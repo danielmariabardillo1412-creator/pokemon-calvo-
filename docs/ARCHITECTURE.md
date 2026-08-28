@@ -1,0 +1,98 @@
+# Architecture — Foundation V1
+
+## Forma general
+
+La arquitectura es **feature-first con límites hexagonales selectivos**. El dominio
+se agrupa por capacidad (`creatures`, `battle`, `status`, `data`), no en carpetas
+globales de managers. Las capas internas solo aparecen donde existe una frontera
+real: intención de cliente, aplicación autoritativa, estado/reglas y presentación.
+
+```text
+Client/UI --BattleAction--> AuthoritativeBattleServer
+                              | validates
+                              v
+                 BattleState + TurnExecutor + RNG
+                    |       |       |
+                    |       |       +--> StatusSystem
+                    |       +----------> DefinitionCatalog --> Resources
+                    v
+                 BattleEvent[] --> Presentation
+```
+
+La dirección de la autoridad es unidireccional. `BattleClient` solo construye una
+intención. `AuthoritativeBattleServer` valida turno, actor, movimiento y objetivo.
+Solo el servidor ejecuta reglas y muta HP. La presentación recibe copias
+serializables de hechos y no recibe `BattleState`.
+
+## Reglas de dependencia
+
+1. Las reglas y el estado mutable son `RefCounted`; nunca acceden a `SceneTree`,
+   `NodePath`, señales globales, sprites, animación o input.
+2. Los datos estáticos editor-friendly son `Resource` y se tratan como inmutables
+   después de cargarlos. El estado guarda sus IDs explícitos, no referencias a
+   Resources ni UIDs de Godot.
+3. Los `Node` quedan para composición, mundo y UI. En V1 solo el runner de tests es
+   un Node porque necesita iniciar y cerrar el árbol.
+4. No hay autoloads. Una dependencia se construye y se pasa explícitamente.
+5. Un módulo no debe depender de presentación. `battle/application` puede
+   orquestar `status/application`; el módulo de status no modifica el resolver.
+6. Todo origen de no determinismo debe pasar por `SeededRandomSource`.
+
+Estas reglas deberían convertirse en comprobaciones automáticas de arquitectura
+cuando crezca el equipo (por ejemplo, prohibir `extends Node` y APIs visuales bajo
+`domain/` y `application/`).
+
+## Modelo de objetos
+
+- `CreatureSpecies`, `MoveDefinition`, `TypeDefinition` y `StatusDefinition` son
+  `Resource`: configuración estática, versionable y cómoda para herramientas.
+- `CreatureInstance`, `StatBlock`, `BattleState`, `BattleAction`, `BattleEvent`,
+  resolvers, calculadores y sistemas son `RefCounted`: estado o lógica instanciable
+  y ejecutable sin escena visual.
+- Los futuros controladores de escena, HUD, personajes y animaciones serán `Node`.
+  Ninguno será dueño de la verdad de combate.
+
+`CreatureInstance` es deliberadamente `RefCounted`, no `Resource`: HP, estados y
+movimientos son estado vivo por instancia. Compartir accidentalmente un Resource
+mutable entre combates sería peligroso. Las especies sí son definiciones Resource.
+
+## Datos masivos e IDs
+
+Los IDs son cadenas estables en minúsculas (`embercub`, `poison`, `quick_strike`).
+Son la identidad de red/save; una ruta, nombre visible o Resource UID nunca lo es.
+Un ID publicado no se reutiliza. Renombrarlo exige una migración explícita.
+
+Los `.tres` de V1 demuestran el contrato, no son la estrategia definitiva para más
+de 1000 especies. Para volumen real se recomienda una fuente tabular validada
+(CSV/JSON o base de autoría), importación reproducible, índice por ID y artefactos
+optimizados generados. El dominio seguirá consumiendo `DefinitionCatalog`, por lo
+que el formato de autoría no contaminará las reglas. No se crea todavía una interfaz
+o repositorio abstracto adicional: sería ceremonial hasta disponer del importador.
+
+## Determinismo y serialización
+
+`SeededRandomSource` usa `lcg32_v1`, es inyectable, reproducible y no criptográfico.
+Daño y modificadores usan basis points para reducir diferencias de redondeo. Un
+snapshot incluye `schema_version`, `ruleset_id`, `rng_algorithm`, estado del RNG,
+turno, fase, ganador, participantes, estadísticas, HP, movimientos y estados.
+
+Esto permite continuar una simulación, replay o reconciliación, siempre que el
+servidor use el mismo ruleset y catálogo. El snapshot es un `Dictionary` apto para
+JSON y no contiene objetos visuales. Aun así, V1 es independiente de `SceneTree`,
+no del runtime de Godot/GDScript; un servidor escrito en otro lenguaje tendría que
+implementar los mismos contratos y reglas.
+
+## Status y ECS
+
+Poison se procesa en un `StatusSystem` pequeño y sin estado. Este patrón aísla las
+reglas transversales sin adoptar un runtime ECS. No hay ECS en batalla ni overworld.
+Para el overworld solo se reconsiderará después de medir una necesidad real (muchas
+entidades homogéneas o coste de actualización); Godot Nodes y composición siguen
+siendo el punto de partida.
+
+## Tests
+
+El runner ligero actual evita incorporar un addon para 13 pruebas fundacionales y
+corre como escena headless. GUT será razonable cuando hagan falta fixtures,
+parametrización, dobles complejos o integración CI más rica. Cambiar el framework no
+debe cambiar el dominio.
