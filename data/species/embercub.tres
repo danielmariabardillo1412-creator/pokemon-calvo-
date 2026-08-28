@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="CreatureSpecies" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://modules/creatures/domain/creature_species.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"embercub"
+display_name = "Embercub"
+primary_type_id = &"fire"
+base_hp = 38
+base_attack = 14
+base_defense = 10
+base_speed = 13
+
