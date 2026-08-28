@@ -19,8 +19,8 @@ func add_type(definition: TypeDefinition) -> void:
 	_types[definition.id] = definition
 
 
-func add_status(definition: Resource) -> void:
-	_statuses[definition.get("id")] = definition
+func add_status(definition: StatusDefinition) -> void:
+	_statuses[definition.id] = definition
 
 
 func species(id: StringName) -> CreatureSpecies:
@@ -35,11 +35,10 @@ func type(id: StringName) -> TypeDefinition:
 	return _types.get(id) as TypeDefinition
 
 
-func status(id: StringName) -> Resource:
-	return _statuses.get(id) as Resource
+func status(id: StringName) -> StatusDefinition:
+	return _statuses.get(id) as StatusDefinition
 
 
 func type_multiplier(attack_type_id: StringName, defender_type_id: StringName) -> float:
 	var attack_type := type(attack_type_id)
 	return attack_type.multiplier_against(defender_type_id) if attack_type != null else 1.0
-

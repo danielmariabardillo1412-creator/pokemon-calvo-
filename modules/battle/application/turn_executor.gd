@@ -3,6 +3,7 @@ extends RefCounted
 
 var _resolver := TurnResolver.new()
 var _damage_calculator := DamageCalculator.new()
+var _status_system := StatusSystem.new()
 
 
 func execute(
@@ -42,6 +43,10 @@ func execute(
 			_finish_battle(state, actor.instance_id, events)
 			state.rng_state = rng.state()
 			return events
+	events.append_array(_status_system.process_end_turn(state, catalog))
+	if state.phase == BattleState.FINISHED:
+		state.rng_state = rng.state()
+		return events
 	events.append(BattleEvent.new(BattleEvent.TURN_ENDED, state.turn))
 	state.rng_state = rng.state()
 	return events
@@ -51,4 +56,3 @@ func _finish_battle(state: BattleState, winner_id: StringName, events: Array[Bat
 	state.phase = BattleState.FINISHED
 	state.winner_id = winner_id
 	events.append(BattleEvent.new(BattleEvent.BATTLE_ENDED, state.turn, winner_id))
-

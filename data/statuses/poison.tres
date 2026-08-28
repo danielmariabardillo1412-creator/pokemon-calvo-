@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="StatusDefinition" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://modules/status/domain/status_definition.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"poison"
+display_name = "Poison"
+end_turn_max_hp_divisor = 8
+minimum_damage = 1
