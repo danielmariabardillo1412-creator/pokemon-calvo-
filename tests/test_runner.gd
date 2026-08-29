@@ -1,4 +1,4 @@
-extends Node
+extends SceneTree
 
 var _passed := 0
 var _failed := 0
@@ -6,11 +6,11 @@ var _catalog: DefinitionCatalog
 var _client := BattleClient.new()
 
 
-func _ready() -> void:
+func _initialize() -> void:
 	_catalog = _build_catalog()
 	_run_all()
 	print("\n=== PROJECT TEST RESULT: %d PASS / %d FAIL ===" % [_passed, _failed])
-	get_tree().quit(0 if _failed == 0 else 1)
+	quit(0 if _failed == 0 else 1)
 
 
 func _run_all() -> void:

@@ -24,6 +24,10 @@ func run(check_callback: Callable) -> void:
 		"_test_capture_full_party_routes_to_storage", "_test_capture_storage_same_instance",
 		"_test_capture_storage_preserves_iv", "_test_capture_storage_preserves_nature",
 		"_test_capture_storage_preserves_ability", "_test_capture_storage_preserves_moves_pp",
+		# FASE 8C: truthful ownership routing (BUG 3)
+		"_test_capture_router_storage_success_routed_true", "_test_capture_router_storage_failure_routed_false",
+		"_test_capture_router_null_storage_no_crash", "_test_capture_router_party_present_routed_true",
+		"_test_capture_router_party_missing_routed_false", "_test_capture_router_unrouted_false",
 	]
 	for name in t:
 		print("ST_TEST %s" % name)
@@ -295,3 +299,69 @@ func _test_capture_storage_preserves_moves_pp() -> void:
 		if r.stored.moveset[i].move_id != r.wild.moveset[i].move_id or r.stored.moveset[i].current_pp != r.wild.moveset[i].current_pp:
 			same = false
 	_check.call("cap_storage_pp", same)
+
+
+# ---------------------------------------------------------------------------
+# FASE 8C: truthful ownership routing (BUG 3) - routed is never a false success
+# ---------------------------------------------------------------------------
+
+func _capture_resolution(id: StringName, seed: int) -> CaptureResolution:
+	var wild := _wild(id, 30, seed)
+	wild.current_hp = 1
+	return CaptureSystem.resolve(_attempt(wild, &"master_ball", _wild_context()), _rng(1), _catalog, _full_party(1))
+
+
+func _test_capture_router_storage_success_routed_true() -> void:
+	var party := _full_party(500)
+	var storage := CreatureStorage.new()
+	var res := CaptureSystem.resolve(_attempt(_wild(&"pikachu", 30, 1), &"master_ball", _wild_context()), _rng(1), _catalog, party)
+	_check.call("cap_router_store_disposition", res.disposition == CaptureDisposition.STORAGE_REQUIRED)
+	var rr := CaptureOwnershipRouter.new().route(res, party, storage)
+	_check.call("cap_router_store_routed_true", rr.routed == true and rr.stored == true and rr.reason == "stored")
+	_check.call("cap_router_store_in_storage", storage.contains_instance_id(res.captured.instance_id))
+
+
+func _test_capture_router_storage_failure_routed_false() -> void:
+	var party := _full_party(501)
+	var storage := CreatureStorage.new()
+	var res := CaptureSystem.resolve(_attempt(_wild(&"pikachu", 30, 1), &"master_ball", _wild_context()), _rng(1), _catalog, party)
+	# Pre-own the captured creature in storage so add_creature must reject it.
+	storage.add_creature(res.captured)
+	var rr := CaptureOwnershipRouter.new().route(res, party, storage)
+	_check.call("cap_router_store_fail_routed_false", rr.routed == false and rr.stored == false)
+	_check.call("cap_router_store_fail_reason", rr.reason == "duplicate_instance_id" or rr.reason == "storage_rejected_creature")
+
+
+func _test_capture_router_null_storage_no_crash() -> void:
+	var party := _full_party(502)
+	var res := CaptureSystem.resolve(_attempt(_wild(&"pikachu", 30, 1), &"master_ball", _wild_context()), _rng(1), _catalog, party)
+	var rr := CaptureOwnershipRouter.new().route(res, party, null)
+	_check.call("cap_router_null_storage_safe", rr.routed == false and rr.stored == false and rr.reason == "storage_null")
+
+
+func _test_capture_router_party_present_routed_true() -> void:
+	var party := CreatureParty.new()
+	var res := CaptureSystem.resolve(_attempt(_wild(&"pikachu", 30, 1), &"master_ball", _wild_context()), _rng(1), _catalog, party)
+	_check.call("cap_router_party_disposition", res.disposition == CaptureDisposition.PARTY)
+	var rr := CaptureOwnershipRouter.new().route(res, party, CreatureStorage.new())
+	_check.call("cap_router_party_routed_true", rr.routed == true and rr.stored == false and rr.reason == "already_in_party")
+	_check.call("cap_router_party_owned", party.contains_instance_id(res.captured.instance_id))
+
+
+func _test_capture_router_party_missing_routed_false() -> void:
+	var party := CreatureParty.new()
+	var c := _wild(&"pikachu", 30, 1)
+	var r := CaptureResolution.new()
+	r.disposition = CaptureDisposition.PARTY
+	r.captured = c
+	var rr := CaptureOwnershipRouter.new().route(r, party, CreatureStorage.new())
+	_check.call("cap_router_party_missing_routed_false", rr.routed == false and rr.stored == false and rr.reason == "party_ownership_missing")
+
+
+func _test_capture_router_unrouted_false() -> void:
+	var c := _wild(&"pikachu", 30, 1)
+	var r := CaptureResolution.new()
+	r.disposition = CaptureDisposition.UNROUTED
+	r.captured = c
+	var rr := CaptureOwnershipRouter.new().route(r, CreatureParty.new(), CreatureStorage.new())
+	_check.call("cap_router_unrouted_false", rr.routed == false and rr.stored == false and rr.reason == "unrouted_no_container")

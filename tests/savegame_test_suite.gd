@@ -26,6 +26,19 @@ func run(check_callback: Callable) -> void:
 		"_test_save_file_write_read", "_test_save_atomic_replacement",
 		"_test_end_to_end_capture_storage_save_load", "_test_end_to_end_capture_party_save_load",
 		"_test_property_repeated_deposit_withdraw", "_test_property_repeated_save_load",
+		# FASE 8C: protected save replacement (BUG 1)
+		"_test_save_safe_first_write", "_test_save_safe_replace_success", "_test_save_safe_replace_preserves_latest",
+		"_test_save_tmp_clean_after_success", "_test_save_backup_clean_after_success",
+		"_test_save_failure_does_not_destroy_previous_save", "_test_save_restore_previous_on_replace_failure",
+		# FASE 8C: corrupt party / format id rejection (BUG 2)
+		"_test_load_party_duplicate_id_rejected", "_test_load_party_over_capacity_rejected",
+		"_test_load_party_empty_id_rejected", "_test_load_party_rebuild_failure_not_published",
+		"_test_load_wrong_format_id_rejected", "_test_load_missing_format_id_rejected",
+		"_test_load_failure_party_is_null", "_test_load_failure_storage_is_null",
+		# FASE 8C: extra invariants
+		"_test_save_empty_creature_instance_id_rejected",
+		"_test_load_creatures_wrong_type_rejected", "_test_load_party_wrong_type_rejected",
+		"_test_load_storage_wrong_type_rejected", "_test_load_boxes_wrong_type_rejected",
 	]
 	for name in t:
 		print("SG_TEST %s" % name)
@@ -276,7 +289,8 @@ func _test_load_json_corrupt_rejected() -> void:
 
 
 func _test_load_missing_schema_rejected() -> void:
-	var path := _write_dict("user://f8_schema", "m.json", {"creatures": []})
+	# Valid format id, but no schema_version -> the schema check (not the format check) must fire.
+	var path := _write_dict("user://f8_schema", "m.json", {"format_id": "calvo_save_v1", "creatures": []})
 	var lr := SaveGameRepository.new().load(path)
 	_check.call("sg_missing_schema_rejected", lr.ok == false and lr.reason == "missing_schema")
 
@@ -421,3 +435,197 @@ func _test_property_repeated_save_load() -> void:
 		if not lr.ok or lr.party.size() != 3 or lr.storage.get_all_creatures().size() != 4:
 			ok = false
 	_check.call("prop_repeated_save_load", ok)
+
+
+# ---------------------------------------------------------------------------
+# FASE 8C: protected save replacement (BUG 1) - last known good save preserved
+# ---------------------------------------------------------------------------
+
+func _test_save_safe_first_write() -> void:
+	var repo := SaveGameRepository.new()
+	var sr := repo.save_collection("user://f8c_save.json", _collection_with(1, 0, 1))
+	_check.call("save_safe_first_write", sr.ok and FileAccess.file_exists("user://f8c_save.json"))
+
+
+func _test_save_safe_replace_success() -> void:
+	var repo := SaveGameRepository.new()
+	_check.call("save_safe_replace_first", repo.save_collection("user://f8c_repl.json", _collection_with(1, 0, 1)).ok)
+	var sr := repo.save_collection("user://f8c_repl.json", _collection_with(0, 2, 2))
+	_check.call("save_safe_replace_success", sr.ok)
+
+
+func _test_save_safe_replace_preserves_latest() -> void:
+	var repo := SaveGameRepository.new()
+	_check.call("save_safe_latest_first", repo.save_collection("user://f8c_latest.json", _collection_with(1, 0, 1)).ok)
+	_check.call("save_safe_latest_second", repo.save_collection("user://f8c_latest.json", _collection_with(0, 2, 2)).ok)
+	var lr := repo.load("user://f8c_latest.json")
+	_check.call("save_safe_latest_reflects_new", lr.ok and lr.party.size() == 0 and lr.storage.get_all_creatures().size() == 2)
+
+
+func _test_save_tmp_clean_after_success() -> void:
+	var repo := SaveGameRepository.new()
+	_check.call("save_tmp_clean_ok", repo.save_collection("user://f8c_tmp.json", _collection_with(1, 1, 1)).ok)
+	_check.call("save_tmp_clean_no_tmp", not FileAccess.file_exists("user://f8c_tmp.json.tmp"))
+	_check.call("save_tmp_clean_no_bak", not FileAccess.file_exists("user://f8c_tmp.json.bak"))
+
+
+func _test_save_backup_clean_after_success() -> void:
+	var repo := SaveGameRepository.new()
+	_check.call("save_backup_clean_first", repo.save_collection("user://f8c_bak.json", _collection_with(1, 0, 1)).ok)
+	_check.call("save_backup_clean_repl", repo.save_collection("user://f8c_bak.json", _collection_with(0, 1, 2)).ok)
+	_check.call("save_backup_clean_no_bak", not FileAccess.file_exists("user://f8c_bak.json.bak"))
+
+
+func _test_save_failure_does_not_destroy_previous_save() -> void:
+	var repo := SaveGameRepository.new()
+	_check.call("save_fail_first", repo.save_collection("user://f8c_fail.json", _collection_with(1, 0, 1)).ok)
+	# Simulate a failed publish (tmp -> target rename fails after the backup was taken).
+	var save_path := "user://f8c_fail.json"
+	var tmp_path := save_path + ".tmp"
+	repo._serializer.rename_failure_inject = func(from: String, to: String) -> int:
+		if from == tmp_path:
+			return FAILED
+		return OK
+	var sr := repo.save_collection(save_path, _collection_with(0, 3, 9))
+	_check.call("save_fail_reported", sr.ok == false and sr.reason == "replace_failed_restored")
+
+
+func _test_save_restore_previous_on_replace_failure() -> void:
+	var repo := SaveGameRepository.new()
+	_check.call("save_restore_first", repo.save_collection("user://f8c_restore.json", _collection_with(1, 0, 1)).ok)
+	var save_path := "user://f8c_restore.json"
+	var tmp_path := save_path + ".tmp"
+	repo._serializer.rename_failure_inject = func(from: String, to: String) -> int:
+		if from == tmp_path:
+			return FAILED
+		return OK
+	var sr := repo.save_collection(save_path, _collection_with(0, 5, 9))
+	_check.call("save_restore_failed", sr.ok == false)
+	var lr := repo.load(save_path)
+	# The previous good save (1 party creature) must be the one that survived.
+	_check.call("save_restore_survived", lr.ok and lr.party.size() == 1 and lr.storage.get_all_creatures().size() == 0)
+
+
+# ---------------------------------------------------------------------------
+# FASE 8C: corrupt party / format id rejection (BUG 2)
+# ---------------------------------------------------------------------------
+
+func _test_load_party_duplicate_id_rejected() -> void:
+	var d := SaveGameData.build(_collection_with(1, 0, 1).party, CreatureStorage.new()).to_dict()
+	var first_id: String = d["party"]["ordered_instance_ids"][0]
+	d["party"]["ordered_instance_ids"] = [first_id, first_id]
+	var path := _write_dict("user://f8c_pdup", "p.json", d)
+	var lr := SaveGameRepository.new().load(path)
+	_check.call("load_party_dup_rejected", lr.ok == false and lr.reason == "duplicate_party_instance_id")
+
+
+func _test_load_party_over_capacity_rejected() -> void:
+	var pc := _collection_with(6, 0, 1)
+	var d := SaveGameData.build(pc.party, CreatureStorage.new()).to_dict()
+	# Hand-add two extra registry creatures and push the party beyond the cap (registry is valid,
+	# only the party layout is over capacity) to exercise the over-capacity guard.
+	for i in range(2):
+		var cd: Dictionary = d["creatures"][0].duplicate(true)
+		cd["instance_id"] = "extra_%d" % i
+		d["creatures"].append(cd)
+		d["party"]["ordered_instance_ids"].append("extra_%d" % i)
+	var path := _write_dict("user://f8c_pcap", "p.json", d)
+	var lr := SaveGameRepository.new().load(path)
+	_check.call("load_party_over_cap_rejected", lr.ok == false and lr.reason == "party_over_capacity")
+
+
+func _test_load_party_empty_id_rejected() -> void:
+	var d := SaveGameData.build(_collection_with(1, 0, 1).party, CreatureStorage.new()).to_dict()
+	d["party"]["ordered_instance_ids"][0] = ""
+	var path := _write_dict("user://f8c_pempty", "p.json", d)
+	var lr := SaveGameRepository.new().load(path)
+	_check.call("load_party_empty_id_rejected", lr.ok == false and lr.reason == "empty_party_instance_id")
+
+
+func _test_load_party_rebuild_failure_not_published() -> void:
+	var d := SaveGameData.build(_collection_with(6, 0, 1).party, CreatureStorage.new()).to_dict()
+	# Over-capacity party layout: load must abort and publish NOTHING (no partial party object).
+	for i in range(2):
+		var cd: Dictionary = d["creatures"][0].duplicate(true)
+		cd["instance_id"] = "extra_%d" % i
+		d["creatures"].append(cd)
+		d["party"]["ordered_instance_ids"].append("extra_%d" % i)
+	var path := _write_dict("user://f8c_preb", "p.json", d)
+	var lr := SaveGameRepository.new().load(path)
+	_check.call("load_party_rebuild_no_publish", lr.ok == false and lr.party == null and lr.storage == null)
+
+
+func _test_load_wrong_format_id_rejected() -> void:
+	var d := SaveGameData.build(_collection_with(1, 0, 1).party, CreatureStorage.new()).to_dict()
+	d["format_id"] = "calvo_save_v2"
+	var path := _write_dict("user://f8c_fmt", "p.json", d)
+	var lr := SaveGameRepository.new().load(path)
+	_check.call("load_wrong_format_rejected", lr.ok == false and lr.reason == "unsupported_format")
+
+
+func _test_load_missing_format_id_rejected() -> void:
+	var d := SaveGameData.build(_collection_with(1, 0, 1).party, CreatureStorage.new()).to_dict()
+	d.erase("format_id")
+	var path := _write_dict("user://f8c_fmtm", "p.json", d)
+	var lr := SaveGameRepository.new().load(path)
+	_check.call("load_missing_format_rejected", lr.ok == false and lr.reason == "missing_format_id")
+
+
+func _test_load_failure_party_is_null() -> void:
+	var d := SaveGameData.build(_collection_with(1, 0, 1).party, CreatureStorage.new()).to_dict()
+	d["schema_version"] = 999
+	var path := _write_dict("user://f8c_nullp", "p.json", d)
+	var lr := SaveGameRepository.new().load(path)
+	_check.call("load_failure_party_null", lr.ok == false and lr.party == null)
+
+
+func _test_load_failure_storage_is_null() -> void:
+	var d := SaveGameData.build(_collection_with(1, 0, 1).party, CreatureStorage.new()).to_dict()
+	d["schema_version"] = 999
+	var path := _write_dict("user://f8c_nulls", "p.json", d)
+	var lr := SaveGameRepository.new().load(path)
+	_check.call("load_failure_storage_null", lr.ok == false and lr.storage == null)
+
+
+# ---------------------------------------------------------------------------
+# FASE 8C: extra invariants
+# ---------------------------------------------------------------------------
+
+func _test_save_empty_creature_instance_id_rejected() -> void:
+	var d := SaveGameData.build(_collection_with(1, 0, 1).party, CreatureStorage.new()).to_dict()
+	d["creatures"].append({"instance_id": "", "species_id": "bulbasaur", "level": 5})
+	var path := _write_dict("user://f8c_cemp", "p.json", d)
+	var lr := SaveGameRepository.new().load(path)
+	_check.call("save_empty_creature_id_rejected", lr.ok == false and lr.reason == "empty_creature_instance_id")
+
+
+func _test_load_creatures_wrong_type_rejected() -> void:
+	var d := SaveGameData.build(_collection_with(1, 0, 1).party, CreatureStorage.new()).to_dict()
+	d["creatures"] = {}
+	var path := _write_dict("user://f8c_wct", "p.json", d)
+	var lr := SaveGameRepository.new().load(path)
+	_check.call("load_creatures_wrong_type", lr.ok == false and lr.reason == "invalid_creatures_type")
+
+
+func _test_load_party_wrong_type_rejected() -> void:
+	var d := SaveGameData.build(_collection_with(1, 0, 1).party, CreatureStorage.new()).to_dict()
+	d["party"] = []
+	var path := _write_dict("user://f8c_wpt", "p.json", d)
+	var lr := SaveGameRepository.new().load(path)
+	_check.call("load_party_wrong_type", lr.ok == false and lr.reason == "invalid_party_type")
+
+
+func _test_load_storage_wrong_type_rejected() -> void:
+	var d := SaveGameData.build(_collection_with(1, 0, 1).party, CreatureStorage.new()).to_dict()
+	d["storage"] = []
+	var path := _write_dict("user://f8c_wst", "p.json", d)
+	var lr := SaveGameRepository.new().load(path)
+	_check.call("load_storage_wrong_type", lr.ok == false and lr.reason == "invalid_storage_type")
+
+
+func _test_load_boxes_wrong_type_rejected() -> void:
+	var d := SaveGameData.build(_collection_with(1, 0, 1).party, CreatureStorage.new()).to_dict()
+	d["storage"] = {"schema_version": 2, "boxes": {}}
+	var path := _write_dict("user://f8c_wbt", "p.json", d)
+	var lr := SaveGameRepository.new().load(path)
+	_check.call("load_boxes_wrong_type", lr.ok == false and lr.reason == "invalid_boxes_type")
