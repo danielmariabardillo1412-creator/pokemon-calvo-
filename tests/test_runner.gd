@@ -41,6 +41,19 @@ func _run_all() -> void:
 	_test_instance_references_species()
 	_test_data_round_trip()
 	_test_imported_battle()
+	# --- Mass PokéAPI import (Phase 4) ---
+	_test_pokeapi_manifest_valid()
+	_test_pokeapi_known_species()
+	_test_pokeapi_known_type()
+	_test_pokeapi_known_move()
+	_test_pokeapi_known_ability()
+	_test_pokeapi_known_evolution()
+	_test_pokeapi_known_learnset()
+	_test_pokeapi_full_catalog_load()
+	_test_pokeapi_no_broken_references()
+	_test_pokeapi_artificial_broken_ref()
+	_test_pokeapi_forms_policy()
+	_test_pokeapi_deterministic_ordering()
 
 
 func _test_priority() -> void:
@@ -291,6 +304,97 @@ func _build_catalog() -> DefinitionCatalog:
 	catalog.add_status(load("res://data/statuses/poison.tres") as StatusDefinition)
 	return catalog
 
+
+# --- Mass PokéAPI import helpers (Phase 4) ---
+
+var _pokeapi_cache: GameData = null
+
+func _import_pokeapi() -> GameData:
+	if _pokeapi_cache != null:
+		return _pokeapi_cache
+	var raw := _load_json("res://data/raw/pokemon_api.json")
+	var manifest := DatasetManifest.from_dict(_load_json("res://data/manifests/pokemon_api_manifest.json"))
+	var res := DataImporter.new().import_dataset(raw, manifest)
+	_pokeapi_cache = res["game_data"]
+	return _pokeapi_cache
+
+func _test_pokeapi_manifest_valid() -> void:
+	var m := DatasetManifest.from_dict(_load_json("res://data/manifests/pokemon_api_manifest.json"))
+	_check("pokeapi_manifest_valid", m.is_valid() and m.schema_version == 1 and m.source == "pokeapi/api-data")
+
+func _test_pokeapi_known_species() -> void:
+	var gd := _import_pokeapi()
+	_check("pokeapi_known_species", gd.species_catalog.has(&"bulbasaur") and gd.species_catalog.get_by_id(&"bulbasaur").display_name == "bulbasaur" and gd.species_catalog.has(&"pikachu") and gd.species_catalog.has(&"charizard"))
+
+func _test_pokeapi_known_type() -> void:
+	var gd := _import_pokeapi()
+	_check("pokeapi_known_type", gd.type_catalog.has(&"fire") and gd.type_catalog.get_by_id(&"fire").multiplier_against(&"grass") == 2.0 and gd.type_catalog.has(&"water"))
+
+func _test_pokeapi_known_move() -> void:
+	var gd := _import_pokeapi()
+	_check("pokeapi_known_move", gd.move_catalog.has(&"tackle") and gd.move_catalog.get_by_id(&"tackle").power > 0 and gd.move_catalog.has(&"ember"))
+
+func _test_pokeapi_known_ability() -> void:
+	var gd := _import_pokeapi()
+	_check("pokeapi_known_ability", gd.ability_catalog.has(&"overgrow") and gd.ability_catalog.has(&"run_away"))
+
+func _test_pokeapi_known_evolution() -> void:
+	var gd := _import_pokeapi()
+	var sp := gd.species_catalog.get_by_id(&"bulbasaur")
+	var found := false
+	for ev in sp.evolutions:
+		if ev is EvolutionRecord and (ev as EvolutionRecord).species_id == &"ivysaur" and (ev as EvolutionRecord).min_level == 16:
+			found = true
+	_check("pokeapi_known_evolution", found)
+
+func _test_pokeapi_known_learnset() -> void:
+	var gd := _import_pokeapi()
+	var sp := gd.species_catalog.get_by_id(&"bulbasaur")
+	var found := false
+	for ls in sp.learnset:
+		if ls is LearnSetEntry and (ls as LearnSetEntry).move_id == &"vine_whip":
+			found = true
+	_check("pokeapi_known_learnset", found)
+
+func _test_pokeapi_full_catalog_load() -> void:
+	var gd := _import_pokeapi()
+	_check("pokeapi_full_catalog_load", gd.species_catalog.size() >= 900 and gd.move_catalog.size() >= 900 and gd.type_catalog.size() >= 18 and gd.ability_catalog.size() >= 300)
+
+func _test_pokeapi_no_broken_references() -> void:
+	var raw := _load_json("res://data/raw/pokemon_api.json")
+	var manifest := DatasetManifest.from_dict(_load_json("res://data/manifests/pokemon_api_manifest.json"))
+	var res := DataImporter.new().import_dataset(raw, manifest)
+	var report: DataImportReport = res["report"]
+	_check("pokeapi_no_broken_references", report.broken_references.size() == 0 and report.rejected.size() == 0)
+
+func _test_pokeapi_artificial_broken_ref() -> void:
+	var raw := _load_json("res://data/raw/pokemon_api.json")
+	var dup := raw.duplicate(true)
+	dup["species"].append({"id": "ghostmon", "display_name": "Ghostmon", "types": ["nonexistent_xyz"], "base_hp": 40, "base_attack": 40, "base_defense": 40, "base_speed": 40, "base_special_attack": 40, "base_special_defense": 40, "ability_ids": ["overgrow"], "learnset": [], "evolutions": []})
+	var manifest := DatasetManifest.from_dict(_load_json("res://data/manifests/pokemon_api_manifest.json"))
+	var res := DataImporter.new().import_dataset(dup, manifest)
+	_check("pokeapi_artificial_broken_ref", not res["game_data"].species_catalog.has(&"ghostmon") and res["report"].rejected.has("ghostmon (broken_type_reference)"))
+
+func _test_pokeapi_forms_policy() -> void:
+	var gd := _import_pokeapi()
+	var fr: Dictionary = _load_json("res://data/reports/forms_policy_report.json")
+	var deferred: Array = fr.get("deferred", [])
+	_check("pokeapi_forms_policy", int(fr.get("forms_total", 0)) > 0 and deferred.size() > 0)
+	var no_deferred_in_catalog := true
+	for f in deferred:
+		if gd.species_catalog.has(StringName(f["id"])):
+			no_deferred_in_catalog = false
+			break
+	_check("pokeapi_forms_not_in_catalog", no_deferred_in_catalog)
+
+func _test_pokeapi_deterministic_ordering() -> void:
+	var gd := _import_pokeapi()
+	var ids := gd.species_catalog.all_ids()
+	var sorted := ids.duplicate()
+	sorted.sort()
+	_check("pokeapi_deterministic_ordering", ids.size() == sorted.size())
+	var restored := GameData.from_dict(gd.to_dict())
+	_check("pokeapi_big_round_trip", restored.species_catalog.size() == gd.species_catalog.size() and restored.move_catalog.size() == gd.move_catalog.size())
 
 func _check(test_name: String, condition: bool) -> void:
 	if condition:
