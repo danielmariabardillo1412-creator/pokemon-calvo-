@@ -98,6 +98,112 @@ func submit_turn(actions: Array[BattleAction]) -> Array[BattleEvent]:
 	return _battle_server.submit_turn(actions)
 
 
+# Canonical player-command boundary for the wild battle loop. A MOVE/SWITCH command is paired with
+# the already-selected opponent action and submitted as a normal authoritative turn. A CAPTURE
+# command is resolved against trusted live battle/player state. Invalid capture commands consume
+# neither turn nor opponent response; a failed valid capture consumes one turn and executes exactly
+# one legal opponent response through the same TurnExecutor end-turn pipeline.
+func submit_player_command(
+	command: WildBattleCommand,
+	capture_rng: RandomNumberGenerator = null,
+	opponent_action: BattleAction = null,
+) -> WildBattleCommandResult:
+	var out := WildBattleCommandResult.new()
+	if command != null:
+		out.command_type = command.command_type
+	if not has_active_battle():
+		out.reason = "no_active_wild_battle"
+		return out
+	var state := _battle_server.state
+	if state.phase != BattleState.WAITING_FOR_ACTIONS:
+		out.reason = "battle_finished"
+		return out
+	if command == null:
+		out.reason = "command_required"
+		return out
+	if command.turn != state.turn + 1:
+		out.reason = "wrong_turn"
+		return out
+	var active_player := player_active()
+	if active_player == null:
+		out.reason = "player_actor_missing"
+		return out
+	var player_side := state.side_for_creature(active_player.instance_id)
+	if player_side == null:
+		out.reason = "player_side_missing"
+		return out
+	if command.side_id == &"":
+		out.reason = "missing_participant"
+		return out
+	if command.side_id != player_side.side_id:
+		out.reason = "wrong_participant"
+		return out
+
+	# Validate the response before any command can mutate inventory or consume capture RNG. This is
+	# what prevents a malformed/forged opponent action from turning a failed capture into a free turn.
+	var reaction_error := _battle_server.validate_reaction_action(opponent_action, player_side.side_id)
+	if not reaction_error.is_empty():
+		out.reason = "invalid_opponent_response:%s" % reaction_error
+		return out
+
+	if command.command_type == WildBattleCommand.ACTION:
+		if command.action == null:
+			out.reason = "action_required"
+			return out
+		if command.action.turn != command.turn or command.action.side_id != command.side_id:
+			out.reason = "command_action_mismatch"
+			return out
+		out.battle_events = _battle_server.submit_turn([command.action, opponent_action])
+		var rejection := _battle_rejection_reason(out.battle_events)
+		if not rejection.is_empty():
+			out.reason = rejection
+			return out
+		out.accepted = true
+		out.turn_consumed = true
+		out.battle_finished = state.phase == BattleState.FINISHED
+		return out
+
+	if command.command_type != WildBattleCommand.CAPTURE:
+		out.reason = "invalid_command_type"
+		return out
+	if command.ball_id == &"":
+		out.reason = "ball_id_required"
+		return out
+	if capture_rng == null:
+		out.reason = "capture_rng_required"
+		return out
+
+	var capture_outcome := capture_current(command.ball_id, capture_rng)
+	out.capture_outcome = capture_outcome
+	if capture_outcome == null or capture_outcome.resolution == null or capture_outcome.resolution.result == null:
+		out.reason = "capture_resolution_missing"
+		return out
+	var capture_result := capture_outcome.resolution.result
+	if capture_result.status == CaptureResult.INVALID:
+		out.reason = capture_result.reason
+		return out
+	if capture_result.status == CaptureResult.SUCCESS:
+		out.accepted = capture_outcome.session_completed
+		out.turn_consumed = capture_outcome.session_completed
+		out.session_completed = capture_outcome.session_completed
+		if not capture_outcome.session_completed:
+			out.reason = capture_outcome.reason if not capture_outcome.reason.is_empty() else "capture_completion_failed"
+		return out
+	if capture_result.status != CaptureResult.FAILED:
+		out.reason = "unknown_capture_result"
+		return out
+
+	out.battle_events = _battle_server.submit_reaction_turn(opponent_action, player_side.side_id)
+	var reaction_rejection := _battle_rejection_reason(out.battle_events)
+	if not reaction_rejection.is_empty():
+		out.reason = "opponent_response_rejected:%s" % reaction_rejection
+		return out
+	out.accepted = true
+	out.turn_consumed = true
+	out.battle_finished = _battle_server.state.phase == BattleState.FINISHED
+	return out
+
+
 # Attempt to capture the active wild creature. The session constructs the trusted capture context
 # from its own live battle instead of accepting ownership/battle facts from the caller.
 func capture_current(ball_id: StringName, capture_rng: RandomNumberGenerator) -> WildAdventureCaptureOutcome:
@@ -275,6 +381,13 @@ func _reconcile_player_party() -> void:
 	for creature in player.party.get_creatures():
 		if creature != null:
 			creature.reconcile_post_battle()
+
+
+func _battle_rejection_reason(events: Array[BattleEvent]) -> String:
+	for event in events:
+		if event != null and event.kind == BattleEvent.ACTION_REJECTED:
+			return String(event.metadata.get("reason", "action_rejected"))
+	return ""
 
 
 func _encounter_error(reason: String) -> WildEncounterResult:
