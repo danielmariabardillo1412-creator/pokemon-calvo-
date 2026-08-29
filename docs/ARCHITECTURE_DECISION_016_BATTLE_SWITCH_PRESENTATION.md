@@ -3,7 +3,7 @@
 Fecha: 2026-08-30  
 Rama: `feature/battle-switch-presentation-v1`  
 Base: `feature/battle-capture-presentation-v1`  
-Estado: **ACCEPTED / VALIDATION FINAL PENDIENTE DEL HEAD DOCUMENTAL**
+Estado: **ACCEPTED / VALIDATED**
 
 ## Contexto
 
@@ -169,4 +169,4 @@ GitHub Actions run `33279617197`, Godot `4.7.stable.official.5b4e0cb0f`, Ubuntu 
 - Battle Switch Presentation: **49 PASS / 0 FAIL**
 - import headless: **PASS**
 
-El cierre definitivo depende de repetir estos gates sobre el HEAD que contiene la documentación final.
+Estos mismos gates deben conservarse sobre cualquier HEAD posterior que modifique el bloque antes de su integración futura.
