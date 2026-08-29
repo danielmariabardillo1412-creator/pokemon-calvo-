@@ -103,10 +103,19 @@ lógica solo usa mappings/specs estructurados por stable ID; nunca `effect_summa
 La arquitectura mantiene 0 autoloads y 0 Nodes fuera de tests. Detalle y reglas:
 `BATTLE_ARCHITECTURE.md`, `BATTLE_EFFECTS.md` y `BATTLE_RULESET_CALVO_V1.md`.
 
+## Progression Core (FASE 6)
+
+`CreatureSpecies` (inmutable) vs `CreatureInstance` (mutable, identidad `instance_id`) vs lógica en
+`modules/creatures/progression/*`. El Battle emite `BattleOutcome`; la Progresión lo consume después
+(`ProgressionSystem.reconcile_battle_result`). 0 autoloads, 0 Nodes fuera de tests, mismo contrato de
+separación que Battle Core. Detalle y reglas: `PROGRESSION_ARCHITECTURE.md`, `PROGRESSION_RULESET_CALVO_V1.md`,
+`EVOLUTION_COVERAGE.md` y `ARCHITECTURE_DECISION_005_PROGRESSION.md`.
+
 ## Tests
 
 El runner ligero actual evita incorporar un addon para 13 pruebas fundacionales y
 corre como escena headless. GUT será razonable cuando hagan falta fixtures,
 parametrización, dobles complejos o integración CI más rica. Cambiar el framework no
 debe cambiar el dominio. Battle Core V2 añade una suite separada de unidades y
-escenarios golden; el total actual es 131 PASS / 0 FAIL.
+escenarios golden; Progression Core (FASE 6) añade `ProgressionTestSuite`. El total actual es
+**208 PASS / 0 FAIL**.

@@ -1,0 +1,72 @@
+{
+	"by_trigger": {
+		"agile_style_move": 1,
+		"gimmighoul_coins": 1,
+		"level_up": 388,
+		"other": 1,
+		"recoil_damage": 1,
+		"shed": 1,
+		"spin": 1,
+		"strong_style_move": 1,
+		"take_damage": 1,
+		"three_critical_hits": 1,
+		"three_defeated_bisharp": 1,
+		"tower_of_darkness": 1,
+		"trade": 24,
+		"use_item": 52,
+		"use_move": 1
+	},
+	"counts": {
+		"DATA_ONLY": 9,
+		"PARTIAL": 0,
+		"RUNTIME_SUPPORTED": 464,
+		"UNSUPPORTED": 3
+	},
+	"edges_total": 476,
+	"examples": {
+		"DATA_ONLY": [
+			"qwilfish->overqwil (strong_style_move)",
+			"stantler->wyrdeer (agile_style_move)",
+			"basculin->basculegion (recoil_damage)",
+			"yamask->runerigus (take_damage)",
+			"primeape->annihilape (use_move)",
+			"bisharp->kingambit (three_defeated_bisharp)",
+			"farfetchd->sirfetchd (three_critical_hits)",
+			"kubfu->urshifu (tower_of_darkness)",
+			"gimmighoul->gholdengo (gimmighoul_coins)"
+		],
+		"PARTIAL": [],
+		"RUNTIME_SUPPORTED": [
+			"bulbasaur->ivysaur (level_up)",
+			"caterpie->metapod (level_up)",
+			"voltorb->electrode (level_up)",
+			"dipplin->hydrapple (level_up)",
+			"poltchageist->sinistcha (use_item)",
+			"exeggcute->exeggutor (use_item)",
+			"cubone->marowak (level_up)",
+			"lickitung->lickilicky (level_up)",
+			"koffing->weezing (level_up)",
+			"metapod->butterfree (level_up)",
+			"rhyhorn->rhydon (level_up)",
+			"rhydon->rhyperior (trade)",
+			"chansey->blissey (level_up)",
+			"tangela->tangrowth (level_up)",
+			"horsea->seadra (level_up)",
+			"seadra->kingdra (trade)",
+			"goldeen->seaking (level_up)",
+			"staryu->starmie (use_item)",
+			"scyther->scizor (trade)",
+			"scyther->kleavor (use_item)",
+			"electabuzz->electivire (trade)",
+			"magmar->magmortar (trade)",
+			"magikarp->gyarados (level_up)",
+			"weedle->kakuna (level_up)",
+			"eevee->vaporeon (use_item)"
+		],
+		"UNSUPPORTED": [
+			"nincada->shedinja (shed)",
+			"milcery->alcremie (spin)",
+			"tandemaus->maushold (other)"
+		]
+	}
+}

@@ -225,3 +225,94 @@ Fuente: PokéAPI `api-data` (SHA completo `784c50b3ad27d0390d3b047fc4c4511f71edd
 SÍ (sujeto a revisión). La capa de efectos de movimiento está data-driven y validada; el Battle Core
 no se rediseñó y los 131 tests base siguen en verde. NO se hizo merge a `main`.
 
+---
+
+# FASE 6 — Progression Core V1
+
+Fecha de validación: 2026-08-29
+Rama: `feature/progression-core-v1` (creada desde `feature/battle-effects-data-v1`, commit `f89725c`)
+Motor: `4.7.stable.official.5b4e0cb0f`
+Fuente: PokéAPI `api-data` (SHA `784c50b3ad27d0390d3b047fc4c4511f71edd049`, BSD 3-Clause)
+
+## Resultado
+
+- Godot import/headless: **PASS**, sin errores de parseo/runtime, exit 0
+- Tests: **208 PASS / 0 FAIL** (137 base + 71 checks de Progression Core)
+- Autoloads: **0** (sin cambios)
+- `extends Node` fuera de tests: **0**
+- Referencias rotas: **0** · Rechazados: **0**
+- Determinismo headless: **PASS** (mismos seed/acciones ⇒ mismos eventos y snapshot)
+- `schema_version`: **2** (sin bump; `growth_rate`/`ev_yield` son campos aditivos)
+
+## Qué se añadió
+
+### Runtime (lógica de progresión, separada de Battle y UI)
+- `modules/creatures/progression/progression_ruleset.gd` — `calvo_progression_v1`:
+  - 6 curvas de XP: `fast`, `medium`, `medium-slow`, `slow`, `erratic`, `fluctuating`
+    (`E(1)=0`; para n≥2 `E(n)=max(0, floor(raw(n)))`; cache por species_id+nivel).
+  - Límites: `MAX_LEVEL=100`, `MOVE_SLOTS_MAX=4`, `MAX_PARTY=6`, `MAX_EV_TOTAL=508`.
+  - Tabla de naturalezas canónica (25) con multiplicadores 1.1 suben / 0.9 bajan / 1.0 neutras.
+  - `experience_for_level`, `level_for_experience` (búsqueda monotónica), `experience_for_defeats`.
+- `modules/creatures/progression/stat_calculator.gd` — `compute(base, ivs, evs, nature_id, level)`:
+  - HP = `(2·base + iv + ev/4)·level/100 + level + 10`
+  - Resto = `(2·base + iv + ev/4)·level/100 + 5`, luego `× nature_mult`.
+- `modules/creatures/progression/learnset_system.gd` — `initial_moves`, `level_up_moves_between`,
+  `moves_learned_at_level` (lee `CreatureSpecies.learnset`).
+- `modules/creatures/progression/evolution_system.gd` — `classify_record`, `evolution_candidates`,
+  `apply_evolution`, `coverage_report` (ver `docs/EVOLUTION_COVERAGE.md`).
+- `modules/creatures/progression/creature_factory.gd` — `create(...)` determinista
+  (stats recalculados, moveset inicial, PP, IVs aleatorias con seed).
+- `modules/creatures/progression/progression_event.gd` — eventos semánticos
+  (`LEVEL_UP`, `STAT_CHANGED`, `MOVE_LEARNED`, `MOVE_LEARN_CHOICE_REQUIRED`,
+  `EVOLUTION_AVAILABLE`, `EXPERIENCE_GAINED`).
+- `modules/creatures/progression/progression_system.gd` — orquesta
+  `gain_experience`, `apply_move_choice` (LEARN/REPLACE/DECLINE), `apply_evolution`,
+  `reconcile_battle_result` (consume `BattleOutcome`).
+- `modules/battle/domain/battle_outcome.gd` — `BattleOutcome.from_battle_state(state, catalogs)`:
+  contrato puro (RefCounted) entre Battle y Progression. El Battle EMITE el resultado; la Progresión
+  lo CONSUME después (sin acoplar la capa de batalla a la de progresión).
+
+### Dominio extendido (sin romper compatibilidad)
+- `CreatureSpecies`: nuevos `growth_rate: String`, `ev_yield: Dictionary`,
+  `base_stat_block()` + `to_dict`/`from_dict`.
+- `CreatureInstance` (fuente de verdad mutable y persistente): nuevos `experience`, `ivs`, `evs`,
+  `nature_id`, `friendship`, `moveset: Array[BattleMoveSlot]`; `recalculate_stats`,
+  `add_move`/`replace_move`/`has_move`/`initialize_move_pp`, `reconcile_post_battle`
+  (solo status volátiles; clamp HP/PP), `to_dict`/`from_dict` (round-trip JSON estable).
+- `DataImporter.SPECIES_KEYS` extendido con `growth_rate`, `ev_yield`.
+- `StatBlock.duplicate()` añadido (RefCounted sin `duplicate` nativo).
+
+### Datos (adapter corregido)
+- `tools/pokeapi_adapter.py`:
+  - `growth_rate` desde `pokemon-species` (ej. bulbasaur = `medium-slow`).
+  - `base_experience` desde el endpoint **`pokemon`** (no `pokemon-species`; corregido — antes
+    leía `pokemon-species` y producía `0`).
+  - `ev_yield` desde `pokemon` → `effort` mapeado a claves de stat.
+- Re-importado: 986 especies · 476 evoluciones · 0 referencias rotas.
+
+## Contrato de separación (FASE 6)
+- **0 autoloads**; `extends Node` solo en `tests/`.
+- `CreatureSpecies` inmutable (definición) vs `CreatureInstance` mutable (estado/identidad `instance_id`).
+- Battle Core muta la MISMA `CreatureInstance` en sitio (HP, `status_state`, `moveset.current_pp`);
+  Progression Core lee/escribe nivel/XP/IV/EV/naturaleza y recalcula `stats`.
+- NO se rediseñó el Battle Core; NO se creó UI; NO se hizo merge a `main`.
+
+## Cobertura honesta — Evoluciones (476 aristas importadas)
+
+| Coverage | Count | Detail |
+|---|---|---|
+| `RUNTIME_SUPPORTED` | 464 | level-up 388, trade 24, use-item 52 (ejecutable en runtime + test) |
+| `DATA_ONLY` | 9 | trigger especial preservado como dato diferido (p.ej. `three_defeated_bisharp`, `use_move` annihilape) |
+| `UNSUPPORTED` | 3 | trigger sin modelo (`other`, `shed`, `spin`); diferido |
+| `PARTIAL` | 0 | — |
+| **TOTAL** | **476** | 464 + 9 + 3 = 476 ✓ |
+
+Detalle: `docs/EVOLUTION_COVERAGE.md` + `docs/PROGRESSION_DATA_AUDIT.md`.
+
+## Listo para la siguiente fase
+
+SÍ (sujeto a revisión). La progresión es data-driven, determinista y validada por 71 checks;
+el Battle Core no cambió (los 137 tests base siguen en verde). NO se hizo merge a `main`.
+Falta (fuera de alcance de FASE 6): UI de elección de movimiento/evolución, persistencia de
+savegame/party, formas (39 diferidas), captura, y runtime de los 12 triggers especiales de evolución.
+

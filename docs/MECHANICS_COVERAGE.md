@@ -102,6 +102,21 @@ Imported-edge coverage (must sum to `IMPORTED_EDGES` = 476):
 > No evolution is executed at runtime in Foundation V1; `SUPPORTED_RUNTIME_OR_MODEL` means the
 > *data model* represents the trigger, not that the engine evolves Pokémon.
 
+### Evolutions — FASE 6 runtime update
+
+FASE 6 (`feature/progression-core-v1`) makes level-up / trade / use-item evolution **executable at
+runtime + tested** (`EvolutionSystem.evolution_candidates` + `ProgressionSystem.apply_evolution`).
+The same 476 imported edges are now classified as:
+
+| Coverage | Count |
+|---|---|
+| `RUNTIME_SUPPORTED` | 464 (level-up 388, trade 24, use-item 52) |
+| `DATA_ONLY` | 9 (special triggers preserved as deferred data) |
+| `UNSUPPORTED` | 3 (`other`, `shed`, `spin`) |
+| `PARTIAL` | 0 |
+
+Full detail: `docs/EVOLUTION_COVERAGE.md` + `docs/evolution_coverage_report.json`.
+
 ## Forms policy (39 deferred)
 
 Hyphenated PokéAPI names are treated as **forms** (regional/alternate/mega/gigantamax/totem/
@@ -144,5 +159,8 @@ Battle y no han cambiado de cobertura.
 - **DATA available:** 21 types, 937 moves (76 fully damage-resolvable, 504 damage + unimplemented effect, 348 status-only), 373 abilities (data only), 2222 items (data only), 986 species, 129390 learnset entries, 476 evolutions (388 level-up modelable, 52 partial, 36 unsupported).
 - **Implemented at runtime:** 91 moves bajo el criterio anterior; 6 abilities; 2 held items;
   canonical status; snapshot v2 y servidor autoritativo determinista.
+- **FASE 6 (Progression Core):** XP/levels (6 curvas), stats por IV/EV/naturaleza, learnsets,
+  movesets individuales con PP, y evolución por level-up/trade/use-item (464 aristas ejecutables).
 - **NOT implemented yet:** cientos de secundarios/efectos únicos, la mayoría de abilities/items,
-  evolution triggering, forms, capture, XP, networking y presentation.
+  los 12 triggers especiales de evolución (data_only/unsupported), forms, capture, UI, savegame,
+  networking y presentation.
