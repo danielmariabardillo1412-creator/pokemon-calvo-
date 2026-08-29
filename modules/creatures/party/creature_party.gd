@@ -33,6 +33,18 @@ func add_creature(creature: CreatureInstance) -> bool:
 	return true
 
 
+# Replace the object behind an existing stable identity without changing roster order.
+# This is the ownership-safe handoff used when Progression returns a new CreatureInstance
+# for an evolution while preserving instance_id. It deliberately refuses a missing/empty ID.
+func replace_same_identity(creature: CreatureInstance) -> bool:
+	if creature == null or creature.instance_id == &"":
+		return false
+	if not _by_id.has(creature.instance_id):
+		return false
+	_by_id[creature.instance_id] = creature
+	return true
+
+
 func remove_creature(instance_id: StringName) -> bool:
 	if not _by_id.has(instance_id):
 		return false
