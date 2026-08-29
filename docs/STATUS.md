@@ -406,4 +406,101 @@ Core no cambiaron (los 222 tests base siguen en verde). NO se hizo merge a `main
 Falta (fuera de alcance de FASE 7): Storage real (FASE 8), persistencia savegame, UI de captura/
 party, y runtime de reemplazo automático en party llena (hoy solo señaliza STORAGE_REQUIRED).
 
+---
+
+# FASE 8 — Storage Core V1 + Savegame V1
+
+Fecha de validación: 2026-08-29
+Rama: `feature/storage-save-v1` (creada desde `feature/capture-party-v1`)
+Motor: `4.7.stable.official.5b4e0cb0f`
+Fuente: PokéAPI `api-data` (SHA `784c50b3ad27d0390d3b047fc4c4511f71edd049`, BSD 3-Clause)
+
+## Resultado
+
+- Godot import/headless: **PASS**, sin errores de parseo/runtime, exit 0
+- Tests: **429 PASS / 0 FAIL** (308 base FASE 7 + 121 nuevos de Storage/Savegame)
+- GATE 8A (Storage Core): **PASS** · GATE 8B (Savegame): **PASS**
+- Autoloads: **0** (sin cambios)
+- `extends Node` fuera de tests: **0**
+- Referencias rotas: **0** · Rechazados: **0**
+- Determinismo headless: **PASS**
+- Savegame `schema_version`: **1** (`calvo_save_v1`); party/storage layouts referencian el registro canónico
+- Duplicado de `instance_id` en party+storage: **imposible por diseño**
+
+## Qué se añadió
+
+### Storage Core (runtime puro)
+- `modules/creatures/storage/storage_ruleset.gd` — `StorageRuleset`: `BOX_CAPACITY = 30`
+  (sin `MAX_BOXES` en V1; cajas se crean dinámicamente con `ensure_box()`).
+- `modules/creatures/storage/storage_box.gd` — `StorageBox`: slots ordenados
+  (`Array[CreatureInstance|null]`, longitud == capacidad); `creature_at/insert_at/remove_at/
+  move_slot/swap_slots/contains/first_free_slot/is_full/size/slots/to_dict` y `from_dict(d, reg)`
+  (reconstruye desde el registro canónico de criaturas; `corrupted` si falta una referencia).
+- `modules/creatures/storage/creature_storage.gd` — `CreatureStorage`: add/remove/locate/
+  find_first_free_slot/ensure_capacity_for/move_between_boxes/swap_slots/get_all_creatures/
+  to_dict/`from_dict(d, reg)`. Invariante: un `instance_id` aparece a lo sumo una vez en TODAS
+  las cajas; slot libre vacío; misma instancia en origen/destino; operación inválida no corrompe.
+- `modules/creatures/storage/player_collection.gd` — `PlayerCollection` (party + storage):
+  `deposit`/`withdraw` con rollback (mueven la MISMA `CreatureInstance`; nunca la duplican ni
+  la rerollan) y `location_of`.
+- `modules/creatures/storage/capture_routing_result.gd` — `CaptureRoutingResult`.
+- `modules/creatures/storage/capture_ownership_router.gd` — `CaptureOwnershipRouter.route(res,
+  party, storage)`: PARTY⇒no-op (ya añadida), STORAGE_REQUIRED⇒`storage.add_creature(res.captured)`,
+  UNROUTED⇒no-op. Consume el `CaptureDisposition` de FASE 7.
+
+### Savegame (serialización + IO)
+- `modules/save/save_result.gd` — `SaveResult` (ok/path/reason).
+- `modules/save/load_result.gd` — `LoadResult` (ok/reason/schema_version/party/storage).
+- `modules/save/save_game_data.gd` — `SaveGameData` (snapshot puro, V1): registro canónico
+  `creatures` (cada criatura UNA vez) + `party_layout` (solo `ordered_instance_ids`) +
+  `storage_layout` (cajas con slots que referencian `instance_id`). `build`/`validate`/`to_dict`/
+  `from_dict`. `validate` rechaza: `missing_schema`, `unsupported_schema`, `duplicate_creature_id`,
+  `missing_creature_reference`, `double_ownership`, `invalid_storage_slot`.
+- `modules/save/save_game_serializer.gd` — `SaveGameSerializer`: escritura ATÓMICA
+  (temp → verificar parse → renombrar; nunca deja `.tmp` colgando) y `read_raw`/`parse`.
+- `modules/save/save_game_repository.gd` — `SaveGameRepository`: `save_state`/`save_collection`
+  → `SaveResult`; `load` → `LoadResult` TRANSACCIONAL (reconstruye registro + party + storage;
+  si cualquier paso falla, `party`/`storage` quedan en `null`: nunca publica estado parcial).
+  Manejo de corrupción: `missing_file`, `json_parse_error`, + razones de `validate`.
+
+## Regla de identidad (crítica)
+
+Una criatura vive conceptualmente UNA vez (`instance_id`). Party y storage referencian la MISMA
+`CreatureInstance`. No hay duplicado de instancia cross-container en runtime ni en el archivo de
+save (el registro canónico lleva los datos; layouts solo referencian). Double-ownership
+(party+storage apuntando al mismo id) es IMPOSIBLE: rechazado en runtime por `contains_instance_id`
+y en load por `validate`.
+
+## Cobertura demostrada (tests FASE 8)
+
+- Storage: vacío/add/identidad preservada/duplicado rechazado/remove/orden de slots/
+  move misma caja/move entre cajas/swap/move inválido sin mutación/auto-nueva caja/capacidad 30/
+  locate.
+- Party↔Storage: deposit/withdraw preservando la MISMA instancia; withdraw a party llena rechazado;
+  no double-ownership.
+- Capture→STORAGE_REQUIRED: enruta a storage, MISMA instancia, preserva IV/naturaleza/habilidad/
+  moveset/PP.
+- Savegame: vacío/party-only/storage-only/party+storage; round-trip; mismos `instance_id`;
+  orden de party; orden de slots de caja; fidelidad de criatura/IV/naturaleza/habilidad/moves/PP/
+  HP/status/nivel+XP.
+- Corrupción: JSON corrupto, schema faltante, schema futuro, referencia faltante, id duplicado,
+  double-ownership, slot inválido; fallo de load NO publica estado parcial.
+- IO: escritura/lectura de archivo; reemplazo atómico (sin `.tmp` colgando).
+- End-to-end: captura→party/storage→save→load con fidelidad total.
+- Property: deposit/withdraw repetido (20×); save/load repetido (15×).
+
+## Contrato de separación (FASE 8)
+
+- **0 autoloads**; `extends Node` solo en `tests/`.
+- Runtime (dominio) separado de IO: `SaveGameData` (snapshot puro) vs `SaveGameSerializer` (archivo).
+- `CreatureInstance` es la fuente de verdad mutable; `SaveGameData` solo transporta diccionarios.
+- NO se creó UI; NO se hizo merge a `main`; NO se introdujo networking.
+
+## Listo para la siguiente fase
+
+SÍ (sujeto a revisión). Storage y Savegame están data-driven, deterministas y validados (121 checks);
+Battle/Progression/Capture/Party no cambiaron (los 308 tests base siguen en verde). Falta (fuera de
+alcance de FASE 8): UI de storage/party/save, autosave, múltiples perfiles de save, y migraciones de
+schema (hoy solo rechaza schema no soportado; no hay fake-migrations).
+
 

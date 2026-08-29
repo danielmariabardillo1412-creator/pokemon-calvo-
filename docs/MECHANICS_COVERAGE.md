@@ -165,6 +165,13 @@ Battle y no han cambiado de cobertura.
   balls; bonus de status sleep/freeze 2.0, poison/burn/paralysis/badly_poisoned 1.5; `capture_rate`
   importado de PokéAPI 1..255; restricción trainer/no-forjable; party persistente máx 6 con
   preservación de identidad IV/EV/naturaleza/ability/moveset/PP). NO rediseña Battle/Progression.
+- **FASE 8 (Storage Core + Savegame V1):** Storage persistente (`CreatureStorage`/`StorageBox`,
+  `BOX_CAPACITY = 30`, cajas dinámicas) y `PlayerCollection` (deposit/withdraw con la MISMA instancia,
+  rollback, sin duplicado); `CaptureOwnershipRouter` enruta `STORAGE_REQUIRED` a storage preservando
+  identidad. Savegame versionado (registro canónico + layouts por referencia), escritura atómica,
+  carga transaccional, rechazo de corrupción (`missing_file`/`json_parse_error`/`missing_schema`/
+  `unsupported_schema`/`duplicate_creature_id`/`missing_creature_reference`/`double_ownership`/
+  `invalid_storage_slot`). End-to-end captura→party/storage→save→load con fidelidad total.
 - **NOT implemented yet:** cientos de secundarios/efectos únicos, la mayoría de abilities/items,
-  los 12 triggers especiales de evolución (data_only/unsupported), forms, Storage real + savegame,
-  UI de captura/party, networking y presentation.
+  los 12 triggers especiales de evolución (data_only/unsupported), forms, UI de captura/party/storage/
+  save, autosave, multi-perfil de save, networking y presentation.

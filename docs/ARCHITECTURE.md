@@ -131,3 +131,15 @@ parametrización, dobles complejos o integración CI más rica. Cambiar el frame
 debe cambiar el dominio. Battle Core V2 añade una suite separada de unidades y
 escenarios golden; Progression Core (FASE 6) añade `ProgressionTestSuite`; Capture + Party Core
 (FASE 7) añade `CapturePartyTestSuite`. El total actual es **286 PASS / 0 FAIL**.
+
+## Storage Core + Savegame (FASE 8)
+
+`modules/creatures/storage/*` (almacenamiento persistente: cajas ordenadas de slots que referencian
+la MISMA `CreatureInstance` que la party; `BOX_CAPACITY = 30`, cajas dinámicas; `PlayerCollection`
+con deposit/withdraw y rollback; `CaptureOwnershipRouter` que consume `CaptureDisposition`) y
+`modules/save/*` (savegame versionado V1: registro canónico de criaturas + layouts de party/storage
+por referencia; escritura atómica y carga transaccional con manejo explícito de corrupción).
+La identidad por `instance_id` es única: party y storage nunca duplican ni rerollan una criatura; el
+double-ownership es imposible en runtime (`contains_instance_id`) y en load (`SaveGameData.validate`).
+Detalle y reglas: `STORAGE_ARCHITECTURE.md`, `SAVEGAME_ARCHITECTURE.md`,
+`ARCHITECTURE_DECISION_007_STORAGE_SAVE.md`. El total actual es **429 PASS / 0 FAIL**.
