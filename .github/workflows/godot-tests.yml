@@ -36,6 +36,27 @@ jobs:
           godot --version | tee godot-version.log
           godot --version | grep -E '^4\.7([\.-]|$)'
 
+      - name: Stage pinned PokeAPI report fixtures
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p data/reports
+          cp ci/fixtures/pokeapi_reports/forms_policy_report.json data/reports/forms_policy_report.json
+          cp ci/fixtures/pokeapi_reports/unsupported_mechanics.json data/reports/unsupported_mechanics.json
+          cp ci/fixtures/pokeapi_reports/import_summary.json data/reports/import_summary.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          for p in (
+              Path('data/reports/forms_policy_report.json'),
+              Path('data/reports/unsupported_mechanics.json'),
+              Path('data/reports/import_summary.json'),
+          ):
+              with p.open(encoding='utf-8') as f:
+                  json.load(f)
+              print(f'CI fixture ready: {p}')
+          PY
+
       - name: Import project
         shell: bash
         run: |
