@@ -1,8 +1,8 @@
 extends Node2D
 
-# Asset-free technical map for FASE 13. It proves the runtime seam:
-# physical movement -> collision-aware step -> encounter -> real Battle -> visual Battle adapter
-# -> authoritative turn resolution -> settlement -> return to exploration.
+# Asset-free technical map for FASE 15. It proves the runtime seam:
+# physical movement -> encounter -> real Battle -> visual Battle adapter -> authoritative player
+# command (move/capture) -> settlement/capture ownership -> return to exploration.
 # Runtime consumes normalized canonical data; import remains build/QA only.
 
 const RUNTIME_DATA_PATH := "res://data/normalized/pokemon_api.json"
@@ -14,21 +14,22 @@ const RUNTIME_DATA_PATH := "res://data/normalized/pokemon_api.json"
 var _director: OverworldEncounterDirector = null
 var _session: WildAdventureSession = null
 var _catalogs: DefinitionCatalog = null
+var _capture_rng: RandomNumberGenerator = null
 
 
 func _ready() -> void:
 	player.step_completed.connect(_on_player_step_completed)
 	battle_presentation.battle_closed.connect(_on_battle_closed)
 	if _bootstrap_demo():
-		battle_presentation.configure(_session, _catalogs)
-		status_label.text = "FASE 13 technical overworld | Arrow keys to move | Walk into the grass"
+		battle_presentation.configure(_session, _catalogs, _capture_rng)
+		status_label.text = "FASE 15 technical overworld | Move in grass | Battle supports moves + capture"
 	else:
 		player.movement_enabled = false
 		status_label.text = "Overworld bootstrap failed"
 
 
 func is_demo_ready() -> bool:
-	return _director != null and _session != null and _catalogs != null
+	return _director != null and _session != null and _catalogs != null and _capture_rng != null
 
 
 func has_active_demo_battle() -> bool:
@@ -37,6 +38,25 @@ func has_active_demo_battle() -> bool:
 
 func is_battle_presentation_visible() -> bool:
 	return battle_presentation != null and battle_presentation.is_presenting_battle()
+
+
+func demo_inventory_quantity(item_id: StringName) -> int:
+	if _session == null or _session.player == null or _session.player.inventory == null:
+		return 0
+	return _session.player.inventory.quantity(item_id)
+
+
+func demo_party_size() -> int:
+	return _session.player.party.size() if _session != null and _session.player != null else 0
+
+
+func demo_storage_contains(instance_id: StringName) -> bool:
+	return (
+		_session != null
+		and _session.player != null
+		and _session.player.storage != null
+		and _session.player.storage.contains_instance_id(instance_id)
+	)
 
 
 func zone_at_position(world_position: Vector2) -> StringName:
@@ -96,10 +116,21 @@ func _bootstrap_demo() -> bool:
 	var collection := PlayerCollection.new()
 	if not collection.party.add_creature(starter):
 		return false
+	# Small technical inventory only. This is not economy/balance data; it exists so the executable
+	# slice can exercise both non-guaranteed and guaranteed capture paths without external assets.
+	if not collection.inventory.add(&"poke_ball", 3):
+		return false
+	if not collection.inventory.add(&"great_ball", 1):
+		return false
+	if not collection.inventory.add(&"master_ball", 1):
+		return false
+
 	_session = WildAdventureSession.new(collection, _catalogs, rules)
 	var encounter_rng := RandomNumberGenerator.new()
 	encounter_rng.seed = 12002
 	_director = OverworldEncounterDirector.new(_session, encounter_rng, 12003)
+	_capture_rng = RandomNumberGenerator.new()
+	_capture_rng.seed = 12004
 
 	var table := WildEncounterTable.new(&"technical_grass", 10000)
 	if not table.add_slot(WildEncounterSlot.new(&"technical_pikachu", &"pikachu", 1, 4, 4)):
