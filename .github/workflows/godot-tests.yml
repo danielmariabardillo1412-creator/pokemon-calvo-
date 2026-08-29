@@ -107,6 +107,20 @@ jobs:
           fi
           echo "Savegame V2 phase gate satisfied: $pass_count PASS / 0 FAIL"
 
+      - name: Run savegame V2 adversarial suite
+        shell: bash
+        run: |
+          set -euo pipefail
+          godot --headless --path . --script res://tests/savegame_v2_adversarial_test_runner.gd 2>&1 | tee savegame-v2-adversarial.log
+          summary="$(grep -E '=== SAVEGAME V2 ADVERSARIAL RESULT: [0-9]+ PASS / 0 FAIL ===' savegame-v2-adversarial.log | tail -n 1)"
+          test -n "$summary"
+          pass_count="$(printf '%s\n' "$summary" | sed -E 's/.*RESULT: ([0-9]+) PASS.*/\1/')"
+          if [ "$pass_count" -lt 8 ]; then
+            echo "Savegame V2 adversarial regression: expected at least 8 passing checks, got $pass_count" >&2
+            exit 1
+          fi
+          echo "Savegame V2 adversarial gate satisfied: $pass_count PASS / 0 FAIL"
+
       - name: Upload CI logs
         if: always()
         uses: actions/upload-artifact@v4
@@ -118,5 +132,6 @@ jobs:
             godot-test.log
             inventory-test.log
             savegame-v2-test.log
+            savegame-v2-adversarial.log
           if-no-files-found: ignore
           retention-days: 7
