@@ -1,0 +1,41 @@
+{
+  "types": [
+    {"id": "normal", "display_name": "Normal", "effectiveness": {}},
+    {"id": "fire", "display_name": "Fire", "effectiveness": {"grass": 2.0, "water": 0.5}},
+    {"id": "grass", "display_name": "Grass", "effectiveness": {"water": 2.0, "fire": 0.5}},
+    {"id": "water", "display_name": "Water", "effectiveness": {"fire": 2.0, "grass": 0.5}},
+    {"id": "electric", "display_name": "Electric", "effectiveness": {"water": 2.0}},
+    {"id": "poison", "display_name": "Poison", "effectiveness": {"grass": 2.0, "fairy": 2.0, "poison": 0.5, "ground": 0.5, "rock": 0.5, "ghost": 0.5}}
+  ],
+  "moves": [
+    {"id": "tackle", "display_name": "Tackle", "power": 35, "type_id": "normal", "priority": 0},
+    {"id": "scratch", "display_name": "Scratch", "power": 40, "type_id": "normal", "priority": 0},
+    {"id": "growl", "display_name": "Growl", "power": 0, "type_id": "normal", "priority": 0},
+    {"id": "ember", "display_name": "Ember", "power": 40, "type_id": "fire", "priority": 0},
+    {"id": "vine_whip", "display_name": "Vine Whip", "power": 45, "type_id": "grass", "priority": 0},
+    {"id": "water_gun", "display_name": "Water Gun", "power": 40, "type_id": "water", "priority": 0},
+    {"id": "thunderbolt", "display_name": "Thunderbolt", "power": 90, "type_id": "electric", "priority": 0},
+    {"id": "quick_attack", "display_name": "Quick Attack", "power": 40, "type_id": "normal", "priority": 1}
+  ],
+  "abilities": [
+    {"id": "overgrow", "display_name": "Overgrow", "description": "Boosts Grass moves in a pinch."},
+    {"id": "blaze", "display_name": "Blaze", "description": "Boosts Fire moves in a pinch."},
+    {"id": "torrent", "display_name": "Torrent", "description": "Boosts Water moves in a pinch."},
+    {"id": "static", "display_name": "Static", "description": "May paralyze on contact."}
+  ],
+  "items": [
+    {"id": "potion", "display_name": "Potion", "description": "Restores 20 HP.", "category": "medicine"}
+  ],
+  "statuses": [
+    {"id": "poison", "display_name": "Poison", "end_turn_max_hp_divisor": 8, "minimum_damage": 1}
+  ],
+  "species": [
+    {"id": "bulbasaur", "display_name": "Bulbasaur", "types": ["grass", "poison"], "base_hp": 45, "base_attack": 49, "base_defense": 49, "base_speed": 45, "ability_ids": ["overgrow"], "base_experience": 64, "learnset": [{"level": 1, "move_id": "tackle"}, {"level": 1, "move_id": "vine_whip"}], "evolutions": [{"species_id": "ivysaur", "min_level": 16, "trigger": "level_up"}]},
+    {"id": "ivysaur", "display_name": "Ivysaur", "types": ["grass", "poison"], "base_hp": 60, "base_attack": 62, "base_defense": 63, "base_speed": 60, "ability_ids": ["overgrow"], "base_experience": 142, "learnset": [{"level": 1, "move_id": "tackle"}], "evolutions": []},
+    {"id": "charmander", "display_name": "Charmander", "types": ["fire"], "base_hp": 39, "base_attack": 52, "base_defense": 43, "base_speed": 65, "ability_ids": ["blaze"], "base_experience": 62, "learnset": [{"level": 1, "move_id": "scratch"}, {"level": 1, "move_id": "ember"}], "evolutions": [{"species_id": "charmeleon", "min_level": 16, "trigger": "level_up"}]},
+    {"id": "charmeleon", "display_name": "Charmeleon", "types": ["fire"], "base_hp": 58, "base_attack": 64, "base_defense": 58, "base_speed": 80, "ability_ids": ["blaze"], "base_experience": 142, "learnset": [{"level": 1, "move_id": "scratch"}], "evolutions": []},
+    {"id": "squirtle", "display_name": "Squirtle", "types": ["water"], "base_hp": 44, "base_attack": 48, "base_defense": 65, "base_speed": 43, "ability_ids": ["torrent"], "base_experience": 63, "learnset": [{"level": 1, "move_id": "tackle"}, {"level": 1, "move_id": "water_gun"}], "evolutions": [{"species_id": "wartortle", "min_level": 16, "trigger": "level_up"}]},
+    {"id": "wartortle", "display_name": "Wartortle", "types": ["water"], "base_hp": 59, "base_attack": 63, "base_defense": 80, "base_speed": 58, "ability_ids": ["torrent"], "base_experience": 142, "learnset": [{"level": 1, "move_id": "tackle"}], "evolutions": []},
+    {"id": "pikachu", "display_name": "Pikachu", "types": ["electric"], "base_hp": 35, "base_attack": 55, "base_defense": 40, "base_speed": 90, "ability_ids": ["static"], "base_experience": 112, "learnset": [{"level": 1, "move_id": "thunderbolt"}, {"level": 1, "move_id": "quick_attack"}], "evolutions": []}
+  ]
+}

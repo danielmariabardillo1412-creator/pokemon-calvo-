@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "dataset_version": "0.1.0",
+  "source": "fixtures/starter_dataset.json",
+  "generated_at": "2026-08-29",
+  "ruleset": "foundation_v1",
+  "provenance": {
+    "source_name": "Manual starter fixtures",
+    "source_version": "1",
+    "source_url": "",
+    "license": "Original placeholder data; not Pokémon intellectual property"
+  }
+}

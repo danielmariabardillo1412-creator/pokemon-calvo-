@@ -1,0 +1,5 @@
+# Generated artifacts (regenerable by the data pipeline)
+# Versioned: raw/, fixtures/, manifests/, normalized/
+generated/
+reports/
+
