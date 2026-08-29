@@ -146,6 +146,20 @@ func switch_control_enabled() -> bool:
 	)
 
 
+# The identity shown by the selector is stored as item metadata. This prevents a stale selected
+# index from silently targeting a different creature if the authoritative switch list changes.
+func selected_switch_instance_id() -> StringName:
+	if _switch_selector == null:
+		return &""
+	var index := _switch_selector.selected
+	if index < 0 or index >= _switch_selector.item_count:
+		return &""
+	var metadata = _switch_selector.get_item_metadata(index)
+	if metadata == null:
+		return &""
+	return StringName(String(metadata))
+
+
 func capture_button_count() -> int:
 	var count := 0
 	for button in _capture_buttons:
@@ -389,13 +403,10 @@ func _on_move_pressed(index: int) -> void:
 
 
 func _on_switch_pressed() -> void:
-	var ids := available_switch_instance_ids()
-	if _switch_selector == null or ids.is_empty():
+	var instance_id := selected_switch_instance_id()
+	if instance_id == &"":
 		return
-	var index := _switch_selector.selected
-	if index < 0 or index >= ids.size():
-		return
-	submit_player_switch(ids[index])
+	submit_player_switch(instance_id)
 
 
 func _on_capture_pressed(index: int) -> void:
@@ -501,7 +512,9 @@ func _refresh_switch_controls(state: BattleState, waiting: bool) -> void:
 			candidate.current_hp,
 			candidate.stats.max_hp,
 		])
-	var can_switch := waiting and not ids.is_empty()
+		var item_index := _switch_selector.item_count - 1
+		_switch_selector.set_item_metadata(item_index, String(instance_id))
+	var can_switch := waiting and _switch_selector.item_count > 0
 	_switch_selector.disabled = not can_switch
 	_switch_button.disabled = not can_switch
 
