@@ -77,4 +77,3 @@ static func from_dict(data: Dictionary) -> BattleEffectSpec:
 	for child_data in data.get("children", []):
 		spec.children.append(BattleEffectSpec.from_dict(child_data))
 	return spec
-

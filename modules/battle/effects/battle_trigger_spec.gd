@@ -36,4 +36,3 @@ func _init(
 	priority = p_priority
 	conditions = p_conditions.duplicate(true)
 	consume_source = p_consume_source
-

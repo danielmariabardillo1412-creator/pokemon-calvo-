@@ -49,4 +49,3 @@ static func from_dict(data: Dictionary) -> BattleStatusState:
 	for status_id in data.get("volatile", {}).keys():
 		state.volatile[StringName(status_id)] = data["volatile"][status_id].duplicate(true)
 	return state
-

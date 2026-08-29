@@ -37,4 +37,3 @@ static func from_dict(data: Dictionary) -> BattleMoveSlot:
 		int(data.get("max_pp", -1)),
 		int(data.get("current_pp", -1)),
 	)
-

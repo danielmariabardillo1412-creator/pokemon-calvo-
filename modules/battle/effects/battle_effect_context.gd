@@ -34,4 +34,3 @@ func _init(
 
 func resolve_target(selector: StringName) -> CreatureInstance:
 	return actor if selector == BattleEffectSpec.SELF else target
-

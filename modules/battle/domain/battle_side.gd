@@ -34,4 +34,3 @@ static func from_dict(data: Dictionary) -> BattleSide:
 	return BattleSide.new(
 		StringName(data.get("side_id", "")), party, StringName(data.get("active_id", ""))
 	)
-

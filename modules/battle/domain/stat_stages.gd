@@ -45,4 +45,3 @@ static func from_dict(data: Dictionary) -> StatStages:
 			int(data.get(String(stat_id), 0)), BattleRuleset.STAGE_MIN, BattleRuleset.STAGE_MAX
 		)
 	return stages
-

@@ -17,4 +17,3 @@ func _init(
 	amount = p_amount
 	reason = p_reason
 	metadata = p_metadata.duplicate(true)
-

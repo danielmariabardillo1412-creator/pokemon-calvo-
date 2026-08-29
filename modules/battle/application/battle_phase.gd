@@ -26,4 +26,3 @@ const ORDER: Array[StringName] = [
 	END_TURN_TRIGGERS,
 	TURN_END,
 ]
-

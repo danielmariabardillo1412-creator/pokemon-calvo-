@@ -144,8 +144,8 @@ Informe final de FASE 4: `docs/INFORME_FINAL_FASE4.md`. Handoff Codex: `docs/COD
 
 # Battle Core V2
 
-Fecha de validación: 2026-08-29  
-Rama: `feature/battle-core-v2`  
+Fecha de validación: 2026-08-29
+Rama: `feature/battle-core-v2`
 Motor: `4.7.stable.official.5b4e0cb0f`
 
 ## Resultado
