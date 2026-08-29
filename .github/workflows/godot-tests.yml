@@ -111,7 +111,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          godot --headless --path . --script res://tests/savegame_v2_adversarial_test_runner.gd 2>&1 | tee savegame-v2-adversarial.log
+          timeout 10s godot --headless --path . --script res://tests/savegame_v2_adversarial_test_runner.gd 2>&1 | tee savegame-v2-adversarial.log
           summary="$(grep -E '=== SAVEGAME V2 ADVERSARIAL RESULT: [0-9]+ PASS / 0 FAIL ===' savegame-v2-adversarial.log | tail -n 1)"
           test -n "$summary"
           pass_count="$(printf '%s\n' "$summary" | sed -E 's/.*RESULT: ([0-9]+) PASS.*/\1/')"
