@@ -10,18 +10,28 @@ const LEGACY_V1_FORMAT_ID := &"calvo_save_v1"
 
 
 static func normalize(raw: Dictionary) -> Dictionary:
-	var version := int(raw.get("schema_version", 0))
-	var format_id := StringName(raw.get("format_id", ""))
-
+	# Treat external JSON as hostile until shape-checked. Casting a Dictionary/Array directly to int
+	# or StringName can raise before the transactional loader has a chance to reject it cleanly.
+	var raw_format: Variant = raw.get("format_id", null)
+	if raw_format == null:
+		return _fail("missing_format_id")
+	if not (raw_format is String or raw_format is StringName):
+		return _fail("invalid_format_type")
+	var format_id := StringName(raw_format)
 	if format_id == &"":
 		return _fail("missing_format_id")
-	if version <= 0:
+
+	var raw_version: Variant = raw.get("schema_version", null)
+	if raw_version == null:
 		return _fail("missing_schema")
+	if not (raw_version is int or raw_version is float):
+		return _fail("invalid_schema_type")
+	var version := int(raw_version)
+	if float(version) != float(raw_version) or version <= 0:
+		return _fail("invalid_schema_value")
 
 	# Current format: accept only the exact current schema. No guessing/backfilling.
 	if format_id == SaveGameData.FORMAT_ID:
-		if version > SaveGameData.CURRENT_VERSION:
-			return _fail("unsupported_schema")
 		if version != SaveGameData.CURRENT_VERSION:
 			return _fail("unsupported_schema")
 		return {
