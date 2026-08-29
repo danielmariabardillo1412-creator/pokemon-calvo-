@@ -121,6 +121,20 @@ jobs:
           fi
           echo "Savegame V2 adversarial gate satisfied: $pass_count PASS / 0 FAIL"
 
+      - name: Run wild encounter phase suite
+        shell: bash
+        run: |
+          set -euo pipefail
+          godot --headless --path . --script res://tests/wild_encounter_test_runner.gd 2>&1 | tee wild-encounter-test.log
+          summary="$(grep -E '=== WILD ENCOUNTER TEST RESULT: [0-9]+ PASS / 0 FAIL ===' wild-encounter-test.log | tail -n 1)"
+          test -n "$summary"
+          pass_count="$(printf '%s\n' "$summary" | sed -E 's/.*RESULT: ([0-9]+) PASS.*/\1/')"
+          if [ "$pass_count" -lt 54 ]; then
+            echo "Wild encounter regression: expected at least 54 passing checks, got $pass_count" >&2
+            exit 1
+          fi
+          echo "Wild encounter phase gate satisfied: $pass_count PASS / 0 FAIL"
+
       - name: Upload CI logs
         if: always()
         uses: actions/upload-artifact@v4
@@ -133,5 +147,6 @@ jobs:
             inventory-test.log
             savegame-v2-test.log
             savegame-v2-adversarial.log
+            wild-encounter-test.log
           if-no-files-found: ignore
           retention-days: 7
