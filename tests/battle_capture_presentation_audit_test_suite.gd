@@ -44,8 +44,10 @@ func _starter(instance_id: StringName, seed_value: int) -> CreatureInstance:
 		{"instance_id": instance_id},
 	)
 	if creature != null and _catalog.move(&"tackle") != null:
-		creature.moveset = [BattleMoveSlot.new(&"tackle", 35, 35)] as Array[BattleMoveSlot]
-		creature.move_ids = [&"tackle"] as Array[StringName]
+		var slots: Array[BattleMoveSlot] = [BattleMoveSlot.new(&"tackle", 35, 35)]
+		var ids: Array[StringName] = [&"tackle"]
+		creature.moveset = slots
+		creature.move_ids = ids
 	return creature
 
 
@@ -59,8 +61,10 @@ func _session(ball_id: StringName, amount: int, battle_seed: int) -> WildAdventu
 	table.add_slot(WildEncounterSlot.new(&"bcp_audit_pikachu", &"pikachu", 1, 4, 4))
 	var encounter := session.begin_encounter(table, _rng(15910 + battle_seed), battle_seed)
 	if encounter.status == WildEncounterResult.ENCOUNTER and session.current_wild() != null:
-		session.current_wild().moveset = [BattleMoveSlot.new(&"tackle", 35, 35)] as Array[BattleMoveSlot]
-		session.current_wild().move_ids = [&"tackle"] as Array[StringName]
+		var enemy_slots: Array[BattleMoveSlot] = [BattleMoveSlot.new(&"tackle", 35, 35)]
+		var enemy_ids: Array[StringName] = [&"tackle"]
+		session.current_wild().moveset = enemy_slots
+		session.current_wild().move_ids = enemy_ids
 	return session
 
 
