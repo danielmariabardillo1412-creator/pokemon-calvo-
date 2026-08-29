@@ -65,12 +65,16 @@ func _test_repository_rejects_hostile_inventory_shapes() -> void:
 		["inv_ruleset_type.json", "ruleset_id", ["bad"], "inventory_invalid_ruleset_type"],
 	]
 
-	for case in cases:
+	for raw_case in cases:
+		var filename: String = String(raw_case[0])
+		var field: String = String(raw_case[1])
+		var value: Variant = raw_case[2]
+		var expected_reason: String = String(raw_case[3])
 		var d := SaveGameData.build(CreatureParty.new(), CreatureStorage.new(), PlayerInventory.new()).to_dict()
-		d["inventory"][case[1]] = case[2]
-		var path := dir + "/" + case[0]
+		d["inventory"][field] = value
+		var path: String = dir + "/" + filename
 		var f := FileAccess.open(path, FileAccess.WRITE)
 		f.store_string(JSON.stringify(d))
 		f.close()
 		var lr := SaveGameRepository.new().load(path)
-		_check.call("sgv2_adv_repo_%s" % case[1], not lr.ok and lr.reason == case[3] and lr.party == null and lr.storage == null and lr.inventory == null)
+		_check.call("sgv2_adv_repo_%s" % field, not lr.ok and lr.reason == expected_reason and lr.party == null and lr.storage == null and lr.inventory == null)
