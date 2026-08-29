@@ -27,6 +27,20 @@ func _run_all() -> void:
 	_test_serialization_round_trip()
 	_test_server_rejects_forged_action()
 	_test_client_sends_intent_only()
+	# --- Data pipeline (Phase 3) ---
+	_test_manifest_valid()
+	_test_manifest_invalid()
+	_test_unique_ids()
+	_test_lookup_species()
+	_test_lookup_move()
+	_test_lookup_type()
+	_test_invalid_type_reference()
+	_test_invalid_learnset()
+	_test_invalid_evolution()
+	_test_definition_immutable()
+	_test_instance_references_species()
+	_test_data_round_trip()
+	_test_imported_battle()
 
 
 func _test_priority() -> void:
@@ -285,3 +299,106 @@ func _check(test_name: String, condition: bool) -> void:
 	else:
 		_failed += 1
 		push_error("FAIL  %s" % test_name)
+
+
+# --- Data pipeline helpers (Phase 3) ---
+
+func _load_json(path: String) -> Dictionary:
+	var f := FileAccess.open(path, FileAccess.READ)
+	assert(f != null, "Cannot open " + path)
+	var text := f.get_as_text()
+	f.close()
+	return JSON.parse_string(text)
+
+func _fixture_raw() -> Dictionary:
+	return _load_json("res://data/fixtures/starter_dataset.json")
+
+func _fixture_manifest() -> DatasetManifest:
+	return DatasetManifest.from_dict(_load_json("res://data/manifests/starter_manifest.json"))
+
+func _clone_dict(d: Dictionary) -> Dictionary:
+	return JSON.parse_string(JSON.stringify(d))
+
+func _import(raw: Dictionary, manifest: DatasetManifest) -> GameData:
+	var res := DataImporter.new().import_dataset(raw, manifest)
+	return res["game_data"]
+
+func _import_report(raw: Dictionary, manifest: DatasetManifest) -> DataImportReport:
+	var res := DataImporter.new().import_dataset(raw, manifest)
+	return res["report"]
+
+
+func _test_manifest_valid() -> void:
+	_check("manifest_valid", _fixture_manifest().is_valid())
+
+func _test_manifest_invalid() -> void:
+	var bad := DatasetManifest.new()
+	bad.schema_version = 999
+	_check("manifest_invalid_schema", not bad.is_valid())
+
+func _test_unique_ids() -> void:
+	var dup := _clone_dict(_fixture_raw())
+	dup["species"].append({"id": "bulbasaur", "display_name": "Dup", "types": ["normal"], "base_hp": 40, "base_attack": 40, "base_defense": 40, "base_speed": 40, "ability_ids": ["overgrow"], "learnset": [], "evolutions": []})
+	var res := DataImporter.new().import_dataset(dup, _fixture_manifest())
+	_check("unique_ids", res["game_data"].species_catalog.has(&"bulbasaur") and res["game_data"].species_catalog.size() == 7 and res["report"].rejected.has("bulbasaur (duplicate_id)"))
+
+func _test_lookup_species() -> void:
+	var gd := _import(_fixture_raw(), _fixture_manifest())
+	_check("lookup_species", gd.species_catalog.has(&"pikachu") and gd.species_catalog.get_by_id(&"pikachu").display_name == "Pikachu")
+
+func _test_lookup_move() -> void:
+	var gd := _import(_fixture_raw(), _fixture_manifest())
+	_check("lookup_move", gd.move_catalog.has(&"thunderbolt") and gd.move_catalog.get_by_id(&"thunderbolt").power == 90)
+
+func _test_lookup_type() -> void:
+	var gd := _import(_fixture_raw(), _fixture_manifest())
+	_check("lookup_type", gd.type_catalog.has(&"electric") and gd.type_catalog.get_by_id(&"electric").multiplier_against(&"water") == 2.0)
+
+func _test_invalid_type_reference() -> void:
+	var raw := _clone_dict(_fixture_raw())
+	raw["species"].append({"id": "ghostsaur", "display_name": "Ghostsaur", "types": ["ghost"], "base_hp": 40, "base_attack": 40, "base_defense": 40, "base_speed": 40, "ability_ids": ["overgrow"], "learnset": [], "evolutions": []})
+	var res := DataImporter.new().import_dataset(raw, _fixture_manifest())
+	_check("invalid_type_reference", not res["game_data"].species_catalog.has(&"ghostsaur") and res["report"].rejected.has("ghostsaur (broken_type_reference)"))
+
+func _test_invalid_learnset() -> void:
+	var raw := _clone_dict(_fixture_raw())
+	raw["species"].append({"id": "nosuchmove", "display_name": "Nsm", "types": ["normal"], "base_hp": 40, "base_attack": 40, "base_defense": 40, "base_speed": 40, "ability_ids": ["overgrow"], "learnset": [{"level": 1, "move_id": "does_not_exist"}], "evolutions": []})
+	var res := DataImporter.new().import_dataset(raw, _fixture_manifest())
+	_check("invalid_learnset", not res["game_data"].species_catalog.has(&"nosuchmove") and res["report"].rejected.has("nosuchmove (broken_move_reference)"))
+
+func _test_invalid_evolution() -> void:
+	var raw := _clone_dict(_fixture_raw())
+	raw["species"].append({"id": "evobroken", "display_name": "Eb", "types": ["normal"], "base_hp": 40, "base_attack": 40, "base_defense": 40, "base_speed": 40, "ability_ids": ["overgrow"], "evolutions": [{"species_id": "missingmon", "min_level": 16, "trigger": "level_up"}]})
+	var res := DataImporter.new().import_dataset(raw, _fixture_manifest())
+	_check("invalid_evolution", not res["game_data"].species_catalog.has(&"evobroken") and res["report"].rejected.has("evobroken (broken_evolution_reference)"))
+
+func _test_definition_immutable() -> void:
+	var gd := _import(_fixture_raw(), _fixture_manifest())
+	var sp := gd.species_catalog.get_by_id(&"bulbasaur")
+	var again := gd.species_catalog.get_by_id(&"bulbasaur")
+	_check("definition_immutable", sp != null and sp == again and sp.type_ids_resolved().has(&"grass") and sp.learnset.size() == 2)
+
+func _test_instance_references_species() -> void:
+	var gd := _import(_fixture_raw(), _fixture_manifest())
+	var sp := gd.species_catalog.get_by_id(&"pikachu")
+	var stats := sp.stats_for_level(5)
+	var inst := CreatureInstance.new(&"inst1", &"pikachu", 5, stats, [&"thunderbolt", &"quick_attack"])
+	_check("instance_references_species", gd.species_catalog.has(inst.species_id) and inst.stats.max_hp == stats.max_hp)
+
+func _test_data_round_trip() -> void:
+	var gd := _import(_fixture_raw(), _fixture_manifest())
+	var text := JSON.stringify(gd.to_dict())
+	var restored := GameData.from_dict(JSON.parse_string(text))
+	_check("data_round_trip", restored.species_catalog.size() == gd.species_catalog.size() and restored.move_catalog.has(&"thunderbolt") and restored.species_catalog.has(&"bulbasaur") and restored.manifest.schema_version == 1)
+
+func _test_imported_battle() -> void:
+	var gd := _import(_fixture_raw(), _fixture_manifest())
+	var cat := gd.to_definition_catalog()
+	var a := CreatureInstance.new(&"c1", &"charmander", 10, gd.species_catalog.get_by_id(&"charmander").stats_for_level(10), [&"ember", &"scratch"])
+	var b := CreatureInstance.new(&"c2", &"squirtle", 10, gd.species_catalog.get_by_id(&"squirtle").stats_for_level(10), [&"water_gun", &"tackle"])
+	var state := BattleState.new(&"b1", [a, b], 12345)
+	var server := AuthoritativeBattleServer.new(state, cat)
+	var cli := BattleClient.new()
+	var events := server.submit_turn([cli.request_move(1, &"c1", &"ember", &"c2"), cli.request_move(1, &"c2", &"water_gun", &"c1")])
+	var dmg := _first_event(events, BattleEvent.DAMAGE_APPLIED)
+	_check("imported_battle", dmg != null and dmg.amount > 0)
