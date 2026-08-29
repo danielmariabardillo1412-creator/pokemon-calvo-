@@ -199,8 +199,8 @@ jobs:
           summary="$(grep -E '=== BATTLE CAPTURE PRESENTATION RESULT: [0-9]+ PASS / 0 FAIL ===' battle-capture-presentation-test.log | tail -n 1)"
           test -n "$summary"
           pass_count="$(printf '%s\n' "$summary" | sed -E 's/.*RESULT: ([0-9]+) PASS.*/\1/')"
-          if [ "$pass_count" -lt 51 ]; then
-            echo "Battle capture presentation regression: expected at least 51 passing checks, got $pass_count" >&2
+          if [ "$pass_count" -lt 68 ]; then
+            echo "Battle capture presentation regression: expected at least 68 passing checks, got $pass_count" >&2
             exit 1
           fi
           echo "Battle capture presentation phase gate satisfied: $pass_count PASS / 0 FAIL"
