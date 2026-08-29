@@ -1,8 +1,8 @@
 extends Node2D
 
-# Asset-free technical map for FASE 15. It proves the runtime seam:
+# Asset-free technical map for FASE 16. It proves the runtime seam:
 # physical movement -> encounter -> real Battle -> visual Battle adapter -> authoritative player
-# command (move/capture) -> settlement/capture ownership -> return to exploration.
+# command (move/switch/capture) -> settlement/capture ownership -> return to exploration.
 # Runtime consumes normalized canonical data; import remains build/QA only.
 
 const RUNTIME_DATA_PATH := "res://data/normalized/pokemon_api.json"
@@ -22,7 +22,7 @@ func _ready() -> void:
 	battle_presentation.battle_closed.connect(_on_battle_closed)
 	if _bootstrap_demo():
 		battle_presentation.configure(_session, _catalogs, _capture_rng)
-		status_label.text = "FASE 15 technical overworld | Move in grass | Battle supports moves + capture"
+		status_label.text = "FASE 16 technical overworld | Battle supports moves + switch + capture"
 	else:
 		player.movement_enabled = false
 		status_label.text = "Overworld bootstrap failed"
@@ -99,7 +99,8 @@ func _bootstrap_demo() -> bool:
 	_catalogs = game_data.to_definition_catalog()
 	var rules := ProgressionRuleset.new()
 	var starter_species := _catalogs.species_catalog.get_by_id(&"bulbasaur")
-	if starter_species == null:
+	var bench_species := _catalogs.species_catalog.get_by_id(&"charmander")
+	if starter_species == null or bench_species == null:
 		return false
 	var starter_rng := RandomNumberGenerator.new()
 	starter_rng.seed = 12001
@@ -111,10 +112,24 @@ func _bootstrap_demo() -> bool:
 		starter_rng,
 		{"instance_id": &"technical_starter"},
 	)
-	if starter == null:
+	var bench_rng := RandomNumberGenerator.new()
+	bench_rng.seed = 12005
+	var bench := CreatureFactory.create(
+		bench_species,
+		5,
+		_catalogs,
+		rules,
+		bench_rng,
+		{"instance_id": &"technical_bench"},
+	)
+	if starter == null or bench == null:
 		return false
 	var collection := PlayerCollection.new()
 	if not collection.party.add_creature(starter):
+		return false
+	# Second technical party member exists only to exercise elective Switch in the executable slice.
+	# It is a QA fixture, not a decision about the final starter roster or game balance.
+	if not collection.party.add_creature(bench):
 		return false
 	# Small technical inventory only. This is not economy/balance data; it exists so the executable
 	# slice can exercise both non-guaranteed and guaranteed capture paths without external assets.
