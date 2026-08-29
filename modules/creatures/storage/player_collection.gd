@@ -1,12 +1,14 @@
 class_name PlayerCollection
 extends RefCounted
 
-# Aggregate holding the player's live party + storage. Owns the deposit/withdraw operations that
-# MOVE a CreatureInstance between party and storage while preserving its identity (same object).
+# Aggregate holding the player's live party + storage + inventory. Owns the deposit/withdraw
+# operations that MOVE a CreatureInstance between party and storage while preserving its identity
+# (same object). Inventory is independent mutable player state and is persisted by SaveGame V2.
 # Neither party nor storage ever creates/rerolls the creature; this aggregate just relocates it.
 
 var party: CreatureParty = CreatureParty.new()
 var storage: CreatureStorage = CreatureStorage.new()
+var inventory: PlayerInventory = PlayerInventory.new()
 
 
 # PARTY -> STORAGE. Same CreatureInstance, removed from party and added to storage.
@@ -39,7 +41,7 @@ func withdraw(instance_id: StringName) -> bool:
 	return true
 
 
-# Convenience: which container currently owns the instance (or null).
+# Convenience: which creature container currently owns the instance (or null).
 func location_of(instance_id: StringName) -> StringName:
 	if party.contains_instance_id(instance_id):
 		return &"PARTY"

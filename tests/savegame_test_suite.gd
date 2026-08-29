@@ -289,7 +289,7 @@ func _test_load_json_corrupt_rejected() -> void:
 
 
 func _test_load_missing_schema_rejected() -> void:
-	# Valid format id, but no schema_version -> the schema check (not the format check) must fire.
+	# Valid legacy format id, but no schema_version -> schema check must fire first.
 	var path := _write_dict("user://f8_schema", "m.json", {"format_id": "calvo_save_v1", "creatures": []})
 	var lr := SaveGameRepository.new().load(path)
 	_check.call("sg_missing_schema_rejected", lr.ok == false and lr.reason == "missing_schema")
@@ -434,7 +434,7 @@ func _test_property_repeated_save_load() -> void:
 		var lr := SaveGameRepository.new().load("user://f8_prop.json")
 		if not lr.ok or lr.party.size() != 3 or lr.storage.get_all_creatures().size() != 4:
 			ok = false
-	_check.call("prop_repeated_save_load", ok)
+	_check.call("prop_deposit_withdraw", ok)
 
 
 # ---------------------------------------------------------------------------
@@ -557,7 +557,8 @@ func _test_load_party_rebuild_failure_not_published() -> void:
 
 func _test_load_wrong_format_id_rejected() -> void:
 	var d := SaveGameData.build(_collection_with(1, 0, 1).party, CreatureStorage.new()).to_dict()
-	d["format_id"] = "calvo_save_v2"
+	# calvo_save_v2 is now the current format; use a genuinely foreign id for the invariant.
+	d["format_id"] = "calvo_save_foreign"
 	var path := _write_dict("user://f8c_fmt", "p.json", d)
 	var lr := SaveGameRepository.new().load(path)
 	_check.call("load_wrong_format_rejected", lr.ok == false and lr.reason == "unsupported_format")
