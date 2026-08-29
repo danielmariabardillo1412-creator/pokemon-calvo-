@@ -9,7 +9,7 @@ var _client := BattleClient.new()
 func _ready() -> void:
 	_catalog = _build_catalog()
 	_run_all()
-	print("\n=== FOUNDATION V1: %d PASS / %d FAIL ===" % [_passed, _failed])
+	print("\n=== PROJECT TEST RESULT: %d PASS / %d FAIL ===" % [_passed, _failed])
 	get_tree().quit(0 if _failed == 0 else 1)
 
 
@@ -221,8 +221,8 @@ func _test_serialization_round_trip() -> void:
 func _test_server_rejects_forged_action() -> void:
 	var server := _server(17, 50, 5)
 	var hp_before := server.state.creature(&"creature_b").current_hp
-	var forged := _client.request_move(1, &"creature_a", &"not_owned", &"creature_b")
-	var valid := _client.request_move(1, &"creature_b", &"wait", &"creature_a")
+	var forged := _client.request_move(1, &"creature_a", &"not_owned", &"creature_b", &"side_a")
+	var valid := _client.request_move(1, &"creature_b", &"wait", &"creature_a", &"side_b")
 	var events := server.submit_turn([forged, valid])
 	_check(
 		"server_authority",
@@ -235,13 +235,16 @@ func _test_server_rejects_forged_action() -> void:
 
 
 func _test_client_sends_intent_only() -> void:
-	var payload := _client.request_move(1, &"creature_a", &"strike", &"creature_b").to_dict()
+	var payload := _client.request_move(1, &"creature_a", &"strike", &"creature_b", &"side_a").to_dict()
 	_check(
 		"client_intent_only",
-		payload.keys().size() == 4
+		payload.keys().size() == 5
 		and not payload.has("damage")
 		and not payload.has("hp")
-		and not payload.has("winner_id"),
+		and not payload.has("winner_id")
+		and not payload.has("critical")
+		and not payload.has("hit_result")
+		and not payload.has("status_result"),
 	)
 
 
@@ -274,8 +277,8 @@ func _actions(
 ) -> Array[BattleAction]:
 	var turn := state.turn + 1
 	return [
-		_client.request_move(turn, &"creature_a", move_a, &"creature_b"),
-		_client.request_move(turn, &"creature_b", move_b, &"creature_a"),
+		_client.request_move(turn, &"creature_a", move_a, &"creature_b", &"side_a"),
+		_client.request_move(turn, &"creature_b", move_b, &"creature_a", &"side_b"),
 	]
 
 
@@ -620,6 +623,6 @@ func _test_imported_battle() -> void:
 	var state := BattleState.new(&"b1", [a, b], 12345)
 	var server := AuthoritativeBattleServer.new(state, cat)
 	var cli := BattleClient.new()
-	var events := server.submit_turn([cli.request_move(1, &"c1", &"ember", &"c2"), cli.request_move(1, &"c2", &"water_gun", &"c1")])
+	var events := server.submit_turn([cli.request_move(1, &"c1", &"ember", &"c2", &"side_a"), cli.request_move(1, &"c2", &"water_gun", &"c1", &"side_b")])
 	var dmg := _first_event(events, BattleEvent.DAMAGE_APPLIED)
 	_check("imported_battle", dmg != null and dmg.amount > 0)

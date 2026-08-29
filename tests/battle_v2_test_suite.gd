@@ -469,11 +469,17 @@ func _test_server_validation() -> void:
 	var wrong_side_events := wrong_side_server.submit_turn([
 		wrong_side, _client.request_move(1, &"b", &"idle", &"a", &"side_b")
 	])
+	var missing_side_server := _server(62, [&"tackle"], [&"idle"])
+	var missing_side_events := missing_side_server.submit_turn([
+		_client.request_move(1, &"a", &"tackle", &"b"),
+		_client.request_move(1, &"b", &"idle", &"a", &"side_b"),
+	])
 	var ko_server := _server(62, [&"tackle"], [&"idle"])
 	ko_server.state.creature(&"a").current_hp = 0
 	var ko_events := ko_server.submit_turn(_move_actions(ko_server.state, &"tackle", &"idle"))
 	_expect("v2_actor_not_found", _rejection_reason(missing_events) == "actor_not_found")
 	_expect("v2_wrong_participant", _rejection_reason(wrong_side_events) == "wrong_participant")
+	_expect("v2_missing_participant", _rejection_reason(missing_side_events) == "missing_participant")
 	_expect("v2_ko_actor_rejected", _rejection_reason(ko_events) == "actor_unavailable")
 
 
