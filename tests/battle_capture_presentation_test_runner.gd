@@ -10,6 +10,7 @@ func _initialize() -> void:
 
 func _run() -> void:
 	await BattleCapturePresentationTestSuite.new().run(Callable(self, "_check"), self)
+	await BattleCapturePresentationAuditTestSuite.new().run(Callable(self, "_check"), self)
 	print("\n=== BATTLE CAPTURE PRESENTATION RESULT: %d PASS / %d FAIL ===" % [_passed, _failed])
 	quit(0 if _failed == 0 else 1)
 
