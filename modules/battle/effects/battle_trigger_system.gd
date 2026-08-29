@@ -45,6 +45,8 @@ func conditions_met(
 		move == null or move.damage_class != "physical"
 	):
 		return false
+	if bool(spec.conditions.get("requires_missing_hp", false)) and owner.current_hp >= owner.stats.max_hp:
+		return false
 	var divisor := int(spec.conditions.get("hp_at_or_below_divisor", 0))
 	if divisor > 0 and owner.current_hp * divisor > owner.stats.max_hp:
 		return false
@@ -88,4 +90,3 @@ func _emit_trigger(
 		0,
 		{"source_id": String(spec.source_id), "trigger": String(spec.trigger)},
 	))
-

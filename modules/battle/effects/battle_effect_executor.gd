@@ -42,6 +42,8 @@ func execute(
 				))
 			return BattleEffectResult.new(healed > 0, healed, &"" if healed > 0 else &"full_hp")
 		BattleEffectSpec.RECOIL:
+			if context.last_damage <= 0:
+				return BattleEffectResult.new(false, 0, &"no_damage")
 			var recoil := maxi(1, context.last_damage * spec.ratio_basis_points / 10000)
 			var recoil_applied := recipient.apply_damage(recoil)
 			context.events.append(BattleEvent.new(
@@ -54,6 +56,8 @@ func execute(
 			))
 			return BattleEffectResult.new(recoil_applied > 0, recoil_applied)
 		BattleEffectSpec.DRAIN:
+			if context.last_damage <= 0:
+				return BattleEffectResult.new(false, 0, &"no_damage")
 			var drain := maxi(1, context.last_damage * spec.ratio_basis_points / 10000)
 			var drained := recipient.recover_hp(drain)
 			if drained > 0:

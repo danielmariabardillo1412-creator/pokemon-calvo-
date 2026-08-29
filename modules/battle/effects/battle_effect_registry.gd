@@ -105,6 +105,8 @@ func _register_items() -> void:
 		&"item",
 		&"leftovers",
 		BattleEffectSpec.new(BattleEffectSpec.HEAL, BattleEffectSpec.SELF, 0, 625),
+		0,
+		{"requires_missing_hp": true},
 	)]
 	_item_specs[&"sitrus_berry"] = [BattleTriggerSpec.new(
 		BattleTriggerSpec.AFTER_DAMAGE,
@@ -112,7 +114,7 @@ func _register_items() -> void:
 		&"sitrus_berry",
 		BattleEffectSpec.new(BattleEffectSpec.HEAL, BattleEffectSpec.SELF, 0, 2500),
 		0,
-		{"hp_at_or_below_divisor": 2},
+		{"hp_at_or_below_divisor": 2, "requires_missing_hp": true},
 		true,
 	)]
 
