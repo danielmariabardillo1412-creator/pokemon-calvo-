@@ -35,6 +35,27 @@ func has_explicit_move_mapping(move_id: StringName) -> bool:
 	].has(move_id)
 
 
+func runtime_supported_move_ids() -> Array[StringName]:
+	var result: Array[StringName] = [
+		&"double_edge", &"ember", &"growl", &"mega_drain", &"quick_attack",
+		&"recover", &"sleep_powder", &"swords_dance", &"tackle", &"thunder",
+		&"thunder_punch", &"thunder_wave", &"toxic", &"water_gun", &"will_o_wisp",
+	]
+	return result
+
+
+func runtime_supported_ability_ids() -> Array[StringName]:
+	var result: Array[StringName] = [
+		&"blaze", &"intimidate", &"levitate", &"overgrow", &"static", &"torrent",
+	]
+	return result
+
+
+func runtime_supported_item_ids() -> Array[StringName]:
+	var result: Array[StringName] = [&"leftovers", &"sitrus_berry"]
+	return result
+
+
 func _filter_triggers(source: Array, trigger: StringName) -> Array[BattleTriggerSpec]:
 	var result: Array[BattleTriggerSpec] = []
 	for spec in source:

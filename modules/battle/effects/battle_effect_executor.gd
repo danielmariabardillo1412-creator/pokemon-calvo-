@@ -80,6 +80,7 @@ func execute(
 				context.catalog,
 				context.rng,
 				context.events,
+				context.ruleset,
 			)
 		BattleEffectSpec.CURE_STATUS:
 			return _status_system.cure_persistent(
@@ -118,6 +119,7 @@ func execute(
 				context.catalog,
 				context.rng,
 				context.events,
+				context.ruleset,
 			)
 		BattleEffectSpec.FIXED_DAMAGE:
 			var fixed := recipient.apply_damage(spec.value)

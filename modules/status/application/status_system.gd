@@ -20,7 +20,9 @@ func try_apply(
 	catalog: DefinitionCatalog,
 	rng: SeededRandomSource,
 	events: Array[BattleEvent],
+	ruleset: BattleRuleset = null,
 ) -> BattleEffectResult:
+	var active_ruleset := ruleset if ruleset != null else BattleRuleset.new()
 	if status_id == FLINCH or status_id == CONFUSION:
 		if target.status_state.has_volatile(status_id):
 			_emit_failed(state, source, target, status_id, &"already_present", events)
@@ -35,13 +37,14 @@ func try_apply(
 	if target.status_state.persistent_id != &"":
 		_emit_failed(state, source, target, status_id, &"persistent_status_present", events)
 		return BattleEffectResult.new(false, 0, &"persistent_status_present")
-	var immunity := _immunity_reason(target, status_id, catalog)
+	var immunity := _immunity_reason(target, status_id, catalog, active_ruleset)
 	if immunity != &"":
 		_emit_failed(state, source, target, status_id, immunity, events)
 		return BattleEffectResult.new(false, 0, immunity)
 	target.status_state.persistent_id = status_id
 	if status_id == SLEEP:
-		target.status_state.turns_remaining = 1 + rng.next_index(3)
+		var duration_range := active_ruleset.sleep_max_turns - active_ruleset.sleep_min_turns + 1
+		target.status_state.turns_remaining = active_ruleset.sleep_min_turns + rng.next_index(duration_range)
 	if status_id == BADLY_POISONED:
 		target.status_state.toxic_counter = 0
 	target.status_ids.clear()
@@ -99,7 +102,7 @@ func can_act(
 				return false
 		FREEZE:
 			# calvo_v1: 20% deterministic thaw before the action.
-			if rng.roll_basis_points(2000):
+			if rng.roll_basis_points(active_ruleset.freeze_thaw_chance_basis_points):
 				cure_persistent(state, creature, creature, events)
 			else:
 				_emit_prevented(state, creature, FREEZE, events)
@@ -166,18 +169,14 @@ func _immunity_reason(
 	target: CreatureInstance,
 	status_id: StringName,
 	catalog: DefinitionCatalog,
+	ruleset: BattleRuleset,
 ) -> StringName:
 	var species := catalog.species(target.species_id)
 	if species == null:
 		return &""
-	if status_id == BURN and species.has_type(&"fire"):
-		return &"type_immunity"
-	if (status_id == POISON or status_id == BADLY_POISONED) and (
-		species.has_type(&"poison") or species.has_type(&"steel")
-	):
-		return &"type_immunity"
-	if status_id == PARALYSIS and species.has_type(&"electric"):
-		return &"type_immunity"
+	for type_id in ruleset.status_immunity_types(status_id):
+		if species.has_type(type_id):
+			return &"type_immunity"
 	return &""
 
 
@@ -234,4 +233,3 @@ func _emit_prevented(
 		0,
 		{"status_id": String(status_id)},
 	))
-

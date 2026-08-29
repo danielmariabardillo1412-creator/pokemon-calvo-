@@ -13,6 +13,7 @@ var paralysis_speed_multiplier_basis_points: int = 5000
 var paralysis_skip_chance_basis_points: int = 2500
 var sleep_min_turns: int = 1
 var sleep_max_turns: int = 3
+var freeze_thaw_chance_basis_points: int = 2000
 var poison_max_hp_divisor: int = 8
 var burn_max_hp_divisor: int = 16
 var badly_poisoned_max_hp_divisor: int = 16
@@ -43,3 +44,15 @@ func accuracy_threshold_basis_points(base_accuracy: int, accuracy_stage: int, ev
 func critical_threshold_basis_points() -> int:
 	return critical_chance_numerator * 10000 / critical_chance_denominator
 
+
+func status_immunity_types(status_id: StringName) -> Array[StringName]:
+	var result: Array[StringName] = []
+	match status_id:
+		&"burn":
+			result.append(&"fire")
+		&"poison", &"badly_poisoned":
+			result.append(&"poison")
+			result.append(&"steel")
+		&"paralysis":
+			result.append(&"electric")
+	return result
