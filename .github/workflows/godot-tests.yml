@@ -1,0 +1,62 @@
+name: Godot 4.7 Tests
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: godot-tests-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Godot headless regression
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Godot 4.7
+        uses: chickensoft-games/setup-godot@v2.4.1
+        with:
+          version: 4.7.0
+          use-dotnet: false
+          include-templates: false
+
+      - name: Verify Godot version
+        shell: bash
+        run: |
+          set -euo pipefail
+          godot --version | tee godot-version.log
+          godot --version | grep -E '^4\.7([\.-]|$)'
+
+      - name: Import project
+        shell: bash
+        run: |
+          set -euo pipefail
+          godot --headless --path . --import 2>&1 | tee godot-import.log
+
+      - name: Run complete test suite
+        shell: bash
+        run: |
+          set -euo pipefail
+          godot --headless --path . --script res://tests/test_runner.gd 2>&1 | tee godot-test.log
+          grep -E '=== PROJECT TEST RESULT: [0-9]+ PASS / 0 FAIL ===' godot-test.log
+
+      - name: Upload CI logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: godot-ci-logs-${{ github.run_id }}
+          path: |
+            godot-version.log
+            godot-import.log
+            godot-test.log
+          if-no-files-found: ignore
+          retention-days: 7
