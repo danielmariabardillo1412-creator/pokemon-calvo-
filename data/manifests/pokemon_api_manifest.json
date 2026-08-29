@@ -6,10 +6,11 @@
   "ruleset": "foundation_v1",
   "provenance": {
     "source_name": "PokeAPI/api-data",
-    "source_version": "regenerated from PokeAPI#1629",
-    "source_commit": "784c50b3",
+    "source_version": "784c50b3ad27d0390d3b047fc4c4511f71edd049",
+    "source_commit": "784c50b3ad27d0390d3b047fc4c4511f71edd049",
+    "source_commit_short": "784c50b3",
     "source_url": "https://github.com/PokeAPI/api-data.git",
-    "license": "PokeAPI data license (see https://github.com/PokeAPI/api-data/blob/master/LICENSE.txt); derived Pokemon data is not affiliated with Nintendo/Creatures/Game Freak.",
+    "license": "BSD 3-Clause (see LICENSE.txt in PokeAPI/api-data). Pokemon character/name/design IP is owned by Nintendo/Creatures/Game Freak; this dataset reuses factual game data under the source's BSD 3-Clause license and is not affiliated with or endorsed by Nintendo/Creatures/Game Freak.",
     "import_date": "2026-08-29",
     "schema_version": 1
   }
