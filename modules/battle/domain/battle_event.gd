@@ -3,9 +3,23 @@ extends RefCounted
 
 const ACTION_REJECTED := &"action_rejected"
 const ACTION_USED := &"action_used"
+const MOVE_MISSED := &"move_missed"
+const PP_CHANGED := &"pp_changed"
 const DAMAGE_APPLIED := &"damage_applied"
+const CRITICAL_HIT := &"critical_hit"
+const TYPE_EFFECTIVENESS := &"type_effectiveness"
 const KNOCKED_OUT := &"knocked_out"
 const STATUS_DAMAGE := &"status_damage"
+const STATUS_APPLIED := &"status_applied"
+const STATUS_FAILED := &"status_failed"
+const STATUS_CURED := &"status_cured"
+const ACTION_PREVENTED := &"action_prevented"
+const STAT_STAGE_CHANGED := &"stat_stage_changed"
+const HP_RECOVERED := &"hp_recovered"
+const RECOIL_DAMAGE := &"recoil_damage"
+const SWITCHED := &"switched"
+const ABILITY_TRIGGERED := &"ability_triggered"
+const ITEM_TRIGGERED := &"item_triggered"
 const TURN_ENDED := &"turn_ended"
 const BATTLE_ENDED := &"battle_ended"
 
@@ -46,4 +60,3 @@ func to_dict() -> Dictionary:
 		"amount": amount,
 		"metadata": metadata.duplicate(true),
 	}
-

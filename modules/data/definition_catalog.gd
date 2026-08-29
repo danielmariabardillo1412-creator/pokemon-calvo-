@@ -10,6 +10,8 @@ var species_catalog := SpeciesCatalog.new()
 var move_catalog := MoveCatalog.new()
 var type_catalog := TypeCatalog.new()
 var status_catalog := StatusCatalog.new()
+var ability_catalog := AbilityCatalog.new()
+var item_catalog := ItemCatalog.new()
 
 func add_species(def: CreatureSpecies) -> void:
 	species_catalog.add(def)
@@ -23,6 +25,12 @@ func add_type(def: TypeDefinition) -> void:
 func add_status(def: StatusDefinition) -> void:
 	status_catalog.add(def)
 
+func add_ability(def: AbilityDefinition) -> void:
+	ability_catalog.add(def)
+
+func add_item(def: ItemDefinition) -> void:
+	item_catalog.add(def)
+
 func species(id: StringName) -> CreatureSpecies:
 	return species_catalog.get_by_id(id)
 
@@ -34,6 +42,12 @@ func type(id: StringName) -> TypeDefinition:
 
 func status(id: StringName) -> StatusDefinition:
 	return status_catalog.get_by_id(id)
+
+func ability(id: StringName) -> AbilityDefinition:
+	return ability_catalog.get_by_id(id)
+
+func item(id: StringName) -> ItemDefinition:
+	return item_catalog.get_by_id(id)
 
 func type_multiplier(attack_type_id: StringName, defender_type_id: StringName) -> float:
 	var attack_type := type_catalog.get_by_id(attack_type_id)

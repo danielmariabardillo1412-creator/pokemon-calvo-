@@ -22,6 +22,10 @@ func to_definition_catalog() -> DefinitionCatalog:
 		dc.add_type(type_catalog.get_by_id(id))
 	for id in status_catalog.all_ids():
 		dc.add_status(status_catalog.get_by_id(id))
+	for id in ability_catalog.all_ids():
+		dc.add_ability(ability_catalog.get_by_id(id))
+	for id in item_catalog.all_ids():
+		dc.add_item(item_catalog.get_by_id(id))
 	return dc
 
 func to_dict() -> Dictionary:
