@@ -10,6 +10,7 @@ func _initialize() -> void:
 
 func _run() -> void:
 	await OverworldTestSuite.new().run(Callable(self, "_check"), self)
+	await OverworldAuditTestSuite.new().run(Callable(self, "_check"), self)
 	print("\n=== OVERWORLD TEST RESULT: %d PASS / %d FAIL ===" % [_passed, _failed])
 	quit(0 if _failed == 0 else 1)
 

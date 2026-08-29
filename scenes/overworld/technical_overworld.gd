@@ -4,6 +4,11 @@ extends Node2D
 # physical movement -> collision-aware step -> encounter zone -> WildAdventureSession -> Battle.
 # There is intentionally no battle UI yet; once the logical Battle starts, movement freezes and the
 # status label exposes the transition for local/manual validation.
+#
+# Runtime consumes the already-normalized canonical dataset. Import/normalization remains a build
+# and QA responsibility, so launching the playable scene does not rebuild the dataset every time.
+
+const RUNTIME_DATA_PATH := "res://data/normalized/pokemon_api.json"
 
 @onready var player: OverworldPlayer = $Player
 @onready var status_label: Label = $CanvasLayer/StatusLabel
@@ -53,14 +58,11 @@ func _on_player_step_completed(world_position: Vector2) -> void:
 
 
 func _bootstrap_demo() -> bool:
-	var raw := _load_json("res://data/raw/pokemon_api.json")
-	var manifest_data := _load_json("res://data/manifests/pokemon_api_manifest.json")
-	if raw.is_empty() or manifest_data.is_empty():
+	var normalized := _load_json(RUNTIME_DATA_PATH)
+	if normalized.is_empty():
 		return false
-	var manifest := DatasetManifest.from_dict(manifest_data)
-	var imported := DataImporter.new().import_dataset(raw, manifest)
-	var game_data := imported.get("game_data", null) as GameData
-	if game_data == null:
+	var game_data := GameData.from_dict(normalized)
+	if game_data == null or game_data.manifest == null or not game_data.manifest.is_valid():
 		return false
 	var catalogs := game_data.to_definition_catalog()
 	var rules := ProgressionRuleset.new()

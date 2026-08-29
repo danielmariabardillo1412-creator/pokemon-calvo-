@@ -4,7 +4,8 @@ extends CharacterBody2D
 # Minimal four-direction overworld mover. Movement is continuous in world pixels, while
 # `step_completed` is emitted from ACTUAL distance travelled after collision resolution. This keeps
 # encounter cadence independent from frame rate and prevents walking into a wall from generating
-# fake encounter steps.
+# fake encounter steps. If one physics tick crosses several steps, each signal carries the actual
+# intermediate world position where that step boundary was crossed.
 
 signal step_completed(world_position: Vector2)
 signal facing_changed(direction: Vector2)
@@ -39,7 +40,7 @@ func apply_motion(direction: Vector2, delta: float) -> Vector2:
 	var before := global_position
 	move_and_collide(velocity * delta)
 	var moved := global_position - before
-	_track_real_distance(moved.length())
+	_track_real_movement(before, moved)
 	return moved
 
 
@@ -57,10 +58,24 @@ static func cardinalize(direction: Vector2) -> Vector2:
 	return Vector2.ZERO
 
 
-func _track_real_distance(distance: float) -> void:
+func _track_real_movement(start_position: Vector2, moved: Vector2) -> void:
+	var distance := moved.length()
 	if distance <= 0.0 or step_distance <= 0.0:
 		return
-	_distance_since_step += distance
-	while _distance_since_step + 0.0001 >= step_distance:
-		_distance_since_step -= step_distance
-		step_completed.emit(global_position)
+	var direction := moved / distance
+	var remaining := distance
+	var cursor := start_position
+
+	while _distance_since_step + remaining + 0.0001 >= step_distance:
+		var distance_to_boundary := step_distance - _distance_since_step
+		# Numeric drift can make this almost zero after a prior exact boundary.
+		distance_to_boundary = maxf(0.0, distance_to_boundary)
+		cursor += direction * distance_to_boundary
+		remaining = maxf(0.0, remaining - distance_to_boundary)
+		_distance_since_step = 0.0
+		step_completed.emit(cursor)
+		if remaining <= 0.0001:
+			remaining = 0.0
+			break
+
+	_distance_since_step += remaining
