@@ -1,8 +1,9 @@
 class_name CaptureAttempt
 extends RefCounted
 
-# Server-side input to a capture resolution. `target` is the live wild CreatureInstance
-# (server-resolved by id, never trusted from the client). `context` carries the battle facts.
+# Input to a capture resolution. `target` is the live wild CreatureInstance and `context` carries
+# the battle facts. CaptureSystem is pure logic and does not authenticate these: when networking
+# exists, a higher layer must ensure `target` + `context` are resolved from trusted state.
 
 var target: CreatureInstance
 var ball_id: StringName = &""

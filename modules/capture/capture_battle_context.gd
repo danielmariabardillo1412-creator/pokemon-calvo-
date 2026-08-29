@@ -5,8 +5,8 @@ extends RefCounted
 # battle (NOT by redesigning Battle). Explicitly distinguishes wild vs trainer battle and
 # carries the ownership/side facts CaptureSystem needs to reject invalid attempts.
 #
-# The client may only supply `ball_id` + `target_id`; the server reconstructs the real
-# target creature + this context, so the result can never be forged client-side.
+# NOTE: this context is constructed by the integration layer. CaptureSystem is pure logic and does
+# not verify who built it; the client/server trust boundary (if any) is enforced by a higher layer.
 
 var is_wild: bool = true
 var battle_finished: bool = false

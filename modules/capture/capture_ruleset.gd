@@ -7,9 +7,6 @@ extends RefCounted
 const ID := &"calvo_capture_v1"
 const SCHEMA_VERSION := 2
 
-# Roster-style limit reuse is intentional; capture decision is independent of party internals.
-const MAX_PARTY := 6
-
 # --- Ball definitions (canonical, versioned) ----------------------------
 # PokéAPI items carry no structured capture multiplier, so this table is the source of truth.
 # Multipliers follow the classic family: poke 1.0, great 1.5, ultra 2.0; master = guaranteed.

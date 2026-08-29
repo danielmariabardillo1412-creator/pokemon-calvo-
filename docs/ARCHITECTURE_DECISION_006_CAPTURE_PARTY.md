@@ -13,7 +13,8 @@ ACEPTADA e IMPLEMENTADA. Tests: **286 PASS / 0 FAIL** (222 base + 64 nuevos de P
 
 FASE 6 entregó Progression Core (XP/nivel/stats/naturaleza/IV/EV/evolution). Faltaba la
 **captura** de criaturas salvajes y una **party persistente**. La captura debe ser determinista y
-resoluble en servidor (la clienta no puede forjar el éxito), y la party debe preservar la identidad
+resoluble de forma reproducible; la autoridad cliente/servidor (si existe networking) se valida en una
+capa superior, y la party debe preservar la identidad
 de la criatura (misma `instance_id`, sin reroll de IV/EV/naturaleza/ability/moveset/PP).
 
 ## Decisiones
@@ -26,10 +27,12 @@ de la criatura (misma `instance_id`, sin reroll de IV/EV/naturaleza/ability/move
    `PartyRuleset.MAX_PARTY = 6`; identidad por `instance_id`; serialización round-trip vía
    `CreatureInstance.to_dict/from_dict`. Sin lógica duplicada (add/remove/swap/reorder).
 3. **Capture 100% pura** en `modules/capture/`: sin UI, sin Nodes, sin autoload. Toda la
-   aleatoriedad se inyecta (`RandomNumberGenerator` propiedad del servidor).
-4. **Autoridad de servidor**: la clienta solo envía `ball_id` + `target_id`. El target real y el
-   contexto de batalla (`CaptureBattleContext`) se resuelven en servidor, así el resultado no se
-   puede forjar.
+   aleatoriedad se inyecta (`RandomNumberGenerator` provisto por el llamador).
+4. **Separación de responsabilidad (NO frontera de seguridad dentro de CaptureSystem)**: en un modelo
+   cliente/servidor la clienta solo enviaría `ball_id` + `target_id`; el target real y el
+   `CaptureBattleContext` deben reconstruirse desde estado confiable en una capa superior. `CaptureSystem`
+   es lógica pura/determinista y NO autentica ni impone por sí misma esa frontera; no afirma
+   antiforgery. El RNG se inyecta externamente para mantener la determinación fuera de la clase.
 5. **Regla determinista `calvo_capture_v1`**: `p = (capture_rate/255) * ball_mult * status_mult *
    hp_factor`, con `hp_factor = (3·max_hp − 2·current_hp)/(3·max_hp)`. Master Ball garantizada
    (no consume RNG). Balls: poke 1.0 / great 1.5 / ultra 2.0 / master garantizada.
@@ -59,4 +62,5 @@ de la criatura (misma `instance_id`, sin reroll de IV/EV/naturaleza/ability/move
 
 - Extender `BattleOutcome` con captura (acoplaría Battle a captura).
 - Autoload de party/capture (violaba el contrato 0-autoload del proyecto).
-- Calcular la captura en la clienta (forjable).
+- Calcular la captura en la clienta sin validación de estado (la autoridad debe vivir en una capa
+  superior; `CaptureSystem` es puro y se invoca desde quien valide el estado confiable).

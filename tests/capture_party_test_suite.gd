@@ -20,6 +20,13 @@ func run(check_callback: Callable) -> void:
 		"_test_party_reject_seventh", "_test_party_duplicate_id", "_test_party_remove",
 		"_test_party_swap", "_test_party_reorder", "_test_party_serialization",
 		"_test_party_creature_fidelity",
+		"_test_party_reorder_rejects_duplicate_longer",
+		"_test_party_reorder_rejects_duplicate_same_length",
+		"_test_party_reorder_failure_preserves_original_order",
+		"_test_party_from_dict_deduplicates_order",
+		"_test_party_from_dict_no_duplicate_instances",
+		"_test_party_from_dict_order_by_id_consistency",
+		"_test_party_from_dict_corrupt_order_respects_max_six",
 		# --- Capture ---
 		"_test_capture_valid_attempt", "_test_capture_invalid_target_null",
 		"_test_capture_trainer_rejected", "_test_capture_unknown_ball",
@@ -32,7 +39,9 @@ func run(check_callback: Callable) -> void:
 		"_test_capture_moves_preserved", "_test_capture_pp_preserved",
 		"_test_capture_failed_no_ownership", "_test_capture_full_party_storage_required",
 		"_test_capture_successful_party_add", "_test_capture_item_consumption_semantic",
-		"_test_capture_server_forged_impossible",
+		"_test_capture_non_guaranteed_not_auto_success",
+		"_test_capture_null_party_semantics", "_test_capture_null_party_no_fake_party_added",
+		"_test_capture_normal_party_still_added", "_test_capture_full_party_still_storage_required",
 		# --- Integration ---
 		"_test_integration_factory_battle_capture_party",
 		# --- Golden ---
@@ -196,6 +205,96 @@ func _test_party_creature_fidelity() -> void:
 	_check.call("party_fid_moves", rc.moveset.size() == c.moveset.size())
 
 
+func _test_party_reorder_rejects_duplicate_longer() -> void:
+	var p := CreatureParty.new()
+	var a := _wild(&"bulbasaur", 5, 1)
+	var b := _wild(&"charmander", 5, 2)
+	var c := _wild(&"squirtle", 5, 3)
+	p.add_creature(a); p.add_creature(b); p.add_creature(c)
+	var before := p.get_ordered_ids()
+	_check.call("reorder_dup_longer", p.reorder([a.instance_id, b.instance_id, c.instance_id, a.instance_id]) == false)
+	_check.call("reorder_dup_longer_order_unchanged", p.get_ordered_ids() == before)
+
+
+func _test_party_reorder_rejects_duplicate_same_length() -> void:
+	var p := CreatureParty.new()
+	var a := _wild(&"bulbasaur", 5, 1)
+	var b := _wild(&"charmander", 5, 2)
+	var c := _wild(&"squirtle", 5, 3)
+	p.add_creature(a); p.add_creature(b); p.add_creature(c)
+	var before := p.get_ordered_ids()
+	_check.call("reorder_dup_same_len", p.reorder([a.instance_id, a.instance_id, b.instance_id]) == false)
+	_check.call("reorder_dup_same_len_order_unchanged", p.get_ordered_ids() == before)
+
+
+func _test_party_reorder_failure_preserves_original_order() -> void:
+	var p := CreatureParty.new()
+	var a := _wild(&"bulbasaur", 5, 1)
+	var b := _wild(&"charmander", 5, 2)
+	var c := _wild(&"squirtle", 5, 3)
+	p.add_creature(a); p.add_creature(b); p.add_creature(c)
+	var before := p.get_ordered_ids()
+	_check.call("reorder_unknown_rejected", p.reorder([a.instance_id, b.instance_id, &"ghost"]) == false)
+	_check.call("reorder_failure_preserves_order", p.get_ordered_ids() == before)
+
+
+func _test_party_from_dict_deduplicates_order() -> void:
+	var p := CreatureParty.new()
+	var a := _wild(&"bulbasaur", 5, 1)
+	var b := _wild(&"charmander", 5, 2)
+	var c := _wild(&"squirtle", 5, 3)
+	p.add_creature(a); p.add_creature(b); p.add_creature(c)
+	var d := p.to_dict()
+	var o: Array = Array(d["ordered_instance_ids"])
+	o.append(String(a.instance_id))  # duplicate first id
+	d["ordered_instance_ids"] = o
+	var restored := CreatureParty.from_dict(d)
+	_check.call("from_dict_dedup_order", restored.get_ordered_ids() == [a.instance_id, b.instance_id, c.instance_id])
+
+
+func _test_party_from_dict_no_duplicate_instances() -> void:
+	var p := CreatureParty.new()
+	var a := _wild(&"bulbasaur", 5, 1)
+	var b := _wild(&"charmander", 5, 2)
+	var c := _wild(&"squirtle", 5, 3)
+	p.add_creature(a); p.add_creature(b); p.add_creature(c)
+	var d := p.to_dict()
+	var o: Array = Array(d["ordered_instance_ids"])
+	o.append(String(a.instance_id))
+	d["ordered_instance_ids"] = o
+	var restored := CreatureParty.from_dict(d)
+	_check.call("from_dict_no_dup_instances", restored.get_ordered_ids().size() == restored.size() and restored.size() == 3)
+
+
+func _test_party_from_dict_order_by_id_consistency() -> void:
+	var p := CreatureParty.new()
+	var a := _wild(&"bulbasaur", 5, 1)
+	var b := _wild(&"charmander", 5, 2)
+	var c := _wild(&"squirtle", 5, 3)
+	p.add_creature(a); p.add_creature(b); p.add_creature(c)
+	var d := p.to_dict()
+	var o: Array = Array(d["ordered_instance_ids"])
+	o.append(String(a.instance_id))
+	d["ordered_instance_ids"] = o
+	var restored := CreatureParty.from_dict(d)
+	var consistent := true
+	for id in restored.get_ordered_ids():
+		if restored.get_creature(id) == null:
+			consistent = false
+	_check.call("from_dict_order_by_id_consistent", consistent and restored.get_ordered_ids().size() == restored.get_creatures().size())
+
+
+func _test_party_from_dict_corrupt_order_respects_max_six() -> void:
+	var creatures: Array[CreatureInstance] = []
+	var ids: Array[StringName] = [&"a1", &"a2", &"a3", &"a4", &"a5", &"a6", &"a7", &"a8"]
+	for i in range(8):
+		creatures.append(_mk_creature(100 + i, ids[i]))
+	var d := _dict_from_creatures(creatures, ids)
+	var restored := CreatureParty.from_dict(d)
+	_check.call("from_dict_max_six_size", restored.size() == 6 and restored.is_full())
+	_check.call("from_dict_max_six_invariant", restored.get_ordered_ids().size() == restored.size())
+
+
 # --- Capture ---------------------------------------------------------------
 
 func _test_capture_valid_attempt() -> void:
@@ -308,6 +407,34 @@ func _event_kinds(res: CaptureResolution) -> Array:
 	return out
 
 
+func _has_event(res: CaptureResolution, kind: StringName) -> bool:
+	for e in res.events:
+		if e.kind == kind:
+			return true
+	return false
+
+
+func _mk_creature(seed: int, id: StringName) -> CreatureInstance:
+	var c := _wild(&"bulbasaur", 5, seed)
+	c.instance_id = id
+	return c
+
+
+func _dict_from_creatures(creatures: Array[CreatureInstance], order: Array[StringName]) -> Dictionary:
+	var cds := []
+	for c in creatures:
+		cds.append(c.to_dict())
+	var oids := []
+	for x in order:
+		oids.append(String(x))
+	return {
+		"schema_version": 2,
+		"ruleset_id": "calvo_party_v1",
+		"ordered_instance_ids": oids,
+		"creatures": cds,
+	}
+
+
 func _test_capture_preserves_identity() -> void:
 	var wild := _wild(&"pikachu", 30, 1)
 	var res := CaptureSystem.resolve(_attempt(wild, &"master_ball", _wild_context()), _rng(1), _catalog, CreatureParty.new())
@@ -396,7 +523,10 @@ func _test_capture_item_consumption_semantic() -> void:
 	_check.call("capture_no_consume_on_invalid", invalid.result.consume_item == false)
 
 
-func _test_capture_server_forged_impossible() -> void:
+func _test_capture_non_guaranteed_not_auto_success() -> void:
+	# A low-probability (non-guaranteed) wild capture must NOT auto-succeed: the outcome is computed
+	# from the probability + RNG. This proves the result is not hardcoded true (no implicit "auto win").
+	# NOTE: this is NOT a client/server antiforgery test - CaptureSystem is pure logic.
 	var wild := _wild(&"mewtwo", 50, 1)
 	wild.current_hp = wild.stats.max_hp
 	var any_failed := false
@@ -405,7 +535,46 @@ func _test_capture_server_forged_impossible() -> void:
 		if res.result.status == CaptureResult.FAILED:
 			any_failed = true
 			break
-	_check.call("capture_not_auto_success", any_failed)
+	_check.call("capture_non_guaranteed_not_auto_success", any_failed)
+
+
+func _test_capture_null_party_semantics() -> void:
+	var wild := _wild(&"pikachu", 30, 1)
+	wild.current_hp = 1
+	var res := CaptureSystem.resolve(_attempt(wild, &"master_ball", _wild_context()), _rng(1), _catalog, null)
+	_check.call("null_party_success", res.result.status == CaptureResult.SUCCESS)
+	_check.call("null_party_captured", res.captured == wild)
+	_check.call("null_party_disposition_unrouted", res.disposition == CaptureDisposition.UNROUTED)
+	_check.call("null_party_not_party", res.disposition != CaptureDisposition.PARTY)
+
+
+func _test_capture_null_party_no_fake_party_added() -> void:
+	var wild := _wild(&"pikachu", 30, 1)
+	wild.current_hp = 1
+	var res := CaptureSystem.resolve(_attempt(wild, &"master_ball", _wild_context()), _rng(1), _catalog, null)
+	_check.call("null_party_no_fake_add", not _has_event(res, CaptureEvent.PARTY_ADDED))
+
+
+func _test_capture_normal_party_still_added() -> void:
+	var party := CreatureParty.new()
+	var wild := _wild(&"pikachu", 30, 1)
+	wild.current_hp = 1
+	var res := CaptureSystem.resolve(_attempt(wild, &"master_ball", _wild_context()), _rng(1), _catalog, party)
+	_check.call("normal_party_added", res.disposition == CaptureDisposition.PARTY and party.contains_instance_id(wild.instance_id) and party.size() == 1)
+	_check.call("normal_party_event", _has_event(res, CaptureEvent.PARTY_ADDED))
+
+
+func _test_capture_full_party_still_storage_required() -> void:
+	var party := CreatureParty.new()
+	for i in range(6):
+		party.add_creature(_wild(&"bulbasaur", 5, 400 + i))
+	var wild := _wild(&"pikachu", 30, 1)
+	wild.current_hp = 1
+	var res := CaptureSystem.resolve(_attempt(wild, &"master_ball", _wild_context()), _rng(1), _catalog, party)
+	_check.call("full_party_storage", res.disposition == CaptureDisposition.STORAGE_REQUIRED)
+	_check.call("full_party_no_fake_add", not _has_event(res, CaptureEvent.PARTY_ADDED))
+	_check.call("full_party_storage_event", _has_event(res, CaptureEvent.STORAGE_REQUIRED))
+	_check.call("full_party_unchanged", party.size() == 6 and not party.contains_instance_id(wild.instance_id))
 
 
 # --- Integration -----------------------------------------------------------

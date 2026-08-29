@@ -1,9 +1,13 @@
 class_name CaptureSystem
 extends RefCounted
 
-# Pure capture resolution. No UI, no Nodes, no autoload. All randomness is injected via
-# RandomNumberGenerator (server-owned). The client only ever supplies ball_id + target_id; the
-# real target creature + battle context are resolved server-side, so the result cannot be forged.
+# Pure, deterministic capture resolution. No UI, no Nodes, no autoload. All randomness is injected
+# via the RandomNumberGenerator argument (the caller owns the RNG source).
+#
+# CaptureSystem is domain logic only: it does NOT, by itself, enforce a client/server trust
+# boundary. It computes the deterministic outcome from whatever `target` and `context` it is given.
+# When networking exists, a higher layer MUST validate that `target` + `context` are reconstructed
+# from trusted server state before calling resolve(); this class does not authenticate or trust them.
 
 # Server resolution of a single capture attempt. Mutates `party` (adds on success if there is
 # room) and returns a CaptureResolution (result + captured creature + disposition + events).
@@ -73,13 +77,15 @@ static func resolve(
 		events.append(CaptureEvent.new(CaptureEvent.SUCCEEDED, {
 			"target_id": String(target.instance_id), "ball_id": String(attempt.ball_id),
 		}))
-		if party != null and party.is_full():
+		if party == null:
+			# No roster supplied: the capture still resolves, but nothing is added anywhere.
+			res.disposition = CaptureDisposition.UNROUTED
+		elif party.is_full():
 			res.disposition = CaptureDisposition.STORAGE_REQUIRED
 			events.append(CaptureEvent.new(CaptureEvent.STORAGE_REQUIRED, {"target_id": String(target.instance_id)}))
 		else:
 			res.disposition = CaptureDisposition.PARTY
-			if party != null:
-				party.add_creature(target)
+			party.add_creature(target)
 			events.append(CaptureEvent.new(CaptureEvent.PARTY_ADDED, {"target_id": String(target.instance_id)}))
 	else:
 		r.shake_count = _failed_shakes(p)

@@ -336,11 +336,16 @@ Fuente: PokéAPI `api-data` (SHA `784c50b3ad27d0390d3b047fc4c4511f71edd049`, BSD
 ## Qué se añadió
 
 ### Party (persistente)
-- `modules/creatures/party/party_ruleset.gd` — `PartyRuleset`: `MAX_PARTY = 6`,
-  `SCHEMA_VERSION = 2`, `is_valid()`.
+- `modules/creatures/party/party_ruleset.gd` — `PartyRuleset`: **única fuente de verdad** de
+  `MAX_PARTY = 6`, `SCHEMA_VERSION = 2`, `is_valid()`. (`CaptureRuleset.MAX_PARTY` eliminado: el
+  límite 6 vive solo aquí.)
 - `modules/creatures/party/creature_party.gd` — `CreatureParty`: add/remove/swap/reorder/get/
   contains/size/is_full/is_empty/get_creatures/get_ordered_ids/get_active/to_dict/from_dict.
   Round-trip estable vía `CreatureInstance`.
+  - `reorder(ids)` exige permutación EXACTA del roster (mismo tamaño, sin duplicados, sin ids
+    desconocidos/ausentes); entrada inválida ⇒ `false` y `_order` inalterado.
+  - `from_dict` deduplica `ordered_instance_ids` (primera ocurrencia válida), ignora ids inexistentes,
+    añade criaturas ausentes y respeta `MAX_PARTY`; invariante `_order.size() == _by_id.size()`.
 
 ### Capture (puro, determinista)
 - `modules/capture/capture_ball_definition.gd` — `CaptureBallDefinition` (ball_id/mult/guaranteed).
@@ -353,10 +358,11 @@ Fuente: PokéAPI `api-data` (SHA `784c50b3ad27d0390d3b047fc4c4511f71edd049`, BSD
 - `modules/capture/capture_attempt.gd` — `CaptureAttempt` (target/ball_id/context; sin campo de éxito).
 - `modules/capture/capture_result.gd` — `CaptureResult` (status/ball_id/target_id/probability/
   shake_count/consume_item/reason).
-- `modules/capture/capture_disposition.gd` — `CaptureDisposition` (PARTY/STORAGE_REQUIRED).
+- `modules/capture/capture_disposition.gd` — `CaptureDisposition` (PARTY/STORAGE_REQUIRED/UNROUTED).
 - `modules/capture/capture_resolution.gd` — `CaptureResolution` (result + captured + disposition + events).
 - `modules/capture/capture_system.gd` — `CaptureSystem.resolve(attempt, rng, catalogs, party)`:
-  valida, calcula `p`, consume RNG solo si no garantizada, muta party en éxito con espacio.
+  valida, calcula `p`, consume RNG solo si no garantizada, muta party en éxito con espacio. `party == null`
+  ⇒ éxito resuelto con disposición `UNROUTED` y SIN evento `PARTY_ADDED` (no afirma un add falso).
 
 ### Datos
 - `CreatureSpecies.capture_rate: int = 0` + `to_dict`/`from_dict` + `is_valid_capture_rate()`.
@@ -377,13 +383,26 @@ poison/burn/paralysis/badly_poisoned 1.5. Trainer siempre rechazado. Party llena
 - Capture NO rediseña Battle ni Progression; lee HP/status de la `CreatureInstance` viva.
 - Captura preserva identidad: `res.captured` es la MISMA `CreatureInstance` (IV/EV/naturaleza/
   ability/moveset/PP intactos). No se crea ni rerolla criatura.
-- Autoridad de servidor: clienta solo envía `ball_id` + `target_id`; el éxito no se puede forjar.
+- **Separación de responsabilidad, NO antiforgery**: `CaptureSystem` es lógica pura/determinista; el
+  RNG se inyecta. La validación de que `target`/`context` vienen de estado confiable (frontera
+  cliente/servidor) es responsabilidad de una capa superior cuando exista networking. `CaptureSystem`
+  no afirma por sí mismo que el éxito "no se puede forjar".
 - `capture_rate` importado de PokéAPI; multipliers de ball son tabla canónica del juego.
+
+## Hotfix (invariantes, pre-FASE 8)
+
+Corrige: `reorder` aceptaba duplicados; `from_dict` podía reconstruir `_order` con duplicados;
+`CaptureRuleset.MAX_PARTY` duplicado (eliminado, `PartyRuleset` es única fuente); `CaptureSystem`
+emitía `PARTY_ADDED` con `party == null` (ahora `UNROUTED`); y se corrigieron comentarios de
+seguridad sobreclaimados + el test `capture_server_forged_impossible` renombrado a
+`capture_non_guaranteed_not_auto_success` (no demuestra antiforgery). Tests añadidos: 11 nuevos
+checks de invariantes (reorder duplicado, from_dict dedupe/consistencia/max-6, null-party). Total:
+**308 PASS / 0 FAIL**. NO merge a `main`.
 
 ## Listo para la siguiente fase
 
-SÍ (Storage + Save). La captura y la party están data-driven y validadas por 64 checks; el Battle
-y Progression Core no cambiaron (los 222 tests base siguen en verde). NO se hizo merge a `main`.
+SÍ (Storage + Save). La captura y la party están data-driven y validadas; el Battle y Progression
+Core no cambiaron (los 222 tests base siguen en verde). NO se hizo merge a `main`.
 Falta (fuera de alcance de FASE 7): Storage real (FASE 8), persistencia savegame, UI de captura/
 party, y runtime de reemplazo automático en party llena (hoy solo señaliza STORAGE_REQUIRED).
 

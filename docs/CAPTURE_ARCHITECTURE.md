@@ -19,15 +19,18 @@ Responsabilidad: resolución determinista de un intento de captura de una criatu
   `is_wild`, `battle_finished`, `caller_trainer_id`, `target_owner_trainer_id`,
   `target_side_id`, `target_instance_id`.
 - `capture_attempt.gd` — `CaptureAttempt` (RefCounted): entrada de la clienta
-  (`target`, `ball_id`, `context`). NO tiene campo de éxito (no forjable).
+  (`target`, `ball_id`, `context`). NO tiene campo de éxito. `CaptureSystem` es puro y no autentica
+  quién construye el attempt; la validación de estado confiable es responsabilidad de una capa superior.
 - `capture_result.gd` — `CaptureResult`: `status` (SUCCESS/FAILED/INVALID), `ball_id`,
   `target_id`, `probability`, `shake_count`, `consume_item`, `reason`. Serializable.
-- `capture_disposition.gd` — `CaptureDisposition`: `PARTY` / `STORAGE_REQUIRED`.
+- `capture_disposition.gd` — `CaptureDisposition`: `PARTY` / `STORAGE_REQUIRED` / `UNROUTED`
+  (capturado pero sin party provista para enrutar).
 - `capture_resolution.gd` — `CaptureResolution`: `result` + `captured` (misma `CreatureInstance`)
   + `disposition` + `events`. Serializable.
 - `capture_system.gd` — `CaptureSystem.resolve(attempt, rng, catalogs, party)`:
   valida, calcula probabilidad, consume RNG solo si no es garantizada, muta la party en éxito con
-  espacio, y devuelve `CaptureResolution`.
+  espacio, y devuelve `CaptureResolution`. `party == null` ⇒ éxito resuelto pero disposición
+  `UNROUTED` (NO emite `PARTY_ADDED`).
 
 ## Flujo
 
@@ -37,7 +40,8 @@ Responsabilidad: resolución determinista de un intento de captura de una criatu
 3. `CaptureSystem.resolve` valida → `INVALID` si falla alguna regla (no consume item).
 4. Si es válido, calcula `p`; master/guaranteed ⇒ SUCCESS sin RNG; si no, `rng.randf() < p`.
 5. En éxito: `res.captured = target` (misma instancia), y si la party tiene espacio ⇒
-   `add_creature` + `PARTY_ADDED`; si está llena ⇒ `STORAGE_REQUIRED` (sin auto-reemplazo).
+   `add_creature` + `PARTY_ADDED`; si está llena ⇒ `STORAGE_REQUIRED` (sin auto-reemplazo);
+   si `party == null` ⇒ disposición `UNROUTED` y NO se emite `PARTY_ADDED` (no se añade a ninguna parte).
 
 ## Determinismo
 
