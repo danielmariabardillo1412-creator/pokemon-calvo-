@@ -14,12 +14,19 @@ func run(check_callback: Callable, tree: SceneTree) -> void:
 	_check.call("bsp_catalog_loaded", _catalog != null)
 	if _catalog == null:
 		return
+	print("BSP_TEST _test_switch_choices_are_authoritative")
 	await _test_switch_choices_are_authoritative(tree)
+	print("BSP_TEST _test_single_member_has_no_switch")
 	await _test_single_member_has_no_switch(tree)
+	print("BSP_TEST _test_elective_switch_consumes_normal_turn")
 	await _test_elective_switch_consumes_normal_turn(tree)
+	print("BSP_TEST _test_invalid_switch_is_rejected_without_mutation")
 	await _test_invalid_switch_is_rejected_without_mutation(tree)
+	print("BSP_TEST _test_ko_switch_target_is_rejected_and_hidden")
 	await _test_ko_switch_target_is_rejected_and_hidden(tree)
+	print("BSP_TEST _test_forced_switch_after_retaliation_refreshes_presentation")
 	await _test_forced_switch_after_retaliation_refreshes_presentation(tree)
+	print("BSP_TEST _test_technical_scene_switch_flow")
 	await _test_technical_scene_switch_flow(tree)
 
 
