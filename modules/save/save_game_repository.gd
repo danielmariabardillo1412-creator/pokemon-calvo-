@@ -60,7 +60,11 @@ func load(path: String) -> LoadResult:
 		if c == null:
 			out.reason = "missing_creature_reference"
 			return out
-		party.add_creature(c)
+		# Rebuild must succeed: a valid save always references creatures that fit the party.
+		# If add_creature rejects (defensive), abort and publish nothing rather than a partial party.
+		if not party.add_creature(c):
+			out.reason = "party_rebuild_failed"
+			return out
 
 	# 3) rebuild storage (references only), guarding cross-box duplication.
 	var storage := CreatureStorage.new()
