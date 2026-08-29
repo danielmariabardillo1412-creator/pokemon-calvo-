@@ -209,7 +209,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          godot --headless --path . --script res://tests/battle_switch_presentation_test_runner.gd 2>&1 | tee battle-switch-presentation-test.log
+          timeout 20s godot --headless --path . --script res://tests/battle_switch_presentation_test_runner.gd 2>&1 | tee battle-switch-presentation-test.log
           summary="$(grep -E '=== BATTLE SWITCH PRESENTATION RESULT: [0-9]+ PASS / 0 FAIL ===' battle-switch-presentation-test.log | tail -n 1)"
           test -n "$summary"
           pass_count="$(printf '%s\n' "$summary" | sed -E 's/.*RESULT: ([0-9]+) PASS.*/\1/')"
