@@ -23,3 +23,10 @@ Los nombres y datos de Foundation (`Embercub`, `Leafling`, `Strike`, etc.) son
 placeholders originales. No hay especies, sprites ni assets propietarios de Pokémon.
 Si en el futuro se reutiliza código, este documento deberá registrar repositorio,
 commit, archivo, licencia y modificaciones exactas antes de integrar el commit.
+
+## Battle Core V2
+
+No se copió ni adaptó código externo. Pokerecomp no fue consultado durante esta
+implementación V2. Los patrones de effects, ruleset, triggers y tests son código
+original del proyecto. El dataset PokéAPI ya versionado sigue siendo datos BSD
+3-Clause y no código reutilizado por Battle Core.

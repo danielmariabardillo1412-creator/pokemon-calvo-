@@ -140,4 +140,41 @@ NO se modificó el Battle existente (StatBlock/DamageCalculator intactos). NO se
 
 Informe final de FASE 4: `docs/INFORME_FINAL_FASE4.md`. Handoff Codex: `docs/CODEX_BATTLE_V2_HANDOFF.md`.
 
+---
 
+# Battle Core V2
+
+Fecha de validación: 2026-08-29  
+Rama: `feature/battle-core-v2`  
+Motor: `4.7.stable.official.5b4e0cb0f`
+
+## Resultado
+
+- Godot import/headless: **PASS**, sin errores de parseo/runtime, exit 0
+- Tests: **131 PASS / 0 FAIL** (61 previos + 70 V2)
+- Snapshot: schema **2**, ruleset `calvo_v1`, RNG `lcg32_v1`
+- Autoloads: **0**
+- `extends Node` fuera de tests: **0**
+- `effect_summary` usado para gameplay: **0**
+
+## Runtime añadido
+
+- Effects compuestos + mappings explícitos por stable ID
+- Pipeline determinista de phases y triggers
+- PP runtime, siete stat stages, accuracy/evasion y críticos
+- Daño physical/special, STAB, dual type, inmunidad y burn
+- Poison, badly poisoned, burn, paralysis y sleep; freeze parcial
+- Parties, active combatant, switch voluntario y reemplazo tras KO
+- Abilities: intimidate, levitate, blaze, torrent, overgrow, static
+- Held items: leftovers, sitrus_berry
+- Eventos semánticos sin texto de UI
+- Golden scenarios y continuación exacta desde snapshot
+
+## Cobertura honesta
+
+- Moves: RUNTIME_SUPPORTED 91 / PARTIAL_RUNTIME 496 / DATA_ONLY 341 / UNSUPPORTED 9
+- Abilities: RUNTIME_SUPPORTED 6 / DATA_ONLY 367
+- Items: RUNTIME_SUPPORTED 2 / DATA_ONLY 2220
+
+No se implementaron evolución, forms, capture, XP, level progression, inventario,
+UI, networking, overworld ni mecánicas generacionales especiales.

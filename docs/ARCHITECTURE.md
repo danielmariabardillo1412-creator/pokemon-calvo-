@@ -93,9 +93,20 @@ Para el overworld solo se reconsiderará después de medir una necesidad real (m
 entidades homogéneas o coste de actualización); Godot Nodes y composición siguen
 siendo el punto de partida.
 
+## Battle Core V2
+
+Battle usa ahora `BattleRuleset(calvo_v1)`, un pipeline de phases estable y specs
+componibles. `BattleState` schema 2 modela parties/active, PP, stages, status,
+ability e item runtime. `DefinitionCatalog` expone también abilities/items, pero la
+lógica solo usa mappings/specs estructurados por stable ID; nunca `effect_summary`.
+
+La arquitectura mantiene 0 autoloads y 0 Nodes fuera de tests. Detalle y reglas:
+`BATTLE_ARCHITECTURE.md`, `BATTLE_EFFECTS.md` y `BATTLE_RULESET_CALVO_V1.md`.
+
 ## Tests
 
 El runner ligero actual evita incorporar un addon para 13 pruebas fundacionales y
 corre como escena headless. GUT será razonable cuando hagan falta fixtures,
 parametrización, dobles complejos o integración CI más rica. Cambiar el framework no
-debe cambiar el dominio.
+debe cambiar el dominio. Battle Core V2 añade una suite separada de unidades y
+escenarios golden; el total actual es 131 PASS / 0 FAIL.

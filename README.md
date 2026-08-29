@@ -12,7 +12,11 @@ Poison, eventos, RNG determinista y snapshots serializables.
 & "C:\Godot\4.7\Godot_v4.7-stable_win64_console.exe" --headless --path "F:\pokemon roma el calvo\pokemon-calvo"
 ```
 
-La segunda orden debe terminar con `13 PASS / 0 FAIL` y código de salida 0.
+La segunda orden debe terminar con `131 PASS / 0 FAIL` y código de salida 0.
+
+Battle Core V2 incorpora effects compuestos, ruleset `calvo_v1`, PP, stages,
+status, abilities, held items, switching y snapshot determinista schema 2. Véase
+[docs/BATTLE_ARCHITECTURE.md](docs/BATTLE_ARCHITECTURE.md).
 
 Consulta [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) para las reglas de
 dependencia y [docs/ARCHITECTURE_DECISION_001.md](docs/ARCHITECTURE_DECISION_001.md)

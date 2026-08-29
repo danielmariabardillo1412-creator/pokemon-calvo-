@@ -1,8 +1,8 @@
-# MECHANICS COVERAGE — FASE 4.1 (Pokémon Data Import QA)
+# MECHANICS COVERAGE — Battle Core V2
 
-Scope: this phase imports data and **validates referential integrity + metrics**. It does NOT
-implement gameplay logic. The coverage labels below separate two distinct questions that were
-previously conflated:
+Scope: dataset FASE 4.1 + runtime `calvo_v1`. The import report remains an immutable
+historical report; current runtime deltas are versioned in
+`data/battle/runtime_coverage_v2.json`.
 
 - **DATA_READY** — the necessary data is imported and modeled in the domain classes.
 - **RUNTIME_SUPPORTED / PARTIAL_RUNTIME / DATA_ONLY / UNSUPPORTED** — how much the *engine*
@@ -15,14 +15,13 @@ Source: PokéAPI `api-data` @ `784c50b3ad27d0390d3b047fc4c4511f71edd049` (BSD 3-
 | Label | Meaning |
 |---|---|
 | `DATA_READY` | Data imported and modeled; available for Battle Core V2 to consume. |
-| `RUNTIME_SUPPORTED` | Foundation V1 battle resolves the mechanic (e.g. damaging move: power/accuracy/damage_class/STAB/type-effectiveness computed). |
+| `RUNTIME_SUPPORTED` | Runtime + test execute the complete behavior claimed for that stable ID under `calvo_v1`. |
 | `PARTIAL_RUNTIME` | Part of the behavior is implemented; the rest is not (e.g. damaging move whose secondary effect is unimplemented). |
 | `DATA_ONLY` | Definition exists; no runtime behavior in Foundation V1 (e.g. status moves, abilities, items). |
 | `UNSUPPORTED` | The model/runtime cannot yet represent or execute the mechanic (gimmick moves; unmodeled evolution triggers). |
 
-> No move is claimed "fully playable" unless a runtime test demonstrates it. Foundation V1 only
-> computes damage for damaging moves; secondary effects, abilities, items and evolution triggering
-> are NOT executed at runtime yet.
+> No move is promoted merely because `effect_summary` describes it. Promotion requires an explicit
+> structured mapping/handler and runtime test.
 
 ## Totals imported
 
@@ -44,23 +43,37 @@ Source: PokéAPI `api-data` @ `784c50b3ad27d0390d3b047fc4c4511f71edd049` (BSD 3-
 
 | Coverage | Count | Sum check |
 |---|---|---|
-| `RUNTIME_SUPPORTED` | 76 | damaging moves resolved for damage (no secondary effect stored) |
-| `PARTIAL_RUNTIME` | 504 | damaging moves whose secondary effect is not yet implemented |
-| `DATA_ONLY` | 348 | status / non-damaging moves (no runtime behavior yet) |
+| `RUNTIME_SUPPORTED` | 91 | baseline 76 + 15 stable IDs with complete tested V2 mappings |
+| `PARTIAL_RUNTIME` | 496 | damaging moves with missing secondary/unique behavior |
+| `DATA_ONLY` | 341 | status/non-damaging moves without mapping |
 | `UNSUPPORTED` | 9 | gimmick/copy moves the model cannot represent |
-| **TOTAL** | **937** | 76 + 504 + 348 + 9 = 937 ✓ |
+| **TOTAL** | **937** | 91 + 496 + 341 + 9 = 937 ✓ |
+
+Newly supported stable IDs: `double_edge`, `ember`, `growl`, `mega_drain`,
+`quick_attack`, `recover`, `sleep_powder`, `swords_dance`, `tackle`, `thunder`,
+`thunder_punch`, `thunder_wave`, `toxic`, `water_gun`, `will_o_wisp`.
 
 ## Abilities (373) — DATA_READY = 373
 
 | Coverage | Count |
 |---|---|
-| `DATA_ONLY` | 373 (effect_summary + classification stored; no passive runtime behavior) |
+| `RUNTIME_SUPPORTED` | 6 (`blaze`, `intimidate`, `levitate`, `overgrow`, `static`, `torrent`) |
+| `DATA_ONLY` | 367 |
 
 ## Items (2222) — DATA_READY = 2222
 
 | Coverage | Count |
 |---|---|
-| `DATA_ONLY` | 2222 (classification stored; consumable/held effects deferred to Battle Core V2) |
+| `RUNTIME_SUPPORTED` | 2 (`leftovers`, `sitrus_berry`) |
+| `DATA_ONLY` | 2220 |
+
+## Canonical internal status
+
+PokéAPI aporta 0 definiciones de status. `calvo_v1` define IDs internos versionados:
+burn, poison, badly_poisoned, paralysis, sleep y freeze; flinch/confusion son
+volátiles. Burn, poison, badly poisoned, paralysis y sleep tienen comportamiento y
+tests. Freeze tiene modelo/thaw pero ninguna move V2 lo aplica; confusion solo tiene
+estado volátil, por lo que ambos se declaran parciales.
 
 ## Evolutions
 
@@ -103,10 +116,11 @@ species is imported. Evolutions targeting deferred forms are dropped (8 edges) t
 
 ## Test evidence (Godot 4.7 stable, headless)
 
-`tests/test_runner.gd` — **61 PASS / 0 FAIL**:
+`tests/test_runner.gd` + `tests/battle_v2_test_suite.gd` — **131 PASS / 0 FAIL**:
 - FASE 1-3 (foundation + data pipeline): 26 PASS
 - FASE 4 (mass import): 14 PASS
 - FASE 4.1 (QA invariants): 21 PASS
+- Battle Core V2: 70 PASS (unitarios, negativos, cobertura y escenarios golden)
 
 New invariant tests (FASE 4.1): `pokeapi_manifest_sha_full`, `pokeapi_manifest_license_bsd`,
 `pokeapi_evolution_source_invariant`, `pokeapi_evolution_coverage_invariant`,
@@ -116,15 +130,16 @@ New invariant tests (FASE 4.1): `pokeapi_manifest_sha_full`, `pokeapi_manifest_l
 `pokeapi_unique_ids_*`, `pokeapi_broken_ref_recomputed`, `pokeapi_broken_ref_zero`,
 `pokeapi_summary_*`.
 
-## Readiness for Battle Core V2
+## Battle Core V2 result
 
-Data layer is ready and internally coherent: types, moves (with damage_class/power/accuracy/pp/target),
-abilities, items, species (full 6 base stats), learnset, and evolutions are present, referentially
-sound, and metric-validated. Battle Core V2 may now be authorized to implement runtime behavior
-consuming `MoveDefinition`/`AbilityDefinition`/`ItemDefinition`/`EvolutionRecord` data.
+Battle Core V2 ejecuta specs compuestos, PP, stages, accuracy/evasion, críticos,
+status, switching, seis abilities y dos held items. Las evoluciones siguen fuera de
+Battle y no han cambiado de cobertura.
 
 ### Honest snapshot for Codex
 
 - **DATA available:** 21 types, 937 moves (76 fully damage-resolvable, 504 damage + unimplemented effect, 348 status-only), 373 abilities (data only), 2222 items (data only), 986 species, 129390 learnset entries, 476 evolutions (388 level-up modelable, 52 partial, 36 unsupported).
-- **Implemented at runtime (Foundation V1):** damage calculation for damaging moves (power/accuracy/damage_class/STAB/type-effectiveness); deterministic battle; server-authority model.
-- **NOT implemented at runtime yet:** move secondary effects, abilities, items, status conditions, evolution triggering, forms as entities.
+- **Implemented at runtime:** 91 moves bajo el criterio anterior; 6 abilities; 2 held items;
+  canonical status; snapshot v2 y servidor autoritativo determinista.
+- **NOT implemented yet:** cientos de secundarios/efectos únicos, la mayoría de abilities/items,
+  evolution triggering, forms, capture, XP, networking y presentation.
