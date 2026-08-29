@@ -70,7 +70,9 @@ func all_item_ids() -> Array[StringName]:
 	var out: Array[StringName] = []
 	for raw_id in _quantities.keys():
 		out.append(StringName(raw_id))
-	out.sort()
+	# StringName ordering is not guaranteed to be lexical; sort by its stable text form so
+	# serialization is deterministic across processes/platforms.
+	out.sort_custom(func(a, b): return String(a) < String(b))
 	return out
 
 
