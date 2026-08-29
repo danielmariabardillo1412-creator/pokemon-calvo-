@@ -127,9 +127,11 @@ func initialize_move_pp(catalog: DefinitionCatalog) -> void:
 			(slot as BattleMoveSlot).initialize(definition)
 
 
-# Post-battle persistence reconciliation: drop volatile battle-only statuses (flinch,
-# confusion, ...), keep the persistent status, clamp HP and PP to legal ranges.
+# Post-battle persistence reconciliation: clear ALL battle-only state (stat stages and volatile
+# statuses), keep the persistent status, and clamp HP/PP to legal ranges. Persistent containers
+# and savegames must never inherit a +6 Attack stage or another transient combat modifier.
 func reconcile_post_battle() -> void:
+	stat_stages = StatStages.new()
 	status_state.volatile.clear()
 	current_hp = clampi(current_hp, 0, stats.max_hp)
 	for slot in moveset:
