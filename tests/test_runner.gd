@@ -62,6 +62,8 @@ func _run_all() -> void:
 	_test_pokeapi_ids_unique()
 	_test_pokeapi_broken_ref_invariant()
 	_test_pokeapi_import_summary_matches()
+	# --- Battle Core V2 ---
+	BattleV2TestSuite.new(_import_pokeapi()).run(Callable(self, "_check"))
 
 
 func _test_priority() -> void:
