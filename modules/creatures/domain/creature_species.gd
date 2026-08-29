@@ -17,8 +17,17 @@ extends Resource
 @export var base_special_defense: int = 1
 @export var ability_ids: Array[StringName] = []
 @export var base_experience: int = 0
+@export var growth_rate: String = "medium"
+@export var ev_yield: Dictionary = {}   # stat_key -> effort value granted when defeated
 var learnset: Array = []      # Array[LearnSetEntry]
 var evolutions: Array = []    # Array[EvolutionRecord]
+
+func base_stat_block() -> StatBlock:
+	return StatBlock.new(
+		base_hp, base_attack, base_defense, base_speed,
+		base_special_attack, base_special_defense,
+	)
+
 
 func type_ids_resolved() -> Array[StringName]:
 	if not type_ids.is_empty():
@@ -67,6 +76,8 @@ func to_dict() -> Dictionary:
 		"base_special_defense": base_special_defense,
 		"ability_ids": _sn_to_str(ability_ids),
 		"base_experience": base_experience,
+		"growth_rate": growth_rate,
+		"ev_yield": ev_yield,
 		"learnset": ls,
 		"evolutions": ev,
 	}
@@ -89,6 +100,8 @@ static func from_dict(d: Dictionary) -> CreatureSpecies:
 	s.base_special_defense = int(d.get("base_special_defense", 1))
 	s.ability_ids = _str_to_sn(d.get("ability_ids", []))
 	s.base_experience = int(d.get("base_experience", 0))
+	s.growth_rate = String(d.get("growth_rate", "medium"))
+	s.ev_yield = d.get("ev_yield", {})
 	for le in d.get("learnset", []):
 		s.learnset.append(LearnSetEntry.from_dict(le))
 	for ev in d.get("evolutions", []):

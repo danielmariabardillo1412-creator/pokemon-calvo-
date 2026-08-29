@@ -36,6 +36,10 @@ func to_dict() -> Dictionary:
 	}
 
 
+func duplicate() -> StatBlock:
+	return StatBlock.new(max_hp, attack, defense, speed, special_attack, special_defense)
+
+
 static func from_dict(data: Dictionary) -> StatBlock:
 	return StatBlock.new(
 		int(data.get("max_hp", 1)),
