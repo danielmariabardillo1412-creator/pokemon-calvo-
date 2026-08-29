@@ -1,0 +1,241 @@
+{
+ "policy": "Hyphenated PokemonAPI names are treated as forms (regional/alternate/mega/gigantamax/totem/cosmetic) and are NOT imported as base SpeciesDefinition. Only the default variety of each base species is imported. Evolutions targeting deferred forms are dropped to avoid broken references.",
+ "forms_total": 39,
+ "species_total": 986,
+ "deferred": [
+  {
+   "id": "wo_chien",
+   "original_name": "wo-chien",
+   "kind": "ALTERNATE",
+   "reason": "Hyphenated name treated as form; deferred (not a base SpeciesDefinition)."
+  },
+  {
+   "id": "chien_pao",
+   "original_name": "chien-pao",
+   "kind": "ALTERNATE",
+   "reason": "Hyphenated name treated as form; deferred (not a base SpeciesDefinition)."
+  },
+  {
+   "id": "ting_lu",
+   "original_name": "ting-lu",
+   "kind": "ALTERNATE",
+   "reason": "Hyphenated name treated as form; deferred (not a base SpeciesDefinition)."
+  },
+  {
+   "id": "chi_yu",
+   "original_name": "chi-yu",
+   "kind": "ALTERNATE",
+   "reason": "Hyphenated name treated as form; deferred (not a base SpeciesDefinition)."
+  },
+  {
+   "id": "roaring_moon",
+   "original_name": "roaring-moon",
+   "kind": "ALTERNATE",
+   "reason": "Hyphenated name treated as form; deferred (not a base SpeciesDefinition)."
+  },
+  {
+   "id": "iron_valiant",
+   "original_name": "iron-valiant",
+   "kind": "ALTERNATE",
+   "reason": "Hyphenated name treated as form; deferred (not a base SpeciesDefinition)."
+  },
+  {
+   "id": "walking_wake",
+   "original_name": "walking-wake",
+   "kind": "ALTERNATE",
+   "reason": "Hyphenated name treated as form; deferred (not a base SpeciesDefinition)."
+  },
+  {
+   "id": "iron_leaves",
+   "original_name": "iron-leaves",
+   "kind": "ALTERNATE",
+   "reason": "Hyphenated name treated as form; deferred (not a base SpeciesDefinition)."
+  },
+  {
+   "id": "gouging_fire",
+   "original_name": "gouging-fire",
+   "kind": "ALTERNATE",
+   "reason": "Hyphenated name treated as form; deferred (not a base SpeciesDefinition)."
+  },
+  {
+   "id": "raging_bolt",
+   "original_name": "raging-bolt",
+   "kind": "ALTERNATE",
+   "reason": "Hyphenated name treated as form; deferred (not a base SpeciesDefinition)."
+  },
+  {
+   "id": "iron_boulder",
+   "original_name": "iron-boulder",
+   "kind": "ALTERNATE",
+   "reason": "Hyphenated name treated as form; deferred (not a base SpeciesDefinition)."
+  },
+  {
+   "id": "iron_crown",
+   "original_name": "iron-crown",
+   "kind": "ALTERNATE",
+   "reason": "Hyphenated name treated as form; deferred (not a base SpeciesDefinition)."
+  },
+  {
+   "id": "mr_mime",
+   "original_name": "mr-mime",
+   "kind": "ALTERNATE",
+   "reason": "Hyphenated name treated as form; deferred (not a base SpeciesDefinition)."
+  },
+  {
+   "id": "ho_oh",
+   "original_name": "ho-oh",
+   "kind": "ALTERNATE",
+   "reason": "Hyphenated name treated as form; deferred (not a base SpeciesDefinition)."
+  },
+  {
+   "id": "nidoran_f",
+   "original_name": "nidoran-f",
+   "kind": "ALTERNATE",
+   "reason": "Hyphenated name treated as form; deferred (not a base SpeciesDefinition)."
+  },
+  {
+   "id": "nidoran_m",
+   "original_name": "nidoran-m",
+   "kind": "ALTERNATE",
+   "reason": "Hyphenated name treated as form; deferred (not a base SpeciesDefinition)."
+  },
+  {
+   "id": "mime_jr",
+   "original_name": "mime-jr",
+   "kind": "ALTERNATE",
+   "reason": "Hyphenated name treated as form; deferred (not a base SpeciesDefinition)."
+  },
+  {
+   "id": "porygon_z",
+   "original_name": "porygon-z",
+   "kind": "ALTERNATE",
+   "reason": "Hyphenated name treated as form; deferred (not a base SpeciesDefinition)."
+  },
+  {
+   "id": "type_null",
+   "original_name": "type-null",
+   "kind": "ALTERNATE",
+   "reason": "Hyphenated name treated as form; deferred (not a base SpeciesDefinition)."
+  },
+  {
+   "id": "jangmo_o",
+   "original_name": "jangmo-o",
+   "kind": "ALTERNATE",
+   "reason": "Hyphenated name treated as form; deferred (not a base SpeciesDefinition)."
+  },
+  {
+   "id": "hakamo_o",
+   "original_name": "hakamo-o",
+   "kind": "ALTERNATE",
+   "reason": "Hyphenated name treated as form; deferred (not a base SpeciesDefinition)."
+  },
+  {
+   "id": "kommo_o",
+   "original_name": "kommo-o",
+   "kind": "ALTERNATE",
+   "reason": "Hyphenated name treated as form; deferred (not a base SpeciesDefinition)."
+  },
+  {
+   "id": "tapu_koko",
+   "original_name": "tapu-koko",
+   "kind": "ALTERNATE",
+   "reason": "Hyphenated name treated as form; deferred (not a base SpeciesDefinition)."
+  },
+  {
+   "id": "tapu_lele",
+   "original_name": "tapu-lele",
+   "kind": "ALTERNATE",
+   "reason": "Hyphenated name treated as form; deferred (not a base SpeciesDefinition)."
+  },
+  {
+   "id": "tapu_bulu",
+   "original_name": "tapu-bulu",
+   "kind": "ALTERNATE",
+   "reason": "Hyphenated name treated as form; deferred (not a base SpeciesDefinition)."
+  },
+  {
+   "id": "tapu_fini",
+   "original_name": "tapu-fini",
+   "kind": "ALTERNATE",
+   "reason": "Hyphenated name treated as form; deferred (not a base SpeciesDefinition)."
+  },
+  {
+   "id": "mr_rime",
+   "original_name": "mr-rime",
+   "kind": "ALTERNATE",
+   "reason": "Hyphenated name treated as form; deferred (not a base SpeciesDefinition)."
+  },
+  {
+   "id": "great_tusk",
+   "original_name": "great-tusk",
+   "kind": "ALTERNATE",
+   "reason": "Hyphenated name treated as form; deferred (not a base SpeciesDefinition)."
+  },
+  {
+   "id": "scream_tail",
+   "original_name": "scream-tail",
+   "kind": "ALTERNATE",
+   "reason": "Hyphenated name treated as form; deferred (not a base SpeciesDefinition)."
+  },
+  {
+   "id": "brute_bonnet",
+   "original_name": "brute-bonnet",
+   "kind": "ALTERNATE",
+   "reason": "Hyphenated name treated as form; deferred (not a base SpeciesDefinition)."
+  },
+  {
+   "id": "flutter_mane",
+   "original_name": "flutter-mane",
+   "kind": "ALTERNATE",
+   "reason": "Hyphenated name treated as form; deferred (not a base SpeciesDefinition)."
+  },
+  {
+   "id": "slither_wing",
+   "original_name": "slither-wing",
+   "kind": "ALTERNATE",
+   "reason": "Hyphenated name treated as form; deferred (not a base SpeciesDefinition)."
+  },
+  {
+   "id": "sandy_shocks",
+   "original_name": "sandy-shocks",
+   "kind": "ALTERNATE",
+   "reason": "Hyphenated name treated as form; deferred (not a base SpeciesDefinition)."
+  },
+  {
+   "id": "iron_treads",
+   "original_name": "iron-treads",
+   "kind": "ALTERNATE",
+   "reason": "Hyphenated name treated as form; deferred (not a base SpeciesDefinition)."
+  },
+  {
+   "id": "iron_bundle",
+   "original_name": "iron-bundle",
+   "kind": "ALTERNATE",
+   "reason": "Hyphenated name treated as form; deferred (not a base SpeciesDefinition)."
+  },
+  {
+   "id": "iron_hands",
+   "original_name": "iron-hands",
+   "kind": "ALTERNATE",
+   "reason": "Hyphenated name treated as form; deferred (not a base SpeciesDefinition)."
+  },
+  {
+   "id": "iron_jugulis",
+   "original_name": "iron-jugulis",
+   "kind": "ALTERNATE",
+   "reason": "Hyphenated name treated as form; deferred (not a base SpeciesDefinition)."
+  },
+  {
+   "id": "iron_moth",
+   "original_name": "iron-moth",
+   "kind": "ALTERNATE",
+   "reason": "Hyphenated name treated as form; deferred (not a base SpeciesDefinition)."
+  },
+  {
+   "id": "iron_thorns",
+   "original_name": "iron-thorns",
+   "kind": "ALTERNATE",
+   "reason": "Hyphenated name treated as form; deferred (not a base SpeciesDefinition)."
+  }
+ ]
+}

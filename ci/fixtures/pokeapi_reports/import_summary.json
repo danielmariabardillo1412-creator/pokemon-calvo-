@@ -1,0 +1,27 @@
+{
+  "abilities_total": 373,
+  "broken_references": [],
+  "dataset_version": "2.0.0",
+  "evolutions_total": 476,
+  "forms_total": 39,
+  "import_time_ms": 825,
+  "imported": {
+    "abilities": 373,
+    "items": 2222,
+    "moves": 937,
+    "species": 986,
+    "statuses": 0
+  },
+  "items_total": 2222,
+  "learnset_entries_total": 129390,
+  "moves_total": 937,
+  "rejected": [],
+  "ruleset": "foundation_v1",
+  "schema_version": 2,
+  "source": "pokeapi/api-data",
+  "source_commit": "784c50b3ad27d0390d3b047fc4c4511f71edd049",
+  "species_total": 986,
+  "statuses_total": 0,
+  "types_total": 21,
+  "warnings": []
+}
