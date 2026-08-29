@@ -58,7 +58,9 @@ func _validate(actions: Array[BattleAction]) -> String:
 		seen_actors[action.actor_id] = true
 		var actor := state.creature(action.actor_id)
 		var actor_side := state.side_for_creature(action.actor_id)
-		if action.side_id != &"" and (actor_side == null or action.side_id != actor_side.side_id):
+		if action.side_id == &"":
+			return "missing_participant"
+		if actor_side == null or action.side_id != actor_side.side_id:
 			return "wrong_participant"
 		if actor == null or actor.is_knocked_out():
 			return "actor_unavailable"
