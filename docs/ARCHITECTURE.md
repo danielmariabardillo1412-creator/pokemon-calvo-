@@ -63,11 +63,14 @@ Son la identidad de red/save; una ruta, nombre visible o Resource UID nunca lo e
 Un ID publicado no se reutiliza. Renombrarlo exige una migración explícita.
 
 Los `.tres` de V1 demuestran el contrato, no son la estrategia definitiva para más
-de 1000 especies. Para volumen real se recomienda una fuente tabular validada
-(CSV/JSON o base de autoría), importación reproducible, índice por ID y artefactos
-optimizados generados. El dominio seguirá consumiendo `DefinitionCatalog`, por lo
-que el formato de autoría no contaminará las reglas. No se crea todavía una interfaz
-o repositorio abstracto adicional: sería ceremonial hasta disponer del importador.
+de 1000 especies. El contrato de datos canónico ya está implementado en
+`feature/data-pipeline-v1` (ver `docs/DATA_ARCHITECTURE.md` y `docs/ARCHITECTURE_DECISION_002_DATA_PIPELINE.md`):
+fuente JSON + `DatasetManifest` versionado + `DataImporter` que valida y rechaza
+lo inválido, catálogos enfocados (`SpeciesCatalog`, `MoveCatalog`, `TypeCatalog`,
+`AbilityCatalog`, `ItemCatalog`, `StatusCatalog`) y `DefinitionCatalog` como fachada
+de batalla. El dominio solo consume `DefinitionCatalog`, por lo que el formato de
+autoría (JSON/CSV/SQL) no contamina las reglas. Para volumen real basta añadir un
+adaptador que produzca el mismo `Dictionary` de entrada del importador.
 
 ## Determinismo y serialización
 
