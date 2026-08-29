@@ -418,7 +418,7 @@ Fuente: PokéAPI `api-data` (SHA `784c50b3ad27d0390d3b047fc4c4511f71edd049`, BSD
 ## Resultado
 
 - Godot import/headless: **PASS**, sin errores de parseo/runtime, exit 0
-- Tests: **429 PASS / 0 FAIL** (308 base FASE 7 + 121 nuevos de Storage/Savegame)
+- Tests: **470 PASS / 0 FAIL** (308 base FASE 7 + 121 FASE 8 + 26 FASE 8C regresión)
 - GATE 8A (Storage Core): **PASS** · GATE 8B (Savegame): **PASS**
 - Autoloads: **0** (sin cambios)
 - `extends Node` fuera de tests: **0**
@@ -502,5 +502,45 @@ SÍ (sujeto a revisión). Storage y Savegame están data-driven, deterministas y
 Battle/Progression/Capture/Party no cambiaron (los 308 tests base siguen en verde). Falta (fuera de
 alcance de FASE 8): UI de storage/party/save, autosave, múltiples perfiles de save, y migraciones de
 schema (hoy solo rechaza schema no soportado; no hay fake-migrations).
+
+# FASE 8C — Hotfix de persistencia e invariantes
+
+Fecha de validación: 2026-08-29
+Rama: `feature/storage-save-hotfix-v1` (creada desde `feature/storage-save-v1`)
+Motor: `4.7.stable.official.5b4e0cb0f`
+
+## Resultado
+
+- Godot import/headless: **PASS**, sin errores de parseo/runtime, exit 0
+- Tests: **470 PASS / 0 FAIL** (total acumulado; +26 checks nuevos de regresión FASE 8C)
+- GATE: SAVE_LAST_KNOWN_GOOD_SAVE_PRESERVED=YES · PARTY_DUPLICATE_SAVE_REJECTED=YES ·
+  PARTY_OVER_CAPACITY_SAVE_REJECTED=YES · PARTY_REBUILD_FAILURE_CAN_PUBLISH=NO ·
+  FORMAT_ID_VALIDATED=YES · STORAGE_ROUTE_FALSE_SUCCESS_POSSIBLE=NO · FULL_REGRESSION=PASS
+
+## Qué se corrigió (3 bugs de code review de FASE 8)
+
+1. **Reemplazo de save inseguro** (`save_game_serializer.gd`): `write_atomic` ahora hace
+   REEMPLAZO PROTEGIDO — respalda el save bueno previo a `path + ".bak"` antes de cualquier renombrado;
+   si la publicación falla, restaura el backup. El save bueno previo NUNCA se destruye. Motivos nuevos:
+   `cannot_back_up_target`, `replace_failed_restored`, `replace_failed_restore_failed`.
+2. **Party corrupta aceptada en silencio** (`save_game_data.gd` + `save_game_repository.gd`):
+   `validate()` ahora rechaza `duplicate_party_instance_id`, `party_over_capacity`,
+   `empty_party_instance_id`, `invalid_party_layout`; `load()` aborta con `party_rebuild_failed` si un
+   `party.add_creature` falla (nunca publica party parcial). Añadido `format_id` (`missing_format_id` /
+   `unsupported_format`) y rechazo de `instance_id` vacío. Los campos de layout son `Variant` para que un
+   payload malformado llegue a `validate()` y sea rechazado en lugar de crashear el loader.
+3. **Router de captura con éxito falso** (`capture_ownership_router.gd`): `routed = stored`
+   (STORAGE_REQUIRED); `storage == null` se maneja sin crashear (`storage_null`); `PARTY` solo marca
+   `routed=true` si la criatura está realmente en la party (`party_ownership_missing` si no).
+
+## Regresiones añadidas (tests)
+
+- Savegame: reemplazo seguro (7), party corrupta/formato (8), invariantes extra (5).
+- Storage: routing verdadero del router (6).
+
+## Contrato de separación (FASE 8C)
+
+- Solo los 3 bugs + tests + docs; NO rework de Storage/Savegame/Capture más allá de los bugs.
+- NO UI/autosave/networking; NO merge a `main`; árbol de trabajo limpio.
 
 

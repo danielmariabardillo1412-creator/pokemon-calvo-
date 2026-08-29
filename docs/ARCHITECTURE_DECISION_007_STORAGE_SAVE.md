@@ -46,8 +46,31 @@ We needed: (a) a Storage Core that holds the same `CreatureInstance` objects as 
 
 ## Consequences
 
-- 121 new tests; 429 PASS / 0 FAIL total. End-to-end capture→party/storage→save→load verified with full
-  fidelity (IV/nature/ability/moveset/PP/HP/status/level/XP).
+- 121 new tests (FASE 8) + 26 FASE 8C regression tests; 470 PASS / 0 FAIL total. End-to-end
+  capture→party/storage→save→load verified with full fidelity
+  (IV/nature/ability/moveset/PP/HP/status/level/XP).
 - Double-ownership is impossible at runtime (`contains_instance_id`) and at load (`validate`).
 - Save schema is explicitly versioned; only V1 is supported. Future versions must add a migration path
   rather than reusing V1.
+
+## Addendum — FASE 8C Hotfix (persistence + invariant fix)
+
+Code review of FASE 8 found three silently-accepted failure modes; all are now closed:
+
+1. **Unsafe save replacement.** `write_atomic` deleted the target then renamed temp→target; a rename
+   failure lost the previous good save. Now PROTECTED REPLACEMENT: target is backed up to
+   `path + ".bak"` before any rename; a failed publish restores the backup. The previous good save is
+   never destroyed (reasons: `cannot_back_up_target`, `replace_failed_restored`,
+   `replace_failed_restore_failed`).
+2. **Corrupt party saves accepted silently.** `validate()` accepted duplicate/over-capacity/empty-id
+   parties, and `load()` did not check `party.add_creature` results. Now `validate()` rejects
+   `duplicate_party_instance_id`, `party_over_capacity`, `empty_party_instance_id`, `invalid_party_layout`;
+   `load()` aborts with `party_rebuild_failed` if a rebuild add fails. Added `format_id` validation
+   (`missing_format_id` / `unsupported_format`) and empty-creature-id rejection.
+3. **`CaptureOwnershipRouter` false success.** `routed` was set `true` for `STORAGE_REQUIRED` before
+   storage accepted, and `PARTY` was assumed present. Now `routed = stored` (STORAGE_REQUIRED), `null`
+   storage is handled without crashing, and `PARTY` is only `routed=true` if the creature is actually in
+   the party.
+
+Layout fields in `SaveGameData` are `Variant` (not strictly typed) so a malformed payload reaches
+`validate()` and is rejected with an explicit reason rather than crashing the loader.

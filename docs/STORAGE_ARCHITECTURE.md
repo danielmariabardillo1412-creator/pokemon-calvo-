@@ -45,10 +45,16 @@ savegame creature registry. `StorageBox.from_dict(d, reg)` resolves references v
 ## Capture routing (`CaptureOwnershipRouter`)
 
 `route(resolution, party, storage) -> CaptureRoutingResult` consumes `CaptureResolution.disposition`
-(FASE 7):
-- `PARTY` → no-op (the party was already mutated by `CaptureSystem`).
-- `STORAGE_REQUIRED` → `storage.add_creature(resolution.captured)`.
-- `UNROUTED` → no-op (e.g. `party == null`).
+(FASE 7). INVARIANT: `routed` is true ONLY when the creature is genuinely owned by the claimed
+container — the router never reports a false success.
+
+- `PARTY` → `routed = true` only if the creature is ACTUALLY present in `party`
+  (`party_ownership_missing` otherwise; a missing container is not a successful route).
+- `STORAGE_REQUIRED` → `stored = storage.add_creature(...)`; `routed = stored`. `null` storage ⇒
+  `routed = false, reason = "storage_null"` (no crash). A rejected add ⇒ `routed = false`
+  (`duplicate_instance_id` / `storage_rejected_creature`), never `storage_full_unexpected` (V1 boxes
+  are dynamic and never full).
+- `UNROUTED` → `routed = false` (e.g. `party == null`); never auto-converted to a route.
 
 The router never creates or rerolls a creature; `resolution.captured` is the same `CreatureInstance`
 that battle/progression mutated.
