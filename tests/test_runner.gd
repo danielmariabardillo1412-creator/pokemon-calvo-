@@ -189,8 +189,10 @@ func _test_battle_events() -> void:
 		"battle_events",
 		kinds == [
 			BattleEvent.ACTION_USED,
+			BattleEvent.PP_CHANGED,
 			BattleEvent.DAMAGE_APPLIED,
 			BattleEvent.ACTION_USED,
+			BattleEvent.PP_CHANGED,
 			BattleEvent.TURN_ENDED,
 		]
 		and collector.received.size() == events.size()

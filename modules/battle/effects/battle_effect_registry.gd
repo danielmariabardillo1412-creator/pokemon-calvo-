@@ -88,7 +88,7 @@ func _register_abilities() -> void:
 		&"static",
 		_chance(3000, BattleEffectSpec.new(
 			BattleEffectSpec.INFLICT_STATUS,
-			BattleEffectSpec.SELF,
+			BattleEffectSpec.OPPONENT,
 			0,
 			0,
 			10000,

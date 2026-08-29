@@ -28,6 +28,14 @@ func damage_factor_basis_points() -> int:
 	return 8500 + (next_u32() % 1501)
 
 
+func roll_basis_points(chance_basis_points: int) -> bool:
+	if chance_basis_points <= 0:
+		return false
+	if chance_basis_points >= 10000:
+		return true
+	return next_u32() % 10000 < chance_basis_points
+
+
 func state() -> int:
 	return _state
 
@@ -36,4 +44,3 @@ func restore_state(value: int) -> void:
 	_state = value & _MASK_32
 	if _state == 0:
 		_state = _DEFAULT_NON_ZERO_STATE
-

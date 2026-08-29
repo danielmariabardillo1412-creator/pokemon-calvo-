@@ -1,10 +1,16 @@
 class_name BattleAction
 extends RefCounted
 
+const MOVE := &"move"
+const SWITCH := &"switch"
+
 var turn: int
+var action_type: StringName
+var side_id: StringName
 var actor_id: StringName
 var move_id: StringName
 var target_id: StringName
+var switch_instance_id: StringName
 
 
 func _init(
@@ -12,20 +18,32 @@ func _init(
 	p_actor_id: StringName = &"",
 	p_move_id: StringName = &"",
 	p_target_id: StringName = &"",
+	p_action_type: StringName = MOVE,
+	p_side_id: StringName = &"",
+	p_switch_instance_id: StringName = &"",
 ) -> void:
 	turn = p_turn
+	action_type = p_action_type
+	side_id = p_side_id
 	actor_id = p_actor_id
 	move_id = p_move_id
 	target_id = p_target_id
+	switch_instance_id = p_switch_instance_id
 
 
 func to_dict() -> Dictionary:
-	return {
+	var result := {
 		"turn": turn,
 		"actor_id": String(actor_id),
 		"move_id": String(move_id),
 		"target_id": String(target_id),
 	}
+	if action_type != MOVE:
+		result["action_type"] = String(action_type)
+		result["switch_instance_id"] = String(switch_instance_id)
+	if side_id != &"":
+		result["side_id"] = String(side_id)
+	return result
 
 
 static func from_dict(data: Dictionary) -> BattleAction:
@@ -34,5 +52,7 @@ static func from_dict(data: Dictionary) -> BattleAction:
 		StringName(data.get("actor_id", "")),
 		StringName(data.get("move_id", "")),
 		StringName(data.get("target_id", "")),
+		StringName(data.get("action_type", MOVE)),
+		StringName(data.get("side_id", "")),
+		StringName(data.get("switch_instance_id", "")),
 	)
-
