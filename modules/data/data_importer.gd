@@ -7,14 +7,14 @@ extends RefCounted
 # Does NOT import massive PokéAPI yet; the same code path scales to large raw sets.
 
 const TYPE_KEYS := ["id", "display_name", "effectiveness"]
-const MOVE_KEYS := ["id", "display_name", "power", "type_id", "priority"]
-const ABILITY_KEYS := ["id", "display_name", "description", "effect_id"]
+const MOVE_KEYS := ["id", "display_name", "power", "type_id", "priority", "damage_class", "accuracy", "pp", "target", "effect_summary", "classification"]
+const ABILITY_KEYS := ["id", "display_name", "description", "effect_id", "effect_summary", "classification"]
 const ITEM_KEYS := ["id", "display_name", "description", "category"]
 const STATUS_KEYS := ["id", "display_name", "end_turn_max_hp_divisor", "minimum_damage"]
 const SPECIES_KEYS := [
 	"id", "display_name", "primary_type_id", "secondary_type_id", "type_ids", "types",
-	"base_hp", "base_attack", "base_defense", "base_speed", "ability_ids",
-	"base_experience", "learnset", "evolutions",
+	"base_hp", "base_attack", "base_defense", "base_speed", "base_special_attack", "base_special_defense",
+	"ability_ids", "base_experience", "learnset", "evolutions",
 ]
 
 var _type_catalog := TypeCatalog.new()
@@ -156,7 +156,8 @@ func _ingest_species(records: Array, report: DataImportReport) -> void:
 
 func _validate_species(s: CreatureSpecies) -> String:
 	if not DataValidator.is_valid_stat(s.base_hp) or not DataValidator.is_valid_stat(s.base_attack) \
-		or not DataValidator.is_valid_stat(s.base_defense) or not DataValidator.is_valid_stat(s.base_speed):
+		or not DataValidator.is_valid_stat(s.base_defense) or not DataValidator.is_valid_stat(s.base_speed) \
+		or not DataValidator.is_valid_stat(s.base_special_attack) or not DataValidator.is_valid_stat(s.base_special_defense):
 		return "invalid_stats"
 	for t in s.type_ids_resolved():
 		if not _type_catalog.has(t):

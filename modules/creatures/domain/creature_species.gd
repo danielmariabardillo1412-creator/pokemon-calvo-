@@ -12,6 +12,9 @@ extends Resource
 @export var base_attack: int = 1
 @export var base_defense: int = 1
 @export var base_speed: int = 1
+# Extended base stats (data only; Battle Core V2 will use them via StatBlock).
+@export var base_special_attack: int = 1
+@export var base_special_defense: int = 1
 @export var ability_ids: Array[StringName] = []
 @export var base_experience: int = 0
 var learnset: Array = []      # Array[LearnSetEntry]
@@ -58,6 +61,8 @@ func to_dict() -> Dictionary:
 		"base_attack": base_attack,
 		"base_defense": base_defense,
 		"base_speed": base_speed,
+		"base_special_attack": base_special_attack,
+		"base_special_defense": base_special_defense,
 		"ability_ids": _sn_to_str(ability_ids),
 		"base_experience": base_experience,
 		"learnset": ls,
@@ -78,6 +83,8 @@ static func from_dict(d: Dictionary) -> CreatureSpecies:
 	s.base_attack = int(d.get("base_attack", 1))
 	s.base_defense = int(d.get("base_defense", 1))
 	s.base_speed = int(d.get("base_speed", 1))
+	s.base_special_attack = int(d.get("base_special_attack", 1))
+	s.base_special_defense = int(d.get("base_special_defense", 1))
 	s.ability_ids = _str_to_sn(d.get("ability_ids", []))
 	s.base_experience = int(d.get("base_experience", 0))
 	for le in d.get("learnset", []):
