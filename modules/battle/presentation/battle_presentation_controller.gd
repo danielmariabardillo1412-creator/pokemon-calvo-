@@ -246,6 +246,13 @@ func submit_capture_ball(ball_id: StringName) -> WildBattleCommandResult:
 		if result.capture_outcome != null and result.capture_outcome.routing != null and result.capture_outcome.routing.stored:
 			_append_log("Party full: captured Pokémon was routed to storage.")
 		_set_command_controls_enabled(false)
+		# The successful command clears the live Battle, so _refresh_view() can no longer rebuild the
+		# command rows from active state. Remove stale ball labels explicitly (for example x1 after the
+		# last Master Ball was consumed) and represent completion instead of leaving a phantom control.
+		for button in _capture_buttons:
+			button.visible = false
+		if _turn_label != null:
+			_turn_label.text = "Captured"
 		if _continue_button != null:
 			_continue_button.text = "Return to overworld"
 			_continue_button.visible = true
