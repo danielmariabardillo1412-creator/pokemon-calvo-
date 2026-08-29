@@ -54,6 +54,14 @@ func _run_all() -> void:
 	_test_pokeapi_artificial_broken_ref()
 	_test_pokeapi_forms_policy()
 	_test_pokeapi_deterministic_ordering()
+	# --- Phase 4.1 QA invariants ---
+	_test_pokeapi_manifest_provenance()
+	_test_pokeapi_evolution_invariant()
+	_test_pokeapi_move_coverage_invariant()
+	_test_pokeapi_ability_item_coverage_invariant()
+	_test_pokeapi_ids_unique()
+	_test_pokeapi_broken_ref_invariant()
+	_test_pokeapi_import_summary_matches()
 
 
 func _test_priority() -> void:
@@ -395,6 +403,111 @@ func _test_pokeapi_deterministic_ordering() -> void:
 	_check("pokeapi_deterministic_ordering", ids.size() == sorted.size())
 	var restored := GameData.from_dict(gd.to_dict())
 	_check("pokeapi_big_round_trip", restored.species_catalog.size() == gd.species_catalog.size() and restored.move_catalog.size() == gd.move_catalog.size())
+
+func _test_pokeapi_manifest_provenance() -> void:
+	var m := DatasetManifest.from_dict(_load_json("res://data/manifests/pokemon_api_manifest.json"))
+	var sha: String = m.provenance.get("source_commit", "")
+	var lic: String = m.provenance.get("license", "")
+	_check("pokeapi_manifest_sha_full", sha == "784c50b3ad27d0390d3b047fc4c4511f71edd049")
+	_check("pokeapi_manifest_license_bsd", "BSD 3-Clause" in lic)
+
+func _test_pokeapi_evolution_invariant() -> void:
+	var um: Dictionary = _load_json("res://data/reports/unsupported_mechanics.json")
+	var es: Dictionary = um["summary"]["evolutions"]
+	var fr: Dictionary = _load_json("res://data/reports/forms_policy_report.json")
+	var raw: Dictionary = _load_json("res://data/raw/pokemon_api.json")
+	var gd := _import_pokeapi()
+	var actual_evo := 0
+	for sid in gd.species_catalog.all_ids():
+		actual_evo += gd.species_catalog.get_by_id(sid).evolutions.size()
+	# Recompute deferred-form edges from raw: evolution edges whose target is a deferred form.
+	var deferred_slugs := {}
+	for f in fr.get("deferred", []):
+		deferred_slugs[f["id"]] = true
+	var recomputed_deferred := 0
+	for sp in raw["species"]:
+		for ev in sp.get("evolutions", []):
+			if deferred_slugs.has(ev["species_id"]):
+				recomputed_deferred += 1
+	var source_ok: bool = int(es["SOURCE_EDGES"]) == int(es["IMPORTED_EDGES"]) + int(es["DEFERRED_FORM_EDGES"]) + int(es["REJECTED_EDGES"])
+	var cov_ok: bool = int(es["SUPPORTED_RUNTIME_OR_MODEL"]) + int(es["PARTIAL_RUNTIME"]) + int(es["UNSUPPORTED"]) == int(es["IMPORTED_EDGES"])
+	_check("pokeapi_evolution_source_invariant", source_ok)
+	_check("pokeapi_evolution_coverage_invariant", cov_ok)
+	_check("pokeapi_evolution_imported_matches_catalog", int(es["IMPORTED_EDGES"]) == actual_evo)
+	# Independent check: no imported (raw) evolution edge may target a deferred form.
+	var no_deferred_target := true
+	for sp in raw["species"]:
+		for ev in sp.get("evolutions", []):
+			if deferred_slugs.has(ev["species_id"]):
+				no_deferred_target = false
+	_check("pokeapi_evolution_no_deferred_targets", no_deferred_target)
+
+func _test_pokeapi_move_coverage_invariant() -> void:
+	var um: Dictionary = _load_json("res://data/reports/unsupported_mechanics.json")
+	var ms: Dictionary = um["summary"]["moves"]
+	var gd := _import_pokeapi()
+	var sum_ok: bool = int(ms["RUNTIME_SUPPORTED"]) + int(ms["PARTIAL_RUNTIME"]) + int(ms["DATA_ONLY"]) + int(ms["UNSUPPORTED"]) == int(ms["DATA_READY"])
+	_check("pokeapi_move_coverage_sums", sum_ok)
+	_check("pokeapi_move_dataready_matches_catalog", int(ms["DATA_READY"]) == gd.move_catalog.size())
+
+func _test_pokeapi_ability_item_coverage_invariant() -> void:
+	var um: Dictionary = _load_json("res://data/reports/unsupported_mechanics.json")
+	var gd := _import_pokeapi()
+	_check("pokeapi_ability_dataready_matches_catalog", int(um["summary"]["abilities"]["DATA_ONLY"]) == gd.ability_catalog.size())
+	_check("pokeapi_item_dataready_matches_catalog", int(um["summary"]["items"]["DATA_ONLY"]) == gd.item_catalog.size())
+
+func _test_pokeapi_ids_unique() -> void:
+	var raw: Dictionary = _load_json("res://data/raw/pokemon_api.json")
+	for cat in ["species", "moves", "types", "abilities", "items"]:
+		var lst: Array = raw.get(cat, [])
+		var seen := {}
+		for e in lst:
+			seen[e["id"]] = true
+		_check("pokeapi_unique_ids_" + cat, seen.size() == lst.size())
+
+func _test_pokeapi_broken_ref_invariant() -> void:
+	var raw: Dictionary = _load_json("res://data/raw/pokemon_api.json")
+	var type_slugs := {}
+	for t in raw["types"]:
+		type_slugs[t["id"]] = true
+	var ability_slugs := {}
+	for a in raw["abilities"]:
+		ability_slugs[a["id"]] = true
+	var move_slugs := {}
+	for m in raw["moves"]:
+		move_slugs[m["id"]] = true
+	var species_slugs := {}
+	for s in raw["species"]:
+		species_slugs[s["id"]] = true
+	var broken := 0
+	for s in raw["species"]:
+		for t in s.get("types", []):
+			if not type_slugs.has(t):
+				broken += 1
+		for a in s.get("ability_ids", []):
+			if not ability_slugs.has(a):
+				broken += 1
+		for ls in s.get("learnset", []):
+			if not move_slugs.has(ls["move_id"]):
+				broken += 1
+		for ev in s.get("evolutions", []):
+			if not species_slugs.has(ev["species_id"]):
+				broken += 1
+	for m in raw["moves"]:
+		if not type_slugs.has(m["type_id"]):
+			broken += 1
+	var manifest := DatasetManifest.from_dict(_load_json("res://data/manifests/pokemon_api_manifest.json"))
+	var report: DataImportReport = DataImporter.new().import_dataset(raw, manifest)["report"]
+	_check("pokeapi_broken_ref_recomputed", broken == report.broken_references.size())
+	_check("pokeapi_broken_ref_zero", broken == 0)
+
+func _test_pokeapi_import_summary_matches() -> void:
+	var summary: Dictionary = _load_json("res://data/reports/import_summary.json")
+	var gd := _import_pokeapi()
+	_check("pokeapi_summary_species", int(summary.get("species_total", -1)) == gd.species_catalog.size())
+	_check("pokeapi_summary_moves", int(summary.get("moves_total", -1)) == gd.move_catalog.size())
+	_check("pokeapi_summary_types", int(summary.get("types_total", -1)) == gd.type_catalog.size())
+	_check("pokeapi_summary_broken_zero", (summary.get("broken_references", []) as Array).size() == 0)
 
 func _check(test_name: String, condition: bool) -> void:
 	if condition:
