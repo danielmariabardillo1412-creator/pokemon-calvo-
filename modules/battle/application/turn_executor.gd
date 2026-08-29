@@ -22,28 +22,75 @@ func execute(
 ) -> Array[BattleEvent]:
 	state.turn += 1
 	var events: Array[BattleEvent] = []
-	if not state.battle_started:
-		state.battle_started = true
-		for creature_id in state.active_ids.duplicate():
-			_execute_triggers(
-				BattleTriggerSpec.ON_SWITCH_IN,
-				state.creature(creature_id),
-				state.opponent_of(creature_id),
-				null,
-				state,
-				catalog,
-				rng,
-				events,
-			)
+	_begin_turn(state, catalog, rng, events)
 	var ordered_actions := _resolver.resolve_order(actions, state, catalog, rng, _ruleset)
 	for action in ordered_actions:
 		if state.phase == BattleState.FINISHED:
 			break
-		if action.action_type == BattleAction.SWITCH:
-			_execute_switch(action, state, catalog, rng, events, false)
-			continue
-		_execute_move(action, state, catalog, rng, events)
-		_handle_knockouts(state, catalog, rng, events)
+		_execute_action(action, state, catalog, rng, events)
+	return _complete_turn(state, catalog, rng, events)
+
+
+# Executes the response side of a turn whose other side has already spent its command outside the
+# move/switch executor (for example, a failed capture attempt). This is intentionally not a general
+# "free action" API: AuthoritativeBattleServer validates the responder and skipped side before this
+# method is called. End-turn status/triggers still run exactly once and the battle turn advances once.
+func execute_reaction(
+	state: BattleState,
+	action: BattleAction,
+	catalog: DefinitionCatalog,
+	rng: SeededRandomSource,
+) -> Array[BattleEvent]:
+	state.turn += 1
+	var events: Array[BattleEvent] = []
+	_begin_turn(state, catalog, rng, events)
+	if state.phase != BattleState.FINISHED:
+		_execute_action(action, state, catalog, rng, events)
+	return _complete_turn(state, catalog, rng, events)
+
+
+func _begin_turn(
+	state: BattleState,
+	catalog: DefinitionCatalog,
+	rng: SeededRandomSource,
+	events: Array[BattleEvent],
+) -> void:
+	if state.battle_started:
+		return
+	state.battle_started = true
+	for creature_id in state.active_ids.duplicate():
+		_execute_triggers(
+			BattleTriggerSpec.ON_SWITCH_IN,
+			state.creature(creature_id),
+			state.opponent_of(creature_id),
+			null,
+			state,
+			catalog,
+			rng,
+			events,
+		)
+
+
+func _execute_action(
+	action: BattleAction,
+	state: BattleState,
+	catalog: DefinitionCatalog,
+	rng: SeededRandomSource,
+	events: Array[BattleEvent],
+) -> void:
+	if action.action_type == BattleAction.SWITCH:
+		_execute_switch(action, state, catalog, rng, events, false)
+		return
+	_execute_move(action, state, catalog, rng, events)
+	_handle_knockouts(state, catalog, rng, events)
+
+
+func _complete_turn(
+	state: BattleState,
+	catalog: DefinitionCatalog,
+	rng: SeededRandomSource,
+	events: Array[BattleEvent],
+) -> Array[BattleEvent]:
 	state.rng_state = rng.state()
 	if state.phase == BattleState.FINISHED:
 		return events
