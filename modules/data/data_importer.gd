@@ -7,7 +7,7 @@ extends RefCounted
 # Does NOT import massive PokéAPI yet; the same code path scales to large raw sets.
 
 const TYPE_KEYS := ["id", "display_name", "effectiveness"]
-const MOVE_KEYS := ["id", "display_name", "power", "type_id", "priority", "damage_class", "accuracy", "pp", "target", "effect_summary", "classification"]
+const MOVE_KEYS := ["id", "display_name", "power", "type_id", "priority", "damage_class", "accuracy", "pp", "target", "effect_summary", "classification", "effect_specs", "crit_rate_bp", "makes_contact"]
 const ABILITY_KEYS := ["id", "display_name", "description", "effect_id", "effect_summary", "classification"]
 const ITEM_KEYS := ["id", "display_name", "description", "category"]
 const STATUS_KEYS := ["id", "display_name", "end_turn_max_hp_divisor", "minimum_damage"]
@@ -22,6 +22,19 @@ var _move_catalog := MoveCatalog.new()
 var _ability_catalog := AbilityCatalog.new()
 var _item_catalog := ItemCatalog.new()
 var _status_catalog := StatusCatalog.new()
+var _pending_report: DataImportReport
+
+const _EFFECT_KINDS := [
+	BattleEffectSpec.DAMAGE, BattleEffectSpec.HEAL, BattleEffectSpec.RECOIL,
+	BattleEffectSpec.DRAIN, BattleEffectSpec.INFLICT_STATUS, BattleEffectSpec.CURE_STATUS,
+	BattleEffectSpec.MODIFY_STAT_STAGE, BattleEffectSpec.CHANCE, BattleEffectSpec.FLINCH,
+	BattleEffectSpec.FIXED_DAMAGE, BattleEffectSpec.MULTI_HIT,
+]
+const _EFFECT_TARGETS := [BattleEffectSpec.SELF, BattleEffectSpec.OPPONENT]
+const _VALID_STATUSES := [
+	&"burn", &"poison", &"badly_poisoned", &"paralysis",
+	&"sleep", &"freeze", &"flinch", &"confusion",
+]
 
 func import_dataset(raw: Dictionary, manifest: DatasetManifest) -> Dictionary:
 	_type_catalog = TypeCatalog.new()
@@ -31,6 +44,7 @@ func import_dataset(raw: Dictionary, manifest: DatasetManifest) -> Dictionary:
 	_status_catalog = StatusCatalog.new()
 
 	var report := DataImportReport.new()
+	_pending_report = report
 	var gd := GameData.new()
 	gd.manifest = manifest if manifest != null else DatasetManifest.new()
 
@@ -92,7 +106,10 @@ func _build(kind: String, rec: Dictionary):
 				return null
 			if not _type_catalog.has(StringName(String(rec.get("type_id", "normal")))):
 				return null
-			return MoveDefinition.from_dict(rec)
+			var mv := MoveDefinition.from_dict(rec)
+			if not _validate_move_effect_specs(mv, _pending_report):
+				return null
+			return mv
 		"ability":
 			return AbilityDefinition.from_dict(rec)
 		"item":
@@ -180,3 +197,48 @@ func _dedup(arr: Array) -> Array:
 		if not out.has(x):
 			out.append(x)
 	return out
+
+
+# Strong validation of imported BattleEffectSpec trees (FASE 5). A broken spec is rejected,
+# keeping malformed effect data out of the runtime catalogs. Issues are recorded in the report.
+func _validate_move_effect_specs(mv: MoveDefinition, report: DataImportReport) -> bool:
+	var ok := true
+	for spec in mv.effect_specs:
+		if not _validate_effect_spec(spec, mv.id, report, 0):
+			ok = false
+	return ok
+
+
+func _validate_effect_spec(
+	spec: BattleEffectSpec, mid: StringName, report: DataImportReport, depth: int
+) -> bool:
+	if depth > 16:
+		report.add_issue("effect_spec_invalid", "Spec recursion too deep", {"move": String(mid)})
+		return false
+	if not _EFFECT_KINDS.has(spec.kind):
+		report.add_issue("effect_spec_invalid", "Unknown effect kind", {"move": String(mid), "kind": spec.kind})
+		return false
+	if not _EFFECT_TARGETS.has(spec.target):
+		report.add_issue("effect_spec_invalid", "Bad target", {"move": String(mid), "target": String(spec.target)})
+		return false
+	if spec.kind == BattleEffectSpec.INFLICT_STATUS and not _VALID_STATUSES.has(spec.status_id):
+		report.add_issue("effect_spec_invalid", "Unknown status id", {"move": String(mid), "status_id": String(spec.status_id)})
+		return false
+	if spec.kind == BattleEffectSpec.MODIFY_STAT_STAGE and not StatStages.ALL.has(spec.stat_id):
+		report.add_issue("effect_spec_invalid", "Unknown stat id", {"move": String(mid), "stat_id": String(spec.stat_id)})
+		return false
+	if spec.kind == BattleEffectSpec.CHANCE and (spec.chance_basis_points < 0 or spec.chance_basis_points > 10000):
+		report.add_issue("effect_spec_invalid", "Chance out of range", {"move": String(mid), "chance": spec.chance_basis_points})
+		return false
+	if spec.kind in [BattleEffectSpec.HEAL, BattleEffectSpec.RECOIL, BattleEffectSpec.DRAIN] and (
+		spec.ratio_basis_points < 0 or spec.ratio_basis_points > 10000
+	):
+		report.add_issue("effect_spec_invalid", "Ratio out of range", {"move": String(mid), "ratio": spec.ratio_basis_points})
+		return false
+	if spec.kind == BattleEffectSpec.MULTI_HIT and (spec.min_hits < 2 or spec.max_hits < spec.min_hits):
+		report.add_issue("effect_spec_invalid", "Bad multi-hit range", {"move": String(mid), "min": spec.min_hits, "max": spec.max_hits})
+		return false
+	for child in spec.children:
+		if not _validate_effect_spec(child, mid, report, depth + 1):
+			return false
+	return true

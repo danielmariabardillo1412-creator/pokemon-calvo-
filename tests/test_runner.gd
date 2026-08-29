@@ -62,6 +62,8 @@ func _run_all() -> void:
 	_test_pokeapi_ids_unique()
 	_test_pokeapi_broken_ref_invariant()
 	_test_pokeapi_import_summary_matches()
+	# --- Phase 5: structured move-metadata -> effect_specs ---
+	_test_pokeapi_effect_specs_integrity()
 	# --- Battle Core V2 ---
 	BattleV2TestSuite.new(_import_pokeapi()).run(Callable(self, "_check"))
 
@@ -335,7 +337,7 @@ func _import_pokeapi() -> GameData:
 
 func _test_pokeapi_manifest_valid() -> void:
 	var m := DatasetManifest.from_dict(_load_json("res://data/manifests/pokemon_api_manifest.json"))
-	_check("pokeapi_manifest_valid", m.is_valid() and m.schema_version == 1 and m.source == "pokeapi/api-data")
+	_check("pokeapi_manifest_valid", m.is_valid() and m.schema_version == 2 and m.source == "pokeapi/api-data")
 
 func _test_pokeapi_known_species() -> void:
 	var gd := _import_pokeapi()
@@ -516,6 +518,60 @@ func _test_pokeapi_import_summary_matches() -> void:
 	_check("pokeapi_summary_types", int(summary.get("types_total", -1)) == gd.type_catalog.size())
 	_check("pokeapi_summary_broken_zero", (summary.get("broken_references", []) as Array).size() == 0)
 
+func _test_pokeapi_effect_specs_integrity() -> void:
+	var gd := _import_pokeapi()
+	var valid_kinds := [
+		BattleEffectSpec.DAMAGE, BattleEffectSpec.HEAL, BattleEffectSpec.RECOIL,
+		BattleEffectSpec.DRAIN, BattleEffectSpec.INFLICT_STATUS, BattleEffectSpec.CURE_STATUS,
+		BattleEffectSpec.MODIFY_STAT_STAGE, BattleEffectSpec.CHANCE, BattleEffectSpec.FLINCH,
+		BattleEffectSpec.FIXED_DAMAGE, BattleEffectSpec.MULTI_HIT,
+	]
+	var valid_targets := [BattleEffectSpec.SELF, BattleEffectSpec.OPPONENT]
+	var valid_statuses := [
+		&"burn", &"poison", &"badly_poisoned", &"paralysis",
+		&"sleep", &"freeze", &"flinch", &"confusion",
+	]
+	var valid_stats := StatStages.ALL
+	var ok := true
+	var count := 0
+	for sid in gd.move_catalog.all_ids():
+		var mv := gd.move_catalog.get_by_id(sid)
+		for spec in mv.effect_specs:
+			count += 1
+			ok = _validate_effect_spec(spec, valid_kinds, valid_targets, valid_statuses, valid_stats) and ok
+	_check("pokeapi_effect_specs_present", count > 300)
+	_check("pokeapi_effect_specs_no_broken", ok)
+
+
+func _validate_effect_spec(
+	spec: BattleEffectSpec,
+	valid_kinds: Array,
+	valid_targets: Array,
+	valid_statuses: Array,
+	valid_stats: Array,
+) -> bool:
+	if not valid_kinds.has(spec.kind):
+		return false
+	if not valid_targets.has(spec.target):
+		return false
+	if spec.kind == BattleEffectSpec.INFLICT_STATUS and not valid_statuses.has(spec.status_id):
+		return false
+	if spec.kind == BattleEffectSpec.MODIFY_STAT_STAGE and not valid_stats.has(spec.stat_id):
+		return false
+	if spec.kind == BattleEffectSpec.CHANCE and (spec.chance_basis_points < 0 or spec.chance_basis_points > 10000):
+		return false
+	if spec.kind in [BattleEffectSpec.HEAL, BattleEffectSpec.RECOIL, BattleEffectSpec.DRAIN] and (
+		spec.ratio_basis_points < 0 or spec.ratio_basis_points > 10000
+	):
+		return false
+	if spec.kind == BattleEffectSpec.MULTI_HIT and (spec.min_hits < 2 or spec.max_hits < spec.min_hits):
+		return false
+	for child in spec.children:
+		if not _validate_effect_spec(child, valid_kinds, valid_targets, valid_statuses, valid_stats):
+			return false
+	return true
+
+
 func _check(test_name: String, condition: bool) -> void:
 	if condition:
 		_passed += 1
@@ -613,7 +669,7 @@ func _test_data_round_trip() -> void:
 	var gd := _import(_fixture_raw(), _fixture_manifest())
 	var text := JSON.stringify(gd.to_dict())
 	var restored := GameData.from_dict(JSON.parse_string(text))
-	_check("data_round_trip", restored.species_catalog.size() == gd.species_catalog.size() and restored.move_catalog.has(&"thunderbolt") and restored.species_catalog.has(&"bulbasaur") and restored.manifest.schema_version == 1)
+	_check("data_round_trip", restored.species_catalog.size() == gd.species_catalog.size() and restored.move_catalog.has(&"thunderbolt") and restored.species_catalog.has(&"bulbasaur") and restored.manifest.schema_version == 2)
 
 func _test_imported_battle() -> void:
 	var gd := _import(_fixture_raw(), _fixture_manifest())

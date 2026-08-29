@@ -178,3 +178,50 @@ Motor: `4.7.stable.official.5b4e0cb0f`
 
 No se implementaron evolución, forms, capture, XP, level progression, inventario,
 UI, networking, overworld ni mecánicas generacionales especiales.
+
+---
+
+# FASE 5 — Move effects as structured data
+
+Fecha de validación: 2026-08-29
+Rama: `feature/battle-effects-data-v1` (creada desde `feature/battle-core-v2`)
+Motor: `4.7.stable.official.5b4e0cb0f`
+Fuente: PokéAPI `api-data` (SHA completo `784c50b3ad27d0390d3b047fc4c4511f71edd049`, BSD 3-Clause)
+
+## Resultado
+
+- Godot import/headless: **PASS**, sin errores de parseo/runtime, exit 0
+- Tests: **137 PASS / 0 FAIL** (131 base + 6 nuevos FASE 5)
+- Snapshot: schema **2**; dataset schema_version **2**; `BattleEffectSpec` V1
+- Autoloads: **0**
+- `extends Node` fuera de tests: **0**
+- Importador: referencias rotas **0**, rechazados **0**, `effect_spec_invalid` **0**
+- Determinismo headless: **PASS** (mismos seed/acciones ⇒ mismos eventos y snapshot)
+
+## Qué se añadió
+
+- `BattleEffectSpec`: kind `MULTI_HIT` + `min_hits/max_hits/min_turns/max_turns`; `to_dict`/`from_dict`.
+- `MoveDefinition`: `effect_specs: Array[BattleEffectSpec]`, `crit_rate_bp`, `makes_contact`.
+- `tools/pokeapi_adapter.py`: genera `effect_specs` desde metadata estructurada (status, stat changes,
+  drain/recoil/heal, flinch, multi-hit, crit), bump schema_version → 2, y `data/reports/battle_effect_specs_summary.json`.
+- `tools/move_flags_override.json`: override de contacto (la fuente no trae flags).
+- `BattleEffectRegistry.effects_for_move`: prefiere specs del dataset; salta DAMAGE implícito si hay MULTI_HIT.
+- `BattleEffectExecutor`: maneja `MULTI_HIT` (daño por golpe + recoil/drain por golpe).
+- `DamageCalculator`: `crit_rate_bp` suma al umbral de crítico.
+- `BattleTriggerSystem` + `Static`: `requires_contact` (corregido desde `requires_physical`).
+- `DataImporter`: validación fuerte de `effect_specs` (rechaza specs rotos; issues en reporte).
+- Tests: `pokeapi_effect_specs_integrity`, `fase5_multi_hit`, `fase5_static_contact`.
+- Docs: `docs/ARCHITECTURE_DECISION_004_EFFECT_DATA.md`, `docs/MOVE_EFFECT_COVERAGE.md`.
+
+## Cobertura honesta (937 movimientos)
+
+- `RUNTIME_SUPPORTED`: **541** (antes 376 / contrato V2 previo 91)
+- `PARTIAL_RUNTIME`: 60 · `DATA_ONLY`: 327 · `UNSUPPORTED`: 9
+- `effect_specs_generated`: 352 movimientos · `generated_by_metadata`: 433 specs · `validation_errors`: 0
+- Multi-hit: IMPLEMENTADO · Contact/Static: CORREGIDO (override) · Protect: DIFERIDO · Ruleset fingerprint: DIFERIDO
+
+## Listo para Progression Core
+
+SÍ (sujeto a revisión). La capa de efectos de movimiento está data-driven y validada; el Battle Core
+no se rediseñó y los 131 tests base siguen en verde. NO se hizo merge a `main`.
+

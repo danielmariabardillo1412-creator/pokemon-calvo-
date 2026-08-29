@@ -134,6 +134,31 @@ func execute(
 				{"fixed": true},
 			))
 			return BattleEffectResult.new(fixed > 0, fixed)
+		BattleEffectSpec.MULTI_HIT:
+			if spec.max_hits <= spec.min_hits:
+				spec.max_hits = spec.min_hits
+			var hits := spec.min_hits
+			if spec.max_hits > spec.min_hits:
+				hits = spec.min_hits + context.rng.next_index(spec.max_hits - spec.min_hits + 1)
+			var total := 0
+			var any_applied := false
+			for i in hits:
+				var dmg_result := _damage(context, registry)
+				total += dmg_result.amount
+				any_applied = dmg_result.applied or any_applied
+				for child in spec.children:
+					var cr := execute(child, context, registry)
+					total += cr.amount
+					any_applied = cr.applied or any_applied
+			context.events.append(BattleEvent.new(
+				BattleEvent.MULTI_HIT,
+				context.state.turn,
+				context.actor.instance_id,
+				context.target.instance_id,
+				context.move.id,
+				hits,
+			))
+			return BattleEffectResult.new(any_applied, total, &"" if any_applied else &"no_damage")
 	return BattleEffectResult.new(false, 0, &"unsupported_effect")
 
 

@@ -49,6 +49,8 @@ func run(check_callback: Callable) -> void:
 	_test_golden_damage_scenario()
 	_test_golden_status_scenario()
 	_test_runtime_coverage_contract()
+	_test_fase5_multi_hit()
+	_test_fase5_static_contact()
 
 
 func _test_phase_order() -> void:
@@ -597,7 +599,7 @@ func _test_runtime_coverage_contract() -> void:
 	var item_ids := _string_names_to_strings(registry.runtime_supported_item_ids())
 	_expect(
 		"v2_move_coverage_contract",
-		coverage.moves.RUNTIME_SUPPORTED == 91
+		coverage.moves.RUNTIME_SUPPORTED == 541
 		and coverage.moves.RUNTIME_SUPPORTED + coverage.moves.PARTIAL_RUNTIME
 		+ coverage.moves.DATA_ONLY + coverage.moves.UNSUPPORTED == coverage.moves.DATA_READY
 		and move_ids == coverage.moves.newly_runtime_supported,
@@ -614,6 +616,50 @@ func _test_runtime_coverage_contract() -> void:
 		and coverage.items.RUNTIME_SUPPORTED + coverage.items.DATA_ONLY == coverage.items.DATA_READY
 		and item_ids == coverage.items.runtime_supported,
 	)
+
+
+func _test_fase5_multi_hit() -> void:
+	var found := false
+	var hit_count := 0
+	for seed in range(1, 500):
+		var server := _server(seed, [&"double_slap"], [&"idle"], &"charmander", &"squirtle")
+		var events := server.submit_turn(_move_actions(server.state, &"double_slap", &"idle"))
+		var damage_events := 0
+		var multi_event: BattleEvent = null
+		for event in events:
+			if event.kind == BattleEvent.DAMAGE_APPLIED:
+				damage_events += 1
+			if event.kind == BattleEvent.MULTI_HIT:
+				multi_event = event
+		if multi_event != null and damage_events >= 2:
+			found = true
+			hit_count = multi_event.amount
+			break
+	_expect("fase5_multi_hit_runs", found)
+	_expect("fase5_multi_hit_count_valid", found and hit_count >= 2 and hit_count <= 5)
+
+
+func _test_fase5_static_contact() -> void:
+	# Contact move (thunder_punch) must fire the Static ability trigger (contact-based, not physical).
+	var contact_event := false
+	for seed in range(1, 300):
+		var server := _server(seed, [&"thunder_punch"], [&"idle"], &"pikachu", &"squirtle")
+		server.state.creature(&"b").ability_id = &"static"
+		var events := server.submit_turn(_move_actions(server.state, &"thunder_punch", &"idle"))
+		if _source_triggered(events, BattleEvent.ABILITY_TRIGGERED, "static"):
+			contact_event = true
+			break
+	# Non-contact physical move (earthquake) must NOT fire the Static ability trigger.
+	var non_contact_event := false
+	for seed in range(1, 300):
+		var server := _server(seed, [&"earthquake"], [&"idle"], &"geodude", &"squirtle")
+		server.state.creature(&"b").ability_id = &"static"
+		var events := server.submit_turn(_move_actions(server.state, &"earthquake", &"idle"))
+		if _source_triggered(events, BattleEvent.ABILITY_TRIGGERED, "static"):
+			non_contact_event = true
+			break
+	_expect("fase5_static_contact_triggers", contact_event)
+	_expect("fase5_static_non_contact_no_trigger", not non_contact_event)
 
 
 func _server(

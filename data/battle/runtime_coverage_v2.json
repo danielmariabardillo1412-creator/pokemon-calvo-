@@ -1,12 +1,13 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "ruleset_id": "calvo_v1",
   "source_dataset_sha": "784c50b3ad27d0390d3b047fc4c4511f71edd049",
+  "effect_spec_schema_version": 1,
   "moves": {
     "DATA_READY": 937,
-    "RUNTIME_SUPPORTED": 91,
-    "PARTIAL_RUNTIME": 496,
-    "DATA_ONLY": 341,
+    "RUNTIME_SUPPORTED": 541,
+    "PARTIAL_RUNTIME": 60,
+    "DATA_ONLY": 327,
     "UNSUPPORTED": 9,
     "newly_runtime_supported": [
       "double_edge",

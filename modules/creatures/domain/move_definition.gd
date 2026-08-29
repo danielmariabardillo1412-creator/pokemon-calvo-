@@ -14,8 +14,16 @@ extends Resource
 @export var target: String = "selected"
 @export var effect_summary: String = ""
 @export var classification: String = "DATA_ONLY"
+# Structured battle metadata (schema v2).
+var effect_specs: Array[BattleEffectSpec] = []
+var crit_rate_bp: int = 0
+var makes_contact: bool = false
+
 
 func to_dict() -> Dictionary:
+	var specs: Array[Dictionary] = []
+	for spec in effect_specs:
+		specs.append(spec.to_dict())
 	return {
 		"id": String(id),
 		"display_name": display_name,
@@ -28,6 +36,9 @@ func to_dict() -> Dictionary:
 		"target": target,
 		"effect_summary": effect_summary,
 		"classification": classification,
+		"effect_specs": specs,
+		"crit_rate_bp": crit_rate_bp,
+		"makes_contact": makes_contact,
 	}
 
 static func from_dict(d: Dictionary) -> MoveDefinition:
@@ -43,4 +54,8 @@ static func from_dict(d: Dictionary) -> MoveDefinition:
 	m.target = String(d.get("target", "selected"))
 	m.effect_summary = String(d.get("effect_summary", ""))
 	m.classification = String(d.get("classification", "DATA_ONLY"))
+	m.crit_rate_bp = int(d.get("crit_rate_bp", 0))
+	m.makes_contact = bool(d.get("makes_contact", false))
+	for spec_data in d.get("effect_specs", []):
+		m.effect_specs.append(BattleEffectSpec.from_dict(spec_data))
 	return m

@@ -14,10 +14,24 @@ func _init() -> void:
 
 func effects_for_move(move: MoveDefinition) -> Array[BattleEffectSpec]:
 	var result: Array[BattleEffectSpec] = []
-	if move.power > 0:
+	var has_multi_hit := false
+	for spec in move.effect_specs:
+		if spec.kind == BattleEffectSpec.MULTI_HIT:
+			has_multi_hit = true
+	# Implicit DAMAGE for damaging moves, unless the dataset drives damage via MULTI_HIT.
+	if move.power > 0 and not has_multi_hit:
 		result.append(BattleEffectSpec.new(BattleEffectSpec.DAMAGE))
-	for spec in _move_specs.get(move.id, []):
+	for spec in move.effect_specs:
 		result.append(spec)
+	# Fallback to hardcoded registry specs when the imported dataset provides none
+	# (keeps legacy Battle Core V2 behavior intact for the explicitly modeled moves).
+	if move.effect_specs.is_empty():
+		var added_damage := false
+		for spec in _move_specs.get(move.id, []):
+			if not added_damage and move.power > 0:
+				result.append(BattleEffectSpec.new(BattleEffectSpec.DAMAGE))
+				added_damage = true
+			result.append(spec)
 	return result
 
 
@@ -116,7 +130,7 @@ func _register_abilities() -> void:
 			&"paralysis",
 		)),
 		0,
-		{"requires_physical": true},
+		{"requires_contact": true},
 	)]
 
 

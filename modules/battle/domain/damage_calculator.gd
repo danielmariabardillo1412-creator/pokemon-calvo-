@@ -32,9 +32,12 @@ func calculate(
 			"critical": false,
 			"critical_basis_points": 10000,
 		}
+	var crit_threshold := active_ruleset.critical_threshold_basis_points()
+	if move != null:
+		crit_threshold += move.crit_rate_bp
 	var critical := (
 		force_critical == 1
-		or (force_critical < 0 and rng.roll_basis_points(active_ruleset.critical_threshold_basis_points()))
+		or (force_critical < 0 and rng.roll_basis_points(crit_threshold))
 	)
 	var critical_bp := active_ruleset.critical_multiplier_basis_points if critical else 10000
 	var random_bp := rng.damage_factor_basis_points()

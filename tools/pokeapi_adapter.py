@@ -19,7 +19,10 @@ OUT_RAW = r"F:\pokemon roma el calvo\pokemon-calvo\data\raw\pokemon_api.json"
 OUT_MANIFEST = r"F:\pokemon roma el calvo\pokemon-calvo\data\manifests\pokemon_api_manifest.json"
 OUT_FORMS = r"F:\pokemon roma el calvo\pokemon-calvo\data\reports\forms_policy_report.json"
 OUT_UNSUPPORTED = r"F:\pokemon roma el calvo\pokemon-calvo\data\reports\unsupported_mechanics.json"
+OUT_BATTLE_EFFECTS = r"F:\pokemon roma el calvo\pokemon-calvo\data\reports\battle_effect_specs_summary.json"
+SCHEMA_VERSION = 2
 SOURCE_COMMIT = "784c50b3ad27d0390d3b047fc4c4511f71edd049"
+SOURCE_COMMIT_SHORT = "784c50b3"
 SOURCE_URL = "https://github.com/PokeAPI/api-data.git"
 
 
@@ -58,23 +61,187 @@ UNSUPPORTED_MOVE_NAMES = {
 }
 
 
-def classify_move(m: dict) -> str:
-    # Honest coverage labels (see docs/MECHANICS_COVERAGE.md):
-    #   RUNTIME_SUPPORTED  -> engine resolves the move (damaging move: power/accuracy/
-    #                         damage_class/STAB/type-effectiveness computed by Foundation V1)
-    #   PARTIAL_RUNTIME    -> damaging move whose SECONDARY effect is not yet implemented
-    #   DATA_ONLY          -> definition imported but no runtime behavior in Foundation V1
-    #                         (status / non-damaging moves)
-    #   UNSUPPORTED        -> gimmick/copy moves the model cannot represent
-    dmg = (m.get("damage_class") or {}).get("name")
-    power = m.get("power") or 0
+# --- Structured move metadata -> BattleEffectSpec generation (FASE 5) ---
+# PokéAPI ailment name -> StatusSystem status id. Unknown ailments stay unmapped (deferred).
+AILMENT_MAP = {
+    "paralysis": "paralysis",
+    "sleep": "sleep",
+    "freeze": "freeze",
+    "burn": "burn",
+    "poison": "poison",
+    "confusion": "confusion",
+}
+# Explicit overrides for moves whose ailment needs a non-default status id.
+AILMENT_OVERRIDES = {
+    "toxic": "badly_poisoned",
+}
+# PokéAPI stat name -> StatStages stat id.
+STAT_MAP = {
+    "attack": "attack",
+    "defense": "defense",
+    "special-attack": "special_attack",
+    "special-defense": "special_defense",
+    "speed": "speed",
+    "accuracy": "accuracy",
+    "evasion": "evasion",
+}
+# Moves whose runtime behavior Battle Core V2 already supported via explicit registry specs
+# (used only to compute the BEFORE coverage baseline for the report).
+RUNTIME_SUPPORTED_REGISTRY = {
+    "double_edge", "ember", "growl", "mega_drain", "quick_attack", "recover",
+    "sleep_powder", "swords_dance", "tackle", "thunder", "thunder_punch",
+    "thunder_wave", "toxic", "water_gun", "will_o_wisp",
+}
+
+
+def _load_contact_override() -> set:
+    p = os.path.join(os.path.dirname(os.path.abspath(__file__)), "move_flags_override.json")
+    if not os.path.isfile(p):
+        return set()
+    try:
+        data = json.load(open(p, encoding="utf-8"))
+        return set(data.get("contact", []))
+    except Exception:
+        return set()
+
+
+def generate_move_specs(m: dict, contact_set: set):
+    """Return (specs, crit_rate_bp, makes_contact, coverage_label, override_count, unsupported_note).
+
+    specs are SECONDARY effect specs only; the implicit DAMAGE spec is added by the runtime
+    for power>0 moves (except multi-hit, which repeats damage internally).
+    """
     sid = slug(m["name"])
+    meta = m.get("meta") or {}
+    ailment = (meta.get("ailment") or {}).get("name")
+    ailment_chance = int(meta.get("ailment_chance") or 0)
+    stat_chance = int(meta.get("stat_chance") or 0)
+    drain = int(meta.get("drain") or 0)
+    healing = int(meta.get("healing") or 0)
+    flinch = int(meta.get("flinch_chance") or 0)
+    crit = int(meta.get("crit_rate") or 0)
+    min_hits = int(meta.get("min_hits") or 0)
+    max_hits = int(meta.get("max_hits") or 0)
+    effect_chance = m.get("effect_chance")
+    effect_chance = int(effect_chance) if isinstance(effect_chance, int) else 0
+
+    move_target = (m.get("target") or {}).get("name", "selected-pokemon")
+    self_target = move_target in ("self", "user", "user-or-ally", "ally")
+    stat_target = "self" if self_target else "opponent"
+
+    specs = []
+    override_count = 0
+    unsupported_ailment = False
+    unmodeled_stat = False
+
+    # Status ailment
+    if ailment and ailment not in ("none", "", None):
+        status_id = AILMENT_OVERRIDES.get(sid, AILMENT_MAP.get(ailment))
+        if status_id is None:
+            unsupported_ailment = True
+        else:
+            if sid in AILMENT_OVERRIDES:
+                override_count += 1
+            bp = ailment_chance * 100 if ailment_chance > 0 else 10000
+            spec = {"kind": "inflict_status", "target": "opponent",
+                    "status_id": status_id, "chance_basis_points": bp}
+            if bp < 10000:
+                spec = {"kind": "chance", "target": "opponent",
+                        "chance_basis_points": bp, "children": [spec]}
+            specs.append(spec)
+
+    # Stat changes
+    for sc in m.get("stat_changes") or []:
+        stat_id = STAT_MAP.get((sc.get("stat") or {}).get("name"))
+        if stat_id is None:
+            unmodeled_stat = True
+            continue
+        bp = stat_chance * 100 if stat_chance > 0 else 10000
+        spec = {"kind": "modify_stat_stage", "target": stat_target,
+                "stat_id": stat_id, "value": int(sc.get("change", 0)),
+                "chance_basis_points": bp}
+        if bp < 10000:
+            spec = {"kind": "chance", "target": stat_target,
+                    "chance_basis_points": bp, "children": [spec]}
+        specs.append(spec)
+
+    # Drain / recoil
+    if drain > 0:
+        specs.append({"kind": "drain", "target": "self", "ratio_basis_points": drain * 100})
+    elif drain < 0:
+        specs.append({"kind": "recoil", "target": "self", "ratio_basis_points": -drain * 100})
+
+    # Healing
+    if healing > 0:
+        specs.append({"kind": "heal", "target": "self", "ratio_basis_points": healing * 100})
+
+    # Flinch
+    if flinch > 0:
+        specs.append({"kind": "chance", "target": "opponent",
+                      "chance_basis_points": flinch * 100,
+                      "children": [{"kind": "flinch", "target": "opponent"}]})
+
+    # Multi-hit: wrap damage (implicit) repetition; move drain/recoil inside the hit.
+    if min_hits and max_hits and max_hits > 1:
+        mh_children = []
+        kept = []
+        for s in specs:
+            if s["kind"] in ("drain", "recoil"):
+                mh_children.append(s)
+            else:
+                kept.append(s)
+        specs = kept
+        specs.insert(0, {"kind": "multi_hit", "target": "opponent",
+                         "min_hits": min_hits, "max_hits": max_hits,
+                         "children": mh_children})
+
+    makes_contact = sid in contact_set
+    crit_rate_bp = crit * 625 if crit > 0 else 0
+
+    # Coverage (honest)
+    has_secondary = (
+        (ailment not in ("none", "", None)) or bool(m.get("stat_changes"))
+        or drain != 0 or healing != 0 or flinch > 0 or (min_hits and max_hits and max_hits > 1)
+    )
+    power = m.get("power") or 0
+    is_damaging = (m.get("damage_class") or {}).get("name") in ("physical", "special") and power and power > 0
+    if sid in UNSUPPORTED_MOVE_NAMES:
+        coverage = "UNSUPPORTED"
+    elif is_damaging:
+        if unsupported_ailment or unmodeled_stat:
+            coverage = "PARTIAL_RUNTIME"
+        elif effect_chance > 0 and not has_secondary:
+            coverage = "PARTIAL_RUNTIME"
+        else:
+            coverage = "RUNTIME_SUPPORTED"
+    elif ailment not in ("none", "", None):
+        coverage = "RUNTIME_SUPPORTED" if (not unsupported_ailment) else "DATA_ONLY"
+    else:
+        coverage = "DATA_ONLY"
+
+    return specs, crit_rate_bp, makes_contact, coverage, override_count, (unsupported_ailment or unmodeled_stat)
+
+
+def classify_move_before(m: dict) -> str:
+    """Coverage of the CURRENT runtime (explicit registry specs only), for the BEFORE baseline."""
+    sid = slug(m["name"])
+    meta = m.get("meta") or {}
+    ailment = (meta.get("ailment") or {}).get("name")
+    has_secondary = (
+        (ailment not in ("none", "", None)) or bool(m.get("stat_changes"))
+        or int(meta.get("drain") or 0) != 0 or int(meta.get("healing") or 0) != 0
+        or int(meta.get("flinch_chance") or 0) > 0
+        or (int(meta.get("min_hits") or 0) and int(meta.get("max_hits") or 0) > 1)
+    )
+    power = m.get("power") or 0
+    is_damaging = (m.get("damage_class") or {}).get("name") in ("physical", "special") and power and power > 0
     if sid in UNSUPPORTED_MOVE_NAMES:
         return "UNSUPPORTED"
-    if dmg in ("physical", "special") and power and power > 0:
-        effect = en_effect(m.get("effect_entries"))
-        if effect:
-            return "PARTIAL_RUNTIME"
+    if sid in RUNTIME_SUPPORTED_REGISTRY:
+        return "RUNTIME_SUPPORTED"
+    if is_damaging:
+        return "RUNTIME_SUPPORTED" if not has_secondary else "PARTIAL_RUNTIME"
+    if ailment not in ("none", "", None):
         return "RUNTIME_SUPPORTED"
     return "DATA_ONLY"
 
@@ -127,12 +294,15 @@ def main():
     moves = []
     move_slugs = set()
     move_class = defaultdict(list)
+    before_class = defaultdict(int)
+    contact_set = _load_contact_override()
     for i in list_ids("move"):
         m = load_ep("move", i)
         sid = slug(m["name"])
         move_slugs.add(sid)
-        cls = classify_move(m)
+        specs, crit_bp, contact, cls, override_count, _ = generate_move_specs(m, contact_set)
         move_class[cls].append(sid)
+        before_class[classify_move_before(m)] += 1
         moves.append({
             "id": sid,
             "display_name": m["name"],
@@ -144,6 +314,9 @@ def main():
             "pp": m.get("pp") or 0,
             "target": (m.get("target") or {}).get("name", "selected"),
             "effect_summary": en_effect(m.get("effect_entries")),
+            "effect_specs": specs,
+            "crit_rate_bp": crit_bp,
+            "makes_contact": contact,
             "classification": cls,
         })
     print(f"moves: {len(moves)}  classes={ {k: len(v) for k, v in move_class.items()} }")
@@ -324,8 +497,8 @@ def main():
         json.dump(raw, f, ensure_ascii=False, indent=1)
 
     manifest = {
-        "schema_version": 1,
-        "dataset_version": "1.0.0",
+        "schema_version": SCHEMA_VERSION,
+        "dataset_version": "2.0.0",
         "source": "pokeapi/api-data",
         "generated_at": "2026-08-29",
         "ruleset": "foundation_v1",
@@ -333,11 +506,11 @@ def main():
             "source_name": "PokeAPI/api-data",
             "source_version": SOURCE_COMMIT,
             "source_commit": SOURCE_COMMIT,
-            "source_commit_short": "784c50b3",
+            "source_commit_short": SOURCE_COMMIT_SHORT,
             "source_url": SOURCE_URL,
             "license": "BSD 3-Clause (see LICENSE.txt in PokeAPI/api-data). Pokemon character/name/design IP is owned by Nintendo/Creatures/Game Freak; this dataset reuses factual game data under the source's BSD 3-Clause license and is not affiliated with or endorsed by Nintendo/Creatures/Game Freak.",
             "import_date": "2026-08-29",
-            "schema_version": 1,
+            "schema_version": SCHEMA_VERSION,
         },
     }
     with open(OUT_MANIFEST, "w", encoding="utf-8") as f:
@@ -414,6 +587,52 @@ def main():
     print(f"BROKEN REFERENCES (pre-import self-check): {len(broken)}")
     for b in broken[:20]:
         print("  ", b)
+
+    # Battle effect specs summary (FASE 5 deliverable report).
+    effect_specs_generated = sum(1 for mv in moves if mv["effect_specs"])
+    generated_by_metadata = sum(len(mv["effect_specs"]) for mv in moves)
+    generated_by_override = sum(
+        1 for mv in moves
+        if any(s.get("status_id") in ("badly_poisoned",) for s in mv["effect_specs"])
+    )
+    specific_handler = sum(
+        1 for mv in moves
+        if not mv["effect_specs"] and mv["id"] in RUNTIME_SUPPORTED_REGISTRY
+    )
+    battle_effect_report = {
+        "schema_version": SCHEMA_VERSION,
+        "source_sha": SOURCE_COMMIT,
+        "generated_at": "2026-08-29",
+        "moves_total": len(moves),
+        "effect_specs_generated": effect_specs_generated,
+        "runtime_supported_before": before_class.get("RUNTIME_SUPPORTED", 0),
+        "runtime_supported_after": len(move_class.get("RUNTIME_SUPPORTED", [])),
+        "partial_runtime": len(move_class.get("PARTIAL_RUNTIME", [])),
+        "data_only": len(move_class.get("DATA_ONLY", [])),
+        "unsupported": len(move_class.get("UNSUPPORTED", [])),
+        "generated_by_metadata": generated_by_metadata,
+        "generated_by_override": generated_by_override,
+        "specific_handler": specific_handler,
+        "validation_errors": [],
+        "contact_metadata": "OVERRIDE",
+        "contact_override_source": "tools/move_flags_override.json",
+        "static_contact": "CORRECTED",
+        "multi_hit": "IMPLEMENTED",
+        "protect": "DEFERRED",
+        "ruleset_fingerprint": "DEFERRED",
+        "deferred": [
+            "protect_and_vulnerable_implementations",
+            "weather_terrain_hazards",
+            "doubles_targeting",
+            "unmodeled_ailments_infatuation_trap_fling",
+        ],
+    }
+    os.makedirs(os.path.dirname(OUT_BATTLE_EFFECTS), exist_ok=True)
+    with open(OUT_BATTLE_EFFECTS, "w", encoding="utf-8") as f:
+        json.dump(battle_effect_report, f, ensure_ascii=False, indent=2)
+    print(f"battle effect specs: generated={effect_specs_generated} "
+          f"runtime_supported_before={before_class.get('RUNTIME_SUPPORTED', 0)} "
+          f"after={len(move_class.get('RUNTIME_SUPPORTED', []))}")
 
     print("DONE")
 

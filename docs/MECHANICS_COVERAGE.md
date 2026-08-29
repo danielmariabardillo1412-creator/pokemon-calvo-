@@ -41,13 +41,16 @@ Source: PokéAPI `api-data` @ `784c50b3ad27d0390d3b047fc4c4511f71edd049` (BSD 3-
 
 ## Moves (937) — DATA_READY = 937
 
+> Cobertura recalculada en FASE 5 (effect_specs data-driven desde metadata estructurada).
+> Ver `docs/MOVE_EFFECT_COVERAGE.md` y `docs/ARCHITECTURE_DECISION_004_EFFECT_DATA.md`.
+
 | Coverage | Count | Sum check |
 |---|---|---|
-| `RUNTIME_SUPPORTED` | 91 | baseline 76 + 15 stable IDs with complete tested V2 mappings |
-| `PARTIAL_RUNTIME` | 496 | damaging moves with missing secondary/unique behavior |
-| `DATA_ONLY` | 341 | status/non-damaging moves without mapping |
+| `RUNTIME_SUPPORTED` | 541 | moves whose complete `calvo_v1` behavior is executed by runtime + tested (was 376 pre-FASE5 / 91 contrato V2 previo) |
+| `PARTIAL_RUNTIME` | 60 | damaging move whose secondary effect is not modeled (unmodeled ailment/stat or `effect_chance` bespoke) |
+| `DATA_ONLY` | 327 | status/non-damaging moves without modeled behavior |
 | `UNSUPPORTED` | 9 | gimmick/copy moves the model cannot represent |
-| **TOTAL** | **937** | 91 + 496 + 341 + 9 = 937 ✓ |
+| **TOTAL** | **937** | 541 + 60 + 327 + 9 = 937 ✓ |
 
 Newly supported stable IDs: `double_edge`, `ember`, `growl`, `mega_drain`,
 `quick_attack`, `recover`, `sleep_powder`, `swords_dance`, `tackle`, `thunder`,

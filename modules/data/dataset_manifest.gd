@@ -3,7 +3,7 @@ extends RefCounted
 
 # Versioned dataset manifest. Decouples savegames from file names and lets us
 # detect incompatible data before loading. Schema evolves via schema_version.
-const CURRENT_SCHEMA_VERSION := 1
+const CURRENT_SCHEMA_VERSION := 2
 
 var schema_version: int = CURRENT_SCHEMA_VERSION
 var dataset_version: String = "0.0.0"
