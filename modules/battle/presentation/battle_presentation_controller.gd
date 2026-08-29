@@ -27,6 +27,8 @@ var _turn_label: Label = null
 var _event_log: RichTextLabel = null
 var _move_buttons: Array[Button] = []
 var _capture_buttons: Array[Button] = []
+var _switch_selector: OptionButton = null
+var _switch_button: Button = null
 var _continue_button: Button = null
 var _completion_reason: StringName = &""
 
@@ -37,8 +39,8 @@ func _ready() -> void:
 	visible = false
 
 
-# Capture RNG is deliberately injected. A presentation with no RNG can still play moves, but its
-# capture controls remain disabled. This avoids inventing a hidden gameplay seed inside UI code.
+# Capture RNG is deliberately injected. A presentation with no RNG can still play moves/switches,
+# but its capture controls remain disabled. This avoids inventing a hidden gameplay seed in UI.
 func configure(
 	p_session: WildAdventureSession,
 	p_catalogs: DefinitionCatalog,
@@ -88,6 +90,28 @@ func available_move_ids() -> Array[StringName]:
 	return result
 
 
+# Only authoritative Battle-side ownership is used here. Active, knocked-out, unknown and foreign
+# creatures are never offered as elective switch targets. Party order remains stable.
+func available_switch_instance_ids() -> Array[StringName]:
+	var result: Array[StringName] = []
+	if session == null or not session.has_active_battle():
+		return result
+	var state := session.battle_state()
+	var actor := session.player_active()
+	if state == null or actor == null:
+		return result
+	var side := state.side_for_creature(actor.instance_id)
+	if side == null:
+		return result
+	for instance_id in side.party_ids:
+		if instance_id == side.active_id:
+			continue
+		var candidate := state.creature(instance_id)
+		if candidate != null and not candidate.is_knocked_out():
+			result.append(instance_id)
+	return result
+
+
 # Presentation ordering is stable and explicit; ownership/quantity comes only from PlayerInventory.
 # Unknown/non-capture items in the bag are never exposed as capture controls.
 func available_capture_ball_ids() -> Array[StringName]:
@@ -107,6 +131,19 @@ func move_button_count() -> int:
 		if button.visible:
 			count += 1
 	return count
+
+
+func switch_option_count() -> int:
+	return _switch_selector.item_count if _switch_selector != null else 0
+
+
+func switch_control_enabled() -> bool:
+	return (
+		_switch_selector != null
+		and _switch_button != null
+		and not _switch_selector.disabled
+		and not _switch_button.disabled
+	)
 
 
 func capture_button_count() -> int:
@@ -168,8 +205,6 @@ func submit_player_move(move_id: StringName) -> Array[BattleEvent]:
 		_append_log("Opponent has no supported usable action.")
 		return empty
 
-	# FASE 15 moves presentation onto the same application command boundary used by Capture. The UI
-	# no longer calls submit_turn() directly.
 	var command := WildBattleCommand.from_action(player_action)
 	var result := session.submit_player_command(command, null, opponent_action)
 	if result == null:
@@ -186,6 +221,66 @@ func submit_player_move(move_id: StringName) -> Array[BattleEvent]:
 	if post_state != null and post_state.phase == BattleState.FINISHED:
 		_settle_finished_battle()
 	return result.battle_events
+
+
+# Elective Switch is only a presentation of the existing canonical BattleAction.SWITCH contract.
+# The UI does not mutate active_id, clear stages/status or decide priority; Battle Core owns all of it.
+func submit_player_switch(switch_instance_id: StringName) -> WildBattleCommandResult:
+	var fallback := WildBattleCommandResult.new()
+	fallback.command_type = WildBattleCommand.ACTION
+	if session == null or catalogs == null or not session.has_active_battle():
+		fallback.reason = "no_active_wild_battle"
+		_append_log("No active battle.")
+		return fallback
+	var state := session.battle_state()
+	var actor := session.player_active()
+	var target := session.current_wild()
+	if state == null or actor == null or target == null:
+		fallback.reason = "battle_state_incomplete"
+		_append_log("Battle state is incomplete.")
+		return fallback
+	var player_side := state.side_for_creature(actor.instance_id)
+	var opponent_side := state.side_for_creature(target.instance_id)
+	if player_side == null or opponent_side == null:
+		fallback.reason = "battle_ownership_incomplete"
+		_append_log("Battle ownership is incomplete.")
+		return fallback
+
+	var opponent_action := SimpleBattleOpponentPolicy.choose_move_action(
+		state, opponent_side.side_id, catalogs
+	)
+	if opponent_action == null:
+		fallback.reason = "opponent_action_unavailable"
+		_append_log("Opponent has no supported usable response.")
+		return fallback
+
+	var player_action := BattleAction.new(
+		state.turn + 1,
+		actor.instance_id,
+		&"",
+		&"",
+		BattleAction.SWITCH,
+		player_side.side_id,
+		switch_instance_id,
+	)
+	var command := WildBattleCommand.from_action(player_action)
+	var result := session.submit_player_command(command, null, opponent_action)
+	if result == null:
+		fallback.reason = "battle_command_result_missing"
+		_append_log("Switch command returned no result.")
+		return fallback
+	if not result.accepted:
+		_append_log("Switch rejected: %s" % result.reason)
+		_render_events(result.battle_events)
+		_refresh_view()
+		return result
+
+	_render_events(result.battle_events)
+	_refresh_view()
+	var post_state := session.battle_state()
+	if post_state != null and post_state.phase == BattleState.FINISHED:
+		_settle_finished_battle()
+	return result
 
 
 func submit_capture_ball(ball_id: StringName) -> WildBattleCommandResult:
@@ -247,10 +342,10 @@ func submit_capture_ball(ball_id: StringName) -> WildBattleCommandResult:
 			_append_log("Party full: captured Pokémon was routed to storage.")
 		_set_command_controls_enabled(false)
 		# The successful command clears the live Battle, so _refresh_view() can no longer rebuild the
-		# command rows from active state. Remove stale ball labels explicitly (for example x1 after the
-		# last Master Ball was consumed) and represent completion instead of leaving a phantom control.
+		# command rows from active state. Remove stale capture/switch choices explicitly.
 		for button in _capture_buttons:
 			button.visible = false
+		_clear_switch_controls()
 		if _turn_label != null:
 			_turn_label.text = "Captured"
 		if _continue_button != null:
@@ -291,6 +386,16 @@ func _on_move_pressed(index: int) -> void:
 	if index < 0 or index >= ids.size():
 		return
 	submit_player_move(ids[index])
+
+
+func _on_switch_pressed() -> void:
+	var ids := available_switch_instance_ids()
+	if _switch_selector == null or ids.is_empty():
+		return
+	var index := _switch_selector.selected
+	if index < 0 or index >= ids.size():
+		return
+	submit_player_switch(ids[index])
 
 
 func _on_capture_pressed(index: int) -> void:
@@ -352,6 +457,7 @@ func _refresh_view() -> void:
 	_enemy_hp.max_value = maxi(1, enemy_creature.stats.max_hp)
 	_enemy_hp.value = enemy_creature.current_hp
 
+	var waiting := state.phase == BattleState.WAITING_FOR_ACTIONS
 	var moves := available_move_ids()
 	for i in _move_buttons.size():
 		var move_button := _move_buttons[i]
@@ -360,10 +466,12 @@ func _refresh_view() -> void:
 			var current_slot := player_creature.move_slot(current_move_id)
 			move_button.text = "%s  PP %d/%d" % [String(current_move_id), current_slot.current_pp, current_slot.max_pp]
 			move_button.visible = true
-			move_button.disabled = state.phase != BattleState.WAITING_FOR_ACTIONS
+			move_button.disabled = not waiting
 		else:
 			move_button.text = "-"
 			move_button.visible = false
+
+	_refresh_switch_controls(state, waiting)
 
 	var balls := available_capture_ball_ids()
 	for i in _capture_buttons.size():
@@ -372,10 +480,38 @@ func _refresh_view() -> void:
 			var ball_id := balls[i]
 			capture_button.text = "%s  x%d" % [String(ball_id), session.player.inventory.quantity(ball_id)]
 			capture_button.visible = true
-			capture_button.disabled = state.phase != BattleState.WAITING_FOR_ACTIONS or _capture_rng == null
+			capture_button.disabled = not waiting or _capture_rng == null
 		else:
 			capture_button.text = "-"
 			capture_button.visible = false
+
+
+func _refresh_switch_controls(state: BattleState, waiting: bool) -> void:
+	if _switch_selector == null or _switch_button == null:
+		return
+	_switch_selector.clear()
+	var ids := available_switch_instance_ids()
+	for instance_id in ids:
+		var candidate := state.creature(instance_id)
+		if candidate == null:
+			continue
+		_switch_selector.add_item("%s Lv.%d  HP %d/%d" % [
+			String(candidate.species_id),
+			candidate.level,
+			candidate.current_hp,
+			candidate.stats.max_hp,
+		])
+	var can_switch := waiting and not ids.is_empty()
+	_switch_selector.disabled = not can_switch
+	_switch_button.disabled = not can_switch
+
+
+func _clear_switch_controls() -> void:
+	if _switch_selector != null:
+		_switch_selector.clear()
+		_switch_selector.disabled = true
+	if _switch_button != null:
+		_switch_button.disabled = true
 
 
 func _set_command_controls_enabled(enabled: bool) -> void:
@@ -383,6 +519,17 @@ func _set_command_controls_enabled(enabled: bool) -> void:
 		button.disabled = not enabled
 	for button in _capture_buttons:
 		button.disabled = not enabled or _capture_rng == null
+	if not enabled:
+		if _switch_selector != null:
+			_switch_selector.disabled = true
+		if _switch_button != null:
+			_switch_button.disabled = true
+	else:
+		var can_switch := not available_switch_instance_ids().is_empty()
+		if _switch_selector != null:
+			_switch_selector.disabled = not can_switch
+		if _switch_button != null:
+			_switch_button.disabled = not can_switch
 
 
 func _render_events(events: Array[BattleEvent]) -> void:
@@ -411,7 +558,7 @@ func _event_text(event: BattleEvent) -> String:
 		BattleEvent.ACTION_PREVENTED:
 			return "%s could not act." % String(event.actor_id)
 		BattleEvent.SWITCHED:
-			return "%s switched." % String(event.actor_id)
+			return "%s switched to %s." % [String(event.actor_id), String(event.target_id)]
 		BattleEvent.BATTLE_ENDED:
 			return "Battle ended."
 		BattleEvent.ACTION_REJECTED:
@@ -450,7 +597,7 @@ func _build_ui() -> void:
 	add_child(frame)
 
 	var root := VBoxContainer.new()
-	root.add_theme_constant_override("separation", 8)
+	root.add_theme_constant_override("separation", 6)
 	frame.add_child(root)
 
 	_turn_label = Label.new()
@@ -479,7 +626,7 @@ func _build_ui() -> void:
 	versus.text = "VS"
 	versus.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	versus.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	versus.custom_minimum_size = Vector2(60, 80)
+	versus.custom_minimum_size = Vector2(60, 48)
 	arena.add_child(versus)
 	var enemy_marker := Label.new()
 	enemy_marker.text = "[ WILD ]"
@@ -497,7 +644,7 @@ func _build_ui() -> void:
 	root.add_child(_player_hp)
 
 	_event_log = RichTextLabel.new()
-	_event_log.custom_minimum_size = Vector2(0, 72)
+	_event_log.custom_minimum_size = Vector2(0, 54)
 	_event_log.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	_event_log.scroll_active = true
 	root.add_child(_event_log)
@@ -508,16 +655,32 @@ func _build_ui() -> void:
 	var moves := GridContainer.new()
 	moves.columns = 2
 	moves.add_theme_constant_override("h_separation", 8)
-	moves.add_theme_constant_override("v_separation", 6)
+	moves.add_theme_constant_override("v_separation", 4)
 	root.add_child(moves)
 	for i in 4:
 		var move_button := Button.new()
 		move_button.text = "-"
-		move_button.custom_minimum_size = Vector2(0, 38)
+		move_button.custom_minimum_size = Vector2(0, 32)
 		move_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		move_button.pressed.connect(_on_move_pressed.bind(i))
 		moves.add_child(move_button)
 		_move_buttons.append(move_button)
+
+	var switch_row := HBoxContainer.new()
+	switch_row.add_theme_constant_override("separation", 8)
+	root.add_child(switch_row)
+	var switch_title := Label.new()
+	switch_title.text = "Switch"
+	switch_row.add_child(switch_title)
+	_switch_selector = OptionButton.new()
+	_switch_selector.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_switch_selector.disabled = true
+	switch_row.add_child(_switch_selector)
+	_switch_button = Button.new()
+	_switch_button.text = "Switch"
+	_switch_button.disabled = true
+	_switch_button.pressed.connect(_on_switch_pressed)
+	switch_row.add_child(_switch_button)
 
 	var capture_title := Label.new()
 	capture_title.text = "Capture"
@@ -525,12 +688,12 @@ func _build_ui() -> void:
 	var captures := GridContainer.new()
 	captures.columns = 2
 	captures.add_theme_constant_override("h_separation", 8)
-	captures.add_theme_constant_override("v_separation", 6)
+	captures.add_theme_constant_override("v_separation", 4)
 	root.add_child(captures)
 	for i in 4:
 		var capture_button := Button.new()
 		capture_button.text = "-"
-		capture_button.custom_minimum_size = Vector2(0, 34)
+		capture_button.custom_minimum_size = Vector2(0, 30)
 		capture_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		capture_button.pressed.connect(_on_capture_pressed.bind(i))
 		captures.add_child(capture_button)
