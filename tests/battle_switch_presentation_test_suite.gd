@@ -19,6 +19,7 @@ func run(check_callback: Callable, tree: SceneTree) -> void:
 	await _test_elective_switch_consumes_normal_turn(tree)
 	await _test_invalid_switch_is_rejected_without_mutation(tree)
 	await _test_ko_switch_target_is_rejected_and_hidden(tree)
+	await _test_forced_switch_after_retaliation_refreshes_presentation(tree)
 	await _test_technical_scene_switch_flow(tree)
 
 
@@ -64,6 +65,7 @@ func _session(
 	for creature in party:
 		if creature != null:
 			collection.party.add_creature(creature)
+	collection.inventory.add(&"poke_ball", 1)
 	collection.inventory.add(&"master_ball", 1)
 	var session := WildAdventureSession.new(collection, _catalog, _rules)
 	var table := WildEncounterTable.new(&"bsp_grass", 10000)
@@ -75,13 +77,34 @@ func _session(
 	return session
 
 
-func _controller(tree: SceneTree, session: WildAdventureSession) -> BattlePresentationController:
+func _controller(
+	tree: SceneTree,
+	session: WildAdventureSession,
+	capture_rng: RandomNumberGenerator = null,
+) -> BattlePresentationController:
 	var controller := BattlePresentationController.new()
 	tree.root.add_child(controller)
 	await tree.process_frame
-	controller.configure(session, _catalog, _rng(17999))
+	controller.configure(session, _catalog, capture_rng if capture_rng != null else _rng(17999))
 	controller.open_for_active_battle()
 	return controller
+
+
+func _find_failure_seed(target: CreatureInstance, ball_id: StringName) -> int:
+	var rules := CaptureRuleset.new()
+	var species := _catalog.species_catalog.get_by_id(target.species_id)
+	var ball := rules.ball(ball_id)
+	var p := rules.catch_probability(
+		species.capture_rate,
+		ball.base_multiplier,
+		rules.status_bonus(target.status_state.persistent_id),
+		target.stats.max_hp,
+		target.current_hp,
+	)
+	for seed_value in range(1, 5000):
+		if _rng(seed_value).randf() >= p:
+			return seed_value
+	return -1
 
 
 func _first(events: Array[BattleEvent], kind: StringName) -> BattleEvent:
@@ -100,15 +123,20 @@ func _event_index(events: Array[BattleEvent], needle: BattleEvent) -> int:
 
 func _test_switch_choices_are_authoritative(tree: SceneTree) -> void:
 	var active := _creature(&"bsp_active", &"bulbasaur", 17101)
-	var bench := _creature(&"bsp_bench", &"charmander", 17102)
-	var knocked_out := _creature(&"bsp_ko", &"squirtle", 17103)
+	var bench_a := _creature(&"bsp_bench_a", &"charmander", 17102)
+	var bench_b := _creature(&"bsp_bench_b", &"squirtle", 17103)
+	var knocked_out := _creature(&"bsp_ko", &"pikachu", 17104)
 	knocked_out.current_hp = 0
-	var session := _session([active, bench, knocked_out] as Array[CreatureInstance], 17110)
+	var session := _session([active, bench_a, bench_b, knocked_out] as Array[CreatureInstance], 17110)
 	var controller := await _controller(tree, session)
 	_check.call("bsp_choices_active_is_first_living", session.player_active() == active)
-	_check.call("bsp_choices_only_living_bench", controller.available_switch_instance_ids() == [&"bsp_bench"])
-	_check.call("bsp_choices_selector_count", controller.switch_option_count() == 1)
+	_check.call("bsp_choices_preserve_living_party_order", controller.available_switch_instance_ids() == [&"bsp_bench_a", &"bsp_bench_b"])
+	_check.call("bsp_choices_selector_count", controller.switch_option_count() == 2)
 	_check.call("bsp_choices_control_enabled", controller.switch_control_enabled())
+	_check.call("bsp_choices_metadata_first", controller.selected_switch_instance_id() == &"bsp_bench_a")
+	controller._switch_selector.select(1)
+	_check.call("bsp_choices_metadata_second", controller.selected_switch_instance_id() == &"bsp_bench_b")
+	_check.call("bsp_choices_ko_not_selected", controller.selected_switch_instance_id() != knocked_out.instance_id)
 	controller.queue_free()
 	await tree.process_frame
 
@@ -132,9 +160,11 @@ func _test_elective_switch_consumes_normal_turn(tree: SceneTree) -> void:
 	var wild_pp_before := wild.move_slot(&"tackle").current_pp
 	var outgoing_hp_before := outgoing.current_hp
 	var incoming_hp_before := incoming.current_hp
+	var capture_rng := _rng(17399)
+	var capture_control_rng := _rng(17399)
 	outgoing.stat_stages.change(StatStages.ATTACK, 2)
 	outgoing.status_state.add_volatile(&"bsp_marker")
-	var controller := await _controller(tree, session)
+	var controller := await _controller(tree, session, capture_rng)
 	var result := controller.submit_player_switch(incoming.instance_id)
 	var switched := _first(result.battle_events, BattleEvent.SWITCHED)
 	var enemy_used := _first(result.battle_events, BattleEvent.ACTION_USED)
@@ -149,6 +179,8 @@ func _test_elective_switch_consumes_normal_turn(tree: SceneTree) -> void:
 	_check.call("bsp_switch_clears_stages", outgoing.stat_stages.get_stage(StatStages.ATTACK) == 0)
 	_check.call("bsp_switch_clears_volatile", outgoing.status_state.volatile.is_empty())
 	_check.call("bsp_switch_old_active_becomes_choice", controller.available_switch_instance_ids() == [&"bsp_outgoing"])
+	_check.call("bsp_switch_inventory_untouched", session.player.inventory.quantity(&"master_ball") == 1 and session.player.inventory.quantity(&"poke_ball") == 1)
+	_check.call("bsp_switch_capture_rng_untouched", is_equal_approx(capture_rng.randf(), capture_control_rng.randf()))
 	controller.queue_free()
 	await tree.process_frame
 
@@ -183,6 +215,29 @@ func _test_ko_switch_target_is_rejected_and_hidden(tree: SceneTree) -> void:
 	await tree.process_frame
 
 
+func _test_forced_switch_after_retaliation_refreshes_presentation(tree: SceneTree) -> void:
+	var outgoing := _creature(&"bsp_forced_out", &"bulbasaur", 17601)
+	var replacement := _creature(&"bsp_forced_in", &"charmander", 17602)
+	var session := _session([outgoing, replacement] as Array[CreatureInstance], 17610)
+	outgoing.current_hp = 1
+	var wild := session.current_wild()
+	var failure_seed := _find_failure_seed(wild, &"poke_ball")
+	var controller := await _controller(tree, session, _rng(failure_seed))
+	var result := controller.submit_capture_ball(&"poke_ball")
+	var switched := _first(result.battle_events, BattleEvent.SWITCHED)
+	_check.call("bsp_forced_seed_found", failure_seed > 0)
+	_check.call("bsp_forced_capture_failed", result.succeeded() and result.capture_outcome != null and result.capture_outcome.resolution.result.status == CaptureResult.FAILED)
+	_check.call("bsp_forced_ball_consumed", session.player.inventory.quantity(&"poke_ball") == 0)
+	_check.call("bsp_forced_outgoing_ko", outgoing.is_knocked_out())
+	_check.call("bsp_forced_active_replacement", session.player_active() == replacement)
+	_check.call("bsp_forced_event", switched != null and bool(switched.metadata.get("forced", false)) and switched.actor_id == outgoing.instance_id and switched.target_id == replacement.instance_id)
+	_check.call("bsp_forced_battle_continues", session.has_active_battle() and session.status == WildAdventureSession.ACTIVE)
+	_check.call("bsp_forced_display_refresh", controller.displayed_player_hp() == replacement.current_hp)
+	_check.call("bsp_forced_no_ko_choice", controller.available_switch_instance_ids().is_empty() and controller.switch_option_count() == 0)
+	controller.queue_free()
+	await tree.process_frame
+
+
 func _test_technical_scene_switch_flow(tree: SceneTree) -> void:
 	var packed := load("res://scenes/overworld/technical_overworld.tscn") as PackedScene
 	_check.call("bsp_scene_loads", packed != null)
@@ -202,7 +257,7 @@ func _test_technical_scene_switch_flow(tree: SceneTree) -> void:
 		player.move_speed = 32.0
 		player.apply_motion(Vector2.RIGHT, 0.1)
 		_check.call("bsp_scene_battle_started", scene.call("has_active_demo_battle") and not player.movement_enabled)
-		_check.call("bsp_scene_bench_offered", controller.available_switch_instance_ids() == [&"technical_bench"] and controller.switch_option_count() == 1)
+		_check.call("bsp_scene_bench_offered", controller.available_switch_instance_ids() == [&"technical_bench"] and controller.switch_option_count() == 1 and controller.selected_switch_instance_id() == &"technical_bench")
 		var switch_result := controller.submit_player_switch(&"technical_bench")
 		_check.call("bsp_scene_switch_success", switch_result.succeeded() and controller.session.player_active().instance_id == &"technical_bench")
 		_check.call("bsp_scene_stays_frozen", not player.movement_enabled and controller.visible)
