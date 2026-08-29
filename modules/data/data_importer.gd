@@ -14,7 +14,7 @@ const STATUS_KEYS := ["id", "display_name", "end_turn_max_hp_divisor", "minimum_
 const SPECIES_KEYS := [
 	"id", "display_name", "primary_type_id", "secondary_type_id", "type_ids", "types",
 	"base_hp", "base_attack", "base_defense", "base_speed", "base_special_attack", "base_special_defense",
-	"ability_ids", "base_experience", "growth_rate", "ev_yield", "learnset", "evolutions",
+	"ability_ids", "base_experience", "growth_rate", "ev_yield", "capture_rate", "learnset", "evolutions",
 ]
 
 var _type_catalog := TypeCatalog.new()

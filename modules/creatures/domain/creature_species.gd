@@ -19,6 +19,7 @@ extends Resource
 @export var base_experience: int = 0
 @export var growth_rate: String = "medium"
 @export var ev_yield: Dictionary = {}   # stat_key -> effort value granted when defeated
+@export var capture_rate: int = 0      # 0 = unknown/absent; 1..255 canonical range (species datum)
 var learnset: Array = []      # Array[LearnSetEntry]
 var evolutions: Array = []    # Array[EvolutionRecord]
 
@@ -27,6 +28,11 @@ func base_stat_block() -> StatBlock:
 		base_hp, base_attack, base_defense, base_speed,
 		base_special_attack, base_special_defense,
 	)
+
+
+# Species-level capture datum validity (canonical Pokemon range).
+func is_valid_capture_rate() -> bool:
+	return capture_rate >= 0 and capture_rate <= 255
 
 
 func type_ids_resolved() -> Array[StringName]:
@@ -78,6 +84,7 @@ func to_dict() -> Dictionary:
 		"base_experience": base_experience,
 		"growth_rate": growth_rate,
 		"ev_yield": ev_yield,
+		"capture_rate": capture_rate,
 		"learnset": ls,
 		"evolutions": ev,
 	}
@@ -102,6 +109,7 @@ static func from_dict(d: Dictionary) -> CreatureSpecies:
 	s.base_experience = int(d.get("base_experience", 0))
 	s.growth_rate = String(d.get("growth_rate", "medium"))
 	s.ev_yield = d.get("ev_yield", {})
+	s.capture_rate = int(d.get("capture_rate", 0))
 	for le in d.get("learnset", []):
 		s.learnset.append(LearnSetEntry.from_dict(le))
 	for ev in d.get("evolutions", []):

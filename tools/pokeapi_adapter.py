@@ -466,6 +466,7 @@ def main():
             "base_experience": pk.get("base_experience") or 0,
             "growth_rate": (ps.get("growth_rate") or {}).get("name", "medium"),
             "ev_yield": pk.get("effort", {}),
+            "capture_rate": int(ps.get("capture_rate", 0) or 0),
             "learnset": pk["learnset"],
             "evolutions": [],
         }

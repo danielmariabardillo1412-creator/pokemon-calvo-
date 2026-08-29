@@ -35713,6 +35713,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -36545,6 +36546,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 255,
    "learnset": [
     {
      "level": 1,
@@ -36628,6 +36630,7 @@
     "special_defense": 0,
     "speed": 1
    },
+   "capture_rate": 190,
    "learnset": [
     {
      "level": 0,
@@ -37410,6 +37413,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -37910,6 +37914,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 3,
    "learnset": [
     {
      "level": 0,
@@ -38355,6 +38360,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 3,
    "learnset": [
     {
      "level": 0,
@@ -38711,6 +38717,7 @@
     "special_defense": 0,
     "speed": 2
    },
+   "capture_rate": 60,
    "learnset": [
     {
      "level": 0,
@@ -39518,6 +39525,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -39811,6 +39819,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 120,
    "learnset": [
     {
      "level": 6,
@@ -40064,6 +40073,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 60,
    "learnset": [
     {
      "level": 0,
@@ -40495,6 +40505,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 3,
    "learnset": [
     {
      "level": 0,
@@ -40876,6 +40887,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 3,
    "learnset": [
     {
      "level": 1,
@@ -41222,6 +41234,7 @@
     "special_defense": 3,
     "speed": 0
    },
+   "capture_rate": 3,
    "learnset": [
     {
      "level": 0,
@@ -41571,6 +41584,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 5,
    "learnset": [
     {
      "level": 0,
@@ -41923,6 +41937,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 10,
    "learnset": [
     {
      "level": 0,
@@ -42545,6 +42560,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 10,
    "learnset": [
     {
      "level": 0,
@@ -43161,6 +43177,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 90,
    "learnset": [
     {
      "level": 0,
@@ -44012,6 +44029,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 255,
    "learnset": [
     {
      "level": 20,
@@ -44362,6 +44380,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 3,
    "learnset": [
     {
      "level": 56,
@@ -44588,6 +44607,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -45359,6 +45379,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 190,
    "learnset": [
     {
      "level": 0,
@@ -46332,6 +46353,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 75,
    "learnset": [
     {
      "level": 0,
@@ -47323,6 +47345,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -48344,6 +48367,7 @@
     "special_defense": 2,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 1,
@@ -49435,6 +49459,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -50573,6 +50598,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 190,
    "learnset": [
     {
      "level": 0,
@@ -51389,6 +51415,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 120,
    "learnset": [
     {
      "level": 0,
@@ -51472,6 +51499,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 60,
    "learnset": [
     {
      "level": 0,
@@ -52294,6 +52322,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 120,
    "learnset": [
     {
      "level": 0,
@@ -53438,6 +53467,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 60,
    "learnset": [
     {
      "level": 0,
@@ -54811,6 +54841,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 30,
    "learnset": [
     {
      "level": 1,
@@ -56184,6 +56215,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -57147,6 +57179,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 1,
@@ -58593,6 +58626,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 225,
    "learnset": [
     {
      "level": 0,
@@ -59351,6 +59385,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 75,
    "learnset": [
     {
      "level": 0,
@@ -60119,6 +60154,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 225,
    "learnset": [
     {
      "level": 0,
@@ -60862,6 +60898,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 60,
    "learnset": [
     {
      "level": 0,
@@ -61593,6 +61630,7 @@
     "special_defense": 1,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -62434,6 +62472,7 @@
     "special_defense": 0,
     "speed": 1
    },
+   "capture_rate": 225,
    "learnset": [
     {
      "level": 0,
@@ -63328,6 +63367,7 @@
     "special_defense": 0,
     "speed": 2
    },
+   "capture_rate": 60,
    "learnset": [
     {
      "level": 0,
@@ -64345,6 +64385,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -65300,6 +65341,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 1,
@@ -66350,6 +66392,7 @@
     "special_defense": 0,
     "speed": 2
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -67362,6 +67405,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -68360,6 +68404,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 1,
@@ -69546,6 +69591,7 @@
     "special_defense": 0,
     "speed": 1
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 21,
@@ -70751,6 +70797,7 @@
     "special_defense": 0,
     "speed": 1
    },
+   "capture_rate": 255,
    "learnset": [
     {
      "level": 15,
@@ -70824,6 +70871,7 @@
     "special_defense": 0,
     "speed": 1
    },
+   "capture_rate": 255,
    "learnset": [
     {
      "level": 1,
@@ -70897,6 +70945,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 1,
@@ -72244,6 +72293,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -73289,6 +73339,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 35,
    "learnset": [
     {
      "level": 1,
@@ -73330,6 +73381,7 @@
     "special_defense": 1,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -74159,6 +74211,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -75404,6 +75457,7 @@
     "special_defense": 0,
     "speed": 2
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -76639,6 +76693,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -77850,6 +77905,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -78684,6 +78740,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -79448,6 +79505,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -80243,6 +80301,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 120,
    "learnset": [
     {
      "level": 0,
@@ -80317,6 +80376,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 1,
@@ -81091,6 +81151,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 1,
@@ -81988,6 +82049,7 @@
     "special_defense": 0,
     "speed": 2
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -83194,6 +83256,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 25,
    "learnset": [
     {
      "level": 0,
@@ -85085,6 +85148,7 @@
     "special_defense": 3,
     "speed": 0
    },
+   "capture_rate": 3,
    "learnset": [
     {
      "level": 0,
@@ -85936,6 +86000,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 3,
    "learnset": [
     {
      "level": 0,
@@ -86772,6 +86837,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 3,
    "learnset": [
     {
      "level": 0,
@@ -87597,6 +87663,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -88429,6 +88496,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -89217,6 +89285,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -90823,6 +90892,7 @@
     "special_defense": 1,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -91823,6 +91893,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 3,
    "learnset": [
     {
      "level": 0,
@@ -93312,6 +93383,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 1,
@@ -95887,6 +95959,7 @@
     "special_defense": 1,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -96514,6 +96587,7 @@
     "special_defense": 1,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -97136,6 +97210,7 @@
     "special_defense": 2,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -98166,6 +98241,7 @@
     "special_defense": 0,
     "speed": 1
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -98833,6 +98909,7 @@
     "special_defense": 0,
     "speed": 1
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -99490,6 +99567,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -100650,6 +100728,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -101512,6 +101591,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -102336,6 +102416,7 @@
     "special_defense": 0,
     "speed": 1
    },
+   "capture_rate": 255,
    "learnset": [
     {
      "level": 0,
@@ -102918,6 +102999,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -104274,6 +104356,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 255,
    "learnset": [
     {
      "level": 0,
@@ -105097,6 +105180,7 @@
     "special_defense": 0,
     "speed": 2
    },
+   "capture_rate": 90,
    "learnset": [
     {
      "level": 0,
@@ -105914,6 +105998,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 255,
    "learnset": [
     {
      "level": 0,
@@ -106803,6 +106888,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 90,
    "learnset": [
     {
      "level": 0,
@@ -107685,6 +107771,7 @@
     "special_defense": 1,
     "speed": 0
    },
+   "capture_rate": 255,
    "learnset": [
     {
      "level": 15,
@@ -108384,6 +108471,7 @@
     "special_defense": 2,
     "speed": 0
    },
+   "capture_rate": 90,
    "learnset": [
     {
      "level": 15,
@@ -109026,6 +109114,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 255,
    "learnset": [
     {
      "level": 0,
@@ -109695,6 +109784,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 90,
    "learnset": [
     {
      "level": 0,
@@ -110686,6 +110776,7 @@
     "special_defense": 0,
     "speed": 3
    },
+   "capture_rate": 90,
    "learnset": [
     {
      "level": 1,
@@ -111518,6 +111609,7 @@
     "special_defense": 0,
     "speed": 2
    },
+   "capture_rate": 120,
    "learnset": [
     {
      "level": 0,
@@ -112092,6 +112184,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 190,
    "learnset": [
     {
      "level": 37,
@@ -112846,6 +112939,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 75,
    "learnset": [
     {
      "level": 45,
@@ -113641,6 +113735,7 @@
     "special_defense": 0,
     "speed": 1
    },
+   "capture_rate": 190,
    "learnset": [
     {
      "level": 0,
@@ -114344,6 +114439,7 @@
     "special_defense": 1,
     "speed": 0
    },
+   "capture_rate": 150,
    "learnset": [
     {
      "level": 1,
@@ -115213,6 +115309,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 170,
    "learnset": [
     {
      "level": 9,
@@ -115981,6 +116078,7 @@
     "special_defense": 1,
     "speed": 0
    },
+   "capture_rate": 190,
    "learnset": [
     {
      "level": 1,
@@ -116965,6 +117063,7 @@
     "special_defense": 2,
     "speed": 0
    },
+   "capture_rate": 75,
    "learnset": [
     {
      "level": 1,
@@ -118019,6 +118118,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 190,
    "learnset": [
     {
      "level": 0,
@@ -118833,6 +118933,7 @@
     "special_defense": 0,
     "speed": 1
    },
+   "capture_rate": 75,
    "learnset": [
     {
      "level": 0,
@@ -119628,6 +119729,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 235,
    "learnset": [
     {
      "level": 0,
@@ -120337,6 +120439,7 @@
     "special_defense": 0,
     "speed": 3
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -121077,6 +121180,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 120,
    "learnset": [
     {
      "level": 0,
@@ -121804,6 +121908,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -122984,6 +123089,7 @@
     "special_defense": 3,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -123621,6 +123727,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 190,
    "learnset": [
     {
      "level": 0,
@@ -124610,6 +124717,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 75,
    "learnset": [
     {
      "level": 0,
@@ -125846,6 +125954,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 65,
    "learnset": [
     {
      "level": 0,
@@ -126907,6 +127016,7 @@
     "special_defense": 3,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 1,
@@ -127954,6 +128064,7 @@
     "special_defense": 1,
     "speed": 0
    },
+   "capture_rate": 255,
    "learnset": [
     {
      "level": 0,
@@ -128723,6 +128834,7 @@
     "special_defense": 0,
     "speed": 2
    },
+   "capture_rate": 120,
    "learnset": [
     {
      "level": 0,
@@ -129382,6 +129494,7 @@
     "special_defense": 0,
     "speed": 3
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -130053,6 +130166,7 @@
     "special_defense": 0,
     "speed": 1
    },
+   "capture_rate": 255,
    "learnset": [
     {
      "level": 0,
@@ -130726,6 +130840,7 @@
     "special_defense": 0,
     "speed": 1
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -131649,6 +131764,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 235,
    "learnset": [
     {
      "level": 0,
@@ -132292,6 +132408,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 120,
    "learnset": [
     {
      "level": 1,
@@ -132919,6 +133036,7 @@
     "special_defense": 0,
     "speed": 1
    },
+   "capture_rate": 75,
    "learnset": [
     {
      "level": 0,
@@ -133618,6 +133736,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 255,
    "learnset": [
     {
      "level": 0,
@@ -134408,6 +134527,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 90,
    "learnset": [
     {
      "level": 0,
@@ -135213,6 +135333,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -136448,6 +136569,7 @@
     "special_defense": 2,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -137675,6 +137797,7 @@
     "special_defense": 0,
     "speed": 1
    },
+   "capture_rate": 30,
    "learnset": [
     {
      "level": 5,
@@ -138524,6 +138647,7 @@
     "special_defense": 2,
     "speed": 0
    },
+   "capture_rate": 70,
    "learnset": [
     {
      "level": 0,
@@ -140080,6 +140204,7 @@
     "special_defense": 1,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -140838,6 +140963,7 @@
     "special_defense": 0,
     "speed": 2
    },
+   "capture_rate": 127,
    "learnset": [
     {
      "level": 1,
@@ -141547,6 +141673,7 @@
     "special_defense": 1,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -142443,6 +142570,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 225,
    "learnset": [
     {
      "level": 1,
@@ -142483,6 +142611,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 1,
@@ -142595,6 +142724,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 60,
    "learnset": [
     {
      "level": 0,
@@ -143537,6 +143667,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 190,
    "learnset": [
     {
      "level": 0,
@@ -144275,6 +144406,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 75,
    "learnset": [
     {
      "level": 0,
@@ -145541,6 +145673,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 190,
    "learnset": [
     {
      "level": 0,
@@ -146895,6 +147028,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 60,
    "learnset": [
     {
      "level": 52,
@@ -147829,6 +147963,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 25,
    "learnset": [
     {
      "level": 0,
@@ -149240,6 +149375,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 190,
    "learnset": [
     {
      "level": 0,
@@ -150133,6 +150269,7 @@
     "special_defense": 0,
     "speed": 1
    },
+   "capture_rate": 255,
    "learnset": [
     {
      "level": 0,
@@ -150796,6 +150933,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 75,
    "learnset": [
     {
      "level": 0,
@@ -151693,6 +151831,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -152937,6 +153076,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 25,
    "learnset": [
     {
      "level": 33,
@@ -154139,6 +154279,7 @@
     "special_defense": 1,
     "speed": 0
    },
+   "capture_rate": 190,
    "learnset": [
     {
      "level": 0,
@@ -154941,6 +155082,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -156213,6 +156355,7 @@
     "special_defense": 0,
     "speed": 1
    },
+   "capture_rate": 60,
    "learnset": [
     {
      "level": 0,
@@ -157342,6 +157485,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 120,
    "learnset": [
     {
      "level": 0,
@@ -158250,6 +158394,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 60,
    "learnset": [
     {
      "level": 0,
@@ -159163,6 +159308,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 190,
    "learnset": [
     {
      "level": 50,
@@ -159872,6 +160018,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 75,
    "learnset": [
     {
      "level": 60,
@@ -160673,6 +160820,7 @@
     "special_defense": 0,
     "speed": 2
    },
+   "capture_rate": 90,
    "learnset": [
     {
      "level": 0,
@@ -161315,6 +161463,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 225,
    "learnset": [
     {
      "level": 0,
@@ -162094,6 +162243,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 75,
    "learnset": [
     {
      "level": 0,
@@ -162898,6 +163048,7 @@
     "special_defense": 1,
     "speed": 0
    },
+   "capture_rate": 60,
    "learnset": [
     {
      "level": 0,
@@ -163801,6 +163952,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 190,
    "learnset": [
     {
      "level": 0,
@@ -164529,6 +164681,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 75,
    "learnset": [
     {
      "level": 0,
@@ -165271,6 +165424,7 @@
     "special_defense": 0,
     "speed": 1
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -165953,6 +166107,7 @@
     "special_defense": 2,
     "speed": 0
    },
+   "capture_rate": 25,
    "learnset": [
     {
      "level": 40,
@@ -166800,6 +166955,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 25,
    "learnset": [
     {
      "level": 0,
@@ -167957,6 +168113,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 120,
    "learnset": [
     {
      "level": 0,
@@ -168811,6 +168968,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -169967,6 +170125,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 255,
    "learnset": [
     {
      "level": 0,
@@ -170786,6 +170945,7 @@
     "special_defense": 1,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -171516,6 +171676,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 120,
    "learnset": [
     {
      "level": 24,
@@ -172173,6 +172334,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 60,
    "learnset": [
     {
      "level": 24,
@@ -172934,6 +173096,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 1,
@@ -173660,6 +173823,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 23,
@@ -174563,6 +174727,7 @@
     "special_defense": 0,
     "speed": 1
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 1,
@@ -174644,6 +174809,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 75,
    "learnset": [
     {
      "level": 0,
@@ -175129,6 +175295,7 @@
     "special_defense": 2,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -175966,6 +176133,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 1,
@@ -176798,6 +176966,7 @@
     "special_defense": 0,
     "speed": 1
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -177656,6 +177825,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 90,
    "learnset": [
     {
      "level": 0,
@@ -178911,6 +179081,7 @@
     "special_defense": 0,
     "speed": 1
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -179719,6 +179890,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -180595,6 +180767,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 30,
    "learnset": [
     {
      "level": 1,
@@ -181780,6 +181953,7 @@
     "special_defense": 0,
     "speed": 2
    },
+   "capture_rate": 3,
    "learnset": [
     {
      "level": 0,
@@ -182485,6 +182659,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 3,
    "learnset": [
     {
      "level": 0,
@@ -183170,6 +183345,7 @@
     "special_defense": 2,
     "speed": 0
    },
+   "capture_rate": 3,
    "learnset": [
     {
      "level": 0,
@@ -183901,6 +184077,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -184693,6 +184870,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -185456,6 +185634,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -187062,6 +187241,7 @@
     "special_defense": 3,
     "speed": 0
    },
+   "capture_rate": 3,
    "learnset": [
     {
      "level": 22,
@@ -188097,6 +188277,7 @@
     "special_defense": 0,
     "speed": 2
    },
+   "capture_rate": 190,
    "learnset": [
     {
      "level": 0,
@@ -189464,6 +189645,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -190254,6 +190436,7 @@
     "special_defense": 0,
     "speed": 1
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 1,
@@ -191066,6 +191249,7 @@
     "special_defense": 0,
     "speed": 2
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 1,
@@ -191913,6 +192097,7 @@
     "special_defense": 0,
     "speed": 3
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 1,
@@ -193313,6 +193498,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -194031,6 +194217,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -194869,6 +195056,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -196279,6 +196467,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -197002,6 +197191,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -197834,6 +198024,7 @@
     "special_defense": 0,
     "speed": 3
    },
+   "capture_rate": 75,
    "learnset": [
     {
      "level": 0,
@@ -198975,6 +199166,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -200321,6 +200513,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 255,
    "learnset": [
     {
      "level": 9,
@@ -201059,6 +201252,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 127,
    "learnset": [
     {
      "level": 1,
@@ -201795,6 +201989,7 @@
     "special_defense": 0,
     "speed": 1
    },
+   "capture_rate": 255,
    "learnset": [
     {
      "level": 0,
@@ -202518,6 +202713,7 @@
     "special_defense": 0,
     "speed": 2
    },
+   "capture_rate": 90,
    "learnset": [
     {
      "level": 0,
@@ -203260,6 +203456,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 255,
    "learnset": [
     {
      "level": 1,
@@ -203352,6 +203549,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 120,
    "learnset": [
     {
      "level": 6,
@@ -203440,6 +203638,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 13,
@@ -203974,6 +204173,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 120,
    "learnset": [
     {
      "level": 6,
@@ -204062,6 +204262,7 @@
     "special_defense": 3,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 13,
@@ -204597,6 +204798,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 255,
    "learnset": [
     {
      "level": 1,
@@ -205626,6 +205828,7 @@
     "special_defense": 1,
     "speed": 0
    },
+   "capture_rate": 255,
    "learnset": [
     {
      "level": 0,
@@ -206280,6 +206483,7 @@
     "special_defense": 2,
     "speed": 0
    },
+   "capture_rate": 120,
    "learnset": [
     {
      "level": 0,
@@ -207104,6 +207308,7 @@
     "special_defense": 3,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -207895,6 +208100,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 255,
    "learnset": [
     {
      "level": 0,
@@ -208529,6 +208735,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 120,
    "learnset": [
     {
      "level": 1,
@@ -209383,6 +209590,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 1,
@@ -210434,6 +210642,7 @@
     "special_defense": 0,
     "speed": 1
    },
+   "capture_rate": 200,
    "learnset": [
     {
      "level": 13,
@@ -210887,6 +211096,7 @@
     "special_defense": 0,
     "speed": 2
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 13,
@@ -211339,6 +211549,7 @@
     "special_defense": 0,
     "speed": 1
    },
+   "capture_rate": 190,
    "learnset": [
     {
      "level": 0,
@@ -212108,6 +212319,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 1,
@@ -213238,6 +213450,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 90,
    "learnset": [
     {
      "level": 1,
@@ -214300,6 +214513,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 235,
    "learnset": [
     {
      "level": 0,
@@ -215344,6 +215558,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 120,
    "learnset": [
     {
      "level": 0,
@@ -216314,6 +216529,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -217820,6 +218036,7 @@
     "special_defense": 0,
     "speed": 1
    },
+   "capture_rate": 200,
    "learnset": [
     {
      "level": 0,
@@ -218383,6 +218600,7 @@
     "special_defense": 1,
     "speed": 0
    },
+   "capture_rate": 75,
    "learnset": [
     {
      "level": 26,
@@ -219139,6 +219357,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 255,
    "learnset": [
     {
      "level": 0,
@@ -219743,6 +219962,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 90,
    "learnset": [
     {
      "level": 0,
@@ -220537,6 +220757,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 255,
    "learnset": [
     {
      "level": 0,
@@ -221248,6 +221469,7 @@
     "special_defense": 0,
     "speed": 2
    },
+   "capture_rate": 120,
    "learnset": [
     {
      "level": 0,
@@ -222069,6 +222291,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -223030,6 +223253,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 255,
    "learnset": [
     {
      "level": 1,
@@ -223484,6 +223708,7 @@
     "special_defense": 0,
     "speed": 2
    },
+   "capture_rate": 120,
    "learnset": [
     {
      "level": 1,
@@ -224104,6 +224329,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 1,
@@ -224669,6 +224895,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 190,
    "learnset": [
     {
      "level": 1,
@@ -225331,6 +225558,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 120,
    "learnset": [
     {
      "level": 1,
@@ -226028,6 +226256,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 1,
@@ -226859,6 +227088,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 180,
    "learnset": [
     {
      "level": 0,
@@ -227637,6 +227867,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 200,
    "learnset": [
     {
      "level": 0,
@@ -228434,6 +228665,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 150,
    "learnset": [
     {
      "level": 15,
@@ -229037,6 +229269,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 255,
    "learnset": [
     {
      "level": 0,
@@ -229900,6 +230133,7 @@
     "special_defense": 1,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -231061,6 +231295,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 120,
    "learnset": [
     {
      "level": 1,
@@ -231774,6 +232009,7 @@
     "special_defense": 0,
     "speed": 1
    },
+   "capture_rate": 255,
    "learnset": [
     {
      "level": 15,
@@ -232517,6 +232753,7 @@
     "special_defense": 0,
     "speed": 1
    },
+   "capture_rate": 60,
    "learnset": [
     {
      "level": 1,
@@ -233049,6 +233286,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -234701,6 +234939,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -236018,6 +236257,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 180,
    "learnset": [
     {
      "level": 0,
@@ -236862,6 +237102,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 90,
    "learnset": [
     {
      "level": 0,
@@ -237681,6 +237922,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -239202,6 +239444,7 @@
     "special_defense": 0,
     "speed": 1
    },
+   "capture_rate": 180,
    "learnset": [
     {
      "level": 1,
@@ -240130,6 +240373,7 @@
     "special_defense": 0,
     "speed": 2
    },
+   "capture_rate": 90,
    "learnset": [
     {
      "level": 1,
@@ -241441,6 +241685,7 @@
     "special_defense": 0,
     "speed": 1
    },
+   "capture_rate": 120,
    "learnset": [
     {
      "level": 0,
@@ -242070,6 +242315,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -243066,6 +243312,7 @@
     "special_defense": 0,
     "speed": 2
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -243946,6 +244193,7 @@
     "special_defense": 0,
     "speed": 1
    },
+   "capture_rate": 200,
    "learnset": [
     {
      "level": 0,
@@ -244766,6 +245014,7 @@
     "special_defense": 0,
     "speed": 1
    },
+   "capture_rate": 200,
    "learnset": [
     {
      "level": 0,
@@ -245562,6 +245811,7 @@
     "special_defense": 0,
     "speed": 1
    },
+   "capture_rate": 150,
    "learnset": [
     {
      "level": 0,
@@ -246368,6 +246618,7 @@
     "special_defense": 0,
     "speed": 1
    },
+   "capture_rate": 150,
    "learnset": [
     {
      "level": 0,
@@ -247120,6 +247371,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 150,
    "learnset": [
     {
      "level": 0,
@@ -247883,6 +248135,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 225,
    "learnset": [
     {
      "level": 1,
@@ -248631,6 +248884,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 75,
    "learnset": [
     {
      "level": 1,
@@ -249422,6 +249676,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 225,
    "learnset": [
     {
      "level": 31,
@@ -250100,6 +250355,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 60,
    "learnset": [
     {
      "level": 52,
@@ -251116,6 +251372,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 125,
    "learnset": [
     {
      "level": 0,
@@ -251839,6 +252096,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 60,
    "learnset": [
     {
      "level": 0,
@@ -252546,6 +252804,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 255,
    "learnset": [
     {
      "level": 0,
@@ -253335,6 +253594,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 150,
    "learnset": [
     {
      "level": 0,
@@ -254451,6 +254711,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 90,
    "learnset": [
     {
      "level": 0,
@@ -255597,6 +255858,7 @@
     "special_defense": 1,
     "speed": 0
    },
+   "capture_rate": 255,
    "learnset": [
     {
      "level": 0,
@@ -256380,6 +256642,7 @@
     "special_defense": 2,
     "speed": 0
    },
+   "capture_rate": 60,
    "learnset": [
     {
      "level": 0,
@@ -257326,6 +257589,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 255,
    "learnset": [
     {
      "level": 0,
@@ -258067,6 +258331,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 255,
    "learnset": [
     {
      "level": 0,
@@ -258784,6 +259049,7 @@
     "special_defense": 0,
     "speed": 1
    },
+   "capture_rate": 120,
    "learnset": [
     {
      "level": 0,
@@ -259697,6 +259963,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 120,
    "learnset": [
     {
      "level": 0,
@@ -260429,6 +260696,7 @@
     "special_defense": 0,
     "speed": 2
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -261524,6 +261792,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 190,
    "learnset": [
     {
      "level": 0,
@@ -262322,6 +262591,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 60,
    "learnset": [
     {
      "level": 0,
@@ -263138,6 +263408,7 @@
     "special_defense": 1,
     "speed": 0
    },
+   "capture_rate": 255,
    "learnset": [
     {
      "level": 0,
@@ -263996,6 +264267,7 @@
     "special_defense": 2,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -265326,6 +265598,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 90,
    "learnset": [
     {
      "level": 0,
@@ -266331,6 +266604,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 90,
    "learnset": [
     {
      "level": 36,
@@ -267251,6 +267525,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 1,
@@ -268151,6 +268426,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -269073,6 +269349,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 190,
    "learnset": [
     {
      "level": 0,
@@ -269772,6 +270049,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -270774,6 +271052,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 75,
    "learnset": [
     {
      "level": 0,
@@ -271520,6 +271799,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 205,
    "learnset": [
     {
      "level": 10,
@@ -272299,6 +272579,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 155,
    "learnset": [
     {
      "level": 1,
@@ -273164,6 +273445,7 @@
     "special_defense": 1,
     "speed": 0
    },
+   "capture_rate": 255,
    "learnset": [
     {
      "level": 0,
@@ -274051,6 +274333,7 @@
     "special_defense": 2,
     "speed": 0
    },
+   "capture_rate": 90,
    "learnset": [
     {
      "level": 0,
@@ -274982,6 +275265,7 @@
     "special_defense": 1,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -275635,6 +275919,7 @@
     "special_defense": 2,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -276326,6 +276611,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 1,
@@ -276974,6 +277260,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 1,
@@ -277695,6 +277982,7 @@
     "special_defense": 0,
     "speed": 1
    },
+   "capture_rate": 255,
    "learnset": [
     {
      "level": 15,
@@ -278103,6 +278391,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 150,
    "learnset": [
     {
      "level": 1,
@@ -279591,6 +279880,7 @@
     "special_defense": 2,
     "speed": 0
    },
+   "capture_rate": 60,
    "learnset": [
     {
      "level": 0,
@@ -280765,6 +281055,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 20,
@@ -281465,6 +281756,7 @@
     "special_defense": 1,
     "speed": 0
    },
+   "capture_rate": 200,
    "learnset": [
     {
      "level": 0,
@@ -282331,6 +282623,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 225,
    "learnset": [
     {
      "level": 0,
@@ -283189,6 +283482,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -284444,6 +284738,7 @@
     "special_defense": 1,
     "speed": 0
    },
+   "capture_rate": 190,
    "learnset": [
     {
      "level": 0,
@@ -285286,6 +285581,7 @@
     "special_defense": 1,
     "speed": 0
    },
+   "capture_rate": 90,
    "learnset": [
     {
      "level": 0,
@@ -286275,6 +286571,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 200,
    "learnset": [
     {
      "level": 0,
@@ -287064,6 +287361,7 @@
     "special_defense": 1,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -288250,6 +288548,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 30,
    "learnset": [
     {
      "level": 1,
@@ -289686,6 +289985,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 25,
    "learnset": [
     {
      "level": 1,
@@ -291396,6 +291696,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 125,
    "learnset": [
     {
      "level": 15,
@@ -291514,6 +291815,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 190,
    "learnset": [
     {
      "level": 19,
@@ -292188,6 +292490,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 75,
    "learnset": [
     {
      "level": 19,
@@ -293210,6 +293513,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 255,
    "learnset": [
     {
      "level": 0,
@@ -293859,6 +294163,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 120,
    "learnset": [
     {
      "level": 0,
@@ -294443,6 +294748,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -295118,6 +295424,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 255,
    "learnset": [
     {
      "level": 0,
@@ -295451,6 +295758,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 60,
    "learnset": [
     {
      "level": 0,
@@ -295926,6 +296234,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 60,
    "learnset": [
     {
      "level": 0,
@@ -296408,6 +296717,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 25,
    "learnset": [
     {
      "level": 0,
@@ -297123,6 +297433,7 @@
     "special_defense": 0,
     "speed": 1
    },
+   "capture_rate": 190,
    "learnset": [
     {
      "level": 0,
@@ -298260,6 +298571,7 @@
     "special_defense": 0,
     "speed": 1
    },
+   "capture_rate": 225,
    "learnset": [
     {
      "level": 1,
@@ -298900,6 +299212,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -299567,6 +299880,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -300235,6 +300549,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -301106,6 +301421,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 3,
    "learnset": [
     {
      "level": 0,
@@ -301209,6 +301525,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 3,
    "learnset": [
     {
      "level": 0,
@@ -302057,6 +302374,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 3,
    "learnset": [
     {
      "level": 0,
@@ -303322,6 +303640,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 3,
    "learnset": [
     {
      "level": 0,
@@ -304132,6 +304451,7 @@
     "special_defense": 3,
     "speed": 0
    },
+   "capture_rate": 3,
    "learnset": [
     {
      "level": 0,
@@ -304897,6 +305217,7 @@
     "special_defense": 1,
     "speed": 0
    },
+   "capture_rate": 3,
    "learnset": [
     {
      "level": 0,
@@ -305747,6 +306068,7 @@
     "special_defense": 1,
     "speed": 1
    },
+   "capture_rate": 75,
    "learnset": [
     {
      "level": 0,
@@ -306852,6 +307174,7 @@
     "special_defense": 3,
     "speed": 0
    },
+   "capture_rate": 3,
    "learnset": [
     {
      "level": 0,
@@ -307867,6 +308190,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 3,
    "learnset": [
     {
      "level": 0,
@@ -308861,6 +309185,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 3,
    "learnset": [
     {
      "level": 0,
@@ -309535,6 +309860,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 3,
    "learnset": [
     {
      "level": 0,
@@ -310425,6 +310751,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -311330,6 +311657,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 3,
    "learnset": [
     {
      "level": 0,
@@ -312209,6 +312537,7 @@
     "special_defense": 0,
     "speed": 1
    },
+   "capture_rate": 3,
    "learnset": [
     {
      "level": 0,
@@ -313109,6 +313438,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -313701,6 +314031,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -314269,6 +314600,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -315351,6 +315683,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 170,
    "learnset": [
     {
      "level": 9,
@@ -316748,6 +317081,7 @@
     "special_defense": 0,
     "speed": 1
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -317481,6 +317815,7 @@
     "special_defense": 0,
     "speed": 1
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -318264,6 +318599,7 @@
     "special_defense": 0,
     "speed": 1
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -319664,6 +320000,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 1,
@@ -320271,6 +320608,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 1,
@@ -320904,6 +321242,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 1,
@@ -322090,6 +322429,7 @@
     "special_defense": 0,
     "speed": 1
    },
+   "capture_rate": 255,
    "learnset": [
     {
      "level": 1,
@@ -322583,6 +322923,7 @@
     "special_defense": 0,
     "speed": 2
    },
+   "capture_rate": 120,
    "learnset": [
     {
      "level": 1,
@@ -323026,6 +323367,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 1,
@@ -323727,6 +324069,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 255,
    "learnset": [
     {
      "level": 37,
@@ -324279,6 +324622,7 @@
     "special_defense": 0,
     "speed": 1
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -325248,6 +325592,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 50,
    "learnset": [
     {
      "level": 1,
@@ -326350,6 +326695,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 127,
    "learnset": [
     {
      "level": 43,
@@ -326955,6 +327301,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 255,
    "learnset": [
     {
      "level": 1,
@@ -327092,6 +327439,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 1,
@@ -327633,6 +327981,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 235,
    "learnset": [
     {
      "level": 0,
@@ -328266,6 +328615,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 120,
    "learnset": [
     {
      "level": 0,
@@ -328819,6 +329169,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -329691,6 +330042,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 255,
    "learnset": [
     {
      "level": 0,
@@ -330150,6 +330502,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 75,
    "learnset": [
     {
      "level": 0,
@@ -330885,6 +331238,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -331547,6 +331901,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -332668,6 +333023,7 @@
     "special_defense": 0,
     "speed": 1
    },
+   "capture_rate": 255,
    "learnset": [
     {
      "level": 0,
@@ -333566,6 +333922,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -334154,6 +334511,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -335134,6 +335492,7 @@
     "special_defense": 1,
     "speed": 0
    },
+   "capture_rate": 120,
    "learnset": [
     {
      "level": 10,
@@ -335238,6 +335597,7 @@
     "special_defense": 2,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 6,
@@ -335724,6 +336084,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 26,
@@ -336200,6 +336561,7 @@
     "special_defense": 0,
     "speed": 1
    },
+   "capture_rate": 120,
    "learnset": [
     {
      "level": 1,
@@ -336368,6 +336730,7 @@
     "special_defense": 1,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -337134,6 +337497,7 @@
     "special_defense": 0,
     "speed": 1
    },
+   "capture_rate": 200,
    "learnset": [
     {
      "level": 0,
@@ -337804,6 +338168,7 @@
     "special_defense": 0,
     "speed": 1
    },
+   "capture_rate": 190,
    "learnset": [
     {
      "level": 0,
@@ -338481,6 +338846,7 @@
     "special_defense": 0,
     "speed": 2
    },
+   "capture_rate": 75,
    "learnset": [
     {
      "level": 0,
@@ -339162,6 +339528,7 @@
     "special_defense": 0,
     "speed": 2
    },
+   "capture_rate": 90,
    "learnset": [
     {
      "level": 0,
@@ -340063,6 +340430,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 190,
    "learnset": [
     {
      "level": 0,
@@ -340549,6 +340917,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 75,
    "learnset": [
     {
      "level": 0,
@@ -341020,6 +341389,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 190,
    "learnset": [
     {
      "level": 0,
@@ -341604,6 +341974,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 75,
    "learnset": [
     {
      "level": 0,
@@ -342190,6 +342561,7 @@
     "special_defense": 0,
     "speed": 2
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -342912,6 +343284,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 125,
    "learnset": [
     {
      "level": 0,
@@ -343771,6 +344144,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 60,
    "learnset": [
     {
      "level": 0,
@@ -344612,6 +344986,7 @@
     "special_defense": 0,
     "speed": 1
    },
+   "capture_rate": 190,
    "learnset": [
     {
      "level": 1,
@@ -345390,6 +345765,7 @@
     "special_defense": 0,
     "speed": 2
    },
+   "capture_rate": 60,
    "learnset": [
     {
      "level": 1,
@@ -346544,6 +346920,7 @@
     "special_defense": 1,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -347225,6 +347602,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 255,
    "learnset": [
     {
      "level": 0,
@@ -347949,6 +348327,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 30,
    "learnset": [
     {
      "level": 1,
@@ -348615,6 +348994,7 @@
     "special_defense": 0,
     "speed": 1
    },
+   "capture_rate": 190,
    "learnset": [
     {
      "level": 5,
@@ -349128,6 +349508,7 @@
     "special_defense": 0,
     "speed": 2
    },
+   "capture_rate": 75,
    "learnset": [
     {
      "level": 1,
@@ -349647,6 +350028,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 120,
    "learnset": [
     {
      "level": 0,
@@ -350261,6 +350643,7 @@
     "special_defense": 0,
     "speed": 1
    },
+   "capture_rate": 225,
    "learnset": [
     {
      "level": 1,
@@ -351080,6 +351463,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 60,
    "learnset": [
     {
      "level": 1,
@@ -351882,6 +352266,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 255,
    "learnset": [
     {
      "level": 1,
@@ -352601,6 +352986,7 @@
     "special_defense": 1,
     "speed": 0
    },
+   "capture_rate": 90,
    "learnset": [
     {
      "level": 1,
@@ -353432,6 +353818,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 255,
    "learnset": [
     {
      "level": 38,
@@ -354140,6 +354527,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 120,
    "learnset": [
     {
      "level": 0,
@@ -354889,6 +355277,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 130,
    "learnset": [
     {
      "level": 1,
@@ -355458,6 +355847,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 30,
    "learnset": [
     {
      "level": 1,
@@ -355964,6 +356354,7 @@
     "special_defense": 1,
     "speed": 0
    },
+   "capture_rate": 100,
    "learnset": [
     {
      "level": 0,
@@ -356945,6 +357336,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -357593,6 +357985,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -358221,6 +358614,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -359217,6 +359611,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 50,
    "learnset": [
     {
      "level": 0,
@@ -360135,6 +360530,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 75,
    "learnset": [
     {
      "level": 0,
@@ -360909,6 +361305,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -362309,6 +362706,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 140,
    "learnset": [
     {
      "level": 0,
@@ -362877,6 +363275,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -363782,6 +364181,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 60,
    "learnset": [
     {
      "level": 0,
@@ -364599,6 +364999,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 120,
    "learnset": [
     {
      "level": 0,
@@ -365298,6 +365699,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -366065,6 +366467,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 140,
    "learnset": [
     {
      "level": 0,
@@ -366949,6 +367352,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 75,
    "learnset": [
     {
      "level": 0,
@@ -368198,6 +368602,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 200,
    "learnset": [
     {
      "level": 0,
@@ -368684,6 +369089,7 @@
     "special_defense": 0,
     "speed": 1
    },
+   "capture_rate": 190,
    "learnset": [
     {
      "level": 1,
@@ -369242,6 +369648,7 @@
     "special_defense": 0,
     "speed": 2
    },
+   "capture_rate": 75,
    "learnset": [
     {
      "level": 1,
@@ -369774,6 +370181,7 @@
     "special_defense": 1,
     "speed": 0
    },
+   "capture_rate": 25,
    "learnset": [
     {
      "level": 22,
@@ -370372,6 +370780,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 120,
    "learnset": [
     {
      "level": 0,
@@ -370966,6 +371375,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 190,
    "learnset": [
     {
      "level": 1,
@@ -371729,6 +372139,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 60,
    "learnset": [
     {
      "level": 0,
@@ -372725,6 +373136,7 @@
     "special_defense": 0,
     "speed": 1
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -373947,6 +374359,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 30,
    "learnset": [
     {
      "level": 1,
@@ -374818,6 +375231,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 30,
    "learnset": [
     {
      "level": 0,
@@ -375560,6 +375974,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 30,
    "learnset": [
     {
      "level": 0,
@@ -377096,6 +377511,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 30,
    "learnset": [
     {
      "level": 0,
@@ -377816,6 +378232,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 30,
    "learnset": [
     {
      "level": 0,
@@ -378666,6 +379083,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 30,
    "learnset": [
     {
      "level": 0,
@@ -379483,6 +379901,7 @@
     "special_defense": 1,
     "speed": 0
    },
+   "capture_rate": 30,
    "learnset": [
     {
      "level": 1,
@@ -380255,6 +380674,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 30,
    "learnset": [
     {
      "level": 0,
@@ -380872,6 +381292,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 75,
    "learnset": [
     {
      "level": 1,
@@ -381587,6 +382008,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -382627,6 +383049,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -383644,6 +384067,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 30,
    "learnset": [
     {
      "level": 45,
@@ -384886,6 +385310,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 50,
    "learnset": [
     {
      "level": 0,
@@ -385968,6 +386393,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -387730,6 +388156,7 @@
     "special_defense": 2,
     "speed": 0
    },
+   "capture_rate": 60,
    "learnset": [
     {
      "level": 0,
@@ -388570,6 +388997,7 @@
     "special_defense": 2,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -389451,6 +389879,7 @@
     "special_defense": 0,
     "speed": 2
    },
+   "capture_rate": 75,
    "learnset": [
     {
      "level": 0,
@@ -390616,6 +391045,7 @@
     "special_defense": 0,
     "speed": 1
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 1,
@@ -391428,6 +391858,7 @@
     "special_defense": 1,
     "speed": 0
    },
+   "capture_rate": 190,
    "learnset": [
     {
      "level": 0,
@@ -392124,6 +392555,7 @@
     "special_defense": 1,
     "speed": 0
    },
+   "capture_rate": 3,
    "learnset": [
     {
      "level": 0,
@@ -392913,6 +393345,7 @@
     "special_defense": 1,
     "speed": 0
    },
+   "capture_rate": 3,
    "learnset": [
     {
      "level": 0,
@@ -393682,6 +394115,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 3,
    "learnset": [
     {
      "level": 0,
@@ -394488,6 +394922,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 3,
    "learnset": [
     {
      "level": 0,
@@ -395294,6 +395729,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 3,
    "learnset": [
     {
      "level": 0,
@@ -396130,6 +396566,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 3,
    "learnset": [
     {
      "level": 0,
@@ -396824,6 +397261,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 3,
    "learnset": [
     {
      "level": 1,
@@ -397530,6 +397968,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 3,
    "learnset": [
     {
      "level": 0,
@@ -398304,6 +398743,7 @@
     "special_defense": 3,
     "speed": 0
    },
+   "capture_rate": 3,
    "learnset": [
     {
      "level": 1,
@@ -398958,6 +399398,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 30,
    "learnset": [
     {
      "level": 16,
@@ -399427,6 +399868,7 @@
     "special_defense": 0,
     "speed": 1
    },
+   "capture_rate": 75,
    "learnset": [
     {
      "level": 0,
@@ -400261,6 +400703,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 3,
    "learnset": [
     {
      "level": 16,
@@ -400810,6 +401253,7 @@
     "special_defense": 0,
     "speed": 1
    },
+   "capture_rate": 3,
    "learnset": [
     {
      "level": 0,
@@ -401459,6 +401903,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -401998,6 +402443,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 3,
    "learnset": [
     {
      "level": 0,
@@ -403078,6 +403524,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 3,
    "learnset": [
     {
      "level": 0,
@@ -403753,6 +404200,7 @@
     "special_defense": 0,
     "speed": 1
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -404250,6 +404698,7 @@
     "special_defense": 0,
     "speed": 2
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -404737,6 +405186,7 @@
     "special_defense": 0,
     "speed": 3
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -405562,6 +406012,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -406065,6 +406516,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -406677,6 +407129,7 @@
     "special_defense": 0,
     "speed": 1
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -407580,6 +408033,7 @@
     "special_defense": 0,
     "speed": 1
    },
+   "capture_rate": 255,
    "learnset": [
     {
      "level": 1,
@@ -408413,6 +408867,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -409478,6 +409933,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 41,
@@ -409995,6 +410451,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 49,
@@ -410577,6 +411034,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 57,
@@ -411543,6 +412001,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 255,
    "learnset": [
     {
      "level": 0,
@@ -411946,6 +412405,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 255,
    "learnset": [
     {
      "level": 0,
@@ -412692,6 +413152,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 255,
    "learnset": [
     {
      "level": 0,
@@ -413195,6 +413656,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 120,
    "learnset": [
     {
      "level": 1,
@@ -413643,6 +414105,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 1,
@@ -414139,6 +414602,7 @@
     "special_defense": 0,
     "speed": 1
    },
+   "capture_rate": 255,
    "learnset": [
     {
      "level": 0,
@@ -414707,6 +415171,7 @@
     "special_defense": 0,
     "speed": 2
    },
+   "capture_rate": 50,
    "learnset": [
     {
      "level": 1,
@@ -415578,6 +416043,7 @@
     "special_defense": 0,
     "speed": 2
    },
+   "capture_rate": 90,
    "learnset": [
     {
      "level": 0,
@@ -416433,6 +416899,7 @@
     "special_defense": 0,
     "speed": 1
    },
+   "capture_rate": 190,
    "learnset": [
     {
      "level": 1,
@@ -416880,6 +417347,7 @@
     "special_defense": 0,
     "speed": 2
    },
+   "capture_rate": 75,
    "learnset": [
     {
      "level": 0,
@@ -417490,6 +417958,7 @@
     "special_defense": 0,
     "speed": 1
    },
+   "capture_rate": 190,
    "learnset": [
     {
      "level": 0,
@@ -417947,6 +418416,7 @@
     "special_defense": 0,
     "speed": 2
    },
+   "capture_rate": 75,
    "learnset": [
     {
      "level": 0,
@@ -418587,6 +419057,7 @@
     "special_defense": 0,
     "speed": 1
    },
+   "capture_rate": 190,
    "learnset": [
     {
      "level": 0,
@@ -419044,6 +419515,7 @@
     "special_defense": 0,
     "speed": 2
    },
+   "capture_rate": 75,
    "learnset": [
     {
      "level": 0,
@@ -419680,6 +420152,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 190,
    "learnset": [
     {
      "level": 0,
@@ -420268,6 +420741,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 75,
    "learnset": [
     {
      "level": 1,
@@ -421000,6 +421474,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 255,
    "learnset": [
     {
      "level": 32,
@@ -421433,6 +421908,7 @@
     "special_defense": 0,
     "speed": 1
    },
+   "capture_rate": 255,
    "learnset": [
     {
      "level": 17,
@@ -422488,6 +422964,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 120,
    "learnset": [
     {
      "level": 36,
@@ -422877,6 +423354,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 38,
@@ -423278,6 +423756,7 @@
     "special_defense": 0,
     "speed": 1
    },
+   "capture_rate": 190,
    "learnset": [
     {
      "level": 29,
@@ -423736,6 +424215,7 @@
     "special_defense": 0,
     "speed": 2
    },
+   "capture_rate": 75,
    "learnset": [
     {
      "level": 31,
@@ -424197,6 +424677,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 255,
    "learnset": [
     {
      "level": 7,
@@ -424620,6 +425101,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 120,
    "learnset": [
     {
      "level": 1,
@@ -425023,6 +425505,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 1,
@@ -425475,6 +425958,7 @@
     "special_defense": 0,
     "speed": 1
    },
+   "capture_rate": 190,
    "learnset": [
     {
      "level": 8,
@@ -426159,6 +426643,7 @@
     "special_defense": 0,
     "speed": 2
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 1,
@@ -426805,6 +427290,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 120,
    "learnset": [
     {
      "level": 1,
@@ -427323,6 +427809,7 @@
     "special_defense": 0,
     "speed": 2
    },
+   "capture_rate": 90,
    "learnset": [
     {
      "level": 17,
@@ -428345,6 +428832,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 60,
    "learnset": [
     {
      "level": 1,
@@ -429181,6 +429669,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 255,
    "learnset": [
     {
      "level": 1,
@@ -430377,6 +430866,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 180,
    "learnset": [
     {
      "level": 1,
@@ -430990,6 +431480,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 90,
    "learnset": [
     {
      "level": 1,
@@ -431578,6 +432069,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 1,
@@ -432514,6 +433006,7 @@
     "special_defense": 0,
     "speed": 1
    },
+   "capture_rate": 255,
    "learnset": [
     {
      "level": 1,
@@ -432978,6 +433471,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 120,
    "learnset": [
     {
      "level": 1,
@@ -433422,6 +433916,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -434028,6 +434523,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -434619,6 +435115,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 25,
@@ -435205,6 +435702,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 190,
    "learnset": [
     {
      "level": 0,
@@ -436429,6 +436927,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 255,
    "learnset": [
     {
      "level": 0,
@@ -436873,6 +437372,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 120,
    "learnset": [
     {
      "level": 0,
@@ -437292,6 +437792,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 46,
@@ -437874,6 +438375,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 255,
    "learnset": [
     {
      "level": 0,
@@ -438303,6 +438805,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 120,
    "learnset": [
     {
      "level": 32,
@@ -438707,6 +439210,7 @@
     "special_defense": 0,
     "speed": 3
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -439519,6 +440023,7 @@
     "special_defense": 0,
     "speed": 1
    },
+   "capture_rate": 190,
    "learnset": [
     {
      "level": 1,
@@ -440043,6 +440548,7 @@
     "special_defense": 0,
     "speed": 2
    },
+   "capture_rate": 75,
    "learnset": [
     {
      "level": 10,
@@ -440799,6 +441305,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 190,
    "learnset": [
     {
      "level": 0,
@@ -441332,6 +441839,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 75,
    "learnset": [
     {
      "level": 0,
@@ -441808,6 +442316,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 75,
    "learnset": [
     {
      "level": 0,
@@ -443034,6 +443543,7 @@
     "special_defense": 0,
     "speed": 2
    },
+   "capture_rate": 25,
    "learnset": [
     {
      "level": 0,
@@ -443728,6 +444238,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 180,
    "learnset": [
     {
      "level": 0,
@@ -444397,6 +444908,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 90,
    "learnset": [
     {
      "level": 0,
@@ -445101,6 +445613,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -446321,6 +446834,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 120,
    "learnset": [
     {
      "level": 0,
@@ -446868,6 +447382,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 60,
    "learnset": [
     {
      "level": 0,
@@ -447509,6 +448024,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 255,
    "learnset": [
     {
      "level": 10,
@@ -448066,6 +448582,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 190,
    "learnset": [
     {
      "level": 0,
@@ -448555,6 +449072,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 75,
    "learnset": [
     {
      "level": 0,
@@ -449027,6 +449545,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 180,
    "learnset": [
     {
      "level": 0,
@@ -449855,6 +450374,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 190,
    "learnset": [
     {
      "level": 15,
@@ -450984,6 +451504,7 @@
     "special_defense": 1,
     "speed": 0
    },
+   "capture_rate": 90,
    "learnset": [
     {
      "level": 0,
@@ -452216,6 +452737,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 1,
@@ -452850,6 +453372,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 190,
    "learnset": [
     {
      "level": 5,
@@ -453417,6 +453940,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 90,
    "learnset": [
     {
      "level": 1,
@@ -454269,6 +454793,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -454868,6 +455393,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -455443,6 +455969,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -456080,6 +456607,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -456696,6 +457224,7 @@
     "special_defense": 0,
     "speed": 1
    },
+   "capture_rate": 190,
    "learnset": [
     {
      "level": 1,
@@ -457169,6 +457698,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 60,
    "learnset": [
     {
      "level": 1,
@@ -457950,6 +458480,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 75,
    "learnset": [
     {
      "level": 1,
@@ -459081,6 +459612,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 75,
    "learnset": [
     {
      "level": 1,
@@ -459717,6 +460249,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -460773,6 +461306,7 @@
     "special_defense": 0,
     "speed": 1
    },
+   "capture_rate": 255,
    "learnset": [
     {
      "level": 1,
@@ -461371,6 +461905,7 @@
     "special_defense": 0,
     "speed": 2
    },
+   "capture_rate": 60,
    "learnset": [
     {
      "level": 1,
@@ -461967,6 +462502,7 @@
     "special_defense": 1,
     "speed": 0
    },
+   "capture_rate": 200,
    "learnset": [
     {
      "level": 1,
@@ -462630,6 +463166,7 @@
     "special_defense": 2,
     "speed": 0
    },
+   "capture_rate": 100,
    "learnset": [
     {
      "level": 1,
@@ -463258,6 +463795,7 @@
     "special_defense": 3,
     "speed": 0
    },
+   "capture_rate": 50,
    "learnset": [
     {
      "level": 1,
@@ -463924,6 +464462,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 200,
    "learnset": [
     {
      "level": 12,
@@ -464572,6 +465111,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 100,
    "learnset": [
     {
      "level": 12,
@@ -465225,6 +465765,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 50,
    "learnset": [
     {
      "level": 0,
@@ -466356,6 +466897,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 190,
    "learnset": [
     {
      "level": 0,
@@ -467310,6 +467852,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 190,
    "learnset": [
     {
      "level": 0,
@@ -467754,6 +468297,7 @@
     "special_defense": 0,
     "speed": 2
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -468225,6 +468769,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 255,
    "learnset": [
     {
      "level": 16,
@@ -468688,6 +469233,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 120,
    "learnset": [
     {
      "level": 16,
@@ -469101,6 +469647,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 16,
@@ -469753,6 +470300,7 @@
     "special_defense": 0,
     "speed": 1
    },
+   "capture_rate": 190,
    "learnset": [
     {
      "level": 10,
@@ -470252,6 +470800,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 75,
    "learnset": [
     {
      "level": 0,
@@ -470778,6 +471327,7 @@
     "special_defense": 0,
     "speed": 2
    },
+   "capture_rate": 200,
    "learnset": [
     {
      "level": 0,
@@ -471549,6 +472099,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 200,
    "learnset": [
     {
      "level": 52,
@@ -471988,6 +472539,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 75,
    "learnset": [
     {
      "level": 52,
@@ -472494,6 +473046,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 75,
    "learnset": [
     {
      "level": 0,
@@ -473445,6 +473998,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 190,
    "learnset": [
     {
      "level": 0,
@@ -473888,6 +474442,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 75,
    "learnset": [
     {
      "level": 0,
@@ -474315,6 +474870,7 @@
     "special_defense": 1,
     "speed": 0
    },
+   "capture_rate": 190,
    "learnset": [
     {
      "level": 0,
@@ -474834,6 +475390,7 @@
     "special_defense": 2,
     "speed": 0
    },
+   "capture_rate": 60,
    "learnset": [
     {
      "level": 0,
@@ -475335,6 +475892,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 75,
    "learnset": [
     {
      "level": 1,
@@ -475867,6 +476425,7 @@
     "special_defense": 0,
     "speed": 1
    },
+   "capture_rate": 190,
    "learnset": [
     {
      "level": 0,
@@ -476426,6 +476985,7 @@
     "special_defense": 0,
     "speed": 2
    },
+   "capture_rate": 75,
    "learnset": [
     {
      "level": 0,
@@ -476991,6 +477551,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 255,
    "learnset": [
     {
      "level": 1,
@@ -477494,6 +478055,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 90,
    "learnset": [
     {
      "level": 0,
@@ -478045,6 +478607,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 130,
    "learnset": [
     {
      "level": 1,
@@ -478458,6 +479021,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -479974,6 +480538,7 @@
     "special_defense": 0,
     "speed": 1
    },
+   "capture_rate": 255,
    "learnset": [
     {
      "level": 4,
@@ -480707,6 +481272,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 60,
    "learnset": [
     {
      "level": 1,
@@ -481130,6 +481696,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 30,
    "learnset": [
     {
      "level": 1,
@@ -481594,6 +482161,7 @@
     "special_defense": 0,
     "speed": 1
    },
+   "capture_rate": 190,
    "learnset": [
     {
      "level": 1,
@@ -481680,6 +482248,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 60,
    "learnset": [
     {
      "level": 9,
@@ -482096,6 +482665,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 30,
    "learnset": [
     {
      "level": 0,
@@ -483057,6 +483627,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 255,
    "learnset": [
     {
      "level": 18,
@@ -483685,6 +484256,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 90,
    "learnset": [
     {
      "level": 18,
@@ -484302,6 +484874,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 190,
    "learnset": [
     {
      "level": 0,
@@ -484901,6 +485474,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 90,
    "learnset": [
     {
      "level": 1,
@@ -485480,6 +486054,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 1,
@@ -486271,6 +486846,7 @@
     "special_defense": 0,
     "speed": 2
    },
+   "capture_rate": 120,
    "learnset": [
     {
      "level": 1,
@@ -487090,6 +487666,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 75,
    "learnset": [
     {
      "level": 1,
@@ -487753,6 +488330,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 60,
    "learnset": [
     {
      "level": 1,
@@ -488376,6 +488954,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 1,
@@ -489052,6 +489631,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 120,
    "learnset": [
     {
      "level": 0,
@@ -489700,6 +490280,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 60,
    "learnset": [
     {
      "level": 0,
@@ -490819,6 +491400,7 @@
     "special_defense": 2,
     "speed": 0
    },
+   "capture_rate": 25,
    "learnset": [
     {
      "level": 1,
@@ -491495,6 +492077,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 200,
    "learnset": [
     {
      "level": 40,
@@ -491923,6 +492506,7 @@
     "special_defense": 0,
     "speed": 2
    },
+   "capture_rate": 75,
    "learnset": [
     {
      "level": 1,
@@ -492405,6 +492989,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 75,
    "learnset": [
     {
      "level": 1,
@@ -493201,6 +493786,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 180,
    "learnset": [
     {
      "level": 1,
@@ -493830,6 +494416,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 1,
@@ -494786,6 +495373,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 1,
@@ -495432,6 +496020,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -496104,6 +496693,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 190,
    "learnset": [
     {
      "level": 1,
@@ -496833,6 +497423,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 90,
    "learnset": [
     {
      "level": 1,
@@ -498075,6 +498666,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 120,
    "learnset": [
     {
      "level": 1,
@@ -498719,6 +499311,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 1,
@@ -499367,6 +499960,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 56,
@@ -499919,6 +500513,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 190,
    "learnset": [
     {
      "level": 0,
@@ -500473,6 +501068,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 60,
    "learnset": [
     {
      "level": 0,
@@ -501050,6 +501646,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 190,
    "learnset": [
     {
      "level": 0,
@@ -501643,6 +502240,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 200,
    "learnset": [
     {
      "level": 0,
@@ -502402,6 +503000,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 60,
    "learnset": [
     {
      "level": 0,
@@ -503038,6 +503637,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 90,
    "learnset": [
     {
      "level": 0,
@@ -503695,6 +504295,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 90,
    "learnset": [
     {
      "level": 1,
@@ -504280,6 +504881,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 28,
@@ -504872,6 +505474,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 28,
@@ -505429,6 +506032,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -506605,6 +507209,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -507108,6 +507713,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 15,
    "learnset": [
     {
      "level": 1,
@@ -508028,6 +508634,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 3,
    "learnset": [
     {
      "level": 49,
@@ -508698,6 +509305,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 3,
    "learnset": [
     {
      "level": 49,
@@ -509329,6 +509937,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 100,
    "learnset": [
     {
      "level": 0,
@@ -510396,6 +511005,7 @@
     "special_defense": 3,
     "speed": 0
    },
+   "capture_rate": 3,
    "learnset": [
     {
      "level": 49,
@@ -511071,6 +511681,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 3,
    "learnset": [
     {
      "level": 1,
@@ -511817,6 +512428,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 3,
    "learnset": [
     {
      "level": 0,
@@ -512597,6 +513209,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 3,
    "learnset": [
     {
      "level": 0,
@@ -513267,6 +513880,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 3,
    "learnset": [
     {
      "level": 0,
@@ -513973,6 +514587,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 3,
    "learnset": [
     {
      "level": 37,
@@ -514708,6 +515323,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 3,
    "learnset": [
     {
      "level": 0,
@@ -515348,6 +515964,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 3,
    "learnset": [
     {
      "level": 49,
@@ -515953,6 +516570,7 @@
     "special_defense": 1,
     "speed": 1
    },
+   "capture_rate": 3,
    "learnset": [
     {
      "level": 0,
@@ -516648,6 +517266,7 @@
     "special_defense": 0,
     "speed": 1
    },
+   "capture_rate": 3,
    "learnset": [
     {
      "level": 0,
@@ -517244,6 +517863,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 50,
    "learnset": [
     {
      "level": 0,
@@ -518654,6 +519274,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -519306,6 +519927,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -520019,6 +520641,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -521284,6 +521907,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 1,
@@ -521786,6 +522410,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -522404,6 +523029,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -523539,6 +524165,7 @@
     "special_defense": 0,
     "speed": 1
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 1,
@@ -524031,6 +524658,7 @@
     "special_defense": 0,
     "speed": 2
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 1,
@@ -524564,6 +525192,7 @@
     "special_defense": 0,
     "speed": 3
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 1,
@@ -525530,6 +526159,7 @@
     "special_defense": 0,
     "speed": 1
    },
+   "capture_rate": 255,
    "learnset": [
     {
      "level": 10,
@@ -526018,6 +526648,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 180,
    "learnset": [
     {
      "level": 1,
@@ -527062,6 +527693,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 127,
    "learnset": [
     {
      "level": 13,
@@ -528033,6 +528665,7 @@
     "special_defense": 0,
     "speed": 1
    },
+   "capture_rate": 255,
    "learnset": [
     {
      "level": 25,
@@ -528481,6 +529114,7 @@
     "special_defense": 0,
     "speed": 2
    },
+   "capture_rate": 120,
    "learnset": [
     {
      "level": 27,
@@ -528954,6 +529588,7 @@
     "special_defense": 0,
     "speed": 3
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 27,
@@ -529710,6 +530345,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 255,
    "learnset": [
     {
      "level": 1,
@@ -529807,6 +530443,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 120,
    "learnset": [
     {
      "level": 1,
@@ -529911,6 +530548,7 @@
     "special_defense": 0,
     "speed": 1
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 1,
@@ -530568,6 +531206,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 220,
    "learnset": [
     {
      "level": 11,
@@ -531027,6 +531666,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 65,
    "learnset": [
     {
      "level": 11,
@@ -531737,6 +532377,7 @@
     "special_defense": 1,
     "speed": 0
    },
+   "capture_rate": 225,
    "learnset": [
     {
      "level": 1,
@@ -532180,6 +532821,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 90,
    "learnset": [
     {
      "level": 1,
@@ -533192,6 +533834,7 @@
     "special_defense": 2,
     "speed": 0
    },
+   "capture_rate": 120,
    "learnset": [
     {
      "level": 1,
@@ -533629,6 +534272,7 @@
     "special_defense": 3,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -534309,6 +534953,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 200,
    "learnset": [
     {
      "level": 7,
@@ -534751,6 +535396,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 7,
@@ -535247,6 +535893,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 220,
    "learnset": [
     {
      "level": 12,
@@ -535886,6 +536533,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 65,
    "learnset": [
     {
      "level": 12,
@@ -537085,6 +537733,7 @@
     "special_defense": 0,
     "speed": 1
    },
+   "capture_rate": 160,
    "learnset": [
     {
      "level": 5,
@@ -537616,6 +538265,7 @@
     "special_defense": 0,
     "speed": 1
    },
+   "capture_rate": 190,
    "learnset": [
     {
      "level": 0,
@@ -538159,6 +538809,7 @@
     "special_defense": 0,
     "speed": 2
    },
+   "capture_rate": 75,
    "learnset": [
     {
      "level": 0,
@@ -539144,6 +539795,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 180,
    "learnset": [
     {
      "level": 1,
@@ -539577,6 +540229,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 1,
@@ -540992,6 +541645,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 90,
    "learnset": [
     {
      "level": 1,
@@ -541399,6 +542053,7 @@
     "special_defense": 1,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 1,
@@ -542009,6 +542664,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 200,
    "learnset": [
     {
      "level": 0,
@@ -542496,6 +543152,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 140,
    "learnset": [
     {
      "level": 0,
@@ -543251,6 +543908,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 200,
    "learnset": [
     {
      "level": 1,
@@ -543693,6 +544351,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 140,
    "learnset": [
     {
      "level": 1,
@@ -544350,6 +545009,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 190,
    "learnset": [
     {
      "level": 0,
@@ -544959,6 +545619,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 80,
    "learnset": [
     {
      "level": 0,
@@ -545946,6 +546607,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 120,
    "learnset": [
     {
      "level": 1,
@@ -546525,6 +547187,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 1,
@@ -547531,6 +548194,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 255,
    "learnset": [
     {
      "level": 0,
@@ -548235,6 +548899,7 @@
     "special_defense": 1,
     "speed": 0
    },
+   "capture_rate": 225,
    "learnset": [
     {
      "level": 1,
@@ -548789,6 +549454,7 @@
     "special_defense": 2,
     "speed": 0
    },
+   "capture_rate": 55,
    "learnset": [
     {
      "level": 1,
@@ -549618,6 +550284,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 225,
    "learnset": [
     {
      "level": 9,
@@ -550124,6 +550791,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 55,
    "learnset": [
     {
      "level": 9,
@@ -550946,6 +551614,7 @@
     "special_defense": 0,
     "speed": 1
    },
+   "capture_rate": 190,
    "learnset": [
     {
      "level": 1,
@@ -551415,6 +552084,7 @@
     "special_defense": 0,
     "speed": 1
    },
+   "capture_rate": 75,
    "learnset": [
     {
      "level": 1,
@@ -552221,6 +552891,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 10,
@@ -552804,6 +553475,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 10,
@@ -553740,6 +554412,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -554353,6 +555026,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -555248,6 +555922,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -556211,6 +556886,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 120,
    "learnset": [
     {
      "level": 0,
@@ -556923,6 +557599,7 @@
     "special_defense": 2,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -557820,6 +558497,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 100,
    "learnset": [
     {
      "level": 4,
@@ -558987,6 +559665,7 @@
     "special_defense": 0,
     "speed": 2
    },
+   "capture_rate": 180,
    "learnset": [
     {
      "level": 0,
@@ -559813,6 +560492,7 @@
     "special_defense": 1,
     "speed": 0
    },
+   "capture_rate": 60,
    "learnset": [
     {
      "level": 1,
@@ -560389,6 +561069,7 @@
     "special_defense": 1,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 1,
@@ -560832,6 +561513,7 @@
     "special_defense": 2,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 1,
@@ -561245,6 +561927,7 @@
     "special_defense": 3,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -562226,6 +562909,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 75,
    "learnset": [
     {
      "level": 0,
@@ -562958,6 +563642,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 120,
    "learnset": [
     {
      "level": 0,
@@ -563577,6 +564262,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 60,
    "learnset": [
     {
      "level": 0,
@@ -564653,6 +565339,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -565620,6 +566307,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 120,
    "learnset": [
     {
      "level": 0,
@@ -566169,6 +566857,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 60,
    "learnset": [
     {
      "level": 0,
@@ -567070,6 +567759,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 190,
    "learnset": [
     {
      "level": 1,
@@ -567578,6 +568268,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 55,
    "learnset": [
     {
      "level": 1,
@@ -568395,6 +569086,7 @@
     "special_defense": 0,
     "speed": 1
    },
+   "capture_rate": 190,
    "learnset": [
     {
      "level": 31,
@@ -568979,6 +569671,7 @@
     "special_defense": 0,
     "speed": 2
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 31,
@@ -569953,6 +570646,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -570478,6 +571172,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 1,
@@ -571013,6 +571708,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 3,
    "learnset": [
     {
      "level": 18,
@@ -571578,6 +572274,7 @@
     "special_defense": 2,
     "speed": 0
    },
+   "capture_rate": 3,
    "learnset": [
     {
      "level": 1,
@@ -572275,6 +572972,7 @@
     "special_defense": 1,
     "speed": 0
    },
+   "capture_rate": 190,
    "learnset": [
     {
      "level": 0,
@@ -573207,6 +573905,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 3,
    "learnset": [
     {
      "level": 0,
@@ -573887,6 +574586,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 3,
    "learnset": [
     {
      "level": 0,
@@ -574513,6 +575213,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -575121,6 +575822,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -575714,6 +576416,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -576804,6 +577507,7 @@
     "special_defense": 0,
     "speed": 1
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -577316,6 +578020,7 @@
     "special_defense": 0,
     "speed": 2
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -577804,6 +578509,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -578979,6 +579685,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 1,
@@ -579521,6 +580228,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 1,
@@ -580045,6 +580753,7 @@
     "special_defense": 2,
     "speed": 0
    },
+   "capture_rate": 60,
    "learnset": [
     {
      "level": 0,
@@ -581026,6 +581735,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 1,
@@ -581983,6 +582693,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 255,
    "learnset": [
     {
      "level": 0,
@@ -582392,6 +583103,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 120,
    "learnset": [
     {
      "level": 0,
@@ -582816,6 +583528,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -583562,6 +584275,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 255,
    "learnset": [
     {
      "level": 10,
@@ -584025,6 +584739,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 127,
    "learnset": [
     {
      "level": 0,
@@ -584564,6 +585279,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 255,
    "learnset": [
     {
      "level": 1,
@@ -584966,6 +585682,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 120,
    "learnset": [
     {
      "level": 1,
@@ -585413,6 +586130,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 1,
@@ -586004,6 +586722,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 225,
    "learnset": [
     {
      "level": 0,
@@ -586498,6 +587217,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 255,
    "learnset": [
     {
      "level": 0,
@@ -587477,6 +588197,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 60,
    "learnset": [
     {
      "level": 0,
@@ -588342,6 +589063,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 1,
@@ -588794,6 +589516,7 @@
     "special_defense": 0,
     "speed": 1
    },
+   "capture_rate": 190,
    "learnset": [
     {
      "level": 1,
@@ -589353,6 +590076,7 @@
     "special_defense": 0,
     "speed": 2
    },
+   "capture_rate": 75,
    "learnset": [
     {
      "level": 0,
@@ -589954,6 +590678,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 190,
    "learnset": [
     {
      "level": 0,
@@ -590467,6 +591192,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 90,
    "learnset": [
     {
      "level": 0,
@@ -591331,6 +592057,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 60,
    "learnset": [
     {
      "level": 25,
@@ -591753,6 +592480,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 190,
    "learnset": [
     {
      "level": 1,
@@ -592262,6 +592990,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 75,
    "learnset": [
     {
      "level": 0,
@@ -593053,6 +593782,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 190,
    "learnset": [
     {
      "level": 17,
@@ -593542,6 +594272,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 120,
    "learnset": [
     {
      "level": 0,
@@ -594570,6 +595301,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 60,
    "learnset": [
     {
      "level": 17,
@@ -595286,6 +596018,7 @@
     "special_defense": 1,
     "speed": 0
    },
+   "capture_rate": 200,
    "learnset": [
     {
      "level": 20,
@@ -595774,6 +596507,7 @@
     "special_defense": 2,
     "speed": 0
    },
+   "capture_rate": 100,
    "learnset": [
     {
      "level": 20,
@@ -596554,6 +597288,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 190,
    "learnset": [
     {
      "level": 0,
@@ -597001,6 +597736,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 75,
    "learnset": [
     {
      "level": 0,
@@ -597528,6 +598264,7 @@
     "special_defense": 1,
     "speed": 0
    },
+   "capture_rate": 190,
    "learnset": [
     {
      "level": 1,
@@ -597942,6 +598679,7 @@
     "special_defense": 2,
     "speed": 0
    },
+   "capture_rate": 75,
    "learnset": [
     {
      "level": 0,
@@ -598363,6 +599101,7 @@
     "special_defense": 0,
     "speed": 1
    },
+   "capture_rate": 120,
    "learnset": [
     {
      "level": 21,
@@ -598941,6 +599680,7 @@
     "special_defense": 0,
     "speed": 2
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 1,
@@ -599953,6 +600693,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 140,
    "learnset": [
     {
      "level": 0,
@@ -600432,6 +601173,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -601524,6 +602266,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 70,
    "learnset": [
     {
      "level": 0,
@@ -602030,6 +602773,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 235,
    "learnset": [
     {
      "level": 0,
@@ -602463,6 +603207,7 @@
     "special_defense": 0,
     "speed": 2
    },
+   "capture_rate": 120,
    "learnset": [
     {
      "level": 0,
@@ -602936,6 +603681,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 1,
@@ -603767,6 +604513,7 @@
     "special_defense": 2,
     "speed": 0
    },
+   "capture_rate": 60,
    "learnset": [
     {
      "level": 0,
@@ -604414,6 +605161,7 @@
     "special_defense": 2,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -605409,6 +606157,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -606404,6 +607153,7 @@
     "special_defense": 0,
     "speed": 1
    },
+   "capture_rate": 90,
    "learnset": [
     {
      "level": 1,
@@ -606641,6 +607391,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 16,
@@ -607222,6 +607973,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 140,
    "learnset": [
     {
      "level": 9,
@@ -607780,6 +608532,7 @@
     "special_defense": 0,
     "speed": 1
    },
+   "capture_rate": 190,
    "learnset": [
     {
      "level": 32,
@@ -608608,6 +609361,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 60,
    "learnset": [
     {
      "level": 1,
@@ -609163,6 +609917,7 @@
     "special_defense": 2,
     "speed": 0
    },
+   "capture_rate": 60,
    "learnset": [
     {
      "level": 17,
@@ -609507,6 +610262,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 3,
    "learnset": [
     {
      "level": 70,
@@ -610142,6 +610898,7 @@
     "special_defense": 1,
     "speed": 0
    },
+   "capture_rate": 30,
    "learnset": [
     {
      "level": 1,
@@ -610556,6 +611313,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -610996,6 +611754,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 70,
    "learnset": [
     {
      "level": 0,
@@ -611598,6 +612357,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 180,
    "learnset": [
     {
      "level": 1,
@@ -612143,6 +612903,7 @@
     "special_defense": 2,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 1,
@@ -613030,6 +613791,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 80,
    "learnset": [
     {
      "level": 0,
@@ -613531,6 +614293,7 @@
     "special_defense": 0,
     "speed": 2
    },
+   "capture_rate": 60,
    "learnset": [
     {
      "level": 0,
@@ -614428,6 +615191,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 70,
    "learnset": [
     {
      "level": 0,
@@ -615373,6 +616137,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 25,
    "learnset": [
     {
      "level": 0,
@@ -615932,6 +616697,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 23,
@@ -615986,6 +616752,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 190,
    "learnset": [
     {
      "level": 0,
@@ -617068,6 +617835,7 @@
     "special_defense": 1,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 1,
@@ -617131,6 +617899,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -617776,6 +618545,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -618401,6 +619171,7 @@
     "special_defense": 3,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 1,
@@ -618941,6 +619712,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 7,
@@ -619466,6 +620238,7 @@
     "special_defense": 0,
     "speed": 3
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 13,
@@ -619975,6 +620748,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 23,
@@ -620420,6 +621194,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -620925,6 +621700,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 73,
@@ -621315,6 +622091,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -621885,6 +622662,7 @@
     "special_defense": 1,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -622844,6 +623622,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 75,
    "learnset": [
     {
      "level": 0,
@@ -624463,6 +625242,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 255,
    "learnset": [
     {
      "level": 0,
@@ -625123,6 +625903,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 3,
    "learnset": [
     {
      "level": 0,
@@ -625823,6 +626604,7 @@
     "special_defense": 0,
     "speed": 1
    },
+   "capture_rate": 3,
    "learnset": [
     {
      "level": 0,
@@ -626452,6 +627234,7 @@
     "special_defense": 0,
     "speed": 1
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 7,
@@ -626784,6 +627567,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -627349,6 +628133,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 30,
    "learnset": [
     {
      "level": 0,
@@ -627859,6 +628644,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 30,
    "learnset": [
     {
      "level": 0,
@@ -628333,6 +629119,7 @@
     "special_defense": 0,
     "speed": 3
    },
+   "capture_rate": 3,
    "learnset": [
     {
      "level": 0,
@@ -628932,6 +629719,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 3,
    "learnset": [
     {
      "level": 1,
@@ -629106,6 +629894,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 3,
    "learnset": [
     {
      "level": 54,
@@ -629473,6 +630262,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 190,
    "learnset": [
     {
      "level": 0,
@@ -630430,6 +631220,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -630792,6 +631583,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -631169,6 +631961,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -631664,6 +632457,7 @@
     "special_defense": 0,
     "speed": 1
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 12,
@@ -632011,6 +632805,7 @@
     "special_defense": 0,
     "speed": 2
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -632373,6 +633168,7 @@
     "special_defense": 0,
     "speed": 3
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -632843,6 +633639,7 @@
     "special_defense": 1,
     "speed": 1
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 1,
@@ -633140,6 +633937,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 1,
@@ -633442,6 +634240,7 @@
     "special_defense": 0,
     "speed": 3
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 1,
@@ -633892,6 +634691,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 255,
    "learnset": [
     {
      "level": 1,
@@ -634186,6 +634986,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 60,
    "learnset": [
     {
      "level": 0,
@@ -635228,6 +636029,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 90,
    "learnset": [
     {
      "level": 0,
@@ -635584,6 +636386,7 @@
     "special_defense": 0,
     "speed": 1
    },
+   "capture_rate": 255,
    "learnset": [
     {
      "level": 0,
@@ -635887,6 +636690,7 @@
     "special_defense": 0,
     "speed": 2
    },
+   "capture_rate": 120,
    "learnset": [
     {
      "level": 0,
@@ -636166,6 +636970,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -636872,6 +637677,7 @@
     "special_defense": 1,
     "speed": 0
    },
+   "capture_rate": 255,
    "learnset": [
     {
      "level": 0,
@@ -636936,6 +637742,7 @@
     "special_defense": 2,
     "speed": 0
    },
+   "capture_rate": 120,
    "learnset": [
     {
      "level": 0,
@@ -637200,6 +638007,7 @@
     "special_defense": 3,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 16,
@@ -637536,6 +638344,7 @@
     "special_defense": 1,
     "speed": 0
    },
+   "capture_rate": 255,
    "learnset": [
     {
      "level": 1,
@@ -637779,6 +638588,7 @@
     "special_defense": 2,
     "speed": 0
    },
+   "capture_rate": 127,
    "learnset": [
     {
      "level": 1,
@@ -638080,6 +638890,7 @@
     "special_defense": 1,
     "speed": 0
    },
+   "capture_rate": 190,
    "learnset": [
     {
      "level": 1,
@@ -638324,6 +639135,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -639297,6 +640109,7 @@
     "special_defense": 2,
     "speed": 0
    },
+   "capture_rate": 75,
    "learnset": [
     {
      "level": 1,
@@ -639538,6 +640351,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 255,
    "learnset": [
     {
      "level": 0,
@@ -639736,6 +640550,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 127,
    "learnset": [
     {
      "level": 0,
@@ -639967,6 +640782,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 255,
    "learnset": [
     {
      "level": 21,
@@ -640246,6 +641062,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 75,
    "learnset": [
     {
      "level": 0,
@@ -640681,6 +641498,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 255,
    "learnset": [
     {
      "level": 0,
@@ -640928,6 +641746,7 @@
     "special_defense": 0,
     "speed": 2
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 1,
@@ -641199,6 +642018,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 255,
    "learnset": [
     {
      "level": 1,
@@ -641483,6 +642303,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 120,
    "learnset": [
     {
      "level": 1,
@@ -641842,6 +642663,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -642234,6 +643056,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 190,
    "learnset": [
     {
      "level": 36,
@@ -643043,6 +643866,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 255,
    "learnset": [
     {
      "level": 1,
@@ -643149,6 +643973,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -643716,6 +644541,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 8,
@@ -644352,6 +645178,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 255,
    "learnset": [
     {
      "level": 40,
@@ -644655,6 +645482,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 120,
    "learnset": [
     {
      "level": 42,
@@ -645230,6 +646058,7 @@
     "special_defense": 2,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -645600,6 +646429,7 @@
     "special_defense": 0,
     "speed": 1
    },
+   "capture_rate": 255,
    "learnset": [
     {
      "level": 6,
@@ -645902,6 +646732,7 @@
     "special_defense": 0,
     "speed": 2
    },
+   "capture_rate": 60,
    "learnset": [
     {
      "level": 1,
@@ -646214,6 +647045,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 75,
    "learnset": [
     {
      "level": 1,
@@ -646368,6 +647200,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -646850,6 +647683,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 38,
@@ -647722,6 +648556,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 190,
    "learnset": [
     {
      "level": 30,
@@ -647956,6 +648791,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 75,
    "learnset": [
     {
      "level": 32,
@@ -648226,6 +649062,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 180,
    "learnset": [
     {
      "level": 0,
@@ -648498,6 +649335,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -648808,6 +649646,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 120,
    "learnset": [
     {
      "level": 0,
@@ -649105,6 +649944,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 60,
    "learnset": [
     {
      "level": 0,
@@ -649671,6 +650511,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 235,
    "learnset": [
     {
      "level": 20,
@@ -650004,6 +650845,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 120,
    "learnset": [
     {
      "level": 20,
@@ -650328,6 +651170,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -651035,6 +651878,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 255,
    "learnset": [
     {
      "level": 0,
@@ -651363,6 +652207,7 @@
     "special_defense": 1,
     "speed": 0
    },
+   "capture_rate": 190,
    "learnset": [
     {
      "level": 0,
@@ -652167,6 +653012,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 120,
    "learnset": [
     {
      "level": 0,
@@ -652511,6 +653357,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -653288,6 +654135,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -653754,6 +654602,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 90,
    "learnset": [
     {
      "level": 12,
@@ -654224,6 +655073,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 30,
    "learnset": [
     {
      "level": 1,
@@ -654609,6 +655459,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 45,
@@ -654894,6 +655745,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 90,
    "learnset": [
     {
      "level": 32,
@@ -655644,6 +656496,7 @@
     "special_defense": 1,
     "speed": 0
    },
+   "capture_rate": 200,
    "learnset": [
     {
      "level": 1,
@@ -655841,6 +656694,7 @@
     "special_defense": 2,
     "speed": 0
    },
+   "capture_rate": 100,
    "learnset": [
     {
      "level": 1,
@@ -656428,6 +657282,7 @@
     "special_defense": 2,
     "speed": 0
    },
+   "capture_rate": 75,
    "learnset": [
     {
      "level": 0,
@@ -657293,6 +658148,7 @@
     "special_defense": 1,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -657908,6 +658764,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 75,
    "learnset": [
     {
      "level": 15,
@@ -658259,6 +659116,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 190,
    "learnset": [
     {
      "level": 0,
@@ -658417,6 +659275,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 75,
    "learnset": [
     {
      "level": 0,
@@ -658791,6 +659650,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 60,
    "learnset": [
     {
      "level": 24,
@@ -659145,6 +660005,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 60,
    "learnset": [
     {
      "level": 0,
@@ -659492,6 +660353,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 30,
    "learnset": [
     {
      "level": 0,
@@ -659857,6 +660719,7 @@
     "special_defense": 0,
     "speed": 2
    },
+   "capture_rate": 180,
    "learnset": [
     {
      "level": 0,
@@ -660612,6 +661475,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 190,
    "learnset": [
     {
      "level": 0,
@@ -660984,6 +661848,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 90,
    "learnset": [
     {
      "level": 20,
@@ -661385,6 +662250,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 190,
    "learnset": [
     {
      "level": 1,
@@ -662324,6 +663190,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -662651,6 +663518,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -662963,6 +663831,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 42,
@@ -663265,6 +664134,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -663542,6 +664412,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -663931,6 +664802,7 @@
     "special_defense": 0,
     "speed": 1
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 1,
@@ -664120,6 +664992,7 @@
     "special_defense": 0,
     "speed": 2
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 54,
@@ -664509,6 +665382,7 @@
     "special_defense": 0,
     "speed": 3
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -665248,6 +666122,7 @@
     "special_defense": 0,
     "speed": 3
    },
+   "capture_rate": 10,
    "learnset": [
     {
      "level": 22,
@@ -665627,6 +666502,7 @@
     "special_defense": 0,
     "speed": 3
    },
+   "capture_rate": 10,
    "learnset": [
     {
      "level": 0,
@@ -666043,6 +666919,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 75,
    "learnset": [
     {
      "level": 1,
@@ -667013,6 +667890,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 255,
    "learnset": [
     {
      "level": 0,
@@ -667382,6 +668260,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 3,
    "learnset": [
     {
      "level": 0,
@@ -667704,6 +668583,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 3,
    "learnset": [
     {
      "level": 0,
@@ -668169,6 +669049,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 3,
    "learnset": [
     {
      "level": 0,
@@ -668643,6 +669524,7 @@
     "special_defense": 0,
     "speed": 3
    },
+   "capture_rate": 3,
    "learnset": [
     {
      "level": 0,
@@ -668927,6 +669809,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 3,
    "learnset": [
     {
      "level": 1,
@@ -669211,6 +670094,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 3,
    "learnset": [
     {
      "level": 72,
@@ -669550,6 +670434,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 3,
    "learnset": [
     {
      "level": 18,
@@ -669875,6 +670760,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 3,
    "learnset": [
     {
      "level": 1,
@@ -670302,6 +671188,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 135,
    "learnset": [
     {
      "level": 13,
@@ -671027,6 +671914,7 @@
     "special_defense": 3,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -672478,6 +673366,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 190,
    "learnset": [
     {
      "level": 0,
@@ -673272,6 +674161,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 115,
    "learnset": [
     {
      "level": 25,
@@ -673934,6 +674824,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 75,
    "learnset": [
     {
      "level": 0,
@@ -674406,6 +675297,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 135,
    "learnset": [
     {
      "level": 24,
@@ -675033,6 +675925,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 135,
    "learnset": [
     {
      "level": 0,
@@ -675770,6 +676663,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 135,
    "learnset": [
     {
      "level": 0,
@@ -676466,6 +677360,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 3,
    "learnset": [
     {
      "level": 0,
@@ -676826,6 +677721,7 @@
     "special_defense": 0,
     "speed": 1
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 1,
@@ -677123,6 +678019,7 @@
     "special_defense": 0,
     "speed": 2
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -677426,6 +678323,7 @@
     "special_defense": 0,
     "speed": 3
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -678186,6 +679084,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 1,
@@ -678485,6 +679384,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 60,
    "learnset": [
     {
      "level": 0,
@@ -679150,6 +680050,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 1,
@@ -679433,6 +680334,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 1,
@@ -680098,6 +681000,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 1,
@@ -680345,6 +681248,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 1,
@@ -680613,6 +681517,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 1,
@@ -681299,6 +682204,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 255,
    "learnset": [
     {
      "level": 21,
@@ -681582,6 +682488,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 100,
    "learnset": [
     {
      "level": 23,
@@ -681882,6 +682789,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 255,
    "learnset": [
     {
      "level": 25,
@@ -682164,6 +683072,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 120,
    "learnset": [
     {
      "level": 28,
@@ -682489,6 +683398,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 190,
    "learnset": [
     {
      "level": 11,
@@ -682706,6 +683616,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 190,
    "learnset": [
     {
      "level": 0,
@@ -683694,6 +684605,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 30,
    "learnset": [
     {
      "level": 0,
@@ -684010,6 +684922,7 @@
     "special_defense": 0,
     "speed": 1
    },
+   "capture_rate": 190,
    "learnset": [
     {
      "level": 1,
@@ -684319,6 +685232,7 @@
     "special_defense": 0,
     "speed": 2
    },
+   "capture_rate": 80,
    "learnset": [
     {
      "level": 0,
@@ -684648,6 +685562,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -685064,6 +685979,7 @@
     "special_defense": 0,
     "speed": 1
    },
+   "capture_rate": 150,
    "learnset": [
     {
      "level": 1,
@@ -685387,6 +686303,7 @@
     "special_defense": 0,
     "speed": 2
    },
+   "capture_rate": 75,
    "learnset": [
     {
      "level": 1,
@@ -685947,6 +686864,7 @@
     "special_defense": 0,
     "speed": 1
    },
+   "capture_rate": 190,
    "learnset": [
     {
      "level": 1,
@@ -686254,6 +687172,7 @@
     "special_defense": 0,
     "speed": 2
    },
+   "capture_rate": 90,
    "learnset": [
     {
      "level": 1,
@@ -686555,6 +687474,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 255,
    "learnset": [
     {
      "level": 1,
@@ -686798,6 +687718,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 120,
    "learnset": [
     {
      "level": 1,
@@ -687020,6 +687941,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 90,
    "learnset": [
     {
      "level": 0,
@@ -687993,6 +688915,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 1,
@@ -688295,6 +689218,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 190,
    "learnset": [
     {
      "level": 30,
@@ -688601,6 +689525,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 255,
    "learnset": [
     {
      "level": 16,
@@ -688884,6 +689809,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 120,
    "learnset": [
     {
      "level": 16,
@@ -689172,6 +690098,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -689797,6 +690724,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 90,
    "learnset": [
     {
      "level": 0,
@@ -690006,6 +690934,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 25,
    "learnset": [
     {
      "level": 0,
@@ -690642,6 +691571,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 25,
    "learnset": [
     {
      "level": 37,
@@ -691278,6 +692208,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 190,
    "learnset": [
     {
      "level": 1,
@@ -691546,6 +692477,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 50,
    "learnset": [
     {
      "level": 1,
@@ -692011,6 +692943,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -693548,6 +694481,7 @@
     "special_defense": 0,
     "speed": 1
    },
+   "capture_rate": 180,
    "learnset": [
     {
      "level": 0,
@@ -693852,6 +694786,7 @@
     "special_defense": 0,
     "speed": 2
    },
+   "capture_rate": 90,
    "learnset": [
     {
      "level": 0,
@@ -694148,6 +695083,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 150,
    "learnset": [
     {
      "level": 22,
@@ -694441,6 +695377,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 75,
    "learnset": [
     {
      "level": 22,
@@ -694758,6 +695695,7 @@
     "special_defense": 0,
     "speed": 1
    },
+   "capture_rate": 190,
    "learnset": [
     {
      "level": 1,
@@ -695107,6 +696045,7 @@
     "special_defense": 0,
     "speed": 2
    },
+   "capture_rate": 90,
    "learnset": [
     {
      "level": 1,
@@ -695453,6 +696392,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 190,
    "learnset": [
     {
      "level": 29,
@@ -695741,6 +696681,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 29,
@@ -696036,6 +696977,7 @@
     "special_defense": 1,
     "speed": 0
    },
+   "capture_rate": 190,
    "learnset": [
     {
      "level": 15,
@@ -696403,6 +697345,7 @@
     "special_defense": 2,
     "speed": 0
    },
+   "capture_rate": 90,
    "learnset": [
     {
      "level": 15,
@@ -696745,6 +697688,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 15,
@@ -697858,6 +698802,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 120,
    "learnset": [
     {
      "level": 56,
@@ -698209,6 +699154,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 190,
    "learnset": [
     {
      "level": 24,
@@ -698473,6 +699419,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 75,
    "learnset": [
     {
      "level": 24,
@@ -699023,6 +699970,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 190,
    "learnset": [
     {
      "level": 4,
@@ -699261,6 +700209,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 4,
@@ -699672,6 +700621,7 @@
     "special_defense": 0,
     "speed": 1
    },
+   "capture_rate": 120,
    "learnset": [
     {
      "level": 0,
@@ -699955,6 +700905,7 @@
     "special_defense": 0,
     "speed": 2
    },
+   "capture_rate": 60,
    "learnset": [
     {
      "level": 0,
@@ -700617,6 +701568,7 @@
     "special_defense": 1,
     "speed": 0
    },
+   "capture_rate": 190,
    "learnset": [
     {
      "level": 0,
@@ -700916,6 +701868,7 @@
     "special_defense": 2,
     "speed": 0
    },
+   "capture_rate": 90,
    "learnset": [
     {
      "level": 0,
@@ -701205,6 +702158,7 @@
     "special_defense": 3,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -701746,6 +702700,7 @@
     "special_defense": 1,
     "speed": 0
    },
+   "capture_rate": 190,
    "learnset": [
     {
      "level": 1,
@@ -702859,6 +703814,7 @@
     "special_defense": 0,
     "speed": 1
    },
+   "capture_rate": 255,
    "learnset": [
     {
      "level": 20,
@@ -703117,6 +704073,7 @@
     "special_defense": 0,
     "speed": 2
    },
+   "capture_rate": 50,
    "learnset": [
     {
      "level": 16,
@@ -703379,6 +704336,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 25,
    "learnset": [
     {
      "level": 1,
@@ -703738,6 +704696,7 @@
     "special_defense": 0,
     "speed": 1
    },
+   "capture_rate": 200,
    "learnset": [
     {
      "level": 0,
@@ -704019,6 +704978,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -704680,6 +705640,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 190,
    "learnset": [
     {
      "level": 21,
@@ -704988,6 +705949,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 75,
    "learnset": [
     {
      "level": 21,
@@ -705324,6 +706286,7 @@
     "special_defense": 0,
     "speed": 2
    },
+   "capture_rate": 190,
    "learnset": [
     {
      "level": 1,
@@ -705669,6 +706632,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 25,
    "learnset": [
     {
      "level": 1,
@@ -706170,6 +707134,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 70,
    "learnset": [
     {
      "level": 1,
@@ -706458,6 +707423,7 @@
     "special_defense": 2,
     "speed": 0
    },
+   "capture_rate": 75,
    "learnset": [
     {
      "level": 1,
@@ -707569,6 +708535,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 25,
    "learnset": [
     {
      "level": 0,
@@ -708109,6 +709076,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 120,
    "learnset": [
     {
      "level": 12,
@@ -708451,6 +709419,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 60,
    "learnset": [
     {
      "level": 12,
@@ -709033,6 +710002,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 100,
    "learnset": [
     {
      "level": 0,
@@ -709354,6 +710324,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 150,
    "learnset": [
     {
      "level": 1,
@@ -709672,6 +710643,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 50,
    "learnset": [
     {
      "level": 0,
@@ -709973,6 +710945,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 100,
    "learnset": [
     {
      "level": 1,
@@ -710259,6 +711232,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 25,
    "learnset": [
     {
      "level": 1,
@@ -710555,6 +711529,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 100,
    "learnset": [
     {
      "level": 0,
@@ -710802,6 +711777,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -711613,6 +712589,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 225,
    "learnset": [
     {
      "level": 20,
@@ -712422,6 +713399,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 90,
    "learnset": [
     {
      "level": 16,
@@ -712784,6 +713762,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 14,
@@ -713565,6 +714544,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -714052,6 +715032,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 25,
    "learnset": [
     {
      "level": 1,
@@ -714663,6 +715644,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 60,
    "learnset": [
     {
      "level": 1,
@@ -715449,6 +716431,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 0,
@@ -715702,6 +716685,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 25,
    "learnset": [
     {
      "level": 0,
@@ -715950,6 +716934,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 10,
    "learnset": [
     {
      "level": 0,
@@ -716289,6 +717274,7 @@
     "special_defense": 0,
     "speed": 0
    },
+   "capture_rate": 45,
    "learnset": [
     {
      "level": 1,
