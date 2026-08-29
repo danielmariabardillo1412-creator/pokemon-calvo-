@@ -89,31 +89,34 @@ Informe final de FASE 3: `docs/INFORME_FINAL_FASE3.md`.
 
 ---
 
-# FASE 4 — Importación masiva PokéAPI
+# FASE 4 — Importación masiva PokéAPI (+ QA 4.1)
 
 Fecha de validación: 2026-08-29
 Rama: `feature/pokemon-data-import-v1`
 Motor: `4.7.stable.official.5b4e0cb0f`
-Fuente: PokéAPI `api-data` (commit `784c50b3`, CC-BY-SA 3.0)
+Fuente: PokéAPI `api-data` (SHA completo `784c50b3ad27d0390d3b047fc4c4511f71edd049`, **BSD 3-Clause**)
+IP Pokémon: Nintendo/Creatures/Game Freak (la licencia BSD no otorga derechos sobre esa IP).
 
 ## Resultado
 
 - Importación/editor Godot 4.7: **PASS**, exit 0, sin errores de parseo
 - Ejecución headless: **PASS**, exit 0
-- Tests: **40 PASS / 0 FAIL** (26 pipeline + 12 import masivo + 2 determinismo/round-trip)
+- Tests: **61 PASS / 0 FAIL** (26 FASE 1-3 + 14 import masivo FASE 4 + 21 invariantes QA FASE 4.1)
 - Autoloads: **0** (sin cambios respecto a Foundation)
 - `extends Node` fuera de `tests/`: **0**
-- Referencias rotas: **0** · Rechazados: **0** · Tiempo de import: **832 ms**
+- Referencias rotas: **0** · Rechazados: **0** · Tiempo de import: **~927 ms**
 
 ## Volumen importado
 
 - 986 especies base · 39 formas diferidas · 21 tipos
-- 937 movimientos (SUPPORTED 580 / PARTIAL 348 / UNSUPPORTED 9)
+- 937 movimientos (DATA_READY 937; RUNTIME_SUPPORTED 76 / PARTIAL_RUNTIME 504 / DATA_ONLY 348 / UNSUPPORTED 9)
 - 373 habilidades (DATA_ONLY) · 2222 objetos (DATA_ONLY)
-- 129390 entradas de learnset · 476 evoluciones (SUPPORTED 394 / UNSUPPORTED 90)
+- 129390 entradas de learnset
+- Evoluciones: SOURCE_EDGES 484 · IMPORTED_EDGES 476 · DEFERRED_FORM_EDGES 8 · REJECTED 0
+  - Cobertura importada: SUPPORTED_RUNTIME_OR_MODEL 388 / PARTIAL_RUNTIME 52 / UNSUPPORTED 36 (suma 476)
 - 0 status conditions (ausentes en el commit fijado de la fuente)
 
-## Qué se añadió
+## Qué se añadió / corrigió
 
 - `tools/pokeapi_adapter.py`: lee la fuente api-data y produce raw + manifest + reports.
 - `tools/run_import.gd`: import headless vía `DataImporter` (writes import_summary + normalized).
@@ -123,15 +126,18 @@ Fuente: PokéAPI `api-data` (commit `784c50b3`, CC-BY-SA 3.0)
   `CreatureSpecies`; `damage_class`/`accuracy`/`pp`/`target`/`effect_summary`/`classification`
   en `MoveDefinition`; `effect_summary`/`classification` en `AbilityDefinition`; `method` en
   `LearnSetEntry`; `item_id` en `EvolutionRecord`. `DataImporter` lee los nuevos campos.
-- Corrección: `Catalog.all_ids()` devuelve `Array[StringName]` tipado (elimina SCRIPT ERROR).
-- Docs: `docs/DATA_SOURCES.md`, `docs/MECHANICS_COVERAGE.md`.
+- Corrección FASE 4: `Catalog.all_ids()` devuelve `Array[StringName]` tipado (elimina SCRIPT ERROR).
+- QA FASE 4.1: licencia corregida (BSD 3-Clause), SHA completo en manifest, cobertura de evoluciones
+  recalculada sobre aristas importadas (suma = 476), terminología honesta DATA_READY/RUNTIME_SUPPORTED/
+  PARTIAL_RUNTIME/DATA_ONLY/UNSUPPORTED, e invariantes de métricas en tests.
+- Docs: `docs/DATA_SOURCES.md`, `docs/MECHANICS_COVERAGE.md`, `docs/CODEX_BATTLE_V2_HANDOFF.md`.
 
 ## Listo para Battle Core V2
 
-SÍ. La capa de datos está completa y referencialmente sana; Battle Core V2 puede consumir
-`MoveDefinition`/`AbilityDefinition`/`ItemDefinition` sin nuevo import. NO se modificó el Battle
-existente (StatBlock/DamageCalculator intactos). NO se hizo merge a `main`.
+SÍ. La capa de datos está completa, referencialmente sana y validada por invariantes; Battle Core V2
+puede consumir `MoveDefinition`/`AbilityDefinition`/`ItemDefinition`/`EvolutionRecord` sin nuevo import.
+NO se modificó el Battle existente (StatBlock/DamageCalculator intactos). NO se hizo merge a `main`.
 
-Informe final de FASE 4: `docs/INFORME_FINAL_FASE4.md`.
+Informe final de FASE 4: `docs/INFORME_FINAL_FASE4.md`. Handoff Codex: `docs/CODEX_BATTLE_V2_HANDOFF.md`.
 
 
