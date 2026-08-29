@@ -14,7 +14,10 @@ func has(id: StringName) -> bool:
 	return _entries.has(id)
 
 func all_ids() -> Array[StringName]:
-	return _entries.keys()
+	var out: Array[StringName] = []
+	for k in _entries.keys():
+		out.append(k)
+	return out
 
 func size() -> int:
 	return _entries.size()
