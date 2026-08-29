@@ -70,6 +70,10 @@ func _run_all() -> void:
 	ProgressionTestSuite.new(_import_pokeapi()).run(Callable(self, "_check"))
 	# --- Phase 7: Capture + Party Core V1 ---
 	CapturePartyTestSuite.new().run(Callable(self, "_check"))
+	# --- Phase 8A: Storage Core V1 + capture routing ---
+	StorageTestSuite.new().run(Callable(self, "_check"))
+	# --- Phase 8B: Savegame V1 ---
+	SavegameTestSuite.new().run(Callable(self, "_check"))
 
 
 func _test_priority() -> void:
