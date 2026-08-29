@@ -387,9 +387,17 @@ def main():
                     continue
                 seen.add(key)
                 learnset.append({"level": level, "move_id": msid, "method": method})
+        effort = {}
+        key_map = {"hp": "hp", "attack": "attack", "defense": "defense",
+                   "special-attack": "special_attack", "special-defense": "special_defense",
+                   "speed": "speed"}
+        for s in pk.get("stats", []):
+            effort[key_map.get(s["stat"]["name"], s["stat"]["name"])] = int(s.get("effort") or 0)
         pokemon_by_name[pname] = {
             "types": types_l, "stats": stats, "abilities": abilities_l,
-            "learnset": learnset, "species_name": slug(pk["species"]["name"]),
+            "learnset": learnset, "effort": effort,
+            "base_experience": pk.get("base_experience") or 0,
+            "species_name": slug(pk["species"]["name"]),
         }
     print(f"pokemon entries: {len(pokemon_by_name)}")
 
@@ -455,7 +463,9 @@ def main():
             "base_special_attack": st.get("spatk", 1),
             "base_special_defense": st.get("spdef", 1),
             "ability_ids": pk["abilities"],
-            "base_experience": ps.get("base_experience") or 0,
+            "base_experience": pk.get("base_experience") or 0,
+            "growth_rate": (ps.get("growth_rate") or {}).get("name", "medium"),
+            "ev_yield": pk.get("effort", {}),
             "learnset": pk["learnset"],
             "evolutions": [],
         }
