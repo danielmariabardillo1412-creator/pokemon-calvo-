@@ -40,6 +40,8 @@ func stats_for_level(level: int) -> StatBlock:
 		base_attack + safe_level,
 		base_defense + safe_level,
 		base_speed + safe_level,
+		base_special_attack + safe_level,
+		base_special_defense + safe_level,
 	)
 
 func to_dict() -> Dictionary:
