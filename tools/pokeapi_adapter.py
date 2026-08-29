@@ -19,7 +19,7 @@ OUT_RAW = r"F:\pokemon roma el calvo\pokemon-calvo\data\raw\pokemon_api.json"
 OUT_MANIFEST = r"F:\pokemon roma el calvo\pokemon-calvo\data\manifests\pokemon_api_manifest.json"
 OUT_FORMS = r"F:\pokemon roma el calvo\pokemon-calvo\data\reports\forms_policy_report.json"
 OUT_UNSUPPORTED = r"F:\pokemon roma el calvo\pokemon-calvo\data\reports\unsupported_mechanics.json"
-SOURCE_COMMIT = "784c50b3"
+SOURCE_COMMIT = "784c50b3ad27d0390d3b047fc4c4511f71edd049"
 SOURCE_URL = "https://github.com/PokeAPI/api-data.git"
 
 
@@ -59,19 +59,35 @@ UNSUPPORTED_MOVE_NAMES = {
 
 
 def classify_move(m: dict) -> str:
+    # Honest coverage labels (see docs/MECHANICS_COVERAGE.md):
+    #   RUNTIME_SUPPORTED  -> engine resolves the move (damaging move: power/accuracy/
+    #                         damage_class/STAB/type-effectiveness computed by Foundation V1)
+    #   PARTIAL_RUNTIME    -> damaging move whose SECONDARY effect is not yet implemented
+    #   DATA_ONLY          -> definition imported but no runtime behavior in Foundation V1
+    #                         (status / non-damaging moves)
+    #   UNSUPPORTED        -> gimmick/copy moves the model cannot represent
     dmg = (m.get("damage_class") or {}).get("name")
     power = m.get("power") or 0
-    if slug(m["name"]) in UNSUPPORTED_MOVE_NAMES:
+    sid = slug(m["name"])
+    if sid in UNSUPPORTED_MOVE_NAMES:
         return "UNSUPPORTED"
     if dmg in ("physical", "special") and power and power > 0:
-        return "SUPPORTED"
-    if dmg == "status" or power == 0:
-        return "PARTIAL"
+        effect = en_effect(m.get("effect_entries"))
+        if effect:
+            return "PARTIAL_RUNTIME"
+        return "RUNTIME_SUPPORTED"
     return "DATA_ONLY"
 
 
-def classify_evolution_trigger(trigger_name: str) -> str:
-    return "SUPPORTED" if trigger_name == "level-up" else "UNSUPPORTED"
+def classify_evolution_trigger(trigger_slug: str) -> str:
+    # SUPPORTED_RUNTIME_OR_MODEL -> the data MODEL represents this trigger (min_level stored)
+    # PARTIAL_RUNTIME            -> some data modeled (e.g. item_id for use-item)
+    # UNSUPPORTED                -> trigger the model cannot represent yet
+    if trigger_slug == "level_up":
+        return "SUPPORTED_RUNTIME_OR_MODEL"
+    if trigger_slug == "use_item":
+        return "PARTIAL_RUNTIME"
+    return "UNSUPPORTED"
 
 
 def form_kind(name: str) -> str:
@@ -204,9 +220,8 @@ def main():
         }
     print(f"pokemon entries: {len(pokemon_by_name)}")
 
-    # evolution chains -> per-species evolution records
+    # evolution chains -> per-species evolution records (raw, before forms drop)
     evo_map = defaultdict(list)
-    evo_class = defaultdict(list)
     for i in list_ids("evolution-chain"):
         chain = load_ep("evolution-chain", i)["chain"]
 
@@ -219,15 +234,14 @@ def main():
                 trigger = slug((det.get("trigger") or {}).get("name", "level_up"))
                 item = slug(det["item"]["name"]) if det.get("item") else ""
                 min_level = det.get("min_level") or 0
-                cls = classify_evolution_trigger((det.get("trigger") or {}).get("name", ""))
-                evo_class[cls].append(f"{from_name}->{to_name}")
                 evo_map[from_name].append({
                     "species_id": to_name, "min_level": min_level,
                     "trigger": trigger, "item_id": item,
                 })
                 walk(e)
         walk(chain)
-    print(f"evolution chains: {len(list_ids('evolution-chain'))}  total evo links: {sum(len(v) for v in evo_map.values())}")
+    total_source_evo = sum(len(v) for v in evo_map.values())
+    print(f"evolution chains: {len(list_ids('evolution-chain'))}  total evo links (SOURCE): {total_source_evo}")
 
     # species (apply forms policy: hyphen == form -> deferred)
     species = []
@@ -279,11 +293,22 @@ def main():
                 entry["evolutions"].append(ev)
         imported_species_slugs.add(sname)
         species.append(entry)
-    # second pass: drop evolutions pointing to deferred forms
+    # second pass: drop evolutions pointing to deferred forms, and classify only IMPORTED edges
     deferred_targets = {f["id"] for f in deferred_forms}
+    imported_evo_class = defaultdict(list)
+    retained_evo = 0
     for sp in species:
-        sp["evolutions"] = [ev for ev in sp["evolutions"] if ev["species_id"] not in deferred_targets]
-    print(f"species (imported): {len(species)}  forms deferred: {len(deferred_forms)}")
+        kept = []
+        for ev in sp["evolutions"]:
+            if ev["species_id"] in deferred_targets:
+                continue
+            kept.append(ev)
+            retained_evo += 1
+            cls = classify_evolution_trigger(ev["trigger"])
+            imported_evo_class[cls].append(f"{sp['id']}->{ev['species_id']}")
+        sp["evolutions"] = kept
+    deferred_evo = total_source_evo - retained_evo
+    print(f"species (imported): {len(species)}  forms deferred: {len(deferred_forms)}  evo IMPORTED: {retained_evo}  DEFERRED: {deferred_evo}")
 
     raw = {
         "types": types,
@@ -306,10 +331,11 @@ def main():
         "ruleset": "foundation_v1",
         "provenance": {
             "source_name": "PokeAPI/api-data",
-            "source_version": "regenerated from PokeAPI#1629",
+            "source_version": SOURCE_COMMIT,
             "source_commit": SOURCE_COMMIT,
+            "source_commit_short": "784c50b3",
             "source_url": SOURCE_URL,
-            "license": "PokeAPI data license (see https://github.com/PokeAPI/api-data/blob/master/LICENSE.txt); derived Pokemon data is not affiliated with Nintendo/Creatures/Game Freak.",
+            "license": "BSD 3-Clause (see LICENSE.txt in PokeAPI/api-data). Pokemon character/name/design IP is owned by Nintendo/Creatures/Game Freak; this dataset reuses factual game data under the source's BSD 3-Clause license and is not affiliated with or endorsed by Nintendo/Creatures/Game Freak.",
             "import_date": "2026-08-29",
             "schema_version": 1,
         },
@@ -328,11 +354,40 @@ def main():
         json.dump(forms_report, f, ensure_ascii=False, indent=1)
 
     unsupported = {
+        "summary": {
+            "moves": {
+                "DATA_READY": len(moves),
+                "RUNTIME_SUPPORTED": len(move_class.get("RUNTIME_SUPPORTED", [])),
+                "PARTIAL_RUNTIME": len(move_class.get("PARTIAL_RUNTIME", [])),
+                "DATA_ONLY": len(move_class.get("DATA_ONLY", [])),
+                "UNSUPPORTED": len(move_class.get("UNSUPPORTED", [])),
+            },
+            "abilities": {"DATA_READY": len(abilities), "DATA_ONLY": len(abilities)},
+            "items": {"DATA_READY": len(items), "DATA_ONLY": len(items)},
+            "evolutions": {
+                "SOURCE_EDGES": total_source_evo,
+                "IMPORTED_EDGES": retained_evo,
+                "DEFERRED_FORM_EDGES": deferred_evo,
+                "REJECTED_EDGES": 0,
+                "SUPPORTED_RUNTIME_OR_MODEL": len(imported_evo_class.get("SUPPORTED_RUNTIME_OR_MODEL", [])),
+                "PARTIAL_RUNTIME": len(imported_evo_class.get("PARTIAL_RUNTIME", [])),
+                "UNSUPPORTED": len(imported_evo_class.get("UNSUPPORTED", [])),
+            },
+        },
         "moves": {k: sorted(v) for k, v in move_class.items()},
         "abilities": {"DATA_ONLY": sorted([a["id"] for a in abilities])},
-        "evolutions": {k: sorted(v) for k, v in evo_class.items()},
-        "forms": {"deferred_total": len(deferred_forms)},
-        "statuses": {"DATA_ONLY": sorted([s["id"] for s in statuses])},
+        "items": {"DATA_ONLY": sorted([it["id"] for it in items])},
+        "evolutions": {
+            "SOURCE_EDGES": total_source_evo,
+            "IMPORTED_EDGES": retained_evo,
+            "DEFERRED_FORM_EDGES": deferred_evo,
+            "REJECTED_EDGES": 0,
+            "SUPPORTED_RUNTIME_OR_MODEL": sorted(imported_evo_class.get("SUPPORTED_RUNTIME_OR_MODEL", [])),
+            "PARTIAL_RUNTIME": sorted(imported_evo_class.get("PARTIAL_RUNTIME", [])),
+            "UNSUPPORTED": sorted(imported_evo_class.get("UNSUPPORTED", [])),
+        },
+        "forms": {"deferred_total": len(deferred_forms), "deferred": deferred_forms},
+        "statuses": {"DATA_READY": len(statuses), "DATA_ONLY": sorted([s["id"] for s in statuses])},
         "other": {},
     }
     with open(OUT_UNSUPPORTED, "w", encoding="utf-8") as f:
