@@ -78,9 +78,9 @@ static func evolution_candidates(
 	return out
 
 
-# Apply an evolution, returning a NEW CreatureInstance that keeps identity and
-# persistent progression data (instance_id, level, experience, IVs, EVs, nature_id,
-# moveset, current_hp ratio, status). Stats are recomputed from the target species.
+# Apply an evolution, returning a NEW CreatureInstance that keeps identity and persistent data.
+# Callers that own the creature in Party/Storage must replace the old object behind the SAME stable
+# instance_id; the aggregate helper PlayerCollection.replace_owned_same_identity does that safely.
 static func apply_evolution(
 	creature: CreatureInstance,
 	target_species_id: StringName,
@@ -102,11 +102,19 @@ static func apply_evolution(
 	new_creature.evs = creature.evs.duplicate()
 	new_creature.nature_id = creature.nature_id
 	new_creature.friendship = creature.friendship
-	# Preserve moveset (move ids + persistent PP) where the move is still learnable/valid.
+	new_creature.status_ids = creature.status_ids.duplicate()
+	new_creature.held_item_id = creature.held_item_id
+	new_creature.held_item_consumed = creature.held_item_consumed
+
+	# Preserve moveset AND the parallel move_ids index. Keeping only BattleMoveSlot values would make
+	# later serialization/queries disagree about which moves the evolved creature owns.
 	new_creature.moveset.clear()
+	new_creature.move_ids.clear()
 	for slot in creature.moveset:
 		var ms := slot as BattleMoveSlot
 		new_creature.moveset.append(BattleMoveSlot.new(ms.move_id, ms.max_pp, ms.current_pp))
+		new_creature.move_ids.append(ms.move_id)
+
 	# Ability: keep the old ability id if the new species also has it, else first ability.
 	if target.ability_ids.has(creature.ability_id):
 		new_creature.ability_id = creature.ability_id
@@ -115,7 +123,7 @@ static func apply_evolution(
 	# Recompute stats from the new species base.
 	var base := target.base_stat_block()
 	new_creature.stats = StatCalculator.compute(base, new_creature.ivs, new_creature.evs, new_creature.nature_id, new_creature.level)
-	# Preserve HP ratio (clamp to new max).
+	# Preserve current HP conservatively, clamped to the new maximum.
 	new_creature.current_hp = mini(creature.current_hp, new_creature.stats.max_hp)
 	new_creature.stat_stages = StatStages.from_dict(creature.stat_stages.to_dict()) if creature.stat_stages != null else StatStages.new()
 	new_creature.status_state = BattleStatusState.from_dict(creature.status_state.to_dict()) if creature.status_state != null else BattleStatusState.new()
