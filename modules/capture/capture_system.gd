@@ -30,7 +30,7 @@ static func resolve(
 		"target_id": String(target_id),
 	}))
 
-	var invalid_reason := _validate(attempt, catalogs)
+	var invalid_reason := validate_attempt(attempt, catalogs)
 	if invalid_reason != "":
 		var r := CaptureResult.new()
 		r.status = CaptureResult.INVALID
@@ -98,7 +98,10 @@ static func resolve(
 	return res
 
 
-static func _validate(attempt: CaptureAttempt, catalogs) -> String:
+# Public validation contract for application services that must check prerequisites (for example,
+# inventory ownership) before any RNG is consumed or party state is mutated. It is the same
+# validation path used by resolve(), so callers do not duplicate capture rules.
+static func validate_attempt(attempt: CaptureAttempt, catalogs) -> String:
 	if attempt == null or attempt.target == null:
 		return "invalid_target"
 	if attempt.context == null:
