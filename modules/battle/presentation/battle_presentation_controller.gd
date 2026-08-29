@@ -103,15 +103,26 @@ func submit_player_move(move_id: StringName) -> Array[BattleEvent]:
 		_append_log("That move is not currently usable.")
 		return empty
 
+	# Derive participant IDs from the live authoritative state instead of baking side_a/side_b
+	# into the presentation layer. WildAdventureSession happens to use those IDs today, but the UI
+	# should depend on ownership, not on a naming convention.
+	var player_side := state.side_for_creature(actor.instance_id)
+	var opponent_side := state.side_for_creature(target.instance_id)
+	if player_side == null or opponent_side == null:
+		_append_log("Battle ownership is incomplete.")
+		return empty
+
 	var player_action := BattleAction.new(
 		state.turn + 1,
 		actor.instance_id,
 		move_id,
 		target.instance_id,
 		BattleAction.MOVE,
-		&"side_a",
+		player_side.side_id,
 	)
-	var opponent_action := SimpleBattleOpponentPolicy.choose_move_action(state, &"side_b", catalogs)
+	var opponent_action := SimpleBattleOpponentPolicy.choose_move_action(
+		state, opponent_side.side_id, catalogs
+	)
 	if opponent_action == null:
 		_append_log("Opponent has no supported usable action.")
 		return empty
@@ -179,7 +190,7 @@ func _refresh_view() -> void:
 		_set_moves_enabled(false)
 		return
 
-	_turn_label.text = "Turn %d" % (state.turn + 1)
+	_turn_label.text = "Battle finished" if state.phase == BattleState.FINISHED else "Turn %d" % (state.turn + 1)
 	_player_label.text = "%s  Lv.%d   HP %d/%d" % [
 		String(player_creature.species_id),
 		player_creature.level,
@@ -201,11 +212,11 @@ func _refresh_view() -> void:
 	for i in _move_buttons.size():
 		var button := _move_buttons[i]
 		if i < ids.size():
-			var move_id := ids[i]
-			var slot := player_creature.move_slot(move_id)
-			button.text = "%s  PP %d/%d" % [String(move_id), slot.current_pp, slot.max_pp]
+			var current_move_id := ids[i]
+			var current_slot := player_creature.move_slot(current_move_id)
+			button.text = "%s  PP %d/%d" % [String(current_move_id), current_slot.current_pp, current_slot.max_pp]
 			button.visible = true
-			button.disabled = false
+			button.disabled = state.phase != BattleState.WAITING_FOR_ACTIONS
 		else:
 			button.text = "-"
 			button.visible = false
