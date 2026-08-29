@@ -1,3 +1,12 @@
+# Godot cache and transient files
 .godot/
 *.tmp
+*.bak
+*.log
 
+# Local-only Pokemon/reference libraries. These currently live beside the
+# repository; the anchored rules also protect the repo if they are copied in.
+/POKEMON_DATA_LIBRARY/
+/POKEMON_REFERENCIAS/
+/Project-Uranium-Godot-v4/
+/Project-Uranium-Godot-master/
