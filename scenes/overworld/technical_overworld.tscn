@@ -1,0 +1,97 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://scenes/overworld/technical_overworld.gd" id="1_root"]
+[ext_resource type="Script" path="res://modules/overworld/overworld_player.gd" id="2_player"]
+[ext_resource type="Script" path="res://modules/overworld/overworld_encounter_zone.gd" id="3_zone"]
+
+[sub_resource type="RectangleShape2D" id="Rectangle_player"]
+size = Vector2(20, 20)
+
+[sub_resource type="RectangleShape2D" id="Rectangle_wall_vertical"]
+size = Vector2(32, 128)
+
+[sub_resource type="RectangleShape2D" id="Rectangle_wall_border"]
+size = Vector2(640, 24)
+
+[sub_resource type="RectangleShape2D" id="Rectangle_grass"]
+size = Vector2(192, 160)
+
+[node name="TechnicalOverworld" type="Node2D"]
+script = ExtResource("1_root")
+
+[node name="Background" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(0, 0, 640, 0, 640, 360, 0, 360)
+color = Color(0.18, 0.2, 0.22, 1)
+
+[node name="EncounterZone" type="Area2D" parent="." groups=["encounter_zones"]]
+position = Vector2(480, 180)
+collision_layer = 2
+collision_mask = 1
+script = ExtResource("3_zone")
+zone_id = &"technical_grass"
+
+[node name="Visual" type="Polygon2D" parent="EncounterZone"]
+polygon = PackedVector2Array(-96, -80, 96, -80, 96, 80, -96, 80)
+color = Color(0.19, 0.42, 0.24, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EncounterZone"]
+shape = SubResource("Rectangle_grass")
+
+[node name="CenterObstacle" type="StaticBody2D" parent="."]
+position = Vector2(272, 180)
+collision_layer = 1
+collision_mask = 1
+
+[node name="Visual" type="Polygon2D" parent="CenterObstacle"]
+polygon = PackedVector2Array(-16, -64, 16, -64, 16, 64, -16, 64)
+color = Color(0.43, 0.32, 0.24, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CenterObstacle"]
+shape = SubResource("Rectangle_wall_vertical")
+
+[node name="TopWall" type="StaticBody2D" parent="."]
+position = Vector2(320, 12)
+collision_layer = 1
+collision_mask = 1
+
+[node name="Visual" type="Polygon2D" parent="TopWall"]
+polygon = PackedVector2Array(-320, -12, 320, -12, 320, 12, -320, 12)
+color = Color(0.34, 0.34, 0.36, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TopWall"]
+shape = SubResource("Rectangle_wall_border")
+
+[node name="BottomWall" type="StaticBody2D" parent="."]
+position = Vector2(320, 348)
+collision_layer = 1
+collision_mask = 1
+
+[node name="Visual" type="Polygon2D" parent="BottomWall"]
+polygon = PackedVector2Array(-320, -12, 320, -12, 320, 12, -320, 12)
+color = Color(0.34, 0.34, 0.36, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BottomWall"]
+shape = SubResource("Rectangle_wall_border")
+
+[node name="Player" type="CharacterBody2D" parent="."]
+position = Vector2(96, 180)
+collision_layer = 1
+collision_mask = 1
+script = ExtResource("2_player")
+
+[node name="Visual" type="Polygon2D" parent="Player"]
+polygon = PackedVector2Array(0, -12, 10, -2, 8, 10, -8, 10, -10, -2)
+color = Color(0.85, 0.76, 0.46, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
+shape = SubResource("Rectangle_player")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="StatusLabel" type="Label" parent="CanvasLayer"]
+offset_left = 12.0
+offset_top = 12.0
+offset_right = 628.0
+offset_bottom = 58.0
+text = "Loading technical overworld..."
+autowrap_mode = 2

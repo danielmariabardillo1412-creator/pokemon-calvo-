@@ -1,16 +1,18 @@
-; Foundation V1 - Godot 4.7
+; Pokemon Calvo - Godot 4.7
 config_version=5
 
 [application]
 
-config/name="Pokemon Calvo Foundation"
-run/main_scene="res://tests/test_runner.tscn"
+config/name="Pokemon Calvo"
+run/main_scene="res://scenes/overworld/technical_overworld.tscn"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 
 [display]
 
 window/size/viewport_width=640
 window/size/viewport_height=360
+window/size/window_width_override=1280
+window/size/window_height_override=720
 
 [rendering]
 
