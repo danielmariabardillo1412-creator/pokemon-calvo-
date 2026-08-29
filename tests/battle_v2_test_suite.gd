@@ -35,6 +35,7 @@ func run(check_callback: Callable) -> void:
 	_test_intimidate()
 	_test_levitate()
 	_test_blaze()
+	_test_other_pinch_abilities()
 	_test_static()
 	_test_leftovers_and_sitrus()
 	_test_switching()
@@ -47,6 +48,7 @@ func run(check_callback: Callable) -> void:
 	_test_semantic_events()
 	_test_golden_damage_scenario()
 	_test_golden_status_scenario()
+	_test_runtime_coverage_contract()
 
 
 func _test_phase_order() -> void:
@@ -386,6 +388,15 @@ func _test_blaze() -> void:
 	)
 
 
+func _test_other_pinch_abilities() -> void:
+	_expect("v2_ability_torrent", _pinch_ability_works(
+		&"torrent", &"water_gun", &"squirtle", &"charmander"
+	))
+	_expect("v2_ability_overgrow", _pinch_ability_works(
+		&"overgrow", &"mega_drain", &"bulbasaur", &"squirtle"
+	))
+
+
 func _test_static() -> void:
 	var found := false
 	for seed in range(1, 300):
@@ -570,6 +581,35 @@ func _test_golden_status_scenario() -> void:
 	])
 
 
+func _test_runtime_coverage_contract() -> void:
+	var file := FileAccess.open("res://data/battle/runtime_coverage_v2.json", FileAccess.READ)
+	var coverage: Dictionary = JSON.parse_string(file.get_as_text())
+	file.close()
+	var registry := BattleEffectRegistry.new()
+	var move_ids := _string_names_to_strings(registry.runtime_supported_move_ids())
+	var ability_ids := _string_names_to_strings(registry.runtime_supported_ability_ids())
+	var item_ids := _string_names_to_strings(registry.runtime_supported_item_ids())
+	_expect(
+		"v2_move_coverage_contract",
+		coverage.moves.RUNTIME_SUPPORTED == 91
+		and coverage.moves.RUNTIME_SUPPORTED + coverage.moves.PARTIAL_RUNTIME
+		+ coverage.moves.DATA_ONLY + coverage.moves.UNSUPPORTED == coverage.moves.DATA_READY
+		and move_ids == coverage.moves.newly_runtime_supported,
+	)
+	_expect(
+		"v2_ability_coverage_contract",
+		coverage.abilities.RUNTIME_SUPPORTED == 6
+		and coverage.abilities.RUNTIME_SUPPORTED + coverage.abilities.DATA_ONLY == coverage.abilities.DATA_READY
+		and ability_ids == coverage.abilities.runtime_supported,
+	)
+	_expect(
+		"v2_item_coverage_contract",
+		coverage.items.RUNTIME_SUPPORTED == 2
+		and coverage.items.RUNTIME_SUPPORTED + coverage.items.DATA_ONLY == coverage.items.DATA_READY
+		and item_ids == coverage.items.runtime_supported,
+	)
+
+
 func _server(
 	seed: int,
 	moves_a: Array[StringName],
@@ -683,6 +723,32 @@ func _move_can_apply_status(
 		if server.state.creature(&"b").status_state.persistent_id == status_id:
 			return true
 	return false
+
+
+func _pinch_ability_works(
+	ability_id: StringName,
+	move_id: StringName,
+	attacker_species: StringName,
+	target_species: StringName,
+) -> bool:
+	var boosted := _server(43, [move_id], [&"idle"], attacker_species, target_species)
+	boosted.state.creature(&"a").ability_id = ability_id
+	boosted.state.creature(&"a").current_hp = boosted.state.creature(&"a").stats.max_hp / 3
+	var boosted_events := boosted.submit_turn(_move_actions(boosted.state, move_id, &"idle"))
+	var plain := _server(43, [move_id], [&"idle"], attacker_species, target_species)
+	plain.state.creature(&"a").current_hp = plain.state.creature(&"a").stats.max_hp / 3
+	var plain_events := plain.submit_turn(_move_actions(plain.state, move_id, &"idle"))
+	return (
+		_damage_amount(boosted_events) > _damage_amount(plain_events)
+		and _source_triggered(boosted_events, BattleEvent.ABILITY_TRIGGERED, String(ability_id))
+	)
+
+
+func _string_names_to_strings(values: Array[StringName]) -> Array[String]:
+	var result: Array[String] = []
+	for value in values:
+		result.append(String(value))
+	return result
 
 
 func _event_index(events: Array[BattleEvent], target: BattleEvent) -> int:
