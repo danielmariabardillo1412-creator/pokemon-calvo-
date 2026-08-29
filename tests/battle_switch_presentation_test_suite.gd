@@ -238,7 +238,7 @@ func _test_forced_switch_after_retaliation_refreshes_presentation(tree: SceneTre
 	_check.call("bsp_forced_outgoing_ko", outgoing.is_knocked_out())
 	_check.call("bsp_forced_active_replacement", session.player_active() == replacement)
 	_check.call("bsp_forced_event", switched != null and bool(switched.metadata.get("forced", false)) and switched.actor_id == outgoing.instance_id and switched.target_id == replacement.instance_id)
-	_check.call("bsp_forced_battle_continues", session.has_active_battle() and session.status == WildAdventureSession.ACTIVE)
+	_check.call("bsp_forced_battle_continues", session.has_active_battle() and session.status == WildAdventureSession.BATTLE_ACTIVE)
 	_check.call("bsp_forced_display_refresh", controller.displayed_player_hp() == replacement.current_hp)
 	_check.call("bsp_forced_no_ko_choice", controller.available_switch_instance_ids().is_empty() and controller.switch_option_count() == 0)
 	controller.queue_free()
