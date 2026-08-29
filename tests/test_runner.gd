@@ -66,6 +66,8 @@ func _run_all() -> void:
 	_test_pokeapi_effect_specs_integrity()
 	# --- Battle Core V2 ---
 	BattleV2TestSuite.new(_import_pokeapi()).run(Callable(self, "_check"))
+	# --- Phase 6: Progression Core V1 ---
+	ProgressionTestSuite.new(_import_pokeapi()).run(Callable(self, "_check"))
 
 
 func _test_priority() -> void:
