@@ -241,6 +241,7 @@ func _test_technical_scene_capture_flow(tree: SceneTree) -> void:
 	var player := scene.get_node("Player") as OverworldPlayer
 	var zone := scene.get_node("EncounterZone") as OverworldEncounterZone
 	var controller := scene.get_node("CanvasLayer/BattlePresentation") as BattlePresentationController
+	var party_before := int(scene.call("demo_party_size"))
 	_check.call("bcp_scene_controller", controller != null)
 	if player != null and zone != null and controller != null:
 		_check.call("bcp_scene_demo_inventory", scene.call("demo_inventory_quantity", &"poke_ball") == 3 and scene.call("demo_inventory_quantity", &"master_ball") == 1)
@@ -255,7 +256,7 @@ func _test_technical_scene_capture_flow(tree: SceneTree) -> void:
 		var wild_id := wild.instance_id if wild != null else &""
 		var result := controller.submit_capture_ball(&"master_ball")
 		_check.call("bcp_scene_capture_success", result.succeeded() and result.session_completed)
-		_check.call("bcp_scene_party_received", wild_id != &"" and controller.session.player.party.contains_instance_id(wild_id) and scene.call("demo_party_size") == 2)
+		_check.call("bcp_scene_party_received", wild_id != &"" and controller.session.player.party.contains_instance_id(wild_id) and scene.call("demo_party_size") == party_before + 1)
 		_check.call("bcp_scene_still_frozen_until_confirm", not player.movement_enabled and controller.visible)
 		_check.call("bcp_scene_continue", controller.continue_after_completion())
 		_check.call("bcp_scene_overworld_resumed", player.movement_enabled and not controller.visible and not scene.call("has_active_demo_battle"))
