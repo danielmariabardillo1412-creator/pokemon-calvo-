@@ -91,20 +91,39 @@ func to_dict() -> Dictionary:
 # returned with an empty bag and an explicit reason so callers can reject the payload transactionally.
 static func from_dict(d: Dictionary) -> PlayerInventory:
 	var inv := PlayerInventory.new()
-	var version := int(d.get("schema_version", 0))
+
+	# Validate untrusted metadata before casting. This method is used by savegame validation, so a
+	# hostile but parseable JSON payload must become a corrupt inventory, never a runtime type error.
+	var raw_version: Variant = d.get("schema_version", null)
+	if raw_version == null:
+		return _corrupt(inv, "missing_schema")
+	if not (raw_version is int or raw_version is float):
+		return _corrupt(inv, "invalid_schema_type")
+	var version := int(raw_version)
+	if float(version) != float(raw_version) or version <= 0:
+		return _corrupt(inv, "invalid_schema_value")
 	if version != InventoryRuleset.SCHEMA_VERSION:
-		return _corrupt(inv, "unsupported_schema" if version > 0 else "missing_schema")
-	var ruleset_id := StringName(d.get("ruleset_id", ""))
+		return _corrupt(inv, "unsupported_schema")
+
+	var raw_ruleset: Variant = d.get("ruleset_id", null)
+	if raw_ruleset == null:
+		return _corrupt(inv, "missing_ruleset_id")
+	if not (raw_ruleset is String or raw_ruleset is StringName):
+		return _corrupt(inv, "invalid_ruleset_type")
+	var ruleset_id := StringName(raw_ruleset)
 	if ruleset_id == &"":
 		return _corrupt(inv, "missing_ruleset_id")
 	if ruleset_id != InventoryRuleset.ID:
 		return _corrupt(inv, "unsupported_ruleset")
+
 	var raw_quantities: Variant = d.get("quantities", null)
 	if not (raw_quantities is Dictionary):
 		return _corrupt(inv, "invalid_quantities_type")
 
 	var staged := {}
 	for raw_id in (raw_quantities as Dictionary).keys():
+		if not (raw_id is String or raw_id is StringName):
+			return _corrupt(inv, "invalid_item_id_type")
 		var item_id := StringName(raw_id)
 		if not InventoryRuleset.is_valid_item_id(item_id):
 			return _corrupt(inv, "empty_item_id")
