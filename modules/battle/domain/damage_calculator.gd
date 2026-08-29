@@ -14,10 +14,11 @@ func calculate(
 	var attacker_species := catalog.species(attacker.species_id)
 	var defender_species := catalog.species(defender.species_id)
 	assert(attacker_species != null and defender_species != null, "Battle creature species must exist")
-	var stab_bp := 15000 if attacker_species.primary_type_id == move.type_id else 10000
-	var effectiveness_bp := int(round(catalog.type_multiplier(
-		move.type_id, defender_species.primary_type_id
-	) * 10000.0))
+	var stab_bp := 15000 if attacker_species.has_type(move.type_id) else 10000
+	var eff := 1.0
+	for defender_type_id in defender_species.type_ids_resolved():
+		eff *= catalog.type(move.type_id).multiplier_against(defender_type_id)
+	var effectiveness_bp := int(round(eff * 10000.0))
 	var random_bp := rng.damage_factor_basis_points()
 	var level_term: int = (2 * attacker.level) / 5 + 2
 	var base_damage: int = (
