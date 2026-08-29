@@ -85,3 +85,5 @@ No se importa PokéAPI ni datos masivos; no se crea UI de importación; no se me
 en `main`. El pipeline ya está listo para alimentar importación masiva cuando se
 autorice (mismo `DataImporter`, distinta fuente cruda).
 
+Informe final de FASE 3: `docs/INFORME_FINAL_FASE3.md`.
+
