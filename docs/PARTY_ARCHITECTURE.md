@@ -6,9 +6,10 @@ serialización estable. Sin UI, sin Nodes, sin autoload.
 
 ## Archivos
 
-- `party_ruleset.gd` — `PartyRuleset` (RefCounted): reglas centralizadas.
+- `party_ruleset.gd` — `PartyRuleset` (RefCounted): ÚNICA fuente de verdad del límite de roster.
   - `MAX_PARTY = 6`, `SCHEMA_VERSION = 2`, `RULESET_ID = &"calvo_party_v1"`.
   - `is_valid()` valida el diccionario serializado (tamaño ≤ 6, ids únicos).
+  - `CaptureRuleset.MAX_PARTY` fue eliminado en el hotfix: el límite 6 vive solo aquí.
 - `creature_party.gd` — `CreatureParty` (RefCounted): estado de la party.
   - `_order: Array[StringName]` (orden) + `_by_id: Dictionary` (instancias).
   - `add_creature(c)` / `remove_creature(instance_id)` / `swap(a, b)` / `reorder(ids)`.
@@ -22,7 +23,13 @@ serialización estable. Sin UI, sin Nodes, sin autoload.
 
 - La party NO crea, recalcula ni rerolla criaturas; solo las contiene.
 - `add_creature` rechaza (false) si ya existe el `instance_id` o si está llena.
-- `reorder` requiere el conjunto exacto de ids actuales (rechaza subconjuntos/extras).
+- `reorder(ids)` requiere una PERMUTACIÓN EXACTA del roster actual: mismo número de elementos, sin
+  `instance_id` duplicado, sin id desconocido, sin id ausente. Cualquier otra entrada (p.ej.
+  `[A,B,C,A]`, `[A,A,B]`, `[A,B]`, `[A,B,D]`) devuelve `false` y NO modifica `_order`.
+- `from_dict` es defensivo: preserva la primera aparición válida de cada `ordered_instance_ids`,
+  ignora duplicados posteriores e ids inexistentes, añade después las criaturas válidas ausentes del
+  order, respeta `MAX_PARTY`, y nunca duplica `instance_id`. Invariante reconstruida:
+  `_order.size() == _by_id.size()` y cada id de `_order` existe exactamente una vez en `_by_id`.
 - Round-trip: `from_dict(to_dict(p)).get_ordered_ids() == p.get_ordered_ids()` y cada criatura
   preserva species/level/ivs/nature/ability/moveset/PP.
 

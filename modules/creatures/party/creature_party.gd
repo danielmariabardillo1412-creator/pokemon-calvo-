@@ -55,16 +55,18 @@ func swap(id_a: StringName, id_b: StringName) -> bool:
 	return true
 
 
-# Reorder the whole roster. The provided ids must be exactly the current set (no add/remove).
+# Reorder the whole roster. The provided ids must be an EXACT permutation of the current set:
+# same count, no duplicate instance_id, no unknown id, no missing id.
 func reorder(ordered_ids: Array[StringName]) -> bool:
-	var expected := {}
-	for id in ordered_ids:
-		expected[id] = true
-	if expected.size() != _by_id.size():
+	if ordered_ids.size() != _by_id.size():
 		return false
-	for id in _by_id.keys():
-		if not expected.has(id):
-			return false
+	var seen := {}
+	for id in ordered_ids:
+		if seen.has(id):
+			return false  # duplicate instance_id -> not a permutation
+		if not _by_id.has(id):
+			return false  # unknown id -> not the current set
+		seen[id] = true
 	_order = ordered_ids.duplicate()
 	return true
 
@@ -130,19 +132,27 @@ static func from_dict(d: Dictionary, party_ruleset: PartyRuleset = null) -> Crea
 	for cd in d.get("creatures", []):
 		var c := CreatureInstance.from_dict(cd)
 		by_id[c.instance_id] = c
+	# Defensive deserialization:
+	# - preserve first valid occurrence of each ordered id;
+	# - ignore later duplicates and any id not present in `creatures`;
+	# - then append any creature missing from the order (in dict order).
 	var order: Array[StringName] = []
+	var seen: Dictionary = {}
 	for sid in d.get("ordered_instance_ids", []):
 		var s := StringName(sid)
-		if by_id.has(s):
+		if by_id.has(s) and not seen.has(s):
 			order.append(s)
+			seen[s] = true
 	for cid in by_id.keys():
-		if not order.has(cid):
+		if not seen.has(cid):
 			order.append(cid)
+			seen[cid] = true
 	# Defensive: never exceed the roster limit even if data is corrupt.
 	while order.size() > pr.MAX_PARTY:
 		var extra := order[order.size() - 1]
 		order.pop_back()
 		by_id.erase(extra)
+	# Invariant: every ordered id exists exactly once and _order.size() == _by_id.size().
 	p._order = order
 	p._by_id = by_id
 	return p
