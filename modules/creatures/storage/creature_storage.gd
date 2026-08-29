@@ -102,6 +102,18 @@ func add_creature(creature: CreatureInstance) -> bool:
 	return (_boxes[free.box_index] as StorageBox).insert_at(free.slot, creature)
 
 
+# Replace the object occupying an existing identity while preserving exact box/slot location.
+# Used by evolution because EvolutionSystem returns a new object with the same instance_id.
+func replace_same_identity(creature: CreatureInstance) -> bool:
+	if creature == null or creature.instance_id == &"":
+		return false
+	var loc := locate(creature.instance_id)
+	if loc.is_empty():
+		return false
+	var box := _boxes[loc.box_index] as StorageBox
+	return box.set_slot(loc.slot, creature)
+
+
 func remove_creature(instance_id: StringName) -> bool:
 	var loc := locate(instance_id)
 	if loc.is_empty():

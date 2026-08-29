@@ -41,10 +41,37 @@ func withdraw(instance_id: StringName) -> bool:
 	return true
 
 
-# Convenience: which creature container currently owns the instance (or null).
+# Return the currently owned object regardless of whether it lives in Party or Storage.
+# If ownership is corrupt (same id in both), return null so callers cannot silently pick one copy.
+func owned_creature(instance_id: StringName) -> CreatureInstance:
+	var in_party := party.contains_instance_id(instance_id)
+	var in_storage := storage.contains_instance_id(instance_id)
+	if in_party == in_storage:
+		return null
+	return party.get_creature(instance_id) if in_party else storage.get_creature(instance_id)
+
+
+# EvolutionSystem intentionally returns a NEW CreatureInstance with the SAME instance_id. Replace
+# the object in exactly the container that owns that identity while preserving Party order or the
+# exact Storage box/slot. Refuse missing ownership or double-ownership instead of guessing.
+func replace_owned_same_identity(creature: CreatureInstance) -> bool:
+	if creature == null or creature.instance_id == &"":
+		return false
+	var in_party := party.contains_instance_id(creature.instance_id)
+	var in_storage := storage.contains_instance_id(creature.instance_id)
+	if in_party == in_storage:
+		return false
+	if in_party:
+		return party.replace_same_identity(creature)
+	return storage.replace_same_identity(creature)
+
+
+# Convenience: which creature container currently owns the instance (or empty).
 func location_of(instance_id: StringName) -> StringName:
-	if party.contains_instance_id(instance_id):
+	var in_party := party.contains_instance_id(instance_id)
+	var in_storage := storage.contains_instance_id(instance_id)
+	if in_party and not in_storage:
 		return &"PARTY"
-	if storage.contains_instance_id(instance_id):
+	if in_storage and not in_party:
 		return &"STORAGE"
 	return &""

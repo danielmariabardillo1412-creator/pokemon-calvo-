@@ -33,10 +33,11 @@ func creature_at(slot: int) -> CreatureInstance:
 	return _slots[slot] as CreatureInstance
 
 
-func set_slot(slot: int, creature: CreatureInstance) -> void:
+func set_slot(slot: int, creature: CreatureInstance) -> bool:
 	if slot < 0 or slot >= _slots.size():
-		return
+		return false
 	_slots[slot] = creature
+	return true
 
 
 func insert_at(slot: int, creature: CreatureInstance) -> bool:

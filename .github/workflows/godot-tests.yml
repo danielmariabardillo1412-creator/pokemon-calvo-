@@ -135,6 +135,20 @@ jobs:
           fi
           echo "Wild encounter phase gate satisfied: $pass_count PASS / 0 FAIL"
 
+      - name: Run logical vertical slice suite
+        shell: bash
+        run: |
+          set -euo pipefail
+          godot --headless --path . --script res://tests/vertical_slice_test_runner.gd 2>&1 | tee vertical-slice-test.log
+          summary="$(grep -E '=== VERTICAL SLICE TEST RESULT: [0-9]+ PASS / 0 FAIL ===' vertical-slice-test.log | tail -n 1)"
+          test -n "$summary"
+          pass_count="$(printf '%s\n' "$summary" | sed -E 's/.*RESULT: ([0-9]+) PASS.*/\1/')"
+          if [ "$pass_count" -lt 62 ]; then
+            echo "Vertical slice regression: expected at least 62 passing checks, got $pass_count" >&2
+            exit 1
+          fi
+          echo "Vertical slice phase gate satisfied: $pass_count PASS / 0 FAIL"
+
       - name: Upload CI logs
         if: always()
         uses: actions/upload-artifact@v4
@@ -148,5 +162,6 @@ jobs:
             savegame-v2-test.log
             savegame-v2-adversarial.log
             wild-encounter-test.log
+            vertical-slice-test.log
           if-no-files-found: ignore
           retention-days: 7
