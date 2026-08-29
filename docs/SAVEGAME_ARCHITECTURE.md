@@ -1,82 +1,139 @@
-# Savegame Architecture (FASE 8, V1)
+# Savegame Architecture — V2
 
-Versioned, atomic, transactional persistence. `schema_version = 1`, `format_id = calvo_save_v1`.
+Estado actual: `schema_version = 2`, `format_id = calvo_save_v2`.
+
+V2 conserva las garantías de FASE 8/8C y añade persistencia explícita del inventario de FASE 9A.
 
 ## Files
 
-- `modules/save/save_game_data.gd` — `SaveGameData`: pure serializable snapshot (no `CreatureInstance`).
-- `modules/save/save_game_serializer.gd` — `SaveGameSerializer`: file IO (atomic write).
-- `modules/save/save_game_repository.gd` — `SaveGameRepository`: build/validate/persist + load.
-- `modules/save/save_result.gd` — `SaveResult` (ok/path/reason).
-- `modules/save/load_result.gd` — `LoadResult` (ok/reason/schema_version/party/storage).
+- `modules/save/save_game_data.gd` — snapshot puro y validación estructural/de dominio.
+- `modules/save/save_game_migration.gd` — normalización explícita del formato histórico V1 al V2 actual.
+- `modules/save/save_game_serializer.gd` — IO + reemplazo protegido del fichero.
+- `modules/save/save_game_repository.gd` — build/validate/persist + carga transaccional.
+- `modules/save/save_result.gd` — `SaveResult`.
+- `modules/save/load_result.gd` — resultado de carga con Party, Storage, Inventory y metadata de migración.
 
-## Schema (V1)
+## Schema V2
 
-```
+```json
 {
-  "schema_version": 1,
-  "format_id": "calvo_save_v1",
-  "creatures": [ {instance_id, species_id, level, experience, ivs, evs, nature_id, ...}, ... ],  # CANONICAL registry (each once)
-  "party":   { "schema_version": 2, "ruleset_id": "calvo_party_v1", "ordered_instance_ids": [id, ...] },   # REFERENCE only
-  "storage": { "schema_version": 2, "ruleset_id": "calvo_storage_v1", "boxes": [ {"box_id","name","capacity","slots":[id|null,...]} ] }  # REFERENCE only
+  "schema_version": 2,
+  "format_id": "calvo_save_v2",
+  "creatures": [
+    {"instance_id": "...", "species_id": "...", "level": 5}
+  ],
+  "party": {
+    "schema_version": 2,
+    "ruleset_id": "calvo_party_v1",
+    "ordered_instance_ids": ["..."]
+  },
+  "storage": {
+    "schema_version": 2,
+    "ruleset_id": "calvo_storage_v1",
+    "boxes": [
+      {"box_id": "box_0", "name": "Box 1", "capacity": 30, "slots": ["...", null]}
+    ]
+  },
+  "inventory": {
+    "schema_version": 1,
+    "ruleset_id": "calvo_inventory_v1",
+    "quantities": {
+      "poke_ball": 12,
+      "great_ball": 4
+    }
+  }
 }
 ```
 
-The creature registry is CANONICAL: each creature is stored exactly once. Party and storage layouts
-reference creatures by `instance_id`. This guarantees a creature exists conceptually once in the
-player's state and that no duplicate full-creature blob is written.
+`creatures` continúa siendo el registro CANÓNICO: cada `CreatureInstance` completo se escribe una sola vez. Party y Storage referencian por `instance_id`. Inventory es otro agregado de estado mutable y se serializa una sola vez mediante `PlayerInventory`.
 
-## Validation (`SaveGameData.validate`)
+## Player aggregate
 
-Returns `{ok, reason}`. Rejected reasons:
-- `missing_format_id` — `format_id` absent (a save from a different format must never be loaded).
-- `unsupported_format` — `format_id` != `FORMAT_ID` (no cross-format guessing).
-- `missing_schema` — `schema_version` missing or older than supported.
-- `unsupported_schema` — `schema_version` newer than `CURRENT_VERSION` (no fake migrations).
-- `invalid_creatures_type` / `invalid_party_type` / `invalid_storage_type` / `invalid_boxes_type` —
-  a top-level field is the wrong shape (corrupt/foreign payload).
-- `empty_creature_instance_id` — a registry entry has an empty `instance_id` (rejected; never stored).
-- `duplicate_creature_id` — a creature id appears twice in the registry.
-- `invalid_party_layout` — `ordered_instance_ids` is not an array.
-- `empty_party_instance_id` — a party slot references an empty id.
-- `duplicate_party_instance_id` — a party lists the same creature twice.
-- `party_over_capacity` — party size exceeds `PartyRuleset.MAX_PARTY`.
-- `missing_creature_reference` — a party/storage slot references an id absent from the registry.
-- `double_ownership` — the same id is referenced by both party and storage (or twice in storage).
-- `invalid_storage_slot` — a box's slot count != its `capacity` (corrupt/mismatched box).
+`PlayerCollection` contiene:
 
-`SaveGameData` stores `creatures` / `party_layout` / `storage_layout` as `Variant` (not strictly typed)
-so a malformed payload is carried into `validate()` and rejected with an explicit reason — the loader
-never crashes on a bad field shape. `from_dict` does NOT raise; validation does the rejecting.
+- `CreatureParty party`
+- `CreatureStorage storage`
+- `PlayerInventory inventory`
 
-## Atomic write + protected replacement (`SaveGameSerializer.write_atomic`)
+`SaveGameRepository.save_collection(path, player_collection)` persiste el agregado completo.
 
-1. Serialize snapshot to a temp file `path + ".tmp"`.
-2. Read back and `parse`; if it fails, delete temp and return `temp_verify_failed`.
-3. If target does not exist: `rename(tmp, path)`. On failure return `rename_failed`.
-4. If target exists (protected replacement):
-   a. `rename(path, path + ".bak")` — back up the LAST KNOWN GOOD save. If this fails, the live
-      target is left untouched and we return `cannot_back_up_target` (no data lost).
-   b. `rename(tmp, path)` — publish. On success remove the backup.
-   c. On publish failure: `rename(path + ".bak", path)` to RESTORE the previous good save
-      (`replace_failed_restored`); if even that fails, `replace_failed_restore_failed`.
-INVARIANT: the previous good save is never destroyed before a verified replacement is published. A
-failed publish restores the previous good save; the live target is never left half-written. No `.tmp`
-or `.bak` lingers after a successful write.
+La API de nivel bajo `save_state(path, party, storage, inventory = null)` conserva compatibilidad para tests/callers antiguos; si no se pasa inventario genera una bolsa V2 vacía. El flujo normal del jugador debe utilizar `save_collection()` para no perder el inventario real.
 
-## Transactional load (`SaveGameRepository.load`)
+## Validación V2 (`SaveGameData.validate`)
 
-All-or-nothing:
-1. Read raw text; empty ⇒ `missing_file`; unparseable ⇒ `json_parse_error`.
-2. `SaveGameData.from_dict` + `validate()`; any failure ⇒ return `LoadResult(ok=false, reason)`.
-3. Build canonical registry (each `CreatureInstance.from_dict` once).
-4. Rebuild party (references only) — each `party.add_creature(c)` result is checked; a rejected add
-   aborts with `party_rebuild_failed` (never publishes a partial party).
-5. Rebuild storage boxes (references only, guarding double-ownership).
-6. Only if fully valid, set `out.ok = true`, `out.party`, `out.storage`.
-On ANY failure, `out.party` and `out.storage` are `null` — no partially mutated state is published.
+Un payload V2 se rechaza, entre otros casos, por:
 
-## Corruption handling
+- `missing_format_id` / `unsupported_format`
+- `missing_schema` / `unsupported_schema`
+- tipos estructurales incorrectos en creatures/party/storage/inventory/boxes
+- `inventory_<reason>` si `PlayerInventory` rechaza su schema, ruleset o cantidades
+- `empty_creature_instance_id`
+- `duplicate_creature_id`
+- party con ID vacío, duplicado o más de `PartyRuleset.MAX_PARTY`
+- referencia a criatura inexistente
+- `double_ownership`
+- slot/storage corrupto
 
-Unreadable/missing/forward-version/corrupt files are rejected with an explicit `reason`; the caller
-keeps the in-memory state and can offer "new game" without crashing.
+Un V2 sin `inventory` NO significa bolsa vacía: es un V2 inválido. Solo el migrador V1 puede sintetizar legítimamente una bolsa vacía.
+
+Los campos de layout siguen transportándose como `Variant` hasta validación para que un JSON con tipos hostiles sea rechazado con un `reason` explícito en lugar de provocar un fallo de tipado antes del gate.
+
+## Migración V1 → V2
+
+El formato histórico reconocido es exclusivamente:
+
+```text
+schema_version = 1
+format_id = calvo_save_v1
+```
+
+`SaveGameMigration.normalize()`:
+
+1. duplica el diccionario en memoria;
+2. cambia a schema 2 / `calvo_save_v2`;
+3. añade un `PlayerInventory` vacío y válido;
+4. deja Party, Storage y el registro canónico de criaturas intactos.
+
+No se infieren objetos a partir de capturas ni de ninguna otra señal. Un supuesto campo `inventory` dentro de un V1 se ignora porque nunca perteneció al contrato V1.
+
+Combinaciones mixtas como `calvo_save_v1 + schema 2`, `calvo_save_v2 + schema 1`, formatos desconocidos y schemas futuros se rechazan. No hay migraciones heurísticas.
+
+La migración es **no destructiva**: `load()` NO reescribe el archivo V1. `LoadResult.migrated_from_version == 1` informa al caller. El siguiente save explícito escribe V2.
+
+## Protected replacement (`SaveGameSerializer.write_atomic`)
+
+Se conserva el contrato validado en FASE 8C:
+
+1. escribir y verificar `path.tmp`;
+2. si no existe target, publicar por rename;
+3. si existe target, moverlo primero a `path.bak`;
+4. publicar el temp;
+5. si la publicación falla, restaurar el backup;
+6. eliminar backup tras éxito.
+
+Propiedad exigida: **LAST KNOWN GOOD SAVE PRESERVED**. No se afirma atomicidad fuerte de filesystem donde la plataforma no la garantice; sí se garantiza el protocolo de reemplazo/restore probado por la suite.
+
+## Transactional load
+
+`SaveGameRepository.load` es all-or-nothing:
+
+1. lee y parsea JSON;
+2. normaliza V1/V2 mediante `SaveGameMigration`;
+3. valida el snapshot V2;
+4. reconstruye y valida Inventory;
+5. crea una sola vez cada `CreatureInstance` del registro canónico;
+6. reconstruye Party comprobando cada `add_creature`;
+7. reconstruye Storage y vuelve a comprobar ownership;
+8. solo entonces publica `ok`, `party`, `storage` e `inventory`.
+
+Ante cualquier fallo, `party`, `storage` e `inventory` permanecen `null`; no se publica estado parcial.
+
+## CI / gates
+
+Validado con Godot `4.7.stable.official.5b4e0cb0f`:
+
+- suite de regresión: **470 PASS / 0 FAIL**
+- Inventory: **47 PASS / 0 FAIL**
+- Savegame V2: **40 PASS / 0 FAIL**
+
+ADR asociada: `docs/ARCHITECTURE_DECISION_009_SAVEGAME_V2.md`.
