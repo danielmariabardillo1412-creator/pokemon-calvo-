@@ -4,12 +4,21 @@ extends Control
 signal battle_closed(reason: StringName)
 
 # Technical, asset-free presentation adapter. The authoritative state remains inside
-# WildAdventureSession/Battle Core. This Control only reads state, builds legal player/opponent
-# actions, submits them through the application boundary, and renders semantic BattleEvents.
+# WildAdventureSession/Battle Core. This Control only reads state, builds player intents, asks the
+# technical opponent policy for a legal response, submits through the application boundary, and
+# renders semantic results. Capture rules/inventory mutation never live in this UI.
+
+const CAPTURE_BALL_ORDER := [
+	&"poke_ball",
+	&"great_ball",
+	&"ultra_ball",
+	&"master_ball",
+]
 
 var session: WildAdventureSession = null
 var catalogs: DefinitionCatalog = null
 
+var _capture_rng: RandomNumberGenerator = null
 var _enemy_label: Label = null
 var _enemy_hp: ProgressBar = null
 var _player_label: Label = null
@@ -17,6 +26,7 @@ var _player_hp: ProgressBar = null
 var _turn_label: Label = null
 var _event_log: RichTextLabel = null
 var _move_buttons: Array[Button] = []
+var _capture_buttons: Array[Button] = []
 var _continue_button: Button = null
 var _completion_reason: StringName = &""
 
@@ -27,9 +37,16 @@ func _ready() -> void:
 	visible = false
 
 
-func configure(p_session: WildAdventureSession, p_catalogs: DefinitionCatalog) -> void:
+# Capture RNG is deliberately injected. A presentation with no RNG can still play moves, but its
+# capture controls remain disabled. This avoids inventing a hidden gameplay seed inside UI code.
+func configure(
+	p_session: WildAdventureSession,
+	p_catalogs: DefinitionCatalog,
+	p_capture_rng: RandomNumberGenerator = null,
+) -> void:
 	session = p_session
 	catalogs = p_catalogs
+	_capture_rng = p_capture_rng
 
 
 func open_for_active_battle() -> bool:
@@ -71,12 +88,39 @@ func available_move_ids() -> Array[StringName]:
 	return result
 
 
+# Presentation ordering is stable and explicit; ownership/quantity comes only from PlayerInventory.
+# Unknown/non-capture items in the bag are never exposed as capture controls.
+func available_capture_ball_ids() -> Array[StringName]:
+	var result: Array[StringName] = []
+	if session == null or session.player == null or session.player.inventory == null:
+		return result
+	for ball_variant in CAPTURE_BALL_ORDER:
+		var ball_id := StringName(ball_variant)
+		if session.player.inventory.quantity(ball_id) > 0:
+			result.append(ball_id)
+	return result
+
+
 func move_button_count() -> int:
 	var count := 0
 	for button in _move_buttons:
 		if button.visible:
 			count += 1
 	return count
+
+
+func capture_button_count() -> int:
+	var count := 0
+	for button in _capture_buttons:
+		if button.visible:
+			count += 1
+	return count
+
+
+func displayed_capture_quantity(ball_id: StringName) -> int:
+	if session == null or session.player == null or session.player.inventory == null:
+		return 0
+	return session.player.inventory.quantity(ball_id)
 
 
 func displayed_player_hp() -> int:
@@ -103,9 +147,6 @@ func submit_player_move(move_id: StringName) -> Array[BattleEvent]:
 		_append_log("That move is not currently usable.")
 		return empty
 
-	# Derive participant IDs from the live authoritative state instead of baking side_a/side_b
-	# into the presentation layer. WildAdventureSession happens to use those IDs today, but the UI
-	# should depend on ownership, not on a naming convention.
 	var player_side := state.side_for_creature(actor.instance_id)
 	var opponent_side := state.side_for_creature(target.instance_id)
 	if player_side == null or opponent_side == null:
@@ -127,14 +168,103 @@ func submit_player_move(move_id: StringName) -> Array[BattleEvent]:
 		_append_log("Opponent has no supported usable action.")
 		return empty
 
-	var actions: Array[BattleAction] = [player_action, opponent_action]
-	var events := session.submit_turn(actions)
-	_render_events(events)
+	# FASE 15 moves presentation onto the same application command boundary used by Capture. The UI
+	# no longer calls submit_turn() directly.
+	var command := WildBattleCommand.from_action(player_action)
+	var result := session.submit_player_command(command, null, opponent_action)
+	if result == null:
+		_append_log("Battle command returned no result.")
+		return empty
+	if not result.accepted:
+		_append_log("Action rejected: %s" % result.reason)
+		_render_events(result.battle_events)
+		_refresh_view()
+		return result.battle_events
+	_render_events(result.battle_events)
 	_refresh_view()
 	var post_state := session.battle_state()
 	if post_state != null and post_state.phase == BattleState.FINISHED:
 		_settle_finished_battle()
-	return events
+	return result.battle_events
+
+
+func submit_capture_ball(ball_id: StringName) -> WildBattleCommandResult:
+	var fallback := WildBattleCommandResult.new()
+	fallback.command_type = WildBattleCommand.CAPTURE
+	if session == null or catalogs == null or not session.has_active_battle():
+		fallback.reason = "no_active_wild_battle"
+		_append_log("No active battle.")
+		return fallback
+	if _capture_rng == null:
+		fallback.reason = "capture_rng_unavailable"
+		_append_log("Capture is unavailable in this presentation.")
+		return fallback
+
+	var state := session.battle_state()
+	var actor := session.player_active()
+	var target := session.current_wild()
+	if state == null or actor == null or target == null:
+		fallback.reason = "battle_state_incomplete"
+		_append_log("Battle state is incomplete.")
+		return fallback
+	var player_side := state.side_for_creature(actor.instance_id)
+	var opponent_side := state.side_for_creature(target.instance_id)
+	if player_side == null or opponent_side == null:
+		fallback.reason = "battle_ownership_incomplete"
+		_append_log("Battle ownership is incomplete.")
+		return fallback
+
+	# The technical policy only chooses a legal response. It does not resolve Capture or Battle.
+	var opponent_action := SimpleBattleOpponentPolicy.choose_move_action(
+		state, opponent_side.side_id, catalogs
+	)
+	if opponent_action == null:
+		fallback.reason = "opponent_action_unavailable"
+		_append_log("Opponent has no supported usable response.")
+		return fallback
+
+	var command := WildBattleCommand.capture(state.turn + 1, player_side.side_id, ball_id)
+	var result := session.submit_player_command(command, _capture_rng, opponent_action)
+	if result == null:
+		fallback.reason = "battle_command_result_missing"
+		_append_log("Capture command returned no result.")
+		return fallback
+
+	if not result.accepted:
+		_append_log("Capture rejected: %s" % result.reason)
+		_render_events(result.battle_events)
+		_refresh_view()
+		return result
+
+	var capture_status := CaptureResult.INVALID
+	if result.capture_outcome != null and result.capture_outcome.resolution != null and result.capture_outcome.resolution.result != null:
+		capture_status = result.capture_outcome.resolution.result.status
+
+	if capture_status == CaptureResult.SUCCESS and result.session_completed:
+		_completion_reason = session.completion_reason
+		_append_log("Captured the wild Pokémon with %s." % String(ball_id))
+		if result.capture_outcome != null and result.capture_outcome.routing != null and result.capture_outcome.routing.stored:
+			_append_log("Party full: captured Pokémon was routed to storage.")
+		_set_command_controls_enabled(false)
+		if _continue_button != null:
+			_continue_button.text = "Return to overworld"
+			_continue_button.visible = true
+		return result
+
+	if capture_status == CaptureResult.FAILED:
+		_append_log("The wild Pokémon broke free.")
+		_render_events(result.battle_events)
+		_refresh_view()
+		var post_state := session.battle_state()
+		if post_state != null and post_state.phase == BattleState.FINISHED:
+			_settle_finished_battle()
+		return result
+
+	# Defensive fallback: accepted commands should currently be either SUCCESS or FAILED.
+	_append_log("Capture command completed with an unknown result.")
+	_render_events(result.battle_events)
+	_refresh_view()
+	return result
 
 
 func continue_after_completion() -> bool:
@@ -156,6 +286,13 @@ func _on_move_pressed(index: int) -> void:
 	submit_player_move(ids[index])
 
 
+func _on_capture_pressed(index: int) -> void:
+	var ids := available_capture_ball_ids()
+	if index < 0 or index >= ids.size():
+		return
+	submit_capture_ball(ids[index])
+
+
 func _on_continue_pressed() -> void:
 	continue_after_completion()
 
@@ -164,14 +301,14 @@ func _settle_finished_battle() -> void:
 	var settlement := session.settle_finished_battle()
 	if settlement == null or not settlement.ok:
 		_append_log("Battle finished but settlement failed: %s" % (settlement.reason if settlement != null else "missing_settlement"))
-		_set_moves_enabled(false)
+		_set_command_controls_enabled(false)
 		return
 	_completion_reason = session.completion_reason
 	if settlement.player_won:
 		_append_log("Victory. Progression has been reconciled.")
 	else:
 		_append_log("Defeat. Persistent battle state has been reconciled.")
-	_set_moves_enabled(false)
+	_set_command_controls_enabled(false)
 	if _continue_button != null:
 		_continue_button.text = "Return to overworld"
 		_continue_button.visible = true
@@ -181,13 +318,13 @@ func _refresh_view() -> void:
 	if _enemy_label == null:
 		return
 	if session == null or not session.has_active_battle():
-		_set_moves_enabled(false)
+		_set_command_controls_enabled(false)
 		return
 	var state := session.battle_state()
 	var player_creature := session.player_active()
 	var enemy_creature := session.current_wild()
 	if state == null or player_creature == null or enemy_creature == null:
-		_set_moves_enabled(false)
+		_set_command_controls_enabled(false)
 		return
 
 	_turn_label.text = "Battle finished" if state.phase == BattleState.FINISHED else "Turn %d" % (state.turn + 1)
@@ -208,23 +345,37 @@ func _refresh_view() -> void:
 	_enemy_hp.max_value = maxi(1, enemy_creature.stats.max_hp)
 	_enemy_hp.value = enemy_creature.current_hp
 
-	var ids := available_move_ids()
+	var moves := available_move_ids()
 	for i in _move_buttons.size():
-		var button := _move_buttons[i]
-		if i < ids.size():
-			var current_move_id := ids[i]
+		var move_button := _move_buttons[i]
+		if i < moves.size():
+			var current_move_id := moves[i]
 			var current_slot := player_creature.move_slot(current_move_id)
-			button.text = "%s  PP %d/%d" % [String(current_move_id), current_slot.current_pp, current_slot.max_pp]
-			button.visible = true
-			button.disabled = state.phase != BattleState.WAITING_FOR_ACTIONS
+			move_button.text = "%s  PP %d/%d" % [String(current_move_id), current_slot.current_pp, current_slot.max_pp]
+			move_button.visible = true
+			move_button.disabled = state.phase != BattleState.WAITING_FOR_ACTIONS
 		else:
-			button.text = "-"
-			button.visible = false
+			move_button.text = "-"
+			move_button.visible = false
+
+	var balls := available_capture_ball_ids()
+	for i in _capture_buttons.size():
+		var capture_button := _capture_buttons[i]
+		if i < balls.size():
+			var ball_id := balls[i]
+			capture_button.text = "%s  x%d" % [String(ball_id), session.player.inventory.quantity(ball_id)]
+			capture_button.visible = true
+			capture_button.disabled = state.phase != BattleState.WAITING_FOR_ACTIONS or _capture_rng == null
+		else:
+			capture_button.text = "-"
+			capture_button.visible = false
 
 
-func _set_moves_enabled(enabled: bool) -> void:
+func _set_command_controls_enabled(enabled: bool) -> void:
 	for button in _move_buttons:
 		button.disabled = not enabled
+	for button in _capture_buttons:
+		button.disabled = not enabled or _capture_rng == null
 
 
 func _render_events(events: Array[BattleEvent]) -> void:
@@ -344,19 +495,39 @@ func _build_ui() -> void:
 	_event_log.scroll_active = true
 	root.add_child(_event_log)
 
+	var moves_title := Label.new()
+	moves_title.text = "Moves"
+	root.add_child(moves_title)
 	var moves := GridContainer.new()
 	moves.columns = 2
 	moves.add_theme_constant_override("h_separation", 8)
 	moves.add_theme_constant_override("v_separation", 6)
 	root.add_child(moves)
 	for i in 4:
-		var button := Button.new()
-		button.text = "-"
-		button.custom_minimum_size = Vector2(0, 38)
-		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		button.pressed.connect(_on_move_pressed.bind(i))
-		moves.add_child(button)
-		_move_buttons.append(button)
+		var move_button := Button.new()
+		move_button.text = "-"
+		move_button.custom_minimum_size = Vector2(0, 38)
+		move_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		move_button.pressed.connect(_on_move_pressed.bind(i))
+		moves.add_child(move_button)
+		_move_buttons.append(move_button)
+
+	var capture_title := Label.new()
+	capture_title.text = "Capture"
+	root.add_child(capture_title)
+	var captures := GridContainer.new()
+	captures.columns = 2
+	captures.add_theme_constant_override("h_separation", 8)
+	captures.add_theme_constant_override("v_separation", 6)
+	root.add_child(captures)
+	for i in 4:
+		var capture_button := Button.new()
+		capture_button.text = "-"
+		capture_button.custom_minimum_size = Vector2(0, 34)
+		capture_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		capture_button.pressed.connect(_on_capture_pressed.bind(i))
+		captures.add_child(capture_button)
+		_capture_buttons.append(capture_button)
 
 	_continue_button = Button.new()
 	_continue_button.text = "Return to overworld"
