@@ -161,6 +161,10 @@ Battle y no han cambiado de cobertura.
   canonical status; snapshot v2 y servidor autoritativo determinista.
 - **FASE 6 (Progression Core):** XP/levels (6 curvas), stats por IV/EV/naturaleza, learnsets,
   movesets individuales con PP, y evolución por level-up/trade/use-item (464 aristas ejecutables).
+- **FASE 7 (Capture + Party Core):** captura determinista `calvo_capture_v1` (poke/great/ultra/master
+  balls; bonus de status sleep/freeze 2.0, poison/burn/paralysis/badly_poisoned 1.5; `capture_rate`
+  importado de PokéAPI 1..255; restricción trainer/no-forjable; party persistente máx 6 con
+  preservación de identidad IV/EV/naturaleza/ability/moveset/PP). NO rediseña Battle/Progression.
 - **NOT implemented yet:** cientos de secundarios/efectos únicos, la mayoría de abilities/items,
-  los 12 triggers especiales de evolución (data_only/unsupported), forms, capture, UI, savegame,
-  networking y presentation.
+  los 12 triggers especiales de evolución (data_only/unsupported), forms, Storage real + savegame,
+  UI de captura/party, networking y presentation.

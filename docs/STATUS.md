@@ -316,3 +316,75 @@ el Battle Core no cambió (los 137 tests base siguen en verde). NO se hizo merge
 Falta (fuera de alcance de FASE 6): UI de elección de movimiento/evolución, persistencia de
 savegame/party, formas (39 diferidas), captura, y runtime de los 12 triggers especiales de evolución.
 
+# FASE 7 — Capture + Party Core V1
+
+Fecha de validación: 2026-08-29
+Rama: `feature/capture-party-v1` (creada desde `feature/progression-core-v1`)
+Motor: `4.7.stable.official.5b4e0cb0f`
+Fuente: PokéAPI `api-data` (SHA `784c50b3ad27d0390d3b047fc4c4511f71edd049`, BSD 3-Clause)
+
+## Resultado
+
+- Godot import/headless: **PASS**, sin errores de parseo/runtime, exit 0
+- Tests: **286 PASS / 0 FAIL** (222 base + 64 nuevos de Party/Capture)
+- Autoloads: **0** (sin cambios)
+- `extends Node` fuera de tests: **0**
+- Referencias rotas: **0** · Rechazados: **0**
+- Determinismo headless: **PASS** (mismos seed ⇒ mismos resultados/eventos de captura)
+- `schema_version`: **2** (sin bump; capture_rate/party son campos aditivos)
+
+## Qué se añadió
+
+### Party (persistente)
+- `modules/creatures/party/party_ruleset.gd` — `PartyRuleset`: `MAX_PARTY = 6`,
+  `SCHEMA_VERSION = 2`, `is_valid()`.
+- `modules/creatures/party/creature_party.gd` — `CreatureParty`: add/remove/swap/reorder/get/
+  contains/size/is_full/is_empty/get_creatures/get_ordered_ids/get_active/to_dict/from_dict.
+  Round-trip estable vía `CreatureInstance`.
+
+### Capture (puro, determinista)
+- `modules/capture/capture_ball_definition.gd` — `CaptureBallDefinition` (ball_id/mult/guaranteed).
+- `modules/capture/capture_ruleset.gd` — `CaptureRuleset` (`calvo_capture_v1`): tabla BALLS,
+  STATUS_BONUS, `catch_probability`, `is_valid_capture_rate`.
+- `modules/capture/capture_event.gd` — `CaptureEvent` (ATTEMPTED/SHAKE/FAILED/SUCCEEDED/
+  REJECTED/PARTY_ADDED/STORAGE_REQUIRED).
+- `modules/capture/capture_battle_context.gd` — `CaptureBattleContext` (frontera de servidor:
+  is_wild/battle_finished/caller_trainer_id/target_owner_trainer_id/target_side_id).
+- `modules/capture/capture_attempt.gd` — `CaptureAttempt` (target/ball_id/context; sin campo de éxito).
+- `modules/capture/capture_result.gd` — `CaptureResult` (status/ball_id/target_id/probability/
+  shake_count/consume_item/reason).
+- `modules/capture/capture_disposition.gd` — `CaptureDisposition` (PARTY/STORAGE_REQUIRED).
+- `modules/capture/capture_resolution.gd` — `CaptureResolution` (result + captured + disposition + events).
+- `modules/capture/capture_system.gd` — `CaptureSystem.resolve(attempt, rng, catalogs, party)`:
+  valida, calcula `p`, consume RNG solo si no garantizada, muta party en éxito con espacio.
+
+### Datos
+- `CreatureSpecies.capture_rate: int = 0` + `to_dict`/`from_dict` + `is_valid_capture_rate()`.
+- `DataImporter.SPECIES_KEYS` + `"capture_rate"`; `tools/pokeapi_adapter.py` lee `pokemon-species`.
+- Re-importado: 986 especies · 0 referencias rotas.
+
+## Regla de captura (calvo_capture_v1)
+
+`p = (capture_rate/255) * ball_mult * status_mult * hp_factor`
+`hp_factor = (3·max_hp − 2·current_hp)/(3·max_hp)`. Master Ball garantizada (sin RNG).
+Balls: poke 1.0 / great 1.5 / ultra 2.0 / master garantizada. Bonus de status: sleep/freeze 2.0;
+poison/burn/paralysis/badly_poisoned 1.5. Trainer siempre rechazado. Party llena ⇒ STORAGE_REQUIRED
+(sin auto-reemplazo). Detalle: `CAPTURE_RULESET_CALVO_V1.md`, `CAPTURE_DATA_AUDIT.md`.
+
+## Contrato de separación (FASE 7)
+
+- **0 autoloads**; `extends Node` solo en `tests/`.
+- Capture NO rediseña Battle ni Progression; lee HP/status de la `CreatureInstance` viva.
+- Captura preserva identidad: `res.captured` es la MISMA `CreatureInstance` (IV/EV/naturaleza/
+  ability/moveset/PP intactos). No se crea ni rerolla criatura.
+- Autoridad de servidor: clienta solo envía `ball_id` + `target_id`; el éxito no se puede forjar.
+- `capture_rate` importado de PokéAPI; multipliers de ball son tabla canónica del juego.
+
+## Listo para la siguiente fase
+
+SÍ (Storage + Save). La captura y la party están data-driven y validadas por 64 checks; el Battle
+y Progression Core no cambiaron (los 222 tests base siguen en verde). NO se hizo merge a `main`.
+Falta (fuera de alcance de FASE 7): Storage real (FASE 8), persistencia savegame, UI de captura/
+party, y runtime de reemplazo automático en party llena (hoy solo señaliza STORAGE_REQUIRED).
+
+

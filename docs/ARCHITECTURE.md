@@ -111,11 +111,23 @@ La arquitectura mantiene 0 autoloads y 0 Nodes fuera de tests. Detalle y reglas:
 separación que Battle Core. Detalle y reglas: `PROGRESSION_ARCHITECTURE.md`, `PROGRESSION_RULESET_CALVO_V1.md`,
 `EVOLUTION_COVERAGE.md` y `ARCHITECTURE_DECISION_005_PROGRESSION.md`.
 
+## Capture + Party Core (FASE 7)
+
+`modules/capture/*` (resolución determinista de captura, 100% pura: sin UI/Nodes/autoload) y
+`modules/creatures/party/*` (roster persistente, máx 6, identidad por `instance_id`). La captura es
+una preocupación *post-batalla*: el Battle Core muta la `CreatureInstance` viva (HP/status/PP) y
+luego `CaptureSystem.resolve` la lee; el `BattleOutcome` NO se extiende con captura. La clienta solo
+envía `ball_id` + `target_id`; el target real y el `CaptureBattleContext` se resuelven en servidor, así
+el resultado no se forja. En éxito, `res.captured` es la MISMA `CreatureInstance` (IV/EV/naturaleza/
+ability/moveset/PP preservados). Party llena ⇒ `STORAGE_REQUIRED` (sin auto-reemplazo; Storage es FASE 8).
+Detalle y reglas: `CAPTURE_ARCHITECTURE.md`, `CAPTURE_RULESET_CALVO_V1.md`, `PARTY_ARCHITECTURE.md`,
+`CAPTURE_DATA_AUDIT.md` y `ARCHITECTURE_DECISION_006_CAPTURE_PARTY.md`.
+
 ## Tests
 
 El runner ligero actual evita incorporar un addon para 13 pruebas fundacionales y
-corre como escena headless. GUT será razonable cuando hagan falta fixtures,
+corre como escena headless. GUT será razonable cuando hagan falten fixtures,
 parametrización, dobles complejos o integración CI más rica. Cambiar el framework no
 debe cambiar el dominio. Battle Core V2 añade una suite separada de unidades y
-escenarios golden; Progression Core (FASE 6) añade `ProgressionTestSuite`. El total actual es
-**208 PASS / 0 FAIL**.
+escenarios golden; Progression Core (FASE 6) añade `ProgressionTestSuite`; Capture + Party Core
+(FASE 7) añade `CapturePartyTestSuite`. El total actual es **286 PASS / 0 FAIL**.
