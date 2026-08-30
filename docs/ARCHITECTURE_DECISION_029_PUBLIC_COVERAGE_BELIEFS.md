@@ -2,7 +2,7 @@
 
 ## Estado
 
-IMPLEMENTADA / PENDIENTE DE VALIDACION.
+VALIDADA / CERRADA TECNICAMENTE.
 
 ## Contexto
 
@@ -85,21 +85,82 @@ Una cobertura incompatible con el learnset público sigue ausente hasta revelars
 Además, ninguna traza o creencia puede afirmar `version_group`, porque ese dato no existe en el
 pipeline canónico actual.
 
-## Validación requerida
+## Resultados del gate FASE 29
 
-El gate debe demostrar al menos:
+El fixture causal convierte la nuke de branching de FASE 28 en una compatibilidad pública
+`machine` de baja confianza y añade un cuarto señuelo `level_up` de alta confianza.
 
-- priors machine/tutor/egg con menor confianza que level-up;
-- métodos especiales excluidos;
+Resultado:
+
+- **70 PASS / 0 FAIL**;
+- level-up conserva el prior reciente de FASE 22;
+- `machine = 1600 bp`, `tutor = 1300 bp`, `egg = 900 bp`;
+- `form_change` excluido;
 - movimiento incompatible ausente;
-- procedencia pública explícita;
-- ausencia de `version_group` inventado;
-- cobertura peligrosa sobreviviendo al cap de cuatro sin ampliar branching;
-- comparación A/B donde FASE 28 conoce la creencia pero la poda y FASE 29 la conserva;
-- cobertura realmente incompatible todavía invisible;
-- determinismo;
-- corpus FASE 26 ejecutado con el candidato FASE 29 sin regresiones;
-- todos los gates históricos y la regresión global verdes sobre el mismo SHA.
+- procedencia pública de `machine` presente;
+- ninguna creencia inventa `version_group`;
+- la cobertura realmente incompatible del control histórico sigue invisible y el planner sigue
+  perdiendo **0/6**, preservando la frontera anti-cheat;
+- la nuke `machine` peligrosa sobrevive el cap de cuatro en el candidato FASE 29;
+- `max_actions_per_side` continúa en 3;
+- el candidato FASE 29 gana **6/6** el escenario de branching y abre con el debuff defensivo.
+
+### Comparación A/B causal contra FASE 28
+
+El brain FASE 28 se ejecutó con **la misma inferencia pública nueva**. Por tanto, ambos modelos
+conocen la hipótesis `machine`; la única diferencia relevante es la selección de cobertura en el
+mundo plausible.
+
+Resultado:
+
+- FASE 28: **0/6**;
+- FASE 29: **6/6**;
+- la traza FASE 28 no contiene la nuke porque los cuatro priors level-up la expulsan antes de
+  buscar;
+- la traza FASE 29 sí la contiene porque sustituye una cola débil por una cobertura públicamente
+  compatible y más peligrosa.
+
+Esto demuestra que la ganancia no procede de omnisciencia ni de aumentar el branching, sino de
+combinar una hipótesis pública legítima con una poda más informativa.
+
+## Regresión de inteligencia sobre FASE 26
+
+El candidato FASE 29 se ejecutó sobre las 60 partidas del corpus estadístico existente.
+
+Resultado:
+
+- baseline: **48/60**;
+- candidato FASE 29: **60/60**;
+- mejoras emparejadas: **12**;
+- regresiones emparejadas: **0**;
+- pares iguales: **48**;
+- 0 draws;
+- 0 partidas inválidas;
+- determinismo confirmado;
+- gate de corpus: **36 PASS / 0 FAIL**.
+
+El 60/60 sigue siendo evidencia dentro del corpus controlado, no una afirmación de superioridad
+universal.
+
+## Certificación
+
+Sobre el HEAD de código y ADR previo al cierre documental
+`17ab65fdc7aeea2dfaef0af18954a74b6cd16106` se obtuvieron **12/12 workflows SUCCESS**:
+
+- FASE 29 public coverage beliefs;
+- FASE 28 adaptive branching;
+- FASE 27 search-limit benchmark;
+- FASE 26 evaluation corpus;
+- FASE 25 self-play;
+- FASE 24 search-depth budget;
+- FASE 23 search foundation;
+- FASE 22 belief inference;
+- FASE 21 tactical intelligence;
+- FASE 20 intelligence foundation;
+- FASE 19 trainer battle session;
+- regresión global Godot 4.7.
+
+El commit documental final debe repetir esta certificación antes de cerrar PR #25.
 
 ## Fuera de alcance
 
@@ -114,3 +175,9 @@ FASE 29 no implementa:
 - MCTS.
 
 Esas capacidades permanecen separadas para poder medir causalmente cada mejora.
+
+## Siguiente decisión
+
+FASE 30 debe abrir el tercer tipo de decisión autoritativa del entrenador: **ITEM**, con inventario
+finito por NPC, consumo real del recurso y evaluación contrafactual contra MOVE/SWITCH. No debe
+usar umbrales rígidos de HP ni inventario infinito.
