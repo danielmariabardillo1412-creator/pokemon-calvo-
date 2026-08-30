@@ -1,241 +1,1964 @@
 {
- "policy": "Hyphenated PokemonAPI names are treated as forms (regional/alternate/mega/gigantamax/totem/cosmetic) and are NOT imported as base SpeciesDefinition. Only the default variety of each base species is imported. Evolutions targeting deferred forms are dropped to avoid broken references.",
- "forms_total": 39,
- "species_total": 986,
- "deferred": [
+ "policy": "pokemon-species is canonical; select varieties[].is_default. Non-default varieties are forms and are reported, never inferred from hyphens.",
+ "forms_total": 326,
+ "species_total": 1025,
+ "forms": [
   {
-   "id": "wo_chien",
-   "original_name": "wo-chien",
-   "kind": "ALTERNATE",
-   "reason": "Hyphenated name treated as form; deferred (not a base SpeciesDefinition)."
+   "species_id": "abomasnow",
+   "pokemon_id": "abomasnow_mega",
+   "is_default": false,
+   "kind": "MEGA"
   },
   {
-   "id": "chien_pao",
-   "original_name": "chien-pao",
-   "kind": "ALTERNATE",
-   "reason": "Hyphenated name treated as form; deferred (not a base SpeciesDefinition)."
+   "species_id": "absol",
+   "pokemon_id": "absol_mega",
+   "is_default": false,
+   "kind": "MEGA"
   },
   {
-   "id": "ting_lu",
-   "original_name": "ting-lu",
-   "kind": "ALTERNATE",
-   "reason": "Hyphenated name treated as form; deferred (not a base SpeciesDefinition)."
+   "species_id": "absol",
+   "pokemon_id": "absol_mega_z",
+   "is_default": false,
+   "kind": "MEGA"
   },
   {
-   "id": "chi_yu",
-   "original_name": "chi-yu",
-   "kind": "ALTERNATE",
-   "reason": "Hyphenated name treated as form; deferred (not a base SpeciesDefinition)."
+   "species_id": "aegislash",
+   "pokemon_id": "aegislash_blade",
+   "is_default": false,
+   "kind": "ALTERNATE"
   },
   {
-   "id": "roaring_moon",
-   "original_name": "roaring-moon",
-   "kind": "ALTERNATE",
-   "reason": "Hyphenated name treated as form; deferred (not a base SpeciesDefinition)."
+   "species_id": "aerodactyl",
+   "pokemon_id": "aerodactyl_mega",
+   "is_default": false,
+   "kind": "MEGA"
   },
   {
-   "id": "iron_valiant",
-   "original_name": "iron-valiant",
-   "kind": "ALTERNATE",
-   "reason": "Hyphenated name treated as form; deferred (not a base SpeciesDefinition)."
+   "species_id": "aggron",
+   "pokemon_id": "aggron_mega",
+   "is_default": false,
+   "kind": "MEGA"
   },
   {
-   "id": "walking_wake",
-   "original_name": "walking-wake",
-   "kind": "ALTERNATE",
-   "reason": "Hyphenated name treated as form; deferred (not a base SpeciesDefinition)."
+   "species_id": "alakazam",
+   "pokemon_id": "alakazam_mega",
+   "is_default": false,
+   "kind": "MEGA"
   },
   {
-   "id": "iron_leaves",
-   "original_name": "iron-leaves",
-   "kind": "ALTERNATE",
-   "reason": "Hyphenated name treated as form; deferred (not a base SpeciesDefinition)."
+   "species_id": "alcremie",
+   "pokemon_id": "alcremie_gmax",
+   "is_default": false,
+   "kind": "GIGANTAMAX"
   },
   {
-   "id": "gouging_fire",
-   "original_name": "gouging-fire",
-   "kind": "ALTERNATE",
-   "reason": "Hyphenated name treated as form; deferred (not a base SpeciesDefinition)."
+   "species_id": "altaria",
+   "pokemon_id": "altaria_mega",
+   "is_default": false,
+   "kind": "MEGA"
   },
   {
-   "id": "raging_bolt",
-   "original_name": "raging-bolt",
-   "kind": "ALTERNATE",
-   "reason": "Hyphenated name treated as form; deferred (not a base SpeciesDefinition)."
+   "species_id": "ampharos",
+   "pokemon_id": "ampharos_mega",
+   "is_default": false,
+   "kind": "MEGA"
   },
   {
-   "id": "iron_boulder",
-   "original_name": "iron-boulder",
-   "kind": "ALTERNATE",
-   "reason": "Hyphenated name treated as form; deferred (not a base SpeciesDefinition)."
+   "species_id": "appletun",
+   "pokemon_id": "appletun_gmax",
+   "is_default": false,
+   "kind": "GIGANTAMAX"
   },
   {
-   "id": "iron_crown",
-   "original_name": "iron-crown",
-   "kind": "ALTERNATE",
-   "reason": "Hyphenated name treated as form; deferred (not a base SpeciesDefinition)."
+   "species_id": "araquanid",
+   "pokemon_id": "araquanid_totem",
+   "is_default": false,
+   "kind": "TOTEM"
   },
   {
-   "id": "mr_mime",
-   "original_name": "mr-mime",
-   "kind": "ALTERNATE",
-   "reason": "Hyphenated name treated as form; deferred (not a base SpeciesDefinition)."
+   "species_id": "arcanine",
+   "pokemon_id": "arcanine_hisui",
+   "is_default": false,
+   "kind": "REGIONAL"
   },
   {
-   "id": "ho_oh",
-   "original_name": "ho-oh",
-   "kind": "ALTERNATE",
-   "reason": "Hyphenated name treated as form; deferred (not a base SpeciesDefinition)."
+   "species_id": "articuno",
+   "pokemon_id": "articuno_galar",
+   "is_default": false,
+   "kind": "REGIONAL"
   },
   {
-   "id": "nidoran_f",
-   "original_name": "nidoran-f",
-   "kind": "ALTERNATE",
-   "reason": "Hyphenated name treated as form; deferred (not a base SpeciesDefinition)."
+   "species_id": "audino",
+   "pokemon_id": "audino_mega",
+   "is_default": false,
+   "kind": "MEGA"
   },
   {
-   "id": "nidoran_m",
-   "original_name": "nidoran-m",
-   "kind": "ALTERNATE",
-   "reason": "Hyphenated name treated as form; deferred (not a base SpeciesDefinition)."
+   "species_id": "avalugg",
+   "pokemon_id": "avalugg_hisui",
+   "is_default": false,
+   "kind": "REGIONAL"
   },
   {
-   "id": "mime_jr",
-   "original_name": "mime-jr",
-   "kind": "ALTERNATE",
-   "reason": "Hyphenated name treated as form; deferred (not a base SpeciesDefinition)."
+   "species_id": "banette",
+   "pokemon_id": "banette_mega",
+   "is_default": false,
+   "kind": "MEGA"
   },
   {
-   "id": "porygon_z",
-   "original_name": "porygon-z",
-   "kind": "ALTERNATE",
-   "reason": "Hyphenated name treated as form; deferred (not a base SpeciesDefinition)."
+   "species_id": "barbaracle",
+   "pokemon_id": "barbaracle_mega",
+   "is_default": false,
+   "kind": "MEGA"
   },
   {
-   "id": "type_null",
-   "original_name": "type-null",
-   "kind": "ALTERNATE",
-   "reason": "Hyphenated name treated as form; deferred (not a base SpeciesDefinition)."
+   "species_id": "basculegion",
+   "pokemon_id": "basculegion_female",
+   "is_default": false,
+   "kind": "ALTERNATE"
   },
   {
-   "id": "jangmo_o",
-   "original_name": "jangmo-o",
-   "kind": "ALTERNATE",
-   "reason": "Hyphenated name treated as form; deferred (not a base SpeciesDefinition)."
+   "species_id": "basculin",
+   "pokemon_id": "basculin_blue_striped",
+   "is_default": false,
+   "kind": "ALTERNATE"
   },
   {
-   "id": "hakamo_o",
-   "original_name": "hakamo-o",
-   "kind": "ALTERNATE",
-   "reason": "Hyphenated name treated as form; deferred (not a base SpeciesDefinition)."
+   "species_id": "basculin",
+   "pokemon_id": "basculin_white_striped",
+   "is_default": false,
+   "kind": "ALTERNATE"
   },
   {
-   "id": "kommo_o",
-   "original_name": "kommo-o",
-   "kind": "ALTERNATE",
-   "reason": "Hyphenated name treated as form; deferred (not a base SpeciesDefinition)."
+   "species_id": "baxcalibur",
+   "pokemon_id": "baxcalibur_mega",
+   "is_default": false,
+   "kind": "MEGA"
   },
   {
-   "id": "tapu_koko",
-   "original_name": "tapu-koko",
-   "kind": "ALTERNATE",
-   "reason": "Hyphenated name treated as form; deferred (not a base SpeciesDefinition)."
+   "species_id": "beedrill",
+   "pokemon_id": "beedrill_mega",
+   "is_default": false,
+   "kind": "MEGA"
   },
   {
-   "id": "tapu_lele",
-   "original_name": "tapu-lele",
-   "kind": "ALTERNATE",
-   "reason": "Hyphenated name treated as form; deferred (not a base SpeciesDefinition)."
+   "species_id": "blastoise",
+   "pokemon_id": "blastoise_gmax",
+   "is_default": false,
+   "kind": "GIGANTAMAX"
   },
   {
-   "id": "tapu_bulu",
-   "original_name": "tapu-bulu",
-   "kind": "ALTERNATE",
-   "reason": "Hyphenated name treated as form; deferred (not a base SpeciesDefinition)."
+   "species_id": "blastoise",
+   "pokemon_id": "blastoise_mega",
+   "is_default": false,
+   "kind": "MEGA"
   },
   {
-   "id": "tapu_fini",
-   "original_name": "tapu-fini",
-   "kind": "ALTERNATE",
-   "reason": "Hyphenated name treated as form; deferred (not a base SpeciesDefinition)."
+   "species_id": "blaziken",
+   "pokemon_id": "blaziken_mega",
+   "is_default": false,
+   "kind": "MEGA"
   },
   {
-   "id": "mr_rime",
-   "original_name": "mr-rime",
-   "kind": "ALTERNATE",
-   "reason": "Hyphenated name treated as form; deferred (not a base SpeciesDefinition)."
+   "species_id": "braviary",
+   "pokemon_id": "braviary_hisui",
+   "is_default": false,
+   "kind": "REGIONAL"
   },
   {
-   "id": "great_tusk",
-   "original_name": "great-tusk",
-   "kind": "ALTERNATE",
-   "reason": "Hyphenated name treated as form; deferred (not a base SpeciesDefinition)."
+   "species_id": "butterfree",
+   "pokemon_id": "butterfree_gmax",
+   "is_default": false,
+   "kind": "GIGANTAMAX"
   },
   {
-   "id": "scream_tail",
-   "original_name": "scream-tail",
-   "kind": "ALTERNATE",
-   "reason": "Hyphenated name treated as form; deferred (not a base SpeciesDefinition)."
+   "species_id": "calyrex",
+   "pokemon_id": "calyrex_ice",
+   "is_default": false,
+   "kind": "ALTERNATE"
   },
   {
-   "id": "brute_bonnet",
-   "original_name": "brute-bonnet",
-   "kind": "ALTERNATE",
-   "reason": "Hyphenated name treated as form; deferred (not a base SpeciesDefinition)."
+   "species_id": "calyrex",
+   "pokemon_id": "calyrex_shadow",
+   "is_default": false,
+   "kind": "ALTERNATE"
   },
   {
-   "id": "flutter_mane",
-   "original_name": "flutter-mane",
-   "kind": "ALTERNATE",
-   "reason": "Hyphenated name treated as form; deferred (not a base SpeciesDefinition)."
+   "species_id": "camerupt",
+   "pokemon_id": "camerupt_mega",
+   "is_default": false,
+   "kind": "MEGA"
   },
   {
-   "id": "slither_wing",
-   "original_name": "slither-wing",
-   "kind": "ALTERNATE",
-   "reason": "Hyphenated name treated as form; deferred (not a base SpeciesDefinition)."
+   "species_id": "castform",
+   "pokemon_id": "castform_rainy",
+   "is_default": false,
+   "kind": "ALTERNATE"
   },
   {
-   "id": "sandy_shocks",
-   "original_name": "sandy-shocks",
-   "kind": "ALTERNATE",
-   "reason": "Hyphenated name treated as form; deferred (not a base SpeciesDefinition)."
+   "species_id": "castform",
+   "pokemon_id": "castform_snowy",
+   "is_default": false,
+   "kind": "ALTERNATE"
   },
   {
-   "id": "iron_treads",
-   "original_name": "iron-treads",
-   "kind": "ALTERNATE",
-   "reason": "Hyphenated name treated as form; deferred (not a base SpeciesDefinition)."
+   "species_id": "castform",
+   "pokemon_id": "castform_sunny",
+   "is_default": false,
+   "kind": "ALTERNATE"
   },
   {
-   "id": "iron_bundle",
-   "original_name": "iron-bundle",
-   "kind": "ALTERNATE",
-   "reason": "Hyphenated name treated as form; deferred (not a base SpeciesDefinition)."
+   "species_id": "centiskorch",
+   "pokemon_id": "centiskorch_gmax",
+   "is_default": false,
+   "kind": "GIGANTAMAX"
   },
   {
-   "id": "iron_hands",
-   "original_name": "iron-hands",
-   "kind": "ALTERNATE",
-   "reason": "Hyphenated name treated as form; deferred (not a base SpeciesDefinition)."
+   "species_id": "chandelure",
+   "pokemon_id": "chandelure_mega",
+   "is_default": false,
+   "kind": "MEGA"
   },
   {
-   "id": "iron_jugulis",
-   "original_name": "iron-jugulis",
-   "kind": "ALTERNATE",
-   "reason": "Hyphenated name treated as form; deferred (not a base SpeciesDefinition)."
+   "species_id": "charizard",
+   "pokemon_id": "charizard_gmax",
+   "is_default": false,
+   "kind": "GIGANTAMAX"
   },
   {
-   "id": "iron_moth",
-   "original_name": "iron-moth",
-   "kind": "ALTERNATE",
-   "reason": "Hyphenated name treated as form; deferred (not a base SpeciesDefinition)."
+   "species_id": "charizard",
+   "pokemon_id": "charizard_mega_x",
+   "is_default": false,
+   "kind": "MEGA"
   },
   {
-   "id": "iron_thorns",
-   "original_name": "iron-thorns",
-   "kind": "ALTERNATE",
-   "reason": "Hyphenated name treated as form; deferred (not a base SpeciesDefinition)."
+   "species_id": "charizard",
+   "pokemon_id": "charizard_mega_y",
+   "is_default": false,
+   "kind": "MEGA"
+  },
+  {
+   "species_id": "chesnaught",
+   "pokemon_id": "chesnaught_mega",
+   "is_default": false,
+   "kind": "MEGA"
+  },
+  {
+   "species_id": "chimecho",
+   "pokemon_id": "chimecho_mega",
+   "is_default": false,
+   "kind": "MEGA"
+  },
+  {
+   "species_id": "cinderace",
+   "pokemon_id": "cinderace_gmax",
+   "is_default": false,
+   "kind": "GIGANTAMAX"
+  },
+  {
+   "species_id": "clefable",
+   "pokemon_id": "clefable_mega",
+   "is_default": false,
+   "kind": "MEGA"
+  },
+  {
+   "species_id": "coalossal",
+   "pokemon_id": "coalossal_gmax",
+   "is_default": false,
+   "kind": "GIGANTAMAX"
+  },
+  {
+   "species_id": "copperajah",
+   "pokemon_id": "copperajah_gmax",
+   "is_default": false,
+   "kind": "GIGANTAMAX"
+  },
+  {
+   "species_id": "corsola",
+   "pokemon_id": "corsola_galar",
+   "is_default": false,
+   "kind": "REGIONAL"
+  },
+  {
+   "species_id": "corviknight",
+   "pokemon_id": "corviknight_gmax",
+   "is_default": false,
+   "kind": "GIGANTAMAX"
+  },
+  {
+   "species_id": "crabominable",
+   "pokemon_id": "crabominable_mega",
+   "is_default": false,
+   "kind": "MEGA"
+  },
+  {
+   "species_id": "cramorant",
+   "pokemon_id": "cramorant_gorging",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "cramorant",
+   "pokemon_id": "cramorant_gulping",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "darkrai",
+   "pokemon_id": "darkrai_mega",
+   "is_default": false,
+   "kind": "MEGA"
+  },
+  {
+   "species_id": "darmanitan",
+   "pokemon_id": "darmanitan_galar_standard",
+   "is_default": false,
+   "kind": "REGIONAL"
+  },
+  {
+   "species_id": "darmanitan",
+   "pokemon_id": "darmanitan_galar_zen",
+   "is_default": false,
+   "kind": "REGIONAL"
+  },
+  {
+   "species_id": "darmanitan",
+   "pokemon_id": "darmanitan_zen",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "darumaka",
+   "pokemon_id": "darumaka_galar",
+   "is_default": false,
+   "kind": "REGIONAL"
+  },
+  {
+   "species_id": "decidueye",
+   "pokemon_id": "decidueye_hisui",
+   "is_default": false,
+   "kind": "REGIONAL"
+  },
+  {
+   "species_id": "delphox",
+   "pokemon_id": "delphox_mega",
+   "is_default": false,
+   "kind": "MEGA"
+  },
+  {
+   "species_id": "deoxys",
+   "pokemon_id": "deoxys_attack",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "deoxys",
+   "pokemon_id": "deoxys_defense",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "deoxys",
+   "pokemon_id": "deoxys_speed",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "dialga",
+   "pokemon_id": "dialga_origin",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "diancie",
+   "pokemon_id": "diancie_mega",
+   "is_default": false,
+   "kind": "MEGA"
+  },
+  {
+   "species_id": "diglett",
+   "pokemon_id": "diglett_alola",
+   "is_default": false,
+   "kind": "REGIONAL"
+  },
+  {
+   "species_id": "dragalge",
+   "pokemon_id": "dragalge_mega",
+   "is_default": false,
+   "kind": "MEGA"
+  },
+  {
+   "species_id": "dragonite",
+   "pokemon_id": "dragonite_mega",
+   "is_default": false,
+   "kind": "MEGA"
+  },
+  {
+   "species_id": "drampa",
+   "pokemon_id": "drampa_mega",
+   "is_default": false,
+   "kind": "MEGA"
+  },
+  {
+   "species_id": "drednaw",
+   "pokemon_id": "drednaw_gmax",
+   "is_default": false,
+   "kind": "GIGANTAMAX"
+  },
+  {
+   "species_id": "dudunsparce",
+   "pokemon_id": "dudunsparce_three_segment",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "dugtrio",
+   "pokemon_id": "dugtrio_alola",
+   "is_default": false,
+   "kind": "REGIONAL"
+  },
+  {
+   "species_id": "duraludon",
+   "pokemon_id": "duraludon_gmax",
+   "is_default": false,
+   "kind": "GIGANTAMAX"
+  },
+  {
+   "species_id": "eelektross",
+   "pokemon_id": "eelektross_mega",
+   "is_default": false,
+   "kind": "MEGA"
+  },
+  {
+   "species_id": "eevee",
+   "pokemon_id": "eevee_gmax",
+   "is_default": false,
+   "kind": "GIGANTAMAX"
+  },
+  {
+   "species_id": "eevee",
+   "pokemon_id": "eevee_starter",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "eiscue",
+   "pokemon_id": "eiscue_noice",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "electrode",
+   "pokemon_id": "electrode_hisui",
+   "is_default": false,
+   "kind": "REGIONAL"
+  },
+  {
+   "species_id": "emboar",
+   "pokemon_id": "emboar_mega",
+   "is_default": false,
+   "kind": "MEGA"
+  },
+  {
+   "species_id": "enamorus",
+   "pokemon_id": "enamorus_therian",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "eternatus",
+   "pokemon_id": "eternatus_eternamax",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "excadrill",
+   "pokemon_id": "excadrill_mega",
+   "is_default": false,
+   "kind": "MEGA"
+  },
+  {
+   "species_id": "exeggutor",
+   "pokemon_id": "exeggutor_alola",
+   "is_default": false,
+   "kind": "REGIONAL"
+  },
+  {
+   "species_id": "falinks",
+   "pokemon_id": "falinks_mega",
+   "is_default": false,
+   "kind": "MEGA"
+  },
+  {
+   "species_id": "farfetchd",
+   "pokemon_id": "farfetchd_galar",
+   "is_default": false,
+   "kind": "REGIONAL"
+  },
+  {
+   "species_id": "feraligatr",
+   "pokemon_id": "feraligatr_mega",
+   "is_default": false,
+   "kind": "MEGA"
+  },
+  {
+   "species_id": "flapple",
+   "pokemon_id": "flapple_gmax",
+   "is_default": false,
+   "kind": "GIGANTAMAX"
+  },
+  {
+   "species_id": "floette",
+   "pokemon_id": "floette_eternal",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "floette",
+   "pokemon_id": "floette_mega",
+   "is_default": false,
+   "kind": "MEGA"
+  },
+  {
+   "species_id": "froslass",
+   "pokemon_id": "froslass_mega",
+   "is_default": false,
+   "kind": "MEGA"
+  },
+  {
+   "species_id": "gallade",
+   "pokemon_id": "gallade_mega",
+   "is_default": false,
+   "kind": "MEGA"
+  },
+  {
+   "species_id": "garbodor",
+   "pokemon_id": "garbodor_gmax",
+   "is_default": false,
+   "kind": "GIGANTAMAX"
+  },
+  {
+   "species_id": "garchomp",
+   "pokemon_id": "garchomp_mega",
+   "is_default": false,
+   "kind": "MEGA"
+  },
+  {
+   "species_id": "garchomp",
+   "pokemon_id": "garchomp_mega_z",
+   "is_default": false,
+   "kind": "MEGA"
+  },
+  {
+   "species_id": "gardevoir",
+   "pokemon_id": "gardevoir_mega",
+   "is_default": false,
+   "kind": "MEGA"
+  },
+  {
+   "species_id": "gengar",
+   "pokemon_id": "gengar_gmax",
+   "is_default": false,
+   "kind": "GIGANTAMAX"
+  },
+  {
+   "species_id": "gengar",
+   "pokemon_id": "gengar_mega",
+   "is_default": false,
+   "kind": "MEGA"
+  },
+  {
+   "species_id": "geodude",
+   "pokemon_id": "geodude_alola",
+   "is_default": false,
+   "kind": "REGIONAL"
+  },
+  {
+   "species_id": "gimmighoul",
+   "pokemon_id": "gimmighoul_roaming",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "giratina",
+   "pokemon_id": "giratina_origin",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "glalie",
+   "pokemon_id": "glalie_mega",
+   "is_default": false,
+   "kind": "MEGA"
+  },
+  {
+   "species_id": "glimmora",
+   "pokemon_id": "glimmora_mega",
+   "is_default": false,
+   "kind": "MEGA"
+  },
+  {
+   "species_id": "golem",
+   "pokemon_id": "golem_alola",
+   "is_default": false,
+   "kind": "REGIONAL"
+  },
+  {
+   "species_id": "golisopod",
+   "pokemon_id": "golisopod_mega",
+   "is_default": false,
+   "kind": "MEGA"
+  },
+  {
+   "species_id": "golurk",
+   "pokemon_id": "golurk_mega",
+   "is_default": false,
+   "kind": "MEGA"
+  },
+  {
+   "species_id": "goodra",
+   "pokemon_id": "goodra_hisui",
+   "is_default": false,
+   "kind": "REGIONAL"
+  },
+  {
+   "species_id": "gourgeist",
+   "pokemon_id": "gourgeist_large",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "gourgeist",
+   "pokemon_id": "gourgeist_small",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "gourgeist",
+   "pokemon_id": "gourgeist_super",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "graveler",
+   "pokemon_id": "graveler_alola",
+   "is_default": false,
+   "kind": "REGIONAL"
+  },
+  {
+   "species_id": "greninja",
+   "pokemon_id": "greninja_ash",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "greninja",
+   "pokemon_id": "greninja_battle_bond",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "greninja",
+   "pokemon_id": "greninja_mega",
+   "is_default": false,
+   "kind": "MEGA"
+  },
+  {
+   "species_id": "grimer",
+   "pokemon_id": "grimer_alola",
+   "is_default": false,
+   "kind": "REGIONAL"
+  },
+  {
+   "species_id": "grimmsnarl",
+   "pokemon_id": "grimmsnarl_gmax",
+   "is_default": false,
+   "kind": "GIGANTAMAX"
+  },
+  {
+   "species_id": "groudon",
+   "pokemon_id": "groudon_primal",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "growlithe",
+   "pokemon_id": "growlithe_hisui",
+   "is_default": false,
+   "kind": "REGIONAL"
+  },
+  {
+   "species_id": "gumshoos",
+   "pokemon_id": "gumshoos_totem",
+   "is_default": false,
+   "kind": "TOTEM"
+  },
+  {
+   "species_id": "gyarados",
+   "pokemon_id": "gyarados_mega",
+   "is_default": false,
+   "kind": "MEGA"
+  },
+  {
+   "species_id": "hatterene",
+   "pokemon_id": "hatterene_gmax",
+   "is_default": false,
+   "kind": "GIGANTAMAX"
+  },
+  {
+   "species_id": "hawlucha",
+   "pokemon_id": "hawlucha_mega",
+   "is_default": false,
+   "kind": "MEGA"
+  },
+  {
+   "species_id": "heatran",
+   "pokemon_id": "heatran_mega",
+   "is_default": false,
+   "kind": "MEGA"
+  },
+  {
+   "species_id": "heracross",
+   "pokemon_id": "heracross_mega",
+   "is_default": false,
+   "kind": "MEGA"
+  },
+  {
+   "species_id": "hoopa",
+   "pokemon_id": "hoopa_unbound",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "houndoom",
+   "pokemon_id": "houndoom_mega",
+   "is_default": false,
+   "kind": "MEGA"
+  },
+  {
+   "species_id": "indeedee",
+   "pokemon_id": "indeedee_female",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "inteleon",
+   "pokemon_id": "inteleon_gmax",
+   "is_default": false,
+   "kind": "GIGANTAMAX"
+  },
+  {
+   "species_id": "kangaskhan",
+   "pokemon_id": "kangaskhan_mega",
+   "is_default": false,
+   "kind": "MEGA"
+  },
+  {
+   "species_id": "keldeo",
+   "pokemon_id": "keldeo_resolute",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "kingler",
+   "pokemon_id": "kingler_gmax",
+   "is_default": false,
+   "kind": "GIGANTAMAX"
+  },
+  {
+   "species_id": "kommo_o",
+   "pokemon_id": "kommo_o_totem",
+   "is_default": false,
+   "kind": "TOTEM"
+  },
+  {
+   "species_id": "koraidon",
+   "pokemon_id": "koraidon_gliding_build",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "koraidon",
+   "pokemon_id": "koraidon_limited_build",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "koraidon",
+   "pokemon_id": "koraidon_sprinting_build",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "koraidon",
+   "pokemon_id": "koraidon_swimming_build",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "kyogre",
+   "pokemon_id": "kyogre_primal",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "kyurem",
+   "pokemon_id": "kyurem_black",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "kyurem",
+   "pokemon_id": "kyurem_white",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "landorus",
+   "pokemon_id": "landorus_therian",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "lapras",
+   "pokemon_id": "lapras_gmax",
+   "is_default": false,
+   "kind": "GIGANTAMAX"
+  },
+  {
+   "species_id": "latias",
+   "pokemon_id": "latias_mega",
+   "is_default": false,
+   "kind": "MEGA"
+  },
+  {
+   "species_id": "latios",
+   "pokemon_id": "latios_mega",
+   "is_default": false,
+   "kind": "MEGA"
+  },
+  {
+   "species_id": "lilligant",
+   "pokemon_id": "lilligant_hisui",
+   "is_default": false,
+   "kind": "REGIONAL"
+  },
+  {
+   "species_id": "linoone",
+   "pokemon_id": "linoone_galar",
+   "is_default": false,
+   "kind": "REGIONAL"
+  },
+  {
+   "species_id": "lopunny",
+   "pokemon_id": "lopunny_mega",
+   "is_default": false,
+   "kind": "MEGA"
+  },
+  {
+   "species_id": "lucario",
+   "pokemon_id": "lucario_mega",
+   "is_default": false,
+   "kind": "MEGA"
+  },
+  {
+   "species_id": "lucario",
+   "pokemon_id": "lucario_mega_z",
+   "is_default": false,
+   "kind": "MEGA"
+  },
+  {
+   "species_id": "lurantis",
+   "pokemon_id": "lurantis_totem",
+   "is_default": false,
+   "kind": "TOTEM"
+  },
+  {
+   "species_id": "lycanroc",
+   "pokemon_id": "lycanroc_dusk",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "lycanroc",
+   "pokemon_id": "lycanroc_midnight",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "machamp",
+   "pokemon_id": "machamp_gmax",
+   "is_default": false,
+   "kind": "GIGANTAMAX"
+  },
+  {
+   "species_id": "magearna",
+   "pokemon_id": "magearna_mega",
+   "is_default": false,
+   "kind": "MEGA"
+  },
+  {
+   "species_id": "magearna",
+   "pokemon_id": "magearna_original",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "magearna",
+   "pokemon_id": "magearna_original_mega",
+   "is_default": false,
+   "kind": "MEGA"
+  },
+  {
+   "species_id": "malamar",
+   "pokemon_id": "malamar_mega",
+   "is_default": false,
+   "kind": "MEGA"
+  },
+  {
+   "species_id": "manectric",
+   "pokemon_id": "manectric_mega",
+   "is_default": false,
+   "kind": "MEGA"
+  },
+  {
+   "species_id": "marowak",
+   "pokemon_id": "marowak_alola",
+   "is_default": false,
+   "kind": "REGIONAL"
+  },
+  {
+   "species_id": "marowak",
+   "pokemon_id": "marowak_totem",
+   "is_default": false,
+   "kind": "TOTEM"
+  },
+  {
+   "species_id": "maushold",
+   "pokemon_id": "maushold_family_of_three",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "mawile",
+   "pokemon_id": "mawile_mega",
+   "is_default": false,
+   "kind": "MEGA"
+  },
+  {
+   "species_id": "medicham",
+   "pokemon_id": "medicham_mega",
+   "is_default": false,
+   "kind": "MEGA"
+  },
+  {
+   "species_id": "meganium",
+   "pokemon_id": "meganium_mega",
+   "is_default": false,
+   "kind": "MEGA"
+  },
+  {
+   "species_id": "melmetal",
+   "pokemon_id": "melmetal_gmax",
+   "is_default": false,
+   "kind": "GIGANTAMAX"
+  },
+  {
+   "species_id": "meloetta",
+   "pokemon_id": "meloetta_pirouette",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "meowstic",
+   "pokemon_id": "meowstic_female",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "meowstic",
+   "pokemon_id": "meowstic_female_mega",
+   "is_default": false,
+   "kind": "MEGA"
+  },
+  {
+   "species_id": "meowstic",
+   "pokemon_id": "meowstic_male_mega",
+   "is_default": false,
+   "kind": "MEGA"
+  },
+  {
+   "species_id": "meowth",
+   "pokemon_id": "meowth_alola",
+   "is_default": false,
+   "kind": "REGIONAL"
+  },
+  {
+   "species_id": "meowth",
+   "pokemon_id": "meowth_galar",
+   "is_default": false,
+   "kind": "REGIONAL"
+  },
+  {
+   "species_id": "meowth",
+   "pokemon_id": "meowth_gmax",
+   "is_default": false,
+   "kind": "GIGANTAMAX"
+  },
+  {
+   "species_id": "metagross",
+   "pokemon_id": "metagross_mega",
+   "is_default": false,
+   "kind": "MEGA"
+  },
+  {
+   "species_id": "mewtwo",
+   "pokemon_id": "mewtwo_mega_x",
+   "is_default": false,
+   "kind": "MEGA"
+  },
+  {
+   "species_id": "mewtwo",
+   "pokemon_id": "mewtwo_mega_y",
+   "is_default": false,
+   "kind": "MEGA"
+  },
+  {
+   "species_id": "mimikyu",
+   "pokemon_id": "mimikyu_busted",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "mimikyu",
+   "pokemon_id": "mimikyu_totem_busted",
+   "is_default": false,
+   "kind": "TOTEM"
+  },
+  {
+   "species_id": "mimikyu",
+   "pokemon_id": "mimikyu_totem_disguised",
+   "is_default": false,
+   "kind": "TOTEM"
+  },
+  {
+   "species_id": "minior",
+   "pokemon_id": "minior_blue",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "minior",
+   "pokemon_id": "minior_blue_meteor",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "minior",
+   "pokemon_id": "minior_green",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "minior",
+   "pokemon_id": "minior_green_meteor",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "minior",
+   "pokemon_id": "minior_indigo",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "minior",
+   "pokemon_id": "minior_indigo_meteor",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "minior",
+   "pokemon_id": "minior_orange",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "minior",
+   "pokemon_id": "minior_orange_meteor",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "minior",
+   "pokemon_id": "minior_red",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "minior",
+   "pokemon_id": "minior_violet",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "minior",
+   "pokemon_id": "minior_violet_meteor",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "minior",
+   "pokemon_id": "minior_yellow",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "minior",
+   "pokemon_id": "minior_yellow_meteor",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "miraidon",
+   "pokemon_id": "miraidon_aquatic_mode",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "miraidon",
+   "pokemon_id": "miraidon_drive_mode",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "miraidon",
+   "pokemon_id": "miraidon_glide_mode",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "miraidon",
+   "pokemon_id": "miraidon_low_power_mode",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "moltres",
+   "pokemon_id": "moltres_galar",
+   "is_default": false,
+   "kind": "REGIONAL"
+  },
+  {
+   "species_id": "morpeko",
+   "pokemon_id": "morpeko_hangry",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "mr_mime",
+   "pokemon_id": "mr_mime_galar",
+   "is_default": false,
+   "kind": "REGIONAL"
+  },
+  {
+   "species_id": "muk",
+   "pokemon_id": "muk_alola",
+   "is_default": false,
+   "kind": "REGIONAL"
+  },
+  {
+   "species_id": "necrozma",
+   "pokemon_id": "necrozma_dawn",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "necrozma",
+   "pokemon_id": "necrozma_dusk",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "necrozma",
+   "pokemon_id": "necrozma_ultra",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "ninetales",
+   "pokemon_id": "ninetales_alola",
+   "is_default": false,
+   "kind": "REGIONAL"
+  },
+  {
+   "species_id": "ogerpon",
+   "pokemon_id": "ogerpon_cornerstone_mask",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "ogerpon",
+   "pokemon_id": "ogerpon_hearthflame_mask",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "ogerpon",
+   "pokemon_id": "ogerpon_wellspring_mask",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "oinkologne",
+   "pokemon_id": "oinkologne_female",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "orbeetle",
+   "pokemon_id": "orbeetle_gmax",
+   "is_default": false,
+   "kind": "GIGANTAMAX"
+  },
+  {
+   "species_id": "oricorio",
+   "pokemon_id": "oricorio_pau",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "oricorio",
+   "pokemon_id": "oricorio_pom_pom",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "oricorio",
+   "pokemon_id": "oricorio_sensu",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "palafin",
+   "pokemon_id": "palafin_hero",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "palkia",
+   "pokemon_id": "palkia_origin",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "persian",
+   "pokemon_id": "persian_alola",
+   "is_default": false,
+   "kind": "REGIONAL"
+  },
+  {
+   "species_id": "pidgeot",
+   "pokemon_id": "pidgeot_mega",
+   "is_default": false,
+   "kind": "MEGA"
+  },
+  {
+   "species_id": "pikachu",
+   "pokemon_id": "pikachu_alola_cap",
+   "is_default": false,
+   "kind": "REGIONAL"
+  },
+  {
+   "species_id": "pikachu",
+   "pokemon_id": "pikachu_belle",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "pikachu",
+   "pokemon_id": "pikachu_cosplay",
+   "is_default": false,
+   "kind": "COSMETIC"
+  },
+  {
+   "species_id": "pikachu",
+   "pokemon_id": "pikachu_gmax",
+   "is_default": false,
+   "kind": "GIGANTAMAX"
+  },
+  {
+   "species_id": "pikachu",
+   "pokemon_id": "pikachu_hoenn_cap",
+   "is_default": false,
+   "kind": "REGIONAL"
+  },
+  {
+   "species_id": "pikachu",
+   "pokemon_id": "pikachu_kalos_cap",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "pikachu",
+   "pokemon_id": "pikachu_libre",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "pikachu",
+   "pokemon_id": "pikachu_original_cap",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "pikachu",
+   "pokemon_id": "pikachu_partner_cap",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "pikachu",
+   "pokemon_id": "pikachu_phd",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "pikachu",
+   "pokemon_id": "pikachu_pop_star",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "pikachu",
+   "pokemon_id": "pikachu_rock_star",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "pikachu",
+   "pokemon_id": "pikachu_sinnoh_cap",
+   "is_default": false,
+   "kind": "REGIONAL"
+  },
+  {
+   "species_id": "pikachu",
+   "pokemon_id": "pikachu_starter",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "pikachu",
+   "pokemon_id": "pikachu_unova_cap",
+   "is_default": false,
+   "kind": "REGIONAL"
+  },
+  {
+   "species_id": "pikachu",
+   "pokemon_id": "pikachu_world_cap",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "pinsir",
+   "pokemon_id": "pinsir_mega",
+   "is_default": false,
+   "kind": "MEGA"
+  },
+  {
+   "species_id": "ponyta",
+   "pokemon_id": "ponyta_galar",
+   "is_default": false,
+   "kind": "REGIONAL"
+  },
+  {
+   "species_id": "pumpkaboo",
+   "pokemon_id": "pumpkaboo_large",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "pumpkaboo",
+   "pokemon_id": "pumpkaboo_small",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "pumpkaboo",
+   "pokemon_id": "pumpkaboo_super",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "pyroar",
+   "pokemon_id": "pyroar_mega",
+   "is_default": false,
+   "kind": "MEGA"
+  },
+  {
+   "species_id": "qwilfish",
+   "pokemon_id": "qwilfish_hisui",
+   "is_default": false,
+   "kind": "REGIONAL"
+  },
+  {
+   "species_id": "raichu",
+   "pokemon_id": "raichu_alola",
+   "is_default": false,
+   "kind": "REGIONAL"
+  },
+  {
+   "species_id": "raichu",
+   "pokemon_id": "raichu_mega_x",
+   "is_default": false,
+   "kind": "MEGA"
+  },
+  {
+   "species_id": "raichu",
+   "pokemon_id": "raichu_mega_y",
+   "is_default": false,
+   "kind": "MEGA"
+  },
+  {
+   "species_id": "rapidash",
+   "pokemon_id": "rapidash_galar",
+   "is_default": false,
+   "kind": "REGIONAL"
+  },
+  {
+   "species_id": "raticate",
+   "pokemon_id": "raticate_alola",
+   "is_default": false,
+   "kind": "REGIONAL"
+  },
+  {
+   "species_id": "raticate",
+   "pokemon_id": "raticate_totem_alola",
+   "is_default": false,
+   "kind": "REGIONAL"
+  },
+  {
+   "species_id": "rattata",
+   "pokemon_id": "rattata_alola",
+   "is_default": false,
+   "kind": "REGIONAL"
+  },
+  {
+   "species_id": "rayquaza",
+   "pokemon_id": "rayquaza_mega",
+   "is_default": false,
+   "kind": "MEGA"
+  },
+  {
+   "species_id": "ribombee",
+   "pokemon_id": "ribombee_totem",
+   "is_default": false,
+   "kind": "TOTEM"
+  },
+  {
+   "species_id": "rillaboom",
+   "pokemon_id": "rillaboom_gmax",
+   "is_default": false,
+   "kind": "GIGANTAMAX"
+  },
+  {
+   "species_id": "rockruff",
+   "pokemon_id": "rockruff_own_tempo",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "rotom",
+   "pokemon_id": "rotom_fan",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "rotom",
+   "pokemon_id": "rotom_frost",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "rotom",
+   "pokemon_id": "rotom_heat",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "rotom",
+   "pokemon_id": "rotom_mow",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "rotom",
+   "pokemon_id": "rotom_wash",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "sableye",
+   "pokemon_id": "sableye_mega",
+   "is_default": false,
+   "kind": "MEGA"
+  },
+  {
+   "species_id": "salamence",
+   "pokemon_id": "salamence_mega",
+   "is_default": false,
+   "kind": "MEGA"
+  },
+  {
+   "species_id": "salazzle",
+   "pokemon_id": "salazzle_totem",
+   "is_default": false,
+   "kind": "TOTEM"
+  },
+  {
+   "species_id": "samurott",
+   "pokemon_id": "samurott_hisui",
+   "is_default": false,
+   "kind": "REGIONAL"
+  },
+  {
+   "species_id": "sandaconda",
+   "pokemon_id": "sandaconda_gmax",
+   "is_default": false,
+   "kind": "GIGANTAMAX"
+  },
+  {
+   "species_id": "sandshrew",
+   "pokemon_id": "sandshrew_alola",
+   "is_default": false,
+   "kind": "REGIONAL"
+  },
+  {
+   "species_id": "sandslash",
+   "pokemon_id": "sandslash_alola",
+   "is_default": false,
+   "kind": "REGIONAL"
+  },
+  {
+   "species_id": "sceptile",
+   "pokemon_id": "sceptile_mega",
+   "is_default": false,
+   "kind": "MEGA"
+  },
+  {
+   "species_id": "scizor",
+   "pokemon_id": "scizor_mega",
+   "is_default": false,
+   "kind": "MEGA"
+  },
+  {
+   "species_id": "scolipede",
+   "pokemon_id": "scolipede_mega",
+   "is_default": false,
+   "kind": "MEGA"
+  },
+  {
+   "species_id": "scovillain",
+   "pokemon_id": "scovillain_mega",
+   "is_default": false,
+   "kind": "MEGA"
+  },
+  {
+   "species_id": "scrafty",
+   "pokemon_id": "scrafty_mega",
+   "is_default": false,
+   "kind": "MEGA"
+  },
+  {
+   "species_id": "sharpedo",
+   "pokemon_id": "sharpedo_mega",
+   "is_default": false,
+   "kind": "MEGA"
+  },
+  {
+   "species_id": "shaymin",
+   "pokemon_id": "shaymin_sky",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "skarmory",
+   "pokemon_id": "skarmory_mega",
+   "is_default": false,
+   "kind": "MEGA"
+  },
+  {
+   "species_id": "sliggoo",
+   "pokemon_id": "sliggoo_hisui",
+   "is_default": false,
+   "kind": "REGIONAL"
+  },
+  {
+   "species_id": "slowbro",
+   "pokemon_id": "slowbro_galar",
+   "is_default": false,
+   "kind": "REGIONAL"
+  },
+  {
+   "species_id": "slowbro",
+   "pokemon_id": "slowbro_mega",
+   "is_default": false,
+   "kind": "MEGA"
+  },
+  {
+   "species_id": "slowking",
+   "pokemon_id": "slowking_galar",
+   "is_default": false,
+   "kind": "REGIONAL"
+  },
+  {
+   "species_id": "slowpoke",
+   "pokemon_id": "slowpoke_galar",
+   "is_default": false,
+   "kind": "REGIONAL"
+  },
+  {
+   "species_id": "sneasel",
+   "pokemon_id": "sneasel_hisui",
+   "is_default": false,
+   "kind": "REGIONAL"
+  },
+  {
+   "species_id": "snorlax",
+   "pokemon_id": "snorlax_gmax",
+   "is_default": false,
+   "kind": "GIGANTAMAX"
+  },
+  {
+   "species_id": "squawkabilly",
+   "pokemon_id": "squawkabilly_blue_plumage",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "squawkabilly",
+   "pokemon_id": "squawkabilly_white_plumage",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "squawkabilly",
+   "pokemon_id": "squawkabilly_yellow_plumage",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "staraptor",
+   "pokemon_id": "staraptor_mega",
+   "is_default": false,
+   "kind": "MEGA"
+  },
+  {
+   "species_id": "starmie",
+   "pokemon_id": "starmie_mega",
+   "is_default": false,
+   "kind": "MEGA"
+  },
+  {
+   "species_id": "steelix",
+   "pokemon_id": "steelix_mega",
+   "is_default": false,
+   "kind": "MEGA"
+  },
+  {
+   "species_id": "stunfisk",
+   "pokemon_id": "stunfisk_galar",
+   "is_default": false,
+   "kind": "REGIONAL"
+  },
+  {
+   "species_id": "swampert",
+   "pokemon_id": "swampert_mega",
+   "is_default": false,
+   "kind": "MEGA"
+  },
+  {
+   "species_id": "tatsugiri",
+   "pokemon_id": "tatsugiri_curly_mega",
+   "is_default": false,
+   "kind": "MEGA"
+  },
+  {
+   "species_id": "tatsugiri",
+   "pokemon_id": "tatsugiri_droopy",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "tatsugiri",
+   "pokemon_id": "tatsugiri_droopy_mega",
+   "is_default": false,
+   "kind": "MEGA"
+  },
+  {
+   "species_id": "tatsugiri",
+   "pokemon_id": "tatsugiri_stretchy",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "tatsugiri",
+   "pokemon_id": "tatsugiri_stretchy_mega",
+   "is_default": false,
+   "kind": "MEGA"
+  },
+  {
+   "species_id": "tauros",
+   "pokemon_id": "tauros_paldea_aqua_breed",
+   "is_default": false,
+   "kind": "REGIONAL"
+  },
+  {
+   "species_id": "tauros",
+   "pokemon_id": "tauros_paldea_blaze_breed",
+   "is_default": false,
+   "kind": "REGIONAL"
+  },
+  {
+   "species_id": "tauros",
+   "pokemon_id": "tauros_paldea_combat_breed",
+   "is_default": false,
+   "kind": "REGIONAL"
+  },
+  {
+   "species_id": "terapagos",
+   "pokemon_id": "terapagos_stellar",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "terapagos",
+   "pokemon_id": "terapagos_terastal",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "thundurus",
+   "pokemon_id": "thundurus_therian",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "togedemaru",
+   "pokemon_id": "togedemaru_totem",
+   "is_default": false,
+   "kind": "TOTEM"
+  },
+  {
+   "species_id": "tornadus",
+   "pokemon_id": "tornadus_therian",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "toxtricity",
+   "pokemon_id": "toxtricity_amped_gmax",
+   "is_default": false,
+   "kind": "GIGANTAMAX"
+  },
+  {
+   "species_id": "toxtricity",
+   "pokemon_id": "toxtricity_low_key",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "toxtricity",
+   "pokemon_id": "toxtricity_low_key_gmax",
+   "is_default": false,
+   "kind": "GIGANTAMAX"
+  },
+  {
+   "species_id": "typhlosion",
+   "pokemon_id": "typhlosion_hisui",
+   "is_default": false,
+   "kind": "REGIONAL"
+  },
+  {
+   "species_id": "tyranitar",
+   "pokemon_id": "tyranitar_mega",
+   "is_default": false,
+   "kind": "MEGA"
+  },
+  {
+   "species_id": "ursaluna",
+   "pokemon_id": "ursaluna_bloodmoon",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "urshifu",
+   "pokemon_id": "urshifu_rapid_strike",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "urshifu",
+   "pokemon_id": "urshifu_rapid_strike_gmax",
+   "is_default": false,
+   "kind": "GIGANTAMAX"
+  },
+  {
+   "species_id": "urshifu",
+   "pokemon_id": "urshifu_single_strike_gmax",
+   "is_default": false,
+   "kind": "GIGANTAMAX"
+  },
+  {
+   "species_id": "venusaur",
+   "pokemon_id": "venusaur_gmax",
+   "is_default": false,
+   "kind": "GIGANTAMAX"
+  },
+  {
+   "species_id": "venusaur",
+   "pokemon_id": "venusaur_mega",
+   "is_default": false,
+   "kind": "MEGA"
+  },
+  {
+   "species_id": "victreebel",
+   "pokemon_id": "victreebel_mega",
+   "is_default": false,
+   "kind": "MEGA"
+  },
+  {
+   "species_id": "vikavolt",
+   "pokemon_id": "vikavolt_totem",
+   "is_default": false,
+   "kind": "TOTEM"
+  },
+  {
+   "species_id": "voltorb",
+   "pokemon_id": "voltorb_hisui",
+   "is_default": false,
+   "kind": "REGIONAL"
+  },
+  {
+   "species_id": "vulpix",
+   "pokemon_id": "vulpix_alola",
+   "is_default": false,
+   "kind": "REGIONAL"
+  },
+  {
+   "species_id": "weezing",
+   "pokemon_id": "weezing_galar",
+   "is_default": false,
+   "kind": "REGIONAL"
+  },
+  {
+   "species_id": "wishiwashi",
+   "pokemon_id": "wishiwashi_school",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "wooper",
+   "pokemon_id": "wooper_paldea",
+   "is_default": false,
+   "kind": "REGIONAL"
+  },
+  {
+   "species_id": "wormadam",
+   "pokemon_id": "wormadam_sandy",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "wormadam",
+   "pokemon_id": "wormadam_trash",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "yamask",
+   "pokemon_id": "yamask_galar",
+   "is_default": false,
+   "kind": "REGIONAL"
+  },
+  {
+   "species_id": "zacian",
+   "pokemon_id": "zacian_crowned",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "zamazenta",
+   "pokemon_id": "zamazenta_crowned",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "zapdos",
+   "pokemon_id": "zapdos_galar",
+   "is_default": false,
+   "kind": "REGIONAL"
+  },
+  {
+   "species_id": "zarude",
+   "pokemon_id": "zarude_dada",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "zeraora",
+   "pokemon_id": "zeraora_mega",
+   "is_default": false,
+   "kind": "MEGA"
+  },
+  {
+   "species_id": "zigzagoon",
+   "pokemon_id": "zigzagoon_galar",
+   "is_default": false,
+   "kind": "REGIONAL"
+  },
+  {
+   "species_id": "zoroark",
+   "pokemon_id": "zoroark_hisui",
+   "is_default": false,
+   "kind": "REGIONAL"
+  },
+  {
+   "species_id": "zorua",
+   "pokemon_id": "zorua_hisui",
+   "is_default": false,
+   "kind": "REGIONAL"
+  },
+  {
+   "species_id": "zygarde",
+   "pokemon_id": "zygarde_10",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "zygarde",
+   "pokemon_id": "zygarde_10_power_construct",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "zygarde",
+   "pokemon_id": "zygarde_50_power_construct",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "zygarde",
+   "pokemon_id": "zygarde_complete",
+   "is_default": false,
+   "kind": "ALTERNATE"
+  },
+  {
+   "species_id": "zygarde",
+   "pokemon_id": "zygarde_mega",
+   "is_default": false,
+   "kind": "MEGA"
   }
- ]
+ ],
+ "anomalies": []
 }

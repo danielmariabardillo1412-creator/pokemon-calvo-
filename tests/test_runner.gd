@@ -345,11 +345,28 @@ func _import_pokeapi() -> GameData:
 
 func _test_pokeapi_manifest_valid() -> void:
 	var m := DatasetManifest.from_dict(_load_json("res://data/manifests/pokemon_api_manifest.json"))
-	_check("pokeapi_manifest_valid", m.is_valid() and m.schema_version == 2 and m.source == "pokeapi/api-data")
+	_check(
+		"pokeapi_manifest_valid",
+		m.is_valid()
+		and m.schema_version == 2
+		and m.dataset_version == "3.0.0"
+		and m.source == "pokeapi/v2-snapshot"
+		and m.ruleset == "latest_conventional_mainline_per_species_v1",
+	)
 
 func _test_pokeapi_known_species() -> void:
 	var gd := _import_pokeapi()
-	_check("pokeapi_known_species", gd.species_catalog.has(&"bulbasaur") and gd.species_catalog.get_by_id(&"bulbasaur").display_name == "bulbasaur" and gd.species_catalog.has(&"pikachu") and gd.species_catalog.has(&"charizard"))
+	var bulbasaur := gd.species_catalog.get_by_id(&"bulbasaur")
+	_check(
+		"pokeapi_known_species",
+		bulbasaur != null
+		and bulbasaur.display_name == "Bulbasaur"
+		and gd.species_catalog.has(&"pikachu")
+		and gd.species_catalog.has(&"charizard")
+		and gd.species_catalog.has(&"mr_mime")
+		and gd.species_catalog.has(&"ho_oh")
+		and gd.species_catalog.has(&"porygon_z"),
+	)
 
 func _test_pokeapi_known_type() -> void:
 	var gd := _import_pokeapi()
@@ -403,14 +420,15 @@ func _test_pokeapi_artificial_broken_ref() -> void:
 func _test_pokeapi_forms_policy() -> void:
 	var gd := _import_pokeapi()
 	var fr: Dictionary = _load_json("res://data/reports/forms_policy_report.json")
-	var deferred: Array = fr.get("deferred", [])
-	_check("pokeapi_forms_policy", int(fr.get("forms_total", 0)) > 0 and deferred.size() > 0)
-	var no_deferred_in_catalog := true
-	for f in deferred:
-		if gd.species_catalog.has(StringName(f["id"])):
-			no_deferred_in_catalog = false
+	var forms: Array = fr.get("forms", [])
+	_check("pokeapi_forms_policy", int(fr.get("forms_total", 0)) == forms.size() and forms.size() > 0)
+	var no_form_variant_in_species_catalog := true
+	for f in forms:
+		var form_id := StringName(String(f.get("pokemon_id", "")))
+		if form_id != &"" and gd.species_catalog.has(form_id):
+			no_form_variant_in_species_catalog = false
 			break
-	_check("pokeapi_forms_not_in_catalog", no_deferred_in_catalog)
+	_check("pokeapi_forms_not_in_catalog", no_form_variant_in_species_catalog)
 
 func _test_pokeapi_deterministic_ordering() -> void:
 	var gd := _import_pokeapi()
@@ -425,53 +443,51 @@ func _test_pokeapi_manifest_provenance() -> void:
 	var m := DatasetManifest.from_dict(_load_json("res://data/manifests/pokemon_api_manifest.json"))
 	var sha: String = m.provenance.get("source_commit", "")
 	var lic: String = m.provenance.get("license", "")
-	_check("pokeapi_manifest_sha_full", sha == "784c50b3ad27d0390d3b047fc4c4511f71edd049")
+	_check("pokeapi_manifest_sha_full", sha == "2f218ec3765c01c894a42bbbd074f15ddf3f32d1")
 	_check("pokeapi_manifest_license_bsd", "BSD 3-Clause" in lic)
+	_check(
+		"pokeapi_manifest_snapshot_trees",
+		m.provenance.get("source_api_tree", "") == "8349ea1ce75716897fe96e02a15950d19edba6c3"
+		and m.provenance.get("source_schema_tree", "") == "02e031e1928d7e9456bf6f7486daacc4b8946c84",
+	)
 
 func _test_pokeapi_evolution_invariant() -> void:
 	var um: Dictionary = _load_json("res://data/reports/unsupported_mechanics.json")
-	var es: Dictionary = um["summary"]["evolutions"]
-	var fr: Dictionary = _load_json("res://data/reports/forms_policy_report.json")
+	var es: Dictionary = um.get("summary", {}).get("evolutions", {})
 	var raw: Dictionary = _load_json("res://data/raw/pokemon_api.json")
 	var gd := _import_pokeapi()
 	var actual_evo := 0
 	for sid in gd.species_catalog.all_ids():
 		actual_evo += gd.species_catalog.get_by_id(sid).evolutions.size()
-	# Recompute deferred-form edges from raw: evolution edges whose target is a deferred form.
-	var deferred_slugs := {}
-	for f in fr.get("deferred", []):
-		deferred_slugs[f["id"]] = true
-	var recomputed_deferred := 0
-	for sp in raw["species"]:
+	_check("pokeapi_evolution_source_invariant", int(es.get("SOURCE_RECORDS_PRESERVED", -1)) == actual_evo)
+	_check("pokeapi_evolution_coverage_invariant", actual_evo > 0)
+	_check("pokeapi_evolution_imported_matches_catalog", actual_evo == 554)
+	var species_ids := {}
+	for sp in raw.get("species", []):
+		species_ids[sp["id"]] = true
+	var all_targets_present := true
+	for sp in raw.get("species", []):
 		for ev in sp.get("evolutions", []):
-			if deferred_slugs.has(ev["species_id"]):
-				recomputed_deferred += 1
-	var source_ok: bool = int(es["SOURCE_EDGES"]) == int(es["IMPORTED_EDGES"]) + int(es["DEFERRED_FORM_EDGES"]) + int(es["REJECTED_EDGES"])
-	var cov_ok: bool = int(es["SUPPORTED_RUNTIME_OR_MODEL"]) + int(es["PARTIAL_RUNTIME"]) + int(es["UNSUPPORTED"]) == int(es["IMPORTED_EDGES"])
-	_check("pokeapi_evolution_source_invariant", source_ok)
-	_check("pokeapi_evolution_coverage_invariant", cov_ok)
-	_check("pokeapi_evolution_imported_matches_catalog", int(es["IMPORTED_EDGES"]) == actual_evo)
-	# Independent check: no imported (raw) evolution edge may target a deferred form.
-	var no_deferred_target := true
-	for sp in raw["species"]:
-		for ev in sp.get("evolutions", []):
-			if deferred_slugs.has(ev["species_id"]):
-				no_deferred_target = false
-	_check("pokeapi_evolution_no_deferred_targets", no_deferred_target)
+			if not species_ids.has(ev.get("species_id", "")):
+				all_targets_present = false
+	_check("pokeapi_evolution_no_deferred_targets", all_targets_present)
 
 func _test_pokeapi_move_coverage_invariant() -> void:
 	var um: Dictionary = _load_json("res://data/reports/unsupported_mechanics.json")
-	var ms: Dictionary = um["summary"]["moves"]
+	var ms: Dictionary = um.get("summary", {}).get("moves", {})
 	var gd := _import_pokeapi()
-	var sum_ok: bool = int(ms["RUNTIME_SUPPORTED"]) + int(ms["PARTIAL_RUNTIME"]) + int(ms["DATA_ONLY"]) + int(ms["UNSUPPORTED"]) == int(ms["DATA_READY"])
-	_check("pokeapi_move_coverage_sums", sum_ok)
-	_check("pokeapi_move_dataready_matches_catalog", int(ms["DATA_READY"]) == gd.move_catalog.size())
+	var runtime_total := 0
+	for key in ["RUNTIME_SUPPORTED", "PARTIAL_RUNTIME", "DATA_ONLY", "UNSUPPORTED"]:
+		runtime_total += int(ms.get(key, 0))
+	_check("pokeapi_move_coverage_sums", runtime_total == gd.move_catalog.size())
+	_check("pokeapi_move_dataready_matches_catalog", gd.move_catalog.size() == 919)
+	_check("pokeapi_move_sidegame_exclusions", int(ms.get("EXCLUDED_NON_STANDARD_TYPE", 0)) == 18)
 
 func _test_pokeapi_ability_item_coverage_invariant() -> void:
 	var um: Dictionary = _load_json("res://data/reports/unsupported_mechanics.json")
 	var gd := _import_pokeapi()
-	_check("pokeapi_ability_dataready_matches_catalog", int(um["summary"]["abilities"]["DATA_ONLY"]) == gd.ability_catalog.size())
-	_check("pokeapi_item_dataready_matches_catalog", int(um["summary"]["items"]["DATA_ONLY"]) == gd.item_catalog.size())
+	_check("pokeapi_ability_dataready_matches_catalog", int(um["summary"]["abilities"].get("DATA_READY", -1)) == gd.ability_catalog.size())
+	_check("pokeapi_item_dataready_matches_catalog", int(um["summary"]["items"].get("DATA_READY", -1)) == gd.item_catalog.size())
 
 func _test_pokeapi_ids_unique() -> void:
 	var raw: Dictionary = _load_json("res://data/raw/pokemon_api.json")

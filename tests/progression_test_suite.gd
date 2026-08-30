@@ -277,99 +277,95 @@ func _test_factory_initial_moves() -> void:
 
 func _test_learnset_queries() -> void:
 	var sp := _bulbasaur()
-	var at13 := LearnsetSystem.level_up_moves_between(sp, 12, 13)
+	var target_level := _level_up_move_level(sp, &"vine_whip")
+	var previous_level := maxi(1, target_level - 1)
+	var crossed := LearnsetSystem.level_up_moves_between(sp, previous_level, target_level)
 	var has_vine := false
-	for e in at13:
+	for e in crossed:
 		if (e as LearnSetEntry).move_id == &"vine_whip":
 			has_vine = true
-	_check.call("learnset_vine_whip_at_13", has_vine)
+	_check.call("learnset_vine_whip_at_source_level", target_level > 1 and has_vine)
 	var init := LearnsetSystem.initial_moves(sp, 1)
 	_check.call("learnset_initial_not_over_cap", init.size() <= ProgressionRuleset.MOVE_SLOTS_MAX)
-	_check.call("learnset_moves_learned_at_level", LearnsetSystem.moves_learned_at_level(sp, 13).has(&"vine_whip"))
-
-
-# --- Gain experience / learnset ---------------------------------------------
+	_check.call("learnset_moves_learned_at_level", LearnsetSystem.moves_learned_at_level(sp, target_level).has(&"vine_whip"))
 
 func _test_gain_learns_move() -> void:
 	var rs := _rs()
 	var sp := _bulbasaur()
-	var c := CreatureInstance.new(&"c", &"bulbasaur", 12, StatBlock.new(), [])
+	var target_level := _level_up_move_level(sp, &"vine_whip")
+	var previous_level := target_level - 1
+	var c := CreatureInstance.new(&"c", &"bulbasaur", previous_level, StatBlock.new(), [])
 	c.recalculate_stats(sp, rs)
 	c.moveset.clear()
 	c.move_ids.clear()
-	c.experience = rs.experience_for_level("medium-slow", 12)
-	var need := rs.experience_for_level("medium-slow", 13) - rs.experience_for_level("medium-slow", 12)
+	c.experience = rs.experience_for_level("medium-slow", previous_level)
+	var need := rs.experience_for_level("medium-slow", target_level) - c.experience
 	var events := ProgressionSystem.gain_experience(c, need, sp, _catalog, rs)
 	var learned := false
 	for ev in events:
-		if (ev as ProgressionEvent).kind == ProgressionEvent.MOVE_LEARNED \
-				and (ev as ProgressionEvent).data.get("move_id") == &"vine_whip":
+		if (ev as ProgressionEvent).kind == ProgressionEvent.MOVE_LEARNED and (ev as ProgressionEvent).data.get("move_id") == &"vine_whip":
 			learned = true
 	_check.call("gain_learns_vine_whip", learned and c.has_move(&"vine_whip"))
-	_check.call("gain_level_13", c.level == 13)
-
+	_check.call("gain_reaches_source_move_level", c.level == target_level)
 
 func _test_gain_move_choice_required() -> void:
 	var rs := _rs()
 	var sp := _bulbasaur()
+	var target_level := _level_up_move_level(sp, &"vine_whip")
+	var previous_level := target_level - 1
 	var filler := _four_valid_moves_excluding(&"vine_whip")
-	var c := CreatureInstance.new(&"c", &"bulbasaur", 12, StatBlock.new(), filler)
+	var c := CreatureInstance.new(&"c", &"bulbasaur", previous_level, StatBlock.new(), filler)
 	c.recalculate_stats(sp, rs)
 	c.initialize_move_pp(_catalog)
-	c.experience = rs.experience_for_level("medium-slow", 12)
-	var need := rs.experience_for_level("medium-slow", 13) - rs.experience_for_level("medium-slow", 12)
+	c.experience = rs.experience_for_level("medium-slow", previous_level)
+	var need := rs.experience_for_level("medium-slow", target_level) - c.experience
 	var events := ProgressionSystem.gain_experience(c, need, sp, _catalog, rs)
 	var choice := false
 	for ev in events:
-		if (ev as ProgressionEvent).kind == ProgressionEvent.MOVE_LEARN_CHOICE_REQUIRED \
-				and (ev as ProgressionEvent).data.get("new_move_id") == &"vine_whip":
+		if (ev as ProgressionEvent).kind == ProgressionEvent.MOVE_LEARN_CHOICE_REQUIRED and (ev as ProgressionEvent).data.get("new_move_id") == &"vine_whip":
 			choice = true
 	_check.call("gain_move_choice_required", choice)
 	_check.call("gain_moveset_full", c.moveset.size() == ProgressionRuleset.MOVE_SLOTS_MAX)
 
-
 func _test_move_choice_replace() -> void:
 	var rs := _rs()
 	var sp := _bulbasaur()
+	var target_level := _level_up_move_level(sp, &"vine_whip")
+	var previous_level := target_level - 1
 	var filler := _four_valid_moves_excluding(&"vine_whip")
-	var c := CreatureInstance.new(&"c", &"bulbasaur", 12, StatBlock.new(), filler)
+	var c := CreatureInstance.new(&"c", &"bulbasaur", previous_level, StatBlock.new(), filler)
 	c.recalculate_stats(sp, rs)
 	c.initialize_move_pp(_catalog)
-	c.experience = rs.experience_for_level("medium-slow", 12)
-	var need := rs.experience_for_level("medium-slow", 13) - rs.experience_for_level("medium-slow", 12)
+	c.experience = rs.experience_for_level("medium-slow", previous_level)
+	var need := rs.experience_for_level("medium-slow", target_level) - c.experience
 	var events := ProgressionSystem.gain_experience(c, need, sp, _catalog, rs)
-	# Multiple moves are learned at L13; pick the vine_whip choice deterministically.
 	var choice: ProgressionEvent = null
 	for ev in events:
-		if (ev as ProgressionEvent).kind == ProgressionEvent.MOVE_LEARN_CHOICE_REQUIRED \
-				and (ev as ProgressionEvent).data.get("new_move_id") == &"vine_whip":
+		if (ev as ProgressionEvent).kind == ProgressionEvent.MOVE_LEARN_CHOICE_REQUIRED and (ev as ProgressionEvent).data.get("new_move_id") == &"vine_whip":
 			choice = ev as ProgressionEvent
 	var old_move: StringName = c.move_ids[0]
 	var ok := ProgressionSystem.apply_move_choice(c, choice, ProgressionSystem.REPLACE_MOVE, _catalog, old_move)
 	_check.call("move_choice_replace_ok", ok and c.has_move(&"vine_whip") and not c.has_move(old_move))
 
-
 func _test_move_choice_decline() -> void:
 	var rs := _rs()
 	var sp := _bulbasaur()
+	var target_level := _level_up_move_level(sp, &"vine_whip")
+	var previous_level := target_level - 1
 	var filler := _four_valid_moves_excluding(&"vine_whip")
-	var c := CreatureInstance.new(&"c", &"bulbasaur", 12, StatBlock.new(), filler)
+	var c := CreatureInstance.new(&"c", &"bulbasaur", previous_level, StatBlock.new(), filler)
 	c.recalculate_stats(sp, rs)
 	c.initialize_move_pp(_catalog)
-	c.experience = rs.experience_for_level("medium-slow", 12)
-	var need := rs.experience_for_level("medium-slow", 13) - rs.experience_for_level("medium-slow", 12)
+	c.experience = rs.experience_for_level("medium-slow", previous_level)
+	var need := rs.experience_for_level("medium-slow", target_level) - c.experience
 	var events := ProgressionSystem.gain_experience(c, need, sp, _catalog, rs)
 	var choice: ProgressionEvent = null
 	for ev in events:
-		if (ev as ProgressionEvent).kind == ProgressionEvent.MOVE_LEARN_CHOICE_REQUIRED \
-				and (ev as ProgressionEvent).data.get("new_move_id") == &"vine_whip":
+		if (ev as ProgressionEvent).kind == ProgressionEvent.MOVE_LEARN_CHOICE_REQUIRED and (ev as ProgressionEvent).data.get("new_move_id") == &"vine_whip":
 			choice = ev as ProgressionEvent
 	var before := c.moveset.size()
 	var ok := ProgressionSystem.apply_move_choice(c, choice, ProgressionSystem.DECLINE_MOVE, _catalog)
 	_check.call("move_choice_decline_ok", ok and c.moveset.size() == before and not c.has_move(&"vine_whip"))
-
-
-# --- Evolution ---------------------------------------------------------------
 
 func _test_evolution_by_level() -> void:
 	var rs := _rs()
@@ -495,15 +491,17 @@ func _test_volatile_status_not_persisted() -> void:
 
 func _test_evolution_coverage_invariant() -> void:
 	var report := EvolutionSystem.coverage_report(_catalog)
-	_check.call("evo_coverage_total", report["edges_total"] == 476)
+	var expected_total := 0
+	for sid in _catalog.species_catalog.all_ids():
+		expected_total += _catalog.species_catalog.get_by_id(sid).evolutions.size()
+	_check.call("evo_coverage_total", report["edges_total"] == expected_total)
 	var counts: Dictionary = report["counts"]
 	var sum := 0
 	for k in counts.keys():
 		sum += int(counts[k])
-	_check.call("evo_coverage_sum", sum == 476)
+	_check.call("evo_coverage_sum", sum == expected_total)
 	_check.call("evo_coverage_has_unsupported", int(counts[EvolutionSystem.UNSUPPORTED]) > 0)
 	_check.call("evo_coverage_has_runtime", int(counts[EvolutionSystem.RUNTIME_SUPPORTED]) > 0)
-
 
 func _test_ruleset_policy_id() -> void:
 	_check.call("ruleset_policy_id", ProgressionRuleset.POLICY_ID == "calvo_progression_v1")
@@ -511,6 +509,12 @@ func _test_ruleset_policy_id() -> void:
 
 
 # --- helpers -----------------------------------------------------------------
+
+func _level_up_move_level(species: CreatureSpecies, move_id: StringName) -> int:
+	for entry in species.learnset:
+		if entry is LearnSetEntry and (entry as LearnSetEntry).method == LearnsetSystem.LEVEL_UP and (entry as LearnSetEntry).move_id == move_id:
+			return (entry as LearnSetEntry).level
+	return -1
 
 func _four_valid_moves_excluding(exclude: StringName) -> Array[StringName]:
 	var out: Array[StringName] = []
