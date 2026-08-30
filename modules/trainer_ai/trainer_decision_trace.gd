@@ -50,3 +50,35 @@ func to_dict() -> Dictionary:
 		"selected_reason": selected_reason,
 		"metadata": metadata.duplicate(true),
 	}
+
+
+static func from_dict(data: Dictionary) -> TrainerDecisionTrace:
+	assert(
+		int(data.get("schema_version", -1)) == SCHEMA_VERSION,
+		"Unsupported trainer decision trace schema",
+	)
+	var trace := TrainerDecisionTrace.new()
+	trace.battle_id = StringName(data.get("battle_id", ""))
+	trace.turn = maxi(0, int(data.get("turn", 0)))
+	trace.brain_id = StringName(data.get("brain_id", ""))
+	trace.profile_id = StringName(data.get("profile_id", ""))
+	for raw_candidate in data.get("candidates", []):
+		var candidate_data := raw_candidate as Dictionary
+		trace.candidates.append({
+			"action": (candidate_data.get("action", {}) as Dictionary).duplicate(true),
+			"source_id": String(candidate_data.get("source_id", "")),
+			"score": int(candidate_data.get("score", 0)),
+			"confidence_basis_points": clampi(
+				int(candidate_data.get("confidence_basis_points", 0)),
+				0,
+				10000,
+			),
+			"reasons": (candidate_data.get("reasons", []) as Array).duplicate(),
+			"metadata": (candidate_data.get("metadata", {}) as Dictionary).duplicate(true),
+		})
+	trace.selected_action = (
+		(data.get("selected_action", {}) as Dictionary).duplicate(true)
+	)
+	trace.selected_reason = String(data.get("selected_reason", ""))
+	trace.metadata = (data.get("metadata", {}) as Dictionary).duplicate(true)
+	return trace
