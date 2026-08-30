@@ -1,177 +1,231 @@
-# MECHANICS COVERAGE — Battle Core V2
+# Pokémon Calvo — Mechanics Coverage
 
-Scope: dataset FASE 4.1 + runtime `calvo_v1`. The import report remains an immutable
-historical report; current runtime deltas are versioned in
-`data/battle/runtime_coverage_v2.json`.
+Fecha de sincronización: 2026-08-30  
+Dataset: PokéAPI `api-data` @ `784c50b3ad27d0390d3b047fc4c4511f71edd049` (BSD 3-Clause)  
+Runtime baseline: FASE 18 / `calvo_v1` + `calvo_capture_v1` + `calvo_escape_v1`
 
-- **DATA_READY** — the necessary data is imported and modeled in the domain classes.
-- **RUNTIME_SUPPORTED / PARTIAL_RUNTIME / DATA_ONLY / UNSUPPORTED** — how much the *engine*
-  (Foundation V1 battle) can actually execute.
+Este documento separa **datos disponibles** de **gameplay realmente ejecutable**. Importar una definición o conservar `effect_summary` no equivale a soportar su mecánica.
 
-Source: PokéAPI `api-data` @ `784c50b3ad27d0390d3b047fc4c4511f71edd049` (BSD 3-Clause).
+## Terminología
 
-## Terminology (honest)
-
-| Label | Meaning |
+| Label | Significado |
 |---|---|
-| `DATA_READY` | Data imported and modeled; available for Battle Core V2 to consume. |
-| `RUNTIME_SUPPORTED` | Runtime + test execute the complete behavior claimed for that stable ID under `calvo_v1`. |
-| `PARTIAL_RUNTIME` | Part of the behavior is implemented; the rest is not (e.g. damaging move whose secondary effect is unimplemented). |
-| `DATA_ONLY` | Definition exists; no runtime behavior in Foundation V1 (e.g. status moves, abilities, items). |
-| `UNSUPPORTED` | The model/runtime cannot yet represent or execute the mechanic (gimmick moves; unmodeled evolution triggers). |
+| `DATA_READY` | El dato está importado/modelado y puede ser consumido por runtime futuro. |
+| `RUNTIME_SUPPORTED` | El comportamiento reclamado para ese ID está ejecutado por runtime y cubierto por tests. |
+| `PARTIAL_RUNTIME` | Parte del comportamiento funciona pero quedan efectos/condiciones sin modelar. |
+| `DATA_ONLY` | La definición existe, pero no tiene comportamiento de gameplay completo. |
+| `UNSUPPORTED` | El modelo/runtime actual no puede representar o ejecutar esa mecánica. |
 
-> No move is promoted merely because `effect_summary` describes it. Promotion requires an explicit
-> structured mapping/handler and runtime test.
+## Dataset importado
 
-## Totals imported
-
-| Category | Count |
-|---|---|
-| Species (base) | 986 |
-| Forms (deferred) | 39 |
+| Categoría | Cantidad |
+|---|---:|
+| Species base | 986 |
+| Forms diferidas | 39 |
 | Types | 21 |
 | Moves | 937 |
 | Abilities | 373 |
 | Items | 2222 |
-| Status conditions | 0 (not present in pinned source) |
 | Learnset entries | 129390 |
+| Imported evolution edges | 476 |
 | Broken references | 0 |
 | Rejected entries | 0 |
-| Import time | ~927 ms |
 
-## Moves (937) — DATA_READY = 937
+PokéAPI no aporta status conditions utilizables en el snapshot fijado; los status canónicos del ruleset se modelan internamente.
 
-> Cobertura recalculada en FASE 5 (effect_specs data-driven desde metadata estructurada).
-> Ver `docs/MOVE_EFFECT_COVERAGE.md` y `docs/ARCHITECTURE_DECISION_004_EFFECT_DATA.md`.
+## Moves — 937 DATA_READY
 
-| Coverage | Count | Sum check |
-|---|---|---|
-| `RUNTIME_SUPPORTED` | 541 | moves whose complete `calvo_v1` behavior is executed by runtime + tested (was 376 pre-FASE5 / 91 contrato V2 previo) |
-| `PARTIAL_RUNTIME` | 60 | damaging move whose secondary effect is not modeled (unmodeled ailment/stat or `effect_chance` bespoke) |
-| `DATA_ONLY` | 327 | status/non-damaging moves without modeled behavior |
-| `UNSUPPORTED` | 9 | gimmick/copy moves the model cannot represent |
-| **TOTAL** | **937** | 541 + 60 + 327 + 9 = 937 ✓ |
+Cobertura actual documentada por FASE 5:
 
-Newly supported stable IDs: `double_edge`, `ember`, `growl`, `mega_drain`,
-`quick_attack`, `recover`, `sleep_powder`, `swords_dance`, `tackle`, `thunder`,
-`thunder_punch`, `thunder_wave`, `toxic`, `water_gun`, `will_o_wisp`.
+| Cobertura | Cantidad |
+|---|---:|
+| `RUNTIME_SUPPORTED` | 541 |
+| `PARTIAL_RUNTIME` | 60 |
+| `DATA_ONLY` | 327 |
+| `UNSUPPORTED` | 9 |
+| **TOTAL** | **937** |
 
-## Abilities (373) — DATA_READY = 373
+Los effects soportados se derivan de metadata estructurada / `BattleEffectSpec` y mappings explícitos. Nunca se ejecuta `effect_summary` como reglas.
 
-| Coverage | Count |
-|---|---|
-| `RUNTIME_SUPPORTED` | 6 (`blaze`, `intimidate`, `levitate`, `overgrow`, `static`, `torrent`) |
+Detalle: `MOVE_EFFECT_COVERAGE.md` y ADR-004.
+
+## Abilities — 373 DATA_READY
+
+| Cobertura | Cantidad |
+|---|---:|
+| `RUNTIME_SUPPORTED` | 6 |
 | `DATA_ONLY` | 367 |
 
-## Items (2222) — DATA_READY = 2222
+Runtime soportado explícitamente: `blaze`, `intimidate`, `levitate`, `overgrow`, `static`, `torrent`.
 
-| Coverage | Count |
-|---|---|
-| `RUNTIME_SUPPORTED` | 2 (`leftovers`, `sitrus_berry`) |
-| `DATA_ONLY` | 2220 |
+No se debe asumir que una ability importada funciona por estar presente en la especie.
 
-## Canonical internal status
+## Items — 2222 DATA_READY
 
-PokéAPI aporta 0 definiciones de status. `calvo_v1` define IDs internos versionados:
-burn, poison, badly_poisoned, paralysis, sleep y freeze; flinch/confusion son
-volátiles. Burn, poison, badly poisoned, paralysis y sleep tienen comportamiento y
-tests. Freeze tiene modelo/thaw pero ninguna move V2 lo aplica; confusion solo tiene
-estado volátil, por lo que ambos se declaran parciales.
+| Cobertura | Cantidad |
+|---|---:|
+| held-item runtime soportado | 2 |
+| resto importado / sin comportamiento general completo | 2220 |
 
-## Evolutions
+Held items soportados actualmente: `leftovers`, `sitrus_berry`.
 
-Raw edges in PokéAPI chains vs. imported edges after the forms policy:
+Además, Capture usa definiciones de ball propias del ruleset (`poke_ball`, `great_ball`, `ultra_ball`, `master_ball`) y el inventario controla ownership/cantidad. Esto **no** significa que exista un sistema general de Bag/consumibles de Battle para los otros miles de items.
 
-| Metric | Count |
-|---|---|
-| `SOURCE_EDGES` | 484 |
-| `IMPORTED_EDGES` | 476 |
-| `DEFERRED_FORM_EDGES` | 8 (dropped: target is a deferred form) |
-| `REJECTED_EDGES` | 0 |
-| Check | 476 + 8 + 0 = 484 ✓ |
+## Status
 
-Imported-edge coverage (must sum to `IMPORTED_EDGES` = 476):
+IDs internos principales:
 
-| Coverage | Count | Sum check |
-|---|---|---|
-| `SUPPORTED_RUNTIME_OR_MODEL` | 388 | level-up (min_level stored; model represents it) |
-| `PARTIAL_RUNTIME` | 52 | e.g. use-item (item_id stored; partially modeled) |
-| `UNSUPPORTED` | 36 | trigger the model cannot represent yet |
-| **TOTAL** | **476** | 388 + 52 + 36 = 476 ✓ |
+- burn;
+- poison;
+- badly_poisoned;
+- paralysis;
+- sleep;
+- freeze;
+- flinch/confusion como estado volátil donde corresponde.
 
-> No evolution is executed at runtime in Foundation V1; `SUPPORTED_RUNTIME_OR_MODEL` means the
-> *data model* represents the trigger, not that the engine evolves Pokémon.
+Burn, poison, badly poisoned, paralysis y sleep tienen comportamiento probado. Freeze permanece parcial en el conjunto actual de moves y confusion no constituye todavía una implementación completa de la mecánica oficial.
 
-### Evolutions — FASE 6 runtime update
+## Evolutions — 476 imported edges
 
-FASE 6 (`feature/progression-core-v1`) makes level-up / trade / use-item evolution **executable at
-runtime + tested** (`EvolutionSystem.evolution_candidates` + `ProgressionSystem.apply_evolution`).
-The same 476 imported edges are now classified as:
+Cobertura runtime de Progression Core:
 
-| Coverage | Count |
-|---|---|
-| `RUNTIME_SUPPORTED` | 464 (level-up 388, trade 24, use-item 52) |
-| `DATA_ONLY` | 9 (special triggers preserved as deferred data) |
-| `UNSUPPORTED` | 3 (`other`, `shed`, `spin`) |
-| `PARTIAL` | 0 |
+| Cobertura | Cantidad |
+|---|---:|
+| `RUNTIME_SUPPORTED` | 464 |
+| `DATA_ONLY` | 9 |
+| `UNSUPPORTED` | 3 |
+| **TOTAL** | **476** |
 
-Full detail: `docs/EVOLUTION_COVERAGE.md` + `docs/evolution_coverage_report.json`.
+Los 464 runtime-supported incluyen triggers representados por level-up, trade y use-item según el contrato actual. Permanecen diferidos triggers especiales y las forms excluidas por la política de importación.
 
-## Forms policy (39 deferred)
+Detalle: `EVOLUTION_COVERAGE.md`.
 
-Hyphenated PokéAPI names are treated as **forms** (regional/alternate/mega/gigantamax/totem/
-cosmetic) and are NOT imported as base `SpeciesDefinition`. Only the default variety of each base
-species is imported. Evolutions targeting deferred forms are dropped (8 edges) to keep
-`broken_references = 0`. Full list: `data/reports/forms_policy_report.json` (`deferred`, 39 entries).
+## Forms
 
-## Referential integrity
+39 formas regionales/alternativas/mega/gigantamax/totem/cosméticas están diferidas por la política actual. El catálogo runtime contiene la variedad base/default y mantiene integridad referencial; no se afirma soporte de esas forms.
 
-- `broken_references = 0` across types, moves, abilities, items, species, learnset, evolutions
-  (recomputed independently in `pokeapi_broken_ref_invariant` test).
-- `rejected = 0` (after adapter-level item slug de-duplication; one duplicate slug `roseli_berry`
-  skipped at adapter time).
-- All ids unique per catalog (`pokeapi_ids_unique` test).
+## Progresión
 
-## Test evidence (Godot 4.7 stable, headless)
+Soportado en dominio:
 
-`tests/test_runner.gd` + `tests/battle_v2_test_suite.gd` — **131 PASS / 0 FAIL**:
-- FASE 1-3 (foundation + data pipeline): 26 PASS
-- FASE 4 (mass import): 14 PASS
-- FASE 4.1 (QA invariants): 21 PASS
-- Battle Core V2: 70 PASS (unitarios, negativos, cobertura y escenarios golden)
+- seis curvas de XP;
+- level cap 100;
+- IV/EV/naturalezas;
+- recálculo de stats;
+- learnsets y moveset individual con PP;
+- eventos de level-up/aprendizaje;
+- `MOVE_LEARN_CHOICE_REQUIRED`;
+- `EVOLUTION_AVAILABLE`;
+- aplicación validada de evolución preservando identidad.
 
-New invariant tests (FASE 4.1): `pokeapi_manifest_sha_full`, `pokeapi_manifest_license_bsd`,
-`pokeapi_evolution_source_invariant`, `pokeapi_evolution_coverage_invariant`,
-`pokeapi_evolution_imported_matches_catalog`, `pokeapi_evolution_no_deferred_targets`,
-`pokeapi_move_coverage_sums`, `pokeapi_move_dataready_matches_catalog`,
-`pokeapi_ability_dataready_matches_catalog`, `pokeapi_item_dataready_matches_catalog`,
-`pokeapi_unique_ids_*`, `pokeapi_broken_ref_recomputed`, `pokeapi_broken_ref_zero`,
-`pokeapi_summary_*`.
+**Pendiente de flujo jugador completo:** las decisiones de reemplazar/declinar movimiento y aceptar/declinar evolución no tienen todavía cola de aplicación + presentación que garantice su resolución antes de volver al Overworld. Ver `ROADMAP.md`.
 
-## Battle Core V2 result
+## Capture
 
-Battle Core V2 ejecuta specs compuestos, PP, stages, accuracy/evasion, críticos,
-status, switching, seis abilities y dos held items. Las evoluciones siguen fuera de
-Battle y no han cambiado de cobertura.
+`calvo_capture_v1` está ejecutado y probado:
 
-### Honest snapshot for Codex
+- capture rate de especie;
+- Poke/Great/Ultra/Master Ball;
+- bonus de status;
+- HP factor;
+- trainer target rechazado;
+- Master Ball garantizada sin RNG probabilístico;
+- fracaso consume ball y, desde Battle Commands, provoca exactamente una respuesta rival;
+- éxito conserva la misma `CreatureInstance` y enruta a Party/Storage;
+- Party llena -> Storage;
+- UI técnica lista balls realmente poseídas.
 
-- **DATA available:** 21 types, 937 moves (76 fully damage-resolvable, 504 damage + unimplemented effect, 348 status-only), 373 abilities (data only), 2222 items (data only), 986 species, 129390 learnset entries, 476 evolutions (388 level-up modelable, 52 partial, 36 unsupported).
-- **Implemented at runtime:** 91 moves bajo el criterio anterior; 6 abilities; 2 held items;
-  canonical status; snapshot v2 y servidor autoritativo determinista.
-- **FASE 6 (Progression Core):** XP/levels (6 curvas), stats por IV/EV/naturaleza, learnsets,
-  movesets individuales con PP, y evolución por level-up/trade/use-item (464 aristas ejecutables).
-- **FASE 7 (Capture + Party Core):** captura determinista `calvo_capture_v1` (poke/great/ultra/master
-  balls; bonus de status sleep/freeze 2.0, poison/burn/paralysis/badly_poisoned 1.5; `capture_rate`
-  importado de PokéAPI 1..255; restricción trainer/no-forjable; party persistente máx 6 con
-  preservación de identidad IV/EV/naturaleza/ability/moveset/PP). NO rediseña Battle/Progression.
-- **FASE 8 (Storage Core + Savegame V1):** Storage persistente (`CreatureStorage`/`StorageBox`,
-  `BOX_CAPACITY = 30`, cajas dinámicas) y `PlayerCollection` (deposit/withdraw con la MISMA instancia,
-  rollback, sin duplicado); `CaptureOwnershipRouter` enruta `STORAGE_REQUIRED` a storage preservando
-  identidad. Savegame versionado (registro canónico + layouts por referencia), escritura atómica,
-  carga transaccional, rechazo de corrupción (`missing_file`/`json_parse_error`/`missing_schema`/
-  `unsupported_schema`/`duplicate_creature_id`/`missing_creature_reference`/`double_ownership`/
-  `invalid_storage_slot`). End-to-end captura→party/storage→save→load con fidelidad total.
-- **NOT implemented yet:** cientos de secundarios/efectos únicos, la mayoría de abilities/items,
-  los 12 triggers especiales de evolución (data_only/unsupported), forms, UI de captura/party/storage/
-  save, autosave, multi-perfil de save, networking y presentation.
+Esto no equivale a Bag general ni economía/tiendas.
+
+## Switch
+
+Battle Core soporta SWITCH electivo y reemplazo automático tras KO. La presentación permite elegir un miembro vivo de la party mediante `instance_id` estable.
+
+**No soportado todavía:** elección manual de reemplazo forzado tras KO. Introducirla requiere un estado explícito de Battle (`replacement_required` o equivalente) y no debe implementarse solo en UI.
+
+## RUN
+
+`calvo_escape_v1` está ejecutado y probado para encuentros salvajes:
+
+- huida garantizada por Speed/odds cuando corresponde;
+- RNG inyectado para caso probabilístico;
+- contador de intentos y bonus acumulativo;
+- fallo -> exactamente una respuesta rival;
+- éxito -> `FLED`, sin XP/captura/heal;
+- separación total de Capture RNG/inventario;
+- botón Run y feedback técnico en Battle Presentation.
+
+No incluye Run Away, Smoke Ball, Poké Doll, trapping/Mean Look ni trainer-battle escape. La fórmula es política explícita del proyecto, no paridad bit-perfect declarada con una generación oficial.
+
+## Overworld / Wild Adventure
+
+Soportado técnicamente:
+
+- movimiento cardinal físico;
+- colisiones;
+- pasos por distancia real;
+- encounter zones;
+- tablas salvajes ponderadas deterministas;
+- creación de criatura vía `CreatureFactory`;
+- Battle visible;
+- MOVE/CAPTURE/SWITCH/RUN;
+- settlement y retorno explícito al Overworld.
+
+No soportado todavía:
+
+- mapa romano final;
+- NPCs/diálogo;
+- puertas/transiciones entre mapas;
+- world-state persistente;
+- trainer-battle loop;
+- audio/animaciones/assets finales.
+
+## Save / colección
+
+Soportado:
+
+- Party máx. 6;
+- Storage 30 slots por caja, cajas dinámicas;
+- Inventory;
+- Savegame V2;
+- migración real V1 -> V2;
+- registro canónico de criaturas;
+- último save bueno protegido;
+- load transaccional;
+- rechazo de corrupción/double ownership;
+- save bloqueado durante Battle activa.
+
+No soportado todavía:
+
+- autosave;
+- múltiples perfiles;
+- cloud;
+- UI de Party/Storage/Save;
+- serialización de Battle activa;
+- política para decisiones de progresión post-battle aún pendientes.
+
+## Estado de presentación
+
+La UI técnica actual ya expone:
+
+- HP/nivel/turno;
+- moves + PP;
+- BattleEvent log;
+- Capture balls + cantidad;
+- Switch;
+- Run;
+- resultado + Continue.
+
+Por tanto, referencias históricas que digan que no existe UI de captura/switch/run describen fases antiguas, no el baseline actual.
+
+## Criterio para ampliar cobertura
+
+Una mecánica solo pasa a `RUNTIME_SUPPORTED` cuando existe:
+
+1. dato/contrato estructurado suficiente;
+2. handler/regla explícita;
+3. integración con lifecycle/autoridad correcta;
+4. tests positivos + negativos/adversariales;
+5. CI verde sobre el HEAD final.
+
+No se debe aumentar cobertura mediante parsing de texto descriptivo, flags inferidos sin provenance o excepciones de UI que el dominio no entienda.
