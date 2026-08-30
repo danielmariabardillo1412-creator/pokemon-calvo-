@@ -1,0 +1,77 @@
+name: Spanish Types Foundation Tests
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: spanish-types-foundation-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Spanish + canonical types foundation gate
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Godot 4.7
+        uses: chickensoft-games/setup-godot@v2.4.1
+        with:
+          version: 4.7.0
+          use-dotnet: false
+          include-templates: false
+
+      - name: Verify Godot version
+        shell: bash
+        run: |
+          set -euo pipefail
+          godot --version | tee spanish-types-godot-version.log
+          godot --version | grep -E '^4\.7([\.-]|$)'
+
+      - name: Stage pinned PokeAPI report fixtures
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p data/reports
+          cp ci/fixtures/pokeapi_reports/forms_policy_report.json data/reports/forms_policy_report.json
+          cp ci/fixtures/pokeapi_reports/unsupported_mechanics.json data/reports/unsupported_mechanics.json
+          cp ci/fixtures/pokeapi_reports/import_summary.json data/reports/import_summary.json
+
+      - name: Import project
+        shell: bash
+        run: |
+          set -euo pipefail
+          godot --headless --path . --import 2>&1 | tee spanish-types-import.log
+
+      - name: Run Spanish + canonical type suite
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 240s godot --headless --path . --script res://tests/spanish_types_foundation_test_runner.gd 2>&1 | tee spanish-types-test.log
+          summary="$(grep -E '=== SPANISH TYPES FOUNDATION RESULT: [0-9]+ PASS / 0 FAIL ===' spanish-types-test.log | tail -n 1)"
+          test -n "$summary"
+          pass_count="$(printf '%s\n' "$summary" | sed -E 's/.*RESULT: ([0-9]+) PASS.*/\1/')"
+          if [ "$pass_count" -lt 296 ]; then
+            echo "Spanish/types foundation regression: expected at least 296 passing checks, got $pass_count" >&2
+            exit 1
+          fi
+          echo "Spanish/types foundation gate satisfied: $pass_count PASS / 0 FAIL"
+
+      - name: Upload Spanish/types logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: spanish-types-foundation-logs-${{ github.run_id }}
+          path: |
+            spanish-types-godot-version.log
+            spanish-types-import.log
+            spanish-types-test.log
+          if-no-files-found: ignore
+          retention-days: 7
