@@ -2,7 +2,15 @@
 
 ## Estado
 
-ACEPTADA / IMPLEMENTACIÓN EN `feature/trainer-tactical-intelligence-v1`.
+ACEPTADA / IMPLEMENTADA / VALIDADA en `feature/trainer-tactical-intelligence-v1`.
+
+Validación final:
+
+- Trainer Tactical Intelligence: **34 PASS / 0 FAIL**.
+- Trainer Intelligence Foundation (FASE 20): **SUCCESS**.
+- Trainer Battle Session (FASE 19): **SUCCESS**.
+- Godot 4.7 headless regression completa: **SUCCESS**.
+- Commit validado: `45356d3efef8147608949fb9be6d8d6bb4e5d2b8`.
 
 ## Contexto
 
@@ -70,6 +78,9 @@ balanced/aggressive/cautious/technical. Ninguno obtiene privilegios de informaci
 `TacticalTrainerBrain` produce `TrainerDecisionTrace` por candidato con puntuación,
 confianza, razones, guardas y metadata. `TrainerTacticalBenchmark` ofrece una firma
 determinista para casos de decisión reproducibles.
+
+`TrainerDecisionTrace` queda además con round-trip JSON canónico para que las trazas
+puedan persistirse y compararse de forma reproducible.
 
 ## Consecuencias
 
