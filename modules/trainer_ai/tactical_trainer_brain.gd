@@ -9,6 +9,7 @@ var last_trace: TrainerDecisionTrace = null
 var _catalog: DefinitionCatalog
 var _tactical: TrainerTacticalEvaluator
 var _strategic: TrainerTeamStrategicEvaluator
+var _switch_strategy: TrainerStrategicSwitchEvaluator
 
 
 func _init(
@@ -20,6 +21,7 @@ func _init(
 	brain_id = &"tactical_trainer_brain_v1"
 	_tactical = TrainerTacticalEvaluator.new(_catalog, profile)
 	_strategic = TrainerTeamStrategicEvaluator.new(_catalog, profile)
+	_switch_strategy = TrainerStrategicSwitchEvaluator.new(_catalog, profile)
 
 
 func choose_action(context: TrainerDecisionContext) -> BattleAction:
@@ -40,12 +42,19 @@ func choose_action(context: TrainerDecisionContext) -> BattleAction:
 			continue
 		var tactical := _tactical.evaluate(context, action)
 		var strategic := _strategic.evaluate(context, action)
+		var switch_strategy := _switch_strategy.evaluate(context, action)
 		var guard := TrainerBlunderGuard.inspect(context, action, _catalog)
-		var score := int(tactical.get("score", 0)) + int(strategic.get("score", 0))
+		var score := (
+			int(tactical.get("score", 0))
+			+ int(strategic.get("score", 0))
+			+ int(switch_strategy.get("score", 0))
+		)
 		var reasons: Array[String] = []
 		for reason in tactical.get("reasons", []):
 			reasons.append(String(reason))
 		for reason in strategic.get("reasons", []):
+			reasons.append(String(reason))
+		for reason in switch_strategy.get("reasons", []):
 			reasons.append(String(reason))
 		var blocked := bool(guard.get("blocked", false))
 		if blocked:
@@ -55,6 +64,7 @@ func choose_action(context: TrainerDecisionContext) -> BattleAction:
 			"guard_reason": String(guard.get("reason", "")),
 			"tactical": (tactical.get("metadata", {}) as Dictionary).duplicate(true),
 			"strategic": (strategic.get("metadata", {}) as Dictionary).duplicate(true),
+			"switch_strategy": (switch_strategy.get("metadata", {}) as Dictionary).duplicate(true),
 		}
 		last_trace.add_candidate(
 			action,
@@ -83,6 +93,7 @@ func choose_action(context: TrainerDecisionContext) -> BattleAction:
 	last_trace.select(best_action, best_reason)
 	last_trace.metadata["selected_score"] = best_score if best_score > -2147483648 else best_blocked_score
 	last_trace.metadata["candidate_count"] = context.legal_actions.size()
+	last_trace.metadata["switch_strategy_model"] = TrainerStrategicSwitchEvaluator.MODEL_ID
 	return BattleAction.from_dict(best_action.to_dict())
 
 
