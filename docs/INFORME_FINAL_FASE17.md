@@ -8,9 +8,9 @@ Motor CI: `4.7.stable.official.5b4e0cb0f`
 
 ## Estado
 
-**FASE_17_STATUS = CODE_VALIDATED / CIERRE FINAL PENDIENTE DEL HEAD DOCUMENTAL**
+**FASE_17_STATUS = CLOSED / VALIDATED**
 
-El código y la auditoría adversarial han pasado CI. Este informe forma parte del HEAD documental final; la fase solo se declarará `CLOSED / VALIDATED` si ese HEAD vuelve a conservar todos los gates.
+El código, la auditoría adversarial y el HEAD documental de cierre han conservado todos los gates definidos para la fase. No se ha hecho merge a `main`; el bloque permanece stacked sobre FASE 16.
 
 ## Qué cambia
 
@@ -114,9 +114,9 @@ La fase modifica únicamente la frontera de gameplay salvaje, el contrato de com
 
 No se añaden sprites, assets, economía, mapa, lógica de trainer battle ni red.
 
-## Gates de código auditado antes del HEAD documental
+## Gates de cierre validados
 
-GitHub Actions run `33299334123`:
+GitHub Actions run `33299465947`:
 
 - Historical regression: **470 PASS / 0 FAIL**
 - Inventory: **47 PASS / 0 FAIL**
@@ -146,6 +146,6 @@ GitHub Actions run `33299334123`:
 
 ## Próximo bloque recomendado
 
-Si el HEAD documental final pasa CI, FASE 17 puede cerrarse. La siguiente dependencia natural es una fase de **Run Presentation V1** que exponga el comando ya validado en `BattlePresentationController` y en la escena técnica, sin reimplementar la fórmula ni tocar Battle Core.
+La siguiente dependencia natural es una fase de **Run Presentation V1** que exponga el comando ya validado en `BattlePresentationController` y en la escena técnica, sin reimplementar la fórmula ni tocar Battle Core.
 
 Antes de abrirla se debe auditar el controlador y la escena actuales para definir exactamente el flujo de botón, estado deshabilitado, feedback de fallo y retorno al Overworld.
