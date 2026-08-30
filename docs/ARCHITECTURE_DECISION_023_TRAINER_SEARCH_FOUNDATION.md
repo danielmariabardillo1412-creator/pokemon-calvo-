@@ -2,7 +2,16 @@
 
 ## Estado
 
-IMPLEMENTACIÓN INICIAL / PENDIENTE DE VALIDACIÓN CI en `feature/trainer-search-foundation-v1`.
+ACEPTADA / IMPLEMENTADA / VALIDADA en `feature/trainer-search-foundation-v1`.
+
+Validación final de la fase:
+
+- FASE 23 Trainer Search Foundation: 45 PASS / 0 FAIL;
+- FASE 22 Trainer Belief Inference: SUCCESS;
+- FASE 21 Trainer Tactical Intelligence: SUCCESS;
+- FASE 20 Trainer Intelligence Foundation: SUCCESS;
+- FASE 19 Trainer Battle Session: SUCCESS;
+- regresión global Godot 4.7: SUCCESS.
 
 ## Contexto
 
@@ -41,6 +50,12 @@ Nunca se usa `BattleState.rng_state` del combate real.
 Los stats rivales no-Speed usan el proxy público de especie+nivel. El Speed se toma del
 rango de creencias. Un objeto desconocido no se inventa: queda sin modelar y el mundo lo
 registra como supuesto.
+
+El límite de mundos es un presupuesto, no un sesgo de conocimiento. Las combinaciones se
+seleccionan mediante `ability_stratified_round_robin_v1`: las hipótesis de habilidad se
+intercalan antes de aplicar el límite, y la masa de peso de cada habilidad se deriva de su
+confianza en `TrainerBeliefState` y se reparte entre los mundos seleccionados de esa
+hipótesis. Así, truncar a 12 mundos no favorece a la primera habilidad por orden de bucle.
 
 ### 3. Movesets rivales
 
@@ -99,6 +114,22 @@ táctico/estratégico de FASE 21. Si no existen escenarios válidos, cae al base
 `TrainerDecisionTrace` conserva resultados agregados y escenarios públicos, pero nunca
 serializa el `BattleState` sintético ni `rng_state`.
 
+## Correcciones durante validación
+
+La validación descubrió dos defectos que se resolvieron antes de cerrar la fase:
+
+1. El fixture sintético no registraba el tipo `normal`, aunque `DamageCalculator` exige que
+   todo `move.type_id` exista en `DefinitionCatalog`. Se corrigió el fixture para respetar
+   el contrato real de Battle Core y se añadió una comprobación explícita.
+2. El orden inicial `habilidad -> velocidad -> RNG` combinado con `max_worlds = 12`
+   representaba 9 mundos de la primera habilidad y 3 de la segunda cuando existían 18
+   combinaciones. Se sustituyó por muestreo estratificado determinista y pesos basados en
+   confianza. Las pruebas verifican tanto estratificación como masa probabilística.
+
+Tras estas correcciones, el escenario adversarial de cañón de cristal demuestra que el
+cerebro de búsqueda abandona el ataque tácticamente atractivo y cambia al tanque cuando
+la represalia plausible hace perder al activo frágil.
+
 ## Invariantes
 
 1. El Battle Core sigue resolviendo todas las reglas de combate.
@@ -108,10 +139,13 @@ serializa el `BattleState` sintético ni `rng_state`.
 5. RNG de búsqueda es sintético y reproducible.
 6. Cada respuesta rival se evalúa desde el mismo estado previo a la acción propia.
 7. Toda selección es determinista para un mismo `DecisionContext`.
-8. FASE 23 no incluye MCTS, profundidad recursiva ni modelo aprendido de política rival.
+8. El presupuesto de mundos no puede favorecer una hipótesis por el orden de iteración.
+9. FASE 23 no incluye MCTS, profundidad recursiva ni modelo aprendido de política rival.
 
 ## Siguiente frontera
 
-Solo después de validar esta base se considerará FASE 24 con búsqueda multi-turno/MCTS,
-transposiciones y presupuestos de simulación. La profundidad no debe introducirse antes
-de demostrar que los mundos y la matriz simultánea son correctos.
+FASE 24 debe ampliar planificación de forma controlada y medible. Antes de introducir un
+MCTS completo, conviene añadir presupuesto explícito de simulación, búsqueda multi-turno
+acotada y benchmarks que permitan demostrar que mirar más lejos mejora decisiones en vez
+de simplemente consumir más CPU. MCTS queda como evolución posterior si ese escalón
+mantiene determinismo, anti-cheat y regresiones verdes.
