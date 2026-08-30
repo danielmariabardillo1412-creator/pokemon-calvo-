@@ -106,7 +106,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          timeout 120s godot --headless --path . --script res://tests/data_foundation_v3_domain_test_runner.gd 2>&1 | tee data-v3-domain-test.log
+          timeout 120s godot --headless --path . --script res://tests/data/data_foundation_v3_domain_test_runner.gd 2>&1 | tee data-v3-domain-test.log
           grep -E '=== DATA FOUNDATION V3 DOMAIN RESULT: [0-9]+ PASS / 0 FAIL ===' data-v3-domain-test.log
 
       - name: Normalize through authoritative DataImporter
@@ -131,7 +131,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          timeout 480s godot --headless --path . --script res://tests/spanish_types_foundation_test_runner.gd 2>&1 | tee data-v3-runtime-test.log
+          timeout 480s godot --headless --path . --script res://tests/data/spanish_types_foundation_test_runner.gd 2>&1 | tee data-v3-runtime-test.log
           grep -E '=== SPANISH TYPES FOUNDATION RESULT: [0-9]+ PASS / 0 FAIL ===' data-v3-runtime-test.log
 
       - name: Upload DATA V3 tested outputs and logs
