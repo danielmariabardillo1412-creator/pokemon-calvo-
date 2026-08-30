@@ -58,8 +58,8 @@ jobs:
           summary="$(grep -E '=== SPANISH TYPES FOUNDATION RESULT: [0-9]+ PASS / 0 FAIL ===' spanish-types-test.log | tail -n 1)"
           test -n "$summary"
           pass_count="$(printf '%s\n' "$summary" | sed -E 's/.*RESULT: ([0-9]+) PASS.*/\1/')"
-          if [ "$pass_count" -lt 296 ]; then
-            echo "Spanish/types foundation regression: expected at least 296 passing checks, got $pass_count" >&2
+          if [ "$pass_count" -lt 298 ]; then
+            echo "Spanish/types foundation regression: expected at least 298 passing checks, got $pass_count" >&2
             exit 1
           fi
           echo "Spanish/types foundation gate satisfied: $pass_count PASS / 0 FAIL"
