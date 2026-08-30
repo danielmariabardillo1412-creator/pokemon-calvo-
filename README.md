@@ -1,23 +1,27 @@
 # Pokémon Calvo
 
-Foundation V1 de un fangame de criaturas construido para Godot 4.7. La rama
-`foundation/core-v1` contiene un vertical slice lógico, sin gráficos ni assets
-propietarios: dos criaturas, prioridad, velocidad, daño, STAB, efectividad, KO,
-Poison, eventos, RNG determinista y snapshots serializables.
+Proyecto de fangame de criaturas en **Godot 4.7**, con Battle Core determinista, progresión/captura/overworld y una IA de entrenadores no neuronal con búsqueda, belief inference, self-play, objetos, switching estratégico y composición de equipos.
 
-## Ejecutar
+## Baseline certificado
 
-```powershell
-& "C:\Godot\4.7\Godot_v4.7-stable_win64_console.exe" --headless --editor --import --path "F:\pokemon roma el calvo\pokemon-calvo"
-& "C:\Godot\4.7\Godot_v4.7-stable_win64_console.exe" --headless --path "F:\pokemon roma el calvo\pokemon-calvo"
+La base de datos canónica actual es **DATA FOUNDATION V3**, conservada en `feature/data-foundation-v3` (HEAD certificado `304035e2e7b39a628c4fece89cf0f3db6caa8664`). Ese HEAD pasó los 18 workflows normales del proyecto.
+
+La fuente PokéAPI es un snapshot versionado en `data/api/v2` + `data/schema/v2`; `tools/pokeapi_adapter_v3.py` genera el raw/manifiesto y Godot normaliza mediante `tools/run_import.gd`.
+
+## Ejecutar tests
+
+```bash
+godot --headless --path . --import
+godot --headless --path . --script res://tests/test_runner.gd
 ```
 
-La segunda orden debe terminar con `131 PASS / 0 FAIL` y código de salida 0.
+No se fija aquí un número de PASS: el total crece con el proyecto y la fuente de verdad son los workflows de `.github/workflows/`.
 
-Battle Core V2 incorpora effects compuestos, ruleset `calvo_v1`, PP, stages,
-status, abilities, held items, switching y snapshot determinista schema 2. Véase
-[docs/BATTLE_ARCHITECTURE.md](docs/BATTLE_ARCHITECTURE.md).
+## Documentación
 
-Consulta [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) para las reglas de
-dependencia y [docs/ARCHITECTURE_DECISION_001.md](docs/ARCHITECTURE_DECISION_001.md)
-para la auditoría y decisión.
+- Estado actual: [docs/STATUS.md](docs/STATUS.md)
+- Índice documental: [docs/README.md](docs/README.md)
+- DATA FOUNDATION V3: [docs/DATA_FOUNDATION_V3.md](docs/DATA_FOUNDATION_V3.md)
+- Arquitectura general: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)
+- ADR: [`docs/adr/`](docs/adr/)
+- Historial de fases: [`docs/history/`](docs/history/)

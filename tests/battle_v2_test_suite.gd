@@ -590,7 +590,7 @@ func _test_golden_status_scenario() -> void:
 
 
 func _test_runtime_coverage_contract() -> void:
-	var file := FileAccess.open("res://data/battle/runtime_coverage_v2.json", FileAccess.READ)
+	var file := FileAccess.open("res://data/fixtures/regression_resources/battle/runtime_coverage_v2.json", FileAccess.READ)
 	var coverage: Dictionary = JSON.parse_string(file.get_as_text())
 	file.close()
 	var registry := BattleEffectRegistry.new()

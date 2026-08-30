@@ -309,24 +309,24 @@ func _event_dicts(events: Array[BattleEvent]) -> Array[Dictionary]:
 func _build_catalog() -> DefinitionCatalog:
 	var catalog := DefinitionCatalog.new()
 	for path in [
-		"res://data/types/normal.tres",
-		"res://data/types/fire.tres",
-		"res://data/types/grass.tres",
+		"res://data/fixtures/regression_resources/types/normal.tres",
+		"res://data/fixtures/regression_resources/types/fire.tres",
+		"res://data/fixtures/regression_resources/types/grass.tres",
 	]:
 		catalog.add_type(load(path) as TypeDefinition)
 	for path in [
-		"res://data/moves/strike.tres",
-		"res://data/moves/quick_strike.tres",
-		"res://data/moves/ember.tres",
-		"res://data/moves/wait.tres",
+		"res://data/fixtures/regression_resources/moves/strike.tres",
+		"res://data/fixtures/regression_resources/moves/quick_strike.tres",
+		"res://data/fixtures/regression_resources/moves/ember.tres",
+		"res://data/fixtures/regression_resources/moves/wait.tres",
 	]:
 		catalog.add_move(load(path) as MoveDefinition)
 	for path in [
-		"res://data/species/embercub.tres",
-		"res://data/species/leafling.tres",
+		"res://data/fixtures/regression_resources/species/embercub.tres",
+		"res://data/fixtures/regression_resources/species/leafling.tres",
 	]:
 		catalog.add_species(load(path) as CreatureSpecies)
-	catalog.add_status(load("res://data/statuses/poison.tres") as StatusDefinition)
+	catalog.add_status(load("res://data/fixtures/regression_resources/statuses/poison.tres") as StatusDefinition)
 	return catalog
 
 

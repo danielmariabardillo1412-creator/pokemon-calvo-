@@ -136,4 +136,4 @@ Validado con Godot `4.7.stable.official.5b4e0cb0f`:
 - Inventory: **47 PASS / 0 FAIL**
 - Savegame V2: **40 PASS / 0 FAIL**
 
-ADR asociada: `docs/ARCHITECTURE_DECISION_009_SAVEGAME_V2.md`.
+ADR asociada: `docs/adr/ARCHITECTURE_DECISION_009_SAVEGAME_V2.md`.

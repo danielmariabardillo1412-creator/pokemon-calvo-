@@ -13,7 +13,7 @@ The source snapshot is immutable. This tool only writes project-owned raw/manife
 report files. Godot's tools/run_import.gd remains the second stage that validates and
 writes data/normalized/pokemon_api.json.
 
-The mature move-effect conversion from pokeapi_adapter.py is intentionally reused;
+The mature move-effect conversion from archive/pokeapi_adapter_v2_legacy.py is intentionally reused;
 V3 replaces source selection/provenance, localization, species/forms, learnsets and
 full evolution preservation around it.
 """

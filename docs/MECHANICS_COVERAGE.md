@@ -2,7 +2,7 @@
 
 Scope: dataset FASE 4.1 + runtime `calvo_v1`. The import report remains an immutable
 historical report; current runtime deltas are versioned in
-`data/battle/runtime_coverage_v2.json`.
+`data/fixtures/regression_resources/battle/runtime_coverage_v2.json`.
 
 - **DATA_READY** — the necessary data is imported and modeled in the domain classes.
 - **RUNTIME_SUPPORTED / PARTIAL_RUNTIME / DATA_ONLY / UNSUPPORTED** — how much the *engine*
@@ -42,7 +42,7 @@ Source: PokéAPI `api-data` @ `784c50b3ad27d0390d3b047fc4c4511f71edd049` (BSD 3-
 ## Moves (937) — DATA_READY = 937
 
 > Cobertura recalculada en FASE 5 (effect_specs data-driven desde metadata estructurada).
-> Ver `docs/MOVE_EFFECT_COVERAGE.md` y `docs/ARCHITECTURE_DECISION_004_EFFECT_DATA.md`.
+> Ver `docs/MOVE_EFFECT_COVERAGE.md` y `docs/adr/ARCHITECTURE_DECISION_004_EFFECT_DATA.md`.
 
 | Coverage | Count | Sum check |
 |---|---|---|

@@ -6,7 +6,7 @@ Dataset schema_version: **2**. Effect spec schema: BattleEffectSpec V1.
 ## Generation
 
 `tools/pokeapi_adapter.py` builds `MoveDefinition.effect_specs` from PokéAPI structured move
-metadata (no flavor-text parsing). See `docs/ARCHITECTURE_DECISION_004_EFFECT_DATA.md`.
+metadata (no flavor-text parsing). See `docs/adr/ARCHITECTURE_DECISION_004_EFFECT_DATA.md`.
 
 ## Totals (937 moves)
 

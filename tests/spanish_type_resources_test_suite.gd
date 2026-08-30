@@ -6,7 +6,7 @@ func run(check_callback: Callable) -> void:
 	var all_loaded := true
 	var all_match := true
 	for type_id in PokemonTypeChart.STANDARD_TYPE_IDS:
-		var resource := load("res://data/types/%s.tres" % String(type_id)) as TypeDefinition
+		var resource := load("res://data/fixtures/regression_resources/types/%s.tres" % String(type_id)) as TypeDefinition
 		if resource == null:
 			all_loaded = false
 			all_match = false
