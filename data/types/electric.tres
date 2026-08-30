@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="TypeDefinition" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://modules/creatures/domain/type_definition.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"electric"
+display_name = "Eléctrico"
+effectiveness = {"water": 2.0, "electric": 0.5, "grass": 0.5, "ground": 0.0, "flying": 2.0, "dragon": 0.5}
