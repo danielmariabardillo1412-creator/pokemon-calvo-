@@ -25,29 +25,63 @@ func build(
 	var ability_options := _ability_options(context, active_view)
 	var speed_options := _speed_options(context, active_view)
 	var seeds := _synthetic_seeds(observation.turn)
+	var candidate_groups := _candidate_groups(ability_options, speed_options, seeds)
+	var selected := _stratified_candidates(candidate_groups, max_worlds)
 	var world_index := 0
+	for candidate in selected:
+		var ability := candidate.get("ability", {}) as Dictionary
+		var world := _build_world(
+			context,
+			StringName(ability.get("id", "")),
+			int(ability.get("confidence_basis_points", 10000)),
+			int(candidate.get("speed", 1)),
+			int(candidate.get("seed", SYNTHETIC_SEED_BASE)),
+			world_index,
+		)
+		if world != null:
+			out.append(world)
+			world_index += 1
+	_assign_hypothesis_weights(out)
+	return out
+
+
+func _candidate_groups(
+	ability_options: Array[Dictionary],
+	speed_options: Array[int],
+	seeds: Array[int],
+) -> Array[Array]:
+	var groups: Array[Array] = []
 	for ability in ability_options:
+		var group: Array = []
 		for speed in speed_options:
 			for seed in seeds:
-				if out.size() >= max_worlds:
-					break
-				var world := _build_world(
-					context,
-					StringName(ability.get("id", "")),
-					int(ability.get("confidence_basis_points", 10000)),
-					int(speed),
-					int(seed),
-					world_index,
-				)
-				if world != null:
-					out.append(world)
-					world_index += 1
-			if out.size() >= max_worlds:
+				group.append({
+					"ability": (ability as Dictionary).duplicate(true),
+					"speed": int(speed),
+					"seed": int(seed),
+				})
+		groups.append(group)
+	return groups
+
+
+func _stratified_candidates(groups: Array[Array], max_worlds: int) -> Array[Dictionary]:
+	var selected: Array[Dictionary] = []
+	if groups.is_empty() or max_worlds <= 0:
+		return selected
+	var depth := 0
+	while selected.size() < max_worlds:
+		var added_at_depth := false
+		for group in groups:
+			if selected.size() >= max_worlds:
 				break
-		if out.size() >= max_worlds:
+			if depth >= group.size():
+				continue
+			selected.append((group[depth] as Dictionary).duplicate(true))
+			added_at_depth = true
+		if not added_at_depth:
 			break
-	_assign_equal_weights(out)
-	return out
+		depth += 1
+	return selected
 
 
 func _build_world(
@@ -105,6 +139,7 @@ func _build_world(
 		"active_opponent_speed_sample": active_speed,
 		"rng_model": "synthetic_seed_grid_v1",
 		"rng_seed": rng_seed,
+		"sampling_model": "ability_stratified_round_robin_v1",
 	}
 	return world
 
@@ -301,6 +336,41 @@ func _view_by_id(views: Array[Dictionary], creature_id: StringName) -> Dictionar
 func _synthetic_seeds(turn: int) -> Array[int]:
 	var base := SYNTHETIC_SEED_BASE + maxi(0, turn) * 97
 	return [base + 11, base + 101, base + 307]
+
+
+func _assign_hypothesis_weights(worlds: Array[TrainerPlausibleWorld]) -> void:
+	if worlds.is_empty():
+		return
+	var counts: Dictionary = {}
+	var confidences: Dictionary = {}
+	for world in worlds:
+		var ability_id := String(world.metadata.get("active_opponent_ability_id", ""))
+		counts[ability_id] = int(counts.get(ability_id, 0)) + 1
+		confidences[ability_id] = clampi(
+			int(world.metadata.get("ability_confidence_basis_points", 0)),
+			0,
+			10000,
+		)
+	var confidence_total := 0
+	for ability_id in confidences.keys():
+		confidence_total += int(confidences[ability_id])
+	if confidence_total <= 0:
+		_assign_equal_weights(worlds)
+		return
+	var assigned := 0
+	for world in worlds:
+		var ability_id := String(world.metadata.get("active_opponent_ability_id", ""))
+		var count := maxi(1, int(counts.get(ability_id, 1)))
+		var confidence := int(confidences.get(ability_id, 0))
+		var weight := confidence * 10000 / (confidence_total * count)
+		world.weight_basis_points = weight
+		assigned += weight
+	var remainder := 10000 - assigned
+	var index := 0
+	while remainder > 0 and not worlds.is_empty():
+		worlds[index % worlds.size()].weight_basis_points += 1
+		index += 1
+		remainder -= 1
 
 
 func _assign_equal_weights(worlds: Array[TrainerPlausibleWorld]) -> void:
