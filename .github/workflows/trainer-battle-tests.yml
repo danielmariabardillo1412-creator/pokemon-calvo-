@@ -1,0 +1,77 @@
+name: Trainer Battle Session Tests
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: trainer-battle-tests-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: FASE 19 trainer battle gate
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Godot 4.7
+        uses: chickensoft-games/setup-godot@v2.4.1
+        with:
+          version: 4.7.0
+          use-dotnet: false
+          include-templates: false
+
+      - name: Verify Godot version
+        shell: bash
+        run: |
+          set -euo pipefail
+          godot --version | tee trainer-godot-version.log
+          godot --version | grep -E '^4\.7([\.-]|$)'
+
+      - name: Stage pinned PokeAPI report fixtures
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p data/reports
+          cp ci/fixtures/pokeapi_reports/forms_policy_report.json data/reports/forms_policy_report.json
+          cp ci/fixtures/pokeapi_reports/unsupported_mechanics.json data/reports/unsupported_mechanics.json
+          cp ci/fixtures/pokeapi_reports/import_summary.json data/reports/import_summary.json
+
+      - name: Import project
+        shell: bash
+        run: |
+          set -euo pipefail
+          godot --headless --path . --import 2>&1 | tee trainer-godot-import.log
+
+      - name: Run trainer battle session suite
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 30s godot --headless --path . --script res://tests/trainer_battle_session_test_runner.gd 2>&1 | tee trainer-battle-test.log
+          summary="$(grep -E '=== TRAINER BATTLE SESSION RESULT: [0-9]+ PASS / 0 FAIL ===' trainer-battle-test.log | tail -n 1)"
+          test -n "$summary"
+          pass_count="$(printf '%s\n' "$summary" | sed -E 's/.*RESULT: ([0-9]+) PASS.*/\1/')"
+          if [ "$pass_count" -lt 38 ]; then
+            echo "Trainer battle regression: expected at least 38 passing checks, got $pass_count" >&2
+            exit 1
+          fi
+          echo "FASE 19 trainer battle gate satisfied: $pass_count PASS / 0 FAIL"
+
+      - name: Upload trainer battle logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: trainer-battle-logs-${{ github.run_id }}
+          path: |
+            trainer-godot-version.log
+            trainer-godot-import.log
+            trainer-battle-test.log
+          if-no-files-found: ignore
+          retention-days: 7
