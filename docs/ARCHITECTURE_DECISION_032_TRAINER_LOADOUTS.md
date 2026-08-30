@@ -2,7 +2,7 @@
 
 ## Estado
 
-IMPLEMENTADA / PENDIENTE DE VALIDACION.
+ACEPTADA / IMPLEMENTADA / VALIDADA.
 
 ## Contexto
 
@@ -100,27 +100,28 @@ El proyecto ya importa compatibilidades machine/tutor/egg, pero no `version_grou
 
 Esto queda explícito para no convertir una aproximación del dataset en una falsa garantía de legalidad histórica.
 
-## Validación requerida
+## Validación
 
-El gate debe demostrar como mínimo:
+Validación del código sobre `4b9398f47cfec5bf2e938a88914fe7540e88f375`:
 
-- round-trip y firma deterministas;
-- rechazo de IV >31;
-- rechazo de EV >252 y total >510;
-- rechazo de naturaleza desconocida;
-- rechazo de más de cuatro movimientos y duplicados;
-- rechazo de movimientos no compatibles y métodos no soportados;
-- aceptación explícita de compatibilidad machine pública;
-- rechazo de habilidad ajena a la especie;
-- rechazo de habilidad/held item sin runtime;
-- presets physical/special/support coherentes;
-- quality basic/trained/expert dentro de límites;
-- habilidad e item generados solo si están soportados;
-- materialización exacta con `StatCalculator`;
-- PP inicializados;
-- rechazo del loadout inválido en vez de clamping silencioso;
-- independencia profunda entre generaciones/materializaciones;
-- todos los gates FASE 31..19 y regresión global Godot 4.7 verdes sobre el mismo SHA.
+- gate FASE 32: **216 PASS / 0 FAIL**;
+- round-trip y firma deterministas: PASS;
+- límites IV/EV/naturaleza/moveset: PASS;
+- incompatibilidades de move/ability/item: PASS;
+- compatibilidad machine pública: PASS;
+- presets physical/special/support: PASS;
+- quality basic/expert y límites de inversión: PASS;
+- materialización exacta contra `StatCalculator`: PASS;
+- PP y HP inicializados: PASS;
+- invalid loadout rechazado sin clamping silencioso: PASS;
+- independencia profunda probada por mutación causal: PASS;
+- FASE 31 y gates históricos: SUCCESS;
+- regresión global Godot 4.7: SUCCESS;
+- total sobre el SHA de código: **15/15 workflows SUCCESS**.
+
+Incidente de validación: la primera ejecución obtuvo **215 PASS / 1 FAIL** porque el test de independencia usó desigualdad de `Dictionary`/`Array` como sustituto de identidad. GDScript compara esos contenedores por contenido, por lo que dos copias independientes e idénticas podían comparar igual. Se corrigió únicamente el fixture: ahora muta una materialización y verifica que la segunda no cambia. No se modificó producción para satisfacer el test.
+
+Este commit documental final debe volver a obtener los mismos **15/15 workflows SUCCESS**. Si queda verde, será el HEAD canónico de FASE 32 y el PR se cerrará sin merge.
 
 ## Fuera de alcance
 
