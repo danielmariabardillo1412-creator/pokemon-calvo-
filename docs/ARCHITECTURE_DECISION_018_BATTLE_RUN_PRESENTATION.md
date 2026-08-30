@@ -170,9 +170,9 @@ No se añadieron assets ni dependencias sobre la biblioteca pesada local.
 - sin recalcular en UI la fórmula de huida;
 - sin cambios de balance en `calvo_escape_v1`.
 
-## Evidencia de validación de cierre
+## Evidencia final de validación de cierre
 
-GitHub Actions run `33300439829`, job `99227454909`, sobre el merge sintético del PR #12 contra FASE 17, con el gate reforzado `>=94 PASS / 0 FAIL` activo:
+GitHub Actions run `33300590609`, job `99227876718`, sobre el merge sintético del PR #12 contra FASE 17, después de que el HEAD documental de cierre y el gate reforzado `>=94 PASS / 0 FAIL` estuvieran ya presentes:
 
 - Historical regression: **470 PASS / 0 FAIL**
 - Inventory: **47 PASS / 0 FAIL**
@@ -190,6 +190,6 @@ GitHub Actions run `33300439829`, job `99227454909`, sobre el merge sintético d
 - Godot: `4.7.stable.official.5b4e0cb0f`
 - import headless: **PASS**
 
-Artifact: `godot-ci-logs-33300439829`, ID `9728764218`, SHA-256 `aaf0adef0dc266d3646d10f457d34622044a722f8ab311758d08c0015466d4e0`.
+Artifact: `godot-ci-logs-33300590609`, ID `9728809265`, SHA-256 `29d1020bea96f87d4b2b2660f95dd7b9643933816d4f504f1afb721316fdc7cd`.
 
 La fase queda aceptada y validada. El workflow conserva el mínimo `>=94 PASS / 0 FAIL`; cualquier cambio funcional posterior en este bloque deberá volver a atravesar estos gates o mínimos incrementados.
