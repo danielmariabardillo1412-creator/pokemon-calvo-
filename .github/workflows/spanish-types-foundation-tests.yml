@@ -54,7 +54,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          timeout 240s godot --headless --path . --script res://tests/spanish_types_foundation_test_runner.gd 2>&1 | tee spanish-types-test.log
+          timeout 240s godot --headless --path . --script res://tests/data/spanish_types_foundation_test_runner.gd 2>&1 | tee spanish-types-test.log
           summary="$(grep -E '=== SPANISH TYPES FOUNDATION RESULT: [0-9]+ PASS / 0 FAIL ===' spanish-types-test.log | tail -n 1)"
           test -n "$summary"
           pass_count="$(printf '%s\n' "$summary" | sed -E 's/.*RESULT: ([0-9]+) PASS.*/\1/')"
