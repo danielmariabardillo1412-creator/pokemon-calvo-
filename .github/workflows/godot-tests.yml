@@ -226,7 +226,12 @@ jobs:
           timeout 20s godot --headless --path . --script res://tests/wild_run_command_test_runner.gd 2>&1 | tee wild-run-command-test.log
           summary="$(grep -E '=== WILD RUN COMMAND RESULT: [0-9]+ PASS / 0 FAIL ===' wild-run-command-test.log | tail -n 1)"
           test -n "$summary"
-          echo "Wild RUN command zero-failure gate satisfied: $summary"
+          pass_count="$(printf '%s\n' "$summary" | sed -E 's/.*RESULT: ([0-9]+) PASS.*/\1/')"
+          if [ "$pass_count" -lt 71 ]; then
+            echo "Wild RUN command regression: expected at least 71 passing checks, got $pass_count" >&2
+            exit 1
+          fi
+          echo "Wild RUN command phase gate satisfied: $pass_count PASS / 0 FAIL"
 
       - name: Upload CI logs
         if: always()
