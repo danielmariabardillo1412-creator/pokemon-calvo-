@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="TypeDefinition" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://modules/creatures/domain/type_definition.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"fighting"
+display_name = "Lucha"
+effectiveness = {"normal": 2.0, "ice": 2.0, "poison": 0.5, "flying": 0.5, "psychic": 0.5, "bug": 0.5, "rock": 2.0, "ghost": 0.0, "dark": 2.0, "steel": 2.0, "fairy": 0.5}
