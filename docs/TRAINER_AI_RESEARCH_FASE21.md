@@ -1,6 +1,6 @@
 # FASE 21 — Trainer AI Research Notes
 
-Estado: investigación cerrada para implementación táctica V1.
+Estado: investigación cerrada e implementación táctica V1 validada.
 
 ## Objetivo
 
@@ -42,7 +42,7 @@ conceptos sobre el Battle Core propio. No se copia código de terceros en esta f
    mágicamente conoce nuestra acción antes de escoger la suya.
 10. Toda mejora futura deberá compararse con seeds y benchmarks reproducibles.
 
-## Componentes seleccionados para FASE 21
+## Componentes implementados
 
 - TrainerActionSpace
 - TrainerProfile
@@ -52,6 +52,14 @@ conceptos sobre el Battle Core propio. No se copia código de terceros en esta f
 - TacticalTrainerBrain
 - TrainerIntelligenceController
 - TrainerTacticalBenchmark
+- TrainerDecisionTrace con round-trip JSON canónico
+
+## Validación final
+
+- FASE 21: 34 PASS / 0 FAIL.
+- FASE 20: SUCCESS.
+- FASE 19: SUCCESS.
+- Regresión Godot 4.7 completa: SUCCESS.
 
 ## Límites conscientes
 
@@ -61,3 +69,18 @@ observados. La traza identifica explícitamente el modelo `public_species_proxy_
 
 La inferencia avanzada de sets, objetos, habilidades y rangos de velocidad queda para
 FASE 22. La búsqueda con BattleSimulationFork queda para FASE 23+.
+
+## Handoff
+
+FASE 22 debe ampliar `TrainerBeliefState` mediante inferencia determinista y auditable:
+
+- candidatos de movimientos compatibles con especie/nivel y evidencia observada;
+- candidatos de habilidad compatibles con especie y revelaciones;
+- hipótesis de objeto sin convertir ausencia de evidencia en certeza;
+- bandas/rangos de velocidad derivados solo de información pública y orden observado;
+- actualización bayesiana o pseudo-bayesiana explícita en basis points;
+- provenance/evidence por hipótesis;
+- poda conservadora cuando una revelación contradiga una hipótesis.
+
+La salida de FASE 22 debe seguir siendo segura para `TrainerDecisionContext` y quedar
+lista para que FASE 23 genere mundos plausibles y haga lookahead sin información privilegiada.
