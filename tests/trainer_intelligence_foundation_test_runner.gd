@@ -9,7 +9,9 @@ func _initialize() -> void:
 
 
 func _run() -> void:
-	TrainerIntelligenceFoundationTestSuite.new().run(Callable(self, "_check"))
+	var check_callback := Callable(self, "_check")
+	TrainerIntelligenceFoundationTestSuite.new().run(check_callback)
+	TrainerIntelligenceMetadataAuditTestSuite.new().run(check_callback)
 	print("\n=== TRAINER INTELLIGENCE FOUNDATION RESULT: %d PASS / %d FAIL ===" % [_passed, _failed])
 	quit(0 if _failed == 0 else 1)
 
