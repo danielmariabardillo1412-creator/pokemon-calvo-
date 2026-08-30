@@ -58,8 +58,8 @@ jobs:
           summary="$(grep -E '=== TRAINER INTELLIGENCE FOUNDATION RESULT: [0-9]+ PASS / 0 FAIL ===' trainer-intelligence-test.log | tail -n 1)"
           test -n "$summary"
           pass_count="$(printf '%s\n' "$summary" | sed -E 's/.*RESULT: ([0-9]+) PASS.*/\1/')"
-          if [ "$pass_count" -lt 60 ]; then
-            echo "Trainer intelligence regression: expected at least 60 passing checks, got $pass_count" >&2
+          if [ "$pass_count" -lt 63 ]; then
+            echo "Trainer intelligence regression: expected at least 63 passing checks, got $pass_count" >&2
             exit 1
           fi
           echo "FASE 20 trainer intelligence gate satisfied: $pass_count PASS / 0 FAIL"
