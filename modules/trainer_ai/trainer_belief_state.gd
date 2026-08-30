@@ -128,5 +128,18 @@ static func from_dict(data: Dictionary) -> TrainerBeliefState:
 	var belief := TrainerBeliefState.new()
 	belief.battle_id = StringName(data.get("battle_id", ""))
 	belief.observer_side_id = StringName(data.get("observer_side_id", ""))
-	belief.hypotheses = (data.get("hypotheses", {}) as Dictionary).duplicate(true)
+	var serialized_hypotheses: Dictionary = data.get("hypotheses", {})
+	for creature_key in serialized_hypotheses.keys():
+		var creature_domains: Dictionary = serialized_hypotheses[creature_key]
+		for domain_key in creature_domains.keys():
+			var domain_candidates: Dictionary = creature_domains[domain_key]
+			for candidate_key in domain_candidates.keys():
+				var record: Dictionary = domain_candidates[candidate_key]
+				belief.set_candidate(
+					StringName(creature_key),
+					StringName(domain_key),
+					StringName(candidate_key),
+					int(record.get("confidence_basis_points", 0)),
+					StringName(record.get("evidence", EVIDENCE_INFERRED)),
+				)
 	return belief
