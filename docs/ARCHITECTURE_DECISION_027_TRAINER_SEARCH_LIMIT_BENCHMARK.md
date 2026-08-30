@@ -2,138 +2,175 @@
 
 ## Estado
 
-IMPLEMENTADA / PENDIENTE DE VALIDACIÓN.
+VALIDADA / CERRADA.
 
 ## Contexto
 
 FASE 26 demostró que el planner de profundidad 2 mejora el corpus V1 sin regresiones en
-los cuatro controles. Eso no justifica aumentar profundidad, branching ni introducir MCTS
-por anticipación. Antes hay que demostrar límites concretos del planner actual y separar
-sus causas.
+los cuatro controles. Eso no justificaba aumentar profundidad, branching ni introducir
+MCTS por anticipación. FASE 27 se diseñó para buscar límites concretos del planner actual
+y separar causalmente horizonte, ancho de acciones e información incompleta.
 
-El contrato vigente de `TrainerSearchBudget` limita explícitamente `depth_turns` a 2 y el
-planner usa un máximo configurable de acciones por lado y mundos plausibles construidos
+El contrato vigente de `TrainerSearchBudget` mantiene `depth_turns = 2` como máximo y el
+planner usa un número configurable de acciones por lado y mundos plausibles construidos
 solo desde información legítima.
 
 ## Decisión
 
-### 1. Banco de límites, no nueva IA
+### 1. Banco diagnóstico, no nueva IA
 
-FASE 27 no cambia el algoritmo de búsqueda ni sus pesos. Introduce:
+FASE 27 no cambia el algoritmo de búsqueda ni los pesos de producción. Introduce:
 
-- `TrainerSearchLimitBenchmark`, harness segmentado y espejado;
+- `TrainerSearchLimitBenchmark`, harness segmentado, determinista y espejado;
 - `TrainerSequenceProbeBrain`, cerebro diagnóstico de secuencia fija que solo puede escoger
-  acciones ya presentes en el `TrainerDecisionContext` legal;
-- tres escenarios diseñados para aislar límites diferentes.
+  acciones ya legales en `TrainerDecisionContext`;
+- cuatro escenarios finales: dos controles positivos de replanning, un límite de branching
+  conocido y una sorpresa legítima de información oculta.
 
-El probe no es un candidato de gameplay. Su única función es demostrar que una línea legal
-existe cuando el planner no la encuentra.
+El probe no es un candidato de gameplay. Su función es comprobar que una línea legal existe
+y separar “el planner no la encontró” de “el escenario no tenía solución”.
 
-### 2. Límite de horizonte
+### 2. Hipótesis de horizonte: refutada en estos fixtures
 
-`three_turn_horizon` exige combinar dos preparaciones distintas antes del golpe decisivo:
+La hipótesis inicial era que una línea de tres turnos quedaría fuera de una búsqueda con
+profundidad nominal 2. El fixture exigía combinar preparaciones antes del golpe decisivo.
 
-1. subir Velocidad y +1 Ataque;
-2. añadir +3 Ataque;
-3. atacar.
+El resultado contradijo la hipótesis de forma reproducible. Con perfil `balanced`, en las
+seis ejecuciones (tres semillas y espejo de lados), el planner hizo exactamente:
 
-La combinación llega a +4 Ataque y permite KO garantizado. Una sola preparación no basta.
-El rival derrota al candidato si este intenta resolver el combate solo con daño inmediato.
+1. `focus`;
+2. `speed+attack`;
+3. `strike`.
 
-El planner se ejecuta con profundidad 2 y presupuesto holgado. El gate exige comprobar que
-la traza alcanzó profundidad 2 completa y no agotó simulaciones. Si aun así pierde mientras
-el probe de tres pasos gana, el fallo queda atribuido a horizonte y no a falta accidental
-de presupuesto.
+Resultado: **6/6 victorias en tres turnos**, con `fully_completed_depth = 2` y
+`budget_exhausted = false`.
 
-### 3. Límite de branching conocido
+Se intentó aislar una posible ayuda del evaluador táctico mediante un perfil diagnóstico con
+`setup_weight_bp = 0`, sin modificar reglas de búsqueda, legalidad ni acceso a información.
+El resultado volvió a ser exactamente el mismo: **6/6 victorias**, misma secuencia de tres
+turnos y profundidad 2 completada sin agotar presupuesto.
+
+La explicación es receding-horizon replanning: profundidad 2 no significa que el agente solo
+pueda ejecutar estrategias de dos turnos. En cada turno vuelve a planificar, y una mejora
+intermedia que ya tiene valor dentro del horizonte visible puede encadenarse hasta una línea
+más larga.
+
+Por tanto, FASE 27 **no demuestra que profundidad 2 sea un cuello de botella**. Los dos casos
+se conservan como controles positivos para impedir que una fase futura degrade esta capacidad.
+No se aumentará `depth_turns` solo por intuición; hará falta un contraejemplo real que el
+planner actual no pueda resolver.
+
+### 3. Límite de branching conocido: confirmado
 
 `known_fourth_response` da al rival cuatro movimientos públicamente plausibles. Los cuatro
-están en su learnset de nivel y, por tanto, son información que puede formar parte de las
-creencias sin hacer trampas.
+están en su learnset y, por tanto, pueden formar parte de las creencias sin hacer trampas.
 
 El planner mantiene `max_actions_per_side = 3`. Los tres primeros movimientos son débiles;
-el cuarto es una respuesta ofensiva letal. El cerebro rival real la selecciona por su valor
-táctico.
+el cuarto es una respuesta ofensiva letal y el cerebro rival real la selecciona.
 
-El gate exige demostrar simultáneamente:
+El resultado final es:
 
+- planner: **0/6**;
+- probe con línea conservadora: **6/6**;
 - el cuarto movimiento está en el prior público;
 - aparece en los eventos reales;
 - no aparece en la traza simulada del planner;
-- la traza registra cap 3;
-- el presupuesto de simulaciones no se agotó;
-- una línea legal conservadora (debuff de Ataque seguido de ataques) gana con el probe.
+- la traza registra `max_actions_per_side = 3`;
+- `budget_exhausted = false`.
 
-Así se separa un límite de muestreo/branching de un límite de horizonte o de CPU.
+Esto demuestra un límite real de cobertura de acciones, no un problema de CPU, horizonte ni
+información ilegal. FASE 28 debe atacar primero este cuello de botella con branching adaptativo
+o selección informada antes de considerar algoritmos de búsqueda más complejos.
 
-### 4. Límite de información legítima
+### 4. Información oculta legítima: límite confirmado, no blunder
 
 `unmodeled_hidden_coverage` contiene un movimiento real del rival que no está en su learnset
 público y todavía no ha sido revelado.
 
-El planner no debe conocerlo antes del primer turno. El gate exige que:
+El resultado final es planner **0/6**, pero el comportamiento es correcto desde el punto de
+vista de anti-cheat:
 
-- el movimiento esté ausente del prior público;
-- esté ausente de la primera traza;
-- el rival lo revele al usarlo en el combate real.
+- el movimiento está ausente del prior público;
+- está ausente de la primera traza;
+- el rival lo revela únicamente al usarlo en el combate real;
+- `budget_exhausted = false`.
 
-Este escenario se clasifica como sorpresa legítima de información incompleta. No se usa un
-probe-oráculo para declarar que el planner hizo una mala jugada, porque un oráculo que
-conociese de antemano el movimiento oculto estaría haciendo trampas.
+No existe un probe-oráculo de “juego justo” para este caso, porque conocer la cobertura antes
+de que sea observable sería hacer trampas. El escenario queda clasificado como límite de
+información incompleta, no como error táctico del agente.
+
+Una mejora futura deberá ampliar priors o generar hipótesis de cobertura desconocida sin
+inyectar el moveset real oculto.
 
 ### 5. RNG controlado sin simulador paralelo
 
-Los combates siguen usando `BattleState + AuthoritativeBattleServer` y el RNG real. Para
-que los fixtures no dependan de críticos, sus movimientos fijan una modificación de ratio
-de crítico suficientemente negativa para que el umbral efectivo sea 0. El factor aleatorio
-de daño permanece activo, y los márgenes de HP/daño están construidos para conservar el
-resultado en todo el rango normal.
+Los combates siguen usando `BattleState + AuthoritativeBattleServer` y el RNG real. Para que
+los fixtures no dependan de críticos, sus movimientos fijan una modificación de crítico
+suficientemente negativa para que el umbral efectivo sea 0. El factor normal aleatorio de
+daño permanece activo y los márgenes del fixture conservan el resultado en ese rango.
 
-### 6. Presupuesto del planner bajo prueba
+### 6. Presupuesto bajo prueba
 
-FASE 27 usa:
+FASE 27 mantiene:
 
 - profundidad: 2;
 - mundos: 2;
 - simulaciones: 128;
 - acciones máximas por lado: 3.
 
-El presupuesto de simulaciones es deliberadamente amplio para que los fixtures de horizonte
-y branching no confundan un cap estructural con agotamiento accidental de nodos.
+El presupuesto de simulaciones es deliberadamente holgado. Los límites confirmados no se
+atribuyen a agotamiento accidental de nodos.
 
-## Gate de aceptación esperado
+## Resultados finales del banco
 
 Con tres semillas y espejo de lados:
 
-- 18 partidas del planner;
-- 12 partidas de probe-oráculo en los dos escenarios solucionables;
+- 4 escenarios;
+- 24 partidas del planner;
+- 12 partidas de probe-oráculo;
 - 0 partidas inválidas;
-- horizonte: planner 0/6, probe 6/6;
+- control de replanning `balanced`: planner 6/6;
+- control de replanning con `setup_weight_bp = 0`: planner 6/6, probe 6/6;
 - branching conocido: planner 0/6, probe 6/6;
-- sorpresa oculta: planner 0/6, sin oráculo de juego justo;
-- trazas coherentes con cada causa declarada;
-- ejecución determinista.
+- sorpresa oculta: planner 0/6, sin oráculo legítimo;
+- ejecución determinista;
+- gate FASE 27: **49 PASS / 0 FAIL**.
 
-Estas cifras son expectativas de fixtures diagnósticos y no resultados hasta que CI las
-confirme.
+El resultado agregado del planner es 12 victorias y 12 derrotas, pero esa cifra no se usa
+como métrica de fuerza global: el banco está segmentado para diagnosticar causas concretas.
+
+## Invariantes conservados
+
+- no se aumentó profundidad;
+- no se introdujo MCTS;
+- no se modificaron pesos de producción para fabricar resultados;
+- no se filtró información oculta real hacia las creencias;
+- las decisiones hipotéticas siguen usando el Battle Core autoritativo;
+- los resultados se prueban en ambos lados y con semillas deterministas;
+- las hipótesis refutadas se documentan en vez de reetiquetarlas como éxitos.
 
 ## No objetivos
 
-- aumentar `depth_turns` a 3;
+- demostrar superioridad universal del planner;
+- aumentar `depth_turns` a 3 sin un caso que lo justifique;
 - implementar MCTS/UCT/PUCT;
-- cambiar pesos tácticos;
-- añadir omnisciencia al rival;
-- usar wall-clock como métrica de inteligencia;
-- llamar “blunder” a una sorpresa que el agente no podía conocer legítimamente.
+- añadir omnisciencia;
+- llamar “blunder” a una sorpresa que el agente no podía conocer legítimamente;
+- usar wall-clock como sustituto de calidad de decisión.
 
-## Siguiente decisión si se valida
+## Siguiente decisión
 
-Comparar primero correcciones incrementales contra cada límite por separado:
+La prioridad empíricamente justificada es **FASE 28 — Adaptive Branching / Action Coverage**.
 
-1. horizonte: profundidad 3 o extensión selectiva;
-2. branching: selección/adaptación del ancho o poda informada;
-3. información: priors más amplios o muestreo de cobertura desconocida sin revelar datos reales.
+Debe intentar corregir `known_fourth_response` sin simplemente elevar el ancho para todos los
+nodos. El objetivo es conservar coste acotado y escoger mejor qué respuestas rivales merecen
+entrar en la búsqueda. La corrección deberá:
 
-MCTS solo deberá entrar como candidato si una de esas soluciones incrementales no ofrece
-una relación suficiente entre calidad, coste y complejidad, y siempre deberá revalidar el
-corpus de FASE 26 para demostrar que no introduce regresiones.
+1. hacer visible la cuarta respuesta peligrosa cuando sea públicamente plausible;
+2. mantener el límite de información de FASE 27 intacto;
+3. conservar los dos controles de replanning;
+4. volver a superar el corpus de FASE 26 y todos los gates históricos;
+5. compararse contra el planner actual antes de considerar MCTS.
+
+MCTS solo entrará como candidato si las soluciones incrementales de cobertura no ofrecen una
+relación suficiente entre calidad, coste y complejidad.
