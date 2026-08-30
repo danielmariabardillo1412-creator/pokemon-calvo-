@@ -2,11 +2,12 @@ class_name WildBattleCommand
 extends RefCounted
 
 # Player-intent envelope at the wild-adventure application boundary. MOVE/SWITCH still use the
-# canonical BattleAction type; CAPTURE carries only the stable ball id. The session derives trusted
-# battle/ownership facts and never accepts target ownership from this payload.
+# canonical BattleAction type; CAPTURE carries only the stable ball id; RUN carries no trusted
+# battle facts. The session derives live actor/target/ownership state from its own authority.
 
 const ACTION := &"action"
 const CAPTURE := &"capture"
+const RUN := &"run"
 
 var turn: int = 0
 var command_type: StringName = ACTION
@@ -35,6 +36,17 @@ static func capture(
 	command.command_type = CAPTURE
 	command.side_id = p_side_id
 	command.ball_id = p_ball_id
+	return command
+
+
+static func run(
+	p_turn: int,
+	p_side_id: StringName,
+) -> WildBattleCommand:
+	var command := WildBattleCommand.new()
+	command.turn = p_turn
+	command.command_type = RUN
+	command.side_id = p_side_id
 	return command
 
 
