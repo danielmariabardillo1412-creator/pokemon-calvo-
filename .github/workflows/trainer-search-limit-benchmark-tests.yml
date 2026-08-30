@@ -50,6 +50,12 @@ jobs:
           set -euo pipefail
           godot --headless --path . --import 2>&1 | tee trainer-search-limit-import.log
 
+      - name: Diagnose horizon fixture
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 180s godot --headless --path . --script res://tests/trainer_search_limit_horizon_diagnostic.gd 2>&1 | tee trainer-search-limit-horizon-diagnostic.log
+
       - name: Run FASE 27 search limit benchmark suite
         shell: bash
         run: |
@@ -72,6 +78,7 @@ jobs:
           path: |
             trainer-search-limit-godot-version.log
             trainer-search-limit-import.log
+            trainer-search-limit-horizon-diagnostic.log
             trainer-search-limit-test.log
           if-no-files-found: ignore
           retention-days: 7
