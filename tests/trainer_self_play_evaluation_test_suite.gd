@@ -42,7 +42,9 @@ func _build_catalog() -> void:
 	candidate.learnset.append(LearnSetEntry.new(1, SETUP_MOVE, LearnsetSystem.LEVEL_UP))
 	_catalog.add_species(candidate)
 
-	var reference := _species(REFERENCE_SPECIES, 50, 120, 80, 60, 70)
+	# Keep the actual speed 90 inside the public species/level speed envelope. The AI
+	# may infer that this species is fast; it still never receives the hidden exact 90.
+	var reference := _species(REFERENCE_SPECIES, 50, 120, 80, 100, 70)
 	reference.learnset.append(LearnSetEntry.new(1, HEAVY_MOVE, LearnsetSystem.LEVEL_UP))
 	_catalog.add_species(reference)
 	_check.call("selfplay_fixture_setup_has_two_effects", _catalog.move(SETUP_MOVE).effect_specs.size() == 2)
