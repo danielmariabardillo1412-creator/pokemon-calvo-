@@ -2,7 +2,17 @@
 
 ## Estado
 
-IMPLEMENTADA / PENDIENTE DE VALIDACIÓN.
+VALIDADA / CERRADA.
+
+FASE 25 quedó validada sobre `3eee9f1036a46ff365082c1a884a959cf440f9bb` con:
+
+- suite FASE 25: **48 PASS / 0 FAIL**;
+- baseline profundidad 1: **0 victorias / 6 derrotas** en el fixture pareado;
+- planner profundidad 2: **6 victorias / 0 derrotas**;
+- **6 mejoras pareadas / 0 regresiones**;
+- resultado conservado al invertir `side_a` / `side_b`;
+- FASE 24, 23, 22, 21, 20 y 19: SUCCESS;
+- regresión global Godot 4.7: SUCCESS.
 
 ## Contexto
 
@@ -87,14 +97,50 @@ si recibe un segundo. Tiene dos opciones:
 - ataque codicioso, que hace daño importante pero no mata;
 - `selfplay_agility_focus`, setup de un solo PP que aumenta Velocidad +4 y Ataque +2.
 
-Profundidad 1 debe preferir el daño inmediato. Al llegar el segundo turno, el rival sigue
-siendo más rápido y remata antes de la segunda acción.
+Profundidad 1 prefiere el daño inmediato. Al llegar el segundo turno, el rival sigue siendo
+más rápido y remata antes de la segunda acción.
 
-Profundidad 2 debe preparar el setup en el primer turno. Sobrevive al primer golpe, pasa a
-ser más rápido y su Ataque aumentado permite KO antes del segundo golpe rival.
+Profundidad 2 prepara el setup en el primer turno. Sobrevive al primer golpe, pasa a ser más
+rápido y su Ataque aumentado permite KO antes del segundo golpe rival.
 
 El cerebro de referencia es táctico y solo dispone del ataque pesado, eliminando ambigüedad
 de política rival en este fixture.
+
+## Incidente de validación resuelto
+
+La primera ejecución de FASE 25 obtuvo **42 PASS / 6 FAIL**. La infraestructura de self-play,
+el aislamiento, el determinismo y el baseline funcionaban, pero el planificador también
+escogía el ataque codicioso.
+
+La investigación mostró que el fixture había declarado al rival con `base_speed = 60` pero
+le había asignado un `speed` real de 90. El sistema anti-cheat no conoce ese 90 oculto:
+`TrainerBeliefInference` construye su rango plausible a partir de especie y nivel públicos.
+Con `base_speed = 60`, varios mundos legítimos hacían defendible la acción codiciosa.
+
+No se modificaron los pesos del cerebro, la búsqueda ni las reglas para aprobar el test.
+Se corrigió únicamente la incoherencia pública del fixture, elevando la especie rival a
+`base_speed = 100` y manteniendo el `speed` real en 90. Así el valor real queda dentro del
+rango públicamente plausible, pero **el entrenador continúa sin recibir el stat exacto**.
+
+Tras esa corrección, sin cambios en el algoritmo, el planner pasó a elegir el setup temprano
+y la suite quedó en 48 PASS / 0 FAIL. El incidente valida además que la frontera anti-cheat
+está influyendo realmente en las decisiones y no es solo una abstracción documental.
+
+## Resultado empírico V1
+
+Con tres semillas deterministas y espejo de lados, cada candidato juega seis partidas contra
+el mismo rival de referencia:
+
+- `SearchTrainerBrain` profundidad 1: 0-6;
+- `DepthSearchTrainerBrain` profundidad 2: 6-0;
+- mejoras pareadas: 6;
+- regresiones pareadas: 0;
+- partidas inválidas: 0;
+- acciones rechazadas en partidas normales: 0.
+
+Este resultado demuestra el valor del laboratorio y una ventaja real en este escenario de
+horizonte. **No se interpreta como significancia estadística general ni como prueba de que
+profundidad 2 sea universalmente superior.**
 
 ## No objetivos
 
@@ -105,20 +151,20 @@ de política rival en este fixture.
 - etiquetar como blunder cualquier derrota;
 - modificar `TrainerBattleSession` para benchmarking.
 
-## Gate de aceptación
+## Invariantes validados
 
-La fase solo puede cerrarse si:
-
-1. la suite FASE 25 queda en 0 FAIL y al menos 45 PASS;
-2. las partidas son deterministas a igualdad de semilla;
-3. los rosters de entrada permanecen intactos;
-4. no aparecen acciones rechazadas en los combates normales;
-5. el espejo conserva la mejora del planificador;
-6. baseline pierde el fixture de horizonte y planner lo gana en las semillas pareadas;
-7. no aparecen regresiones pareadas en el fixture de control;
+1. La suite FASE 25 queda en 0 FAIL y supera el mínimo de 45 PASS.
+2. Las partidas son deterministas a igualdad de semilla.
+3. Los rosters de entrada permanecen intactos.
+4. No aparecen acciones rechazadas en los combates normales.
+5. El espejo conserva la mejora del planificador.
+6. Baseline pierde el fixture de horizonte y planner lo gana en las semillas pareadas.
+7. No aparecen regresiones pareadas en el fixture validado.
 8. FASE 24, 23, 22, 21, 20, 19 y la regresión global Godot 4.7 siguen verdes.
+9. La mejora se consigue sin revelar al cerebro el stat oculto exacto del rival.
 
-## Siguiente decisión si se valida
+## Siguiente decisión
 
-Ampliar el corpus de escenarios y ejecutar una evaluación estadística mayor antes de decidir
-si MCTS aporta una mejora suficiente para justificar su complejidad y coste.
+FASE 26 debe ampliar el corpus de escenarios y ejecutar una evaluación estadística mayor,
+con resultados segmentados y un intervalo de confianza apropiado, antes de decidir si MCTS
+aporta una mejora suficiente para justificar su complejidad y coste.
