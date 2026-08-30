@@ -54,7 +54,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          timeout 180s godot --headless --path . --script res://tests/trainer_adaptive_branching_test_runner.gd 2>&1 | tee trainer-adaptive-branching-test.log
+          timeout 180s godot --headless --path . --script res://tests/trainer_ai/trainer_adaptive_branching_test_runner.gd 2>&1 | tee trainer-adaptive-branching-test.log
           summary="$(grep -E '=== TRAINER ADAPTIVE BRANCHING RESULT: [0-9]+ PASS / 0 FAIL ===' trainer-adaptive-branching-test.log | tail -n 1)"
           test -n "$summary"
           pass_count="$(printf '%s\n' "$summary" | sed -E 's/.*RESULT: ([0-9]+) PASS.*/\1/')"
@@ -68,7 +68,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          timeout 180s godot --headless --path . --script res://tests/trainer_adaptive_branching_corpus_test_runner.gd 2>&1 | tee trainer-adaptive-corpus-test.log
+          timeout 180s godot --headless --path . --script res://tests/trainer_ai/trainer_adaptive_branching_corpus_test_runner.gd 2>&1 | tee trainer-adaptive-corpus-test.log
           summary="$(grep -E '=== TRAINER ADAPTIVE CORPUS RESULT: [0-9]+ PASS / 0 FAIL ===' trainer-adaptive-corpus-test.log | tail -n 1)"
           test -n "$summary"
           pass_count="$(printf '%s\n' "$summary" | sed -E 's/.*RESULT: ([0-9]+) PASS.*/\1/')"
