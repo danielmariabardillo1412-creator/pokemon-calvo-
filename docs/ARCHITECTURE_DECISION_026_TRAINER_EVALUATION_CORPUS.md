@@ -2,7 +2,7 @@
 
 ## Estado
 
-IMPLEMENTADA / PENDIENTE DE VALIDACIÓN.
+VALIDADA / CERRADA.
 
 ## Contexto
 
@@ -11,8 +11,8 @@ mejora una trampa de horizonte. Un único escenario, incluso repetido con varias
 no justifica una arquitectura más compleja ni permite generalizar la superioridad del
 planner.
 
-Antes de considerar MCTS necesitamos un corpus segmentado que mezcle casos donde la
-profundidad adicional debe ayudar con controles donde no debe alterar una decisión obvia.
+Antes de considerar MCTS necesitábamos un corpus segmentado que mezclase casos donde la
+profundidad adicional debía ayudar con controles donde no debía alterar una decisión obvia.
 
 ## Decisión
 
@@ -30,7 +30,7 @@ FASE 26 introduce `TrainerEvaluationCorpus`. Cada escenario declara:
 Cada escenario reutiliza `TrainerSelfPlayEvaluation`, por lo que conserva comparación
 pareada y espejo `side_a` / `side_b`.
 
-### 2. Tamaño mínimo V1
+### 2. Tamaño V1
 
 El gate CI usa cinco familias, seis semillas y espejo de lados:
 
@@ -71,26 +71,54 @@ parte del criterio de inteligencia ni del pass/fail de esta fase.
 
 ### 6. Criterio de interpretación
 
-Incluso si los intervalos se separan en este corpus sintético, eso solo demuestra una
-ventaja estadísticamente consistente **dentro del corpus V1**. No equivale a demostrar que
+Aunque los intervalos se separan en este corpus sintético, eso solo demuestra una ventaja
+estadísticamente consistente **dentro del corpus V1**. No equivale a demostrar que
 profundidad 2 sea universalmente superior en todas las batallas Pokémon.
 
-## Gate de aceptación esperado
+## Resultado validado
 
-El corpus V1 está construido para producir, si la arquitectura se comporta como en FASE 25:
+HEAD técnico validado antes de este cierre documental:
+`871f740d90ab331827bea330cd7e042101b1dc0d`.
 
+FASE 26 obtuvo:
+
+- 36 PASS / 0 FAIL;
 - 60 partidas por candidato;
 - baseline: 48 victorias / 12 derrotas;
-- planner: 60 victorias / 0 derrotas;
+- planner profundidad 2: 60 victorias / 0 derrotas;
 - 12 mejoras pareadas;
 - 0 regresiones pareadas;
 - 48 pares iguales;
+- 0 empates;
 - 0 partidas inválidas;
-- intervalo Wilson del planner separado del baseline;
-- controles sin regresión.
+- los cuatro escenarios de control permanecen iguales y ganadores para el planner;
+- determinismo confirmado ejecutando el corpus completo dos veces.
 
-Estas cifras son expectativas de un fixture deliberadamente diseñado, no resultados hasta
-que CI las valide.
+El win rate observado es 80 % para baseline y 100 % para planner. Con Wilson bilateral
+95 %, los intervalos aproximados son:
+
+- baseline 48/60: 68.2 % — 88.2 %;
+- planner 60/60: 94.0 % — 100 %.
+
+Los intervalos no se solapan en este corpus. Entre los 12 pares cuyo resultado cambia,
+los 12 cambios favorecen al planner; los otros 48 pares son estabilidad y no se cuentan
+como evidencia adicional de mejora.
+
+## Validación de regresión
+
+Sobre el mismo SHA `871f740d90ab331827bea330cd7e042101b1dc0d` quedaron en SUCCESS:
+
+- FASE 26 corpus estadístico;
+- FASE 25 self-play;
+- FASE 24 profundidad/presupuesto;
+- FASE 23 búsqueda;
+- FASE 22 creencias;
+- FASE 21 inteligencia táctica;
+- FASE 20 foundation;
+- FASE 19 trainer battle session;
+- regresión global Godot 4.7.
+
+Total: 9/9 gates verdes.
 
 ## No objetivos
 
@@ -101,10 +129,10 @@ que CI las valide.
 - reemplazar el self-play autoritativo de FASE 25;
 - ocultar o promediar regresiones por familia.
 
-## Siguiente decisión si se valida
+## Siguiente decisión
 
-Si el corpus confirma mejora sin regresiones, la siguiente fase debe atacar un límite que
-profundidad 2 no resuelva —mayor branching, incertidumbre o horizonte— y usar ese caso para
-comparar una técnica de búsqueda más avanzada contra el planner actual. MCTS solo se
-justifica si aporta una mejora medible en esos casos difíciles sin degradar el corpus ya
-validado.
+No introducir MCTS solo porque profundidad 2 haya ganado el corpus actual. La siguiente
+fase debe construir casos que expongan límites reales del planner actual —mayor horizonte,
+branching y/o incertidumbre— y medirlos con el mismo laboratorio. Después se compararán
+alternativas incrementales (más profundidad/presupuesto, poda u otra búsqueda) antes de
+aceptar el coste de MCTS.
