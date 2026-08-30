@@ -33,4 +33,4 @@ Source: PokéAPI `api-data` @ `784c50b3ad27d0390d3b047fc4c4511f71edd049` (BSD 3-
 ## Not modeled in FASE 6
 - `base_happiness`, `gender_rate` (present in source; deferred — no gameplay consumer yet).
 - `effort` values > 3 per species edge cases (none in this source commit).
-- Form-based evolution targets (8 edges dropped by forms policy; see `docs/MECHANICS_COVERAGE.md`).
+- Form-based evolution targets (8 edges dropped by forms policy; see `docs/history/legacy_data/MECHANICS_COVERAGE.md`).

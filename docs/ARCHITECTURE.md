@@ -64,7 +64,7 @@ Un ID publicado no se reutiliza. Renombrarlo exige una migración explícita.
 
 Los `.tres` de V1 demuestran el contrato, no son la estrategia definitiva para más
 de 1000 especies. El contrato de datos canónico ya está implementado en
-`feature/data-pipeline-v1` (ver `docs/DATA_ARCHITECTURE.md` y `docs/adr/ARCHITECTURE_DECISION_002_DATA_PIPELINE.md`):
+`feature/data-pipeline-v1` (ver `docs/history/legacy_data/DATA_ARCHITECTURE.md` y `docs/adr/ARCHITECTURE_DECISION_002_DATA_PIPELINE.md`):
 fuente JSON + `DatasetManifest` versionado + `DataImporter` que valida y rechaza
 lo inválido, catálogos enfocados (`SpeciesCatalog`, `MoveCatalog`, `TypeCatalog`,
 `AbilityCatalog`, `ItemCatalog`, `StatusCatalog`) y `DefinitionCatalog` como fachada

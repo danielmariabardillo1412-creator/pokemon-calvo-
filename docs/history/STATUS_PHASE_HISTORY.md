@@ -130,7 +130,7 @@ IP Pokémon: Nintendo/Creatures/Game Freak (la licencia BSD no otorga derechos s
 - QA FASE 4.1: licencia corregida (BSD 3-Clause), SHA completo en manifest, cobertura de evoluciones
   recalculada sobre aristas importadas (suma = 476), terminología honesta DATA_READY/RUNTIME_SUPPORTED/
   PARTIAL_RUNTIME/DATA_ONLY/UNSUPPORTED, e invariantes de métricas en tests.
-- Docs: `docs/DATA_SOURCES.md`, `docs/MECHANICS_COVERAGE.md`, `docs/CODEX_BATTLE_V2_HANDOFF.md`.
+- Docs: `docs/history/legacy_data/DATA_SOURCES.md`, `docs/history/legacy_data/MECHANICS_COVERAGE.md`, `docs/history/legacy_data/CODEX_BATTLE_V2_HANDOFF.md`.
 
 ## Listo para Battle Core V2
 
@@ -138,7 +138,7 @@ SÍ. La capa de datos está completa, referencialmente sana y validada por invar
 puede consumir `MoveDefinition`/`AbilityDefinition`/`ItemDefinition`/`EvolutionRecord` sin nuevo import.
 NO se modificó el Battle existente (StatBlock/DamageCalculator intactos). NO se hizo merge a `main`.
 
-Informe final de FASE 4: `docs/history/phase_reports/INFORME_FINAL_FASE4.md`. Handoff Codex: `docs/CODEX_BATTLE_V2_HANDOFF.md`.
+Informe final de FASE 4: `docs/history/phase_reports/INFORME_FINAL_FASE4.md`. Handoff Codex: `docs/history/legacy_data/CODEX_BATTLE_V2_HANDOFF.md`.
 
 ---
 
@@ -211,7 +211,7 @@ Fuente: PokéAPI `api-data` (SHA completo `784c50b3ad27d0390d3b047fc4c4511f71edd
 - `BattleTriggerSystem` + `Static`: `requires_contact` (corregido desde `requires_physical`).
 - `DataImporter`: validación fuerte de `effect_specs` (rechaza specs rotos; issues en reporte).
 - Tests: `pokeapi_effect_specs_integrity`, `fase5_multi_hit`, `fase5_static_contact`.
-- Docs: `docs/adr/ARCHITECTURE_DECISION_004_EFFECT_DATA.md`, `docs/MOVE_EFFECT_COVERAGE.md`.
+- Docs: `docs/adr/ARCHITECTURE_DECISION_004_EFFECT_DATA.md`, `docs/history/legacy_data/MOVE_EFFECT_COVERAGE.md`.
 
 ## Cobertura honesta (937 movimientos)
 
@@ -259,7 +259,7 @@ Fuente: PokéAPI `api-data` (SHA `784c50b3ad27d0390d3b047fc4c4511f71edd049`, BSD
 - `modules/creatures/progression/learnset_system.gd` — `initial_moves`, `level_up_moves_between`,
   `moves_learned_at_level` (lee `CreatureSpecies.learnset`).
 - `modules/creatures/progression/evolution_system.gd` — `classify_record`, `evolution_candidates`,
-  `apply_evolution`, `coverage_report` (ver `docs/EVOLUTION_COVERAGE.md`).
+  `apply_evolution`, `coverage_report` (ver `docs/history/legacy_data/EVOLUTION_COVERAGE.md`).
 - `modules/creatures/progression/creature_factory.gd` — `create(...)` determinista
   (stats recalculados, moveset inicial, PP, IVs aleatorias con seed).
 - `modules/creatures/progression/progression_event.gd` — eventos semánticos
@@ -307,7 +307,7 @@ Fuente: PokéAPI `api-data` (SHA `784c50b3ad27d0390d3b047fc4c4511f71edd049`, BSD
 | `PARTIAL` | 0 | — |
 | **TOTAL** | **476** | 464 + 9 + 3 = 476 ✓ |
 
-Detalle: `docs/EVOLUTION_COVERAGE.md` + `docs/PROGRESSION_DATA_AUDIT.md`.
+Detalle: `docs/history/legacy_data/EVOLUTION_COVERAGE.md` + `docs/history/legacy_data/PROGRESSION_DATA_AUDIT.md`.
 
 ## Listo para la siguiente fase
 

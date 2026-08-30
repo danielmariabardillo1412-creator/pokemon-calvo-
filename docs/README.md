@@ -18,7 +18,10 @@ Los ADR 001–033 están en [`adr/`](adr/). Se conservan porque documentan decis
 
 ## Historial
 
+- [history/README.md](history/README.md) — guía del archivo histórico.
 - [`history/phase_reports/`](history/phase_reports/) — informes finales de fases cerradas.
+- [`history/legacy_data/`](history/legacy_data/) — DATA V1/V2, auditorías y coberturas superadas.
+- [`history/research/`](history/research/) — investigación técnica preservada.
 - [history/STATUS_PHASE_HISTORY.md](history/STATUS_PHASE_HISTORY.md) — antiguo STATUS acumulativo.
 
 Los documentos históricos pueden contener cifras y rutas válidas para su fase original que ya no describen el baseline actual. Para datos actuales prevalecen `STATUS.md` y `DATA_FOUNDATION_V3.md`.

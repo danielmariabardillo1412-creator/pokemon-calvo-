@@ -84,7 +84,7 @@
 - `data/manifests/pokemon_api_manifest.json` (schema_version 1, dataset_version 1.0.0, source_commit completo)
 - `data/normalized/pokemon_api.json` (dump de round-trip, regenerado)
 - `data/reports/{forms_policy_report, unsupported_mechanics, import_summary}.json` (gitignored, regenerable)
-- `docs/DATA_SOURCES.md`, `docs/MECHANICS_COVERAGE.md`, `docs/CODEX_BATTLE_V2_HANDOFF.md`
+- `docs/history/legacy_data/DATA_SOURCES.md`, `docs/history/legacy_data/MECHANICS_COVERAGE.md`, `docs/history/legacy_data/CODEX_BATTLE_V2_HANDOFF.md`
 
 ## Extensión de dominio (solo datos, sin lógica de juego)
 - `CreatureSpecies`: +`base_special_attack`, `base_special_defense` (6 stats base completos)

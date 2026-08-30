@@ -42,7 +42,7 @@ Source: PokéAPI `api-data` @ `784c50b3ad27d0390d3b047fc4c4511f71edd049` (BSD 3-
 ## Moves (937) — DATA_READY = 937
 
 > Cobertura recalculada en FASE 5 (effect_specs data-driven desde metadata estructurada).
-> Ver `docs/MOVE_EFFECT_COVERAGE.md` y `docs/adr/ARCHITECTURE_DECISION_004_EFFECT_DATA.md`.
+> Ver `docs/history/legacy_data/MOVE_EFFECT_COVERAGE.md` y `docs/adr/ARCHITECTURE_DECISION_004_EFFECT_DATA.md`.
 
 | Coverage | Count | Sum check |
 |---|---|---|
@@ -115,7 +115,7 @@ The same 476 imported edges are now classified as:
 | `UNSUPPORTED` | 3 (`other`, `shed`, `spin`) |
 | `PARTIAL` | 0 |
 
-Full detail: `docs/EVOLUTION_COVERAGE.md` + `docs/evolution_coverage_report.json`.
+Full detail: `docs/history/legacy_data/EVOLUTION_COVERAGE.md` + `docs/history/legacy_data/evolution_coverage_report.json`.
 
 ## Forms policy (39 deferred)
 
