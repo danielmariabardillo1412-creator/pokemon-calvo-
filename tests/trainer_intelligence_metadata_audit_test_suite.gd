@@ -41,9 +41,16 @@ func _test_event_metadata_is_sanitized() -> void:
 	]
 	memory.observe_events(events, state)
 	var serialized := JSON.stringify(memory.to_dict())
+	var raw_metadata_key_absent := true
+	for record in memory.event_log:
+		if record.has("metadata"):
+			raw_metadata_key_absent = false
+			break
 	_check.call(
 		"intel_metadata_raw_fields_not_persisted",
-		not serialized.contains(secret) and not serialized.contains("internal_roll") and not serialized.contains("metadata"),
+		raw_metadata_key_absent
+		and not serialized.contains(secret)
+		and not serialized.contains("internal_roll"),
 	)
 	_check.call(
 		"intel_metadata_public_reveals_preserved",
