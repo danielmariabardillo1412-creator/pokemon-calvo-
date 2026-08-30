@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="TypeDefinition" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://modules/creatures/domain/type_definition.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"poison"
+display_name = "Veneno"
+effectiveness = {"grass": 2.0, "poison": 0.5, "ground": 0.5, "rock": 0.5, "ghost": 0.5, "steel": 0.0, "fairy": 2.0}
