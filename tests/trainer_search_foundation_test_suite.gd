@@ -36,6 +36,11 @@ func run(check_callback: Callable) -> void:
 
 
 func _build_catalog() -> void:
+	var normal_type := TypeDefinition.new("Normal")
+	normal_type.id = &"normal"
+	_catalog.add_type(normal_type)
+	_check.call("search_fixture_normal_type_available", _catalog.type(&"normal") != null)
+
 	_add_move(OWN_HIT, 95, 0)
 	_add_move(TANK_HIT, 20, 0)
 	_add_move(OPP_HEAVY, 250, 0)
@@ -229,6 +234,8 @@ func _test_belief_dimensions_materialize_without_live_rng() -> void:
 	var worlds := TrainerPlausibleWorldFactory.new(_catalog).build(context)
 	var abilities: Array[String] = []
 	var speeds: Array[int] = []
+	var ability_counts: Dictionary = {}
+	var ability_weights: Dictionary = {}
 	var rng_is_synthetic := true
 	var speed_in_bound := true
 	var ranges: Dictionary = context.belief_snapshot.get("ranges", {})
@@ -243,6 +250,8 @@ func _test_belief_dimensions_materialize_without_live_rng() -> void:
 			abilities.append(ability)
 		if not speeds.has(speed):
 			speeds.append(speed)
+		ability_counts[ability] = int(ability_counts.get(ability, 0)) + 1
+		ability_weights[ability] = int(ability_weights.get(ability, 0)) + world.weight_basis_points
 		rng_is_synthetic = rng_is_synthetic and int(world.metadata.get("rng_seed", 0)) != state.rng_state
 		speed_in_bound = speed_in_bound and speed >= low and speed <= high
 	_check.call("search_worlds_sample_multiple_abilities", abilities.has(String(ABILITY_A)) and abilities.has(String(ABILITY_B)))
@@ -250,6 +259,22 @@ func _test_belief_dimensions_materialize_without_live_rng() -> void:
 	_check.call("search_world_speed_samples_inside_public_range", speed_in_bound)
 	_check.call("search_world_rng_never_reuses_live_rng", rng_is_synthetic)
 	_check.call("search_context_has_no_live_rng", not JSON.stringify(context.to_dict()).contains("rng_state"))
+	var count_a := int(ability_counts.get(String(ABILITY_A), 0))
+	var count_b := int(ability_counts.get(String(ABILITY_B), 0))
+	_check.call("search_world_sampling_stratifies_ability_hypotheses", absi(count_a - count_b) <= 1)
+	var hypotheses: Dictionary = context.belief_snapshot.get("hypotheses", {})
+	var creature_hypotheses: Dictionary = hypotheses.get(String(fx.opponent_id), {})
+	var ability_hypotheses: Dictionary = creature_hypotheses.get(String(TrainerBeliefState.DOMAIN_ABILITY), {})
+	var confidence_a := int((ability_hypotheses.get(String(ABILITY_A), {}) as Dictionary).get("confidence_basis_points", 0))
+	var confidence_b := int((ability_hypotheses.get(String(ABILITY_B), {}) as Dictionary).get("confidence_basis_points", 0))
+	var confidence_total := confidence_a + confidence_b
+	var expected_weight_a := confidence_a * 10000 / confidence_total if confidence_total > 0 else 5000
+	var actual_weight_a := int(ability_weights.get(String(ABILITY_A), 0))
+	_check.call("search_world_weights_follow_ability_confidence", absi(actual_weight_a - expected_weight_a) <= worlds.size())
+	var sampling_model_ok := true
+	for world in worlds:
+		sampling_model_ok = sampling_model_ok and String(world.metadata.get("sampling_model", "")) == "ability_stratified_round_robin_v1"
+	_check.call("search_world_sampling_model_is_explicit", sampling_model_ok)
 	var unknown_item_assumption := false
 	for world in worlds:
 		unknown_item_assumption = unknown_item_assumption or world.assumptions.has("opponent_unknown_item_unmodeled")
