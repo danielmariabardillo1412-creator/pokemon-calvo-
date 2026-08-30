@@ -1,0 +1,77 @@
+name: Trainer Loadouts Tests
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: trainer-loadouts-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: FASE 32 trainer loadouts gate
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Godot 4.7
+        uses: chickensoft-games/setup-godot@v2.4.1
+        with:
+          version: 4.7.0
+          use-dotnet: false
+          include-templates: false
+
+      - name: Verify Godot version
+        shell: bash
+        run: |
+          set -euo pipefail
+          godot --version | tee trainer-loadouts-godot-version.log
+          godot --version | grep -E '^4\.7([\.-]|$)'
+
+      - name: Stage pinned PokeAPI report fixtures
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p data/reports
+          cp ci/fixtures/pokeapi_reports/forms_policy_report.json data/reports/forms_policy_report.json
+          cp ci/fixtures/pokeapi_reports/unsupported_mechanics.json data/reports/unsupported_mechanics.json
+          cp ci/fixtures/pokeapi_reports/import_summary.json data/reports/import_summary.json
+
+      - name: Import project
+        shell: bash
+        run: |
+          set -euo pipefail
+          godot --headless --path . --import 2>&1 | tee trainer-loadouts-import.log
+
+      - name: Run FASE 32 trainer loadout suite
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 240s godot --headless --path . --script res://tests/trainer_loadouts_test_runner.gd 2>&1 | tee trainer-loadouts-test.log
+          summary="$(grep -E '=== TRAINER LOADOUTS RESULT: [0-9]+ PASS / 0 FAIL ===' trainer-loadouts-test.log | tail -n 1)"
+          test -n "$summary"
+          pass_count="$(printf '%s\n' "$summary" | sed -E 's/.*RESULT: ([0-9]+) PASS.*/\1/')"
+          if [ "$pass_count" -lt 216 ]; then
+            echo "Trainer loadout regression: expected at least 216 passing checks, got $pass_count" >&2
+            exit 1
+          fi
+          echo "FASE 32 trainer loadout gate satisfied: $pass_count PASS / 0 FAIL"
+
+      - name: Upload trainer loadout logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: trainer-loadouts-logs-${{ github.run_id }}
+          path: |
+            trainer-loadouts-godot-version.log
+            trainer-loadouts-import.log
+            trainer-loadouts-test.log
+          if-no-files-found: ignore
+          retention-days: 7
