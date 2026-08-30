@@ -1,0 +1,72 @@
+name: Repository Organization Commit Diagnostic
+
+on:
+  push:
+    branches:
+      - chore/repository-organization-v1
+    paths:
+      - '.github/workflows/repository-organization-commit-diagnostic.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout exact cleanup branch
+        uses: actions/checkout@v4
+        with:
+          ref: chore/repository-organization-v1
+          fetch-depth: 0
+
+      - name: Apply migration and diagnose commit
+        shell: bash
+        run: |
+          set -u
+          python tools/repository_organize_tmp.py
+          {
+            echo '=== HEAD BEFORE ==='
+            git rev-parse HEAD
+            echo '=== STATUS ==='
+            git status --short
+            echo '=== WORKFLOW DIFF ==='
+            git diff --name-status -- .github/workflows || true
+            echo '=== ALL CHANGED PATHS ==='
+            git diff --name-status || true
+            echo '=== ADD ==='
+          } > repository_commit_diag_tmp.txt
+
+          git add -A >>repository_commit_diag_tmp.txt 2>&1
+          add_rc=$?
+          echo "add_rc=$add_rc" >>repository_commit_diag_tmp.txt
+          echo '=== CACHED WORKFLOW DIFF ===' >>repository_commit_diag_tmp.txt
+          git diff --cached --name-status -- .github/workflows >>repository_commit_diag_tmp.txt 2>&1 || true
+
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          echo '=== COMMIT ATTEMPT ===' >>repository_commit_diag_tmp.txt
+          git commit -m 'chore(repo): organize fixtures docs and legacy tooling' >>repository_commit_diag_tmp.txt 2>&1
+          commit_rc=$?
+          echo "commit_rc=$commit_rc" >>repository_commit_diag_tmp.txt
+
+          if [ "$commit_rc" -eq 0 ]; then
+            migration_sha=$(git rev-parse HEAD)
+            echo "migration_sha=$migration_sha" >>repository_commit_diag_tmp.txt
+            echo '=== PUSH ATTEMPT ===' >>repository_commit_diag_tmp.txt
+            git push origin HEAD:chore/repository-organization-v1 >>repository_commit_diag_tmp.txt 2>&1
+            push_rc=$?
+            echo "push_rc=$push_rc" >>repository_commit_diag_tmp.txt
+            if [ "$push_rc" -eq 0 ]; then
+              echo 'Migration push succeeded.'
+              exit 0
+            fi
+            git reset --mixed origin/chore/repository-organization-v1
+          fi
+
+          # Persist only the diagnostic if migration commit/push did not succeed.
+          git reset
+          git add repository_commit_diag_tmp.txt
+          git commit -m 'chore(repo): capture migration commit diagnostic'
+          git push origin HEAD:chore/repository-organization-v1
