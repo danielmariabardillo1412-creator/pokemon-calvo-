@@ -1,17 +1,23 @@
 {
-  "schema_version": 2,
-  "dataset_version": "2.0.0",
-  "source": "pokeapi/api-data",
-  "generated_at": "2026-08-29",
-  "ruleset": "foundation_v1",
-  "provenance": {
-    "source_name": "PokeAPI/api-data",
-    "source_version": "784c50b3ad27d0390d3b047fc4c4511f71edd049",
-    "source_commit": "784c50b3ad27d0390d3b047fc4c4511f71edd049",
-    "source_commit_short": "784c50b3",
-    "source_url": "https://github.com/PokeAPI/api-data.git",
-    "license": "BSD 3-Clause (see LICENSE.txt in PokeAPI/api-data). Pokemon character/name/design IP is owned by Nintendo/Creatures/Game Freak; this dataset reuses factual game data under the source's BSD 3-Clause license and is not affiliated with or endorsed by Nintendo/Creatures/Game Freak.",
-    "import_date": "2026-08-29",
-    "schema_version": 2
-  }
+ "schema_version": 2,
+ "dataset_version": "3.0.0",
+ "source": "pokeapi/v2-snapshot",
+ "generated_at": "2026-08-31",
+ "ruleset": "latest_conventional_mainline_per_species_v1",
+ "provenance": {
+  "source_name": "PokeAPI v2 snapshot",
+  "source_commit": "2f218ec3765c01c894a42bbbd074f15ddf3f32d1",
+  "source_snapshot_commit": "2f218ec3765c01c894a42bbbd074f15ddf3f32d1",
+  "source_api_tree": "8349ea1ce75716897fe96e02a15950d19edba6c3",
+  "source_schema_tree": "02e031e1928d7e9456bf6f7486daacc4b8946c84",
+  "source_url": "https://github.com/PokeAPI/pokeapi",
+  "license": "BSD 3-Clause (data/POKEAPI_DATA_LICENSE.txt)",
+  "learnset_policy": "one latest available conventional main-series version-group per Pokemon; no side-game fallback",
+  "move_values_policy": "current values from snapshot; historical past_values retained in source snapshot",
+  "language_priority": [
+   "es",
+   "es-419",
+   "en"
+  ]
+ }
 }
