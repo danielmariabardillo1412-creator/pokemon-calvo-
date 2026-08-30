@@ -3,13 +3,15 @@ extends RefCounted
 
 var _move_specs: Dictionary = {}
 var _ability_specs: Dictionary = {}
-var _item_specs: Dictionary = {}
+var _item_specs: Dictionary = {} # held-item triggers
+var _trainer_item_specs: Dictionary = {} # explicit bag-item actions
 
 
 func _init() -> void:
 	_register_moves()
 	_register_abilities()
 	_register_items()
+	_register_trainer_items()
 
 
 func effects_for_move(move: MoveDefinition) -> Array[BattleEffectSpec]:
@@ -43,6 +45,26 @@ func triggers_for_item(item_id: StringName, trigger: StringName) -> Array[Battle
 	return _filter_triggers(_item_specs.get(item_id, []), trigger)
 
 
+func effects_for_trainer_item(item_id: StringName) -> Array[BattleEffectSpec]:
+	var out: Array[BattleEffectSpec] = []
+	for raw_spec in _trainer_item_specs.get(item_id, []):
+		if raw_spec is BattleEffectSpec:
+			out.append(BattleEffectSpec.from_dict((raw_spec as BattleEffectSpec).to_dict()))
+	return out
+
+
+func is_trainer_item_supported(item_id: StringName) -> bool:
+	return _trainer_item_specs.has(item_id)
+
+
+func runtime_supported_trainer_item_ids() -> Array[StringName]:
+	var out: Array[StringName] = []
+	for raw_id in _trainer_item_specs.keys():
+		out.append(StringName(raw_id))
+	out.sort_custom(func(a, b): return String(a) < String(b))
+	return out
+
+
 func has_explicit_move_mapping(move_id: StringName) -> bool:
 	return _move_specs.has(move_id) or [
 		&"tackle", &"water_gun", &"quick_attack",
@@ -66,6 +88,8 @@ func runtime_supported_ability_ids() -> Array[StringName]:
 
 
 func runtime_supported_item_ids() -> Array[StringName]:
+	# Held-item runtime coverage only. Trainer bag items are intentionally reported
+	# separately so historical item coverage contracts remain stable.
 	var result: Array[StringName] = [&"leftovers", &"sitrus_berry"]
 	return result
 
@@ -152,6 +176,29 @@ func _register_items() -> void:
 		{"hp_at_or_below_divisor": 2, "requires_missing_hp": true},
 		true,
 	)]
+
+
+func _register_trainer_items() -> void:
+	# Calvo V1 trainer-bag rules. These are explicit project mechanics rather than
+	# text parsed from PokeAPI descriptions, which keeps battle math deterministic.
+	# OPPONENT is used here as the generic BattleEffectContext target selector; item
+	# validation guarantees that this target belongs to the acting trainer's side.
+	_trainer_item_specs[&"potion"] = [
+		BattleEffectSpec.new(BattleEffectSpec.HEAL, BattleEffectSpec.OPPONENT, 20),
+	]
+	_trainer_item_specs[&"super_potion"] = [
+		BattleEffectSpec.new(BattleEffectSpec.HEAL, BattleEffectSpec.OPPONENT, 60),
+	]
+	_trainer_item_specs[&"hyper_potion"] = [
+		BattleEffectSpec.new(BattleEffectSpec.HEAL, BattleEffectSpec.OPPONENT, 120),
+	]
+	_trainer_item_specs[&"max_potion"] = [
+		BattleEffectSpec.new(BattleEffectSpec.HEAL, BattleEffectSpec.OPPONENT, 0, 10000),
+	]
+	_trainer_item_specs[&"full_restore"] = [
+		BattleEffectSpec.new(BattleEffectSpec.HEAL, BattleEffectSpec.OPPONENT, 0, 10000),
+		BattleEffectSpec.new(BattleEffectSpec.CURE_STATUS, BattleEffectSpec.OPPONENT),
+	]
 
 
 func _chance(chance_bp: int, child: BattleEffectSpec) -> BattleEffectSpec:
