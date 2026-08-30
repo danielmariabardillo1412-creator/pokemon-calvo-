@@ -14,10 +14,10 @@ func _init(catalog: DefinitionCatalog) -> void:
 
 
 func materialize(team: TrainerTeamDefinition) -> Array[CreatureInstance]:
-	var out: Array[CreatureInstance] = []
+	var authored: Array[CreatureInstance] = []
 	last_validation = _validator.validate(team)
 	if not bool(last_validation.get("valid", false)):
-		return out
+		return authored
 	for index in range(team.loadouts.size()):
 		var loadout := team.loadouts[index]
 		var instance_id := StringName("%s_%02d_%s" % [
@@ -27,13 +27,24 @@ func materialize(team: TrainerTeamDefinition) -> Array[CreatureInstance]:
 		])
 		var creature := _loadout_factory.materialize(loadout, instance_id)
 		if creature == null:
-			out.clear()
+			authored.clear()
 			last_validation = {
 				"valid": false,
 				"errors": ["member_materialization_failed:%d" % index],
 				"member_errors": {index: _loadout_factory.last_validation.duplicate(true)},
 				"model": MODEL_ID,
 			}
-			return out
-		out.append(creature)
-	return out
+			return authored
+		authored.append(creature)
+
+	# The battle/session stack commonly treats roster[0] as the initial active. Preserve
+	# authored member data/IDs but rotate only the returned battle roster so lead_index
+	# has operational meaning without mutating the TrainerTeamDefinition.
+	if team.lead_index <= 0:
+		return authored
+	var ordered: Array[CreatureInstance] = []
+	ordered.append(authored[team.lead_index])
+	for index in range(authored.size()):
+		if index != team.lead_index:
+			ordered.append(authored[index])
+	return ordered
