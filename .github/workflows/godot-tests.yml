@@ -83,7 +83,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          godot --headless --path . --script res://tests/inventory_test_runner.gd 2>&1 | tee inventory-test.log
+          godot --headless --path . --script res://tests/gameplay/inventory_test_runner.gd 2>&1 | tee inventory-test.log
           summary="$(grep -E '=== INVENTORY TEST RESULT: [0-9]+ PASS / 0 FAIL ===' inventory-test.log | tail -n 1)"
           test -n "$summary"
           pass_count="$(printf '%s\n' "$summary" | sed -E 's/.*RESULT: ([0-9]+) PASS.*/\1/')"
@@ -97,7 +97,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          godot --headless --path . --script res://tests/savegame_v2_test_runner.gd 2>&1 | tee savegame-v2-test.log
+          godot --headless --path . --script res://tests/gameplay/savegame_v2_test_runner.gd 2>&1 | tee savegame-v2-test.log
           summary="$(grep -E '=== SAVEGAME V2 TEST RESULT: [0-9]+ PASS / 0 FAIL ===' savegame-v2-test.log | tail -n 1)"
           test -n "$summary"
           pass_count="$(printf '%s\n' "$summary" | sed -E 's/.*RESULT: ([0-9]+) PASS.*/\1/')"
@@ -111,7 +111,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          timeout 10s godot --headless --path . --script res://tests/savegame_v2_adversarial_test_runner.gd 2>&1 | tee savegame-v2-adversarial.log
+          timeout 10s godot --headless --path . --script res://tests/gameplay/savegame_v2_adversarial_test_runner.gd 2>&1 | tee savegame-v2-adversarial.log
           summary="$(grep -E '=== SAVEGAME V2 ADVERSARIAL RESULT: [0-9]+ PASS / 0 FAIL ===' savegame-v2-adversarial.log | tail -n 1)"
           test -n "$summary"
           pass_count="$(printf '%s\n' "$summary" | sed -E 's/.*RESULT: ([0-9]+) PASS.*/\1/')"
@@ -125,7 +125,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          godot --headless --path . --script res://tests/wild_encounter_test_runner.gd 2>&1 | tee wild-encounter-test.log
+          godot --headless --path . --script res://tests/gameplay/wild_encounter_test_runner.gd 2>&1 | tee wild-encounter-test.log
           summary="$(grep -E '=== WILD ENCOUNTER TEST RESULT: [0-9]+ PASS / 0 FAIL ===' wild-encounter-test.log | tail -n 1)"
           test -n "$summary"
           pass_count="$(printf '%s\n' "$summary" | sed -E 's/.*RESULT: ([0-9]+) PASS.*/\1/')"
@@ -139,7 +139,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          godot --headless --path . --script res://tests/vertical_slice_test_runner.gd 2>&1 | tee vertical-slice-test.log
+          godot --headless --path . --script res://tests/gameplay/vertical_slice_test_runner.gd 2>&1 | tee vertical-slice-test.log
           summary="$(grep -E '=== VERTICAL SLICE TEST RESULT: [0-9]+ PASS / 0 FAIL ===' vertical-slice-test.log | tail -n 1)"
           test -n "$summary"
           pass_count="$(printf '%s\n' "$summary" | sed -E 's/.*RESULT: ([0-9]+) PASS.*/\1/')"
@@ -153,7 +153,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          godot --headless --path . --script res://tests/overworld_test_runner.gd 2>&1 | tee overworld-test.log
+          godot --headless --path . --script res://tests/gameplay/overworld_test_runner.gd 2>&1 | tee overworld-test.log
           summary="$(grep -E '=== OVERWORLD TEST RESULT: [0-9]+ PASS / 0 FAIL ===' overworld-test.log | tail -n 1)"
           test -n "$summary"
           pass_count="$(printf '%s\n' "$summary" | sed -E 's/.*RESULT: ([0-9]+) PASS.*/\1/')"
@@ -167,7 +167,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          godot --headless --path . --script res://tests/battle_presentation_test_runner.gd 2>&1 | tee battle-presentation-test.log
+          godot --headless --path . --script res://tests/battle/battle_presentation_test_runner.gd 2>&1 | tee battle-presentation-test.log
           summary="$(grep -E '=== BATTLE PRESENTATION TEST RESULT: [0-9]+ PASS / 0 FAIL ===' battle-presentation-test.log | tail -n 1)"
           test -n "$summary"
           pass_count="$(printf '%s\n' "$summary" | sed -E 's/.*RESULT: ([0-9]+) PASS.*/\1/')"
@@ -181,7 +181,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          godot --headless --path . --script res://tests/battle_commands_test_runner.gd 2>&1 | tee battle-commands-test.log
+          godot --headless --path . --script res://tests/battle/battle_commands_test_runner.gd 2>&1 | tee battle-commands-test.log
           summary="$(grep -E '=== BATTLE COMMANDS TEST RESULT: [0-9]+ PASS / 0 FAIL ===' battle-commands-test.log | tail -n 1)"
           test -n "$summary"
           pass_count="$(printf '%s\n' "$summary" | sed -E 's/.*RESULT: ([0-9]+) PASS.*/\1/')"
@@ -195,7 +195,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          godot --headless --path . --script res://tests/battle_capture_presentation_test_runner.gd 2>&1 | tee battle-capture-presentation-test.log
+          godot --headless --path . --script res://tests/battle/battle_capture_presentation_test_runner.gd 2>&1 | tee battle-capture-presentation-test.log
           summary="$(grep -E '=== BATTLE CAPTURE PRESENTATION RESULT: [0-9]+ PASS / 0 FAIL ===' battle-capture-presentation-test.log | tail -n 1)"
           test -n "$summary"
           pass_count="$(printf '%s\n' "$summary" | sed -E 's/.*RESULT: ([0-9]+) PASS.*/\1/')"
@@ -209,7 +209,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          timeout 20s godot --headless --path . --script res://tests/battle_switch_presentation_test_runner.gd 2>&1 | tee battle-switch-presentation-test.log
+          timeout 20s godot --headless --path . --script res://tests/battle/battle_switch_presentation_test_runner.gd 2>&1 | tee battle-switch-presentation-test.log
           summary="$(grep -E '=== BATTLE SWITCH PRESENTATION RESULT: [0-9]+ PASS / 0 FAIL ===' battle-switch-presentation-test.log | tail -n 1)"
           test -n "$summary"
           pass_count="$(printf '%s\n' "$summary" | sed -E 's/.*RESULT: ([0-9]+) PASS.*/\1/')"
@@ -223,7 +223,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          timeout 20s godot --headless --path . --script res://tests/wild_run_command_test_runner.gd 2>&1 | tee wild-run-command-test.log
+          timeout 20s godot --headless --path . --script res://tests/gameplay/wild_run_command_test_runner.gd 2>&1 | tee wild-run-command-test.log
           summary="$(grep -E '=== WILD RUN COMMAND RESULT: [0-9]+ PASS / 0 FAIL ===' wild-run-command-test.log | tail -n 1)"
           test -n "$summary"
           pass_count="$(printf '%s\n' "$summary" | sed -E 's/.*RESULT: ([0-9]+) PASS.*/\1/')"
@@ -237,7 +237,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          timeout 20s godot --headless --path . --script res://tests/battle_run_presentation_test_runner.gd 2>&1 | tee battle-run-presentation-test.log
+          timeout 20s godot --headless --path . --script res://tests/battle/battle_run_presentation_test_runner.gd 2>&1 | tee battle-run-presentation-test.log
           summary="$(grep -E '=== BATTLE RUN PRESENTATION RESULT: [0-9]+ PASS / 0 FAIL ===' battle-run-presentation-test.log | tail -n 1)"
           test -n "$summary"
           pass_count="$(printf '%s\n' "$summary" | sed -E 's/.*RESULT: ([0-9]+) PASS.*/\1/')"
