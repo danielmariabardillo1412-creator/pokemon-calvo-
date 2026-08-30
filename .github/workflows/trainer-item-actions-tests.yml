@@ -54,7 +54,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          timeout 240s godot --headless --path . --script res://tests/trainer_item_actions_test_runner.gd 2>&1 | tee trainer-item-actions-test.log
+          timeout 240s godot --headless --path . --script res://tests/trainer_ai/trainer_item_actions_test_runner.gd 2>&1 | tee trainer-item-actions-test.log
           summary="$(grep -E '=== TRAINER ITEM ACTIONS RESULT: [0-9]+ PASS / 0 FAIL ===' trainer-item-actions-test.log | tail -n 1)"
           test -n "$summary"
           pass_count="$(printf '%s\n' "$summary" | sed -E 's/.*RESULT: ([0-9]+) PASS.*/\1/')"
@@ -68,7 +68,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          timeout 240s godot --headless --path . --script res://tests/trainer_item_actions_corpus_test_runner.gd 2>&1 | tee trainer-item-actions-corpus-test.log
+          timeout 240s godot --headless --path . --script res://tests/trainer_ai/trainer_item_actions_corpus_test_runner.gd 2>&1 | tee trainer-item-actions-corpus-test.log
           summary="$(grep -E '=== TRAINER ITEM ACTIONS CORPUS RESULT: [0-9]+ PASS / 0 FAIL ===' trainer-item-actions-corpus-test.log | tail -n 1)"
           test -n "$summary"
           pass_count="$(printf '%s\n' "$summary" | sed -E 's/.*RESULT: ([0-9]+) PASS.*/\1/')"
