@@ -17,6 +17,9 @@ var participants: Dictionary = {}
 var participant_ids: Array[StringName] = []
 var sides: Array[BattleSide] = []
 var battle_started: bool = false
+# Optional additive field within snapshot schema V2. Empty inventories are omitted
+# from serialization so all historical V2 snapshots remain byte-for-byte stable.
+var side_item_inventories: Dictionary = {} # side_id -> BattleSideItemInventory
 
 
 func _init(
@@ -87,6 +90,35 @@ func switch_active(side_id: StringName, creature_id: StringName) -> bool:
 	return false
 
 
+func item_inventory_for_side(side_id: StringName) -> BattleSideItemInventory:
+	var value: Variant = side_item_inventories.get(side_id, null)
+	return value as BattleSideItemInventory if value is BattleSideItemInventory else null
+
+
+func ensure_item_inventory_for_side(side_id: StringName) -> BattleSideItemInventory:
+	if side_id == &"":
+		return null
+	var existing := item_inventory_for_side(side_id)
+	if existing != null:
+		return existing
+	var created := BattleSideItemInventory.new()
+	side_item_inventories[side_id] = created
+	return created
+
+
+func set_item_inventory_for_side(
+	side_id: StringName,
+	inventory: BattleSideItemInventory,
+) -> bool:
+	if side_id == &"":
+		return false
+	if inventory == null or inventory.is_empty():
+		side_item_inventories.erase(side_id)
+		return true
+	side_item_inventories[side_id] = inventory.duplicate_inventory()
+	return true
+
+
 func _refresh_active_ids() -> void:
 	active_ids.clear()
 	for side in sides:
@@ -115,7 +147,7 @@ func to_dict() -> Dictionary:
 	var serialized_sides: Array[Dictionary] = []
 	for side in sides:
 		serialized_sides.append(side.to_dict())
-	return {
+	var result := {
 		"schema_version": SCHEMA_VERSION,
 		"ruleset_id": String(ruleset_id),
 		"rng_algorithm": RNG_ALGORITHM,
@@ -130,6 +162,17 @@ func to_dict() -> Dictionary:
 		"sides": serialized_sides,
 		"battle_started": battle_started,
 	}
+	var serialized_inventories: Dictionary = {}
+	var inventory_side_ids := side_item_inventories.keys()
+	inventory_side_ids.sort_custom(func(a, b): return String(a) < String(b))
+	for raw_side_id in inventory_side_ids:
+		var side_id := StringName(raw_side_id)
+		var inventory := item_inventory_for_side(side_id)
+		if inventory != null and not inventory.is_empty():
+			serialized_inventories[String(side_id)] = inventory.to_dict()
+	if not serialized_inventories.is_empty():
+		result["side_item_inventories"] = serialized_inventories
+	return result
 
 
 static func from_dict(data: Dictionary) -> BattleState:
@@ -161,6 +204,15 @@ static func from_dict(data: Dictionary) -> BattleState:
 		state.sides.append(BattleSide.new(&"side_b", [restored_creatures[1].instance_id]))
 	state._refresh_active_ids()
 	state.battle_started = bool(data.get("battle_started", false))
+	var raw_inventories: Variant = data.get("side_item_inventories", {})
+	if raw_inventories is Dictionary:
+		for raw_side_id in (raw_inventories as Dictionary).keys():
+			var side_id := StringName(raw_side_id)
+			var raw_inventory: Variant = (raw_inventories as Dictionary)[raw_side_id]
+			if side_id != &"" and raw_inventory is Dictionary:
+				var inventory := BattleSideItemInventory.from_dict(raw_inventory as Dictionary)
+				if not inventory.is_empty():
+					state.side_item_inventories[side_id] = inventory
 	return state
 
 
