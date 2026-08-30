@@ -1,0 +1,53 @@
+name: Repository Legacy Docs Archive
+
+on:
+  push:
+    branches:
+      - chore/repository-organization-v1
+    paths:
+      - 'tools/repository_archive_docs_tmp.py'
+      - '.github/workflows/repository-organization-docs-migrate.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  archive:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout cleanup branch
+        uses: actions/checkout@v4
+        with:
+          ref: chore/repository-organization-v1
+          fetch-depth: 0
+
+      - name: Apply legacy documentation archive
+        shell: bash
+        run: |
+          set -euo pipefail
+          python tools/repository_archive_docs_tmp.py
+
+      - name: Verify current-facing docs remain concise
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f docs/DATA_FOUNDATION_V3.md
+          test -f docs/STATUS.md
+          test -f docs/README.md
+          test -f docs/history/legacy_data/DATA_SOURCES.md
+          test -f docs/history/legacy_data/MECHANICS_COVERAGE.md
+          test -f docs/history/research/TRAINER_AI_RESEARCH_FASE21.md
+          ! test -f docs/DATA_SOURCES.md
+          ! test -f docs/MECHANICS_COVERAGE.md
+          ! test -f docs/TRAINER_AI_RESEARCH_FASE21.md
+
+      - name: Commit verified documentation archive
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git commit -m 'docs: archive superseded data audits and research'
+          git push origin HEAD:chore/repository-organization-v1
