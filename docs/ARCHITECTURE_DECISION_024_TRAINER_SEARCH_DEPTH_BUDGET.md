@@ -2,7 +2,17 @@
 
 ## Estado
 
-IMPLEMENTADA / PENDIENTE DE VALIDACIÓN CI.
+VALIDADA / CERRADA.
+
+FASE 24 quedó validada sobre `e48fdcbfac6c5f81dda552b0ee934d2328bee0a6` con:
+
+- suite FASE 24: **47 PASS / 0 FAIL**;
+- FASE 23: SUCCESS;
+- FASE 22: SUCCESS;
+- FASE 21: SUCCESS;
+- FASE 20: SUCCESS;
+- FASE 19: SUCCESS;
+- regresión global Godot 4.7: SUCCESS.
 
 ## Contexto
 
@@ -53,8 +63,8 @@ sistemáticamente todos los cambios solo porque los movimientos se enumeren prim
 ### 5. Hojas acumulativas, no suma por turno
 
 El valor de una hoja de profundidad 2 se calcula comparando el estado final con el estado
-raíz del mundo. No se suman dos evaluaciones turno-a-turno, lo que evitaría contar dos
-veces daño, KO o estados persistentes.
+raíz del mundo. No se suman dos evaluaciones turno-a-turno, evitando contar dos veces daño,
+KO o estados persistentes.
 
 ### 6. Matrices parciales no influyen
 
@@ -82,7 +92,7 @@ El cerebro de profundidad mantiene la composición validada:
 
 `score de búsqueda + 25 % baseline táctico/estratégico`.
 
-### 9. Benchmark
+### 9. Benchmark y trampa de horizonte
 
 `TrainerPlanningBenchmark` compara decisiones de dos cerebros sin medir wall-clock.
 Registra:
@@ -93,12 +103,17 @@ Registra:
 - regresiones;
 - firmas deterministas.
 
-Los fixtures de FASE 24 incluyen un caso donde el golpe inmediato parece favorable tras
-un turno, pero el rival con prioridad puede rematar al atacante en el segundo. La
-profundidad 2 debe preservar al atacante y cambiar al tanque. También existe un control
-de presión ligera donde profundidad 1 y 2 deben coincidir en atacar.
+El fixture final de horizonte evita imponer una retirada artificial. El Pokémon propio
+dispone de un ataque fuerte y de `depth_defense_setup`, que aumenta Defensa en dos niveles.
+Ante un rival con golpe fuerte de prioridad, profundidad 1 prefiere el daño inmediato,
+pero profundidad 2 detecta que preparar Defensa en el primer turno permite sobrevivir al
+segundo; intentar preparar la defensa después del ataque llega demasiado tarde.
 
-## Invariantes
+Existe además un control de presión ligera donde profundidad 1 y 2 coinciden en atacar.
+Así la mejora de horizonte no se obtiene convirtiendo al planificador en excesivamente
+conservador.
+
+## Invariantes validados
 
 1. Cualquier fallo detiene la fase hasta corregirse y revalidarse.
 2. Nunca se consulta RNG vivo en planificación.
@@ -106,19 +121,19 @@ de presión ligera donde profundidad 1 y 2 deben coincidir en atacar.
 4. La legalidad profunda pertenece al Battle Core sintético.
 5. El presupuesto es determinista y explícito en la traza.
 6. Ninguna matriz parcial puede presentarse como profundidad 2 completa.
-7. Profundidad 2 debe demostrar al menos un caso de horizonte sin introducir regresión en
-   el caso de control antes de considerar FASE 24 validada.
+7. Profundidad 2 demuestra una mejora real de horizonte sin regresión en el control.
 8. MCTS queda explícitamente fuera de FASE 24.
 
-## Gate de cierre esperado
+## Incidente de validación resuelto
 
-- suite FASE 24: 0 FAIL;
-- FASE 23: SUCCESS;
-- FASE 22: SUCCESS;
-- FASE 21: SUCCESS;
-- FASE 20: SUCCESS;
-- FASE 19: SUCCESS;
-- regresión global Godot 4.7: SUCCESS.
+El primer fixture esperaba que profundidad 2 cambiara inmediatamente a un tanque. El gate
+mostró que el planificador encontraba una línea válida superior: atacar primero y retirarse
+en el turno siguiente. No se modificó el algoritmo para satisfacer una expectativa peor;
+se corrigió el fixture para representar una trampa de horizonte genuina mediante setup
+defensivo temprano.
 
-Solo después de ese cierre se decidirá si FASE 25 debe ampliar benchmarks/self-play o si
-ya existe evidencia suficiente para introducir una búsqueda tipo MCTS/DUCT.
+## Siguiente decisión
+
+FASE 25 debe ampliar la evidencia empírica mediante benchmark/self-play, registro de
+resultados y clasificación de blunders antes de decidir si una búsqueda tipo MCTS/DUCT
+aporta valor suficiente frente al planificador determinista de profundidad 2.
