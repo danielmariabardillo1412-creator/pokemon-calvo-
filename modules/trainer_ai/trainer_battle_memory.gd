@@ -42,7 +42,10 @@ func observe_events(events: Array[BattleEvent], state: BattleState) -> bool:
 	for event in events:
 		if event == null:
 			continue
-		event_log.append(event.to_dict().duplicate(true))
+		# Keep only the stable semantic event envelope in generic memory. BattleEvent.metadata
+		# is deliberately not copied: future Battle Core metadata may contain diagnostics or
+		# implementation details that a trainer brain must never learn accidentally.
+		event_log.append(_public_event_record(event))
 		last_observed_turn = maxi(last_observed_turn, event.turn)
 		if event.kind == BattleEvent.SWITCHED and _is_opponent_creature(state, event.target_id):
 			mark_seen(event.target_id)
@@ -143,6 +146,17 @@ static func from_dict(data: Dictionary) -> TrainerBattleMemory:
 	for event_data in data.get("event_log", []):
 		memory.event_log.append((event_data as Dictionary).duplicate(true))
 	return memory
+
+
+func _public_event_record(event: BattleEvent) -> Dictionary:
+	return {
+		"kind": String(event.kind),
+		"turn": event.turn,
+		"actor_id": String(event.actor_id),
+		"target_id": String(event.target_id),
+		"move_id": String(event.move_id),
+		"amount": event.amount,
+	}
 
 
 func _mark_current_opponent_seen(state: BattleState) -> void:
