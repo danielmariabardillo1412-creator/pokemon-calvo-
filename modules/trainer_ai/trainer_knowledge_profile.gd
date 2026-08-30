@@ -48,7 +48,7 @@ func validate(catalog: DefinitionCatalog = null) -> Dictionary:
 		if seen.has(type_id):
 			return {"ok": false, "reason": "duplicate_specialist_type"}
 		seen[type_id] = true
-		if catalog != null and catalog.type_catalog.get(type_id) == null:
+		if catalog != null and not catalog.type_catalog.has(type_id):
 			return {"ok": false, "reason": "unknown_specialist_type"}
 	return {"ok": true, "reason": ""}
 
