@@ -2,7 +2,7 @@
 
 ## Estado
 
-IMPLEMENTADA / PENDIENTE DE VALIDACION.
+ACEPTADA / IMPLEMENTADA / VALIDADA.
 
 ## Contexto
 
@@ -66,22 +66,26 @@ La capa solo recibe `TrainerDecisionContext`:
 
 No recibe BattleState vivo, RNG rival, moveset oculto, naturaleza rival, IV/EV rivales, objeto no revelado ni banca no vista.
 
-## Validación requerida
+## Validación
 
-El gate debe demostrar:
+Validación de código sobre `c7843f25e0c82a8f72d4fa1d35c5c643d22a1d68`:
 
-- counter-switch ante una inmunidad real;
-- reacción después de que el rival cambie a un counter;
-- escape de una amenaza revelada;
-- permanencia cuando existe KO inmediato;
-- un movimiento de utilidad evita clasificar falsamente el matchup como `sin ruta`;
-- penalización de ping-pong de switch reciente;
-- sacrificio productivo y protección de una pieza de banca valiosa;
-- preferencia por cambiar frente a gastar Hiperpoción en un activo completamente bloqueado;
-- no mutación del combate vivo;
-- corpus FASE 26 ejecutado con el candidato sin regresiones;
-- FASE 30 y todos los gates históricos verdes;
-- regresión global Godot 4.7 verde sobre el mismo SHA.
+- gate FASE 31: **169 PASS / 0 FAIL**;
+- counter-switch ante inmunidad: PASS;
+- reacción tras switch rival a counter: PASS;
+- escape de amenaza revelada: PASS;
+- permanencia con KO inmediato: PASS;
+- utilidad estructurada evita falso `sin ruta`: PASS;
+- anti-ping-pong por switch reciente: PASS;
+- sacrificio productivo y preservación de banca clave: PASS;
+- switch preferido frente a Hiperpoción en matchup bloqueado: PASS;
+- corpus FASE 26 con candidato FASE 31: **36 PASS / 0 FAIL**;
+- registro del candidato en corpus: **60 victorias / 0 derrotas**, sin regresiones emparejadas;
+- FASE 30 y gates históricos: SUCCESS;
+- regresión global Godot 4.7: SUCCESS;
+- workflows del SHA de código: **14/14 SUCCESS**.
+
+Antes del cierre de PR se requiere que este commit documental final vuelva a obtener los mismos 14 workflows en verde, para que el HEAD canónico de FASE 31 sea exactamente el SHA validado final.
 
 ## Fuera de alcance
 
