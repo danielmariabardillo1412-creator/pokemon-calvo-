@@ -1,6 +1,6 @@
 # ADR-020 — Trainer Intelligence Foundation
 
-**Estado:** EN IMPLEMENTACION / FASE 20
+**Estado:** ACEPTADA / FASE 20 CERRADA TECNICAMENTE
 
 ## Contexto
 
@@ -104,6 +104,16 @@ Registro serializable para candidatos, puntuaciones, confianza, fuentes, razón 
 2. La observación V1 conoce HP rival como ratio 0..10000; puede reducirse a barras/intervalos si la regla de visibilidad final lo exige.
 3. El historial de memoria es deliberadamente conservador; futuros expertos podrán requerir campos públicos adicionales, que deberán añadirse mediante whitelist.
 4. Antes de search profundo habrá que construir un proveedor de acciones candidatas que permanezca subordinado a la validación del servidor.
+
+## Validación
+
+El HEAD de implementación `89d2a9e8f2d6e2712ff436fc979ed57b33438f7b` fue validado con:
+
+- Trainer Intelligence Foundation: **63 PASS / 0 FAIL**;
+- regresión Trainer Battle Session de FASE 19: **66 PASS / 0 FAIL**;
+- workflow histórico Godot 4.7: **SUCCESS**.
+
+El cierre documental posterior debe mantener estos tres gates verdes antes de cerrar el PR #14 sin merge.
 
 ## Secuencia prevista
 
