@@ -3,7 +3,7 @@
 Fecha: 2026-08-30  
 Rama: `feature/battle-run-presentation-v1`  
 Base: `feature/wild-run-command-v1`  
-Estado: **ACCEPTED / VALIDACIÓN FINAL PENDIENTE DEL HEAD DOCUMENTAL**
+Estado: **ACCEPTED / VALIDATED**
 
 ## Contexto
 
@@ -170,9 +170,9 @@ No se añadieron assets ni dependencias sobre la biblioteca pesada local.
 - sin recalcular en UI la fórmula de huida;
 - sin cambios de balance en `calvo_escape_v1`.
 
-## Evidencia pre-cierre
+## Evidencia de validación de cierre
 
-GitHub Actions run `33300297082`, job `99227059631`, sobre merge sintético del PR #12 contra FASE 17:
+GitHub Actions run `33300439829`, job `99227454909`, sobre el merge sintético del PR #12 contra FASE 17, con el gate reforzado `>=94 PASS / 0 FAIL` activo:
 
 - Historical regression: **470 PASS / 0 FAIL**
 - Inventory: **47 PASS / 0 FAIL**
@@ -190,6 +190,6 @@ GitHub Actions run `33300297082`, job `99227059631`, sobre merge sintético del 
 - Godot: `4.7.stable.official.5b4e0cb0f`
 - import headless: **PASS**
 
-Artifact: `godot-ci-logs-33300297082`, ID `9728716602`, SHA-256 `80143261d7dcc46242003d0e8a71573e17556daa48dd4496daa539daef6d9bff`.
+Artifact: `godot-ci-logs-33300439829`, ID `9728764218`, SHA-256 `aaf0adef0dc266d3646d10f457d34622044a722f8ab311758d08c0015466d4e0`.
 
-El workflow se endureció posteriormente para exigir `>=94 PASS / 0 FAIL`. El cierre definitivo requiere repetir todos los gates sobre el HEAD documental con ese mínimo activo.
+La fase queda aceptada y validada. El workflow conserva el mínimo `>=94 PASS / 0 FAIL`; cualquier cambio funcional posterior en este bloque deberá volver a atravesar estos gates o mínimos incrementados.
