@@ -11,6 +11,7 @@ var _catalog: DefinitionCatalog
 var _search: TrainerMultiTurnSearch
 var _tactical: TrainerTacticalEvaluator
 var _strategic: TrainerTeamStrategicEvaluator
+var _switch_strategy: TrainerStrategicSwitchEvaluator
 
 
 func _init(
@@ -25,6 +26,7 @@ func _init(
 	_search = TrainerMultiTurnSearch.new(_catalog, profile, budget)
 	_tactical = TrainerTacticalEvaluator.new(_catalog, profile)
 	_strategic = TrainerTeamStrategicEvaluator.new(_catalog, profile)
+	_switch_strategy = TrainerStrategicSwitchEvaluator.new(_catalog, profile)
 
 
 func choose_action(context: TrainerDecisionContext) -> BattleAction:
@@ -41,8 +43,13 @@ func choose_action(context: TrainerDecisionContext) -> BattleAction:
 		var guard := TrainerBlunderGuard.inspect(context, action, _catalog)
 		var tactical := _tactical.evaluate(context, action)
 		var strategic := _strategic.evaluate(context, action)
+		var switch_strategy := _switch_strategy.evaluate(context, action)
 		var search := _search.evaluate(context, action)
-		var baseline_score := int(tactical.get("score", 0)) + int(strategic.get("score", 0))
+		var baseline_score := (
+			int(tactical.get("score", 0))
+			+ int(strategic.get("score", 0))
+			+ int(switch_strategy.get("score", 0))
+		)
 		var search_confidence := int(search.get("confidence_basis_points", 0))
 		var score := baseline_score if search_confidence <= 0 else int(search.get("score", 0)) + baseline_score / 4
 		var reasons: Array[String] = []
@@ -52,6 +59,8 @@ func choose_action(context: TrainerDecisionContext) -> BattleAction:
 			reasons.append("tactical:%s" % String(reason))
 		for reason in strategic.get("reasons", []):
 			reasons.append("strategic:%s" % String(reason))
+		for reason in switch_strategy.get("reasons", []):
+			reasons.append("switch:%s" % String(reason))
 		var blocked := bool(guard.get("blocked", false))
 		if blocked:
 			reasons.append("guard:%s" % String(guard.get("reason", "blocked")))
@@ -68,6 +77,7 @@ func choose_action(context: TrainerDecisionContext) -> BattleAction:
 				"search": (search.get("metadata", {}) as Dictionary).duplicate(true),
 				"tactical": (tactical.get("metadata", {}) as Dictionary).duplicate(true),
 				"strategic": (strategic.get("metadata", {}) as Dictionary).duplicate(true),
+				"switch_strategy": (switch_strategy.get("metadata", {}) as Dictionary).duplicate(true),
 			},
 		)
 		if blocked:
@@ -81,6 +91,7 @@ func choose_action(context: TrainerDecisionContext) -> BattleAction:
 	last_trace.select(best_action, "highest_bounded_depth_search_score")
 	last_trace.metadata["selected_score"] = best_score
 	last_trace.metadata["search_model"] = TrainerMultiTurnSearch.SEARCH_MODEL_ID
+	last_trace.metadata["switch_strategy_model"] = TrainerStrategicSwitchEvaluator.MODEL_ID
 	last_trace.metadata["budget"] = budget.to_dict()
 	last_trace.metadata["candidate_count"] = context.legal_actions.size()
 	return BattleAction.from_dict(best_action.to_dict())
