@@ -3,6 +3,7 @@ extends RefCounted
 
 const DAMAGE := &"damage"
 const HEAL := &"heal"
+const REVIVE := &"revive"
 const RECOIL := &"recoil"
 const DRAIN := &"drain"
 const INFLICT_STATUS := &"inflict_status"
