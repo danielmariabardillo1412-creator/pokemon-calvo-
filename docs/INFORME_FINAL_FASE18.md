@@ -101,9 +101,9 @@ No aparecieron defectos funcionales que requirieran cambiar el dominio ni el Bat
 
 Resultado ampliado: **94 PASS / 0 FAIL**.
 
-## Evidencia de cierre
+## Evidencia final de cierre
 
-GitHub Actions run `33300439829`, job `99227454909`, sobre el merge sintético del PR #12 contra FASE 17:
+GitHub Actions run `33300590609`, job `99227876718`, sobre el merge sintético del PR #12 contra FASE 17 después del cierre documental:
 
 - Historical regression: **470 PASS / 0 FAIL**
 - Inventory: **47 PASS / 0 FAIL**
@@ -121,7 +121,7 @@ GitHub Actions run `33300439829`, job `99227454909`, sobre el merge sintético d
 - import headless: **PASS**
 - Godot exacto: `4.7.stable.official.5b4e0cb0f`
 
-Artifact: `godot-ci-logs-33300439829`, ID `9728764218`, SHA-256 `aaf0adef0dc266d3646d10f457d34622044a722f8ab311758d08c0015466d4e0`.
+Artifact: `godot-ci-logs-33300590609`, ID `9728809265`, SHA-256 `29d1020bea96f87d4b2b2660f95dd7b9643933816d4f504f1afb721316fdc7cd`.
 
 ## Gate permanente de fase
 
@@ -144,6 +144,6 @@ Se usa mínimo y no igualdad exacta para permitir que fases posteriores añadan 
 
 ## Próximo bloque recomendado
 
-Después del cierre de PR #12, revisar el roadmap real del repositorio y elegir la siguiente frontera por dependencia, no por numeración improvisada.
+Después del cierre de PR #12 se auditó la documentación agregada del repositorio. `STATUS.md`, `README.md`, `ARCHITECTURE.md` y `MECHANICS_COVERAGE.md` habían quedado históricamente por detrás de las fases recientes, por lo que antes de abrir otro bloque funcional se abrió un bloque exclusivo de sincronización documental.
 
-No debe abrirse un nuevo bloque funcional hasta verificar también el HEAD documental final de este cierre y dejar PR #12 cerrado sin merge.
+La siguiente frontera funcional recomendada por esa auditoría es **Post-Battle Progression Flow**: preservar y resolver explícitamente `MOVE_LEARN_CHOICE_REQUIRED` y `EVOLUTION_AVAILABLE` antes de volver al Overworld. No existe todavía una FASE 19 oficial; ver `docs/ROADMAP.md`.
