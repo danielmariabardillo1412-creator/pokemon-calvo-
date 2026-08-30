@@ -6,7 +6,7 @@ signal battle_closed(reason: StringName)
 # Technical, asset-free presentation adapter. The authoritative state remains inside
 # WildAdventureSession/Battle Core. This Control only reads state, builds player intents, asks the
 # technical opponent policy for a legal response, submits through the application boundary, and
-# renders semantic results. Capture rules/inventory mutation never live in this UI.
+# renders semantic results. Capture/Run rules and inventory mutation never live in this UI.
 
 const CAPTURE_BALL_ORDER := [
 	&"poke_ball",
@@ -19,6 +19,7 @@ var session: WildAdventureSession = null
 var catalogs: DefinitionCatalog = null
 
 var _capture_rng: RandomNumberGenerator = null
+var _escape_rng: RandomNumberGenerator = null
 var _enemy_label: Label = null
 var _enemy_hp: ProgressBar = null
 var _player_label: Label = null
@@ -29,6 +30,7 @@ var _move_buttons: Array[Button] = []
 var _capture_buttons: Array[Button] = []
 var _switch_selector: OptionButton = null
 var _switch_button: Button = null
+var _run_button: Button = null
 var _continue_button: Button = null
 var _completion_reason: StringName = &""
 
@@ -39,16 +41,19 @@ func _ready() -> void:
 	visible = false
 
 
-# Capture RNG is deliberately injected. A presentation with no RNG can still play moves/switches,
-# but its capture controls remain disabled. This avoids inventing a hidden gameplay seed in UI.
+# Gameplay RNGs are deliberately injected. Capture always requires its RNG. Run may be resolvable
+# without Escape RNG when the domain ruleset declares the escape guaranteed; presentation never
+# duplicates that ruleset to guess whether randomness will be needed.
 func configure(
 	p_session: WildAdventureSession,
 	p_catalogs: DefinitionCatalog,
 	p_capture_rng: RandomNumberGenerator = null,
+	p_escape_rng: RandomNumberGenerator = null,
 ) -> void:
 	session = p_session
 	catalogs = p_catalogs
 	_capture_rng = p_capture_rng
+	_escape_rng = p_escape_rng
 
 
 func open_for_active_battle() -> bool:
@@ -144,6 +149,14 @@ func switch_control_enabled() -> bool:
 		and not _switch_selector.disabled
 		and not _switch_button.disabled
 	)
+
+
+func run_button_visible() -> bool:
+	return _run_button != null and _run_button.visible
+
+
+func run_control_enabled() -> bool:
+	return _run_button != null and _run_button.visible and not _run_button.disabled
 
 
 # The identity shown by the selector is stored as item metadata. This prevents a stale selected
@@ -354,17 +367,7 @@ func submit_capture_ball(ball_id: StringName) -> WildBattleCommandResult:
 		_append_log("Captured the wild Pokémon with %s." % String(ball_id))
 		if result.capture_outcome != null and result.capture_outcome.routing != null and result.capture_outcome.routing.stored:
 			_append_log("Party full: captured Pokémon was routed to storage.")
-		_set_command_controls_enabled(false)
-		# The successful command clears the live Battle, so _refresh_view() can no longer rebuild the
-		# command rows from active state. Remove stale capture/switch choices explicitly.
-		for button in _capture_buttons:
-			button.visible = false
-		_clear_switch_controls()
-		if _turn_label != null:
-			_turn_label.text = "Captured"
-		if _continue_button != null:
-			_continue_button.text = "Return to overworld"
-			_continue_button.visible = true
+		_present_completed_command("Captured")
 		return result
 
 	if capture_status == CaptureResult.FAILED:
@@ -378,6 +381,69 @@ func submit_capture_ball(ball_id: StringName) -> WildBattleCommandResult:
 
 	# Defensive fallback: accepted commands should currently be either SUCCESS or FAILED.
 	_append_log("Capture command completed with an unknown result.")
+	_render_events(result.battle_events)
+	_refresh_view()
+	return result
+
+
+# RUN is only a presentation adapter for WildBattleCommand.RUN. The UI deliberately does not inspect
+# Speed, attempts or escape odds. It offers the legal intent and lets WildAdventureSession decide
+# whether an opponent reaction and/or Escape RNG are required by calvo_escape_v1.
+func submit_player_run() -> WildBattleCommandResult:
+	var fallback := WildBattleCommandResult.new()
+	fallback.command_type = WildBattleCommand.RUN
+	if session == null or catalogs == null or not session.has_active_battle():
+		fallback.reason = "no_active_wild_battle"
+		_append_log("No active battle.")
+		return fallback
+	var state := session.battle_state()
+	var actor := session.player_active()
+	var target := session.current_wild()
+	if state == null or actor == null or target == null:
+		fallback.reason = "battle_state_incomplete"
+		_append_log("Battle state is incomplete.")
+		return fallback
+	var player_side := state.side_for_creature(actor.instance_id)
+	var opponent_side := state.side_for_creature(target.instance_id)
+	if player_side == null or opponent_side == null:
+		fallback.reason = "battle_ownership_incomplete"
+		_append_log("Battle ownership is incomplete.")
+		return fallback
+
+	# A guaranteed escape does not require a response, while a failed probabilistic escape does. The
+	# presentation may provide a legal candidate but never rejects just because none exists; the
+	# authoritative session knows whether that response is actually required for this attempt.
+	var opponent_action := SimpleBattleOpponentPolicy.choose_move_action(
+		state, opponent_side.side_id, catalogs
+	)
+	var command := WildBattleCommand.run(state.turn + 1, player_side.side_id)
+	var result := session.submit_player_command(command, null, opponent_action, _escape_rng)
+	if result == null:
+		fallback.reason = "battle_command_result_missing"
+		_append_log("Run command returned no result.")
+		return fallback
+	if not result.accepted:
+		_append_log("Run rejected: %s" % result.reason)
+		_render_events(result.battle_events)
+		_refresh_view()
+		return result
+
+	if result.escape_resolution != null and result.escape_resolution.escaped and result.session_completed:
+		_completion_reason = session.completion_reason
+		_append_log("Got away safely.")
+		_present_completed_command("Escaped")
+		return result
+
+	if result.escape_resolution != null and not result.escape_resolution.escaped:
+		_append_log("Couldn't get away.")
+		_render_events(result.battle_events)
+		_refresh_view()
+		var post_state := session.battle_state()
+		if post_state != null and post_state.phase == BattleState.FINISHED:
+			_settle_finished_battle()
+		return result
+
+	_append_log("Run command completed with an unknown result.")
 	_render_events(result.battle_events)
 	_refresh_view()
 	return result
@@ -416,8 +482,28 @@ func _on_capture_pressed(index: int) -> void:
 	submit_capture_ball(ids[index])
 
 
+func _on_run_pressed() -> void:
+	submit_player_run()
+
+
 func _on_continue_pressed() -> void:
 	continue_after_completion()
+
+
+func _present_completed_command(label: String) -> void:
+	_set_command_controls_enabled(false)
+	# Successful Capture/Run clears the live Battle, so _refresh_view() can no longer rebuild command
+	# rows from active state. Remove stale context-sensitive choices explicitly.
+	for button in _capture_buttons:
+		button.visible = false
+	_clear_switch_controls()
+	if _run_button != null:
+		_run_button.disabled = true
+	if _turn_label != null:
+		_turn_label.text = label
+	if _continue_button != null:
+		_continue_button.text = "Return to overworld"
+		_continue_button.visible = true
 
 
 func _settle_finished_battle() -> void:
@@ -496,6 +582,10 @@ func _refresh_view() -> void:
 			capture_button.text = "-"
 			capture_button.visible = false
 
+	if _run_button != null:
+		_run_button.visible = true
+		_run_button.disabled = not waiting
+
 
 func _refresh_switch_controls(state: BattleState, waiting: bool) -> void:
 	if _switch_selector == null or _switch_button == null:
@@ -532,6 +622,8 @@ func _set_command_controls_enabled(enabled: bool) -> void:
 		button.disabled = not enabled
 	for button in _capture_buttons:
 		button.disabled = not enabled or _capture_rng == null
+	if _run_button != null:
+		_run_button.disabled = not enabled
 	if not enabled:
 		if _switch_selector != null:
 			_switch_selector.disabled = true
@@ -711,6 +803,14 @@ func _build_ui() -> void:
 		capture_button.pressed.connect(_on_capture_pressed.bind(i))
 		captures.add_child(capture_button)
 		_capture_buttons.append(capture_button)
+
+	_run_button = Button.new()
+	_run_button.text = "Run"
+	_run_button.custom_minimum_size = Vector2(0, 32)
+	_run_button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_run_button.disabled = true
+	_run_button.pressed.connect(_on_run_pressed)
+	root.add_child(_run_button)
 
 	_continue_button = Button.new()
 	_continue_button.text = "Return to overworld"
