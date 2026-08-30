@@ -2,7 +2,7 @@
 
 ## Estado
 
-IMPLEMENTADA / PENDIENTE DE VALIDACION.
+ACEPTADA / IMPLEMENTADA / VALIDADA.
 
 ## Contexto
 
@@ -75,25 +75,27 @@ El search estratifica MOVE/SWITCH/ITEM dentro del presupuesto existente. Un obje
 
 El evaluador de objetos usa recuperación efectiva, curación de estado, desperdicio por overheal y un coste de oportunidad explícito. Los costes de recurso son heurísticos V1 y quedan marcados para calibración matemática posterior; no se consideran parámetros óptimos.
 
-## Validación requerida
+## Validación
 
-El gate debe demostrar:
+La primera ejecución de CI produjo 133 PASS / 3 FAIL. Los tres fallos eran errores de fixture, no defectos de producción:
 
-- serialización y round-trip de ITEM;
-- snapshot/fork de inventario finito;
-- consumo 1 -> 0 y rechazo de reutilización;
-- no consumo en acciones rechazadas;
-- Potion/Super/Hyper/Max/Full Restore correctos;
-- curación de un miembro vivo de la banca;
-- independencia entre bag item y held item;
-- Revive desactivado aunque exista en la bolsa;
-- bolsa rival ausente de observación y mundos plausibles;
-- búsqueda sin mutación del combate vivo;
-- selección de curación cuando evita una derrota inmediata;
-- preferencia por una jugada ganadora frente a curación innecesaria;
-- preferencia de recurso menor cuando produce el mismo efecto útil;
-- corpus FASE 26 ejecutado con el candidato FASE 30 sin regresiones;
-- todos los gates históricos y regresión global verdes sobre el mismo SHA.
+1. el test de fork intentaba usar Hyper Potion a HP completos; el servidor la rechazó correctamente con la regla de `item_no_effect`;
+2. dos comprobaciones derivadas de ese rechazo esperaban consumo dentro del fork;
+3. el test de observación leyó `own_item_inventory` como mapa plano, cuando el contrato correcto conserva la forma serializada de `BattleSideItemInventory` bajo `quantities`.
+
+No se modificó producción para satisfacer esas expectativas. `TrainerItemActionsV2TestSuite` corrigió únicamente los fixtures y conservó la suite original como historial del diagnóstico.
+
+Resultado validado sobre el commit de código `4553e6e958b149968031da07a27af5a837ed83c6`:
+
+- FASE 30 item actions: **136 PASS / 0 FAIL**;
+- corpus FASE 26 ejecutado con `ItemAwareTrainerBrain`: **36 PASS / 0 FAIL**;
+- resultado del candidato en corpus: **60 victorias / 0 derrotas**;
+- **0 regresiones emparejadas** respecto al planner validado;
+- Revive permanece no registrado y es rechazado aunque exista accidentalmente en la bolsa;
+- consumo de inventario, snapshot/fork y aislamiento del combate vivo validados;
+- bolsa propia visible y bolsa rival ausente de la observación/mundos plausibles;
+- el brain cura cuando la línea ofensiva inmediata pierde, no cura cuando puede cerrar el combate y prefiere el recurso menor cuando dos curaciones producen el mismo beneficio útil;
+- **13/13 workflows SUCCESS**, incluida la regresión global Godot 4.7, sobre el mismo commit de código.
 
 ## Fuera de alcance
 
