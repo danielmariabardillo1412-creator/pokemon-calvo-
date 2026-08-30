@@ -23,10 +23,10 @@ func _ready() -> void:
 	battle_presentation.battle_closed.connect(_on_battle_closed)
 	if _bootstrap_demo():
 		battle_presentation.configure(_session, _catalogs, _capture_rng, _escape_rng)
-		status_label.text = "FASE 18 technical overworld | Battle supports moves + switch + capture + run"
+		status_label.text = "Mundo técnico | Combate: movimientos + cambio + captura + huida"
 	else:
 		player.movement_enabled = false
-		status_label.text = "Overworld bootstrap failed"
+		status_label.text = "No se ha podido iniciar el mundo"
 
 
 func is_demo_ready() -> bool:
@@ -82,18 +82,18 @@ func _on_player_step_completed(world_position: Vector2) -> void:
 	if outcome.battle_started:
 		player.movement_enabled = false
 		var wild := _session.current_wild()
-		var label := String(wild.species_id) if wild != null else "unknown"
+		var label := SpanishGameText.species_name(wild.species_id, _catalogs) if wild != null else "desconocido"
 		var level := wild.level if wild != null else 0
-		status_label.text = "ENCOUNTER -> BATTLE ACTIVE | %s Lv.%d" % [label, level]
+		status_label.text = "¡ENCUENTRO! | %s salvaje Nv.%d" % [label, level]
 		if not battle_presentation.open_for_active_battle():
-			status_label.text = "Battle started, but presentation failed to open"
+			status_label.text = "El combate ha empezado, pero no se ha podido abrir la pantalla"
 	elif outcome.rolled and outcome.encounter != null and outcome.encounter.status == WildEncounterResult.NONE:
-		status_label.text = "Encounter zone step: no encounter this time"
+		status_label.text = "No ha aparecido ningún Pokémon esta vez"
 
 
 func _on_battle_closed(reason: StringName) -> void:
 	player.movement_enabled = true
-	status_label.text = "BATTLE COMPLETE: %s | Exploration resumed" % String(reason)
+	status_label.text = "Combate terminado: %s | Exploración reanudada" % SpanishGameText.completion_reason(reason)
 
 
 func _bootstrap_demo() -> bool:
@@ -102,6 +102,10 @@ func _bootstrap_demo() -> bool:
 		return false
 	var game_data := GameData.from_dict(normalized)
 	if game_data == null or game_data.manifest == null or not game_data.manifest.is_valid():
+		return false
+	var type_validation := PokemonTypeChart.validate_catalog(game_data.type_catalog)
+	if not bool(type_validation.get("valid", false)):
+		push_error("Canonical Pokemon type chart is incomplete: %s" % str(type_validation))
 		return false
 	_catalogs = game_data.to_definition_catalog()
 	var rules := ProgressionRuleset.new()
