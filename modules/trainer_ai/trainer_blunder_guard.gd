@@ -16,6 +16,8 @@ static func inspect(
 		return _inspect_move(context.observation, action, catalog)
 	if action.action_type == BattleAction.SWITCH:
 		return _inspect_switch(context.observation, action)
+	if action.action_type == BattleAction.ITEM:
+		return _inspect_item(context.observation, action, catalog)
 	return {"blocked": true, "reason": "unsupported_action_type"}
 
 
@@ -51,6 +53,24 @@ static func _inspect_switch(observation: TrainerObservation, action: BattleActio
 		return {"blocked": true, "reason": "switch_target_knocked_out"}
 	if StringName(incoming.get("instance_id", "")) == observation.own_active_id:
 		return {"blocked": true, "reason": "switch_target_already_active"}
+	return {"blocked": false, "reason": ""}
+
+
+static func _inspect_item(
+	observation: TrainerObservation,
+	action: BattleAction,
+	catalog: DefinitionCatalog,
+) -> Dictionary:
+	if action.item_id == &"" or catalog.item(action.item_id) == null:
+		return {"blocked": true, "reason": "unknown_item_definition"}
+	var target := _view_by_id(observation.own_party, action.target_id)
+	if target.is_empty():
+		return {"blocked": true, "reason": "item_target_not_owned"}
+	if int(target.get("current_hp", 0)) <= 0 or bool(target.get("is_knocked_out", false)):
+		return {"blocked": true, "reason": "item_target_knocked_out"}
+	var quantities := observation.own_item_inventory.get("quantities", {}) as Dictionary
+	if int(quantities.get(String(action.item_id), 0)) <= 0:
+		return {"blocked": true, "reason": "item_not_in_own_inventory"}
 	return {"blocked": false, "reason": ""}
 
 
