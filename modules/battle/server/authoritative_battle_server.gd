@@ -32,9 +32,6 @@ func submit_turn(actions: Array[BattleAction]) -> Array[BattleEvent]:
 	return _executor.execute(state, actions, _catalog, _rng)
 
 
-# A trusted application command can consume one side's action outside the move/switch executor
-# (capture is the first use). Before that command mutates inventory or consumes RNG, callers can use
-# validate_reaction_action() to prove the response is a legal action for the opposite active side.
 func validate_reaction_action(action: BattleAction, skipped_side_id: StringName) -> String:
 	if state.phase != BattleState.WAITING_FOR_ACTIONS:
 		return "battle_finished"
@@ -132,8 +129,13 @@ func _validate_trainer_item_action(action: BattleAction, actor_side: BattleSide)
 	if action.target_id == &"" or not actor_side.owns(action.target_id):
 		return "invalid_item_target"
 	var target := state.creature(action.target_id)
-	if target == null or target.is_knocked_out():
+	if target == null:
 		return "item_target_unavailable"
+	var target_mode := _registry.trainer_item_target_mode(action.item_id)
+	if target_mode == BattleEffectRegistry.TRAINER_ITEM_TARGET_ALIVE and target.is_knocked_out():
+		return "item_target_unavailable"
+	if target_mode == BattleEffectRegistry.TRAINER_ITEM_TARGET_FAINTED and not target.is_knocked_out():
+		return "item_requires_fainted_target"
 	if not _trainer_item_has_effect(action.item_id, target):
 		return "item_no_effect"
 	return ""
@@ -144,6 +146,8 @@ func _trainer_item_has_effect(item_id: StringName, target: CreatureInstance) -> 
 		if spec.kind == BattleEffectSpec.HEAL and target.stats != null and target.current_hp < target.stats.max_hp:
 			return true
 		if spec.kind == BattleEffectSpec.CURE_STATUS and target.status_state.persistent_id != &"":
+			return true
+		if spec.kind == BattleEffectSpec.REVIVE and target.is_knocked_out() and target.stats != null and target.stats.max_hp > 0:
 			return true
 	return false
 
