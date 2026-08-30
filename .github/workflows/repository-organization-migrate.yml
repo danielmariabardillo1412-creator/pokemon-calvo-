@@ -48,6 +48,15 @@ jobs:
           use-dotnet: false
           include-templates: false
 
+      - name: Stage pinned PokeAPI report fixtures
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p data/reports
+          cp ci/fixtures/pokeapi_reports/forms_policy_report.json data/reports/forms_policy_report.json
+          cp ci/fixtures/pokeapi_reports/unsupported_mechanics.json data/reports/unsupported_mechanics.json
+          cp ci/fixtures/pokeapi_reports/import_summary.json data/reports/import_summary.json
+
       - name: Import reorganized project
         shell: bash
         run: |
