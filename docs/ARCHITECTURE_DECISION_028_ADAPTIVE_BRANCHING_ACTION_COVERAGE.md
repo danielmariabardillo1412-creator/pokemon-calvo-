@@ -2,7 +2,7 @@
 
 ## Estado
 
-IMPLEMENTADA / PENDIENTE DE VALIDACIÓN.
+VALIDADA / CERRADA.
 
 ## Contexto
 
@@ -17,12 +17,12 @@ La inspección posterior mostró dos hechos:
 2. `TrainerMultiTurnSearch._bounded_actions()` mantiene el orden recibido dentro de MOVE y
    recorta después al máximo permitido.
 
-Por tanto, una amenaza puede existir correctamente en el mundo plausible y aun así quedar
-fuera de la matriz únicamente por su posición en el moveset.
+Por tanto, una amenaza podía existir correctamente en el mundo plausible y quedar fuera de la
+matriz únicamente por su posición en el moveset.
 
 ## Decisión
 
-FASE 28 mantiene intactos el planner y el buscador de FASE 27 y crea un candidato A/B separado:
+FASE 28 mantiene intactos el planner y el buscador de FASE 27 y añade un candidato A/B separado:
 
 - `TrainerThreatOrderedWorldFactory`;
 - `TrainerAdaptiveBranchingSearch`;
@@ -33,7 +33,7 @@ FASE 28 mantiene intactos el planner y el buscador de FASE 27 y crea un candidat
 El nuevo factory llama primero al generador legítimo de movimientos plausibles de FASE 27.
 No añade movimientos, no consulta el moveset real oculto y no modifica las creencias.
 
-Solo reordena los movimientos ya presentes según una amenaza determinista para el Pokémon
+Solo reordena los movimientos ya presentes según una amenaza determinista contra el Pokémon
 activo propio observado:
 
 - potencia;
@@ -43,55 +43,106 @@ activo propio observado:
 - prioridad positiva;
 - utilidad estructurada básica de estado, cambios de stages, curación/drenaje y flinch.
 
-La confianza de la hipótesis solo desempata amenazas iguales; el ID estable desempata después.
-Esto es deliberado: una vez que un movimiento forma parte de un mundo plausible, la búsqueda
-debe protegerse primero contra las respuestas peligrosas de ese mundo, no contra el orden
-alfabético del identificador.
+La confianza de la hipótesis desempata amenazas iguales y el ID estable resuelve el último
+empate. Una vez que una acción ya pertenece a un mundo plausible, la búsqueda protege primero
+contra las respuestas más peligrosas de ese mundo, no contra el orden accidental del ID.
 
 ### Preservación del branching
 
 `TrainerAdaptiveBranchingSearch` hereda íntegramente `TrainerMultiTurnSearch` y únicamente
-instala el factory ordenado por amenaza. `_bounded_actions()` sigue usando el mismo esquema
-estratificado MOVE/SWITCH y el mismo límite de acciones.
+instala el factory ordenado por amenaza. `_bounded_actions()` conserva el mismo esquema
+estratificado MOVE/SWITCH y el mismo límite.
 
-No se eleva el ancho global.
+No se elevó el ancho global.
 
 ### Candidato A/B
 
 `AdaptiveBranchingTrainerBrain` hereda `DepthSearchTrainerBrain` y sustituye solo el objeto de
 búsqueda por `TrainerAdaptiveBranchingSearch`.
 
-El brain anterior queda intacto. Esto permite que el gate de FASE 27 siga funcionando como
-baseline negativo del escenario de branching y que FASE 28 mida el candidato sin reescribir
-el pasado.
+El brain anterior permanece intacto. El gate histórico de FASE 27 continúa demostrando el
+baseline negativo, mientras FASE 28 mide el candidato de forma separada.
 
 ## Presupuesto congelado
 
 - profundidad: 2;
 - mundos: 2;
-- simulaciones: 128;
+- simulaciones del banco de límites: 128;
 - acciones máximas por lado: 3.
 
-## Gate esperado
+## Resultados del banco FASE 28
 
-El banco de FASE 28 debe reutilizar los cuatro escenarios de FASE 27 y exigir:
+Con tres semillas y espejo de lados:
 
-- replanning `balanced`: candidato 6/6;
-- replanning con `setup_weight_bp = 0`: candidato 6/6;
-- branching conocido: candidato 6/6 y probe 6/6;
-- la respuesta peligrosa pública aparece ahora en la traza;
-- el candidato abre con la línea defensiva esperada;
-- cobertura oculta: candidato 0/6 y el movimiento oculto sigue ausente de la primera traza;
+- 24 partidas del candidato;
+- 12 partidas probe;
 - 0 inválidas;
-- determinismo;
-- el cap sigue siendo 3 y el presupuesto no se agota.
+- determinismo confirmado;
+- controles de replanning: **6/6 y 6/6**;
+- branching conocido: candidato **6/6**, frente a **0/6** del planner FASE 27;
+- probe de branching: **6/6**;
+- la nuke pública entra en la traza del candidato;
+- el candidato abre con el debuff defensivo esperado;
+- una respuesta débil queda podada;
+- `max_actions_per_side` sigue en **3**;
+- `budget_exhausted = false`;
+- cobertura verdaderamente oculta: candidato **0/6** y el movimiento sigue ausente de la
+  primera traza, preservando anti-cheat.
 
-Además, el gate histórico de FASE 27 debe continuar en 49 PASS / 0 FAIL con el brain antiguo.
+Gate específico: **52 PASS / 0 FAIL**.
 
-## Criterio de decisión
+## Regresión de inteligencia sobre FASE 26
 
-Si FASE 28 corrige `known_fourth_response` sin regresiones, la evidencia favorece selección de
-branching informada antes que aumentar profundidad o introducir MCTS.
+El candidato adaptativo se ejecutó también sobre las 60 partidas del corpus estadístico de
+FASE 26, no solo sobre los gates del planner antiguo.
 
-Si falla, se inspeccionará la causa antes de ampliar el algoritmo. No se aumentará el cap como
-parche automático.
+Resultado:
+
+- baseline: **48/60**;
+- candidato adaptativo: **60/60**;
+- mejoras emparejadas: **12**;
+- regresiones emparejadas: **0**;
+- pares iguales: **48**;
+- 0 draws;
+- 0 partidas inválidas;
+- resultado determinista;
+- **36 PASS / 0 FAIL** en el gate de corpus adaptativo.
+
+Por tanto, la corrección del branching no muestra regresión en el corpus controlado existente.
+Como siempre, 60/60 no se interpreta como superioridad universal fuera de ese corpus.
+
+## Certificación
+
+Sobre el HEAD previo al cierre documental `9c16127608bd983d6575d571a6c4d75451a68489`
+se obtuvieron **11/11 workflows SUCCESS**:
+
+- FASE 28 adaptive branching;
+- FASE 27 search-limit benchmark;
+- FASE 26 evaluation corpus;
+- FASE 25 self-play;
+- FASE 24 search-depth budget;
+- FASE 23 search foundation;
+- FASE 22 belief inference;
+- FASE 21 tactical intelligence;
+- FASE 20 intelligence foundation;
+- FASE 19 trainer battle session;
+- regresión global Godot 4.7.
+
+El commit documental final debe repetir esta certificación antes de cerrar PR #23.
+
+## Limitación residual
+
+FASE 28 solo reordena los movimientos que ya llegaron al mundo plausible. No resuelve todavía
+un dominio de hipótesis mayor de cuatro movimientos ni inventa cobertura que el modelo de
+creencias no considere legítimamente plausible.
+
+Ese límite se mantiene deliberadamente separado de la selección de branching.
+
+## Siguiente decisión
+
+La siguiente prioridad debe atacar el límite restante demostrado por FASE 27: **cobertura
+oculta legítima / priors de moveset**, sin omnisciencia.
+
+Antes de MCTS o profundidad 3 conviene comprobar si el dataset ya contiene compatibilidades de
+movimientos por métodos distintos del level-up (máquinas, tutor, egg u otros) y, si existen,
+construir priors de menor confianza que amplíen mundos plausibles sin revelar el moveset real.
