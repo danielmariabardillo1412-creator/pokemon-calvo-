@@ -1,0 +1,162 @@
+{
+  "id": 10363,
+  "name": "calyrex-shadow",
+  "order": 1304,
+  "form_order": 3,
+  "is_default": true,
+  "is_battle_only": false,
+  "is_mega": false,
+  "form_name": "shadow",
+  "pokemon": {
+    "name": "calyrex-shadow",
+    "url": "/api/v2/pokemon/10194/"
+  },
+  "sprites": {
+    "versions": {
+      "generation-ix": {
+        "scarlet-violet": {
+          "front_female": null,
+          "front_default": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-ix/scarlet-violet/10194.png"
+        }
+      },
+      "generation-viii": {
+        "brilliant-diamond-shining-pearl": {
+          "front_female": null,
+          "front_default": null
+        }
+      }
+    },
+    "back_shiny": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/shiny/10194.png",
+    "back_female": null,
+    "front_shiny": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/10194.png",
+    "back_default": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/10194.png",
+    "front_female": null,
+    "front_default": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10194.png",
+    "back_shiny_female": null,
+    "front_shiny_female": null
+  },
+  "version_group": {
+    "name": "sword-shield",
+    "url": "/api/v2/version-group/20/"
+  },
+  "form_names": [
+    {
+      "name": "こくばじょうのすがた",
+      "language": {
+        "name": "ja-hrkt",
+        "url": "/api/v2/language/1/"
+      }
+    },
+    {
+      "name": "흑마 탄 모습",
+      "language": {
+        "name": "ko",
+        "url": "/api/v2/language/3/"
+      }
+    },
+    {
+      "name": "騎黑馬的樣子",
+      "language": {
+        "name": "zh-hant",
+        "url": "/api/v2/language/4/"
+      }
+    },
+    {
+      "name": "Cavalier d’Effroi",
+      "language": {
+        "name": "fr",
+        "url": "/api/v2/language/5/"
+      }
+    },
+    {
+      "name": "Rappenreiter",
+      "language": {
+        "name": "de",
+        "url": "/api/v2/language/6/"
+      }
+    },
+    {
+      "name": "Jinete Espectral",
+      "language": {
+        "name": "es",
+        "url": "/api/v2/language/7/"
+      }
+    },
+    {
+      "name": "Cavaliere Spettrale",
+      "language": {
+        "name": "it",
+        "url": "/api/v2/language/8/"
+      }
+    },
+    {
+      "name": "Shadow Rider",
+      "language": {
+        "name": "en",
+        "url": "/api/v2/language/9/"
+      }
+    },
+    {
+      "name": "こくばじょうのすがた",
+      "language": {
+        "name": "ja",
+        "url": "/api/v2/language/11/"
+      }
+    },
+    {
+      "name": "骑黑马的样子",
+      "language": {
+        "name": "zh-hans",
+        "url": "/api/v2/language/12/"
+      }
+    },
+    {
+      "name": "Jinete Espectral",
+      "language": {
+        "name": "es-419",
+        "url": "/api/v2/language/14/"
+      }
+    }
+  ],
+  "names": [
+    {
+      "name": "Calyrex Cavalier d’Effroi",
+      "language": {
+        "name": "fr",
+        "url": "/api/v2/language/5/"
+      }
+    },
+    {
+      "name": "Coronospa (Rappenreiter)",
+      "language": {
+        "name": "de",
+        "url": "/api/v2/language/6/"
+      }
+    },
+    {
+      "name": "Shadow Calyrex",
+      "language": {
+        "name": "en",
+        "url": "/api/v2/language/9/"
+      }
+    }
+  ],
+  "types": [
+    {
+      "slot": 1,
+      "type": {
+        "name": "psychic",
+        "url": "/api/v2/type/14/"
+      }
+    },
+    {
+      "slot": 2,
+      "type": {
+        "name": "ghost",
+        "url": "/api/v2/type/8/"
+      }
+    }
+  ],
+  "trigger_conditions": [],
+  "flavor_text_entries": []
+}

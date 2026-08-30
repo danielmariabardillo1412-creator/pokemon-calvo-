@@ -1,0 +1,14 @@
+{
+  "id": 56,
+  "name": "overworld-dirt",
+  "order": 56,
+  "names": [
+    {
+      "name": "Overworld spawn coming from underground or within a swamp.",
+      "language": {
+        "name": "en",
+        "url": "/api/v2/language/9/"
+      }
+    }
+  ]
+}

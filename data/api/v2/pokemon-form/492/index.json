@@ -1,0 +1,155 @@
+{
+  "id": 492,
+  "name": "shaymin-land",
+  "order": 658,
+  "form_order": 1,
+  "is_default": true,
+  "is_battle_only": false,
+  "is_mega": false,
+  "form_name": "land",
+  "pokemon": {
+    "name": "shaymin-land",
+    "url": "/api/v2/pokemon/492/"
+  },
+  "sprites": {
+    "versions": {
+      "generation-ix": {
+        "scarlet-violet": {
+          "front_female": null,
+          "front_default": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-ix/scarlet-violet/492.png"
+        }
+      },
+      "generation-viii": {
+        "brilliant-diamond-shining-pearl": {
+          "front_female": null,
+          "front_default": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-viii/brilliant-diamond-shining-pearl/492.png"
+        }
+      }
+    },
+    "back_shiny": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/shiny/492.png",
+    "back_female": null,
+    "front_shiny": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/492.png",
+    "back_default": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/492.png",
+    "front_female": null,
+    "front_default": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/492.png",
+    "back_shiny_female": null,
+    "front_shiny_female": null
+  },
+  "version_group": {
+    "name": "diamond-pearl",
+    "url": "/api/v2/version-group/8/"
+  },
+  "form_names": [
+    {
+      "name": "ランドフォルム",
+      "language": {
+        "name": "ja-hrkt",
+        "url": "/api/v2/language/1/"
+      }
+    },
+    {
+      "name": "랜드폼",
+      "language": {
+        "name": "ko",
+        "url": "/api/v2/language/3/"
+      }
+    },
+    {
+      "name": "陸上形態",
+      "language": {
+        "name": "zh-hant",
+        "url": "/api/v2/language/4/"
+      }
+    },
+    {
+      "name": "Forme Terrestre",
+      "language": {
+        "name": "fr",
+        "url": "/api/v2/language/5/"
+      }
+    },
+    {
+      "name": "Landform",
+      "language": {
+        "name": "de",
+        "url": "/api/v2/language/6/"
+      }
+    },
+    {
+      "name": "Forma Tierra",
+      "language": {
+        "name": "es",
+        "url": "/api/v2/language/7/"
+      }
+    },
+    {
+      "name": "Forma Terra",
+      "language": {
+        "name": "it",
+        "url": "/api/v2/language/8/"
+      }
+    },
+    {
+      "name": "Land Forme",
+      "language": {
+        "name": "en",
+        "url": "/api/v2/language/9/"
+      }
+    },
+    {
+      "name": "ランドフォルム",
+      "language": {
+        "name": "ja",
+        "url": "/api/v2/language/11/"
+      }
+    },
+    {
+      "name": "陆上形态",
+      "language": {
+        "name": "zh-hans",
+        "url": "/api/v2/language/12/"
+      }
+    },
+    {
+      "name": "Forma Tierra",
+      "language": {
+        "name": "es-419",
+        "url": "/api/v2/language/14/"
+      }
+    }
+  ],
+  "names": [
+    {
+      "name": "Shaymin Terrestre",
+      "language": {
+        "name": "fr",
+        "url": "/api/v2/language/5/"
+      }
+    },
+    {
+      "name": "Shaymin (Land)",
+      "language": {
+        "name": "de",
+        "url": "/api/v2/language/6/"
+      }
+    },
+    {
+      "name": "Land Shaymin",
+      "language": {
+        "name": "en",
+        "url": "/api/v2/language/9/"
+      }
+    }
+  ],
+  "types": [
+    {
+      "slot": 1,
+      "type": {
+        "name": "grass",
+        "url": "/api/v2/type/12/"
+      }
+    }
+  ],
+  "trigger_conditions": [],
+  "flavor_text_entries": []
+}

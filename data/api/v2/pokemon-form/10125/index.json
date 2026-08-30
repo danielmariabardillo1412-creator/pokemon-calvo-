@@ -1,0 +1,168 @@
+{
+  "id": 10125,
+  "name": "aegislash-blade",
+  "order": 988,
+  "form_order": 2,
+  "is_default": true,
+  "is_battle_only": true,
+  "is_mega": false,
+  "form_name": "blade",
+  "pokemon": {
+    "name": "aegislash-blade",
+    "url": "/api/v2/pokemon/10026/"
+  },
+  "sprites": {
+    "versions": {
+      "generation-ix": {
+        "scarlet-violet": {
+          "front_female": null,
+          "front_default": null
+        }
+      },
+      "generation-viii": {
+        "brilliant-diamond-shining-pearl": {
+          "front_female": null,
+          "front_default": null
+        }
+      }
+    },
+    "back_shiny": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/shiny/10026.png",
+    "back_female": null,
+    "front_shiny": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/10026.png",
+    "back_default": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/10026.png",
+    "front_female": null,
+    "front_default": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10026.png",
+    "back_shiny_female": null,
+    "front_shiny_female": null
+  },
+  "version_group": {
+    "name": "x-y",
+    "url": "/api/v2/version-group/15/"
+  },
+  "form_names": [
+    {
+      "name": "ブレードフォルム",
+      "language": {
+        "name": "ja-hrkt",
+        "url": "/api/v2/language/1/"
+      }
+    },
+    {
+      "name": "블레이드폼",
+      "language": {
+        "name": "ko",
+        "url": "/api/v2/language/3/"
+      }
+    },
+    {
+      "name": "刀劍形態",
+      "language": {
+        "name": "zh-hant",
+        "url": "/api/v2/language/4/"
+      }
+    },
+    {
+      "name": "Forme Assaut",
+      "language": {
+        "name": "fr",
+        "url": "/api/v2/language/5/"
+      }
+    },
+    {
+      "name": "Klingenform",
+      "language": {
+        "name": "de",
+        "url": "/api/v2/language/6/"
+      }
+    },
+    {
+      "name": "Forma Filo",
+      "language": {
+        "name": "es",
+        "url": "/api/v2/language/7/"
+      }
+    },
+    {
+      "name": "Forma Spada",
+      "language": {
+        "name": "it",
+        "url": "/api/v2/language/8/"
+      }
+    },
+    {
+      "name": "Blade Forme",
+      "language": {
+        "name": "en",
+        "url": "/api/v2/language/9/"
+      }
+    },
+    {
+      "name": "ブレードフォルム",
+      "language": {
+        "name": "ja",
+        "url": "/api/v2/language/11/"
+      }
+    },
+    {
+      "name": "刀剑形态",
+      "language": {
+        "name": "zh-hans",
+        "url": "/api/v2/language/12/"
+      }
+    },
+    {
+      "name": "Forma Filo",
+      "language": {
+        "name": "es-419",
+        "url": "/api/v2/language/14/"
+      }
+    }
+  ],
+  "names": [
+    {
+      "name": "Exagide Assaut",
+      "language": {
+        "name": "fr",
+        "url": "/api/v2/language/5/"
+      }
+    },
+    {
+      "name": "Durengard (Klinge)",
+      "language": {
+        "name": "de",
+        "url": "/api/v2/language/6/"
+      }
+    },
+    {
+      "name": "Blade Aegislash",
+      "language": {
+        "name": "en",
+        "url": "/api/v2/language/9/"
+      }
+    }
+  ],
+  "types": [
+    {
+      "slot": 1,
+      "type": {
+        "name": "steel",
+        "url": "/api/v2/type/9/"
+      }
+    },
+    {
+      "slot": 2,
+      "type": {
+        "name": "ghost",
+        "url": "/api/v2/type/8/"
+      }
+    }
+  ],
+  "trigger_conditions": [
+    {
+      "trigger": "ability",
+      "name": "stance-change",
+      "url": "/api/v2/ability/176/"
+    }
+  ],
+  "flavor_text_entries": []
+}

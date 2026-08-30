@@ -1,0 +1,140 @@
+{
+  "id": 10049,
+  "name": "arceus-grass",
+  "order": 671,
+  "form_order": 12,
+  "is_default": false,
+  "is_battle_only": false,
+  "is_mega": false,
+  "form_name": "grass",
+  "pokemon": {
+    "name": "arceus",
+    "url": "/api/v2/pokemon/493/"
+  },
+  "sprites": {
+    "versions": {
+      "generation-ix": {
+        "scarlet-violet": {
+          "front_female": null,
+          "front_default": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-ix/scarlet-violet/493-grass.png"
+        }
+      },
+      "generation-viii": {
+        "brilliant-diamond-shining-pearl": {
+          "front_female": null,
+          "front_default": null
+        }
+      }
+    },
+    "back_shiny": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/shiny/493-grass.png",
+    "back_female": null,
+    "front_shiny": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/493-grass.png",
+    "back_default": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/493-grass.png",
+    "front_female": null,
+    "front_default": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/493-grass.png",
+    "back_shiny_female": null,
+    "front_shiny_female": null
+  },
+  "version_group": {
+    "name": "diamond-pearl",
+    "url": "/api/v2/version-group/8/"
+  },
+  "form_names": [
+    {
+      "name": "くさタイプ",
+      "language": {
+        "name": "ja-hrkt",
+        "url": "/api/v2/language/1/"
+      }
+    },
+    {
+      "name": "Plante",
+      "language": {
+        "name": "fr",
+        "url": "/api/v2/language/5/"
+      }
+    },
+    {
+      "name": "Pflanze",
+      "language": {
+        "name": "de",
+        "url": "/api/v2/language/6/"
+      }
+    },
+    {
+      "name": "Tipo Planta",
+      "language": {
+        "name": "es",
+        "url": "/api/v2/language/7/"
+      }
+    },
+    {
+      "name": "Tipo Erba",
+      "language": {
+        "name": "it",
+        "url": "/api/v2/language/8/"
+      }
+    },
+    {
+      "name": "Grass Type",
+      "language": {
+        "name": "en",
+        "url": "/api/v2/language/9/"
+      }
+    },
+    {
+      "name": "くさタイプ",
+      "language": {
+        "name": "ja",
+        "url": "/api/v2/language/11/"
+      }
+    },
+    {
+      "name": "Tipo Planta",
+      "language": {
+        "name": "es-419",
+        "url": "/api/v2/language/14/"
+      }
+    }
+  ],
+  "names": [
+    {
+      "name": "Arceus Plante",
+      "language": {
+        "name": "fr",
+        "url": "/api/v2/language/5/"
+      }
+    },
+    {
+      "name": "Arceus (Pflanze)",
+      "language": {
+        "name": "de",
+        "url": "/api/v2/language/6/"
+      }
+    },
+    {
+      "name": "Grass Arceus",
+      "language": {
+        "name": "en",
+        "url": "/api/v2/language/9/"
+      }
+    }
+  ],
+  "types": [
+    {
+      "slot": 1,
+      "type": {
+        "name": "grass",
+        "url": "/api/v2/type/12/"
+      }
+    }
+  ],
+  "trigger_conditions": [
+    {
+      "trigger": "held-item",
+      "name": "meadow-plate",
+      "url": "/api/v2/item/278/"
+    }
+  ],
+  "flavor_text_entries": []
+}

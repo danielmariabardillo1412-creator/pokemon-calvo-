@@ -1,0 +1,126 @@
+{
+  "id": 10415,
+  "name": "palkia-origin",
+  "order": 1345,
+  "form_order": 2,
+  "is_default": true,
+  "is_battle_only": false,
+  "is_mega": false,
+  "form_name": "origin",
+  "pokemon": {
+    "name": "palkia-origin",
+    "url": "/api/v2/pokemon/10246/"
+  },
+  "sprites": {
+    "versions": {
+      "generation-ix": {
+        "scarlet-violet": {
+          "front_female": null,
+          "front_default": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-ix/scarlet-violet/10246.png"
+        }
+      },
+      "generation-viii": {
+        "brilliant-diamond-shining-pearl": {
+          "front_female": null,
+          "front_default": null
+        }
+      }
+    },
+    "back_shiny": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/shiny/10246.png",
+    "back_female": null,
+    "front_shiny": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/10246.png",
+    "back_default": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/10246.png",
+    "front_female": null,
+    "front_default": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10246.png",
+    "back_shiny_female": null,
+    "front_shiny_female": null
+  },
+  "version_group": {
+    "name": "legends-arceus",
+    "url": "/api/v2/version-group/24/"
+  },
+  "form_names": [
+    {
+      "name": "オリジンフォルム",
+      "language": {
+        "name": "ja-hrkt",
+        "url": "/api/v2/language/1/"
+      }
+    },
+    {
+      "name": "Forme Originelle",
+      "language": {
+        "name": "fr",
+        "url": "/api/v2/language/5/"
+      }
+    },
+    {
+      "name": "Urform",
+      "language": {
+        "name": "de",
+        "url": "/api/v2/language/6/"
+      }
+    },
+    {
+      "name": "Origin Forme",
+      "language": {
+        "name": "en",
+        "url": "/api/v2/language/9/"
+      }
+    },
+    {
+      "name": "オリジンフォルム",
+      "language": {
+        "name": "ja",
+        "url": "/api/v2/language/11/"
+      }
+    }
+  ],
+  "names": [
+    {
+      "name": "Palkia Originel",
+      "language": {
+        "name": "fr",
+        "url": "/api/v2/language/5/"
+      }
+    },
+    {
+      "name": "Ur-Palkia",
+      "language": {
+        "name": "de",
+        "url": "/api/v2/language/6/"
+      }
+    },
+    {
+      "name": "Origin Palkia",
+      "language": {
+        "name": "en",
+        "url": "/api/v2/language/9/"
+      }
+    }
+  ],
+  "types": [
+    {
+      "slot": 1,
+      "type": {
+        "name": "water",
+        "url": "/api/v2/type/11/"
+      }
+    },
+    {
+      "slot": 2,
+      "type": {
+        "name": "dragon",
+        "url": "/api/v2/type/16/"
+      }
+    }
+  ],
+  "trigger_conditions": [
+    {
+      "trigger": "held-item",
+      "name": "lustrous-globe",
+      "url": "/api/v2/item/1660/"
+    }
+  ],
+  "flavor_text_entries": []
+}

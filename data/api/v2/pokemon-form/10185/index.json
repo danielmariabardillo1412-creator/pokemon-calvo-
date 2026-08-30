@@ -1,0 +1,113 @@
+{
+  "id": 10185,
+  "name": "pikachu-phd",
+  "order": 41,
+  "form_order": 6,
+  "is_default": true,
+  "is_battle_only": false,
+  "is_mega": false,
+  "form_name": "phd",
+  "pokemon": {
+    "name": "pikachu-phd",
+    "url": "/api/v2/pokemon/10083/"
+  },
+  "sprites": {
+    "versions": {
+      "generation-ix": {
+        "scarlet-violet": {
+          "front_female": null,
+          "front_default": null
+        }
+      },
+      "generation-viii": {
+        "brilliant-diamond-shining-pearl": {
+          "front_female": null,
+          "front_default": null
+        }
+      }
+    },
+    "back_shiny": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/shiny/10083.png",
+    "back_female": null,
+    "front_shiny": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/10083.png",
+    "back_default": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/10083.png",
+    "front_female": null,
+    "front_default": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10083.png",
+    "back_shiny_female": null,
+    "front_shiny_female": null
+  },
+  "version_group": {
+    "name": "omega-ruby-alpha-sapphire",
+    "url": "/api/v2/version-group/16/"
+  },
+  "form_names": [
+    {
+      "name": "ドクター・ピカチュウ",
+      "language": {
+        "name": "ja-hrkt",
+        "url": "/api/v2/language/1/"
+      }
+    },
+    {
+      "name": "Pikachu Docteur",
+      "language": {
+        "name": "fr",
+        "url": "/api/v2/language/5/"
+      }
+    },
+    {
+      "name": "Cosplayform",
+      "language": {
+        "name": "de",
+        "url": "/api/v2/language/6/"
+      }
+    },
+    {
+      "name": "Pikachu Ph.D.",
+      "language": {
+        "name": "en",
+        "url": "/api/v2/language/9/"
+      }
+    },
+    {
+      "name": "ドクター・ピカチュウ",
+      "language": {
+        "name": "ja",
+        "url": "/api/v2/language/11/"
+      }
+    }
+  ],
+  "names": [
+    {
+      "name": "Pikachu Docteur",
+      "language": {
+        "name": "fr",
+        "url": "/api/v2/language/5/"
+      }
+    },
+    {
+      "name": "Dr. Pikachu",
+      "language": {
+        "name": "de",
+        "url": "/api/v2/language/6/"
+      }
+    },
+    {
+      "name": "Pikachu Ph.D.",
+      "language": {
+        "name": "en",
+        "url": "/api/v2/language/9/"
+      }
+    }
+  ],
+  "types": [
+    {
+      "slot": 1,
+      "type": {
+        "name": "electric",
+        "url": "/api/v2/type/13/"
+      }
+    }
+  ],
+  "trigger_conditions": [],
+  "flavor_text_entries": []
+}

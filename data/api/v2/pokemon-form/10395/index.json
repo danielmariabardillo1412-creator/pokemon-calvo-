@@ -1,0 +1,128 @@
+{
+  "id": 10395,
+  "name": "urshifu-single-strike-gmax",
+  "order": 1324,
+  "form_order": 1,
+  "is_default": true,
+  "is_battle_only": true,
+  "is_mega": false,
+  "form_name": "gmax",
+  "pokemon": {
+    "name": "urshifu-single-strike-gmax",
+    "url": "/api/v2/pokemon/10226/"
+  },
+  "sprites": {
+    "versions": {
+      "generation-ix": {
+        "scarlet-violet": {
+          "front_female": null,
+          "front_default": null
+        }
+      },
+      "generation-viii": {
+        "brilliant-diamond-shining-pearl": {
+          "front_female": null,
+          "front_default": null
+        }
+      }
+    },
+    "back_shiny": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/shiny/10226.png",
+    "back_female": null,
+    "front_shiny": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/10226.png",
+    "back_default": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/10226.png",
+    "front_female": null,
+    "front_default": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10226.png",
+    "back_shiny_female": null,
+    "front_shiny_female": null
+  },
+  "version_group": {
+    "name": "sword-shield",
+    "url": "/api/v2/version-group/20/"
+  },
+  "form_names": [
+    {
+      "name": "いちげきのかた・キョダイマックスのすがた",
+      "language": {
+        "name": "ja-hrkt",
+        "url": "/api/v2/language/1/"
+      }
+    },
+    {
+      "name": "Forme Gigamax",
+      "language": {
+        "name": "fr",
+        "url": "/api/v2/language/5/"
+      }
+    },
+    {
+      "name": "Gigadynamax-Form",
+      "language": {
+        "name": "de",
+        "url": "/api/v2/language/6/"
+      }
+    },
+    {
+      "name": "Gigantamax Form",
+      "language": {
+        "name": "en",
+        "url": "/api/v2/language/9/"
+      }
+    },
+    {
+      "name": "いちげきのかた・キョダイマックスのすがた",
+      "language": {
+        "name": "ja",
+        "url": "/api/v2/language/11/"
+      }
+    }
+  ],
+  "names": [
+    {
+      "name": "Shifours Style Poing Final Gigamax",
+      "language": {
+        "name": "fr",
+        "url": "/api/v2/language/5/"
+      }
+    },
+    {
+      "name": "Gigadynamax-Wulaosu (Fokussiert)",
+      "language": {
+        "name": "de",
+        "url": "/api/v2/language/6/"
+      }
+    },
+    {
+      "name": "Gigantamax Single Strike Urshifu",
+      "language": {
+        "name": "en",
+        "url": "/api/v2/language/9/"
+      }
+    }
+  ],
+  "types": [
+    {
+      "slot": 1,
+      "type": {
+        "name": "fighting",
+        "url": "/api/v2/type/2/"
+      }
+    },
+    {
+      "slot": 2,
+      "type": {
+        "name": "dark",
+        "url": "/api/v2/type/17/"
+      }
+    }
+  ],
+  "trigger_conditions": [
+    {
+      "trigger": "gigantamax-factor",
+      "base_form": {
+        "name": "urshifu-single-strike",
+        "url": "/api/v2/pokemon-form/892/"
+      }
+    }
+  ],
+  "flavor_text_entries": []
+}

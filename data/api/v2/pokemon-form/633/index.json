@@ -1,0 +1,62 @@
+{
+  "id": 633,
+  "name": "deino",
+  "order": 839,
+  "form_order": 1,
+  "is_default": true,
+  "is_battle_only": false,
+  "is_mega": false,
+  "form_name": "",
+  "pokemon": {
+    "name": "deino",
+    "url": "/api/v2/pokemon/633/"
+  },
+  "sprites": {
+    "versions": {
+      "generation-ix": {
+        "scarlet-violet": {
+          "front_female": null,
+          "front_default": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-ix/scarlet-violet/633.png"
+        }
+      },
+      "generation-viii": {
+        "brilliant-diamond-shining-pearl": {
+          "front_female": null,
+          "front_default": null
+        }
+      }
+    },
+    "back_shiny": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/shiny/633.png",
+    "back_female": null,
+    "front_shiny": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/633.png",
+    "back_default": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/633.png",
+    "front_female": null,
+    "front_default": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/633.png",
+    "back_shiny_female": null,
+    "front_shiny_female": null
+  },
+  "version_group": {
+    "name": "black-white",
+    "url": "/api/v2/version-group/11/"
+  },
+  "form_names": [],
+  "names": [],
+  "types": [
+    {
+      "slot": 1,
+      "type": {
+        "name": "dark",
+        "url": "/api/v2/type/17/"
+      }
+    },
+    {
+      "slot": 2,
+      "type": {
+        "name": "dragon",
+        "url": "/api/v2/type/16/"
+      }
+    }
+  ],
+  "trigger_conditions": [],
+  "flavor_text_entries": []
+}
