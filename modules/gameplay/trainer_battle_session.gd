@@ -80,6 +80,15 @@ func begin_battle(
 	if trainer_roster.is_empty():
 		last_error = "no_available_opponent_creature"
 		return false
+
+	var player_identity_error := _roster_identity_error(player_roster)
+	if not player_identity_error.is_empty():
+		last_error = "invalid_player_roster:%s" % player_identity_error
+		return false
+	var trainer_identity_error := _roster_identity_error(trainer_roster)
+	if not trainer_identity_error.is_empty():
+		last_error = "invalid_opponent_roster:%s" % trainer_identity_error
+		return false
 	if _has_identity_overlap(player_roster, trainer_roster):
 		last_error = "creature_identity_overlap"
 		return false
@@ -194,6 +203,19 @@ func _roster_with_living_active(source: Array[CreatureInstance]) -> Array[Creatu
 		if creature != null and creature != first_living:
 			roster.append(creature)
 	return roster
+
+
+func _roster_identity_error(roster: Array[CreatureInstance]) -> String:
+	var seen := {}
+	for creature in roster:
+		if creature == null:
+			continue
+		if creature.instance_id == &"":
+			return "creature_identity_required"
+		if seen.has(creature.instance_id):
+			return "duplicate_creature_identity"
+		seen[creature.instance_id] = true
+	return ""
 
 
 func _has_identity_overlap(
