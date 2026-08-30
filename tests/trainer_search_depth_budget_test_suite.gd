@@ -2,13 +2,12 @@ class_name TrainerSearchDepthBudgetTestSuite
 extends RefCounted
 
 const GREEDY_MOVE := &"depth_greedy_hit"
-const TANK_MOVE := &"depth_tank_hit"
+const DEFEND_MOVE := &"depth_defense_setup"
 const OPP_HEAVY := &"depth_opponent_heavy"
 const OPP_LIGHT := &"depth_opponent_light"
 const OPP_SECRET := &"depth_opponent_secret"
 
 const GLASS_SPECIES := &"depth_glass_species"
-const TANK_SPECIES := &"depth_tank_species"
 const HEAVY_SPECIES := &"depth_heavy_species"
 const LIGHT_SPECIES := &"depth_light_species"
 
@@ -40,17 +39,15 @@ func _build_catalog() -> void:
 	_check.call("depth_fixture_normal_type_available", _catalog.type(&"normal") != null)
 
 	_add_move(GREEDY_MOVE, 140, 0)
-	_add_move(TANK_MOVE, 55, 0)
+	_add_defense_setup_move()
 	_add_move(OPP_HEAVY, 90, 1)
 	_add_move(OPP_LIGHT, 25, 0)
 	_add_move(OPP_SECRET, 300, 2)
 
 	var glass := _species(GLASS_SPECIES, 60, 130, 50, 10, 40)
 	glass.learnset.append(LearnSetEntry.new(1, GREEDY_MOVE, LearnsetSystem.LEVEL_UP))
+	glass.learnset.append(LearnSetEntry.new(1, DEFEND_MOVE, LearnsetSystem.LEVEL_UP))
 	_catalog.add_species(glass)
-	var tank := _species(TANK_SPECIES, 180, 70, 230, 10, 120)
-	tank.learnset.append(LearnSetEntry.new(1, TANK_MOVE, LearnsetSystem.LEVEL_UP))
-	_catalog.add_species(tank)
 	var heavy := _species(HEAVY_SPECIES, 140, 120, 80, 60, 90)
 	heavy.learnset.append(LearnSetEntry.new(1, OPP_HEAVY, LearnsetSystem.LEVEL_UP))
 	_catalog.add_species(heavy)
@@ -95,6 +92,28 @@ func _add_move(id: StringName, power: int, priority: int) -> void:
 	_catalog.add_move(move)
 
 
+func _add_defense_setup_move() -> void:
+	var move := MoveDefinition.new()
+	move.id = DEFEND_MOVE
+	move.display_name = String(DEFEND_MOVE)
+	move.power = 0
+	move.type_id = &"normal"
+	move.priority = 0
+	move.damage_class = "status"
+	move.accuracy = 100
+	move.pp = 20
+	move.effect_specs.append(BattleEffectSpec.new(
+		BattleEffectSpec.MODIFY_STAT_STAGE,
+		BattleEffectSpec.SELF,
+		2,
+		0,
+		10000,
+		&"",
+		StatStages.DEFENSE,
+	))
+	_catalog.add_move(move)
+
+
 func _creature(
 	id: StringName,
 	species_id: StringName,
@@ -118,16 +137,10 @@ func _fixture(opponent_move: StringName) -> Dictionary:
 		&"depth_glass",
 		GLASS_SPECIES,
 		StatBlock.new(120, 250, 80, 40, 70, 80),
-		[GREEDY_MOVE],
-	)
-	var tank := _creature(
-		&"depth_tank",
-		TANK_SPECIES,
-		StatBlock.new(320, 100, 260, 30, 80, 220),
-		[TANK_MOVE],
+		[GREEDY_MOVE, DEFEND_MOVE],
 	)
 	var party_a: Array[CreatureInstance] = [opponent]
-	var party_b: Array[CreatureInstance] = [glass, tank]
+	var party_b: Array[CreatureInstance] = [glass]
 	var state := BattleState.create_with_parties(&"depth_fixture", party_a, party_b, 1122334455)
 	state.turn = 1
 	state.battle_started = true
@@ -148,7 +161,6 @@ func _fixture(opponent_move: StringName) -> Dictionary:
 		"state": state,
 		"context": context,
 		"glass_id": glass.instance_id,
-		"tank_id": tank.instance_id,
 		"opponent_id": opponent.instance_id,
 	}
 
@@ -234,7 +246,7 @@ func _test_depth_two_avoids_second_turn_horizon_trap() -> void:
 	var planner := DepthSearchTrainerBrain.new(_catalog, TrainerProfile.balanced(), budget)
 	var planner_action := planner.choose_action(context)
 	_check.call("depth_horizon_planner_returns_action", planner_action != null)
-	_check.call("depth_horizon_planner_switches_to_tank", planner_action != null and planner_action.action_type == BattleAction.SWITCH and planner_action.switch_instance_id == fx.tank_id)
+	_check.call("depth_horizon_planner_prepares_defense_early", planner_action != null and planner_action.action_type == BattleAction.MOVE and planner_action.move_id == DEFEND_MOVE)
 	_check.call("depth_horizon_trace_exists", planner.last_trace != null)
 	var trace := planner.last_trace.to_dict() if planner.last_trace != null else {}
 	_check.call("depth_horizon_trace_uses_depth_model", JSON.stringify(trace).contains(TrainerMultiTurnSearch.SEARCH_MODEL_ID))
@@ -269,9 +281,9 @@ func _test_planning_benchmark_detects_horizon_improvement() -> void:
 	)
 	var cases: Array[Dictionary] = [
 		{
-			"id": "second_turn_ko_trap",
+			"id": "second_turn_priority_ko_trap",
 			"context": horizon.context,
-			"expected_action_key": "switch:%s" % String(horizon.tank_id),
+			"expected_action_key": "move:%s" % String(DEFEND_MOVE),
 		},
 		{
 			"id": "light_pressure_attack",
