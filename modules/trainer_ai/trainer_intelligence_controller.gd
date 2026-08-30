@@ -23,7 +23,7 @@ func _init(
 	brain = p_brain
 	catalog = p_catalog
 	if catalog != null:
-		inference = TrainerBeliefInference.new(catalog)
+		inference = TrainerPublicCoverageBeliefInference.new(catalog)
 
 
 func begin(server: AuthoritativeBattleServer) -> bool:
