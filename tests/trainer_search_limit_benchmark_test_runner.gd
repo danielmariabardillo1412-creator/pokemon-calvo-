@@ -9,7 +9,7 @@ func _initialize() -> void:
 
 
 func _run() -> void:
-	TrainerSearchLimitBenchmarkV2TestSuite.new().run(Callable(self, "_check"))
+	TrainerSearchLimitBenchmarkV3TestSuite.new().run(Callable(self, "_check"))
 	print("\n=== TRAINER SEARCH LIMIT BENCHMARK RESULT: %d PASS / %d FAIL ===" % [_passed, _failed])
 	quit(0 if _failed == 0 else 1)
 
