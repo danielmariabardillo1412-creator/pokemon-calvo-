@@ -1,0 +1,92 @@
+name: Trainer Strategic Switching V2 Tests
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: trainer-strategic-switching-v2-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: FASE 31 strategic switching v2 gate
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Godot 4.7
+        uses: chickensoft-games/setup-godot@v2.4.1
+        with:
+          version: 4.7.0
+          use-dotnet: false
+          include-templates: false
+
+      - name: Verify Godot version
+        shell: bash
+        run: |
+          set -euo pipefail
+          godot --version | tee trainer-strategic-switching-v2-godot-version.log
+          godot --version | grep -E '^4\.7([\.-]|$)'
+
+      - name: Stage pinned PokeAPI report fixtures
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p data/reports
+          cp ci/fixtures/pokeapi_reports/forms_policy_report.json data/reports/forms_policy_report.json
+          cp ci/fixtures/pokeapi_reports/unsupported_mechanics.json data/reports/unsupported_mechanics.json
+          cp ci/fixtures/pokeapi_reports/import_summary.json data/reports/import_summary.json
+
+      - name: Import project
+        shell: bash
+        run: |
+          set -euo pipefail
+          godot --headless --path . --import 2>&1 | tee trainer-strategic-switching-v2-import.log
+
+      - name: Run FASE 31 strategic switching suite
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 240s godot --headless --path . --script res://tests/trainer_strategic_switching_v2_test_runner.gd 2>&1 | tee trainer-strategic-switching-v2-test.log
+          summary="$(grep -E '=== TRAINER STRATEGIC SWITCHING V2 RESULT: [0-9]+ PASS / 0 FAIL ===' trainer-strategic-switching-v2-test.log | tail -n 1)"
+          test -n "$summary"
+          pass_count="$(printf '%s\n' "$summary" | sed -E 's/.*RESULT: ([0-9]+) PASS.*/\1/')"
+          if [ "$pass_count" -lt 169 ]; then
+            echo "Strategic switching regression: expected at least 169 passing checks, got $pass_count" >&2
+            exit 1
+          fi
+          echo "FASE 31 strategic switching gate satisfied: $pass_count PASS / 0 FAIL"
+
+      - name: Run FASE 31 candidate on FASE 26 corpus
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 240s godot --headless --path . --script res://tests/trainer_strategic_switching_v2_corpus_test_runner.gd 2>&1 | tee trainer-strategic-switching-v2-corpus-test.log
+          summary="$(grep -E '=== TRAINER STRATEGIC SWITCHING V2 CORPUS RESULT: [0-9]+ PASS / 0 FAIL ===' trainer-strategic-switching-v2-corpus-test.log | tail -n 1)"
+          test -n "$summary"
+          pass_count="$(printf '%s\n' "$summary" | sed -E 's/.*RESULT: ([0-9]+) PASS.*/\1/')"
+          if [ "$pass_count" -lt 36 ]; then
+            echo "Strategic switching candidate corpus regression: expected at least 36 passing checks, got $pass_count" >&2
+            exit 1
+          fi
+          echo "FASE 31 candidate preserves FASE 26 corpus: $pass_count PASS / 0 FAIL"
+
+      - name: Upload strategic switching logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: trainer-strategic-switching-v2-logs-${{ github.run_id }}
+          path: |
+            trainer-strategic-switching-v2-godot-version.log
+            trainer-strategic-switching-v2-import.log
+            trainer-strategic-switching-v2-test.log
+            trainer-strategic-switching-v2-corpus-test.log
+          if-no-files-found: ignore
+          retention-days: 7
