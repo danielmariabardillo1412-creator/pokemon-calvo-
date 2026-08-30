@@ -54,7 +54,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          timeout 180s godot --headless --path . --script res://tests/trainer_public_coverage_beliefs_test_runner.gd 2>&1 | tee trainer-public-coverage-test.log
+          timeout 180s godot --headless --path . --script res://tests/trainer_ai/trainer_public_coverage_beliefs_test_runner.gd 2>&1 | tee trainer-public-coverage-test.log
           summary="$(grep -E '=== TRAINER PUBLIC COVERAGE RESULT: [0-9]+ PASS / 0 FAIL ===' trainer-public-coverage-test.log | tail -n 1)"
           test -n "$summary"
           pass_count="$(printf '%s\n' "$summary" | sed -E 's/.*RESULT: ([0-9]+) PASS.*/\1/')"
@@ -68,7 +68,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          timeout 180s godot --headless --path . --script res://tests/trainer_public_coverage_corpus_test_runner.gd 2>&1 | tee trainer-public-coverage-corpus-test.log
+          timeout 180s godot --headless --path . --script res://tests/trainer_ai/trainer_public_coverage_corpus_test_runner.gd 2>&1 | tee trainer-public-coverage-corpus-test.log
           summary="$(grep -E '=== TRAINER PUBLIC COVERAGE CORPUS RESULT: [0-9]+ PASS / 0 FAIL ===' trainer-public-coverage-corpus-test.log | tail -n 1)"
           test -n "$summary"
           pass_count="$(printf '%s\n' "$summary" | sed -E 's/.*RESULT: ([0-9]+) PASS.*/\1/')"
