@@ -16,6 +16,7 @@ func run(check_callback: Callable) -> void:
 	_add_tap_move()
 	var tests := [
 		"_test_ruleset_boundaries",
+		"_test_session_invalid_speed_precedes_reaction",
 		"_test_wrong_side_is_side_effect_free",
 		"_test_run_does_not_consume_capture_rng",
 		"_test_escape_uses_persistent_speed_not_stages",
@@ -138,6 +139,18 @@ func _test_ruleset_boundaries() -> void:
 	var bad_attempt := _escape.resolve(10, 100, 0, _rng(1))
 	_check.call("run_audit_invalid_speed_semantic", bad_speed.reason == "invalid_escape_speed" and not bad_speed.rng_consumed)
 	_check.call("run_audit_invalid_attempt_semantic", bad_attempt.reason == "invalid_escape_attempt" and not bad_attempt.rng_consumed)
+
+
+func _test_session_invalid_speed_precedes_reaction() -> void:
+	var session := _session(22000)
+	session.player_active().stats.speed = 0
+	session.current_wild().stats.speed = 200
+	var escape_rng := _rng(22077)
+	var control := _rng(22077)
+	var result := session.submit_player_command(_command(session), null, null, escape_rng)
+	_check.call("run_audit_session_bad_speed_reason", not result.accepted and result.reason == "invalid_escape_speed")
+	_check.call("run_audit_session_bad_speed_no_turn_attempt", session.battle_state().turn == 0 and session.escape_attempts() == 0)
+	_check.call("run_audit_session_bad_speed_rng_safe", escape_rng.randi() == control.randi())
 
 
 func _test_wrong_side_is_side_effect_free() -> void:
