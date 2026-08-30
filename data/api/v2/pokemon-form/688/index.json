@@ -1,0 +1,62 @@
+{
+  "id": 688,
+  "name": "binacle",
+  "order": 996,
+  "form_order": 1,
+  "is_default": true,
+  "is_battle_only": false,
+  "is_mega": false,
+  "form_name": "",
+  "pokemon": {
+    "name": "binacle",
+    "url": "/api/v2/pokemon/688/"
+  },
+  "sprites": {
+    "versions": {
+      "generation-ix": {
+        "scarlet-violet": {
+          "front_female": null,
+          "front_default": null
+        }
+      },
+      "generation-viii": {
+        "brilliant-diamond-shining-pearl": {
+          "front_female": null,
+          "front_default": null
+        }
+      }
+    },
+    "back_shiny": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/shiny/688.png",
+    "back_female": null,
+    "front_shiny": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/688.png",
+    "back_default": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/688.png",
+    "front_female": null,
+    "front_default": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/688.png",
+    "back_shiny_female": null,
+    "front_shiny_female": null
+  },
+  "version_group": {
+    "name": "x-y",
+    "url": "/api/v2/version-group/15/"
+  },
+  "form_names": [],
+  "names": [],
+  "types": [
+    {
+      "slot": 1,
+      "type": {
+        "name": "rock",
+        "url": "/api/v2/type/6/"
+      }
+    },
+    {
+      "slot": 2,
+      "type": {
+        "name": "water",
+        "url": "/api/v2/type/11/"
+      }
+    }
+  ],
+  "trigger_conditions": [],
+  "flavor_text_entries": []
+}
