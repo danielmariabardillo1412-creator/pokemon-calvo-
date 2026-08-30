@@ -30,14 +30,14 @@ def replace_in_file(path: Path, replacements: list[tuple[str, str]]) -> None:
 
 
 def tracked_text_files() -> list[Path]:
+    # Intentionally excludes .github/workflows and tools. A migration must never
+    # rewrite its own workflow or its own source while it is executing.
     patterns = [
         "README.md",
         "docs/**/*.md",
         "tests/**/*.gd",
         "modules/**/*.gd",
         "scenes/**/*.tscn",
-        ".github/workflows/*.yml",
-        "tools/**/*.py",
     ]
     files: set[Path] = set()
     for pattern in patterns:
@@ -58,30 +58,26 @@ def main() -> None:
         "data/battle/runtime_coverage_v2.json",
         "data/fixtures/regression_resources/battle/runtime_coverage_v2.json",
     )
-    # Empty data/battle disappears from git automatically.
 
     # 2) Separate architecture decisions and historical phase reports.
-    adr_dir = ROOT / "docs/adr"
-    adr_dir.mkdir(parents=True, exist_ok=True)
+    (ROOT / "docs/adr").mkdir(parents=True, exist_ok=True)
     for path in sorted((ROOT / "docs").glob("ARCHITECTURE_DECISION_*.md")):
         git_mv(path.relative_to(ROOT).as_posix(), f"docs/adr/{path.name}")
 
-    reports_dir = ROOT / "docs/history/phase_reports"
-    reports_dir.mkdir(parents=True, exist_ok=True)
+    (ROOT / "docs/history/phase_reports").mkdir(parents=True, exist_ok=True)
     for path in sorted((ROOT / "docs").glob("INFORME_FINAL_*.md")):
         git_mv(path.relative_to(ROOT).as_posix(), f"docs/history/phase_reports/{path.name}")
 
-    history_dir = ROOT / "docs/history"
-    history_dir.mkdir(parents=True, exist_ok=True)
+    (ROOT / "docs/history").mkdir(parents=True, exist_ok=True)
     git_mv("docs/STATUS.md", "docs/history/STATUS_PHASE_HISTORY.md")
 
     # 3) Archive the superseded absolute-path PokéAPI adapter.
-    archive_dir = ROOT / "tools/archive"
-    archive_dir.mkdir(parents=True, exist_ok=True)
+    (ROOT / "tools/archive").mkdir(parents=True, exist_ok=True)
     git_mv("tools/pokeapi_adapter.py", "tools/archive/pokeapi_adapter_v2_legacy.py")
 
-    # 4) Update active path references. Historical prose keeps its factual wording;
-    # only repository paths that would otherwise break are changed.
+    # 4) Update active path references. Historical documents are preserved, but
+    # repository paths are updated so references do not point to locations that
+    # no longer exist.
     replacements = [
         ("res://data/species/", "res://data/fixtures/regression_resources/species/"),
         ("res://data/moves/", "res://data/fixtures/regression_resources/moves/"),
@@ -100,7 +96,6 @@ def main() -> None:
     ]
     for path in tracked_text_files():
         replace_in_file(path, replacements)
-        # Root-level docs that linked siblings need a new relative prefix.
         if path.parent == ROOT / "docs":
             replace_in_file(
                 path,
@@ -123,13 +118,12 @@ def main() -> None:
 
     # .gitkeep files are noise once the directory contains canonical data.
     for rel in ("data/raw/.gitkeep", "data/normalized/.gitkeep"):
-        path = ROOT / rel
-        if path.exists():
+        if (ROOT / rel).exists():
             run("git", "rm", rel)
 
     # 5) Replace stale current-facing documentation with concise canonical entrypoints.
     (ROOT / "README.md").write_text(
-        """# Pokémon Calvo\n\n"
+        "# Pokémon Calvo\n\n"
         "Proyecto de fangame de criaturas en **Godot 4.7**, con Battle Core determinista, "
         "progresión/captura/overworld y una IA de entrenadores no neuronal con búsqueda, "
         "belief inference, self-play, objetos, switching estratégico y composición de equipos.\n\n"
@@ -153,13 +147,12 @@ def main() -> None:
         "- DATA FOUNDATION V3: [docs/DATA_FOUNDATION_V3.md](docs/DATA_FOUNDATION_V3.md)\n"
         "- Arquitectura general: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)\n"
         "- ADR: [`docs/adr/`](docs/adr/)\n"
-        "- Historial de fases: [`docs/history/`](docs/history/)\n"
-        """,
+        "- Historial de fases: [`docs/history/`](docs/history/)\n",
         encoding="utf-8",
     )
 
     (ROOT / "docs/STATUS.md").write_text(
-        """# Estado actual del proyecto\n\n"
+        "# Estado actual del proyecto\n\n"
         "## Baseline certificado\n\n"
         "- Motor: **Godot 4.7**.\n"
         "- Baseline previo a esta reorganización: `feature/data-foundation-v3`.\n"
@@ -186,13 +179,12 @@ def main() -> None:
         "canónicos: viven bajo `data/fixtures/`. Los documentos de fases cerradas viven bajo "
         "`docs/history/`; los ADR bajo `docs/adr/`.\n\n"
         "El estado histórico acumulado anterior se conserva íntegro en "
-        "[history/STATUS_PHASE_HISTORY.md](history/STATUS_PHASE_HISTORY.md).\n"
-        """,
+        "[history/STATUS_PHASE_HISTORY.md](history/STATUS_PHASE_HISTORY.md).\n",
         encoding="utf-8",
     )
 
     (ROOT / "docs/README.md").write_text(
-        """# Índice de documentación\n\n"
+        "# Índice de documentación\n\n"
         "## Actual\n\n"
         "- [STATUS.md](STATUS.md) — estado operativo actual.\n"
         "- [DATA_FOUNDATION_V3.md](DATA_FOUNDATION_V3.md) — contrato y snapshot de datos canónico.\n"
@@ -211,32 +203,29 @@ def main() -> None:
         "- [history/STATUS_PHASE_HISTORY.md](history/STATUS_PHASE_HISTORY.md) — antiguo STATUS acumulativo.\n\n"
         "Los documentos históricos pueden contener cifras y rutas válidas para su fase original que "
         "ya no describen el baseline actual. Para datos actuales prevalecen `STATUS.md` y "
-        "`DATA_FOUNDATION_V3.md`.\n"
-        """,
+        "`DATA_FOUNDATION_V3.md`.\n",
         encoding="utf-8",
     )
 
     (ROOT / "data/fixtures/README.md").write_text(
-        """# Fixtures de regresión\n\n"
+        "# Fixtures de regresión\n\n"
         "Este directorio contiene **datos de prueba**, no el dataset canónico del juego.\n\n"
         "- `starter_dataset.json` + `../manifests/starter_manifest.json`: fixture del Data Pipeline V1.\n"
         "- `regression_resources/`: Resources `.tres` sintéticos/estables usados por regresiones "
         "históricas (Foundation, tipos españoles y Battle V2).\n\n"
         "Los datos Pokémon canónicos proceden del snapshot `data/api/v2` + `data/schema/v2`, "
         "se generan en `data/raw/pokemon_api.json` y se normalizan en "
-        "`data/normalized/pokemon_api.json`.\n"
-        """,
+        "`data/normalized/pokemon_api.json`.\n",
         encoding="utf-8",
     )
 
     (ROOT / "tools/archive/README.md").write_text(
-        """# Herramientas archivadas\n\n"
+        "# Herramientas archivadas\n\n"
         "`pokeapi_adapter_v2_legacy.py` es el adaptador PokéAPI anterior a DATA FOUNDATION V3. "
         "Se conserva únicamente por trazabilidad histórica: contiene rutas locales absolutas y no "
         "debe usarse para regenerar el dataset actual.\n\n"
         "El adaptador canónico es `../pokeapi_adapter_v3.py`. Documentos históricos pueden mencionar "
-        "la antigua ruta `tools/pokeapi_adapter.py` porque era correcta en la fase que describen.\n"
-        """,
+        "la antigua ruta `tools/pokeapi_adapter.py` porque era correcta en la fase que describen.\n",
         encoding="utf-8",
     )
 
