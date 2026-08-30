@@ -54,7 +54,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          timeout 120s godot --headless --path . --script res://tests/trainer_self_play_evaluation_test_runner.gd 2>&1 | tee trainer-self-play-test.log
+          timeout 120s godot --headless --path . --script res://tests/trainer_ai/trainer_self_play_evaluation_test_runner.gd 2>&1 | tee trainer-self-play-test.log
           summary="$(grep -E '=== TRAINER SELF PLAY EVALUATION RESULT: [0-9]+ PASS / 0 FAIL ===' trainer-self-play-test.log | tail -n 1)"
           test -n "$summary"
           pass_count="$(printf '%s\n' "$summary" | sed -E 's/.*RESULT: ([0-9]+) PASS.*/\1/')"
