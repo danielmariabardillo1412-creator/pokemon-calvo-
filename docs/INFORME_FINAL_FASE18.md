@@ -8,11 +8,9 @@ Motor CI: `4.7.stable.official.5b4e0cb0f`
 
 ## Estado
 
-**FASE_18_STATUS = VALIDATION_PENDING_FINAL_DOCUMENT_HEAD**
+**FASE_18_STATUS = CLOSED / VALIDATED**
 
-La implementación y la auditoría adversarial están verdes. Falta únicamente repetir GitHub Actions sobre el HEAD documental con el gate reforzado a **>=94 PASS / 0 FAIL** antes de marcar la fase CLOSED/VALIDATED.
-
-No se ha hecho merge a `main`.
+La implementación, la auditoría adversarial y el HEAD documental con el gate reforzado a **>=94 PASS / 0 FAIL** han pasado GitHub Actions. No se ha hecho merge a `main`; el bloque permanece stacked sobre FASE 17.
 
 ## Objetivo cumplido
 
@@ -103,9 +101,9 @@ No aparecieron defectos funcionales que requirieran cambiar el dominio ni el Bat
 
 Resultado ampliado: **94 PASS / 0 FAIL**.
 
-## Evidencia pre-cierre
+## Evidencia de cierre
 
-Run `33300297082`, job `99227059631`:
+GitHub Actions run `33300439829`, job `99227454909`, sobre el merge sintético del PR #12 contra FASE 17:
 
 - Historical regression: **470 PASS / 0 FAIL**
 - Inventory: **47 PASS / 0 FAIL**
@@ -121,12 +119,13 @@ Run `33300297082`, job `99227059631`:
 - Wild Run Command: **71 PASS / 0 FAIL**
 - Battle Run Presentation + audit: **94 PASS / 0 FAIL**
 - import headless: **PASS**
+- Godot exacto: `4.7.stable.official.5b4e0cb0f`
 
-Artifact: `godot-ci-logs-33300297082`, ID `9728716602`, SHA-256 `80143261d7dcc46242003d0e8a71573e17556daa48dd4496daa539daef6d9bff`.
+Artifact: `godot-ci-logs-33300439829`, ID `9728764218`, SHA-256 `aaf0adef0dc266d3646d10f457d34622044a722f8ab311758d08c0015466d4e0`.
 
 ## Gate permanente de fase
 
-El workflow queda configurado para exigir:
+El workflow exige:
 
 **Battle Run Presentation >=94 PASS / 0 FAIL**
 
@@ -145,6 +144,6 @@ Se usa mínimo y no igualdad exacta para permitir que fases posteriores añadan 
 
 ## Próximo bloque recomendado
 
-Después del cierre documental, revisar el roadmap real del repositorio y elegir la siguiente frontera por dependencia, no por numeración improvisada.
+Después del cierre de PR #12, revisar el roadmap real del repositorio y elegir la siguiente frontera por dependencia, no por numeración improvisada.
 
-No debe abrirse FASE 19 hasta que el HEAD documental de FASE 18 pase todos los gates y PR #12 quede cerrado sin merge.
+No debe abrirse un nuevo bloque funcional hasta verificar también el HEAD documental final de este cierre y dejar PR #12 cerrado sin merge.
