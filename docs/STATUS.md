@@ -1,546 +1,122 @@
-# Foundation V1 status
-
-Fecha de validación: 2026-08-29  
-Rama: `foundation/core-v1`  
-Motor: `4.7.stable.official.5b4e0cb0f`
-
-## Resultado
-
-- Arquitectura auditada: **VALIDADA CON CAMBIOS**
-- Importación/editor Godot 4.7: **PASS**, exit 0, sin errores de parseo
-- Ejecución headless: **PASS**, exit 0
-- Tests: **13 PASS / 0 FAIL**
-- Battle minimal: **PASS**
-- RNG determinista y empate de velocidad: **PASS**
-- Snapshot JSON y restauración: **PASS**
-- Autoloads: **0**
-- Código/recursos externos incorporados: **0**
-
-## Cobertura demostrada
-
-- Definiciones de especie, tipo, movimiento y status como Resource
-- Instancia mutable y estadísticas como RefCounted
-- prioridad y velocidad
-- daño, STAB y efectividad
-- KO y final de combate
-- Poison aislado en `StatusSystem`
-- mismos seed/acciones producen mismos eventos y snapshot
-- `BattleEvent` consumible por presentación
-- snapshot con esquema, ruleset, algoritmo/estado RNG e IDs estables
-- rechazo autoritativo de movimiento forjado sin mutación de HP/turno
-- payload cliente sin daño, HP ni resultado
-
-## Fuera de alcance
-
-No hay networking, UI, mapas, assets, savegame general, captura,
-party, inventario ni contenido Pokémon. No se debe iniciar la siguiente fase ni
-mezclar esta rama en `main` sin autorización.
-
----
-
-# Data pipeline V1 (post-Foundation)
-
-Fecha de validación: 2026-08-29
-Rama: `feature/data-pipeline-v1`
-Motor: `4.7.stable.official.5b4e0cb0f`
-
-## Resultado
-
-- Importación/editor Godot 4.7: **PASS**, exit 0, sin errores de parseo
-- Ejecución headless: **PASS**, exit 0
-- Tests: **26 PASS / 0 FAIL** (13 Foundation + 12 pipeline de datos)
-- Autoloads: **0** (sin cambios respecto a Foundation)
-- `extends Node` fuera de `tests/`: **0**
-- Código/recursos externos incorporados: **0**
-
-## Qué se añadió
-
-- Contrato de datos: `DatasetManifest` (esquema versionado + provenance).
-- Validación: `DataValidator`, `DataValidationIssue`, `DataImportReport`.
-- Importador: `DataImporter.import_dataset(raw, manifest) -> {game_data, report}`
-  que RECHAZA IDs inválidos/duplicados, stats fuera de rango y referencias rotas.
-- Definiciones estables: `AbilityDefinition`, `ItemDefinition`, `LearnSetEntry`,
-  `EvolutionRecord`; `CreatureSpecies`/`MoveDefinition`/`TypeDefinition`/
-  `StatusDefinition` ampliados con `to_dict`/`from_dict` y tipos duales.
-- Catálogos enfocados inyectables + `GameData` (agregado con `to_dict`/`from_dict`
-  y `to_definition_catalog()`).
-- `DefinitionCatalog` Refactorizado a fachada sobre catálogos enfocados (misma API
-  de batalla); `DamageCalculator` corregido para efectividad tipo atacante→defensor
-  y STAB dual-type.
-- Fixtures: `data/fixtures/starter_dataset.json` (7 especies + evoluciones,
-  movimientos, tipos, habilidades, objeto, estado) y `data/manifests/starter_manifest.json`.
-- Zonas de datos: `data/{raw,manifests,normalized,generated,fixtures,reports}`
-  (`generated/` y `reports/` ignorados en git).
-
-## Cobertura de datos demostrada
-
-- manifiesto válido e inválido; IDs únicos; lookup especie/movimiento/tipo
-- rechazo de referencia de tipo / movimiento / evolución rota
-- definición inmutable; instancia referencia especie por ID
-- round-trip JSON del dataset; batalla real importada desde el dataset
-
-## Fuera de alcance de esta fase
-
-No se importa PokéAPI ni datos masivos; no se crea UI de importación; no se mezcla
-en `main`. El pipeline ya está listo para alimentar importación masiva cuando se
-autorice (mismo `DataImporter`, distinta fuente cruda).
-
-Informe final de FASE 3: `docs/INFORME_FINAL_FASE3.md`.
-
----
-
-# FASE 4 — Importación masiva PokéAPI (+ QA 4.1)
-
-Fecha de validación: 2026-08-29
-Rama: `feature/pokemon-data-import-v1`
-Motor: `4.7.stable.official.5b4e0cb0f`
-Fuente: PokéAPI `api-data` (SHA completo `784c50b3ad27d0390d3b047fc4c4511f71edd049`, **BSD 3-Clause**)
-IP Pokémon: Nintendo/Creatures/Game Freak (la licencia BSD no otorga derechos sobre esa IP).
-
-## Resultado
-
-- Importación/editor Godot 4.7: **PASS**, exit 0, sin errores de parseo
-- Ejecución headless: **PASS**, exit 0
-- Tests: **61 PASS / 0 FAIL** (26 FASE 1-3 + 14 import masivo FASE 4 + 21 invariantes QA FASE 4.1)
-- Autoloads: **0** (sin cambios respecto a Foundation)
-- `extends Node` fuera de `tests/`: **0**
-- Referencias rotas: **0** · Rechazados: **0** · Tiempo de import: **~927 ms**
-
-## Volumen importado
-
-- 986 especies base · 39 formas diferidas · 21 tipos
-- 937 movimientos (DATA_READY 937; RUNTIME_SUPPORTED 76 / PARTIAL_RUNTIME 504 / DATA_ONLY 348 / UNSUPPORTED 9)
-- 373 habilidades (DATA_ONLY) · 2222 objetos (DATA_ONLY)
-- 129390 entradas de learnset
-- Evoluciones: SOURCE_EDGES 484 · IMPORTED_EDGES 476 · DEFERRED_FORM_EDGES 8 · REJECTED 0
-  - Cobertura importada: SUPPORTED_RUNTIME_OR_MODEL 388 / PARTIAL_RUNTIME 52 / UNSUPPORTED 36 (suma 476)
-- 0 status conditions (ausentes en el commit fijado de la fuente)
-
-## Qué se añadió / corrigió
-
-- `tools/pokeapi_adapter.py`: lee la fuente api-data y produce raw + manifest + reports.
-- `tools/run_import.gd`: import headless vía `DataImporter` (writes import_summary + normalized).
-- Dataset canónico: `data/raw/pokemon_api.json`, `data/manifests/pokemon_api_manifest.json`,
-  `data/normalized/pokemon_api.json`.
-- Extensión de dominio solo-datos: `base_special_attack`/`base_special_defense` en
-  `CreatureSpecies`; `damage_class`/`accuracy`/`pp`/`target`/`effect_summary`/`classification`
-  en `MoveDefinition`; `effect_summary`/`classification` en `AbilityDefinition`; `method` en
-  `LearnSetEntry`; `item_id` en `EvolutionRecord`. `DataImporter` lee los nuevos campos.
-- Corrección FASE 4: `Catalog.all_ids()` devuelve `Array[StringName]` tipado (elimina SCRIPT ERROR).
-- QA FASE 4.1: licencia corregida (BSD 3-Clause), SHA completo en manifest, cobertura de evoluciones
-  recalculada sobre aristas importadas (suma = 476), terminología honesta DATA_READY/RUNTIME_SUPPORTED/
-  PARTIAL_RUNTIME/DATA_ONLY/UNSUPPORTED, e invariantes de métricas en tests.
-- Docs: `docs/DATA_SOURCES.md`, `docs/MECHANICS_COVERAGE.md`, `docs/CODEX_BATTLE_V2_HANDOFF.md`.
-
-## Listo para Battle Core V2
-
-SÍ. La capa de datos está completa, referencialmente sana y validada por invariantes; Battle Core V2
-puede consumir `MoveDefinition`/`AbilityDefinition`/`ItemDefinition`/`EvolutionRecord` sin nuevo import.
-NO se modificó el Battle existente (StatBlock/DamageCalculator intactos). NO se hizo merge a `main`.
-
-Informe final de FASE 4: `docs/INFORME_FINAL_FASE4.md`. Handoff Codex: `docs/CODEX_BATTLE_V2_HANDOFF.md`.
-
----
-
-# Battle Core V2
-
-Fecha de validación: 2026-08-29
-Rama: `feature/battle-core-v2`
-Motor: `4.7.stable.official.5b4e0cb0f`
-
-## Resultado
-
-- Godot import/headless: **PASS**, sin errores de parseo/runtime, exit 0
-- Tests: **131 PASS / 0 FAIL** (61 previos + 70 V2)
-- Snapshot: schema **2**, ruleset `calvo_v1`, RNG `lcg32_v1`
-- Autoloads: **0**
-- `extends Node` fuera de tests: **0**
-- `effect_summary` usado para gameplay: **0**
-
-## Runtime añadido
-
-- Effects compuestos + mappings explícitos por stable ID
-- Pipeline determinista de phases y triggers
-- PP runtime, siete stat stages, accuracy/evasion y críticos
-- Daño physical/special, STAB, dual type, inmunidad y burn
-- Poison, badly poisoned, burn, paralysis y sleep; freeze parcial
-- Parties, active combatant, switch voluntario y reemplazo tras KO
-- Abilities: intimidate, levitate, blaze, torrent, overgrow, static
-- Held items: leftovers, sitrus_berry
-- Eventos semánticos sin texto de UI
-- Golden scenarios y continuación exacta desde snapshot
-
-## Cobertura honesta
-
-- Moves: RUNTIME_SUPPORTED 91 / PARTIAL_RUNTIME 496 / DATA_ONLY 341 / UNSUPPORTED 9
-- Abilities: RUNTIME_SUPPORTED 6 / DATA_ONLY 367
-- Items: RUNTIME_SUPPORTED 2 / DATA_ONLY 2220
-
-No se implementaron evolución, forms, capture, XP, level progression, inventario,
-UI, networking, overworld ni mecánicas generacionales especiales.
-
----
-
-# FASE 5 — Move effects as structured data
-
-Fecha de validación: 2026-08-29
-Rama: `feature/battle-effects-data-v1` (creada desde `feature/battle-core-v2`)
-Motor: `4.7.stable.official.5b4e0cb0f`
-Fuente: PokéAPI `api-data` (SHA completo `784c50b3ad27d0390d3b047fc4c4511f71edd049`, BSD 3-Clause)
-
-## Resultado
-
-- Godot import/headless: **PASS**, sin errores de parseo/runtime, exit 0
-- Tests: **137 PASS / 0 FAIL** (131 base + 6 nuevos FASE 5)
-- Snapshot: schema **2**; dataset schema_version **2**; `BattleEffectSpec` V1
-- Autoloads: **0**
-- `extends Node` fuera de tests: **0**
-- Importador: referencias rotas **0**, rechazados **0**, `effect_spec_invalid` **0**
-- Determinismo headless: **PASS** (mismos seed/acciones ⇒ mismos eventos y snapshot)
-
-## Qué se añadió
-
-- `BattleEffectSpec`: kind `MULTI_HIT` + `min_hits/max_hits/min_turns/max_turns`; `to_dict`/`from_dict`.
-- `MoveDefinition`: `effect_specs: Array[BattleEffectSpec]`, `crit_rate_bp`, `makes_contact`.
-- `tools/pokeapi_adapter.py`: genera `effect_specs` desde metadata estructurada (status, stat changes,
-  drain/recoil/heal, flinch, multi-hit, crit), bump schema_version → 2, y `data/reports/battle_effect_specs_summary.json`.
-- `tools/move_flags_override.json`: override de contacto (la fuente no trae flags).
-- `BattleEffectRegistry.effects_for_move`: prefiere specs del dataset; salta DAMAGE implícito si hay MULTI_HIT.
-- `BattleEffectExecutor`: maneja `MULTI_HIT` (daño por golpe + recoil/drain por golpe).
-- `DamageCalculator`: `crit_rate_bp` suma al umbral de crítico.
-- `BattleTriggerSystem` + `Static`: `requires_contact` (corregido desde `requires_physical`).
-- `DataImporter`: validación fuerte de `effect_specs` (rechaza specs rotos; issues en reporte).
-- Tests: `pokeapi_effect_specs_integrity`, `fase5_multi_hit`, `fase5_static_contact`.
-- Docs: `docs/ARCHITECTURE_DECISION_004_EFFECT_DATA.md`, `docs/MOVE_EFFECT_COVERAGE.md`.
-
-## Cobertura honesta (937 movimientos)
-
-- `RUNTIME_SUPPORTED`: **541** (antes 376 / contrato V2 previo 91)
-- `PARTIAL_RUNTIME`: 60 · `DATA_ONLY`: 327 · `UNSUPPORTED`: 9
-- `effect_specs_generated`: 352 movimientos · `generated_by_metadata`: 433 specs · `validation_errors`: 0
-- Multi-hit: IMPLEMENTADO · Contact/Static: CORREGIDO (override) · Protect: DIFERIDO · Ruleset fingerprint: DIFERIDO
-
-## Listo para Progression Core
-
-SÍ (sujeto a revisión). La capa de efectos de movimiento está data-driven y validada; el Battle Core
-no se rediseñó y los 131 tests base siguen en verde. NO se hizo merge a `main`.
-
----
-
-# FASE 6 — Progression Core V1
-
-Fecha de validación: 2026-08-29
-Rama: `feature/progression-core-v1` (creada desde `feature/battle-effects-data-v1`, commit `f89725c`)
-Motor: `4.7.stable.official.5b4e0cb0f`
-Fuente: PokéAPI `api-data` (SHA `784c50b3ad27d0390d3b047fc4c4511f71edd049`, BSD 3-Clause)
-
-## Resultado
-
-- Godot import/headless: **PASS**, sin errores de parseo/runtime, exit 0
-- Tests: **208 PASS / 0 FAIL** (137 base + 71 checks de Progression Core)
-- Autoloads: **0** (sin cambios)
-- `extends Node` fuera de tests: **0**
-- Referencias rotas: **0** · Rechazados: **0**
-- Determinismo headless: **PASS** (mismos seed/acciones ⇒ mismos eventos y snapshot)
-- `schema_version`: **2** (sin bump; `growth_rate`/`ev_yield` son campos aditivos)
-
-## Qué se añadió
-
-### Runtime (lógica de progresión, separada de Battle y UI)
-- `modules/creatures/progression/progression_ruleset.gd` — `calvo_progression_v1`:
-  - 6 curvas de XP: `fast`, `medium`, `medium-slow`, `slow`, `erratic`, `fluctuating`
-    (`E(1)=0`; para n≥2 `E(n)=max(0, floor(raw(n)))`; cache por species_id+nivel).
-  - Límites: `MAX_LEVEL=100`, `MOVE_SLOTS_MAX=4`, `MAX_PARTY=6`, `MAX_EV_TOTAL=508`.
-  - Tabla de naturalezas canónica (25) con multiplicadores 1.1 suben / 0.9 bajan / 1.0 neutras.
-  - `experience_for_level`, `level_for_experience` (búsqueda monotónica), `experience_for_defeats`.
-- `modules/creatures/progression/stat_calculator.gd` — `compute(base, ivs, evs, nature_id, level)`:
-  - HP = `(2·base + iv + ev/4)·level/100 + level + 10`
-  - Resto = `(2·base + iv + ev/4)·level/100 + 5`, luego `× nature_mult`.
-- `modules/creatures/progression/learnset_system.gd` — `initial_moves`, `level_up_moves_between`,
-  `moves_learned_at_level` (lee `CreatureSpecies.learnset`).
-- `modules/creatures/progression/evolution_system.gd` — `classify_record`, `evolution_candidates`,
-  `apply_evolution`, `coverage_report` (ver `docs/EVOLUTION_COVERAGE.md`).
-- `modules/creatures/progression/creature_factory.gd` — `create(...)` determinista
-  (stats recalculados, moveset inicial, PP, IVs aleatorias con seed).
-- `modules/creatures/progression/progression_event.gd` — eventos semánticos
-  (`LEVEL_UP`, `STAT_CHANGED`, `MOVE_LEARNED`, `MOVE_LEARN_CHOICE_REQUIRED`,
-  `EVOLUTION_AVAILABLE`, `EXPERIENCE_GAINED`).
-- `modules/creatures/progression/progression_system.gd` — orquesta
-  `gain_experience`, `apply_move_choice` (LEARN/REPLACE/DECLINE), `apply_evolution`,
-  `reconcile_battle_result` (consume `BattleOutcome`).
-- `modules/battle/domain/battle_outcome.gd` — `BattleOutcome.from_battle_state(state, catalogs)`:
-  contrato puro (RefCounted) entre Battle y Progression. El Battle EMITE el resultado; la Progresión
-  lo CONSUME después (sin acoplar la capa de batalla a la de progresión).
-
-### Dominio extendido (sin romper compatibilidad)
-- `CreatureSpecies`: nuevos `growth_rate: String`, `ev_yield: Dictionary`,
-  `base_stat_block()` + `to_dict`/`from_dict`.
-- `CreatureInstance` (fuente de verdad mutable y persistente): nuevos `experience`, `ivs`, `evs`,
-  `nature_id`, `friendship`, `moveset: Array[BattleMoveSlot]`; `recalculate_stats`,
-  `add_move`/`replace_move`/`has_move`/`initialize_move_pp`, `reconcile_post_battle`
-  (solo status volátiles; clamp HP/PP), `to_dict`/`from_dict` (round-trip JSON estable).
-- `DataImporter.SPECIES_KEYS` extendido con `growth_rate`, `ev_yield`.
-- `StatBlock.duplicate()` añadido (RefCounted sin `duplicate` nativo).
-
-### Datos (adapter corregido)
-- `tools/pokeapi_adapter.py`:
-  - `growth_rate` desde `pokemon-species` (ej. bulbasaur = `medium-slow`).
-  - `base_experience` desde el endpoint **`pokemon`** (no `pokemon-species`; corregido — antes
-    leía `pokemon-species` y producía `0`).
-  - `ev_yield` desde `pokemon` → `effort` mapeado a claves de stat.
-- Re-importado: 986 especies · 476 evoluciones · 0 referencias rotas.
-
-## Contrato de separación (FASE 6)
-- **0 autoloads**; `extends Node` solo en `tests/`.
-- `CreatureSpecies` inmutable (definición) vs `CreatureInstance` mutable (estado/identidad `instance_id`).
-- Battle Core muta la MISMA `CreatureInstance` en sitio (HP, `status_state`, `moveset.current_pp`);
-  Progression Core lee/escribe nivel/XP/IV/EV/naturaleza y recalcula `stats`.
-- NO se rediseñó el Battle Core; NO se creó UI; NO se hizo merge a `main`.
-
-## Cobertura honesta — Evoluciones (476 aristas importadas)
-
-| Coverage | Count | Detail |
-|---|---|---|
-| `RUNTIME_SUPPORTED` | 464 | level-up 388, trade 24, use-item 52 (ejecutable en runtime + test) |
-| `DATA_ONLY` | 9 | trigger especial preservado como dato diferido (p.ej. `three_defeated_bisharp`, `use_move` annihilape) |
-| `UNSUPPORTED` | 3 | trigger sin modelo (`other`, `shed`, `spin`); diferido |
-| `PARTIAL` | 0 | — |
-| **TOTAL** | **476** | 464 + 9 + 3 = 476 ✓ |
-
-Detalle: `docs/EVOLUTION_COVERAGE.md` + `docs/PROGRESSION_DATA_AUDIT.md`.
-
-## Listo para la siguiente fase
-
-SÍ (sujeto a revisión). La progresión es data-driven, determinista y validada por 71 checks;
-el Battle Core no cambió (los 137 tests base siguen en verde). NO se hizo merge a `main`.
-Falta (fuera de alcance de FASE 6): UI de elección de movimiento/evolución, persistencia de
-savegame/party, formas (39 diferidas), captura, y runtime de los 12 triggers especiales de evolución.
-
-# FASE 7 — Capture + Party Core V1
-
-Fecha de validación: 2026-08-29
-Rama: `feature/capture-party-v1` (creada desde `feature/progression-core-v1`)
-Motor: `4.7.stable.official.5b4e0cb0f`
-Fuente: PokéAPI `api-data` (SHA `784c50b3ad27d0390d3b047fc4c4511f71edd049`, BSD 3-Clause)
-
-## Resultado
-
-- Godot import/headless: **PASS**, sin errores de parseo/runtime, exit 0
-- Tests: **286 PASS / 0 FAIL** (222 base + 64 nuevos de Party/Capture)
-- Autoloads: **0** (sin cambios)
-- `extends Node` fuera de tests: **0**
-- Referencias rotas: **0** · Rechazados: **0**
-- Determinismo headless: **PASS** (mismos seed ⇒ mismos resultados/eventos de captura)
-- `schema_version`: **2** (sin bump; capture_rate/party son campos aditivos)
-
-## Qué se añadió
-
-### Party (persistente)
-- `modules/creatures/party/party_ruleset.gd` — `PartyRuleset`: **única fuente de verdad** de
-  `MAX_PARTY = 6`, `SCHEMA_VERSION = 2`, `is_valid()`. (`CaptureRuleset.MAX_PARTY` eliminado: el
-  límite 6 vive solo aquí.)
-- `modules/creatures/party/creature_party.gd` — `CreatureParty`: add/remove/swap/reorder/get/
-  contains/size/is_full/is_empty/get_creatures/get_ordered_ids/get_active/to_dict/from_dict.
-  Round-trip estable vía `CreatureInstance`.
-  - `reorder(ids)` exige permutación EXACTA del roster (mismo tamaño, sin duplicados, sin ids
-    desconocidos/ausentes); entrada inválida ⇒ `false` y `_order` inalterado.
-  - `from_dict` deduplica `ordered_instance_ids` (primera ocurrencia válida), ignora ids inexistentes,
-    añade criaturas ausentes y respeta `MAX_PARTY`; invariante `_order.size() == _by_id.size()`.
-
-### Capture (puro, determinista)
-- `modules/capture/capture_ball_definition.gd` — `CaptureBallDefinition` (ball_id/mult/guaranteed).
-- `modules/capture/capture_ruleset.gd` — `CaptureRuleset` (`calvo_capture_v1`): tabla BALLS,
-  STATUS_BONUS, `catch_probability`, `is_valid_capture_rate`.
-- `modules/capture/capture_event.gd` — `CaptureEvent` (ATTEMPTED/SHAKE/FAILED/SUCCEEDED/
-  REJECTED/PARTY_ADDED/STORAGE_REQUIRED).
-- `modules/capture/capture_battle_context.gd` — `CaptureBattleContext` (frontera de servidor:
-  is_wild/battle_finished/caller_trainer_id/target_owner_trainer_id/target_side_id).
-- `modules/capture/capture_attempt.gd` — `CaptureAttempt` (target/ball_id/context; sin campo de éxito).
-- `modules/capture/capture_result.gd` — `CaptureResult` (status/ball_id/target_id/probability/
-  shake_count/consume_item/reason).
-- `modules/capture/capture_disposition.gd` — `CaptureDisposition` (PARTY/STORAGE_REQUIRED/UNROUTED).
-- `modules/capture/capture_resolution.gd` — `CaptureResolution` (result + captured + disposition + events).
-- `modules/capture/capture_system.gd` — `CaptureSystem.resolve(attempt, rng, catalogs, party)`:
-  valida, calcula `p`, consume RNG solo si no garantizada, muta party en éxito con espacio. `party == null`
-  ⇒ éxito resuelto con disposición `UNROUTED` y SIN evento `PARTY_ADDED` (no afirma un add falso).
-
-### Datos
-- `CreatureSpecies.capture_rate: int = 0` + `to_dict`/`from_dict` + `is_valid_capture_rate()`.
-- `DataImporter.SPECIES_KEYS` + `"capture_rate"`; `tools/pokeapi_adapter.py` lee `pokemon-species`.
-- Re-importado: 986 especies · 0 referencias rotas.
-
-## Regla de captura (calvo_capture_v1)
-
-`p = (capture_rate/255) * ball_mult * status_mult * hp_factor`
-`hp_factor = (3·max_hp − 2·current_hp)/(3·max_hp)`. Master Ball garantizada (sin RNG).
-Balls: poke 1.0 / great 1.5 / ultra 2.0 / master garantizada. Bonus de status: sleep/freeze 2.0;
-poison/burn/paralysis/badly_poisoned 1.5. Trainer siempre rechazado. Party llena ⇒ STORAGE_REQUIRED
-(sin auto-reemplazo). Detalle: `CAPTURE_RULESET_CALVO_V1.md`, `CAPTURE_DATA_AUDIT.md`.
-
-## Contrato de separación (FASE 7)
-
-- **0 autoloads**; `extends Node` solo en `tests/`.
-- Capture NO rediseña Battle ni Progression; lee HP/status de la `CreatureInstance` viva.
-- Captura preserva identidad: `res.captured` es la MISMA `CreatureInstance` (IV/EV/naturaleza/
-  ability/moveset/PP intactos). No se crea ni rerolla criatura.
-- **Separación de responsabilidad, NO antiforgery**: `CaptureSystem` es lógica pura/determinista; el
-  RNG se inyecta. La validación de que `target`/`context` vienen de estado confiable (frontera
-  cliente/servidor) es responsabilidad de una capa superior cuando exista networking. `CaptureSystem`
-  no afirma por sí mismo que el éxito "no se puede forjar".
-- `capture_rate` importado de PokéAPI; multipliers de ball son tabla canónica del juego.
-
-## Hotfix (invariantes, pre-FASE 8)
-
-Corrige: `reorder` aceptaba duplicados; `from_dict` podía reconstruir `_order` con duplicados;
-`CaptureRuleset.MAX_PARTY` duplicado (eliminado, `PartyRuleset` es única fuente); `CaptureSystem`
-emitía `PARTY_ADDED` con `party == null` (ahora `UNROUTED`); y se corrigieron comentarios de
-seguridad sobreclaimados + el test `capture_server_forged_impossible` renombrado a
-`capture_non_guaranteed_not_auto_success` (no demuestra antiforgery). Tests añadidos: 11 nuevos
-checks de invariantes (reorder duplicado, from_dict dedupe/consistencia/max-6, null-party). Total:
-**308 PASS / 0 FAIL**. NO merge a `main`.
-
-## Listo para la siguiente fase
-
-SÍ (Storage + Save). La captura y la party están data-driven y validadas; el Battle y Progression
-Core no cambiaron (los 222 tests base siguen en verde). NO se hizo merge a `main`.
-Falta (fuera de alcance de FASE 7): Storage real (FASE 8), persistencia savegame, UI de captura/
-party, y runtime de reemplazo automático en party llena (hoy solo señaliza STORAGE_REQUIRED).
-
----
-
-# FASE 8 — Storage Core V1 + Savegame V1
-
-Fecha de validación: 2026-08-29
-Rama: `feature/storage-save-v1` (creada desde `feature/capture-party-v1`)
-Motor: `4.7.stable.official.5b4e0cb0f`
-Fuente: PokéAPI `api-data` (SHA `784c50b3ad27d0390d3b047fc4c4511f71edd049`, BSD 3-Clause)
-
-## Resultado
-
-- Godot import/headless: **PASS**, sin errores de parseo/runtime, exit 0
-- Tests: **470 PASS / 0 FAIL** (308 base FASE 7 + 121 FASE 8 + 26 FASE 8C regresión)
-- GATE 8A (Storage Core): **PASS** · GATE 8B (Savegame): **PASS**
-- Autoloads: **0** (sin cambios)
-- `extends Node` fuera de tests: **0**
-- Referencias rotas: **0** · Rechazados: **0**
-- Determinismo headless: **PASS**
-- Savegame `schema_version`: **1** (`calvo_save_v1`); party/storage layouts referencian el registro canónico
-- Duplicado de `instance_id` en party+storage: **imposible por diseño**
-
-## Qué se añadió
-
-### Storage Core (runtime puro)
-- `modules/creatures/storage/storage_ruleset.gd` — `StorageRuleset`: `BOX_CAPACITY = 30`
-  (sin `MAX_BOXES` en V1; cajas se crean dinámicamente con `ensure_box()`).
-- `modules/creatures/storage/storage_box.gd` — `StorageBox`: slots ordenados
-  (`Array[CreatureInstance|null]`, longitud == capacidad); `creature_at/insert_at/remove_at/
-  move_slot/swap_slots/contains/first_free_slot/is_full/size/slots/to_dict` y `from_dict(d, reg)`
-  (reconstruye desde el registro canónico de criaturas; `corrupted` si falta una referencia).
-- `modules/creatures/storage/creature_storage.gd` — `CreatureStorage`: add/remove/locate/
-  find_first_free_slot/ensure_capacity_for/move_between_boxes/swap_slots/get_all_creatures/
-  to_dict/`from_dict(d, reg)`. Invariante: un `instance_id` aparece a lo sumo una vez en TODAS
-  las cajas; slot libre vacío; misma instancia en origen/destino; operación inválida no corrompe.
-- `modules/creatures/storage/player_collection.gd` — `PlayerCollection` (party + storage):
-  `deposit`/`withdraw` con rollback (mueven la MISMA `CreatureInstance`; nunca la duplican ni
-  la rerollan) y `location_of`.
-- `modules/creatures/storage/capture_routing_result.gd` — `CaptureRoutingResult`.
-- `modules/creatures/storage/capture_ownership_router.gd` — `CaptureOwnershipRouter.route(res,
-  party, storage)`: PARTY⇒no-op (ya añadida), STORAGE_REQUIRED⇒`storage.add_creature(res.captured)`,
-  UNROUTED⇒no-op. Consume el `CaptureDisposition` de FASE 7.
-
-### Savegame (serialización + IO)
-- `modules/save/save_result.gd` — `SaveResult` (ok/path/reason).
-- `modules/save/load_result.gd` — `LoadResult` (ok/reason/schema_version/party/storage).
-- `modules/save/save_game_data.gd` — `SaveGameData` (snapshot puro, V1): registro canónico
-  `creatures` (cada criatura UNA vez) + `party_layout` (solo `ordered_instance_ids`) +
-  `storage_layout` (cajas con slots que referencian `instance_id`). `build`/`validate`/`to_dict`/
-  `from_dict`. `validate` rechaza: `missing_schema`, `unsupported_schema`, `duplicate_creature_id`,
-  `missing_creature_reference`, `double_ownership`, `invalid_storage_slot`.
-- `modules/save/save_game_serializer.gd` — `SaveGameSerializer`: escritura ATÓMICA
-  (temp → verificar parse → renombrar; nunca deja `.tmp` colgando) y `read_raw`/`parse`.
-- `modules/save/save_game_repository.gd` — `SaveGameRepository`: `save_state`/`save_collection`
-  → `SaveResult`; `load` → `LoadResult` TRANSACCIONAL (reconstruye registro + party + storage;
-  si cualquier paso falla, `party`/`storage` quedan en `null`: nunca publica estado parcial).
-  Manejo de corrupción: `missing_file`, `json_parse_error`, + razones de `validate`.
-
-## Regla de identidad (crítica)
-
-Una criatura vive conceptualmente UNA vez (`instance_id`). Party y storage referencian la MISMA
-`CreatureInstance`. No hay duplicado de instancia cross-container en runtime ni en el archivo de
-save (el registro canónico lleva los datos; layouts solo referencian). Double-ownership
-(party+storage apuntando al mismo id) es IMPOSIBLE: rechazado en runtime por `contains_instance_id`
-y en load por `validate`.
-
-## Cobertura demostrada (tests FASE 8)
-
-- Storage: vacío/add/identidad preservada/duplicado rechazado/remove/orden de slots/
-  move misma caja/move entre cajas/swap/move inválido sin mutación/auto-nueva caja/capacidad 30/
-  locate.
-- Party↔Storage: deposit/withdraw preservando la MISMA instancia; withdraw a party llena rechazado;
-  no double-ownership.
-- Capture→STORAGE_REQUIRED: enruta a storage, MISMA instancia, preserva IV/naturaleza/habilidad/
-  moveset/PP.
-- Savegame: vacío/party-only/storage-only/party+storage; round-trip; mismos `instance_id`;
-  orden de party; orden de slots de caja; fidelidad de criatura/IV/naturaleza/habilidad/moves/PP/
-  HP/status/nivel+XP.
-- Corrupción: JSON corrupto, schema faltante, schema futuro, referencia faltante, id duplicado,
-  double-ownership, slot inválido; fallo de load NO publica estado parcial.
-- IO: escritura/lectura de archivo; reemplazo atómico (sin `.tmp` colgando).
-- End-to-end: captura→party/storage→save→load con fidelidad total.
-- Property: deposit/withdraw repetido (20×); save/load repetido (15×).
-
-## Contrato de separación (FASE 8)
-
-- **0 autoloads**; `extends Node` solo en `tests/`.
-- Runtime (dominio) separado de IO: `SaveGameData` (snapshot puro) vs `SaveGameSerializer` (archivo).
-- `CreatureInstance` es la fuente de verdad mutable; `SaveGameData` solo transporta diccionarios.
-- NO se creó UI; NO se hizo merge a `main`; NO se introdujo networking.
-
-## Listo para la siguiente fase
-
-SÍ (sujeto a revisión). Storage y Savegame están data-driven, deterministas y validados (121 checks);
-Battle/Progression/Capture/Party no cambiaron (los 308 tests base siguen en verde). Falta (fuera de
-alcance de FASE 8): UI de storage/party/save, autosave, múltiples perfiles de save, y migraciones de
-schema (hoy solo rechaza schema no soportado; no hay fake-migrations).
-
-# FASE 8C — Hotfix de persistencia e invariantes
-
-Fecha de validación: 2026-08-29
-Rama: `feature/storage-save-hotfix-v1` (creada desde `feature/storage-save-v1`)
-Motor: `4.7.stable.official.5b4e0cb0f`
-
-## Resultado
-
-- Godot import/headless: **PASS**, sin errores de parseo/runtime, exit 0
-- Tests: **470 PASS / 0 FAIL** (total acumulado; +26 checks nuevos de regresión FASE 8C)
-- GATE: SAVE_LAST_KNOWN_GOOD_SAVE_PRESERVED=YES · PARTY_DUPLICATE_SAVE_REJECTED=YES ·
-  PARTY_OVER_CAPACITY_SAVE_REJECTED=YES · PARTY_REBUILD_FAILURE_CAN_PUBLISH=NO ·
-  FORMAT_ID_VALIDATED=YES · STORAGE_ROUTE_FALSE_SUCCESS_POSSIBLE=NO · FULL_REGRESSION=PASS
-
-## Qué se corrigió (3 bugs de code review de FASE 8)
-
-1. **Reemplazo de save inseguro** (`save_game_serializer.gd`): `write_atomic` ahora hace
-   REEMPLAZO PROTEGIDO — respalda el save bueno previo a `path + ".bak"` antes de cualquier renombrado;
-   si la publicación falla, restaura el backup. El save bueno previo NUNCA se destruye. Motivos nuevos:
-   `cannot_back_up_target`, `replace_failed_restored`, `replace_failed_restore_failed`.
-2. **Party corrupta aceptada en silencio** (`save_game_data.gd` + `save_game_repository.gd`):
-   `validate()` ahora rechaza `duplicate_party_instance_id`, `party_over_capacity`,
-   `empty_party_instance_id`, `invalid_party_layout`; `load()` aborta con `party_rebuild_failed` si un
-   `party.add_creature` falla (nunca publica party parcial). Añadido `format_id` (`missing_format_id` /
-   `unsupported_format`) y rechazo de `instance_id` vacío. Los campos de layout son `Variant` para que un
-   payload malformado llegue a `validate()` y sea rechazado en lugar de crashear el loader.
-3. **Router de captura con éxito falso** (`capture_ownership_router.gd`): `routed = stored`
-   (STORAGE_REQUIRED); `storage == null` se maneja sin crashear (`storage_null`); `PARTY` solo marca
-   `routed=true` si la criatura está realmente en la party (`party_ownership_missing` si no).
-
-## Regresiones añadidas (tests)
-
-- Savegame: reemplazo seguro (7), party corrupta/formato (8), invariantes extra (5).
-- Storage: routing verdadero del router (6).
-
-## Contrato de separación (FASE 8C)
-
-- Solo los 3 bugs + tests + docs; NO rework de Storage/Savegame/Capture más allá de los bugs.
-- NO UI/autosave/networking; NO merge a `main`; árbol de trabajo limpio.
+# Pokémon Calvo — Current Project Status
 
+Fecha de sincronización: 2026-08-30  
+Motor validado: `4.7.stable.official.5b4e0cb0f`  
+Estado de desarrollo: **stacked development; no merge a `main`**
 
+Este documento es el índice de estado **actual**. Los informes `INFORME_FINAL_FASE*.md` y los ADR conservan el detalle histórico y la evidencia de cada bloque. No se debe usar un total antiguo de tests o una descripción de una fase intermedia como descripción del proyecto completo.
+
+## Baseline validado actual
+
+La cadena funcional validada llega hasta **FASE 18 — Battle Run Presentation V1**:
+
+`Overworld físico -> zona de encuentro -> WildEncounterSystem -> WildAdventureSession -> Battle visible -> MOVE / CAPTURE / SWITCH / RUN -> settlement -> confirmación -> Overworld`
+
+La presentación no es autoridad de gameplay. MOVE/SWITCH pasan por Battle Core; CAPTURE y RUN pasan por comandos de aplicación de `WildAdventureSession`; la UI construye intenciones y representa resultados autoritativos.
+
+La rama funcional más reciente es:
+
+`feature/battle-run-presentation-v1`
+
+PR #12 está cerrado **sin merge**. El desarrollo posterior debe partir de esa historia o de una rama descendiente explícitamente documentada; `main` no representa todavía este baseline.
+
+## Gates finales del baseline
+
+GitHub Actions final de FASE 18: run `33300590609`, job `99227876718`.
+
+| Gate | Resultado |
+|---|---:|
+| Historical regression | 470 PASS / 0 FAIL |
+| Inventory | 47 PASS / 0 FAIL |
+| Savegame V2 | 40 PASS / 0 FAIL |
+| Savegame V2 adversarial | 8 PASS / 0 FAIL |
+| Wild Encounters | 54 PASS / 0 FAIL |
+| Logical Vertical Slice | 62 PASS / 0 FAIL |
+| Overworld | 59 PASS / 0 FAIL |
+| Battle Presentation | 43 PASS / 0 FAIL |
+| Battle Commands | 53 PASS / 0 FAIL |
+| Battle Capture Presentation | 68 PASS / 0 FAIL |
+| Battle Switch Presentation | 49 PASS / 0 FAIL |
+| Wild RUN Command | 71 PASS / 0 FAIL |
+| Battle RUN Presentation + audit | 94 PASS / 0 FAIL |
+| Godot import headless | PASS |
+
+Artifact: `godot-ci-logs-33300590609`  
+Artifact ID: `9728809265`  
+SHA-256: `29d1020bea96f87d4b2b2660f95dd7b9643933816d4f504f1afb721316fdc7cd`
+
+El diagnóstico de parser provocado por el test de JSON corrupto es intencionado y termina en PASS. Los warnings de Node.js de GitHub Actions no son errores del juego.
+
+## Cadena de bloques recientes
+
+| Bloque | Rama | Estado | Resultado dedicado |
+|---|---|---|---:|
+| FASE 8C — Storage/Save hotfix | `feature/storage-save-hotfix-v1` | CLOSED / VALIDATED | baseline 470 / 0 |
+| FASE 9A — Inventory Core | `feature/inventory-core-v1` | CLOSED / VALIDATED | 47 / 0 |
+| FASE 9B — Inventory + Savegame V2 | `feature/inventory-savegame-v2` | CLOSED / VALIDATED | 40 / 0 + adv 8 / 0 |
+| FASE 10 — Wild Encounters | `feature/wild-encounters-v1` | CLOSED / VALIDATED | 54 / 0 |
+| FASE 11 — Logical Vertical Slice | `feature/vertical-slice-core-v1` | CLOSED / VALIDATED | 62 / 0 |
+| FASE 12 — Overworld Core | `feature/overworld-core-v1` | CLOSED / VALIDATED | 59 / 0 |
+| FASE 13 — Battle Presentation | `feature/battle-presentation-v1` | CLOSED / VALIDATED | 43 / 0 |
+| FASE 14 — Battle Commands | `feature/battle-commands-v1` | validated in descendant baseline | 53 / 0 |
+| FASE 15 — Capture Presentation | `feature/battle-capture-presentation-v1` | CLOSED / VALIDATED | 68 / 0 |
+| FASE 16 — Switch Presentation | `feature/battle-switch-presentation-v1` | CLOSED / VALIDATED | 49 / 0 |
+| FASE 17 — Wild RUN Command | `feature/wild-run-command-v1` | CLOSED / VALIDATED | 71 / 0 |
+| FASE 18 — Run Presentation | `feature/battle-run-presentation-v1` | CLOSED / VALIDATED | 94 / 0 |
+
+FASE 14 conserva en su informe la nota histórica de que el HEAD documental necesitaba repetición de CI. Los descendientes FASE 15–18 y el CI final de FASE 18 ejecutan y conservan su gate de 53/0; por tanto forma parte del baseline validado actual. No se reescribe el informe histórico para fingir que aquella evidencia existía antes.
+
+## Capacidades presentes
+
+### Datos y criaturas
+
+- dataset normalizado PokéAPI fijado por commit/provenance;
+- 986 especies base, tipos, movimientos, habilidades, objetos, learnsets y evoluciones importados con IDs estables;
+- `CreatureInstance` persistente con identidad, IV/EV, naturaleza, nivel/XP, HP/status, ability, held item y moveset/PP;
+- progresión, stats, learnsets y evolución modelados fuera de Battle.
+
+### Battle
+
+- Battle Core autoritativo y determinista;
+- MOVE y SWITCH;
+- PP, accuracy/evasion, stages, críticos, tipos, status, triggers, algunas abilities/held items y effects estructurados;
+- eventos semánticos consumibles por presentación;
+- snapshot/replay determinista del core.
+
+### Colección y persistencia
+
+- Party máx. 6;
+- Storage por cajas de 30 slots con cajas dinámicas;
+- Inventory persistente;
+- Savegame V2 con migración real V1 -> V2, validación defensiva y carga transaccional;
+- identidad canónica de criaturas compartida por Party/Storage.
+
+### Aventura y presentación técnica
+
+- movimiento físico cardinal y colisiones;
+- pasos por distancia real y zonas de encounter;
+- encuentro salvaje determinista;
+- Battle overlay técnico sobre la misma sesión real;
+- MOVE, CAPTURE, SWITCH y RUN utilizables;
+- captura fallida recibe represalia; captura exitosa enruta ownership;
+- cambio electivo y reemplazo automático tras KO;
+- huida con `calvo_escape_v1`, intentos acumulativos y reacción rival al fallo;
+- confirmación explícita antes de volver al Overworld.
+
+## Límites actuales importantes
+
+Todavía no hay UI/arte final, mapa romano definitivo, NPCs/diálogo, puertas/transiciones de mapas, audio, world-state persistente, networking ni trainer-battle loop completo.
+
+Tampoco existe todavía un flujo jugador-completo para **decisiones de progresión post-battle**. `ProgressionSystem` puede emitir `MOVE_LEARN_CHOICE_REQUIRED` y `EVOLUTION_AVAILABLE`, pero `BattlePresentationController` hoy solo registra de forma genérica que la progresión fue reconciliada; no presenta ni conserva una cola de decisiones obligatorias para el jugador. Esta frontera debe cerrarse antes de considerar la victoria -> progreso -> retorno como UX completa.
+
+La cobertura de contenido también es deliberadamente parcial: cientos de efectos únicos, la mayoría de abilities/items, forms y triggers especiales de evolución siguen fuera del runtime completo. Ver `docs/MECHANICS_COVERAGE.md`, `docs/MOVE_EFFECT_COVERAGE.md` y `docs/EVOLUTION_COVERAGE.md`.
+
+## Fuente canónica para decidir el siguiente trabajo
+
+1. Este `STATUS.md` para estado agregado actual.
+2. `docs/ROADMAP.md` para orden recomendado y dependencias futuras.
+3. ADRs para decisiones arquitectónicas.
+4. `INFORME_FINAL_FASE*.md` para evidencia histórica de cada bloque.
+5. GitHub Actions para demostrar el HEAD exacto; un informe sin CI verde del HEAD no basta.
+
+No se abre una nueva fase funcional solo porque toque el siguiente número. Primero se identifica una frontera real, se audita el contrato existente y se define el gate.
