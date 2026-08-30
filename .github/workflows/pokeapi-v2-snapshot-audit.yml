@@ -28,13 +28,22 @@ jobs:
           python3 tools/pokeapi_v2_snapshot_audit.py 2>&1 | tee pokeapi-v2-audit.log
           grep -F 'POKEAPI_V2_AUDIT_ASSUMPTIONS=' pokeapi-v2-audit.log
 
-      - name: Upload audit report
+      - name: Resolve coherent modern-unified learnsets
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 tools/pokeapi_v2_resolver.py --profile modern_unified_v1 2>&1 | tee pokeapi-v2-resolver.log
+          grep -F 'POKEAPI_V2_RESOLVER_SUMMARY=' pokeapi-v2-resolver.log
+
+      - name: Upload audit reports
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: pokeapi-v2-snapshot-audit-${{ github.run_id }}
           path: |
             data/reports/pokeapi_v2_snapshot_audit.json
+            data/reports/pokeapi_v2_resolver_report.json
             pokeapi-v2-audit.log
+            pokeapi-v2-resolver.log
           if-no-files-found: error
           retention-days: 14
