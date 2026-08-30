@@ -1,0 +1,77 @@
+name: Trainer Tactical Intelligence Tests
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: trainer-tactical-intelligence-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: FASE 21 trainer tactical intelligence gate
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Godot 4.7
+        uses: chickensoft-games/setup-godot@v2.4.1
+        with:
+          version: 4.7.0
+          use-dotnet: false
+          include-templates: false
+
+      - name: Verify Godot version
+        shell: bash
+        run: |
+          set -euo pipefail
+          godot --version | tee trainer-tactical-godot-version.log
+          godot --version | grep -E '^4\.7([\.-]|$)'
+
+      - name: Stage pinned PokeAPI report fixtures
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p data/reports
+          cp ci/fixtures/pokeapi_reports/forms_policy_report.json data/reports/forms_policy_report.json
+          cp ci/fixtures/pokeapi_reports/unsupported_mechanics.json data/reports/unsupported_mechanics.json
+          cp ci/fixtures/pokeapi_reports/import_summary.json data/reports/import_summary.json
+
+      - name: Import project
+        shell: bash
+        run: |
+          set -euo pipefail
+          godot --headless --path . --import 2>&1 | tee trainer-tactical-import.log
+
+      - name: Run trainer tactical intelligence suite
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 30s godot --headless --path . --script res://tests/trainer_tactical_intelligence_test_runner.gd 2>&1 | tee trainer-tactical-test.log
+          summary="$(grep -E '=== TRAINER TACTICAL INTELLIGENCE RESULT: [0-9]+ PASS / 0 FAIL ===' trainer-tactical-test.log | tail -n 1)"
+          test -n "$summary"
+          pass_count="$(printf '%s\n' "$summary" | sed -E 's/.*RESULT: ([0-9]+) PASS.*/\1/')"
+          if [ "$pass_count" -lt 97 ]; then
+            echo "Trainer tactical regression: expected at least 97 passing checks, got $pass_count" >&2
+            exit 1
+          fi
+          echo "FASE 21 trainer tactical gate satisfied: $pass_count PASS / 0 FAIL"
+
+      - name: Upload trainer tactical logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: trainer-tactical-logs-${{ github.run_id }}
+          path: |
+            trainer-tactical-godot-version.log
+            trainer-tactical-import.log
+            trainer-tactical-test.log
+          if-no-files-found: ignore
+          retention-days: 7
