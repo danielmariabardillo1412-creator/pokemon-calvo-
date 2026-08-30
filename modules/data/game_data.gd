@@ -43,6 +43,11 @@ static func from_dict(d: Dictionary) -> GameData:
 	var gd := GameData.new()
 	gd.manifest = DatasetManifest.from_dict(d.get("manifest", {}))
 	gd.type_catalog = TypeCatalog.from_dict(d.get("types", {}))
+	# The committed normalized PokeAPI dump predates the Spanish/type-chart hardening.
+	# Overlay the 18 standard battle types only for that production source. Custom fixtures
+	# keep their authored type relations untouched.
+	if gd.manifest.source == "pokeapi/api-data":
+		PokemonTypeChart.apply_to_catalog(gd.type_catalog)
 	gd.move_catalog = MoveCatalog.from_dict(d.get("moves", {}))
 	gd.ability_catalog = AbilityCatalog.from_dict(d.get("abilities", {}))
 	gd.item_catalog = ItemCatalog.from_dict(d.get("items", {}))
