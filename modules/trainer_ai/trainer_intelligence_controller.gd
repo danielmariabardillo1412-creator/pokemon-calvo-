@@ -9,15 +9,21 @@ var side_id: StringName
 var memory := TrainerBattleMemory.new()
 var belief := TrainerBeliefState.new()
 var brain: TrainerBrain
+var catalog: DefinitionCatalog = null
+var inference: TrainerBeliefInference = null
 var last_context: TrainerDecisionContext = null
 
 
 func _init(
 	p_side_id: StringName,
 	p_brain: TrainerBrain,
+	p_catalog: DefinitionCatalog = null,
 ) -> void:
 	side_id = p_side_id
 	brain = p_brain
+	catalog = p_catalog
+	if catalog != null:
+		inference = TrainerBeliefInference.new(catalog)
 
 
 func begin(server: AuthoritativeBattleServer) -> bool:
@@ -26,7 +32,13 @@ func begin(server: AuthoritativeBattleServer) -> bool:
 		return false
 	if not memory.begin(server.state, side_id):
 		return false
-	return belief.begin(memory)
+	if not belief.begin(memory):
+		return false
+	if inference != null:
+		var observation := TrainerObservationBuilder.build(server.state, side_id, memory)
+		if observation != null:
+			inference.seed_from_observation(belief, observation)
+	return true
 
 
 func observe(
@@ -35,9 +47,26 @@ func observe(
 ) -> bool:
 	if server == null or server.state == null:
 		return false
+	var previous_observation: TrainerObservation = null
+	if last_context != null:
+		previous_observation = last_context.observation
 	if not memory.observe_events(events, server.state):
 		return false
-	belief.sync_revealed(memory)
+	if not belief.sync_revealed(memory):
+		return false
+	if inference != null:
+		var current_observation := TrainerObservationBuilder.build(
+			server.state,
+			side_id,
+			memory,
+		)
+		if current_observation != null:
+			inference.update_after_observation(
+				belief,
+				previous_observation,
+				memory,
+				current_observation,
+			)
 	return true
 
 
@@ -47,6 +76,8 @@ func choose_action(server: AuthoritativeBattleServer) -> BattleAction:
 	var observation := TrainerObservationBuilder.build(server.state, side_id, memory)
 	if observation == null:
 		return null
+	if inference != null:
+		inference.seed_from_observation(belief, observation)
 	var legal_actions := TrainerActionSpace.from_server(server, side_id)
 	last_context = TrainerDecisionContext.create(
 		observation,
