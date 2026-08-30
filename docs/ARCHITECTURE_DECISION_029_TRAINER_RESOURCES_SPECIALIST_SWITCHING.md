@@ -2,7 +2,7 @@
 
 ## Status
 
-PROPOSED / IMPLEMENTATION IN PROGRESS
+FASE 29A VALIDATED / FASE 29B+ PENDING
 
 ## Context
 
@@ -10,7 +10,7 @@ The trainer AI can already choose MOVE and SWITCH actions and has tactical/searc
 
 1. Trainers cannot use battle consumables such as Potions because BattleAction currently has no ITEM action.
 2. CreatureInstance stores `held_item_id`, but imported item definitions are still data-only and Battle Core has no general held-item runtime.
-3. Switching exists, but the current score can still prefer staying in a clearly losing or ineffective matchup because switching is treated as an ordinary scored action with a generic switch cost.
+3. Switching existed before this ADR, but the generic score could still prefer staying in a clearly losing or ineffective matchup because switching was treated as an ordinary scored action with a generic switch cost.
 
 The goal is not to give NPCs infinite resources or hidden information. The goal is to give them authored, finite resources and public battle knowledge appropriate to trainer tier.
 
@@ -56,27 +56,39 @@ Elite-level trainers use the same legitimate information boundary but with stron
 
 Switching must remain selective: repeatedly switching without a concrete gain is a blunder. However, the evaluator/search must explicitly recognize high-urgency situations instead of relying only on a generic switch score.
 
-Required explainable signals include:
+The validated FASE 29A implementation adds `TrainerStrategicSwitchEvaluator` with these explainable signals:
 
 - `active_has_no_effective_damage`: current active has no meaningful damaging route against the observed opponent while a healthy bench creature does;
 - `clear_offensive_matchup_gain`: incoming creature has substantially better offensive pressure;
-- `escape_super_effective_threat`: current active is exposed to a known/publicly inferred strong threat and an incoming creature is materially safer;
-- `preserve_low_hp_active`: already supported, retained;
-- `preserve_unique_answer`: already supported at team level, retained;
-- `avoid_fragile_switch_in`: already supported, retained;
-- `avoid_pointless_switch`: no switch bonus when the gain is marginal or the current active is already strongly favoured.
+- `escape_super_effective_threat`: current active is exposed to a known/public strong threat and an incoming creature is materially safer;
+- `avoid_switch_with_immediate_ko`: do not throw away an immediate public KO to make a merely attractive switch;
+- `avoid_pointless_switch`: penalize marginal switching and prevent ping-pong.
 
-A player switching Pokémon does not grant the NPC secret information. The trainer simply reevaluates the new observed active matchup on its next legal decision.
+Existing signals such as `preserve_low_hp_active`, `preserve_unique_answer` and `avoid_fragile_switch_in` remain active in the older tactical/team layers.
+
+A player switching Pokémon does not grant the NPC secret information. The trainer simply reevaluates the newly observed active matchup on its next legal decision.
 
 ### 5. Implementation sequence
 
 This ADR intentionally splits the work so regressions can be attributed correctly.
 
-#### FASE 29A — Strategic Switching V2
+#### FASE 29A — Strategic Switching V2 — VALIDATED
 
-- strengthen switching urgency using existing MOVE/SWITCH Battle Core;
-- add deterministic tests for immunity/no-effect escape, clear counter-switching, super-effective threat escape and anti-ping-pong behaviour;
-- require existing trainer corpus/regressions to remain green.
+- strengthened switching urgency using existing MOVE/SWITCH Battle Core;
+- integrated into `TacticalTrainerBrain` and `DepthSearchTrainerBrain`, therefore also into `AdaptiveBranchingTrainerBrain`;
+- no increase to search depth or branching;
+- no new hidden information source.
+
+Validation on PR #24 candidate SHA `7c0e2f3abf6d0bdf05e9fa491493aa81f7b06d6e`:
+
+- strategic switching gate: **13 PASS / 0 FAIL**;
+- no-effect/immunity case: tactical and adaptive brains both switch to the valid counter;
+- clear bad matchup: switches to the stronger counter;
+- favourable matchup: stays and attacks rather than ping-pong switching;
+- observed player switch: reevaluates the new active and counter-switches;
+- decision trace contains the switching model/reason and no IV/EV/nature/RNG leakage;
+- FASE 26 corpus with adaptive candidate: **36 PASS / 0 FAIL**, planner record remains **60/60**, paired regressions remain **0**;
+- all 12 CI workflows, including the complete Godot 4.7 regression, passed on the candidate SHA.
 
 #### FASE 29B — Trainer Battle Resources Contract
 
