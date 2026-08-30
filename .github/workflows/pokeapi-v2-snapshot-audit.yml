@@ -1,0 +1,40 @@
+name: PokeAPI V2 Snapshot Audit
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pokeapi-v2-audit-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  audit:
+    name: Versioned source integrity audit
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run PokeAPI v2 snapshot audit
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 tools/pokeapi_v2_snapshot_audit.py 2>&1 | tee pokeapi-v2-audit.log
+          grep -F 'POKEAPI_V2_AUDIT_ASSUMPTIONS=' pokeapi-v2-audit.log
+
+      - name: Upload audit report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pokeapi-v2-snapshot-audit-${{ github.run_id }}
+          path: |
+            data/reports/pokeapi_v2_snapshot_audit.json
+            pokeapi-v2-audit.log
+          if-no-files-found: error
+          retention-days: 14
