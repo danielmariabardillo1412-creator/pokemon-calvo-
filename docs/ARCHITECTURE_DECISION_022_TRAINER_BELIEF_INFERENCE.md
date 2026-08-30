@@ -2,7 +2,15 @@
 
 ## Estado
 
-PROPUESTA IMPLEMENTADA / PENDIENTE DE VALIDACIÓN CI en `feature/trainer-belief-inference-v1`.
+ACEPTADA / IMPLEMENTADA / VALIDADA en `feature/trainer-belief-inference-v1`.
+
+Validación final del commit de código `7597dd15db93c3f196682f6e809657e795c7356f`:
+
+- Trainer Belief Inference (FASE 22): **48 PASS / 0 FAIL**.
+- Trainer Tactical Intelligence (FASE 21): **SUCCESS**.
+- Trainer Intelligence Foundation (FASE 20): **SUCCESS**.
+- Trainer Battle Session (FASE 19): **SUCCESS**.
+- Godot 4.7 headless regression completa: **SUCCESS**.
 
 ## Contexto
 
@@ -90,7 +98,7 @@ Los pesos se normalizan a 10000 basis points con reparto determinista del residu
 No se aplica automáticamente a movimientos, porque un moveset contiene varios candidatos
 simultáneamente.
 
-## Invariantes
+## Invariantes validadas
 
 1. Battle Core sigue siendo la única autoridad de legalidad y ejecución.
 2. Inferencia nunca puede reemplazar una revelación pública.
@@ -98,7 +106,9 @@ simultáneamente.
 4. Los snapshots de creencias no contienen IV, EV, naturaleza, RNG ni stats rivales exactos.
 5. Todo resultado probabilístico usa enteros/basis points.
 6. Toda inferencia importante deja provenance auditable.
-7. FASE 23 podrá muestrear mundos plausibles desde estas creencias sin abrir la frontera anti-cheat.
+7. Prioridad distinta no se interpreta falsamente como evidencia de velocidad.
+8. El valor oculto real de Speed permanece dentro del intervalo inferido en el fixture adversarial.
+9. FASE 23 puede construir mundos plausibles desde estas creencias sin abrir la frontera anti-cheat.
 
 ## Fuera de alcance
 
@@ -108,3 +118,11 @@ simultáneamente.
 - self-play de producción;
 - inferencia de objetos por ausencia de activación;
 - deducciones desde metadata privada de Battle Core.
+
+## Handoff a FASE 23
+
+La siguiente fase debe introducir una capa separada de `plausible worlds` y búsqueda corta.
+La primera versión no debe saltar directamente a MCTS: conviene demostrar primero que
+podemos materializar estados hipotéticos compatibles con `TrainerBeliefState`, evaluar
+acciones simultáneas sin que un lado vea la elección privada del otro, y reutilizar
+`BattleSimulationFork` sin mutar el combate real.
