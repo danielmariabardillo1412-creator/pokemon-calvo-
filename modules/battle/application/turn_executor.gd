@@ -81,6 +81,10 @@ func _execute_action(
 	if action.action_type == BattleAction.SWITCH:
 		_execute_switch(action, state, catalog, rng, events, false)
 		return
+	if action.action_type == BattleAction.ITEM:
+		_execute_trainer_item(action, state, catalog, rng, events)
+		_handle_knockouts(state, catalog, rng, events)
+		return
 	_execute_move(action, state, catalog, rng, events)
 	_handle_knockouts(state, catalog, rng, events)
 
@@ -180,6 +184,44 @@ func _execute_move(
 			rng,
 			events,
 		)
+
+
+func _execute_trainer_item(
+	action: BattleAction,
+	state: BattleState,
+	catalog: DefinitionCatalog,
+	rng: SeededRandomSource,
+	events: Array[BattleEvent],
+) -> void:
+	var actor := state.creature(action.actor_id)
+	var actor_side := state.side_for_creature(action.actor_id)
+	var target := state.creature(action.target_id)
+	if actor == null or actor_side == null or target == null:
+		return
+	var inventory := state.item_inventory_for_side(actor_side.side_id)
+	if inventory == null or not inventory.consume(action.item_id):
+		return
+	events.append(BattleEvent.new(
+		BattleEvent.TRAINER_ITEM_USED,
+		state.turn,
+		actor.instance_id,
+		target.instance_id,
+		&"",
+		1,
+		{
+			"item_id": String(action.item_id),
+			"side_id": String(actor_side.side_id),
+			"remaining_quantity": inventory.quantity(action.item_id),
+		},
+	))
+	var context := BattleEffectContext.new(
+		state, actor, target, null, catalog, _ruleset, rng, events
+	)
+	_effect_executor.execute_all(
+		_registry.effects_for_trainer_item(action.item_id),
+		context,
+		_registry,
+	)
 
 
 func _execute_switch(
