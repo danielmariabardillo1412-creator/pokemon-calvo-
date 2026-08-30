@@ -8,7 +8,7 @@ on:
       - '.github/workflows/repository-organization-commit-diagnostic.yml'
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   diagnose:
@@ -21,52 +21,60 @@ jobs:
           ref: chore/repository-organization-v1
           fetch-depth: 0
 
-      - name: Apply migration and diagnose commit
+      - name: Apply migration and capture git diagnostics
         shell: bash
         run: |
-          set -u
-          python tools/repository_organize_tmp.py
+          set +e
+          python tools/repository_organize_tmp.py > /tmp/migrate.out 2>&1
+          migrate_rc=$?
           {
+            echo '=== MIGRATION ==='
+            cat /tmp/migrate.out
+            echo "migrate_rc=$migrate_rc"
+            echo
             echo '=== HEAD BEFORE ==='
             git rev-parse HEAD
+            echo
             echo '=== STATUS ==='
             git status --short
+            echo
             echo '=== WORKFLOW DIFF ==='
-            git diff --name-status -- .github/workflows || true
+            git diff --name-status -- .github/workflows
+            echo
             echo '=== ALL CHANGED PATHS ==='
-            git diff --name-status || true
+            git diff --name-status
+            echo
             echo '=== ADD ==='
           } > repository_commit_diag_tmp.txt
 
           git add -A >>repository_commit_diag_tmp.txt 2>&1
           add_rc=$?
           echo "add_rc=$add_rc" >>repository_commit_diag_tmp.txt
+          echo >>repository_commit_diag_tmp.txt
           echo '=== CACHED WORKFLOW DIFF ===' >>repository_commit_diag_tmp.txt
-          git diff --cached --name-status -- .github/workflows >>repository_commit_diag_tmp.txt 2>&1 || true
+          git diff --cached --name-status -- .github/workflows >>repository_commit_diag_tmp.txt 2>&1
 
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          echo >>repository_commit_diag_tmp.txt
           echo '=== COMMIT ATTEMPT ===' >>repository_commit_diag_tmp.txt
           git commit -m 'chore(repo): organize fixtures docs and legacy tooling' >>repository_commit_diag_tmp.txt 2>&1
           commit_rc=$?
           echo "commit_rc=$commit_rc" >>repository_commit_diag_tmp.txt
 
           if [ "$commit_rc" -eq 0 ]; then
-            migration_sha=$(git rev-parse HEAD)
-            echo "migration_sha=$migration_sha" >>repository_commit_diag_tmp.txt
-            echo '=== PUSH ATTEMPT ===' >>repository_commit_diag_tmp.txt
-            git push origin HEAD:chore/repository-organization-v1 >>repository_commit_diag_tmp.txt 2>&1
-            push_rc=$?
-            echo "push_rc=$push_rc" >>repository_commit_diag_tmp.txt
-            if [ "$push_rc" -eq 0 ]; then
-              echo 'Migration push succeeded.'
-              exit 0
-            fi
-            git reset --mixed origin/chore/repository-organization-v1
+            echo "migration_sha=$(git rev-parse HEAD)" >>repository_commit_diag_tmp.txt
+            echo >>repository_commit_diag_tmp.txt
+            echo '=== PUSH DRY RUN ===' >>repository_commit_diag_tmp.txt
+            git push --dry-run origin HEAD:chore/repository-organization-v1 >>repository_commit_diag_tmp.txt 2>&1
+            echo "push_dry_run_rc=$?" >>repository_commit_diag_tmp.txt
           fi
+          exit 0
 
-          # Persist only the diagnostic if migration commit/push did not succeed.
-          git reset
-          git add repository_commit_diag_tmp.txt
-          git commit -m 'chore(repo): capture migration commit diagnostic'
-          git push origin HEAD:chore/repository-organization-v1
+      - name: Upload diagnostic
+        uses: actions/upload-artifact@v4
+        with:
+          name: repository-organization-commit-diagnostic-${{ github.run_id }}
+          path: repository_commit_diag_tmp.txt
+          if-no-files-found: error
+          retention-days: 1
