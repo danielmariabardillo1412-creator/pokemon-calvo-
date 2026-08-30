@@ -54,11 +54,19 @@ static func gain_experience(
 				continue
 			if creature.moveset.size() < ruleset.MOVE_SLOTS_MAX:
 				creature.add_move(mid, catalogs)
-				events.append(ProgressionEvent.new(ProgressionEvent.MOVE_LEARNED, creature.instance_id, {"move_id": mid}))
+				events.append(ProgressionEvent.new(
+					ProgressionEvent.MOVE_LEARNED,
+					creature.instance_id,
+					{"move_id": mid, "level": lvl},
+				))
 			else:
 				events.append(ProgressionEvent.new(
 					ProgressionEvent.MOVE_LEARN_CHOICE_REQUIRED, creature.instance_id,
-					{"new_move_id": mid, "current_moves": creature.move_ids.duplicate()},
+					{
+						"new_move_id": mid,
+						"level": lvl,
+						"current_moves": creature.move_ids.duplicate(),
+					},
 				))
 
 	var candidates := EvolutionSystem.evolution_candidates(species, {"level": creature.level}, catalogs)
@@ -70,7 +78,9 @@ static func gain_experience(
 	return events
 
 
-# Resolve a MOVE_LEARN_CHOICE_REQUIRED event. Returns true if a valid intent was applied.
+# Resolve a MOVE_LEARN_CHOICE_REQUIRED event. This is a domain guard, not a UI convenience:
+# callers may not use a forged/stale event to teach an arbitrary catalog move, target another
+# creature, or silently replace slot zero. Returns true only for an explicitly valid intent.
 static func apply_move_choice(
 	creature: CreatureInstance,
 	choice: ProgressionEvent,
@@ -78,19 +88,40 @@ static func apply_move_choice(
 	catalogs,
 	old_move_id: StringName = &"",
 ) -> bool:
-	if choice == null or choice.kind != ProgressionEvent.MOVE_LEARN_CHOICE_REQUIRED:
+	if creature == null or choice == null:
 		return false
+	if choice.kind != ProgressionEvent.MOVE_LEARN_CHOICE_REQUIRED:
+		return false
+	if choice.creature_id == &"" or choice.creature_id != creature.instance_id:
+		return false
+	if catalogs == null or catalogs.species_catalog == null:
+		return false
+
 	var new_move: StringName = StringName(choice.data.get("new_move_id", ""))
+	var learned_at_level := int(choice.data.get("level", 0))
+	if new_move == &"" or learned_at_level <= 0 or learned_at_level > creature.level:
+		return false
+	if catalogs.move(new_move) == null or creature.has_move(new_move):
+		return false
+
+	# Re-derive the learnset fact from live canonical species data. The event is evidence of a pending
+	# decision, not authority to invent a move. Pending choices are resolved before evolution, so the
+	# creature's current species must still contain the claimed level-up move.
+	var species: CreatureSpecies = catalogs.species_catalog.get_by_id(creature.species_id)
+	if species == null or not LearnsetSystem.moves_learned_at_level(species, learned_at_level).has(new_move):
+		return false
+
 	match intent:
 		LEARN_MOVE:
-			if creature.moveset.size() < ProgressionRuleset.MOVE_SLOTS_MAX:
-				return creature.add_move(new_move, catalogs)
-			return false
+			if creature.moveset.size() >= ProgressionRuleset.MOVE_SLOTS_MAX:
+				return false
+			return creature.add_move(new_move, catalogs)
 		REPLACE_MOVE:
-			var target: StringName = old_move_id
-			if target == &"" and not creature.move_ids.is_empty():
-				target = creature.move_ids[0]
-			return creature.replace_move(target, new_move, catalogs)
+			# Replacement must be an explicit player/application choice. The previous fallback to the
+			# first move could silently delete slot zero if a caller forgot the target.
+			if old_move_id == &"" or not creature.has_move(old_move_id):
+				return false
+			return creature.replace_move(old_move_id, new_move, catalogs)
 		DECLINE_MOVE:
 			return true
 		_:
