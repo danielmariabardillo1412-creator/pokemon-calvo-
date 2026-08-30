@@ -9,7 +9,7 @@ func _initialize() -> void:
 
 
 func _run() -> void:
-	TrainerLoadoutsTestSuite.new().run(Callable(self, "_check"))
+	TrainerLoadoutsV2TestSuite.new().run(Callable(self, "_check"))
 	print("\n=== TRAINER LOADOUTS RESULT: %d PASS / %d FAIL ===" % [_passed, _failed])
 	quit(0 if _failed == 0 else 1)
 
