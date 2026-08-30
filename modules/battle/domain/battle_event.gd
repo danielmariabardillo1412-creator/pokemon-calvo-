@@ -20,7 +20,8 @@ const RECOIL_DAMAGE := &"recoil_damage"
 const MULTI_HIT := &"multi_hit"
 const SWITCHED := &"switched"
 const ABILITY_TRIGGERED := &"ability_triggered"
-const ITEM_TRIGGERED := &"item_triggered"
+const ITEM_TRIGGERED := &"item_triggered" # held-item trigger
+const TRAINER_ITEM_USED := &"trainer_item_used" # finite bag resource action
 const TURN_ENDED := &"turn_ended"
 const BATTLE_ENDED := &"battle_ended"
 
