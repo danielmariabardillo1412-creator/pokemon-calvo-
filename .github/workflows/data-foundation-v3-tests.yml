@@ -1,0 +1,130 @@
+name: Data Foundation V3 Tests
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: data-foundation-v3-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: PokeAPI snapshot canonical import V3
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Verify snapshot source is present
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f data/api/v2/pokemon/94/index.json
+          test -f data/api/v2/pokemon/127/index.json
+          test -f 'data/schema/v2/pokemon/$id/index.json'
+          test -f data/POKEAPI_DATA_LICENSE.txt
+
+      - name: Audit V3 adapter without writing outputs
+        shell: bash
+        run: |
+          set -euo pipefail
+          python tools/pokeapi_adapter_v3.py --check-only 2>&1 | tee data-v3-check.log
+          grep -F '"exactly_18_standard_types": true' data-v3-check.log
+          grep -F '"gengar_single_version_group": true' data-v3-check.log
+          grep -F '"pinsir_single_version_group": true' data-v3-check.log
+          grep -F '"hyphenated_base_species_preserved": true' data-v3-check.log
+          grep -F '"no_broken_references": true' data-v3-check.log
+
+      - name: Regenerate canonical raw dataset from snapshot
+        shell: bash
+        run: |
+          set -euo pipefail
+          python tools/pokeapi_adapter_v3.py 2>&1 | tee data-v3-generate.log
+
+      - name: Validate generated raw invariants
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          raw = json.load(open('data/raw/pokemon_api.json', encoding='utf-8'))
+          species = {x['id']: x for x in raw['species']}
+          types = {x['id']: x for x in raw['types']}
+          moves = {x['id']: x for x in raw['moves']}
+          assert len(types) == 18
+          assert types['fire']['display_name'] == 'Fuego'
+          assert 'mr_mime' in species and 'ho_oh' in species and 'porygon_z' in species
+          assert species['gengar']['source_metadata']['learnset_version_group']
+          assert species['pinsir']['source_metadata']['learnset_version_group']
+          assert len({e.get('version_group') for e in species['gengar']['learnset'] if e.get('version_group')}) <= 1
+          assert len({e.get('version_group') for e in species['pinsir']['learnset'] if e.get('version_group')}) <= 1
+          assert moves['tackle']['display_name'] in ('Placaje', 'Tackle')
+          bulba = species['bulbasaur']
+          assert any(x['ability_id'] == 'chlorophyll' and x['is_hidden'] for x in bulba.get('ability_slots', []))
+          exact = set()
+          for sid, sp in species.items():
+              for e in sp['learnset']:
+                  k = (sid, e['move_id'], e['method'], e['level'], e.get('order', -1), e.get('version_group', ''))
+                  assert k not in exact, k
+                  exact.add(k)
+          print('RAW V3 invariants OK: species=%d moves=%d learnset_entries=%d' % (
+              len(species), len(moves), len(exact)))
+          PY
+
+      - name: Setup Godot 4.7
+        uses: chickensoft-games/setup-godot@v2.4.1
+        with:
+          version: 4.7.0
+          use-dotnet: false
+          include-templates: false
+
+      - name: Verify Godot version
+        shell: bash
+        run: |
+          set -euo pipefail
+          godot --version | tee data-v3-godot-version.log
+          godot --version | grep -E '^4\.7([\.-]|$)'
+
+      - name: Import project
+        shell: bash
+        run: |
+          set -euo pipefail
+          godot --headless --path . --import 2>&1 | tee data-v3-godot-import.log
+
+      - name: Normalize through authoritative DataImporter
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 480s godot --headless --path . --script res://tools/run_import.gd 2>&1 | tee data-v3-normalize.log
+          grep -F 'broken_references=0' data-v3-normalize.log
+
+      - name: Run Spanish/type/runtime regression against regenerated data
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 480s godot --headless --path . --script res://tests/spanish_types_foundation_test_runner.gd 2>&1 | tee data-v3-runtime-test.log
+          grep -E '=== SPANISH TYPES FOUNDATION RESULT: [0-9]+ PASS / 0 FAIL ===' data-v3-runtime-test.log
+
+      - name: Upload DATA V3 logs and reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: data-foundation-v3-${{ github.run_id }}
+          path: |
+            data-v3-check.log
+            data-v3-generate.log
+            data-v3-godot-version.log
+            data-v3-godot-import.log
+            data-v3-normalize.log
+            data-v3-runtime-test.log
+            data/reports/pokeapi_v3_audit.json
+            data/reports/pokeapi_v3_auxiliary.json
+            data/reports/import_summary.json
+          if-no-files-found: ignore
+          retention-days: 7
