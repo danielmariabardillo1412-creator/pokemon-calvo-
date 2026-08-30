@@ -2,7 +2,7 @@
 
 ## Estado
 
-IMPLEMENTADA / PENDIENTE DE VALIDACION.
+ACEPTADA / IMPLEMENTADA / VALIDADA.
 
 ## Contexto
 
@@ -64,29 +64,27 @@ El compositor selecciona un `lead_index` determinista con preferencia por fast a
 
 La rotación del roster materializado no muta `TrainerTeamDefinition` ni reescribe los loadouts authored.
 
-## Validación requerida
+## Validación
 
-El gate debe demostrar:
+Validación de código sobre `06fe4fe78afab2f792555760abbb13a19580e571`:
 
-- round-trip y firma determinista del equipo;
-- límite central de seis miembros;
-- lead válido;
-- política de especies duplicadas configurable;
-- propagación de errores de un loadout miembro;
-- detección de debilidades compartidas y debilidades sin respuesta;
-- un equipo diversificado obtiene mejor diagnóstico que uno redundante diseñado para el fixture;
-- compositor determinista y tamaño exacto;
-- especies únicas cuando la política lo exige;
-- imposibilidad explícita si el pool no puede llenar el tamaño sin duplicados;
-- capacidad de llenar cuando los duplicados están permitidos;
-- diversidad mínima de roles y tipos ofensivos en el fixture de composición;
-- materialización completa e independiente;
-- IDs de instancia únicos;
-- lead materializado en primera posición;
-- no mutación de la definición durante materialización;
-- rechazo de equipos inválidos;
-- FASE 32 y todos los gates históricos verdes;
-- regresión global Godot 4.7 verde sobre el mismo SHA.
+- gate FASE 33: **255 PASS / 0 FAIL**;
+- round-trip/firma y límite de seis: PASS;
+- lead y política de duplicados: PASS;
+- propagación de errores de loadout: PASS;
+- detección de debilidad compartida y sin respuesta: PASS;
+- fixture diversificado puntúa por encima del redundante: PASS;
+- compositor: tamaño exacto, determinismo, especies únicas y diversidad de roles/tipos: PASS;
+- fallo explícito si el pool no puede llenar sin duplicados: PASS;
+- llenado permitido cuando la política de duplicados lo autoriza: PASS;
+- materialización completa, IDs únicos e independencia profunda: PASS;
+- `lead_index` materializado en `roster[0]`: PASS;
+- definición no mutada por la materialización: PASS;
+- FASE 32 y todos los gates históricos: SUCCESS;
+- regresión global Godot 4.7: SUCCESS;
+- total sobre el SHA de código: **16/16 workflows SUCCESS**.
+
+Este commit documental final debe volver a obtener los mismos **16/16 workflows SUCCESS**. Si queda verde, será el HEAD canónico de FASE 33 y el PR se cerrará sin merge.
 
 ## Fuera de alcance
 
