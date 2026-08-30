@@ -39,6 +39,7 @@ jobs:
           grep -F '"gengar_single_version_group": true' data-v3-check.log
           grep -F '"pinsir_single_version_group": true' data-v3-check.log
           grep -F '"hyphenated_base_species_preserved": true' data-v3-check.log
+          grep -F '"all_default_species_use_mainline_learnsets": true' data-v3-check.log
           grep -F '"no_broken_references": true' data-v3-check.log
 
       - name: Regenerate canonical raw dataset from snapshot
@@ -58,17 +59,21 @@ jobs:
           types = {x['id']: x for x in raw['types']}
           moves = {x['id']: x for x in raw['moves']}
           assert len(types) == 18
+          assert len(moves) == 919
           assert types['fire']['display_name'] == 'Fuego'
           assert 'mr_mime' in species and 'ho_oh' in species and 'porygon_z' in species
-          assert species['gengar']['source_metadata']['learnset_version_group']
-          assert species['pinsir']['source_metadata']['learnset_version_group']
-          assert len({e.get('version_group') for e in species['gengar']['learnset'] if e.get('version_group')}) <= 1
-          assert len({e.get('version_group') for e in species['pinsir']['learnset'] if e.get('version_group')}) <= 1
+          assert not any(mid.startswith('shadow_') and moves[mid]['type_id'] not in types for mid in moves)
+          assert 'shadow_blast' not in moves and 'shadow_rush' not in moves
+          assert species['gengar']['source_metadata']['learnset_version_group'] == 'scarlet-violet'
+          assert species['pinsir']['source_metadata']['learnset_version_group'] == 'brilliant-diamond-shining-pearl'
+          assert len({e.get('version_group') for e in species['gengar']['learnset'] if e.get('version_group')}) == 1
+          assert len({e.get('version_group') for e in species['pinsir']['learnset'] if e.get('version_group')}) == 1
           assert moves['tackle']['display_name'] in ('Placaje', 'Tackle')
           bulba = species['bulbasaur']
           assert any(x['ability_id'] == 'chlorophyll' and x['is_hidden'] for x in bulba.get('ability_slots', []))
           exact = set()
           for sid, sp in species.items():
+              assert sp['source_metadata']['learnset_selection_reason'] == 'mainline_priority', (sid, sp['source_metadata'])
               for e in sp['learnset']:
                   k = (sid, e['move_id'], e['method'], e['level'], e.get('order', -1), e.get('version_group', ''))
                   assert k not in exact, k
@@ -97,12 +102,30 @@ jobs:
           set -euo pipefail
           godot --headless --path . --import 2>&1 | tee data-v3-godot-import.log
 
+      - name: Run V3 domain provenance tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 120s godot --headless --path . --script res://tests/data_foundation_v3_domain_test_runner.gd 2>&1 | tee data-v3-domain-test.log
+          grep -E '=== DATA FOUNDATION V3 DOMAIN RESULT: [0-9]+ PASS / 0 FAIL ===' data-v3-domain-test.log
+
       - name: Normalize through authoritative DataImporter
         shell: bash
         run: |
           set -euo pipefail
           timeout 480s godot --headless --path . --script res://tools/run_import.gd 2>&1 | tee data-v3-normalize.log
-          grep -F 'broken_references=0' data-v3-normalize.log
+          grep -F 'broken_references=0 rejected=0' data-v3-normalize.log
+          python - <<'PY'
+          import json
+          report = json.load(open('data/reports/import_summary.json', encoding='utf-8'))
+          assert report['broken_references'] == []
+          assert report['rejected'] == []
+          assert 'unsupported:species:ability_slots' not in report['warnings']
+          assert 'unsupported:species:source_metadata' not in report['warnings']
+          assert report['source_commit'] == '2f218ec3765c01c894a42bbbd074f15ddf3f32d1'
+          assert report['moves_total'] == 919
+          print('NORMALIZED V3 import is clean')
+          PY
 
       - name: Run Spanish/type/runtime regression against regenerated data
         shell: bash
@@ -111,7 +134,7 @@ jobs:
           timeout 480s godot --headless --path . --script res://tests/spanish_types_foundation_test_runner.gd 2>&1 | tee data-v3-runtime-test.log
           grep -E '=== SPANISH TYPES FOUNDATION RESULT: [0-9]+ PASS / 0 FAIL ===' data-v3-runtime-test.log
 
-      - name: Upload DATA V3 logs and reports
+      - name: Upload DATA V3 tested outputs and logs
         if: always()
         uses: actions/upload-artifact@v4
         with:
@@ -121,8 +144,14 @@ jobs:
             data-v3-generate.log
             data-v3-godot-version.log
             data-v3-godot-import.log
+            data-v3-domain-test.log
             data-v3-normalize.log
             data-v3-runtime-test.log
+            data/raw/pokemon_api.json
+            data/normalized/pokemon_api.json
+            data/manifests/pokemon_api_manifest.json
+            data/reports/forms_policy_report.json
+            data/reports/unsupported_mechanics.json
             data/reports/pokeapi_v3_audit.json
             data/reports/pokeapi_v3_auxiliary.json
             data/reports/import_summary.json
