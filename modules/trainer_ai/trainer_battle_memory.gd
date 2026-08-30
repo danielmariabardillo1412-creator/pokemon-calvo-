@@ -130,21 +130,18 @@ static func from_dict(data: Dictionary) -> TrainerBattleMemory:
 	memory.last_observed_turn = maxi(0, int(data.get("last_observed_turn", 0)))
 	for creature_id in data.get("seen_opponent_ids", []):
 		memory.mark_seen(StringName(creature_id))
-	for creature_id in data.get("revealed_moves", {}).keys():
-		for move_id in data["revealed_moves"][creature_id]:
+	var revealed_moves: Dictionary = data.get("revealed_moves", {})
+	for creature_id in revealed_moves.keys():
+		for move_id in revealed_moves[creature_id]:
 			memory.reveal_move(StringName(creature_id), StringName(move_id))
-	for creature_id in data.get("revealed_abilities", {}).keys():
-		memory.reveal_ability(
-			StringName(creature_id),
-			StringName(data["revealed_abilities"][creature_id]),
-		)
-	for creature_id in data.get("revealed_items", {}).keys():
-		memory.reveal_item(
-			StringName(creature_id),
-			StringName(data["revealed_items"][creature_id]),
-		)
+	var revealed_abilities: Dictionary = data.get("revealed_abilities", {})
+	for creature_id in revealed_abilities.keys():
+		memory.reveal_ability(StringName(creature_id), StringName(revealed_abilities[creature_id]))
+	var revealed_items: Dictionary = data.get("revealed_items", {})
+	for creature_id in revealed_items.keys():
+		memory.reveal_item(StringName(creature_id), StringName(revealed_items[creature_id]))
 	for event_data in data.get("event_log", []):
-		memory.event_log.append((event_data as Dictionary).duplicate(true))
+		memory.event_log.append(_canonical_public_event_record(event_data as Dictionary))
 	return memory
 
 
@@ -156,6 +153,19 @@ func _public_event_record(event: BattleEvent) -> Dictionary:
 		"target_id": String(event.target_id),
 		"move_id": String(event.move_id),
 		"amount": event.amount,
+	}
+
+
+static func _canonical_public_event_record(data: Dictionary) -> Dictionary:
+	# JSON has one generic number representation at the interchange boundary. Reassert
+	# the schema's integer fields here so repeated save/load cycles are byte-stable.
+	return {
+		"kind": String(data.get("kind", "")),
+		"turn": maxi(0, int(data.get("turn", 0))),
+		"actor_id": String(data.get("actor_id", "")),
+		"target_id": String(data.get("target_id", "")),
+		"move_id": String(data.get("move_id", "")),
+		"amount": int(data.get("amount", 0)),
 	}
 
 
