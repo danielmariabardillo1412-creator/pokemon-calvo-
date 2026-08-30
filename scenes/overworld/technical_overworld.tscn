@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://scenes/overworld/technical_overworld.gd" id="1_root"]
 [ext_resource type="Script" path="res://modules/overworld/overworld_player.gd" id="2_player"]
 [ext_resource type="Script" path="res://modules/overworld/overworld_encounter_zone.gd" id="3_zone"]
-[ext_resource type="Script" path="res://modules/battle/presentation/battle_presentation_controller.gd" id="4_battle_ui"]
+[ext_resource type="Script" path="res://modules/battle/presentation/spanish_battle_presentation_controller.gd" id="4_battle_ui"]
 
 [sub_resource type="RectangleShape2D" id="Rectangle_player"]
 size = Vector2(20, 20)
@@ -94,7 +94,7 @@ offset_left = 12.0
 offset_top = 12.0
 offset_right = 628.0
 offset_bottom = 58.0
-text = "Loading technical overworld..."
+text = "Cargando mundo técnico..."
 autowrap_mode = 2
 
 [node name="BattlePresentation" type="Control" parent="CanvasLayer"]
