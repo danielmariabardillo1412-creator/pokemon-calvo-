@@ -12,6 +12,7 @@ const COMPLETED := &"COMPLETED"
 const COMPLETED_CAPTURED := &"CAPTURED"
 const COMPLETED_VICTORY := &"VICTORY"
 const COMPLETED_DEFEAT := &"DEFEAT"
+const COMPLETED_FLED := &"FLED"
 
 var player: PlayerCollection
 var catalogs: DefinitionCatalog
@@ -22,6 +23,8 @@ var completion_reason: StringName = &""
 var _encounter: WildEncounterResult = null
 var _battle_server: AuthoritativeBattleServer = null
 var _save_repository: SaveGameRepository = SaveGameRepository.new()
+var _escape_ruleset: WildEscapeRuleset = WildEscapeRuleset.new()
+var _escape_attempts: int = 0
 
 
 func _init(
@@ -54,6 +57,10 @@ func player_active() -> CreatureInstance:
 	return _battle_server.state.active_for_side(&"side_a")
 
 
+func escape_attempts() -> int:
+	return _escape_attempts
+
+
 # Start a wild encounter request. Invalid player state is rejected BEFORE Encounter consumes RNG.
 # If chance misses, the session remains READY and the semantic NONE result is returned.
 func begin_encounter(
@@ -75,6 +82,7 @@ func begin_encounter(
 		completion_reason = &""
 		_encounter = null
 		_battle_server = null
+		_escape_attempts = 0
 		return result
 
 	_encounter = result
@@ -89,6 +97,7 @@ func begin_encounter(
 	_battle_server = AuthoritativeBattleServer.new(state, catalogs)
 	status = BATTLE_ACTIVE
 	completion_reason = &""
+	_escape_attempts = 0
 	return result
 
 
@@ -98,15 +107,15 @@ func submit_turn(actions: Array[BattleAction]) -> Array[BattleEvent]:
 	return _battle_server.submit_turn(actions)
 
 
-# Canonical player-command boundary for the wild battle loop. A MOVE/SWITCH command is paired with
-# the already-selected opponent action and submitted as a normal authoritative turn. A CAPTURE
-# command is resolved against trusted live battle/player state. Invalid capture commands consume
-# neither turn nor opponent response; a failed valid capture consumes one turn and executes exactly
-# one legal opponent response through the same TurnExecutor end-turn pipeline.
+# Canonical player-command boundary for the wild battle loop. MOVE/SWITCH use BattleAction,
+# CAPTURE uses trusted live capture state, and RUN uses the separate wild-escape ruleset. Invalid
+# commands consume no turn. A failed CAPTURE/RUN executes exactly one already-validated opponent
+# reaction through the same TurnExecutor end-turn pipeline.
 func submit_player_command(
 	command: WildBattleCommand,
 	capture_rng: RandomNumberGenerator = null,
 	opponent_action: BattleAction = null,
+	escape_rng: RandomNumberGenerator = null,
 ) -> WildBattleCommandResult:
 	var out := WildBattleCommandResult.new()
 	if command != null:
@@ -139,8 +148,12 @@ func submit_player_command(
 		out.reason = "wrong_participant"
 		return out
 
-	# Validate the response before any command can mutate inventory or consume capture RNG. This is
-	# what prevents a malformed/forged opponent action from turning a failed capture into a free turn.
+	if command.command_type == WildBattleCommand.RUN:
+		return _submit_run_command(out, active_player, player_side, opponent_action, escape_rng)
+
+	# ACTION and CAPTURE can require an opponent response, so validate it before those commands can
+	# mutate PP/inventory or consume capture RNG. This keeps malformed reactions from creating a free
+	# turn or a partially-applied command.
 	var reaction_error := _battle_server.validate_reaction_action(opponent_action, player_side.side_id)
 	if not reaction_error.is_empty():
 		out.reason = "invalid_opponent_response:%s" % reaction_error
@@ -204,6 +217,66 @@ func submit_player_command(
 	return out
 
 
+func _submit_run_command(
+	out: WildBattleCommandResult,
+	active_player: CreatureInstance,
+	player_side: BattleSide,
+	opponent_action: BattleAction,
+	escape_rng: RandomNumberGenerator,
+) -> WildBattleCommandResult:
+	var wild := current_wild()
+	if wild == null:
+		out.reason = "wild_target_missing"
+		return out
+	if active_player.stats == null or wild.stats == null:
+		out.reason = "escape_stats_missing"
+		return out
+
+	var attempt := _escape_attempts + 1
+	var raw_odds := _escape_ruleset.odds(active_player.stats.speed, wild.stats.speed, attempt)
+	var guaranteed := _escape_ruleset.guaranteed(active_player.stats.speed, wild.stats.speed) or raw_odds > WildEscapeRuleset.ROLL_MAX
+	if not guaranteed:
+		var reaction_error := _battle_server.validate_reaction_action(opponent_action, player_side.side_id)
+		if not reaction_error.is_empty():
+			out.reason = "invalid_opponent_response:%s" % reaction_error
+			return out
+
+	var resolution := _escape_ruleset.resolve(
+		active_player.stats.speed,
+		wild.stats.speed,
+		attempt,
+		escape_rng,
+	)
+	out.escape_resolution = resolution
+	if resolution == null:
+		out.reason = "escape_resolution_missing"
+		return out
+	if not resolution.reason.is_empty():
+		out.reason = resolution.reason
+		return out
+
+	_escape_attempts = attempt
+	out.accepted = true
+	out.turn_consumed = true
+	if resolution.escaped:
+		_reconcile_player_party()
+		status = COMPLETED
+		completion_reason = COMPLETED_FLED
+		out.session_completed = true
+		_encounter = null
+		_battle_server = null
+		return out
+
+	out.battle_events = _battle_server.submit_reaction_turn(opponent_action, player_side.side_id)
+	var reaction_rejection := _battle_rejection_reason(out.battle_events)
+	if not reaction_rejection.is_empty():
+		out.accepted = false
+		out.reason = "opponent_response_rejected:%s" % reaction_rejection
+		return out
+	out.battle_finished = _battle_server.state.phase == BattleState.FINISHED
+	return out
+
+
 # Attempt to capture the active wild creature. The session constructs the trusted capture context
 # from its own live battle instead of accepting ownership/battle facts from the caller.
 func capture_current(ball_id: StringName, capture_rng: RandomNumberGenerator) -> WildAdventureCaptureOutcome:
@@ -252,6 +325,7 @@ func capture_current(ball_id: StringName, capture_rng: RandomNumberGenerator) ->
 	out.reason = ""
 	_encounter = null
 	_battle_server = null
+	_escape_attempts = 0
 	return out
 
 
@@ -283,6 +357,7 @@ func settle_finished_battle() -> WildBattleSettlement:
 	out.session_completed = true
 	_encounter = null
 	_battle_server = null
+	_escape_attempts = 0
 	return out
 
 
@@ -350,6 +425,7 @@ func load_game(path: String) -> LoadResult:
 	completion_reason = &""
 	_encounter = null
 	_battle_server = null
+	_escape_attempts = 0
 	return loaded
 
 
@@ -358,6 +434,7 @@ func reset_after_completion() -> bool:
 		return false
 	status = READY
 	completion_reason = &""
+	_escape_attempts = 0
 	return true
 
 
