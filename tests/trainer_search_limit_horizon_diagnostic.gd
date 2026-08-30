@@ -6,7 +6,7 @@ func _initialize() -> void:
 
 
 func _run() -> void:
-	var suite := TrainerSearchLimitBenchmarkV2TestSuite.new()
+	var suite := TrainerSearchLimitBenchmarkV3TestSuite.new()
 	suite._check = Callable(self, "_ignore")
 	suite._build_catalog()
 	var result := TrainerSearchLimitBenchmark.run(
@@ -21,7 +21,7 @@ func _run() -> void:
 			if String(record.get("id", "")) == target_id:
 				horizon = record
 				break
-		print("HORIZON_DIAGNOSTIC_SUMMARY id=%s planner=%s" % [target_id, JSON.stringify(horizon.get("planner", {}))])
+		print("REPLANNING_DIAGNOSTIC_SUMMARY id=%s planner=%s" % [target_id, JSON.stringify(horizon.get("planner", {}))])
 		var matches := horizon.get("planner_matches", []) as Array
 		for i in range(matches.size()):
 			var match_record := matches[i] as Dictionary
@@ -32,7 +32,7 @@ func _run() -> void:
 				var key := "side_b_action" if bool(match_record.get("mirrored", false)) else "side_a_action"
 				var action := turn.get(key, {}) as Dictionary
 				actions.append(String(action.get("move_id", action.get("switch_instance_id", ""))))
-			print("HORIZON_DIAGNOSTIC_MATCH id=%s index=%d seed=%d mirrored=%s outcome=%s winner=%s turns=%d actions=%s" % [
+			print("REPLANNING_DIAGNOSTIC_MATCH id=%s index=%d seed=%d mirrored=%s outcome=%s winner=%s turns=%d actions=%s" % [
 				target_id,
 				i,
 				int(match_record.get("seed", 0)),
