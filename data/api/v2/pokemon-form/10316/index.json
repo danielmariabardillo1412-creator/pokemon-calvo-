@@ -1,0 +1,181 @@
+{
+  "id": 10316,
+  "name": "necrozma-ultra",
+  "order": 1178,
+  "form_order": 4,
+  "is_default": true,
+  "is_battle_only": true,
+  "is_mega": false,
+  "form_name": "ultra",
+  "pokemon": {
+    "name": "necrozma-ultra",
+    "url": "/api/v2/pokemon/10157/"
+  },
+  "sprites": {
+    "versions": {
+      "generation-ix": {
+        "scarlet-violet": {
+          "front_female": null,
+          "front_default": null
+        }
+      },
+      "generation-viii": {
+        "brilliant-diamond-shining-pearl": {
+          "front_female": null,
+          "front_default": null
+        }
+      }
+    },
+    "back_shiny": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/shiny/10157.png",
+    "back_female": null,
+    "front_shiny": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/10157.png",
+    "back_default": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/10157.png",
+    "front_female": null,
+    "front_default": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10157.png",
+    "back_shiny_female": null,
+    "front_shiny_female": null
+  },
+  "version_group": {
+    "name": "ultra-sun-ultra-moon",
+    "url": "/api/v2/version-group/18/"
+  },
+  "form_names": [
+    {
+      "name": "ウルトラネクロズマ",
+      "language": {
+        "name": "ja-hrkt",
+        "url": "/api/v2/language/1/"
+      }
+    },
+    {
+      "name": "울트라네크로즈마",
+      "language": {
+        "name": "ko",
+        "url": "/api/v2/language/3/"
+      }
+    },
+    {
+      "name": "究極奈克洛茲瑪",
+      "language": {
+        "name": "zh-hant",
+        "url": "/api/v2/language/4/"
+      }
+    },
+    {
+      "name": "Ultra-Necrozma",
+      "language": {
+        "name": "fr",
+        "url": "/api/v2/language/5/"
+      }
+    },
+    {
+      "name": "Ultra",
+      "language": {
+        "name": "de",
+        "url": "/api/v2/language/6/"
+      }
+    },
+    {
+      "name": "Ultra-Necrozma",
+      "language": {
+        "name": "es",
+        "url": "/api/v2/language/7/"
+      }
+    },
+    {
+      "name": "UltraNecrozma",
+      "language": {
+        "name": "it",
+        "url": "/api/v2/language/8/"
+      }
+    },
+    {
+      "name": "Ultra Necrozma",
+      "language": {
+        "name": "en",
+        "url": "/api/v2/language/9/"
+      }
+    },
+    {
+      "name": "ウルトラネクロズマ",
+      "language": {
+        "name": "ja",
+        "url": "/api/v2/language/11/"
+      }
+    },
+    {
+      "name": "究极奈克洛兹玛",
+      "language": {
+        "name": "zh-hans",
+        "url": "/api/v2/language/12/"
+      }
+    },
+    {
+      "name": "Ultra-Necrozma",
+      "language": {
+        "name": "es-419",
+        "url": "/api/v2/language/14/"
+      }
+    }
+  ],
+  "names": [
+    {
+      "name": "Ultra-Necrozma",
+      "language": {
+        "name": "fr",
+        "url": "/api/v2/language/5/"
+      }
+    },
+    {
+      "name": "Ultra-Necrozma",
+      "language": {
+        "name": "de",
+        "url": "/api/v2/language/6/"
+      }
+    },
+    {
+      "name": "Ultra Necrozma",
+      "language": {
+        "name": "en",
+        "url": "/api/v2/language/9/"
+      }
+    }
+  ],
+  "types": [
+    {
+      "slot": 1,
+      "type": {
+        "name": "psychic",
+        "url": "/api/v2/type/14/"
+      }
+    },
+    {
+      "slot": 2,
+      "type": {
+        "name": "dragon",
+        "url": "/api/v2/type/16/"
+      }
+    }
+  ],
+  "trigger_conditions": [
+    {
+      "trigger": "held-item",
+      "name": "ultranecrozium-z--held",
+      "url": "/api/v2/item/969/",
+      "base_form": {
+        "name": "necrozma-dusk",
+        "url": "/api/v2/pokemon-form/10314/"
+      }
+    },
+    {
+      "trigger": "held-item",
+      "name": "ultranecrozium-z--held",
+      "url": "/api/v2/item/969/",
+      "base_form": {
+        "name": "necrozma-dawn",
+        "url": "/api/v2/pokemon-form/10315/"
+      }
+    }
+  ],
+  "flavor_text_entries": []
+}

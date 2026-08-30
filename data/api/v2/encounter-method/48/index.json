@@ -1,0 +1,14 @@
+{
+  "id": 48,
+  "name": "pokemon-ranger",
+  "order": 48,
+  "names": [
+    {
+      "name": "Receiving a Manaphy from Pokemon Ranger",
+      "language": {
+        "name": "en",
+        "url": "/api/v2/language/9/"
+      }
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "id": 44,
+  "name": "horde",
+  "order": 44,
+  "names": [
+    {
+      "name": "Encountering 5 Pokemon within grass, flowers, or within a cave",
+      "language": {
+        "name": "en",
+        "url": "/api/v2/language/9/"
+      }
+    }
+  ]
+}

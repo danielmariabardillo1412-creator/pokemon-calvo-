@@ -1,0 +1,13 @@
+{
+  "id": 428,
+  "baby_trigger_item": null,
+  "chain": {
+    "is_baby": false,
+    "species": {
+      "name": "meltan",
+      "url": "/api/v2/pokemon-species/808/"
+    },
+    "evolution_details": [],
+    "evolves_to": []
+  }
+}
