@@ -6,6 +6,7 @@ var _catalog: DefinitionCatalog
 var _rng: SeededRandomSource
 var _ruleset: BattleRuleset
 var _executor: TurnExecutor
+var _registry: BattleEffectRegistry
 
 
 func _init(
@@ -17,7 +18,8 @@ func _init(
 	state = p_state
 	_catalog = p_catalog
 	_ruleset = p_ruleset if p_ruleset != null else BattleRuleset.new()
-	_executor = TurnExecutor.new(_ruleset, p_registry)
+	_registry = p_registry if p_registry != null else BattleEffectRegistry.new()
+	_executor = TurnExecutor.new(_ruleset, _registry)
 	_rng = SeededRandomSource.new(state.rng_state)
 	for creature_id in state.participant_ids:
 		state.creature(creature_id).initialize_move_pp(_catalog)
@@ -103,6 +105,8 @@ func _validate_action(action: BattleAction) -> String:
 		var incoming := state.creature(action.switch_instance_id)
 		if incoming == null or incoming.is_knocked_out():
 			return "switch_target_unavailable"
+	elif action.action_type == BattleAction.ITEM:
+		return _validate_trainer_item_action(action, actor_side)
 	elif action.action_type == BattleAction.MOVE:
 		var slot := actor.move_slot(action.move_id)
 		if slot == null or _catalog.move(action.move_id) == null:
@@ -115,6 +119,33 @@ func _validate_action(action: BattleAction) -> String:
 	else:
 		return "invalid_action_type"
 	return ""
+
+
+func _validate_trainer_item_action(action: BattleAction, actor_side: BattleSide) -> String:
+	if action.item_id == &"" or _catalog.item(action.item_id) == null:
+		return "invalid_item"
+	if not _registry.is_trainer_item_supported(action.item_id):
+		return "item_not_battle_usable"
+	var inventory := state.item_inventory_for_side(actor_side.side_id)
+	if inventory == null or not inventory.has(action.item_id):
+		return "item_unavailable"
+	if action.target_id == &"" or not actor_side.owns(action.target_id):
+		return "invalid_item_target"
+	var target := state.creature(action.target_id)
+	if target == null or target.is_knocked_out():
+		return "item_target_unavailable"
+	if not _trainer_item_has_effect(action.item_id, target):
+		return "item_no_effect"
+	return ""
+
+
+func _trainer_item_has_effect(item_id: StringName, target: CreatureInstance) -> bool:
+	for spec in _registry.effects_for_trainer_item(item_id):
+		if spec.kind == BattleEffectSpec.HEAL and target.stats != null and target.current_hp < target.stats.max_hp:
+			return true
+		if spec.kind == BattleEffectSpec.CURE_STATUS and target.status_state.persistent_id != &"":
+			return true
+	return false
 
 
 func _rejection(reason: String) -> BattleEvent:
