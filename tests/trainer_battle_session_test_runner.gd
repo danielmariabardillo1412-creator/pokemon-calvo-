@@ -10,6 +10,7 @@ func _initialize() -> void:
 
 func _run() -> void:
 	TrainerBattleSessionTestSuite.new().run(Callable(self, "_check"))
+	TrainerBattleSessionAuditTestSuite.new().run(Callable(self, "_check"))
 	print("\n=== TRAINER BATTLE SESSION RESULT: %d PASS / %d FAIL ===" % [_passed, _failed])
 	quit(0 if _failed == 0 else 1)
 
