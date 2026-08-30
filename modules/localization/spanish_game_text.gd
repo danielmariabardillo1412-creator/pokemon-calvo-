@@ -59,6 +59,28 @@ const STATUS_NAMES := {
 	"flinch": "amedrentado",
 }
 
+const EXACT_RUNTIME_MESSAGES := {
+	"No active battle.": "No hay ningún combate activo.",
+	"Battle state is incomplete.": "El estado del combate está incompleto.",
+	"That move is not currently usable.": "Ese movimiento no se puede usar ahora mismo.",
+	"Battle ownership is incomplete.": "No se ha podido determinar correctamente a quién pertenece cada Pokémon.",
+	"Opponent has no supported usable action.": "El rival no tiene ninguna acción compatible disponible.",
+	"Opponent has no supported usable response.": "El rival no tiene ninguna respuesta compatible disponible.",
+	"Battle command returned no result.": "La orden de combate no devolvió ningún resultado.",
+	"Switch command returned no result.": "La orden de cambio no devolvió ningún resultado.",
+	"Capture is unavailable in this presentation.": "La captura no está disponible en esta pantalla.",
+	"Capture command returned no result.": "La orden de captura no devolvió ningún resultado.",
+	"Party full: captured Pokémon was routed to storage.": "El equipo está lleno: el Pokémon capturado se ha enviado al almacenamiento.",
+	"The wild Pokémon broke free.": "¡El Pokémon salvaje se ha liberado!",
+	"Capture command completed with an unknown result.": "La captura terminó con un resultado desconocido.",
+	"Run command returned no result.": "La orden de huida no devolvió ningún resultado.",
+	"Got away safely.": "¡Has escapado sin problemas!",
+	"Couldn't get away.": "¡No has podido escapar!",
+	"Run command completed with an unknown result.": "La huida terminó con un resultado desconocido.",
+	"Victory. Progression has been reconciled.": "¡Victoria! El progreso se ha actualizado correctamente.",
+	"Defeat. Persistent battle state has been reconciled.": "Derrota. El estado persistente del combate se ha actualizado correctamente.",
+}
+
 
 static func type_name(type_id: StringName) -> String:
 	return String(PokemonTypeChart.SPANISH_NAMES.get(String(type_id), _prettify(type_id)))
@@ -120,6 +142,28 @@ static func completion_reason(reason: StringName) -> String:
 			return "derrota"
 		_:
 			return _prettify(reason).to_lower()
+
+
+static func translate_runtime_message(text: String) -> String:
+	if EXACT_RUNTIME_MESSAGES.has(text):
+		return String(EXACT_RUNTIME_MESSAGES[text])
+	if text.begins_with("A wild ") and text.ends_with(" appeared."):
+		var middle := text.substr(7, text.length() - 17)
+		return "¡Ha aparecido un %s salvaje!" % middle.replace("Lv.", "Nv.")
+	if text.begins_with("Action rejected: "):
+		return "Acción rechazada: %s" % text.trim_prefix("Action rejected: ")
+	if text.begins_with("Switch rejected: "):
+		return "Cambio rechazado: %s" % text.trim_prefix("Switch rejected: ")
+	if text.begins_with("Capture rejected: "):
+		return "Captura rechazada: %s" % text.trim_prefix("Capture rejected: ")
+	if text.begins_with("Run rejected: "):
+		return "Huida rechazada: %s" % text.trim_prefix("Run rejected: ")
+	if text.begins_with("Captured the wild Pokémon with "):
+		var raw_item := text.trim_prefix("Captured the wild Pokémon with ").trim_suffix(".")
+		return "¡Has capturado al Pokémon salvaje con una %s!" % item_name(StringName(raw_item))
+	if text.begins_with("Battle finished but settlement failed: "):
+		return "El combate terminó, pero falló su cierre: %s" % text.trim_prefix("Battle finished but settlement failed: ")
+	return text
 
 
 static func _prettify(value: StringName) -> String:
