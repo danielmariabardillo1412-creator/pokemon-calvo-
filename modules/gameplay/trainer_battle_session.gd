@@ -220,5 +220,5 @@ func _reconcile_roster(roster: Array[CreatureInstance]) -> void:
 func _battle_rejection_reason(events: Array[BattleEvent]) -> String:
 	for event in events:
 		if event != null and event.kind == BattleEvent.ACTION_REJECTED:
-			return String(event.data.get("reason", "action_rejected"))
+			return String(event.metadata.get("reason", "action_rejected"))
 	return ""
