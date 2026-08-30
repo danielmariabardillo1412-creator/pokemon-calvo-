@@ -231,6 +231,9 @@ func _submit_run_command(
 	if active_player.stats == null or wild.stats == null:
 		out.reason = "escape_stats_missing"
 		return out
+	if active_player.stats.speed <= 0 or wild.stats.speed <= 0:
+		out.reason = "invalid_escape_speed"
+		return out
 
 	var attempt := _escape_attempts + 1
 	var raw_odds := _escape_ruleset.odds(active_player.stats.speed, wild.stats.speed, attempt)
