@@ -1,0 +1,73 @@
+name: DATA V3 Persist Generated Dataset
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/data-v3-persist-generated.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  persist:
+    if: github.head_ref == 'feature/data-foundation-v3'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout DATA V3 branch, not PR merge ref
+        uses: actions/checkout@v4
+        with:
+          ref: feature/data-foundation-v3
+          fetch-depth: 0
+
+      - name: Generate V3 raw from immutable snapshot
+        shell: bash
+        run: |
+          set -euo pipefail
+          python tools/pokeapi_adapter_v3.py
+
+      - name: Setup Godot 4.7
+        uses: chickensoft-games/setup-godot@v2.4.1
+        with:
+          version: 4.7.0
+          use-dotnet: false
+          include-templates: false
+
+      - name: Import and normalize through authoritative pipeline
+        shell: bash
+        run: |
+          set -euo pipefail
+          godot --headless --path . --import >/tmp/data-v3-import.log 2>&1
+          timeout 480s godot --headless --path . --script res://tools/run_import.gd | tee /tmp/data-v3-normalize.log
+          grep -F 'broken_references=0 rejected=0' /tmp/data-v3-normalize.log
+
+      - name: Verify generated dataset before persistence
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          raw = json.load(open('data/raw/pokemon_api.json', encoding='utf-8'))
+          norm = json.load(open('data/normalized/pokemon_api.json', encoding='utf-8'))
+          manifest = json.load(open('data/manifests/pokemon_api_manifest.json', encoding='utf-8'))
+          assert len(raw['species']) == 1025 and len(norm['species']) == 1025
+          assert len(raw['types']) == 18 and len(norm['types']) == 18
+          assert len(raw['moves']) == 919 and len(norm['moves']) == 919
+          assert manifest['dataset_version'] == '3.0.0'
+          assert manifest['provenance']['source_commit'] == '2f218ec3765c01c894a42bbbd074f15ddf3f32d1'
+          print('certified generated payload verified')
+          PY
+
+      - name: Commit exact generated canonical dataset
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add data/raw/pokemon_api.json data/normalized/pokemon_api.json data/manifests/pokemon_api_manifest.json
+          if git diff --cached --quiet; then
+            echo 'Canonical V3 dataset already persisted.'
+            exit 0
+          fi
+          git commit -m 'data(v3): persist certified canonical dataset'
+          git push origin HEAD:feature/data-foundation-v3
