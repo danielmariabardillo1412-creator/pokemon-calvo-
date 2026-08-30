@@ -18,6 +18,10 @@ var poison_max_hp_divisor: int = 8
 var burn_max_hp_divisor: int = 16
 var badly_poisoned_max_hp_divisor: int = 16
 var switch_priority: int = 6
+# Trainer bag actions are commands rather than move-speed actions. V1 gives them the
+# same command priority as switching; equal-priority trainer commands use speed/RNG
+# only to produce a deterministic total order when both sides issue one.
+var trainer_item_priority: int = 6
 
 
 func stat_multiplier_basis_points(stage: int) -> int:
