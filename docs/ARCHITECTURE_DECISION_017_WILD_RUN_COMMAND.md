@@ -3,7 +3,7 @@
 Fecha: 2026-08-30  
 Rama: `feature/wild-run-command-v1`  
 Base: `feature/battle-switch-presentation-v1`  
-Estado: **ACCEPTED / VALIDACIÓN FINAL PENDIENTE DEL HEAD DOCUMENTAL**
+Estado: **ACCEPTED / VALIDATED**
 
 ## Contexto
 
@@ -152,9 +152,9 @@ Tras ese hardening, la suite dedicada queda en **71 PASS / 0 FAIL**.
 - no afirmación de paridad exacta con una generación oficial;
 - no cambios al Battle Core genérico salvo reutilizar su pipeline de reacción/fin de turno.
 
-## Evidencia de código antes del HEAD documental
+## Evidencia de validación de cierre
 
-GitHub Actions run `33299334123`, Godot `4.7.stable.official.5b4e0cb0f`, Ubuntu 24.04:
+GitHub Actions run `33299465947`, Godot `4.7.stable.official.5b4e0cb0f`, Ubuntu 24.04:
 
 - Historical regression: **470 PASS / 0 FAIL**
 - Inventory: **47 PASS / 0 FAIL**
@@ -170,4 +170,4 @@ GitHub Actions run `33299334123`, Godot `4.7.stable.official.5b4e0cb0f`, Ubuntu 
 - Wild Run Command + audit: **71 PASS / 0 FAIL**
 - import headless: **PASS**
 
-El workflow se endurece para exigir `>=71 PASS / 0 FAIL` en la suite RUN. El cierre definitivo depende de repetir todos estos gates sobre el HEAD documental final.
+El workflow exige `>=71 PASS / 0 FAIL` en la suite RUN. La fase queda aceptada y validada; cualquier cambio funcional posterior en este bloque deberá volver a atravesar los mismos gates o sus mínimos incrementados.
