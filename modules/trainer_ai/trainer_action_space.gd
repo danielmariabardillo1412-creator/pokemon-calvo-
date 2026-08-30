@@ -52,4 +52,21 @@ static func from_server(
 		)
 		if server.validate_reaction_action(switch_action, opponent_side.side_id).is_empty():
 			out.append(BattleAction.from_dict(switch_action.to_dict()))
+
+	var inventory := state.item_inventory_for_side(side_id)
+	if inventory != null:
+		for item_id in inventory.all_item_ids():
+			for creature_id in actor_side.party_ids:
+				var item_action := BattleAction.new(
+					state.turn + 1,
+					actor.instance_id,
+					&"",
+					creature_id,
+					BattleAction.ITEM,
+					side_id,
+					&"",
+					item_id,
+				)
+				if server.validate_reaction_action(item_action, opponent_side.side_id).is_empty():
+					out.append(BattleAction.from_dict(item_action.to_dict()))
 	return out
