@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="TypeDefinition" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://modules/creatures/domain/type_definition.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"dark"
+display_name = "Siniestro"
+effectiveness = {"fighting": 0.5, "psychic": 2.0, "ghost": 2.0, "dark": 0.5, "fairy": 0.5}
