@@ -1,0 +1,92 @@
+name: Trainer Public Coverage Beliefs Tests
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: trainer-public-coverage-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: FASE 29 public coverage beliefs gate
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Godot 4.7
+        uses: chickensoft-games/setup-godot@v2.4.1
+        with:
+          version: 4.7.0
+          use-dotnet: false
+          include-templates: false
+
+      - name: Verify Godot version
+        shell: bash
+        run: |
+          set -euo pipefail
+          godot --version | tee trainer-public-coverage-godot-version.log
+          godot --version | grep -E '^4\.7([\.-]|$)'
+
+      - name: Stage pinned PokeAPI report fixtures
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p data/reports
+          cp ci/fixtures/pokeapi_reports/forms_policy_report.json data/reports/forms_policy_report.json
+          cp ci/fixtures/pokeapi_reports/unsupported_mechanics.json data/reports/unsupported_mechanics.json
+          cp ci/fixtures/pokeapi_reports/import_summary.json data/reports/import_summary.json
+
+      - name: Import project
+        shell: bash
+        run: |
+          set -euo pipefail
+          godot --headless --path . --import 2>&1 | tee trainer-public-coverage-import.log
+
+      - name: Run FASE 29 public coverage suite
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 180s godot --headless --path . --script res://tests/trainer_public_coverage_beliefs_test_runner.gd 2>&1 | tee trainer-public-coverage-test.log
+          summary="$(grep -E '=== TRAINER PUBLIC COVERAGE RESULT: [0-9]+ PASS / 0 FAIL ===' trainer-public-coverage-test.log | tail -n 1)"
+          test -n "$summary"
+          pass_count="$(printf '%s\n' "$summary" | sed -E 's/.*RESULT: ([0-9]+) PASS.*/\1/')"
+          if [ "$pass_count" -lt 70 ]; then
+            echo "Public coverage regression: expected at least 70 passing checks, got $pass_count" >&2
+            exit 1
+          fi
+          echo "FASE 29 public coverage gate satisfied: $pass_count PASS / 0 FAIL"
+
+      - name: Run FASE 29 candidate on FASE 26 corpus
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 180s godot --headless --path . --script res://tests/trainer_public_coverage_corpus_test_runner.gd 2>&1 | tee trainer-public-coverage-corpus-test.log
+          summary="$(grep -E '=== TRAINER PUBLIC COVERAGE CORPUS RESULT: [0-9]+ PASS / 0 FAIL ===' trainer-public-coverage-corpus-test.log | tail -n 1)"
+          test -n "$summary"
+          pass_count="$(printf '%s\n' "$summary" | sed -E 's/.*RESULT: ([0-9]+) PASS.*/\1/')"
+          if [ "$pass_count" -lt 36 ]; then
+            echo "Public coverage candidate corpus regression: expected at least 36 passing checks, got $pass_count" >&2
+            exit 1
+          fi
+          echo "FASE 29 candidate preserves FASE 26 corpus: $pass_count PASS / 0 FAIL"
+
+      - name: Upload public coverage logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: trainer-public-coverage-logs-${{ github.run_id }}
+          path: |
+            trainer-public-coverage-godot-version.log
+            trainer-public-coverage-import.log
+            trainer-public-coverage-test.log
+            trainer-public-coverage-corpus-test.log
+          if-no-files-found: ignore
+          retention-days: 7
