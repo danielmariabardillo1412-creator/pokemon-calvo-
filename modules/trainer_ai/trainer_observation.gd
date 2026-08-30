@@ -11,6 +11,7 @@ var opponent_side_id: StringName = &""
 var own_active_id: StringName = &""
 var opponent_active_id: StringName = &""
 var own_party: Array[Dictionary] = []
+var own_item_inventory: Dictionary = {}
 var observed_opponents: Array[Dictionary] = []
 
 
@@ -25,5 +26,6 @@ func to_dict() -> Dictionary:
 		"own_active_id": String(own_active_id),
 		"opponent_active_id": String(opponent_active_id),
 		"own_party": own_party.duplicate(true),
+		"own_item_inventory": own_item_inventory.duplicate(true),
 		"observed_opponents": observed_opponents.duplicate(true),
 	}
