@@ -2,9 +2,10 @@ class_name TrainerObservationBuilder
 extends RefCounted
 
 # Builds the only battle-state view intended for trainer brains.
-# Own-side data is complete. Opponent data is restricted to creatures already seen
-# and facts revealed through battle events. Internal RNG state, unrevealed roster,
-# IV/EV/nature, exact opponent stats, hidden moves, ability and item never cross this boundary.
+# Own-side data is complete, including the trainer's own finite battle-item bag.
+# Opponent data is restricted to creatures already seen and facts revealed through
+# battle events. Internal RNG state, unrevealed roster/inventory, IV/EV/nature,
+# exact opponent stats, hidden moves, ability and item never cross this boundary.
 
 
 static func build(
@@ -29,6 +30,9 @@ static func build(
 	observation.opponent_side_id = opponent_side.side_id
 	observation.own_active_id = own_side.active_id
 	observation.opponent_active_id = opponent_side.active_id
+	var own_inventory := state.item_inventory_for_side(observer_side_id)
+	if own_inventory != null:
+		observation.own_item_inventory = own_inventory.to_dict().duplicate(true)
 
 	for creature_id in own_side.party_ids:
 		var creature := state.creature(creature_id)
