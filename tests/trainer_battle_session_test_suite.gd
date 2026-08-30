@@ -245,7 +245,7 @@ func _test_victory_settles_and_applies_progression() -> void:
 	_check.call("trainer_win_settled", settlement.ok and settlement.player_won and settlement.session_completed)
 	_check.call("trainer_win_reason", session.status == TrainerBattleSession.COMPLETED and session.completion_reason == TrainerBattleSession.COMPLETED_VICTORY)
 	_check.call("trainer_win_progression", player.experience > xp_before and not settlement.progression_events.is_empty())
-	_check.call("trainer_win_reconciled", player.current_hp > 0 and player.stat_stages.is_neutral())
+	_check.call("trainer_win_reconciled", player.current_hp > 0 and player.stat_stages.get_stage(StatStages.ATTACK) == 0)
 
 
 func _test_defeat_settles_without_progression() -> void:
