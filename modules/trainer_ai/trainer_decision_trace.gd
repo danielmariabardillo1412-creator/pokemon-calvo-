@@ -64,8 +64,12 @@ static func from_dict(data: Dictionary) -> TrainerDecisionTrace:
 	trace.profile_id = StringName(data.get("profile_id", ""))
 	for raw_candidate in data.get("candidates", []):
 		var candidate_data := raw_candidate as Dictionary
+		var action_data := candidate_data.get("action", {}) as Dictionary
+		var canonical_action := {}
+		if not action_data.is_empty():
+			canonical_action = BattleAction.from_dict(action_data).to_dict()
 		trace.candidates.append({
-			"action": (candidate_data.get("action", {}) as Dictionary).duplicate(true),
+			"action": canonical_action,
 			"source_id": String(candidate_data.get("source_id", "")),
 			"score": int(candidate_data.get("score", 0)),
 			"confidence_basis_points": clampi(
@@ -73,12 +77,31 @@ static func from_dict(data: Dictionary) -> TrainerDecisionTrace:
 				0,
 				10000,
 			),
-			"reasons": (candidate_data.get("reasons", []) as Array).duplicate(),
-			"metadata": (candidate_data.get("metadata", {}) as Dictionary).duplicate(true),
+			"reasons": _canonical_json_value(candidate_data.get("reasons", [])),
+			"metadata": _canonical_json_value(candidate_data.get("metadata", {})),
 		})
+	var selected_data := data.get("selected_action", {}) as Dictionary
 	trace.selected_action = (
-		(data.get("selected_action", {}) as Dictionary).duplicate(true)
+		BattleAction.from_dict(selected_data).to_dict()
+		if not selected_data.is_empty()
+		else {}
 	)
 	trace.selected_reason = String(data.get("selected_reason", ""))
-	trace.metadata = (data.get("metadata", {}) as Dictionary).duplicate(true)
+	trace.metadata = _canonical_json_value(data.get("metadata", {})) as Dictionary
 	return trace
+
+
+static func _canonical_json_value(value):
+	if value is Dictionary:
+		var out_dict: Dictionary = {}
+		for key in value.keys():
+			out_dict[key] = _canonical_json_value(value[key])
+		return out_dict
+	if value is Array:
+		var out_array: Array = []
+		for item in value:
+			out_array.append(_canonical_json_value(item))
+		return out_array
+	if value is float and value == floor(value):
+		return int(value)
+	return value
