@@ -9,8 +9,8 @@ func _initialize() -> void:
 
 
 func _run_all() -> void:
-	var suite := BattleRunPresentationTestSuite.new()
-	await suite.run(_check, self)
+	await BattleRunPresentationTestSuite.new().run(_check, self)
+	await BattleRunPresentationAuditTestSuite.new().run(_check, self)
 	print("")
 	print("=== BATTLE RUN PRESENTATION RESULT: %d PASS / %d FAIL ===" % [_passed, _failed])
 	quit(0 if _failed == 0 else 1)
