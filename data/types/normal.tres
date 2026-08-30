@@ -6,4 +6,4 @@
 script = ExtResource("1")
 id = &"normal"
 display_name = "Normal"
-
+effectiveness = {"rock": 0.5, "ghost": 0.0, "steel": 0.5}
