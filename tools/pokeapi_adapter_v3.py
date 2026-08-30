@@ -1,15 +1,17 @@
 #!/usr/bin/env python3
 """PokéAPI snapshot -> canonical runtime dataset, V3.
 
-V3 fixes the two structural mistakes of the legacy adapter:
-1) learnsets are selected from ONE coherent version-group per Pokémon instead of
-   unioning every generation together;
+V3 fixes the structural mistakes of the legacy adapter:
+1) learnsets are selected from ONE coherent conventional main-series version-group
+   per Pokémon instead of unioning every generation together;
 2) hyphenated species names are not treated as forms. Species/varieties are read
-   from pokemon-species.varieties and the default variety is selected explicitly.
+   from pokemon-species.varieties and the default variety is selected explicitly;
+3) source-only mechanics (for example XD Shadow-type moves) stay in the immutable
+   snapshot but are excluded explicitly from the 18-type runtime catalog.
 
-The source snapshot is treated as immutable. This tool only writes project-owned
-raw/manifest/report files. Godot's tools/run_import.gd remains the second stage that
-validates and writes data/normalized/pokemon_api.json.
+The source snapshot is immutable. This tool only writes project-owned raw/manifest/
+report files. Godot's tools/run_import.gd remains the second stage that validates and
+writes data/normalized/pokemon_api.json.
 
 The mature move-effect conversion from pokeapi_adapter.py is intentionally reused;
 V3 replaces source selection/provenance, localization, species/forms, learnsets and
@@ -19,8 +21,6 @@ from __future__ import annotations
 
 import argparse
 import json
-import os
-import sys
 from collections import Counter, defaultdict
 from pathlib import Path
 from typing import Any, Iterable
@@ -51,9 +51,9 @@ STANDARD_TYPES = (
 )
 STANDARD_TYPE_SET = set(STANDARD_TYPES)
 
-# Newest -> oldest. Deliberately excludes side-game/special-mechanics groups such as
-# Stadium, Colosseum/XD and Legends: Arceus. If a species is absent from a newer game,
-# we fall back to its newest available conventional main-series learnset.
+# Newest -> oldest conventional main-series compatibility policy. Side-game and
+# mechanically divergent groups such as Stadium, Colosseum/XD, Legends: Arceus and
+# Champions are deliberately not valid runtime fallbacks.
 MAINLINE_VERSION_GROUP_PRIORITY = (
     "scarlet-violet",
     "brilliant-diamond-shining-pearl",
@@ -76,7 +76,6 @@ MAINLINE_VERSION_GROUP_PRIORITY = (
     "yellow",
     "red-blue",
 )
-VERSION_PRIORITY_RANK = {name: i for i, name in enumerate(MAINLINE_VERSION_GROUP_PRIORITY)}
 
 LANGUAGE_PRIORITY = ("es", "es-419", "en")
 
@@ -160,7 +159,7 @@ def load_version_group_ids(source: Path) -> dict[str, int]:
     return result
 
 
-def choose_version_group(pokemon: dict, version_ids: dict[str, int]) -> tuple[str, str]:
+def choose_version_group(pokemon: dict, _version_ids: dict[str, int]) -> tuple[str, str]:
     groups: set[str] = set()
     for move in pokemon.get("moves", []) or []:
         for detail in move.get("version_group_details", []) or []:
@@ -172,13 +171,14 @@ def choose_version_group(pokemon: dict, version_ids: dict[str, int]) -> tuple[st
             return preferred, "mainline_priority"
     if not groups:
         return "", "no_learnset_data"
-    # Rare fallback: preserve data rather than emit an empty species, but make the
-    # deviation auditable. Highest PokeAPI version-group id is deterministic.
-    selected = max(groups, key=lambda g: (version_ids.get(g, -1), g))
-    return selected, "fallback_latest_any"
+    # Do not silently convert side-game/special-game compatibility into the runtime
+    # ruleset. Source data remains available in data/api/v2 and is reported instead.
+    return "", "unsupported_non_mainline_only"
 
 
 def build_learnset(pokemon: dict, selected_group: str) -> list[dict]:
+    if not selected_group:
+        return []
     out: list[dict] = []
     seen: set[tuple] = set()
     for move in pokemon.get("moves", []) or []:
@@ -233,8 +233,6 @@ def evolution_record(target_name: str, detail: dict) -> dict:
     version_group = resource_name(detail.get("version_group"))
     min_level = int(detail.get("min_level") or 0)
     conditions: dict[str, Any] = {}
-    # Preserve every source condition except fields already represented as legacy
-    # first-class fields. Null/false/empty values are omitted to keep raw compact.
     skip = {"trigger", "item", "min_level", "version_group", "is_default"}
     for key, value in detail.items():
         if key in skip:
@@ -312,6 +310,10 @@ def build_moves(source: Path) -> tuple[list[dict], dict[str, list[str]], dict[st
     for entry_id in list_ids(source, "move"):
         move = load_ep(source, "move", entry_id)
         sid = slug(str(move.get("name", "")))
+        type_id = resource_name(move.get("type")) or "normal"
+        if type_id not in STANDARD_TYPE_SET:
+            move_classes["EXCLUDED_NON_STANDARD_TYPE"].append(sid)
+            continue
         specs, crit_bp, contact, classification, _, _ = legacy.generate_move_specs(move, contact_set)
         move_classes[classification].append(sid)
         before_classes[legacy.classify_move_before(move)] += 1
@@ -319,7 +321,7 @@ def build_moves(source: Path) -> tuple[list[dict], dict[str, list[str]], dict[st
             "id": sid,
             "display_name": localized_name(move, move.get("name", sid)),
             "power": int(move.get("power") or 0),
-            "type_id": resource_name(move.get("type")) or "normal",
+            "type_id": type_id,
             "priority": int(move.get("priority") or 0),
             "damage_class": (move.get("damage_class") or {}).get("name") or "status",
             "accuracy": int(move.get("accuracy")) if move.get("accuracy") is not None else 100,
@@ -371,9 +373,8 @@ def build_items(source: Path) -> list[dict]:
     return out
 
 
-def pokemon_index(source: Path, version_ids: dict[str, int]) -> tuple[dict[str, dict], list[dict]]:
+def pokemon_index(source: Path, version_ids: dict[str, int]) -> dict[str, dict]:
     by_name: dict[str, dict] = {}
-    selection_report: list[dict] = []
     for entry_id in list_ids(source, "pokemon"):
         pokemon = load_ep(source, "pokemon", entry_id)
         pname = slug(str(pokemon.get("name", "")))
@@ -422,13 +423,7 @@ def pokemon_index(source: Path, version_ids: dict[str, int]) -> tuple[dict[str, 
             "base_experience": int(pokemon.get("base_experience") or 0),
             "species_name": resource_name(pokemon.get("species")),
         }
-        selection_report.append({
-            "pokemon": pname,
-            "version_group": selected_group,
-            "reason": selection_reason,
-            "entries": len(learnset),
-        })
-    return by_name, selection_report
+    return by_name
 
 
 def build_species(source: Path, pokemon_by_name: dict[str, dict], evo_map: dict[str, list[dict]]) -> tuple[list[dict], list[dict], list[dict]]:
@@ -534,7 +529,7 @@ def build_auxiliary(source: Path, version_ids: dict[str, int]) -> dict:
     }
 
 
-def audit_dataset(raw: dict, forms: list[dict], selection_report: list[dict], anomalies: list[dict]) -> dict:
+def audit_dataset(raw: dict, forms: list[dict], anomalies: list[dict]) -> dict:
     species = {s["id"]: s for s in raw.get("species", [])}
     types = {t["id"]: t for t in raw.get("types", [])}
     moves = {m["id"]: m for m in raw.get("moves", [])}
@@ -585,6 +580,18 @@ def audit_dataset(raw: dict, forms: list[dict], selection_report: list[dict], an
                 "version_groups": sorted({e.get("version_group", "") for e in sp.get("learnset", []) if e.get("version_group")}),
             }
 
+    default_selection_fallbacks = []
+    for sid, sp in species.items():
+        metadata = sp.get("source_metadata") or {}
+        reason = metadata.get("learnset_selection_reason", "")
+        if reason != "mainline_priority":
+            default_selection_fallbacks.append({
+                "species": sid,
+                "source_pokemon_id": metadata.get("source_pokemon_id", ""),
+                "version_group": metadata.get("learnset_version_group", ""),
+                "reason": reason,
+            })
+
     return {
         "model": "pokeapi_snapshot_canonical_import_v3",
         "species_total": len(species),
@@ -597,12 +604,13 @@ def audit_dataset(raw: dict, forms: list[dict], selection_report: list[dict], an
         "missing_hyphenated_base_species": missing_hyphen_species,
         "learnset_anomalies": learnset_anomalies,
         "source_anomalies": anomalies,
-        "selection_fallbacks": [x for x in selection_report if x["reason"] != "mainline_priority"],
+        "default_species_selection_fallbacks": default_selection_fallbacks,
         "samples": sample,
         "checks": {
             "exactly_18_standard_types": set(types) == STANDARD_TYPE_SET,
             "no_broken_references": not broken,
             "hyphenated_base_species_preserved": not missing_hyphen_species,
+            "all_default_species_use_mainline_learnsets": not default_selection_fallbacks,
             "gengar_single_version_group": len(sample.get("gengar", {}).get("version_groups", [])) <= 1,
             "pinsir_single_version_group": len(sample.get("pinsir", {}).get("version_groups", [])) <= 1,
         },
@@ -618,7 +626,7 @@ def build(source: Path) -> tuple[dict, dict, dict, dict, dict]:
     abilities = build_abilities(source)
     items = build_items(source)
     statuses = preserve_project_statuses()
-    pokemon_by_name, selection_report = pokemon_index(source, version_ids)
+    pokemon_by_name = pokemon_index(source, version_ids)
     evo_map = build_evolution_map(source)
     species, forms, anomalies = build_species(source, pokemon_by_name, evo_map)
 
@@ -638,12 +646,13 @@ def build(source: Path) -> tuple[dict, dict, dict, dict, dict]:
         "ruleset": "latest_conventional_mainline_per_species_v1",
         "provenance": {
             "source_name": "PokeAPI v2 snapshot",
+            "source_commit": SOURCE_SNAPSHOT_COMMIT,
             "source_snapshot_commit": SOURCE_SNAPSHOT_COMMIT,
             "source_api_tree": SOURCE_API_TREE,
             "source_schema_tree": SOURCE_SCHEMA_TREE,
             "source_url": SOURCE_URL,
             "license": "BSD 3-Clause (data/POKEAPI_DATA_LICENSE.txt)",
-            "learnset_policy": "one latest available conventional main-series version-group per Pokemon",
+            "learnset_policy": "one latest available conventional main-series version-group per Pokemon; no side-game fallback",
             "move_values_policy": "current values from snapshot; historical past_values retained in source snapshot",
             "language_priority": list(LANGUAGE_PRIORITY),
         },
@@ -665,12 +674,13 @@ def build(source: Path) -> tuple[dict, dict, dict, dict, dict]:
         "moves": move_classes,
         "runtime_supported_before": before_classes,
         "notes": [
+            "Non-standard source move types (for example XD Shadow moves) are retained only in the immutable snapshot and explicitly excluded from runtime canonical moves.",
             "Evolution conditions are preserved even where runtime execution is not implemented yet.",
             "Ability slot/hidden metadata is preserved on species; ability runtime coverage remains explicit and partial.",
-            "Learnset version-group is selected before canonicalization; cross-generation unions are forbidden.",
+            "Learnset version-group is selected before canonicalization; cross-generation unions and side-game fallbacks are forbidden.",
         ],
     }
-    audit = audit_dataset(raw, forms, selection_report, anomalies)
+    audit = audit_dataset(raw, forms, anomalies)
     aux = build_auxiliary(source, version_ids)
     return raw, manifest, forms_report, unsupported, {"audit": audit, "auxiliary": aux}
 
@@ -698,6 +708,8 @@ def main() -> int:
     ))
     print("DATA V3 samples:", json.dumps(audit["samples"], ensure_ascii=False, sort_keys=True))
     print("DATA V3 checks:", json.dumps(checks, ensure_ascii=False, sort_keys=True))
+    if audit["default_species_selection_fallbacks"]:
+        print("DATA V3 default-species fallbacks:", json.dumps(audit["default_species_selection_fallbacks"][:20], ensure_ascii=False, sort_keys=True))
     if not args.check_only:
         write_json(args.raw, raw)
         write_json(args.manifest, manifest)
@@ -709,6 +721,7 @@ def main() -> int:
         checks["exactly_18_standard_types"],
         checks["no_broken_references"],
         checks["hyphenated_base_species_preserved"],
+        checks["all_default_species_use_mainline_learnsets"],
         checks["gengar_single_version_group"],
         checks["pinsir_single_version_group"],
     )
