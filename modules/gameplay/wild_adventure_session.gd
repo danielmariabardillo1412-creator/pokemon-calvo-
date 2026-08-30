@@ -25,6 +25,7 @@ var _battle_server: AuthoritativeBattleServer = null
 var _save_repository: SaveGameRepository = SaveGameRepository.new()
 var _escape_ruleset: WildEscapeRuleset = WildEscapeRuleset.new()
 var _escape_attempts: int = 0
+var _progression_decisions: ProgressionDecisionQueue = ProgressionDecisionQueue.new()
 
 
 func _init(
@@ -61,8 +62,63 @@ func escape_attempts() -> int:
 	return _escape_attempts
 
 
-# Start a wild encounter request. Invalid player state is rejected BEFORE Encounter consumes RNG.
-# If chance misses, the session remains READY and the semantic NONE result is returned.
+func has_pending_progression_decisions() -> bool:
+	return not _progression_decisions.is_empty()
+
+
+func pending_progression_decision_count() -> int:
+	return _progression_decisions.size()
+
+
+# Detached read model. The caller never receives the mutable ProgressionEvent stored by the session.
+func pending_progression_decision() -> Dictionary:
+	return _progression_decisions.current_snapshot()
+
+
+# Resolve only the current FIFO MOVE_LEARN_CHOICE_REQUIRED event. The event itself is never supplied
+# by the caller, preventing stale/forged event injection at the application boundary.
+func resolve_pending_move_choice(
+	intent: String,
+	old_move_id: StringName = &"",
+) -> ProgressionDecisionResult:
+	var out := ProgressionDecisionResult.new()
+	out.intent = intent
+	out.remaining = _progression_decisions.size()
+	if status != COMPLETED or completion_reason != COMPLETED_VICTORY:
+		out.reason = "progression_resolution_unavailable"
+		return out
+	var event := _progression_decisions.current_event()
+	if event == null:
+		out.reason = "no_pending_progression_decision"
+		return out
+	out.decision_kind = event.kind
+	out.creature_id = event.creature_id
+	out.new_move_id = StringName(event.data.get("new_move_id", ""))
+	out.replaced_move_id = old_move_id
+	if event.kind != ProgressionEvent.MOVE_LEARN_CHOICE_REQUIRED:
+		out.reason = "unsupported_progression_decision"
+		return out
+	var creature := player.owned_creature(event.creature_id)
+	if creature == null:
+		out.reason = "progression_creature_not_owned"
+		return out
+	if not ProgressionSystem.apply_move_choice(creature, event, intent, catalogs, old_move_id):
+		out.reason = "move_choice_rejected"
+		return out
+	if not _progression_decisions.consume_current():
+		# This cannot happen after a successful current-event resolution; keep an explicit reason so a
+		# future refactor cannot silently report success while leaving a stale queue entry.
+		out.reason = "progression_queue_consume_failed"
+		return out
+	out.ok = true
+	out.reason = ""
+	out.remaining = _progression_decisions.size()
+	return out
+
+
+# Start a wild encounter request. Invalid player/session state is rejected BEFORE Encounter consumes
+# RNG. A completed session must be explicitly reset; pending progression decisions cannot be skipped
+# by starting another encounter.
 func begin_encounter(
 	table: WildEncounterTable,
 	encounter_rng: RandomNumberGenerator,
@@ -70,6 +126,10 @@ func begin_encounter(
 ) -> WildEncounterResult:
 	if has_active_battle():
 		return _encounter_error("battle_already_active")
+	if has_pending_progression_decisions():
+		return _encounter_error("progression_decision_pending")
+	if status != READY:
+		return _encounter_error("session_not_ready")
 	if catalogs == null:
 		return _encounter_error("missing_catalog")
 	var roster := _battle_roster_with_living_active()
@@ -263,6 +323,7 @@ func _submit_run_command(
 	out.turn_consumed = true
 	if resolution.escaped:
 		_reconcile_player_party()
+		_progression_decisions.clear()
 		status = COMPLETED
 		completion_reason = COMPLETED_FLED
 		out.session_completed = true
@@ -322,6 +383,7 @@ func capture_current(ball_id: StringName, capture_rng: RandomNumberGenerator) ->
 	_reconcile_player_party()
 	if resolution.captured != null:
 		resolution.captured.reconcile_post_battle()
+	_progression_decisions.clear()
 	status = COMPLETED
 	completion_reason = COMPLETED_CAPTURED
 	out.session_completed = true
@@ -333,7 +395,8 @@ func capture_current(ball_id: StringName, capture_rng: RandomNumberGenerator) ->
 
 
 # Settle a Battle Core victory/defeat only after the authoritative battle has actually finished.
-# Progression consumes BattleOutcome; this layer never reaches into Progression internals.
+# Progression consumes BattleOutcome. Mandatory move-learning decisions are copied into an
+# application-layer FIFO before the settlement reference escapes to presentation.
 func settle_finished_battle() -> WildBattleSettlement:
 	var out := WildBattleSettlement.new()
 	if not has_active_battle():
@@ -351,6 +414,9 @@ func settle_finished_battle() -> WildBattleSettlement:
 		out.progression_events = ProgressionSystem.reconcile_battle_result(
 			player.party.get_creatures(), outcome, catalogs, progression_ruleset
 		)
+		_progression_decisions.rebuild_from(out.progression_events)
+	else:
+		_progression_decisions.clear()
 	_reconcile_player_party()
 
 	status = COMPLETED
@@ -364,10 +430,13 @@ func settle_finished_battle() -> WildBattleSettlement:
 	return out
 
 
-# Apply only a currently-eligible evolution target for the owned creature. This rejects a forged
-# EVOLUTION_AVAILABLE event that names an arbitrary species, which is important for future network
-# authority and is also a useful local invariant today.
+# Apply only a currently-eligible evolution target for the owned creature. Move-learning choices are
+# ordered before evolution and must be resolved first. Evolution remains non-blocking in V1 because
+# the imported EvolutionRecord currently loses several PokéAPI condition fields; exposing it as a
+# mandatory player decision would overstate eligibility fidelity.
 func apply_evolution_event(event: ProgressionEvent) -> CreatureInstance:
+	if has_pending_progression_decisions():
+		return null
 	if event == null or event.kind != ProgressionEvent.EVOLUTION_AVAILABLE:
 		return null
 	var current := player.owned_creature(event.creature_id)
@@ -398,23 +467,32 @@ func apply_evolution_event(event: ProgressionEvent) -> CreatureInstance:
 	return evolved
 
 
-# The V2 save does not claim to serialize a live wild battle. Refuse mid-battle saves rather than
-# silently dropping transient state. World/battle continuation can get an explicit schema later.
+# Savegame V2 does not serialize a live wild battle or unresolved post-battle decisions. Refuse both
+# states instead of silently dropping transient authority.
 func save_game(path: String) -> SaveResult:
 	if has_active_battle():
 		var blocked := SaveResult.new()
 		blocked.reason = "active_wild_battle"
 		blocked.path = path
 		return blocked
+	if has_pending_progression_decisions():
+		var blocked := SaveResult.new()
+		blocked.reason = "progression_decision_pending"
+		blocked.path = path
+		return blocked
 	return _save_repository.save_collection(path, player)
 
 
-# Loading is likewise all-or-nothing. On success replace the player aggregate, clear any completed
-# transient encounter state, and make the restored collection immediately usable for another loop.
+# Loading is likewise all-or-nothing and may not be used to discard an unresolved player decision.
+# On success replace the aggregate and clear completed/transient application state.
 func load_game(path: String) -> LoadResult:
 	if has_active_battle():
 		var blocked := LoadResult.new()
 		blocked.reason = "active_wild_battle"
+		return blocked
+	if has_pending_progression_decisions():
+		var blocked := LoadResult.new()
+		blocked.reason = "progression_decision_pending"
 		return blocked
 	var loaded := _save_repository.load(path)
 	if not loaded.ok:
@@ -429,15 +507,19 @@ func load_game(path: String) -> LoadResult:
 	_encounter = null
 	_battle_server = null
 	_escape_attempts = 0
+	_progression_decisions.clear()
 	return loaded
 
 
 func reset_after_completion() -> bool:
 	if status != COMPLETED:
 		return false
+	if has_pending_progression_decisions():
+		return false
 	status = READY
 	completion_reason = &""
 	_escape_attempts = 0
+	_progression_decisions.clear()
 	return true
 
 
