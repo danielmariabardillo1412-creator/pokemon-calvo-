@@ -1,8 +1,8 @@
 extends Node2D
 
-# Asset-free technical map for FASE 16. It proves the runtime seam:
+# Asset-free technical map for FASE 18. It proves the runtime seam:
 # physical movement -> encounter -> real Battle -> visual Battle adapter -> authoritative player
-# command (move/switch/capture) -> settlement/capture ownership -> return to exploration.
+# command (move/switch/capture/run) -> settlement/capture/flee -> return to exploration.
 # Runtime consumes normalized canonical data; import remains build/QA only.
 
 const RUNTIME_DATA_PATH := "res://data/normalized/pokemon_api.json"
@@ -15,21 +15,28 @@ var _director: OverworldEncounterDirector = null
 var _session: WildAdventureSession = null
 var _catalogs: DefinitionCatalog = null
 var _capture_rng: RandomNumberGenerator = null
+var _escape_rng: RandomNumberGenerator = null
 
 
 func _ready() -> void:
 	player.step_completed.connect(_on_player_step_completed)
 	battle_presentation.battle_closed.connect(_on_battle_closed)
 	if _bootstrap_demo():
-		battle_presentation.configure(_session, _catalogs, _capture_rng)
-		status_label.text = "FASE 16 technical overworld | Battle supports moves + switch + capture"
+		battle_presentation.configure(_session, _catalogs, _capture_rng, _escape_rng)
+		status_label.text = "FASE 18 technical overworld | Battle supports moves + switch + capture + run"
 	else:
 		player.movement_enabled = false
 		status_label.text = "Overworld bootstrap failed"
 
 
 func is_demo_ready() -> bool:
-	return _director != null and _session != null and _catalogs != null and _capture_rng != null
+	return (
+		_director != null
+		and _session != null
+		and _catalogs != null
+		and _capture_rng != null
+		and _escape_rng != null
+	)
 
 
 func has_active_demo_battle() -> bool:
@@ -146,6 +153,8 @@ func _bootstrap_demo() -> bool:
 	_director = OverworldEncounterDirector.new(_session, encounter_rng, 12003)
 	_capture_rng = RandomNumberGenerator.new()
 	_capture_rng.seed = 12004
+	_escape_rng = RandomNumberGenerator.new()
+	_escape_rng.seed = 12006
 
 	var table := WildEncounterTable.new(&"technical_grass", 10000)
 	if not table.add_slot(WildEncounterSlot.new(&"technical_pikachu", &"pikachu", 1, 4, 4)):
