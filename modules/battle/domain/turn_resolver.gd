@@ -27,11 +27,15 @@ func resolve_order(
 func _priority(action: BattleAction, catalog: DefinitionCatalog, ruleset: BattleRuleset) -> int:
 	if action.action_type == BattleAction.SWITCH:
 		return ruleset.switch_priority
+	if action.action_type == BattleAction.ITEM:
+		return ruleset.trainer_item_priority
 	var move := catalog.move(action.move_id)
 	return move.priority if move != null else -100
 
 
 func _effective_speed(creature: CreatureInstance, ruleset: BattleRuleset) -> int:
+	if creature == null or creature.stats == null:
+		return 1
 	var speed := creature.stats.speed * ruleset.stat_multiplier_basis_points(
 		creature.stat_stages.get_stage(StatStages.SPEED)
 	) / 10000
