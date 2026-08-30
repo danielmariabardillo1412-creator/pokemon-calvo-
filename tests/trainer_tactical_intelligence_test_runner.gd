@@ -10,8 +10,9 @@ func _initialize() -> void:
 
 func _run() -> void:
 	var check_callback := Callable(self, "_check")
-	TrainerIntelligenceFoundationTestSuite.new().run(check_callback)
-	TrainerIntelligenceMetadataAuditTestSuite.new().run(check_callback)
+	# FASE 19/20 and the full Godot suite already run as independent PR gates.
+	# Keep this runner focused on the 34 new FASE 21 checks so CI does not import
+	# the full dataset three extra times inside a redundant nested regression run.
 	TrainerTacticalIntelligenceTestSuite.new().run(check_callback)
 	print(
 		"\n=== TRAINER TACTICAL INTELLIGENCE RESULT: %d PASS / %d FAIL ==="
