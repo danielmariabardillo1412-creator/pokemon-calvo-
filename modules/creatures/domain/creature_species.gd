@@ -16,6 +16,10 @@ extends Resource
 @export var base_special_attack: int = 1
 @export var base_special_defense: int = 1
 @export var ability_ids: Array[StringName] = []
+# V3 preserves the source slot/hidden flag without changing current runtime ability semantics.
+var ability_slots: Array[Dictionary] = []
+# Source-only factual metadata retained for future mechanics (generation, egg groups, gender, etc.).
+var source_metadata: Dictionary = {}
 @export var base_experience: int = 0
 @export var growth_rate: String = "medium"
 @export var ev_yield: Dictionary = {}   # stat_key -> effort value granted when defeated
@@ -68,7 +72,7 @@ func to_dict() -> Dictionary:
 	for e in evolutions:
 		if e is EvolutionRecord:
 			ev.append((e as EvolutionRecord).to_dict())
-	return {
+	var out := {
 		"id": String(id),
 		"display_name": display_name,
 		"primary_type_id": String(primary_type_id),
@@ -88,6 +92,11 @@ func to_dict() -> Dictionary:
 		"learnset": ls,
 		"evolutions": ev,
 	}
+	if not ability_slots.is_empty():
+		out["ability_slots"] = ability_slots.duplicate(true)
+	if not source_metadata.is_empty():
+		out["source_metadata"] = source_metadata.duplicate(true)
+	return out
 
 static func from_dict(d: Dictionary) -> CreatureSpecies:
 	var s := CreatureSpecies.new()
@@ -106,6 +115,8 @@ static func from_dict(d: Dictionary) -> CreatureSpecies:
 	s.base_special_attack = int(d.get("base_special_attack", 1))
 	s.base_special_defense = int(d.get("base_special_defense", 1))
 	s.ability_ids = _str_to_sn(d.get("ability_ids", []))
+	s.ability_slots.assign(d.get("ability_slots", []))
+	s.source_metadata = (d.get("source_metadata", {}) as Dictionary).duplicate(true)
 	s.base_experience = int(d.get("base_experience", 0))
 	s.growth_rate = String(d.get("growth_rate", "medium"))
 	s.ev_yield = d.get("ev_yield", {})
