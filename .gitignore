@@ -4,6 +4,9 @@
 *.bak
 *.log
 
+# Godot 4.4+ .uid sidecars are persistent identity metadata and MUST stay
+# versioned. Do not add *.uid to this file.
+
 # Local-only Pokemon/reference libraries. These currently live beside the
 # repository; the anchored rules also protect the repo if they are copied in.
 /POKEMON_DATA_LIBRARY/
