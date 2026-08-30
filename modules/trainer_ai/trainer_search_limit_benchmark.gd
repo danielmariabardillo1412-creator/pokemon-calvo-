@@ -27,6 +27,9 @@ static func run(
 		var candidate_roster := scenario.get("candidate_roster", []) as Array[CreatureInstance]
 		var reference_roster := scenario.get("reference_roster", []) as Array[CreatureInstance]
 		var reference_factory := scenario.get("reference_factory", Callable()) as Callable
+		var scenario_planner_factory := scenario.get("planner_factory", planner_factory) as Callable
+		if not scenario_planner_factory.is_valid():
+			scenario_planner_factory = planner_factory
 		var oracle_factory := scenario.get("oracle_factory", Callable()) as Callable
 		var seeds := _int_array(scenario.get("seeds", []))
 		var max_turns := maxi(1, int(scenario.get("max_turns", 40)))
@@ -34,7 +37,7 @@ static func run(
 			catalog,
 			candidate_roster,
 			reference_roster,
-			planner_factory,
+			scenario_planner_factory,
 			reference_factory,
 			seeds,
 			max_turns,
