@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="TypeDefinition" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://modules/creatures/domain/type_definition.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"flying"
+display_name = "Volador"
+effectiveness = {"electric": 0.5, "grass": 2.0, "fighting": 2.0, "bug": 2.0, "rock": 0.5, "steel": 0.5}
