@@ -8,6 +8,7 @@ var turn_consumed: bool = false
 var session_completed: bool = false
 var battle_finished: bool = false
 var capture_outcome: WildAdventureCaptureOutcome = null
+var escape_resolution: WildEscapeResolution = null
 var battle_events: Array[BattleEvent] = []
 
 
