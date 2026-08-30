@@ -50,9 +50,9 @@ La ball se consume y el rival obtiene exactamente una respuesta legal. Esa respu
 - `modules/gameplay/wild_adventure_session.gd`
 - `modules/battle/server/authoritative_battle_server.gd`
 - `modules/battle/application/turn_executor.gd`
-- `tests/battle_commands_test_suite.gd`
-- `tests/battle_commands_audit_test_suite.gd`
-- `tests/battle_commands_test_runner.gd`
+- `tests/battle/battle_commands_test_suite.gd`
+- `tests/battle/battle_commands_audit_test_suite.gd`
+- `tests/battle/battle_commands_test_runner.gd`
 - `.github/workflows/godot-tests.yml`
 - ADR-014
 

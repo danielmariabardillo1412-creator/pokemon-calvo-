@@ -88,9 +88,9 @@ Esto mantiene las decisiones de las fases salvajes: captura y huida no se convie
 
 Se añadieron:
 
-- `tests/trainer_battle_session_test_suite.gd`;
-- `tests/trainer_battle_session_audit_test_suite.gd`;
-- `tests/trainer_battle_session_test_runner.gd`.
+- `tests/trainer_ai/trainer_battle_session_test_suite.gd`;
+- `tests/trainer_ai/trainer_battle_session_audit_test_suite.gd`;
+- `tests/trainer_ai/trainer_battle_session_test_runner.gd`.
 
 La suite base cubre contratos nominales y errores de ciclo de vida.
 

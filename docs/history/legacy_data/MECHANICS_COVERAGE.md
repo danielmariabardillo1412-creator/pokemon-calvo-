@@ -134,7 +134,7 @@ species is imported. Evolutions targeting deferred forms are dropped (8 edges) t
 
 ## Test evidence (Godot 4.7 stable, headless)
 
-`tests/test_runner.gd` + `tests/battle_v2_test_suite.gd` — **131 PASS / 0 FAIL**:
+`tests/test_runner.gd` + `tests/battle/battle_v2_test_suite.gd` — **131 PASS / 0 FAIL**:
 - FASE 1-3 (foundation + data pipeline): 26 PASS
 - FASE 4 (mass import): 14 PASS
 - FASE 4.1 (QA invariants): 21 PASS

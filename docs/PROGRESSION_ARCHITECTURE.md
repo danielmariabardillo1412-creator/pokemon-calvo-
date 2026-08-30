@@ -66,6 +66,6 @@ modules/data/
   seed; tests pin seeds and assert stable results.
 
 ## Testing
-- `tests/progression_test_suite.gd`: 71 checks (XP curves, stat calc, learnset, move choice,
+- `tests/gameplay/progression_test_suite.gd`: 71 checks (XP curves, stat calc, learnset, move choice,
   evolution apply/identity preservation, battle reconciliation, coverage invariants).
 - Full suite: **208 PASS / 0 FAIL**.

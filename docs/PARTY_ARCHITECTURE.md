@@ -41,5 +41,5 @@ serialización estable. Sin UI, sin Nodes, sin autoload.
 
 ## Tests
 
-`CapturePartyTestSuite` (tests/capture_party_test_suite.gd): party_empty/add/max_six/
+`CapturePartyTestSuite` (tests/gameplay/capture_party_test_suite.gd): party_empty/add/max_six/
 reject_seventh/duplicate_id/remove/swap/reorder/serialization/creature_fidelity.
