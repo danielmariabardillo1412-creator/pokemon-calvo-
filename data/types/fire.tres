@@ -5,6 +5,5 @@
 [resource]
 script = ExtResource("1")
 id = &"fire"
-display_name = "Fire"
-effectiveness = {"grass": 2.0, "fire": 0.5}
-
+display_name = "Fuego"
+effectiveness = {"fire": 0.5, "water": 0.5, "grass": 2.0, "ice": 2.0, "bug": 2.0, "rock": 0.5, "dragon": 0.5, "steel": 2.0}
