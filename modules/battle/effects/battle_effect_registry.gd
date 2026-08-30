@@ -1,10 +1,14 @@
 class_name BattleEffectRegistry
 extends RefCounted
 
+const TRAINER_ITEM_TARGET_ALIVE := &"alive"
+const TRAINER_ITEM_TARGET_FAINTED := &"fainted"
+
 var _move_specs: Dictionary = {}
 var _ability_specs: Dictionary = {}
 var _item_specs: Dictionary = {} # held-item triggers
 var _trainer_item_specs: Dictionary = {} # explicit bag-item actions
+var _trainer_item_target_modes: Dictionary = {}
 
 
 func _init() -> void:
@@ -20,13 +24,10 @@ func effects_for_move(move: MoveDefinition) -> Array[BattleEffectSpec]:
 	for spec in move.effect_specs:
 		if spec.kind == BattleEffectSpec.MULTI_HIT:
 			has_multi_hit = true
-	# Implicit DAMAGE for damaging moves, unless the dataset drives damage via MULTI_HIT.
 	if move.power > 0 and not has_multi_hit:
 		result.append(BattleEffectSpec.new(BattleEffectSpec.DAMAGE))
 	for spec in move.effect_specs:
 		result.append(spec)
-	# Fallback to hardcoded registry specs when the imported dataset provides none
-	# (keeps legacy Battle Core V2 behavior intact for the explicitly modeled moves).
 	if move.effect_specs.is_empty():
 		var added_damage := false
 		for spec in _move_specs.get(move.id, []):
@@ -53,6 +54,10 @@ func effects_for_trainer_item(item_id: StringName) -> Array[BattleEffectSpec]:
 	return out
 
 
+func trainer_item_target_mode(item_id: StringName) -> StringName:
+	return StringName(_trainer_item_target_modes.get(item_id, TRAINER_ITEM_TARGET_ALIVE))
+
+
 func is_trainer_item_supported(item_id: StringName) -> bool:
 	return _trainer_item_specs.has(item_id)
 
@@ -66,32 +71,25 @@ func runtime_supported_trainer_item_ids() -> Array[StringName]:
 
 
 func has_explicit_move_mapping(move_id: StringName) -> bool:
-	return _move_specs.has(move_id) or [
-		&"tackle", &"water_gun", &"quick_attack",
-	].has(move_id)
+	return _move_specs.has(move_id) or [&"tackle", &"water_gun", &"quick_attack"].has(move_id)
 
 
 func runtime_supported_move_ids() -> Array[StringName]:
-	var result: Array[StringName] = [
+	return [
 		&"double_edge", &"ember", &"growl", &"mega_drain", &"quick_attack",
 		&"recover", &"sleep_powder", &"swords_dance", &"tackle", &"thunder",
 		&"thunder_punch", &"thunder_wave", &"toxic", &"water_gun", &"will_o_wisp",
 	]
-	return result
 
 
 func runtime_supported_ability_ids() -> Array[StringName]:
-	var result: Array[StringName] = [
-		&"blaze", &"intimidate", &"levitate", &"overgrow", &"static", &"torrent",
-	]
-	return result
+	return [&"blaze", &"intimidate", &"levitate", &"overgrow", &"static", &"torrent"]
 
 
 func runtime_supported_item_ids() -> Array[StringName]:
 	# Held-item runtime coverage only. Trainer bag items are intentionally reported
 	# separately so historical item coverage contracts remain stable.
-	var result: Array[StringName] = [&"leftovers", &"sitrus_berry"]
-	return result
+	return [&"leftovers", &"sitrus_berry"]
 
 
 func _filter_triggers(source: Array, trigger: StringName) -> Array[BattleTriggerSpec]:
@@ -181,24 +179,41 @@ func _register_items() -> void:
 func _register_trainer_items() -> void:
 	# Calvo V1 trainer-bag rules. These are explicit project mechanics rather than
 	# text parsed from PokeAPI descriptions, which keeps battle math deterministic.
-	# OPPONENT is used here as the generic BattleEffectContext target selector; item
-	# validation guarantees that this target belongs to the acting trainer's side.
-	_trainer_item_specs[&"potion"] = [
-		BattleEffectSpec.new(BattleEffectSpec.HEAL, BattleEffectSpec.OPPONENT, 20),
-	]
-	_trainer_item_specs[&"super_potion"] = [
-		BattleEffectSpec.new(BattleEffectSpec.HEAL, BattleEffectSpec.OPPONENT, 60),
-	]
-	_trainer_item_specs[&"hyper_potion"] = [
-		BattleEffectSpec.new(BattleEffectSpec.HEAL, BattleEffectSpec.OPPONENT, 120),
-	]
-	_trainer_item_specs[&"max_potion"] = [
-		BattleEffectSpec.new(BattleEffectSpec.HEAL, BattleEffectSpec.OPPONENT, 0, 10000),
-	]
-	_trainer_item_specs[&"full_restore"] = [
-		BattleEffectSpec.new(BattleEffectSpec.HEAL, BattleEffectSpec.OPPONENT, 0, 10000),
-		BattleEffectSpec.new(BattleEffectSpec.CURE_STATUS, BattleEffectSpec.OPPONENT),
-	]
+	# Every currently enabled item targets a living own creature. The target-mode
+	# contract already supports future FAINTED-only items (Revive), but none are
+	# registered in V1; special NPCs may later receive exactly one such resource.
+	_register_trainer_item(
+		&"potion",
+		[BattleEffectSpec.new(BattleEffectSpec.HEAL, BattleEffectSpec.OPPONENT, 20)],
+	)
+	_register_trainer_item(
+		&"super_potion",
+		[BattleEffectSpec.new(BattleEffectSpec.HEAL, BattleEffectSpec.OPPONENT, 60)],
+	)
+	_register_trainer_item(
+		&"hyper_potion",
+		[BattleEffectSpec.new(BattleEffectSpec.HEAL, BattleEffectSpec.OPPONENT, 120)],
+	)
+	_register_trainer_item(
+		&"max_potion",
+		[BattleEffectSpec.new(BattleEffectSpec.HEAL, BattleEffectSpec.OPPONENT, 0, 10000)],
+	)
+	_register_trainer_item(
+		&"full_restore",
+		[
+			BattleEffectSpec.new(BattleEffectSpec.HEAL, BattleEffectSpec.OPPONENT, 0, 10000),
+			BattleEffectSpec.new(BattleEffectSpec.CURE_STATUS, BattleEffectSpec.OPPONENT),
+		],
+	)
+
+
+func _register_trainer_item(
+	item_id: StringName,
+	specs: Array,
+	target_mode: StringName = TRAINER_ITEM_TARGET_ALIVE,
+) -> void:
+	_trainer_item_specs[item_id] = specs
+	_trainer_item_target_modes[item_id] = target_mode
 
 
 func _chance(chance_bp: int, child: BattleEffectSpec) -> BattleEffectSpec:
