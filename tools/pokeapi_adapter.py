@@ -50,6 +50,8 @@ _SIMPLE_SELF_STAT_BOOSTS = {
     "agility": ("speed", 2),
     "amnesia": ("special_defense", 2),
     "barrier": ("defense", 2),
+    "cotton_guard": ("defense", 3),
+    "double_team": ("evasion", 1),
     "harden": ("defense", 1),
     "iron_defense": ("defense", 2),
     "meditate": ("attack", 1),
@@ -58,6 +60,7 @@ _SIMPLE_SELF_STAT_BOOSTS = {
     "sharpen": ("attack", 1),
     "swords_dance": ("attack", 2),
     "tail_glow": ("special_attack", 3),
+    "withdraw": ("defense", 1),
 }
 
 # The V2 list mixes raw PokéAPI hyphenated names with the underscore-normalized
