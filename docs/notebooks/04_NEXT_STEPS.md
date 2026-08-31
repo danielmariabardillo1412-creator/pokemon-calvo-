@@ -3,69 +3,97 @@
 Read this immediately after `00_READ_FIRST.md` when recovering context.
 
 ## Previous certified tranche
-- PR #61 — `fix/data-v3-simple-self-stat-packages-a`
-- Final HEAD `623930ca0b98b00099288bcf542e7e0a922ac180`
+- PR #62 — `fix/data-v3-simple-opponent-stat-drops-a`
+- Final HEAD `6d1335b8c5cee0b1cf1e99910a7707734b4aef85`
 - 18/18 SUCCESS on exact notebook-bearing HEAD
 - closed without merge.
 
-## Current tranche — PR #62
-- Branch `fix/data-v3-simple-opponent-stat-drops-a`
-- Parent `623930ca0b98b00099288bcf542e7e0a922ac180`
-- Engineering SHA before notebook sync: `e384cb3a5b19a158e11da4925e7c2c23c929d9ca`
+## Current tranche — PR #63
+- Branch `fix/data-v3-always-hit-accuracy`
+- Parent `6d1335b8c5cee0b1cf1e99910a7707734b4aef85`
+- Engineering SHA before notebook sync: `428e1f2e387301899d749a9b97127f9e1a0a5b45`
 - Engineering SHA CI: **18/18 SUCCESS**
-- DATA V3 independently verified all 17 regenerated opponent stat packages.
-- Notebook synchronization moves branch tip. Require **18/18 on the final exact notebook-bearing HEAD**, then close #62 without merge.
+- DATA V3 independently verified null-accuracy canonicalization, MoveDefinition preservation and BattleRuleset sentinel semantics.
+- Notebook synchronization moves branch tip. Require **18/18 on the final exact notebook-bearing HEAD**, then close #63 without merge.
 
 ## Workstream
-**Move Effects V3 semantic audit. Do not switch to trainer AI/archetypes.**
+**Move Effects V3 / battle-relevant DATA V3 semantic audit. Do not switch to trainer AI/archetypes.**
 
-## Exact #62 engineering artifact
+## What #63 fixes
+PokéAPI `accuracy=null` previously became canonical `accuracy=100`.
+That was wrong because Battle Core distinguishes:
+- negative accuracy = bypass normal accuracy/evasion check;
+- 100 = normal 100% base accuracy, still modified by Accuracy/Evasion stages.
+
+Correct mapping is now:
+- numeric source accuracy → same integer;
+- null source accuracy → `-1`.
+
+No Battle Core change was required.
+
+## Exact #63 engineering artifact
+Compared with certified #62:
+- 919 moves before and after.
+- **285** records changed.
+- every changed record changed **only `accuracy`**.
+- 0 classification changes.
+- 0 `effect_specs` changes.
+
+285 always-hit records by coverage:
+- 66 RUNTIME_SUPPORTED
+- 28 PARTIAL_RUNTIME
+- 180 DATA_ONLY
+- 11 UNSUPPORTED
+
+Overall coverage remains:
 - `RUNTIME_SUPPORTED`: **582**
 - `PARTIAL_RUNTIME`: **67**
 - `DATA_ONLY`: **258**
 - `UNSUPPORTED`: **12**
-- DATA_ONLY with non-empty specs: **32**
-  - 29 stat-change
-  - Beat Up
-  - Purify
-  - Swallow
 
-Remaining 29 stat-change targets:
+Sentinels:
+- Confide / Play Nice / Tearful Look / Decorate / Spicy Extract → -1
+- Charm → genuine 100 remains 100
+- BattleRuleset(-1, Accuracy -6, Evasion +6) → 10000 bp
+- BattleRuleset(100, Accuracy -6, Evasion +6) → below 10000 bp
+
+## Exact next task after #63 closure
+Return to the six remaining `selected-pokemon` special stat cases. Start with the two already inspected:
+1. `Decorate`
+2. `Spicy Extract`
+
+Initial evidence already established:
+- Decorate source: selected-pokemon, Attack +2 / SpAtk +2, accuracy null.
+- Its generated effects are OPPONENT Attack +2 / SpAtk +2.
+- Spicy Extract source: selected-pokemon, Attack +2 / Defense -2, accuracy null.
+- Its generated effects are OPPONENT Attack +2 / Defense -2.
+- #63 makes their always-hit accuracy representation faithful (`-1`).
+
+Do not promote them merely from this note. After #63 certification:
+- re-check exact source contracts,
+- add fail-fast move-specific/package validation,
+- add independent regenerated-output assertions including accuracy=-1,
+- decide `RUNTIME_SUPPORTED` only if the full current singles battle semantics are represented.
+
+Then audit separately:
+- `Defog` — field/hazard/screen cleanup beyond visible stat change.
+- `Memento` — user faints after target drops.
+- `Parting Shot` — user switches after target drops.
+- `Tar Shot` — Speed drop plus Fire interaction/state.
+
+## Remaining DATA_ONLY with specs after #62/#63
+32 total:
+- 29 stat-change
+- Beat Up
+- Purify
+- Swallow
+
+Stat targets:
 - 13 user
 - 8 all-opponents
 - 6 selected-pokemon
 - 2 all-pokemon
 
-## What #62 certified
-17 simple selected-target debuffs are now `RUNTIME_SUPPORTED` with exact OPPONENT packages:
-Baby-Doll Eyes, Charm, Confide, Eerie Impulse, Fake Tears, Feather Dance, Flash, Kinesis, Metal Sound, Noble Roar, Play Nice, Sand Attack, Scary Face, Screech, Smokescreen, Tearful Look, Tickle.
-
-No effect rewrites were needed; the legacy generator already produced correct effects. The adapter now fail-fast verifies exact source metadata/package and exact generated output before promotion.
-
-## Exact next task after #62 closure
-Finish the `selected-pokemon` family by auditing the **six special cases only**:
-- `decorate`
-- `defog`
-- `memento`
-- `parting_shot`
-- `spicy_extract`
-- `tar_shot`
-
-Do not batch them blindly.
-
-Recommended order:
-1. Verify `Decorate` and `Spicy Extract` from immutable source first. They may be fully representable stat packages in the current single-opponent model, but target/mixed-sign semantics must be proved.
-2. Audit `Defog`, `Memento`, `Parting Shot`, `Tar Shot` separately because each is known/suspected to include an additional mechanic beyond visible stat changes.
-3. For each special move decide among:
-   - `RUNTIME_SUPPORTED` if full current battle semantics are representable,
-   - `PARTIAL_RUNTIME` if a faithful subset executes,
-   - `DATA_ONLY`/effect-free if current generated effects would be misleading.
-4. Add exact source assertions + independent output tests.
-5. Focal DATA V3 → 18/18 engineering → artifact → notebooks → 18/18 final → close without merge.
-
-After the six selected specials are resolved, choose between the 8 all-opponents family and the 13 stateful user moves based on which can be safely regrouped. Do not mass-promote the 13 user cases.
-
-## Known remaining families
 User conditional/stateful:
 `autotomize`, `charge`, `clangorous_soul`, `defense_curl`, `extreme_evoboost`, `fillet_away`, `geomancy`, `growth`, `minimize`, `no_retreat`, `shell_smash`, `stockpile`, `tidy_up`.
 
@@ -74,9 +102,6 @@ All-opponents:
 
 All-pokemon:
 `flower_shield`, `rototiller`.
-
-Non-stat:
-`Purify`, `Swallow`, `Beat Up`.
 
 ## Stop condition
 If any focal or regression test fails, stop immediately, diagnose/fix root cause, rerun focal, then full matrix. Never accumulate failures.
