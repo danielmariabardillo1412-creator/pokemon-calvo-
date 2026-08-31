@@ -129,7 +129,7 @@ jobs:
           assert len(matching_effects(jungle['effect_specs'], 'cure_status', 'self')) == 1
 
           # Move Effects V3 — snapshot-verified simple 50% self-heals.
-          for move_id in ('recover', 'soft_boiled', 'milk_drink', 'slack_off'):
+          for move_id in ('recover', 'soft_boiled', 'milk_drink', 'slack_off', 'heal_order'):
               move = moves[move_id]
               assert move['target'] == 'user', (move_id, move['target'])
               assert move['classification'] == 'RUNTIME_SUPPORTED', (
