@@ -75,6 +75,17 @@ jobs:
                   out.extend(effects(spec.get('children', []), kind))
               return out
 
+          def assert_chance_contract(specs, move_id):
+              for spec in specs:
+                  children = spec.get('children', []) or []
+                  if spec.get('kind') == 'chance':
+                      parent_bp = int(spec.get('chance_basis_points', 10000))
+                      for child in children:
+                          if child.get('kind') != 'chance':
+                              assert int(child.get('chance_basis_points', 10000)) == 10000, (
+                                  move_id, parent_bp, child)
+                  assert_chance_contract(children, move_id)
+
           assert len(types) == 18
           assert len(moves) == 919
           assert types['fire']['display_name'] == 'Fuego'
@@ -137,6 +148,19 @@ jobs:
 
           assert moves['swallow']['classification'] == 'UNSUPPORTED'
           assert moves['swallow']['effect_specs'] == []
+
+          # Conditional-effect probability belongs to the CHANCE wrapper only.
+          # This is the same convention used by BattleEffectRegistry and prevents
+          # tactical expected-value code from squaring probabilities.
+          for move_id, move in moves.items():
+              assert_chance_contract(move['effect_specs'], move_id)
+          for move_id, expected_bp in (('ember', 1000), ('thunder_punch', 1000), ('thunder', 3000)):
+              chance_specs = effects(moves[move_id]['effect_specs'], 'chance')
+              assert chance_specs, move_id
+              assert int(chance_specs[0]['chance_basis_points']) == expected_bp, (move_id, chance_specs[0])
+              for child in chance_specs[0].get('children', []):
+                  if child.get('kind') != 'chance':
+                      assert int(child.get('chance_basis_points', 10000)) == 10000, (move_id, child)
 
           bulba = species['bulbasaur']
           assert any(x['ability_id'] == 'chlorophyll' and x['is_hidden'] for x in bulba.get('ability_slots', []))
