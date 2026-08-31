@@ -24,6 +24,7 @@ func _run() -> void:
 	DataFoundationV3AbilityRuntimeContractTestSuite.new().run(Callable(self, "_check"))
 	DataFoundationV3AbilityFamilyInventoryTestSuite.new().run(Callable(self, "_check"))
 	DataFoundationV3AbilityHitStatTestSuite.new().run(Callable(self, "_check"))
+	DataFoundationV3AbilityContactDamageTestSuite.new().run(Callable(self, "_check"))
 	print("\n=== DATA FOUNDATION V3 DOMAIN RESULT: %d PASS / %d FAIL ===" % [_passed, _failed])
 	quit(0 if _failed == 0 else 1)
 
