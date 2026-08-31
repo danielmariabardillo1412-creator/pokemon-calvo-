@@ -48,6 +48,7 @@ _PARTIAL_UNIQUE_STAT_HEALS = {"strength_sap"}
 _AUDITED_DATA_ONLY_PROTECTION_CONTACT = {"silk_trap"}
 _AUDITED_DATA_ONLY_ALLY_STAT = {"aromatic_mist": ("special_defense", 1)}
 _AUDITED_DATA_ONLY_HELD_BERRY_STAT = {"stuff_cheeks": ("defense", 2)}
+_PARTIAL_USER_AND_ALLIES_STAT = {"howl": ("attack", 1)}
 _SIMPLE_SELF_STAT_BOOSTS = {
     "acid_armor": ("defense", 2),
     "agility": ("speed", 2),
@@ -365,6 +366,58 @@ def _require_held_berry_stat_data_only(
         raise RuntimeError(f"DATA V3 held-Berry unconditional signature changed for {sid}: {stage}")
 
 
+def _require_user_and_allies_stat_partial(
+    m: dict,
+    specs: list[dict],
+    sid: str,
+    stat_id: str,
+    value: int,
+) -> None:
+    """Verify a modern user-and-allies stat move before preserving only SELF."""
+    meta = m.get("meta") or {}
+    target = (m.get("target") or {}).get("name")
+    category = (meta.get("category") or {}).get("name")
+    ailment = (meta.get("ailment") or {}).get("name")
+    stat_changes = m.get("stat_changes") or []
+    if target != "user-and-allies" or category != "net-good-stats" or ailment not in ("none", "", None):
+        raise RuntimeError(f"DATA V3 user-and-allies source contract changed for {sid}")
+    if any(int(meta.get(key) or 0) != 0 for key in (
+        "healing", "drain", "flinch_chance", "ailment_chance"
+    )):
+        raise RuntimeError(f"DATA V3 user-and-allies metadata changed for {sid}")
+    if len(stat_changes) != 1:
+        raise RuntimeError(f"DATA V3 expected one user-and-allies stat change for {sid}")
+    source_change = stat_changes[0]
+    if (
+        (source_change.get("stat") or {}).get("name") != stat_id.replace("special_", "special-")
+        or int(source_change.get("change", 0)) != value
+    ):
+        raise RuntimeError(f"DATA V3 user-and-allies stat source change mismatch for {sid}")
+
+    current_texts = []
+    for entry in m.get("flavor_text_entries") or []:
+        if (
+            (entry.get("language") or {}).get("name") == "en"
+            and (entry.get("version_group") or {}).get("name") == "scarlet-violet"
+        ):
+            current_texts.append(str(entry.get("flavor_text") or ""))
+    current_text = " ".join(current_texts).lower()
+    if "itself and its allies" not in current_text or "attack stats" not in current_text:
+        raise RuntimeError(f"DATA V3 current user-and-allies semantics changed for {sid}")
+
+    stages = _matching_effects(specs, "modify_stat_stage")
+    if len(specs) != 1 or len(stages) != 1:
+        raise RuntimeError(f"DATA V3 user-and-allies legacy shape changed for {sid}: {specs}")
+    stage = stages[0]
+    if (
+        stage.get("target") != "opponent"
+        or stage.get("stat_id") != stat_id
+        or int(stage.get("value", 0)) != value
+        or int(stage.get("chance_basis_points", 0)) != 10000
+    ):
+        raise RuntimeError(f"DATA V3 user-and-allies false-opponent signature changed for {sid}: {stage}")
+
+
 def generate_move_specs(m: dict, contact_set: set):
     """V3 wrapper around the archived move-effect converter.
 
@@ -447,6 +500,17 @@ def generate_move_specs(m: dict, contact_set: set):
         # the held-item prerequisite/consumption transaction is represented.
         specs = []
         coverage = "DATA_ONLY"
+
+    if sid in _PARTIAL_USER_AND_ALLIES_STAT:
+        stat_id, value = _PARTIAL_USER_AND_ALLIES_STAT[sid]
+        _require_user_and_allies_stat_partial(m, specs, sid, stat_id, value)
+        changed = _rewrite_effect_target(specs, "modify_stat_stage", "self")
+        if changed != 1:
+            raise RuntimeError(f"DATA V3 expected one Howl stat effect rewrite, found {changed}")
+        # Modern Howl boosts the user and allies. SELF Attack +1 is a faithful
+        # executable subset; ally targeting remains outside the current effect
+        # model. Never leave the legacy OPPONENT boost in place.
+        coverage = "PARTIAL_RUNTIME"
 
     if sid in _SELECTED_TARGET_HEALS:
         changed = _rewrite_effect_target(specs, "heal", "opponent")
