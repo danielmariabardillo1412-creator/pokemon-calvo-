@@ -168,6 +168,17 @@ func _register_abilities() -> void:
 		0,
 		{"requires_contact": true, "multiplier_bp": 13000},
 	)]
+	# Partial runtime contract: structured recoil moves get the faithful 1.2x boost.
+	# Crash-on-miss moves are not represented by a RECOIL effect spec yet, so that
+	# source-required Reckless subset remains deliberately absent.
+	_ability_specs[&"reckless"] = [BattleTriggerSpec.new(
+		BattleTriggerSpec.MODIFY_DAMAGE,
+		&"ability",
+		&"reckless",
+		BattleEffectSpec.new(BattleEffectSpec.DAMAGE),
+		0,
+		{"requires_recoil": true, "multiplier_bp": 12000},
+	)]
 	_ability_specs[&"fur_coat"] = [BattleTriggerSpec.new(
 		BattleTriggerSpec.MODIFY_DAMAGE,
 		&"ability",
