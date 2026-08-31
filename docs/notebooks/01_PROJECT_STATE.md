@@ -6,10 +6,10 @@ Fast recovery for engineering work. GitHub commits, PR state, CI, immutable sour
 ## Certification policy
 - Repo: `danielmariabardillo1412-creator/pokemon-calvo-`; Godot 4.7.
 - Certified snapshots stay as closed PR branches **without merge**.
-- New tranche starts from latest exact certified HEAD.
+- New tranches start from the latest exact certified HEAD.
 - Require all 18 normal workflows green on the same exact final SHA.
-- Notebook commits move SHA, so final notebook-bearing HEAD requires a second 18/18.
-- Stop on any failing focal/regression and fix root cause first.
+- Notebook commits move SHA, therefore the final notebook-bearing HEAD requires a second 18/18.
+- Any focal/regression failure stops the tranche until root cause is fixed.
 
 ## DATA FOUNDATION V3 authority
 Immutable source:
@@ -25,117 +25,127 @@ Pipeline:
 `snapshot → V3 adapter → narrow semantic audit layers → raw JSON → Godot DataImporter → normalized data → runtime`.
 
 ## Recent certified chain
-- #63 accuracy `9f8b3e01bec1f86cff75380d68dd98d76e738e78`
-- #64 selected special stats `674ccaf0928c93749c581565d53eb1f672dfd7b4`
-- #65 selected stateful `b13af37c350156bc7a9a7d7faf63742245afd801`
-- #66 all-opponents `51bc14155338e47c76926047845a958205005bdd`
-- #69 safe user-stateful `7aaae1c600120442581fdd7c0c048b29e3ee5690`
-- #70 reconciled chain `4ee439a9741cc7dac8ec5d1792485ee79aa5f4b2`
-- #71 mandatory-state user `98c68f1c184e84db30458a4533fb769cba1140ac`
-- #72 persistent-state user `d46be6864abd6e1cffdf54f9e932da06bed054dc`
-- #73 terminal user-state `67ba79e9a68a78669ee5ae04166a47ee11331bc7`
-- #74 all-pokemon semantics `9a917fea11df07c3aa26c8962e2dca9784a41875`
 - #75 final DATA_ONLY executable effects `4bb4bdc64982eef62f126f8d1c38e9509d21c96c`
 - #76 initial ability runtime contracts `a596a38680b60db317f1dfd6b6beb8d7ded7b813`
 - #77 ability family inventory + Swarm `78da22438d0866193b0d1154814464531ac55641`
 - #78 unconditional ability type boosts `eda483d9cd6423d32bdf1a156372416b2fbcb639`
+- #79 hit-triggered stat reactions `5b9ad561017fc4c209d6fd11ef9ddc7dbf3fbd71`
 
 All entries above: **18/18 SUCCESS on exact final notebook-bearing HEAD and closed without merge**.
 
 ## Move Effects V3 closed milestone
-PR #75 certified that no `DATA_ONLY` move retains executable `effect_specs`.
-
-Move coverage:
+Move coverage remains:
 - `RUNTIME_SUPPORTED`: **590**
 - `PARTIAL_RUNTIME`: **71**
 - `DATA_ONLY`: **246**
 - `UNSUPPORTED`: **12**
-- `DATA_ONLY` with non-empty `effect_specs`: **0**.
+- `DATA_ONLY` with executable `effect_specs`: **0**.
 
-## Coverage safety principle
-Preserved data is not equivalent to executable support.
+## Ability coverage principle
+Preserved metadata is not executable support.
+- `RUNTIME_SUPPORTED`: modeled battle mechanic is faithful.
+- `PARTIAL_RUNTIME`: useful faithful subset works but known source-required behavior is absent.
+- `DATA_ONLY`: data retained without claiming executable mechanics.
 
-- `RUNTIME_SUPPORTED`: current modeled battle mechanic is faithful.
-- `PARTIAL_RUNTIME`: real useful subset works, but known source-required battle behavior is absent/wrong.
-- `DATA_ONLY`: source metadata retained without claiming executable mechanics.
-- `UNSUPPORTED`: explicitly outside the current contract.
+Battle Core ability execution is controlled by trigger registration; DATA V3 classification describes semantic completeness.
 
-For moves, `effect_specs` execute regardless of label, so unsafe specs must be removed. For abilities, Battle Core trigger registration controls execution while DATA V3 classification describes semantic completeness.
-
-## Ability reliability through certified #78
+## Certified ability baseline — PR #79
 Detailed notebooks:
 - `06_DATA_V3_ABILITY_RUNTIME_AUDIT.md`
 - `07_DATA_V3_ABILITY_FAMILY_INVENTORY.md`
 - `08_DATA_V3_ABILITY_TYPE_BOOSTS.md`
+- `09_DATA_V3_ABILITY_HIT_STAT_REACTIONS.md`
 
-Known certified partials before this tranche:
-- `intimidate`: base switch-in Attack drop works; extra acquisition/reacquisition/Substitute semantics absent.
-- `levitate`: Ground move immunity works; grounded-field/suppression semantics absent.
-- `static`: ordinary contact paralysis works; fatal contact cannot currently trigger because fainted owners are excluded from AFTER_DAMAGE.
-
-Certified #78 ability coverage:
+Certified #79 coverage:
 - `RUNTIME_SUPPORTED`: **8** — `blaze`, `dragons_maw`, `fire_mane`, `overgrow`, `rocky_payload`, `steelworker`, `swarm`, `torrent`
-- `PARTIAL_RUNTIME`: **3** — `intimidate`, `levitate`, `static`
-- `DATA_ONLY`: **362**
-- total: **373**.
-
-`transistor` remains deliberately DATA_ONLY because its multiplier is version-sensitive and the pinned snapshot does not provide an honest universal versioned contract.
-
-# Current tranche — PR #79 Hit-triggered stat reactions
-
-- Branch: `audit/data-v3-ability-hit-stat-reactions-v1`.
-- Parent: certified #78 final `eda483d9cd6423d32bdf1a156372416b2fbcb639`.
-- PR: #79 `DATA V3 — audit hit-triggered stat ability reactions`.
-- Engineering SHA: `748b28b69d19be5912bbc0318f2e8e8d40f3eccd`.
-- Engineering SHA: **18/18 SUCCESS**, including DATA V3 and Godot 4.7 global.
-- Detailed notebook: `docs/notebooks/09_DATA_V3_ABILITY_HIT_STAT_REACTIONS.md`.
-
-## #79 decision — Stamina
-Immutable source `data/api/v2/ability/192/index.json` states that taking damage from a move raises Defense by one stage; main-series Generation VII; `effect_changes=[]`.
-
-Battle Core now registers:
-- `AFTER_DAMAGE`
-- SELF Defense `+1`
-- no invented contact/physical/type/HP condition.
-
-This is a faithful subset, but **not complete** because current Battle Core fires AFTER_DAMAGE once per completed move rather than once per strike inside MULTI_HIT; it also excludes fainted owners from trigger execution.
-
-Decision: **`stamina → PARTIAL_RUNTIME`**.
-
-A dedicated DATA V3 integration suite creates a real `AuthoritativeBattleServer` and verifies:
-- surviving Tackle damage triggers Stamina and Defense +1;
-- non-damaging Growl does not trigger Stamina.
-
-## #79 adjacent blockers
-- `water_compaction`: stays `DATA_ONLY`; requires a Water-move predicate on AFTER_DAMAGE that the current condition evaluator does not expose.
-- `weak_armor`: stays `DATA_ONLY`; needs a dual stat transaction plus per-hit/version-aware behavior.
-
-No broad Battle Core primitive was added merely to increase coverage.
-
-## Ability coverage after #79 engineering
-- `RUNTIME_SUPPORTED`: **8**
 - `PARTIAL_RUNTIME`: **4** — `intimidate`, `levitate`, `stamina`, `static`
 - `DATA_ONLY`: **361**
 - total: **373**.
 
-## Exact #78 → #79 engineering artifact
-Raw + normalized:
-- exactly one changed ability: `stamina`;
-- only changed semantic field: `classification`;
-- `DATA_ONLY → PARTIAL_RUNTIME`.
+Known partial reasons:
+- `intimidate`: switch-in Attack drop works; additional acquisition/Substitute semantics absent.
+- `levitate`: Ground move immunity works; grounding/suppression/field interactions absent.
+- `static`: ordinary surviving contact reaction works; fatal-contact trigger gap remains.
+- `stamina`: ordinary surviving damaging hit gives Defense +1; current AFTER_DAMAGE is once per completed move and excludes fainted owners, so per-hit/fatal-hit semantics are incomplete.
 
-Reports move only Stamina and update counts 362→361 DATA_ONLY / 3→4 PARTIAL_RUNTIME. Manifest, forms and auxiliary reports are unchanged. Import-time variation 357→516 ms is non-semantic.
+Known blockers:
+- `transistor`: version-sensitive multiplier not honestly represented by pinned source.
+- `water_compaction`: requires a Water-specific AFTER_DAMAGE predicate.
+- `weak_armor`: requires dual stat transaction plus per-hit/version semantics.
+
+# Current tranche — PR #80
+
+- Branch: `audit/data-v3-ability-stat-damage-modifiers-v2`.
+- Parent: certified #79 final `5b9ad561017fc4c209d6fd11ef9ddc7dbf3fbd71`.
+- PR: #80 `DATA V3 — audit contact damage and attack-doubling abilities`.
+- Engineering SHA: `fecf7995e0284a0c7111239107aa3762f4e1233f`.
+- Engineering SHA: **18/18 SUCCESS**, including DATA V3 and Godot global.
+- Detailed notebook: `docs/notebooks/10_DATA_V3_ABILITY_STAT_DAMAGE_MODIFIERS.md`.
+
+## #80 result — Tough Claws
+Pinned immutable source `data/api/v2/ability/181/index.json` is Generation VI/main-series, `effect_changes=[]`, but its English prose says contact moves are `1.33x` power.
+
+Current audited main-series mechanics are a **30%** contact-move power boost. Immutable source remains untouched. The ability contract first validates the stale pinned `1.33x` shape and then normalizes only the loaded project-owned record to:
+`Boosts the power of moves that make contact by 30%.`
+
+Runtime uses only existing primitives:
+- `MODIFY_DAMAGE`
+- `requires_contact=true`
+- `multiplier_bp=13000`
+- no type gate
+- no physical-only gate.
+
+Decision: **`tough_claws → RUNTIME_SUPPORTED`**.
+
+A real-battle DATA V3 suite verifies:
+- contact `Tackle` receives the boost and emits `ABILITY_TRIGGERED`;
+- non-contact `Earthquake` has identical damage to the no-ability control and emits no Tough Claws trigger.
+
+## #80 rejected adjacent candidates
+`huge_power` and `pure_power` remain **DATA_ONLY**.
+
+Their pinned source says **Attack is doubled in battle** and explicitly says this is not a stat-stage modifier. A blanket final physical-damage x2 is not a faithful substitute for an offensive-stat multiplier. Both records now have source guards and regression tests; no MODIFY_DAMAGE mapping is registered.
+
+## Ability coverage after #80 engineering
+- `RUNTIME_SUPPORTED`: **9**
+- `PARTIAL_RUNTIME`: **4**
+- `DATA_ONLY`: **360**
+- total: **373**.
+
+## Exact #79 → #80 artifact
+Raw and normalized data:
+- exactly one changed ability: `tough_claws`;
+- exactly three changed fields: `classification`, `description`, `effect_summary`.
+
+Reports move only Tough Claws from DATA_ONLY to RUNTIME_SUPPORTED and update 8→9 / 361→360 counts. Partial remains 4.
+
+Explicitly unchanged:
+- Huge Power
+- Pure Power
+- all other abilities
+- species/Pokémon
+- moves/effects
+- items
+- learnsets
+- evolutions
+- types/stats
+- manifest/forms/auxiliary.
+
+`import_time_ms` 516→495 ms is non-semantic timing noise.
+
+## Safety note
+A draft broad replacement of `tools/pokeapi_adapter_v3.py` was caught by the pre-PR compare check (716 changed lines) and removed before PR creation. Final #80 engineering diff leaves the adapter unchanged from certified #79 and implements the correction only in the narrow ability-contract layer.
 
 ## Current certification step
-Notebook sync now moves SHA after engineering `748b28b69d19be5912bbc0318f2e8e8d40f3eccd`.
+Notebook synchronization follows engineering SHA `fecf7995e0284a0c7111239107aa3762f4e1233f`.
 
-Before closing #79:
-1. verify engineering → final HEAD changes only notebook files;
+Before closing #80:
+1. verify engineering SHA → final HEAD changes only `01`, `04`, `10` notebooks;
 2. require **18/18 SUCCESS** on exact final notebook-bearing HEAD;
-3. close #79 without merge;
-4. use that exact final HEAD as next baseline.
+3. close #80 without merge;
+4. use that exact final SHA as the next certified baseline.
 
-## Exact next work after #79
-Remain in DATA FOUNDATION V3 ability reliability.
+## Exact next work after #80
+Continue DATA FOUNDATION V3 ability reliability with another bounded subgroup whose semantics fit existing primitives. Do not bulk-promote the remaining abilities and do not add broad weather/status/party/form state solely to increase coverage.
 
-Do not shortcut Water Compaction or Weak Armor. Triage the remaining `stat_damage_modifier` bucket for another small allowlist whose complete or useful-partial semantics already fit Battle Core primitives. If no clean candidate exists, record that result and move to another family rather than broadening Battle Core solely for coverage.
+Huge Power/Pure Power stay deferred until a genuine offensive-stat multiplier abstraction exists. Trainer AI/archetypes remain deferred.
