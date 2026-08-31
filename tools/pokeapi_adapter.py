@@ -43,7 +43,7 @@ _SIMPLE_SELF_HEALS = {
 }
 _WEATHER_SELF_HEALS = {"morning_sun", "synthesis", "moonlight", "shore_up"}
 _TEMP_TYPE_SELF_HEALS = {"roost"}
-_AUDITED_DATA_ONLY_UNIQUE = {"rest"}
+_AUDITED_DATA_ONLY_UNIQUE = {"rest", "wish"}
 
 # The V2 list mixes raw PokéAPI hyphenated names with the underscore-normalized
 # IDs used by the adapter. Normalize it once for the archived helper functions.
@@ -176,10 +176,11 @@ def generate_move_specs(m: dict, contact_set: set):
 
     if sid in _AUDITED_DATA_ONLY_UNIQUE:
         _require_audited_data_only_unique(m, specs, sid)
-        # Rest is intentionally DATA_ONLY. Generic sleep cannot reproduce Rest:
-        # it rejects replacing an existing persistent status and uses the normal
-        # 1-3 turn sleep duration, while Rest needs its own replacement/failure/
-        # duration semantics. Empty specs are safer than a plausible but false move.
+        # These source-verified unique moves require mechanics outside the current
+        # generic effect model. Rest needs status replacement and move-specific
+        # sleep semantics; Wish needs a persisted delayed heal that follows the
+        # user's side through switching. Empty specs are safer than plausible but
+        # false immediate effects.
         coverage = "DATA_ONLY"
 
     if sid in _SELECTED_TARGET_HEALS:
