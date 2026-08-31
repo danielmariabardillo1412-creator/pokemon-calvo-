@@ -21,12 +21,14 @@ DATA_ONLY = "DATA_ONLY"
 _PINCH_TYPES = {
     "blaze": "fire",
     "overgrow": "grass",
+    "swarm": "bug",
     "torrent": "water",
 }
 
 _CLASSIFICATION = {
     "blaze": RUNTIME_SUPPORTED,
     "overgrow": RUNTIME_SUPPORTED,
+    "swarm": RUNTIME_SUPPORTED,
     "torrent": RUNTIME_SUPPORTED,
     "intimidate": PARTIAL_RUNTIME,
     "levitate": PARTIAL_RUNTIME,
@@ -76,6 +78,29 @@ def _require_tokens(text: str, sid: str, tokens: tuple[str, ...]) -> None:
         )
 
 
+def _validate_swarm_history(ability: dict) -> None:
+    """Swarm's recorded history changes only its old overworld side effect.
+
+    DATA V3 ability coverage is a battle-runtime claim. Historical source records
+    are still guarded here so a future battle-semantic change cannot be mistaken
+    for the harmless overworld-only changes currently present in the snapshot.
+    """
+    changes = ability.get("effect_changes") or []
+    if not changes:
+        raise RuntimeError("DATA V3 Swarm history unexpectedly disappeared; re-audit")
+    for change in changes:
+        change_text = _english_text(change.get("effect_entries"))
+        if not change_text or "overworld" not in change_text:
+            raise RuntimeError(
+                "DATA V3 Swarm history is no longer overworld-only; re-audit"
+            )
+        for battle_token in ("bug-type moves", "1.5x", "damage", "1/3"):
+            if battle_token in change_text:
+                raise RuntimeError(
+                    "DATA V3 Swarm historical battle semantics changed; re-audit"
+                )
+
+
 def _validate_source_contract(ability: dict, sid: str) -> None:
     if not bool(ability.get("is_main_series", False)):
         raise RuntimeError(f"DATA V3 audited ability is no longer main-series: {sid}")
@@ -98,9 +123,12 @@ def _validate_source_contract(ability: dict, sid: str) -> None:
                 "damage",
             ),
         )
-        # The snapshot has no historical effect override for these three; if that
-        # changes, re-audit instead of silently retaining full support.
-        if ability.get("effect_changes"):
+        if sid == "swarm":
+            _validate_swarm_history(ability)
+        elif ability.get("effect_changes"):
+            # Blaze / Overgrow / Torrent have no historical effect override in the
+            # immutable snapshot. If that changes, re-audit before retaining full
+            # battle-runtime support.
             raise RuntimeError(f"DATA V3 pinch ability history changed for {sid}")
         return
 
