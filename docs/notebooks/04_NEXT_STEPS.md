@@ -3,84 +3,83 @@
 Read immediately after `00_READ_FIRST.md` when recovering context.
 
 ## Latest certified baseline
-- PR #77 — `audit/data-v3-ability-family-inventory-v1`
-- Final HEAD `78da22438d0866193b0d1154814464531ac55641`
+- PR #78 — `audit/data-v3-ability-type-boosts-v1`
+- Final HEAD `eda483d9cd6423d32bdf1a156372416b2fbcb639`
 - **18/18 SUCCESS** on exact notebook-bearing HEAD
 - closed without merge.
 
 Move Effects V3 remains closed:
-- move coverage: **590 runtime / 71 partial / 246 data-only / 12 unsupported**;
-- `DATA_ONLY` moves with non-empty `effect_specs`: **0**.
+- **590 runtime / 71 partial / 246 data-only / 12 unsupported**;
+- `DATA_ONLY` moves with executable `effect_specs`: **0**.
 
-Ability coverage at certified #77:
-- `RUNTIME_SUPPORTED`: **4** — `blaze`, `overgrow`, `swarm`, `torrent`
-- `PARTIAL_RUNTIME`: **3** — `intimidate`, `levitate`, `static`
-- `DATA_ONLY`: **366**
-- total: **373**.
-
-Detailed prior ability notebooks:
-- `docs/notebooks/06_DATA_V3_ABILITY_RUNTIME_AUDIT.md`
-- `docs/notebooks/07_DATA_V3_ABILITY_FAMILY_INVENTORY.md`.
-
-# Current tranche — PR #78
-
-- Branch: `audit/data-v3-ability-type-boosts-v1`
-- Parent: certified #77 final `78da22438d0866193b0d1154814464531ac55641`
-- PR: #78 `DATA V3 — audit unconditional ability type boosts`
-- Engineering SHA: `f01b1d0553b7dfa1e5998ee1de99ace9fad1534b`
-- Engineering SHA: **18/18 SUCCESS**; DATA V3 and Godot global green.
-- Detailed current notebook: `docs/notebooks/08_DATA_V3_ABILITY_TYPE_BOOSTS.md`.
-
-## #78 result
-Four clean unconditional user-move type boosts fit the already-existing `MODIFY_DAMAGE` primitive and have explicit numeric immutable-source contracts:
-
-- `steelworker` — Steel x1.5
-- `dragons_maw` — Dragon +50%
-- `rocky_payload` — Rock +50%
-- `fire_mane` — Fire +50%
-
-All four become **`RUNTIME_SUPPORTED`**.
-
-Runtime shape for each:
-- `MODIFY_DAMAGE`
-- exact `move_type_id`
-- `multiplier_bp=15000`
-- no HP threshold and no new Battle Core primitive.
-
-### Transistor is deliberately excluded
-The pinned Transistor record says +50% Electric power and has no historical effect changes, but the ability is version-sensitive. DATA V3 does not yet have enough version-aware ability semantics to choose one universal multiplier honestly.
-
-Decision: **`transistor` stays `DATA_ONLY`** and the test suite enforces that choice.
-
-## Ability coverage after #78 engineering
+Certified #78 ability coverage:
 - `RUNTIME_SUPPORTED`: **8**
-- `PARTIAL_RUNTIME`: **3**
+- `PARTIAL_RUNTIME`: **3** — `intimidate`, `levitate`, `static`
 - `DATA_ONLY`: **362**
 - total: **373**.
 
-Runtime-supported IDs:
-`blaze`, `dragons_maw`, `fire_mane`, `overgrow`, `rocky_payload`, `steelworker`, `swarm`, `torrent`.
+Prior ability notebooks: `06`, `07`, `08`.
 
-## Exact #77 → #78 artifact
+# Current tranche — PR #79
+
+- Branch: `audit/data-v3-ability-hit-stat-reactions-v1`
+- Parent: certified #78 final `eda483d9cd6423d32bdf1a156372416b2fbcb639`
+- PR: #79 `DATA V3 — audit hit-triggered stat ability reactions`
+- Engineering SHA: `748b28b69d19be5912bbc0318f2e8e8d40f3eccd`
+- Engineering SHA: **18/18 SUCCESS**; DATA V3 and Godot global green.
+- Detailed notebook: `docs/notebooks/09_DATA_V3_ABILITY_HIT_STAT_REACTIONS.md`.
+
+## #79 result
+
+### Stamina
+Pinned source `data/api/v2/ability/192/index.json`:
+- main-series Generation VII;
+- taking damage from a move raises Defense one stage;
+- `effect_changes=[]`.
+
+Implemented faithful subset:
+- `AFTER_DAMAGE`
+- SELF Defense `+1`
+- no contact/physical/type/HP gate.
+
+Decision: **`stamina → PARTIAL_RUNTIME`**, not full support.
+
+Reason for partial classification: current Battle Core fires AFTER_DAMAGE once after the complete move. MULTI_HIT resolves its strikes internally before that trigger, so Stamina cannot currently activate per strike. Fainted owners are also excluded from trigger execution.
+
+A dedicated DATA V3 integration suite uses a real `AuthoritativeBattleServer` and verifies:
+- Tackle damage to a surviving Stamina owner → Defense +1 + `ABILITY_TRIGGERED`;
+- Growl/non-damage → no Stamina trigger.
+
+### Explicit blockers
+- `water_compaction` remains `DATA_ONLY`: current AFTER_DAMAGE conditions cannot require Water type without adding a broader primitive.
+- `weak_armor` remains `DATA_ONLY`: dual stat transaction + per-hit/version semantics exceed this tranche.
+
+## Ability coverage after #79 engineering
+- `RUNTIME_SUPPORTED`: **8**
+- `PARTIAL_RUNTIME`: **4** — `intimidate`, `levitate`, `stamina`, `static`
+- `DATA_ONLY`: **361**
+- total: **373**.
+
+## Exact #78 → #79 artifact
 Raw + normalized:
-- exactly four semantic changes;
-- only `classification: DATA_ONLY → RUNTIME_SUPPORTED` for `dragons_maw`, `fire_mane`, `rocky_payload`, `steelworker`.
+- exactly one semantic change;
+- `stamina.classification: DATA_ONLY → PARTIAL_RUNTIME`.
 
-No other ability, Pokémon/species, move/effect, item, learnset, evolution, type or stat changed. Reports move exactly those same IDs and counts. Manifest/forms/auxiliary remain unchanged. Import timing 519→525 ms is non-semantic.
+No other ability, species, move/effect, item, learnset, evolution, type or stat changed. Reports move only Stamina and adjust the matching counts. Manifest/forms/auxiliary are unchanged. Import-time variation is non-semantic.
 
 ## Current certification step
-Notebook synchronization now moves the branch after engineering SHA `f01b1d0553b7dfa1e5998ee1de99ace9fad1534b`.
+Notebook synchronization has moved the branch after engineering SHA `748b28b69d19be5912bbc0318f2e8e8d40f3eccd`.
 
-Before closing #78:
-1. verify engineering SHA → final HEAD changed only `01_PROJECT_STATE.md`, `04_NEXT_STEPS.md`, `08_DATA_V3_ABILITY_TYPE_BOOSTS.md`;
+Before closing #79:
+1. verify engineering SHA → final HEAD changed only `01_PROJECT_STATE.md`, `04_NEXT_STEPS.md`, `09_DATA_V3_ABILITY_HIT_STAT_REACTIONS.md`;
 2. require **18/18 SUCCESS** on exact final notebook-bearing HEAD;
-3. close #78 without merge;
+3. close #79 without merge;
 4. use exact final HEAD as next baseline.
 
-## Exact next task after #78 closure
-Continue **DATA FOUNDATION V3 ability reliability** with another bounded family that can use existing primitives.
+## Exact next task after #79 closure
+Continue **DATA FOUNDATION V3 ability reliability**.
 
-First candidate: `stamina`, subject to a fresh immutable-source + runtime audit. Do not bulk-convert the remaining `stat_damage_modifier` family. Keep the broad contact-reactive family deferred while Static's fatal-contact AFTER_DAMAGE gap remains unresolved.
+Triage the remaining `stat_damage_modifier` family for another bounded set whose semantics already fit existing Battle Core primitives. Do not implement Water Compaction or Weak Armor by shortcut and do not broaden Battle Core solely to improve the coverage number. If that bucket yields no clean candidate, record the negative result and move to another family.
 
 Trainer AI/archetypes remain deferred.
 
