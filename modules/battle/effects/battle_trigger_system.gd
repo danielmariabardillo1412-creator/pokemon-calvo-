@@ -30,8 +30,16 @@ func damage_modifiers(
 	for spec in registry.triggers_for_ability(
 		context.target.ability_id, BattleTriggerSpec.MODIFY_DAMAGE
 	):
-		if StringName(spec.conditions.get("immune_type_id", "")) == context.move.type_id:
+		var immune_type := StringName(spec.conditions.get("immune_type_id", ""))
+		if immune_type != &"" and immune_type == context.move.type_id:
 			immune = true
+			_emit_trigger(context, spec, context.target)
+			continue
+		if (
+			spec.conditions.has("multiplier_bp")
+			and _damage_condition_matches(spec, context.target, context.move)
+		):
+			multiplier_bp = multiplier_bp * int(spec.conditions.get("multiplier_bp", 10000)) / 10000
 			_emit_trigger(context, spec, context.target)
 	return {"multiplier_basis_points": multiplier_bp, "immune": immune}
 
