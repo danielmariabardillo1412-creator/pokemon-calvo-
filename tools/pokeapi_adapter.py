@@ -35,6 +35,7 @@ _REQUIRED_UNSUPPORTED_NORMALIZED = {
 _SELECTED_TARGET_HEALS = {"heal_pulse", "floral_healing"}
 _TEAM_TARGET_HEALS = {"life_dew", "jungle_healing"}
 _SIMPLE_SELF_HEALS = {"recover", "soft_boiled", "milk_drink", "slack_off"}
+_WEATHER_SELF_HEALS = {"morning_sun", "synthesis", "moonlight", "shore_up"}
 
 # The V2 list mixes raw PokéAPI hyphenated names with the underscore-normalized
 # IDs used by the adapter. Normalize it once for the archived helper functions.
@@ -103,6 +104,19 @@ def _has_effect(specs: list[dict], kind: str, target: str | None = None) -> bool
     return bool(_matching_effects(specs, kind, target))
 
 
+def _require_single_self_heal(specs: list[dict], sid: str, ratio_basis_points: int) -> None:
+    heals = _matching_effects(specs, "heal")
+    if len(heals) != 1:
+        raise RuntimeError(
+            f"DATA V3 expected exactly one heal effect for {sid}, found {len(heals)}"
+        )
+    heal = heals[0]
+    if heal.get("target") != "self" or heal.get("ratio_basis_points") != ratio_basis_points:
+        raise RuntimeError(
+            f"DATA V3 self-heal contract mismatch for {sid}: {heal}"
+        )
+
+
 def generate_move_specs(m: dict, contact_set: set):
     """V3 wrapper around the archived move-effect converter.
 
@@ -115,18 +129,16 @@ def generate_move_specs(m: dict, contact_set: set):
     sid = _legacy.slug(str(m.get("name", "")))
 
     if sid in _SIMPLE_SELF_HEALS:
-        heals = _matching_effects(specs, "heal")
-        if len(heals) != 1:
-            raise RuntimeError(
-                f"DATA V3 expected exactly one heal effect for {sid}, found {len(heals)}"
-            )
-        heal = heals[0]
-        if heal.get("target") != "self" or heal.get("ratio_basis_points") != 5000:
-            raise RuntimeError(
-                f"DATA V3 simple self-heal contract mismatch for {sid}: {heal}"
-            )
+        _require_single_self_heal(specs, sid, 5000)
         # Snapshot-verified: these four moves have no additional battle effect.
         coverage = "RUNTIME_SUPPORTED"
+
+    if sid in _WEATHER_SELF_HEALS:
+        _require_single_self_heal(specs, sid, 5000)
+        # The generated 1/2 heal is the correct neutral-weather behavior, but the
+        # current BattleEffectSpec cannot express weather-dependent ratios. Keep
+        # the representable base effect while explicitly refusing full coverage.
+        coverage = "PARTIAL_RUNTIME"
 
     if sid in _SELECTED_TARGET_HEALS:
         changed = _rewrite_effect_target(specs, "heal", "opponent")
