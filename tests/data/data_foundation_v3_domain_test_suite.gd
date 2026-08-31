@@ -6,6 +6,7 @@ func run(check_callback: Callable) -> void:
 	_test_learnset_roundtrip(check_callback)
 	_test_evolution_roundtrip(check_callback)
 	_test_species_metadata_roundtrip(check_callback)
+	_test_silk_trap_generated_semantics(check_callback)
 
 
 func _test_learnset_roundtrip(check_callback: Callable) -> void:
@@ -69,3 +70,23 @@ func _test_species_metadata_roundtrip(check_callback: Callable) -> void:
 	species.ability_slots[0]["slot"] = 99
 	species.source_metadata["learnset_version_group"] = "broken"
 	check_callback.call("data_v3_species_metadata_is_independent", int(copy.ability_slots[0].get("slot", 0)) == 1 and copy.source_metadata.get("learnset_version_group") == "scarlet_violet")
+
+
+func _test_silk_trap_generated_semantics(check_callback: Callable) -> void:
+	var raw_text := FileAccess.get_file_as_string("res://data/raw/pokemon_api.json")
+	var parsed = JSON.parse_string(raw_text)
+	check_callback.call("data_v3_silk_trap_raw_json_parses", parsed is Dictionary)
+	if not parsed is Dictionary:
+		return
+	var root: Dictionary = parsed
+	var silk_trap: Dictionary = {}
+	for move in root.get("moves", []):
+		if move is Dictionary and String(move.get("id", "")) == "silk_trap":
+			silk_trap = move
+			break
+	check_callback.call("data_v3_silk_trap_present", not silk_trap.is_empty())
+	if silk_trap.is_empty():
+		return
+	check_callback.call("data_v3_silk_trap_target_preserved", silk_trap.get("target", "") == "user")
+	check_callback.call("data_v3_silk_trap_is_data_only", silk_trap.get("classification", "") == "DATA_ONLY")
+	check_callback.call("data_v3_silk_trap_has_no_false_runtime_effect", (silk_trap.get("effect_specs", []) as Array).is_empty())
