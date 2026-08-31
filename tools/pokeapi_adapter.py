@@ -43,6 +43,7 @@ _SIMPLE_SELF_HEALS = {
 }
 _WEATHER_SELF_HEALS = {"morning_sun", "synthesis", "moonlight", "shore_up"}
 _TEMP_TYPE_SELF_HEALS = {"roost"}
+_AUDITED_DATA_ONLY_UNIQUE = {"rest"}
 
 # The V2 list mixes raw PokéAPI hyphenated names with the underscore-normalized
 # IDs used by the adapter. Normalize it once for the archived helper functions.
@@ -124,6 +125,26 @@ def _require_single_self_heal(specs: list[dict], sid: str, ratio_basis_points: i
         )
 
 
+def _require_audited_data_only_unique(m: dict, specs: list[dict], sid: str) -> None:
+    """Fail if a source-verified unique move starts receiving guessed runtime effects."""
+    meta = m.get("meta") or {}
+    category = (meta.get("category") or {}).get("name")
+    ailment = (meta.get("ailment") or {}).get("name")
+    target = (m.get("target") or {}).get("name")
+    if specs:
+        raise RuntimeError(
+            f"DATA V3 audited DATA_ONLY move {sid} unexpectedly generated effects: {specs}"
+        )
+    if category != "unique" or int(meta.get("healing") or 0) != 0:
+        raise RuntimeError(
+            f"DATA V3 audited unique-move metadata changed for {sid}"
+        )
+    if ailment not in ("none", "", None) or target != "user":
+        raise RuntimeError(
+            f"DATA V3 audited unique-move status/target changed for {sid}"
+        )
+
+
 def generate_move_specs(m: dict, contact_set: set):
     """V3 wrapper around the archived move-effect converter.
 
@@ -152,6 +173,14 @@ def generate_move_specs(m: dict, contact_set: set):
         # Roost's base healing is representable, but BattleEffectSpec has no
         # temporary type suppression/change effect for its Flying-type rule.
         coverage = "PARTIAL_RUNTIME"
+
+    if sid in _AUDITED_DATA_ONLY_UNIQUE:
+        _require_audited_data_only_unique(m, specs, sid)
+        # Rest is intentionally DATA_ONLY. Generic sleep cannot reproduce Rest:
+        # it rejects replacing an existing persistent status and uses the normal
+        # 1-3 turn sleep duration, while Rest needs its own replacement/failure/
+        # duration semantics. Empty specs are safer than a plausible but false move.
+        coverage = "DATA_ONLY"
 
     if sid in _SELECTED_TARGET_HEALS:
         changed = _rewrite_effect_target(specs, "heal", "opponent")
