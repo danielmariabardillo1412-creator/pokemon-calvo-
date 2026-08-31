@@ -36,20 +36,19 @@ Pipeline:
 - #73 terminal user-state `67ba79e9a68a78669ee5ae04166a47ee11331bc7`
 - #74 all-pokemon semantics `9a917fea11df07c3aa26c8962e2dca9784a41875`
 - #75 final DATA_ONLY executable effects `4bb4bdc64982eef62f126f8d1c38e9509d21c96c`
+- #76 initial ability runtime contracts `a596a38680b60db317f1dfd6b6beb8d7ded7b813`
 
 All entries above: 18/18 on exact final notebook-bearing HEAD, closed without merge.
 
 ## Move Effects V3 closed milestone
 PR #75 certified that no `DATA_ONLY` move retains executable `effect_specs`.
 
-Move coverage at #75:
+Move coverage:
 - `RUNTIME_SUPPORTED`: **590**
 - `PARTIAL_RUNTIME`: **71**
 - `DATA_ONLY`: **246**
 - `UNSUPPORTED`: **12**
 - `DATA_ONLY` with non-empty `effect_specs`: **0**
-
-`Purify`, `Swallow`, and `Beat Up` were the final unsafe approximations and now remain `DATA_ONLY + effect_specs=[]` until Battle Core can represent their complete transactions.
 
 ## Coverage safety principle
 Preserved data is not equivalent to executable support.
@@ -61,55 +60,92 @@ Preserved data is not equivalent to executable support.
 
 For moves, `effect_specs` execute regardless of label, so unsafe specs must be removed. For abilities, Battle Core trigger registration controls execution while DATA V3 classification describes semantic completeness.
 
-# Current tranche — PR #76 Ability runtime contracts
+## Certified ability baseline — PR #76
+Detailed notebook: `docs/notebooks/06_DATA_V3_ABILITY_RUNTIME_AUDIT.md`.
 
-- Branch: `audit/data-v3-ability-runtime-contracts-v1`
-- Parent: certified #75 final `4bb4bdc64982eef62f126f8d1c38e9509d21c96c`.
-- Engineering SHA: `8e1ea4e443ef76dcca8f83ebf49c0ea282f4c890`.
+PR #76 established the first honest ability split:
+- `RUNTIME_SUPPORTED`: **3** — `blaze`, `overgrow`, `torrent`
+- `PARTIAL_RUNTIME`: **3** — `intimidate`, `levitate`, `static`
+- `DATA_ONLY`: **367**
+- total: 373.
+
+Important known partials:
+- `intimidate`: base switch-in Attack drop works; additional acquisition/reacquisition/Substitute semantics absent.
+- `levitate`: Ground move immunity works; grounded-field/suppression semantics absent.
+- `static`: ordinary 30% contact paralysis works; fatal contact cannot currently trigger because fainted owners are excluded from the AFTER_DAMAGE path.
+
+Do not globally fire all AFTER_DAMAGE triggers on fainted owners as a shortcut; held items share that infrastructure.
+
+# Current tranche — PR #77 Ability family inventory + Swarm
+
+- Branch: `audit/data-v3-ability-family-inventory-v1`.
+- Parent: certified #76 final `a596a38680b60db317f1dfd6b6beb8d7ded7b813`.
+- PR: #77 `DATA V3 — inventory ability families and audit Swarm`.
+- Engineering SHA: `3eb799c2fefc513ef925ebe329e4ad092954aef1`.
 - Engineering SHA: **18/18 SUCCESS**, including DATA V3 and Godot 4.7 global.
-- Detailed notebook: `docs/notebooks/06_DATA_V3_ABILITY_RUNTIME_AUDIT.md`.
+- Detailed notebook: `docs/notebooks/07_DATA_V3_ABILITY_FAMILY_INVENTORY.md`.
 
-## #76 audited ability result
-Battle Core has explicit triggers for six abilities. DATA V3 previously mislabeled all 373 abilities as `DATA_ONLY`.
+## #77 inventory result
+The exact 367-record DATA_ONLY frontier inherited from #76 is deterministically partitioned into **13 triage families**. The inventory is planning/test infrastructure only; it cannot auto-promote abilities.
 
-After source/runtime audit:
+Largest families:
+- `stat_damage_modifier`: 78
+- `source_text_missing`: 60
+- `immunity_absorb_prevention`: 53
+- `move_property_control`: 38
+- `weather_terrain`: 33
+- remaining eight families account for the rest; exact 367 total is CI-enforced.
 
-### RUNTIME_SUPPORTED — 3
-- `blaze`
-- `overgrow`
-- `torrent`
+`source_text_missing` is an explicit blocker. The inventory suite also fails if any former #76 DATA_ONLY ability other than the explicitly audited Swarm is promoted in this tranche.
 
-Their source 1/3-HP + matching-type + 1.5x damage transaction matches the actual Battle Core damage-modifier path.
+## #77 bounded family decision — Swarm
+The `pinch_type_boost` remainder contains exactly one ability: `swarm`.
 
-### PARTIAL_RUNTIME — 3
-- `intimidate`: switch-in Attack -1 works; additional acquisition/reacquisition/Substitute semantics are absent.
-- `levitate`: Ground-move immunity works; grounded-field/suppression semantics are absent.
-- `static`: ordinary contact 30% paralysis works, but a contact hit that KOs the Static holder cannot currently trigger its AFTER_DAMAGE ability path.
+Immutable source `data/api/v2/ability/68/index.json`:
+- main-series, Generation III;
+- <=1/3 HP;
+- Bug-type moves deal 1.5x regular damage;
+- historical `effect_changes` are overworld-only and do not alter the battle transaction.
 
-### DATA_ONLY — 367
-All other ability records remain data-only until their semantic families are explicitly audited.
+Decision: `swarm → RUNTIME_SUPPORTED`.
 
-## #76 implementation contract
-- `tools/pokeapi_ability_runtime_contracts.py`: explicit six-ID allowlist with fail-fast immutable-source semantic checks.
-- `tools/pokeapi_adapter_v3.py`: emits audited ability classifications and report counts/IDs.
-- `tests/data/data_foundation_v3_ability_runtime_contract_test_suite.gd`: exact 3/3/367 partition + registry consistency.
-- No generic Battle Core trigger changes in this tranche.
+Battle Core reuses the existing Blaze/Torrent/Overgrow MODIFY_DAMAGE primitive:
+- `move_type_id=bug`
+- `hp_at_or_below_divisor=3`
+- `multiplier_bp=15000`
 
-## Exact #75 → #76 engineering artifact
-Raw and normalized:
-- exactly six changes;
-- all are `ability.classification` changes only.
+No new execution primitive was added.
 
-Reports add the corresponding classification IDs/counts and audit check. Species, moves/effects, items, learnsets, evolutions, types, stats, manifest, forms and auxiliary data are unchanged. `import_time_ms` variation is non-semantic execution timing only.
+`runtime_supported_ability_ids()` remains the frozen historical Battle V2 compatibility list. New `implemented_ability_ids()` exposes the actual ability trigger registry for DATA V3 reliability tests.
+
+## Ability coverage after #77 engineering
+- `RUNTIME_SUPPORTED`: **4** — `blaze`, `overgrow`, `swarm`, `torrent`
+- `PARTIAL_RUNTIME`: **3** — `intimidate`, `levitate`, `static`
+- `DATA_ONLY`: **366**
+- total: **373**
+
+## Exact #76 → #77 engineering artifact
+Raw and normalized datasets:
+- exactly one changed ability: `swarm`;
+- exactly one changed field: `classification`;
+- `DATA_ONLY → RUNTIME_SUPPORTED`.
+
+No other ability, species, move/effect, item, learnset, evolution, type or stat changed.
+
+Reports change only the corresponding ability counts/lists. `import_summary.json` differs only in nondeterministic `import_time_ms` (`512→519 ms`). Manifest/forms/auxiliary are unchanged.
 
 ## Current certification step
-Notebook synchronization follows engineering SHA `8e1ea4e443ef76dcca8f83ebf49c0ea282f4c890`.
+Notebook sync now moves SHA after engineering `3eb799c2fefc513ef925ebe329e4ad092954aef1`.
 
-Before closing #76 without merge:
-1. verify engineering → final HEAD changed only operational notebooks;
-2. require 18/18 on exact final notebook-bearing HEAD;
-3. close #76 without merge;
-4. use final HEAD as next baseline.
+Before closing #77 without merge:
+1. verify engineering → final HEAD changes only notebook files;
+2. require **18/18 SUCCESS** on exact final notebook-bearing HEAD;
+3. close #77 without merge;
+4. use that exact final HEAD as next baseline.
 
-## Exact next work after #76
-Remain in DATA FOUNDATION V3 ability reliability. Inventory/classify the remaining **367** abilities by semantic families and prioritize families expressible with existing Battle Core primitives. Do not mass-implement all abilities and do not return to trainer AI/archetypes yet.
+## Exact next work after #77
+Remain in DATA FOUNDATION V3 ability reliability.
+
+First candidate: `steelworker` (`data/api/v2/ability/200/index.json`). Immutable source states Steel moves have 1.5x power and `effect_changes=[]`; the existing MODIFY_DAMAGE primitive appears sufficient for an unconditional Steel multiplier. **It is not yet audited/promoted.** Next tranche must still perform source guard → focal runtime contract → tests → artifact diff before changing classification.
+
+Do not mass-promote Transistor / Dragon's Maw / Rocky Payload from short prose alone; their preserved text lacks the numeric multiplier needed for the same source-only proof.
