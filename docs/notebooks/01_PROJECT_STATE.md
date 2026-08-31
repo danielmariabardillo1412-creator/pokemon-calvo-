@@ -88,35 +88,44 @@ Silk Trap semantic fix:
 - PR #54: closed without merge.
 - CI: 18/18 SUCCESS on that exact final notebook-bearing HEAD.
 
-Current Aromatic Mist tranche:
+Aromatic Mist semantic fix:
 
 - Branch: `fix/data-v3-aromatic-mist-semantics`
-- PR #55.
-- Parent: certified HEAD `c1f5e55c7d1d8acc991b3a6ddde906f10930bb67`.
-- Engineering SHA before notebook synchronization: `7ae7d5c8f20c555e03411e3baacdbd2de1084f1c`.
-- That engineering SHA passed 18/18 workflows, including the independent Aromatic Mist dataset assertion and Godot global.
-- Notebook synchronization moves the branch tip; **the exact final certified HEAD must be read from PR #55 / branch tip after its second 18/18 run before closure**. GitHub is authoritative.
+- Final HEAD: `844efde0eed27e1a5ca8790ae95a183fba6ba98c`
+- PR #55: closed without merge.
+- CI: 18/18 SUCCESS on that exact final notebook-bearing HEAD.
+
+Current Stuff Cheeks tranche:
+
+- Branch: `fix/data-v3-stuff-cheeks-semantics`
+- PR #56.
+- Parent: certified HEAD `844efde0eed27e1a5ca8790ae95a183fba6ba98c`.
+- Engineering SHA before notebook synchronization: `9600c74db8d45c590f47ad3be7baff439757964e`.
+- That engineering SHA passed 18/18 workflows, including the independent Stuff Cheeks regenerated-dataset assertion and Godot global.
+- Notebook synchronization moves the branch tip; **the exact final certified HEAD must be read from PR #56 / branch tip after its second 18/18 run before closure**. GitHub is authoritative.
 
 The active work is **Move Effects V3 semantic audit**, not trainer AI.
 
-## Current move coverage from PR #55 engineering artifact
+## Current move coverage from PR #56 engineering artifact
 
-Exact generated artifact counts from SHA `7ae7d5c8f20c555e03411e3baacdbd2de1084f1c`:
+Exact generated artifact counts from SHA `9600c74db8d45c590f47ad3be7baff439757964e`:
 
 - `RUNTIME_SUPPORTED`: 555
 - `PARTIAL_RUNTIME`: 66
 - `DATA_ONLY`: 286
 - `UNSUPPORTED`: 12
 
-Among the remaining `DATA_ONLY` records, 64 still have generated `effect_specs` and therefore deserve special scrutiny:
+Among the remaining `DATA_ONLY` records, 63 still have generated `effect_specs` and therefore deserve special scrutiny:
 
-- 61 records contain stat-change effects (109 nested/top-level `modify_stat_stage` specs in total across them).
+- 60 records contain stat-change effects (108 top-level `modify_stat_stage` specs across those records).
 - 2 heal-related cases: `Purify`, `Swallow`.
 - 1 multi-hit case: `Beat Up`.
 
 `Silk Trap` remains `DATA_ONLY` with empty `effect_specs`; its previous generic `SELF Speed -1` was false because the real Speed drop is contact-triggered on the attacker.
 
 `Aromatic Mist` remains `DATA_ONLY` with empty `effect_specs`; its previous generic `SELF Special Defense +1` was false because the immutable source explicitly targets a selected ally. Current Battle Core has no ally target.
+
+`Stuff Cheeks` remains `DATA_ONLY` with empty `effect_specs`; its previous generic `SELF Defense +2` was false because the move cannot be used without a held Berry and must consume that Berry before the Defense boost. Current move effects cannot represent that held-item prerequisite/consumption transaction faithfully.
 
 This count is a prioritization signal, **not** proof that all other DATA_ONLY moves are correct. The audit must continue by semantic family.
 
@@ -137,7 +146,7 @@ This count is a prioritization signal, **not** proof that all other DATA_ONLY mo
 - FIXED_DAMAGE
 - MULTI_HIT
 
-Targets currently available to the effect model/importer are SELF and OPPONENT. Team/side/ally targeting, delayed effects, weather-conditioned heal ratios, temporary type suppression, protection/contact-response triggers, and several unique move mechanics are not generally representable.
+Targets currently available to the effect model/importer are SELF and OPPONENT. Team/side/ally targeting, delayed effects, weather-conditioned heal ratios, temporary type suppression, protection/contact-response triggers, held-item prerequisites/consumption transactions, and several unique move mechanics are not generally representable.
 
 `StatStages` supports Attack, Defense, Special Attack, Special Defense, Speed, Accuracy, and Evasion with normal stage clamping.
 
