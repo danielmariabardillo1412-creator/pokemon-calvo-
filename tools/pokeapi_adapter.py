@@ -36,6 +36,7 @@ _SELECTED_TARGET_HEALS = {"heal_pulse", "floral_healing"}
 _TEAM_TARGET_HEALS = {"life_dew", "jungle_healing"}
 _SIMPLE_SELF_HEALS = {"recover", "soft_boiled", "milk_drink", "slack_off"}
 _WEATHER_SELF_HEALS = {"morning_sun", "synthesis", "moonlight", "shore_up"}
+_TEMP_TYPE_SELF_HEALS = {"roost"}
 
 # The V2 list mixes raw PokéAPI hyphenated names with the underscore-normalized
 # IDs used by the adapter. Normalize it once for the archived helper functions.
@@ -138,6 +139,12 @@ def generate_move_specs(m: dict, contact_set: set):
         # The generated 1/2 heal is the correct neutral-weather behavior, but the
         # current BattleEffectSpec cannot express weather-dependent ratios. Keep
         # the representable base effect while explicitly refusing full coverage.
+        coverage = "PARTIAL_RUNTIME"
+
+    if sid in _TEMP_TYPE_SELF_HEALS:
+        _require_single_self_heal(specs, sid, 5000)
+        # Roost's base healing is representable, but BattleEffectSpec has no
+        # temporary type suppression/change effect for its Flying-type rule.
         coverage = "PARTIAL_RUNTIME"
 
     if sid in _SELECTED_TARGET_HEALS:
