@@ -38,6 +38,7 @@ Pipeline:
 - #75 final DATA_ONLY executable effects `4bb4bdc64982eef62f126f8d1c38e9509d21c96c`
 - #76 initial ability runtime contracts `a596a38680b60db317f1dfd6b6beb8d7ded7b813`
 - #77 ability family inventory + Swarm `78da22438d0866193b0d1154814464531ac55641`
+- #78 unconditional ability type boosts `eda483d9cd6423d32bdf1a156372416b2fbcb639`
 
 All entries above: **18/18 SUCCESS on exact final notebook-bearing HEAD and closed without merge**.
 
@@ -61,84 +62,80 @@ Preserved data is not equivalent to executable support.
 
 For moves, `effect_specs` execute regardless of label, so unsafe specs must be removed. For abilities, Battle Core trigger registration controls execution while DATA V3 classification describes semantic completeness.
 
-## Certified ability baseline through PR #77
+## Ability reliability through certified #78
 Detailed notebooks:
-- `docs/notebooks/06_DATA_V3_ABILITY_RUNTIME_AUDIT.md`
-- `docs/notebooks/07_DATA_V3_ABILITY_FAMILY_INVENTORY.md`
+- `06_DATA_V3_ABILITY_RUNTIME_AUDIT.md`
+- `07_DATA_V3_ABILITY_FAMILY_INVENTORY.md`
+- `08_DATA_V3_ABILITY_TYPE_BOOSTS.md`
 
-PR #76 established the initial honest ability split and the known partials:
+Known certified partials before this tranche:
 - `intimidate`: base switch-in Attack drop works; extra acquisition/reacquisition/Substitute semantics absent.
 - `levitate`: Ground move immunity works; grounded-field/suppression semantics absent.
 - `static`: ordinary contact paralysis works; fatal contact cannot currently trigger because fainted owners are excluded from AFTER_DAMAGE.
 
-PR #77 then partitioned the exact 367-record #76 DATA_ONLY frontier into **13 deterministic triage families** and promoted only `swarm` after an explicit source/runtime audit.
-
-Certified #77 ability coverage:
-- `RUNTIME_SUPPORTED`: **4** — `blaze`, `overgrow`, `swarm`, `torrent`
+Certified #78 ability coverage:
+- `RUNTIME_SUPPORTED`: **8** — `blaze`, `dragons_maw`, `fire_mane`, `overgrow`, `rocky_payload`, `steelworker`, `swarm`, `torrent`
 - `PARTIAL_RUNTIME`: **3** — `intimidate`, `levitate`, `static`
-- `DATA_ONLY`: **366**
-- total: **373**.
-
-# Current tranche — PR #78 Ability type boosts
-
-- Branch: `audit/data-v3-ability-type-boosts-v1`.
-- Parent: certified #77 final `78da22438d0866193b0d1154814464531ac55641`.
-- PR: #78 `DATA V3 — audit unconditional ability type boosts`.
-- Engineering SHA: `f01b1d0553b7dfa1e5998ee1de99ace9fad1534b`.
-- Engineering SHA: **18/18 SUCCESS**, including DATA V3 and Godot 4.7 global.
-- Detailed notebook: `docs/notebooks/08_DATA_V3_ABILITY_TYPE_BOOSTS.md`.
-
-## #78 bounded source/runtime result
-Four unconditional type-power boosts are source-complete and fit the existing `MODIFY_DAMAGE` primitive without a new Battle Core mechanism:
-
-- `steelworker` — Steel, x1.5
-- `dragons_maw` — Dragon, +50%
-- `rocky_payload` — Rock, +50%
-- `fire_mane` — Fire, +50%
-
-All four have explicit numeric current source semantics, expected generation guards and `effect_changes=[]` in the pinned snapshot.
-
-Decision: all four become `RUNTIME_SUPPORTED`.
-
-`transistor` remains deliberately `DATA_ONLY`: its ability semantics are version-sensitive while the pinned source lacks enough versioned history to justify one universal multiplier under the project's version-aware policy.
-
-## #78 runtime contract
-Battle Core registers each new ability as:
-- trigger `MODIFY_DAMAGE`;
-- exact `move_type_id`;
-- `multiplier_bp=15000`;
-- no HP threshold or additional hidden condition.
-
-No new general primitive and no global damage-order change were introduced. Historical `runtime_supported_ability_ids()` remains frozen for Battle V2 compatibility; DATA V3 uses `implemented_ability_ids()`.
-
-## Ability coverage after #78 engineering
-- `RUNTIME_SUPPORTED`: **8**
-- `PARTIAL_RUNTIME`: **3**
 - `DATA_ONLY`: **362**
 - total: **373**.
 
-The exact runtime-supported set is:
-`blaze`, `dragons_maw`, `fire_mane`, `overgrow`, `rocky_payload`, `steelworker`, `swarm`, `torrent`.
+`transistor` remains deliberately DATA_ONLY because its multiplier is version-sensitive and the pinned snapshot does not provide an honest universal versioned contract.
 
-## Exact #77 → #78 engineering artifact
-Raw + normalized datasets:
-- exactly four semantic changes;
-- only `classification: DATA_ONLY → RUNTIME_SUPPORTED` for `dragons_maw`, `fire_mane`, `rocky_payload`, `steelworker`.
+# Current tranche — PR #79 Hit-triggered stat reactions
 
-No other ability, species, move/effect, item, learnset, evolution, type or stat changed.
+- Branch: `audit/data-v3-ability-hit-stat-reactions-v1`.
+- Parent: certified #78 final `eda483d9cd6423d32bdf1a156372416b2fbcb639`.
+- PR: #79 `DATA V3 — audit hit-triggered stat ability reactions`.
+- Engineering SHA: `748b28b69d19be5912bbc0318f2e8e8d40f3eccd`.
+- Engineering SHA: **18/18 SUCCESS**, including DATA V3 and Godot 4.7 global.
+- Detailed notebook: `docs/notebooks/09_DATA_V3_ABILITY_HIT_STAT_REACTIONS.md`.
 
-Reports move exactly those four IDs and update counts 4→8 runtime / 366→362 data-only. Manifest, forms report and auxiliary report are unchanged. `import_time_ms` 519→525 ms is non-semantic timing noise.
+## #79 decision — Stamina
+Immutable source `data/api/v2/ability/192/index.json` states that taking damage from a move raises Defense by one stage; main-series Generation VII; `effect_changes=[]`.
+
+Battle Core now registers:
+- `AFTER_DAMAGE`
+- SELF Defense `+1`
+- no invented contact/physical/type/HP condition.
+
+This is a faithful subset, but **not complete** because current Battle Core fires AFTER_DAMAGE once per completed move rather than once per strike inside MULTI_HIT; it also excludes fainted owners from trigger execution.
+
+Decision: **`stamina → PARTIAL_RUNTIME`**.
+
+A dedicated DATA V3 integration suite creates a real `AuthoritativeBattleServer` and verifies:
+- surviving Tackle damage triggers Stamina and Defense +1;
+- non-damaging Growl does not trigger Stamina.
+
+## #79 adjacent blockers
+- `water_compaction`: stays `DATA_ONLY`; requires a Water-move predicate on AFTER_DAMAGE that the current condition evaluator does not expose.
+- `weak_armor`: stays `DATA_ONLY`; needs a dual stat transaction plus per-hit/version-aware behavior.
+
+No broad Battle Core primitive was added merely to increase coverage.
+
+## Ability coverage after #79 engineering
+- `RUNTIME_SUPPORTED`: **8**
+- `PARTIAL_RUNTIME`: **4** — `intimidate`, `levitate`, `stamina`, `static`
+- `DATA_ONLY`: **361**
+- total: **373**.
+
+## Exact #78 → #79 engineering artifact
+Raw + normalized:
+- exactly one changed ability: `stamina`;
+- only changed semantic field: `classification`;
+- `DATA_ONLY → PARTIAL_RUNTIME`.
+
+Reports move only Stamina and update counts 362→361 DATA_ONLY / 3→4 PARTIAL_RUNTIME. Manifest, forms and auxiliary reports are unchanged. Import-time variation 357→516 ms is non-semantic.
 
 ## Current certification step
-Notebook synchronization follows engineering SHA `f01b1d0553b7dfa1e5998ee1de99ace9fad1534b`.
+Notebook sync now moves SHA after engineering `748b28b69d19be5912bbc0318f2e8e8d40f3eccd`.
 
-Before closing #78 without merge:
-1. verify engineering SHA → final HEAD changes only `01`, `04`, `08` notebooks;
+Before closing #79:
+1. verify engineering → final HEAD changes only notebook files;
 2. require **18/18 SUCCESS** on exact final notebook-bearing HEAD;
-3. close #78 without merge;
-4. use that exact final SHA as next certified baseline.
+3. close #79 without merge;
+4. use that exact final HEAD as next baseline.
 
-## Exact next work after #78
-Remain in DATA FOUNDATION V3 ability reliability. Audit another bounded existing-primitive family rather than bulk-promoting `stat_damage_modifier`.
+## Exact next work after #79
+Remain in DATA FOUNDATION V3 ability reliability.
 
-First candidate: `stamina`, subject to a fresh source/runtime audit. Keep the broad contact-reactive family deferred while the Static fatal-contact trigger gap remains unresolved.
+Do not shortcut Water Compaction or Weak Armor. Triage the remaining `stat_damage_modifier` bucket for another small allowlist whose complete or useful-partial semantics already fit Battle Core primitives. If no clean candidate exists, record that result and move to another family rather than broadening Battle Core solely for coverage.
