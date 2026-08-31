@@ -14,8 +14,7 @@ from __future__ import annotations
 
 from typing import Any
 
-import pokeapi_adapter_user_hp_cost as user_hp_cost
-import pokeapi_adapter_user_mandatory_state as user_mandatory_state
+import pokeapi_adapter_user_audit_chain as user_audit_chain
 
 
 _POLICIES: dict[str, dict[str, Any]] = {
@@ -128,8 +127,7 @@ def _require_source_contract(move: dict, sid: str, expected_stats: dict[str, int
 
 
 def _apply_remaining_user_audits(move: dict, generated: tuple):
-    audited = user_hp_cost.apply_user_hp_cost(move, generated)
-    return user_mandatory_state.apply_user_mandatory_state(move, audited)
+    return user_audit_chain.apply_user_audits(move, generated)
 
 
 def apply_user_stateful_safe(move: dict, generated: tuple):
