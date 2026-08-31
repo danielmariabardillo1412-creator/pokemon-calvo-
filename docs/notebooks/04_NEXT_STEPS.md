@@ -3,46 +3,43 @@
 Read this immediately after `00_READ_FIRST.md` when recovering context.
 
 ## Latest certified baseline before current tranche
-- PR #71 — `fix/data-v3-user-mandatory-state-b`
-- Final HEAD `98c68f1c184e84db30458a4533fb769cba1140ac`
+- PR #72 — `fix/data-v3-user-persistent-state-c`
+- Final HEAD `d46be6864abd6e1cffdf54f9e932da06bed054dc`
 - 18/18 SUCCESS on exact notebook-bearing HEAD
 - closed without merge.
 
-## Current tranche — PR #72
-- Title: `DATA V3 — audit persistent-state user moves`
-- Branch: `fix/data-v3-user-persistent-state-c`
-- Parent: certified #71 final `98c68f1c184e84db30458a4533fb769cba1140ac`
-- Engineering SHA before notebook sync: `16f7eef390fb08e7ce48f2a1d2cbf4547321a939`
+## Current tranche — PR #73
+- Title: `DATA V3 — neutralize final user-state stat packages`
+- Branch: `fix/data-v3-user-terminal-state-d`
+- Parent: certified #72 final `d46be6864abd6e1cffdf54f9e932da06bed054dc`
+- Engineering SHA before notebook sync: `51f0a15bf980befc2fdb2393dd8b516a2f53eaed`
 - Engineering SHA CI: **18/18 SUCCESS**
 - DATA V3 independent suite: SUCCESS
 - Godot global: SUCCESS
 
-## What #72 resolves
-### Autotomize
-- real base stat effect: Speed +2;
-- current mechanics reduce weight by 100 kg per successful use, stacking to a 0.1 kg minimum;
-- immutable snapshot generic prose is stale and incorrectly says weight is halved / does not stack;
-- missing weight state can be beneficial or detrimental in weight-based interactions, so Speed +2 alone is not a safe partial.
-Decision: `DATA_ONLY`, `effect_specs=[]`.
-Canonical derived summary is repaired in memory to current 100 kg semantics; immutable source remains untouched.
+## What #73 resolves
+### Extreme Evoboost
+- source +2 to all five battle stats;
+- real move is Eevee's exclusive Z-Move derived from Last Resort and not an ordinary freely selectable modern move;
+- +2-all exposed as a normal move is false.
+Decision: `DATA_ONLY`, `effect_specs=[]`; canonical summary records Z-Move/selectability constraint.
 
-### Minimize
-- real base stat effect: Evasion +2;
-- also applies persistent Minimized state with special attack vulnerabilities;
-- Battle Core has no Minimized-state primitive;
-- Evasion +2 alone removes an explicit drawback.
-Decision: `DATA_ONLY`, `effect_specs=[]`.
-Canonical summary now retains the Minimized-state fact generically.
+### Stockpile
+- source Defense +1 / SpDef +1;
+- real move also stores a capped counter (max three), couples to Spit Up/Swallow and consumes/loses associated state;
+- stat-only execution is unsafe.
+Decision: `DATA_ONLY`, `effect_specs=[]`; summary records max-three/coupling semantics.
 
-## Small architecture improvement
-New `tools/pokeapi_adapter_user_audit_chain.py` coordinates the narrow user audits in order:
-`HP-cost → mandatory-state → persistent-state`.
-It contains no move-specific semantic policy; this avoids repeatedly rewiring older certified layers.
+### Tidy Up
+- source Attack +1 / Speed +1;
+- real move also removes Spikes, Toxic Spikes, Stealth Rock, Sticky Web and Substitute from both sides;
+- omitting bilateral cleanup can preserve strategically favorable hazards.
+Decision: `DATA_ONLY`, `effect_specs=[]`; summary is synthesized from Scarlet/Violet source/current mechanics.
 
-## Exact #71 → #72 engineering artifact
-- exactly two changed records: `autotomize`, `minimize`;
-- both changed only `effect_specs` and `effect_summary`;
-- no classification, target, accuracy or unrelated move changed.
+## Exact #72 → #73 engineering artifact
+- exactly three changed records: `extreme_evoboost`, `stockpile`, `tidy_up`;
+- changed keys on each: `effect_specs`, `effect_summary` only;
+- no classification, target, accuracy or unrelated record changed.
 
 Coverage remains:
 - `RUNTIME_SUPPORTED`: **590**
@@ -50,33 +47,30 @@ Coverage remains:
 - `DATA_ONLY`: **246**
 - `UNSUPPORTED`: **12**
 
-DATA_ONLY with non-empty specs: **8**.
-- 5 stat/stateful total.
-- non-stat: `Beat Up`, `Purify`, `Swallow`.
+DATA_ONLY with non-empty specs: **5** only:
+1. `flower_shield`
+2. `rototiller`
+3. `beat_up`
+4. `purify`
+5. `swallow`
+
+Important milestone: **zero remaining `target=user` DATA_ONLY records with executable stat specs**.
 
 ## Current certification step
-Notebook synchronization moves SHA. Before closing #72:
-1. verify only notebooks 01/02/04 changed after engineering SHA `16f7eef390fb08e7ce48f2a1d2cbf4547321a939`;
+Notebook synchronization moves SHA. Before closing #73:
+1. verify only notebooks 01/02/04 changed after engineering SHA `51f0a15bf980befc2fdb2393dd8b516a2f53eaed`;
 2. require 18/18 on exact final notebook-bearing HEAD;
-3. close #72 without merge;
+3. close #73 without merge;
 4. use that exact final HEAD as next baseline.
 
-## Exact next DATA V3 task after #72 certification
-Only **3 user stat/stateful DATA_ONLY-with-specs** remain:
-1. `extreme_evoboost`
-2. `stockpile`
-3. `tidy_up`
-
-Recommended handling:
-- `stockpile`: audit first; counter/cap and Spit Up/Swallow dependency probably make free Def/SpDef boosts unsafe without stored-state transaction.
-- `tidy_up`: audit cleanup transaction vs stat boosts; determine whether retaining Atk/Speed alone creates strategic distortion.
-- `extreme_evoboost`: audit Z-Move/Eevee activation and generation legality; do not treat as an ordinary freely selectable move.
-
-Then all-pokemon:
+## Exact next DATA V3 task after #73 certification
+Audit the two remaining `all-pokemon` stat cases:
 - `flower_shield`
 - `rototiller`
 
-Then non-stat:
+Do not map `all-pokemon` blindly to SELF or OPPONENT. Verify immutable source + current mechanics + exact generated specs, especially Grass-type/grounded predicates and whether the current OPPONENT-targeted generated boosts are false.
+
+After those two, only three non-stat DATA_ONLY-with-spec cases remain:
 - `Purify`
 - `Swallow`
 - `Beat Up`
