@@ -54,27 +54,40 @@ _UNSUPPORTED_HEAL_RUNTIME = {
 }
 _TARGET_HEAL_MOVES = {"heal_pulse", "floral_healing"}
 
-# Stat-stage audit V1. Keep exact, already-supported effects executable; retain
-# only safe weaker subsets when a beneficial mechanic is missing; remove specs
-# when an omitted cost/condition would make the runtime move materially stronger.
+# Move-effect audit. Keep exact, already-supported effects executable; retain only
+# safe weaker subsets when a beneficial mechanic is missing; remove specs when an
+# omitted cost, prerequisite, target filter or state dependency would make the
+# runtime move stronger or simply wrong.
 _SIMPLE_STAT_RUNTIME = {"growl", "swords_dance"}
 _SAFE_PARTIAL_STAT_RUNTIME = {
+    "autotomize",  # Speed boost modeled; weight reduction is not.
+    "charge",  # Sp. Def boost modeled; next Electric-move boost is not.
+    "defense_curl",  # Defense boost modeled; Rollout/Ice Ball state is not.
     "defog",  # evasion drop modeled; field cleanup is not.
     "growth",  # baseline +1/+1 modeled; sun boost is not.
     "howl",  # self boost modeled; ally-wide scope is not.
     "stockpile",  # defensive stages modeled; Stockpile counter/state is not.
     "strength_sap",  # Attack drop modeled; healing from target Attack is not.
     "tar_shot",  # Speed drop modeled; persistent Fire weakness is not.
+    "tidy_up",  # Attack/Speed boosts modeled; hazards/Substitute cleanup is not.
 }
 _UNSAFE_INCOMPLETE_STAT_RUNTIME = {
+    "aromatic_mist",  # ally-only target is incorrectly mapped to self.
+    "beat_up",  # hit count/damage depend on eligible party members, not fixed 6 hits.
+    "captivate",  # opposite-gender prerequisite is absent.
+    "clangorous_soul",  # mandatory HP cost is absent.
+    "coaching",  # ally-only semantics are incorrectly mapped to opponent.
+    "fillet_away",  # mandatory 50% max-HP cost/failure condition is absent.
     "flower_shield",  # requires all-Grass filtering across both sides.
     "gear_up",  # friendly Plus/Minus condition and side targeting are absent.
     "geomancy",  # charge turn is absent.
     "magnetic_flux",  # friendly Plus/Minus condition and side targeting are absent.
     "memento",  # mandatory user faint is absent.
+    "minimize",  # minimized-state vulnerability to specific attacks is absent.
     "no_retreat",  # mandatory switch lock is absent.
     "parting_shot",  # mandatory user switch is absent.
     "rototiller",  # requires all-Grass filtering across both sides.
+    "silk_trap",  # Protect/contact reaction is absent; legacy stat target is wrong.
     "stuff_cheeks",  # berry requirement/consumption is absent.
     "venom_drench",  # poisoned-target prerequisite is absent.
 }
@@ -151,7 +164,7 @@ def _normalize_chance_children(specs: list[dict]) -> int:
 
 
 def _assert_stat_contract(sid: str, specs: list[dict], classification: str) -> None:
-    """Fail closed if a curated stat-semantic correction regresses."""
+    """Fail closed if a curated move-effect correction regresses."""
     if sid == "growl":
         expected = [{
             "kind": "modify_stat_stage", "target": "opponent",
@@ -176,11 +189,11 @@ def _assert_stat_contract(sid: str, specs: list[dict], classification: str) -> N
     elif sid in _UNSAFE_INCOMPLETE_STAT_RUNTIME:
         if classification != "UNSUPPORTED" or specs:
             raise RuntimeError(
-                f"DATA V3 unsafe incomplete stat move remained executable: {sid}"
+                f"DATA V3 unsafe incomplete move remained executable: {sid}"
             )
     elif sid in _SAFE_PARTIAL_STAT_RUNTIME:
         if classification != "PARTIAL_RUNTIME" or not specs:
-            raise RuntimeError(f"DATA V3 safe partial stat contract regressed: {sid}")
+            raise RuntimeError(f"DATA V3 safe partial contract regressed: {sid}")
 
 
 def generate_move_specs(move: dict, contact_set: set):
