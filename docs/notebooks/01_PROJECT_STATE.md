@@ -37,82 +37,76 @@ Structural facts:
 - #65 selected stateful — `b13af37c350156bc7a9a7d7faf63742245afd801`
 - #66 all-opponents semantics — `51bc14155338e47c76926047845a958205005bdd`
 - #69 safe user-stateful subsets — `7aaae1c600120442581fdd7c0c048b29e3ee5690`
-- #70 reconciliation of #67/#68 with #69 — `4ee439a9741cc7dac8ec5d1792485ee79aa5f4b2`
+- #70 reconciled #67/#68 with #69 — `4ee439a9741cc7dac8ec5d1792485ee79aa5f4b2`
 - #71 mandatory-state user boosts — `98c68f1c184e84db30458a4533fb769cba1140ac`
+- #72 persistent-state user moves — `d46be6864abd6e1cffdf54f9e932da06bed054dc`
 All above: 18/18 on exact final notebook-bearing HEAD, closed without merge.
 
-# Current tranche — PR #72 persistent-state user moves
-- Branch: `fix/data-v3-user-persistent-state-c`
-- Parent: certified #71 final `98c68f1c184e84db30458a4533fb769cba1140ac`.
-- Engineering SHA before notebook sync: `16f7eef390fb08e7ce48f2a1d2cbf4547321a939`.
+## User audit architecture after #72
+`tools/pokeapi_adapter_user_audit_chain.py` coordinates narrow user audits in deterministic order:
+`HP-cost → mandatory-state → persistent-state → terminal-state (#73)`.
+Move-specific policy stays in narrow modules.
+
+# Current tranche — PR #73 final user-state stat packages
+- Branch: `fix/data-v3-user-terminal-state-d`
+- Parent: certified #72 final `d46be6864abd6e1cffdf54f9e932da06bed054dc`.
+- Engineering SHA before notebook sync: `51f0a15bf980befc2fdb2393dd8b516a2f53eaed`.
 - Engineering SHA passed **18/18**, including DATA V3 and Godot global.
+- Exact #72→#73 artifact diff changed exactly three move records and no unrelated move.
 
-## #72 architecture
-New tiny coordinator `tools/pokeapi_adapter_user_audit_chain.py` centralizes the deterministic order of narrow user audits:
-`HP-cost → mandatory-state → persistent-state`.
-It does not define move semantics; each narrow module remains authoritative for its audited family.
+## #73 decisions
+### Extreme Evoboost
+- source stat package: Attack/Defense/SpAtk/SpDef/Speed +2;
+- real mechanic is Eevee's exclusive Z-Move derived from Last Resort, not an ordinary freely selectable modern move;
+- exposing +2-all as a normal move is false.
+Decision: remain `DATA_ONLY`, `effect_specs=[]`.
+Canonical derived summary now records the Z-Move/selectability constraint; immutable source remains untouched.
 
-## #72 decisions
-### Autotomize
-Immutable snapshot:
-- target user; accuracy null → canonical -1;
-- Speed +2;
-- generic English effect prose is stale: says weight is halved and does not stack.
+### Stockpile
+- source stat package: Defense +1, SpDef +1;
+- real mechanic also stores a capped Stockpile counter (max 3), couples to Spit Up/Swallow and loses/consumes associated state under those transactions;
+- exposing only repeatable stat boosts without the counter is unsafe.
+Decision: remain `DATA_ONLY`, `effect_specs=[]`.
+Canonical summary now records max-three counter and Spit Up/Swallow coupling.
 
-Current core-series mechanic checked publicly:
-- each successful use reduces weight by 100 kg;
-- effect stacks to a minimum weight of 0.1 kg.
+### Tidy Up
+- source stat package: Attack +1, Speed +1;
+- real move also clears Spikes, Toxic Spikes, Stealth Rock, Sticky Web and Substitute from both sides;
+- omitting bilateral cleanup can preserve strategically favorable hazards and make the runtime move stronger.
+Decision: remain `DATA_ONLY`, `effect_specs=[]`.
+Snapshot has no generic effect entry; canonical summary is derived from current Scarlet/Violet flavor text and records boosts + bilateral cleanup.
 
-Weight modification can help or hurt depending on weight-based attacks, so exposing only Speed +2 is not a provably safe partial.
-Decision:
-- remain `DATA_ONLY`;
-- `effect_specs=[]`;
-- immutable source stays untouched;
-- loaded English prose is normalized before canonical `effect_summary` so derived data says Speed +2 and weight -100 kg rather than the stale half-weight rule.
+Implementation: `tools/pokeapi_adapter_user_terminal_state.py`, appended to the #72 user-audit coordinator. Independent DATA V3 assertions require all three regenerated records to remain target=user, accuracy=-1, DATA_ONLY, empty specs, with complete canonical summaries.
 
-### Minimize
-Immutable snapshot:
-- target user; accuracy null → canonical -1;
-- Evasion +2;
-- source prose records special vulnerabilities after using Minimize but is incomplete for modern mechanics.
-
-Modern core-series rules apply persistent Minimized state with special accuracy/damage vulnerabilities. Current Battle Core has no Minimized-state primitive. Evasion +2 alone removes the drawback and is materially stronger.
-Decision:
-- remain `DATA_ONLY`;
-- `effect_specs=[]`;
-- canonical English summary is normalized to preserve the Minimized-state fact generically.
-
-## Exact #72 engineering artifact
+## Exact #73 engineering artifact
 Coverage remains:
 - `RUNTIME_SUPPORTED`: **590**
 - `PARTIAL_RUNTIME`: **71**
 - `DATA_ONLY`: **246**
 - `UNSUPPORTED`: **12**
 
-DATA_ONLY with non-empty `effect_specs`: **8**.
-- 5 stat/stateful records total.
-- 3 non-stat: `Beat Up`, `Purify`, `Swallow`.
+DATA_ONLY with non-empty `effect_specs`: **5** only:
+- `flower_shield`
+- `rototiller`
+- `beat_up`
+- `purify`
+- `swallow`
 
-Exact #71 → #72 raw comparison:
-- exactly two records changed: `autotomize`, `minimize`;
-- both changed only `effect_specs` and `effect_summary`;
-- Autotomize: one SELF Speed +2 spec → empty; stale half-weight summary → current 100 kg wording;
-- Minimize: one SELF Evasion +2 spec → empty; summary now records Minimized state;
-- classification, target, accuracy and every unrelated record unchanged.
+There are **zero remaining target=user DATA_ONLY records with executable stat specs**.
 
-Notebook synchronization moves SHA. Final #72 notebook-bearing HEAD must pass 18/18 before closure without merge.
+Exact #72 → #73 raw comparison:
+- exactly `extreme_evoboost`, `stockpile`, `tidy_up` changed;
+- changed keys on all three: `effect_specs`, `effect_summary` only;
+- classification, target, accuracy and every unrelated move remain unchanged.
 
-## Move Effects frontier after #72 engineering
-Remaining user stat/stateful DATA_ONLY-with-specs: **3**
-- `extreme_evoboost`
-- `stockpile`
-- `tidy_up`
+Notebook synchronization moves SHA. Final #73 notebook-bearing HEAD must pass 18/18 before closure without merge.
 
-Remaining all-pokemon stat cases: **2**
+## Move Effects frontier after #73 engineering
+All-pokemon stat cases:
 - `flower_shield`
 - `rototiller`
 
-Remaining non-stat cases: **3**
+Non-stat cases:
 - `Beat Up`
 - `Purify`
 - `Swallow`
