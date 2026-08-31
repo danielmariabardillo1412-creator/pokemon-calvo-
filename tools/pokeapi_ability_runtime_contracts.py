@@ -47,6 +47,7 @@ _CLASSIFICATION = {
     "fire_mane": RUNTIME_SUPPORTED,
     "intimidate": PARTIAL_RUNTIME,
     "levitate": PARTIAL_RUNTIME,
+    "stamina": PARTIAL_RUNTIME,
     "static": PARTIAL_RUNTIME,
 }
 
@@ -158,6 +159,21 @@ def _validate_source_contract(ability: dict, sid: str) -> None:
         )
         if ability.get("effect_changes"):
             raise RuntimeError(f"DATA V3 type-boost ability history changed for {sid}")
+        return
+
+    if sid == "stamina":
+        if _generation_name(ability) != "generation-vii":
+            raise RuntimeError("DATA V3 audited ability generation changed for stamina")
+        _require_tokens(
+            text,
+            sid,
+            (
+                "raises this pokémon's defense by one stage",
+                "takes damage from a move",
+            ),
+        )
+        if ability.get("effect_changes"):
+            raise RuntimeError("DATA V3 Stamina history changed; re-audit")
         return
 
     if _generation_name(ability) != "generation-iii":
