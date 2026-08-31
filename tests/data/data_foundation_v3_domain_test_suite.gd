@@ -76,7 +76,7 @@ func _test_silk_trap_generated_semantics(check_callback: Callable) -> void:
 	var raw_text := FileAccess.get_file_as_string("res://data/raw/pokemon_api.json")
 	var parsed = JSON.parse_string(raw_text)
 	check_callback.call("data_v3_silk_trap_raw_json_parses", parsed is Dictionary)
-	if not parsed is Dictionary:
+	if not (parsed is Dictionary):
 		return
 	var root: Dictionary = parsed
 	var silk_trap: Dictionary = {}
@@ -87,6 +87,7 @@ func _test_silk_trap_generated_semantics(check_callback: Callable) -> void:
 	check_callback.call("data_v3_silk_trap_present", not silk_trap.is_empty())
 	if silk_trap.is_empty():
 		return
+	var specs: Array = silk_trap.get("effect_specs", [])
 	check_callback.call("data_v3_silk_trap_target_preserved", silk_trap.get("target", "") == "user")
 	check_callback.call("data_v3_silk_trap_is_data_only", silk_trap.get("classification", "") == "DATA_ONLY")
-	check_callback.call("data_v3_silk_trap_has_no_false_runtime_effect", (silk_trap.get("effect_specs", []) as Array).is_empty())
+	check_callback.call("data_v3_silk_trap_has_no_false_runtime_effect", specs.is_empty())
