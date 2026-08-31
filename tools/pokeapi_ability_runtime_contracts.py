@@ -42,6 +42,7 @@ _TYPE_POWER_BOOSTS = {
 _ATTACK_DOUBLER_GUARDS = {"huge_power", "pure_power"}
 _MULTI_SPEC_EVENT_GUARDS = {"fluffy"}
 _SUPER_EFFECTIVE_GUARDS = {"filter", "solid_rock"}
+_MOVE_PROPERTY_GUARDS = {"long_reach", "technician"}
 
 # The pinned PokeAPI snapshot says 1.33x for Tough Claws. Current main-series
 # mechanics are a 30% contact-move power boost, so DATA V3 deliberately corrects
@@ -63,6 +64,7 @@ _CLASSIFICATION = {
     "ice_scales": RUNTIME_SUPPORTED,
     "multiscale": RUNTIME_SUPPORTED,
     "heatproof": PARTIAL_RUNTIME,
+    "reckless": PARTIAL_RUNTIME,
     "intimidate": PARTIAL_RUNTIME,
     "levitate": PARTIAL_RUNTIME,
     "stamina": PARTIAL_RUNTIME,
@@ -89,6 +91,7 @@ def classification_for(ability: dict) -> str:
             sid in _ATTACK_DOUBLER_GUARDS
             or sid in _MULTI_SPEC_EVENT_GUARDS
             or sid in _SUPER_EFFECTIVE_GUARDS
+            or sid in _MOVE_PROPERTY_GUARDS
         ):
             _validate_source_contract(ability, sid)
         return DATA_ONLY
@@ -215,6 +218,56 @@ def _validate_source_contract(ability: dict, sid: str) -> None:
             ),
         )
         _require_no_history(ability, sid)
+        return
+
+    if sid == "reckless":
+        if _generation_name(ability) != "generation-iv":
+            raise RuntimeError("DATA V3 audited ability generation changed for reckless")
+        _require_tokens(
+            text,
+            sid,
+            (
+                "recoil moves and crash moves",
+                "1.2x",
+                "struggle is unaffected",
+                "jump kick",
+                "high jump kick",
+            ),
+        )
+        _require_no_history(ability, sid)
+        return
+
+    if sid == "long_reach":
+        if _generation_name(ability) != "generation-vii":
+            raise RuntimeError("DATA V3 audited ability generation changed for long_reach")
+        _require_tokens(text, sid, ("will not make contact", "moves do not make contact"))
+        _require_no_history(ability, sid)
+        return
+
+    if sid == "technician":
+        if _generation_name(ability) != "generation-iv":
+            raise RuntimeError("DATA V3 audited ability generation changed for technician")
+        _require_tokens(
+            text,
+            sid,
+            (
+                "base power is 60 or less",
+                "variable power",
+                "helping hand",
+                "defense curl",
+            ),
+        )
+        changes = ability.get("effect_changes") or []
+        if not changes:
+            raise RuntimeError("DATA V3 Technician history unexpectedly disappeared; re-audit")
+        history_text = " ".join(
+            _english_text(change.get("effect_entries")) for change in changes
+        )
+        _require_tokens(
+            history_text,
+            sid,
+            ("struggle is unaffected", "helping hand and defense curl are not taken into account"),
+        )
         return
 
     if sid == "fur_coat":
