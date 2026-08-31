@@ -52,6 +52,9 @@ _PARTIAL_USER_AND_ALLIES_STAT = {"howl": ("attack", 1)}
 _AUDITED_DATA_ONLY_ADJACENT_ALLY_STATS = {
     "coaching": {"attack": 1, "defense": 1},
 }
+_AUDITED_DATA_ONLY_PLUS_MINUS_SIDE_STATS = {
+    "gear_up": {"attack": 1, "special_attack": 1},
+}
 _SIMPLE_SELF_STAT_BOOSTS = {
     "acid_armor": ("defense", 2),
     "agility": ("speed", 2),
@@ -488,6 +491,62 @@ def _require_adjacent_ally_stats_data_only(
         raise RuntimeError(f"DATA V3 adjacent-ally legacy stat changes mismatch for {sid}: {generated_stats}")
 
 
+def _require_plus_minus_side_stats_data_only(
+    m: dict,
+    specs: list[dict],
+    sid: str,
+    expected_stats: dict[str, int],
+) -> None:
+    """Verify Plus/Minus-gated friendly-side stats before removing false OPPONENT buffs."""
+    meta = m.get("meta") or {}
+    target = (m.get("target") or {}).get("name")
+    category = (meta.get("category") or {}).get("name")
+    ailment = (meta.get("ailment") or {}).get("name")
+    if target != "user-and-allies" or category != "net-good-stats" or ailment not in ("none", "", None):
+        raise RuntimeError(f"DATA V3 Plus/Minus source contract changed for {sid}")
+    if int(meta.get("stat_chance") or 0) != 0:
+        raise RuntimeError(f"DATA V3 Plus/Minus stat chance changed for {sid}")
+    if any(int(meta.get(key) or 0) != 0 for key in (
+        "healing", "drain", "flinch_chance", "ailment_chance"
+    )):
+        raise RuntimeError(f"DATA V3 Plus/Minus metadata changed for {sid}")
+
+    source_stats = {}
+    for change in m.get("stat_changes") or []:
+        stat_name = (change.get("stat") or {}).get("name")
+        if stat_name:
+            source_stats[stat_name.replace("-", "_")] = int(change.get("change", 0))
+    if source_stats != expected_stats:
+        raise RuntimeError(f"DATA V3 Plus/Minus stat source changes mismatch for {sid}: {source_stats}")
+
+    english_effects = []
+    for entry in m.get("effect_entries") or []:
+        if (entry.get("language") or {}).get("name") == "en":
+            english_effects.append(str(entry.get("effect") or ""))
+            english_effects.append(str(entry.get("short_effect") or ""))
+    effect_text = " ".join(english_effects).lower()
+    if (
+        "raises the attack and special attack of all friendly" not in effect_text
+        or "with plus or minus" not in effect_text
+    ):
+        raise RuntimeError(f"DATA V3 Plus/Minus effect semantics changed for {sid}")
+
+    stages = _matching_effects(specs, "modify_stat_stage")
+    if len(specs) != len(expected_stats) or len(stages) != len(expected_stats):
+        raise RuntimeError(f"DATA V3 Plus/Minus legacy shape changed for {sid}: {specs}")
+    generated_stats = {}
+    for stage in stages:
+        stat_id = str(stage.get("stat_id", ""))
+        if (
+            stage.get("target") != "opponent"
+            or int(stage.get("chance_basis_points", 0)) != 10000
+        ):
+            raise RuntimeError(f"DATA V3 Plus/Minus false-opponent signature changed for {sid}: {stage}")
+        generated_stats[stat_id] = int(stage.get("value", 0))
+    if generated_stats != expected_stats:
+        raise RuntimeError(f"DATA V3 Plus/Minus legacy stat changes mismatch for {sid}: {generated_stats}")
+
+
 def generate_move_specs(m: dict, contact_set: set):
     """V3 wrapper around the archived move-effect converter.
 
@@ -589,6 +648,16 @@ def generate_move_specs(m: dict, contact_set: set):
         # ally exists. Current Battle Core has neither ally targeting nor that
         # adjacency/failure condition. The legacy OPPONENT buffs are actively false,
         # so preserve only the data record until those mechanics exist.
+        specs = []
+        coverage = "DATA_ONLY"
+
+    if sid in _AUDITED_DATA_ONLY_PLUS_MINUS_SIDE_STATS:
+        expected_stats = _AUDITED_DATA_ONLY_PLUS_MINUS_SIDE_STATS[sid]
+        _require_plus_minus_side_stats_data_only(m, specs, sid, expected_stats)
+        # Gear Up only raises Attack and Special Attack for friendly Pokémon whose
+        # Ability is Plus or Minus. Current Battle Core cannot target a friendly
+        # side with an ability predicate, so any unconditional SELF or OPPONENT
+        # boost would be false. Preserve the data record without executable specs.
         specs = []
         coverage = "DATA_ONLY"
 
