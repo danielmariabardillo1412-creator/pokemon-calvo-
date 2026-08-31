@@ -10,8 +10,10 @@ Every executable `effect_spec` and battle-relevant move field must be semantical
 - selected-stateful: `tools/pokeapi_adapter_selected_stateful.py`
 - all-opponents: `tools/pokeapi_adapter_all_opponents.py`
 - safe user-stateful: `tools/pokeapi_adapter_user_stateful_safe.py`
+- user audit coordinator: `tools/pokeapi_adapter_user_audit_chain.py`
 - HP-cost user: `tools/pokeapi_adapter_user_hp_cost.py`
 - mandatory-state user: `tools/pokeapi_adapter_user_mandatory_state.py`
+- persistent-state user: `tools/pokeapi_adapter_user_persistent_state.py`
 - archived V2 remains provenance-only.
 
 ## Certified recent heads
@@ -21,92 +23,99 @@ Every executable `effect_spec` and battle-relevant move field must be semantical
 - #66 all-opponents — `51bc14155338e47c76926047845a958205005bdd`
 - #69 safe user-stateful — `7aaae1c600120442581fdd7c0c048b29e3ee5690`
 - #70 reconciled user audit chain — `4ee439a9741cc7dac8ec5d1792485ee79aa5f4b2`
+- #71 mandatory-state user — `98c68f1c184e84db30458a4533fb769cba1140ac`
 All certified 18/18 and closed without merge.
 
-## #70 reconciliation retained
-#70 is the canonical continuation after the temporary #67/#68 vs #69 branch divergence. It preserves:
-- self-target moves skipping only the normal opponent Accuracy/Evasion check;
-- Clangorous Soul and Fillet Away effect-free because mandatory max-HP payment/failure transaction is unsupported;
-- #69 safe subsets for Charge, Defense Curl, Growth and complete Shell Smash.
-
-# PR #71 — mandatory-state user boosts (CURRENT)
-Branch `fix/data-v3-user-mandatory-state-b`.
-Parent: certified #70 final `4ee439a9741cc7dac8ec5d1792485ee79aa5f4b2`.
-Engineering SHA before notebook sync: `b55a487b46ec5443992e623fef5b1c8ce2bb0665`.
+# PR #72 — persistent-state user moves (CURRENT)
+Branch `fix/data-v3-user-persistent-state-c`.
+Parent: certified #71 final `98c68f1c184e84db30458a4533fb769cba1140ac`.
+Engineering SHA before notebook sync: `16f7eef390fb08e7ce48f2a1d2cbf4547321a939`.
 Engineering SHA: **18/18 SUCCESS**.
 
-## Geomancy
-Immutable snapshot contract:
+## Coordinator refactor
+`pokeapi_adapter_user_audit_chain.py` is a 14-line coordinator only. It applies narrow audits in deterministic order:
+1. HP-cost;
+2. mandatory-state;
+3. persistent-state.
+It intentionally contains no move-specific policy. This avoids repeatedly rewiring already-certified audit modules as the remaining user families are processed.
+
+## Autotomize
+Immutable snapshot:
 - target `user`;
 - source accuracy null → canonical `-1`;
-- SpAtk +2, SpDef +2, Speed +2;
-- effect text: one turn to charge, then apply boosts.
+- Speed +2;
+- generic effect prose incorrectly says weight is halved and does not stack.
 
-Current public core-series mechanic:
-- first turn charges;
-- second turn applies +2/+2/+2;
-- Power Herb can compress execution to one turn only by being consumed.
+Current core-series mechanics verified publicly:
+- each successful use reduces weight by 100 kg;
+- reduction stacks to a minimum effective weight of 0.1 kg.
 
-Generated pre-#71 package:
-- three immediate deterministic SELF stat effects.
+Generated pre-#72 package:
+- one deterministic SELF Speed +2 effect.
 
-Current BattleEffectSpec has no charge/pending-action effect and no Power-Herb transaction for this move. The immediate package removes a mandatory temporal cost.
-Decision: remain `DATA_ONLY`, set `effect_specs=[]`.
+Why not PARTIAL_RUNTIME:
+- weight state affects weight-based attacks and can be beneficial or detrimental;
+- preserving the original weight while granting Speed +2 can make some interactions artificially stronger than the real move.
 
-## No Retreat
-Immutable snapshot contract:
-- target `user`;
-- source accuracy null → canonical `-1`;
-- Attack/Defense/SpAtk/SpDef/Speed +1;
-- effect text prevents switching out and states failure/reuse semantics.
-
-Current public core-series mechanic:
-- applies +1 to all five battle stats;
-- applies Can't Escape/switch restriction;
-- reuse has state-dependent failure semantics.
-
-Generated pre-#71 package:
-- five deterministic SELF +1 effects only.
-
-Current BattleEffectSpec has no Can't Escape/trapping/reuse-state primitive. Keeping the boosts alone removes a mandatory strategic drawback and allows false repeatability.
-Decision: remain `DATA_ONLY`, set `effect_specs=[]`.
-
-## Independent #71 output gate
-Regenerated raw data must assert for both:
-- target `user`;
-- canonical accuracy `-1`;
-- classification `DATA_ONLY`;
+Decision:
+- remain `DATA_ONLY`;
 - `effect_specs=[]`;
-- canonical summary retains the missing real mechanic (charge for Geomancy; switching restriction for No Retreat).
+- immutable snapshot untouched;
+- normalize only the loaded English effect prose before canonical `effect_summary` is built.
 
-## Exact #71 engineering artifact
+Canonical derived summary now says Speed +2 and weight -100 kg rather than the stale half-weight rule.
+
+## Minimize
+Immutable snapshot:
+- target `user`;
+- source accuracy null → canonical `-1`;
+- Evasion +2;
+- source effect records Minimize-specific vulnerabilities but only an older/incomplete subset of affected attacks.
+
+Modern core-series mechanic:
+- using Minimize establishes persistent Minimized state;
+- special attacks against Minimized targets receive accuracy/damage exceptions.
+
+Generated pre-#72 package:
+- one deterministic SELF Evasion +2 effect.
+
+Why not PARTIAL_RUNTIME:
+- current Battle Core has no Minimized-state primitive;
+- keeping Evasion +2 while omitting the vulnerability state removes an explicit drawback and makes the move stronger.
+
+Decision:
+- remain `DATA_ONLY`;
+- `effect_specs=[]`;
+- canonical English summary normalized generically to state that Minimized state is applied, avoiding a stale/incomplete move list.
+
+## Independent #72 output gate
+Regenerated raw data must verify:
+- Autotomize: target user, accuracy -1, DATA_ONLY, empty specs, summary includes 100 kg and excludes stale half/no-stack wording.
+- Minimize: target user, accuracy -1, DATA_ONLY, empty specs, summary includes Evasion and Minimized state.
+
+## Exact #72 engineering artifact
 Coverage:
 - `RUNTIME_SUPPORTED`: **590**
 - `PARTIAL_RUNTIME`: **71**
 - `DATA_ONLY`: **246**
 - `UNSUPPORTED`: **12**
 
-DATA_ONLY with non-empty specs: **10**.
-- 7 stat/stateful
-- `Beat Up`, `Purify`, `Swallow`.
+DATA_ONLY with non-empty specs: **8**.
+- 5 stat/stateful total.
+- non-stat: `Beat Up`, `Purify`, `Swallow`.
 
-Exact #70→#71 raw comparison:
-- exactly two records changed;
-- `geomancy`: only `effect_specs`, 3 → 0;
-- `no_retreat`: only `effect_specs`, 5 → 0;
-- no classification, target, accuracy, summary or unrelated record changed.
+Exact #71→#72 raw comparison:
+- exactly two records changed: `autotomize`, `minimize`;
+- changed keys on each: `effect_specs`, `effect_summary` only;
+- no classification, target, accuracy or unrelated move changed.
 
-Notebook sync moves the SHA. #71 requires a second exact-head 18/18 before closure without merge.
+Notebook sync moves SHA. #72 requires second exact-head 18/18 before closure without merge.
 
-# Audit frontier after #71 engineering
-## User — 5 remaining stat/stateful cases
-- `autotomize`: Speed +2 plus weight reduction; weight change influences weight-based interactions and may be benefit or drawback.
-- `extreme_evoboost`: +2 all five stats but is an Eevee-exclusive Z-Move with activation/legality prerequisites.
-- `minimize`: Evasion +2 plus Minimized state causing special always-hit/double-damage interactions.
+# Audit frontier after #72 engineering
+## User — 3 remaining stat/stateful cases
+- `extreme_evoboost`: +2 all five stats but requires Eevee-specific Z-Move activation and is not an ordinary freely selectable modern move.
 - `stockpile`: Def/SpDef +1 plus stored counter capped at three and Spit Up/Swallow dependency.
 - `tidy_up`: Atk/Speed +1 plus field cleanup affecting hazards/substitutes.
-
-Do not mass-promote these five. Audit the exact missing transaction/state before deciding partial vs effect-free DATA_ONLY.
 
 ## All-pokemon — 2
 `flower_shield`, `rototiller`.
