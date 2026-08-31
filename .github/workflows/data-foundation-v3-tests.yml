@@ -139,6 +139,18 @@ jobs:
               assert heals[0]['target'] == 'self', (move_id, heals[0])
               assert heals[0]['ratio_basis_points'] == 5000, (move_id, heals[0])
 
+          # Move Effects V3 — weather-dependent heals keep their correct neutral
+          # 50% subset but must not claim full runtime coverage.
+          for move_id in ('morning_sun', 'synthesis', 'moonlight', 'shore_up'):
+              move = moves[move_id]
+              assert move['target'] == 'user', (move_id, move['target'])
+              assert move['classification'] == 'PARTIAL_RUNTIME', (
+                  move_id, move['classification'])
+              heals = matching_effects(move['effect_specs'], 'heal')
+              assert len(heals) == 1, (move_id, heals)
+              assert heals[0]['target'] == 'self', (move_id, heals[0])
+              assert heals[0]['ratio_basis_points'] == 5000, (move_id, heals[0])
+
           bulba = species['bulbasaur']
           assert any(x['ability_id'] == 'chlorophyll' and x['is_hidden'] for x in bulba.get('ability_slots', []))
           exact = set()
