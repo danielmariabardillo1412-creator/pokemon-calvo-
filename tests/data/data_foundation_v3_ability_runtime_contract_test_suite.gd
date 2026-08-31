@@ -3,12 +3,13 @@ extends RefCounted
 
 const FULL_IDS := [
 	"blaze", "dragons_maw", "fire_mane", "overgrow", "rocky_payload",
-	"steelworker", "swarm", "torrent",
+	"steelworker", "swarm", "torrent", "tough_claws",
 ]
 const PARTIAL_IDS := ["intimidate", "levitate", "stamina", "static"]
 const IMPLEMENTED_IDS := [
 	"blaze", "dragons_maw", "fire_mane", "intimidate", "levitate", "overgrow",
 	"rocky_payload", "stamina", "static", "steelworker", "swarm", "torrent",
+	"tough_claws",
 ]
 const TYPE_BOOSTS := {
 	"steelworker": "steel",
@@ -35,7 +36,7 @@ func run(check: Callable) -> void:
 	)
 	check.call(
 		"data_v3_ability_contract_data_only_count",
-		(classes.get("DATA_ONLY", []) as Array).size() == 361,
+		(classes.get("DATA_ONLY", []) as Array).size() == 360,
 	)
 	check.call(
 		"data_v3_ability_contract_partition",
@@ -77,7 +78,7 @@ func run(check: Callable) -> void:
 		)
 	check.call("data_v3_ability_contract_swarm_trigger_exact", swarm_ok)
 
-	# New unconditional type boosts must use only move type + 1.5x. In particular,
+	# Unconditional type boosts must use only move type + 1.5x. In particular,
 	# they must not inherit the pinch HP condition or another hidden state gate.
 	var type_boosts_ok := true
 	for ability_id in TYPE_BOOSTS:
@@ -95,6 +96,43 @@ func run(check: Callable) -> void:
 			and spec.effect.kind == BattleEffectSpec.DAMAGE
 		)
 	check.call("data_v3_ability_contract_unconditional_type_boosts_exact", type_boosts_ok)
+
+	# Tough Claws has an explicit DATA V3 semantic correction: the pinned PokeAPI
+	# snapshot says 1.33x, while audited current main-series mechanics are +30%.
+	# Canonical data and runtime must therefore agree on the corrected 1.30x contract.
+	var tough_record: Dictionary = by_id.get("tough_claws", {})
+	check.call(
+		"data_v3_ability_contract_tough_claws_text_corrected",
+		str(tough_record.get("description", "")) == "Boosts the power of moves that make contact by 30%."
+		and str(tough_record.get("effect_summary", "")) == "Boosts the power of moves that make contact by 30%.",
+	)
+	var tough_specs := registry.triggers_for_ability(&"tough_claws", BattleTriggerSpec.MODIFY_DAMAGE)
+	var tough_ok := tough_specs.size() == 1
+	if tough_ok:
+		var tough: BattleTriggerSpec = tough_specs[0]
+		tough_ok = (
+			tough.source_kind == &"ability"
+			and tough.source_id == &"tough_claws"
+			and bool(tough.conditions.get("requires_contact", false))
+			and int(tough.conditions.get("multiplier_bp", 0)) == 13000
+			and not tough.conditions.has("requires_physical")
+			and not tough.conditions.has("move_type_id")
+			and tough.effect.kind == BattleEffectSpec.DAMAGE
+		)
+	check.call("data_v3_ability_contract_tough_claws_trigger_exact", tough_ok)
+
+	# Huge Power and Pure Power double the Attack stat; they do not simply multiply
+	# every physical move's final damage. Until Battle Core has an offensive-stat
+	# multiplier primitive, both remain deliberately non-executable DATA_ONLY.
+	var attack_doublers_safe := true
+	for ability_id in ["huge_power", "pure_power"]:
+		var record: Dictionary = by_id.get(ability_id, {})
+		attack_doublers_safe = attack_doublers_safe and (
+			str(record.get("classification", "")) == "DATA_ONLY"
+			and str(record.get("description", "")) == "Doubles Attack in battle."
+			and registry.triggers_for_ability(StringName(ability_id), BattleTriggerSpec.MODIFY_DAMAGE).is_empty()
+		)
+	check.call("data_v3_ability_contract_attack_doublers_stay_data_only", attack_doublers_safe)
 
 	# Stamina is deliberately PARTIAL_RUNTIME. For an ordinary surviving damaging
 	# move, the existing AFTER_DAMAGE transaction is exactly Defense +1 with no
@@ -139,9 +177,9 @@ func run(check: Callable) -> void:
 	check.call(
 		"data_v3_ability_contract_report_counts",
 		int(summary.get("DATA_READY", -1)) == 373
-		and int(summary.get("RUNTIME_SUPPORTED", -1)) == 8
+		and int(summary.get("RUNTIME_SUPPORTED", -1)) == 9
 		and int(summary.get("PARTIAL_RUNTIME", -1)) == 4
-		and int(summary.get("DATA_ONLY", -1)) == 361,
+		and int(summary.get("DATA_ONLY", -1)) == 360,
 	)
 	var report_classes: Dictionary = report.get("ability_runtime_classification", {})
 	check.call(
