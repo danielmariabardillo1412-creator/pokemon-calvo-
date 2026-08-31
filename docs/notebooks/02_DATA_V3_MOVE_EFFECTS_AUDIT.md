@@ -234,21 +234,50 @@ Fix:
 - Keep `Aromatic Mist` as `DATA_ONLY` with `effect_specs=[]` until the battle target model supports allies.
 - Add an independent DATA V3 domain test requiring the regenerated raw record to remain present, `target=ally`, `classification=DATA_ONLY`, and effect-free.
 
-Engineering SHA before notebook synchronization: `7ae7d5c8f20c555e03411e3baacdbd2de1084f1c`.
-That SHA passed 18/18 workflows. The final exact notebook-bearing HEAD for PR #55 must be read from GitHub after the required second 18/18 certification before closure.
+Final HEAD: `844efde0eed27e1a5ca8790ae95a183fba6ba98c`.
+18/18 passed on that exact notebook-bearing HEAD. PR closed without merge.
 
-## Current artifact metrics from PR #55 engineering SHA
+### PR #56 — Stuff Cheeks unconditional Defense boost
+
+This tranche found another **active conditional-semantics bug**.
+
+Immutable snapshot facts for move 747 (`stuff-cheeks`):
+
+- `target = user`.
+- `stat_changes = Defense +2`.
+- `meta.stat_chance = 100`.
+- English source effect explicitly states that the move **cannot be used unless the user is holding a Berry**.
+- On use, the user consumes the Berry, triggers its effect, and then receives the Defense boost.
+
+The legacy generic converter ignored the held-item prerequisite/consumption transaction and emitted an unconditional:
+
+`MODIFY_STAT_STAGE target=SELF stat=defense value=+2`
+
+Because runtime executes `effect_specs` regardless of DATA_ONLY classification, the user could gain Defense +2 without holding or consuming a Berry.
+
+Fix:
+
+- Fail-fast verify the source target/category/stat metadata plus the English held-Berry prerequisite/consumption semantics.
+- Verify the legacy unconditional SELF Defense +2 signature before correction.
+- Remove the executable effect.
+- Keep `Stuff Cheeks` as `DATA_ONLY` with `effect_specs=[]` until held-item prerequisite and consumption semantics are represented faithfully.
+- Add an independent DATA V3 domain test requiring the regenerated raw record to remain present, `target=user`, `classification=DATA_ONLY`, and effect-free.
+
+Engineering SHA before notebook synchronization: `9600c74db8d45c590f47ad3be7baff439757964e`.
+That SHA passed 18/18 workflows, including DATA V3 and Godot global. The final exact notebook-bearing HEAD for PR #56 must be read from GitHub after the required second 18/18 certification before closure.
+
+## Current artifact metrics from PR #56 engineering SHA
 
 - `RUNTIME_SUPPORTED`: 555
 - `PARTIAL_RUNTIME`: 66
 - `DATA_ONLY`: 286
 - `UNSUPPORTED`: 12
 
-Remaining `DATA_ONLY` moves that nevertheless contain `effect_specs`: 64.
+Remaining `DATA_ONLY` moves that nevertheless contain `effect_specs`: 63.
 
 Breakdown:
 
-- 61 records with stat-change effects.
+- 60 records with stat-change effects (108 top-level `modify_stat_stage` specs across those records).
 - 2 heal cases: `Purify`, `Swallow`.
 - 1 multi-hit case: `Beat Up`.
 
@@ -259,6 +288,7 @@ The count should shrink only through audited semantic tranches, not mass relabel
 - Targeted heal vs self heal.
 - User-and-allies targeting unsupported by SELF/OPPONENT-only effect targets.
 - Explicit ally targeting (`Aromatic Mist`): never collapse to SELF/OPPONENT silently.
+- Held-item prerequisite/consumption semantics (`Stuff Cheeks`): never preserve a reward effect when its required transaction is missing.
 - Weather-conditioned healing ratios.
 - Temporary type suppression (`Roost`).
 - Persistent status replacement and move-specific sleep (`Rest`).
