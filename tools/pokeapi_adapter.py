@@ -54,6 +54,11 @@ _AUDITED_DATA_ONLY_ADJACENT_ALLY_STATS = {
 }
 _AUDITED_DATA_ONLY_PLUS_MINUS_SIDE_STATS = {
     "gear_up": {"attack": 1, "special_attack": 1},
+    "magnetic_flux": {"defense": 1, "special_defense": 1},
+}
+_PLUS_MINUS_SIDE_EFFECT_PHRASES = {
+    "gear_up": "raises the attack and special attack of all friendly",
+    "magnetic_flux": "raises the defense and special defense of all friendly",
 }
 _SIMPLE_SELF_STAT_BOOSTS = {
     "acid_armor": ("defense", 2),
@@ -525,8 +530,10 @@ def _require_plus_minus_side_stats_data_only(
             english_effects.append(str(entry.get("effect") or ""))
             english_effects.append(str(entry.get("short_effect") or ""))
     effect_text = " ".join(english_effects).lower()
+    expected_phrase = _PLUS_MINUS_SIDE_EFFECT_PHRASES.get(sid, "")
     if (
-        "raises the attack and special attack of all friendly" not in effect_text
+        not expected_phrase
+        or expected_phrase not in effect_text
         or "with plus or minus" not in effect_text
     ):
         raise RuntimeError(f"DATA V3 Plus/Minus effect semantics changed for {sid}")
@@ -654,10 +661,10 @@ def generate_move_specs(m: dict, contact_set: set):
     if sid in _AUDITED_DATA_ONLY_PLUS_MINUS_SIDE_STATS:
         expected_stats = _AUDITED_DATA_ONLY_PLUS_MINUS_SIDE_STATS[sid]
         _require_plus_minus_side_stats_data_only(m, specs, sid, expected_stats)
-        # Gear Up only raises Attack and Special Attack for friendly Pokémon whose
-        # Ability is Plus or Minus. Current Battle Core cannot target a friendly
-        # side with an ability predicate, so any unconditional SELF or OPPONENT
-        # boost would be false. Preserve the data record without executable specs.
+        # Gear Up and Magnetic Flux affect only friendly Pokémon whose Ability is
+        # Plus or Minus. Current Battle Core cannot target a friendly side with an
+        # ability predicate, so any unconditional SELF or OPPONENT boost would be
+        # false. Preserve the source data without executable specs.
         specs = []
         coverage = "DATA_ONLY"
 
