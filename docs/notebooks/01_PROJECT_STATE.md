@@ -9,7 +9,8 @@ Fast context recovery for engineering work. GitHub commits, PR state, CI, and im
 - Certified snapshots are retained as branches / closed PRs **without merge**.
 - New tranches branch from the latest exact certified HEAD.
 - Certification requires all 18 normal workflows green on the same exact final SHA.
-- Notebook updates move the SHA, so a notebook-bearing HEAD requires a second 18/18 run before PR closure.
+- Notebook updates move the SHA, so the final notebook-bearing HEAD requires a second 18/18 run before PR closure.
+- Stop on any failing focal/regression test and fix root cause before continuing.
 
 ## DATA FOUNDATION V3 authority
 Immutable source:
@@ -21,7 +22,7 @@ Immutable source:
 - source JSON is read-only.
 
 Pipeline:
-`snapshot → tools/pokeapi_adapter_v3.py → tools/pokeapi_adapter.py compatibility corrections → data/raw/pokemon_api.json → Godot DataImporter → data/normalized/pokemon_api.json → runtime`.
+`snapshot → tools/pokeapi_adapter_v3.py → tools/pokeapi_adapter.py → data/raw/pokemon_api.json → Godot DataImporter → data/normalized/pokemon_api.json → runtime`.
 
 Archived V2 remains provenance-only at `tools/archive/pokeapi_adapter_v2_legacy.py`.
 
@@ -35,11 +36,7 @@ Archived V2 remains provenance-only at `tools/archive/pokeapi_adapter_v2_legacy.
 - 0 broken refs; 0 rejected definitions.
 - 18 XD Shadow moves explicitly excluded instead of remapped.
 
-## Current certified chain
-Repository organization baseline: PR #33, HEAD `1247c4029b8001abd445db2f4155012962c703ee`, 18/18.
-Persistent notebook baseline: PR #52, HEAD `7ab2c1be78fab18309c6c4f4de9b2cf02ed96b46`, 18/18.
-
-Recent Move Effects V3 chain:
+## Recent certified Move Effects chain
 - #53 simple self boosts C — `b3cfa577e01f45d57e0d73ebe662b84665d6f48e`
 - #54 Silk Trap — `c1f5e55c7d1d8acc991b3a6ddde906f10930bb67`
 - #55 Aromatic Mist — `844efde0eed27e1a5ca8790ae95a183fba6ba98c`
@@ -48,65 +45,74 @@ Recent Move Effects V3 chain:
 - #58 Coaching — `3c4ac4d772a5869b45de592be7dd7f4d9b2a389b`
 - #59 Gear Up — `ef7dd6a41b1cf4bccacf0a8d5098a755bb9fd3e9`
 - #60 Magnetic Flux — `a5b56a0ba3a1efa81ac57be63b2813c19f2962a7`
-All above: 18/18 exact final HEAD, closed without merge.
+- #61 pure SELF stat packages A — final `623930ca0b98b00099288bcf542e7e0a922ac180`
+All: 18/18 on exact final HEAD, closed without merge.
 
-## Current tranche — PR #61 pure SELF stat packages A
-- Branch: `fix/data-v3-simple-self-stat-packages-a`
-- Parent: certified #60 final `a5b56a0ba3a1efa81ac57be63b2813c19f2962a7`.
-- Engineering SHA before notebook synchronization: `f3927a99d4d21d711dec77d68e7526757691c47f`.
-- Engineering SHA passed 18/18, including independent regenerated-output assertions for all ten moves and Godot global.
-- Notebook synchronization moves the branch tip; final exact HEAD must pass 18/18 again before #61 is closed without merge.
+## Current tranche — PR #62 pure opponent stat drops A
+- Branch: `fix/data-v3-simple-opponent-stat-drops-a`
+- Parent: certified #61 final `623930ca0b98b00099288bcf542e7e0a922ac180`.
+- Engineering SHA before notebook synchronization: `e384cb3a5b19a158e11da4925e7c2c23c929d9ca`.
+- Engineering SHA passed **18/18**, including DATA V3, independent regenerated-output assertions for all 17 moves, and Godot global.
+- Notebook synchronization moves the SHA; final exact HEAD must pass 18/18 again before #62 closes without merge.
 
-Certified in this tranche:
-- Bulk Up — Attack +1 / Defense +1
-- Calm Mind — Special Attack +1 / Special Defense +1
-- Coil — Attack +1 / Defense +1 / Accuracy +1
-- Cosmic Power — Defense +1 / Special Defense +1
-- Defend Order — Defense +1 / Special Defense +1
-- Dragon Dance — Attack +1 / Speed +1
-- Hone Claws — Attack +1 / Accuracy +1
-- Quiver Dance — Special Attack +1 / Special Defense +1 / Speed +1
-- Shift Gear — Attack +1 / Speed +2
-- Work Up — Attack +1 / Special Attack +1
+Source-audited and promoted in #62:
+- Baby-Doll Eyes — opponent Attack -1
+- Charm — Attack -2
+- Confide — Special Attack -1
+- Eerie Impulse — Special Attack -2
+- Fake Tears — Special Defense -2
+- Feather Dance — Attack -2
+- Flash — Accuracy -1
+- Kinesis — Accuracy -1
+- Metal Sound — Special Defense -2
+- Noble Roar — Attack -1 / Special Attack -1
+- Play Nice — Attack -1
+- Sand Attack — Accuracy -1
+- Scary Face — Speed -2
+- Screech — Defense -2
+- Smokescreen — Accuracy -1
+- Tearful Look — Attack -1 / Special Attack -1
+- Tickle — Attack -1 / Defense -1
 
-For these ten, immutable source semantics are exactly an unconditional `user` stat package. The legacy generator already emitted the complete SELF package correctly; PR #61 adds fail-fast exact package validation and promotes only these named moves to `RUNTIME_SUPPORTED`.
+The legacy generator already emitted the correct complete OPPONENT stat packages. #62 adds an exact allowlist, exact source `stat_chance`, `effect_changes=[]`, target/category/damage-class/metadata checks, generated package checks, and promotes only these 17 to `RUNTIME_SUPPORTED`.
 
-## Exact move coverage from PR #61 engineering artifact
-- `RUNTIME_SUPPORTED`: **565**
+## Exact coverage from PR #62 engineering artifact
+- `RUNTIME_SUPPORTED`: **582**
 - `PARTIAL_RUNTIME`: **67**
-- `DATA_ONLY`: **275**
+- `DATA_ONLY`: **258**
 - `UNSUPPORTED`: **12**
 
-Remaining `DATA_ONLY` records with non-empty `effect_specs`: **49**.
-Breakdown:
-- **46 stat-change records**.
-- `Purify` and `Swallow` heal-related.
-- `Beat Up` multi-hit.
+Remaining `DATA_ONLY` records with non-empty `effect_specs`: **32**.
+- **29 stat-change** records.
+- `Beat Up`, `Purify`, `Swallow` are the 3 non-stat cases.
 
-Remaining 46 stat-change targets:
-- 23 `selected-pokemon`
+Remaining 29 stat-change target distribution:
 - 13 `user`
 - 8 `all-opponents`
+- 6 `selected-pokemon`
 - 2 `all-pokemon`
 
-The 13 remaining `user` cases are the conditional/stateful family rather than the clean stat-package family: Autotomize, Charge, Clangorous Soul, Defense Curl, Extreme Evoboost, Fillet Away, Geomancy, Growth, Minimize, No Retreat, Shell Smash, Stockpile, Tidy Up. Do not mass-promote them.
+Remaining six `selected-pokemon` special cases:
+`decorate`, `defog`, `memento`, `parting_shot`, `spicy_extract`, `tar_shot`.
+No simple selected-target stat drops remain unaudited.
 
-## Recently neutralized/corrected active false effects
-- Silk Trap: false SELF Speed -1 removed; DATA_ONLY effect-free.
-- Aromatic Mist: false SELF ally buff removed; DATA_ONLY effect-free.
-- Stuff Cheeks: unconditional Defense +2 without Berry removed; DATA_ONLY effect-free.
-- Howl: false OPPONENT Attack +1 corrected to faithful SELF Attack +1 subset; PARTIAL_RUNTIME.
-- Coaching: false OPPONENT Attack/Defense buffs removed; DATA_ONLY effect-free.
-- Gear Up: false OPPONENT Attack/SpAtk buffs removed; DATA_ONLY effect-free.
-- Magnetic Flux: false OPPONENT Defense/SpDef buffs removed; DATA_ONLY effect-free.
+Remaining 13 `user` cases are conditional/stateful:
+`autotomize`, `charge`, `clangorous_soul`, `defense_curl`, `extreme_evoboost`, `fillet_away`, `geomancy`, `growth`, `minimize`, `no_retreat`, `shell_smash`, `stockpile`, `tidy_up`.
+Do not mass-promote them.
 
-## Runtime constraints relevant to audit
-Effect targets available today are effectively SELF and OPPONENT. Missing/general mechanics include ally/team/side targeting, ability-filtered recipient sets, delayed effects, weather-conditioned ratios, temporary type changes, protection/contact triggers, held-item transactions, and move-specific counters/state machines.
+All-opponents remainder:
+`captivate`, `cotton_spore`, `growl`, `leer`, `string_shot`, `sweet_scent`, `tail_whip`, `venom_drench`.
 
-Crucial fact: `effect_specs` execute regardless of coverage label. `DATA_ONLY` is not a safety gate; known-false specs must be removed.
+All-pokemon remainder:
+`flower_shield`, `rototiller`.
 
-Coverage meaning:
-- `RUNTIME_SUPPORTED`: audited semantics fully faithful.
-- `PARTIAL_RUNTIME`: faithful subset executes, known semantics missing.
-- `DATA_ONLY`: data preserved; no faithful executable behavior should be implied.
+## Runtime safety invariant
+`effect_specs` execute regardless of coverage label. `DATA_ONLY` is not an execution gate. A known-false spec must be removed/corrected.
+
+Current effect targets are effectively SELF and OPPONENT. Missing/general mechanics include ally/team/side targeting, ability-filtered recipients, delayed effects, weather ratios, temporary type effects, protection/contact triggers, held-item transactions, and move-specific state machines.
+
+Coverage:
+- `RUNTIME_SUPPORTED`: audited semantics fully faithful in current battle model.
+- `PARTIAL_RUNTIME`: faithful executable subset with explicit missing mechanics.
+- `DATA_ONLY`: data retained without claiming faithful executable behavior.
 - `UNSUPPORTED`: explicitly outside current contract.
