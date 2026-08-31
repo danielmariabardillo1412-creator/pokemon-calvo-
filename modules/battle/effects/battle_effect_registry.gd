@@ -146,6 +146,20 @@ func _register_abilities() -> void:
 			0,
 			{"move_type_id": String(pair[1]), "hp_at_or_below_divisor": 3, "multiplier_bp": 15000},
 		)]
+	for pair in [
+		[&"steelworker", &"steel"],
+		[&"dragons_maw", &"dragon"],
+		[&"rocky_payload", &"rock"],
+		[&"fire_mane", &"fire"],
+	]:
+		_ability_specs[pair[0]] = [BattleTriggerSpec.new(
+			BattleTriggerSpec.MODIFY_DAMAGE,
+			&"ability",
+			pair[0],
+			BattleEffectSpec.new(BattleEffectSpec.DAMAGE),
+			0,
+			{"move_type_id": String(pair[1]), "multiplier_bp": 15000},
+		)]
 	_ability_specs[&"levitate"] = [BattleTriggerSpec.new(
 		BattleTriggerSpec.MODIFY_DAMAGE,
 		&"ability",
