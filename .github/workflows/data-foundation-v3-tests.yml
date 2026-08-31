@@ -151,6 +151,16 @@ jobs:
               assert heals[0]['target'] == 'self', (move_id, heals[0])
               assert heals[0]['ratio_basis_points'] == 5000, (move_id, heals[0])
 
+          # Move Effects V3 — Roost's 50% heal is representable, but temporary
+          # Flying-type suppression is not available in BattleEffectSpec.
+          roost = moves['roost']
+          assert roost['target'] == 'user'
+          assert roost['classification'] == 'PARTIAL_RUNTIME'
+          roost_heals = matching_effects(roost['effect_specs'], 'heal')
+          assert len(roost_heals) == 1
+          assert roost_heals[0]['target'] == 'self'
+          assert roost_heals[0]['ratio_basis_points'] == 5000
+
           bulba = species['bulbasaur']
           assert any(x['ability_id'] == 'chlorophyll' and x['is_hidden'] for x in bulba.get('ability_slots', []))
           exact = set()
