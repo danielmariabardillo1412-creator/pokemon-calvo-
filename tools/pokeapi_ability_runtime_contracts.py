@@ -25,11 +25,26 @@ _PINCH_TYPES = {
     "torrent": "water",
 }
 
+# Clean unconditional user-move type boosts that fit the existing MODIFY_DAMAGE
+# primitive without weather, terrain, item, status, switch, form, or party state.
+# The third tuple field is the exact numeric source token retained by the pinned
+# immutable snapshot.
+_TYPE_POWER_BOOSTS = {
+    "steelworker": ("steel", "generation-vii", "1.5x"),
+    "dragons_maw": ("dragon", "generation-viii", "50%"),
+    "rocky_payload": ("rock", "generation-ix", "50%"),
+    "fire_mane": ("fire", "generation-ix", "50%"),
+}
+
 _CLASSIFICATION = {
     "blaze": RUNTIME_SUPPORTED,
     "overgrow": RUNTIME_SUPPORTED,
     "swarm": RUNTIME_SUPPORTED,
     "torrent": RUNTIME_SUPPORTED,
+    "steelworker": RUNTIME_SUPPORTED,
+    "dragons_maw": RUNTIME_SUPPORTED,
+    "rocky_payload": RUNTIME_SUPPORTED,
+    "fire_mane": RUNTIME_SUPPORTED,
     "intimidate": PARTIAL_RUNTIME,
     "levitate": PARTIAL_RUNTIME,
     "static": PARTIAL_RUNTIME,
@@ -79,12 +94,7 @@ def _require_tokens(text: str, sid: str, tokens: tuple[str, ...]) -> None:
 
 
 def _validate_swarm_history(ability: dict) -> None:
-    """Swarm's recorded history changes only its old overworld side effect.
-
-    DATA V3 ability coverage is a battle-runtime claim. Historical source records
-    are still guarded here so a future battle-semantic change cannot be mistaken
-    for the harmless overworld-only changes currently present in the snapshot.
-    """
+    """Swarm's recorded history changes only its old overworld side effect."""
     changes = ability.get("effect_changes") or []
     if not changes:
         raise RuntimeError("DATA V3 Swarm history unexpectedly disappeared; re-audit")
@@ -101,17 +111,21 @@ def _validate_swarm_history(ability: dict) -> None:
                 )
 
 
+def _generation_name(ability: dict) -> str:
+    return str((ability.get("generation") or {}).get("name", ""))
+
+
 def _validate_source_contract(ability: dict, sid: str) -> None:
     if not bool(ability.get("is_main_series", False)):
         raise RuntimeError(f"DATA V3 audited ability is no longer main-series: {sid}")
-    if (ability.get("generation") or {}).get("name") != "generation-iii":
-        raise RuntimeError(f"DATA V3 audited ability generation changed for {sid}")
 
     text = _english_text(ability.get("effect_entries"))
     if not text:
         raise RuntimeError(f"DATA V3 audited ability lost English effect text: {sid}")
 
     if sid in _PINCH_TYPES:
+        if _generation_name(ability) != "generation-iii":
+            raise RuntimeError(f"DATA V3 audited ability generation changed for {sid}")
         move_type = _PINCH_TYPES[sid]
         _require_tokens(
             text,
@@ -126,11 +140,28 @@ def _validate_source_contract(ability: dict, sid: str) -> None:
         if sid == "swarm":
             _validate_swarm_history(ability)
         elif ability.get("effect_changes"):
-            # Blaze / Overgrow / Torrent have no historical effect override in the
-            # immutable snapshot. If that changes, re-audit before retaining full
-            # battle-runtime support.
             raise RuntimeError(f"DATA V3 pinch ability history changed for {sid}")
         return
+
+    if sid in _TYPE_POWER_BOOSTS:
+        move_type, expected_generation, amount_token = _TYPE_POWER_BOOSTS[sid]
+        if _generation_name(ability) != expected_generation:
+            raise RuntimeError(f"DATA V3 audited ability generation changed for {sid}")
+        _require_tokens(
+            text,
+            sid,
+            (
+                "power",
+                f"{move_type}-type moves" if sid != "steelworker" else "steel moves",
+                amount_token,
+            ),
+        )
+        if ability.get("effect_changes"):
+            raise RuntimeError(f"DATA V3 type-boost ability history changed for {sid}")
+        return
+
+    if _generation_name(ability) != "generation-iii":
+        raise RuntimeError(f"DATA V3 audited ability generation changed for {sid}")
 
     if sid == "intimidate":
         _require_tokens(
