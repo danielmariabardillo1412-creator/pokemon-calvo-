@@ -159,18 +159,52 @@ Promoted to `RUNTIME_SUPPORTED` using the same already-certified contract:
 HEAD: `24889d355e8d89f8873d2d958efb951080fd8027`
 18/18 passed. PR closed without merge.
 
-## Current artifact metrics after PR #51
+### PR #52 — persistent project notebooks
 
-- `RUNTIME_SUPPORTED`: 552
+Operational continuity notebooks were added under `docs/notebooks/` so another chat/context can recover the certified state without relying on conversation history.
+
+- Branch: `docs/project-notebooks-v1`
+- HEAD: `7ab2c1be78fab18309c6c4f4de9b2cf02ed96b46`
+- 18/18 passed.
+- PR closed without merge.
+
+All subsequent tranches should descend from this notebook-bearing branch chain so the recovery documents remain present.
+
+### PR #53 — simple self stat boosts C
+
+Source-verified against the immutable snapshot and promoted through the existing fail-fast pure-self-boost contract:
+
+- `Cotton Guard`: Defense +3
+- `Double Team`: Evasion +1
+- `Withdraw`: Defense +1
+
+The source records are user-targeted status moves with no ailment, healing, drain, flinch, or second stat change. `StatStages` supports both Defense and Evasion, and the generated artifact contains exactly one unconditional `modify_stat_stage` effect for each.
+
+Deliberately **not** included despite superficially similar generated output:
+
+- `Autotomize`: also changes weight.
+- `Charge`: also stores/changes the next Electric-move interaction.
+- `Defense Curl`: has Rollout/Ice Ball interaction.
+- `Minimize`: has special interactions with certain attacks.
+- `Stuff Cheeks`: consumes a held Berry.
+- `Aromatic Mist`: targets an ally, outside the current SELF/OPPONENT target contract.
+- `Silk Trap`: protection/contact-response semantics; its current generated stat effect is suspicious and requires a dedicated audit.
+
+Engineering SHA before notebook synchronization: `4d6f0dbf205ffd41fdbbfae490e8efaedea54d3f`.
+That SHA passed 18/18 workflows and produced the artifact metrics below. The notebook sync intentionally changes the branch tip, so the final exact certified HEAD for PR #53 must be read from GitHub after the required second 18/18 run and PR closure.
+
+## Current artifact metrics from PR #53 engineering SHA
+
+- `RUNTIME_SUPPORTED`: 555
 - `PARTIAL_RUNTIME`: 66
-- `DATA_ONLY`: 289
+- `DATA_ONLY`: 286
 - `UNSUPPORTED`: 12
 
-Remaining `DATA_ONLY` moves that nevertheless contain `effect_specs`: 69.
+Remaining `DATA_ONLY` moves that nevertheless contain `effect_specs`: 66.
 
 Breakdown:
 
-- 66 stat-change cases.
+- 63 stat-change cases.
 - 2 heal cases: `Purify`, `Swallow`.
 - 1 multi-hit case: `Beat Up`.
 
@@ -187,6 +221,8 @@ The count should shrink only through audited semantic tranches, not mass relabel
 - Heal amount derived from opponent stat (`Strength Sap`).
 - Pure self stat boosts: safe only after verifying no hidden extra mechanic.
 - `Stockpile`, `Charge`, `Minimize`, `No Retreat`, etc. must **not** be assumed equivalent to pure stat boosts; they may carry additional state/mechanics.
+- `Aromatic Mist` requires ally targeting.
+- `Silk Trap` needs a dedicated protection/contact-response audit; do not trust its current generic stat effect.
 - `Purify`, `Swallow`, and `Beat Up` require separate semantic audits.
 
 ## Audit rule
@@ -197,8 +233,8 @@ For every family:
 2. Inspect current generated `effect_specs` from an exact certified DATA V3 artifact.
 3. Confirm Battle Core can execute the represented mechanics faithfully.
 4. Add explicit adapter fail-fast assertions.
-5. Add output invariants to DATA V3 CI.
+5. Add independent output invariants when the effect shape/target is being changed; pure extensions of an already-certified table may reuse its fail-fast contract while still passing the complete DATA V3 regeneration/import/runtime workflow.
 6. Run focal DATA V3.
-7. Run/confirm all 18 workflows on the exact same HEAD.
-8. Close PR without merge after certification.
-9. Update this notebook and `04_NEXT_STEPS.md`.
+7. Run/confirm all 18 workflows on the exact same engineering HEAD.
+8. Synchronize the notebooks when the tranche changes project state; this creates a new HEAD and therefore requires another exact-head 18/18 certification before closure.
+9. Close PR without merge after final certification.
