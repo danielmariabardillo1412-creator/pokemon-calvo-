@@ -108,6 +108,10 @@ _PURE_OPPONENT_STAT_PACKAGES = {
     "tearful_look": ({"attack": -1, "special_attack": -1}, 100),
     "tickle": ({"attack": -1, "defense": -1}, 0),
 }
+_SELECTED_SPECIAL_STAT_PACKAGES = {
+    "decorate": {"attack": 2, "special_attack": 2},
+    "spicy_extract": {"attack": 2, "defense": -2},
+}
 
 # The V2 list mixes raw PokéAPI hyphenated names with the underscore-normalized
 # IDs used by the adapter. Normalize it once for the archived helper functions.
@@ -324,6 +328,85 @@ def _require_pure_opponent_stat_package(
         generated_stats[stat_id] = int(stage.get("value", 0))
     if generated_stats != expected_stats:
         raise RuntimeError(f"DATA V3 pure opponent-stat generated stats mismatch for {sid}: {generated_stats}")
+
+
+def _require_selected_special_stat_package(
+    m: dict,
+    specs: list[dict],
+    sid: str,
+    expected_stats: dict[str, int],
+) -> None:
+    """Verify source-specific selected-target stat packages with no missing battle effect."""
+    target = (m.get("target") or {}).get("name")
+    damage_class = (m.get("damage_class") or {}).get("name")
+    if target != "selected-pokemon" or damage_class != "status":
+        raise RuntimeError(f"DATA V3 selected-special target/class changed for {sid}")
+    if m.get("accuracy") is not None or int(m.get("priority") or 0) != 0:
+        raise RuntimeError(f"DATA V3 selected-special accuracy/priority changed for {sid}")
+    if m.get("effect_changes"):
+        raise RuntimeError(f"DATA V3 selected-special effect history changed for {sid}")
+
+    source_stats = {}
+    for change in m.get("stat_changes") or []:
+        stat_name = (change.get("stat") or {}).get("name")
+        if stat_name:
+            source_stats[stat_name.replace("-", "_")] = int(change.get("change", 0))
+    if source_stats != expected_stats:
+        raise RuntimeError(f"DATA V3 selected-special stat changes mismatch for {sid}: {source_stats}")
+
+    if sid == "decorate":
+        meta = m.get("meta") or {}
+        if (
+            (meta.get("category") or {}).get("name") != "net-good-stats"
+            or (meta.get("ailment") or {}).get("name") not in ("none", "", None)
+            or int(meta.get("stat_chance") or 0) != 100
+        ):
+            raise RuntimeError("DATA V3 Decorate metadata changed")
+        if any(int(meta.get(key) or 0) != 0 for key in (
+            "healing", "drain", "flinch_chance", "ailment_chance"
+        )):
+            raise RuntimeError("DATA V3 Decorate gained unsupported metadata")
+        english_effects = []
+        for entry in m.get("effect_entries") or []:
+            if (entry.get("language") or {}).get("name") == "en":
+                english_effects.append(str(entry.get("effect") or ""))
+                english_effects.append(str(entry.get("short_effect") or ""))
+        effect_text = " ".join(english_effects).lower()
+        if "attack and special attack by 2 stages" not in effect_text:
+            raise RuntimeError("DATA V3 Decorate effect text changed")
+    elif sid == "spicy_extract":
+        if m.get("meta") is not None or m.get("effect_entries"):
+            raise RuntimeError("DATA V3 Spicy Extract metadata/effect-entry shape changed")
+        current_texts = []
+        for entry in m.get("flavor_text_entries") or []:
+            if (
+                (entry.get("language") or {}).get("name") == "en"
+                and (entry.get("version_group") or {}).get("name") == "scarlet-violet"
+            ):
+                current_texts.append(str(entry.get("flavor_text") or ""))
+        current_text = " ".join(current_texts).lower()
+        if (
+            "sharply boosting the target's attack" not in current_text
+            or "harshly lowering the target's defense" not in current_text
+        ):
+            raise RuntimeError("DATA V3 Spicy Extract current semantics changed")
+    else:
+        raise RuntimeError(f"DATA V3 unknown selected-special contract: {sid}")
+
+    stages = _matching_effects(specs, "modify_stat_stage")
+    if len(specs) != len(expected_stats) or len(stages) != len(expected_stats):
+        raise RuntimeError(f"DATA V3 selected-special generated unexpected effects for {sid}: {specs}")
+    generated_stats = {}
+    for stage in stages:
+        stat_id = str(stage.get("stat_id", ""))
+        if (
+            stage.get("target") != "opponent"
+            or int(stage.get("chance_basis_points", 0)) != 10000
+        ):
+            raise RuntimeError(f"DATA V3 selected-special generated effect mismatch for {sid}: {stage}")
+        generated_stats[stat_id] = int(stage.get("value", 0))
+    if generated_stats != expected_stats:
+        raise RuntimeError(f"DATA V3 selected-special generated stats mismatch for {sid}: {generated_stats}")
 
 
 def _require_audited_data_only_unique(m: dict, specs: list[dict], sid: str) -> None:
@@ -739,6 +822,14 @@ def generate_move_specs(m: dict, contact_set: set):
         # selected target. In the current single-opponent battle model that target
         # is faithfully represented by OPPONENT, and the legacy generator already
         # emits the complete package; this branch certifies that exact shape only.
+        coverage = "RUNTIME_SUPPORTED"
+
+    if sid in _SELECTED_SPECIAL_STAT_PACKAGES:
+        expected_stats = _SELECTED_SPECIAL_STAT_PACKAGES[sid]
+        _require_selected_special_stat_package(m, specs, sid, expected_stats)
+        # Decorate and Spicy Extract are complete selected-target stat packages in
+        # the current singles battle model. Their source accuracy is null, which
+        # DATA V3 now canonically preserves as -1 (always hit) before runtime.
         coverage = "RUNTIME_SUPPORTED"
 
     if sid in _AUDITED_DATA_ONLY_UNIQUE:
