@@ -3,103 +3,107 @@
 Read this immediately after `00_READ_FIRST.md` when recovering context.
 
 ## Previous certified tranche
-- PR #64 — `fix/data-v3-selected-special-stat-packages-a`
-- Final HEAD `674ccaf0928c93749c581565d53eb1f672dfd7b4`
+- PR #65 — `fix/data-v3-selected-special-stateful-b`
+- Final HEAD `b13af37c350156bc7a9a7d7faf63742245afd801`
 - 18/18 SUCCESS on exact notebook-bearing HEAD
 - closed without merge.
 
-## Current tranche — PR #65
-- Branch `fix/data-v3-selected-special-stateful-b`
-- Parent `674ccaf0928c93749c581565d53eb1f672dfd7b4`
-- Engineering SHA before notebook sync: `01854416bf54179b0caa32b99459667d40d369c7`
+## Current tranche — PR #66
+- Branch `fix/data-v3-all-opponents-stat-audit`
+- Parent `b13af37c350156bc7a9a7d7faf63742245afd801`
+- Engineering SHA before notebook sync: `4773a8ce33854f987f2cc09bb4f14ef5db678d0b`
 - Engineering SHA CI: **18/18 SUCCESS**
-- DATA V3 independently verified all four selected-stateful decisions.
-- Notebook synchronization moves branch tip. Require **18/18 on the final exact notebook-bearing HEAD**, then close #65 without merge.
+- Artifact comparison changed exactly 8 move records and no unrelated moves.
+- Notebook synchronization moves branch tip. Require **18/18 on the final exact notebook-bearing HEAD**, then close #66 without merge.
 
 ## Workstream
 **Move Effects V3 / battle-relevant DATA V3 semantic audit. Do not switch to trainer AI/archetypes.**
 
-## What #65 resolves
-The entire remaining `selected-pokemon` DATA_ONLY-with-specs family is now resolved.
+## What #66 resolves
+The entire remaining `all-opponents` DATA_ONLY-with-specs family is resolved.
 
-### Defog
-- real: Evasion -1 plus field/hazard/screen/terrain cleanup;
-- current engine cannot represent cleanup;
-- Evasion-only execution can remove a real strategic drawback;
-- result: `DATA_ONLY`, `effect_specs=[]`, accuracy -1 preserved.
+RUNTIME_SUPPORTED in current singles:
+- `growl`: OPPONENT Attack -1, accuracy 100.
+- `leer`: OPPONENT Defense -1, accuracy 100.
+- `string_shot`: OPPONENT Speed -2, accuracy 95.
+- `sweet_scent`: OPPONENT Evasion -2, accuracy 100.
+- `tail_whip`: OPPONENT Defense -1, accuracy 100.
 
-### Memento
-- real: target Atk/SpAtk -2 and user faints;
-- free -2/-2 without self-faint would be false;
-- result: `DATA_ONLY`, `effect_specs=[]`, accuracy 100 preserved.
+Neutralized as DATA_ONLY with `effect_specs=[]`:
+- `captivate`: opposite-gender prerequisite unsupported.
+- `venom_drench`: poisoned-target prerequisite unsupported.
+- `cotton_spore`: powder/spore target predicate includes intrinsic Grass-type immunity; unconditional effect would be false.
 
-### Parting Shot
-- real: target Atk/SpAtk -1 and user switches;
-- staying active changes the transaction and permits false repeatable debuffs;
-- result: `DATA_ONLY`, `effect_specs=[]`, accuracy 100 preserved.
+Sweet Scent source inconsistency repaired canonically:
+- structured snapshot/current mechanics = Evasion -2;
+- stale generic source prose said -1;
+- immutable source stays untouched;
+- loaded in-memory English prose is normalized before `effect_summary` is built.
 
-### Tar Shot
-- real: Speed -1 plus persistent Fire vulnerability;
-- missing Fire vulnerability only weakens the move;
-- result: `PARTIAL_RUNTIME`, retain exactly OPPONENT Speed -1, accuracy 100.
-
-## Exact #65 engineering artifact
-- `RUNTIME_SUPPORTED`: **584**
+## Exact #66 engineering artifact
+- `RUNTIME_SUPPORTED`: **589**
 - `PARTIAL_RUNTIME`: **68**
-- `DATA_ONLY`: **255**
+- `DATA_ONLY`: **250**
 - `UNSUPPORTED`: **12**
-- DATA_ONLY with non-empty specs: **26**
-  - 23 stat-change
+- DATA_ONLY with non-empty specs: **18**
+  - 15 stat-change
   - Beat Up
   - Purify
   - Swallow
 
-Exact #64→#65 comparison:
-- only 4 move records changed;
-- Defog/Memento/Parting Shot changed only `effect_specs` → empty;
-- Tar Shot changed only `classification` DATA_ONLY → PARTIAL_RUNTIME;
+Exact #65→#66 comparison:
+- only 8 move records changed;
+- Captivate/Cotton Spore/Venom Drench: only specs removed;
+- Growl/Leer/String Shot/Tail Whip: only classification changed;
+- Sweet Scent: classification + canonical summary correction;
 - no unrelated move changed.
 
-## Exact next task after #65 closure
-Audit the **8 `all-opponents` stat-change moves** as the next candidate family:
-- `captivate`
-- `cotton_spore`
-- `growl`
-- `leer`
-- `string_shot`
-- `sweet_scent`
-- `tail_whip`
-- `venom_drench`
+## Exact next task after #66 closure
+Audit the **13 `user` conditional/stateful stat moves**. Do not mass-promote them.
 
-Do not promote them as one blind batch. First inspect immutable source + current public mechanics + exact generated outputs and split by semantics.
+List:
+1. `autotomize`
+2. `charge`
+3. `clangorous_soul`
+4. `defense_curl`
+5. `extreme_evoboost`
+6. `fillet_away`
+7. `geomancy`
+8. `growth`
+9. `minimize`
+10. `no_retreat`
+11. `shell_smash`
+12. `stockpile`
+13. `tidy_up`
 
-Known issues to check before classification:
-- `Captivate`: gender/sex compatibility condition; an unconditional stat drop would be false if the predicate is unsupported.
-- `Venom Drench`: poisoned-target prerequisite; unconditional drops would be false.
-- spread target `all-opponents`: current singles engine has one opponent, so verify whether mapping the effect to OPPONENT is semantically faithful in the current model and does not hide another condition.
-- `Growl`, `Leer`, `Cotton Spore`, `String Shot`, `Sweet Scent`, `Tail Whip`: likely simpler spread debuffs, but confirm current-generation stat packages and accuracy before grouping.
+Recommended split before editing:
+- **HP cost/prerequisite:** Clangorous Soul, Fillet Away.
+- **two-turn/delayed:** Geomancy.
+- **weather-dependent magnitude:** Growth.
+- **stored counter/state:** Stockpile.
+- **persistent flags/special interactions:** Autotomize, Charge, Defense Curl, Minimize, No Retreat, Tidy Up.
+- **multi-stat packages to verify for completeness:** Shell Smash, Extreme Evoboost.
 
-Recommended sequence:
-1. inspect all eight source records and generated records without editing;
-2. isolate conditional moves (`captivate`, `venom_drench`) from simple spread debuffs;
-3. only batch moves with genuinely identical support logic;
-4. add fail-fast source contracts + independent regenerated-output tests;
-5. DATA V3 focal → 18/18 engineering → artifact diff → notebooks → 18/18 final → close without merge.
+For each move inspect immutable source + current public mechanics + exact generated specs. A stat package may be true but still unsafe if a missing cost/prerequisite/state transaction materially changes the move.
 
-## Other remaining user conditional/stateful — 13
-`autotomize`, `charge`, `clangorous_soul`, `defense_curl`, `extreme_evoboost`, `fillet_away`, `geomancy`, `growth`, `minimize`, `no_retreat`, `shell_smash`, `stockpile`, `tidy_up`.
-Do not mass-promote.
+After the 13 user moves:
+- `flower_shield`, `rototiller` (`all-pokemon`/type predicates).
+- `Purify`, `Swallow`, `Beat Up` (non-stat remaining specs).
 
-## Remaining all-pokemon — 2
-`flower_shield`, `rototiller`.
-Current SELF/OPPONENT model likely requires conservative handling because both include target-set/type predicates.
+## Safety rule
+`effect_specs` execute regardless of coverage label. `DATA_ONLY` is not an execution gate. If a generated spec is known false or unsafe, remove/correct it before proceeding.
 
-## Remaining non-stat with specs — 3
-`Purify`, `Swallow`, `Beat Up`.
-Audit separately.
-
-## Safety rule reinforced by #65
-A retained effect can be factually true yet still be unsafe if an omitted mechanic is a mandatory cost/transaction or removes a strategic drawback. `PARTIAL_RUNTIME` is appropriate only when the exposed subset remains faithful and omissions do not create materially false advantageous behavior.
+## Certification sequence
+1. immutable source + public mechanic audit;
+2. exact generated record inspection;
+3. narrow implementation + fail-fast contracts;
+4. independent regenerated-output tests;
+5. DATA V3 focal;
+6. 18/18 engineering SHA;
+7. artifact diff/counts;
+8. notebooks;
+9. 18/18 exact final HEAD;
+10. close PR without merge.
 
 ## Stop condition
 If any focal or regression test fails, stop immediately, diagnose/fix root cause, rerun focal, then full matrix. Never accumulate failures.
