@@ -46,6 +46,7 @@ _TEMP_TYPE_SELF_HEALS = {"roost"}
 _AUDITED_DATA_ONLY_UNIQUE = {"rest", "wish"}
 _PARTIAL_UNIQUE_STAT_HEALS = {"strength_sap"}
 _AUDITED_DATA_ONLY_PROTECTION_CONTACT = {"silk_trap"}
+_AUDITED_DATA_ONLY_ALLY_STAT = {"aromatic_mist": ("special_defense", 1)}
 _SIMPLE_SELF_STAT_BOOSTS = {
     "acid_armor": ("defense", 2),
     "agility": ("speed", 2),
@@ -271,6 +272,46 @@ def _require_silk_trap_data_only(m: dict, specs: list[dict]) -> None:
         )
 
 
+def _require_ally_stat_data_only(
+    m: dict,
+    specs: list[dict],
+    sid: str,
+    stat_id: str,
+    value: int,
+) -> None:
+    """Verify an ally-targeted stat move before removing its false SELF effect."""
+    meta = m.get("meta") or {}
+    target = (m.get("target") or {}).get("name")
+    ailment = (meta.get("ailment") or {}).get("name")
+    stat_changes = m.get("stat_changes") or []
+    if target != "ally" or ailment not in ("none", "", None):
+        raise RuntimeError(f"DATA V3 ally-stat source contract changed for {sid}")
+    if any(int(meta.get(key) or 0) != 0 for key in (
+        "healing", "drain", "flinch_chance", "ailment_chance"
+    )):
+        raise RuntimeError(f"DATA V3 ally-stat metadata changed for {sid}")
+    if len(stat_changes) != 1:
+        raise RuntimeError(f"DATA V3 expected one ally stat change for {sid}")
+    source_change = stat_changes[0]
+    if (
+        (source_change.get("stat") or {}).get("name") != stat_id.replace("special_", "special-")
+        or int(source_change.get("change", 0)) != value
+    ):
+        raise RuntimeError(f"DATA V3 ally-stat source change mismatch for {sid}")
+
+    stages = _matching_effects(specs, "modify_stat_stage")
+    if len(specs) != 1 or len(stages) != 1:
+        raise RuntimeError(f"DATA V3 ally-stat legacy shape changed for {sid}: {specs}")
+    stage = stages[0]
+    if (
+        stage.get("target") != "self"
+        or stage.get("stat_id") != stat_id
+        or int(stage.get("value", 0)) != value
+        or int(stage.get("chance_basis_points", 0)) != 10000
+    ):
+        raise RuntimeError(f"DATA V3 ally-stat false-SELF signature changed for {sid}: {stage}")
+
+
 def generate_move_specs(m: dict, contact_set: set):
     """V3 wrapper around the archived move-effect converter.
 
@@ -330,6 +371,16 @@ def generate_move_specs(m: dict, contact_set: set):
         # Mapping the source target onto the stat change produced a false SELF -1
         # Speed effect. Battle Core has no protect/contact-trigger effect model, so
         # a no-op DATA_ONLY representation is safer than any unconditional debuff.
+        specs = []
+        coverage = "DATA_ONLY"
+
+    if sid in _AUDITED_DATA_ONLY_ALLY_STAT:
+        stat_id, value = _AUDITED_DATA_ONLY_ALLY_STAT[sid]
+        _require_ally_stat_data_only(m, specs, sid, stat_id, value)
+        # Aromatic Mist raises a selected ally's Special Defense. The generic
+        # converter collapses that unsupported ally target into SELF, which would
+        # execute on the wrong creature. Until ally targeting exists, preserve the
+        # move as DATA_ONLY with no executable effect rather than lying about target.
         specs = []
         coverage = "DATA_ONLY"
 
