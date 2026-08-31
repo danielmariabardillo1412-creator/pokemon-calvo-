@@ -5,10 +5,10 @@ const FULL_IDS := [
 	"blaze", "dragons_maw", "fire_mane", "overgrow", "rocky_payload",
 	"steelworker", "swarm", "torrent",
 ]
-const PARTIAL_IDS := ["intimidate", "levitate", "static"]
+const PARTIAL_IDS := ["intimidate", "levitate", "stamina", "static"]
 const IMPLEMENTED_IDS := [
 	"blaze", "dragons_maw", "fire_mane", "intimidate", "levitate", "overgrow",
-	"rocky_payload", "static", "steelworker", "swarm", "torrent",
+	"rocky_payload", "stamina", "static", "steelworker", "swarm", "torrent",
 ]
 const TYPE_BOOSTS := {
 	"steelworker": "steel",
@@ -35,7 +35,7 @@ func run(check: Callable) -> void:
 	)
 	check.call(
 		"data_v3_ability_contract_data_only_count",
-		(classes.get("DATA_ONLY", []) as Array).size() == 362,
+		(classes.get("DATA_ONLY", []) as Array).size() == 361,
 	)
 	check.call(
 		"data_v3_ability_contract_partition",
@@ -96,9 +96,39 @@ func run(check: Callable) -> void:
 		)
 	check.call("data_v3_ability_contract_unconditional_type_boosts_exact", type_boosts_ok)
 
-	# Transistor is deliberately not promoted in this tranche. Its source record is
-	# version-sensitive but the pinned snapshot does not encode that history in a
-	# way that supports one honest universal multiplier.
+	# Stamina is deliberately PARTIAL_RUNTIME. For an ordinary surviving damaging
+	# move, the existing AFTER_DAMAGE transaction is exactly Defense +1 with no
+	# contact/physical/type gate. Multi-hit per-strike and fatal-hit triggering are
+	# not represented by the current executor, which is why this is not full support.
+	var stamina_specs := registry.triggers_for_ability(&"stamina", BattleTriggerSpec.AFTER_DAMAGE)
+	var stamina_ok := stamina_specs.size() == 1
+	if stamina_ok:
+		var stamina: BattleTriggerSpec = stamina_specs[0]
+		stamina_ok = (
+			stamina.source_kind == &"ability"
+			and stamina.source_id == &"stamina"
+			and stamina.conditions.is_empty()
+			and stamina.effect.kind == BattleEffectSpec.MODIFY_STAT_STAGE
+			and stamina.effect.target == BattleEffectSpec.SELF
+			and stamina.effect.value == 1
+			and stamina.effect.stat_id == StatStages.DEFENSE
+		)
+	check.call("data_v3_ability_contract_stamina_partial_trigger_exact", stamina_ok)
+
+	# These adjacent hit-reaction abilities are explicit blockers, not forgotten
+	# candidates. Water Compaction needs a Water-move AFTER_DAMAGE predicate; Weak
+	# Armor needs a dual stat transaction plus per-hit/version-aware semantics.
+	check.call(
+		"data_v3_ability_contract_water_compaction_stays_data_only",
+		str((by_id.get("water_compaction", {}) as Dictionary).get("classification", "")) == "DATA_ONLY",
+	)
+	check.call(
+		"data_v3_ability_contract_weak_armor_stays_data_only",
+		str((by_id.get("weak_armor", {}) as Dictionary).get("classification", "")) == "DATA_ONLY",
+	)
+
+	# Transistor remains DATA_ONLY because its version-sensitive multiplier is not
+	# represented honestly by one universal source contract in the pinned snapshot.
 	check.call(
 		"data_v3_ability_contract_transistor_stays_data_only",
 		str((by_id.get("transistor", {}) as Dictionary).get("classification", "")) == "DATA_ONLY",
@@ -110,8 +140,8 @@ func run(check: Callable) -> void:
 		"data_v3_ability_contract_report_counts",
 		int(summary.get("DATA_READY", -1)) == 373
 		and int(summary.get("RUNTIME_SUPPORTED", -1)) == 8
-		and int(summary.get("PARTIAL_RUNTIME", -1)) == 3
-		and int(summary.get("DATA_ONLY", -1)) == 362,
+		and int(summary.get("PARTIAL_RUNTIME", -1)) == 4
+		and int(summary.get("DATA_ONLY", -1)) == 361,
 	)
 	var report_classes: Dictionary = report.get("ability_runtime_classification", {})
 	check.call(
