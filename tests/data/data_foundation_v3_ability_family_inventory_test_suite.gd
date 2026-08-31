@@ -2,9 +2,15 @@ class_name DataFoundationV3AbilityFamilyInventoryTestSuite
 extends RefCounted
 
 # Certified #76 ability IDs are excluded so this inventory remains anchored to the
-# exact 367-record DATA_ONLY frontier that existed at the start of this tranche.
+# exact 367-record DATA_ONLY frontier that existed at the start of family work.
 const PARENT_AUDITED_IDS := [
 	"blaze", "intimidate", "levitate", "overgrow", "static", "torrent",
+]
+
+# Explicit promotions made after the #76 frontier. Keeping this list narrow makes
+# the inventory fail if a future adapter change silently upgrades a whole family.
+const EXPLICITLY_PROMOTED_FRONTIER_IDS := [
+	"dragons_maw", "fire_mane", "rocky_payload", "steelworker", "swarm",
 ]
 
 const EXPECTED_COUNTS := {
@@ -74,15 +80,15 @@ func run(check: Callable) -> void:
 		missing_text_safe = missing_text_safe and str(record.get("classification", "")) == "DATA_ONLY"
 	check.call("data_v3_ability_family_inventory_missing_text_stays_data_only", missing_text_safe)
 
-	# This tranche promotes only the single audited pinch-family member. Every other
-	# member of the #76 DATA_ONLY frontier must remain DATA_ONLY here.
+	# Every member of the #76 DATA_ONLY frontier must remain DATA_ONLY unless it is
+	# named in the explicit post-#76 promotion allowlist above.
 	var no_mass_promotion := true
 	for raw_ability in abilities:
 		if not (raw_ability is Dictionary):
 			continue
 		var ability: Dictionary = raw_ability
 		var ability_id := str(ability.get("id", ""))
-		if PARENT_AUDITED_IDS.has(ability_id) or ability_id == "swarm":
+		if PARENT_AUDITED_IDS.has(ability_id) or EXPLICITLY_PROMOTED_FRONTIER_IDS.has(ability_id):
 			continue
 		no_mass_promotion = no_mass_promotion and str(ability.get("classification", "")) == "DATA_ONLY"
 	check.call("data_v3_ability_family_inventory_no_mass_promotion", no_mass_promotion)
