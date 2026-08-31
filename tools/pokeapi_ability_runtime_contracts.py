@@ -41,6 +41,7 @@ _TYPE_POWER_BOOSTS = {
 # re-audit rather than silently making the old rejection rationale stale.
 _ATTACK_DOUBLER_GUARDS = {"huge_power", "pure_power"}
 _MULTI_SPEC_EVENT_GUARDS = {"fluffy"}
+_SUPER_EFFECTIVE_GUARDS = {"filter", "solid_rock"}
 
 # The pinned PokeAPI snapshot says 1.33x for Tough Claws. Current main-series
 # mechanics are a 30% contact-move power boost, so DATA V3 deliberately corrects
@@ -59,6 +60,9 @@ _CLASSIFICATION = {
     "tough_claws": RUNTIME_SUPPORTED,
     "fur_coat": RUNTIME_SUPPORTED,
     "thick_fat": RUNTIME_SUPPORTED,
+    "ice_scales": RUNTIME_SUPPORTED,
+    "multiscale": RUNTIME_SUPPORTED,
+    "heatproof": PARTIAL_RUNTIME,
     "intimidate": PARTIAL_RUNTIME,
     "levitate": PARTIAL_RUNTIME,
     "stamina": PARTIAL_RUNTIME,
@@ -81,7 +85,11 @@ def classification_for(ability: dict) -> str:
     sid = _slug(str(ability.get("name", "")))
     classification = _CLASSIFICATION.get(sid)
     if classification is None:
-        if sid in _ATTACK_DOUBLER_GUARDS or sid in _MULTI_SPEC_EVENT_GUARDS:
+        if (
+            sid in _ATTACK_DOUBLER_GUARDS
+            or sid in _MULTI_SPEC_EVENT_GUARDS
+            or sid in _SUPER_EFFECTIVE_GUARDS
+        ):
             _validate_source_contract(ability, sid)
         return DATA_ONLY
     _validate_source_contract(ability, sid)
@@ -225,6 +233,43 @@ def _validate_source_contract(ability: dict, sid: str) -> None:
             (
                 "half as much damage",
                 "fire- and ice-type moves",
+            ),
+        )
+        _require_no_history(ability, sid)
+        return
+
+    if sid == "ice_scales":
+        if _generation_name(ability) != "generation-viii":
+            raise RuntimeError("DATA V3 audited ability generation changed for ice_scales")
+        _require_tokens(text, sid, ("halve the damage taken from special moves",))
+        _require_no_history(ability, sid)
+        return
+
+    if sid == "multiscale":
+        if _generation_name(ability) != "generation-v":
+            raise RuntimeError("DATA V3 audited ability generation changed for multiscale")
+        _require_tokens(text, sid, ("half as much damage", "full hp"))
+        _require_no_history(ability, sid)
+        return
+
+    if sid == "heatproof":
+        if _generation_name(ability) != "generation-iv":
+            raise RuntimeError("DATA V3 audited ability generation changed for heatproof")
+        _require_tokens(text, sid, ("half as much damage", "fire-type moves and burns"))
+        _require_no_history(ability, sid)
+        return
+
+    if sid in _SUPER_EFFECTIVE_GUARDS:
+        if _generation_name(ability) != "generation-iv":
+            raise RuntimeError(f"DATA V3 audited ability generation changed for {sid}")
+        counterpart = "solid rock" if sid == "filter" else "filter"
+        _require_tokens(
+            text,
+            sid,
+            (
+                "0.75x as much damage",
+                "super effective",
+                f"functions identically to {counterpart}",
             ),
         )
         _require_no_history(ability, sid)
