@@ -44,6 +44,7 @@ _SIMPLE_SELF_HEALS = {
 _WEATHER_SELF_HEALS = {"morning_sun", "synthesis", "moonlight", "shore_up"}
 _TEMP_TYPE_SELF_HEALS = {"roost"}
 _AUDITED_DATA_ONLY_UNIQUE = {"rest", "wish"}
+_PARTIAL_UNIQUE_STAT_HEALS = {"strength_sap"}
 
 # The V2 list mixes raw PokéAPI hyphenated names with the underscore-normalized
 # IDs used by the adapter. Normalize it once for the archived helper functions.
@@ -145,6 +146,41 @@ def _require_audited_data_only_unique(m: dict, specs: list[dict], sid: str) -> N
         )
 
 
+def _require_strength_sap_partial(m: dict, specs: list[dict]) -> None:
+    """Verify the representable Strength Sap subset without inventing its heal."""
+    meta = m.get("meta") or {}
+    category = (meta.get("category") or {}).get("name")
+    target = (m.get("target") or {}).get("name")
+    stat_changes = m.get("stat_changes") or []
+    if category != "unique" or target != "selected-pokemon":
+        raise RuntimeError("DATA V3 Strength Sap source contract changed")
+    if int(meta.get("healing") or 0) != 0 or len(stat_changes) != 1:
+        raise RuntimeError("DATA V3 Strength Sap metadata changed")
+    stat_change = stat_changes[0]
+    if (
+        int(stat_change.get("change", 0)) != -1
+        or (stat_change.get("stat") or {}).get("name") != "attack"
+    ):
+        raise RuntimeError("DATA V3 Strength Sap Attack-drop contract changed")
+
+    stages = _matching_effects(specs, "modify_stat_stage")
+    heals = _matching_effects(specs, "heal")
+    if len(stages) != 1 or heals:
+        raise RuntimeError(
+            f"DATA V3 Strength Sap generated unexpected effects: {specs}"
+        )
+    stage = stages[0]
+    if (
+        stage.get("target") != "opponent"
+        or stage.get("stat_id") != "attack"
+        or int(stage.get("value", 0)) != -1
+        or int(stage.get("chance_basis_points", 0)) != 10000
+    ):
+        raise RuntimeError(
+            f"DATA V3 Strength Sap stat effect mismatch: {stage}"
+        )
+
+
 def generate_move_specs(m: dict, contact_set: set):
     """V3 wrapper around the archived move-effect converter.
 
@@ -182,6 +218,13 @@ def generate_move_specs(m: dict, contact_set: set):
         # user's side through switching. Empty specs are safer than plausible but
         # false immediate effects.
         coverage = "DATA_ONLY"
+
+    if sid in _PARTIAL_UNIQUE_STAT_HEALS:
+        _require_strength_sap_partial(m, specs)
+        # The target's Attack drop is fully representable and already executes in
+        # Battle Core. Healing by the target's current Attack value is not expressible
+        # as the current fixed/ratio HEAL effect, so full support would be dishonest.
+        coverage = "PARTIAL_RUNTIME"
 
     if sid in _SELECTED_TARGET_HEALS:
         changed = _rewrite_effect_target(specs, "heal", "opponent")
