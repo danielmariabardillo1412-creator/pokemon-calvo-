@@ -9,7 +9,7 @@ Fast context recovery for engineering work. GitHub commits, PR state, CI, immuta
 - Certified snapshots are retained as branches / closed PRs **without merge**.
 - New tranches branch from the latest exact certified HEAD.
 - Certification requires all 18 normal workflows green on the same exact final SHA.
-- Notebook updates move the SHA, so the notebook-bearing HEAD requires a second 18/18 run before PR closure.
+- Notebook updates move the SHA, so notebook-bearing HEAD requires a second 18/18 run before PR closure.
 - Stop on any failing focal/regression test and fix root cause before continuing.
 
 ## DATA FOUNDATION V3 authority
@@ -37,61 +37,78 @@ Structural facts:
 - #65 selected stateful — `b13af37c350156bc7a9a7d7faf63742245afd801`
 - #66 all-opponents semantics — `51bc14155338e47c76926047845a958205005bdd`
 - #69 safe user-stateful subsets — `7aaae1c600120442581fdd7c0c048b29e3ee5690`
-All above: 18/18 on exact final HEAD, closed without merge.
+- #70 reconciliation of #67/#68 with #69 — `4ee439a9741cc7dac8ec5d1792485ee79aa5f4b2`
+All above: 18/18 on exact final notebook-bearing HEAD, closed without merge.
 
-## Parallel-branch reconciliation
-After #66, two valid branches were created in parallel:
-- #67: Battle Core self-target accuracy fix, final `432781b78e8864192343b952b0645a48046ceed4`, 18/18 and closed without merge.
-- #68: Clangorous Soul / Fillet Away HP-cost neutralization, engineering HEAD `fb5cbf71edf2327725d8506b1b32965b0fae6bec`, 18/18 but PR left open before final notebook certification.
-- #69 independently audited Charge / Defense Curl / Growth / Shell Smash from #66 and became the latest fully certified DATA V3 baseline.
+## Certified reconciliation from #70
+After #66, #67/#68 and #69 had diverged. #70 is the canonical reunification point; do not resume from #67 or #68.
 
-Do **not** continue from #67 or #68 independently. PR #70 reconciles their validated technical work on top of certified #69.
+#70 contains:
+- certified Battle Core self-target accuracy fix from #67: normal Accuracy/Evasion roll is skipped only for canonical `target=user`; move-specific failure rules remain separate;
+- Clangorous Soul / Fillet Away HP-cost safety from #68: both remain `DATA_ONLY` but their free stat specs are removed because max-HP payment/failure transaction is not representable;
+- all #69 safe-user-stateful classifications remain intact.
 
-# Current tranche — PR #70 unified user-audit chain
-- Branch: `reconcile/data-v3-user-audit-chain`
-- Parent: certified #69 final `7aaae1c600120442581fdd7c0c048b29e3ee5690`.
-- Engineering SHA before notebook synchronization: `20fedf932ae1a867dd641f0e693c21b745393a9b`.
+#70 final coverage:
+- `RUNTIME_SUPPORTED`: 590
+- `PARTIAL_RUNTIME`: 71
+- `DATA_ONLY`: 246
+- `UNSUPPORTED`: 12
+- DATA_ONLY with non-empty specs: 12 (9 stat/stateful + Beat Up + Purify + Swallow).
+
+# Current tranche — PR #71 mandatory-state user boosts
+- Branch: `fix/data-v3-user-mandatory-state-b`
+- Parent: certified #70 final `4ee439a9741cc7dac8ec5d1792485ee79aa5f4b2`.
+- Engineering SHA before notebook sync: `b55a487b46ec5443992e623fef5b1c8ce2bb0665`.
 - Engineering SHA passed **18/18**, including DATA V3 and Godot global.
 
-### Ported from certified #67
-Battle Core `TurnExecutor` skips the normal Accuracy/Evasion roll only for canonical `target=user` moves. Move-specific failure conditions remain separate mechanics. The exact #67 battle regression suite is reused and passes in #70.
+## #71 decisions
+### Geomancy
+Immutable source:
+- target user; source accuracy null → canonical -1;
+- SpAtk +2, SpDef +2, Speed +2;
+- English effect explicitly says it takes one turn to charge.
+Public core-series mechanics confirm Power Herb can execute it in one turn only by consuming the item.
 
-### Ported from #68 engineering
-`Clangorous Soul` and `Fillet Away` remain `DATA_ONLY`, but their executable SELF stat packages are removed because Battle Core cannot represent the mandatory max-HP payment + insufficient-HP failure transaction.
-- Clangorous Soul: real +1 to five stats costs 1/3 max HP; free boosts were unsafe.
-- Fillet Away: real +2 Atk/SpAtk/Speed costs 1/2 max HP; free boosts were unsafe.
+Current BattleEffectSpec has no charge/pending-turn primitive. Immediate +2/+2/+2 is materially stronger than the real move.
+Decision: remain `DATA_ONLY`, `effect_specs=[]`.
 
-### Unified audit chain
-`all-opponents → user-stateful-safe (#69) → user-hp-cost (#68)`.
-The #69 decisions stay intact; the HP-cost layer only handles Clangorous Soul and Fillet Away.
+### No Retreat
+Immutable source:
+- target user; source accuracy null → canonical -1;
+- Attack/Defense/SpAtk/SpDef/Speed +1;
+- effect explicitly prevents switching out and contains reuse/failure semantics.
+Public mechanics confirm Can't Escape/switch restriction is integral.
 
-## Exact #70 engineering artifact
+Current BattleEffectSpec has no trapping/reuse state. Free repeatable +1-all is materially stronger than the real move.
+Decision: remain `DATA_ONLY`, `effect_specs=[]`.
+
+Implementation: `tools/pokeapi_adapter_user_mandatory_state.py`, executed after safe-user-stateful and HP-cost audits. Independent DATA V3 suite verifies both regenerated records are effect-free and retain semantic summaries.
+
+## Exact #71 engineering artifact
 Coverage remains:
 - `RUNTIME_SUPPORTED`: **590**
 - `PARTIAL_RUNTIME`: **71**
 - `DATA_ONLY`: **246**
 - `UNSUPPORTED`: **12**
 
-DATA_ONLY with non-empty `effect_specs`: **12**.
-- 9 stat-change records.
+DATA_ONLY with non-empty `effect_specs`: **10**.
+- 7 stat/stateful records.
 - 3 non-stat: `Beat Up`, `Purify`, `Swallow`.
 
-Exact #69 → #70 data comparison:
-- changed records: exactly `clangorous_soul`, `fillet_away`;
-- changed key on both: `effect_specs` only;
-- both packages become empty;
-- classifications, target, accuracy, summaries and every unrelated move remain unchanged.
-- the #67 Battle Core fix changes no DATA V3 record.
+Exact #70 → #71 raw comparison:
+- exactly two records changed: `geomancy`, `no_retreat`;
+- changed key on each: `effect_specs` only;
+- Geomancy 3 SELF stat specs → empty;
+- No Retreat 5 SELF stat specs → empty;
+- classifications, target, accuracy, summaries and every unrelated record unchanged.
 
-Notebook synchronization moves the SHA. Final #70 notebook-bearing HEAD must pass 18/18 before closure without merge.
+Notebook synchronization moves SHA. Final #71 notebook-bearing HEAD must pass 18/18 before closure without merge.
 
-## Move Effects frontier after #70 engineering
-Remaining user stat/stateful DATA_ONLY-with-specs: **7**
+## Move Effects frontier after #71 engineering
+Remaining user stat/stateful DATA_ONLY-with-specs: **5**
 - `autotomize`
 - `extreme_evoboost`
-- `geomancy`
 - `minimize`
-- `no_retreat`
 - `stockpile`
 - `tidy_up`
 
@@ -108,7 +125,7 @@ Remaining non-stat cases: **3**
 `effect_specs` execute regardless of coverage label. `DATA_ONLY` is not an execution gate. Known-false or strategically unsafe specs must be removed/corrected.
 
 Coverage:
-- `RUNTIME_SUPPORTED`: fully faithful in the current battle model.
+- `RUNTIME_SUPPORTED`: fully faithful in current battle model.
 - `PARTIAL_RUNTIME`: retained subset is faithful and omissions only weaken/omit benefits.
 - `DATA_ONLY`: data retained without unsafe executable behavior.
 - `UNSUPPORTED`: explicitly outside current contract.
