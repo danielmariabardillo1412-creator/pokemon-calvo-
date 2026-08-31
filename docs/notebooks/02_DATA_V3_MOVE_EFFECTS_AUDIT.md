@@ -11,105 +11,104 @@ DATA V3 structural correctness is not enough: every executable `effect_spec` and
 - source-selection/canonical-field conversion in `tools/pokeapi_adapter_v3.py`
 - archived V2 is provenance-only and must remain untouched.
 
-## Certified history summary
-Move Effects V3 has already certified healing targets/self heals/weather heals/Roost/Rest/Wish/Strength Sap, simple SELF stat boosts, false-target/resource cases including Silk Trap, Aromatic Mist, Stuff Cheeks, Howl, Coaching, Gear Up and Magnetic Flux, and the simple selected-target opponent stat-drop family.
-
-Recent exact certified heads:
+## Recent certified heads
 - #60 Magnetic Flux — `a5b56a0ba3a1efa81ac57be63b2813c19f2962a7`
 - #61 pure SELF stat packages A — `623930ca0b98b00099288bcf542e7e0a922ac180`
 - #62 pure opponent stat drops A — `6d1335b8c5cee0b1cf1e99910a7707734b4aef85`
+- #63 always-hit accuracy semantics — `9f8b3e01bec1f86cff75380d68dd98d76e738e78`
 All: 18/18 and closed without merge.
 
-## PR #63 — always-hit accuracy semantics (CURRENT)
-Branch `fix/data-v3-always-hit-accuracy`.
-Parent: certified #62 final `6d1335b8c5cee0b1cf1e99910a7707734b4aef85`.
-Engineering SHA before notebook sync: `428e1f2e387301899d749a9b97127f9e1a0a5b45`.
+## Certified transversal accuracy contract from #63
+- numeric PokéAPI accuracy is preserved;
+- source `accuracy=null` becomes canonical `-1`;
+- `MoveDefinition` preserves `-1`;
+- `BattleRuleset` treats negative base accuracy as always-hit (10000 bp), while a genuine 100 remains Accuracy/Evasion-stage-sensitive.
+
+# PR #64 — selected special stat packages A (CURRENT)
+Branch `fix/data-v3-selected-special-stat-packages-a`.
+Parent: certified #63 final `9f8b3e01bec1f86cff75380d68dd98d76e738e78`.
+Engineering SHA before notebook sync: `3c9c83d3ff99c0e9a98506343db4e28b6de65af2`.
 Engineering SHA: **18/18 SUCCESS**.
 
-### Root cause
-During the special-move audit of `Decorate` and `Spicy Extract`, both immutable source records were found to use PokéAPI `accuracy=null`. Their generated records used canonical `accuracy=100`.
+## Decorate
+Immutable source (`move/777`):
+- target `selected-pokemon`
+- `accuracy=null` → canonical `-1`
+- status move, priority 0
+- Attack +2
+- Special Attack +2
+- `effect_changes=[]`
+- meta category `net-good-stats`, ailment none, `stat_chance=100`
+- no healing/drain/flinch/ailment chance
+- English effect text states target Attack and Special Attack +2 stages.
 
-That mapping was unsafe because the runtime contract is explicit:
-- `TurnExecutor` passes `move.accuracy` directly to `BattleRuleset.accuracy_threshold_basis_points()`.
-- `BattleRuleset` treats `base_accuracy < 0` as always-hit and returns 10000 bp immediately.
-- `base_accuracy=100` remains subject to Accuracy/Evasion stage multipliers.
+Legacy/generated output after #63:
+- `OPPONENT Attack +2`, 10000 bp
+- `OPPONENT Special Attack +2`, 10000 bp
+- `accuracy=-1`
 
-Therefore `null → 100` could make moves that should bypass accuracy checks miss when stages were unfavorable.
+This is the complete battle effect in the current singles model. #64 validates source/output fail-fast and promotes to `RUNTIME_SUPPORTED` without rewriting effects.
 
-### Fix
-In `tools/pokeapi_adapter_v3.py` only:
-- numeric PokéAPI accuracy remains unchanged;
-- PokéAPI `accuracy=null` now maps to canonical `-1`.
+## Spicy Extract
+Immutable source (`move/858`):
+- target `selected-pokemon`
+- `accuracy=null` → canonical `-1`
+- status move, priority 0
+- Attack +2
+- Defense -2
+- `effect_changes=[]`
+- snapshot `meta=null`, `effect_entries=[]`
+- current Scarlet/Violet English flavor text explicitly says target Attack sharply rises and target Defense harshly falls.
 
-No Battle Core implementation change is required. `MoveDefinition.accuracy` is already an integer and `from_dict()` preserves negative values. `DataImporter` does not reject negative accuracy.
+Legacy/generated output after #63:
+- `OPPONENT Attack +2`, 10000 bp
+- `OPPONENT Defense -2`, 10000 bp
+- `accuracy=-1`
 
-### Independent regression suite
-A dedicated DATA V3 accuracy suite verifies regenerated output and runtime contract:
-- `Confide` → -1
-- `Play Nice` → -1
-- `Tearful Look` → -1
-- `Decorate` → -1
-- `Spicy Extract` → -1
-- `Charm` remains 100 as a genuine numeric-100 control.
+This is the complete current singles battle effect. #64 validates source/output fail-fast and promotes to `RUNTIME_SUPPORTED` without rewriting effects.
 
-For each always-hit sentinel, `MoveDefinition.from_dict()` must preserve `-1`.
+## Independent #64 output tests
+For both moves, regenerated raw data must have:
+- target `selected-pokemon`
+- accuracy `-1`
+- classification `RUNTIME_SUPPORTED`
+- exactly two effects
+- each effect is `modify_stat_stage`, target `opponent`, 10000 bp
+- exact expected stat dictionary.
 
-BattleRuleset checks:
-- `accuracy_threshold_basis_points(-1, -6, 6) == 10000`;
-- `accuracy_threshold_basis_points(100, -6, 6) < 10000`.
-
-This explicitly prevents future conflation of “100 accuracy” with “bypasses accuracy checks”.
-
-### Exact engineering artifact comparison against certified #62
-- runtime moves: 919 both before and after.
-- changed records: **285**.
-- changed field: **accuracy only** on all 285.
-- non-accuracy differences: **0**.
-- classification differences: **0**.
-- `effect_specs` differences: **0**.
-
-Always-hit records by current coverage:
-- 66 `RUNTIME_SUPPORTED`
-- 28 `PARTIAL_RUNTIME`
-- 180 `DATA_ONLY`
-- 11 `UNSUPPORTED`
-
-Coverage counts remain exactly:
-- `RUNTIME_SUPPORTED`: **582**
+## Exact #64 engineering artifact
+Coverage:
+- `RUNTIME_SUPPORTED`: **584**
 - `PARTIAL_RUNTIME`: **67**
-- `DATA_ONLY`: **258**
+- `DATA_ONLY`: **256**
 - `UNSUPPORTED`: **12**
 
-Notebook sync moves the SHA. #63 must pass a second exact-head 18/18 before closure without merge.
+DATA_ONLY with non-empty specs: **30**.
+- 27 stat-change
+- `Beat Up`, `Purify`, `Swallow`
 
-## PR #62 family retained as certified
-17 simple selected-target stat packages are certified `RUNTIME_SUPPORTED`:
-Baby-Doll Eyes, Charm, Confide, Eerie Impulse, Fake Tears, Feather Dance, Flash, Kinesis, Metal Sound, Noble Roar, Play Nice, Sand Attack, Scary Face, Screech, Smokescreen, Tearful Look, Tickle.
+Exact #63→#64 raw comparison:
+- only two moves changed: `decorate`, `spicy_extract`
+- each changed only `classification: DATA_ONLY → RUNTIME_SUPPORTED`
+- accuracy unchanged (`-1`)
+- effect specs unchanged
+- no unrelated record changed.
 
-The #63 accuracy correction does not alter any of their effect packages or coverage; it fixes the canonical accuracy semantics for members whose source accuracy is null.
+Notebook synchronization moves the SHA. #64 requires a second exact-head 18/18 before closure without merge.
 
-## Remaining selected-pokemon special cases
-Only these six remain:
-- `decorate`
+## Remaining selected-pokemon special family — four only
 - `defog`
 - `memento`
 - `parting_shot`
-- `spicy_extract`
 - `tar_shot`
 
-`Decorate` and `Spicy Extract` have already had an initial source/output inspection:
-- Decorate source: selected-pokemon; Attack +2 and Special Attack +2; `accuracy=null`.
-- Generated package: OPPONENT Attack +2 / SpAtk +2, both unconditional.
-- Spicy Extract source: selected-pokemon; Attack +2 and Defense -2; `accuracy=null`.
-- Generated package: OPPONENT Attack +2 / Defense -2, both unconditional.
+Do not batch/promote blindly:
+- Defog: visible Evasion drop plus field/hazard/screen/terrain cleanup semantics.
+- Memento: target Attack/SpAtk drops plus user faint.
+- Parting Shot: target Attack/SpAtk drops plus user switch.
+- Tar Shot: target Speed drop plus Fire-damage vulnerability/state interaction.
 
-Those packages appear representable in the current single-opponent model, but their promotion was intentionally stopped when the transversal accuracy bug was discovered. Resume only after #63 final certification, then add exact move-specific source/output contracts before changing coverage.
-
-Other four specials remain separate:
-- Defog: stat drop plus field/hazard/screen cleanup.
-- Memento: stat drops plus user faint.
-- Parting Shot: stat drops plus user switch.
-- Tar Shot: Speed drop plus Fire-damage/type-state interaction.
+Each needs immutable-source inspection, exact current generated output, and a decision between faithful partial subset versus effect-free DATA_ONLY if the missing mechanic makes the executable subset strategically misleading.
 
 ## Other remaining families
 ### User — 13 conditional/stateful
@@ -118,10 +117,10 @@ Do not mass-promote.
 
 ### All-opponents — 8
 `captivate`, `cotton_spore`, `growl`, `leer`, `string_shot`, `sweet_scent`, `tail_whip`, `venom_drench`.
-Conditions such as gender or poisoned-only must be preserved.
+Conditions such as gender/poisoned-only must be preserved.
 
 ### All-pokemon — 2
-`flower_shield`, `rototiller`; current single-opponent target model cannot represent all-Pokémon/type predicates fully without further mechanics.
+`flower_shield`, `rototiller`; current singles SELF/OPPONENT model cannot directly express all-Pokémon/type predicates.
 
 ### Non-stat — 3
 `Purify`, `Swallow`, `Beat Up` require separate semantic audits.
@@ -132,9 +131,9 @@ Conditions such as gender or poisoned-only must be preserved.
 3. Determine all battle-relevant fields, not only `effect_specs`.
 4. Determine representable semantics in current Battle Core.
 5. Choose coverage from semantics, not convenience.
-6. Add exact fail-fast adapter/source contract.
+6. Add exact fail-fast source/generated contract.
 7. Add independent regenerated-output/runtime assertion.
-8. Batch only genuinely homogeneous source contracts.
+8. Batch only genuinely homogeneous contracts.
 9. DATA V3 focal.
 10. 18/18 engineering SHA.
 11. Measure artifact and compare changed fields.
