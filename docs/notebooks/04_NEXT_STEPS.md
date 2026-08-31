@@ -1,97 +1,59 @@
 # NEXT STEPS — LIVE CHECKPOINT
 
-Read this immediately after `00_READ_FIRST.md` when recovering context.
+Read immediately after `00_READ_FIRST.md` when recovering context.
 
 ## Latest certified baseline before current tranche
-- PR #72 — `fix/data-v3-user-persistent-state-c`
-- Final HEAD `d46be6864abd6e1cffdf54f9e932da06bed054dc`
+- PR #73 — `fix/data-v3-user-terminal-state-d`
+- Final HEAD `67ba79e9a68a78669ee5ae04166a47ee11331bc7`
 - 18/18 SUCCESS on exact notebook-bearing HEAD
 - closed without merge.
 
-## Current tranche — PR #73
-- Title: `DATA V3 — neutralize final user-state stat packages`
-- Branch: `fix/data-v3-user-terminal-state-d`
-- Parent: certified #72 final `d46be6864abd6e1cffdf54f9e932da06bed054dc`
-- Engineering SHA before notebook sync: `51f0a15bf980befc2fdb2393dd8b516a2f53eaed`
-- Engineering SHA CI: **18/18 SUCCESS**
-- DATA V3 independent suite: SUCCESS
-- Godot global: SUCCESS
+## Current tranche — PR #74
+- Branch: `fix/data-v3-all-pokemon-semantics`
+- Parent: certified #73 final `67ba79e9a68a78669ee5ae04166a47ee11331bc7`
+- Engineering SHA before notebooks: `99a435c291514612b5c1ce43ad2a28e47797c6c0`
+- Engineering SHA: **18/18 SUCCESS**; DATA V3 and Godot global green.
 
-## What #73 resolves
-### Extreme Evoboost
-- source +2 to all five battle stats;
-- real move is Eevee's exclusive Z-Move derived from Last Resort and not an ordinary freely selectable modern move;
-- +2-all exposed as a normal move is false.
-Decision: `DATA_ONLY`, `effect_specs=[]`; canonical summary records Z-Move/selectability constraint.
+### Flower Shield
+Real move affects eligible Grass-type Pokémon across the field, not simply the opponent; Gen IX cannot select it. Legacy OPPONENT Defense +1 is false.
+Decision: `DATA_ONLY`, `effect_specs=[]`; canonical summary records eligibility/current availability.
 
-### Stockpile
-- source Defense +1 / SpDef +1;
-- real move also stores a capped counter (max three), couples to Spit Up/Swallow and consumes/loses associated state;
-- stat-only execution is unsafe.
-Decision: `DATA_ONLY`, `effect_specs=[]`; summary records max-three/coupling semantics.
+### Rototiller
+Real move affects eligible grounded Grass-type Pokémon across the field, fails if none, and is unavailable for selection from Gen VIII onward. Legacy OPPONENT Attack/SpAtk +1 is false.
+Decision: `DATA_ONLY`, `effect_specs=[]`; canonical summary records grounded/type/current availability.
 
-### Tidy Up
-- source Attack +1 / Speed +1;
-- real move also removes Spikes, Toxic Spikes, Stealth Rock, Sticky Web and Substitute from both sides;
-- omitting bilateral cleanup can preserve strategically favorable hazards.
-Decision: `DATA_ONLY`, `effect_specs=[]`; summary is synthesized from Scarlet/Violet source/current mechanics.
+## Exact #73 → #74 engineering artifact
+- only `flower_shield` and `rototiller` changed;
+- on both only `effect_specs` and `effect_summary` changed;
+- coverage remains **590 runtime / 71 partial / 246 data-only / 12 unsupported**.
 
-## Exact #72 → #73 engineering artifact
-- exactly three changed records: `extreme_evoboost`, `stockpile`, `tidy_up`;
-- changed keys on each: `effect_specs`, `effect_summary` only;
-- no classification, target, accuracy or unrelated record changed.
+Important milestone: **all DATA_ONLY stat-change records with executable specs are now resolved**.
 
-Coverage remains:
-- `RUNTIME_SUPPORTED`: **590**
-- `PARTIAL_RUNTIME`: **71**
-- `DATA_ONLY`: **246**
-- `UNSUPPORTED`: **12**
-
-DATA_ONLY with non-empty specs: **5** only:
-1. `flower_shield`
-2. `rototiller`
-3. `beat_up`
-4. `purify`
-5. `swallow`
-
-Important milestone: **zero remaining `target=user` DATA_ONLY records with executable stat specs**.
+Only three DATA_ONLY records still have non-empty `effect_specs`:
+1. `Purify`
+2. `Swallow`
+3. `Beat Up`
 
 ## Current certification step
-Notebook synchronization moves SHA. Before closing #73:
-1. verify only notebooks 01/02/04 changed after engineering SHA `51f0a15bf980befc2fdb2393dd8b516a2f53eaed`;
+Notebook synchronization moves SHA. Before closing #74:
+1. verify only notebooks 01/02/04 changed after engineering SHA `99a435c291514612b5c1ce43ad2a28e47797c6c0`;
 2. require 18/18 on exact final notebook-bearing HEAD;
-3. close #73 without merge;
-4. use that exact final HEAD as next baseline.
+3. close #74 without merge;
+4. use that exact HEAD as next baseline.
 
-## Exact next DATA V3 task after #73 certification
-Audit the two remaining `all-pokemon` stat cases:
-- `flower_shield`
-- `rototiller`
+## Exact next task
+Audit the three remaining non-stat cases. Suggested order:
+- `Purify`: source/current mechanic cures the selected target's major status and heals the user only if the cure succeeds; current generated SELF heal may grant a free heal without the cure transaction.
+- `Swallow`: healing magnitude and legality depend on Stockpile count and consume that state; a flat heal without prerequisite/consumption is unsafe.
+- `Beat Up`: hit count/damage depend on eligible party members rather than a fixed generic six-hit transaction.
 
-Do not map `all-pokemon` blindly to SELF or OPPONENT. Verify immutable source + current mechanics + exact generated specs, especially Grass-type/grounded predicates and whether the current OPPONENT-targeted generated boosts are false.
-
-After those two, only three non-stat DATA_ONLY-with-spec cases remain:
-- `Purify`
-- `Swallow`
-- `Beat Up`
+Do not change Battle Core merely to make these records executable. If a faithful subset cannot be guaranteed, prefer effect-free `DATA_ONLY`.
 
 ## Workstream
 **Move Effects V3 / battle-relevant DATA V3 semantic audit. Do not switch to trainer AI/archetypes.**
 
 ## Safety rule
-`effect_specs` execute regardless of coverage label. `DATA_ONLY` is not an execution gate. If a generated spec is known false or strategically unsafe, remove/correct it before proceeding.
-
-## Certification protocol
-1. immutable source + public mechanic audit;
-2. exact generated record inspection;
-3. narrow implementation + fail-fast contracts;
-4. independent regenerated-output tests;
-5. DATA V3 focal;
-6. 18/18 engineering SHA;
-7. artifact diff/counts;
-8. notebooks;
-9. 18/18 exact final HEAD;
-10. close PR without merge.
+`effect_specs` execute regardless of coverage label. `DATA_ONLY` is not an execution gate.
 
 ## Stop condition
-If any focal or regression test fails, stop immediately, diagnose/fix root cause, rerun focal, then full matrix. Never accumulate failures.
+Any focal/regression failure stops the tranche until root cause is fixed and rerun.
