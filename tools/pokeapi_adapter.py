@@ -34,7 +34,13 @@ _REQUIRED_UNSUPPORTED_NORMALIZED = {
 # alter hundreds of generated records.
 _SELECTED_TARGET_HEALS = {"heal_pulse", "floral_healing"}
 _TEAM_TARGET_HEALS = {"life_dew", "jungle_healing"}
-_SIMPLE_SELF_HEALS = {"recover", "soft_boiled", "milk_drink", "slack_off"}
+_SIMPLE_SELF_HEALS = {
+    "recover",
+    "soft_boiled",
+    "milk_drink",
+    "slack_off",
+    "heal_order",
+}
 _WEATHER_SELF_HEALS = {"morning_sun", "synthesis", "moonlight", "shore_up"}
 _TEMP_TYPE_SELF_HEALS = {"roost"}
 
@@ -131,7 +137,7 @@ def generate_move_specs(m: dict, contact_set: set):
 
     if sid in _SIMPLE_SELF_HEALS:
         _require_single_self_heal(specs, sid, 5000)
-        # Snapshot-verified: these four moves have no additional battle effect.
+        # Snapshot-verified: these moves have no additional battle effect.
         coverage = "RUNTIME_SUPPORTED"
 
     if sid in _WEATHER_SELF_HEALS:
