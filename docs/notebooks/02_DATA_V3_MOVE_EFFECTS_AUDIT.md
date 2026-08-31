@@ -3,173 +3,156 @@
 ## Invariant
 DATA V3 structural correctness is not enough: every executable `effect_spec` and every battle-relevant move field must be semantically faithful. If Battle Core cannot represent a mechanic, preserve only a provably faithful subset (`PARTIAL_RUNTIME`) or remove executable effects (`DATA_ONLY`). Coverage labels do not gate execution.
 
-A subset is not automatically safe merely because each retained effect is individually true. If an omitted mechanic is a mandatory cost/transaction or can remove a strategic drawback, exposing the remaining effect can create a stronger fake move. In those cases prefer effect-free `DATA_ONLY`.
+A retained effect can be individually true yet still unsafe if an omitted mechanic is a mandatory cost, transaction, prerequisite, target predicate, or strategic drawback. In those cases prefer effect-free `DATA_ONLY`.
 
 ## Canonical source
 - immutable `data/pokeapi-v2-snapshot`
 - commit `2f218ec3765c01c894a42bbbd074f15ddf3f32d1`
 - `data/api/v2` + `data/schema/v2`
-- move-effect compatibility corrections in `tools/pokeapi_adapter.py`
-- source-selection/canonical-field conversion in `tools/pokeapi_adapter_v3.py`
-- selected stateful audit layer in `tools/pokeapi_adapter_selected_stateful.py`
+- compatibility corrections: `tools/pokeapi_adapter.py`
+- source-selection/canonical conversion: `tools/pokeapi_adapter_v3.py`
+- selected-stateful audit: `tools/pokeapi_adapter_selected_stateful.py`
+- all-opponents audit: `tools/pokeapi_adapter_all_opponents.py`
 - archived V2 is provenance-only and must remain untouched.
 
-## Recent certified heads
-- #60 Magnetic Flux — `a5b56a0ba3a1efa81ac57be63b2813c19f2962a7`
-- #61 pure SELF stat packages A — `623930ca0b98b00099288bcf542e7e0a922ac180`
-- #62 pure opponent stat drops A — `6d1335b8c5cee0b1cf1e99910a7707734b4aef85`
-- #63 always-hit accuracy semantics — `9f8b3e01bec1f86cff75380d68dd98d76e738e78`
-- #64 selected special stat packages A — `674ccaf0928c93749c581565d53eb1f672dfd7b4`
-All above: 18/18 and closed without merge.
+## Certified recent heads
+- #63 always-hit accuracy — `9f8b3e01bec1f86cff75380d68dd98d76e738e78`
+- #64 selected special stats — `674ccaf0928c93749c581565d53eb1f672dfd7b4`
+- #65 selected stateful — `b13af37c350156bc7a9a7d7faf63742245afd801`
+All certified 18/18 on exact notebook-bearing HEAD and closed without merge.
 
-## Certified transversal accuracy contract from #63
+## Accuracy contract
 - numeric PokéAPI accuracy is preserved;
 - source `accuracy=null` becomes canonical `-1`;
 - `MoveDefinition` preserves `-1`;
-- `BattleRuleset` treats negative base accuracy as always-hit (10000 bp), while a genuine 100 remains Accuracy/Evasion-stage-sensitive.
+- `BattleRuleset` treats negative base accuracy as always-hit, while genuine 100 remains Accuracy/Evasion-stage-sensitive.
 
-# PR #65 — selected stateful semantics (CURRENT)
-Branch `fix/data-v3-selected-special-stateful-b`.
-Parent: certified #64 final `674ccaf0928c93749c581565d53eb1f672dfd7b4`.
-Engineering SHA before notebook sync: `01854416bf54179b0caa32b99459667d40d369c7`.
+# PR #66 — all-opponents stat semantics (CURRENT)
+Branch `fix/data-v3-all-opponents-stat-audit`.
+Parent: certified #65 final `b13af37c350156bc7a9a7d7faf63742245afd801`.
+Engineering SHA before notebook sync: `4773a8ce33854f987f2cc09bb4f14ef5db678d0b`.
 Engineering SHA: **18/18 SUCCESS**.
 
-The four final `selected-pokemon` DATA_ONLY-with-specs cases were checked against both the immutable snapshot and current public Pokémon mechanics references before choosing runtime exposure.
+The eight remaining `all-opponents` DATA_ONLY-with-specs stat moves were checked against the immutable snapshot and current public core-series mechanics before runtime exposure changed.
 
-## Defog
-Immutable snapshot:
-- target `selected-pokemon`
-- `accuracy=null` → canonical `-1`
-- status move
-- Evasion -1
-- English source text also states field effects are removed.
+## Fully representable base effects in current singles
+Because current battle is singles, `all-opponents` has exactly one opposing active target and can collapse to `OPPONENT` for these unconditional base effects:
 
-Current public mechanics confirm that Defog is not merely an Evasion debuff: modern behavior includes removal of hazards and other field effects, including effects across both sides where applicable, plus target-side barriers/terrain-related cleanup.
-
-Legacy/generated output before #65 exposed only:
-- `OPPONENT Evasion -1`, 10000 bp.
-
-That subset is unsafe as executable behavior. Omitting field cleanup can remove a strategic drawback (for example preserving hazards that real Defog would clear) and turn the move into a stronger fake debuff.
-
-Decision:
-- `DATA_ONLY`
-- `effect_specs=[]`
-- preserve target and canonical accuracy metadata.
-
-## Memento
-Immutable snapshot and public mechanics agree:
-- target `selected-pokemon`
+### Growl
+- target `all-opponents`
 - accuracy 100
-- Attack -2 / Special Attack -2
-- **user faints**.
+- Attack -1
+- no move-intrinsic prerequisite in the source effect contract
+- decision: `RUNTIME_SUPPORTED`.
 
-Legacy/generated output before #65 exposed only the opponent -2/-2 package. That omits the mandatory self-faint cost and would grant a free severe debuff.
+Soundproof is an ability interaction and remains for the ability interaction audit, consistent with previously certified sound moves.
 
-Decision:
-- `DATA_ONLY`
-- `effect_specs=[]`.
-
-## Parting Shot
-Immutable snapshot and public mechanics agree:
-- target `selected-pokemon`
+### Leer
+- target `all-opponents`
 - accuracy 100
-- Attack -1 / Special Attack -1
-- **user switches out** after the debuff transaction.
+- Defense -1
+- decision: `RUNTIME_SUPPORTED`.
 
-Legacy/generated output before #65 exposed only the opponent -1/-1 package. Keeping the user active changes the move materially and can allow repeatable debuffs that the real move cannot perform in that state.
+### String Shot
+- target `all-opponents`
+- accuracy 95
+- modern Speed -2
+- decision: `RUNTIME_SUPPORTED`.
 
-Decision:
-- `DATA_ONLY`
-- `effect_specs=[]`.
-
-## Tar Shot
-Immutable snapshot and public mechanics agree:
-- target `selected-pokemon`
+### Sweet Scent
+- target `all-opponents`
 - accuracy 100
-- Speed -1
-- persistent Fire vulnerability / doubled Fire effectiveness under its effect.
+- structured snapshot `stat_changes`: Evasion -2
+- current mechanics: Evasion -2 since Generation VI
+- decision: `RUNTIME_SUPPORTED`.
 
-Legacy/generated output exposes:
-- `OPPONENT Speed -1`, 10000 bp.
+Snapshot inconsistency discovered: generic `effect_entries` prose still described Evasion -1. #66 keeps immutable JSON untouched and normalizes only loaded in-memory English prose so canonical `effect_summary` matches the structured/current -2 mechanic.
 
-Unlike the three moves above, the missing mechanic is an additional benefit, not a mandatory cost or strategic drawback. Keeping Speed -1 produces a weaker but truthful subset.
+### Tail Whip
+- target `all-opponents`
+- accuracy 100
+- Defense -1
+- decision: `RUNTIME_SUPPORTED`.
 
-Decision:
-- `PARTIAL_RUNTIME`
-- retain exactly `OPPONENT Speed -1`.
+## Conditional/unsafe all-opponents effects neutralized
+### Captivate
+Source states Special Attack -2 only for opposite gender; same gender or genderless cases fail. Current effect model has no gender predicate. An unconditional -2 is false.
+Decision: `DATA_ONLY`, `effect_specs=[]`.
 
-## Implementation contract
-`tools/pokeapi_adapter_selected_stateful.py` validates before altering exposure:
-- exact source target;
-- status damage class;
-- source accuracy/priority;
-- `effect_changes=[]`;
-- exact source stat dictionary;
-- exact generated OPPONENT stat package at 10000 bp;
-- move-specific semantic evidence from source text/meta.
+### Venom Drench
+Source states Attack/SpAtk/Speed -1 only if the target is poisoned. Current effect model cannot predicate stat effects on existing poison state. Unconditional -1/-1/-1 is false.
+Decision: `DATA_ONLY`, `effect_specs=[]`.
 
-`tools/pokeapi_adapter_v3.py` applies this narrow layer immediately after the existing legacy/compatibility generator and before canonical records are written.
+### Cotton Spore
+Source base package is Speed -2, but modern powder/spore rules intrinsically exclude Grass-type targets, in addition to ability/item interactions. Current effect model lacks the move-class/type predicate. Even before ability/item audit, an unconditional Speed -2 against Grass is false.
+Decision: `DATA_ONLY`, `effect_specs=[]`.
 
-Independent Godot DATA V3 tests verify regenerated output rather than trusting the adapter internally:
-- Defog: selected target, accuracy -1, DATA_ONLY, no specs.
-- Memento: selected target, accuracy 100, DATA_ONLY, no specs.
-- Parting Shot: selected target, accuracy 100, DATA_ONLY, no specs.
-- Tar Shot: selected target, accuracy 100, PARTIAL_RUNTIME, exactly one OPPONENT Speed -1 effect.
+## Independent #66 output tests
+Regenerated raw data must verify:
+- Growl: RUNTIME_SUPPORTED, accuracy 100, exact OPPONENT Attack -1.
+- Leer: RUNTIME_SUPPORTED, accuracy 100, exact OPPONENT Defense -1.
+- String Shot: RUNTIME_SUPPORTED, accuracy 95, exact OPPONENT Speed -2.
+- Sweet Scent: RUNTIME_SUPPORTED, accuracy 100, exact OPPONENT Evasion -2, summary no longer says one stage.
+- Tail Whip: RUNTIME_SUPPORTED, accuracy 100, exact OPPONENT Defense -1.
+- Captivate/Cotton Spore/Venom Drench: DATA_ONLY with empty specs.
 
-## Exact #65 engineering artifact
+## Exact #66 engineering artifact
 Coverage:
-- `RUNTIME_SUPPORTED`: **584**
+- `RUNTIME_SUPPORTED`: **589**
 - `PARTIAL_RUNTIME`: **68**
-- `DATA_ONLY`: **255**
+- `DATA_ONLY`: **250**
 - `UNSUPPORTED`: **12**
 
-DATA_ONLY with non-empty specs: **26**.
-- 23 stat-change
+DATA_ONLY with non-empty specs: **18**.
+- 15 stat-change
 - `Beat Up`, `Purify`, `Swallow`.
 
-Exact #64→#65 raw comparison:
-- exactly four move records changed;
-- Defog: `effect_specs` only, Evasion -1 → empty;
-- Memento: `effect_specs` only, Atk/SpAtk -2/-2 → empty;
-- Parting Shot: `effect_specs` only, Atk/SpAtk -1/-1 → empty;
-- Tar Shot: `classification` only, DATA_ONLY → PARTIAL_RUNTIME; Speed -1 unchanged;
+Exact #65→#66 raw comparison:
+- exactly eight move records changed;
+- Captivate/Cotton Spore/Venom Drench: `effect_specs` only → empty;
+- Growl/Leer/String Shot/Tail Whip: `classification` only → RUNTIME_SUPPORTED;
+- Sweet Scent: `classification` plus stale canonical `effect_summary` correction; target, accuracy and effect specs unchanged;
 - no unrelated record changed.
 
-Notebook synchronization moves the SHA. #65 requires a second exact-head 18/18 before closure without merge.
+Notebook synchronization moves the SHA. #66 requires a second exact-head 18/18 before closure without merge.
 
-# Audit frontier after #65
-The `selected-pokemon` family is complete.
+# Audit frontier after #66
+`selected-pokemon` and `all-opponents` DATA_ONLY-with-specs families are complete.
 
 ## User — 13 conditional/stateful
 `autotomize`, `charge`, `clangorous_soul`, `defense_curl`, `extreme_evoboost`, `fillet_away`, `geomancy`, `growth`, `minimize`, `no_retreat`, `shell_smash`, `stockpile`, `tidy_up`.
-Do not mass-promote.
 
-## All-opponents — 8
-`captivate`, `cotton_spore`, `growl`, `leer`, `string_shot`, `sweet_scent`, `tail_whip`, `venom_drench`.
-This is likely the next useful family, but inspect source conditions first. Gender predicates, poisoned-only rules, and spread-target semantics must not be flattened silently.
+Do not mass-promote. Likely dimensions to inspect:
+- HP cost/prerequisite: Clangorous Soul, Fillet Away;
+- delayed/two-turn execution: Geomancy;
+- weather-dependent stat magnitude: Growth;
+- stored counters/state: Stockpile;
+- secondary persistent flags/interactions: Charge, Defense Curl, Minimize, Autotomize;
+- switching restrictions/state: No Retreat;
+- cleanup/field side effects: Tidy Up;
+- multi-stat packages that may otherwise be representable: Shell Smash, Extreme Evoboost.
 
 ## All-pokemon — 2
 `flower_shield`, `rototiller`.
-Current singles SELF/OPPONENT effect targeting cannot directly express all-Pokémon/type predicates.
+Both require all-Pokémon/type predicates not directly representable with SELF/OPPONENT-only targeting.
 
 ## Non-stat — 3
 `Purify`, `Swallow`, `Beat Up` require separate semantic audits.
 
 ## Audit protocol
 1. Inspect immutable source.
-2. Cross-check public Pokémon mechanics when source text is incomplete/version-ambiguous.
+2. Cross-check public mechanics when source text is incomplete/version-ambiguous.
 3. Inspect exact generated artifact.
-4. Determine all battle-relevant fields, not only `effect_specs`.
-5. Determine whether an omitted mechanic is merely a missing benefit or instead a cost/transaction/drawback.
-6. Choose coverage from semantics, not convenience.
-7. Add exact fail-fast source/generated contract.
-8. Add independent regenerated-output/runtime assertion.
-9. Batch only genuinely homogeneous contracts.
-10. DATA V3 focal.
-11. 18/18 engineering SHA.
-12. Measure artifact and compare changed fields.
-13. Sync notebooks.
-14. 18/18 final HEAD.
-15. Close without merge.
+4. Identify all battle-relevant mechanics, costs, predicates and state changes.
+5. Choose coverage from semantics, not convenience.
+6. Add fail-fast source/generated contract.
+7. Add independent regenerated-output/runtime assertion.
+8. Batch only genuinely homogeneous contracts.
+9. DATA V3 focal.
+10. 18/18 engineering SHA.
+11. Measure artifact and compare changed fields.
+12. Sync notebooks.
+13. 18/18 final HEAD.
+14. Close without merge.
 
 Stop on any failure; fix root cause before another family.
