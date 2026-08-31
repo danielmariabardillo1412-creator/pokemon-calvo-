@@ -32,6 +32,7 @@ Pipeline:
 - #79 hit-triggered stat reactions `5b9ad561017fc4c209d6fd11ef9ddc7dbf3fbd71`
 - #80 contact damage + attack-doubling audit `232a3e787fe2d7d58b1feb693272b63bd7a699bf`
 - #81 defensive damage modifiers `e2eeef1d23def1d9fd124b5e2eeb437270212b68`
+- #82 defensive predicates `089140a8439390758d688636f715a311ec175163`
 
 All entries above: **18/18 SUCCESS on exact final notebook-bearing HEAD and closed without merge**.
 
@@ -51,70 +52,79 @@ Preserved metadata is not executable support.
 
 Battle Core ability execution is controlled by trigger registration; DATA V3 classification describes semantic completeness.
 
-## Certified ability baseline — PR #81
-Detailed notebooks: `06`, `07`, `08`, `09`, `10`, `11`.
+## Latest certified ability baseline — PR #82
+Detailed notebooks: `06`, `07`, `08`, `09`, `10`, `11`, `12`.
 
-Certified #81 coverage:
-- `RUNTIME_SUPPORTED`: **11**
-- `PARTIAL_RUNTIME`: **4** — `intimidate`, `levitate`, `stamina`, `static`
-- `DATA_ONLY`: **358**
-- total: **373**.
-
-# Current tranche — PR #82 Defensive predicates
-- Branch: `audit/data-v3-ability-defensive-predicates-v2`.
-- Parent: certified #81 final `e2eeef1d23def1d9fd124b5e2eeb437270212b68`.
-- PR: #82 `DATA V3 — audit defensive predicate abilities`.
-- Engineering SHA: `60edf8b7be9225f7670c6dd5039713e4b621163e`.
-- Engineering SHA: **18/18 SUCCESS**.
-- Detailed notebook: `docs/notebooks/12_DATA_V3_ABILITY_DEFENSIVE_PREDICATES.md`.
-
-## #82 decisions
-### Ice Scales
-Source: Generation VIII/main-series; halves special-move damage; no effect history.
-Runtime: target-side `MODIFY_DAMAGE`, `requires_special=true`, `multiplier_bp=5000`.
-Decision: **RUNTIME_SUPPORTED**.
-
-### Multiscale
-Source: Generation V/main-series; halves move damage while at full HP; no effect history.
-Runtime: target-side `MODIFY_DAMAGE`, `requires_full_hp=true`, `multiplier_bp=5000`.
-Decision: **RUNTIME_SUPPORTED**.
-
-`MULTI_HIT` calls `_damage()` per strike, so the full-HP condition is reevaluated each hit. Real-battle integration with canonical two-hit `double_kick` proves only hit one is reduced and exactly one Multiscale trigger is emitted.
-
-### Heatproof
-Source: Generation IV/main-series; halves Fire-move damage and burn residual damage; no effect history.
-Runtime currently implements only Fire-move reduction: `move_type_id=fire`, `multiplier_bp=5000`.
-Decision: **PARTIAL_RUNTIME** because burn residual is still calculated directly by `StatusSystem.process_end_turn()` without an ability modifier hook. A regression test explicitly proves burn damage remains unchanged under Heatproof.
-
-### Filter / Solid Rock
-Both require a super-effective predicate and remain **DATA_ONLY**. Current effectiveness is produced inside `DamageCalculator.calculate()` after `damage_modifiers()` runs. Do not duplicate type-chart logic in the ability layer solely for coverage.
-
-## #82 Battle Core change
-Only two generic condition keys were added:
-- `requires_special=true`, mirror of existing `requires_physical`;
-- `requires_full_hp=true`, exact owner `current_hp == max_hp`.
-
-The target multiplier path from #81 is reused. No new trigger type, damage formula, weather/status/party/form/item machinery or effectiveness duplication was introduced.
-
-## #82 artifact drift
-Certified #81 → successful #82 engineering artifact:
-- raw: exactly `ice_scales`, `multiscale`, `heatproof` change classification and no other field;
-- normalized: exactly the same three classification-only changes;
-- `ice_scales`: DATA_ONLY → RUNTIME_SUPPORTED;
-- `multiscale`: DATA_ONLY → RUNTIME_SUPPORTED;
-- `heatproof`: DATA_ONLY → PARTIAL_RUNTIME;
-- `unsupported_mechanics.json`: 11→13 runtime, 4→5 partial, 358→355 data-only;
-- `pokeapi_v3_audit.json`: exactly those same three count changes and nothing else;
-- every other ability, species, move/effect, item/status, learnset/evolution, type/stat, manifest/forms/auxiliary unchanged;
-- `import_time_ms` 505→506 ms is non-semantic.
-
-## Ability coverage after #82 engineering
+Certified #82 coverage:
 - `RUNTIME_SUPPORTED`: **13**
 - `PARTIAL_RUNTIME`: **5** — `heatproof`, `intimidate`, `levitate`, `stamina`, `static`
 - `DATA_ONLY`: **355**
 - total: **373**.
 
-## Known blockers after #82
+# Current tranche — PR #83 Move-property ability contracts
+- Branch: `audit/data-v3-ability-move-property-v1`.
+- Exact parent: certified #82 final `089140a8439390758d688636f715a311ec175163`.
+- PR: #83 `DATA V3 — audit move-property ability contracts`.
+- Engineering SHA: `f9d3538dec9c443e60070b0e4bf7d7904c984e55`.
+- Engineering SHA: **18/18 SUCCESS**.
+- Detailed notebook: `docs/notebooks/13_DATA_V3_ABILITY_MOVE_PROPERTIES.md`.
+
+## #83 decision — Reckless
+Pinned Generation IV source requires 1.2x power for recoil **and crash** moves; Struggle is excluded.
+
+Current runtime has a trustworthy structured recoil subset through `BattleEffectSpec.RECOIL` but does not yet encode Jump Kick / High Jump Kick crash-on-miss as the same transaction.
+
+Decision: **`reckless → PARTIAL_RUNTIME`**.
+
+Battle Core adds one generic structural condition:
+- `requires_recoil=true`, recursively matched from `move.effect_specs`;
+- no move-name/prose inference.
+
+Reckless registration:
+- actor `MODIFY_DAMAGE`;
+- `requires_recoil=true`;
+- `multiplier_bp=12000`.
+
+Real-battle integration verifies:
+- Double-Edge damage increases and Reckless triggers;
+- normal recoil still occurs;
+- Tackle is unchanged and does not trigger Reckless;
+- Jump Kick remains unchanged with/without Reckless and emits no Reckless trigger, explicitly documenting the missing crash subset.
+
+## #83 audited blockers
+### Long Reach
+Source is clean, but defender-owned contact-trigger evaluation currently receives trigger owner + move, not the move user. Long Reach therefore remains **DATA_ONLY** rather than introducing a hidden ability-id special-case or broad trigger-context expansion.
+
+### Technician
+Source requires resolved/variable-power and prior power-modifier semantics. Static `move.power <= 60` is knowingly insufficient for current stateful/variable-power moves. Remains **DATA_ONLY**.
+
+### Iron Fist / Strong Jaw / Mega Launcher / Sharpness
+Current `MoveDefinition` has no provenance-backed punch/bite/pulse/slicing tags. All remain **DATA_ONLY**; no inference from names or prose.
+
+## #83 artifact drift
+Certified #82 artifact → successful #83 engineering artifact:
+- raw: exactly `reckless.classification: DATA_ONLY → PARTIAL_RUNTIME`;
+- normalized: exactly the same one-field change;
+- `RUNTIME_SUPPORTED`: remains **13**;
+- `PARTIAL_RUNTIME`: **5 → 6**;
+- `DATA_ONLY`: **355 → 354**;
+- Long Reach, Technician, Iron Fist, Strong Jaw, Mega Launcher and Sharpness unchanged;
+- every other ability unchanged;
+- species/Pokémon, moves/effects, items/statuses, learnsets/evolutions, types/stats, manifest/forms/auxiliary unchanged;
+- `pokeapi_v3_audit.json` changes only partial 5→6 and data-only 355→354;
+- `import_time_ms` 396→398 ms is non-semantic.
+
+## Ability coverage after #83 engineering
+- `RUNTIME_SUPPORTED`: **13**
+- `PARTIAL_RUNTIME`: **6** — `heatproof`, `intimidate`, `levitate`, `reckless`, `stamina`, `static`
+- `DATA_ONLY`: **354**
+- total: **373**.
+
+## Known blockers after #83
+- `reckless`: full support needs structured crash-on-miss move semantics.
+- `long_reach`: needs a shared effective-contact/context contract exposing move user to contact reactions.
+- `technician`: needs resolved/transactional move-power semantics, not static base-power approximation.
+- `iron_fist`, `strong_jaw`, `mega_launcher`, `sharpness`: need provenance-backed move-property tags.
 - `filter`, `solid_rock`: need a shared super-effective/effectiveness predicate.
 - `heatproof`: full support needs burn residual ability interaction.
 - `fluffy`: needs modifier composition/event aggregation to avoid duplicate logical trigger events.
@@ -124,13 +134,13 @@ Certified #81 → successful #82 engineering artifact:
 - `weak_armor`: requires dual stat transaction plus per-hit/version semantics.
 
 ## Current certification step
-Notebook synchronization follows engineering SHA `60edf8b7be9225f7670c6dd5039713e4b621163e`.
+Notebook synchronization follows engineering SHA `f9d3538dec9c443e60070b0e4bf7d7904c984e55`.
 
-Before closing #82:
-1. verify engineering → final HEAD changes only `01`, `04`, `12` notebooks;
+Before closing #83:
+1. verify engineering → final HEAD changes only `01`, `04`, `13` notebooks;
 2. require **18/18 SUCCESS** on exact final notebook-bearing HEAD;
-3. close #82 without merge;
+3. close #83 without merge;
 4. use exact final SHA as next certified baseline.
 
-## Exact next work after #82
-Continue DATA FOUNDATION V3 ability reliability with another bounded family selected by source semantics and current primitives. Do not broaden Battle Core merely to improve the coverage number. Trainer AI/archetypes remain deferred.
+## Exact next work after #83
+Continue DATA FOUNDATION V3 ability reliability with another bounded family selected from the remaining 354 DATA_ONLY records only after source-vs-runtime comparison. Do not broaden Battle Core merely to improve coverage. Trainer AI/archetypes remain deferred.
