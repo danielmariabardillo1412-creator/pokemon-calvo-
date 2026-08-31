@@ -118,18 +118,34 @@ Unchanged:
 
 `import_summary.json` differs only in nondeterministic `import_time_ms` (`517 → 521` ms); this is execution timing noise, not canonical semantic drift.
 
-## Certification state
+## #76 certification — CLOSED
 
-Engineering SHA `8e1ea4e443ef76dcca8f83ebf49c0ea282f4c890`: **18/18 SUCCESS**.
+- Final notebook-bearing HEAD: `a596a38680b60db317f1dfd6b6beb8d7ded7b813`.
+- Final HEAD: **18/18 workflows SUCCESS**.
+- PR #76 closed without merge.
+- This exact SHA is the certified parent for the next ability tranche.
 
-Notebook synchronization now moves the branch HEAD. Before #76 can be closed without merge:
+## Current tranche — ability family inventory V1
 
-1. update operational notebooks with this exact result;
-2. verify engineering SHA → final HEAD changes only notebook files;
-3. require **18/18 SUCCESS** again on that exact notebook-bearing final HEAD;
-4. close PR #76 without merge;
-5. use that exact final HEAD as the next baseline.
+- Branch: `audit/data-v3-ability-family-inventory-v1`.
+- Certified parent: #76 final `a596a38680b60db317f1dfd6b6beb8d7ded7b813`.
+- Starting corpus: **367 `DATA_ONLY` abilities**.
+- Goal: turn the undifferentiated remainder into explicit semantic families, identify which families fit existing Battle Core primitives, and—only if source/runtime evidence is clean—close one bounded family in the same tranche.
+- This checkpoint is committed **before** broad analysis so interruption cannot erase the workstream state.
 
-## Next work after #76 certification
+### Rules for this tranche
 
-Do not implement hundreds of abilities at once. Inventory/classify the remaining 367 by semantic families and identify which families can be represented safely by existing Battle Core primitives. First follow-up tranche should be family inventory/prioritization plus one bounded family audit, not a mass conversion.
+1. No mass implementation and no heuristic promotion solely from prose keywords.
+2. Inventory may use deterministic text/mechanic signatures for grouping, but promotion to `RUNTIME_SUPPORTED`/`PARTIAL_RUNTIME` requires an explicit per-family contract and source guards.
+3. Existing runtime primitives define what can be considered immediately representable; do not expand Battle Core casually to make a family fit.
+4. Any ability with mandatory weather/terrain, party-wide state, switching transaction, form change, move rewriting, suppression/copying, item transaction, multi-combat targeting, or faint-sensitive semantics stays outside a simple-family promotion until specifically modeled.
+5. Preserve exact 373-total accounting and fail if any ability is silently unclassified.
+6. Before closure: focal tests → 18/18 engineering SHA → artifact diff → notebook sync → 18/18 final SHA → close without merge.
+
+### Immediate work order
+
+1. Generate a deterministic family inventory for the 367 `DATA_ONLY` records.
+2. Cross-reference those families against actual Battle Core ability-trigger primitives.
+3. Choose a first bounded family with low semantic risk.
+4. Audit that family explicitly and test exact IDs/counts.
+5. Record rejected/blocked families and why, so future sessions do not rediscover the same boundaries.
