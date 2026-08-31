@@ -11,6 +11,7 @@ func _initialize() -> void:
 func _run() -> void:
 	BattleCommandsTestSuite.new().run(Callable(self, "_check"))
 	BattleCommandsAuditTestSuite.new().run(Callable(self, "_check"))
+	BattleSelfTargetAccuracyTestSuite.new().run(Callable(self, "_check"))
 	print("\n=== BATTLE COMMANDS TEST RESULT: %d PASS / %d FAIL ===" % [_passed, _failed])
 	quit(0 if _failed == 0 else 1)
 
