@@ -37,8 +37,9 @@ Pipeline:
 - #74 all-pokemon semantics `9a917fea11df07c3aa26c8962e2dca9784a41875`
 - #75 final DATA_ONLY executable effects `4bb4bdc64982eef62f126f8d1c38e9509d21c96c`
 - #76 initial ability runtime contracts `a596a38680b60db317f1dfd6b6beb8d7ded7b813`
+- #77 ability family inventory + Swarm `78da22438d0866193b0d1154814464531ac55641`
 
-All entries above: 18/18 on exact final notebook-bearing HEAD, closed without merge.
+All entries above: **18/18 SUCCESS on exact final notebook-bearing HEAD and closed without merge**.
 
 ## Move Effects V3 closed milestone
 PR #75 certified that no `DATA_ONLY` move retains executable `effect_specs`.
@@ -48,7 +49,7 @@ Move coverage:
 - `PARTIAL_RUNTIME`: **71**
 - `DATA_ONLY`: **246**
 - `UNSUPPORTED`: **12**
-- `DATA_ONLY` with non-empty `effect_specs`: **0**
+- `DATA_ONLY` with non-empty `effect_specs`: **0**.
 
 ## Coverage safety principle
 Preserved data is not equivalent to executable support.
@@ -60,92 +61,84 @@ Preserved data is not equivalent to executable support.
 
 For moves, `effect_specs` execute regardless of label, so unsafe specs must be removed. For abilities, Battle Core trigger registration controls execution while DATA V3 classification describes semantic completeness.
 
-## Certified ability baseline — PR #76
-Detailed notebook: `docs/notebooks/06_DATA_V3_ABILITY_RUNTIME_AUDIT.md`.
+## Certified ability baseline through PR #77
+Detailed notebooks:
+- `docs/notebooks/06_DATA_V3_ABILITY_RUNTIME_AUDIT.md`
+- `docs/notebooks/07_DATA_V3_ABILITY_FAMILY_INVENTORY.md`
 
-PR #76 established the first honest ability split:
-- `RUNTIME_SUPPORTED`: **3** — `blaze`, `overgrow`, `torrent`
-- `PARTIAL_RUNTIME`: **3** — `intimidate`, `levitate`, `static`
-- `DATA_ONLY`: **367**
-- total: 373.
-
-Important known partials:
-- `intimidate`: base switch-in Attack drop works; additional acquisition/reacquisition/Substitute semantics absent.
+PR #76 established the initial honest ability split and the known partials:
+- `intimidate`: base switch-in Attack drop works; extra acquisition/reacquisition/Substitute semantics absent.
 - `levitate`: Ground move immunity works; grounded-field/suppression semantics absent.
-- `static`: ordinary 30% contact paralysis works; fatal contact cannot currently trigger because fainted owners are excluded from the AFTER_DAMAGE path.
+- `static`: ordinary contact paralysis works; fatal contact cannot currently trigger because fainted owners are excluded from AFTER_DAMAGE.
 
-Do not globally fire all AFTER_DAMAGE triggers on fainted owners as a shortcut; held items share that infrastructure.
+PR #77 then partitioned the exact 367-record #76 DATA_ONLY frontier into **13 deterministic triage families** and promoted only `swarm` after an explicit source/runtime audit.
 
-# Current tranche — PR #77 Ability family inventory + Swarm
-
-- Branch: `audit/data-v3-ability-family-inventory-v1`.
-- Parent: certified #76 final `a596a38680b60db317f1dfd6b6beb8d7ded7b813`.
-- PR: #77 `DATA V3 — inventory ability families and audit Swarm`.
-- Engineering SHA: `3eb799c2fefc513ef925ebe329e4ad092954aef1`.
-- Engineering SHA: **18/18 SUCCESS**, including DATA V3 and Godot 4.7 global.
-- Detailed notebook: `docs/notebooks/07_DATA_V3_ABILITY_FAMILY_INVENTORY.md`.
-
-## #77 inventory result
-The exact 367-record DATA_ONLY frontier inherited from #76 is deterministically partitioned into **13 triage families**. The inventory is planning/test infrastructure only; it cannot auto-promote abilities.
-
-Largest families:
-- `stat_damage_modifier`: 78
-- `source_text_missing`: 60
-- `immunity_absorb_prevention`: 53
-- `move_property_control`: 38
-- `weather_terrain`: 33
-- remaining eight families account for the rest; exact 367 total is CI-enforced.
-
-`source_text_missing` is an explicit blocker. The inventory suite also fails if any former #76 DATA_ONLY ability other than the explicitly audited Swarm is promoted in this tranche.
-
-## #77 bounded family decision — Swarm
-The `pinch_type_boost` remainder contains exactly one ability: `swarm`.
-
-Immutable source `data/api/v2/ability/68/index.json`:
-- main-series, Generation III;
-- <=1/3 HP;
-- Bug-type moves deal 1.5x regular damage;
-- historical `effect_changes` are overworld-only and do not alter the battle transaction.
-
-Decision: `swarm → RUNTIME_SUPPORTED`.
-
-Battle Core reuses the existing Blaze/Torrent/Overgrow MODIFY_DAMAGE primitive:
-- `move_type_id=bug`
-- `hp_at_or_below_divisor=3`
-- `multiplier_bp=15000`
-
-No new execution primitive was added.
-
-`runtime_supported_ability_ids()` remains the frozen historical Battle V2 compatibility list. New `implemented_ability_ids()` exposes the actual ability trigger registry for DATA V3 reliability tests.
-
-## Ability coverage after #77 engineering
+Certified #77 ability coverage:
 - `RUNTIME_SUPPORTED`: **4** — `blaze`, `overgrow`, `swarm`, `torrent`
 - `PARTIAL_RUNTIME`: **3** — `intimidate`, `levitate`, `static`
 - `DATA_ONLY`: **366**
-- total: **373**
+- total: **373**.
 
-## Exact #76 → #77 engineering artifact
-Raw and normalized datasets:
-- exactly one changed ability: `swarm`;
-- exactly one changed field: `classification`;
-- `DATA_ONLY → RUNTIME_SUPPORTED`.
+# Current tranche — PR #78 Ability type boosts
+
+- Branch: `audit/data-v3-ability-type-boosts-v1`.
+- Parent: certified #77 final `78da22438d0866193b0d1154814464531ac55641`.
+- PR: #78 `DATA V3 — audit unconditional ability type boosts`.
+- Engineering SHA: `f01b1d0553b7dfa1e5998ee1de99ace9fad1534b`.
+- Engineering SHA: **18/18 SUCCESS**, including DATA V3 and Godot 4.7 global.
+- Detailed notebook: `docs/notebooks/08_DATA_V3_ABILITY_TYPE_BOOSTS.md`.
+
+## #78 bounded source/runtime result
+Four unconditional type-power boosts are source-complete and fit the existing `MODIFY_DAMAGE` primitive without a new Battle Core mechanism:
+
+- `steelworker` — Steel, x1.5
+- `dragons_maw` — Dragon, +50%
+- `rocky_payload` — Rock, +50%
+- `fire_mane` — Fire, +50%
+
+All four have explicit numeric current source semantics, expected generation guards and `effect_changes=[]` in the pinned snapshot.
+
+Decision: all four become `RUNTIME_SUPPORTED`.
+
+`transistor` remains deliberately `DATA_ONLY`: its ability semantics are version-sensitive while the pinned source lacks enough versioned history to justify one universal multiplier under the project's version-aware policy.
+
+## #78 runtime contract
+Battle Core registers each new ability as:
+- trigger `MODIFY_DAMAGE`;
+- exact `move_type_id`;
+- `multiplier_bp=15000`;
+- no HP threshold or additional hidden condition.
+
+No new general primitive and no global damage-order change were introduced. Historical `runtime_supported_ability_ids()` remains frozen for Battle V2 compatibility; DATA V3 uses `implemented_ability_ids()`.
+
+## Ability coverage after #78 engineering
+- `RUNTIME_SUPPORTED`: **8**
+- `PARTIAL_RUNTIME`: **3**
+- `DATA_ONLY`: **362**
+- total: **373**.
+
+The exact runtime-supported set is:
+`blaze`, `dragons_maw`, `fire_mane`, `overgrow`, `rocky_payload`, `steelworker`, `swarm`, `torrent`.
+
+## Exact #77 → #78 engineering artifact
+Raw + normalized datasets:
+- exactly four semantic changes;
+- only `classification: DATA_ONLY → RUNTIME_SUPPORTED` for `dragons_maw`, `fire_mane`, `rocky_payload`, `steelworker`.
 
 No other ability, species, move/effect, item, learnset, evolution, type or stat changed.
 
-Reports change only the corresponding ability counts/lists. `import_summary.json` differs only in nondeterministic `import_time_ms` (`512→519 ms`). Manifest/forms/auxiliary are unchanged.
+Reports move exactly those four IDs and update counts 4→8 runtime / 366→362 data-only. Manifest, forms report and auxiliary report are unchanged. `import_time_ms` 519→525 ms is non-semantic timing noise.
 
 ## Current certification step
-Notebook sync now moves SHA after engineering `3eb799c2fefc513ef925ebe329e4ad092954aef1`.
+Notebook synchronization follows engineering SHA `f01b1d0553b7dfa1e5998ee1de99ace9fad1534b`.
 
-Before closing #77 without merge:
-1. verify engineering → final HEAD changes only notebook files;
+Before closing #78 without merge:
+1. verify engineering SHA → final HEAD changes only `01`, `04`, `08` notebooks;
 2. require **18/18 SUCCESS** on exact final notebook-bearing HEAD;
-3. close #77 without merge;
-4. use that exact final HEAD as next baseline.
+3. close #78 without merge;
+4. use that exact final SHA as next certified baseline.
 
-## Exact next work after #77
-Remain in DATA FOUNDATION V3 ability reliability.
+## Exact next work after #78
+Remain in DATA FOUNDATION V3 ability reliability. Audit another bounded existing-primitive family rather than bulk-promoting `stat_damage_modifier`.
 
-First candidate: `steelworker` (`data/api/v2/ability/200/index.json`). Immutable source states Steel moves have 1.5x power and `effect_changes=[]`; the existing MODIFY_DAMAGE primitive appears sufficient for an unconditional Steel multiplier. **It is not yet audited/promoted.** Next tranche must still perform source guard → focal runtime contract → tests → artifact diff before changing classification.
-
-Do not mass-promote Transistor / Dragon's Maw / Rocky Payload from short prose alone; their preserved text lacks the numeric multiplier needed for the same source-only proof.
+First candidate: `stamina`, subject to a fresh source/runtime audit. Keep the broad contact-reactive family deferred while the Static fatal-contact trigger gap remains unresolved.
