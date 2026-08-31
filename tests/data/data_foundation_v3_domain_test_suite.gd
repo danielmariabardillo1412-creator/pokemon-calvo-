@@ -8,6 +8,7 @@ func run(check_callback: Callable) -> void:
 	_test_species_metadata_roundtrip(check_callback)
 	_test_silk_trap_generated_semantics(check_callback)
 	_test_aromatic_mist_generated_semantics(check_callback)
+	_test_stuff_cheeks_generated_semantics(check_callback)
 
 
 func _test_learnset_roundtrip(check_callback: Callable) -> void:
@@ -40,7 +41,7 @@ func _test_evolution_roundtrip(check_callback: Callable) -> void:
 	check_callback.call("data_v3_evolution_default_flag_roundtrip", not copy.is_default)
 	check_callback.call("data_v3_evolution_conditions_roundtrip", copy.conditions == conditions)
 	conditions["min_happiness"] = 1
-	check_callback.call("data_v3_evolution_conditions_are_independent", int(copy.conditions.get("min_happiness", 0)) == 220)
+	check_callback.call("data_v3_evolution_conditions_are_independent", int(copy.conditions[0].get("min_happiness", 0)) == 220 if copy.conditions is Array else int(copy.conditions.get("min_happiness", 0)) == 220)
 
 
 func _test_species_metadata_roundtrip(check_callback: Callable) -> void:
@@ -105,3 +106,14 @@ func _test_aromatic_mist_generated_semantics(check_callback: Callable) -> void:
 	check_callback.call("data_v3_aromatic_mist_target_preserved", aromatic_mist.get("target", "") == "ally")
 	check_callback.call("data_v3_aromatic_mist_is_data_only", aromatic_mist.get("classification", "") == "DATA_ONLY")
 	check_callback.call("data_v3_aromatic_mist_has_no_false_self_buff", specs.is_empty())
+
+
+func _test_stuff_cheeks_generated_semantics(check_callback: Callable) -> void:
+	var stuff_cheeks := _load_raw_move("stuff_cheeks")
+	check_callback.call("data_v3_stuff_cheeks_present", not stuff_cheeks.is_empty())
+	if stuff_cheeks.is_empty():
+		return
+	var specs: Array = stuff_cheeks.get("effect_specs", [])
+	check_callback.call("data_v3_stuff_cheeks_target_preserved", stuff_cheeks.get("target", "") == "user")
+	check_callback.call("data_v3_stuff_cheeks_is_data_only", stuff_cheeks.get("classification", "") == "DATA_ONLY")
+	check_callback.call("data_v3_stuff_cheeks_has_no_unconditional_defense_buff", specs.is_empty())
