@@ -65,29 +65,38 @@ Key organized test roots:
 - `tests/trainer_ai/`
 - `tests/test_runner.gd` is the sole global root runner.
 
-## Current certified working baseline
+## Current working baseline / active certification
 
-Before introducing project notebooks:
+Persistent notebooks were introduced and certified on:
 
-- Branch: `fix/data-v3-simple-self-stat-boosts-b`
-- HEAD: `24889d355e8d89f8873d2d958efb951080fd8027`
-- PR #51: closed without merge.
+- Branch: `docs/project-notebooks-v1`
+- HEAD: `7ab2c1be78fab18309c6c4f4de9b2cf02ed96b46`
+- PR #52: closed without merge.
 - CI: 18/18 SUCCESS on that exact HEAD.
+
+Current Move Effects tranche:
+
+- Branch: `fix/data-v3-simple-self-stat-boosts-c`
+- PR #53.
+- Parent: notebook baseline `7ab2c1be78fab18309c6c4f4de9b2cf02ed96b46`.
+- Engineering SHA before notebook synchronization: `4d6f0dbf205ffd41fdbbfae490e8efaedea54d3f`.
+- That engineering SHA passed 18/18 workflows, including DATA V3 and Godot global.
+- The notebook synchronization commit intentionally moves the branch tip; **the exact final certified HEAD must be read from PR #53 / branch tip after its second 18/18 run before closure**. GitHub is authoritative.
 
 The active work is **Move Effects V3 semantic audit**, not trainer AI.
 
-## Current move coverage at HEAD 24889d35...
+## Current move coverage from PR #53 engineering artifact
 
-Generated artifact counts:
+Exact generated artifact counts from SHA `4d6f0dbf205ffd41fdbbfae490e8efaedea54d3f`:
 
-- `RUNTIME_SUPPORTED`: 552
+- `RUNTIME_SUPPORTED`: 555
 - `PARTIAL_RUNTIME`: 66
-- `DATA_ONLY`: 289
+- `DATA_ONLY`: 286
 - `UNSUPPORTED`: 12
 
-Among the remaining `DATA_ONLY` records, 69 still have generated `effect_specs` and therefore deserve special scrutiny:
+Among the remaining `DATA_ONLY` records, 66 still have generated `effect_specs` and therefore deserve special scrutiny:
 
-- 66 stat-change cases.
+- 63 stat-change cases.
 - 2 heal-related cases: `Purify`, `Swallow`.
 - 1 multi-hit case: `Beat Up`.
 
