@@ -22,104 +22,107 @@ Immutable source:
 - source JSON is read-only.
 
 Pipeline:
-`snapshot → tools/pokeapi_adapter_v3.py → tools/pokeapi_adapter.py + narrow audit layers → data/raw/pokemon_api.json → Godot DataImporter → data/normalized/pokemon_api.json → runtime`.
+`snapshot → tools/pokeapi_adapter_v3.py → compatibility + narrow audit layers → data/raw/pokemon_api.json → Godot DataImporter → data/normalized/pokemon_api.json → runtime`.
 
-Archived V2 remains provenance-only at `tools/archive/pokeapi_adapter_v2_legacy.py`.
-
-## Structural V3 facts
-- 1,025 base species; 326 forms.
-- 18 runtime battle types.
-- 919 runtime moves.
-- 373 abilities; 2,222 items.
-- 61,102 learnset entries.
-- 554 evolution records.
+Structural facts:
+- 1,025 base species; 326 forms; 18 runtime types.
+- 919 runtime moves; 373 abilities; 2,222 items.
+- 61,102 learnset entries; 554 evolution records.
 - 0 broken refs; 0 rejected definitions.
-- 18 XD Shadow moves explicitly excluded instead of remapped.
+- 18 XD Shadow moves explicitly excluded.
 
 ## Recent certified Move Effects chain
-- #60 Magnetic Flux — `a5b56a0ba3a1efa81ac57be63b2813c19f2962a7`
-- #61 pure SELF stat packages A — `623930ca0b98b00099288bcf542e7e0a922ac180`
-- #62 pure opponent stat drops A — `6d1335b8c5cee0b1cf1e99910a7707734b4aef85`
-- #63 always-hit accuracy semantics — `9f8b3e01bec1f86cff75380d68dd98d76e738e78`
-- #64 selected special stat packages A — `674ccaf0928c93749c581565d53eb1f672dfd7b4`
-- #65 selected stateful semantics — `b13af37c350156bc7a9a7d7faf63742245afd801`
-All above: 18/18 on exact final HEAD, closed without merge.
+- #63 always-hit accuracy — `9f8b3e01bec1f86cff75380d68dd98d76e738e78`
+- #64 selected special stats — `674ccaf0928c93749c581565d53eb1f672dfd7b4`
+- #65 selected stateful — `b13af37c350156bc7a9a7d7faf63742245afd801`
+- #66 all-opponents stat semantics — `51bc14155338e47c76926047845a958205005bdd`
+All: 18/18 on exact final notebook-bearing HEAD, closed without merge.
 
-## Certified transversal accuracy contract from #63
-PokéAPI `accuracy=null` maps to canonical `accuracy=-1`, matching Battle Core's always-hit sentinel. Numeric accuracy remains numeric. Exactly 285/919 records changed only in `accuracy`.
+## Accuracy contract retained
+PokéAPI `accuracy=null` maps to canonical `accuracy=-1`, matching Battle Core's always-hit sentinel. Numeric accuracy remains numeric.
 
-# Current tranche — PR #66 all-opponents stat semantics
-- Branch: `fix/data-v3-all-opponents-stat-audit`
-- Parent: certified #65 final `b13af37c350156bc7a9a7d7faf63742245afd801`.
-- Engineering SHA before notebook synchronization: `4773a8ce33854f987f2cc09bb4f14ef5db678d0b`.
+# Current tranche — PR #69 safe user-stateful subsets
+- Branch: `fix/data-v3-user-stateful-safe-subsets-a`
+- Parent: certified #66 final `51bc14155338e47c76926047845a958205005bdd`.
+- Engineering SHA before notebook synchronization: `a2de4701b028e35622d9fb6b1ea2980d09179a92`.
 - Engineering SHA passed **18/18**, including DATA V3 independent regenerated-output assertions and Godot global.
-- Artifact comparison #65→#66 changed exactly eight move records and no unrelated moves.
-- Notebook synchronization moves the SHA; final exact HEAD must pass 18/18 again before #66 closes without merge.
+- Exact #66→#69 artifact comparison changed exactly four records, and on all four **classification was the only changed key**.
+- Notebook synchronization moves the SHA; final exact notebook-bearing HEAD must pass 18/18 again before #69 closes without merge.
 
-## #66 audited decisions
-The eight remaining `all-opponents` DATA_ONLY-with-specs stat moves were checked against the immutable snapshot and current public core-series mechanics.
+## #69 audited decisions
+Immutable PokéAPI source and current public core-series mechanics were cross-checked before changing coverage.
 
-### Fully representable base effects in the current singles model
-In singles, `all-opponents` collapses faithfully to the one opposing active Pokémon. The following generated stat packages are complete base move effects:
-- `growl`: Attack -1, accuracy 100 → `RUNTIME_SUPPORTED`.
-- `leer`: Defense -1, accuracy 100 → `RUNTIME_SUPPORTED`.
-- `string_shot`: Speed -2, accuracy 95 → `RUNTIME_SUPPORTED`.
-- `sweet_scent`: Evasion -2, accuracy 100 → `RUNTIME_SUPPORTED`.
-- `tail_whip`: Defense -1, accuracy 100 → `RUNTIME_SUPPORTED`.
+### Shell Smash — complete
+Source/current semantics are exactly:
+- Defense -1
+- Special Defense -1
+- Attack +2
+- Special Attack +2
+- Speed +2
 
-Ability/item interactions such as Soundproof are intentionally handled by the later ability/item interaction audit, consistent with already-certified sound moves such as Screech and Metal Sound.
+The legacy generator already emitted exactly that SELF package. No missing battle mechanic remains in the audited base move.
+Decision: `RUNTIME_SUPPORTED`.
 
-### Unsafe conditional effects neutralized
-- `captivate`: requires opposite gender and fails for same-gender/genderless targets; current effect model has no gender predicate. Result: `DATA_ONLY`, `effect_specs=[]`.
-- `venom_drench`: stat drops require a poisoned target; current generated package was unconditional. Result: `DATA_ONLY`, `effect_specs=[]`.
-- `cotton_spore`: modern powder/spore rules include intrinsic Grass-type immunity; the current effect model has no powder/type target predicate. Result: `DATA_ONLY`, `effect_specs=[]`.
+### Charge — safe partial
+Generated SELF Special Defense +1 is faithful. Missing mechanic: persistent Charge/Electric-boost state that doubles the next qualifying Electric move (current Gen IX semantics retain the charge until an Electric move is attempted/used under the game's rules).
+Omission removes an extra benefit rather than a cost.
+Decision: `PARTIAL_RUNTIME`, keep SELF SpDef +1.
 
-### Sweet Scent canonical text repair
-The immutable snapshot's structured `stat_changes` says current Evasion -2, matching current mechanics, while generic `effect_entries` prose was stale at -1. #66 leaves the source JSON untouched and normalizes only the loaded in-memory English prose before canonical `effect_summary` is produced. Canonical summary now matches Evasion -2.
+### Defense Curl — safe partial
+Generated SELF Defense +1 is faithful. Missing mechanic: persistent flag that doubles Rollout/Ice Ball power while the user remains in battle.
+Omission removes an extra benefit.
+Decision: `PARTIAL_RUNTIME`, keep SELF Defense +1.
 
-Implementation is isolated in `tools/pokeapi_adapter_all_opponents.py`, chained after `tools/pokeapi_adapter_selected_stateful.py`.
+### Growth — safe partial
+Generated neutral-weather SELF Attack +1 / Special Attack +1 is faithful. In harsh sunlight the real move gives +2/+2.
+Omission weakens the move but does not remove a cost or create a false advantage.
+Decision: `PARTIAL_RUNTIME`, keep +1/+1.
 
-## Exact #66 engineering artifact
+Implementation is isolated in `tools/pokeapi_adapter_user_stateful_safe.py`, chained after the certified all-opponents layer. It validates source target/class/accuracy, exact stat package, semantic evidence and exact generated SELF effects. It does not rewrite specs.
+
+## Exact #69 engineering artifact
 Coverage:
-- `RUNTIME_SUPPORTED`: **589**
-- `PARTIAL_RUNTIME`: **68**
-- `DATA_ONLY`: **250**
+- `RUNTIME_SUPPORTED`: **590**
+- `PARTIAL_RUNTIME`: **71**
+- `DATA_ONLY`: **246**
 - `UNSUPPORTED`: **12**
 
-DATA_ONLY with non-empty `effect_specs`: **18**.
-- 15 stat-change records.
+DATA_ONLY with non-empty `effect_specs`: **14**.
+- 11 stat-change records.
 - 3 non-stat: `Beat Up`, `Purify`, `Swallow`.
 
-Exact #65 → #66 raw comparison:
-- changed move records: **8 only**.
-- `captivate`, `cotton_spore`, `venom_drench`: only `effect_specs` removed.
-- `growl`, `leer`, `string_shot`, `tail_whip`: only `classification` changed `DATA_ONLY → RUNTIME_SUPPORTED`.
-- `sweet_scent`: `classification` changed to `RUNTIME_SUPPORTED` and canonical `effect_summary` corrected from the stale -1 wording to -2; its accuracy/target/effect package remained unchanged.
-- no unrelated move changed.
+Exact #66 → #69 raw comparison:
+- changed records: `charge`, `defense_curl`, `growth`, `shell_smash` only;
+- changed key on each: `classification` only;
+- no target/accuracy/effect-summary/effect-spec change;
+- no unrelated record changed.
 
-## Move Effects audit frontier after #66
-The entire `selected-pokemon` and `all-opponents` DATA_ONLY-with-specs families are resolved.
+## Move Effects frontier after #69 engineering
+Remaining user stat/stateful DATA_ONLY-with-specs: **9**
+- `autotomize`
+- `clangorous_soul`
+- `extreme_evoboost`
+- `fillet_away`
+- `geomancy`
+- `minimize`
+- `no_retreat`
+- `stockpile`
+- `tidy_up`
 
-Remaining 15 stat-change DATA_ONLY target distribution:
-- 13 `user`
-- 2 `all-pokemon`
+Remaining all-pokemon stat cases: **2**
+- `flower_shield`
+- `rototiller`
 
-User conditional/stateful:
-`autotomize`, `charge`, `clangorous_soul`, `defense_curl`, `extreme_evoboost`, `fillet_away`, `geomancy`, `growth`, `minimize`, `no_retreat`, `shell_smash`, `stockpile`, `tidy_up`.
-Do not mass-promote them; inspect costs, delayed turns, weather/state dependencies and additional battle-state effects.
-
-All-pokemon:
-`flower_shield`, `rototiller`.
-Current SELF/OPPONENT model cannot directly express all-Pokémon/type predicates.
-
-Non-stat:
-`Purify`, `Swallow`, `Beat Up`.
+Remaining non-stat cases: **3**
+- `Beat Up`
+- `Purify`
+- `Swallow`
 
 ## Runtime safety invariant
 `effect_specs` execute regardless of coverage label. `DATA_ONLY` is not an execution gate. A known-false or strategically unsafe spec must be removed/corrected.
 
 Coverage:
 - `RUNTIME_SUPPORTED`: audited semantics fully faithful in current battle model.
-- `PARTIAL_RUNTIME`: faithful executable subset whose omissions do not create materially false/advantageous behavior.
+- `PARTIAL_RUNTIME`: faithful executable subset whose omissions only weaken or omit benefits without removing a mandatory cost/transaction/drawback.
 - `DATA_ONLY`: data retained without exposing unsafe executable behavior.
 - `UNSUPPORTED`: explicitly outside current contract.
