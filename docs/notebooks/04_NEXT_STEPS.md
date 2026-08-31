@@ -3,92 +3,71 @@
 Read this immediately after `00_READ_FIRST.md` when recovering context.
 
 ## Previous certified tranche
-- PR #65 — `fix/data-v3-selected-special-stateful-b`
-- Final HEAD `b13af37c350156bc7a9a7d7faf63742245afd801`
+- PR #66 — `fix/data-v3-all-opponents-stat-audit`
+- Final HEAD `51bc14155338e47c76926047845a958205005bdd`
 - 18/18 SUCCESS on exact notebook-bearing HEAD
 - closed without merge.
 
-## Current tranche — PR #66
-- Branch `fix/data-v3-all-opponents-stat-audit`
-- Parent `b13af37c350156bc7a9a7d7faf63742245afd801`
-- Engineering SHA before notebook sync: `4773a8ce33854f987f2cc09bb4f14ef5db678d0b`
+## Current tranche — PR #69
+- Branch `fix/data-v3-user-stateful-safe-subsets-a`
+- Parent `51bc14155338e47c76926047845a958205005bdd`
+- Engineering SHA before notebook sync: `a2de4701b028e35622d9fb6b1ea2980d09179a92`
 - Engineering SHA CI: **18/18 SUCCESS**
-- Artifact comparison changed exactly 8 move records and no unrelated moves.
-- Notebook synchronization moves branch tip. Require **18/18 on the final exact notebook-bearing HEAD**, then close #66 without merge.
+- Exact artifact comparison changed only `charge`, `defense_curl`, `growth`, `shell_smash`, and only their `classification` fields.
+- Notebook synchronization moves branch tip. Require **18/18 on the final exact notebook-bearing HEAD**, then close #69 without merge.
 
 ## Workstream
 **Move Effects V3 / battle-relevant DATA V3 semantic audit. Do not switch to trainer AI/archetypes.**
 
-## What #66 resolves
-The entire remaining `all-opponents` DATA_ONLY-with-specs family is resolved.
+## What #69 resolves
+- `shell_smash` -> `RUNTIME_SUPPORTED`; exact SELF package Defense -1, SpDef -1, Atk +2, SpAtk +2, Speed +2 is complete.
+- `charge` -> `PARTIAL_RUNTIME`; keep SELF SpDef +1, missing Electric-boost state.
+- `defense_curl` -> `PARTIAL_RUNTIME`; keep SELF Defense +1, missing Rollout/Ice Ball boost flag.
+- `growth` -> `PARTIAL_RUNTIME`; keep neutral-weather SELF Atk +1 / SpAtk +1, missing harsh-sun +2/+2 branch.
 
-RUNTIME_SUPPORTED in current singles:
-- `growl`: OPPONENT Attack -1, accuracy 100.
-- `leer`: OPPONENT Defense -1, accuracy 100.
-- `string_shot`: OPPONENT Speed -2, accuracy 95.
-- `sweet_scent`: OPPONENT Evasion -2, accuracy 100.
-- `tail_whip`: OPPONENT Defense -1, accuracy 100.
+All four retain target, accuracy and effect specs unchanged.
 
-Neutralized as DATA_ONLY with `effect_specs=[]`:
-- `captivate`: opposite-gender prerequisite unsupported.
-- `venom_drench`: poisoned-target prerequisite unsupported.
-- `cotton_spore`: powder/spore target predicate includes intrinsic Grass-type immunity; unconditional effect would be false.
-
-Sweet Scent source inconsistency repaired canonically:
-- structured snapshot/current mechanics = Evasion -2;
-- stale generic source prose said -1;
-- immutable source stays untouched;
-- loaded in-memory English prose is normalized before `effect_summary` is built.
-
-## Exact #66 engineering artifact
-- `RUNTIME_SUPPORTED`: **589**
-- `PARTIAL_RUNTIME`: **68**
-- `DATA_ONLY`: **250**
+## Exact #69 engineering artifact
+- `RUNTIME_SUPPORTED`: **590**
+- `PARTIAL_RUNTIME`: **71**
+- `DATA_ONLY`: **246**
 - `UNSUPPORTED`: **12**
-- DATA_ONLY with non-empty specs: **18**
-  - 15 stat-change
+- DATA_ONLY with non-empty specs: **14**
+  - 11 stat-change
   - Beat Up
   - Purify
   - Swallow
 
-Exact #65→#66 comparison:
-- only 8 move records changed;
-- Captivate/Cotton Spore/Venom Drench: only specs removed;
-- Growl/Leer/String Shot/Tail Whip: only classification changed;
-- Sweet Scent: classification + canonical summary correction;
-- no unrelated move changed.
+## Exact next task after #69 closure
+Audit the first **mandatory-cost/stateful user group**:
+1. `clangorous_soul`
+2. `fillet_away`
+3. `geomancy`
+4. `no_retreat`
 
-## Exact next task after #66 closure
-Audit the **13 `user` conditional/stateful stat moves**. Do not mass-promote them.
+Known real mechanics already cross-checked publicly:
+- Clangorous Soul: costs 1/3 max HP and fails when HP is too low; current free +1-all package would be false.
+- Fillet Away: costs 1/2 max HP and has an HP threshold; current free +2 Atk/SpAtk/Speed would be false.
+- Geomancy: requires a charge turn unless a Power Herb is consumed; current immediate +2/+2/+2 would be false.
+- No Retreat: +1 all stats is inseparable from Can't Escape/switch restriction and repeat-use state; current unrestricted boosts would be false.
 
-List:
-1. `autotomize`
-2. `charge`
-3. `clangorous_soul`
-4. `defense_curl`
-5. `extreme_evoboost`
-6. `fillet_away`
-7. `geomancy`
-8. `growth`
-9. `minimize`
-10. `no_retreat`
-11. `shell_smash`
-12. `stockpile`
-13. `tidy_up`
+Recommended decision unless immutable source reveals a contradiction: keep each as `DATA_ONLY` but remove its executable stat specs until the missing transaction/state exists. Add fail-fast source/generated contracts and independent effect-free output tests.
 
-Recommended split before editing:
-- **HP cost/prerequisite:** Clangorous Soul, Fillet Away.
-- **two-turn/delayed:** Geomancy.
-- **weather-dependent magnitude:** Growth.
-- **stored counter/state:** Stockpile.
-- **persistent flags/special interactions:** Autotomize, Charge, Defense Curl, Minimize, No Retreat, Tidy Up.
-- **multi-stat packages to verify for completeness:** Shell Smash, Extreme Evoboost.
+## Other remaining user cases after that group
+- `autotomize`: weight state.
+- `extreme_evoboost`: Z-Move prerequisite/unusable in modern generations.
+- `minimize`: persistent Minimized vulnerability.
+- `stockpile`: capped stored counter + Spit Up/Swallow interaction.
+- `tidy_up`: field cleanup transaction.
 
-For each move inspect immutable source + current public mechanics + exact generated specs. A stat package may be true but still unsafe if a missing cost/prerequisite/state transaction materially changes the move.
+## Remaining all-pokemon
+- `flower_shield`
+- `rototiller`
 
-After the 13 user moves:
-- `flower_shield`, `rototiller` (`all-pokemon`/type predicates).
-- `Purify`, `Swallow`, `Beat Up` (non-stat remaining specs).
+## Remaining non-stat
+- `Purify`
+- `Swallow`
+- `Beat Up`
 
 ## Safety rule
 `effect_specs` execute regardless of coverage label. `DATA_ONLY` is not an execution gate. If a generated spec is known false or unsafe, remove/correct it before proceeding.
