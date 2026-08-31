@@ -58,6 +58,15 @@ jobs:
           species = {x['id']: x for x in raw['species']}
           types = {x['id']: x for x in raw['types']}
           moves = {x['id']: x for x in raw['moves']}
+
+          def has_effect(specs, kind):
+              for spec in specs:
+                  if spec.get('kind') == kind:
+                      return True
+                  if has_effect(spec.get('children', []), kind):
+                      return True
+              return False
+
           assert len(types) == 18
           assert len(moves) == 919
           assert types['fire']['display_name'] == 'Fuego'
@@ -69,6 +78,18 @@ jobs:
           assert len({e.get('version_group') for e in species['gengar']['learnset'] if e.get('version_group')}) == 1
           assert len({e.get('version_group') for e in species['pinsir']['learnset'] if e.get('version_group')}) == 1
           assert moves['tackle']['display_name'] in ('Placaje', 'Tackle')
+
+          # Post-reorganization V3 compatibility gates. These protect curated
+          # contact metadata and normalized legacy move classifications.
+          assert moves['tackle']['makes_contact'] is True
+          assert moves['thunder_punch']['makes_contact'] is True
+          assert moves['astonish']['makes_contact'] is True
+          assert moves['astonish']['classification'] == 'RUNTIME_SUPPORTED'
+          assert has_effect(moves['astonish']['effect_specs'], 'flinch')
+          for move_id in ('sleep_talk', 'me_first', 'mirror_move', 'nature_power'):
+              assert moves[move_id]['classification'] == 'UNSUPPORTED', (
+                  move_id, moves[move_id]['classification'])
+
           bulba = species['bulbasaur']
           assert any(x['ability_id'] == 'chlorophyll' and x['is_hidden'] for x in bulba.get('ability_slots', []))
           exact = set()
