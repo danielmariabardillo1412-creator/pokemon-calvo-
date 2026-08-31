@@ -13,6 +13,7 @@ func run(check_callback: Callable) -> void:
 	_test_coaching_generated_semantics(check_callback)
 	_test_gear_up_generated_semantics(check_callback)
 	_test_magnetic_flux_generated_semantics(check_callback)
+	_test_pure_self_stat_packages(check_callback)
 
 
 func _test_learnset_roundtrip(check_callback: Callable) -> void:
@@ -172,3 +173,39 @@ func _test_magnetic_flux_generated_semantics(check_callback: Callable) -> void:
 	check_callback.call("data_v3_magnetic_flux_target_preserved", magnetic_flux.get("target", "") == "user-and-allies")
 	check_callback.call("data_v3_magnetic_flux_is_data_only", magnetic_flux.get("classification", "") == "DATA_ONLY")
 	check_callback.call("data_v3_magnetic_flux_has_no_false_opponent_buffs", specs.is_empty())
+
+
+func _test_pure_self_stat_packages(check_callback: Callable) -> void:
+	var expected := {
+		"bulk_up": {"attack": 1, "defense": 1},
+		"calm_mind": {"special_attack": 1, "special_defense": 1},
+		"coil": {"attack": 1, "defense": 1, "accuracy": 1},
+		"cosmic_power": {"defense": 1, "special_defense": 1},
+		"defend_order": {"defense": 1, "special_defense": 1},
+		"dragon_dance": {"attack": 1, "speed": 1},
+		"hone_claws": {"attack": 1, "accuracy": 1},
+		"quiver_dance": {"special_attack": 1, "special_defense": 1, "speed": 1},
+		"shift_gear": {"attack": 1, "speed": 2},
+		"work_up": {"attack": 1, "special_attack": 1},
+	}
+	for move_id in expected:
+		var move := _load_raw_move(move_id)
+		check_callback.call("data_v3_%s_present" % move_id, not move.is_empty())
+		if move.is_empty():
+			continue
+		check_callback.call("data_v3_%s_target_is_user" % move_id, move.get("target", "") == "user")
+		check_callback.call("data_v3_%s_runtime_supported" % move_id, move.get("classification", "") == "RUNTIME_SUPPORTED")
+		var specs: Array = move.get("effect_specs", [])
+		var expected_stats: Dictionary = expected[move_id]
+		check_callback.call("data_v3_%s_effect_count" % move_id, specs.size() == expected_stats.size())
+		var generated := {}
+		var shape_ok := true
+		for spec in specs:
+			if not (spec is Dictionary):
+				shape_ok = false
+				continue
+			if spec.get("kind", "") != "modify_stat_stage" or spec.get("target", "") != "self" or int(spec.get("chance_basis_points", 0)) != 10000:
+				shape_ok = false
+			generated[String(spec.get("stat_id", ""))] = int(spec.get("value", 0))
+		check_callback.call("data_v3_%s_effect_shape" % move_id, shape_ok)
+		check_callback.call("data_v3_%s_effect_package" % move_id, generated == expected_stats)
