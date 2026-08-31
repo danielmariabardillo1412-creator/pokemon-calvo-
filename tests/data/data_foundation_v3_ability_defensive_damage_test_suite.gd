@@ -128,7 +128,7 @@ func _source_triggered(
 	for event in events:
 		if (
 			event.kind == BattleEvent.ABILITY_TRIGGERED
-			and event.source_id == owner_id
+			and event.actor_id == owner_id
 			and event.metadata.get("source_id", "") == source_id
 		):
 			return true
