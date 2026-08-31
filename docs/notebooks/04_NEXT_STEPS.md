@@ -6,19 +6,19 @@ This file is intentionally short and should be updated frequently. A fresh conte
 
 Previous certified tranche:
 
-- Branch: `fix/data-v3-aromatic-mist-semantics`
-- Final HEAD: `844efde0eed27e1a5ca8790ae95a183fba6ba98c`
-- PR #55: closed without merge.
+- Branch: `fix/data-v3-stuff-cheeks-semantics`
+- Final HEAD: `1c4217d5ebc6727982ef5d7b5b5b0667cea6c5b6`
+- PR #56: closed without merge.
 - CI: 18/18 SUCCESS on that exact notebook-bearing HEAD.
 
 Current tranche:
 
-- Branch: `fix/data-v3-stuff-cheeks-semantics`
-- PR #56.
-- Parent: `844efde0eed27e1a5ca8790ae95a183fba6ba98c`.
-- Engineering SHA before notebook synchronization: `9600c74db8d45c590f47ad3be7baff439757964e`.
-- Engineering SHA CI: 18/18 SUCCESS, including the independent regenerated-dataset assertion for Stuff Cheeks.
-- Notebook synchronization intentionally moves the branch tip. **Before continuing to another tranche, require 18/18 workflows on the final exact notebook-bearing HEAD and then close PR #56 without merge.** GitHub is authoritative for that final SHA.
+- Branch: `fix/data-v3-howl-target-semantics`
+- PR #57.
+- Parent: `1c4217d5ebc6727982ef5d7b5b5b0667cea6c5b6`.
+- Engineering SHA before notebook synchronization: `fc118cb3a06d3f1724b65aac5ba5c8893d0ea83b`.
+- Engineering SHA CI: 18/18 SUCCESS, including the independent regenerated-dataset assertion for Howl.
+- Notebook synchronization intentionally moves the branch tip. **Before continuing to another tranche, require 18/18 workflows on the final exact notebook-bearing HEAD and then close PR #57 without merge.** GitHub is authoritative for that final SHA.
 
 ## Current workstream
 
@@ -28,52 +28,56 @@ Do not switch to trainer AI/archetypes yet.
 
 ## Latest exact artifact metrics
 
-From PR #56 engineering SHA `9600c74db8d45c590f47ad3be7baff439757964e`:
+From PR #57 engineering SHA `fc118cb3a06d3f1724b65aac5ba5c8893d0ea83b`:
 
 - `RUNTIME_SUPPORTED`: 555
-- `PARTIAL_RUNTIME`: 66
-- `DATA_ONLY`: 286
+- `PARTIAL_RUNTIME`: 67
+- `DATA_ONLY`: 285
 - `UNSUPPORTED`: 12
 
-Remaining `DATA_ONLY` records with non-empty `effect_specs`: 63.
+Remaining `DATA_ONLY` records with non-empty `effect_specs`: 62.
 
-- 60 stat-change cases.
-- 2 heal cases: `Purify`, `Swallow`.
-- 1 multi-hit case: `Beat Up`.
+The previous 60 stat-change DATA_ONLY records drop to 59 because Howl is now honestly `PARTIAL_RUNTIME`; `Purify`, `Swallow`, and `Beat Up` remain separate unaudited cases.
 
-## Tranche just completed in PR #56
+## Tranche just completed in PR #57
 
-`Stuff Cheeks` had an incorrect generated runtime effect:
+Modern `Howl` had an actively wrong generated target:
 
-`SELF Defense +2`
+`OPPONENT Attack +1`
 
-The immutable PokéAPI snapshot explicitly states that the move cannot be used unless the user holds a Berry, and using it consumes that Berry before applying its effects and the Defense increase. Current generic move effects do not represent that held-item prerequisite/consumption transaction.
+The immutable snapshot has `target=user-and-allies`. Sword/Shield and Scarlet/Violet flavor text explicitly state that Howl raises the Attack of the user and its allies. The legacy converter failed to recognize `user-and-allies` as a self-side target and therefore mapped the stat change to OPPONENT.
 
 Therefore:
 
-- `Stuff Cheeks` remains `DATA_ONLY`.
-- Source target `user` is preserved.
-- `effect_specs` is now deliberately empty.
-- The unconditional Defense +2 is removed.
-- A DATA V3 domain test independently verifies the regenerated JSON remains `target=user`, `classification=DATA_ONLY`, and effect-free.
+- Source target `user-and-allies` is preserved.
+- The executable subset is now exactly `SELF Attack +1`.
+- `Howl` is `PARTIAL_RUNTIME`, because the user subset is faithful but ally boosting is still unimplemented.
+- The false opponent buff is removed.
+- A DATA V3 domain test independently verifies target, classification, stat, value, chance, and SELF runtime target.
 
 ## Exact next technical task
 
-After final exact-head certification and closure of PR #56, continue the remaining 60 stat-change `DATA_ONLY` moves by **small semantic family**.
+After final exact-head certification and closure of PR #57, continue the remaining high-risk `user-and-allies` stat moves **one at a time** before returning to ordinary stat families.
 
-Recommended next selection strategy:
+Known remaining records from the PR #56 artifact:
 
-1. Use the exact DATA V3 artifact from the final certified PR #56 chain.
-2. Group remaining stat-change cases by source target, generated runtime target, and number/type of effects.
-3. Prioritize target mismatches and conditional/triggered/resource-gated effects because they can produce actively false runtime behavior even while classification remains DATA_ONLY.
-4. Keep ally/team/protection/conditional/held-item mechanics effect-free unless current Battle Core can represent them faithfully.
-5. Only promote pure stat moves after immutable-source verification and exact generated-effect validation.
-6. Continue to keep `Autotomize`, `Charge`, `Defense Curl`, and `Minimize` out of pure-boost batches because they have extra mechanics.
-7. Add fail-fast adapter contracts and independent regenerated-output assertions whenever effect shape/target is corrected.
-8. Open one small PR against the final certified PR #56 branch/head chain.
-9. Require focal DATA V3 success and 18/18 workflows on the engineering HEAD.
-10. Synchronize notebooks, then require 18/18 again on the final notebook-bearing HEAD.
-11. Close without merge.
+- `Coaching`: generic output buffs OPPONENT; real semantics involve an adjacent ally and failure when no suitable ally exists.
+- `Gear Up`: generic output buffs OPPONENT; real semantics apply to friendly Pokémon with Plus/Minus.
+- `Magnetic Flux`: generic output buffs OPPONENT; real semantics apply to friendly Pokémon with Plus/Minus.
+
+Do **not** apply the Howl rewrite generically to those three. Their prerequisites/recipient sets are different and may require `DATA_ONLY` effect-free handling rather than a SELF partial subset.
+
+Recommended sequence:
+
+1. Confirm PR #57 final exact HEAD is 18/18 green and close without merge.
+2. Start the next branch from that exact SHA.
+3. Inspect the immutable source and exact generated record for one of `Coaching`, `Gear Up`, or `Magnetic Flux`.
+4. Decide representable subset only after checking prerequisites and whether SELF is actually a legal recipient.
+5. Add fail-fast adapter contract + independent regenerated-output assertion.
+6. Require DATA V3 focal success and 18/18 on the engineering HEAD.
+7. Measure the exact artifact.
+8. Synchronize notebooks and require 18/18 again on the final HEAD.
+9. Close without merge.
 
 ## Important known exclusions for now
 
@@ -89,6 +93,7 @@ Do not casually implement/promote:
 - `Stuff Cheeks`: safely `DATA_ONLY`/effect-free until held-Berry prerequisite + consumption semantics exist.
 - `Silk Trap`: safely `DATA_ONLY`/effect-free until protection + contact-response mechanics exist.
 - `Aromatic Mist`: safely `DATA_ONLY`/effect-free until ally targeting exists.
+- `Howl`: now `PARTIAL_RUNTIME`; SELF subset is correct, ally subset remains missing.
 - `Purify`, `Swallow`, `Beat Up`: not yet audited; handle separately.
 
 ## Stop condition
