@@ -89,6 +89,25 @@ _PURE_SELF_STAT_PACKAGES = {
     "shift_gear": {"attack": 1, "speed": 2},
     "work_up": {"attack": 1, "special_attack": 1},
 }
+_PURE_OPPONENT_STAT_PACKAGES = {
+    "baby_doll_eyes": ({"attack": -1}, 0),
+    "charm": ({"attack": -2}, 0),
+    "confide": ({"special_attack": -1}, 100),
+    "eerie_impulse": ({"special_attack": -2}, 0),
+    "fake_tears": ({"special_defense": -2}, 0),
+    "feather_dance": ({"attack": -2}, 0),
+    "flash": ({"accuracy": -1}, 0),
+    "kinesis": ({"accuracy": -1}, 0),
+    "metal_sound": ({"special_defense": -2}, 0),
+    "noble_roar": ({"attack": -1, "special_attack": -1}, 100),
+    "play_nice": ({"attack": -1}, 100),
+    "sand_attack": ({"accuracy": -1}, 0),
+    "scary_face": ({"speed": -2}, 0),
+    "screech": ({"defense": -2}, 0),
+    "smokescreen": ({"accuracy": -1}, 0),
+    "tearful_look": ({"attack": -1, "special_attack": -1}, 100),
+    "tickle": ({"attack": -1, "defense": -1}, 0),
+}
 
 # The V2 list mixes raw PokéAPI hyphenated names with the underscore-normalized
 # IDs used by the adapter. Normalize it once for the archived helper functions.
@@ -252,6 +271,59 @@ def _require_pure_self_stat_package(
         generated_stats[stat_id] = int(stage.get("value", 0))
     if generated_stats != expected_stats:
         raise RuntimeError(f"DATA V3 pure self-stat generated stats mismatch for {sid}: {generated_stats}")
+
+
+def _require_pure_opponent_stat_package(
+    m: dict,
+    specs: list[dict],
+    sid: str,
+    expected_stats: dict[str, int],
+    expected_stat_chance: int,
+) -> None:
+    """Verify a source-audited move is exactly an unconditional OPPONENT stat package."""
+    meta = m.get("meta") or {}
+    target = (m.get("target") or {}).get("name")
+    category = (meta.get("category") or {}).get("name")
+    ailment = (meta.get("ailment") or {}).get("name")
+    damage_class = (m.get("damage_class") or {}).get("name")
+    if (
+        target != "selected-pokemon"
+        or category != "net-good-stats"
+        or ailment not in ("none", "", None)
+        or damage_class != "status"
+    ):
+        raise RuntimeError(f"DATA V3 pure opponent-stat source contract changed for {sid}")
+    if int(meta.get("stat_chance") or 0) != expected_stat_chance:
+        raise RuntimeError(f"DATA V3 pure opponent-stat chance changed for {sid}")
+    if m.get("effect_changes"):
+        raise RuntimeError(f"DATA V3 pure opponent-stat effect history changed for {sid}")
+    if any(int(meta.get(key) or 0) != 0 for key in (
+        "healing", "drain", "flinch_chance", "ailment_chance"
+    )):
+        raise RuntimeError(f"DATA V3 pure opponent-stat metadata changed for {sid}")
+
+    source_stats = {}
+    for change in m.get("stat_changes") or []:
+        stat_name = (change.get("stat") or {}).get("name")
+        if stat_name:
+            source_stats[stat_name.replace("-", "_")] = int(change.get("change", 0))
+    if source_stats != expected_stats:
+        raise RuntimeError(f"DATA V3 pure opponent-stat source changes mismatch for {sid}: {source_stats}")
+
+    stages = _matching_effects(specs, "modify_stat_stage")
+    if len(specs) != len(expected_stats) or len(stages) != len(expected_stats):
+        raise RuntimeError(f"DATA V3 pure opponent-stat generated unexpected effects for {sid}: {specs}")
+    generated_stats = {}
+    for stage in stages:
+        stat_id = str(stage.get("stat_id", ""))
+        if (
+            stage.get("target") != "opponent"
+            or int(stage.get("chance_basis_points", 0)) != 10000
+        ):
+            raise RuntimeError(f"DATA V3 pure opponent-stat generated effect mismatch for {sid}: {stage}")
+        generated_stats[stat_id] = int(stage.get("value", 0))
+    if generated_stats != expected_stats:
+        raise RuntimeError(f"DATA V3 pure opponent-stat generated stats mismatch for {sid}: {generated_stats}")
 
 
 def _require_audited_data_only_unique(m: dict, specs: list[dict], sid: str) -> None:
@@ -652,6 +724,21 @@ def generate_move_specs(m: dict, contact_set: set):
         # These source-audited moves are exactly unconditional stat packages on
         # the user. The generic converter already emits the complete SELF package;
         # this branch only certifies that exact shape and coverage.
+        coverage = "RUNTIME_SUPPORTED"
+
+    if sid in _PURE_OPPONENT_STAT_PACKAGES:
+        expected_stats, expected_stat_chance = _PURE_OPPONENT_STAT_PACKAGES[sid]
+        _require_pure_opponent_stat_package(
+            m,
+            specs,
+            sid,
+            expected_stats,
+            expected_stat_chance,
+        )
+        # These source-audited moves are exactly unconditional stat drops on the
+        # selected target. In the current single-opponent battle model that target
+        # is faithfully represented by OPPONENT, and the legacy generator already
+        # emits the complete package; this branch certifies that exact shape only.
         coverage = "RUNTIME_SUPPORTED"
 
     if sid in _AUDITED_DATA_ONLY_UNIQUE:
