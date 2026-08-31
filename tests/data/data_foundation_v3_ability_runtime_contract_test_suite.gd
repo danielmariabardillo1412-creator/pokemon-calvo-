@@ -2,14 +2,15 @@ class_name DataFoundationV3AbilityRuntimeContractTestSuite
 extends RefCounted
 
 const FULL_IDS := [
-	"blaze", "dragons_maw", "fire_mane", "fur_coat", "overgrow", "rocky_payload",
-	"steelworker", "swarm", "thick_fat", "torrent", "tough_claws",
+	"blaze", "dragons_maw", "fire_mane", "fur_coat", "ice_scales", "multiscale",
+	"overgrow", "rocky_payload", "steelworker", "swarm", "thick_fat", "torrent",
+	"tough_claws",
 ]
-const PARTIAL_IDS := ["intimidate", "levitate", "stamina", "static"]
+const PARTIAL_IDS := ["heatproof", "intimidate", "levitate", "stamina", "static"]
 const IMPLEMENTED_IDS := [
-	"blaze", "dragons_maw", "fire_mane", "fur_coat", "intimidate", "levitate",
-	"overgrow", "rocky_payload", "stamina", "static", "steelworker", "swarm",
-	"thick_fat", "torrent", "tough_claws",
+	"blaze", "dragons_maw", "fire_mane", "fur_coat", "heatproof", "ice_scales",
+	"intimidate", "levitate", "multiscale", "overgrow", "rocky_payload", "stamina",
+	"static", "steelworker", "swarm", "thick_fat", "torrent", "tough_claws",
 ]
 const TYPE_BOOSTS := {
 	"steelworker": "steel",
@@ -36,7 +37,7 @@ func run(check: Callable) -> void:
 	)
 	check.call(
 		"data_v3_ability_contract_data_only_count",
-		(classes.get("DATA_ONLY", []) as Array).size() == 358,
+		(classes.get("DATA_ONLY", []) as Array).size() == 355,
 	)
 	check.call(
 		"data_v3_ability_contract_partition",
@@ -121,9 +122,7 @@ func run(check: Callable) -> void:
 		)
 	check.call("data_v3_ability_contract_tough_claws_trigger_exact", tough_ok)
 
-	# Defensive damage reducers use the same MODIFY_DAMAGE transaction but are
-	# owned by the target. Fur Coat is one physical-only 0.5x rule. Thick Fat is two
-	# mutually exclusive type rules, so at most one spec can trigger for a move.
+	# Defensive damage reducers use the same target-owned MODIFY_DAMAGE transaction.
 	var fur_specs := registry.triggers_for_ability(&"fur_coat", BattleTriggerSpec.MODIFY_DAMAGE)
 	var fur_ok := fur_specs.size() == 1
 	if fur_ok:
@@ -158,6 +157,50 @@ func run(check: Callable) -> void:
 		thick_ok and thick_types == {"fire": 5000, "ice": 5000},
 	)
 
+	var ice_specs := registry.triggers_for_ability(&"ice_scales", BattleTriggerSpec.MODIFY_DAMAGE)
+	var ice_ok := ice_specs.size() == 1
+	if ice_ok:
+		var ice: BattleTriggerSpec = ice_specs[0]
+		ice_ok = (
+			ice.source_kind == &"ability"
+			and ice.source_id == &"ice_scales"
+			and bool(ice.conditions.get("requires_special", false))
+			and int(ice.conditions.get("multiplier_bp", 0)) == 5000
+			and not ice.conditions.has("requires_physical")
+			and not ice.conditions.has("move_type_id")
+			and ice.effect.kind == BattleEffectSpec.DAMAGE
+		)
+	check.call("data_v3_ability_contract_ice_scales_trigger_exact", ice_ok)
+
+	var multi_specs := registry.triggers_for_ability(&"multiscale", BattleTriggerSpec.MODIFY_DAMAGE)
+	var multi_ok := multi_specs.size() == 1
+	if multi_ok:
+		var multi: BattleTriggerSpec = multi_specs[0]
+		multi_ok = (
+			multi.source_kind == &"ability"
+			and multi.source_id == &"multiscale"
+			and bool(multi.conditions.get("requires_full_hp", false))
+			and int(multi.conditions.get("multiplier_bp", 0)) == 5000
+			and not multi.conditions.has("move_type_id")
+			and multi.effect.kind == BattleEffectSpec.DAMAGE
+		)
+	check.call("data_v3_ability_contract_multiscale_trigger_exact", multi_ok)
+
+	# Heatproof is deliberately partial: the Fire-move half-damage subset is exact,
+	# while burn residual currently bypasses the ability trigger system entirely.
+	var heat_specs := registry.triggers_for_ability(&"heatproof", BattleTriggerSpec.MODIFY_DAMAGE)
+	var heat_ok := heat_specs.size() == 1
+	if heat_ok:
+		var heat: BattleTriggerSpec = heat_specs[0]
+		heat_ok = (
+			heat.source_kind == &"ability"
+			and heat.source_id == &"heatproof"
+			and String(heat.conditions.get("move_type_id", "")) == "fire"
+			and int(heat.conditions.get("multiplier_bp", 0)) == 5000
+			and heat.effect.kind == BattleEffectSpec.DAMAGE
+		)
+	check.call("data_v3_ability_contract_heatproof_partial_trigger_exact", heat_ok)
+
 	# Fluffy is deliberately blocked even though its two numeric predicates are
 	# individually expressible. A Fire contact move satisfies both rules at once;
 	# the current multi-spec registry would emit two ABILITY_TRIGGERED events for one
@@ -167,6 +210,21 @@ func run(check: Callable) -> void:
 		"data_v3_ability_contract_fluffy_stays_data_only",
 		str((by_id.get("fluffy", {}) as Dictionary).get("classification", "")) == "DATA_ONLY"
 		and registry.triggers_for_ability(&"fluffy", BattleTriggerSpec.MODIFY_DAMAGE).is_empty(),
+	)
+
+	# Filter and Solid Rock need a super-effective predicate. Type effectiveness is
+	# produced later by DamageCalculator, after damage_modifiers() currently runs, so
+	# duplicating type-chart logic here would be a new subsystem rather than a safe
+	# predicate extension.
+	var super_effective_blockers_safe := true
+	for ability_id in ["filter", "solid_rock"]:
+		super_effective_blockers_safe = super_effective_blockers_safe and (
+			str((by_id.get(ability_id, {}) as Dictionary).get("classification", "")) == "DATA_ONLY"
+			and registry.triggers_for_ability(StringName(ability_id), BattleTriggerSpec.MODIFY_DAMAGE).is_empty()
+		)
+	check.call(
+		"data_v3_ability_contract_super_effective_reducers_stay_data_only",
+		super_effective_blockers_safe,
 	)
 
 	# Huge Power and Pure Power double the Attack stat; they do not simply multiply
@@ -225,9 +283,9 @@ func run(check: Callable) -> void:
 	check.call(
 		"data_v3_ability_contract_report_counts",
 		int(summary.get("DATA_READY", -1)) == 373
-		and int(summary.get("RUNTIME_SUPPORTED", -1)) == 11
-		and int(summary.get("PARTIAL_RUNTIME", -1)) == 4
-		and int(summary.get("DATA_ONLY", -1)) == 358,
+		and int(summary.get("RUNTIME_SUPPORTED", -1)) == 13
+		and int(summary.get("PARTIAL_RUNTIME", -1)) == 5
+		and int(summary.get("DATA_ONLY", -1)) == 355,
 	)
 	var report_classes: Dictionary = report.get("ability_runtime_classification", {})
 	check.call(
