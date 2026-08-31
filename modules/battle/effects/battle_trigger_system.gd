@@ -53,9 +53,15 @@ func conditions_met(
 		move == null or move.damage_class != "physical"
 	):
 		return false
+	if bool(spec.conditions.get("requires_special", false)) and (
+		move == null or move.damage_class != "special"
+	):
+		return false
 	if bool(spec.conditions.get("requires_contact", false)) and (
 		move == null or not move.makes_contact
 	):
+		return false
+	if bool(spec.conditions.get("requires_full_hp", false)) and owner.current_hp != owner.stats.max_hp:
 		return false
 	if bool(spec.conditions.get("requires_missing_hp", false)) and owner.current_hp >= owner.stats.max_hp:
 		return false
