@@ -83,7 +83,17 @@ func runtime_supported_move_ids() -> Array[StringName]:
 
 
 func runtime_supported_ability_ids() -> Array[StringName]:
+	# Frozen Battle V2 compatibility surface. DATA V3 ability reliability uses
+	# implemented_ability_ids() plus its stricter semantic classifications.
 	return [&"blaze", &"intimidate", &"levitate", &"overgrow", &"static", &"torrent"]
+
+
+func implemented_ability_ids() -> Array[StringName]:
+	var out: Array[StringName] = []
+	for raw_id in _ability_specs.keys():
+		out.append(StringName(raw_id))
+	out.sort_custom(func(a, b): return String(a) < String(b))
+	return out
 
 
 func runtime_supported_item_ids() -> Array[StringName]:
@@ -122,7 +132,12 @@ func _register_abilities() -> void:
 		&"intimidate",
 		_stage(BattleEffectSpec.OPPONENT, StatStages.ATTACK, -1),
 	)]
-	for pair in [[&"blaze", &"fire"], [&"torrent", &"water"], [&"overgrow", &"grass"]]:
+	for pair in [
+		[&"blaze", &"fire"],
+		[&"torrent", &"water"],
+		[&"overgrow", &"grass"],
+		[&"swarm", &"bug"],
+	]:
 		_ability_specs[pair[0]] = [BattleTriggerSpec.new(
 			BattleTriggerSpec.MODIFY_DAMAGE,
 			&"ability",
