@@ -2,14 +2,14 @@ class_name DataFoundationV3AbilityRuntimeContractTestSuite
 extends RefCounted
 
 const FULL_IDS := [
-	"blaze", "dragons_maw", "fire_mane", "overgrow", "rocky_payload",
-	"steelworker", "swarm", "torrent", "tough_claws",
+	"blaze", "dragons_maw", "fire_mane", "fur_coat", "overgrow", "rocky_payload",
+	"steelworker", "swarm", "thick_fat", "torrent", "tough_claws",
 ]
 const PARTIAL_IDS := ["intimidate", "levitate", "stamina", "static"]
 const IMPLEMENTED_IDS := [
-	"blaze", "dragons_maw", "fire_mane", "intimidate", "levitate", "overgrow",
-	"rocky_payload", "stamina", "static", "steelworker", "swarm", "torrent",
-	"tough_claws",
+	"blaze", "dragons_maw", "fire_mane", "fur_coat", "intimidate", "levitate",
+	"overgrow", "rocky_payload", "stamina", "static", "steelworker", "swarm",
+	"thick_fat", "torrent", "tough_claws",
 ]
 const TYPE_BOOSTS := {
 	"steelworker": "steel",
@@ -36,7 +36,7 @@ func run(check: Callable) -> void:
 	)
 	check.call(
 		"data_v3_ability_contract_data_only_count",
-		(classes.get("DATA_ONLY", []) as Array).size() == 360,
+		(classes.get("DATA_ONLY", []) as Array).size() == 358,
 	)
 	check.call(
 		"data_v3_ability_contract_partition",
@@ -121,6 +121,54 @@ func run(check: Callable) -> void:
 		)
 	check.call("data_v3_ability_contract_tough_claws_trigger_exact", tough_ok)
 
+	# Defensive damage reducers use the same MODIFY_DAMAGE transaction but are
+	# owned by the target. Fur Coat is one physical-only 0.5x rule. Thick Fat is two
+	# mutually exclusive type rules, so at most one spec can trigger for a move.
+	var fur_specs := registry.triggers_for_ability(&"fur_coat", BattleTriggerSpec.MODIFY_DAMAGE)
+	var fur_ok := fur_specs.size() == 1
+	if fur_ok:
+		var fur: BattleTriggerSpec = fur_specs[0]
+		fur_ok = (
+			fur.source_kind == &"ability"
+			and fur.source_id == &"fur_coat"
+			and bool(fur.conditions.get("requires_physical", false))
+			and int(fur.conditions.get("multiplier_bp", 0)) == 5000
+			and not fur.conditions.has("move_type_id")
+			and not fur.conditions.has("requires_contact")
+			and fur.effect.kind == BattleEffectSpec.DAMAGE
+		)
+	check.call("data_v3_ability_contract_fur_coat_trigger_exact", fur_ok)
+
+	var thick_specs := registry.triggers_for_ability(&"thick_fat", BattleTriggerSpec.MODIFY_DAMAGE)
+	var thick_types := {}
+	var thick_ok := thick_specs.size() == 2
+	for spec in thick_specs:
+		thick_types[String(spec.conditions.get("move_type_id", ""))] = int(
+			spec.conditions.get("multiplier_bp", 0)
+		)
+		thick_ok = thick_ok and (
+			spec.source_kind == &"ability"
+			and spec.source_id == &"thick_fat"
+			and not spec.conditions.has("requires_physical")
+			and not spec.conditions.has("requires_contact")
+			and spec.effect.kind == BattleEffectSpec.DAMAGE
+		)
+	check.call(
+		"data_v3_ability_contract_thick_fat_trigger_exact",
+		thick_ok and thick_types == {"fire": 5000, "ice": 5000},
+	)
+
+	# Fluffy is deliberately blocked even though its two numeric predicates are
+	# individually expressible. A Fire contact move satisfies both rules at once;
+	# the current multi-spec registry would emit two ABILITY_TRIGGERED events for one
+	# ability activation. Keep it non-executable until modifier composition/event
+	# aggregation is modeled explicitly.
+	check.call(
+		"data_v3_ability_contract_fluffy_stays_data_only",
+		str((by_id.get("fluffy", {}) as Dictionary).get("classification", "")) == "DATA_ONLY"
+		and registry.triggers_for_ability(&"fluffy", BattleTriggerSpec.MODIFY_DAMAGE).is_empty(),
+	)
+
 	# Huge Power and Pure Power double the Attack stat; they do not simply multiply
 	# every physical move's final damage. Until Battle Core has an offensive-stat
 	# multiplier primitive, both remain deliberately non-executable DATA_ONLY.
@@ -177,9 +225,9 @@ func run(check: Callable) -> void:
 	check.call(
 		"data_v3_ability_contract_report_counts",
 		int(summary.get("DATA_READY", -1)) == 373
-		and int(summary.get("RUNTIME_SUPPORTED", -1)) == 9
+		and int(summary.get("RUNTIME_SUPPORTED", -1)) == 11
 		and int(summary.get("PARTIAL_RUNTIME", -1)) == 4
-		and int(summary.get("DATA_ONLY", -1)) == 360,
+		and int(summary.get("DATA_ONLY", -1)) == 358,
 	)
 	var report_classes: Dictionary = report.get("ability_runtime_classification", {})
 	check.call(
