@@ -101,12 +101,41 @@ def _rewrite_kind_target(specs: list[dict], kind: str, target: str) -> int:
     return changed
 
 
+def _normalize_chance_children(specs: list[dict]) -> int:
+    """Keep probability on CHANCE wrappers, matching BattleEffectRegistry's contract.
+
+    The archived converter wrote the same chance on the wrapper and its status/stat
+    child. BattleEffectExecutor only rolls the wrapper, but tactical evaluation
+    multiplies chance_basis_points at every level, so 10% was evaluated as 1%.
+    Only the exact duplicated parent/child pattern is rewritten; nested independent
+    chances remain untouched.
+    """
+    changed = 0
+    for spec in specs:
+        children = spec.get("children", []) or []
+        if spec.get("kind") == "chance":
+            parent_bp = int(spec.get("chance_basis_points", 10000) or 10000)
+            if parent_bp < 10000:
+                for child in children:
+                    child_bp = int(child.get("chance_basis_points", 10000) or 10000)
+                    if child.get("kind") != "chance" and child_bp == parent_bp:
+                        child["chance_basis_points"] = 10000
+                        changed += 1
+        changed += _normalize_chance_children(children)
+    return changed
+
+
 def generate_move_specs(move: dict, contact_set: set):
     """Reuse the V2 converter, then apply audited DATA V3 semantic corrections."""
     specs, crit_bp, contact, classification, override_count, unsupported_note = (
         _legacy.generate_move_specs(move, contact_set)
     )
     sid = _legacy.slug(str(move.get("name", "")))
+
+    # Canonical schema convention: conditional probability belongs to the CHANCE
+    # wrapper. Removing duplicated child chances preserves executor behavior while
+    # making tactical expected-value calculations correct.
+    override_count += _normalize_chance_children(specs)
 
     # Heal Pulse / Floral Healing restore HP to the selected target, not the user.
     if sid in _TARGET_HEAL_MOVES:
