@@ -34,7 +34,8 @@ Pipeline:
 - #71 mandatory-state user `98c68f1c184e84db30458a4533fb769cba1140ac`
 - #72 persistent-state user `d46be6864abd6e1cffdf54f9e932da06bed054dc`
 - #73 terminal user-state `67ba79e9a68a78669ee5ae04166a47ee11331bc7`
-All: 18/18 on exact final notebook-bearing HEAD, closed without merge.
+- #74 all-pokemon semantics `9a917fea11df07c3aa26c8962e2dca9784a41875`
+All certified entries above: 18/18 on exact final notebook-bearing HEAD, closed without merge.
 
 ## Runtime safety invariant
 `effect_specs` execute regardless of `classification`. `DATA_ONLY` is not an execution gate. A known-false or strategically unsafe spec must be removed/corrected.
@@ -45,46 +46,50 @@ Coverage semantics:
 - `DATA_ONLY`: data retained without unsafe executable behavior.
 - `UNSUPPORTED`: explicitly outside current contract.
 
-# Current tranche — PR #74 all-pokemon semantics
-- Branch: `fix/data-v3-all-pokemon-semantics`
-- Parent: certified #73 final `67ba79e9a68a78669ee5ae04166a47ee11331bc7`.
-- Engineering SHA before notebook sync: `99a435c291514612b5c1ce43ad2a28e47797c6c0`.
+# Current tranche — PR #75 final DATA_ONLY executable effects
+- Branch: `fix/data-v3-final-data-only-effects`
+- Parent: certified #74 final `9a917fea11df07c3aa26c8962e2dca9784a41875`.
+- Engineering SHA before notebook sync: `db73a16b631f4e7bd539ac5e73b288401489d39a`.
 - Engineering SHA: **18/18 SUCCESS**, including DATA V3 and Godot global.
-- Exact #73→#74 artifact diff: only `flower_shield`, `rototiller`; on both only `effect_specs` and `effect_summary` changed.
 
-## #74 decisions
-### Flower Shield
-Source: target `all-pokemon`, accuracy null, Defense +1; source prose says all Grass Pokémon in battle. Current mechanics affect eligible Grass-type Pokémon on the field, fail if none, and the move cannot be selected in Generation IX.
+## #75 decisions
+### Purify
+Immutable source requires the selected target to have a major/non-volatile status condition. The move cures that status and only then heals the user up to 50%; it fails when no eligible target status exists.
 
-Legacy output was unconditional `OPPONENT Defense +1`, which can buff an ineligible opponent and miss eligible user/allies. SELF/OPPONENT cannot express all-Pokémon fan-out + Grass predicate.
-Decision: `DATA_ONLY`, `effect_specs=[]`; canonical summary records eligibility/current selectability.
+Legacy output was unconditional `HEAL SELF 50%`, allowing a free heal on a turn that should fail.
+Decision: remain `DATA_ONLY`, `effect_specs=[]`; canonical summary retains cure prerequisite + conditional heal.
 
-### Rototiller
-Source: target `all-pokemon`, accuracy null, Attack +1 / SpAtk +1; source prose says all Grass Pokémon in battle. Current mechanics in usable generations affect eligible **grounded** Grass-type Pokémon, fail if none, and the move cannot be selected from Generation VIII onward.
+### Swallow
+Immutable source requires stored Stockpile energy. Stockpile levels 1/2/3 heal 25%/50%/100%, then the stored energy is consumed and associated Stockpile Defense/Special Defense changes are removed. It fails at zero Stockpile.
 
-Legacy output was unconditional `OPPONENT Attack +1 / SpAtk +1`; not faithful.
-Decision: `DATA_ONLY`, `effect_specs=[]`; canonical summary records grounded/type/current selectability semantics.
+Legacy output was unconditional `HEAL SELF 25%`.
+Decision: remain `DATA_ONLY`, `effect_specs=[]`; canonical summary retains prerequisite, variable healing and consumption.
 
-Implementation: `tools/pokeapi_adapter_all_pokemon.py`, invoked as a narrow final post-stat audit. Independent DATA V3 assertions verify target, accuracy=-1, DATA_ONLY, empty specs and summaries.
+### Beat Up
+Immutable source is a physical selected-target move with source `power=null`; snapshot meta exposes `min_hits=max_hits=6`, but source prose/effect history describes party participation. Modern core-series behavior uses one strike for each eligible conscious party member without a non-volatile status, with party-member-dependent strike power rather than a fixed generic six-hit action.
 
-## Exact #74 engineering artifact
-Coverage unchanged:
+Legacy output was unconditional `MULTI_HIT 6..6`.
+Decision: remain `DATA_ONLY`, `effect_specs=[]`; canonical summary records party-dependent semantics.
+
+Implementation: `tools/pokeapi_adapter_final_data_only_effects.py`, invoked as the final explicit post-stat audit stage. Independent DATA V3 assertions verify the three output contracts and the global zero-unsafe-spec invariant.
+
+## Exact #74 → #75 engineering artifact
+Raw and normalized datasets agree:
+- only `beat_up`, `purify`, `swallow` changed;
+- on all three only `effect_specs` and `effect_summary` changed;
+- no classification, target, accuracy, power, PP or unrelated record changed.
+
+Coverage remains:
 - `RUNTIME_SUPPORTED`: **590**
 - `PARTIAL_RUNTIME`: **71**
 - `DATA_ONLY`: **246**
 - `UNSUPPORTED`: **12**
 
-DATA_ONLY with non-empty specs: **3 only**:
-- `beat_up`
-- `purify`
-- `swallow`
+DATA_ONLY with non-empty `effect_specs`: **0**.
 
-**All stat-change DATA_ONLY-with-spec cases are now resolved.**
+**Move Effects V3 executable-safety frontier is closed at the engineering artifact.**
 
-Notebook sync moves SHA; final #74 HEAD must pass 18/18 before closure.
+Notebook sync moves SHA; final #75 HEAD must pass 18/18 before closure without merge.
 
-## Remaining Move Effects frontier
-Only three non-stat cases remain:
-- `Beat Up`
-- `Purify`
-- `Swallow`
+## Next workstream after #75 certification
+Remain in DATA FOUNDATION V3 semantic reliability. Begin explicit **Ability runtime-support contracts**: distinguish the 373 preserved ability records from the subset whose battle mechanics are actually implemented. Do not return to trainer AI/archetypes until the remaining data-reliability work is deliberately closed or reprioritized.
