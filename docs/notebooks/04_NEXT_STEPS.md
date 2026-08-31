@@ -2,63 +2,70 @@
 
 Read immediately after `00_READ_FIRST.md` when recovering context.
 
-## Latest certified baseline before current tranche
-- PR #74 — `fix/data-v3-all-pokemon-semantics`
-- Final HEAD `9a917fea11df07c3aa26c8962e2dca9784a41875`
+## Latest certified baseline
+- PR #75 — `fix/data-v3-final-data-only-effects`
+- Final HEAD `4bb4bdc64982eef62f126f8d1c38e9509d21c96c`
 - 18/18 SUCCESS on exact notebook-bearing HEAD
 - closed without merge.
 
-## Current tranche — PR #75
-- Branch: `fix/data-v3-final-data-only-effects`
-- Parent: certified #74 final `9a917fea11df07c3aa26c8962e2dca9784a41875`
-- Engineering SHA before notebooks: `db73a16b631f4e7bd539ac5e73b288401489d39a`
+Move Effects V3 milestone at this baseline:
+- move coverage: **590 runtime / 71 partial / 246 data-only / 12 unsupported**;
+- `DATA_ONLY` moves with non-empty `effect_specs`: **0**.
+
+## Current tranche — PR #76
+- Branch: `audit/data-v3-ability-runtime-contracts-v1`
+- Parent: certified #75 final `4bb4bdc64982eef62f126f8d1c38e9509d21c96c`
+- Engineering SHA: `8e1ea4e443ef76dcca8f83ebf49c0ea282f4c890`
 - Engineering SHA: **18/18 SUCCESS**; DATA V3 and Godot global green.
+- Detailed state: `docs/notebooks/06_DATA_V3_ABILITY_RUNTIME_AUDIT.md`.
 
-### Purify
-Requires an eligible target status, cures it, then heals the user up to 50%; legacy unconditional SELF 50% heal was unsafe.
-Decision: `DATA_ONLY`, `effect_specs=[]`.
+## Ability audit decision
+DATA V3 preserves **373** ability records. Battle Core currently has explicit trigger implementations for six IDs.
 
-### Swallow
-Requires Stockpile, heals 25%/50%/100% at levels 1/2/3, consumes Stockpile and associated defensive changes; legacy flat SELF 25% heal was unsafe.
-Decision: `DATA_ONLY`, `effect_specs=[]`.
+New semantic classification:
 
-### Beat Up
-Party-dependent multi-hit attack whose eligible strike count depends on conscious/non-statused party members and whose modern strike power is party-member-dependent; legacy fixed 6-hit spec was false.
-Decision: `DATA_ONLY`, `effect_specs=[]`.
+- `RUNTIME_SUPPORTED` **3**: `blaze`, `overgrow`, `torrent`
+- `PARTIAL_RUNTIME` **3**: `intimidate`, `levitate`, `static`
+- `DATA_ONLY` **367**
 
-## Exact #74 → #75 engineering artifact
-Raw and normalized agree:
-- only `beat_up`, `purify`, `swallow` changed;
-- on all three only `effect_specs` and `effect_summary` changed;
-- coverage remains **590 runtime / 71 partial / 246 data-only / 12 unsupported**;
-- `DATA_ONLY` with non-empty `effect_specs`: **0**.
+Why partial:
+- `intimidate`: base switch-in Attack drop works; additional source battle semantics are missing.
+- `levitate`: Ground-move immunity works; field/suppression semantics are missing.
+- `static`: ordinary 30% contact paralysis works, but fatal contact currently cannot trigger because the knocked-out ability owner is excluded from AFTER_DAMAGE trigger execution.
 
-Important milestone: **Move Effects V3 executable-safety frontier is closed.**
+Do not quick-fix Static by globally firing all post-damage triggers on fainted owners; held-item triggers share that infrastructure and need a deliberate faint-safe engine policy.
+
+## Implementation / regression protection
+- explicit source-validated six-ID contract: `tools/pokeapi_ability_runtime_contracts.py`;
+- DATA V3 adapter publishes exact ability coverage labels/counts;
+- dedicated Godot DATA V3 suite enforces exact **3 / 3 / 367** plus registry consistency;
+- all unlisted abilities remain `DATA_ONLY` until explicitly audited.
+
+## Exact #75 → #76 engineering artifact
+Raw + normalized:
+- exactly six semantic changes;
+- only `classification` changes for Blaze, Overgrow, Torrent, Intimidate, Levitate and Static.
+
+Reports add ability classification IDs/counts and source-audit checks. No species, move/effect, item, learnset, evolution, type or stat drift. Manifest/forms/auxiliary reports unchanged. `import_time_ms` variation is timing noise only.
 
 ## Current certification step
-Notebook synchronization moves SHA. Before closing #75:
-1. verify only notebooks 01/02/04 changed after engineering SHA `db73a16b631f4e7bd539ac5e73b288401489d39a`;
-2. require 18/18 on exact final notebook-bearing HEAD;
-3. close #75 without merge;
-4. use that exact HEAD as next baseline.
+Notebook synchronization moves the SHA. Before closing #76:
+1. verify engineering SHA `8e1ea4e443ef76dcca8f83ebf49c0ea282f4c890` → final HEAD changes only notebooks;
+2. require 18/18 SUCCESS on that exact final notebook-bearing HEAD;
+3. close #76 without merge;
+4. use exact final HEAD as next baseline.
 
-## Exact next task after #75 closure
-Begin a new DATA V3 reliability workstream for **Ability runtime-support contracts**.
+## Exact next task after #76 closure
+Continue the **Ability runtime-support audit**, but in bounded families rather than one ability per session or all 367 at once.
 
-First tranche should be an inventory/audit, not mass implementation:
-- enumerate the 373 preserved ability records;
-- identify which abilities have actual Battle Core/runtime mechanics versus metadata-only storage;
-- identify any ability records whose current labels or executable paths imply more support than exists;
-- establish explicit coverage semantics/tests before implementing additional abilities;
-- create a dedicated ability-audit notebook rather than bloating this live pointer.
-
-Do not implement hundreds of abilities at once and do not switch back to trainer AI/archetypes yet.
+Next tranche:
+- inventory the remaining 367 `DATA_ONLY` abilities by semantic family;
+- identify families already expressible with current Battle Core primitives (damage modifiers, type immunity, switch-in stat changes, contact/status triggers, end-turn effects, etc.);
+- choose one bounded high-confidence family and audit it against immutable source;
+- do not implement new general engine primitives merely to improve coverage numbers.
 
 ## Workstream
-**DATA FOUNDATION V3 semantic reliability. Move Effects V3 is closing; Abilities are next.**
-
-## Safety rule
-Preserved source metadata is not equivalent to implemented runtime mechanics. Coverage/support claims must match what the engine can actually execute.
+**DATA FOUNDATION V3 semantic reliability — Abilities.** Trainer AI/archetypes remain deferred.
 
 ## Stop condition
 Any focal/regression failure stops the tranche until root cause is fixed and rerun.
