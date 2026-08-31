@@ -39,7 +39,8 @@ _TYPE_POWER_BOOSTS = {
 # These records have been explicitly audited and intentionally remain DATA_ONLY.
 # Their source contracts are still guarded so a future source change forces a
 # re-audit rather than silently making the old rejection rationale stale.
-_DATA_ONLY_SOURCE_GUARDS = {"huge_power", "pure_power"}
+_ATTACK_DOUBLER_GUARDS = {"huge_power", "pure_power"}
+_MULTI_SPEC_EVENT_GUARDS = {"fluffy"}
 
 # The pinned PokeAPI snapshot says 1.33x for Tough Claws. Current main-series
 # mechanics are a 30% contact-move power boost, so DATA V3 deliberately corrects
@@ -56,6 +57,8 @@ _CLASSIFICATION = {
     "rocky_payload": RUNTIME_SUPPORTED,
     "fire_mane": RUNTIME_SUPPORTED,
     "tough_claws": RUNTIME_SUPPORTED,
+    "fur_coat": RUNTIME_SUPPORTED,
+    "thick_fat": RUNTIME_SUPPORTED,
     "intimidate": PARTIAL_RUNTIME,
     "levitate": PARTIAL_RUNTIME,
     "stamina": PARTIAL_RUNTIME,
@@ -78,7 +81,7 @@ def classification_for(ability: dict) -> str:
     sid = _slug(str(ability.get("name", "")))
     classification = _CLASSIFICATION.get(sid)
     if classification is None:
-        if sid in _DATA_ONLY_SOURCE_GUARDS:
+        if sid in _ATTACK_DOUBLER_GUARDS or sid in _MULTI_SPEC_EVENT_GUARDS:
             _validate_source_contract(ability, sid)
         return DATA_ONLY
     _validate_source_contract(ability, sid)
@@ -142,6 +145,11 @@ def _generation_name(ability: dict) -> str:
     return str((ability.get("generation") or {}).get("name", ""))
 
 
+def _require_no_history(ability: dict, sid: str) -> None:
+    if ability.get("effect_changes"):
+        raise RuntimeError(f"DATA V3 {sid} history changed; re-audit")
+
+
 def _validate_source_contract(ability: dict, sid: str) -> None:
     if not bool(ability.get("is_main_series", False)):
         raise RuntimeError(f"DATA V3 audited ability is no longer main-series: {sid}")
@@ -166,8 +174,8 @@ def _validate_source_contract(ability: dict, sid: str) -> None:
         )
         if sid == "swarm":
             _validate_swarm_history(ability)
-        elif ability.get("effect_changes"):
-            raise RuntimeError(f"DATA V3 pinch ability history changed for {sid}")
+        else:
+            _require_no_history(ability, sid)
         return
 
     if sid in _TYPE_POWER_BOOSTS:
@@ -183,8 +191,7 @@ def _validate_source_contract(ability: dict, sid: str) -> None:
                 amount_token,
             ),
         )
-        if ability.get("effect_changes"):
-            raise RuntimeError(f"DATA V3 type-boost ability history changed for {sid}")
+        _require_no_history(ability, sid)
         return
 
     if sid == "tough_claws":
@@ -199,11 +206,45 @@ def _validate_source_contract(ability: dict, sid: str) -> None:
                 "power",
             ),
         )
-        if ability.get("effect_changes"):
-            raise RuntimeError("DATA V3 Tough Claws history changed; re-audit")
+        _require_no_history(ability, sid)
         return
 
-    if sid in _DATA_ONLY_SOURCE_GUARDS:
+    if sid == "fur_coat":
+        if _generation_name(ability) != "generation-vi":
+            raise RuntimeError("DATA V3 audited ability generation changed for fur_coat")
+        _require_tokens(text, sid, ("halves damage from physical attacks",))
+        _require_no_history(ability, sid)
+        return
+
+    if sid == "thick_fat":
+        if _generation_name(ability) != "generation-iii":
+            raise RuntimeError("DATA V3 audited ability generation changed for thick_fat")
+        _require_tokens(
+            text,
+            sid,
+            (
+                "half as much damage",
+                "fire- and ice-type moves",
+            ),
+        )
+        _require_no_history(ability, sid)
+        return
+
+    if sid == "fluffy":
+        if _generation_name(ability) != "generation-vii":
+            raise RuntimeError("DATA V3 audited ability generation changed for fluffy")
+        _require_tokens(
+            text,
+            sid,
+            (
+                "damage from contact moves is halved",
+                "damage from fire moves is doubled",
+            ),
+        )
+        _require_no_history(ability, sid)
+        return
+
+    if sid in _ATTACK_DOUBLER_GUARDS:
         if _generation_name(ability) != "generation-iii":
             raise RuntimeError(f"DATA V3 audited ability generation changed for {sid}")
         _require_tokens(
@@ -215,8 +256,7 @@ def _validate_source_contract(ability: dict, sid: str) -> None:
                 "functions identically",
             ),
         )
-        if ability.get("effect_changes"):
-            raise RuntimeError(f"DATA V3 attack-doubling ability history changed for {sid}")
+        _require_no_history(ability, sid)
         return
 
     if sid == "stamina":
@@ -230,8 +270,7 @@ def _validate_source_contract(ability: dict, sid: str) -> None:
                 "takes damage from a move",
             ),
         )
-        if ability.get("effect_changes"):
-            raise RuntimeError("DATA V3 Stamina history changed; re-audit")
+        _require_no_history(ability, sid)
         return
 
     if _generation_name(ability) != "generation-iii":
