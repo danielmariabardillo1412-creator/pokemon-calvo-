@@ -6,11 +6,13 @@ const FULL_IDS := [
 	"overgrow", "rocky_payload", "steelworker", "swarm", "thick_fat", "torrent",
 	"tough_claws",
 ]
-const PARTIAL_IDS := ["heatproof", "intimidate", "levitate", "stamina", "static"]
+const PARTIAL_IDS := [
+	"heatproof", "intimidate", "levitate", "reckless", "stamina", "static",
+]
 const IMPLEMENTED_IDS := [
 	"blaze", "dragons_maw", "fire_mane", "fur_coat", "heatproof", "ice_scales",
-	"intimidate", "levitate", "multiscale", "overgrow", "rocky_payload", "stamina",
-	"static", "steelworker", "swarm", "thick_fat", "torrent", "tough_claws",
+	"intimidate", "levitate", "multiscale", "overgrow", "reckless", "rocky_payload",
+	"stamina", "static", "steelworker", "swarm", "thick_fat", "torrent", "tough_claws",
 ]
 const TYPE_BOOSTS := {
 	"steelworker": "steel",
@@ -37,7 +39,7 @@ func run(check: Callable) -> void:
 	)
 	check.call(
 		"data_v3_ability_contract_data_only_count",
-		(classes.get("DATA_ONLY", []) as Array).size() == 355,
+		(classes.get("DATA_ONLY", []) as Array).size() == 354,
 	)
 	check.call(
 		"data_v3_ability_contract_partition",
@@ -121,6 +123,22 @@ func run(check: Callable) -> void:
 			and tough.effect.kind == BattleEffectSpec.DAMAGE
 		)
 	check.call("data_v3_ability_contract_tough_claws_trigger_exact", tough_ok)
+
+	# Reckless is deliberately PARTIAL_RUNTIME: a structured RECOIL effect is a
+	# trustworthy runtime property and gets the exact 1.2x boost, while crash-on-miss
+	# moves are not yet represented by that transaction and therefore remain absent.
+	var reckless_specs := registry.triggers_for_ability(&"reckless", BattleTriggerSpec.MODIFY_DAMAGE)
+	var reckless_ok := reckless_specs.size() == 1
+	if reckless_ok:
+		var reckless: BattleTriggerSpec = reckless_specs[0]
+		reckless_ok = (
+			reckless.source_kind == &"ability"
+			and reckless.source_id == &"reckless"
+			and bool(reckless.conditions.get("requires_recoil", false))
+			and int(reckless.conditions.get("multiplier_bp", 0)) == 12000
+			and reckless.effect.kind == BattleEffectSpec.DAMAGE
+		)
+	check.call("data_v3_ability_contract_reckless_partial_trigger_exact", reckless_ok)
 
 	# Defensive damage reducers use the same target-owned MODIFY_DAMAGE transaction.
 	var fur_specs := registry.triggers_for_ability(&"fur_coat", BattleTriggerSpec.MODIFY_DAMAGE)
@@ -240,6 +258,21 @@ func run(check: Callable) -> void:
 		)
 	check.call("data_v3_ability_contract_attack_doublers_stay_data_only", attack_doublers_safe)
 
+	# Adjacent move-property abilities are explicit blockers. Long Reach needs the
+	# attacking creature to be available while evaluating defender-owned contact
+	# triggers; Technician needs resolved/variable power rather than a static field;
+	# punch/bite/pulse/slicing categories are not retained in MoveDefinition today.
+	var move_property_blockers_safe := true
+	for ability_id in [
+		"long_reach", "technician", "iron_fist", "strong_jaw", "mega_launcher", "sharpness",
+	]:
+		move_property_blockers_safe = move_property_blockers_safe and (
+			str((by_id.get(ability_id, {}) as Dictionary).get("classification", "")) == "DATA_ONLY"
+			and registry.triggers_for_ability(StringName(ability_id), BattleTriggerSpec.MODIFY_DAMAGE).is_empty()
+			and registry.triggers_for_ability(StringName(ability_id), BattleTriggerSpec.AFTER_DAMAGE).is_empty()
+		)
+	check.call("data_v3_ability_contract_move_property_blockers_stay_data_only", move_property_blockers_safe)
+
 	# Stamina is deliberately PARTIAL_RUNTIME. For an ordinary surviving damaging
 	# move, the existing AFTER_DAMAGE transaction is exactly Defense +1 with no
 	# contact/physical/type gate. Multi-hit per-strike and fatal-hit triggering are
@@ -284,8 +317,8 @@ func run(check: Callable) -> void:
 		"data_v3_ability_contract_report_counts",
 		int(summary.get("DATA_READY", -1)) == 373
 		and int(summary.get("RUNTIME_SUPPORTED", -1)) == 13
-		and int(summary.get("PARTIAL_RUNTIME", -1)) == 5
-		and int(summary.get("DATA_ONLY", -1)) == 355,
+		and int(summary.get("PARTIAL_RUNTIME", -1)) == 6
+		and int(summary.get("DATA_ONLY", -1)) == 354,
 	)
 	var report_classes: Dictionary = report.get("ability_runtime_classification", {})
 	check.call(
