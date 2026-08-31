@@ -168,43 +168,60 @@ Operational continuity notebooks were added under `docs/notebooks/` so another c
 - 18/18 passed.
 - PR closed without merge.
 
-All subsequent tranches should descend from this notebook-bearing branch chain so the recovery documents remain present.
+All subsequent tranches descend from this notebook-bearing branch chain.
 
 ### PR #53 — simple self stat boosts C
 
-Source-verified against the immutable snapshot and promoted through the existing fail-fast pure-self-boost contract:
+Promoted through the already-certified pure-self-boost contract:
 
 - `Cotton Guard`: Defense +3
 - `Double Team`: Evasion +1
 - `Withdraw`: Defense +1
 
-The source records are user-targeted status moves with no ailment, healing, drain, flinch, or second stat change. `StatStages` supports both Defense and Evasion, and the generated artifact contains exactly one unconditional `modify_stat_stage` effect for each.
+Deliberately excluded due to extra mechanics/targeting: `Autotomize`, `Charge`, `Defense Curl`, `Minimize`, `Stuff Cheeks`, `Aromatic Mist`, `Silk Trap`.
 
-Deliberately **not** included despite superficially similar generated output:
+Final HEAD: `b3cfa577e01f45d57e0d73ebe662b84665d6f48e`.
+18/18 passed on that exact notebook-bearing HEAD. PR closed without merge.
 
-- `Autotomize`: also changes weight.
-- `Charge`: also stores/changes the next Electric-move interaction.
-- `Defense Curl`: has Rollout/Ice Ball interaction.
-- `Minimize`: has special interactions with certain attacks.
-- `Stuff Cheeks`: consumes a held Berry.
-- `Aromatic Mist`: targets an ally, outside the current SELF/OPPONENT target contract.
-- `Silk Trap`: protection/contact-response semantics; its current generated stat effect is suspicious and requires a dedicated audit.
+### PR #54 — Silk Trap false self-debuff
 
-Engineering SHA before notebook synchronization: `4d6f0dbf205ffd41fdbbfae490e8efaedea54d3f`.
-That SHA passed 18/18 workflows and produced the artifact metrics below. The notebook sync intentionally changes the branch tip, so the final exact certified HEAD for PR #53 must be read from GitHub after the required second 18/18 run and PR closure.
+This tranche found an **active semantic runtime bug**, not just a coverage-label problem.
 
-## Current artifact metrics from PR #53 engineering SHA
+Immutable snapshot facts for move 852 (`silk-trap`):
+
+- `target = user` because Silk Trap protects the user.
+- priority = +4.
+- `stat_changes = Speed -1`.
+- flavor text states that an attacker making direct contact has its Speed lowered.
+
+The legacy generic converter combined `target=user` with the independent stat change and emitted:
+
+`MODIFY_STAT_STAGE target=SELF stat=speed value=-1`
+
+Because runtime executes `effect_specs` regardless of DATA_ONLY classification, using Silk Trap could incorrectly slow the **user itself**.
+
+Fix:
+
+- Validate the exact source signature and the legacy false-self-debuff signature fail-fast.
+- Remove the false runtime effect.
+- Keep `Silk Trap` as `DATA_ONLY` with `effect_specs=[]` until protection + contact-trigger + attacker-target semantics exist.
+- Add an independent DATA V3 domain test that reads regenerated `data/raw/pokemon_api.json` and requires Silk Trap to be present, `target=user`, `classification=DATA_ONLY`, and effect-free.
+
+Engineering SHA before notebook synchronization: `0bf50ab5e6eb17d4b8d768d38fa274b97387741b`.
+That SHA passed 18/18 workflows. The final exact notebook-bearing HEAD for PR #54 must be read from GitHub after the required second 18/18 certification before closure.
+
+## Current artifact metrics from PR #54 engineering SHA
 
 - `RUNTIME_SUPPORTED`: 555
 - `PARTIAL_RUNTIME`: 66
 - `DATA_ONLY`: 286
 - `UNSUPPORTED`: 12
 
-Remaining `DATA_ONLY` moves that nevertheless contain `effect_specs`: 66.
+Remaining `DATA_ONLY` moves that nevertheless contain `effect_specs`: 65.
 
 Breakdown:
 
-- 63 stat-change cases.
+- 62 stat-change cases.
 - 2 heal cases: `Purify`, `Swallow`.
 - 1 multi-hit case: `Beat Up`.
 
@@ -220,9 +237,9 @@ The count should shrink only through audited semantic tranches, not mass relabel
 - Delayed/persisted effects (`Wish`).
 - Heal amount derived from opponent stat (`Strength Sap`).
 - Pure self stat boosts: safe only after verifying no hidden extra mechanic.
+- Protection/contact-trigger effects (`Silk Trap`): source-level `target=user` must not be blindly applied to conditional stat changes on an attacker.
 - `Stockpile`, `Charge`, `Minimize`, `No Retreat`, etc. must **not** be assumed equivalent to pure stat boosts; they may carry additional state/mechanics.
 - `Aromatic Mist` requires ally targeting.
-- `Silk Trap` needs a dedicated protection/contact-response audit; do not trust its current generic stat effect.
 - `Purify`, `Swallow`, and `Beat Up` require separate semantic audits.
 
 ## Audit rule
