@@ -45,45 +45,53 @@ Archived V2 remains provenance-only at `tools/archive/pokeapi_adapter_v2_legacy.
 - #58 Coaching — `3c4ac4d772a5869b45de592be7dd7f4d9b2a389b`
 - #59 Gear Up — `ef7dd6a41b1cf4bccacf0a8d5098a755bb9fd3e9`
 - #60 Magnetic Flux — `a5b56a0ba3a1efa81ac57be63b2813c19f2962a7`
-- #61 pure SELF stat packages A — final `623930ca0b98b00099288bcf542e7e0a922ac180`
-All: 18/18 on exact final HEAD, closed without merge.
+- #61 pure SELF stat packages A — `623930ca0b98b00099288bcf542e7e0a922ac180`
+- #62 pure opponent stat drops A — `6d1335b8c5cee0b1cf1e99910a7707734b4aef85`
+All certified entries above: 18/18 on exact final HEAD, closed without merge.
 
-## Current tranche — PR #62 pure opponent stat drops A
-- Branch: `fix/data-v3-simple-opponent-stat-drops-a`
-- Parent: certified #61 final `623930ca0b98b00099288bcf542e7e0a922ac180`.
-- Engineering SHA before notebook synchronization: `e384cb3a5b19a158e11da4925e7c2c23c929d9ca`.
-- Engineering SHA passed **18/18**, including DATA V3, independent regenerated-output assertions for all 17 moves, and Godot global.
-- Notebook synchronization moves the SHA; final exact HEAD must pass 18/18 again before #62 closes without merge.
+## Current tranche — PR #63 always-hit accuracy semantics
+- Branch: `fix/data-v3-always-hit-accuracy`
+- Parent: certified #62 final `6d1335b8c5cee0b1cf1e99910a7707734b4aef85`.
+- Engineering SHA before notebook synchronization: `428e1f2e387301899d749a9b97127f9e1a0a5b45`.
+- Engineering SHA passed **18/18**, including DATA V3 accuracy contract tests and Godot global.
+- Notebook synchronization moves the SHA; final exact HEAD must pass 18/18 again before #63 closes without merge.
 
-Source-audited and promoted in #62:
-- Baby-Doll Eyes — opponent Attack -1
-- Charm — Attack -2
-- Confide — Special Attack -1
-- Eerie Impulse — Special Attack -2
-- Fake Tears — Special Defense -2
-- Feather Dance — Attack -2
-- Flash — Accuracy -1
-- Kinesis — Accuracy -1
-- Metal Sound — Special Defense -2
-- Noble Roar — Attack -1 / Special Attack -1
-- Play Nice — Attack -1
-- Sand Attack — Accuracy -1
-- Scary Face — Speed -2
-- Screech — Defense -2
-- Smokescreen — Accuracy -1
-- Tearful Look — Attack -1 / Special Attack -1
-- Tickle — Attack -1 / Defense -1
+### Root cause fixed by #63
+PokéAPI uses `accuracy=null` for moves that bypass the normal accuracy check. DATA V3 previously converted null to canonical `100`. That is semantically wrong in this project because `BattleRuleset.accuracy_threshold_basis_points()` treats a negative base accuracy as the explicit always-hit sentinel, while `100` is still modified by Accuracy/Evasion stages.
 
-The legacy generator already emitted the correct complete OPPONENT stat packages. #62 adds an exact allowlist, exact source `stat_chance`, `effect_changes=[]`, target/category/damage-class/metadata checks, generated package checks, and promotes only these 17 to `RUNTIME_SUPPORTED`.
+Correct canonical mapping:
+- source numeric accuracy → preserve the numeric value;
+- source `accuracy=null` → canonical `accuracy=-1`.
 
-## Exact coverage from PR #62 engineering artifact
-- `RUNTIME_SUPPORTED`: **582**
-- `PARTIAL_RUNTIME`: **67**
-- `DATA_ONLY`: **258**
-- `UNSUPPORTED`: **12**
+No Battle Core behavior changed. `MoveDefinition` already stores arbitrary integer accuracy and `TurnExecutor` already passes it directly to `BattleRuleset`.
 
+### Exact #63 engineering artifact impact
+Compared with the certified #62 artifact:
+- **285 / 919** runtime move records changed.
+- The **only changed key was `accuracy`** on those 285 moves.
+- No classifications changed.
+- No `effect_specs` changed.
+- Coverage remains:
+  - `RUNTIME_SUPPORTED`: **582**
+  - `PARTIAL_RUNTIME`: **67**
+  - `DATA_ONLY`: **258**
+  - `UNSUPPORTED`: **12**
+
+The 285 always-hit records by current coverage:
+- 66 `RUNTIME_SUPPORTED`
+- 28 `PARTIAL_RUNTIME`
+- 180 `DATA_ONLY`
+- 11 `UNSUPPORTED`
+
+Independent sentinels verify:
+- `Confide`, `Play Nice`, `Tearful Look`, `Decorate`, `Spicy Extract` regenerate as `accuracy=-1` and survive `MoveDefinition.from_dict()` unchanged.
+- `Charm`, whose source accuracy is genuinely 100, remains `100`.
+- `BattleRuleset` returns 10000 bp for `-1` even with Accuracy -6 versus Evasion +6.
+- A genuine `100` remains stage-sensitive, proving the two representations are distinct.
+
+## Move Effects audit frontier after #62/#63
 Remaining `DATA_ONLY` records with non-empty `effect_specs`: **32**.
-- **29 stat-change** records.
+- 29 stat-change records.
 - `Beat Up`, `Purify`, `Swallow` are the 3 non-stat cases.
 
 Remaining 29 stat-change target distribution:
@@ -94,7 +102,8 @@ Remaining 29 stat-change target distribution:
 
 Remaining six `selected-pokemon` special cases:
 `decorate`, `defog`, `memento`, `parting_shot`, `spicy_extract`, `tar_shot`.
-No simple selected-target stat drops remain unaudited.
+
+`Decorate` and `Spicy Extract` were inspected immediately after #62: their generated OPPONENT stat packages appear faithful, but promotion was correctly paused when the transversal null-accuracy defect was discovered. Resume their coverage audit only after #63 is fully certified.
 
 Remaining 13 `user` cases are conditional/stateful:
 `autotomize`, `charge`, `clangorous_soul`, `defense_curl`, `extreme_evoboost`, `fillet_away`, `geomancy`, `growth`, `minimize`, `no_retreat`, `shell_smash`, `stockpile`, `tidy_up`.
