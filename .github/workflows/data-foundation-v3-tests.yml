@@ -195,7 +195,7 @@ jobs:
           assert ss_stages[0]['chance_basis_points'] == 10000
           assert matching_effects(strength_sap['effect_specs'], 'heal') == []
 
-          # Move Effects V3 — first audited family of pure self stat boosts.
+          # Move Effects V3 — audited family of pure self stat boosts.
           simple_self_boosts = {
               'acid_armor': ('defense', 2),
               'agility': ('speed', 2),
@@ -203,6 +203,12 @@ jobs:
               'barrier': ('defense', 2),
               'harden': ('defense', 1),
               'iron_defense': ('defense', 2),
+              'meditate': ('attack', 1),
+              'nasty_plot': ('special_attack', 2),
+              'rock_polish': ('speed', 2),
+              'sharpen': ('attack', 1),
+              'swords_dance': ('attack', 2),
+              'tail_glow': ('special_attack', 3),
           }
           for move_id, (stat_id, value) in simple_self_boosts.items():
               move = moves[move_id]
