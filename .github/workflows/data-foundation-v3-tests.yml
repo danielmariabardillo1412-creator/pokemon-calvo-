@@ -195,6 +195,29 @@ jobs:
           assert ss_stages[0]['chance_basis_points'] == 10000
           assert matching_effects(strength_sap['effect_specs'], 'heal') == []
 
+          # Move Effects V3 — first audited family of pure self stat boosts.
+          simple_self_boosts = {
+              'acid_armor': ('defense', 2),
+              'agility': ('speed', 2),
+              'amnesia': ('special_defense', 2),
+              'barrier': ('defense', 2),
+              'harden': ('defense', 1),
+              'iron_defense': ('defense', 2),
+          }
+          for move_id, (stat_id, value) in simple_self_boosts.items():
+              move = moves[move_id]
+              assert move['target'] == 'user', (move_id, move['target'])
+              assert move['classification'] == 'RUNTIME_SUPPORTED', (
+                  move_id, move['classification'])
+              assert move['power'] == 0, (move_id, move['power'])
+              stages = matching_effects(move['effect_specs'], 'modify_stat_stage')
+              assert len(move['effect_specs']) == 1 and len(stages) == 1, (
+                  move_id, move['effect_specs'])
+              assert stages[0]['target'] == 'self', (move_id, stages[0])
+              assert stages[0]['stat_id'] == stat_id, (move_id, stages[0])
+              assert stages[0]['value'] == value, (move_id, stages[0])
+              assert stages[0]['chance_basis_points'] == 10000, (move_id, stages[0])
+
           bulba = species['bulbasaur']
           assert any(x['ability_id'] == 'chlorophyll' and x['is_hidden'] for x in bulba.get('ability_slots', []))
           exact = set()
