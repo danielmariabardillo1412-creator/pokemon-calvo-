@@ -9,6 +9,7 @@ func run(check_callback: Callable) -> void:
 	_test_silk_trap_generated_semantics(check_callback)
 	_test_aromatic_mist_generated_semantics(check_callback)
 	_test_stuff_cheeks_generated_semantics(check_callback)
+	_test_howl_generated_semantics(check_callback)
 
 
 func _test_learnset_roundtrip(check_callback: Callable) -> void:
@@ -117,3 +118,21 @@ func _test_stuff_cheeks_generated_semantics(check_callback: Callable) -> void:
 	check_callback.call("data_v3_stuff_cheeks_target_preserved", stuff_cheeks.get("target", "") == "user")
 	check_callback.call("data_v3_stuff_cheeks_is_data_only", stuff_cheeks.get("classification", "") == "DATA_ONLY")
 	check_callback.call("data_v3_stuff_cheeks_has_no_unconditional_defense_buff", specs.is_empty())
+
+
+func _test_howl_generated_semantics(check_callback: Callable) -> void:
+	var howl := _load_raw_move("howl")
+	check_callback.call("data_v3_howl_present", not howl.is_empty())
+	if howl.is_empty():
+		return
+	var specs: Array = howl.get("effect_specs", [])
+	check_callback.call("data_v3_howl_target_preserved", howl.get("target", "") == "user-and-allies")
+	check_callback.call("data_v3_howl_is_partial_runtime", howl.get("classification", "") == "PARTIAL_RUNTIME")
+	check_callback.call("data_v3_howl_has_one_representable_effect", specs.size() == 1)
+	if specs.size() != 1 or not (specs[0] is Dictionary):
+		return
+	var stage: Dictionary = specs[0]
+	check_callback.call("data_v3_howl_effect_is_stat_stage", stage.get("kind", "") == "modify_stat_stage")
+	check_callback.call("data_v3_howl_effect_targets_self", stage.get("target", "") == "self")
+	check_callback.call("data_v3_howl_effect_is_attack_plus_one", stage.get("stat_id", "") == "attack" and int(stage.get("value", 0)) == 1)
+	check_callback.call("data_v3_howl_effect_is_unconditional", int(stage.get("chance_basis_points", 0)) == 10000)
