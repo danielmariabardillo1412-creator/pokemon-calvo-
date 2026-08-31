@@ -77,6 +77,18 @@ _SIMPLE_SELF_STAT_BOOSTS = {
     "tail_glow": ("special_attack", 3),
     "withdraw": ("defense", 1),
 }
+_PURE_SELF_STAT_PACKAGES = {
+    "bulk_up": {"attack": 1, "defense": 1},
+    "calm_mind": {"special_attack": 1, "special_defense": 1},
+    "coil": {"attack": 1, "defense": 1, "accuracy": 1},
+    "cosmic_power": {"defense": 1, "special_defense": 1},
+    "defend_order": {"defense": 1, "special_defense": 1},
+    "dragon_dance": {"attack": 1, "speed": 1},
+    "hone_claws": {"attack": 1, "accuracy": 1},
+    "quiver_dance": {"special_attack": 1, "special_defense": 1, "speed": 1},
+    "shift_gear": {"attack": 1, "speed": 2},
+    "work_up": {"attack": 1, "special_attack": 1},
+}
 
 # The V2 list mixes raw PokéAPI hyphenated names with the underscore-normalized
 # IDs used by the adapter. Normalize it once for the archived helper functions.
@@ -196,6 +208,50 @@ def _require_simple_self_stat_boost(
         or int(stage.get("chance_basis_points", 0)) != 10000
     ):
         raise RuntimeError(f"DATA V3 simple self-boost effect mismatch for {sid}: {stage}")
+
+
+def _require_pure_self_stat_package(
+    m: dict,
+    specs: list[dict],
+    sid: str,
+    expected_stats: dict[str, int],
+) -> None:
+    """Verify a source-audited move is exactly an unconditional SELF stat package."""
+    meta = m.get("meta") or {}
+    target = (m.get("target") or {}).get("name")
+    category = (meta.get("category") or {}).get("name")
+    ailment = (meta.get("ailment") or {}).get("name")
+    if target != "user" or category != "net-good-stats" or ailment not in ("none", "", None):
+        raise RuntimeError(f"DATA V3 pure self-stat source contract changed for {sid}")
+    if int(meta.get("stat_chance") or 0) != 0:
+        raise RuntimeError(f"DATA V3 pure self-stat chance changed for {sid}")
+    if any(int(meta.get(key) or 0) != 0 for key in (
+        "healing", "drain", "flinch_chance", "ailment_chance"
+    )):
+        raise RuntimeError(f"DATA V3 pure self-stat metadata changed for {sid}")
+
+    source_stats = {}
+    for change in m.get("stat_changes") or []:
+        stat_name = (change.get("stat") or {}).get("name")
+        if stat_name:
+            source_stats[stat_name.replace("-", "_")] = int(change.get("change", 0))
+    if source_stats != expected_stats:
+        raise RuntimeError(f"DATA V3 pure self-stat source changes mismatch for {sid}: {source_stats}")
+
+    stages = _matching_effects(specs, "modify_stat_stage")
+    if len(specs) != len(expected_stats) or len(stages) != len(expected_stats):
+        raise RuntimeError(f"DATA V3 pure self-stat generated unexpected effects for {sid}: {specs}")
+    generated_stats = {}
+    for stage in stages:
+        stat_id = str(stage.get("stat_id", ""))
+        if (
+            stage.get("target") != "self"
+            or int(stage.get("chance_basis_points", 0)) != 10000
+        ):
+            raise RuntimeError(f"DATA V3 pure self-stat generated effect mismatch for {sid}: {stage}")
+        generated_stats[stat_id] = int(stage.get("value", 0))
+    if generated_stats != expected_stats:
+        raise RuntimeError(f"DATA V3 pure self-stat generated stats mismatch for {sid}: {generated_stats}")
 
 
 def _require_audited_data_only_unique(m: dict, specs: list[dict], sid: str) -> None:
@@ -588,6 +644,14 @@ def generate_move_specs(m: dict, contact_set: set):
         _require_simple_self_stat_boost(m, specs, sid, stat_id, value)
         # These source-verified moves are exactly one unconditional self stat
         # stage increase and Battle Core executes that effect directly.
+        coverage = "RUNTIME_SUPPORTED"
+
+    if sid in _PURE_SELF_STAT_PACKAGES:
+        expected_stats = _PURE_SELF_STAT_PACKAGES[sid]
+        _require_pure_self_stat_package(m, specs, sid, expected_stats)
+        # These source-audited moves are exactly unconditional stat packages on
+        # the user. The generic converter already emits the complete SELF package;
+        # this branch only certifies that exact shape and coverage.
         coverage = "RUNTIME_SUPPORTED"
 
     if sid in _AUDITED_DATA_ONLY_UNIQUE:
