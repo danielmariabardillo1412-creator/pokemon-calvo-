@@ -3,41 +3,46 @@
 Read this immediately after `00_READ_FIRST.md` when recovering context.
 
 ## Latest certified baseline before current tranche
-- PR #70 — `reconcile/data-v3-user-audit-chain`
-- Final HEAD `4ee439a9741cc7dac8ec5d1792485ee79aa5f4b2`
+- PR #71 — `fix/data-v3-user-mandatory-state-b`
+- Final HEAD `98c68f1c184e84db30458a4533fb769cba1140ac`
 - 18/18 SUCCESS on exact notebook-bearing HEAD
 - closed without merge.
 
-#70 is the canonical continuation after the temporary #67/#68 vs #69 branch divergence. Do not resume from #67 or #68.
-
-## Current tranche — PR #71
-- Title: `DATA V3 — neutralize mandatory-state user boosts`
-- Branch: `fix/data-v3-user-mandatory-state-b`
-- Parent: certified #70 final `4ee439a9741cc7dac8ec5d1792485ee79aa5f4b2`
-- Engineering SHA before notebook sync: `b55a487b46ec5443992e623fef5b1c8ce2bb0665`
+## Current tranche — PR #72
+- Title: `DATA V3 — audit persistent-state user moves`
+- Branch: `fix/data-v3-user-persistent-state-c`
+- Parent: certified #71 final `98c68f1c184e84db30458a4533fb769cba1140ac`
+- Engineering SHA before notebook sync: `16f7eef390fb08e7ce48f2a1d2cbf4547321a939`
 - Engineering SHA CI: **18/18 SUCCESS**
 - DATA V3 independent suite: SUCCESS
 - Godot global: SUCCESS
 
-## What #71 resolves
-### Geomancy
-- real source: one charge turn, then SpAtk/SpDef/Speed +2;
-- Power Herb can skip the delay by consuming the item;
-- current Battle Core has no charge/pending-turn primitive;
-- immediate free +2/+2/+2 was false.
+## What #72 resolves
+### Autotomize
+- real base stat effect: Speed +2;
+- current mechanics reduce weight by 100 kg per successful use, stacking to a 0.1 kg minimum;
+- immutable snapshot generic prose is stale and incorrectly says weight is halved / does not stack;
+- missing weight state can be beneficial or detrimental in weight-based interactions, so Speed +2 alone is not a safe partial.
 Decision: `DATA_ONLY`, `effect_specs=[]`.
+Canonical derived summary is repaired in memory to current 100 kg semantics; immutable source remains untouched.
 
-### No Retreat
-- real source: +1 Attack/Defense/SpAtk/SpDef/Speed;
-- inseparable Can't Escape/switch restriction and reuse/failure state;
-- current Battle Core has no trapping/reuse-state primitive;
-- free repeatable +1-all was false.
+### Minimize
+- real base stat effect: Evasion +2;
+- also applies persistent Minimized state with special attack vulnerabilities;
+- Battle Core has no Minimized-state primitive;
+- Evasion +2 alone removes an explicit drawback.
 Decision: `DATA_ONLY`, `effect_specs=[]`.
+Canonical summary now retains the Minimized-state fact generically.
 
-Exact #70 → #71 artifact comparison:
-- changed records: exactly `geomancy`, `no_retreat`;
-- changed key on both: only `effect_specs`;
-- no classification, target, accuracy, summary or unrelated move changed.
+## Small architecture improvement
+New `tools/pokeapi_adapter_user_audit_chain.py` coordinates the narrow user audits in order:
+`HP-cost → mandatory-state → persistent-state`.
+It contains no move-specific semantic policy; this avoids repeatedly rewiring older certified layers.
+
+## Exact #71 → #72 engineering artifact
+- exactly two changed records: `autotomize`, `minimize`;
+- both changed only `effect_specs` and `effect_summary`;
+- no classification, target, accuracy or unrelated move changed.
 
 Coverage remains:
 - `RUNTIME_SUPPORTED`: **590**
@@ -45,36 +50,33 @@ Coverage remains:
 - `DATA_ONLY`: **246**
 - `UNSUPPORTED`: **12**
 
-DATA_ONLY with non-empty specs: **10**.
-- 7 stat/stateful.
+DATA_ONLY with non-empty specs: **8**.
+- 5 stat/stateful total.
 - non-stat: `Beat Up`, `Purify`, `Swallow`.
 
 ## Current certification step
-Notebook synchronization moves SHA. Before closing #71:
-1. verify only 01/02/04 changed after engineering SHA `b55a487b46ec5443992e623fef5b1c8ce2bb0665`;
-2. require 18/18 on the exact final notebook-bearing HEAD;
-3. close #71 without merge;
+Notebook synchronization moves SHA. Before closing #72:
+1. verify only notebooks 01/02/04 changed after engineering SHA `16f7eef390fb08e7ce48f2a1d2cbf4547321a939`;
+2. require 18/18 on exact final notebook-bearing HEAD;
+3. close #72 without merge;
 4. use that exact final HEAD as next baseline.
 
-## Exact next DATA V3 task after #71 certification
-Audit the remaining **5 user stat/stateful DATA_ONLY-with-specs**:
-- `autotomize`
-- `extreme_evoboost`
-- `minimize`
-- `stockpile`
-- `tidy_up`
+## Exact next DATA V3 task after #72 certification
+Only **3 user stat/stateful DATA_ONLY-with-specs** remain:
+1. `extreme_evoboost`
+2. `stockpile`
+3. `tidy_up`
 
-Recommended split:
-1. `autotomize` + `minimize`: persistent self-state omitted from otherwise real stat boosts; determine whether omission is merely weakening or strategically false.
-2. `stockpile`: counter/cap and Spit Up/Swallow dependency; likely unsafe without stored-state transaction.
-3. `tidy_up`: field/substitute cleanup plus boosts; determine whether retaining boosts alone removes an inseparable cost/strategic effect.
-4. `extreme_evoboost`: Z-Move/Eevee activation and generation legality; do not treat as ordinary freely selectable status move.
+Recommended handling:
+- `stockpile`: audit first; counter/cap and Spit Up/Swallow dependency probably make free Def/SpDef boosts unsafe without stored-state transaction.
+- `tidy_up`: audit cleanup transaction vs stat boosts; determine whether retaining Atk/Speed alone creates strategic distortion.
+- `extreme_evoboost`: audit Z-Move/Eevee activation and generation legality; do not treat as an ordinary freely selectable move.
 
-Then remaining all-pokemon:
+Then all-pokemon:
 - `flower_shield`
 - `rototiller`
 
-Then remaining non-stat:
+Then non-stat:
 - `Purify`
 - `Swallow`
 - `Beat Up`
