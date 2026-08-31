@@ -45,6 +45,7 @@ _WEATHER_SELF_HEALS = {"morning_sun", "synthesis", "moonlight", "shore_up"}
 _TEMP_TYPE_SELF_HEALS = {"roost"}
 _AUDITED_DATA_ONLY_UNIQUE = {"rest", "wish"}
 _PARTIAL_UNIQUE_STAT_HEALS = {"strength_sap"}
+_AUDITED_DATA_ONLY_PROTECTION_CONTACT = {"silk_trap"}
 _SIMPLE_SELF_STAT_BOOSTS = {
     "acid_armor": ("defense", 2),
     "agility": ("speed", 2),
@@ -238,6 +239,38 @@ def _require_strength_sap_partial(m: dict, specs: list[dict]) -> None:
         )
 
 
+def _require_silk_trap_data_only(m: dict, specs: list[dict]) -> None:
+    """Verify Silk Trap source semantics and the legacy false self-debuff signature."""
+    target = (m.get("target") or {}).get("name")
+    stat_changes = m.get("stat_changes") or []
+    if target != "user" or int(m.get("priority") or 0) != 4 or m.get("meta") is not None:
+        raise RuntimeError("DATA V3 Silk Trap source contract changed")
+    if len(stat_changes) != 1:
+        raise RuntimeError("DATA V3 Silk Trap expected one source stat change")
+    source_change = stat_changes[0]
+    if (
+        int(source_change.get("change", 0)) != -1
+        or (source_change.get("stat") or {}).get("name") != "speed"
+    ):
+        raise RuntimeError("DATA V3 Silk Trap Speed-drop metadata changed")
+
+    stages = _matching_effects(specs, "modify_stat_stage")
+    if len(specs) != 1 or len(stages) != 1:
+        raise RuntimeError(
+            f"DATA V3 Silk Trap legacy generated shape changed unexpectedly: {specs}"
+        )
+    stage = stages[0]
+    if (
+        stage.get("target") != "self"
+        or stage.get("stat_id") != "speed"
+        or int(stage.get("value", 0)) != -1
+        or int(stage.get("chance_basis_points", 0)) != 10000
+    ):
+        raise RuntimeError(
+            f"DATA V3 Silk Trap legacy false-self-debuff signature changed: {stage}"
+        )
+
+
 def generate_move_specs(m: dict, contact_set: set):
     """V3 wrapper around the archived move-effect converter.
 
@@ -289,6 +322,16 @@ def generate_move_specs(m: dict, contact_set: set):
         # Battle Core. Healing by the target's current Attack value is not expressible
         # as the current fixed/ratio HEAL effect, so full support would be dishonest.
         coverage = "PARTIAL_RUNTIME"
+
+    if sid in _AUDITED_DATA_ONLY_PROTECTION_CONTACT:
+        _require_silk_trap_data_only(m, specs)
+        # Silk Trap's source target is USER because it protects the user. The -1
+        # Speed stat change applies only to an attacker that makes direct contact.
+        # Mapping the source target onto the stat change produced a false SELF -1
+        # Speed effect. Battle Core has no protect/contact-trigger effect model, so
+        # a no-op DATA_ONLY representation is safer than any unconditional debuff.
+        specs = []
+        coverage = "DATA_ONLY"
 
     if sid in _SELECTED_TARGET_HEALS:
         changed = _rewrite_effect_target(specs, "heal", "opponent")
