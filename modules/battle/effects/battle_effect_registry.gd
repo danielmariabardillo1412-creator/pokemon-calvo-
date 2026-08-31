@@ -168,6 +168,32 @@ func _register_abilities() -> void:
 		0,
 		{"requires_contact": true, "multiplier_bp": 13000},
 	)]
+	_ability_specs[&"fur_coat"] = [BattleTriggerSpec.new(
+		BattleTriggerSpec.MODIFY_DAMAGE,
+		&"ability",
+		&"fur_coat",
+		BattleEffectSpec.new(BattleEffectSpec.DAMAGE),
+		0,
+		{"requires_physical": true, "multiplier_bp": 5000},
+	)]
+	_ability_specs[&"thick_fat"] = [
+		BattleTriggerSpec.new(
+			BattleTriggerSpec.MODIFY_DAMAGE,
+			&"ability",
+			&"thick_fat",
+			BattleEffectSpec.new(BattleEffectSpec.DAMAGE),
+			0,
+			{"move_type_id": "fire", "multiplier_bp": 5000},
+		),
+		BattleTriggerSpec.new(
+			BattleTriggerSpec.MODIFY_DAMAGE,
+			&"ability",
+			&"thick_fat",
+			BattleEffectSpec.new(BattleEffectSpec.DAMAGE),
+			0,
+			{"move_type_id": "ice", "multiplier_bp": 5000},
+		),
+	]
 	_ability_specs[&"levitate"] = [BattleTriggerSpec.new(
 		BattleTriggerSpec.MODIFY_DAMAGE,
 		&"ability",
