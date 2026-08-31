@@ -36,6 +36,16 @@ _TYPE_POWER_BOOSTS = {
     "fire_mane": ("fire", "generation-ix", "50%"),
 }
 
+# These records have been explicitly audited and intentionally remain DATA_ONLY.
+# Their source contracts are still guarded so a future source change forces a
+# re-audit rather than silently making the old rejection rationale stale.
+_DATA_ONLY_SOURCE_GUARDS = {"huge_power", "pure_power"}
+
+# The pinned PokeAPI snapshot says 1.33x for Tough Claws. Current main-series
+# mechanics are a 30% contact-move power boost, so DATA V3 deliberately corrects
+# the stale prose while preserving and validating the immutable source record.
+_TOUGH_CLAWS_CANONICAL_EFFECT = "Boosts the power of moves that make contact by 30%."
+
 _CLASSIFICATION = {
     "blaze": RUNTIME_SUPPORTED,
     "overgrow": RUNTIME_SUPPORTED,
@@ -45,6 +55,7 @@ _CLASSIFICATION = {
     "dragons_maw": RUNTIME_SUPPORTED,
     "rocky_payload": RUNTIME_SUPPORTED,
     "fire_mane": RUNTIME_SUPPORTED,
+    "tough_claws": RUNTIME_SUPPORTED,
     "intimidate": PARTIAL_RUNTIME,
     "levitate": PARTIAL_RUNTIME,
     "stamina": PARTIAL_RUNTIME,
@@ -67,9 +78,20 @@ def classification_for(ability: dict) -> str:
     sid = _slug(str(ability.get("name", "")))
     classification = _CLASSIFICATION.get(sid)
     if classification is None:
+        if sid in _DATA_ONLY_SOURCE_GUARDS:
+            _validate_source_contract(ability, sid)
         return DATA_ONLY
     _validate_source_contract(ability, sid)
     return classification
+
+
+def canonical_effect_text(ability: dict, source_text: str) -> str:
+    """Return audited DATA V3 prose overrides without mutating immutable source."""
+    sid = _slug(str(ability.get("name", "")))
+    if sid == "tough_claws":
+        _validate_source_contract(ability, sid)
+        return _TOUGH_CLAWS_CANONICAL_EFFECT
+    return source_text
 
 
 def _slug(value: str) -> str:
@@ -159,6 +181,38 @@ def _validate_source_contract(ability: dict, sid: str) -> None:
         )
         if ability.get("effect_changes"):
             raise RuntimeError(f"DATA V3 type-boost ability history changed for {sid}")
+        return
+
+    if sid == "tough_claws":
+        if _generation_name(ability) != "generation-vi":
+            raise RuntimeError("DATA V3 audited ability generation changed for tough_claws")
+        _require_tokens(
+            text,
+            sid,
+            (
+                "strengthens moves that make contact",
+                "1.33x",
+                "power",
+            ),
+        )
+        if ability.get("effect_changes"):
+            raise RuntimeError("DATA V3 Tough Claws history changed; re-audit")
+        return
+
+    if sid in _DATA_ONLY_SOURCE_GUARDS:
+        if _generation_name(ability) != "generation-iii":
+            raise RuntimeError(f"DATA V3 audited ability generation changed for {sid}")
+        _require_tokens(
+            text,
+            sid,
+            (
+                "attack is doubled",
+                "does not count as a stat modifier",
+                "functions identically",
+            ),
+        )
+        if ability.get("effect_changes"):
+            raise RuntimeError(f"DATA V3 attack-doubling ability history changed for {sid}")
         return
 
     if sid == "stamina":
