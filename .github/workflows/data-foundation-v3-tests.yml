@@ -67,6 +67,14 @@ jobs:
                       return True
               return False
 
+          def matching_effects(specs, kind, target=None):
+              found = []
+              for spec in specs:
+                  if spec.get('kind') == kind and (target is None or spec.get('target') == target):
+                      found.append(spec)
+                  found.extend(matching_effects(spec.get('children', []), kind, target))
+              return found
+
           assert len(types) == 18
           assert len(moves) == 919
           assert types['fire']['display_name'] == 'Fuego'
@@ -89,6 +97,36 @@ jobs:
           for move_id in ('sleep_talk', 'me_first', 'mirror_move', 'nature_power'):
               assert moves[move_id]['classification'] == 'UNSUPPORTED', (
                   move_id, moves[move_id]['classification'])
+
+          # Move Effects V3 — verified healing-target semantics.
+          heal_pulse = moves['heal_pulse']
+          assert heal_pulse['target'] == 'selected-pokemon'
+          assert heal_pulse['classification'] == 'RUNTIME_SUPPORTED'
+          hp_heals = matching_effects(heal_pulse['effect_specs'], 'heal')
+          assert len(hp_heals) == 1 and hp_heals[0]['target'] == 'opponent'
+          assert hp_heals[0]['ratio_basis_points'] == 5000
+
+          floral = moves['floral_healing']
+          assert floral['target'] == 'selected-pokemon'
+          assert floral['classification'] == 'PARTIAL_RUNTIME'
+          floral_heals = matching_effects(floral['effect_specs'], 'heal')
+          assert len(floral_heals) == 1 and floral_heals[0]['target'] == 'opponent'
+          assert floral_heals[0]['ratio_basis_points'] == 5000
+
+          life_dew = moves['life_dew']
+          assert life_dew['target'] == 'user-and-allies'
+          assert life_dew['classification'] == 'PARTIAL_RUNTIME'
+          life_heals = matching_effects(life_dew['effect_specs'], 'heal')
+          assert len(life_heals) == 1 and life_heals[0]['target'] == 'self'
+          assert life_heals[0]['ratio_basis_points'] == 2500
+
+          jungle = moves['jungle_healing']
+          assert jungle['target'] == 'user-and-allies'
+          assert jungle['classification'] == 'PARTIAL_RUNTIME'
+          jungle_heals = matching_effects(jungle['effect_specs'], 'heal')
+          assert len(jungle_heals) == 1 and jungle_heals[0]['target'] == 'self'
+          assert jungle_heals[0]['ratio_basis_points'] == 2500
+          assert len(matching_effects(jungle['effect_specs'], 'cure_status', 'self')) == 1
 
           bulba = species['bulbasaur']
           assert any(x['ability_id'] == 'chlorophyll' and x['is_hidden'] for x in bulba.get('ability_slots', []))
