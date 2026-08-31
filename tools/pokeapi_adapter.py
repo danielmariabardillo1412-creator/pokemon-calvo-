@@ -28,6 +28,32 @@ _REQUIRED_UNSUPPORTED_NORMALIZED = {
     "nature_power",
 }
 
+# Healing semantics that DATA V3 can represent honestly with the current singles
+# BattleEffectSpec target model.
+_SIMPLE_HEAL_RUNTIME = {
+    "heal_order",
+    "heal_pulse",
+    "milk_drink",
+    "recover",
+    "slack_off",
+    "soft_boiled",
+}
+_PARTIAL_HEAL_RUNTIME = {
+    "floral_healing",  # target heal is modeled; Grassy Terrain boost is not.
+    "jungle_healing",  # self heal/cure modeled; ally-wide scope is not.
+    "life_dew",  # self heal modeled; ally-wide scope is not.
+    "moonlight",  # baseline heal modeled; weather scaling is not.
+    "morning_sun",  # baseline heal modeled; weather scaling is not.
+    "purify",  # target cure modeled; conditional self-heal dependency is not.
+    "roost",  # heal modeled; temporary Flying-type suppression is not.
+    "shore_up",  # baseline heal modeled; sandstorm scaling is not.
+    "synthesis",  # baseline heal modeled; weather scaling is not.
+}
+_UNSUPPORTED_HEAL_RUNTIME = {
+    "swallow",  # amount/consumption depends on Stockpile state not modeled yet.
+}
+_TARGET_HEAL_MOVES = {"heal_pulse", "floral_healing"}
+
 # The V2 list mixes raw PokéAPI hyphenated names with the underscore-normalized
 # IDs used by the adapter. Normalize it once for the archived helper functions.
 # ``astonish`` was an old placeholder: its damage + flinch effect is fully
@@ -63,6 +89,56 @@ def _load_contact_override() -> set[str]:
             % ", ".join(missing)
         )
     return contact
+
+
+def _rewrite_kind_target(specs: list[dict], kind: str, target: str) -> int:
+    changed = 0
+    for spec in specs:
+        if spec.get("kind") == kind and spec.get("target") != target:
+            spec["target"] = target
+            changed += 1
+        changed += _rewrite_kind_target(spec.get("children", []) or [], kind, target)
+    return changed
+
+
+def generate_move_specs(move: dict, contact_set: set):
+    """Reuse the V2 converter, then apply audited DATA V3 semantic corrections."""
+    specs, crit_bp, contact, classification, override_count, unsupported_note = (
+        _legacy.generate_move_specs(move, contact_set)
+    )
+    sid = _legacy.slug(str(move.get("name", "")))
+
+    # Heal Pulse / Floral Healing restore HP to the selected target, not the user.
+    if sid in _TARGET_HEAL_MOVES:
+        override_count += _rewrite_kind_target(specs, "heal", "opponent")
+
+    # Jungle Healing has a safe self-side subset in singles: heal + cure status.
+    # Ally-wide application remains explicitly partial until Battle Core grows a
+    # side/team target selector.
+    if sid == "jungle_healing":
+        specs.append({"kind": "cure_status", "target": "self"})
+        override_count += 1
+
+    # Purify can safely model the selected target's cure. Its self heal is
+    # conditional on a successful cure; execute_all cannot express that dependency,
+    # so remove the misleading unconditional heal until conditional sequencing lands.
+    if sid == "purify":
+        specs = [{"kind": "cure_status", "target": "opponent"}]
+        override_count += 1
+
+    # Swallow's amount depends on Stockpile count and also consumes that state. A
+    # fixed 25% heal is not an honest partial model, so expose no executable spec.
+    if sid in _UNSUPPORTED_HEAL_RUNTIME:
+        specs = []
+        classification = "UNSUPPORTED"
+        unsupported_note = True
+        override_count += 1
+    elif sid in _SIMPLE_HEAL_RUNTIME:
+        classification = "RUNTIME_SUPPORTED"
+    elif sid in _PARTIAL_HEAL_RUNTIME:
+        classification = "PARTIAL_RUNTIME"
+
+    return specs, crit_bp, contact, classification, override_count, unsupported_note
 
 
 def __getattr__(name: str):
