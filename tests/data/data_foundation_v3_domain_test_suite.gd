@@ -10,6 +10,7 @@ func run(check_callback: Callable) -> void:
 	_test_aromatic_mist_generated_semantics(check_callback)
 	_test_stuff_cheeks_generated_semantics(check_callback)
 	_test_howl_generated_semantics(check_callback)
+	_test_coaching_generated_semantics(check_callback)
 
 
 func _test_learnset_roundtrip(check_callback: Callable) -> void:
@@ -136,3 +137,14 @@ func _test_howl_generated_semantics(check_callback: Callable) -> void:
 	check_callback.call("data_v3_howl_effect_targets_self", stage.get("target", "") == "self")
 	check_callback.call("data_v3_howl_effect_is_attack_plus_one", stage.get("stat_id", "") == "attack" and int(stage.get("value", 0)) == 1)
 	check_callback.call("data_v3_howl_effect_is_unconditional", int(stage.get("chance_basis_points", 0)) == 10000)
+
+
+func _test_coaching_generated_semantics(check_callback: Callable) -> void:
+	var coaching := _load_raw_move("coaching")
+	check_callback.call("data_v3_coaching_present", not coaching.is_empty())
+	if coaching.is_empty():
+		return
+	var specs: Array = coaching.get("effect_specs", [])
+	check_callback.call("data_v3_coaching_target_preserved", coaching.get("target", "") == "user-and-allies")
+	check_callback.call("data_v3_coaching_is_data_only", coaching.get("classification", "") == "DATA_ONLY")
+	check_callback.call("data_v3_coaching_has_no_false_opponent_buffs", specs.is_empty())
