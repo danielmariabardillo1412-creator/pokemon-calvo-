@@ -34,6 +34,7 @@ _REQUIRED_UNSUPPORTED_NORMALIZED = {
 # alter hundreds of generated records.
 _SELECTED_TARGET_HEALS = {"heal_pulse", "floral_healing"}
 _TEAM_TARGET_HEALS = {"life_dew", "jungle_healing"}
+_SIMPLE_SELF_HEALS = {"recover", "soft_boiled", "milk_drink", "slack_off"}
 
 # The V2 list mixes raw PokéAPI hyphenated names with the underscore-normalized
 # IDs used by the adapter. Normalize it once for the archived helper functions.
@@ -85,16 +86,21 @@ def _rewrite_effect_target(specs: list[dict], kind: str, target: str) -> int:
     return changed
 
 
-def _has_effect(specs: list[dict], kind: str, target: str | None = None) -> bool:
+def _matching_effects(specs: list[dict], kind: str, target: str | None = None) -> list[dict]:
+    found: list[dict] = []
     for spec in specs:
         if spec.get("kind") == kind and (
             target is None or spec.get("target") == target
         ):
-            return True
+            found.append(spec)
         children = spec.get("children") or []
-        if isinstance(children, list) and _has_effect(children, kind, target):
-            return True
-    return False
+        if isinstance(children, list):
+            found.extend(_matching_effects(children, kind, target))
+    return found
+
+
+def _has_effect(specs: list[dict], kind: str, target: str | None = None) -> bool:
+    return bool(_matching_effects(specs, kind, target))
 
 
 def generate_move_specs(m: dict, contact_set: set):
@@ -107,6 +113,20 @@ def generate_move_specs(m: dict, contact_set: set):
         _legacy.generate_move_specs(m, contact_set)
     )
     sid = _legacy.slug(str(m.get("name", "")))
+
+    if sid in _SIMPLE_SELF_HEALS:
+        heals = _matching_effects(specs, "heal")
+        if len(heals) != 1:
+            raise RuntimeError(
+                f"DATA V3 expected exactly one heal effect for {sid}, found {len(heals)}"
+            )
+        heal = heals[0]
+        if heal.get("target") != "self" or heal.get("ratio_basis_points") != 5000:
+            raise RuntimeError(
+                f"DATA V3 simple self-heal contract mismatch for {sid}: {heal}"
+            )
+        # Snapshot-verified: these four moves have no additional battle effect.
+        coverage = "RUNTIME_SUPPORTED"
 
     if sid in _SELECTED_TARGET_HEALS:
         changed = _rewrite_effect_target(specs, "heal", "opponent")
