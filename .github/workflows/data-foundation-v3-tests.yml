@@ -161,6 +161,15 @@ jobs:
           assert roost_heals[0]['target'] == 'self'
           assert roost_heals[0]['ratio_basis_points'] == 5000
 
+          # Move Effects V3 — Rest is intentionally data-only. The current status
+          # system cannot reproduce its status replacement, fixed sleep duration,
+          # and move-specific failure semantics without lying about runtime support.
+          rest = moves['rest']
+          assert rest['target'] == 'user'
+          assert rest['classification'] == 'DATA_ONLY'
+          assert rest['power'] == 0
+          assert rest['effect_specs'] == []
+
           bulba = species['bulbasaur']
           assert any(x['ability_id'] == 'chlorophyll' and x['is_hidden'] for x in bulba.get('ability_slots', []))
           exact = set()
