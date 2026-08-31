@@ -47,6 +47,7 @@ _AUDITED_DATA_ONLY_UNIQUE = {"rest", "wish"}
 _PARTIAL_UNIQUE_STAT_HEALS = {"strength_sap"}
 _AUDITED_DATA_ONLY_PROTECTION_CONTACT = {"silk_trap"}
 _AUDITED_DATA_ONLY_ALLY_STAT = {"aromatic_mist": ("special_defense", 1)}
+_AUDITED_DATA_ONLY_HELD_BERRY_STAT = {"stuff_cheeks": ("defense", 2)}
 _SIMPLE_SELF_STAT_BOOSTS = {
     "acid_armor": ("defense", 2),
     "agility": ("speed", 2),
@@ -312,6 +313,58 @@ def _require_ally_stat_data_only(
         raise RuntimeError(f"DATA V3 ally-stat false-SELF signature changed for {sid}: {stage}")
 
 
+def _require_held_berry_stat_data_only(
+    m: dict,
+    specs: list[dict],
+    sid: str,
+    stat_id: str,
+    value: int,
+) -> None:
+    """Verify a held-Berry-gated stat move before removing its unconditional effect."""
+    meta = m.get("meta") or {}
+    target = (m.get("target") or {}).get("name")
+    category = (meta.get("category") or {}).get("name")
+    ailment = (meta.get("ailment") or {}).get("name")
+    stat_changes = m.get("stat_changes") or []
+    if target != "user" or category != "net-good-stats" or ailment not in ("none", "", None):
+        raise RuntimeError(f"DATA V3 held-Berry stat source contract changed for {sid}")
+    if int(meta.get("stat_chance") or 0) != 100:
+        raise RuntimeError(f"DATA V3 held-Berry stat chance changed for {sid}")
+    if any(int(meta.get(key) or 0) != 0 for key in (
+        "healing", "drain", "flinch_chance", "ailment_chance"
+    )):
+        raise RuntimeError(f"DATA V3 held-Berry stat metadata changed for {sid}")
+    if len(stat_changes) != 1:
+        raise RuntimeError(f"DATA V3 expected one held-Berry stat change for {sid}")
+    source_change = stat_changes[0]
+    if (
+        (source_change.get("stat") or {}).get("name") != stat_id.replace("special_", "special-")
+        or int(source_change.get("change", 0)) != value
+    ):
+        raise RuntimeError(f"DATA V3 held-Berry stat source change mismatch for {sid}")
+
+    english_effects = []
+    for entry in m.get("effect_entries") or []:
+        if (entry.get("language") or {}).get("name") == "en":
+            english_effects.append(str(entry.get("effect") or ""))
+            english_effects.append(str(entry.get("short_effect") or ""))
+    effect_text = " ".join(english_effects).lower()
+    if "cannot be used unless the user is holding a berry" not in effect_text or "consumes a berry" not in effect_text:
+        raise RuntimeError(f"DATA V3 held-Berry semantic contract changed for {sid}")
+
+    stages = _matching_effects(specs, "modify_stat_stage")
+    if len(specs) != 1 or len(stages) != 1:
+        raise RuntimeError(f"DATA V3 held-Berry legacy shape changed for {sid}: {specs}")
+    stage = stages[0]
+    if (
+        stage.get("target") != "self"
+        or stage.get("stat_id") != stat_id
+        or int(stage.get("value", 0)) != value
+        or int(stage.get("chance_basis_points", 0)) != 10000
+    ):
+        raise RuntimeError(f"DATA V3 held-Berry unconditional signature changed for {sid}: {stage}")
+
+
 def generate_move_specs(m: dict, contact_set: set):
     """V3 wrapper around the archived move-effect converter.
 
@@ -381,6 +434,17 @@ def generate_move_specs(m: dict, contact_set: set):
         # converter collapses that unsupported ally target into SELF, which would
         # execute on the wrong creature. Until ally targeting exists, preserve the
         # move as DATA_ONLY with no executable effect rather than lying about target.
+        specs = []
+        coverage = "DATA_ONLY"
+
+    if sid in _AUDITED_DATA_ONLY_HELD_BERRY_STAT:
+        stat_id, value = _AUDITED_DATA_ONLY_HELD_BERRY_STAT[sid]
+        _require_held_berry_stat_data_only(m, specs, sid, stat_id, value)
+        # Stuff Cheeks may only succeed while the user holds a Berry, consumes that
+        # Berry, triggers its effect, and then raises Defense. The current generic
+        # effect model cannot require/consume a held Berry, so an unconditional
+        # Defense +2 would grant an illegal benefit. Keep the move effect-free until
+        # the held-item prerequisite/consumption transaction is represented.
         specs = []
         coverage = "DATA_ONLY"
 
