@@ -45,6 +45,14 @@ _WEATHER_SELF_HEALS = {"morning_sun", "synthesis", "moonlight", "shore_up"}
 _TEMP_TYPE_SELF_HEALS = {"roost"}
 _AUDITED_DATA_ONLY_UNIQUE = {"rest", "wish"}
 _PARTIAL_UNIQUE_STAT_HEALS = {"strength_sap"}
+_SIMPLE_SELF_STAT_BOOSTS = {
+    "acid_armor": ("defense", 2),
+    "agility": ("speed", 2),
+    "amnesia": ("special_defense", 2),
+    "barrier": ("defense", 2),
+    "harden": ("defense", 1),
+    "iron_defense": ("defense", 2),
+}
 
 # The V2 list mixes raw PokéAPI hyphenated names with the underscore-normalized
 # IDs used by the adapter. Normalize it once for the archived helper functions.
@@ -124,6 +132,46 @@ def _require_single_self_heal(specs: list[dict], sid: str, ratio_basis_points: i
         raise RuntimeError(
             f"DATA V3 self-heal contract mismatch for {sid}: {heal}"
         )
+
+
+def _require_simple_self_stat_boost(
+    m: dict,
+    specs: list[dict],
+    sid: str,
+    stat_id: str,
+    value: int,
+) -> None:
+    """Verify a source-checked pure self stat boost has no hidden generated effect."""
+    meta = m.get("meta") or {}
+    target = (m.get("target") or {}).get("name")
+    ailment = (meta.get("ailment") or {}).get("name")
+    stat_changes = m.get("stat_changes") or []
+    if target != "user" or ailment not in ("none", "", None):
+        raise RuntimeError(f"DATA V3 simple self-boost source contract changed for {sid}")
+    if any(int(meta.get(key) or 0) != 0 for key in (
+        "healing", "drain", "flinch_chance", "ailment_chance"
+    )):
+        raise RuntimeError(f"DATA V3 simple self-boost metadata changed for {sid}")
+    if len(stat_changes) != 1:
+        raise RuntimeError(f"DATA V3 expected one source stat change for {sid}")
+    source_change = stat_changes[0]
+    if (
+        (source_change.get("stat") or {}).get("name") != stat_id.replace("special_", "special-")
+        or int(source_change.get("change", 0)) != value
+    ):
+        raise RuntimeError(f"DATA V3 simple self-boost stat contract changed for {sid}")
+
+    stages = _matching_effects(specs, "modify_stat_stage")
+    if len(specs) != 1 or len(stages) != 1:
+        raise RuntimeError(f"DATA V3 simple self-boost generated unexpected effects for {sid}: {specs}")
+    stage = stages[0]
+    if (
+        stage.get("target") != "self"
+        or stage.get("stat_id") != stat_id
+        or int(stage.get("value", 0)) != value
+        or int(stage.get("chance_basis_points", 0)) != 10000
+    ):
+        raise RuntimeError(f"DATA V3 simple self-boost effect mismatch for {sid}: {stage}")
 
 
 def _require_audited_data_only_unique(m: dict, specs: list[dict], sid: str) -> None:
@@ -209,6 +257,13 @@ def generate_move_specs(m: dict, contact_set: set):
         # Roost's base healing is representable, but BattleEffectSpec has no
         # temporary type suppression/change effect for its Flying-type rule.
         coverage = "PARTIAL_RUNTIME"
+
+    if sid in _SIMPLE_SELF_STAT_BOOSTS:
+        stat_id, value = _SIMPLE_SELF_STAT_BOOSTS[sid]
+        _require_simple_self_stat_boost(m, specs, sid, stat_id, value)
+        # These source-verified moves are exactly one unconditional self stat
+        # stage increase and Battle Core executes that effect directly.
+        coverage = "RUNTIME_SUPPORTED"
 
     if sid in _AUDITED_DATA_ONLY_UNIQUE:
         _require_audited_data_only_unique(m, specs, sid)
