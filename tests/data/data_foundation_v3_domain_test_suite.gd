@@ -41,7 +41,7 @@ func _test_evolution_roundtrip(check_callback: Callable) -> void:
 	check_callback.call("data_v3_evolution_default_flag_roundtrip", not copy.is_default)
 	check_callback.call("data_v3_evolution_conditions_roundtrip", copy.conditions == conditions)
 	conditions["min_happiness"] = 1
-	check_callback.call("data_v3_evolution_conditions_are_independent", int(copy.conditions[0].get("min_happiness", 0)) == 220 if copy.conditions is Array else int(copy.conditions.get("min_happiness", 0)) == 220)
+	check_callback.call("data_v3_evolution_conditions_are_independent", int(copy.conditions.get("min_happiness", 0)) == 220)
 
 
 func _test_species_metadata_roundtrip(check_callback: Callable) -> void:
