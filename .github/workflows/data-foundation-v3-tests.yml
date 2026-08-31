@@ -67,6 +67,14 @@ jobs:
                       return True
               return False
 
+          def effects(specs, kind):
+              out = []
+              for spec in specs:
+                  if spec.get('kind') == kind:
+                      out.append(spec)
+                  out.extend(effects(spec.get('children', []), kind))
+              return out
+
           assert len(types) == 18
           assert len(moves) == 919
           assert types['fire']['display_name'] == 'Fuego'
@@ -89,6 +97,46 @@ jobs:
           for move_id in ('sleep_talk', 'me_first', 'mirror_move', 'nature_power'):
               assert moves[move_id]['classification'] == 'UNSUPPORTED', (
                   move_id, moves[move_id]['classification'])
+
+          # Healing semantics audit V1. Never expose an executable effect that
+          # contradicts the move's known target/condition just to increase coverage.
+          for move_id in ('heal_order', 'milk_drink', 'recover', 'slack_off', 'soft_boiled'):
+              assert moves[move_id]['classification'] == 'RUNTIME_SUPPORTED', move_id
+              heals = effects(moves[move_id]['effect_specs'], 'heal')
+              assert len(heals) == 1 and heals[0]['target'] == 'self', (move_id, heals)
+              assert heals[0]['ratio_basis_points'] == 5000, (move_id, heals)
+
+          assert moves['heal_pulse']['classification'] == 'RUNTIME_SUPPORTED'
+          heals = effects(moves['heal_pulse']['effect_specs'], 'heal')
+          assert len(heals) == 1 and heals[0]['target'] == 'opponent'
+          assert heals[0]['ratio_basis_points'] == 5000
+
+          assert moves['floral_healing']['classification'] == 'PARTIAL_RUNTIME'
+          heals = effects(moves['floral_healing']['effect_specs'], 'heal')
+          assert len(heals) == 1 and heals[0]['target'] == 'opponent'
+          assert heals[0]['ratio_basis_points'] == 5000
+
+          for move_id in ('life_dew', 'jungle_healing'):
+              assert moves[move_id]['classification'] == 'PARTIAL_RUNTIME', move_id
+              heals = effects(moves[move_id]['effect_specs'], 'heal')
+              assert len(heals) == 1 and heals[0]['target'] == 'self', (move_id, heals)
+              assert heals[0]['ratio_basis_points'] == 2500, (move_id, heals)
+          cures = effects(moves['jungle_healing']['effect_specs'], 'cure_status')
+          assert len(cures) == 1 and cures[0]['target'] == 'self', cures
+
+          for move_id in ('moonlight', 'morning_sun', 'roost', 'shore_up', 'synthesis'):
+              assert moves[move_id]['classification'] == 'PARTIAL_RUNTIME', move_id
+              heals = effects(moves[move_id]['effect_specs'], 'heal')
+              assert len(heals) == 1 and heals[0]['target'] == 'self', (move_id, heals)
+              assert heals[0]['ratio_basis_points'] == 5000, (move_id, heals)
+
+          assert moves['purify']['classification'] == 'PARTIAL_RUNTIME'
+          assert effects(moves['purify']['effect_specs'], 'heal') == []
+          cures = effects(moves['purify']['effect_specs'], 'cure_status')
+          assert len(cures) == 1 and cures[0]['target'] == 'opponent', cures
+
+          assert moves['swallow']['classification'] == 'UNSUPPORTED'
+          assert moves['swallow']['effect_specs'] == []
 
           bulba = species['bulbasaur']
           assert any(x['ability_id'] == 'chlorophyll' and x['is_hidden'] for x in bulba.get('ability_slots', []))
