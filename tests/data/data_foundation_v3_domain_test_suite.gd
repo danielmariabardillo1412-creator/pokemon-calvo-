@@ -11,6 +11,7 @@ func run(check_callback: Callable) -> void:
 	_test_stuff_cheeks_generated_semantics(check_callback)
 	_test_howl_generated_semantics(check_callback)
 	_test_coaching_generated_semantics(check_callback)
+	_test_gear_up_generated_semantics(check_callback)
 
 
 func _test_learnset_roundtrip(check_callback: Callable) -> void:
@@ -148,3 +149,14 @@ func _test_coaching_generated_semantics(check_callback: Callable) -> void:
 	check_callback.call("data_v3_coaching_target_preserved", coaching.get("target", "") == "user-and-allies")
 	check_callback.call("data_v3_coaching_is_data_only", coaching.get("classification", "") == "DATA_ONLY")
 	check_callback.call("data_v3_coaching_has_no_false_opponent_buffs", specs.is_empty())
+
+
+func _test_gear_up_generated_semantics(check_callback: Callable) -> void:
+	var gear_up := _load_raw_move("gear_up")
+	check_callback.call("data_v3_gear_up_present", not gear_up.is_empty())
+	if gear_up.is_empty():
+		return
+	var specs: Array = gear_up.get("effect_specs", [])
+	check_callback.call("data_v3_gear_up_target_preserved", gear_up.get("target", "") == "user-and-allies")
+	check_callback.call("data_v3_gear_up_is_data_only", gear_up.get("classification", "") == "DATA_ONLY")
+	check_callback.call("data_v3_gear_up_has_no_false_opponent_buffs", specs.is_empty())
