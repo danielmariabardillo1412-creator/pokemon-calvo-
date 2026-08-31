@@ -14,6 +14,8 @@ from __future__ import annotations
 
 from typing import Any
 
+import pokeapi_adapter_user_hp_cost as user_hp_cost
+
 
 _POLICIES: dict[str, dict[str, Any]] = {
     "charge": {
@@ -125,11 +127,11 @@ def _require_source_contract(move: dict, sid: str, expected_stats: dict[str, int
 
 
 def apply_user_stateful_safe(move: dict, generated: tuple):
-    """Validate and classify the four audited safe user-stateful moves."""
+    """Validate/classify safe user-stateful moves, then apply HP-cost safety audit."""
     sid = _slug(str(move.get("name", "")))
     policy = _POLICIES.get(sid)
     if policy is None:
-        return generated
+        return user_hp_cost.apply_user_hp_cost(move, generated)
 
     specs, crit_bp, contact, classification, override_count, unsupported_note = generated
     expected_stats = dict(policy["stats"])
@@ -145,7 +147,7 @@ def apply_user_stateful_safe(move: dict, generated: tuple):
             f"DATA V3 user-stateful generated stats changed for {sid}: {generated_stats}"
         )
 
-    return (
+    audited = (
         specs,
         crit_bp,
         contact,
@@ -153,3 +155,4 @@ def apply_user_stateful_safe(move: dict, generated: tuple):
         override_count,
         unsupported_note,
     )
+    return user_hp_cost.apply_user_hp_cost(move, audited)
