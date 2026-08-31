@@ -153,22 +153,26 @@ func _execute_move(
 		-1,
 		{"current_pp": slot.current_pp, "max_pp": slot.max_pp},
 	))
-	var accuracy_threshold := _ruleset.accuracy_threshold_basis_points(
-		move.accuracy,
-		actor.stat_stages.get_stage(StatStages.ACCURACY),
-		target.stat_stages.get_stage(StatStages.EVASION),
-	)
-	if not rng.roll_basis_points(accuracy_threshold):
-		events.append(BattleEvent.new(
-			BattleEvent.MOVE_MISSED,
-			state.turn,
-			actor.instance_id,
-			target.instance_id,
-			move.id,
-			0,
-			{"accuracy_basis_points": accuracy_threshold},
-		))
-		return
+	# Moves that can only target the user do not make the normal accuracy/evasion
+	# check against the opposing Pokemon. Move-specific failure conditions remain
+	# separate mechanics and must be enforced by their own effect contracts.
+	if move.target != "user":
+		var accuracy_threshold := _ruleset.accuracy_threshold_basis_points(
+			move.accuracy,
+			actor.stat_stages.get_stage(StatStages.ACCURACY),
+			target.stat_stages.get_stage(StatStages.EVASION),
+		)
+		if not rng.roll_basis_points(accuracy_threshold):
+			events.append(BattleEvent.new(
+				BattleEvent.MOVE_MISSED,
+				state.turn,
+				actor.instance_id,
+				target.instance_id,
+				move.id,
+				0,
+				{"accuracy_basis_points": accuracy_threshold},
+			))
+			return
 	var context := BattleEffectContext.new(
 		state, actor, target, move, catalog, _ruleset, rng, events
 	)
