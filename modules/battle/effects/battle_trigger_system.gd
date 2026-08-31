@@ -61,6 +61,10 @@ func conditions_met(
 		move == null or not move.makes_contact
 	):
 		return false
+	if bool(spec.conditions.get("requires_recoil", false)) and not _move_has_effect_kind(
+		move, BattleEffectSpec.RECOIL
+	):
+		return false
 	if bool(spec.conditions.get("requires_full_hp", false)) and owner.current_hp != owner.stats.max_hp:
 		return false
 	if bool(spec.conditions.get("requires_missing_hp", false)) and owner.current_hp >= owner.stats.max_hp:
@@ -88,6 +92,24 @@ func _damage_condition_matches(
 	if required_type != &"" and required_type != move.type_id:
 		return false
 	return conditions_met(spec, owner, move)
+
+
+func _move_has_effect_kind(move: MoveDefinition, wanted_kind: StringName) -> bool:
+	if move == null:
+		return false
+	for spec in move.effect_specs:
+		if _effect_spec_has_kind(spec, wanted_kind):
+			return true
+	return false
+
+
+func _effect_spec_has_kind(spec: BattleEffectSpec, wanted_kind: StringName) -> bool:
+	if spec.kind == wanted_kind:
+		return true
+	for child in spec.children:
+		if _effect_spec_has_kind(child, wanted_kind):
+			return true
+	return false
 
 
 func _emit_trigger(
