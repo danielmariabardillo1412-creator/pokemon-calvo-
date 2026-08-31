@@ -79,35 +79,44 @@ Simple self-stat boosts C:
 - Branch: `fix/data-v3-simple-self-stat-boosts-c`
 - Final HEAD: `b3cfa577e01f45d57e0d73ebe662b84665d6f48e`
 - PR #53: closed without merge.
-- CI: 18/18 SUCCESS on that exact final notebook-bearing HEAD.
+- CI: 18/18 SUCCESS.
 
-Current Silk Trap tranche:
+Silk Trap semantic fix:
 
 - Branch: `fix/data-v3-silk-trap-semantics`
-- PR #54.
-- Parent: certified HEAD `b3cfa577e01f45d57e0d73ebe662b84665d6f48e`.
-- Engineering SHA before notebook synchronization: `0bf50ab5e6eb17d4b8d768d38fa274b97387741b`.
-- That engineering SHA passed 18/18 workflows, including the new independent Silk Trap dataset assertion and Godot global.
-- Notebook synchronization moves the branch tip; **the exact final certified HEAD must be read from PR #54 / branch tip after its second 18/18 run before closure**. GitHub is authoritative.
+- Final HEAD: `c1f5e55c7d1d8acc991b3a6ddde906f10930bb67`
+- PR #54: closed without merge.
+- CI: 18/18 SUCCESS on that exact final notebook-bearing HEAD.
+
+Current Aromatic Mist tranche:
+
+- Branch: `fix/data-v3-aromatic-mist-semantics`
+- PR #55.
+- Parent: certified HEAD `c1f5e55c7d1d8acc991b3a6ddde906f10930bb67`.
+- Engineering SHA before notebook synchronization: `7ae7d5c8f20c555e03411e3baacdbd2de1084f1c`.
+- That engineering SHA passed 18/18 workflows, including the independent Aromatic Mist dataset assertion and Godot global.
+- Notebook synchronization moves the branch tip; **the exact final certified HEAD must be read from PR #55 / branch tip after its second 18/18 run before closure**. GitHub is authoritative.
 
 The active work is **Move Effects V3 semantic audit**, not trainer AI.
 
-## Current move coverage from PR #54 engineering artifact
+## Current move coverage from PR #55 engineering artifact
 
-Exact generated artifact counts from SHA `0bf50ab5e6eb17d4b8d768d38fa274b97387741b`:
+Exact generated artifact counts from SHA `7ae7d5c8f20c555e03411e3baacdbd2de1084f1c`:
 
 - `RUNTIME_SUPPORTED`: 555
 - `PARTIAL_RUNTIME`: 66
 - `DATA_ONLY`: 286
 - `UNSUPPORTED`: 12
 
-Among the remaining `DATA_ONLY` records, 65 still have generated `effect_specs` and therefore deserve special scrutiny:
+Among the remaining `DATA_ONLY` records, 64 still have generated `effect_specs` and therefore deserve special scrutiny:
 
-- 62 stat-change cases.
+- 61 records contain stat-change effects (109 nested/top-level `modify_stat_stage` specs in total across them).
 - 2 heal-related cases: `Purify`, `Swallow`.
 - 1 multi-hit case: `Beat Up`.
 
-`Silk Trap` remains `DATA_ONLY` but now has **empty `effect_specs`**, because the previous generic `SELF Speed -1` effect was semantically false. Its real protection + contact-triggered attacker Speed drop is not representable by current Battle Core.
+`Silk Trap` remains `DATA_ONLY` with empty `effect_specs`; its previous generic `SELF Speed -1` was false because the real Speed drop is contact-triggered on the attacker.
+
+`Aromatic Mist` remains `DATA_ONLY` with empty `effect_specs`; its previous generic `SELF Special Defense +1` was false because the immutable source explicitly targets a selected ally. Current Battle Core has no ally target.
 
 This count is a prioritization signal, **not** proof that all other DATA_ONLY moves are correct. The audit must continue by semantic family.
 
@@ -128,7 +137,7 @@ This count is a prioritization signal, **not** proof that all other DATA_ONLY mo
 - FIXED_DAMAGE
 - MULTI_HIT
 
-Targets currently available to the effect model/importer are SELF and OPPONENT. Team/side targeting, delayed effects, weather-conditioned heal ratios, temporary type suppression, protection/contact-response triggers, and several unique move mechanics are not generally representable.
+Targets currently available to the effect model/importer are SELF and OPPONENT. Team/side/ally targeting, delayed effects, weather-conditioned heal ratios, temporary type suppression, protection/contact-response triggers, and several unique move mechanics are not generally representable.
 
 `StatStages` supports Attack, Defense, Special Attack, Special Defense, Speed, Accuracy, and Evasion with normal stage clamping.
 
