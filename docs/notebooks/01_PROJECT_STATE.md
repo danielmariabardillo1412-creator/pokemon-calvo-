@@ -2,20 +2,21 @@
 
 ## Purpose
 
-High-level state needed to resume engineering work safely. This is a continuity document, not a replacement for formal architecture documentation.
+Fast, durable context recovery for engineering work. This notebook records the current certified chain, DATA V3 authority, runtime constraints, and live metrics. Detailed Move Effects history lives in `02_DATA_V3_MOVE_EFFECTS_AUDIT.md`; the immediate continuation point lives in `04_NEXT_STEPS.md`.
 
-## Repository and workflow
+## Repository and certification policy
 
 - Repository: `danielmariabardillo1412-creator/pokemon-calvo-`
 - Engine: Godot 4.7.
-- Working policy: certified snapshots are commonly kept as branches/closed PRs **without merge**. Do not assume a conventional merge-to-main workflow.
-- A new tranche branches from the latest certified HEAD.
-- Certification is performed on the exact final HEAD; do not certify one SHA and then add code afterward.
-- Normal regression matrix: 18 workflows.
+- Certified snapshots are commonly retained as branches / closed PRs **without merge**.
+- Every new tranche branches from the latest exact certified HEAD.
+- A tranche is not certified until **all 18 normal workflows are green on the same final SHA**.
+- If notebooks are updated after engineering CI, that creates a new SHA and therefore requires a second 18/18 run.
+- If chat/notebooks disagree with GitHub, GitHub commits, PR state, CI, and immutable source data are authoritative.
 
-## DATA FOUNDATION V3 canonical source
+## DATA FOUNDATION V3 authority
 
-Immutable source snapshot:
+Immutable PokéAPI snapshot:
 
 - Branch: `data/pokeapi-v2-snapshot`
 - Source commit: `2f218ec3765c01c894a42bbbd074f15ddf3f32d1`
@@ -28,137 +29,113 @@ Pipeline:
 
 `data/api/v2 + data/schema/v2`
 → `tools/pokeapi_adapter_v3.py`
+→ compatibility corrections in `tools/pokeapi_adapter.py`
 → `data/raw/pokemon_api.json`
 → Godot `DataImporter`
 → `data/normalized/pokemon_api.json`
 → runtime definitions.
 
-V3 reuses mature legacy move-conversion helpers through `tools/pokeapi_adapter.py`, while the obsolete V2 adapter remains archived for provenance at `tools/archive/pokeapi_adapter_v2_legacy.py`.
+The obsolete V2 adapter remains archived for provenance at `tools/archive/pokeapi_adapter_v2_legacy.py` and must not be edited for current fixes.
 
-## Certified V3 foundation facts
+## Certified structural V3 facts
 
-The original V3 foundation established:
+- 1,025 base species
+- 326 forms
+- 18 runtime battle types
+- 919 runtime move records
+- 373 abilities
+- 2,222 items
+- 61,102 learnset entries
+- 554 evolution records
+- 0 broken references
+- 0 rejected definitions
+- 18 XD Shadow moves explicitly excluded instead of remapped
 
-- 1,025 base species.
-- 326 forms.
-- 18 runtime battle types.
-- 919 runtime move records.
-- 373 abilities.
-- 2,222 items.
-- 61,102 learnset entries.
-- 554 evolution records.
-- 0 broken references.
-- 0 rejected definitions.
-- 18 XD Shadow moves explicitly excluded rather than remapped to standard types.
-
-Learnsets are version-aware per species. Species/forms use PokéAPI default-variety semantics rather than naïve hyphen filtering. Ability slot/hidden metadata and evolution provenance are preserved.
+Learnsets are version-aware per species; species/forms use PokéAPI default-variety semantics; ability slot/hidden metadata and evolution provenance are preserved.
 
 ## Repository organization baseline
 
-Repository organization V1 was certified on branch `chore/repository-organization-v1`, final HEAD `1247c4029b8001abd445db2f4155012962c703ee`, PR #33 closed without merge.
+Repository organization V1:
 
-Key organized test roots:
+- Branch: `chore/repository-organization-v1`
+- HEAD: `1247c4029b8001abd445db2f4155012962c703ee`
+- PR #33 closed without merge
+- 18/18 workflows SUCCESS
 
-- `tests/battle/`
-- `tests/data/`
-- `tests/gameplay/`
-- `tests/trainer_ai/`
-- `tests/test_runner.gd` is the sole global root runner.
+Organized test roots: `tests/battle/`, `tests/data/`, `tests/gameplay/`, `tests/trainer_ai/`; `tests/test_runner.gd` remains the sole global root runner.
 
-## Current certification chain
+## Current certified chain
 
-Notebook baseline:
+Persistent notebooks baseline:
 
-- Branch: `docs/project-notebooks-v1`
-- HEAD: `7ab2c1be78fab18309c6c4f4de9b2cf02ed96b46`
-- PR #52: closed without merge.
-- CI: 18/18 SUCCESS.
+- PR #52 — `docs/project-notebooks-v1`
+- HEAD `7ab2c1be78fab18309c6c4f4de9b2cf02ed96b46`
+- 18/18 SUCCESS, closed without merge
 
-Simple self-stat boosts C:
+Recent Move Effects V3 chain:
 
-- Branch: `fix/data-v3-simple-self-stat-boosts-c`
-- Final HEAD: `b3cfa577e01f45d57e0d73ebe662b84665d6f48e`
-- PR #53: closed without merge.
-- CI: 18/18 SUCCESS.
+- PR #53 — simple self stat boosts C — final `b3cfa577e01f45d57e0d73ebe662b84665d6f48e` — 18/18
+- PR #54 — Silk Trap target/trigger bug — final `c1f5e55c7d1d8acc991b3a6ddde906f10930bb67` — 18/18
+- PR #55 — Aromatic Mist ally-target bug — final `844efde0eed27e1a5ca8790ae95a183fba6ba98c` — 18/18
+- PR #56 — Stuff Cheeks held-Berry prerequisite bug — final `1c4217d5ebc6727982ef5d7b5b5b0667cea6c5b6` — 18/18
 
-Silk Trap semantic fix:
+Current tranche:
 
-- Branch: `fix/data-v3-silk-trap-semantics`
-- Final HEAD: `c1f5e55c7d1d8acc991b3a6ddde906f10930bb67`
-- PR #54: closed without merge.
-- CI: 18/18 SUCCESS on that exact final notebook-bearing HEAD.
+- PR #57 — `fix/data-v3-howl-target-semantics`
+- Parent: certified #56 final `1c4217d5ebc6727982ef5d7b5b5b0667cea6c5b6`
+- Engineering SHA before notebook synchronization: `fc118cb3a06d3f1724b65aac5ba5c8893d0ea83b`
+- Engineering SHA passed 18/18 workflows, including the independent Howl regenerated-dataset assertion and Godot global.
+- Notebook synchronization moves the branch tip. **The final exact PR #57 HEAD must pass 18/18 again before closure without merge.**
 
-Aromatic Mist semantic fix:
+Active workstream: **Move Effects V3 semantic audit**, not trainer AI/archetypes.
 
-- Branch: `fix/data-v3-aromatic-mist-semantics`
-- Final HEAD: `844efde0eed27e1a5ca8790ae95a183fba6ba98c`
-- PR #55: closed without merge.
-- CI: 18/18 SUCCESS on that exact final notebook-bearing HEAD.
+## Exact move coverage from PR #57 engineering artifact
 
-Current Stuff Cheeks tranche:
-
-- Branch: `fix/data-v3-stuff-cheeks-semantics`
-- PR #56.
-- Parent: certified HEAD `844efde0eed27e1a5ca8790ae95a183fba6ba98c`.
-- Engineering SHA before notebook synchronization: `9600c74db8d45c590f47ad3be7baff439757964e`.
-- That engineering SHA passed 18/18 workflows, including the independent Stuff Cheeks regenerated-dataset assertion and Godot global.
-- Notebook synchronization moves the branch tip; **the exact final certified HEAD must be read from PR #56 / branch tip after its second 18/18 run before closure**. GitHub is authoritative.
-
-The active work is **Move Effects V3 semantic audit**, not trainer AI.
-
-## Current move coverage from PR #56 engineering artifact
-
-Exact generated artifact counts from SHA `9600c74db8d45c590f47ad3be7baff439757964e`:
+Artifact generated from `fc118cb3a06d3f1724b65aac5ba5c8893d0ea83b`:
 
 - `RUNTIME_SUPPORTED`: 555
-- `PARTIAL_RUNTIME`: 66
-- `DATA_ONLY`: 286
+- `PARTIAL_RUNTIME`: 67
+- `DATA_ONLY`: 285
 - `UNSUPPORTED`: 12
 
-Among the remaining `DATA_ONLY` records, 63 still have generated `effect_specs` and therefore deserve special scrutiny:
+Remaining `DATA_ONLY` records with non-empty `effect_specs`: **62**.
 
-- 60 records contain stat-change effects (108 top-level `modify_stat_stage` specs across those records).
-- 2 heal-related cases: `Purify`, `Swallow`.
-- 1 multi-hit case: `Beat Up`.
+Known breakdown after Howl leaves DATA_ONLY:
 
-`Silk Trap` remains `DATA_ONLY` with empty `effect_specs`; its previous generic `SELF Speed -1` was false because the real Speed drop is contact-triggered on the attacker.
+- 59 stat-change DATA_ONLY records
+- 2 heal cases: `Purify`, `Swallow`
+- 1 multi-hit case: `Beat Up`
 
-`Aromatic Mist` remains `DATA_ONLY` with empty `effect_specs`; its previous generic `SELF Special Defense +1` was false because the immutable source explicitly targets a selected ally. Current Battle Core has no ally target.
+Important recently neutralized/corrected behavior:
 
-`Stuff Cheeks` remains `DATA_ONLY` with empty `effect_specs`; its previous generic `SELF Defense +2` was false because the move cannot be used without a held Berry and must consume that Berry before the Defense boost. Current move effects cannot represent that held-item prerequisite/consumption transaction faithfully.
+- `Silk Trap`: DATA_ONLY, effect-free; previous `SELF Speed -1` was false because the real debuff is contact-triggered on the attacker.
+- `Aromatic Mist`: DATA_ONLY, effect-free; previous `SELF SpDef +1` targeted the wrong creature because source target is ally.
+- `Stuff Cheeks`: DATA_ONLY, effect-free; previous unconditional `SELF Defense +2` ignored the required held-Berry consume transaction.
+- `Howl`: now `PARTIAL_RUNTIME`; modern source target is `user-and-allies`, executable subset is exactly `SELF Attack +1`, ally subset remains missing. Previous generic output incorrectly buffed OPPONENT.
 
-This count is a prioritization signal, **not** proof that all other DATA_ONLY moves are correct. The audit must continue by semantic family.
+## Runtime constraints relevant to Move Effects audit
 
-## Battle effect model relevant to the audit
+`BattleEffectSpec` / importer currently support the core effect kinds used here: DAMAGE, HEAL, RECOIL, DRAIN, INFLICT_STATUS, CURE_STATUS, MODIFY_STAT_STAGE, CHANCE, FLINCH, FIXED_DAMAGE, MULTI_HIT (REVIVE constant exists but importer/runtime support must be checked before use).
 
-`BattleEffectSpec` currently supports:
+Effect targets available today are effectively **SELF and OPPONENT**. The model does not generally represent:
 
-- DAMAGE
-- HEAL
-- REVIVE constant (note importer support must be checked before use)
-- RECOIL
-- DRAIN
-- INFLICT_STATUS
-- CURE_STATUS
-- MODIFY_STAT_STAGE
-- CHANCE
-- FLINCH
-- FIXED_DAMAGE
-- MULTI_HIT
-
-Targets currently available to the effect model/importer are SELF and OPPONENT. Team/side/ally targeting, delayed effects, weather-conditioned heal ratios, temporary type suppression, protection/contact-response triggers, held-item prerequisites/consumption transactions, and several unique move mechanics are not generally representable.
+- ally/team/side targeting
+- delayed persisted effects
+- weather-conditioned heal ratios
+- temporary type suppression
+- protection/contact-response triggers
+- held-item prerequisites/consumption transactions
+- many unique move-specific state machines
 
 `StatStages` supports Attack, Defense, Special Attack, Special Defense, Speed, Accuracy, and Evasion with normal stage clamping.
 
-## Core interpretation rule
+Crucial runtime fact: **`effect_specs` execute regardless of the move's coverage label.** Therefore `DATA_ONLY` is not a safety barrier by itself. A false generated effect must be removed or corrected.
 
-A source record existing in PokéAPI does **not** imply the runtime implements its mechanics.
+## Coverage meaning
 
-Coverage labels must mean what they say:
+- `RUNTIME_SUPPORTED`: audited battle semantics represented faithfully.
+- `PARTIAL_RUNTIME`: a faithful subset executes; known mechanics are absent.
+- `DATA_ONLY`: data preserved; no faithful executable behavior should be implied.
+- `UNSUPPORTED`: explicitly outside the current contract.
 
-- `RUNTIME_SUPPORTED`: the runtime representation is faithful for the audited battle semantics.
-- `PARTIAL_RUNTIME`: a real subset executes, but known mechanics remain unrepresented.
-- `DATA_ONLY`: preserved as data but no faithful runtime effect is claimed.
-- `UNSUPPORTED`: explicitly unsupported by the current contract.
-
-Never promote coverage simply because a generic `effect_spec` exists. If a generic effect is demonstrably false, remove/neutralize it even when the coverage label was already DATA_ONLY, because runtime execution is driven by `effect_specs` rather than coverage alone.
+Never promote coverage merely because a generic `effect_spec` exists. Never leave a known-false executable effect merely because the label says DATA_ONLY.
