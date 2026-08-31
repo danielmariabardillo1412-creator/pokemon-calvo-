@@ -1,132 +1,132 @@
 # DATA V3 / MOVE EFFECTS V3 AUDIT NOTEBOOK
 
-## Purpose / invariant
-DATA FOUNDATION V3 solved structural provenance/import problems, but generic PokéAPI metadata can still create semantically false runtime effects.
-
-> Every executable effect must be faithful. If Battle Core cannot represent a mechanic, preserve only a provably faithful subset (`PARTIAL_RUNTIME`) or remove executable effects (`DATA_ONLY`). Never retain a plausible but false effect.
-
-Critical runtime fact: coverage classification is not an execution gate; `effect_specs` are consumed directly.
+## Invariant
+DATA V3 structural correctness is not enough: every executable `effect_spec` must be semantically faithful. If Battle Core cannot represent a mechanic, preserve only a provably faithful subset (`PARTIAL_RUNTIME`) or remove executable effects (`DATA_ONLY`). Coverage labels do not gate execution.
 
 ## Canonical source
-- immutable branch `data/pokeapi-v2-snapshot`
+- immutable `data/pokeapi-v2-snapshot`
 - commit `2f218ec3765c01c894a42bbbd074f15ddf3f32d1`
-- paths `data/api/v2`, `data/schema/v2`
-- current corrections live in `tools/pokeapi_adapter.py`
-- archived V2 remains untouched at `tools/archive/pokeapi_adapter_v2_legacy.py`
+- `data/api/v2` + `data/schema/v2`
+- current semantic corrections in `tools/pokeapi_adapter.py`
+- archived V2 is provenance-only and must remain untouched.
 
-## Certified correction chain
-Pre-audit:
-- #34 contact override path — `cefd875cb227035c018400fac45106a09a4241a9`
-- #37 unsupported-ID normalization / Astonish correction — `1a54395cfedf0c8b63af3631a1560b8e38ab5ca5`
+## Certified history summary
+Move Effects V3 has already certified healing targets/self heals/weather heals/Roost/Rest/Wish/Strength Sap, simple SELF stat boosts, and false-target/resource cases including Silk Trap, Aromatic Mist, Stuff Cheeks, Howl, Coaching, Gear Up and Magnetic Flux.
 
-Move Effects V3:
-- #42 healing targets — `cf60b8cc7431643219e260ad90d8dcb61ddad4e5`
-- #43 Recover / Soft-Boiled / Milk Drink / Slack Off → RUNTIME_SUPPORTED
-- #44 Morning Sun / Synthesis / Moonlight / Shore Up → PARTIAL_RUNTIME for weather ratios
-- #45 Roost → PARTIAL_RUNTIME (temporary Flying suppression missing)
-- #46 Heal Order → RUNTIME_SUPPORTED
-- #47 Rest → DATA_ONLY effect-free
-- #48 Wish → DATA_ONLY effect-free
-- #49 Strength Sap → PARTIAL_RUNTIME
-- #50 simple self boosts A
-- #51 simple self boosts B
-- #52 persistent notebooks baseline — `7ab2c1be78fab18309c6c4f4de9b2cf02ed96b46`
-- #53 simple self boosts C — `b3cfa577e01f45d57e0d73ebe662b84665d6f48e`
-- #54 Silk Trap — `c1f5e55c7d1d8acc991b3a6ddde906f10930bb67`
-- #55 Aromatic Mist — `844efde0eed27e1a5ca8790ae95a183fba6ba98c`
-- #56 Stuff Cheeks — `1c4217d5ebc6727982ef5d7b5b5b0667cea6c5b6`
-- #57 Howl — `53e20600d372d44bc21eb145f598448a41828e5d`
-- #58 Coaching — `3c4ac4d772a5869b45de592be7dd7f4d9b2a389b`
-- #59 Gear Up — `ef7dd6a41b1cf4bccacf0a8d5098a755bb9fd3e9`
+Recent exact certified heads:
 - #60 Magnetic Flux — `a5b56a0ba3a1efa81ac57be63b2813c19f2962a7`
+- #61 pure SELF stat packages A — `623930ca0b98b00099288bcf542e7e0a922ac180`
+Both 18/18 and closed without merge.
 
-All certified entries above passed 18/18 on exact final HEAD and were closed without merge.
+## PR #62 — pure opponent stat drops A (CURRENT)
+Branch `fix/data-v3-simple-opponent-stat-drops-a`.
+Parent: certified #61 final `623930ca0b98b00099288bcf542e7e0a922ac180`.
+Engineering SHA before notebook sync: `e384cb3a5b19a158e11da4925e7c2c23c929d9ca`.
+Engineering SHA: **18/18 SUCCESS**.
 
-## PR #61 — pure SELF stat packages A (CURRENT)
-Branch `fix/data-v3-simple-self-stat-packages-a`.
-Parent: certified #60 final `a5b56a0ba3a1efa81ac57be63b2813c19f2962a7`.
-Engineering SHA before notebook sync: `f3927a99d4d21d711dec77d68e7526757691c47f`.
-Engineering SHA passed **18/18**, including DATA V3, independent ten-move package assertion, and Godot global.
+### Source-audited family
+The following 17 moves were inspected against immutable source before batching. Their current battle contract is exactly an unconditional selected-target stat package; no ailment/heal/drain/flinch/effect-history/switch/faint/field/type/resource mechanic was present in the audited source contract:
 
-### Audited moves
-Immutable source was checked individually before batching. Each of these has `target=user`, status category, no ailment/heal/drain/flinch/cost/condition/field/switch/delayed mechanic in the audited source contract, and exactly the listed stat package:
+- Baby-Doll Eyes: Attack -1
+- Charm: Attack -2
+- Confide: SpAtk -1
+- Eerie Impulse: SpAtk -2
+- Fake Tears: SpDef -2
+- Feather Dance: Attack -2
+- Flash: Accuracy -1
+- Kinesis: Accuracy -1
+- Metal Sound: SpDef -2
+- Noble Roar: Attack -1 / SpAtk -1
+- Play Nice: Attack -1
+- Sand Attack: Accuracy -1
+- Scary Face: Speed -2
+- Screech: Defense -2
+- Smokescreen: Accuracy -1
+- Tearful Look: Attack -1 / SpAtk -1
+- Tickle: Attack -1 / Defense -1
 
-- Bulk Up: Attack +1, Defense +1
-- Calm Mind: Special Attack +1, Special Defense +1
-- Coil: Attack +1, Defense +1, Accuracy +1
-- Cosmic Power: Defense +1, Special Defense +1
-- Defend Order: Defense +1, Special Defense +1
-- Dragon Dance: Attack +1, Speed +1
-- Hone Claws: Attack +1, Accuracy +1
-- Quiver Dance: Special Attack +1, Special Defense +1, Speed +1
-- Shift Gear: Attack +1, Speed +2
-- Work Up: Attack +1, Special Attack +1
+Important metadata detail: PokéAPI uses `stat_chance=100` for Confide, Play Nice, Noble Roar and Tearful Look, while the other members use `0`. The adapter records the exact expected source value per move rather than pretending the family has one common metadata value.
 
-The legacy generator already produced the correct complete SELF `modify_stat_stage` effects. PR #61 deliberately does **not** rewrite those specs. It adds an explicit `_PURE_SELF_STAT_PACKAGES` allowlist plus fail-fast validation of:
-- target/category/ailment/metadata
+### Adapter contract
+`_PURE_OPPONENT_STAT_PACKAGES` stores the exact package + exact source stat chance for the 17 names only.
+`_require_pure_opponent_stat_package` fail-fast checks:
+- source target `selected-pokemon`
+- status damage class
+- `net-good-stats`, ailment none
+- exact source `stat_chance`
+- `effect_changes=[]`
+- no healing/drain/flinch/ailment chance
 - exact source stat dictionary
 - exact generated effect count
-- every effect kind/SELF target/100% chance
+- every generated effect is `modify_stat_stage`, target `opponent`, 10000 bp
 - exact generated stat dictionary
 
-Only after all checks pass is coverage changed to `RUNTIME_SUPPORTED`.
+The legacy generator already emitted correct effects; no effect rewrite occurs. Coverage changes to `RUNTIME_SUPPORTED` only after all checks pass.
 
-Independent Godot DATA V3 test loops all ten regenerated records and verifies presence, source target, `RUNTIME_SUPPORTED`, effect count, SELF/stat-stage shape, 100% chance, and exact package.
+Independent Godot DATA V3 tests loop all 17 regenerated records and verify target, classification, effect count, OPPONENT shape and exact package.
 
 ### Exact engineering artifact
-- `RUNTIME_SUPPORTED`: **565**
+- `RUNTIME_SUPPORTED`: **582**
 - `PARTIAL_RUNTIME`: **67**
-- `DATA_ONLY`: **275**
+- `DATA_ONLY`: **258**
 - `UNSUPPORTED`: **12**
-- DATA_ONLY with non-empty specs: **49**
-- breakdown: **46 stat-change** + `Purify` + `Swallow` + `Beat Up`
+- DATA_ONLY with specs: **32**
+- remaining stat-change DATA_ONLY: **29**
+- non-stat with specs: `Beat Up`, `Purify`, `Swallow`
 
-Remaining stat-change target distribution:
-- 23 `selected-pokemon`
-- 13 `user`
-- 8 `all-opponents`
-- 2 `all-pokemon`
+Remaining stat targets:
+- 13 user
+- 8 all-opponents
+- 6 selected-pokemon
+- 2 all-pokemon
 
-Notebook synchronization moves the SHA. #61 requires a second exact-head 18/18 before closure without merge.
+Notebook sync moves the SHA. #62 must pass a second exact-head 18/18 before closure without merge.
 
-## Remaining 46 stat-change DATA_ONLY records
+## Remaining selected-pokemon special cases
+Only these six remain:
+- `decorate`
+- `defog`
+- `memento`
+- `parting_shot`
+- `spicy_extract`
+- `tar_shot`
 
-### Remaining user-target cases — all require separate semantic treatment
-`Autotomize`, `Charge`, `Clangorous Soul`, `Defense Curl`, `Extreme Evoboost`, `Fillet Away`, `Geomancy`, `Growth`, `Minimize`, `No Retreat`, `Shell Smash`, `Stockpile`, `Tidy Up`.
+They were intentionally excluded from #62 because their semantics are not the simple drop family. Audit separately/small groups. Useful hypotheses to verify, not assumptions:
+- Decorate: positive stat package on selected target; target flexibility may matter.
+- Spicy Extract: mixed positive/negative stat package may be fully representable.
+- Defog: stat drop plus field/hazard/screen cleanup.
+- Memento: stat drops plus user faint.
+- Parting Shot: stat drops plus forced user switch.
+- Tar Shot: Speed drop plus Fire-damage/type-state interaction.
 
-These are deliberately excluded from the clean package batch because one or more carries extra state/cost/field/version mechanics: weight change, Electric move charging, HP cost, Rollout interaction, Z-Move provenance, two-turn charge, sun scaling, Minimize-specific interactions, switching lock, Stockpile counter, hazard/substitute cleanup, etc. Do not mass-promote them.
+## Other remaining families
+### User — 13 conditional/stateful
+`autotomize`, `charge`, `clangorous_soul`, `defense_curl`, `extreme_evoboost`, `fillet_away`, `geomancy`, `growth`, `minimize`, `no_retreat`, `shell_smash`, `stockpile`, `tidy_up`.
+Do not mass-promote.
 
-### Selected-pokemon candidates — next likely batching area
-23 records remain. Known names include:
-`baby_doll_eyes`, `charm`, `confide`, `decorate`, `defog`, `eerie_impulse`, `fake_tears`, `feather_dance`, `flash`, `kinesis`, `memento`, `metal_sound`, `noble_roar`, `parting_shot`, `play_nice`, `sand_attack`, `scary_face`, `screech`, `smokescreen`, `spicy_extract`, `tar_shot`, `tearful_look`, `tickle`.
+### All-opponents — 8
+`captivate`, `cotton_spore`, `growl`, `leer`, `string_shot`, `sweet_scent`, `tail_whip`, `venom_drench`.
+Conditions such as gender or poisoned-only must be preserved.
 
-Do not mass-promote. Some may be exact opponent stat drops; others carry extra mechanics or even positive ally-target semantics (`decorate`). Regroup and verify source before editing.
+### All-pokemon — 2
+`flower_shield`, `rototiller`; current single-opponent target model likely cannot represent all-Pokémon/type predicates fully.
 
-### All-opponents / all-pokemon
-- 8 all-opponents cases; conditions such as gender/poisoned-only matter.
-- 2 all-pokemon cases; current SELF/OPPONENT model cannot generally express all-Pokémon + species/type predicates faithfully.
-
-### Non-stat DATA_ONLY with specs
-- `Purify` — heal/status interaction
-- `Swallow` — Stockpile-dependent heal
-- `Beat Up` — party-dependent multi-hit
-
-## Battle Core limits
-Effect targets effectively SELF/OPPONENT only. Missing/general features include ally/team/side targets, ability-filtered recipients, delayed effects, weather ratios, temporary type effects, protection/contact triggers, held-item transactions, and move-specific state machines.
+### Non-stat — 3
+`Purify`, `Swallow`, `Beat Up` require separate semantic audits.
 
 ## Audit protocol
-1. Inspect immutable source semantics.
-2. Inspect exact latest certified generated record.
-3. Confirm what Battle Core can represent.
+1. Inspect immutable source.
+2. Inspect exact generated artifact.
+3. Determine representable semantics in current Battle Core.
 4. Choose coverage from semantics, not convenience.
-5. Add fail-fast adapter assertions.
-6. Add independent output assertion when shape/target/classification changes.
-7. Batch only after proving source contracts are homogeneous.
-8. Run focal DATA V3.
-9. Require 18/18 engineering SHA.
-10. Measure exact artifact.
+5. Add exact fail-fast adapter contract.
+6. Add independent regenerated-output assertion.
+7. Batch only genuinely homogeneous source contracts.
+8. DATA V3 focal.
+9. 18/18 engineering SHA.
+10. Measure artifact.
 11. Sync notebooks.
-12. Require 18/18 final notebook-bearing SHA.
-13. Close PR without merge.
+12. 18/18 final HEAD.
+13. Close without merge.
 
-Stop on any failure and fix root cause before continuing.
+Stop on any failure; fix root cause before another family.
