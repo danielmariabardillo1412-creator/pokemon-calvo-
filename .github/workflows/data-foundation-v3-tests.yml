@@ -170,6 +170,16 @@ jobs:
           assert rest['power'] == 0
           assert rest['effect_specs'] == []
 
+          # Move Effects V3 — Wish is intentionally data-only. Its heal occurs at
+          # the end of the following turn and follows the user's side through a
+          # switch; BattleState/BattleEffectSpec have no persisted delayed-effect
+          # mechanism, so an immediate HEAL would be semantically false.
+          wish = moves['wish']
+          assert wish['target'] == 'user'
+          assert wish['classification'] == 'DATA_ONLY'
+          assert wish['power'] == 0
+          assert wish['effect_specs'] == []
+
           bulba = species['bulbasaur']
           assert any(x['ability_id'] == 'chlorophyll' and x['is_hidden'] for x in bulba.get('ability_slots', []))
           exact = set()
