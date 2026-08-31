@@ -29,6 +29,7 @@ from typing import Any, Iterable
 import pokeapi_adapter as legacy
 import pokeapi_adapter_all_opponents as all_opponents
 import pokeapi_adapter_selected_stateful as selected_stateful
+import pokeapi_ability_runtime_contracts as ability_runtime_contracts
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_SOURCE = ROOT / "data" / "api" / "v2"
@@ -349,13 +350,14 @@ def build_abilities(source: Path) -> list[dict]:
     for entry_id in list_ids(source, "ability"):
         ability = load_ep(source, "ability", entry_id)
         sid = slug(str(ability.get("name", "")))
+        classification = ability_runtime_contracts.classification_for(ability)
         out.append({
             "id": sid,
             "display_name": localized_name(ability, ability.get("name", sid)),
             "description": localized_effect(ability.get("effect_entries")),
             "effect_id": sid,
             "effect_summary": localized_effect(ability.get("effect_entries")),
-            "classification": "DATA_ONLY",
+            "classification": classification,
         })
     out.sort(key=lambda x: x["id"])
     return out
@@ -541,6 +543,10 @@ def audit_dataset(raw: dict, forms: list[dict], anomalies: list[dict]) -> dict:
     types = {t["id"]: t for t in raw.get("types", [])}
     moves = {m["id"]: m for m in raw.get("moves", [])}
     abilities = {a["id"]: a for a in raw.get("abilities", [])}
+    ability_classification_counts = Counter(
+        str(a.get("classification", ability_runtime_contracts.DATA_ONLY))
+        for a in abilities.values()
+    )
 
     learnset_anomalies: list[dict] = []
     for sid, sp in species.items():
@@ -599,6 +605,10 @@ def audit_dataset(raw: dict, forms: list[dict], anomalies: list[dict]) -> dict:
                 "reason": reason,
             })
 
+    audited_ability_ids_present = all(
+        sid in abilities for sid in ability_runtime_contracts.audited_ids()
+    )
+
     return {
         "model": "pokeapi_snapshot_canonical_import_v3",
         "species_total": len(species),
@@ -606,6 +616,7 @@ def audit_dataset(raw: dict, forms: list[dict], anomalies: list[dict]) -> dict:
         "types_total": len(types),
         "moves_total": len(moves),
         "abilities_total": len(abilities),
+        "ability_classification_counts": dict(sorted(ability_classification_counts.items())),
         "broken_references": broken,
         "missing_standard_types": [t for t in STANDARD_TYPES if t not in types],
         "missing_hyphenated_base_species": missing_hyphen_species,
@@ -620,6 +631,7 @@ def audit_dataset(raw: dict, forms: list[dict], anomalies: list[dict]) -> dict:
             "all_default_species_use_mainline_learnsets": not default_selection_fallbacks,
             "gengar_single_version_group": len(sample.get("gengar", {}).get("version_groups", [])) <= 1,
             "pinsir_single_version_group": len(sample.get("pinsir", {}).get("version_groups", [])) <= 1,
+            "audited_ability_ids_present": audited_ability_ids_present,
         },
     }
 
@@ -631,6 +643,11 @@ def build(source: Path) -> tuple[dict, dict, dict, dict, dict]:
     types = build_types(source)
     moves, move_classes, before_classes = build_moves(source)
     abilities = build_abilities(source)
+    ability_classes: dict[str, list[str]] = defaultdict(list)
+    for ability in abilities:
+        ability_classes[str(ability.get("classification", ability_runtime_contracts.DATA_ONLY))].append(
+            str(ability.get("id", ""))
+        )
     items = build_items(source)
     statuses = preserve_project_statuses()
     pokemon_by_name = pokemon_index(source, version_ids)
@@ -674,16 +691,25 @@ def build(source: Path) -> tuple[dict, dict, dict, dict, dict]:
     unsupported = {
         "summary": {
             "moves": {k: len(v) for k, v in move_classes.items()},
-            "abilities": {"DATA_READY": len(abilities), "RUNTIME_EFFECTS_PARTIAL": len(abilities)},
+            "abilities": {
+                "DATA_READY": len(abilities),
+                "RUNTIME_EFFECTS_PARTIAL": len(abilities),
+                "RUNTIME_SUPPORTED": len(ability_classes.get(ability_runtime_contracts.RUNTIME_SUPPORTED, [])),
+                "PARTIAL_RUNTIME": len(ability_classes.get(ability_runtime_contracts.PARTIAL_RUNTIME, [])),
+                "DATA_ONLY": len(ability_classes.get(ability_runtime_contracts.DATA_ONLY, [])),
+            },
             "items": {"DATA_READY": len(items), "RUNTIME_EFFECTS_PARTIAL": len(items)},
             "evolutions": {"SOURCE_RECORDS_PRESERVED": sum(len(s.get("evolutions", [])) for s in species)},
         },
         "moves": move_classes,
+        "ability_runtime_classification": {
+            key: sorted(value) for key, value in sorted(ability_classes.items())
+        },
         "runtime_supported_before": before_classes,
         "notes": [
             "Non-standard source move types (for example XD Shadow moves) are retained only in the immutable snapshot and explicitly excluded from runtime canonical moves.",
             "Evolution conditions are preserved even where runtime execution is not implemented yet.",
-            "Ability slot/hidden metadata is preserved on species; ability runtime coverage remains explicit and partial.",
+            "Ability slot/hidden metadata is preserved on species; ability runtime coverage is source-audited explicitly. Unlisted abilities remain DATA_ONLY until audited.",
             "Learnset version-group is selected before canonicalization; cross-generation unions and side-game fallbacks are forbidden.",
         ],
     }
@@ -714,6 +740,7 @@ def main() -> int:
         audit["species_total"], audit["forms_total"], audit["types_total"], audit["moves_total"], audit["abilities_total"],
     ))
     print("DATA V3 samples:", json.dumps(audit["samples"], ensure_ascii=False, sort_keys=True))
+    print("DATA V3 ability classifications:", json.dumps(audit["ability_classification_counts"], ensure_ascii=False, sort_keys=True))
     print("DATA V3 checks:", json.dumps(checks, ensure_ascii=False, sort_keys=True))
     if audit["default_species_selection_fallbacks"]:
         print("DATA V3 default-species fallbacks:", json.dumps(audit["default_species_selection_fallbacks"][:20], ensure_ascii=False, sort_keys=True))
@@ -731,6 +758,7 @@ def main() -> int:
         checks["all_default_species_use_mainline_learnsets"],
         checks["gengar_single_version_group"],
         checks["pinsir_single_version_group"],
+        checks["audited_ability_ids_present"],
     )
     return 0 if all(required) else 1
 
