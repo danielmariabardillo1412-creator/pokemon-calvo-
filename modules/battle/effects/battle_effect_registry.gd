@@ -160,6 +160,14 @@ func _register_abilities() -> void:
 			0,
 			{"move_type_id": String(pair[1]), "multiplier_bp": 15000},
 		)]
+	_ability_specs[&"tough_claws"] = [BattleTriggerSpec.new(
+		BattleTriggerSpec.MODIFY_DAMAGE,
+		&"ability",
+		&"tough_claws",
+		BattleEffectSpec.new(BattleEffectSpec.DAMAGE),
+		0,
+		{"requires_contact": true, "multiplier_bp": 13000},
+	)]
 	_ability_specs[&"levitate"] = [BattleTriggerSpec.new(
 		BattleTriggerSpec.MODIFY_DAMAGE,
 		&"ability",
