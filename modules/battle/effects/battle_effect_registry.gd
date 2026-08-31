@@ -194,6 +194,32 @@ func _register_abilities() -> void:
 			{"move_type_id": "ice", "multiplier_bp": 5000},
 		),
 	]
+	_ability_specs[&"ice_scales"] = [BattleTriggerSpec.new(
+		BattleTriggerSpec.MODIFY_DAMAGE,
+		&"ability",
+		&"ice_scales",
+		BattleEffectSpec.new(BattleEffectSpec.DAMAGE),
+		0,
+		{"requires_special": true, "multiplier_bp": 5000},
+	)]
+	_ability_specs[&"multiscale"] = [BattleTriggerSpec.new(
+		BattleTriggerSpec.MODIFY_DAMAGE,
+		&"ability",
+		&"multiscale",
+		BattleEffectSpec.new(BattleEffectSpec.DAMAGE),
+		0,
+		{"requires_full_hp": true, "multiplier_bp": 5000},
+	)]
+	# Partial runtime contract: Fire-move damage is exact, but burn residual damage
+	# is still computed directly by StatusSystem and has no ability modifier hook.
+	_ability_specs[&"heatproof"] = [BattleTriggerSpec.new(
+		BattleTriggerSpec.MODIFY_DAMAGE,
+		&"ability",
+		&"heatproof",
+		BattleEffectSpec.new(BattleEffectSpec.DAMAGE),
+		0,
+		{"move_type_id": "fire", "multiplier_bp": 5000},
+	)]
 	_ability_specs[&"levitate"] = [BattleTriggerSpec.new(
 		BattleTriggerSpec.MODIFY_DAMAGE,
 		&"ability",
