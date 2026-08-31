@@ -78,31 +78,32 @@ Recent Move Effects V3 chain:
 - PR #54 — Silk Trap target/trigger bug — final `c1f5e55c7d1d8acc991b3a6ddde906f10930bb67` — 18/18
 - PR #55 — Aromatic Mist ally-target bug — final `844efde0eed27e1a5ca8790ae95a183fba6ba98c` — 18/18
 - PR #56 — Stuff Cheeks held-Berry prerequisite bug — final `1c4217d5ebc6727982ef5d7b5b5b0667cea6c5b6` — 18/18
+- PR #57 — Howl user-and-allies target bug — final `53e20600d372d44bc21eb145f598448a41828e5d` — 18/18, closed without merge
 
 Current tranche:
 
-- PR #57 — `fix/data-v3-howl-target-semantics`
-- Parent: certified #56 final `1c4217d5ebc6727982ef5d7b5b5b0667cea6c5b6`
-- Engineering SHA before notebook synchronization: `fc118cb3a06d3f1724b65aac5ba5c8893d0ea83b`
-- Engineering SHA passed 18/18 workflows, including the independent Howl regenerated-dataset assertion and Godot global.
-- Notebook synchronization moves the branch tip. **The final exact PR #57 HEAD must pass 18/18 again before closure without merge.**
+- PR #58 — `fix/data-v3-coaching-semantics`
+- Parent: certified #57 final `53e20600d372d44bc21eb145f598448a41828e5d`
+- Engineering SHA before notebook synchronization: `b7da56687d1e1e45072ca4572f5f0751f9d309d7`
+- Engineering SHA passed 18/18 workflows, including the independent Coaching regenerated-dataset assertion and Godot global.
+- Notebook synchronization moves the branch tip. **The final exact PR #58 HEAD must pass 18/18 again before closure without merge.**
 
 Active workstream: **Move Effects V3 semantic audit**, not trainer AI/archetypes.
 
-## Exact move coverage from PR #57 engineering artifact
+## Exact move coverage from PR #58 engineering artifact
 
-Artifact generated from `fc118cb3a06d3f1724b65aac5ba5c8893d0ea83b`:
+Artifact generated from `b7da56687d1e1e45072ca4572f5f0751f9d309d7`:
 
 - `RUNTIME_SUPPORTED`: 555
 - `PARTIAL_RUNTIME`: 67
 - `DATA_ONLY`: 285
 - `UNSUPPORTED`: 12
 
-Remaining `DATA_ONLY` records with non-empty `effect_specs`: **62**.
+Remaining `DATA_ONLY` records with non-empty `effect_specs`: **61**.
 
-Known breakdown after Howl leaves DATA_ONLY:
+Current breakdown:
 
-- 59 stat-change DATA_ONLY records
+- 58 stat-change DATA_ONLY records
 - 2 heal cases: `Purify`, `Swallow`
 - 1 multi-hit case: `Beat Up`
 
@@ -111,7 +112,8 @@ Important recently neutralized/corrected behavior:
 - `Silk Trap`: DATA_ONLY, effect-free; previous `SELF Speed -1` was false because the real debuff is contact-triggered on the attacker.
 - `Aromatic Mist`: DATA_ONLY, effect-free; previous `SELF SpDef +1` targeted the wrong creature because source target is ally.
 - `Stuff Cheeks`: DATA_ONLY, effect-free; previous unconditional `SELF Defense +2` ignored the required held-Berry consume transaction.
-- `Howl`: now `PARTIAL_RUNTIME`; modern source target is `user-and-allies`, executable subset is exactly `SELF Attack +1`, ally subset remains missing. Previous generic output incorrectly buffed OPPONENT.
+- `Howl`: `PARTIAL_RUNTIME`; modern source target is `user-and-allies`, executable subset is exactly `SELF Attack +1`, ally subset remains missing. Previous generic output incorrectly buffed OPPONENT.
+- `Coaching`: DATA_ONLY, effect-free; source mechanics affect ally Pokémon and fail with no adjacent ally. Previous generic output incorrectly granted `OPPONENT Attack +1` and `OPPONENT Defense +1`.
 
 ## Runtime constraints relevant to Move Effects audit
 
