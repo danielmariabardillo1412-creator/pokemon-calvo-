@@ -65,40 +65,49 @@ Key organized test roots:
 - `tests/trainer_ai/`
 - `tests/test_runner.gd` is the sole global root runner.
 
-## Current working baseline / active certification
+## Current certification chain
 
-Persistent notebooks were introduced and certified on:
+Notebook baseline:
 
 - Branch: `docs/project-notebooks-v1`
 - HEAD: `7ab2c1be78fab18309c6c4f4de9b2cf02ed96b46`
 - PR #52: closed without merge.
-- CI: 18/18 SUCCESS on that exact HEAD.
+- CI: 18/18 SUCCESS.
 
-Current Move Effects tranche:
+Simple self-stat boosts C:
 
 - Branch: `fix/data-v3-simple-self-stat-boosts-c`
-- PR #53.
-- Parent: notebook baseline `7ab2c1be78fab18309c6c4f4de9b2cf02ed96b46`.
-- Engineering SHA before notebook synchronization: `4d6f0dbf205ffd41fdbbfae490e8efaedea54d3f`.
-- That engineering SHA passed 18/18 workflows, including DATA V3 and Godot global.
-- The notebook synchronization commit intentionally moves the branch tip; **the exact final certified HEAD must be read from PR #53 / branch tip after its second 18/18 run before closure**. GitHub is authoritative.
+- Final HEAD: `b3cfa577e01f45d57e0d73ebe662b84665d6f48e`
+- PR #53: closed without merge.
+- CI: 18/18 SUCCESS on that exact final notebook-bearing HEAD.
+
+Current Silk Trap tranche:
+
+- Branch: `fix/data-v3-silk-trap-semantics`
+- PR #54.
+- Parent: certified HEAD `b3cfa577e01f45d57e0d73ebe662b84665d6f48e`.
+- Engineering SHA before notebook synchronization: `0bf50ab5e6eb17d4b8d768d38fa274b97387741b`.
+- That engineering SHA passed 18/18 workflows, including the new independent Silk Trap dataset assertion and Godot global.
+- Notebook synchronization moves the branch tip; **the exact final certified HEAD must be read from PR #54 / branch tip after its second 18/18 run before closure**. GitHub is authoritative.
 
 The active work is **Move Effects V3 semantic audit**, not trainer AI.
 
-## Current move coverage from PR #53 engineering artifact
+## Current move coverage from PR #54 engineering artifact
 
-Exact generated artifact counts from SHA `4d6f0dbf205ffd41fdbbfae490e8efaedea54d3f`:
+Exact generated artifact counts from SHA `0bf50ab5e6eb17d4b8d768d38fa274b97387741b`:
 
 - `RUNTIME_SUPPORTED`: 555
 - `PARTIAL_RUNTIME`: 66
 - `DATA_ONLY`: 286
 - `UNSUPPORTED`: 12
 
-Among the remaining `DATA_ONLY` records, 66 still have generated `effect_specs` and therefore deserve special scrutiny:
+Among the remaining `DATA_ONLY` records, 65 still have generated `effect_specs` and therefore deserve special scrutiny:
 
-- 63 stat-change cases.
+- 62 stat-change cases.
 - 2 heal-related cases: `Purify`, `Swallow`.
 - 1 multi-hit case: `Beat Up`.
+
+`Silk Trap` remains `DATA_ONLY` but now has **empty `effect_specs`**, because the previous generic `SELF Speed -1` effect was semantically false. Its real protection + contact-triggered attacker Speed drop is not representable by current Battle Core.
 
 This count is a prioritization signal, **not** proof that all other DATA_ONLY moves are correct. The audit must continue by semantic family.
 
@@ -119,7 +128,7 @@ This count is a prioritization signal, **not** proof that all other DATA_ONLY mo
 - FIXED_DAMAGE
 - MULTI_HIT
 
-Targets currently available to the effect model/importer are SELF and OPPONENT. Team/side targeting, delayed effects, weather-conditioned heal ratios, temporary type suppression, and several unique move mechanics are not generally representable.
+Targets currently available to the effect model/importer are SELF and OPPONENT. Team/side targeting, delayed effects, weather-conditioned heal ratios, temporary type suppression, protection/contact-response triggers, and several unique move mechanics are not generally representable.
 
 `StatStages` supports Attack, Defense, Special Attack, Special Defense, Speed, Accuracy, and Evasion with normal stage clamping.
 
@@ -134,4 +143,4 @@ Coverage labels must mean what they say:
 - `DATA_ONLY`: preserved as data but no faithful runtime effect is claimed.
 - `UNSUPPORTED`: explicitly unsupported by the current contract.
 
-Never promote coverage simply because a generic `effect_spec` exists.
+Never promote coverage simply because a generic `effect_spec` exists. If a generic effect is demonstrably false, remove/neutralize it even when the coverage label was already DATA_ONLY, because runtime execution is driven by `effect_specs` rather than coverage alone.
