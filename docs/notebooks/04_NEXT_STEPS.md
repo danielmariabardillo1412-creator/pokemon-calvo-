@@ -3,94 +3,103 @@
 Read this immediately after `00_READ_FIRST.md` when recovering context.
 
 ## Previous certified tranche
-- PR #63 — `fix/data-v3-always-hit-accuracy`
-- Final HEAD `9f8b3e01bec1f86cff75380d68dd98d76e738e78`
+- PR #64 — `fix/data-v3-selected-special-stat-packages-a`
+- Final HEAD `674ccaf0928c93749c581565d53eb1f672dfd7b4`
 - 18/18 SUCCESS on exact notebook-bearing HEAD
 - closed without merge.
 
-## Current tranche — PR #64
-- Branch `fix/data-v3-selected-special-stat-packages-a`
-- Parent `9f8b3e01bec1f86cff75380d68dd98d76e738e78`
-- Engineering SHA before notebook sync: `3c9c83d3ff99c0e9a98506343db4e28b6de65af2`
+## Current tranche — PR #65
+- Branch `fix/data-v3-selected-special-stateful-b`
+- Parent `674ccaf0928c93749c581565d53eb1f672dfd7b4`
+- Engineering SHA before notebook sync: `01854416bf54179b0caa32b99459667d40d369c7`
 - Engineering SHA CI: **18/18 SUCCESS**
-- DATA V3 independently verified Decorate and Spicy Extract target, accuracy=-1, classification and exact OPPONENT stat packages.
-- Notebook synchronization moves branch tip. Require **18/18 on the final exact notebook-bearing HEAD**, then close #64 without merge.
+- DATA V3 independently verified all four selected-stateful decisions.
+- Notebook synchronization moves branch tip. Require **18/18 on the final exact notebook-bearing HEAD**, then close #65 without merge.
 
 ## Workstream
 **Move Effects V3 / battle-relevant DATA V3 semantic audit. Do not switch to trainer AI/archetypes.**
 
-## What #64 certifies
-`Decorate`:
-- selected-pokemon
-- always-hit canonical accuracy -1
-- Attack +2 / SpAtk +2 on target
-- no additional current battle mechanic in audited source
-- promoted to RUNTIME_SUPPORTED without effect rewrite.
+## What #65 resolves
+The entire remaining `selected-pokemon` DATA_ONLY-with-specs family is now resolved.
 
-`Spicy Extract`:
-- selected-pokemon
-- always-hit canonical accuracy -1
-- Attack +2 / Defense -2 on target
-- current Scarlet/Violet semantics fully match generated package
-- promoted to RUNTIME_SUPPORTED without effect rewrite.
+### Defog
+- real: Evasion -1 plus field/hazard/screen/terrain cleanup;
+- current engine cannot represent cleanup;
+- Evasion-only execution can remove a real strategic drawback;
+- result: `DATA_ONLY`, `effect_specs=[]`, accuracy -1 preserved.
 
-Exact #63→#64 artifact comparison:
-- only `decorate` and `spicy_extract` changed
-- only `classification` changed on those two
-- accuracy unchanged
-- effect_specs unchanged
-- no unrelated move changed.
+### Memento
+- real: target Atk/SpAtk -2 and user faints;
+- free -2/-2 without self-faint would be false;
+- result: `DATA_ONLY`, `effect_specs=[]`, accuracy 100 preserved.
 
-## Exact #64 engineering artifact
+### Parting Shot
+- real: target Atk/SpAtk -1 and user switches;
+- staying active changes the transaction and permits false repeatable debuffs;
+- result: `DATA_ONLY`, `effect_specs=[]`, accuracy 100 preserved.
+
+### Tar Shot
+- real: Speed -1 plus persistent Fire vulnerability;
+- missing Fire vulnerability only weakens the move;
+- result: `PARTIAL_RUNTIME`, retain exactly OPPONENT Speed -1, accuracy 100.
+
+## Exact #65 engineering artifact
 - `RUNTIME_SUPPORTED`: **584**
-- `PARTIAL_RUNTIME`: **67**
-- `DATA_ONLY`: **256**
+- `PARTIAL_RUNTIME`: **68**
+- `DATA_ONLY`: **255**
 - `UNSUPPORTED`: **12**
-- DATA_ONLY with non-empty specs: **30**
-  - 27 stat-change
+- DATA_ONLY with non-empty specs: **26**
+  - 23 stat-change
   - Beat Up
   - Purify
   - Swallow
 
-Remaining stat target distribution:
-- 13 user
-- 8 all-opponents
-- 4 selected-pokemon
-- 2 all-pokemon
+Exact #64→#65 comparison:
+- only 4 move records changed;
+- Defog/Memento/Parting Shot changed only `effect_specs` → empty;
+- Tar Shot changed only `classification` DATA_ONLY → PARTIAL_RUNTIME;
+- no unrelated move changed.
 
-## Exact next task after #64 closure
-Finish the selected-pokemon family by auditing these **four only**:
-1. `Defog`
-2. `Memento`
-3. `Parting Shot`
-4. `Tar Shot`
+## Exact next task after #65 closure
+Audit the **8 `all-opponents` stat-change moves** as the next candidate family:
+- `captivate`
+- `cotton_spore`
+- `growl`
+- `leer`
+- `string_shot`
+- `sweet_scent`
+- `tail_whip`
+- `venom_drench`
 
-Recommended approach: inspect source + exact generated record for all four first, then decide whether any can share a safe tranche. Do not infer coverage from their visible stat changes alone.
+Do not promote them as one blind batch. First inspect immutable source + current public mechanics + exact generated outputs and split by semantics.
 
-Known/suspected missing semantics to verify:
-- Defog — Evasion drop plus field/hazard/screen/terrain cleanup.
-- Memento — Attack/SpAtk drops plus user faint.
-- Parting Shot — Attack/SpAtk drops plus user switch.
-- Tar Shot — Speed drop plus Fire-damage vulnerability/state.
+Known issues to check before classification:
+- `Captivate`: gender/sex compatibility condition; an unconditional stat drop would be false if the predicate is unsupported.
+- `Venom Drench`: poisoned-target prerequisite; unconditional drops would be false.
+- spread target `all-opponents`: current singles engine has one opponent, so verify whether mapping the effect to OPPONENT is semantically faithful in the current model and does not hide another condition.
+- `Growl`, `Leer`, `Cotton Spore`, `String Shot`, `Sweet Scent`, `Tail Whip`: likely simpler spread debuffs, but confirm current-generation stat packages and accuracy before grouping.
 
-For each, choose:
-- `RUNTIME_SUPPORTED` only if full current singles semantics are representable;
-- `PARTIAL_RUNTIME` only if the executing subset is itself faithful and not strategically misleading;
-- `DATA_ONLY`/effect-free if the current generated subset would create materially false behavior.
+Recommended sequence:
+1. inspect all eight source records and generated records without editing;
+2. isolate conditional moves (`captivate`, `venom_drench`) from simple spread debuffs;
+3. only batch moves with genuinely identical support logic;
+4. add fail-fast source contracts + independent regenerated-output tests;
+5. DATA V3 focal → 18/18 engineering → artifact diff → notebooks → 18/18 final → close without merge.
 
-Then continue with either the 8 all-opponents cases or small groups from the 13 user/stateful cases, depending on source homogeneity.
-
-## Remaining user conditional/stateful
+## Other remaining user conditional/stateful — 13
 `autotomize`, `charge`, `clangorous_soul`, `defense_curl`, `extreme_evoboost`, `fillet_away`, `geomancy`, `growth`, `minimize`, `no_retreat`, `shell_smash`, `stockpile`, `tidy_up`.
+Do not mass-promote.
 
-## Remaining all-opponents
-`captivate`, `cotton_spore`, `growl`, `leer`, `string_shot`, `sweet_scent`, `tail_whip`, `venom_drench`.
-
-## Remaining all-pokemon
+## Remaining all-pokemon — 2
 `flower_shield`, `rototiller`.
+Current SELF/OPPONENT model likely requires conservative handling because both include target-set/type predicates.
 
-## Remaining non-stat with specs
+## Remaining non-stat with specs — 3
 `Purify`, `Swallow`, `Beat Up`.
+Audit separately.
+
+## Safety rule reinforced by #65
+A retained effect can be factually true yet still be unsafe if an omitted mechanic is a mandatory cost/transaction or removes a strategic drawback. `PARTIAL_RUNTIME` is appropriate only when the exposed subset remains faithful and omissions do not create materially false advantageous behavior.
 
 ## Stop condition
 If any focal or regression test fails, stop immediately, diagnose/fix root cause, rerun focal, then full matrix. Never accumulate failures.
