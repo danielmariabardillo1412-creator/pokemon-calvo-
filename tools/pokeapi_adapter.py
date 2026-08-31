@@ -49,6 +49,9 @@ _AUDITED_DATA_ONLY_PROTECTION_CONTACT = {"silk_trap"}
 _AUDITED_DATA_ONLY_ALLY_STAT = {"aromatic_mist": ("special_defense", 1)}
 _AUDITED_DATA_ONLY_HELD_BERRY_STAT = {"stuff_cheeks": ("defense", 2)}
 _PARTIAL_USER_AND_ALLIES_STAT = {"howl": ("attack", 1)}
+_AUDITED_DATA_ONLY_ADJACENT_ALLY_STATS = {
+    "coaching": {"attack": 1, "defense": 1},
+}
 _SIMPLE_SELF_STAT_BOOSTS = {
     "acid_armor": ("defense", 2),
     "agility": ("speed", 2),
@@ -418,6 +421,73 @@ def _require_user_and_allies_stat_partial(
         raise RuntimeError(f"DATA V3 user-and-allies false-opponent signature changed for {sid}: {stage}")
 
 
+def _require_adjacent_ally_stats_data_only(
+    m: dict,
+    specs: list[dict],
+    sid: str,
+    expected_stats: dict[str, int],
+) -> None:
+    """Verify an ally-only multi-stat move before removing false OPPONENT buffs."""
+    meta = m.get("meta") or {}
+    target = (m.get("target") or {}).get("name")
+    category = (meta.get("category") or {}).get("name")
+    ailment = (meta.get("ailment") or {}).get("name")
+    if target != "user-and-allies" or category != "net-good-stats" or ailment not in ("none", "", None):
+        raise RuntimeError(f"DATA V3 adjacent-ally source contract changed for {sid}")
+    if int(meta.get("stat_chance") or 0) != 100:
+        raise RuntimeError(f"DATA V3 adjacent-ally stat chance changed for {sid}")
+    if any(int(meta.get(key) or 0) != 0 for key in (
+        "healing", "drain", "flinch_chance", "ailment_chance"
+    )):
+        raise RuntimeError(f"DATA V3 adjacent-ally metadata changed for {sid}")
+
+    source_stats = {}
+    for change in m.get("stat_changes") or []:
+        stat_name = (change.get("stat") or {}).get("name")
+        if stat_name:
+            source_stats[stat_name.replace("-", "_")] = int(change.get("change", 0))
+    if source_stats != expected_stats:
+        raise RuntimeError(f"DATA V3 adjacent-ally stat source changes mismatch for {sid}: {source_stats}")
+
+    english_effects = []
+    for entry in m.get("effect_entries") or []:
+        if (entry.get("language") or {}).get("name") == "en":
+            english_effects.append(str(entry.get("effect") or ""))
+            english_effects.append(str(entry.get("short_effect") or ""))
+    effect_text = " ".join(english_effects).lower()
+    if (
+        "raises the target's attack and defense by 1 stage" not in effect_text
+        or "fails if there is no ally adjacent to the user" not in effect_text
+    ):
+        raise RuntimeError(f"DATA V3 adjacent-ally effect semantics changed for {sid}")
+
+    current_texts = []
+    for entry in m.get("flavor_text_entries") or []:
+        if (
+            (entry.get("language") or {}).get("name") == "en"
+            and (entry.get("version_group") or {}).get("name") == "scarlet-violet"
+        ):
+            current_texts.append(str(entry.get("flavor_text") or ""))
+    current_text = " ".join(current_texts).lower()
+    if "ally pokémon" not in current_text or "attack and defense stats" not in current_text:
+        raise RuntimeError(f"DATA V3 current adjacent-ally semantics changed for {sid}")
+
+    stages = _matching_effects(specs, "modify_stat_stage")
+    if len(specs) != len(expected_stats) or len(stages) != len(expected_stats):
+        raise RuntimeError(f"DATA V3 adjacent-ally legacy shape changed for {sid}: {specs}")
+    generated_stats = {}
+    for stage in stages:
+        stat_id = str(stage.get("stat_id", ""))
+        if (
+            stage.get("target") != "opponent"
+            or int(stage.get("chance_basis_points", 0)) != 10000
+        ):
+            raise RuntimeError(f"DATA V3 adjacent-ally false-opponent signature changed for {sid}: {stage}")
+        generated_stats[stat_id] = int(stage.get("value", 0))
+    if generated_stats != expected_stats:
+        raise RuntimeError(f"DATA V3 adjacent-ally legacy stat changes mismatch for {sid}: {generated_stats}")
+
+
 def generate_move_specs(m: dict, contact_set: set):
     """V3 wrapper around the archived move-effect converter.
 
@@ -511,6 +581,16 @@ def generate_move_specs(m: dict, contact_set: set):
         # executable subset; ally targeting remains outside the current effect
         # model. Never leave the legacy OPPONENT boost in place.
         coverage = "PARTIAL_RUNTIME"
+
+    if sid in _AUDITED_DATA_ONLY_ADJACENT_ALLY_STATS:
+        expected_stats = _AUDITED_DATA_ONLY_ADJACENT_ALLY_STATS[sid]
+        _require_adjacent_ally_stats_data_only(m, specs, sid, expected_stats)
+        # Coaching affects allied Pokémon, not the user, and fails when no adjacent
+        # ally exists. Current Battle Core has neither ally targeting nor that
+        # adjacency/failure condition. The legacy OPPONENT buffs are actively false,
+        # so preserve only the data record until those mechanics exist.
+        specs = []
+        coverage = "DATA_ONLY"
 
     if sid in _SELECTED_TARGET_HEALS:
         changed = _rewrite_effect_target(specs, "heal", "opponent")
