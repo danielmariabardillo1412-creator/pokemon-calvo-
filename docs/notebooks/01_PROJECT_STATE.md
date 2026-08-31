@@ -35,61 +35,81 @@ Pipeline:
 - #72 persistent-state user `d46be6864abd6e1cffdf54f9e932da06bed054dc`
 - #73 terminal user-state `67ba79e9a68a78669ee5ae04166a47ee11331bc7`
 - #74 all-pokemon semantics `9a917fea11df07c3aa26c8962e2dca9784a41875`
-All certified entries above: 18/18 on exact final notebook-bearing HEAD, closed without merge.
+- #75 final DATA_ONLY executable effects `4bb4bdc64982eef62f126f8d1c38e9509d21c96c`
 
-## Runtime safety invariant
-`effect_specs` execute regardless of `classification`. `DATA_ONLY` is not an execution gate. A known-false or strategically unsafe spec must be removed/corrected.
+All entries above: 18/18 on exact final notebook-bearing HEAD, closed without merge.
 
-Coverage semantics:
-- `RUNTIME_SUPPORTED`: fully faithful in current model.
-- `PARTIAL_RUNTIME`: faithful subset; omissions only weaken/omit benefits.
-- `DATA_ONLY`: data retained without unsafe executable behavior.
-- `UNSUPPORTED`: explicitly outside current contract.
+## Move Effects V3 closed milestone
+PR #75 certified that no `DATA_ONLY` move retains executable `effect_specs`.
 
-# Current tranche — PR #75 final DATA_ONLY executable effects
-- Branch: `fix/data-v3-final-data-only-effects`
-- Parent: certified #74 final `9a917fea11df07c3aa26c8962e2dca9784a41875`.
-- Engineering SHA before notebook sync: `db73a16b631f4e7bd539ac5e73b288401489d39a`.
-- Engineering SHA: **18/18 SUCCESS**, including DATA V3 and Godot global.
-
-## #75 decisions
-### Purify
-Immutable source requires the selected target to have a major/non-volatile status condition. The move cures that status and only then heals the user up to 50%; it fails when no eligible target status exists.
-
-Legacy output was unconditional `HEAL SELF 50%`, allowing a free heal on a turn that should fail.
-Decision: remain `DATA_ONLY`, `effect_specs=[]`; canonical summary retains cure prerequisite + conditional heal.
-
-### Swallow
-Immutable source requires stored Stockpile energy. Stockpile levels 1/2/3 heal 25%/50%/100%, then the stored energy is consumed and associated Stockpile Defense/Special Defense changes are removed. It fails at zero Stockpile.
-
-Legacy output was unconditional `HEAL SELF 25%`.
-Decision: remain `DATA_ONLY`, `effect_specs=[]`; canonical summary retains prerequisite, variable healing and consumption.
-
-### Beat Up
-Immutable source is a physical selected-target move with source `power=null`; snapshot meta exposes `min_hits=max_hits=6`, but source prose/effect history describes party participation. Modern core-series behavior uses one strike for each eligible conscious party member without a non-volatile status, with party-member-dependent strike power rather than a fixed generic six-hit action.
-
-Legacy output was unconditional `MULTI_HIT 6..6`.
-Decision: remain `DATA_ONLY`, `effect_specs=[]`; canonical summary records party-dependent semantics.
-
-Implementation: `tools/pokeapi_adapter_final_data_only_effects.py`, invoked as the final explicit post-stat audit stage. Independent DATA V3 assertions verify the three output contracts and the global zero-unsafe-spec invariant.
-
-## Exact #74 → #75 engineering artifact
-Raw and normalized datasets agree:
-- only `beat_up`, `purify`, `swallow` changed;
-- on all three only `effect_specs` and `effect_summary` changed;
-- no classification, target, accuracy, power, PP or unrelated record changed.
-
-Coverage remains:
+Move coverage at #75:
 - `RUNTIME_SUPPORTED`: **590**
 - `PARTIAL_RUNTIME`: **71**
 - `DATA_ONLY`: **246**
 - `UNSUPPORTED`: **12**
+- `DATA_ONLY` with non-empty `effect_specs`: **0**
 
-DATA_ONLY with non-empty `effect_specs`: **0**.
+`Purify`, `Swallow`, and `Beat Up` were the final unsafe approximations and now remain `DATA_ONLY + effect_specs=[]` until Battle Core can represent their complete transactions.
 
-**Move Effects V3 executable-safety frontier is closed at the engineering artifact.**
+## Coverage safety principle
+Preserved data is not equivalent to executable support.
 
-Notebook sync moves SHA; final #75 HEAD must pass 18/18 before closure without merge.
+- `RUNTIME_SUPPORTED`: current modeled battle mechanic is faithful.
+- `PARTIAL_RUNTIME`: real useful subset works, but known source-required battle behavior is absent/wrong.
+- `DATA_ONLY`: source metadata retained without claiming executable mechanics.
+- `UNSUPPORTED`: explicitly outside the current contract.
 
-## Next workstream after #75 certification
-Remain in DATA FOUNDATION V3 semantic reliability. Begin explicit **Ability runtime-support contracts**: distinguish the 373 preserved ability records from the subset whose battle mechanics are actually implemented. Do not return to trainer AI/archetypes until the remaining data-reliability work is deliberately closed or reprioritized.
+For moves, `effect_specs` execute regardless of label, so unsafe specs must be removed. For abilities, Battle Core trigger registration controls execution while DATA V3 classification describes semantic completeness.
+
+# Current tranche — PR #76 Ability runtime contracts
+
+- Branch: `audit/data-v3-ability-runtime-contracts-v1`
+- Parent: certified #75 final `4bb4bdc64982eef62f126f8d1c38e9509d21c96c`.
+- Engineering SHA: `8e1ea4e443ef76dcca8f83ebf49c0ea282f4c890`.
+- Engineering SHA: **18/18 SUCCESS**, including DATA V3 and Godot 4.7 global.
+- Detailed notebook: `docs/notebooks/06_DATA_V3_ABILITY_RUNTIME_AUDIT.md`.
+
+## #76 audited ability result
+Battle Core has explicit triggers for six abilities. DATA V3 previously mislabeled all 373 abilities as `DATA_ONLY`.
+
+After source/runtime audit:
+
+### RUNTIME_SUPPORTED — 3
+- `blaze`
+- `overgrow`
+- `torrent`
+
+Their source 1/3-HP + matching-type + 1.5x damage transaction matches the actual Battle Core damage-modifier path.
+
+### PARTIAL_RUNTIME — 3
+- `intimidate`: switch-in Attack -1 works; additional acquisition/reacquisition/Substitute semantics are absent.
+- `levitate`: Ground-move immunity works; grounded-field/suppression semantics are absent.
+- `static`: ordinary contact 30% paralysis works, but a contact hit that KOs the Static holder cannot currently trigger its AFTER_DAMAGE ability path.
+
+### DATA_ONLY — 367
+All other ability records remain data-only until their semantic families are explicitly audited.
+
+## #76 implementation contract
+- `tools/pokeapi_ability_runtime_contracts.py`: explicit six-ID allowlist with fail-fast immutable-source semantic checks.
+- `tools/pokeapi_adapter_v3.py`: emits audited ability classifications and report counts/IDs.
+- `tests/data/data_foundation_v3_ability_runtime_contract_test_suite.gd`: exact 3/3/367 partition + registry consistency.
+- No generic Battle Core trigger changes in this tranche.
+
+## Exact #75 → #76 engineering artifact
+Raw and normalized:
+- exactly six changes;
+- all are `ability.classification` changes only.
+
+Reports add the corresponding classification IDs/counts and audit check. Species, moves/effects, items, learnsets, evolutions, types, stats, manifest, forms and auxiliary data are unchanged. `import_time_ms` variation is non-semantic execution timing only.
+
+## Current certification step
+Notebook synchronization follows engineering SHA `8e1ea4e443ef76dcca8f83ebf49c0ea282f4c890`.
+
+Before closing #76 without merge:
+1. verify engineering → final HEAD changed only operational notebooks;
+2. require 18/18 on exact final notebook-bearing HEAD;
+3. close #76 without merge;
+4. use final HEAD as next baseline.
+
+## Exact next work after #76
+Remain in DATA FOUNDATION V3 ability reliability. Inventory/classify the remaining **367** abilities by semantic families and prioritize families expressible with existing Battle Core primitives. Do not mass-implement all abilities and do not return to trainer AI/archetypes yet.
