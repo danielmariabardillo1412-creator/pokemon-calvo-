@@ -9,6 +9,8 @@ from __future__ import annotations
 
 from typing import Any
 
+import pokeapi_adapter_user_stateful_safe as user_stateful_safe
+
 _SIMPLE_BASE_EFFECTS: dict[str, tuple[int, int, dict[str, int]]] = {
     # move_id: (source accuracy, source stat_chance, exact current stat package)
     "growl": (100, 0, {"attack": -1}),
@@ -157,7 +159,7 @@ def apply_all_opponents(
             specs = []
             coverage = "DATA_ONLY"
 
-    return (
+    result = (
         specs,
         crit_rate_bp,
         makes_contact,
@@ -165,3 +167,4 @@ def apply_all_opponents(
         override_count,
         unsupported_note,
     )
+    return user_stateful_safe.apply_user_stateful_safe(move, result)
