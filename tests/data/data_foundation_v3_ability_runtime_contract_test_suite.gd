@@ -1,9 +1,21 @@
 class_name DataFoundationV3AbilityRuntimeContractTestSuite
 extends RefCounted
 
-const FULL_IDS := ["blaze", "overgrow", "swarm", "torrent"]
+const FULL_IDS := [
+	"blaze", "dragons_maw", "fire_mane", "overgrow", "rocky_payload",
+	"steelworker", "swarm", "torrent",
+]
 const PARTIAL_IDS := ["intimidate", "levitate", "static"]
-const IMPLEMENTED_IDS := ["blaze", "intimidate", "levitate", "overgrow", "static", "swarm", "torrent"]
+const IMPLEMENTED_IDS := [
+	"blaze", "dragons_maw", "fire_mane", "intimidate", "levitate", "overgrow",
+	"rocky_payload", "static", "steelworker", "swarm", "torrent",
+]
+const TYPE_BOOSTS := {
+	"steelworker": "steel",
+	"dragons_maw": "dragon",
+	"rocky_payload": "rock",
+	"fire_mane": "fire",
+}
 
 
 func run(check: Callable) -> void:
@@ -23,7 +35,7 @@ func run(check: Callable) -> void:
 	)
 	check.call(
 		"data_v3_ability_contract_data_only_count",
-		(classes.get("DATA_ONLY", []) as Array).size() == 366,
+		(classes.get("DATA_ONLY", []) as Array).size() == 362,
 	)
 	check.call(
 		"data_v3_ability_contract_partition",
@@ -50,8 +62,7 @@ func run(check: Callable) -> void:
 	registry_ids.sort()
 	check.call("data_v3_ability_contract_registry_exact", registry_ids == IMPLEMENTED_IDS)
 
-	# Swarm is the fourth member of the already-tested pinch-damage primitive. Its
-	# trigger must be exactly Bug + <=1/3 HP + 1.5x and must not invent a new path.
+	# Swarm remains the fourth member of the tested pinch-damage primitive.
 	var swarm_specs := registry.triggers_for_ability(&"swarm", BattleTriggerSpec.MODIFY_DAMAGE)
 	var swarm_ok := swarm_specs.size() == 1
 	if swarm_ok:
@@ -66,14 +77,41 @@ func run(check: Callable) -> void:
 		)
 	check.call("data_v3_ability_contract_swarm_trigger_exact", swarm_ok)
 
+	# New unconditional type boosts must use only move type + 1.5x. In particular,
+	# they must not inherit the pinch HP condition or another hidden state gate.
+	var type_boosts_ok := true
+	for ability_id in TYPE_BOOSTS:
+		var specs := registry.triggers_for_ability(StringName(ability_id), BattleTriggerSpec.MODIFY_DAMAGE)
+		if specs.size() != 1:
+			type_boosts_ok = false
+			continue
+		var spec: BattleTriggerSpec = specs[0]
+		type_boosts_ok = type_boosts_ok and (
+			spec.source_kind == &"ability"
+			and String(spec.source_id) == ability_id
+			and String(spec.conditions.get("move_type_id", "")) == TYPE_BOOSTS[ability_id]
+			and int(spec.conditions.get("multiplier_bp", 0)) == 15000
+			and not spec.conditions.has("hp_at_or_below_divisor")
+			and spec.effect.kind == BattleEffectSpec.DAMAGE
+		)
+	check.call("data_v3_ability_contract_unconditional_type_boosts_exact", type_boosts_ok)
+
+	# Transistor is deliberately not promoted in this tranche. Its source record is
+	# version-sensitive but the pinned snapshot does not encode that history in a
+	# way that supports one honest universal multiplier.
+	check.call(
+		"data_v3_ability_contract_transistor_stays_data_only",
+		str((by_id.get("transistor", {}) as Dictionary).get("classification", "")) == "DATA_ONLY",
+	)
+
 	var report := _load_json("res://data/reports/unsupported_mechanics.json")
 	var summary: Dictionary = report.get("summary", {}).get("abilities", {})
 	check.call(
 		"data_v3_ability_contract_report_counts",
 		int(summary.get("DATA_READY", -1)) == 373
-		and int(summary.get("RUNTIME_SUPPORTED", -1)) == 4
+		and int(summary.get("RUNTIME_SUPPORTED", -1)) == 8
 		and int(summary.get("PARTIAL_RUNTIME", -1)) == 3
-		and int(summary.get("DATA_ONLY", -1)) == 366,
+		and int(summary.get("DATA_ONLY", -1)) == 362,
 	)
 	var report_classes: Dictionary = report.get("ability_runtime_classification", {})
 	check.call(
