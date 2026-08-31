@@ -1,314 +1,305 @@
 # DATA V3 / MOVE EFFECTS V3 AUDIT NOTEBOOK
 
-## Why this audit exists
+## Purpose and invariant
 
-DATA FOUNDATION V3 fixed major structural data problems, but later auditing showed that a structurally valid move record can still be semantically wrong at runtime. Generic PokéAPI metadata does not always describe a move's complete battle behavior, and legacy classification rules were too coarse.
+DATA FOUNDATION V3 solved structural provenance/import problems, but a structurally valid move can still be semantically wrong at runtime. PokéAPI metadata is generic and sometimes versioned/conditional; the legacy converter can combine fields that do not share the same target or prerequisite.
 
-The audit goal is not to implement all Pokémon mechanics immediately. The goal is stricter:
+Audit invariant:
 
-> Every move used by runtime/AI must either have a faithful executable representation or be honestly classified as partial/data-only/unsupported. Never let a plausible but false effect masquerade as support.
+> Every executable move effect must be faithful. If the current Battle Core cannot represent a mechanic, keep only a provably faithful subset (`PARTIAL_RUNTIME`) or remove executable effects (`DATA_ONLY`). Never keep a plausible but false effect.
 
-## Certified pre-audit fixes
+Critical runtime fact: `BattleEffectRegistry` / executor consumes `effect_specs` without using the coverage label as a safety gate. Therefore a `DATA_ONLY` move with bad specs can still execute bad mechanics.
 
-### Contact override path after repository reorganization
+## Canonical source
 
-- Branch: `fix/data-v3-contact-override-path`
-- HEAD: `cefd875cb227035c018400fac45106a09a4241a9`
-- PR #34, closed without merge.
-- 18/18 workflows passed.
+Immutable DATA V3 source:
 
-Problem: V3 reused the archived V2 `_load_contact_override()`, whose path became wrong after archival. It silently returned an empty contact set. The V3 compatibility shim now owns loading `tools/move_flags_override.json`, fails closed, and verifies sentinels including `tackle` and `thunder_punch`.
+- branch `data/pokeapi-v2-snapshot`
+- commit `2f218ec3765c01c894a42bbbd074f15ddf3f32d1`
+- `data/api/v2` + `data/schema/v2`
+- source JSON is read-only
 
-### Legacy unsupported-name normalization
+Current corrections belong in `tools/pokeapi_adapter.py`. Do not edit `tools/archive/pokeapi_adapter_v2_legacy.py` except as historical provenance (current policy: leave archived V2 untouched).
 
-- Branch: `fix/data-v3-legacy-move-classification`
-- HEAD: `1a54395cfedf0c8b63af3631a1560b8e38ab5ca5`
-- PR #37, closed without merge.
-- 18/18 workflows passed.
+## Certified pre-audit corrections
 
-Fixes:
+### PR #34 — contact override path
 
-- Normalize legacy unsupported move names to underscore IDs.
-- Correct escaped cases such as `sleep_talk`, `me_first`, `mirror_move`, `nature_power`.
-- Remove obsolete `astonish` placeholder because damage + 30% flinch is representable.
-- Add CI gates for contact and classification regressions.
+- HEAD `cefd875cb227035c018400fac45106a09a4241a9`
+- 18/18 SUCCESS, closed without merge
+- Re-homed contact override loading in V3 shim after repository reorganization.
+- Fails closed and verifies sentinels such as `tackle` / `thunder_punch`.
 
-This HEAD became the starting point for Move Effects V3.
+### PR #37 — legacy unsupported-name normalization
+
+- HEAD `1a54395cfedf0c8b63af3631a1560b8e38ab5ca5`
+- 18/18 SUCCESS, closed without merge
+- Normalized hyphenated legacy unsupported IDs (`sleep_talk`, `me_first`, `mirror_move`, `nature_power`).
+- Removed obsolete `astonish` unsupported placeholder; damage + 30% flinch is representable.
+
+This became the starting certified baseline for Move Effects V3.
 
 ## Move Effects V3 certified tranches
 
 ### PR #42 — healing target semantics
 
-Certified target semantics for:
+HEAD `cf60b8cc7431643219e260ad90d8dcb61ddad4e5`, 18/18, closed without merge.
 
-- `Heal Pulse`: target heal represented as OPPONENT; full runtime support for the current singles target model.
-- `Floral Healing`: target heal represented, but Grassy Terrain dependency missing → `PARTIAL_RUNTIME`.
-- `Life Dew`: self subset represented; ally-side healing missing → `PARTIAL_RUNTIME`.
-- `Jungle Healing`: self heal + self status cure represented; ally-side behavior missing → `PARTIAL_RUNTIME`.
-
-HEAD: `cf60b8cc7431643219e260ad90d8dcb61ddad4e5`
-18/18 passed. PR closed without merge.
+- `Heal Pulse`: selected-target heal corrected; fully representable in current single-target model → `RUNTIME_SUPPORTED`.
+- `Floral Healing`: target heal represented; Grassy Terrain dependency missing → `PARTIAL_RUNTIME`.
+- `Life Dew`: SELF subset represented; ally-side healing missing → `PARTIAL_RUNTIME`.
+- `Jungle Healing`: SELF heal + SELF status cure represented; ally-side behavior missing → `PARTIAL_RUNTIME`.
 
 ### PR #43 — simple self heals
 
-Certified as `RUNTIME_SUPPORTED` with exactly one `HEAL SELF 50%`:
+HEAD `28d66f3a...`, 18/18, closed without merge.
 
-- `Recover`
-- `Soft-Boiled`
-- `Milk Drink`
-- `Slack Off`
+Verified exact `HEAL SELF 50%`, no hidden battle mechanic:
+`Recover`, `Soft-Boiled`, `Milk Drink`, `Slack Off` → `RUNTIME_SUPPORTED`.
 
-HEAD: `28d66f3a...`
-18/18 passed. PR closed without merge.
+### PR #44 — weather-dependent heals
 
-### PR #44 — weather-dependent self heals
+HEAD `7661e686...`, 18/18, closed without merge.
 
-Moves:
-
-- `Morning Sun`
-- `Synthesis`
-- `Moonlight`
-- `Shore Up`
-
-The neutral 50% self-heal is representable, but weather-specific ratios are not. Classified `PARTIAL_RUNTIME`; no fake weather mechanics added.
-
-HEAD: `7661e686...`
-18/18 passed. PR closed without merge.
+`Morning Sun`, `Synthesis`, `Moonlight`, `Shore Up`: neutral 50% SELF heal is representable; weather ratios are not → `PARTIAL_RUNTIME`.
 
 ### PR #45 — Roost
 
-`Roost` has a representable 50% self-heal, but the temporary Flying-type suppression is not expressible by current `BattleEffectSpec`.
+HEAD `5fe0b4d7...`, 18/18, closed without merge.
 
-Classification: `PARTIAL_RUNTIME`.
-
-HEAD: `5fe0b4d7...`
-18/18 passed. PR closed without merge.
+- SELF heal 50% represented.
+- Temporary Flying-type suppression absent.
+- `PARTIAL_RUNTIME`.
 
 ### PR #46 — Heal Order
 
-`Heal Order` verified as a pure 50% self-heal and promoted to `RUNTIME_SUPPORTED`.
+HEAD `bdfced6754d1a2683c4f9e9de139b34642af6314`, 18/18, closed without merge.
 
-HEAD: `bdfced6754d1a2683c4f9e9de139b34642af6314`
-18/18 passed. PR closed without merge.
+Pure SELF 50% heal → `RUNTIME_SUPPORTED`.
 
 ### PR #47 — Rest
 
-`Rest` was deliberately kept `DATA_ONLY` with empty `effect_specs`.
+HEAD `a880f4dbec59244c3e21545a4a50ee6a7c949bac`, 18/18, closed without merge.
 
-Why not implement it as `SLEEP SELF + HEAL 100%`:
-
-- Current persistent-status logic rejects applying sleep over an existing persistent status.
-- Generic sleep duration is 1–3 turns.
-- Rest requires move-specific status replacement, sleep duration, failure conditions, and full-heal semantics.
-
-A generic approximation would look plausible but be wrong. The no-op is intentional and protected by fail-fast gates.
-
-HEAD: `a880f4dbec59244c3e21545a4a50ee6a7c949bac`
-18/18 passed. PR closed without merge.
+Kept `DATA_ONLY`, `effect_specs=[]` because a guessed `SLEEP SELF + HEAL 100%` would be wrong:
+- current persistent-status system will not replace an existing status as Rest must;
+- generic sleep duration differs from Rest-specific semantics;
+- failure/status replacement details are absent.
 
 ### PR #48 — Wish
 
-`Wish` kept `DATA_ONLY` with empty `effect_specs`.
+HEAD `24176396b9b3c620ed2a2a6217042d703e5a590f`, 18/18, closed without merge.
 
-Reason: the actual heal is delayed until the end of the following turn and can apply to a replacement after switching. Current `BattleEffectSpec` has no delayed-heal effect and `BattleState` has no persisted pending-effect queue/side slot for this mechanic.
-
-An immediate `HEAL SELF` would be false.
-
-HEAD: `24176396b9b3c620ed2a2a6217042d703e5a590f`
-18/18 passed. PR closed without merge.
+Kept `DATA_ONLY`, `effect_specs=[]`: delayed heal / persisted side-slot semantics are absent. Immediate heal would be false.
 
 ### PR #49 — Strength Sap
 
-`Strength Sap` has a faithful representable subset:
+HEAD `2423066ebdf54e41b1bf2edfc5689d85492e0e92`, 18/18, closed without merge.
 
-- Opponent Attack -1: representable and executable.
-- Heal equal to the target's current Attack value: not expressible by current fixed/ratio heal model.
-
-Classification corrected from `DATA_ONLY` to `PARTIAL_RUNTIME`. Gate requires exactly the real Attack drop and forbids a guessed heal.
-
-HEAD: `2423066ebdf54e41b1bf2edfc5689d85492e0e92`
-18/18 passed. PR closed without merge.
+- Opponent Attack -1 is faithful and executable.
+- Heal equal to target's current Attack is not expressible by fixed/ratio HEAL.
+- Corrected to `PARTIAL_RUNTIME`; gate forbids guessed heal.
 
 ### PR #50 — simple self stat boosts A
 
-Promoted to `RUNTIME_SUPPORTED`, with exact source/effect contracts:
+HEAD `898db8a10005c66fc602d8d4d1d804aba6a5bf21`, 18/18, closed without merge.
 
-- `Acid Armor`: Defense +2
-- `Agility`: Speed +2
-- `Amnesia`: Special Defense +2
-- `Barrier`: Defense +2
-- `Harden`: Defense +1
-- `Iron Defense`: Defense +2
-
-Each must remain a user-targeted status move with exactly one unconditional self stat-stage effect and no hidden generated effect.
-
-HEAD: `898db8a10005c66fc602d8d4d1d804aba6a5bf21`
-18/18 passed. PR closed without merge.
+Promoted after exact source/effect verification:
+- Acid Armor Def +2
+- Agility Speed +2
+- Amnesia SpDef +2
+- Barrier Def +2
+- Harden Def +1
+- Iron Defense Def +2
 
 ### PR #51 — simple self stat boosts B
 
-Promoted to `RUNTIME_SUPPORTED` using the same already-certified contract:
+HEAD `24889d355e8d89f8873d2d958efb951080fd8027`, 18/18, closed without merge.
 
-- `Meditate`: Attack +1
-- `Nasty Plot`: Special Attack +2
-- `Rock Polish`: Speed +2
-- `Sharpen`: Attack +1
-- `Swords Dance`: Attack +2
-- `Tail Glow`: Special Attack +3
+Promoted:
+- Meditate Atk +1
+- Nasty Plot SpAtk +2
+- Rock Polish Speed +2
+- Sharpen Atk +1
+- Swords Dance Atk +2
+- Tail Glow SpAtk +3
 
-HEAD: `24889d355e8d89f8873d2d958efb951080fd8027`
-18/18 passed. PR closed without merge.
+### PR #52 — persistent notebooks
 
-### PR #52 — persistent project notebooks
+HEAD `7ab2c1be78fab18309c6c4f4de9b2cf02ed96b46`, 18/18, closed without merge.
 
-Operational continuity notebooks were added under `docs/notebooks/` so another chat/context can recover the certified state without relying on conversation history.
-
-- Branch: `docs/project-notebooks-v1`
-- HEAD: `7ab2c1be78fab18309c6c4f4de9b2cf02ed96b46`
-- 18/18 passed.
-- PR closed without merge.
-
-All subsequent tranches descend from this notebook-bearing branch chain.
+Created `docs/notebooks/` continuity layer. All later tranches descend from notebook-bearing snapshots.
 
 ### PR #53 — simple self stat boosts C
 
-Promoted through the already-certified pure-self-boost contract:
+Final HEAD `b3cfa577e01f45d57e0d73ebe662b84665d6f48e`, 18/18, closed without merge.
 
-- `Cotton Guard`: Defense +3
-- `Double Team`: Evasion +1
-- `Withdraw`: Defense +1
+Promoted:
+- Cotton Guard Def +3
+- Double Team Evasion +1
+- Withdraw Def +1
 
-Deliberately excluded due to extra mechanics/targeting: `Autotomize`, `Charge`, `Defense Curl`, `Minimize`, `Stuff Cheeks`, `Aromatic Mist`, `Silk Trap`.
+Explicitly excluded from pure batches because they have extra semantics: `Autotomize`, `Charge`, `Defense Curl`, `Minimize`, `Stuff Cheeks`, `Aromatic Mist`, `Silk Trap`.
 
-Final HEAD: `b3cfa577e01f45d57e0d73ebe662b84665d6f48e`.
-18/18 passed on that exact notebook-bearing HEAD. PR closed without merge.
+### PR #54 — Silk Trap false SELF debuff
 
-### PR #54 — Silk Trap false self-debuff
+Final HEAD `c1f5e55c7d1d8acc991b3a6ddde906f10930bb67`, 18/18, closed without merge.
 
-This tranche found an **active semantic runtime bug**, not just a coverage-label problem.
+Source:
+- `target=user` because the move protects the user.
+- stat metadata contains Speed -1, but real recipient is an attacker that makes direct contact.
 
-Immutable snapshot facts for move 852 (`silk-trap`):
-
-- `target = user` because Silk Trap protects the user.
-- priority = +4.
-- `stat_changes = Speed -1`.
-- flavor text states that an attacker making direct contact has its Speed lowered.
-
-The legacy generic converter combined `target=user` with the independent stat change and emitted:
-
-`MODIFY_STAT_STAGE target=SELF stat=speed value=-1`
-
-Because runtime executes `effect_specs` regardless of DATA_ONLY classification, using Silk Trap could incorrectly slow the **user itself**.
+Legacy false output:
+`SELF Speed -1`
 
 Fix:
+- fail-fast source + legacy signature;
+- remove executable spec;
+- keep `DATA_ONLY`, `effect_specs=[]` until protection/contact-trigger/attacker targeting exists;
+- independent DATA V3 regenerated-JSON assertion.
 
-- Validate the exact source signature and the legacy false-self-debuff signature fail-fast.
-- Remove the false runtime effect.
-- Keep `Silk Trap` as `DATA_ONLY` with `effect_specs=[]` until protection + contact-trigger + attacker-target semantics exist.
-- Add an independent DATA V3 domain test against regenerated raw JSON.
+### PR #55 — Aromatic Mist false SELF buff
 
-Final HEAD: `c1f5e55c7d1d8acc991b3a6ddde906f10930bb67`.
-18/18 passed on that exact notebook-bearing HEAD. PR closed without merge.
+Final HEAD `844efde0eed27e1a5ca8790ae95a183fba6ba98c`, 18/18, closed without merge.
 
-### PR #55 — Aromatic Mist false self-buff
-
-This tranche found another **active target-semantics bug**.
-
-Immutable snapshot facts for move 597 (`aromatic-mist`):
-
-- `target = ally`.
-- Status move, power 0.
-- `stat_changes = Special Defense +1`.
-- Source effect text explicitly says it raises a **selected ally's** Special Defense by one stage.
-
-The legacy generic converter cannot represent ally targeting and emitted:
-
-`MODIFY_STAT_STAGE target=SELF stat=special_defense value=+1`
-
-Because `effect_specs` execute regardless of DATA_ONLY classification, this could buff the user instead of the selected ally.
+Source: `target=ally`, selected ally SpDef +1.
+Legacy false output: `SELF SpDef +1`.
 
 Fix:
-
-- Fail-fast verify the exact ally-targeted source contract and the legacy false-SELF signature.
-- Remove the false executable effect.
-- Keep `Aromatic Mist` as `DATA_ONLY` with `effect_specs=[]` until the battle target model supports allies.
-- Add an independent DATA V3 domain test requiring the regenerated raw record to remain present, `target=ally`, `classification=DATA_ONLY`, and effect-free.
-
-Final HEAD: `844efde0eed27e1a5ca8790ae95a183fba6ba98c`.
-18/18 passed on that exact notebook-bearing HEAD. PR closed without merge.
+- fail-fast ally source + false SELF signature;
+- remove executable effect;
+- `DATA_ONLY`, `effect_specs=[]` until ally target exists;
+- independent regenerated-output assertion.
 
 ### PR #56 — Stuff Cheeks unconditional Defense boost
 
-This tranche found another **active conditional-semantics bug**.
+Final HEAD `1c4217d5ebc6727982ef5d7b5b5b0667cea6c5b6`, 18/18, closed without merge.
 
-Immutable snapshot facts for move 747 (`stuff-cheeks`):
+Source move 747:
+- target user
+- Defense +2
+- cannot be used without held Berry
+- Berry must be consumed / its effect triggered before the boost
 
-- `target = user`.
-- `stat_changes = Defense +2`.
-- `meta.stat_chance = 100`.
-- English source effect explicitly states that the move **cannot be used unless the user is holding a Berry**.
-- On use, the user consumes the Berry, triggers its effect, and then receives the Defense boost.
-
-The legacy generic converter ignored the held-item prerequisite/consumption transaction and emitted an unconditional:
-
-`MODIFY_STAT_STAGE target=SELF stat=defense value=+2`
-
-Because runtime executes `effect_specs` regardless of DATA_ONLY classification, the user could gain Defense +2 without holding or consuming a Berry.
+Legacy false output: unconditional `SELF Defense +2`.
 
 Fix:
+- fail-fast target/category/stat metadata plus held-Berry prerequisite/consumption text;
+- verify legacy false unconditional signature;
+- remove executable effect;
+- keep `DATA_ONLY`, `effect_specs=[]` until held-item prerequisite/consumption transaction is representable;
+- independent regenerated-output assertion.
 
-- Fail-fast verify the source target/category/stat metadata plus the English held-Berry prerequisite/consumption semantics.
-- Verify the legacy unconditional SELF Defense +2 signature before correction.
-- Remove the executable effect.
-- Keep `Stuff Cheeks` as `DATA_ONLY` with `effect_specs=[]` until held-item prerequisite and consumption semantics are represented faithfully.
-- Add an independent DATA V3 domain test requiring the regenerated raw record to remain present, `target=user`, `classification=DATA_ONLY`, and effect-free.
+Exact PR #56 artifact after correction:
+- RUNTIME_SUPPORTED 555
+- PARTIAL_RUNTIME 66
+- DATA_ONLY 286
+- UNSUPPORTED 12
+- 63 DATA_ONLY records still had non-empty specs.
 
-Engineering SHA before notebook synchronization: `9600c74db8d45c590f47ad3be7baff439757964e`.
-That SHA passed 18/18 workflows, including DATA V3 and Godot global. The final exact notebook-bearing HEAD for PR #56 must be read from GitHub after the required second 18/18 certification before closure.
+### PR #57 — Howl user-and-allies target correction (CURRENT)
 
-## Current artifact metrics from PR #56 engineering SHA
+Branch `fix/data-v3-howl-target-semantics`.
+Parent: certified PR #56 final `1c4217d5ebc6727982ef5d7b5b5b0667cea6c5b6`.
+Engineering SHA before notebook sync: `fc118cb3a06d3f1724b65aac5ba5c8893d0ea83b`.
+Engineering SHA: **18/18 SUCCESS** including DATA V3 + independent Howl assertion + Godot global.
 
+Source facts:
+- move 336 `howl`
+- target `user-and-allies`
+- Attack +1
+- Sword/Shield text: user raises spirit of itself and allies; their Attack rises
+- Scarlet/Violet text: user rouses itself and allies; their Attack rises
+
+Legacy bug:
+- `user-and-allies` was not included in legacy `self_target` detection;
+- generated output was `OPPONENT Attack +1`;
+- because specs execute despite DATA_ONLY label, Howl could buff the rival.
+
+Correct representation today:
+- preserve source target `user-and-allies`;
+- rewrite executable spec to exactly `SELF Attack +1`, 100% chance;
+- set `PARTIAL_RUNTIME` because SELF subset is faithful but ally subset is missing;
+- independent DATA V3 assertion checks target, classification, effect count, effect kind, SELF target, Attack +1, and 100% chance.
+
+Exact PR #57 engineering artifact:
 - `RUNTIME_SUPPORTED`: 555
-- `PARTIAL_RUNTIME`: 66
-- `DATA_ONLY`: 286
+- `PARTIAL_RUNTIME`: 67
+- `DATA_ONLY`: 285
 - `UNSUPPORTED`: 12
+- remaining DATA_ONLY with non-empty specs: 62
+- Howl record: `target=user-and-allies`, `PARTIAL_RUNTIME`, one `SELF Attack +1` effect.
 
-Remaining `DATA_ONLY` moves that nevertheless contain `effect_specs`: 63.
+Notebook sync moves the SHA. **PR #57 must receive a second exact-head 18/18 certification before closure without merge.**
 
-Breakdown:
+## Remaining high-risk families
 
-- 60 records with stat-change effects (108 top-level `modify_stat_stage` specs across those records).
-- 2 heal cases: `Purify`, `Swallow`.
-- 1 multi-hit case: `Beat Up`.
+### `user-and-allies` target records
 
-The count should shrink only through audited semantic tranches, not mass relabeling.
+PR #56 artifact exposed four such DATA_ONLY records whose generic stat effects targeted OPPONENT. Howl is now corrected separately. Remaining:
 
-## Known semantic families / traps already identified
+- `Coaching`: real semantics involve an adjacent ally and failure if no legal adjacent ally; do not blindly rewrite to SELF.
+- `Gear Up`: real semantics apply to friendly Pokémon with Plus/Minus; do not blindly rewrite to SELF.
+- `Magnetic Flux`: real semantics apply to friendly Pokémon with Plus/Minus; do not blindly rewrite to SELF.
 
-- Targeted heal vs self heal.
-- User-and-allies targeting unsupported by SELF/OPPONENT-only effect targets.
-- Explicit ally targeting (`Aromatic Mist`): never collapse to SELF/OPPONENT silently.
-- Held-item prerequisite/consumption semantics (`Stuff Cheeks`): never preserve a reward effect when its required transaction is missing.
-- Weather-conditioned healing ratios.
-- Temporary type suppression (`Roost`).
-- Persistent status replacement and move-specific sleep (`Rest`).
-- Delayed/persisted effects (`Wish`).
-- Heal amount derived from opponent stat (`Strength Sap`).
-- Pure self stat boosts: safe only after verifying no hidden extra mechanic.
-- Protection/contact-trigger effects (`Silk Trap`): source-level `target=user` must not be blindly applied to conditional stat changes on an attacker.
-- `Stockpile`, `Charge`, `Minimize`, `No Retreat`, etc. must **not** be assumed equivalent to pure stat boosts; they may carry additional state/mechanics.
-- `Purify`, `Swallow`, and `Beat Up` require separate semantic audits.
+Audit each separately.
 
-## Audit rule
+### Selected-pokemon stat records
 
-For every family:
+Known remaining examples include `baby_doll_eyes`, `charm`, `confide`, `decorate`, `defog`, `eerie_impulse`, `fake_tears`, `feather_dance`, `flash`, `kinesis`, `memento`, `metal_sound`, `noble_roar`, `parting_shot`, `play_nice`, `sand_attack`, `scary_face`, `screech`, `smokescreen`, `spicy_extract`, `tar_shot`, `tearful_look`, `tickle`.
 
-1. Inspect immutable source semantics.
-2. Inspect current generated `effect_specs` from an exact certified DATA V3 artifact.
-3. Confirm Battle Core can execute the represented mechanics faithfully.
-4. Add explicit adapter fail-fast assertions.
-5. Add independent output invariants when the effect shape/target is being changed; pure extensions of an already-certified table may reuse its fail-fast contract while still passing the complete DATA V3 regeneration/import/runtime workflow.
-6. Run focal DATA V3.
-7. Run/confirm all 18 workflows on the exact same engineering HEAD.
-8. Synchronize the notebooks when the tranche changes project state; this creates a new HEAD and therefore requires another exact-head 18/18 certification before closure.
-9. Close PR without merge after final certification.
+Do not mass-promote: several carry extra mechanics (Defog field removal, Memento self-faint, Parting Shot switching, Tar Shot Fire interaction, etc.).
+
+### User-target stat records
+
+Known cases include `Autotomize`, `Bulk Up`, `Calm Mind`, `Charge`, `Clangorous Soul`, `Coil`, `Cosmic Power`, `Defend Order`, `Defense Curl`, `Dragon Dance`, `Extreme Evoboost`, `Fillet Away`, `Geomancy`, `Growth`, `Hone Claws`, `Minimize`, `No Retreat`, `Quiver Dance`, `Shell Smash`, `Shift Gear`, `Stockpile`, `Tidy Up`, `Work Up`.
+
+Some are pure stat packages; others require weight changes, costs, charging turns, weather, switching locks, stored counters, cleanup effects, etc. Audit by small semantic family.
+
+### All-opponents / all-pokemon
+
+All-opponents examples: `Captivate`, `Cotton Spore`, `Growl`, `Leer`, `String Shot`, `Sweet Scent`, `Tail Whip`, `Venom Drench`. Conditions like gender or poisoned-only must be preserved.
+
+All-pokemon examples: `Flower Shield`, `Rototiller`; current generic single-opponent effects cannot represent all-Pokémon + Grass-only semantics faithfully.
+
+### Non-stat remaining DATA_ONLY with specs
+
+- `Purify` — heal/status semantics not yet audited
+- `Swallow` — heal amount depends on Stockpile state
+- `Beat Up` — multi-hit semantics depend on party composition/stats
+
+Handle separately.
+
+## Battle Core limitations relevant to classification
+
+Effect targets currently supported by the importer/runtime are effectively SELF and OPPONENT. Missing/general limitations include:
+
+- ally/team/side targeting
+- delayed/persisted effects
+- weather-conditioned heal ratios
+- temporary type suppression
+- protection/contact-response triggers
+- held-item prerequisites/consumption transactions
+- move-specific counters/state machines
+
+`StatStages` supports Attack, Defense, Special Attack, Special Defense, Speed, Accuracy, Evasion.
+
+## Audit protocol
+
+For every microfamily:
+
+1. Inspect immutable source semantics, including version-specific flavor/effect data when relevant.
+2. Inspect exact generated record from the latest certified DATA V3 artifact.
+3. Confirm what Battle Core can represent faithfully.
+4. Decide `RUNTIME_SUPPORTED`, `PARTIAL_RUNTIME`, `DATA_ONLY`, or `UNSUPPORTED` from semantics, not convenience.
+5. Add fail-fast adapter assertions.
+6. Add independent regenerated-output assertion when effect shape/target/classification changes.
+7. Keep scope tiny; never generalize one move's rule to superficially similar moves without source verification.
+8. Run focal DATA V3.
+9. Require 18/18 on the engineering SHA.
+10. Measure the exact artifact instead of estimating counts.
+11. Synchronize notebooks.
+12. Require 18/18 again on the final notebook-bearing SHA.
+13. Close PR without merge.
+
+Stop immediately on any failure; fix root cause before another family.
