@@ -168,6 +168,15 @@ func _register_abilities() -> void:
 		0,
 		{"immune_type_id": "ground"},
 	)]
+	# Partial runtime contract: an ordinary surviving damaging move raises Defense
+	# once. Battle Core currently emits AFTER_DAMAGE once per completed move and not
+	# for a fainted owner, so multi-hit and fatal-hit Stamina semantics remain absent.
+	_ability_specs[&"stamina"] = [BattleTriggerSpec.new(
+		BattleTriggerSpec.AFTER_DAMAGE,
+		&"ability",
+		&"stamina",
+		_stage(BattleEffectSpec.SELF, StatStages.DEFENSE, 1),
+	)]
 	_ability_specs[&"static"] = [BattleTriggerSpec.new(
 		BattleTriggerSpec.AFTER_DAMAGE,
 		&"ability",
