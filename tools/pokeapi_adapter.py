@@ -52,6 +52,12 @@ _SIMPLE_SELF_STAT_BOOSTS = {
     "barrier": ("defense", 2),
     "harden": ("defense", 1),
     "iron_defense": ("defense", 2),
+    "meditate": ("attack", 1),
+    "nasty_plot": ("special_attack", 2),
+    "rock_polish": ("speed", 2),
+    "sharpen": ("attack", 1),
+    "swords_dance": ("attack", 2),
+    "tail_glow": ("special_attack", 3),
 }
 
 # The V2 list mixes raw PokéAPI hyphenated names with the underscore-normalized
