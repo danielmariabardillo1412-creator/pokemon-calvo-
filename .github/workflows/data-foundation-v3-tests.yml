@@ -180,6 +180,21 @@ jobs:
           assert wish['power'] == 0
           assert wish['effect_specs'] == []
 
+          # Move Effects V3 — Strength Sap has a representable Attack drop but its
+          # heal equals the target's current Attack value, which the fixed/ratio
+          # HEAL model cannot express. Keep the real subset and report it honestly.
+          strength_sap = moves['strength_sap']
+          assert strength_sap['target'] == 'selected-pokemon'
+          assert strength_sap['classification'] == 'PARTIAL_RUNTIME'
+          assert strength_sap['power'] == 0
+          ss_stages = matching_effects(strength_sap['effect_specs'], 'modify_stat_stage')
+          assert len(ss_stages) == 1
+          assert ss_stages[0]['target'] == 'opponent'
+          assert ss_stages[0]['stat_id'] == 'attack'
+          assert ss_stages[0]['value'] == -1
+          assert ss_stages[0]['chance_basis_points'] == 10000
+          assert matching_effects(strength_sap['effect_specs'], 'heal') == []
+
           bulba = species['bulbasaur']
           assert any(x['ability_id'] == 'chlorophyll' and x['is_hidden'] for x in bulba.get('ability_slots', []))
           exact = set()
