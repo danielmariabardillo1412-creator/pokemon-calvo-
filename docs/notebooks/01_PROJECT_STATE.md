@@ -47,37 +47,58 @@ Recent Move Effects V3 chain:
 - #57 Howl — `53e20600d372d44bc21eb145f598448a41828e5d`
 - #58 Coaching — `3c4ac4d772a5869b45de592be7dd7f4d9b2a389b`
 - #59 Gear Up — `ef7dd6a41b1cf4bccacf0a8d5098a755bb9fd3e9`
+- #60 Magnetic Flux — `a5b56a0ba3a1efa81ac57be63b2813c19f2962a7`
 All above: 18/18 exact final HEAD, closed without merge.
 
-## Current tranche — PR #60 Magnetic Flux
-- Branch: `fix/data-v3-magnetic-flux-semantics`
-- Parent: certified #59 final `ef7dd6a41b1cf4bccacf0a8d5098a755bb9fd3e9`.
-- Engineering SHA before notebook synchronization: `ee5380e27a0a3312c88c68fc8e476c14dac0a1a7`.
-- Engineering SHA passed 18/18, including independent Magnetic Flux regenerated-output assertion and Godot global.
-- Notebook synchronization moves the branch tip; final exact HEAD must pass 18/18 again before #60 is closed without merge.
+## Current tranche — PR #61 pure SELF stat packages A
+- Branch: `fix/data-v3-simple-self-stat-packages-a`
+- Parent: certified #60 final `a5b56a0ba3a1efa81ac57be63b2813c19f2962a7`.
+- Engineering SHA before notebook synchronization: `f3927a99d4d21d711dec77d68e7526757691c47f`.
+- Engineering SHA passed 18/18, including independent regenerated-output assertions for all ten moves and Godot global.
+- Notebook synchronization moves the branch tip; final exact HEAD must pass 18/18 again before #61 is closed without merge.
 
-## Exact move coverage from PR #60 engineering artifact
-- `RUNTIME_SUPPORTED`: 555
-- `PARTIAL_RUNTIME`: 67
-- `DATA_ONLY`: 285
-- `UNSUPPORTED`: 12
+Certified in this tranche:
+- Bulk Up — Attack +1 / Defense +1
+- Calm Mind — Special Attack +1 / Special Defense +1
+- Coil — Attack +1 / Defense +1 / Accuracy +1
+- Cosmic Power — Defense +1 / Special Defense +1
+- Defend Order — Defense +1 / Special Defense +1
+- Dragon Dance — Attack +1 / Speed +1
+- Hone Claws — Attack +1 / Accuracy +1
+- Quiver Dance — Special Attack +1 / Special Defense +1 / Speed +1
+- Shift Gear — Attack +1 / Speed +2
+- Work Up — Attack +1 / Special Attack +1
 
-Remaining `DATA_ONLY` records with non-empty `effect_specs`: **59**.
+For these ten, immutable source semantics are exactly an unconditional `user` stat package. The legacy generator already emitted the complete SELF package correctly; PR #61 adds fail-fast exact package validation and promotes only these named moves to `RUNTIME_SUPPORTED`.
+
+## Exact move coverage from PR #61 engineering artifact
+- `RUNTIME_SUPPORTED`: **565**
+- `PARTIAL_RUNTIME`: **67**
+- `DATA_ONLY`: **275**
+- `UNSUPPORTED`: **12**
+
+Remaining `DATA_ONLY` records with non-empty `effect_specs`: **49**.
 Breakdown:
-- **56 stat-change records**.
+- **46 stat-change records**.
 - `Purify` and `Swallow` heal-related.
 - `Beat Up` multi-hit.
 
-## Recently neutralized/corrected active false effects
-- `Silk Trap`: false `SELF Speed -1` removed; DATA_ONLY effect-free.
-- `Aromatic Mist`: false SELF ally buff removed; DATA_ONLY effect-free.
-- `Stuff Cheeks`: unconditional Defense +2 without Berry removed; DATA_ONLY effect-free.
-- `Howl`: false OPPONENT Attack +1 corrected to faithful `SELF Attack +1` subset; PARTIAL_RUNTIME.
-- `Coaching`: false OPPONENT Attack/Defense buffs removed; DATA_ONLY effect-free.
-- `Gear Up`: false OPPONENT Attack/SpAtk buffs removed; DATA_ONLY effect-free; requires friendly Plus/Minus filtering.
-- `Magnetic Flux`: false OPPONENT Defense/SpDef buffs removed; DATA_ONLY effect-free; requires friendly Plus/Minus filtering.
+Remaining 46 stat-change targets:
+- 23 `selected-pokemon`
+- 13 `user`
+- 8 `all-opponents`
+- 2 `all-pokemon`
 
-The known `user-and-allies` target-risk tranche is now exhausted. Next work should regroup the remaining 56 stat-change DATA_ONLY records by semantic family before editing.
+The 13 remaining `user` cases are the conditional/stateful family rather than the clean stat-package family: Autotomize, Charge, Clangorous Soul, Defense Curl, Extreme Evoboost, Fillet Away, Geomancy, Growth, Minimize, No Retreat, Shell Smash, Stockpile, Tidy Up. Do not mass-promote them.
+
+## Recently neutralized/corrected active false effects
+- Silk Trap: false SELF Speed -1 removed; DATA_ONLY effect-free.
+- Aromatic Mist: false SELF ally buff removed; DATA_ONLY effect-free.
+- Stuff Cheeks: unconditional Defense +2 without Berry removed; DATA_ONLY effect-free.
+- Howl: false OPPONENT Attack +1 corrected to faithful SELF Attack +1 subset; PARTIAL_RUNTIME.
+- Coaching: false OPPONENT Attack/Defense buffs removed; DATA_ONLY effect-free.
+- Gear Up: false OPPONENT Attack/SpAtk buffs removed; DATA_ONLY effect-free.
+- Magnetic Flux: false OPPONENT Defense/SpDef buffs removed; DATA_ONLY effect-free.
 
 ## Runtime constraints relevant to audit
 Effect targets available today are effectively SELF and OPPONENT. Missing/general mechanics include ally/team/side targeting, ability-filtered recipient sets, delayed effects, weather-conditioned ratios, temporary type changes, protection/contact triggers, held-item transactions, and move-specific counters/state machines.
