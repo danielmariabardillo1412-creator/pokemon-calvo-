@@ -3,45 +3,40 @@
 Read this immediately after `00_READ_FIRST.md` when recovering context.
 
 ## Latest certified baseline before current tranche
-- PR #69 — `fix/data-v3-user-stateful-safe-subsets-a`
-- Final HEAD `7aaae1c600120442581fdd7c0c048b29e3ee5690`
+- PR #70 — `reconcile/data-v3-user-audit-chain`
+- Final HEAD `4ee439a9741cc7dac8ec5d1792485ee79aa5f4b2`
 - 18/18 SUCCESS on exact notebook-bearing HEAD
 - closed without merge.
 
-## Branch divergence that was discovered
-Two valid lines had diverged from certified PR #66:
-- PR #67 — Battle Core self-target accuracy fix; final HEAD `432781b78e8864192343b952b0645a48046ceed4`; 18/18 certified and closed without merge.
-- PR #68 — HP-cost safety for `clangorous_soul` / `fillet_away`; engineering HEAD `fb5cbf71edf2327725d8506b1b32965b0fae6bec`; 18/18 green but PR remained open and was not the canonical continuation.
-- PR #69 — Charge / Defense Curl / Growth / Shell Smash audit; certified independently from #66.
+#70 is the canonical continuation after the temporary #67/#68 vs #69 branch divergence. Do not resume from #67 or #68.
 
-Do **not** resume from #67 or #68. PR #70 is the reconciliation point that reunifies those validated technical changes on top of certified #69.
-
-## Current tranche — PR #70
-- Title: `DATA V3 — reconcile self-target accuracy and HP-cost audits`
-- Branch: `reconcile/data-v3-user-audit-chain`
-- Parent: certified #69 final `7aaae1c600120442581fdd7c0c048b29e3ee5690`
-- Engineering SHA before notebook sync: `20fedf932ae1a867dd641f0e693c21b745393a9b`
+## Current tranche — PR #71
+- Title: `DATA V3 — neutralize mandatory-state user boosts`
+- Branch: `fix/data-v3-user-mandatory-state-b`
+- Parent: certified #70 final `4ee439a9741cc7dac8ec5d1792485ee79aa5f4b2`
+- Engineering SHA before notebook sync: `b55a487b46ec5443992e623fef5b1c8ce2bb0665`
 - Engineering SHA CI: **18/18 SUCCESS**
-- Godot global: SUCCESS, including `BattleSelfTargetAccuracyTestSuite` through battle commands.
-- DATA V3: SUCCESS, including the #69 safe-user-stateful suite and the HP-cost suite together.
+- DATA V3 independent suite: SUCCESS
+- Godot global: SUCCESS
 
-### Technical reconciliation
-Ported from certified #67:
-- `TurnExecutor` skips the normal Accuracy/Evasion roll only for `move.target == "user"`.
-- Selected/opponent-target moves retain normal accuracy behavior.
-- Move-specific failure conditions remain separate mechanics.
+## What #71 resolves
+### Geomancy
+- real source: one charge turn, then SpAtk/SpDef/Speed +2;
+- Power Herb can skip the delay by consuming the item;
+- current Battle Core has no charge/pending-turn primitive;
+- immediate free +2/+2/+2 was false.
+Decision: `DATA_ONLY`, `effect_specs=[]`.
 
-Ported from #68 engineering:
-- `clangorous_soul`: mandatory 1/3 max-HP cost/failure transaction is not representable; free +1-all specs removed.
-- `fillet_away`: mandatory 1/2 max-HP cost/failure transaction is not representable; free +2 Atk/SpAtk/Speed specs removed.
-- Both remain `DATA_ONLY` with `effect_specs=[]`.
+### No Retreat
+- real source: +1 Attack/Defense/SpAtk/SpDef/Speed;
+- inseparable Can't Escape/switch restriction and reuse/failure state;
+- current Battle Core has no trapping/reuse-state primitive;
+- free repeatable +1-all was false.
+Decision: `DATA_ONLY`, `effect_specs=[]`.
 
-Unified audit chain:
-`all_opponents → user_stateful_safe (#69) → user_hp_cost (#68)`.
-
-Exact artifact comparison #69 → #70 engineering:
-- only two move records changed: `clangorous_soul`, `fillet_away`;
-- on both, only `effect_specs` changed to `[]`;
+Exact #70 → #71 artifact comparison:
+- changed records: exactly `geomancy`, `no_retreat`;
+- changed key on both: only `effect_specs`;
 - no classification, target, accuracy, summary or unrelated move changed.
 
 Coverage remains:
@@ -50,36 +45,36 @@ Coverage remains:
 - `DATA_ONLY`: **246**
 - `UNSUPPORTED`: **12**
 
-DATA_ONLY with non-empty specs: **12** total.
-- 9 remaining stat/stateful records.
+DATA_ONLY with non-empty specs: **10**.
+- 7 stat/stateful.
 - non-stat: `Beat Up`, `Purify`, `Swallow`.
 
 ## Current certification step
-Notebook synchronization moves the SHA. Before closing #70:
-1. verify only `docs/notebooks/01_PROJECT_STATE.md`, `02_DATA_V3_MOVE_EFFECTS_AUDIT.md`, `04_NEXT_STEPS.md` changed after engineering SHA `20fedf932ae1a867dd641f0e693c21b745393a9b`;
-2. require all 18 workflows green on the exact final notebook-bearing HEAD;
-3. close #70 without merge;
-4. close #68 as superseded by #70, without merge.
+Notebook synchronization moves SHA. Before closing #71:
+1. verify only 01/02/04 changed after engineering SHA `b55a487b46ec5443992e623fef5b1c8ce2bb0665`;
+2. require 18/18 on the exact final notebook-bearing HEAD;
+3. close #71 without merge;
+4. use that exact final HEAD as next baseline.
 
-## Exact next DATA V3 task after #70 certification
-Audit the remaining user stat/stateful records, starting with the two clearly unsafe transactions:
-1. `geomancy` — +2 SpAtk/SpDef/Speed occurs after a charging turn; Power Herb can consume an item to skip the charge. Immediate free boosts are false.
-2. `no_retreat` — +1 all stats is coupled to switch/escape restriction and repeat-use state. Unrestricted repeatable boosts are false.
+## Exact next DATA V3 task after #71 certification
+Audit the remaining **5 user stat/stateful DATA_ONLY-with-specs**:
+- `autotomize`
+- `extreme_evoboost`
+- `minimize`
+- `stockpile`
+- `tidy_up`
 
-Unless immutable source/public mechanics reveal a contradiction, both should remain `DATA_ONLY` and lose executable stat specs until the missing state transaction exists.
+Recommended split:
+1. `autotomize` + `minimize`: persistent self-state omitted from otherwise real stat boosts; determine whether omission is merely weakening or strategically false.
+2. `stockpile`: counter/cap and Spit Up/Swallow dependency; likely unsafe without stored-state transaction.
+3. `tidy_up`: field/substitute cleanup plus boosts; determine whether retaining boosts alone removes an inseparable cost/strategic effect.
+4. `extreme_evoboost`: Z-Move/Eevee activation and generation legality; do not treat as ordinary freely selectable status move.
 
-Then remaining user cases:
-- `autotomize`: weight-reduction state.
-- `extreme_evoboost`: Eevee-exclusive Z-Move / generation legality.
-- `minimize`: persistent Minimized vulnerabilities/always-hit interactions.
-- `stockpile`: capped stored counter + Spit Up/Swallow transaction.
-- `tidy_up`: mandatory field/substitute cleanup transaction.
-
-Remaining all-pokemon:
+Then remaining all-pokemon:
 - `flower_shield`
 - `rototiller`
 
-Remaining non-stat:
+Then remaining non-stat:
 - `Purify`
 - `Swallow`
 - `Beat Up`
