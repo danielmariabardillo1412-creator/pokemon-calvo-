@@ -3,57 +3,62 @@
 Read immediately after `00_READ_FIRST.md` when recovering context.
 
 ## Latest certified baseline before current tranche
-- PR #73 — `fix/data-v3-user-terminal-state-d`
-- Final HEAD `67ba79e9a68a78669ee5ae04166a47ee11331bc7`
+- PR #74 — `fix/data-v3-all-pokemon-semantics`
+- Final HEAD `9a917fea11df07c3aa26c8962e2dca9784a41875`
 - 18/18 SUCCESS on exact notebook-bearing HEAD
 - closed without merge.
 
-## Current tranche — PR #74
-- Branch: `fix/data-v3-all-pokemon-semantics`
-- Parent: certified #73 final `67ba79e9a68a78669ee5ae04166a47ee11331bc7`
-- Engineering SHA before notebooks: `99a435c291514612b5c1ce43ad2a28e47797c6c0`
+## Current tranche — PR #75
+- Branch: `fix/data-v3-final-data-only-effects`
+- Parent: certified #74 final `9a917fea11df07c3aa26c8962e2dca9784a41875`
+- Engineering SHA before notebooks: `db73a16b631f4e7bd539ac5e73b288401489d39a`
 - Engineering SHA: **18/18 SUCCESS**; DATA V3 and Godot global green.
 
-### Flower Shield
-Real move affects eligible Grass-type Pokémon across the field, not simply the opponent; Gen IX cannot select it. Legacy OPPONENT Defense +1 is false.
-Decision: `DATA_ONLY`, `effect_specs=[]`; canonical summary records eligibility/current availability.
+### Purify
+Requires an eligible target status, cures it, then heals the user up to 50%; legacy unconditional SELF 50% heal was unsafe.
+Decision: `DATA_ONLY`, `effect_specs=[]`.
 
-### Rototiller
-Real move affects eligible grounded Grass-type Pokémon across the field, fails if none, and is unavailable for selection from Gen VIII onward. Legacy OPPONENT Attack/SpAtk +1 is false.
-Decision: `DATA_ONLY`, `effect_specs=[]`; canonical summary records grounded/type/current availability.
+### Swallow
+Requires Stockpile, heals 25%/50%/100% at levels 1/2/3, consumes Stockpile and associated defensive changes; legacy flat SELF 25% heal was unsafe.
+Decision: `DATA_ONLY`, `effect_specs=[]`.
 
-## Exact #73 → #74 engineering artifact
-- only `flower_shield` and `rototiller` changed;
-- on both only `effect_specs` and `effect_summary` changed;
-- coverage remains **590 runtime / 71 partial / 246 data-only / 12 unsupported**.
+### Beat Up
+Party-dependent multi-hit attack whose eligible strike count depends on conscious/non-statused party members and whose modern strike power is party-member-dependent; legacy fixed 6-hit spec was false.
+Decision: `DATA_ONLY`, `effect_specs=[]`.
 
-Important milestone: **all DATA_ONLY stat-change records with executable specs are now resolved**.
+## Exact #74 → #75 engineering artifact
+Raw and normalized agree:
+- only `beat_up`, `purify`, `swallow` changed;
+- on all three only `effect_specs` and `effect_summary` changed;
+- coverage remains **590 runtime / 71 partial / 246 data-only / 12 unsupported**;
+- `DATA_ONLY` with non-empty `effect_specs`: **0**.
 
-Only three DATA_ONLY records still have non-empty `effect_specs`:
-1. `Purify`
-2. `Swallow`
-3. `Beat Up`
+Important milestone: **Move Effects V3 executable-safety frontier is closed.**
 
 ## Current certification step
-Notebook synchronization moves SHA. Before closing #74:
-1. verify only notebooks 01/02/04 changed after engineering SHA `99a435c291514612b5c1ce43ad2a28e47797c6c0`;
+Notebook synchronization moves SHA. Before closing #75:
+1. verify only notebooks 01/02/04 changed after engineering SHA `db73a16b631f4e7bd539ac5e73b288401489d39a`;
 2. require 18/18 on exact final notebook-bearing HEAD;
-3. close #74 without merge;
+3. close #75 without merge;
 4. use that exact HEAD as next baseline.
 
-## Exact next task
-Audit the three remaining non-stat cases. Suggested order:
-- `Purify`: source/current mechanic cures the selected target's major status and heals the user only if the cure succeeds; current generated SELF heal may grant a free heal without the cure transaction.
-- `Swallow`: healing magnitude and legality depend on Stockpile count and consume that state; a flat heal without prerequisite/consumption is unsafe.
-- `Beat Up`: hit count/damage depend on eligible party members rather than a fixed generic six-hit transaction.
+## Exact next task after #75 closure
+Begin a new DATA V3 reliability workstream for **Ability runtime-support contracts**.
 
-Do not change Battle Core merely to make these records executable. If a faithful subset cannot be guaranteed, prefer effect-free `DATA_ONLY`.
+First tranche should be an inventory/audit, not mass implementation:
+- enumerate the 373 preserved ability records;
+- identify which abilities have actual Battle Core/runtime mechanics versus metadata-only storage;
+- identify any ability records whose current labels or executable paths imply more support than exists;
+- establish explicit coverage semantics/tests before implementing additional abilities;
+- create a dedicated ability-audit notebook rather than bloating this live pointer.
+
+Do not implement hundreds of abilities at once and do not switch back to trainer AI/archetypes yet.
 
 ## Workstream
-**Move Effects V3 / battle-relevant DATA V3 semantic audit. Do not switch to trainer AI/archetypes.**
+**DATA FOUNDATION V3 semantic reliability. Move Effects V3 is closing; Abilities are next.**
 
 ## Safety rule
-`effect_specs` execute regardless of coverage label. `DATA_ONLY` is not an execution gate.
+Preserved source metadata is not equivalent to implemented runtime mechanics. Coverage/support claims must match what the engine can actually execute.
 
 ## Stop condition
 Any focal/regression failure stops the tranche until root cause is fixed and rerun.
