@@ -9,8 +9,8 @@ Fast context recovery for engineering work. GitHub commits, PR state, CI, immuta
 - Certified snapshots are retained as branches / closed PRs **without merge**.
 - New tranches branch from the latest exact certified HEAD.
 - Certification requires all 18 normal workflows green on the same exact final SHA.
-- Notebook updates move the SHA, so notebook-bearing HEAD requires a second 18/18 run before PR closure.
-- Stop on any failing focal/regression test and fix root cause before continuing.
+- Notebook updates move SHA, so notebook-bearing HEAD requires a second 18/18 run before closure.
+- Stop on any failing focal/regression test; fix root cause before continuing.
 
 ## DATA FOUNDATION V3 authority
 Immutable source:
@@ -38,77 +38,73 @@ Structural facts:
 - #66 all-opponents semantics — `51bc14155338e47c76926047845a958205005bdd`
 - #69 safe user-stateful subsets — `7aaae1c600120442581fdd7c0c048b29e3ee5690`
 - #70 reconciliation of #67/#68 with #69 — `4ee439a9741cc7dac8ec5d1792485ee79aa5f4b2`
+- #71 mandatory-state user boosts — `98c68f1c184e84db30458a4533fb769cba1140ac`
 All above: 18/18 on exact final notebook-bearing HEAD, closed without merge.
 
-## Certified reconciliation from #70
-After #66, #67/#68 and #69 had diverged. #70 is the canonical reunification point; do not resume from #67 or #68.
-
-#70 contains:
-- certified Battle Core self-target accuracy fix from #67: normal Accuracy/Evasion roll is skipped only for canonical `target=user`; move-specific failure rules remain separate;
-- Clangorous Soul / Fillet Away HP-cost safety from #68: both remain `DATA_ONLY` but their free stat specs are removed because max-HP payment/failure transaction is not representable;
-- all #69 safe-user-stateful classifications remain intact.
-
-#70 final coverage:
-- `RUNTIME_SUPPORTED`: 590
-- `PARTIAL_RUNTIME`: 71
-- `DATA_ONLY`: 246
-- `UNSUPPORTED`: 12
-- DATA_ONLY with non-empty specs: 12 (9 stat/stateful + Beat Up + Purify + Swallow).
-
-# Current tranche — PR #71 mandatory-state user boosts
-- Branch: `fix/data-v3-user-mandatory-state-b`
-- Parent: certified #70 final `4ee439a9741cc7dac8ec5d1792485ee79aa5f4b2`.
-- Engineering SHA before notebook sync: `b55a487b46ec5443992e623fef5b1c8ce2bb0665`.
+# Current tranche — PR #72 persistent-state user moves
+- Branch: `fix/data-v3-user-persistent-state-c`
+- Parent: certified #71 final `98c68f1c184e84db30458a4533fb769cba1140ac`.
+- Engineering SHA before notebook sync: `16f7eef390fb08e7ce48f2a1d2cbf4547321a939`.
 - Engineering SHA passed **18/18**, including DATA V3 and Godot global.
 
-## #71 decisions
-### Geomancy
-Immutable source:
-- target user; source accuracy null → canonical -1;
-- SpAtk +2, SpDef +2, Speed +2;
-- English effect explicitly says it takes one turn to charge.
-Public core-series mechanics confirm Power Herb can execute it in one turn only by consuming the item.
+## #72 architecture
+New tiny coordinator `tools/pokeapi_adapter_user_audit_chain.py` centralizes the deterministic order of narrow user audits:
+`HP-cost → mandatory-state → persistent-state`.
+It does not define move semantics; each narrow module remains authoritative for its audited family.
 
-Current BattleEffectSpec has no charge/pending-turn primitive. Immediate +2/+2/+2 is materially stronger than the real move.
-Decision: remain `DATA_ONLY`, `effect_specs=[]`.
+## #72 decisions
+### Autotomize
+Immutable snapshot:
+- target user; accuracy null → canonical -1;
+- Speed +2;
+- generic English effect prose is stale: says weight is halved and does not stack.
 
-### No Retreat
-Immutable source:
-- target user; source accuracy null → canonical -1;
-- Attack/Defense/SpAtk/SpDef/Speed +1;
-- effect explicitly prevents switching out and contains reuse/failure semantics.
-Public mechanics confirm Can't Escape/switch restriction is integral.
+Current core-series mechanic checked publicly:
+- each successful use reduces weight by 100 kg;
+- effect stacks to a minimum weight of 0.1 kg.
 
-Current BattleEffectSpec has no trapping/reuse state. Free repeatable +1-all is materially stronger than the real move.
-Decision: remain `DATA_ONLY`, `effect_specs=[]`.
+Weight modification can help or hurt depending on weight-based attacks, so exposing only Speed +2 is not a provably safe partial.
+Decision:
+- remain `DATA_ONLY`;
+- `effect_specs=[]`;
+- immutable source stays untouched;
+- loaded English prose is normalized before canonical `effect_summary` so derived data says Speed +2 and weight -100 kg rather than the stale half-weight rule.
 
-Implementation: `tools/pokeapi_adapter_user_mandatory_state.py`, executed after safe-user-stateful and HP-cost audits. Independent DATA V3 suite verifies both regenerated records are effect-free and retain semantic summaries.
+### Minimize
+Immutable snapshot:
+- target user; accuracy null → canonical -1;
+- Evasion +2;
+- source prose records special vulnerabilities after using Minimize but is incomplete for modern mechanics.
 
-## Exact #71 engineering artifact
+Modern core-series rules apply persistent Minimized state with special accuracy/damage vulnerabilities. Current Battle Core has no Minimized-state primitive. Evasion +2 alone removes the drawback and is materially stronger.
+Decision:
+- remain `DATA_ONLY`;
+- `effect_specs=[]`;
+- canonical English summary is normalized to preserve the Minimized-state fact generically.
+
+## Exact #72 engineering artifact
 Coverage remains:
 - `RUNTIME_SUPPORTED`: **590**
 - `PARTIAL_RUNTIME`: **71**
 - `DATA_ONLY`: **246**
 - `UNSUPPORTED`: **12**
 
-DATA_ONLY with non-empty `effect_specs`: **10**.
-- 7 stat/stateful records.
+DATA_ONLY with non-empty `effect_specs`: **8**.
+- 5 stat/stateful records total.
 - 3 non-stat: `Beat Up`, `Purify`, `Swallow`.
 
-Exact #70 → #71 raw comparison:
-- exactly two records changed: `geomancy`, `no_retreat`;
-- changed key on each: `effect_specs` only;
-- Geomancy 3 SELF stat specs → empty;
-- No Retreat 5 SELF stat specs → empty;
-- classifications, target, accuracy, summaries and every unrelated record unchanged.
+Exact #71 → #72 raw comparison:
+- exactly two records changed: `autotomize`, `minimize`;
+- both changed only `effect_specs` and `effect_summary`;
+- Autotomize: one SELF Speed +2 spec → empty; stale half-weight summary → current 100 kg wording;
+- Minimize: one SELF Evasion +2 spec → empty; summary now records Minimized state;
+- classification, target, accuracy and every unrelated record unchanged.
 
-Notebook synchronization moves SHA. Final #71 notebook-bearing HEAD must pass 18/18 before closure without merge.
+Notebook synchronization moves SHA. Final #72 notebook-bearing HEAD must pass 18/18 before closure without merge.
 
-## Move Effects frontier after #71 engineering
-Remaining user stat/stateful DATA_ONLY-with-specs: **5**
-- `autotomize`
+## Move Effects frontier after #72 engineering
+Remaining user stat/stateful DATA_ONLY-with-specs: **3**
 - `extreme_evoboost`
-- `minimize`
 - `stockpile`
 - `tidy_up`
 
