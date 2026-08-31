@@ -37,73 +37,54 @@ Archived V2 remains provenance-only at `tools/archive/pokeapi_adapter_v2_legacy.
 - 18 XD Shadow moves explicitly excluded instead of remapped.
 
 ## Recent certified Move Effects chain
-- #53 simple self boosts C — `b3cfa577e01f45d57e0d73ebe662b84665d6f48e`
-- #54 Silk Trap — `c1f5e55c7d1d8acc991b3a6ddde906f10930bb67`
-- #55 Aromatic Mist — `844efde0eed27e1a5ca8790ae95a183fba6ba98c`
-- #56 Stuff Cheeks — `1c4217d5ebc6727982ef5d7b5b5b0667cea6c5b6`
-- #57 Howl — `53e20600d372d44bc21eb145f598448a41828e5d`
-- #58 Coaching — `3c4ac4d772a5869b45de592be7dd7f4d9b2a389b`
-- #59 Gear Up — `ef7dd6a41b1cf4bccacf0a8d5098a755bb9fd3e9`
 - #60 Magnetic Flux — `a5b56a0ba3a1efa81ac57be63b2813c19f2962a7`
 - #61 pure SELF stat packages A — `623930ca0b98b00099288bcf542e7e0a922ac180`
 - #62 pure opponent stat drops A — `6d1335b8c5cee0b1cf1e99910a7707734b4aef85`
-All certified entries above: 18/18 on exact final HEAD, closed without merge.
+- #63 always-hit accuracy semantics — `9f8b3e01bec1f86cff75380d68dd98d76e738e78`
+All above: 18/18 on exact final HEAD, closed without merge.
 
-## Current tranche — PR #63 always-hit accuracy semantics
-- Branch: `fix/data-v3-always-hit-accuracy`
-- Parent: certified #62 final `6d1335b8c5cee0b1cf1e99910a7707734b4aef85`.
-- Engineering SHA before notebook synchronization: `428e1f2e387301899d749a9b97127f9e1a0a5b45`.
-- Engineering SHA passed **18/18**, including DATA V3 accuracy contract tests and Godot global.
-- Notebook synchronization moves the SHA; final exact HEAD must pass 18/18 again before #63 closes without merge.
+## PR #63 accuracy correction retained as certified
+PokéAPI `accuracy=null` is now canonically preserved as `accuracy=-1`, matching Battle Core's existing always-hit sentinel. The correction affected exactly 285/919 move records and changed only the `accuracy` field; classifications and `effect_specs` were unchanged.
 
-### Root cause fixed by #63
-PokéAPI uses `accuracy=null` for moves that bypass the normal accuracy check. DATA V3 previously converted null to canonical `100`. That is semantically wrong in this project because `BattleRuleset.accuracy_threshold_basis_points()` treats a negative base accuracy as the explicit always-hit sentinel, while `100` is still modified by Accuracy/Evasion stages.
+## Current tranche — PR #64 selected special stat packages A
+- Branch: `fix/data-v3-selected-special-stat-packages-a`
+- Parent: certified #63 final `9f8b3e01bec1f86cff75380d68dd98d76e738e78`.
+- Engineering SHA before notebook synchronization: `3c9c83d3ff99c0e9a98506343db4e28b6de65af2`.
+- Engineering SHA passed **18/18**, including DATA V3 independent regenerated-output assertions and Godot global.
+- Notebook synchronization moves the SHA; final exact HEAD must pass 18/18 again before #64 closes without merge.
 
-Correct canonical mapping:
-- source numeric accuracy → preserve the numeric value;
-- source `accuracy=null` → canonical `accuracy=-1`.
+Source-audited/promoted in #64:
+- `Decorate`: selected target, always-hit (`accuracy=-1` canonical), Attack +2 / Special Attack +2.
+- `Spicy Extract`: selected target, always-hit (`accuracy=-1` canonical), Attack +2 / Defense -2.
 
-No Battle Core behavior changed. `MoveDefinition` already stores arbitrary integer accuracy and `TurnExecutor` already passes it directly to `BattleRuleset`.
+The legacy generator already emitted both complete OPPONENT stat packages correctly. #64 does not rewrite effects. It adds exact move-specific source/generated contracts and promotes only these two records to `RUNTIME_SUPPORTED`.
 
-### Exact #63 engineering artifact impact
-Compared with the certified #62 artifact:
-- **285 / 919** runtime move records changed.
-- The **only changed key was `accuracy`** on those 285 moves.
-- No classifications changed.
-- No `effect_specs` changed.
-- Coverage remains:
-  - `RUNTIME_SUPPORTED`: **582**
-  - `PARTIAL_RUNTIME`: **67**
-  - `DATA_ONLY`: **258**
-  - `UNSUPPORTED`: **12**
+### Exact #64 engineering artifact
+- `RUNTIME_SUPPORTED`: **584**
+- `PARTIAL_RUNTIME`: **67**
+- `DATA_ONLY`: **256**
+- `UNSUPPORTED`: **12**
+- DATA_ONLY with non-empty `effect_specs`: **30**
+  - 27 stat-change
+  - `Beat Up`, `Purify`, `Swallow`
 
-The 285 always-hit records by current coverage:
-- 66 `RUNTIME_SUPPORTED`
-- 28 `PARTIAL_RUNTIME`
-- 180 `DATA_ONLY`
-- 11 `UNSUPPORTED`
+Artifact comparison #63 → #64:
+- changed move records: **2** (`decorate`, `spicy_extract`)
+- changed key on both: **classification only**
+- `accuracy` differences: 0
+- `effect_specs` differences: 0
 
-Independent sentinels verify:
-- `Confide`, `Play Nice`, `Tearful Look`, `Decorate`, `Spicy Extract` regenerate as `accuracy=-1` and survive `MoveDefinition.from_dict()` unchanged.
-- `Charm`, whose source accuracy is genuinely 100, remains `100`.
-- `BattleRuleset` returns 10000 bp for `-1` even with Accuracy -6 versus Evasion +6.
-- A genuine `100` remains stage-sensitive, proving the two representations are distinct.
-
-## Move Effects audit frontier after #62/#63
-Remaining `DATA_ONLY` records with non-empty `effect_specs`: **32**.
-- 29 stat-change records.
-- `Beat Up`, `Purify`, `Swallow` are the 3 non-stat cases.
-
-Remaining 29 stat-change target distribution:
+Remaining 27 stat-change DATA_ONLY target distribution:
 - 13 `user`
 - 8 `all-opponents`
-- 6 `selected-pokemon`
+- 4 `selected-pokemon`
 - 2 `all-pokemon`
 
-Remaining six `selected-pokemon` special cases:
-`decorate`, `defog`, `memento`, `parting_shot`, `spicy_extract`, `tar_shot`.
-
-`Decorate` and `Spicy Extract` were inspected immediately after #62: their generated OPPONENT stat packages appear faithful, but promotion was correctly paused when the transversal null-accuracy defect was discovered. Resume their coverage audit only after #63 is fully certified.
+The selected-pokemon family is now reduced to four special/stateful moves:
+- `defog`
+- `memento`
+- `parting_shot`
+- `tar_shot`
 
 Remaining 13 `user` cases are conditional/stateful:
 `autotomize`, `charge`, `clangorous_soul`, `defense_curl`, `extreme_evoboost`, `fillet_away`, `geomancy`, `growth`, `minimize`, `no_retreat`, `shell_smash`, `stockpile`, `tidy_up`.
@@ -118,7 +99,7 @@ All-pokemon remainder:
 ## Runtime safety invariant
 `effect_specs` execute regardless of coverage label. `DATA_ONLY` is not an execution gate. A known-false spec must be removed/corrected.
 
-Current effect targets are effectively SELF and OPPONENT. Missing/general mechanics include ally/team/side targeting, ability-filtered recipients, delayed effects, weather ratios, temporary type effects, protection/contact triggers, held-item transactions, and move-specific state machines.
+Current effect targets are effectively SELF and OPPONENT. Missing/general mechanics include ally/team/side targeting, ability-filtered recipients, delayed effects, weather ratios, temporary type effects, protection/contact triggers, held-item transactions, field/hazard cleanup, move-driven self-faint/switch behavior, temporary damage-vulnerability state, and other move-specific state machines.
 
 Coverage:
 - `RUNTIME_SUPPORTED`: audited semantics fully faithful in current battle model.
