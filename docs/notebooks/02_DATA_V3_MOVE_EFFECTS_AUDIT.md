@@ -205,23 +205,50 @@ Fix:
 - Validate the exact source signature and the legacy false-self-debuff signature fail-fast.
 - Remove the false runtime effect.
 - Keep `Silk Trap` as `DATA_ONLY` with `effect_specs=[]` until protection + contact-trigger + attacker-target semantics exist.
-- Add an independent DATA V3 domain test that reads regenerated `data/raw/pokemon_api.json` and requires Silk Trap to be present, `target=user`, `classification=DATA_ONLY`, and effect-free.
+- Add an independent DATA V3 domain test against regenerated raw JSON.
 
-Engineering SHA before notebook synchronization: `0bf50ab5e6eb17d4b8d768d38fa274b97387741b`.
-That SHA passed 18/18 workflows. The final exact notebook-bearing HEAD for PR #54 must be read from GitHub after the required second 18/18 certification before closure.
+Final HEAD: `c1f5e55c7d1d8acc991b3a6ddde906f10930bb67`.
+18/18 passed on that exact notebook-bearing HEAD. PR closed without merge.
 
-## Current artifact metrics from PR #54 engineering SHA
+### PR #55 — Aromatic Mist false self-buff
+
+This tranche found another **active target-semantics bug**.
+
+Immutable snapshot facts for move 597 (`aromatic-mist`):
+
+- `target = ally`.
+- Status move, power 0.
+- `stat_changes = Special Defense +1`.
+- Source effect text explicitly says it raises a **selected ally's** Special Defense by one stage.
+
+The legacy generic converter cannot represent ally targeting and emitted:
+
+`MODIFY_STAT_STAGE target=SELF stat=special_defense value=+1`
+
+Because `effect_specs` execute regardless of DATA_ONLY classification, this could buff the user instead of the selected ally.
+
+Fix:
+
+- Fail-fast verify the exact ally-targeted source contract and the legacy false-SELF signature.
+- Remove the false executable effect.
+- Keep `Aromatic Mist` as `DATA_ONLY` with `effect_specs=[]` until the battle target model supports allies.
+- Add an independent DATA V3 domain test requiring the regenerated raw record to remain present, `target=ally`, `classification=DATA_ONLY`, and effect-free.
+
+Engineering SHA before notebook synchronization: `7ae7d5c8f20c555e03411e3baacdbd2de1084f1c`.
+That SHA passed 18/18 workflows. The final exact notebook-bearing HEAD for PR #55 must be read from GitHub after the required second 18/18 certification before closure.
+
+## Current artifact metrics from PR #55 engineering SHA
 
 - `RUNTIME_SUPPORTED`: 555
 - `PARTIAL_RUNTIME`: 66
 - `DATA_ONLY`: 286
 - `UNSUPPORTED`: 12
 
-Remaining `DATA_ONLY` moves that nevertheless contain `effect_specs`: 65.
+Remaining `DATA_ONLY` moves that nevertheless contain `effect_specs`: 64.
 
 Breakdown:
 
-- 62 stat-change cases.
+- 61 records with stat-change effects.
 - 2 heal cases: `Purify`, `Swallow`.
 - 1 multi-hit case: `Beat Up`.
 
@@ -231,6 +258,7 @@ The count should shrink only through audited semantic tranches, not mass relabel
 
 - Targeted heal vs self heal.
 - User-and-allies targeting unsupported by SELF/OPPONENT-only effect targets.
+- Explicit ally targeting (`Aromatic Mist`): never collapse to SELF/OPPONENT silently.
 - Weather-conditioned healing ratios.
 - Temporary type suppression (`Roost`).
 - Persistent status replacement and move-specific sleep (`Rest`).
@@ -239,7 +267,6 @@ The count should shrink only through audited semantic tranches, not mass relabel
 - Pure self stat boosts: safe only after verifying no hidden extra mechanic.
 - Protection/contact-trigger effects (`Silk Trap`): source-level `target=user` must not be blindly applied to conditional stat changes on an attacker.
 - `Stockpile`, `Charge`, `Minimize`, `No Retreat`, etc. must **not** be assumed equivalent to pure stat boosts; they may carry additional state/mechanics.
-- `Aromatic Mist` requires ally targeting.
 - `Purify`, `Swallow`, and `Beat Up` require separate semantic audits.
 
 ## Audit rule
