@@ -54,6 +54,31 @@ _UNSUPPORTED_HEAL_RUNTIME = {
 }
 _TARGET_HEAL_MOVES = {"heal_pulse", "floral_healing"}
 
+# Stat-stage audit V1. Keep exact, already-supported effects executable; retain
+# only safe weaker subsets when a beneficial mechanic is missing; remove specs
+# when an omitted cost/condition would make the runtime move materially stronger.
+_SIMPLE_STAT_RUNTIME = {"growl", "swords_dance"}
+_SAFE_PARTIAL_STAT_RUNTIME = {
+    "defog",  # evasion drop modeled; field cleanup is not.
+    "growth",  # baseline +1/+1 modeled; sun boost is not.
+    "howl",  # self boost modeled; ally-wide scope is not.
+    "stockpile",  # defensive stages modeled; Stockpile counter/state is not.
+    "strength_sap",  # Attack drop modeled; healing from target Attack is not.
+    "tar_shot",  # Speed drop modeled; persistent Fire weakness is not.
+}
+_UNSAFE_INCOMPLETE_STAT_RUNTIME = {
+    "flower_shield",  # requires all-Grass filtering across both sides.
+    "gear_up",  # friendly Plus/Minus condition and side targeting are absent.
+    "geomancy",  # charge turn is absent.
+    "magnetic_flux",  # friendly Plus/Minus condition and side targeting are absent.
+    "memento",  # mandatory user faint is absent.
+    "no_retreat",  # mandatory switch lock is absent.
+    "parting_shot",  # mandatory user switch is absent.
+    "rototiller",  # requires all-Grass filtering across both sides.
+    "stuff_cheeks",  # berry requirement/consumption is absent.
+    "venom_drench",  # poisoned-target prerequisite is absent.
+}
+
 # The V2 list mixes raw PokéAPI hyphenated names with the underscore-normalized
 # IDs used by the adapter. Normalize it once for the archived helper functions.
 # ``astonish`` was an old placeholder: its damage + flinch effect is fully
@@ -125,6 +150,39 @@ def _normalize_chance_children(specs: list[dict]) -> int:
     return changed
 
 
+def _assert_stat_contract(sid: str, specs: list[dict], classification: str) -> None:
+    """Fail closed if a curated stat-semantic correction regresses."""
+    if sid == "growl":
+        expected = [{
+            "kind": "modify_stat_stage", "target": "opponent",
+            "stat_id": "attack", "value": -1, "chance_basis_points": 10000,
+        }]
+        if classification != "RUNTIME_SUPPORTED" or specs != expected:
+            raise RuntimeError("DATA V3 Growl stat contract regressed")
+    elif sid == "swords_dance":
+        expected = [{
+            "kind": "modify_stat_stage", "target": "self",
+            "stat_id": "attack", "value": 2, "chance_basis_points": 10000,
+        }]
+        if classification != "RUNTIME_SUPPORTED" or specs != expected:
+            raise RuntimeError("DATA V3 Swords Dance stat contract regressed")
+    elif sid == "howl":
+        expected = [{
+            "kind": "modify_stat_stage", "target": "self",
+            "stat_id": "attack", "value": 1, "chance_basis_points": 10000,
+        }]
+        if classification != "PARTIAL_RUNTIME" or specs != expected:
+            raise RuntimeError("DATA V3 Howl safe-subset contract regressed")
+    elif sid in _UNSAFE_INCOMPLETE_STAT_RUNTIME:
+        if classification != "UNSUPPORTED" or specs:
+            raise RuntimeError(
+                f"DATA V3 unsafe incomplete stat move remained executable: {sid}"
+            )
+    elif sid in _SAFE_PARTIAL_STAT_RUNTIME:
+        if classification != "PARTIAL_RUNTIME" or not specs:
+            raise RuntimeError(f"DATA V3 safe partial stat contract regressed: {sid}")
+
+
 def generate_move_specs(move: dict, contact_set: set):
     """Reuse the V2 converter, then apply audited DATA V3 semantic corrections."""
     specs, crit_bp, contact, classification, override_count, unsupported_note = (
@@ -167,6 +225,30 @@ def generate_move_specs(move: dict, contact_set: set):
     elif sid in _PARTIAL_HEAL_RUNTIME:
         classification = "PARTIAL_RUNTIME"
 
+    # The manual BattleEffectRegistry already implements these exact stat effects;
+    # generated V3 specs match it byte-for-byte, so DATA_ONLY was stale metadata.
+    if sid in _SIMPLE_STAT_RUNTIME:
+        classification = "RUNTIME_SUPPORTED"
+
+    # Howl's source target is user-and-allies. The current singles target model can
+    # safely preserve the user's own +1 Attack, but cannot fan out to allies.
+    if sid == "howl":
+        override_count += _rewrite_kind_target(specs, "modify_stat_stage", "self")
+
+    if sid in _SAFE_PARTIAL_STAT_RUNTIME:
+        classification = "PARTIAL_RUNTIME"
+
+    # Do not execute a beneficial effect while silently omitting its mandatory cost,
+    # prerequisite or target filter. That would change battle balance, often making
+    # the move strictly stronger than canon. Preserve source data, expose no runtime
+    # spec, and wait for the required Battle Core primitive.
+    if sid in _UNSAFE_INCOMPLETE_STAT_RUNTIME:
+        specs = []
+        classification = "UNSUPPORTED"
+        unsupported_note = True
+        override_count += 1
+
+    _assert_stat_contract(sid, specs, classification)
     return specs, crit_bp, contact, classification, override_count, unsupported_note
 
 
