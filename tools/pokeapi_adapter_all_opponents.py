@@ -95,6 +95,21 @@ def _require_common(
         )
 
 
+def _normalize_sweet_scent_summary(move: dict) -> None:
+    """Align stale prose with the snapshot's current structured Evasion -2 value."""
+    changed = 0
+    for entry in move.get("effect_entries") or []:
+        if (entry.get("language") or {}).get("name") != "en":
+            continue
+        entry["effect"] = "Lowers the target’s evasion by two stages."
+        entry["short_effect"] = "Lowers the target’s evasion by two stages."
+        changed += 1
+    if changed != 1:
+        raise RuntimeError(
+            f"DATA V3 expected one English Sweet Scent effect entry, found {changed}"
+        )
+
+
 def apply_all_opponents(
     move: dict,
     generated: tuple[list[dict], int, bool, str, int, Any],
@@ -105,6 +120,8 @@ def apply_all_opponents(
     if sid in _SIMPLE_BASE_EFFECTS:
         accuracy, stat_chance, expected_stats = _SIMPLE_BASE_EFFECTS[sid]
         _require_common(move, specs, sid, accuracy, stat_chance, expected_stats)
+        if sid == "sweet_scent":
+            _normalize_sweet_scent_summary(move)
         # In the current singles model there is exactly one opposing active target.
         # These five moves have a complete unconditional base stat effect, so the
         # generated OPPONENT package is faithful. Ability-driven immunities remain
@@ -148,13 +165,3 @@ def apply_all_opponents(
         override_count,
         unsupported_note,
     )
-
-
-def canonical_effect_summary(move: dict, default_summary: str) -> str:
-    """Repair a known stale PokéAPI prose field without altering source JSON."""
-    sid = str(move.get("name", "")).replace("-", "_")
-    if sid == "sweet_scent":
-        # Current structured stat_changes and Gen VI+ mechanics are Evasion -2,
-        # while this snapshot's generic effect_entries prose still says one stage.
-        return "Lowers the target’s evasion by two stages."
-    return default_summary
