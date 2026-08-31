@@ -78,32 +78,33 @@ Recent Move Effects V3 chain:
 - PR #54 — Silk Trap target/trigger bug — final `c1f5e55c7d1d8acc991b3a6ddde906f10930bb67` — 18/18
 - PR #55 — Aromatic Mist ally-target bug — final `844efde0eed27e1a5ca8790ae95a183fba6ba98c` — 18/18
 - PR #56 — Stuff Cheeks held-Berry prerequisite bug — final `1c4217d5ebc6727982ef5d7b5b5b0667cea6c5b6` — 18/18
-- PR #57 — Howl user-and-allies target bug — final `53e20600d372d44bc21eb145f598448a41828e5d` — 18/18, closed without merge
+- PR #57 — Howl user-and-allies target bug — final `53e20600d372d44bc21eb145f598448a41828e5d` — 18/18
+- PR #58 — Coaching ally-only target bug — final `3c4ac4d772a5869b45de592be7dd7f4d9b2a389b` — 18/18, closed without merge
 
 Current tranche:
 
-- PR #58 — `fix/data-v3-coaching-semantics`
-- Parent: certified #57 final `53e20600d372d44bc21eb145f598448a41828e5d`
-- Engineering SHA before notebook synchronization: `b7da56687d1e1e45072ca4572f5f0751f9d309d7`
-- Engineering SHA passed 18/18 workflows, including the independent Coaching regenerated-dataset assertion and Godot global.
-- Notebook synchronization moves the branch tip. **The final exact PR #58 HEAD must pass 18/18 again before closure without merge.**
+- PR #59 — `fix/data-v3-gear-up-semantics`
+- Parent: certified #58 final `3c4ac4d772a5869b45de592be7dd7f4d9b2a389b`
+- Engineering SHA before notebook synchronization: `d0dc2a82f8c6dcd4112b2b47d64612b56270e38c`
+- Engineering SHA passed 18/18 workflows, including the independent Gear Up regenerated-dataset assertion and Godot global.
+- Notebook synchronization moves the branch tip. **The final exact PR #59 HEAD must pass 18/18 again before closure without merge.**
 
 Active workstream: **Move Effects V3 semantic audit**, not trainer AI/archetypes.
 
-## Exact move coverage from PR #58 engineering artifact
+## Exact move coverage from PR #59 engineering artifact
 
-Artifact generated from `b7da56687d1e1e45072ca4572f5f0751f9d309d7`:
+Artifact generated from `d0dc2a82f8c6dcd4112b2b47d64612b56270e38c`:
 
 - `RUNTIME_SUPPORTED`: 555
 - `PARTIAL_RUNTIME`: 67
 - `DATA_ONLY`: 285
 - `UNSUPPORTED`: 12
 
-Remaining `DATA_ONLY` records with non-empty `effect_specs`: **61**.
+Remaining `DATA_ONLY` records with non-empty `effect_specs`: **60**.
 
 Current breakdown:
 
-- 58 stat-change DATA_ONLY records
+- 57 stat-change DATA_ONLY records
 - 2 heal cases: `Purify`, `Swallow`
 - 1 multi-hit case: `Beat Up`
 
@@ -112,8 +113,11 @@ Important recently neutralized/corrected behavior:
 - `Silk Trap`: DATA_ONLY, effect-free; previous `SELF Speed -1` was false because the real debuff is contact-triggered on the attacker.
 - `Aromatic Mist`: DATA_ONLY, effect-free; previous `SELF SpDef +1` targeted the wrong creature because source target is ally.
 - `Stuff Cheeks`: DATA_ONLY, effect-free; previous unconditional `SELF Defense +2` ignored the required held-Berry consume transaction.
-- `Howl`: `PARTIAL_RUNTIME`; modern source target is `user-and-allies`, executable subset is exactly `SELF Attack +1`, ally subset remains missing. Previous generic output incorrectly buffed OPPONENT.
-- `Coaching`: DATA_ONLY, effect-free; source mechanics affect ally Pokémon and fail with no adjacent ally. Previous generic output incorrectly granted `OPPONENT Attack +1` and `OPPONENT Defense +1`.
+- `Howl`: `PARTIAL_RUNTIME`; executable subset is exactly `SELF Attack +1`, while ally boosting remains missing. Previous generic output incorrectly buffed OPPONENT.
+- `Coaching`: DATA_ONLY, effect-free; real mechanics affect ally Pokémon and fail with no adjacent ally. Previous generic output buffed OPPONENT.
+- `Gear Up`: DATA_ONLY, effect-free; real mechanics raise Attack and Special Attack only for friendly Pokémon with Plus or Minus. Previous generic output granted those boosts to OPPONENT. An unconditional SELF rewrite would also be false because the Ability predicate is mandatory.
+
+`Magnetic Flux` is the last known `user-and-allies` DATA_ONLY record still carrying false generic OPPONENT stat boosts; audit it next before returning to ordinary stat families.
 
 ## Runtime constraints relevant to Move Effects audit
 
@@ -122,6 +126,7 @@ Important recently neutralized/corrected behavior:
 Effect targets available today are effectively **SELF and OPPONENT**. The model does not generally represent:
 
 - ally/team/side targeting
+- ability-filtered target sets
 - delayed persisted effects
 - weather-conditioned heal ratios
 - temporary type suppression
