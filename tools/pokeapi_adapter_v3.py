@@ -27,6 +27,7 @@ from typing import Any, Iterable
 
 # tools/ is automatically on sys.path when this file is executed directly.
 import pokeapi_adapter as legacy
+import pokeapi_adapter_all_opponents as all_opponents
 import pokeapi_adapter_selected_stateful as selected_stateful
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -316,7 +317,8 @@ def build_moves(source: Path) -> tuple[list[dict], dict[str, list[str]], dict[st
             move_classes["EXCLUDED_NON_STANDARD_TYPE"].append(sid)
             continue
         generated = legacy.generate_move_specs(move, contact_set)
-        specs, crit_bp, contact, classification, _, _ = selected_stateful.apply_selected_stateful(
+        generated = selected_stateful.apply_selected_stateful(move, generated)
+        specs, crit_bp, contact, classification, _, _ = all_opponents.apply_all_opponents(
             move,
             generated,
         )
