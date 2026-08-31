@@ -14,6 +14,7 @@ func run(check_callback: Callable) -> void:
 	_test_gear_up_generated_semantics(check_callback)
 	_test_magnetic_flux_generated_semantics(check_callback)
 	_test_pure_self_stat_packages(check_callback)
+	_test_pure_opponent_stat_packages(check_callback)
 
 
 func _test_learnset_roundtrip(check_callback: Callable) -> void:
@@ -205,6 +206,49 @@ func _test_pure_self_stat_packages(check_callback: Callable) -> void:
 				shape_ok = false
 				continue
 			if spec.get("kind", "") != "modify_stat_stage" or spec.get("target", "") != "self" or int(spec.get("chance_basis_points", 0)) != 10000:
+				shape_ok = false
+			generated[String(spec.get("stat_id", ""))] = int(spec.get("value", 0))
+		check_callback.call("data_v3_%s_effect_shape" % move_id, shape_ok)
+		check_callback.call("data_v3_%s_effect_package" % move_id, generated == expected_stats)
+
+
+func _test_pure_opponent_stat_packages(check_callback: Callable) -> void:
+	var expected := {
+		"baby_doll_eyes": {"attack": -1},
+		"charm": {"attack": -2},
+		"confide": {"special_attack": -1},
+		"eerie_impulse": {"special_attack": -2},
+		"fake_tears": {"special_defense": -2},
+		"feather_dance": {"attack": -2},
+		"flash": {"accuracy": -1},
+		"kinesis": {"accuracy": -1},
+		"metal_sound": {"special_defense": -2},
+		"noble_roar": {"attack": -1, "special_attack": -1},
+		"play_nice": {"attack": -1},
+		"sand_attack": {"accuracy": -1},
+		"scary_face": {"speed": -2},
+		"screech": {"defense": -2},
+		"smokescreen": {"accuracy": -1},
+		"tearful_look": {"attack": -1, "special_attack": -1},
+		"tickle": {"attack": -1, "defense": -1},
+	}
+	for move_id in expected:
+		var move := _load_raw_move(move_id)
+		check_callback.call("data_v3_%s_present" % move_id, not move.is_empty())
+		if move.is_empty():
+			continue
+		check_callback.call("data_v3_%s_target_is_selected_pokemon" % move_id, move.get("target", "") == "selected-pokemon")
+		check_callback.call("data_v3_%s_runtime_supported" % move_id, move.get("classification", "") == "RUNTIME_SUPPORTED")
+		var specs: Array = move.get("effect_specs", [])
+		var expected_stats: Dictionary = expected[move_id]
+		check_callback.call("data_v3_%s_effect_count" % move_id, specs.size() == expected_stats.size())
+		var generated := {}
+		var shape_ok := true
+		for spec in specs:
+			if not (spec is Dictionary):
+				shape_ok = false
+				continue
+			if spec.get("kind", "") != "modify_stat_stage" or spec.get("target", "") != "opponent" or int(spec.get("chance_basis_points", 0)) != 10000:
 				shape_ok = false
 			generated[String(spec.get("stat_id", ""))] = int(spec.get("value", 0))
 		check_callback.call("data_v3_%s_effect_shape" % move_id, shape_ok)
