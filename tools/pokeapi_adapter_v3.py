@@ -324,7 +324,7 @@ def build_moves(source: Path) -> tuple[list[dict], dict[str, list[str]], dict[st
             "type_id": type_id,
             "priority": int(move.get("priority") or 0),
             "damage_class": (move.get("damage_class") or {}).get("name") or "status",
-            "accuracy": int(move.get("accuracy")) if move.get("accuracy") is not None else 100,
+            "accuracy": int(move.get("accuracy")) if move.get("accuracy") is not None else -1,
             "pp": int(move.get("pp") or 0),
             "target": (move.get("target") or {}).get("name", "selected"),
             "effect_summary": localized_effect(move.get("effect_entries")),
