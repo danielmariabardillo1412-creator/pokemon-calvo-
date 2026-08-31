@@ -43,7 +43,7 @@ _DATA_ONLY_SOURCE_GUARDS = {"huge_power", "pure_power"}
 
 # The pinned PokeAPI snapshot says 1.33x for Tough Claws. Current main-series
 # mechanics are a 30% contact-move power boost, so DATA V3 deliberately corrects
-# the stale prose while preserving and validating the immutable source record.
+# the stale prose in the project-owned in-memory record after validating source.
 _TOUGH_CLAWS_CANONICAL_EFFECT = "Boosts the power of moves that make contact by 30%."
 
 _CLASSIFICATION = {
@@ -82,16 +82,20 @@ def classification_for(ability: dict) -> str:
             _validate_source_contract(ability, sid)
         return DATA_ONLY
     _validate_source_contract(ability, sid)
+    if sid == "tough_claws":
+        _apply_tough_claws_canonical_effect(ability)
     return classification
 
 
-def canonical_effect_text(ability: dict, source_text: str) -> str:
-    """Return audited DATA V3 prose overrides without mutating immutable source."""
-    sid = _slug(str(ability.get("name", "")))
-    if sid == "tough_claws":
-        _validate_source_contract(ability, sid)
-        return _TOUGH_CLAWS_CANONICAL_EFFECT
-    return source_text
+def _apply_tough_claws_canonical_effect(ability: dict) -> None:
+    """Correct only the project-owned loaded record; immutable snapshot is untouched."""
+    for entry in ability.get("effect_entries") or []:
+        if (entry.get("language") or {}).get("name") != "en":
+            continue
+        entry["effect"] = _TOUGH_CLAWS_CANONICAL_EFFECT
+        entry["short_effect"] = _TOUGH_CLAWS_CANONICAL_EFFECT
+        return
+    raise RuntimeError("DATA V3 Tough Claws lost English effect entry; re-audit")
 
 
 def _slug(value: str) -> str:
