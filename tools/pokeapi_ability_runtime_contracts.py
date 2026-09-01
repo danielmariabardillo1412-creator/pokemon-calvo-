@@ -39,7 +39,6 @@ _TYPE_POWER_BOOSTS = {
 # These records have been explicitly audited and intentionally remain DATA_ONLY.
 # Their source contracts are still guarded so a future source change forces a
 # re-audit rather than silently making the old rejection rationale stale.
-_ATTACK_DOUBLER_GUARDS = {"huge_power", "pure_power"}
 _MULTI_SPEC_EVENT_GUARDS = {"fluffy"}
 _SUPER_EFFECTIVE_GUARDS = {"filter", "solid_rock"}
 _MOVE_PROPERTY_GUARDS = {"long_reach", "technician"}
@@ -64,6 +63,10 @@ _CLASSIFICATION = {
     "thick_fat": RUNTIME_SUPPORTED,
     "ice_scales": RUNTIME_SUPPORTED,
     "multiscale": RUNTIME_SUPPORTED,
+    "huge_power": RUNTIME_SUPPORTED,
+    "pure_power": RUNTIME_SUPPORTED,
+    "toxic_boost": RUNTIME_SUPPORTED,
+    "flare_boost": RUNTIME_SUPPORTED,
     "flame_body": PARTIAL_RUNTIME,
     "gooey": PARTIAL_RUNTIME,
     "heatproof": PARTIAL_RUNTIME,
@@ -93,8 +96,7 @@ def classification_for(ability: dict) -> str:
     classification = _CLASSIFICATION.get(sid)
     if classification is None:
         if (
-            sid in _ATTACK_DOUBLER_GUARDS
-            or sid in _MULTI_SPEC_EVENT_GUARDS
+            sid in _MULTI_SPEC_EVENT_GUARDS
             or sid in _SUPER_EFFECTIVE_GUARDS
             or sid in _MOVE_PROPERTY_GUARDS
             or sid in _VERSION_SENSITIVE_CONTACT_DAMAGE_GUARDS
@@ -366,7 +368,7 @@ def _validate_source_contract(ability: dict, sid: str) -> None:
         _require_no_history(ability, sid)
         return
 
-    if sid in _ATTACK_DOUBLER_GUARDS:
+    if sid in {"huge_power", "pure_power"}:
         if _generation_name(ability) != "generation-iii":
             raise RuntimeError(f"DATA V3 audited ability generation changed for {sid}")
         _require_tokens(
@@ -378,6 +380,20 @@ def _validate_source_contract(ability: dict, sid: str) -> None:
                 "functions identically",
             ),
         )
+        _require_no_history(ability, sid)
+        return
+
+    if sid == "toxic_boost":
+        if _generation_name(ability) != "generation-v":
+            raise RuntimeError("DATA V3 audited ability generation changed for toxic_boost")
+        _require_tokens(text, sid, ("1.5x its attack when poisoned",))
+        _require_no_history(ability, sid)
+        return
+
+    if sid == "flare_boost":
+        if _generation_name(ability) != "generation-v":
+            raise RuntimeError("DATA V3 audited ability generation changed for flare_boost")
+        _require_tokens(text, sid, ("1.5x its special attack when burned",))
         _require_no_history(ability, sid)
         return
 
