@@ -1,145 +1,123 @@
-# Architecture — Foundation V1
+# Arquitectura actual — visión general
 
-## Forma general
+Este documento describe la **estructura vigente a alto nivel** del proyecto. Los contratos detallados de cada subsistema están en los demás documentos de esta carpeta y las decisiones originales en `docs/adr/`.
 
-La arquitectura es **feature-first con límites hexagonales selectivos**. El dominio
-se agrupa por capacidad (`creatures`, `battle`, `status`, `data`), no en carpetas
-globales de managers. Las capas internas solo aparecen donde existe una frontera
-real: intención de cliente, aplicación autoritativa, estado/reglas y presentación.
+Para estado, SHA certificado y siguiente trabajo no usar este archivo: consultar `docs/current/`.
 
-```text
-Client/UI --BattleAction--> AuthoritativeBattleServer
-                              | validates
-                              v
-                 BattleState + TurnExecutor + RNG
-                    |       |       |
-                    |       |       +--> StatusSystem
-                    |       +----------> DefinitionCatalog --> Resources
-                    v
-                 BattleEvent[] --> Presentation
-```
+## Principios de arquitectura
 
-La dirección de la autoridad es unidireccional. `BattleClient` solo construye una
-intención. `AuthoritativeBattleServer` valida turno, actor, movimiento y objetivo.
-Solo el servidor ejecuta reglas y muta HP. La presentación recibe copias
-serializables de hechos y no recibe `BattleState`.
+El proyecto mantiene separación entre:
 
-## Reglas de dependencia
+- **dominio y reglas**: estado y lógica autoritativa, independientes de presentación;
+- **aplicación/orquestación**: coordina acciones legales y servicios del dominio;
+- **presentación/escenas**: Godot Nodes, UI y adaptación visual;
+- **datos estáticos**: definiciones canónicas importadas y catálogos;
+- **IA de entrenadores**: consume una vista sanitizada del combate y nunca se convierte en autoridad de reglas.
 
-1. Las reglas y el estado mutable son `RefCounted`; nunca acceden a `SceneTree`,
-   `NodePath`, señales globales, sprites, animación o input.
-2. Los datos estáticos editor-friendly son `Resource` y se tratan como inmutables
-   después de cargarlos. El estado guarda sus IDs explícitos, no referencias a
-   Resources ni UIDs de Godot.
-3. Los `Node` quedan para composición, mundo y UI. En V1 solo el runner de tests es
-   un Node porque necesita iniciar y cerrar el árbol.
-4. No hay autoloads. Una dependencia se construye y se pasa explícitamente.
-5. Un módulo no debe depender de presentación. `battle/application` puede
-   orquestar `status/application`; el módulo de status no modifica el resolver.
-6. Todo origen de no determinismo debe pasar por `SeededRandomSource`.
+La regla principal sigue siendo que una capa visual o un cerebro de entrenador puede **solicitar/seleccionar** una acción, pero la legalidad y mutación del estado pertenecen al sistema autoritativo correspondiente.
 
-Estas reglas deberían convertirse en comprobaciones automáticas de arquitectura
-cuando crezca el equipo (por ejemplo, prohibir `extends Node` y APIs visuales bajo
-`domain/` y `application/`).
+## Battle Core
 
-## Modelo de objetos
+El combate se apoya en `BattleState`, reglas deterministas, ejecución por fases y RNG inyectado. Presentation recibe eventos semánticos y no debe ser dueña de la verdad del combate.
 
-- `CreatureSpecies`, `MoveDefinition`, `TypeDefinition` y `StatusDefinition` son
-  `Resource`: configuración estática, versionable y cómoda para herramientas.
-- `CreatureInstance`, `StatBlock`, `BattleState`, `BattleAction`, `BattleEvent`,
-  resolvers, calculadores y sistemas son `RefCounted`: estado o lógica instanciable
-  y ejecutable sin escena visual.
-- Los futuros controladores de escena, HUD, personajes y animaciones serán `Node`.
-  Ninguno será dueño de la verdad de combate.
+El runtime soporta, entre otras superficies ya implementadas:
 
-`CreatureInstance` es deliberadamente `RefCounted`, no `Resource`: HP, estados y
-movimientos son estado vivo por instancia. Compartir accidentalmente un Resource
-mutable entre combates sería peligroso. Las especies sí son definiciones Resource.
+- movimientos y PP;
+- daño físico/especial;
+- stages;
+- estados;
+- habilidades e items dentro de la frontera runtime certificada;
+- switching;
+- acciones de items de entrenador;
+- snapshot/serialización determinista.
 
-## Datos masivos e IDs
+Detalle:
 
-Los IDs son cadenas estables en minúsculas (`embercub`, `poison`, `quick_strike`).
-Son la identidad de red/save; una ruta, nombre visible o Resource UID nunca lo es.
-Un ID publicado no se reutiliza. Renombrarlo exige una migración explícita.
+- `BATTLE_ARCHITECTURE.md`
+- `BATTLE_EFFECTS.md`
+- `BATTLE_RULESET_CALVO_V1.md`
 
-Los `.tres` de V1 demuestran el contrato, no son la estrategia definitiva para más
-de 1000 especies. El contrato de datos canónico ya está implementado en
-`feature/data-pipeline-v1` (ver `docs/history/legacy_data/DATA_ARCHITECTURE.md` y `docs/adr/ARCHITECTURE_DECISION_002_DATA_PIPELINE.md`):
-fuente JSON + `DatasetManifest` versionado + `DataImporter` que valida y rechaza
-lo inválido, catálogos enfocados (`SpeciesCatalog`, `MoveCatalog`, `TypeCatalog`,
-`AbilityCatalog`, `ItemCatalog`, `StatusCatalog`) y `DefinitionCatalog` como fachada
-de batalla. El dominio solo consume `DefinitionCatalog`, por lo que el formato de
-autoría (JSON/CSV/SQL) no contamina las reglas. Para volumen real basta añadir un
-adaptador que produzca el mismo `Dictionary` de entrada del importador.
+## Datos canónicos — DATA FOUNDATION V3
 
-## Determinismo y serialización
+La fuente Pokémon es un snapshot inmutable de PokéAPI:
 
-`SeededRandomSource` usa `lcg32_v1`, es inyectable, reproducible y no criptográfico.
-Daño y modificadores usan basis points para reducir diferencias de redondeo. Un
-snapshot incluye `schema_version`, `ruleset_id`, `rng_algorithm`, estado del RNG,
-turno, fase, ganador, participantes, estadísticas, HP, movimientos y estados.
+- `data/api/v2`
+- `data/schema/v2`
 
-Esto permite continuar una simulación, replay o reconciliación, siempre que el
-servidor use el mismo ruleset y catálogo. El snapshot es un `Dictionary` apto para
-JSON y no contiene objetos visuales. Aun así, V1 es independiente de `SceneTree`,
-no del runtime de Godot/GDScript; un servidor escrito en otro lenguaje tendría que
-implementar los mismos contratos y reglas.
+El pipeline vigente es:
 
-## Status y ECS
+`snapshot → adapter V3 → auditorías semánticas → raw → DataImporter → normalized → runtime`
 
-Poison se procesa en un `StatusSystem` pequeño y sin estado. Este patrón aísla las
-reglas transversales sin adoptar un runtime ECS. No hay ECS en batalla ni overworld.
-Para el overworld solo se reconsiderará después de medir una necesidad real (muchas
-entidades homogéneas o coste de actualización); Godot Nodes y composición siguen
-siendo el punto de partida.
+DATA V3 está cerrado en una frontera explícita entre dato preservado y mecánica ejecutable. No se interpreta la existencia de 373 habilidades o 2.222 objetos como soporte runtime de todas sus mecánicas.
 
-## Battle Core V2
+Detalle formal: `DATA_FOUNDATION_V3.md`.
 
-Battle usa ahora `BattleRuleset(calvo_v1)`, un pipeline de phases estable y specs
-componibles. `BattleState` schema 2 modela parties/active, PP, stages, status,
-ability e item runtime. `DefinitionCatalog` expone también abilities/items, pero la
-lógica solo usa mappings/specs estructurados por stable ID; nunca `effect_summary`.
+Resumen operativo/certificación: `docs/project_book/DATA_V3.md`.
 
-La arquitectura mantiene 0 autoloads y 0 Nodes fuera de tests. Detalle y reglas:
-`BATTLE_ARCHITECTURE.md`, `BATTLE_EFFECTS.md` y `BATTLE_RULESET_CALVO_V1.md`.
+## Criaturas, progresión, captura, party y almacenamiento
 
-## Progression Core (FASE 6)
+`CreatureSpecies` representa definición estática; `CreatureInstance` representa una criatura concreta con identidad y estado mutable.
 
-`CreatureSpecies` (inmutable) vs `CreatureInstance` (mutable, identidad `instance_id`) vs lógica en
-`modules/creatures/progression/*`. El Battle emite `BattleOutcome`; la Progresión lo consume después
-(`ProgressionSystem.reconcile_battle_result`). 0 autoloads, 0 Nodes fuera de tests, mismo contrato de
-separación que Battle Core. Detalle y reglas: `PROGRESSION_ARCHITECTURE.md`, `PROGRESSION_RULESET_CALVO_V1.md`,
-`EVOLUTION_COVERAGE.md` y `ARCHITECTURE_DECISION_005_PROGRESSION.md`.
+Los subsistemas de progresión, captura, party y storage conservan esa identidad por `instance_id` y evitan duplicar una criatura al moverla entre superficies persistentes.
 
-## Capture + Party Core (FASE 7)
+Detalle:
 
-`modules/capture/*` (resolución determinista de captura, 100% pura: sin UI/Nodes/autoload) y
-`modules/creatures/party/*` (roster persistente, máx 6, identidad por `instance_id`). La captura es
-una preocupación *post-batalla*: el Battle Core muta la `CreatureInstance` viva (HP/status/PP) y
-luego `CaptureSystem.resolve` la lee; el `BattleOutcome` NO se extiende con captura. La clienta solo
-envía `ball_id` + `target_id`; el target real y el `CaptureBattleContext` se resuelven en servidor, así
-el resultado no se forja. En éxito, `res.captured` es la MISMA `CreatureInstance` (IV/EV/naturaleza/
-ability/moveset/PP preservados). Party llena ⇒ `STORAGE_REQUIRED` (sin auto-reemplazo; Storage es FASE 8).
-Detalle y reglas: `CAPTURE_ARCHITECTURE.md`, `CAPTURE_RULESET_CALVO_V1.md`, `PARTY_ARCHITECTURE.md`,
-`CAPTURE_DATA_AUDIT.md` y `ARCHITECTURE_DECISION_006_CAPTURE_PARTY.md`.
+- `PROGRESSION_ARCHITECTURE.md`
+- `PROGRESSION_RULESET_CALVO_V1.md`
+- `CAPTURE_ARCHITECTURE.md`
+- `CAPTURE_RULESET_CALVO_V1.md`
+- `PARTY_ARCHITECTURE.md`
+- `STORAGE_ARCHITECTURE.md`
 
-## Tests
+## Savegame
 
-El runner ligero actual evita incorporar un addon para 13 pruebas fundacionales y
-corre como escena headless. GUT será razonable cuando hagan falten fixtures,
-parametrización, dobles complejos o integración CI más rica. Cambiar el framework no
-debe cambiar el dominio. Battle Core V2 añade una suite separada de unidades y
-escenarios golden; Progression Core (FASE 6) añade `ProgressionTestSuite`; Capture + Party Core
-(FASE 7) añade `CapturePartyTestSuite`. El total actual es **286 PASS / 0 FAIL**.
+El sistema de guardado mantiene registro canónico de criaturas y referencias desde party/storage, con validación antes de publicar estado cargado y reemplazo protegido del fichero.
 
-## Storage Core + Savegame (FASE 8)
+Detalle: `SAVEGAME_ARCHITECTURE.md`.
 
-`modules/creatures/storage/*` (almacenamiento persistente: cajas ordenadas de slots que referencian
-la MISMA `CreatureInstance` que la party; `BOX_CAPACITY = 30`, cajas dinámicas; `PlayerCollection`
-con deposit/withdraw y rollback; `CaptureOwnershipRouter` que consume `CaptureDisposition`) y
-`modules/save/*` (savegame versionado V1: registro canónico de criaturas + layouts de party/storage
-por referencia; escritura atómica y carga transaccional con manejo explícito de corrupción).
-La identidad por `instance_id` es única: party y storage nunca duplican ni rerollan una criatura; el
-double-ownership es imposible en runtime (`contains_instance_id`) y en load (`SaveGameData.validate`).
-Detalle y reglas: `STORAGE_ARCHITECTURE.md`, `SAVEGAME_ARCHITECTURE.md`,
-`ARCHITECTURE_DECISION_007_STORAGE_SAVE.md`. El total actual es **429 PASS / 0 FAIL**.
+## IA de entrenadores
+
+La IA FASE19–33 es un sistema separado del Battle Core. Battle Core sigue siendo autoridad de legalidad.
+
+La arquitectura de Trainer AI contiene actualmente:
+
+- contexto de decisión sanitizado;
+- evaluación táctica y perfiles de estilo;
+- belief inference;
+- búsqueda determinista y acotada sobre mundos plausibles;
+- self-play y corpus de evaluación;
+- branching adaptativo y cobertura pública inferida;
+- items de entrenador finitos;
+- switching estratégico;
+- loadouts;
+- análisis y composición de equipos.
+
+`TrainerProfile` representa **estilo** (`balanced`, `aggressive`, `cautious`, `technical`) y no concede información oculta.
+
+La ruta seria actual parte de `StrategicSwitchingTrainerBrain`. La siguiente expansión debe estudiar **competencia/expertise** como concepto separado del estilo, reutilizando loadouts y composición de equipo existentes.
+
+Resumen operativo: `docs/project_book/TRAINER_AI.md`.
+
+Decisiones formales: ADR 019–033 en `docs/adr/`.
+
+## Overworld y presentación
+
+Las escenas y controladores visuales viven fuera del dominio puro. La vertical slice técnica integra movimiento físico, encuentros y presentación del combate sin convertir la escena en autoridad de reglas.
+
+La existencia de Nodes en overworld/presentación es intencionada; las antiguas afirmaciones de fases fundacionales del tipo “0 Nodes fuera de tests” no describen ya el repositorio completo.
+
+## Determinismo y testabilidad
+
+El determinismo se preserva donde afecta a reglas, simulación y evaluación. Las fuentes de aleatoriedad relevantes se inyectan o fijan mediante seeds en pruebas.
+
+La autoridad de validación no es un contador escrito en documentación: son los workflows ejecutados sobre el **SHA exacto** que se pretende certificar. Los números de PASS incluidos en documentos de fases anteriores deben leerse como evidencia de aquella fase, no como total global actual.
+
+## Documentos y autoridad
+
+- estado vivo: `docs/current/`
+- memoria temática: `docs/project_book/`
+- arquitectura de subsistemas: `docs/architecture/`
+- decisiones: `docs/adr/`
+- evidencia histórica: `docs/history/`
+
+En caso de conflicto, GitHub/CI/artefactos del SHA exacto y las fuentes canónicas prevalecen sobre los resúmenes documentales.

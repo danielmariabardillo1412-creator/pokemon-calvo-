@@ -1,36 +1,39 @@
-# DATA FOUNDATION V3 — PokéAPI snapshot canonical import
+# DATA FOUNDATION V3 — contrato canónico final
 
-**Estado:** VALIDADA.  
-**Rama canónica:** `feature/data-foundation-v3`  
-**PR de validación:** #32, cerrar sin merge únicamente si el HEAD documental vuelve a quedar 18/18 verde.  
-**HEAD técnico previo a este documento:** `5afdc8b3adfd093f8ab0ca67b9900f44b793e546` — 18/18 workflows normales SUCCESS, incluida la regresión global de Godot 4.7.
+Estado: **CERRADO / CERTIFICADO END-TO-END**.
 
-> Este documento no almacena su propio SHA final para evitar una referencia circular. El criterio de cierre es que el commit que contiene este documento pase los 18 workflows normales sin cambios posteriores.
+Este documento describe el contrato técnico vigente de DATA FOUNDATION V3. Para el resumen operativo y las decisiones de cierre, consultar `docs/project_book/DATA_V3.md`.
 
-## Motivo
+## Certificación final
 
-El adaptador PokéAPI anterior a V3 simplificaba información que es esencial para un juego Pokémon coherente. Los síntomas visibles fueron learnsets absurdos/repetidos (casos Gengar/Pinsir), especies legítimas descartadas por contener guiones y datos históricos/versionados mezclados como si pertenecieran a un único juego.
+- PR final: #95 — `DATA V3 — final end-to-end certification`
+- rama: `audit/data-v3-end-to-end-closure-v1`
+- HEAD final certificado: `b4f6adc200bef18f8ac51b9144f2f9a838f464fd`
+- estado: cerrado **sin merge**
+- validación del HEAD final: **18/18 workflows SUCCESS**.
 
-V3 sustituye esa interpretación por un pipeline reproducible y auditable basado en el snapshot completo incluido en el repositorio. Los JSON fuente no se corrigen a mano.
+El engineering SHA del cierre fue:
+
+`9e17f903f229b6efc0044608dde66aba4783ef9c`
+
+con:
+
+- DATA V3 domain: **567 PASS / 0 FAIL**
+- Spanish/type/runtime regression: **298 PASS / 0 FAIL**.
 
 ## Fuente inmutable
 
-La fuente canónica queda versionada bajo:
+La autoridad fuente está versionada en:
 
-- `data/api/v2`
-- `data/schema/v2`
-- licencia del snapshot PokéAPI
-
-Provenance fijada:
-
+- branch: `data/pokeapi-v2-snapshot`
 - source commit: `2f218ec3765c01c894a42bbbd074f15ddf3f32d1`
 - API tree: `8349ea1ce75716897fe96e02a15950d19edba6c3`
 - schema tree: `02e031e1928d7e9456bf6f7486daacc4b8946c84`
-- licencia: BSD 3-Clause
+- licencia: BSD 3-Clause.
 
-Regla: el snapshot es **solo lectura**. Toda adaptación ocurre en `tools/pokeapi_adapter_v3.py` y después en el `DataImporter` autoritativo de Godot.
+`data/api/v2` y `data/schema/v2` son **read-only**. Las correcciones se realizan en adaptadores, contratos runtime o tests; nunca modificando manualmente el snapshot para hacerlo encajar.
 
-## Pipeline V3
+## Pipeline
 
 ```text
 data/api/v2 + data/schema/v2
@@ -38,9 +41,10 @@ data/api/v2 + data/schema/v2
         v
  tools/pokeapi_adapter_v3.py
         |
+        +--> auditorías semánticas acotadas
         +--> data/raw/pokemon_api.json
         +--> data/manifests/pokemon_api_manifest.json
-        +--> reports de cobertura/auditoría
+        +--> data/reports/*
         |
         v
  DataImporter (Godot)
@@ -52,132 +56,160 @@ data/api/v2 + data/schema/v2
  GameData / DefinitionCatalog / runtime
 ```
 
-El adaptador usa rutas relativas al repositorio. Se elimina la dependencia anterior de una ruta local `F:\...`.
+El pipeline separa tres afirmaciones distintas:
 
-## Política de learnsets
+1. la fuente contiene un dato;
+2. V3 preserva ese dato;
+3. Battle Core puede ejecutar fielmente esa mecánica.
 
-V3 **no suma todos los learnsets de todas las generaciones**.
+No se confunden entre sí.
 
-Para cada Pokémon base se selecciona un único `version_group` convencional/mainline coherente según `latest_conventional_mainline_per_species_v1`. Cada entrada conserva:
-
-- `move_id`
-- `method`
-- `level`
-- `order`
-- `version_group`
-
-Esto permite auditar la procedencia y evita que un Pokémon herede simultáneamente movimientos/niveles de múltiples juegos.
-
-Casos de control:
-
-- Gengar: `scarlet-violet`, 81 entradas totales, 17 por level-up, un único version-group.
-- Pinsir: `brilliant-diamond-shining-pearl`, 56 entradas totales, 15 por level-up, un único version-group.
-
-Los tests de progresión ya no fijan niveles históricos arbitrarios (por ejemplo, “Látigo Cepa siempre al nivel 13”); derivan el nivel del learnset canónico seleccionado y prueban la mecánica contra ese dato.
-
-## Especies y formas
-
-Se elimina la regla errónea `nombre con guion = forma alternativa`.
-
-La clasificación usa los datos estructurados de PokéAPI (`pokemon-species.varieties[].is_default`). Por ello especies base legítimas como Mr. Mime, Ho-Oh y Porygon-Z no desaparecen por su nombre.
-
-Las variantes/formas se contabilizan separadamente y no se inyectan silenciosamente en el catálogo base.
-
-## Evoluciones
-
-`EvolutionRecord` conserva ahora provenance y condiciones que el adaptador antiguo descartaba, incluido `version_group` y las condiciones estructuradas disponibles en la fuente.
-
-Preservar el dato no implica que todas esas mecánicas estén ya ejecutadas por el runtime. `EvolutionSystem` sigue clasificando explícitamente qué condiciones son soportadas y cuáles permanecen pendientes; no se inventa una evolución simplificada para hacerla pasar.
-
-## Habilidades
-
-La ingesta conserva la metadata de slots de habilidad, incluyendo `is_hidden` y `slot`, además de la lista compatible usada por el dominio actual.
-
-La información se conserva para futuras decisiones de generación de Pokémon/entrenadores sin convertir una habilidad oculta en una habilidad normal por pérdida de metadata.
-
-## Tipos y movimientos laterales
-
-El runtime utiliza exactamente los 18 tipos estándar de combate definidos por el proyecto.
-
-El snapshot contiene 18 movimientos Shadow de Pokémon XD con tipo `shadow`. V3 los conserva en la fuente original pero los clasifica como `EXCLUDED_NON_STANDARD_TYPE` y **no** los importa al catálogo runtime. No se renombran ni se convierten fraudulentamente a otro tipo.
-
-## Localización
-
-Siempre que PokéAPI proporciona `names` por idioma, V3 puede conservar/usar el nombre español oficial para presentación. Los IDs internos permanecen estables y normalizados para no romper persistencia, referencias o replays.
-
-## Dataset canónico certificado
-
-Importación V3 limpia:
+## Contrato estructural congelado
 
 | Entidad | Total |
 |---|---:|
-| Especies base | 1025 |
+| Especies base | 1.025 |
 | Formas detectadas | 326 |
 | Tipos runtime | 18 |
 | Movimientos runtime | 919 |
 | Habilidades | 373 |
-| Objetos | 2222 |
-| Entradas de learnset | 61,102 |
+| Objetos | 2.222 |
+| Entradas de learnset | 61.102 |
 | Evoluciones preservadas | 554 |
 | Referencias rotas | 0 |
 | Definiciones rechazadas | 0 |
 
-Los 18 movimientos Shadow excluidos no forman parte de los 919 movimientos runtime.
+Además, **18 movimientos XD Shadow** permanecen en la fuente pero se excluyen explícitamente del catálogo runtime de 18 tipos estándar.
 
-## Migración de regresiones históricas
+## Localización e IDs
 
-Al persistir V3, la suite global detectó 18 expectativas ligadas al dataset antiguo. No se modificó el dataset correcto para satisfacerlas.
+Los IDs internos son estables, normalizados y no dependen del idioma de presentación.
 
-Se migraron las pruebas para verificar invariantes V3:
+Cuando PokéAPI proporciona nombres localizados, el adaptador prioriza:
 
-- source/ruleset/provenance correctos;
-- catálogos reales, no conteos V2;
-- formas por metadata estructurada, no por guiones;
-- movimientos laterales excluidos explícitamente;
-- evolución preservada frente a catálogo real;
-- niveles de aprendizaje derivados del learnset seleccionado.
+`es → es-419 → en`
 
-El smoke test de la migración quedó en **472 PASS / 0 FAIL** antes de persistir los cambios.
+Los nombres visibles pueden por tanto estar en español sin renombrar IDs, romper saves o alterar referencias internas.
 
-Los workflows y scripts temporales usados exclusivamente para la migración/persistencia fueron eliminados antes de la certificación del HEAD técnico limpio.
+La disponibilidad de una traducción de nombre no implica que todos los `effect_entries` de PokéAPI tengan traducción española; la localización completa de textos de presentación es una capa separada del contrato canónico.
 
-## Gates de aceptación
+## Learnsets
 
-En `5afdc8b3adfd093f8ab0ca67b9900f44b793e546` pasaron los **18/18 workflows normales**:
+V3 no une learnsets de todas las generaciones.
 
-1. Data Foundation V3
-2. Godot 4.7 global
-3. Spanish Types Foundation
-4. Trainer Battle Session
-5. Trainer Intelligence Foundation
-6. Trainer Tactical Intelligence
-7. Trainer Belief Inference
-8. Trainer Search Foundation
-9. Trainer Search Depth Budget
-10. Trainer Self Play Evaluation
-11. Trainer Evaluation Corpus
-12. Trainer Search Limit Benchmark
-13. Trainer Adaptive Branching
-14. Trainer Public Coverage Beliefs
-15. Trainer Item Actions
-16. Trainer Strategic Switching V2
-17. Trainer Loadouts
-18. Trainer Team Composition
+Cada Pokémon selecciona un único `version_group` convencional/mainline coherente mediante una prioridad explícita. Cada entrada preserva:
 
-El cierre de PR #32 exige repetir este mismo conjunto sobre el HEAD que contiene este documento.
+- `move_id`
+- `method`
+- `level`
+- `order` cuando existe
+- `version_group`.
 
-## Límites conscientes
+Esto evita mezclar simultáneamente niveles y compatibilidades de generaciones diferentes.
 
-- `latest_conventional_mainline_per_species_v1` es una política de coherencia por especie, no un ruleset global que pretenda reproducir una generación única completa.
-- Conservar datos de habilidades, objetos y evoluciones no significa que todas sus mecánicas estén implementadas todavía.
-- Los datos fuente permanecen separados de los datos `raw`/`normalized` consumidos por el juego.
-- No se modifica Battle Core para “acomodar” datos inválidos; los límites del runtime deben seguir siendo explícitos.
+## Especies y formas
 
-## Siguiente trabajo
+La detección de formas no depende de que un nombre tenga guion.
 
-Tras cerrar DATA FOUNDATION V3:
+La identidad base/variedad usa `pokemon-species.varieties` y `is_default`, evitando descartar especies legítimas como Mr. Mime, Ho-Oh o Porygon-Z por heurísticas de nombre.
 
-1. hacer una fase separada de organización/limpieza del repositorio;
-2. identificar documentos, scripts, ramas de trabajo y archivos generados obsoletos sin borrar baselines canónicos ni provenance;
-3. consolidar documentación de datos antigua que haya quedado superada por V3;
-4. volver después a FASE 34 — Trainer Archetypes / Difficulty Tiers sobre la nueva base de datos certificada.
+Las 326 formas detectadas se preservan separadas del catálogo de 1.025 especies base.
+
+## Frontera de movimientos
+
+De los 919 movimientos runtime:
+
+- **590 RUNTIME_SUPPORTED**
+- **71 PARTIAL_RUNTIME**
+- **246 DATA_ONLY**
+- **12 UNSUPPORTED**.
+
+Invariante crítica:
+
+`DATA_ONLY` con `effect_specs` ejecutables = **0**.
+
+Un movimiento preservado pero no representable fielmente no puede ejecutar silenciosamente una aproximación más débil solo para aumentar cobertura.
+
+## Frontera de habilidades
+
+De las 373 habilidades:
+
+- **21 RUNTIME_SUPPORTED**
+- **14 PARTIAL_RUNTIME**
+- **338 DATA_ONLY**.
+
+No existe mapping ejecutable oculto para habilidades `DATA_ONLY`.
+
+La metadata de slots y `is_hidden` se preserva independientemente de si la mecánica de la habilidad tiene runtime completo.
+
+## Frontera de objetos
+
+Los 2.222 registros canónicos son metadata preservada, no 2.222 mecánicas implementadas.
+
+Held items con runtime certificado:
+
+- `leftovers`
+- `sitrus_berry`.
+
+Trainer bag con runtime certificado:
+
+- `potion`
+- `super_potion`
+- `hyper_potion`
+- `max_potion`
+- `full_restore`.
+
+Contrato Calvo V1 de curación:
+
+- 20
+- 60
+- 120
+- full
+- full + status.
+
+Textos históricos de PokéAPI con valores 50/200 para Super/Hyper Potion son metadata histórica y **no redefinen** la ejecución 60/120 del ruleset del proyecto.
+
+## Frontera de evoluciones
+
+De 554 evoluciones preservadas:
+
+- **391 RUNTIME_SUPPORTED**
+- **0 PARTIAL_RUNTIME**
+- **149 DATA_ONLY**
+- **14 UNSUPPORTED**.
+
+Se conservan exactamente **165 registros condicionados**.
+
+Las condiciones no soportadas —amistad, hora, género, movimiento conocido, held item de intercambio, forma/región/localización, lluvia, estado de party y otras— no pueden degradarse silenciosamente a una evolución más débil por nivel, item o trade.
+
+Solo siete selectores redundantes `base_form == current source species` permanecen ejecutables porque no cambian materialmente la condición.
+
+## Cierre end-to-end
+
+La suite final congela diez grupos de invariantes:
+
+1. totales estructurales exactos;
+2. procedencia fuente exacta;
+3. igualdad de conjuntos de identidad raw ↔ normalized;
+4. cierre de referencias cruzadas y totales de learnsets/evoluciones;
+5. frontera Moves;
+6. frontera Abilities;
+7. frontera Evolutions y no ejecución conditioned DATA_ONLY;
+8. superficies runtime exactas de Items;
+9. ausencia de ejecución oculta DATA_ONLY en moves/abilities;
+10. exclusión Shadow y totales de reportes.
+
+La comparación de artefactos entre el cierre anterior y el engineering final demostró ausencia de deriva canónica: raw, normalized, manifest y reportes esenciales permanecieron byte-identical; las diferencias fueron únicamente los nuevos checks, registro de la clase de test y tiempos de importación.
+
+## Regla de reapertura
+
+DATA V3 no se reabre para subir porcentajes o perseguir un 100% nominal.
+
+Un dominio se reabre cuando exista una causa concreta:
+
+- regresión real;
+- una nueva capacidad de Battle Core elimina un blocker documentado;
+- cambio deliberado de fuente/provenance;
+- necesidad concreta del juego que exige ampliar una frontera actualmente diferida.
+
+Hasta entonces, `b4f6adc2...` es la base DATA V3 cerrada sobre la que deben evolucionar los demás sistemas.
