@@ -289,6 +289,22 @@ func _register_abilities() -> void:
 		0,
 		{"requires_contact": true},
 	)]
+	# Partial runtime contract: ordinary surviving single-hit contact inflicts the
+	# source-faithful 1/8 of the attacker's maximum HP. Per-strike multihit and the
+	# defender-faints-on-contact case remain outside current AFTER_DAMAGE semantics.
+	_ability_specs[&"iron_barbs"] = [BattleTriggerSpec.new(
+		BattleTriggerSpec.AFTER_DAMAGE,
+		&"ability",
+		&"iron_barbs",
+		BattleEffectSpec.new(
+			BattleEffectSpec.MAX_HP_DAMAGE,
+			BattleEffectSpec.OPPONENT,
+			0,
+			1250,
+		),
+		0,
+		{"requires_contact": true},
+	)]
 	_ability_specs[&"static"] = [BattleTriggerSpec.new(
 		BattleTriggerSpec.AFTER_DAMAGE,
 		&"ability",
