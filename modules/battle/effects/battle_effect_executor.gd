@@ -203,6 +203,7 @@ func _damage(
 		context.rng,
 		context.ruleset,
 		int(modifiers.multiplier_basis_points),
+		-1,
 		int(modifiers.offensive_stat_multiplier_basis_points),
 	)
 	if result.critical:
