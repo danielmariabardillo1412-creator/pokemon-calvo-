@@ -60,7 +60,7 @@ func run(check: Callable) -> void:
 	var raw_abilities: Array = raw.get("abilities", [])
 	var raw_items: Array = raw.get("items", [])
 
-	var structural_counts_ok := (
+	var structural_counts_ok: bool = (
 		raw_types.size() == EXPECTED_TYPE_COUNT
 		and raw_species.size() == EXPECTED_SPECIES_COUNT
 		and raw_moves.size() == EXPECTED_MOVE_COUNT
@@ -75,7 +75,7 @@ func run(check: Callable) -> void:
 	check.call("data_v3_end_to_end_exact_structural_contract", structural_counts_ok)
 
 	var provenance: Dictionary = manifest.get("provenance", {}) as Dictionary
-	var provenance_ok := (
+	var provenance_ok: bool = (
 		int(manifest.get("schema_version", -1)) == EXPECTED_SCHEMA_VERSION
 		and str(manifest.get("dataset_version", "")) == EXPECTED_DATASET_VERSION
 		and str(manifest.get("source", "")) == EXPECTED_SOURCE
@@ -92,7 +92,7 @@ func run(check: Callable) -> void:
 	)
 	check.call("data_v3_end_to_end_exact_source_provenance", provenance_ok)
 
-	var raw_normalized_identity_ok := (
+	var raw_normalized_identity_ok: bool = (
 		_same_id_set(raw_types, normalized.get("types", {}))
 		and _same_id_set(raw_species, normalized.get("species", {}))
 		and _same_id_set(raw_moves, normalized.get("moves", {}))
