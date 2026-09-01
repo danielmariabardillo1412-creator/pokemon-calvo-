@@ -7,15 +7,16 @@ const FULL_IDS := [
 	"steelworker", "swarm", "thick_fat", "torrent", "tough_claws", "toxic_boost",
 ]
 const PARTIAL_IDS := [
-	"flame_body", "gooey", "guts", "heatproof", "hustle", "intimidate", "iron_barbs",
-	"levitate", "poison_point", "reckless", "stamina", "static",
+	"dry_skin", "flame_body", "gooey", "guts", "heatproof", "hustle", "intimidate",
+	"iron_barbs", "levitate", "poison_point", "reckless", "stamina", "static", "water_bubble",
 ]
 const IMPLEMENTED_IDS := [
-	"blaze", "defeatist", "dragons_maw", "fire_mane", "flame_body", "flare_boost",
-	"fur_coat", "gooey", "guts", "heatproof", "huge_power", "hustle", "ice_scales",
-	"intimidate", "iron_barbs", "levitate", "multiscale", "overgrow", "poison_point",
-	"pure_power", "reckless", "rocky_payload", "stamina", "static", "steelworker", "swarm",
-	"thick_fat", "torrent", "tough_claws", "toxic_boost",
+	"blaze", "defeatist", "dragons_maw", "dry_skin", "fire_mane", "flame_body",
+	"flare_boost", "fur_coat", "gooey", "guts", "heatproof", "huge_power", "hustle",
+	"ice_scales", "intimidate", "iron_barbs", "levitate", "multiscale", "overgrow",
+	"poison_point", "pure_power", "reckless", "rocky_payload", "stamina", "static",
+	"steelworker", "swarm", "thick_fat", "torrent", "tough_claws", "toxic_boost",
+	"water_bubble",
 ]
 const TYPE_BOOSTS := {
 	"steelworker": "steel",
@@ -42,7 +43,7 @@ func run(check: Callable) -> void:
 	)
 	check.call(
 		"data_v3_ability_contract_data_only_count",
-		(classes.get("DATA_ONLY", []) as Array).size() == 343,
+		(classes.get("DATA_ONLY", []) as Array).size() == 341,
 	)
 	check.call(
 		"data_v3_ability_contract_partition",
@@ -69,6 +70,20 @@ func run(check: Callable) -> void:
 	registry_ids.sort()
 	check.call("data_v3_ability_contract_registry_exact", registry_ids == IMPLEMENTED_IDS)
 
+	# Every ability MODIFY_DAMAGE spec must now be explicitly directional. Missing
+	# roles are fail-safe inert in BattleTriggerSystem rather than applying both ways.
+	var damage_roles_explicit := true
+	var damage_spec_count := 0
+	for ability_id in IMPLEMENTED_IDS:
+		for spec in registry.triggers_for_ability(StringName(ability_id), BattleTriggerSpec.MODIFY_DAMAGE):
+			damage_spec_count += 1
+			var role := String(spec.conditions.get("damage_role", ""))
+			damage_roles_explicit = damage_roles_explicit and role in ["actor", "target"]
+	check.call(
+		"data_v3_ability_contract_damage_roles_explicit",
+		damage_spec_count > 0 and damage_roles_explicit,
+	)
+
 	# Swarm remains the fourth member of the tested pinch-damage primitive.
 	var swarm_specs := registry.triggers_for_ability(&"swarm", BattleTriggerSpec.MODIFY_DAMAGE)
 	var swarm_ok := swarm_specs.size() == 1
@@ -77,6 +92,7 @@ func run(check: Callable) -> void:
 		swarm_ok = (
 			swarm.source_kind == &"ability"
 			and swarm.source_id == &"swarm"
+			and String(swarm.conditions.get("damage_role", "")) == "actor"
 			and String(swarm.conditions.get("move_type_id", "")) == "bug"
 			and int(swarm.conditions.get("hp_at_or_below_divisor", 0)) == 3
 			and int(swarm.conditions.get("multiplier_bp", 0)) == 15000
@@ -84,8 +100,8 @@ func run(check: Callable) -> void:
 		)
 	check.call("data_v3_ability_contract_swarm_trigger_exact", swarm_ok)
 
-	# Unconditional type boosts must use only move type + 1.5x. In particular,
-	# they must not inherit the pinch HP condition or another hidden state gate.
+	# Unconditional type boosts must use only actor role + move type + 1.5x. In
+	# particular, they must not inherit the pinch HP condition or another state gate.
 	var type_boosts_ok := true
 	for ability_id in TYPE_BOOSTS:
 		var specs := registry.triggers_for_ability(StringName(ability_id), BattleTriggerSpec.MODIFY_DAMAGE)
@@ -96,6 +112,7 @@ func run(check: Callable) -> void:
 		type_boosts_ok = type_boosts_ok and (
 			spec.source_kind == &"ability"
 			and String(spec.source_id) == ability_id
+			and String(spec.conditions.get("damage_role", "")) == "actor"
 			and String(spec.conditions.get("move_type_id", "")) == TYPE_BOOSTS[ability_id]
 			and int(spec.conditions.get("multiplier_bp", 0)) == 15000
 			and not spec.conditions.has("hp_at_or_below_divisor")
@@ -134,6 +151,7 @@ func run(check: Callable) -> void:
 		offensive_stat_specs_ok = offensive_stat_specs_ok and (
 			spec.source_kind == &"ability"
 			and String(spec.source_id) == ability_id
+			and String(spec.conditions.get("damage_role", "")) == "actor"
 			and bool(spec.conditions.get("requires_physical", false)) == bool(expected.physical)
 			and bool(spec.conditions.get("requires_special", false)) == bool(expected.special)
 			and int(spec.conditions.get("offensive_stat_multiplier_bp", 0)) == int(expected.multiplier)
@@ -156,6 +174,7 @@ func run(check: Callable) -> void:
 		defeatist_ok = defeatist_ok and (
 			spec.source_kind == &"ability"
 			and spec.source_id == &"defeatist"
+			and String(spec.conditions.get("damage_role", "")) == "actor"
 			and int(spec.conditions.get("hp_at_or_below_divisor", 0)) == 2
 			and int(spec.conditions.get("offensive_stat_multiplier_bp", 0)) == 5000
 			and not spec.conditions.has("multiplier_bp")
@@ -177,6 +196,7 @@ func run(check: Callable) -> void:
 		guts_ok = (
 			guts.source_kind == &"ability"
 			and guts.source_id == &"guts"
+			and String(guts.conditions.get("damage_role", "")) == "actor"
 			and bool(guts.conditions.get("requires_physical", false))
 			and not bool(guts.conditions.get("requires_special", false))
 			and guts_statuses == ["paralysis", "poison", "badly_poisoned"]
@@ -197,6 +217,7 @@ func run(check: Callable) -> void:
 		hustle_ok = (
 			hustle.source_kind == &"ability"
 			and hustle.source_id == &"hustle"
+			and String(hustle.conditions.get("damage_role", "")) == "actor"
 			and bool(hustle.conditions.get("requires_physical", false))
 			and int(hustle.conditions.get("multiplier_bp", 0)) == 15000
 			and not hustle.conditions.has("offensive_stat_multiplier_bp")
@@ -220,6 +241,7 @@ func run(check: Callable) -> void:
 		tough_ok = (
 			tough.source_kind == &"ability"
 			and tough.source_id == &"tough_claws"
+			and String(tough.conditions.get("damage_role", "")) == "actor"
 			and bool(tough.conditions.get("requires_contact", false))
 			and int(tough.conditions.get("multiplier_bp", 0)) == 13000
 			and not tough.conditions.has("requires_physical")
@@ -238,6 +260,7 @@ func run(check: Callable) -> void:
 		reckless_ok = (
 			reckless.source_kind == &"ability"
 			and reckless.source_id == &"reckless"
+			and String(reckless.conditions.get("damage_role", "")) == "actor"
 			and bool(reckless.conditions.get("requires_recoil", false))
 			and int(reckless.conditions.get("multiplier_bp", 0)) == 12000
 			and reckless.effect.kind == BattleEffectSpec.DAMAGE
@@ -252,6 +275,7 @@ func run(check: Callable) -> void:
 		fur_ok = (
 			fur.source_kind == &"ability"
 			and fur.source_id == &"fur_coat"
+			and String(fur.conditions.get("damage_role", "")) == "target"
 			and bool(fur.conditions.get("requires_physical", false))
 			and int(fur.conditions.get("multiplier_bp", 0)) == 5000
 			and not fur.conditions.has("move_type_id")
@@ -270,6 +294,7 @@ func run(check: Callable) -> void:
 		thick_ok = thick_ok and (
 			spec.source_kind == &"ability"
 			and spec.source_id == &"thick_fat"
+			and String(spec.conditions.get("damage_role", "")) == "target"
 			and not spec.conditions.has("requires_physical")
 			and not spec.conditions.has("requires_contact")
 			and spec.effect.kind == BattleEffectSpec.DAMAGE
@@ -286,6 +311,7 @@ func run(check: Callable) -> void:
 		ice_ok = (
 			ice.source_kind == &"ability"
 			and ice.source_id == &"ice_scales"
+			and String(ice.conditions.get("damage_role", "")) == "target"
 			and bool(ice.conditions.get("requires_special", false))
 			and int(ice.conditions.get("multiplier_bp", 0)) == 5000
 			and not ice.conditions.has("requires_physical")
@@ -301,6 +327,7 @@ func run(check: Callable) -> void:
 		multi_ok = (
 			multi.source_kind == &"ability"
 			and multi.source_id == &"multiscale"
+			and String(multi.conditions.get("damage_role", "")) == "target"
 			and bool(multi.conditions.get("requires_full_hp", false))
 			and int(multi.conditions.get("multiplier_bp", 0)) == 5000
 			and not multi.conditions.has("move_type_id")
@@ -317,11 +344,57 @@ func run(check: Callable) -> void:
 		heat_ok = (
 			heat.source_kind == &"ability"
 			and heat.source_id == &"heatproof"
+			and String(heat.conditions.get("damage_role", "")) == "target"
 			and String(heat.conditions.get("move_type_id", "")) == "fire"
 			and int(heat.conditions.get("multiplier_bp", 0)) == 5000
 			and heat.effect.kind == BattleEffectSpec.DAMAGE
 		)
 	check.call("data_v3_ability_contract_heatproof_partial_trigger_exact", heat_ok)
+
+	# Dry Skin's Fire vulnerability is exact; weather and Water absorption are still
+	# absent, so the ability remains partial.
+	var dry_specs := registry.triggers_for_ability(&"dry_skin", BattleTriggerSpec.MODIFY_DAMAGE)
+	var dry_ok := dry_specs.size() == 1
+	if dry_ok:
+		var dry: BattleTriggerSpec = dry_specs[0]
+		dry_ok = (
+			dry.source_kind == &"ability"
+			and dry.source_id == &"dry_skin"
+			and String(dry.conditions.get("damage_role", "")) == "target"
+			and String(dry.conditions.get("move_type_id", "")) == "fire"
+			and int(dry.conditions.get("multiplier_bp", 0)) == 12500
+			and dry.effect.kind == BattleEffectSpec.DAMAGE
+		)
+	check.call("data_v3_ability_contract_dry_skin_partial_trigger_exact", dry_ok)
+
+	# Water Bubble uses two opposite-direction specs. Role isolation is required so
+	# outgoing Water x2 cannot become incoming Water x2 and incoming Fire x0.5 cannot
+	# halve the holder's own Fire attacks. Burn prevention/cure remains absent.
+	var bubble_specs := registry.triggers_for_ability(&"water_bubble", BattleTriggerSpec.MODIFY_DAMAGE)
+	var bubble_ok := bubble_specs.size() == 2
+	var bubble_actor_ok := false
+	var bubble_target_ok := false
+	for spec in bubble_specs:
+		var role := String(spec.conditions.get("damage_role", ""))
+		if role == "actor":
+			bubble_actor_ok = (
+				String(spec.conditions.get("move_type_id", "")) == "water"
+				and int(spec.conditions.get("multiplier_bp", 0)) == 20000
+				and spec.effect.kind == BattleEffectSpec.DAMAGE
+			)
+		elif role == "target":
+			bubble_target_ok = (
+				String(spec.conditions.get("move_type_id", "")) == "fire"
+				and int(spec.conditions.get("multiplier_bp", 0)) == 5000
+				and spec.effect.kind == BattleEffectSpec.DAMAGE
+			)
+		else:
+			bubble_ok = false
+		bubble_ok = bubble_ok and spec.source_kind == &"ability" and spec.source_id == &"water_bubble"
+	check.call(
+		"data_v3_ability_contract_water_bubble_partial_triggers_exact",
+		bubble_ok and bubble_actor_ok and bubble_target_ok,
+	)
 
 	# Defender-owned contact reactions are deliberately partial for the same reason
 	# as Static: AFTER_DAMAGE is not requested for a defender that fainted from the
@@ -474,14 +547,24 @@ func run(check: Callable) -> void:
 		str((by_id.get("transistor", {}) as Dictionary).get("classification", "")) == "DATA_ONLY",
 	)
 
+	# The pinned snapshot has no numeric boost value for either record. Guard them as
+	# DATA_ONLY rather than importing an external multiplier into canonical DATA V3.
+	var prose_only_boosts_safe := true
+	for ability_id in ["gorilla_tactics", "steely_spirit"]:
+		prose_only_boosts_safe = prose_only_boosts_safe and (
+			str((by_id.get(ability_id, {}) as Dictionary).get("classification", "")) == "DATA_ONLY"
+			and registry.triggers_for_ability(StringName(ability_id), BattleTriggerSpec.MODIFY_DAMAGE).is_empty()
+		)
+	check.call("data_v3_ability_contract_prose_only_boosts_stay_data_only", prose_only_boosts_safe)
+
 	var report := _load_json("res://data/reports/unsupported_mechanics.json")
 	var summary: Dictionary = report.get("summary", {}).get("abilities", {})
 	check.call(
 		"data_v3_ability_contract_report_counts",
 		int(summary.get("DATA_READY", -1)) == 373
 		and int(summary.get("RUNTIME_SUPPORTED", -1)) == 18
-		and int(summary.get("PARTIAL_RUNTIME", -1)) == 12
-		and int(summary.get("DATA_ONLY", -1)) == 343,
+		and int(summary.get("PARTIAL_RUNTIME", -1)) == 14
+		and int(summary.get("DATA_ONLY", -1)) == 341,
 	)
 	var report_classes: Dictionary = report.get("ability_runtime_classification", {})
 	check.call(
