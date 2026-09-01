@@ -12,6 +12,7 @@ Final DATA Foundation V3 certification checkpoint after bounded closure of Moves
 ## Current tranche
 - Branch: `audit/data-v3-end-to-end-closure-v1`.
 - Exact parent: certified #94 final `be5b4bde75252afa2ef355b2e7392d0884c42d7a`.
+- PR: #95 `DATA V3 — final end-to-end certification`.
 
 ## Mandatory continuity rule
 Every material discovery, exception, correction, architectural decision, certification boundary or deliberate deferral must be written into project notebooks. Chat context is never the sole source of continuity.
@@ -89,6 +90,28 @@ The end-to-end closure should prove:
 8. no conditioned DATA_ONLY evolution silently becomes executable;
 9. reports/manifest identify the same dataset/ruleset/source authority;
 10. CI regenerates the same canonical artifact as certified #94 apart from execution timing noise.
+
+## Engineering attempt #1 — stopped correctly on GDScript typing failure
+Engineering HEAD `f9a9b4b11e1aa14447c447d0f35a37e98da6797e` launched the normal 18-workflow matrix.
+
+Result:
+- **17/18 workflows SUCCESS**;
+- only `Data Foundation V3 Tests` failed;
+- all pre-domain adapter/source/raw-invariant stages passed;
+- Godot 4.7 and every Trainer AI regression workflow passed.
+
+Exact failure:
+- `data_foundation_v3_end_to_end_closure_test_suite.gd:64` could not infer the type of `structural_counts_ok` because the compound expression contains `Variant`-typed JSON values;
+- because the new global class failed to compile, the runner later reported `Nonexistent function 'new' in base 'GDScript'` when attempting to instantiate it;
+- the domain process then reached its 120-second timeout because the runner never reached its normal `quit()` path.
+
+Decision/correction:
+- this is a **test-suite GDScript 4.7 typing defect only**, not a Pokémon-data, adapter, runtime or canonical-dataset discrepancy;
+- explicitly type compound boolean closure variables as `bool` instead of relying on inference from JSON/Variant expressions;
+- do not weaken, remove or reinterpret any end-to-end invariant to make CI pass;
+- rerun the full 18-workflow engineering matrix on the corrected SHA.
+
+No canonical data or Pokémon mechanic changes are justified by this failure.
 
 ## Certification workflow
 1. audit existing V3 tests/reports to avoid duplicating already-certified invariants;
