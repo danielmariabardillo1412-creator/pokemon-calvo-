@@ -22,18 +22,7 @@ Immutable source:
 - schema tree `02e031e1928d7e9456bf6f7486daacc4b8946c84`
 - `data/api/v2`, `data/schema/v2` read-only.
 
-Structural facts:
-- 1,025 species;
-- 326 forms;
-- 18 runtime types;
-- 919 runtime moves;
-- 373 abilities;
-- 2,222 items;
-- 61,102 learnset entries;
-- 554 evolutions;
-- 0 broken refs;
-- 0 rejected defs;
-- 18 XD Shadow moves explicitly excluded.
+Structural facts: 1,025 species; 326 forms; 18 runtime types; 919 runtime moves; 373 abilities; 2,222 items; 61,102 learnset entries; 554 evolutions; 0 broken refs; 0 rejected defs; 18 XD Shadow moves explicitly excluded.
 
 Pipeline:
 `snapshot → V3 adapter → narrow semantic audit layers → raw JSON → Godot DataImporter → normalized data → runtime`.
@@ -52,149 +41,110 @@ Pipeline:
 - #85 `6909aa778eca6555184167401f5e52be11f46ac3`
 - #86 `06b078b02766ff2c85d5ca45798d8293b8c8e557`
 - #87 `6fc1f73be1b24cba0c8052549ab4ea5f1e96c976`
+- #88 `64625cd8d46576a528ea9229bbd0b1d7898f0332`
 
-All above: **18/18 SUCCESS on exact final notebook-bearing HEAD and closed without merge**.
+All entries above: **18/18 SUCCESS on exact final notebook-bearing HEAD and closed without merge**.
 
 ## Move Effects V3 closed milestone
-- `RUNTIME_SUPPORTED`: **590**
-- `PARTIAL_RUNTIME`: **71**
-- `DATA_ONLY`: **246**
-- `UNSUPPORTED`: **12**
-- `DATA_ONLY` with executable `effect_specs`: **0**.
+- RUNTIME_SUPPORTED: **590**
+- PARTIAL_RUNTIME: **71**
+- DATA_ONLY: **246**
+- UNSUPPORTED: **12**
+- DATA_ONLY with executable `effect_specs`: **0**.
 
-## Latest certified baseline — PR #87
+## Latest certified baseline — PR #88
 Certified final HEAD:
-`6fc1f73be1b24cba0c8052549ab4ea5f1e96c976`
+`64625cd8d46576a528ea9229bbd0b1d7898f0332`
 
 Certified ability coverage:
-- `RUNTIME_SUPPORTED`: **18**
-- `PARTIAL_RUNTIME`: **12**
-- `DATA_ONLY`: **343**
+- RUNTIME_SUPPORTED: **18**
+- PARTIAL_RUNTIME: **14**
+- DATA_ONLY: **341**
 - total: **373**.
 
-Detailed ability notebooks: `06` through `17`.
+# Current tranche — PR #89 End-turn ability semantics
+- Branch: `audit/data-v3-ability-end-turn-v1`.
+- Exact parent: certified #88 final `64625cd8d46576a528ea9229bbd0b1d7898f0332`.
+- PR: #89 `DATA V3 — audit end-turn ability semantics`.
+- Engineering SHA: `b161373a70d0ed226259fe01f98b0d5cfcf677ed`.
+- Engineering result: **18/18 SUCCESS**.
+- DATA Foundation V3: **509 PASS / 0 FAIL**.
+- Spanish/type/runtime regression: **298 PASS / 0 FAIL**.
+- Detailed notebook: `docs/notebooks/19_DATA_V3_ABILITY_END_TURN.md`.
 
-# Current tranche — PR #88 Damage modifier roles + compound abilities
-- Branch: `audit/data-v3-ability-existing-primitives-v1`.
-- Exact parent: certified #87 final `6fc1f73be1b24cba0c8052549ab4ea5f1e96c976`.
-- PR: #88 `DATA V3 — isolate damage modifier roles and audit compound abilities`.
-- Engineering SHA: `15543135b42254c8d475db9d3eeb36503a674b6c`.
-- Engineering SHA: **18/18 SUCCESS**.
-- DATA V3 domain: **499 PASS / 0 FAIL**.
-- Detailed notebook: `docs/notebooks/18_DATA_V3_ABILITY_EXISTING_PRIMITIVES.md`.
+## #89 source decisions
+### Speed Boost
+Pinned Gen III source: Speed rises one stage after each turn; no history.
 
-## #88 root-cause correction — role isolation
-A pre-existing Battle Core bug allowed ability `MODIFY_DAMAGE` specs to be evaluated from both actor and target sides because no directional contract existed.
+Decision: **RUNTIME_SUPPORTED**.
 
-Invalid examples before the fix:
-- attacking Fur Coat could reduce its own outgoing physical damage;
-- defending low-HP Blaze could amplify incoming Fire damage.
+Runtime is exactly one existing primitive transaction:
+`END_TURN → SELF Speed +1`.
 
-Correction:
-- every ability `MODIFY_DAMAGE` spec now declares `damage_role = actor` or `damage_role = target`;
-- actor loop accepts only actor specs;
-- target loop accepts only target specs;
-- missing role is fail-safe inert.
+No Battle Core change was required. Real battle tests prove +1 after turn one, +2 after turn two, and exactly one ability event per completed turn.
 
-All existing ability damage modifiers were tagged according to their real direction. New real-battle regressions prove defender Blaze and attacker Fur Coat are inert in the wrong role.
+### Shed Skin
+Pinned source is version-sensitive:
+- current prose: 33% cure chance after each turn;
+- Black/White history: 30%;
+- Diamond/Pearl history: 33%.
 
-This is a shared correctness repair, not architecture added solely for coverage.
+Decision: **DATA_ONLY** until ability runtime contracts become version-aware. No universal probability is chosen.
 
-## #88 source decisions
-### Water Bubble
-Decision: **PARTIAL_RUNTIME**.
+### Poison Heal
+Pinned source requires poison to heal 1/8 max HP **instead of** causing poison damage, including bad poison.
 
-Pinned Gen VII source requires:
-- outgoing Water x2;
-- incoming Fire x0.5;
-- burn prevention / immediate cure.
+Current end-turn order is:
+1. `StatusSystem.process_end_turn()` applies residual;
+2. KO handling;
+3. END_TURN ability/item triggers.
 
-Runtime subset:
-- actor Water `multiplier_bp=20000`;
-- target Fire `multiplier_bp=5000`.
+A simple heal trigger would therefore be false semantics. Real battle tests prove a Poison Heal holder currently takes the same poison residual as a plain control.
 
-Missing: burn prevention/cure.
+Decision: **DATA_ONLY** until poison residual has an ability-aware replacement/suppression path.
 
-### Dry Skin
-Decision: **PARTIAL_RUNTIME**.
+## #89 architecture
+No new Battle Core primitive and no changes to `TurnExecutor` or `StatusSystem`.
 
-Pinned Gen IV source requires:
-- sun 1/8 max-HP damage;
-- rain 1/8 max-HP healing;
-- incoming Fire x1.25;
-- Water absorption + 1/4 max-HP heal.
+Only executable runtime change:
+- register Speed Boost with existing END_TURN + MODIFY_STAT_STAGE semantics.
 
-Runtime subset:
-- target Fire `multiplier_bp=12500`.
+Shed Skin / Poison Heal receive provenance guards and negative regressions only.
 
-Missing: weather and Water absorption/healing.
-
-### Gorilla Tactics
-Decision: **DATA_ONLY**.
-Pinned source states Attack boost + first-move lock but contains no numeric boost amount. No value is invented. A guard forces re-audit if numeric provenance appears.
-
-### Steely Spirit
-Decision: **DATA_ONLY**.
-Pinned source states Steel boost for holder/allies but contains no numeric amount. No value is invented. A guard forces re-audit if numeric provenance appears.
-
-## #88 tests
-New `DataFoundationV3AbilityDamageRoleTestSuite` verifies:
-- every `MODIFY_DAMAGE` ability spec has explicit role;
-- defender Blaze wrong-role inert;
-- attacker Fur Coat wrong-role inert;
-- Water Bubble outgoing Water x2;
-- Water Bubble incoming Fire x0.5;
-- Water Bubble opposite-role leakage absent;
-- Water Bubble burn gap explicit;
-- Dry Skin incoming Fire x1.25;
-- Dry Skin attacker wrong-role inert;
-- Dry Skin Water absorption gap explicit;
-- Gorilla Tactics / Steely Spirit stay DATA_ONLY.
-
-The global runtime contract suite also pins exact registry shapes and exact coverage counts.
-
-## #88 exact artifact drift
-Certified #87 final artifact → #88 engineering artifact:
-- raw: exactly two one-field changes:
-  - `dry_skin.classification: DATA_ONLY → PARTIAL_RUNTIME`;
-  - `water_bubble.classification: DATA_ONLY → PARTIAL_RUNTIME`;
-- normalized: exactly the same two changes;
-- PARTIAL set adds exactly `dry_skin`, `water_bubble`;
-- DATA_ONLY set removes exactly those two;
-- RUNTIME_SUPPORTED set unchanged;
-- every other ability unchanged;
+## #89 exact artifact drift
+Certified #88 final tested artifact → #89 engineering tested artifact:
+- raw: exactly `speed_boost.classification: DATA_ONLY → RUNTIME_SUPPORTED`;
+- normalized: exactly the same one-field change;
+- RUNTIME_SUPPORTED set adds exactly `speed_boost`;
+- DATA_ONLY set removes exactly `speed_boost`;
+- PARTIAL_RUNTIME set unchanged;
+- all other abilities unchanged;
 - Pokémon/species, moves/effects, items/statuses, learnsets/evolutions, types/stats unchanged;
 - manifest/forms/auxiliary unchanged;
-- `pokeapi_v3_audit.json` changes only partial/data-only counts;
-- `import_time_ms 504 → 406 ms` is non-semantic timing noise.
+- `pokeapi_v3_audit.json` changes only runtime/data-only counts;
+- `import_time_ms 515 → 511 ms` is non-semantic timing noise.
 
-## Ability coverage after #88 engineering
-- `RUNTIME_SUPPORTED`: **18**
-- `PARTIAL_RUNTIME`: **14** — `dry_skin`, `flame_body`, `gooey`, `guts`, `heatproof`, `hustle`, `intimidate`, `iron_barbs`, `levitate`, `poison_point`, `reckless`, `stamina`, `static`, `water_bubble`
-- `DATA_ONLY`: **341**
+## Ability coverage after #89 engineering
+- RUNTIME_SUPPORTED: **19**
+- PARTIAL_RUNTIME: **14**
+- DATA_ONLY: **340**
 - total: **373**.
 
-## Important blockers after #88
-- Water Bubble: burn prevention/immediate cure.
-- Dry Skin: weather + Water absorption/healing.
-- Gorilla Tactics: missing numeric source value + move lock.
-- Steely Spirit: missing numeric source value + ally context.
-- Guts: burn-cut suppression + version-aware sleep.
-- Hustle: accuracy modifier.
-- Iron Barbs / Static / Flame Body / Poison Point / Gooey: per-strike/faint-safe contact policy.
-- Rough Skin / Transistor: version-aware ability values.
-- Water Compaction / Weak Armor: hit-context / compound per-hit transactions.
-- Technician / move-property families: resolved move properties.
-- Filter / Solid Rock: super-effective predicate.
+## Important current blockers
+Newly pinned:
+- Shed Skin: version-aware probability semantics.
+- Poison Heal: poison residual replacement/suppression.
+
+Existing blockers remain: Water Bubble burn prevention; Dry Skin weather/Water absorption; Guts burn/sleep; Hustle accuracy; contact per-strike/faint-safe policy; Rough Skin/Transistor version-aware values; Water Compaction/Weak Armor hit semantics; move-property metadata; super-effective predicates; Gorilla Tactics numeric provenance/move lock; Steely Spirit numeric/ally provenance.
 
 ## Current certification step
-Notebook synchronization follows engineering SHA `15543135b42254c8d475db9d3eeb36503a674b6c`.
+Notebook synchronization follows engineering SHA `b161373a70d0ed226259fe01f98b0d5cfcf677ed`.
 
-Before closing #88:
-1. verify engineering → final HEAD changes only `01`, `04`, `18` notebooks;
+Before closing #89:
+1. engineering → final must change exactly `01`, `04`, `19` notebooks;
 2. require **18/18 SUCCESS** on exact final notebook-bearing HEAD;
-3. close #88 without merge;
-4. use exact final SHA as the next certified baseline.
+3. close #89 without merge;
+4. use exact final SHA as next certified baseline.
 
-## Exact next work after #88
-Continue DATA FOUNDATION V3 ability reliability from the exact #88 certified final HEAD with one bounded immutable-source-backed subgroup among the remaining **341 DATA_ONLY** records. Prefer the now role-safe damage surface or another genuinely shared correctness primitive. Trainer AI/archetypes remain deferred.
+## Next work after #89
+Continue DATA FOUNDATION V3 ability reliability from exact certified #89 final HEAD. Select one bounded source-first subgroup from the remaining **340 DATA_ONLY** records. Prefer complete semantics already expressible with current primitives; negative audit is preferable to speculative architecture. Trainer AI/archetypes remain deferred.
