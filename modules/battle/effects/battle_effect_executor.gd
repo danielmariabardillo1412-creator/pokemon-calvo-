@@ -134,6 +134,23 @@ func execute(
 				{"fixed": true},
 			))
 			return BattleEffectResult.new(fixed > 0, fixed)
+		BattleEffectSpec.MAX_HP_DAMAGE:
+			var requested := maxi(1, recipient.stats.max_hp * spec.ratio_basis_points / 10000)
+			var max_hp_damage := recipient.apply_damage(requested)
+			if max_hp_damage > 0:
+				context.events.append(BattleEvent.new(
+					BattleEvent.DAMAGE_APPLIED,
+					context.state.turn,
+					context.actor.instance_id,
+					recipient.instance_id,
+					context.move.id if context.move != null else &"",
+					max_hp_damage,
+					{
+						"cause": "max_hp_fraction",
+						"ratio_basis_points": spec.ratio_basis_points,
+					},
+				))
+			return BattleEffectResult.new(max_hp_damage > 0, max_hp_damage)
 		BattleEffectSpec.MULTI_HIT:
 			if spec.max_hits <= spec.min_hits:
 				spec.max_hits = spec.min_hits
