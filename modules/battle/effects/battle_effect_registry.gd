@@ -144,7 +144,12 @@ func _register_abilities() -> void:
 			pair[0],
 			BattleEffectSpec.new(BattleEffectSpec.DAMAGE),
 			0,
-			{"move_type_id": String(pair[1]), "hp_at_or_below_divisor": 3, "multiplier_bp": 15000},
+			{
+				"damage_role": "actor",
+				"move_type_id": String(pair[1]),
+				"hp_at_or_below_divisor": 3,
+				"multiplier_bp": 15000,
+			},
 		)]
 	for pair in [
 		[&"steelworker", &"steel"],
@@ -158,7 +163,11 @@ func _register_abilities() -> void:
 			pair[0],
 			BattleEffectSpec.new(BattleEffectSpec.DAMAGE),
 			0,
-			{"move_type_id": String(pair[1]), "multiplier_bp": 15000},
+			{
+				"damage_role": "actor",
+				"move_type_id": String(pair[1]),
+				"multiplier_bp": 15000,
+			},
 		)]
 	for ability_id in [&"huge_power", &"pure_power"]:
 		_ability_specs[ability_id] = [BattleTriggerSpec.new(
@@ -167,7 +176,11 @@ func _register_abilities() -> void:
 			ability_id,
 			BattleEffectSpec.new(BattleEffectSpec.DAMAGE),
 			0,
-			{"requires_physical": true, "offensive_stat_multiplier_bp": 20000},
+			{
+				"damage_role": "actor",
+				"requires_physical": true,
+				"offensive_stat_multiplier_bp": 20000,
+			},
 		)]
 	_ability_specs[&"toxic_boost"] = [BattleTriggerSpec.new(
 		BattleTriggerSpec.MODIFY_DAMAGE,
@@ -176,6 +189,7 @@ func _register_abilities() -> void:
 		BattleEffectSpec.new(BattleEffectSpec.DAMAGE),
 		0,
 		{
+			"damage_role": "actor",
 			"requires_physical": true,
 			"required_persistent_status_ids": ["poison", "badly_poisoned"],
 			"offensive_stat_multiplier_bp": 15000,
@@ -188,6 +202,7 @@ func _register_abilities() -> void:
 		BattleEffectSpec.new(BattleEffectSpec.DAMAGE),
 		0,
 		{
+			"damage_role": "actor",
 			"requires_special": true,
 			"required_persistent_status_ids": ["burn"],
 			"offensive_stat_multiplier_bp": 15000,
@@ -201,6 +216,7 @@ func _register_abilities() -> void:
 			BattleEffectSpec.new(BattleEffectSpec.DAMAGE),
 			0,
 			{
+				"damage_role": "actor",
 				"requires_physical": true,
 				"hp_at_or_below_divisor": 2,
 				"offensive_stat_multiplier_bp": 5000,
@@ -213,6 +229,7 @@ func _register_abilities() -> void:
 			BattleEffectSpec.new(BattleEffectSpec.DAMAGE),
 			0,
 			{
+				"damage_role": "actor",
 				"requires_special": true,
 				"hp_at_or_below_divisor": 2,
 				"offensive_stat_multiplier_bp": 5000,
@@ -229,6 +246,7 @@ func _register_abilities() -> void:
 		BattleEffectSpec.new(BattleEffectSpec.DAMAGE),
 		0,
 		{
+			"damage_role": "actor",
 			"requires_physical": true,
 			"required_persistent_status_ids": ["paralysis", "poison", "badly_poisoned"],
 			"offensive_stat_multiplier_bp": 15000,
@@ -242,7 +260,11 @@ func _register_abilities() -> void:
 		&"hustle",
 		BattleEffectSpec.new(BattleEffectSpec.DAMAGE),
 		0,
-		{"requires_physical": true, "multiplier_bp": 15000},
+		{
+			"damage_role": "actor",
+			"requires_physical": true,
+			"multiplier_bp": 15000,
+		},
 	)]
 	_ability_specs[&"tough_claws"] = [BattleTriggerSpec.new(
 		BattleTriggerSpec.MODIFY_DAMAGE,
@@ -250,7 +272,11 @@ func _register_abilities() -> void:
 		&"tough_claws",
 		BattleEffectSpec.new(BattleEffectSpec.DAMAGE),
 		0,
-		{"requires_contact": true, "multiplier_bp": 13000},
+		{
+			"damage_role": "actor",
+			"requires_contact": true,
+			"multiplier_bp": 13000,
+		},
 	)]
 	# Partial runtime contract: structured recoil moves get the faithful 1.2x boost.
 	# Crash-on-miss moves are not represented by a RECOIL effect spec yet, so that
@@ -261,7 +287,11 @@ func _register_abilities() -> void:
 		&"reckless",
 		BattleEffectSpec.new(BattleEffectSpec.DAMAGE),
 		0,
-		{"requires_recoil": true, "multiplier_bp": 12000},
+		{
+			"damage_role": "actor",
+			"requires_recoil": true,
+			"multiplier_bp": 12000,
+		},
 	)]
 	_ability_specs[&"fur_coat"] = [BattleTriggerSpec.new(
 		BattleTriggerSpec.MODIFY_DAMAGE,
@@ -269,7 +299,11 @@ func _register_abilities() -> void:
 		&"fur_coat",
 		BattleEffectSpec.new(BattleEffectSpec.DAMAGE),
 		0,
-		{"requires_physical": true, "multiplier_bp": 5000},
+		{
+			"damage_role": "target",
+			"requires_physical": true,
+			"multiplier_bp": 5000,
+		},
 	)]
 	_ability_specs[&"thick_fat"] = [
 		BattleTriggerSpec.new(
@@ -278,7 +312,7 @@ func _register_abilities() -> void:
 			&"thick_fat",
 			BattleEffectSpec.new(BattleEffectSpec.DAMAGE),
 			0,
-			{"move_type_id": "fire", "multiplier_bp": 5000},
+			{"damage_role": "target", "move_type_id": "fire", "multiplier_bp": 5000},
 		),
 		BattleTriggerSpec.new(
 			BattleTriggerSpec.MODIFY_DAMAGE,
@@ -286,7 +320,7 @@ func _register_abilities() -> void:
 			&"thick_fat",
 			BattleEffectSpec.new(BattleEffectSpec.DAMAGE),
 			0,
-			{"move_type_id": "ice", "multiplier_bp": 5000},
+			{"damage_role": "target", "move_type_id": "ice", "multiplier_bp": 5000},
 		),
 	]
 	_ability_specs[&"ice_scales"] = [BattleTriggerSpec.new(
@@ -295,7 +329,11 @@ func _register_abilities() -> void:
 		&"ice_scales",
 		BattleEffectSpec.new(BattleEffectSpec.DAMAGE),
 		0,
-		{"requires_special": true, "multiplier_bp": 5000},
+		{
+			"damage_role": "target",
+			"requires_special": true,
+			"multiplier_bp": 5000,
+		},
 	)]
 	_ability_specs[&"multiscale"] = [BattleTriggerSpec.new(
 		BattleTriggerSpec.MODIFY_DAMAGE,
@@ -303,7 +341,11 @@ func _register_abilities() -> void:
 		&"multiscale",
 		BattleEffectSpec.new(BattleEffectSpec.DAMAGE),
 		0,
-		{"requires_full_hp": true, "multiplier_bp": 5000},
+		{
+			"damage_role": "target",
+			"requires_full_hp": true,
+			"multiplier_bp": 5000,
+		},
 	)]
 	# Partial runtime contract: Fire-move damage is exact, but burn residual damage
 	# is still computed directly by StatusSystem and has no ability modifier hook.
@@ -313,15 +355,46 @@ func _register_abilities() -> void:
 		&"heatproof",
 		BattleEffectSpec.new(BattleEffectSpec.DAMAGE),
 		0,
-		{"move_type_id": "fire", "multiplier_bp": 5000},
+		{"damage_role": "target", "move_type_id": "fire", "multiplier_bp": 5000},
 	)]
+	# Partial runtime: the exact Fire vulnerability is executable. Weather HP changes
+	# and Water absorption/healing remain outside the current damage modifier surface.
+	_ability_specs[&"dry_skin"] = [BattleTriggerSpec.new(
+		BattleTriggerSpec.MODIFY_DAMAGE,
+		&"ability",
+		&"dry_skin",
+		BattleEffectSpec.new(BattleEffectSpec.DAMAGE),
+		0,
+		{"damage_role": "target", "move_type_id": "fire", "multiplier_bp": 12500},
+	)]
+	# Partial runtime: Water outgoing x2 and Fire incoming x0.5 are exact. Burn
+	# immunity / immediate cure remains deliberately absent until status prevention
+	# has an ability-aware hook.
+	_ability_specs[&"water_bubble"] = [
+		BattleTriggerSpec.new(
+			BattleTriggerSpec.MODIFY_DAMAGE,
+			&"ability",
+			&"water_bubble",
+			BattleEffectSpec.new(BattleEffectSpec.DAMAGE),
+			0,
+			{"damage_role": "actor", "move_type_id": "water", "multiplier_bp": 20000},
+		),
+		BattleTriggerSpec.new(
+			BattleTriggerSpec.MODIFY_DAMAGE,
+			&"ability",
+			&"water_bubble",
+			BattleEffectSpec.new(BattleEffectSpec.DAMAGE),
+			0,
+			{"damage_role": "target", "move_type_id": "fire", "multiplier_bp": 5000},
+		),
+	]
 	_ability_specs[&"levitate"] = [BattleTriggerSpec.new(
 		BattleTriggerSpec.MODIFY_DAMAGE,
 		&"ability",
 		&"levitate",
 		BattleEffectSpec.new(BattleEffectSpec.DAMAGE),
 		0,
-		{"immune_type_id": "ground"},
+		{"damage_role": "target", "immune_type_id": "ground"},
 	)]
 	# Partial runtime contract: an ordinary surviving damaging move raises Defense
 	# once. Battle Core currently emits AFTER_DAMAGE once per completed move and not
