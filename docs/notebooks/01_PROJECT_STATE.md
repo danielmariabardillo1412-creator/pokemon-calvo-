@@ -43,6 +43,7 @@ Pipeline:
 - #87 `6fc1f73be1b24cba0c8052549ab4ea5f1e96c976`
 - #88 `64625cd8d46576a528ea9229bbd0b1d7898f0332`
 - #89 `407ad8f27d13a79b09c367aac2f6ae0c1ef801ef`
+- #90 `84e58498e4453ee5378e3209487f4cbfe7b2eead`
 
 All entries above: **18/18 SUCCESS on exact final notebook-bearing HEAD and closed without merge**.
 
@@ -53,114 +54,109 @@ All entries above: **18/18 SUCCESS on exact final notebook-bearing HEAD and clos
 - UNSUPPORTED: **12**
 - DATA_ONLY with executable `effect_specs`: **0**.
 
-## Latest certified baseline — PR #89
+## Latest certified baseline — PR #90
 Certified final HEAD:
-`407ad8f27d13a79b09c367aac2f6ae0c1ef801ef`
+`84e58498e4453ee5378e3209487f4cbfe7b2eead`
 
-Certified ability coverage:
+Certified #90 ability coverage:
 - RUNTIME_SUPPORTED: **19**
 - PARTIAL_RUNTIME: **14**
 - DATA_ONLY: **340**
 - total: **373**.
 
-# Current tranche — PR #90 Opponent end-turn blockers
-- Branch: `audit/data-v3-ability-end-turn-opponent-v1`.
-- Exact parent: certified #89 final `407ad8f27d13a79b09c367aac2f6ae0c1ef801ef`.
-- PR: #90 `DATA V3 — audit opponent end-turn ability blockers`.
-- Engineering SHA: `52fafcc035dd46824bf9f0f6239cc93363981998`.
+# Current tranche — PR #91 Target-state semantics
+- Branch: `audit/data-v3-ability-target-state-v1`.
+- Parent: certified #90 final `84e58498e4453ee5378e3209487f4cbfe7b2eead`.
+- PR: #91 `DATA V3 — add shared target-state ability semantics`.
+- Engineering SHA: `a14b761016aec1dd3b0d733f89cee28fd06fe16a`.
 - Engineering result: **18/18 SUCCESS**.
-- DATA Foundation V3: **516 PASS / 0 FAIL**.
-- Spanish/type/runtime regression: **298 PASS / 0 FAIL**.
-- Normalized import: 0 broken refs / 0 rejected definitions.
-- Detailed notebook: `docs/notebooks/20_DATA_V3_ABILITY_END_TURN_OPPONENT.md`.
+- DATA V3 domain: **529 PASS / 0 FAIL**.
+- Detailed notebook: `docs/notebooks/21_DATA_V3_ABILITY_TARGET_STATE.md`.
 
-## #90 result — deliberately negative audit
-No production/runtime file changed. No adapter change. No registry entry. No ability classification moved.
+## #91 shared target-state architecture
+#90 proved Bad Dreams could not use the owner-local persistent-status predicate. #91 found a second independent consumer, Merciless, so a generic target-status condition is justified.
 
-### Bad Dreams → DATA_ONLY
-Pinned Generation IV source requires opposing Pokémon to lose 1/8 max HP after each turn **while they are asleep**.
+Contract:
+- `required_persistent_status_ids` remains owner-local;
+- `required_target_persistent_status_ids` evaluates the supplied opposing/effect target;
+- historical callers remain compatible via optional target argument;
+- damage modifiers pass the opposing combatant directionally;
+- no weather/gender/switch-history subsystem was added.
 
-Battle Core already has the effect primitive needed (`MAX_HP_DAMAGE` against `OPPONENT`), but the only persistent-status trigger predicate, `required_persistent_status_ids`, is evaluated against the **ability owner** in `BattleTriggerSystem.conditions_met()`.
+## #91 ability decisions
+### Bad Dreams → RUNTIME_SUPPORTED
+- Gen IV source; no history.
+- `END_TURN` + target `sleep` + `MAX_HP_DAMAGE(OPPONENT, 1250 bp)`.
+- Real battle: sleeping rival loses exactly 1/8 max HP and triggers once; awake rival is inert.
 
-END_TURN routing supplies owner + opponent, but conditions still receive only the owner. Therefore the engine cannot currently express “opponent is asleep”. Using the existing predicate would instead mean “ability owner is asleep”, which is false semantics.
+### Merciless → RUNTIME_SUPPORTED
+- Gen VII source; no history.
+- actor `MODIFY_DAMAGE` + target status `{poison, badly_poisoned}` + `force_critical=true`.
+- no damage multiplier / no offensive-stat multiplier.
+- Natural critical chance is forced to zero in tests; poison/toxic still critical, healthy/burn controls do not.
+- Uses existing project-authoritative `calvo_v1` critical semantics rather than a new critical subsystem.
 
-Decision: remain **DATA_ONLY**. Do not approximate with unconditional 1/8 damage and do not add a target-status predicate solely for one ability.
+### Rivalry → DATA_ONLY
+Requires comparing user/target gender. Runtime does not carry the required per-creature gender/comparison state. Species `gender_rate` is not a safe substitute.
 
-Real-battle regression: Bad Dreams holder versus a sleeping opponent produces no false ability event and no Bad Dreams damage. A direct predicate probe also proves awake owner is rejected while sleeping owner is accepted, confirming owner-local semantics.
+### Stakeout → DATA_ONLY
+Requires knowing whether the target switched in during the current turn. Runtime lacks turn-scoped target switch-history state.
 
-### Rain Dish → DATA_ONLY
-Pinned Generation III source requires healing 1/16 max HP after each turn during rain. Repository-wide search found no battle weather state/condition surface.
+Rain Dish / Ice Body remain DATA_ONLY because weather architecture is still absent.
 
-Decision: remain **DATA_ONLY**. Do not install an unconditional heal and do not add weather architecture solely for this audit.
+## #91 source guards
+Ability contracts now explicitly guard immutable source semantics for Bad Dreams, Merciless, Rivalry and Stakeout. Source drift forces re-audit.
 
-### Ice Body → DATA_ONLY
-Pinned Generation IV source requires healing 1/16 max HP after each turn during hail and immunity to hail damage regardless of type. Current battle state has neither weather state nor hail residual transaction.
+## #91 exact artifact comparison
+Certified #90 final:
+- run `33503120882`
+- artifact `9798542104`
+- head `84e58498e4453ee5378e3209487f4cbfe7b2eead`.
 
-Decision: remain **DATA_ONLY**.
+#91 engineering:
+- run `33505565643`
+- artifact `9799469428`
+- head `a14b761016aec1dd3b0d733f89cee28fd06fe16a`.
 
-## #90 tests
-New `DataFoundationV3AbilityEndTurnOpponentTestSuite` adds seven regressions:
-1. Bad Dreams immutable source contract;
-2. Rain Dish immutable source contract;
-3. Ice Body immutable source contract;
-4. all three stay DATA_ONLY with no END_TURN trigger;
-5. existing persistent-status predicate is owner-local;
-6. sleeping-target Bad Dreams real-battle gap remains explicit;
-7. exact ability partition remains 19 / 14 / 340.
+Canonical drift is exactly:
+- `bad_dreams.classification: DATA_ONLY → RUNTIME_SUPPORTED`
+- `merciless.classification: DATA_ONLY → RUNTIME_SUPPORTED`
+in raw and normalized.
 
-DATA V3 domain increases from #89's 509 checks to **516 PASS / 0 FAIL**.
+Reports change only corresponding ability lists/counters:
+- RUNTIME_SUPPORTED **19 → 21**
+- PARTIAL_RUNTIME **14 → 14**
+- DATA_ONLY **340 → 338**.
 
-## #90 exact artifact comparison
-Certified #89 final tested artifact:
-- run `33501387360`;
-- artifact `9797865183`;
-- head `407ad8f27d13a79b09c367aac2f6ae0c1ef801ef`.
+Unchanged: all other ability fields/records, Pokémon/species, moves/effects, items/statuses, learnsets/evolutions, types/stats, manifest, forms and auxiliary. `import_time_ms 509 → 507` is timing noise.
 
-#90 engineering tested artifact:
-- run `33502577117`;
-- artifact `9798322866`;
-- head `52fafcc035dd46824bf9f0f6239cc93363981998`.
-
-Both artifacts contain the same 15 files.
-
-Semantically identical:
-- raw `pokemon_api.json`;
-- normalized `pokemon_api.json`;
-- manifest;
-- forms policy report;
-- unsupported mechanics report;
-- PokeAPI V3 audit report;
-- auxiliary report.
-
-No species/Pokémon, move/effect, ability classification, item/status, learnset/evolution, type/stat or report-set change exists.
-
-Only difference: `import_time_ms 513 → 509 ms`, non-semantic execution timing noise.
-
-## Ability coverage after #90 engineering
-Unchanged from certified #89:
-- RUNTIME_SUPPORTED: **19**
+## Ability coverage after #91 engineering
+- RUNTIME_SUPPORTED: **21**
 - PARTIAL_RUNTIME: **14**
-- DATA_ONLY: **340**
+- DATA_ONLY: **338**
 - total: **373**.
-
-## Important blockers after #90
-Newly pinned:
-- Bad Dreams: needs target/opponent persistent-status predicate on END_TURN or another shared target-state condition mechanism.
-- Rain Dish: needs weather state + rain predicate.
-- Ice Body: needs weather state + hail predicate + hail residual immunity.
-
-Existing blockers remain: Shed Skin version-aware probability; Poison Heal residual replacement; Water Bubble burn prevention; Dry Skin weather/Water absorption; Guts burn/sleep; Hustle accuracy; contact per-strike/faint-safe policy; Rough Skin/Transistor version-aware values; Water Compaction/Weak Armor hit semantics; move-property metadata; super-effective predicates; Gorilla Tactics numeric provenance/move lock; Steely Spirit numeric/ally provenance.
 
 ## Current certification step
-Notebook synchronization follows engineering SHA `52fafcc035dd46824bf9f0f6239cc93363981998`.
+Notebook synchronization follows engineering SHA `a14b761016aec1dd3b0d733f89cee28fd06fe16a`.
 
-Before closing #90:
-1. engineering → final must change exactly `01`, `04`, `20` notebooks;
+Before closing #91:
+1. engineering → final must change exactly `01`, `04`, `21` notebooks;
 2. require **18/18 SUCCESS** on exact final notebook-bearing HEAD;
-3. close #90 without merge;
+3. close #91 without merge;
 4. use exact final SHA as next certified baseline.
 
 Do not make a post-close commit solely to record closure; GitHub PR state is authoritative.
 
-## Next work after #90
-Continue DATA FOUNDATION V3 ability reliability from exact certified #90 final HEAD. Do **not** implement weather merely because Rain Dish/Ice Body exposed it, and do not add target-status solely for Bad Dreams. First identify a bounded source-backed family that genuinely reuses an existing primitive or demonstrates that a shared missing condition is justified by multiple abilities. A negative audit remains preferable to speculative architecture. Trainer AI/archetypes remain deferred.
+## Important blockers still open
+- weather state/residuals: Rain Dish, Ice Body and other weather families;
+- gender comparison: Rivalry;
+- turn-scoped switch history: Stakeout;
+- version-aware ability values/probabilities: Rough Skin, Transistor, Shed Skin;
+- residual replacement/prevention: Poison Heal, Heatproof burn residual, Water Bubble burn prevention;
+- Guts burn/sleep semantics; Hustle accuracy;
+- contact per-strike/faint-safe policy;
+- move-property metadata and super-effective predicates;
+- Gorilla Tactics numeric provenance/move lock; Steely Spirit numeric/ally provenance.
+
+## Next work after #91
+Continue DATA FOUNDATION V3 ability reliability from exact certified #91 final HEAD. Prefer another bounded family that reuses existing primitives or produces a useful negative audit. Do not open weather/gender/switch-history architecture casually. Trainer AI/archetypes remain deferred until DATA V3 closure is complete.
