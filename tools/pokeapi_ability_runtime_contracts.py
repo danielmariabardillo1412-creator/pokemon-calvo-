@@ -67,9 +67,12 @@ _CLASSIFICATION = {
     "pure_power": RUNTIME_SUPPORTED,
     "toxic_boost": RUNTIME_SUPPORTED,
     "flare_boost": RUNTIME_SUPPORTED,
+    "defeatist": RUNTIME_SUPPORTED,
     "flame_body": PARTIAL_RUNTIME,
     "gooey": PARTIAL_RUNTIME,
+    "guts": PARTIAL_RUNTIME,
     "heatproof": PARTIAL_RUNTIME,
+    "hustle": PARTIAL_RUNTIME,
     "iron_barbs": PARTIAL_RUNTIME,
     "poison_point": PARTIAL_RUNTIME,
     "reckless": PARTIAL_RUNTIME,
@@ -175,6 +178,24 @@ def _validate_flame_body_history(ability: dict) -> None:
             if battle_token in change_text:
                 raise RuntimeError(
                     "DATA V3 Flame Body historical battle semantics changed; re-audit"
+                )
+
+
+def _validate_hustle_history(ability: dict) -> None:
+    """Hustle's pinned history changes only its old overworld encounter effect."""
+    changes = ability.get("effect_changes") or []
+    if not changes:
+        raise RuntimeError("DATA V3 Hustle history unexpectedly disappeared; re-audit")
+    for change in changes:
+        change_text = _english_text(change.get("effect_entries"))
+        if not change_text or "overworld" not in change_text:
+            raise RuntimeError(
+                "DATA V3 Hustle history is no longer overworld-only; re-audit"
+            )
+        for battle_token in ("1.5x", "0.8x", "accuracy", "physical moves"):
+            if battle_token in change_text:
+                raise RuntimeError(
+                    "DATA V3 Hustle historical battle semantics changed; re-audit"
                 )
 
 
@@ -395,6 +416,60 @@ def _validate_source_contract(ability: dict, sid: str) -> None:
             raise RuntimeError("DATA V3 audited ability generation changed for flare_boost")
         _require_tokens(text, sid, ("1.5x its special attack when burned",))
         _require_no_history(ability, sid)
+        return
+
+    if sid == "defeatist":
+        if _generation_name(ability) != "generation-v":
+            raise RuntimeError("DATA V3 audited ability generation changed for defeatist")
+        _require_tokens(
+            text,
+            sid,
+            ("attack and special attack are halved", "half its hp or less"),
+        )
+        _require_no_history(ability, sid)
+        return
+
+    if sid == "guts":
+        if _generation_name(ability) != "generation-iii":
+            raise RuntimeError("DATA V3 audited ability generation changed for guts")
+        _require_tokens(
+            text,
+            sid,
+            (
+                "asleep, burned, paralyzed, or poisoned",
+                "1.5x its attack",
+                "not affected by the usual attack cut from a burn",
+                "does not count as a stat modifier",
+            ),
+        )
+        changes = ability.get("effect_changes") or []
+        if len(changes) != 1:
+            raise RuntimeError("DATA V3 Guts history shape changed; re-audit")
+        change = changes[0]
+        if (change.get("version_group") or {}).get("name") != "diamond-pearl":
+            raise RuntimeError("DATA V3 Guts version marker changed; re-audit")
+        _require_tokens(
+            _english_text(change.get("effect_entries")),
+            sid,
+            ("does not take effect during sleep",),
+        )
+        return
+
+    if sid == "hustle":
+        if _generation_name(ability) != "generation-iii":
+            raise RuntimeError("DATA V3 audited ability generation changed for hustle")
+        _require_tokens(
+            text,
+            sid,
+            (
+                "physical moves do 1.5x as much regular damage",
+                "0.8x their usual accuracy",
+                "special moves are unaffected",
+                "set damage",
+                "accuracy affected, but not their damage",
+            ),
+        )
+        _validate_hustle_history(ability)
         return
 
     if sid == "stamina":
