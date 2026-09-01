@@ -45,6 +45,7 @@ _MOVE_PROPERTY_GUARDS = {"long_reach", "technician"}
 _VERSION_SENSITIVE_CONTACT_DAMAGE_GUARDS = {"rough_skin"}
 _NON_NUMERIC_BOOST_GUARDS = {"gorilla_tactics", "steely_spirit"}
 _END_TURN_DATA_ONLY_GUARDS = {"shed_skin", "poison_heal"}
+_TARGET_STATE_DATA_ONLY_GUARDS = {"rivalry", "stakeout"}
 
 # The pinned PokeAPI snapshot says 1.33x for Tough Claws. Current main-series
 # mechanics are a 30% contact-move power boost, so DATA V3 deliberately corrects
@@ -52,6 +53,7 @@ _END_TURN_DATA_ONLY_GUARDS = {"shed_skin", "poison_heal"}
 _TOUGH_CLAWS_CANONICAL_EFFECT = "Boosts the power of moves that make contact by 30%."
 
 _CLASSIFICATION = {
+    "bad_dreams": RUNTIME_SUPPORTED,
     "blaze": RUNTIME_SUPPORTED,
     "overgrow": RUNTIME_SUPPORTED,
     "swarm": RUNTIME_SUPPORTED,
@@ -64,6 +66,7 @@ _CLASSIFICATION = {
     "fur_coat": RUNTIME_SUPPORTED,
     "thick_fat": RUNTIME_SUPPORTED,
     "ice_scales": RUNTIME_SUPPORTED,
+    "merciless": RUNTIME_SUPPORTED,
     "multiscale": RUNTIME_SUPPORTED,
     "huge_power": RUNTIME_SUPPORTED,
     "pure_power": RUNTIME_SUPPORTED,
@@ -110,6 +113,7 @@ def classification_for(ability: dict) -> str:
             or sid in _VERSION_SENSITIVE_CONTACT_DAMAGE_GUARDS
             or sid in _NON_NUMERIC_BOOST_GUARDS
             or sid in _END_TURN_DATA_ONLY_GUARDS
+            or sid in _TARGET_STATE_DATA_ONLY_GUARDS
         ):
             _validate_source_contract(ability, sid)
         return DATA_ONLY
@@ -230,6 +234,48 @@ def _validate_source_contract(ability: dict, sid: str) -> None:
     text = _english_text(ability.get("effect_entries"))
     if not text:
         raise RuntimeError(f"DATA V3 audited ability lost English effect text: {sid}")
+
+    if sid == "bad_dreams":
+        if _generation_name(ability) != "generation-iv":
+            raise RuntimeError("DATA V3 audited ability generation changed for bad_dreams")
+        _require_tokens(
+            text,
+            sid,
+            ("1/8 of their maximum hp", "after each turn", "while they are asleep"),
+        )
+        _require_no_history(ability, sid)
+        return
+
+    if sid == "merciless":
+        if _generation_name(ability) != "generation-vii":
+            raise RuntimeError("DATA V3 audited ability generation changed for merciless")
+        _require_tokens(text, sid, ("critical hit", "poisoned targets"))
+        _require_no_history(ability, sid)
+        return
+
+    if sid == "rivalry":
+        if _generation_name(ability) != "generation-iv":
+            raise RuntimeError("DATA V3 audited ability generation changed for rivalry")
+        _require_tokens(
+            text,
+            sid,
+            (
+                "1.25x as much regular damage",
+                "same gender",
+                "0.75x as much regular damage",
+                "opposite gender",
+                "genderless",
+            ),
+        )
+        _require_no_history(ability, sid)
+        return
+
+    if sid == "stakeout":
+        if _generation_name(ability) != "generation-vii":
+            raise RuntimeError("DATA V3 audited ability generation changed for stakeout")
+        _require_tokens(text, sid, ("double power", "switched in this turn"))
+        _require_no_history(ability, sid)
+        return
 
     if sid in _PINCH_TYPES:
         if _generation_name(ability) != "generation-iii":
