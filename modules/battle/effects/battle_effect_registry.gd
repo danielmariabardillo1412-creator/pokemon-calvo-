@@ -132,6 +132,12 @@ func _register_abilities() -> void:
 		&"intimidate",
 		_stage(BattleEffectSpec.OPPONENT, StatStages.ATTACK, -1),
 	)]
+	_ability_specs[&"speed_boost"] = [BattleTriggerSpec.new(
+		BattleTriggerSpec.END_TURN,
+		&"ability",
+		&"speed_boost",
+		_stage(BattleEffectSpec.SELF, StatStages.SPEED, 1),
+	)]
 	for pair in [
 		[&"blaze", &"fire"],
 		[&"torrent", &"water"],
