@@ -49,7 +49,6 @@ func run(check: Callable) -> void:
 	var raw := _load_json("res://data/raw/pokemon_api.json")
 	var normalized := _load_json("res://data/normalized/pokemon_api.json")
 	var manifest := _load_json("res://data/manifests/pokemon_api_manifest.json")
-	var summary := _load_json("res://data/reports/import_summary.json")
 	var unsupported := _load_json("res://data/reports/unsupported_mechanics.json")
 	var audit := _load_json("res://data/reports/pokeapi_v3_audit.json")
 	var forms := _load_json("res://data/reports/forms_policy_report.json")
@@ -59,22 +58,33 @@ func run(check: Callable) -> void:
 	var raw_moves: Array = raw.get("moves", [])
 	var raw_abilities: Array = raw.get("abilities", [])
 	var raw_items: Array = raw.get("items", [])
+	var raw_learnset_count := 0
+	var raw_evolution_count := 0
+	for raw_species_record in raw_species:
+		if raw_species_record is Dictionary:
+			raw_learnset_count += raw_species_record.get("learnset", []).size()
+			raw_evolution_count += raw_species_record.get("evolutions", []).size()
 
+	# This suite runs before authoritative normalization in CI. Therefore structural
+	# invariants here use regenerated raw data + pre-normalization adapter reports.
+	# Post-import rejected-definition checks are certified from the tested artifact.
 	var structural_counts_ok: bool = (
 		raw_types.size() == EXPECTED_TYPE_COUNT
 		and raw_species.size() == EXPECTED_SPECIES_COUNT
 		and raw_moves.size() == EXPECTED_MOVE_COUNT
 		and raw_abilities.size() == EXPECTED_ABILITY_COUNT
 		and raw_items.size() == EXPECTED_ITEM_COUNT
-		and int(summary.get("learnset_entries_total", -1)) == EXPECTED_LEARNSET_COUNT
-		and int(summary.get("evolutions_total", -1)) == EXPECTED_EVOLUTION_COUNT
-		and int(summary.get("forms_total", -1)) == EXPECTED_FORM_COUNT
-		and summary.get("broken_references", []).is_empty()
-		and summary.get("rejected", []).is_empty()
+		and raw_learnset_count == EXPECTED_LEARNSET_COUNT
+		and raw_evolution_count == EXPECTED_EVOLUTION_COUNT
+		and int(forms.get("forms_total", -1)) == EXPECTED_FORM_COUNT
+		and int(forms.get("species_total", -1)) == EXPECTED_SPECIES_COUNT
+		and audit.get("broken_references", []).is_empty()
 	)
 	check.call("data_v3_end_to_end_exact_structural_contract", structural_counts_ok)
 
 	var provenance: Dictionary = manifest.get("provenance", {}) as Dictionary
+	var normalized_manifest: Dictionary = normalized.get("manifest", {}) as Dictionary
+	var normalized_provenance: Dictionary = normalized_manifest.get("provenance", {}) as Dictionary
 	var provenance_ok: bool = (
 		int(manifest.get("schema_version", -1)) == EXPECTED_SCHEMA_VERSION
 		and str(manifest.get("dataset_version", "")) == EXPECTED_DATASET_VERSION
@@ -84,11 +94,14 @@ func run(check: Callable) -> void:
 		and str(provenance.get("source_snapshot_commit", "")) == EXPECTED_SOURCE_COMMIT
 		and str(provenance.get("source_api_tree", "")) == EXPECTED_API_TREE
 		and str(provenance.get("source_schema_tree", "")) == EXPECTED_SCHEMA_TREE
-		and int(summary.get("schema_version", -1)) == EXPECTED_SCHEMA_VERSION
-		and str(summary.get("dataset_version", "")) == EXPECTED_DATASET_VERSION
-		and str(summary.get("source", "")) == EXPECTED_SOURCE
-		and str(summary.get("source_commit", "")) == EXPECTED_SOURCE_COMMIT
-		and str(summary.get("ruleset", "")) == EXPECTED_RULESET
+		and int(normalized_manifest.get("schema_version", -1)) == EXPECTED_SCHEMA_VERSION
+		and str(normalized_manifest.get("dataset_version", "")) == EXPECTED_DATASET_VERSION
+		and str(normalized_manifest.get("source", "")) == EXPECTED_SOURCE
+		and str(normalized_manifest.get("ruleset", "")) == EXPECTED_RULESET
+		and str(normalized_provenance.get("source_commit", "")) == EXPECTED_SOURCE_COMMIT
+		and str(normalized_provenance.get("source_snapshot_commit", "")) == EXPECTED_SOURCE_COMMIT
+		and str(normalized_provenance.get("source_api_tree", "")) == EXPECTED_API_TREE
+		and str(normalized_provenance.get("source_schema_tree", "")) == EXPECTED_SCHEMA_TREE
 	)
 	check.call("data_v3_end_to_end_exact_source_provenance", provenance_ok)
 
