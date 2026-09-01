@@ -13,8 +13,8 @@ const EXPLICITLY_PROMOTED_FRONTIER_IDS := [
 	"defeatist", "dragons_maw", "dry_skin", "fire_mane", "flame_body", "flare_boost",
 	"fur_coat", "gooey", "guts", "heatproof", "huge_power", "hustle", "ice_scales",
 	"iron_barbs", "multiscale", "poison_point", "pure_power", "reckless", "rocky_payload",
-	"stamina", "steelworker", "swarm", "thick_fat", "toxic_boost", "tough_claws",
-	"water_bubble",
+	"speed_boost", "stamina", "steelworker", "swarm", "thick_fat", "toxic_boost",
+	"tough_claws", "water_bubble",
 ]
 
 const EXPECTED_COUNTS := {
