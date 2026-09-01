@@ -193,6 +193,57 @@ func _register_abilities() -> void:
 			"offensive_stat_multiplier_bp": 15000,
 		},
 	)]
+	_ability_specs[&"defeatist"] = [
+		BattleTriggerSpec.new(
+			BattleTriggerSpec.MODIFY_DAMAGE,
+			&"ability",
+			&"defeatist",
+			BattleEffectSpec.new(BattleEffectSpec.DAMAGE),
+			0,
+			{
+				"requires_physical": true,
+				"hp_at_or_below_divisor": 2,
+				"offensive_stat_multiplier_bp": 5000,
+			},
+		),
+		BattleTriggerSpec.new(
+			BattleTriggerSpec.MODIFY_DAMAGE,
+			&"ability",
+			&"defeatist",
+			BattleEffectSpec.new(BattleEffectSpec.DAMAGE),
+			0,
+			{
+				"requires_special": true,
+				"hp_at_or_below_divisor": 2,
+				"offensive_stat_multiplier_bp": 5000,
+			},
+		),
+	]
+	# Partial runtime: paralysis and poison variants receive the faithful Attack x1.5.
+	# Burn is excluded because DamageCalculator would still apply the normal burn cut;
+	# sleep is excluded because the pinned source preserves version-sensitive history.
+	_ability_specs[&"guts"] = [BattleTriggerSpec.new(
+		BattleTriggerSpec.MODIFY_DAMAGE,
+		&"ability",
+		&"guts",
+		BattleEffectSpec.new(BattleEffectSpec.DAMAGE),
+		0,
+		{
+			"requires_physical": true,
+			"required_persistent_status_ids": ["paralysis", "poison", "badly_poisoned"],
+			"offensive_stat_multiplier_bp": 15000,
+		},
+	)]
+	# Partial runtime: the regular physical-damage x1.5 subset is exact. Hustle's
+	# required 0.8x accuracy modifier is not represented by the current trigger path.
+	_ability_specs[&"hustle"] = [BattleTriggerSpec.new(
+		BattleTriggerSpec.MODIFY_DAMAGE,
+		&"ability",
+		&"hustle",
+		BattleEffectSpec.new(BattleEffectSpec.DAMAGE),
+		0,
+		{"requires_physical": true, "multiplier_bp": 15000},
+	)]
 	_ability_specs[&"tough_claws"] = [BattleTriggerSpec.new(
 		BattleTriggerSpec.MODIFY_DAMAGE,
 		&"ability",
