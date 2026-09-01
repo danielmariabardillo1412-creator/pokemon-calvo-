@@ -6,7 +6,7 @@ var _check: Callable
 
 func run(check_callback: Callable) -> void:
 	_check = check_callback
-	var catalog := TrainerRosterRoleInferenceFixtures.build_catalog()
+	var catalog: DefinitionCatalog = TrainerRosterRoleInferenceFixtures.build_catalog()
 	_test_classification_contract(catalog)
 	_test_structured_effect_contract(catalog)
 	_test_sanitized_member_views(catalog)
@@ -15,7 +15,7 @@ func run(check_callback: Callable) -> void:
 
 
 func _test_classification_contract(catalog: DefinitionCatalog) -> void:
-	var runtime_ids := [
+	var runtime_ids: Array[StringName] = [
 		TrainerRosterRoleInferenceFixtures.MOVE_PHYSICAL,
 		TrainerRosterRoleInferenceFixtures.MOVE_SPECIAL,
 		TrainerRosterRoleInferenceFixtures.MOVE_PRIORITY,
@@ -25,7 +25,7 @@ func _test_classification_contract(catalog: DefinitionCatalog) -> void:
 	]
 	var all_runtime_supported := true
 	for move_id in runtime_ids:
-		var move: MoveDefinition = catalog.move(StringName(move_id))
+		var move: MoveDefinition = catalog.move(move_id)
 		all_runtime_supported = (
 			all_runtime_supported
 			and move != null
@@ -57,31 +57,31 @@ func _test_structured_effect_contract(catalog: DefinitionCatalog) -> void:
 
 	var control_ok := false
 	if control != null and control.effect_specs.size() == 1:
-		var spec := control.effect_specs[0] as BattleEffectSpec
+		var control_spec := control.effect_specs[0] as BattleEffectSpec
 		control_ok = (
-			spec.kind == BattleEffectSpec.MODIFY_STAT_STAGE
-			and spec.target == BattleEffectSpec.OPPONENT
-			and spec.value < 0
+			control_spec.kind == BattleEffectSpec.MODIFY_STAT_STAGE
+			and control_spec.target == BattleEffectSpec.OPPONENT
+			and control_spec.value < 0
 		)
 	_check.call("role_fixture_control_is_structured_opponent_debuff", control_ok)
 
 	var setup_ok := false
 	if setup != null and setup.effect_specs.size() == 1:
-		var spec := setup.effect_specs[0] as BattleEffectSpec
+		var setup_spec := setup.effect_specs[0] as BattleEffectSpec
 		setup_ok = (
-			spec.kind == BattleEffectSpec.MODIFY_STAT_STAGE
-			and spec.target == BattleEffectSpec.SELF
-			and spec.value > 0
+			setup_spec.kind == BattleEffectSpec.MODIFY_STAT_STAGE
+			and setup_spec.target == BattleEffectSpec.SELF
+			and setup_spec.value > 0
 		)
 	_check.call("role_fixture_setup_is_structured_self_buff", setup_ok)
 
 	var sustain_ok := false
 	if sustain != null and sustain.effect_specs.size() == 1:
-		var spec := sustain.effect_specs[0] as BattleEffectSpec
+		var sustain_spec := sustain.effect_specs[0] as BattleEffectSpec
 		sustain_ok = (
-			spec.kind == BattleEffectSpec.HEAL
-			and spec.target == BattleEffectSpec.SELF
-			and spec.ratio_basis_points == 5000
+			sustain_spec.kind == BattleEffectSpec.HEAL
+			and sustain_spec.target == BattleEffectSpec.SELF
+			and sustain_spec.ratio_basis_points == 5000
 		)
 	_check.call("role_fixture_sustain_is_structured_self_heal", sustain_ok)
 
@@ -89,13 +89,13 @@ func _test_structured_effect_contract(catalog: DefinitionCatalog) -> void:
 func _test_sanitized_member_views(catalog: DefinitionCatalog) -> void:
 	var physical_stats := StatBlock.new(200, 180, 100, 100, 80, 100)
 	var special_stats := StatBlock.new(200, 80, 100, 100, 180, 100)
-	var physical := TrainerRosterRoleInferenceFixtures.member_view(
+	var physical: Dictionary = TrainerRosterRoleInferenceFixtures.member_view(
 		catalog,
 		&"role_fixture_physical_member",
 		[TrainerRosterRoleInferenceFixtures.MOVE_PHYSICAL],
 		physical_stats,
 	)
-	var special := TrainerRosterRoleInferenceFixtures.member_view(
+	var special: Dictionary = TrainerRosterRoleInferenceFixtures.member_view(
 		catalog,
 		&"role_fixture_special_member",
 		[TrainerRosterRoleInferenceFixtures.MOVE_SPECIAL],
@@ -107,25 +107,25 @@ func _test_sanitized_member_views(catalog: DefinitionCatalog) -> void:
 
 	var parsed: Variant = JSON.parse_string(JSON.stringify(physical))
 	_check.call("role_fixture_member_view_json_serializable", parsed is Dictionary)
-	_check.call("role_fixture_member_view_is_dictionary_boundary", physical is Dictionary)
+	_check.call("role_fixture_member_view_is_dictionary_boundary", typeof(physical) == TYPE_DICTIONARY)
 
 
 func _test_hp_and_pp_variants_preserve_structural_identity(catalog: DefinitionCatalog) -> void:
 	var stats := StatBlock.new(220, 150, 140, 90, 70, 130)
-	var full := TrainerRosterRoleInferenceFixtures.member_view(
+	var full: Dictionary = TrainerRosterRoleInferenceFixtures.member_view(
 		catalog,
 		&"role_fixture_structural_member",
 		[TrainerRosterRoleInferenceFixtures.MOVE_PHYSICAL],
 		stats,
 	)
-	var low_hp := TrainerRosterRoleInferenceFixtures.member_view(
+	var low_hp: Dictionary = TrainerRosterRoleInferenceFixtures.member_view(
 		catalog,
 		&"role_fixture_structural_member",
 		[TrainerRosterRoleInferenceFixtures.MOVE_PHYSICAL],
 		stats,
 		22,
 	)
-	var zero_pp := TrainerRosterRoleInferenceFixtures.member_view(
+	var zero_pp: Dictionary = TrainerRosterRoleInferenceFixtures.member_view(
 		catalog,
 		&"role_fixture_structural_member",
 		[TrainerRosterRoleInferenceFixtures.MOVE_PHYSICAL],
@@ -138,8 +138,8 @@ func _test_hp_and_pp_variants_preserve_structural_identity(catalog: DefinitionCa
 	_check.call("role_fixture_low_hp_keeps_moves", full.get("move_ids", []) == low_hp.get("move_ids", []))
 	_check.call("role_fixture_low_hp_changes_only_readiness_signal", int(full.get("current_hp", 0)) > int(low_hp.get("current_hp", 0)))
 
-	var full_moveset: Array = full.get("moveset", [])
-	var zero_moveset: Array = zero_pp.get("moveset", [])
+	var full_moveset: Array = full.get("moveset", []) as Array
+	var zero_moveset: Array = zero_pp.get("moveset", []) as Array
 	var pp_variant_ok := (
 		full.get("move_ids", []) == zero_pp.get("move_ids", [])
 		and full_moveset.size() == 1
@@ -149,7 +149,7 @@ func _test_hp_and_pp_variants_preserve_structural_identity(catalog: DefinitionCa
 	)
 	_check.call("role_fixture_zero_pp_keeps_structural_move_identity", pp_variant_ok)
 
-	var excluded := TrainerRosterRoleInferenceFixtures.member_view(
+	var excluded: Dictionary = TrainerRosterRoleInferenceFixtures.member_view(
 		catalog,
 		&"role_fixture_excluded_moves",
 		[
@@ -164,13 +164,13 @@ func _test_hp_and_pp_variants_preserve_structural_identity(catalog: DefinitionCa
 
 func _test_fixture_independence(catalog: DefinitionCatalog) -> void:
 	var stats := StatBlock.new(200, 120, 110, 100, 90, 80)
-	var a := TrainerRosterRoleInferenceFixtures.member_view(
+	var a: Dictionary = TrainerRosterRoleInferenceFixtures.member_view(
 		catalog,
 		&"role_fixture_independent",
 		[TrainerRosterRoleInferenceFixtures.MOVE_PHYSICAL],
 		stats,
 	)
-	var b := TrainerRosterRoleInferenceFixtures.member_view(
+	var b: Dictionary = TrainerRosterRoleInferenceFixtures.member_view(
 		catalog,
 		&"role_fixture_independent",
 		[TrainerRosterRoleInferenceFixtures.MOVE_PHYSICAL],
@@ -178,10 +178,10 @@ func _test_fixture_independence(catalog: DefinitionCatalog) -> void:
 	)
 	var a_stats := a.get("stats", {}) as Dictionary
 	a_stats["attack"] = 1
-	var a_moveset: Array = a.get("moveset", [])
+	var a_moveset: Array = a.get("moveset", []) as Array
 	if not a_moveset.is_empty():
 		(a_moveset[0] as Dictionary)["current_pp"] = 0
-	var b_moveset: Array = b.get("moveset", [])
+	var b_moveset: Array = b.get("moveset", []) as Array
 	var independent := (
 		int((b.get("stats", {}) as Dictionary).get("attack", 0)) == 120
 		and b_moveset.size() == 1
