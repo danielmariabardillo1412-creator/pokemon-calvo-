@@ -7,12 +7,14 @@ const FULL_IDS := [
 	"tough_claws",
 ]
 const PARTIAL_IDS := [
-	"heatproof", "intimidate", "levitate", "reckless", "stamina", "static",
+	"flame_body", "gooey", "heatproof", "intimidate", "levitate", "poison_point",
+	"reckless", "stamina", "static",
 ]
 const IMPLEMENTED_IDS := [
-	"blaze", "dragons_maw", "fire_mane", "fur_coat", "heatproof", "ice_scales",
-	"intimidate", "levitate", "multiscale", "overgrow", "reckless", "rocky_payload",
-	"stamina", "static", "steelworker", "swarm", "thick_fat", "torrent", "tough_claws",
+	"blaze", "dragons_maw", "fire_mane", "flame_body", "fur_coat", "gooey",
+	"heatproof", "ice_scales", "intimidate", "levitate", "multiscale", "overgrow",
+	"poison_point", "reckless", "rocky_payload", "stamina", "static", "steelworker",
+	"swarm", "thick_fat", "torrent", "tough_claws",
 ]
 const TYPE_BOOSTS := {
 	"steelworker": "steel",
@@ -39,7 +41,7 @@ func run(check: Callable) -> void:
 	)
 	check.call(
 		"data_v3_ability_contract_data_only_count",
-		(classes.get("DATA_ONLY", []) as Array).size() == 354,
+		(classes.get("DATA_ONLY", []) as Array).size() == 351,
 	)
 	check.call(
 		"data_v3_ability_contract_partition",
@@ -219,6 +221,52 @@ func run(check: Callable) -> void:
 		)
 	check.call("data_v3_ability_contract_heatproof_partial_trigger_exact", heat_ok)
 
+	# Defender-owned contact reactions are deliberately partial for the same reason
+	# as Static: AFTER_DAMAGE is not requested for a defender that fainted from the
+	# contact hit. Their ordinary surviving-hit transactions are exact and explicit.
+	var contact_status_specs_ok := true
+	for pair in [["flame_body", "burn"], ["poison_point", "poison"]]:
+		var ability_id := String(pair[0])
+		var status_id := String(pair[1])
+		var specs := registry.triggers_for_ability(StringName(ability_id), BattleTriggerSpec.AFTER_DAMAGE)
+		if specs.size() != 1:
+			contact_status_specs_ok = false
+			continue
+		var spec: BattleTriggerSpec = specs[0]
+		var effect := spec.effect
+		var child_ok := effect.children.size() == 1
+		if child_ok:
+			var child: BattleEffectSpec = effect.children[0]
+			child_ok = (
+				child.kind == BattleEffectSpec.INFLICT_STATUS
+				and child.target == BattleEffectSpec.OPPONENT
+				and String(child.status_id) == status_id
+			)
+		contact_status_specs_ok = contact_status_specs_ok and (
+			spec.source_kind == &"ability"
+			and String(spec.source_id) == ability_id
+			and bool(spec.conditions.get("requires_contact", false))
+			and effect.kind == BattleEffectSpec.CHANCE
+			and effect.chance_basis_points == 3000
+			and child_ok
+		)
+	check.call("data_v3_ability_contract_contact_status_partials_exact", contact_status_specs_ok)
+
+	var gooey_specs := registry.triggers_for_ability(&"gooey", BattleTriggerSpec.AFTER_DAMAGE)
+	var gooey_ok := gooey_specs.size() == 1
+	if gooey_ok:
+		var gooey: BattleTriggerSpec = gooey_specs[0]
+		gooey_ok = (
+			gooey.source_kind == &"ability"
+			and gooey.source_id == &"gooey"
+			and bool(gooey.conditions.get("requires_contact", false))
+			and gooey.effect.kind == BattleEffectSpec.MODIFY_STAT_STAGE
+			and gooey.effect.target == BattleEffectSpec.OPPONENT
+			and gooey.effect.value == -1
+			and gooey.effect.stat_id == StatStages.SPEED
+		)
+	check.call("data_v3_ability_contract_gooey_partial_trigger_exact", gooey_ok)
+
 	# Fluffy is deliberately blocked even though its two numeric predicates are
 	# individually expressible. A Fire contact move satisfies both rules at once;
 	# the current multi-spec registry would emit two ABILITY_TRIGGERED events for one
@@ -317,8 +365,8 @@ func run(check: Callable) -> void:
 		"data_v3_ability_contract_report_counts",
 		int(summary.get("DATA_READY", -1)) == 373
 		and int(summary.get("RUNTIME_SUPPORTED", -1)) == 13
-		and int(summary.get("PARTIAL_RUNTIME", -1)) == 6
-		and int(summary.get("DATA_ONLY", -1)) == 354,
+		and int(summary.get("PARTIAL_RUNTIME", -1)) == 9
+		and int(summary.get("DATA_ONLY", -1)) == 351,
 	)
 	var report_classes: Dictionary = report.get("ability_runtime_classification", {})
 	check.call(
