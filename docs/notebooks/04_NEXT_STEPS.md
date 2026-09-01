@@ -3,86 +3,72 @@
 Read immediately after `00_READ_FIRST.md` when recovering context.
 
 ## Latest certified baseline
-- PR #87 — `audit/data-v3-ability-offensive-stat-conditions-v1`
-- Final HEAD `6fc1f73be1b24cba0c8052549ab4ea5f1e96c976`
+- PR #88 — `audit/data-v3-ability-existing-primitives-v1`
+- Final HEAD `64625cd8d46576a528ea9229bbd0b1d7898f0332`
 - **18/18 SUCCESS** on exact notebook-bearing HEAD
 - closed without merge.
 
 Move Effects V3 remains closed:
 - **590 runtime / 71 partial / 246 data-only / 12 unsupported**;
-- `DATA_ONLY` moves with executable `effect_specs`: **0**.
+- DATA_ONLY moves with executable `effect_specs`: **0**.
 
-Certified #87 ability coverage:
-- `RUNTIME_SUPPORTED`: **18**
-- `PARTIAL_RUNTIME`: **12**
-- `DATA_ONLY`: **343**
+Certified #88 ability coverage:
+- RUNTIME_SUPPORTED: **18**
+- PARTIAL_RUNTIME: **14**
+- DATA_ONLY: **341**
 - total: **373**.
 
-Prior detailed ability notebooks: `06` through `17`.
-
-# Current tranche — PR #88
-- Branch: `audit/data-v3-ability-existing-primitives-v1`
-- Parent: certified #87 final `6fc1f73be1b24cba0c8052549ab4ea5f1e96c976`
-- PR: #88 `DATA V3 — isolate damage modifier roles and audit compound abilities`
-- Engineering SHA: `15543135b42254c8d475db9d3eeb36503a674b6c`
+# Current tranche — PR #89
+- Branch: `audit/data-v3-ability-end-turn-v1`
+- Parent: certified #88 final `64625cd8d46576a528ea9229bbd0b1d7898f0332`
+- PR: #89 `DATA V3 — audit end-turn ability semantics`
+- Engineering SHA: `b161373a70d0ed226259fe01f98b0d5cfcf677ed`
 - Engineering SHA: **18/18 SUCCESS**
-- DATA V3 domain: **499 PASS / 0 FAIL**
-- Detailed notebook: `docs/notebooks/18_DATA_V3_ABILITY_EXISTING_PRIMITIVES.md`.
+- DATA V3 domain: **509 PASS / 0 FAIL**
+- Detailed notebook: `docs/notebooks/19_DATA_V3_ABILITY_END_TURN.md`.
 
-## #88 root result — damage roles fixed
-A pre-existing `BattleTriggerSystem.damage_modifiers()` bug let ability damage modifiers be evaluated from both sides because registry specs had no directional contract.
+## #89 result
+### Speed Boost → RUNTIME_SUPPORTED
+Pinned Gen III source requires exactly Speed +1 after each turn and has no historical effect changes.
 
-Now every ability `MODIFY_DAMAGE` spec must declare:
-- `damage_role = actor` for outgoing/offensive behavior; or
-- `damage_role = target` for incoming/defensive behavior or immunity.
+Current runtime already supports the complete transaction:
+`END_TURN → SELF Speed +1`.
 
-A missing role is fail-safe inert.
+No new Battle Core primitive was added.
 
-All existing ability damage modifiers were tagged. Real-battle regressions prove:
-- low-HP defender Blaze no longer amplifies incoming Fire damage;
-- attacker Fur Coat no longer reduces its own outgoing physical damage.
+Real battle tests pin:
+- turn 1: Speed stage +1, one Speed Boost event;
+- turn 2: Speed stage +2, one Speed Boost event that turn;
+- no-ability control remains at Speed stage 0.
 
-This correctness fix is the required foundation for Water Bubble's opposite-direction effects.
+### Shed Skin → DATA_ONLY
+Pinned source has version-sensitive probability:
+- current prose 33%;
+- Black/White 30%;
+- Diamond/Pearl 33%.
 
-## #88 ability decisions
-### Water Bubble → PARTIAL_RUNTIME
-Faithful subset:
-- outgoing Water x2 (`actor`, `multiplier_bp=20000`);
-- incoming Fire x0.5 (`target`, `multiplier_bp=5000`).
+Do not choose a universal probability until ability runtime is version-aware. Source guards preserve the exact history and runtime tests require no END_TURN trigger.
 
-Explicit gap:
-- burn prevention / immediate cure.
+### Poison Heal → DATA_ONLY
+Pinned source requires healing 1/8 max HP under poison **instead of poison residual damage**.
 
-Tests also pin no cross-role leakage: holder's own Fire attack is not halved, and incoming Water is not doubled.
+Current `TurnExecutor` runs `StatusSystem.process_end_turn()` before END_TURN ability triggers. A simple heal afterward would not reproduce the mechanic.
 
-### Dry Skin → PARTIAL_RUNTIME
-Faithful subset:
-- incoming Fire x1.25 (`target`, `multiplier_bp=12500`).
+Real battle tests pin the blocker: a poisoned Poison Heal holder currently takes the same positive status residual as an otherwise identical control and emits no Poison Heal event.
 
-Explicit gaps:
-- sun damage;
-- rain heal;
-- Water absorption + 1/4 max-HP heal.
+## Architecture
+**No Battle Core primitive changed in #89.**
 
-A real-battle test proves incoming Water still deals ordinary damage, keeping the partial boundary visible.
+Only runtime addition is Speed Boost registration using existing END_TURN and MODIFY_STAT_STAGE. `TurnExecutor` and `StatusSystem` remain untouched.
 
-### Gorilla Tactics → DATA_ONLY
-Pinned source contains no numeric Attack boost value. It also needs move-lock behavior. No multiplier is invented.
-
-### Steely Spirit → DATA_ONLY
-Pinned source contains no numeric Steel boost value and ally context is absent. No multiplier is invented.
-
-Both prose-only source records have fail-fast guards so a future numeric source change forces re-audit.
-
-## Exact #87 → #88 artifact
+## Exact #88 → #89 engineering artifact
 Raw + normalized:
-- exactly `dry_skin.classification: DATA_ONLY → PARTIAL_RUNTIME`;
-- exactly `water_bubble.classification: DATA_ONLY → PARTIAL_RUNTIME`.
+- exactly `speed_boost.classification: DATA_ONLY → RUNTIME_SUPPORTED`.
 
 Reports:
-- runtime **18→18**;
-- partial **12→14**;
-- data-only **343→341**.
+- runtime **18→19**;
+- partial **14→14**;
+- data-only **341→340**.
 
 Explicitly unchanged:
 - every other ability;
@@ -93,31 +79,27 @@ Explicitly unchanged:
 - types/stats;
 - manifest/forms/auxiliary.
 
-`import_time_ms 504→406 ms` is non-semantic timing noise.
+`import_time_ms 515→511 ms` is non-semantic timing noise.
 
-## Ability coverage after #88 engineering
-- `RUNTIME_SUPPORTED`: **18**
-- `PARTIAL_RUNTIME`: **14** — `dry_skin`, `flame_body`, `gooey`, `guts`, `heatproof`, `hustle`, `intimidate`, `iron_barbs`, `levitate`, `poison_point`, `reckless`, `stamina`, `static`, `water_bubble`
-- `DATA_ONLY`: **341**
+## Ability coverage after #89 engineering
+- RUNTIME_SUPPORTED: **19**
+- PARTIAL_RUNTIME: **14**
+- DATA_ONLY: **340**
 - total: **373**.
 
 ## Current certification step
-Notebook synchronization now follows engineering SHA `15543135b42254c8d475db9d3eeb36503a674b6c`.
+Notebook synchronization follows engineering SHA `b161373a70d0ed226259fe01f98b0d5cfcf677ed`.
 
-Before closing #88:
-1. verify engineering SHA → final HEAD changes only `01_PROJECT_STATE.md`, `04_NEXT_STEPS.md`, `18_DATA_V3_ABILITY_EXISTING_PRIMITIVES.md`;
+Before closing #89:
+1. verify engineering → final HEAD changed exactly `01_PROJECT_STATE.md`, `04_NEXT_STEPS.md`, `19_DATA_V3_ABILITY_END_TURN.md`;
 2. require **18/18 SUCCESS** on exact final notebook-bearing HEAD;
-3. close #88 without merge;
-4. use exact final HEAD as the next baseline.
+3. close #89 without merge;
+4. use exact final SHA as next certified baseline.
 
-## Exact next task after #88 closure
-Continue **DATA FOUNDATION V3 ability reliability** from the exact certified #88 final SHA. Select one bounded source-first subgroup from the remaining **341 DATA_ONLY** abilities.
+## Exact next task after #89 closure
+Continue **DATA FOUNDATION V3 ability reliability** from exact certified #89 final SHA. Select one small immutable-source-backed subgroup from the remaining **340 DATA_ONLY** abilities whose complete semantics already fit existing primitives.
 
-Prefer:
-- semantics that now fit the role-safe damage modifier surface; or
-- one genuinely shared correctness primitive with multiple source-backed uses.
-
-Do not reopen Water Bubble/Dry Skin missing mechanics unless burn/status prevention, weather or absorption/heal transactions are being designed deliberately. Do not invent values absent from the immutable snapshot. Trainer AI/archetypes remain deferred.
+Do not implement Shed Skin until version-aware ability probability is deliberate. Do not implement Poison Heal as a post-residual heal; it needs residual replacement/suppression. Trainer AI/archetypes remain deferred.
 
 ## Stop condition
 Any focal/regression failure stops the tranche until root cause is fixed and rerun.
