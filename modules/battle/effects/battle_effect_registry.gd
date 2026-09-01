@@ -138,6 +138,19 @@ func _register_abilities() -> void:
 		&"speed_boost",
 		_stage(BattleEffectSpec.SELF, StatStages.SPEED, 1),
 	)]
+	_ability_specs[&"bad_dreams"] = [BattleTriggerSpec.new(
+		BattleTriggerSpec.END_TURN,
+		&"ability",
+		&"bad_dreams",
+		BattleEffectSpec.new(
+			BattleEffectSpec.MAX_HP_DAMAGE,
+			BattleEffectSpec.OPPONENT,
+			0,
+			1250,
+		),
+		0,
+		{"required_target_persistent_status_ids": ["sleep"]},
+	)]
 	for pair in [
 		[&"blaze", &"fire"],
 		[&"torrent", &"water"],
@@ -297,6 +310,18 @@ func _register_abilities() -> void:
 			"damage_role": "actor",
 			"requires_recoil": true,
 			"multiplier_bp": 12000,
+		},
+	)]
+	_ability_specs[&"merciless"] = [BattleTriggerSpec.new(
+		BattleTriggerSpec.MODIFY_DAMAGE,
+		&"ability",
+		&"merciless",
+		BattleEffectSpec.new(BattleEffectSpec.DAMAGE),
+		0,
+		{
+			"damage_role": "actor",
+			"required_target_persistent_status_ids": ["poison", "badly_poisoned"],
+			"force_critical": true,
 		},
 	)]
 	_ability_specs[&"fur_coat"] = [BattleTriggerSpec.new(
