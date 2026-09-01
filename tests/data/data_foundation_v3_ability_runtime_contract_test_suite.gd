@@ -4,7 +4,8 @@ extends RefCounted
 const FULL_IDS := [
 	"blaze", "defeatist", "dragons_maw", "fire_mane", "flare_boost", "fur_coat",
 	"huge_power", "ice_scales", "multiscale", "overgrow", "pure_power", "rocky_payload",
-	"steelworker", "swarm", "thick_fat", "torrent", "tough_claws", "toxic_boost",
+	"speed_boost", "steelworker", "swarm", "thick_fat", "torrent", "tough_claws",
+	"toxic_boost",
 ]
 const PARTIAL_IDS := [
 	"dry_skin", "flame_body", "gooey", "guts", "heatproof", "hustle", "intimidate",
@@ -14,9 +15,9 @@ const IMPLEMENTED_IDS := [
 	"blaze", "defeatist", "dragons_maw", "dry_skin", "fire_mane", "flame_body",
 	"flare_boost", "fur_coat", "gooey", "guts", "heatproof", "huge_power", "hustle",
 	"ice_scales", "intimidate", "iron_barbs", "levitate", "multiscale", "overgrow",
-	"poison_point", "pure_power", "reckless", "rocky_payload", "stamina", "static",
-	"steelworker", "swarm", "thick_fat", "torrent", "tough_claws", "toxic_boost",
-	"water_bubble",
+	"poison_point", "pure_power", "reckless", "rocky_payload", "speed_boost", "stamina",
+	"static", "steelworker", "swarm", "thick_fat", "torrent", "tough_claws",
+	"toxic_boost", "water_bubble",
 ]
 const TYPE_BOOSTS := {
 	"steelworker": "steel",
@@ -43,7 +44,7 @@ func run(check: Callable) -> void:
 	)
 	check.call(
 		"data_v3_ability_contract_data_only_count",
-		(classes.get("DATA_ONLY", []) as Array).size() == 341,
+		(classes.get("DATA_ONLY", []) as Array).size() == 340,
 	)
 	check.call(
 		"data_v3_ability_contract_partition",
@@ -69,6 +70,23 @@ func run(check: Callable) -> void:
 		registry_ids.append(String(ability_id))
 	registry_ids.sort()
 	check.call("data_v3_ability_contract_registry_exact", registry_ids == IMPLEMENTED_IDS)
+
+	# Speed Boost is a clean END_TURN transaction: exactly one self Speed stage with
+	# no condition gate or extra side effect.
+	var speed_specs := registry.triggers_for_ability(&"speed_boost", BattleTriggerSpec.END_TURN)
+	var speed_ok := speed_specs.size() == 1
+	if speed_ok:
+		var speed: BattleTriggerSpec = speed_specs[0]
+		speed_ok = (
+			speed.source_kind == &"ability"
+			and speed.source_id == &"speed_boost"
+			and speed.conditions.is_empty()
+			and speed.effect.kind == BattleEffectSpec.MODIFY_STAT_STAGE
+			and speed.effect.target == BattleEffectSpec.SELF
+			and speed.effect.value == 1
+			and speed.effect.stat_id == StatStages.SPEED
+		)
+	check.call("data_v3_ability_contract_speed_boost_end_turn_exact", speed_ok)
 
 	# Every ability MODIFY_DAMAGE spec must now be explicitly directional. Missing
 	# roles are fail-safe inert in BattleTriggerSystem rather than applying both ways.
@@ -557,14 +575,25 @@ func run(check: Callable) -> void:
 		)
 	check.call("data_v3_ability_contract_prose_only_boosts_stay_data_only", prose_only_boosts_safe)
 
+	# End-turn blockers are explicit: Shed Skin has version-sensitive 33%/30%
+	# provenance, and Poison Heal must replace poison residual rather than merely heal
+	# after StatusSystem has already applied damage.
+	var end_turn_blockers_safe := true
+	for ability_id in ["poison_heal", "shed_skin"]:
+		end_turn_blockers_safe = end_turn_blockers_safe and (
+			str((by_id.get(ability_id, {}) as Dictionary).get("classification", "")) == "DATA_ONLY"
+			and registry.triggers_for_ability(StringName(ability_id), BattleTriggerSpec.END_TURN).is_empty()
+		)
+	check.call("data_v3_ability_contract_end_turn_blockers_stay_data_only", end_turn_blockers_safe)
+
 	var report := _load_json("res://data/reports/unsupported_mechanics.json")
 	var summary: Dictionary = report.get("summary", {}).get("abilities", {})
 	check.call(
 		"data_v3_ability_contract_report_counts",
 		int(summary.get("DATA_READY", -1)) == 373
-		and int(summary.get("RUNTIME_SUPPORTED", -1)) == 18
+		and int(summary.get("RUNTIME_SUPPORTED", -1)) == 19
 		and int(summary.get("PARTIAL_RUNTIME", -1)) == 14
-		and int(summary.get("DATA_ONLY", -1)) == 341,
+		and int(summary.get("DATA_ONLY", -1)) == 340,
 	)
 	var report_classes: Dictionary = report.get("ability_runtime_classification", {})
 	check.call(
