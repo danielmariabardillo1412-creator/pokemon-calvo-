@@ -2,22 +2,22 @@ class_name DataFoundationV3AbilityRuntimeContractTestSuite
 extends RefCounted
 
 const FULL_IDS := [
-	"blaze", "defeatist", "dragons_maw", "fire_mane", "flare_boost", "fur_coat",
-	"huge_power", "ice_scales", "multiscale", "overgrow", "pure_power", "rocky_payload",
-	"speed_boost", "steelworker", "swarm", "thick_fat", "torrent", "tough_claws",
-	"toxic_boost",
+	"bad_dreams", "blaze", "defeatist", "dragons_maw", "fire_mane", "flare_boost",
+	"fur_coat", "huge_power", "ice_scales", "merciless", "multiscale", "overgrow",
+	"pure_power", "rocky_payload", "speed_boost", "steelworker", "swarm", "thick_fat",
+	"torrent", "tough_claws", "toxic_boost",
 ]
 const PARTIAL_IDS := [
 	"dry_skin", "flame_body", "gooey", "guts", "heatproof", "hustle", "intimidate",
 	"iron_barbs", "levitate", "poison_point", "reckless", "stamina", "static", "water_bubble",
 ]
 const IMPLEMENTED_IDS := [
-	"blaze", "defeatist", "dragons_maw", "dry_skin", "fire_mane", "flame_body",
-	"flare_boost", "fur_coat", "gooey", "guts", "heatproof", "huge_power", "hustle",
-	"ice_scales", "intimidate", "iron_barbs", "levitate", "multiscale", "overgrow",
-	"poison_point", "pure_power", "reckless", "rocky_payload", "speed_boost", "stamina",
-	"static", "steelworker", "swarm", "thick_fat", "torrent", "tough_claws",
-	"toxic_boost", "water_bubble",
+	"bad_dreams", "blaze", "defeatist", "dragons_maw", "dry_skin", "fire_mane",
+	"flame_body", "flare_boost", "fur_coat", "gooey", "guts", "heatproof",
+	"huge_power", "hustle", "ice_scales", "intimidate", "iron_barbs", "levitate",
+	"merciless", "multiscale", "overgrow", "poison_point", "pure_power", "reckless",
+	"rocky_payload", "speed_boost", "stamina", "static", "steelworker", "swarm",
+	"thick_fat", "torrent", "tough_claws", "toxic_boost", "water_bubble",
 ]
 const TYPE_BOOSTS := {
 	"steelworker": "steel",
@@ -44,7 +44,7 @@ func run(check: Callable) -> void:
 	)
 	check.call(
 		"data_v3_ability_contract_data_only_count",
-		(classes.get("DATA_ONLY", []) as Array).size() == 340,
+		(classes.get("DATA_ONLY", []) as Array).size() == 338,
 	)
 	check.call(
 		"data_v3_ability_contract_partition",
@@ -591,9 +591,9 @@ func run(check: Callable) -> void:
 	check.call(
 		"data_v3_ability_contract_report_counts",
 		int(summary.get("DATA_READY", -1)) == 373
-		and int(summary.get("RUNTIME_SUPPORTED", -1)) == 19
+		and int(summary.get("RUNTIME_SUPPORTED", -1)) == 21
 		and int(summary.get("PARTIAL_RUNTIME", -1)) == 14
-		and int(summary.get("DATA_ONLY", -1)) == 340,
+		and int(summary.get("DATA_ONLY", -1)) == 338,
 	)
 	var report_classes: Dictionary = report.get("ability_runtime_classification", {})
 	check.call(
