@@ -3,8 +3,8 @@
 Read immediately after `00_READ_FIRST.md` when recovering context.
 
 ## Latest certified baseline
-- PR #88 — `audit/data-v3-ability-existing-primitives-v1`
-- Final HEAD `64625cd8d46576a528ea9229bbd0b1d7898f0332`
+- PR #89 — `audit/data-v3-ability-end-turn-v1`
+- Final HEAD `407ad8f27d13a79b09c367aac2f6ae0c1ef801ef`
 - **18/18 SUCCESS** on exact notebook-bearing HEAD
 - closed without merge.
 
@@ -12,94 +12,95 @@ Move Effects V3 remains closed:
 - **590 runtime / 71 partial / 246 data-only / 12 unsupported**;
 - DATA_ONLY moves with executable `effect_specs`: **0**.
 
-Certified #88 ability coverage:
-- RUNTIME_SUPPORTED: **18**
+Certified #89 ability coverage:
+- RUNTIME_SUPPORTED: **19**
 - PARTIAL_RUNTIME: **14**
-- DATA_ONLY: **341**
+- DATA_ONLY: **340**
 - total: **373**.
 
-# Current tranche — PR #89
-- Branch: `audit/data-v3-ability-end-turn-v1`
-- Parent: certified #88 final `64625cd8d46576a528ea9229bbd0b1d7898f0332`
-- PR: #89 `DATA V3 — audit end-turn ability semantics`
-- Engineering SHA: `b161373a70d0ed226259fe01f98b0d5cfcf677ed`
+# Current tranche — PR #90
+- Branch: `audit/data-v3-ability-end-turn-opponent-v1`
+- Parent: certified #89 final `407ad8f27d13a79b09c367aac2f6ae0c1ef801ef`
+- PR: #90 `DATA V3 — audit opponent end-turn ability blockers`
+- Engineering SHA: `52fafcc035dd46824bf9f0f6239cc93363981998`
 - Engineering SHA: **18/18 SUCCESS**
-- DATA V3 domain: **509 PASS / 0 FAIL**
-- Detailed notebook: `docs/notebooks/19_DATA_V3_ABILITY_END_TURN.md`.
+- DATA V3 domain: **516 PASS / 0 FAIL**
+- Spanish/type/runtime regression: **298 PASS / 0 FAIL**
+- Detailed notebook: `docs/notebooks/20_DATA_V3_ABILITY_END_TURN_OPPONENT.md`.
 
-## #89 result
-### Speed Boost → RUNTIME_SUPPORTED
-Pinned Gen III source requires exactly Speed +1 after each turn and has no historical effect changes.
+## #90 result — negative audit by design
+No production/runtime or adapter file changed and no ability classification moved.
 
-Current runtime already supports the complete transaction:
-`END_TURN → SELF Speed +1`.
+### Bad Dreams → DATA_ONLY
+Immutable Gen IV source requires opposing Pokémon to lose 1/8 max HP after each turn while asleep.
 
-No new Battle Core primitive was added.
+The engine already has `MAX_HP_DAMAGE` and `OPPONENT`, so the damage transaction itself is representable. The blocker is the condition: `required_persistent_status_ids` is evaluated on the ability **owner**, not the target/opponent. END_TURN passes an opponent into the effect context but `conditions_met()` still sees owner state only.
 
-Real battle tests pin:
-- turn 1: Speed stage +1, one Speed Boost event;
-- turn 2: Speed stage +2, one Speed Boost event that turn;
-- no-ability control remains at Speed stage 0.
+Therefore do not:
+- make the damage unconditional;
+- use owner-sleep as a proxy;
+- add a one-off target-status predicate just to promote Bad Dreams.
 
-### Shed Skin → DATA_ONLY
-Pinned source has version-sensitive probability:
-- current prose 33%;
-- Black/White 30%;
-- Diamond/Pearl 33%.
+Tests prove the predicate is owner-local and a real sleeping opponent receives no false Bad Dreams damage/event.
 
-Do not choose a universal probability until ability runtime is version-aware. Source guards preserve the exact history and runtime tests require no END_TURN trigger.
+### Rain Dish → DATA_ONLY
+Source requires 1/16 max-HP healing during rain. Current battle state has no weather state/predicate. Do not install an unconditional heal.
 
-### Poison Heal → DATA_ONLY
-Pinned source requires healing 1/8 max HP under poison **instead of poison residual damage**.
+### Ice Body → DATA_ONLY
+Source requires 1/16 max-HP healing during hail plus hail-damage immunity. Current battle state has no weather state or hail residual transaction.
 
-Current `TurnExecutor` runs `StatusSystem.process_end_turn()` before END_TURN ability triggers. A simple heal afterward would not reproduce the mechanic.
+## #90 regression value
+New suite adds seven checks:
+- three immutable source contracts;
+- all three blockers stay DATA_ONLY/no END_TURN trigger;
+- owner-local status predicate proof;
+- real sleeping-target Bad Dreams gap proof;
+- exact 19 / 14 / 340 partition.
 
-Real battle tests pin the blocker: a poisoned Poison Heal holder currently takes the same positive status residual as an otherwise identical control and emits no Poison Heal event.
+DATA V3 rises from **509 → 516 checks**, all green.
 
-## Architecture
-**No Battle Core primitive changed in #89.**
+## Exact #89 final → #90 engineering artifact
+Compared:
+- #89 final run `33501387360`, artifact `9797865183`;
+- #90 engineering run `33502577117`, artifact `9798322866`.
 
-Only runtime addition is Speed Boost registration using existing END_TURN and MODIFY_STAT_STAGE. `TurnExecutor` and `StatusSystem` remain untouched.
+All canonical JSON is semantically identical:
+- raw;
+- normalized;
+- manifest;
+- forms;
+- unsupported mechanics;
+- audit;
+- auxiliary.
 
-## Exact #88 → #89 engineering artifact
-Raw + normalized:
-- exactly `speed_boost.classification: DATA_ONLY → RUNTIME_SUPPORTED`.
+No domain or classification drift. Only `import_time_ms 513→509 ms` changed, which is execution timing noise.
 
-Reports:
-- runtime **18→19**;
-- partial **14→14**;
-- data-only **341→340**.
-
-Explicitly unchanged:
-- every other ability;
-- Pokémon/species;
-- moves/effects;
-- items/statuses;
-- learnsets/evolutions;
-- types/stats;
-- manifest/forms/auxiliary.
-
-`import_time_ms 515→511 ms` is non-semantic timing noise.
-
-## Ability coverage after #89 engineering
+## Ability coverage after #90 engineering
+Unchanged:
 - RUNTIME_SUPPORTED: **19**
 - PARTIAL_RUNTIME: **14**
 - DATA_ONLY: **340**
 - total: **373**.
 
 ## Current certification step
-Notebook synchronization follows engineering SHA `b161373a70d0ed226259fe01f98b0d5cfcf677ed`.
+Notebook synchronization follows engineering SHA `52fafcc035dd46824bf9f0f6239cc93363981998`.
 
-Before closing #89:
-1. verify engineering → final HEAD changed exactly `01_PROJECT_STATE.md`, `04_NEXT_STEPS.md`, `19_DATA_V3_ABILITY_END_TURN.md`;
+Before closing #90:
+1. verify engineering → final HEAD changed exactly `01_PROJECT_STATE.md`, `04_NEXT_STEPS.md`, `20_DATA_V3_ABILITY_END_TURN_OPPONENT.md`;
 2. require **18/18 SUCCESS** on exact final notebook-bearing HEAD;
-3. close #89 without merge;
+3. close #90 without merge;
 4. use exact final SHA as next certified baseline.
 
-## Exact next task after #89 closure
-Continue **DATA FOUNDATION V3 ability reliability** from exact certified #89 final SHA. Select one small immutable-source-backed subgroup from the remaining **340 DATA_ONLY** abilities whose complete semantics already fit existing primitives.
+## Exact next task after #90 closure
+Continue DATA FOUNDATION V3 ability reliability from exact certified #90 final SHA.
 
-Do not implement Shed Skin until version-aware ability probability is deliberate. Do not implement Poison Heal as a post-residual heal; it needs residual replacement/suppression. Trainer AI/archetypes remain deferred.
+Candidate-selection rule:
+- prefer a small source-backed family whose complete semantics already fit current primitives;
+- if considering a missing condition such as target status, first prove multiple abilities genuinely need the same shared mechanism;
+- keep weather deferred unless doing a deliberate multi-ability weather architecture tranche rather than patching Rain Dish/Ice Body individually;
+- negative audit is acceptable and preferable to coverage inflation.
+
+Trainer AI/archetypes remain deferred.
 
 ## Stop condition
 Any focal/regression failure stops the tranche until root cause is fixed and rerun.
