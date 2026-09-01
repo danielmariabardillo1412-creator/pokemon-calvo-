@@ -2491,3 +2491,86 @@ Después de certificar C1 se decidirá si C1b entra en la misma microfase o en l
 - código de producción modificado en este checkpoint: **NO**.
 
 Siguiente bloque recomendado: ejecutar la **tranche C1** en código —extensión aditiva de `TrainerDecisionContext` + regresiones FASE20—, correr los tests pertinentes y, si quedan verdes, preparar la certificación del HEAD exacto antes de pasar al transporte del controller.
+
+---
+
+## 23. Tranche C1 — `campaign_snapshot` en `TrainerDecisionContext`
+
+Checkpoint de primera modificación de producción del rediseño PRE-FASE34.
+
+### 23.1 Implementación
+
+C1 extiende de forma aditiva el contrato seguro de `TrainerDecisionContext`:
+
+- añade `campaign_snapshot: Dictionary = {}`;
+- `create()` recibe `p_campaign_snapshot` como último parámetro opcional con default `{}`;
+- el snapshot se copia mediante `duplicate(true)`;
+- `to_dict()` lo serializa bajo la clave estable `campaign` mediante una nueva copia profunda;
+- los call sites históricos continúan siendo válidos sin pasar campaña;
+- no se ha modificado `TrainerObservation`, `TrainerBattleMemory`, beliefs, brains ni `TrainerIntelligenceController` en esta tranche.
+
+Commits de implementación:
+
+- `6f28d3bdb7677351ac21fd6b31f6b86715a80ee7` — `feat(trainer-ai): add optional campaign snapshot to decision context`;
+- `9ca4c78d34d6ad47f1577eb4a5d95d5d75b6abf7` — regresiones FASE20 iniciales;
+- `27d1f2ec9fc86895d8e5b5006ed2a67181664827` — corrección estricta de tipado del resultado JSON del test.
+
+### 23.2 Regresiones añadidas
+
+FASE20 comprueba ahora explícitamente:
+
+- contexto antiguo sin snapshot → `campaign_snapshot` vacío;
+- serialización con clave `campaign` vacía en ese caso;
+- snapshot no vacío aceptado;
+- mutar el diccionario origen no altera el contexto;
+- mutar arrays/diccionarios anidados del origen no altera el contexto;
+- mutar la salida de `to_dict()` no altera el snapshot almacenado;
+- JSON round-trip/serialización del snapshot funciona;
+- las regresiones existentes de aislamiento, privacidad, ausencia de `BattleState` y ausencia de RNG siguen intactas.
+
+### 23.3 Incidente CI detectado y corregido
+
+La primera ejecución CI sobre `9ca4c78d34d6ad47f1577eb4a5d95d5d75b6abf7` falló únicamente en `Trainer Intelligence Foundation Tests` durante importación de Godot.
+
+Causa exacta:
+
+- el nuevo test usaba `var parsed := JSON.parse_string(json_text)`;
+- Godot 4.7 infería ese retorno como `Variant`;
+- el proyecto trata ese warning de inferencia como error.
+
+No fue un fallo del contrato de campaña ni una regresión de runtime.
+
+Corrección:
+
+`var parsed: Variant = JSON.parse_string(json_text)`.
+
+El fix quedó en `27d1f2ec9fc86895d8e5b5006ed2a67181664827`.
+
+### 23.4 Certificación de código C1
+
+PR de auditoría/CI: **#98**, abierto contra `main` únicamente para ejecutar la matriz. No debe mergearse; el patrón previsto es cerrarlo sin merge después de la validación del HEAD final.
+
+Sobre el SHA exacto:
+
+`27d1f2ec9fc86895d8e5b5006ed2a67181664827`
+
+resultado confirmado:
+
+- **18/18 workflows GitHub Actions: SUCCESS**;
+- `Trainer Intelligence Foundation Tests`: **70 PASS / 0 FAIL**;
+- `Godot 4.7 Tests`: SUCCESS;
+- `Data Foundation V3 Tests`: SUCCESS;
+- self-play, beliefs, tactical, search, adaptive branching, items, loadouts, team composition, switching y corpus: SUCCESS.
+
+Por tanto, **C1 de código queda CERTIFICADO en `27d1f2ec9fc86895d8e5b5006ed2a67181664827`**.
+
+### 23.5 Estado y siguiente tranche
+
+- C1 context seam: **IMPLEMENTADO Y CERTIFICADO**;
+- `campaign_snapshot` en controller: **TODAVÍA NO**;
+- `RandomCupState`/builder artificial creado para tests: **NO**;
+- conducta histórica con snapshot vacío: **CONSERVADA**;
+- `main`: **NO MOVIDO**;
+- siguiente modificación de producción autorizada: **C1b — transporte opcional del snapshot ya sanitizado mediante `TrainerIntelligenceController`**.
+
+Este commit documental posterior a `27d1f2ec...` deberá pasar la matriz completa sobre su propio SHA antes de que el HEAD final de la rama pueda considerarse certificado.
