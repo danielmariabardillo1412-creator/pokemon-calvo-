@@ -163,7 +163,7 @@ Continúan fuera de alcance inmediato:
 
 ## CHECKPOINT ACTUAL — TRAINER AI RANDOM CUP PRE-FASE34
 
-**Este bloque supersede para el trabajo Trainer AI las secciones históricas `Trabajo actual` / `Después de #96` anteriores.** La autoridad exacta de refs y CI sigue siendo GitHub.
+**Este bloque supersede para el trabajo Trainer AI las secciones históricas `Trabajo actual` / `Después de #96` anteriores.** La autoridad exacta de refs, PRs y CI sigue siendo GitHub.
 
 Rama activa:
 
@@ -174,19 +174,20 @@ Estado de modernización:
 - C1 `campaign_snapshot` en `TrainerDecisionContext`: **IMPLEMENTADO / CERTIFICADO**;
 - C1b transporte sanitizado por `TrainerIntelligenceController`: **IMPLEMENTADO / CERTIFICADO**;
 - C2a fixtures e invariantes de inferencia: **IMPLEMENTADO / CERTIFICADO**;
-- C2b evidencia intrínseca de capacidades: **IMPLEMENTADA Y CERTIFICADA EN SHA DE CÓDIGO**;
+- C2b evidencia intrínseca de capacidades: **IMPLEMENTADA / CERTIFICADA**;
+- C2c afinidades funcionales multirole: **IMPLEMENTADA / CERTIFICADA EN SHA DE CÓDIGO**;
 - `TrainerTeamAnalyzer`: **NO INTEGRADO TODAVÍA**;
 - switching/search con valor de campaña: **NO INTEGRADOS TODAVÍA**;
 - C3 valor estratégico/permadeath: **NO INICIADO**;
 - FASE34 dificultad/expertise: **PAUSADA HASTA CERRAR MODERNIZACIÓN PREVIA**.
 
-### C2b — evidencia intrínseca implementada
+### C2b — evidencia intrínseca implementada y cierre final
 
-Nueva clase:
+Clase:
 
 `TrainerRosterRoleInference`
 
-La API actual **no produce todavía `role_scores_bp` ni decide un rol primario**. Extrae una capa auditable de hechos/evidencias desde el `member_view` propio sanitizado + `DefinitionCatalog`:
+`extract_intrinsic_evidence()` extrae una capa auditable de hechos/evidencias desde el `member_view` propio sanitizado + `DefinitionCatalog`:
 
 - stats estructurales reales;
 - suma de potencia física de movimientos ejecutables;
@@ -201,57 +202,144 @@ La API actual **no produce todavía `role_scores_bp` ni decide un rol primario**
 - señal de setup desde `BattleEffectSpec` estructurado;
 - señal de sustain desde `BattleEffectSpec` estructurado.
 
-Gate Random Cup V1 aplicado en esta capa:
+Gate Random Cup V1:
 
 - solo `MoveDefinition.classification == RUNTIME_SUPPORTED` aporta evidencia;
 - `PARTIAL_RUNTIME`, `DATA_ONLY`, `UNSUPPORTED` y movimientos desconocidos fallan de forma cerrada y no inflan capacidades;
 - la salida registra por separado movimientos runtime, excluidos y desconocidos para auditoría.
 
-La identidad intrínseca ignora deliberadamente:
+La identidad intrínseca ignora deliberadamente HP actual, PP actual, `role_id` authored, `TrainerProfile` y ruido/datos rivales añadidos al input. Esos factores pertenecen a readiness, personalidad o información de batalla, no a la capacidad estructural del miembro.
 
-- HP actual;
-- PP actual;
-- `role_id` authored;
-- `TrainerProfile`;
-- ruido/datos rivales añadidos al input.
-
-Esos factores pertenecen a readiness, personalidad o información de batalla, no a la capacidad estructural del miembro.
-
-### C2b — certificación de código
-
-SHA exacto sometido a CI:
+SHA de código/test C2b inicialmente certificado:
 
 `2b754f63def1632117e54fbd8aa11cb2f089ccc3`
 
-PR temporal de auditoría/CI:
+Tras registrar el checkpoint documental, el HEAD final exacto de C2b fue:
 
-`#101 — Trainer AI Random Cup modernization — C2b intrinsic capability evidence`
+`6bceaeda1a1439c9ad690e5c48745c112b74ba2a`
+
+Resultado sobre ese HEAD final:
+
+- **18/18 workflows GitHub Actions: SUCCESS**;
+- `Trainer Loadouts Tests`: **261 PASS / 0 FAIL**;
+- C2b añadió **27 checks nuevos** sobre C2a;
+- PR temporal **#101 cerrado SIN merge**;
+- `main` permaneció sin mover.
+
+Incidente operativo no funcional durante C2b:
+
+- se creó accidentalmente `tests/trainer_ai/.c2b_ci_placeholder` en un commit transitorio;
+- se eliminó inmediatamente en el commit siguiente;
+- no quedó ningún placeholder en el árbol final certificado.
+
+### C2c — afinidades funcionales multirole
+
+C2c añade:
+
+`TrainerRosterRoleInference.infer_role_scores(member_view, catalog)`
+
+Modelo:
+
+`trainer_roster_role_affinity_v1`
+
+La salida `role_scores_bp` usa basis points `0..10000`, pero **estos scores NO representan fuerza total ni valor estratégico**. Representan afinidad funcional intrínseca: qué funciones puede desempeñar el miembro según sus stats materializados y su loadout realmente ejecutable.
+
+La magnitud bruta de combate continúa en `intrinsic_evidence` de C2b y será una entrada separada para C3. Así se evita confundir “tiene forma de tanque” con “es un tanque fuerte/valioso” o convertir el mejor miembro de un roster mediocre en élite por puro ranking interno.
+
+Normalización C2c:
+
+- `stat_ceiling` = máximo entre Attack, Defense, Speed, Special Attack y Special Defense del propio miembro;
+- cada `*_focus_bp` compara ese stat contra dicho techo intrínseco;
+- `damage_route_ceiling` = máximo entre las señales físicas/especiales ejecutables de C2b;
+- `physical_route_bp` y `special_route_bp` describen el reparto real de sus rutas ofensivas;
+- no existe comparación contra los otros cinco miembros del roster.
+
+Roles:
+
+- `physical_attacker = min(attack_focus_bp, physical_route_bp)`;
+- `special_attacker = min(special_attack_focus_bp, special_route_bp)`;
+- `fast_attacker = min(speed_focus_bp, max(physical_attacker, special_attacker))`, y requiere ruta ofensiva real;
+- `bulky_physical = defense_focus_bp`;
+- `bulky_special = special_defense_focus_bp`;
+- `support = max(control_signal_bp, sustain_signal_bp)`.
+
+Decisiones deliberadas:
+
+- Attack alto sin movimiento físico `RUNTIME_SUPPORTED` no fabrica `physical_attacker`;
+- Special Attack alto sin ruta especial no fabrica `special_attacker`;
+- Speed alta sin presión ofensiva real no fabrica `fast_attacker`;
+- prioridad se conserva como señal auditable pero **no convierte por atajo a un Pokémon lento en fast attacker**;
+- self-setup se conserva en `setup_signal_bp`, pero **no convierte por sí solo en support**;
+- un híbrido puede poseer simultáneamente afinidad física y especial alta;
+- no se fuerza todavía un único `primary_role_id` ni secundarios;
+- `balanced` sigue reservado como posible resumen/fallback posterior, no como bolsa que oculte capacidades;
+- `role_id` authored, `TrainerProfile`, rival/beliefs y datos ocultos no intervienen;
+- el gate C2b mantiene fuera `PARTIAL_RUNTIME`, `DATA_ONLY`, `UNSUPPORTED` y movimientos desconocidos.
+
+Commits C2c:
+
+- `8ba235915b2556921e8be39b4187a5b431647161` — `feat(trainer-ai): add intrinsic role affinity scores`;
+- `d4866e74b7c436c728d19174c68e96560c102d8b` — `test(trainer-ai): cover multi-role affinity inference`.
+
+Diff C2c frente al HEAD C2b:
+
+- **2 commits**;
+- **2 archivos modificados**;
+- `modules/trainer_ai/trainer_roster_role_inference.gd`: +73 / -0;
+- `tests/trainer_ai/trainer_roster_role_inference_test_suite.gd`: +121 / -0;
+- consumidores: **0 modificados**.
+
+### C2c — regresiones y certificación de código
+
+C2c añadió **19 checks nuevos**. Entre ellos:
+
+- físico claro → rol físico máximo y especial cero;
+- especial claro → rol especial máximo y físico cero;
+- speed limita `fast_attacker`;
+- un no-atacante rápido no obtiene rol fast por sí solo;
+- bulk físico/especial sigue el foco defensivo correspondiente;
+- control/sustain estructurados producen support;
+- setup se conserva sin convertirse automáticamente en support;
+- híbrido puede conservar dos roles ofensivos simultáneos;
+- `DATA_ONLY` no puede fabricar rol ofensivo;
+- prioridad queda auditable sin shortcut de fast role;
+- `role_id`/perfil/ruido rival no cambian el resultado;
+- todos los role scores quedan en `0..10000`;
+- salida JSON-serializable y model id estable.
+
+SHA exacto de código/test C2c:
+
+`d4866e74b7c436c728d19174c68e96560c102d8b`
+
+PR temporal:
+
+`#102 — Trainer AI Random Cup modernization — C2c multi-role affinities`
 
 Resultado confirmado sobre ese SHA:
 
 - **18/18 workflows GitHub Actions: SUCCESS**;
-- `Trainer Loadouts Tests`: **261 PASS / 0 FAIL**;
-- C2b añade **27 checks nuevos** sobre los 234 del checkpoint C2a;
+- `Trainer Loadouts Tests`: **280 PASS / 0 FAIL**;
+- los **19 checks C2c** son verdes;
 - `Godot 4.7 Tests`: SUCCESS;
 - `Data Foundation V3 Tests`: SUCCESS;
 - resto de gates Trainer AI: SUCCESS.
 
-Incidente operativo no funcional durante la tranche:
+Por tanto, **C2c de código queda CERTIFICADO en `d4866e74b7c436c728d19174c68e96560c102d8b`**.
 
-- se creó accidentalmente `tests/trainer_ai/.c2b_ci_placeholder` en un commit transitorio;
-- se eliminó inmediatamente en el commit siguiente;
-- la comparación neta del HEAD C2b frente a C2a contiene únicamente los tres archivos previstos: nueva clase, nueva suite y una línea de runner;
-- no quedó ningún placeholder en el árbol certificado.
+### Límites tras C2c
 
-### Siguiente tranche autorizada
+Todavía no existe:
 
-**C2c — derivar `capability_scores_bp` / `role_scores_bp` multirole a partir de la evidencia C2b, con normalización determinista y tests de relaciones antes de congelar umbrales finales.**
-
-Todavía fuera de C2c:
-
+- selección de `primary_role_id`/secondary roles;
+- calibración sobre una muestra representativa de Pokémon reales DATA V3;
 - integración con `TrainerTeamAnalyzer`;
-- coste estratégico de permadeath;
-- switching/search;
-- dificultad/expertise FASE34.
+- cálculo de unicidad/redundancia entre miembros;
+- `TrainerRosterStrategicValueEvaluator`;
+- `operational_readiness_bp`;
+- `permadeath_loss_cost_bp`;
+- integración switching/search;
+- corpus Random Cup multi-batalla.
 
-Este commit documental posterior a `2b754f63...` debe recibir su propia matriz **18/18 sobre el SHA exacto final** antes de considerar cerrado C2b a nivel de HEAD de rama.
+El siguiente bloque recomendado antes de conectar consumidores es **C2d — calibración/regresión con miembros reales materializados desde DATA V3**, para comprobar que las afinidades relativas no producen distribuciones patológicas fuera de los fixtures sintéticos. Solo después conviene adaptar `TrainerTeamAnalyzer` o empezar C3.
+
+Este commit documental es posterior al SHA de código verde. Debe obtener **18/18 workflows sobre su SHA exacto** antes de considerar cerrado C2c a nivel de HEAD final de rama. PR #102 debe cerrarse **sin merge** después de esa certificación.
