@@ -345,7 +345,7 @@ func _test_decision_context_campaign_snapshot_is_detached() -> void:
 	serialized_alive.append("serialized_leak")
 	_check.call("intel_context_campaign_serialized_detached", not stored_alive.has("serialized_leak"))
 	var json_text := JSON.stringify(data)
-	var parsed := JSON.parse_string(json_text)
+	var parsed: Variant = JSON.parse_string(json_text)
 	_check.call(
 		"intel_context_campaign_json_serializable",
 		parsed is Dictionary and (parsed as Dictionary).has("campaign") and json_text.contains("intel_trainer_bench"),
