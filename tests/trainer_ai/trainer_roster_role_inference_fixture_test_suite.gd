@@ -140,7 +140,7 @@ func _test_hp_and_pp_variants_preserve_structural_identity(catalog: DefinitionCa
 
 	var full_moveset: Array = full.get("moveset", []) as Array
 	var zero_moveset: Array = zero_pp.get("moveset", []) as Array
-	var pp_variant_ok := (
+	var pp_variant_ok: bool = (
 		full.get("move_ids", []) == zero_pp.get("move_ids", [])
 		and full_moveset.size() == 1
 		and zero_moveset.size() == 1
@@ -176,13 +176,13 @@ func _test_fixture_independence(catalog: DefinitionCatalog) -> void:
 		[TrainerRosterRoleInferenceFixtures.MOVE_PHYSICAL],
 		stats,
 	)
-	var a_stats := a.get("stats", {}) as Dictionary
+	var a_stats: Dictionary = a.get("stats", {}) as Dictionary
 	a_stats["attack"] = 1
 	var a_moveset: Array = a.get("moveset", []) as Array
 	if not a_moveset.is_empty():
 		(a_moveset[0] as Dictionary)["current_pp"] = 0
 	var b_moveset: Array = b.get("moveset", []) as Array
-	var independent := (
+	var independent: bool = (
 		int((b.get("stats", {}) as Dictionary).get("attack", 0)) == 120
 		and b_moveset.size() == 1
 		and int((b_moveset[0] as Dictionary).get("current_pp", 0)) > 0
