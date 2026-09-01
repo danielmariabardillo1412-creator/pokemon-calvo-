@@ -43,78 +43,88 @@ Pipeline:
 
 ## Closed DATA V3 milestones
 ### Move Effects V3
-- RUNTIME_SUPPORTED: **590**
-- PARTIAL_RUNTIME: **71**
-- DATA_ONLY: **246**
-- UNSUPPORTED: **12**
+- **590 RUNTIME_SUPPORTED / 71 PARTIAL_RUNTIME / 246 DATA_ONLY / 12 UNSUPPORTED**.
 - DATA_ONLY moves with executable `effect_specs`: **0**.
 
 ### Ability V3 — certified closure #92
-- PR #92 `DATA V3 — close ability runtime frontier`
-- final HEAD `73dc4dced11804d762182a5017389bea77208aa7`
+- Final HEAD `73dc4dced11804d762182a5017389bea77208aa7`.
 - **18/18 SUCCESS**, closed without merge.
-- final coverage: **21 RUNTIME_SUPPORTED / 14 PARTIAL_RUNTIME / 338 DATA_ONLY / 373 total**.
-- Remaining DATA_ONLY frontier is frozen into documented blocker families; do not resume ability micro-tranches merely to increase counters.
+- **21 RUNTIME_SUPPORTED / 14 PARTIAL_RUNTIME / 338 DATA_ONLY / 373 total**.
 - Detailed closure: `docs/notebooks/22_DATA_V3_ABILITY_CLOSURE.md`.
 
-## Current tranche — PR #93 Items V3 closure
-- Branch: `audit/data-v3-item-closure-v1`
-- Parent: certified #92 final `73dc4dced11804d762182a5017389bea77208aa7`
-- PR: #93 `DATA V3 — close item runtime frontier`
-- Engineering SHA: `cf2d3fd8f5eea88e6310fec8886e5611938465ae`
-- Engineering result: **18/18 SUCCESS**
-- DATA V3 domain: **546 PASS / 0 FAIL**
-- detailed notebook: `docs/notebooks/23_DATA_V3_ITEM_CLOSURE.md`.
+### Items V3 — certified closure #93
+- Final HEAD `a034a8404d80a13cad25d43eb85c4f84e9fb22bf`.
+- **18/18 SUCCESS**, closed without merge.
+- DATA V3 domain: **546 PASS / 0 FAIL**.
+- Exact held runtime: `leftovers`, `sitrus_berry`.
+- Exact trainer bag runtime: `potion`, `super_potion`, `hyper_potion`, `max_potion`, `full_restore`.
+- Calvo V1 healing contract: `20 / 60 / 120 / full / full+status`.
+- Super/Hyper legacy 50/200 description text is historical metadata only and must not redefine runtime 60/120.
+- Oran Berry is canonical but deliberately deferred.
+- Detailed closure: `docs/notebooks/23_DATA_V3_ITEM_CLOSURE.md`.
 
-## #93 Items V3 boundary
-Canonical DATA V3 preserves exactly **2,222 items**. Item records are metadata-only:
-`id · display_name · description · category`.
+## Current tranche — PR #94 Evolutions V3 closure
+- Branch: `audit/data-v3-evolution-closure-v1`.
+- Parent: certified #93 final `a034a8404d80a13cad25d43eb85c4f84e9fb22bf`.
+- PR: #94 `DATA V3 — close evolution runtime frontier`.
+- Engineering SHA: `87a48acc2746ee429cbd6786e6a8adedb1afabeb`.
+- Engineering result: **18/18 SUCCESS**.
+- DATA V3 domain: **557 PASS / 0 FAIL**.
+- Detailed notebook: `docs/notebooks/24_DATA_V3_EVOLUTION_CLOSURE.md`.
 
-They do not carry move/ability-style runtime classifications. Executable item support is an explicit Battle Core registry contract.
+## #94 evolution reliability finding
+DATA V3 preserves exactly **554 evolution records**, of which **165** carry nonempty `conditions`.
 
-Exact runtime surfaces:
-- held items: `leftovers`, `sitrus_berry`;
-- trainer bag items: `potion`, `super_potion`, `hyper_potion`, `max_potion`, `full_restore`.
+The prior runtime overclaimed support because it:
+- classified all `level_up`, valid `use_item` and `trade` records as executable;
+- evaluated only level, direct item and a boolean trade flag;
+- ignored preserved conditions such as friendship, time, gender, known move, held trade item, region/form, location, rain, party state and later-game special requirements;
+- allowed DATA_ONLY records under known triggers to pass through candidate evaluation.
 
-Closure suite proves:
-- exactly 2,222 canonical item records and unique IDs;
-- exact metadata-only schema;
-- exact held and trainer-bag runtime frontiers;
-- every runtime item ID exists canonically in DATA V3;
-- Calvo V1 trainer healing contract is exactly `20 / 60 / 120 / full / full+status`;
-- Oran Berry remains canonical but deliberately unmapped/deferred.
+Consequence: real Pokémon evolution rules could silently degrade into weaker invented rules. This is forbidden.
 
-## Super/Hyper Potion isolated metadata discrepancy
-The immutable PokeAPI snapshot keeps legacy English `effect_entries`:
-- Super Potion: **50 HP**;
-- Hyper Potion: **200 HP**.
+A second bug used hyphenated unsupported-trigger constants while canonical DATA V3 uses underscores, producing false coverage buckets.
 
-Versioned flavor entries move to **60 HP / 120 HP** from Sun/Moon onward. Trainer AI / Battle Core already uses the explicit Calvo V1 modern contract 60/120.
+## Bounded Evolutions V3 correction
+No broad evolution-condition subsystem was added.
 
-Decision: this is an isolated metadata-version discrepancy, not a Battle Core bug and not a reason to open a general version-policy subsystem during Items V3 closure.
+`EvolutionSystem` now:
+1. uses exact canonical underscore trigger IDs;
+2. marks exotic triggers with no runtime path `UNSUPPORTED`;
+3. allows `level_up`, `use_item`, `trade` to be runtime-supported only when preserved conditions are actually compatible with current runtime context;
+4. treats empty conditions as compatible;
+5. permits exactly seven source-backed records whose sole condition is redundant `base_form == current source species`;
+6. keeps every other conditioned record `DATA_ONLY`;
+7. exposes only `RUNTIME_SUPPORTED` records from `evolution_candidates()`;
+8. requires valid nonempty item references for `use_item`.
 
-Architectural rule:
-**DATA V3 descriptive/historical metadata is not an executable battle contract. Battle Core defines Calvo V1 runtime semantics unless a future explicit version-policy layer deliberately changes that rule.**
+Exact corrected boundary:
+- **391 RUNTIME_SUPPORTED**
+- **149 DATA_ONLY**
+- **14 UNSUPPORTED**
+- **0 PARTIAL**
+- **554 total**.
 
-## Oran Berry decision
-Source semantics are clean: `HP <= 1/2 → heal 10 HP → consume` and existing primitives could express it.
+Reference integrity:
+- broken target-species references: **0**;
+- broken/missing `use_item` item references: **0**.
 
-Decision: deliberately defer runtime registration. Adding one easy berry does not close a systemic family and would reopen held-item scope. Revisit when held-item selection/loadouts are intentionally reopened.
+The closure suite adds **11 checks** freezing exact count, trigger partition, condition inventory, reference integrity, exact support boundary, exotic-trigger classification, seven redundant base-form exceptions and candidate gating.
 
-## #92 final → #93 engineering artifact comparison
-Certified #92 final DATA V3 artifact:
-- head `73dc4dced11804d762182a5017389bea77208aa7`
-- run `33510555305`
-- artifact `9801468899`.
+## #93 final → #94 engineering artifact comparison
+Certified #93 final DATA V3 artifact:
+- head `a034a8404d80a13cad25d43eb85c4f84e9fb22bf`
+- run `33513512710`
+- artifact `9802641046`.
 
-#93 engineering DATA V3 artifact:
-- head `cf2d3fd8f5eea88e6310fec8886e5611938465ae`
-- run `33512679014`
-- artifact `9802318978`.
+#94 engineering DATA V3 artifact:
+- head `87a48acc2746ee429cbd6786e6a8adedb1afabeb`
+- run `33515258905`
+- artifact `9803339060`.
 
-Both artifacts contain the same **15-file output set**.
+Both artifacts contain the same **15 files**.
 
-Canonically identical:
+Byte-identical canonical outputs:
 - raw `pokemon_api.json`;
 - normalized `pokemon_api.json`;
 - manifest;
@@ -123,28 +133,26 @@ Canonically identical:
 - PokeAPI V3 audit report;
 - auxiliary report.
 
-No species/Pokémon, move/effect, ability, item/status, learnset/evolution, type/stat or report-set drift exists.
+`import_summary.json` is canonically identical except execution timing:
+- `import_time_ms 508 → 491 ms`.
 
-Only canonical JSON difference:
-- `import_time_ms 529 → 518 ms`, execution timing noise.
+Expected log delta:
+- DATA V3 domain **546 → 557 PASS / 0 FAIL** from the 11 new Evolutions V3 closure checks.
+- runtime/check logs are otherwise unchanged.
 
-Expected log differences:
-- DATA V3 domain increases **535 → 546 PASS / 0 FAIL** because of the 11 new Items V3 closure checks;
-- Godot import registers one additional test-suite class.
+No canonical DATA V3 drift exists.
 
 ## Current certification step
 Engineering is certified and artifact comparison is clean.
 
-Before closing #93:
-1. engineering → final must be notebooks-only;
-2. synchronized notebooks are `01_PROJECT_STATE.md`, `04_NEXT_STEPS.md`, `23_DATA_V3_ITEM_CLOSURE.md`;
-3. require **18/18 SUCCESS** on the exact final notebook-bearing HEAD;
-4. close #93 without merge;
-5. use exact final SHA as the certified parent for Evolutions V3.
+Before closing #94:
+1. engineering → final must change only `01_PROJECT_STATE.md`, `04_NEXT_STEPS.md`, `24_DATA_V3_EVOLUTION_CLOSURE.md`;
+2. require **18/18 SUCCESS** on the exact final notebook-bearing HEAD;
+3. close #94 without merge;
+4. use that exact final SHA as the parent for the final end-to-end DATA V3 certification.
 
-## Next DATA V3 work after #93
-1. **Evolutions V3 reliability**
-2. **final end-to-end DATA V3 certification**
-3. return to **Trainer AI / trainer systems**.
+## Next DATA V3 work after #94
+1. **final end-to-end DATA V3 certification**
+2. return to **Trainer AI / trainer systems**.
 
-No further Items V3 expansion is required before returning to Trainer AI unless a closure regression exposes a real issue.
+Do not reopen Moves, Abilities, Items or Evolutions merely to increase counters unless a real regression or newly available subsystem invalidates a frozen boundary.
