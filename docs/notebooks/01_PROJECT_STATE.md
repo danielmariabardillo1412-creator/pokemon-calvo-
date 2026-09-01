@@ -33,6 +33,7 @@ Pipeline:
 - #80 contact damage + attack-doubling audit `232a3e787fe2d7d58b1feb693272b63bd7a699bf`
 - #81 defensive damage modifiers `e2eeef1d23def1d9fd124b5e2eeb437270212b68`
 - #82 defensive predicates `089140a8439390758d688636f715a311ec175163`
+- #83 move-property ability contracts `f4a1f76850d8737c4d9847045335e703d5ecaa23`
 
 All entries above: **18/18 SUCCESS on exact final notebook-bearing HEAD and closed without merge**.
 
@@ -52,95 +53,116 @@ Preserved metadata is not executable support.
 
 Battle Core ability execution is controlled by trigger registration; DATA V3 classification describes semantic completeness.
 
-## Latest certified ability baseline — PR #82
-Detailed notebooks: `06`, `07`, `08`, `09`, `10`, `11`, `12`.
+## Latest certified ability baseline — PR #83
+Detailed notebooks: `06`, `07`, `08`, `09`, `10`, `11`, `12`, `13`.
 
-Certified #82 coverage:
-- `RUNTIME_SUPPORTED`: **13**
-- `PARTIAL_RUNTIME`: **5** — `heatproof`, `intimidate`, `levitate`, `stamina`, `static`
-- `DATA_ONLY`: **355**
-- total: **373**.
-
-# Current tranche — PR #83 Move-property ability contracts
-- Branch: `audit/data-v3-ability-move-property-v1`.
-- Exact parent: certified #82 final `089140a8439390758d688636f715a311ec175163`.
-- PR: #83 `DATA V3 — audit move-property ability contracts`.
-- Engineering SHA: `f9d3538dec9c443e60070b0e4bf7d7904c984e55`.
-- Engineering SHA: **18/18 SUCCESS**.
-- Detailed notebook: `docs/notebooks/13_DATA_V3_ABILITY_MOVE_PROPERTIES.md`.
-
-## #83 decision — Reckless
-Pinned Generation IV source requires 1.2x power for recoil **and crash** moves; Struggle is excluded.
-
-Current runtime has a trustworthy structured recoil subset through `BattleEffectSpec.RECOIL` but does not yet encode Jump Kick / High Jump Kick crash-on-miss as the same transaction.
-
-Decision: **`reckless → PARTIAL_RUNTIME`**.
-
-Battle Core adds one generic structural condition:
-- `requires_recoil=true`, recursively matched from `move.effect_specs`;
-- no move-name/prose inference.
-
-Reckless registration:
-- actor `MODIFY_DAMAGE`;
-- `requires_recoil=true`;
-- `multiplier_bp=12000`.
-
-Real-battle integration verifies:
-- Double-Edge damage increases and Reckless triggers;
-- normal recoil still occurs;
-- Tackle is unchanged and does not trigger Reckless;
-- Jump Kick remains unchanged with/without Reckless and emits no Reckless trigger, explicitly documenting the missing crash subset.
-
-## #83 audited blockers
-### Long Reach
-Source is clean, but defender-owned contact-trigger evaluation currently receives trigger owner + move, not the move user. Long Reach therefore remains **DATA_ONLY** rather than introducing a hidden ability-id special-case or broad trigger-context expansion.
-
-### Technician
-Source requires resolved/variable-power and prior power-modifier semantics. Static `move.power <= 60` is knowingly insufficient for current stateful/variable-power moves. Remains **DATA_ONLY**.
-
-### Iron Fist / Strong Jaw / Mega Launcher / Sharpness
-Current `MoveDefinition` has no provenance-backed punch/bite/pulse/slicing tags. All remain **DATA_ONLY**; no inference from names or prose.
-
-## #83 artifact drift
-Certified #82 artifact → successful #83 engineering artifact:
-- raw: exactly `reckless.classification: DATA_ONLY → PARTIAL_RUNTIME`;
-- normalized: exactly the same one-field change;
-- `RUNTIME_SUPPORTED`: remains **13**;
-- `PARTIAL_RUNTIME`: **5 → 6**;
-- `DATA_ONLY`: **355 → 354**;
-- Long Reach, Technician, Iron Fist, Strong Jaw, Mega Launcher and Sharpness unchanged;
-- every other ability unchanged;
-- species/Pokémon, moves/effects, items/statuses, learnsets/evolutions, types/stats, manifest/forms/auxiliary unchanged;
-- `pokeapi_v3_audit.json` changes only partial 5→6 and data-only 355→354;
-- `import_time_ms` 396→398 ms is non-semantic.
-
-## Ability coverage after #83 engineering
+Certified #83 coverage:
 - `RUNTIME_SUPPORTED`: **13**
 - `PARTIAL_RUNTIME`: **6** — `heatproof`, `intimidate`, `levitate`, `reckless`, `stamina`, `static`
 - `DATA_ONLY`: **354**
 - total: **373**.
 
-## Known blockers after #83
+# Current tranche — PR #84 Defender contact reactions
+- Branch: `audit/data-v3-ability-contact-reactions-v1`.
+- Exact parent: certified #83 final `f4a1f76850d8737c4d9847045335e703d5ecaa23`.
+- PR: #84 `DATA V3 — audit defender contact reaction abilities`.
+- Engineering SHA: `27a9d2b429334ea6f809009de219bb3fce0bb813`.
+- Engineering SHA: **18/18 SUCCESS**.
+- DATA V3 domain: **451 PASS / 0 FAIL**.
+- Detailed notebook: `docs/notebooks/14_DATA_V3_ABILITY_CONTACT_REACTIONS.md`.
+
+## #84 decisions
+### Flame Body
+Pinned Generation III source: contacting move user has 30% chance to be burned. Historical `effect_changes` is overworld-only.
+
+Runtime subset:
+- defender `AFTER_DAMAGE`;
+- `requires_contact=true`;
+- 30% CHANCE -> burn attacker.
+
+Decision: **PARTIAL_RUNTIME**.
+
+### Poison Point
+Pinned Generation III source: contacting move user has 30% chance to be poisoned; no effect history.
+
+Runtime subset:
+- defender `AFTER_DAMAGE`;
+- `requires_contact=true`;
+- 30% CHANCE -> poison attacker.
+
+Decision: **PARTIAL_RUNTIME**.
+
+### Gooey
+Pinned Generation VI source: lowers attacking Pokémon's Speed one stage on contact; no effect history.
+
+Runtime subset:
+- defender `AFTER_DAMAGE`;
+- `requires_contact=true`;
+- attacker Speed stage `-1`.
+
+Decision: **PARTIAL_RUNTIME**.
+
+## Shared #84 partial boundary
+No generic Battle Core code changed in #84. All three reuse the same machinery already used by Static.
+
+Current limitations:
+- defender `AFTER_DAMAGE` is requested only when positive damage was dealt and the defender survives;
+- knocked-out trigger owners are rejected;
+- multi-hit strikes are resolved before the single defender `AFTER_DAMAGE` request.
+
+Therefore fatal-contact and per-strike contact-reaction semantics remain incomplete. A real-battle regression explicitly verifies a 1-HP Gooey holder is KO'd by contact and does not react.
+
+## #84 real-battle coverage
+New `DataFoundationV3AbilityContactReactionTestSuite` verifies:
+- Tackle contact vs Water Gun non-contact metadata;
+- Flame Body real 30% burn path using deterministic seed search;
+- Poison Point real 30% poison path using deterministic seed search;
+- both status abilities inert for Water Gun;
+- Gooey Tackle lowers attacker Speed exactly one stage and emits defender-owned ability event;
+- Gooey inert for Water Gun;
+- fatal-contact missing behavior is explicit.
+
+## #84 artifact drift
+Certified #83 artifact → successful #84 engineering artifact:
+- raw: exactly `flame_body`, `gooey`, `poison_point` classification changes `DATA_ONLY → PARTIAL_RUNTIME`;
+- normalized: exactly the same three one-field changes;
+- `RUNTIME_SUPPORTED`: remains **13**;
+- `PARTIAL_RUNTIME`: **6 → 9**;
+- `DATA_ONLY`: **354 → 351**;
+- every other ability unchanged;
+- species/Pokémon, moves/effects, items/statuses, learnsets/evolutions, types/stats, manifest/forms/auxiliary unchanged;
+- `pokeapi_v3_audit.json` changes only partial 6→9 and data-only 354→351;
+- `import_time_ms` 705→524 ms is non-semantic.
+
+## Ability coverage after #84 engineering
+- `RUNTIME_SUPPORTED`: **13**
+- `PARTIAL_RUNTIME`: **9** — `flame_body`, `gooey`, `heatproof`, `intimidate`, `levitate`, `poison_point`, `reckless`, `stamina`, `static`
+- `DATA_ONLY`: **351**
+- total: **373**.
+
+## Known blockers after #84
+- `static`, `flame_body`, `poison_point`, `gooey`: full support needs a deliberate faint-safe/per-strike contact-reaction policy.
 - `reckless`: full support needs structured crash-on-miss move semantics.
-- `long_reach`: needs a shared effective-contact/context contract exposing move user to contact reactions.
+- `long_reach`: needs shared effective-contact context exposing the move user.
 - `technician`: needs resolved/transactional move-power semantics, not static base-power approximation.
 - `iron_fist`, `strong_jaw`, `mega_launcher`, `sharpness`: need provenance-backed move-property tags.
-- `filter`, `solid_rock`: need a shared super-effective/effectiveness predicate.
+- `filter`, `solid_rock`: need shared super-effective/effectiveness predicate.
 - `heatproof`: full support needs burn residual ability interaction.
-- `fluffy`: needs modifier composition/event aggregation to avoid duplicate logical trigger events.
+- `fluffy`: needs modifier composition/event aggregation.
 - `huge_power`, `pure_power`: need genuine offensive-stat multiplier abstraction.
 - `transistor`: version-sensitive multiplier contract unresolved.
 - `water_compaction`: requires Water-specific AFTER_DAMAGE predicate.
 - `weak_armor`: requires dual stat transaction plus per-hit/version semantics.
+- remaining contact family: Cute Charm needs gender/infatuation; Effect Spore needs mutually exclusive random statuses; Iron Barbs/Rough Skin need max-HP contact damage; Mummy/Wandering Spirit need ability replacement; Pickpocket needs item transfer; Poison Touch needs attacker-owned post-hit contact handling.
 
 ## Current certification step
-Notebook synchronization follows engineering SHA `f9d3538dec9c443e60070b0e4bf7d7904c984e55`.
+Notebook synchronization follows engineering SHA `27a9d2b429334ea6f809009de219bb3fce0bb813`.
 
-Before closing #83:
-1. verify engineering → final HEAD changes only `01`, `04`, `13` notebooks;
+Before closing #84:
+1. verify engineering → final HEAD changes only `01`, `04`, `14` notebooks;
 2. require **18/18 SUCCESS** on exact final notebook-bearing HEAD;
-3. close #83 without merge;
+3. close #84 without merge;
 4. use exact final SHA as next certified baseline.
 
-## Exact next work after #83
-Continue DATA FOUNDATION V3 ability reliability with another bounded family selected from the remaining 354 DATA_ONLY records only after source-vs-runtime comparison. Do not broaden Battle Core merely to improve coverage. Trainer AI/archetypes remain deferred.
+## Exact next work after #84
+Continue DATA FOUNDATION V3 ability reliability with one bounded compatible subgroup from the remaining 351 DATA_ONLY records. Do not mass-promote the rest of the contact family and do not return to Trainer AI/archetypes yet.
