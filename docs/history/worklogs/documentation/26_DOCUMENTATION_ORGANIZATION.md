@@ -1,87 +1,163 @@
 # CUADERNO 26 — REORGANIZACIÓN DOCUMENTAL
 
-Estado: EN CURSO
+Estado: **MIGRACIÓN EJECUTADA / PENDIENTE DE CERTIFICACIÓN CI**
 
 ## Objetivo
 
-Reorganizar la documentación del proyecto antes de retomar la expansión de la IA de entrenadores.
-
-La reorganización debe reducir ruido, duplicación y ambigüedad sin perder trazabilidad histórica ni modificar lógica del juego.
+Reorganizar la documentación del proyecto antes de retomar la expansión de la IA de entrenadores, reduciendo ruido y duplicación sin perder trazabilidad histórica ni modificar lógica del juego.
 
 ## Baseline de partida
 
 - Baseline certificado: `b4f6adc200bef18f8ac51b9144f2f9a838f464fd`
 - Origen: cierre DATA V3, PR #95, cerrado sin merge.
-- Rama de trabajo: `chore/documentation-consolidation-v1`
-- Regla: no usar `main` como autoridad durante esta reorganización.
+- Rama: `chore/documentation-consolidation-v1`
+- Regla: `main` no es autoridad actual y no se sustituye en esta operación.
 
-## Descubrimiento inicial
+## Descubrimientos
 
-`docs/notebooks/` contiene 26 documentos (00–25). De ellos, 20 son diarios/auditorías específicos de DATA V3. Son útiles como trazabilidad, pero no deben seguir presentándose como cuadernos activos una vez cerrado DATA V3.
+### 1. Exceso de notebooks activos
 
-También existen:
+`docs/notebooks/` contenía 26 documentos 00–25 antes de iniciar esta reorganización.
 
-- `docs/history/phase_reports/` para informes de fases cerradas;
-- `docs/history/legacy_data/` para DATA V1/V2 y material superado;
-- `docs/history/research/` para investigación técnica preservada;
-- `docs/adr/` para decisiones arquitectónicas formales;
-- documentos de arquitectura y reglas todavía mezclados directamente bajo `docs/`.
+De ellos, 20 eran diarios/auditorías específicos de DATA V3: notebook 02 y notebooks 06–25. DATA V3 ya estaba cerrado, de modo que estos archivos eran valiosos como trazabilidad pero no como memoria activa.
 
-Se detectó además que algunos cuadernos vivos quedaron cronológicamente desactualizados tras la certificación final de DATA V3. Por ejemplo, `00_READ_FIRST.md`, `01_PROJECT_STATE.md`, `04_NEXT_STEPS.md` y `05_DEFERRED_WORK_AND_ROADMAP.md` todavía contienen referencias a DATA V3 como trabajo activo o pendiente.
+### 2. Estado vivo contradictorio
 
-## Decisión de organización
+Se detectaron varios documentos operativos desactualizados:
 
-La documentación operativa se reorganizará en cinco capas conceptuales:
+- `00_READ_FIRST.md` todavía presentaba Move Effects V3 como workstream activo;
+- `01_PROJECT_STATE.md` y `04_NEXT_STEPS.md` todavía describían el cierre final de #95 como pendiente;
+- `05_DEFERRED_WORK_AND_ROADMAP.md` todavía marcaba DATA V3 como prioridad;
+- `docs/STATUS.md` y el `README.md` raíz anunciaban el antiguo baseline `304035e2...` / `feature/data-foundation-v3` en vez del cierre real `b4f6adc2...`.
 
-1. `docs/current/` — estado vivo, protocolo y próximo paso.
-2. `docs/project_book/` — pocos cuadernos temáticos consolidados y mantenidos.
-3. `docs/architecture/` — arquitectura y rulesets vigentes.
-4. `docs/adr/` — decisiones arquitectónicas numeradas; se conserva su función actual.
-5. `docs/history/` — diarios de trabajo, investigación cerrada, informes y material superado.
+El problema no era solo cantidad de archivos, sino varias fuentes que podían parecer simultáneamente “actuales”.
 
-## Política de cuadernos
+### 3. Research y cuadernos eran conceptos parcialmente solapados
 
-No se mantendrá un cuaderno nuevo por cada microtramo.
+`docs/history/research/TRAINER_AI_RESEARCH_FASE21.md` contiene decisiones que siguen siendo relevantes para Trainer AI aunque la investigación FASE21 esté cerrada. Se decidió conservar la fuente histórica e integrar sus conclusiones vigentes en el cuaderno temático Trainer AI.
 
-Los cuadernos activos serán temáticos y acumulativos. Como mínimo se prevén:
+### 4. FASE34 no debe duplicar perfiles existentes
 
-- `PROJECT_BOOK.md` o índice equivalente: guía de uso de los cuadernos;
-- `TRAINER_AI.md`: estado, arquitectura práctica, decisiones, límites, investigación útil y continuación de IA;
-- `DATA_V3.md`: resumen consolidado del DATA V3 cerrado y su autoridad certificada;
-- `BATTLE_AND_GAME_SYSTEMS.md`: notas operativas relevantes del Battle Core y sistemas de juego cuando proceda;
-- `GENERAL_ENGINEERING.md`: decisiones de trabajo que no pertenecen a un dominio concreto.
+Durante la consolidación se verificó que `TrainerProfile` ya define `balanced`, `aggressive`, `cautious` y `technical`, y explícitamente establece que dificultad no puede conceder información oculta.
 
-El número final podrá reducirse si dos cuadernos resultan artificialmente separados.
+La continuación de Trainer AI deberá separar **estilo** de **competencia/expertise**, no crear otra capa genérica de personalidad que duplique FASE21.
 
-## Política de archivo
+## Estructura decidida
 
-Los diarios DATA V3 02 y 06–25 no se borrarán. Se moverán como registros históricos de trabajo a un área de archivo de DATA V3.
+La estructura operativa final queda:
 
-El nuevo cuaderno consolidado DATA V3 será la referencia humana habitual; los diarios originales quedarán disponibles cuando sea necesario auditar una decisión concreta.
+- `docs/current/` — única fuente documental de estado vivo;
+- `docs/project_book/` — pocos cuadernos temáticos consolidados;
+- `docs/architecture/` — arquitectura y rulesets vigentes;
+- `docs/adr/` — decisiones arquitectónicas numeradas;
+- `docs/reference/` — entorno y procedencia técnica;
+- `docs/history/` — material cerrado, research, informes y worklogs.
 
-La investigación técnica cerrada, como `TRAINER_AI_RESEARCH_FASE21.md`, se preservará y sus conclusiones todavía vigentes se integrarán en el cuaderno temático correspondiente sin destruir la fuente histórica.
+## Política final de cuadernos
 
-## Reglas de seguridad de esta reorganización
+Se redujo deliberadamente la propuesta inicial.
 
-- No modificar código, datos canónicos, tests ni semántica runtime.
-- No borrar información histórica material.
-- No reescribir retrospectivamente decisiones técnicas para hacerlas parecer distintas.
-- Actualizar enlaces/rutas documentales que queden rotos por movimientos.
-- Mantener GitHub/CI/commits/PRs como autoridad por encima de cualquier resumen documental.
-- El resultado debe permitir que un nuevo contexto recupere el proyecto leyendo pocos documentos.
+No se crean cuadernos vacíos para Battle, UI, Overworld o ingeniería general “por si acaso”. Solo existen actualmente:
 
-## Criterio de éxito
+- `docs/project_book/DATA_V3.md` — **CERRADO**;
+- `docs/project_book/TRAINER_AI.md` — **ACTIVO / siguiente workstream**.
 
-Una persona o una IA nueva debe poder recuperar el estado del proyecto siguiendo un recorrido corto:
+`docs/project_book/README.md` define la política: abrir un nuevo cuaderno solo cuando un workstream grande y distinto realmente necesite memoria propia.
 
-1. índice de documentación;
-2. estado actual;
-3. siguiente trabajo;
-4. cuaderno temático relevante;
-5. arquitectura/ADR solo cuando necesite detalle.
+## Migración ejecutada
 
-No debería ser necesario leer veinte diarios DATA V3 para continuar con Trainer AI.
+Commit estructural:
 
-## Próximo paso
+`002b8b4ef275cc239ada9c540f0fc84351b0ea44`
 
-Completar el inventario de documentos, clasificar cada archivo como ACTUAL / CUADERNO / ARQUITECTURA / ADR / HISTÓRICO y ejecutar la migración con cambios exclusivamente documentales.
+### Estado vivo
+
+Se crearon:
+
+- `docs/current/START_HERE.md`
+- `docs/current/PROJECT_STATE.md`
+- `docs/current/NEXT_STEPS.md`
+- `docs/current/WORK_PROTOCOL.md`
+
+### Cuadernos consolidados
+
+Se crearon:
+
+- `docs/project_book/README.md`
+- `docs/project_book/DATA_V3.md`
+- `docs/project_book/TRAINER_AI.md`
+
+### DATA V3 archivado sin reescritura
+
+Los 20 diarios DATA V3 originales se movieron a:
+
+`docs/history/worklogs/data_v3/`
+
+Los movimientos son renames de **0 adiciones / 0 eliminaciones**: el contenido histórico permanece byte-identical.
+
+### Documentos operativos antiguos
+
+Los antiguos notebooks 00, 01, 03, 04 y 05, junto al antiguo `docs/STATUS.md`, se preservaron en:
+
+`docs/history/worklogs/pre_consolidation/`
+
+No son autoridad actual.
+
+### Arquitectura y referencia
+
+Los documentos formales que estaban sueltos en `docs/` se movieron a `docs/architecture/` sin modificar contenido.
+
+`DEVELOPMENT_ENVIRONMENT.md` y `THIRD_PARTY_CODE.md` pasaron a `docs/reference/`.
+
+Los ADR permanecen en `docs/adr/` sin cambios.
+
+La investigación histórica permanece en `docs/history/research/`.
+
+### `docs/notebooks/`
+
+Deja de existir como superficie activa. El propio cuaderno 26 se conserva bajo:
+
+`docs/history/worklogs/documentation/26_DOCUMENTATION_ORGANIZATION.md`.
+
+## Verificación del diff
+
+Comparación:
+
+- base: `b4f6adc200bef18f8ac51b9144f2f9a838f464fd`
+- engineering de reorganización: `002b8b4ef275cc239ada9c540f0fc84351b0ea44`
+
+Resultado:
+
+- ahead_by: 2 commits (creación inicial del cuaderno 26 + migración);
+- cambios exclusivamente en `README.md` y `docs/**`;
+- **0 archivos de código modificados**;
+- **0 tests modificados**;
+- **0 workflows modificados**;
+- **0 datos canónicos modificados**;
+- los movimientos de arquitectura, reference y worklogs preservan los blobs originales.
+
+## Reglas de seguridad preservadas
+
+- no se modifica runtime;
+- no se modifica DATA V3;
+- no se modifica Battle Core;
+- no se reescribe la historia para aparentar otra decisión;
+- GitHub/CI/artefactos siguen por encima de cualquier resumen;
+- `main` se mantiene intacta hasta una operación posterior.
+
+## Criterio de cierre
+
+La reorganización quedará certificada cuando:
+
+1. se abra PR contra el snapshot #95 inmediatamente anterior;
+2. se ejecute la matriz normal sobre el HEAD documental final;
+3. todos los workflows queden verdes;
+4. se actualicen `docs/current/PROJECT_STATE.md`, `docs/current/NEXT_STEPS.md` y este worklog con la certificación exacta;
+5. ese HEAD final vuelva a quedar completamente verde si la actualización mueve el SHA;
+6. se cierre el PR sin merge.
+
+## Siguiente workstream después del cierre
+
+Trainer AI.
+
+Primera tarea: auditar la arquitectura/prototipos de difficulty/archetype/expertise y diseñar una capa de competencia separada de `TrainerProfile`, construida sobre `StrategicSwitchingTrainerBrain`, loadouts y composición de equipos, sin cheating y sin ampliar search/MCTS sin evidencia.
