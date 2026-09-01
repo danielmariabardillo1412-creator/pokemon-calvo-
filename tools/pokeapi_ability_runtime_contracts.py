@@ -43,6 +43,7 @@ _MULTI_SPEC_EVENT_GUARDS = {"fluffy"}
 _SUPER_EFFECTIVE_GUARDS = {"filter", "solid_rock"}
 _MOVE_PROPERTY_GUARDS = {"long_reach", "technician"}
 _VERSION_SENSITIVE_CONTACT_DAMAGE_GUARDS = {"rough_skin"}
+_NON_NUMERIC_BOOST_GUARDS = {"gorilla_tactics", "steely_spirit"}
 
 # The pinned PokeAPI snapshot says 1.33x for Tough Claws. Current main-series
 # mechanics are a 30% contact-move power boost, so DATA V3 deliberately corrects
@@ -68,6 +69,7 @@ _CLASSIFICATION = {
     "toxic_boost": RUNTIME_SUPPORTED,
     "flare_boost": RUNTIME_SUPPORTED,
     "defeatist": RUNTIME_SUPPORTED,
+    "dry_skin": PARTIAL_RUNTIME,
     "flame_body": PARTIAL_RUNTIME,
     "gooey": PARTIAL_RUNTIME,
     "guts": PARTIAL_RUNTIME,
@@ -80,6 +82,7 @@ _CLASSIFICATION = {
     "levitate": PARTIAL_RUNTIME,
     "stamina": PARTIAL_RUNTIME,
     "static": PARTIAL_RUNTIME,
+    "water_bubble": PARTIAL_RUNTIME,
 }
 
 
@@ -103,6 +106,7 @@ def classification_for(ability: dict) -> str:
             or sid in _SUPER_EFFECTIVE_GUARDS
             or sid in _MOVE_PROPERTY_GUARDS
             or sid in _VERSION_SENSITIVE_CONTACT_DAMAGE_GUARDS
+            or sid in _NON_NUMERIC_BOOST_GUARDS
         ):
             _validate_source_contract(ability, sid)
         return DATA_ONLY
@@ -142,6 +146,14 @@ def _require_tokens(text: str, sid: str, tokens: tuple[str, ...]) -> None:
     if missing:
         raise RuntimeError(
             f"DATA V3 ability source semantics changed for {sid}; missing {missing}"
+        )
+
+
+def _require_no_numeric_source_value(text: str, sid: str) -> None:
+    """Keep prose-only boost records DATA_ONLY until the immutable source gives a value."""
+    if any(ch.isdigit() for ch in text):
+        raise RuntimeError(
+            f"DATA V3 {sid} source now contains a numeric value; re-audit before promotion"
         )
 
 
@@ -356,6 +368,69 @@ def _validate_source_contract(ability: dict, sid: str) -> None:
         if _generation_name(ability) != "generation-iv":
             raise RuntimeError("DATA V3 audited ability generation changed for heatproof")
         _require_tokens(text, sid, ("half as much damage", "fire-type moves and burns"))
+        _require_no_history(ability, sid)
+        return
+
+    if sid == "dry_skin":
+        if _generation_name(ability) != "generation-iv":
+            raise RuntimeError("DATA V3 audited ability generation changed for dry_skin")
+        _require_tokens(
+            text,
+            sid,
+            (
+                "1/8 of its maximum hp in damage",
+                "strong sunlight",
+                "heals for 1/8 of its hp each turn during rain",
+                "1.25x as much damage from fire-type moves",
+                "water move hits it",
+                "heals for 1/4 its maximum hp instead",
+            ),
+        )
+        _require_no_history(ability, sid)
+        return
+
+    if sid == "water_bubble":
+        if _generation_name(ability) != "generation-vii":
+            raise RuntimeError("DATA V3 audited ability generation changed for water_bubble")
+        _require_tokens(
+            text,
+            sid,
+            (
+                "hit by a fire move",
+                "damage is halved",
+                "uses a water move",
+                "power is doubled",
+                "cannot be burned",
+                "burn is immediately cured",
+            ),
+        )
+        _require_no_history(ability, sid)
+        return
+
+    if sid == "gorilla_tactics":
+        if _generation_name(ability) != "generation-viii":
+            raise RuntimeError("DATA V3 audited ability generation changed for gorilla_tactics")
+        _require_tokens(
+            text,
+            sid,
+            (
+                "boosts the pokémon's attack stat",
+                "only allows the use of the first selected move",
+            ),
+        )
+        _require_no_numeric_source_value(text, sid)
+        _require_no_history(ability, sid)
+        return
+
+    if sid == "steely_spirit":
+        if _generation_name(ability) != "generation-viii":
+            raise RuntimeError("DATA V3 audited ability generation changed for steely_spirit")
+        _require_tokens(
+            text,
+            sid,
+            ("powers up the steel-type moves of the pokémon and its allies",),
+        )
+        _require_no_numeric_source_value(text, sid)
         _require_no_history(ability, sid)
         return
 
