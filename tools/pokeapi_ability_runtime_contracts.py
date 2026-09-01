@@ -44,6 +44,7 @@ _SUPER_EFFECTIVE_GUARDS = {"filter", "solid_rock"}
 _MOVE_PROPERTY_GUARDS = {"long_reach", "technician"}
 _VERSION_SENSITIVE_CONTACT_DAMAGE_GUARDS = {"rough_skin"}
 _NON_NUMERIC_BOOST_GUARDS = {"gorilla_tactics", "steely_spirit"}
+_END_TURN_DATA_ONLY_GUARDS = {"shed_skin", "poison_heal"}
 
 # The pinned PokeAPI snapshot says 1.33x for Tough Claws. Current main-series
 # mechanics are a 30% contact-move power boost, so DATA V3 deliberately corrects
@@ -69,6 +70,7 @@ _CLASSIFICATION = {
     "toxic_boost": RUNTIME_SUPPORTED,
     "flare_boost": RUNTIME_SUPPORTED,
     "defeatist": RUNTIME_SUPPORTED,
+    "speed_boost": RUNTIME_SUPPORTED,
     "dry_skin": PARTIAL_RUNTIME,
     "flame_body": PARTIAL_RUNTIME,
     "gooey": PARTIAL_RUNTIME,
@@ -107,6 +109,7 @@ def classification_for(ability: dict) -> str:
             or sid in _MOVE_PROPERTY_GUARDS
             or sid in _VERSION_SENSITIVE_CONTACT_DAMAGE_GUARDS
             or sid in _NON_NUMERIC_BOOST_GUARDS
+            or sid in _END_TURN_DATA_ONLY_GUARDS
         ):
             _validate_source_contract(ability, sid)
         return DATA_ONLY
@@ -432,6 +435,60 @@ def _validate_source_contract(ability: dict, sid: str) -> None:
         )
         _require_no_numeric_source_value(text, sid)
         _require_no_history(ability, sid)
+        return
+
+    if sid == "speed_boost":
+        if _generation_name(ability) != "generation-iii":
+            raise RuntimeError("DATA V3 audited ability generation changed for speed_boost")
+        _require_tokens(text, sid, ("speed rises one stage after each turn",))
+        _require_no_history(ability, sid)
+        return
+
+    if sid == "shed_skin":
+        if _generation_name(ability) != "generation-iii":
+            raise RuntimeError("DATA V3 audited ability generation changed for shed_skin")
+        _require_tokens(
+            text,
+            sid,
+            ("33% chance", "any major status ailment", "after each turn"),
+        )
+        changes = ability.get("effect_changes") or []
+        if len(changes) != 2:
+            raise RuntimeError("DATA V3 Shed Skin history shape changed; re-audit")
+        history := {
+            str((change.get("version_group") or {}).get("name", "")): _english_text(
+                change.get("effect_entries")
+            )
+            for change in changes
+        }
+        if set(history) != {"black-white", "diamond-pearl"}:
+            raise RuntimeError("DATA V3 Shed Skin version markers changed; re-audit")
+        _require_tokens(history["black-white"], sid, ("30%",))
+        _require_tokens(history["diamond-pearl"], sid, ("33%",))
+        return
+
+    if sid == "poison_heal":
+        if _generation_name(ability) != "generation-iv":
+            raise RuntimeError("DATA V3 audited ability generation changed for poison_heal")
+        _require_tokens(
+            text,
+            sid,
+            (
+                "heal for 1/8 of its maximum hp after each turn rather than taking damage",
+                "includes bad poison",
+            ),
+        )
+        changes = ability.get("effect_changes") or []
+        if len(changes) != 1:
+            raise RuntimeError("DATA V3 Poison Heal history shape changed; re-audit")
+        change = changes[0]
+        if (change.get("version_group") or {}).get("name") != "black-white":
+            raise RuntimeError("DATA V3 Poison Heal version marker changed; re-audit")
+        history_text = _english_text(change.get("effect_entries"))
+        _require_tokens(history_text, sid, ("outside of battle",))
+        for battle_token in ("1/8", "after each turn", "rather than taking damage"):
+            if battle_token in history_text:
+                raise RuntimeError("DATA V3 Poison Heal battle history changed; re-audit")
         return
 
     if sid in _SUPER_EFFECTIVE_GUARDS:
