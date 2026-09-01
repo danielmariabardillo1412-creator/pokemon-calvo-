@@ -20,12 +20,25 @@ func damage_modifiers(
 	registry: BattleEffectRegistry,
 ) -> Dictionary:
 	var multiplier_bp := 10000
+	var offensive_stat_multiplier_bp := 10000
 	var immune := false
 	for spec in registry.triggers_for_ability(
 		context.actor.ability_id, BattleTriggerSpec.MODIFY_DAMAGE
 	):
-		if _damage_condition_matches(spec, context.actor, context.move):
+		if not _damage_condition_matches(spec, context.actor, context.move):
+			continue
+		var applied_modifier := false
+		if spec.conditions.has("multiplier_bp"):
 			multiplier_bp = multiplier_bp * int(spec.conditions.get("multiplier_bp", 10000)) / 10000
+			applied_modifier = true
+		if spec.conditions.has("offensive_stat_multiplier_bp"):
+			offensive_stat_multiplier_bp = (
+				offensive_stat_multiplier_bp
+				* int(spec.conditions.get("offensive_stat_multiplier_bp", 10000))
+				/ 10000
+			)
+			applied_modifier = true
+		if applied_modifier:
 			_emit_trigger(context, spec)
 	for spec in registry.triggers_for_ability(
 		context.target.ability_id, BattleTriggerSpec.MODIFY_DAMAGE
@@ -41,7 +54,11 @@ func damage_modifiers(
 		):
 			multiplier_bp = multiplier_bp * int(spec.conditions.get("multiplier_bp", 10000)) / 10000
 			_emit_trigger(context, spec, context.target)
-	return {"multiplier_basis_points": multiplier_bp, "immune": immune}
+	return {
+		"multiplier_basis_points": multiplier_bp,
+		"offensive_stat_multiplier_basis_points": offensive_stat_multiplier_bp,
+		"immune": immune,
+	}
 
 
 func conditions_met(
@@ -68,6 +85,12 @@ func conditions_met(
 	if bool(spec.conditions.get("requires_full_hp", false)) and owner.current_hp != owner.stats.max_hp:
 		return false
 	if bool(spec.conditions.get("requires_missing_hp", false)) and owner.current_hp >= owner.stats.max_hp:
+		return false
+	var required_statuses: Array = spec.conditions.get("required_persistent_status_ids", [])
+	if (
+		not required_statuses.is_empty()
+		and not required_statuses.has(String(owner.status_state.persistent_id))
+	):
 		return false
 	var divisor := int(spec.conditions.get("hp_at_or_below_divisor", 0))
 	if divisor > 0 and owner.current_hp * divisor > owner.stats.max_hp:
