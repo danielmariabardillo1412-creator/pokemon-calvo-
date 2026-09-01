@@ -12,6 +12,7 @@ func run(check_callback: Callable) -> void:
 	_test_damage_and_bulk_evidence(inference, catalog)
 	_test_structured_utility_evidence(inference, catalog)
 	_test_structural_state_independence(inference, catalog)
+	_test_role_affinity_scores(inference, catalog)
 	_test_determinism_and_boundary(inference, catalog)
 
 
@@ -194,6 +195,126 @@ func _test_structural_state_independence(
 	decorated["trainer_profile"] = "aggressive"
 	decorated["hidden_rival_species"] = ["secret_fixture"]
 	_check.call("role_inference_ignores_authored_role_profile_and_rival_noise", full_evidence == inference.extract_intrinsic_evidence(decorated, catalog))
+
+
+func _test_role_affinity_scores(
+	inference: TrainerRosterRoleInference,
+	catalog: DefinitionCatalog,
+) -> void:
+	var physical: Dictionary = TrainerRosterRoleInferenceFixtures.member_view(
+		catalog,
+		&"role_score_physical",
+		[TrainerRosterRoleInferenceFixtures.MOVE_PHYSICAL],
+		StatBlock.new(200, 180, 90, 90, 70, 80),
+	)
+	var physical_result: Dictionary = inference.infer_role_scores(physical, catalog)
+	var physical_scores: Dictionary = physical_result.get("role_scores_bp", {}) as Dictionary
+	_check.call("role_score_physical_clear_route_is_max", int(physical_scores.get("physical_attacker", 0)) == 10000)
+	_check.call("role_score_physical_clear_route_has_no_special", int(physical_scores.get("special_attacker", -1)) == 0)
+	_check.call("role_score_fast_requires_speed_focus", int(physical_scores.get("fast_attacker", 0)) == 5000)
+
+	var special: Dictionary = TrainerRosterRoleInferenceFixtures.member_view(
+		catalog,
+		&"role_score_special",
+		[TrainerRosterRoleInferenceFixtures.MOVE_SPECIAL],
+		StatBlock.new(200, 70, 80, 90, 180, 90),
+	)
+	var special_scores: Dictionary = (inference.infer_role_scores(special, catalog).get("role_scores_bp", {}) as Dictionary)
+	_check.call("role_score_special_clear_route_is_max", int(special_scores.get("special_attacker", 0)) == 10000)
+	_check.call("role_score_special_clear_route_has_no_physical", int(special_scores.get("physical_attacker", -1)) == 0)
+
+	var fast: Dictionary = TrainerRosterRoleInferenceFixtures.member_view(
+		catalog,
+		&"role_score_fast",
+		[TrainerRosterRoleInferenceFixtures.MOVE_PHYSICAL],
+		StatBlock.new(200, 150, 90, 180, 80, 90),
+	)
+	var fast_scores: Dictionary = (inference.infer_role_scores(fast, catalog).get("role_scores_bp", {}) as Dictionary)
+	_check.call("role_score_fast_attacker_matches_available_offense", int(fast_scores.get("fast_attacker", 0)) == int(fast_scores.get("physical_attacker", -1)))
+	_check.call("role_score_fast_attacker_exceeds_bulk_axes", int(fast_scores.get("fast_attacker", 0)) > int(fast_scores.get("bulky_physical", 0)))
+
+	var bulky: Dictionary = TrainerRosterRoleInferenceFixtures.member_view(
+		catalog,
+		&"role_score_bulky",
+		[TrainerRosterRoleInferenceFixtures.MOVE_CONTROL],
+		StatBlock.new(240, 80, 180, 70, 80, 120),
+	)
+	var bulky_scores: Dictionary = (inference.infer_role_scores(bulky, catalog).get("role_scores_bp", {}) as Dictionary)
+	_check.call("role_score_bulky_physical_tracks_defense_focus", int(bulky_scores.get("bulky_physical", 0)) == 10000)
+	_check.call("role_score_non_attacker_has_no_fast_role", int(bulky_scores.get("fast_attacker", -1)) == 0)
+
+	var bulky_special: Dictionary = TrainerRosterRoleInferenceFixtures.member_view(
+		catalog,
+		&"role_score_bulky_special",
+		[TrainerRosterRoleInferenceFixtures.MOVE_SUSTAIN],
+		StatBlock.new(240, 80, 120, 70, 80, 180),
+	)
+	var bulky_special_scores: Dictionary = (inference.infer_role_scores(bulky_special, catalog).get("role_scores_bp", {}) as Dictionary)
+	_check.call("role_score_bulky_special_tracks_special_defense_focus", int(bulky_special_scores.get("bulky_special", 0)) == 10000)
+
+	var support: Dictionary = TrainerRosterRoleInferenceFixtures.member_view(
+		catalog,
+		&"role_score_support",
+		[TrainerRosterRoleInferenceFixtures.MOVE_CONTROL, TrainerRosterRoleInferenceFixtures.MOVE_SUSTAIN],
+		StatBlock.new(220, 90, 130, 80, 90, 130),
+	)
+	var support_scores: Dictionary = (inference.infer_role_scores(support, catalog).get("role_scores_bp", {}) as Dictionary)
+	_check.call("role_score_support_uses_structured_control_or_sustain", int(support_scores.get("support", 0)) == 10000)
+
+	var setup_only: Dictionary = TrainerRosterRoleInferenceFixtures.member_view(
+		catalog,
+		&"role_score_setup_only",
+		[TrainerRosterRoleInferenceFixtures.MOVE_SETUP],
+		StatBlock.new(220, 130, 100, 100, 90, 100),
+	)
+	var setup_result: Dictionary = inference.infer_role_scores(setup_only, catalog)
+	var setup_scores: Dictionary = setup_result.get("role_scores_bp", {}) as Dictionary
+	var setup_normalization: Dictionary = setup_result.get("normalization", {}) as Dictionary
+	_check.call("role_score_setup_is_preserved_without_becoming_support", int(setup_normalization.get("setup_signal_bp", 0)) == 10000 and int(setup_scores.get("support", -1)) == 0)
+
+	var hybrid: Dictionary = TrainerRosterRoleInferenceFixtures.member_view(
+		catalog,
+		&"role_score_hybrid",
+		[TrainerRosterRoleInferenceFixtures.MOVE_PHYSICAL, TrainerRosterRoleInferenceFixtures.MOVE_SPECIAL],
+		StatBlock.new(210, 160, 90, 100, 160, 90),
+	)
+	var hybrid_scores: Dictionary = (inference.infer_role_scores(hybrid, catalog).get("role_scores_bp", {}) as Dictionary)
+	_check.call("role_score_hybrid_can_hold_physical_and_special_roles", int(hybrid_scores.get("physical_attacker", 0)) == 10000 and int(hybrid_scores.get("special_attacker", 0)) == 10000)
+
+	var excluded: Dictionary = TrainerRosterRoleInferenceFixtures.member_view(
+		catalog,
+		&"role_score_excluded",
+		[TrainerRosterRoleInferenceFixtures.MOVE_DATA_ONLY],
+		StatBlock.new(200, 220, 80, 100, 70, 80),
+	)
+	var excluded_scores: Dictionary = (inference.infer_role_scores(excluded, catalog).get("role_scores_bp", {}) as Dictionary)
+	_check.call("role_score_data_only_move_cannot_create_attack_role", int(excluded_scores.get("physical_attacker", -1)) == 0 and int(excluded_scores.get("fast_attacker", -1)) == 0)
+
+	var priority: Dictionary = TrainerRosterRoleInferenceFixtures.member_view(
+		catalog,
+		&"role_score_priority",
+		[TrainerRosterRoleInferenceFixtures.MOVE_PRIORITY],
+		StatBlock.new(200, 180, 90, 45, 70, 90),
+	)
+	var priority_result: Dictionary = inference.infer_role_scores(priority, catalog)
+	var priority_scores: Dictionary = priority_result.get("role_scores_bp", {}) as Dictionary
+	var priority_normalization: Dictionary = priority_result.get("normalization", {}) as Dictionary
+	_check.call("role_score_priority_remains_auditable_without_shortcutting_fast_role", int(priority_normalization.get("priority", 0)) == 1 and int(priority_scores.get("fast_attacker", 0)) == 2500)
+
+	var decorated: Dictionary = hybrid.duplicate(true)
+	decorated["role_id"] = "support"
+	decorated["trainer_profile"] = "cautious"
+	decorated["hidden_rival_species"] = ["secret_a", "secret_b"]
+	_check.call("role_score_ignores_authored_role_profile_and_rival_noise", inference.infer_role_scores(hybrid, catalog) == inference.infer_role_scores(decorated, catalog))
+
+	var all_in_range: bool = true
+	for raw_score in hybrid_scores.values():
+		var score: int = int(raw_score)
+		all_in_range = all_in_range and score >= 0 and score <= 10000
+	_check.call("role_score_all_axes_are_basis_points", all_in_range)
+	var parsed: Variant = JSON.parse_string(JSON.stringify(physical_result))
+	_check.call("role_score_output_is_json_serializable", parsed is Dictionary)
+	_check.call("role_score_model_id_recorded", String(physical_result.get("model_id", "")) == TrainerRosterRoleInference.ROLE_MODEL_ID)
 
 
 func _test_determinism_and_boundary(
