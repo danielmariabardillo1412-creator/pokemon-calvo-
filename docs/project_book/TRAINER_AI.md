@@ -1291,3 +1291,122 @@ Cuando se implemente, el mínimo de regresiones deberá cubrir al menos:
 - código de producción modificado durante esta auditoría: **NO**.
 
 Siguiente bloque recomendado: congelar únicamente las reglas de Random Cup que bloquean la implementación —pool/duplicados, loadout inicial, persistencia HP/PP/status, reposición y recursos— antes de diseñar clases o tocar código.
+
+---
+
+## 17. Frontera de reglas Random Cup — confirmado vs abierto
+
+Checkpoint de reglas previo a implementación. **No se modifica código de producción en este tramo.**
+
+### 17.1 Reglas realmente canónicas ya confirmadas
+
+Tras revisar documentación viva, historial de commits y decisiones previas del proyecto, solo hay dos reglas de Random Cup que están realmente congeladas:
+
+1. **Las especies de los entrenadores se asignan aleatoriamente.** El entrenador debe jugar el roster que recibe y no puede corregir una mala tirada seleccionando otras especies.
+2. **Muerte permanente.** Un Pokémon eliminado bajo este modo deja de formar parte del roster futuro.
+
+El resto de decisiones que afectan a generación, curación, reposición y economía no aparecen definidas de forma canónica en documentación anterior.
+
+### 17.2 No existen reglas antiguas ocultas que recuperar
+
+`PROJECT_STATE.md` y `NEXT_STEPS.md` anteriores al rediseño describen el stack FASE19–33, pero no contienen un contrato Random Cup. La primera congelación explícita del modo es el commit `e3215b35cfd00b358d92e35f93074007cf98a7fc`, que introduce precisamente las dos premisas anteriores y deja el resto para auditoría.
+
+Por tanto, no se debe tratar como “olvidada” ninguna regla sobre:
+
+- duplicados;
+- formas;
+- curación entre rondas;
+- PP;
+- status;
+- reposición;
+- objetos persistentes;
+- loadout inicial.
+
+Esas decisiones siguen abiertas y deberán resolverse conscientemente.
+
+### 17.3 `CreatureFactory` — reutilizable, pero no es una política Random Cup completa
+
+`CreatureFactory.create()` ya ofrece una materialización determinista con RNG inyectado:
+
+- IVs aleatorios por defecto;
+- naturaleza aleatoria por defecto;
+- EVs vacíos salvo override;
+- primera habilidad de especie por defecto;
+- moveset por `LearnsetSystem.initial_moves()` salvo override;
+- HP inicial completo salvo override.
+
+Esto es una buena primitiva de construcción, pero **no debe convertirse automáticamente en el ruleset Random Cup**.
+
+La razón es doble:
+
+1. la elección de primera habilidad no equivale a una política explícita de habilidad aleatoria/legal;
+2. `LearnsetSystem.initial_moves()` agrega movimientos `level_up` sin distinguir `version_group`, `order` de procedencia moderna ni clasificación runtime V3.
+
+Por tanto, la futura asignación deberá decidir primero el contrato de loadout y después usar `CreatureFactory` como materializador con overrides ya legales.
+
+### 17.4 `LearnsetSystem.initial_moves()` hereda una premisa pre-V3
+
+La función actual:
+
+- recoge todas las entradas `level_up` con nivel `<= level`;
+- las ordena únicamente por nivel;
+- conserva las últimas cuatro;
+- no filtra `version_group`;
+- no filtra `MoveDefinition.classification`.
+
+Eso es suficiente para la progresión histórica sobre fixtures estrechos, pero no puede ser la autoridad final de un roster Random Cup generado desde DATA V3.
+
+**Clasificación:** CONSERVAR como utilidad histórica; MODERNIZAR o envolver mediante una política V3 antes de usarla para generación Random Cup.
+
+### 17.5 Decisiones bloqueantes que siguen abiertas
+
+Antes de diseñar `RandomCupRuleset`/`RandomCupState` deben resolverse únicamente estas familias de reglas:
+
+- **Pool:** qué especies/formas pueden salir y si existen exclusiones por falta de soporte runtime.
+- **Duplicados:** si una misma especie o forma puede aparecer más de una vez en un roster/torneo.
+- **Nivel/progresión:** nivel inicial común o variable y si se gana experiencia/evoluciona durante la copa.
+- **Loadout inicial:** movimientos, naturaleza, IV/EV, habilidad y held item; qué parte se aleatoriza y qué parte se deriva de reglas.
+- **Provenance V3:** `version_group`, machine/tutor/egg y política de `PARTIAL_RUNTIME`.
+- **Persistencia entre rondas:** HP, PP, status y cualquier curación automática.
+- **Reposición:** roster decreciente puro frente a cualquier mecanismo de reemplazo.
+- **Economía:** qué objetos de bolsa existen, si persisten y si se reponen.
+
+No hace falta decidir aún bracket, presentación, save final o UI para empezar el núcleo del modo; esos temas pueden ir después de cerrar estas reglas.
+
+### 17.6 Lo que sí puede diseñarse sin resolver todavía esas opciones
+
+Aunque las políticas anteriores sigan abiertas, ya queda congelada una separación de responsabilidades que no depende de ellas:
+
+`RandomCupRuleset` (política) → `RandomCupState/Participant` (estado persistente) → `TrainerBattleSession` (una batalla) → `Battle Core`.
+
+Y de vuelta:
+
+`Battle settlement` → `RandomCup authority` → aplicar permadeath/persistencia según ruleset → siguiente batalla.
+
+La IA recibirá solo un snapshot sanitizado del estado propio de campaña que el ruleset permita conocer.
+
+### 17.7 Orden seguro de implementación una vez cerradas las reglas
+
+El orden recomendado sigue siendo pequeño y certificable:
+
+1. contrato `RandomCupRuleset` sin UI/save;
+2. participante/roster persistente y asignación determinista;
+3. permadeath post-settlement;
+4. política de persistencia HP/PP/status/recursos;
+5. snapshot estratégico sanitizado para Trainer AI;
+6. adaptación de utilidad/switching/items;
+7. corpus multi-battle;
+8. integración de save más adelante.
+
+Esto evita construir primero una IA estratégica sobre un estado de campaña que luego cambie de significado.
+
+### 17.8 Estado de este checkpoint
+
+- reglas Random Cup canónicas recuperadas: **2** (asignación aleatoria de especies + permadeath);
+- reglas históricas adicionales encontradas: **NO**;
+- `CreatureFactory`: **CONSERVAR COMO MATERIALIZADOR, NO COMO RULESET**;
+- `LearnsetSystem.initial_moves`: **NO USAR COMO AUTORIDAD V3 SIN ADAPTACIÓN**;
+- decisiones bloqueantes restantes: **EXPLÍCITAMENTE LISTADAS**;
+- código de producción modificado: **NO**.
+
+Siguiente bloque recomendado: transformar estas decisiones abiertas en un contrato de reglas mínimo y escoger defaults de diseño únicamente donde exista una opción claramente coherente con la premisa Random Cup; cualquier elección de gameplay no derivable deberá mantenerse explícita hasta decisión del usuario.
