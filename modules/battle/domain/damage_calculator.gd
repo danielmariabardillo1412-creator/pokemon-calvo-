@@ -10,6 +10,7 @@ func calculate(
 	rng: SeededRandomSource,
 	ruleset: BattleRuleset = null,
 	damage_multiplier_basis_points: int = 10000,
+	offensive_stat_multiplier_basis_points: int = 10000,
 	force_critical: int = -1,
 ) -> Dictionary:
 	if move.power <= 0:
@@ -49,6 +50,7 @@ func calculate(
 	attack_stat = attack_stat * active_ruleset.stat_multiplier_basis_points(
 		attacker.stat_stages.get_stage(attack_stage_id)
 	) / 10000
+	attack_stat = attack_stat * offensive_stat_multiplier_basis_points / 10000
 	defense_stat = defense_stat * active_ruleset.stat_multiplier_basis_points(
 		defender.stat_stages.get_stage(defense_stage_id)
 	) / 10000
@@ -73,4 +75,5 @@ func calculate(
 		"critical": critical,
 		"critical_basis_points": critical_bp,
 		"damage_class": move.damage_class,
+		"offensive_stat_multiplier_basis_points": offensive_stat_multiplier_basis_points,
 	}
