@@ -60,6 +60,8 @@ func run(check: Callable) -> void:
 		audited_present = audited_present and by_id.has(ability_id)
 	check.call("data_v3_ability_contract_audited_ids_present", audited_present)
 
+	# The old runtime_supported_ability_ids() API remains frozen for the historical
+	# Battle V2 fixture. DATA V3 uses the actual trigger registry inventory instead.
 	var registry := BattleEffectRegistry.new()
 	var registry_ids: Array[String] = []
 	for ability_id in registry.implemented_ability_ids():
@@ -67,6 +69,7 @@ func run(check: Callable) -> void:
 	registry_ids.sort()
 	check.call("data_v3_ability_contract_registry_exact", registry_ids == IMPLEMENTED_IDS)
 
+	# Swarm remains the fourth member of the tested pinch-damage primitive.
 	var swarm_specs := registry.triggers_for_ability(&"swarm", BattleTriggerSpec.MODIFY_DAMAGE)
 	var swarm_ok := swarm_specs.size() == 1
 	if swarm_ok:
@@ -81,6 +84,8 @@ func run(check: Callable) -> void:
 		)
 	check.call("data_v3_ability_contract_swarm_trigger_exact", swarm_ok)
 
+	# Unconditional type boosts must use only move type + 1.5x. In particular,
+	# they must not inherit the pinch HP condition or another hidden state gate.
 	var type_boosts_ok := true
 	for ability_id in TYPE_BOOSTS:
 		var specs := registry.triggers_for_ability(StringName(ability_id), BattleTriggerSpec.MODIFY_DAMAGE)
@@ -98,6 +103,9 @@ func run(check: Callable) -> void:
 		)
 	check.call("data_v3_ability_contract_unconditional_type_boosts_exact", type_boosts_ok)
 
+	# Offensive-stat abilities must never masquerade as final-damage multipliers.
+	# Huge/Pure double Attack; Toxic Boost raises Attack 1.5x under either poison
+	# state; Flare Boost raises Special Attack 1.5x under burn.
 	var offensive_stat_specs_ok := true
 	var offensive_expected := {
 		"huge_power": {"physical": true, "special": false, "multiplier": 20000, "statuses": []},
@@ -135,6 +143,9 @@ func run(check: Callable) -> void:
 		)
 	check.call("data_v3_ability_contract_offensive_stat_modifiers_exact", offensive_stat_specs_ok)
 
+	# Tough Claws has an explicit DATA V3 semantic correction: the pinned PokeAPI
+	# snapshot says 1.33x, while audited current main-series mechanics are +30%.
+	# Canonical data and runtime must therefore agree on the corrected 1.30x contract.
 	var tough_record: Dictionary = by_id.get("tough_claws", {})
 	check.call(
 		"data_v3_ability_contract_tough_claws_text_corrected",
@@ -156,6 +167,9 @@ func run(check: Callable) -> void:
 		)
 	check.call("data_v3_ability_contract_tough_claws_trigger_exact", tough_ok)
 
+	# Reckless is deliberately PARTIAL_RUNTIME: a structured RECOIL effect is a
+	# trustworthy runtime property and gets the exact 1.2x boost, while crash-on-miss
+	# moves are not yet represented by that transaction and therefore remain absent.
 	var reckless_specs := registry.triggers_for_ability(&"reckless", BattleTriggerSpec.MODIFY_DAMAGE)
 	var reckless_ok := reckless_specs.size() == 1
 	if reckless_ok:
@@ -169,6 +183,7 @@ func run(check: Callable) -> void:
 		)
 	check.call("data_v3_ability_contract_reckless_partial_trigger_exact", reckless_ok)
 
+	# Defensive damage reducers use the same target-owned MODIFY_DAMAGE transaction.
 	var fur_specs := registry.triggers_for_ability(&"fur_coat", BattleTriggerSpec.MODIFY_DAMAGE)
 	var fur_ok := fur_specs.size() == 1
 	if fur_ok:
@@ -232,6 +247,8 @@ func run(check: Callable) -> void:
 		)
 	check.call("data_v3_ability_contract_multiscale_trigger_exact", multi_ok)
 
+	# Heatproof is deliberately partial: the Fire-move half-damage subset is exact,
+	# while burn residual currently bypasses the ability trigger system entirely.
 	var heat_specs := registry.triggers_for_ability(&"heatproof", BattleTriggerSpec.MODIFY_DAMAGE)
 	var heat_ok := heat_specs.size() == 1
 	if heat_ok:
@@ -245,6 +262,9 @@ func run(check: Callable) -> void:
 		)
 	check.call("data_v3_ability_contract_heatproof_partial_trigger_exact", heat_ok)
 
+	# Defender-owned contact reactions are deliberately partial for the same reason
+	# as Static: AFTER_DAMAGE is not requested for a defender that fainted from the
+	# contact hit. Their ordinary surviving-hit transactions are exact and explicit.
 	var contact_status_specs_ok := true
 	for pair in [["flame_body", "burn"], ["poison_point", "poison"]]:
 		var ability_id := String(pair[0])
@@ -288,6 +308,9 @@ func run(check: Callable) -> void:
 		)
 	check.call("data_v3_ability_contract_gooey_partial_trigger_exact", gooey_ok)
 
+	# Iron Barbs reuses defender AFTER_DAMAGE but its payload is a generic max-HP
+	# fraction damage effect targeted at the attacker. It remains partial because
+	# current AFTER_DAMAGE is neither per-strike for multi-hit nor faint-safe for the owner.
 	var iron_specs := registry.triggers_for_ability(&"iron_barbs", BattleTriggerSpec.AFTER_DAMAGE)
 	var iron_ok := iron_specs.size() == 1
 	if iron_ok:
@@ -302,18 +325,30 @@ func run(check: Callable) -> void:
 		)
 	check.call("data_v3_ability_contract_iron_barbs_partial_trigger_exact", iron_ok)
 
+	# Rough Skin has the same current 1/8 prose but the pinned source preserves a
+	# historical 1/16 battle value. Until ability runtime contracts are version-aware,
+	# it must not inherit Iron Barbs' universal 1/8 mapping.
 	check.call(
 		"data_v3_ability_contract_rough_skin_stays_data_only",
 		str((by_id.get("rough_skin", {}) as Dictionary).get("classification", "")) == "DATA_ONLY"
 		and registry.triggers_for_ability(&"rough_skin", BattleTriggerSpec.AFTER_DAMAGE).is_empty(),
 	)
 
+	# Fluffy is deliberately blocked even though its two numeric predicates are
+	# individually expressible. A Fire contact move satisfies both rules at once;
+	# the current multi-spec registry would emit two ABILITY_TRIGGERED events for one
+	# ability activation. Keep it non-executable until modifier composition/event
+	# aggregation is modeled explicitly.
 	check.call(
 		"data_v3_ability_contract_fluffy_stays_data_only",
 		str((by_id.get("fluffy", {}) as Dictionary).get("classification", "")) == "DATA_ONLY"
 		and registry.triggers_for_ability(&"fluffy", BattleTriggerSpec.MODIFY_DAMAGE).is_empty(),
 	)
 
+	# Filter and Solid Rock need a super-effective predicate. Type effectiveness is
+	# produced later by DamageCalculator, after damage_modifiers() currently runs, so
+	# duplicating type-chart logic here would be a new subsystem rather than a safe
+	# predicate extension.
 	var super_effective_blockers_safe := true
 	for ability_id in ["filter", "solid_rock"]:
 		super_effective_blockers_safe = super_effective_blockers_safe and (
@@ -325,6 +360,10 @@ func run(check: Callable) -> void:
 		super_effective_blockers_safe,
 	)
 
+	# Adjacent move-property abilities are explicit blockers. Long Reach needs the
+	# attacking creature to be available while evaluating defender-owned contact
+	# triggers; Technician needs resolved/variable power rather than a static field;
+	# punch/bite/pulse/slicing categories are not retained in MoveDefinition today.
 	var move_property_blockers_safe := true
 	for ability_id in [
 		"long_reach", "technician", "iron_fist", "strong_jaw", "mega_launcher", "sharpness",
@@ -336,6 +375,10 @@ func run(check: Callable) -> void:
 		)
 	check.call("data_v3_ability_contract_move_property_blockers_stay_data_only", move_property_blockers_safe)
 
+	# Stamina is deliberately PARTIAL_RUNTIME. For an ordinary surviving damaging
+	# move, the existing AFTER_DAMAGE transaction is exactly Defense +1 with no
+	# contact/physical/type gate. Multi-hit per-strike and fatal-hit triggering are
+	# not represented by the current executor, which is why this is not full support.
 	var stamina_specs := registry.triggers_for_ability(&"stamina", BattleTriggerSpec.AFTER_DAMAGE)
 	var stamina_ok := stamina_specs.size() == 1
 	if stamina_ok:
@@ -351,6 +394,9 @@ func run(check: Callable) -> void:
 		)
 	check.call("data_v3_ability_contract_stamina_partial_trigger_exact", stamina_ok)
 
+	# These adjacent hit-reaction abilities are explicit blockers, not forgotten
+	# candidates. Water Compaction needs a Water-move AFTER_DAMAGE predicate; Weak
+	# Armor needs a dual stat transaction plus per-hit/version-aware semantics.
 	check.call(
 		"data_v3_ability_contract_water_compaction_stays_data_only",
 		str((by_id.get("water_compaction", {}) as Dictionary).get("classification", "")) == "DATA_ONLY",
@@ -359,6 +405,9 @@ func run(check: Callable) -> void:
 		"data_v3_ability_contract_weak_armor_stays_data_only",
 		str((by_id.get("weak_armor", {}) as Dictionary).get("classification", "")) == "DATA_ONLY",
 	)
+
+	# Transistor remains DATA_ONLY because its version-sensitive multiplier is not
+	# represented honestly by one universal source contract in the pinned snapshot.
 	check.call(
 		"data_v3_ability_contract_transistor_stays_data_only",
 		str((by_id.get("transistor", {}) as Dictionary).get("classification", "")) == "DATA_ONLY",
