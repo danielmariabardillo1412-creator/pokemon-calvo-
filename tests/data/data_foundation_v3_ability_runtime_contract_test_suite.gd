@@ -7,14 +7,14 @@ const FULL_IDS := [
 	"tough_claws",
 ]
 const PARTIAL_IDS := [
-	"flame_body", "gooey", "heatproof", "intimidate", "levitate", "poison_point",
-	"reckless", "stamina", "static",
+	"flame_body", "gooey", "heatproof", "intimidate", "iron_barbs", "levitate",
+	"poison_point", "reckless", "stamina", "static",
 ]
 const IMPLEMENTED_IDS := [
 	"blaze", "dragons_maw", "fire_mane", "flame_body", "fur_coat", "gooey",
-	"heatproof", "ice_scales", "intimidate", "levitate", "multiscale", "overgrow",
-	"poison_point", "reckless", "rocky_payload", "stamina", "static", "steelworker",
-	"swarm", "thick_fat", "torrent", "tough_claws",
+	"heatproof", "ice_scales", "intimidate", "iron_barbs", "levitate", "multiscale",
+	"overgrow", "poison_point", "reckless", "rocky_payload", "stamina", "static",
+	"steelworker", "swarm", "thick_fat", "torrent", "tough_claws",
 ]
 const TYPE_BOOSTS := {
 	"steelworker": "steel",
@@ -41,7 +41,7 @@ func run(check: Callable) -> void:
 	)
 	check.call(
 		"data_v3_ability_contract_data_only_count",
-		(classes.get("DATA_ONLY", []) as Array).size() == 351,
+		(classes.get("DATA_ONLY", []) as Array).size() == 350,
 	)
 	check.call(
 		"data_v3_ability_contract_partition",
@@ -267,6 +267,32 @@ func run(check: Callable) -> void:
 		)
 	check.call("data_v3_ability_contract_gooey_partial_trigger_exact", gooey_ok)
 
+	# Iron Barbs reuses defender AFTER_DAMAGE but its payload is a generic max-HP
+	# fraction damage effect targeted at the attacker. It remains partial because
+	# current AFTER_DAMAGE is neither per-strike for multi-hit nor faint-safe for the owner.
+	var iron_specs := registry.triggers_for_ability(&"iron_barbs", BattleTriggerSpec.AFTER_DAMAGE)
+	var iron_ok := iron_specs.size() == 1
+	if iron_ok:
+		var iron: BattleTriggerSpec = iron_specs[0]
+		iron_ok = (
+			iron.source_kind == &"ability"
+			and iron.source_id == &"iron_barbs"
+			and bool(iron.conditions.get("requires_contact", false))
+			and iron.effect.kind == BattleEffectSpec.MAX_HP_DAMAGE
+			and iron.effect.target == BattleEffectSpec.OPPONENT
+			and iron.effect.ratio_basis_points == 1250
+		)
+	check.call("data_v3_ability_contract_iron_barbs_partial_trigger_exact", iron_ok)
+
+	# Rough Skin has the same current 1/8 prose but the pinned source preserves a
+	# historical 1/16 battle value. Until ability runtime contracts are version-aware,
+	# it must not inherit Iron Barbs' universal 1/8 mapping.
+	check.call(
+		"data_v3_ability_contract_rough_skin_stays_data_only",
+		str((by_id.get("rough_skin", {}) as Dictionary).get("classification", "")) == "DATA_ONLY"
+		and registry.triggers_for_ability(&"rough_skin", BattleTriggerSpec.AFTER_DAMAGE).is_empty(),
+	)
+
 	# Fluffy is deliberately blocked even though its two numeric predicates are
 	# individually expressible. A Fire contact move satisfies both rules at once;
 	# the current multi-spec registry would emit two ABILITY_TRIGGERED events for one
@@ -365,8 +391,8 @@ func run(check: Callable) -> void:
 		"data_v3_ability_contract_report_counts",
 		int(summary.get("DATA_READY", -1)) == 373
 		and int(summary.get("RUNTIME_SUPPORTED", -1)) == 13
-		and int(summary.get("PARTIAL_RUNTIME", -1)) == 9
-		and int(summary.get("DATA_ONLY", -1)) == 351,
+		and int(summary.get("PARTIAL_RUNTIME", -1)) == 10
+		and int(summary.get("DATA_ONLY", -1)) == 350,
 	)
 	var report_classes: Dictionary = report.get("ability_runtime_classification", {})
 	check.call(
