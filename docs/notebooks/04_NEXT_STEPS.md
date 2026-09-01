@@ -2,9 +2,12 @@
 
 Read immediately after `00_READ_FIRST.md` when recovering context.
 
+## Mandatory continuity rule
+Material findings, exceptions, decisions, certification boundaries and deliberate deferrals must be written into the notebooks. Never rely on chat context alone.
+
 ## Latest certified baseline
-- PR #91 — `audit/data-v3-ability-target-state-v1`
-- Final HEAD `9a6d559e1c83699d01a54718a1748bca791c034a`
+- PR #92 — `audit/data-v3-ability-closure-v1`
+- Final HEAD `73dc4dced11804d762182a5017389bea77208aa7`
 - **18/18 SUCCESS** on exact notebook-bearing HEAD
 - closed without merge.
 
@@ -12,84 +15,77 @@ Move Effects V3 remains closed:
 - **590 runtime / 71 partial / 246 data-only / 12 unsupported**
 - DATA_ONLY moves with executable `effect_specs`: **0**.
 
-Certified #91 ability coverage:
-- RUNTIME_SUPPORTED: **21**
-- PARTIAL_RUNTIME: **14**
-- DATA_ONLY: **338**
-- total: **373**.
+Ability V3 is closed:
+- **21 RUNTIME_SUPPORTED / 14 PARTIAL_RUNTIME / 338 DATA_ONLY / 373 total**.
+- Do not resume ability micro-tranches merely to increase support count.
 
-# Current tranche — PR #92 Ability closure
-- Branch: `audit/data-v3-ability-closure-v1`
-- Parent: certified #91 final `9a6d559e1c83699d01a54718a1748bca791c034a`
-- PR: #92 `DATA V3 — close ability runtime frontier`
-- Engineering SHA: `837ad9da94a88b002d251eb9472a43cbc777d9a1`
+# Current tranche — PR #93 Items V3 closure
+- Branch: `audit/data-v3-item-closure-v1`
+- Parent: certified #92 final `73dc4dced11804d762182a5017389bea77208aa7`
+- PR: #93 `DATA V3 — close item runtime frontier`
+- Engineering SHA: `cf2d3fd8f5eea88e6310fec8886e5611938465ae`
 - Engineering result: **18/18 SUCCESS**
-- DATA V3 domain: **535 PASS / 0 FAIL**
-- Detailed notebook: `docs/notebooks/22_DATA_V3_ABILITY_CLOSURE.md`.
+- DATA V3 domain: **546 PASS / 0 FAIL**
+- Detailed notebook: `docs/notebooks/23_DATA_V3_ITEM_CLOSURE.md`.
 
-## #92 result — Ability V3 closed
-No production/runtime or adapter code changed. No ability classification moved.
+## #93 result — bounded Items V3 frontier
+DATA V3 preserves exactly **2,222 canonical items** with metadata-only schema:
+`id · display_name · description · category`.
 
-A deterministic closure suite freezes the exact **338 DATA_ONLY** frontier into 12 planning/blocker buckets:
-- stat_damage_modifier 64
-- source_text_missing 60
-- immunity_absorb_prevention 52
-- move_property_control 36
-- weather_terrain 33
-- misc_unresolved 26
-- status_dependent 18
-- item_transaction 13
-- form_identity 12
-- switch_party 11
-- contact_reactive 7
-- faint_dependent 6.
+Exact executable surfaces are intentionally separate:
+- held: `leftovers`, `sitrus_berry`;
+- trainer bag: `potion`, `super_potion`, `hyper_potion`, `max_potion`, `full_restore`.
 
-Additional closure invariants:
-- no DATA_ONLY ability may have a hidden registry mapping;
-- high-value deferred sentinels remain DATA_ONLY and unmapped;
-- source-text-missing remains exactly 60;
-- coverage stays **21 / 14 / 338**.
+The closure suite freezes:
+- exact canonical count and unique IDs;
+- exact metadata schema;
+- exact runtime frontiers;
+- every runtime ID must exist in DATA V3;
+- Calvo V1 trainer healing contract `20 / 60 / 120 / full / full+status`;
+- Oran Berry remains canonical but deliberately unmapped/deferred.
 
-### Battle Armor / Shell Armor final audit
-Both have stable Gen III source, no history and source-declared identical critical-prevention semantics.
+### Super/Hyper Potion isolated discrepancy
+PokeAPI `effect_entries` preserve legacy **50 / 200 HP**, while versioned flavor entries use **60 / 120 HP** from Sun/Moon onward. Battle Core already uses the explicit Calvo V1 modern contract 60/120.
 
-They stay DATA_ONLY because current trigger/event semantics lack truthful **critical-prevention provenance**. A simple `force_critical=false` can reproduce the outcome but cannot tell whether the ability actually prevented a critical or the roll was ordinary. Do not emit false trigger events or build another subsystem solely for two counters.
+Decision: treat this as bounded historical metadata, not executable semantics and not a reason to build a general version-policy subsystem.
 
-## Exact #91 final → #92 engineering artifact
+Rule: **DATA V3 descriptive/historical metadata must never silently redefine Battle Core execution.**
+
+### Oran Berry
+Mechanically compatible (`<= 1/2 HP → +10 HP → consume`) but deliberately deferred until held-item selection/loadouts are reopened. Do not widen Items V3 merely because one extra berry is easy.
+
+## Exact #92 final → #93 engineering artifact
 Compared:
-- #91 final run `33508792267`, artifact `9800760793`, head `9a6d559e...`
-- #92 engineering run `33510073601`, artifact `9801276792`, head `837ad9da...`.
+- #92 final run `33510555305`, artifact `9801468899`, head `73dc4dce...`
+- #93 engineering run `33512679014`, artifact `9802318978`, head `cf2d3fd8...`.
 
-Canonical output is identical:
-- raw
-- normalized
-- manifest
-- forms
-- unsupported mechanics
-- PokeAPI V3 audit
-- auxiliary.
+Both contain the same **15 files**.
 
-Only `import_time_ms 513→512 ms` differs. DATA V3 checks rise from **529 → 535**, all green.
+Canonical outputs are identical except:
+- `import_time_ms 529 → 518 ms` timing noise.
+
+Expected test/log delta:
+- DATA V3 domain **535 → 546 PASS / 0 FAIL** from 11 new closure checks;
+- one extra Godot global test-suite class.
+
+No canonical data drift exists.
 
 ## Current certification step
-Notebook synchronization follows engineering SHA `837ad9da94a88b002d251eb9472a43cbc777d9a1`.
+Engineering and artifact comparison are complete.
 
-Before closing #92:
-1. verify engineering → final changed exactly `01_PROJECT_STATE.md`, `04_NEXT_STEPS.md`, `22_DATA_V3_ABILITY_CLOSURE.md`;
-2. require **18/18 SUCCESS** on exact final notebook-bearing HEAD;
-3. close #92 without merge;
-4. use exact final SHA as next certified baseline.
+Before closing #93:
+1. final synchronization must affect only `01_PROJECT_STATE.md`, `04_NEXT_STEPS.md`, `23_DATA_V3_ITEM_CLOSURE.md` after the certified engineering state;
+2. require **18/18 SUCCESS** on the exact final notebook-bearing HEAD;
+3. close #93 without merge;
+4. use that exact final SHA as the parent of Evolutions V3.
 
-## Exact next work after #92 closure
-**Do not continue ability micro-tranches.** Ability V3 is closed unless a future subsystem removes a frozen blocker.
-
+## Exact next work after #93 closure
 Proceed in this order:
-1. **Items V3 reliability/coverage** — important before returning to Trainer AI because trainer battles already consume/use item contracts.
-2. **Evolutions V3 reliability** — verify conditions/references and close remaining data semantics.
-3. **final end-to-end DATA V3 certification** — one consolidated artifact/CI/notebook closure.
-4. return to **Trainer AI / trainer systems**.
+1. **Evolutions V3 reliability** — verify references/conditions and freeze the real supported data boundary without opening unrelated progression architecture.
+2. **final end-to-end DATA V3 certification** — consolidated artifact/CI/notebook closure.
+3. return to **Trainer AI / trainer systems**.
 
-This means the current DATA detour is now in its final few tranches rather than an open-ended ability audit.
+Items V3 should not be reopened before Trainer AI unless a real regression or source-backed systemic gap invalidates the frozen boundary.
 
 ## Stop condition
 Any focal/regression failure stops the tranche until root cause is fixed and rerun.

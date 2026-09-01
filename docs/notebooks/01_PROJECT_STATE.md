@@ -3,6 +3,9 @@
 ## Purpose / authority
 Fast recovery for engineering work. GitHub commits, PR state, CI, immutable source and tested artifacts override this notebook on conflict.
 
+## Mandatory continuity rule
+Every material discovery, exception, correction, architectural decision, certification boundary or deliberate deferral must be written into the project notebooks. Chat context is never the sole source of continuity.
+
 ## Certification policy
 - Repo: `danielmariabardillo1412-creator/pokemon-calvo-`; Godot 4.7.
 - Certified snapshots stay as closed PR branches **without merge**.
@@ -46,101 +49,102 @@ Pipeline:
 - UNSUPPORTED: **12**
 - DATA_ONLY moves with executable `effect_specs`: **0**.
 
-### Ability V3 — closure tranche #92
-Ability micro-tranches are now considered **closed pending final notebook-bearing certification of #92**.
-
-Current certified parent:
-- PR #91 `DATA V3 — add shared target-state ability semantics`
-- final HEAD `9a6d559e1c83699d01a54718a1748bca791c034a`
+### Ability V3 — certified closure #92
+- PR #92 `DATA V3 — close ability runtime frontier`
+- final HEAD `73dc4dced11804d762182a5017389bea77208aa7`
 - **18/18 SUCCESS**, closed without merge.
+- final coverage: **21 RUNTIME_SUPPORTED / 14 PARTIAL_RUNTIME / 338 DATA_ONLY / 373 total**.
+- Remaining DATA_ONLY frontier is frozen into documented blocker families; do not resume ability micro-tranches merely to increase counters.
+- Detailed closure: `docs/notebooks/22_DATA_V3_ABILITY_CLOSURE.md`.
 
-Certified #91 ability coverage:
-- RUNTIME_SUPPORTED: **21**
-- PARTIAL_RUNTIME: **14**
-- DATA_ONLY: **338**
-- total: **373**.
-
-Detailed target-state history is in `docs/notebooks/21_DATA_V3_ABILITY_TARGET_STATE.md`.
-
-## Current tranche — PR #92 Ability closure
-- Branch: `audit/data-v3-ability-closure-v1`
-- Parent: certified #91 final `9a6d559e1c83699d01a54718a1748bca791c034a`
-- PR: #92 `DATA V3 — close ability runtime frontier`
-- Engineering SHA: `837ad9da94a88b002d251eb9472a43cbc777d9a1`
+## Current tranche — PR #93 Items V3 closure
+- Branch: `audit/data-v3-item-closure-v1`
+- Parent: certified #92 final `73dc4dced11804d762182a5017389bea77208aa7`
+- PR: #93 `DATA V3 — close item runtime frontier`
+- Engineering SHA: `cf2d3fd8f5eea88e6310fec8886e5611938465ae`
 - Engineering result: **18/18 SUCCESS**
-- DATA V3 domain: **535 PASS / 0 FAIL**
-- detailed notebook: `docs/notebooks/22_DATA_V3_ABILITY_CLOSURE.md`.
+- DATA V3 domain: **546 PASS / 0 FAIL**
+- detailed notebook: `docs/notebooks/23_DATA_V3_ITEM_CLOSURE.md`.
 
-## #92 closure result
-The remaining **338 DATA_ONLY abilities** are deterministically frozen into 12 planning/blocker buckets:
-- stat_damage_modifier 64
-- source_text_missing 60
-- immunity_absorb_prevention 52
-- move_property_control 36
-- weather_terrain 33
-- misc_unresolved 26
-- status_dependent 18
-- item_transaction 13
-- form_identity 12
-- switch_party 11
-- contact_reactive 7
-- faint_dependent 6.
+## #93 Items V3 boundary
+Canonical DATA V3 preserves exactly **2,222 items**. Item records are metadata-only:
+`id · display_name · description · category`.
 
-The closure suite additionally proves:
-- exact DATA_ONLY frontier = 338;
-- no DATA_ONLY ability has a hidden `BattleEffectRegistry` mapping;
-- high-value deferred sentinels remain DATA_ONLY and unmapped;
-- source-text-missing frontier remains exactly 60, so mechanics are never inferred from names.
+They do not carry move/ability-style runtime classifications. Executable item support is an explicit Battle Core registry contract.
 
-## Final compatible-subgroup audit
-Battle Armor and Shell Armor were source-audited:
-- Gen III, main-series, no `effect_changes`;
-- both prevent critical hits against the holder and are source-declared identical.
+Exact runtime surfaces:
+- held items: `leftovers`, `sitrus_berry`;
+- trainer bag items: `potion`, `super_potion`, `hyper_potion`, `max_potion`, `full_restore`.
 
-They remain **DATA_ONLY** because Battle Core lacks truthful critical-prevention provenance. A defender-side `force_critical=false` can reproduce the raw outcome, but current trigger/event semantics cannot distinguish a critical actually prevented from an ordinary non-critical roll. Do not emit false `ABILITY_TRIGGERED` events or create a new interception subsystem merely to move two counters.
+Closure suite proves:
+- exactly 2,222 canonical item records and unique IDs;
+- exact metadata-only schema;
+- exact held and trainer-bag runtime frontiers;
+- every runtime item ID exists canonically in DATA V3;
+- Calvo V1 trainer healing contract is exactly `20 / 60 / 120 / full / full+status`;
+- Oran Berry remains canonical but deliberately unmapped/deferred.
 
-## #92 exact artifact comparison
-Certified #91 final tested artifact:
-- head `9a6d559e1c83699d01a54718a1748bca791c034a`
-- run `33508792267`
-- artifact `9800760793`.
+## Super/Hyper Potion isolated metadata discrepancy
+The immutable PokeAPI snapshot keeps legacy English `effect_entries`:
+- Super Potion: **50 HP**;
+- Hyper Potion: **200 HP**.
 
-#92 engineering tested artifact:
-- head `837ad9da94a88b002d251eb9472a43cbc777d9a1`
-- run `33510073601`
-- artifact `9801276792`.
+Versioned flavor entries move to **60 HP / 120 HP** from Sun/Moon onward. Trainer AI / Battle Core already uses the explicit Calvo V1 modern contract 60/120.
 
-Both artifacts contain the same 15 files.
+Decision: this is an isolated metadata-version discrepancy, not a Battle Core bug and not a reason to open a general version-policy subsystem during Items V3 closure.
+
+Architectural rule:
+**DATA V3 descriptive/historical metadata is not an executable battle contract. Battle Core defines Calvo V1 runtime semantics unless a future explicit version-policy layer deliberately changes that rule.**
+
+## Oran Berry decision
+Source semantics are clean: `HP <= 1/2 → heal 10 HP → consume` and existing primitives could express it.
+
+Decision: deliberately defer runtime registration. Adding one easy berry does not close a systemic family and would reopen held-item scope. Revisit when held-item selection/loadouts are intentionally reopened.
+
+## #92 final → #93 engineering artifact comparison
+Certified #92 final DATA V3 artifact:
+- head `73dc4dced11804d762182a5017389bea77208aa7`
+- run `33510555305`
+- artifact `9801468899`.
+
+#93 engineering DATA V3 artifact:
+- head `cf2d3fd8f5eea88e6310fec8886e5611938465ae`
+- run `33512679014`
+- artifact `9802318978`.
+
+Both artifacts contain the same **15-file output set**.
 
 Canonically identical:
-- raw `pokemon_api.json`
-- normalized `pokemon_api.json`
-- manifest
-- forms policy report
-- unsupported mechanics report
-- PokeAPI V3 audit report
+- raw `pokemon_api.json`;
+- normalized `pokemon_api.json`;
+- manifest;
+- forms policy report;
+- unsupported mechanics report;
+- PokeAPI V3 audit report;
 - auxiliary report.
 
-Ability coverage remains exactly **21 / 14 / 338**. No species/Pokémon, move/effect, ability classification, item/status, learnset/evolution, type/stat or report-set drift exists.
+No species/Pokémon, move/effect, ability, item/status, learnset/evolution, type/stat or report-set drift exists.
 
-Only `import_time_ms 513 → 512 ms` differs; this is execution timing noise.
+Only canonical JSON difference:
+- `import_time_ms 529 → 518 ms`, execution timing noise.
 
-## Ability V3 closure meaning
-After #92 final certification, do **not** continue ability micro-tranches merely to increase support count. Reopen an ability only when a future battle subsystem/source change materially removes a frozen blocker (weather, terrain, doubles/ally context, form identity, gender, switch history, accuracy/evasion, move-property metadata, effectiveness provenance, item lifecycle, status interception, per-hit/faint-safe contact handling, etc.).
+Expected log differences:
+- DATA V3 domain increases **535 → 546 PASS / 0 FAIL** because of the 11 new Items V3 closure checks;
+- Godot import registers one additional test-suite class.
 
 ## Current certification step
-Notebook synchronization follows engineering SHA `837ad9da94a88b002d251eb9472a43cbc777d9a1`.
+Engineering is certified and artifact comparison is clean.
 
-Before closing #92:
-1. engineering → final must change exactly `01`, `04`, `22` notebooks;
-2. require **18/18 SUCCESS** on exact final notebook-bearing HEAD;
-3. close #92 without merge;
-4. use exact final SHA as next certified baseline.
+Before closing #93:
+1. engineering → final must be notebooks-only;
+2. synchronized notebooks are `01_PROJECT_STATE.md`, `04_NEXT_STEPS.md`, `23_DATA_V3_ITEM_CLOSURE.md`;
+3. require **18/18 SUCCESS** on the exact final notebook-bearing HEAD;
+4. close #93 without merge;
+5. use exact final SHA as the certified parent for Evolutions V3.
 
-## Next DATA V3 work after #92
-1. **Items V3 reliability/coverage**
-2. **Evolutions V3 reliability**
-3. **final end-to-end DATA V3 certification**
-4. return to **Trainer AI / trainer systems**.
+## Next DATA V3 work after #93
+1. **Evolutions V3 reliability**
+2. **final end-to-end DATA V3 certification**
+3. return to **Trainer AI / trainer systems**.
 
-No further ability work is required before returning to Trainer AI unless a closure regression exposes a real issue.
+No further Items V3 expansion is required before returning to Trainer AI unless a closure regression exposes a real issue.
