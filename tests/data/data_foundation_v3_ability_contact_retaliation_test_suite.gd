@@ -16,21 +16,21 @@ func run(check: Callable) -> void:
 
 	var tackle := _catalog.move(&"tackle")
 	var water_gun := _catalog.move(&"water_gun")
-	var double_kick := _catalog.move(&"double_kick")
-	var double_kick_multi := false
-	if double_kick != null:
-		for spec in double_kick.effect_specs:
+	var double_slap := _catalog.move(&"double_slap")
+	var double_slap_multi := false
+	if double_slap != null:
+		for spec in double_slap.effect_specs:
 			if (
 				spec.kind == BattleEffectSpec.MULTI_HIT
 				and spec.min_hits == 2
-				and spec.max_hits == 2
+				and spec.max_hits == 5
 			):
-				double_kick_multi = true
+				double_slap_multi = true
 	check.call(
 		"data_v3_contact_retaliation_move_metadata",
 		tackle != null and tackle.makes_contact
 		and water_gun != null and not water_gun.makes_contact
-		and double_kick != null and double_kick.makes_contact and double_kick_multi,
+		and double_slap != null and double_slap.makes_contact and double_slap_multi,
 	)
 
 	# MAX_HP_DAMAGE is a generic serializable effect primitive rather than a hidden
@@ -94,14 +94,19 @@ func run(check: Callable) -> void:
 		and not _has_fraction_damage_event(fatal_owner_events),
 	)
 
-	# Explicit multi-hit partial boundary: main-series Iron Barbs activates once per
-	# contact strike, but current TurnExecutor requests defender AFTER_DAMAGE only
-	# after the completed move. Double Kick therefore removes only one 1/8 chunk here.
-	var multi := _server(8604, &"double_kick", &"iron_barbs")
-	var multi_events := multi.submit_turn(_actions(multi.state, &"double_kick"))
+	# Explicit multi-hit partial boundary. The failed first CI assumption used Double
+	# Kick, but canonical DATA V3 correctly marks Double Kick non-contact. Double Slap
+	# is the runtime-supported contact multi-hit control (2-5 strikes). Search for a
+	# deterministic landing seed so accuracy cannot make this regression flaky.
+	var multi_seed := _find_landing_multihit_seed()
+	var multi := _server(multi_seed, &"double_slap", &"iron_barbs")
+	var multi_events := multi.submit_turn(_actions(multi.state, &"double_slap"))
 	check.call(
 		"data_v3_iron_barbs_multihit_partial_boundary",
-		multi.state.creature(&"a").current_hp == 210
+		multi_seed >= 0
+		and _multi_hit_count(multi_events) >= 2
+		and multi.state.creature(&"b").current_hp > 0
+		and multi.state.creature(&"a").current_hp == 210
 		and _source_trigger_count(multi_events, "iron_barbs", &"b") == 1
 		and _fraction_damage_event(multi_events, &"b", &"a", 30, 1250),
 	)
@@ -117,6 +122,22 @@ func run(check: Callable) -> void:
 		and not _source_triggered(rough_events, "rough_skin", &"b")
 		and not _has_fraction_damage_event(rough_events),
 	)
+
+
+func _find_landing_multihit_seed() -> int:
+	for seed in range(8604, 8704):
+		var probe := _server(seed, &"double_slap", &"iron_barbs")
+		var events := probe.submit_turn(_actions(probe.state, &"double_slap"))
+		if _multi_hit_count(events) >= 2 and probe.state.creature(&"b").current_hp > 0:
+			return seed
+	return -1
+
+
+func _multi_hit_count(events: Array[BattleEvent]) -> int:
+	for event in events:
+		if event.kind == BattleEvent.MULTI_HIT and event.move_id == &"double_slap":
+			return event.amount
+	return 0
 
 
 func _server(seed: int, move_a: StringName, target_ability: StringName) -> AuthoritativeBattleServer:
