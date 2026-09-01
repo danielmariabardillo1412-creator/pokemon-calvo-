@@ -2,19 +2,20 @@ class_name DataFoundationV3AbilityRuntimeContractTestSuite
 extends RefCounted
 
 const FULL_IDS := [
-	"blaze", "dragons_maw", "fire_mane", "fur_coat", "ice_scales", "multiscale",
-	"overgrow", "rocky_payload", "steelworker", "swarm", "thick_fat", "torrent",
-	"tough_claws",
+	"blaze", "dragons_maw", "fire_mane", "flare_boost", "fur_coat", "huge_power",
+	"ice_scales", "multiscale", "overgrow", "pure_power", "rocky_payload", "steelworker",
+	"swarm", "thick_fat", "torrent", "toxic_boost", "tough_claws",
 ]
 const PARTIAL_IDS := [
 	"flame_body", "gooey", "heatproof", "intimidate", "iron_barbs", "levitate",
 	"poison_point", "reckless", "stamina", "static",
 ]
 const IMPLEMENTED_IDS := [
-	"blaze", "dragons_maw", "fire_mane", "flame_body", "fur_coat", "gooey",
-	"heatproof", "ice_scales", "intimidate", "iron_barbs", "levitate", "multiscale",
-	"overgrow", "poison_point", "reckless", "rocky_payload", "stamina", "static",
-	"steelworker", "swarm", "thick_fat", "torrent", "tough_claws",
+	"blaze", "dragons_maw", "fire_mane", "flame_body", "flare_boost", "fur_coat",
+	"gooey", "heatproof", "huge_power", "ice_scales", "intimidate", "iron_barbs",
+	"levitate", "multiscale", "overgrow", "poison_point", "pure_power", "reckless",
+	"rocky_payload", "stamina", "static", "steelworker", "swarm", "thick_fat", "torrent",
+	"toxic_boost", "tough_claws",
 ]
 const TYPE_BOOSTS := {
 	"steelworker": "steel",
@@ -41,7 +42,7 @@ func run(check: Callable) -> void:
 	)
 	check.call(
 		"data_v3_ability_contract_data_only_count",
-		(classes.get("DATA_ONLY", []) as Array).size() == 350,
+		(classes.get("DATA_ONLY", []) as Array).size() == 346,
 	)
 	check.call(
 		"data_v3_ability_contract_partition",
@@ -101,6 +102,46 @@ func run(check: Callable) -> void:
 			and spec.effect.kind == BattleEffectSpec.DAMAGE
 		)
 	check.call("data_v3_ability_contract_unconditional_type_boosts_exact", type_boosts_ok)
+
+	# Offensive-stat abilities must never masquerade as final-damage multipliers.
+	# Huge/Pure double Attack; Toxic Boost raises Attack 1.5x under either poison
+	# state; Flare Boost raises Special Attack 1.5x under burn.
+	var offensive_stat_specs_ok := true
+	var offensive_expected := {
+		"huge_power": {"physical": true, "special": false, "multiplier": 20000, "statuses": []},
+		"pure_power": {"physical": true, "special": false, "multiplier": 20000, "statuses": []},
+		"toxic_boost": {
+			"physical": true,
+			"special": false,
+			"multiplier": 15000,
+			"statuses": ["poison", "badly_poisoned"],
+		},
+		"flare_boost": {
+			"physical": false,
+			"special": true,
+			"multiplier": 15000,
+			"statuses": ["burn"],
+		},
+	}
+	for ability_id in offensive_expected:
+		var expected: Dictionary = offensive_expected[ability_id]
+		var specs := registry.triggers_for_ability(StringName(ability_id), BattleTriggerSpec.MODIFY_DAMAGE)
+		if specs.size() != 1:
+			offensive_stat_specs_ok = false
+			continue
+		var spec: BattleTriggerSpec = specs[0]
+		var statuses: Array = spec.conditions.get("required_persistent_status_ids", [])
+		offensive_stat_specs_ok = offensive_stat_specs_ok and (
+			spec.source_kind == &"ability"
+			and String(spec.source_id) == ability_id
+			and bool(spec.conditions.get("requires_physical", false)) == bool(expected.physical)
+			and bool(spec.conditions.get("requires_special", false)) == bool(expected.special)
+			and int(spec.conditions.get("offensive_stat_multiplier_bp", 0)) == int(expected.multiplier)
+			and statuses == (expected.statuses as Array)
+			and not spec.conditions.has("multiplier_bp")
+			and spec.effect.kind == BattleEffectSpec.DAMAGE
+		)
+	check.call("data_v3_ability_contract_offensive_stat_modifiers_exact", offensive_stat_specs_ok)
 
 	# Tough Claws has an explicit DATA V3 semantic correction: the pinned PokeAPI
 	# snapshot says 1.33x, while audited current main-series mechanics are +30%.
@@ -319,19 +360,6 @@ func run(check: Callable) -> void:
 		super_effective_blockers_safe,
 	)
 
-	# Huge Power and Pure Power double the Attack stat; they do not simply multiply
-	# every physical move's final damage. Until Battle Core has an offensive-stat
-	# multiplier primitive, both remain deliberately non-executable DATA_ONLY.
-	var attack_doublers_safe := true
-	for ability_id in ["huge_power", "pure_power"]:
-		var record: Dictionary = by_id.get(ability_id, {})
-		attack_doublers_safe = attack_doublers_safe and (
-			str(record.get("classification", "")) == "DATA_ONLY"
-			and str(record.get("description", "")) == "Doubles Attack in battle."
-			and registry.triggers_for_ability(StringName(ability_id), BattleTriggerSpec.MODIFY_DAMAGE).is_empty()
-		)
-	check.call("data_v3_ability_contract_attack_doublers_stay_data_only", attack_doublers_safe)
-
 	# Adjacent move-property abilities are explicit blockers. Long Reach needs the
 	# attacking creature to be available while evaluating defender-owned contact
 	# triggers; Technician needs resolved/variable power rather than a static field;
@@ -390,9 +418,9 @@ func run(check: Callable) -> void:
 	check.call(
 		"data_v3_ability_contract_report_counts",
 		int(summary.get("DATA_READY", -1)) == 373
-		and int(summary.get("RUNTIME_SUPPORTED", -1)) == 13
+		and int(summary.get("RUNTIME_SUPPORTED", -1)) == 17
 		and int(summary.get("PARTIAL_RUNTIME", -1)) == 10
-		and int(summary.get("DATA_ONLY", -1)) == 350,
+		and int(summary.get("DATA_ONLY", -1)) == 346,
 	)
 	var report_classes: Dictionary = report.get("ability_runtime_classification", {})
 	check.call(
