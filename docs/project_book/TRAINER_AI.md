@@ -1585,3 +1585,173 @@ La validación del ruleset deberá fallar temprano si una combinación de polít
 - código de producción modificado: **NO**.
 
 Siguiente bloque recomendado: auditar el seam exacto de `TrainerDecisionContext` / `TrainerObservationBuilder` y diseñar el mínimo `TrainerCampaignSnapshot` sanitizado que permita valorar permadeath sin exponer estado rival oculto. Ese contrato puede diseñarse aunque HP/PP/items se recuperen o no: representará el estado propio real que exista en cada momento.
+
+---
+
+## 19. Auditoría técnica — seam de información de campaña para Trainer AI
+
+Checkpoint de seguridad/arquitectura para conectar Random Cup con el cerebro. **No se modifica código de producción en este tramo.**
+
+### 19.1 `TrainerObservationBuilder` — CONSERVAR Y NO ENSANCHAR CON CAMPAÑA
+
+La observación actual está correctamente definida como una vista **battle-scoped**:
+
+- incluye estado completo del lado propio que participa en la batalla;
+- incluye la bolsa propia finita de esa batalla;
+- del rival solo expone criaturas vistas y hechos revelados;
+- oculta banca no observada, movimientos no revelados, habilidad/item ocultos, IV/EV/naturaleza, stats exactos y HP exacto;
+- no expone RNG ni el roster autoritativo bruto.
+
+Los tests FASE20 verifican de forma explícita esas propiedades.
+
+Random Cup no debe convertir `TrainerObservation` en un contenedor híbrido de batalla+torneo. Campos como ronda de copa, bajas permanentes, políticas de recuperación o recursos de campaña pertenecen a otra vista.
+
+**Clasificación:** CONSERVAR `TrainerObservation` y `TrainerObservationBuilder` como frontera battle-scoped. No añadirles `RandomCupState` ni datos persistentes de torneo.
+
+### 19.2 `TrainerBattleMemory` — CONSERVAR COMO MEMORIA DE UNA BATALLA
+
+`TrainerBattleMemory.begin()` limpia su estado y lo vincula al `battle_id`/perspectiva actuales. Guarda únicamente hechos observados durante esa batalla y deliberadamente reduce el envelope de eventos para no copiar metadata genérica que pudiera contener detalles internos.
+
+Esto sigue siendo correcto.
+
+No debe reutilizarse esta clase como memoria persistente de Random Cup. Si más adelante el diseño permite que un entrenador recuerde información legítimamente revelada en combates anteriores —por ejemplo ante un posible rematch— eso deberá ser una capa de conocimiento de campaña separada, con reglas explícitas de retención. No se autoriza ese conocimiento cruzado por defecto en este checkpoint.
+
+**Clasificación:** CONSERVAR battle memory; memoria/knowledge inter-battle = responsabilidad separada si el ruleset la necesita.
+
+### 19.3 `TrainerDecisionContext` — EXTENSIÓN ADITIVA Y OPCIONAL
+
+El contexto actual contiene:
+
+- `observation`;
+- `belief_snapshot`;
+- `memory_snapshot`;
+- `legal_actions`.
+
+Beliefs, memoria y acciones se copian/deserializan de forma que el brain no recibe referencias mutables del estado autoritativo. Los consumidores actuales acceden a campos concretos y no dependen de que el contexto tenga un conjunto cerrado de cuatro claves.
+
+Dirección canónica para Random Cup:
+
+- añadir un `campaign_snapshot` separado;
+- por defecto `{}` para combates normales, fixtures y self-play histórico;
+- copiarlo en profundidad al crear el `TrainerDecisionContext`;
+- serializarlo como datos planos;
+- nunca incluir objetos vivos, callables, nodos, `CreatureInstance`, `RandomCupState` o RNG.
+
+Nombre de trabajo del contrato: **`TrainerCampaignSnapshot`**. El nombre de la clase concreta puede congelarse al implementar, pero la separación funcional queda decidida.
+
+### 19.4 Autoridad y construcción — WHITELIST, no “serializar y borrar secretos”
+
+El snapshot debe ser construido por una capa confiable de Random Cup mediante una **lista positiva de campos permitidos**.
+
+Queda prohibido el patrón:
+
+`RandomCupState.to_dict() → borrar unas claves rivales → entregar el resto al cerebro`.
+
+Ese patrón sería frágil: un futuro campo nuevo de seed, bracket, rival o diagnóstico podría filtrarse sin que nadie actualizase el blacklist.
+
+El patrón correcto es:
+
+`RandomCup authority → CampaignSnapshotBuilder explícito → Dictionary/DTO sanitizado → TrainerDecisionContext`.
+
+El builder debe crear cada campo permitido conscientemente y producir únicamente datos JSON-serializables/copias profundas.
+
+### 19.5 Datos propios/públicos que el snapshot puede representar
+
+Sin elegir todavía las nueve reglas de gameplay abiertas, el contrato puede admitir de forma segura familias de datos como:
+
+- `schema_version`;
+- `mode_id` / `ruleset_id`;
+- identidad propia del participante si la IA la necesita como clave estable;
+- índice de ronda y número conocido de rondas restantes **solo cuando esa información sea pública/definida por el modo**;
+- tamaño inicial del roster;
+- IDs propios de miembros que continúan en el roster, o un conteo equivalente cuando sea suficiente;
+- número de bajas propias permanentes;
+- flags/IDs públicos de las políticas de permadeath, recuperación, progresión, reposición y recursos;
+- recursos persistentes **propios** si el ruleset finalmente los define;
+- cualquier otro dato exclusivamente propio o públicamente conocido que sea necesario para valorar el coste de una decisión.
+
+No debe duplicarse gratuitamente el estado completo de cada Pokémon: `TrainerObservation.own_party` ya contiene el estado propio de batalla necesario —HP, PP, stats, moveset, habilidad, item, status, etc.—. El snapshot de campaña añade **semántica persistente**, no una segunda copia divergente del roster.
+
+Si en el futuro una modalidad permite registrar miembros propios que no participan en el combate actual, esa necesidad se modelará expresamente en el snapshot sin convertirlo en acceso al estado rival.
+
+### 19.6 Datos expresamente prohibidos
+
+El snapshot V1 no puede contener:
+
+- `RandomCupState` o `RandomCupParticipant` vivos;
+- referencias a `CreatureInstance`, `BattleState` o `AuthoritativeBattleServer`;
+- RNG vivo, `rng_state`, assignment seed o estado interno de la secuencia aleatoria;
+- resultados de futuras tiradas o futuras asignaciones;
+- futuros `battle_seed`;
+- especies/loadouts/IV/EV/naturaleza/items/recursos de rivales no revelados;
+- roster persistente rival oculto;
+- bolsa persistente rival oculta;
+- información de bracket/emparejamiento que el modo no declare públicamente conocida;
+- diagnósticos internos usados por tests/servidor.
+
+Conocer que existe permadeath o que quedan X rondas puede ser legítimo; conocer qué seis Pokémon tiene un rival futuro porque `RandomCupState` los posee internamente no lo es.
+
+Si más adelante hay información pública del torneo sobre otros participantes, deberá entrar mediante un contrato de **public tournament knowledge** explícito, no reutilizando estado autoritativo bruto.
+
+### 19.7 Seam de inyección en `TrainerIntelligenceController`
+
+`TrainerIntelligenceController` es ya la capa confiable que construye observación/contexto y luego llama al brain. Por tanto es el lugar correcto para **transportar** el snapshot sanitizado, pero no para construirlo desde estado de torneo bruto.
+
+Dirección de implementación futura:
+
+1. Random Cup/application layer construye el `TrainerCampaignSnapshot` permitido;
+2. lo entrega al controlador como datos ya sanitizados;
+3. `choose_action()` crea `TrainerDecisionContext` con ese snapshot;
+4. el contexto realiza copia profunda;
+5. el brain consume únicamente el contexto.
+
+No se congela todavía si la API concreta será constructor, setter o parámetro de decisión. Sí queda congelado que el controlador no recibirá acceso general a `RandomCupState` solo para que él mismo “escoja qué mirar”.
+
+El snapshot deberá refrescarse antes de una decisión si alguna variable de campaña permitida puede cambiar durante el combate y no está ya representada por `TrainerObservation`. La bolsa battle-scoped actual ya se actualiza por la observación, por lo que no debe duplicarse sin necesidad.
+
+### 19.8 Compatibilidad con self-play y stack histórico
+
+`TrainerSelfPlayMatch` crea controladores sin concepto de campaña y clona rosters para un único combate. Ese comportamiento sigue siendo válido como benchmark battle-only.
+
+La extensión debe permitir:
+
+- contexto antiguo → `campaign_snapshot = {}`;
+- ningún cambio semántico para FASE20–33 cuando no hay Random Cup;
+- corpus histórico intacto como regresión de batalla;
+- nuevo orquestador/corpus multi-battle para Random Cup en una fase posterior.
+
+No se debe transformar `TrainerSelfPlayMatch` en una simulación de copa por defecto.
+
+### 19.9 Tests obligatorios al implementar el seam
+
+La futura tranche deberá añadir al menos:
+
+- contexto sin campaña sigue funcionando y serializando igual salvo la nueva clave vacía acordada;
+- snapshot se copia en profundidad y mutar el origen después no cambia el contexto;
+- snapshot es JSON-serializable;
+- no contiene objetos vivos ni RNG;
+- no contiene roster/bolsa/loadout rival oculto;
+- no contiene assignment seed ni futuras tiradas;
+- `TrainerObservation` mantiene intactos todos los gates de privacidad FASE20;
+- una modificación del snapshot no muta `RandomCupState` ni el roster persistente;
+- dos decisiones con el mismo estado permitido producen el mismo snapshot;
+- self-play histórico puede seguir creando controladores sin snapshot;
+- tests adversariales intentan introducir claves/objetos prohibidos y el builder/contrato los rechaza o no los emite.
+
+Más adelante, cuando exista la función de valor de campaña, habrá tests conductuales separados que demuestren que cambiar **solo** un dato legítimo del snapshot —por ejemplo el valor de supervivencia derivado de una pieza única— puede cambiar una decisión sin alterar información rival.
+
+### 19.10 Estado de este checkpoint
+
+- `TrainerObservationBuilder`: **CONSERVAR SIN DATOS DE CAMPAÑA**;
+- `TrainerObservation`: **CONSERVAR BATTLE-SCOPED**;
+- `TrainerBattleMemory`: **CONSERVAR BATTLE-SCOPED**;
+- conocimiento inter-battle rival: **NO CONCEDIDO POR DEFECTO / CAPA FUTURA SI EL RULESET LO JUSTIFICA**;
+- `TrainerDecisionContext`: **CONSERVAR FRONTERA + AÑADIR `campaign_snapshot` OPCIONAL**;
+- autoridad del snapshot: **RANDOM CUP/APPLICATION LAYER**;
+- construcción del snapshot: **WHITELIST EXPLÍCITO**;
+- referencias vivas/RNG/estado rival oculto: **PROHIBIDOS**;
+- self-play battle-only: **CONSERVAR**;
+- corpus multi-battle Random Cup: **NUEVA CAPA POSTERIOR**;
+- código de producción modificado en este checkpoint: **NO**.
+
+Siguiente bloque recomendado: auditar dónde y cómo debe calcularse el **valor estratégico de cada miembro del roster** usando solo `own_party + campaign_snapshot`: cobertura única, redundancia, potencia/rol, estado persistente y coste de permadeath. El objetivo será definir el evaluador de roster antes de tocar `TrainerSearchStateEvaluator` o los pesos de switching.
