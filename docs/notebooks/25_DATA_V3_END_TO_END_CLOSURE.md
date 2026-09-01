@@ -108,17 +108,38 @@ Exact failure:
 Decision/correction:
 - this is a **test-suite GDScript 4.7 typing defect only**, not a Pokémon-data, adapter, runtime or canonical-dataset discrepancy;
 - explicitly type compound boolean closure variables as `bool` instead of relying on inference from JSON/Variant expressions;
-- do not weaken, remove or reinterpret any end-to-end invariant to make CI pass;
-- rerun the full 18-workflow engineering matrix on the corrected SHA.
+- do not weaken, remove or reinterpret any end-to-end invariant to make CI pass.
 
-No canonical data or Pokémon mechanic changes are justified by this failure.
+## Preflight finding #2 — import-summary phase ordering
+After attempt #1, the uploaded artifact was inspected before rerunning. It proved the regenerated raw/manifest/reports were present and healthy, but `import_summary.json` was absent because the DATA workflow intentionally runs domain provenance tests **before** `Normalize through authoritative DataImporter`.
+
+Therefore the initial end-to-end suite incorrectly depended on an artifact that does not exist yet at that phase.
+
+Correction/architecture:
+- the domain suite must derive learnset/evolution totals directly from regenerated raw DATA;
+- forms and adapter broken-reference state are checked from the pre-normalization reports already available at that phase;
+- provenance is compared between canonical manifest and the checked-in normalized manifest, both available before normalization;
+- `rejected definitions = 0` and final import-summary equality remain certification requirements, but are verified from the post-DataImporter tested artifact during the artifact-comparison step, where `import_summary.json` actually exists;
+- no invariant is dropped; each invariant is checked at the pipeline stage where its authoritative evidence exists.
+
+Preflight recomputation from attempt #1 artifact confirmed:
+- raw/normalized identity sets match exactly for types/species/moves/abilities/items;
+- learnset entries = **61,102**;
+- evolutions = **554**;
+- cross-domain broken references = **0**;
+- move classes = **590 / 71 / 246 / 12**;
+- ability classes = **21 / 14 / 338**;
+- DATA_ONLY moves with effect specs = **0**;
+- audit broken references = **0**.
+
+This finding is about certification-phase ordering only, not Pokémon semantics.
 
 ## Certification workflow
 1. audit existing V3 tests/reports to avoid duplicating already-certified invariants;
 2. add only missing cross-domain end-to-end closure guards;
 3. open PR from exact certified #94 final;
 4. require 18/18 engineering;
-5. compare tested DATA V3 artifact byte/canonical output against #94 final;
+5. compare tested DATA V3 artifact byte/canonical output against #94 final, including post-import `rejected=0`;
 6. synchronize `01_PROJECT_STATE.md`, `04_NEXT_STEPS.md`, `25_DATA_V3_END_TO_END_CLOSURE.md` only;
 7. verify engineering → final is notebooks-only;
 8. require second 18/18 on exact final notebook-bearing HEAD;
