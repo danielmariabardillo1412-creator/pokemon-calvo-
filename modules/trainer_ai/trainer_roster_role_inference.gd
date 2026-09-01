@@ -2,6 +2,7 @@ class_name TrainerRosterRoleInference
 extends RefCounted
 
 const MODEL_ID := "trainer_roster_role_inference_evidence_v1"
+const ROLE_MODEL_ID := "trainer_roster_role_affinity_v1"
 const RUNTIME_SUPPORTED := "RUNTIME_SUPPORTED"
 
 
@@ -85,6 +86,78 @@ func extract_intrinsic_evidence(
 		"excluded_move_ids": excluded_move_ids,
 		"unknown_move_ids": unknown_move_ids,
 	}
+
+
+func infer_role_scores(
+	member_view: Dictionary,
+	catalog: DefinitionCatalog,
+) -> Dictionary:
+	var evidence: Dictionary = extract_intrinsic_evidence(member_view, catalog)
+	var stats: Dictionary = evidence.get("stats", {}) as Dictionary
+	var capabilities: Dictionary = evidence.get("capability_evidence", {}) as Dictionary
+
+	var stat_ceiling: int = _non_hp_stat_ceiling(stats)
+	var attack_focus_bp: int = _ratio_bp(int(stats.get("attack", 0)), stat_ceiling)
+	var defense_focus_bp: int = _ratio_bp(int(stats.get("defense", 0)), stat_ceiling)
+	var speed_focus_bp: int = _ratio_bp(int(stats.get("speed", 0)), stat_ceiling)
+	var special_attack_focus_bp: int = _ratio_bp(int(stats.get("special_attack", 0)), stat_ceiling)
+	var special_defense_focus_bp: int = _ratio_bp(int(stats.get("special_defense", 0)), stat_ceiling)
+
+	var physical_damage: int = maxi(0, int(capabilities.get("physical_damage_signal", 0)))
+	var special_damage: int = maxi(0, int(capabilities.get("special_damage_signal", 0)))
+	var damage_ceiling: int = maxi(physical_damage, special_damage)
+	var physical_route_bp: int = _ratio_bp(physical_damage, damage_ceiling) if damage_ceiling > 0 else 0
+	var special_route_bp: int = _ratio_bp(special_damage, damage_ceiling) if damage_ceiling > 0 else 0
+
+	var physical_attacker_bp: int = mini(attack_focus_bp, physical_route_bp)
+	var special_attacker_bp: int = mini(special_attack_focus_bp, special_route_bp)
+	var offensive_affinity_bp: int = maxi(physical_attacker_bp, special_attacker_bp)
+	var fast_attacker_bp: int = mini(speed_focus_bp, offensive_affinity_bp) if damage_ceiling > 0 else 0
+	var support_bp: int = maxi(
+		clampi(int(capabilities.get("control_signal_bp", 0)), 0, 10000),
+		clampi(int(capabilities.get("sustain_signal_bp", 0)), 0, 10000),
+	)
+
+	return {
+		"model_id": ROLE_MODEL_ID,
+		"instance_id": String(evidence.get("instance_id", "")),
+		"role_scores_bp": {
+			"physical_attacker": physical_attacker_bp,
+			"special_attacker": special_attacker_bp,
+			"fast_attacker": fast_attacker_bp,
+			"bulky_physical": defense_focus_bp,
+			"bulky_special": special_defense_focus_bp,
+			"support": support_bp,
+		},
+		"normalization": {
+			"stat_ceiling": stat_ceiling,
+			"damage_route_ceiling": damage_ceiling,
+			"attack_focus_bp": attack_focus_bp,
+			"special_attack_focus_bp": special_attack_focus_bp,
+			"speed_focus_bp": speed_focus_bp,
+			"defense_focus_bp": defense_focus_bp,
+			"special_defense_focus_bp": special_defense_focus_bp,
+			"physical_route_bp": physical_route_bp,
+			"special_route_bp": special_route_bp,
+			"offensive_affinity_bp": offensive_affinity_bp,
+			"setup_signal_bp": clampi(int(capabilities.get("setup_signal_bp", 0)), 0, 10000),
+			"priority": int(capabilities.get("priority", 0)),
+		},
+		"intrinsic_evidence": evidence,
+	}
+
+
+func _non_hp_stat_ceiling(stats: Dictionary) -> int:
+	var ceiling: int = 1
+	for key in ["attack", "defense", "speed", "special_attack", "special_defense"]:
+		ceiling = maxi(ceiling, maxi(0, int(stats.get(key, 0))))
+	return ceiling
+
+
+func _ratio_bp(value: int, ceiling: int) -> int:
+	if value <= 0 or ceiling <= 0:
+		return 0
+	return clampi(value * 10000 / ceiling, 0, 10000)
 
 
 func _effect_signals(spec: BattleEffectSpec, inherited_chance_bp: int) -> Dictionary:
