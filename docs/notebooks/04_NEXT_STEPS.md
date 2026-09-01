@@ -3,8 +3,8 @@
 Read immediately after `00_READ_FIRST.md` when recovering context.
 
 ## Latest certified baseline
-- PR #82 — `audit/data-v3-ability-defensive-predicates-v2`
-- Final HEAD `089140a8439390758d688636f715a311ec175163`
+- PR #83 — `audit/data-v3-ability-move-property-v1`
+- Final HEAD `f4a1f76850d8737c4d9847045335e703d5ecaa23`
 - **18/18 SUCCESS** on exact notebook-bearing HEAD
 - closed without merge.
 
@@ -12,73 +12,77 @@ Move Effects V3 remains closed:
 - **590 runtime / 71 partial / 246 data-only / 12 unsupported**;
 - `DATA_ONLY` moves with executable `effect_specs`: **0**.
 
-Certified #82 ability coverage:
-- `RUNTIME_SUPPORTED`: **13**
-- `PARTIAL_RUNTIME`: **5** — `heatproof`, `intimidate`, `levitate`, `stamina`, `static`
-- `DATA_ONLY`: **355**
-- total: **373**.
-
-Prior detailed ability notebooks: `06`, `07`, `08`, `09`, `10`, `11`, `12`.
-
-# Current tranche — PR #83
-- Branch: `audit/data-v3-ability-move-property-v1`
-- Parent: certified #82 final `089140a8439390758d688636f715a311ec175163`
-- PR: #83 `DATA V3 — audit move-property ability contracts`
-- Engineering SHA: `f9d3538dec9c443e60070b0e4bf7d7904c984e55`
-- Engineering SHA: **18/18 SUCCESS**; DATA V3 and Godot global green.
-- Detailed notebook: `docs/notebooks/13_DATA_V3_ABILITY_MOVE_PROPERTIES.md`.
-
-## #83 result
-### Reckless
-Decision: **PARTIAL_RUNTIME**.
-
-Source requires 1.2x for both recoil moves and crash moves, with Struggle unaffected.
-
-Faithful executable subset:
-- generic `requires_recoil=true` predicate backed recursively by structured `BattleEffectSpec.RECOIL`;
-- actor-side `MODIFY_DAMAGE`;
-- `multiplier_bp=12000`.
-
-Real-battle focal coverage:
-- Double-Edge gets higher matched-seed damage and emits Reckless trigger;
-- recoil still executes normally;
-- Tackle remains identical/no trigger;
-- Jump Kick has no structured RECOIL transaction today and remains identical/no trigger, explicitly documenting the missing crash subset.
-
-### Long Reach
-Remains **DATA_ONLY**. Defender-owned contact-trigger evaluation does not currently receive the move user, so it cannot safely know the attacker has Long Reach. Do not add a hidden ability-id special-case or mutate move contact metadata.
-
-### Technician
-Remains **DATA_ONLY**. Source requires variable/resolved power and prior power-modifier semantics. Static `move.power <= 60` is a known-false shortcut for current dynamic moves.
-
-### Iron Fist / Strong Jaw / Mega Launcher / Sharpness
-Remain **DATA_ONLY**. Current runtime move definitions do not preserve punch/bite/pulse/slicing tags; do not infer them from names/prose.
-
-## Battle Core scope
-One new generic condition only:
-- `requires_recoil=true`, structural recursive search through `move.effect_specs`.
-
-No new trigger kind, crash mechanic, move-tag system, name heuristic, contact-context plumbing or broad architecture was added.
-
-## Ability coverage after #83 engineering
+Certified #83 ability coverage:
 - `RUNTIME_SUPPORTED`: **13**
 - `PARTIAL_RUNTIME`: **6** — `heatproof`, `intimidate`, `levitate`, `reckless`, `stamina`, `static`
 - `DATA_ONLY`: **354**
 - total: **373**.
 
-## Exact #82 → #83 artifact
+Prior detailed ability notebooks: `06`, `07`, `08`, `09`, `10`, `11`, `12`, `13`.
+
+# Current tranche — PR #84
+- Branch: `audit/data-v3-ability-contact-reactions-v1`
+- Parent: certified #83 final `f4a1f76850d8737c4d9847045335e703d5ecaa23`
+- PR: #84 `DATA V3 — audit defender contact reaction abilities`
+- Engineering SHA: `27a9d2b429334ea6f809009de219bb3fce0bb813`
+- Engineering SHA: **18/18 SUCCESS**; DATA V3 and Godot global green.
+- DATA V3 domain: **451 PASS / 0 FAIL**.
+- Detailed notebook: `docs/notebooks/14_DATA_V3_ABILITY_CONTACT_REACTIONS.md`.
+
+## #84 result
+### Flame Body
+Decision: **PARTIAL_RUNTIME**.
+
+Source battle semantics: contacting move user has a 30% chance to be burned. The pinned historical change is overworld-only.
+
+Runtime subset:
+- defender `AFTER_DAMAGE`;
+- `requires_contact=true`;
+- 30% CHANCE -> burn attacker.
+
+### Poison Point
+Decision: **PARTIAL_RUNTIME**.
+
+Source battle semantics: contacting move user has a 30% chance to be poisoned; no effect history.
+
+Runtime subset:
+- defender `AFTER_DAMAGE`;
+- `requires_contact=true`;
+- 30% CHANCE -> poison attacker.
+
+### Gooey
+Decision: **PARTIAL_RUNTIME**.
+
+Source battle semantics: contact lowers attacker Speed one stage; no effect history.
+
+Runtime subset:
+- defender `AFTER_DAMAGE`;
+- `requires_contact=true`;
+- attacker Speed `-1` stage.
+
+## Shared partial boundary
+No generic Battle Core code changed in #84. All three reuse the existing Static-style contact-reaction path.
+
+The current path does not trigger for a defender that fainted from the hit and is evaluated once after the completed move rather than once per multi-hit strike. Therefore fatal/per-strike semantics remain absent and the three classifications stay partial.
+
+A focal real-battle regression explicitly KOs a 1-HP Gooey owner with Tackle and confirms no Gooey reaction, preserving the missing behavior as a visible contract rather than hiding it.
+
+## Exact #83 → #84 artifact
 Raw + normalized:
-- exactly one semantic difference;
-- `reckless.classification: DATA_ONLY → PARTIAL_RUNTIME`.
+- exactly three semantic differences;
+- `flame_body.classification: DATA_ONLY → PARTIAL_RUNTIME`;
+- `gooey.classification: DATA_ONLY → PARTIAL_RUNTIME`;
+- `poison_point.classification: DATA_ONLY → PARTIAL_RUNTIME`.
+
+No other field on those records changes.
 
 Reports:
 - runtime stays 13;
-- partial 5→6, adding only Reckless;
-- data-only 355→354, removing only Reckless;
+- partial 6→9, adding exactly those three IDs;
+- data-only 354→351, removing exactly those three IDs;
 - `pokeapi_v3_audit.json` changes only those two count values.
 
 Explicitly unchanged:
-- Long Reach, Technician, Iron Fist, Strong Jaw, Mega Launcher, Sharpness;
 - every other ability;
 - Pokémon/species;
 - moves/effects;
@@ -87,23 +91,35 @@ Explicitly unchanged:
 - types/stats;
 - manifest/forms/auxiliary.
 
-`import_time_ms` 396→398 ms is non-semantic.
+`import_time_ms` 705→524 ms is non-semantic.
+
+## Ability coverage after #84 engineering
+- `RUNTIME_SUPPORTED`: **13**
+- `PARTIAL_RUNTIME`: **9** — `flame_body`, `gooey`, `heatproof`, `intimidate`, `levitate`, `poison_point`, `reckless`, `stamina`, `static`
+- `DATA_ONLY`: **351**
+- total: **373**.
 
 ## Current certification step
-Notebook synchronization now moves the branch after engineering SHA `f9d3538dec9c443e60070b0e4bf7d7904c984e55`.
+Notebook synchronization now moves the branch after engineering SHA `27a9d2b429334ea6f809009de219bb3fce0bb813`.
 
-Before closing #83:
-1. verify engineering SHA → final HEAD changed only `01_PROJECT_STATE.md`, `04_NEXT_STEPS.md`, `13_DATA_V3_ABILITY_MOVE_PROPERTIES.md`;
+Before closing #84:
+1. verify engineering SHA → final HEAD changed only `01_PROJECT_STATE.md`, `04_NEXT_STEPS.md`, `14_DATA_V3_ABILITY_CONTACT_REACTIONS.md`;
 2. require **18/18 SUCCESS** on exact final notebook-bearing HEAD;
-3. close #83 without merge;
+3. close #84 without merge;
 4. use exact final HEAD as next baseline.
 
-## Exact next task after #83 closure
-Continue **DATA FOUNDATION V3 ability reliability** with another bounded subgroup selected from the remaining 354 DATA_ONLY records.
+## Exact next task after #84 closure
+Continue **DATA FOUNDATION V3 ability reliability** with one bounded subgroup selected from the remaining 351 DATA_ONLY records.
 
-Do not reopen the blockers just documented unless their required shared primitive has actually been added for a broader reason. Prefer an existing-primitive family or a documented negative audit over architecture added solely to increase ability coverage.
+Do not mass-promote the rest of the contact family:
+- Cute Charm needs gender/infatuation semantics;
+- Effect Spore needs mutually exclusive random-status behavior;
+- Iron Barbs/Rough Skin need a properly audited max-HP contact-damage transaction;
+- Mummy/Wandering Spirit need ability replacement;
+- Pickpocket needs held-item transfer;
+- Poison Touch needs attacker-owned post-hit contact handling.
 
-Trainer AI/archetypes remain deferred.
+Prefer one existing-primitive family or a documented negative audit over broadening architecture solely for coverage. Trainer AI/archetypes remain deferred.
 
 ## Stop condition
 Any focal/regression failure stops the tranche until root cause is fixed and rerun.
