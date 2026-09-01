@@ -768,3 +768,149 @@ El inventario rival persistente seguirá oculto salvo que una regla pública del
 - código modificado durante esta auditoría: **NO**.
 
 Siguiente bloque de auditoría recomendado: `TrainerLoadoutValidator` + `TrainerRoleLoadoutGenerator` frente a DATA V3 y asignación aleatoria de especies.
+
+---
+
+## 14. Auditoría técnica — Trainer Loadouts frente a DATA V3 y Random Cup
+
+Checkpoint específico de FASE32. **No se modifica código de producción en este tramo.**
+
+### 14.1 `TrainerLoadoutValidator` — ADAPTACIÓN IMPORTANTE
+
+La estructura general del validador sigue siendo útil. Ya comprueba correctamente:
+
+- especie y nivel;
+- naturaleza;
+- límites de IV/EV y total EV;
+- máximo de cuatro movimientos y ausencia de duplicados;
+- existencia de movimientos en catálogo;
+- compatibilidad de habilidad con especie;
+- soporte runtime de habilidad;
+- soporte runtime del held item.
+
+El problema moderno está concentrado en la legalidad del moveset.
+
+`_species_can_use_move()` conserva una premisa que DATA V3 ya invalidó: documenta que el dataset no retiene `version_group`. En realidad `LearnSetEntry` V3 preserva explícitamente `version_group` y `order`, además de `level`, `move_id` y `method`.
+
+Actualmente la compatibilidad se reduce a:
+
+- level-up si `entry.level <= level`;
+- machine/tutor/egg u otro método admitido por `TrainerPublicCoverageBeliefInference` sin filtrar procedencia/versionado.
+
+Por tanto, dos entradas de épocas/versiones distintas pueden terminar tratándose como igualmente válidas para un mismo Random Cup aunque el dato V3 permita distinguirlas.
+
+**Clasificación:** CONSERVAR la arquitectura de validación; ADAPTAR DE FORMA IMPORTANTE la política de compatibilidad de movimientos para que dependa de un ruleset/provenance explícito.
+
+### 14.2 Segunda brecha V3 — el moveset no valida ejecutabilidad runtime
+
+A diferencia de habilidades y held items, `_validate_moves()` no verifica la clasificación runtime del movimiento. Basta con que:
+
+- exista en el catálogo;
+- sea compatible según el learnset antiguo.
+
+DATA V3 congela una frontera explícita de 919 movimientos:
+
+- 590 `RUNTIME_SUPPORTED`;
+- 71 `PARTIAL_RUNTIME`;
+- 246 `DATA_ONLY`;
+- 12 `UNSUPPORTED`.
+
+`MoveDefinition.classification` es un campo canónico de la definición, no metadata externa.
+
+Consecuencia: el validador actual puede declarar válido un loadout con un movimiento que DATA V3 conserva como dato pero que no constituye una capacidad de combate plenamente ejecutable.
+
+No se congela aún si `PARTIAL_RUNTIME` debe aceptarse, rechazarse o depender de una política más fina: eso debe formar parte del contrato del ruleset. `DATA_ONLY` y `UNSUPPORTED` no pueden seguir pasando inadvertidamente como si su ejecutabilidad fuese equivalente a `RUNTIME_SUPPORTED`.
+
+### 14.3 No usar el whitelist histórico de Battle V2 como sustituto de DATA V3
+
+`BattleEffectRegistry.runtime_supported_move_ids()` sigue existiendo, pero es una superficie histórica congelada de Battle V2 con una lista pequeña de movimientos.
+
+No debe utilizarse como arreglo rápido para FASE32 porque reduciría accidentalmente el catálogo moderno a la antigua superficie.
+
+La modernización debe consumir la clasificación/capacidades V3 canónicas y, si hace falta una API de legalidad runtime, construirla sobre ese contrato moderno en vez de resucitar el whitelist antiguo.
+
+### 14.4 `TrainerRoleLoadoutGenerator` — CONSERVAR NÚCLEO / ADAPTAR CANDIDATOS
+
+El generador no selecciona la especie: recibe `species_id` como entrada. Por ello **no contradice por sí mismo** la asignación aleatoria de especies de Random Cup.
+
+Esto permite reutilizarlo potencialmente para construir o interpretar un loadout de una especie que el modo ya haya asignado legítimamente.
+
+Son reutilizables como concepto:
+
+- perfiles de IV/EV por calidad;
+- naturalezas por rol;
+- scoring determinista por rol;
+- selección de habilidad/held item limitada a soporte runtime;
+- priorización de STAB, daño físico/especial, utilidad y prioridad;
+- determinismo de la construcción.
+
+Sin embargo, `_moves_for_role()` hereda las mismas dos brechas del validador:
+
+1. ignora `version_group` y `order` al construir candidatos;
+2. no filtra candidatos por clasificación runtime V3.
+
+Por tanto el scoring de rol puede seguir siendo útil, pero debe ejecutarse **después** de construir un conjunto de candidatos legal y ejecutable según el ruleset moderno.
+
+### 14.5 Random Cup — construcción de loadout no equivale a interpretación del roster
+
+`role_id` entra al generador desde fuera. El generador sabe optimizar un Pokémon para un rol solicitado, pero no decide por sí mismo qué rol tiene sentido dentro de los seis Pokémon aleatorios recibidos.
+
+Random Cup necesita mantener separadas dos responsabilidades:
+
+1. **interpretar el roster recibido** y detectar dinámicamente qué roles/coberturas existen o faltan;
+2. **construir/configurar un loadout**, únicamente en los campos que las reglas del modo permitan modificar.
+
+Esto evita que el generador se convierta en una forma indirecta de hacer trampas al azar: recibir una especie aleatoria no concede automáticamente permiso para escoger naturaleza, IV/EV, habilidad, item y cuatro movimientos ideales si el contrato de Random Cup no lo establece.
+
+**Clasificación:** `TrainerRoleLoadoutGenerator` CONSERVAR como núcleo determinista reutilizable; ADAPTAR integración y legalidad; no convertirlo todavía en autoridad de Random Cup.
+
+### 14.6 Tests FASE32 — BUENA ESTRUCTURA, FIXTURES OBSOLETOS PARA V3
+
+La suite histórica prueba correctamente muchos contratos útiles:
+
+- round-trip;
+- IV/EV/naturaleza;
+- movimientos duplicados o incompatibles;
+- método de learnset no soportado;
+- habilidad e item runtime;
+- generación por rol;
+- materialización;
+- determinismo e independencia.
+
+Pero sus movimientos son definiciones sintéticas creadas sin fijar explícitamente `classification`. Como `MoveDefinition` usa `DATA_ONLY` por defecto, los fixtures demuestran que la suite histórica **no estaba modelando la frontera moderna de clasificación de movimientos**.
+
+Tampoco existen en esta suite casos que separen:
+
+- varios `version_group` para una misma especie/movimiento;
+- `RUNTIME_SUPPORTED` vs `PARTIAL_RUNTIME` vs `DATA_ONLY` vs `UNSUPPORTED`;
+- reglas reales de procedencia V3;
+- generación sobre una muestra representativa del catálogo V3.
+
+El V2 de la suite únicamente corrige la prueba de independencia de contenedores; no moderniza legalidad/procedencia.
+
+**Clasificación:** CONSERVAR estructura de tests; MODERNIZAR fixtures y añadir gates V3 antes de certificar FASE32 renovada.
+
+### 14.7 Decisiones que deliberadamente NO se inventan en esta auditoría
+
+Antes de modificar producción deben quedar congeladas reglas de Random Cup que el repositorio actual no define todavía de forma suficiente:
+
+- qué `version_group` o conjunto de procedencias constituye el ruleset legal;
+- tratamiento exacto de machine/tutor/egg;
+- política sobre `PARTIAL_RUNTIME`;
+- si moveset, naturaleza, IV/EV, habilidad y held item se asignan aleatoriamente, se generan una vez, se heredan o pueden optimizarse;
+- qué campos puede variar la expertise del entrenador sin alterar la aleatoriedad de especies.
+
+Resolver estas reglas después de codificar obligaría a rehacer el validador y el generador, por lo que el código queda intacto hasta cerrar ese contrato.
+
+### 14.8 Estado de FASE32 tras auditoría
+
+- `TrainerPokemonLoadout` como contrato de datos: **CONSERVAR**;
+- `TrainerLoadoutValidator`: **CONSERVAR ESTRUCTURA / ADAPTAR LEGALIDAD V3**;
+- `TrainerRoleLoadoutGenerator`: **CONSERVAR NÚCLEO / ADAPTAR CANDIDATOS E INTEGRACIÓN RANDOM CUP**;
+- selección de especie dentro del generador: **NO EXISTE**, por tanto no viola Random Cup;
+- scoring de rol: **CONSERVAR / REVALIDAR**;
+- fixtures FASE32: **MODERNIZAR**;
+- política exacta de `version_group` y `PARTIAL_RUNTIME`: **PENDIENTE DE CONTRATO**;
+- código de producción modificado durante esta auditoría: **NO**.
+
+Siguiente bloque recomendado: auditar `TrainerTeamAnalyzer`, `TrainerTeamComposer` y `TrainerTeamFactory` para separar análisis legítimo del roster aleatorio de cualquier selección de especies que ya no pertenezca al flujo Random Cup.
