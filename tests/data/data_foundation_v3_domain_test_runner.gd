@@ -29,6 +29,7 @@ func _run() -> void:
 	DataFoundationV3AbilityOffensiveStatTestSuite.new().run(Callable(self, "_check"))
 	DataFoundationV3AbilityOffensiveStatConditionsTestSuite.new().run(Callable(self, "_check"))
 	DataFoundationV3AbilityDamageRoleTestSuite.new().run(Callable(self, "_check"))
+	DataFoundationV3AbilityEndTurnTestSuite.new().run(Callable(self, "_check"))
 	DataFoundationV3AbilityMovePropertyTestSuite.new().run(Callable(self, "_check"))
 	DataFoundationV3AbilityContactReactionTestSuite.new().run(Callable(self, "_check"))
 	DataFoundationV3AbilityContactRetaliationTestSuite.new().run(Callable(self, "_check"))
