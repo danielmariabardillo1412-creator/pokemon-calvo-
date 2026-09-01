@@ -66,7 +66,7 @@ func execute(
 					context.state.turn,
 					context.actor.instance_id,
 					recipient.instance_id,
-					context.move.id,
+					context.move.id if context.move != null else &"",
 					drained,
 					{"cause": "drain"},
 				))
@@ -203,7 +203,7 @@ func _damage(
 		context.rng,
 		context.ruleset,
 		int(modifiers.multiplier_basis_points),
-		-1,
+		int(modifiers.force_critical),
 		int(modifiers.offensive_stat_multiplier_basis_points),
 	)
 	if result.critical:
