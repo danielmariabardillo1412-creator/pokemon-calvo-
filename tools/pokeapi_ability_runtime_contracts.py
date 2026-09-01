@@ -63,7 +63,10 @@ _CLASSIFICATION = {
     "thick_fat": RUNTIME_SUPPORTED,
     "ice_scales": RUNTIME_SUPPORTED,
     "multiscale": RUNTIME_SUPPORTED,
+    "flame_body": PARTIAL_RUNTIME,
+    "gooey": PARTIAL_RUNTIME,
     "heatproof": PARTIAL_RUNTIME,
+    "poison_point": PARTIAL_RUNTIME,
     "reckless": PARTIAL_RUNTIME,
     "intimidate": PARTIAL_RUNTIME,
     "levitate": PARTIAL_RUNTIME,
@@ -149,6 +152,24 @@ def _validate_swarm_history(ability: dict) -> None:
             if battle_token in change_text:
                 raise RuntimeError(
                     "DATA V3 Swarm historical battle semantics changed; re-audit"
+                )
+
+
+def _validate_flame_body_history(ability: dict) -> None:
+    """Flame Body's pinned history changes only its old overworld egg effect."""
+    changes = ability.get("effect_changes") or []
+    if not changes:
+        raise RuntimeError("DATA V3 Flame Body history unexpectedly disappeared; re-audit")
+    for change in changes:
+        change_text = _english_text(change.get("effect_entries"))
+        if not change_text or "overworld" not in change_text:
+            raise RuntimeError(
+                "DATA V3 Flame Body history is no longer overworld-only; re-audit"
+            )
+        for battle_token in ("move makes contact", "30% chance", "burned"):
+            if battle_token in change_text:
+                raise RuntimeError(
+                    "DATA V3 Flame Body historical battle semantics changed; re-audit"
                 )
 
 
@@ -368,6 +389,27 @@ def _validate_source_contract(ability: dict, sid: str) -> None:
                 "takes damage from a move",
             ),
         )
+        _require_no_history(ability, sid)
+        return
+
+    if sid == "gooey":
+        if _generation_name(ability) != "generation-vi":
+            raise RuntimeError("DATA V3 audited ability generation changed for gooey")
+        _require_tokens(text, sid, ("speed by one stage", "on contact"))
+        _require_no_history(ability, sid)
+        return
+
+    if sid == "flame_body":
+        if _generation_name(ability) != "generation-iii":
+            raise RuntimeError("DATA V3 audited ability generation changed for flame_body")
+        _require_tokens(text, sid, ("move makes contact", "30% chance", "burned"))
+        _validate_flame_body_history(ability)
+        return
+
+    if sid == "poison_point":
+        if _generation_name(ability) != "generation-iii":
+            raise RuntimeError("DATA V3 audited ability generation changed for poison_point")
+        _require_tokens(text, sid, ("move makes contact", "30% chance", "poisoned"))
         _require_no_history(ability, sid)
         return
 
