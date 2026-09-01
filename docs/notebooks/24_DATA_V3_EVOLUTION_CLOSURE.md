@@ -12,6 +12,8 @@ Operational checkpoint for the Evolutions V3 reliability/closure tranche immedia
 ## Current tranche
 - Branch: `audit/data-v3-evolution-closure-v1`.
 - Exact parent: certified #93 final `a034a8404d80a13cad25d43eb85c4f84e9fb22bf`.
+- PR: #94 `DATA V3 — close evolution runtime frontier`.
+- Engineering SHA: `87a48acc2746ee429cbd6786e6a8adedb1afabeb`.
 
 ## Mandatory continuity rule
 Every material discovery, exception, correction, architectural decision, certification boundary or deliberate deferral must be written into the project notebooks. Chat context is never the sole source of continuity. A small live correction is allowed when it is bounded and source-backed, but the finding and decision must be recorded before the tranche is considered closed.
@@ -40,7 +42,7 @@ Trigger partition:
 - `other`: **1**
 - `take_damage`: **1**.
 
-Reference integrity was recomputed directly from the exact certified artifact:
+Reference integrity:
 - broken target-species references: **0**;
 - broken/missing `use_item` item references: **0**.
 
@@ -52,7 +54,7 @@ Conditioned records inside primary triggers that already have runtime paths:
 - `trade`: **23 / 30**
 - total: **156**.
 
-Observed preserved condition families include:
+Preserved condition families include:
 - form/region identity: `base_form`, `evolved_form`, `region`;
 - friendship/affection/beauty: `min_happiness`, `min_affection`, `min_beauty`;
 - temporal/location/world context: `time_of_day`, `location`, `near_special_rock`, `needs_overworld_rain`;
@@ -76,7 +78,7 @@ Before this tranche, `EvolutionSystem`:
 - never evaluated `record.conditions`;
 - skipped only `UNSUPPORTED` records in `evolution_candidates()`, allowing `DATA_ONLY` records under a known primary trigger to be evaluated anyway.
 
-Consequence: a conditioned evolution could silently degrade into a weaker simple level/item/trade evolution.
+Consequence: a conditioned evolution could silently degrade into a weaker simple level/item/trade evolution. That would modify Pokémon rules rather than implement them faithfully.
 
 Representative preserved examples:
 - Aipom → Ambipom requires knowing `double_hit`;
@@ -130,15 +132,13 @@ No new evolution-condition subsystem is being built.
 
 This is a capability-boundary correction, not a general version/form/friendship/trade evolution engine.
 
-## Provisional corrected capability boundary
-With exact references verified and the redundant-selector rule applied, the expected canonical classification is:
+## Certified engineering capability boundary
+Engineering CI confirms the exact classification:
 - `RUNTIME_SUPPORTED`: **391**
 - `DATA_ONLY`: **149**
 - `UNSUPPORTED`: **14**
 - `PARTIAL`: **0**
 - total: **554**.
-
-This **391 / 149 / 14** boundary is now encoded in the closure suite but is not certified until engineering CI and artifact comparison pass.
 
 ## Closure regression suite
 `DataFoundationV3EvolutionClosureTestSuite` adds **11 closure checks**:
@@ -154,27 +154,72 @@ This **391 / 149 / 14** boundary is now encoded in the closure suite but is not 
 10. all canonical exotic trigger IDs classify `UNSUPPORTED`;
 11. candidate gating proves conditioned level/trade records stay out while a redundant base-form item evolution remains executable.
 
+## Engineering certification
+Engineering HEAD:
+- `87a48acc2746ee429cbd6786e6a8adedb1afabeb`.
+
+Result:
+- **18/18 workflows SUCCESS**;
+- Godot 4.7 regression suite SUCCESS;
+- DATA Foundation V3 SUCCESS;
+- Trainer AI regressors SUCCESS;
+- DATA V3 domain: **557 PASS / 0 FAIL**.
+
+## Exact #93 final → #94 engineering artifact comparison
+Certified #93 final:
+- head `a034a8404d80a13cad25d43eb85c4f84e9fb22bf`;
+- DATA V3 run `33513512710`;
+- artifact `9802641046`.
+
+#94 engineering:
+- head `87a48acc2746ee429cbd6786e6a8adedb1afabeb`;
+- DATA V3 run `33515258905`;
+- artifact `9803339060`.
+
+Both artifacts contain the same **15-file output set**.
+
+Byte-identical canonical outputs:
+- raw `pokemon_api.json`;
+- normalized `pokemon_api.json`;
+- manifest;
+- forms policy report;
+- unsupported mechanics report;
+- PokeAPI V3 audit report;
+- auxiliary report.
+
+`import_summary.json` is canonically identical except timing noise:
+- `import_time_ms 508 → 491 ms`.
+
+Expected log delta:
+- DATA V3 domain increases **546 → 557 PASS / 0 FAIL** because of the 11 new Evolutions V3 closure checks.
+- runtime/check logs are unchanged.
+
+No canonical DATA V3 drift exists.
+
 ## Closure rule
-Prefer tested preservation + explicit runtime capability boundaries over pretending every main-series evolution mechanic is executable. Evolutions V3 can close when:
+Prefer tested preservation + explicit runtime capability boundaries over pretending every main-series evolution mechanic is executable. Evolutions V3 closes only when:
 - canonical evolution counts/references are exact;
 - trigger/condition families are inventoried;
 - runtime-consumed fields are explicitly distinguished from preserved metadata;
 - no unsupported condition can silently behave as a simpler supported evolution;
 - the narrow redundant-selector exception is frozen by tests;
-- no broad overworld/trade/friendship/time/location/party/form subsystem is opened solely for data coverage.
+- no broad overworld/trade/friendship/time/location/party/form subsystem is opened solely for data coverage;
+- engineering and final notebook-bearing HEADs both pass 18/18.
 
-## Workflow
-1. inspect raw/normalized evolution schema and V3 adapter construction;
-2. inspect `EvolutionRecord`, `EvolutionSystem`, progression tests and importer validation;
-3. inventory exact trigger/condition families across the 554 records;
-4. identify and correct semantic loss between canonical data and runtime evaluation;
-5. add closure regressions/invariants;
-6. 18/18 engineering → artifact diff → sync `01/04/24` → notebooks-only compare → final 18/18 → close without merge.
+## Current certification step
+Engineering and artifact comparison are complete.
+
+Before closing #94:
+1. engineering → final must change only `01_PROJECT_STATE.md`, `04_NEXT_STEPS.md`, `24_DATA_V3_EVOLUTION_CLOSURE.md`;
+2. require **18/18 SUCCESS** on the exact final notebook-bearing HEAD;
+3. close #94 without merge;
+4. use that exact final SHA as the certified parent for final end-to-end DATA V3 certification.
 
 ## Safety
 - immutable PokeAPI snapshot remains read-only;
 - no manual edits to generated JSON;
 - do not infer missing conditions from Pokémon names or remembered game knowledge;
+- when source uncertainty matters, verify against PokeAPI/authoritative Pokémon references rather than inventing mechanics;
 - do not simplify a multi-condition evolution into a weaker runtime rule;
 - conditioned records remain preserved even when runtime execution is deferred;
 - do not build friendship/time/location/form/trade-item/party/move-use systems merely to raise coverage during closure;
