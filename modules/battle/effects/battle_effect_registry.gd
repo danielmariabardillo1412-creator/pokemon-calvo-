@@ -248,6 +248,47 @@ func _register_abilities() -> void:
 		&"stamina",
 		_stage(BattleEffectSpec.SELF, StatStages.DEFENSE, 1),
 	)]
+	# Defender-owned contact reactions share the same partial boundary as Static:
+	# TurnExecutor requests AFTER_DAMAGE only after positive damage and only while
+	# the defender survives, so a contact hit that KOs the owner cannot trigger yet.
+	_ability_specs[&"flame_body"] = [BattleTriggerSpec.new(
+		BattleTriggerSpec.AFTER_DAMAGE,
+		&"ability",
+		&"flame_body",
+		_chance(3000, BattleEffectSpec.new(
+			BattleEffectSpec.INFLICT_STATUS,
+			BattleEffectSpec.OPPONENT,
+			0,
+			0,
+			10000,
+			&"burn",
+		)),
+		0,
+		{"requires_contact": true},
+	)]
+	_ability_specs[&"poison_point"] = [BattleTriggerSpec.new(
+		BattleTriggerSpec.AFTER_DAMAGE,
+		&"ability",
+		&"poison_point",
+		_chance(3000, BattleEffectSpec.new(
+			BattleEffectSpec.INFLICT_STATUS,
+			BattleEffectSpec.OPPONENT,
+			0,
+			0,
+			10000,
+			&"poison",
+		)),
+		0,
+		{"requires_contact": true},
+	)]
+	_ability_specs[&"gooey"] = [BattleTriggerSpec.new(
+		BattleTriggerSpec.AFTER_DAMAGE,
+		&"ability",
+		&"gooey",
+		_stage(BattleEffectSpec.OPPONENT, StatStages.SPEED, -1),
+		0,
+		{"requires_contact": true},
+	)]
 	_ability_specs[&"static"] = [BattleTriggerSpec.new(
 		BattleTriggerSpec.AFTER_DAMAGE,
 		&"ability",
