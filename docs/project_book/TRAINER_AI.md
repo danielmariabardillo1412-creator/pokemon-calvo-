@@ -1976,3 +1976,298 @@ La suite debe registrar breakdowns para que una regresión no pase solo porque �
 - código de producción modificado: **NO**.
 
 Siguiente bloque recomendado: diseñar la **inferencia dinámica de roles/capacidades sobre `own_party`** que alimentará el valor estructural —sin depender de `TrainerPokemonLoadout.role_id`— y decidir qué señales runtime son suficientemente fiables para clasificar atacante físico/especial, fast, bulky y support.
+
+---
+
+## 21. Auditoría técnica — inferencia dinámica de roles y capacidades
+
+Checkpoint de diseño para interpretar el roster aleatorio ya materializado. **No se modifica código de producción en este tramo.**
+
+### 21.1 Nueva capa — interpretar, nunca construir
+
+Hace falta una capa nueva, provisionalmente denominada:
+
+**`TrainerRosterRoleInference`**.
+
+Su responsabilidad es leer un miembro propio tal como existe realmente y responder qué funciones puede cumplir. No selecciona especie, no cambia movimientos, no asigna EV/IV, no cambia naturaleza, no escoge habilidad ni held item.
+
+Entradas V1:
+
+- vista propia procedente de `TrainerObservation.own_party`;
+- `DefinitionCatalog`;
+- política runtime ya congelada para Random Cup.
+
+No necesita ni debe leer:
+
+- `TrainerPokemonLoadout.role_id` como verdad estratégica;
+- `quality_id`;
+- `TrainerProfile`;
+- `observed_opponents`;
+- beliefs;
+- memoria rival;
+- RNG/seed.
+
+El `role_id` histórico se conserva por compatibilidad, authored teams y otros modos, pero Random Cup lo tratará como metadata no autoritativa.
+
+### 21.2 FASE32 — separar construcción de inferencia
+
+`TrainerRoleLoadoutGenerator` mezcla deliberadamente varias responsabilidades de construcción:
+
+- `_ivs_for_quality()`;
+- `_evs_for_role()`;
+- `_nature_for_role()`;
+- `_moves_for_role()`;
+- `_supported_ability()`;
+- `_held_item_for_role()`.
+
+Estas funciones **no se reutilizan** para inferencia Random Cup porque modifican o seleccionan las propiedades del Pokémon.
+
+Sí son reutilizables como inspiración conceptual:
+
+- distinguir daño físico y especial;
+- valorar STAB, potencia, prioridad y utilidad estructurada;
+- reconocer que bulk físico y especial son funciones distintas;
+- mantener determinismo y trazabilidad.
+
+Los tests históricos FASE32 prueban el sentido contrario al que ahora necesitamos: `rol solicitado → construir loadout`. Random Cup necesita `loadout real → inferir roles`.
+
+### 21.3 Las capacidades son más fundamentales que las etiquetas de rol
+
+Para evitar meter efectos distintos a la fuerza dentro de `support`, la inferencia V1 debe producir primero un **vector de capacidades** y después derivar etiquetas de rol.
+
+Capacidades mínimas propuestas:
+
+- `physical_damage_bp`;
+- `special_damage_bp`;
+- `speed_pressure_bp`;
+- `physical_bulk_bp`;
+- `special_bulk_bp`;
+- `control_bp`;
+- `setup_bp`;
+- `sustain_bp`.
+
+Después se derivan puntuaciones de rol compatibles con el vocabulario existente:
+
+- `physical_attacker`;
+- `special_attacker`;
+- `fast_attacker`;
+- `bulky_physical`;
+- `bulky_special`;
+- `support`.
+
+`balanced` queda como **fallback/resumen** cuando no existe una función claramente dominante o cuando el miembro presenta un perfil muy repartido. No se utiliza como capacidad primaria que borre las funciones concretas detectadas.
+
+### 21.4 Salida multietiqueta — un Pokémon puede cumplir varios papeles
+
+La salida por `instance_id` debe incluir como mínimo:
+
+- `capability_scores_bp`;
+- `role_scores_bp`;
+- `primary_role_id`;
+- `secondary_role_ids`;
+- `role_confidence_bp`;
+- `evidence` / breakdown determinista.
+
+No se fuerza una clasificación exclusiva.
+
+Ejemplos válidos conceptualmente:
+
+- atacante especial + fast attacker;
+- bulky físico + support;
+- atacante físico + setup;
+- bulky especial + sustain;
+- híbrido físico/especial si el stats+moveset real lo justifican.
+
+Esto es especialmente importante en Random Cup: una plantilla aleatoria puede obligar a un mismo miembro a cubrir más de una función.
+
+### 21.5 Señales para daño físico y especial
+
+La inferencia debe utilizar los **stats reales materializados** de `own_party`, no solo base stats de especie. Eso incorpora legítimamente nivel, IV, EV y naturaleza ya existentes sin volver a diseñarlos.
+
+Para `physical_damage_bp` deben aportar evidencia, entre otras señales:
+
+- Attack real;
+- existencia de movimientos físicos `RUNTIME_SUPPORTED` con potencia > 0;
+- potencia;
+- STAB;
+- accuracy;
+- prioridad;
+- capacidades estructuradas que amplifiquen de forma explícita una ruta física cuando exista soporte runtime auditable.
+
+`special_damage_bp` aplica el mismo principio con Special Attack y movimientos especiales.
+
+Un Attack enorme sin ningún movimiento físico ejecutable no basta para declarar al miembro atacante físico fuerte. Del mismo modo, un movimiento físico potente no debe ignorar que el stat real de Attack puede ser muy pobre.
+
+### 21.6 `fast_attacker` — velocidad real + ruta ofensiva
+
+La velocidad se obtiene del stat real propio y debe combinarse con una ruta ofensiva ejecutable.
+
+Un Pokémon rápido que no puede ejercer presión ofensiva no debe recibir automáticamente una puntuación máxima de `fast_attacker`.
+
+La prioridad positiva de movimientos aporta **cleaner/finish pressure**, pero no sustituye totalmente la velocidad real: un Pokémon lento con prioridad puede ser un buen rematador sin convertirse conceptualmente en uno de los miembros más rápidos del roster.
+
+No se congela todavía una fórmula absoluta de normalización. Los fixtures deberán cubrir tanto velocidad intrínseca como comparación razonable entre miembros antes de fijar pesos.
+
+### 21.7 Bulk físico y especial — potencial estructural, no HP actual
+
+`physical_bulk_bp` debe derivarse de la capacidad real de absorber daño físico, principalmente:
+
+- max HP;
+- Defense real;
+- tipado/resistencias estructurales cuando el evaluador correspondiente las integre de forma auditable;
+- sustain explícito como señal complementaria, no como sustituto de bulk.
+
+`special_bulk_bp` aplica el mismo principio con Special Defense.
+
+**El HP actual no define el rol.** Un muro a 10% de vida sigue siendo estructuralmente bulky aunque esté temporalmente casi inutilizable. Su estado actual pertenece a `operational_readiness_bp` de la capa estratégica/táctica.
+
+Los stat stages temporales tampoco deben reescribir el rol intrínseco.
+
+### 21.8 Utilidad estructurada — separar control, setup y sustain
+
+`BattleEffectSpec` ya proporciona señales semánticas suficientemente explícitas para no inferir por nombre de movimiento.
+
+Mapeo conceptual V1:
+
+- `INFLICT_STATUS` sobre oponente → `control`;
+- `MODIFY_STAT_STAGE` negativo sobre oponente → `control` / debuff;
+- `FLINCH` → `control`, ponderado por chance/condiciones disponibles;
+- `MODIFY_STAT_STAGE` positivo sobre self → `setup`;
+- `HEAL` sobre self → `sustain`;
+- `DRAIN` → `sustain` + daño correspondiente;
+- `CURE_STATUS` propio → `sustain/utility`;
+- `RECOIL` → coste/penalización de sustain;
+- `CHANCE` → recurse ponderando `chance_basis_points`;
+- `REVIVE` → ignorado/prohibido en Random Cup;
+- efectos de daño/fixed/max-HP/multi-hit → alimentan capacidades ofensivas cuando su semántica runtime sea ejecutable.
+
+Un movimiento de setup propio **no convierte por sí solo** al Pokémon en support. Del mismo modo, recuperación propia puede reforzar bulk/sustain sin tener que etiquetarse automáticamente como soporte puro.
+
+`support` se deriva principalmente de control, debuff, status, cura/utility y otras capacidades no puramente ofensivas que beneficien la estabilidad táctica del miembro/equipo dentro de las mecánicas realmente implementadas.
+
+### 21.9 Gate DATA V3 — fail closed
+
+La inferencia Random Cup V1 solo cuenta capacidades que el ruleset considera ejecutables.
+
+Contrato actual:
+
+- `RUNTIME_SUPPORTED` → puede contribuir;
+- `PARTIAL_RUNTIME` → no contribuye en V1 mientras siga excluido de generación automática;
+- `DATA_ONLY` → no contribuye;
+- `UNSUPPORTED` → no contribuye.
+
+La comprobación debe usar `MoveDefinition.classification`, no el whitelist histórico pequeño de Battle V2.
+
+Aunque el generador Random Cup futuro debería impedir que llegue un moveset ilegal, la inferencia debe fallar de forma segura: un movimiento no aceptado no puede inflar silenciosamente un rol si entra por fixture, save antiguo u otro flujo.
+
+### 21.10 Habilidades y held items — no inferir semántica por nombre
+
+El miembro propio conoce su `ability_id` y `held_item_id`, pero Random Cup V1 no debe adjudicar roles mediante reglas como “si habilidad == Levitate entonces…” o “si item == Leftovers entonces bulky” salvo que exista una capacidad runtime estructurada y auditable que represente el efecto.
+
+Dirección V1:
+
+- stats + moveset + tipado estructural = señales base;
+- habilidad/held item solo entran en el vector cuando exista una API semántica runtime explícita y comprobable;
+- no duplicar a mano una segunda base de conocimiento de efectos dentro de Trainer AI.
+
+Esto evita que la IA conozca mejor una mecánica por su nombre de lo que el propio runtime sabe ejecutar.
+
+### 21.11 Rol intrínseco vs importancia del rol dentro del roster
+
+Se congelan dos conceptos separados:
+
+1. **Role inference intrínseca:** qué puede hacer este `instance_id` por sus stats/loadout reales.
+2. **Roster role importance:** qué tan escasa, única o reemplazable es esa capacidad dentro de los supervivientes actuales.
+
+La primera no debe cambiar simplemente porque muera un compañero.
+
+La segunda sí puede cambiar radicalmente con permadeath.
+
+Ejemplo:
+
+- un Pokémon con `support=6200` y `special_attacker=7800` conserva esas capacidades si muere el soporte principal;
+- después de la baja, su `support` puede pasar a ser la mejor alternativa del roster y aumentar su importancia estratégica, sin falsificar su score intrínseco.
+
+Esta separación alimentará directamente `TrainerRosterStrategicValueEvaluator` y evita roles “mágicamente reescritos” por necesidades del equipo.
+
+### 21.12 Estado actual, PP y status — no borrar identidad funcional
+
+La inferencia estructural no debe degradarse porque:
+
+- el Pokémon tenga poco HP;
+- esté quemado/paralizado/etc.;
+- un movimiento esté temporalmente sin PP;
+- exista un stat stage temporal.
+
+Esos datos sí importan para la **disponibilidad operativa** y la decisión táctica actual.
+
+Si una política de Random Cup hace que PP/status persistan entre rondas, esa persistencia podrá reducir `operational_readiness_bp` o utilidad estratégica futura, pero seguirá separada de la pregunta “¿qué función define este loadout cuando es utilizable?”.
+
+Si el propio Pokémon cambia persistentemente —nivel, evolución, moveset real— la inferencia se recalcula porque la capacidad objetiva sí cambió.
+
+### 21.13 Relación con `TrainerTeamAnalyzer`
+
+`TrainerTeamAnalyzer` actualmente calcula `role_counts` leyendo `loadout.role_id`.
+
+En el flujo Random Cup moderno deberá consumir la nueva inferencia en vez de esa etiqueta authored.
+
+Dirección futura:
+
+- conservar análisis de tipos, debilidades, resistencias y cobertura reutilizable;
+- reemplazar el conteo autoritativo de `role_id` por cobertura de roles inferidos;
+- distinguir presencia fuerte de un rol de simples secundarios débiles;
+- usar la distribución de scores para detectar ausencia, redundancia y unicidad;
+- no congelar aún umbrales exactos hasta crear fixtures de inferencia.
+
+El Analyzer histórico puede seguir comportándose como antes para `TrainerTeamDefinition` authored fuera de Random Cup si se necesita compatibilidad.
+
+### 21.14 `balanced` no debe esconder información
+
+`TrainerPokemonLoadout.ROLE_BALANCED` se conserva por compatibilidad, pero no debe convertirse en una bolsa donde caigan todos los casos difíciles.
+
+En Random Cup:
+
+- `balanced` puede ser `primary_role_id` de resumen si ningún rol específico domina o si existe una distribución muy pareja;
+- aun así `role_scores_bp` y `capability_scores_bp` completos siempre se conservan;
+- el valor estratégico y la IA pueden utilizar capacidades secundarias aunque el resumen diga `balanced`.
+
+Así un híbrido no pierde información útil por una decisión de etiquetado.
+
+### 21.15 Tests mínimos de la futura inferencia
+
+Antes de integrarla en `TrainerTeamAnalyzer` o valor estratégico debe existir una suite aislada y determinista que pruebe al menos:
+
+- mismo `CreatureInstance` + distinto `TrainerPokemonLoadout.role_id` histórico → misma inferencia;
+- mismo miembro + distinto `TrainerProfile` → misma inferencia;
+- misma especie con moveset físico vs moveset especial → roles distintos;
+- misma especie con moveset de status/debuff vs ofensivo → soporte/control distinto;
+- híbrido real → múltiples roles significativos, no clasificación exclusiva;
+- self-setup aumenta `setup` pero no convierte por sí solo en support;
+- recuperación/drain aumenta `sustain`;
+- movimiento `DATA_ONLY`, `PARTIAL_RUNTIME` o `UNSUPPORTED` no aumenta capacidades V1;
+- ataque alto sin ruta física ejecutable no obtiene score físico alto solo por stat;
+- velocidad alta sin ruta ofensiva no obtiene automáticamente `fast_attacker` máximo;
+- HP actual bajo no cambia `physical_bulk_bp`/`special_bulk_bp` estructural;
+- current PP = 0 no borra el rol estructural, aunque una capa de readiness pueda penalizar disponibilidad;
+- eliminar otro miembro del roster no cambia los role scores intrínsecos del superviviente;
+- la importancia/escasez posterior sí puede cambiar al recalcular el roster;
+- cambiar cualquier dato oculto rival no altera el resultado;
+- mismo input → mismo output y mismo breakdown.
+
+### 21.16 Estado de este checkpoint
+
+- inferencia dinámica existente: **NO; NUEVA CAPA NECESARIA**;
+- nombre provisional: **`TrainerRosterRoleInference`**;
+- autoridad de `TrainerPokemonLoadout.role_id` en Random Cup: **NO**;
+- salida: **MULTIROLE + VECTOR DE CAPACIDADES**;
+- roles específicos: **PHYSICAL / SPECIAL / FAST / BULKY PHYSICAL / BULKY SPECIAL / SUPPORT**;
+- `balanced`: **FALLBACK/RESUMEN, NO CAPACIDAD OCULTADORA**;
+- señales base: **STATS REALES + MOVESET RUNTIME + EFFECT_SPECS + TIPADO ESTRUCTURAL**;
+- HP/status/PP actuales dentro del rol estructural: **NO; VAN A READINESS**;
+- perfil/personalidad dentro de inferencia: **NO**;
+- rivales/beliefs/RNG dentro de inferencia: **NO**;
+- habilidad/item por nombre: **PROHIBIDO**;
+- pesos/umbrales numéricos finales: **NO CONGELADOS; PRIMERO FIXTURES**;
+- código de producción modificado: **NO**.
+
+Siguiente bloque recomendado: cerrar el **orden de implementación mínimo** de las nuevas piezas ya diseñadas (`campaign_snapshot`, role inference, roster strategic value) y decidir cuál puede implementarse/testearse primero sin depender de las reglas de gameplay de Random Cup que aún están abiertas.
