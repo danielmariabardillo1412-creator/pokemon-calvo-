@@ -38,6 +38,7 @@ func _run() -> void:
 	DataFoundationV3AbilityContactRetaliationTestSuite.new().run(Callable(self, "_check"))
 	DataFoundationV3ItemClosureTestSuite.new().run(Callable(self, "_check"))
 	DataFoundationV3EvolutionClosureTestSuite.new().run(Callable(self, "_check"))
+	DataFoundationV3EndToEndClosureTestSuite.new().run(Callable(self, "_check"))
 	print("\n=== DATA FOUNDATION V3 DOMAIN RESULT: %d PASS / %d FAIL ===" % [_passed, _failed])
 	quit(0 if _failed == 0 else 1)
 
