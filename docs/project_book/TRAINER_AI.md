@@ -1115,3 +1115,179 @@ No prueban:
 - código de producción modificado durante esta auditoría: **NO**.
 
 Siguiente bloque recomendado: localizar la autoridad actual de torneo/campaña/roster fuera de Battle Core y comprobar dónde debe vivir la eliminación permanente, la persistencia entre combates y la asignación aleatoria determinista.
+
+---
+
+## 16. Auditoría técnica — autoridad Random Cup, persistencia y permadeath
+
+Checkpoint de arquitectura de modo/campaña. **No se modifica código de producción en este tramo.**
+
+### 16.1 No existe todavía una autoridad Random Cup/campaña implementada
+
+La búsqueda del repositorio no encuentra una implementación funcional de `Random Cup`, `permadeath`, `campaign` o `tournament` fuera de la documentación de este rediseño.
+
+Por tanto no hay un sistema de torneo oculto que deba adaptarse. La capa de modo persistente será una responsabilidad nueva.
+
+Esto es importante porque esa responsabilidad **no pertenece a Trainer AI ni a Battle Core**. Trainer AI decide usando un contexto permitido; Battle Core resuelve un combate. El modo Random Cup debe vivir por encima de ambos y poseer el estado que sobrevive entre batallas.
+
+### 16.2 `CreatureParty` — base persistente reutilizable
+
+Ya existe una primitiva apropiada para mantener un roster persistente:
+
+- contiene las mismas `CreatureInstance` que otros sistemas mutan;
+- identifica miembros por `instance_id`, no por especie ni índice;
+- no crea, recalcula ni rerollear criaturas;
+- permite `add_creature`, `remove_creature`, `reorder` y acceso por identidad;
+- serializa de forma estable el roster y las instancias;
+- el límite de seis vive en `PartyRuleset`.
+
+Aunque la documentación histórica la describa como party del jugador, `CreatureParty` es estado de dominio puro y no contiene lógica específicamente humana/UI. Puede reutilizarse conceptualmente como contenedor de roster de un participante Random Cup, siempre que no se le añada lógica de torneo dentro.
+
+**Clasificación:** CONSERVAR `CreatureParty` como primitiva de roster; NO convertirla en autoridad de Random Cup.
+
+### 16.3 Persistencia real entre batallas ya existe a nivel de `CreatureInstance`
+
+`TrainerBattleSession.begin_battle()` no clona ni rematerializa los combatientes. Entrega al `BattleState` las mismas `CreatureInstance` recibidas del propietario del roster.
+
+Battle modifica esas instancias en vivo. Al terminar, `reconcile_post_battle()`:
+
+- elimina estado exclusivamente temporal de combate;
+- reinicia stat stages;
+- mantiene estado persistente;
+- conserva/clampa HP;
+- conserva/clampa PP.
+
+Esto significa que la infraestructura actual **ya puede transportar daño, PP y estado persistente a la siguiente batalla** sin crear un sistema nuevo de criaturas.
+
+Pero esto describe el comportamiento técnico actual, no congela todavía que Random Cup deba conservar obligatoriamente todos esos recursos entre rondas. La muerte permanente sí es premisa canónica; la política exacta de curación/restauración entre combates sigue siendo una regla del modo pendiente de definición.
+
+### 16.4 `TrainerBattleSession` — CONSERVAR COMO FRONTERA DE UNA BATALLA
+
+La sesión ya está en el nivel correcto para:
+
+- recibir identidad del entrenador rival;
+- recibir un roster ya propiedad de otro sistema;
+- crear el `BattleState` real;
+- resolver el combate sin captura/flee;
+- producir `BattleOutcome`/settlement;
+- reconciliar las mismas instancias al finalizar.
+
+No debe convertirse en torneo.
+
+En particular, `_opponent_roster` es solo un array de referencias usado durante la sesión. Tras settlement la sesión limpia su referencia local, pero no destruye las `CreatureInstance` que un propietario externo siga manteniendo.
+
+**Clasificación:** CONSERVAR `TrainerBattleSession` como frontera battle-scoped; la futura autoridad Random Cup la invoca, no se fusiona con ella.
+
+### 16.5 Permadeath — debe aplicarse en la autoridad del modo tras settlement
+
+`CreatureParty.remove_creature(instance_id)` ya ofrece la operación básica necesaria para eliminar una identidad del roster.
+
+La regla canónica del proyecto dice que un Pokémon que cae bajo Random Cup queda eliminado permanentemente del roster futuro. Esa política no debe implementarse dentro de daño, KO, Battle Core ni `CreatureParty`, porque esos sistemas también sirven a modos donde faint no equivale a eliminación permanente.
+
+Dirección arquitectónica:
+
+1. Battle Core determina legítimamente el KO/final del combate;
+2. `TrainerBattleSession` produce y reconcilia el settlement;
+3. la autoridad Random Cup inspecciona el resultado/estado de sus participantes;
+4. aplica la política de permadeath por `instance_id` al roster persistente correspondiente;
+5. las rondas posteriores reciben únicamente los supervivientes.
+
+Esto preserva la semántica genérica de batalla y hace que permadeath sea una regla explícita y testeable del modo.
+
+### 16.6 Estado de participantes — hace falta una capa nueva por encima de `CreatureParty`
+
+Un participante Random Cup necesitará más información que una lista de Pokémon. Como mínimo conceptual, la autoridad futura tendrá que poseer o referenciar:
+
+- identidad del participante/entrenador;
+- roster persistente;
+- `TrainerProfile`/competencia cuando sea IA;
+- recursos persistentes del modo si existen;
+- situación de ronda/eliminación;
+- datos necesarios para reproducibilidad/semillas.
+
+No se congela todavía el nombre ni el schema exacto (`RandomCupState`, `RandomCupParticipant`, etc.). Primero se cerrarán las reglas del modo y después se diseñará el contrato mínimo.
+
+### 16.7 SaveGame V2 no persiste una copa
+
+El save actual persiste el agregado del jugador:
+
+- `CreatureParty`;
+- `CreatureStorage`;
+- `PlayerInventory`.
+
+No incluye:
+
+- bracket/ronda de Random Cup;
+- participantes rivales;
+- rosters rivales persistentes;
+- eliminaciones del torneo;
+- seed/estado de asignación del torneo;
+- recursos de copa separados del jugador.
+
+Por tanto, si Random Cup debe sobrevivir a cerrar/cargar partida, será necesario ampliar la persistencia de forma explícita. No se modifica todavía `SaveGame V2` ni se decide una nueva versión de schema durante esta auditoría.
+
+**Clasificación:** infraestructura de save CONSERVAR; integración Random Cup = NUEVO CONTRATO posterior.
+
+### 16.8 Asignación aleatoria determinista — reutilizar patrón RNG, no el RNG vivo de Battle
+
+El repositorio ya tiene dos precedentes:
+
+- Battle usa `SeededRandomSource` para su snapshot determinista;
+- sistemas gameplay como encounters/capture/CreatureFactory usan `RandomNumberGenerator` inyectado y seeds controladas.
+
+La asignación de especies de Random Cup es una decisión del modo, no una tirada interna de Battle Core. Debe utilizar una fuente RNG inyectada/reproducible propiedad de la capa Random Cup y producir resultados reproducibles para tests y benchmarks.
+
+No se congela en este checkpoint cuál de las dos abstracciones RNG se reutilizará. Sí queda congelado que:
+
+- no habrá `randomize()` oculto;
+- el mismo estado/seed y ruleset deberán reproducir la misma asignación;
+- la IA no podrá pedir rerolls según la calidad del equipo;
+- los `battle_seed` deben seguir siendo una preocupación separable de la semilla de asignación de roster.
+
+### 16.9 Reglas de asignación que siguen pendientes
+
+Antes de implementar el generador Random Cup deben definirse expresamente:
+
+- pool exacto elegible: especies/formas;
+- duplicados permitidos o no;
+- nivel inicial y posible progresión;
+- cómo se materializan moveset/naturaleza/IV/EV/habilidad/held item;
+- `version_group`/provenance legal;
+- política sobre movimientos `PARTIAL_RUNTIME`;
+- si existe reposición de Pokémon tras una baja o el roster solo decrece;
+- política de HP/PP/status/healing entre rondas;
+- economía/objetos persistentes exactos.
+
+Estas decisiones alteran directamente la IA y el valor de campaña, por lo que no se autorrellenan.
+
+### 16.10 Tests que necesitará la nueva autoridad de modo
+
+Cuando se implemente, el mínimo de regresiones deberá cubrir al menos:
+
+- misma seed + mismo ruleset → misma asignación;
+- seeds distintas pueden producir asignaciones distintas;
+- ninguna IA puede rerollear especies recibidas;
+- identidades `instance_id` estables durante toda la copa;
+- Battle recibe las mismas instancias persistentes;
+- estado permitido entre rondas no se restaura accidentalmente;
+- un KO marcado por la regla de permadeath desaparece del roster futuro;
+- un superviviente conserva exactamente el estado que el ruleset determine;
+- participante sin miembros utilizables queda eliminado/incapaz de iniciar batalla;
+- `TrainerTeamComposer` no participa en la asignación Random Cup;
+- round-trip de estado de copa cuando se decida integrar save.
+
+### 16.11 Estado arquitectónico tras esta auditoría
+
+- autoridad Random Cup existente: **NO**;
+- `CreatureParty`: **CONSERVAR COMO PRIMITIVA PERSISTENTE**;
+- `CreatureInstance`: **CONSERVAR IDENTIDAD/ESTADO VIVO**;
+- `TrainerBattleSession`: **CONSERVAR COMO SESIÓN DE UNA BATALLA**;
+- permadeath en Battle Core: **NO**;
+- permadeath en `CreatureParty`: **NO COMO REGLA INTERNA**;
+- permadeath en futura autoridad Random Cup tras settlement: **DIRECCIÓN CANÓNICA**;
+- estado/participante de copa: **NUEVA CAPA NECESARIA**;
+- asignación aleatoria: **NUEVA CAPA DETERMINISTA NECESARIA**;
+- save de copa: **NO EXISTE / INTEGRACIÓN POSTERIOR**;
+- código de producción modificado durante esta auditoría: **NO**.
+
+Siguiente bloque recomendado: congelar únicamente las reglas de Random Cup que bloquean la implementación —pool/duplicados, loadout inicial, persistencia HP/PP/status, reposición y recursos— antes de diseñar clases o tocar código.
