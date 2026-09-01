@@ -158,3 +158,100 @@ Continúan fuera de alcance inmediato:
 - MCTS/red neuronal sin límite real demostrado;
 - sustitución de `main`;
 - traducción masiva del código/runtime.
+
+---
+
+## CHECKPOINT ACTUAL — TRAINER AI RANDOM CUP PRE-FASE34
+
+**Este bloque supersede para el trabajo Trainer AI las secciones históricas `Trabajo actual` / `Después de #96` anteriores.** La autoridad exacta de refs y CI sigue siendo GitHub.
+
+Rama activa:
+
+`audit/trainer-ai-v3-random-cup-redesign-v1`
+
+Estado de modernización:
+
+- C1 `campaign_snapshot` en `TrainerDecisionContext`: **IMPLEMENTADO / CERTIFICADO**;
+- C1b transporte sanitizado por `TrainerIntelligenceController`: **IMPLEMENTADO / CERTIFICADO**;
+- C2a fixtures e invariantes de inferencia: **IMPLEMENTADO / CERTIFICADO**;
+- C2b evidencia intrínseca de capacidades: **IMPLEMENTADA Y CERTIFICADA EN SHA DE CÓDIGO**;
+- `TrainerTeamAnalyzer`: **NO INTEGRADO TODAVÍA**;
+- switching/search con valor de campaña: **NO INTEGRADOS TODAVÍA**;
+- C3 valor estratégico/permadeath: **NO INICIADO**;
+- FASE34 dificultad/expertise: **PAUSADA HASTA CERRAR MODERNIZACIÓN PREVIA**.
+
+### C2b — evidencia intrínseca implementada
+
+Nueva clase:
+
+`TrainerRosterRoleInference`
+
+La API actual **no produce todavía `role_scores_bp` ni decide un rol primario**. Extrae una capa auditable de hechos/evidencias desde el `member_view` propio sanitizado + `DefinitionCatalog`:
+
+- stats estructurales reales;
+- suma de potencia física de movimientos ejecutables;
+- suma de potencia especial de movimientos ejecutables;
+- señal física `attack × physical_power_sum`;
+- señal especial `special_attack × special_power_sum`;
+- bulk físico `max_hp × defense`;
+- bulk especial `max_hp × special_defense`;
+- speed estructural;
+- prioridad máxima ejecutable;
+- señal de control desde `BattleEffectSpec` estructurado;
+- señal de setup desde `BattleEffectSpec` estructurado;
+- señal de sustain desde `BattleEffectSpec` estructurado.
+
+Gate Random Cup V1 aplicado en esta capa:
+
+- solo `MoveDefinition.classification == RUNTIME_SUPPORTED` aporta evidencia;
+- `PARTIAL_RUNTIME`, `DATA_ONLY`, `UNSUPPORTED` y movimientos desconocidos fallan de forma cerrada y no inflan capacidades;
+- la salida registra por separado movimientos runtime, excluidos y desconocidos para auditoría.
+
+La identidad intrínseca ignora deliberadamente:
+
+- HP actual;
+- PP actual;
+- `role_id` authored;
+- `TrainerProfile`;
+- ruido/datos rivales añadidos al input.
+
+Esos factores pertenecen a readiness, personalidad o información de batalla, no a la capacidad estructural del miembro.
+
+### C2b — certificación de código
+
+SHA exacto sometido a CI:
+
+`2b754f63def1632117e54fbd8aa11cb2f089ccc3`
+
+PR temporal de auditoría/CI:
+
+`#101 — Trainer AI Random Cup modernization — C2b intrinsic capability evidence`
+
+Resultado confirmado sobre ese SHA:
+
+- **18/18 workflows GitHub Actions: SUCCESS**;
+- `Trainer Loadouts Tests`: **261 PASS / 0 FAIL**;
+- C2b añade **27 checks nuevos** sobre los 234 del checkpoint C2a;
+- `Godot 4.7 Tests`: SUCCESS;
+- `Data Foundation V3 Tests`: SUCCESS;
+- resto de gates Trainer AI: SUCCESS.
+
+Incidente operativo no funcional durante la tranche:
+
+- se creó accidentalmente `tests/trainer_ai/.c2b_ci_placeholder` en un commit transitorio;
+- se eliminó inmediatamente en el commit siguiente;
+- la comparación neta del HEAD C2b frente a C2a contiene únicamente los tres archivos previstos: nueva clase, nueva suite y una línea de runner;
+- no quedó ningún placeholder en el árbol certificado.
+
+### Siguiente tranche autorizada
+
+**C2c — derivar `capability_scores_bp` / `role_scores_bp` multirole a partir de la evidencia C2b, con normalización determinista y tests de relaciones antes de congelar umbrales finales.**
+
+Todavía fuera de C2c:
+
+- integración con `TrainerTeamAnalyzer`;
+- coste estratégico de permadeath;
+- switching/search;
+- dificultad/expertise FASE34.
+
+Este commit documental posterior a `2b754f63...` debe recibir su propia matriz **18/18 sobre el SHA exacto final** antes de considerar cerrado C2b a nivel de HEAD de rama.
