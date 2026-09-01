@@ -3,8 +3,8 @@
 Read immediately after `00_READ_FIRST.md` when recovering context.
 
 ## Latest certified baseline
-- PR #85 — `audit/data-v3-ability-contact-damage-v1`
-- Final HEAD `6909aa778eca6555184167401f5e52be11f46ac3`
+- PR #86 — `audit/data-v3-ability-next-compatible-v1`
+- Final HEAD `06b078b02766ff2c85d5ca45798d8293b8c8e557`
 - **18/18 SUCCESS** on exact notebook-bearing HEAD
 - closed without merge.
 
@@ -12,77 +12,78 @@ Move Effects V3 remains closed:
 - **590 runtime / 71 partial / 246 data-only / 12 unsupported**;
 - `DATA_ONLY` moves with executable `effect_specs`: **0**.
 
-Certified #85 ability coverage:
-- `RUNTIME_SUPPORTED`: **13**
-- `PARTIAL_RUNTIME`: **10** — `flame_body`, `gooey`, `heatproof`, `intimidate`, `iron_barbs`, `levitate`, `poison_point`, `reckless`, `stamina`, `static`
-- `DATA_ONLY`: **350**
+Certified #86 ability coverage:
+- `RUNTIME_SUPPORTED`: **17**
+- `PARTIAL_RUNTIME`: **10**
+- `DATA_ONLY`: **346**
 - total: **373**.
 
-Prior detailed ability notebooks: `06` through `15`.
+Prior detailed ability notebooks: `06` through `16`.
 
-# Current tranche — PR #86
-- Branch: `audit/data-v3-ability-next-compatible-v1`
-- Parent: certified #85 final `6909aa778eca6555184167401f5e52be11f46ac3`
-- PR: #86 `DATA V3 — audit offensive stat ability modifiers`
-- First candidate `fd5a3f8d3138827c2cb6964bbe53bf3f9f524d5d`: DATA V3 **468 PASS / 3 FAIL**.
-- Corrected engineering SHA: `60281b7c016f8032a1f6c8f955cdfe2a727b58ac`
-- Corrected engineering SHA: **18/18 SUCCESS**.
-- Corrected DATA V3 domain: **471 PASS / 0 FAIL**.
-- Detailed notebook: `docs/notebooks/16_DATA_V3_ABILITY_NEXT_COMPATIBLE.md`.
+# Current tranche — PR #87
+- Branch: `audit/data-v3-ability-offensive-stat-conditions-v1`
+- Parent: certified #86 final `06b078b02766ff2c85d5ca45798d8293b8c8e557`
+- PR: #87 `DATA V3 — audit conditional offensive stat abilities`
+- Engineering SHA: `c641891f6a8d2b0b8fcf63db0a57436c2445374f`
+- Engineering SHA: **18/18 SUCCESS**
+- DATA V3 domain: **482 PASS / 0 FAIL**
+- Detailed notebook: `docs/notebooks/17_DATA_V3_ABILITY_OFFENSIVE_STAT_CONDITIONS.md`.
 
-## #86 result
-Promoted to **RUNTIME_SUPPORTED**:
-- `huge_power` — Attack x2;
-- `pure_power` — Attack x2;
-- `toxic_boost` — Attack x1.5 while poisoned;
-- `flare_boost` — Special Attack x1.5 while burned.
+## #87 result
+### Defeatist
+Decision: **RUNTIME_SUPPORTED**.
 
-All four pinned source records are main-series, have the expected generation/value semantics and no `effect_changes`.
+Pinned Gen V source requires Attack and Special Attack x0.5 at half HP or less, with no effect history.
 
-Toxic Boost accepts both runtime poison states: `poison` and `badly_poisoned`.
+Runtime reuses existing #86 conditions:
+- physical or special;
+- `hp_at_or_below_divisor=2`;
+- `offensive_stat_multiplier_bp=5000`.
 
-## Shared Battle Core abstraction
-Do **not** model these abilities with the existing final-damage `multiplier_bp`.
+Real battle pins the exact threshold:
+- 120/240 HP activates;
+- 121/240 HP is inert.
 
-New channel:
-- `offensive_stat_multiplier_basis_points`.
+### Guts
+Decision: **PARTIAL_RUNTIME**.
 
-`DamageCalculator` applies it to effective staged Attack/Special Attack **before** the base damage formula.
+Faithful runtime subset:
+- physical move;
+- `paralysis`, `poison` or `badly_poisoned`;
+- Attack x1.5 through `offensive_stat_multiplier_bp=15000`.
 
-`BattleTriggerSystem` now returns final-damage and offensive-stat modifiers separately and supports generic `required_persistent_status_ids`.
+Explicit gaps:
+- burn is excluded because the source says Guts suppresses the usual burn Attack cut, while current `DamageCalculator` still applies that cut;
+- sleep is excluded because the pinned source preserves Diamond/Pearl battle-history semantics.
 
-A direct regression with odd Attack proves Attack x2 is not equivalent to final damage x2 under integer flooring.
+Tests pin both poison support and the current burn gap.
 
-## Positional API compatibility
-Historical calculator calls use positional `..., damage_multiplier, force_critical` arguments. The new offensive-stat parameter is therefore appended **after** `force_critical`.
+### Hustle
+Decision: **PARTIAL_RUNTIME**.
 
-The focal suite pins compatibility between old 8-argument use and explicit 9-argument default use.
+Faithful runtime subset:
+- physical regular damage x1.5 via final `multiplier_bp=15000`.
 
-## First CI failure — fixed in exact inventory expectations
-All new functional tests passed on the first candidate. Only three exact sorted-list assertions failed because expected arrays placed:
+Explicit gap:
+- source-required accuracy x0.8 is not implemented.
 
-`toxic_boost` before `tough_claws`.
+Special damage is tested inert. Structural tests guarantee Hustle does not masquerade as an offensive-stat multiplier.
 
-Canonical lexical order is:
+## Architecture
+**No Battle Core file changed in #87.**
 
-`tough_claws` before `toxic_boost`.
+This tranche intentionally reuses existing predicates and modifier channels. No new effect, condition or calculator parameter was added.
 
-No runtime/source/classification change was required. Comment-only audit annotations accidentally removed during the first correction were restored before selecting the final engineering SHA.
-
-Corrected result: **18/18 SUCCESS**, DATA V3 **471 PASS / 0 FAIL**.
-
-## Exact #85 → #86 artifact
+## Exact #86 → #87 artifact
 Raw + normalized:
-- exactly four semantic differences;
-- `flare_boost.classification: DATA_ONLY → RUNTIME_SUPPORTED`;
-- `huge_power.classification: DATA_ONLY → RUNTIME_SUPPORTED`;
-- `pure_power.classification: DATA_ONLY → RUNTIME_SUPPORTED`;
-- `toxic_boost.classification: DATA_ONLY → RUNTIME_SUPPORTED`.
+- exactly `defeatist.classification: DATA_ONLY → RUNTIME_SUPPORTED`;
+- exactly `guts.classification: DATA_ONLY → PARTIAL_RUNTIME`;
+- exactly `hustle.classification: DATA_ONLY → PARTIAL_RUNTIME`.
 
 Reports:
-- runtime **13→17**;
-- partial remains **10**;
-- data-only **350→346**.
+- runtime **17→18**;
+- partial **10→12**;
+- data-only **346→343**.
 
 Explicitly unchanged:
 - every other ability;
@@ -93,29 +94,27 @@ Explicitly unchanged:
 - types/stats;
 - manifest/forms/auxiliary.
 
-`import_time_ms 509→548 ms` is non-semantic.
+`import_time_ms 491→518 ms` is non-semantic.
 
-## Ability coverage after #86 engineering
-- `RUNTIME_SUPPORTED`: **17**
-- `PARTIAL_RUNTIME`: **10**
-- `DATA_ONLY`: **346**
+## Ability coverage after #87 engineering
+- `RUNTIME_SUPPORTED`: **18**
+- `PARTIAL_RUNTIME`: **12** — `flame_body`, `gooey`, `guts`, `heatproof`, `hustle`, `intimidate`, `iron_barbs`, `levitate`, `poison_point`, `reckless`, `stamina`, `static`
+- `DATA_ONLY`: **343**
 - total: **373**.
 
 ## Current certification step
-Notebook synchronization now moves the branch after engineering SHA `60281b7c016f8032a1f6c8f955cdfe2a727b58ac`.
+Notebook synchronization follows engineering SHA `c641891f6a8d2b0b8fcf63db0a57436c2445374f`.
 
-Before closing #86:
-1. verify engineering SHA → final HEAD changes only `01_PROJECT_STATE.md`, `04_NEXT_STEPS.md`, `16_DATA_V3_ABILITY_NEXT_COMPATIBLE.md`;
+Before closing #87:
+1. verify engineering → final HEAD changed only `01_PROJECT_STATE.md`, `04_NEXT_STEPS.md`, `17_DATA_V3_ABILITY_OFFENSIVE_STAT_CONDITIONS.md`;
 2. require **18/18 SUCCESS** on exact final notebook-bearing HEAD;
-3. close #86 without merge;
-4. use exact final HEAD as the next baseline.
+3. close #87 without merge;
+4. use exact final HEAD as next baseline.
 
-## Exact next task after #86 closure
-Continue **DATA FOUNDATION V3 ability reliability** with one bounded source-first subgroup selected from the remaining **346 DATA_ONLY** abilities.
+## Exact next task after #87 closure
+Continue **DATA FOUNDATION V3 ability reliability** from the exact certified #87 final SHA. Select one small source-first subgroup from the remaining **343 DATA_ONLY** records whose semantics already fit current primitives or justify one genuinely shared primitive.
 
-Keep explicit blockers closed until their shared semantics genuinely exist: version-aware ability values, per-strike/faint-safe contact reactions, resolved move-power/property metadata, super-effective predicates, compound modifier/event aggregation, residual-damage hooks, or dual-stat/per-hit transactions as appropriate.
-
-Trainer AI/archetypes remain deferred.
+Do not reopen Guts until burn-cut suppression + version-aware sleep are designed. Do not reopen Hustle until accuracy modifiers are part of hit resolution. Trainer AI/archetypes remain deferred.
 
 ## Stop condition
 Any focal/regression failure stops the tranche until root cause is fixed and rerun.
