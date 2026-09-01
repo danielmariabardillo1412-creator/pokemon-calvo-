@@ -123,6 +123,18 @@ Esos perfiles cambian prioridades, no legalidad ni acceso a información oculta.
 
 La siguiente expansión debe separar **estilo** de **competencia/expertise** y mantener la misma frontera anti-cheat.
 
+### Random Cup — regla canónica de curación de bolsa
+
+En Random Cup **no se permiten pociones ni acciones de curación mediante la bolsa durante el combate**, de forma simétrica para jugador y entrenadores IA.
+
+Consecuencias para Trainer AI:
+
+- el flujo Random Cup no debe ofrecer acciones `ITEM` de curación a ningún lado;
+- `TrainerItemTacticalEvaluator`, `TrainerItemAwareSearch` y la economía persistente de pociones no forman parte de la política Random Cup;
+- FASE30 se conserva como infraestructura válida para otros modos donde los objetos de bolsa sí estén permitidos;
+- Revive continúa fuera de Random Cup;
+- esta decisión no define por sí sola la recuperación automática de HP/PP/status entre combates ni la política de held items con curación pasiva; esos temas permanecen separados hasta una regla explícita.
+
 Referencia: `docs/project_book/TRAINER_AI.md`.
 
 ## Trabajo actual
