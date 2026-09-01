@@ -493,3 +493,139 @@ Investigación histórica:
 DATA V3 consolidado:
 
 `docs/project_book/DATA_V3.md`.
+
+---
+
+## 12. Auditoría técnica PRE-FASE34 — primeros hallazgos confirmados
+
+Checkpoint de auditoría posterior al cambio de premisa. Todavía **no se ha modificado código de IA**.
+
+### 12.1 `TrainerSearchStateEvaluator` — REHACER FUNCIÓN DE UTILIDAD
+
+El evaluador de búsqueda actual es deliberadamente táctico y de combate aislado:
+
+- `TERMINAL_SCORE = 100000`;
+- `KO_SCORE = 7000`;
+- todo KO propio recibe el mismo coste;
+- la pérdida de HP se valora como suma de ratios de HP;
+- los estados persistentes reciben un coste fijo.
+
+Incompatibilidad crítica con permadeath:
+
+- si `foe_alive_after == 0`, devuelve inmediatamente `TERMINAL_SCORE` por `simulated_victory`;
+- ese retorno ocurre **antes** de descontar KOs propios, HP perdido o daño estratégico al roster;
+- por tanto, una simulación que gana el combate dejando el roster gravemente mutilado sigue siendo una victoria terminal máxima para esta capa.
+
+Esto era razonable para optimizar un combate aislado. No es una función objetivo válida para Random Cup con muerte permanente.
+
+**Clasificación:** infraestructura de búsqueda CONSERVAR; función de utilidad REHACER/SEPARAR en horizonte táctico + horizonte de campaña.
+
+### 12.2 `TrainerTeamStrategicEvaluator` — CONSERVAR CONCEPTO / AMPLIAR HORIZONTE
+
+Ya existe una capa de preservación de equipo útil:
+
+- detecta si el activo es la única respuesta conocida a otra amenaza observada;
+- con HP bajo, bonifica cambiar para preservarlo;
+- penaliza arriesgarlo innecesariamente;
+- solo usa datos propios completos + rivales ya observados.
+
+Esto demuestra que la arquitectura ya tiene una noción embrionaria de valor estratégico.
+
+Limitación:
+
+- “futuro” significa amenazas observadas que quedan **dentro del combate actual**;
+- no conoce el valor del Pokémon para la copa/campaña posterior.
+
+**Clasificación:** CONSERVAR y ampliar mediante una capa de valor de roster/campaña, sin romper la frontera de información rival.
+
+### 12.3 `TrainerStrategicSwitchEvaluatorV2` — ADAPTACIÓN MAYOR
+
+La implementación V2 ya contiene:
+
+- `KEY_BENCH_EXPOSURE_PENALTY`;
+- `PRODUCTIVE_SACRIFICE_BONUS`;
+- `_future_value_bp()`;
+- comparación entre valor futuro del activo y la banca;
+- protección frente a entradas malas de una pieza importante;
+- una ventana explícita de `productive_sacrifice_window`.
+
+Sin embargo, `_future_value_bp()` calcula el valor medio del Pokémon únicamente contra **oponentes observados que quedan en el combate actual**.
+
+Consecuencia:
+
+- el concepto de “sacrificio productivo” puede ser correcto en batalla aislada y desastroso bajo permadeath;
+- el valor futuro actual no representa rareza, cobertura única del roster, reemplazabilidad ni utilidad en combates posteriores.
+
+**Clasificación:** ADAPTAR DE FORMA IMPORTANTE. No eliminar el switching V2: conservar sus heurísticas tácticas y añadir una autoridad estratégica de campaña que pueda vetar/penalizar sacrificios según contexto.
+
+### 12.4 `TrainerDecisionContext` — CONSERVAR FRONTERA / EXTENDER DE FORMA SEGURA
+
+Contrato actual:
+
+- `TrainerObservation`;
+- snapshot de beliefs;
+- snapshot de memoria de batalla;
+- acciones legales.
+
+No contiene `BattleState`, `CreatureInstance` rival ni RNG vivo, lo cual sigue siendo correcto.
+
+Pero tampoco contiene ningún estado persistente de Random Cup/campaña.
+
+Para permadeath hará falta un contexto estratégico propio, sanitizado, probablemente como snapshot separado, que pueda incluir **solo información legítima del propio entrenador/campaña**, por ejemplo estado persistente de su roster y recursos. No debe convertirse en una puerta trasera hacia información oculta rival.
+
+**Clasificación:** CONSERVAR interfaz de seguridad; EXTENDER contrato con contexto de campaña cuando sus reglas estén definidas.
+
+### 12.5 `TrainerBeliefInference` — CONSERVAR MOTOR / MODERNIZAR PRIORS
+
+La inferencia base está bien desacoplada:
+
+- consume `TrainerObservation` y memoria sanitizada;
+- genera priors públicos de movimientos de nivel, habilidades y velocidad;
+- refina velocidad con evidencia observable de orden de turno;
+- no necesita datos ocultos.
+
+El problema está en la interpretación del learnset:
+
+- agrupa movimientos de nivel sin distinguir `version_group`;
+- la extensión de FASE29 añade machine/tutor/egg con priors globales;
+- ese comportamiento nació cuando el dataset no conservaba procedencia/versionado suficiente.
+
+DATA V3 sí conserva `version_group` y `order`, por lo que debe definirse una política canónica de legalidad/procedencia para Random Cup antes de ajustar los priors.
+
+**Clasificación:** CONSERVAR arquitectura de beliefs; ADAPTAR selección de candidatos y procedencia a DATA V3.
+
+### 12.6 `TrainerPlausibleWorldFactory` — CONSERVAR GENERACIÓN / REVALIDAR HIPÓTESIS
+
+El factory de mundos plausibles sigue respetando la frontera de seguridad:
+
+- usa estado sintético, no RNG vivo;
+- reconstruye rivales observados mediante proxies;
+- muestrea habilidad y velocidad desde beliefs;
+- usa movimientos revelados y candidatos de belief;
+- limita el moveset plausible a los slots máximos;
+- si no hay candidatos, recurre a `LearnsetSystem.initial_moves()`.
+
+La estructura sigue siendo útil, pero sus mundos heredan cualquier error o estrechez del modelo de beliefs y del learnset antiguo.
+
+**Clasificación:** CONSERVAR infraestructura; REVALIDAR después de modernizar beliefs/learnsets y corpus V2.
+
+### 12.7 Arquitectura resultante que empieza a emerger
+
+La auditoría apunta a separar claramente tres niveles:
+
+1. **Observación / legalidad / beliefs** — qué puede saber legítimamente el entrenador.
+2. **Interpretación dinámica del roster** — qué funciones, coberturas, redundancias y piezas únicas tiene el equipo aleatorio que realmente recibió.
+3. **Utilidad de decisión** — combinar valor táctico del combate actual con valor estratégico de supervivencia/campaña.
+
+`TrainerProfile` seguirá modulando estilo. La futura competencia/expertise deberá modular calidad de decisión, no acceso a información oculta.
+
+Todavía no se congela una fórmula de valor de campaña: primero deben quedar definidas las reglas persistentes exactas de Random Cup (qué persiste además de la muerte, qué se repone, qué se regenera y cómo se asignan loadouts/recursos).
+
+### 12.8 Estado del rediseño en este checkpoint
+
+- código de IA modificado: **NO**;
+- FASE34 iniciada: **NO**;
+- incompatibilidad DATA V3 confirmada: **SÍ**;
+- incompatibilidad de función objetivo con permadeath confirmada: **SÍ**;
+- infraestructura reutilizable identificada: **SÍ**;
+- siguiente auditoría: item/economy, observación propia, tests/corpus sintético y flujo de composición/loadout Random Cup.
