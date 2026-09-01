@@ -3,8 +3,8 @@
 Read immediately after `00_READ_FIRST.md` when recovering context.
 
 ## Latest certified baseline
-- PR #86 — `audit/data-v3-ability-next-compatible-v1`
-- Final HEAD `06b078b02766ff2c85d5ca45798d8293b8c8e557`
+- PR #87 — `audit/data-v3-ability-offensive-stat-conditions-v1`
+- Final HEAD `6fc1f73be1b24cba0c8052549ab4ea5f1e96c976`
 - **18/18 SUCCESS** on exact notebook-bearing HEAD
 - closed without merge.
 
@@ -12,78 +12,77 @@ Move Effects V3 remains closed:
 - **590 runtime / 71 partial / 246 data-only / 12 unsupported**;
 - `DATA_ONLY` moves with executable `effect_specs`: **0**.
 
-Certified #86 ability coverage:
-- `RUNTIME_SUPPORTED`: **17**
-- `PARTIAL_RUNTIME`: **10**
-- `DATA_ONLY`: **346**
+Certified #87 ability coverage:
+- `RUNTIME_SUPPORTED`: **18**
+- `PARTIAL_RUNTIME`: **12**
+- `DATA_ONLY`: **343**
 - total: **373**.
 
-Prior detailed ability notebooks: `06` through `16`.
+Prior detailed ability notebooks: `06` through `17`.
 
-# Current tranche — PR #87
-- Branch: `audit/data-v3-ability-offensive-stat-conditions-v1`
-- Parent: certified #86 final `06b078b02766ff2c85d5ca45798d8293b8c8e557`
-- PR: #87 `DATA V3 — audit conditional offensive stat abilities`
-- Engineering SHA: `c641891f6a8d2b0b8fcf63db0a57436c2445374f`
+# Current tranche — PR #88
+- Branch: `audit/data-v3-ability-existing-primitives-v1`
+- Parent: certified #87 final `6fc1f73be1b24cba0c8052549ab4ea5f1e96c976`
+- PR: #88 `DATA V3 — isolate damage modifier roles and audit compound abilities`
+- Engineering SHA: `15543135b42254c8d475db9d3eeb36503a674b6c`
 - Engineering SHA: **18/18 SUCCESS**
-- DATA V3 domain: **482 PASS / 0 FAIL**
-- Detailed notebook: `docs/notebooks/17_DATA_V3_ABILITY_OFFENSIVE_STAT_CONDITIONS.md`.
+- DATA V3 domain: **499 PASS / 0 FAIL**
+- Detailed notebook: `docs/notebooks/18_DATA_V3_ABILITY_EXISTING_PRIMITIVES.md`.
 
-## #87 result
-### Defeatist
-Decision: **RUNTIME_SUPPORTED**.
+## #88 root result — damage roles fixed
+A pre-existing `BattleTriggerSystem.damage_modifiers()` bug let ability damage modifiers be evaluated from both sides because registry specs had no directional contract.
 
-Pinned Gen V source requires Attack and Special Attack x0.5 at half HP or less, with no effect history.
+Now every ability `MODIFY_DAMAGE` spec must declare:
+- `damage_role = actor` for outgoing/offensive behavior; or
+- `damage_role = target` for incoming/defensive behavior or immunity.
 
-Runtime reuses existing #86 conditions:
-- physical or special;
-- `hp_at_or_below_divisor=2`;
-- `offensive_stat_multiplier_bp=5000`.
+A missing role is fail-safe inert.
 
-Real battle pins the exact threshold:
-- 120/240 HP activates;
-- 121/240 HP is inert.
+All existing ability damage modifiers were tagged. Real-battle regressions prove:
+- low-HP defender Blaze no longer amplifies incoming Fire damage;
+- attacker Fur Coat no longer reduces its own outgoing physical damage.
 
-### Guts
-Decision: **PARTIAL_RUNTIME**.
+This correctness fix is the required foundation for Water Bubble's opposite-direction effects.
 
-Faithful runtime subset:
-- physical move;
-- `paralysis`, `poison` or `badly_poisoned`;
-- Attack x1.5 through `offensive_stat_multiplier_bp=15000`.
-
-Explicit gaps:
-- burn is excluded because the source says Guts suppresses the usual burn Attack cut, while current `DamageCalculator` still applies that cut;
-- sleep is excluded because the pinned source preserves Diamond/Pearl battle-history semantics.
-
-Tests pin both poison support and the current burn gap.
-
-### Hustle
-Decision: **PARTIAL_RUNTIME**.
-
-Faithful runtime subset:
-- physical regular damage x1.5 via final `multiplier_bp=15000`.
+## #88 ability decisions
+### Water Bubble → PARTIAL_RUNTIME
+Faithful subset:
+- outgoing Water x2 (`actor`, `multiplier_bp=20000`);
+- incoming Fire x0.5 (`target`, `multiplier_bp=5000`).
 
 Explicit gap:
-- source-required accuracy x0.8 is not implemented.
+- burn prevention / immediate cure.
 
-Special damage is tested inert. Structural tests guarantee Hustle does not masquerade as an offensive-stat multiplier.
+Tests also pin no cross-role leakage: holder's own Fire attack is not halved, and incoming Water is not doubled.
 
-## Architecture
-**No Battle Core file changed in #87.**
+### Dry Skin → PARTIAL_RUNTIME
+Faithful subset:
+- incoming Fire x1.25 (`target`, `multiplier_bp=12500`).
 
-This tranche intentionally reuses existing predicates and modifier channels. No new effect, condition or calculator parameter was added.
+Explicit gaps:
+- sun damage;
+- rain heal;
+- Water absorption + 1/4 max-HP heal.
 
-## Exact #86 → #87 artifact
+A real-battle test proves incoming Water still deals ordinary damage, keeping the partial boundary visible.
+
+### Gorilla Tactics → DATA_ONLY
+Pinned source contains no numeric Attack boost value. It also needs move-lock behavior. No multiplier is invented.
+
+### Steely Spirit → DATA_ONLY
+Pinned source contains no numeric Steel boost value and ally context is absent. No multiplier is invented.
+
+Both prose-only source records have fail-fast guards so a future numeric source change forces re-audit.
+
+## Exact #87 → #88 artifact
 Raw + normalized:
-- exactly `defeatist.classification: DATA_ONLY → RUNTIME_SUPPORTED`;
-- exactly `guts.classification: DATA_ONLY → PARTIAL_RUNTIME`;
-- exactly `hustle.classification: DATA_ONLY → PARTIAL_RUNTIME`.
+- exactly `dry_skin.classification: DATA_ONLY → PARTIAL_RUNTIME`;
+- exactly `water_bubble.classification: DATA_ONLY → PARTIAL_RUNTIME`.
 
 Reports:
-- runtime **17→18**;
-- partial **10→12**;
-- data-only **346→343**.
+- runtime **18→18**;
+- partial **12→14**;
+- data-only **343→341**.
 
 Explicitly unchanged:
 - every other ability;
@@ -94,27 +93,31 @@ Explicitly unchanged:
 - types/stats;
 - manifest/forms/auxiliary.
 
-`import_time_ms 491→518 ms` is non-semantic.
+`import_time_ms 504→406 ms` is non-semantic timing noise.
 
-## Ability coverage after #87 engineering
+## Ability coverage after #88 engineering
 - `RUNTIME_SUPPORTED`: **18**
-- `PARTIAL_RUNTIME`: **12** — `flame_body`, `gooey`, `guts`, `heatproof`, `hustle`, `intimidate`, `iron_barbs`, `levitate`, `poison_point`, `reckless`, `stamina`, `static`
-- `DATA_ONLY`: **343**
+- `PARTIAL_RUNTIME`: **14** — `dry_skin`, `flame_body`, `gooey`, `guts`, `heatproof`, `hustle`, `intimidate`, `iron_barbs`, `levitate`, `poison_point`, `reckless`, `stamina`, `static`, `water_bubble`
+- `DATA_ONLY`: **341**
 - total: **373**.
 
 ## Current certification step
-Notebook synchronization follows engineering SHA `c641891f6a8d2b0b8fcf63db0a57436c2445374f`.
+Notebook synchronization now follows engineering SHA `15543135b42254c8d475db9d3eeb36503a674b6c`.
 
-Before closing #87:
-1. verify engineering → final HEAD changed only `01_PROJECT_STATE.md`, `04_NEXT_STEPS.md`, `17_DATA_V3_ABILITY_OFFENSIVE_STAT_CONDITIONS.md`;
+Before closing #88:
+1. verify engineering SHA → final HEAD changes only `01_PROJECT_STATE.md`, `04_NEXT_STEPS.md`, `18_DATA_V3_ABILITY_EXISTING_PRIMITIVES.md`;
 2. require **18/18 SUCCESS** on exact final notebook-bearing HEAD;
-3. close #87 without merge;
-4. use exact final HEAD as next baseline.
+3. close #88 without merge;
+4. use exact final HEAD as the next baseline.
 
-## Exact next task after #87 closure
-Continue **DATA FOUNDATION V3 ability reliability** from the exact certified #87 final SHA. Select one small source-first subgroup from the remaining **343 DATA_ONLY** records whose semantics already fit current primitives or justify one genuinely shared primitive.
+## Exact next task after #88 closure
+Continue **DATA FOUNDATION V3 ability reliability** from the exact certified #88 final SHA. Select one bounded source-first subgroup from the remaining **341 DATA_ONLY** abilities.
 
-Do not reopen Guts until burn-cut suppression + version-aware sleep are designed. Do not reopen Hustle until accuracy modifiers are part of hit resolution. Trainer AI/archetypes remain deferred.
+Prefer:
+- semantics that now fit the role-safe damage modifier surface; or
+- one genuinely shared correctness primitive with multiple source-backed uses.
+
+Do not reopen Water Bubble/Dry Skin missing mechanics unless burn/status prevention, weather or absorption/heal transactions are being designed deliberately. Do not invent values absent from the immutable snapshot. Trainer AI/archetypes remain deferred.
 
 ## Stop condition
 Any focal/regression failure stops the tranche until root cause is fixed and rerun.
