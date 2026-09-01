@@ -24,13 +24,14 @@ func damage_modifiers(
 ) -> Dictionary:
 	var multiplier_bp := 10000
 	var offensive_stat_multiplier_bp := 10000
+	var force_critical := -1
 	var immune := false
 	for spec in registry.triggers_for_ability(
 		context.actor.ability_id, BattleTriggerSpec.MODIFY_DAMAGE
 	):
 		if not _damage_role_matches(spec, DAMAGE_ROLE_ACTOR):
 			continue
-		if not _damage_condition_matches(spec, context.actor, context.move):
+		if not _damage_condition_matches(spec, context.actor, context.move, context.target):
 			continue
 		var applied_modifier := false
 		if spec.conditions.has("multiplier_bp"):
@@ -42,6 +43,9 @@ func damage_modifiers(
 				* int(spec.conditions.get("offensive_stat_multiplier_bp", 10000))
 				/ 10000
 			)
+			applied_modifier = true
+		if bool(spec.conditions.get("force_critical", false)):
+			force_critical = 1
 			applied_modifier = true
 		if applied_modifier:
 			_emit_trigger(context, spec)
@@ -57,13 +61,14 @@ func damage_modifiers(
 			continue
 		if (
 			spec.conditions.has("multiplier_bp")
-			and _damage_condition_matches(spec, context.target, context.move)
+			and _damage_condition_matches(spec, context.target, context.move, context.actor)
 		):
 			multiplier_bp = multiplier_bp * int(spec.conditions.get("multiplier_bp", 10000)) / 10000
 			_emit_trigger(context, spec, context.target)
 	return {
 		"multiplier_basis_points": multiplier_bp,
 		"offensive_stat_multiplier_basis_points": offensive_stat_multiplier_bp,
+		"force_critical": force_critical,
 		"immune": immune,
 	}
 
@@ -72,6 +77,7 @@ func conditions_met(
 	spec: BattleTriggerSpec,
 	owner: CreatureInstance,
 	move: MoveDefinition,
+	target: CreatureInstance = null,
 ) -> bool:
 	if bool(spec.conditions.get("requires_physical", false)) and (
 		move == null or move.damage_class != "physical"
@@ -99,6 +105,14 @@ func conditions_met(
 		and not required_statuses.has(String(owner.status_state.persistent_id))
 	):
 		return false
+	var required_target_statuses: Array = spec.conditions.get(
+		"required_target_persistent_status_ids", []
+	)
+	if not required_target_statuses.is_empty() and (
+		target == null
+		or not required_target_statuses.has(String(target.status_state.persistent_id))
+	):
+		return false
 	var divisor := int(spec.conditions.get("hp_at_or_below_divisor", 0))
 	if divisor > 0 and owner.current_hp * divisor > owner.stats.max_hp:
 		return false
@@ -121,11 +135,12 @@ func _damage_condition_matches(
 	spec: BattleTriggerSpec,
 	owner: CreatureInstance,
 	move: MoveDefinition,
+	target: CreatureInstance = null,
 ) -> bool:
 	var required_type := StringName(spec.conditions.get("move_type_id", ""))
 	if required_type != &"" and required_type != move.type_id:
 		return false
-	return conditions_met(spec, owner, move)
+	return conditions_met(spec, owner, move, target)
 
 
 func _move_has_effect_kind(move: MoveDefinition, wanted_kind: StringName) -> bool:
