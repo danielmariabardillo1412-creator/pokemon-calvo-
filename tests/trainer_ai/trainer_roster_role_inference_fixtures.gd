@@ -95,7 +95,7 @@ static func member_view(
 	var typed_moves: Array[StringName] = []
 	for move_id in move_ids:
 		typed_moves.append(StringName(move_id))
-	var actual_stats := stats if stats != null else StatBlock.new(200, 100, 100, 100, 100, 100)
+	var actual_stats: StatBlock = stats if stats != null else StatBlock.new(200, 100, 100, 100, 100, 100)
 	var creature := CreatureInstance.new(instance_id, SPECIES, 50, actual_stats, typed_moves)
 	creature.initialize_move_pp(catalog)
 	if current_hp >= 0:
