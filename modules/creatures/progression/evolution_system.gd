@@ -14,39 +14,67 @@ const TRIGGER_LEVEL_UP := &"level_up"
 const TRIGGER_USE_ITEM := &"use_item"
 const TRIGGER_TRADE := &"trade"
 
-# Triggers stored in the dataset that the runtime model cannot evaluate at all.
+# Canonical V3 trigger IDs use underscores. These mechanics have no runtime path in
+# the current progression model and must never fall through as apparently unknown
+# data merely because an old constant used the source API's hyphenated spelling.
 const UNSUPPORTED_TRIGGERS := [
-	&"strong-style-move", &"agile-style-move", &"use-move", &"shed",
-	&"recoil-damage", &"take-damage", &"three-defeated-bisharp",
-	&"three-critical-hits", &"spin", &"tower-of-darkness", &"tower-of-waters",
-	&"gimmighoul-coins", &"other",
+	&"strong_style_move", &"agile_style_move", &"use_move", &"shed",
+	&"recoil_damage", &"take_damage", &"three_defeated_bisharp",
+	&"three_critical_hits", &"spin", &"tower_of_darkness", &"tower_of_waters",
+	&"gimmighoul_coins", &"other",
 ]
 
 
 # Classify a single evolution record into a support bucket.
-# catalogs may be null (then item availability is not checked -> use-item kept RUNTIME_SUPPORTED).
-static func classify_record(record: EvolutionRecord, catalogs = null) -> String:
+# `source_species_id` is required to prove the only currently tolerated preserved
+# condition: a sole base_form selector equal to the species already being evaluated.
+# Every other preserved V3 condition remains DATA_ONLY until its real subsystem exists.
+static func classify_record(
+	record: EvolutionRecord,
+	catalogs = null,
+	source_species_id: StringName = &"",
+) -> String:
 	var trig: StringName = record.trigger
-	if trig == TRIGGER_LEVEL_UP:
-		# Plain level gate is fully supported. Happiness/known-move/time gating is not
-		# modelled in V1, but the dataset only stores min_level for level-up, so we treat
-		# it as RUNTIME_SUPPORTED (level is the primary, always-present condition).
-		return RUNTIME_SUPPORTED
-	if trig == TRIGGER_USE_ITEM:
-		if catalogs != null and catalogs.item_catalog != null \
-				and not catalogs.item_catalog.has(record.item_id):
-			return DATA_ONLY
-		return RUNTIME_SUPPORTED
-	if trig == TRIGGER_TRADE:
-		return RUNTIME_SUPPORTED
 	if trig in UNSUPPORTED_TRIGGERS:
 		return UNSUPPORTED
+
+	if trig == TRIGGER_LEVEL_UP or trig == TRIGGER_USE_ITEM or trig == TRIGGER_TRADE:
+		if not _conditions_are_runtime_compatible(record, source_species_id):
+			return DATA_ONLY
+		if trig == TRIGGER_USE_ITEM:
+			if record.item_id == &"":
+				return DATA_ONLY
+			if catalogs != null and catalogs.item_catalog != null \
+					and not catalogs.item_catalog.has(record.item_id):
+				return DATA_ONLY
+		return RUNTIME_SUPPORTED
+
 	# Unknown trigger: data imported but no runtime path -> data only, never silently supported.
 	return DATA_ONLY
 
 
+# V3 preserves many real evolution requirements in `conditions`: friendship, time,
+# gender, known moves, held trade items, region/form routing, weather, party state,
+# location and more. None of those may be ignored and simplified to the primary
+# trigger. The sole safe exception is a redundant base_form selector that exactly
+# names the source species already being evaluated.
+static func _conditions_are_runtime_compatible(
+	record: EvolutionRecord,
+	source_species_id: StringName,
+) -> bool:
+	if record.conditions.is_empty():
+		return true
+	if source_species_id == &"":
+		return false
+	if record.conditions.size() != 1 or not record.conditions.has("base_form"):
+		return false
+	return StringName(str(record.conditions.get("base_form", ""))) == source_species_id
+
+
 # Eligible evolutions for a species given a runtime context.
 # context keys: level (int), item_id (StringName), traded (bool).
+# DATA_ONLY records are preserved but deliberately not executable: this prevents a
+# conditioned evolution from silently degrading into a weaker level/item/trade rule.
 static func evolution_candidates(
 	species: CreatureSpecies,
 	context: Dictionary,
@@ -60,8 +88,8 @@ static func evolution_candidates(
 		if not (ev is EvolutionRecord):
 			continue
 		var rec := ev as EvolutionRecord
-		var cls := classify_record(rec, catalogs)
-		if cls == UNSUPPORTED:
+		var cls := classify_record(rec, catalogs, species.id)
+		if cls != RUNTIME_SUPPORTED:
 			continue
 		var eligible := false
 		match rec.trigger:
@@ -143,7 +171,7 @@ static func coverage_report(catalogs) -> Dictionary:
 				continue
 			edges += 1
 			var rec := ev as EvolutionRecord
-			var cls := classify_record(rec, catalogs)
+			var cls := classify_record(rec, catalogs, sp.id)
 			counts[cls] += 1
 			var key := String(rec.trigger)
 			by_trigger[key] = by_trigger.get(key, 0) + 1
