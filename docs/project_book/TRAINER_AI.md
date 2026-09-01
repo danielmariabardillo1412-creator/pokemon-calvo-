@@ -1410,3 +1410,178 @@ Esto evita construir primero una IA estratégica sobre un estado de campaña que
 - código de producción modificado: **NO**.
 
 Siguiente bloque recomendado: transformar estas decisiones abiertas en un contrato de reglas mínimo y escoger defaults de diseño únicamente donde exista una opción claramente coherente con la premisa Random Cup; cualquier elección de gameplay no derivable deberá mantenerse explícita hasta decisión del usuario.
+
+---
+
+## 18. Contrato mínimo Random Cup — decisiones técnicas derivables y correcciones de auditoría
+
+Checkpoint de consolidación previo a crear clases. **No se modifica código de producción en este tramo.**
+
+### 18.1 CORRECCIÓN IMPORTANTE — DATA V3 ya resuelve la coherencia de `version_group`
+
+La auditoría de FASE32 detectó correctamente que comentarios y consumidores antiguos dicen que `version_group` no existe, pero sobreestimó el riesgo de mezclar generaciones dentro de un mismo learnset.
+
+El adaptador V3 tiene una política canónica explícita:
+
+`latest_conventional_mainline_per_species_v1`.
+
+Para cada Pokémon:
+
+1. inspecciona los grupos disponibles;
+2. elige el grupo convencional de saga principal más reciente según una prioridad fija;
+3. no usa Stadium/Colosseum/XD/Legends/otros grupos especiales como fallback;
+4. construye el `CreatureSpecies.learnset` **solo con entradas de ese grupo seleccionado**;
+5. conserva `version_group` y `order` en cada `LearnSetEntry` como procedencia trazable.
+
+El manifest DATA V3 confirma: `one latest available conventional main-series version-group per Pokemon; no side-game fallback`.
+
+Consecuencia: Random Cup **no necesita inventar un `version_group` global** ni filtrar una unión multigeneracional que ya no existe en V3. Debe heredar la procedencia canónica de DATA V3.
+
+Sigue siendo necesario corregir los comentarios/contratos antiguos que afirman que `version_group` no se preserva, y utilizar `order` cuando corresponda para desempates deterministas. También sigue siendo necesario decidir qué métodos de aprendizaje (`level_up`, `machine`, `tutor`, `egg`) permite el ruleset.
+
+Esta sección corrige expresamente cualquier frase anterior del cuaderno que sugiera que el catálogo V3 de una especie contiene entradas mezcladas de varias generaciones.
+
+### 18.2 Pool Random Cup V1 — especies runtime, no formas preservadas
+
+DATA V3 conserva 1.025 especies y 326 formas, pero las formas no se materializan actualmente como entradas independientes del `species_catalog` runtime. Existe incluso una regresión que verifica que las variantes de forma no entren como especies del catálogo.
+
+Por tanto, el pool base técnicamente correcto para Random Cup V1 es:
+
+`DefinitionCatalog.species_catalog` / especies runtime canónicas.
+
+Las formas quedan fuera del sorteo V1 hasta que exista soporte explícito de formas combatibles como identidades/materializaciones de runtime. No se fingirá soporte mediante IDs que el dominio de criaturas no reconoce.
+
+El pool final elegible podrá ser un subconjunto del catálogo base: una especie solo debe entrar si la política de loadout puede producir al menos una configuración de batalla legal y ejecutable para el nivel/métodos definidos por el ruleset.
+
+### 18.3 Tamaño inicial y duplicados
+
+`PartyRuleset.MAX_PARTY` es 6, coherente con la premisa del roster aleatorio de seis miembros.
+
+**Contrato estructural V1:** roster inicial objetivo = 6, siempre que el pool elegible permita materializar seis miembros válidos.
+
+Los duplicados no son una limitación técnica: `CreatureParty` identifica por `instance_id` y admite expresamente dos criaturas de la misma especie.
+
+Por ello:
+
+- `allow_duplicate_species` debe existir como política de Random Cup;
+- su valor sigue siendo una elección de gameplay y no se congela por arquitectura.
+
+### 18.4 Gate de capacidades runtime para generación automática
+
+Random Cup no debe asignar automáticamente una mecánica que DATA V3 marca como incompleta o no ejecutable.
+
+Default técnico seguro para V1:
+
+- movimientos automáticos: **solo `RUNTIME_SUPPORTED`**;
+- `PARTIAL_RUNTIME`: preservado en DATA V3, pero excluido de asignación automática V1 hasta tener una política granular que acepte conscientemente su semántica parcial;
+- `DATA_ONLY` / `UNSUPPORTED`: nunca se materializan como capacidad de batalla Random Cup;
+- habilidades: solo runtime-supported o vacío si la especie no tiene ninguna soportada;
+- held item: solo runtime-supported o vacío si la política del modo no asigna uno.
+
+Para movimientos esta comprobación debe apoyarse en `MoveDefinition.classification` V3, **no** en el pequeño whitelist histórico `BattleEffectRegistry.runtime_supported_move_ids()` de Battle V2.
+
+Esto no elimina `PARTIAL_RUNTIME`; únicamente impide que una tirada aleatoria introduzca silenciosamente una mecánica conocida como incompleta en un modo que se utilizará para medir IA.
+
+### 18.5 La autoridad del loadout pertenece al modo, no al cerebro
+
+La asignación inicial debe seguir este orden:
+
+`Random Cup sortea especie → ruleset genera/deriva loadout legal → materializa CreatureInstance → Trainer AI recibe lo que le tocó`.
+
+La IA no puede volver a generar el Pokémon según su perfil, dificultad o calidad de decisión.
+
+El `TrainerRoleLoadoutGenerator` histórico cambia IVs, EVs, naturaleza, movimientos, habilidad y objeto según `role_id`/`quality_id`. Por ello no puede utilizarse automáticamente como “expertise del entrenador” dentro de Random Cup: eso haría que competencia cognitiva modificase las propiedades físicas del Pokémon recibido.
+
+Sus heurísticas de rol siguen siendo reutilizables, pero:
+
+- como ayuda a una política de generación explícita del modo, si se decide así; o
+- como base para interpretar roles del roster ya materializado.
+
+La creación/materialización inicial de cada miembro ocurre una vez y conserva `instance_id`. Cualquier cambio posterior de nivel, evolución o moveset solo podrá venir de una regla explícita de progresión, nunca de rematerializar el roster antes de cada combate.
+
+### 18.6 Métodos de aprendizaje — provenance resuelta, whitelist de métodos todavía abierta
+
+Como DATA V3 ya ha elegido un único grupo mainline coherente por especie, la pregunta restante no es “qué generación usamos”, sino “qué fuentes de movimiento permite Random Cup”.
+
+El ruleset deberá declarar un conjunto explícito, por ejemplo alguna combinación de:
+
+- `level_up`;
+- `machine`;
+- `tutor`;
+- `egg`.
+
+Para `level_up` sigue aplicando `entry.level <= nivel`. Para el resto, la legalidad depende de que el método esté permitido por el ruleset y el movimiento pase el gate runtime V3.
+
+`order` debe conservarse como parte de la selección determinista cuando varias entradas empatan o el orden de aprendizaje sea semánticamente relevante.
+
+El valor concreto de `allowed_learn_methods` sigue siendo una elección de gameplay.
+
+### 18.7 Nueva incompatibilidad encontrada — `TrainerBattleSession` aplica progresión asimétrica
+
+`TrainerBattleSession.settle_finished_battle()` reutiliza la progresión del juego normal y, cuando gana `side_a`, ejecuta `ProgressionSystem.reconcile_battle_result()` únicamente sobre `player.party`.
+
+Eso es correcto para la campaña normal jugador-vs-entrenador, pero no constituye una política neutral de torneo:
+
+- si Random Cup tiene progresión, debe aplicarse según reglas simétricas/expresas a los participantes correspondientes;
+- si Random Cup no tiene progresión, debe poder desactivar ese XP automático;
+- no puede dejarse que el lado etiquetado como “player” gane niveles por accidente mientras el otro no.
+
+**Clasificación actualizada de `TrainerBattleSession`:** CONSERVAR la frontera de batalla, pero ADAPTAR el settlement para permitir que la política de progresión se externalice o se desactive en Random Cup. No convertir la sesión en autoridad del torneo.
+
+### 18.8 Decisiones de gameplay que siguen abiertas después de esta reducción
+
+Ya no son bloqueos técnicos `version_group` ni soporte de formas V1: esos dos puntos quedan resueltos por la arquitectura/dataset actuales.
+
+Siguen abiertos conscientemente:
+
+1. `allow_duplicate_species`;
+2. nivel inicial común/variable;
+3. progresión: ninguna / XP / evolución / aprendizaje durante la copa;
+4. `allowed_learn_methods`;
+5. política concreta de IVs, EVs, naturaleza y selección de habilidad;
+6. held items: ninguno / asignación y método;
+7. recuperación entre rondas de HP/PP/status;
+8. reposición o no de miembros eliminados;
+9. bolsa inicial, persistencia y reposición de consumibles.
+
+Estas opciones alteran el gameplay y la función de valor de campaña; no se eligen por comodidad de implementación.
+
+### 18.9 Forma mínima provisional de `RandomCupRuleset`
+
+Sin escribir todavía la clase, el contrato conceptual ya puede congelar campos/responsabilidades:
+
+- `roster_size = 6`;
+- `species_pool_policy = runtime_species_catalog_v1`;
+- `forms_policy = default_runtime_species_only_v1`;
+- `allow_duplicate_species = <gameplay>`;
+- `initial_level_policy = <gameplay>`;
+- `progression_policy = <gameplay>`;
+- `allowed_learn_methods = <gameplay>`;
+- `accepted_move_classifications = [RUNTIME_SUPPORTED]` para generación automática V1;
+- `accepted_ability_policy = runtime_supported_or_none`;
+- `held_item_policy = <gameplay>, siempre runtime-supported`;
+- `between_battle_recovery_policy = <gameplay>`;
+- `replacement_policy = <gameplay>`;
+- `bag_policy = <gameplay>`;
+- `learnset_provenance_policy = inherited_from_data_v3_manifest`;
+- `assignment_seed` propiedad del modo y separada de cada `battle_seed`.
+
+La validación del ruleset deberá fallar temprano si una combinación de políticas deja un pool incapaz de generar un roster legal.
+
+### 18.10 Estado de este checkpoint
+
+- mezcla multigeneracional real dentro de learnsets V3: **NO; CORRECCIÓN CONFIRMADA**;
+- provenance de learnset: **HEREDAR DATA V3**;
+- formas combatibles en `species_catalog`: **NO EN V1**;
+- pool base V1: **ESPECIES RUNTIME DEL CATÁLOGO**;
+- tamaño de roster: **6**;
+- duplicados: **TÉCNICAMENTE SOPORTADOS / REGLA ABIERTA**;
+- movimientos autoasignados: **RUNTIME_SUPPORTED V1**;
+- `PARTIAL_RUNTIME` autoasignado: **NO POR DEFECTO**;
+- autoridad de loadout: **RANDOM CUP, NO TRAINER AI**;
+- rematerialización entre combates: **PROHIBIDA**;
+- progresión actual de `TrainerBattleSession`: **ASIMÉTRICA / DEBE ADAPTARSE PARA RANDOM CUP**;
+- decisiones puramente de gameplay restantes: **9 FAMILIAS EXPLÍCITAS**;
+- código de producción modificado: **NO**.
+
+Siguiente bloque recomendado: auditar el seam exacto de `TrainerDecisionContext` / `TrainerObservationBuilder` y diseñar el mínimo `TrainerCampaignSnapshot` sanitizado que permita valorar permadeath sin exponer estado rival oculto. Ese contrato puede diseñarse aunque HP/PP/items se recuperen o no: representará el estado propio real que exista en cada momento.
