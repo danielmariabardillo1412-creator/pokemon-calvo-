@@ -2271,3 +2271,223 @@ Antes de integrarla en `TrainerTeamAnalyzer` o valor estratégico debe existir u
 - código de producción modificado: **NO**.
 
 Siguiente bloque recomendado: cerrar el **orden de implementación mínimo** de las nuevas piezas ya diseñadas (`campaign_snapshot`, role inference, roster strategic value) y decidir cuál puede implementarse/testearse primero sin depender de las reglas de gameplay de Random Cup que aún están abiertas.
+
+---
+
+## 22. Orden de implementación mínimo — dependencias y gates de certificación
+
+Checkpoint de transición entre auditoría y primeras tranches de producción. **No se modifica código de producción en este commit.**
+
+### 22.1 Grafo de dependencias
+
+Las tres piezas nuevas no tienen el mismo grado de dependencia:
+
+1. **`campaign_snapshot` seam**
+   - depende únicamente del contrato de seguridad ya congelado;
+   - no depende de nivel, duplicados, progresión, recuperación entre rondas, reposición ni loadout Random Cup;
+   - puede existir vacío (`{}`) en todo el stack histórico.
+
+2. **`TrainerRosterRoleInference`**
+   - depende de `TrainerObservation.own_party`, catálogo DATA V3 y clasificación runtime de movimientos;
+   - no depende de cómo se sorteó el Pokémon ni de qué política futura lo generó;
+   - no depende de HP/PP/status persistentes porque esos estados no definen el rol intrínseco;
+   - sí necesita fixtures/normalizaciones antes de congelar pesos y umbrales.
+
+3. **`TrainerRosterStrategicValueEvaluator`**
+   - depende de la inferencia de roles/capacidades;
+   - usa `campaign_snapshot` para semántica persistente;
+   - `structural_value_bp` puede diseñarse con datos ya disponibles, pero `permadeath_loss_cost_bp` completo depende de políticas como reposición y recuperación;
+   - por tanto no debe implementarse primero ni con placeholders semánticos.
+
+Orden canónico:
+
+`safe campaign seam → role inference → strategic roster value → integración switching/search`.
+
+### 22.2 Tranche C1 — extender `TrainerDecisionContext` de forma aditiva
+
+Primera modificación de producción recomendada.
+
+Cambios mínimos:
+
+- añadir `campaign_snapshot: Dictionary = {}` a `TrainerDecisionContext`;
+- ampliar `create()` con parámetro opcional al final, default `{}`;
+- copiarlo con `duplicate(true)`;
+- incluirlo en `to_dict()` mediante una clave estable;
+- no modificar `TrainerObservation`, beliefs ni battle memory;
+- ningún brain histórico debe necesitar leerlo.
+
+La firma debe mantener compatibilidad porque todos los call sites existentes podrán seguir usando los argumentos actuales.
+
+Tests FASE20 a ampliar:
+
+- sin snapshot, contexto se sigue creando;
+- snapshot vacío produce comportamiento antiguo;
+- snapshot no vacío se copia en profundidad;
+- mutar el Dictionary origen después no cambia el contexto;
+- mutar la copia serializada no cambia el contexto;
+- JSON serialization funciona;
+- legal actions/belief/memory conservan sus gates anteriores.
+
+Este cambio **sí puede implementarse ya** sin `RandomCupState` real.
+
+### 22.3 Tranche C1b — transporte opcional en `TrainerIntelligenceController`
+
+Después de certificar C1, añadir únicamente transporte de un snapshot ya sanitizado.
+
+Dirección mínima:
+
+- el controller mantiene una copia local del snapshot permitido o lo recibe mediante un seam explícito;
+- el default es `{}`;
+- `choose_action()` lo pasa a `TrainerDecisionContext.create()`;
+- el controller no recibe `RandomCupState` vivo;
+- el controller no construye conocimiento de campaña por su cuenta;
+- reemplazar el snapshot de origen no muta `last_context` ya creado.
+
+No hace falta crear todavía `TrainerCampaignSnapshotBuilder`: esa pieza pertenece a la futura capa Random Cup y debe construirse cuando exista el estado autoritativo del modo.
+
+Esto evita crear una falsa clase de torneo solo para satisfacer una dependencia de tests.
+
+### 22.4 Gate C1 — qué significa “certificado”
+
+C1/C1b son cambios de producción, por lo que un commit final de esa tranche no puede considerarse certificado solo por revisión documental.
+
+Gate mínimo:
+
+- suite `TrainerIntelligenceFoundationTestSuite` verde con las nuevas regresiones;
+- todas las regresiones antiguas de privacidad siguen verdes;
+- ningún call site histórico necesita pasar campaña explícitamente;
+- self-play battle-only conserva semántica con `{}`;
+- full CI matrix verde en el **HEAD exacto final** de la tranche antes de llamarla certificada.
+
+Si se añade documentación después del HEAD verde, debe rerunearse la matriz sobre el nuevo HEAD antes de certificar el exacto final.
+
+### 22.5 Tranche C2 — fixtures de role inference antes de pesos
+
+La segunda pieza implementable es `TrainerRosterRoleInference`, pero no conviene empezar pegando números intuitivos.
+
+Primero debe crearse una suite aislada con fixtures sintéticos explícitos que definan relaciones esperadas, no cifras arbitrarias.
+
+Ejemplos de invariantes:
+
+- mismo stats + moveset físico claramente mejor que especial → `physical_attacker` > `special_attacker`;
+- invertir moveset/stats invierte la relación;
+- un híbrido conserva dos scores relevantes;
+- velocidad sin presión ofensiva no basta para `fast_attacker` alto;
+- HP+Defense altos elevan bulk físico aunque `current_hp` sea bajo;
+- status/debuff estructurado eleva control/support;
+- self-setup eleva setup pero no fuerza support;
+- heal/drain elevan sustain;
+- `DATA_ONLY`, `PARTIAL_RUNTIME`, `UNSUPPORTED` no aportan en Random Cup V1;
+- `role_id`, `TrainerProfile`, rival y current PP no alteran el rol intrínseco.
+
+Todos los movimientos sintéticos de esta suite deben fijar `classification` expresamente para no repetir el error de fixtures FASE32.
+
+### 22.6 Normalización C2 — no usar solo ranking interno
+
+La inferencia necesita combinar señal absoluta y relativa sin que un roster malo convierta automáticamente a su mejor miembro en “élite”.
+
+Dirección de implementación:
+
+- producir primero features/capacidades intrínsecas por miembro;
+- normalizarlas mediante reglas deterministas que no dependan exclusivamente del ranking entre los seis;
+- derivar `role_scores_bp` desde esos features;
+- calcular `primary_role_id`/secundarios después, como resumen;
+- breakdown obligatorio para poder calibrar y auditar.
+
+Los primeros tests deben preferir **desigualdades/monotonicidad y estabilidad** antes que congelar scores exactos. Los valores exactos se congelarán cuando los fixtures representativos demuestren que la escala es razonable.
+
+### 22.7 Tranche C2 — aislamiento deliberado
+
+`TrainerRosterRoleInference` no debe integrarse inmediatamente en `TrainerTeamAnalyzer`, switching o search en el mismo commit.
+
+Secuencia segura:
+
+1. nueva clase + suite aislada;
+2. certificar determinismo, fail-closed DATA V3 y multirole;
+3. después adaptar `TrainerTeamAnalyzer` en una tranche separada para consumir los resultados inferidos en Random Cup;
+4. mantener el flujo authored histórico con `role_id` cuando corresponda.
+
+Esto permite saber si un fallo viene de la inferencia o de su consumidor.
+
+### 22.8 Tranche C3 — valor estratégico solo después de C2
+
+No implementar `TrainerRosterStrategicValueEvaluator` antes de disponer de role inference estable.
+
+Motivos:
+
+- de lo contrario volvería a depender de `role_id` authored;
+- o duplicaría reglas de daño/bulk/support dentro del evaluador estratégico;
+- ambas opciones crearían dos fuentes de verdad que divergirían.
+
+C3 consume:
+
+- role/capability inference certificada;
+- cobertura/tipado estructural reutilizable;
+- `own_party`;
+- `campaign_snapshot`.
+
+### 22.9 Qué parte de C3 está bloqueada por gameplay
+
+`structural_value_bp` y parte de la redundancia pueden implementarse cuando C2 esté estable.
+
+Pero no se debe congelar el `permadeath_loss_cost_bp` completo hasta resolver al menos:
+
+- `replacement_policy`;
+- `between_battle_recovery_policy` para saber cuánto del estado operativo se arrastra;
+- información pública de rondas/restantes si se quiere usar ese factor.
+
+La ausencia de pociones de bolsa **ya está resuelta y no bloquea C3**.
+
+Si estas políticas siguen abiertas al llegar a C3, se puede implementar primero un evaluador estructural separado, pero no una API que finja devolver un loss-cost definitivo con defaults inventados.
+
+### 22.10 Integración con FASE31/search — última, no primera
+
+Solo después de C1–C3:
+
+- `TrainerStrategicSwitchEvaluatorV2` puede consumir coste de pérdida persistente;
+- `productive_sacrifice_window` puede descontar/vetar según `permadeath_loss_cost_bp`;
+- `TrainerSearchStateEvaluator` puede dejar de tratar todos los KOs propios como equivalentes;
+- la victoria terminal puede combinarse con coste real del roster superviviente.
+
+No se tocarán esos pesos todavía: necesitan corpus Random Cup y evaluación multi-batalla.
+
+### 22.11 Qué reglas abiertas NO bloquean C1 ni C2
+
+Pueden seguir pendientes sin impedir las dos primeras tranches:
+
+- duplicados;
+- nivel inicial exacto;
+- XP/evolución/progresión;
+- machine/tutor/egg;
+- política concreta de IV/EV/naturaleza/habilidad;
+- held items;
+- recuperación HP/PP/status entre rondas;
+- reposición.
+
+C2 interpreta el Pokémon **ya materializado** y por ello no necesita saber por qué reglas llegó a tener esos stats/movimientos.
+
+La única frontera runtime que sí necesita es la ya congelada para Random Cup V1: contar únicamente capacidades aceptadas (`RUNTIME_SUPPORTED`).
+
+### 22.12 Primer cambio de producción autorizado
+
+Con la auditoría actual ya existe suficiente contrato para abandonar la fase exclusivamente documental en una tranche muy pequeña.
+
+**Primer cambio autorizado:** C1 — `campaign_snapshot` opcional en `TrainerDecisionContext`, con tests FASE20.
+
+No requiere decidir ninguna regla de gameplay pendiente y no cambia la conducta de los brains mientras el snapshot permanezca vacío.
+
+Después de certificar C1 se decidirá si C1b entra en la misma microfase o en la siguiente según el tamaño real del diff/tests.
+
+### 22.13 Estado de este checkpoint
+
+- orden de implementación: **CONGELADO**;
+- C1 campaign seam: **IMPLEMENTABLE YA**;
+- C1b controller transport: **IMPLEMENTABLE DESPUÉS DE C1**;
+- C2 role inference: **IMPLEMENTABLE TRAS FIJAR FIXTURES/ESCALA, SIN ESPERAR RANDOM CUP COMPLETO**;
+- C3 strategic value: **DESPUÉS DE C2; LOSS-COST COMPLETO BLOQUEADO PARCIALMENTE POR POLÍTICAS DE CAMPAÑA**;
+- switching/search: **INTEGRACIÓN POSTERIOR**;
+- `RandomCupState` artificial para tests C1: **NO CREAR**;
+- pociones de bolsa: **NO FORMAN PARTE DEL FLUJO RANDOM CUP**;
+- código de producción modificado en este checkpoint: **NO**.
+
+Siguiente bloque recomendado: ejecutar la **tranche C1** en código —extensión aditiva de `TrainerDecisionContext` + regresiones FASE20—, correr los tests pertinentes y, si quedan verdes, preparar la certificación del HEAD exacto antes de pasar al transporte del controller.
