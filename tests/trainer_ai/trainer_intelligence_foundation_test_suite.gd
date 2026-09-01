@@ -21,6 +21,7 @@ func run(check_callback: Callable) -> void:
 		"_test_belief_state_separates_inference_from_reveal",
 		"_test_observation_hides_unrevealed_information",
 		"_test_decision_context_is_detached",
+		"_test_decision_context_campaign_snapshot_is_detached",
 		"_test_decision_trace_is_serializable",
 		"_test_brain_contract_has_no_default_policy",
 	]
@@ -300,9 +301,55 @@ func _test_decision_context_is_detached() -> void:
 	_check.call("intel_context_created", context != null)
 	_check.call("intel_context_action_detached", context.legal_actions[0] != action and context.legal_actions[0].move_id == original_move)
 	_check.call("intel_context_memory_detached", not JSON.stringify(context.memory_snapshot).contains("solar_beam"))
+	_check.call("intel_context_default_campaign_empty", context.campaign_snapshot.is_empty())
 	var data := context.to_dict()
+	_check.call("intel_context_campaign_serialized_empty", data.has("campaign") and (data.get("campaign", {}) as Dictionary).is_empty())
 	_check.call("intel_context_no_battle_state", not data.has("state") and not data.has("battle_state"))
 	_check.call("intel_context_no_rng", not JSON.stringify(data).contains("rng_state"))
+
+
+func _test_decision_context_campaign_snapshot_is_detached() -> void:
+	var state := _battle_state(251)
+	var memory := TrainerBattleMemory.new()
+	memory.begin(state, &"side_b")
+	var belief := TrainerBeliefState.new()
+	belief.begin(memory)
+	var observation := TrainerObservationBuilder.build(state, &"side_b", memory)
+	var actions: Array[BattleAction] = []
+	var campaign := {
+		"schema_version": 1,
+		"round_index": 2,
+		"own_roster": {
+			"alive_instance_ids": ["intel_trainer", "intel_trainer_bench"],
+		},
+		"policies": {
+			"permadeath": true,
+		},
+	}
+	var context := TrainerDecisionContext.create(observation, belief, memory, actions, campaign)
+	_check.call("intel_context_campaign_created", context != null)
+	if context == null:
+		return
+	campaign["round_index"] = 99
+	var source_roster := campaign.get("own_roster", {}) as Dictionary
+	var source_alive := source_roster.get("alive_instance_ids", []) as Array
+	source_alive.append("source_leak")
+	_check.call("intel_context_campaign_top_level_detached", int(context.campaign_snapshot.get("round_index", 0)) == 2)
+	var stored_roster := context.campaign_snapshot.get("own_roster", {}) as Dictionary
+	var stored_alive := stored_roster.get("alive_instance_ids", []) as Array
+	_check.call("intel_context_campaign_nested_detached", not stored_alive.has("source_leak") and stored_alive.size() == 2)
+	var data := context.to_dict()
+	var serialized_campaign := data.get("campaign", {}) as Dictionary
+	var serialized_roster := serialized_campaign.get("own_roster", {}) as Dictionary
+	var serialized_alive := serialized_roster.get("alive_instance_ids", []) as Array
+	serialized_alive.append("serialized_leak")
+	_check.call("intel_context_campaign_serialized_detached", not stored_alive.has("serialized_leak"))
+	var json_text := JSON.stringify(data)
+	var parsed := JSON.parse_string(json_text)
+	_check.call(
+		"intel_context_campaign_json_serializable",
+		parsed is Dictionary and (parsed as Dictionary).has("campaign") and json_text.contains("intel_trainer_bench"),
+	)
 
 
 func _test_decision_trace_is_serializable() -> void:
