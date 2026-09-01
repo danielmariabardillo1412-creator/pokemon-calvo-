@@ -2574,3 +2574,90 @@ Por tanto, **C1 de código queda CERTIFICADO en `27d1f2ec9fc86895d8e5b5006ed2a67
 - siguiente modificación de producción autorizada: **C1b — transporte opcional del snapshot ya sanitizado mediante `TrainerIntelligenceController`**.
 
 Este commit documental posterior a `27d1f2ec...` deberá pasar la matriz completa sobre su propio SHA antes de que el HEAD final de la rama pueda considerarse certificado.
+
+---
+
+## 24. Tranche C1b — transporte de `campaign_snapshot` en `TrainerIntelligenceController`
+
+Checkpoint de cierre del seam de campaña entre la capa de aplicación confiable y el contexto de decisión seguro.
+
+### 24.1 Implementación
+
+C1b extiende únicamente el transporte en `TrainerIntelligenceController`:
+
+- añade `_campaign_snapshot: Dictionary = {}` como almacenamiento privado del controller;
+- añade `set_campaign_snapshot(p_campaign_snapshot)` y realiza `duplicate(true)` al recibir el dato;
+- `choose_action()` pasa `_campaign_snapshot` como quinto argumento a `TrainerDecisionContext.create()`;
+- el comportamiento por defecto continúa siendo `{}` para combates normales y self-play battle-only;
+- el controller recibe únicamente un snapshot **ya sanitizado**;
+- el controller no recibe `RandomCupState` vivo;
+- el controller no construye ni infiere información de campaña;
+- `begin()`, memoria de batalla, observación, beliefs y brains no cambian en esta tranche.
+
+Commits de C1b:
+
+- `a69bb0e2a8b6a62b4d22bbf8de925cbf36b89142` — `feat(trainer-ai): transport campaign snapshot through controller`;
+- `2cf09fe1ebd2fba28543a84c3809523c014574ec` — `test(trainer-ai): cover controller campaign snapshot transport`;
+- `eead7947e72d4fb9b02df271875f8d2ec2c36858` — `test(trainer-ai): run controller campaign transport regression`.
+
+### 24.2 Regresiones específicas
+
+Se añadió una suite aislada `TrainerIntelligenceControllerCampaignTestSuite` y se conectó al runner FASE20.
+
+Las siete comprobaciones nuevas son:
+
+- `intel_controller_campaign_begin`;
+- `intel_controller_campaign_default_empty`;
+- `intel_controller_campaign_source_detached`;
+- `intel_controller_campaign_nested_detached`;
+- `intel_controller_campaign_refreshes_next_context`;
+- `intel_controller_campaign_previous_context_stable`;
+- `intel_controller_campaign_can_clear`.
+
+La suite demuestra que:
+
+- el controller funciona sin campaña explícita;
+- el origen se copia en profundidad;
+- mutaciones posteriores del Dictionary origen no contaminan la decisión;
+- actualizar el snapshot afecta a la siguiente decisión;
+- un `last_context` ya creado permanece estable cuando el controller recibe otro snapshot;
+- volver a `{}` limpia el transporte para decisiones posteriores.
+
+### 24.3 Certificación de código C1b
+
+PR temporal de auditoría/CI: **#99**, contra `main`, sin intención de merge.
+
+SHA exacto de código C1b:
+
+`eead7947e72d4fb9b02df271875f8d2ec2c36858`
+
+Resultado confirmado:
+
+- **18/18 workflows GitHub Actions: SUCCESS**;
+- `Trainer Intelligence Foundation Tests`: **77 PASS / 0 FAIL**;
+- `Godot 4.7 Tests`: SUCCESS;
+- `Data Foundation V3 Tests`: SUCCESS;
+- self-play, beliefs, tactical, search, adaptive branching, item actions, loadouts, team composition, switching y corpus: SUCCESS.
+
+Por tanto, **C1b de código queda CERTIFICADO en `eead7947e72d4fb9b02df271875f8d2ec2c36858`**.
+
+### 24.4 Consecuencia arquitectónica y siguiente tranche
+
+Con C1 + C1b queda completo el seam seguro de transporte:
+
+`application layer confiable → snapshot sanitizado → TrainerIntelligenceController → TrainerDecisionContext → brain`.
+
+Todavía **NO** existe `TrainerCampaignSnapshotBuilder` ni autoridad `RandomCupState/Participant` funcional. Esa futura capa deberá construir el snapshot mediante whitelist positiva, tal como quedó congelado en la sección 19; el controller no sustituye esa responsabilidad.
+
+Estado:
+
+- C1 context seam: **IMPLEMENTADO Y CERTIFICADO**;
+- C1b controller transport: **IMPLEMENTADO Y CERTIFICADO EN SHA DE CÓDIGO**;
+- builder/autoridad Random Cup real: **NO IMPLEMENTADOS**;
+- integración `TrainerTeamAnalyzer`: **NO TOCADA**;
+- switching/search con valor de campaña: **NO TOCADOS**;
+- C3 strategic value: **NO INICIADO**;
+- `main`: **NO MOVIDO**;
+- siguiente tranche autorizada tras certificar el HEAD documental final: **C2 — fixtures e invariantes de `TrainerRosterRoleInference` antes de fijar pesos**.
+
+Este commit documental debe rerunear la matriz completa sobre su **SHA exacto** antes de considerar certificado el HEAD final de la rama.
