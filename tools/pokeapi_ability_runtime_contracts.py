@@ -455,7 +455,7 @@ def _validate_source_contract(ability: dict, sid: str) -> None:
         changes = ability.get("effect_changes") or []
         if len(changes) != 2:
             raise RuntimeError("DATA V3 Shed Skin history shape changed; re-audit")
-        history := {
+        history = {
             str((change.get("version_group") or {}).get("name", "")): _english_text(
                 change.get("effect_entries")
             )
