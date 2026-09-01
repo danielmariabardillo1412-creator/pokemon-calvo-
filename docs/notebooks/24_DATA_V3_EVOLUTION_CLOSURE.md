@@ -19,30 +19,7 @@ Every material discovery, exception, correction, architectural decision, certifi
 ## Goal
 Close Evolutions V3 as a bounded data-reliability tranche. Verify what evolution semantics are actually preserved and executable today, freeze the honest boundary, and do not open unrelated progression architecture merely to chase complete Pokémon-mechanics coverage.
 
-## Initial questions
-1. What exact evolution schema is preserved in the 554 canonical evolution records?
-2. Are all evolution targets/references valid and deterministic?
-3. Which trigger/condition families are preserved by the V3 adapter?
-4. Which fields are actually consumed by `EvolutionSystem` today?
-5. Are any preserved conditions silently ignored or simplified at runtime?
-6. Is the current runtime boundary already sufficient for the game/trainer roadmap, or are there a few source-backed gaps that fit existing primitives without opening new systems?
-7. Are there version/form/item/trade/location/time/friendship or party-context conditions whose honest execution requires architecture not currently present?
-
-## Live audit finding — conditioned evolutions are currently overclaimed
-This is a real semantic bug, not merely missing optional coverage.
-
-`EvolutionRecord` preserves a free-form `conditions` dictionary and round-trips it through serialization. The V3 adapter deliberately stores source-backed evolution detail fields there after extracting the primary `trigger`, `min_level` and `item_id` fields.
-
-However, current `EvolutionSystem`:
-- classifies every `level_up` record as `RUNTIME_SUPPORTED`;
-- classifies valid `use_item` records as `RUNTIME_SUPPORTED`;
-- classifies every `trade` record as `RUNTIME_SUPPORTED`;
-- evaluates only `min_level`, direct `item_id`, and the boolean `traded` context;
-- never evaluates `record.conditions`.
-
-Therefore a conditioned evolution under one of those three triggers can silently behave as a weaker simple evolution.
-
-### Exact canonical inventory
+## Exact canonical inventory
 The certified #93 canonical artifact contains exactly **554 evolution records**.
 
 Trigger partition:
@@ -61,19 +38,21 @@ Trigger partition:
 - `strong_style_move`: **1**
 - `agile_style_move`: **1**
 - `other`: **1**
-- `take_damage`: **1**
+- `take_damage`: **1**.
+
+Reference integrity was recomputed directly from the exact certified artifact:
+- broken target-species references: **0**;
+- broken/missing `use_item` item references: **0**.
 
 Exactly **165 / 554** records carry a nonempty `conditions` dictionary.
 
-Conditioned records inside triggers currently treated as executable:
+Conditioned records inside primary triggers that already have runtime paths:
 - `level_up`: **111 / 438**
 - `use_item`: **22 / 72**
 - `trade`: **23 / 30**
-- total conditioned records under these three runtime paths: **156**.
+- total: **156**.
 
-Thus the current runtime-support claim is materially too broad.
-
-Observed preserved condition keys include:
+Observed preserved condition families include:
 - form/region identity: `base_form`, `evolved_form`, `region`;
 - friendship/affection/beauty: `min_happiness`, `min_affection`, `min_beauty`;
 - temporal/location/world context: `time_of_day`, `location`, `near_special_rock`, `needs_overworld_rain`;
@@ -82,47 +61,98 @@ Observed preserved condition keys include:
 - trade/item context: `held_item`, `trade_species`;
 - stat/body/input context: `relative_physical_stats`, `gender`, `turn_upside_down`, `min_steps`, `min_damage_taken`.
 
-Representative source-preserved examples that current runtime would oversimplify:
+The closure suite freezes the exact condition-key inventory so a future adapter/source change cannot silently alter this frontier.
+
+## Live audit finding #1 — conditioned evolutions were overclaimed
+This is a real semantic bug, not merely missing optional coverage.
+
+`EvolutionRecord` preserves `conditions` and round-trips them. The V3 adapter stores source-backed evolution-detail fields there after extracting `trigger`, `min_level` and `item_id`.
+
+Before this tranche, `EvolutionSystem`:
+- classified every `level_up` record as `RUNTIME_SUPPORTED`;
+- classified valid `use_item` records as `RUNTIME_SUPPORTED`;
+- classified every `trade` record as `RUNTIME_SUPPORTED`;
+- evaluated only `min_level`, direct `item_id`, and boolean `traded`;
+- never evaluated `record.conditions`;
+- skipped only `UNSUPPORTED` records in `evolution_candidates()`, allowing `DATA_ONLY` records under a known primary trigger to be evaluated anyway.
+
+Consequence: a conditioned evolution could silently degrade into a weaker simple level/item/trade evolution.
+
+Representative preserved examples:
 - Aipom → Ambipom requires knowing `double_hit`;
-- Eevee branches include friendship/time/affection/move-type conditions;
-- trade evolutions such as Clamperl branches preserve required held items;
-- regional/form branches preserve `base_form` / `evolved_form` identity;
-- later-generation mechanics preserve rain, party, move-use, damage-taken and similar conditions.
+- Eevee branches preserve friendship/time/affection/move-type and historical location/stone methods;
+- Clamperl trade branches preserve required held items;
+- regional/form branches preserve `base_form` / `evolved_form` / `region` routing;
+- later mechanics preserve rain, party, move-use, damage-taken and related requirements.
 
-### Bounded correction decision
-Do **not** implement 165 condition mechanics in this closure tranche.
+## Live audit finding #2 — `conditions` mixes real requirements with one provably redundant selector
+The first conservative estimate treated every nonempty `conditions` dictionary as non-runtime and produced a provisional **384 / 156 / 14** split.
 
-Instead:
-1. any evolution record with a nonempty `conditions` dictionary is **not fully executable by the current runtime** and must not be classified `RUNTIME_SUPPORTED`;
-2. conditioned records whose primary trigger otherwise has a runtime path should be preserved as `DATA_ONLY` until the required condition subsystem is deliberately implemented;
-3. `evolution_candidates()` must only expose records classified `RUNTIME_SUPPORTED`, preventing a DATA_ONLY conditioned record from silently executing via its weaker primary trigger;
-4. unconditional `level_up`, valid `use_item`, and unconditional `trade` remain candidates for runtime support;
-5. exotic triggers remain non-executable and must be classified honestly rather than inferred from names.
+A deeper audit showed that this was too conservative. There are exactly **7** records whose only preserved condition is:
 
-This is a capability-boundary correction, not a new evolution engine.
+`{"base_form": <current source species id>}`
 
-## Live audit finding — normalized trigger naming mismatch
-A second, smaller classification defect exists.
+For those records the selector is already guaranteed by the fact that `EvolutionSystem` is evaluating that exact base species. No new form, region, time or version state is required.
 
-`EvolutionSystem.UNSUPPORTED_TRIGGERS` currently stores several trigger names with hyphens such as `use-move`, `take-damage`, `three-critical-hits`, etc. DATA V3 normalizes trigger IDs to underscores such as `use_move`, `take_damage`, `three_critical_hits`.
+The seven source-backed redundant-selector cases are:
+- Eevee → Vaporeon (`water_stone`)
+- Eevee → Jolteon (`thunder_stone`)
+- Eevee → Flareon (`fire_stone`)
+- Eevee → Leafeon (`leaf_stone`)
+- Eevee → Glaceon (`ice_stone`)
+- Floette → Florges (`shiny_stone`)
+- Pikachu → Raichu (`thunder_stone`).
+
+This exception is deliberately narrow. A `base_form` value such as `meowth_galar`, any `region`, any `evolved_form`, or any additional condition remains non-runtime because the current progression context cannot prove it.
+
+## Live audit finding #3 — normalized trigger naming mismatch
+`EvolutionSystem.UNSUPPORTED_TRIGGERS` used old hyphenated spellings (`use-move`, `take-damage`, `three-critical-hits`, etc.) while DATA V3 canonical trigger IDs use underscores (`use_move`, `take_damage`, `three_critical_hits`, etc.).
 
 Consequence:
-- most exotic triggers fall through to generic `DATA_ONLY` rather than the intended `UNSUPPORTED` bucket;
-- they are not currently executed because the runtime match has no path for them, so this is not the dangerous bug above;
-- coverage reporting is nevertheless false and must be corrected during Evolutions V3 closure.
+- most exotic triggers fell through to generic `DATA_ONLY` instead of the intended `UNSUPPORTED` bucket;
+- they did not execute accidentally because the runtime match had no path for them;
+- coverage reporting was nevertheless false.
 
-Decision: align the explicit unsupported-trigger constants with the canonical normalized IDs and freeze the trigger partition with regression tests.
+Correction: the unsupported-trigger registry now uses the exact canonical underscore IDs.
 
-## Provisional honest capability boundary
-Before final verification of item references and existing progression contracts, the canonical inventory suggests:
-- unconditional `level_up`: **327**
-- unconditional `use_item`: **50**
-- unconditional `trade`: **7**
-- provisional fully runtime-capable records: **384**
-- conditioned records under otherwise supported triggers: **156** → `DATA_ONLY`
-- exotic/non-runtime trigger records: **14** → intended `UNSUPPORTED` if their normalized trigger IDs are explicitly recognized.
+## Bounded correction implemented
+No new evolution-condition subsystem is being built.
 
-This **384 / 156 / 14** split is provisional until the closure suite verifies item references, importer invariants and existing progression tests. Do not certify these numbers merely from arithmetic.
+`EvolutionSystem` now follows these rules:
+1. canonical exotic triggers are `UNSUPPORTED`;
+2. `level_up`, `use_item` and `trade` can be `RUNTIME_SUPPORTED` only when their preserved conditions are runtime-compatible;
+3. empty `conditions` are compatible;
+4. the sole nonempty compatible condition is exactly one `base_form` equal to the source species currently being evaluated;
+5. every other preserved condition is `DATA_ONLY`;
+6. `use_item` still requires a nonempty valid item ID;
+7. `evolution_candidates()` now accepts **only** records classified `RUNTIME_SUPPORTED`; `DATA_ONLY` cannot silently execute through a weaker known trigger;
+8. `coverage_report()` classifies with the source species ID so the narrow redundant `base_form` exception is auditable.
+
+This is a capability-boundary correction, not a general version/form/friendship/trade evolution engine.
+
+## Provisional corrected capability boundary
+With exact references verified and the redundant-selector rule applied, the expected canonical classification is:
+- `RUNTIME_SUPPORTED`: **391**
+- `DATA_ONLY`: **149**
+- `UNSUPPORTED`: **14**
+- `PARTIAL`: **0**
+- total: **554**.
+
+This **391 / 149 / 14** boundary is now encoded in the closure suite but is not certified until engineering CI and artifact comparison pass.
+
+## Closure regression suite
+`DataFoundationV3EvolutionClosureTestSuite` adds **11 closure checks**:
+1. exact evolution count = 554;
+2. exact 16-trigger partition;
+3. exact conditioned count = 165;
+4. exact condition-key inventory;
+5. zero broken target-species references;
+6. zero broken `use_item` item references;
+7. exact classification boundary = **391 runtime / 149 data-only / 14 unsupported / 0 partial**;
+8. no real preserved condition may silently execute;
+9. exactly seven redundant `base_form == source species` exceptions remain runtime-compatible;
+10. all canonical exotic trigger IDs classify `UNSUPPORTED`;
+11. candidate gating proves conditioned level/trade records stay out while a redundant base-form item evolution remains executable.
 
 ## Closure rule
 Prefer tested preservation + explicit runtime capability boundaries over pretending every main-series evolution mechanic is executable. Evolutions V3 can close when:
@@ -130,14 +160,14 @@ Prefer tested preservation + explicit runtime capability boundaries over pretend
 - trigger/condition families are inventoried;
 - runtime-consumed fields are explicitly distinguished from preserved metadata;
 - no unsupported condition can silently behave as a simpler supported evolution;
-- any small, high-value compatible gap is either implemented in a bounded way or deliberately deferred;
+- the narrow redundant-selector exception is frozen by tests;
 - no broad overworld/trade/friendship/time/location/party/form subsystem is opened solely for data coverage.
 
 ## Workflow
 1. inspect raw/normalized evolution schema and V3 adapter construction;
 2. inspect `EvolutionRecord`, `EvolutionSystem`, progression tests and importer validation;
 3. inventory exact trigger/condition families across the 554 records;
-4. identify any semantic loss between canonical data and runtime evaluation;
+4. identify and correct semantic loss between canonical data and runtime evaluation;
 5. add closure regressions/invariants;
 6. 18/18 engineering → artifact diff → sync `01/04/24` → notebooks-only compare → final 18/18 → close without merge.
 
@@ -145,7 +175,8 @@ Prefer tested preservation + explicit runtime capability boundaries over pretend
 - immutable PokeAPI snapshot remains read-only;
 - no manual edits to generated JSON;
 - do not infer missing conditions from Pokémon names or remembered game knowledge;
-- do not simplify a multi-condition evolution into a weaker runtime rule without explicitly marking the unsupported boundary;
+- do not simplify a multi-condition evolution into a weaker runtime rule;
 - conditioned records remain preserved even when runtime execution is deferred;
 - do not build friendship/time/location/form/trade-item/party/move-use systems merely to raise coverage during closure;
+- the seven redundant-base-form exceptions must never broaden into generic form inference;
 - stop on any regression and fix root cause.
