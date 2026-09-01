@@ -13,12 +13,13 @@ Final DATA Foundation V3 certification checkpoint after bounded closure of Moves
 - Branch: `audit/data-v3-end-to-end-closure-v1`.
 - Exact parent: certified #94 final `be5b4bde75252afa2ef355b2e7392d0884c42d7a`.
 - PR: #95 `DATA V3 — final end-to-end certification`.
+- Valid engineering SHA: `9e17f903f229b6efc0044608dde66aba4783ef9c`.
 
 ## Mandatory continuity rule
 Every material discovery, exception, correction, architectural decision, certification boundary or deliberate deferral must be written into project notebooks. Chat context is never the sole source of continuity.
 
 ## Goal
-Certify DATA Foundation V3 end-to-end as a stable data/runtime boundary before returning to Trainer AI. This tranche is not for adding new Pokémon mechanics. It must prove that the immutable source, adapter output, normalized data, runtime capability boundaries and regression surfaces agree with the already-certified domain closures.
+Certify DATA Foundation V3 end-to-end as a stable data/runtime boundary before returning to Trainer AI. This tranche adds no new Pokémon mechanics.
 
 ## Frozen domain boundaries entering this tranche
 ### Moves V3
@@ -26,7 +27,7 @@ Certify DATA Foundation V3 end-to-end as a stable data/runtime boundary before r
 - PARTIAL_RUNTIME: **71**
 - DATA_ONLY: **246**
 - UNSUPPORTED: **12**
-- total runtime move records: **919**
+- total: **919**
 - DATA_ONLY moves with executable effect specs: **0**.
 
 ### Abilities V3
@@ -39,8 +40,8 @@ Certify DATA Foundation V3 end-to-end as a stable data/runtime boundary before r
 - canonical items: **2,222**
 - held runtime: `leftovers`, `sitrus_berry`
 - trainer bag runtime: `potion`, `super_potion`, `hyper_potion`, `max_potion`, `full_restore`
-- trainer healing contract: `20 / 60 / 120 / full / full+status`
-- legacy Super/Hyper description metadata must not redefine runtime semantics.
+- healing contract: `20 / 60 / 120 / full / full+status`
+- legacy Super/Hyper description values 50/200 are historical metadata only.
 
 ### Evolutions V3
 - RUNTIME_SUPPORTED: **391**
@@ -52,7 +53,6 @@ Certify DATA Foundation V3 end-to-end as a stable data/runtime boundary before r
 - broken target/item references: **0**.
 
 ## Canonical structural contract
-The final end-to-end certification must freeze at least:
 - species: **1,025**
 - forms: **326**
 - runtime types: **18**
@@ -66,90 +66,147 @@ The final end-to-end certification must freeze at least:
 - XD Shadow moves explicitly excluded: **18**.
 
 ## Source/provenance contract
-Immutable authority remains:
+Immutable authority:
 - snapshot branch `data/pokeapi-v2-snapshot`
 - snapshot commit `2f218ec3765c01c894a42bbbd074f15ddf3f32d1`
 - API tree `8349ea1ce75716897fe96e02a15950d19edba6c3`
 - schema tree `02e031e1928d7e9456bf6f7486daacc4b8946c84`
-- `data/api/v2` and `data/schema/v2` remain read-only.
+- `data/api/v2` and `data/schema/v2` read-only.
 
-Pipeline contract:
+Pipeline:
 `snapshot → V3 adapter → narrow semantic audit layers → raw JSON → Godot DataImporter → normalized data → runtime`.
 
-## Closure strategy
-Do not reopen domain mechanics. Add a final deterministic closure suite/report only where it materially protects cross-domain invariants not already frozen by domain suites.
-
-The end-to-end closure should prove:
-1. canonical structural totals remain exact;
-2. source commit/tree/schema provenance is exact;
-3. raw and normalized datasets contain the same canonical identity sets across species/moves/abilities/items;
-4. all cross-domain references used by runtime remain valid;
-5. frozen move/ability/evolution coverage totals remain exact;
-6. exact Items V3 runtime surfaces remain unchanged;
-7. no DATA_ONLY move or ability silently gains executable mappings;
-8. no conditioned DATA_ONLY evolution silently becomes executable;
-9. reports/manifest identify the same dataset/ruleset/source authority;
-10. CI regenerates the same canonical artifact as certified #94 apart from execution timing noise.
+## Final end-to-end closure suite
+`DataFoundationV3EndToEndClosureTestSuite` adds exactly **10 checks**:
+1. exact structural contract;
+2. exact immutable source provenance;
+3. raw ↔ normalized identity-set equality;
+4. cross-domain reference closure and exact learnset/evolution totals;
+5. frozen Moves V3 boundary;
+6. frozen Abilities V3 boundary;
+7. frozen Evolutions V3 boundary plus DATA_ONLY conditioned non-execution;
+8. exact Items V3 runtime surfaces;
+9. no DATA_ONLY move/ability hidden execution;
+10. exact Shadow exclusion and report totals.
 
 ## Engineering attempt #1 — stopped correctly on GDScript typing failure
-Engineering HEAD `f9a9b4b11e1aa14447c447d0f35a37e98da6797e` launched the normal 18-workflow matrix.
+HEAD `f9a9b4b11e1aa14447c447d0f35a37e98da6797e`:
+- **17/18 SUCCESS**;
+- only DATA Foundation V3 failed.
 
-Result:
-- **17/18 workflows SUCCESS**;
-- only `Data Foundation V3 Tests` failed;
-- all pre-domain adapter/source/raw-invariant stages passed;
-- Godot 4.7 and every Trainer AI regression workflow passed.
+Root cause:
+- GDScript 4.7 could not infer the type of a compound boolean assembled from `Variant`-typed JSON values;
+- the new global class failed to compile, runner instantiation failed, then the domain job timed out.
 
-Exact failure:
-- `data_foundation_v3_end_to_end_closure_test_suite.gd:64` could not infer the type of `structural_counts_ok` because the compound expression contains `Variant`-typed JSON values;
-- because the new global class failed to compile, the runner later reported `Nonexistent function 'new' in base 'GDScript'` when attempting to instantiate it;
-- the domain process then reached its 120-second timeout because the runner never reached its normal `quit()` path.
-
-Decision/correction:
-- this is a **test-suite GDScript 4.7 typing defect only**, not a Pokémon-data, adapter, runtime or canonical-dataset discrepancy;
-- explicitly type compound boolean closure variables as `bool` instead of relying on inference from JSON/Variant expressions;
-- do not weaken, remove or reinterpret any end-to-end invariant to make CI pass.
+Correction:
+- explicitly type closure boolean variables as `bool`;
+- no data, adapter, runtime or Pokémon semantic change;
+- no invariant weakened.
 
 ## Preflight finding #2 — import-summary phase ordering
-After attempt #1, the uploaded artifact was inspected before rerunning. It proved the regenerated raw/manifest/reports were present and healthy, but `import_summary.json` was absent because the DATA workflow intentionally runs domain provenance tests **before** `Normalize through authoritative DataImporter`.
+The first attempt artifact showed `import_summary.json` is created only after the domain phase by `DataImporter`.
 
-Therefore the initial end-to-end suite incorrectly depended on an artifact that does not exist yet at that phase.
+The initial suite incorrectly depended on that later artifact during pre-normalization domain tests.
 
-Correction/architecture:
-- the domain suite must derive learnset/evolution totals directly from regenerated raw DATA;
-- forms and adapter broken-reference state are checked from the pre-normalization reports already available at that phase;
-- provenance is compared between canonical manifest and the checked-in normalized manifest, both available before normalization;
-- `rejected definitions = 0` and final import-summary equality remain certification requirements, but are verified from the post-DataImporter tested artifact during the artifact-comparison step, where `import_summary.json` actually exists;
-- no invariant is dropped; each invariant is checked at the pipeline stage where its authoritative evidence exists.
+Correction:
+- pre-normalization domain checks derive structural totals from regenerated raw DATA and adapter reports;
+- manifest/provenance checks use the canonical manifest and checked-in normalized manifest available at that stage;
+- post-import `broken_references=0` and `rejected=0` remain mandatory and are verified from the DataImporter step/tested artifact;
+- invariants were moved to their authoritative pipeline phase, not removed.
 
-Preflight recomputation from attempt #1 artifact confirmed:
-- raw/normalized identity sets match exactly for types/species/moves/abilities/items;
-- learnset entries = **61,102**;
-- evolutions = **554**;
-- cross-domain broken references = **0**;
-- move classes = **590 / 71 / 246 / 12**;
-- ability classes = **21 / 14 / 338**;
-- DATA_ONLY moves with effect specs = **0**;
-- audit broken references = **0**.
+This was a certification-harness ordering defect, not a Pokémon/data defect.
 
-This finding is about certification-phase ordering only, not Pokémon semantics.
+## Valid engineering certification
+Valid engineering HEAD:
+`9e17f903f229b6efc0044608dde66aba4783ef9c`
 
-## Certification workflow
-1. audit existing V3 tests/reports to avoid duplicating already-certified invariants;
-2. add only missing cross-domain end-to-end closure guards;
-3. open PR from exact certified #94 final;
-4. require 18/18 engineering;
-5. compare tested DATA V3 artifact byte/canonical output against #94 final, including post-import `rejected=0`;
-6. synchronize `01_PROJECT_STATE.md`, `04_NEXT_STEPS.md`, `25_DATA_V3_END_TO_END_CLOSURE.md` only;
-7. verify engineering → final is notebooks-only;
-8. require second 18/18 on exact final notebook-bearing HEAD;
-9. close without merge;
-10. return to Trainer AI using the exact final SHA as certified DATA V3 baseline.
+Result:
+- **18/18 workflows SUCCESS**;
+- DATA Foundation V3: **567 PASS / 0 FAIL**;
+- Spanish/type/runtime regression: **298 PASS / 0 FAIL**;
+- all ten new end-to-end checks PASS;
+- Godot 4.7 regression SUCCESS;
+- all Trainer AI regression workflows SUCCESS.
+
+Post-DataImporter exact evidence:
+- species=1025
+- forms=326
+- types=18
+- moves=919
+- abilities=373
+- items=2222
+- learnset_entries=61102
+- evolutions=554
+- broken_references=0
+- rejected=0.
+
+## Exact #94 final → #95 engineering artifact comparison
+Certified #94 final:
+- head `be5b4bde75252afa2ef355b2e7392d0884c42d7a`
+- DATA run `33526438810`
+- artifact `9807934801`.
+
+#95 valid engineering:
+- head `9e17f903f229b6efc0044608dde66aba4783ef9c`
+- DATA run `33527719967`
+- artifact `9808446505`.
+
+Both artifacts contain the same **15 files**.
+
+### Byte-identical 11/15
+The following are byte-identical:
+- `data/raw/pokemon_api.json`
+- `data/normalized/pokemon_api.json`
+- `data/manifests/pokemon_api_manifest.json`
+- `data/reports/forms_policy_report.json`
+- `data/reports/unsupported_mechanics.json`
+- `data/reports/pokeapi_v3_audit.json`
+- `data/reports/pokeapi_v3_auxiliary.json`
+- `data-v3-check.log`
+- `data-v3-generate.log`
+- `data-v3-godot-version.log`
+- `data-v3-runtime-test.log`.
+
+### Expected differences only
+1. `data-v3-domain-test.log`
+   - adds exactly the 10 final end-to-end PASS checks;
+   - result **557 → 567 PASS / 0 FAIL**.
+2. `data-v3-godot-import.log`
+   - registered global classes **279 → 280** because the new closure test suite adds one class;
+   - remaining differences are only progress-percentage position shifts.
+3. `data-v3-normalize.log`
+   - only `import_time_ms 523 → 507`.
+4. `data/reports/import_summary.json`
+   - only `import_time_ms 523 → 507`.
+
+Therefore raw data, normalized data, manifest, reports, provenance, adapter output and runtime regression output are unchanged. **No canonical DATA V3 drift exists.**
+
+## Closure meaning
+At valid engineering SHA, DATA Foundation V3 is end-to-end closed at an honest capability boundary. “Closed” does not mean every Pokémon mechanic is runtime-supported; it means:
+- immutable source provenance is frozen;
+- canonical data and cross-domain references are coherent;
+- runtime-supported/partial/data-only/unsupported boundaries are explicit and regression-tested;
+- unsupported semantics cannot silently execute as weaker invented Pokémon rules;
+- future work can return to Trainer AI without another open-ended DATA audit.
+
+## Current certification step
+Only notebook-bearing final certification remains.
+
+Before closing #95:
+1. engineering → final must change only `01_PROJECT_STATE.md`, `04_NEXT_STEPS.md`, `25_DATA_V3_END_TO_END_CLOSURE.md`;
+2. require **18/18 SUCCESS** on the exact final notebook-bearing HEAD;
+3. close #95 without merge;
+4. exact final #95 SHA becomes the certified DATA V3 baseline.
+
+## Next work after #95
+**Return directly to Trainer AI / trainer systems.**
+
+Do not open another DATA V3 tranche merely to increase coverage counts. Reopen a frozen domain only if a real regression or newly implemented subsystem materially invalidates a documented blocker/boundary.
 
 ## Safety
 - no manual edits to generated JSON;
 - no new move/ability/item/evolution mechanics in this closure tranche;
 - no source inference from names when immutable data is available;
-- any discrepancy must be resolved against immutable source / reliable Pokémon references rather than project invention;
-- any focal or regression failure stops certification until root cause is fixed;
-- final closure means stable tested boundary, not fictional 100% runtime support.
+- resolve real semantic discrepancies against immutable/reliable Pokémon sources, never project invention;
+- any focal/regression failure stops certification until root cause is fixed;
+- final closure is a stable tested boundary, not fictional 100% runtime support.
