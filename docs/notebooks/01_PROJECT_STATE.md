@@ -42,6 +42,7 @@ Pipeline:
 - #86 `06b078b02766ff2c85d5ca45798d8293b8c8e557`
 - #87 `6fc1f73be1b24cba0c8052549ab4ea5f1e96c976`
 - #88 `64625cd8d46576a528ea9229bbd0b1d7898f0332`
+- #89 `407ad8f27d13a79b09c367aac2f6ae0c1ef801ef`
 
 All entries above: **18/18 SUCCESS on exact final notebook-bearing HEAD and closed without merge**.
 
@@ -52,99 +53,114 @@ All entries above: **18/18 SUCCESS on exact final notebook-bearing HEAD and clos
 - UNSUPPORTED: **12**
 - DATA_ONLY with executable `effect_specs`: **0**.
 
-## Latest certified baseline — PR #88
+## Latest certified baseline — PR #89
 Certified final HEAD:
-`64625cd8d46576a528ea9229bbd0b1d7898f0332`
+`407ad8f27d13a79b09c367aac2f6ae0c1ef801ef`
 
 Certified ability coverage:
-- RUNTIME_SUPPORTED: **18**
-- PARTIAL_RUNTIME: **14**
-- DATA_ONLY: **341**
-- total: **373**.
-
-# Current tranche — PR #89 End-turn ability semantics
-- Branch: `audit/data-v3-ability-end-turn-v1`.
-- Exact parent: certified #88 final `64625cd8d46576a528ea9229bbd0b1d7898f0332`.
-- PR: #89 `DATA V3 — audit end-turn ability semantics`.
-- Engineering SHA: `b161373a70d0ed226259fe01f98b0d5cfcf677ed`.
-- Engineering result: **18/18 SUCCESS**.
-- DATA Foundation V3: **509 PASS / 0 FAIL**.
-- Spanish/type/runtime regression: **298 PASS / 0 FAIL**.
-- Detailed notebook: `docs/notebooks/19_DATA_V3_ABILITY_END_TURN.md`.
-
-## #89 source decisions
-### Speed Boost
-Pinned Gen III source: Speed rises one stage after each turn; no history.
-
-Decision: **RUNTIME_SUPPORTED**.
-
-Runtime is exactly one existing primitive transaction:
-`END_TURN → SELF Speed +1`.
-
-No Battle Core change was required. Real battle tests prove +1 after turn one, +2 after turn two, and exactly one ability event per completed turn.
-
-### Shed Skin
-Pinned source is version-sensitive:
-- current prose: 33% cure chance after each turn;
-- Black/White history: 30%;
-- Diamond/Pearl history: 33%.
-
-Decision: **DATA_ONLY** until ability runtime contracts become version-aware. No universal probability is chosen.
-
-### Poison Heal
-Pinned source requires poison to heal 1/8 max HP **instead of** causing poison damage, including bad poison.
-
-Current end-turn order is:
-1. `StatusSystem.process_end_turn()` applies residual;
-2. KO handling;
-3. END_TURN ability/item triggers.
-
-A simple heal trigger would therefore be false semantics. Real battle tests prove a Poison Heal holder currently takes the same poison residual as a plain control.
-
-Decision: **DATA_ONLY** until poison residual has an ability-aware replacement/suppression path.
-
-## #89 architecture
-No new Battle Core primitive and no changes to `TurnExecutor` or `StatusSystem`.
-
-Only executable runtime change:
-- register Speed Boost with existing END_TURN + MODIFY_STAT_STAGE semantics.
-
-Shed Skin / Poison Heal receive provenance guards and negative regressions only.
-
-## #89 exact artifact drift
-Certified #88 final tested artifact → #89 engineering tested artifact:
-- raw: exactly `speed_boost.classification: DATA_ONLY → RUNTIME_SUPPORTED`;
-- normalized: exactly the same one-field change;
-- RUNTIME_SUPPORTED set adds exactly `speed_boost`;
-- DATA_ONLY set removes exactly `speed_boost`;
-- PARTIAL_RUNTIME set unchanged;
-- all other abilities unchanged;
-- Pokémon/species, moves/effects, items/statuses, learnsets/evolutions, types/stats unchanged;
-- manifest/forms/auxiliary unchanged;
-- `pokeapi_v3_audit.json` changes only runtime/data-only counts;
-- `import_time_ms 515 → 511 ms` is non-semantic timing noise.
-
-## Ability coverage after #89 engineering
 - RUNTIME_SUPPORTED: **19**
 - PARTIAL_RUNTIME: **14**
 - DATA_ONLY: **340**
 - total: **373**.
 
-## Important current blockers
-Newly pinned:
-- Shed Skin: version-aware probability semantics.
-- Poison Heal: poison residual replacement/suppression.
+# Current tranche — PR #90 Opponent end-turn blockers
+- Branch: `audit/data-v3-ability-end-turn-opponent-v1`.
+- Exact parent: certified #89 final `407ad8f27d13a79b09c367aac2f6ae0c1ef801ef`.
+- PR: #90 `DATA V3 — audit opponent end-turn ability blockers`.
+- Engineering SHA: `52fafcc035dd46824bf9f0f6239cc93363981998`.
+- Engineering result: **18/18 SUCCESS**.
+- DATA Foundation V3: **516 PASS / 0 FAIL**.
+- Spanish/type/runtime regression: **298 PASS / 0 FAIL**.
+- Normalized import: 0 broken refs / 0 rejected definitions.
+- Detailed notebook: `docs/notebooks/20_DATA_V3_ABILITY_END_TURN_OPPONENT.md`.
 
-Existing blockers remain: Water Bubble burn prevention; Dry Skin weather/Water absorption; Guts burn/sleep; Hustle accuracy; contact per-strike/faint-safe policy; Rough Skin/Transistor version-aware values; Water Compaction/Weak Armor hit semantics; move-property metadata; super-effective predicates; Gorilla Tactics numeric provenance/move lock; Steely Spirit numeric/ally provenance.
+## #90 result — deliberately negative audit
+No production/runtime file changed. No adapter change. No registry entry. No ability classification moved.
+
+### Bad Dreams → DATA_ONLY
+Pinned Generation IV source requires opposing Pokémon to lose 1/8 max HP after each turn **while they are asleep**.
+
+Battle Core already has the effect primitive needed (`MAX_HP_DAMAGE` against `OPPONENT`), but the only persistent-status trigger predicate, `required_persistent_status_ids`, is evaluated against the **ability owner** in `BattleTriggerSystem.conditions_met()`.
+
+END_TURN routing supplies owner + opponent, but conditions still receive only the owner. Therefore the engine cannot currently express “opponent is asleep”. Using the existing predicate would instead mean “ability owner is asleep”, which is false semantics.
+
+Decision: remain **DATA_ONLY**. Do not approximate with unconditional 1/8 damage and do not add a target-status predicate solely for one ability.
+
+Real-battle regression: Bad Dreams holder versus a sleeping opponent produces no false ability event and no Bad Dreams damage. A direct predicate probe also proves awake owner is rejected while sleeping owner is accepted, confirming owner-local semantics.
+
+### Rain Dish → DATA_ONLY
+Pinned Generation III source requires healing 1/16 max HP after each turn during rain. Repository-wide search found no battle weather state/condition surface.
+
+Decision: remain **DATA_ONLY**. Do not install an unconditional heal and do not add weather architecture solely for this audit.
+
+### Ice Body → DATA_ONLY
+Pinned Generation IV source requires healing 1/16 max HP after each turn during hail and immunity to hail damage regardless of type. Current battle state has neither weather state nor hail residual transaction.
+
+Decision: remain **DATA_ONLY**.
+
+## #90 tests
+New `DataFoundationV3AbilityEndTurnOpponentTestSuite` adds seven regressions:
+1. Bad Dreams immutable source contract;
+2. Rain Dish immutable source contract;
+3. Ice Body immutable source contract;
+4. all three stay DATA_ONLY with no END_TURN trigger;
+5. existing persistent-status predicate is owner-local;
+6. sleeping-target Bad Dreams real-battle gap remains explicit;
+7. exact ability partition remains 19 / 14 / 340.
+
+DATA V3 domain increases from #89's 509 checks to **516 PASS / 0 FAIL**.
+
+## #90 exact artifact comparison
+Certified #89 final tested artifact:
+- run `33501387360`;
+- artifact `9797865183`;
+- head `407ad8f27d13a79b09c367aac2f6ae0c1ef801ef`.
+
+#90 engineering tested artifact:
+- run `33502577117`;
+- artifact `9798322866`;
+- head `52fafcc035dd46824bf9f0f6239cc93363981998`.
+
+Both artifacts contain the same 15 files.
+
+Semantically identical:
+- raw `pokemon_api.json`;
+- normalized `pokemon_api.json`;
+- manifest;
+- forms policy report;
+- unsupported mechanics report;
+- PokeAPI V3 audit report;
+- auxiliary report.
+
+No species/Pokémon, move/effect, ability classification, item/status, learnset/evolution, type/stat or report-set change exists.
+
+Only difference: `import_time_ms 513 → 509 ms`, non-semantic execution timing noise.
+
+## Ability coverage after #90 engineering
+Unchanged from certified #89:
+- RUNTIME_SUPPORTED: **19**
+- PARTIAL_RUNTIME: **14**
+- DATA_ONLY: **340**
+- total: **373**.
+
+## Important blockers after #90
+Newly pinned:
+- Bad Dreams: needs target/opponent persistent-status predicate on END_TURN or another shared target-state condition mechanism.
+- Rain Dish: needs weather state + rain predicate.
+- Ice Body: needs weather state + hail predicate + hail residual immunity.
+
+Existing blockers remain: Shed Skin version-aware probability; Poison Heal residual replacement; Water Bubble burn prevention; Dry Skin weather/Water absorption; Guts burn/sleep; Hustle accuracy; contact per-strike/faint-safe policy; Rough Skin/Transistor version-aware values; Water Compaction/Weak Armor hit semantics; move-property metadata; super-effective predicates; Gorilla Tactics numeric provenance/move lock; Steely Spirit numeric/ally provenance.
 
 ## Current certification step
-Notebook synchronization follows engineering SHA `b161373a70d0ed226259fe01f98b0d5cfcf677ed`.
+Notebook synchronization follows engineering SHA `52fafcc035dd46824bf9f0f6239cc93363981998`.
 
-Before closing #89:
-1. engineering → final must change exactly `01`, `04`, `19` notebooks;
+Before closing #90:
+1. engineering → final must change exactly `01`, `04`, `20` notebooks;
 2. require **18/18 SUCCESS** on exact final notebook-bearing HEAD;
-3. close #89 without merge;
+3. close #90 without merge;
 4. use exact final SHA as next certified baseline.
 
-## Next work after #89
-Continue DATA FOUNDATION V3 ability reliability from exact certified #89 final HEAD. Select one bounded source-first subgroup from the remaining **340 DATA_ONLY** records. Prefer complete semantics already expressible with current primitives; negative audit is preferable to speculative architecture. Trainer AI/archetypes remain deferred.
+Do not make a post-close commit solely to record closure; GitHub PR state is authoritative.
+
+## Next work after #90
+Continue DATA FOUNDATION V3 ability reliability from exact certified #90 final HEAD. Do **not** implement weather merely because Rain Dish/Ice Body exposed it, and do not add target-status solely for Bad Dreams. First identify a bounded source-backed family that genuinely reuses an existing primitive or demonstrates that a shared missing condition is justified by multiple abilities. A negative audit remains preferable to speculative architecture. Trainer AI/archetypes remain deferred.
