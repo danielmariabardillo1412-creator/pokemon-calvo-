@@ -43,6 +43,7 @@ _ATTACK_DOUBLER_GUARDS = {"huge_power", "pure_power"}
 _MULTI_SPEC_EVENT_GUARDS = {"fluffy"}
 _SUPER_EFFECTIVE_GUARDS = {"filter", "solid_rock"}
 _MOVE_PROPERTY_GUARDS = {"long_reach", "technician"}
+_VERSION_SENSITIVE_CONTACT_DAMAGE_GUARDS = {"rough_skin"}
 
 # The pinned PokeAPI snapshot says 1.33x for Tough Claws. Current main-series
 # mechanics are a 30% contact-move power boost, so DATA V3 deliberately corrects
@@ -66,6 +67,7 @@ _CLASSIFICATION = {
     "flame_body": PARTIAL_RUNTIME,
     "gooey": PARTIAL_RUNTIME,
     "heatproof": PARTIAL_RUNTIME,
+    "iron_barbs": PARTIAL_RUNTIME,
     "poison_point": PARTIAL_RUNTIME,
     "reckless": PARTIAL_RUNTIME,
     "intimidate": PARTIAL_RUNTIME,
@@ -95,6 +97,7 @@ def classification_for(ability: dict) -> str:
             or sid in _MULTI_SPEC_EVENT_GUARDS
             or sid in _SUPER_EFFECTIVE_GUARDS
             or sid in _MOVE_PROPERTY_GUARDS
+            or sid in _VERSION_SENSITIVE_CONTACT_DAMAGE_GUARDS
         ):
             _validate_source_contract(ability, sid)
         return DATA_ONLY
@@ -411,6 +414,47 @@ def _validate_source_contract(ability: dict, sid: str) -> None:
             raise RuntimeError("DATA V3 audited ability generation changed for poison_point")
         _require_tokens(text, sid, ("move makes contact", "30% chance", "poisoned"))
         _require_no_history(ability, sid)
+        return
+
+    if sid == "iron_barbs":
+        if _generation_name(ability) != "generation-v":
+            raise RuntimeError("DATA V3 audited ability generation changed for iron_barbs")
+        _require_tokens(
+            text,
+            sid,
+            (
+                "move makes contact",
+                "1/8 of its maximum hp",
+                "functions identically to rough skin",
+            ),
+        )
+        _require_no_history(ability, sid)
+        return
+
+    if sid == "rough_skin":
+        if _generation_name(ability) != "generation-iii":
+            raise RuntimeError("DATA V3 audited ability generation changed for rough_skin")
+        _require_tokens(
+            text,
+            sid,
+            (
+                "move makes contact",
+                "1/8 of its maximum hp",
+                "functions identically to iron barbs",
+            ),
+        )
+        changes = ability.get("effect_changes") or []
+        if len(changes) != 1:
+            raise RuntimeError("DATA V3 Rough Skin history shape changed; re-audit")
+        change = changes[0]
+        if (change.get("version_group") or {}).get("name") != "diamond-pearl":
+            raise RuntimeError("DATA V3 Rough Skin version marker changed; re-audit")
+        history_text = _english_text(change.get("effect_entries"))
+        _require_tokens(
+            history_text,
+            sid,
+            ("1/16 of the attacker's maximum hp",),
+        )
         return
 
     if _generation_name(ability) != "generation-iii":
