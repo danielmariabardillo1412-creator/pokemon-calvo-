@@ -10,8 +10,8 @@ func calculate(
 	rng: SeededRandomSource,
 	ruleset: BattleRuleset = null,
 	damage_multiplier_basis_points: int = 10000,
-	offensive_stat_multiplier_basis_points: int = 10000,
 	force_critical: int = -1,
+	offensive_stat_multiplier_basis_points: int = 10000,
 ) -> Dictionary:
 	if move.power <= 0:
 		return {"amount": 0, "stab_basis_points": 10000, "effectiveness_basis_points": 10000, "critical": false}
