@@ -2661,3 +2661,113 @@ Estado:
 - siguiente tranche autorizada tras certificar el HEAD documental final: **C2 — fixtures e invariantes de `TrainerRosterRoleInference` antes de fijar pesos**.
 
 Este commit documental debe rerunear la matriz completa sobre su **SHA exacto** antes de considerar certificado el HEAD final de la rama.
+
+---
+
+## 25. Tranche C2a — contrato ejecutable de fixtures para inferencia de roles
+
+Checkpoint previo a implementar `TrainerRosterRoleInference`. Esta tranche congela únicamente la frontera de entrada y los casos de prueba básicos; **no implementa todavía inferencia, pesos, role scores ni integración con consumidores**.
+
+### 25.1 Frontera de fixtures
+
+La futura inferencia trabajará sobre la misma clase de datos que ya expone `TrainerObservation.own_party`: diccionarios sanitizados equivalentes a `CreatureInstance.to_dict()`, no `BattleState` ni `CreatureInstance` vivos.
+
+Se añadió `TrainerRosterRoleInferenceFixtures` con un catálogo sintético deliberadamente pequeño y explícito:
+
+- una especie neutral de fixture;
+- movimiento físico `RUNTIME_SUPPORTED`;
+- movimiento especial `RUNTIME_SUPPORTED`;
+- movimiento de prioridad `RUNTIME_SUPPORTED`;
+- control como `MODIFY_STAT_STAGE` negativo sobre oponente;
+- setup como `MODIFY_STAT_STAGE` positivo sobre self;
+- sustain como `HEAL` sobre self;
+- un movimiento `PARTIAL_RUNTIME`;
+- un movimiento `DATA_ONLY`;
+- un movimiento `UNSUPPORTED`.
+
+A diferencia de los fixtures históricos FASE32, **todos los movimientos fijan `classification` de forma explícita**. Esto evita repetir el error de tratar por accidente un fixture que usa el default `DATA_ONLY` como si fuese una capacidad plenamente ejecutable.
+
+### 25.2 Invariantes congeladas antes de los pesos
+
+Se añadió `TrainerRosterRoleInferenceFixtureTestSuite` y se conectó al runner de Trainer Loadouts.
+
+Las 18 comprobaciones nuevas congelan que:
+
+- los seis movimientos positivos del fixture son explícitamente `RUNTIME_SUPPORTED`;
+- `PARTIAL_RUNTIME`, `DATA_ONLY` y `UNSUPPORTED` están representados de forma separada;
+- control usa semántica estructurada de debuff al oponente;
+- setup usa semántica estructurada de buff propio;
+- sustain usa semántica estructurada de curación propia;
+- las vistas física y especial usan stats reales materializados distintos;
+- physical/special fixtures poseen rutas de daño distintas;
+- la vista propia es JSON-serializable y cruza una frontera `Dictionary`;
+- bajar HP conserva stats y moveset estructurales y altera únicamente una señal de readiness;
+- llevar PP a cero conserva la identidad estructural del movimiento;
+- los movimientos de clasificación excluida pueden llegar deliberadamente a futuros tests fail-closed;
+- dos vistas generadas por separado son profundamente independientes.
+
+Estas pruebas **no afirman todavía** cuánto debe valer cada capacidad. Preparan el terreno para que C2b pruebe relaciones de monotonicidad y fail-closed sin inventar scores exactos antes de tiempo.
+
+### 25.3 Incidente CI del primer intento
+
+El primer HEAD de fixtures sometido a CI fue:
+
+`7ebb76df2ff2d58cc7d8b3c083e8f42bb4452de0`.
+
+Resultado:
+
+- 17/18 workflows: SUCCESS;
+- `Trainer Loadouts Tests`: FAILED.
+
+La importación general del proyecto había terminado correctamente. El fallo exacto estaba dentro de la nueva suite:
+
+`Cannot infer the type of "pp_variant_ok" variable because the value doesn't have a set type.`
+
+Como la suite no pudo compilarse, el runner intentó instanciar una clase inválida (`Nonexistent function 'new' in base 'GDScript'`) y terminó agotando el timeout de 240 s con exit 124.
+
+No fue una regresión semántica de Trainer AI ni un fallo de los contratos C2. Fue un error de tipado estricto del test bajo Godot 4.7.
+
+Corrección aplicada:
+
+- `pp_variant_ok: bool` explícito;
+- `independent: bool` explícito de forma preventiva;
+- `a_stats: Dictionary` explícito.
+
+El fix quedó en:
+
+`add1dd76ed8b5f9fbe507dd595d246ca4eb2b3cb` — `test(trainer-ai): fix strict bool typing in C2 fixtures`.
+
+### 25.4 Certificación de C2a
+
+PR temporal de auditoría/CI: **#100**, contra `main`, sin intención de merge.
+
+Sobre el SHA exacto:
+
+`add1dd76ed8b5f9fbe507dd595d246ca4eb2b3cb`
+
+resultado confirmado:
+
+- **18/18 workflows GitHub Actions: SUCCESS**;
+- `Trainer Loadouts Tests`: **234 PASS / 0 FAIL**;
+- de esos checks, **18 son las nuevas invariantes C2a**;
+- `Godot 4.7 Tests`: SUCCESS;
+- `Data Foundation V3 Tests`: SUCCESS;
+- resto de gates de Trainer AI: SUCCESS.
+
+Por tanto, **C2a de fixtures/tests queda CERTIFICADO en `add1dd76ed8b5f9fbe507dd595d246ca4eb2b3cb`**.
+
+### 25.5 Límites y siguiente tranche
+
+Estado al cerrar C2a:
+
+- `TrainerRosterRoleInference` de producción: **TODAVÍA NO EXISTE**;
+- pesos/umbrales numéricos: **NO FIJADOS**;
+- role scores / primary / secondary roles: **NO IMPLEMENTADOS**;
+- `TrainerTeamAnalyzer`: **NO TOCADO**;
+- switching/search: **NO TOCADOS**;
+- código de producción modificado en C2a: **NO**;
+- `main`: **NO MOVIDO**.
+
+Siguiente tranche autorizada: **C2b — implementar la mínima extracción intrínseca de capacidades contra estos fixtures**, empezando por fail-closed de `MoveDefinition.classification`, stats/moveset estructurales y relaciones de monotonicidad. Todavía sin integrar `TrainerTeamAnalyzer`, switching ni search y sin congelar pesos finales por intuición.
+
+Este commit documental debe rerunear la matriz completa sobre su **SHA exacto** antes de considerar certificado el HEAD final de la rama.
