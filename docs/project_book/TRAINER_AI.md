@@ -1755,3 +1755,224 @@ Más adelante, cuando exista la función de valor de campaña, habrá tests cond
 - código de producción modificado en este checkpoint: **NO**.
 
 Siguiente bloque recomendado: auditar dónde y cómo debe calcularse el **valor estratégico de cada miembro del roster** usando solo `own_party + campaign_snapshot`: cobertura única, redundancia, potencia/rol, estado persistente y coste de permadeath. El objetivo será definir el evaluador de roster antes de tocar `TrainerSearchStateEvaluator` o los pesos de switching.
+
+### 19.11 CORRECCIÓN CANÓNICA — Random Cup no permite curación de bolsa
+
+Regla de gameplay confirmada posteriormente por el usuario y que **supersede** cualquier parte anterior de las secciones 13, 17 o 18 que tratase la economía de pociones como una decisión todavía abierta para Random Cup:
+
+- en Random Cup no se permiten `Potion`, `Super Potion`, `Hyper Potion`, `Max Potion`, `Full Restore` ni ninguna otra acción de curación mediante bolsa durante el combate;
+- la prohibición es simétrica para jugador y entrenadores IA;
+- el ActionSpace Random Cup no debe ofrecer acciones `ITEM` de curación a ningún lado;
+- `TrainerItemTacticalEvaluator`, `TrainerItemAwareSearch` y la economía persistente de pociones quedan **FUERA DEL FLUJO RANDOM CUP**;
+- FASE30 se conserva como infraestructura para otros modos donde los objetos de bolsa sí sean legales;
+- Revive también queda fuera de Random Cup;
+- el `TrainerCampaignSnapshot` Random Cup V1 no necesita representar recursos de curación de bolsa ni escasez de pociones.
+
+Esta regla **no decide** por sí sola:
+
+- recuperación automática de HP/PP/status entre combates;
+- held items con curación o recuperación pasiva;
+- otras categorías de objeto que un futuro ruleset pudiera permitir expresamente.
+
+---
+
+## 20. Auditoría técnica — valor estratégico de miembros del roster
+
+Checkpoint de diseño del evaluador que permitirá razonar sobre permadeath sin mirar rivales futuros. **No se modifica código de producción en este tramo.**
+
+### 20.1 Responsabilidad y nombre provisional
+
+Hace falta una capa nueva, provisionalmente denominada:
+
+**`TrainerRosterStrategicValueEvaluator`**.
+
+Su responsabilidad no es decidir una acción ni predecir el siguiente rival. Debe responder, para cada miembro propio todavía disponible:
+
+> «¿qué pierde objetivamente este roster si este `instance_id` desaparece de forma permanente?»
+
+El evaluador consume únicamente:
+
+- `TrainerObservation.own_party`;
+- `TrainerDecisionContext.campaign_snapshot`;
+- `DefinitionCatalog`/tabla de tipos y capacidades runtime propias.
+
+No necesita ni debe consultar:
+
+- `observed_opponents`;
+- `belief_snapshot`;
+- `memory_snapshot` rival;
+- bracket oculto;
+- futuros rivales;
+- RNG/seed.
+
+El matchup actual seguirá perteneciendo a las capas tácticas existentes. Este evaluador mide el **valor del activo dentro de su propio roster**.
+
+### 20.2 Tres salidas separadas — no una cifra opaca
+
+Por cada `instance_id` el resultado debe distinguir al menos:
+
+1. **`structural_value_bp`** — importancia intrínseca/relativa del miembro para la composición del roster si estuviera utilizable.
+2. **`operational_readiness_bp`** — cuánto de ese potencial puede ejercer en su estado actual dentro de la batalla.
+3. **`permadeath_loss_cost_bp`** — coste estratégico de que desaparezca permanentemente bajo las reglas actuales de campaña.
+
+Además debe devolver breakdown/reasons deterministas para trazabilidad.
+
+Esta separación evita un error crítico: un Pokémon único a 10% de HP puede tener baja disponibilidad operativa **sin dejar de ser una pieza estructuralmente muy valiosa**. Reducir su valor permanente simplemente porque está herido empujaría a la IA a sacrificar precisamente aquello que más debería intentar conservar.
+
+### 20.3 `structural_value_bp` — componentes permitidos
+
+El valor estructural se deriva solo del roster propio superviviente y del loadout real ya materializado.
+
+Componentes V1 candidatos:
+
+- **capacidad de combate real:** stats actuales/base relevantes y movimientos ejecutables del loadout, no solo BST de la especie;
+- **cobertura ofensiva útil:** tipos/funciones que sus movimientos `RUNTIME_SUPPORTED` aportan realmente;
+- **cobertura ofensiva única:** bonus cuando ese miembro es el único —o claramente el mejor— que cubre una familia de tipos/funciones dentro del roster;
+- **resistencia/inmunidad estructural:** tipado defensivo que aporta entradas seguras frente a tipos del universo conocido;
+- **resistencia/inmunidad única:** mayor valor si ningún otro superviviente ofrece una respuesta defensiva equivalente;
+- **rol inferido:** capacidad de actuar como atacante físico, especial, fast/cleaner, bulky, soporte, etc., derivada de stats+moveset reales y no de un `role_id` preasignado;
+- **rol único/flexibilidad:** mayor valor cuando una función necesaria solo existe en ese miembro o cuando puede cubrir varias funciones útiles;
+- **redundancia:** descuento cuando otros miembros pueden cumplir casi la misma función con calidad comparable.
+
+No debe premiarse un movimiento `DATA_ONLY`, `UNSUPPORTED` o cualquier capacidad que el ruleset Random Cup no permita materializar. `PARTIAL_RUNTIME` tampoco cuenta en V1 mientras siga excluido de la generación automática.
+
+La contribución de habilidades al valor ofensivo/defensivo solo se incorporará cuando exista una forma runtime explícita y auditable de medir esa capacidad. No se inventarán inmunidades o sinergias por nombre de habilidad.
+
+### 20.4 Poder absoluto y valor relativo deben coexistir
+
+No basta con ordenar los seis miembros entre sí.
+
+Si el equipo aleatorio es muy malo, seguirá existiendo un «mejor miembro» relativo; eso no debe convertirlo artificialmente en una superestrella. Al mismo tiempo, una pieza moderada puede ser estratégicamente crucial si es la única que cubre una debilidad del roster.
+
+Por tanto el valor estructural debe combinar:
+
+- **capacidad absoluta legítimamente medible**;
+- **contribución marginal al roster**;
+- **redundancia/reemplazabilidad interna**.
+
+No se congela todavía una fórmula ni pesos finales. Primero se definirán fixtures donde esos tres conceptos produzcan ordenaciones obvias y después se calibrarán los pesos contra ellos.
+
+### 20.5 `operational_readiness_bp` — condición actual sin destruir el valor del activo
+
+La disponibilidad operativa puede considerar:
+
+- ratio de HP actual;
+- status persistente actual;
+- PP disponibles en movimientos relevantes;
+- estado consumido del held item cuando corresponda;
+- cualquier otra limitación propia ya visible en `own_party`.
+
+Debe representar «qué tan utilizable está ahora», no «cuánto vale que siga existiendo».
+
+La política de recuperación entre combates sigue abierta. Por tanto:
+
+- HP/PP/status siempre pueden afectar la decisión **de la batalla actual**;
+- solo afectan al valor de campaña futuro en la medida en que `campaign_snapshot` indique que esa condición persiste según el ruleset;
+- si el ruleset cura/restaura algo entre rondas, el evaluador de pérdida permanente no debe fingir que ese daño temporal se arrastrará para siempre.
+
+### 20.6 `permadeath_loss_cost_bp` — coste de borrar el activo
+
+Random Cup tiene permadeath canónico, por lo que perder una instancia debe generar un coste separado de recibir daño normal.
+
+El coste puede derivarse de:
+
+- `structural_value_bp`;
+- disponibilidad de sustitutos/redundancia dentro del roster;
+- número de supervivientes respecto al roster inicial;
+- política de reposición si finalmente existe;
+- rondas restantes **solo si esa información es pública y está en `campaign_snapshot`**;
+- estado operativo actual como modulador limitado, nunca como mecanismo que convierta una pieza única a 1 HP en «prescindible» automáticamente.
+
+Cuando el roster se reduce y no existe reemplazo, perder otra pieza puede ser más grave que perder una pieza equivalente al principio. Ese multiplicador solo se activa cuando la política de campaña correspondiente está explícitamente disponible; no se asume mientras `replacement_policy` siga abierta.
+
+### 20.7 `TrainerProfile` NO calcula el valor del Pokémon
+
+El valor estructural y el coste objetivo de pérdida deben ser iguales para dos entrenadores que reciben exactamente el mismo estado propio.
+
+`TrainerProfile` ya contiene `preservation_weight_bp`, con diferencias claras entre aggressive/cautious/technical. Esa es la capa apropiada para decidir **cuánto le importa** actuar sobre el riesgo, no para alterar los hechos del roster.
+
+Separación canónica:
+
+`RosterStrategicValueEvaluator` → hechos/valor objetivo del activo.
+
+`TrainerProfile` → tolerancia conductual a exponer/sacrificar ese activo.
+
+`Expertise` futura → calidad con la que se interpreta/utiliza el análisis legítimo, sin cambiar el roster ni la información disponible.
+
+Esto mantiene la identidad del entrenador sin hacer que un agresivo «crea» falsamente que su pieza única vale menos.
+
+### 20.8 Relación con el código FASE31 existente
+
+`TrainerTeamStrategicEvaluator` ya detecta una pieza como única respuesta, pero solo respecto a oponentes observados que quedan **en la batalla actual**. Se conserva como capa táctica de preservación contextual.
+
+`TrainerStrategicSwitchEvaluatorV2._future_value_bp()` también calcula valor únicamente frente a rivales observados restantes. No debe convertirse en el evaluador de campaña mediante más heurísticas añadidas dentro de esa función.
+
+Dirección futura:
+
+- mantener matchup/amenaza actual y amenazas observadas en FASE31;
+- introducir `TrainerRosterStrategicValueEvaluator` como fuente separada de valor de campaña;
+- switching combina ambos horizontes;
+- `productive_sacrifice_window` deja de bastar por sí solo: un sacrificio que parece tácticamente productivo debe descontar el `permadeath_loss_cost_bp` del miembro;
+- una pieza de alto coste puede recibir una penalización/veto estratégico al sacrificio salvo que ganar/sobrevivir a la batalla justifique realmente ese coste;
+- una pieza muy redundante puede seguir siendo el sacrificio correcto cuando la situación lo exige.
+
+No se elimina FASE31: se evita mezclar en una sola función «matchup futuro de esta batalla» y «valor persistente de campaña».
+
+### 20.9 Relación futura con `TrainerSearchStateEvaluator`
+
+El evaluador de búsqueda actual puntúa todos los KOs propios con un coste uniforme y devuelve victoria terminal antes de evaluar el daño al roster.
+
+Cuando se implemente el valor de campaña:
+
+- un KO propio simulado debe poder cargar el `permadeath_loss_cost_bp` específico de esa instancia;
+- ganar el combate seguirá siendo un objetivo dominante, pero la utilidad terminal no debe borrar automáticamente el coste de terminar con medio roster muerto;
+- daño no letal y KO permanente deben permanecer conceptualmente separados;
+- los pesos finales se calibrarán mediante corpus Random Cup multi-batalla, no por intuición.
+
+Este checkpoint **no congela** todavía cómo se combinarán matemáticamente el score táctico y el de campaña.
+
+### 20.10 Efecto de la prohibición de pociones
+
+La regla canónica de Random Cup simplifica este evaluador:
+
+- no existe componente de «valor de conservar pociones»;
+- no existe oportunidad estratégica de gastar una cura de bolsa para proteger una pieza;
+- el evaluator no necesita inventario de pociones ni cantidades persistentes;
+- switching, selección de acción, movimientos de recuperación propios del Pokémon si existen y held items permitidos serán las únicas formas de conservación dentro del combate que procedan del runtime/ruleset.
+
+La recuperación automática **entre combates** sigue siendo una regla separada y se reflejará mediante `campaign_snapshot` cuando se defina.
+
+### 20.11 Tests mínimos del futuro evaluador
+
+Antes de integrarlo en switching/search debe existir una suite aislada con escenarios deterministas como:
+
+- mismo roster + distintos `TrainerProfile` → mismos valores estructurales/loss-cost;
+- miembro con cobertura única > miembro equivalente cuya cobertura está duplicada;
+- resistencia/inmunidad única > resistencia repetida, a igualdad razonable;
+- dos Pokémon de la misma especie pueden tener distinto valor por moveset/estado/función real;
+- Pokémon único a HP bajo → `structural_value_bp` alto pero `operational_readiness_bp` bajo;
+- movimiento `DATA_ONLY`/`UNSUPPORTED` no aumenta cobertura estratégica;
+- eliminar un miembro del roster puede aumentar la unicidad/valor relativo de los supervivientes;
+- si `replacement_policy` declara que no hay reemplazo, una plantilla muy reducida puede elevar el coste marginal de otra muerte;
+- si una condición no persiste entre rondas según snapshot, no debe degradar permanentemente el loss-cost futuro;
+- cambiar datos ocultos del rival no altera el resultado del evaluador;
+- cambiar únicamente datos propios legítimos sí puede alterar el resultado;
+- no existe dependencia de bolsa/pociones en Random Cup.
+
+La suite debe registrar breakdowns para que una regresión no pase solo porque «la cifra final sigue parecida».
+
+### 20.12 Estado de este checkpoint
+
+- evaluador estratégico de roster existente: **NO; NUEVA CAPA NECESARIA**;
+- nombre provisional: **`TrainerRosterStrategicValueEvaluator`**;
+- entradas: **OWN PARTY + CAMPAIGN SNAPSHOT + CATÁLOGO**;
+- rivales/beliefs/memoria rival: **FUERA DE ESTA CAPA**;
+- salidas mínimas: **STRUCTURAL VALUE + OPERATIONAL READINESS + PERMADEATH LOSS COST**;
+- personalidad dentro del valor objetivo: **NO**;
+- `TrainerProfile.preservation_weight_bp`: **CONSERVAR COMO MODULADOR POSTERIOR DE DECISIÓN**;
+- FASE31 tactical future-value: **CONSERVAR COMO HORIZONTE DE BATALLA, NO COMO CAMPAÑA**;
+- economía de pociones Random Cup: **ELIMINADA DEL MODELO**;
+- pesos/fórmula final: **NO CONGELADOS AÚN**;
+- código de producción modificado: **NO**.
+
+Siguiente bloque recomendado: diseñar la **inferencia dinámica de roles/capacidades sobre `own_party`** que alimentará el valor estructural —sin depender de `TrainerPokemonLoadout.role_id`— y decidir qué señales runtime son suficientemente fiables para clasificar atacante físico/especial, fast, bulky y support.
