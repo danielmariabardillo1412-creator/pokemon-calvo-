@@ -16,8 +16,6 @@ func run(check: Callable) -> void:
 	var by_id := _by_id(raw.get("abilities", []))
 	var registry := BattleEffectRegistry.new()
 
-	# Immutable source guards. These are intentionally test-side provenance checks:
-	# this tranche makes no adapter/runtime classification change.
 	var bad_source := _load_json("res://data/api/v2/ability/123/index.json")
 	var bad_text := _english_effect_text(bad_source.get("effect_entries", []))
 	check.call(
@@ -53,59 +51,92 @@ func run(check: Callable) -> void:
 		and (ice_source.get("effect_changes", []) as Array).is_empty(),
 	)
 
-	# All three remain non-executable. Bad Dreams needs target-status gating; Rain
-	# Dish and Ice Body need weather state, and Ice Body additionally needs hail
-	# residual immunity. Do not install an unconditional END_TURN approximation.
-	var blockers_stay_data_only := true
-	for ability_id in ["bad_dreams", "rain_dish", "ice_body"]:
-		blockers_stay_data_only = blockers_stay_data_only and (
+	# Weather remains outside current battle state. Target-status support must not be
+	# misused to install unconditional Rain Dish or Ice Body healing.
+	var weather_blockers_safe := true
+	for ability_id in ["rain_dish", "ice_body"]:
+		weather_blockers_safe = weather_blockers_safe and (
 			str((by_id.get(ability_id, {}) as Dictionary).get("classification", "")) == "DATA_ONLY"
 			and registry.triggers_for_ability(StringName(ability_id), BattleTriggerSpec.END_TURN).is_empty()
 		)
-	check.call("data_v3_end_turn_opponent_blockers_stay_data_only", blockers_stay_data_only)
+	check.call("data_v3_end_turn_weather_blockers_stay_data_only", weather_blockers_safe)
 
-	# The only persistent-status predicate currently available is explicitly owner-
-	# local. A sleeping opponent cannot satisfy it for an awake ability holder.
+	# Owner-state and target-state conditions are distinct contracts. The historical
+	# predicate remains owner-local while the new predicate explicitly reads target.
 	var owner := _creature(&"probe_owner", &"darkrai", [&"growl"], 30)
-	var probe := BattleTriggerSpec.new(
+	var target_probe := _creature(&"probe_target", &"squirtle", [&"growl"], 20)
+	var owner_probe := BattleTriggerSpec.new(
 		BattleTriggerSpec.END_TURN,
 		&"ability",
-		&"bad_dreams_probe",
-		BattleEffectSpec.new(
-			BattleEffectSpec.MAX_HP_DAMAGE,
-			BattleEffectSpec.OPPONENT,
-			0,
-			1250,
-		),
+		&"owner_probe",
+		BattleEffectSpec.new(BattleEffectSpec.MAX_HP_DAMAGE, BattleEffectSpec.OPPONENT, 0, 1250),
 		0,
 		{"required_persistent_status_ids": ["sleep"]},
 	)
+	var target_status_probe := BattleTriggerSpec.new(
+		BattleTriggerSpec.END_TURN,
+		&"ability",
+		&"target_probe",
+		BattleEffectSpec.new(BattleEffectSpec.MAX_HP_DAMAGE, BattleEffectSpec.OPPONENT, 0, 1250),
+		0,
+		{"required_target_persistent_status_ids": ["sleep"]},
+	)
 	var trigger_system := BattleTriggerSystem.new()
-	var awake_owner_rejected := not trigger_system.conditions_met(probe, owner, null)
-	owner.status_state.persistent_id = StatusSystem.SLEEP
-	var sleeping_owner_accepted := trigger_system.conditions_met(probe, owner, null)
+	target_probe.status_state.persistent_id = StatusSystem.SLEEP
 	check.call(
-		"data_v3_bad_dreams_existing_status_predicate_is_owner_local",
-		awake_owner_rejected and sleeping_owner_accepted,
+		"data_v3_target_status_predicate_subjects_explicit",
+		not trigger_system.conditions_met(owner_probe, owner, null, target_probe)
+		and trigger_system.conditions_met(target_status_probe, owner, null, target_probe),
 	)
 
-	# Real battle boundary: even with the opponent asleep, Bad Dreams must not emit
-	# a false unconditional trigger or damage until target-status semantics exist.
+	# Structural contract: Bad Dreams is exactly one sleeping-target END_TURN 1/8
+	# max-HP transaction. No owner-status gate or unconditional damage is present.
+	var bad_specs := registry.triggers_for_ability(&"bad_dreams", BattleTriggerSpec.END_TURN)
+	var bad_spec_ok := bad_specs.size() == 1
+	if bad_spec_ok:
+		var bad: BattleTriggerSpec = bad_specs[0]
+		bad_spec_ok = (
+			bad.source_kind == &"ability"
+			and bad.source_id == &"bad_dreams"
+			and bad.conditions.get("required_target_persistent_status_ids", []) == ["sleep"]
+			and not bad.conditions.has("required_persistent_status_ids")
+			and bad.effect.kind == BattleEffectSpec.MAX_HP_DAMAGE
+			and bad.effect.target == BattleEffectSpec.OPPONENT
+			and bad.effect.ratio_basis_points == 1250
+		)
+	check.call("data_v3_bad_dreams_structural_target_status_exact", bad_spec_ok)
+
+	# Real battle: a sleeping opponent loses exactly 1/8 max HP at end turn and the
+	# ability emits exactly once. Sleep itself has no end-turn HP transaction.
 	var bad_server := _server(9501, &"bad_dreams")
-	var target := bad_server.state.creature(&"b")
-	target.status_state.persistent_id = StatusSystem.SLEEP
-	target.status_state.turns_remaining = 3
-	var hp_before := target.current_hp
+	var sleeping_target := bad_server.state.creature(&"b")
+	sleeping_target.status_state.persistent_id = StatusSystem.SLEEP
+	sleeping_target.status_state.turns_remaining = 3
+	var hp_before := sleeping_target.current_hp
 	var bad_events := bad_server.submit_turn(_actions(bad_server.state))
 	check.call(
-		"data_v3_bad_dreams_sleeping_target_gap_explicit",
-		target.current_hp == hp_before
-		and target.status_state.persistent_id == StatusSystem.SLEEP
-		and _source_trigger_count(bad_events, "bad_dreams", &"a") == 0,
+		"data_v3_bad_dreams_real_battle_sleeping_target",
+		sleeping_target.current_hp == hp_before - 30
+		and sleeping_target.status_state.persistent_id == StatusSystem.SLEEP
+		and _source_trigger_count(bad_events, "bad_dreams", &"a") == 1,
 	)
 
-	# Negative tranche: canonical coverage must remain exactly the certified #89
-	# partition. Any movement here requires a deliberate follow-up implementation.
+	# Same seed/state without sleep must be inert: no residual damage and no event.
+	var awake_server := _server(9501, &"bad_dreams")
+	var awake_target := awake_server.state.creature(&"b")
+	var awake_hp_before := awake_target.current_hp
+	var awake_events := awake_server.submit_turn(_actions(awake_server.state))
+	check.call(
+		"data_v3_bad_dreams_real_battle_awake_target_inert",
+		awake_target.current_hp == awake_hp_before
+		and _source_trigger_count(awake_events, "bad_dreams", &"a") == 0,
+	)
+
+	check.call(
+		"data_v3_bad_dreams_classification_full",
+		str((by_id.get("bad_dreams", {}) as Dictionary).get("classification", "")) == "RUNTIME_SUPPORTED",
+	)
+
 	var counts := {"RUNTIME_SUPPORTED": 0, "PARTIAL_RUNTIME": 0, "DATA_ONLY": 0}
 	for ability in raw.get("abilities", []):
 		if ability is Dictionary:
@@ -113,10 +144,10 @@ func run(check: Callable) -> void:
 			if counts.has(classification):
 				counts[classification] = int(counts[classification]) + 1
 	check.call(
-		"data_v3_end_turn_opponent_negative_audit_preserves_counts",
-		int(counts["RUNTIME_SUPPORTED"]) == 19
+		"data_v3_target_state_promotions_update_counts",
+		int(counts["RUNTIME_SUPPORTED"]) == 21
 		and int(counts["PARTIAL_RUNTIME"]) == 14
-		and int(counts["DATA_ONLY"]) == 340,
+		and int(counts["DATA_ONLY"]) == 338,
 	)
 
 
