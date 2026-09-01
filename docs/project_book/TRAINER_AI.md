@@ -629,3 +629,142 @@ Todavía no se congela una fórmula de valor de campaña: primero deben quedar d
 - incompatibilidad de función objetivo con permadeath confirmada: **SÍ**;
 - infraestructura reutilizable identificada: **SÍ**;
 - siguiente auditoría: item/economy, observación propia, tests/corpus sintético y flujo de composición/loadout Random Cup.
+
+---
+
+## 13. Auditoría técnica — objetos, economía y persistencia
+
+Checkpoint específico de FASE30 frente a Random Cup/permadeath. **No se modifica código en este tramo.**
+
+### 13.1 `BattleSideItemInventory` — CONSERVAR COMO PRIMITIVA DE COMBATE
+
+La separación existente es correcta y debe protegerse:
+
+- el inventario es finito;
+- puede serializarse, duplicarse y consumirse de forma determinista;
+- pertenece al estado de batalla y puede copiarse en forks de simulación;
+- está diseñado explícitamente como recurso **battle-scoped** y separado de la persistencia del jugador/campaña.
+
+No debe deformarse `BattleSideItemInventory` para convertirlo en inventario persistente de Random Cup. La capa de campaña debe ser otra autoridad y entregar al Battle Core el inventario correspondiente a cada combate.
+
+**Clasificación:** CONSERVAR.
+
+### 13.2 Observación y privacidad del inventario — CONSERVAR
+
+`TrainerObservationBuilder` expone al entrenador su propio inventario finito exacto y mantiene oculto el inventario rival no revelado.
+
+`TrainerItemAwareWorldFactory` copia únicamente el inventario propio conocido a los mundos plausibles y deja sin modelar la bolsa rival desconocida.
+
+Esta frontera sigue siendo compatible con Random Cup: el entrenador puede conocer sus propios recursos persistentes, pero no debe obtener gratuitamente información sobre recursos rivales futuros o no observados.
+
+**Clasificación:** CONSERVAR frontera de información y mecanismo de copia.
+
+### 13.3 `TrainerItemAwareSearch` — CONSERVAR INTEGRACIÓN / REVALIDAR CON CONTEXTO DE CAMPAÑA
+
+La búsqueda ya integra `ITEM` junto a movimientos y cambios, estratifica las acciones y simula correctamente su consumo en forks.
+
+No hay evidencia de que esta infraestructura deba reescribirse por el cambio de modo.
+
+**Clasificación:** CONSERVAR integración y muestreo; revalidar cuando exista función de utilidad de campaña.
+
+### 13.4 `TrainerItemTacticalEvaluator` — ADAPTACIÓN IMPORTANTE
+
+La valoración actual de objetos es esencialmente local al combate:
+
+- recompensa HP recuperado;
+- valora cura de estado;
+- penaliza overheal;
+- descuenta un coste fijo por tipo de objeto.
+
+Costes heurísticos actuales:
+
+- Potion: 250;
+- Super Potion: 500;
+- Hyper Potion: 900;
+- Max Potion: 1200;
+- Full Restore: 1400;
+- fallback: 1000.
+
+Esto permite preferir una cura barata cuando dos objetos producen un resultado inmediato equivalente, pero **no representa el coste de oportunidad entre combates**.
+
+En Random Cup, gastar un objeto debe poder depender también de variables legítimas como:
+
+- cuántas unidades persistentes quedan;
+- expectativa de combates restantes si esa información es pública para el propio entrenador;
+- valor estratégico del Pokémon que se intenta salvar;
+- posibilidad de sobrevivir sin gastar el recurso;
+- redundancia o irremplazabilidad de esa pieza;
+- disponibilidad futura de reposición, si las reglas del modo la permiten.
+
+No se congela todavía ninguna fórmula.
+
+**Clasificación:** ADAPTAR DE FORMA IMPORTANTE, conservando la lectura de efectos runtime en lugar de hardcodear cantidades curadas dentro de la IA.
+
+### 13.5 DATA V3 — integración de efectos de objetos bien encaminada
+
+La IA no codifica directamente dentro del evaluador que una Potion cure 20, una Super Potion 60, etc. Consulta los efectos runtime de `BattleEffectRegistry`.
+
+Eso es positivo: el contrato de DATA/runtime puede seguir siendo la autoridad de efecto, mientras la IA decide **cuándo merece la pena gastar** el recurso.
+
+**Clasificación:** CONSERVAR este desacoplamiento.
+
+### 13.6 Tests existentes — correctos para batalla aislada, insuficientes para campaña
+
+Los tests activos comprueban correctamente, entre otras cosas:
+
+- snapshot y round-trip del inventario;
+- forks que consumen su propia copia sin mutar la batalla viva;
+- consumo unitario y rechazo cuando el objeto se agota;
+- targeting de activo/banca viva;
+- Revive deshabilitado;
+- separación entre objetos de bolsa y held items;
+- visibilidad del inventario propio;
+- ocultación de la bolsa rival;
+- copia exacta del inventario propio a mundos plausibles;
+- elección de curación cuando una línea ofensiva inmediata muere;
+- preferencia por rematar en vez de curar innecesariamente;
+- preferencia por una cura menor cuando produce el mismo beneficio inmediato.
+
+El V2 de tests corrige dos fixtures antiguos sin debilitar producción: curar a HP completo debe rechazarse y `own_item_inventory` conserva la forma serializada de `BattleSideItemInventory`.
+
+Sin embargo, `TrainerItemActionsCorpusTestSuite` solo sustituye el cerebro del corpus de combate existente por `ItemAwareTrainerBrain`. No añade una secuencia persistente de varios combates.
+
+Por tanto, los tests actuales **no prueban**:
+
+- conservación de recursos entre rondas;
+- coste de gastar una cura ahora frente a necesitarla después;
+- consumo acumulado en una copa;
+- decisión de salvar una pieza estratégica con un recurso escaso;
+- reposición o ausencia de reposición entre combates.
+
+**Clasificación:** CONSERVAR tests unitarios de batalla; AÑADIR posteriormente corpus determinista multi-combate de Random Cup.
+
+### 13.7 Contrato arquitectónico provisional que sale de esta auditoría
+
+La persistencia de Random Cup no debe vivir dentro de `BattleSideItemInventory` ni obligar al Battle Core a conocer toda la campaña.
+
+Dirección provisional:
+
+1. una futura autoridad de Random Cup/campaña mantiene roster y recursos persistentes;
+2. antes de cada combate proyecta al Battle Core el inventario utilizable en esa batalla;
+3. el `TrainerDecisionContext` recibe un **snapshot estratégico sanitizado** con la información propia de campaña que el entrenador tiene derecho a conocer;
+4. la IA combina utilidad táctica del objeto con coste estratégico persistente;
+5. al terminar el combate, la autoridad de campaña recoge los consumos y actualiza su estado persistente.
+
+Esto mantiene limpia la separación Battle Core / modo de juego / cerebro.
+
+El inventario rival persistente seguirá oculto salvo que una regla pública del modo indique lo contrario.
+
+### 13.8 Estado de FASE30 tras auditoría
+
+- `BattleSideItemInventory`: **CONSERVAR**;
+- `TrainerObservationBuilder` para bolsa propia: **CONSERVAR**;
+- `TrainerItemAwareWorldFactory`: **CONSERVAR**;
+- `TrainerItemAwareSearch`: **CONSERVAR / REVALIDAR**;
+- `TrainerItemTacticalEvaluator`: **ADAPTAR DE FORMA IMPORTANTE**;
+- corpus/tests de batalla: **CONSERVAR**;
+- evaluación de economía persistente: **NUEVA CAPA NECESARIA**;
+- Revive: **SIGUE DESHABILITADO** salvo futura regla explícita;
+- código modificado durante esta auditoría: **NO**.
+
+Siguiente bloque de auditoría recomendado: `TrainerLoadoutValidator` + `TrainerRoleLoadoutGenerator` frente a DATA V3 y asignación aleatoria de especies.
