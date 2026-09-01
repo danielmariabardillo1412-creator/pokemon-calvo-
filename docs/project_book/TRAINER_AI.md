@@ -914,3 +914,204 @@ Resolver estas reglas después de codificar obligaría a rehacer el validador y 
 - código de producción modificado durante esta auditoría: **NO**.
 
 Siguiente bloque recomendado: auditar `TrainerTeamAnalyzer`, `TrainerTeamComposer` y `TrainerTeamFactory` para separar análisis legítimo del roster aleatorio de cualquier selección de especies que ya no pertenezca al flujo Random Cup.
+
+---
+
+## 15. Auditoría técnica — Team Analysis / Composition frente a Random Cup
+
+Checkpoint específico de FASE33. **No se modifica código de producción en este tramo.**
+
+### 15.1 `TrainerTeamAnalyzer` — CONSERVAR COMO ANALIZADOR ESTRUCTURAL / ADAPTAR PARA RANDOM CUP
+
+La estructura central encaja bien con una plantilla aleatoria ya asignada. `analyze()` recibe un `TrainerTeamDefinition` existente y no selecciona especies.
+
+Actualmente calcula de forma genérica:
+
+- número de miembros válidos;
+- conteo de roles;
+- tipos de las especies;
+- tipos ofensivos presentes en el moveset;
+- debilidades compartidas;
+- resistencias por tabla de tipos;
+- cobertura ofensiva;
+- diversidad de roles y tipos;
+- una puntuación de sinergia.
+
+Además recorre `type_catalog.all_ids()`, por lo que la lógica no está hardcodeada a un subconjunto histórico de tipos y puede trabajar con el catálogo moderno cargado.
+
+**Clasificación:** CONSERVAR el concepto y gran parte de la implementación como análisis estructural de plantilla.
+
+### 15.2 Limitación crítica — los roles no se infieren dinámicamente
+
+El Analyzer incrementa `role_counts` leyendo directamente `loadout.role_id`.
+
+Eso significa que no responde todavía a la pregunta central de Random Cup:
+
+> «me han tocado estos seis Pokémon; ¿qué función real puede cumplir cada uno dentro de este roster concreto?»
+
+En FASE33 los roles ya estaban asignados antes de analizar el equipo. El Analyzer mide diversidad de esas etiquetas, pero no las descubre.
+
+Random Cup necesitará una capa de **role inference / roster interpretation** que pueda derivar uno o varios roles plausibles desde datos legítimos del miembro ya recibido:
+
+- stats;
+- moveset legal existente;
+- habilidad/held item si forman parte del loadout real;
+- velocidad;
+- bulk;
+- cobertura;
+- utilidad/status/setup;
+- relación con el resto de la plantilla.
+
+Un miembro puede desempeñar más de un papel y su valor debe ser relativo al roster, no solo una etiqueta fija.
+
+**Clasificación:** Analyzer CONSERVAR; añadir o integrar inferencia dinámica de roles antes de usar `role_counts` como verdad estratégica.
+
+### 15.3 Segunda brecha DATA V3 — cobertura ofensiva no filtra clasificación runtime
+
+Para construir `attack_type_counts`, el Analyzer acepta cualquier movimiento existente con `power > 0`.
+
+No comprueba `MoveDefinition.classification`.
+
+Por tanto hereda la misma brecha detectada en FASE32: un movimiento `DATA_ONLY` o `UNSUPPORTED` podría inflar artificialmente la cobertura y la sinergia de un equipo si llega a un loadout por el validador antiguo.
+
+La solución futura no debe duplicar reglas arbitrarias dentro del Analyzer. El contrato preferido es que el roster/loadout que llega a esta capa ya esté validado contra el ruleset V3, y que el Analyzer solo consuma capacidades realmente utilizables.
+
+**Clasificación:** ADAPTAR integración con la nueva autoridad de legalidad/capacidades V3.
+
+### 15.4 El Analyzer V1 es estático, no una función de valor de campaña
+
+`TrainerTeamAnalyzer` trabaja con definiciones de loadout. No incorpora:
+
+- HP persistente actual;
+- estados persistentes;
+- PP o recursos consumidos;
+- miembros ya eliminados por permadeath;
+- disponibilidad futura de curación;
+- valor de supervivencia;
+- coste de perder una cobertura única;
+- reemplazabilidad real durante la copa.
+
+Tampoco modela todavía sinergias defensivas aportadas por habilidades concretas; la resistencia base se calcula por tipado de especie.
+
+Esto no es un bug de FASE33: era un analizador de composición estática.
+
+Random Cup necesita conservarlo como una de las entradas del análisis, pero añadir una capa dinámica de **roster strategic state/value** sobre el estado persistente real.
+
+### 15.5 `TrainerTeamComposer` — RETIRAR DEL FLUJO PRINCIPAL RANDOM CUP
+
+La incompatibilidad aquí sí es directa.
+
+`compose()` recibe un `species_pool` y, en cada iteración:
+
+1. recorre especies candidatas;
+2. prueba distintos roles para cada especie;
+3. genera un loadout;
+4. analiza la sinergia del equipo provisional;
+5. escoge la combinación especie/rol con mayor puntuación;
+6. repite hasta alcanzar el tamaño objetivo.
+
+Por tanto, `TrainerTeamComposer` es explícitamente un **selector de especies** y optimizador de composición.
+
+Eso contradice el contrato de Random Cup cuando las especies se asignan aleatoriamente y el entrenador no puede sustituir una mala tirada por otra especie del pool.
+
+**Clasificación:** RETIRAR del flujo principal de Random Cup.
+
+No se elimina del repositorio: sigue siendo una utilidad válida para otros modos, NPCs diseñados, fixtures, benchmarks o generación de equipos donde la selección de especies sí sea legítima.
+
+### 15.6 Partes salvables del Composer — no conservar la autoridad equivocada
+
+Aunque `compose()` no debe decidir especies en Random Cup, contiene heurísticas reutilizables como conceptos:
+
+- `_role_fit()` para estimar adecuación estadística a un rol;
+- evaluación incremental de sinergia;
+- desempate determinista;
+- selección de lead como problema separado.
+
+Estas piezas no deben reutilizarse copiando el Composer entero dentro del nuevo flujo. Se extraerán o reimplementarán solo si un benchmark demuestra que aportan valor a la **interpretación de una plantilla ya asignada**.
+
+La regla es clara:
+
+`random assignment → interpret roster → decide cómo usarlo`
+
+no:
+
+`random assignment → volver a elegir especies para arreglarlo`.
+
+### 15.7 Lead selection — idea válida, heurística insuficiente para permadeath
+
+El Composer selecciona el lead después de construir el equipo mediante una heurística estática basada principalmente en:
+
+- `base_speed`;
+- bonus fuerte para `fast_attacker`;
+- bonus para `support`;
+- bonus menor para roles bulky/otros.
+
+Eso es razonable como V1 para un equipo fresco y diseñado, pero no es suficiente para Random Cup persistente.
+
+La futura selección de lead debe poder considerar también información propia legítima como:
+
+- HP/estado persistente del miembro;
+- valor estratégico y reemplazabilidad;
+- cobertura única que conviene preservar;
+- rol real inferido del roster;
+- riesgo de exponer una pieza clave;
+- información pública/observada del rival cuando proceda.
+
+**Clasificación:** CONSERVAR el problema de selección de lead; ADAPTAR/REUBICAR la política. No debe seguir acoplada a la construcción de especies.
+
+### 15.8 `TrainerTeamFactory` — CONSERVAR COMO MATERIALIZADOR INICIAL / NO USAR COMO RESTAURADOR DE CAMPAÑA
+
+`TrainerTeamFactory` no selecciona especies ni roles. Valida un `TrainerTeamDefinition`, materializa cada loadout mediante `TrainerLoadoutFactory` y rota el roster retornado para que `lead_index` quede primero.
+
+La separación es buena y no contradice Random Cup si se utiliza para crear inicialmente las instancias que el modo ha asignado legítimamente.
+
+Sin embargo, la materialización produce instancias nuevas a partir del loadout. Los tests históricos verifican precisamente que las instancias creadas son independientes y que nacen con stats/moves inicializados.
+
+Por ello, en una copa con persistencia **no debe recrearse el roster desde el `TrainerTeamDefinition` antes de cada combate**, porque eso podría restaurar estado que debía persistir o haberse perdido: HP, estado, PP, eliminación permanente u otros recursos según el contrato final.
+
+La futura autoridad de Random Cup debe mantener las instancias/estado persistente y proyectar al Battle Core el roster superviviente correspondiente.
+
+**Clasificación:** CONSERVAR como constructor/materializador inicial; PROHIBIR su uso como mecanismo de reset/restauración entre rondas.
+
+### 15.9 Tests FASE33 — buenos para composición diseñada, insuficientes para Random Cup
+
+La suite histórica prueba correctamente:
+
+- round-trip y validación de `TrainerTeamDefinition`;
+- límites de party y duplicados;
+- detección de debilidades compartidas;
+- diversidad de roles/tipos;
+- Composer determinista desde un pool;
+- selección de especie sin duplicados cuando así se pide;
+- lead válido;
+- materialización completa e independiente.
+
+Pero sus fixtures están construidos expresamente para demostrar que un equipo balanceado diseñado obtiene mejor score que uno redundante y que el Composer puede escoger especies distintas de un pool.
+
+No prueban:
+
+- seis especies realmente asignadas al azar sin posibilidad de reemplazo;
+- inferencia dinámica de roles;
+- roster malo que la IA debe aceptar y explotar tal cual;
+- miembros eliminados entre combates;
+- análisis sobre HP/estado persistente;
+- lead condicionado por supervivencia de campaña;
+- cobertura filtrada por clasificación V3 real;
+- valor de una pieza única frente a miembros redundantes.
+
+**Clasificación:** CONSERVAR tests de FASE33 como regresión del modo de composición diseñada; AÑADIR una suite/corpus específico de interpretación Random Cup.
+
+### 15.10 Estado de FASE33 tras auditoría
+
+- `TrainerTeamDefinition`: **CONSERVAR** como definición estática, sin convertirla en autoridad de estado persistente;
+- `TrainerTeamValidator`: **CONSERVAR / REVALIDAR** después de modernizar loadouts V3;
+- `TrainerTeamAnalyzer`: **CONSERVAR ESTRUCTURA / ADAPTAR** con legalidad V3 e interpretación dinámica;
+- inferencia de roles del roster: **NUEVA CAPA NECESARIA**;
+- análisis estratégico de campaña: **NUEVA CAPA NECESARIA**;
+- `TrainerTeamComposer`: **RETIRAR DEL FLUJO RANDOM CUP**, conservar para modos donde elegir especies sea legítimo;
+- lead selection: **EXTRAER/ADAPTAR** como política sobre roster ya asignado;
+- `TrainerTeamFactory`: **CONSERVAR COMO MATERIALIZADOR INICIAL**, no como restaurador entre combates;
+- tests FASE33: **CONSERVAR COMO REGRESIÓN HISTÓRICA + AÑADIR RANDOM CUP V2**;
+- código de producción modificado durante esta auditoría: **NO**.
+
+Siguiente bloque recomendado: localizar la autoridad actual de torneo/campaña/roster fuera de Battle Core y comprobar dónde debe vivir la eliminación permanente, la persistencia entre combates y la asignación aleatoria determinista.
