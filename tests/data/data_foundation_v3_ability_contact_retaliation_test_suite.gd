@@ -190,7 +190,7 @@ func _fraction_damage_event(
 			event.kind == BattleEvent.DAMAGE_APPLIED
 			and event.actor_id == actor_id
 			and event.target_id == target_id
-			and event.value == amount
+			and event.amount == amount
 			and event.metadata.get("cause", "") == "max_hp_fraction"
 			and int(event.metadata.get("ratio_basis_points", 0)) == ratio_bp
 		):
