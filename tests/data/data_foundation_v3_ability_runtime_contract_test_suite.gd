@@ -2,20 +2,20 @@ class_name DataFoundationV3AbilityRuntimeContractTestSuite
 extends RefCounted
 
 const FULL_IDS := [
-	"blaze", "dragons_maw", "fire_mane", "flare_boost", "fur_coat", "huge_power",
-	"ice_scales", "multiscale", "overgrow", "pure_power", "rocky_payload", "steelworker",
-	"swarm", "thick_fat", "torrent", "tough_claws", "toxic_boost",
+	"blaze", "defeatist", "dragons_maw", "fire_mane", "flare_boost", "fur_coat",
+	"huge_power", "ice_scales", "multiscale", "overgrow", "pure_power", "rocky_payload",
+	"steelworker", "swarm", "thick_fat", "torrent", "tough_claws", "toxic_boost",
 ]
 const PARTIAL_IDS := [
-	"flame_body", "gooey", "heatproof", "intimidate", "iron_barbs", "levitate",
-	"poison_point", "reckless", "stamina", "static",
+	"flame_body", "gooey", "guts", "heatproof", "hustle", "intimidate", "iron_barbs",
+	"levitate", "poison_point", "reckless", "stamina", "static",
 ]
 const IMPLEMENTED_IDS := [
-	"blaze", "dragons_maw", "fire_mane", "flame_body", "flare_boost", "fur_coat",
-	"gooey", "heatproof", "huge_power", "ice_scales", "intimidate", "iron_barbs",
-	"levitate", "multiscale", "overgrow", "poison_point", "pure_power", "reckless",
-	"rocky_payload", "stamina", "static", "steelworker", "swarm", "thick_fat", "torrent",
-	"tough_claws", "toxic_boost",
+	"blaze", "defeatist", "dragons_maw", "fire_mane", "flame_body", "flare_boost",
+	"fur_coat", "gooey", "guts", "heatproof", "huge_power", "hustle", "ice_scales",
+	"intimidate", "iron_barbs", "levitate", "multiscale", "overgrow", "poison_point",
+	"pure_power", "reckless", "rocky_payload", "stamina", "static", "steelworker", "swarm",
+	"thick_fat", "torrent", "tough_claws", "toxic_boost",
 ]
 const TYPE_BOOSTS := {
 	"steelworker": "steel",
@@ -42,7 +42,7 @@ func run(check: Callable) -> void:
 	)
 	check.call(
 		"data_v3_ability_contract_data_only_count",
-		(classes.get("DATA_ONLY", []) as Array).size() == 346,
+		(classes.get("DATA_ONLY", []) as Array).size() == 343,
 	)
 	check.call(
 		"data_v3_ability_contract_partition",
@@ -142,6 +142,67 @@ func run(check: Callable) -> void:
 			and spec.effect.kind == BattleEffectSpec.DAMAGE
 		)
 	check.call("data_v3_ability_contract_offensive_stat_modifiers_exact", offensive_stat_specs_ok)
+
+	# Defeatist is fully expressible as two mutually-exclusive class predicates that
+	# halve the actual offensive stat at or below half HP, before the damage formula.
+	var defeatist_specs := registry.triggers_for_ability(&"defeatist", BattleTriggerSpec.MODIFY_DAMAGE)
+	var defeatist_ok := defeatist_specs.size() == 2
+	var defeatist_classes := {}
+	for spec in defeatist_specs:
+		var class_id := "physical" if bool(spec.conditions.get("requires_physical", false)) else (
+			"special" if bool(spec.conditions.get("requires_special", false)) else ""
+		)
+		defeatist_classes[class_id] = int(spec.conditions.get("offensive_stat_multiplier_bp", 0))
+		defeatist_ok = defeatist_ok and (
+			spec.source_kind == &"ability"
+			and spec.source_id == &"defeatist"
+			and int(spec.conditions.get("hp_at_or_below_divisor", 0)) == 2
+			and int(spec.conditions.get("offensive_stat_multiplier_bp", 0)) == 5000
+			and not spec.conditions.has("multiplier_bp")
+			and spec.effect.kind == BattleEffectSpec.DAMAGE
+		)
+	check.call(
+		"data_v3_ability_contract_defeatist_trigger_exact",
+		defeatist_ok and defeatist_classes == {"physical": 5000, "special": 5000},
+	)
+
+	# Guts is deliberately partial. The safe current subset is paralysis and both
+	# poison representations. Burn is excluded because its source also suppresses the
+	# normal burn Attack cut; sleep is excluded because pinned history is version-sensitive.
+	var guts_specs := registry.triggers_for_ability(&"guts", BattleTriggerSpec.MODIFY_DAMAGE)
+	var guts_ok := guts_specs.size() == 1
+	if guts_ok:
+		var guts: BattleTriggerSpec = guts_specs[0]
+		var guts_statuses: Array = guts.conditions.get("required_persistent_status_ids", [])
+		guts_ok = (
+			guts.source_kind == &"ability"
+			and guts.source_id == &"guts"
+			and bool(guts.conditions.get("requires_physical", false))
+			and not bool(guts.conditions.get("requires_special", false))
+			and guts_statuses == ["paralysis", "poison", "badly_poisoned"]
+			and not guts_statuses.has("burn")
+			and not guts_statuses.has("sleep")
+			and int(guts.conditions.get("offensive_stat_multiplier_bp", 0)) == 15000
+			and not guts.conditions.has("multiplier_bp")
+			and guts.effect.kind == BattleEffectSpec.DAMAGE
+		)
+	check.call("data_v3_ability_contract_guts_partial_trigger_exact", guts_ok)
+
+	# Hustle is partial: regular physical damage gets the exact 1.5x final-damage
+	# transaction, while the source-required 0.8x accuracy mechanic is absent.
+	var hustle_specs := registry.triggers_for_ability(&"hustle", BattleTriggerSpec.MODIFY_DAMAGE)
+	var hustle_ok := hustle_specs.size() == 1
+	if hustle_ok:
+		var hustle: BattleTriggerSpec = hustle_specs[0]
+		hustle_ok = (
+			hustle.source_kind == &"ability"
+			and hustle.source_id == &"hustle"
+			and bool(hustle.conditions.get("requires_physical", false))
+			and int(hustle.conditions.get("multiplier_bp", 0)) == 15000
+			and not hustle.conditions.has("offensive_stat_multiplier_bp")
+			and hustle.effect.kind == BattleEffectSpec.DAMAGE
+		)
+	check.call("data_v3_ability_contract_hustle_partial_trigger_exact", hustle_ok)
 
 	# Tough Claws has an explicit DATA V3 semantic correction: the pinned PokeAPI
 	# snapshot says 1.33x, while audited current main-series mechanics are +30%.
@@ -418,9 +479,9 @@ func run(check: Callable) -> void:
 	check.call(
 		"data_v3_ability_contract_report_counts",
 		int(summary.get("DATA_READY", -1)) == 373
-		and int(summary.get("RUNTIME_SUPPORTED", -1)) == 17
-		and int(summary.get("PARTIAL_RUNTIME", -1)) == 10
-		and int(summary.get("DATA_ONLY", -1)) == 346,
+		and int(summary.get("RUNTIME_SUPPORTED", -1)) == 18
+		and int(summary.get("PARTIAL_RUNTIME", -1)) == 12
+		and int(summary.get("DATA_ONLY", -1)) == 343,
 	)
 	var report_classes: Dictionary = report.get("ability_runtime_classification", {})
 	check.call(
