@@ -11,8 +11,8 @@ const PARENT_AUDITED_IDS := [
 # the inventory fail if a future adapter change silently upgrades a whole family.
 const EXPLICITLY_PROMOTED_FRONTIER_IDS := [
 	"dragons_maw", "fire_mane", "flame_body", "fur_coat", "gooey", "heatproof",
-	"ice_scales", "multiscale", "poison_point", "reckless", "rocky_payload", "stamina",
-	"steelworker", "swarm", "thick_fat", "tough_claws",
+	"ice_scales", "iron_barbs", "multiscale", "poison_point", "reckless", "rocky_payload",
+	"stamina", "steelworker", "swarm", "thick_fat", "tough_claws",
 ]
 
 const EXPECTED_COUNTS := {
