@@ -1,12 +1,37 @@
 # Pokémon Calvo
 
-Proyecto de fangame de criaturas en **Godot 4.7**, con Battle Core determinista, progresión/captura/overworld y una IA de entrenadores no neuronal con búsqueda, belief inference, self-play, objetos, switching estratégico y composición de equipos.
+Proyecto de fangame de criaturas en **Godot 4.7**. El repositorio contiene Battle Core determinista, progresión/captura/overworld y una IA de entrenadores no neuronal con inferencia de información, búsqueda acotada, self-play/evaluación, objetos finitos, switching estratégico, loadouts y composición de equipos.
 
-## Baseline certificado
+## Autoridad de desarrollo
 
-La base de datos canónica actual es **DATA FOUNDATION V3**, conservada en `feature/data-foundation-v3` (HEAD certificado `304035e2e7b39a628c4fece89cf0f3db6caa8664`). Ese HEAD pasó los 18 workflows normales del proyecto.
+El último baseline funcional certificado antes de la reorganización documental es:
 
-La fuente PokéAPI es un snapshot versionado en `data/api/v2` + `data/schema/v2`; `tools/pokeapi_adapter_v3.py` genera el raw/manifiesto y Godot normaliza mediante `tools/run_import.gd`.
+- PR #95: `DATA V3 — final end-to-end certification`
+- HEAD: `b4f6adc200bef18f8ac51b9144f2f9a838f464fd`
+- estado: cerrado **sin merge**
+- validación: **18/18 workflows SUCCESS** sobre el HEAD final.
+
+La rama `main` es una referencia histórica antigua y **no representa el estado actual del proyecto**. No debe usarse como baseline de trabajo. Su sustitución por el baseline nuevo se hará en una operación separada cuando la reorganización esté terminada y certificada.
+
+## Por dónde empezar
+
+Para recuperar el proyecto sin leer todo el historial:
+
+1. [`docs/current/START_HERE.md`](docs/current/START_HERE.md)
+2. [`docs/current/PROJECT_STATE.md`](docs/current/PROJECT_STATE.md)
+3. [`docs/current/NEXT_STEPS.md`](docs/current/NEXT_STEPS.md)
+4. el cuaderno temático relevante en [`docs/project_book/`](docs/project_book/)
+
+Índice completo: [`docs/README.md`](docs/README.md).
+
+## Datos canónicos
+
+DATA FOUNDATION V3 parte de un snapshot inmutable de PokéAPI en `data/api/v2` + `data/schema/v2`. `tools/pokeapi_adapter_v3.py` genera el raw/manifiesto y Godot normaliza mediante `tools/run_import.gd`.
+
+El contrato consolidado y el cierre operativo están en:
+
+- [`docs/architecture/DATA_FOUNDATION_V3.md`](docs/architecture/DATA_FOUNDATION_V3.md)
+- [`docs/project_book/DATA_V3.md`](docs/project_book/DATA_V3.md)
 
 ## Ejecutar tests
 
@@ -15,13 +40,4 @@ godot --headless --path . --import
 godot --headless --path . --script res://tests/test_runner.gd
 ```
 
-No se fija aquí un número de PASS: el total crece con el proyecto y la fuente de verdad son los workflows de `.github/workflows/`.
-
-## Documentación
-
-- Estado actual: [docs/STATUS.md](docs/STATUS.md)
-- Índice documental: [docs/README.md](docs/README.md)
-- DATA FOUNDATION V3: [docs/DATA_FOUNDATION_V3.md](docs/DATA_FOUNDATION_V3.md)
-- Arquitectura general: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)
-- ADR: [`docs/adr/`](docs/adr/)
-- Historial de fases: [`docs/history/`](docs/history/)
+No se fija aquí un número global de PASS: el total crece con el proyecto y la autoridad son los workflows de `.github/workflows/` ejecutados sobre el SHA exacto que se pretende certificar.
