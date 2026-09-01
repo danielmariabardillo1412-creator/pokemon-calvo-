@@ -160,6 +160,39 @@ func _register_abilities() -> void:
 			0,
 			{"move_type_id": String(pair[1]), "multiplier_bp": 15000},
 		)]
+	for ability_id in [&"huge_power", &"pure_power"]:
+		_ability_specs[ability_id] = [BattleTriggerSpec.new(
+			BattleTriggerSpec.MODIFY_DAMAGE,
+			&"ability",
+			ability_id,
+			BattleEffectSpec.new(BattleEffectSpec.DAMAGE),
+			0,
+			{"requires_physical": true, "offensive_stat_multiplier_bp": 20000},
+		)]
+	_ability_specs[&"toxic_boost"] = [BattleTriggerSpec.new(
+		BattleTriggerSpec.MODIFY_DAMAGE,
+		&"ability",
+		&"toxic_boost",
+		BattleEffectSpec.new(BattleEffectSpec.DAMAGE),
+		0,
+		{
+			"requires_physical": true,
+			"required_persistent_status_ids": ["poison", "badly_poisoned"],
+			"offensive_stat_multiplier_bp": 15000,
+		},
+	)]
+	_ability_specs[&"flare_boost"] = [BattleTriggerSpec.new(
+		BattleTriggerSpec.MODIFY_DAMAGE,
+		&"ability",
+		&"flare_boost",
+		BattleEffectSpec.new(BattleEffectSpec.DAMAGE),
+		0,
+		{
+			"requires_special": true,
+			"required_persistent_status_ids": ["burn"],
+			"offensive_stat_multiplier_bp": 15000,
+		},
+	)]
 	_ability_specs[&"tough_claws"] = [BattleTriggerSpec.new(
 		BattleTriggerSpec.MODIFY_DAMAGE,
 		&"ability",
