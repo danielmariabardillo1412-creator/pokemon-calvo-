@@ -6,86 +6,82 @@ Read immediately after `00_READ_FIRST.md` when recovering context.
 Material findings, exceptions, decisions, certification boundaries and deliberate deferrals must be written into the notebooks. Never rely on chat context alone.
 
 ## Latest certified baseline
-- PR #93 — `audit/data-v3-item-closure-v1`
-- Final HEAD `a034a8404d80a13cad25d43eb85c4f84e9fb22bf`
+- PR #94 — `audit/data-v3-evolution-closure-v1`
+- Final HEAD `be5b4bde75252afa2ef355b2e7392d0884c42d7a`
 - **18/18 SUCCESS** on exact notebook-bearing HEAD
 - closed without merge.
 
-Closed DATA V3 domains:
+Closed DATA V3 domain boundaries:
 - Moves: **590 runtime / 71 partial / 246 data-only / 12 unsupported**.
-- Abilities: **21 runtime / 14 partial / 338 data-only / 373 total**.
-- Items: exact runtime boundary frozen in notebook 23; do not widen before Trainer AI without a systemic reason.
+- Abilities: **21 runtime / 14 partial / 338 data-only**.
+- Items: exact held/trainer surfaces frozen in notebook 23.
+- Evolutions: **391 runtime / 149 data-only / 14 unsupported / 0 partial**.
 
-# Current tranche — PR #94 Evolutions V3 closure
-- Branch: `audit/data-v3-evolution-closure-v1`
-- Parent: certified #93 final `a034a8404d80a13cad25d43eb85c4f84e9fb22bf`
-- PR: #94 `DATA V3 — close evolution runtime frontier`
-- Engineering SHA: `87a48acc2746ee429cbd6786e6a8adedb1afabeb`
+# Current tranche — PR #95 final DATA V3 end-to-end certification
+- Branch: `audit/data-v3-end-to-end-closure-v1`
+- Parent: certified #94 final `be5b4bde75252afa2ef355b2e7392d0884c42d7a`
+- PR: #95 `DATA V3 — final end-to-end certification`
+- Valid engineering SHA: `9e17f903f229b6efc0044608dde66aba4783ef9c`
 - Engineering result: **18/18 SUCCESS**
-- DATA V3 domain: **557 PASS / 0 FAIL**
-- Detailed notebook: `docs/notebooks/24_DATA_V3_EVOLUTION_CLOSURE.md`.
+- DATA V3 domain: **567 PASS / 0 FAIL**
+- Spanish/type/runtime regression: **298 PASS / 0 FAIL**
+- Detailed notebook: `docs/notebooks/25_DATA_V3_END_TO_END_CLOSURE.md`.
 
-## #94 result — honest evolution boundary
-Canonical DATA V3 preserves exactly **554 evolution records** with **165 conditioned records** and zero broken target/item references.
+## End-to-end result
+The final suite adds exactly **10 cross-domain closure checks** and proves:
+- structural totals: 18 types, 1,025 species, 919 moves, 373 abilities, 2,222 items, 61,102 learnset entries, 554 evolutions, 326 forms;
+- exact immutable PokeAPI source commit/API tree/schema tree and DATA V3 ruleset;
+- raw ↔ normalized identity sets match for types/species/moves/abilities/items;
+- cross-domain references are closed with zero broken references;
+- Moves boundary remains **590/71/246/12**;
+- Abilities boundary remains **21/14/338**;
+- Evolutions boundary remains **391/0/149/14**, with conditioned DATA_ONLY records non-executable;
+- Items held/trainer runtime surfaces remain exact;
+- DATA_ONLY moves/abilities have no hidden execution;
+- Shadow exclusion remains exactly **18** and audit/forms report totals remain exact.
 
-The old runtime overclaimed support by ignoring preserved `conditions` while executing level/item/trade triggers. That could incorrectly turn real Pokémon requirements such as friendship, time, gender, known move, held trade item, form/region, location, rain or party state into weaker invented rules.
+Post-DataImporter evidence:
+- `broken_references=0`
+- `rejected=0`
+- learnset_entries=61102
+- evolutions=554.
 
-Correction is deliberately bounded:
-- canonical exotic trigger IDs use underscores and classify `UNSUPPORTED` when no runtime path exists;
-- `level_up`, `use_item`, `trade` are executable only when their full preserved condition set is runtime-compatible;
-- empty conditions are compatible;
-- exactly seven records with sole redundant `base_form == current source species` remain executable;
-- every other conditioned record is `DATA_ONLY`;
-- `evolution_candidates()` now returns only `RUNTIME_SUPPORTED` records.
+## Engineering harness incidents
+Two issues were found during #95 and are fully documented in notebook 25:
+1. GDScript Variant-backed bool inference failure in the new test suite;
+2. initial test attempted to read `import_summary.json` before the DataImporter phase creates it.
 
-Exact corrected classification:
-- **391 RUNTIME_SUPPORTED**
-- **149 DATA_ONLY**
-- **14 UNSUPPORTED**
-- **0 PARTIAL**
-- **554 total**.
+Both were **certification-harness defects only**. No Pokémon mechanic, canonical data, adapter semantics or runtime boundary was changed to resolve them. Invariants were moved to the correct pipeline phase, not weakened.
 
-No friendship/time/location/form/trade-item/party/move-use subsystem was invented merely to raise coverage.
-
-## Exact #93 final → #94 engineering artifact
+## Exact #94 final → #95 engineering artifact
 Compared:
-- #93 final run `33513512710`, artifact `9802641046`, head `a034a840...`
-- #94 engineering run `33515258905`, artifact `9803339060`, head `87a48acc...`.
+- #94 final: head `be5b4bde...`, run `33526438810`, artifact `9807934801`;
+- #95 engineering: head `9e17f903...`, run `33527719967`, artifact `9808446505`.
 
-Both artifacts contain the same **15 files**.
+Same **15-file** artifact set.
 
-Canonical outputs are identical:
-- raw dataset;
-- normalized dataset;
-- manifest;
-- forms policy report;
-- unsupported mechanics report;
-- PokeAPI V3 audit;
-- auxiliary report.
+Byte-identical canonical outputs include raw, normalized, manifest, forms, unsupported mechanics, PokeAPI V3 audit and auxiliary reports.
 
-Only `import_summary.json` timing changes:
-- `import_time_ms 508 → 491 ms`.
+Expected differences only:
+- domain log: adds 10 final closure checks, **557 → 567 PASS / 0 FAIL**;
+- Godot import log: **279 → 280** registered global classes due to the new test suite, plus percentage-position noise;
+- normalization/import summary: only `import_time_ms 523 → 507`.
 
-Expected test delta:
-- DATA V3 domain **546 → 557 PASS / 0 FAIL** from 11 Evolutions V3 closure checks.
-
-No canonical data drift exists.
+No canonical DATA V3 drift exists.
 
 ## Current certification step
-Engineering and artifact comparison are complete.
+Engineering and artifact comparison are complete. DATA V3 is functionally closed pending the second CI cycle on documentation-bearing HEAD.
 
-Before closing #94:
-1. engineering → final must affect only `01_PROJECT_STATE.md`, `04_NEXT_STEPS.md`, `24_DATA_V3_EVOLUTION_CLOSURE.md`;
+Before closing #95:
+1. verify engineering → final changed only `01_PROJECT_STATE.md`, `04_NEXT_STEPS.md`, `25_DATA_V3_END_TO_END_CLOSURE.md`;
 2. require **18/18 SUCCESS** on the exact final notebook-bearing HEAD;
-3. close #94 without merge;
-4. use that exact final SHA as the parent of final end-to-end DATA V3 certification.
+3. close #95 **without merge**;
+4. use exact final #95 SHA as the certified DATA V3 baseline.
 
-## Exact next work after #94 closure
-Proceed in this order:
-1. **final end-to-end DATA V3 certification** — one consolidated verification of immutable source provenance, canonical counts, frozen domain boundaries, references, artifacts and CI.
-2. return to **Trainer AI / trainer systems**.
+## Exact next work after #95 closure
+**Return to Trainer AI / trainer systems.**
 
-Do not reopen Moves, Abilities, Items or Evolutions merely to increase support counters unless a real regression or a newly implemented subsystem invalidates a frozen boundary.
+Do not start another DATA V3 tranche merely to raise support counts. Read the Trainer AI checkpoints and continue from the latest certified Trainer state rather than restarting its design.
 
 ## Stop condition
 Any focal/regression failure stops the tranche until root cause is fixed and rerun.
