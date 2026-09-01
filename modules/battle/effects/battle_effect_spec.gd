@@ -12,6 +12,7 @@ const MODIFY_STAT_STAGE := &"modify_stat_stage"
 const CHANCE := &"chance"
 const FLINCH := &"flinch"
 const FIXED_DAMAGE := &"fixed_damage"
+const MAX_HP_DAMAGE := &"max_hp_damage"
 const MULTI_HIT := &"multi_hit"
 
 const SELF := &"self"
