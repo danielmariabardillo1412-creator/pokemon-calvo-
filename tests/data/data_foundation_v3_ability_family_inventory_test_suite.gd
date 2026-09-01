@@ -10,11 +10,11 @@ const PARENT_AUDITED_IDS := [
 # Explicit promotions made after the #76 frontier. Keeping this list narrow makes
 # the inventory fail if a future adapter change silently upgrades a whole family.
 const EXPLICITLY_PROMOTED_FRONTIER_IDS := [
-	"defeatist", "dragons_maw", "dry_skin", "fire_mane", "flame_body", "flare_boost",
-	"fur_coat", "gooey", "guts", "heatproof", "huge_power", "hustle", "ice_scales",
-	"iron_barbs", "multiscale", "poison_point", "pure_power", "reckless", "rocky_payload",
-	"speed_boost", "stamina", "steelworker", "swarm", "thick_fat", "toxic_boost",
-	"tough_claws", "water_bubble",
+	"bad_dreams", "defeatist", "dragons_maw", "dry_skin", "fire_mane", "flame_body",
+	"flare_boost", "fur_coat", "gooey", "guts", "heatproof", "huge_power", "hustle",
+	"ice_scales", "iron_barbs", "merciless", "multiscale", "poison_point", "pure_power",
+	"reckless", "rocky_payload", "speed_boost", "stamina", "steelworker", "swarm",
+	"thick_fat", "toxic_boost", "tough_claws", "water_bubble",
 ]
 
 const EXPECTED_COUNTS := {
