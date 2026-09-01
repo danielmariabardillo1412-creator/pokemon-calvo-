@@ -1,6 +1,9 @@
 class_name BattleTriggerSystem
 extends RefCounted
 
+const DAMAGE_ROLE_ACTOR := "actor"
+const DAMAGE_ROLE_TARGET := "target"
+
 
 func specs_for_creature(
 	creature: CreatureInstance,
@@ -25,6 +28,8 @@ func damage_modifiers(
 	for spec in registry.triggers_for_ability(
 		context.actor.ability_id, BattleTriggerSpec.MODIFY_DAMAGE
 	):
+		if not _damage_role_matches(spec, DAMAGE_ROLE_ACTOR):
+			continue
 		if not _damage_condition_matches(spec, context.actor, context.move):
 			continue
 		var applied_modifier := false
@@ -43,6 +48,8 @@ func damage_modifiers(
 	for spec in registry.triggers_for_ability(
 		context.target.ability_id, BattleTriggerSpec.MODIFY_DAMAGE
 	):
+		if not _damage_role_matches(spec, DAMAGE_ROLE_TARGET):
+			continue
 		var immune_type := StringName(spec.conditions.get("immune_type_id", ""))
 		if immune_type != &"" and immune_type == context.move.type_id:
 			immune = true
@@ -104,6 +111,10 @@ func emit_source_triggered(
 	owner: CreatureInstance,
 ) -> void:
 	_emit_trigger(context, spec, owner)
+
+
+func _damage_role_matches(spec: BattleTriggerSpec, expected_role: String) -> bool:
+	return String(spec.conditions.get("damage_role", "")) == expected_role
 
 
 func _damage_condition_matches(
