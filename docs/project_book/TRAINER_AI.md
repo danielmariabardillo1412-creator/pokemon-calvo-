@@ -1,220 +1,495 @@
 # CUADERNO TEMÁTICO — IA DE ENTRENADORES
 
-Estado: **ACTIVO / SIGUIENTE WORKSTREAM TÉCNICO**.
+Estado: **ACTIVO / REDISEÑO MAYOR PRE-FASE34**.
 
-Este documento consolida la continuidad útil de Trainer AI. No sustituye los ADR; evita tener que reconstruir FASE19–33 leyendo toda la historia antes de diseñar la siguiente fase.
+Baseline de partida certificado: `3c25f3185e67e255c65f161904e911908a28a5e2`.
 
-## 1. Principio rector
+Rama de revisión: `audit/trainer-ai-v3-random-cup-redesign-v1`.
 
-La IA debe ser buena por **razonamiento, prioridades, composición y uso correcto de información legítima**, no porque vea datos ocultos.
+Este documento es la memoria viva de Trainer AI. Consolida continuidad, decisiones, descubrimientos y cambios de premisa para no depender del contexto de una conversación larga. Los ADR conservan el detalle contractual histórico, pero este cuaderno manda sobre qué partes siguen activas, cuáles necesitan adaptación y cuáles han quedado obsoletas.
 
-Reglas permanentes:
+---
+
+## 0. CAMBIO DE PREMISA — DATA V3 + RANDOM CUP + MUERTE PERMANENTE
+
+Antes de continuar con FASE34 se detectó que la IA de entrenadores fue diseñada parcialmente sobre un dataset bastante más pequeño e incompleto que el actual y bajo una premisa de equipos más planificables.
+
+Desde DATA V3 y la definición del modo Random Cup, esas premisas ya no pueden asumirse.
+
+### 0.1 DATA V3 cambia el conocimiento disponible
+
+DATA V3 está cerrado y certificado con un catálogo mucho más amplio:
+
+- 1.025 especies;
+- 326 formas;
+- 18 tipos runtime;
+- 919 movimientos runtime/data auditados;
+- 373 habilidades;
+- 2.222 objetos;
+- 61.102 entradas de learnset;
+- 554 evoluciones.
+
+Esto significa que una IA que pasó sus tests antiguos puede seguir funcionando técnicamente y aun así estar tomando decisiones desde supuestos obsoletos o demasiado estrechos.
+
+Descubrimiento concreto ya confirmado:
+
+- `TrainerPublicCoverageBeliefInference` todavía documenta que el dataset no preserva `version_group`.
+- `TrainerLoadoutValidator` repite la misma premisa.
+- DATA V3 sí preserva `version_group` y `order` en `LearnSetEntry`.
+
+Por tanto, **tests verdes no bastan para certificar que el diseño antiguo aprovecha correctamente DATA V3**.
+
+### 0.2 Random Cup invalida la especialización fija por tipo
+
+Los Pokémon de cada entrenador se obtendrán de forma aleatoria. Un entrenador no puede depender de una identidad de equipo como:
+
+- entrenador de Agua;
+- entrenador de Fuego;
+- entrenador de Planta;
+- cualquier otra especialización que presuponga recibir especies de un tipo concreto.
+
+El entrenador debe adaptarse a **la plantilla real que le haya tocado**.
+
+La identidad del entrenador debe ser principalmente:
+
+- conductual;
+- táctica;
+- estratégica;
+- de gestión del riesgo;
+- de explotación del roster disponible.
+
+Un mismo entrenador debe poder comportarse de forma coherente aunque en dos partidas reciba equipos completamente distintos.
+
+### 0.3 Muerte permanente cambia la función objetivo
+
+En Random Cup, un Pokémon eliminado al morir no es solo una pérdida dentro del combate actual. Es una pérdida persistente del roster.
+
+La IA ya no puede valorar una línea únicamente con:
+
+`probabilidad de ganar este combate`.
+
+Debe considerar al menos dos horizontes:
+
+1. **Táctico:** cómo ganar el combate actual.
+2. **Estratégico/campaña:** cómo ganar sin destruir innecesariamente el potencial futuro del roster.
+
+Esto afecta especialmente a:
+
+- switching;
+- sacrificios;
+- curación;
+- preservación de piezas clave;
+- selección de lead;
+- riesgo aceptable;
+- valoración de un KO propio a cambio de ventaja inmediata;
+- uso de objetos limitados;
+- evaluación de Pokémon redundantes frente a Pokémon irremplazables dentro del roster actual.
+
+Debe existir una noción explícita o derivada de **valor de supervivencia / valor estratégico del miembro**, separada de su utilidad táctica inmediata.
+
+### 0.4 Consecuencia de arquitectura
+
+**FASE34 queda en pausa.**
+
+No se diseñarán todavía arquetipos/dificultad encima de la arquitectura antigua como si nada hubiera cambiado.
+
+Primero se realizará una auditoría completa:
+
+`TRAINER AI FASE19–33 × DATA V3 × RANDOM CUP × PERMADEATH`
+
+Cada componente se clasificará como:
+
+- **CONSERVAR**;
+- **ADAPTAR**;
+- **REHACER / RETIRAR**.
+
+No se reescribe por estética. Solo se cambia aquello cuya premisa haya quedado obsoleta o cuya interfaz no permita representar correctamente el nuevo juego.
+
+---
+
+## 1. Principios que siguen siendo canónicos
+
+Estas reglas permanecen válidas salvo evidencia técnica en contra:
 
 - Battle Core es la autoridad de legalidad.
 - El cerebro no recibe `BattleState` vivo ni RNG rival.
 - No recibe moveset oculto, naturaleza/IV/EV rivales, objeto no revelado ni banca no observada.
 - La dificultad no concede información oculta.
 - Las creencias deben proceder de información pública, evidencia observada o priors explícitos y auditables.
-- La selección simultánea de acciones debe modelarse como simultánea; el rival no conoce mágicamente nuestra acción antes de elegir.
+- La selección simultánea de acciones debe modelarse como simultánea.
 - Las mejoras deben compararse mediante seeds/corpus/benchmarks reproducibles.
+- La IA debe ser mejor por razonamiento, adaptación y uso legítimo de información, no por cheating.
 
-Estas reglas nacen de FASE20–21 y siguen siendo válidas en el stack moderno.
+---
 
-## 2. Stack existente FASE19–33
+## 2. Stack histórico existente FASE19–33
 
-### FASE 19 — Trainer Battle Session
+El stack antiguo no se considera basura. Es una base probada que ahora debe auditarse contra las nuevas premisas.
 
-Integra combate contra entrenador como sesión autoritativa y separa el controlador de decisiones de las reglas del Battle Core.
+### FASE19 — Trainer Battle Session
 
-### FASE 20 — Trainer Intelligence Foundation
+Sesión autoritativa contra entrenador y separación del controlador de decisiones respecto al Battle Core.
 
-Establece contexto sanitizado, trazas, legalidad e infraestructura de inteligencia.
+**Estado preliminar:** probablemente CONSERVAR.
 
-### FASE 21 — Tactical Intelligence
+### FASE20 — Trainer Intelligence Foundation
 
-Introduce evaluación táctica explicable, estrategia de equipo, blunder guards y perfiles de personalidad.
+Contexto sanitizado, trazas, legalidad e infraestructura de inteligencia.
 
-`TrainerProfile` ya existe y define:
+**Estado preliminar:** CONSERVAR.
 
-- `balanced`
-- `aggressive`
-- `cautious`
+### FASE21 — Tactical Intelligence
+
+Evaluación táctica explicable, estrategia de equipo, blunder guards y `TrainerProfile`.
+
+Perfiles existentes:
+
+- `balanced`;
+- `aggressive`;
+- `cautious`;
 - `technical`.
 
-Estos perfiles modifican pesos/prioridades; **no** modifican legalidad ni acceso a información.
+Estos perfiles son conductuales, no especializaciones por tipo, y por ello encajan bien con Random Cup.
 
-### FASE 22 — Belief Inference
+**Estado preliminar:** CONSERVAR como concepto; AUDITAR pesos frente a permadeath.
 
-Amplía el estado de creencias sobre información rival sin convertir ausencia de evidencia en certeza.
+### FASE22 — Belief Inference
 
-### FASE 23 — Search Foundation
+Inferencia sobre información rival sin convertir ausencia de evidencia en certeza.
 
-Introduce mundos plausibles y matriz de acciones simultáneas sobre contexto seguro. No usa información oculta del `BattleState` y no introduce MCTS.
+**Estado preliminar:** ADAPTAR a DATA V3.
 
-### FASE 24 — Search Depth & Budget
+### FASE23 — Search Foundation
 
-Búsqueda determinista y acotada. La profundidad normal permanece limitada; no se amplía presupuesto sin contraejemplos que demuestren una necesidad real.
+Mundos plausibles y matriz de acciones simultáneas sobre contexto seguro.
 
-### FASE 25 — Self-Play Evaluation
+**Estado preliminar:** CONSERVAR infraestructura; REEVALUAR función de utilidad.
 
-Infraestructura determinista para comparar cerebros mediante self-play y medir diferencias en lugar de juzgarlas solo por intuición.
+### FASE24 — Search Depth & Budget
 
-### FASE 26 — Evaluation Corpus
+Búsqueda determinista y acotada.
 
-Corpus estadístico reproducible. En el benchmark certificado de la fase, el baseline obtuvo 48/60 y el planner 60/60: 12 mejoras emparejadas y 0 regresiones. Es evidencia del corpus V1, no prueba de superioridad universal.
+**Estado preliminar:** CONSERVAR límites hasta que un benchmark moderno demuestre un cuello de botella real.
 
-### FASE 27 — Search Limit Benchmark
+### FASE25 — Self-Play Evaluation
 
-Demuestra que aumentar profundidad no era el siguiente arreglo correcto. El límite observado estaba en cobertura de acciones y en información realmente oculta, no en un depth insuficiente demostrado.
+Infraestructura determinista de evaluación.
 
-### FASE 28 — Adaptive Branching / Action Coverage
+**Estado preliminar:** CONSERVAR.
 
-Ordena amenazas/candidatos plausibles para recuperar respuestas relevantes sin ampliar indiscriminadamente branching, mundos o simulaciones. El conocimiento genuinamente oculto continúa oculto.
+### FASE26 — Evaluation Corpus
 
-### FASE 29 — Public Coverage Beliefs
+Corpus reproducible. El antiguo benchmark 48/60 vs 60/60 es evidencia histórica del corpus V1, no certificación de la IA actual sobre DATA V3/Random Cup.
 
-Añade priors públicos de machine/tutor/egg a baja confianza y mantiene fuera métodos incompatibles/especiales. Permite conservar coberturas públicas peligrosas dentro del límite acotado sin inventar sets concretos.
+**Estado preliminar:** infraestructura CONSERVAR; CORPUS debe ampliarse/reconstruirse.
 
-### FASE 30 — Trainer Item Actions
+### FASE27 — Search Limit Benchmark
 
-ITEM pasa a ser una acción autoritativa con bolsa finita. Revive continúa deshabilitado; si algún día se habilita para NPC especiales, la política prevista limita el efecto a máximo un Pokémon revivido por combate especial.
+Demostró que el problema observado entonces no era simplemente falta de profundidad.
 
-### FASE 31 — Strategic Switching V2
+**Estado preliminar:** conservar como evidencia histórica, no asumir que cubre el nuevo entorno.
 
-Base seria actual de decisión:
+### FASE28 — Adaptive Branching
 
-- `TrainerStrategicSwitchEvaluatorV2`
-- `TrainerStrategicSwitchTacticalEvaluator`
+Cobertura ordenada de amenazas sin ampliar indiscriminadamente el árbol.
+
+**Estado preliminar:** CONSERVAR concepto; REVALIDAR con catálogo V3.
+
+### FASE29 — Public Coverage Beliefs
+
+Priors públicos de machine/tutor/egg.
+
+**Estado preliminar:** ADAPTAR.
+
+Motivo confirmado: contiene premisas antiguas sobre ausencia de `version_group` que DATA V3 ya invalida.
+
+### FASE30 — Trainer Item Actions
+
+Bolsa finita y acciones de objetos.
+
+**Estado preliminar:** ADAPTAR a economía/persistencia de Random Cup.
+
+Revive continúa deshabilitado salvo futura regla explícita.
+
+### FASE31 — Strategic Switching V2
+
+Componentes principales:
+
+- `TrainerStrategicSwitchEvaluatorV2`;
+- `TrainerStrategicSwitchTacticalEvaluator`;
 - `StrategicSwitchingTrainerBrain`.
 
-Modela escape de matchups sin ruta, hard counters, mejora ofensiva clara, anti-ping-pong, preservación de banca valiosa, sacrificio productivo y evita heal spam en matchups bloqueados.
+Modela hard counters, escape de matchups sin ruta, mejora ofensiva, anti-ping-pong, preservación y sacrificio productivo.
 
-La amenaza rival se estima solo con especie/nivel públicos, movimientos revelados, beliefs ponderados, fallback STAB público y estado observable.
+**Estado preliminar:** ADAPTAR DE FORMA IMPORTANTE.
 
-**Los entrenadores serios futuros deben construirse sobre esta ruta**, no regresar a un brain antiguo de search-only.
+El switching ya conoce preservación, pero debe incorporar el coste persistente de perder un miembro del roster y distinguir utilidad táctica de valor estratégico futuro.
 
-### FASE 32 — Trainer Loadouts
+### FASE32 — Trainer Loadouts
 
-Un loadout es una unidad atómica:
-
-- especie y nivel;
-- rol/calidad;
-- naturaleza;
-- IV/EV;
-- habilidad;
-- held item;
-- moveset;
-- procedencia.
+Loadout atómico con especie, nivel, rol/calidad, naturaleza, IV/EV, habilidad, objeto y moveset.
 
 Roles V1:
 
-- balanced
-- physical_attacker
-- special_attacker
-- fast_attacker
-- bulky_physical
-- bulky_special
+- balanced;
+- physical_attacker;
+- special_attacker;
+- fast_attacker;
+- bulky_physical;
+- bulky_special;
 - support.
 
-Calidades:
+**Estado preliminar:** ADAPTAR.
 
-- basic: IV15 / EV0
-- trained: IV25 + inversión moderada
-- expert: IV31 + inversión especializada dentro de 510 EV.
+Los roles siguen siendo útiles porque describen lo que un Pokémon puede hacer, no qué tipo debe tener. Sin embargo:
 
-Solo se materializan habilidades/held items que tienen runtime real. No se inventa legalidad exacta de generación cuando el dataset solo permite afirmar compatibilidad pública importada.
+- la legalidad/compatibilidad debe reevaluarse con DATA V3;
+- el generador no debe asumir conocimiento antiguo del learnset;
+- debe decidirse qué partes del loadout son aleatorias, heredadas o configurables en Random Cup;
+- el valor del loadout debe incluir su importancia relativa dentro del roster recibido.
 
-### FASE 33 — Trainer Team Composition
+### FASE33 — Trainer Team Composition
 
-Introduce:
+Componentes:
 
-- `TrainerTeamDefinition`
-- `TrainerTeamValidator`
-- `TrainerTeamAnalyzer`
-- `TrainerTeamComposer`
+- `TrainerTeamDefinition`;
+- `TrainerTeamValidator`;
+- `TrainerTeamAnalyzer`;
+- `TrainerTeamComposer`;
 - `TrainerTeamFactory`.
 
-Analiza distribución de roles, tipos defensivos, cobertura equipada, debilidades compartidas y respuestas disponibles. El compositor es greedy, determinista y acotado: produce NPC razonables, no un óptimo competitivo global.
+`TrainerTeamAnalyzer` ya analiza dinámicamente roles, tipos, cobertura, resistencias y debilidades de una plantilla dada. Ese concepto encaja bien con equipos aleatorios.
 
-## 3. Lo que NO debe duplicar la siguiente fase
+`TrainerTeamComposer`, en cambio, selecciona especies de un pool buscando una composición mejor. En Random Cup el entrenador normalmente **no elige las especies que recibe**.
 
-Ya existen:
+**Estado preliminar:**
 
-- personalidad táctica (`TrainerProfile`);
-- beliefs/inferencia;
-- search acotado;
-- prior público de cobertura;
-- objetos finitos;
-- switching estratégico;
-- loadouts y calidad individual;
-- composición/análisis de equipo.
+- Analyzer: CONSERVAR/ADAPTAR.
+- Composer como selector de especies: REHACER o retirar del flujo Random Cup.
+- Posible nuevo papel: organizar/interpretar una plantilla ya asignada, no escoger sus especies.
 
-Por tanto, crear otra clase llamada genéricamente “perfil de entrenador” que vuelva a mezclar todo sería arquitectura duplicada.
+---
 
-## 4. Siguiente problema correcto: estilo vs expertise
+## 3. Regla canónica de identidad del entrenador
 
-La próxima fase debe estudiar una separación explícita entre:
+Un entrenador **no se define por el tipo Pokémon que posee**.
 
-### Estilo
+Se define por cómo usa lo que le toca.
 
-Cómo prefiere jugar un entrenador.
+Ejemplos de dimensiones válidas:
 
-Ya existe en `TrainerProfile`: balanced/aggressive/cautious/technical.
+- agresividad;
+- cautela;
+- conservación de plantilla;
+- tolerancia al riesgo;
+- uso de status/setup;
+- preferencia por presión inmediata;
+- sofisticación de switching;
+- gestión de recursos;
+- capacidad de identificar roles dentro de un equipo aleatorio;
+- calidad de adaptación;
+- competencia/expertise.
 
-### Competencia / expertise
+Dos entrenadores con exactamente los mismos Pokémon pueden jugar de forma muy distinta.
 
-Qué tan bien utiliza las herramientas legítimas que tiene disponibles y qué calidad de preparación recibe.
+La personalidad y la competencia deben permanecer separadas:
 
-Aquí pueden entrar, si el diseño lo confirma:
+- **estilo:** qué tipo de decisiones prefiere;
+- **expertise:** qué tan bien utiliza las herramientas legítimas disponibles.
 
-- brain/política usada;
-- calidad de loadout;
-- calidad/coherencia del equipo;
-- uso de objetos y stock;
-- umbrales/competencia de switching;
-- sofisticación de beliefs públicos permitidos;
-- tolerancia a errores o simplificaciones deliberadas en NPC básicos;
-- evaluación estratégica disponible.
+Ninguna de las dos concede información oculta.
 
-**Nunca** debe entrar “ver movimientos ocultos” o cualquier otro privilegio ilegal.
+---
 
-## 5. Arquetipos narrativos futuros
+## 4. Nuevo problema central: adaptación al roster aleatorio
 
-Líder, Alto Mando, Campeón y boss-tier están explícitamente fuera del alcance de FASE31–33 y son candidatos naturales del siguiente trabajo.
+La IA debe poder recibir una plantilla arbitraria y construir una interpretación interna de esa plantilla.
 
-No están todavía congelados como una lista obligatoria. Primero hay que auditar cómo representar expertise sin mezclarlo con personalidad ni crear una clase monolítica.
+Como mínimo deberá poder identificar dinámicamente:
 
-Un posible resultado sería que un Líder y un Campeón compartan estilo `technical` pero tengan distinta calidad de preparación/competencia; o que dos líderes con igual expertise tengan estilos muy diferentes.
+- atacante físico;
+- atacante especial;
+- velocidad/cleaner;
+- bulky físico;
+- bulky especial;
+- soporte;
+- cobertura única;
+- resistencia única;
+- respuesta a amenazas concretas;
+- miembro redundante;
+- miembro difícil de reemplazar;
+- candidato a lead;
+- miembro que conviene reservar;
+- sacrificio menos costoso si la situación exige uno.
 
-## 6. Restricciones para FASE 34
+No se presupone que todos los equipos tengan todos los roles.
 
-Antes de escribir código:
+Una buena IA debe saber jugar también una plantilla mala, desequilibrada o extraña.
 
-1. auditar componentes/prototipos antiguos de difficulty/archetype/expertise;
-2. comprobar referencias a `TrainerProfile` para evitar duplicación;
-3. decidir contrato separado de estilo y competencia;
-4. mantener `StrategicSwitchingTrainerBrain` como base seria salvo evidencia contraria;
-5. definir tests que demuestren diferencias intencionadas entre niveles sin cheating;
-6. comparar candidatos contra el corpus existente;
-7. no ampliar depth/branching/MCTS/red neuronal sin un límite demostrado.
+---
 
-## 7. Neural AI
+## 5. Valor de campaña / permadeath
 
-Una IA neuronal sigue siendo una línea experimental futura, no el siguiente parche.
+Debe diseñarse una capa que valore el efecto de una decisión más allá del combate actual.
 
-Primero conviene tener entrenadores no neuronales fuertes, medibles y con arquitectura limpia. Esa base servirá después como benchmark, generador de experiencias, adversario o teacher para experimentar con sistemas neuronales sin confundir fallos del motor/datos con fallos de aprendizaje.
+No se congela todavía una fórmula concreta, pero la auditoría debe estudiar variables como:
 
-## 8. Fuentes documentales
+- HP y estado actuales;
+- potencia del miembro;
+- cobertura exclusiva;
+- función estratégica única;
+- redundancia dentro del roster;
+- disponibilidad de sustitutos;
+- salud/estado del resto del equipo;
+- coste de perder acceso a una habilidad/movimiento/rol;
+- valor esperado en combates futuros;
+- importancia de conservar recursos consumibles.
+
+La IA no debe volverse cobarde por sistema. A veces sacrificar un Pokémon seguirá siendo correcto. La diferencia es que ahora ese sacrificio debe ser **consciente de su coste persistente**.
+
+---
+
+## 6. Revisión obligatoria DATA V3
+
+Antes de tocar dificultad/arquetipos se auditarán al menos:
+
+- `TrainerBeliefInference`;
+- `TrainerPublicCoverageBeliefInference`;
+- `TrainerPlausibleWorldBuilder` y capas de search relacionadas;
+- `TrainerRoleLoadoutGenerator`;
+- `TrainerLoadoutValidator`;
+- `TrainerTeamAnalyzer`;
+- `TrainerTeamComposer`;
+- `StrategicSwitchingTrainerBrain` y sus evaluadores;
+- item decision/economy;
+- corpus y escenarios de evaluación.
+
+Preguntas de auditoría:
+
+1. ¿Consume realmente el catálogo V3 o presupone fixtures/datos antiguos?
+2. ¿Ignora campos que ahora sí existen?
+3. ¿Hace inferencias demasiado amplias debido a limitaciones antiguas ya resueltas?
+4. ¿Evalúa los 18 tipos y la cobertura moderna de forma genérica?
+5. ¿Distingue runtime-supported, partial/data-only y unsupported cuando corresponde?
+6. ¿Puede trabajar con cualquier especie/forma válida del pool?
+7. ¿Sus tests prueban comportamiento realista o solo fixtures sintéticos estrechos?
+8. ¿Su función objetivo sigue siendo válida con muerte permanente?
+
+---
+
+## 7. Corpus de evaluación V2 requerido
+
+El corpus antiguo no se borra, pero deja de ser suficiente para certificar la siguiente IA.
+
+El futuro corpus debe incluir escenarios derivados del catálogo moderno y plantillas aleatorias, por ejemplo:
+
+- equipos equilibrados;
+- equipos con debilidad compartida grave;
+- equipos sin atacante especial;
+- equipos con una única respuesta a una amenaza;
+- equipos con una pieza excepcional y varias mediocres;
+- equipos con roles redundantes;
+- situaciones donde sacrificar gana el combate pero empeora claramente la campaña;
+- situaciones donde conservar demasiado hace perder un combate que debía arriesgarse;
+- decisiones de objeto bajo recursos persistentes;
+- matchups con cobertura machine/tutor/egg dependiente de procedencia/versionado.
+
+La evaluación debe separar:
+
+- calidad táctica del combate;
+- supervivencia del roster;
+- consumo de recursos;
+- capacidad de adaptación a equipos no diseñados a mano.
+
+---
+
+## 8. Clasificación preliminar de arquitectura
+
+### CONSERVAR casi seguro
+
+- separación Battle Core / cerebro;
+- `TrainerDecisionContext` sanitizado;
+- prohibición de cheating;
+- trazas explicables;
+- `TrainerProfile` como estilo conductual;
+- infraestructura de self-play;
+- matriz simultánea de acciones;
+- idea de `TrainerTeamAnalyzer`;
+- búsqueda acotada mientras no haya evidencia de un límite nuevo.
+
+### ADAPTAR
+
+- beliefs y public coverage a DATA V3;
+- loadouts y legalidad;
+- roles sobre roster aleatorio;
+- switching con valor persistente;
+- items con economía/persistencia;
+- corpus;
+- evaluación de equipo;
+- selección de lead;
+- heurísticas de preservación/sacrificio.
+
+### REHACER / RETIRAR del flujo Random Cup
+
+- cualquier especialización fija por tipo;
+- cualquier lógica que presuponga que el entrenador puede elegir sus especies si Random Cup no lo permite;
+- `TrainerTeamComposer` como selector de especies para el flujo principal, salvo que encuentre otro uso legítimo;
+- cualquier contrato basado en carencias del dataset antiguo que DATA V3 ya haya resuelto.
+
+Esta clasificación es preliminar y se actualizará con evidencia de código/tests.
+
+---
+
+## 9. FASE34 queda redefinida
+
+La antigua propuesta de “Trainer Archetypes / Difficulty Profiles V1” **no se ejecuta todavía**.
+
+El siguiente tramo real es una auditoría/rediseño de compatibilidad.
+
+Nombre de trabajo provisional:
+
+**PRE-FASE34 — Trainer AI Modernization Audit / Random Cup & Permadeath Redesign**.
+
+Salida esperada:
+
+1. mapa completo CONSERVAR/ADAPTAR/REHACER;
+2. contrato canónico de Random Cup;
+3. contrato canónico de permadeath para la IA;
+4. lista de supuestos obsoletos por DATA V3;
+5. nuevo corpus de evaluación requerido;
+6. orden de implementación por tramos pequeños y certificables;
+7. solo después, redefinir FASE34 sobre la arquitectura moderna.
+
+---
+
+## 10. Regla de trabajo
+
+Antes de cada cirugía relevante:
+
+- registrar el objetivo y el hallazgo en este cuaderno;
+- no perder decisiones importantes en el chat;
+- mantener SHAs, pruebas y resultados reproducibles;
+- no considerar un componente “bueno” solo porque compile o pase un fixture antiguo;
+- no rehacer componentes que sigan siendo correctos;
+- actualizar este cuaderno después de cada tranche certificada.
+
+Este cuaderno es el punto de recuperación si se llena o se pierde el contexto de conversación.
+
+---
+
+## 11. Fuentes documentales históricas
 
 Decisiones formales principales:
 
-- ADR 019–030: evolución de sesión, inteligencia, beliefs, search, evaluación, cobertura pública e items;
+- ADR 019–030: sesión, inteligencia, beliefs, search, evaluación, cobertura pública e items;
 - ADR 031: Strategic Switching V2;
 - ADR 032: Trainer Loadouts;
 - ADR 033: Trainer Team Composition.
 
-Investigación histórica preservada:
+Investigación histórica:
 
 `docs/history/research/TRAINER_AI_RESEARCH_FASE21.md`.
 
-Este cuaderno es el punto normal de entrada para continuar Trainer AI; acudir a los ADR cuando se necesite el detalle contractual original.
+DATA V3 consolidado:
+
+`docs/project_book/DATA_V3.md`.
