@@ -282,7 +282,7 @@ func _execute_triggers(
 		state, owner, target, move, catalog, _ruleset, rng, events
 	)
 	for spec in _trigger_system.specs_for_creature(owner, trigger, _registry):
-		if not _trigger_system.conditions_met(spec, owner, move):
+		if not _trigger_system.conditions_met(spec, owner, move, target):
 			continue
 		_trigger_system.emit_source_triggered(context, spec, owner)
 		var result := _effect_executor.execute(spec.effect, context, _registry)
