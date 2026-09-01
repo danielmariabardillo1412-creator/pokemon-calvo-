@@ -34,6 +34,7 @@ Pipeline:
 - #81 defensive damage modifiers `e2eeef1d23def1d9fd124b5e2eeb437270212b68`
 - #82 defensive predicates `089140a8439390758d688636f715a311ec175163`
 - #83 move-property ability contracts `f4a1f76850d8737c4d9847045335e703d5ecaa23`
+- #84 defender contact reactions `67c483899dadb2e3d1b5314a779d4c71b1bc8708`
 
 All entries above: **18/18 SUCCESS on exact final notebook-bearing HEAD and closed without merge**.
 
@@ -53,98 +54,104 @@ Preserved metadata is not executable support.
 
 Battle Core ability execution is controlled by trigger registration; DATA V3 classification describes semantic completeness.
 
-## Latest certified ability baseline — PR #83
-Detailed notebooks: `06`, `07`, `08`, `09`, `10`, `11`, `12`, `13`.
+## Latest certified ability baseline — PR #84
+Detailed notebooks: `06`, `07`, `08`, `09`, `10`, `11`, `12`, `13`, `14`.
 
-Certified #83 coverage:
-- `RUNTIME_SUPPORTED`: **13**
-- `PARTIAL_RUNTIME`: **6** — `heatproof`, `intimidate`, `levitate`, `reckless`, `stamina`, `static`
-- `DATA_ONLY`: **354**
-- total: **373**.
-
-# Current tranche — PR #84 Defender contact reactions
-- Branch: `audit/data-v3-ability-contact-reactions-v1`.
-- Exact parent: certified #83 final `f4a1f76850d8737c4d9847045335e703d5ecaa23`.
-- PR: #84 `DATA V3 — audit defender contact reaction abilities`.
-- Engineering SHA: `27a9d2b429334ea6f809009de219bb3fce0bb813`.
-- Engineering SHA: **18/18 SUCCESS**.
-- DATA V3 domain: **451 PASS / 0 FAIL**.
-- Detailed notebook: `docs/notebooks/14_DATA_V3_ABILITY_CONTACT_REACTIONS.md`.
-
-## #84 decisions
-### Flame Body
-Pinned Generation III source: contacting move user has 30% chance to be burned. Historical `effect_changes` is overworld-only.
-
-Runtime subset:
-- defender `AFTER_DAMAGE`;
-- `requires_contact=true`;
-- 30% CHANCE -> burn attacker.
-
-Decision: **PARTIAL_RUNTIME**.
-
-### Poison Point
-Pinned Generation III source: contacting move user has 30% chance to be poisoned; no effect history.
-
-Runtime subset:
-- defender `AFTER_DAMAGE`;
-- `requires_contact=true`;
-- 30% CHANCE -> poison attacker.
-
-Decision: **PARTIAL_RUNTIME**.
-
-### Gooey
-Pinned Generation VI source: lowers attacking Pokémon's Speed one stage on contact; no effect history.
-
-Runtime subset:
-- defender `AFTER_DAMAGE`;
-- `requires_contact=true`;
-- attacker Speed stage `-1`.
-
-Decision: **PARTIAL_RUNTIME**.
-
-## Shared #84 partial boundary
-No generic Battle Core code changed in #84. All three reuse the same machinery already used by Static.
-
-Current limitations:
-- defender `AFTER_DAMAGE` is requested only when positive damage was dealt and the defender survives;
-- knocked-out trigger owners are rejected;
-- multi-hit strikes are resolved before the single defender `AFTER_DAMAGE` request.
-
-Therefore fatal-contact and per-strike contact-reaction semantics remain incomplete. A real-battle regression explicitly verifies a 1-HP Gooey holder is KO'd by contact and does not react.
-
-## #84 real-battle coverage
-New `DataFoundationV3AbilityContactReactionTestSuite` verifies:
-- Tackle contact vs Water Gun non-contact metadata;
-- Flame Body real 30% burn path using deterministic seed search;
-- Poison Point real 30% poison path using deterministic seed search;
-- both status abilities inert for Water Gun;
-- Gooey Tackle lowers attacker Speed exactly one stage and emits defender-owned ability event;
-- Gooey inert for Water Gun;
-- fatal-contact missing behavior is explicit.
-
-## #84 artifact drift
-Certified #83 artifact → successful #84 engineering artifact:
-- raw: exactly `flame_body`, `gooey`, `poison_point` classification changes `DATA_ONLY → PARTIAL_RUNTIME`;
-- normalized: exactly the same three one-field changes;
-- `RUNTIME_SUPPORTED`: remains **13**;
-- `PARTIAL_RUNTIME`: **6 → 9**;
-- `DATA_ONLY`: **354 → 351**;
-- every other ability unchanged;
-- species/Pokémon, moves/effects, items/statuses, learnsets/evolutions, types/stats, manifest/forms/auxiliary unchanged;
-- `pokeapi_v3_audit.json` changes only partial 6→9 and data-only 354→351;
-- `import_time_ms` 705→524 ms is non-semantic.
-
-## Ability coverage after #84 engineering
+Certified #84 coverage:
 - `RUNTIME_SUPPORTED`: **13**
 - `PARTIAL_RUNTIME`: **9** — `flame_body`, `gooey`, `heatproof`, `intimidate`, `levitate`, `poison_point`, `reckless`, `stamina`, `static`
 - `DATA_ONLY`: **351**
 - total: **373**.
 
-## Known blockers after #84
+# Current tranche — PR #85 Contact retaliation damage
+- Branch: `audit/data-v3-ability-contact-damage-v1`.
+- Exact parent: certified #84 final `67c483899dadb2e3d1b5314a779d4c71b1bc8708`.
+- PR: #85 `DATA V3 — audit contact retaliation damage ability`.
+- First candidate SHA `afe9f6fa558fffbd7347a2cca33a1c94dc5eec58`: DATA V3 domain **459 PASS / 2 FAIL**.
+- Corrected engineering SHA: `146285fc4e85c0d50036c12454af641c2ebf4aa5`.
+- Corrected engineering SHA: **18/18 SUCCESS**.
+- Corrected DATA V3 domain: **461 PASS / 0 FAIL**.
+- Detailed notebook: `docs/notebooks/15_DATA_V3_ABILITY_CONTACT_DAMAGE.md`.
+
+## #85 decision — Iron Barbs
+Pinned Generation V source requires the contacting move user to lose **1/8 of its own maximum HP**; `effect_changes=[]`.
+
+Decision: **`iron_barbs → PARTIAL_RUNTIME`**.
+
+New generic Battle Core effect:
+- `BattleEffectSpec.MAX_HP_DAMAGE`;
+- reuses existing `target + ratio_basis_points` fields;
+- executor applies `maxi(1, recipient.max_hp * ratio / 10000)`;
+- emits `DAMAGE_APPLIED` with `cause=max_hp_fraction`;
+- round-trips through effect serialization.
+
+Iron Barbs registration:
+- defender `AFTER_DAMAGE`;
+- `requires_contact=true`;
+- `MAX_HP_DAMAGE` targeting attacker;
+- `ratio_basis_points=1250`.
+
+Exact supported subset:
+- ordinary contact hit;
+- defender survives;
+- attacker loses floor(max HP / 8), minimum 1;
+- retaliation can KO the attacker.
+
+Partial boundary remains explicit:
+- defender AFTER_DAMAGE is once after the completed move, not per multi-hit strike;
+- defender AFTER_DAMAGE is not requested if the owner is KO'd by the hit;
+- therefore per-strike and fatal-owner/double-KO semantics are absent.
+
+## #85 decision — Rough Skin
+Pinned Generation III current effect is also 1/8 attacker max HP, but source preserves a Diamond/Pearl historical battle value of **1/16**.
+
+Decision: **remain DATA_ONLY**. Current ability contracts are not version-aware, so one universal 1/8 mapping would erase source-preserved semantics.
+
+## #85 first CI failure and correction
+The first candidate failed only two new assertions:
+- contact-retaliation move metadata;
+- multi-hit partial boundary.
+
+Root cause: the test assumed `Double Kick` was contact. The generated DATA V3 artifact proves:
+- Double Kick: RUNTIME_SUPPORTED, fixed 2-hit, **non-contact**;
+- Double Slap: RUNTIME_SUPPORTED, **contact**, 2-5-hit MULTI_HIT.
+
+Only the new focal test file changed after the failure. It now uses Double Slap plus deterministic landing-seed search.
+
+Failed SHA → corrected engineering SHA:
+- **1 commit**;
+- **1 changed test file**;
+- **zero runtime changes**.
+
+Corrected result: **18/18 SUCCESS**, DATA V3 **461 PASS / 0 FAIL**.
+
+## #85 artifact drift
+Certified #84 artifact → successful #85 engineering artifact:
+- raw: exactly `iron_barbs.classification: DATA_ONLY → PARTIAL_RUNTIME`;
+- normalized: exactly the same one-field change;
+- Rough Skin identical and remains DATA_ONLY;
+- every other ability unchanged;
+- Pokémon/species, moves/effects, items/statuses, learnsets/evolutions, types/stats unchanged;
+- manifest/forms/auxiliary unchanged;
+- runtime remains **13**;
+- partial **9 → 10**;
+- data-only **351 → 350**;
+- `pokeapi_v3_audit.json` changes only those two counts;
+- `import_time_ms` 503→395 ms is non-semantic.
+
+## Ability coverage after #85 engineering
+- `RUNTIME_SUPPORTED`: **13**
+- `PARTIAL_RUNTIME`: **10** — `flame_body`, `gooey`, `heatproof`, `intimidate`, `iron_barbs`, `levitate`, `poison_point`, `reckless`, `stamina`, `static`
+- `DATA_ONLY`: **350**
+- total: **373**.
+
+## Known blockers after #85 engineering
+- `iron_barbs`: full support needs deliberate per-strike and faint-safe/double-KO ordering.
+- `rough_skin`: needs version-aware ability semantics before its 1/16→1/8 history can be represented honestly.
 - `static`, `flame_body`, `poison_point`, `gooey`: full support needs a deliberate faint-safe/per-strike contact-reaction policy.
 - `reckless`: full support needs structured crash-on-miss move semantics.
 - `long_reach`: needs shared effective-contact context exposing the move user.
-- `technician`: needs resolved/transactional move-power semantics, not static base-power approximation.
+- `technician`: needs resolved/transactional move-power semantics.
 - `iron_fist`, `strong_jaw`, `mega_launcher`, `sharpness`: need provenance-backed move-property tags.
 - `filter`, `solid_rock`: need shared super-effective/effectiveness predicate.
 - `heatproof`: full support needs burn residual ability interaction.
@@ -153,16 +160,15 @@ Certified #83 artifact → successful #84 engineering artifact:
 - `transistor`: version-sensitive multiplier contract unresolved.
 - `water_compaction`: requires Water-specific AFTER_DAMAGE predicate.
 - `weak_armor`: requires dual stat transaction plus per-hit/version semantics.
-- remaining contact family: Cute Charm needs gender/infatuation; Effect Spore needs mutually exclusive random statuses; Iron Barbs/Rough Skin need max-HP contact damage; Mummy/Wandering Spirit need ability replacement; Pickpocket needs item transfer; Poison Touch needs attacker-owned post-hit contact handling.
 
 ## Current certification step
-Notebook synchronization follows engineering SHA `27a9d2b429334ea6f809009de219bb3fce0bb813`.
+Notebook synchronization follows corrected engineering SHA `146285fc4e85c0d50036c12454af641c2ebf4aa5`.
 
-Before closing #84:
-1. verify engineering → final HEAD changes only `01`, `04`, `14` notebooks;
+Before closing #85:
+1. verify engineering → final HEAD changes only `01`, `04`, `15` notebooks;
 2. require **18/18 SUCCESS** on exact final notebook-bearing HEAD;
-3. close #84 without merge;
+3. close #85 without merge;
 4. use exact final SHA as next certified baseline.
 
-## Exact next work after #84
-Continue DATA FOUNDATION V3 ability reliability with one bounded compatible subgroup from the remaining 351 DATA_ONLY records. Do not mass-promote the rest of the contact family and do not return to Trainer AI/archetypes yet.
+## Exact next work after #85
+Continue DATA FOUNDATION V3 ability reliability with one bounded compatible subgroup from the remaining 350 DATA_ONLY records. Do not reopen Iron Barbs/Rough Skin blockers until their required shared semantics exist, and do not return to Trainer AI/archetypes yet.
