@@ -10,6 +10,7 @@ Fast recovery for engineering work. GitHub commits, PR state, CI, immutable sour
 - Require all 18 normal workflows green on the same exact final SHA.
 - Notebook commits move SHA, therefore the final notebook-bearing HEAD requires a second 18/18.
 - Any focal/regression failure stops the tranche until root cause is fixed.
+- PR close is external state; do not move a certified SHA merely to record closure in a notebook.
 
 ## DATA FOUNDATION V3 authority
 Immutable source:
@@ -30,12 +31,13 @@ Pipeline:
 - #77 ability family inventory + Swarm `78da22438d0866193b0d1154814464531ac55641`
 - #78 unconditional ability type boosts `eda483d9cd6423d32bdf1a156372416b2fbcb639`
 - #79 hit-triggered stat reactions `5b9ad561017fc4c209d6fd11ef9ddc7dbf3fbd71`
-- #80 contact damage + attack-doubling audit `232a3e787fe2d7d58b1feb693272b63bd7a699bf`
+- #80 Tough Claws / contact damage audit `232a3e787fe2d7d58b1feb693272b63bd7a699bf`
 - #81 defensive damage modifiers `e2eeef1d23def1d9fd124b5e2eeb437270212b68`
 - #82 defensive predicates `089140a8439390758d688636f715a311ec175163`
-- #83 move-property ability contracts `f4a1f76850d8737c4d9847045335e703d5ecaa23`
+- #83 move-property contracts / Reckless partial `f4a1f76850d8737c4d9847045335e703d5ecaa23`
 - #84 defender contact reactions `67c483899dadb2e3d1b5314a779d4c71b1bc8708`
 - #85 contact retaliation damage `6909aa778eca6555184167401f5e52be11f46ac3`
+- #86 offensive stat ability modifiers `06b078b02766ff2c85d5ca45798d8293b8c8e557`
 
 All entries above: **18/18 SUCCESS on exact final notebook-bearing HEAD and closed without merge**.
 
@@ -55,112 +57,103 @@ Preserved metadata is not executable support.
 
 Battle Core ability execution is controlled by trigger registration; DATA V3 classification describes semantic completeness.
 
-## Latest certified baseline — PR #85
-Detailed ability notebooks: `06` through `15`.
+## Latest certified baseline — PR #86
+Detailed ability notebooks: `06` through `16`.
 
-Certified #85 coverage:
-- `RUNTIME_SUPPORTED`: **13**
-- `PARTIAL_RUNTIME`: **10** — `flame_body`, `gooey`, `heatproof`, `intimidate`, `iron_barbs`, `levitate`, `poison_point`, `reckless`, `stamina`, `static`
-- `DATA_ONLY`: **350**
-- total: **373**.
+Certified #86 final HEAD:
+`06b078b02766ff2c85d5ca45798d8293b8c8e557`
 
-# Current tranche — PR #86 Offensive stat ability modifiers
-- Branch: `audit/data-v3-ability-next-compatible-v1`.
-- Exact parent: certified #85 final `6909aa778eca6555184167401f5e52be11f46ac3`.
-- PR: #86 `DATA V3 — audit offensive stat ability modifiers`.
-- First engineering candidate: `fd5a3f8d3138827c2cb6964bbe53bf3f9f524d5d` — DATA V3 **468 PASS / 3 FAIL**.
-- Corrected engineering SHA: `60281b7c016f8032a1f6c8f955cdfe2a727b58ac`.
-- Corrected engineering SHA: **18/18 SUCCESS**.
-- Corrected DATA V3 domain: **471 PASS / 0 FAIL**.
-- Detailed notebook: `docs/notebooks/16_DATA_V3_ABILITY_NEXT_COMPATIBLE.md`.
-
-## #86 source decisions
-Promoted to **RUNTIME_SUPPORTED** after immutable-source audit:
-- `huge_power`: Gen III Attack x2, no effect history;
-- `pure_power`: Gen III Attack x2, no effect history;
-- `toxic_boost`: Gen V Attack x1.5 while poisoned, no effect history;
-- `flare_boost`: Gen V Special Attack x1.5 while burned, no effect history.
-
-Toxic Boost accepts both runtime poison states: `poison` and `badly_poisoned`.
-
-## #86 Battle Core abstraction
-The existing `multiplier_bp` is a **final-damage** modifier and was deliberately not reused for these abilities.
-
-New shared channel:
-- `offensive_stat_multiplier_basis_points`.
-
-`BattleTriggerSystem.damage_modifiers()` now separates:
-- final-damage multiplier;
-- offensive-stat multiplier;
-- immunity.
-
-New generic trigger condition:
-- `required_persistent_status_ids`.
-
-`DamageCalculator` applies the offensive multiplier to staged Attack/Special Attack **before the base formula**. Damage-event metadata records the multiplier.
-
-A focal odd-Attack regression proves Attack x2 is not generally equivalent to final damage x2 because integer floors occur inside the formula.
-
-## Positional API compatibility
-The new calculator parameter was initially inserted before `force_critical`, but repository search found historical positional calls `..., 10000, 0` where the final `0` means force non-critical.
-
-Before first CI, the signature was corrected so the new parameter is appended after `force_critical`.
-
-The focal suite proves old positional usage and explicit new usage are equivalent at the default offensive multiplier.
-
-## #86 runtime registrations
-- Huge Power: physical + offensive stat `20000`.
-- Pure Power: physical + offensive stat `20000`.
-- Toxic Boost: physical + status in `{poison, badly_poisoned}` + offensive stat `15000`.
-- Flare Boost: special + burn + offensive stat `15000`.
-
-None of the four uses final `multiplier_bp`.
-
-## #86 real-battle coverage
-New `DataFoundationV3AbilityOffensiveStatTestSuite` verifies:
-- physical/special controls;
-- positional calculator compatibility;
-- stat-multiplier vs final-damage-multiplier distinction;
-- Huge Power physical support / special inert;
-- Pure Power parity with Huge Power;
-- Toxic Boost normal poison + badly poisoned support, clean/special inert;
-- Flare Boost burned-special support, clean/physical inert.
-
-## #86 first CI failure and correction
-First candidate `fd5a3f8...` passed source audit, regeneration, counts and **all new functional tests**, but three exact inventory assertions failed.
-
-Root cause: expected arrays used:
-`..., torrent, toxic_boost, tough_claws`
-
-Canonical sorted output is:
-`..., torrent, tough_claws, toxic_boost`.
-
-This was purely an ordering expectation error.
-
-The first test-only correction accidentally removed comment-only audit annotations through full-file replacement. A follow-up restored them. Failed candidate → final corrected engineering SHA changes only the runtime-contract test file: the two order swaps plus an EOF newline marker; no runtime/source/classification changes.
-
-Corrected engineering result: **18/18 SUCCESS**, DATA V3 **471 PASS / 0 FAIL**.
-
-## #86 exact artifact drift
-Certified #85 final artifact → successful #86 engineering artifact:
-- raw: exactly four one-field changes, `classification: DATA_ONLY → RUNTIME_SUPPORTED`, for `flare_boost`, `huge_power`, `pure_power`, `toxic_boost`;
-- normalized: exactly the same four changes;
-- every other ability unchanged;
-- species/Pokémon, moves/effects, items/statuses, learnsets/evolutions, types/stats unchanged;
-- manifest/forms/auxiliary unchanged;
-- RUNTIME_SUPPORTED **13 → 17**;
-- PARTIAL_RUNTIME remains **10**;
-- DATA_ONLY **350 → 346**;
-- `pokeapi_v3_audit.json` changes only runtime/data-only counts;
-- `import_time_ms` **509 → 548 ms** is non-semantic timing noise.
-
-## Ability coverage after #86 engineering
+Certified #86 ability coverage:
 - `RUNTIME_SUPPORTED`: **17**
 - `PARTIAL_RUNTIME`: **10** — `flame_body`, `gooey`, `heatproof`, `intimidate`, `iron_barbs`, `levitate`, `poison_point`, `reckless`, `stamina`, `static`
 - `DATA_ONLY`: **346**
 - total: **373**.
 
-## Known blockers after #86 engineering
+# Current tranche — PR #87 Conditional offensive stat abilities
+- Branch: `audit/data-v3-ability-offensive-stat-conditions-v1`.
+- Exact parent: certified #86 final `06b078b02766ff2c85d5ca45798d8293b8c8e557`.
+- PR: #87 `DATA V3 — audit conditional offensive stat abilities`.
+- Engineering SHA: `c641891f6a8d2b0b8fcf63db0a57436c2445374f`.
+- Engineering SHA: **18/18 SUCCESS**.
+- DATA V3 domain: **482 PASS / 0 FAIL**.
+- Detailed notebook: `docs/notebooks/17_DATA_V3_ABILITY_OFFENSIVE_STAT_CONDITIONS.md`.
+
+## #87 source decisions
+### Defeatist
+Pinned Gen V source: Attack and Special Attack are halved at half HP or less; no history.
+
+Decision: **`defeatist → RUNTIME_SUPPORTED`**.
+
+Runtime:
+- physical and special mutually-exclusive `MODIFY_DAMAGE` specs;
+- `hp_at_or_below_divisor=2`;
+- `offensive_stat_multiplier_bp=5000`;
+- no final-damage multiplier.
+
+Real battle pins exactly 120/240 active and 121/240 inert.
+
+### Guts
+Pinned Gen III source requires Attack x1.5 while asleep/burned/paralyzed/poisoned, plus suppression of the usual burn Attack cut. Pinned history records Diamond/Pearl sleep behavior.
+
+Decision: **`guts → PARTIAL_RUNTIME`**.
+
+Faithful subset only:
+- physical;
+- status in `paralysis`, `poison`, `badly_poisoned`;
+- offensive stat `15000`.
+
+Deliberately absent:
+- burn: current `DamageCalculator` would still apply the normal burn cut after the offensive-stat multiplier;
+- sleep: source history is version-sensitive.
+
+### Hustle
+Pinned Gen III source requires regular physical damage x1.5 and accuracy x0.8; special moves unaffected. Recorded history is overworld-only.
+
+Decision: **`hustle → PARTIAL_RUNTIME`**.
+
+Faithful subset only:
+- physical;
+- final `multiplier_bp=15000`.
+
+Missing: accuracy x0.8 integration.
+
+## #87 architecture
+**No Battle Core file changed.**
+
+The tranche reuses existing #86 primitives:
+- physical/special predicates;
+- HP divisor condition;
+- persistent-status list;
+- final damage multiplier;
+- offensive-stat multiplier.
+
+This is intentional: coverage increased through source-compatible reuse rather than another architecture layer.
+
+## #87 exact artifact drift
+Certified #86 final artifact → #87 engineering artifact:
+- raw: exactly three one-field changes:
+  - `defeatist.classification: DATA_ONLY → RUNTIME_SUPPORTED`;
+  - `guts.classification: DATA_ONLY → PARTIAL_RUNTIME`;
+  - `hustle.classification: DATA_ONLY → PARTIAL_RUNTIME`;
+- normalized: exactly the same three changes;
+- every other ability unchanged;
+- species/Pokémon, moves/effects, items/statuses, learnsets/evolutions, types/stats unchanged;
+- manifest/forms/auxiliary unchanged;
+- runtime **17 → 18**;
+- partial **10 → 12**;
+- data-only **346 → 343**;
+- `pokeapi_v3_audit.json` changes only those three counts;
+- `import_time_ms 491 → 518 ms` is non-semantic timing noise.
+
+## Ability coverage after #87 engineering
+- `RUNTIME_SUPPORTED`: **18**
+- `PARTIAL_RUNTIME`: **12** — `flame_body`, `gooey`, `guts`, `heatproof`, `hustle`, `intimidate`, `iron_barbs`, `levitate`, `poison_point`, `reckless`, `stamina`, `static`
+- `DATA_ONLY`: **343**
+- total: **373**.
+
+## Known blockers after #87 engineering
+- `guts`: full support needs version-aware sleep behavior and ability-aware suppression of the burn Attack cut.
+- `hustle`: full support needs an accuracy modifier in hit resolution, including set-damage moves.
 - `iron_barbs`: full support needs deliberate per-strike and faint-safe/double-KO ordering.
 - `rough_skin`: needs version-aware ability semantics.
 - `static`, `flame_body`, `poison_point`, `gooey`: full support needs deliberate fatal/per-strike contact policy.
@@ -176,15 +169,13 @@ Certified #85 final artifact → successful #86 engineering artifact:
 - `reckless`: full support needs crash-on-miss semantics.
 
 ## Current certification step
-Notebook synchronization follows engineering SHA `60281b7c016f8032a1f6c8f955cdfe2a727b58ac`.
+Notebook synchronization follows engineering SHA `c641891f6a8d2b0b8fcf63db0a57436c2445374f`.
 
-Before closing #86:
-1. verify engineering → final HEAD changes only `01`, `04`, `16` notebooks;
+Before closing #87:
+1. verify engineering → final HEAD changes only `01`, `04`, `17` notebooks;
 2. require **18/18 SUCCESS** on exact final notebook-bearing HEAD;
-3. close #86 without merge;
+3. close #87 without merge;
 4. use exact final SHA as next certified baseline.
 
-## Exact next work after #86
-Continue DATA FOUNDATION V3 ability reliability with one bounded source-first subgroup from the remaining **346 DATA_ONLY** records. Prefer an existing abstraction or a genuinely shared primitive across multiple source-compatible abilities. A negative audit is preferable to architecture added only for coverage.
-
-Trainer AI/archetypes remain deferred.
+## Exact next work after #87
+Continue DATA FOUNDATION V3 ability reliability with one bounded source-first subgroup from the remaining **343 DATA_ONLY** records. Do not reopen Guts/Hustle blockers merely to raise coverage. Trainer AI/archetypes remain deferred.
