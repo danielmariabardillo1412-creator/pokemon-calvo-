@@ -1,0 +1,49 @@
+name: TEMP Trainer AI C3c unregistered restore
+
+on:
+  push:
+    branches:
+      - audit/trainer-ai-c3c-structural-formula-comparison-staging
+
+permissions:
+  contents: write
+
+jobs:
+  restore-c3c-unregistered:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: audit/trainer-ai-c3c-structural-formula-comparison-staging
+          fetch-depth: 0
+      - name: Restore C3c as explicitly loaded script and self-clean
+        shell: bash
+        run: |
+          set -euo pipefail
+          formula='tests/trainer_ai/trainer_roster_structural_formula_comparison_test_suite.gd'
+          runner='tests/trainer_ai/trainer_team_composition_test_runner.gd'
+          git show 97d0fcd009572969f7e77f765064ee13c9023e4f:"$formula" > "$formula"
+          python3 - <<'PY'
+          from pathlib import Path
+          formula = Path('tests/trainer_ai/trainer_roster_structural_formula_comparison_test_suite.gd')
+          s = formula.read_text(encoding='utf-8')
+          prefix = 'class_name TrainerRosterStructuralFormulaComparisonTestSuite\n'
+          assert s.startswith(prefix)
+          formula.write_text(s[len(prefix):], encoding='utf-8', newline='\n')
+
+          runner = Path('tests/trainer_ai/trainer_team_composition_test_runner.gd')
+          r = runner.read_text(encoding='utf-8')
+          old = '\tTrainerRosterStructuralOverlapRealDataAuditTestSuite.new().run(Callable(self, "_check"))\n\tprint("\\n=== TRAINER TEAM COMPOSITION RESULT: %d PASS / %d FAIL ===" % [_passed, _failed])'
+          new = '\tTrainerRosterStructuralOverlapRealDataAuditTestSuite.new().run(Callable(self, "_check"))\n\tvar formula_suite_script: Script = load("res://tests/trainer_ai/trainer_roster_structural_formula_comparison_test_suite.gd") as Script\n\tif formula_suite_script == null:\n\t\t_check("structural_formula_script_loads", false)\n\telse:\n\t\tformula_suite_script.new().run(Callable(self, "_check"))\n\tprint("\\n=== TRAINER TEAM COMPOSITION RESULT: %d PASS / %d FAIL ===" % [_passed, _failed])'
+          assert r.count(old) == 1, r.count(old)
+          runner.write_text(r.replace(old, new, 1), encoding='utf-8', newline='\n')
+          PY
+          git rm tests/trainer_ai/trainer_roster_structural_registry_probe.gd
+          rm .github/workflows/trainer-ai-c3c-unregistered-restore-temporary.yml
+          git diff --check
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add "$formula" "$runner" .github/workflows/trainer-ai-c3c-unregistered-restore-temporary.yml tests/trainer_ai/trainer_roster_structural_registry_probe.gd
+          git commit -m 'test(trainer-ai): load C3c formula audit explicitly'
+          git push origin HEAD:audit/trainer-ai-c3c-structural-formula-comparison-staging
