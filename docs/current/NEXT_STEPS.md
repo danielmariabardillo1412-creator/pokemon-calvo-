@@ -181,25 +181,104 @@ Por tanto una sola ruta fuerte puede seguir llevando `support` al techo; breadth
 
 ---
 
-## Decisión requerida antes de tocar producción
+## C2e-d — forma del control: intensidad, fiabilidad y breadth separados
 
-C2e-c cambia una premisa del modelo y no debe convertirse automáticamente en un parche.
+Commits test-only:
 
-Hay que separar tres conceptos:
+- `cc5297119b24acec2972cdbfb0fbdea1b8ccf8c0` — añade `TrainerRosterControlShapeAuditTestSuite`;
+- `255cf8db722ca7248bc4a3fd7b648dd8fa8fab07` — conecta la sonda al runner.
 
-1. **probabilidad runtime del efecto** — debe reflejar la semántica real de `CHANCE` sin multiplicar metadata duplicada del hijo;
-2. **fiabilidad de la acción** — accuracy base y, más adelante, contexto de accuracy/evasion si corresponde;
-3. **breadth/densidad de control** — cuántas rutas de control independientes tiene el miembro y si son moves dedicados o secundarios dañinos.
+Producción no cambió.
 
-La siguiente tranche debe ser pequeña y explícita. Antes de modificar `TrainerRosterRoleInference`, decidir si el score intrínseco de control debe representar:
+Trainer Loadouts sobre `255cf8db...`:
 
-- expectativa por intento (`effect_probability × base_accuracy`),
-- potencia condicional al impacto + fiabilidad como eje separado,
-- o un par de señales (`control_potency_bp`, `control_reliability_bp`) del que `support` derive después.
+**332 PASS / 0 FAIL**.
 
-No bajar thresholds ni añadir bonus de breadth hasta resolver esta semántica.
+La sonda no crea un nuevo `support` ni asigna pesos. Conserva por separado hechos observables:
 
-No modificar todavía `TrainerTeamAnalyzer`, switching/search, C3 ni FASE34.
+- número de movimientos con control;
+- número de ejes/efectos de control distintos;
+- familia del efecto (`stat_debuff`, `status`, `flinch`);
+- mejor y segunda mejor fiabilidad por intento (`runtime CHANCE × base accuracy`);
+- movimientos de control dedicados frente a secundarios de ataques;
+- magnitud cruda máxima de debuff en stages.
+
+### Distribución real
+
+Sobre 1.021 especies elegibles:
+
+- especies con alguna ruta de control: **867**;
+- con 2+ movimientos de control: **564**;
+- con 2+ efectos/ejes distintos: **506**;
+- con exactamente una ruta de alta fiabilidad (`>=7500`): **346**;
+- con 2+ rutas de alta fiabilidad: **65**.
+
+Histogramas:
+
+- movimientos de control: `0:154, 1:303, 2:340, 3:171, 4:53`;
+- efectos/ejes distintos: `0:154, 1:361, 2:358, 3:132, 4:16`;
+- familias distintas: `0:154, 1:472, 2:343, 3:52`;
+- movimientos de alta fiabilidad: `0:610, 1:346, 2:57, 3:8`;
+- debuff máximo en stages: `0:430, 1:380, 2:211`.
+
+La segunda mejor ruta es especialmente discriminativa:
+
+- sin segunda ruta: **457**;
+- segunda ruta entre 1–4999 bp: **478**;
+- 5000–7499: **21**;
+- 7500–8999: **29**;
+- 9000–10000: **36**.
+
+### Qué ocurre dentro de los 441 techos actuales
+
+Entre las especies cuyo `control_signal_bp` actual es 10000:
+
+- **90** tienen un solo movimiento de control;
+- **351** tienen varios movimientos de control;
+- **30** no tienen ninguna ruta que alcance 7500 al ponderar CHANCE runtime + accuracy base;
+- **346** tienen exactamente una ruta de alta fiabilidad;
+- solo **65** tienen dos o más rutas de alta fiabilidad.
+
+Esto demuestra que `control=10000` mezcla perfiles funcionalmente muy diferentes. Un Pokémon con un solo Screech, uno con Icy Wind + Swagger y otro con cuatro ataques que contienen efectos secundarios pueden compartir techo aunque su robustez/breadth de control sea muy distinta.
+
+### Sentinelas
+
+- Thunder Wave: status dedicado, reliability proxy **9000**;
+- Screech: debuff dedicado de Defense -2, reliability **8500**;
+- Dynamic Punch: ataque con control potente on-hit, reliability **5000** por accuracy;
+- Rock Slide: flinch secundario, reliability **2700**;
+- Moonblast: SpA -1 secundario, runtime chance **3000** y reliability **3000**; confirma que no debe elevarse al cuadrado la metadata;
+- Icy Wind: ataque con Speed -1 garantizado on-hit, reliability **9500**.
+
+Además aparecen dos formas de breadth que no deben confundirse:
+
+1. **varios movimientos, mismo eje** — por ejemplo dos ataques que solo intentan burn/paralysis/flinch;
+2. **un solo movimiento, varios ejes** — por ejemplo `Noble Roar` aporta Attack -1 y Special Attack -1 desde una sola acción.
+
+Por tanto, contar simplemente movimientos tampoco es suficiente. El modelo debe conservar al menos `move breadth` y `effect breadth` por separado si más adelante quiere resumir soporte.
+
+---
+
+## Decisión semántica antes del siguiente cambio de producción
+
+C2e-d refuerza que un único escalar `control_signal_bp = max(...)` pierde información esencial.
+
+La dirección más segura para la siguiente tranche de producción es **no reemplazarlo por otra fórmula mágica**, sino enriquecer primero la evidencia intrínseca con señales separadas y auditables. Propuesta de contrato mínimo:
+
+- `control_potency` / magnitud estructural del efecto, sin confundirla con probabilidad;
+- `control_reliability_bp` — fiabilidad de la mejor ruta por intento;
+- `control_secondary_reliability_bp` — segunda mejor ruta, útil para robustez/breadth;
+- `control_move_count`;
+- `control_effect_key_count`;
+- `control_dedicated_move_count`;
+- `control_damaging_move_count`;
+- breakdown determinista por `move_id`/efecto.
+
+Todavía NO congelar un bonus numérico de breadth ni un nuevo threshold de `support`.
+
+La próxima microtranche debe decidir e implementar únicamente la **representación fiel de estas evidencias** dentro de `TrainerRosterRoleInference`, manteniendo compatibilidad con el output existente mientras se recalibra `support` en un paso posterior.
+
+No integrar en esa misma tranche `TrainerTeamAnalyzer`, switching/search, C3 ni FASE34.
 
 ---
 
