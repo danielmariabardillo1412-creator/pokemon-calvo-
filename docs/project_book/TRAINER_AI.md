@@ -8358,3 +8358,325 @@ Sigue prohibido hasta una autorización posterior explícita:
 - definir `permadeath_loss_cost_bp` definitivo;
 - iniciar FASE34;
 - mergear PR #105.
+
+
+### 26.33 C3f-l — frontera del primer consumidor conductual: Pareto NO puede podar switching antes del matchup
+
+Estado: **CERRADO / DOBLEMENTE CERTIFICADO / TEST-AUDIT-ONLY**.
+
+C3f-l ejecuta la barrera abierta en 26.32: antes de conectar `TrainerRosterParetoFrontier` a un brain, switching o search, había que identificar el primer consumidor plausible y comprobar qué semántica podía aceptar sin convertir una primitive rival-agnostic en una policy conductual falsa.
+
+El primer consumidor auditado es:
+
+`TrainerStrategicSwitchEvaluatorV2`
+
+model id:
+
+`strategic_switch_expected_matchup_v2`
+
+La conclusión es negativa pero decisiva:
+
+> **la frontier Pareto component-first NO es un pre-filtro seguro de candidatos de switching, ni siquiera cuando contiene un único miembro.**
+
+#### Baseline y SHAs certificados
+
+Baseline documental 26.32:
+
+`563a1809e84fe4526222adfd957c218e8c169f66`
+
+SHA técnico limpio C3f-l:
+
+`79dfa671621f653cb4dedd2800eb2cdd2585a898`
+
+SHA humano tree-identical C3f-l:
+
+`09d7473d05c6a056536af4dbc7e18a2f7a0f1edf`
+
+Árbol técnico/humano común:
+
+`b5892437bb3946c0bcdfa9c7487956d6895ac747`
+
+Ambos checkpoints tienen como parent directo el baseline documental 26.32. Los commits de staging quedan excluidos de la historia certificada.
+
+#### Alcance neto limpio
+
+Frente a 26.32, C3f-l cambia únicamente:
+
+- nueva suite `tests/trainer_ai/trainer_roster_frontier_first_consumer_boundary_audit_test_suite.gd`: **+244 líneas**;
+- `tests/trainer_ai/trainer_team_composition_test_runner.gd`: **+2 / -2**.
+
+No cambia:
+
+- producción;
+- `TrainerStrategicSwitchEvaluatorV2`;
+- brains;
+- switching behavior;
+- search/planning;
+- campaign policy;
+- recovery/replacement;
+- FASE34.
+
+Audit ID:
+
+`c3f_l_first_behavior_consumer_boundary_audit_v1`
+
+#### Por qué switching es una frontera distinta
+
+La frontier C3f-k es deliberadamente rival-agnostic y usa solo el vector inmediato component-first:
+
+1. `structural_value_bp`;
+2. `hp_state_bp`;
+3. `route_retention_bp`;
+4. `immediate_status_action_bp`.
+
+No conoce al rival actual, sus tipos, movimientos públicos, amenaza ni matchup.
+
+`TrainerStrategicSwitchEvaluatorV2`, en cambio, evalúa evidencia contextual de la batalla, incluyendo capacidad ofensiva contra el rival activo y amenaza pública recibida por cada candidato.
+
+Por tanto, dominancia en el espacio component-first no implica dominancia en el problema táctico de switching.
+
+#### Contraejemplo adversarial certificado
+
+C3f-l construye un contrato component-first válido con tres miembros:
+
+- `boundary_active`: vector `5000 / 5000 / 5000 / 5000`;
+- `frontier_water`: vector `9000 / 9000 / 9000 / 9000`;
+- `dominated_grass`: vector `7000 / 7000 / 7000 / 7000`.
+
+Así, `frontier_water` domina estrictamente a `dominated_grass` en las cuatro dimensiones C3f-k.
+
+Resultado Pareto:
+
+- `frontier_count = 1`;
+- `frontier_instance_ids = ["frontier_water"]`;
+- `dominated_instance_ids` contiene `dominated_grass`.
+
+Después se presenta un rival Water real dentro del fixture FASE31 y se evalúan ambos switches con `TrainerStrategicSwitchEvaluatorV2` sin modificarlo.
+
+Resultado táctico:
+
+- score de switch de `frontier_water`: **2200**;
+- score de switch de `dominated_grass`: **5800**;
+- ofensiva del Water frontier contra el rival Water: **3692 bp**;
+- ofensiva del Grass dominado contra el rival Water: **8076 bp**;
+- amenaza pública recibida por Water frontier: **10200 bp**;
+- amenaza pública recibida por Grass dominado: **2500 bp**.
+
+El candidato eliminado por un supuesto pre-filtro Pareto sería precisamente el mejor counter táctico del escenario.
+
+Por tanto:
+
+`dominated_counter_outscores_frontier_member = true`
+
+#### Semántica congelada
+
+C3f-l certifica expresamente:
+
+`hard_frontier_pruning_safe_for_switching = false`
+
+`frontier_selection_authorized = false`
+
+`frontier_score_bonus_authorized = false`
+
+`behavior_integration_authorized = false`
+
+La frontier tampoco puede convertirse en un bonus silencioso de score. Hacerlo introduciría una preferencia nueva no demostrada y volvería a mezclar valor roster-state con matchup táctico.
+
+Incluso cuando:
+
+`frontier_count == 1`
+
+ese miembro es solo el único no dominado bajo el vector component-first actual. **No es automáticamente el mejor switch.**
+
+#### Orden obligatorio de razonamiento
+
+C3f-l congela:
+
+`required_ordering = legal_and_contextual_switch_evidence_before_any_nonbinding_frontier_use`
+
+Interpretación segura:
+
+`frontier_is_roster_state_evidence_not_a_switch_candidate_filter`
+
+Esto significa:
+
+1. primero se preserva el espacio de acciones legales;
+2. después se evalúa el contexto táctico pertinente al problema de switching;
+3. solo después podría explorarse en otra tranche si la frontier aporta evidencia no vinculante;
+4. nunca puede eliminarse un candidato únicamente porque esté dominado en el vector rival-agnostic C3f-k.
+
+#### Checks C3f-l
+
+La suite añade 13 comprobaciones y todas pasan:
+
+- audit id correcto;
+- consumidor real de switching identificado;
+- frontier productiva certificada usada;
+- frontier component-first de un solo miembro reproducida;
+- counter táctico marcado como dominated component-first;
+- counter dominado con mejor ofensiva contextual;
+- counter dominado con menor amenaza pública;
+- counter dominado con mejor score final de switching;
+- hard pruning declarado inseguro;
+- integración conductual sigue no autorizada;
+- contexto/legalidad deben preceder a cualquier uso de frontier;
+- determinismo;
+- JSON serialization.
+
+#### Reporte C3f-l canónico
+
+```json
+{
+  "audit_id": "c3f_l_first_behavior_consumer_boundary_audit_v1",
+  "behavior_integration_authorized": false,
+  "candidate_consumer": "strategic_switching",
+  "candidate_consumer_model_id": "strategic_switch_expected_matchup_v2",
+  "controller_begin_ok": true,
+  "controller_produced_action": true,
+  "dominated_counter_offense_bp": 8076,
+  "dominated_counter_outscores_frontier_member": true,
+  "dominated_counter_public_threat_bp": 2500,
+  "dominated_counter_switch_score": 5800,
+  "dominated_instance_ids": ["boundary_active", "dominated_grass"],
+  "frontier_count": 1,
+  "frontier_instance_ids": ["frontier_water"],
+  "frontier_member_offense_bp": 3692,
+  "frontier_member_public_threat_bp": 10200,
+  "frontier_member_switch_score": 2200,
+  "frontier_model_id": "trainer_roster_pareto_frontier_v1",
+  "frontier_score_bonus_authorized": false,
+  "frontier_selection_authorized": false,
+  "hard_frontier_pruning_safe_for_switching": false,
+  "required_ordering": "legal_and_contextual_switch_evidence_before_any_nonbinding_frontier_use",
+  "safe_interpretation": "frontier_is_roster_state_evidence_not_a_switch_candidate_filter",
+  "source_contract_model_id": "trainer_roster_component_first_contract_v1",
+  "switch_actions_available": true
+}
+```
+
+#### Incidente de staging — no forma parte del checkpoint limpio
+
+El primer staging de C3f-l llegó a producir **637 PASS / 0 FAIL**, pero el log contenía dos `SCRIPT ERROR` al reutilizar el fixture FASE31: su helper de catálogo intentaba emitir checks antes de que la sonda hubiera inicializado el callback heredado.
+
+Ese SHA **NO se certificó**.
+
+Staging inicial rechazado:
+
+`7c911b3ed11b6c494ff23add8e75e52398365661`
+
+La corrección fue exclusivamente test-harness: inicializar un callback no-op antes de construir el catálogo heredado. No cambió producción ni el contraejemplo.
+
+Staging corregido:
+
+`8838a2ab0ca61e71430dc4334165040261299a4e`
+
+Ese staging dio 18/18 SUCCESS y 637/0 sin los errores de script. A continuación se reconstruyó exactamente su árbol como el checkpoint técnico limpio `79dfa671...`, excluyendo ambos commits de staging de la historia certificada.
+
+#### Certificación técnica limpia
+
+Sobre:
+
+`79dfa671621f653cb4dedd2800eb2cdd2585a898`
+
+resultado:
+
+- **18/18 workflows GitHub Actions: SUCCESS**;
+- FASE33 / Trainer Team Composition: **637 PASS / 0 FAIL**;
+- FASE31 / Strategic Switching V2: SUCCESS;
+- Godot 4.7 general: SUCCESS;
+- DATA V3: SUCCESS;
+- sin `SCRIPT ERROR` de la sonda;
+- reporte C3f-l con el contraejemplo anterior.
+
+#### Certificación humana tree-identical
+
+Sobre:
+
+`09d7473d05c6a056536af4dbc7e18a2f7a0f1edf`
+
+con árbol idéntico:
+
+`b5892437bb3946c0bcdfa9c7487956d6895ac747`
+
+se reprodujo:
+
+- **18/18 workflows SUCCESS**;
+- FASE33: **637 PASS / 0 FAIL**;
+- FASE31: SUCCESS;
+- mismo reporte C3f-l;
+- mismo `5800 > 2200`;
+- mismo `8076 > 3692` ofensivo;
+- mismo `2500 < 10200` de amenaza pública;
+- Godot general: SUCCESS;
+- DATA V3: SUCCESS.
+
+C3f-l queda **DOBLEMENTE CERTIFICADO**.
+
+#### Invariantes externas
+
+Tras la certificación humana:
+
+- PR #105: **OPEN**;
+- `merged = false`;
+- `merged_at = null`;
+- head previo a este freeze documental: `09d7473d05c6a056536af4dbc7e18a2f7a0f1edf`;
+- base: `main`;
+- `main`: `f8452a1625ccb8389c9e52ff4416a96a24e00efd`, sin movimiento.
+
+PR #105 continúa siendo temporal y **NO debe mergearse**.
+
+#### Conclusión C3f-l
+
+La primitive Pareto sigue siendo útil como descripción parcial del estado del roster, pero C3f-l demuestra un límite esencial:
+
+> **dominancia roster-state rival-agnostic no equivale a dominancia táctica contra el rival actual.**
+
+Por ello quedan prohibidos:
+
+- filtrar `BattleAction.SWITCH` por `frontier_instance_ids` antes del evaluator;
+- elegir automáticamente el único frontier member;
+- bonificar score solo por pertenecer a frontier;
+- penalizar score solo por quedar dominated;
+- conectar `frontier_instance_ids[0]` a switching;
+- modificar brains/search con esta primitive sin una nueva auditoría.
+
+La ausencia de autorización conductual se mantiene intacta.
+
+#### Siguiente microtranche autorizada — C3f-m
+
+**C3f-m — shadow/read-only overlap audit entre switching real y Pareto, todavía sin cambiar conducta.**
+
+Objetivo: medir sobre una muestra amplia de escenarios cuánto se solapan o divergen:
+
+- el/los mejores candidatos según `TrainerStrategicSwitchEvaluatorV2`;
+- los miembros de `TrainerRosterParetoFrontier`;
+- los miembros component-first dominated.
+
+C3f-m debe ser TEST/AUDIT-ONLY y no modificar scores, pruning ni brains.
+
+Debe medir, como mínimo:
+
+- cuántas veces el mejor switch está dentro de frontier;
+- cuántas veces el mejor switch está dominated component-first;
+- distribución de gaps de score;
+- frontier size frente a número de switches legales;
+- casos de `frontier_count == 1` donde otro switch contextual gana;
+- casos donde todos los switches legales están en frontier;
+- sensibilidad a rival/type/public move evidence;
+- determinismo y JSON;
+- cero selección nueva y cero cambio conductual.
+
+Solo con esa evidencia podrá decidirse si la frontier tiene algún uso contextual no vinculante en switching o si debe permanecer completamente fuera de esa capa.
+
+Sigue prohibido durante C3f-m:
+
+- hard pruning;
+- score bonus/penalty por frontier membership;
+- cambio de brains;
+- cambio de search;
+- campaign policy;
+- `between_battle_recovery_policy`;
+- `replacement_policy`;
+- `permadeath_loss_cost_bp` definitivo;
+- FASE34;
+- merge de PR #105.
