@@ -18,6 +18,7 @@ func _run() -> void:
 	TrainerRosterSupportCalibrationTestSuite.new().run(Callable(self, "_check"))
 	TrainerRosterControlProbabilityAuditTestSuite.new().run(Callable(self, "_check"))
 	TrainerRosterControlShapeAuditTestSuite.new().run(Callable(self, "_check"))
+	TrainerRosterSupportFormulaComparisonTestSuite.new().run(Callable(self, "_check"))
 	print("\n=== TRAINER LOADOUTS RESULT: %d PASS / %d FAIL ===" % [_passed, _failed])
 	quit(0 if _failed == 0 else 1)
 
