@@ -9,7 +9,7 @@ func _initialize() -> void:
 
 
 func _run() -> void:
-	TrainerTeamCompositionTestSuite.new().run(Callable(self, "_check"))
+	TrainerTeamRandomCupAnalysisTestSuite.new().run(Callable(self, "_check"))
 	print("\n=== TRAINER TEAM COMPOSITION RESULT: %d PASS / %d FAIL ===" % [_passed, _failed])
 	quit(0 if _failed == 0 else 1)
 
