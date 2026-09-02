@@ -1,0 +1,45 @@
+name: TEMP Trainer AI C3c notebook append
+
+on:
+  push:
+    branches:
+      - audit/trainer-ai-c3c-structural-formula-comparison-staging
+
+permissions:
+  contents: write
+
+jobs:
+  append-c3c-doc:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: audit/trainer-ai-c3c-structural-formula-comparison-staging
+          fetch-depth: 0
+      - name: Append C3c checkpoint and self-clean
+        shell: bash
+        run: |
+          set -euo pipefail
+          notebook='docs/project_book/TRAINER_AI.md'
+          staging='docs/project_book/_C3C_STABLE_APPEND_TEMP.md'
+          workflow='.github/workflows/trainer-ai-c3c-doc-append-temporary.yml'
+          heading='### 26.18 C3c — orden léxico estable, reproducibilidad cerrada y comparación canónica'
+          test -f "$staging"
+          if ! grep -Fq "$heading" "$notebook"; then
+            python3 - <<'PY'
+          from pathlib import Path
+          notebook = Path('docs/project_book/TRAINER_AI.md')
+          staging = Path('docs/project_book/_C3C_STABLE_APPEND_TEMP.md')
+          base = notebook.read_text(encoding='utf-8').rstrip() + '\n'
+          addition = staging.read_text(encoding='utf-8').strip() + '\n'
+          notebook.write_text(base + addition, encoding='utf-8', newline='\n')
+          PY
+          fi
+          rm "$staging" "$workflow"
+          git diff --check
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add "$notebook" "$staging" "$workflow"
+          git commit -m 'docs(trainer-ai): record stable C3c audit baseline'
+          git push origin HEAD:audit/trainer-ai-c3c-structural-formula-comparison-staging
