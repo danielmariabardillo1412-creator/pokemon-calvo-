@@ -13,8 +13,7 @@ func run(check_callback: Callable) -> void:
 
 	var game_data: GameData = GameData.from_dict(normalized)
 	var catalog: DefinitionCatalog = game_data.to_definition_catalog()
-	var species_ids: Array[StringName] = game_data.species_catalog.all_ids()
-	species_ids.sort()
+	var species_ids: Array[StringName] = _lexically_sorted_species_ids(game_data.species_catalog)
 	var probe: Dictionary = _build_probe_members(game_data, catalog, species_ids)
 	var members: Array[Dictionary] = []
 	for raw_member in probe.get("members", []):

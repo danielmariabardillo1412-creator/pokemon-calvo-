@@ -22,9 +22,12 @@ func run(check_callback: Callable) -> void:
 
 	var game_data: GameData = GameData.from_dict(normalized)
 	var catalog: DefinitionCatalog = game_data.to_definition_catalog()
-	var species_ids: Array[StringName] = game_data.species_catalog.all_ids()
-	species_ids.sort()
+	var species_ids: Array[StringName] = _lexically_sorted_species_ids(game_data.species_catalog)
 	_check.call("structural_real_data_species_count_canonical", species_ids.size() == 1025)
+	var species_id_strings: Array[String] = _stringify_ids(species_ids)
+	var lexical_copy: Array[String] = species_id_strings.duplicate()
+	lexical_copy.sort()
+	_check.call("structural_real_data_species_order_is_lexical", species_id_strings == lexical_copy)
 
 	var probe: Dictionary = _build_probe_members(game_data, catalog, species_ids)
 	var members: Array[Dictionary] = []
@@ -423,6 +426,19 @@ func _probe_moves(species: CreatureSpecies, catalog: DefinitionCatalog) -> Array
 	var start: int = maxi(0, ordered.size() - ProgressionRuleset.MOVE_SLOTS_MAX)
 	for index in range(start, ordered.size()):
 		out.append(ordered[index])
+	return out
+
+
+func _lexically_sorted_species_ids(catalog: SpeciesCatalog) -> Array[StringName]:
+	var lexical_ids: Array[String] = []
+	if catalog == null:
+		return []
+	for raw_id in catalog.all_ids():
+		lexical_ids.append(String(raw_id))
+	lexical_ids.sort()
+	var out: Array[StringName] = []
+	for lexical_id in lexical_ids:
+		out.append(StringName(lexical_id))
 	return out
 
 
