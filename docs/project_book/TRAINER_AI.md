@@ -9011,3 +9011,335 @@ Continúa prohibido:
 - inventar recovery/replacement/permadeath policy;
 - iniciar FASE34;
 - mergear PR #105.
+
+
+### 26.35 C3f-n — el sampling acotado de search depende del orden de switches
+
+Estado: **CERRADO / DOBLEMENTE CERTIFICADO / TEST-AUDIT-ONLY**.
+
+C3f-n abre un problema distinto del cerrado en C3f-m. C3f-m demostró que la frontier Pareto no puede podar switching de forma segura. C3f-n audita ahora una frontera anterior dentro de `TrainerMultiTurnSearch`: qué acciones de switch llegan siquiera a entrar en search cuando el presupuesto limita el número de acciones por lado.
+
+El resultado demuestra una dependencia de orden previa a cualquier integración de roster value:
+
+> **con el presupuesto default de tres acciones y cinco switches disponibles, el sampler productivo actual conserva un solo switch; cambiar únicamente el orden de entrada cambia qué switch sobrevive al muestreo.**
+
+C3f-n no modifica el sampler. Solo certifica su semántica actual y bloquea cualquier integración de roster value en search hasta diseñar y auditar una frontera de muestreo adecuada.
+
+#### Baseline y SHAs certificados
+
+Baseline documental 26.34:
+
+`51e5846a4de19804239fa012f18dfdbc3b0a67c7`
+
+SHA técnico limpio C3f-n:
+
+`504625ac275732838bbb5b2a5a616ce33952ba7a`
+
+SHA humano tree-identical C3f-n:
+
+`113168ab59d1c1c2800bb6734c71fc131e7b3426`
+
+Árbol técnico/humano común:
+
+`de873aee6ae31c01667d4745d826ba3ae2101b0b`
+
+Ambos checkpoints tienen como parent directo 26.34. No existe diferencia funcional entre técnico y humano.
+
+#### Scope neto limpio
+
+Frente a 26.34, C3f-n modifica únicamente tests/audit:
+
+- nueva suite `tests/trainer_ai/trainer_roster_search_switch_sampling_boundary_audit_test_suite.gd`: **+249 líneas**;
+- `tests/trainer_ai/trainer_team_composition_test_runner.gd`: **+1 / -1**.
+
+No modifica:
+
+- `TrainerMultiTurnSearch`;
+- `TrainerActionSpace`;
+- `TrainerSearchBudget`;
+- evaluadores de switching;
+- brains;
+- scores;
+- legal actions;
+- frontier productiva;
+- campaign policy;
+- recovery/replacement;
+- FASE34.
+
+Audit ID:
+
+`c3f_n_search_switch_sampling_order_boundary_audit_v1`
+
+Modelo de search auditado:
+
+`simultaneous_depth_budget_v1`
+
+Modelo de sampling auditado:
+
+`kind_stratified_round_robin_v1`
+
+#### Por qué C3f-n era una frontera distinta
+
+El presupuesto default de `TrainerSearchBudget.depth_two_default()` usa:
+
+`max_actions_per_side = 3`
+
+El sampler productivo de `TrainerMultiTurnSearch` separa clases de acción y hace round-robin estratificado. Esa propiedad garantiza que un cap pequeño pueda conservar diversidad entre MOVE y SWITCH, pero no garantiza invariancia ni cobertura entre múltiples switches de la misma clase.
+
+C3f-n audita precisamente esa segunda propiedad antes de permitir que structural value, operational readiness o frontier aparezcan en search.
+
+#### Geometría sintética controlada
+
+La auditoría construye el mismo conjunto semántico de acciones bajo distintos órdenes de switches:
+
+- moves: **4**;
+- switches: **5**;
+- acciones totales: **9**;
+- cap default: **3**.
+
+Switch IDs:
+
+- `switch_alpha`;
+- `switch_beta`;
+- `switch_gamma`;
+- `switch_delta`;
+- `switch_epsilon`.
+
+No cambia entre probes:
+
+- número de moves;
+- número de switches;
+- tipos de acción;
+- presupuesto;
+- search model;
+- sampler;
+- scores;
+- frontier;
+- roster value.
+
+Solo cambia el orden de entrada de los cinco switches.
+
+#### Resultado default — un solo switch entra en search
+
+Con orden inicial alpha -> beta -> gamma -> delta -> epsilon, el sample exacto bajo cap 3 es:
+
+`MOVE sampling_move_0`
+
+`SWITCH switch_alpha`
+
+`MOVE sampling_move_1`
+
+Contadores:
+
+- `default_sample_size = 3`;
+- `default_sample_move_count = 2`;
+- `default_sample_switch_count = 1`;
+- `default_switch_omitted_count = 4`;
+- `default_switch_coverage_bp = 2000`.
+
+Por tanto, en esta geometría el sampler conserva:
+
+**1 / 5 switches = 20 %**
+
+y omite cuatro switches legales antes de que search pueda compararlos.
+
+Esto no implica por sí solo que esos cuatro fueran tácticamente mejores. C3f-n certifica una propiedad anterior y más básica: **no llegan al conjunto buscado**.
+
+#### Invertir solo el orden cambia el switch muestreado
+
+Con el mismo conjunto de acciones y orden inverso de switches:
+
+`epsilon -> delta -> gamma -> beta -> alpha`
+
+el sample pasa a:
+
+`MOVE sampling_move_0`
+
+`SWITCH switch_epsilon`
+
+`MOVE sampling_move_1`
+
+Resultado:
+
+`reverse_order_changes_sampled_switch = true`
+
+`default_sampling_switch_order_invariant = false`
+
+`input_switch_order_dependency_proven = true`
+
+No cambia ninguna evidencia táctica ni estratégica. El cambio de switch muestreado procede únicamente de la posición de entrada.
+
+#### Rotaciones — cualquiera de los cinco puede convertirse en el único switch buscado
+
+C3f-n ejecuta cinco rotaciones cíclicas del mismo conjunto de switches.
+
+Resultado:
+
+- `rotation_cases = 5`;
+- `distinct_sampled_switches_across_rotations = 5`;
+- `all_switches_can_be_selected_by_order_only = true`.
+
+Rotaciones certificadas:
+
+1. alpha primero -> se muestrea alpha;
+2. beta primero -> se muestrea beta;
+3. gamma primero -> se muestrea gamma;
+4. delta primero -> se muestrea delta;
+5. epsilon primero -> se muestrea epsilon.
+
+La prueba no afirma que el orden del party sea la única fuente posible de ese orden en todas las rutas. La propiedad ejecutable certificada es más precisa:
+
+> **el resultado del bounded sampling depende del orden de entrada de los switch actions.**
+
+La revisión de `TrainerActionSpace` muestra además que la ruta actual enumera switches recorriendo `side.party_ids`; esa observación arquitectónica motiva la siguiente auditoría, pero C3f-n no convierte por sí sola esa relación en una nueva policy ni en una corrección productiva.
+
+#### Control con cap completo
+
+La misma entrada se ejecuta con cap **9**, suficiente para conservar las nueve acciones.
+
+Resultado:
+
+- `full_cap = 9`;
+- `full_cap_switch_count = 5`;
+- `full_cap_preserves_all_switches = true`.
+
+Por tanto, la pérdida de cobertura no procede de `BattleAction`, de la construcción sintética ni de switches inválidos. Aparece específicamente al aplicar el bounded sampling con cap 3.
+
+#### El problema precede a Pareto y roster value
+
+C3f-n congela:
+
+`frontier_used_for_sampling = false`
+
+`roster_value_used_for_sampling = false`
+
+La dependencia de orden existe **antes** de conectar:
+
+- `TrainerRosterComponentFirstContract`;
+- `TrainerRosterParetoFrontier`;
+- structural value;
+- operational readiness.
+
+Por eso no sería correcto intentar solucionar el problema añadiendo simplemente frontier o un bonus de roster value al sampler actual. Primero debe definirse una frontera de sampling que sea auditable y no introduzca una policy accidental por posición.
+
+C3f-m sigue plenamente vigente: Pareto no puede usarse como hard pruning de switches.
+
+#### Semántica congelada
+
+C3f-n fija:
+
+`default_sampling_switch_order_invariant = false`
+
+`input_switch_order_dependency_proven = true`
+
+`behavior_integration_authorized = false`
+
+`search_sampling_redesign_authorized = false`
+
+Recomendación documental:
+
+`audit_order_invariant_context_aware_switch_sampling_before_search_roster_value_integration`
+
+Esto significa:
+
+- el sampler actual queda auditado, no corregido;
+- no se autoriza aumentar scores por frontier;
+- no se autoriza ordenar switches por frontier;
+- no se autoriza seleccionar un `frontier_instance_ids[0]`;
+- no se autoriza convertir orden léxico o party order en preferencia;
+- no se autoriza cambiar budgets productivos todavía;
+- no se autoriza comportamiento nuevo.
+
+#### Certificación técnica limpia
+
+Sobre:
+
+`504625ac275732838bbb5b2a5a616ce33952ba7a`
+
+resultado:
+
+- **18/18 workflows GitHub Actions: SUCCESS**;
+- FASE33 / Trainer Team Composition: **669 PASS / 0 FAIL**;
+- Godot 4.7 general: SUCCESS;
+- DATA V3: SUCCESS;
+- Trainer Search Foundation: SUCCESS;
+- Trainer Search Depth Budget: SUCCESS;
+- Trainer Search Limit Benchmark: SUCCESS;
+- Trainer Strategic Switching V2: SUCCESS;
+- reporte C3f-n determinista y JSON serializable.
+
+#### Certificación humana tree-identical
+
+Sobre:
+
+`113168ab59d1c1c2800bb6734c71fc131e7b3426`
+
+se reproduce:
+
+- **18/18 workflows GitHub Actions: SUCCESS**;
+- FASE33: **669 PASS / 0 FAIL**;
+- mismo modelo `simultaneous_depth_budget_v1`;
+- mismo sampler `kind_stratified_round_robin_v1`;
+- mismo sample default MOVE0 / SWITCH-alpha / MOVE1;
+- mismo `default_switch_coverage_bp = 2000`;
+- mismo `default_switch_omitted_count = 4`;
+- mismo cambio alpha -> epsilon al invertir orden;
+- mismas cinco rotaciones seleccionables únicamente por orden;
+- mismo control full-cap con los cinco switches preservados;
+- Godot general, DATA V3 y gates de search: SUCCESS.
+
+C3f-n queda **DOBLEMENTE CERTIFICADO**.
+
+#### Invariantes externas
+
+Durante el cierre C3f-n:
+
+- PR #105 continúa **OPEN**;
+- `merged = false`;
+- `merged_at = null`;
+- base: `main`;
+- `main` permanece exactamente en `f8452a1625ccb8389c9e52ff4416a96a24e00efd`.
+
+PR #105 sigue siendo temporal y **NO debe mergearse**.
+
+#### Conclusión C3f-n
+
+Antes de discutir cómo introducir roster value en search, existe una frontera más básica que debe sanearse conceptualmente: el bounded sampler decide qué switch actions llegan a ser buscadas.
+
+Con el cap default auditado, una banca de cinco alternativas queda reducida a una sola alternativa de switch, y la identidad de esa alternativa depende del orden de entrada.
+
+Eso crea una barrera de diseño independiente de Pareto:
+
+> **primero debe existir un sampling de switches determinista, auditable y no dependiente de una preferencia posicional accidental; después podrá estudiarse si alguna evidencia estratégica entra de forma no destructiva.**
+
+No se ha cambiado comportamiento en C3f-n.
+
+#### Siguiente microtranche autorizada — C3f-o
+
+**C3f-o — comparación TEST/AUDIT-ONLY de estrategias de sampling de switches order-invariant y context-aware para search.**
+
+C3f-o queda autorizado únicamente a comparar diseños, no a modificar producción.
+
+Debe comprobar como mínimo:
+
+- invariancia ante reorder del mismo conjunto de switch actions;
+- determinismo;
+- compatibilidad con un budget acotado;
+- conservación explícita de diversidad MOVE/SWITCH;
+- qué ocurre cuando hay más switches que plazas disponibles;
+- uso únicamente de contexto público/legal certificado;
+- que una alternativa tácticamente fuerte no quede eliminada por una geometría rival-agnostic;
+- que Pareto no actúe como hard pruning, según C3f-m;
+- que orden léxico sea solo desempate de representación, nunca preferencia semántica;
+- que TrainerProfile, RNG, beliefs ocultas, recovery/replacement y campaign policy no entren accidentalmente;
+- que ningún diseño quede seleccionado para producción sin un checkpoint posterior separado.
+
+C3f-o no puede todavía:
+
+- modificar `TrainerMultiTurnSearch`;
+- modificar `TrainerActionSpace`;
+- cambiar `max_actions_per_side` productivo;
+- integrar frontier/roster value en search;
+- modificar brains;
+- abrir FASE34;
+- mergear PR #105.
