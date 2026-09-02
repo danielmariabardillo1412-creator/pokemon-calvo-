@@ -1,0 +1,47 @@
+name: TEMP Trainer AI C3c inheritance decoupling
+
+on:
+  push:
+    branches:
+      - audit/trainer-ai-c3c-structural-formula-comparison-staging
+
+permissions:
+  contents: write
+
+jobs:
+  decouple-c3c:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: audit/trainer-ai-c3c-structural-formula-comparison-staging
+          fetch-depth: 0
+      - name: Decouple formula suite from overlap-suite inheritance and self-clean
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path('tests/trainer_ai/trainer_roster_structural_formula_comparison_test_suite.gd')
+          s = p.read_text(encoding='utf-8')
+          old = 'class_name TrainerRosterStructuralFormulaComparisonTestSuite\nextends TrainerRosterStructuralOverlapRealDataAuditTestSuite\n'
+          new = 'class_name TrainerRosterStructuralFormulaComparisonTestSuite\nextends TrainerRosterStructuralRealDataAuditTestSuite\n'
+          assert s.count(old) == 1, s.count(old)
+          s = s.replace(old, new, 1)
+          marker = ']\n\n\nfunc run(check_callback: Callable) -> void:'
+          insert = ']\n\nvar _disjoint_helper := TrainerRosterStructuralOverlapRealDataAuditTestSuite.new()\n\n\nfunc run(check_callback: Callable) -> void:'
+          assert s.count(marker) == 1, s.count(marker)
+          s = s.replace(marker, insert, 1)
+          target = '_disjoint_member_metrics(evidence)'
+          assert s.count(target) == 2, s.count(target)
+          s = s.replace(target, '_disjoint_helper._disjoint_member_metrics(evidence)')
+          p.write_text(s, encoding='utf-8', newline='\n')
+          PY
+          rm .github/workflows/trainer-ai-c3c-inheritance-diagnostic-temporary.yml
+          git diff --check
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add tests/trainer_ai/trainer_roster_structural_formula_comparison_test_suite.gd .github/workflows/trainer-ai-c3c-inheritance-diagnostic-temporary.yml
+          git commit -m 'test(trainer-ai): decouple C3c audit inheritance'
+          git push origin HEAD:audit/trainer-ai-c3c-structural-formula-comparison-staging
