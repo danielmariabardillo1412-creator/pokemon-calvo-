@@ -3189,3 +3189,186 @@ Si esta conversación se llena o se cambia de ventana, recuperar Trainer AI así
 6. continuar desde **comparación test-only de fórmulas de support**.
 
 La autoridad final de estado externo es GitHub; el cuaderno conserva las decisiones y la continuidad semántica.
+
+---
+
+### 26.13 C2e-f — comparación test-only de fórmulas de `support`
+
+Se completó la comparación exigida antes de recalibrar `infer_role_scores().support`.
+
+La producción **no fue modificada** durante esta tranche. `TrainerRosterRoleInference` sigue devolviendo el `support` legado mientras las fórmulas candidatas viven únicamente en suites de auditoría.
+
+#### Candidatas comparadas
+
+Primer checkpoint test-only:
+
+`a04fee0b415764ae53ca5925eb9559de73e0fe6e`
+
+Se compararon sobre las 1.021 especies elegibles del mismo probe real-data:
+
+- `legacy`;
+- `reliability_max`;
+- `balanced_evidence`;
+- `portfolio_evidence`.
+
+Baseline legado:
+
+- `support >= 7500`: 444;
+- `support == 10000`: 441;
+- support máximo único: 103;
+- colisiones en máximo: 338;
+- colisiones con ofensiva: 201;
+- colisiones con bulk: 164;
+- casos de una sola ruta dedicada fiable `>=7500`: 56.
+
+`reliability_max = max(control_reliability_bp, sustain_signal_bp)`:
+
+- `support >= 7500`: 414;
+- `support == 10000`: 240;
+- support máximo único: 81;
+- colisiones en máximo: 181;
+- colisiones con ofensiva: 105;
+- colisiones con bulk: 91;
+- casos de una sola ruta dedicada fiable `>=7500`: 56.
+
+Conclusión: la fiabilidad por intento corrige una parte material de la saturación sin borrar los 56 casos dedicados fiables.
+
+`balanced_evidence`:
+
+- `support >= 7500`: 408;
+- `support == 10000`: 0;
+- colisiones en máximo: 0;
+- casos dedicados fiables `>=7500`: 56.
+
+**RECHAZADA** como fórmula final. Eliminar todos los `10000` comprime estructuralmente el eje `support` frente a otros roles y produce una mejora aparente de colisiones que no es comparable en la misma escala.
+
+`portfolio_evidence`:
+
+- `support >= 7500`: 323;
+- `support == 10000`: 6;
+- colisiones en máximo: 5;
+- casos dedicados fiables `>=7500`: 31.
+
+**RECHAZADA** por exceso de severidad: pierde 25 de los 56 casos de una sola ruta dedicada fiable que el baseline de fiabilidad conservaba.
+
+Trainer Loadouts en este checkpoint: **379 PASS / 0 FAIL**.
+
+#### Refinamiento aditivo rechazado
+
+Segundo checkpoint test-only:
+
+`0257dbf0ac3b55c93597ab2ce00126f90d44a9db`
+
+Se probó una fórmula que partía de fiabilidad pero sumaba de forma continua:
+
+- segunda fiabilidad;
+- breadth por movimientos;
+- breadth por efectos;
+- breadth por familias;
+- proporción dedicada;
+- magnitud del stat drop;
+- sustain.
+
+Resultado:
+
+- `support >= 7500`: 427;
+- `support == 10000`: 360;
+- colisiones en máximo: 274;
+- colisiones con ofensiva: 160;
+- colisiones con bulk: 134;
+- casos dedicados fiables `>=7500`: 56.
+
+Trainer Loadouts: **397 PASS / 0 FAIL**.
+
+**RECHAZADA**. La evidencia demuestra que convertir breadth en puntos aditivos vuelve a saturar el eje. Breadth debe conservarse como evidencia estructural y no necesariamente aplastarse en una suma lineal.
+
+#### Candidata seleccionada — `guarded_reliability`
+
+Checkpoint test-only seleccionado:
+
+`b8750b65422726e5f198b9ba8684480c6aff160d`
+
+Principio:
+
+1. la magnitud ordinaria de `support` sigue viniendo de la mejor fiabilidad por intento y de sustain;
+2. breadth/redundancia no regalan puntos de forma continua;
+3. la evidencia adicional se usa para decidir si un techo exacto de `10000` está justificado.
+
+Regla auditada:
+
+- si `sustain_signal_bp >= 10000` -> `10000`;
+- si `control_reliability_bp >= 9000` y `control_secondary_reliability_bp >= 7500` -> `10000`;
+- si `control_reliability_bp >= 9000`, `sustain_signal_bp >= 5000` y existe al menos una ruta dedicada -> `10000`;
+- en cualquier otro caso:
+  `min(max(control_reliability_bp, sustain_signal_bp), 9500)`.
+
+Los umbrales `9000 / 7500 / 5000` y el cap `9500` son una **política de clasificación auditable**, no una constante natural. Se aceptan provisionalmente porque reutilizan escalas ya empleadas por el modelo y su comportamiento real-data es claramente mejor que las alternativas comparadas.
+
+Resultado sobre 1.021 especies elegibles:
+
+- `support > 0`: 892;
+- `support >= 7500`: **414**;
+- `support >= 9000`: **309**;
+- `support == 10000`: **82**;
+- support máximo único: **77**;
+- colisiones en máximo: **67**;
+- colisiones con ofensiva: **33**;
+- colisiones con bulk: **36**;
+- `support >=7500` coexistiendo con ofensiva alta: 335;
+- `support ==10000` coexistiendo con ofensiva alta: 65;
+- casos de una sola ruta dedicada fiable `>=7500`: **56/56 preservados**;
+- casos `==10000` con una sola ruta de control: 6;
+- casos `==10000` con una sola ruta dañina de control: **0**;
+- casos `==10000` con múltiples rutas de control: 76;
+- casos `==10000` con sustain: 27.
+
+Comparación directa:
+
+- legado: 441 techos / 338 colisiones;
+- `reliability_max`: 240 techos / 181 colisiones;
+- `guarded_reliability`: **82 techos / 67 colisiones**.
+
+A diferencia de `balanced_evidence`, `guarded_reliability` mantiene especialistas reales en `10000`.
+A diferencia de `portfolio_evidence`, conserva los 56 casos dedicados fiables.
+A diferencia del refinamiento aditivo, no vuelve a inflar `support` por sumar breadth.
+
+Sentinelas relevantes:
+
+- Abomasnow: mejor fiabilidad 9500 + segunda 8500 -> `10000`;
+- Alcremie: control dedicado 10000 + sustain 5000 -> `10000`;
+- Amoonguss: 10000 + segunda 9000 + sustain -> `10000`;
+- Ampharos: 10000 + segunda 3000, sin sustain -> `9500`;
+- Annihilape/Screech: fiabilidad 8500 -> `8500`;
+- Araquanid: 10000 + segunda 3000, solo control dañino -> `9500`;
+- Arcanine: 10000 + segunda 1000, sin sustain -> `9500`;
+- Archaludon/Breaking Swipe: una única ruta dañina 10000 -> `9500`;
+- Bellibolt: mejor fiabilidad 5000 -> `5000`.
+
+Certificación del checkpoint `b8750b65422726e5f198b9ba8684480c6aff160d`:
+
+- **18/18 workflows GitHub Actions: SUCCESS**;
+- Trainer Loadouts: **416 PASS / 0 FAIL**;
+- Godot 4.7 general: SUCCESS;
+- DATA V3: SUCCESS;
+- `main`: no movido;
+- PR #105: temporal, abierto y sin merge.
+
+#### Decisión y siguiente microtranche
+
+**`guarded_reliability` queda SELECCIONADA como candidata para la tranche de producción, pero todavía NO implementada en producción en este checkpoint.**
+
+Siguiente microtranche exacta:
+
+- implementar una helper explícita en `TrainerRosterRoleInference`;
+- hacer que `infer_role_scores().support` use la regla `guarded_reliability`;
+- conservar `control_signal_bp` legado dentro de la evidencia para compatibilidad/auditoría;
+- añadir regresiones unitarias de la nueva regla y regresión real-data;
+- demostrar que una única ruta dañina perfecta no alcanza `10000`;
+- demostrar que dos rutas fiables o control dedicado + sustain sí pueden justificar `10000`;
+- preservar fail-closed, determinismo y JSON;
+- no integrar todavía `TrainerTeamAnalyzer`;
+- no tocar switching/search con valor de campaña;
+- no iniciar C3;
+- no iniciar FASE34.
+
+La implementación de producción debe ser una tranche separada de esta comparación.
