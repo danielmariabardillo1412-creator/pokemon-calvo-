@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   append-c3f-d-doc:
-    if: ${{ github.actor != 'github-actions[bot]' && github.event.head_commit.message == 'docs(audit): trigger C3f-d notebook append' }}
+    if: "${{ github.actor != 'github-actions[bot]' && github.event.head_commit.message == 'docs(audit): trigger C3f-d notebook append' }}"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
