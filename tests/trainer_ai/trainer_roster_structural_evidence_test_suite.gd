@@ -172,9 +172,18 @@ func _view(
 	instance_id: StringName,
 	species_id: StringName,
 	stats: StatBlock,
-	move_ids: Array[StringName],
+	move_ids: Array,
 ) -> Dictionary:
-	return CreatureInstance.new(instance_id, species_id, 50, stats, move_ids).to_dict()
+	var resolved_move_ids: Array[StringName] = []
+	for raw_move_id in move_ids:
+		resolved_move_ids.append(StringName(raw_move_id))
+	return CreatureInstance.new(
+		instance_id,
+		species_id,
+		50,
+		stats,
+		resolved_move_ids,
+	).to_dict()
 
 
 func _member(evidence: Dictionary, instance_id: String) -> Dictionary:
