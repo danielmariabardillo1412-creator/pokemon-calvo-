@@ -66,8 +66,8 @@ jobs:
             tests/data/data_v3_damage_user_stat_target_test_suite.gd \
             data/raw/pokemon_api.json \
             data/normalized/pokemon_api.json \
-            data/manifests/pokemon_api_manifest.json \
-            data/reports
+            data/manifests/pokemon_api_manifest.json
+          git add -u data/reports
           git diff --cached --check
           git status --short
           test -n "$(git diff --cached --name-only)"
