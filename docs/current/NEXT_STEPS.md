@@ -8,7 +8,7 @@ Rama activa:
 
 PR temporal activo:
 
-`#105 — Trainer AI Random Cup modernization — C2e-b support saturation audit`
+`#105 — Trainer AI Random Cup modernization — C2e control evidence calibration`
 
 No mergear a `main`. `main` continúa fuera de este workstream.
 
@@ -259,26 +259,91 @@ Por tanto, contar simplemente movimientos tampoco es suficiente. El modelo debe 
 
 ---
 
-## Decisión semántica antes del siguiente cambio de producción
+## C2e-e — evidencia de control separada en producción
 
-C2e-d refuerza que un único escalar `control_signal_bp = max(...)` pierde información esencial.
+Tranche de producción aditiva. No recalibra `support` ni integra consumidores.
 
-La dirección más segura para la siguiente tranche de producción es **no reemplazarlo por otra fórmula mágica**, sino enriquecer primero la evidencia intrínseca con señales separadas y auditables. Propuesta de contrato mínimo:
+Commits:
 
-- `control_potency` / magnitud estructural del efecto, sin confundirla con probabilidad;
-- `control_reliability_bp` — fiabilidad de la mejor ruta por intento;
-- `control_secondary_reliability_bp` — segunda mejor ruta, útil para robustez/breadth;
+- `00a7b8aa56c10dd022a8b876e610c396c7974737` — añade evidencia de control auditada a `TrainerRosterRoleInference`;
+- `8652f3b8facec89f3da7dee57d8e6e5d8fe124f1` — añade `TrainerRosterControlEvidenceTestSuite`;
+- `80f19095f7b1b97973d818b8fad364453db9662b` — conecta la suite al runner;
+- `bcb7a2036d9750662c14763ab8b1d519e432da47` — corrige el acceso `stat_key` → `stat_id` detectado por CI.
+
+La salida de `extract_intrinsic_evidence()` conserva el `control_signal_bp` legado y añade en paralelo:
+
+- `control_best_runtime_effect_bp`;
+- `control_reliability_bp`;
+- `control_secondary_reliability_bp`;
 - `control_move_count`;
 - `control_effect_key_count`;
+- `control_effect_family_count`;
 - `control_dedicated_move_count`;
 - `control_damaging_move_count`;
-- breakdown determinista por `move_id`/efecto.
+- `control_strongest_stat_drop_stages`;
+- `control_breakdown` determinista por movimiento;
+- `control_evidence_model_id = trainer_roster_control_evidence_v1`.
 
-Todavía NO congelar un bonus numérico de breadth ni un nuevo threshold de `support`.
+Semántica nueva:
 
-La próxima microtranche debe decidir e implementar únicamente la **representación fiel de estas evidencias** dentro de `TrainerRosterRoleInference`, manteniendo compatibilidad con el output existente mientras se recalibra `support` en un paso posterior.
+- la probabilidad runtime solo se multiplica al atravesar un nodo `BattleEffectSpec.CHANCE`;
+- la fiabilidad por intento combina esa probabilidad runtime con `MoveDefinition.accuracy` base;
+- la magnitud del debuff se conserva separada como stages crudos;
+- move breadth y effect breadth se conservan por separado;
+- se distingue control dedicado (`power <= 0`) de control secundario en movimientos dañinos;
+- solo `RUNTIME_SUPPORTED` entra en esta evidencia, igual que el gate C2b.
 
-No integrar en esa misma tranche `TrainerTeamAnalyzer`, switching/search, C3 ni FASE34.
+Compatibilidad deliberada:
+
+- `_effect_signals()` no cambió;
+- `control_signal_bp` no cambió;
+- `support = max(control_signal_bp, sustain_signal_bp)` no cambió;
+- las distribuciones real-data de C2d/C2e anteriores permanecen idénticas en esta tranche.
+
+### Incidente CI C2e-e
+
+Primer HEAD con la suite conectada:
+
+`80f19095f7b1b97973d818b8fad364453db9662b`
+
+Resultado FASE32:
+
+**346 PASS / 3 FAIL**.
+
+Los tres fallos eran exclusivamente de la nueva evidencia (`stat drop magnitude`, `effect breadth`, `one move/two effect keys`). La causa única fue un acceso incorrecto a `BattleEffectSpec.stat_key`; el contrato real usa `stat_id`.
+
+No hubo regresión histórica ni fallo de diseño del modelo. El fix mínimo fue `stat_key → stat_id` en `_accumulate_control_shape()`.
+
+SHA de código/test corregido:
+
+`bcb7a2036d9750662c14763ab8b1d519e432da47`
+
+Resultado:
+
+- **18/18 workflows GitHub Actions: SUCCESS**;
+- `Trainer Loadouts Tests`: **349 PASS / 0 FAIL**;
+- 332 checks previos conservados + **17 checks nuevos**;
+- Godot 4.7 Tests: SUCCESS;
+- Data Foundation V3 Tests: SUCCESS;
+- `support` histórico y las sondas real-data permanecen sin recalibrar.
+
+Por tanto C2e-e de código queda **CERTIFICADO en `bcb7a203...`**. Este documento crea un HEAD posterior y debe obtener su propio 18/18 antes de certificar el HEAD final de la tranche.
+
+---
+
+## Paso inmediato después de C2e-e
+
+La siguiente microtranche ya puede usar la evidencia separada para **auditar y diseñar el nuevo resumen de `support`**, pero no debe saltar directamente a una fórmula arbitraria.
+
+Orden recomendado:
+
+1. tests relacionales con sentinelas que comparen una sola ruta fiable vs varias rutas fiables;
+2. comparar control dedicado vs secundario dañino sin declarar que uno siempre vale más;
+3. medir una o más fórmulas candidatas contra las 1.021 especies del probe;
+4. elegir una semántica solo si reduce saturación sin borrar casos legítimos de support;
+5. en una tranche separada, cambiar `support` y repetir los audits real-data.
+
+Todavía NO integrar `TrainerTeamAnalyzer`, switching/search, C3 ni FASE34.
 
 ---
 
