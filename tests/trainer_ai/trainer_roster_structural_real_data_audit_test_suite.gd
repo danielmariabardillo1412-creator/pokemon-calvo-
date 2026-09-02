@@ -27,7 +27,10 @@ func run(check_callback: Callable) -> void:
 	_check.call("structural_real_data_species_count_canonical", species_ids.size() == 1025)
 
 	var probe: Dictionary = _build_probe_members(game_data, catalog, species_ids)
-	var members: Array[Dictionary] = probe.get("members", []) as Array[Dictionary]
+	var members: Array[Dictionary] = []
+	for raw_member in probe.get("members", []):
+		if raw_member is Dictionary:
+			members.append(raw_member as Dictionary)
 	_check.call("structural_real_data_probe_accounts_for_all_species", members.size() + int(probe.get("species_without_probe_moves", 0)) == species_ids.size())
 	_check.call("structural_real_data_probe_has_1021_eligible_species", members.size() == 1021)
 	_check.call("structural_real_data_probe_moves_runtime_supported", bool(probe.get("all_probe_moves_runtime_supported", false)))
@@ -161,7 +164,7 @@ func _build_report(catalog: DefinitionCatalog, members: Array[Dictionary]) -> Di
 				_histogram_increment(unique_immunity_histogram, unique_immunity)
 				_histogram_increment(redundant_immunity_histogram, redundant_immunity)
 				_histogram_increment(strong_role_count_histogram, strong_roles)
-				_histogram_increment(role_max_histogram, role_max / 1000)
+				_histogram_increment(role_max_histogram, int(role_max / 1000))
 				if unique_roles > 0:
 					occurrences_with_unique_role += 1
 					schedule_unique_role_occurrences += 1
