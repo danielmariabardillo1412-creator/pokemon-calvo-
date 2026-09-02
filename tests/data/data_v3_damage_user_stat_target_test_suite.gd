@@ -18,6 +18,52 @@ func run(check_callback: Callable) -> void:
 		return
 	var game_data := GameData.from_dict(parsed)
 	var catalog := game_data.to_definition_catalog()
+
+	# Whole-family regression. PokeAPI move-category/7 (damage-raise) contains
+	# damaging moves whose stat_changes belong to the USER even when the move's
+	# general target is the opponent. Validate the immutable category itself so a
+	# future member cannot silently fall back to the legacy target heuristic.
+	var category_file := FileAccess.open(
+		"res://data/api/v2/move-category/7/index.json", FileAccess.READ
+	)
+	_expect("data_v3_damage_user_category_open", category_file != null)
+	if category_file == null:
+		return
+	var category_data = JSON.parse_string(category_file.get_as_text())
+	category_file.close()
+	_expect("data_v3_damage_user_category_parse", category_data is Dictionary)
+	if not (category_data is Dictionary):
+		return
+	var category_moves: Array = category_data.get("moves", [])
+	_expect("data_v3_damage_user_category_has_28_moves", category_moves.size() == 28)
+	var all_family_moves_present := category_moves.size() == 28
+	var all_family_moves_have_stat_changes := category_moves.size() == 28
+	var all_family_stat_changes_target_self := category_moves.size() == 28
+	for entry_variant in category_moves:
+		if not (entry_variant is Dictionary):
+			all_family_moves_present = false
+			all_family_moves_have_stat_changes = false
+			all_family_stat_changes_target_self = false
+			continue
+		var entry: Dictionary = entry_variant
+		var move_id := StringName(str(entry.get("name", "")).replace("-", "_"))
+		var family_move := catalog.move(move_id)
+		if family_move == null:
+			all_family_moves_present = false
+			all_family_moves_have_stat_changes = false
+			all_family_stat_changes_target_self = false
+			continue
+		var family_stages: Array[BattleEffectSpec] = []
+		_collect_stat_stages(family_move.effect_specs, family_stages)
+		if family_stages.is_empty():
+			all_family_moves_have_stat_changes = false
+		for stage in family_stages:
+			if stage.target != BattleEffectSpec.SELF:
+				all_family_stat_changes_target_self = false
+	_expect("data_v3_damage_user_family_all_present", all_family_moves_present)
+	_expect("data_v3_damage_user_family_all_have_stat_changes", all_family_moves_have_stat_changes)
+	_expect("data_v3_damage_user_family_all_target_self", all_family_stat_changes_target_self)
+
 	var move := catalog.move(&"close_combat")
 	_expect("data_v3_close_combat_present", move != null)
 	if move == null:
