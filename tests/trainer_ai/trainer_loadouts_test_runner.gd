@@ -12,6 +12,7 @@ func _run() -> void:
 	TrainerLoadoutsV2TestSuite.new().run(Callable(self, "_check"))
 	TrainerRosterRoleInferenceFixtureTestSuite.new().run(Callable(self, "_check"))
 	TrainerRosterRoleInferenceTestSuite.new().run(Callable(self, "_check"))
+	TrainerRosterRoleRealDataTestSuite.new().run(Callable(self, "_check"))
 	print("\n=== TRAINER LOADOUTS RESULT: %d PASS / %d FAIL ===" % [_passed, _failed])
 	quit(0 if _failed == 0 else 1)
 
