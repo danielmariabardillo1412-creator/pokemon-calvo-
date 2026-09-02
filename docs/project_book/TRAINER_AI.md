@@ -9343,3 +9343,521 @@ C3f-o no puede todavía:
 - modificar brains;
 - abrir FASE34;
 - mergear PR #105.
+
+
+### 26.36 C3f-o — sampling contextual elimina el sesgo de orden, pero cap 3 no preserva todos los óptimos
+
+Estado: **CERRADO / DOBLEMENTE CERTIFICADO / TEST-AUDIT-ONLY**.
+
+C3f-o parte del problema congelado en 26.35: el bounded sampler productivo de search es sensible al orden de entrada de los switches cuando `max_actions_per_side = 3`. Este microtranche no corrige producción. Compara, en sombra, estrategias de selección de switch que sean deterministas y order-invariant antes de autorizar cualquier cambio en `TrainerMultiTurnSearch`.
+
+El resultado separa dos problemas que no deben confundirse:
+
+1. **eliminar la dependencia del orden de entrada es posible**;
+2. **eliminarla no basta para justificar una poda semántica** cuando varios switches empatan como máximos bajo la evidencia contextual disponible.
+
+Con el cap productivo actual de tres acciones y conservando al menos una plaza MOVE, solo quedan como máximo dos plazas SWITCH. En la matriz real auditada existen **186 / 512 contextos** donde el conjunto de máximos tácticos tiene tres o más miembros. Por tanto, bajo esa geometría, cap 3 no puede preservar simultáneamente todo el conjunto óptimo y la diversidad MOVE/SWITCH.
+
+#### Baseline y SHAs certificados
+
+Baseline documental 26.35:
+
+`7dea5464ecd17c9903dc58fac4de70c53abbb7bd`
+
+SHA técnico limpio C3f-o:
+
+`d0ae3f141ea237f81c92ee4e42eddaa48d2fd4a7`
+
+SHA humano tree-identical C3f-o:
+
+`6650355933f3d719354b6721de9549b34950f124`
+
+Árbol técnico/humano común:
+
+`40152cf6d314bccb4c43084477aeaadf846ac8e2`
+
+Ambos checkpoints tienen como parent directo 26.35. No existe diferencia funcional entre técnico y humano.
+
+#### Scope neto limpio
+
+Frente a 26.35, C3f-o modifica únicamente tests/audit:
+
+- nueva suite `tests/trainer_ai/trainer_roster_search_switch_sampling_strategy_comparison_audit_test_suite.gd`: **+610 líneas**;
+- `tests/trainer_ai/trainer_team_composition_test_runner.gd`: **+1 / -1**.
+
+No modifica:
+
+- `TrainerMultiTurnSearch`;
+- `TrainerActionSpace`;
+- `TrainerSearchBudget`;
+- `TrainerStrategicSwitchEvaluatorV2`;
+- brains;
+- scores productivos;
+- legal actions;
+- frontier productiva;
+- campaign policy;
+- recovery/replacement;
+- FASE34.
+
+Audit ID:
+
+`c3f_o_switch_sampling_strategy_comparison_audit_v1`
+
+Modelos observados:
+
+- search: `simultaneous_depth_budget_v1`;
+- sampler actual: `kind_stratified_round_robin_v1`;
+- switching contextual: `strategic_switch_expected_matchup_v2`;
+- frontier: `trainer_roster_pareto_frontier_v1`;
+- source contract: `trainer_roster_component_first_contract_v1`.
+
+#### Matriz real reutilizada
+
+C3f-o reutiliza la geometría certificada de C3f-m:
+
+- **1021 especies elegibles**;
+- **128 rosters**;
+- **512 contextos de switching**;
+- **2560 ocurrencias de candidatos switch**;
+- offsets rival: `[37, 503]`;
+- modos de evidencia: `species_fallback` y `revealed_damaging_move`;
+- **2048 probes de reorder** entre las cuatro estrategias.
+
+No hay:
+
+- hidden belief hypotheses;
+- memory event log;
+- campaign snapshot;
+- RNG;
+- recovery policy;
+- replacement policy;
+- campaign policy;
+- roster value integrado en search.
+
+El `TrainerProfile` usado es neutral para esta comparación y conserva:
+
+`switch_weight_bp = 10000`
+
+No se usa una preferencia semántica de perfil para resolver candidatos.
+
+#### Cuatro estrategias comparadas
+
+C3f-o compara cuatro políticas en sombra:
+
+1. `lexical_id_one_switch_negative_control`
+2. `pareto_frontier_one_switch_negative_control`
+3. `contextual_switch_score_one_switch_candidate`
+4. `contextual_switch_score_two_switch_candidate`
+
+Las dos primeras son **controles negativos**. Las dos contextuales son candidatas de auditoría, no candidatas aprobadas para producción.
+
+Todas son implementadas únicamente dentro de la suite C3f-o.
+
+#### Invariancia de reorder
+
+Resultado global:
+
+- `reorder_probe_cases = 2048`;
+- `reorder_mismatch_cases = 0`;
+- `bounded_size_violation_cases = 0`;
+- `diversity_failure_cases = 0`.
+
+Por tanto, las cuatro estrategias de comparación pueden hacerse deterministas y order-invariant.
+
+Pero esta propiedad **no equivale a corrección semántica**.
+
+El control lexical lo demuestra directamente: ordenar canónicamente por ID elimina la dependencia del orden de entrada, pero convierte el ID en preferencia artificial si se usa para decidir qué candidato sobrevive.
+
+#### Control negativo lexical — order-invariant pero semánticamente inválido
+
+`lexical_id_one_switch_negative_control`
+
+Resultado:
+
+- casos: **512**;
+- `any_optimum_preserved_cases = 245`;
+- `loses_all_optima_cases = 267`;
+- `all_optima_preserved_cases = 36`;
+- `partial_optimum_cases = 209`;
+- `selected_dominated_cases = 228`;
+- `reorder_mismatches = 0`;
+- `lexical_semantic_preference = true`;
+- `production_ready = false`.
+
+Conclusión:
+
+> **ser order-invariant no basta.**
+
+Un canonical sort por ID es reproducible, pero no contiene evidencia táctica. No puede convertirse en policy de selección.
+
+#### Control negativo Pareto-first — sigue destruyendo óptimos tácticos
+
+`pareto_frontier_one_switch_negative_control`
+
+Resultado:
+
+- casos: **512**;
+- `any_optimum_preserved_cases = 274`;
+- `loses_all_optima_cases = 238`;
+- `all_optima_preserved_cases = 51`;
+- `partial_optimum_cases = 223`;
+- `selected_dominated_cases = 0`;
+- `frontier_hard_filter = true`;
+- `reorder_mismatches = 0`;
+- `production_ready = false`.
+
+Este control combina dos errores que C3f-l/C3f-m ya prohibieron:
+
+- filtrar primero por frontier rival-agnostic;
+- después escoger un representante lexical de esa frontier.
+
+Pierde todos los máximos contextuales en **238 / 512** contextos.
+
+C3f-o reafirma:
+
+`frontier_hard_pruning_authorized = false`
+
+#### Candidata contextual con una plaza SWITCH
+
+`contextual_switch_score_one_switch_candidate`
+
+Geometría bajo cap 3:
+
+- MOVE slots: **2**;
+- SWITCH slots: **1**.
+
+Resultado:
+
+- casos: **512**;
+- `any_optimum_preserved_cases = 512`;
+- `loses_all_optima_cases = 0`;
+- `all_optima_preserved_cases = 206`;
+- `partial_optimum_cases = 306`;
+- `top_set_overflow_cases = 306`;
+- `lexical_equal_score_cutoff_cases = 306`;
+- `selected_dominated_cases = 204`;
+- `reorder_mismatches = 0`;
+- `frontier_hard_filter = false`;
+- `production_ready = false`.
+
+La señal contextual preserva **al menos un máximo** en los 512 contextos y puede retener counters tácticos component-first dominated. Eso evita el fallo de Pareto-first.
+
+Sin embargo, solo preserva **todo** el conjunto óptimo en los 206 contextos donde el máximo es único.
+
+En los otros 306 contextos existe empate en el cutoff. El ID lexical usado por la auditoría dentro del empate es solo una representación determinista de qué elementos caben; **no certifica que esos miembros sean semánticamente mejores que los empatados excluidos**.
+
+#### Candidata contextual con dos plazas SWITCH
+
+`contextual_switch_score_two_switch_candidate`
+
+Geometría bajo el mismo cap 3:
+
+- MOVE slots: **1**;
+- SWITCH slots: **2**.
+
+Resultado:
+
+- casos: **512**;
+- `any_optimum_preserved_cases = 512`;
+- `loses_all_optima_cases = 0`;
+- `all_optima_preserved_cases = 326`;
+- `partial_optimum_cases = 186`;
+- `top_set_overflow_cases = 186`;
+- `lexical_equal_score_cutoff_cases = 349`;
+- `selected_dominated_cases = 338`;
+- `reorder_mismatches = 0`;
+- `frontier_hard_filter = false`;
+- `production_ready = false`.
+
+Dar dos plazas de switch mejora la preservación completa del óptimo:
+
+**206 -> 326 contextos**.
+
+Pero todavía quedan **186 / 512** contextos donde hay más máximos empatados que plazas switch disponibles.
+
+Por tanto, aumentar de una a dos plazas no resuelve la frontera conceptual.
+
+#### Distribución exacta del conjunto óptimo contextual
+
+C3f-o reproduce el best-set histogram de C3f-m:
+
+- tamaño 1 -> **206** contextos;
+- tamaño 2 -> **120**;
+- tamaño 3 -> **62**;
+- tamaño 4 -> **27**;
+- tamaño 5 -> **97**.
+
+Total:
+
+**512 contextos**.
+
+No se colapsan los empates a un primer ID para construir esta distribución. El best set significa:
+
+`all_equal_max_score_switch_ids`
+
+#### Cap necesario para preservar todos los máximos + al menos un MOVE
+
+Si se exige conservar al menos una plaza MOVE, el cap total mínimo requerido es:
+
+- best-set 1 -> cap **2**: 206 contextos;
+- best-set 2 -> cap **3**: 120;
+- best-set 3 -> cap **4**: 62;
+- best-set 4 -> cap **5**: 27;
+- best-set 5 -> cap **6**: 97.
+
+Histograma certificado:
+
+`{"2":206,"3":120,"4":62,"5":27,"6":97}`
+
+Resultado:
+
+- `cap_three_one_move_preserves_full_optimal_set_cases = 326`;
+- `cap_three_one_move_cannot_preserve_full_optimal_set_cases = 186`;
+- `contexts_requiring_cap_above_three_for_full_optimal_set = 186`;
+- `required_total_cap_max = 6`.
+
+Esta es la barrera principal de C3f-o.
+
+#### Por qué no se puede declarar ganadora la estrategia contextual todavía
+
+C3f-o sí demuestra que el score contextual existente contiene mejor evidencia para **no perder todos los máximos** que los controles lexical/Pareto de esta auditoría.
+
+Pero no demuestra que dos switches empatados en `TrainerStrategicSwitchEvaluatorV2` sean intercambiables para una búsqueda multi-turn.
+
+Un empate de primer paso puede romperse después por:
+
+- estado futuro tras el switch;
+- opciones de segundo turno;
+- respuesta rival;
+- diferencias de profundidad/horizonte;
+- interacción con el presupuesto de nodos y acciones.
+
+Por tanto, podar un empate contextual antes de search podría borrar precisamente la continuación que search profundo habría preferido.
+
+C3f-o **no autoriza** asumir equivalencia entre miembros empatados.
+
+#### Semántica lexical congelada
+
+Lexical ordering puede usarse para:
+
+- serialización estable;
+- firma determinista;
+- presentación reproducible;
+- recorrer elementos de un empate sin afirmar preferencia.
+
+No puede usarse para:
+
+- decir que `id_a` es tácticamente mejor que `id_b`;
+- eliminar un candidato empatado y tratar la eliminación como semanticamente segura;
+- seleccionar un switch real por ID.
+
+Los `lexical_equal_score_cutoff_cases` son precisamente una señal de pérdida potencial, no una autorización de desempate.
+
+#### Pareto sigue fuera de la poda de switches
+
+C3f-o conserva intacta la barrera C3f-m:
+
+- la frontier no entra en las candidatas contextuales como hard filter;
+- una candidata contextual puede seleccionar miembros dominated;
+- una plaza contextual selecciona dominated en **204** contextos;
+- dos plazas contextuales seleccionan dominated en **338** contextos.
+
+Eso es coherente con el resultado previo: dominance de roster-state no implica dominance contra el rival actual.
+
+No se autoriza:
+
+- frontier bonus;
+- frontier penalty;
+- hard frontier pruning;
+- `frontier_instance_ids[0]` como preferencia.
+
+#### Contexto oculto y policy externa ausentes
+
+Contadores certificados:
+
+- `nonempty_hidden_belief_cases = 0`;
+- `nonempty_memory_event_cases = 0`;
+- `nonempty_campaign_snapshot_cases = 0`;
+- `rng_used = false`;
+- `recovery_policy_used = false`;
+- `replacement_policy_used = false`;
+- `campaign_policy_used = false`;
+- `roster_value_integrated = false`.
+
+La auditoría se limita a contexto legal/público ya certificado.
+
+#### Ninguna estrategia queda seleccionada
+
+C3f-o congela explícitamente:
+
+`selected_strategy_id = null`
+
+`production_strategy_selected = false`
+
+`search_sampling_redesign_authorized = false`
+
+`behavior_integration_authorized = false`
+
+Por tanto, ni la variante contextual de una plaza ni la de dos plazas queda aprobada para producción.
+
+#### Canonical report C3f-o
+
+```json
+{
+  "audit_id": "c3f_o_switch_sampling_strategy_comparison_audit_v1",
+  "behavior_integration_authorized": false,
+  "bounded_action_cap": 3,
+  "bounded_size_violation_cases": 0,
+  "cap_three_one_move_cannot_preserve_full_optimal_set_cases": 186,
+  "cap_three_one_move_preserves_full_optimal_set_cases": 326,
+  "context_build_failures": 0,
+  "contexts_requiring_cap_above_three_for_full_optimal_set": 186,
+  "contextual_one_all_optima_preserved_cases": 206,
+  "contextual_two_all_optima_preserved_cases": 326,
+  "current_sampling_model_id": "kind_stratified_round_robin_v1",
+  "diversity_failure_cases": 0,
+  "eligible_species": 1021,
+  "frontier_hard_pruning_authorized": false,
+  "minimum_move_slots_for_diversity": 1,
+  "nonempty_campaign_snapshot_cases": 0,
+  "nonempty_hidden_belief_cases": 0,
+  "nonempty_memory_event_cases": 0,
+  "production_strategy_selected": false,
+  "recommended_next_boundary": "resolve_contextual_tie_overflow_and_search_depth_preservation_before_any_sampler_port",
+  "reorder_mismatch_cases": 0,
+  "reorder_probe_cases": 2048,
+  "required_total_cap_histogram": {"2":206,"3":120,"4":62,"5":27,"6":97},
+  "required_total_cap_max": 6,
+  "rng_used": false,
+  "roster_value_integrated": false,
+  "sampled_rosters": 128,
+  "scenarios": 512,
+  "search_model_id": "simultaneous_depth_budget_v1",
+  "search_sampling_redesign_authorized": false,
+  "selected_strategy_id": null,
+  "switch_candidate_occurrences": 2560,
+  "switching_model_id": "strategic_switch_expected_matchup_v2"
+}
+```
+
+Resultados por estrategia:
+
+```json
+{
+  "contextual_switch_score_one_switch_candidate": {
+    "any_optimum_preserved_cases": 512,
+    "all_optima_preserved_cases": 206,
+    "partial_optimum_cases": 306,
+    "loses_all_optima_cases": 0,
+    "top_set_overflow_cases": 306,
+    "selected_dominated_cases": 204,
+    "production_ready": false
+  },
+  "contextual_switch_score_two_switch_candidate": {
+    "any_optimum_preserved_cases": 512,
+    "all_optima_preserved_cases": 326,
+    "partial_optimum_cases": 186,
+    "loses_all_optima_cases": 0,
+    "top_set_overflow_cases": 186,
+    "selected_dominated_cases": 338,
+    "production_ready": false
+  },
+  "lexical_id_one_switch_negative_control": {
+    "any_optimum_preserved_cases": 245,
+    "all_optima_preserved_cases": 36,
+    "loses_all_optima_cases": 267,
+    "production_ready": false
+  },
+  "pareto_frontier_one_switch_negative_control": {
+    "any_optimum_preserved_cases": 274,
+    "all_optima_preserved_cases": 51,
+    "loses_all_optima_cases": 238,
+    "production_ready": false
+  }
+}
+```
+
+#### Certificación técnica limpia
+
+Sobre:
+
+`d0ae3f141ea237f81c92ee4e42eddaa48d2fd4a7`
+
+resultado:
+
+- **18/18 workflows GitHub Actions: SUCCESS**;
+- FASE33 / Trainer Team Composition: **692 PASS / 0 FAIL**;
+- Godot 4.7 general: SUCCESS;
+- DATA V3: SUCCESS;
+- Trainer Search Foundation: SUCCESS;
+- Trainer Search Depth Budget: SUCCESS;
+- Trainer Search Limit Benchmark: SUCCESS;
+- Trainer Strategic Switching V2: SUCCESS;
+- reporte C3f-o determinista y JSON serializable;
+- sin script errors.
+
+#### Certificación humana tree-identical
+
+Sobre:
+
+`6650355933f3d719354b6721de9549b34950f124`
+
+se reproduce:
+
+- **18/18 workflows GitHub Actions: SUCCESS**;
+- FASE33: **692 PASS / 0 FAIL**;
+- mismos 512 contextos y 2560 candidatos;
+- mismos 2048 reorder probes y 0 mismatches;
+- mismo best-set histogram `206/120/62/27/97`;
+- mismo required-cap histogram `206/120/62/27/97` para caps `2/3/4/5/6`;
+- mismos **186** contextos que exceden cap 3;
+- mismo cap máximo requerido **6**;
+- contextual 1-slot: 512/512 preservan algún óptimo, 206 preservan todos;
+- contextual 2-slot: 512/512 preservan algún óptimo, 326 preservan todos;
+- lexical control pierde todos los óptimos en 267 contextos;
+- Pareto control pierde todos los óptimos en 238 contextos;
+- Godot general, DATA V3, switching y gates de search: SUCCESS.
+
+C3f-o queda **DOBLEMENTE CERTIFICADO**.
+
+#### Conclusión C3f-o
+
+La dependencia de orden detectada en C3f-n no obliga a escoger entre party order y lexical order. Puede eliminarse mediante una ordenación contextual determinista.
+
+Pero C3f-o también demuestra que **la salida contextual de primer paso no siempre tiene un máximo único**. Bajo el cap actual, los empates grandes fuerzan una pérdida de candidatos antes de search si se intenta imponer una selección fija.
+
+Por tanto, el siguiente problema ya no es “qué switch va primero”, sino:
+
+> **si dos o más switches empatan como máximos contextuales, ¿puede search profundo distinguirlos y cambiar cuál era realmente la mejor continuación?**
+
+Hasta responder eso, no es seguro colapsar el empate por ID ni cambiar producción.
+
+#### Siguiente microtranche autorizada — C3f-p
+
+**C3f-p — auditoría TEST/AUDIT-ONLY de tie-overflow y preservación de profundidad de search.**
+
+C3f-p queda autorizado únicamente a observar/comparar diseños.
+
+Debe comprobar como mínimo:
+
+- contextos donde `TrainerStrategicSwitchEvaluatorV2` tiene múltiples máximos empatados;
+- ejecutar continuaciones de search por cada miembro del top set sin usar lexical como preferencia;
+- medir cuántas veces candidatos empatados divergen después de uno o más plies;
+- medir cuántas veces elegir un solo representante lexical borraría la mejor continuación profunda;
+- comparar preservación con 1-slot, 2-slot y expansión del top tier;
+- cuantificar coste de nodos/acciones de preservar el empate;
+- mantener MOVE/SWITCH diversity explícita;
+- no usar Pareto como hard pruning;
+- no usar hidden beliefs, RNG, campaign policy, recovery/replacement ni TrainerProfile como desempate accidental;
+- mantener determinismo y serialización JSON;
+- no seleccionar todavía un sampler productivo.
+
+C3f-p no puede todavía:
+
+- modificar `TrainerMultiTurnSearch`;
+- modificar `TrainerActionSpace`;
+- cambiar `max_actions_per_side` productivo;
+- integrar frontier/roster value en search;
+- modificar brains;
+- abrir FASE34;
+- mergear PR #105.
