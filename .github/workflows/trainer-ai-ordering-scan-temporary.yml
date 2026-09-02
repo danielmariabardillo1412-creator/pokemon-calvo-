@@ -1,0 +1,25 @@
+name: TEMP Trainer AI ordering scan
+
+on:
+  push:
+    branches:
+      - audit/trainer-ai-c3-ordering-scan
+
+permissions:
+  contents: read
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Scan order-sensitive Trainer AI patterns
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo '=== all_ids() usages in Trainer AI tests ==='
+          grep -R -n -C 3 'all_ids()' tests/trainer_ai || true
+          echo '=== sort() usages near Trainer AI audits ==='
+          grep -R -n -C 2 '\.sort()' tests/trainer_ai | grep -E 'species|ids|all_ids|sort|^--$' || true
+          echo '=== slicing / first-N / range over species ids ==='
+          grep -R -n -E 'species_ids|slice\(|range\(.*members|MARGINAL_SAMPLE|SCHEDULE_STRIDES' tests/trainer_ai || true
