@@ -1,0 +1,34 @@
+name: TEMP Trainer AI C2e-g book checkpoint recovery
+
+on:
+  push:
+    branches:
+      - audit/trainer-ai-v3-random-cup-redesign-v1
+
+permissions:
+  contents: write
+
+jobs:
+  checkpoint-project-book-recovery:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    env:
+      SECTION_GZ_B64: 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
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: audit/trainer-ai-v3-random-cup-redesign-v1
+          fetch-depth: 0
+      - name: Append checkpoint and self-clean
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -c 'import os,base64,gzip,pathlib; p=pathlib.Path("docs/project_book/TRAINER_AI.md"); s=gzip.decompress(base64.b64decode(os.environ["SECTION_GZ_B64"])).decode("utf-8"); t=p.read_text(); p.write_text(t if "### 26.14 C2e-g" in t else t.rstrip()+"\n\n"+s+"\n")'
+          rm -f .github/workflows/trainer-ai-c2eg-book-checkpoint-temporary.yml
+          rm -f .github/workflows/trainer-ai-c2eg-book-checkpoint-recovery-temporary.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A docs/project_book/TRAINER_AI.md .github/workflows
+          git diff --cached --check
+          git commit -m "docs(trainer-ai): close C2e-g guarded support production"
+          git push origin HEAD:audit/trainer-ai-v3-random-cup-redesign-v1
