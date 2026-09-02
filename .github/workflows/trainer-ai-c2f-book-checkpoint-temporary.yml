@@ -1,0 +1,33 @@
+name: TEMP Trainer AI C2f book checkpoint
+
+on:
+  push:
+    branches:
+      - audit/trainer-ai-v3-random-cup-redesign-v1
+
+permissions:
+  contents: write
+
+jobs:
+  checkpoint-project-book:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    env:
+      SECTION_GZ_B64: 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
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: audit/trainer-ai-v3-random-cup-redesign-v1
+          fetch-depth: 0
+      - name: Append checkpoint and self-clean
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -c 'import os,base64,gzip,pathlib; p=pathlib.Path("docs/project_book/TRAINER_AI.md"); s=gzip.decompress(base64.b64decode(os.environ["SECTION_GZ_B64"])).decode("utf-8"); t=p.read_text(); out=t if "### 26.15 C2f" in t else t.rstrip()+"\n\n"+s; p.write_text(out.rstrip()+"\n")'
+          rm -f .github/workflows/trainer-ai-c2f-book-checkpoint-temporary.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A docs/project_book/TRAINER_AI.md .github/workflows
+          git diff --cached --check
+          git commit -m "docs(trainer-ai): close C2f team analyzer integration"
+          git push origin HEAD:audit/trainer-ai-v3-random-cup-redesign-v1
