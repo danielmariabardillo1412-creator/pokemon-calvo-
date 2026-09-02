@@ -3372,3 +3372,176 @@ Siguiente microtranche exacta:
 - no iniciar FASE34.
 
 La implementación de producción debe ser una tranche separada de esta comparación.
+
+---
+
+### 26.14 C2e-g — `guarded_reliability` en producción
+
+La tranche separada de producción autorizada al cerrar C2e-f queda **IMPLEMENTADA Y CERTIFICADA**.
+
+#### Implementación
+
+Commit de producción generado por la tranche:
+
+`fa9f415ac5c840ea2eba40d2056ebc4c05766974`
+
+`TrainerRosterRoleInference` incorpora ahora:
+
+- `SUPPORT_MODEL_ID = trainer_roster_support_guarded_reliability_v1`;
+- umbral de alta fiabilidad `7500`;
+- umbral de fiabilidad muy alta `9000`;
+- corroboración de sustain `5000`;
+- cap de especialista no corroborado `9500`;
+- helper explícita `_support_score_from_capabilities()`.
+
+`infer_role_scores().support` deja de usar directamente el máximo legado entre `control_signal_bp` y sustain y pasa a ejecutar la política `guarded_reliability` seleccionada en C2e-f.
+
+Regla de producción:
+
+- `sustain_signal_bp >= 10000` -> `10000`;
+- `control_reliability_bp >= 9000` + `control_secondary_reliability_bp >= 7500` -> `10000`;
+- `control_reliability_bp >= 9000` + `sustain_signal_bp >= 5000` + al menos una ruta dedicada -> `10000`;
+- resto:
+  `min(max(control_reliability_bp, sustain_signal_bp), 9500)`.
+
+La salida de role inference expone además `support_model_id` para hacer auditable la política que produjo el score.
+
+La señal histórica `control_signal_bp` **se conserva intacta dentro de `intrinsic_evidence`**. No se ha borrado ni reutilizado retroactivamente: continúa disponible para auditoría/compatibilidad mientras el score de `support` usa la nueva política.
+
+#### Diff neto de la tranche
+
+Entre el checkpoint documental anterior:
+
+`dd5aeab760cf3f32c1f5b04dfc02b9c467b37907`
+
+y el commit de producción `fa9f415ac5c840ea2eba40d2056ebc4c05766974`, el diff neto queda limitado exactamente a cinco archivos:
+
+- `modules/trainer_ai/trainer_roster_role_inference.gd`;
+- `tests/trainer_ai/trainer_loadouts_test_runner.gd`;
+- `tests/trainer_ai/trainer_roster_control_evidence_test_suite.gd`;
+- `tests/trainer_ai/trainer_roster_support_guarded_reliability_test_suite.gd`;
+- `tests/trainer_ai/trainer_roster_support_production_test_suite.gd`.
+
+El workflow temporal usado para aplicar la tranche se autolimpió y **no permanece en el árbol final**.
+
+No se modificaron:
+
+- `TrainerTeamAnalyzer`;
+- switching;
+- search;
+- C3;
+- FASE34.
+
+#### Regresiones de producción
+
+La nueva `TrainerRosterSupportProductionTestSuite` demuestra explícitamente:
+
+- una única ruta dañina perfecta tiene fiabilidad `10000` pero `support = 9500`;
+- una única ruta dedicada perfecta permanece alta pero no alcanza automáticamente el techo;
+- dos rutas fiables pueden justificar `10000`;
+- control dedicado + sustain suficiente puede justificar `10000`;
+- accuracy reduce el score cuando corresponde;
+- sustain-only se conserva;
+- control `DATA_ONLY` falla cerrado y no genera `support`;
+- `support_model_id` queda registrado;
+- determinismo;
+- serialización JSON.
+
+La regresión histórica C2e-e que exigía que `support` todavía no se recalibrase fue sustituida deliberadamente por el nuevo contrato. A la vez se mantiene una comprobación separada de que `control_signal_bp` legado no ha cambiado.
+
+#### Regresión DATA V3 real
+
+La suite `TrainerRosterSupportGuardedReliabilityTestSuite` compara ahora la producción contra la fórmula candidata auditada sobre las 1.021 especies elegibles y exige:
+
+`production_guarded_mismatch_count == 0`.
+
+Resultado certificado:
+
+- especies totales: 1.025;
+- elegibles en probe: 1.021;
+- sin probe moves: 4;
+- `support > 0`: **892**;
+- `support >= 7500`: **414**;
+- `support >= 9000`: **309**;
+- `support == 10000`: **82**;
+- support máximo único: **77**;
+- colisiones en máximo: **67**;
+- colisiones con ofensiva: **33**;
+- colisiones con bulk: **36**;
+- una sola ruta dedicada fiable `>=7500`: **56/56 preservados**;
+- techos con una única ruta dañina de control: **0**;
+- mismatch producción vs fórmula seleccionada: **0**.
+
+Sentinelas de producción:
+
+- Abomasnow -> `10000`;
+- Alcremie -> `10000`;
+- Amoonguss -> `10000`;
+- Ampharos -> `9500`;
+- Annihilape -> `8500`;
+- Araquanid -> `9500`;
+- Arcanine -> `9500`;
+- Archaludon -> `9500`;
+- Bellibolt -> `5000`.
+
+#### Certificación exacta
+
+Como `fa9f415ac5c840ea2eba40d2056ebc4c05766974` fue creado por `github-actions[bot]`, se creó un commit de certificación con **el mismo árbol exacto y cero cambios de archivos**:
+
+`46c6841dab1ea425476b8c3aaec78f5665bd7ba2`
+
+Resultado sobre ese SHA exacto:
+
+- **18/18 workflows GitHub Actions: SUCCESS**;
+- Trainer Loadouts: **436 PASS / 0 FAIL**;
+- Godot 4.7 general: SUCCESS;
+- DATA V3: SUCCESS;
+- `production_guarded_mismatch_count`: **0**;
+- PR #105: abierto, temporal y sin merge;
+- `main`: `f8452a1625ccb8389c9e52ff4416a96a24e00efd`, no movido.
+
+Por tanto, **C2e-g queda CERTIFICADO** y `guarded_reliability` deja de ser una candidata test-only: es ya la política de producción de `infer_role_scores().support`.
+
+#### Estado C2 después de C2e-g
+
+Cerrado/certificado:
+
+- C2a — fixtures;
+- C2b — evidencia intrínseca;
+- C2c — afinidades multirole;
+- C2d — auditoría real-data;
+- C2e-a — calibración de labels;
+- reparación DATA V3 `damage-raise`;
+- C2e-c — probability/accuracy audit;
+- C2e-d — control shape;
+- C2e-e — evidencia de control separada;
+- C2e-f — comparación y selección de fórmula;
+- C2e-g — recalibración de `support` en producción.
+
+La inferencia de roles queda suficientemente estable para pasar al **consumidor siguiente definido en la sección 22.7**, manteniendo la separación de responsabilidades.
+
+#### Siguiente tranche autorizada
+
+Siguiente bloque:
+
+**C2f — adaptación separada de `TrainerTeamAnalyzer` para consumir `TrainerRosterRoleInference` en flujo Random Cup.**
+
+Alcance recomendado:
+
+- auditar primero cómo consume hoy `role_id` authored;
+- conservar el flujo histórico authored cuando corresponda;
+- introducir una ruta Random Cup que consuma `role_scores_bp`/evidencia inferida en vez de fingir roles authored;
+- evitar duplicar fórmulas de daño/bulk/support dentro de `TrainerTeamAnalyzer`;
+- mantener la inferencia como única fuente de verdad de capacidades/roles intrínsecos;
+- añadir fixtures donde el mismo roster recibe interpretación dinámica sin depender de especialización fija por tipo;
+- certificar la integración en una tranche aislada antes de C3.
+
+Todavía **NO**:
+
+- integrar switching/search con valor de campaña;
+- iniciar `TrainerRosterStrategicValueEvaluator` C3;
+- iniciar FASE34;
+- convertir `TrainerTeamComposer` en selector de especies Random Cup;
+- mergear PR #105 a `main`.
+
+La autoridad externa de estado sigue siendo GitHub y este cuaderno conserva la continuidad semántica.
