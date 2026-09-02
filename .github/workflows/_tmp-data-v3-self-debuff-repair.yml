@@ -1,0 +1,75 @@
+name: TEMP DATA V3 self-debuff repair
+
+on:
+  pull_request:
+
+permissions:
+  contents: write
+
+jobs:
+  repair:
+    if: github.event.pull_request.number == 105 && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+
+    steps:
+      - name: Checkout PR head branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          fetch-depth: 1
+
+      - name: Apply source and regression patch
+        shell: bash
+        run: |
+          set -euo pipefail
+          python tools/_tmp_fix_damage_user_stat_targets.py
+          git diff --check
+
+      - name: Regenerate raw DATA V3 from immutable snapshot
+        shell: bash
+        run: |
+          set -euo pipefail
+          python tools/pokeapi_adapter_v3.py
+
+      - name: Setup Godot 4.7
+        uses: chickensoft-games/setup-godot@v2.4.1
+        with:
+          version: 4.7.0
+          use-dotnet: false
+          include-templates: false
+
+      - name: Import project and normalize through DataImporter
+        shell: bash
+        run: |
+          set -euo pipefail
+          godot --headless --path . --import
+          timeout 480s godot --headless --path . --script res://tools/run_import.gd
+
+      - name: Execute new end-to-end regression before committing
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 480s godot --headless --path . --script res://tests/data/spanish_types_foundation_test_runner.gd | tee tmp-self-debuff-regression.log
+          grep -E '=== SPANISH TYPES FOUNDATION RESULT: [0-9]+ PASS / 0 FAIL ===' tmp-self-debuff-regression.log
+
+      - name: Commit canonical repair outputs to PR head
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add \
+            tools/pokeapi_adapter.py \
+            .github/workflows/data-foundation-v3-tests.yml \
+            tests/data/spanish_types_foundation_test_runner.gd \
+            tests/data/data_v3_damage_user_stat_target_test_suite.gd \
+            data/raw/pokemon_api.json \
+            data/normalized/pokemon_api.json \
+            data/manifests/pokemon_api_manifest.json \
+            data/reports
+          git diff --cached --check
+          git status --short
+          test -n "$(git diff --cached --name-only)"
+          git commit -m 'fix(data-v3): correct damage user stat targets'
+          git push origin HEAD:${{ github.event.pull_request.head.ref }}
