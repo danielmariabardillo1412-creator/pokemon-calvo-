@@ -6,7 +6,7 @@ Rama activa:
 
 `audit/trainer-ai-v3-random-cup-redesign-v1`
 
-Modernización cerrada/certificada antes del bloqueo actual:
+Modernización cerrada/certificada antes del checkpoint actual:
 
 - C1 — `campaign_snapshot` seguro en `TrainerDecisionContext`;
 - C1b — transporte sanitizado por `TrainerIntelligenceController`;
@@ -16,6 +16,13 @@ Modernización cerrada/certificada antes del bloqueo actual:
 - C2d — auditoría contra DATA V3 real;
 - C2e-a — auditoría jerárquica de etiquetas.
 
+C2e-b está abierto y ya produjo dos resultados útiles:
+
+1. diagnosticó saturación excesiva de `support`;
+2. descubrió una regresión semántica real de DATA V3/Battle Core en ataques cuyos `stat_changes` afectan al usuario.
+
+La regresión DATA V3 ha sido reparada y está en proceso de recertificación del HEAD final. C2e-b NO debe calibrar thresholds hasta volver a medir sus estadísticas sobre el dataset corregido.
+
 Todavía NO están integrados con la nueva inferencia:
 
 - `TrainerTeamAnalyzer`;
@@ -23,9 +30,10 @@ Todavía NO están integrados con la nueva inferencia:
 - C3 `TrainerRosterStrategicValueEvaluator`;
 - FASE34 difficulty/expertise.
 
-Referencia temática principal:
+Referencias temáticas:
 
-`docs/project_book/TRAINER_AI.md`.
+- `docs/project_book/TRAINER_AI.md`;
+- `docs/project_book/DATA_V3.md` sección 11 para la corrección semántica descubierta durante C2e-b.
 
 ---
 
@@ -41,13 +49,13 @@ Probe:
 
 No es política Random Cup. Usa DATA V3 real, nivel 50, IV31, EV0, naturaleza neutral, hasta cuatro últimos movimientos `level_up <= 50` y solo `RUNTIME_SUPPORTED`.
 
-Cobertura:
+Cobertura histórica antes de la corrección DATA V3:
 
 - 1.025 especies totales;
 - 1.011 elegibles bajo el probe;
 - 14 sin movimiento elegible.
 
-Afinidades `>= 7500`:
+Afinidades `>= 7500` históricas:
 
 - 0 roles: 29;
 - 1: 101;
@@ -57,9 +65,9 @@ Afinidades `>= 7500`:
 - 5: 71;
 - 6: 8.
 
-Por tanto 569/1.011 tienen 3 o más roles altos y 289/1.011 tienen 4 o más. El vector continuo conserva información útil, pero un threshold global fijo no sirve para derivar etiquetas discretas.
+Por tanto 569/1.011 tenían 3 o más roles altos y 289/1.011 tenían 4 o más. El vector continuo conserva información útil, pero un threshold global fijo no sirve para derivar etiquetas discretas.
 
-Empates del máximo en el modelo plano de seis ejes:
+Empates históricos del máximo en el modelo plano de seis ejes:
 
 - máximo único: 512;
 - empate de 2: 428;
@@ -67,25 +75,20 @@ Empates del máximo en el modelo plano de seis ejes:
 - empate de 4: 15;
 - empate de 5: 7.
 
-Separación confirmada:
+Separación confirmada y todavía canónica:
 
 - `role_scores_bp` = afinidad/forma funcional relativa;
 - `intrinsic_evidence` C2b = magnitud objetiva;
 - C3 deberá consumir ambas dimensiones sin convertir afinidad en fuerza.
 
-Medianas absolutas de bulk del probe:
-
-- físico: 13.050;
-- especial: 12.825.
-
-Había 83/79 casos respectivamente con afinidad defensiva `>=9000` pero magnitud absoluta igual o inferior a la mediana.
-
-C2d final:
+C2d final histórico:
 
 - HEAD `35c689e657816f62b7428d6128ae3cfdc6ce15eb`;
 - 18/18 workflows SUCCESS;
 - Trainer Loadouts 290 PASS / 0 FAIL;
 - PR #103 cerrado sin merge.
+
+Los números de distribución deben considerarse **pre-corrección DATA V3** hasta volver a ejecutar el audit sobre el dataset reparado.
 
 ---
 
@@ -95,7 +98,7 @@ Sonda de test:
 
 `TrainerRosterRoleLabelCalibrationTestSuite`
 
-Hallazgo principal:
+Hallazgo histórico principal:
 
 `fast_attacker` es compuesto por construcción (`speed ∩ offense`) y competir como rol primario plano fabrica empates. Al retirarlo del conjunto de candidatos primarios:
 
@@ -104,14 +107,14 @@ Hallazgo principal:
 - `fast_attacker == best_offense` en 318 especies;
 - `fast_attacker >=7500` en 442.
 
-Dominancia entre los 638 primarios core únicos:
+Dominancia histórica entre los 638 primarios core únicos:
 
 - margen >=500 bp: 573;
 - margen >=1000 bp: 456;
 - margen >=1500 bp: 345;
 - top >=7500 y margen >=1000: 446.
 
-Distribución provisional de primarios únicos:
+Distribución provisional histórica de primarios únicos:
 
 - physical_attacker: 269;
 - special_attacker: 141;
@@ -119,16 +122,18 @@ Distribución provisional de primarios únicos:
 - bulky_special: 71;
 - support: 63.
 
-`support` seguía colisionando en el máximo en 302 especies.
+`support` colisionaba en el máximo en 302 especies.
 
-También se confirmó que 74 de los 638 primarios únicos tenían magnitud absoluta igual o inferior a la mediana de su propia familia: la etiqueta funcional NO equivale a valor estratégico.
+También se confirmó que la etiqueta funcional NO equivale a valor estratégico.
 
-C2e-a final:
+C2e-a final histórico:
 
 - HEAD `00b0369b016b9c0c7b6643203cd49130ccddb166`;
 - 18/18 workflows SUCCESS;
 - Trainer Loadouts 297 PASS / 0 FAIL;
 - PR #104 cerrado sin merge.
+
+Los contadores de distribución deben remedirse después de la reparación DATA V3; la conclusión arquitectónica sobre `fast_attacker` como eje compuesto sigue siendo válida, pero no se congelan thresholds a partir de cifras pre-corrección.
 
 ---
 
@@ -138,7 +143,7 @@ PR temporal abierto:
 
 `#105 — Trainer AI Random Cup modernization — C2e-b support saturation audit`
 
-SHA de audit test-only:
+SHA del audit test-only inicial:
 
 `b65b98a142405f714d92572764a58ec5d480f4f1`
 
@@ -146,14 +151,14 @@ Cambios de esa tranche:
 
 - nuevo `TrainerRosterSupportCalibrationTestSuite`;
 - una línea de conexión en `trainer_loadouts_test_runner.gd`;
-- producción sin cambios.
+- producción Trainer AI sin cambios.
 
 CI sobre `b65b98a1...`:
 
 - 18/18 workflows SUCCESS;
 - Trainer Loadouts: 305 PASS / 0 FAIL.
 
-### Distribución observada de support
+### Distribución observada antes de reparar DATA V3
 
 Sobre 1.011 especies elegibles:
 
@@ -167,7 +172,7 @@ Sobre 1.011 especies elegibles:
 - support >=7500 coexistiendo con ofensiva >=7500: 300;
 - support ==10000 coexistiendo con ofensiva >=7500: 291.
 
-Fuentes de la señal:
+Fuentes históricas de la señal:
 
 - solo control: 793;
 - solo sustain: 17;
@@ -181,93 +186,105 @@ Entre los 365 casos `support ==10000`:
 - sustain-only: 0;
 - una sola fuente/movimiento de utilidad: 62;
 - múltiples movimientos de utilidad: 303;
-- 35 de los 62 casos de fuente única proceden además de un movimiento dañino.
+- 35 de los 62 casos de fuente única procedían además de un movimiento dañino.
 
-Este audit confirmó que `support = max(control, sustain)` es demasiado fácil de saturar, pero descubrió además un problema más profundo que bloquea cualquier calibración honesta.
-
----
-
-# BLOQUEO ACTUAL — defecto semántico DATA V3 en self-debuffs dañinos
-
-**C2e-b NO se considera cerrado todavía. NO calibrar thresholds ni modificar `support` hasta resolver este defecto.**
-
-La sonda encontró ejemplos donde movimientos ofensivos con coste propio aparecen como `control=10000`.
-
-Sentinelas observados:
-
-- `close_combat`;
-- `superpower`;
-- `hammer_arm`.
-
-Ejemplo real del probe:
-
-- Annihilape: su única fuente de `support` puede ser `close_combat`, y la inferencia recibe `control_bp=10000`;
-- Clobbopus/Grapploct/Croconaw muestran el mismo patrón con `superpower`;
-- Bewear lo muestra con `hammer_arm`.
-
-Esto NO debe corregirse con una lista de nombres dentro de Trainer AI si Battle Core está recibiendo el mismo objetivo incorrecto.
-
-## Evidencia del defecto
-
-### 1. Fuente PokeAPI inmutable
-
-`data/api/v2/move/370/index.json` (`close-combat`) declara explícitamente que, después de hacer daño, baja Defense y Special Defense **del usuario**. Sus `stat_changes` son -1 Defense y -1 Special Defense.
-
-`data/api/v2/move/276/index.json` (`superpower`) declara explícitamente que baja Attack y Defense **del usuario**.
-
-El `target = selected-pokemon` de estas entradas describe el objetivo del ATAQUE, no necesariamente el destinatario de sus cambios secundarios de stats.
-
-### 2. Conversor heredado
-
-`tools/archive/pokeapi_adapter_v2_legacy.py::generate_move_specs()` calcula:
-
-- `self_target` a partir del `move.target` general;
-- `stat_target = self` si el move target es user/self;
-- de lo contrario `stat_target = opponent`;
-- después aplica ese mismo `stat_target` a TODOS los `stat_changes`.
-
-Esto es insuficiente para movimientos dañinos cuyo golpe va al rival pero cuyo coste secundario afecta al usuario.
-
-### 3. Shim DATA V3
-
-`tools/pokeapi_adapter.py` envuelve el conversor legado y contiene correcciones estrechas para familias auditadas durante Move Effects V3, pero no se encontró una corrección específica ya existente para `close_combat`, `superpower` o `hammer_arm`.
-
-### 4. Battle Core ejecuta literalmente el target generado
-
-`BattleEffectExecutor` llama `context.resolve_target(spec.target)` antes de ejecutar `MODIFY_STAT_STAGE`.
-
-`BattleEffectContext.resolve_target()` devuelve al actor únicamente si el selector es `SELF`; cualquier otro selector resuelve al target/rival.
-
-Por tanto un `modify_stat_stage` generado como `opponent` no es solo una etiqueta incorrecta para Trainer AI: Battle Core lo aplicará al Pokémon rival.
-
-## Interpretación del 18/18 verde
-
-Que `b65b98a1...` tenga 18/18 SUCCESS NO demuestra que esta semántica sea correcta. Demuestra que las regresiones existentes no estaban comprobando esta familia de targeting secundario. C2e-b la descubrió por una consecuencia indirecta en el análisis de roles.
+Estos números **NO deben usarse ya para calibrar producción**, porque parte de la señal de control estaba contaminada por targeting secundario incorrecto en DATA V3.
 
 ---
 
-## Paso inmediato — diagnóstico y reparación canónica de DATA V3
+## Corrección DATA V3 descubierta por C2e-b
 
-Antes de volver a C2e:
+### Defecto
 
-1. añadir regresiones fuente/runtime para self-debuffs dañinos conocidos, empezando por `close_combat`, `superpower` y `hammer_arm`;
-2. medir el alcance completo de la familia en el snapshot, no asumir que son solo tres movimientos;
-3. corregir `tools/pokeapi_adapter.py` mediante una regla/familia explícitamente auditada y fail-closed, no mediante una heurística genérica insegura;
-4. regenerar el dataset normalizado por la ruta autoritativa;
-5. verificar que los `effect_specs` afectados usan `target=self` y que Battle Core baja los stats del actor, no del rival;
-6. ejecutar DATA V3 domain + Spanish/type/runtime + Godot general + toda la matriz de Trainer AI;
-7. registrar los contadores/clasificaciones que cambien, si cambian;
-8. solo entonces volver a ejecutar C2d/C2e-a/C2e-b y recalcular la distribución de roles/support.
+El conversor legado derivaba el destino de todos los `stat_changes` a partir del `target` general del movimiento. En ataques como `close_combat`, `superpower` o `hammer_arm`, el golpe va al rival pero el coste secundario pertenece al usuario. El resultado era un `MODIFY_STAT_STAGE target=opponent` incorrecto que Battle Core ejecutaba literalmente sobre el rival.
 
-Si el alcance obliga a reabrir formalmente DATA V3, se hará como corrección semántica de un contrato existente, no como expansión por aumentar contadores.
+### Alcance auditado
 
-PR #105 debe permanecer abierto mientras este hallazgo sea el checkpoint activo; no mergear a main.
+La fuente inmutable `data/api/v2/move-category/7/index.json` contiene **28 movimientos** de la familia `damage-raise`. La corrección no usa una lista privada de tres nombres en Trainer AI: el adaptador V3 trata la familia mediante una regla explícita y fail-closed.
+
+### Reparación canónica
+
+Commit de código + regeneración:
+
+`a2341d4f77f22f54b89916fd8e91ac7b26d2c8d5`
+
+Cambios canónicos de ese commit:
+
+- `tools/pokeapi_adapter.py`;
+- `data/raw/pokemon_api.json` regenerado desde snapshot;
+- `data/normalized/pokemon_api.json` regenerado mediante `DataImporter`;
+- nueva `DataV3DamageUserStatTargetTestSuite`;
+- conexión de esa suite al runner Spanish/type/runtime.
+
+No cambiaron el manifest ni los contadores estructurales observados durante regeneración.
+
+El adaptador ahora:
+
+1. entra solo para `meta.category == "damage-raise"`;
+2. exige clase física/especial, power > 0 y `stat_changes` válidos;
+3. compara el paquete generado con el paquete de la fuente antes de modificar targets;
+4. retargetea únicamente los subárboles `MODIFY_STAT_STAGE` de esa familia a `self`;
+5. conserva wrappers `CHANCE` semánticamente coherentes con `self` cuando contienen esos stat changes.
+
+### Regresión permanente
+
+`DataV3DamageUserStatTargetTestSuite` quedó ampliada para:
+
+- leer directamente la categoría 7 del snapshot inmutable;
+- exigir exactamente 28 miembros;
+- verificar 28/28 presentes en el catálogo normalizado;
+- verificar que 28/28 conservan stat changes ejecutables;
+- verificar que todos esos `MODIFY_STAT_STAGE` usan `SELF`;
+- comprobar además que Close Combat contiene Defense -1 y Special Defense -1;
+- ejecutar Close Combat mediante `AuthoritativeBattleServer`;
+- comprobar que baja los stages del actor, no los del rival;
+- comprobar que los eventos `STAT_STAGE_CHANGED` apuntan al actor.
+
+Prueba del bridge de regeneración antes de materializar el commit canónico:
+
+- snapshot → raw → DataImporter → normalized: OK;
+- Spanish/type/runtime: **308 PASS / 0 FAIL**;
+- regresiones Close Combat: todas PASS;
+- especies 1.025;
+- formas 326;
+- tipos 18;
+- movimientos 919;
+- habilidades 373;
+- objetos 2.222;
+- learnset entries 61.102;
+- evoluciones 554;
+- broken references 0;
+- rejected definitions 0.
+
+La infraestructura temporal de regeneración fue eliminada del árbol después de producir el JSON canónico. No forma parte del estado final.
+
+### Estado de certificación
+
+La corrección está **IMPLEMENTADA / REGENERADA / PROBADA END-TO-END EN EL BRIDGE**.
+
+Todavía no debe etiquetarse como recertificada hasta que el HEAD final posterior a limpieza, ampliación de la regresión y documentación obtenga la matriz normal completa de CI. GitHub sigue siendo la autoridad del estado exacto de checks.
 
 ---
 
-## Después de reparar DATA V3 y cerrar C2e
+## Paso inmediato después de recertificar el HEAD final
 
-Solo cuando la semántica de efectos vuelva a estar certificada y la distribución de roles sea razonablemente discriminativa:
+Volver a C2e **sin tocar aún producción**:
+
+1. leer el nuevo informe de `TrainerRosterRoleRealDataTestSuite` sobre DATA V3 corregido;
+2. leer el nuevo informe de `TrainerRosterRoleLabelCalibrationTestSuite`;
+3. leer el nuevo informe de `TrainerRosterSupportCalibrationTestSuite`;
+4. comparar específicamente cuántos falsos `control/support` desaparecen al convertir los self-debuffs dañinos en SELF;
+5. comprobar sentinelas que antes eran falsos support: Annihilape/Close Combat, Superpower y Hammer Arm;
+6. separar la saturación que permanezca por control real (flinch/status/debuff rival) de la contaminación ya eliminada;
+7. solo después decidir si `support` necesita breadth/densidad de utilidad u otra regla de etiqueta.
+
+No cambiar `TrainerRosterRoleInference`, `TrainerTeamAnalyzer`, switching/search ni C3 antes de esa remedición.
+
+---
+
+## Después de cerrar C2e
+
+Solo cuando la semántica de efectos esté recertificada y la distribución de roles sea razonablemente discriminativa:
 
 1. integrar `TrainerTeamAnalyzer` con inferencia dinámica en una tranche separada;
 2. mantener el flujo authored histórico con `role_id` donde corresponda;
@@ -283,4 +300,4 @@ Continúan fuera de alcance inmediato:
 - mover `main`;
 - crear una autoridad Random Cup ficticia solo para tests;
 - inventar reglas todavía abiertas de gameplay;
-- esconder un bug de DATA/Battle Core mediante excepciones privadas de Trainer AI.
+- esconder bugs de DATA/Battle Core mediante excepciones privadas de Trainer AI.
