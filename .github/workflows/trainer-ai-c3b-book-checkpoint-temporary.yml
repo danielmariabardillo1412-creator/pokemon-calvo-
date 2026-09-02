@@ -1,0 +1,41 @@
+name: TEMP Trainer AI C3b book checkpoint
+
+on:
+  push:
+    branches:
+      - audit/trainer-ai-v3-random-cup-redesign-v1
+
+permissions:
+  contents: write
+
+jobs:
+  checkpoint-project-book:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: audit/trainer-ai-v3-random-cup-redesign-v1
+          fetch-depth: 0
+      - name: Append staged checkpoint and self-clean
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          book = Path('docs/project_book/TRAINER_AI.md')
+          staged = Path('docs/project_book/.trainer_ai_c3b_checkpoint_staging.md')
+          text = book.read_text(encoding='utf-8')
+          section = staged.read_text(encoding='utf-8')
+          if '### 26.17 C3b — auditoría real-data de evidencia estructural' not in text:
+              text = text.rstrip() + '\n' + section
+          book.write_text(text.rstrip() + '\n', encoding='utf-8')
+          PY
+          rm -f docs/project_book/.trainer_ai_c3b_checkpoint_staging.md
+          rm -f .github/workflows/trainer-ai-c3b-book-checkpoint-temporary.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A docs/project_book/TRAINER_AI.md docs/project_book/.trainer_ai_c3b_checkpoint_staging.md .github/workflows/trainer-ai-c3b-book-checkpoint-temporary.yml
+          git diff --cached --check
+          git commit -m "docs(trainer-ai): close C3b structural real-data audit"
+          git push origin HEAD:audit/trainer-ai-v3-random-cup-redesign-v1
