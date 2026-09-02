@@ -1,5 +1,5 @@
 class_name TrainerRosterStructuralFormulaComparisonTestSuite
-extends TrainerRosterStructuralOverlapRealDataAuditTestSuite
+extends TrainerRosterStructuralRealDataAuditTestSuite
 
 const COMPARISON_ID := "c3c_structural_formula_comparison_v1"
 const CANDIDATE_IDS := [
@@ -9,6 +9,8 @@ const CANDIDATE_IDS := [
 	"capped_units_blend",
 	"guarded_family_bonus",
 ]
+
+var _disjoint_helper := TrainerRosterStructuralOverlapRealDataAuditTestSuite.new()
 
 
 func run(check_callback: Callable) -> void:
@@ -75,7 +77,7 @@ func _build_formula_report(catalog: DefinitionCatalog, members: Array[Dictionary
 		for anchor in range(members.size()):
 			var roster: Array[Dictionary] = _scheduled_roster(members, anchor, stride)
 			var evidence: Dictionary = evaluator.extract_structural_evidence(roster)
-			var disjoint_by_id: Dictionary = _disjoint_member_metrics(evidence)
+			var disjoint_by_id: Dictionary = _disjoint_helper._disjoint_member_metrics(evidence)
 			for raw_member in evidence.get("member_evidence", []):
 				if not (raw_member is Dictionary):
 					continue
@@ -336,7 +338,7 @@ func _marginal_formula_report(
 
 
 func _metrics_by_id(evidence: Dictionary) -> Dictionary:
-	var disjoint_by_id: Dictionary = _disjoint_member_metrics(evidence)
+	var disjoint_by_id: Dictionary = _disjoint_helper._disjoint_member_metrics(evidence)
 	var out: Dictionary = {}
 	for raw_member in evidence.get("member_evidence", []):
 		if not (raw_member is Dictionary):
