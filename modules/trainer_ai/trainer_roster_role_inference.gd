@@ -3,6 +3,7 @@ extends RefCounted
 
 const MODEL_ID := "trainer_roster_role_inference_evidence_v1"
 const ROLE_MODEL_ID := "trainer_roster_role_affinity_v1"
+const CONTROL_EVIDENCE_MODEL_ID := "trainer_roster_control_evidence_v1"
 const RUNTIME_SUPPORTED := "RUNTIME_SUPPORTED"
 
 
@@ -24,6 +25,16 @@ func extract_intrinsic_evidence(
 	var control_signal_bp: int = 0
 	var setup_signal_bp: int = 0
 	var sustain_signal_bp: int = 0
+	var control_best_runtime_effect_bp: int = 0
+	var control_reliability_bp: int = 0
+	var control_secondary_reliability_bp: int = 0
+	var control_move_count: int = 0
+	var control_dedicated_move_count: int = 0
+	var control_damaging_move_count: int = 0
+	var control_strongest_stat_drop_stages: int = 0
+	var control_effect_keys_seen: Dictionary = {}
+	var control_effect_families_seen: Dictionary = {}
+	var control_breakdown: Array[Dictionary] = []
 	var runtime_move_ids: Array[String] = []
 	var excluded_move_ids: Array[String] = []
 	var unknown_move_ids: Array[String] = []
@@ -52,8 +63,41 @@ func extract_intrinsic_evidence(
 			setup_signal_bp = maxi(setup_signal_bp, int(signals.get("setup", 0)))
 			sustain_signal_bp = maxi(sustain_signal_bp, int(signals.get("sustain", 0)))
 
+		var control_report: Dictionary = _control_move_evidence(move)
+		var move_runtime_control_bp: int = int(control_report.get("best_runtime_effect_bp", 0))
+		if move_runtime_control_bp <= 0:
+			continue
+		control_move_count += 1
+		control_best_runtime_effect_bp = maxi(control_best_runtime_effect_bp, move_runtime_control_bp)
+		var move_reliability_bp: int = int(control_report.get("best_attempt_reliability_bp", 0))
+		if move_reliability_bp > control_reliability_bp:
+			control_secondary_reliability_bp = control_reliability_bp
+			control_reliability_bp = move_reliability_bp
+		elif move_reliability_bp > control_secondary_reliability_bp:
+			control_secondary_reliability_bp = move_reliability_bp
+		if bool(control_report.get("dedicated_control", false)):
+			control_dedicated_move_count += 1
+		if bool(control_report.get("damaging_control", false)):
+			control_damaging_move_count += 1
+		control_strongest_stat_drop_stages = maxi(
+			control_strongest_stat_drop_stages,
+			int(control_report.get("strongest_stat_drop_stages", 0)),
+		)
+		var report_effect_keys: Array = control_report.get("effect_keys", []) as Array
+		for raw_effect_key in report_effect_keys:
+			control_effect_keys_seen[String(raw_effect_key)] = true
+		var report_effect_families: Array = control_report.get("effect_families", []) as Array
+		for raw_effect_family in report_effect_families:
+			control_effect_families_seen[String(raw_effect_family)] = true
+		control_breakdown.append(control_report)
+
+	control_breakdown.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
+		return String(a.get("move_id", "")) < String(b.get("move_id", ""))
+	)
+
 	return {
 		"model_id": MODEL_ID,
+		"control_evidence_model_id": CONTROL_EVIDENCE_MODEL_ID,
 		"instance_id": String(member_view.get("instance_id", "")),
 		"stats": {
 			"max_hp": max_hp,
@@ -79,9 +123,19 @@ func extract_intrinsic_evidence(
 			"special_bulk_signal": max_hp * special_defense,
 			"priority": max_priority,
 			"control_signal_bp": control_signal_bp,
+			"control_best_runtime_effect_bp": control_best_runtime_effect_bp,
+			"control_reliability_bp": control_reliability_bp,
+			"control_secondary_reliability_bp": control_secondary_reliability_bp,
+			"control_move_count": control_move_count,
+			"control_effect_key_count": control_effect_keys_seen.size(),
+			"control_effect_family_count": control_effect_families_seen.size(),
+			"control_dedicated_move_count": control_dedicated_move_count,
+			"control_damaging_move_count": control_damaging_move_count,
+			"control_strongest_stat_drop_stages": control_strongest_stat_drop_stages,
 			"setup_signal_bp": setup_signal_bp,
 			"sustain_signal_bp": sustain_signal_bp,
 		},
+		"control_breakdown": control_breakdown,
 		"runtime_move_ids": runtime_move_ids,
 		"excluded_move_ids": excluded_move_ids,
 		"unknown_move_ids": unknown_move_ids,
@@ -158,6 +212,98 @@ func _ratio_bp(value: int, ceiling: int) -> int:
 	if value <= 0 or ceiling <= 0:
 		return 0
 	return clampi(value * 10000 / ceiling, 0, 10000)
+
+
+func _control_move_evidence(move: MoveDefinition) -> Dictionary:
+	var state: Dictionary = {
+		"best_runtime_effect_bp": 0,
+		"route_count": 0,
+		"effect_keys": {},
+		"effect_families": {},
+		"strongest_stat_drop_stages": 0,
+	}
+	for spec in move.effect_specs:
+		_accumulate_control_shape(spec, 10000, state)
+
+	var effect_keys_dict: Dictionary = state.get("effect_keys", {}) as Dictionary
+	var effect_keys: Array[String] = []
+	for raw_key in effect_keys_dict.keys():
+		effect_keys.append(String(raw_key))
+	effect_keys.sort()
+
+	var effect_families_dict: Dictionary = state.get("effect_families", {}) as Dictionary
+	var effect_families: Array[String] = []
+	for raw_family in effect_families_dict.keys():
+		effect_families.append(String(raw_family))
+	effect_families.sort()
+
+	var best_runtime_effect_bp: int = int(state.get("best_runtime_effect_bp", 0))
+	var accuracy_bp: int = _move_accuracy_bp(move)
+	return {
+		"move_id": String(move.id),
+		"accuracy_bp": accuracy_bp,
+		"best_runtime_effect_bp": best_runtime_effect_bp,
+		"best_attempt_reliability_bp": best_runtime_effect_bp * accuracy_bp / 10000,
+		"route_count": int(state.get("route_count", 0)),
+		"effect_keys": effect_keys,
+		"effect_families": effect_families,
+		"strongest_stat_drop_stages": int(state.get("strongest_stat_drop_stages", 0)),
+		"dedicated_control": best_runtime_effect_bp > 0 and move.power <= 0,
+		"damaging_control": best_runtime_effect_bp > 0 and move.power > 0,
+	}
+
+
+func _accumulate_control_shape(
+	spec: BattleEffectSpec,
+	inherited_runtime_bp: int,
+	state: Dictionary,
+) -> void:
+	if spec == null:
+		return
+	var effective_runtime_bp: int = inherited_runtime_bp
+	if spec.kind == BattleEffectSpec.CHANCE:
+		effective_runtime_bp = inherited_runtime_bp * clampi(spec.chance_basis_points, 0, 10000) / 10000
+
+	if _is_control_leaf(spec):
+		state["route_count"] = int(state.get("route_count", 0)) + 1
+		state["best_runtime_effect_bp"] = maxi(
+			int(state.get("best_runtime_effect_bp", 0)),
+			effective_runtime_bp,
+		)
+		var effect_keys: Dictionary = state.get("effect_keys", {}) as Dictionary
+		var effect_families: Dictionary = state.get("effect_families", {}) as Dictionary
+		if spec.kind == BattleEffectSpec.MODIFY_STAT_STAGE:
+			effect_keys["stat:%s" % String(spec.stat_key)] = true
+			effect_families["stat_debuff"] = true
+			state["strongest_stat_drop_stages"] = maxi(
+				int(state.get("strongest_stat_drop_stages", 0)),
+				absi(spec.value),
+			)
+		elif spec.kind == BattleEffectSpec.INFLICT_STATUS:
+			effect_keys["status:%s" % String(spec.status_id)] = true
+			effect_families["status"] = true
+		elif spec.kind == BattleEffectSpec.FLINCH:
+			effect_keys["flinch"] = true
+			effect_families["flinch"] = true
+
+	for child in spec.children:
+		_accumulate_control_shape(child, effective_runtime_bp, state)
+
+
+func _is_control_leaf(spec: BattleEffectSpec) -> bool:
+	if spec.kind == BattleEffectSpec.MODIFY_STAT_STAGE:
+		return spec.target == BattleEffectSpec.OPPONENT and spec.value < 0
+	if spec.kind == BattleEffectSpec.INFLICT_STATUS:
+		return spec.target == BattleEffectSpec.OPPONENT
+	if spec.kind == BattleEffectSpec.FLINCH:
+		return spec.target == BattleEffectSpec.OPPONENT
+	return false
+
+
+func _move_accuracy_bp(move: MoveDefinition) -> int:
+	if move.accuracy < 0:
+		return 10000
+	return clampi(move.accuracy * 100, 0, 10000)
 
 
 func _effect_signals(spec: BattleEffectSpec, inherited_chance_bp: int) -> Dictionary:
