@@ -14,6 +14,8 @@ La modernización previa a FASE34 ha completado y certificado:
 - C2b — evidencia intrínseca de capacidades;
 - C2c — afinidades funcionales multirole `0..10000`.
 
+C2d auditó C2c contra DATA V3 real. C2e está en calibración y todavía no autoriza consumidores.
+
 `TrainerTeamAnalyzer`, switching/search con valor de campaña y C3 strategic value continúan sin integrar con la nueva inferencia.
 
 Referencia temática:
@@ -55,11 +57,10 @@ PR temporal:
 
 `#103 — Trainer AI Random Cup modernization — C2d real DATA V3 role audit`
 
-CI sobre ese SHA:
+CI sobre el HEAD final C2d:
 
 - **18/18 workflows SUCCESS**;
 - `Trainer Loadouts Tests`: **290 PASS / 0 FAIL**;
-- C2d añade 10 checks de frontera/determinismo;
 - 1.025 especies totales;
 - 1.011 especies cubiertas por el probe;
 - 14 sin movimiento elegible bajo esta sonda concreta.
@@ -115,23 +116,111 @@ Conclusión canónica:
 
 ---
 
-## Paso inmediato — C2e calibración antes de consumidores
+## C2e-a — auditoría jerárquica de etiquetas
+
+Se añadió una segunda sonda exclusivamente de test:
+
+`TrainerRosterRoleLabelCalibrationTestSuite`
+
+Su objetivo no es congelar thresholds, sino comprobar qué parte de la ambigüedad de C2d nace de tratar todos los ejes como roles primarios equivalentes.
+
+Hipótesis auditada:
+
+- `fast_attacker` es un eje compuesto por construcción: `speed ∩ offense`;
+- por ello puede ser más correcto tratarlo como descriptor/modificador secundario de un atacante que como competidor plano contra `physical_attacker` y `special_attacker` al elegir un rol primario.
+
+Comparación sobre las mismas 1.011 especies elegibles:
+
+- esquema plano de seis roles: **499** especies con empate múltiple en el máximo;
+- candidatos primarios sin `fast_attacker`: **373** con empate múltiple;
+- primario único plano: 512;
+- primario único en la jerarquía provisional: **638**.
+
+La jerarquía reduce por tanto 126 empates máximos, pero **no resuelve por sí sola la calibración**.
+
+Prueba directa de la causa:
+
+- en **318** especies `fast_attacker` es exactamente igual al mejor score ofensivo;
+- **442** especies tienen `fast_attacker >= 7500`.
+
+Esto confirma que una parte material de los empates era mecánica, derivada de que `fast_attacker` reutiliza la afinidad ofensiva como techo. La conclusión provisional es que `fast_attacker` encaja mejor como descriptor funcional secundario; todavía no se congela esta decisión en producción hasta cerrar el resto de C2e.
+
+### Dominancia y margen
+
+Entre las 638 especies con primario core único:
+
+- margen >= 500 bp: 573;
+- margen >= 1000 bp: 456;
+- margen >= 1500 bp: 345;
+- top >= 7500 y margen >= 1000: 446.
+
+Estos números muestran que margen/dominancia sí aporta discriminación, pero no debe usarse como único criterio universal.
+
+Distribución provisional de primarios únicos core:
+
+- `physical_attacker`: 269;
+- `special_attacker`: 141;
+- `bulky_physical`: 94;
+- `bulky_special`: 71;
+- `support`: 63.
+
+### Hallazgo principal pendiente: support
+
+`support` sigue siendo la fuente de colisión más clara:
+
+- `support` es máximo único solo en **63** especies;
+- colisiona en el máximo con otro rol en **302** especies.
+
+La explicación técnica probable está en C2c: `support = max(control_signal_bp, sustain_signal_bp)`. Un único efecto garantizado de control puede producir `10000`, aunque el resto del loadout sea claramente ofensivo. C2e no debe solucionar esto bajando un threshold a ojo; debe auditar primero semántica, frecuencia y coexistencia ofensiva de esas señales.
+
+### Magnitud C2b sigue separada de la etiqueta
+
+Medianas absolutas observadas por familia en esta sonda:
+
+- `physical_attacker`: 16.280;
+- `special_attacker`: 7.875;
+- `bulky_physical`: 13.050;
+- `bulky_special`: 12.825;
+- `support`: 3.000.
+
+De los 638 primarios core únicos, **74** tienen una magnitud absoluta igual o inferior a la mediana de su propia familia:
+
+- physical attacker: 36;
+- special attacker: 1;
+- bulky physical: 19;
+- bulky special: 18.
+
+Esto NO invalida la etiqueta: un miembro puede ser principalmente físico o defensivo dentro de su propio perfil y, aun así, ser mediocre en magnitud absoluta. Precisamente por eso C3 debe valorar poder/escasez/valor estratégico por separado y no reinterpretar `primary_role_id` como fuerza.
+
+Los percentiles/medianas usados aquí son **diagnóstico de corpus**, no thresholds runtime congelados.
+
+---
+
+## Paso inmediato — C2e-b auditoría de support antes de producción
 
 **NO integrar todavía `TrainerTeamAnalyzer`.**
 
-El siguiente bloque debe calibrar cómo convertir el vector continuo C2c en presencia de roles útil para análisis de roster, sin destruir el multirole ni mezclar valor estratégico.
+El siguiente bloque debe estudiar por qué `support` colisiona en 302 máximos y separar al menos:
 
-Objetivos C2e:
+1. control garantizado aislado dentro de un moveset ofensivo;
+2. control recurrente o múltiple;
+3. sustain real;
+4. combinación control + sustain;
+5. utilidad que coexiste con una ruta ofensiva dominante;
+6. utilidad que constituye realmente la función central del miembro.
 
-1. conservar `role_scores_bp` y `intrinsic_evidence` como salidas separadas;
-2. evitar un threshold global ingenuo como `score >= 7500`;
-3. estudiar una regla determinista de `primary/secondary/confidence` basada en dominancia y margen entre ejes, no solo en `argmax`;
-4. decidir si `bulky_physical`/`bulky_special` deben incorporar también una señal estructural de HP/bulk para que el nombre del rol no dependa únicamente del foco Defense/SpDef;
-5. revisar el `support` saturado por efectos garantizados antes de usarlo como etiqueta discreta;
-6. repetir el mismo audit DATA V3 y comparar distribuciones antes/después;
-7. no tocar TeamAnalyzer, switching, search ni C3 en la misma tranche de calibración.
+La auditoría debe usar `BattleEffectSpec` estructurado y DATA V3 real. No inferir semántica por nombres de movimientos.
 
-C2e debe preferir invariantes relacionales y métricas de distribución. No se congelarán thresholds por intuición hasta comprobarlos contra DATA V3 real.
+Objetivo de C2e-b:
+
+- decidir si `support` necesita una señal de **densidad/breadth de utilidad**, no solo el máximo de un efecto;
+- comprobar si conviene separar una capacidad `utility/control/sustain` de la etiqueta discreta `support`;
+- conservar self-setup fuera de support salvo evidencia adicional;
+- no degradar control/sustain como capacidades: solo evitar que un efecto aislado monopolice la etiqueta primaria;
+- volver a medir empates y distribución después de cualquier candidato de calibración;
+- no tocar todavía TeamAnalyzer, switching, search ni C3.
+
+Después de support, revisar si los ejes `bulky_physical/bulky_special` necesitan una calibración adicional de etiqueta. La magnitud absoluta seguirá perteneciendo a C2b/C3, no se mezclará silenciosamente con afinidad C2c.
 
 ---
 
