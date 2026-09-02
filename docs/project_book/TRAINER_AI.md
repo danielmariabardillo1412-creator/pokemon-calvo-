@@ -7747,3 +7747,354 @@ C3f-j **NO** puede:
 - mergear PR #105.
 
 Después de C3f-j será obligatorio un checkpoint separado antes de cualquier consumidor conductual. Idealmente, la helper de producción deberá pasar primero una auditoría real-data propia que reproduzca C3f-i antes de decidir si alguna capa de reasoning puede consumirla.
+
+
+### 26.31 C3f-j — port pasivo de Pareto/frontier a producción, sin consumidor conductual
+
+C3f-j queda cerrado como **productionization pasiva** de la operación Pareto/frontier certificada en C3f-i.
+
+El objetivo de esta microtranche no era decidir qué miembro del roster usar, cambiar o preservar. El objetivo era mucho más estrecho: demostrar que la geometría Pareto ya auditada podía existir como helper real de producción sin introducir por accidente un ranking, un scalar combinado, un tie-break oculto ni una política de campaña.
+
+#### Baseline
+
+C3f-j parte exactamente del checkpoint documental 26.30:
+
+`d7566e0ef16f329ae9ddc07dd5405440948e1574`
+
+Ese baseline estaba certificado con:
+
+- `18/18 SUCCESS`;
+- FASE33 `567 PASS / 0 FAIL`;
+- Godot general verde;
+- DATA V3 verde;
+- PR #105 abierto y sin merge;
+- `main` inmóvil en `f8452a1625ccb8389c9e52ff4416a96a24e00efd`.
+
+#### Alcance técnico exacto
+
+El diff técnico de C3f-j respecto a `d7566e...` quedó limitado a tres archivos:
+
+1. `modules/trainer_ai/trainer_roster_pareto_frontier.gd`
+2. `tests/trainer_ai/trainer_roster_pareto_frontier_production_test_suite.gd`
+3. `tests/trainer_ai/trainer_team_composition_test_runner.gd`
+
+No se modificaron:
+
+- brains;
+- switching;
+- search;
+- campaign integration;
+- `TrainerProfile`;
+- FASE34;
+- documentación durante el tramo técnico;
+- workflows permanentes.
+
+El control de alcance registró aproximadamente:
+
+- helper de producción: `+146` líneas;
+- suite de certificación/audit: `+421` líneas;
+- runner: `+1 / -1`.
+
+#### Helper productiva
+
+Se añadió:
+
+`TrainerRosterParetoFrontier`
+
+Archivo:
+
+`modules/trainer_ai/trainer_roster_pareto_frontier.gd`
+
+Modelo:
+
+`trainer_roster_pareto_frontier_v1`
+
+Fuente contractual obligatoria:
+
+`trainer_roster_component_first_contract_v1`
+
+API pública de esta tranche:
+
+`evaluate(contract: Dictionary) -> Dictionary`
+
+La helper consume solamente un contrato ya producido por `TrainerRosterComponentFirstContract`.
+
+No reconstruye observaciones, no lee battle memory y no recibe contexto de campaña.
+
+#### Vector Pareto congelado
+
+C3f-j usa exactamente las cuatro dimensiones ya certificadas por C3f-i:
+
+1. `structural_value_bp`
+2. `hp_state_bp`
+3. `route_retention_bp`
+4. `immediate_status_action_bp`
+
+No se añadió una quinta dimensión.
+
+No entran en el vector inmediato:
+
+- attrition;
+- held item;
+- TrainerProfile;
+- rival/opponent;
+- beliefs;
+- RNG;
+- campaign snapshot;
+- replacement policy;
+- recovery policy;
+- permadeath policy.
+
+La dominancia sigue siendo exactamente:
+
+- A debe ser `>=` B en las cuatro dimensiones;
+- y A debe ser `>` B en al menos una.
+
+Por tanto, dos miembros con tradeoff real siguen siendo incomparables.
+
+Dos vectores idénticos tampoco se rompen por orden léxico ni por instance id.
+
+#### Elegibilidad
+
+La helper solo introduce en el cálculo Pareto estados que cumplen simultáneamente:
+
+- `availability_state == "surviving"`;
+- structural disponible;
+- operational disponible;
+- los cuatro componentes requeridos presentes como enteros.
+
+Los KO permanecen en el contrato de origen, pero quedan fuera de la frontier y del conjunto dominated calculado sobre candidatos elegibles.
+
+La helper no muta el contrato original.
+
+#### Fail-closed
+
+C3f-j endurece explícitamente la entrada antes de producir una frontier.
+
+Devuelve resultado vacío/no válido ante, entre otros:
+
+- `model_id` de contrato incorrecto;
+- `member_states` no Array;
+- `member_count` ausente/no entero/incoherente;
+- member state no Dictionary;
+- instance id vacío;
+- instance id duplicado;
+- availability state desconocido;
+- structural/operational con forma inválida;
+- componente requerido ausente o no entero en un candidato que declara disponibilidad.
+
+No devuelve una frontier parcial fingiendo que un contrato roto era válido.
+
+#### Output productivo
+
+El resultado expone solamente una partición pasiva y trazabilidad:
+
+- `model_id`;
+- `source_contract_model_id`;
+- `frontier_dimensions`;
+- `input_contract_valid`;
+- `eligible_member_count`;
+- `frontier_count`;
+- `dominated_count`;
+- `frontier_instance_ids`;
+- `dominated_instance_ids`;
+- `attrition_excluded_from_immediate_frontier`;
+- `held_item_excluded_from_immediate_frontier`.
+
+Los IDs de frontier y dominated salen ordenados léxicamente para determinismo/auditabilidad.
+
+Ese orden **no tiene semántica de preferencia**.
+
+C3f-j no expone:
+
+- `best_member_id`;
+- `selected_member_id`;
+- ranking;
+- `combined_score`;
+- pesos;
+- scalar de operational readiness;
+- decisión de switching;
+- autorización de conducta.
+
+#### Suite de producción
+
+Se añadió:
+
+`TrainerRosterParetoFrontierProductionTestSuite`
+
+La suite hereda C3f-i, por lo que conserva toda la barrera previa y añade checks específicos del port productivo.
+
+El total FASE33 subió de:
+
+`567 PASS / 0 FAIL`
+
+a:
+
+`601 PASS / 0 FAIL`
+
+#### Invariantes sintéticas certificadas
+
+Entre otros checks, C3f-j demuestra:
+
+- model id correcto;
+- source contract model id correcto;
+- dimensiones idénticas a C3f-i;
+- contrato válido aceptado;
+- paridad exacta con la helper audit-only en un caso sintético;
+- frontier/dominated forman la partición esperada de elegibles;
+- input no mutado;
+- invariancia ante reorder del input;
+- outputs ordenados léxicamente;
+- vectores iguales conservan ambos miembros;
+- tradeoff structural/operational conserva ambos miembros;
+- cambios solo en attrition/item no cambian la frontier inmediata;
+- KO queda fuera sin borrarse del contrato;
+- survivor con capa no disponible no recibe valores fabricados;
+- modelo incorrecto falla cerrado;
+- member count incorrecto falla cerrado;
+- IDs duplicados fallan cerrado;
+- componente faltante falla cerrado;
+- determinismo;
+- JSON serializable;
+- ausencia de scalar/ranking/contexto prohibido;
+- ausencia de selección conductual.
+
+#### Auditoría real-data productiva
+
+Audit id:
+
+`c3f_j_pareto_frontier_production_real_data_v1`
+
+La auditoría ejecuta la helper de producción sobre el mismo esquema real-data de C3f-i y compara roster por roster contra la operación audit-only certificada.
+
+Cobertura:
+
+- especies elegibles: `1021`;
+- rosters muestreados: `128`;
+- member states elegibles: `768`;
+- stride: `8`;
+- probes KO: `24`.
+
+Resultado exacto:
+
+- `frontier_parity_mismatches = 0`;
+- `dominated_partition_mismatches = 0`;
+- `model_id_mismatches = 0`;
+- `source_contract_model_id_mismatches = 0`;
+- `dimension_mismatches = 0`;
+- `reorder_mismatches = 0`;
+- `contract_mutation_cases = 0`;
+- `ko_frontier_parity_mismatches = 0`;
+- `ko_frontier_inclusions = 0`;
+- `forbidden_output_key_cases = 0`;
+- `forbidden_context_key_cases = 0`.
+
+La distribución productiva reproduce exactamente C3f-i:
+
+- frontier member occurrences: `424`;
+- dominated member occurrences: `344`;
+- rosters con reducción: `124 / 128`;
+- histograma de tamaño de frontier:
+  - `1 -> 12`;
+  - `2 -> 22`;
+  - `3 -> 34`;
+  - `4 -> 38`;
+  - `5 -> 18`;
+  - `6 -> 4`.
+
+La productionization, por tanto, no cambió la geometría certificada.
+
+#### Certificación técnica
+
+SHA técnico final:
+
+`a49c1239a1c4af0d372f346634cbc35f0b906ba3`
+
+Sobre ese SHA:
+
+- `18/18 SUCCESS`;
+- FASE33 `601 PASS / 0 FAIL`;
+- Godot general verde;
+- DATA V3 verde;
+- reporte C3f-j con todos los mismatches críticos en cero.
+
+#### Checkpoint humano tree-identical
+
+Se creó un commit humano con el mismo árbol técnico y parent directo del baseline 26.30:
+
+`c844d3cb88aadbb572696bd2a455a02040cc5d5d`
+
+El objetivo era excluir de la historia certificada los commits técnicos intermedios de staging y certificar exactamente el árbol ya validado.
+
+La segunda ejecución reprodujo:
+
+- `18/18 SUCCESS`;
+- FASE33 `601 PASS / 0 FAIL`;
+- `frontier_parity_mismatches = 0`;
+- `dominated_partition_mismatches = 0`;
+- `reorder_mismatches = 0`;
+- `contract_mutation_cases = 0`;
+- `ko_frontier_parity_mismatches = 0`;
+- `ko_frontier_inclusions = 0`;
+- mismo `424 / 344`;
+- mismo `124 / 128`;
+- mismo histograma `12 / 22 / 34 / 38 / 18 / 4`.
+
+#### Invariantes externas
+
+Tras la certificación humana C3f-j:
+
+- PR #105 sigue `OPEN`;
+- PR #105 sigue `merged = false`;
+- head de PR #105: `c844d3cb88aadbb572696bd2a455a02040cc5d5d`;
+- base: `main`;
+- `main` sigue exactamente en `f8452a1625ccb8389c9e52ff4416a96a24e00efd`.
+
+#### Conclusión C3f-j
+
+La operación Pareto/frontier ya puede considerarse una **primitive productiva pasiva certificada**.
+
+Eso NO significa que el Trainer AI ya tenga permiso para usarla para cambiar de Pokémon, buscar acciones o escoger un miembro.
+
+La helper sabe responder:
+
+> ¿qué candidatos no están estrictamente dominados dentro de este vector component-first?
+
+No sabe responder:
+
+> ¿qué candidato debo elegir?
+
+La diferencia sigue siendo deliberada.
+
+En 116 de las 128 rosters auditadas en C3f-i la frontier conserva más de una alternativa. Por tanto, convertir `frontier_instance_ids[0]` en una selección sería introducir silenciosamente un tie-break léxico, no una decisión estratégica certificada.
+
+C3f-j queda cerrado sin esa contaminación.
+
+#### Siguiente microtranche autorizada — C3f-k
+
+**C3f-k — auditoría test-only de semántica de consumo de frontier, todavía sin selección ni integración conductual.**
+
+Antes de conectar la primitive Pareto a cualquier brain, switching o search, C3f-k debe estudiar qué puede significar de forma segura “consumir” una frontier sin transformarla accidentalmente en ranking.
+
+C3f-k queda limitado a tests/audit.
+
+Debe comprobar, como mínimo:
+
+- join lossless de `frontier_instance_ids` contra `TrainerRosterComponentFirstContract` por `instance_id`;
+- cada frontier member conserva accesibles por separado structural y operational components;
+- los dominated members siguen auditables en el contrato aunque no sean candidatos de frontier;
+- `frontier_count == 1` significa únicamente “único no dominado en este vector”, no “acción universalmente correcta”;
+- `frontier_count > 1` mantiene explícitamente el tradeoff sin resolver;
+- el orden léxico no puede actuar como tie-break;
+- item y attrition permanecen side evidence y no desempates ocultos;
+- un KO/removal obliga a recomputar contrato/frontier y no a reutilizar una selección anterior;
+- ningún output puede exponer winner/ranking/combined scalar;
+- no puede leer TrainerProfile/rival/beliefs/RNG/campaign policy;
+- no puede modificar brains;
+- no puede tocar switching/search;
+- no puede decidir acciones;
+- FASE34 sigue cerrada.
+
+C3f-k no está autorizado a añadir todavía una clase productiva consumidora.
+
+Cualquier futura integración conductual requerirá un checkpoint documental separado después de C3f-k y una autorización explícita de alcance.
