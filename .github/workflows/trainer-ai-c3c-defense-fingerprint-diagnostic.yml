@@ -1,0 +1,162 @@
+name: TEMP Trainer AI C3c defense fingerprint diagnostic
+
+on:
+  push:
+    branches:
+      - audit/trainer-ai-c3c-defense-fingerprint-diagnostic
+
+permissions:
+  contents: read
+
+jobs:
+  fingerprint:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - label: c3b-certified
+            ref: e88a953c6453c373dba4692880bc870eca519876
+          - label: c3c-current
+            ref: e8a06165222c3414dc95639dc270bb273dd1d3ac
+    name: fingerprint-${{ matrix.label }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ matrix.ref }}
+      - uses: chickensoft-games/setup-godot@v2.4.1
+        with:
+          version: 4.7.0
+          use-dotnet: false
+          include-templates: false
+      - name: Import exact tree
+        shell: bash
+        run: |
+          set -euo pipefail
+          godot --headless --path . --import >/tmp/c3c-fingerprint-import.log 2>&1
+      - name: Run post-import defense fingerprint
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > tests/trainer_ai/_c3c_defense_fingerprint_runtime.gd <<'GD'
+          extends SceneTree
+
+          const DATA_PATH := "res://data/normalized/pokemon_api.json"
+
+          func _initialize() -> void:
+              call_deferred("_run")
+
+          func _run() -> void:
+              var normalized := _load_json(DATA_PATH)
+              if normalized.is_empty():
+                  push_error("FINGERPRINT empty normalized data")
+                  quit(2)
+                  return
+              var input_hash_before := _json_hash(normalized)
+              print("FINGERPRINT input_hash_before=", input_hash_before)
+              for pass_index in range(3):
+                  _run_pass(pass_index, normalized)
+              print("FINGERPRINT input_hash_after=", _json_hash(normalized))
+              print("FINGERPRINT input_unchanged=", input_hash_before == _json_hash(normalized))
+              quit(0)
+
+          func _run_pass(pass_index: int, normalized: Dictionary) -> void:
+              var game_data := GameData.from_dict(normalized)
+              var catalog := game_data.to_definition_catalog()
+              var validation := PokemonTypeChart.validate_catalog(game_data.type_catalog)
+
+              var native_ids: Array[StringName] = game_data.species_catalog.all_ids()
+              native_ids.sort()
+              var native_order: Array[String] = []
+              for species_id in native_ids:
+                  native_order.append(String(species_id))
+
+              var lexical_order: Array[String] = []
+              for species_id in game_data.species_catalog.all_ids():
+                  lexical_order.append(String(species_id))
+              lexical_order.sort()
+
+              var chart_rows: Array = []
+              for attack_id in PokemonTypeChart.STANDARD_TYPE_IDS:
+                  var row: Array = [String(attack_id)]
+                  for defend_id in PokemonTypeChart.STANDARD_TYPE_IDS:
+                      row.append(catalog.type_multiplier(attack_id, defend_id))
+                  chart_rows.append(row)
+
+              var species_defense_rows: Array = []
+              for species_id in native_ids:
+                  var species := catalog.species(species_id)
+                  if species == null:
+                      continue
+                  var resisted: Array[String] = []
+                  var immune: Array[String] = []
+                  for attack_id in PokemonTypeChart.STANDARD_TYPE_IDS:
+                      var multiplier := 1.0
+                      for defend_id in species.type_ids_resolved():
+                          multiplier *= catalog.type_multiplier(attack_id, defend_id)
+                      if multiplier < 0.9999:
+                          resisted.append(String(attack_id))
+                      if multiplier < 0.0001:
+                          immune.append(String(attack_id))
+                  resisted.sort()
+                  immune.sort()
+                  var type_ids: Array[String] = []
+                  for type_id in species.type_ids_resolved():
+                      type_ids.append(String(type_id))
+                  species_defense_rows.append([String(species_id), type_ids, resisted, immune])
+
+              var base_helper := TrainerRosterStructuralRealDataAuditTestSuite.new()
+              var probe := base_helper._build_probe_members(game_data, catalog, native_ids)
+              var members: Array[Dictionary] = []
+              var member_species_order: Array[String] = []
+              for raw_member in probe.get("members", []):
+                  if raw_member is Dictionary:
+                      var member := raw_member as Dictionary
+                      members.append(member)
+                      member_species_order.append(String(member.get("species_id", "")))
+
+              var first_roster_173: Array[String] = []
+              for member in base_helper._scheduled_roster(members, 0, 173):
+                  first_roster_173.append(String((member as Dictionary).get("species_id", "")))
+              var first_roster_389: Array[String] = []
+              for member in base_helper._scheduled_roster(members, 0, 389):
+                  first_roster_389.append(String((member as Dictionary).get("species_id", "")))
+
+              var overlap := TrainerRosterStructuralOverlapRealDataAuditTestSuite.new()
+              var refined := overlap._build_refined_report(catalog, members)
+              var refined_summary := {
+                  "absolute_unique_defense_unit_delta": int(refined.get("absolute_unique_defense_unit_delta", 0)),
+                  "occurrences_with_defensive_semantic_difference": int(refined.get("occurrences_with_defensive_semantic_difference", 0)),
+                  "raw_gt": int(refined.get("raw_unique_defense_gt_disjoint_occurrences", 0)),
+                  "raw_lt": int(refined.get("raw_unique_defense_lt_disjoint_occurrences", 0)),
+                  "low_signal": int(refined.get("low_signal_no_unique_occurrences", 0)),
+                  "marginal_cases": int((refined.get("marginal_removal_disjoint", {}) as Dictionary).get("cases_with_new_uniqueness", 0)),
+                  "marginal_units": int((refined.get("marginal_removal_disjoint", {}) as Dictionary).get("new_unique_units", 0)),
+              }
+
+              print("FINGERPRINT pass=", pass_index)
+              print("FINGERPRINT type_validation=", JSON.stringify(validation))
+              print("FINGERPRINT chart_hash=", _json_hash(chart_rows))
+              print("FINGERPRINT native_order_hash=", _json_hash(native_order))
+              print("FINGERPRINT lexical_order_hash=", _json_hash(lexical_order))
+              print("FINGERPRINT native_first12=", JSON.stringify(native_order.slice(0, 12)))
+              print("FINGERPRINT defense_hash=", _json_hash(species_defense_rows))
+              print("FINGERPRINT member_order_hash=", _json_hash(member_species_order))
+              print("FINGERPRINT member_count=", members.size())
+              print("FINGERPRINT roster173=", JSON.stringify(first_roster_173))
+              print("FINGERPRINT roster389=", JSON.stringify(first_roster_389))
+              print("FINGERPRINT refined=", JSON.stringify(refined_summary))
+              print("FINGERPRINT distortion_examples_hash=", _json_hash(refined.get("defensive_semantic_distortion_examples", [])))
+
+          func _json_hash(value: Variant) -> String:
+              return JSON.stringify(value).sha256_text()
+
+          func _load_json(path: String) -> Dictionary:
+              var file := FileAccess.open(path, FileAccess.READ)
+              if file == null:
+                  return {}
+              var parsed: Variant = JSON.parse_string(file.get_as_text())
+              return parsed as Dictionary if parsed is Dictionary else {}
+          GD
+          timeout 180s godot --headless --path . --script res://tests/trainer_ai/_c3c_defense_fingerprint_runtime.gd 2>&1 | tee /tmp/c3c-defense-fingerprint.log
+          grep '^FINGERPRINT' /tmp/c3c-defense-fingerprint.log
