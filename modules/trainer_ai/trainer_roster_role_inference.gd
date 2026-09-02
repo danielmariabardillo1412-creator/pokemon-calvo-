@@ -273,7 +273,7 @@ func _accumulate_control_shape(
 		var effect_keys: Dictionary = state.get("effect_keys", {}) as Dictionary
 		var effect_families: Dictionary = state.get("effect_families", {}) as Dictionary
 		if spec.kind == BattleEffectSpec.MODIFY_STAT_STAGE:
-			effect_keys["stat:%s" % String(spec.stat_key)] = true
+			effect_keys["stat:%s" % String(spec.stat_id)] = true
 			effect_families["stat_debuff"] = true
 			state["strongest_stat_drop_stages"] = maxi(
 				int(state.get("strongest_stat_drop_stages", 0)),
