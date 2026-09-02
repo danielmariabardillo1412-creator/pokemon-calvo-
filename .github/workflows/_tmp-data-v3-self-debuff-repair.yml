@@ -61,7 +61,6 @@ jobs:
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add \
             tools/pokeapi_adapter.py \
-            .github/workflows/data-foundation-v3-tests.yml \
             tests/data/spanish_types_foundation_test_runner.gd \
             tests/data/data_v3_damage_user_stat_target_test_suite.gd \
             data/raw/pokemon_api.json \
