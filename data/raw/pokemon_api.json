@@ -237,7 +237,7 @@
    "type_id": "electric",
    "priority": 0,
    "damage_class": "special",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 1,
    "target": "selected-pokemon",
    "effect_summary": "Inflicts regular damage with no additional effect.",
@@ -322,7 +322,7 @@
    "type_id": "poison",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 20,
    "target": "user",
    "effect_summary": "Raises the user’s Defense by two stages.",
@@ -337,7 +337,7 @@
    ],
    "crit_rate_bp": 0,
    "makes_contact": false,
-   "classification": "DATA_ONLY"
+   "classification": "RUNTIME_SUPPORTED"
   },
   {
    "id": "acid_downpour_physical",
@@ -346,7 +346,7 @@
    "type_id": "poison",
    "priority": 0,
    "damage_class": "physical",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 1,
    "target": "selected-pokemon",
    "effect_summary": "Inflicts regular damage with no additional effect.",
@@ -362,7 +362,7 @@
    "type_id": "poison",
    "priority": 0,
    "damage_class": "special",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 1,
    "target": "selected-pokemon",
    "effect_summary": "Inflicts regular damage with no additional effect.",
@@ -418,7 +418,7 @@
    "type_id": "normal",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 30,
    "target": "user-or-ally",
    "effect_summary": "Raises one of a friendly Pokémon’s stats at random by two stages.",
@@ -434,7 +434,7 @@
    "type_id": "flying",
    "priority": 0,
    "damage_class": "physical",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 20,
    "target": "selected-pokemon",
    "effect_summary": "Never misses.",
@@ -466,7 +466,7 @@
    "type_id": "normal",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 15,
    "target": "selected-pokemon",
    "effect_summary": "Makes the target act next this turn.",
@@ -482,7 +482,7 @@
    "type_id": "psychic",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 30,
    "target": "user",
    "effect_summary": "Raises the user’s Speed by two stages.",
@@ -497,7 +497,7 @@
    ],
    "crit_rate_bp": 0,
    "makes_contact": false,
-   "classification": "DATA_ONLY"
+   "classification": "RUNTIME_SUPPORTED"
   },
   {
    "id": "air_cutter",
@@ -550,7 +550,7 @@
    "type_id": "fighting",
    "priority": 0,
    "damage_class": "physical",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 1,
    "target": "selected-pokemon",
    "effect_summary": "Inflicts regular damage with no additional effect.",
@@ -566,7 +566,7 @@
    "type_id": "fighting",
    "priority": 0,
    "damage_class": "special",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 1,
    "target": "selected-pokemon",
    "effect_summary": "Inflicts regular damage with no additional effect.",
@@ -598,7 +598,7 @@
    "type_id": "psychic",
    "priority": 2,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 15,
    "target": "user",
    "effect_summary": "User switches places with the friendly Pokémon opposite it.",
@@ -614,7 +614,7 @@
    "type_id": "psychic",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 20,
    "target": "user",
    "effect_summary": "Raises the user’s Special Defense by two stages.",
@@ -629,7 +629,7 @@
    ],
    "crit_rate_bp": 0,
    "makes_contact": false,
-   "classification": "DATA_ONLY"
+   "classification": "RUNTIME_SUPPORTED"
   },
   {
    "id": "anchor_shot",
@@ -661,12 +661,12 @@
    "effect_specs": [
     {
      "kind": "chance",
-     "target": "opponent",
+     "target": "self",
      "chance_basis_points": 1000,
      "children": [
       {
        "kind": "modify_stat_stage",
-       "target": "opponent",
+       "target": "self",
        "stat_id": "attack",
        "value": 1,
        "chance_basis_points": 1000
@@ -675,12 +675,12 @@
     },
     {
      "kind": "chance",
-     "target": "opponent",
+     "target": "self",
      "chance_basis_points": 1000,
      "children": [
       {
        "kind": "modify_stat_stage",
-       "target": "opponent",
+       "target": "self",
        "stat_id": "defense",
        "value": 1,
        "chance_basis_points": 1000
@@ -689,12 +689,12 @@
     },
     {
      "kind": "chance",
-     "target": "opponent",
+     "target": "self",
      "chance_basis_points": 1000,
      "children": [
       {
        "kind": "modify_stat_stage",
-       "target": "opponent",
+       "target": "self",
        "stat_id": "special_attack",
        "value": 1,
        "chance_basis_points": 1000
@@ -703,12 +703,12 @@
     },
     {
      "kind": "chance",
-     "target": "opponent",
+     "target": "self",
      "chance_basis_points": 1000,
      "children": [
       {
        "kind": "modify_stat_stage",
-       "target": "opponent",
+       "target": "self",
        "stat_id": "special_defense",
        "value": 1,
        "chance_basis_points": 1000
@@ -717,12 +717,12 @@
     },
     {
      "kind": "chance",
-     "target": "opponent",
+     "target": "self",
      "chance_basis_points": 1000,
      "children": [
       {
        "kind": "modify_stat_stage",
-       "target": "opponent",
+       "target": "self",
        "stat_id": "speed",
        "value": 1,
        "chance_basis_points": 1000
@@ -797,7 +797,7 @@
    "type_id": "water",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 20,
    "target": "user",
    "effect_summary": "Restores 1/16 of the user’s max HP each turn.",
@@ -908,7 +908,7 @@
    "type_id": "grass",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 5,
    "target": "user-and-allies",
    "effect_summary": "Cures the entire party of major status effects.",
@@ -924,19 +924,11 @@
    "type_id": "fairy",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 20,
    "target": "ally",
    "effect_summary": "Raises a selected ally’s Special Defense by one stage.",
-   "effect_specs": [
-    {
-     "kind": "modify_stat_stage",
-     "target": "self",
-     "stat_id": "special_defense",
-     "value": 1,
-     "chance_basis_points": 10000
-    }
-   ],
+   "effect_specs": [],
    "crit_rate_bp": 0,
    "makes_contact": false,
    "classification": "DATA_ONLY"
@@ -948,7 +940,7 @@
    "type_id": "normal",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 20,
    "target": "user",
    "effect_summary": "Randomly selects and uses one of the trainer’s other Pokémon’s moves.",
@@ -999,7 +991,7 @@
    ],
    "crit_rate_bp": 0,
    "makes_contact": true,
-   "classification": "UNSUPPORTED"
+   "classification": "RUNTIME_SUPPORTED"
   },
   {
    "id": "astral_barrage",
@@ -1056,7 +1048,7 @@
    "type_id": "fighting",
    "priority": 0,
    "damage_class": "special",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 20,
    "target": "selected-pokemon",
    "effect_summary": "Never misses.",
@@ -1079,7 +1071,7 @@
    "effect_specs": [
     {
      "kind": "modify_stat_stage",
-     "target": "opponent",
+     "target": "self",
      "stat_id": "speed",
      "value": 1,
      "chance_basis_points": 10000
@@ -1127,7 +1119,7 @@
    "type_id": "ice",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 20,
    "target": "users-field",
    "effect_summary": "Reduces damage five turns, but must be used during hail.",
@@ -1143,19 +1135,11 @@
    "type_id": "steel",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 15,
    "target": "user",
-   "effect_summary": "Raises the user’s Speed by two stages and halves the user’s weight.",
-   "effect_specs": [
-    {
-     "kind": "modify_stat_stage",
-     "target": "self",
-     "stat_id": "speed",
-     "value": 2,
-     "chance_basis_points": 10000
-    }
-   ],
+   "effect_summary": "Raises the user’s Speed by two stages and lowers its weight by 100 kg.",
+   "effect_specs": [],
    "crit_rate_bp": 0,
    "makes_contact": false,
    "classification": "DATA_ONLY"
@@ -1214,7 +1198,7 @@
    ],
    "crit_rate_bp": 0,
    "makes_contact": false,
-   "classification": "DATA_ONLY"
+   "classification": "RUNTIME_SUPPORTED"
   },
   {
    "id": "baddy_bad",
@@ -1239,7 +1223,7 @@
    "type_id": "poison",
    "priority": 4,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 10,
    "target": "user",
    "effect_summary": "Grants the user protection for the rest of the turn and poisons any Pokémon that tries to use a contact move on it.",
@@ -1295,7 +1279,7 @@
    "type_id": "psychic",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 20,
    "target": "user",
    "effect_summary": "Raises the user’s Defense by two stages.",
@@ -1310,7 +1294,7 @@
    ],
    "crit_rate_bp": 0,
    "makes_contact": false,
-   "classification": "DATA_ONLY"
+   "classification": "RUNTIME_SUPPORTED"
   },
   {
    "id": "baton_pass",
@@ -1319,7 +1303,7 @@
    "type_id": "normal",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 40,
    "target": "user",
    "effect_summary": "Allows the trainer to switch out the user and pass effects along to its replacement.",
@@ -1354,16 +1338,8 @@
    "accuracy": 100,
    "pp": 10,
    "target": "selected-pokemon",
-   "effect_summary": "Hits once for every conscious Pokémon the trainer has.",
-   "effect_specs": [
-    {
-     "kind": "multi_hit",
-     "target": "opponent",
-     "min_hits": 6,
-     "max_hits": 6,
-     "children": []
-    }
-   ],
+   "effect_summary": "Party-dependent multi-hit attack; fainted or statused party members do not contribute.",
+   "effect_specs": [],
    "crit_rate_bp": 0,
    "makes_contact": false,
    "classification": "DATA_ONLY"
@@ -1423,7 +1399,7 @@
    "type_id": "normal",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 10,
    "target": "user",
    "effect_summary": "User pays half its max HP to max out its Attack.",
@@ -1439,7 +1415,7 @@
    "type_id": "normal",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 15,
    "target": "selected-pokemon",
    "effect_summary": "Gives the user’s held item to the target.",
@@ -1455,7 +1431,7 @@
    "type_id": "normal",
    "priority": 1,
    "damage_class": "physical",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 10,
    "target": "user",
    "effect_summary": "User waits for two turns, then hits back for twice the damage it took.",
@@ -1547,7 +1523,7 @@
    "type_id": "dark",
    "priority": 0,
    "damage_class": "physical",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 1,
    "target": "selected-pokemon",
    "effect_summary": "Inflicts regular damage with no additional effect.",
@@ -1563,7 +1539,7 @@
    "type_id": "dark",
    "priority": 0,
    "damage_class": "special",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 1,
    "target": "selected-pokemon",
    "effect_summary": "Inflicts regular damage with no additional effect.",
@@ -1687,7 +1663,7 @@
    "type_id": "normal",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 5,
    "target": "selected-pokemon",
    "effect_summary": "Prevents the target from leaving battle.",
@@ -1719,7 +1695,7 @@
    "type_id": "grass",
    "priority": 0,
    "damage_class": "physical",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 1,
    "target": "selected-pokemon",
    "effect_summary": "Inflicts regular damage with no additional effect.",
@@ -1735,7 +1711,7 @@
    "type_id": "grass",
    "priority": 0,
    "damage_class": "special",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 1,
    "target": "selected-pokemon",
    "effect_summary": "Inflicts regular damage with no additional effect.",
@@ -2079,7 +2055,7 @@
    "type_id": "normal",
    "priority": 0,
    "damage_class": "physical",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 1,
    "target": "selected-pokemon",
    "effect_summary": "Inflicts regular damage with no additional effect.",
@@ -2095,7 +2071,7 @@
    "type_id": "normal",
    "priority": 0,
    "damage_class": "special",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 1,
    "target": "selected-pokemon",
    "effect_summary": "Inflicts regular damage with no additional effect.",
@@ -2268,7 +2244,7 @@
    "type_id": "fighting",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 20,
    "target": "user",
    "effect_summary": "Raises the user’s Attack and Defense by one stage.",
@@ -2290,7 +2266,7 @@
    ],
    "crit_rate_bp": 0,
    "makes_contact": false,
-   "classification": "DATA_ONLY"
+   "classification": "RUNTIME_SUPPORTED"
   },
   {
    "id": "bulldoze",
@@ -2441,7 +2417,7 @@
    "type_id": "psychic",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 20,
    "target": "user",
    "effect_summary": "Raises the user’s Special Attack and Special Defense by one stage.",
@@ -2463,7 +2439,7 @@
    ],
    "crit_rate_bp": 0,
    "makes_contact": false,
-   "classification": "DATA_ONLY"
+   "classification": "RUNTIME_SUPPORTED"
   },
   {
    "id": "camouflage",
@@ -2472,7 +2448,7 @@
    "type_id": "normal",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 20,
    "target": "user",
    "effect_summary": "User’s type changes to match the terrain.",
@@ -2492,15 +2468,7 @@
    "pp": 20,
    "target": "all-opponents",
    "effect_summary": "Lowers the target’s Special Attack by two stages if it’s the opposite gender.",
-   "effect_specs": [
-    {
-     "kind": "modify_stat_stage",
-     "target": "opponent",
-     "stat_id": "special_attack",
-     "value": -2,
-     "chance_basis_points": 10000
-    }
-   ],
+   "effect_specs": [],
    "crit_rate_bp": 0,
    "makes_contact": false,
    "classification": "DATA_ONLY"
@@ -2512,7 +2480,7 @@
    "type_id": "electric",
    "priority": 0,
    "damage_class": "physical",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 1,
    "target": "selected-pokemon",
    "effect_summary": "Inflicts regular damage with no additional effect.",
@@ -2544,7 +2512,7 @@
    "type_id": "normal",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 40,
    "target": "user",
    "effect_summary": "Does nothing.",
@@ -2560,7 +2528,7 @@
    "type_id": "electric",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 20,
    "target": "user",
    "effect_summary": "Raises the user’s Special Defense by one stage.  User’s Electric moves have doubled power next turn.",
@@ -2575,7 +2543,7 @@
    ],
    "crit_rate_bp": 0,
    "makes_contact": false,
-   "classification": "DATA_ONLY"
+   "classification": "PARTIAL_RUNTIME"
   },
   {
    "id": "charge_beam",
@@ -2591,12 +2559,12 @@
    "effect_specs": [
     {
      "kind": "chance",
-     "target": "opponent",
+     "target": "self",
      "chance_basis_points": 7000,
      "children": [
       {
        "kind": "modify_stat_stage",
-       "target": "opponent",
+       "target": "self",
        "stat_id": "special_attack",
        "value": 1,
        "chance_basis_points": 7000
@@ -2630,7 +2598,7 @@
    ],
    "crit_rate_bp": 0,
    "makes_contact": false,
-   "classification": "DATA_ONLY"
+   "classification": "RUNTIME_SUPPORTED"
   },
   {
    "id": "chatter",
@@ -2686,7 +2654,7 @@
    "type_id": "ice",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 10,
    "target": "entire-field",
    "effect_summary": "",
@@ -2773,7 +2741,7 @@
    "effect_specs": [
     {
      "kind": "modify_stat_stage",
-     "target": "opponent",
+     "target": "self",
      "stat_id": "defense",
      "value": -1,
      "chance_basis_points": 10000
@@ -2794,43 +2762,7 @@
    "pp": 5,
    "target": "user",
    "effect_summary": "User loses 33% of its Max HP. Raises all of the user’s stats by one stage.",
-   "effect_specs": [
-    {
-     "kind": "modify_stat_stage",
-     "target": "self",
-     "stat_id": "attack",
-     "value": 1,
-     "chance_basis_points": 10000
-    },
-    {
-     "kind": "modify_stat_stage",
-     "target": "self",
-     "stat_id": "defense",
-     "value": 1,
-     "chance_basis_points": 10000
-    },
-    {
-     "kind": "modify_stat_stage",
-     "target": "self",
-     "stat_id": "special_attack",
-     "value": 1,
-     "chance_basis_points": 10000
-    },
-    {
-     "kind": "modify_stat_stage",
-     "target": "self",
-     "stat_id": "special_defense",
-     "value": 1,
-     "chance_basis_points": 10000
-    },
-    {
-     "kind": "modify_stat_stage",
-     "target": "self",
-     "stat_id": "speed",
-     "value": 1,
-     "chance_basis_points": 10000
-    }
-   ],
+   "effect_specs": [],
    "crit_rate_bp": 0,
    "makes_contact": false,
    "classification": "DATA_ONLY"
@@ -2842,42 +2774,42 @@
    "type_id": "dragon",
    "priority": 0,
    "damage_class": "special",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 1,
    "target": "all-opponents",
    "effect_summary": "Inflicts damage to all opposing Pokémon and increases the user’s Attack, Defense, Special Attack, Special Defense, and Speed by one stage each.",
    "effect_specs": [
     {
      "kind": "modify_stat_stage",
-     "target": "opponent",
+     "target": "self",
      "stat_id": "attack",
      "value": 1,
      "chance_basis_points": 10000
     },
     {
      "kind": "modify_stat_stage",
-     "target": "opponent",
+     "target": "self",
      "stat_id": "defense",
      "value": 1,
      "chance_basis_points": 10000
     },
     {
      "kind": "modify_stat_stage",
-     "target": "opponent",
+     "target": "self",
      "stat_id": "special_attack",
      "value": 1,
      "chance_basis_points": 10000
     },
     {
      "kind": "modify_stat_stage",
-     "target": "opponent",
+     "target": "self",
      "stat_id": "special_defense",
      "value": 1,
      "chance_basis_points": 10000
     },
     {
      "kind": "modify_stat_stage",
-     "target": "opponent",
+     "target": "self",
      "stat_id": "speed",
      "value": 1,
      "chance_basis_points": 10000
@@ -2894,7 +2826,7 @@
    "type_id": "poison",
    "priority": 0,
    "damage_class": "special",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 15,
    "target": "selected-pokemon",
    "effect_summary": "Removes all of the target’s stat modifiers.",
@@ -2917,14 +2849,14 @@
    "effect_specs": [
     {
      "kind": "modify_stat_stage",
-     "target": "opponent",
+     "target": "self",
      "stat_id": "defense",
      "value": -1,
      "chance_basis_points": 10000
     },
     {
      "kind": "modify_stat_stage",
-     "target": "opponent",
+     "target": "self",
      "stat_id": "special_defense",
      "value": -1,
      "chance_basis_points": 10000
@@ -2941,26 +2873,11 @@
    "type_id": "fighting",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 10,
    "target": "user-and-allies",
    "effect_summary": "Raises the target's Attack and Defense by 1 stage. Fails if there is no ally adjacent to the user.",
-   "effect_specs": [
-    {
-     "kind": "modify_stat_stage",
-     "target": "opponent",
-     "stat_id": "attack",
-     "value": 1,
-     "chance_basis_points": 10000
-    },
-    {
-     "kind": "modify_stat_stage",
-     "target": "opponent",
-     "stat_id": "defense",
-     "value": 1,
-     "chance_basis_points": 10000
-    }
-   ],
+   "effect_specs": [],
    "crit_rate_bp": 0,
    "makes_contact": false,
    "classification": "DATA_ONLY"
@@ -2972,7 +2889,7 @@
    "type_id": "poison",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 20,
    "target": "user",
    "effect_summary": "Raises the user’s Attack, Defense, and accuracy by one stage each.",
@@ -3001,7 +2918,7 @@
    ],
    "crit_rate_bp": 0,
    "makes_contact": false,
-   "classification": "DATA_ONLY"
+   "classification": "RUNTIME_SUPPORTED"
   },
   {
    "id": "collision_course",
@@ -3082,7 +2999,7 @@
    "type_id": "normal",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 20,
    "target": "selected-pokemon",
    "effect_summary": "Lowers the target’s Special Attack by one stage.",
@@ -3097,7 +3014,7 @@
    ],
    "crit_rate_bp": 0,
    "makes_contact": false,
-   "classification": "DATA_ONLY"
+   "classification": "RUNTIME_SUPPORTED"
   },
   {
    "id": "confuse_ray",
@@ -3190,7 +3107,7 @@
    "type_id": "rock",
    "priority": 0,
    "damage_class": "physical",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 1,
    "target": "selected-pokemon",
    "effect_summary": "Inflicts regular damage with no additional effect.",
@@ -3206,7 +3123,7 @@
    "type_id": "rock",
    "priority": 0,
    "damage_class": "special",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 1,
    "target": "selected-pokemon",
    "effect_summary": "Inflicts regular damage with no additional effect.",
@@ -3222,7 +3139,7 @@
    "type_id": "normal",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 30,
    "target": "user",
    "effect_summary": "User’s type changes to the type of one of its moves at random.",
@@ -3238,7 +3155,7 @@
    "type_id": "normal",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 30,
    "target": "selected-pokemon",
    "effect_summary": "Changes the user’s type to a random type either resistant or immune to the last move used against it.",
@@ -3254,7 +3171,7 @@
    "type_id": "normal",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 20,
    "target": "user",
    "effect_summary": "Uses the target’s last used move.",
@@ -3286,7 +3203,7 @@
    "type_id": "steel",
    "priority": 0,
    "damage_class": "physical",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 1,
    "target": "selected-pokemon",
    "effect_summary": "Inflicts regular damage with no additional effect.",
@@ -3302,7 +3219,7 @@
    "type_id": "steel",
    "priority": 0,
    "damage_class": "special",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 1,
    "target": "selected-pokemon",
    "effect_summary": "Inflicts regular damage with no additional effect.",
@@ -3334,7 +3251,7 @@
    "type_id": "psychic",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 20,
    "target": "user",
    "effect_summary": "Raises the user’s Defense and Special Defense by one stage.",
@@ -3356,7 +3273,7 @@
    ],
    "crit_rate_bp": 0,
    "makes_contact": false,
-   "classification": "DATA_ONLY"
+   "classification": "RUNTIME_SUPPORTED"
   },
   {
    "id": "cotton_guard",
@@ -3365,7 +3282,7 @@
    "type_id": "grass",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 10,
    "target": "user",
    "effect_summary": "Raises the user’s Defense by three stages.",
@@ -3380,7 +3297,7 @@
    ],
    "crit_rate_bp": 0,
    "makes_contact": false,
-   "classification": "DATA_ONLY"
+   "classification": "RUNTIME_SUPPORTED"
   },
   {
    "id": "cotton_spore",
@@ -3393,15 +3310,7 @@
    "pp": 40,
    "target": "all-opponents",
    "effect_summary": "Lowers the target’s Speed by two stages.",
-   "effect_specs": [
-    {
-     "kind": "modify_stat_stage",
-     "target": "opponent",
-     "stat_id": "speed",
-     "value": -2,
-     "chance_basis_points": 10000
-    }
-   ],
+   "effect_specs": [],
    "crit_rate_bp": 0,
    "makes_contact": false,
    "classification": "DATA_ONLY"
@@ -3477,7 +3386,7 @@
    "type_id": "fairy",
    "priority": 3,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 10,
    "target": "users-field",
    "effect_summary": "Protects all friendly Pokémon from non-damaging moves.",
@@ -3617,7 +3526,7 @@
    "type_id": "ghost",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 10,
    "target": "specific-move",
    "effect_summary": "Ghosts pay half their max HP to hurt the target every turn.  Others decrease Speed but raise Attack and Defense.",
@@ -3732,7 +3641,7 @@
    "type_id": "fairy",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 15,
    "target": "selected-pokemon",
    "effect_summary": "Raise the targets Attack and Special Attack by 2 stages.",
@@ -3754,7 +3663,7 @@
    ],
    "crit_rate_bp": 0,
    "makes_contact": false,
-   "classification": "DATA_ONLY"
+   "classification": "RUNTIME_SUPPORTED"
   },
   {
    "id": "defend_order",
@@ -3763,7 +3672,7 @@
    "type_id": "bug",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 10,
    "target": "user",
    "effect_summary": "Raises the user’s Defense and Special Defense by one stage.",
@@ -3785,7 +3694,7 @@
    ],
    "crit_rate_bp": 0,
    "makes_contact": false,
-   "classification": "DATA_ONLY"
+   "classification": "RUNTIME_SUPPORTED"
   },
   {
    "id": "defense_curl",
@@ -3794,7 +3703,7 @@
    "type_id": "normal",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 40,
    "target": "user",
    "effect_summary": "Raises user’s Defense by one stage.",
@@ -3809,7 +3718,7 @@
    ],
    "crit_rate_bp": 0,
    "makes_contact": false,
-   "classification": "DATA_ONLY"
+   "classification": "PARTIAL_RUNTIME"
   },
   {
    "id": "defog",
@@ -3818,19 +3727,11 @@
    "type_id": "flying",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 15,
    "target": "selected-pokemon",
    "effect_summary": "Lowers the target’s evasion by one stage.  Removes field effects from the enemy field.",
-   "effect_specs": [
-    {
-     "kind": "modify_stat_stage",
-     "target": "opponent",
-     "stat_id": "evasion",
-     "value": -1,
-     "chance_basis_points": 10000
-    }
-   ],
+   "effect_specs": [],
    "crit_rate_bp": 0,
    "makes_contact": false,
    "classification": "DATA_ONLY"
@@ -3842,7 +3743,7 @@
    "type_id": "ghost",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 5,
    "target": "user",
    "effect_summary": "If the user faints this turn, the target automatically will, too.",
@@ -3858,7 +3759,7 @@
    "type_id": "fighting",
    "priority": 4,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 5,
    "target": "user",
    "effect_summary": "Prevents any moves from hitting the user this turn.",
@@ -3874,7 +3775,7 @@
    "type_id": "dragon",
    "priority": 0,
    "damage_class": "physical",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 1,
    "target": "selected-pokemon",
    "effect_summary": "Inflicts regular damage with no additional effect.",
@@ -3890,7 +3791,7 @@
    "type_id": "dragon",
    "priority": 0,
    "damage_class": "special",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 1,
    "target": "selected-pokemon",
    "effect_summary": "Inflicts regular damage with no additional effect.",
@@ -3913,12 +3814,12 @@
    "effect_specs": [
     {
      "kind": "chance",
-     "target": "opponent",
+     "target": "self",
      "chance_basis_points": 5000,
      "children": [
       {
        "kind": "modify_stat_stage",
-       "target": "opponent",
+       "target": "self",
        "stat_id": "defense",
        "value": 2,
        "chance_basis_points": 5000
@@ -3985,7 +3886,7 @@
    "type_id": "fairy",
    "priority": 0,
    "damage_class": "special",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 15,
    "target": "all-opponents",
    "effect_summary": "Never misses.",
@@ -4254,7 +4155,7 @@
    "type_id": "normal",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 15,
    "target": "user",
    "effect_summary": "Raises the user’s evasion by one stage.",
@@ -4269,7 +4170,7 @@
    ],
    "crit_rate_bp": 0,
    "makes_contact": false,
-   "classification": "DATA_ONLY"
+   "classification": "RUNTIME_SUPPORTED"
   },
   {
    "id": "draco_meteor",
@@ -4285,7 +4186,7 @@
    "effect_specs": [
     {
      "kind": "modify_stat_stage",
-     "target": "opponent",
+     "target": "self",
      "stat_id": "special_attack",
      "value": -2,
      "chance_basis_points": 10000
@@ -4309,14 +4210,14 @@
    "effect_specs": [
     {
      "kind": "modify_stat_stage",
-     "target": "opponent",
+     "target": "self",
      "stat_id": "defense",
      "value": -1,
      "chance_basis_points": 10000
     },
     {
      "kind": "modify_stat_stage",
-     "target": "opponent",
+     "target": "self",
      "stat_id": "special_defense",
      "value": -1,
      "chance_basis_points": 10000
@@ -4395,7 +4296,7 @@
    "type_id": "dragon",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 20,
    "target": "user",
    "effect_summary": "Raises the user’s Attack and Speed by one stage.",
@@ -4417,7 +4318,7 @@
    ],
    "crit_rate_bp": 0,
    "makes_contact": false,
-   "classification": "DATA_ONLY"
+   "classification": "RUNTIME_SUPPORTED"
   },
   {
    "id": "dragon_darts",
@@ -4845,7 +4746,7 @@
    ],
    "crit_rate_bp": 0,
    "makes_contact": false,
-   "classification": "DATA_ONLY"
+   "classification": "RUNTIME_SUPPORTED"
   },
   {
    "id": "eerie_spell",
@@ -4886,7 +4787,7 @@
    "type_id": "electric",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 10,
    "target": "entire-field",
    "effect_summary": "For five turns, prevents all Pokémon on the ground from sleeping and strengthens their Electric moves to 1.5× their power.",
@@ -4902,7 +4803,7 @@
    "type_id": "electric",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 20,
    "target": "selected-pokemon",
    "effect_summary": "Changes the target’s move’s type to Electric if it hasn’t moved yet this turn.",
@@ -5076,7 +4977,7 @@
    "type_id": "normal",
    "priority": 4,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 10,
    "target": "user",
    "effect_summary": "Prevents the user’s HP from lowering below 1 this turn.",
@@ -5247,47 +5148,11 @@
    "type_id": "normal",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 1,
    "target": "user",
-   "effect_summary": "Raises all of the user’s stats by two stages.",
-   "effect_specs": [
-    {
-     "kind": "modify_stat_stage",
-     "target": "self",
-     "stat_id": "attack",
-     "value": 2,
-     "chance_basis_points": 10000
-    },
-    {
-     "kind": "modify_stat_stage",
-     "target": "self",
-     "stat_id": "defense",
-     "value": 2,
-     "chance_basis_points": 10000
-    },
-    {
-     "kind": "modify_stat_stage",
-     "target": "self",
-     "stat_id": "special_attack",
-     "value": 2,
-     "chance_basis_points": 10000
-    },
-    {
-     "kind": "modify_stat_stage",
-     "target": "self",
-     "stat_id": "special_defense",
-     "value": 2,
-     "chance_basis_points": 10000
-    },
-    {
-     "kind": "modify_stat_stage",
-     "target": "self",
-     "stat_id": "speed",
-     "value": 2,
-     "chance_basis_points": 10000
-    }
-   ],
+   "effect_summary": "Eevee's exclusive Z-Move; raises five battle stats by two stages and is not normally selectable from Generation VIII onward.",
+   "effect_specs": [],
    "crit_rate_bp": 0,
    "makes_contact": false,
    "classification": "DATA_ONLY"
@@ -5331,7 +5196,7 @@
    "type_id": "fairy",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 10,
    "target": "entire-field",
    "effect_summary": "Prevents all Pokémon from fleeing or switching out during the next turn.",
@@ -5406,7 +5271,7 @@
    ],
    "crit_rate_bp": 0,
    "makes_contact": false,
-   "classification": "DATA_ONLY"
+   "classification": "RUNTIME_SUPPORTED"
   },
   {
    "id": "false_surrender",
@@ -5415,7 +5280,7 @@
    "type_id": "dark",
    "priority": 0,
    "damage_class": "physical",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 10,
    "target": "selected-pokemon",
    "effect_summary": "Never misses.",
@@ -5462,7 +5327,7 @@
    ],
    "crit_rate_bp": 0,
    "makes_contact": false,
-   "classification": "DATA_ONLY"
+   "classification": "RUNTIME_SUPPORTED"
   },
   {
    "id": "feint",
@@ -5487,7 +5352,7 @@
    "type_id": "dark",
    "priority": 0,
    "damage_class": "physical",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 20,
    "target": "selected-pokemon",
    "effect_summary": "Never misses.",
@@ -5542,12 +5407,12 @@
    "effect_specs": [
     {
      "kind": "chance",
-     "target": "opponent",
+     "target": "self",
      "chance_basis_points": 5000,
      "children": [
       {
        "kind": "modify_stat_stage",
-       "target": "opponent",
+       "target": "self",
        "stat_id": "special_attack",
        "value": 1,
        "chance_basis_points": 5000
@@ -5594,33 +5459,11 @@
    "type_id": "normal",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 10,
    "target": "user",
    "effect_summary": "",
-   "effect_specs": [
-    {
-     "kind": "modify_stat_stage",
-     "target": "self",
-     "stat_id": "attack",
-     "value": 2,
-     "chance_basis_points": 10000
-    },
-    {
-     "kind": "modify_stat_stage",
-     "target": "self",
-     "stat_id": "special_attack",
-     "value": 2,
-     "chance_basis_points": 10000
-    },
-    {
-     "kind": "modify_stat_stage",
-     "target": "self",
-     "stat_id": "speed",
-     "value": 2,
-     "chance_basis_points": 10000
-    }
-   ],
+   "effect_specs": [],
    "crit_rate_bp": 0,
    "makes_contact": false,
    "classification": "DATA_ONLY"
@@ -5892,7 +5735,7 @@
    "effect_specs": [
     {
      "kind": "modify_stat_stage",
-     "target": "opponent",
+     "target": "self",
      "stat_id": "speed",
      "value": 1,
      "chance_basis_points": 10000
@@ -6019,7 +5862,7 @@
    ],
    "crit_rate_bp": 0,
    "makes_contact": false,
-   "classification": "DATA_ONLY"
+   "classification": "RUNTIME_SUPPORTED"
   },
   {
    "id": "flash_cannon",
@@ -6096,7 +5939,7 @@
    "effect_specs": [
     {
      "kind": "modify_stat_stage",
-     "target": "opponent",
+     "target": "self",
      "stat_id": "special_attack",
      "value": -2,
      "chance_basis_points": 10000
@@ -6173,20 +6016,20 @@
    "type_id": "fairy",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 10,
    "target": "selected-pokemon",
    "effect_summary": "Heals the target for ½ its max HP, or ⅔ on Grassy Terrain.",
    "effect_specs": [
     {
      "kind": "heal",
-     "target": "self",
+     "target": "opponent",
      "ratio_basis_points": 5000
     }
    ],
    "crit_rate_bp": 0,
    "makes_contact": false,
-   "classification": "DATA_ONLY"
+   "classification": "PARTIAL_RUNTIME"
   },
   {
    "id": "flower_shield",
@@ -6195,19 +6038,11 @@
    "type_id": "fairy",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 10,
    "target": "all-pokemon",
-   "effect_summary": "Raises the Defense of all Grass Pokémon in battle.",
-   "effect_specs": [
-    {
-     "kind": "modify_stat_stage",
-     "target": "opponent",
-     "stat_id": "defense",
-     "value": 1,
-     "chance_basis_points": 10000
-    }
-   ],
+   "effect_summary": "Raises Defense of eligible Grass-type Pokémon on the field; unavailable for selection in Generation IX.",
+   "effect_specs": [],
    "crit_rate_bp": 0,
    "makes_contact": false,
    "classification": "DATA_ONLY"
@@ -6219,7 +6054,7 @@
    "type_id": "grass",
    "priority": 0,
    "damage_class": "physical",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 10,
    "target": "selected-pokemon",
    "effect_summary": "",
@@ -6298,7 +6133,7 @@
    "type_id": "normal",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 30,
    "target": "user",
    "effect_summary": "Increases the user’s chance to score a critical hit.",
@@ -6330,7 +6165,7 @@
    "type_id": "normal",
    "priority": 2,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 20,
    "target": "user",
    "effect_summary": "Redirects the target’s single-target effects to the user for this turn.",
@@ -6376,7 +6211,7 @@
    "type_id": "normal",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 40,
    "target": "selected-pokemon",
    "effect_summary": "Forces the target to have no Evade, and allows it to be hit by Normal and Fighting moves even if it’s a Ghost.",
@@ -6730,26 +6565,11 @@
    "type_id": "steel",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 20,
    "target": "user-and-allies",
    "effect_summary": "Raises the Attack and Special Attack of all friendly Pokémon with Plus or Minus by one stage.",
-   "effect_specs": [
-    {
-     "kind": "modify_stat_stage",
-     "target": "opponent",
-     "stat_id": "attack",
-     "value": 1,
-     "chance_basis_points": 10000
-    },
-    {
-     "kind": "modify_stat_stage",
-     "target": "opponent",
-     "stat_id": "special_attack",
-     "value": 1,
-     "chance_basis_points": 10000
-    }
-   ],
+   "effect_specs": [],
    "crit_rate_bp": 0,
    "makes_contact": false,
    "classification": "DATA_ONLY"
@@ -6761,7 +6581,7 @@
    "type_id": "psychic",
    "priority": 0,
    "damage_class": "special",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 1,
    "target": "selected-pokemon",
    "effect_summary": "Changes the terrain to Psychic Terrain after inflicting damage.",
@@ -6777,33 +6597,11 @@
    "type_id": "fairy",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 10,
    "target": "user",
    "effect_summary": "Takes one turn to charge, then raises the user’s Special Attack, Special Defense, and Speed by two stages.",
-   "effect_specs": [
-    {
-     "kind": "modify_stat_stage",
-     "target": "self",
-     "stat_id": "special_attack",
-     "value": 2,
-     "chance_basis_points": 10000
-    },
-    {
-     "kind": "modify_stat_stage",
-     "target": "self",
-     "stat_id": "special_defense",
-     "value": 2,
-     "chance_basis_points": 10000
-    },
-    {
-     "kind": "modify_stat_stage",
-     "target": "self",
-     "stat_id": "speed",
-     "value": 2,
-     "chance_basis_points": 10000
-    }
-   ],
+   "effect_specs": [],
    "crit_rate_bp": 0,
    "makes_contact": false,
    "classification": "DATA_ONLY"
@@ -6869,7 +6667,7 @@
    "type_id": "electric",
    "priority": 0,
    "damage_class": "physical",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 1,
    "target": "selected-pokemon",
    "effect_summary": "Inflicts regular damage with no additional effect.",
@@ -6885,7 +6683,7 @@
    "type_id": "electric",
    "priority": 0,
    "damage_class": "special",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 1,
    "target": "selected-pokemon",
    "effect_summary": "Inflicts regular damage with no additional effect.",
@@ -7067,7 +6865,7 @@
    "type_id": "grass",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 10,
    "target": "entire-field",
    "effect_summary": "For five turns, heals all Pokémon on the ground for 1/16 max HP each turn and strengthens their Grass moves to 1.5× their power.",
@@ -7107,7 +6905,7 @@
    "type_id": "psychic",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 5,
    "target": "entire-field",
    "effect_summary": "Disables moves and immunities that involve flying or levitating for five turns.",
@@ -7138,7 +6936,7 @@
    ],
    "crit_rate_bp": 0,
    "makes_contact": false,
-   "classification": "DATA_ONLY"
+   "classification": "RUNTIME_SUPPORTED"
   },
   {
    "id": "growth",
@@ -7147,7 +6945,7 @@
    "type_id": "normal",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 20,
    "target": "user",
    "effect_summary": "Raises the user’s Attack and Special Attack by one stage.",
@@ -7169,7 +6967,7 @@
    ],
    "crit_rate_bp": 0,
    "makes_contact": false,
-   "classification": "DATA_ONLY"
+   "classification": "PARTIAL_RUNTIME"
   },
   {
    "id": "grudge",
@@ -7178,7 +6976,7 @@
    "type_id": "ghost",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 5,
    "target": "user",
    "effect_summary": "If the user faints this turn, the PP of the move that fainted it drops to 0.",
@@ -7194,7 +6992,7 @@
    "type_id": "psychic",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 10,
    "target": "selected-pokemon",
    "effect_summary": "Averages Defense and Special Defense with the target.",
@@ -7210,7 +7008,7 @@
    "type_id": "psychic",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 10,
    "target": "selected-pokemon",
    "effect_summary": "User swaps Defense and Special Defense changes with the target.",
@@ -7226,7 +7024,7 @@
    "type_id": "fairy",
    "priority": 0,
    "damage_class": "special",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 1,
    "target": "selected-pokemon",
    "effect_summary": "Damages the target for 75% of its remaining HP.",
@@ -7320,7 +7118,7 @@
    "type_id": "ice",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 10,
    "target": "entire-field",
    "effect_summary": "Changes the weather to a hailstorm for five turns.",
@@ -7343,7 +7141,7 @@
    "effect_specs": [
     {
      "kind": "modify_stat_stage",
-     "target": "opponent",
+     "target": "self",
      "stat_id": "speed",
      "value": -1,
      "chance_basis_points": 10000
@@ -7360,7 +7158,7 @@
    "type_id": "normal",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 30,
    "target": "users-field",
    "effect_summary": "Doubles prize money.",
@@ -7392,7 +7190,7 @@
    "type_id": "normal",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 30,
    "target": "user",
    "effect_summary": "Raises the user’s Defense by one stage.",
@@ -7407,7 +7205,7 @@
    ],
    "crit_rate_bp": 0,
    "makes_contact": false,
-   "classification": "DATA_ONLY"
+   "classification": "RUNTIME_SUPPORTED"
   },
   {
    "id": "haze",
@@ -7416,7 +7214,7 @@
    "type_id": "ice",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 30,
    "target": "entire-field",
    "effect_summary": "Resets all Pokémon’s stats, accuracy, and evasion.",
@@ -7520,7 +7318,7 @@
    "type_id": "normal",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 5,
    "target": "user-and-allies",
    "effect_summary": "Cures the entire party of major status effects.",
@@ -7552,7 +7350,7 @@
    "type_id": "bug",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 10,
    "target": "user",
    "effect_summary": "Heals the user by half its max HP.",
@@ -7565,7 +7363,7 @@
    ],
    "crit_rate_bp": 0,
    "makes_contact": false,
-   "classification": "DATA_ONLY"
+   "classification": "RUNTIME_SUPPORTED"
   },
   {
    "id": "heal_pulse",
@@ -7574,20 +7372,20 @@
    "type_id": "psychic",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 10,
    "target": "selected-pokemon",
    "effect_summary": "Heals the target for half its max HP.",
    "effect_specs": [
     {
      "kind": "heal",
-     "target": "self",
+     "target": "opponent",
      "ratio_basis_points": 5000
     }
    ],
    "crit_rate_bp": 0,
    "makes_contact": false,
-   "classification": "DATA_ONLY"
+   "classification": "RUNTIME_SUPPORTED"
   },
   {
    "id": "healing_wish",
@@ -7596,7 +7394,7 @@
    "type_id": "psychic",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 10,
    "target": "user",
    "effect_summary": "User faints.  Its replacement has its HP fully restored and any major status effect removed.",
@@ -7640,7 +7438,7 @@
    "type_id": "psychic",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 10,
    "target": "selected-pokemon",
    "effect_summary": "User and target swap stat changes.",
@@ -7718,7 +7516,7 @@
    "type_id": "normal",
    "priority": 5,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 20,
    "target": "ally",
    "effect_summary": "Ally’s next move inflicts half more damage.",
@@ -7814,7 +7612,7 @@
    "type_id": "normal",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 40,
    "target": "ally",
    "effect_summary": "Does nothing.",
@@ -7830,7 +7628,7 @@
    "type_id": "dark",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 15,
    "target": "user",
    "effect_summary": "Raises the user’s Attack and accuracy by one stage.",
@@ -7852,7 +7650,7 @@
    ],
    "crit_rate_bp": 0,
    "makes_contact": false,
-   "classification": "DATA_ONLY"
+   "classification": "RUNTIME_SUPPORTED"
   },
   {
    "id": "horn_attack",
@@ -7915,14 +7713,14 @@
    "type_id": "normal",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 40,
    "target": "user-and-allies",
    "effect_summary": "Raises the user’s Attack by one stage.",
    "effect_specs": [
     {
      "kind": "modify_stat_stage",
-     "target": "opponent",
+     "target": "self",
      "stat_id": "attack",
      "value": 1,
      "chance_basis_points": 10000
@@ -7930,7 +7728,7 @@
    ],
    "crit_rate_bp": 0,
    "makes_contact": false,
-   "classification": "DATA_ONLY"
+   "classification": "PARTIAL_RUNTIME"
   },
   {
    "id": "hurricane",
@@ -8017,7 +7815,7 @@
    "type_id": "water",
    "priority": 0,
    "damage_class": "physical",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 1,
    "target": "selected-pokemon",
    "effect_summary": "Inflicts regular damage with no additional effect.",
@@ -8033,7 +7831,7 @@
    "type_id": "water",
    "priority": 0,
    "damage_class": "special",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 1,
    "target": "selected-pokemon",
    "effect_summary": "Inflicts regular damage with no additional effect.",
@@ -8125,14 +7923,14 @@
    "type_id": "dark",
    "priority": 0,
    "damage_class": "physical",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 5,
    "target": "selected-pokemon",
    "effect_summary": "Ignores and destroys protection effects.",
    "effect_specs": [
     {
      "kind": "modify_stat_stage",
-     "target": "opponent",
+     "target": "self",
      "stat_id": "defense",
      "value": -1,
      "chance_basis_points": 10000
@@ -8149,7 +7947,7 @@
    "type_id": "psychic",
    "priority": 0,
    "damage_class": "special",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 5,
    "target": "selected-pokemon",
    "effect_summary": "Ignores and destroys protection effects.",
@@ -8312,7 +8110,7 @@
    "effect_specs": [
     {
      "kind": "modify_stat_stage",
-     "target": "opponent",
+     "target": "self",
      "stat_id": "speed",
      "value": -1,
      "chance_basis_points": 10000
@@ -8467,7 +8265,7 @@
    "type_id": "psychic",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 10,
    "target": "user",
    "effect_summary": "Prevents the target from using any moves that the user also knows.",
@@ -8538,7 +8336,7 @@
    "type_id": "fire",
    "priority": 0,
    "damage_class": "physical",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 1,
    "target": "selected-pokemon",
    "effect_summary": "Inflicts regular damage with no additional effect.",
@@ -8554,7 +8352,7 @@
    "type_id": "fire",
    "priority": 0,
    "damage_class": "special",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 1,
    "target": "selected-pokemon",
    "effect_summary": "Inflicts regular damage with no additional effect.",
@@ -8586,7 +8384,7 @@
    "type_id": "grass",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 20,
    "target": "user",
    "effect_summary": "Prevents the user from leaving battle.  User regains 1/16 of its max HP every turn.",
@@ -8602,7 +8400,7 @@
    "type_id": "psychic",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 15,
    "target": "selected-pokemon",
    "effect_summary": "Forces the target to repeat its last used move.",
@@ -8618,7 +8416,7 @@
    "type_id": "electric",
    "priority": 1,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 25,
    "target": "entire-field",
    "effect_summary": "Changes all Normal moves to Electric moves for the rest of the turn.",
@@ -8634,7 +8432,7 @@
    "type_id": "steel",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 15,
    "target": "user",
    "effect_summary": "Raises the user’s Defense by two stages.",
@@ -8649,7 +8447,7 @@
    ],
    "crit_rate_bp": 0,
    "makes_contact": false,
-   "classification": "DATA_ONLY"
+   "classification": "RUNTIME_SUPPORTED"
   },
   {
    "id": "iron_head",
@@ -8797,7 +8595,7 @@
    "type_id": "grass",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 10,
    "target": "user-and-allies",
    "effect_summary": "Each Pokemon on the user's side has its status condition healed and restores 1/4 of its maximum HP, rounded up.",
@@ -8806,11 +8604,15 @@
      "kind": "heal",
      "target": "self",
      "ratio_basis_points": 2500
+    },
+    {
+     "kind": "cure_status",
+     "target": "self"
     }
    ],
    "crit_rate_bp": 0,
    "makes_contact": false,
-   "classification": "DATA_ONLY"
+   "classification": "PARTIAL_RUNTIME"
   },
   {
    "id": "karate_chop",
@@ -8850,7 +8652,7 @@
    ],
    "crit_rate_bp": 0,
    "makes_contact": false,
-   "classification": "DATA_ONLY"
+   "classification": "RUNTIME_SUPPORTED"
   },
   {
    "id": "kings_shield",
@@ -8859,7 +8661,7 @@
    "type_id": "steel",
    "priority": 4,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 10,
    "target": "user",
    "effect_summary": "Blocks damaging attacks and lowers attacking Pokémon’s Attack by two stages on contact.  Switches Aegislash to Shield Forme.",
@@ -8891,7 +8693,7 @@
    "type_id": "dark",
    "priority": 0,
    "damage_class": "physical",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 10,
    "target": "selected-pokemon",
    "effect_summary": "",
@@ -8923,7 +8725,7 @@
    "type_id": "normal",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 30,
    "target": "user",
    "effect_summary": "Guarantees a critical hit with the user’s next move.",
@@ -9040,7 +8842,7 @@
    "effect_specs": [
     {
      "kind": "modify_stat_stage",
-     "target": "opponent",
+     "target": "self",
      "stat_id": "special_attack",
      "value": -2,
      "chance_basis_points": 10000
@@ -9157,7 +8959,7 @@
    ],
    "crit_rate_bp": 0,
    "makes_contact": false,
-   "classification": "DATA_ONLY"
+   "classification": "RUNTIME_SUPPORTED"
   },
   {
    "id": "lets_snuggle_forever",
@@ -9166,7 +8968,7 @@
    "type_id": "fairy",
    "priority": 0,
    "damage_class": "physical",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 1,
    "target": "selected-pokemon",
    "effect_summary": "Inflicts regular damage with no additional effect.",
@@ -9212,7 +9014,7 @@
    "type_id": "water",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 10,
    "target": "user-and-allies",
    "effect_summary": "Each Pokemon on the user's side restores 1/4 of its maximum HP, rounded half up.",
@@ -9225,7 +9027,7 @@
    ],
    "crit_rate_bp": 0,
    "makes_contact": false,
-   "classification": "DATA_ONLY"
+   "classification": "PARTIAL_RUNTIME"
   },
   {
    "id": "light_of_ruin",
@@ -9256,7 +9058,7 @@
    "type_id": "psychic",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 30,
    "target": "users-field",
    "effect_summary": "Reduces damage from special attacks by 50% for five turns.",
@@ -9272,7 +9074,7 @@
    "type_id": "psychic",
    "priority": 0,
    "damage_class": "special",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 1,
    "target": "selected-pokemon",
    "effect_summary": "Inflicts damage using either Attack or Special Attack stat, whichever is higher.",
@@ -9319,7 +9121,7 @@
    "type_id": "normal",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 5,
    "target": "selected-pokemon",
    "effect_summary": "Ensures that the user’s next move will hit the target.",
@@ -9398,7 +9200,7 @@
    "type_id": "normal",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 30,
    "target": "users-field",
    "effect_summary": "Prevents the target from scoring critical hits for five turns.",
@@ -9438,7 +9240,7 @@
    "type_id": "psychic",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 5,
    "target": "all-allies",
    "effect_summary": "",
@@ -9454,7 +9256,7 @@
    "type_id": "psychic",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 10,
    "target": "user",
    "effect_summary": "User faints, and its replacement is fully healed.",
@@ -9541,7 +9343,7 @@
    "type_id": "psychic",
    "priority": 4,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 15,
    "target": "user",
    "effect_summary": "Reflects back the first effect move used on the user this turn.",
@@ -9573,7 +9375,7 @@
    "type_id": "psychic",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 10,
    "target": "entire-field",
    "effect_summary": "Negates held items for five turns.",
@@ -9589,7 +9391,7 @@
    "type_id": "grass",
    "priority": 0,
    "damage_class": "special",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 20,
    "target": "selected-pokemon",
    "effect_summary": "Never misses.",
@@ -9637,7 +9439,7 @@
    "type_id": "steel",
    "priority": 0,
    "damage_class": "physical",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 20,
    "target": "selected-pokemon",
    "effect_summary": "Never misses.",
@@ -9653,7 +9455,7 @@
    "type_id": "electric",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 10,
    "target": "user",
    "effect_summary": "User is immune to Ground moves and effects for five turns.",
@@ -9669,26 +9471,11 @@
    "type_id": "electric",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 20,
    "target": "user-and-allies",
    "effect_summary": "Raises the Defense and Special Defense of all friendly Pokémon with Plus or Minus by one stage.",
-   "effect_specs": [
-    {
-     "kind": "modify_stat_stage",
-     "target": "opponent",
-     "stat_id": "defense",
-     "value": 1,
-     "chance_basis_points": 10000
-    },
-    {
-     "kind": "modify_stat_stage",
-     "target": "opponent",
-     "stat_id": "special_defense",
-     "value": 1,
-     "chance_basis_points": 10000
-    }
-   ],
+   "effect_specs": [],
    "crit_rate_bp": 0,
    "makes_contact": false,
    "classification": "DATA_ONLY"
@@ -9740,7 +9527,7 @@
    "type_id": "dark",
    "priority": 0,
    "damage_class": "physical",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 1,
    "target": "selected-pokemon",
    "effect_summary": "Inflicts regular damage with no additional effect.",
@@ -9772,7 +9559,7 @@
    "type_id": "fighting",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 10,
    "target": "users-field",
    "effect_summary": "Protects all friendly Pokémon from damaging moves.  Only works on the first turn after the user is sent out.",
@@ -9804,7 +9591,7 @@
    "type_id": "flying",
    "priority": 0,
    "damage_class": "physical",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 10,
    "target": "selected-pokemon-me-first",
    "effect_summary": "If this move hits, raise the Speed of the user and its allies' by 1 stage.",
@@ -9820,7 +9607,7 @@
    "type_id": "dark",
    "priority": 0,
    "damage_class": "physical",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 10,
    "target": "selected-pokemon-me-first",
    "effect_summary": "If this move hits, lower the Special Defense of all Pokemon on the opposing side by 1 stage.",
@@ -9836,7 +9623,7 @@
    "type_id": "fire",
    "priority": 0,
    "damage_class": "physical",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 10,
    "target": "selected-pokemon-me-first",
    "effect_summary": "Changes the weather to sunny for five turns.",
@@ -9852,7 +9639,7 @@
    "type_id": "bug",
    "priority": 0,
    "damage_class": "physical",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 10,
    "target": "selected-pokemon-me-first",
    "effect_summary": "If this move hits, lower the Special Attack of all Pokemon on the opposing side by 1 stage.",
@@ -9868,7 +9655,7 @@
    "type_id": "water",
    "priority": 0,
    "damage_class": "physical",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 10,
    "target": "selected-pokemon-me-first",
    "effect_summary": "Changes the weather to rain for five turns.",
@@ -9884,7 +9671,7 @@
    "type_id": "normal",
    "priority": 4,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 10,
    "target": "user",
    "effect_summary": "Prevents any moves from hitting the user this turn.",
@@ -9900,7 +9687,7 @@
    "type_id": "ice",
    "priority": 0,
    "damage_class": "physical",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 10,
    "target": "selected-pokemon-me-first",
    "effect_summary": "Changes the weather to a hailstorm for five turns.",
@@ -9916,7 +9703,7 @@
    "type_id": "fighting",
    "priority": 0,
    "damage_class": "physical",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 10,
    "target": "selected-pokemon-me-first",
    "effect_summary": "If this move hits, raise the Attack of the user and its allies' by 1 stage.",
@@ -9932,7 +9719,7 @@
    "type_id": "electric",
    "priority": 0,
    "damage_class": "physical",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 10,
    "target": "selected-pokemon-me-first",
    "effect_summary": "For five turns, prevents all Pokémon on the ground from sleeping and strengthens their Electric moves to 1.5× their power.",
@@ -9948,7 +9735,7 @@
    "type_id": "psychic",
    "priority": 0,
    "damage_class": "physical",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 10,
    "target": "selected-pokemon-me-first",
    "effect_summary": "Protects Pokémon on the ground from priority moves and increases the power of their  Psychic moves by 50%.",
@@ -9964,7 +9751,7 @@
    "type_id": "poison",
    "priority": 0,
    "damage_class": "physical",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 10,
    "target": "selected-pokemon-me-first",
    "effect_summary": "If this move hits, raise the Special Attack of the user and its allies' by 1 stage.",
@@ -9980,7 +9767,7 @@
    "type_id": "grass",
    "priority": 0,
    "damage_class": "physical",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 10,
    "target": "selected-pokemon-me-first",
    "effect_summary": "For five turns, heals all Pokémon on the ground for 1/16 max HP each turn and strengthens their Grass moves to 1.5× their power.",
@@ -9996,7 +9783,7 @@
    "type_id": "ghost",
    "priority": 0,
    "damage_class": "physical",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 10,
    "target": "selected-pokemon-me-first",
    "effect_summary": "If this move hits, lower the Defense of all Pokemon on the opposing side by 1 stage.",
@@ -10012,7 +9799,7 @@
    "type_id": "ground",
    "priority": 0,
    "damage_class": "physical",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 10,
    "target": "selected-pokemon-me-first",
    "effect_summary": "If this move hits, raise the Special Defense of the user and its allies' by 1 stage.",
@@ -10028,7 +9815,7 @@
    "type_id": "rock",
    "priority": 0,
    "damage_class": "physical",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 10,
    "target": "selected-pokemon-me-first",
    "effect_summary": "Changes the weather to a sandstorm for five turns.",
@@ -10044,7 +9831,7 @@
    "type_id": "fairy",
    "priority": 0,
    "damage_class": "physical",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 10,
    "target": "selected-pokemon-me-first",
    "effect_summary": "For five turns, protects all Pokémon on the ground from major status ailments and confusion, and halves the power of incoming Dragon moves.",
@@ -10060,7 +9847,7 @@
    "type_id": "steel",
    "priority": 0,
    "damage_class": "physical",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 10,
    "target": "selected-pokemon-me-first",
    "effect_summary": "If this move hits, raise the Defense of the user and its allies' by 1 stage.",
@@ -10076,7 +9863,7 @@
    "type_id": "normal",
    "priority": 0,
    "damage_class": "physical",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 10,
    "target": "selected-pokemon-me-first",
    "effect_summary": "If this move hits, lower the Speed of all Pokemon on the opposing side by 1 stage.",
@@ -10092,7 +9879,7 @@
    "type_id": "dragon",
    "priority": 0,
    "damage_class": "physical",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 10,
    "target": "selected-pokemon-me-first",
    "effect_summary": "If this move hits, lower the Attack of all Pokemon on the opposing side by 1 stage.",
@@ -10108,14 +9895,14 @@
    "type_id": "normal",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 20,
    "target": "selected-pokemon-me-first",
    "effect_summary": "Uses the target’s move against it before it attacks, with power increased by half.",
    "effect_specs": [],
    "crit_rate_bp": 0,
    "makes_contact": false,
-   "classification": "DATA_ONLY"
+   "classification": "UNSUPPORTED"
   },
   {
    "id": "mean_look",
@@ -10124,7 +9911,7 @@
    "type_id": "normal",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 5,
    "target": "selected-pokemon",
    "effect_summary": "Prevents the target from leaving battle.",
@@ -10140,7 +9927,7 @@
    "type_id": "psychic",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 40,
    "target": "user",
    "effect_summary": "Raises the user’s Attack by one stage.",
@@ -10155,7 +9942,7 @@
    ],
    "crit_rate_bp": 0,
    "makes_contact": false,
-   "classification": "DATA_ONLY"
+   "classification": "RUNTIME_SUPPORTED"
   },
   {
    "id": "mega_drain",
@@ -10238,22 +10025,7 @@
    "pp": 10,
    "target": "selected-pokemon",
    "effect_summary": "Lowers the target’s Attack and Special Attack by two stages.  User faints.",
-   "effect_specs": [
-    {
-     "kind": "modify_stat_stage",
-     "target": "opponent",
-     "stat_id": "attack",
-     "value": -2,
-     "chance_basis_points": 10000
-    },
-    {
-     "kind": "modify_stat_stage",
-     "target": "opponent",
-     "stat_id": "special_attack",
-     "value": -2,
-     "chance_basis_points": 10000
-    }
-   ],
+   "effect_specs": [],
    "crit_rate_bp": 0,
    "makes_contact": false,
    "classification": "DATA_ONLY"
@@ -10265,7 +10037,7 @@
    "type_id": "ghost",
    "priority": 0,
    "damage_class": "special",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 1,
    "target": "selected-pokemon",
    "effect_summary": "Cannot be disrupted by abilities.",
@@ -10304,12 +10076,12 @@
    "effect_specs": [
     {
      "kind": "chance",
-     "target": "opponent",
+     "target": "self",
      "chance_basis_points": 1000,
      "children": [
       {
        "kind": "modify_stat_stage",
-       "target": "opponent",
+       "target": "self",
        "stat_id": "attack",
        "value": 1,
        "chance_basis_points": 1000
@@ -10343,7 +10115,7 @@
    ],
    "crit_rate_bp": 0,
    "makes_contact": false,
-   "classification": "DATA_ONLY"
+   "classification": "RUNTIME_SUPPORTED"
   },
   {
    "id": "meteor_assault",
@@ -10391,12 +10163,12 @@
    "effect_specs": [
     {
      "kind": "chance",
-     "target": "opponent",
+     "target": "self",
      "chance_basis_points": 2000,
      "children": [
       {
        "kind": "modify_stat_stage",
-       "target": "opponent",
+       "target": "self",
        "stat_id": "attack",
        "value": 1,
        "chance_basis_points": 2000
@@ -10415,7 +10187,7 @@
    "type_id": "normal",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 10,
    "target": "user",
    "effect_summary": "Randomly selects and uses any move in the game.",
@@ -10447,7 +10219,7 @@
    "type_id": "normal",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 5,
    "target": "user",
    "effect_summary": "Heals the user by half its max HP.",
@@ -10460,7 +10232,7 @@
    ],
    "crit_rate_bp": 0,
    "makes_contact": false,
-   "classification": "DATA_ONLY"
+   "classification": "RUNTIME_SUPPORTED"
   },
   {
    "id": "mimic",
@@ -10469,7 +10241,7 @@
    "type_id": "normal",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 10,
    "target": "selected-pokemon",
    "effect_summary": "Copies the target’s last used move.",
@@ -10501,7 +10273,7 @@
    "type_id": "normal",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 5,
    "target": "selected-pokemon",
    "effect_summary": "Ensures that the user’s next move will hit the target.",
@@ -10517,19 +10289,11 @@
    "type_id": "normal",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 10,
    "target": "user",
-   "effect_summary": "Raises the user’s evasion by two stages.",
-   "effect_specs": [
-    {
-     "kind": "modify_stat_stage",
-     "target": "self",
-     "stat_id": "evasion",
-     "value": 2,
-     "chance_basis_points": 10000
-    }
-   ],
+   "effect_summary": "Raises the user’s evasion by two stages and applies the Minimized state.",
+   "effect_specs": [],
    "crit_rate_bp": 0,
    "makes_contact": false,
    "classification": "DATA_ONLY"
@@ -10541,7 +10305,7 @@
    "type_id": "psychic",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 40,
    "target": "selected-pokemon",
    "effect_summary": "Forces the target to have no evasion, and allows it to be hit by Psychic moves even if it’s Dark.",
@@ -10573,14 +10337,14 @@
    "type_id": "flying",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 20,
    "target": "selected-pokemon",
    "effect_summary": "Uses the target’s last used move.",
    "effect_specs": [],
    "crit_rate_bp": 0,
    "makes_contact": false,
-   "classification": "DATA_ONLY"
+   "classification": "UNSUPPORTED"
   },
   {
    "id": "mirror_shot",
@@ -10620,7 +10384,7 @@
    "type_id": "ice",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 30,
    "target": "users-field",
    "effect_summary": "Protects the user’s stats from being changed by enemy moves.",
@@ -10683,7 +10447,7 @@
    "type_id": "fairy",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 10,
    "target": "entire-field",
    "effect_summary": "For five turns, protects all Pokémon on the ground from major status ailments and confusion, and halves the power of incoming Dragon moves.",
@@ -10746,7 +10510,7 @@
    "type_id": "fairy",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 5,
    "target": "user",
    "effect_summary": "Heals the user by half its max HP.  Affected by weather.",
@@ -10759,7 +10523,7 @@
    ],
    "crit_rate_bp": 0,
    "makes_contact": false,
-   "classification": "DATA_ONLY"
+   "classification": "PARTIAL_RUNTIME"
   },
   {
    "id": "morning_sun",
@@ -10768,7 +10532,7 @@
    "type_id": "normal",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 5,
    "target": "user",
    "effect_summary": "Heals the user by half its max HP.  Affected by weather.",
@@ -10781,7 +10545,7 @@
    ],
    "crit_rate_bp": 0,
    "makes_contact": false,
-   "classification": "DATA_ONLY"
+   "classification": "PARTIAL_RUNTIME"
   },
   {
    "id": "mortal_spin",
@@ -10901,7 +10665,7 @@
    "type_id": "ground",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 15,
    "target": "entire-field",
    "effect_summary": "Halves all Electric-type damage.",
@@ -11004,7 +10768,7 @@
    "type_id": "dark",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 20,
    "target": "user",
    "effect_summary": "Raises the user’s Special Attack by two stages.",
@@ -11019,7 +10783,7 @@
    ],
    "crit_rate_bp": 0,
    "makes_contact": false,
-   "classification": "DATA_ONLY"
+   "classification": "RUNTIME_SUPPORTED"
   },
   {
    "id": "natural_gift",
@@ -11044,14 +10808,14 @@
    "type_id": "normal",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 20,
    "target": "selected-pokemon",
    "effect_summary": "Uses a move which depends upon the terrain.",
    "effect_specs": [],
    "crit_rate_bp": 0,
    "makes_contact": false,
-   "classification": "DATA_ONLY"
+   "classification": "UNSUPPORTED"
   },
   {
    "id": "natures_madness",
@@ -11104,7 +10868,7 @@
    "type_id": "ghost",
    "priority": 0,
    "damage_class": "physical",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 1,
    "target": "selected-pokemon",
    "effect_summary": "Inflicts regular damage with no additional effect.",
@@ -11120,7 +10884,7 @@
    "type_id": "ghost",
    "priority": 0,
    "damage_class": "special",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 1,
    "target": "selected-pokemon",
    "effect_summary": "Inflicts regular damage with no additional effect.",
@@ -11215,47 +10979,11 @@
    "type_id": "fighting",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 5,
    "target": "user",
    "effect_summary": "Prevents user from switching out. Raises all of the user’s stats by one stage.",
-   "effect_specs": [
-    {
-     "kind": "modify_stat_stage",
-     "target": "self",
-     "stat_id": "attack",
-     "value": 1,
-     "chance_basis_points": 10000
-    },
-    {
-     "kind": "modify_stat_stage",
-     "target": "self",
-     "stat_id": "defense",
-     "value": 1,
-     "chance_basis_points": 10000
-    },
-    {
-     "kind": "modify_stat_stage",
-     "target": "self",
-     "stat_id": "special_attack",
-     "value": 1,
-     "chance_basis_points": 10000
-    },
-    {
-     "kind": "modify_stat_stage",
-     "target": "self",
-     "stat_id": "special_defense",
-     "value": 1,
-     "chance_basis_points": 10000
-    },
-    {
-     "kind": "modify_stat_stage",
-     "target": "self",
-     "stat_id": "speed",
-     "value": 1,
-     "chance_basis_points": 10000
-    }
-   ],
+   "effect_specs": [],
    "crit_rate_bp": 0,
    "makes_contact": false,
    "classification": "DATA_ONLY"
@@ -11289,7 +11017,7 @@
    ],
    "crit_rate_bp": 0,
    "makes_contact": false,
-   "classification": "DATA_ONLY"
+   "classification": "RUNTIME_SUPPORTED"
   },
   {
    "id": "noxious_torque",
@@ -11375,7 +11103,7 @@
    "type_id": "water",
    "priority": 0,
    "damage_class": "special",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 1,
    "target": "selected-pokemon",
    "effect_summary": "Inflicts regular damage with no additional effect.",
@@ -11438,7 +11166,7 @@
    "type_id": "normal",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 40,
    "target": "selected-pokemon",
    "effect_summary": "Forces the target to have no Evade, and allows it to be hit by Normal and Fighting moves even if it’s a Ghost.",
@@ -11461,12 +11189,12 @@
    "effect_specs": [
     {
      "kind": "chance",
-     "target": "opponent",
+     "target": "self",
      "chance_basis_points": 1000,
      "children": [
       {
        "kind": "modify_stat_stage",
-       "target": "opponent",
+       "target": "self",
        "stat_id": "attack",
        "value": 1,
        "chance_basis_points": 1000
@@ -11475,12 +11203,12 @@
     },
     {
      "kind": "chance",
-     "target": "opponent",
+     "target": "self",
      "chance_basis_points": 1000,
      "children": [
       {
        "kind": "modify_stat_stage",
-       "target": "opponent",
+       "target": "self",
        "stat_id": "defense",
        "value": 1,
        "chance_basis_points": 1000
@@ -11489,12 +11217,12 @@
     },
     {
      "kind": "chance",
-     "target": "opponent",
+     "target": "self",
      "chance_basis_points": 1000,
      "children": [
       {
        "kind": "modify_stat_stage",
-       "target": "opponent",
+       "target": "self",
        "stat_id": "special_attack",
        "value": 1,
        "chance_basis_points": 1000
@@ -11503,12 +11231,12 @@
     },
     {
      "kind": "chance",
-     "target": "opponent",
+     "target": "self",
      "chance_basis_points": 1000,
      "children": [
       {
        "kind": "modify_stat_stage",
-       "target": "opponent",
+       "target": "self",
        "stat_id": "special_defense",
        "value": 1,
        "chance_basis_points": 1000
@@ -11517,12 +11245,12 @@
     },
     {
      "kind": "chance",
-     "target": "opponent",
+     "target": "self",
      "chance_basis_points": 1000,
      "children": [
       {
        "kind": "modify_stat_stage",
-       "target": "opponent",
+       "target": "self",
        "stat_id": "speed",
        "value": 1,
        "chance_basis_points": 1000
@@ -11612,7 +11340,7 @@
    "effect_specs": [
     {
      "kind": "modify_stat_stage",
-     "target": "opponent",
+     "target": "self",
      "stat_id": "special_attack",
      "value": -2,
      "chance_basis_points": 10000
@@ -11629,7 +11357,7 @@
    "type_id": "normal",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 20,
    "target": "selected-pokemon",
    "effect_summary": "Sets the user’s and targets’s HP to the average of their current HP.",
@@ -11671,22 +11399,7 @@
    "pp": 20,
    "target": "selected-pokemon",
    "effect_summary": "Lowers all targets’ Attack and Special Attack by one stage.  Makes the user switch out.",
-   "effect_specs": [
-    {
-     "kind": "modify_stat_stage",
-     "target": "opponent",
-     "stat_id": "attack",
-     "value": -1,
-     "chance_basis_points": 10000
-    },
-    {
-     "kind": "modify_stat_stage",
-     "target": "opponent",
-     "stat_id": "special_attack",
-     "value": -1,
-     "chance_basis_points": 10000
-    }
-   ],
+   "effect_specs": [],
    "crit_rate_bp": 0,
    "makes_contact": false,
    "classification": "DATA_ONLY"
@@ -11746,7 +11459,7 @@
    "type_id": "normal",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 5,
    "target": "all-pokemon",
    "effect_summary": "User and target both faint after three turns.",
@@ -11826,7 +11539,7 @@
    "type_id": "electric",
    "priority": 0,
    "damage_class": "special",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 20,
    "target": "selected-pokemon",
    "effect_summary": "Inflicts regular damage with no additional effect.",
@@ -11882,7 +11595,7 @@
    "type_id": "normal",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 20,
    "target": "selected-pokemon",
    "effect_summary": "Lowers the target’s Attack by one stage.",
@@ -11897,7 +11610,7 @@
    ],
    "crit_rate_bp": 0,
    "makes_contact": false,
-   "classification": "DATA_ONLY"
+   "classification": "RUNTIME_SUPPORTED"
   },
   {
    "id": "play_rough",
@@ -12269,7 +11982,7 @@
    "type_id": "normal",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 10,
    "target": "user",
    "effect_summary": "",
@@ -12285,7 +11998,7 @@
    "type_id": "psychic",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 10,
    "target": "selected-pokemon",
    "effect_summary": "Averages Attack and Special Attack with the target.",
@@ -12301,7 +12014,7 @@
    "type_id": "psychic",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 10,
    "target": "selected-pokemon",
    "effect_summary": "User swaps Attack and Special Attack changes with the target.",
@@ -12317,7 +12030,7 @@
    "type_id": "psychic",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 10,
    "target": "user",
    "effect_summary": "User swaps Attack and Defense.",
@@ -12356,7 +12069,7 @@
    "effect_specs": [
     {
      "kind": "modify_stat_stage",
-     "target": "opponent",
+     "target": "self",
      "stat_id": "attack",
      "value": 1,
      "chance_basis_points": 10000
@@ -12437,7 +12150,7 @@
    "type_id": "normal",
    "priority": 4,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 10,
    "target": "user",
    "effect_summary": "Prevents any moves from hitting the user this turn.",
@@ -12499,7 +12212,7 @@
    "type_id": "normal",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 10,
    "target": "selected-pokemon",
    "effect_summary": "Discards the user’s stat changes and copies the target’s.",
@@ -12578,7 +12291,7 @@
    "type_id": "psychic",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 10,
    "target": "entire-field",
    "effect_summary": "Protects Pokémon on the ground from priority moves and increases the power of their  Psychic moves by 50%.",
@@ -12601,7 +12314,7 @@
    "effect_specs": [
     {
      "kind": "modify_stat_stage",
-     "target": "opponent",
+     "target": "self",
      "stat_id": "special_attack",
      "value": -2,
      "chance_basis_points": 10000
@@ -12714,7 +12427,7 @@
    "type_id": "normal",
    "priority": 0,
    "damage_class": "physical",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 1,
    "target": "selected-pokemon",
    "effect_summary": "Inflicts regular damage with no additional effect.",
@@ -12746,17 +12459,11 @@
    "type_id": "poison",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 20,
    "target": "selected-pokemon",
-   "effect_summary": "Cures the target of a major status ailment and heals the user for 50% of its max HP.",
-   "effect_specs": [
-    {
-     "kind": "heal",
-     "target": "self",
-     "ratio_basis_points": 5000
-    }
-   ],
+   "effect_summary": "Cures the target's major status and heals the user by up to 50% only if the cure succeeds.",
+   "effect_specs": [],
    "crit_rate_bp": 0,
    "makes_contact": false,
    "classification": "DATA_ONLY"
@@ -12846,7 +12553,7 @@
    "type_id": "fighting",
    "priority": 3,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 15,
    "target": "users-field",
    "effect_summary": "Prevents any priority moves from hitting friendly Pokémon this turn.",
@@ -12862,7 +12569,7 @@
    "type_id": "bug",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 20,
    "target": "user",
    "effect_summary": "Raises the user’s Special Attack, Special Defense, and Speed by one stage each.",
@@ -12891,7 +12598,7 @@
    ],
    "crit_rate_bp": 0,
    "makes_contact": false,
-   "classification": "DATA_ONLY"
+   "classification": "RUNTIME_SUPPORTED"
   },
   {
    "id": "rage",
@@ -12932,7 +12639,7 @@
    "type_id": "bug",
    "priority": 2,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 20,
    "target": "user",
    "effect_summary": "Redirects the target’s single-target effects to the user for this turn.",
@@ -12980,7 +12687,7 @@
    "type_id": "water",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 5,
    "target": "entire-field",
    "effect_summary": "Changes the weather to rain for five turns.",
@@ -13003,7 +12710,7 @@
    "effect_specs": [
     {
      "kind": "modify_stat_stage",
-     "target": "opponent",
+     "target": "self",
      "stat_id": "speed",
      "value": 1,
      "chance_basis_points": 10000
@@ -13083,7 +12790,7 @@
    "type_id": "normal",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 5,
    "target": "user",
    "effect_summary": "Heals the user by half its max HP.",
@@ -13096,7 +12803,7 @@
    ],
    "crit_rate_bp": 0,
    "makes_contact": false,
-   "classification": "DATA_ONLY"
+   "classification": "RUNTIME_SUPPORTED"
   },
   {
    "id": "recycle",
@@ -13105,7 +12812,7 @@
    "type_id": "normal",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 10,
    "target": "user",
    "effect_summary": "User recovers the item it last used up.",
@@ -13121,7 +12828,7 @@
    "type_id": "psychic",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 20,
    "target": "users-field",
    "effect_summary": "Reduces damage from physical attacks by half.",
@@ -13137,7 +12844,7 @@
    "type_id": "normal",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 15,
    "target": "selected-pokemon",
    "effect_summary": "User becomes the target’s type.",
@@ -13153,7 +12860,7 @@
    "type_id": "normal",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 20,
    "target": "user",
    "effect_summary": "Cleanses the user of a burn, paralysis, or poison.",
@@ -13199,7 +12906,7 @@
    "type_id": "psychic",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 5,
    "target": "user",
    "effect_summary": "User sleeps for two turns, completely healing itself.",
@@ -13295,7 +13002,7 @@
    "type_id": "normal",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 1,
    "target": "fainting-pokemon",
    "effect_summary": "",
@@ -13327,7 +13034,7 @@
    "type_id": "normal",
    "priority": -6,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 20,
    "target": "selected-pokemon",
    "effect_summary": "Immediately ends wild battles.  Forces trainers to switch Pokémon.",
@@ -13413,7 +13120,7 @@
    "type_id": "rock",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 20,
    "target": "user",
    "effect_summary": "Raises the user’s Speed by two stages.",
@@ -13428,7 +13135,7 @@
    ],
    "crit_rate_bp": 0,
    "makes_contact": false,
-   "classification": "DATA_ONLY"
+   "classification": "RUNTIME_SUPPORTED"
   },
   {
    "id": "rock_slide",
@@ -13552,7 +13259,7 @@
    "type_id": "psychic",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 10,
    "target": "selected-pokemon",
    "effect_summary": "Copies the target’s ability.",
@@ -13612,7 +13319,7 @@
    "type_id": "flying",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 5,
    "target": "user",
    "effect_summary": "Heals the user by half its max HP.",
@@ -13625,7 +13332,7 @@
    ],
    "crit_rate_bp": 0,
    "makes_contact": false,
-   "classification": "DATA_ONLY"
+   "classification": "PARTIAL_RUNTIME"
   },
   {
    "id": "rototiller",
@@ -13634,26 +13341,11 @@
    "type_id": "ground",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 10,
    "target": "all-pokemon",
-   "effect_summary": "Raises the Attack and Special Attack of all Grass Pokémon in battle.",
-   "effect_specs": [
-    {
-     "kind": "modify_stat_stage",
-     "target": "opponent",
-     "stat_id": "attack",
-     "value": 1,
-     "chance_basis_points": 10000
-    },
-    {
-     "kind": "modify_stat_stage",
-     "target": "opponent",
-     "stat_id": "special_attack",
-     "value": 1,
-     "chance_basis_points": 10000
-    }
-   ],
+   "effect_summary": "Raises Attack and Special Attack of eligible grounded Grass-type Pokémon; unavailable for selection from Generation VIII onward.",
+   "effect_specs": [],
    "crit_rate_bp": 0,
    "makes_contact": false,
    "classification": "DATA_ONLY"
@@ -13743,7 +13435,7 @@
    "type_id": "normal",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 25,
    "target": "users-field",
    "effect_summary": "Protects the user’s field from major status ailments and confusion for five turns.",
@@ -13790,7 +13482,7 @@
    ],
    "crit_rate_bp": 0,
    "makes_contact": false,
-   "classification": "DATA_ONLY"
+   "classification": "RUNTIME_SUPPORTED"
   },
   {
    "id": "sand_tomb",
@@ -13831,7 +13523,7 @@
    "type_id": "rock",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 10,
    "target": "entire-field",
    "effect_summary": "Changes the weather to a sandstorm for five turns.",
@@ -13863,7 +13555,7 @@
    "type_id": "bug",
    "priority": 0,
    "damage_class": "physical",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 1,
    "target": "selected-pokemon",
    "effect_summary": "Inflicts regular damage with no additional effect.",
@@ -13879,7 +13571,7 @@
    "type_id": "bug",
    "priority": 0,
    "damage_class": "special",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 1,
    "target": "selected-pokemon",
    "effect_summary": "Inflicts regular damage with no additional effect.",
@@ -13964,7 +13656,7 @@
    ],
    "crit_rate_bp": 0,
    "makes_contact": false,
-   "classification": "DATA_ONLY"
+   "classification": "RUNTIME_SUPPORTED"
   },
   {
    "id": "scorching_sands",
@@ -14034,7 +13726,7 @@
    ],
    "crit_rate_bp": 0,
    "makes_contact": false,
-   "classification": "DATA_ONLY"
+   "classification": "RUNTIME_SUPPORTED"
   },
   {
    "id": "searing_shot",
@@ -14073,7 +13765,7 @@
    "type_id": "steel",
    "priority": 0,
    "damage_class": "physical",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 1,
    "target": "selected-pokemon",
    "effect_summary": "Cannot be disrupted by abilities.",
@@ -14294,7 +13986,7 @@
    "type_id": "ghost",
    "priority": 0,
    "damage_class": "physical",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 20,
    "target": "selected-pokemon",
    "effect_summary": "Never misses.",
@@ -14326,7 +14018,7 @@
    "type_id": "normal",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 30,
    "target": "user",
    "effect_summary": "Raises the user’s Attack by one stage.",
@@ -14341,7 +14033,7 @@
    ],
    "crit_rate_bp": 0,
    "makes_contact": false,
-   "classification": "DATA_ONLY"
+   "classification": "RUNTIME_SUPPORTED"
   },
   {
    "id": "shattered_psyche_physical",
@@ -14350,7 +14042,7 @@
    "type_id": "psychic",
    "priority": 0,
    "damage_class": "physical",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 1,
    "target": "selected-pokemon",
    "effect_summary": "Inflicts regular damage with no additional effect.",
@@ -14366,7 +14058,7 @@
    "type_id": "psychic",
    "priority": 0,
    "damage_class": "special",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 1,
    "target": "selected-pokemon",
    "effect_summary": "Inflicts regular damage with no additional effect.",
@@ -14382,7 +14074,7 @@
    "type_id": "normal",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 10,
    "target": "user",
    "effect_summary": "",
@@ -14444,7 +14136,7 @@
    "type_id": "normal",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 15,
    "target": "user",
    "effect_summary": "Raises user’s Attack, Special Attack, and Speed by two stages.  Lower user’s Defense and Special Defense by one stage.",
@@ -14487,7 +14179,7 @@
    ],
    "crit_rate_bp": 0,
    "makes_contact": false,
-   "classification": "DATA_ONLY"
+   "classification": "RUNTIME_SUPPORTED"
   },
   {
    "id": "shell_trap",
@@ -14512,7 +14204,7 @@
    "type_id": "steel",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 10,
    "target": "user",
    "effect_summary": "",
@@ -14528,7 +14220,7 @@
    "type_id": "steel",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 10,
    "target": "user",
    "effect_summary": "Raises the user’s Attack by one stage and its Speed by two stages.",
@@ -14550,7 +14242,7 @@
    ],
    "crit_rate_bp": 0,
    "makes_contact": false,
-   "classification": "DATA_ONLY"
+   "classification": "RUNTIME_SUPPORTED"
   },
   {
    "id": "shock_wave",
@@ -14559,7 +14251,7 @@
    "type_id": "electric",
    "priority": 0,
    "damage_class": "special",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 20,
    "target": "selected-pokemon",
    "effect_summary": "Never misses.",
@@ -14575,7 +14267,7 @@
    "type_id": "ground",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 5,
    "target": "user",
    "effect_summary": "Heals the user for ½ its max HP, or ⅔ during a sandstorm.",
@@ -14588,7 +14280,7 @@
    ],
    "crit_rate_bp": 0,
    "makes_contact": false,
-   "classification": "DATA_ONLY"
+   "classification": "PARTIAL_RUNTIME"
   },
   {
    "id": "signal_beam",
@@ -14627,19 +14319,11 @@
    "type_id": "bug",
    "priority": 4,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 10,
    "target": "user",
    "effect_summary": "",
-   "effect_specs": [
-    {
-     "kind": "modify_stat_stage",
-     "target": "self",
-     "stat_id": "speed",
-     "value": -1,
-     "chance_basis_points": 10000
-    }
-   ],
+   "effect_specs": [],
    "crit_rate_bp": 0,
    "makes_contact": false,
    "classification": "DATA_ONLY"
@@ -14658,12 +14342,12 @@
    "effect_specs": [
     {
      "kind": "chance",
-     "target": "opponent",
+     "target": "self",
      "chance_basis_points": 1000,
      "children": [
       {
        "kind": "modify_stat_stage",
-       "target": "opponent",
+       "target": "self",
        "stat_id": "attack",
        "value": 1,
        "chance_basis_points": 1000
@@ -14672,12 +14356,12 @@
     },
     {
      "kind": "chance",
-     "target": "opponent",
+     "target": "self",
      "chance_basis_points": 1000,
      "children": [
       {
        "kind": "modify_stat_stage",
-       "target": "opponent",
+       "target": "self",
        "stat_id": "defense",
        "value": 1,
        "chance_basis_points": 1000
@@ -14686,12 +14370,12 @@
     },
     {
      "kind": "chance",
-     "target": "opponent",
+     "target": "self",
      "chance_basis_points": 1000,
      "children": [
       {
        "kind": "modify_stat_stage",
-       "target": "opponent",
+       "target": "self",
        "stat_id": "special_attack",
        "value": 1,
        "chance_basis_points": 1000
@@ -14700,12 +14384,12 @@
     },
     {
      "kind": "chance",
-     "target": "opponent",
+     "target": "self",
      "chance_basis_points": 1000,
      "children": [
       {
        "kind": "modify_stat_stage",
-       "target": "opponent",
+       "target": "self",
        "stat_id": "special_defense",
        "value": 1,
        "chance_basis_points": 1000
@@ -14714,12 +14398,12 @@
     },
     {
      "kind": "chance",
-     "target": "opponent",
+     "target": "self",
      "chance_basis_points": 1000,
      "children": [
       {
        "kind": "modify_stat_stage",
-       "target": "opponent",
+       "target": "self",
        "stat_id": "speed",
        "value": 1,
        "chance_basis_points": 1000
@@ -14777,7 +14461,7 @@
    "type_id": "ghost",
    "priority": 0,
    "damage_class": "physical",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 1,
    "target": "selected-pokemon",
    "effect_summary": "Inflicts regular damage with no additional effect.",
@@ -14816,7 +14500,7 @@
    "type_id": "normal",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 1,
    "target": "selected-pokemon",
    "effect_summary": "Permanently becomes the target’s last used move.",
@@ -14832,7 +14516,7 @@
    "type_id": "psychic",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 10,
    "target": "selected-pokemon",
    "effect_summary": "User and target swap abilities.",
@@ -14948,7 +14632,7 @@
    "type_id": "normal",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 5,
    "target": "user",
    "effect_summary": "Heals the user by half its max HP.",
@@ -14961,7 +14645,7 @@
    ],
    "crit_rate_bp": 0,
    "makes_contact": false,
-   "classification": "DATA_ONLY"
+   "classification": "RUNTIME_SUPPORTED"
   },
   {
    "id": "slam",
@@ -15025,14 +14709,14 @@
    "type_id": "normal",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 10,
    "target": "user",
    "effect_summary": "Randomly uses one of the user’s other three moves.  Only works if the user is sleeping.",
    "effect_specs": [],
    "crit_rate_bp": 0,
    "makes_contact": false,
-   "classification": "DATA_ONLY"
+   "classification": "UNSUPPORTED"
   },
   {
    "id": "sludge",
@@ -15147,7 +14831,7 @@
    "type_id": "steel",
    "priority": 0,
    "damage_class": "physical",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 10,
    "target": "selected-pokemon",
    "effect_summary": "Never misses.",
@@ -15224,7 +14908,7 @@
    ],
    "crit_rate_bp": 0,
    "makes_contact": false,
-   "classification": "DATA_ONLY"
+   "classification": "RUNTIME_SUPPORTED"
   },
   {
    "id": "snap_trap",
@@ -15273,7 +14957,7 @@
    "type_id": "dark",
    "priority": 4,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 10,
    "target": "user",
    "effect_summary": "Steals the target’s move, if it’s self-targeted.",
@@ -15333,7 +15017,7 @@
    "type_id": "ice",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 10,
    "target": "entire-field",
    "effect_summary": "",
@@ -15365,7 +15049,7 @@
    "type_id": "normal",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 5,
    "target": "user",
    "effect_summary": "Heals the user by half its max HP.",
@@ -15378,7 +15062,7 @@
    ],
    "crit_rate_bp": 0,
    "makes_contact": false,
-   "classification": "DATA_ONLY"
+   "classification": "RUNTIME_SUPPORTED"
   },
   {
    "id": "solar_beam",
@@ -15435,7 +15119,7 @@
    "type_id": "ghost",
    "priority": 0,
    "damage_class": "physical",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 1,
    "target": "selected-pokemon",
    "effect_summary": "Inflicts regular damage with no additional effect.",
@@ -15545,7 +15229,7 @@
    "type_id": "psychic",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 10,
    "target": "selected-pokemon",
    "effect_summary": "Exchanges the user’s Speed with the target’s.",
@@ -15561,7 +15245,7 @@
    "type_id": "grass",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 15,
    "target": "selected-pokemon",
    "effect_summary": "",
@@ -15583,7 +15267,7 @@
    ],
    "crit_rate_bp": 0,
    "makes_contact": false,
-   "classification": "DATA_ONLY"
+   "classification": "RUNTIME_SUPPORTED"
   },
   {
    "id": "spider_web",
@@ -15592,7 +15276,7 @@
    "type_id": "bug",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 10,
    "target": "selected-pokemon",
    "effect_summary": "Prevents the target from leaving battle.",
@@ -15632,7 +15316,7 @@
    "type_id": "ground",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 20,
    "target": "opponents-field",
    "effect_summary": "Scatters Spikes, hurting opposing Pokémon that switch in.",
@@ -15648,7 +15332,7 @@
    "type_id": "grass",
    "priority": 4,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 10,
    "target": "user",
    "effect_summary": "Blocks damaging attacks and damages attacking Pokémon for 1/8 their max HP.",
@@ -15760,7 +15444,7 @@
    "type_id": "normal",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 40,
    "target": "user",
    "effect_summary": "Does nothing.",
@@ -15776,7 +15460,7 @@
    "type_id": "rock",
    "priority": 0,
    "damage_class": "physical",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 1,
    "target": "selected-pokemon",
    "effect_summary": "Inflicts damage and removes any terrain present on the battlefield.",
@@ -15845,7 +15529,7 @@
    "type_id": "normal",
    "priority": 3,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 15,
    "target": "selected-pokemon",
    "effect_summary": "Forces the target’s opponents to aim at the target for the rest of the turn.",
@@ -15877,7 +15561,7 @@
    "type_id": "rock",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 20,
    "target": "opponents-field",
    "effect_summary": "Causes damage when opposing Pokémon switch in.",
@@ -15990,12 +15674,12 @@
    "effect_specs": [
     {
      "kind": "chance",
-     "target": "opponent",
+     "target": "self",
      "chance_basis_points": 1000,
      "children": [
       {
        "kind": "modify_stat_stage",
-       "target": "opponent",
+       "target": "self",
        "stat_id": "defense",
        "value": 1,
        "chance_basis_points": 1000
@@ -16014,7 +15698,7 @@
    "type_id": "bug",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 20,
    "target": "opponents-field",
    "effect_summary": "Covers the opposing field, lowering opponents’ Speed by one stage upon switching in.",
@@ -16030,26 +15714,11 @@
    "type_id": "normal",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 20,
    "target": "user",
-   "effect_summary": "Stores energy up to three times for use with Spit Up and Swallow.",
-   "effect_specs": [
-    {
-     "kind": "modify_stat_stage",
-     "target": "self",
-     "stat_id": "defense",
-     "value": 1,
-     "chance_basis_points": 10000
-    },
-    {
-     "kind": "modify_stat_stage",
-     "target": "self",
-     "stat_id": "special_defense",
-     "value": 1,
-     "chance_basis_points": 10000
-    }
-   ],
+   "effect_summary": "Stores one Stockpile level (maximum three) and raises Defense and Special Defense by one stage; Spit Up or Swallow consume the stored levels and the associated Stockpile stat boosts.",
+   "effect_specs": [],
    "crit_rate_bp": 0,
    "makes_contact": false,
    "classification": "DATA_ONLY"
@@ -16061,7 +15730,7 @@
    "type_id": "electric",
    "priority": 0,
    "damage_class": "special",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 1,
    "target": "selected-pokemon",
    "effect_summary": "Has a chance to paralyze the target.",
@@ -16253,7 +15922,7 @@
    ],
    "crit_rate_bp": 0,
    "makes_contact": false,
-   "classification": "DATA_ONLY"
+   "classification": "PARTIAL_RUNTIME"
   },
   {
    "id": "string_shot",
@@ -16277,7 +15946,7 @@
    ],
    "crit_rate_bp": 0,
    "makes_contact": false,
-   "classification": "DATA_ONLY"
+   "classification": "RUNTIME_SUPPORTED"
   },
   {
    "id": "struggle",
@@ -16286,7 +15955,7 @@
    "type_id": "normal",
    "priority": 0,
    "damage_class": "physical",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 1,
    "target": "random-opponent",
    "effect_summary": "User takes 1/4 its max HP in recoil.",
@@ -16326,19 +15995,11 @@
    "type_id": "normal",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 10,
    "target": "user",
    "effect_summary": "User consumes berry and raises its defense by 2 stages.",
-   "effect_specs": [
-    {
-     "kind": "modify_stat_stage",
-     "target": "self",
-     "stat_id": "defense",
-     "value": 2,
-     "chance_basis_points": 10000
-    }
-   ],
+   "effect_specs": [],
    "crit_rate_bp": 0,
    "makes_contact": false,
    "classification": "DATA_ONLY"
@@ -16395,7 +16056,7 @@
    "type_id": "normal",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 10,
    "target": "user",
    "effect_summary": "Transfers 1/4 of the user’s max HP into a doll, protecting the user from further damage or status changes until it breaks.",
@@ -16411,7 +16072,7 @@
    "type_id": "ice",
    "priority": 0,
    "damage_class": "physical",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 1,
    "target": "selected-pokemon",
    "effect_summary": "Inflicts regular damage with no additional effect.",
@@ -16427,7 +16088,7 @@
    "type_id": "ice",
    "priority": 0,
    "damage_class": "special",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 1,
    "target": "selected-pokemon",
    "effect_summary": "Inflicts regular damage with no additional effect.",
@@ -16459,7 +16120,7 @@
    "type_id": "fire",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 5,
    "target": "entire-field",
    "effect_summary": "Changes the weather to sunny for five turns.",
@@ -16530,14 +16191,14 @@
    "effect_specs": [
     {
      "kind": "modify_stat_stage",
-     "target": "opponent",
+     "target": "self",
      "stat_id": "attack",
      "value": -1,
      "chance_basis_points": 10000
     },
     {
      "kind": "modify_stat_stage",
-     "target": "opponent",
+     "target": "self",
      "stat_id": "defense",
      "value": -1,
      "chance_basis_points": 10000
@@ -16577,7 +16238,7 @@
    "type_id": "flying",
    "priority": 0,
    "damage_class": "physical",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 1,
    "target": "selected-pokemon",
    "effect_summary": "Inflicts regular damage with no additional effect.",
@@ -16593,7 +16254,7 @@
    "type_id": "flying",
    "priority": 0,
    "damage_class": "special",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 1,
    "target": "selected-pokemon",
    "effect_summary": "Inflicts regular damage with no additional effect.",
@@ -16679,17 +16340,11 @@
    "type_id": "normal",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 10,
    "target": "user",
-   "effect_summary": "Recovers 1/4 HP after one Stockpile, 1/2 HP after two Stockpiles, or full HP after three Stockpiles.",
-   "effect_specs": [
-    {
-     "kind": "heal",
-     "target": "self",
-     "ratio_basis_points": 2500
-    }
-   ],
+   "effect_summary": "Consumes Stockpile: heals 25%/50%/100% at levels 1/2/3 and fails at level 0.",
+   "effect_specs": [],
    "crit_rate_bp": 0,
    "makes_contact": false,
    "classification": "DATA_ONLY"
@@ -16727,7 +16382,7 @@
    "accuracy": 100,
    "pp": 20,
    "target": "all-opponents",
-   "effect_summary": "Lowers the target’s evasion by one stage.",
+   "effect_summary": "Lowers the target’s evasion by two stages.",
    "effect_specs": [
     {
      "kind": "modify_stat_stage",
@@ -16739,7 +16394,7 @@
    ],
    "crit_rate_bp": 0,
    "makes_contact": false,
-   "classification": "DATA_ONLY"
+   "classification": "RUNTIME_SUPPORTED"
   },
   {
    "id": "swift",
@@ -16748,7 +16403,7 @@
    "type_id": "normal",
    "priority": 0,
    "damage_class": "special",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 20,
    "target": "all-opponents",
    "effect_summary": "Never misses.",
@@ -16780,7 +16435,7 @@
    "type_id": "normal",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 20,
    "target": "user",
    "effect_summary": "Raises the user’s Attack by two stages.",
@@ -16795,7 +16450,7 @@
    ],
    "crit_rate_bp": 0,
    "makes_contact": false,
-   "classification": "DATA_ONLY"
+   "classification": "RUNTIME_SUPPORTED"
   },
   {
    "id": "synchronoise",
@@ -16820,7 +16475,7 @@
    "type_id": "grass",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 5,
    "target": "user",
    "effect_summary": "Heals the user by half its max HP.  Affected by weather.",
@@ -16833,7 +16488,7 @@
    ],
    "crit_rate_bp": 0,
    "makes_contact": false,
-   "classification": "DATA_ONLY"
+   "classification": "PARTIAL_RUNTIME"
   },
   {
    "id": "syrup_bomb",
@@ -16898,7 +16553,7 @@
    "type_id": "bug",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 20,
    "target": "user",
    "effect_summary": "Raises the user’s Special Attack by three stages.",
@@ -16913,7 +16568,7 @@
    ],
    "crit_rate_bp": 0,
    "makes_contact": false,
-   "classification": "DATA_ONLY"
+   "classification": "RUNTIME_SUPPORTED"
   },
   {
    "id": "tail_slap",
@@ -16961,7 +16616,7 @@
    ],
    "crit_rate_bp": 0,
    "makes_contact": false,
-   "classification": "DATA_ONLY"
+   "classification": "RUNTIME_SUPPORTED"
   },
   {
    "id": "tailwind",
@@ -16970,7 +16625,7 @@
    "type_id": "flying",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 15,
    "target": "users-field",
    "effect_summary": "For three turns, friendly Pokémon have doubled Speed.",
@@ -17008,7 +16663,7 @@
    "type_id": "psychic",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 10,
    "target": "all-allies",
    "effect_summary": "",
@@ -17039,7 +16694,7 @@
    ],
    "crit_rate_bp": 0,
    "makes_contact": false,
-   "classification": "DATA_ONLY"
+   "classification": "PARTIAL_RUNTIME"
   },
   {
    "id": "taunt",
@@ -17064,7 +16719,7 @@
    "type_id": "normal",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 20,
    "target": "selected-pokemon",
    "effect_summary": "Lowers the target’s Attack and Special Attack by one stage.",
@@ -17086,7 +16741,7 @@
    ],
    "crit_rate_bp": 0,
    "makes_contact": false,
-   "classification": "DATA_ONLY"
+   "classification": "RUNTIME_SUPPORTED"
   },
   {
    "id": "teatime",
@@ -17095,7 +16750,7 @@
    "type_id": "normal",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 10,
    "target": "all-pokemon",
    "effect_summary": "All Pokemon on the field consume their held berries.",
@@ -17127,7 +16782,7 @@
    "type_id": "ground",
    "priority": 0,
    "damage_class": "physical",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 1,
    "target": "selected-pokemon",
    "effect_summary": "Inflicts regular damage with no additional effect.",
@@ -17143,7 +16798,7 @@
    "type_id": "ground",
    "priority": 0,
    "damage_class": "special",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 1,
    "target": "selected-pokemon",
    "effect_summary": "Inflicts regular damage with no additional effect.",
@@ -17182,7 +16837,7 @@
    "type_id": "psychic",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 15,
    "target": "selected-pokemon",
    "effect_summary": "Moves have 100% accuracy against the target for three turns.",
@@ -17198,7 +16853,7 @@
    "type_id": "psychic",
    "priority": -6,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 20,
    "target": "user",
    "effect_summary": "Immediately ends wild battles.  No effect otherwise.",
@@ -17635,7 +17290,7 @@
    ],
    "crit_rate_bp": 0,
    "makes_contact": false,
-   "classification": "DATA_ONLY"
+   "classification": "RUNTIME_SUPPORTED"
   },
   {
    "id": "tidy_up",
@@ -17644,26 +17299,11 @@
    "type_id": "normal",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 10,
    "target": "user",
-   "effect_summary": "",
-   "effect_specs": [
-    {
-     "kind": "modify_stat_stage",
-     "target": "self",
-     "stat_id": "attack",
-     "value": 1,
-     "chance_basis_points": 10000
-    },
-    {
-     "kind": "modify_stat_stage",
-     "target": "self",
-     "stat_id": "speed",
-     "value": 1,
-     "chance_basis_points": 10000
-    }
-   ],
+   "effect_summary": "Raises Attack and Speed by one stage and clears hazards and Substitute from both sides.",
+   "effect_specs": [],
    "crit_rate_bp": 0,
    "makes_contact": false,
    "classification": "DATA_ONLY"
@@ -17675,7 +17315,7 @@
    "type_id": "dark",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 20,
    "target": "selected-pokemon",
    "effect_summary": "Inverts the target’s stat modifiers.",
@@ -17754,7 +17394,7 @@
    "type_id": "poison",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 20,
    "target": "opponents-field",
    "effect_summary": "Scatters poisoned spikes, poisoning opposing Pokémon that switch in.",
@@ -17824,7 +17464,7 @@
    "type_id": "normal",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 10,
    "target": "selected-pokemon",
    "effect_summary": "User becomes a copy of the target until it leaves battle.",
@@ -17888,7 +17528,7 @@
    "type_id": "psychic",
    "priority": -7,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 5,
    "target": "entire-field",
    "effect_summary": "For five turns, slower Pokémon will act before faster Pokémon.",
@@ -18008,7 +17648,7 @@
    "type_id": "normal",
    "priority": 0,
    "damage_class": "special",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 5,
    "target": "selected-pokemon",
    "effect_summary": "Power increases when this move has less PP, up to a maximum of 200.",
@@ -18077,7 +17717,7 @@
    "type_id": "fairy",
    "priority": 0,
    "damage_class": "physical",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 1,
    "target": "selected-pokemon",
    "effect_summary": "Inflicts regular damage with no additional effect.",
@@ -18093,7 +17733,7 @@
    "type_id": "fairy",
    "priority": 0,
    "damage_class": "special",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 1,
    "target": "selected-pokemon",
    "effect_summary": "Inflicts regular damage with no additional effect.",
@@ -18192,21 +17832,21 @@
    "effect_specs": [
     {
      "kind": "modify_stat_stage",
-     "target": "opponent",
+     "target": "self",
      "stat_id": "defense",
      "value": -1,
      "chance_basis_points": 10000
     },
     {
      "kind": "modify_stat_stage",
-     "target": "opponent",
+     "target": "self",
      "stat_id": "special_defense",
      "value": -1,
      "chance_basis_points": 10000
     },
     {
      "kind": "modify_stat_stage",
-     "target": "opponent",
+     "target": "self",
      "stat_id": "speed",
      "value": -1,
      "chance_basis_points": 10000
@@ -18239,7 +17879,7 @@
    "type_id": "normal",
    "priority": 0,
    "damage_class": "physical",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 20,
    "target": "selected-pokemon",
    "effect_summary": "Inflicts regular damage with no additional effect.",
@@ -18259,29 +17899,7 @@
    "pp": 20,
    "target": "all-opponents",
    "effect_summary": "Lowers the target’s Attack, Special Attack, and Speed by one stage if it is poisoned.",
-   "effect_specs": [
-    {
-     "kind": "modify_stat_stage",
-     "target": "opponent",
-     "stat_id": "attack",
-     "value": -1,
-     "chance_basis_points": 10000
-    },
-    {
-     "kind": "modify_stat_stage",
-     "target": "opponent",
-     "stat_id": "special_attack",
-     "value": -1,
-     "chance_basis_points": 10000
-    },
-    {
-     "kind": "modify_stat_stage",
-     "target": "opponent",
-     "stat_id": "speed",
-     "value": -1,
-     "chance_basis_points": 10000
-    }
-   ],
+   "effect_specs": [],
    "crit_rate_bp": 0,
    "makes_contact": false,
    "classification": "DATA_ONLY"
@@ -18325,7 +17943,7 @@
    "type_id": "fighting",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 10,
    "target": "user",
    "effect_summary": "",
@@ -18357,7 +17975,7 @@
    "type_id": "fighting",
    "priority": -1,
    "damage_class": "physical",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 10,
    "target": "selected-pokemon",
    "effect_summary": "Never misses.",
@@ -18526,7 +18144,7 @@
    "type_id": "water",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 15,
    "target": "entire-field",
    "effect_summary": "Halves all Fire-type damage.",
@@ -18634,7 +18252,7 @@
    "type_id": "normal",
    "priority": -6,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 20,
    "target": "selected-pokemon",
    "effect_summary": "Immediately ends wild battles.  Forces trainers to switch Pokémon.",
@@ -18682,7 +18300,7 @@
    "type_id": "rock",
    "priority": 3,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 10,
    "target": "users-field",
    "effect_summary": "Prevents any multi-target moves from hitting friendly Pokémon this turn.",
@@ -18775,7 +18393,7 @@
    "type_id": "normal",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 10,
    "target": "user",
    "effect_summary": "User will recover half its max HP at the end of the next turn.",
@@ -18791,7 +18409,7 @@
    "type_id": "water",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 40,
    "target": "user",
    "effect_summary": "Raises the user’s Defense by one stage.",
@@ -18806,7 +18424,7 @@
    ],
    "crit_rate_bp": 0,
    "makes_contact": false,
-   "classification": "DATA_ONLY"
+   "classification": "RUNTIME_SUPPORTED"
   },
   {
    "id": "wonder_room",
@@ -18815,7 +18433,7 @@
    "type_id": "psychic",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 10,
    "target": "entire-field",
    "effect_summary": "All Pokémon’s Defense and Special Defense are swapped for 5 turns.",
@@ -18853,7 +18471,7 @@
    "type_id": "normal",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 30,
    "target": "user",
    "effect_summary": "Raises the user’s Attack and Special Attack by one stage each.",
@@ -18875,7 +18493,7 @@
    ],
    "crit_rate_bp": 0,
    "makes_contact": false,
-   "classification": "DATA_ONLY"
+   "classification": "RUNTIME_SUPPORTED"
   },
   {
    "id": "worry_seed",
@@ -18948,7 +18566,7 @@
    "type_id": "normal",
    "priority": 0,
    "damage_class": "status",
-   "accuracy": 100,
+   "accuracy": -1,
    "pp": 10,
    "target": "selected-pokemon",
    "effect_summary": "Target sleeps at the end of the next turn.",
@@ -19050,7 +18668,7 @@
    "effect_specs": [
     {
      "kind": "modify_stat_stage",
-     "target": "opponent",
+     "target": "self",
      "stat_id": "evasion",
      "value": 1,
      "chance_basis_points": 10000
@@ -19188,7 +18806,7 @@
    "description": "Damages sleeping opponents for 1/8 their max HP after each turn.",
    "effect_id": "bad_dreams",
    "effect_summary": "Damages sleeping opponents for 1/8 their max HP after each turn.",
-   "classification": "DATA_ONLY"
+   "classification": "RUNTIME_SUPPORTED"
   },
   {
    "id": "ball_fetch",
@@ -19268,7 +18886,7 @@
    "description": "Strengthens Fire moves to inflict 1.5× damage at 1/3 max HP or less.",
    "effect_id": "blaze",
    "effect_summary": "Strengthens Fire moves to inflict 1.5× damage at 1/3 max HP or less.",
-   "classification": "DATA_ONLY"
+   "classification": "RUNTIME_SUPPORTED"
   },
   {
    "id": "bodyguard",
@@ -19548,7 +19166,7 @@
    "description": "Halves Attack and Special Attack at 50% max HP or less.",
    "effect_id": "defeatist",
    "effect_summary": "Halves Attack and Special Attack at 50% max HP or less.",
-   "classification": "DATA_ONLY"
+   "classification": "RUNTIME_SUPPORTED"
   },
   {
    "id": "defiant",
@@ -19620,7 +19238,7 @@
    "description": "Powers up Dragon-type moves.",
    "effect_id": "dragons_maw",
    "effect_summary": "Powers up Dragon-type moves.",
-   "classification": "DATA_ONLY"
+   "classification": "RUNTIME_SUPPORTED"
   },
   {
    "id": "drizzle",
@@ -19644,7 +19262,7 @@
    "description": "Causes 1/8 max HP in damage each turn during strong sunlight, but heals for 1/8 max HP during rain.  Increases damage from Fire moves to 1.25×, but absorbs Water moves, healing for 1/4 max HP.",
    "effect_id": "dry_skin",
    "effect_summary": "Causes 1/8 max HP in damage each turn during strong sunlight, but heals for 1/8 max HP during rain.  Increases damage from Fire moves to 1.25×, but absorbs Water moves, healing for 1/4 max HP.",
-   "classification": "DATA_ONLY"
+   "classification": "PARTIAL_RUNTIME"
   },
   {
    "id": "early_bird",
@@ -19740,7 +19358,7 @@
    "description": "Boosts the power of the Pokémon's Fire-type moves by 50%.",
    "effect_id": "fire_mane",
    "effect_summary": "Boosts the power of the Pokémon's Fire-type moves by 50%.",
-   "classification": "DATA_ONLY"
+   "classification": "RUNTIME_SUPPORTED"
   },
   {
    "id": "flame_body",
@@ -19748,7 +19366,7 @@
    "description": "Has a 30% chance of burning attacking Pokémon on contact.",
    "effect_id": "flame_body",
    "effect_summary": "Has a 30% chance of burning attacking Pokémon on contact.",
-   "classification": "DATA_ONLY"
+   "classification": "PARTIAL_RUNTIME"
   },
   {
    "id": "flame_boost",
@@ -19764,7 +19382,7 @@
    "description": "Increases Special Attack to 1.5× when burned.",
    "effect_id": "flare_boost",
    "effect_summary": "Increases Special Attack to 1.5× when burned.",
-   "classification": "DATA_ONLY"
+   "classification": "RUNTIME_SUPPORTED"
   },
   {
    "id": "flash_fire",
@@ -19868,7 +19486,7 @@
    "description": "Halves damage from physical attacks.",
    "effect_id": "fur_coat",
    "effect_summary": "Halves damage from physical attacks.",
-   "classification": "DATA_ONLY"
+   "classification": "RUNTIME_SUPPORTED"
   },
   {
    "id": "gale_wings",
@@ -19908,7 +19526,7 @@
    "description": "Lowers attacking Pokémon's Speed by one stage on contact.",
    "effect_id": "gooey",
    "effect_summary": "Lowers attacking Pokémon's Speed by one stage on contact.",
-   "classification": "DATA_ONLY"
+   "classification": "PARTIAL_RUNTIME"
   },
   {
    "id": "gorilla_tactics",
@@ -19980,7 +19598,7 @@
    "description": "Increases Attack to 1.5× with a major status ailment.",
    "effect_id": "guts",
    "effect_summary": "Increases Attack to 1.5× with a major status ailment.",
-   "classification": "DATA_ONLY"
+   "classification": "PARTIAL_RUNTIME"
   },
   {
    "id": "hadron_engine",
@@ -20012,7 +19630,7 @@
    "description": "Halves damage from Fire moves and burns.",
    "effect_id": "heatproof",
    "effect_summary": "Halves damage from Fire moves and burns.",
-   "classification": "DATA_ONLY"
+   "classification": "PARTIAL_RUNTIME"
   },
   {
    "id": "heavy_metal",
@@ -20076,7 +19694,7 @@
    "description": "Doubles Attack in battle.",
    "effect_id": "huge_power",
    "effect_summary": "Doubles Attack in battle.",
-   "classification": "DATA_ONLY"
+   "classification": "RUNTIME_SUPPORTED"
   },
   {
    "id": "hunger_switch",
@@ -20092,7 +19710,7 @@
    "description": "Strengthens physical moves to inflict 1.5× damage, but decreases their accuracy to 0.8×.",
    "effect_id": "hustle",
    "effect_summary": "Strengthens physical moves to inflict 1.5× damage, but decreases their accuracy to 0.8×.",
-   "classification": "DATA_ONLY"
+   "classification": "PARTIAL_RUNTIME"
   },
   {
    "id": "hydration",
@@ -20132,7 +19750,7 @@
    "description": "Halves damage from Special moves.",
    "effect_id": "ice_scales",
    "effect_summary": "Halves damage from Special moves.",
-   "classification": "DATA_ONLY"
+   "classification": "RUNTIME_SUPPORTED"
   },
   {
    "id": "illuminate",
@@ -20220,7 +19838,7 @@
    "description": "Lowers opponents' Attack one stage upon entering battle.",
    "effect_id": "intimidate",
    "effect_summary": "Lowers opponents' Attack one stage upon entering battle.",
-   "classification": "DATA_ONLY"
+   "classification": "PARTIAL_RUNTIME"
   },
   {
    "id": "intrepid_sword",
@@ -20236,7 +19854,7 @@
    "description": "Damages attacking Pokémon for 1/8 their max HP on contact.",
    "effect_id": "iron_barbs",
    "effect_summary": "Damages attacking Pokémon for 1/8 their max HP on contact.",
-   "classification": "DATA_ONLY"
+   "classification": "PARTIAL_RUNTIME"
   },
   {
    "id": "iron_fist",
@@ -20300,7 +19918,7 @@
    "description": "Evades Ground moves.",
    "effect_id": "levitate",
    "effect_summary": "Evades Ground moves.",
-   "classification": "DATA_ONLY"
+   "classification": "PARTIAL_RUNTIME"
   },
   {
    "id": "libero",
@@ -20476,7 +20094,7 @@
    "description": "This Pokémon's moves critical hit against poisoned targets.",
    "effect_id": "merciless",
    "effect_summary": "This Pokémon's moves critical hit against poisoned targets.",
-   "classification": "DATA_ONLY"
+   "classification": "RUNTIME_SUPPORTED"
   },
   {
    "id": "mimicry",
@@ -20572,7 +20190,7 @@
    "description": "Halves damage taken from full HP.",
    "effect_id": "multiscale",
    "effect_summary": "Halves damage taken from full HP.",
-   "classification": "DATA_ONLY"
+   "classification": "RUNTIME_SUPPORTED"
   },
   {
    "id": "multitype",
@@ -20700,7 +20318,7 @@
    "description": "Strengthens Grass moves to inflict 1.5× damage at 1/3 max HP or less.",
    "effect_id": "overgrow",
    "effect_summary": "Strengthens Grass moves to inflict 1.5× damage at 1/3 max HP or less.",
-   "classification": "DATA_ONLY"
+   "classification": "RUNTIME_SUPPORTED"
   },
   {
    "id": "own_tempo",
@@ -20804,7 +20422,7 @@
    "description": "Has a 30% chance of poisoning attacking Pokémon on contact.",
    "effect_id": "poison_point",
    "effect_summary": "Has a 30% chance of poisoning attacking Pokémon on contact.",
-   "classification": "DATA_ONLY"
+   "classification": "PARTIAL_RUNTIME"
   },
   {
    "id": "poison_puppeteer",
@@ -20940,7 +20558,7 @@
    "description": "Doubles Attack in battle.",
    "effect_id": "pure_power",
    "effect_summary": "Doubles Attack in battle.",
-   "classification": "DATA_ONLY"
+   "classification": "RUNTIME_SUPPORTED"
   },
   {
    "id": "purifying_salt",
@@ -21012,7 +20630,7 @@
    "description": "Strengthens recoil moves to 1.2× their power.",
    "effect_id": "reckless",
    "effect_summary": "Strengthens recoil moves to 1.2× their power.",
-   "classification": "DATA_ONLY"
+   "classification": "PARTIAL_RUNTIME"
   },
   {
    "id": "refrigerate",
@@ -21068,7 +20686,7 @@
    "description": "Powers up Rock-type moves.",
    "effect_id": "rocky_payload",
    "effect_summary": "Powers up Rock-type moves.",
-   "classification": "DATA_ONLY"
+   "classification": "RUNTIME_SUPPORTED"
   },
   {
    "id": "rough_skin",
@@ -21396,7 +21014,7 @@
    "description": "Raises Speed one stage after each turn.",
    "effect_id": "speed_boost",
    "effect_summary": "Raises Speed one stage after each turn.",
-   "classification": "DATA_ONLY"
+   "classification": "RUNTIME_SUPPORTED"
   },
   {
    "id": "spicy_spray",
@@ -21460,7 +21078,7 @@
    "description": "Raises this Pokémon's Defense by one stage when it takes damage from a move.",
    "effect_id": "stamina",
    "effect_summary": "Raises this Pokémon's Defense by one stage when it takes damage from a move.",
-   "classification": "DATA_ONLY"
+   "classification": "PARTIAL_RUNTIME"
   },
   {
    "id": "stance_change",
@@ -21476,7 +21094,7 @@
    "description": "Has a 30% chance of paralyzing attacking Pokémon on contact.",
    "effect_id": "static",
    "effect_summary": "Has a 30% chance of paralyzing attacking Pokémon on contact.",
-   "classification": "DATA_ONLY"
+   "classification": "PARTIAL_RUNTIME"
   },
   {
    "id": "steadfast",
@@ -21508,7 +21126,7 @@
    "description": "This Pokémon's Steel moves have 1.5× power.",
    "effect_id": "steelworker",
    "effect_summary": "This Pokémon's Steel moves have 1.5× power.",
-   "classification": "DATA_ONLY"
+   "classification": "RUNTIME_SUPPORTED"
   },
   {
    "id": "steely_spirit",
@@ -21604,7 +21222,7 @@
    "description": "Strengthens Bug moves to inflict 1.5× damage at 1/3 max HP or less.",
    "effect_id": "swarm",
    "effect_summary": "Strengthens Bug moves to inflict 1.5× damage at 1/3 max HP or less.",
-   "classification": "DATA_ONLY"
+   "classification": "RUNTIME_SUPPORTED"
   },
   {
    "id": "sweet_veil",
@@ -21740,7 +21358,7 @@
    "description": "Halves damage from Fire and Ice moves.",
    "effect_id": "thick_fat",
    "effect_summary": "Halves damage from Fire and Ice moves.",
-   "classification": "DATA_ONLY"
+   "classification": "RUNTIME_SUPPORTED"
   },
   {
    "id": "thrust",
@@ -21764,15 +21382,15 @@
    "description": "Strengthens Water moves to inflict 1.5× damage at 1/3 max HP or less.",
    "effect_id": "torrent",
    "effect_summary": "Strengthens Water moves to inflict 1.5× damage at 1/3 max HP or less.",
-   "classification": "DATA_ONLY"
+   "classification": "RUNTIME_SUPPORTED"
   },
   {
    "id": "tough_claws",
    "display_name": "Garra Dura",
-   "description": "Strengthens moves that make contact to 1.33× their power.",
+   "description": "Boosts the power of moves that make contact by 30%.",
    "effect_id": "tough_claws",
-   "effect_summary": "Strengthens moves that make contact to 1.33× their power.",
-   "classification": "DATA_ONLY"
+   "effect_summary": "Boosts the power of moves that make contact by 30%.",
+   "classification": "RUNTIME_SUPPORTED"
   },
   {
    "id": "toxic_boost",
@@ -21780,7 +21398,7 @@
    "description": "Increases Attack to 1.5× when poisoned.",
    "effect_id": "toxic_boost",
    "effect_summary": "Increases Attack to 1.5× when poisoned.",
-   "classification": "DATA_ONLY"
+   "classification": "RUNTIME_SUPPORTED"
   },
   {
    "id": "toxic_chain",
@@ -21940,7 +21558,7 @@
    "description": "Halves damage from Fire moves, doubles damage of Water moves, and prevents burns.",
    "effect_id": "water_bubble",
    "effect_summary": "Halves damage from Fire moves, doubles damage of Water moves, and prevents burns.",
-   "classification": "DATA_ONLY"
+   "classification": "PARTIAL_RUNTIME"
   },
   {
    "id": "water_compaction",
