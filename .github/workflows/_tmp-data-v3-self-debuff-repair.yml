@@ -67,7 +67,6 @@ jobs:
             data/raw/pokemon_api.json \
             data/normalized/pokemon_api.json \
             data/manifests/pokemon_api_manifest.json
-          git add -u data/reports
           git diff --cached --check
           git status --short
           test -n "$(git diff --cached --name-only)"
