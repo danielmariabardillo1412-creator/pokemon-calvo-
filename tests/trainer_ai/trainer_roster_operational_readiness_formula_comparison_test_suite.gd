@@ -119,22 +119,25 @@ func _test_readiness_formula_comparison() -> void:
 	var fast := _ready_view(
 		"c3fb_fast",
 		TC_ELECTRIC,
-		StatBlock.new(100, 130, 80, 70, 80, 200),
+		StatBlock.new(100, 130, 80, 200, 70, 80),
 		[TC_ELECTRIC_PHYS],
 	)
 	var slow := _ready_view(
 		"c3fb_slow",
 		TC_ELECTRIC,
-		StatBlock.new(100, 130, 80, 70, 80, 45),
+		StatBlock.new(100, 130, 80, 45, 70, 80),
 		[TC_ELECTRIC_PHYS],
 	)
 	_set_status(fast, StatusSystem.PARALYSIS, 0, 0)
 	_set_status(slow, StatusSystem.PARALYSIS, 0, 0)
 	var fast_paralysis := _operational_evidence(fast)
 	var slow_paralysis := _operational_evidence(slow)
+	var fast_roles := fast_paralysis.get("all_pp_sensitive_role_max_bp", {}) as Dictionary
+	var slow_roles := slow_paralysis.get("all_pp_sensitive_role_max_bp", {}) as Dictionary
 	_check.call(
 		"readiness_formula_paralysis_penalizes_fast_dependency_more",
-		_status_action_factor_bp(fast_paralysis) < _status_action_factor_bp(slow_paralysis),
+		int(fast_roles.get("fast_attacker", 0)) > int(slow_roles.get("fast_attacker", 0))
+		and _status_action_factor_bp(fast_paralysis) < _status_action_factor_bp(slow_paralysis),
 	)
 
 	var sleep := full.duplicate(true)
@@ -215,7 +218,8 @@ func _test_readiness_formula_comparison() -> void:
 	)
 	_check.call(
 		"readiness_formula_comparison_remains_test_only",
-		not report_a.has("selected_operational_readiness_formula")
+		report_a.has("selected_operational_readiness_formula")
+		and report_a.get("selected_operational_readiness_formula") == null
 		and not report_a.has("production_operational_readiness_bp")
 		and not report_a.has("between_battle_recovery_policy")
 		and not report_a.has("replacement_policy"),
