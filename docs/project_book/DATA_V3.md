@@ -166,3 +166,28 @@ Ahí están el antiguo notebook 02 y los notebooks 06–25. Se consultan para au
 Documento formal del pipeline/arquitectura:
 
 `docs/architecture/DATA_FOUNDATION_V3.md`
+
+## 11. Corrección semántica 2026-09-02 — stat changes de ataques que afectan al usuario
+
+Durante la calibración C2e-b de Trainer AI se detectó una regresión real del contrato DATA V3/Battle Core. Movimientos dañinos como `close_combat`, `superpower` y `hammer_arm` aparecían como control sobre el rival porque el conversor legado derivaba el objetivo de todos los `stat_changes` desde el `target` general del movimiento.
+
+La fuente PokeAPI demuestra que ese criterio es inválido para la familia `move-category/7` (`damage-raise`): el golpe puede dirigirse a `selected-pokemon`, mientras los cambios secundarios de stats pertenecen al **usuario**. La categoría inmutable contiene **28 movimientos**.
+
+Corrección canónica aplicada en la rama de Trainer AI:
+
+- commit de reparación/regeneración: `a2341d4f77f22f54b89916fd8e91ac7b26d2c8d5`;
+- `tools/pokeapi_adapter.py` audita explícitamente `meta.category == "damage-raise"`, verifica que el paquete de `stat_changes` generado coincide con la fuente y retargetea solo esos subárboles a `self`;
+- se regeneraron `data/raw/pokemon_api.json` y `data/normalized/pokemon_api.json` desde el snapshot inmutable; no se editaron a mano;
+- `DataV3DamageUserStatTargetTestSuite` ejecuta `close_combat` a través de `AuthoritativeBattleServer` y verifica que Defense/SpDef bajan en el actor y no en el rival;
+- la suite fue ampliada después para leer directamente `data/api/v2/move-category/7/index.json` y exigir que los **28/28** movimientos normalizados estén presentes, contengan stat changes ejecutables y que todos sus `MODIFY_STAT_STAGE` apunten a `SELF`.
+
+Prueba previa al commit canónico realizada dentro del bridge temporal de regeneración:
+
+- pipeline snapshot → raw → DataImporter → normalized completado;
+- Spanish/type/runtime: **308 PASS / 0 FAIL**;
+- regresiones específicas de Close Combat: todas PASS;
+- contadores estructurales observados durante regeneración permanecieron en 1.025 especies, 326 formas, 18 tipos, 919 movimientos, 373 habilidades, 2.222 objetos, 61.102 learnset entries, 554 evoluciones, 0 broken references y 0 rejected.
+
+La infraestructura temporal usada únicamente para materializar los JSON regenerados fue eliminada del árbol antes de la certificación final. Esta corrección **no amplía el alcance de DATA V3 ni aumenta contadores**: repara la semántica ejecutable de un contrato ya declarado `RUNTIME_SUPPORTED`.
+
+Estado de este checkpoint documental: **corrección aplicada y regresiones añadidas; el HEAD final posterior a documentación debe obtener la matriz normal completa antes de considerar la corrección recertificada**.
