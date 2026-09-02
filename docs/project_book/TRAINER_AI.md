@@ -8098,3 +8098,263 @@ Debe comprobar, como mínimo:
 C3f-k no está autorizado a añadir todavía una clase productiva consumidora.
 
 Cualquier futura integración conductual requerirá un checkpoint documental separado después de C3f-k y una autorización explícita de alcance.
+
+
+### 26.32 C3f-k — semántica de consumo de frontier sin selección conductual
+
+Estado: **CERRADO / DOBLEMENTE CERTIFICADO**.
+
+C3f-k ejecuta la barrera exigida por 26.31 antes de permitir cualquier consumidor real de `TrainerRosterParetoFrontier`. La tranche permanece estrictamente **TEST/AUDIT-ONLY**: estudia qué significa consumir una frontier sin convertir su orden, side evidence o cardinalidad en una política de selección encubierta.
+
+#### Baseline y SHAs
+
+Baseline documental 26.31:
+
+`9b75d2bb7c81f0a2aad6adfe2013b09713473405`
+
+SHA técnico C3f-k:
+
+`2892c93e2b30452c3cd878d53f556ecea755c4b3`
+
+SHA humano tree-identical C3f-k:
+
+`eeb4b0aa04176c77b683e4262479a356d61bbe82`
+
+El checkpoint humano tiene como parent directo el baseline documental 26.31 y reproduce el árbol técnico certificado de C3f-k.
+
+#### Alcance neto
+
+C3f-k modifica únicamente tests/audit:
+
+- `tests/trainer_ai/trainer_roster_pareto_frontier_consumption_audit_test_suite.gd`: **+401 líneas**;
+- `tests/trainer_ai/trainer_team_composition_test_runner.gd`: **+1 / -1**.
+
+No se modificaron:
+
+- producción;
+- brains;
+- switching;
+- search/planning;
+- campaign integration;
+- recovery/replacement;
+- FASE34.
+
+Audit ID:
+
+`c3f_k_pareto_frontier_consumption_semantics_audit_v1`
+
+Modelo de frontier productiva auditado:
+
+`trainer_roster_pareto_frontier_v1`
+
+Contrato fuente:
+
+`trainer_roster_component_first_contract_v1`
+
+#### Join lossless y conservación de componentes
+
+La auditoría vuelve a unir los IDs de frontier contra `TrainerRosterComponentFirstContract` por `instance_id`, nunca por posición.
+
+Cobertura real-data:
+
+- especies elegibles: `1021`;
+- rosters muestreados: `128`;
+- estados elegibles: `768`;
+- stride: `8`;
+- frontier member occurrences: `424`;
+- dominated member occurrences: `344`.
+
+Resultado:
+
+- `frontier_join_missing_cases = 0`;
+- `frontier_join_duplicate_cases = 0`;
+- `dominated_join_missing_cases = 0`;
+- `dominated_join_duplicate_cases = 0`;
+- `component_preservation_mismatches = 0`.
+
+Por tanto, consumir la frontier no borra la evidencia estructural ni operacional de sus miembros, y los dominated continúan siendo auditables en el contrato fuente.
+
+#### Frontier única NO equivale a acción
+
+Distribución observada:
+
+- `single_frontier_rosters = 12`;
+- `multiple_frontier_rosters = 116`.
+
+La auditoría congela expresamente:
+
+`single_frontier_is_action_decision = false`
+
+Una frontier de un solo miembro significa únicamente:
+
+> único no dominado dentro del vector component-first actual.
+
+No significa:
+
+- mejor switch universal;
+- miembro que deba entrar ahora;
+- sacrificio correcto;
+- acción correcta independientemente del matchup;
+- autorización para saltarse legalidad, táctica o policy contextual.
+
+#### Orden léxico — solo determinismo, nunca preferencia
+
+Los IDs de frontier permanecen ordenados léxicamente para estabilidad y auditabilidad, pero C3f-k prueba explícitamente que ese orden no puede actuar como desempate.
+
+Resultado:
+
+`lexical_order_used_as_tiebreak = false`
+
+La suite incluye renombrado adversarial de IDs y demuestra que cambiar únicamente los nombres puede cambiar qué vector aparece primero en el array ordenado sin cambiar la geometría estratégica.
+
+Consecuencia canónica:
+
+**`frontier_instance_ids[0]` NO puede interpretarse como candidato preferido.**
+
+Cualquier consumidor que haga eso introduciría una policy léxica accidental y violaría el contrato certificado.
+
+#### Attrition y held item — side evidence, no tiebreak oculto
+
+C3f-k mantiene attrition e item fuera del vector Pareto inmediato y comprueba que tampoco puedan reaparecer silenciosamente como desempate posterior.
+
+Resultado:
+
+`side_evidence_used_as_tiebreak = false`
+
+Cambiar únicamente evidencia de attrition o disponibilidad de held item no autoriza a reordenar la frontier ni a declarar un ganador.
+
+Esas señales siguen disponibles para una futura policy que declare de forma explícita horizonte y semántica, pero no son preferencias implícitas de C3f-k.
+
+#### KO/removal invalida la frontier anterior
+
+Se ejecutaron `24` probes de KO/removal.
+
+Resultado:
+
+- `ko_probe_cases = 24`;
+- `stale_frontier_invalidated_cases = 24`;
+- `ko_frontier_inclusions = 0`;
+- `ko_rejoin_missing_cases = 0`;
+- `ko_rejoin_duplicate_cases = 0`.
+
+Semántica congelada:
+
+1. cambia el roster superviviente;
+2. se recomputa `TrainerRosterComponentFirstContract`;
+3. se recomputa `TrainerRosterParetoFrontier`;
+4. no se reutiliza una frontier o selección previa como si siguiera válida.
+
+Esto es obligatorio porque una baja puede cambiar el `structural_value_bp` marginal de los supervivientes aunque sus componentes operacionales propios no hayan cambiado.
+
+#### Contexto y outputs prohibidos
+
+Resultado:
+
+- `forbidden_output_key_cases = 0`;
+- `forbidden_context_key_cases = 0`.
+
+C3f-k no produce ni consume:
+
+- `best_member_id`;
+- `selected_member_id`;
+- ranking total;
+- `combined_score`;
+- scalar global de readiness;
+- TrainerProfile como criterio objetivo;
+- rival/opponent data;
+- beliefs;
+- RNG;
+- hidden bracket;
+- recovery policy;
+- replacement policy;
+- campaign policy;
+- switching/search score.
+
+Y mantiene explícitamente:
+
+`behavior_integration_authorized = false`
+
+#### Certificación técnica
+
+Sobre:
+
+`2892c93e2b30452c3cd878d53f556ecea755c4b3`
+
+resultado:
+
+- **18/18 workflows GitHub Actions: SUCCESS**;
+- FASE33 / Trainer Team Composition: **624 PASS / 0 FAIL**;
+- Godot 4.7 general: SUCCESS;
+- DATA V3: SUCCESS;
+- todos los contadores críticos de joins, KO, tiebreaks y contexto prohibido: `0` donde corresponde.
+
+#### Certificación humana tree-identical
+
+Sobre:
+
+`eeb4b0aa04176c77b683e4262479a356d61bbe82`
+
+se reprodujo la segunda matriz completa:
+
+- **18/18 workflows SUCCESS**;
+- FASE33: **624 PASS / 0 FAIL**;
+- mismo audit C3f-k y mismas invariantes materiales;
+- Godot general: SUCCESS;
+- DATA V3: SUCCESS.
+
+La cifra `436 PASS / 0 FAIL` observada en `Trainer Loadouts Tests` pertenece a FASE32 y no sustituye al gate C3f-k. El contador canónico de esta tranche es FASE33 **624 PASS / 0 FAIL**.
+
+#### Invariantes externas
+
+Tras la certificación humana:
+
+- PR #105: **OPEN**;
+- `merged_at = null`;
+- head: `eeb4b0aa04176c77b683e4262479a356d61bbe82` antes de este append documental;
+- base: `main`;
+- `main`: `f8452a1625ccb8389c9e52ff4416a96a24e00efd`, sin movimiento.
+
+PR #105 continúa siendo temporal y **NO debe mergearse**.
+
+#### Conclusión C3f-k
+
+C3f-k cierra la semántica segura de consumo de una frontier pasiva:
+
+- frontier puede podar dominados;
+- los componentes siguen accesibles por separado;
+- dominated sigue auditable;
+- frontier única no es una acción;
+- frontier múltiple no se resuelve por orden;
+- side evidence no es desempate oculto;
+- cambios de roster invalidan la frontier previa;
+- no existe todavía una policy conductual autorizada.
+
+La primitive Pareto está preparada para ser **una entrada** de reasoning futuro, no para convertirse en decision function por sí sola.
+
+#### Siguiente microtranche autorizada — C3f-l
+
+Antes de tocar un brain, switching o search, abrir un checkpoint separado:
+
+**C3f-l — auditoría/diseño de la frontera del primer consumidor conductual.**
+
+C3f-l debe decidir de forma explícita y auditable:
+
+- qué problema concreto será el primer consumidor;
+- qué información táctica legítima adicional necesita además de la frontier;
+- en qué condiciones la frontier puede usarse solo como pruning y cuándo no;
+- qué ocurre con frontier de 1 frente a frontier de varios miembros;
+- cómo impedir que el orden léxico, attrition o item se conviertan en tiebreaks accidentales;
+- qué evento obliga a recomputar contrato/frontier;
+- qué invariantes debe cumplir antes de autorizar cualquier cambio de conducta.
+
+C3f-l empieza como **documental/audit-only**. No debe integrar todavía nada mientras no se congele el contrato del consumidor concreto.
+
+Sigue prohibido hasta una autorización posterior explícita:
+
+- conectar directamente `frontier_instance_ids[0]` a switching;
+- modificar search/planning;
+- modificar brains;
+- inventar `between_battle_recovery_policy` o `replacement_policy`;
+- definir `permadeath_loss_cost_bp` definitivo;
+- iniciar FASE34;
+- mergear PR #105.
