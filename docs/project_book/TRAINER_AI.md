@@ -9861,3 +9861,589 @@ C3f-p no puede todavía:
 - modificar brains;
 - abrir FASE34;
 - mergear PR #105.
+
+
+### 26.37 C3f-p — los empates inmediatos de switching no son equivalencia profunda: search depth-2 distingue 48/48 casos auditados
+
+C3f-p queda **CERRADO Y DOBLEMENTE CERTIFICADO** como auditoría TEST/AUDIT-ONLY.
+
+#### Baseline de partida
+
+C3f-p parte exclusivamente del freeze documental 26.36:
+
+`2068625010763f7698d3779f5c3fd470db92ac99`
+
+C3f-o había demostrado dos hechos distintos:
+
+1. el sampler actual de search con `max_actions_per_side = 3` puede introducir dependencia del orden de entrada entre switches;
+2. una ordenación contextual puede eliminar esa dependencia de orden, pero el score táctico inmediato de `TrainerStrategicSwitchEvaluatorV2` produce empates reales de tamaño 2–5 que no caben siempre dentro del cap 3 si se reserva al menos un MOVE.
+
+La pregunta de C3f-p fue deliberadamente más estrecha:
+
+> cuando dos o más switches empatan como máximos según la evaluación táctica inmediata, ¿son realmente equivalentes después de ejecutar `TrainerMultiTurnSearch` a profundidad 2, o una poda previa al search puede borrar la mejor continuación?
+
+C3f-p no estaba autorizado a modificar producción ni a escoger todavía una política de sampling.
+
+#### Superficies productivas observadas, no modificadas
+
+La auditoría reutiliza sin modificar:
+
+- `TrainerStrategicSwitchEvaluatorV2`;
+- `TrainerMultiTurnSearch`;
+- `TrainerSearchBudget.depth_two_default()`;
+- el sampler productivo `kind_stratified_round_robin_v1` para continuaciones;
+- Battle Core como autoridad de ejecución de turnos;
+- DATA V3 canónico y el probe `runtime_levelup_l50_neutral_probe_v1`.
+
+`TrainerMultiTurnSearch.evaluate(context, root_action)` permite evaluar explícitamente cada switch raíz empatado. Por ello C3f-p pudo comparar todos los miembros del top-set inmediato **sin modificar `TrainerMultiTurnSearch` ni `TrainerActionSpace`**.
+
+El sampler existente sigue actuando en las continuaciones internas, por lo que el audit observa el search real vigente en lugar de sustituirlo por un planner ficticio.
+
+---
+
+#### Primer intento provisional: fallo legítimo de harness, no fallo de producción
+
+Primer SHA provisional:
+
+`cab4a1eb496867cc9d6c0280d7d7b5701b98ea71`
+
+Árbol provisional:
+
+`5e9a6c85dc082d2b5298e62eb8ffd542f42af4d5`
+
+Parent:
+
+`2068625010763f7698d3779f5c3fd470db92ac99`
+
+Ese primer intento añadió únicamente la auditoría y el cambio de runner; producción permaneció intacta.
+
+Resultado CI provisional:
+
+- **17/18 workflows SUCCESS**;
+- único fallo: FASE33 / Trainer Team Composition;
+- FASE33: **708 PASS / 5 FAIL**;
+- `168/168` evaluaciones raíz devolvieron un resultado de search;
+- pero `depth_two_incomplete_evaluations = 168`;
+- `world_coverage_failures = 168`.
+
+No se certificó ese SHA.
+
+La diagnosis aisló una diferencia de contrato entre dos tipos de test:
+
+- C3f-m/C3f-o construían un contexto **shadow de switching** con:
+  `observation.phase = "action_selection"`;
+- eso era suficiente para `TrainerStrategicSwitchEvaluatorV2`, porque esa auditoría no ejecutaba Battle Core;
+- `TrainerMultiTurnSearch`, en cambio, reconstruye un `BattleState` desde la observación;
+- Battle Core solo acepta acciones en:
+  `BattleState.WAITING_FOR_ACTIONS = "waiting_for_actions"`.
+
+Por tanto, las acciones de las worlds de search eran rechazadas por una fase sintética que nunca habría sido la fase canónica recibida desde `TrainerObservationBuilder` en una selección de acción real.
+
+Conclusión exacta del incidente:
+
+**fue un mismatch TEST-HARNESS / CONTEXT-CONTRACT, no una avería de `TrainerMultiTurnSearch`, ni un agotamiento de presupuesto, ni una incapacidad de la arquitectura para comparar los empates.**
+
+---
+
+#### Única corrección aplicada
+
+Para evitar un ciclo de parches, C3f-p permitió una sola corrección enfocada.
+
+Se añadió un adaptador exclusivamente de test:
+
+`tests/trainer_ai/trainer_roster_search_tie_depth_preservation_canonical_phase_audit_test_suite.gd`
+
+Clase:
+
+`TrainerRosterSearchTieDepthPreservationCanonicalPhaseAuditTestSuite`
+
+El adaptador hereda el builder certificado de C3f-o y cambia únicamente:
+
+`context.observation.phase = BattleState.WAITING_FOR_ACTIONS`
+
+No cambia:
+
+- roster;
+- rival;
+- evidence mode;
+- legal actions;
+- beliefs;
+- memory;
+- campaign snapshot;
+- scores inmediatos de switching;
+- budget;
+- sampler;
+- search;
+- Battle Core;
+- profile;
+- roster value;
+- Pareto.
+
+El reporte deja explícito:
+
+- `source_shadow_phase = "action_selection"`;
+- `search_context_phase = "waiting_for_actions"`;
+- `test_only_phase_adapter_used = true`;
+- `production_phase_logic_modified = false`.
+
+No hubo una segunda corrección.
+
+---
+
+#### Checkpoint técnico limpio C3f-p
+
+SHA técnico:
+
+`0d44b7fe3837bc9ec8bc0d357e2e84f0619339ec`
+
+Árbol:
+
+`6c074d9947a018232674f6e5c15a05b2af0bd743`
+
+Parent directo:
+
+`2068625010763f7698d3779f5c3fd470db92ac99`
+
+Commit:
+
+`test(trainer-ai): audit C3f-p switch tie depth preservation`
+
+Diff limpio contra 26.36:
+
+1. `tests/trainer_ai/trainer_roster_search_tie_depth_preservation_audit_test_suite.gd`
+   - `+581`;
+2. `tests/trainer_ai/trainer_roster_search_tie_depth_preservation_canonical_phase_audit_test_suite.gd`
+   - `+36`;
+3. `tests/trainer_ai/trainer_team_composition_test_runner.gd`
+   - `+1 / -1`.
+
+**Cambios de producción: 0.**
+
+Certificación técnica exacta:
+
+- **18/18 workflows GitHub Actions: SUCCESS**;
+- FASE33 / Trainer Team Composition: **713 PASS / 0 FAIL**;
+- Godot 4.7 general: SUCCESS;
+- DATA V3: SUCCESS;
+- Trainer Search Foundation: SUCCESS;
+- Trainer Search Depth Budget: SUCCESS;
+- Trainer Search Limit Benchmark: SUCCESS;
+- Trainer Strategic Switching V2: SUCCESS;
+- sin script errors.
+
+---
+
+#### Checkpoint humano tree-identical
+
+SHA humano:
+
+`ed212c2828a927f455f7f5ee1eab4a3f9c64cd4b`
+
+Árbol:
+
+`6c074d9947a018232674f6e5c15a05b2af0bd743`
+
+Mismo parent directo:
+
+`2068625010763f7698d3779f5c3fd470db92ac99`
+
+Commit:
+
+`test(trainer-ai): human checkpoint C3f-p`
+
+El checkpoint humano es **tree-identical** al técnico y reproduce exactamente el mismo delta de tres archivos de test.
+
+Certificación humana exacta:
+
+- **18/18 workflows GitHub Actions: SUCCESS**;
+- FASE33: **713 PASS / 0 FAIL**;
+- mismo reporte JSON C3f-p;
+- Godot general: SUCCESS;
+- DATA V3: SUCCESS;
+- Search Foundation: SUCCESS;
+- Search Depth Budget: SUCCESS;
+- Search Limit Benchmark: SUCCESS;
+- Strategic Switching V2: SUCCESS.
+
+C3f-p queda por tanto doblemente certificado antes del freeze documental.
+
+---
+
+#### Geometría del audit C3f-p
+
+Audit ID:
+
+`c3f_p_switch_tie_depth_preservation_audit_v1`
+
+Población heredada de C3f-m/C3f-o:
+
+- especies elegibles: `1021`;
+- rosters muestreados: `128`;
+- escenarios totales: `512`;
+- escenarios con empate inmediato de switching: `306`.
+
+Distribución de los 306 empates inmediatos:
+
+- top-set tamaño 2: `120`;
+- top-set tamaño 3: `62`;
+- top-set tamaño 4: `27`;
+- top-set tamaño 5: `97`.
+
+Para que la auditoría profunda permaneciera acotada y reproducible se tomó una muestra estratificada:
+
+- `6` casos por tamaño de empate;
+- por cada uno de los dos evidence modes;
+- tamaños auditados: `2, 3, 4, 5`;
+- evidence modes:
+  - `species_fallback`;
+  - `revealed_damaging_move`.
+
+Muestra final:
+
+- casos seleccionados: `48`;
+- 12 de tamaño 2;
+- 12 de tamaño 3;
+- 12 de tamaño 4;
+- 12 de tamaño 5;
+- 24 `species_fallback`;
+- 24 `revealed_damaging_move`.
+
+Número total de root switches evaluados:
+
+`12×2 + 12×3 + 12×4 + 12×5 = 168`
+
+Budget productivo observado, no cambiado:
+
+- `depth_turns = 2`;
+- `max_worlds = 4`;
+- `max_simulations = 220`;
+- `max_actions_per_side = 3`.
+
+Integridad de ejecución:
+
+- `root_search_evaluations = 168`;
+- `search_result_failures = 0`;
+- `context_build_failures = 0`;
+- `depth_two_incomplete_evaluations = 0`;
+- `world_coverage_failures = 0`;
+- `budget_exhausted_evaluations = 0`.
+
+Por tanto, las 168 raíces alcanzan profundidad 2 completa y cobertura completa de las worlds usadas por el search.
+
+---
+
+#### Resultado central: 48/48 empates inmediatos se rompen en profundidad 2
+
+Resultado canónico:
+
+- `depth_divergence_cases = 48`;
+- `depth_all_still_tied_cases = 0`;
+- `depth_unique_best_cases = 48`;
+- `depth_multiple_best_cases = 0`;
+- `deep_best_set_size_histogram = {1: 48}`.
+
+Es decir:
+
+**los 48/48 casos seleccionados que eran empates perfectos bajo el score táctico inmediato dejaron de ser empates al ejecutar search depth-2.**
+
+En esta muestra, cada top-set inmediato acabó teniendo un único ganador profundo.
+
+Esto no demuestra que absolutamente todo empate posible del juego vaya a romperse siempre, porque C3f-p no ejecutó las 306 situaciones profundas completas. Sí demuestra que la igualdad del score inmediato **no es una equivalencia semántica suficiente para colapsar candidatos antes de search**.
+
+El reporte lo registra como:
+
+`arbitrary_single_representative_not_proven_safe_cases = 48`
+
+---
+
+#### Riesgo de conservar solo un representante lexical
+
+Si dentro del empate inmediato se conservara únicamente el primer ID lexical:
+
+- preserva el ganador profundo: `19/48`;
+- pierde el ganador profundo: `29/48`.
+
+Porcentaje de pérdida en esta muestra:
+
+`29 / 48 ≈ 60,42 %`
+
+Por tanto, lexical no es un desempate semántico aceptable.
+
+---
+
+#### Riesgo de conservar dos representantes lexicales
+
+Si se conservaran los dos primeros IDs lexicales:
+
+- preserva el ganador profundo: `30/48`;
+- pierde el ganador profundo: `18/48`.
+
+Pérdida:
+
+`18 / 48 = 37,5 %`
+
+Dos slots recuperan 11 casos que 1-slot perdía, pero siguen sin ser universalmente seguros.
+
+---
+
+#### Preservación del top-tier inmediato completo
+
+Manteniendo todos los miembros del empate inmediato:
+
+- preserva el ganador profundo: `48/48`;
+- pierde el ganador profundo: `0/48`.
+
+Esto es evidencia a favor de **no resolver el empate arbitrariamente antes de search**.
+
+No constituye todavía autorización para expandir todo top-tier en producción: C3f-p también cuantifica el coste.
+
+---
+
+#### Resultado por tamaño del empate
+
+##### Tie size 2
+
+- casos: `12`;
+- divergen en profundidad: `12/12`;
+- 1-slot lexical pierde: `7`;
+- 2-slot pierde: `0`;
+- score spread sum: `54.353`;
+- spread máximo: `10.541`.
+
+##### Tie size 3
+
+- casos: `12`;
+- divergen: `12/12`;
+- 1-slot lexical pierde: `7`;
+- 2-slot pierde: `5`;
+- score spread sum: `104.016`;
+- spread máximo: `20.329`.
+
+##### Tie size 4
+
+- casos: `12`;
+- divergen: `12/12`;
+- 1-slot lexical pierde: `5`;
+- 2-slot pierde: `5`;
+- score spread sum: `127.033`;
+- spread máximo: `20.894`.
+
+##### Tie size 5
+
+- casos: `12`;
+- divergen: `12/12`;
+- 1-slot lexical pierde: `10`;
+- 2-slot pierde: `8`;
+- score spread sum: `121.244`;
+- spread máximo: `14.330`.
+
+Los empates grandes son especialmente peligrosos para un cutoff fijo pequeño.
+
+---
+
+#### Resultado por evidence mode
+
+##### species_fallback
+
+- casos: `24`;
+- divergen: `24/24`;
+- 1-slot pierde: `17`;
+- 2-slot pierde: `11`;
+- score spread sum: `181.659`;
+- spread máximo: `12.769`.
+
+##### revealed_damaging_move
+
+- casos: `24`;
+- divergen: `24/24`;
+- 1-slot pierde: `12`;
+- 2-slot pierde: `7`;
+- score spread sum: `224.987`;
+- spread máximo: `20.894`.
+
+La divergencia profunda no depende de un único modo de evidencia pública.
+
+---
+
+#### Magnitud de la divergencia
+
+Entre el mejor y peor miembro del empate inmediato después de depth-2:
+
+- spread acumulado: `406.646`;
+- spread medio: `8.471`;
+- spread máximo: `20.894`.
+
+Esto refuerza que muchos de estos empates no son “casi lo mismo” una vez considerada la continuación.
+
+---
+
+#### Ejemplos auditables
+
+Algunos casos representativos:
+
+- rival Lunatone:
+  - Magnemite `-10.951`;
+  - Swampert `-14.553`;
+  - ganador profundo: Magnemite.
+
+- rival Sandaconda:
+  - Braviary `-5.950`;
+  - Murkrow `-3.906`;
+  - lexical-first Braviary pierde el ganador profundo.
+
+- rival Aron:
+  - Basculegion `-4.186`;
+  - Drednaw `-3.513`;
+  - lexical-first pierde.
+
+- rival Roserade:
+  - Delibird `-10.109`;
+  - Maushold `-6.829`;
+  - lexical-first pierde.
+
+- rival Voltorb:
+  - Electrode `-11.283`;
+  - Iron Treads `-742`;
+  - lexical-first pierde;
+  - spread: `10.541`.
+
+- rival Bombirdier:
+  - Dracovish `-4.381`;
+  - Heatran `-11.566`.
+
+- rival Poliwrath:
+  - Golem `-5.352`;
+  - Magcargo `-5.401`;
+  - incluso aquí un empate inmediato se rompe por solo `49` puntos.
+
+- rival Combusken:
+  - Golisopod `-7.193`;
+  - Staraptor `-3.311`;
+  - lexical-first pierde.
+
+- rival Stoutland:
+  - Lilligant `-21.471`;
+  - Wobbuffet `-17.526`;
+  - lexical-first pierde.
+
+- rival Watchog:
+  - Escavalier `-10.984`;
+  - Shiftry `-8.173`;
+  - lexical-first pierde.
+
+---
+
+#### Coste de preservar los candidatos empatados
+
+C3f-p también registra el coste agregado de la muestra de 48 casos.
+
+##### 1-slot lexical
+
+- root evaluations: `48`;
+- simulations: `2.400`.
+
+##### 2-slot lexical
+
+- root evaluations: `96`;
+- simulations: `4.800`.
+
+##### top-tier completo
+
+- root evaluations: `168`;
+- simulations: `8.424`.
+
+Coste adicional del top-tier completo:
+
+- vs 1-slot: `+6.024` simulaciones;
+- vs 2-slot: `+3.624` simulaciones.
+
+Multiplicadores agregados de esta auditoría:
+
+- top-tier completo vs 1-slot: `35.100 bp = 3,51×`;
+- top-tier completo vs 2-slot: `17.550 bp = 1,755×`.
+
+Estos multiplicadores describen **el coste agregado de este audit**, no se congelan como predicción exacta del coste de una futura integración productiva. Una política futura podría usar detección de empate, branching adaptativo, presupuestos compartidos u otras técnicas que C3f-p todavía no evalúa.
+
+---
+
+#### Semántica de seguridad congelada
+
+C3f-p congela:
+
+- `production_sampler_unchanged = true`;
+- `move_switch_diversity_boundary_preserved = true`;
+- `frontier_used_for_depth_selection = false`;
+- `roster_value_integrated = false`;
+- `recovery_policy_used = false`;
+- `replacement_policy_used = false`;
+- `campaign_policy_used = false`;
+- `live_rng_used = false`;
+- hidden belief cases = `0`;
+- memory event cases = `0`;
+- campaign snapshot cases = `0`;
+- `profile_used_as_presearch_tiebreak = false`;
+- `profile_varied_across_tied_candidates = false`;
+- `selected_sampler_strategy_id = null`;
+- `search_sampling_redesign_authorized = false`;
+- `behavior_integration_authorized = false`.
+
+Interpretación canónica:
+
+> **la igualdad del score inmediato de switching no autoriza a colapsar el top-set antes de search. La profundidad puede distinguir candidatos que parecían equivalentes, pero preservar todo el top-tier tiene un coste medible que debe diseñarse explícitamente.**
+
+C3f-p rechaza como política universal segura:
+
+- un representante arbitrario;
+- lexical 1-slot;
+- lexical 2-slot;
+- cualquier cutoff previo que trate la igualdad inmediata como equivalencia profunda.
+
+C3f-p NO autoriza todavía:
+
+- expansión productiva automática de todo el top-tier;
+- cambio de `max_actions_per_side`;
+- port de un sampler nuevo;
+- modificación de `TrainerMultiTurnSearch`;
+- modificación de `TrainerActionSpace`;
+- integración de Pareto en search;
+- integración de roster value en search;
+- modificación de brains;
+- cambio de comportamiento;
+- apertura de FASE34.
+
+---
+
+#### Siguiente microtranche autorizada — C3f-q
+
+C3f-q puede abrirse únicamente como **TEST/AUDIT-ONLY** para estudiar diseños de preservación de empate que intenten conservar la información profunda sin pagar siempre el coste del top-tier completo.
+
+Debe comparar, como mínimo, variantes conceptuales como:
+
+- resolver solo los top-sets realmente empatados, no todos los switches;
+- expansión adaptativa del top-tier bajo un budget explícito;
+- evaluación incremental/deferred tie resolution;
+- límites de 1/2 slots frente a expansión condicionada;
+- reutilización o reparto de budget entre candidatos empatados, si puede modelarse en test sin cambiar producción;
+- pérdida de óptimo profundo;
+- coste en simulaciones/nodos;
+- determinismo;
+- invariancia al orden de entrada;
+- preservación de MOVE/SWITCH diversity.
+
+C3f-q debe mantener fuera:
+
+- lexical como preferencia semántica;
+- Pareto como hard pruning;
+- roster value como tiebreak prematuro;
+- hidden beliefs;
+- live RNG;
+- campaign/recovery/replacement policy;
+- TrainerProfile como desempate accidental.
+
+C3f-q tampoco puede todavía seleccionar/portar una estrategia productiva salvo nueva autorización documental posterior.
+
+`FASE34` sigue **CERRADA**.
+
+PR #105 sigue siendo temporal y **NO DEBE MERGEARSE**.
+
+`main` debe permanecer intacta.
