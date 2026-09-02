@@ -7151,3 +7151,261 @@ Sigue NO autorizado:
 - definir `permadeath_loss_cost_bp` definitivo;
 - FASE34;
 - merge de PR #105.
+
+
+### 26.29 C3f-h — auditoría real-data del contrato component-first de producción
+
+Estado: **CERRADO / CERTIFICADO**.
+
+Baseline documental de entrada:
+
+`73094431fdf8e481807592d966de9554df94f2e8`
+
+Ese baseline correspondía a C3f-g + 26.28, con `TrainerRosterComponentFirstContract` ya disponible en producción como productor pasivo y certificado con **18/18 SUCCESS** y FASE33 **530 PASS / 0 FAIL**.
+
+#### Objetivo
+
+C3f-h era la barrera real-data exigida antes de considerar cualquier interfaz de consumo posterior.
+
+La tranche debía permanecer estrictamente **TEST/AUDIT-ONLY** y demostrar que la clase de producción real:
+
+- conserva la forma certificada en C3f-f;
+- mantiene joins por `instance_id`;
+- preserva semántica KO;
+- es invariante al orden de entrada;
+- no introduce scalar, ranking ni policy oculta;
+- reproduce los trade-offs estructural/operacional observados por el contrato candidato;
+- no autoriza todavía comportamiento.
+
+No se modificó ninguna clase de producción.
+
+#### Scope neto
+
+Frente al baseline 26.28, C3f-h modifica exactamente:
+
+1. nueva suite `tests/trainer_ai/trainer_roster_component_first_contract_real_data_audit_test_suite.gd`;
+2. una sustitución en `tests/trainer_ai/trainer_team_composition_test_runner.gd`.
+
+Diff neto final:
+
+- suite C3f-h: +314 líneas;
+- runner: +1 / -1;
+- cero producción;
+- cero docs dentro del checkpoint técnico;
+- cero workflows o triggers temporales supervivientes.
+
+#### Incidente del primer intento
+
+Primer SHA técnico:
+
+`591177294039fd94b76778cbd301762b3bb9699d`
+
+La matriz produjo **17/18 SUCCESS**, con fallo únicamente en Team Composition.
+
+La auditoría semántica no llegó a ejecutarse. Godot rechazó la suite porque redeclaraba dos constantes que ya existían en la jerarquía padre:
+
+- `SAMPLE_STRIDE`;
+- `KO_PROBE_ROSTERS`.
+
+No era un fallo del contrato de producción ni una divergencia real-data.
+
+La corrección consistió exclusivamente en eliminar esas dos redeclaraciones y reutilizar las constantes heredadas. Se aplicó mediante workflow temporal autolimpiable. Un primer intento del workflow temporal tuvo un error YAML en su `if:` por el texto del mensaje; no ejecutó job ni tocó contenido. El workflow reparado se ejecutó correctamente y se autolimpió.
+
+SHA técnico corregido:
+
+`7f37fb73c6044207cf47377f2f675edadba2e64b`
+
+Árbol corregido:
+
+`f67f25495310e30a3191b7d31493505ad1c1737c`
+
+#### Muestreo real-data
+
+Audit ID:
+
+`c3f_h_component_first_contract_production_real_data_v1`
+
+Se reutiliza la geometría determinista ya certificada:
+
+- especies elegibles: **1021**;
+- rosters muestreados: **128**;
+- miembros por roster: **6**;
+- estados conjuntos inspeccionados: **768**;
+- stride: **8**;
+- KO probes: **24**.
+
+La auditoría ejecuta `TrainerRosterComponentFirstContract` directamente y compara su salida con la construcción candidata C3f-f bajo el mismo roster real.
+
+#### Paridad exacta producción -> contrato candidato
+
+Resultado:
+
+- `candidate_parity_mismatches = 0`;
+- `reorder_mismatches = 0`;
+- `identity_mismatches = 0`;
+- `model_id_mismatches = 0`;
+- `duplicate_instance_id_cases = 0`;
+- `missing_operational_join_cases = 0`;
+- `missing_structural_survivor_join_cases = 0`;
+- `forbidden_contract_key_cases = 0`;
+- `forbidden_context_key_cases = 0`.
+
+La clase de producción reproduce por tanto el contrato certificado roster-a-roster sin depender de posiciones del array ni introducir contexto oculto.
+
+Model IDs observados:
+
+- producción: `trainer_roster_component_first_contract_v1`;
+- estructural: `trainer_roster_structural_value_capped_units_blend_v1`;
+- fórmula estructural: `capped_units_blend_baseline_w30_v1`;
+- operacional: `trainer_roster_current_operational_components_v1`.
+
+#### KO real-data
+
+Sobre 24 KO probes:
+
+- `ko_candidate_parity_mismatches = 0`;
+- `ko_fake_structural_value_cases = 0`;
+- `ko_state_mismatches = 0`.
+
+Para los supervivientes:
+
+- `survivor_operational_changes_after_teammate_ko = 0`;
+- `survivor_structural_change_after_teammate_ko = 29`;
+- `survivor_structural_decrease_after_teammate_ko = 0`.
+
+Esto vuelve a confirmar la separación central de C3:
+
+- perder un compañero puede aumentar o recomputar la importancia estructural marginal de quienes sobreviven;
+- esa pérdida no reescribe artificialmente HP, PP ni status de esos supervivientes;
+- el miembro KO sigue representado operacionalmente;
+- no recibe un `structural_value_bp` falso.
+
+El número 29 no debe compararse literalmente con los 36 cambios registrados en C3f-f como si fuera una regresión: ambas suites usan contextos de probe distintos para ese contador agregado. La comprobación relevante es la paridad directa C3f-h dentro de sus mismos KO probes, y esa paridad es **0 mismatches**.
+
+#### Pareto y trade-offs reproducidos en producción
+
+C3f-h vuelve a obtener exactamente sobre la muestra:
+
+- pair comparisons: **1920**;
+- Pareto dominance pairs: **519**;
+- incomparable pairs: **1401**;
+- `structural_higher_operational_lower_pairs`: **1379**.
+
+La producción conserva por tanto la misma geometría conceptual que C3f-f: la mayoría de comparaciones no admiten un ganador total sin aportar una preferencia externa.
+
+No se selecciona ni se autoriza:
+
+- `combined_score`;
+- `combined_score_bp`;
+- `ranking_score`;
+- `best_member_id`;
+- scalar global `operational_readiness_bp`.
+
+#### Attrition y comportamiento
+
+`attrition_excluded_from_immediate_pareto = true`.
+
+La evidencia residual continúa fuera del vector inmediato, porque incorporarla requiere un horizonte temporal explícito.
+
+Además:
+
+`consumer_behavior_integration_authorized = false`
+
+C3f-h certifica datos y forma de interfaz; no autoriza que un brain tome decisiones con ella todavía.
+
+#### Determinismo y serialización
+
+Los checks C3f-h confirman:
+
+- reporte determinista;
+- JSON serializable;
+- orden de entrada irrelevante;
+- ausencia recursiva de claves prohibidas.
+
+#### Certificación técnica corregida
+
+SHA técnico:
+
+`7f37fb73c6044207cf47377f2f675edadba2e64b`
+
+Resultado sobre ese SHA exacto:
+
+- **18/18 workflows SUCCESS**;
+- FASE33: **547 PASS / 0 FAIL**;
+- Godot 4.7 general: SUCCESS;
+- DATA Foundation V3: SUCCESS.
+
+#### Certificación humana tree-identical
+
+SHA humano C3f-h:
+
+`3c8850ab0eb9aacf07aab00155ff97452b6e4690`
+
+Parent directo:
+
+`73094431fdf8e481807592d966de9554df94f2e8`
+
+Árbol:
+
+`f67f25495310e30a3191b7d31493505ad1c1737c`
+
+Sobre ese SHA exacto se reproduce:
+
+- **18/18 workflows GitHub Actions: SUCCESS**;
+- FASE33: **547 PASS / 0 FAIL**;
+- reporte C3f-h con todos los mismatch counters críticos en 0;
+- Godot general: SUCCESS;
+- DATA V3: SUCCESS;
+- PR #105: OPEN / unmerged;
+- `main`: `f8452a1625ccb8389c9e52ff4416a96a24e00efd`.
+
+C3f-h queda **CERTIFICADO**.
+
+#### Conclusión
+
+C3f-h demuestra que `TrainerRosterComponentFirstContract` no solo reproduce sintéticamente el contrato candidato: también lo mantiene sobre DATA V3 real, en rosters degradados, reordenamientos y KO.
+
+La superficie component-first puede considerarse una **fuente pasiva de hechos certificada**.
+
+Lo que todavía NO está demostrado es una política general para convertir esos hechos en una elección única. La evidencia de 1401 pares incomparables y 1379 trade-offs refuerza precisamente que imponer ahora un scalar global sería inventar preferencias.
+
+#### Siguiente microtranche autorizada — C3f-i
+
+**C3f-i — auditoría test-only de una interfaz Pareto/frontier pasiva sobre el contrato de producción.**
+
+Objetivo: comprobar si un consumidor puede reducir alternativas claramente dominadas sin convertir la frontera restante en ranking ni introducir pesos ocultos.
+
+C3f-i seguirá siendo TEST/AUDIT-ONLY y no modificará producción.
+
+Debe como mínimo:
+
+- consumir únicamente `TrainerRosterComponentFirstContract`;
+- definir de forma explícita qué dimensiones inmediatas participan en dominancia;
+- mantener attrition fuera salvo horizonte explícito, que no se autoriza en esta tranche;
+- producir conjunto de IDs no dominados, no `best_member_id`;
+- demostrar invariancia al orden;
+- demostrar que añadir una alternativa dominada no cambia la frontera válida;
+- demostrar que una alternativa incomparable se conserva;
+- comprobar KO y availability;
+- comprobar monotonicidad de dominancia por componente;
+- auditar DATA V3 real sobre el mismo muestreo determinista;
+- medir tamaños de frontier, empates y casos totalmente dominados;
+- exigir determinismo y JSON;
+- prohibir scalar, pesos, TrainerProfile, rival, beliefs, RNG y campaign policy.
+
+C3f-i **NO** autoriza todavía:
+
+- clase de producción nueva;
+- consumidor conductual;
+- switching/search;
+- modificación de brains;
+- `best_member_id`;
+- ranking total;
+- `combined_score`;
+- `operational_readiness_bp` agregado;
+- recovery/replacement;
+- `permadeath_loss_cost_bp` definitivo;
+- FASE34;
+- merge de PR #105.
+
+Solo si C3f-i demuestra una frontier semánticamente estable deberá decidirse en otro checkpoint si esa operación puramente parcial puede migrarse a una helper de producción pasiva.
