@@ -25,7 +25,7 @@ func _init(catalog: DefinitionCatalog) -> void:
 	_catalog = catalog
 
 
-func extract_structural_evidence(own_party: Array[Dictionary]) -> Dictionary:
+func extract_structural_evidence(own_party: Array) -> Dictionary:
 	if _catalog == null or _catalog.type_catalog == null:
 		return _empty_result()
 
@@ -39,7 +39,11 @@ func extract_structural_evidence(own_party: Array[Dictionary]) -> Dictionary:
 	var skipped_invalid_member_indices: Array[int] = []
 
 	for index in range(own_party.size()):
-		var member: Dictionary = own_party[index]
+		var raw_member: Variant = own_party[index]
+		if not (raw_member is Dictionary):
+			skipped_invalid_member_indices.append(index)
+			continue
+		var member: Dictionary = raw_member as Dictionary
 		var instance_id := String(member.get("instance_id", ""))
 		var species_id := StringName(String(member.get("species_id", "")))
 		if instance_id.is_empty() or _catalog.species(species_id) == null:
@@ -68,12 +72,12 @@ func extract_structural_evidence(own_party: Array[Dictionary]) -> Dictionary:
 			_increment(offensive_coverage_counts, type_id)
 
 		var defensive: Dictionary = _defensive_type_evidence(species_id, all_type_ids)
-		var resisted: Array[String] = defensive.get("resisted_attack_type_ids", []) as Array[String]
-		var immune: Array[String] = defensive.get("immune_attack_type_ids", []) as Array[String]
+		var resisted: Array = defensive.get("resisted_attack_type_ids", []) as Array
+		var immune: Array = defensive.get("immune_attack_type_ids", []) as Array
 		for type_id in resisted:
-			_increment(resistance_counts, type_id)
+			_increment(resistance_counts, String(type_id))
 		for type_id in immune:
-			_increment(immunity_counts, type_id)
+			_increment(immunity_counts, String(type_id))
 
 		var intrinsic: Dictionary = inference.get("intrinsic_evidence", {}) as Dictionary
 		var move_features: Dictionary = intrinsic.get("move_features", {}) as Dictionary
@@ -89,8 +93,8 @@ func extract_structural_evidence(own_party: Array[Dictionary]) -> Dictionary:
 			"runtime_supported_move_count": int(move_features.get("runtime_supported_count", 0)),
 			"runtime_supported_damaging_move_count": _runtime_supported_damaging_move_count(member),
 			"offensive_coverage_type_ids": offensive_coverage,
-			"resisted_attack_type_ids": resisted,
-			"immune_attack_type_ids": immune,
+			"resisted_attack_type_ids": resisted.duplicate(),
+			"immune_attack_type_ids": immune.duplicate(),
 		})
 
 	for index in range(members.size()):
