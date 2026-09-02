@@ -23,7 +23,7 @@ func run(check_callback: Callable) -> void:
 	_check.call("control_evidence_runtime_chance_not_double_counted", int(double_cap.get("control_best_runtime_effect_bp", 0)) == 3000)
 	_check.call("control_evidence_runtime_reliability_not_double_counted", int(double_cap.get("control_reliability_bp", 0)) == 3000)
 	var double_scores: Dictionary = (inference.infer_role_scores(_view(catalog, DOUBLE, stats), catalog).get("role_scores_bp", {}) as Dictionary)
-	_check.call("control_evidence_does_not_recalibrate_support_yet", int(double_scores.get("support", 0)) == 900)
+	_check.call("control_evidence_support_uses_runtime_reliability", int(double_scores.get("support", 0)) == 3000)
 
 	var inaccurate_cap: Dictionary = (inference.extract_intrinsic_evidence(_view(catalog, INACCURATE, stats), catalog).get("capability_evidence", {}) as Dictionary)
 	_check.call("control_evidence_accuracy_reduces_reliability", int(inaccurate_cap.get("control_reliability_bp", 0)) == 5000)

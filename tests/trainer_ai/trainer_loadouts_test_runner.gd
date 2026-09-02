@@ -13,6 +13,7 @@ func _run() -> void:
 	TrainerRosterRoleInferenceFixtureTestSuite.new().run(Callable(self, "_check"))
 	TrainerRosterRoleInferenceTestSuite.new().run(Callable(self, "_check"))
 	TrainerRosterControlEvidenceTestSuite.new().run(Callable(self, "_check"))
+	TrainerRosterSupportProductionTestSuite.new().run(Callable(self, "_check"))
 	TrainerRosterRoleRealDataTestSuite.new().run(Callable(self, "_check"))
 	TrainerRosterRoleLabelCalibrationTestSuite.new().run(Callable(self, "_check"))
 	TrainerRosterSupportCalibrationTestSuite.new().run(Callable(self, "_check"))

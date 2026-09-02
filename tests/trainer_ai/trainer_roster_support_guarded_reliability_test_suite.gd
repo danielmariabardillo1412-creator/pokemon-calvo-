@@ -57,6 +57,11 @@ func run(check_callback: Callable) -> void:
 	_check.call("support_guarded_reliability_report_deterministic", report_a == report_b)
 	_check.call("support_guarded_reliability_report_json_serializable", not JSON.stringify(report_a).is_empty())
 	_check.call("support_guarded_reliability_range", int(guarded.get("support_min", -1)) >= 0 and int(guarded.get("support_max", -1)) <= 10000)
+	_check.call("support_guarded_reliability_production_matches_candidate", int(report_a.get("production_guarded_mismatch_count", -1)) == 0)
+	_check.call("support_guarded_reliability_selected_high_count", int(guarded.get("support_ge_7500", -1)) == 414)
+	_check.call("support_guarded_reliability_selected_ceiling_count", int(guarded.get("support_eq_10000", -1)) == 82)
+	_check.call("support_guarded_reliability_preserves_dedicated_reliable", int(guarded.get("single_dedicated_reliable_control_ge_7500", -1)) == 56)
+	_check.call("support_guarded_reliability_single_damaging_never_ceiling", int(guarded.get("eq_10000_single_damaging_control", -1)) == 0)
 
 	_run_formula_invariants()
 
@@ -98,6 +103,7 @@ func _build_report(
 	var baseline_summary: Dictionary = _empty_summary()
 	var guarded_summary: Dictionary = _empty_summary()
 	var sentinels: Dictionary = {}
+	var production_guarded_mismatch_count: int = 0
 
 	for species_id in species_ids:
 		var species: CreatureSpecies = game_data.species_catalog.get_by_id(species_id)
@@ -124,6 +130,8 @@ func _build_report(
 			clampi(int(capabilities.get("sustain_signal_bp", 0)), 0, 10000),
 		)
 		var guarded_bp: int = _guarded_support(capabilities)
+		if int(production_scores.get("support", -1)) != guarded_bp:
+			production_guarded_mismatch_count += 1
 		_accumulate_summary(baseline_summary, reliability_bp, production_scores, capabilities, best_offense)
 		_accumulate_summary(guarded_summary, guarded_bp, production_scores, capabilities, best_offense)
 
@@ -155,6 +163,7 @@ func _build_report(
 		"species_without_probe_moves": missing,
 		"reliability_max": baseline_summary,
 		"guarded_reliability": guarded_summary,
+		"production_guarded_mismatch_count": production_guarded_mismatch_count,
 		"sentinels": sentinels,
 	}
 

@@ -4,7 +4,12 @@ extends RefCounted
 const MODEL_ID := "trainer_roster_role_inference_evidence_v1"
 const ROLE_MODEL_ID := "trainer_roster_role_affinity_v1"
 const CONTROL_EVIDENCE_MODEL_ID := "trainer_roster_control_evidence_v1"
+const SUPPORT_MODEL_ID := "trainer_roster_support_guarded_reliability_v1"
 const RUNTIME_SUPPORTED := "RUNTIME_SUPPORTED"
+const SUPPORT_HIGH_RELIABILITY_BP := 7500
+const SUPPORT_VERY_HIGH_RELIABILITY_BP := 9000
+const SUPPORT_SUSTAIN_CORROBORATION_BP := 5000
+const SUPPORT_UNCONFIRMED_SPECIALIST_CAP_BP := 9500
 
 
 func extract_intrinsic_evidence(
@@ -167,13 +172,11 @@ func infer_role_scores(
 	var special_attacker_bp: int = mini(special_attack_focus_bp, special_route_bp)
 	var offensive_affinity_bp: int = maxi(physical_attacker_bp, special_attacker_bp)
 	var fast_attacker_bp: int = mini(speed_focus_bp, offensive_affinity_bp) if damage_ceiling > 0 else 0
-	var support_bp: int = maxi(
-		clampi(int(capabilities.get("control_signal_bp", 0)), 0, 10000),
-		clampi(int(capabilities.get("sustain_signal_bp", 0)), 0, 10000),
-	)
+	var support_bp: int = _support_score_from_capabilities(capabilities)
 
 	return {
 		"model_id": ROLE_MODEL_ID,
+		"support_model_id": SUPPORT_MODEL_ID,
 		"instance_id": String(evidence.get("instance_id", "")),
 		"role_scores_bp": {
 			"physical_attacker": physical_attacker_bp,
@@ -199,6 +202,30 @@ func infer_role_scores(
 		},
 		"intrinsic_evidence": evidence,
 	}
+
+
+func _support_score_from_capabilities(capabilities: Dictionary) -> int:
+	var reliability: int = clampi(int(capabilities.get("control_reliability_bp", 0)), 0, 10000)
+	var secondary: int = clampi(int(capabilities.get("control_secondary_reliability_bp", 0)), 0, 10000)
+	var dedicated_count: int = maxi(0, int(capabilities.get("control_dedicated_move_count", 0)))
+	var sustain: int = clampi(int(capabilities.get("sustain_signal_bp", 0)), 0, 10000)
+
+	if sustain >= 10000:
+		return 10000
+
+	var route_confirmed: bool = (
+		reliability >= SUPPORT_VERY_HIGH_RELIABILITY_BP
+		and secondary >= SUPPORT_HIGH_RELIABILITY_BP
+	)
+	var sustain_confirmed: bool = (
+		reliability >= SUPPORT_VERY_HIGH_RELIABILITY_BP
+		and sustain >= SUPPORT_SUSTAIN_CORROBORATION_BP
+		and dedicated_count > 0
+	)
+	if route_confirmed or sustain_confirmed:
+		return 10000
+
+	return mini(maxi(reliability, sustain), SUPPORT_UNCONFIRMED_SPECIALIST_CAP_BP)
 
 
 func _non_hp_stat_ceiling(stats: Dictionary) -> int:
