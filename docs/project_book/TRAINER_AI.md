@@ -6931,3 +6931,223 @@ Sigue **NO autorizado** en C3f-g:
 - mergear PR #105.
 
 La superficie C3f-g, si pasa, será únicamente un **productor pasivo de contrato**, no una nueva conducta del entrenador.
+
+
+### 26.28 C3f-g — contrato component-first pasivo en producción
+
+Estado: **CERRADO / CERTIFICADO**.
+
+Baseline de entrada:
+
+`a18ead23063e9061604c2bc6b9244d2c2ff1b2f3`
+
+Ese baseline correspondía a C3f-f + 26.27 ya certificados con **18/18 SUCCESS** y FASE33 **509 PASS / 0 FAIL**.
+
+#### Objetivo
+
+Portar a producción la forma component-first validada por C3f-f sin introducir ningún consumidor conductual.
+
+La tranche debía limitarse a:
+
+- componer `TrainerRosterStrategicValueEvaluator` y `TrainerRosterOperationalReadinessEvaluator`;
+- unir por `instance_id`;
+- conservar semántica KO explícita;
+- conservar model IDs y formula ID de origen;
+- mantener attrition e item como evidencia separada;
+- devolver orden canónico y determinista;
+- no seleccionar scalar, ranking, miembro ni política.
+
+#### Producción añadida
+
+Archivo:
+
+`modules/trainer_ai/trainer_roster_component_first_contract.gd`
+
+Clase:
+
+`TrainerRosterComponentFirstContract`
+
+Model ID:
+
+`trainer_roster_component_first_contract_v1`
+
+API:
+
+`build_contract(own_party: Array) -> Dictionary`
+
+La clase es un **productor pasivo**. No modifica brains, switching, search ni decisiones.
+
+#### Forma del resultado
+
+Cabecera:
+
+- `model_id`;
+- `structural_model_id`;
+- `structural_formula_id`;
+- `operational_model_id`;
+- `member_count`;
+- `member_states`.
+
+Los miembros se unen mediante `instance_id` y se ordenan léxicamente.
+
+Cada estado mantiene:
+
+- `instance_id`;
+- `species_id`;
+- `availability_state`;
+- bloque `structural`;
+- bloque `operational`.
+
+#### KO
+
+La semántica de C3f-f se porta literalmente:
+
+- el miembro KO permanece en el contrato porque sigue existiendo en la superficie operacional;
+- `availability_state = knocked_out`;
+- `operational.available = true`;
+- `operational.is_knocked_out = true`;
+- `hp_state_bp = 0`;
+- `structural.available = false`;
+- no existe `structural_value_bp` falso;
+- `unavailable_reason = knocked_out_not_in_surviving_structural_roster`.
+
+La pérdida de un compañero puede recomputar valor estructural de supervivientes, pero no reescribe sus componentes operacionales.
+
+#### Fail-closed
+
+- catálogo null -> contrato vacío con model ID válido;
+- miembros inválidos -> no producen estados falsos;
+- no se sintetizan joins estructurales inexistentes.
+
+#### Suite de producción
+
+Archivo:
+
+`tests/trainer_ai/trainer_roster_component_first_contract_production_test_suite.gd`
+
+Clase:
+
+`TrainerRosterComponentFirstContractProductionTestSuite`
+
+Hereda C3f-f y añade **21 checks**.
+
+Se comprueba:
+
+- DATA cargada;
+- 1021 especies elegibles en probe;
+- model ID de producción;
+- IDs estructural/operacional y formula ID;
+- igualdad exacta con el contrato candidato C3f-f tras normalizar únicamente el model ID del wrapper;
+- conteo completo de miembros;
+- no mutación del input;
+- invariancia al orden de entrada;
+- orden léxico de salida;
+- joins completos;
+- semántica KO;
+- no reescritura operacional de supervivientes tras KO de compañero;
+- attrition e item separados;
+- ausencia recursiva de scalar/policy/context prohibido;
+- ausencia de selección conductual;
+- determinismo;
+- JSON;
+- fail-closed de inputs inválidos y catálogo null.
+
+#### Paridad C3f-f -> C3f-g
+
+Check crítico:
+
+`component_contract_production_matches_certified_candidate_shape`
+
+Resultado: **PASS**.
+
+La producción coincide con la forma certificada C3f-f, salvo el cambio deliberado:
+
+`trainer_roster_component_first_consumer_contract_candidate_v1`
+
+->
+
+`trainer_roster_component_first_contract_v1`
+
+No se añadió ninguna semántica nueva durante el port.
+
+#### Scope neto
+
+Frente al baseline 26.27:
+
+- nueva clase de producción: +102 líneas;
+- nueva suite: +180 líneas;
+- runner: una sustitución;
+- cero brains;
+- cero switching/search;
+- cero documentación en el checkpoint técnico;
+- cero temporales.
+
+#### Certificación técnica
+
+SHA técnico:
+
+`eb95227bb2f12aaba8aedff6002b940445912320`
+
+Resultado:
+
+- **18/18 workflows SUCCESS**;
+- Team Composition: **530 PASS / 0 FAIL**;
+- Godot 4.7 general: SUCCESS;
+- DATA V3: SUCCESS.
+
+#### Certificación humana
+
+SHA humano tree-identical:
+
+`65c988e367cdedb75b333735d7b9f3eb6ae5067a`
+
+Árbol:
+
+`5318530191365199f244d854c68de5b540f7fbc0`
+
+Sobre ese SHA exacto:
+
+- **18/18 workflows SUCCESS**;
+- FASE33: **530 PASS / 0 FAIL**;
+- Godot general: SUCCESS;
+- DATA V3: SUCCESS.
+
+PR #105 permanece abierto y no mergeado.
+
+`main` permanece exactamente en:
+
+`f8452a1625ccb8389c9e52ff4416a96a24e00efd`
+
+#### Conclusión
+
+C3f-g demuestra que el contrato component-first puede existir en producción como **superficie pasiva** sin introducir ranking ni comportamiento.
+
+La disponibilidad de esta clase NO autoriza por sí sola a ningún brain a consumirla.
+
+Sigue sin existir un scalar agregado operacional ni un `combined_score`.
+
+#### Siguiente microtranche autorizada
+
+**C3f-h — auditoría real-data del contrato de producción.**
+
+Scope:
+
+- test/audit-only;
+- ejecutar `TrainerRosterComponentFirstContract` directamente sobre DATA V3 real;
+- usar muestreo determinista ya certificado;
+- comprobar paridad roster-a-roster con el contrato candidato C3f-f;
+- comprobar 0 mismatches de identidad/model IDs/joins/KO/reorder;
+- comprobar ausencia de scalars/policies/context prohibido;
+- registrar distribución de availability y trade-offs sin seleccionar ranking;
+- determinismo y JSON.
+
+Sigue NO autorizado:
+
+- conectar switching/search;
+- modificar brains;
+- seleccionar `operational_readiness_bp`;
+- crear `combined_score`, ranking o `best_member_id`;
+- inventar recovery/replacement;
+- definir `permadeath_loss_cost_bp` definitivo;
+- FASE34;
+- merge de PR #105.
