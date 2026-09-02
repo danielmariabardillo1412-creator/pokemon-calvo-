@@ -8680,3 +8680,334 @@ Sigue prohibido durante C3f-m:
 - `permadeath_loss_cost_bp` definitivo;
 - FASE34;
 - merge de PR #105.
+
+
+### 26.34 C3f-m — shadow overlap real-data: la frontier Pareto es observabilidad, no filtro de switching
+
+Estado: **CERRADO / DOBLEMENTE CERTIFICADO / SHADOW-AUDIT-ONLY**.
+
+C3f-m amplía la barrera abierta por C3f-l. C3f-l había demostrado con un contraejemplo adversarial que un miembro dominado por la frontier component-first puede ser el mejor switch contextual. C3f-m comprueba ahora si ese problema era excepcional o aparece de forma material sobre DATA V3 real.
+
+La respuesta es inequívoca:
+
+> **la frontier Pareto correlaciona con parte de los mejores switches, pero no es segura para podar, seleccionar ni bonificar candidatos de switching.**
+
+#### Baseline y SHAs certificados
+
+Baseline documental 26.33:
+
+`88c5e35faca81cdab490a4761a69127c8f6ff7c9`
+
+SHA técnico limpio C3f-m:
+
+`e19b1b2d1759675fa4ab4903ba5f95fd53bc2e31`
+
+SHA humano tree-identical C3f-m:
+
+`77bc71463da3ddadb7329e49200108c6028792e7`
+
+Árbol técnico/humano común:
+
+`18b456ef018deec634c0cbc5bdb58f41f4ce01e5`
+
+Los dos checkpoints tienen como parent directo 26.33. Los commits de staging quedan fuera de la historia certificada.
+
+#### Scope neto limpio
+
+Frente a 26.33, C3f-m modifica únicamente:
+
+- nueva suite `tests/trainer_ai/trainer_roster_frontier_switching_shadow_overlap_audit_test_suite.gd`: **+543 líneas**;
+- `tests/trainer_ai/trainer_team_composition_test_runner.gd`: **+2 / -2**.
+
+No modifica:
+
+- producción;
+- `TrainerStrategicSwitchEvaluatorV2`;
+- brains;
+- score de switching;
+- espacio de acciones legales;
+- search/planning;
+- campaign policy;
+- recovery/replacement;
+- FASE34.
+
+Audit ID:
+
+`c3f_m_switching_frontier_shadow_overlap_audit_v1`
+
+#### Matriz real-data
+
+C3f-m consume directamente las primitivas de producción ya certificadas:
+
+- contrato: `trainer_roster_component_first_contract_v1`;
+- frontier: `trainer_roster_pareto_frontier_v1`;
+- switching: `strategic_switch_expected_matchup_v2`;
+- probe DATA V3: `runtime_levelup_l50_neutral_probe_v1`.
+
+Geometría de la auditoría:
+
+- especies elegibles: **1021**;
+- sample stride: **8**;
+- rosters muestreados: **128**;
+- offsets deterministas de rival: **37** y **503**;
+- pares roster/rival: **256**;
+- modos de evidencia por par: **2**;
+- escenarios contextuales: **512**;
+- candidatos de switch por escenario: **5**;
+- evaluaciones de candidatos: **2560**.
+
+Modos de evidencia:
+
+1. `species_fallback`;
+2. `revealed_damaging_move`.
+
+Todos los escenarios son shadow/read-only. La frontier no entra en el evaluador de switching y no modifica ningún score.
+
+#### Integridad de la muestra
+
+Resultado:
+
+- `opponent_selection_failures = 0`;
+- `context_build_failures = 0`;
+- `contract_validation_failures = 0`;
+- `frontier_validation_failures = 0`;
+- `candidate_partition_mismatches = 0`;
+- `contexts_with_frontier_bench = 512`;
+- `contexts_without_frontier_bench = 0`.
+
+Por tanto, los resultados de overlap no proceden de escenarios incompletos ni de candidatos sin clasificar.
+
+#### Resultado central — hard pruning pierde óptimos reales
+
+Sobre 512 escenarios:
+
+- `best_set_intersects_frontier_cases = 411`;
+- `hard_frontier_pruning_loses_all_optima_cases = 101`;
+- `best_set_dominated_only_cases = 101`;
+- `best_set_contains_dominated_cases = 303`.
+
+Equivale aproximadamente a:
+
+- **80.27 %** de escenarios donde la frontier conserva al menos un switch óptimo;
+- **19.73 %** donde filtrar a frontier elimina **todos** los switches óptimos;
+- **59.18 %** donde el conjunto de mejores switches contiene al menos un miembro que Pareto marca como dominated.
+
+El dato de 80.27 % NO autoriza pruning. Un filtro que destruye todo el conjunto óptimo en aproximadamente uno de cada cinco escenarios es semánticamente inseguro para switching.
+
+C3f-m mantiene por tanto:
+
+`hard_frontier_pruning_safe_for_switching = false`
+
+`sample_supports_hard_pruning = false`
+
+#### Coste observado de filtrar solo a frontier
+
+En los 101 escenarios donde la frontier no conserva ningún óptimo:
+
+- `frontier_only_score_loss_cases = 101`;
+- `frontier_only_score_loss_sum = 280900`;
+- `frontier_only_score_loss_mean = 2781`;
+- `frontier_only_score_loss_max = 5900`.
+
+La pérdida no es solo una diferencia teórica de pertenencia al conjunto. El score contextual de switching puede degradarse de forma material.
+
+Ejemplos certificados incluyen:
+
+- Rayquaza dominado como mejor switch frente a Baxcalibur, pérdida frontier-only **700**;
+- Scovillain dominado frente a Calyrex, pérdida de hasta **2200**;
+- Sirfetch'd/Wailord dominados frente a Nosepass, pérdida **2200**;
+- Mr. Rime dominado frente a Rowlet, pérdida **4400**;
+- Incineroar dominado frente a Ferroseed, pérdida **4400**.
+
+Estos ejemplos no crean una nueva regla de matchup. Solo muestran que la evaluación contextual real puede invertir la utilidad relativa respecto del espacio rival-agnostic de la frontier.
+
+#### La evidencia pública del rival cambia el óptimo
+
+C3f-m compara para cada uno de los 256 pares roster/rival los dos modos de evidencia.
+
+Resultado:
+
+- `evidence_pair_comparisons = 256`;
+- `evidence_changed_best_set_cases = 77`.
+
+Aproximadamente **30.08 %** de los pares cambian su conjunto de mejores switches cuando se pasa de fallback por especie a movimiento dañino público revelado.
+
+Esto refuerza la separación arquitectónica:
+
+- la frontier describe estado/valor component-first del roster propio;
+- switching resuelve un problema contextual condicionado por rival y evidencia pública legítima;
+- una geometría rival-agnostic no puede sustituir esa evaluación contextual.
+
+Por modo:
+
+`species_fallback`:
+
+- escenarios: **256**;
+- conserva algún óptimo: **207**;
+- pierde todos los óptimos: **49**;
+- best set contiene dominated: **158**.
+
+`revealed_damaging_move`:
+
+- escenarios: **256**;
+- conserva algún óptimo: **204**;
+- pierde todos los óptimos: **52**;
+- best set contiene dominated: **145**.
+
+El problema persiste bajo ambos modos; no depende de una única forma de evidencia rival.
+
+#### Empates — semántica de conjunto, no ganador léxico
+
+C3f-m no fuerza un ganador cuando varios candidatos comparten score máximo.
+
+Semántica congelada:
+
+`best_set_semantics = all_equal_max_score_switch_ids`
+
+`lexical_best_selection_used = false`
+
+Histograma del tamaño del best set:
+
+- 1 -> **206** escenarios;
+- 2 -> **120**;
+- 3 -> **62**;
+- 4 -> **27**;
+- 5 -> **97**.
+
+El orden léxico sigue siendo únicamente determinismo/auditabilidad. No es una preferencia de conducta.
+
+#### Distribución de frontier en banquillo
+
+Número de miembros frontier disponibles como switch por escenario:
+
+- 1 -> **72**;
+- 2 -> **112**;
+- 3 -> **176**;
+- 4 -> **120**;
+- 5 -> **32**.
+
+Todos los 512 escenarios tenían al menos un miembro frontier de banquillo. Por tanto, los 101 casos de pérdida completa no pueden explicarse por una frontier vacía o sin candidato legal: son contradicciones reales entre dominancia component-first y utilidad contextual de switching.
+
+#### Semántica canónica resultante
+
+C3f-m congela:
+
+`frontier_pruning_authorized = false`
+
+`frontier_score_bonus_authorized = false`
+
+`behavior_integration_authorized = false`
+
+`recommended_switching_use = shadow_observability_only_not_candidate_filter`
+
+Para switching, la frontier puede mantenerse como **telemetría/observabilidad de roster-state**, por ejemplo para explicar posteriormente que un switch táctico escogido estaba fuera de la frontier. No puede utilizarse como:
+
+- filtro duro;
+- shortlist vinculante;
+- bonus silencioso de score;
+- desempate;
+- elección automática;
+- sustituto del matchup contextual.
+
+C3f-l permanece íntegramente vigente.
+
+#### Incidente de staging — excluido de la historia certificada
+
+El primer staging de C3f-m alcanzó **17/18 workflows SUCCESS**. Team Composition falló antes de ejecutar la auditoría porque la clase hija redeclaró `EXPECTED_ELIGIBLE_SPECIES`, constante ya presente en la jerarquía padre.
+
+SHA staging fallido:
+
+`ed44d42ca13db0ea9ad59e78baa417079a9570de`
+
+No fue un fallo conceptual, de DATA V3, del contrato, de frontier ni de switching. Godot rechazó la redeclaración durante import.
+
+La corrección eliminó exclusivamente esa línea duplicada y reutilizó la constante heredada.
+
+SHA staging corregido:
+
+`2e7215e8d668d618bcd6303989c14a91a61a2721`
+
+El diff entre ambos fue exactamente:
+
+- 1 archivo;
+- **0 adiciones / 1 eliminación**.
+
+El staging corregido produjo 18/18 SUCCESS, FASE33 **653 PASS / 0 FAIL** y el reporte C3f-m canónico. Después su árbol se reconstruyó como el SHA técnico limpio, por lo que ambos staging quedan fuera de la historia certificada.
+
+#### Certificación técnica limpia
+
+Sobre:
+
+`e19b1b2d1759675fa4ab4903ba5f95fd53bc2e31`
+
+resultado:
+
+- **18/18 workflows GitHub Actions: SUCCESS**;
+- FASE33 / Trainer Team Composition: **653 PASS / 0 FAIL**;
+- Godot 4.7 general: SUCCESS;
+- DATA V3: SUCCESS;
+- Strategic Switching V2: SUCCESS;
+- mismo reporte C3f-m;
+- sin `SCRIPT ERROR`.
+
+#### Certificación humana tree-identical
+
+Sobre:
+
+`77bc71463da3ddadb7329e49200108c6028792e7`
+
+se reproduce:
+
+- **18/18 workflows GitHub Actions: SUCCESS**;
+- FASE33: **653 PASS / 0 FAIL**;
+- mismo reporte C3f-m y mismas 512 observaciones contextuales;
+- Godot general: SUCCESS;
+- DATA V3: SUCCESS;
+- Strategic Switching V2: SUCCESS;
+- sin `SCRIPT ERROR`.
+
+C3f-m queda **DOBLEMENTE CERTIFICADO**.
+
+#### Invariantes externas
+
+En el cierre técnico/humano:
+
+- PR #105 continúa **OPEN**;
+- `merged_at = null`;
+- base: `main`;
+- `main` permanece exactamente en `f8452a1625ccb8389c9e52ff4416a96a24e00efd`.
+
+PR #105 sigue siendo temporal y **NO debe mergearse**.
+
+#### Conclusión C3f-m
+
+C3f-m convierte el aviso adversarial de C3f-l en evidencia cuantitativa amplia.
+
+La frontier component-first tiene valor descriptivo: en alrededor del 80 % de esta matriz comparte al menos un óptimo con switching. Pero ese solapamiento no constituye una policy porque:
+
+- falla completamente en **101/512** escenarios;
+- los dominated aparecen en best sets en **303/512**;
+- la evidencia pública del rival cambia el óptimo en **77/256** pares;
+- las pérdidas de score frontier-only alcanzan **5900**.
+
+Por tanto, para switching la frontera correcta queda cerrada así:
+
+> **contexto táctico y legalidad primero; frontier solo como observabilidad no vinculante.**
+
+No existe autorización para integrar Pareto dentro del score ni dentro del filtrado de switching.
+
+#### Estado de la secuencia
+
+**C3f-n NO está abierto todavía.**
+
+Cualquier siguiente microtranche debe abrirse en un checkpoint separado y justificar un problema distinto. No puede reinterpretar C3f-m como permiso implícito para integrar frontier en switching.
+
+Continúa prohibido:
+
+- modificar brains por esta frontier;
+- podar legal actions por frontier;
+- añadir frontier bonus a switching/search;
+- convertir orden léxico en preferencia;
+- inventar recovery/replacement/permadeath policy;
+- iniciar FASE34;
+- mergear PR #105.
