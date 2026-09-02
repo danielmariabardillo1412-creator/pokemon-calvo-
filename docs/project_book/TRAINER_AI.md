@@ -3726,3 +3726,225 @@ Antes de implementar C3 debe hacerse una **auditoría de entrada de C3** contra 
 - no tocar switching/search hasta tener esa frontera documentada y testeable.
 
 La siguiente tranche, por tanto, es **auditoría C3 previa a código**, no implementación automática de loss-cost con defaults inventados.
+
+---
+
+### 26.16 C3a — evidencia estructural de valor de roster, antes del scalar
+
+C3 entra en producción mediante una microtranche deliberadamente más pequeña que el evaluador estratégico completo. El objetivo de C3a es construir una **capa de evidencia estructural auditable** y demostrar sus invariantes antes de congelar pesos para `structural_value_bp`.
+
+#### Motivo de la separación
+
+El diseño de las secciones 20 y 22 exige distinguir:
+
+- `structural_value_bp`;
+- `operational_readiness_bp`;
+- `permadeath_loss_cost_bp`.
+
+Además, `permadeath_loss_cost_bp` completo sigue bloqueado por reglas de campaña todavía no cerradas, especialmente:
+
+- `replacement_policy`;
+- `between_battle_recovery_policy`.
+
+Por tanto C3a **no inventa defaults de gameplay** ni publica todavía ninguno de esos tres scalars. Primero estabiliza los hechos que una futura fórmula podrá consumir.
+
+#### Frontera de entrada auditada
+
+La auditoría previa confirmó que `TrainerObservation.own_party` contiene vistas propias generadas como:
+
+`CreatureInstance.to_dict().duplicate(true)`.
+
+Por tanto la nueva capa puede consumir directamente `own_party` y reutilizar `TrainerRosterRoleInference` sobre el mismo `Dictionary` seguro, sin:
+
+- recibir `BattleState`;
+- recibir `CreatureInstance` vivo;
+- rematerializar loadouts;
+- consultar `TrainerPokemonLoadout.role_id` authored;
+- duplicar fórmulas de role inference.
+
+#### Implementación
+
+SHA C3a de código:
+
+`b88d142410cbb71b32f127f62ba153e70c7debcb`
+
+Nueva clase:
+
+`TrainerRosterStrategicValueEvaluator`
+
+Modelo de evidencia:
+
+`trainer_roster_structural_evidence_v1`
+
+API C3a:
+
+`extract_structural_evidence(own_party: Array) -> Dictionary`
+
+El nombre de la clase corresponde al evaluador C3 diseñado, pero en esta tranche la API expuesta se limita deliberadamente a **evidencia estructural**. No existe aún una API que finja devolver valor estratégico final.
+
+#### Evidencia por miembro superviviente
+
+Para cada miembro propio válido y no KO se registra:
+
+- `instance_id`;
+- `species_id`;
+- `role_model_id`;
+- `support_model_id`;
+- `role_scores_bp` completos;
+- máximo y suma de afinidades de rol;
+- roles fuertes con umbral `7500`;
+- cantidad de movimientos `RUNTIME_SUPPORTED`;
+- cantidad de movimientos dañinos `RUNTIME_SUPPORTED`;
+- tipos rivales que sus movimientos dañinos pueden cubrir super-efectivamente;
+- tipos de ataque que su tipado resiste;
+- inmunidades estructurales de tipado.
+
+Después, respecto al resto de supervivientes, se separan:
+
+- roles fuertes únicos vs redundantes;
+- cobertura ofensiva única vs redundante;
+- resistencias únicas vs redundantes;
+- inmunidades únicas vs redundantes.
+
+La evidencia de roles se obtiene mediante `TrainerRosterRoleInference`; C3a no vuelve a calcular daño, bulk o support por su cuenta.
+
+#### Política runtime y fail-closed
+
+La cobertura ofensiva solo cuenta movimientos que cumplen simultáneamente:
+
+- definición conocida;
+- `classification == RUNTIME_SUPPORTED`;
+- `power > 0`.
+
+`PARTIAL_RUNTIME`, `DATA_ONLY`, `UNSUPPORTED` y movimientos desconocidos no pueden inflar cobertura estratégica.
+
+La capa también falla cerrada ante catálogo ausente, miembro no-`Dictionary`, `instance_id` inválido o especie desconocida.
+
+#### Semántica de supervivencia
+
+C3a distingue expresamente estado operativo y existencia estructural:
+
+- un miembro a **1 HP pero vivo** conserva la misma evidencia estructural que a HP completo;
+- un miembro con `current_hp <= 0` / KO deja de contar entre los supervivientes;
+- al desaparecer un miembro, la unicidad/redundancia de los restantes se recalcula.
+
+Esto preserva el contrato de C3: estar herido no convierte una pieza valiosa en estructuralmente prescindible, mientras que una baja permanente sí cambia la composición disponible.
+
+`operational_readiness_bp` se implementará/calibrará en una tranche separada y no contamina esta evidencia.
+
+#### Información deliberadamente fuera de C3a
+
+`extract_structural_evidence()` no lee:
+
+- `TrainerProfile`;
+- `observed_opponents`;
+- beliefs;
+- memoria rival;
+- RNG/seed;
+- `campaign_snapshot`;
+- bracket ni rivales futuros.
+
+La ausencia de `campaign_snapshot` es deliberada en C3a: la evidencia estructural objetiva del roster no necesita políticas persistentes. Esas políticas entrarán más adelante al convertir hechos estructurales en coste de campaña.
+
+El `TrainerTeamStrategicEvaluator` histórico FASE21 tampoco se reutiliza: continúa siendo una capa battle-scoped de preservación frente a amenazas rivales ya observadas.
+
+#### Diff neto C3a
+
+Desde el checkpoint documental C2f:
+
+`f9e0dccc4c9cf4562c2f0bc248d1e326de26293a`
+
+hasta el SHA C3a:
+
+`b88d142410cbb71b32f127f62ba153e70c7debcb`
+
+el diff neto está limitado exactamente a tres archivos:
+
+- `modules/trainer_ai/trainer_roster_strategic_value_evaluator.gd` — nuevo;
+- `tests/trainer_ai/trainer_roster_structural_evidence_test_suite.gd` — nuevo;
+- `tests/trainer_ai/trainer_team_composition_test_runner.gd` — runner ampliado.
+
+No se modificaron:
+
+- `TrainerTeamAnalyzer`;
+- `TrainerTeamComposer`;
+- `TrainerRosterRoleInference`;
+- `TrainerTeamStrategicEvaluator`;
+- switching;
+- search;
+- DATA V3;
+- FASE34.
+
+#### Regresiones C3a
+
+La nueva `TrainerRosterStructuralEvidenceTestSuite` hereda la cadena completa de Team Composition/C2f y añade 17 comprobaciones específicas.
+
+Demuestra, entre otras cosas:
+
+- modelo de evidencia registrado;
+- conteo correcto de supervivientes;
+- reutilización del umbral de rol fuerte `7500`;
+- rol físico redundante cuando dos supervivientes lo cubren;
+- rol especial único cuando solo uno lo cubre;
+- unicidad recalculada después de eliminar otro miembro;
+- bajar a 1 HP no reescribe estructura;
+- KO elimina al miembro del conjunto superviviente;
+- cobertura ofensiva única identificada;
+- inmunidad estructural única identificada;
+- duplicar esa inmunidad la convierte en redundante;
+- misma especie con moveset distinto produce evidencia de rol distinta;
+- movimiento `DATA_ONLY` no aporta ruta ofensiva ni rol;
+- determinismo;
+- JSON serializable;
+- ausencia deliberada de los tres scalars finales;
+- catálogo nulo falla cerrado.
+
+Resultado FASE33 sobre el SHA C3a:
+
+**286 PASS / 0 FAIL**.
+
+#### Certificación técnica
+
+Sobre `b88d142410cbb71b32f127f62ba153e70c7debcb`:
+
+- **18/18 workflows GitHub Actions: SUCCESS**;
+- Trainer Team Composition: **286 PASS / 0 FAIL**;
+- Godot 4.7 general: SUCCESS;
+- DATA V3: SUCCESS;
+- PR #105: abierto y sin merge;
+- `main`: `f8452a1625ccb8389c9e52ff4416a96a24e00efd`, no movido.
+
+Por tanto, **C3a queda técnicamente CERTIFICADO** como capa de hechos estructurales previa a la función de valor.
+
+#### Siguiente microtranche autorizada
+
+Siguiente bloque exacto:
+
+**C3b — auditoría real-data de la evidencia estructural antes de congelar `structural_value_bp`.**
+
+La auditoría deberá medir sobre rosters/materializaciones representativas, como mínimo:
+
+- distribución de roles fuertes por miembro y por roster;
+- frecuencia de roles únicos y redundantes;
+- amplitud y unicidad de cobertura ofensiva;
+- amplitud y unicidad de resistencias/inmunidades;
+- correlaciones fuertes entre señales para evitar contar dos veces el mismo hecho;
+- comportamiento al retirar miembros y recalcular contribución marginal;
+- sentinelas de piezas objetivamente fuertes pero redundantes;
+- sentinelas moderados pero estructuralmente únicos;
+- especies/loadouts con evidencia casi vacía para comprobar fail-closed y escala baja.
+
+C3b debe ser primero **test/audit-only**. No debe seleccionar una fórmula solo porque produzca una distribución bonita.
+
+Todavía NO:
+
+- congelar pesos de `structural_value_bp` por intuición;
+- implementar `operational_readiness_bp` como sustituto del valor estructural;
+- implementar `permadeath_loss_cost_bp` definitivo;
+- inventar `replacement_policy` o `between_battle_recovery_policy`;
+- integrar switching/search con campaña;
+- iniciar FASE34;
+- reescribir `TrainerTeamComposer`;
+- mergear PR #105 a `main`.
+
+La autoridad externa de estado sigue siendo GitHub y este cuaderno conserva la continuidad semántica de C3.
