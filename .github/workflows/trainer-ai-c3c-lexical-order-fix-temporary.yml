@@ -1,0 +1,69 @@
+name: TEMP Trainer AI C3 lexical-order fix
+
+on:
+  push:
+    branches:
+      - audit/trainer-ai-c3c-structural-formula-comparison-staging
+
+permissions:
+  contents: write
+
+jobs:
+  patch-c3-order:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: audit/trainer-ai-c3c-structural-formula-comparison-staging
+          fetch-depth: 0
+      - name: Make C3 roster scheduling lexically deterministic
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+
+          base = Path('tests/trainer_ai/trainer_roster_structural_real_data_audit_test_suite.gd')
+          s = base.read_text(encoding='utf-8')
+          old = '\tvar species_ids: Array[StringName] = game_data.species_catalog.all_ids()\n\tspecies_ids.sort()\n\t_check.call("structural_real_data_species_count_canonical", species_ids.size() == 1025)'
+          new = '\tvar species_ids: Array[StringName] = _lexically_sorted_species_ids(game_data.species_catalog)\n\t_check.call("structural_real_data_species_count_canonical", species_ids.size() == 1025)\n\tvar species_id_strings: Array[String] = _stringify_ids(species_ids)\n\tvar lexical_copy: Array[String] = species_id_strings.duplicate()\n\tlexical_copy.sort()\n\t_check.call("structural_real_data_species_order_is_lexical", species_id_strings == lexical_copy)'
+          assert s.count(old) == 1, s.count(old)
+          s = s.replace(old, new, 1)
+          marker = '\n\nfunc _stringify_ids(ids: Array[StringName]) -> Array[String]:\n'
+          helper = '''\n\nfunc _lexically_sorted_species_ids(catalog: SpeciesCatalog) -> Array[StringName]:\n\tvar lexical_ids: Array[String] = []\n\tif catalog == null:\n\t\treturn []\n\tfor raw_id in catalog.all_ids():\n\t\tlexical_ids.append(String(raw_id))\n\tlexical_ids.sort()\n\tvar out: Array[StringName] = []\n\tfor lexical_id in lexical_ids:\n\t\tout.append(StringName(lexical_id))\n\treturn out\n'''
+          assert s.count(marker) == 1, s.count(marker)
+          s = s.replace(marker, helper + marker, 1)
+          base.write_text(s, encoding='utf-8', newline='\n')
+
+          overlap = Path('tests/trainer_ai/trainer_roster_structural_overlap_real_data_audit_test_suite.gd')
+          s = overlap.read_text(encoding='utf-8')
+          old = '\tvar species_ids: Array[StringName] = game_data.species_catalog.all_ids()\n\tspecies_ids.sort()'
+          new = '\tvar species_ids: Array[StringName] = _lexically_sorted_species_ids(game_data.species_catalog)'
+          assert s.count(old) == 1, s.count(old)
+          overlap.write_text(s.replace(old, new, 1), encoding='utf-8', newline='\n')
+
+          formula = Path('tests/trainer_ai/trainer_roster_structural_formula_comparison_test_suite.gd')
+          s = formula.read_text(encoding='utf-8')
+          assert s.startswith('extends TrainerRosterStructuralRealDataAuditTestSuite\n')
+          s = 'class_name TrainerRosterStructuralFormulaComparisonTestSuite\n' + s
+          old = '\tvar species_ids: Array[StringName] = game_data.species_catalog.all_ids()\n\tspecies_ids.sort()'
+          new = '\tvar species_ids: Array[StringName] = _lexically_sorted_species_ids(game_data.species_catalog)'
+          assert s.count(old) == 1, s.count(old)
+          formula.write_text(s.replace(old, new, 1), encoding='utf-8', newline='\n')
+
+          runner = Path('tests/trainer_ai/trainer_team_composition_test_runner.gd')
+          r = runner.read_text(encoding='utf-8')
+          old = '''\tTrainerRosterStructuralOverlapRealDataAuditTestSuite.new().run(Callable(self, "_check"))\n\tvar formula_suite_script: Script = load("res://tests/trainer_ai/trainer_roster_structural_formula_comparison_test_suite.gd") as Script\n\tif formula_suite_script == null:\n\t\t_check("structural_formula_script_loads", false)\n\telse:\n\t\tformula_suite_script.new().run(Callable(self, "_check"))'''
+          new = '''\tTrainerRosterStructuralOverlapRealDataAuditTestSuite.new().run(Callable(self, "_check"))\n\tTrainerRosterStructuralFormulaComparisonTestSuite.new().run(Callable(self, "_check"))'''
+          assert r.count(old) == 1, r.count(old)
+          runner.write_text(r.replace(old, new, 1), encoding='utf-8', newline='\n')
+          PY
+          rm .github/workflows/trainer-ai-c3c-lexical-order-fix-temporary.yml
+          git diff --check
+          git diff -- tests/trainer_ai/trainer_roster_structural_real_data_audit_test_suite.gd tests/trainer_ai/trainer_roster_structural_overlap_real_data_audit_test_suite.gd tests/trainer_ai/trainer_roster_structural_formula_comparison_test_suite.gd tests/trainer_ai/trainer_team_composition_test_runner.gd
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add tests/trainer_ai/trainer_roster_structural_real_data_audit_test_suite.gd tests/trainer_ai/trainer_roster_structural_overlap_real_data_audit_test_suite.gd tests/trainer_ai/trainer_roster_structural_formula_comparison_test_suite.gd tests/trainer_ai/trainer_team_composition_test_runner.gd .github/workflows/trainer-ai-c3c-lexical-order-fix-temporary.yml
+          git commit -m 'test(trainer-ai): stabilize C3 roster ordering'
+          git push origin HEAD:audit/trainer-ai-c3c-structural-formula-comparison-staging
