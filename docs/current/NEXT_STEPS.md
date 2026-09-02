@@ -2,23 +2,28 @@
 
 ## Estado operativo actual — Trainer AI Random Cup pre-FASE34
 
-La rama activa es:
+Rama activa:
 
 `audit/trainer-ai-v3-random-cup-redesign-v1`
 
-La modernización previa a FASE34 ha completado y certificado:
+Modernización cerrada/certificada antes del bloqueo actual:
 
 - C1 — `campaign_snapshot` seguro en `TrainerDecisionContext`;
 - C1b — transporte sanitizado por `TrainerIntelligenceController`;
 - C2a — fixtures/invariantes de role inference;
 - C2b — evidencia intrínseca de capacidades;
-- C2c — afinidades funcionales multirole `0..10000`.
+- C2c — afinidades funcionales multirole `0..10000`;
+- C2d — auditoría contra DATA V3 real;
+- C2e-a — auditoría jerárquica de etiquetas.
 
-C2d auditó C2c contra DATA V3 real. C2e está en calibración y todavía no autoriza consumidores.
+Todavía NO están integrados con la nueva inferencia:
 
-`TrainerTeamAnalyzer`, switching/search con valor de campaña y C3 strategic value continúan sin integrar con la nueva inferencia.
+- `TrainerTeamAnalyzer`;
+- switching/search con valor de campaña;
+- C3 `TrainerRosterStrategicValueEvaluator`;
+- FASE34 difficulty/expertise.
 
-Referencia temática:
+Referencia temática principal:
 
 `docs/project_book/TRAINER_AI.md`.
 
@@ -26,7 +31,7 @@ Referencia temática:
 
 ## C2d — auditoría real DATA V3
 
-Antes de conectar consumidores se añadió una sonda estadística exclusivamente de test:
+Sonda exclusivamente de test:
 
 `TrainerRosterRoleRealDataTestSuite`
 
@@ -34,211 +39,248 @@ Probe:
 
 `runtime_levelup_l50_neutral_probe_v1`
 
-Características del probe:
+No es política Random Cup. Usa DATA V3 real, nivel 50, IV31, EV0, naturaleza neutral, hasta cuatro últimos movimientos `level_up <= 50` y solo `RUNTIME_SUPPORTED`.
 
-- DATA V3 real comprometido en `data/normalized/pokemon_api.json`;
-- nivel 50;
-- IV 31 en todos los stats;
-- EV 0;
-- naturaleza neutral;
-- hasta cuatro últimos movimientos `level_up` con nivel <= 50;
-- únicamente movimientos `RUNTIME_SUPPORTED`;
-- stats calculados con `StatCalculator` canónico.
+Cobertura:
 
-**Este probe NO es una política Random Cup ni congela nivel/loadout del modo.** Solo sirve para evaluar la geometría de la normalización C2c sobre datos reales.
-
-### Resultado del primer audit
-
-SHA de tests/auditoría:
-
-`9a6336c793b60b747c02dd1fa46b6ebf872ca78e`
-
-PR temporal:
-
-`#103 — Trainer AI Random Cup modernization — C2d real DATA V3 role audit`
-
-CI sobre el HEAD final C2d:
-
-- **18/18 workflows SUCCESS**;
-- `Trainer Loadouts Tests`: **290 PASS / 0 FAIL**;
 - 1.025 especies totales;
-- 1.011 especies cubiertas por el probe;
-- 14 sin movimiento elegible bajo esta sonda concreta.
+- 1.011 elegibles bajo el probe;
+- 14 sin movimiento elegible.
 
-Histograma usando únicamente como diagnóstico un umbral de afinidad `>= 7500`:
+Afinidades `>= 7500`:
 
-- 0 roles altos: 29 especies;
-- 1 rol alto: 101;
-- 2 roles altos: 312;
-- 3 roles altos: 280;
-- 4 roles altos: 210;
-- 5 roles altos: 71;
-- 6 roles altos: 8.
+- 0 roles: 29;
+- 1: 101;
+- 2: 312;
+- 3: 280;
+- 4: 210;
+- 5: 71;
+- 6: 8.
 
-Por tanto:
+Por tanto 569/1.011 tienen 3 o más roles altos y 289/1.011 tienen 4 o más. El vector continuo conserva información útil, pero un threshold global fijo no sirve para derivar etiquetas discretas.
 
-- **569/1.011** especies tienen 3 o más roles `>= 7500`;
-- **289/1.011** tienen 4 o más;
-- el vector continuo funciona y conserva información multirole, pero un umbral global fijo de 7500 sería demasiado permisivo para derivar `primary/secondary roles`.
+Empates del máximo en el modelo plano de seis ejes:
 
-Empates en el score máximo:
-
-- un único rol máximo: 512 especies;
+- máximo único: 512;
 - empate de 2: 428;
 - empate de 3: 49;
 - empate de 4: 15;
 - empate de 5: 7.
 
-Esto significa que casi la mitad de los casos cubiertos tienen más de un eje empatado en la afinidad máxima. Por ello no debe implementarse todavía un `primary_role_id` mediante simple `argmax` sin regla de confianza/margen.
+Separación confirmada:
 
-### Separación afinidad vs magnitud confirmada
+- `role_scores_bp` = afinidad/forma funcional relativa;
+- `intrinsic_evidence` C2b = magnitud objetiva;
+- C3 deberá consumir ambas dimensiones sin convertir afinidad en fuerza.
 
-La auditoría también confirma por qué C2b y C2c deben permanecer separados.
+Medianas absolutas de bulk del probe:
 
-Medianas absolutas del probe:
+- físico: 13.050;
+- especial: 12.825.
 
-- `physical_bulk_signal`: 13.050;
-- `special_bulk_signal`: 12.825.
+Había 83/79 casos respectivamente con afinidad defensiva `>=9000` pero magnitud absoluta igual o inferior a la mediana.
 
-Existen miembros con afinidad defensiva `>= 9000` pero magnitud absoluta igual o inferior a la mediana:
+C2d final:
 
-- 83 casos en bulk físico;
-- 79 casos en bulk especial.
-
-Ejemplos observados incluyen especies como `azurill`, `bidoof`, `bounsweet`, `burmy` o `blipbug`: pueden tener una **forma relativa** defensiva dentro de su propio perfil sin ser por ello tanques fuertes en términos absolutos.
-
-Conclusión canónica:
-
-- `role_scores_bp` = **afinidad/forma funcional relativa**;
-- `intrinsic_evidence` C2b = **magnitud objetiva**;
-- C3 deberá consumir ambas dimensiones;
-- no convertir un `10000` de afinidad en “fuerza 10000”.
+- HEAD `35c689e657816f62b7428d6128ae3cfdc6ce15eb`;
+- 18/18 workflows SUCCESS;
+- Trainer Loadouts 290 PASS / 0 FAIL;
+- PR #103 cerrado sin merge.
 
 ---
 
 ## C2e-a — auditoría jerárquica de etiquetas
 
-Se añadió una segunda sonda exclusivamente de test:
+Sonda de test:
 
 `TrainerRosterRoleLabelCalibrationTestSuite`
 
-Su objetivo no es congelar thresholds, sino comprobar qué parte de la ambigüedad de C2d nace de tratar todos los ejes como roles primarios equivalentes.
+Hallazgo principal:
 
-Hipótesis auditada:
+`fast_attacker` es compuesto por construcción (`speed ∩ offense`) y competir como rol primario plano fabrica empates. Al retirarlo del conjunto de candidatos primarios:
 
-- `fast_attacker` es un eje compuesto por construcción: `speed ∩ offense`;
-- por ello puede ser más correcto tratarlo como descriptor/modificador secundario de un atacante que como competidor plano contra `physical_attacker` y `special_attacker` al elegir un rol primario.
+- empates múltiples: 499 -> 373;
+- primarios únicos: 512 -> 638;
+- `fast_attacker == best_offense` en 318 especies;
+- `fast_attacker >=7500` en 442.
 
-Comparación sobre las mismas 1.011 especies elegibles:
+Dominancia entre los 638 primarios core únicos:
 
-- esquema plano de seis roles: **499** especies con empate múltiple en el máximo;
-- candidatos primarios sin `fast_attacker`: **373** con empate múltiple;
-- primario único plano: 512;
-- primario único en la jerarquía provisional: **638**.
+- margen >=500 bp: 573;
+- margen >=1000 bp: 456;
+- margen >=1500 bp: 345;
+- top >=7500 y margen >=1000: 446.
 
-La jerarquía reduce por tanto 126 empates máximos, pero **no resuelve por sí sola la calibración**.
+Distribución provisional de primarios únicos:
 
-Prueba directa de la causa:
+- physical_attacker: 269;
+- special_attacker: 141;
+- bulky_physical: 94;
+- bulky_special: 71;
+- support: 63.
 
-- en **318** especies `fast_attacker` es exactamente igual al mejor score ofensivo;
-- **442** especies tienen `fast_attacker >= 7500`.
+`support` seguía colisionando en el máximo en 302 especies.
 
-Esto confirma que una parte material de los empates era mecánica, derivada de que `fast_attacker` reutiliza la afinidad ofensiva como techo. La conclusión provisional es que `fast_attacker` encaja mejor como descriptor funcional secundario; todavía no se congela esta decisión en producción hasta cerrar el resto de C2e.
+También se confirmó que 74 de los 638 primarios únicos tenían magnitud absoluta igual o inferior a la mediana de su propia familia: la etiqueta funcional NO equivale a valor estratégico.
 
-### Dominancia y margen
+C2e-a final:
 
-Entre las 638 especies con primario core único:
-
-- margen >= 500 bp: 573;
-- margen >= 1000 bp: 456;
-- margen >= 1500 bp: 345;
-- top >= 7500 y margen >= 1000: 446.
-
-Estos números muestran que margen/dominancia sí aporta discriminación, pero no debe usarse como único criterio universal.
-
-Distribución provisional de primarios únicos core:
-
-- `physical_attacker`: 269;
-- `special_attacker`: 141;
-- `bulky_physical`: 94;
-- `bulky_special`: 71;
-- `support`: 63.
-
-### Hallazgo principal pendiente: support
-
-`support` sigue siendo la fuente de colisión más clara:
-
-- `support` es máximo único solo en **63** especies;
-- colisiona en el máximo con otro rol en **302** especies.
-
-La explicación técnica probable está en C2c: `support = max(control_signal_bp, sustain_signal_bp)`. Un único efecto garantizado de control puede producir `10000`, aunque el resto del loadout sea claramente ofensivo. C2e no debe solucionar esto bajando un threshold a ojo; debe auditar primero semántica, frecuencia y coexistencia ofensiva de esas señales.
-
-### Magnitud C2b sigue separada de la etiqueta
-
-Medianas absolutas observadas por familia en esta sonda:
-
-- `physical_attacker`: 16.280;
-- `special_attacker`: 7.875;
-- `bulky_physical`: 13.050;
-- `bulky_special`: 12.825;
-- `support`: 3.000.
-
-De los 638 primarios core únicos, **74** tienen una magnitud absoluta igual o inferior a la mediana de su propia familia:
-
-- physical attacker: 36;
-- special attacker: 1;
-- bulky physical: 19;
-- bulky special: 18.
-
-Esto NO invalida la etiqueta: un miembro puede ser principalmente físico o defensivo dentro de su propio perfil y, aun así, ser mediocre en magnitud absoluta. Precisamente por eso C3 debe valorar poder/escasez/valor estratégico por separado y no reinterpretar `primary_role_id` como fuerza.
-
-Los percentiles/medianas usados aquí son **diagnóstico de corpus**, no thresholds runtime congelados.
+- HEAD `00b0369b016b9c0c7b6643203cd49130ccddb166`;
+- 18/18 workflows SUCCESS;
+- Trainer Loadouts 297 PASS / 0 FAIL;
+- PR #104 cerrado sin merge.
 
 ---
 
-## Paso inmediato — C2e-b auditoría de support antes de producción
+## C2e-b — auditoría de saturación de `support`
 
-**NO integrar todavía `TrainerTeamAnalyzer`.**
+PR temporal abierto:
 
-El siguiente bloque debe estudiar por qué `support` colisiona en 302 máximos y separar al menos:
+`#105 — Trainer AI Random Cup modernization — C2e-b support saturation audit`
 
-1. control garantizado aislado dentro de un moveset ofensivo;
-2. control recurrente o múltiple;
-3. sustain real;
-4. combinación control + sustain;
-5. utilidad que coexiste con una ruta ofensiva dominante;
-6. utilidad que constituye realmente la función central del miembro.
+SHA de audit test-only:
 
-La auditoría debe usar `BattleEffectSpec` estructurado y DATA V3 real. No inferir semántica por nombres de movimientos.
+`b65b98a142405f714d92572764a58ec5d480f4f1`
 
-Objetivo de C2e-b:
+Cambios de esa tranche:
 
-- decidir si `support` necesita una señal de **densidad/breadth de utilidad**, no solo el máximo de un efecto;
-- comprobar si conviene separar una capacidad `utility/control/sustain` de la etiqueta discreta `support`;
-- conservar self-setup fuera de support salvo evidencia adicional;
-- no degradar control/sustain como capacidades: solo evitar que un efecto aislado monopolice la etiqueta primaria;
-- volver a medir empates y distribución después de cualquier candidato de calibración;
-- no tocar todavía TeamAnalyzer, switching, search ni C3.
+- nuevo `TrainerRosterSupportCalibrationTestSuite`;
+- una línea de conexión en `trainer_loadouts_test_runner.gd`;
+- producción sin cambios.
 
-Después de support, revisar si los ejes `bulky_physical/bulky_special` necesitan una calibración adicional de etiqueta. La magnitud absoluta seguirá perteneciendo a C2b/C3, no se mezclará silenciosamente con afinidad C2c.
+CI sobre `b65b98a1...`:
+
+- 18/18 workflows SUCCESS;
+- Trainer Loadouts: 305 PASS / 0 FAIL.
+
+### Distribución observada de support
+
+Sobre 1.011 especies elegibles:
+
+- support > 0: 901;
+- support >=7500: 374;
+- support ==10000: 365;
+- support máximo único: 63;
+- support empatado en el máximo: 302;
+- colisión con rol ofensivo: 182;
+- colisión con bulk: 139;
+- support >=7500 coexistiendo con ofensiva >=7500: 300;
+- support ==10000 coexistiendo con ofensiva >=7500: 291.
+
+Fuentes de la señal:
+
+- solo control: 793;
+- solo sustain: 17;
+- control + sustain: 91;
+- ninguna: 110.
+
+Entre los 365 casos `support ==10000`:
+
+- control-only: 323;
+- control+sustain: 42;
+- sustain-only: 0;
+- una sola fuente/movimiento de utilidad: 62;
+- múltiples movimientos de utilidad: 303;
+- 35 de los 62 casos de fuente única proceden además de un movimiento dañino.
+
+Este audit confirmó que `support = max(control, sustain)` es demasiado fácil de saturar, pero descubrió además un problema más profundo que bloquea cualquier calibración honesta.
 
 ---
 
-## Después de C2e
+# BLOQUEO ACTUAL — defecto semántico DATA V3 en self-debuffs dañinos
 
-Solo si la distribución queda razonablemente discriminativa:
+**C2e-b NO se considera cerrado todavía. NO calibrar thresholds ni modificar `support` hasta resolver este defecto.**
+
+La sonda encontró ejemplos donde movimientos ofensivos con coste propio aparecen como `control=10000`.
+
+Sentinelas observados:
+
+- `close_combat`;
+- `superpower`;
+- `hammer_arm`.
+
+Ejemplo real del probe:
+
+- Annihilape: su única fuente de `support` puede ser `close_combat`, y la inferencia recibe `control_bp=10000`;
+- Clobbopus/Grapploct/Croconaw muestran el mismo patrón con `superpower`;
+- Bewear lo muestra con `hammer_arm`.
+
+Esto NO debe corregirse con una lista de nombres dentro de Trainer AI si Battle Core está recibiendo el mismo objetivo incorrecto.
+
+## Evidencia del defecto
+
+### 1. Fuente PokeAPI inmutable
+
+`data/api/v2/move/370/index.json` (`close-combat`) declara explícitamente que, después de hacer daño, baja Defense y Special Defense **del usuario**. Sus `stat_changes` son -1 Defense y -1 Special Defense.
+
+`data/api/v2/move/276/index.json` (`superpower`) declara explícitamente que baja Attack y Defense **del usuario**.
+
+El `target = selected-pokemon` de estas entradas describe el objetivo del ATAQUE, no necesariamente el destinatario de sus cambios secundarios de stats.
+
+### 2. Conversor heredado
+
+`tools/archive/pokeapi_adapter_v2_legacy.py::generate_move_specs()` calcula:
+
+- `self_target` a partir del `move.target` general;
+- `stat_target = self` si el move target es user/self;
+- de lo contrario `stat_target = opponent`;
+- después aplica ese mismo `stat_target` a TODOS los `stat_changes`.
+
+Esto es insuficiente para movimientos dañinos cuyo golpe va al rival pero cuyo coste secundario afecta al usuario.
+
+### 3. Shim DATA V3
+
+`tools/pokeapi_adapter.py` envuelve el conversor legado y contiene correcciones estrechas para familias auditadas durante Move Effects V3, pero no se encontró una corrección específica ya existente para `close_combat`, `superpower` o `hammer_arm`.
+
+### 4. Battle Core ejecuta literalmente el target generado
+
+`BattleEffectExecutor` llama `context.resolve_target(spec.target)` antes de ejecutar `MODIFY_STAT_STAGE`.
+
+`BattleEffectContext.resolve_target()` devuelve al actor únicamente si el selector es `SELF`; cualquier otro selector resuelve al target/rival.
+
+Por tanto un `modify_stat_stage` generado como `opponent` no es solo una etiqueta incorrecta para Trainer AI: Battle Core lo aplicará al Pokémon rival.
+
+## Interpretación del 18/18 verde
+
+Que `b65b98a1...` tenga 18/18 SUCCESS NO demuestra que esta semántica sea correcta. Demuestra que las regresiones existentes no estaban comprobando esta familia de targeting secundario. C2e-b la descubrió por una consecuencia indirecta en el análisis de roles.
+
+---
+
+## Paso inmediato — diagnóstico y reparación canónica de DATA V3
+
+Antes de volver a C2e:
+
+1. añadir regresiones fuente/runtime para self-debuffs dañinos conocidos, empezando por `close_combat`, `superpower` y `hammer_arm`;
+2. medir el alcance completo de la familia en el snapshot, no asumir que son solo tres movimientos;
+3. corregir `tools/pokeapi_adapter.py` mediante una regla/familia explícitamente auditada y fail-closed, no mediante una heurística genérica insegura;
+4. regenerar el dataset normalizado por la ruta autoritativa;
+5. verificar que los `effect_specs` afectados usan `target=self` y que Battle Core baja los stats del actor, no del rival;
+6. ejecutar DATA V3 domain + Spanish/type/runtime + Godot general + toda la matriz de Trainer AI;
+7. registrar los contadores/clasificaciones que cambien, si cambian;
+8. solo entonces volver a ejecutar C2d/C2e-a/C2e-b y recalcular la distribución de roles/support.
+
+Si el alcance obliga a reabrir formalmente DATA V3, se hará como corrección semántica de un contrato existente, no como expansión por aumentar contadores.
+
+PR #105 debe permanecer abierto mientras este hallazgo sea el checkpoint activo; no mergear a main.
+
+---
+
+## Después de reparar DATA V3 y cerrar C2e
+
+Solo cuando la semántica de efectos vuelva a estar certificada y la distribución de roles sea razonablemente discriminativa:
 
 1. integrar `TrainerTeamAnalyzer` con inferencia dinámica en una tranche separada;
 2. mantener el flujo authored histórico con `role_id` donde corresponda;
-3. iniciar C3 `TrainerRosterStrategicValueEvaluator` usando tanto afinidad como evidencia absoluta;
-4. resolver las políticas de campaña que todavía bloqueen `permadeath_loss_cost_bp` completo;
+3. iniciar C3 `TrainerRosterStrategicValueEvaluator` usando afinidad + evidencia absoluta;
+4. resolver las políticas de campaña que bloqueen `permadeath_loss_cost_bp` completo;
 5. integrar después switching/search;
 6. construir corpus Random Cup multi-batalla antes de calibrar pesos de preservación/permadeath;
 7. retomar FASE34 difficulty/expertise solo después de cerrar esta modernización.
 
 Continúan fuera de alcance inmediato:
 
-- MCTS o red neuronal sin bottleneck demostrado;
+- MCTS/red neuronal sin bottleneck demostrado;
 - mover `main`;
-- crear una autoridad Random Cup ficticia solo para tests de Trainer AI;
-- inventar reglas todavía abiertas de gameplay (duplicados, recuperación entre rondas, reposición, progresión, held items, etc.).
+- crear una autoridad Random Cup ficticia solo para tests;
+- inventar reglas todavía abiertas de gameplay;
+- esconder un bug de DATA/Battle Core mediante excepciones privadas de Trainer AI.
