@@ -1,0 +1,44 @@
+name: TEMP Trainer AI C3b audit typing fix
+
+on:
+  push:
+    branches:
+      - audit/trainer-ai-c3b-structural-real-data-staging
+
+permissions:
+  contents: write
+
+jobs:
+  patch-audit:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: audit/trainer-ai-c3b-structural-real-data-staging
+          fetch-depth: 0
+      - name: Harden strict typing and self-clean
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path('tests/trainer_ai/trainer_roster_structural_real_data_audit_test_suite.gd')
+          text = p.read_text(encoding='utf-8')
+          text = text.replace(
+              'var members: Array[Dictionary] = probe.get("members", []) as Array[Dictionary]',
+              'var members: Array[Dictionary] = []\n\tfor raw_member in probe.get("members", []):\n\t\tif raw_member is Dictionary:\n\t\t\tmembers.append(raw_member as Dictionary)'
+          )
+          text = text.replace(
+              '_histogram_increment(role_max_histogram, role_max / 1000)',
+              '_histogram_increment(role_max_histogram, int(role_max / 1000))'
+          )
+          p.write_text(text, encoding='utf-8')
+          PY
+          rm -f .github/workflows/trainer-ai-c3b-audit-typing-fix-temporary.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A tests/trainer_ai/trainer_roster_structural_real_data_audit_test_suite.gd .github/workflows/trainer-ai-c3b-audit-typing-fix-temporary.yml
+          git diff --cached --check
+          git commit -m "test(trainer-ai): harden C3b audit typing"
+          git push origin HEAD:audit/trainer-ai-c3b-structural-real-data-staging
