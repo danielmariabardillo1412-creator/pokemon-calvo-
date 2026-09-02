@@ -1,0 +1,462 @@
+name: TEMP Trainer AI project book append
+
+on:
+  push:
+    branches:
+      - audit/trainer-ai-v3-random-cup-redesign-v1
+
+permissions:
+  contents: write
+
+jobs:
+  append-project-book:
+    if: github.actor != 'github-actions[bot]' && !contains(github.event.head_commit.message, '[book-appended]')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: audit/trainer-ai-v3-random-cup-redesign-v1
+          fetch-depth: 0
+
+      - name: Append consolidated Trainer AI checkpoint
+        shell: bash
+        run: |
+          set -euo pipefail
+          if grep -q '^## 26\. Consolidación C2b–C2e-e' docs/project_book/TRAINER_AI.md; then
+            echo 'Section 26 already present; nothing to append.'
+            exit 0
+          fi
+          cat >> docs/project_book/TRAINER_AI.md <<'BOOK_EOF'
+
+---
+
+## 26. Consolidación C2b–C2e-e — role inference, DATA V3 y evidencia de control
+
+Este checkpoint reconcilia en el cuaderno temático el trabajo realizado después de C2a. `docs/current/PROJECT_STATE.md` y `docs/current/NEXT_STEPS.md` conservaron el estado operativo durante las microtranches; esta sección incorpora ahora las decisiones, incidentes, SHAs y resultados que deben sobrevivir a un cambio de conversación.
+
+### 26.1 Reconciliación de certificaciones anteriores
+
+Los cierres documentales exactos posteriores a las secciones 23–25 fueron:
+
+- C1 `campaign_snapshot` en `TrainerDecisionContext`: HEAD final `850bc5083d5dbc6fae742591efbef56eb80b7be1`, 18/18 workflows SUCCESS;
+- C1b transporte sanitizado por `TrainerIntelligenceController`: HEAD final `1dbe88c65206e37ecef9f8bb9cffe1f5eb89615b`, 18/18 SUCCESS, FASE20 77 PASS / 0 FAIL;
+- C2a fixtures/invariantes: HEAD final `927c59e7e428ea07999d1fa58978fa7a22889f6e`, 18/18 SUCCESS, Trainer Loadouts 234 PASS / 0 FAIL, PR #100 cerrado sin merge.
+
+`main` permaneció fuera del workstream y no debe moverse automáticamente.
+
+### 26.2 C2b — evidencia intrínseca de capacidades
+
+C2b creó la primera implementación real de `TrainerRosterRoleInference`.
+
+Principio congelado:
+
+`loadout materializado propio -> evidencia estructural auditable`, no `role_id authored -> verdad estratégica`.
+
+`extract_intrinsic_evidence()` conserva, entre otras señales:
+
+- stats materializados;
+- potencia física/especial de movimientos ejecutables;
+- señal de daño físico y especial;
+- bulk físico/especial;
+- speed;
+- prioridad;
+- control;
+- setup;
+- sustain;
+- movimientos runtime incluidos/excluidos/desconocidos.
+
+Gate fail-closed Random Cup V1:
+
+- solo `MoveDefinition.classification == RUNTIME_SUPPORTED` aporta capacidad;
+- `PARTIAL_RUNTIME`, `DATA_ONLY`, `UNSUPPORTED` y unknown quedan fuera;
+- HP/PP actuales no reescriben identidad intrínseca;
+- `TrainerProfile`, `role_id` authored y ruido rival no intervienen.
+
+HEAD final C2b:
+
+`6bceaeda1a1439c9ad690e5c48745c112b74ba2a`
+
+Resultado:
+
+- 18/18 workflows SUCCESS;
+- Trainer Loadouts: 261 PASS / 0 FAIL;
+- PR #101 cerrado sin merge.
+
+### 26.3 C2c — afinidades funcionales multirole
+
+C2c añadió `infer_role_scores()` con modelo `trainer_roster_role_affinity_v1`.
+
+Los scores `0..10000` son **afinidad funcional intrínseca**, no fuerza total ni valor estratégico.
+
+Roles continuos:
+
+- `physical_attacker`;
+- `special_attacker`;
+- `fast_attacker`;
+- `bulky_physical`;
+- `bulky_special`;
+- `support`.
+
+Principios:
+
+- un híbrido puede tener varias afinidades altas;
+- Speed sin ruta ofensiva no fabrica `fast_attacker`;
+- setup propio no se convierte automáticamente en `support`;
+- movimientos no ejecutables no inflan roles;
+- magnitud absoluta C2b permanece separada de afinidad relativa C2c.
+
+HEAD final C2c:
+
+`9d3c54bb970be160418dec14648c78a90a2f64ad`
+
+Resultado:
+
+- 18/18 SUCCESS;
+- Trainer Loadouts: 280 PASS / 0 FAIL;
+- PR #102 cerrado sin merge.
+
+### 26.4 C2d — auditoría contra DATA V3 real
+
+Se creó un probe exclusivamente de auditoría, no una política Random Cup:
+
+- nivel 50;
+- IV31;
+- EV0;
+- naturaleza neutral;
+- hasta cuatro últimos movimientos `level_up <= 50`;
+- solo `RUNTIME_SUPPORTED`.
+
+Cobertura:
+
+- especies totales: 1.025;
+- elegibles en la sonda inicial: 1.011;
+- la auditoría posterior quedó estabilizada en 1.021 tras la corrección DATA descrita abajo.
+
+Hallazgo original de C2d: los scores continuos eran demasiado anchos para transformarlos directamente en etiquetas discretas.
+
+En la primera medición:
+
+- 569 especies tenían 3+ roles >=7500;
+- 289 tenían 4+;
+- solo 512 tenían un único máximo;
+- 499 empataban entre 2–5 roles en el máximo.
+
+Conclusión congelada:
+
+**afinidad funcional != magnitud absoluta != valor estratégico**.
+
+HEAD final C2d:
+
+`35c689e657816f62b7428d6128ae3cfdc6ce15eb`
+
+Resultado:
+
+- 18/18 SUCCESS;
+- Trainer Loadouts: 290 PASS / 0 FAIL;
+- PR #103 cerrado sin merge.
+
+### 26.5 C2e-a — auditoría jerárquica de labels
+
+Se probó sin tocar producción la hipótesis de sacar `fast_attacker` del plano de roles primarios porque es un descriptor compuesto `speed ∩ offense`.
+
+Resultado:
+
+- empates de máximo: 499 -> 373;
+- primarios únicos: 512 -> 638;
+- aun quedaba demasiada ambigüedad;
+- `support` colisionaba en el máximo con otro rol en 302 especies;
+- 74 de los 638 primarios únicos tenían magnitud absoluta igual o inferior a la mediana de su propia familia.
+
+Consecuencia:
+
+un Pokémon puede tener una función principal clara sin ser fuerte en términos absolutos; C3 debe conservar esa separación.
+
+HEAD final C2e-a:
+
+`00b0369b016b9c0c7b6643203cd49130ccddb166`
+
+Resultado:
+
+- 18/18 SUCCESS;
+- Trainer Loadouts: 297 PASS / 0 FAIL;
+- PR #104 cerrado sin merge.
+
+### 26.6 C2e-b — auditoría de `support` y bug semántico descubierto en DATA V3
+
+La auditoría de `support` detectó ejemplos ofensivos que aparecían como control máximo. La investigación bajó hasta PokeAPI, adaptador y Battle Core y encontró un bug real fuera de Trainer AI.
+
+Problema:
+
+- el conversor legado decidía el target de `stat_changes` usando el target general del movimiento;
+- en movimientos dañinos cuyo coste/debuff pertenece al usuario, como Close Combat/Superpower/Hammer Arm, eso podía convertir un efecto `SELF` en `OPPONENT`;
+- `BattleEffectExecutor` ejecuta literalmente `spec.target`, por lo que el error podía alterar el Pokémon equivocado en combate.
+
+La familia canónica afectada era `move-category/7` / `damage-raise`, con 28 movimientos de daño + cambios de stats del usuario.
+
+No se parcheó Trainer AI para ocultarlo.
+
+Corrección canónica principal:
+
+`a2341d4f77f22f54b89916fd8e91ac7b26d2c8d5`
+
+La reparación regeneró DATA desde el snapshot inmutable y añadió regresión end-to-end.
+
+Regresión permanente:
+
+- categoría 7 completa presente;
+- 28/28 movimientos con sus `MODIFY_STAT_STAGE` propios sobre `SELF`;
+- Close Combat ejecutado realmente contra Battle Core reduce al actor, no al rival.
+
+Checkpoint final de recertificación DATA/Trainer AI posterior a la reparación:
+
+`f198fcc16587c268f6f890f0747602b4283c131d`
+
+Resultado:
+
+- 18/18 workflows SUCCESS;
+- DATA V3 domain: 567 PASS / 0 FAIL;
+- Spanish/type/runtime: 314 PASS / 0 FAIL;
+- catálogo estructural preservado: 1.025 especies, 919 movimientos, 61.102 learnset entries, 554 evoluciones, 0 broken refs/rejected definitions.
+
+La remedición post-fix demostró que el bug DATA era real pero **no era la causa principal de la saturación de support**.
+
+Probe post-fix estable:
+
+- 1.025 especies;
+- 1.021 elegibles;
+- 4 sin movimientos del probe;
+- `support > 0`: 892;
+- `support >= 7500`: 444;
+- `support == 10000`: 441;
+- support máximo único: 103;
+- support empatado en el máximo: 338;
+- colisión con ofensiva: 201;
+- colisión con bulk: 164;
+- `support == 10000` coexistiendo con ofensiva >=7500: 354.
+
+### 26.7 C2e-c — probabilidad runtime y precisión
+
+Commits audit test-only principales:
+
+- `30a4949d8fda685935cd190426907a9ecb9cec97`;
+- `6b82df60a0d1f39c7dcd08f39a81439d20d3c7a0`.
+
+Trainer Loadouts sobre `6b82df60...`:
+
+**317 PASS / 0 FAIL**.
+
+Hallazgo A — metadata probabilística duplicada:
+
+- Battle Core tira el dado únicamente en nodos `BattleEffectSpec.CHANCE`;
+- los hijos no vuelven a tirar su `chance_basis_points`;
+- la inferencia antigua multiplicaba `chance_basis_points` en cada nodo;
+- ciertos efectos secundarios conservaban la probabilidad tanto en wrapper como hijo.
+
+Consecuencia:
+
+- 284 especies tenían parte de su control infravalorado;
+- Moonblast: 900 bp en inferencia antigua frente a 3000 bp de semántica runtime;
+- Discharge: 900 -> 3000;
+- Rock Slide ya era 3000 -> 3000.
+
+Este defecto reduce control; no explica la saturación por exceso.
+
+Hallazgo B — accuracy no formaba parte del control:
+
+- 312 especies reducían su mejor control al ponderar por precisión base;
+- control actual `==10000`: 441;
+- proxy accuracy `==10000`: 240;
+- 201 máximos caerían por debajo de 10000;
+- 30 casos >=7500 caerían por debajo de 7500.
+
+Sentinelas:
+
+- Screech: 10000 on-hit, accuracy 85% -> 8500 por intento;
+- Thunder Wave: 10000, 90% -> 9000;
+- Dynamic Punch: 10000, 50% -> 5000;
+- Rock Slide: 3000 × 90% -> 2700.
+
+No se congeló `chance × accuracy` como fórmula de support; se trató como evidencia de fiabilidad.
+
+### 26.8 C2e-d — forma del control: fiabilidad y breadth separados
+
+Commits test-only principales:
+
+- `cc5297119b24acec2972cdbfb0fbdea1b8ccf8c0`;
+- `255cf8db722ca7248bc4a3fd7b648dd8fa8fab07`.
+
+Trainer Loadouts:
+
+**332 PASS / 0 FAIL**.
+
+Sobre 1.021 especies elegibles:
+
+- alguna ruta de control: 867;
+- 2+ movimientos de control: 564;
+- 2+ efectos/ejes distintos: 506;
+- exactamente una ruta de alta fiabilidad >=7500: 346;
+- 2+ rutas de alta fiabilidad: 65.
+
+Dentro de los 441 techos `control_signal_bp == 10000`:
+
+- 90 tienen un solo movimiento de control;
+- 351 tienen varios;
+- 30 no conservan ninguna ruta >=7500 al ponderar CHANCE runtime + accuracy base;
+- 346 tienen exactamente una ruta de alta fiabilidad;
+- solo 65 tienen dos o más rutas de alta fiabilidad.
+
+La sonda también confirmó que deben distinguirse:
+
+1. varios movimientos que repiten el mismo eje;
+2. un único movimiento que afecta varios ejes, como Noble Roar.
+
+Por tanto `move breadth` y `effect breadth` son hechos diferentes.
+
+### 26.9 C2e-e — evidencia de control separada en producción
+
+Objetivo: **añadir información sin recalibrar todavía `support`**.
+
+`TrainerRosterRoleInference.extract_intrinsic_evidence()` conserva ahora en paralelo:
+
+- `control_signal_bp` legado, para compatibilidad temporal;
+- `control_best_runtime_effect_bp`;
+- `control_reliability_bp`;
+- `control_secondary_reliability_bp`;
+- `control_move_count`;
+- `control_effect_key_count`;
+- `control_effect_family_count`;
+- `control_dedicated_move_count`;
+- `control_damaging_move_count`;
+- `control_strongest_stat_drop_stages`;
+- `control_breakdown` determinista por movimiento.
+
+La helper por movimiento conserva:
+
+- `move_id`;
+- accuracy en bp;
+- mejor probabilidad runtime del efecto;
+- mejor fiabilidad por intento;
+- route count;
+- effect keys;
+- effect families;
+- magnitud de stat drop;
+- dedicado vs dañino.
+
+**`infer_role_scores().support` sigue usando el `control_signal_bp` antiguo en esta tranche.**
+
+Esto es deliberado: representación y recalibración son cambios separados.
+
+Incidente CI del primer intento:
+
+- HEAD provisional `80f19095...`;
+- Trainer Loadouts: 346 PASS / 3 FAIL;
+- los tres fallos pertenecían solo a la evidencia nueva;
+- causa exacta: la helper intentaba leer `BattleEffectSpec.stat_key`, pero el contrato real se llama `stat_id`.
+
+No era un fallo del modelo ni una regresión histórica.
+
+Fix exacto:
+
+`bcb7a2036d9750662c14763ab8b1d519e432da47`
+
+Resultado de código/test:
+
+- 18/18 workflows SUCCESS;
+- Trainer Loadouts: **349 PASS / 0 FAIL**;
+- los 332 checks anteriores siguen verdes;
+- 17 checks nuevos prueban chance runtime, accuracy, mejor/segunda fiabilidad, breadth, magnitud, dedicado/dañino, fail-closed y JSON/determinismo;
+- las distribuciones real-data anteriores permanecen iguales porque `support` no fue recalibrado.
+
+HEAD documental final de C2e-e:
+
+`de1af3934e20d421848f4289f309d69b50551cb6`
+
+Resultado sobre ese SHA exacto:
+
+- **18/18 workflows SUCCESS**;
+- Trainer Loadouts: **349 PASS / 0 FAIL**;
+- Godot 4.7 general: SUCCESS;
+- DATA V3: SUCCESS.
+
+### 26.10 Estado canónico al cerrar este checkpoint
+
+Cerrado/certificado:
+
+- C1 campaign seam;
+- C1b controller transport;
+- C2a fixtures;
+- C2b evidencia intrínseca;
+- C2c afinidades multirole;
+- C2d real-data audit;
+- C2e-a labels audit;
+- reparación DATA V3 `damage-raise`;
+- C2e-c probability/accuracy audit;
+- C2e-d control-shape audit;
+- C2e-e representación separada de evidencia de control.
+
+Todavía **NO** integrar:
+
+- `TrainerTeamAnalyzer` con esta inferencia;
+- switching/search con valor de campaña;
+- C3 `TrainerRosterStrategicValueEvaluator`;
+- FASE34 difficulty/expertise.
+
+`support` de producción **todavía no está recalibrado**.
+
+### 26.11 Siguiente microtranche exacta — comparación de fórmulas de support
+
+Antes de modificar `support` en producción se debe ejecutar una comparación test-only sobre las 1.021 especies elegibles del probe post-fix.
+
+La comparación debe usar las señales C2e-e sin aplastarlas prematuramente y medir como mínimo:
+
+- intensidad/semántica del control;
+- mejor fiabilidad por intento;
+- segunda fiabilidad;
+- breadth por movimientos;
+- breadth por efectos/ejes;
+- dedicado vs secundario de ataque;
+- sustain como eje separado;
+- colisiones con roles ofensivos/bulk;
+- supports legítimos sentinela frente a falsos techos.
+
+No elegir una fórmula porque simplemente produzca menos `10000`.
+
+La candidata debe ser:
+
+- determinista;
+- explicable;
+- monotónica en señales razonables;
+- compatible con fail-closed runtime;
+- discriminativa en DATA V3 real;
+- sin convertir un único proc secundario en especialista de support;
+- sin borrar a un support real porque su potencia absoluta sea modesta.
+
+Solo después de comparar candidatos se autoriza cambiar `infer_role_scores().support` en una tranche separada.
+
+### 26.12 Recuperación en una conversación nueva
+
+Si esta conversación se llena o se cambia de ventana, recuperar Trainer AI así:
+
+1. leer este `docs/project_book/TRAINER_AI.md`, especialmente sección 26;
+2. leer `docs/current/PROJECT_STATE.md` y `docs/current/NEXT_STEPS.md`;
+3. verificar en GitHub la rama `audit/trainer-ai-v3-random-cup-redesign-v1` y su HEAD exacto;
+4. comprobar PR #105, que sigue siendo PR temporal/auditable y **NO debe mergearse a main** mientras C2e permanezca abierto;
+5. verificar que `main` no se haya movido automáticamente;
+6. continuar desde **comparación test-only de fórmulas de support**.
+
+La autoridad final de estado externo es GitHub; el cuaderno conserva las decisiones y la continuidad semántica.
+BOOK_EOF
+
+      - name: Commit appended project book
+        shell: bash
+        run: |
+          set -euo pipefail
+          if git diff --quiet -- docs/project_book/TRAINER_AI.md; then
+            echo 'No project book changes to commit.'
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add docs/project_book/TRAINER_AI.md
+          git commit -m 'docs(trainer-ai): sync project book through C2e-e [book-appended]'
+          git push origin HEAD:audit/trainer-ai-v3-random-cup-redesign-v1
