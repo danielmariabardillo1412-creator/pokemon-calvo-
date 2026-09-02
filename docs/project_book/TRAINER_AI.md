@@ -6601,3 +6601,333 @@ No permite aún considerar estable ningún **contrato consumidor** ni ningún sc
 La siguiente microtranche debe permanecer separada de la integración de comportamiento: diseñar y auditar un **contrato de consumo component-first** que combine la evidencia estructural y operacional sin seleccionar a escondidas un `operational_readiness_bp`, sin inventar recovery/replacement y sin conectar todavía switching/search.
 
 Solo después de demostrar invariantes de ese contrato podrá evaluarse una integración concreta en una tranche posterior.
+
+
+### 26.27 C3f-f — contrato component-first para consumidores, sin scalar combinado
+
+Estado: **CERRADO / CERTIFICADO**.
+
+Baseline de entrada de C3f-f:
+
+`3c5a6d8985ae9291804622e7056a16861d74e31f`
+
+Ese baseline correspondía a C3f-e + 26.26 ya certificados, con:
+
+- `TrainerRosterStrategicValueEvaluator` en producción;
+- `TrainerRosterOperationalReadinessEvaluator` en producción;
+- `structural_value_bp` certificado;
+- componentes operacionales actuales certificados por separado;
+- DATA V3 real-data auditada;
+- ningún `operational_readiness_bp` agregado seleccionado;
+- ninguna integración nueva con switching/search;
+- recovery/replacement/permadeath todavía sin política inventada.
+
+#### Objetivo de C3f-f
+
+Antes de permitir que cualquier consumidor combine valor estructural y estado operacional, comprobar si existe un contrato conjunto que:
+
+1. una ambas superficies por identidad canónica;
+2. conserve explícitamente sus modelos de origen;
+3. no esconda pesos ni un ranking total;
+4. trate correctamente a miembros KO;
+5. mantenga attrition separado del vector inmediato;
+6. no lea contexto rival, beliefs, perfil, RNG ni políticas de campaña inexistentes;
+7. sea determinista, serializable y robusto frente al orden de entrada.
+
+C3f-f fue deliberadamente **test/audit-only**.
+
+No añadió clase de producción ni consumidor conductual.
+
+#### Suite añadida
+
+`tests/trainer_ai/trainer_roster_component_first_consumer_contract_audit_test_suite.gd`
+
+Clase:
+
+`TrainerRosterComponentFirstConsumerContractAuditTestSuite`
+
+Audit ID:
+
+`c3f_f_component_first_consumer_contract_audit_v1`
+
+Contrato candidato auditado:
+
+`trainer_roster_component_first_consumer_contract_candidate_v1`
+
+La suite hereda la cadena C3 anterior y añade 18 invariantes nuevas.
+
+FASE33 pasa de 491 a **509 checks**.
+
+#### Join canónico
+
+El contrato candidato NO hace `zip` posicional de las dos superficies.
+
+Une los resultados por:
+
+`instance_id`
+
+Esto es obligatorio porque las semánticas de KO difieren de forma intencionada:
+
+- la valoración estructural excluye del roster superviviente al miembro KO;
+- la superficie operacional conserva el miembro KO y registra su estado actual.
+
+Por tanto, para cada miembro el contrato candidato expone explícitamente:
+
+- identidad;
+- `availability_state`;
+- subbloque `structural` con `available`;
+- subbloque `operational` con `available`;
+- evidencia separada de item;
+- attrition separado del vector inmediato.
+
+No se inventa un `structural_value_bp` para un KO.
+
+#### Modelos de origen explícitos
+
+El contrato conserva los IDs canónicos de las dos superficies:
+
+- estructural: `trainer_roster_structural_value_capped_units_blend_v1`;
+- operacional: `trainer_roster_current_operational_components_v1`.
+
+No fusiona ambos modelos bajo una fórmula nueva.
+
+#### Muestreo real-data
+
+Se reutiliza DATA V3 real y la geometría de probe/schedule ya certificada.
+
+Datos del audit:
+
+- especies elegibles: **1021**;
+- rosters muestreados: **128**;
+- miembros por roster: **6**;
+- estados conjuntos inspeccionados: **768**;
+- stride del muestreo: **8**.
+
+#### Integridad del join
+
+Resultado:
+
+- `missing_operational_join_cases = 0`;
+- `missing_structural_survivor_join_cases = 0`;
+- `species_identity_mismatches = 0`;
+- `duplicate_contract_instance_ids = 0`;
+- `model_identity_mismatches = 0`;
+- `reorder_contract_mismatches = 0`.
+
+Por tanto, el contrato candidato es estable frente al reordenamiento del input y no depende de posiciones del array.
+
+#### Independencia de capas
+
+Se ejecutaron probes específicos para impedir contaminación entre valor permanente y estado presente.
+
+HP:
+
+- `hp_operational_change_cases = 24`;
+- `hp_structural_mutation_mismatches = 0`.
+
+PP:
+
+- `pp_route_change_cases = 11`;
+- `pp_structural_mutation_mismatches = 0`;
+- `pp_unexpected_operational_dimension_mismatches = 0`.
+
+Status:
+
+- `status_action_change_cases = 24`;
+- `status_structural_mutation_mismatches = 0`;
+- `status_unexpected_operational_dimension_mismatches = 0`.
+
+Held item:
+
+- `item_availability_change_cases = 24`;
+- `item_structural_mutation_mismatches = 0`;
+- `item_numeric_component_mismatches = 0`.
+
+Esto confirma que la interfaz component-first mantiene separadas las dimensiones en vez de volver a introducir una media implícita.
+
+#### KO y recomputación de roster
+
+Se ejecutaron **24 KO probes**.
+
+Resultado:
+
+- `ko_contract_missing_cases = 0`;
+- `ko_fake_structural_value_cases = 0`;
+- `ko_operational_state_mismatches = 0`.
+
+Además:
+
+- `survivor_operational_changes_after_teammate_ko = 0`;
+- `survivor_structural_change_after_teammate_ko = 36`;
+- `survivor_structural_decrease_after_teammate_ko = 0`.
+
+Semántica confirmada:
+
+- perder un compañero puede cambiar la importancia estructural marginal de los supervivientes;
+- esa pérdida NO reescribe artificialmente su HP, PP o status actual;
+- el miembro KO sigue visible operacionalmente;
+- no recibe un valor estructural falso como si siguiera disponible.
+
+#### Pareto y ausencia de ranking total gratuito
+
+C3f-f compara el vector inmediato sin attrition mediante dominancia Pareto.
+
+Resultados real-data:
+
+- comparaciones de pares: **1920**;
+- pares con dominancia Pareto: **519**;
+- pares incomparables: **1401**;
+- pares con trade-off `structural_higher / operational_lower`: **1379**.
+
+Así, aproximadamente el **73 %** de los pares inspeccionados son incomparables sin introducir una preferencia externa.
+
+Este resultado es importante.
+
+No es una carencia del contrato: demuestra que structural value y operational state describen dimensiones realmente diferentes.
+
+Un consumidor que necesite escoger entre esos miembros tendrá que aportar una política explícita de decisión correspondiente a su problema concreto.
+
+No se autoriza transformar esta incomparabilidad en:
+
+- `combined_score`;
+- `combined_score_bp`;
+- `ranking_score`;
+- `preservation_score`;
+- `best_member_id`;
+- `operational_readiness_bp` global.
+
+#### Attrition
+
+Attrition permanece fuera del vector Pareto inmediato.
+
+Esto evita convertir poison/toxic/burn residual en una pérdida de capacidad inmediata sin horizonte temporal.
+
+El contrato puede transportar la evidencia de attrition certificada, pero un consumidor futuro deberá declarar de forma explícita cuándo y con qué horizonte la utiliza.
+
+#### Contextos prohibidos
+
+Resultado:
+
+- `forbidden_contract_key_cases = 0`;
+- `forbidden_context_key_cases = 0`.
+
+El contrato candidato no contiene ni consume:
+
+- `observed_opponents`;
+- `beliefs`;
+- `rival_memory`;
+- `trainer_profile`;
+- `campaign_snapshot`;
+- bracket oculto;
+- futuros oponentes;
+- RNG/seed;
+- recovery/replacement policy;
+- switching/search score.
+
+#### Determinismo y serialización
+
+C3f-f confirma:
+
+- reporte determinista;
+- JSON serializable;
+- input reorder invariant.
+
+#### Incidente mecánico durante la tranche
+
+Primer SHA técnico:
+
+`51f774d1...`
+
+La primera ejecución no llegó a auditar semántica por una dedentación accidental dentro del loop de miembros de la propia suite.
+
+El error dejaba `instance_id` y `state` fuera de scope.
+
+No afectaba a producción.
+
+Se corrigió únicamente la indentación mediante un workflow temporal autolimpiable.
+
+SHA técnico corregido:
+
+`4337fdf8e02c60ea9e67cf8d16530749366bcc22`
+
+Diff neto frente al baseline C3f-e:
+
+- suite C3f-f nueva;
+- runner actualizado;
+- **cero producción**;
+- **cero temporales**.
+
+Sobre ese SHA:
+
+- **18/18 workflows SUCCESS**;
+- Team Composition: **509 PASS / 0 FAIL**;
+- Godot 4.7 general: SUCCESS;
+- DATA V3: SUCCESS.
+
+#### Certificación humana
+
+SHA humano tree-identical:
+
+`cce96ae42d0b788ced20d9717e90cbc1aa250201`
+
+Sobre ese SHA exacto se repite:
+
+- **18/18 workflows SUCCESS**;
+- FASE33: **509 PASS / 0 FAIL**;
+- Godot general: SUCCESS;
+- DATA V3: SUCCESS.
+
+PR temporal #105 permanece:
+
+- `state = open`;
+- `merged_at = null`;
+- head = `cce96ae42d0b788ced20d9717e90cbc1aa250201` al cerrar la certificación.
+
+`main` permanece exactamente en:
+
+`f8452a1625ccb8389c9e52ff4416a96a24e00efd`
+
+#### Conclusión C3f-f
+
+C3f-f valida la **forma del contrato component-first**.
+
+La evidencia real-data demuestra que:
+
+1. structural value y operational state deben mantenerse separados;
+2. el join debe hacerse por identidad, no por posición;
+3. KO necesita semántica explícita de disponibilidad;
+4. attrition debe permanecer separado del vector inmediato;
+5. un ranking total global no está justificado;
+6. los consumidores futuros deben declarar su propia política concreta y auditable.
+
+#### Siguiente microtranche autorizada
+
+**C3f-g — portar el contrato component-first a una superficie de producción pasiva.**
+
+Scope autorizado:
+
+- clase nueva y aislada;
+- composición de `TrainerRosterStrategicValueEvaluator` + `TrainerRosterOperationalReadinessEvaluator`;
+- join por `instance_id`;
+- misma semántica KO certificada;
+- mismos IDs de modelo explícitos;
+- attrition e item conservados como evidencia separada;
+- determinismo/fail-closed/JSON;
+- paridad exacta con el contrato audit-only C3f-f;
+- DATA V3 audit después del port.
+
+Sigue **NO autorizado** en C3f-g:
+
+- seleccionar `operational_readiness_bp`;
+- crear `combined_score` o ranking total;
+- escoger `best_member_id`;
+- integrar switching/search;
+- modificar brains;
+- usar rival/beliefs/profile como valor objetivo;
+- inventar `replacement_policy`;
+- inventar `between_battle_recovery_policy`;
+- definir `permadeath_loss_cost_bp` definitivo;
+- abrir FASE34;
+- mergear PR #105.
+
+La superficie C3f-g, si pasa, será únicamente un **productor pasivo de contrato**, no una nueva conducta del entrenador.
