@@ -1,2 +1,4 @@
 class_name TrainerRosterStructuralRegistryProbe
 extends TrainerRosterStructuralRealDataAuditTestSuite
+
+var _disjoint_helper := TrainerRosterStructuralOverlapRealDataAuditTestSuite.new()
