@@ -210,24 +210,24 @@ func _build_c3ff_report() -> Dictionary:
 			var instance_id := String(state.get("instance_id", ""))
 			if seen_ids.has(instance_id):
 				duplicate_contract_instance_ids += 1
-		seen_ids[instance_id] = true
-		var operational := state.get("operational", {}) as Dictionary
-		if not bool(operational.get("available", false)):
-			missing_operational_join_cases += 1
-		var structural := state.get("structural", {}) as Dictionary
-		if String(state.get("availability_state", "")) == "surviving" and not bool(structural.get("available", false)):
-			missing_structural_survivor_join_cases += 1
-		if (
-			bool(structural.get("available", false))
-			and String(structural.get("species_id", "")) != String(state.get("species_id", ""))
-		):
-			species_identity_mismatches += 1
-		if String(operational.get("species_id", "")) != String(state.get("species_id", "")):
-			species_identity_mismatches += 1
-		if sampled_species_examples.size() < 12:
-			sampled_species_examples.append(String(state.get("species_id", "")))
-		if String(state.get("availability_state", "")) == "surviving":
-			surviving_vectors.append(_immediate_value_vector(state))
+			seen_ids[instance_id] = true
+			var operational := state.get("operational", {}) as Dictionary
+			if not bool(operational.get("available", false)):
+				missing_operational_join_cases += 1
+			var structural := state.get("structural", {}) as Dictionary
+			if String(state.get("availability_state", "")) == "surviving" and not bool(structural.get("available", false)):
+				missing_structural_survivor_join_cases += 1
+			if (
+				bool(structural.get("available", false))
+				and String(structural.get("species_id", "")) != String(state.get("species_id", ""))
+			):
+				species_identity_mismatches += 1
+			if String(operational.get("species_id", "")) != String(state.get("species_id", "")):
+				species_identity_mismatches += 1
+			if sampled_species_examples.size() < 12:
+				sampled_species_examples.append(String(state.get("species_id", "")))
+			if String(state.get("availability_state", "")) == "surviving":
+				surviving_vectors.append(_immediate_value_vector(state))
 
 		for i in range(surviving_vectors.size()):
 			for j in range(i + 1, surviving_vectors.size()):
