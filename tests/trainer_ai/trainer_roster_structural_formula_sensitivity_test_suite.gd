@@ -122,7 +122,9 @@ func _build_sensitivity_report(
 					var weight_key := String.num_int64(int(spec.get("context_weight_bp", 0)))
 					if not scores_by_weight.has(weight_key):
 						scores_by_weight[weight_key] = {}
-					(scores_by_weight[weight_key] as Dictionary)[String(spec.get("cap_profile_id", ""))] = score
+					var weight_scores: Dictionary = scores_by_weight[weight_key] as Dictionary
+					weight_scores[String(spec.get("cap_profile_id", ""))] = score
+					scores_by_weight[weight_key] = weight_scores
 					if String(spec.get("cap_profile_id", "")) == "baseline" and int(spec.get("context_weight_bp", 0)) == 3000:
 						baseline_matches = baseline_matches and score == _candidate_score("capped_units_blend", metrics)
 					if int(metrics.get("role_max_bp", 0)) < 7500 and int(metrics.get("unique_units", 0)) == 0:
@@ -402,8 +404,11 @@ func _synthetic_weight_neighborhood_bounded() -> bool:
 	var scores: Array[int] = []
 	for raw_weight in CONTEXT_WEIGHTS_BP:
 		scores.append(_sensitivity_score(metrics, _spec_for("baseline", int(raw_weight))))
-	var low: int = scores.min()
-	var high: int = scores.max()
+	var low: int = 10000
+	var high: int = 0
+	for score in scores:
+		low = mini(low, score)
+		high = maxi(high, score)
 	return low >= roundi(7000.0 * 0.80) and high <= 10000 and high - low <= 1500
 
 
