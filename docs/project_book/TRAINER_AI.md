@@ -13937,3 +13937,272 @@ C3f-y deberá, como mínimo:
 C3f-y **no queda autorizada** para integrar ningún adapter en producción, seleccionar globalmente `margin3000` o 660, ni convertir evidencia muestral en garantía universal.
 
 Cualquier port productivo deberá esperar una autorización documental posterior y separada.
+
+
+### 26.46) Freeze C3f-y — candidate switch screen atravesado por contrato ItemAware; blocker cross-kind documentado
+
+C3f-y parte exclusivamente del freeze canónico 26.45:
+
+`ab92bf275517afe62e3a9d8c6ff4b39320c6a720`
+
+26.45 autorizaba únicamente probar en TEST/AUDIT el candidato `depth1_margin_3000_all_legal` a través de los tres roles ItemAware, sin producción y sin globalizar la evidencia C3f-u/v.
+
+#### Checkpoints certificados
+
+| checkpoint | SHA |
+|---|---|
+| técnico C3f-y reconstruido tree-identical | `1a6b3ca17a2a7e25ec9e026f5a0e4b9dbeb2ff5b` |
+| humano tree-identical | `cfbbc52b69a5b6893667bfd9696aea7d44c602df` |
+| tree común | `1946ec045a3a8f79baa329f8f8476296763cedf0` |
+| parent común | `ab92bf275517afe62e3a9d8c6ff4b39320c6a720` |
+
+Son siblings reales: mismo parent, mismo tree, mismo contenido y ninguno desciende del otro.
+
+La cronología fue excepcional y queda registrada sin maquillarla: el humano `cfbbc52b...` ya existía y estaba certificado cuando, al retomar la sesión, no se pudo recuperar un objeto técnico sibling previo fiable. Para restaurar el protocolo sin alterar contenido se reconstruyó después el técnico `1a6b3ca...` usando exactamente el tree del humano y el parent 26.45. Ese técnico reconstruido fue sometido de nuevo a la matriz completa. No se afirma que existiera cronológicamente antes del humano.
+
+#### Diff exacto de C3f-y
+
+Respecto a 26.45:
+
+- `tests/trainer_ai/trainer_roster_search_candidate_policy_contract_item_aware_audit_test_suite.gd`: **+513**;
+- `tests/trainer_ai/trainer_team_composition_test_runner.gd`: **+1/-1**;
+- producción: **0 cambios**;
+- brains: **0 cambios**;
+- `TrainerMultiTurnSearch`: **0 cambios**;
+- `TrainerItemAwareSearch`: **0 cambios**;
+- `TrainerSearchBudget`: **0 cambios**;
+- workflows permanentes: **0 cambios**;
+- FASE34: **CLOSED**.
+
+Audit ID:
+
+`c3f_y_candidate_policy_through_item_aware_contract_audit_v1`
+
+Estado:
+
+`BLOCKED`
+
+Blocker:
+
+`cross_kind_candidate_screen_policy_undefined`
+
+Reason:
+
+`validated_margin_candidate_has_switch_only_evidence_and_no_authorized_cross_kind_item_aware_composition_policy`
+
+#### Evidencia conservada sin globalizar
+
+El candidato sigue siendo `depth1_margin_3000_all_legal`, con scope **switch_only**.
+
+Evidencia previa C3f-u + C3f-v:
+
+- casos distintos observados: **96**;
+- deep optimum preservado observado: **96/96**;
+- pérdidas observadas: **0**;
+- evidencia: sample-scoped SWITCH candidates only;
+- `candidate_strategy_proven_safe_globally = false`.
+
+C3f-y no vuelve a seleccionar la muestra held-out ni convierte 96/96 en prueba universal.
+
+Membership rule ejercitada:
+
+`switch_depth1_score_gte_best_switch_depth1_score_minus_3000`
+
+#### Tres roles ItemAware
+
+Se ejercitan explícitamente:
+
+1. `root_opponent_response`;
+2. `own_depth2_continuation`;
+3. `opponent_depth2_continuation`.
+
+Los tres exigen side, role y perspectiva sanitizada coherentes, preservan MOVE/SWITCH/ITEM como kinds distintos y mantienen `inner max_actions_per_side = 3` separado del root fan-out all-legal.
+
+#### Probe sin reducción
+
+Con exactamente una MOVE, una SWITCH y una ITEM, las tres acciones caben en cap 3 y no hace falta preferencia cross-kind.
+
+Resultado en los tres roles:
+
+`COMPLETE`
+
+#### Probe SWITCH-only con overflow
+
+Con cuatro SWITCH sí existe evidencia aplicable. C3f-y usa margin3000 dentro de su dominio:
+
+- input SWITCH: **4**;
+- cap: **3**;
+- selected SWITCH: **3**;
+- membership coincide con margin3000;
+- forward/reverse conserva el mismo set;
+- lexical no selecciona conducta.
+
+Esto demuestra únicamente que el candidato puede atravesar el contrato en su dominio switch-only.
+
+#### Probe mixed-kind con overflow
+
+Con MOVE + SWITCH + SWITCH + ITEM aparece el blocker real. Margin3000 solo define selección entre SWITCH. No existe todavía una semántica autorizada para:
+
+- comparar MOVE vs SWITCH vs ITEM;
+- reservar slots por kind;
+- reducir múltiples MOVEs;
+- reducir múltiples ITEMs;
+- componer candidatos per-kind bajo cap 3.
+
+Usar margin3000 sobre SWITCH y rellenar el resto con el round-robin ItemAware actual introduciría una preferencia cross-kind no auditada. C3f-y no lo hace.
+
+Resultado en los tres roles:
+
+`NO_DECISION`
+
+El overflow mixto queda fail-closed.
+
+#### Sampler ItemAware actual
+
+Modelo observado:
+
+`move_switch_item_stratified_round_robin_v1`
+
+Se mantiene:
+
+`current_item_aware_round_robin_reused_as_candidate_policy = false`
+
+`current_sampler_fallback_used = false`
+
+El sampler actual no se promociona silenciosamente a policy semántica cross-kind.
+
+#### Información rival y fallbacks
+
+Reutilizar memoria privada del observer como perspectiva rival devuelve `NO_DECISION` antes de aplicar policy.
+
+Siguen prohibidos como fallbacks/tiebreaks ocultos:
+
+- lexical;
+- frontier;
+- roster value;
+- Profile;
+- current sampler;
+- hidden belief;
+- campaign snapshot;
+- recovery;
+- replacement;
+- reserva ITEM inventada.
+
+#### Scheduler y budget
+
+C3f-y no reejecuta ni selecciona scheduler/budget productivo:
+
+- `selected_strategy_id = null`;
+- `selected_scheduler_id = null`;
+- `selected_shared_budget = null`;
+- `shared_scheduler_reexecuted = false`;
+- 660 sigue no seleccionado;
+- 220 productivo no se reinterpreta como shared-total.
+
+#### Certificación humana
+
+`cfbbc52b69a5b6893667bfd9696aea7d44c602df`
+
+- **18/18 workflows SUCCESS**;
+- FASE33: **935 PASS / 0 FAIL**;
+- **28/28 checks nuevos C3f-y PASS**;
+- `tranche_status = BLOCKED`;
+- JSON determinista/serializable;
+- cero producción.
+
+#### Certificación técnica reconstruida
+
+`1a6b3ca17a2a7e25ec9e026f5a0e4b9dbeb2ff5b`
+
+- **18/18 workflows SUCCESS**;
+- FASE33: **935 PASS / 0 FAIL**;
+- **28/28 checks nuevos C3f-y PASS**;
+- mismo audit ID, blocker, probes y null/false productivos;
+- mismo tree que el humano.
+
+C3f-y queda **DOBLEMENTE CERTIFICADO**, con la anomalía cronológica de reconstrucción técnica documentada explícitamente.
+
+#### Qué demuestra C3f-y
+
+C3f-y demuestra de forma estrecha que:
+
+1. el contrato ItemAware puede preservar todo cuando no requiere reducción;
+2. margin3000 puede operar en overflow SWITCH-only, su dominio auditado;
+3. margin3000 no define por sí solo una semántica MOVE/SWITCH/ITEM;
+4. completar slots mediante fallback no auditado ampliaría la semántica;
+5. el contrato puede detectar esa ampliación y devolver `NO_DECISION`;
+6. la perspectiva rival puede fallar cerrado antes de selección;
+7. el blocker se localiza sin modificar producción.
+
+No demuestra ni autoriza que margin3000 sea globalmente seguro, que pueda comparar SWITCH con MOVE/ITEM, que deba reservarse un slot por kind, que el round-robin ItemAware sea la policy correcta, que 660 deba seleccionarse ni que exista ya un adapter productivo seguro.
+
+Se mantiene:
+
+`production_strategy_selected = false`
+
+`production_adapter_authorized = false`
+
+`production_files_modified = false`
+
+`candidate_strategy_proven_safe_globally = false`
+
+`fase34_open = false`
+
+#### Invariantes externas
+
+- PR #105: **OPEN**;
+- PR #105: **merged = false**;
+- base: `main`;
+- `main`: `f8452a1625ccb8389c9e52ff4416a96a24e00efd`;
+- head humano antes del freeze: `cfbbc52b69a5b6893667bfd9696aea7d44c602df`.
+
+PR #105 sigue temporal y **NO debe mergearse**.
+
+#### Decisión documental del blocker
+
+C3f-y exige `blocker_requires_documentary_decision = true`. 26.46 resuelve esa decisión **sin autorizar producción**.
+
+El siguiente paso no es portar margin3000. Es diseñar y comparar una semántica cross-kind explícita en TEST/AUDIT, manteniendo margin3000 limitado al subconjunto SWITCH para el que existe evidencia.
+
+#### Frontera autorizada siguiente — C3f-z
+
+26.46 autoriza únicamente:
+
+**C3f-z — TEST/AUDIT-ONLY cross-kind MOVE/SWITCH/ITEM composition-policy design under sanitized side-aware ItemAware perspectives before any production adapter.**
+
+C3f-z deberá mantener:
+
+- producción, brains, `TrainerMultiTurnSearch` y `TrainerItemAwareSearch`: **0 cambios**;
+- root fan-out all-legal intacto y separado de inner cap 3;
+- los tres roles ItemAware;
+- side/perspective sanitizados y role-matching;
+- memoria privada del observer prohibida para perspectiva rival;
+- MOVE/SWITCH/ITEM separados;
+- margin3000 limitado a SWITCH;
+- `candidate_strategy_proven_safe_globally = false`;
+- ningún score cross-kind inventado;
+- ninguna reserva 1 MOVE + 1 SWITCH + 1 ITEM asumida como correcta por definición;
+- lexical solo para telemetría;
+- ItemAware round-robin solo como control, no como preferencia semántica implícita;
+- frontier/roster/Profile/campaign/recovery/replacement fuera de tiebreaks ocultos;
+- scheduler/660 sin reselección;
+- strategy/scheduler/shared-budget siguen `null`;
+- FASE34 CLOSED;
+- PR #105 OPEN/unmerged;
+- `main` intacto.
+
+C3f-z deberá distinguir como mínimo:
+
+1. no-reduction: preservar todo si cabe;
+2. switch-only overflow: margin3000 solo en su dominio;
+3. mixed overflow con como máximo una MOVE y una ITEM: probar explícitamente una composición narrow, sin asumirla segura;
+4. múltiples MOVEs o múltiples ITEMs: sin selector per-kind auditado, `NO_DECISION`;
+5. perspectiva rival inválida: `NO_DECISION` antes de selección.
+
+El resultado deberá ser explícitamente uno de:
+
+- `SAFE_TEST_CONTRACT`;
+- `NEEDS_MORE_POLICY`;
+- `BLOCKED`.
+
+26.46 no predecide cuál. Cualquier adapter o cambio productivo requiere freeze documental posterior y separado.
