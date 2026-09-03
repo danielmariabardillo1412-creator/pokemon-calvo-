@@ -11768,3 +11768,565 @@ La condición para cualquier tranche posterior de port productivo será que C3f-
 Recommended next boundary:
 
 `audit_all_legal_depth_one_screening_against_all_legal_depth_two_oracle_before_any_sampler_port`
+
+
+### 26.41 C3f-t — depth1 all-legal encuentra 39/48 líderes; margin3000 conserva 48/48 en la muestra con 7053 simulaciones
+
+C3f-t parte del baseline documental certificado 26.40:
+
+`a77e54b7c7f50210281b9df6e34e1fe3450b6ea6`
+
+La microtranche permanece estrictamente **TEST/AUDIT-ONLY**. No modifica `TrainerMultiTurnSearch`, `TrainerActionSpace`, `TrainerSearchBudget`, brains, switching productivo, Pareto productivo, política de campaña ni ninguna superficie de producción. `FASE34` permanece cerrada y PR #105 continúa siendo temporal y no debe mergearse.
+
+#### Pregunta que C3f-t debía resolver
+
+C3f-s había ampliado el oracle desde el top-tier inmediato a **todos los switches legales** y había demostrado una frontera crítica: en 6/48 contextos, el único mejor root depth2 estaba fuera del top-tier inmediato de `TrainerStrategicSwitchEvaluatorV2`.
+
+Por tanto, la pregunta ya no podía ser «qué miembro del top-tier conservar», sino:
+
+> ¿Puede un screen barato, order-invariant y aplicado simétricamente a todos los switches legales reducir el fan-out depth2 sin borrar el óptimo global observado, y cuál es el coste real de hacerlo?
+
+C3f-t responde esta pregunta en la misma muestra certificada de C3f-s mediante un **depth1 all-legal screen** y comparación contra el oracle depth2 all-legal ya certificado.
+
+#### Checkpoints limpios
+
+Checkpoint técnico:
+
+`7d785adc245da6ce0a676242e5e5688b3149f68d`
+
+Checkpoint humano tree-identical:
+
+`f907ba3946a0e5748bb76e5c58e93ba8e2b0142c`
+
+Tree común:
+
+`941ea516f95c5aa533258bf5220433724dca0473`
+
+Ambos commits tienen como parent directo el baseline documental 26.40:
+
+`a77e54b7c7f50210281b9df6e34e1fe3450b6ea6`
+
+El diff limpio frente a 26.40 contiene únicamente:
+
+- `tests/trainer_ai/trainer_roster_search_all_legal_screen_budget_audit_test_suite.gd`: **+749 / 0**;
+- `tests/trainer_ai/trainer_team_composition_test_runner.gd`: **+1 / -1**;
+- producción: **0**;
+- brains: **0**;
+- `TrainerMultiTurnSearch`: **0**;
+- `TrainerActionSpace`: **0**;
+- `TrainerSearchBudget`: **0**;
+- workflows persistentes: **0**.
+
+Suite:
+
+`TrainerRosterSearchAllLegalScreenBudgetAuditTestSuite`
+
+Audit ID:
+
+`c3f_t_all_legal_depth1_screen_budget_audit_v1`
+
+La suite hereda C3f-s y, por esa cadena, C3f-r → C3f-q → C3f-p → C3f-o → C3f-n → C3f-m → C3f-l → C3f-k. Todas las barreras anteriores continúan ejecutándose en el mismo gate.
+
+#### Optimización de ejecución sin alterar el experimento
+
+C3f-t no repite innecesariamente el oracle depth2 de C3f-s. La suite cachea TEST-ONLY el resultado exacto de `_collect_c3fs_observations()` durante `super.run()` y reutiliza esas observaciones para el screen depth1.
+
+Esto permite añadir únicamente el trabajo nuevo autorizado:
+
+- 48 contextos;
+- 5 switches legales/contexto;
+- **240 evaluaciones depth1 all-legal**.
+
+El oracle depth2 de referencia sigue siendo exactamente el de C3f-s:
+
+- 240 roots depth2;
+- **12000 simulaciones**;
+- máximo observado por contexto: **450**.
+
+No se reduce muestra, no se cambia budget y no se sustituye el oracle por una aproximación.
+
+#### Geometría y budgets
+
+Muestra reutilizada:
+
+- especies elegibles: **1021**;
+- casos seleccionados: **48**;
+- `species_fallback`: **24**;
+- `revealed_damaging_move`: **24**;
+- switches legales por contexto: **5**;
+- ocurrencias legales: **240**.
+
+Screen depth1:
+
+- depth: **1**;
+- worlds: **4**;
+- `max_simulations`: **220**;
+- `max_actions_per_side`: **3**;
+- evaluaciones: **240/240**;
+- simulaciones de screen: **1425**.
+
+Oracle depth2:
+
+- depth: **2**;
+- worlds: **4**;
+- `max_simulations`: **220** por root;
+- `max_actions_per_side`: **3**;
+- simulaciones de referencia: **12000**.
+
+Integridad del screen:
+
+- `context_attach_failures = 0`;
+- `screen_context_failures = 0`;
+- `screen_result_failures = 0`;
+- `screen_incomplete_depth_evaluations = 0`;
+- `screen_budget_exhausted_evaluations = 0`;
+- `screen_world_coverage_failures = 0`.
+
+#### Qué tan informativo es depth1
+
+Los 48 contextos de C3f-s tienen un único mejor root depth2. C3f-t mide en qué posición depth1 aparece ese ganador profundo.
+
+Histograma exacto:
+
+- rank 1 → **39**;
+- rank 2 → **6**;
+- rank 3 → **2**;
+- rank 4 → **1**;
+- rank 5 → **0**.
+
+Por tanto:
+
+- `deep_best_screen_leader_cases = 39`;
+- **39/48 = 81,25 %** de los ganadores depth2 ya son líderes depth1;
+- todos los ganadores depth2 de esta muestra están dentro del top-4 depth1.
+
+Gap entre el líder depth1 y el futuro ganador depth2:
+
+- suma: **5665**;
+- media: **118**;
+- máximo: **1665**.
+
+Esto es evidencia fuerte de que depth1 all-legal contiene señal útil, pero **no demuestra** que rank ≤4 o gap ≤1665 sean invariantes del sistema fuera de esta muestra.
+
+#### Los seis ganadores no-top de C3f-s bajo el screen all-legal
+
+C3f-t caracteriza explícitamente los seis contraejemplos que habían invalidado la poda por top-tier inmediato.
+
+1. `ho_oh` — anchor 552, `species_fallback`, rival `aron`
+   - depth1 rank: **1**;
+   - gap: **0**;
+   - depth1: -1327;
+   - depth2: -2226;
+   - retenido por top-k 1/2/3/4 y margins 500/1500/3000/6000.
+
+2. `arboliva` — anchor 696, `species_fallback`, rival `roserade`
+   - rank: **1**;
+   - gap: **0**;
+   - depth1: -1201;
+   - depth2: -4205;
+   - retenido por todas las estrategias auditadas.
+
+3. `cresselia` — anchor 672, `revealed_damaging_move`, rival `combusken`
+   - rank: **1**;
+   - gap: **0**;
+   - depth1: -2735;
+   - depth2: -1270;
+   - retenido por todas las estrategias auditadas.
+
+4. `clauncher` — anchor 816, `revealed_damaging_move`, rival `stoutland`
+   - rank: **2**;
+   - gap: **63**;
+   - depth1: -5946;
+   - depth2: -15645;
+   - top-k1 lo elimina;
+   - top-k2/3/4 y todos los margins lo retienen.
+
+5. `nosepass` — anchor 936, `revealed_damaging_move`, rival `watchog`
+   - rank: **1**;
+   - gap: **0**;
+   - depth1: -2126;
+   - depth2: -3153;
+   - retenido por todas las estrategias auditadas.
+
+6. `ursaring` — anchor 248, `revealed_damaging_move`, rival `scatterbug`
+   - rank: **3**;
+   - gap: **1000**;
+   - depth1: -1494;
+   - depth2: -170;
+   - top-k1: eliminado;
+   - top-k2: eliminado;
+   - top-k3/4: retenido;
+   - margin500: eliminado;
+   - margin1500/3000/6000: retenido.
+
+Los seis contraejemplos de C3f-s caben dentro de margin1500. Sin embargo, esto **no convierte margin1500 en seguro**, porque existe otro contexto de la muestra cuyo óptimo profundo sí queda eliminado por margin1500.
+
+#### Familia top-k con empate preservado
+
+C3f-t compara top-k 1/2/3/4 sobre scores depth1. El corte es por **tier de score**, no por representante lexical: un empate en el boundary conserva todos los candidatos empatados.
+
+`lexical_cutoff_used_for_top_k = false`
+
+`top_k_ties_preserved = true`
+
+Resultados:
+
+##### top-k1
+
+- preserva óptimo profundo: **39/48**;
+- pierde: **9/48**;
+- roots promovidos: 48;
+- screen: 1425 simulaciones;
+- depth2 promovido: 2400;
+- total staged: **3825**;
+- máximo/contexto: **135**.
+
+Es barato pero semánticamente insuficiente.
+
+##### top-k2
+
+- preserva: **45/48**;
+- pierde: **3/48**;
+- roots promovidos: 96;
+- depth2: 4800;
+- total: **6225**;
+- máximo/contexto: **225**.
+
+Sigue siendo inseguro en la muestra.
+
+##### top-k3
+
+- preserva: **47/48**;
+- pierde: **1/48**;
+- roots promovidos: 144;
+- depth2: 7200;
+- total: **8625**;
+- máximo/contexto: **315**.
+
+No queda autorizado: existe una pérdida positiva.
+
+##### top-k4
+
+- preserva: **48/48**;
+- pierde: **0/48**;
+- roots promovidos: 192;
+- depth2: 9600;
+- total: **11025**;
+- máximo/contexto: **405**.
+
+Top-k4 tiene cero pérdidas en esta muestra, pero **no se declara seguro ni seleccionado para producción**. 48 casos no establecen un invariante general.
+
+#### Familia de margin all-legal
+
+C3f-t compara margins depth1 de 500/1500/3000/6000 contra el mejor score depth1 del contexto.
+
+##### margin500
+
+- preserva: **44/48**;
+- pierde: **4/48**;
+- roots promovidos: **63**;
+- distribución: 35 casos con 1 root, 11 con 2, 2 con >2;
+- depth2: 3126;
+- screen: 1425;
+- total: **4551**;
+- máximo/contexto: **315**.
+
+Inseguro en la muestra.
+
+##### margin1500
+
+- preserva: **47/48**;
+- pierde: **1/48**;
+- roots promovidos: **87**;
+- distribución: 22 con 1 root, 17 con 2, 9 con >2;
+- depth2: 4350;
+- total: **5775**;
+- máximo/contexto: **405**.
+
+Dato importante: **retiene los seis ganadores no-top originales de C3f-s y aun así pierde otro óptimo profundo distinto**. Por tanto, diseñar únicamente alrededor de los seis contraejemplos conocidos sería sobreajuste.
+
+##### margin3000
+
+- preserva: **48/48**;
+- pierde: **0/48**;
+- roots promovidos: **117**;
+- distribución: 9 con 1 root, 19 con 2, 20 con >2;
+- depth2: **5628**;
+- screen: **1425**;
+- total staged: **7053**;
+- máximo/contexto: **405**.
+
+Frente al oracle full all-legal de 12000 simulaciones:
+
+- ahorro observado: **4947 simulaciones**;
+- coste relativo: **7053 / 12000 ≈ 58,78 %**.
+
+Este es el tradeoff observado más interesante de C3f-t, pero permanece **AUDIT EVIDENCE ONLY**. No se autoriza threshold 3000 ni se selecciona estrategia productiva.
+
+##### margin6000
+
+- preserva: **48/48**;
+- pierde: **0/48**;
+- roots promovidos: **172**;
+- distribución: 0 con 1 root, 10 con 2, 38 con >2;
+- depth2: 9204;
+- total: **10629**;
+- máximo/contexto: **495**.
+
+También cero pérdidas en la muestra, pero con mucho menos ahorro que margin3000.
+
+#### Control sin poda
+
+`all_legal_screen_no_prune_control` hace depth1 a todos y luego depth2 a todos:
+
+- preserva 48/48;
+- screen: 1425;
+- depth2: 12000;
+- total: **13425**;
+- máximo/contexto: **495**.
+
+Como era de esperar, añadir un screen sin usarlo para reducir roots solo añade overhead. Sirve como control de contabilidad.
+
+#### Cost-loss frontier descriptivo
+
+El informe calcula una frontera coste/pérdida únicamente descriptiva:
+
+`["depth1_margin_1500_all_legal", "depth1_margin_3000_all_legal", "depth1_margin_500_all_legal", "depth1_topk_1_tie_preserving"]`
+
+Esto **no selecciona** ninguna estrategia:
+
+`cost_loss_frontier_selects_production_strategy = false`
+
+La presencia de una estrategia en esa frontera significa únicamente que no está simultáneamente dominada en los dos ejes observados coste/pérdida dentro de este conjunto de candidatos.
+
+#### Budget compartido: solo contabilidad, no scheduler ejecutado
+
+C3f-t conserva los controles:
+
+`[220, 440, 660, 880, 1100]`
+
+Pero no implementa ni ejecuta un scheduler de budget compartido.
+
+Exacto:
+
+- `shared_budget_controls_are_accounting_only = true`;
+- `shared_budget_execution_modeled = false`;
+- `equal_reservation_accounting_only = true`;
+- `selected_shared_budget = null`.
+
+La tabla de equal reservation hace únicamente lo siguiente:
+
+1. resta del control total el coste observado del screen depth1;
+2. divide el remanente por el número de roots promovidos;
+3. compara esa cuota con el coste depth2 observado de cada root.
+
+No modela:
+
+- ejecución intercalada;
+- early stop;
+- redistribución de remanentes;
+- starvation temporal;
+- prioridad entre roots;
+- orden de scheduling;
+- truncación real de un root a mitad de búsqueda;
+- cache sharing entre roots.
+
+Por tanto, una celda `fit` en esta tabla **no equivale** a demostrar que un scheduler real bajo ese budget conservaría la misma decisión.
+
+#### Ejemplo de budget accounting: margin3000
+
+Para `depth1_margin_3000_all_legal`:
+
+- coste staged total: 7053;
+- máximo/contexto: 405;
+- contextos con coste >220: **19**;
+- >440: **0**;
+- >660: **0**;
+- >880: **0**;
+- >1100: **0**.
+
+Equal reservation — `deep_best_reservation_fit_cases`:
+
+- 220 → **29/48**;
+- 440 → **48/48**;
+- 660 → **48/48**;
+- 880 → **48/48**;
+- 1100 → **48/48**.
+
+Esto sugiere que 440 merece ser probado como control en un scheduler real, pero **C3f-t no autoriza budget 440** ni afirma que un scheduler real de 440 sea semánticamente equivalente.
+
+#### Ejemplo de budget accounting: top-k4
+
+Top-k4:
+
+- coste total: 11025;
+- máximo/contexto: 405;
+- >220: 23 contextos;
+- >440: 0.
+
+Equal reservation deep-best fit:
+
+- 220 → 25/48;
+- 440 → 48/48;
+- 660+ → 48/48.
+
+De nuevo: esto es una sonda de capacidad, no una política ejecutada.
+
+#### Separación root fan-out / inner cap sigue intacta
+
+C3f-t no confunde el número de roots promovidos con `max_actions_per_side` del search interior.
+
+- `root_fanout_is_separate_from_inner_action_cap = true`;
+- inner `max_actions_per_side = 3` permanece intacto;
+- la geometría mixed MOVE/SWITCH conserva diversidad;
+- `move_diversity_failure_cases = 0`;
+- `switch_diversity_failure_cases = 0`;
+- `switch_reorder_root_set_mismatch_cases = 0`.
+
+La observación de que una estrategia promueva >2 switches no autoriza subir el cap3 ni reemplazar el slot de MOVE. Significa que el fan-out de roots debe seguir tratándose como una capa separada si alguna estrategia de este tipo llegara a diseñarse en producción.
+
+#### Orden e información prohibida
+
+C3f-t conserva:
+
+- `strategy_reorder_mismatch_cases = 0`;
+- hidden beliefs: 0;
+- memory events: 0;
+- campaign snapshot: 0;
+- live RNG: false;
+- Pareto usado para preselección: false;
+- roster value usado para preselección: false;
+- profile usado como pre-search tiebreak: false;
+- recovery policy: false;
+- replacement policy: false;
+- campaign policy: false.
+
+No hay filtrado por frontier, no hay bonus de roster, no hay preferencia lexical semántica y no se introduce información rival oculta.
+
+#### Estado de autorización tras C3f-t
+
+Permanece exacto:
+
+- `selected_strategy_id = null`;
+- `selected_shared_budget = null`;
+- `production_strategy_selected = false`;
+- `search_sampling_redesign_authorized = false`;
+- `behavior_integration_authorized = false`;
+- producción modificada = false;
+- `FASE34` = CLOSED.
+
+C3f-t **no autoriza**:
+
+- portar margin3000;
+- portar top-k4;
+- portar margin6000;
+- cambiar `TrainerMultiTurnSearch`;
+- cambiar `TrainerActionSpace`;
+- cambiar `TrainerSearchBudget`;
+- cambiar `max_actions_per_side`;
+- adoptar budget 440/660/etc.;
+- integrar Pareto/roster value;
+- modificar brains;
+- abrir FASE34;
+- mergear PR #105.
+
+#### Certificación técnica C3f-t
+
+SHA:
+
+`7d785adc245da6ce0a676242e5e5688b3149f68d`
+
+Resultado:
+
+- **18/18 GitHub Actions SUCCESS**;
+- FASE33: **811 PASS / 0 FAIL**;
+- Godot general: SUCCESS;
+- DATA V3: SUCCESS;
+- Search Foundation: SUCCESS;
+- Search Depth Budget: SUCCESS;
+- Search Limit Benchmark: SUCCESS;
+- Strategic Switching V2: SUCCESS;
+- import registra `TrainerRosterSearchAllLegalScreenBudgetAuditTestSuite`;
+- JSON C3f-t reproducido exactamente.
+
+#### Certificación humana tree-identical C3f-t
+
+SHA:
+
+`f907ba3946a0e5748bb76e5c58e93ba8e2b0142c`
+
+Tree:
+
+`941ea516f95c5aa533258bf5220433724dca0473`
+
+Resultado:
+
+- **18/18 GitHub Actions SUCCESS**;
+- FASE33: **811 PASS / 0 FAIL**;
+- mismo JSON C3f-t;
+- mismo histograma `39/6/2/1`;
+- mismas 1425 simulaciones de screen;
+- mismas pérdidas por estrategia;
+- mismos costes staged;
+- mismas tablas de budget accounting;
+- DATA V3/Godot/search/switching gates SUCCESS.
+
+#### Interpretación congelada
+
+C3f-t cambia de forma importante el espacio de diseño, pero todavía no autoriza integración:
+
+1. el screen depth1 aplicado a **todos** los switches legales es mucho más informativo que el top-tier inmediato de switching;
+2. 39/48 ganadores depth2 ya son líderes depth1;
+3. los 48/48 ganadores auditados quedan en rank ≤4 y gap ≤1665;
+4. estrategias agresivas siguen perdiendo óptimos: top-k1 pierde 9, top-k2 pierde 3, top-k3 pierde 1, margin500 pierde 4 y margin1500 pierde 1;
+5. top-k4, margin3000 y margin6000 tienen 0 pérdidas en estos 48 casos;
+6. margin3000 ofrece el mejor punto observado entre las estrategias 0-loss de la muestra: **7053 vs 12000 simulaciones**;
+7. pero cero pérdidas en 48 casos no demuestra seguridad poblacional;
+8. y el budget compartido real sigue sin estar modelado/ejecutado.
+
+La frontera correcta pasa a ser:
+
+> ampliar/adversarializar la validación de los candidatos 0-loss de C3f-t y ejecutar semánticas reales de scheduling/budget compartido antes de cualquier port del sampler.
+
+#### Siguiente microtranche autorizada
+
+Queda autorizada únicamente:
+
+**C3f-u — TEST/AUDIT-ONLY broader/adversarial validation of all-legal depth1 screening + executed shared-budget scheduling semantics.**
+
+C3f-u debe, como mínimo:
+
+- partir del baseline documental 26.41 certificado;
+- conservar C3f-t/C3f-s como barreras heredadas;
+- ampliar la muestra más allá de los mismos 48 casos, con selección determinista y explícita;
+- priorizar casos adversariales alrededor de los boundaries observados: rank 3/4, gaps cercanos o superiores a 1500/1665/3000, contextos donde top-k3/margin1500 fallan y diversidad de evidence mode;
+- probar al menos `depth1_margin_3000_all_legal` y `depth1_topk_4_tie_preserving` contra un oracle all-legal depth2 más amplio;
+- mantener `margin6000` como control conservador si el coste lo permite;
+- si ejecutar los 512 contextos completos con cinco roots depth2 viola el timeout, usar una expansión determinista estratificada/adversarial claramente documentada, sin sobreafirmar cobertura no ejecutada;
+- medir nuevos deep-best rank/gap máximos y cualquier pérdida de los candidatos 0-loss de C3f-t;
+- ejecutar, no solo contabilizar, una semántica TEST-ONLY de budget compartido entre roots;
+- comparar al menos controles totales 220/440/660 donde sean técnicamente viables;
+- declarar explícitamente el algoritmo de scheduling auditado: orden, quantum o asignación, redistribución de remanente, early stop y condición de truncación;
+- permutar el orden de roots para detectar starvation/order dependency;
+- medir cuándo un budget compartido cambia el mejor root respecto al oracle sin truncar;
+- separar siempre root fan-out del `inner max_actions_per_side = 3`;
+- preservar diversidad MOVE/SWITCH en la geometría auditada;
+- no usar Pareto como hard prune;
+- no usar hidden beliefs, RNG, campaign policy, recovery ni replacement;
+- no usar `TrainerProfile` como tiebreak semántico;
+- mantener salida determinista y JSON-serializable;
+- no seleccionar sampler ni budget productivo todavía.
+
+C3f-u **no queda autorizada** para:
+
+- modificar `TrainerMultiTurnSearch`;
+- modificar `TrainerActionSpace`;
+- modificar `TrainerSearchBudget`;
+- cambiar `max_actions_per_side` productivo;
+- cambiar `max_simulations` productivo;
+- integrar frontier/roster value;
+- modificar brains;
+- abrir `FASE34`;
+- mergear PR #105.
+
+La autorización es únicamente para producir evidencia adicional que permita decidir si existe una ruta de sampler/scheduler suficientemente segura para una futura microtranche de diseño productivo.
