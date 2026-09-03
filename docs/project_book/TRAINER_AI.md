@@ -10447,3 +10447,319 @@ C3f-q tampoco puede todavía seleccionar/portar una estrategia productiva salvo 
 PR #105 sigue siendo temporal y **NO DEBE MERGEARSE**.
 
 `main` debe permanecer intacta.
+
+
+### 26.38 C3f-q — depth-1 reduce coste, pero cap 3 sigue incompatible con preservación profunda sin pérdidas
+
+#### Baseline certificado
+
+C3f-q parte exclusivamente del cierre documental certificado de C3f-p / 26.37:
+
+`f9b26100fac7e6125dfb7c0f561115280ac55228`
+
+No se modificó `main`, no se abrió FASE34 y PR #105 siguió siendo temporal y no mergeable por política del proyecto.
+
+#### Alcance autorizado
+
+C3f-q fue autorizado como **TEST/AUDIT-ONLY** para comparar diseños adaptativos de preservación de empates contextuales antes de cualquier port del sampler a producción.
+
+El objetivo fue responder si se podía conservar la información profunda demostrada por C3f-p sin pagar siempre el coste del top-tier completo y, simultáneamente, sin romper el presupuesto productivo actual `max_actions_per_side = 3` reservando al menos una acción MOVE.
+
+Quedaron fuera de alcance:
+
+- cambios en `TrainerMultiTurnSearch`;
+- cambios en `TrainerActionSpace`;
+- cambios de `TrainerSearchBudget.depth_two_default()`;
+- cambios en brains;
+- integración de Pareto en selección;
+- integración de roster value en search;
+- lexical ordering como preferencia semántica;
+- hidden beliefs;
+- live RNG;
+- recovery/replacement/campaign policy;
+- selección o port de una estrategia productiva;
+- FASE34;
+- merge de PR #105.
+
+#### Implementación audit-only
+
+Suite nueva:
+
+`tests/trainer_ai/trainer_roster_search_tie_adaptive_preservation_audit_test_suite.gd`
+
+Clase:
+
+`TrainerRosterSearchTieAdaptivePreservationAuditTestSuite`
+
+Audit ID:
+
+`c3f_q_adaptive_tie_preservation_cost_audit_v1`
+
+La suite hereda C3f-p y reutiliza exactamente la misma geometría estratificada de datos reales:
+
+- `eligible_species = 1021`;
+- `sampled_rosters = 128`;
+- `population_scenarios = 512`;
+- `population_tie_cases = 306`;
+- `population_untied_cases = 206`;
+- tasa de contextos con empate inmediato = `5976 bp` = 59,76 %;
+- `selected_cases = 48`;
+- 12 casos para cada tamaño de empate 2/3/4/5;
+- 24 `species_fallback`;
+- 24 `revealed_damaging_move`;
+- `immediate_tied_root_candidates = 168`.
+
+El runner pasa a iniciar la cadena con:
+
+`TrainerRosterSearchTieAdaptivePreservationAuditTestSuite.new().run(...)`
+
+El diff técnico limpio contra 26.37 contiene exclusivamente:
+
+- suite C3f-q nueva: +711 líneas;
+- runner: +2/-2;
+- **cero producción**.
+
+El commit automático de staging generado durante la creación del archivo:
+
+`40ecef7a45c87680abcc46104cc64925888c93f3`
+
+no forma parte de la historia limpia certificada.
+
+#### Dos profundidades, mismo marco de presupuesto
+
+Screen barato:
+
+`TrainerSearchBudget.constrained(1, 4, 220, 3)`
+
+Referencia profunda:
+
+`TrainerSearchBudget.depth_two_default()`
+
+Por tanto:
+
+- screen: depth 1, worlds 4, max simulations 220, action cap 3;
+- referencia: depth 2, worlds 4, max simulations 220, action cap 3.
+
+Cada uno de los 168 candidatos raíz empatados fue evaluado con `TrainerMultiTurnSearch.evaluate(context, root_action)` tanto a depth 1 como a depth 2.
+
+Resultados de integridad:
+
+- `depth_one_evaluations = 168`;
+- `depth_two_reference_evaluations = 168`;
+- `search_result_failures = 0`;
+- `incomplete_depth_evaluations = 0`;
+- `budget_exhausted_evaluations = 0`;
+- `world_coverage_failures = 0`;
+- `context_build_failures = 0`;
+- `reference_depth_divergence_cases = 48`;
+- `reference_unique_deep_best_cases = 48`.
+
+C3f-p queda reproducido: todos los 48 empates inmediatos de la muestra vuelven a producir un ganador profundo único a depth 2.
+
+#### Coste base observado
+
+- screening depth 1 de los 168 candidatos: `999` simulaciones;
+- referencia top-tier completa depth 2: `8424` simulaciones.
+
+No se modeló reutilización de cache/budget entre depth 1 y depth 2:
+
+`shared_budget_reuse_modeled = false`
+
+La contabilidad adaptativa es deliberadamente conservadora:
+
+`actual depth1 screen + selected depth2 evaluations`.
+
+#### Controles negativos
+
+##### Lexical 1-slot
+
+`lexical_one_slot_negative_control`
+
+- preserva deep optimum: 19/48;
+- pierde deep optimum: 29/48;
+- simulaciones: 2400;
+- violaciones cap3+un MOVE: 0;
+- order invariant: false.
+
+##### Lexical 2-slot
+
+`lexical_two_slot_negative_control`
+
+- preserva: 30/48;
+- pierde: 18/48;
+- simulaciones: 4800;
+- violaciones cap3+un MOVE: 0;
+- order invariant: false.
+
+Estos controles confirman que limitarse a uno o dos representantes lexicográficos no es una política semánticamente segura.
+
+#### Estrategias adaptativas por margen depth-1
+
+Todas usan únicamente scores de search depth 1 para la preselección, preservan conjuntos completos cuando caen dentro del margen y son input-order invariant en la auditoría.
+
+| Estrategia | Preserva | Pierde | Sims totales | >2 SWITCH / viola cap3+MOVE |
+|---|---:|---:|---:|---:|
+| `depth1_margin_0` | 40/48 | 8 | 3399 | 0/48 |
+| `depth1_margin_500` | 43/48 | 5 | 3999 | 1/48 |
+| `depth1_margin_1500` | 47/48 | 1 | 5019 | 5/48 |
+| `depth1_margin_3000` | 48/48 | 0 | 5763 | 11/48 |
+| `depth1_margin_6000` | 48/48 | 0 | 7965 | 24/48 |
+
+Hallazgo principal:
+
+`depth1_margin_3000` fue la estrategia **cero-pérdidas más barata de las probadas**, pero no queda autorizada ni seleccionada.
+
+Frente a la referencia full-tier:
+
+- full-tier = 8424 simulaciones;
+- margin-3000 = 5763;
+- ahorro = 2661 simulaciones;
+- reducción aproximada = **31,59 %**.
+
+Sin embargo, `depth1_margin_3000` necesita promover más de dos switches en 11/48 casos. Con el cap productivo 3 y la obligación de mantener al menos un MOVE, esos 11 casos no caben en el mismo conjunto bounded de acciones.
+
+El número `3000` es exclusivamente un umbral de auditoría. C3f-q no demuestra que sea una constante semántica generalizable ni autoriza su uso productivo.
+
+#### Estrategias gap + full fallback
+
+| Estrategia | Preserva | Pierde | Sims totales | >2 SWITCH / viola cap3+MOVE |
+|---|---:|---:|---:|---:|
+| `depth1_gap_500_full_fallback` | 44/48 | 4 | 4791 | 8/48 |
+| `depth1_gap_1500_full_fallback` | 48/48 | 0 | 6975 | 19/48 |
+| `depth1_gap_3000_full_fallback` | 48/48 | 0 | 8331 | 29/48 |
+
+El fallback conservador puede eliminar pérdidas, pero incrementa precisamente la frecuencia con la que el top-set ya no cabe dentro de cap3+un MOVE.
+
+#### Referencia full top-tier
+
+`full_top_tier_depth_two_reference`
+
+- preserva: 48/48;
+- pierde: 0/48;
+- candidatos promovidos: 168;
+- máximo simultáneo: 5;
+- casos con >2 switches: 36/48;
+- simulaciones: 8424.
+
+Es semánticamente segura en la muestra respecto al ganador profundo observado, pero incompatible con interpretar `max_actions_per_side = 3` como un único contenedor que además debe mantener diversidad MOVE/SWITCH.
+
+#### Frontera coste–pérdida auditada
+
+El informe identifica, considerando solo pérdida profunda y simulaciones —no autorización productiva—:
+
+`["depth1_gap_500_full_fallback","depth1_margin_0","depth1_margin_1500","depth1_margin_3000","depth1_margin_500"]`
+
+como frontera coste–pérdida entre las variantes contextuales probadas.
+
+Esto **no** constituye ranking semántico ni selección de estrategia.
+
+#### Conclusión C3f-q
+
+C3f-q demuestra simultáneamente cuatro cosas:
+
+1. **Depth 1 contiene señal útil.** El mejor depth-1 único pierde 8/48 deep optima, frente a 29/48 del lexical one-slot.
+2. **Se puede ahorrar coste sin observar pérdida profunda en la muestra.** Margin-3000 preservó 48/48 con ~31,59 % menos simulaciones que full-tier.
+3. **Ese ahorro no resuelve el límite arquitectónico.** Las variantes cero-pérdidas todavía necesitan más de dos switches en algunos contextos y, por tanto, no caben en cap3 si se reserva al menos un MOVE.
+4. **No existe entre las estrategias auditadas una variante que combine simultáneamente `0 deep-optimum loss` y `0 cap3+MOVE violations`.**
+
+Por tanto, el problema ya no debe formularse como «qué representante del empate elegir dentro de los dos slots disponibles». La frontera correcta es comprobar si la resolución del empate contextual raíz debe vivir **fuera del bounded action sampler**, manteniendo el cap3 para las continuaciones internas.
+
+#### Barreras semánticas preservadas
+
+C3f-q certifica:
+
+- `contextual_strategy_reorder_mismatches = 0`;
+- preselección contextual basada solo en depth-1 search;
+- `frontier_used_for_preselection = false`;
+- `roster_value_used_for_preselection = false`;
+- `profile_used_as_presearch_tiebreak = false`;
+- hidden beliefs = 0;
+- memory events = 0;
+- campaign snapshot = 0;
+- live RNG = false;
+- recovery policy = false;
+- replacement policy = false;
+- campaign policy = false;
+- production sampler unchanged;
+- no global cap change;
+- no production behavior change.
+
+Estado de autorización:
+
+- `selected_strategy_id = null`;
+- `production_strategy_selected = false`;
+- `search_sampling_redesign_authorized = false`;
+- `behavior_integration_authorized = false`;
+- FASE34 permanece CLOSED.
+
+#### Checkpoints certificados
+
+Técnico limpio:
+
+`dbdc23ede1f0d08de89d3fbf24e72a479f60d96c`
+
+Humano tree-identical:
+
+`1a416fe40e0088e9bc48d177046b3ee26b0b0872`
+
+Árbol común:
+
+`67467373d26692c09bf278f647a72fc76c56e140`
+
+Ambos tienen parent directo:
+
+`f9b26100fac7e6125dfb7c0f561115280ac55228`
+
+Certificación técnica:
+
+- 18/18 GitHub Actions SUCCESS;
+- FASE33: **732 PASS / 0 FAIL**;
+- Godot 4.7 SUCCESS;
+- DATA V3 SUCCESS;
+- Search Foundation SUCCESS;
+- Search Depth Budget SUCCESS;
+- Search Limit Benchmark SUCCESS;
+- Strategic Switching V2 SUCCESS;
+- mismo JSON canónico C3f-q.
+
+Certificación humana:
+
+- 18/18 GitHub Actions SUCCESS;
+- FASE33: **732 PASS / 0 FAIL**;
+- mismo JSON canónico C3f-q;
+- mismo árbol y mismo diff que el técnico.
+
+#### Siguiente microtranche autorizada
+
+Se autoriza **C3f-r — TEST/AUDIT-ONLY root tie-resolution / deferred root-expansion feasibility audit**.
+
+Objetivo: comprobar si los switches pertenecientes al top-set contextual empatado pueden resolverse como una capa de expansión raíz separada del bounded action sampler, dejando `max_actions_per_side = 3` intacto para las continuaciones internas y preservando explícitamente diversidad MOVE/SWITCH.
+
+C3f-r debe comparar al menos:
+
+- bounded sampler actual como control;
+- evaluación de cada switch del top-tier contextual como root action explícita, con continuaciones internas manteniendo cap3;
+- expansión adaptativa condicionada por señal depth-1, sin convertir ningún umbral C3f-q en constante productiva;
+- coste total de simulaciones/nodos por decisión;
+- coste máximo y medio por contexto;
+- preservación del deep optimum observado;
+- input-order invariance;
+- determinismo;
+- contabilidad explícita de que root fan-out y inner action cap son presupuestos conceptualmente distintos;
+- comparación con subir el cap global solo como **negative/control cost model**, no como autorización;
+- posibilidad o imposibilidad de fijar un presupuesto total por decisión sin truncar semánticamente el top-tier.
+
+C3f-r **no** puede:
+
+- modificar `TrainerMultiTurnSearch`;
+- modificar `TrainerActionSpace`;
+- cambiar production `max_actions_per_side`;
+- seleccionar `depth1_margin_3000` ni ningún otro umbral como regla productiva;
+- integrar Pareto o roster value en preselección;
+- introducir lexical semantic tiebreaks;
+- introducir hidden beliefs, RNG o campaign policy;
+- modificar brains;
+- abrir FASE34;
+- mergear PR #105.
+
+Si C3f-r demuestra una separación raíz/continuación segura, bounded y determinista, el siguiente checkpoint podrá decidir si existe base suficiente para un port productivo mínimo. Si no la demuestra, debe congelar el bloqueo en lugar de inventar un desempate.
