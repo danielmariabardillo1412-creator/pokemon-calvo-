@@ -10763,3 +10763,552 @@ C3f-r **no** puede:
 - mergear PR #105.
 
 Si C3f-r demuestra una separación raíz/continuación segura, bounded y determinista, el siguiente checkpoint podrá decidir si existe base suficiente para un port productivo mínimo. Si no la demuestra, debe congelar el bloqueo en lugar de inventar un desempate.
+
+
+### 26.39 C3f-r — fan-out raíz separado conserva cap3 interno; diversidad MOVE/SWITCH validada, descarte no-top aún no seguro
+
+C3f-r parte del baseline documental certificado 26.38:
+
+`b079b1871d239afc927dda760e5ca05cae7c0a31`
+
+La microtranche permanece estrictamente **TEST/AUDIT-ONLY**. No modifica `TrainerMultiTurnSearch`, `TrainerActionSpace`, brains, budgets productivos, switching productivo, Pareto productivo ni ninguna política de campaña. `FASE34` permanece cerrada y PR #105 continúa siendo temporal/no mergeable por decisión de proyecto.
+
+#### Objetivo auditado
+
+C3f-q había demostrado que, con el cap productivo actual `max_actions_per_side = 3` y reservando al menos un slot MOVE, ninguna de las estrategias contextuales auditadas podía simultáneamente:
+
+- preservar todos los óptimos profundos observados;
+- conservar el cap3 en la raíz;
+- y evitar una preferencia arbitraria dentro de los empates contextuales.
+
+C3f-r por tanto no intenta elegir un sampler. Su pregunta es más estrecha:
+
+> ¿Puede separarse el **fan-out de acciones raíz** del `cap3` usado por las continuaciones internas, evaluando explícitamente los switches empatados como raíces independientes y manteniendo el límite productivo de tres acciones por lado dentro de cada búsqueda?
+
+El audit compara además esta arquitectura con el control productivo actual y con el control negativo de aumentar un único cap global.
+
+#### Checkpoints limpios
+
+Checkpoint técnico:
+
+`37d4d1cb6ab8928b5639f32a6e8e29b9b0595e44`
+
+Checkpoint humano tree-identical:
+
+`e1ad264b0b50205bef41de4cd5ae4ee0a2a12596`
+
+Tree común:
+
+`d2889b972888d2f036b9f3bf97abf03460a56f8e`
+
+Ambos commits tienen como parent directo:
+
+`b079b1871d239afc927dda760e5ca05cae7c0a31`
+
+El diff limpio frente a 26.38 contiene únicamente:
+
+- `tests/trainer_ai/trainer_roster_search_root_tie_deferred_expansion_audit_test_suite.gd`: **+961 / 0**;
+- `tests/trainer_ai/trainer_team_composition_test_runner.gd`: **+1 / -1**;
+- producción: **0**;
+- brains: **0**;
+- `TrainerMultiTurnSearch`: **0**;
+- `TrainerActionSpace`: **0**;
+- budgets productivos: **0**;
+- workflows persistentes: **0**.
+
+Suite:
+
+`TrainerRosterSearchRootTieDeferredExpansionAuditTestSuite`
+
+Audit ID:
+
+`c3f_r_root_tie_deferred_expansion_feasibility_audit_v1`
+
+La suite hereda la cadena C3f-q → C3f-p → C3f-o → C3f-n → C3f-m → C3f-l → C3f-k, de modo que las barreras anteriores siguen ejecutándose en el mismo gate.
+
+#### API productiva observada: la acción raíz ya puede evaluarse explícitamente
+
+La producción actual expone una separación arquitectónica relevante:
+
+`TrainerMultiTurnSearch.evaluate(context, root_action)`
+
+recibe una acción raíz concreta antes de que las continuaciones internas usen `_bounded_actions(...)`.
+
+C3f-r utiliza exclusivamente esa API existente desde test para evaluar raíces explícitas. No añade ningún método de producción.
+
+Queda por tanto auditada la distinción:
+
+- **root fan-out**: número de acciones raíz que el caller decide evaluar de forma independiente;
+- **inner action cap**: `max_actions_per_side = 3` aplicado dentro de las continuaciones de cada raíz.
+
+C3f-r registra explícitamente:
+
+- `explicit_root_action_api_used = true`;
+- `root_fanout_is_not_inner_action_cap = true`;
+- `inner_max_actions_per_side = 3`;
+- `production_global_cap_unchanged = true`;
+- `production_sampler_unchanged = true`.
+
+#### Población de referencia
+
+Para mantener comparabilidad exacta con C3f-p/q, el audit reutiliza los mismos **48 contextos de empate**:
+
+- 1021 especies elegibles;
+- 512 escenarios de población C3f-m/o;
+- 306 contextos con empate inmediato;
+- 48 casos estratificados;
+- tie size 2: 12 casos;
+- tie size 3: 12 casos;
+- tie size 4: 12 casos;
+- tie size 5: 12 casos;
+- `species_fallback`: 24 casos;
+- `revealed_damaging_move`: 24 casos;
+- 168 candidatos raíz empatados en total.
+
+Budget interno mantenido:
+
+- depth: 2;
+- worlds: 4;
+- simulations por raíz: 220;
+- actions per side: 3.
+
+#### Corrección importante del fixture antes de certificar
+
+Durante C3f-r se detectó que el fixture heredado de C3f-m/p/q construye deliberadamente `legal_actions` únicamente con acciones `SWITCH`.
+
+Ese fixture es válido para comparar semántica y coste entre switches, pero **no puede por sí solo demostrar la obligación MOVE/SWITCH de 26.38**.
+
+La primera formulación de C3f-r intentó leer diversidad no-SWITCH sobre ese fixture y produjo un FAIL. Ese FAIL no se ocultó ni se convirtió artificialmente en PASS.
+
+La corrección certificada separa dos capas:
+
+1. **referencia real SWITCH-only**: conserva exactamente los 48 contextos anteriores para todos los scores profundos, costes y comparaciones C3f-p/q;
+2. **mixed-root diversity probe**: usa los cinco IDs de switch legales reales de cada contexto y los top-sets contextuales reales, añadiendo exactamente dos acciones MOVE deterministas **solo para geometría de selección raíz**.
+
+El probe mixto declara explícitamente:
+
+- `reference_context_switch_only = true`;
+- `uses_real_switch_ids_and_contextual_top_sets = true`;
+- `synthetic_moves_used_for_geometry_only = true`;
+- `deep_scores_recomputed_with_synthetic_moves = false`.
+
+Por tanto, los MOVE sintéticos no alteran ningún score profundo ni ninguna conclusión táctica. Solo permiten comprobar de manera limpia que las estrategias de fan-out preservan al menos un MOVE y un SWITCH cuando ambos tipos existen en la raíz.
+
+#### Mixed-root probe — resultado
+
+Casos:
+
+- `cases = 48`;
+- `context_failures = 0`;
+- `probe_move_count = 2`;
+- `adaptive_diversity_failure_cases = 0`;
+- `adaptive_reorder_mismatch_cases = 0`.
+
+Control bounded actual sobre geometría mixta:
+
+- MOVE diversity failures: **0/48**;
+- SWITCH diversity failures: **0/48**;
+- root fan-out máximo: 3;
+- reorder mismatch: **48/48**.
+
+Interpretación:
+
+El sampler actual conserva diversidad de tipos bajo esta geometría, pero la identidad del switch retenido continúa dependiendo del orden de entrada.
+
+Full top-tier additive deferred sobre geometría mixta:
+
+- MOVE diversity failures: **0/48**;
+- SWITCH diversity failures: **0/48**;
+- root fan-out máximo: 7;
+- reorder mismatch: **24/48**.
+
+La variante aditiva reduce el sesgo, pero no lo elimina: conserva además cualquier switch que el bounded sampler hubiera seleccionado por orden.
+
+Full top-tier replacement deferred sobre geometría mixta:
+
+- MOVE diversity failures: **0/48**;
+- SWITCH diversity failures: **0/48**;
+- root fan-out máximo: 7;
+- reorder mismatch: **0/48**.
+
+Las variantes adaptive replacement también conservan MOVE/SWITCH en **48/48** y tienen reorder mismatch **0**:
+
+- margin 0: fan-out máximo 3;
+- margin 500: máximo 5;
+- margin 1500: máximo 6;
+- margin 3000: máximo 7;
+- margin 6000: máximo 7.
+
+Conclusión limitada:
+
+> Separar el fan-out raíz del cap interno **es compatible con diversidad MOVE/SWITCH**. Esto no demuestra todavía que sea seguro eliminar switches legales que quedan fuera del top-tier contextual inmediato.
+
+#### Control productivo actual — referencia SWITCH-only
+
+Sobre los 48 casos reales comparables:
+
+- cases: 48;
+- root evaluations: 144;
+- deep optimum preserved: **30/48**;
+- deep optimum lost: **18/48**;
+- evaluation failures: 0;
+- incomplete depth2: 0;
+- budget exhausted: 0;
+- world coverage failures: 0;
+- fan-out sum: 144;
+- fan-out max: 3;
+- mean fan-out: 3.0000;
+- switch reorder mismatch: **48/48**;
+- simulations sum: **7200**;
+- simulations mean: **150**;
+- simulations max: **270**;
+- contexts above 220 total-simulation control: **23/48**;
+- hard bound: 660.
+
+El dato `non_switch_diversity_failure_cases = 48` en esta referencia no se interpreta como fallo de estrategia: documenta que el fixture de referencia es explícitamente SWITCH-only.
+
+#### Full top-tier additive deferred
+
+Semántica:
+
+- conserva el bounded root sample actual;
+- añade cualquier miembro del top-tier contextual que falte;
+- por construcción nunca elimina una raíz actualmente muestreada;
+- puede retener el sesgo de orden heredado del sampler actual.
+
+Resultado:
+
+- deep optimum preserved: **48/48**;
+- lost: **0/48**;
+- fan-out sum: 208;
+- fan-out max: 5;
+- fan-out > inner cap3: **44/48**;
+- reorder mismatch: **35/48**;
+- bounded sampled switch dropped: **0/48**;
+- simulations sum: **10260**;
+- simulations mean: **213**;
+- simulations max: **450**;
+- contexts above 220 total-simulation control: **23/48**;
+- hard total simulations bound: **1100**;
+- inner cap violation: **0**.
+
+Interpretación:
+
+La variante aditiva demuestra que el fan-out separado puede preservar todos los óptimos profundos observados sin tocar `inner cap3`, pero no resuelve completamente la dependencia de orden.
+
+#### Full top-tier replacement deferred
+
+Semántica:
+
+- conserva las raíces no-SWITCH bounded cuando existen;
+- reemplaza el representante SWITCH arbitrario por el top-tier contextual completo;
+- no usa lexical como preferencia semántica.
+
+Resultado real SWITCH-only:
+
+- deep optimum preserved: **48/48**;
+- lost: **0/48**;
+- fan-out sum: 168;
+- fan-out max: 5;
+- fan-out > inner cap3: **24/48**;
+- reorder mismatch: **0/48**;
+- bounded sampled switch dropped: **29/48**;
+- simulations sum: **8424**;
+- simulations mean: **175**;
+- simulations max: **450**;
+- contexts above 220 total-simulation control: **17/48**;
+- hard total simulations bound: **1100**;
+- inner cap violation: **0**.
+
+La mejora frente a additive es clara en coste y orden-invariance, pero aparece la nueva frontera semántica crítica:
+
+`dropping_non_top_switch_proven_safe = false`
+
+En **29/48** contextos, replacement elimina el switch que el bounded sampler actual habría retenido porque ese switch no pertenece al top-tier contextual inmediato.
+
+C3f-r **no demuestra** que ese descarte sea seguro contra profundidad. Que un switch no sea máximo para `TrainerStrategicSwitchEvaluatorV2` no implica que no pueda convertirse en la mejor raíz después de la búsqueda multi-turno.
+
+Por eso replacement **no queda autorizado para producción**.
+
+#### Adaptive replacement — coste y preservación
+
+Todas estas estrategias:
+
+- usan solo evidencia contextual pública ya disponible;
+- son reorder-invariant en los 48 casos;
+- mantienen `inner cap3` sin violaciones;
+- no usan Pareto ni roster value;
+- no usan lexical como preferencia semántica;
+- no se autorizan para producción.
+
+`depth1_margin_0`:
+
+- preserves: 40/48;
+- loses: 8/48;
+- drops current bounded switch: 48/48;
+- fan-out max: 1;
+- simulations sum: 3399;
+- mean: 70;
+- max: 135;
+- contexts >220: 0.
+
+`depth1_margin_500`:
+
+- preserves: 43/48;
+- loses: 5/48;
+- drops current bounded switch: 47/48;
+- fan-out max: 3;
+- simulations sum: 3999;
+- mean: 83;
+- max: 315;
+- contexts >220: 2.
+
+`depth1_margin_1500`:
+
+- preserves: 47/48;
+- loses: 1/48;
+- drops current bounded switch: 46/48;
+- fan-out max: 4;
+- simulations sum: 5019;
+- mean: 104;
+- max: 405;
+- contexts >220: 6.
+
+`depth1_margin_3000`:
+
+- preserves: **48/48**;
+- loses: **0/48**;
+- drops current bounded switch: **44/48**;
+- fan-out max: 5;
+- simulations sum: **5763**;
+- mean: 120;
+- max: 405;
+- contexts >220: 8.
+
+`depth1_margin_6000`:
+
+- preserves: 48/48;
+- loses: 0/48;
+- drops current bounded switch: 36/48;
+- fan-out max: 5;
+- simulations sum: 7965;
+- mean: 165;
+- max: 495;
+- contexts >220: 12.
+
+El dato más tentador es margin3000: reproduce **0 pérdidas** en la muestra con bastante menos coste que el full top-tier.
+
+Pero C3f-r congela explícitamente que esto **no basta para seleccionarlo**:
+
+- elimina el switch bounded actual en 44/48;
+- todavía no se ha evaluado si alguno de esos switches no-top se convierte en el mejor root profundo;
+- el hecho de que margin3000 preserve el mejor miembro **dentro del top-tier inmediato** no responde a la seguridad de podar candidatos legales fuera de dicho top-tier.
+
+Por tanto:
+
+`selected_strategy_id = null`
+
+#### Control negativo: subir un único cap global
+
+C3f-r también prueba la alternativa aparentemente sencilla de aumentar el mismo `max_actions_per_side` para que quepan todos los switches empatados y dejar que ese cap mayor se propague también a las continuaciones.
+
+En los 48 casos seleccionados, para conservar el top-tier completo mediante el sampler actual fue necesario:
+
+- cap requerido: **5 en 48/48**;
+- histogram: `{"5":48}`;
+- cap máximo: 5;
+- cap medio: 5.
+
+Resultado del control con cap global 5:
+
+- evaluations: 48;
+- completed depth2: **26/48**;
+- incomplete depth2: **22/48**;
+- budget exhausted: **22/48**;
+- result failures: 0;
+- world coverage failures: 0;
+- simulations sum: 5482;
+- mean: 114;
+- max: 220;
+- entre los 26 casos que sí completaron, score cambiado frente a cap3: **12**.
+
+Así, aumentar un único cap no es una sustitución neutra del root fan-out separado.
+
+Con un budget fijo de 220 simulaciones, el cap mayor aumenta el branching interno y provoca agotamiento/incompletitud en casi la mitad de la muestra.
+
+C3f-r congela:
+
+`global_cap_change_authorized = false`
+
+#### Budget total: separación finita, pero todavía no política final
+
+C3f-r sí demuestra que separar raíces e interior no crea una expansión no acotada.
+
+Para full top-tier additive y replacement, bajo los máximos auditados:
+
+- max root fan-out = 5 en la referencia SWITCH-only;
+- max simulations por raíz = 220;
+- hard bound = **5 × 220 = 1100 simulaciones** por decisión auditada.
+
+Por eso:
+
+`separate_root_and_inner_budget_is_finitely_bounded = true`
+
+Pero **1100 no queda aceptado como budget productivo**. Es únicamente un límite superior de construcción para la geometría auditada.
+
+El siguiente tranche debe estudiar el coste de preservar todos los switches legales y cómo se comportaría un budget total compartido sin reintroducir poda semánticamente ciega.
+
+#### Contexto prohibido ausente
+
+C3f-r mantiene las barreras anteriores:
+
+- hidden belief cases: 0;
+- memory event cases: 0;
+- campaign snapshot cases: 0;
+- live RNG: false;
+- recovery policy: false;
+- replacement policy: false;
+- campaign policy: false;
+- Pareto en root selection: false;
+- roster value en root selection: false;
+- TrainerProfile como pre-search tiebreak: false.
+
+`TrainerProfile.balanced()` solo satisface la API de búsqueda existente y se mantiene constante; no decide qué candidato raíz entra.
+
+#### Estado de autorización tras C3f-r
+
+C3f-r **sí demuestra**:
+
+1. la API productiva actual permite evaluar acciones raíz explícitas;
+2. el fan-out raíz puede separarse del `inner cap3` sin modificar producción;
+3. full top-tier additive y replacement preservan 48/48 óptimos profundos observados dentro del top-tier inmediato;
+4. replacement elimina la dependencia de orden del conjunto raíz auditado;
+5. una sonda mixta real-switch + synthetic-MOVE valida diversidad MOVE/SWITCH para current/additive/replacement/adaptive;
+6. subir el cap global a 5 no es equivalente y agota el budget en 22/48 casos;
+7. la separación root/inner es finitamente acotable.
+
+C3f-r **no demuestra**:
+
+1. que un switch legal no-top pueda podarse sin riesgo;
+2. que replacement sea seguro pese a descartar el bounded switch actual en 29/48;
+3. que margin3000 sea seguro pese a descartar el bounded switch actual en 44/48;
+4. que 1100 simulaciones sea un budget productivo aceptable;
+5. que exista ya una política compartida de budget entre múltiples roots;
+6. que deba portarse ningún sampler a producción.
+
+Estado congelado:
+
+- `selected_strategy_id = null`;
+- `production_strategy_selected = false`;
+- `search_sampling_redesign_authorized = false`;
+- `behavior_integration_authorized = false`;
+- `production_sampler_unchanged = true`;
+- `production_global_cap_unchanged = true`;
+- `dropping_non_top_switch_proven_safe = false`.
+
+Recommended next boundary exacto:
+
+`resolve_non_top_switch_root_semantics_and_total_budget_before_any_sampler_port`
+
+#### Certificación técnica
+
+SHA:
+
+`37d4d1cb6ab8928b5639f32a6e8e29b9b0595e44`
+
+GitHub Actions:
+
+- **18/18 SUCCESS**.
+
+FASE33:
+
+- run `33722312865`;
+- job `100543873824`;
+- `=== TRAINER TEAM COMPOSITION RESULT: 761 PASS / 0 FAIL ===`;
+- `FASE 33 trainer team composition gate satisfied: 761 PASS / 0 FAIL`.
+
+Además:
+
+- Godot 4.7 SUCCESS;
+- DATA Foundation V3 SUCCESS;
+- Search Foundation SUCCESS;
+- Search Depth Budget SUCCESS;
+- Search Limit Benchmark SUCCESS;
+- Strategic Switching V2 SUCCESS;
+- resto de workflows SUCCESS.
+
+#### Checkpoint humano tree-identical
+
+SHA:
+
+`e1ad264b0b50205bef41de4cd5ae4ee0a2a12596`
+
+Tree:
+
+`d2889b972888d2f036b9f3bf97abf03460a56f8e`
+
+Parent:
+
+`b079b1871d239afc927dda760e5ca05cae7c0a31`
+
+La matriz humana reproduce:
+
+- **18/18 SUCCESS**;
+- FASE33 run `33722673873`;
+- job `100544911610`;
+- **761 PASS / 0 FAIL**;
+- mismo JSON C3f-r;
+- mismos 48/48 full-top preservados;
+- mismos 29/48 drops de replacement;
+- mismos 44/48 drops de margin3000;
+- mismos 22/48 agotamientos del control cap5;
+- misma mixed-root diversity sin fallos.
+
+Queda por tanto certificado que el resultado no depende del SHA técnico concreto: técnico y humano son tree-identical y reproducen la misma evidencia.
+
+#### Próxima microtranche autorizada: C3f-s
+
+Se autoriza exclusivamente:
+
+**C3f-s — TEST/AUDIT-ONLY non-top switch root semantics + total-budget preservation**
+
+Objetivo:
+
+Resolver la principal incógnita que impide seleccionar replacement/adaptive: comprobar si los switches legales descartados por el top-tier contextual inmediato pueden convertirse en la mejor raíz después de búsqueda profunda.
+
+C3f-s debe, como mínimo:
+
+- partir del estado certificado 26.39;
+- reutilizar los contextos C3f-r donde replacement/adaptive descartan switches legales;
+- evaluar **todos los switches legales** como raíces explícitas, no solo el top-tier inmediato;
+- ejecutar depth2 con el mismo inner cap3 para cada raíz;
+- comparar el mejor root profundo global con el mejor root profundo contenido en el top-tier inmediato;
+- medir `non_top_becomes_deep_best_cases`;
+- medir `top_tier_contains_global_deep_best_cases`;
+- medir `replacement_pruning_loses_global_deep_best_cases`;
+- medir `adaptive_margin3000_pruning_loses_global_deep_best_cases`;
+- separar ties profundos como conjuntos, sin representative lexical semántico;
+- medir root evaluations, simulations sum/mean/max y hard bounds del fan-out legal completo;
+- auditar coste frente a controles de budget total sin modificar ningún budget productivo;
+- si se modela budget compartido, distinguir claramente un control de coste de una poda semántica;
+- mantener una sonda separada MOVE/SWITCH si el fixture profundo continúa siendo SWITCH-only;
+- no usar Pareto como pruning, bonus o tiebreak;
+- no usar roster value para seleccionar roots;
+- no usar hidden beliefs, live RNG, campaign snapshot/policy, recovery o replacement policy;
+- no usar TrainerProfile como tiebreak previo;
+- producir salida determinista y JSON-serializable;
+- mantener `selected_strategy_id = null` salvo autorización documental posterior explícita.
+
+C3f-s **no autoriza**:
+
+- modificar `TrainerMultiTurnSearch`;
+- modificar `TrainerActionSpace`;
+- modificar brains;
+- cambiar `max_actions_per_side` productivo;
+- cambiar `max_simulations` productivo;
+- portar replacement o margin3000 a producción;
+- integrar Pareto/roster value en search;
+- abrir FASE34;
+- mergear PR #105.
+
+La decisión sobre cualquier sampler productivo queda bloqueada hasta saber si la poda de switches no-top es semánticamente segura y hasta tener una política de budget total auditada.
