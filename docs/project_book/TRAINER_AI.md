@@ -12330,3 +12330,392 @@ C3f-u **no queda autorizada** para:
 - mergear PR #105.
 
 La autorización es únicamente para producir evidencia adicional que permita decidir si existe una ruta de sampler/scheduler suficientemente segura para una futura microtranche de diseño productivo.
+
+
+### 26.42 C3f-u — la validación adversarial ampliada conserva 72/72 y el scheduler compartido solo completa 32/32 con 660 en la muestra
+
+C3f-u queda cerrada como microtranche estrictamente **TEST/AUDIT-ONLY**. Parte del baseline documental 26.41 y amplía la evidencia de C3f-t sin modificar búsqueda productiva, action-space, budgets productivos, brains, Pareto, roster value ni comportamiento.
+
+#### Baseline y checkpoints limpios
+
+Baseline documental 26.41:
+
+`f63665420facd3b001695cc340a7a004efb85e32`
+
+Checkpoint técnico C3f-u:
+
+`fb3b7ac5e04520cfcab1c807dd77db2e4ad3a75d`
+
+Checkpoint humano tree-identical C3f-u:
+
+`259a0bf6fac0f29c640b45f05612487a2038a07d`
+
+Tree común técnico/humano:
+
+`c0afe5b9a28235e8644391fc12a4181e23e8fc09`
+
+Tanto el checkpoint técnico como el humano tienen como parent directo el freeze 26.41 `f6366542...`; por tanto, la historia limpia contiene una sola microtranche audit-only sobre el baseline certificado.
+
+El diff limpio frente a 26.41 contiene únicamente:
+
+- `tests/trainer_ai/trainer_roster_search_broader_adversarial_shared_budget_audit_test_suite.gd`: **+807**;
+- `tests/trainer_ai/trainer_team_composition_test_runner.gd`: **+1/-1**.
+
+No hay cambios de producción.
+
+Durante el desarrollo existió un sibling de staging defectuoso que no forma parte de la historia limpia final. Se descartó en vez de encadenar parches sobre él. No se congela una causa raíz no demostrada para ese staging.
+
+#### Suite y modelos auditados
+
+Suite:
+
+`TrainerRosterSearchBroaderAdversarialSharedBudgetAuditTestSuite`
+
+Audit ID:
+
+`c3f_u_broader_adversarial_shared_budget_audit_v1`
+
+Scheduler TEST-ONLY:
+
+`equal_upfront_root_reservation_no_redistribution_v1`
+
+Modelos productivos observados sin modificación:
+
+- search: `simultaneous_depth_budget_v1`;
+- action sampling: `kind_stratified_round_robin_v1`;
+- inner depth: 2;
+- inner `max_actions_per_side`: 3;
+- inner `max_worlds`: 4;
+- inner `max_simulations` por root: 220.
+
+C3f-u conserva explícitamente la separación entre **root fan-out** y el cap interno de acciones. Expandir roots en el harness no equivale a cambiar `max_actions_per_side` productivo.
+
+#### Expansión determinista de la muestra
+
+C3f-u conserva íntegros los 48 casos certificados de C3f-t y añade 24 casos adversariales nuevos:
+
+- legacy C3f-t: **48**;
+- fallos al reutilizar legacy: **0**;
+- nuevos adversariales: **24**;
+- total expandido: **72**;
+- casos semánticamente completos: **72**;
+- inconclusos: **0**.
+
+La expansión nueva toma exactamente 3 casos por cada uno de los 8 estratos:
+
+- tie size 2 × `species_fallback`;
+- tie size 2 × `revealed_damaging_move`;
+- tie size 3 × `species_fallback`;
+- tie size 3 × `revealed_damaging_move`;
+- tie size 4 × `species_fallback`;
+- tie size 4 × `revealed_damaging_move`;
+- tie size 5 × `species_fallback`;
+- tie size 5 × `revealed_damaging_move`.
+
+La geometría poblacional de referencia sigue siendo:
+
+- eligible species: **1021**;
+- tie contexts poblacionales: **306**.
+
+Antes de elegir los 24 nuevos casos se ejecutó el screen depth1 sobre **258 candidatos adversariales no-legacy** y hubo:
+
+- `population_screened_adversarial_candidates = 258`;
+- `population_screen_failures = 0`.
+
+No se redujo cobertura para obtener un resultado verde.
+
+#### Rank y gap del ganador depth2 frente al screen depth1
+
+Referencia C3f-t:
+
+- rank máximo: 4;
+- gap máximo: 1665.
+
+En los 72 casos C3f-u:
+
+- rank 1 → **54**;
+- rank 2 → **11**;
+- rank 3 → **5**;
+- rank 4 → **2**;
+- suma → **72**;
+- gap sum → **10121**;
+- gap mean → **140**;
+- gap max → **1665**.
+
+Solo en los 24 nuevos adversariales:
+
+- rank máximo → **4**;
+- gap máximo → **1120**.
+
+Por tanto, la ampliación adversarial no produjo todavía un ganador depth2 fuera de rank 4 ni por encima del gap 1665 observado en C3f-t. Esto es evidencia de muestra, no una cota global demostrada.
+
+#### Candidatos de screen sobre los 72 casos
+
+Se comparan tres candidatos TEST-ONLY contra el oracle all-legal depth2.
+
+**`depth1_margin_3000_all_legal`**
+
+- cases: 72;
+- preserves deep optimum: **72**;
+- losses: **0**;
+- promoted switches sum: 222;
+- promoted max: 5;
+- screening simulations: 2145;
+- depth2 simulations: 11178;
+- total simulations: **13323**.
+
+**`depth1_topk_4_tie_preserving`**
+
+- cases: 72;
+- preserves deep optimum: **72**;
+- losses: **0**;
+- promoted switches sum: 288;
+- promoted max: 4;
+- screening simulations: 2145;
+- depth2 simulations: 14496;
+- total simulations: **16641**.
+
+**`depth1_margin_6000_all_legal`**
+
+- cases: 72;
+- preserves deep optimum: **72**;
+- losses: **0**;
+- promoted switches sum: 284;
+- promoted max: 5;
+- screening simulations: 2145;
+- depth2 simulations: 15072;
+- total simulations: **17217**.
+
+Los tres candidatos conservan el óptimo depth2 en los 72 casos auditados, y `margin3000` sigue siendo el menos costoso de esos tres en esta muestra.
+
+Pero quedan congeladas las barreras:
+
+- `candidate_strategy_proven_safe_globally = false`;
+- `candidate_strategy_selected = false`;
+- `production_strategy_selected = false`;
+- `selected_strategy_id = null`.
+
+**72/72 no equivale a seguridad poblacional ni autoriza un sampler productivo.**
+
+#### Scheduler de budget compartido realmente ejecutado
+
+C3f-u ya no se limita al accounting de C3f-t. Ejecuta un scheduler TEST-ONLY sobre 32 contextos:
+
+- 24 casos adversariales nuevos;
+- 8 casos legacy seleccionados por boundary rank/gap;
+- total scheduler cases: **32**.
+
+Contrato exacto del scheduler:
+
+- model ID: `equal_upfront_root_reservation_no_redistribution_v1`;
+- shared budgets: `[220, 440, 660]`;
+- allocation: `equal_upfront_floor_remaining_div_promoted_roots`;
+- root order probe: `lexical_and_reverse`;
+- redistribution: **none**;
+- early stop: **false**;
+- truncation condition: `quota_unavailable_or_any_promoted_root_not_depth2_complete_or_budget_exhausted_or_world_coverage_incomplete`.
+
+El scheduler ejecuta las reservas, no infiere su resultado a partir de costes cacheados.
+
+Controles globales:
+
+- budget violations: **0**;
+- order probes: **96**;
+- forward/reverse allocation mismatches: **0**;
+- truncated case occurrences: **22**;
+- no-decision occurrences: **22**.
+
+##### Shared budget 220
+
+- cases: 32;
+- total-budget violations: 0;
+- truncated: **14**;
+- no decision: **14**;
+- promotion loses global best: 0;
+- preserves oracle global best: **18/32**;
+- changed best vs oracle: **14**;
+- forward/reverse best-set mismatches: 0;
+- allocation mismatches: 0;
+- quota/root min: 35;
+- quota/root mean: 49;
+- quota/root max: 102;
+- actual simulations sum: 4214.
+
+##### Shared budget 440
+
+- cases: 32;
+- total-budget violations: 0;
+- truncated: **8**;
+- no decision: **8**;
+- promotion loses global best: 0;
+- preserves oracle global best: **24/32**;
+- changed best vs oracle: **8**;
+- forward/reverse best-set mismatches: 0;
+- allocation mismatches: 0;
+- quota/root min: 79;
+- quota/root mean: 107;
+- quota/root max: 212;
+- actual simulations sum: 6646.
+
+##### Shared budget 660
+
+- cases: 32;
+- total-budget violations: 0;
+- truncated: **0**;
+- no decision: **0**;
+- promotion loses global best: 0;
+- preserves oracle global best: **32/32**;
+- changed best vs oracle: **0**;
+- forward/reverse best-set mismatches: 0;
+- allocation mismatches: 0;
+- quota/root min: 123;
+- quota/root mean: 156;
+- quota/root max: 220;
+- actual simulations sum: 7086.
+
+#### Interpretación del budget 660
+
+El resultado de 660 es fuerte pero queda deliberadamente limitado a su dominio observado:
+
+> bajo **este scheduler concreto**, en **estos 32 casos**, shared budget 660 completa todos los roots promovidos y reproduce el mejor set del oracle sin truncar.
+
+No se infiere de ello que:
+
+- 660 sea suficiente para toda la población;
+- 660 sea el budget productivo correcto;
+- este scheduler sea el scheduler productivo correcto;
+- una política con redistribución vaya a comportarse igual;
+- `margin3000` sea globalmente seguro.
+
+Por tanto:
+
+- `selected_shared_budget = null`;
+- `selected_strategy_id = null`;
+- `search_sampling_redesign_authorized = false`;
+- `behavior_integration_authorized = false`.
+
+Los budgets 220 y 440 demuestran además que la semántica de budget compartido **sí importa**: no basta con que el preselector contenga el ganador; starvation/truncation puede impedir completar la comparación.
+
+#### Semántica prohibida sigue ausente
+
+En C3f-u:
+
+- Pareto no se usa como preselector/hard prune;
+- roster value no se usa como preselector;
+- `TrainerProfile` no se usa como tiebreak pre-search;
+- hidden belief cases no vacíos: 0;
+- memory event cases no vacíos: 0;
+- campaign snapshot cases no vacíos: 0;
+- live RNG: false;
+- recovery policy: false;
+- replacement policy: false;
+- campaign policy: false.
+
+Producción permanece intacta:
+
+- sampler productivo unchanged;
+- `max_actions_per_side` productivo unchanged;
+- `max_simulations` productivo unchanged;
+- phase logic productiva unchanged;
+- cero modificaciones de brains.
+
+#### Certificación técnica
+
+Checkpoint técnico:
+
+`fb3b7ac5e04520cfcab1c807dd77db2e4ad3a75d`
+
+Resultado:
+
+- **18/18 GitHub Actions SUCCESS**;
+- FASE33: **832 PASS / 0 FAIL**;
+- Godot 4.7 general SUCCESS;
+- DATA V3 SUCCESS;
+- Trainer Search Foundation SUCCESS;
+- Trainer Search Depth Budget SUCCESS;
+- Trainer Search Limit Benchmark SUCCESS;
+- Trainer Strategic Switching V2 SUCCESS;
+- resto de workflows Trainer SUCCESS;
+- suite C3f-u registrada/importada sin regresión de scripts.
+
+#### Certificación humana tree-identical
+
+Checkpoint humano:
+
+`259a0bf6fac0f29c640b45f05612487a2038a07d`
+
+Tree común:
+
+`c0afe5b9a28235e8644391fc12a4181e23e8fc09`
+
+Resultado humano:
+
+- **18/18 GitHub Actions SUCCESS**;
+- FASE33: **832 PASS / 0 FAIL**;
+- mismo JSON canónico C3f-u;
+- mismos 72/72 para `margin3000`, top-k4 y margin6000;
+- mismos 14/8/0 truncados para budgets 220/440/660;
+- mismo 18/24/32 oracle-best preservation;
+- mismos 0 budget violations;
+- mismos 0 forward/reverse allocation mismatches;
+- DATA V3/Godot/search/switching gates SUCCESS.
+
+#### Interpretación congelada
+
+C3f-u aporta dos resultados nuevos y distintos:
+
+1. la familia all-legal depth1 screen conserva los tres candidatos 0-loss de C3f-t en una expansión determinista a 72 casos, con `margin3000` todavía como el de menor coste observado entre esos tres;
+2. el budget compartido deja de ser accounting-only: 220 y 440 truncan casos bajo el scheduler auditado, mientras 660 completa los 32/32 casos scheduler y reproduce el oracle en los 32.
+
+Sin embargo, todavía no existe base suficiente para portar producción porque:
+
+- 72 casos siguen siendo una muestra;
+- los 24 nuevos fueron elegidos adversarialmente dentro de la geometría conocida, no son un held-out independiente de la selección de candidato;
+- el scheduler se ejecutó solo sobre 32 casos;
+- se auditó un único algoritmo de reserva sin redistribución;
+- el éxito 32/32 de 660 no constituye una cota global.
+
+La frontera correcta pasa a ser:
+
+> validar fuera de la muestra de selección que `margin3000` conserva el óptimo y que el scheduler/budget observado sigue siendo robusto antes de autorizar cualquier port productivo.
+
+#### Siguiente microtranche autorizada
+
+Queda autorizada únicamente:
+
+**C3f-v — TEST/AUDIT-ONLY held-out validation of the 0-loss screen candidates and shared-budget scheduler robustness before any production port.**
+
+C3f-v debe, como mínimo:
+
+- partir del freeze documental 26.42 certificado;
+- heredar C3f-u/C3f-t/C3f-s como barreras;
+- construir una muestra determinista **held-out**, no reutilizada para escoger los 24 adversariales de C3f-u;
+- mantener diversidad por evidence mode y geometría de tie/rank/gap cuando sea técnicamente posible;
+- ejecutar all-legal depth1 screen y oracle all-legal depth2 en esa muestra;
+- medir de nuevo `depth1_margin_3000_all_legal`, `depth1_topk_4_tie_preserving` y `depth1_margin_6000_all_legal` sin asumir que siguen siendo 0-loss;
+- registrar cualquier counterexample como resultado válido, sin cambiar thresholds para ocultarlo;
+- ejecutar el scheduler compartido sobre held-out cases y comprobar truncation, no-decision, oracle-best preservation y order dependency;
+- incluir 660 como control observado de C3f-u, pero **no** tratarlo como budget ya seleccionado;
+- incluir al menos un control inferior que permita observar de nuevo la frontera de starvation/truncation;
+- si se compara una política de redistribución, mantenerla estrictamente TEST-ONLY y reportarla como control, no como selección productiva;
+- mantener root fan-out separado de `inner max_actions_per_side = 3`;
+- no usar Pareto como hard prune;
+- no usar roster value como preselector;
+- no usar hidden beliefs, RNG, campaign policy, recovery ni replacement;
+- no usar `TrainerProfile` como tiebreak semántico;
+- mantener salida determinista y JSON-serializable;
+- no seleccionar todavía sampler, scheduler ni budget productivo salvo que una microtranche posterior lo autorice explícitamente.
+
+C3f-v **no queda autorizada** para:
+
+- modificar `TrainerMultiTurnSearch`;
+- modificar `TrainerActionSpace`;
+- modificar `TrainerSearchBudget`;
+- cambiar `max_actions_per_side` productivo;
+- cambiar `max_simulations` productivo;
+- integrar frontier/roster value;
+- modificar brains;
+- abrir `FASE34`;
+- mergear PR #105.
+
+FASE34 permanece **CLOSED**. PR #105 sigue siendo temporal y no debe mergearse.
