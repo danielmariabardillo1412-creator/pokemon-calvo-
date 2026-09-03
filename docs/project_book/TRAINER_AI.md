@@ -13145,3 +13145,308 @@ La condición para cualquier port posterior será que C3f-w identifique un seam 
 Recommended next boundary:
 
 `map_validated_screen_and_shared_budget_to_exact_production_search_seam_before_any_sampler_port`
+
+
+### 26.44 C3f-w — el seam productivo real no coincide con el experimento base; `NEEDS_NEW_API` antes de cualquier port
+
+Estado: **CERRADO / DOBLEMENTE CERTIFICADO / TEST-AUDIT-ONLY**.
+
+C3f-w ejecuta la microtranche de localización del seam exigida por 26.43. Su objetivo no era volver a medir los 96 casos de screening ni seleccionar `margin3000`/660, sino comprobar si la geometría auditada en C3f-n..v podía trasladarse literalmente al search que usa hoy el brain estratégico.
+
+La respuesta ejecutable es inequívoca:
+
+> **NO existe hoy un seam productivo equivalente al experimento C3f-n..v. El brain ya enumera todos los roots legales; el search estratégico efectivo es ItemAware y usa MOVE/SWITCH/ITEM; el cap de acciones vive en tres call-sites internos distintos; `max_simulations` es por root y no compartido; y la perspectiva rival necesita su propio contexto/memoria sanitizados. Por tanto un port directo sería semánticamente incorrecto. `seam_status = NEEDS_NEW_API`.**
+
+Esto no invalida la evidencia C3f-n..v. Esa evidencia sigue demostrando, dentro de sus muestras, la utilidad del screening y la frontera observada del scheduler. C3f-w delimita qué adaptadores/contratos faltan para poder llevar esa evidencia al runtime real sin cambiar de problema a escondidas.
+
+#### Checkpoints C3f-w
+
+Baseline documental 26.43:
+
+`e9681102cfc716128462b5ea43ad54e46b27c5c7`
+
+Checkpoint técnico:
+
+`e6d6ff8ae163dfd805342f97a0e73b4d474d5906`
+
+Checkpoint humano tree-identical:
+
+`3b8697315cb9e30e100b06ca74ca7b3e7119064e`
+
+Tree común:
+
+`07ab7316e0bda7e4d6456cc5cb3036b5ebc69597`
+
+Parent común:
+
+`e9681102cfc716128462b5ea43ad54e46b27c5c7`
+
+Los dos checkpoints son siblings reales: mismo parent y mismo tree.
+
+Diff neto C3f-w contra 26.43:
+
+- `tests/trainer_ai/trainer_roster_search_production_seam_mapping_audit_test_suite.gd`: **+349 / 0**;
+- `tests/trainer_ai/trainer_team_composition_test_runner.gd`: **+1 / -1**;
+- producción: **0**;
+- brains: **0**;
+- search productivo: **0**;
+- budgets productivos: **0**;
+- workflows productivos: **0**.
+
+Suite:
+
+`TrainerRosterSearchProductionSeamMappingAuditTestSuite`
+
+Audit ID:
+
+`c3f_w_search_production_seam_mapping_audit_v1`
+
+#### Hallazgo 1 — el root fan-out productivo ya es all-legal
+
+`DepthSearchTrainerBrain.choose_action()` recorre `context.legal_actions` y llama a `_search.evaluate(context, action)` para cada root legal no nulo.
+
+C3f-w certifica:
+
+- `depth_brain_enumerates_all_legal_roots = true`;
+- `depth_brain_uses_bounded_root_prefilter = false`;
+- `root_fanout_separate_from_inner_action_cap = true`.
+
+Por tanto el cap `max_actions_per_side = 3` auditado desde C3f-n no es un preselector de roots del brain. Es un límite interno del árbol de search.
+
+#### Hallazgo 2 — el search estratégico efectivo no usa el sampler base MOVE/SWITCH
+
+La cadena real es:
+
+`StrategicSwitchingTrainerBrain -> ItemAwareTrainerBrain -> TrainerItemAwareSearch`.
+
+C3f-w certifica:
+
+- `strategic_brain_extends_item_aware = true`;
+- `item_brain_installs_item_aware_search = true`;
+- `item_search_overrides_bounded_actions = true`.
+
+C3f-n había instanciado explícitamente `TrainerMultiTurnSearch` y auditado:
+
+`kind_stratified_round_robin_v1`
+
+El search efectivo ItemAware usa:
+
+`move_switch_item_stratified_round_robin_v1`
+
+El probe mixto con cap 3 demuestra una diferencia observable:
+
+Input:
+
+`[move_zero, move_one, switch_zero, potion]`
+
+Sampler base:
+
+`[move_zero, switch_zero, move_one]`
+
+Sampler ItemAware:
+
+`[move_zero, switch_zero, potion]`
+
+Por tanto:
+
+`mixed_action_sampler_probe.signatures_differ = true`
+
+No puede asumirse que una política validada sobre el sampler base MOVE/SWITCH conserva su significado cuando ITEM participa en el sampler efectivo.
+
+#### Hallazgo 3 — `_bounded_actions()` no representa una sola frontera semántica
+
+C3f-w localiza **tres** call-sites internos:
+
+1. respuestas del rival al root;
+2. continuaciones propias depth2;
+3. continuaciones rivales depth2.
+
+Resultado:
+
+- `bounded_action_call_site_count = 3`;
+- `root_opponent_responses = true`;
+- `own_depth2_continuations = true`;
+- `opponent_depth2_continuations = true`.
+
+Una sustitución global de `_bounded_actions()` introduciría la misma política en tres roles diferentes sin haber demostrado que comparten información disponible, objetivo ni fallback correcto.
+
+#### Hallazgo 4 — el sampler actual no recibe el contexto necesario para un screen contextual
+
+La firma productiva de `_bounded_actions(actions, limit)` no recibe:
+
+- `side_id`;
+- `TrainerDecisionContext`;
+- `TrainerBattleMemory`.
+
+C3f-w certifica:
+
+- `base_sampler_accepts_side_id = false`;
+- `base_sampler_accepts_context = false`;
+- `base_sampler_accepts_memory = false`.
+
+Por tanto no existe hoy una API en la que portar limpiamente una selección side-aware/context-aware sin ensanchar el contrato de producción.
+
+#### Hallazgo 5 — 660 compartido no equivale a cambiar `TrainerSearchBudget.max_simulations`
+
+`TrainerMultiTurnSearch.evaluate(context, root_action)` crea un contador local `simulations_used` para esa evaluación de root.
+
+C3f-w certifica:
+
+`max_simulations_scope = per_root_search_evaluate_local_counter`
+
+Con el valor productivo actual:
+
+`production_max_simulations_per_root = 220`
+
+Por ejemplo, cinco roots independientes podrían disponer en conjunto de un hard cap agregado de:
+
+`5 * 220 = 1100`
+
+Eso NO es el scheduler TEST-ONLY C3f-u/v de budget total compartido 660.
+
+C3f-w certifica explícitamente:
+
+- `shared_total_budget_field_present = false`;
+- `shared_root_scheduler_api_present = false`;
+- `control_660_directly_maps_to_current_budget = false`.
+
+Por tanto **NO** queda autorizado cambiar `max_simulations` de 220 a 660. Hacerlo multiplicaría otra dimensión del coste y no implementaría el scheduler auditado.
+
+#### Hallazgo 6 — la perspectiva rival necesita un contrato propio
+
+`TrainerObservationBuilder` exige una `TrainerBattleMemory` coherente con el `observer_side_id` y restringe información no observada del rival.
+
+C3f-w certifica:
+
+- `observation_builder_requires_matching_observer_memory = true`;
+- `observation_builder_restricts_unseen_opponents = true`;
+- `multi_search_uses_observation_builder = false`;
+- `bounded_sampler_receives_observer_context = false`;
+- `reuse_observer_memory_for_opponent_perspective_authorized = false`.
+
+Estados de frontera:
+
+- continuaciones propias: `NEEDS_UPDATED_OBSERVER_CONTEXT_API`;
+- continuaciones rivales: `NEEDS_OPPONENT_PERSPECTIVE_API`.
+
+No está demostrado que la misma política de screening sea segura para ambos lados:
+
+`same_screen_policy_both_sides_proven_safe = false`
+
+#### Hallazgo 7 — faltan outcomes explícitos de scheduler
+
+El futuro contrato de budget compartido deberá distinguir, como mínimo:
+
+- `COMPLETE`;
+- `TRUNCATED`;
+- `NO_DECISION`.
+
+C3f-w no autoriza fallbacks implícitos cuando el budget no completa la matriz:
+
+- lexical fallback: **false**;
+- frontier fallback: **false**;
+- roster-value fallback: **false**;
+- current-sampler fallback: **false**;
+- implicit fallback: **false**.
+
+Esto preserva la lección de C3f-u/v: una truncation no puede maquillarse como una decisión válida por conveniencia del runtime.
+
+#### Veredicto ejecutable
+
+C3f-w produce:
+
+`seam_status = NEEDS_NEW_API`
+
+Y conserva:
+
+`behavior_integration_authorized = false`
+
+`search_sampling_redesign_authorized = false`
+
+`production_strategy_selected = false`
+
+`selected_strategy_id = null`
+
+`selected_scheduler_id = null`
+
+`selected_shared_budget = null`
+
+No hay selección productiva de `margin3000`, top-k4, margin6000 ni 660.
+
+#### Certificación técnica
+
+Checkpoint:
+
+`e6d6ff8ae163dfd805342f97a0e73b4d474d5906`
+
+Resultado:
+
+- **18/18 workflows GitHub Actions: SUCCESS**;
+- FASE33 / Trainer Team Composition: **876 PASS / 0 FAIL**;
+- los **24 checks nuevos C3f-w: PASS**;
+- JSON C3f-w completo y determinista;
+- `seam_status = NEEDS_NEW_API`;
+- producción sin cambios.
+
+#### Certificación humana tree-identical
+
+Checkpoint:
+
+`3b8697315cb9e30e100b06ca74ca7b3e7119064e`
+
+Resultado reproducido:
+
+- **18/18 workflows GitHub Actions: SUCCESS**;
+- FASE33 / Trainer Team Composition: **876 PASS / 0 FAIL**;
+- mismo audit ID;
+- mismos 24 checks C3f-w;
+- mismo JSON semántico;
+- mismo `NEEDS_NEW_API`;
+- mismo tree `07ab7316e0bda7e4d6456cc5cb3036b5ebc69597`.
+
+C3f-w queda **DOBLEMENTE CERTIFICADO**.
+
+#### Invariantes externas antes del freeze 26.44
+
+- PR #105: **OPEN**;
+- PR #105: `merged_at = null`;
+- head certificado: `3b8697315cb9e30e100b06ca74ca7b3e7119064e`;
+- base: `main`;
+- `main`: `f8452a1625ccb8389c9e52ff4416a96a24e00efd`.
+
+PR #105 sigue siendo temporal y **NO debe mergearse**.
+
+FASE34 permanece **CLOSED**.
+
+#### Frontera autorizada siguiente — C3f-x
+
+26.44 autoriza únicamente:
+
+**C3f-x TEST/AUDIT-ONLY — diseñar y probar contratos ejecutables para un selector interno side-aware + action-kind-aware y un scheduler de budget total compartido entre roots, preservando semántica ItemAware MOVE/SWITCH/ITEM y outcomes explícitos `COMPLETE/TRUNCATED/NO_DECISION`, antes de cualquier port productivo.**
+
+C3f-x deberá mantener como invariantes:
+
+- producción: **0 cambios**;
+- root fan-out productivo continúa all-legal;
+- `inner max_actions_per_side = 3` continúa separado del root fan-out;
+- el selector recibe explícitamente el lado y contexto sanitizado que necesita;
+- ITEM permanece una clase de acción explícita y no se degrada al bucket MOVE;
+- la perspectiva rival no reutiliza memoria privada del observer;
+- el scheduler posee un budget **total compartido entre roots**, no un `max_simulations` por-root maquillado;
+- outcomes mínimos: `COMPLETE`, `TRUNCATED`, `NO_DECISION`;
+- no lexical fallback;
+- no frontier fallback;
+- no roster-value fallback;
+- no hidden-belief fallback;
+- no Profile como tiebreak semántico;
+- no campaign/recovery/replacement policy;
+- no seleccionar todavía estrategia, scheduler ni budget productivos;
+- mantener `candidate_strategy_proven_safe_globally = false`;
+- mantener C3f-s/t/u/v/w como evidencia previa intacta;
+- FASE34 sigue CLOSED;
+- PR #105 sigue OPEN/unmerged;
+- `main` no se toca.
+
+Si C3f-x demuestra que esos contratos no pueden aislarse sin un rediseño amplio del comportamiento del Trainer, deberá **parar y documentar el blocker** en vez de ensanchar scope.
+
+Cualquier integración de producción deberá esperar a una autorización documental posterior y separada.
