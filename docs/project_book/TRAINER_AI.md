@@ -14206,3 +14206,272 @@ El resultado deberá ser explícitamente uno de:
 - `BLOCKED`.
 
 26.46 no predecide cuál. Cualquier adapter o cambio productivo requiere freeze documental posterior y separado.
+
+
+### 26.47 C3f-z — contrato narrow cross-kind ItemAware certificado; producción sigue bloqueada hasta mapear perspectiva y scores simulados
+
+Estado: **CERRADO / DOBLEMENTE CERTIFICADO / TEST-AUDIT-ONLY**.
+
+C3f-z parte exclusivamente del freeze canónico 26.46:
+
+`366eb2d1fc02efbbaaa0a2dcd645ab88e52b54c2`
+
+26.46 autorizaba diseñar en TEST/AUDIT una semántica cross-kind explícita MOVE/SWITCH/ITEM, manteniendo `depth1_margin_3000_all_legal` restringido al subconjunto SWITCH y fallando cerrado cuando hiciera falta una preferencia per-kind o cross-kind no auditada.
+
+#### Checkpoints certificados
+
+| checkpoint | SHA |
+|---|---|
+| técnico C3f-z | `7204228408a14ad4a768903b86d108831be819cb` |
+| humano tree-identical | `729f83b73a96e17561d867f65deee27ba1299eb2` |
+| tree común | `62de286d2a0adb57e72222c4d1836f233be10a00` |
+| parent común | `366eb2d1fc02efbbaaa0a2dcd645ab88e52b54c2` |
+
+Son siblings reales: mismo parent, mismo tree, mismo contenido y ninguno desciende del otro.
+
+#### Diff exacto de C3f-z
+
+Respecto a 26.46:
+
+- `tests/trainer_ai/trainer_roster_search_cross_kind_composition_policy_audit_test_suite.gd`: **+551 / 0**;
+- `tests/trainer_ai/trainer_team_composition_test_runner.gd`: **+1 / -1**;
+- producción: **0 cambios**;
+- brains: **0 cambios**;
+- `TrainerMultiTurnSearch`: **0 cambios**;
+- `TrainerItemAwareSearch`: **0 cambios**;
+- `TrainerSearchBudget`: **0 cambios**;
+- documentación dentro de los checkpoints técnico/humano: **0 cambios**;
+- workflows permanentes: **0 cambios**;
+- FASE34: **CLOSED**.
+
+Audit ID:
+
+`c3f_z_cross_kind_item_aware_composition_policy_audit_v1`
+
+Resultado:
+
+`tranche_status = SAFE_TEST_CONTRACT`
+
+Policy ID TEST-ONLY:
+
+`preserve_single_move_single_item_plus_switch_margin3000_fail_closed_v1`
+
+Precondición narrow:
+
+`at_most_one_move_at_most_one_item_switch_subset_resolves_with_margin3000_without_secondary_reduction`
+
+#### Política narrow demostrada
+
+C3f-z separa explícitamente MOVE, SWITCH e ITEM y demuestra únicamente esta composición estrecha:
+
+1. si el conjunto completo cabe en el cap, se preserva completo;
+2. si existe overflow únicamente dentro de SWITCH, `margin3000` puede reducir **solo el subconjunto SWITCH**;
+3. si hay como máximo una MOVE y como máximo una ITEM, y el subconjunto SWITCH queda reducido exactamente hasta los slots restantes sin necesitar una segunda preferencia, el contrato puede devolver `COMPLETE`;
+4. si hay múltiples MOVEs, devuelve `NO_DECISION`;
+5. si hay múltiples ITEMs, devuelve `NO_DECISION`;
+6. si margin3000 todavía deja demasiados SWITCH para los slots disponibles, devuelve `NO_DECISION`;
+7. una perspectiva rival inválida falla cerrado antes de selección.
+
+La policy no introduce un score cross-kind y no afirma que MOVE, SWITCH e ITEM sean comparables numéricamente.
+
+#### Qué permanece explícitamente prohibido
+
+No se autoriza ningún fallback para completar slots mediante:
+
+- orden lexical;
+- current ItemAware round-robin;
+- Pareto frontier;
+- roster value;
+- Trainer Profile;
+- beliefs ocultas;
+- campaign/recovery/replacement policy.
+
+El round-robin ItemAware actual se conserva únicamente como **control observable**, no como policy candidata implícita.
+
+`margin3000` continúa restringido al dominio SWITCH para el que existe evidencia sample-scoped.
+
+#### Resultado sobre los casos de frontera
+
+El audit certifica que:
+
+- no-reduction preserva todos los actions;
+- narrow mixed composition puede completar cuando no exige escoger entre dos MOVEs ni dos ITEMs;
+- multiple-MOVE overflow -> `NO_DECISION`;
+- multiple-ITEM overflow -> `NO_DECISION`;
+- unresolved SWITCH overflow -> `NO_DECISION`;
+- observer-private memory para perspectiva rival -> rechazado;
+- role/perspective mismatch -> rechazado;
+- lexical ordering no participa en conducta;
+- root fan-out all-legal permanece separado del inner cap 3.
+
+#### Evidencia previa conservada sin globalizar
+
+C3f-z no reabre la selección held-out C3f-v.
+
+El candidato `depth1_margin_3000_all_legal` conserva únicamente la evidencia previa:
+
+- dominio auditado: SWITCH candidates;
+- casos distintos C3f-u + C3f-v: **96**;
+- deep optimum observado preservado: **96/96**;
+- pérdidas observadas: **0**;
+- `candidate_strategy_proven_safe_globally = false`.
+
+Los controles scheduler previos permanecen históricos:
+
+- 220 / 440 / 660 pueden seguir apareciendo como controles auditados;
+- `660` **NO** queda seleccionado;
+- `max_simulations = 220` productivo **NO** se reinterpreta como shared-total;
+- no se ejecuta un port de scheduler.
+
+#### Certificación técnica
+
+Checkpoint:
+
+`7204228408a14ad4a768903b86d108831be819cb`
+
+Resultado:
+
+- **18/18 workflows GitHub Actions: SUCCESS**;
+- FASE33 / Trainer Team Composition: **965 PASS / 0 FAIL**;
+- **30/30 checks nuevos C3f-z: PASS**;
+- audit ID correcto;
+- `tranche_status = SAFE_TEST_CONTRACT`;
+- JSON determinista y serializable;
+- policy narrow y probes fail-closed: PASS;
+- Godot 4.7 general: SUCCESS;
+- DATA V3: SUCCESS;
+- Search Foundation: SUCCESS;
+- Search Depth Budget: SUCCESS;
+- Search Limit Benchmark: SUCCESS;
+- Strategic Switching V2: SUCCESS;
+- Item Actions: SUCCESS;
+- Loadouts: SUCCESS;
+- cero producción modificada.
+
+#### Certificación humana tree-identical
+
+Checkpoint:
+
+`729f83b73a96e17561d867f65deee27ba1299eb2`
+
+Resultado reproducido:
+
+- **18/18 workflows GitHub Actions: SUCCESS**;
+- FASE33 / Trainer Team Composition: **965 PASS / 0 FAIL**;
+- mismos **30/30 checks C3f-z: PASS**;
+- mismo audit ID;
+- mismo `tranche_status = SAFE_TEST_CONTRACT`;
+- misma policy ID y precondición narrow;
+- mismos probes `COMPLETE` / `NO_DECISION`;
+- mismas barreras de información;
+- mismos `null/false` productivos;
+- mismo tree que el técnico.
+
+C3f-z queda **DOBLEMENTE CERTIFICADO**.
+
+#### Qué demuestra C3f-z
+
+C3f-z resuelve el blocker exacto de C3f-y de forma estrecha:
+
+1. existe una composición cross-kind TEST-ONLY que no necesita inventar un score MOVE-vs-SWITCH-vs-ITEM;
+2. margin3000 puede mantenerse confinado al subconjunto SWITCH;
+3. el contrato puede preservar una MOVE y una ITEM cuando ninguna clase exige preferencia interna adicional;
+4. los casos fuera de esa precondición pueden permanecer `NO_DECISION` en vez de ocultar una policy nueva;
+5. la frontera de información rival puede seguir fail-closed;
+6. el resultado es aislable, determinista y JSON-serializable.
+
+#### Qué NO demuestra ni autoriza C3f-z
+
+`SAFE_TEST_CONTRACT` significa seguro **como contrato de test bajo sus precondiciones**, no seguro como integración productiva.
+
+C3f-z no demuestra:
+
+- que la policy narrow cubra todos los estados reales ItemAware;
+- que multiple-MOVE o multiple-ITEM puedan resolverse sin otra policy;
+- que margin3000 sea globalmente seguro;
+- que exista un score cross-kind válido;
+- que el runtime actual disponga del contexto necesario en `_bounded_actions(actions, limit)`;
+- que los tres call-sites internos puedan construir la misma perspectiva;
+- que una perspectiva oponente productiva pueda reutilizar memoria privada del observer;
+- que los scores SWITCH del estado raíz sean válidos para un estado simulado posterior;
+- que 660 sea un budget productivo;
+- que exista ya un production adapter seguro.
+
+Permanecen explícitamente:
+
+`production_strategy_selected = false`
+
+`production_adapter_authorized = false`
+
+`behavior_integration_authorized = false`
+
+`candidate_strategy_proven_safe_globally = false`
+
+`production_files_modified = false`
+
+`selected_strategy_id = null`
+
+`selected_scheduler_id = null`
+
+`selected_shared_budget = null`
+
+`fase34_open = false`
+
+#### Invariantes externas
+
+Después de la certificación humana C3f-z:
+
+- PR #105: **OPEN**;
+- PR #105: `merged = false`;
+- head humano certificado: `729f83b73a96e17561d867f65deee27ba1299eb2`;
+- base: `main`;
+- `main`: `f8452a1625ccb8389c9e52ff4416a96a24e00efd`.
+
+PR #105 continúa siendo temporal y **NO debe mergearse**.
+
+#### Hallazgo de seam que gobierna la siguiente tranche
+
+La lectura productiva posterior a C3f-z confirma que el contrato narrow todavía no tiene un punto de inserción equivalente en runtime:
+
+- `TrainerItemAwareSearch._bounded_actions()` recibe únicamente `(actions, limit)`;
+- los tres call-sites viven dentro de `TrainerMultiTurnSearch.evaluate()`;
+- cada call-site representa un role diferente del árbol simulado;
+- un screen contextual necesita una perspectiva sanitizada correspondiente al side/role simulado;
+- un screen SWITCH necesita scores calculados para el **estado simulado correcto**, no scores heredados del root por conveniencia;
+- reutilizar la memoria privada del observer como conocimiento del oponente continúa prohibido.
+
+Por tanto el siguiente paso no es integrar C3f-z en producción. Primero hay que demostrar qué información legítima existe —o falta— en cada role y de dónde puede obtenerse el score SWITCH sin cruzar la frontera de información.
+
+#### Siguiente microtranche autorizada — C3f-aa
+
+26.47 autoriza únicamente:
+
+**C3f-aa — TEST/AUDIT-ONLY simulated-perspective and SWITCH-score source mapping for the three ItemAware continuation roles before any production adapter.**
+
+Boundary exacto:
+
+`map_sanitized_simulated_perspective_and_switch_score_sources_per_item_aware_role_before_any_adapter`
+
+C3f-aa deberá, como mínimo:
+
+- permanecer estrictamente **TEST/AUDIT-ONLY**;
+- mapear por separado los tres roles ya localizados: root opponent response, own depth2 continuation y opponent depth2 continuation;
+- identificar para cada role el `side_id`, estado simulado y perspectiva necesaria;
+- comprobar si las APIs productivas actuales pueden construir una perspectiva sanitizada legítima para ese role;
+- comprobar si existe una fuente productiva legítima para recalcular los scores SWITCH sobre ese estado simulado;
+- prohibir expresamente reutilizar scores SWITCH calculados sobre el estado raíz si el estado simulado ha cambiado;
+- prohibir reutilizar memoria privada del observer como memoria/perspectiva del oponente;
+- distinguir, por role, un resultado explícito como `EXISTING_API_SUFFICIENT`, `NEEDS_ADAPTER` o `BLOCKED_BY_INFORMATION_BOUNDARY`;
+- si un role necesita API nueva, declararlo y fallar cerrado; no inventar contexto sintético;
+- mantener MOVE/SWITCH/ITEM separados;
+- conservar la policy C3f-z como contrato narrow TEST-ONLY, sin portarla todavía;
+- mantener root fan-out all-legal separado del inner cap 3;
+- no seleccionar strategy/scheduler/shared budget;
+- no reabrir 660 como budget productivo;
+- no modificar production, brains, search, budgets ni action space;
+- producir JSON determinista y serializable;
+- FASE34: CLOSED;
+- PR #105: OPEN/unmerged;
+- `main`: intacto.
+
+C3f-aa deberá terminar con una conclusión arquitectónica inequívoca sobre si cada role puede alimentar el contrato narrow C3f-z usando únicamente información válida. Cualquier adapter productivo requerirá un freeze documental posterior y separado.
