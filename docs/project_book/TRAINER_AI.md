@@ -11312,3 +11312,459 @@ C3f-s **no autoriza**:
 - mergear PR #105.
 
 La decisión sobre cualquier sampler productivo queda bloqueada hasta saber si la poda de switches no-top es semánticamente segura y hasta tener una política de budget total auditada.
+
+
+### 26.40 C3f-s — el top-tier contextual no es una poda segura: 6/48 óptimos depth2 nacen fuera
+
+C3f-s parte del baseline documental certificado 26.39:
+
+`ff8a7653125ea92a475418cfeecb1818a99ce99d`
+
+La microtranche permanece estrictamente **TEST/AUDIT-ONLY**. No modifica `TrainerMultiTurnSearch`, `TrainerActionSpace`, brains, budgets productivos, switching productivo, Pareto productivo ni ninguna política de campaña. `FASE34` permanece cerrada y PR #105 continúa siendo temporal y no debe mergearse.
+
+#### Pregunta que C3f-s debía resolver
+
+C3f-r había demostrado que separar el fan-out de acciones raíz del `inner cap3` era arquitectónicamente viable y que el top-tier contextual completo podía conservar el mejor continuation observado **dentro del propio top-tier**. Sin embargo, quedaba una frontera semántica sin resolver:
+
+> ¿Puede un switch legal que no pertenece al top-tier inmediato de `TrainerStrategicSwitchEvaluatorV2` convertirse en el mejor root cuando se evalúa con la búsqueda depth2 real?
+
+Mientras esa pregunta no estuviera contestada, eliminar switches no-top antes de search no podía considerarse seguro.
+
+C3f-s amplía por tanto el oracle. Ya no compara únicamente miembros del top-tier inmediato: evalúa **todos los switches legales** como roots explícitos y compara sus valores depth2.
+
+#### Checkpoints limpios
+
+Checkpoint técnico:
+
+`1db4ed3b76aef8a59fed78f43291b45bb0a1dd28`
+
+Checkpoint humano tree-identical:
+
+`30e52bdc51c6ba292e012639b23c5b87ddaa99c2`
+
+Tree común:
+
+`3b3a96da61b88bf3e208cd147ecd48b85b973299`
+
+Ambos commits tienen como parent directo:
+
+`ff8a7653125ea92a475418cfeecb1818a99ce99d`
+
+El diff limpio frente a 26.39 contiene únicamente:
+
+- `tests/trainer_ai/trainer_roster_search_all_legal_switch_root_semantics_audit_test_suite.gd`: **+628 / 0**;
+- `tests/trainer_ai/trainer_team_composition_test_runner.gd`: **+1 / -1**;
+- producción: **0**;
+- brains: **0**;
+- `TrainerMultiTurnSearch`: **0**;
+- `TrainerActionSpace`: **0**;
+- `TrainerSearchBudget`: **0**;
+- workflows persistentes: **0**.
+
+Suite:
+
+`TrainerRosterSearchAllLegalSwitchRootSemanticsAuditTestSuite`
+
+Audit ID:
+
+`c3f_s_all_legal_switch_root_semantics_total_budget_audit_v1`
+
+La suite hereda C3f-r y, por esa cadena, C3f-q → C3f-p → C3f-o → C3f-n → C3f-m → C3f-l → C3f-k. Las barreras anteriores continúan ejecutándose en el mismo gate.
+
+#### Oracle ampliado: todos los switches legales
+
+C3f-s conserva exactamente la muestra estratificada de 48 contextos usada por C3f-p/q/r y reconstruye cada contexto sobre DATA V3 canónico.
+
+Geometría:
+
+- especies elegibles: **1021**;
+- casos seleccionados: **48**;
+- `species_fallback`: **24**;
+- `revealed_damaging_move`: **24**;
+- switches legales por contexto: **5**;
+- roots legales totales: **240**;
+- roots evaluados: **240/240**.
+
+Budget por root, sin cambios productivos:
+
+- depth: **2**;
+- worlds: **4**;
+- `max_simulations`: **220**;
+- `max_actions_per_side`: **3**.
+
+Cada switch legal se evalúa mediante la API productiva ya existente:
+
+`TrainerMultiTurnSearch.evaluate(context, root_action)`
+
+La selección del root que entra en el oracle es TEST/AUDIT-ONLY. C3f-s no porta ningún sampler a producción.
+
+#### Integridad del experimento
+
+Resultados de ejecución:
+
+- `context_rebuild_failures = 0`;
+- `root_evaluation_failures = 0`;
+- `incomplete_depth_two_root_evaluations = 0`;
+- `budget_exhausted_root_evaluations = 0`;
+- `world_coverage_failure_root_evaluations = 0`;
+- `top_tier_score_parity_mismatches = 0`;
+- `top_tier_best_set_parity_mismatches = 0`;
+- `semantically_complete_cases = 48`;
+- `semantically_inconclusive_cases = 0`.
+
+Los 48 contextos producen un único mejor root global depth2:
+
+- `global_deep_unique_best_cases = 48`;
+- `global_deep_multiple_best_cases = 0`;
+- histograma del best-set global: `{1: 48}`.
+
+Los empates siguen tratados como conjuntos. C3f-s no usa un representante lexical para semántica:
+
+`deep_best_semantics = all_equal_max_score_switch_ids`
+
+`lexical_representative_used_for_semantics = false`
+
+#### Hallazgo principal: el no-top puede ser el mejor root profundo
+
+De los 48 contextos:
+
+- 36 tienen al menos un switch legal fuera del top-tier inmediato;
+- 12 no tienen candidatos no-top que podar;
+- en **6/48** contextos, el mejor root global depth2 está fuera del top-tier inmediato;
+- en los seis casos el ganador no-top es además el **único** óptimo profundo;
+- no hubo ningún caso de empate entre un óptimo top-tier y uno no-top.
+
+Exacto:
+
+- `non_top_becomes_deep_best_cases = 6`;
+- `non_top_only_deep_best_cases = 6`;
+- `non_top_joint_deep_best_cases = 0`;
+- `top_tier_contains_global_deep_best_cases = 42`;
+- `top_tier_contains_all_global_deep_best_cases = 42`.
+
+Tasas descriptivas de esta muestra:
+
+- sobre los 48 contextos: **6/48 = 12,5 %**;
+- entre los 36 contextos donde existe algo no-top que podar: **6/36 = 16,67 %**.
+
+Estas tasas describen exclusivamente la muestra auditada; no son una estimación poblacional ni una probabilidad productiva.
+
+La conclusión semántica sí es categórica para la frontera auditada:
+
+> El top-tier contextual inmediato **no es una poda segura** antes de depth2. Existe evidencia real reproducible de switches no-top que se convierten en el mejor continuation profundo.
+
+#### Seis contraejemplos canónicos
+
+1. `anchor = 552`, `species_fallback`, rival `aron`
+   - ganador global: `structural_real_probe_ho_oh` → **-2226**;
+   - top-tier inmediato: `basculegion` → -4186, `drednaw` → -3513;
+   - `ho_oh` queda fuera del top-tier y gana depth2.
+
+2. `anchor = 696`, `species_fallback`, rival `roserade`
+   - ganador global: `structural_real_probe_arboliva` → **-4205**;
+   - top-tier inmediato: `delibird` → -10109, `maushold` → -6829;
+   - `arboliva` queda fuera del top-tier y gana depth2.
+
+3. `anchor = 672`, `revealed_damaging_move`, rival `combusken`
+   - ganador global: `structural_real_probe_cresselia` → **-1270**;
+   - top-tier inmediato: `golisopod` → -7193, `staraptor` → -3311;
+   - `cresselia` queda fuera del top-tier y gana depth2.
+
+4. `anchor = 816`, `revealed_damaging_move`, rival `stoutland`
+   - ganador global: `structural_real_probe_clauncher` → **-15645**;
+   - top-tier inmediato: `lilligant` → -21471, `wobbuffet` → -17526;
+   - `clauncher` queda fuera del top-tier y gana depth2.
+
+5. `anchor = 936`, `revealed_damaging_move`, rival `watchog`
+   - ganador global: `structural_real_probe_nosepass` → **-3153**;
+   - top-tier inmediato: `escavalier` → -10984, `shiftry` → -8173;
+   - `nosepass` queda fuera del top-tier y gana depth2.
+
+6. `anchor = 248`, `revealed_damaging_move`, rival `scatterbug`
+   - ganador global: `structural_real_probe_ursaring` → **-170**;
+   - top-tier inmediato: `buizel` → -255, `iron_hands` → -1018, `nidoking` → -1900;
+   - `ursaring` queda fuera del top-tier y gana depth2.
+
+#### Impacto directo sobre full top-tier replacement
+
+En C3f-r, `full_top_tier_replacement_deferred` eliminaba todo switch no-top y era order-invariant.
+
+Frente al oracle ampliado de C3f-s:
+
+- contextos donde replacement poda switches legales: **36/48**;
+- roots legales podados: **72**;
+- contextos donde la poda elimina **todos** los óptimos globales depth2: **6/48**;
+- contextos donde elimina al menos un óptimo global: **6/48**.
+
+Exacto:
+
+`replacement_pruning_loses_global_deep_best_cases = 6`
+
+`replacement_pruning_removes_any_global_deep_best_cases = 6`
+
+Por tanto:
+
+`dropping_non_top_switch_proven_safe = false`
+
+Y, después de C3f-s, ya no es solo falta de prueba: existe un contraejemplo positivo repetido seis veces en la muestra.
+
+#### Impacto sobre `depth1_margin_3000`
+
+C3f-q/r había observado que `depth1_margin_3000` preservaba 48/48 de los óptimos **del oracle restringido al top-tier inmediato**.
+
+Contra el nuevo oracle all-legal:
+
+- contextos donde margin3000 poda algún switch legal: **47/48**;
+- roots legales podados: **143**;
+- contextos donde pierde todos los óptimos globales depth2: **6/48**;
+- contextos donde elimina algún óptimo global: **6/48**.
+
+Exacto:
+
+`adaptive_margin3000_pruning_loses_global_deep_best_cases = 6`
+
+`adaptive_margin3000_pruning_removes_any_global_deep_best_cases = 6`
+
+Así, `depth1_margin_3000` tampoco queda autorizado como hard-pruning all-legal.
+
+#### Por qué C3f-s no contradice C3f-q/r
+
+No existe contradicción entre los resultados:
+
+- C3f-p/q/r preguntaban si una estrategia conservaba el mejor continuation **entre los candidatos del top-tier inmediato ya admitidos en el oracle**;
+- C3f-s amplía el universo de comparación a **todos los switches legales**;
+- los 48/48 anteriores siguen siendo correctos dentro de aquel universo restringido;
+- C3f-s demuestra que aquel universo era insuficiente para justificar una poda semántica previa a depth2.
+
+La frontera cambia de:
+
+> «¿Cuál miembro del top-tier debo conservar?»
+
+a:
+
+> «¿Qué evidencia barata puede reducir roots sin eliminar un switch no-top que después gana en profundidad?»
+
+#### Coste de evaluar los cinco roots legales
+
+C3f-s mide el coste real observado de evaluar los cinco switches legales como roots independientes, manteniendo el `inner cap3` intacto.
+
+Resultados:
+
+- root evaluations: **240**;
+- simulaciones totales: **12000**;
+- media por contexto: **250**;
+- máximo por contexto: **450**;
+- hard bound por contexto: **1100** = 5 roots × 220 simulaciones/root.
+
+Controles descriptivos de coste:
+
+- contextos >220 simulaciones: **23/48**;
+- contextos >440: **23/48**;
+- contextos >660: **0/48**;
+- contextos >880: **0/48**;
+- contextos >1100: **0/48**.
+
+Exacto:
+
+`cost_control_exceed_cases = {220: 23, 440: 23, 660: 0, 880: 0, 1100: 0}`
+
+Importante:
+
+- estos umbrales son **controles de contabilidad**, no políticas;
+- `total_budget_controls_are_accounting_only = true`;
+- `shared_total_budget_allocation_modeled = false`;
+- `cost_control_used_for_semantic_pruning = false`.
+
+C3f-s no autoriza un budget global 660, ni 440, ni ningún otro. Tampoco simula una política de reparto compartido entre roots.
+
+#### Separación root fan-out / inner cap sigue válida
+
+Aunque C3f-s evalúa cinco roots por contexto, cada root mantiene el budget productivo interno:
+
+- `inner_depth_turns = 2`;
+- `inner_max_worlds = 4`;
+- `inner_max_simulations_per_root = 220`;
+- `inner_max_actions_per_side = 3`.
+
+No hubo:
+
+- depth2 incompleto;
+- root budget exhaustion;
+- fallos de world coverage.
+
+Por tanto, C3f-s conserva el hallazgo arquitectónico de C3f-r:
+
+> El fan-out de raíces puede estudiarse por separado del `max_actions_per_side = 3` de las continuaciones internas.
+
+Lo que C3f-s invalida es usar el top-tier inmediato como hard-filter semántico para decidir qué roots merecen entrar.
+
+#### Mixed-root MOVE/SWITCH probe
+
+El fixture profundo heredado continúa siendo SWITCH-only. Para comprobar la obligación de diversidad sin contaminar los scores, C3f-s mantiene una sonda geométrica separada con dos MOVE sintéticos y los cinco IDs de switch reales.
+
+Resultados:
+
+- casos: **48**;
+- context failures: **0**;
+- MOVE diversity failures: **0**;
+- SWITCH diversity failures: **0**;
+- switch reorder root-set mismatches: **0**;
+- root fan-out máximo en geometría mixta: **7**.
+
+Los MOVE sintéticos siguen siendo exclusivamente geométricos:
+
+- `synthetic_moves_used_for_geometry_only = true`;
+- `deep_scores_recomputed_with_synthetic_moves = false`.
+
+Por tanto, ningún score profundo de C3f-s depende de acciones MOVE artificiales.
+
+#### Contexto prohibido y tiebreaks ausentes
+
+C3f-s mantiene explícitamente fuera del root selection:
+
+- Pareto frontier;
+- roster value;
+- `TrainerProfile` como tiebreak previo;
+- hidden beliefs;
+- memory events;
+- campaign snapshot;
+- RNG vivo;
+- recovery policy;
+- replacement policy;
+- campaign policy;
+- lexical preference semántica.
+
+Exacto:
+
+- `frontier_used_for_root_selection = false`;
+- `roster_value_used_for_root_selection = false`;
+- `profile_used_as_presearch_tiebreak = false`;
+- hidden/memory/campaign cases = **0**;
+- `live_rng_used = false`;
+- recovery/replacement/campaign policy = **false**.
+
+#### Estado de autorización después de C3f-s
+
+C3f-s no selecciona estrategia productiva:
+
+`selected_strategy_id = null`
+
+Y congela:
+
+- `production_strategy_selected = false`;
+- `search_sampling_redesign_authorized = false`;
+- `behavior_integration_authorized = false`;
+- `production_sampler_unchanged = true`;
+- `production_max_actions_unchanged = true`;
+- `production_max_simulations_unchanged = true`;
+- `production_phase_logic_modified = false`.
+
+No queda autorizada ninguna de estas decisiones:
+
+- full top-tier replacement en producción;
+- margin3000 como hard filter;
+- expandir siempre los cinco switches productivamente;
+- adoptar un total budget 660/440/220;
+- cambiar `max_actions_per_side`;
+- cambiar `max_simulations`;
+- integrar Pareto o roster value en search;
+- modificar brains;
+- abrir FASE34.
+
+#### Certificación técnica
+
+Checkpoint:
+
+`1db4ed3b76aef8a59fed78f43291b45bb0a1dd28`
+
+Resultado:
+
+- **18/18 GitHub Actions SUCCESS**;
+- FASE33 run: `33749085438`;
+- FASE33 job: `100628253926`;
+- `=== TRAINER TEAM COMPOSITION RESULT: 785 PASS / 0 FAIL ===`;
+- `FASE 33 trainer team composition gate satisfied: 785 PASS / 0 FAIL`;
+- DATA V3 run `33749085432`: SUCCESS;
+- Godot 4.7: SUCCESS;
+- Search Foundation: SUCCESS;
+- Search Depth Budget: SUCCESS;
+- Search Limit Benchmark: SUCCESS;
+- Strategic Switching V2: SUCCESS;
+- canonical C3f-s JSON reproduce 240/240 roots y los seis ganadores no-top;
+- import registra `TrainerRosterSearchAllLegalSwitchRootSemanticsAuditTestSuite` sin error.
+
+#### Certificación humana tree-identical
+
+Checkpoint:
+
+`30e52bdc51c6ba292e012639b23c5b87ddaa99c2`
+
+Tree:
+
+`3b3a96da61b88bf3e208cd147ecd48b85b973299`
+
+Resultado:
+
+- **18/18 GitHub Actions SUCCESS**;
+- FASE33 run: `33749730172`;
+- FASE33 job: `100630261780`;
+- `=== TRAINER TEAM COMPOSITION RESULT: 785 PASS / 0 FAIL ===`;
+- `FASE 33 trainer team composition gate satisfied: 785 PASS / 0 FAIL`;
+- DATA V3 run `33749730340`: SUCCESS;
+- Godot 4.7: SUCCESS;
+- Search Foundation: SUCCESS;
+- Search Depth Budget: SUCCESS;
+- Search Limit Benchmark: SUCCESS;
+- Strategic Switching V2: SUCCESS;
+- mismo JSON C3f-s;
+- mismos 240/240 roots;
+- mismos seis ganadores no-top;
+- mismos costes 12000 / 250 / 450;
+- cero fallos de reconstrucción, depth, budget o coverage.
+
+#### Decisión congelada
+
+C3f-s demuestra dos hechos simultáneos:
+
+1. **Semántica:** no es seguro convertir el top-tier contextual inmediato en hard-pruning para depth2. Seis contextos reales del audit tienen un único mejor root profundo fuera de ese top-tier.
+2. **Arquitectura/coste:** evaluar todos los switches como roots separados es finitamente acotado y, en esta muestra, no supera 450 simulaciones/contexto; pero C3f-s no modela ni autoriza todavía un scheduler/budget compartido productivo.
+
+Por tanto, la siguiente frontera no puede ser «portar replacement». Primero hay que encontrar si existe un screening barato de **todos los switches legales** que preserve el oracle all-legal depth2 con un coste razonable y una política de budget explícita.
+
+#### Próxima microtranche autorizada
+
+**C3f-t — TEST/AUDIT-ONLY all-legal depth-one screening contra oracle all-legal depth-two + budget-safe root scheduling.**
+
+C3f-t queda autorizada para:
+
+- reutilizar los mismos 48 contextos de C3f-s;
+- conservar como ground truth el best-set depth2 calculado sobre **todos los switches legales**;
+- calcular evidencia depth1 barata para **todos los switches legales**, no solo para el top-tier inmediato;
+- comparar estrategias deterministas de screening, margin, gap y/o fallback que decidan qué roots pasan a depth2;
+- medir cuántos óptimos globales all-legal se preservan o pierden;
+- medir roots promovidos, simulaciones depth1, simulaciones depth2 y coste total;
+- separar explícitamente coste de screening de coste de continuación;
+- auditar alternativas de scheduler/budget compartido **solo como contabilidad/test**, sin convertir el agotamiento de budget en una preferencia semántica silenciosa;
+- mantener al menos una geometría mixed-root que preserve MOVE/SWITCH cuando ambos tipos existan;
+- mantener order invariance;
+- tratar empates como conjuntos;
+- mantener Pareto, roster value, hidden beliefs, RNG, campaign/recovery/replacement policy y `TrainerProfile` como tiebreak fuera del preselection;
+- producir salida determinista y JSON-serializable.
+
+C3f-t **no** queda autorizada para:
+
+- modificar `TrainerMultiTurnSearch`;
+- modificar `TrainerActionSpace`;
+- modificar brains;
+- cambiar `max_actions_per_side` productivo;
+- cambiar `max_simulations` productivo;
+- integrar Pareto o roster value en search;
+- seleccionar un threshold/scheduler/sampler para producción;
+- abrir FASE34;
+- mergear PR #105.
+
+La condición para cualquier tranche posterior de port productivo será que C3f-t pueda demostrar, sobre el oracle all-legal de C3f-s, una frontera explícita entre **preservación semántica** y **coste/budget**, sin volver a introducir orden arbitrario ni una poda que elimine los contraejemplos `ho_oh`, `arboliva`, `cresselia`, `clauncher`, `nosepass` o `ursaring`.
+
+Recommended next boundary:
+
+`audit_all_legal_depth_one_screening_against_all_legal_depth_two_oracle_before_any_sampler_port`
