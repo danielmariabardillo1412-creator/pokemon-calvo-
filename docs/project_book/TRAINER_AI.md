@@ -13450,3 +13450,490 @@ C3f-x deberá mantener como invariantes:
 Si C3f-x demuestra que esos contratos no pueden aislarse sin un rediseño amplio del comportamiento del Trainer, deberá **parar y documentar el blocker** en vez de ensanchar scope.
 
 Cualquier integración de producción deberá esperar a una autorización documental posterior y separada.
+
+
+### 26.45) Freeze C3f-x — contrato TEST-ONLY side-aware/action-kind-aware + shared-total scheduler certificado; política todavía no seleccionada
+
+C3f-x parte exclusivamente del freeze canónico 26.44:
+
+`86cef6432d03ef44c1d30de5a72da96dfb64cb1d`
+
+26.44 había cerrado C3f-w con:
+
+`seam_status = NEEDS_NEW_API`
+
+y había autorizado únicamente diseñar/probar, en TEST/AUDIT, dos contratos ejecutables antes de cualquier port productivo:
+
+1. un selector interno **side-aware + action-kind-aware + perspective-aware**;
+2. un scheduler que posea **un único budget total compartido entre roots**.
+
+C3f-x no modifica producción ni selecciona todavía una policy de reducción, scheduler o budget productivos.
+
+#### Checkpoints certificados
+
+| checkpoint | SHA |
+|---|---|
+| técnico C3f-x | `460475b8522b94febd9d30dc467b0deeff209fd9` |
+| humano tree-identical | `f94ce24da85d88f065cc71c67f671c77f85e468b` |
+| tree común | `eb739b8cebf25c3a9981817ea2638279c0839d72` |
+| parent común | `86cef6432d03ef44c1d30de5a72da96dfb64cb1d` |
+
+Los checkpoints técnico y humano son **siblings reales**:
+
+- mismo parent;
+- mismo tree;
+- ningún commit técnico está en la ancestry del humano;
+- el segundo checkpoint reproduce el mismo contenido bajo un SHA distinto.
+
+#### Diff exacto de C3f-x
+
+Respecto a 26.44:
+
+- `tests/trainer_ai/trainer_roster_search_contract_api_design_audit_test_suite.gd`: **+581**;
+- `tests/trainer_ai/trainer_team_composition_test_runner.gd`: **+1/-1**;
+- producción: **0 cambios**;
+- brains: **0 cambios**;
+- `TrainerMultiTurnSearch`: **0 cambios**;
+- `TrainerActionSpace`: **0 cambios**;
+- `TrainerSearchBudget`: **0 cambios**;
+- ItemAware production search: **0 cambios**;
+- workflows permanentes: **0 cambios**.
+
+Audit ID:
+
+`c3f_x_search_contract_api_design_audit_v1`
+
+Estado contractual:
+
+`CONTRACT_API_ISOLATABLE_POLICY_UNSELECTED`
+
+#### Incidente de ejecución detectado y corregido antes de certificar
+
+El primer intento técnico de C3f-x fue:
+
+`5c851af8aee2b1bde4d002b5242bf2ed37129519`
+
+Ese intento obtuvo:
+
+- 17/18 workflows SUCCESS;
+- Trainer Team Composition: FAILURE;
+- FASE33: **878 PASS / 29 FAIL**.
+
+El import de Godot había pasado. El fallo real era uno solo, dentro de la construcción del informe C3f-x:
+
+`budget_reports[String(budget)] = ...`
+
+Godot 4.7 reportó que no existía un constructor `String` válido para ese entero. Como el informe abortó antes de construirse, quedó `{}` y las 29 comprobaciones posteriores fallaron en cascada.
+
+Por tanto, **29 FAIL no representaban 29 contradicciones del contrato**. Representaban un único error de ejecución previo a sus aserciones.
+
+La corrección fue estrictamente mecánica:
+
+`String(budget)` -> `str(budget)`
+
+No se modificó:
+
+- ninguna expectativa semántica;
+- ningún outcome esperado;
+- ninguna cuota;
+- ningún límite;
+- ningún fallback;
+- ninguna policy;
+- ningún archivo productivo.
+
+Para mantener la disciplina anti-ciclo, el intento fallido y el staging de corrección fueron retirados de la historia canónica. C3f-x se reconstruyó limpiamente desde 26.44 y produjo el técnico definitivo `460475b8...`.
+
+#### Contrato TEST-ONLY del selector
+
+Contract ID:
+
+`side_aware_action_kind_aware_fail_closed_selector_contract_v1`
+
+Roles modelados explícitamente:
+
+- `root_opponent_response`;
+- `own_depth2_continuation`;
+- `opponent_depth2_continuation`.
+
+El contrato exige:
+
+- `side_id` explícito;
+- perspectiva sanitizada explícita;
+- correspondencia entre role, side y perspectiva;
+- MOVE, SWITCH e ITEM como clases de acción explícitas;
+- `inner limit = 3`;
+- ninguna reutilización de memoria privada del observer para construir perspectiva rival.
+
+Cuando las acciones caben completas en el límite, el selector no necesita reducir semánticamente y devuelve:
+
+`COMPLETE`
+
+Probe ejecutado con tres acciones:
+
+- MOVE: 1;
+- SWITCH: 1;
+- ITEM: 1.
+
+Resultado:
+
+- input: **3**;
+- selected: **3**;
+- los tres kinds preservados exactamente.
+
+Cuando existen **4 acciones para cap 3** y todavía no hay una policy semántica seleccionada, el contrato no inventa una decisión:
+
+`NO_DECISION`
+
+Reason:
+
+`semantic_overflow_policy_not_selected`
+
+Selected signature:
+
+`[]`
+
+Esto es deliberadamente fail-closed.
+
+#### Frontera de perspectiva rival
+
+Un contexto rival sanitizado y explícitamente separado se acepta en el probe:
+
+`opponent_perspective_probe = COMPLETE`
+
+En cambio, intentar reutilizar memoria privada del observer como perspectiva del oponente produce:
+
+`NO_DECISION`
+
+Reason:
+
+`opponent_perspective_cannot_reuse_observer_private_memory`
+
+También se rechaza una discrepancia role/perspective/side con:
+
+`NO_DECISION`
+
+De esta forma C3f-x no convierte una conveniencia de implementación en permiso para usar información que el lado simulado no debería poseer.
+
+#### Sin desempate lexical encubierto
+
+C3f-x mantiene explícitamente:
+
+`lexical_fallback_authorized = false`
+
+`canonicalization_used_for_behavior = false`
+
+El probe forward/reverse comprueba únicamente invariancia de **set** cuando no hace falta reducción. La ordenación lexical usada para telemetría/comparación no participa en la selección de conducta.
+
+#### Contrato TEST-ONLY del scheduler compartido
+
+Contract ID:
+
+`shared_total_equal_quota_no_redistribution_contract_v1`
+
+El scheduler de contrato posee:
+
+- un único `shared_total_budget`;
+- hard cap local por root: **220**;
+- cuotas upfront iguales;
+- redistribución: **0**;
+- outcomes explícitos: `COMPLETE`, `TRUNCATED`, `NO_DECISION`;
+- ninguna decisión implícita cuando no existe presupuesto suficiente.
+
+Roots del probe, en simulaciones solicitadas:
+
+- root_0: 40;
+- root_1: 80;
+- root_2: 120;
+- root_3: 130;
+- root_4: 130.
+
+Total requerido para completar ese probe:
+
+**500** simulaciones.
+
+##### Control 220
+
+Quota upfront:
+
+**44** por root.
+
+Allocations:
+
+- root_0: 40;
+- root_1: 44;
+- root_2: 44;
+- root_3: 44;
+- root_4: 44.
+
+Resultado:
+
+- simulations allocated: **216**;
+- unused budget: **4**;
+- complete roots: **1**;
+- truncated roots: **4**;
+- budget violations: **0**;
+- global outcome: `TRUNCATED`.
+
+##### Control 440
+
+Quota upfront:
+
+**88** por root.
+
+Allocations:
+
+- root_0: 40;
+- root_1: 80;
+- root_2: 88;
+- root_3: 88;
+- root_4: 88.
+
+Resultado:
+
+- simulations allocated: **384**;
+- unused budget: **56**;
+- complete roots: **2**;
+- truncated roots: **3**;
+- budget violations: **0**;
+- global outcome: `TRUNCATED`.
+
+##### Control 660
+
+Quota upfront:
+
+**132** por root.
+
+Allocations:
+
+- root_0: 40;
+- root_1: 80;
+- root_2: 120;
+- root_3: 130;
+- root_4: 130.
+
+Resultado:
+
+- simulations allocated: **500**;
+- unused budget: **160**;
+- redistributed simulations: **0**;
+- complete roots: **5**;
+- truncated roots: **0**;
+- budget violations: **0**;
+- global outcome: `COMPLETE`.
+
+##### Control budget 0
+
+Resultado:
+
+- allocations: **0** en todos los roots;
+- simulations allocated: **0**;
+- no-decision roots: **5**;
+- global outcome: `NO_DECISION`.
+
+#### Invariancia ante orden de roots
+
+El probe forward/reverse sobre budget 440 reproduce:
+
+- mismas allocations por root: **true**;
+- mismos outcomes por root: **true**.
+
+No se introduce dependencia del orden de enumeración de roots.
+
+#### 660 sigue sin ser equivalente al budget productivo actual
+
+C3f-x mantiene explícitamente la distinción descubierta en C3f-w:
+
+- hard cap actual por evaluación/root observado: **220**;
+- cinco roots independientes a 220 podrían permitir hasta **1100**;
+- control shared-total auditado: **660**.
+
+Por tanto:
+
+`1100 != 660`
+
+C3f-x demuestra que una API de shared-total budget **puede aislarse en test**. No demuestra que el runtime actual ya posea esa semántica ni autoriza a reinterpretar `max_simulations = 220` como 660 compartido.
+
+#### Certificación técnica definitiva
+
+Checkpoint:
+
+`460475b8522b94febd9d30dc467b0deeff209fd9`
+
+Resultado:
+
+- **18/18 workflows GitHub Actions: SUCCESS**;
+- FASE33 / Trainer Team Composition: **907 PASS / 0 FAIL**;
+- **31/31 checks nuevos C3f-x: PASS**;
+- JSON C3f-x completo;
+- JSON determinista y serializable;
+- selector contract: PASS;
+- scheduler contract: PASS;
+- Godot 4.7 general: SUCCESS;
+- DATA V3: SUCCESS;
+- Search Foundation: SUCCESS;
+- Search Depth Budget: SUCCESS;
+- Search Limit Benchmark: SUCCESS;
+- Strategic Switching V2: SUCCESS;
+- Item Actions: SUCCESS;
+- Loadouts: SUCCESS;
+- cero producción modificada.
+
+#### Certificación humana tree-identical
+
+Checkpoint:
+
+`f94ce24da85d88f065cc71c67f671c77f85e468b`
+
+Tree común:
+
+`eb739b8cebf25c3a9981817ea2638279c0839d72`
+
+Parent común:
+
+`86cef6432d03ef44c1d30de5a72da96dfb64cb1d`
+
+Resultado reproducido:
+
+- **18/18 workflows GitHub Actions: SUCCESS**;
+- FASE33 / Trainer Team Composition: **907 PASS / 0 FAIL**;
+- mismos **31/31 checks C3f-x: PASS**;
+- mismo `audit_id`;
+- mismo `contract_status = CONTRACT_API_ISOLATABLE_POLICY_UNSELECTED`;
+- mismos probes del selector;
+- mismos outcomes 220/440/660/0 del scheduler;
+- mismas allocations y unused budgets;
+- mismo root-order probe;
+- mismas barreras de información;
+- mismos `null/false` productivos.
+
+C3f-x queda **DOBLEMENTE CERTIFICADO**.
+
+#### Qué demuestra C3f-x
+
+C3f-x resuelve la pregunta inmediata de 26.44:
+
+1. el missing seam de C3f-w puede representarse mediante contratos aislados sin modificar producción;
+2. un selector puede exigir role, side y perspectiva sanitizada de forma explícita;
+3. MOVE/SWITCH/ITEM pueden preservarse como kinds separados;
+4. un overflow sin policy seleccionada puede fallar cerrado en vez de introducir un fallback no auditado;
+5. una perspectiva rival puede mantenerse separada de la memoria privada del observer;
+6. un scheduler puede poseer un budget total compartido, con cuotas deterministas y outcomes explícitos;
+7. `TRUNCATED` y `NO_DECISION` pueden permanecer visibles en vez de convertirse en decisiones implícitas;
+8. root fan-out all-legal y `inner max_actions_per_side = 3` siguen siendo conceptos separados.
+
+#### Qué NO demuestra ni autoriza C3f-x
+
+C3f-x **no** demuestra:
+
+- que `margin3000` sea globalmente seguro;
+- que 660 sea un budget universal;
+- que el scheduler de contrato sea la policy productiva correcta;
+- que el selector fail-closed sea por sí solo suficiente para producción;
+- que la policy validada en C3f-u/v se comporte correctamente en los tres roles ItemAware;
+- que se pueda portar el contrato sin adaptar APIs productivas;
+- que una perspectiva rival productiva ya exista con todos los datos sanitizados necesarios.
+
+C3f-x **no autoriza**:
+
+- modificar `TrainerMultiTurnSearch`;
+- modificar `TrainerItemAwareSearch`;
+- modificar `TrainerActionSpace`;
+- modificar `TrainerSearchBudget`;
+- modificar brains;
+- modificar `max_actions_per_side`;
+- modificar `max_simulations`;
+- integrar un adapter productivo;
+- seleccionar `margin3000`, top-k4, margin6000, 660 o scheduler como policy productiva;
+- lexical fallback;
+- frontier fallback;
+- roster-value fallback;
+- hidden-belief fallback;
+- Profile como desempate;
+- campaign/recovery/replacement policy;
+- abrir FASE34.
+
+Permanecen explícitamente:
+
+`candidate_strategy_proven_safe_globally = false`
+
+`behavior_integration_authorized = false`
+
+`production_adapter_authorized = false`
+
+`production_files_modified = false`
+
+`selected_strategy_id = null`
+
+`selected_scheduler_id = null`
+
+`selected_shared_budget = null`
+
+`fase34_open = false`
+
+#### Invariantes externas antes del freeze 26.45
+
+Después de la certificación humana:
+
+- PR #105: **OPEN**;
+- PR #105: `merged = false`;
+- head certificado: `f94ce24da85d88f065cc71c67f671c77f85e468b`;
+- base: `main`;
+- `main`: `f8452a1625ccb8389c9e52ff4416a96a24e00efd`.
+
+PR #105 continúa siendo temporal y **NO debe mergearse**.
+
+FASE34 permanece **CLOSED**.
+
+#### Decisión congelada
+
+C3f-w había determinado que el runtime productivo necesita una API nueva antes de portar la evidencia de C3f-n..v.
+
+C3f-x demuestra que esa frontera nueva es **aislable y testeable**, pero deja deliberadamente la policy semántica sin seleccionar:
+
+`contract_status = CONTRACT_API_ISOLATABLE_POLICY_UNSELECTED`
+
+No hay contradicción entre ambos resultados:
+
+- C3f-w: la API productiva actual no basta;
+- C3f-x: la API que falta puede definirse con contratos ejecutables estrechos y fail-closed;
+- siguiente paso: probar una policy candidata **a través de esos contratos aislados**, todavía sin adapter productivo.
+
+#### Siguiente microtranche autorizada — C3f-y
+
+26.45 autoriza únicamente:
+
+**C3f-y — TEST/AUDIT-ONLY candidate-screen policy-through-contract audit sobre los roles ItemAware antes de cualquier production adapter.**
+
+Boundary exacto:
+
+`test_candidate_screen_policy_through_isolated_contract_on_item_aware_roles_before_any_production_adapter`
+
+C3f-y podrá usar como **candidato de test**, no como selección productiva, la evidencia sample-scoped previa de C3f-u/v. En particular, `depth1_margin_3000_all_legal` puede ser ejercitado porque fue el candidato 0-loss de menor coste observado sobre los 96 casos distintos de C3f-u+v, pero deberá conservar:
+
+`candidate_strategy_proven_safe_globally = false`
+
+C3f-y deberá, como mínimo:
+
+- mantener toda la tranche **TEST/AUDIT-ONLY**;
+- no repetir sin necesidad la selección held-out C3f-v;
+- pasar una candidate screen policy a través del contrato aislado C3f-x;
+- cubrir explícitamente los tres roles: root opponent response, own depth2 continuation y opponent depth2 continuation;
+- preservar MOVE/SWITCH/ITEM como clases explícitas en el camino ItemAware;
+- usar perspectivas sanitizadas y side-aware;
+- impedir reutilización de memoria privada del observer para decisiones del oponente;
+- comprobar overflow y failure outcomes sin lexical/current-sampler/frontier/roster-value fallback oculto;
+- mantener root fan-out all-legal separado del inner cap 3;
+- usar 660 únicamente como control observado si hace falta medir el scheduler, no como budget productivo seleccionado;
+- conservar outcomes `COMPLETE/TRUNCATED/NO_DECISION` visibles;
+- registrar cualquier counterexample como evidencia válida;
+- parar y documentar `BLOCKED` si la policy no puede pasar por los contratos ItemAware sin ampliar la frontera de información o cambiar conducta productiva;
+- producir JSON determinista y serializable;
+- conservar C3f-s/t/u/v/w/x intactos;
+- producción: **0 cambios**;
+- FASE34: **CLOSED**;
+- PR #105: OPEN/unmerged;
+- `main`: sin cambios.
+
+C3f-y **no queda autorizada** para integrar ningún adapter en producción, seleccionar globalmente `margin3000` o 660, ni convertir evidencia muestral en garantía universal.
+
+Cualquier port productivo deberá esperar una autorización documental posterior y separada.
