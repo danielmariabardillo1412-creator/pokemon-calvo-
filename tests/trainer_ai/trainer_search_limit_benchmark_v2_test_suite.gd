@@ -71,9 +71,10 @@ func _build_catalog() -> void:
 	# Hidden coverage is real in the live moveset but deliberately absent from public level-up data.
 	_add_species(U_REFERENCE_SPECIES, 50, 170, 70, 60, [U_WEAK])
 
-	_check.call("limit_v2_normal_type_available", _catalog.type(&"normal") != null)
-	_check.call("limit_v2_branch_nuke_is_public_prior", _species_learnset_has(B_REFERENCE_SPECIES, B_NUKE))
-	_check.call("limit_v2_hidden_nuke_not_public_prior", not _species_learnset_has(U_REFERENCE_SPECIES, U_HIDDEN_NUKE))
+	if _check.is_valid():
+		_check.call("limit_v2_normal_type_available", _catalog.type(&"normal") != null)
+		_check.call("limit_v2_branch_nuke_is_public_prior", _species_learnset_has(B_REFERENCE_SPECIES, B_NUKE))
+		_check.call("limit_v2_hidden_nuke_not_public_prior", not _species_learnset_has(U_REFERENCE_SPECIES, U_HIDDEN_NUKE))
 
 
 func _test_contract() -> void:
