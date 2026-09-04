@@ -1,0 +1,32 @@
+name: TEMP Trainer AI 26.53 append
+
+on:
+  push:
+    branches:
+      - tmp/trainer-ai-2653-append
+
+permissions:
+  contents: write
+
+jobs:
+  append-and-clean:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Append freeze and remove staging files
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat tmp/trainer_ai_2653_append.md >> docs/project_book/TRAINER_AI.md
+          rm tmp/trainer_ai_2653_append.md
+          rm .github/workflows/_tmp_trainer_ai_2653_append.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/project_book/TRAINER_AI.md tmp/trainer_ai_2653_append.md .github/workflows/_tmp_trainer_ai_2653_append.yml
+          git commit -m "docs(trainer-ai): stage freeze 26.53"
+          git push origin "HEAD:${GITHUB_REF_NAME}"
