@@ -4,8 +4,8 @@ extends RefCounted
 # Headless application boundary for battles against owned trainer parties.
 # Battle rules remain authoritative in Battle Core. This layer composes player ownership,
 # opponent roster, settlement and progression; it deliberately exposes no Capture or Run command.
-# C3f-ae also owns trusted dual side-specific battle memory from battle start, but does not
-# select trainer actions or activate any search/switch policy.
+# C3f-ae owns trusted dual side-specific battle memory from battle start. C3f-af may execute
+# ItemAware search as read-only shadow telemetry, but still never selects/substitutes an action.
 
 const READY := &"READY"
 const BATTLE_ACTIVE := &"BATTLE_ACTIVE"
@@ -21,10 +21,12 @@ var status: StringName = READY
 var completion_reason: StringName = &""
 var opponent_trainer_id: StringName = &""
 var last_error: String = ""
+var last_trainer_shadow_report: Dictionary = {}
 
 var _battle_server: AuthoritativeBattleServer = null
 var _opponent_roster: Array[CreatureInstance] = []
 var _trainer_memory_owner := TrainerDualSideBattleMemoryOwner.new()
+var _trainer_shadow_item_aware_enabled: bool = false
 
 
 func _init(
@@ -57,8 +59,8 @@ func opponent_active() -> CreatureInstance:
 	return _battle_server.state.active_for_side(&"side_b")
 
 
-# Wiring-only read seam for future search integration. Callers receive detached snapshots;
-# no mutable live TrainerBattleMemory escapes the trusted session.
+# Wiring-only read seam. Callers receive detached snapshots; no mutable live
+# TrainerBattleMemory escapes the trusted session.
 func trainer_memory_wiring_ready() -> bool:
 	return (
 		has_active_battle()
@@ -83,6 +85,41 @@ func trainer_branch_memory_snapshot_for_side(
 	return _trainer_memory_owner.branch_snapshot_for_side(side_id, events, branch_state)
 
 
+# C3f-af shadow toggle. Disabled by default. Enabling it can produce telemetry or fail
+# closed, but can never replace the explicit opponent_action submitted by the caller.
+func set_trainer_shadow_item_aware_enabled(enabled: bool) -> void:
+	_trainer_shadow_item_aware_enabled = enabled
+	last_trainer_shadow_report = {}
+
+
+func trainer_shadow_item_aware_is_enabled() -> bool:
+	return _trainer_shadow_item_aware_enabled
+
+
+func trainer_shadow_item_aware_report_for_side(side_id: StringName) -> Dictionary:
+	var probe := TrainerItemAwareShadowProbe.new()
+	if not trainer_memory_wiring_ready():
+		return probe.blocked_report("trainer_memory_not_ready", side_id)
+	var memory := trainer_memory_snapshot_for_side(side_id)
+	if memory == null:
+		return probe.blocked_report("side_memory_unavailable", side_id)
+	return probe.evaluate(_battle_server.state, side_id, memory, catalogs)
+
+
+func trainer_branch_shadow_item_aware_report_for_side(
+	side_id: StringName,
+	events: Array[BattleEvent],
+	branch_state: BattleState,
+) -> Dictionary:
+	var probe := TrainerItemAwareShadowProbe.new()
+	if not trainer_memory_wiring_ready():
+		return probe.blocked_report("trainer_memory_not_ready", side_id)
+	var memory := trainer_branch_memory_snapshot_for_side(side_id, events, branch_state)
+	if memory == null:
+		return probe.blocked_report("branch_memory_unavailable", side_id)
+	return probe.evaluate(branch_state, side_id, memory, catalogs)
+
+
 # Starts a trainer battle from trusted trainer identity + roster data.
 # The session never creates/copies combatants: Battle receives the same CreatureInstance objects.
 func begin_battle(
@@ -91,6 +128,7 @@ func begin_battle(
 	battle_seed: int = 1,
 ) -> bool:
 	last_error = ""
+	last_trainer_shadow_report = {}
 	if has_active_battle():
 		last_error = "battle_already_active"
 		return false
@@ -148,8 +186,9 @@ func begin_battle(
 	return true
 
 
-# The application/presentation layer still chooses the trainer action. C3f-ae wires trusted
-# side-specific memory only; it deliberately does not call a brain/search or synthesize an action.
+# The application/presentation layer still chooses both actions. When C3f-af shadow is enabled,
+# side_b ItemAware search is executed only to produce telemetry before the authoritative submit.
+# The exact opponent_action argument below remains the action sent to Battle Core.
 func submit_player_action(
 	player_action: BattleAction,
 	opponent_action: BattleAction,
@@ -173,6 +212,15 @@ func submit_player_action(
 	if not _trainer_memory_owner.is_ready(_battle_server.state):
 		last_error = "trainer_memory_not_ready"
 		return []
+
+	if _trainer_shadow_item_aware_enabled:
+		var shadow_report := trainer_shadow_item_aware_report_for_side(&"side_b")
+		last_trainer_shadow_report = shadow_report.duplicate(true)
+		if String(shadow_report.get("tranche_status", "")) != TrainerItemAwareShadowProbe.SHADOW_READY:
+			last_error = "trainer_shadow_context_not_ready"
+			return []
+	else:
+		last_trainer_shadow_report = {}
 
 	var events := _battle_server.submit_turn([player_action, opponent_action])
 	if not _trainer_memory_owner.observe_authoritative(events, _battle_server.state):
@@ -218,6 +266,8 @@ func settle_finished_battle() -> TrainerBattleSettlement:
 	_trainer_memory_owner.clear()
 	_battle_server = null
 	_opponent_roster.clear()
+	_trainer_shadow_item_aware_enabled = false
+	last_trainer_shadow_report = {}
 	return out
 
 
@@ -227,6 +277,8 @@ func reset_after_completion() -> bool:
 		last_error = "session_not_completed"
 		return false
 	_trainer_memory_owner.clear()
+	_trainer_shadow_item_aware_enabled = false
+	last_trainer_shadow_report = {}
 	status = READY
 	completion_reason = &""
 	opponent_trainer_id = &""

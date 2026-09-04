@@ -9,7 +9,7 @@ func _initialize() -> void:
 
 
 func _run() -> void:
-	TrainerRosterDualSideMemoryProductionWiringAuditTestSuite.new().run(Callable(self, "_check"))
+	TrainerRosterItemAwareShadowProductionLifecycleAuditTestSuite.new().run(Callable(self, "_check"))
 	TrainerRosterStructuralRealDataAuditTestSuite.new().run(Callable(self, "_check"))
 	TrainerRosterStructuralOverlapRealDataAuditTestSuite.new().run(Callable(self, "_check"))
 	TrainerRosterStructuralFormulaComparisonTestSuite.new().run(Callable(self, "_check"))
