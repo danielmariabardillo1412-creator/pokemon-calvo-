@@ -14475,3 +14475,218 @@ C3f-aa deberá, como mínimo:
 - `main`: intacto.
 
 C3f-aa deberá terminar con una conclusión arquitectónica inequívoca sobre si cada role puede alimentar el contrato narrow C3f-z usando únicamente información válida. Cualquier adapter productivo requerirá un freeze documental posterior y separado.
+
+### 26.48) Freeze C3f-aa — perspectiva simulada y procedencia del score SWITCH mapeadas; adapter productivo todavía no listo
+
+#### Baseline y checkpoints
+
+C3f-aa parte exclusivamente del freeze corregido 26.47:
+
+`5192b1b837d16550a649bfa1e2c7bc163e335a24`
+
+Primer candidato técnico no certificado:
+
+`dac9c32432f3667c3d809262c23ca7c555ec4c50`
+
+Ese candidato falló por un defecto de implementación del propio audit: cuatro constantes locales redeclaraban nombres ya heredados (`PATH_MULTI_SEARCH`, `PATH_ITEM_SEARCH`, `PATH_OBSERVATION_BUILDER`, `PATH_DEPTH_BRAIN`). Los checks semánticos C3f-aa no llegaron a ejecutarse; el timeout posterior del runner no constituye evidencia contra el contrato. Este SHA no forma parte del checkpoint canónico.
+
+Checkpoint técnico corregido:
+
+`c357f5c7f1db734e030920281419485a68fd8a25`
+
+Checkpoint humano sibling:
+
+`e92a3a47643f4d5d9e5109de50366377a387952b`
+
+Ambos son siblings reales:
+
+- parent común: `5192b1b837d16550a649bfa1e2c7bc163e335a24`;
+- tree común: `0feff27f008b5a965909a43e880bd5140946ac9b`;
+- ninguno desciende del otro.
+
+#### Diff exacto C3f-aa
+
+Contra 26.47 el tree certificado modifica únicamente TEST/AUDIT:
+
+- `tests/trainer_ai/trainer_roster_search_simulated_perspective_switch_score_source_audit_test_suite.gd`: **+503 / -0**;
+- `tests/trainer_ai/trainer_team_composition_test_runner.gd`: **+1 / -1**;
+- total: **504 inserciones / 1 borrado**;
+- producción: **0**;
+- brains: **0**;
+- `TrainerMultiTurnSearch`: **0**;
+- `TrainerItemAwareSearch`: **0**;
+- documentación/workflows en el tree C3f-aa: **0**.
+
+Suite:
+
+`TrainerRosterSearchSimulatedPerspectiveSwitchScoreSourceAuditTestSuite`
+
+Audit id:
+
+`c3f_aa_simulated_perspective_switch_score_source_mapping_audit_v1`
+
+Resultado de tranche:
+
+`NO_PRODUCTION_ADAPTER_READY`
+
+#### Recuento canónico de FASE33
+
+C3f-aa añade exactamente **35 checks** sobre los **965** del freeze 26.47:
+
+`965 + 35 = 1000`
+
+Certificación técnica:
+
+- **18/18 workflows SUCCESS**;
+- FASE33 literal: **1000 PASS / 0 FAIL**.
+
+Certificación humana:
+
+- **18/18 workflows SUCCESS**;
+- FASE33 literal: **1000 PASS / 0 FAIL**.
+
+Corrección explícita de registro: cualquier mención conversacional previa a `1001 PASS / 0 FAIL` o a 36 checks no es canónica. Fue un error de recuento/transcripción; los dos logs exactos reproducen **1000 PASS / 0 FAIL** y 35 checks nuevos. No hubo nondeterminismo entre técnico y humano.
+
+#### Mapa de los tres roles ItemAware
+
+C3f-aa mantiene separados los tres call-sites semánticos de `_bounded_actions()` y exige perspectiva side-aware sanitizada para cada uno.
+
+**1. `root_opponent_response`**
+
+- side requerido: oponente;
+- estado simulado: `world.state_before_root_turn`;
+- action space: `root_fork.server`;
+- memoria requerida: `opponent_historical_public_memory`;
+- reutilizar memoria privada del observer: prohibido;
+- historial previo equivalente del oponente disponible en el contexto actual: no;
+- status: `BLOCKED_BY_INFORMATION_BOUNDARY`;
+- comportamiento del contrato: fail closed.
+
+**2. `own_depth2_continuation`**
+
+- side requerido: observer;
+- estado simulado: `branch.fork.state_after_root_turn`;
+- action space: `branch.fork.server`;
+- existen primitivas para reconstrucción branch-local: clone de memoria, `observe_events`, `TrainerObservationBuilder`, clone de belief, actualización de belief y creación de `TrainerDecisionContext`;
+- el historial previo del observer sí está disponible;
+- los eventos del root turn existen transitoriamente, pero el search actual no los retiene/encadena hacia la continuación;
+- status: `NEEDS_ADAPTER`;
+- no es un bloqueo de información oculta, sino de threading/reconstrucción;
+- hasta existir adapter: fail closed.
+
+**3. `opponent_depth2_continuation`**
+
+- side requerido: oponente;
+- estado/action space: branch simulado;
+- memoria requerida: `opponent_historical_public_memory`;
+- memoria privada del observer: no reutilizable;
+- historial previo equivalente del oponente no está disponible en el contexto actual;
+- status: `BLOCKED_BY_INFORMATION_BOUNDARY`;
+- comportamiento del contrato: fail closed.
+
+#### Frontera de información demostrada
+
+El audit confirma que:
+
+- `TrainerDecisionContext` contiene snapshot de memoria del observer, no un snapshot histórico equivalente del oponente;
+- `TrainerObservationBuilder` requiere memoria coherente con el side observado;
+- el envelope público persistido por `TrainerBattleMemory` conserva el núcleo del evento, pero elimina metadata y `source_id`;
+- los reveal maps del observer están orientados a lo que ese observer ha aprendido del oponente;
+- iniciar una memoria rival vacía sería sanitizado, pero históricamente incompleto;
+- por tanto no es válido fingir que la memoria del observer o una memoria rival recién creada equivalen a lo que el rival habría observado durante toda la batalla.
+
+C3f-aa no demuestra que una historia pública simétrica sea imposible de obtener en otra capa. Solo demuestra que **el contexto actual de search no la contiene ni la reconstruye de forma equivalente**. Esa distinción queda reservada para C3f-ab.
+
+#### Procedencia exacta de `depth1_margin_3000_all_legal`
+
+La evidencia C3f-t/C3f-aa fija que el score usado por el candidato SWITCH `depth1_margin_3000_all_legal` no procede de `TrainerStrategicSwitchEvaluatorV2`.
+
+La procedencia auditada es un screen dedicado con:
+
+- clase: `TrainerMultiTurnSearch`;
+- search model: `simultaneous_depth_budget_v1`;
+- `depth_turns = 1`;
+- `max_worlds = 4`;
+- `max_simulations = 220`;
+- `max_actions_per_side = 3`;
+- cada SWITCH evaluado como root sobre un `TrainerDecisionContext` válido para esa perspectiva.
+
+Status de la fuente de score:
+
+`AUDITED_BASE_DEPTH1_NOT_ITEM_AWARE_EQUIVALENT`
+
+Consecuencias:
+
+- no se autoriza sustituirlo por el score inmediato de `TrainerStrategicSwitchEvaluatorV2`;
+- no se autoriza reutilizar un score calculado antes de que cambie el estado simulado;
+- cada role necesita recalcular el score con su contexto/observación/memoria/belief branch-local correspondiente;
+- `TrainerItemAwareSearch` posee semántica ITEM propia, por lo que la equivalencia entre el screen base depth-1 auditado y un screen ItemAware **no está demostrada**;
+- la portabilidad de ese score a ItemAware requiere un audit separado posterior.
+
+#### Límites que siguen cerrados
+
+C3f-aa no selecciona ni abre:
+
+- estrategia productiva;
+- scheduler productivo;
+- shared budget;
+- `660` como budget productivo;
+- adapter productivo;
+- integración de comportamiento;
+- fallback lexical;
+- fallback frontier/roster/Profile/campaign/recovery/replacement;
+- FASE34.
+
+Se preserva:
+
+- root fanout all-legal;
+- inner cap3 como límite distinto del root fanout;
+- separación explícita MOVE / SWITCH / ITEM;
+- C3f-z como contrato TEST/AUDIT-only;
+- `candidate_strategy_proven_safe_globally = false`;
+- cero producción.
+
+#### Invariantes externas al cierre C3f-aa
+
+- PR #105: **OPEN**;
+- `merged_at = null` / endpoint de merged devuelve 404, por tanto no mergeado;
+- head del PR al certificar el humano: `e92a3a47643f4d5d9e5109de50366377a387952b`;
+- base: `main`;
+- `main`: `f8452a1625ccb8389c9e52ff4416a96a24e00efd`.
+
+#### Decisión documental 26.48
+
+C3f-aa queda cerrado como mapa ejecutable de la frontera de perspectiva y de la procedencia del score SWITCH. El resultado **no** autoriza un adapter productivo: antes hay que saber si existe una fuente pública autoritativa retenida durante toda la batalla que permita reconstruir dos historias side-specific legítimas sin información oculta.
+
+Se autoriza exclusivamente:
+
+**C3f-ab — TEST/AUDIT-ONLY symmetric public-history + branch-local perspective contract before ItemAware score portability or any production adapter.**
+
+C3f-ab deberá distinguir explícitamente entre:
+
+1. snapshot actual del observer;
+2. historia/event stream público autoritativo neutral;
+3. memoria histórica side-specific;
+4. eventos simulados branch-local.
+
+Objetivo mínimo:
+
+- localizar si `TrainerBattleSession`, controller, Battle Core/server u otra capa ya retienen un event stream público/autoritativo entre turnos;
+- comprobar si ese stream puede proyectarse de forma determinista y sanitizada para ambos sides sin reutilizar memoria privada del observer;
+- comprobar qué metadata del stream es pública, qué debe filtrarse y qué no puede inferirse;
+- comprobar si los eventos branch-local retornados por simulación pueden añadirse a cada historia proyectada sin contaminarla con información del otro side;
+- clasificar el resultado de forma explícita, sin predeterminarlo, como `EXISTING_PUBLIC_HISTORY_SUFFICIENT`, `NEEDS_PUBLIC_HISTORY_CHANNEL`, `NEEDS_ADAPTER` o `BLOCKED`;
+- si solo existe una solución parcial, fallar cerrado y documentar el missing seam exacto.
+
+C3f-ab **no** podrá:
+
+- modificar producción;
+- afirmar todavía paridad del score `TrainerItemAwareSearch` con el screen base depth-1;
+- seleccionar política, scheduler o budget;
+- reabrir 660;
+- alterar root all-legal ni inner cap3;
+- reutilizar memoria privada del observer para modelar al oponente;
+- abrir FASE34;
+- mergear PR #105.
+
+La portabilidad ItemAware del score SWITCH queda deliberadamente para un tranche posterior, únicamente después de resolver o clasificar la historia/perspectiva side-specific.
