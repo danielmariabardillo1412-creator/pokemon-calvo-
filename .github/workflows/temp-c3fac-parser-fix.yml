@@ -1,0 +1,32 @@
+name: TEMP C3f-ac parser fix
+
+on:
+  push:
+    branches:
+      - temp/c3fac-parser-fix
+
+permissions:
+  contents: write
+
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: temp/c3fac-parser-fix
+      - name: Replace unsupported strict inequality
+        shell: bash
+        run: |
+          set -euo pipefail
+          path='tests/trainer_ai/trainer_roster_search_item_aware_depth1_switch_score_portability_audit_test_suite.gd'
+          sed -i 's/!==/!=/g' "$path"
+          if git diff --quiet -- "$path"; then
+            echo 'No parser fix required.'
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add "$path"
+          git commit -m 'temp: repair C3f-ac parser operator'
+          git push origin HEAD:temp/c3fac-parser-fix
