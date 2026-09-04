@@ -15252,3 +15252,232 @@ Conclusiones permitidas para C3f-ad:
 Ninguna de esas conclusiones autoriza por sí sola un adapter de producción.
 
 Hasta que 26.51 quede certificado, **C3f-ad permanece bloqueado**.
+
+
+---
+
+## 26.52 — Freeze C3f-ad: margin3000 ItemAware preserva el deep-best en el corpus disjunto ejecutado; se abre únicamente el wiring productivo sin cambio de comportamiento
+
+Estado: **FREEZE DOCUMENTAL / C3f-ad CERTIFICADA / PRODUCCIÓN DE COMPORTAMIENTO TODAVÍA CERRADA**.
+
+Este freeze cierra C3f-ad después de certificar por separado un checkpoint técnico y un checkpoint humano tree-identical. La conclusión es deliberadamente corpus-scoped: el `margin3000` SWITCH-only no pierde ningún deep/global best en el corpus disjunto ejecutado, pero **no** queda demostrado como seguro globalmente.
+
+### 26.52.1 Baseline, genealogía y diff exacto
+
+Baseline exclusivo — freeze 26.51 certificado:
+
+`6bd3e87b6f35148ca3feaa11f388a26cc24a6040`
+
+Checkpoint técnico C3f-ad:
+
+`5b65dab8ce7a5ffdcf8dee900b4b3d29a978829f`
+
+Checkpoint humano C3f-ad:
+
+`52f03b03285777d926e001e69860303b6e25fe9c`
+
+Los dos checkpoints C3f-ad son siblings reales:
+
+- parent común: `6bd3e87b6f35148ca3feaa11f388a26cc24a6040`;
+- tree común: `82457b68f40882169c8d71e2025ceeadedddde2e`;
+- ninguno desciende del otro.
+
+Diff exacto contra 26.51:
+
+- `tests/trainer_ai/trainer_roster_search_item_aware_margin_disjoint_role_local_validation_audit_test_suite.gd`: **+969 / -0**;
+- `tests/trainer_ai/trainer_team_composition_test_runner.gd`: **+1 / -1**;
+- producción: **0 cambios**;
+- brains: **0 cambios**;
+- sampler/budget/search productivos: **0 cambios**;
+- documentación/workflows en el tree C3f-ad: **0 cambios**.
+
+Suite nueva:
+
+`TrainerRosterSearchItemAwareMarginDisjointRoleLocalValidationAuditTestSuite`
+
+Audit ID:
+
+`c3f_ad_item_aware_margin_disjoint_role_local_validation_audit_v1`
+
+Boundary ID:
+
+`revalidate_margin3000_item_aware_candidate_preservation_on_disjoint_role_local_corpus_before_any_production_adapter`
+
+### 26.52.2 Certificación técnica y humana
+
+C3f-ad añade exactamente **25 checks** sobre los **1077** del freeze reparado 26.51:
+
+`1077 + 25 = 1102`
+
+Checkpoint técnico:
+
+- **18/18 workflows SUCCESS**;
+- FASE33 literal: **`1102 PASS / 0 FAIL`**;
+- **0 `SCRIPT ERROR`**;
+- **0 traceback**;
+- **0 líneas `FAIL`**;
+- conclusión C3f-ad: `SAFE_DISJOINT_TEST_CORPUS`.
+
+Checkpoint humano:
+
+- **18/18 workflows SUCCESS**;
+- FASE33 literal: **`1102 PASS / 0 FAIL`**;
+- **0 `SCRIPT ERROR`**;
+- **0 traceback**;
+- **0 líneas `FAIL`**;
+- conclusión C3f-ad: `SAFE_DISJOINT_TEST_CORPUS`.
+
+El log `trainer-team-composition-test.log` es byte-idéntico entre técnico y humano:
+
+`sha256:74611981dc87d2347e27915fc34e1a67a06d3aa5e65d7bd53dc8014cc466b6e8`
+
+No se observa nondeterminismo entre ambos checkpoints.
+
+### 26.52.3 Corpus disjunto ejecutado
+
+C3f-ad usa:
+
+- corpus: `synthetic_role_local_itemaware_disjoint_v1`;
+- selección: fixtures sintéticos predeclarados + matriz de roles, independiente de scores depth1/depth2;
+- fixtures: **3**;
+- casos role-local: **9**;
+- histograma de roles:
+  - `root_opponent_response`: 3;
+  - `own_depth2_continuation`: 3;
+  - `opponent_depth2_continuation`: 3;
+- casos semánticamente completos: **9/9**;
+- casos incompletos: **0**;
+- overlap con fixtures C3f-ac: **0**;
+- overlap con corpus histórico real-data usado para selección/interpretación: **0**;
+- reutilización del corpus histórico de selección: `false`;
+- reutilización de scores base históricos: `false`.
+
+La selección de casos no usa resultados depth1/depth2, evitando convertir el corpus en una selección condicionada por el outcome que pretende validar.
+
+### 26.52.4 Resultado del margin3000 ItemAware
+
+El score se obtiene exclusivamente mediante:
+
+`TrainerItemAwareSearch_role_local_recomputation`
+
+Política candidata auditada:
+
+- `candidate_policy_id = depth1_margin_3000_all_legal`;
+- `candidate_margin = 3000`;
+- `candidate_policy_scope = switch_only`.
+
+Resultado observado en los 9 casos ejecutados:
+
+- `policy_loss_cases = 0`;
+- `partial_global_best_tie_drop_cases = 0`;
+- todos los SWITCH legales se evalúan como referencia;
+- el set promovido permanece SWITCH-only;
+- el mejor resultado depth2 de la referencia all-legal queda preservado en todos los casos;
+- no se ocultan casos incompletos.
+
+Por tanto:
+
+`tranche_status = SAFE_DISJOINT_TEST_CORPUS`
+
+Lectura canónica de ese estado:
+
+> el corpus disjunto ejecutado no observa pérdida bajo el contrato ItemAware role-local auditado.
+
+No significa:
+
+- prueba matemática del margin3000;
+- seguridad global;
+- equivalencia global entre `TrainerMultiTurnSearch` y `TrainerItemAwareSearch`;
+- autorización automática de una política de comportamiento productiva.
+
+Sigue fijado:
+
+`candidate_strategy_proven_safe_globally = false`
+
+### 26.52.5 Perspectiva, memoria y aislamiento branch-local
+
+Los nueve casos mantienen las barreras fijadas por C3f-ab/C3f-ac:
+
+- historia side-specific válida desde battle begin;
+- memoria del mismo side que el contexto observado;
+- rechazo de memoria del side incorrecto;
+- observación, belief y contexto sanitizados por rol;
+- clones de memoria antes de proyectar eventos branch-local;
+- eventos simulados confinados a la rama que los generó;
+- `live_memory_mutation_cases = 0`;
+- `live_state_mutation_cases = 0`;
+- `wrong_side_memory_acceptance_cases = 0`;
+- `memory_begin_failures = 0`;
+- root fanout all-legal preservado;
+- `inner_max_actions_per_side = 3` permanece como límite interno distinto del root fanout.
+
+No se autoriza bootstrap histórico a mitad de batalla ni reconstrucción retroactiva de la memoria del rival desde la memoria privada del observer.
+
+### 26.52.6 Contratos que permanecen cerrados
+
+C3f-ad mantiene:
+
+- `MOVE`, `SWITCH` e `ITEM` explícitos y separados;
+- `cross_kind_score_model_defined = false`;
+- fallback lexical: no usado;
+- frontier/Pareto como fallback o preselector: no usado;
+- roster value como fallback/preselector: no usado;
+- `TrainerProfile` como tiebreak pre-search: no usado;
+- campaign/recovery/replacement policy inventada: no usada;
+- scheduler compartido: no reejecutado;
+- `660`: no reabierto;
+- `selected_strategy_id = null`;
+- `selected_scheduler_id = null`;
+- `selected_shared_budget = null`;
+- `production_files_modified = false` en C3f-ad;
+- `production_sampler_modified = false`;
+- `production_budget_modified = false`;
+- `behavior_integration_authorized = false`;
+- `fase34_open = false`.
+
+PR #105 continúa siendo temporal y **no debe mergearse**. `main` debe permanecer intacto.
+
+### 26.52.7 Decisión documental: se abre solo el wiring productivo, no el comportamiento
+
+C3f-ab ya identificó el missing seam exacto:
+
+`trusted_dual_side_memory_owner_and_authoritative_event_fanout_from_battle_start_not_threaded_into_trainer_session_or_search`
+
+C3f-ac reparada fijó que los scores ItemAware deben recalcularse role-localmente y no reutilizar scores base. C3f-ad ha revalidado el margin3000 SWITCH-only en un corpus disjunto ItemAware sin pérdidas observadas.
+
+Con esas tres fronteras ya certificadas, **26.52 autoriza exclusivamente el siguiente microtranche de wiring productivo**. Esta autorización procede de este freeze separado; no se reinterpreta `production_adapter_authorized = false` del informe C3f-ad como si el propio audit hubiera autorizado producción.
+
+Siguiente microtranche autorizado:
+
+**C3f-ae — wiring productivo mínimo de historia dual side-specific desde battle start hacia Trainer session/search, sin integrar todavía decisiones de comportamiento.**
+
+Alcance permitido de C3f-ae:
+
+1. crear/poseer dos `TrainerBattleMemory` side-specific legítimas desde el comienzo de la batalla en la capa trusted apropiada;
+2. fan-out del mismo lote autoritativo de `BattleEvent` hacia ambas memorias mediante la proyección side-specific ya existente;
+3. entregar al search únicamente la memoria correspondiente al side/perspectiva solicitada;
+4. para ramas simuladas, clonar la memoria antes de proyectar eventos branch-local;
+5. preservar separación estricta entre memoria live y memoria de rama;
+6. fallar cerrado ante memoria ausente, side mismatch o lifecycle no inicializado desde battle start;
+7. mantener el stream/metadata trusted dentro de la capa interna necesaria y no ensanchar el conocimiento público del brain;
+8. añadir tests de lifecycle, anti-cheat, side isolation y branch isolation suficientes para demostrar que el adapter no cambia decisiones por sí mismo.
+
+C3f-ae **NO** queda autorizado para:
+
+- activar `depth1_margin_3000_all_legal` en comportamiento productivo;
+- cambiar qué acción elige el entrenador;
+- modificar sampler, budgets, scheduler, 660 o phase logic;
+- cambiar root fanout all-legal;
+- cambiar el inner cap3;
+- añadir score cross-kind común;
+- introducir lexical/frontier/roster/Profile/campaign/recovery/replacement como fallback;
+- abrir FASE34;
+- mergear PR #105.
+
+Por tanto, la frontera documental queda separada así:
+
+- **wiring/ownership productivo mínimo:** autorizado para C3f-ae;
+- **integración de comportamiento/search/switch policy:** sigue **NO autorizada**;
+- **FASE34:** sigue **CLOSED**.
+
+Cualquier activación de comportamiento deberá demostrar primero que el wiring C3f-ae conserva aislamiento, determinismo y ausencia de fuga de información, y requerirá un freeze posterior separado.
