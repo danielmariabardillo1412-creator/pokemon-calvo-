@@ -15115,3 +15115,140 @@ C3f-ad deberá terminar con una conclusión inequívoca, sin predeterminarla, en
 - `BLOCKED` — la validación exigiría información o comportamiento no autorizado.
 
 Ninguno de esos resultados autoriza por sí solo un adapter productivo. Cualquier adapter o cambio de comportamiento productivo requerirá un freeze documental posterior y separado.
+
+---
+
+## 26.51 — Freeze correctivo C3f-ac: certificación limpia del harness y corrección documental de 26.50
+
+Estado: **FREEZE CORRECTIVO / DOCUMENTACIÓN ÚNICAMENTE**.
+
+Este freeze corrige explícitamente la certificación documental de 26.50 sin reescribir su historia. La sección 26.50 permanece como registro del checkpoint que se intentó certificar, pero sus cifras y conclusiones afectadas por el harness defectuoso **no son evidencia certificada**.
+
+### 26.51.1 Motivo de la corrección
+
+El freeze 26.50 (`40d153d1860fdaedfaedb9133d62fd01a4f907cb`) alcanzó 18/18 workflows `SUCCESS`, pero la inspección literal de FASE33 detectó una contradicción interna:
+
+- el resultado real era `1077 PASS / 0 FAIL`, no `1079 PASS / 0 FAIL`;
+- aparecían **2 `SCRIPT ERROR` no fatales** dentro del harness C3f-ac;
+- por tanto, los `40 checks` atribuidos a C3f-ac en 26.50 no eran reales;
+- las diferencias base↔ItemAware descritas en 26.50 tampoco estaban respaldadas por esa ejecución;
+- en consecuencia, la autorización de C3f-ad publicada por 26.50 quedó suspendida hasta reparar el harness y certificar esta corrección.
+
+La causa quedó aislada en el helper de tests reutilizado por C3f-ac: `TrainerItemActionsTestSuite._build_catalog()` podía invocar el callback `_check` cuando el helper se usaba fuera de su `run(check)` normal. La reparación protege esas invocaciones con validación explícita del callback. Es una reparación de **test harness**, no de producción ni de semántica de búsqueda.
+
+### 26.51.2 Genealogía reparada y certificación
+
+Base defectuosa común:
+
+`40d153d1860fdaedfaedb9133d62fd01a4f907cb`
+
+Checkpoint técnico reparado:
+
+`b924df3147b435bc0fa0860ce894d0c25695b481`
+
+Checkpoint humano reparado:
+
+`f46e522a0338db38f458fc560766ae8f48580235`
+
+Tree común reparado:
+
+`021e43446ea171c9f762c2df7720f61ddce2e96c`
+
+Certificación de ambos checkpoints reparados:
+
+- **18/18 workflows SUCCESS**;
+- FASE33 exacta: **`1077 PASS / 0 FAIL`**;
+- **0 `SCRIPT ERROR`**;
+- mismo tree técnico/humano;
+- cero cambios de producción;
+- cero cambios de brains;
+- cero cambios de política de search/switching;
+- FASE34 continúa cerrada.
+
+La C3f-ac reparada aporta **38 checks efectivos**.
+
+### 26.51.3 Lectura corregida de C3f-ac
+
+C3f-ac sigue auditando exactamente los tres roles ItemAware relevantes:
+
+- `root_opponent_response`;
+- `own_depth2_continuation`;
+- `opponent_depth2_continuation`.
+
+El contrato válido es **recomputación role-local con `TrainerItemAwareSearch`**, no reutilización de scores históricos de `TrainerMultiTurnSearch`.
+
+Se mantiene demostrado dentro del harness:
+
+- historial público dual side-specific iniciado desde battle begin;
+- memoria correcta por lado y rechazo de memoria del lado incorrecto;
+- clones branch-local antes de proyectar eventos simulados;
+- mismo stream de eventos branch-local proyectado a ambos clones mediante su filtro side-specific;
+- cero mutación de memoria viva y cero mutación de estado vivo;
+- observación, belief y contexto sanitizados y side-matching por rol;
+- fan-out de todos los SWITCH legales en root separado del `inner_max_actions_per_side = 3`;
+- `MOVE`, `SWITCH` e `ITEM` permanecen explícitos y separados;
+- el action space role-local contiene ITEM reales y el sampler ItemAware difiere del sampler base en los tres roles.
+
+La telemetría reparada compara **6 pares base↔ItemAware** y observa **6/6 scores exactamente iguales en este fixture**. Esta igualdad:
+
+- es **telemetría del fixture únicamente**;
+- **no prueba equivalencia** entre `TrainerMultiTurnSearch` y `TrainerItemAwareSearch`;
+- no autoriza reutilizar scores base;
+- no elimina la obligación de recalcular con ItemAware en cada contexto role-local;
+- no transfiere como prueba la evidencia C3f-u/C3f-v a contextos ItemAware.
+
+Campos canónicos de la conclusión reparada:
+
+- `tranche_status = PORTABLE_TEST_CONTRACT`;
+- `portability_mode = role_local_itemaware_recomputation_not_base_score_reuse`;
+- `base_item_score_pairs_compared = 6`;
+- `base_item_equal_score_pairs_observed = 6`;
+- `equivalence_observations_are_fixture_telemetry_only = true`;
+- `base_item_score_equivalence_proven = false`;
+- `historical_base_scores_reused = false`;
+- `prior_c3fu_v_evidence_transferred = false`;
+- `candidate_strategy_proven_safe_globally = false`;
+- `selected_strategy_id = null`;
+- `selected_scheduler_id = null`;
+- `selected_shared_budget = null`;
+- `production_adapter_authorized = false`;
+- `behavior_integration_authorized = false`;
+- `production_files_modified = false`;
+- `fase34_open = false`.
+
+Por tanto, `PORTABLE_TEST_CONTRACT` significa únicamente que el margin candidate puede someterse a una nueva validación **audit/test-only** cuando sus scores SWITCH se recalculan con ItemAware dentro del contexto role-local correcto. No significa portabilidad de scores base ni seguridad de producción.
+
+### 26.51.4 Siguiente microtranche autorizada tras certificar este freeze
+
+**C3f-ad queda autorizada exclusivamente después de que este mismo freeze 26.51 alcance CI completo limpio.**
+
+Boundary:
+
+`revalidate_margin3000_item_aware_candidate_preservation_on_disjoint_role_local_corpus_before_any_production_adapter`
+
+C3f-ad debe ser estrictamente **test/audit-only** y deberá:
+
+1. construir un corpus determinista y **disjunto** de los fixtures de C3f-ac y de los corpus históricos usados para seleccionar/interpretar el margin3000;
+2. cubrir los tres roles `root_opponent_response`, `own_depth2_continuation` y `opponent_depth2_continuation`;
+3. usar historial side-specific válido desde battle begin, observación/belief/contexto sanitizados y memoria side-matching;
+4. para continuaciones, clonar memorias antes de ejecutar la rama y proyectar únicamente los eventos branch-local de esa rama;
+5. recalcular siempre los scores SWITCH con `TrainerItemAwareSearch` en el contexto role-local correspondiente;
+6. aplicar `margin3000` solo al subconjunto `SWITCH`, sin inventar comparación de score cross-kind;
+7. evaluar todos los SWITCH legales como referencia y registrar por caso: scores, gap, set promovido, deep/global best preservado o perdido y coste de simulaciones;
+8. mantener `candidate_strategy_proven_safe_globally = false` aunque el corpus observado salga limpio;
+9. mantener separados `MOVE`, `SWITCH` e `ITEM`;
+10. mantener el root fan-out all-legal separado del inner cap3;
+11. no usar orden léxico, Pareto/frontier, roster value, `TrainerProfile`, campaign, recovery ni replacement como fallback semántico;
+12. no reabrir ni seleccionar el scheduler/660;
+13. no modificar producción, brains, sampler de producción, budgets de producción ni FASE34.
+
+Conclusiones permitidas para C3f-ad:
+
+- `SAFE_DISJOINT_TEST_CORPUS`;
+- `NEEDS_POLICY_CHANGE`;
+- `NEEDS_MORE_VALIDATION`;
+- `BLOCKED`.
+
+Ninguna de esas conclusiones autoriza por sí sola un adapter de producción.
+
+Hasta que 26.51 quede certificado, **C3f-ad permanece bloqueado**.
