@@ -14690,3 +14690,210 @@ C3f-ab **no** podrá:
 - mergear PR #105.
 
 La portabilidad ItemAware del score SWITCH queda deliberadamente para un tranche posterior, únicamente después de resolver o clasificar la historia/perspectiva side-specific.
+
+
+### 26.49) Freeze C3f-ab — historia simétrica resoluble por fan-out trusted desde battle start; falta adapter de wiring y portabilidad ItemAware sigue abierta
+
+#### Baseline y checkpoints
+
+C3f-ab parte exclusivamente del freeze 26.48 certificado:
+
+- freeze 26.48: `260c1adbbf3af7419cea0248e2383dc17c51ad53`;
+- técnico C3f-ab: `31af4eefb68a2b1f27f23de05ddea2ca3f1212fc`;
+- humano C3f-ab: `8aa618d287b6a726ba60b9f5a187bfe307695f77`;
+- parent común de ambos siblings: `260c1adbbf3af7419cea0248e2383dc17c51ad53`;
+- tree común de ambos siblings: `c6ac7751f8698800e6689c524ad7136da49029d5`.
+
+Los checkpoints técnico y humano son siblings reales: comparten parent y tree y ninguno desciende del otro.
+
+Diff C3f-ab frente a 26.48:
+
+- `tests/trainer_ai/trainer_roster_search_symmetric_public_history_branch_perspective_audit_test_suite.gd`: +393;
+- `tests/trainer_ai/trainer_team_composition_test_runner.gd`: +1/-1;
+- producción: 0 cambios;
+- brains: 0 cambios;
+- `TrainerMultiTurnSearch`: 0 cambios;
+- `TrainerItemAwareSearch`: 0 cambios;
+- server/session/controller/memory productivos: 0 cambios.
+
+#### Resultado ejecutivo C3f-ab
+
+Suite:
+
+`TrainerRosterSearchSymmetricPublicHistoryBranchPerspectiveAuditTestSuite`
+
+Audit ID:
+
+`c3f_ab_symmetric_public_history_branch_perspective_contract_audit_v1`
+
+Boundary ID:
+
+`symmetric_authoritative_event_fanout_to_side_specific_memory_then_branch_local_clone_v1`
+
+Resultado:
+
+`NEEDS_ADAPTER`
+
+Missing seam exacto:
+
+`trusted_dual_side_memory_owner_and_authoritative_event_fanout_from_battle_start_not_threaded_into_trainer_session_or_search`
+
+Clase del missing seam:
+
+`TRUSTED_WIRING_ADAPTER`
+
+La conclusión es deliberadamente más estrecha que «falta información pública». C3f-ab demuestra que **no hace falta inventar un canal público nuevo**: el stream autoritativo existente es semánticamente suficiente si se proyecta hacia dos memorias side-specific legítimas desde el comienzo de la batalla. Lo que falta es ownership/wiring para conservar ambas proyecciones y entregarlas al search cuando corresponda.
+
+Esto **no autoriza** todavía ningún adapter productivo.
+
+#### Cuatro capas que ya no deben confundirse
+
+C3f-ab separa de forma explícita:
+
+1. **observer snapshot actual** — está en el contexto de decisión, pero no contiene una historia simétrica completa del otro side;
+2. **authoritative neutral stream** — existe por turno, contiene `BattleEvent` crudo/trusted y metadata interna, pero server/session no lo retienen como historial acumulado;
+3. **side-specific history** — `TrainerBattleMemory` proyecta los eventos según `observer_side_id`; el patrón existe en SelfPlay con dos controllers independientes;
+4. **branch-local events** — una simulación devuelve sus propios eventos, que deben proyectarse sobre clones de las memorias side-specific y nunca contaminar la historia live.
+
+El snapshot del observer **no** puede usarse para reconstruir retroactivamente la memoria histórica del rival. Una memoria rival creada a mitad de combate sería sanitizada, pero históricamente incompleta. Por tanto:
+
+`mid_battle_bootstrap_supported = false`
+
+#### Fan-out trusted y frontera de metadata
+
+La arquitectura actual ya aporta la materia prima legítima:
+
+- el server devuelve los eventos autoritativos de cada turno;
+- `TrainerBattleSession` devuelve esos eventos, pero no posee historial acumulado;
+- SelfPlay mantiene dos controllers side-specific desde battle start;
+- ambos controllers reciben el mismo lote de eventos autoritativos;
+- cada controller mantiene su propia `TrainerBattleMemory`;
+- la memoria filtra/proyecta según el observer side;
+- el envelope público persistido por memoria no conserva generic metadata;
+- `source_id` tiene un uso estrecho para reveals de ability/item del oponente;
+- la metadata cruda permanece input trusted interno, no «memoria pública del brain».
+
+Por ello C3f-ab fija:
+
+- `existing_authoritative_stream_semantically_sufficient_if_fanned_out_from_start = true`;
+- `existing_retained_public_history_sufficient = false`;
+- `new_public_information_channel_required = false`;
+- `observer_snapshot_reconstructs_opponent_history = false`.
+
+No se autoriza persistir metadata cruda indiscriminadamente ni ensanchar el conocimiento del brain.
+
+#### Contrato branch-local aislable
+
+Para una rama simulada, el orden seguro queda fijado como contrato TEST/AUDIT:
+
+1. clonar cada memoria side-specific válida;
+2. ejecutar el turno sobre el fork;
+3. entregar el mismo lote de eventos branch-local a cada clone, evaluándolo contra el estado branch-local;
+4. construir después observación/belief/contexto role-local sanitizado para cada side.
+
+Los eventos de una rama:
+
+- no se añaden a la memoria live;
+- no se reutilizan entre ramas hermanas;
+- no autorizan observar información privada del otro side;
+- reutilizan el mismo filtro side-specific ya existente.
+
+C3f-ab confirma que este contrato es aislable con primitivas existentes, pero su wiring productivo permanece fuera de alcance.
+
+#### Lo que C3f-ab NO demuestra
+
+C3f-ab no demuestra portabilidad semántica del score usado por:
+
+`depth1_margin_3000_all_legal`
+
+a `TrainerItemAwareSearch`.
+
+Sigue vigente:
+
+- candidate policy: `depth1_margin_3000_all_legal`;
+- scope: SWITCH-only;
+- `candidate_strategy_proven_safe_globally = false`;
+- el score histórico auditado procede del depth-1 base y no del `TrainerStrategicSwitchEvaluatorV2`;
+- `TrainerItemAwareSearch` incorpora semántica propia y su equivalencia todavía no está probada;
+- cualquier score de continuación debe recalcularse en su contexto role-local correspondiente.
+
+Por tanto:
+
+`item_aware_score_portability_proven = false`
+
+#### Certificación C3f-ab
+
+Checkpoint técnico:
+
+`31af4eefb68a2b1f27f23de05ddea2ca3f1212fc`
+
+- 18/18 workflows `SUCCESS`;
+- FASE33: `1039 PASS / 0 FAIL`;
+- 39 checks nuevos C3f-ab;
+- JSON: `tranche_status = NEEDS_ADAPTER`;
+- producción: 0 cambios.
+
+Checkpoint humano:
+
+`8aa618d287b6a726ba60b9f5a187bfe307695f77`
+
+- 18/18 workflows `SUCCESS`;
+- FASE33: `1039 PASS / 0 FAIL`;
+- mismos 39 checks C3f-ab;
+- mismo JSON `NEEDS_ADAPTER`;
+- mismo parent y mismo tree que el técnico;
+- producción: 0 cambios.
+
+Invariantes después de certificar el humano:
+
+- PR #105: OPEN;
+- `merged = false`;
+- head: `8aa618d287b6a726ba60b9f5a187bfe307695f77`;
+- base: `main`;
+- `main`: `f8452a1625ccb8389c9e52ff4416a96a24e00efd`;
+- FASE34: CLOSED.
+
+#### Decisión documental y siguiente frontera
+
+C3f-ab queda cerrado como **NEEDS_ADAPTER**, pero el adapter faltante es un seam de wiring trusted para conservar dos historias side-specific desde battle start, no una autorización para crear información pública nueva ni para portar comportamiento a producción.
+
+Antes de diseñar ese adapter productivo debe resolverse la otra mitad que C3f-aa dejó abierta: si el score depth-1 que alimenta el candidato SWITCH puede trasladarse a la semántica ItemAware cuando se recalcula desde contextos role-local sanitizados.
+
+Se autoriza exclusivamente:
+
+**C3f-ac — TEST/AUDIT-ONLY ItemAware depth-1 SWITCH-score portability validation on role-local sanitized contexts before any production adapter.**
+
+Boundary exacto:
+
+`validate_item_aware_depth1_switch_score_portability_on_role_local_sanitized_context_before_any_production_adapter`
+
+C3f-ac deberá:
+
+1. mantener el contrato dual-history de C3f-ab únicamente como harness TEST/AUDIT, sin adapter productivo;
+2. cubrir exactamente los tres roles ItemAware ya mapeados:
+   - `root_opponent_response`;
+   - `own_depth2_continuation`;
+   - `opponent_depth2_continuation`;
+3. construir para cada role memoria side-specific válida, observación sanitizada, belief y decision context role-local;
+4. para continuaciones simuladas, partir de clones de memoria y proyectar únicamente eventos branch-local de esa rama;
+5. prohibir reutilizar memoria privada del observer para roles del oponente;
+6. comparar explícitamente la procedencia/semántica del score depth-1 base con la evaluación ItemAware real; la equivalencia **no** se presume;
+7. identificar cualquier diferencia causada por acciones ITEM, muestreo MOVE/SWITCH/ITEM, world factory/evaluator o estado branch-local;
+8. mantener MOVE/SWITCH/ITEM separados y auditables;
+9. mantener root fanout all-legal separado del inner cap3;
+10. mantener `depth1_margin_3000_all_legal` limitado a SWITCH y `candidate_strategy_proven_safe_globally = false`;
+11. no usar lexical/frontier/roster/Profile/campaign/recovery/replacement como fallback semántico oculto;
+12. no reabrir ni seleccionar scheduler/660;
+13. mantener `selected_strategy_id = null`, `selected_scheduler_id = null`, `selected_shared_budget = null`;
+14. mantener producción, brains, search productivo y adapter productivo sin cambios;
+15. mantener FASE34 CLOSED;
+16. producir JSON determinista y serializable.
+
+C3f-ac deberá terminar con una conclusión inequívoca, sin predeterminarla, entre:
+
+- `PORTABLE_TEST_CONTRACT` — la portabilidad queda demostrada únicamente dentro del contrato TEST/AUDIT y precondiciones explícitas;
+- `NEEDS_ITEM_AWARE_SCORE_API` — la semántica necesaria no puede obtenerse limpiamente con las interfaces actuales;
+- `NEEDS_MORE_VALIDATION` — la evidencia ejecutable no basta para cerrar la portabilidad;
+- `BLOCKED` — la validación exigiría información o comportamiento no autorizado.
+
+Ninguno de esos resultados autoriza por sí solo un adapter productivo. Cualquier port a producción requerirá un freeze documental posterior y separado.
