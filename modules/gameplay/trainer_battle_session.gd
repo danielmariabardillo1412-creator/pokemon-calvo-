@@ -4,6 +4,8 @@ extends RefCounted
 # Headless application boundary for battles against owned trainer parties.
 # Battle rules remain authoritative in Battle Core. This layer composes player ownership,
 # opponent roster, settlement and progression; it deliberately exposes no Capture or Run command.
+# C3f-ae also owns trusted dual side-specific battle memory from battle start, but does not
+# select trainer actions or activate any search/switch policy.
 
 const READY := &"READY"
 const BATTLE_ACTIVE := &"BATTLE_ACTIVE"
@@ -22,6 +24,7 @@ var last_error: String = ""
 
 var _battle_server: AuthoritativeBattleServer = null
 var _opponent_roster: Array[CreatureInstance] = []
+var _trainer_memory_owner := TrainerDualSideBattleMemoryOwner.new()
 
 
 func _init(
@@ -52,6 +55,32 @@ func opponent_active() -> CreatureInstance:
 	if _battle_server == null:
 		return null
 	return _battle_server.state.active_for_side(&"side_b")
+
+
+# Wiring-only read seam for future search integration. Callers receive detached snapshots;
+# no mutable live TrainerBattleMemory escapes the trusted session.
+func trainer_memory_wiring_ready() -> bool:
+	return (
+		has_active_battle()
+		and _trainer_memory_owner != null
+		and _trainer_memory_owner.is_ready(_battle_server.state)
+	)
+
+
+func trainer_memory_snapshot_for_side(side_id: StringName) -> TrainerBattleMemory:
+	if not trainer_memory_wiring_ready():
+		return null
+	return _trainer_memory_owner.snapshot_for_side(_battle_server.state, side_id)
+
+
+func trainer_branch_memory_snapshot_for_side(
+	side_id: StringName,
+	events: Array[BattleEvent],
+	branch_state: BattleState,
+) -> TrainerBattleMemory:
+	if not trainer_memory_wiring_ready():
+		return null
+	return _trainer_memory_owner.branch_snapshot_for_side(side_id, events, branch_state)
 
 
 # Starts a trainer battle from trusted trainer identity + roster data.
@@ -105,7 +134,13 @@ func begin_battle(
 		last_error = "battle_state_creation_failed"
 		return false
 
+	var memory_owner := TrainerDualSideBattleMemoryOwner.new()
+	if not memory_owner.begin(state):
+		last_error = "trainer_memory_initialization_failed"
+		return false
+
 	_battle_server = AuthoritativeBattleServer.new(state, catalogs)
+	_trainer_memory_owner = memory_owner
 	_opponent_roster = trainer_roster.duplicate()
 	opponent_trainer_id = p_opponent_trainer_id
 	status = BATTLE_ACTIVE
@@ -113,9 +148,8 @@ func begin_battle(
 	return true
 
 
-# The application/presentation layer may choose the trainer action, but Battle Core validates both
-# actions authoritatively. Future network/AI work must move opponent strategy behind server authority;
-# this phase only proves the local trainer-battle seam and does not claim network security.
+# The application/presentation layer still chooses the trainer action. C3f-ae wires trusted
+# side-specific memory only; it deliberately does not call a brain/search or synthesize an action.
 func submit_player_action(
 	player_action: BattleAction,
 	opponent_action: BattleAction,
@@ -136,8 +170,15 @@ func submit_player_action(
 	if opponent_action.side_id != &"side_b":
 		last_error = "wrong_opponent_side"
 		return []
+	if not _trainer_memory_owner.is_ready(_battle_server.state):
+		last_error = "trainer_memory_not_ready"
+		return []
 
 	var events := _battle_server.submit_turn([player_action, opponent_action])
+	if not _trainer_memory_owner.observe_authoritative(events, _battle_server.state):
+		_trainer_memory_owner.clear()
+		last_error = "trainer_memory_fanout_failed"
+		return events
 	var rejection := _battle_rejection_reason(events)
 	if not rejection.is_empty():
 		last_error = rejection
@@ -174,6 +215,7 @@ func settle_finished_battle() -> TrainerBattleSettlement:
 	out.ok = true
 	out.reason = ""
 	out.session_completed = true
+	_trainer_memory_owner.clear()
 	_battle_server = null
 	_opponent_roster.clear()
 	return out
@@ -184,6 +226,7 @@ func reset_after_completion() -> bool:
 	if status != COMPLETED or _battle_server != null:
 		last_error = "session_not_completed"
 		return false
+	_trainer_memory_owner.clear()
 	status = READY
 	completion_reason = &""
 	opponent_trainer_id = &""
