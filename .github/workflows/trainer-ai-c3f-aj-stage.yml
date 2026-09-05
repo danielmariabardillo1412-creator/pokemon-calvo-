@@ -1,0 +1,77 @@
+name: Temporary Trainer AI C3f-aj staging
+
+on:
+  push:
+    branches:
+      - tmp/trainer-ai-c3f-aj-stage
+    paths:
+      - .github/workflows/trainer-ai-c3f-aj-stage.yml
+
+permissions:
+  contents: write
+
+jobs:
+  stage:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: tmp/trainer-ai-c3f-aj-stage
+
+      - name: Wire proposal seam and audit runner
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+
+          p = Path('modules/gameplay/trainer_battle_session.gd')
+          s = p.read_text()
+
+          old = 'var last_trainer_shadow_report: Dictionary = {}\n'
+          new = old + 'var last_trainer_action_proposal_report: Dictionary = {}\n'
+          assert s.count(old) == 1
+          s = s.replace(old, new, 1)
+
+          old = 'var _trainer_shadow_item_aware_enabled: bool = false\n'
+          new = old + 'var _trainer_action_proposal_enabled: bool = false\n'
+          assert s.count(old) == 1
+          s = s.replace(old, new, 1)
+
+          marker = '\n\n# Starts a trainer battle from trusted trainer identity + roster data.\n'
+          assert s.count(marker) == 1
+          methods = '''\n\n# C3f-aj proposal toggle. Disabled by default. A proposal is detached telemetry only:\n# the explicit opponent_action supplied by the caller remains authoritative.\nfunc set_trainer_action_proposal_enabled(enabled: bool) -> void:\n\t_trainer_action_proposal_enabled = enabled\n\tlast_trainer_action_proposal_report = {}\n\n\nfunc trainer_action_proposal_is_enabled() -> bool:\n\treturn _trainer_action_proposal_enabled\n\n\nfunc trainer_action_proposal_report_for_side(side_id: StringName) -> Dictionary:\n\tvar proposal := TrainerItemAwareActionProposal.new()\n\tif not trainer_memory_wiring_ready():\n\t\treturn proposal.blocked_report("trainer_memory_not_ready", side_id)\n\tvar memory := trainer_memory_snapshot_for_side(side_id)\n\tif memory == null:\n\t\treturn proposal.blocked_report("side_memory_unavailable", side_id)\n\treturn proposal.evaluate(_battle_server.state, side_id, memory, catalogs)\n\n\nfunc trainer_branch_action_proposal_report_for_side(\n\tside_id: StringName,\n\tevents: Array[BattleEvent],\n\tbranch_state: BattleState,\n) -> Dictionary:\n\tvar proposal := TrainerItemAwareActionProposal.new()\n\tif not trainer_memory_wiring_ready():\n\t\treturn proposal.blocked_report("trainer_memory_not_ready", side_id)\n\tvar memory := trainer_branch_memory_snapshot_for_side(side_id, events, branch_state)\n\tif memory == null:\n\t\treturn proposal.blocked_report("branch_memory_unavailable", side_id)\n\treturn proposal.evaluate(branch_state, side_id, memory, catalogs)\n'''
+          s = s.replace(marker, methods + marker, 1)
+
+          marker = '\n\tvar events := _battle_server.submit_turn([player_action, opponent_action])\n'
+          assert s.count(marker) == 1
+          block = '''\n\tif _trainer_action_proposal_enabled:\n\t\tlast_trainer_action_proposal_report = trainer_action_proposal_report_for_side(&"side_b").duplicate(true)\n\telse:\n\t\tlast_trainer_action_proposal_report = {}\n'''
+          s = s.replace(marker, block + marker, 1)
+
+          old = '\t_trainer_shadow_item_aware_enabled = false\n\tlast_trainer_shadow_report = {}\n'
+          new = old + '\t_trainer_action_proposal_enabled = false\n\tlast_trainer_action_proposal_report = {}\n'
+          assert s.count(old) == 2
+          s = s.replace(old, new)
+          p.write_text(s)
+
+          p = Path('tests/trainer_ai/trainer_battle_session_test_runner.gd')
+          s = p.read_text()
+          old = '\tTrainerBattleSessionAuditTestSuite.new().run(Callable(self, "_check"))\n'
+          new = old + '\tTrainerBattleSessionActionProposalAuditTestSuite.new().run(Callable(self, "_check"))\n'
+          assert s.count(old) == 1
+          p.write_text(s.replace(old, new, 1))
+
+          p = Path('.github/workflows/trainer-battle-tests.yml')
+          s = p.read_text()
+          old = 'timeout 30s godot --headless --path . --script res://tests/trainer_ai/trainer_battle_session_test_runner.gd'
+          new = 'timeout 240s godot --headless --path . --script res://tests/trainer_ai/trainer_battle_session_test_runner.gd'
+          assert s.count(old) == 1
+          p.write_text(s.replace(old, new, 1))
+          PY
+
+          rm .github/workflows/trainer-ai-c3f-aj-stage.yml
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add modules/gameplay/trainer_battle_session.gd tests/trainer_ai/trainer_battle_session_test_runner.gd .github/workflows/trainer-battle-tests.yml .github/workflows/trainer-ai-c3f-aj-stage.yml
+          git commit -m 'feat(trainer-ai): stage C3f-aj production proposal lifecycle'
+          git push origin HEAD:tmp/trainer-ai-c3f-aj-stage
