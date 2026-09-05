@@ -1,0 +1,206 @@
+name: Temporary Trainer AI freeze 26.54 append
+
+on:
+  push:
+    branches:
+      - audit/trainer-ai-v3-random-cup-redesign-v1
+    paths:
+      - .github/workflows/trainer-ai-freeze-26-54-append.yml
+
+permissions:
+  contents: write
+
+jobs:
+  append-freeze:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v4
+        with:
+          ref: audit/trainer-ai-v3-random-cup-redesign-v1
+
+      - name: Append canonical freeze once
+        shell: bash
+        run: |
+          set -euo pipefail
+          if grep -q '^## 26\.54 —' docs/project_book/TRAINER_AI.md; then
+            echo '26.54 already present; refusing duplicate append.'
+            exit 0
+          fi
+          cat >> docs/project_book/TRAINER_AI.md <<'FREEZE_EOF'
+
+
+## 26.54 — C3f-af shadow ItemAware sobre lifecycle productivo certificado; selector final permanece cerrado
+
+C3f-af queda **doblemente certificado** como integración productiva en modo shadow/read-only. Este freeze no autoriza todavía que search sustituya la acción autoritativa enviada a Battle Core.
+
+### 26.54.1 Checkpoints certificados
+
+Checkpoint técnico:
+
+`cc1b13ec65767e85431e994adcbd7499acb0cec5`
+
+Checkpoint humano tree-identical:
+
+`9e24adf633d84aeb3334d7f6f08a36c7caef7922`
+
+Ambos comparten exactamente:
+
+- parent: `5f4cf01daa5f54233060df491bfa9b7b1cd5934e`;
+- tree: `7176b3094dcd69698caaa62c50a12d577b836cc4`.
+
+Por tanto el sibling humano no cambia bytes respecto al técnico.
+
+Certificación de ambos checkpoints:
+
+- **18/18 workflows SUCCESS**;
+- FASE33: **1162 PASS / 0 FAIL**;
+- C3f-af: **35/35 checks**;
+- Trainer Battle Session: **66 PASS / 0 FAIL**;
+- **0 `SCRIPT ERROR`**;
+- **0 traceback**;
+- **0 FAIL**.
+
+Resultado canónico de tranche:
+
+`SHADOW_VALIDATED_NO_BEHAVIOR_INTEGRATION`
+
+### 26.54.2 Qué quedó conectado en C3f-af
+
+`TrainerBattleSession` puede ejecutar `TrainerItemAwareSearch` en shadow sobre el lifecycle productivo real sin entregar memoria live mutable ni alterar la acción autoritativa existente.
+
+El camino certificado usa:
+
+- snapshots detached side-specific del owner dual;
+- estado de batalla clonado para shadow;
+- construcción sanitizada `Observation -> Belief -> TrainerDecisionContext`;
+- memoria side-matching;
+- branch snapshots clonados para continuaciones;
+- eventos exclusivamente branch-local sobre clones;
+- recomputación ItemAware role-local;
+- telemetría SWITCH all-legal y membership margin3000.
+
+C3f-af falla cerrado cuando no puede construir un contexto legítimo/sanitizado. No cae a otra policy.
+
+### 26.54.3 Invariancia autoritativa demostrada
+
+La suite C3f-af prueba que shadow OFF y shadow ON producen exactamente:
+
+- el mismo `opponent_action` explícito/efectivo enviado al flujo autoritativo;
+- el mismo event stream autoritativo;
+- el mismo estado resultante.
+
+Además:
+
+- el shadow no muta el `BattleState` live;
+- no muta ninguna memoria live del owner dual;
+- las ramas shadow operan sobre clones;
+- la telemetría shadow no es selección de acción.
+
+Por tanto C3f-af valida el seam y el consumo de memoria/contexto, **no comportamiento nuevo**.
+
+### 26.54.4 Margin3000 sigue siendo candidate-set, no selector final
+
+Se mantiene el contrato candidato:
+
+- `candidate_policy_id = depth1_margin_3000_all_legal`;
+- `candidate_margin = 3000`;
+- `candidate_policy_scope = switch_only`;
+- `candidate_strategy_proven_safe_globally = false`.
+
+La evidencia C3f-af revela una barrera concreta antes de cualquier sustitución de acción: en los **cuatro contextos shadow certificados**, había **2 SWITCH legales y los 2 quedaron dentro del conjunto margin3000**.
+
+Ejemplo observado en la perspectiva `side_b` actual:
+
+- score SWITCH A: aproximadamente `-833`;
+- score SWITCH B: aproximadamente `-2121`;
+- diferencia absoluta menor de 3000;
+- ambos pertenecen al candidate-set.
+
+Por tanto `depth1_margin_3000_all_legal` no define por sí solo una acción única. Activarlo como comportamiento ahora requeriría inventar un selector secundario.
+
+C3f-y ya había separado explícitamente membership SWITCH de selección final y había bloqueado cualquier fallback oculto. C3f-af confirma en lifecycle productivo que ese hueco es real, no meramente documental.
+
+### 26.54.5 Barreras que permanecen cerradas
+
+Este freeze NO autoriza:
+
+- escoger el primer candidato por orden de entrada o por orden lexical;
+- reutilizar `move_switch_item_stratified_round_robin_v1` como selector oculto;
+- convertir Pareto/frontier en preselector o tiebreak;
+- usar roster value como preselector/tiebreak;
+- usar `TrainerProfile` como pre-search/final tiebreak;
+- introducir campaign/recovery/replacement policy;
+- usar hidden beliefs;
+- introducir live RNG;
+- mezclar scores MOVE/SWITCH/ITEM;
+- reabrir scheduler o shared budget 660;
+- modificar root fanout all-legal;
+- modificar inner `max_actions_per_side = 3`;
+- afirmar seguridad global desde estas muestras;
+- sustituir `opponent_action` por el resultado shadow;
+- modificar brains, sampler, budgets o phase logic;
+- abrir FASE34;
+- mergear PR #105.
+
+Campos que continúan canónicamente cerrados:
+
+- `selected_strategy_id = null`;
+- `selected_scheduler_id = null`;
+- `selected_shared_budget = null`;
+- `production_strategy_selected = false`;
+- `behavior_integration_authorized = false`;
+- `fase34_open = false`.
+
+Root fanout all-legal permanece separado del inner cap3 y MOVE/SWITCH/ITEM permanecen semánticamente separados.
+
+### 26.54.6 Estado externo del repositorio
+
+PR #105 continúa siendo temporal y debe permanecer **OPEN / unmerged**.
+
+Durante esta línea de trabajo `main` avanzó externamente desde `f8452a1625ccb8389c9e52ff4416a96a24e00efd` a:
+
+`641d4b1fb0bcf964205d616e96f198f05d702197`
+
+Ese commit externo es hijo directo del baseline anterior y añade únicamente el archivo vacío `this_should_not_be_called`; no altera Trainer AI ni los contratos aquí certificados. Esta rama no debe modificar `main`.
+
+### 26.54.7 Siguiente frontera autorizada: C3f-ag selector final SWITCH, audit/contract-only
+
+Una vez este freeze 26.54 obtenga certificación CI completa limpia, se autoriza exclusivamente:
+
+**C3f-ag — definir y auditar un contrato determinista para resolver candidate-sets SWITCH con cardinalidad mayor que uno, sin integrar todavía ese selector en el comportamiento productivo.**
+
+C3f-ag deberá:
+
+1. permanecer estrictamente **TEST/AUDIT/CONTRACT-ONLY**;
+2. tratar `depth1_margin_3000_all_legal` únicamente como membership SWITCH ya validada, no como acción final;
+3. estudiar explícitamente el paso `candidate-set -> single SWITCH` sin asumir de antemano que `max depth1 score`, orden de entrada u otra regla sea correcta;
+4. exigir invariancia frente al orden de entrada de los candidatos;
+5. usar únicamente contextos legítimos, side-matching, sanitizados y detached/read-only;
+6. mantener MOVE/SWITCH/ITEM separados y no inventar composición cross-kind;
+7. no usar lexical/frontier/Pareto/roster/Profile/campaign/recovery/replacement/current-sampler como fallback oculto;
+8. no introducir live RNG;
+9. conservar root fanout all-legal separado del inner cap3;
+10. no reabrir scheduler, shared budget ni 660;
+11. no modificar producción, brains, sampler, budgets, phase logic ni FASE34;
+12. registrar evidencia suficiente para decidir en un freeze posterior si existe un selector semántico autorizable.
+
+Resultados admisibles para C3f-ag:
+
+- `SELECTOR_CONTRACT_VALIDATED`;
+- `NEEDS_POLICY_DECISION`;
+- `NEEDS_MORE_VALIDATION`;
+- `BLOCKED`.
+
+Incluso `SELECTOR_CONTRACT_VALIDATED` será solamente evidencia contractual: **no autoriza comportamiento real**. Solo un freeze posterior podrá decidir si se permite que una acción elegida por ese contrato sustituya por primera vez el `opponent_action` explícito.
+FREEZE_EOF
+
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add docs/project_book/TRAINER_AI.md
+          if git diff --cached --quiet; then
+            echo 'No notebook change to commit.'
+            exit 0
+          fi
+          git commit -m 'docs(trainer-ai): freeze C3f-af as 26.54'
+          git push origin HEAD:audit/trainer-ai-v3-random-cup-redesign-v1
