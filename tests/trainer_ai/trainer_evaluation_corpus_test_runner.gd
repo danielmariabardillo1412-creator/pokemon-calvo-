@@ -15,6 +15,7 @@ func _run() -> void:
 	TrainerBattleSessionMultiTurnAuthoritativeSubstitutionAuditTestSuite.new().run(Callable(self, "_check"))
 	TrainerBattleSessionAutonomousSideBSubmissionApiAuditTestSuite.new().run(Callable(self, "_check"))
 	TrainerBattleSessionTerminalHorizonCompletenessAuditTestSuite.new().run(Callable(self, "_check"))
+	TrainerBattleSessionCrossBattleResetLifecycleAuditTestSuite.new().run(Callable(self, "_check"))
 	print("\n=== TRAINER EVALUATION CORPUS RESULT: %d PASS / %d FAIL ===" % [_passed, _failed])
 	quit(0 if _failed == 0 else 1)
 
