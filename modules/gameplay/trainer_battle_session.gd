@@ -22,11 +22,13 @@ var completion_reason: StringName = &""
 var opponent_trainer_id: StringName = &""
 var last_error: String = ""
 var last_trainer_shadow_report: Dictionary = {}
+var last_trainer_action_proposal_report: Dictionary = {}
 
 var _battle_server: AuthoritativeBattleServer = null
 var _opponent_roster: Array[CreatureInstance] = []
 var _trainer_memory_owner := TrainerDualSideBattleMemoryOwner.new()
 var _trainer_shadow_item_aware_enabled: bool = false
+var _trainer_action_proposal_enabled: bool = false
 
 
 func _init(
@@ -118,6 +120,41 @@ func trainer_branch_shadow_item_aware_report_for_side(
 	if memory == null:
 		return probe.blocked_report("branch_memory_unavailable", side_id)
 	return probe.evaluate(branch_state, side_id, memory, catalogs)
+
+
+# C3f-aj proposal toggle. Disabled by default. A proposal is detached telemetry only:
+# the explicit opponent_action supplied by the caller remains authoritative.
+func set_trainer_action_proposal_enabled(enabled: bool) -> void:
+	_trainer_action_proposal_enabled = enabled
+	last_trainer_action_proposal_report = {}
+
+
+func trainer_action_proposal_is_enabled() -> bool:
+	return _trainer_action_proposal_enabled
+
+
+func trainer_action_proposal_report_for_side(side_id: StringName) -> Dictionary:
+	var proposal := TrainerItemAwareActionProposal.new()
+	if not trainer_memory_wiring_ready():
+		return proposal.blocked_report("trainer_memory_not_ready", side_id)
+	var memory := trainer_memory_snapshot_for_side(side_id)
+	if memory == null:
+		return proposal.blocked_report("side_memory_unavailable", side_id)
+	return proposal.evaluate(_battle_server.state, side_id, memory, catalogs)
+
+
+func trainer_branch_action_proposal_report_for_side(
+	side_id: StringName,
+	events: Array[BattleEvent],
+	branch_state: BattleState,
+) -> Dictionary:
+	var proposal := TrainerItemAwareActionProposal.new()
+	if not trainer_memory_wiring_ready():
+		return proposal.blocked_report("trainer_memory_not_ready", side_id)
+	var memory := trainer_branch_memory_snapshot_for_side(side_id, events, branch_state)
+	if memory == null:
+		return proposal.blocked_report("branch_memory_unavailable", side_id)
+	return proposal.evaluate(branch_state, side_id, memory, catalogs)
 
 
 # Starts a trainer battle from trusted trainer identity + roster data.
@@ -222,6 +259,11 @@ func submit_player_action(
 	else:
 		last_trainer_shadow_report = {}
 
+	if _trainer_action_proposal_enabled:
+		last_trainer_action_proposal_report = trainer_action_proposal_report_for_side(&"side_b").duplicate(true)
+	else:
+		last_trainer_action_proposal_report = {}
+
 	var events := _battle_server.submit_turn([player_action, opponent_action])
 	if not _trainer_memory_owner.observe_authoritative(events, _battle_server.state):
 		_trainer_memory_owner.clear()
@@ -268,6 +310,8 @@ func settle_finished_battle() -> TrainerBattleSettlement:
 	_opponent_roster.clear()
 	_trainer_shadow_item_aware_enabled = false
 	last_trainer_shadow_report = {}
+	_trainer_action_proposal_enabled = false
+	last_trainer_action_proposal_report = {}
 	return out
 
 
@@ -279,6 +323,8 @@ func reset_after_completion() -> bool:
 	_trainer_memory_owner.clear()
 	_trainer_shadow_item_aware_enabled = false
 	last_trainer_shadow_report = {}
+	_trainer_action_proposal_enabled = false
+	last_trainer_action_proposal_report = {}
 	status = READY
 	completion_reason = &""
 	opponent_trainer_id = &""
