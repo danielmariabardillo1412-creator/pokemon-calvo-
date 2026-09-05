@@ -10,246 +10,40 @@ permissions:
 
 jobs:
   append-freeze:
-    if: ${{ github.event.head_commit.message == 'chore(trainer-ai): install 26.61 freeze writer' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout exact branch
         uses: actions/checkout@v4
         with:
           ref: audit/trainer-ai-v3-random-cup-redesign-v1
-          fetch-depth: 2
+          fetch-depth: 5
 
-      - name: Verify exact certified parent
+      - name: Verify certified state and staged freeze
         shell: bash
         run: |
           set -euo pipefail
-          test "$(git rev-parse HEAD^)" = "40aa9d6ad0dea70bd9cc9dd6e5872251b9904d8b"
-          test "$(git rev-parse HEAD^:docs/project_book/TRAINER_AI.md)" = "7567345a6dd6643691b7582cd54167218a2efeb3"
-          test "$(git rev-parse HEAD^:modules/gameplay/trainer_battle_session.gd)" = "dd25cf551360f36dc9e65aa445f60f5c1ee5e55e"
+          test "$(git rev-parse HEAD~3)" = "40aa9d6ad0dea70bd9cc9dd6e5872251b9904d8b"
+          test "$(git rev-parse HEAD:docs/project_book/TRAINER_AI.md)" = "7567345a6dd6643691b7582cd54167218a2efeb3"
+          test "$(git rev-parse HEAD:modules/gameplay/trainer_battle_session.gd)" = "dd25cf551360f36dc9e65aa445f60f5c1ee5e55e"
+          test -f docs/project_book/.trainer_ai_freeze_26_61.tmp.md
+          grep -Fx '## 26.61 — Freeze C3f-am: API autónomo side_b explícito doblemente certificado; lifecycle completo pasa a auditoría' docs/project_book/.trainer_ai_freeze_26_61.tmp.md
+          test "$(grep -c '^## 26\.61 ' docs/project_book/TRAINER_AI.md || true)" -eq 0
 
-      - name: Append documentary freeze 26.61
+      - name: Append freeze and self-clean
         shell: bash
         run: |
           set -euo pipefail
-          NOTEBOOK="docs/project_book/TRAINER_AI.md"
-          test "$(grep -c '^## 26\.61 ' "$NOTEBOOK" || true)" -eq 0
-          cat >> "$NOTEBOOK" <<'FREEZE_26_61'
-
-## 26.61 — Freeze C3f-am: API autónomo side_b explícito doblemente certificado; lifecycle completo pasa a auditoría
-
-Estado: **FREEZE DOCUMENTAL / C3f-am DOBLEMENTE CERTIFICADA / API AUTÓNOMO SIDE_B EXPLÍCITO VALIDADO / FAIL-CLOSED DEMOSTRADO / API HISTÓRICO PRESERVADO / ACTIVACIÓN GLOBAL TODAVÍA CERRADA**.
-
-C3f-am introduce exactamente una nueva superficie productiva opt-in para que el caller entregue solo la acción `side_a` y `TrainerBattleSession` calcule y someta la acción `side_b` mediante el pipeline autoritativo C3f-aj/C3f-ak/C3f-al ya certificado. No convierte la autonomía en modo global, no altera la firma histórica y no inventa política de forced replacement.
-
-### 26.61.1 Genealogía limpia
-
-Baseline exclusivo — freeze 26.60 certificado:
-
-`7664283712f94a3164996bb2f4acfe27f16d1320`
-
-Checkpoint técnico C3f-am certificado:
-
-`c57a40b54ab6baef10bb7996d7d0a9c3f439fa63`
-
-Checkpoint humano C3f-am certificado:
-
-`40aa9d6ad0dea70bd9cc9dd6e5872251b9904d8b`
-
-Los dos checkpoints son siblings reales:
-
-- parent común: `7664283712f94a3164996bb2f4acfe27f16d1320`;
-- tree común: `3b2ae592dd82c29bf1772e21899bc59cf6fa1d90`;
-- ninguno desciende del otro;
-- el contenido técnico y humano es por tanto idéntico a nivel Git tree.
-
-Diff neto exacto contra 26.60:
-
-- `modules/gameplay/trainer_battle_session.gd`: **+49 / -0**;
-- `tests/trainer_ai/trainer_battle_session_autonomous_proposal_override_fixture.gd`: **+22 / -0**;
-- `tests/trainer_ai/trainer_battle_session_autonomous_side_b_submission_api_audit_test_suite.gd`: **+414 / -0**;
-- `tests/trainer_ai/trainer_evaluation_corpus_test_runner.gd`: **+1 / -0**;
-- total: **+486 / -0**;
-- Battle Core: **0 cambios**;
-- brains: **0 cambios**;
-- sampler/search budget/phase logic: **0 cambios**;
-- scheduler/shared budget: **0 cambios**;
-- workflows/YAML del tranche certificado: **0 cambios netos**.
-
-La única producción nueva es la superficie explícita:
-
-`submit_player_action_with_autonomous_trainer(player_action: BattleAction)`
-
-La llamada a ese método es el opt-in. No existe toggle autónomo global ni activación por defecto.
-
-### 26.61.2 Certificación técnica
-
-Checkpoint técnico `c57a40b54ab6baef10bb7996d7d0a9c3f439fa63`:
-
-- **18/18 workflows SUCCESS**;
-- Trainer Evaluation Corpus run: `33969719170`;
-- job: `101315962528`;
-- literal: **`181 PASS / 0 FAIL`**;
-- **39/39 checks C3f-am PASS**;
-- aggregate: `AUTONOMOUS_SIDE_B_SUBMISSION_API_VALIDATED_WITH_FAIL_CLOSED_BOUNDARY`;
-- Trainer Battle Session run: `33969719198`;
-- job: `101315962717`;
-- literal: **`66 PASS / 0 FAIL`**;
-- Trainer Team Composition run: `33969719117`;
-- job: `101315997277`;
-- literal FASE33: **`1258 PASS / 0 FAIL`**;
-- **0 `SCRIPT ERROR`**, **0 traceback** en las superficies auditadas.
-
-### 26.61.3 Certificación humana sibling
-
-Checkpoint humano `40aa9d6ad0dea70bd9cc9dd6e5872251b9904d8b`:
-
-- **18/18 workflows SUCCESS**;
-- Trainer Evaluation Corpus run: `33975369829`;
-- job: `101331014407`;
-- literal: **`181 PASS / 0 FAIL`**;
-- mismos **39/39 checks C3f-am PASS**;
-- mismo aggregate: `AUTONOMOUS_SIDE_B_SUBMISSION_API_VALIDATED_WITH_FAIL_CLOSED_BOUNDARY`;
-- Trainer Battle Session run: `33975369851`;
-- job: `101331014592`;
-- literal: **`66 PASS / 0 FAIL`**;
-- Trainer Team Composition run: `33975369835`;
-- job: `101331014510`;
-- literal FASE33: **`1258 PASS / 0 FAIL`**;
-- **0 `SCRIPT ERROR`**, **0 traceback** en las superficies auditadas.
-
-Los tres logs de certificación relevantes son byte-idénticos técnico↔humano:
-
-- Evaluation Corpus: `sha256:d7d3c79ea2571978b53f5b1634996092cb42e76f80d21ea95d82313d70c0f1e2`;
-- Battle Session: `sha256:123f2fd6ae75bf9907d3eb5364f9d43cc2e3916788ade19063ca32ae48c06f75`;
-- Team Composition: `sha256:996d7590c9a6c6ffbe33463d4c3469e6186d8724c4f4716d3ff39efecb766312`.
-
-No se observa nondeterminismo técnico↔humano.
-
-### 26.61.4 Contrato productivo validado
-
-El método nuevo mantiene las siguientes barreras:
-
-1. requiere batalla activa;
-2. exige `player_action != null`;
-3. exige que la acción del caller pertenezca a `side_a`;
-4. exige memoria Trainer READY;
-5. calcula una proposal `side_b` fresca desde estado/memoria live;
-6. reutiliza el validador autoritativo de sustitución y exige `SUBSTITUTION_READY`;
-7. reconstruye exactamente la `submitted_action` validada para `side_b`;
-8. somete `[player_action, autonomous_opponent_action]` a Battle Core;
-9. observa los eventos autoritativos y el estado resultante en la memoria dual;
-10. propaga cualquier rechazo autoritativo de Battle Core.
-
-La auditoría demuestra además dos turnos autónomos ordinarios consecutivos con bindings frescos y sin caller side_b.
-
-### 26.61.5 Fail-closed demostrado
-
-C3f-am bloquea antes de avanzar el turno cuando aparece cualquiera de las fronteras auditadas:
-
-- tie / proposal no READY;
-- profundidad incompleta;
-- proposal stale / turn mismatch;
-- acción propuesta ya no legal;
-- side mismatch;
-- batalla no iniciada;
-- `player_action == null`;
-- acción del jugador con side incorrecto;
-- memoria Trainer no READY.
-
-En todos los blockers auditados:
-
-- no existe fallback a una acción caller side_b;
-- no se fabrica una acción histórica;
-- no avanza el turno;
-- la autonomía permanece fail-closed.
-
-### 26.61.6 API histórica, forced replacement y settlement conservan ownership
-
-La superficie histórica sigue intacta:
-
-`submit_player_action(player_action, opponent_action)`
-
-Si falta `opponent_action`, continúa rechazando con `opponent_action_required`; C3f-am no modifica esa semántica.
-
-Forced replacement continúa perteneciendo a Battle Core mediante `TurnExecutor._handle_knockouts(...)`. Trainer AI no introduce `replacement_policy_used` ni selecciona una política paralela de reemplazo.
-
-`TrainerBattleSession.settle_finished_battle()` continúa siendo la única frontera de settlement de la sesión: exige `BattleState.FINISHED`, produce `BattleOutcome`, reconcilia progresión/rosters, marca la sesión `COMPLETED` y limpia battle server, memoria y toggles Trainer.
-
-Esta separación de ownership es obligatoria para la siguiente auditoría.
-
-### 26.61.7 Decisión del freeze
-
-C3f-am resuelve la retirada explícita del caller ordinario side_b para una llamada autónoma sin abrir todavía integración global. La siguiente incertidumbre ya no está en la selección de una acción individual, sino en el **lifecycle completo** cuando esa misma API atraviesa transiciones autoritativas de KO, reemplazo forzado, final de combate y settlement.
-
-No existe todavía evidencia suficiente para activar la autonomía por defecto en todos los entrenadores ni para conectar un Trainer Brain general. Por tanto se autoriza exclusivamente C3f-an como auditoría lifecycle TEST/AUDIT-ONLY.
-
-### 26.61.8 Siguiente microtranche autorizada: C3f-an auditoría lifecycle autónomo end-to-end
-
-**C3f-an — auditar, sin ampliar la superficie productiva ni activar autonomía global, que `submit_player_action_with_autonomous_trainer(player_action)` permanece correcto a través del lifecycle autoritativo completo de una batalla de entrenador: turnos autónomos ordinarios, KO, forced replacement propiedad de Battle Core, continuidad con memoria/estado frescos, transición `FINISHED`, settlement y reset, manteniendo fail-closed y sin inventar políticas Trainer AI nuevas.**
-
-C3f-an será estrictamente **TEST/AUDIT-ONLY** salvo blocker imposible de observar sin una corrección mínima separada y explícitamente documentada.
-
-Deberá comprobar al menos:
-
-1. autonomía global sigue inexistente/OFF por defecto;
-2. el método histórico sigue exigiendo caller side_b;
-3. el nuevo método autónomo sigue siendo opt-in por llamada;
-4. varios turnos ordinarios recalculan proposal fresca desde el estado vigente;
-5. un KO de `side_a` se resuelve exclusivamente por Battle Core según sus reglas autoritativas;
-6. un KO de `side_b` se resuelve exclusivamente por Battle Core según sus reglas autoritativas;
-7. el forced switch emitido es autoritativo y `forced = true`;
-8. Trainer AI no crea ni consulta una `replacement_policy` paralela;
-9. tras forced replacement, memoria dual observa actor/roster/eventos actualizados antes de la siguiente proposal;
-10. la siguiente proposal usa el nuevo actor activo y legal action space live;
-11. no se reutiliza proposal/report/roots/scores anteriores al KO;
-12. si un lado no tiene reemplazo vivo, Battle Core lleva el estado a `FINISHED` según su contrato;
-13. una vez `FINISHED`, no se somete un turno autónomo adicional;
-14. `settle_finished_battle()` solo tiene éxito desde `FINISHED`;
-15. settlement correcto conserva winner/progression/roster reconciliation actuales;
-16. settlement limpia memoria, battle server y toggles Trainer;
-17. `reset_after_completion()` devuelve la sesión a `READY` sin residuos de la batalla anterior;
-18. una batalla posterior comienza con memoria/proposals limpias, sin contaminación cross-battle;
-19. blockers de proposal continúan fail-closed / no turn / no caller fallback;
-20. Battle Core, brains, sampler, search budget y phase logic permanecen sin cambios;
-21. no se introduce campaign/recovery semantics;
-22. no se abre scheduler/shared budget/660;
-23. `selected_strategy_id`, `selected_scheduler_id` y `selected_shared_budget` permanecen `null`;
-24. FASE34 permanece CLOSED;
-25. PR #105 permanece OPEN/unmerged y `main` no se toca.
-
-Resultados admisibles C3f-an:
-
-- `AUTONOMOUS_TRAINER_BATTLE_LIFECYCLE_VALIDATED`;
-- `AUTONOMOUS_TRAINER_BATTLE_LIFECYCLE_VALIDATED_WITH_FAIL_CLOSED_BOUNDARY`;
-- `NEEDS_MORE_VALIDATION`;
-- `BLOCKED`.
-
-Incluso un resultado validado C3f-an **NO** autoriza automáticamente activar autonomía por defecto, conectar un Trainer Brain general, abrir scheduler/shared budget ni abrir FASE34. Esa decisión requerirá un freeze posterior y evidencia explícita sobre el caller/integration point real del juego.
-
-### 26.61.9 Invariantes externas
-
-PR #105 continúa **OPEN / unmerged**.
-
-`main` continúa exactamente en:
-
-`641d4b1fb0bcf964205d616e96f198f05d702197`
-
-C3f-am queda por tanto **DOBLEMENTE CERTIFICADA** como `AUTONOMOUS_SIDE_B_SUBMISSION_API_VALIDATED_WITH_FAIL_CLOSED_BOUNDARY`; la única siguiente frontera autorizada es C3f-an lifecycle audit-only bajo las barreras anteriores.
-FREEZE_26_61
-
+          NOTEBOOK='docs/project_book/TRAINER_AI.md'
+          STAGED='docs/project_book/.trainer_ai_freeze_26_61.tmp.md'
+          cat "$STAGED" >> "$NOTEBOOK"
           test "$(grep -c '^## 26\.61 ' "$NOTEBOOK")" -eq 1
-          git diff --check
-          test "$(git diff --name-only)" = "$NOTEBOOK"
-
-      - name: Commit freeze and remove writer in same commit
-        shell: bash
-        run: |
-          set -euo pipefail
+          rm "$STAGED"
           rm .github/workflows/trainer-ai-freeze-26-61-writer.yml
           git add -A
           git diff --cached --check
-          test "$(git diff --cached --name-only | wc -l)" -eq 2
+          test "$(git diff --cached --name-only | wc -l)" -eq 3
           git diff --cached --name-only | grep -Fx 'docs/project_book/TRAINER_AI.md'
+          git diff --cached --name-only | grep -Fx 'docs/project_book/.trainer_ai_freeze_26_61.tmp.md'
           git diff --cached --name-only | grep -Fx '.github/workflows/trainer-ai-freeze-26-61-writer.yml'
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
