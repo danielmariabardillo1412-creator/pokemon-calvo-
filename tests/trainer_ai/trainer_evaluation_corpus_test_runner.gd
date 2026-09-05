@@ -12,6 +12,7 @@ func _run() -> void:
 	TrainerEvaluationCorpusTestSuite.new().run(Callable(self, "_check"))
 	TrainerBattleSessionActionProposalAuditTestSuite.new().run(Callable(self, "_check"))
 	TrainerBattleSessionAuthoritativeSubstitutionAuditTestSuite.new().run(Callable(self, "_check"))
+	TrainerBattleSessionMultiTurnAuthoritativeSubstitutionAuditTestSuite.new().run(Callable(self, "_check"))
 	print("\n=== TRAINER EVALUATION CORPUS RESULT: %d PASS / %d FAIL ===" % [_passed, _failed])
 	quit(0 if _failed == 0 else 1)
 
