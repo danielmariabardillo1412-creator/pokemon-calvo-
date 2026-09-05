@@ -1,0 +1,22 @@
+name: Trainer AI Freeze 26.63 Writer
+
+on:
+  push:
+    branches:
+      - audit/trainer-ai-v3-random-cup-redesign-v1
+    paths:
+      - .c3fao-freeze-26-63-trigger
+
+permissions:
+  contents: write
+
+jobs:
+  freeze:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Append freeze and self-clean
+        run: python .github/scripts/c3fao_freeze_26_63.py
