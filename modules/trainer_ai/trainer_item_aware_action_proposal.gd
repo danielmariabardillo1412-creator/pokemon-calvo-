@@ -70,6 +70,9 @@ func evaluate(
 	var root_scores: Dictionary = {}
 	var root_depths: Dictionary = {}
 	var root_simulations: Dictionary = {}
+	var root_horizon_complete: Dictionary = {}
+	var root_terminal_horizon_closed: Dictionary = {}
+	var root_depth_two_completed: Dictionary = {}
 	var root_actions: Dictionary = {}
 	var evaluations_complete := true
 	var metadata_models_match := true
@@ -89,11 +92,18 @@ func evaluate(
 		root_scores[root_id] = int(result.get("score", -2147483648))
 		root_depths[root_id] = int(metadata.get("fully_completed_depth", 0))
 		root_simulations[root_id] = int(metadata.get("simulations_used", 0))
+		root_horizon_complete[root_id] = bool(metadata.get("required_horizon_complete", false))
+		root_terminal_horizon_closed[root_id] = (
+			int(metadata.get("fully_completed_depth", 0)) < REQUIRED_DEPTH
+			and bool(metadata.get("required_horizon_complete", false))
+			and int(metadata.get("terminal_horizon_closed_branch_count", 0)) > 0
+		)
+		root_depth_two_completed[root_id] = int(metadata.get("completed_depth_two_branch_count", 0)) > 0
 		evaluations_complete = evaluations_complete and _result_complete(result)
 		metadata_models_match = metadata_models_match and _metadata_models_valid(metadata)
 		same_budget = same_budget and JSON.stringify(metadata.get("budget", {})) == expected_budget
 
-	var resolution := resolve_scores_for_contract(root_ids, root_scores, root_depths, root_kinds)
+	var resolution := resolve_scores_for_contract(root_ids, root_scores, root_depths, root_kinds, root_horizon_complete)
 	var outcome := String(resolution.get("outcome", ""))
 	var ready := (
 		evaluations_complete
@@ -141,6 +151,10 @@ func evaluate(
 		"root_scores": root_scores,
 		"root_depths": root_depths,
 		"root_simulations": root_simulations,
+		"root_horizon_complete": root_horizon_complete,
+		"root_terminal_horizon_closed": root_terminal_horizon_closed,
+		"root_depth_two_completed": root_depth_two_completed,
+		"common_physical_depth": int(resolution.get("common_physical_depth", 0)),
 		"evaluations_complete": evaluations_complete,
 		"metadata_models_match": metadata_models_match,
 		"same_budget": same_budget,
@@ -184,6 +198,7 @@ func resolve_scores_for_contract(
 	scores: Dictionary,
 	depths: Dictionary,
 	kinds: Dictionary,
+	horizon_complete: Dictionary = {},
 ) -> Dictionary:
 	var root_ids: Array[String] = []
 	for value in values:
@@ -193,8 +208,18 @@ func resolve_scores_for_contract(
 		root_ids.append(root_id)
 	if root_ids.is_empty():
 		return _incomplete_resolution()
+	var common_physical_depth := REQUIRED_DEPTH
 	for root_id in root_ids:
-		if not scores.has(root_id) or int(depths.get(root_id, 0)) != REQUIRED_DEPTH:
+		if not scores.has(root_id):
+			return _incomplete_resolution()
+		var physical_depth := int(depths.get(root_id, 0))
+		if physical_depth <= 0 or physical_depth > REQUIRED_DEPTH:
+			return _incomplete_resolution()
+		common_physical_depth = mini(common_physical_depth, physical_depth)
+		var root_horizon_complete := physical_depth == REQUIRED_DEPTH
+		if not horizon_complete.is_empty():
+			root_horizon_complete = bool(horizon_complete.get(root_id, false))
+		if not root_horizon_complete:
 			return _incomplete_resolution()
 	var best_ids := _max_score_ids(scores, root_ids)
 	var reverse_ids := root_ids.duplicate()
@@ -215,6 +240,7 @@ func resolve_scores_for_contract(
 		"best_root_ids": best_ids,
 		"best_kinds": best_kinds,
 		"common_depth": REQUIRED_DEPTH,
+		"common_physical_depth": common_physical_depth,
 		"order_invariant": order_invariant,
 	}
 
@@ -238,6 +264,10 @@ func blocked_report(reason: String, side_id: StringName) -> Dictionary:
 		"root_scores": {},
 		"root_depths": {},
 		"root_simulations": {},
+		"root_horizon_complete": {},
+		"root_terminal_horizon_closed": {},
+		"root_depth_two_completed": {},
+		"common_physical_depth": 0,
 		"evaluations_complete": false,
 		"metadata_models_match": false,
 		"same_budget": false,
@@ -293,11 +323,14 @@ func _result_complete(result: Dictionary) -> bool:
 		return false
 	if int(metadata.get("world_coverage_basis_points", 0)) != 10000:
 		return false
-	if int(metadata.get("fully_completed_depth", 0)) != REQUIRED_DEPTH:
-		return false
-	if int(metadata.get("max_depth_reached", 0)) < REQUIRED_DEPTH:
-		return false
 	if bool(metadata.get("budget_exhausted", true)):
+		return false
+	if not bool(metadata.get("required_horizon_complete", false)):
+		return false
+	var required_horizon_branches := int(metadata.get("required_horizon_branch_count", 0))
+	if required_horizon_branches <= 0:
+		return false
+	if int(metadata.get("required_horizon_complete_branch_count", -1)) != required_horizon_branches:
 		return false
 	var expandable := int(metadata.get("expandable_branch_count", 0))
 	if expandable > 0:
@@ -341,6 +374,7 @@ func _incomplete_resolution() -> Dictionary:
 		"best_root_ids": [],
 		"best_kinds": [],
 		"common_depth": 0,
+		"common_physical_depth": 0,
 		"order_invariant": false,
 	}
 
