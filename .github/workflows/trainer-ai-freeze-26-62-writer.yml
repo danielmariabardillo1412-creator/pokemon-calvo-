@@ -1,0 +1,61 @@
+name: Trainer AI freeze 26.62 writer
+
+on:
+  push:
+    branches:
+      - audit/trainer-ai-v3-random-cup-redesign-v1
+    paths:
+      - docs/project_book/.trainer_ai_freeze_26_62.trigger
+
+permissions:
+  contents: write
+
+jobs:
+  append-freeze:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout exact branch
+        uses: actions/checkout@v4
+        with:
+          ref: audit/trainer-ai-v3-random-cup-redesign-v1
+          fetch-depth: 0
+
+      - name: Verify certified human sibling and helper-only commit
+        shell: bash
+        run: |
+          set -euo pipefail
+          HUMAN='135714f3df926f32ddd314b31a39358ecb3e3ef7'
+          test "$(git rev-parse HEAD^)" = "$HUMAN"
+          test "$(git rev-parse HEAD:docs/project_book/TRAINER_AI.md)" = "0aed327b38be206ab6296193cc0cefc405478826"
+          test -f docs/project_book/.trainer_ai_freeze_26_62.tmp.md
+          test -f docs/project_book/.trainer_ai_freeze_26_62.trigger
+          grep -Fx '## 26.62 — Freeze C3f-an: blocker terminal-depth lifecycle causalmente certificado; corrección mínima autorizada' docs/project_book/.trainer_ai_freeze_26_62.tmp.md
+          test "$(grep -c '^## 26\.62 ' docs/project_book/TRAINER_AI.md || true)" -eq 0
+          EXPECTED='.github/workflows/trainer-ai-freeze-26-62-writer.yml
+docs/project_book/.trainer_ai_freeze_26_62.tmp.md
+docs/project_book/.trainer_ai_freeze_26_62.trigger'
+          ACTUAL="$(git diff --name-only "$HUMAN"..HEAD | sort)"
+          test "$ACTUAL" = "$EXPECTED"
+
+      - name: Append freeze and self-clean
+        shell: bash
+        run: |
+          set -euo pipefail
+          NOTEBOOK='docs/project_book/TRAINER_AI.md'
+          STAGED='docs/project_book/.trainer_ai_freeze_26_62.tmp.md'
+          cat "$STAGED" >> "$NOTEBOOK"
+          test "$(grep -c '^## 26\.62 ' "$NOTEBOOK")" -eq 1
+          rm "$STAGED"
+          rm docs/project_book/.trainer_ai_freeze_26_62.trigger
+          rm .github/workflows/trainer-ai-freeze-26-62-writer.yml
+          git add -A
+          git diff --cached --check
+          test "$(git diff --cached --name-only | wc -l)" -eq 4
+          git diff --cached --name-only | grep -Fx 'docs/project_book/TRAINER_AI.md'
+          git diff --cached --name-only | grep -Fx 'docs/project_book/.trainer_ai_freeze_26_62.tmp.md'
+          git diff --cached --name-only | grep -Fx 'docs/project_book/.trainer_ai_freeze_26_62.trigger'
+          git diff --cached --name-only | grep -Fx '.github/workflows/trainer-ai-freeze-26-62-writer.yml'
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'docs(trainer-ai): freeze 26.62 C3f-an terminal-depth lifecycle blocker'
+          git push origin "HEAD:${GITHUB_REF_NAME}"
