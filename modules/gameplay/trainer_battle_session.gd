@@ -515,7 +515,7 @@ func submit_player_action_with_autonomous_trainer(
 	if String(substitution_report.get("substitution_status", "")) != SUBSTITUTION_READY:
 		last_error = "trainer_action_substitution_not_ready"
 		return []
-	var submitted_dict := substitution_report.get("submitted_action", null)
+	var submitted_dict: Variant = substitution_report.get("submitted_action", null)
 	if not (submitted_dict is Dictionary):
 		last_error = "trainer_action_substitution_not_ready"
 		return []
