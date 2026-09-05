@@ -7,6 +7,7 @@ extends RefCounted
 var observation: TrainerObservation = null
 var belief_snapshot: Dictionary = {}
 var memory_snapshot: Dictionary = {}
+var campaign_snapshot: Dictionary = {}
 var legal_actions: Array[BattleAction] = []
 
 
@@ -15,6 +16,7 @@ static func create(
 	belief: TrainerBeliefState,
 	memory: TrainerBattleMemory,
 	p_legal_actions: Array[BattleAction] = [],
+	p_campaign_snapshot: Dictionary = {},
 ) -> TrainerDecisionContext:
 	if p_observation == null or belief == null or memory == null:
 		return null
@@ -22,6 +24,7 @@ static func create(
 	context.observation = p_observation
 	context.belief_snapshot = belief.to_dict().duplicate(true)
 	context.memory_snapshot = memory.to_dict().duplicate(true)
+	context.campaign_snapshot = p_campaign_snapshot.duplicate(true)
 	for action in p_legal_actions:
 		if action != null:
 			context.legal_actions.append(BattleAction.from_dict(action.to_dict()))
@@ -36,5 +39,6 @@ func to_dict() -> Dictionary:
 		"observation": observation.to_dict() if observation != null else {},
 		"belief": belief_snapshot.duplicate(true),
 		"memory": memory_snapshot.duplicate(true),
+		"campaign": campaign_snapshot.duplicate(true),
 		"legal_actions": actions,
 	}

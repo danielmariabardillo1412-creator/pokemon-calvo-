@@ -121,7 +121,7 @@
       "id": "aura_break"
     },
     "bad_dreams": {
-      "classification": "DATA_ONLY",
+      "classification": "RUNTIME_SUPPORTED",
       "description": "Damages sleeping opponents for 1/8 their max HP after each turn.",
       "display_name": "Mal Sueño",
       "effect_id": "bad_dreams",
@@ -201,7 +201,7 @@
       "id": "black_hole"
     },
     "blaze": {
-      "classification": "DATA_ONLY",
+      "classification": "RUNTIME_SUPPORTED",
       "description": "Strengthens Fire moves to inflict 1.5× damage at 1/3 max HP or less.",
       "display_name": "Mar Llamas",
       "effect_id": "blaze",
@@ -481,7 +481,7 @@
       "id": "deep_sleep"
     },
     "defeatist": {
-      "classification": "DATA_ONLY",
+      "classification": "RUNTIME_SUPPORTED",
       "description": "Halves Attack and Special Attack at 50% max HP or less.",
       "display_name": "Flaqueza",
       "effect_id": "defeatist",
@@ -553,7 +553,7 @@
       "id": "dragonize"
     },
     "dragons_maw": {
-      "classification": "DATA_ONLY",
+      "classification": "RUNTIME_SUPPORTED",
       "description": "Powers up Dragon-type moves.",
       "display_name": "Mandíbula Dragón",
       "effect_id": "dragons_maw",
@@ -577,7 +577,7 @@
       "id": "drought"
     },
     "dry_skin": {
-      "classification": "DATA_ONLY",
+      "classification": "PARTIAL_RUNTIME",
       "description": "Causes 1/8 max HP in damage each turn during strong sunlight, but heals for 1/8 max HP during rain.  Increases damage from Fire moves to 1.25×, but absorbs Water moves, healing for 1/4 max HP.",
       "display_name": "Piel Seca",
       "effect_id": "dry_skin",
@@ -673,7 +673,7 @@
       "id": "filter"
     },
     "fire_mane": {
-      "classification": "DATA_ONLY",
+      "classification": "RUNTIME_SUPPORTED",
       "description": "Boosts the power of the Pokémon's Fire-type moves by 50%.",
       "display_name": "Fire Mane",
       "effect_id": "fire_mane",
@@ -681,7 +681,7 @@
       "id": "fire_mane"
     },
     "flame_body": {
-      "classification": "DATA_ONLY",
+      "classification": "PARTIAL_RUNTIME",
       "description": "Has a 30% chance of burning attacking Pokémon on contact.",
       "display_name": "Cuerpo Llama",
       "effect_id": "flame_body",
@@ -697,7 +697,7 @@
       "id": "flame_boost"
     },
     "flare_boost": {
-      "classification": "DATA_ONLY",
+      "classification": "RUNTIME_SUPPORTED",
       "description": "Increases Special Attack to 1.5× when burned.",
       "display_name": "Ímpetu Ardiente",
       "effect_id": "flare_boost",
@@ -801,7 +801,7 @@
       "id": "full_metal_body"
     },
     "fur_coat": {
-      "classification": "DATA_ONLY",
+      "classification": "RUNTIME_SUPPORTED",
       "description": "Halves damage from physical attacks.",
       "display_name": "Pelaje Recio",
       "effect_id": "fur_coat",
@@ -841,7 +841,7 @@
       "id": "good_as_gold"
     },
     "gooey": {
-      "classification": "DATA_ONLY",
+      "classification": "PARTIAL_RUNTIME",
       "description": "Lowers attacking Pokémon's Speed by one stage on contact.",
       "display_name": "Baba",
       "effect_id": "gooey",
@@ -913,7 +913,7 @@
       "id": "gulp_missile"
     },
     "guts": {
-      "classification": "DATA_ONLY",
+      "classification": "PARTIAL_RUNTIME",
       "description": "Increases Attack to 1.5× with a major status ailment.",
       "display_name": "Agallas",
       "effect_id": "guts",
@@ -945,7 +945,7 @@
       "id": "healer"
     },
     "heatproof": {
-      "classification": "DATA_ONLY",
+      "classification": "PARTIAL_RUNTIME",
       "description": "Halves damage from Fire moves and burns.",
       "display_name": "Ignífugo",
       "effect_id": "heatproof",
@@ -1009,7 +1009,7 @@
       "id": "hot_blooded"
     },
     "huge_power": {
-      "classification": "DATA_ONLY",
+      "classification": "RUNTIME_SUPPORTED",
       "description": "Doubles Attack in battle.",
       "display_name": "Potencia",
       "effect_id": "huge_power",
@@ -1025,7 +1025,7 @@
       "id": "hunger_switch"
     },
     "hustle": {
-      "classification": "DATA_ONLY",
+      "classification": "PARTIAL_RUNTIME",
       "description": "Strengthens physical moves to inflict 1.5× damage, but decreases their accuracy to 0.8×.",
       "display_name": "Entusiasmo",
       "effect_id": "hustle",
@@ -1065,7 +1065,7 @@
       "id": "ice_face"
     },
     "ice_scales": {
-      "classification": "DATA_ONLY",
+      "classification": "RUNTIME_SUPPORTED",
       "description": "Halves damage from Special moves.",
       "display_name": "Escama de Hielo",
       "effect_id": "ice_scales",
@@ -1153,7 +1153,7 @@
       "id": "interference"
     },
     "intimidate": {
-      "classification": "DATA_ONLY",
+      "classification": "PARTIAL_RUNTIME",
       "description": "Lowers opponents' Attack one stage upon entering battle.",
       "display_name": "Intimidación",
       "effect_id": "intimidate",
@@ -1169,7 +1169,7 @@
       "id": "intrepid_sword"
     },
     "iron_barbs": {
-      "classification": "DATA_ONLY",
+      "classification": "PARTIAL_RUNTIME",
       "description": "Damages attacking Pokémon for 1/8 their max HP on contact.",
       "display_name": "Punta Acero",
       "effect_id": "iron_barbs",
@@ -1233,7 +1233,7 @@
       "id": "leaf_guard"
     },
     "levitate": {
-      "classification": "DATA_ONLY",
+      "classification": "PARTIAL_RUNTIME",
       "description": "Evades Ground moves.",
       "display_name": "Levitación",
       "effect_id": "levitate",
@@ -1409,7 +1409,7 @@
       "id": "melee"
     },
     "merciless": {
-      "classification": "DATA_ONLY",
+      "classification": "RUNTIME_SUPPORTED",
       "description": "This Pokémon's moves critical hit against poisoned targets.",
       "display_name": "Ensañamiento",
       "effect_id": "merciless",
@@ -1505,7 +1505,7 @@
       "id": "moxie"
     },
     "multiscale": {
-      "classification": "DATA_ONLY",
+      "classification": "RUNTIME_SUPPORTED",
       "description": "Halves damage taken from full HP.",
       "display_name": "Multiescamas",
       "effect_id": "multiscale",
@@ -1633,7 +1633,7 @@
       "id": "overcoat"
     },
     "overgrow": {
-      "classification": "DATA_ONLY",
+      "classification": "RUNTIME_SUPPORTED",
       "description": "Strengthens Grass moves to inflict 1.5× damage at 1/3 max HP or less.",
       "display_name": "Espesura",
       "effect_id": "overgrow",
@@ -1737,7 +1737,7 @@
       "id": "poison_heal"
     },
     "poison_point": {
-      "classification": "DATA_ONLY",
+      "classification": "PARTIAL_RUNTIME",
       "description": "Has a 30% chance of poisoning attacking Pokémon on contact.",
       "display_name": "Punto Tóxico",
       "effect_id": "poison_point",
@@ -1873,7 +1873,7 @@
       "id": "punk_rock"
     },
     "pure_power": {
-      "classification": "DATA_ONLY",
+      "classification": "RUNTIME_SUPPORTED",
       "description": "Doubles Attack in battle.",
       "display_name": "Energía Pura",
       "effect_id": "pure_power",
@@ -1945,7 +1945,7 @@
       "id": "receiver"
     },
     "reckless": {
-      "classification": "DATA_ONLY",
+      "classification": "PARTIAL_RUNTIME",
       "description": "Strengthens recoil moves to 1.2× their power.",
       "display_name": "Audaz",
       "effect_id": "reckless",
@@ -2001,7 +2001,7 @@
       "id": "rock_head"
     },
     "rocky_payload": {
-      "classification": "DATA_ONLY",
+      "classification": "RUNTIME_SUPPORTED",
       "description": "Powers up Rock-type moves.",
       "display_name": "Transportarrocas",
       "effect_id": "rocky_payload",
@@ -2329,7 +2329,7 @@
       "id": "soundproof"
     },
     "speed_boost": {
-      "classification": "DATA_ONLY",
+      "classification": "RUNTIME_SUPPORTED",
       "description": "Raises Speed one stage after each turn.",
       "display_name": "Impulso",
       "effect_id": "speed_boost",
@@ -2393,7 +2393,7 @@
       "id": "stalwart"
     },
     "stamina": {
-      "classification": "DATA_ONLY",
+      "classification": "PARTIAL_RUNTIME",
       "description": "Raises this Pokémon's Defense by one stage when it takes damage from a move.",
       "display_name": "Firmeza",
       "effect_id": "stamina",
@@ -2409,7 +2409,7 @@
       "id": "stance_change"
     },
     "static": {
-      "classification": "DATA_ONLY",
+      "classification": "PARTIAL_RUNTIME",
       "description": "Has a 30% chance of paralyzing attacking Pokémon on contact.",
       "display_name": "Electricidad Estática",
       "effect_id": "static",
@@ -2441,7 +2441,7 @@
       "id": "steam_engine"
     },
     "steelworker": {
-      "classification": "DATA_ONLY",
+      "classification": "RUNTIME_SUPPORTED",
       "description": "This Pokémon's Steel moves have 1.5× power.",
       "display_name": "Acero Templado",
       "effect_id": "steelworker",
@@ -2537,7 +2537,7 @@
       "id": "surge_surfer"
     },
     "swarm": {
-      "classification": "DATA_ONLY",
+      "classification": "RUNTIME_SUPPORTED",
       "description": "Strengthens Bug moves to inflict 1.5× damage at 1/3 max HP or less.",
       "display_name": "Enjambre",
       "effect_id": "swarm",
@@ -2673,7 +2673,7 @@
       "id": "thermal_exchange"
     },
     "thick_fat": {
-      "classification": "DATA_ONLY",
+      "classification": "RUNTIME_SUPPORTED",
       "description": "Halves damage from Fire and Ice moves.",
       "display_name": "Sebo",
       "effect_id": "thick_fat",
@@ -2697,7 +2697,7 @@
       "id": "tinted_lens"
     },
     "torrent": {
-      "classification": "DATA_ONLY",
+      "classification": "RUNTIME_SUPPORTED",
       "description": "Strengthens Water moves to inflict 1.5× damage at 1/3 max HP or less.",
       "display_name": "Torrente",
       "effect_id": "torrent",
@@ -2705,15 +2705,15 @@
       "id": "torrent"
     },
     "tough_claws": {
-      "classification": "DATA_ONLY",
-      "description": "Strengthens moves that make contact to 1.33× their power.",
+      "classification": "RUNTIME_SUPPORTED",
+      "description": "Boosts the power of moves that make contact by 30%.",
       "display_name": "Garra Dura",
       "effect_id": "tough_claws",
-      "effect_summary": "Strengthens moves that make contact to 1.33× their power.",
+      "effect_summary": "Boosts the power of moves that make contact by 30%.",
       "id": "tough_claws"
     },
     "toxic_boost": {
-      "classification": "DATA_ONLY",
+      "classification": "RUNTIME_SUPPORTED",
       "description": "Increases Attack to 1.5× when poisoned.",
       "display_name": "Ímpetu Tóxico",
       "effect_id": "toxic_boost",
@@ -2873,7 +2873,7 @@
       "id": "water_absorb"
     },
     "water_bubble": {
-      "classification": "DATA_ONLY",
+      "classification": "PARTIAL_RUNTIME",
       "description": "Halves damage from Fire moves, doubles damage of Water moves, and prevents burns.",
       "display_name": "Pompa",
       "effect_id": "water_bubble",
@@ -16344,7 +16344,7 @@
   },
   "moves": {
     "10_000_000_volt_thunderbolt": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "RUNTIME_SUPPORTED",
       "crit_rate_bp": 1250,
       "damage_class": "special",
@@ -16453,8 +16453,8 @@
       "type_id": "poison"
     },
     "acid_armor": {
-      "accuracy": 100,
-      "classification": "DATA_ONLY",
+      "accuracy": -1,
+      "classification": "RUNTIME_SUPPORTED",
       "crit_rate_bp": 0,
       "damage_class": "status",
       "display_name": "Armadura Ácida",
@@ -16484,7 +16484,7 @@
       "type_id": "poison"
     },
     "acid_downpour_physical": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "physical",
@@ -16500,7 +16500,7 @@
       "type_id": "poison"
     },
     "acid_downpour_special": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "special",
@@ -16563,7 +16563,7 @@
       "type_id": "flying"
     },
     "acupressure": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -16579,7 +16579,7 @@
       "type_id": "normal"
     },
     "aerial_ace": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "RUNTIME_SUPPORTED",
       "crit_rate_bp": 0,
       "damage_class": "physical",
@@ -16611,7 +16611,7 @@
       "type_id": "flying"
     },
     "after_you": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -16627,8 +16627,8 @@
       "type_id": "normal"
     },
     "agility": {
-      "accuracy": 100,
-      "classification": "DATA_ONLY",
+      "accuracy": -1,
+      "classification": "RUNTIME_SUPPORTED",
       "crit_rate_bp": 0,
       "damage_class": "status",
       "display_name": "Agilidad",
@@ -16720,7 +16720,7 @@
       "type_id": "flying"
     },
     "all_out_pummeling_physical": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "physical",
@@ -16736,7 +16736,7 @@
       "type_id": "fighting"
     },
     "all_out_pummeling_special": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "special",
@@ -16768,7 +16768,7 @@
       "type_id": "fairy"
     },
     "ally_switch": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -16784,8 +16784,8 @@
       "type_id": "psychic"
     },
     "amnesia": {
-      "accuracy": 100,
-      "classification": "DATA_ONLY",
+      "accuracy": -1,
+      "classification": "RUNTIME_SUPPORTED",
       "crit_rate_bp": 0,
       "damage_class": "status",
       "display_name": "Amnesia",
@@ -16851,7 +16851,7 @@
               "ratio_basis_points": 0,
               "stat_id": "attack",
               "status_id": "",
-              "target": "opponent",
+              "target": "self",
               "value": 1
             }
           ],
@@ -16863,7 +16863,7 @@
           "ratio_basis_points": 0,
           "stat_id": "",
           "status_id": "",
-          "target": "opponent",
+          "target": "self",
           "value": 0
         },
         {
@@ -16880,7 +16880,7 @@
               "ratio_basis_points": 0,
               "stat_id": "defense",
               "status_id": "",
-              "target": "opponent",
+              "target": "self",
               "value": 1
             }
           ],
@@ -16892,7 +16892,7 @@
           "ratio_basis_points": 0,
           "stat_id": "",
           "status_id": "",
-          "target": "opponent",
+          "target": "self",
           "value": 0
         },
         {
@@ -16909,7 +16909,7 @@
               "ratio_basis_points": 0,
               "stat_id": "special_attack",
               "status_id": "",
-              "target": "opponent",
+              "target": "self",
               "value": 1
             }
           ],
@@ -16921,7 +16921,7 @@
           "ratio_basis_points": 0,
           "stat_id": "",
           "status_id": "",
-          "target": "opponent",
+          "target": "self",
           "value": 0
         },
         {
@@ -16938,7 +16938,7 @@
               "ratio_basis_points": 0,
               "stat_id": "special_defense",
               "status_id": "",
-              "target": "opponent",
+              "target": "self",
               "value": 1
             }
           ],
@@ -16950,7 +16950,7 @@
           "ratio_basis_points": 0,
           "stat_id": "",
           "status_id": "",
-          "target": "opponent",
+          "target": "self",
           "value": 0
         },
         {
@@ -16967,7 +16967,7 @@
               "ratio_basis_points": 0,
               "stat_id": "speed",
               "status_id": "",
-              "target": "opponent",
+              "target": "self",
               "value": 1
             }
           ],
@@ -16979,7 +16979,7 @@
           "ratio_basis_points": 0,
           "stat_id": "",
           "status_id": "",
-          "target": "opponent",
+          "target": "self",
           "value": 0
         }
       ],
@@ -17056,7 +17056,7 @@
       "type_id": "water"
     },
     "aqua_ring": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -17195,7 +17195,7 @@
       "type_id": "fire"
     },
     "aromatherapy": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -17211,27 +17211,12 @@
       "type_id": "grass"
     },
     "aromatic_mist": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
       "display_name": "Niebla Aromática",
-      "effect_specs": [
-        {
-          "chance_basis_points": 10000,
-          "children": [],
-          "kind": "modify_stat_stage",
-          "max_hits": 0,
-          "max_turns": 0,
-          "min_hits": 0,
-          "min_turns": 0,
-          "ratio_basis_points": 0,
-          "stat_id": "special_defense",
-          "status_id": "",
-          "target": "self",
-          "value": 1
-        }
-      ],
+      "effect_specs": [],
       "effect_summary": "Raises a selected ally’s Special Defense by one stage.",
       "id": "aromatic_mist",
       "makes_contact": false,
@@ -17242,7 +17227,7 @@
       "type_id": "fairy"
     },
     "assist": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "UNSUPPORTED",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -17275,7 +17260,7 @@
     },
     "astonish": {
       "accuracy": 100,
-      "classification": "UNSUPPORTED",
+      "classification": "RUNTIME_SUPPORTED",
       "crit_rate_bp": 0,
       "damage_class": "physical",
       "display_name": "Impresionar",
@@ -17368,7 +17353,7 @@
       "type_id": "normal"
     },
     "aura_sphere": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "RUNTIME_SUPPORTED",
       "crit_rate_bp": 0,
       "damage_class": "special",
@@ -17401,7 +17386,7 @@
           "ratio_basis_points": 0,
           "stat_id": "speed",
           "status_id": "",
-          "target": "opponent",
+          "target": "self",
           "value": 1
         }
       ],
@@ -17461,7 +17446,7 @@
       "type_id": "ice"
     },
     "aurora_veil": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -17477,28 +17462,13 @@
       "type_id": "ice"
     },
     "autotomize": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
       "display_name": "Aligerar",
-      "effect_specs": [
-        {
-          "chance_basis_points": 10000,
-          "children": [],
-          "kind": "modify_stat_stage",
-          "max_hits": 0,
-          "max_turns": 0,
-          "min_hits": 0,
-          "min_turns": 0,
-          "ratio_basis_points": 0,
-          "stat_id": "speed",
-          "status_id": "",
-          "target": "self",
-          "value": 2
-        }
-      ],
-      "effect_summary": "Raises the user’s Speed by two stages and halves the user’s weight.",
+      "effect_specs": [],
+      "effect_summary": "Raises the user’s Speed by two stages and lowers its weight by 100 kg.",
       "id": "autotomize",
       "makes_contact": false,
       "power": 0,
@@ -17541,7 +17511,7 @@
     },
     "baby_doll_eyes": {
       "accuracy": 100,
-      "classification": "DATA_ONLY",
+      "classification": "RUNTIME_SUPPORTED",
       "crit_rate_bp": 0,
       "damage_class": "status",
       "display_name": "Ojitos Tiernos",
@@ -17587,7 +17557,7 @@
       "type_id": "dark"
     },
     "baneful_bunker": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -17650,8 +17620,8 @@
       "type_id": "normal"
     },
     "barrier": {
-      "accuracy": 100,
-      "classification": "DATA_ONLY",
+      "accuracy": -1,
+      "classification": "RUNTIME_SUPPORTED",
       "crit_rate_bp": 0,
       "damage_class": "status",
       "display_name": "Barrera",
@@ -17681,7 +17651,7 @@
       "type_id": "psychic"
     },
     "baton_pass": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -17718,23 +17688,8 @@
       "crit_rate_bp": 0,
       "damage_class": "physical",
       "display_name": "Paliza",
-      "effect_specs": [
-        {
-          "chance_basis_points": 10000,
-          "children": [],
-          "kind": "multi_hit",
-          "max_hits": 6,
-          "max_turns": 0,
-          "min_hits": 6,
-          "min_turns": 0,
-          "ratio_basis_points": 0,
-          "stat_id": "",
-          "status_id": "",
-          "target": "opponent",
-          "value": 0
-        }
-      ],
-      "effect_summary": "Hits once for every conscious Pokémon the trainer has.",
+      "effect_specs": [],
+      "effect_summary": "Party-dependent multi-hit attack; fainted or statused party members do not contribute.",
       "id": "beat_up",
       "makes_contact": false,
       "power": 0,
@@ -17792,7 +17747,7 @@
       "type_id": "poison"
     },
     "belly_drum": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -17808,7 +17763,7 @@
       "type_id": "normal"
     },
     "bestow": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "UNSUPPORTED",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -17824,7 +17779,7 @@
       "type_id": "normal"
     },
     "bide": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "physical",
@@ -17934,7 +17889,7 @@
       "type_id": "ghost"
     },
     "black_hole_eclipse_physical": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "physical",
@@ -17950,7 +17905,7 @@
       "type_id": "dark"
     },
     "black_hole_eclipse_special": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "special",
@@ -18106,7 +18061,7 @@
       "type_id": "ice"
     },
     "block": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -18138,7 +18093,7 @@
       "type_id": "normal"
     },
     "bloom_doom_physical": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "physical",
@@ -18154,7 +18109,7 @@
       "type_id": "grass"
     },
     "bloom_doom_special": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "special",
@@ -18619,7 +18574,7 @@
       "type_id": "dragon"
     },
     "breakneck_blitz_physical": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "physical",
@@ -18635,7 +18590,7 @@
       "type_id": "normal"
     },
     "breakneck_blitz_special": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "special",
@@ -18853,8 +18808,8 @@
       "type_id": "bug"
     },
     "bulk_up": {
-      "accuracy": 100,
-      "classification": "DATA_ONLY",
+      "accuracy": -1,
+      "classification": "RUNTIME_SUPPORTED",
       "crit_rate_bp": 0,
       "damage_class": "status",
       "display_name": "Corpulencia",
@@ -19070,8 +19025,8 @@
       "type_id": "electric"
     },
     "calm_mind": {
-      "accuracy": 100,
-      "classification": "DATA_ONLY",
+      "accuracy": -1,
+      "classification": "RUNTIME_SUPPORTED",
       "crit_rate_bp": 0,
       "damage_class": "status",
       "display_name": "Paz Mental",
@@ -19115,7 +19070,7 @@
       "type_id": "psychic"
     },
     "camouflage": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -19136,22 +19091,7 @@
       "crit_rate_bp": 0,
       "damage_class": "status",
       "display_name": "Seducción",
-      "effect_specs": [
-        {
-          "chance_basis_points": 10000,
-          "children": [],
-          "kind": "modify_stat_stage",
-          "max_hits": 0,
-          "max_turns": 0,
-          "min_hits": 0,
-          "min_turns": 0,
-          "ratio_basis_points": 0,
-          "stat_id": "special_attack",
-          "status_id": "",
-          "target": "opponent",
-          "value": -2
-        }
-      ],
+      "effect_specs": [],
       "effect_summary": "Lowers the target’s Special Attack by two stages if it’s the opposite gender.",
       "id": "captivate",
       "makes_contact": false,
@@ -19162,7 +19102,7 @@
       "type_id": "normal"
     },
     "catastropika": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "RUNTIME_SUPPORTED",
       "crit_rate_bp": 0,
       "damage_class": "physical",
@@ -19194,7 +19134,7 @@
       "type_id": "dark"
     },
     "celebrate": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -19210,8 +19150,8 @@
       "type_id": "normal"
     },
     "charge": {
-      "accuracy": 100,
-      "classification": "DATA_ONLY",
+      "accuracy": -1,
+      "classification": "PARTIAL_RUNTIME",
       "crit_rate_bp": 0,
       "damage_class": "status",
       "display_name": "Carga",
@@ -19261,7 +19201,7 @@
               "ratio_basis_points": 0,
               "stat_id": "special_attack",
               "status_id": "",
-              "target": "opponent",
+              "target": "self",
               "value": 1
             }
           ],
@@ -19273,7 +19213,7 @@
           "ratio_basis_points": 0,
           "stat_id": "",
           "status_id": "",
-          "target": "opponent",
+          "target": "self",
           "value": 0
         }
       ],
@@ -19288,7 +19228,7 @@
     },
     "charm": {
       "accuracy": 100,
-      "classification": "DATA_ONLY",
+      "classification": "RUNTIME_SUPPORTED",
       "crit_rate_bp": 0,
       "damage_class": "status",
       "display_name": "Encanto",
@@ -19380,7 +19320,7 @@
       "type_id": "water"
     },
     "chilly_reception": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -19477,7 +19417,7 @@
           "ratio_basis_points": 0,
           "stat_id": "defense",
           "status_id": "",
-          "target": "opponent",
+          "target": "self",
           "value": -1
         }
       ],
@@ -19496,78 +19436,7 @@
       "crit_rate_bp": 0,
       "damage_class": "status",
       "display_name": "Estruendo Escama",
-      "effect_specs": [
-        {
-          "chance_basis_points": 10000,
-          "children": [],
-          "kind": "modify_stat_stage",
-          "max_hits": 0,
-          "max_turns": 0,
-          "min_hits": 0,
-          "min_turns": 0,
-          "ratio_basis_points": 0,
-          "stat_id": "attack",
-          "status_id": "",
-          "target": "self",
-          "value": 1
-        },
-        {
-          "chance_basis_points": 10000,
-          "children": [],
-          "kind": "modify_stat_stage",
-          "max_hits": 0,
-          "max_turns": 0,
-          "min_hits": 0,
-          "min_turns": 0,
-          "ratio_basis_points": 0,
-          "stat_id": "defense",
-          "status_id": "",
-          "target": "self",
-          "value": 1
-        },
-        {
-          "chance_basis_points": 10000,
-          "children": [],
-          "kind": "modify_stat_stage",
-          "max_hits": 0,
-          "max_turns": 0,
-          "min_hits": 0,
-          "min_turns": 0,
-          "ratio_basis_points": 0,
-          "stat_id": "special_attack",
-          "status_id": "",
-          "target": "self",
-          "value": 1
-        },
-        {
-          "chance_basis_points": 10000,
-          "children": [],
-          "kind": "modify_stat_stage",
-          "max_hits": 0,
-          "max_turns": 0,
-          "min_hits": 0,
-          "min_turns": 0,
-          "ratio_basis_points": 0,
-          "stat_id": "special_defense",
-          "status_id": "",
-          "target": "self",
-          "value": 1
-        },
-        {
-          "chance_basis_points": 10000,
-          "children": [],
-          "kind": "modify_stat_stage",
-          "max_hits": 0,
-          "max_turns": 0,
-          "min_hits": 0,
-          "min_turns": 0,
-          "ratio_basis_points": 0,
-          "stat_id": "speed",
-          "status_id": "",
-          "target": "self",
-          "value": 1
-        }
-      ],
+      "effect_specs": [],
       "effect_summary": "User loses 33% of its Max HP. Raises all of the user’s stats by one stage.",
       "id": "clangorous_soul",
       "makes_contact": false,
@@ -19578,7 +19447,7 @@
       "type_id": "dragon"
     },
     "clangorous_soulblaze": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "RUNTIME_SUPPORTED",
       "crit_rate_bp": 0,
       "damage_class": "special",
@@ -19595,7 +19464,7 @@
           "ratio_basis_points": 0,
           "stat_id": "attack",
           "status_id": "",
-          "target": "opponent",
+          "target": "self",
           "value": 1
         },
         {
@@ -19609,7 +19478,7 @@
           "ratio_basis_points": 0,
           "stat_id": "defense",
           "status_id": "",
-          "target": "opponent",
+          "target": "self",
           "value": 1
         },
         {
@@ -19623,7 +19492,7 @@
           "ratio_basis_points": 0,
           "stat_id": "special_attack",
           "status_id": "",
-          "target": "opponent",
+          "target": "self",
           "value": 1
         },
         {
@@ -19637,7 +19506,7 @@
           "ratio_basis_points": 0,
           "stat_id": "special_defense",
           "status_id": "",
-          "target": "opponent",
+          "target": "self",
           "value": 1
         },
         {
@@ -19651,7 +19520,7 @@
           "ratio_basis_points": 0,
           "stat_id": "speed",
           "status_id": "",
-          "target": "opponent",
+          "target": "self",
           "value": 1
         }
       ],
@@ -19665,7 +19534,7 @@
       "type_id": "dragon"
     },
     "clear_smog": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "RUNTIME_SUPPORTED",
       "crit_rate_bp": 0,
       "damage_class": "special",
@@ -19698,7 +19567,7 @@
           "ratio_basis_points": 0,
           "stat_id": "defense",
           "status_id": "",
-          "target": "opponent",
+          "target": "self",
           "value": -1
         },
         {
@@ -19712,7 +19581,7 @@
           "ratio_basis_points": 0,
           "stat_id": "special_defense",
           "status_id": "",
-          "target": "opponent",
+          "target": "self",
           "value": -1
         }
       ],
@@ -19726,41 +19595,12 @@
       "type_id": "fighting"
     },
     "coaching": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
       "display_name": "Motivación",
-      "effect_specs": [
-        {
-          "chance_basis_points": 10000,
-          "children": [],
-          "kind": "modify_stat_stage",
-          "max_hits": 0,
-          "max_turns": 0,
-          "min_hits": 0,
-          "min_turns": 0,
-          "ratio_basis_points": 0,
-          "stat_id": "attack",
-          "status_id": "",
-          "target": "opponent",
-          "value": 1
-        },
-        {
-          "chance_basis_points": 10000,
-          "children": [],
-          "kind": "modify_stat_stage",
-          "max_hits": 0,
-          "max_turns": 0,
-          "min_hits": 0,
-          "min_turns": 0,
-          "ratio_basis_points": 0,
-          "stat_id": "defense",
-          "status_id": "",
-          "target": "opponent",
-          "value": 1
-        }
-      ],
+      "effect_specs": [],
       "effect_summary": "Raises the target's Attack and Defense by 1 stage. Fails if there is no ally adjacent to the user.",
       "id": "coaching",
       "makes_contact": false,
@@ -19771,8 +19611,8 @@
       "type_id": "fighting"
     },
     "coil": {
-      "accuracy": 100,
-      "classification": "DATA_ONLY",
+      "accuracy": -1,
+      "classification": "RUNTIME_SUPPORTED",
       "crit_rate_bp": 0,
       "damage_class": "status",
       "display_name": "Enrosque",
@@ -19909,8 +19749,8 @@
       "type_id": "dark"
     },
     "confide": {
-      "accuracy": 100,
-      "classification": "DATA_ONLY",
+      "accuracy": -1,
+      "classification": "RUNTIME_SUPPORTED",
       "crit_rate_bp": 0,
       "damage_class": "status",
       "display_name": "Confidencia",
@@ -20063,7 +19903,7 @@
       "type_id": "normal"
     },
     "continental_crush_physical": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "physical",
@@ -20079,7 +19919,7 @@
       "type_id": "rock"
     },
     "continental_crush_special": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "special",
@@ -20095,7 +19935,7 @@
       "type_id": "rock"
     },
     "conversion": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -20111,7 +19951,7 @@
       "type_id": "normal"
     },
     "conversion_2": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -20127,7 +19967,7 @@
       "type_id": "normal"
     },
     "copycat": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "UNSUPPORTED",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -20159,7 +19999,7 @@
       "type_id": "dragon"
     },
     "corkscrew_crash_physical": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "physical",
@@ -20175,7 +20015,7 @@
       "type_id": "steel"
     },
     "corkscrew_crash_special": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "special",
@@ -20207,8 +20047,8 @@
       "type_id": "poison"
     },
     "cosmic_power": {
-      "accuracy": 100,
-      "classification": "DATA_ONLY",
+      "accuracy": -1,
+      "classification": "RUNTIME_SUPPORTED",
       "crit_rate_bp": 0,
       "damage_class": "status",
       "display_name": "Masa Cósmica",
@@ -20252,8 +20092,8 @@
       "type_id": "psychic"
     },
     "cotton_guard": {
-      "accuracy": 100,
-      "classification": "DATA_ONLY",
+      "accuracy": -1,
+      "classification": "RUNTIME_SUPPORTED",
       "crit_rate_bp": 0,
       "damage_class": "status",
       "display_name": "Rizo Algodón",
@@ -20288,22 +20128,7 @@
       "crit_rate_bp": 0,
       "damage_class": "status",
       "display_name": "Esporagodón",
-      "effect_specs": [
-        {
-          "chance_basis_points": 10000,
-          "children": [],
-          "kind": "modify_stat_stage",
-          "max_hits": 0,
-          "max_turns": 0,
-          "min_hits": 0,
-          "min_turns": 0,
-          "ratio_basis_points": 0,
-          "stat_id": "speed",
-          "status_id": "",
-          "target": "opponent",
-          "value": -2
-        }
-      ],
+      "effect_specs": [],
       "effect_summary": "Lowers the target’s Speed by two stages.",
       "id": "cotton_spore",
       "makes_contact": false,
@@ -20378,7 +20203,7 @@
       "type_id": "water"
     },
     "crafty_shield": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -20564,7 +20389,7 @@
       "type_id": "normal"
     },
     "curse": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -20705,8 +20530,8 @@
       "type_id": "fairy"
     },
     "decorate": {
-      "accuracy": 100,
-      "classification": "DATA_ONLY",
+      "accuracy": -1,
+      "classification": "RUNTIME_SUPPORTED",
       "crit_rate_bp": 0,
       "damage_class": "status",
       "display_name": "Decoración",
@@ -20750,8 +20575,8 @@
       "type_id": "fairy"
     },
     "defend_order": {
-      "accuracy": 100,
-      "classification": "DATA_ONLY",
+      "accuracy": -1,
+      "classification": "RUNTIME_SUPPORTED",
       "crit_rate_bp": 0,
       "damage_class": "status",
       "display_name": "A Defender",
@@ -20795,8 +20620,8 @@
       "type_id": "bug"
     },
     "defense_curl": {
-      "accuracy": 100,
-      "classification": "DATA_ONLY",
+      "accuracy": -1,
+      "classification": "PARTIAL_RUNTIME",
       "crit_rate_bp": 0,
       "damage_class": "status",
       "display_name": "Rizo Defensa",
@@ -20826,27 +20651,12 @@
       "type_id": "normal"
     },
     "defog": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
       "display_name": "Despejar",
-      "effect_specs": [
-        {
-          "chance_basis_points": 10000,
-          "children": [],
-          "kind": "modify_stat_stage",
-          "max_hits": 0,
-          "max_turns": 0,
-          "min_hits": 0,
-          "min_turns": 0,
-          "ratio_basis_points": 0,
-          "stat_id": "evasion",
-          "status_id": "",
-          "target": "opponent",
-          "value": -1
-        }
-      ],
+      "effect_specs": [],
       "effect_summary": "Lowers the target’s evasion by one stage.  Removes field effects from the enemy field.",
       "id": "defog",
       "makes_contact": false,
@@ -20857,7 +20667,7 @@
       "type_id": "flying"
     },
     "destiny_bond": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -20873,7 +20683,7 @@
       "type_id": "ghost"
     },
     "detect": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -20889,7 +20699,7 @@
       "type_id": "fighting"
     },
     "devastating_drake_physical": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "physical",
@@ -20905,7 +20715,7 @@
       "type_id": "dragon"
     },
     "devastating_drake_special": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "special",
@@ -20941,7 +20751,7 @@
               "ratio_basis_points": 0,
               "stat_id": "defense",
               "status_id": "",
-              "target": "opponent",
+              "target": "self",
               "value": 2
             }
           ],
@@ -20953,7 +20763,7 @@
           "ratio_basis_points": 0,
           "stat_id": "",
           "status_id": "",
-          "target": "opponent",
+          "target": "self",
           "value": 0
         }
       ],
@@ -21015,7 +20825,7 @@
       "type_id": "normal"
     },
     "disarming_voice": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "RUNTIME_SUPPORTED",
       "crit_rate_bp": 0,
       "damage_class": "special",
@@ -21371,8 +21181,8 @@
       "type_id": "normal"
     },
     "double_team": {
-      "accuracy": 100,
-      "classification": "DATA_ONLY",
+      "accuracy": -1,
+      "classification": "RUNTIME_SUPPORTED",
       "crit_rate_bp": 0,
       "damage_class": "status",
       "display_name": "Doble Equipo",
@@ -21419,7 +21229,7 @@
           "ratio_basis_points": 0,
           "stat_id": "special_attack",
           "status_id": "",
-          "target": "opponent",
+          "target": "self",
           "value": -2
         }
       ],
@@ -21450,7 +21260,7 @@
           "ratio_basis_points": 0,
           "stat_id": "defense",
           "status_id": "",
-          "target": "opponent",
+          "target": "self",
           "value": -1
         },
         {
@@ -21464,7 +21274,7 @@
           "ratio_basis_points": 0,
           "stat_id": "special_defense",
           "status_id": "",
-          "target": "opponent",
+          "target": "self",
           "value": -1
         }
       ],
@@ -21556,8 +21366,8 @@
       "type_id": "dragon"
     },
     "dragon_dance": {
-      "accuracy": 100,
-      "classification": "DATA_ONLY",
+      "accuracy": -1,
+      "classification": "RUNTIME_SUPPORTED",
       "crit_rate_bp": 0,
       "damage_class": "status",
       "display_name": "Danza Dragón",
@@ -22102,7 +21912,7 @@
     },
     "eerie_impulse": {
       "accuracy": 100,
-      "classification": "DATA_ONLY",
+      "classification": "RUNTIME_SUPPORTED",
       "crit_rate_bp": 0,
       "damage_class": "status",
       "display_name": "Onda Anómala",
@@ -22164,7 +21974,7 @@
       "type_id": "normal"
     },
     "electric_terrain": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -22180,7 +21990,7 @@
       "type_id": "electric"
     },
     "electrify": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -22384,7 +22194,7 @@
       "type_id": "normal"
     },
     "endure": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -22588,84 +22398,13 @@
       "type_id": "psychic"
     },
     "extreme_evoboost": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
       "display_name": "Novena Potencia",
-      "effect_specs": [
-        {
-          "chance_basis_points": 10000,
-          "children": [],
-          "kind": "modify_stat_stage",
-          "max_hits": 0,
-          "max_turns": 0,
-          "min_hits": 0,
-          "min_turns": 0,
-          "ratio_basis_points": 0,
-          "stat_id": "attack",
-          "status_id": "",
-          "target": "self",
-          "value": 2
-        },
-        {
-          "chance_basis_points": 10000,
-          "children": [],
-          "kind": "modify_stat_stage",
-          "max_hits": 0,
-          "max_turns": 0,
-          "min_hits": 0,
-          "min_turns": 0,
-          "ratio_basis_points": 0,
-          "stat_id": "defense",
-          "status_id": "",
-          "target": "self",
-          "value": 2
-        },
-        {
-          "chance_basis_points": 10000,
-          "children": [],
-          "kind": "modify_stat_stage",
-          "max_hits": 0,
-          "max_turns": 0,
-          "min_hits": 0,
-          "min_turns": 0,
-          "ratio_basis_points": 0,
-          "stat_id": "special_attack",
-          "status_id": "",
-          "target": "self",
-          "value": 2
-        },
-        {
-          "chance_basis_points": 10000,
-          "children": [],
-          "kind": "modify_stat_stage",
-          "max_hits": 0,
-          "max_turns": 0,
-          "min_hits": 0,
-          "min_turns": 0,
-          "ratio_basis_points": 0,
-          "stat_id": "special_defense",
-          "status_id": "",
-          "target": "self",
-          "value": 2
-        },
-        {
-          "chance_basis_points": 10000,
-          "children": [],
-          "kind": "modify_stat_stage",
-          "max_hits": 0,
-          "max_turns": 0,
-          "min_hits": 0,
-          "min_turns": 0,
-          "ratio_basis_points": 0,
-          "stat_id": "speed",
-          "status_id": "",
-          "target": "self",
-          "value": 2
-        }
-      ],
-      "effect_summary": "Raises all of the user’s stats by two stages.",
+      "effect_specs": [],
+      "effect_summary": "Eevee's exclusive Z-Move; raises five battle stats by two stages and is not normally selectable from Generation VIII onward.",
       "id": "extreme_evoboost",
       "makes_contact": false,
       "power": 0,
@@ -22707,7 +22446,7 @@
       "type_id": "normal"
     },
     "fairy_lock": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -22786,7 +22525,7 @@
     },
     "fake_tears": {
       "accuracy": 100,
-      "classification": "DATA_ONLY",
+      "classification": "RUNTIME_SUPPORTED",
       "crit_rate_bp": 0,
       "damage_class": "status",
       "display_name": "Llanto Falso",
@@ -22816,7 +22555,7 @@
       "type_id": "dark"
     },
     "false_surrender": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "PARTIAL_RUNTIME",
       "crit_rate_bp": 0,
       "damage_class": "physical",
@@ -22849,7 +22588,7 @@
     },
     "feather_dance": {
       "accuracy": 100,
-      "classification": "DATA_ONLY",
+      "classification": "RUNTIME_SUPPORTED",
       "crit_rate_bp": 0,
       "damage_class": "status",
       "display_name": "Danza Pluma",
@@ -22895,7 +22634,7 @@
       "type_id": "normal"
     },
     "feint_attack": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "RUNTIME_SUPPORTED",
       "crit_rate_bp": 0,
       "damage_class": "physical",
@@ -22963,7 +22702,7 @@
               "ratio_basis_points": 0,
               "stat_id": "special_attack",
               "status_id": "",
-              "target": "opponent",
+              "target": "self",
               "value": 1
             }
           ],
@@ -22975,7 +22714,7 @@
           "ratio_basis_points": 0,
           "stat_id": "",
           "status_id": "",
-          "target": "opponent",
+          "target": "self",
           "value": 0
         }
       ],
@@ -23035,55 +22774,12 @@
       "type_id": "dark"
     },
     "fillet_away": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
       "display_name": "Deslome",
-      "effect_specs": [
-        {
-          "chance_basis_points": 10000,
-          "children": [],
-          "kind": "modify_stat_stage",
-          "max_hits": 0,
-          "max_turns": 0,
-          "min_hits": 0,
-          "min_turns": 0,
-          "ratio_basis_points": 0,
-          "stat_id": "attack",
-          "status_id": "",
-          "target": "self",
-          "value": 2
-        },
-        {
-          "chance_basis_points": 10000,
-          "children": [],
-          "kind": "modify_stat_stage",
-          "max_hits": 0,
-          "max_turns": 0,
-          "min_hits": 0,
-          "min_turns": 0,
-          "ratio_basis_points": 0,
-          "stat_id": "special_attack",
-          "status_id": "",
-          "target": "self",
-          "value": 2
-        },
-        {
-          "chance_basis_points": 10000,
-          "children": [],
-          "kind": "modify_stat_stage",
-          "max_hits": 0,
-          "max_turns": 0,
-          "min_hits": 0,
-          "min_turns": 0,
-          "ratio_basis_points": 0,
-          "stat_id": "speed",
-          "status_id": "",
-          "target": "self",
-          "value": 2
-        }
-      ],
+      "effect_specs": [],
       "effect_summary": "",
       "id": "fillet_away",
       "makes_contact": false,
@@ -23437,7 +23133,7 @@
           "ratio_basis_points": 0,
           "stat_id": "speed",
           "status_id": "",
-          "target": "opponent",
+          "target": "self",
           "value": 1
         }
       ],
@@ -23604,7 +23300,7 @@
     },
     "flash": {
       "accuracy": 100,
-      "classification": "DATA_ONLY",
+      "classification": "RUNTIME_SUPPORTED",
       "crit_rate_bp": 0,
       "damage_class": "status",
       "display_name": "Destello",
@@ -23742,7 +23438,7 @@
           "ratio_basis_points": 0,
           "stat_id": "special_attack",
           "status_id": "",
-          "target": "opponent",
+          "target": "self",
           "value": -2
         }
       ],
@@ -23834,8 +23530,8 @@
       "type_id": "flying"
     },
     "floral_healing": {
-      "accuracy": 100,
-      "classification": "DATA_ONLY",
+      "accuracy": -1,
+      "classification": "PARTIAL_RUNTIME",
       "crit_rate_bp": 0,
       "damage_class": "status",
       "display_name": "Cura Floral",
@@ -23851,7 +23547,7 @@
           "ratio_basis_points": 5000,
           "stat_id": "",
           "status_id": "",
-          "target": "self",
+          "target": "opponent",
           "value": 0
         }
       ],
@@ -23865,28 +23561,13 @@
       "type_id": "fairy"
     },
     "flower_shield": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
       "display_name": "Defensa Floral",
-      "effect_specs": [
-        {
-          "chance_basis_points": 10000,
-          "children": [],
-          "kind": "modify_stat_stage",
-          "max_hits": 0,
-          "max_turns": 0,
-          "min_hits": 0,
-          "min_turns": 0,
-          "ratio_basis_points": 0,
-          "stat_id": "defense",
-          "status_id": "",
-          "target": "opponent",
-          "value": 1
-        }
-      ],
-      "effect_summary": "Raises the Defense of all Grass Pokémon in battle.",
+      "effect_specs": [],
+      "effect_summary": "Raises Defense of eligible Grass-type Pokémon on the field; unavailable for selection in Generation IX.",
       "id": "flower_shield",
       "makes_contact": false,
       "power": 0,
@@ -23896,7 +23577,7 @@
       "type_id": "fairy"
     },
     "flower_trick": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "RUNTIME_SUPPORTED",
       "crit_rate_bp": 0,
       "damage_class": "physical",
@@ -23990,7 +23671,7 @@
       "type_id": "fighting"
     },
     "focus_energy": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -24022,7 +23703,7 @@
       "type_id": "fighting"
     },
     "follow_me": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -24084,7 +23765,7 @@
       "type_id": "fighting"
     },
     "foresight": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -24507,41 +24188,12 @@
       "type_id": "steel"
     },
     "gear_up": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
       "display_name": "Piñón Auxiliar",
-      "effect_specs": [
-        {
-          "chance_basis_points": 10000,
-          "children": [],
-          "kind": "modify_stat_stage",
-          "max_hits": 0,
-          "max_turns": 0,
-          "min_hits": 0,
-          "min_turns": 0,
-          "ratio_basis_points": 0,
-          "stat_id": "attack",
-          "status_id": "",
-          "target": "opponent",
-          "value": 1
-        },
-        {
-          "chance_basis_points": 10000,
-          "children": [],
-          "kind": "modify_stat_stage",
-          "max_hits": 0,
-          "max_turns": 0,
-          "min_hits": 0,
-          "min_turns": 0,
-          "ratio_basis_points": 0,
-          "stat_id": "special_attack",
-          "status_id": "",
-          "target": "opponent",
-          "value": 1
-        }
-      ],
+      "effect_specs": [],
       "effect_summary": "Raises the Attack and Special Attack of all friendly Pokémon with Plus or Minus by one stage.",
       "id": "gear_up",
       "makes_contact": false,
@@ -24552,7 +24204,7 @@
       "type_id": "steel"
     },
     "genesis_supernova": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "RUNTIME_SUPPORTED",
       "crit_rate_bp": 0,
       "damage_class": "special",
@@ -24568,55 +24220,12 @@
       "type_id": "psychic"
     },
     "geomancy": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
       "display_name": "Geocontrol",
-      "effect_specs": [
-        {
-          "chance_basis_points": 10000,
-          "children": [],
-          "kind": "modify_stat_stage",
-          "max_hits": 0,
-          "max_turns": 0,
-          "min_hits": 0,
-          "min_turns": 0,
-          "ratio_basis_points": 0,
-          "stat_id": "special_attack",
-          "status_id": "",
-          "target": "self",
-          "value": 2
-        },
-        {
-          "chance_basis_points": 10000,
-          "children": [],
-          "kind": "modify_stat_stage",
-          "max_hits": 0,
-          "max_turns": 0,
-          "min_hits": 0,
-          "min_turns": 0,
-          "ratio_basis_points": 0,
-          "stat_id": "special_defense",
-          "status_id": "",
-          "target": "self",
-          "value": 2
-        },
-        {
-          "chance_basis_points": 10000,
-          "children": [],
-          "kind": "modify_stat_stage",
-          "max_hits": 0,
-          "max_turns": 0,
-          "min_hits": 0,
-          "min_turns": 0,
-          "ratio_basis_points": 0,
-          "stat_id": "speed",
-          "status_id": "",
-          "target": "self",
-          "value": 2
-        }
-      ],
+      "effect_specs": [],
       "effect_summary": "Takes one turn to charge, then raises the user’s Special Attack, Special Defense, and Speed by two stages.",
       "id": "geomancy",
       "makes_contact": false,
@@ -24690,7 +24299,7 @@
       "type_id": "steel"
     },
     "gigavolt_havoc_physical": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "physical",
@@ -24706,7 +24315,7 @@
       "type_id": "electric"
     },
     "gigavolt_havoc_special": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "special",
@@ -24911,7 +24520,7 @@
       "type_id": "grass"
     },
     "grassy_terrain": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -24958,7 +24567,7 @@
       "type_id": "grass"
     },
     "gravity": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -24975,7 +24584,7 @@
     },
     "growl": {
       "accuracy": 100,
-      "classification": "DATA_ONLY",
+      "classification": "RUNTIME_SUPPORTED",
       "crit_rate_bp": 0,
       "damage_class": "status",
       "display_name": "Gruñido",
@@ -25005,8 +24614,8 @@
       "type_id": "normal"
     },
     "growth": {
-      "accuracy": 100,
-      "classification": "DATA_ONLY",
+      "accuracy": -1,
+      "classification": "PARTIAL_RUNTIME",
       "crit_rate_bp": 0,
       "damage_class": "status",
       "display_name": "Desarrollo",
@@ -25050,7 +24659,7 @@
       "type_id": "normal"
     },
     "grudge": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -25066,7 +24675,7 @@
       "type_id": "ghost"
     },
     "guard_split": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -25082,7 +24691,7 @@
       "type_id": "psychic"
     },
     "guard_swap": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -25098,7 +24707,7 @@
       "type_id": "psychic"
     },
     "guardian_of_alola": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "special",
@@ -25208,7 +24817,7 @@
       "type_id": "steel"
     },
     "hail": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -25241,7 +24850,7 @@
           "ratio_basis_points": 0,
           "stat_id": "speed",
           "status_id": "",
-          "target": "opponent",
+          "target": "self",
           "value": -1
         }
       ],
@@ -25255,7 +24864,7 @@
       "type_id": "fighting"
     },
     "happy_hour": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -25287,8 +24896,8 @@
       "type_id": "steel"
     },
     "harden": {
-      "accuracy": 100,
-      "classification": "DATA_ONLY",
+      "accuracy": -1,
+      "classification": "RUNTIME_SUPPORTED",
       "crit_rate_bp": 0,
       "damage_class": "status",
       "display_name": "Fortaleza",
@@ -25318,7 +24927,7 @@
       "type_id": "normal"
     },
     "haze": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -25458,7 +25067,7 @@
       "type_id": "ground"
     },
     "heal_bell": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -25490,8 +25099,8 @@
       "type_id": "psychic"
     },
     "heal_order": {
-      "accuracy": 100,
-      "classification": "DATA_ONLY",
+      "accuracy": -1,
+      "classification": "RUNTIME_SUPPORTED",
       "crit_rate_bp": 0,
       "damage_class": "status",
       "display_name": "Auxilio",
@@ -25521,8 +25130,8 @@
       "type_id": "bug"
     },
     "heal_pulse": {
-      "accuracy": 100,
-      "classification": "DATA_ONLY",
+      "accuracy": -1,
+      "classification": "RUNTIME_SUPPORTED",
       "crit_rate_bp": 0,
       "damage_class": "status",
       "display_name": "Pulso Cura",
@@ -25538,7 +25147,7 @@
           "ratio_basis_points": 5000,
           "stat_id": "",
           "status_id": "",
-          "target": "self",
+          "target": "opponent",
           "value": 0
         }
       ],
@@ -25552,7 +25161,7 @@
       "type_id": "psychic"
     },
     "healing_wish": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -25614,7 +25223,7 @@
       "type_id": "psychic"
     },
     "heart_swap": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -25708,7 +25317,7 @@
       "type_id": "steel"
     },
     "helping_hand": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -25804,7 +25413,7 @@
       "type_id": "normal"
     },
     "hold_hands": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -25820,8 +25429,8 @@
       "type_id": "normal"
     },
     "hone_claws": {
-      "accuracy": 100,
-      "classification": "DATA_ONLY",
+      "accuracy": -1,
+      "classification": "RUNTIME_SUPPORTED",
       "crit_rate_bp": 0,
       "damage_class": "status",
       "display_name": "Afilagarras",
@@ -25928,8 +25537,8 @@
       "type_id": "grass"
     },
     "howl": {
-      "accuracy": 100,
-      "classification": "DATA_ONLY",
+      "accuracy": -1,
+      "classification": "PARTIAL_RUNTIME",
       "crit_rate_bp": 0,
       "damage_class": "status",
       "display_name": "Aullido",
@@ -25945,7 +25554,7 @@
           "ratio_basis_points": 0,
           "stat_id": "attack",
           "status_id": "",
-          "target": "opponent",
+          "target": "self",
           "value": 1
         }
       ],
@@ -26053,7 +25662,7 @@
       "type_id": "water"
     },
     "hydro_vortex_physical": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "physical",
@@ -26069,7 +25678,7 @@
       "type_id": "water"
     },
     "hydro_vortex_special": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "special",
@@ -26179,7 +25788,7 @@
       "type_id": "normal"
     },
     "hyperspace_fury": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "RUNTIME_SUPPORTED",
       "crit_rate_bp": 0,
       "damage_class": "physical",
@@ -26196,7 +25805,7 @@
           "ratio_basis_points": 0,
           "stat_id": "defense",
           "status_id": "",
-          "target": "opponent",
+          "target": "self",
           "value": -1
         }
       ],
@@ -26210,7 +25819,7 @@
       "type_id": "dark"
     },
     "hyperspace_hole": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "RUNTIME_SUPPORTED",
       "crit_rate_bp": 0,
       "damage_class": "special",
@@ -26457,7 +26066,7 @@
           "ratio_basis_points": 0,
           "stat_id": "speed",
           "status_id": "",
-          "target": "opponent",
+          "target": "self",
           "value": -1
         }
       ],
@@ -26657,7 +26266,7 @@
       "type_id": "ice"
     },
     "imprison": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -26736,7 +26345,7 @@
       "type_id": "fire"
     },
     "inferno_overdrive_physical": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "physical",
@@ -26752,7 +26361,7 @@
       "type_id": "fire"
     },
     "inferno_overdrive_special": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "special",
@@ -26784,7 +26393,7 @@
       "type_id": "bug"
     },
     "ingrain": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -26800,7 +26409,7 @@
       "type_id": "grass"
     },
     "instruct": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -26816,7 +26425,7 @@
       "type_id": "psychic"
     },
     "ion_deluge": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -26832,8 +26441,8 @@
       "type_id": "electric"
     },
     "iron_defense": {
-      "accuracy": 100,
-      "classification": "DATA_ONLY",
+      "accuracy": -1,
+      "classification": "RUNTIME_SUPPORTED",
       "crit_rate_bp": 0,
       "damage_class": "status",
       "display_name": "Defensa Férrea",
@@ -27035,8 +26644,8 @@
       "type_id": "fighting"
     },
     "jungle_healing": {
-      "accuracy": 100,
-      "classification": "DATA_ONLY",
+      "accuracy": -1,
+      "classification": "PARTIAL_RUNTIME",
       "crit_rate_bp": 0,
       "damage_class": "status",
       "display_name": "Cura Selvática",
@@ -27050,6 +26659,20 @@
           "min_hits": 0,
           "min_turns": 0,
           "ratio_basis_points": 2500,
+          "stat_id": "",
+          "status_id": "",
+          "target": "self",
+          "value": 0
+        },
+        {
+          "chance_basis_points": 10000,
+          "children": [],
+          "kind": "cure_status",
+          "max_hits": 0,
+          "max_turns": 0,
+          "min_hits": 0,
+          "min_turns": 0,
+          "ratio_basis_points": 0,
           "stat_id": "",
           "status_id": "",
           "target": "self",
@@ -27083,7 +26706,7 @@
     },
     "kinesis": {
       "accuracy": 80,
-      "classification": "DATA_ONLY",
+      "classification": "RUNTIME_SUPPORTED",
       "crit_rate_bp": 0,
       "damage_class": "status",
       "display_name": "Kinético",
@@ -27113,7 +26736,7 @@
       "type_id": "psychic"
     },
     "kings_shield": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -27145,7 +26768,7 @@
       "type_id": "dark"
     },
     "kowtow_cleave": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "RUNTIME_SUPPORTED",
       "crit_rate_bp": 0,
       "damage_class": "physical",
@@ -27177,7 +26800,7 @@
       "type_id": "ground"
     },
     "laser_focus": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -27320,7 +26943,7 @@
           "ratio_basis_points": 0,
           "stat_id": "special_attack",
           "status_id": "",
-          "target": "opponent",
+          "target": "self",
           "value": -2
         }
       ],
@@ -27444,7 +27067,7 @@
     },
     "leer": {
       "accuracy": 100,
-      "classification": "DATA_ONLY",
+      "classification": "RUNTIME_SUPPORTED",
       "crit_rate_bp": 0,
       "damage_class": "status",
       "display_name": "Malicioso",
@@ -27474,7 +27097,7 @@
       "type_id": "normal"
     },
     "lets_snuggle_forever": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "RUNTIME_SUPPORTED",
       "crit_rate_bp": 0,
       "damage_class": "physical",
@@ -27536,8 +27159,8 @@
       "type_id": "ghost"
     },
     "life_dew": {
-      "accuracy": 100,
-      "classification": "DATA_ONLY",
+      "accuracy": -1,
+      "classification": "PARTIAL_RUNTIME",
       "crit_rate_bp": 0,
       "damage_class": "status",
       "display_name": "Gota Vital",
@@ -27598,7 +27221,7 @@
       "type_id": "fairy"
     },
     "light_screen": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -27614,7 +27237,7 @@
       "type_id": "psychic"
     },
     "light_that_burns_the_sky": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "RUNTIME_SUPPORTED",
       "crit_rate_bp": 0,
       "damage_class": "special",
@@ -27676,7 +27299,7 @@
       "type_id": "water"
     },
     "lock_on": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -27770,7 +27393,7 @@
       "type_id": "fighting"
     },
     "lucky_chant": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -27817,7 +27440,7 @@
       "type_id": "psychic"
     },
     "lunar_blessing": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -27833,7 +27456,7 @@
       "type_id": "psychic"
     },
     "lunar_dance": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -27942,7 +27565,7 @@
       "type_id": "fighting"
     },
     "magic_coat": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -27974,7 +27597,7 @@
       "type_id": "psychic"
     },
     "magic_room": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -27990,7 +27613,7 @@
       "type_id": "psychic"
     },
     "magical_leaf": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "RUNTIME_SUPPORTED",
       "crit_rate_bp": 0,
       "damage_class": "special",
@@ -28038,7 +27661,7 @@
       "type_id": "fire"
     },
     "magnet_bomb": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "RUNTIME_SUPPORTED",
       "crit_rate_bp": 0,
       "damage_class": "physical",
@@ -28054,7 +27677,7 @@
       "type_id": "steel"
     },
     "magnet_rise": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -28070,41 +27693,12 @@
       "type_id": "electric"
     },
     "magnetic_flux": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
       "display_name": "Aura Magnética",
-      "effect_specs": [
-        {
-          "chance_basis_points": 10000,
-          "children": [],
-          "kind": "modify_stat_stage",
-          "max_hits": 0,
-          "max_turns": 0,
-          "min_hits": 0,
-          "min_turns": 0,
-          "ratio_basis_points": 0,
-          "stat_id": "defense",
-          "status_id": "",
-          "target": "opponent",
-          "value": 1
-        },
-        {
-          "chance_basis_points": 10000,
-          "children": [],
-          "kind": "modify_stat_stage",
-          "max_hits": 0,
-          "max_turns": 0,
-          "min_hits": 0,
-          "min_turns": 0,
-          "ratio_basis_points": 0,
-          "stat_id": "special_defense",
-          "status_id": "",
-          "target": "opponent",
-          "value": 1
-        }
-      ],
+      "effect_specs": [],
       "effect_summary": "Raises the Defense and Special Defense of all friendly Pokémon with Plus or Minus by one stage.",
       "id": "magnetic_flux",
       "makes_contact": false,
@@ -28162,7 +27756,7 @@
       "type_id": "steel"
     },
     "malicious_moonsault": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "RUNTIME_SUPPORTED",
       "crit_rate_bp": 0,
       "damage_class": "physical",
@@ -28194,7 +27788,7 @@
       "type_id": "poison"
     },
     "mat_block": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -28226,7 +27820,7 @@
       "type_id": "grass"
     },
     "max_airstream": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "PARTIAL_RUNTIME",
       "crit_rate_bp": 0,
       "damage_class": "physical",
@@ -28242,7 +27836,7 @@
       "type_id": "flying"
     },
     "max_darkness": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "PARTIAL_RUNTIME",
       "crit_rate_bp": 0,
       "damage_class": "physical",
@@ -28258,7 +27852,7 @@
       "type_id": "dark"
     },
     "max_flare": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "PARTIAL_RUNTIME",
       "crit_rate_bp": 0,
       "damage_class": "physical",
@@ -28274,7 +27868,7 @@
       "type_id": "fire"
     },
     "max_flutterby": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "PARTIAL_RUNTIME",
       "crit_rate_bp": 0,
       "damage_class": "physical",
@@ -28290,7 +27884,7 @@
       "type_id": "bug"
     },
     "max_geyser": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "PARTIAL_RUNTIME",
       "crit_rate_bp": 0,
       "damage_class": "physical",
@@ -28306,7 +27900,7 @@
       "type_id": "water"
     },
     "max_guard": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -28322,7 +27916,7 @@
       "type_id": "normal"
     },
     "max_hailstorm": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "PARTIAL_RUNTIME",
       "crit_rate_bp": 0,
       "damage_class": "physical",
@@ -28338,7 +27932,7 @@
       "type_id": "ice"
     },
     "max_knuckle": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "PARTIAL_RUNTIME",
       "crit_rate_bp": 0,
       "damage_class": "physical",
@@ -28354,7 +27948,7 @@
       "type_id": "fighting"
     },
     "max_lightning": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "PARTIAL_RUNTIME",
       "crit_rate_bp": 0,
       "damage_class": "physical",
@@ -28370,7 +27964,7 @@
       "type_id": "electric"
     },
     "max_mindstorm": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "PARTIAL_RUNTIME",
       "crit_rate_bp": 0,
       "damage_class": "physical",
@@ -28386,7 +27980,7 @@
       "type_id": "psychic"
     },
     "max_ooze": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "PARTIAL_RUNTIME",
       "crit_rate_bp": 0,
       "damage_class": "physical",
@@ -28402,7 +27996,7 @@
       "type_id": "poison"
     },
     "max_overgrowth": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "PARTIAL_RUNTIME",
       "crit_rate_bp": 0,
       "damage_class": "physical",
@@ -28418,7 +28012,7 @@
       "type_id": "grass"
     },
     "max_phantasm": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "PARTIAL_RUNTIME",
       "crit_rate_bp": 0,
       "damage_class": "physical",
@@ -28434,7 +28028,7 @@
       "type_id": "ghost"
     },
     "max_quake": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "PARTIAL_RUNTIME",
       "crit_rate_bp": 0,
       "damage_class": "physical",
@@ -28450,7 +28044,7 @@
       "type_id": "ground"
     },
     "max_rockfall": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "PARTIAL_RUNTIME",
       "crit_rate_bp": 0,
       "damage_class": "physical",
@@ -28466,7 +28060,7 @@
       "type_id": "rock"
     },
     "max_starfall": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "PARTIAL_RUNTIME",
       "crit_rate_bp": 0,
       "damage_class": "physical",
@@ -28482,7 +28076,7 @@
       "type_id": "fairy"
     },
     "max_steelspike": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "PARTIAL_RUNTIME",
       "crit_rate_bp": 0,
       "damage_class": "physical",
@@ -28498,7 +28092,7 @@
       "type_id": "steel"
     },
     "max_strike": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "PARTIAL_RUNTIME",
       "crit_rate_bp": 0,
       "damage_class": "physical",
@@ -28514,7 +28108,7 @@
       "type_id": "normal"
     },
     "max_wyrmwind": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "PARTIAL_RUNTIME",
       "crit_rate_bp": 0,
       "damage_class": "physical",
@@ -28530,8 +28124,8 @@
       "type_id": "dragon"
     },
     "me_first": {
-      "accuracy": 100,
-      "classification": "DATA_ONLY",
+      "accuracy": -1,
+      "classification": "UNSUPPORTED",
       "crit_rate_bp": 0,
       "damage_class": "status",
       "display_name": "Yo Primero",
@@ -28546,7 +28140,7 @@
       "type_id": "normal"
     },
     "mean_look": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -28562,8 +28156,8 @@
       "type_id": "normal"
     },
     "meditate": {
-      "accuracy": 100,
-      "classification": "DATA_ONLY",
+      "accuracy": -1,
+      "classification": "RUNTIME_SUPPORTED",
       "crit_rate_bp": 0,
       "damage_class": "status",
       "display_name": "Meditación",
@@ -28677,36 +28271,7 @@
       "crit_rate_bp": 0,
       "damage_class": "status",
       "display_name": "Legado",
-      "effect_specs": [
-        {
-          "chance_basis_points": 10000,
-          "children": [],
-          "kind": "modify_stat_stage",
-          "max_hits": 0,
-          "max_turns": 0,
-          "min_hits": 0,
-          "min_turns": 0,
-          "ratio_basis_points": 0,
-          "stat_id": "attack",
-          "status_id": "",
-          "target": "opponent",
-          "value": -2
-        },
-        {
-          "chance_basis_points": 10000,
-          "children": [],
-          "kind": "modify_stat_stage",
-          "max_hits": 0,
-          "max_turns": 0,
-          "min_hits": 0,
-          "min_turns": 0,
-          "ratio_basis_points": 0,
-          "stat_id": "special_attack",
-          "status_id": "",
-          "target": "opponent",
-          "value": -2
-        }
-      ],
+      "effect_specs": [],
       "effect_summary": "Lowers the target’s Attack and Special Attack by two stages.  User faints.",
       "id": "memento",
       "makes_contact": false,
@@ -28717,7 +28282,7 @@
       "type_id": "dark"
     },
     "menacing_moonraze_maelstrom": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "RUNTIME_SUPPORTED",
       "crit_rate_bp": 0,
       "damage_class": "special",
@@ -28769,7 +28334,7 @@
               "ratio_basis_points": 0,
               "stat_id": "attack",
               "status_id": "",
-              "target": "opponent",
+              "target": "self",
               "value": 1
             }
           ],
@@ -28781,7 +28346,7 @@
           "ratio_basis_points": 0,
           "stat_id": "",
           "status_id": "",
-          "target": "opponent",
+          "target": "self",
           "value": 0
         }
       ],
@@ -28796,7 +28361,7 @@
     },
     "metal_sound": {
       "accuracy": 85,
-      "classification": "DATA_ONLY",
+      "classification": "RUNTIME_SUPPORTED",
       "crit_rate_bp": 0,
       "damage_class": "status",
       "display_name": "Eco Metálico",
@@ -28878,7 +28443,7 @@
               "ratio_basis_points": 0,
               "stat_id": "attack",
               "status_id": "",
-              "target": "opponent",
+              "target": "self",
               "value": 1
             }
           ],
@@ -28890,7 +28455,7 @@
           "ratio_basis_points": 0,
           "stat_id": "",
           "status_id": "",
-          "target": "opponent",
+          "target": "self",
           "value": 0
         }
       ],
@@ -28904,7 +28469,7 @@
       "type_id": "steel"
     },
     "metronome": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "UNSUPPORTED",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -28936,8 +28501,8 @@
       "type_id": "rock"
     },
     "milk_drink": {
-      "accuracy": 100,
-      "classification": "DATA_ONLY",
+      "accuracy": -1,
+      "classification": "RUNTIME_SUPPORTED",
       "crit_rate_bp": 0,
       "damage_class": "status",
       "display_name": "Batido",
@@ -28967,7 +28532,7 @@
       "type_id": "normal"
     },
     "mimic": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "UNSUPPORTED",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -28999,7 +28564,7 @@
       "type_id": "fire"
     },
     "mind_reader": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -29015,28 +28580,13 @@
       "type_id": "normal"
     },
     "minimize": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
       "display_name": "Reducción",
-      "effect_specs": [
-        {
-          "chance_basis_points": 10000,
-          "children": [],
-          "kind": "modify_stat_stage",
-          "max_hits": 0,
-          "max_turns": 0,
-          "min_hits": 0,
-          "min_turns": 0,
-          "ratio_basis_points": 0,
-          "stat_id": "evasion",
-          "status_id": "",
-          "target": "self",
-          "value": 2
-        }
-      ],
-      "effect_summary": "Raises the user’s evasion by two stages.",
+      "effect_specs": [],
+      "effect_summary": "Raises the user’s evasion by two stages and applies the Minimized state.",
       "id": "minimize",
       "makes_contact": false,
       "power": 0,
@@ -29046,7 +28596,7 @@
       "type_id": "normal"
     },
     "miracle_eye": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -29078,8 +28628,8 @@
       "type_id": "psychic"
     },
     "mirror_move": {
-      "accuracy": 100,
-      "classification": "DATA_ONLY",
+      "accuracy": -1,
+      "classification": "UNSUPPORTED",
       "crit_rate_bp": 0,
       "damage_class": "status",
       "display_name": "Espejo",
@@ -29140,7 +28690,7 @@
       "type_id": "steel"
     },
     "mist": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -29218,7 +28768,7 @@
       "type_id": "fairy"
     },
     "misty_terrain": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -29296,8 +28846,8 @@
       "type_id": "ghost"
     },
     "moonlight": {
-      "accuracy": 100,
-      "classification": "DATA_ONLY",
+      "accuracy": -1,
+      "classification": "PARTIAL_RUNTIME",
       "crit_rate_bp": 0,
       "damage_class": "status",
       "display_name": "Luz Lunar",
@@ -29327,8 +28877,8 @@
       "type_id": "fairy"
     },
     "morning_sun": {
-      "accuracy": 100,
-      "classification": "DATA_ONLY",
+      "accuracy": -1,
+      "classification": "PARTIAL_RUNTIME",
       "crit_rate_bp": 0,
       "damage_class": "status",
       "display_name": "Sol Matinal",
@@ -29498,7 +29048,7 @@
       "type_id": "ground"
     },
     "mud_sport": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -29623,8 +29173,8 @@
       "type_id": "psychic"
     },
     "nasty_plot": {
-      "accuracy": 100,
-      "classification": "DATA_ONLY",
+      "accuracy": -1,
+      "classification": "RUNTIME_SUPPORTED",
       "crit_rate_bp": 0,
       "damage_class": "status",
       "display_name": "Maquinación",
@@ -29670,8 +29220,8 @@
       "type_id": "normal"
     },
     "nature_power": {
-      "accuracy": 100,
-      "classification": "DATA_ONLY",
+      "accuracy": -1,
+      "classification": "UNSUPPORTED",
       "crit_rate_bp": 0,
       "damage_class": "status",
       "display_name": "Adaptación",
@@ -29748,7 +29298,7 @@
       "type_id": "grass"
     },
     "never_ending_nightmare_physical": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "physical",
@@ -29764,7 +29314,7 @@
       "type_id": "ghost"
     },
     "never_ending_nightmare_special": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "special",
@@ -29874,83 +29424,12 @@
       "type_id": "ghost"
     },
     "no_retreat": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
       "display_name": "Bastión Final",
-      "effect_specs": [
-        {
-          "chance_basis_points": 10000,
-          "children": [],
-          "kind": "modify_stat_stage",
-          "max_hits": 0,
-          "max_turns": 0,
-          "min_hits": 0,
-          "min_turns": 0,
-          "ratio_basis_points": 0,
-          "stat_id": "attack",
-          "status_id": "",
-          "target": "self",
-          "value": 1
-        },
-        {
-          "chance_basis_points": 10000,
-          "children": [],
-          "kind": "modify_stat_stage",
-          "max_hits": 0,
-          "max_turns": 0,
-          "min_hits": 0,
-          "min_turns": 0,
-          "ratio_basis_points": 0,
-          "stat_id": "defense",
-          "status_id": "",
-          "target": "self",
-          "value": 1
-        },
-        {
-          "chance_basis_points": 10000,
-          "children": [],
-          "kind": "modify_stat_stage",
-          "max_hits": 0,
-          "max_turns": 0,
-          "min_hits": 0,
-          "min_turns": 0,
-          "ratio_basis_points": 0,
-          "stat_id": "special_attack",
-          "status_id": "",
-          "target": "self",
-          "value": 1
-        },
-        {
-          "chance_basis_points": 10000,
-          "children": [],
-          "kind": "modify_stat_stage",
-          "max_hits": 0,
-          "max_turns": 0,
-          "min_hits": 0,
-          "min_turns": 0,
-          "ratio_basis_points": 0,
-          "stat_id": "special_defense",
-          "status_id": "",
-          "target": "self",
-          "value": 1
-        },
-        {
-          "chance_basis_points": 10000,
-          "children": [],
-          "kind": "modify_stat_stage",
-          "max_hits": 0,
-          "max_turns": 0,
-          "min_hits": 0,
-          "min_turns": 0,
-          "ratio_basis_points": 0,
-          "stat_id": "speed",
-          "status_id": "",
-          "target": "self",
-          "value": 1
-        }
-      ],
+      "effect_specs": [],
       "effect_summary": "Prevents user from switching out. Raises all of the user’s stats by one stage.",
       "id": "no_retreat",
       "makes_contact": false,
@@ -29962,7 +29441,7 @@
     },
     "noble_roar": {
       "accuracy": 100,
-      "classification": "DATA_ONLY",
+      "classification": "RUNTIME_SUPPORTED",
       "crit_rate_bp": 0,
       "damage_class": "status",
       "display_name": "Rugido de Guerra",
@@ -30100,7 +29579,7 @@
       "type_id": "dark"
     },
     "oceanic_operetta": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "RUNTIME_SUPPORTED",
       "crit_rate_bp": 0,
       "damage_class": "special",
@@ -30178,7 +29657,7 @@
       "type_id": "fighting"
     },
     "odor_sleuth": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -30214,7 +29693,7 @@
               "ratio_basis_points": 0,
               "stat_id": "attack",
               "status_id": "",
-              "target": "opponent",
+              "target": "self",
               "value": 1
             }
           ],
@@ -30226,7 +29705,7 @@
           "ratio_basis_points": 0,
           "stat_id": "",
           "status_id": "",
-          "target": "opponent",
+          "target": "self",
           "value": 0
         },
         {
@@ -30243,7 +29722,7 @@
               "ratio_basis_points": 0,
               "stat_id": "defense",
               "status_id": "",
-              "target": "opponent",
+              "target": "self",
               "value": 1
             }
           ],
@@ -30255,7 +29734,7 @@
           "ratio_basis_points": 0,
           "stat_id": "",
           "status_id": "",
-          "target": "opponent",
+          "target": "self",
           "value": 0
         },
         {
@@ -30272,7 +29751,7 @@
               "ratio_basis_points": 0,
               "stat_id": "special_attack",
               "status_id": "",
-              "target": "opponent",
+              "target": "self",
               "value": 1
             }
           ],
@@ -30284,7 +29763,7 @@
           "ratio_basis_points": 0,
           "stat_id": "",
           "status_id": "",
-          "target": "opponent",
+          "target": "self",
           "value": 0
         },
         {
@@ -30301,7 +29780,7 @@
               "ratio_basis_points": 0,
               "stat_id": "special_defense",
               "status_id": "",
-              "target": "opponent",
+              "target": "self",
               "value": 1
             }
           ],
@@ -30313,7 +29792,7 @@
           "ratio_basis_points": 0,
           "stat_id": "",
           "status_id": "",
-          "target": "opponent",
+          "target": "self",
           "value": 0
         },
         {
@@ -30330,7 +29809,7 @@
               "ratio_basis_points": 0,
               "stat_id": "speed",
               "status_id": "",
-              "target": "opponent",
+              "target": "self",
               "value": 1
             }
           ],
@@ -30342,7 +29821,7 @@
           "ratio_basis_points": 0,
           "stat_id": "",
           "status_id": "",
-          "target": "opponent",
+          "target": "self",
           "value": 0
         }
       ],
@@ -30437,7 +29916,7 @@
           "ratio_basis_points": 0,
           "stat_id": "special_attack",
           "status_id": "",
-          "target": "opponent",
+          "target": "self",
           "value": -2
         }
       ],
@@ -30451,7 +29930,7 @@
       "type_id": "fire"
     },
     "pain_split": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -30503,36 +29982,7 @@
       "crit_rate_bp": 0,
       "damage_class": "status",
       "display_name": "Última Palabra",
-      "effect_specs": [
-        {
-          "chance_basis_points": 10000,
-          "children": [],
-          "kind": "modify_stat_stage",
-          "max_hits": 0,
-          "max_turns": 0,
-          "min_hits": 0,
-          "min_turns": 0,
-          "ratio_basis_points": 0,
-          "stat_id": "attack",
-          "status_id": "",
-          "target": "opponent",
-          "value": -1
-        },
-        {
-          "chance_basis_points": 10000,
-          "children": [],
-          "kind": "modify_stat_stage",
-          "max_hits": 0,
-          "max_turns": 0,
-          "min_hits": 0,
-          "min_turns": 0,
-          "ratio_basis_points": 0,
-          "stat_id": "special_attack",
-          "status_id": "",
-          "target": "opponent",
-          "value": -1
-        }
-      ],
+      "effect_specs": [],
       "effect_summary": "Lowers all targets’ Attack and Special Attack by one stage.  Makes the user switch out.",
       "id": "parting_shot",
       "makes_contact": false,
@@ -30591,7 +30041,7 @@
       "type_id": "flying"
     },
     "perish_song": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -30671,7 +30121,7 @@
       "type_id": "psychic"
     },
     "pika_papow": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "special",
@@ -30734,8 +30184,8 @@
       "type_id": "electric"
     },
     "play_nice": {
-      "accuracy": 100,
-      "classification": "DATA_ONLY",
+      "accuracy": -1,
+      "classification": "RUNTIME_SUPPORTED",
       "crit_rate_bp": 0,
       "damage_class": "status",
       "display_name": "Camaradería",
@@ -31246,7 +30696,7 @@
       "type_id": "rock"
     },
     "power_shift": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -31262,7 +30712,7 @@
       "type_id": "normal"
     },
     "power_split": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -31278,7 +30728,7 @@
       "type_id": "psychic"
     },
     "power_swap": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -31294,7 +30744,7 @@
       "type_id": "psychic"
     },
     "power_trick": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -31343,7 +30793,7 @@
           "ratio_basis_points": 0,
           "stat_id": "attack",
           "status_id": "",
-          "target": "opponent",
+          "target": "self",
           "value": 1
         }
       ],
@@ -31421,7 +30871,7 @@
       "type_id": "psychic"
     },
     "protect": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -31499,7 +30949,7 @@
       "type_id": "psychic"
     },
     "psych_up": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -31593,7 +31043,7 @@
       "type_id": "psychic"
     },
     "psychic_terrain": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -31626,7 +31076,7 @@
           "ratio_basis_points": 0,
           "stat_id": "special_attack",
           "status_id": "",
-          "target": "opponent",
+          "target": "self",
           "value": -2
         }
       ],
@@ -31736,7 +31186,7 @@
       "type_id": "psychic"
     },
     "pulverizing_pancake": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "RUNTIME_SUPPORTED",
       "crit_rate_bp": 0,
       "damage_class": "physical",
@@ -31768,28 +31218,13 @@
       "type_id": "dark"
     },
     "purify": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
       "display_name": "Purificación",
-      "effect_specs": [
-        {
-          "chance_basis_points": 10000,
-          "children": [],
-          "kind": "heal",
-          "max_hits": 0,
-          "max_turns": 0,
-          "min_hits": 0,
-          "min_turns": 0,
-          "ratio_basis_points": 5000,
-          "stat_id": "",
-          "status_id": "",
-          "target": "self",
-          "value": 0
-        }
-      ],
-      "effect_summary": "Cures the target of a major status ailment and heals the user for 50% of its max HP.",
+      "effect_specs": [],
+      "effect_summary": "Cures the target's major status and heals the user by up to 50% only if the cure succeeds.",
       "id": "purify",
       "makes_contact": false,
       "power": 0,
@@ -31893,7 +31328,7 @@
       "type_id": "normal"
     },
     "quick_guard": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -31909,8 +31344,8 @@
       "type_id": "fighting"
     },
     "quiver_dance": {
-      "accuracy": 100,
-      "classification": "DATA_ONLY",
+      "accuracy": -1,
+      "classification": "RUNTIME_SUPPORTED",
       "crit_rate_bp": 0,
       "damage_class": "status",
       "display_name": "Danza Aleteo",
@@ -32000,7 +31435,7 @@
       "type_id": "ghost"
     },
     "rage_powder": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -32048,7 +31483,7 @@
       "type_id": "fire"
     },
     "rain_dance": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -32081,7 +31516,7 @@
           "ratio_basis_points": 0,
           "stat_id": "speed",
           "status_id": "",
-          "target": "opponent",
+          "target": "self",
           "value": 1
         }
       ],
@@ -32173,8 +31608,8 @@
       "type_id": "normal"
     },
     "recover": {
-      "accuracy": 100,
-      "classification": "DATA_ONLY",
+      "accuracy": -1,
+      "classification": "RUNTIME_SUPPORTED",
       "crit_rate_bp": 0,
       "damage_class": "status",
       "display_name": "Recuperación",
@@ -32204,7 +31639,7 @@
       "type_id": "normal"
     },
     "recycle": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -32220,7 +31655,7 @@
       "type_id": "normal"
     },
     "reflect": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -32236,7 +31671,7 @@
       "type_id": "psychic"
     },
     "reflect_type": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -32252,7 +31687,7 @@
       "type_id": "normal"
     },
     "refresh": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -32314,7 +31749,7 @@
       "type_id": "normal"
     },
     "rest": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -32410,7 +31845,7 @@
       "type_id": "fighting"
     },
     "revival_blessing": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -32442,7 +31877,7 @@
       "type_id": "electric"
     },
     "roar": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -32551,8 +31986,8 @@
       "type_id": "normal"
     },
     "rock_polish": {
-      "accuracy": 100,
-      "classification": "DATA_ONLY",
+      "accuracy": -1,
+      "classification": "RUNTIME_SUPPORTED",
       "crit_rate_bp": 0,
       "damage_class": "status",
       "display_name": "Pulimento",
@@ -32737,7 +32172,7 @@
       "type_id": "rock"
     },
     "role_play": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -32815,8 +32250,8 @@
       "type_id": "rock"
     },
     "roost": {
-      "accuracy": 100,
-      "classification": "DATA_ONLY",
+      "accuracy": -1,
+      "classification": "PARTIAL_RUNTIME",
       "crit_rate_bp": 0,
       "damage_class": "status",
       "display_name": "Respiro",
@@ -32846,42 +32281,13 @@
       "type_id": "flying"
     },
     "rototiller": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
       "display_name": "Fertilizante",
-      "effect_specs": [
-        {
-          "chance_basis_points": 10000,
-          "children": [],
-          "kind": "modify_stat_stage",
-          "max_hits": 0,
-          "max_turns": 0,
-          "min_hits": 0,
-          "min_turns": 0,
-          "ratio_basis_points": 0,
-          "stat_id": "attack",
-          "status_id": "",
-          "target": "opponent",
-          "value": 1
-        },
-        {
-          "chance_basis_points": 10000,
-          "children": [],
-          "kind": "modify_stat_stage",
-          "max_hits": 0,
-          "max_turns": 0,
-          "min_hits": 0,
-          "min_turns": 0,
-          "ratio_basis_points": 0,
-          "stat_id": "special_attack",
-          "status_id": "",
-          "target": "opponent",
-          "value": 1
-        }
-      ],
-      "effect_summary": "Raises the Attack and Special Attack of all Grass Pokémon in battle.",
+      "effect_specs": [],
+      "effect_summary": "Raises Attack and Special Attack of eligible grounded Grass-type Pokémon; unavailable for selection from Generation VIII onward.",
       "id": "rototiller",
       "makes_contact": false,
       "power": 0,
@@ -32985,7 +32391,7 @@
       "type_id": "fighting"
     },
     "safeguard": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -33018,7 +32424,7 @@
     },
     "sand_attack": {
       "accuracy": 100,
-      "classification": "DATA_ONLY",
+      "classification": "RUNTIME_SUPPORTED",
       "crit_rate_bp": 0,
       "damage_class": "status",
       "display_name": "Ataque Arena",
@@ -33080,7 +32486,7 @@
       "type_id": "ground"
     },
     "sandstorm": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -33112,7 +32518,7 @@
       "type_id": "grass"
     },
     "savage_spin_out_physical": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "physical",
@@ -33128,7 +32534,7 @@
       "type_id": "bug"
     },
     "savage_spin_out_special": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "special",
@@ -33222,7 +32628,7 @@
     },
     "scary_face": {
       "accuracy": 100,
-      "classification": "DATA_ONLY",
+      "classification": "RUNTIME_SUPPORTED",
       "crit_rate_bp": 0,
       "damage_class": "status",
       "display_name": "Cara Susto",
@@ -33315,7 +32721,7 @@
     },
     "screech": {
       "accuracy": 85,
-      "classification": "DATA_ONLY",
+      "classification": "RUNTIME_SUPPORTED",
       "crit_rate_bp": 0,
       "damage_class": "status",
       "display_name": "Chirrido",
@@ -33391,7 +32797,7 @@
       "type_id": "fire"
     },
     "searing_sunraze_smash": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "RUNTIME_SUPPORTED",
       "crit_rate_bp": 0,
       "damage_class": "physical",
@@ -33657,7 +33063,7 @@
       "type_id": "ghost"
     },
     "shadow_punch": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "RUNTIME_SUPPORTED",
       "crit_rate_bp": 0,
       "damage_class": "physical",
@@ -33689,8 +33095,8 @@
       "type_id": "ghost"
     },
     "sharpen": {
-      "accuracy": 100,
-      "classification": "DATA_ONLY",
+      "accuracy": -1,
+      "classification": "RUNTIME_SUPPORTED",
       "crit_rate_bp": 0,
       "damage_class": "status",
       "display_name": "Afilar",
@@ -33720,7 +33126,7 @@
       "type_id": "normal"
     },
     "shattered_psyche_physical": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "physical",
@@ -33736,7 +33142,7 @@
       "type_id": "psychic"
     },
     "shattered_psyche_special": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "special",
@@ -33752,7 +33158,7 @@
       "type_id": "psychic"
     },
     "shed_tail": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -33830,8 +33236,8 @@
       "type_id": "poison"
     },
     "shell_smash": {
-      "accuracy": 100,
-      "classification": "DATA_ONLY",
+      "accuracy": -1,
+      "classification": "RUNTIME_SUPPORTED",
       "crit_rate_bp": 0,
       "damage_class": "status",
       "display_name": "Rompecoraza",
@@ -33933,7 +33339,7 @@
       "type_id": "fire"
     },
     "shelter": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -33949,8 +33355,8 @@
       "type_id": "steel"
     },
     "shift_gear": {
-      "accuracy": 100,
-      "classification": "DATA_ONLY",
+      "accuracy": -1,
+      "classification": "RUNTIME_SUPPORTED",
       "crit_rate_bp": 0,
       "damage_class": "status",
       "display_name": "Cambio de Marcha",
@@ -33994,7 +33400,7 @@
       "type_id": "steel"
     },
     "shock_wave": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "RUNTIME_SUPPORTED",
       "crit_rate_bp": 0,
       "damage_class": "special",
@@ -34010,8 +33416,8 @@
       "type_id": "electric"
     },
     "shore_up": {
-      "accuracy": 100,
-      "classification": "DATA_ONLY",
+      "accuracy": -1,
+      "classification": "PARTIAL_RUNTIME",
       "crit_rate_bp": 0,
       "damage_class": "status",
       "display_name": "Recogearena",
@@ -34087,27 +33493,12 @@
       "type_id": "bug"
     },
     "silk_trap": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
       "display_name": "Telatrampa",
-      "effect_specs": [
-        {
-          "chance_basis_points": 10000,
-          "children": [],
-          "kind": "modify_stat_stage",
-          "max_hits": 0,
-          "max_turns": 0,
-          "min_hits": 0,
-          "min_turns": 0,
-          "ratio_basis_points": 0,
-          "stat_id": "speed",
-          "status_id": "",
-          "target": "self",
-          "value": -1
-        }
-      ],
+      "effect_specs": [],
       "effect_summary": "",
       "id": "silk_trap",
       "makes_contact": false,
@@ -34138,7 +33529,7 @@
               "ratio_basis_points": 0,
               "stat_id": "attack",
               "status_id": "",
-              "target": "opponent",
+              "target": "self",
               "value": 1
             }
           ],
@@ -34150,7 +33541,7 @@
           "ratio_basis_points": 0,
           "stat_id": "",
           "status_id": "",
-          "target": "opponent",
+          "target": "self",
           "value": 0
         },
         {
@@ -34167,7 +33558,7 @@
               "ratio_basis_points": 0,
               "stat_id": "defense",
               "status_id": "",
-              "target": "opponent",
+              "target": "self",
               "value": 1
             }
           ],
@@ -34179,7 +33570,7 @@
           "ratio_basis_points": 0,
           "stat_id": "",
           "status_id": "",
-          "target": "opponent",
+          "target": "self",
           "value": 0
         },
         {
@@ -34196,7 +33587,7 @@
               "ratio_basis_points": 0,
               "stat_id": "special_attack",
               "status_id": "",
-              "target": "opponent",
+              "target": "self",
               "value": 1
             }
           ],
@@ -34208,7 +33599,7 @@
           "ratio_basis_points": 0,
           "stat_id": "",
           "status_id": "",
-          "target": "opponent",
+          "target": "self",
           "value": 0
         },
         {
@@ -34225,7 +33616,7 @@
               "ratio_basis_points": 0,
               "stat_id": "special_defense",
               "status_id": "",
-              "target": "opponent",
+              "target": "self",
               "value": 1
             }
           ],
@@ -34237,7 +33628,7 @@
           "ratio_basis_points": 0,
           "stat_id": "",
           "status_id": "",
-          "target": "opponent",
+          "target": "self",
           "value": 0
         },
         {
@@ -34254,7 +33645,7 @@
               "ratio_basis_points": 0,
               "stat_id": "speed",
               "status_id": "",
-              "target": "opponent",
+              "target": "self",
               "value": 1
             }
           ],
@@ -34266,7 +33657,7 @@
           "ratio_basis_points": 0,
           "stat_id": "",
           "status_id": "",
-          "target": "opponent",
+          "target": "self",
           "value": 0
         }
       ],
@@ -34327,7 +33718,7 @@
       "type_id": "normal"
     },
     "sinister_arrow_raid": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "RUNTIME_SUPPORTED",
       "crit_rate_bp": 0,
       "damage_class": "physical",
@@ -34374,7 +33765,7 @@
       "type_id": "fire"
     },
     "sketch": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "UNSUPPORTED",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -34390,7 +33781,7 @@
       "type_id": "normal"
     },
     "skill_swap": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -34531,8 +33922,8 @@
       "type_id": "fighting"
     },
     "slack_off": {
-      "accuracy": 100,
-      "classification": "DATA_ONLY",
+      "accuracy": -1,
+      "classification": "RUNTIME_SUPPORTED",
       "crit_rate_bp": 0,
       "damage_class": "status",
       "display_name": "Relajo",
@@ -34625,8 +34016,8 @@
       "type_id": "grass"
     },
     "sleep_talk": {
-      "accuracy": 100,
-      "classification": "DATA_ONLY",
+      "accuracy": -1,
+      "classification": "UNSUPPORTED",
       "crit_rate_bp": 0,
       "damage_class": "status",
       "display_name": "Sonámbulo",
@@ -34795,7 +34186,7 @@
       "type_id": "rock"
     },
     "smart_strike": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "RUNTIME_SUPPORTED",
       "crit_rate_bp": 0,
       "damage_class": "physical",
@@ -34874,7 +34265,7 @@
     },
     "smokescreen": {
       "accuracy": 100,
-      "classification": "DATA_ONLY",
+      "classification": "RUNTIME_SUPPORTED",
       "crit_rate_bp": 0,
       "damage_class": "status",
       "display_name": "Pantalla de Humo",
@@ -34951,7 +34342,7 @@
       "type_id": "dark"
     },
     "snatch": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -35029,7 +34420,7 @@
       "type_id": "normal"
     },
     "snowscape": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -35061,8 +34452,8 @@
       "type_id": "water"
     },
     "soft_boiled": {
-      "accuracy": 100,
-      "classification": "DATA_ONLY",
+      "accuracy": -1,
+      "classification": "RUNTIME_SUPPORTED",
       "crit_rate_bp": 0,
       "damage_class": "status",
       "display_name": "Ovocuración",
@@ -35140,7 +34531,7 @@
       "type_id": "normal"
     },
     "soul_stealing_7_star_strike": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "RUNTIME_SUPPORTED",
       "crit_rate_bp": 0,
       "damage_class": "physical",
@@ -35266,7 +34657,7 @@
       "type_id": "ghost"
     },
     "speed_swap": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -35282,8 +34673,8 @@
       "type_id": "psychic"
     },
     "spicy_extract": {
-      "accuracy": 100,
-      "classification": "DATA_ONLY",
+      "accuracy": -1,
+      "classification": "RUNTIME_SUPPORTED",
       "crit_rate_bp": 0,
       "damage_class": "status",
       "display_name": "Extracto Picante",
@@ -35327,7 +34718,7 @@
       "type_id": "grass"
     },
     "spider_web": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -35374,7 +34765,7 @@
       "type_id": "normal"
     },
     "spikes": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -35390,7 +34781,7 @@
       "type_id": "ground"
     },
     "spiky_shield": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -35516,7 +34907,7 @@
       "type_id": "ghost"
     },
     "splash": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -35532,7 +34923,7 @@
       "type_id": "normal"
     },
     "splintered_stormshards": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "RUNTIME_SUPPORTED",
       "crit_rate_bp": 0,
       "damage_class": "physical",
@@ -35625,7 +35016,7 @@
       "type_id": "grass"
     },
     "spotlight": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -35657,7 +35048,7 @@
       "type_id": "fairy"
     },
     "stealth_rock": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -35817,7 +35208,7 @@
               "ratio_basis_points": 0,
               "stat_id": "defense",
               "status_id": "",
-              "target": "opponent",
+              "target": "self",
               "value": 1
             }
           ],
@@ -35829,7 +35220,7 @@
           "ratio_basis_points": 0,
           "stat_id": "",
           "status_id": "",
-          "target": "opponent",
+          "target": "self",
           "value": 0
         }
       ],
@@ -35843,7 +35234,7 @@
       "type_id": "steel"
     },
     "sticky_web": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -35859,42 +35250,13 @@
       "type_id": "bug"
     },
     "stockpile": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
       "display_name": "Reserva",
-      "effect_specs": [
-        {
-          "chance_basis_points": 10000,
-          "children": [],
-          "kind": "modify_stat_stage",
-          "max_hits": 0,
-          "max_turns": 0,
-          "min_hits": 0,
-          "min_turns": 0,
-          "ratio_basis_points": 0,
-          "stat_id": "defense",
-          "status_id": "",
-          "target": "self",
-          "value": 1
-        },
-        {
-          "chance_basis_points": 10000,
-          "children": [],
-          "kind": "modify_stat_stage",
-          "max_hits": 0,
-          "max_turns": 0,
-          "min_hits": 0,
-          "min_turns": 0,
-          "ratio_basis_points": 0,
-          "stat_id": "special_defense",
-          "status_id": "",
-          "target": "self",
-          "value": 1
-        }
-      ],
-      "effect_summary": "Stores energy up to three times for use with Spit Up and Swallow.",
+      "effect_specs": [],
+      "effect_summary": "Stores one Stockpile level (maximum three) and raises Defense and Special Defense by one stage; Spit Up or Swallow consume the stored levels and the associated Stockpile stat boosts.",
       "id": "stockpile",
       "makes_contact": false,
       "power": 0,
@@ -35904,7 +35266,7 @@
       "type_id": "normal"
     },
     "stoked_sparksurfer": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "RUNTIME_SUPPORTED",
       "crit_rate_bp": 0,
       "damage_class": "special",
@@ -36124,7 +35486,7 @@
     },
     "strength_sap": {
       "accuracy": 100,
-      "classification": "DATA_ONLY",
+      "classification": "PARTIAL_RUNTIME",
       "crit_rate_bp": 0,
       "damage_class": "status",
       "display_name": "Absorbefuerza",
@@ -36155,7 +35517,7 @@
     },
     "string_shot": {
       "accuracy": 95,
-      "classification": "DATA_ONLY",
+      "classification": "RUNTIME_SUPPORTED",
       "crit_rate_bp": 0,
       "damage_class": "status",
       "display_name": "Disparo Demora",
@@ -36185,7 +35547,7 @@
       "type_id": "bug"
     },
     "struggle": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "RUNTIME_SUPPORTED",
       "crit_rate_bp": 0,
       "damage_class": "physical",
@@ -36232,27 +35594,12 @@
       "type_id": "bug"
     },
     "stuff_cheeks": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
       "display_name": "Atiborramiento",
-      "effect_specs": [
-        {
-          "chance_basis_points": 10000,
-          "children": [],
-          "kind": "modify_stat_stage",
-          "max_hits": 0,
-          "max_turns": 0,
-          "min_hits": 0,
-          "min_turns": 0,
-          "ratio_basis_points": 0,
-          "stat_id": "defense",
-          "status_id": "",
-          "target": "self",
-          "value": 2
-        }
-      ],
+      "effect_specs": [],
       "effect_summary": "User consumes berry and raises its defense by 2 stages.",
       "id": "stuff_cheeks",
       "makes_contact": false,
@@ -36325,7 +35672,7 @@
       "type_id": "fighting"
     },
     "substitute": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -36341,7 +35688,7 @@
       "type_id": "normal"
     },
     "subzero_slammer_physical": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "physical",
@@ -36357,7 +35704,7 @@
       "type_id": "ice"
     },
     "subzero_slammer_special": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "special",
@@ -36389,7 +35736,7 @@
       "type_id": "dark"
     },
     "sunny_day": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -36470,7 +35817,7 @@
           "ratio_basis_points": 0,
           "stat_id": "attack",
           "status_id": "",
-          "target": "opponent",
+          "target": "self",
           "value": -1
         },
         {
@@ -36484,7 +35831,7 @@
           "ratio_basis_points": 0,
           "stat_id": "defense",
           "status_id": "",
-          "target": "opponent",
+          "target": "self",
           "value": -1
         }
       ],
@@ -36529,7 +35876,7 @@
       "type_id": "normal"
     },
     "supersonic_skystrike_physical": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "physical",
@@ -36545,7 +35892,7 @@
       "type_id": "flying"
     },
     "supersonic_skystrike_special": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "special",
@@ -36653,28 +36000,13 @@
       "type_id": "normal"
     },
     "swallow": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
       "display_name": "Tragar",
-      "effect_specs": [
-        {
-          "chance_basis_points": 10000,
-          "children": [],
-          "kind": "heal",
-          "max_hits": 0,
-          "max_turns": 0,
-          "min_hits": 0,
-          "min_turns": 0,
-          "ratio_basis_points": 2500,
-          "stat_id": "",
-          "status_id": "",
-          "target": "self",
-          "value": 0
-        }
-      ],
-      "effect_summary": "Recovers 1/4 HP after one Stockpile, 1/2 HP after two Stockpiles, or full HP after three Stockpiles.",
+      "effect_specs": [],
+      "effect_summary": "Consumes Stockpile: heals 25%/50%/100% at levels 1/2/3 and fails at level 0.",
       "id": "swallow",
       "makes_contact": false,
       "power": 0,
@@ -36716,7 +36048,7 @@
     },
     "sweet_scent": {
       "accuracy": 100,
-      "classification": "DATA_ONLY",
+      "classification": "RUNTIME_SUPPORTED",
       "crit_rate_bp": 0,
       "damage_class": "status",
       "display_name": "Dulce Aroma",
@@ -36736,7 +36068,7 @@
           "value": -2
         }
       ],
-      "effect_summary": "Lowers the target’s evasion by one stage.",
+      "effect_summary": "Lowers the target’s evasion by two stages.",
       "id": "sweet_scent",
       "makes_contact": false,
       "power": 0,
@@ -36746,7 +36078,7 @@
       "type_id": "normal"
     },
     "swift": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "RUNTIME_SUPPORTED",
       "crit_rate_bp": 0,
       "damage_class": "special",
@@ -36778,8 +36110,8 @@
       "type_id": "dark"
     },
     "swords_dance": {
-      "accuracy": 100,
-      "classification": "DATA_ONLY",
+      "accuracy": -1,
+      "classification": "RUNTIME_SUPPORTED",
       "crit_rate_bp": 0,
       "damage_class": "status",
       "display_name": "Danza Espada",
@@ -36825,8 +36157,8 @@
       "type_id": "psychic"
     },
     "synthesis": {
-      "accuracy": 100,
-      "classification": "DATA_ONLY",
+      "accuracy": -1,
+      "classification": "PARTIAL_RUNTIME",
       "crit_rate_bp": 0,
       "damage_class": "status",
       "display_name": "Fotosíntesis",
@@ -36919,8 +36251,8 @@
       "type_id": "normal"
     },
     "tail_glow": {
-      "accuracy": 100,
-      "classification": "DATA_ONLY",
+      "accuracy": -1,
+      "classification": "RUNTIME_SUPPORTED",
       "crit_rate_bp": 0,
       "damage_class": "status",
       "display_name": "Luminicola",
@@ -36982,7 +36314,7 @@
     },
     "tail_whip": {
       "accuracy": 100,
-      "classification": "DATA_ONLY",
+      "classification": "RUNTIME_SUPPORTED",
       "crit_rate_bp": 0,
       "damage_class": "status",
       "display_name": "Agitacola",
@@ -37012,7 +36344,7 @@
       "type_id": "normal"
     },
     "tailwind": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -37059,7 +36391,7 @@
       "type_id": "normal"
     },
     "take_heart": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -37076,7 +36408,7 @@
     },
     "tar_shot": {
       "accuracy": 100,
-      "classification": "DATA_ONLY",
+      "classification": "PARTIAL_RUNTIME",
       "crit_rate_bp": 0,
       "damage_class": "status",
       "display_name": "Alquitranazo",
@@ -37122,8 +36454,8 @@
       "type_id": "dark"
     },
     "tearful_look": {
-      "accuracy": 100,
-      "classification": "DATA_ONLY",
+      "accuracy": -1,
+      "classification": "RUNTIME_SUPPORTED",
       "crit_rate_bp": 0,
       "damage_class": "status",
       "display_name": "Ojos Llorosos",
@@ -37167,7 +36499,7 @@
       "type_id": "normal"
     },
     "teatime": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -37199,7 +36531,7 @@
       "type_id": "normal"
     },
     "tectonic_rage_physical": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "physical",
@@ -37215,7 +36547,7 @@
       "type_id": "ground"
     },
     "tectonic_rage_special": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "special",
@@ -37262,7 +36594,7 @@
       "type_id": "normal"
     },
     "telekinesis": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -37278,7 +36610,7 @@
       "type_id": "psychic"
     },
     "teleport": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -37821,7 +37153,7 @@
     },
     "tickle": {
       "accuracy": 100,
-      "classification": "DATA_ONLY",
+      "classification": "RUNTIME_SUPPORTED",
       "crit_rate_bp": 0,
       "damage_class": "status",
       "display_name": "Cosquillas",
@@ -37865,42 +37197,13 @@
       "type_id": "normal"
     },
     "tidy_up": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
       "display_name": "Limpieza General",
-      "effect_specs": [
-        {
-          "chance_basis_points": 10000,
-          "children": [],
-          "kind": "modify_stat_stage",
-          "max_hits": 0,
-          "max_turns": 0,
-          "min_hits": 0,
-          "min_turns": 0,
-          "ratio_basis_points": 0,
-          "stat_id": "attack",
-          "status_id": "",
-          "target": "self",
-          "value": 1
-        },
-        {
-          "chance_basis_points": 10000,
-          "children": [],
-          "kind": "modify_stat_stage",
-          "max_hits": 0,
-          "max_turns": 0,
-          "min_hits": 0,
-          "min_turns": 0,
-          "ratio_basis_points": 0,
-          "stat_id": "speed",
-          "status_id": "",
-          "target": "self",
-          "value": 1
-        }
-      ],
-      "effect_summary": "",
+      "effect_specs": [],
+      "effect_summary": "Raises Attack and Speed by one stage and clears hazards and Substitute from both sides.",
       "id": "tidy_up",
       "makes_contact": false,
       "power": 0,
@@ -37910,7 +37213,7 @@
       "type_id": "normal"
     },
     "topsy_turvy": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -38004,7 +37307,7 @@
       "type_id": "poison"
     },
     "toxic_spikes": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -38096,7 +37399,7 @@
       "type_id": "grass"
     },
     "transform": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "UNSUPPORTED",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -38160,7 +37463,7 @@
       "type_id": "ghost"
     },
     "trick_room": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -38301,7 +37604,7 @@
       "type_id": "grass"
     },
     "trump_card": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "special",
@@ -38393,7 +37696,7 @@
       "type_id": "bug"
     },
     "twinkle_tackle_physical": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "physical",
@@ -38409,7 +37712,7 @@
       "type_id": "fairy"
     },
     "twinkle_tackle_special": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "special",
@@ -38536,7 +37839,7 @@
           "ratio_basis_points": 0,
           "stat_id": "defense",
           "status_id": "",
-          "target": "opponent",
+          "target": "self",
           "value": -1
         },
         {
@@ -38550,7 +37853,7 @@
           "ratio_basis_points": 0,
           "stat_id": "special_defense",
           "status_id": "",
-          "target": "opponent",
+          "target": "self",
           "value": -1
         },
         {
@@ -38564,7 +37867,7 @@
           "ratio_basis_points": 0,
           "stat_id": "speed",
           "status_id": "",
-          "target": "opponent",
+          "target": "self",
           "value": -1
         }
       ],
@@ -38594,7 +37897,7 @@
       "type_id": "fighting"
     },
     "veevee_volley": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "physical",
@@ -38615,50 +37918,7 @@
       "crit_rate_bp": 0,
       "damage_class": "status",
       "display_name": "Trampa Venenosa",
-      "effect_specs": [
-        {
-          "chance_basis_points": 10000,
-          "children": [],
-          "kind": "modify_stat_stage",
-          "max_hits": 0,
-          "max_turns": 0,
-          "min_hits": 0,
-          "min_turns": 0,
-          "ratio_basis_points": 0,
-          "stat_id": "attack",
-          "status_id": "",
-          "target": "opponent",
-          "value": -1
-        },
-        {
-          "chance_basis_points": 10000,
-          "children": [],
-          "kind": "modify_stat_stage",
-          "max_hits": 0,
-          "max_turns": 0,
-          "min_hits": 0,
-          "min_turns": 0,
-          "ratio_basis_points": 0,
-          "stat_id": "special_attack",
-          "status_id": "",
-          "target": "opponent",
-          "value": -1
-        },
-        {
-          "chance_basis_points": 10000,
-          "children": [],
-          "kind": "modify_stat_stage",
-          "max_hits": 0,
-          "max_turns": 0,
-          "min_hits": 0,
-          "min_turns": 0,
-          "ratio_basis_points": 0,
-          "stat_id": "speed",
-          "status_id": "",
-          "target": "opponent",
-          "value": -1
-        }
-      ],
+      "effect_specs": [],
       "effect_summary": "Lowers the target’s Attack, Special Attack, and Speed by one stage if it is poisoned.",
       "id": "venom_drench",
       "makes_contact": false,
@@ -38701,7 +37961,7 @@
       "type_id": "normal"
     },
     "victory_dance": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -38733,7 +37993,7 @@
       "type_id": "grass"
     },
     "vital_throw": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "RUNTIME_SUPPORTED",
       "crit_rate_bp": 0,
       "damage_class": "physical",
@@ -38950,7 +38210,7 @@
       "type_id": "water"
     },
     "water_sport": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -39076,7 +38336,7 @@
       "type_id": "water"
     },
     "whirlwind": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -39124,7 +38384,7 @@
       "type_id": "dark"
     },
     "wide_guard": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -39234,7 +38494,7 @@
       "type_id": "flying"
     },
     "wish": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -39250,8 +38510,8 @@
       "type_id": "normal"
     },
     "withdraw": {
-      "accuracy": 100,
-      "classification": "DATA_ONLY",
+      "accuracy": -1,
+      "classification": "RUNTIME_SUPPORTED",
       "crit_rate_bp": 0,
       "damage_class": "status",
       "display_name": "Refugio",
@@ -39281,7 +38541,7 @@
       "type_id": "water"
     },
     "wonder_room": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -39328,8 +38588,8 @@
       "type_id": "grass"
     },
     "work_up": {
-      "accuracy": 100,
-      "classification": "DATA_ONLY",
+      "accuracy": -1,
+      "classification": "RUNTIME_SUPPORTED",
       "crit_rate_bp": 0,
       "damage_class": "status",
       "display_name": "Avivar",
@@ -39437,7 +38697,7 @@
       "type_id": "bug"
     },
     "yawn": {
-      "accuracy": 100,
+      "accuracy": -1,
       "classification": "DATA_ONLY",
       "crit_rate_bp": 0,
       "damage_class": "status",
@@ -39593,7 +38853,7 @@
           "ratio_basis_points": 0,
           "stat_id": "evasion",
           "status_id": "",
-          "target": "opponent",
+          "target": "self",
           "value": 1
         }
       ],

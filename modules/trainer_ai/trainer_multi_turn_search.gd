@@ -102,6 +102,7 @@ func evaluate(context: TrainerDecisionContext, root_action: BattleAction) -> Dic
 				"root_score": int(root_eval.get("score", 0)),
 				"score": int(root_eval.get("score", 0)),
 				"depth_used": 1,
+				"terminal_horizon_closed": fork.state() != null and fork.state().phase == BattleState.FINISHED,
 				"opponent_action_key": _action_key(opponent),
 				"best_followup_action_key": "",
 				"expected_pairs": 0,
@@ -225,6 +226,7 @@ func evaluate(context: TrainerDecisionContext, root_action: BattleAction) -> Dic
 				"opponent_action_key": String(branch.opponent_action_key),
 				"score": int(branch.score),
 				"depth_used": int(branch.depth_used),
+				"terminal_horizon_closed": bool(branch.get("terminal_horizon_closed", false)),
 				"best_followup_action_key": String(branch.best_followup_action_key),
 			})
 		var mean := _mean(scores)
@@ -249,6 +251,28 @@ func evaluate(context: TrainerDecisionContext, root_action: BattleAction) -> Dic
 		no_coverage.metadata["budget_exhausted"] = budget_exhausted
 		no_coverage.metadata["root_branch_count"] = root_branch_count
 		return no_coverage
+
+	var required_horizon_branch_count := 0
+	var terminal_horizon_closed_branch_count := 0
+	var required_horizon_complete_branch_count := 0
+	for entry in entries:
+		if not bool(entry.root_matrix_complete):
+			continue
+		for branch in entry.branches as Array:
+			required_horizon_branch_count += 1
+			var terminal_closed := bool(branch.get("terminal_horizon_closed", false))
+			if terminal_closed:
+				terminal_horizon_closed_branch_count += 1
+			var requested_depth_reached := int(branch.depth_used) >= active_budget.depth_turns
+			if terminal_closed or requested_depth_reached:
+				required_horizon_complete_branch_count += 1
+	var required_horizon_complete := (
+		required_horizon_branch_count > 0
+		and complete_world_count == worlds.size()
+		and root_complete_worlds == worlds.size()
+		and required_horizon_complete_branch_count == required_horizon_branch_count
+		and not budget_exhausted
+	)
 
 	var score := weighted_total / used_weight
 	var world_coverage_bp := complete_world_count * 10000 / maxi(1, worlds.size())
@@ -285,6 +309,10 @@ func evaluate(context: TrainerDecisionContext, root_action: BattleAction) -> Dic
 			"root_branch_count": root_branch_count,
 			"expandable_branch_count": expandable_branches.size(),
 			"completed_depth_two_branch_count": completed_depth_two_branches,
+			"required_horizon_branch_count": required_horizon_branch_count,
+			"terminal_horizon_closed_branch_count": terminal_horizon_closed_branch_count,
+			"required_horizon_complete_branch_count": required_horizon_complete_branch_count,
+			"required_horizon_complete": required_horizon_complete,
 			"depth_two_coverage_basis_points": depth_two_coverage_bp,
 			"max_depth_reached": max_depth_reached,
 			"fully_completed_depth": fully_completed_depth,
