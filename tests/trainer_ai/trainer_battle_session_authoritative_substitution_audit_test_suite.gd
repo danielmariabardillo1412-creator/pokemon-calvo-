@@ -193,8 +193,8 @@ func _run_authoritative_case(catalog: DefinitionCatalog, substitution_enabled: b
 	var memory_a := session.trainer_memory_snapshot_for_side(SIDE_A_C3FAF)
 	var setup_revealed := memory_a != null and memory_a.revealed_move_ids(session.opponent_active().instance_id).has(SETUP_B_C3FAD)
 	var chip_revealed := memory_a != null and memory_a.revealed_move_ids(session.opponent_active().instance_id).has(CHIP_B_C3FAD)
-	var submitted := substitution.get("submitted_action", null)
-	var proposal_action := proposal.get("proposal_action", null)
+	var submitted: Variant = substitution.get("submitted_action", null)
+	var proposal_action: Variant = proposal.get("proposal_action", null)
 	return {
 		"turn_succeeds": not events.is_empty() and session.last_error.is_empty() and session.battle_state().turn == turn_before + 1,
 		"caller_root_id": caller_root,
