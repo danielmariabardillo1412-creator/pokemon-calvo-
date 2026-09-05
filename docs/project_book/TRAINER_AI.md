@@ -15881,3 +15881,218 @@ Resultados admisibles para C3f-ag:
 - `BLOCKED`.
 
 Incluso `SELECTOR_CONTRACT_VALIDATED` será solamente evidencia contractual: **no autoriza comportamiento real**. Solo un freeze posterior podrá decidir si se permite que una acción elegida por ese contrato sustituya por primera vez el `opponent_action` explícito.
+
+## 26.55 — Freeze C3f-ag: el selector final SWITCH requiere score profundo; `max depth1` queda como hipótesis observada, no como política
+
+Estado: **FREEZE DOCUMENTAL / C3f-ag CERTIFICADA / DECISIÓN DE POLÍTICA LIMITADA A LA SIGUIENTE AUDITORÍA / COMPORTAMIENTO REAL CERRADO**.
+
+C3f-ag cierra la frontera `candidate-set -> single SWITCH` sin introducir un selector productivo. La auditoría demuestra que el hueco es real, que los fallbacks de orden no son aceptables y que `max depth1` es empíricamente prometedor en el corpus ejecutado, pero no constituye por sí mismo la semántica final correcta.
+
+### 26.55.1 Genealogía y diff exacto
+
+Baseline exclusivo — freeze 26.54 certificado:
+
+`f3074285a423833e451c384377317a60173fb753`
+
+Checkpoint técnico C3f-ag:
+
+`dca51e5e1fb749ad2c6cc1841868fbf2bdc034c2`
+
+Checkpoint humano C3f-ag:
+
+`748ce05b9015b0f5309086f04ae4fce18e782eb4`
+
+Los checkpoints técnico y humano son siblings reales:
+
+- parent común: `f3074285a423833e451c384377317a60173fb753`;
+- tree común: `31fc4de6fe67373de68c556db6f5ae38ac354e95`;
+- ninguno desciende del otro.
+
+Diff exacto contra 26.54:
+
+- `tests/trainer_ai/trainer_roster_search_final_switch_selector_contract_audit_test_suite.gd`: **+501 / -0**;
+- `tests/trainer_ai/trainer_team_composition_test_runner.gd`: **+1 / -1**;
+- producción: **0 cambios**;
+- brains: **0 cambios**;
+- sampler/budgets/phase logic: **0 cambios**.
+
+C3f-ag es por tanto estrictamente **TEST/AUDIT/CONTRACT-ONLY**.
+
+### 26.55.2 Certificación técnica y humana
+
+Checkpoint técnico:
+
+- **18/18 workflows SUCCESS**;
+- Trainer Team Composition run: `33937106278`;
+- FASE33 literal: **`1194 PASS / 0 FAIL`**;
+- **0 `SCRIPT ERROR`**;
+- **0 traceback**;
+- **0 líneas `FAIL`**;
+- **0 líneas `ERROR:`**.
+
+Checkpoint humano:
+
+- **18/18 workflows SUCCESS**;
+- Trainer Team Composition run: `33937413642`;
+- FASE33 literal: **`1194 PASS / 0 FAIL`**;
+- **0 `SCRIPT ERROR`**;
+- **0 traceback**;
+- **0 líneas `FAIL`**;
+- **0 líneas `ERROR:`**.
+
+Los logs `trainer-team-composition-test.log` son byte-idénticos:
+
+`sha256:daf2c389268af6e908b532ce914144e0a15fa5b92be78f2bac22bf2ecba2c644`
+
+No se observa nondeterminismo entre técnico y humano.
+
+Resultado canónico C3f-ag:
+
+`NEEDS_POLICY_DECISION`
+
+### 26.55.3 El candidate-set múltiple es una frontera real
+
+C3f-ag reutiliza el lifecycle shadow C3f-af sin mutar producción.
+
+En los cuatro contextos shadow certificados:
+
+- `current_side_a`;
+- `current_side_b`;
+- `branch_side_a`;
+- `branch_side_b`;
+
+se observa:
+
+- `shadow_ready_contexts = 4`;
+- `shadow_multi_candidate_contexts = 4`;
+- exactamente dos SWITCH dentro del margin3000 en cada contexto;
+- contexto side-matching y detached;
+- resultado shadow únicamente telemétrico.
+
+Por tanto `depth1_margin_3000_all_legal` sigue siendo **membership**, no acción final.
+
+### 26.55.4 Orden de entrada y lexical quedan descartados
+
+C3f-ag invierte deliberadamente el orden de los candidatos.
+
+Resultado:
+
+- `input_first_order_sensitive_shadow_contexts = 4`;
+- elegir “el primero” cambia al invertir el input;
+- por tanto el orden de entrada no cumple la invariancia exigida.
+
+El orden lexical sí sería estable al reordenar el input, pero continúa prohibido como semántica de decisión. Ser determinista no convierte una ordenación nominal en preferencia táctica.
+
+Se mantienen igualmente fuera:
+
+- current sampler como selector oculto;
+- Pareto/frontier;
+- roster value;
+- `TrainerProfile`;
+- campaign/recovery/replacement;
+- hidden beliefs;
+- live RNG.
+
+### 26.55.5 Evidencia de `max depth1`: 9/9, pero no selección
+
+C3f-ag aplica la hipótesis `argmax depth1` únicamente como auditoría sobre el corpus disjunto C3f-ad.
+
+Corpus:
+
+- `synthetic_role_local_itemaware_disjoint_v1`;
+- **9/9 casos semánticamente completos**;
+- **9/9 candidate-sets con cardinalidad > 1**.
+
+Resultado observado:
+
+- `max_depth1_unique_reference_cases = 9`;
+- `max_depth1_tied_reference_cases = 0`;
+- `max_depth1_deep_best_hit_cases = 9`;
+- `max_depth1_deep_best_miss_cases = 0`;
+- `max_depth1_depth2_score_loss_sum = 0`;
+- `max_depth1_depth2_score_loss_max = 0`;
+- invariancia frente al orden: sin fallos.
+
+Esta evidencia es positiva, pero permanece estrictamente sample-scoped:
+
+- `max_depth1_proven_safe_globally = false`;
+- `candidate_strategy_proven_safe_globally = false`;
+- `max_depth1_selector_authorized = false`;
+- `max_depth1_selector_selected = false`.
+
+Además, usar `max depth1` como selector final colapsaría los candidate-sets múltiples de margin3000 a top-1 **antes de aprovechar la evaluación profunda cuya preservación motivó el propio margin**.
+
+Por eso 26.55 no convierte el 9/9 observado en política productiva.
+
+### 26.55.6 Decisión documental: la selección final debe auditar el score profundo, no reutilizar el screen depth1
+
+La búsqueda existente ya tiene una separación semántica útil:
+
+1. el score depth1 permite construir un candidate-set económico;
+2. cuando depth2 completa toda la matriz requerida, el `score` devuelto por search incorpora esa profundidad;
+3. `fully_completed_depth` registra si esa evaluación profunda terminó de forma completa;
+4. C3f-ad validó margin3000 precisamente comprobando si preservaba el **deep/global best** de referencia.
+
+Por tanto la siguiente hipótesis semántica coherente no es volver a seleccionar por el mismo score depth1 usado para el screen.
+
+Se congela exclusivamente esta dirección de auditoría:
+
+> dentro del candidate-set margin3000, comparar los candidatos mediante el `score` ItemAware de la **máxima profundidad completamente terminada y común**; si el máximo profundo es único, ese candidato puede formar un single-SWITCH contractual; si existe empate exacto en el máximo profundo, el contrato debe permanecer `NO_DECISION / TIE_UNRESOLVED` hasta que una política de empate independiente sea autorizada.
+
+Esto **NO** selecciona todavía una policy de producción y **NO** permite action substitution.
+
+En particular:
+
+- no se permite usar depth1 como tiebreak de un empate depth2;
+- no se permite lexical/input order/current sampler como tiebreak;
+- no se permite RNG;
+- no se permite bajar silenciosamente de profundidad cuando los candidatos no comparten una profundidad completamente terminada;
+- una evaluación incompleta debe fallar cerrado.
+
+### 26.55.7 Siguiente microtranche autorizada: C3f-ah deep-score selector contract, audit-only
+
+Se autoriza exclusivamente:
+
+**C3f-ah — TEST/AUDIT/CONTRACT-ONLY validation of deepest-complete ItemAware score as the final SWITCH selector inside the certified margin3000 candidate-set, with exact ties left unresolved.**
+
+C3f-ah deberá:
+
+1. permanecer estrictamente test/audit/contract-only;
+2. partir del candidate-set `depth1_margin_3000_all_legal`, SWITCH-only;
+3. evaluar **todos** los candidatos del set con `TrainerItemAwareSearch` a profundidad 2 donde el caso permita completar esa profundidad;
+4. aceptar score profundo solo cuando todos los candidatos comparados tengan la misma `fully_completed_depth` requerida y cobertura completa;
+5. seleccionar contractualmente solo si existe un único máximo de score profundo;
+6. ante empate exacto del máximo, devolver explícitamente `TIE_UNRESOLVED`, sin fallback;
+7. comprobar invariancia frente al orden de candidatos;
+8. reutilizar el corpus C3f-ad como referencia all-legal y registrar si el selector candidate-only coincide con el deep/global-best all-legal;
+9. cubrir lifecycle productivo shadow side-specific/detached, incluyendo current y branch;
+10. no mutar estado ni memoria live;
+11. mantener MOVE/SWITCH/ITEM separados;
+12. conservar root fanout all-legal separado del inner cap3;
+13. no usar lexical, input order, sampler, Pareto/frontier, roster value, Profile, campaign/recovery/replacement, hidden beliefs ni live RNG;
+14. no reabrir scheduler/shared budget/660;
+15. no modificar producción, brains, sampler, budgets ni phase logic;
+16. mantener `selected_strategy_id = null`, `selected_scheduler_id = null`, `selected_shared_budget = null`;
+17. mantener `behavior_integration_authorized = false`;
+18. mantener `action_substitution_authorized = false`;
+19. mantener FASE34 CLOSED.
+
+Resultados admisibles para C3f-ah:
+
+- `DEEP_SCORE_SELECTOR_CONTRACT_VALIDATED`;
+- `DEEP_SCORE_SELECTOR_VALIDATED_WITH_UNRESOLVED_TIES`;
+- `NEEDS_POLICY_DECISION`;
+- `NEEDS_MORE_VALIDATION`;
+- `BLOCKED`.
+
+Incluso un resultado validado seguirá siendo **contract-only**. Un freeze posterior deberá decidir por separado si se permite por primera vez sustituir el `opponent_action` explícito.
+
+### 26.55.8 Barreras externas
+
+PR #105 debe permanecer **OPEN / unmerged**.
+
+`main` permanece bajo ownership externo a esta rama y no debe ser modificado. El baseline externo conocido durante este freeze sigue siendo:
+
+`641d4b1fb0bcf964205d616e96f198f05d702197`
+
+C3f-ag queda por tanto **CERTIFICADA** como `NEEDS_POLICY_DECISION`; 26.55 resuelve únicamente qué semántica debe auditarse a continuación y mantiene cerrada toda integración de comportamiento real.
