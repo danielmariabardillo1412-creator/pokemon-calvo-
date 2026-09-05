@@ -16096,3 +16096,283 @@ PR #105 debe permanecer **OPEN / unmerged**.
 `641d4b1fb0bcf964205d616e96f198f05d702197`
 
 C3f-ag queda por tanto **CERTIFICADA** como `NEEDS_POLICY_DECISION`; 26.55 resuelve únicamente qué semántica debe auditarse a continuación y mantiene cerrada toda integración de comportamiento real.
+
+
+## 26.56 — Freeze C3f-ah: selector SWITCH por score profundo validado; empates exactos permanecen `TIE_UNRESOLVED` y la decisión cross-kind sigue cerrada
+
+Estado: **FREEZE DOCUMENTAL / C3f-ah DOBLEMENTE CERTIFICADA / SELECTOR SWITCH CONTRACTUAL VALIDADO CON EMPATES NO RESUELTOS / COMPORTAMIENTO REAL TODAVÍA CERRADO**.
+
+C3f-ah cierra la frontera abierta por 26.55 sin introducir producción. El resultado demuestra que, dentro del candidate-set SWITCH `depth1_margin_3000_all_legal`, el score ItemAware de profundidad completamente terminada y común puede resolver de forma determinista un único SWITCH cuando existe un máximo profundo único. Cuando el máximo profundo empata exactamente, el contrato no inventa un desempate y devuelve `TIE_UNRESOLVED`.
+
+### 26.56.1 Genealogía y diff exacto
+
+Baseline exclusivo — freeze 26.55 certificado:
+
+`377ff097418e7f75f0497cde9e3fc434e2aeb87d`
+
+Checkpoint técnico C3f-ah:
+
+`cd0c2934c8a20fdc9699b9e9a4fef22a3b6e61ce`
+
+Checkpoint humano C3f-ah:
+
+`96571c06384565efa1d8ec2b192dc50a94c0d596`
+
+Los dos checkpoints son siblings reales:
+
+- parent común: `377ff097418e7f75f0497cde9e3fc434e2aeb87d`;
+- tree común: `0eda1bc8d94484869367ae12c1f670ea75385cb7`;
+- ninguno desciende del otro.
+
+Diff exacto contra 26.55:
+
+- `tests/trainer_ai/trainer_roster_search_deep_score_final_switch_selector_contract_audit_test_suite.gd`: **+797 / -0**;
+- `tests/trainer_ai/trainer_team_composition_test_runner.gd`: **+1 / -1**;
+- producción: **0 cambios**;
+- brains: **0 cambios**;
+- sampler/budgets/phase logic: **0 cambios**.
+
+C3f-ah es estrictamente **TEST/AUDIT/CONTRACT-ONLY**.
+
+### 26.56.2 Certificación técnica y humana
+
+Checkpoint técnico:
+
+- **18/18 workflows SUCCESS**;
+- Trainer Team Composition run: `33940044121`;
+- FASE33 literal: **`1230 PASS / 0 FAIL`**;
+- **36 checks efectivos nuevos** sobre los 1194 de C3f-ag;
+- **0 `SCRIPT ERROR`**;
+- **0 traceback**;
+- **0 líneas `FAIL`**;
+- **0 líneas `ERROR:`**.
+
+Checkpoint humano:
+
+- **18/18 workflows SUCCESS**;
+- Trainer Team Composition run: `33940258667`;
+- FASE33 literal: **`1230 PASS / 0 FAIL`**;
+- mismos 36 checks C3f-ah;
+- **0 `SCRIPT ERROR`**;
+- **0 traceback**;
+- **0 líneas `FAIL`**;
+- **0 líneas `ERROR:`**.
+
+Los logs `trainer-team-composition-test.log` son byte-idénticos:
+
+`sha256:f28850dbd6e911e00701c22e907c1eb2439b2cf7300c4bd4802a23cfc728cb7f`
+
+Resultado canónico:
+
+`DEEP_SCORE_SELECTOR_VALIDATED_WITH_UNRESOLVED_TIES`
+
+No se observa nondeterminismo entre técnico y humano.
+
+### 26.56.3 Contrato profundo validado
+
+El contrato ejecutado conserva dos etapas semánticamente distintas:
+
+1. `depth1_margin_3000_all_legal` forma únicamente el candidate-set SWITCH;
+2. todos los candidatos del set se evalúan con `TrainerItemAwareSearch` a profundidad 2;
+3. solo se acepta la comparación cuando todos comparten `fully_completed_depth = 2` y la cobertura requerida está completa;
+4. si existe un único máximo depth2, el resultado contractual es `SINGLE_SWITCH_CONTRACT`;
+5. si varios candidatos comparten exactamente el máximo depth2, el resultado es `TIE_UNRESOLVED`;
+6. si no existe una profundidad completamente terminada y común, el resultado es `INCOMPLETE_COMMON_DEPTH`.
+
+No existe descenso silencioso de profundidad ni desempate secundario.
+
+Se mantiene explícitamente:
+
+- `depth1_tiebreak_authorized = false`;
+- `depth1_tiebreak_used = false`;
+- input-order tiebreak: false;
+- lexical tiebreak: false;
+- current sampler tiebreak: false;
+- live RNG: false.
+
+### 26.56.4 Corpus disjunto C3f-ad: 7 máximos únicos y 2 empates reales
+
+C3f-ah reutiliza como referencia el corpus disjunto certificado:
+
+`synthetic_role_local_itemaware_disjoint_v1`
+
+Resultado:
+
+- casos: **9**;
+- completos: **9/9**;
+- candidate-sets múltiples: **9/9**;
+- máximos depth2 únicos: **7/9**;
+- empates depth2 exactos: **2/9**;
+- mismatch candidate-only frente al deep/global-best all-legal: **0**;
+- mismatch de selección única frente al deep/global-best: **0**;
+- fallos de invariancia por orden: **0**.
+
+En los siete casos con máximo único, el `SINGLE_SWITCH_CONTRACT` selecciona siempre un miembro del deep/global-best all-legal.
+
+Los dos empates reales aparecen en:
+
+- `c3fad_beta|root_opponent_response`;
+- `c3fad_beta|opponent_depth2_continuation`.
+
+En ambos:
+
+- candidatos: `c3fad_beta_b1`, `c3fad_beta_b2`;
+- score depth2: `0`, `0`;
+- ambos pertenecen al deep-best;
+- `selected_switch_id = ""`;
+- outcome: `TIE_UNRESOLVED`.
+
+Por tanto C3f-ah no oculta una preferencia nominal cuando el search profundo no distingue tácticamente los candidatos.
+
+### 26.56.5 Lifecycle productivo shadow: 4/4 contextos resueltos a depth2 sin mutación
+
+C3f-ah vuelve a ejecutar la frontera sobre lifecycle productivo real, usando snapshots side-specific detached y branch-local.
+
+Contextos:
+
+- `current_side_a`;
+- `current_side_b`;
+- `branch_side_a`;
+- `branch_side_b`.
+
+Resultado:
+
+- contextos: **4/4**;
+- evaluaciones profundas completas: **4/4**;
+- `fully_completed_depth = 2`: **4/4**;
+- máximos profundos únicos: **4/4**;
+- empates: **0/4**;
+- fallos de invariancia por orden: **0**;
+- estado live sin mutación: true;
+- memorias live sin mutación: true.
+
+Scores observados:
+
+- current `side_a`: `c3fae_a1 = -91`, `c3fae_a2 = -3977` → `c3fae_a1`;
+- current `side_b`: `c3fae_b1 = 0`, `c3fae_b2 = -2287` → `c3fae_b1`;
+- branch `side_a`: `c3fae_a1 = -34`, `c3fae_a2 = -3790` → `c3fae_a1`;
+- branch `side_b`: `c3fae_b1 = 0`, `c3fae_b2 = -1437` → `c3fae_b1`.
+
+Cada candidato SWITCH de estos probes consumió 56 simulaciones depth2 bajo el budget auditado.
+
+### 26.56.6 Los empates no bloquean el contrato; bloquean únicamente la selección en ese caso
+
+El probe sintético de empate exacto:
+
+- score A: `1234`;
+- score B: `1234`;
+- ambos a depth2;
+- outcome: `TIE_UNRESOLVED`;
+- acción seleccionada: ninguna.
+
+El probe sintético de profundidad desigual:
+
+- candidato A completamente depth2;
+- candidato B solo depth1;
+- outcome: `INCOMPLETE_COMMON_DEPTH`;
+- acción seleccionada: ninguna.
+
+Por tanto el contrato puede considerarse validado sin inventar una política global de desempate: los casos no distinguibles permanecen fail-closed.
+
+Esto no demuestra seguridad global:
+
+- `candidate_strategy_proven_safe_globally = false`;
+- `deep_selector_proven_safe_globally = false`.
+
+### 26.56.7 La siguiente barrera real es cross-kind, no el empate SWITCH
+
+Aunque C3f-ah ya puede producir un mejor SWITCH contractual cuando el máximo profundo es único, eso **no equivale a elegir la acción del entrenador**.
+
+En los cuatro contexts lifecycle ejecutados, el action space completo era:
+
+- MOVE: **2**;
+- SWITCH: **2**;
+- ITEM: **6**.
+
+Por tanto una integración que sustituyese ahora `opponent_action` por el mejor SWITCH impondría implícitamente:
+
+`SWITCH > MOVE / ITEM`
+
+sin evidencia que lo autorice.
+
+C3f-z ya había establecido además que su composición narrow no define un score compartido MOVE/SWITCH/ITEM y que el current ItemAware round-robin no puede convertirse silenciosamente en preferencia semántica.
+
+En consecuencia, 26.56 **NO autoriza todavía action substitution**.
+
+### 26.56.8 Siguiente microtranche autorizada: C3f-ai comparabilidad cross-kind del score root profundo, audit-only
+
+Se autoriza exclusivamente:
+
+**C3f-ai — TEST/AUDIT/CONTRACT-ONLY validation of whether deepest-complete `TrainerItemAwareSearch` root scores are semantically comparable across MOVE, SWITCH and ITEM before any authoritative action substitution.**
+
+Objetivo: decidir mediante ejecución y trazabilidad del modelo —no por suposición— si el scalar final de `TrainerItemAwareSearch.evaluate(context, root_action)` puede actuar como comparador root común entre kinds cuando todos los roots se evalúan bajo exactamente el mismo contexto, world model, profile, budget y profundidad completamente terminada.
+
+C3f-ai deberá:
+
+1. permanecer estrictamente test/audit/contract-only;
+2. usar lifecycle productivo side-specific/detached para current y branch, ambos sides;
+3. enumerar **todos los root actions legales** MOVE/SWITCH/ITEM; el root fan-out no puede quedar limitado por inner cap3;
+4. evaluar cada root con el mismo `TrainerItemAwareSearch`, mismo `TrainerProfile`, mismo world model, mismo budget y misma profundidad requerida;
+5. aceptar comparación cross-kind solo si los roots comparados comparten profundidad completamente terminada y cobertura completa;
+6. trazar explícitamente si MOVE, SWITCH e ITEM desembocan en la misma escala de `TrainerSearchStateEvaluator` / agregación robusta del search o si existe cualquier normalización kind-specific que invalide la comparación;
+7. registrar por contexto scores root, kind, best ids, best kind, empates y coste de simulación;
+8. exigir invariancia frente al orden de roots;
+9. ante empate exacto cross-kind, devolver `TIE_UNRESOLVED`, sin prioridad por kind;
+10. ante profundidad/cobertura desigual o semántica de score no comparable, fallar cerrado;
+11. contrastar el subconjunto SWITCH con el contrato C3f-ah y exigir coherencia cuando ambos evalúen el mismo root/contexto;
+12. mantener el sampler ItemAware actual únicamente como parte declarada del modelo de search ejecutado; no promocionarlo a selector/tiebreak cross-kind;
+13. no usar lexical, input order, prioridad MOVE/SWITCH/ITEM, Pareto/frontier, roster value, `TrainerProfile` como tiebreak, campaign/recovery/replacement, hidden beliefs ni live RNG;
+14. mantener root all-legal separado del inner `max_actions_per_side = 3`;
+15. no reabrir scheduler/shared budget/660;
+16. no modificar producción, brains, sampler, budgets ni phase logic;
+17. mantener `selected_strategy_id = null`, `selected_scheduler_id = null`, `selected_shared_budget = null`;
+18. mantener `behavior_integration_authorized = false`;
+19. mantener `action_substitution_authorized = false`;
+20. mantener FASE34 CLOSED.
+
+Resultados admisibles:
+
+- `CROSS_KIND_DEEP_SCORE_COMPARABILITY_VALIDATED`;
+- `CROSS_KIND_DEEP_SCORE_COMPARABILITY_VALIDATED_WITH_UNRESOLVED_TIES`;
+- `NOT_COMPARABLE_NEEDS_POLICY`;
+- `NEEDS_MORE_VALIDATION`;
+- `BLOCKED`.
+
+Incluso un resultado validado seguirá siendo **contract-only**. Solo un freeze posterior podrá decidir si existe evidencia suficiente para la primera sustitución autoritativa de acción.
+
+### 26.56.9 Barreras que permanecen cerradas
+
+C3f-ah y este freeze NO autorizan:
+
+- reemplazar todavía `opponent_action`;
+- seleccionar automáticamente SWITCH por existir un ganador dentro del kind;
+- resolver empates profundos mediante depth1;
+- lexical/input order/current sampler como tiebreak;
+- prioridad fija MOVE/SWITCH/ITEM;
+- Pareto/frontier/roster/Profile como preselector o desempate;
+- campaign/recovery/replacement;
+- hidden beliefs;
+- live RNG;
+- scheduler/shared 660;
+- cambiar root fanout all-legal;
+- cambiar inner cap3;
+- modificar brains, production sampler, budgets o phase logic;
+- abrir FASE34;
+- mergear PR #105.
+
+Campos canónicos continúan cerrados:
+
+- `selected_strategy_id = null`;
+- `selected_scheduler_id = null`;
+- `selected_shared_budget = null`;
+- `behavior_integration_authorized = false`;
+- `action_substitution_authorized = false`;
+- `fase34_open = false`.
+
+PR #105 debe permanecer **OPEN / unmerged**.
+
+`main` continúa bajo ownership externo a esta rama y, al certificar C3f-ah, permanece en:
+
+`641d4b1fb0bcf964205d616e96f198f05d702197`
+
+C3f-ah queda por tanto **DOBLEMENTE CERTIFICADA** como `DEEP_SCORE_SELECTOR_VALIDATED_WITH_UNRESOLVED_TIES`; el único siguiente paso autorizado es C3f-ai audit-only de comparabilidad cross-kind.
