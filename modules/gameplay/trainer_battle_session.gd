@@ -460,7 +460,11 @@ func submit_player_action(
 		last_trainer_action_proposal_report = {}
 		last_trainer_action_substitution_report = {}
 
-	var events := _battle_server.submit_turn([player_action, authoritative_opponent_action])
+	var events: Array[BattleEvent] = []
+	if _trainer_action_substitution_enabled:
+		events = _battle_server.submit_turn([player_action, authoritative_opponent_action])
+	else:
+		events = _submit_explicit_opponent_action(player_action, opponent_action)
 	if not _trainer_memory_owner.observe_authoritative(events, _battle_server.state):
 		_trainer_memory_owner.clear()
 		last_error = "trainer_memory_fanout_failed"
@@ -468,6 +472,17 @@ func submit_player_action(
 	var rejection := _battle_rejection_reason(events)
 	if not rejection.is_empty():
 		last_error = rejection
+	return events
+
+
+# Preserve the historical explicit-caller path exactly when C3f-ak substitution is OFF.
+# This helper is live production code, not a compatibility stub: submit_player_action uses it
+# on the disabled/default path and returns the same authoritative event batch.
+func _submit_explicit_opponent_action(
+	player_action: BattleAction,
+	opponent_action: BattleAction,
+) -> Array[BattleEvent]:
+	var events := _battle_server.submit_turn([player_action, opponent_action])
 	return events
 
 
