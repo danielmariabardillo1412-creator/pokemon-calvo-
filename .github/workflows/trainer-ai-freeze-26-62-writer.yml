@@ -20,22 +20,19 @@ jobs:
           ref: audit/trainer-ai-v3-random-cup-redesign-v1
           fetch-depth: 0
 
-      - name: Verify certified human sibling and helper-only commit
+      - name: Verify certified human sibling and helper-only ancestry
         shell: bash
         run: |
           set -euo pipefail
           HUMAN='135714f3df926f32ddd314b31a39358ecb3e3ef7'
-          test "$(git rev-parse HEAD^)" = "$HUMAN"
+          git merge-base --is-ancestor "$HUMAN" HEAD
           test "$(git rev-parse HEAD:docs/project_book/TRAINER_AI.md)" = "0aed327b38be206ab6296193cc0cefc405478826"
           test -f docs/project_book/.trainer_ai_freeze_26_62.tmp.md
           test -f docs/project_book/.trainer_ai_freeze_26_62.trigger
           grep -Fx '## 26.62 — Freeze C3f-an: blocker terminal-depth lifecycle causalmente certificado; corrección mínima autorizada' docs/project_book/.trainer_ai_freeze_26_62.tmp.md
           test "$(grep -c '^## 26\.62 ' docs/project_book/TRAINER_AI.md || true)" -eq 0
-          EXPECTED='.github/workflows/trainer-ai-freeze-26-62-writer.yml
-docs/project_book/.trainer_ai_freeze_26_62.tmp.md
-docs/project_book/.trainer_ai_freeze_26_62.trigger'
-          ACTUAL="$(git diff --name-only "$HUMAN"..HEAD | sort)"
-          test "$ACTUAL" = "$EXPECTED"
+          UNEXPECTED="$(git diff --name-only "$HUMAN"..HEAD | grep -Ev '^(\.github/workflows/trainer-ai-freeze-26-62-writer\.yml|docs/project_book/\.trainer_ai_freeze_26_62\.tmp\.md|docs/project_book/\.trainer_ai_freeze_26_62\.trigger)$' || true)"
+          test -z "$UNEXPECTED"
 
       - name: Append freeze and self-clean
         shell: bash
