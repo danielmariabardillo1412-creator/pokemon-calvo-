@@ -27,6 +27,7 @@ var last_error: String = ""
 var last_trainer_shadow_report: Dictionary = {}
 var last_trainer_action_proposal_report: Dictionary = {}
 var last_trainer_action_substitution_report: Dictionary = {}
+var last_trainer_game_ready_tie_report: Dictionary = {}
 
 var _battle_server: AuthoritativeBattleServer = null
 var _opponent_roster: Array[CreatureInstance] = []
@@ -342,6 +343,7 @@ func begin_battle(
 	last_trainer_shadow_report = {}
 	last_trainer_action_proposal_report = {}
 	last_trainer_action_substitution_report = {}
+	last_trainer_game_ready_tie_report = {}
 	if has_active_battle():
 		last_error = "battle_already_active"
 		return false
@@ -407,6 +409,7 @@ func submit_player_action(
 	opponent_action: BattleAction,
 ) -> Array[BattleEvent]:
 	last_error = ""
+	last_trainer_game_ready_tie_report = {}
 	if not has_active_battle():
 		last_error = "no_active_trainer_battle"
 		return []
@@ -495,6 +498,7 @@ func submit_player_action_with_autonomous_trainer(
 	last_error = ""
 	last_trainer_action_proposal_report = {}
 	last_trainer_action_substitution_report = {}
+	last_trainer_game_ready_tie_report = {}
 	if not has_active_battle():
 		last_error = "no_active_trainer_battle"
 		return []
@@ -511,6 +515,41 @@ func submit_player_action_with_autonomous_trainer(
 	var proposal_report := trainer_action_proposal_report_for_side(&"side_b")
 	last_trainer_action_proposal_report = proposal_report.duplicate(true)
 	var substitution_report := _trainer_action_substitution_candidate_from_report(proposal_report)
+	if String(proposal_report.get("proposal_status", "")) == TrainerItemAwareActionProposal.TIE_UNRESOLVED:
+		var tie_report := TrainerGameReadyTieResolver.new().resolve(
+			proposal_report,
+			TrainerActionSpace.from_server(_battle_server, &"side_b"),
+			_battle_server.state.battle_id,
+			_battle_server.state.turn,
+			&"side_b",
+		)
+		last_trainer_game_ready_tie_report = tie_report.duplicate(true)
+		if String(tie_report.get("tie_resolution_status", "")) == TrainerGameReadyTieResolver.TIE_RESOLVED:
+			var selected_action_variant: Variant = tie_report.get("selected_action", null)
+			if selected_action_variant is Dictionary:
+				var selected_root_id := String(tie_report.get("selected_root_id", ""))
+				var selected_kind := String(tie_report.get("selected_kind", ""))
+				var game_ready_proposal := proposal_report.duplicate(true)
+				game_ready_proposal["proposal_status"] = TrainerItemAwareActionProposal.PROPOSAL_READY
+				game_ready_proposal["resolution_outcome"] = TrainerItemAwareActionProposal.SINGLE_ROOT_CONTRACT
+				game_ready_proposal["selected_root_id"] = selected_root_id
+				game_ready_proposal["selected_kind"] = selected_kind
+				game_ready_proposal["best_root_ids"] = [selected_root_id]
+				game_ready_proposal["best_kinds"] = [selected_kind]
+				game_ready_proposal["proposal_action"] = (selected_action_variant as Dictionary).duplicate(true)
+				game_ready_proposal["proposal_action_detached"] = true
+				substitution_report = _trainer_action_substitution_candidate_from_report(game_ready_proposal)
+				if String(substitution_report.get("substitution_status", "")) == SUBSTITUTION_READY:
+					substitution_report["proposal_status"] = TrainerItemAwareActionProposal.TIE_UNRESOLVED
+					substitution_report["game_ready_tiebreak_used"] = true
+					substitution_report["tie_resolution_policy"] = String(tie_report.get("policy_id", ""))
+					substitution_report["tie_candidate_count"] = int(tie_report.get("candidate_count", 0))
+					substitution_report["tie_resolution_seed"] = int(tie_report.get("selection_seed", -1))
+					substitution_report["tie_resolution_index"] = int(tie_report.get("selected_index", -1))
+					substitution_report["seeded_equal_tiebreak_used"] = true
+					substitution_report["player_current_action_used_by_tiebreak"] = false
+	else:
+		last_trainer_game_ready_tie_report = {}
 	last_trainer_action_substitution_report = substitution_report.duplicate(true)
 	if String(substitution_report.get("substitution_status", "")) != SUBSTITUTION_READY:
 		last_error = "trainer_action_substitution_not_ready"
@@ -574,6 +613,7 @@ func settle_finished_battle() -> TrainerBattleSettlement:
 	last_trainer_action_proposal_report = {}
 	_trainer_action_substitution_enabled = false
 	last_trainer_action_substitution_report = {}
+	last_trainer_game_ready_tie_report = {}
 	return out
 
 
@@ -589,6 +629,7 @@ func reset_after_completion() -> bool:
 	last_trainer_action_proposal_report = {}
 	_trainer_action_substitution_enabled = false
 	last_trainer_action_substitution_report = {}
+	last_trainer_game_ready_tie_report = {}
 	status = READY
 	completion_reason = &""
 	opponent_trainer_id = &""
