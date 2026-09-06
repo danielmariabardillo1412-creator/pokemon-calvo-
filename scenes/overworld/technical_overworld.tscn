@@ -1,9 +1,10 @@
-[gd_scene load_steps=9 format=3]
+[gd_scene load_steps=11 format=3]
 
 [ext_resource type="Script" path="res://scenes/overworld/technical_overworld.gd" id="1_root"]
 [ext_resource type="Script" path="res://modules/overworld/overworld_player.gd" id="2_player"]
 [ext_resource type="Script" path="res://modules/overworld/overworld_encounter_zone.gd" id="3_zone"]
 [ext_resource type="Script" path="res://modules/battle/presentation/spanish_battle_presentation_controller.gd" id="4_battle_ui"]
+[ext_resource type="Script" path="res://modules/battle/presentation/trainer_battle_presentation_controller.gd" id="5_trainer_ui"]
 
 [sub_resource type="RectangleShape2D" id="Rectangle_player"]
 size = Vector2(20, 20)
@@ -16,6 +17,9 @@ size = Vector2(640, 24)
 
 [sub_resource type="RectangleShape2D" id="Rectangle_grass"]
 size = Vector2(192, 160)
+
+[sub_resource type="RectangleShape2D" id="Rectangle_trainer"]
+size = Vector2(72, 72)
 
 [node name="TechnicalOverworld" type="Node2D"]
 script = ExtResource("1_root")
@@ -37,6 +41,18 @@ color = Color(0.19, 0.42, 0.24, 1)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="EncounterZone"]
 shape = SubResource("Rectangle_grass")
+
+[node name="TrainerTrigger" type="Area2D" parent="." groups=["trainer_triggers"]]
+position = Vector2(144, 80)
+collision_layer = 2
+collision_mask = 1
+
+[node name="Visual" type="Polygon2D" parent="TrainerTrigger"]
+polygon = PackedVector2Array(-36, -36, 36, -36, 36, 36, -36, 36)
+color = Color(0.28, 0.28, 0.58, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TrainerTrigger"]
+shape = SubResource("Rectangle_trainer")
 
 [node name="CenterObstacle" type="StaticBody2D" parent="."]
 position = Vector2(272, 180)
@@ -105,3 +121,12 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("4_battle_ui")
+
+[node name="TrainerBattlePresentation" type="Control" parent="CanvasLayer"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("5_trainer_ui")
