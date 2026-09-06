@@ -1,0 +1,22 @@
+name: C3f-ar Freeze 26.66
+
+on:
+  push:
+    branches:
+      - audit/trainer-ai-v3-random-cup-redesign-v1
+    paths:
+      - .github/triggers/c3far-freeze-26-66.trigger
+
+permissions:
+  contents: write
+
+jobs:
+  freeze:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      - name: Write and self-clean freeze 26.66
+        run: python .github/scripts/c3far_freeze_26_66.py
