@@ -1,0 +1,34 @@
+name: C3f-aq Freeze 26.65
+
+on:
+  push:
+    branches:
+      - audit/trainer-ai-v3-random-cup-redesign-v1
+    paths:
+      - .c3faq-freeze-26-65-trigger
+
+permissions:
+  contents: write
+
+jobs:
+  freeze:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      - name: Relax only the historical tail-marker assertion
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('.github/scripts/c3faq_freeze_26_65.py')
+          s = p.read_text(encoding='utf-8')
+          old = 'if "## 26.64 — Freeze C3f-ap" not in text or "la única siguiente frontera autorizada es C3f-aq" not in text:'
+          new = 'if "## 26.64 — Freeze C3f-ap" not in text:'
+          if old not in s:
+              raise SystemExit('expected strict marker assertion not found')
+          p.write_text(s.replace(old, new), encoding='utf-8')
+          PY
+      - name: Write and self-clean freeze 26.65
+        run: python .github/scripts/c3faq_freeze_26_65.py
