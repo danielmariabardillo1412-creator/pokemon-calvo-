@@ -92,3 +92,129 @@ La fase se considerará game-ready solo si:
 - 18/18 workflows SUCCESS en checkpoint técnico y humano tree-identical;
 - PR #105 permanece OPEN/unmerged;
 - `main` permanece exactamente en `641d4b1fb0bcf964205d616e96f198f05d702197`.
+
+## 27.1 — Freeze final Game-Ready: Trainer AI hardening CLOSED / VALIDATED
+
+Estado: **CLOSED / VALIDATED**.
+
+Esta freeze cierra exclusivamente la fase Game-Ready abierta en 27.0. No reabre C3f, no crea una continuación C3f-at y no autoriza una nueva tranche de Trainer AI.
+
+### Checkpoints canónicos
+
+Commit de apertura 27.0:
+
+`14bed5cfc3cc8a48714277baa481a350b47da4f4`
+
+Checkpoint técnico:
+
+`63850b0c738cb7f2c1dc740294b7289e4b9ef5db`
+
+Checkpoint humano:
+
+`17fd83aa38c901116f1d635ef4125d0c76e17d8e`
+
+Los dos checkpoints son siblings directos del mismo parent:
+
+`14bed5cfc3cc8a48714277baa481a350b47da4f4`
+
+y comparten exactamente el mismo tree:
+
+`92aa8ce7fbf0c4931c186003c4e328623836ba88`
+
+### Certificación doble
+
+Checkpoint técnico:
+
+- **18/18 workflows SUCCESS**;
+- Trainer Evaluation Corpus: **408 PASS / 0 FAIL**;
+- Trainer Battle Session: **66 PASS / 0 FAIL**;
+- Trainer Team Composition: **1258 PASS / 0 FAIL**;
+- Godot 4.7 global: **472 PASS / 0 FAIL**.
+
+Checkpoint humano:
+
+- **18/18 workflows SUCCESS**;
+- Trainer Evaluation Corpus: **408 PASS / 0 FAIL**;
+- Trainer Battle Session: **66 PASS / 0 FAIL**;
+- Trainer Team Composition: **1258 PASS / 0 FAIL**;
+- Godot 4.7 global: **472 PASS / 0 FAIL**.
+
+Los logs inspeccionados de Evaluation, Battle y Team no contienen `SCRIPT ERROR` ni `Traceback`. El `Parse JSON failed` observado en el corpus Godot pertenece al control negativo deliberado de savegame corrupto y termina en `PASS sg_corrupt_rejected`; no es un fallo de producto.
+
+### Resolución del falso blocker 404/3
+
+El candidato diagnóstico anterior produjo **404 PASS / 3 FAIL** y reportó:
+
+`live_root_coverage_mismatch`
+
+La causa no estaba en `TrainerGameReadyTieResolver` ni en Battle Core. El fixture runtime clonado omitía el inventario que había generado el proposal fuente de 10 raíces legales. El proposal original contenía:
+
+- 2 raíces MOVE;
+- 2 raíces SWITCH;
+- 6 raíces ITEM.
+
+El helper canónico instala 1 Potion + 1 Hyper Potion por lado; el clon no lo hacía. El resolver, por tanto, bloqueaba correctamente porque el espacio legal vivo no coincidía con la evidencia profunda que intentaba consumir.
+
+La corrección final fue estrictamente de fixture:
+
+- instalar en la sesión clonada el mismo inventario Potion + Hyper Potion;
+- exigir explícitamente `game_ready_runtime_fixture_live_root_coverage` antes de resolver el empate.
+
+La barrera `live_root_coverage_mismatch` **se conserva intacta**. No se debilitó el comportamiento fail-closed para hacer pasar el test.
+
+### Resultado Game-Ready
+
+Queda certificado que:
+
+- un empate exacto, completo y vigente se resuelve de forma reproducible entre raíces deep-best equivalentes;
+- el turno autoritativo avanza;
+- la sustitución alcanza `SUBSTITUTION_READY`;
+- no existe caller fallback;
+- la telemetría del empate se conserva;
+- invertir el orden de candidatos no altera el resultado;
+- la selección no usa la acción actual del jugador;
+- existe diversidad entre equivalentes y no una preferencia fija por el primer root;
+- empate incompleto, stale o con cobertura legal viva distinta continúa bloqueado;
+- la ruta unique-max anterior permanece sin cambios;
+- las políticas adversariales `damage_greedy`, `switch_bait`, `sacrifice` e `item_heal` completan batalla sin deadlock;
+- `item_heal` ejerce realmente la superficie ITEM;
+- el benchmark reproducible ejecuta 5 muestras y todas permanecen muy por debajo del guard CI de 5000 ms.
+
+Los tiempos del benchmark son únicamente referencia del runner CI y **no** constituyen una medición ni una promesa de rendimiento sobre el PC físico del usuario.
+
+### Scope neto canónico 27.0 -> Game-Ready
+
+Exactamente 4 archivos:
+
+Producción:
+
+1. `modules/gameplay/trainer_battle_session.gd`;
+2. `modules/trainer_ai/trainer_game_ready_tie_resolver.gd`.
+
+Tests:
+
+3. `tests/trainer_ai/trainer_evaluation_corpus_test_runner.gd`;
+4. `tests/trainer_ai/trainer_game_ready_hardening_test_suite.gd`.
+
+No existe workflow/helper diagnóstico temporal en el tree canónico.
+
+### Barreras preservadas
+
+No se ha abierto ni integrado:
+
+- Trainer Brain general;
+- autonomía global por defecto;
+- scheduler;
+- shared budget / 660;
+- FASE34;
+- recovery/campaign/replacement policy como desempate oculto;
+- forced replacement fuera de Battle Core.
+
+### Invariantes externos y cierre
+
+- PR #105 debe permanecer **OPEN / unmerged**;
+- `main` debe permanecer exactamente en `641d4b1fb0bcf964205d616e96f198f05d702197`;
+- esta freeze es docs-only sobre el checkpoint humano certificado;
+- **Trainer AI Game-Ready hardening: CLOSED / VALIDATED**.
+
+No hay una siguiente tranche Game-Ready de Trainer AI autorizada. Cualquier trabajo futuro requiere un regression reproducible concreto o una nueva feature/proyecto con scope separado.
