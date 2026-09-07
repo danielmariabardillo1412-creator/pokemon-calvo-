@@ -19,6 +19,7 @@ func _run() -> void:
 	await TrainerBattleRuntimeIntegrationTestSuite.new().run(Callable(self, "_check"), self)
 	await TrainerAIRuntimeFinalClosureTestSuite.new().run(Callable(self, "_check"), self)
 	TrainerGameReadyHardeningTestSuite.new().run(Callable(self, "_check"))
+	TrainerExpertiseContractAuditTestSuite.new().run(Callable(self, "_check"))
 	print("\n=== TRAINER EVALUATION CORPUS RESULT: %d PASS / %d FAIL ===" % [_passed, _failed])
 	quit(0 if _failed == 0 else 1)
 

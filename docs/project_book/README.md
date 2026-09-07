@@ -4,9 +4,9 @@ Esta carpeta contiene **memoria temática consolidada**, no diarios cronológico
 
 ## Regla principal
 
-No crear un cuaderno por cada PR, microfase o sesión.
+No crear un cuaderno por cada PR, microfase o sesión. Un cuaderno existe mientras un tema necesite memoria operativa propia; al cerrar, queda como resumen humano y la evidencia detallada permanece en `../history/worklogs/`.
 
-Un cuaderno existe mientras un tema necesite memoria operativa propia. Se actualiza a medida que el workstream avanza y, cuando cierra, queda como resumen de autoridad humana. Los diarios detallados que justifican ese resumen se conservan bajo `../history/worklogs/`.
+GitHub/CI/artefactos del SHA exacto tienen prioridad sobre cualquier cuaderno.
 
 ## Cuadernos actuales
 
@@ -14,29 +14,33 @@ Un cuaderno existe mientras un tema necesite memoria operativa propia. Se actual
 
 Estado: **CERRADO**.
 
-Resume la fuente, contrato estructural, fronteras runtime, certificación final y condiciones que justificarían reabrir DATA V3.
-
-Los antiguos diarios 02 y 06–25 se conservan en `../history/worklogs/data_v3/`.
+Resume fuente, contrato estructural, fronteras runtime, certificación final y condiciones para reabrir DATA V3.
 
 ### `TRAINER_AI.md`
 
-Estado: **ACTIVO / siguiente workstream técnico**.
+Estado: **CERRADO / COMPLETED**.
 
-Resume la línea FASE19–33, invariantes anti-cheat, arquitectura útil y el punto exacto desde el que debe diseñarse la siguiente fase.
+Conserva la memoria completa de la línea FASE19–33 y C1–C3f que culminó en el cierre runtime 26.67.
 
-La investigación original de FASE21 permanece en `../history/research/TRAINER_AI_RESEARCH_FASE21.md` como fuente histórica.
+### `TRAINER_AI_GAME_READY.md`
+
+Estado: **CERRADO / VALIDATED**.
+
+Conserva la fase post-cierre que añadió desempate game-ready, full-battle adversarial y benchmark, congelada en 27.1.
+
+### `TRAINER_AI_EXPERTISE.md`
+
+Estado: **ACTIVO**.
+
+Workstream nuevo y separado para diseñar competencia/dificultad sin confundirla con estilo y sin alterar la frontera anti-cheat.
 
 ## Cuándo crear otro cuaderno
 
-Solo cuando empiece un workstream suficientemente grande y distinto como para que meterlo en otro cuaderno cree confusión.
-
-No se crean por anticipación cuadernos vacíos de Battle, Overworld, UI, etc. Si esos temas vuelven a ser trabajo activo y necesitan memoria propia, se abrirán entonces.
+Solo cuando empiece un workstream suficientemente grande y distinto como para que mezclarlo en otro cuaderno cree confusión.
 
 ## Diferencia con otras carpetas
 
 - `../current/`: dónde estamos y qué toca ahora.
 - `../architecture/`: cómo está construido el sistema.
-- `../adr/`: por qué se tomó una decisión arquitectónica concreta.
-- `../history/`: evidencia y diarios de trabajo que ya no son estado vivo.
-
-GitHub/CI/artefactos del SHA exacto siguen teniendo prioridad sobre cualquier cuaderno.
+- `../adr/`: por qué se tomó una decisión arquitectónica.
+- `../history/`: evidencia y diarios cerrados.

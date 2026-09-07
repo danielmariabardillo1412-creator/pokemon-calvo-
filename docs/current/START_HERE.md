@@ -4,50 +4,52 @@ Este archivo es el punto de entrada para recuperar el proyecto en una conversaci
 
 ## Lectura mínima
 
-1. `PROJECT_STATE.md` — qué baseline está certificado y qué existe realmente.
-2. `NEXT_STEPS.md` — qué trabajo toca exactamente ahora.
-3. `WORK_PROTOCOL.md` — cómo trabajar sin romper la cadena de certificación.
-4. El cuaderno temático correspondiente en `../project_book/`.
-
-No es necesario leer todos los ADR ni todo el historial antes de continuar.
+1. `PROJECT_STATE.md` — baseline certificado y estado real.
+2. `NEXT_STEPS.md` — trabajo autorizado ahora.
+3. `WORK_PROTOCOL.md` — reglas de ejecución/certificación.
+4. El cuaderno temático activo en `../project_book/`.
 
 ## Autoridad
 
-Si dos documentos parecen contradecirse, resolver en este orden:
+Si dos fuentes se contradicen:
 
 1. commit/branch/PR/CI/artefactos del SHA exacto en GitHub;
 2. fuente canónica o inmutable del dominio;
-3. documentos de `docs/current/`;
+3. `docs/current/`;
 4. arquitectura y ADR vigentes;
 5. cuadernos temáticos;
-6. historial y worklogs;
-7. memoria de conversación.
+6. historial/worklogs;
+7. memoria del chat.
 
-## Baseline de continuidad
+## Baseline moderno de continuidad
 
-El último baseline funcional certificado anterior a la reorganización documental es:
+Último baseline funcional certificado antes del workstream actual:
 
-`b4f6adc200bef18f8ac51b9144f2f9a838f464fd`
+`337a4f787c7da18f9cf649aea929e79912840b2a`
 
-Corresponde al cierre final de DATA V3 en PR #95, cerrado sin merge tras 18/18 workflows SUCCESS.
+Corresponde a:
 
-La reorganización documental se desarrolla desde ese SHA en:
+`docs(trainer-ai): freeze 27.1 game-ready hardening`
 
-`chore/documentation-consolidation-v1`
+Trainer AI de combate queda **CLOSED / VALIDATED** en ese SHA.
 
-## Regla sobre `main`
+Rama del nuevo workstream:
 
-`main` es actualmente una rama histórica antigua. No iniciar trabajo desde ella ni usarla para inferir el estado moderno del proyecto.
+`feature/trainer-ai-expertise-v1`
 
-La futura sustitución de `main` por el baseline certificado se hará **después** de organizar y certificar esta estructura, como una operación separada y verificable.
+El nuevo trabajo es una feature separada: **Trainer AI Expertise V1**. No reabre C3f ni Game-Ready 27.x.
 
-## Regla de memoria del proyecto
+## Invariantes externos
 
-Las decisiones materiales no deben existir únicamente en el chat.
+- `main` sigue siendo histórica y debe permanecer exactamente en `641d4b1fb0bcf964205d616e96f198f05d702197` mientras este workstream no autorice otra cosa.
+- PR #105 permanece OPEN / unmerged y no debe mergearse casualmente.
+- El siguiente tramo parte del último SHA certificado exacto, no de `main` por nombre.
+
+## Regla de memoria
+
+Las decisiones materiales no deben vivir solo en el chat:
 
 - estado y continuación: `docs/current/`;
-- conocimiento de un workstream: `docs/project_book/`;
-- decisión arquitectónica formal: `docs/adr/`;
-- diarios y trazabilidad cerrada: `docs/history/worklogs/`.
-
-No crear un cuaderno nuevo por cada microcambio. Actualizar el cuaderno temático correspondiente.
+- conocimiento de workstream: `docs/project_book/`;
+- decisión arquitectónica duradera: `docs/adr/`;
+- evidencia histórica cerrada: `docs/history/worklogs/`.
