@@ -78,14 +78,16 @@ func run(check_callback: Callable) -> void:
 		and strategic_source.contains("super(catalog, p_profile, p_budget)")
 	)
 	_check.call(
-		"expertise_audit_runtime_proposal_is_currently_balanced_fixed",
-		proposal_source.contains("TrainerItemAwareSearch.new(catalog, TrainerProfile.balanced(), budget)")
+		"expertise_audit_runtime_proposal_accepts_explicit_style_and_expertise",
+		proposal_source.contains("profile: TrainerProfile = null")
+		and proposal_source.contains("expertise_id: StringName = TrainerExpertise.DEFAULT")
+		and proposal_source.contains("TrainerItemAwareSearch.new(catalog, active_profile, budget)")
 	)
 	_check.call(
-		"expertise_audit_runtime_proposal_has_no_profile_or_expertise_input",
-		not proposal_source.contains("p_profile")
-		and not proposal_source.contains("expertise_id")
-		and not proposal_source.contains("difficulty_id")
+		"expertise_audit_runtime_proposal_preserves_balanced_full_defaults",
+		proposal_source.contains("profile.profile_id if profile != null else TrainerProfile.BALANCED")
+		and proposal_source.contains("TrainerExpertise.DEFAULT")
+		and proposal_source.contains("const INNER_ACTION_CAP := TrainerItemAwareShadowProbe.INNER_ACTION_CAP")
 	)
 	_check.call(
 		"expertise_audit_proposal_does_not_use_profile_tiebreak",
@@ -96,10 +98,11 @@ func run(check_callback: Callable) -> void:
 		proposal_source.contains("\"fase34_open\": false")
 	)
 	_check.call(
-		"expertise_audit_session_has_no_runtime_expertise_state",
-		not session_source.contains("expertise_id")
-		and not session_source.contains("difficulty_id")
-		and not session_source.contains("competence_id")
+		"expertise_audit_session_keeps_style_and_expertise_separate",
+		session_source.contains("_trainer_profile_id")
+		and session_source.contains("_trainer_expertise_id")
+		and session_source.contains("TrainerExpertise.is_supported")
+		and not TrainerProfile.balanced().to_dict().has("expertise_id")
 	)
 	_check.call(
 		"expertise_audit_game_ready_tie_resolver_has_no_style_or_expertise_fallback",

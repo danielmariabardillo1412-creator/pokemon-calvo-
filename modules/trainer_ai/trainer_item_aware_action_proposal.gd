@@ -18,13 +18,27 @@ const INNER_ACTION_CAP := TrainerItemAwareShadowProbe.INNER_ACTION_CAP
 const SIDE_A := &"side_a"
 const SIDE_B := &"side_b"
 
+var _active_profile_id: StringName = TrainerProfile.BALANCED
+var _active_expertise_id: StringName = TrainerExpertise.DEFAULT
+var _active_inner_action_cap: int = INNER_ACTION_CAP
+
 
 func evaluate(
 	state: BattleState,
 	side_id: StringName,
 	memory: TrainerBattleMemory,
 	catalog: DefinitionCatalog,
+	profile: TrainerProfile = null,
+	expertise_id: StringName = TrainerExpertise.DEFAULT,
 ) -> Dictionary:
+	_active_profile_id = profile.profile_id if profile != null else TrainerProfile.BALANCED
+	_active_expertise_id = expertise_id
+	_active_inner_action_cap = TrainerExpertise.inner_action_cap(expertise_id)
+	var active_profile := _canonical_profile(_active_profile_id)
+	if active_profile == null:
+		return blocked_report("invalid_trainer_profile", side_id)
+	if not TrainerExpertise.is_supported(_active_expertise_id) or _active_inner_action_cap <= 0:
+		return blocked_report("invalid_trainer_expertise", side_id)
 	if state == null or memory == null or catalog == null:
 		return blocked_report("missing_input", side_id)
 	if not _valid_side(side_id):
@@ -70,6 +84,7 @@ func evaluate(
 	var root_scores: Dictionary = {}
 	var root_depths: Dictionary = {}
 	var root_simulations: Dictionary = {}
+	var root_risk_weight_basis_points: Dictionary = {}
 	var root_horizon_complete: Dictionary = {}
 	var root_terminal_horizon_closed: Dictionary = {}
 	var root_depth_two_completed: Dictionary = {}
@@ -77,7 +92,7 @@ func evaluate(
 	var evaluations_complete := true
 	var metadata_models_match := true
 	var same_budget := true
-	var expected_budget := _budget_signature()
+	var expected_budget := _budget_signature(_active_inner_action_cap)
 	for action in legal_actions:
 		var root := BattleAction.from_dict(action.to_dict()) if action != null else null
 		var root_id := _root_id(root)
@@ -86,12 +101,13 @@ func evaluate(
 		root_ids.append(root_id)
 		root_kinds[root_id] = _kind(root)
 		root_actions[root_id] = root
-		var budget := _budget()
-		var result := TrainerItemAwareSearch.new(catalog, TrainerProfile.balanced(), budget).evaluate(context, root)
+		var budget := _budget(_active_inner_action_cap)
+		var result := TrainerItemAwareSearch.new(catalog, active_profile, budget).evaluate(context, root)
 		var metadata := result.get("metadata", {}) as Dictionary
 		root_scores[root_id] = int(result.get("score", -2147483648))
 		root_depths[root_id] = int(metadata.get("fully_completed_depth", 0))
 		root_simulations[root_id] = int(metadata.get("simulations_used", 0))
+		root_risk_weight_basis_points[root_id] = int(metadata.get("risk_weight_basis_points", -1))
 		root_horizon_complete[root_id] = bool(metadata.get("required_horizon_complete", false))
 		root_terminal_horizon_closed[root_id] = (
 			int(metadata.get("fully_completed_depth", 0)) < REQUIRED_DEPTH
@@ -141,7 +157,9 @@ func evaluate(
 		"context_side_matching": true,
 		"memory_snapshot_detached": memory_clone != memory,
 		"root_all_legal": true,
-		"inner_max_actions_per_side": INNER_ACTION_CAP,
+		"trainer_profile_id": String(_active_profile_id),
+		"trainer_expertise_id": String(_active_expertise_id),
+		"inner_max_actions_per_side": _active_inner_action_cap,
 		"required_depth": REQUIRED_DEPTH,
 		"legal_action_count": legal_actions.size(),
 		"legal_action_kind_histogram": _action_kind_histogram(legal_actions),
@@ -151,6 +169,7 @@ func evaluate(
 		"root_scores": root_scores,
 		"root_depths": root_depths,
 		"root_simulations": root_simulations,
+		"root_risk_weight_basis_points": root_risk_weight_basis_points,
 		"root_horizon_complete": root_horizon_complete,
 		"root_terminal_horizon_closed": root_terminal_horizon_closed,
 		"root_depth_two_completed": root_depth_two_completed,
@@ -254,7 +273,9 @@ func blocked_report(reason: String, side_id: StringName) -> Dictionary:
 		"context_side_matching": false,
 		"memory_snapshot_detached": false,
 		"root_all_legal": true,
-		"inner_max_actions_per_side": INNER_ACTION_CAP,
+		"trainer_profile_id": String(_active_profile_id),
+		"trainer_expertise_id": String(_active_expertise_id),
+		"inner_max_actions_per_side": _active_inner_action_cap,
 		"required_depth": REQUIRED_DEPTH,
 		"legal_action_count": 0,
 		"legal_action_kind_histogram": {"MOVE": 0, "SWITCH": 0, "ITEM": 0},
@@ -264,6 +285,7 @@ func blocked_report(reason: String, side_id: StringName) -> Dictionary:
 		"root_scores": {},
 		"root_depths": {},
 		"root_simulations": {},
+		"root_risk_weight_basis_points": {},
 		"root_horizon_complete": {},
 		"root_terminal_horizon_closed": {},
 		"root_depth_two_completed": {},
@@ -306,12 +328,24 @@ func blocked_report(reason: String, side_id: StringName) -> Dictionary:
 	}
 
 
-func _budget() -> TrainerSearchBudget:
-	return TrainerSearchBudget.constrained(REQUIRED_DEPTH, MAX_WORLDS, MAX_SIMULATIONS, INNER_ACTION_CAP)
+func _canonical_profile(profile_id: StringName) -> TrainerProfile:
+	if profile_id == TrainerProfile.BALANCED:
+		return TrainerProfile.balanced()
+	if profile_id == TrainerProfile.AGGRESSIVE:
+		return TrainerProfile.aggressive()
+	if profile_id == TrainerProfile.CAUTIOUS:
+		return TrainerProfile.cautious()
+	if profile_id == TrainerProfile.TECHNICAL:
+		return TrainerProfile.technical()
+	return null
 
 
-func _budget_signature() -> String:
-	return JSON.stringify(_budget().normalized().to_dict())
+func _budget(inner_action_cap: int = INNER_ACTION_CAP) -> TrainerSearchBudget:
+	return TrainerSearchBudget.constrained(REQUIRED_DEPTH, MAX_WORLDS, MAX_SIMULATIONS, inner_action_cap)
+
+
+func _budget_signature(inner_action_cap: int = INNER_ACTION_CAP) -> String:
+	return JSON.stringify(_budget(inner_action_cap).normalized().to_dict())
 
 
 func _result_complete(result: Dictionary) -> bool:

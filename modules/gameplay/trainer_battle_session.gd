@@ -35,6 +35,8 @@ var _trainer_memory_owner := TrainerDualSideBattleMemoryOwner.new()
 var _trainer_shadow_item_aware_enabled: bool = false
 var _trainer_action_proposal_enabled: bool = false
 var _trainer_action_substitution_enabled: bool = false
+var _trainer_profile_id: StringName = TrainerProfile.BALANCED
+var _trainer_expertise_id: StringName = TrainerExpertise.DEFAULT
 
 
 func _init(
@@ -65,6 +67,14 @@ func opponent_active() -> CreatureInstance:
 	if _battle_server == null:
 		return null
 	return _battle_server.state.active_for_side(&"side_b")
+
+
+func trainer_profile_id() -> StringName:
+	return _trainer_profile_id
+
+
+func trainer_expertise_id() -> StringName:
+	return _trainer_expertise_id
 
 
 # Wiring-only read seam. Callers receive detached snapshots; no mutable live
@@ -146,7 +156,10 @@ func trainer_action_proposal_report_for_side(side_id: StringName) -> Dictionary:
 	var memory := trainer_memory_snapshot_for_side(side_id)
 	if memory == null:
 		return proposal.blocked_report("side_memory_unavailable", side_id)
-	return proposal.evaluate(_battle_server.state, side_id, memory, catalogs)
+	var profile := _trainer_profile_for_id(_trainer_profile_id)
+	if profile == null or not TrainerExpertise.is_supported(_trainer_expertise_id):
+		return proposal.blocked_report("trainer_expertise_config_not_ready", side_id)
+	return proposal.evaluate(_battle_server.state, side_id, memory, catalogs, profile, _trainer_expertise_id)
 
 
 func trainer_branch_action_proposal_report_for_side(
@@ -160,7 +173,10 @@ func trainer_branch_action_proposal_report_for_side(
 	var memory := trainer_branch_memory_snapshot_for_side(side_id, events, branch_state)
 	if memory == null:
 		return proposal.blocked_report("branch_memory_unavailable", side_id)
-	return proposal.evaluate(branch_state, side_id, memory, catalogs)
+	var profile := _trainer_profile_for_id(_trainer_profile_id)
+	if profile == null or not TrainerExpertise.is_supported(_trainer_expertise_id):
+		return proposal.blocked_report("trainer_expertise_config_not_ready", side_id)
+	return proposal.evaluate(branch_state, side_id, memory, catalogs, profile, _trainer_expertise_id)
 
 
 # C3f-ak authoritative substitution toggle. It is independent from proposal telemetry and
@@ -192,7 +208,8 @@ func _trainer_action_substitution_candidate_from_report(report: Dictionary) -> D
 		return _trainer_action_substitution_blocked_report("proposal_memory_not_detached", report)
 	if not bool(report.get("root_all_legal", false)):
 		return _trainer_action_substitution_blocked_report("proposal_root_coverage_not_all_legal", report)
-	if int(report.get("inner_max_actions_per_side", -1)) != TrainerItemAwareActionProposal.INNER_ACTION_CAP:
+	var expected_inner_cap := TrainerExpertise.inner_action_cap(_trainer_expertise_id)
+	if expected_inner_cap <= 0 or int(report.get("inner_max_actions_per_side", -1)) != expected_inner_cap:
 		return _trainer_action_substitution_blocked_report("proposal_inner_cap_mismatch", report)
 	if int(report.get("required_depth", -1)) != TrainerItemAwareActionProposal.REQUIRED_DEPTH or int(report.get("common_depth", -1)) != TrainerItemAwareActionProposal.REQUIRED_DEPTH:
 		return _trainer_action_substitution_blocked_report("proposal_depth_incomplete", report)
@@ -206,6 +223,10 @@ func _trainer_action_substitution_candidate_from_report(report: Dictionary) -> D
 		return _trainer_action_substitution_blocked_report("proposal_not_order_invariant", report)
 	if not bool(report.get("proposal_action_detached", false)) or not (report.get("proposal_action", null) is Dictionary):
 		return _trainer_action_substitution_blocked_report("proposal_action_not_detached", report)
+	if String(report.get("trainer_profile_id", "")) != String(_trainer_profile_id):
+		return _trainer_action_substitution_blocked_report("proposal_profile_mismatch", report)
+	if String(report.get("trainer_expertise_id", "")) != String(_trainer_expertise_id):
+		return _trainer_action_substitution_blocked_report("proposal_expertise_mismatch", report)
 
 	var proposal_dict := (report.get("proposal_action", {}) as Dictionary).duplicate(true)
 	var candidate := BattleAction.from_dict(proposal_dict)
@@ -230,6 +251,8 @@ func _trainer_action_substitution_candidate_from_report(report: Dictionary) -> D
 		"authoritative_substitution_scope": "side_b_opt_in_only",
 		"proposal_status": String(report.get("proposal_status", "")),
 		"proposal_model": String(report.get("proposal_model", "")),
+		"trainer_profile_id": String(report.get("trainer_profile_id", "")),
+		"trainer_expertise_id": String(report.get("trainer_expertise_id", "")),
 		"selected_root_id": selected_root_id,
 		"selected_kind": String(report.get("selected_kind", "")),
 		"submitted_root_id": selected_root_id,
@@ -272,6 +295,8 @@ func _trainer_action_substitution_blocked_report(reason: String, proposal_report
 		"authoritative_substitution_scope": "side_b_opt_in_only",
 		"proposal_status": String(proposal_report.get("proposal_status", "")),
 		"proposal_model": String(proposal_report.get("proposal_model", "")),
+		"trainer_profile_id": String(proposal_report.get("trainer_profile_id", _trainer_profile_id)),
+		"trainer_expertise_id": String(proposal_report.get("trainer_expertise_id", _trainer_expertise_id)),
 		"selected_root_id": String(proposal_report.get("selected_root_id", "")),
 		"selected_kind": String(proposal_report.get("selected_kind", "")),
 		"submitted_root_id": "",
@@ -279,7 +304,7 @@ func _trainer_action_substitution_blocked_report(reason: String, proposal_report
 		"proposal_action_currently_legal": false,
 		"proposal_action_exact_match": false,
 		"root_all_legal": bool(proposal_report.get("root_all_legal", false)),
-		"inner_max_actions_per_side": int(proposal_report.get("inner_max_actions_per_side", TrainerItemAwareActionProposal.INNER_ACTION_CAP)),
+		"inner_max_actions_per_side": int(proposal_report.get("inner_max_actions_per_side", TrainerExpertise.inner_action_cap(_trainer_expertise_id))),
 		"common_depth": int(proposal_report.get("common_depth", 0)),
 		"caller_action": null,
 		"caller_fallback_used": false,
@@ -338,6 +363,8 @@ func begin_battle(
 	p_opponent_trainer_id: StringName,
 	p_opponent_roster: Array[CreatureInstance],
 	battle_seed: int = 1,
+	p_trainer_profile_id: StringName = TrainerProfile.BALANCED,
+	p_trainer_expertise_id: StringName = TrainerExpertise.DEFAULT,
 ) -> bool:
 	last_error = ""
 	last_trainer_shadow_report = {}
@@ -352,6 +379,12 @@ func begin_battle(
 		return false
 	if p_opponent_trainer_id == &"":
 		last_error = "trainer_id_required"
+		return false
+	if _trainer_profile_for_id(p_trainer_profile_id) == null:
+		last_error = "invalid_trainer_profile"
+		return false
+	if not TrainerExpertise.is_supported(p_trainer_expertise_id):
+		last_error = "invalid_trainer_expertise"
 		return false
 
 	var player_roster := _roster_with_living_active(player.party.get_creatures())
@@ -396,6 +429,8 @@ func begin_battle(
 	_trainer_memory_owner = memory_owner
 	_opponent_roster = trainer_roster.duplicate()
 	opponent_trainer_id = p_opponent_trainer_id
+	_trainer_profile_id = p_trainer_profile_id
+	_trainer_expertise_id = p_trainer_expertise_id
 	status = BATTLE_ACTIVE
 	completion_reason = &""
 	return true
@@ -630,10 +665,24 @@ func reset_after_completion() -> bool:
 	_trainer_action_substitution_enabled = false
 	last_trainer_action_substitution_report = {}
 	last_trainer_game_ready_tie_report = {}
+	_trainer_profile_id = TrainerProfile.BALANCED
+	_trainer_expertise_id = TrainerExpertise.DEFAULT
 	status = READY
 	completion_reason = &""
 	opponent_trainer_id = &""
 	return true
+
+
+func _trainer_profile_for_id(profile_id: StringName) -> TrainerProfile:
+	if profile_id == TrainerProfile.BALANCED:
+		return TrainerProfile.balanced()
+	if profile_id == TrainerProfile.AGGRESSIVE:
+		return TrainerProfile.aggressive()
+	if profile_id == TrainerProfile.CAUTIOUS:
+		return TrainerProfile.cautious()
+	if profile_id == TrainerProfile.TECHNICAL:
+		return TrainerProfile.technical()
+	return null
 
 
 func _roster_with_living_active(source: Array[CreatureInstance]) -> Array[CreatureInstance]:

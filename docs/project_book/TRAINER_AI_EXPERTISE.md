@@ -84,13 +84,13 @@ PR #106 contiene este workstream y permanece separado del PR histórico #105.
 Para no mover el objetivo durante la ejecución, Expertise V1 queda fijado en cuatro tramos:
 
 1. **E1-A — contrato y hueco runtime** — COMPLETADO / CERTIFICADO.
-2. **E1-B — seguridad de knobs de competencia** — ACTUAL / TEST-AUDIT-ONLY.
-3. **E1-C — integración productiva mínima de estilo + expertise**.
+2. **E1-B — seguridad de knobs de competencia** — COMPLETADO / CERTIFICADO.
+3. **E1-C — integración productiva mínima de estilo + expertise** — ACTUAL / CI PENDING.
 4. **E1-D — E2E, regresión, doble certificación y freeze**.
 
 No se añadirá E1-E por inercia. Cualquier ampliación posterior será otra feature separada.
 
-## E1-B — seguridad de knobs de competencia
+## E1-B — seguridad de knobs de competencia — CLOSED / CERTIFIED
 
 Objetivo: no convertir cualquier presupuesto existente en una dificultad sin demostrar antes que preserva Game-Ready.
 
@@ -139,6 +139,40 @@ Si estas condiciones pasan, el branching interno queda demostrado como **candida
 - no usar live Battle RNG;
 - no usar perfil como desempate oculto;
 - no modificar Battle Core.
+
+## E1-C — integración productiva mínima — IMPLEMENTED / CI PENDING
+
+E1-B quedó certificado en el checkpoint exacto:
+
+`f8053f2a655fd38b1082e6e48688b8318e17d850`
+
+Resultado literal recuperado del workflow Evaluation:
+
+- **18/18 workflows SUCCESS**;
+- **444 PASS / 0 FAIL**;
+- aggregate `TRAINER_AI_EXPERTISE_BUDGET_SAFETY_AUDIT_COMPLETE`;
+- `depth_turns=1` sigue prohibido para Game-Ready;
+- un budget depth-2 agotado sigue incompleto/fail-closed;
+- caps internos 1 y 3 conservan depth 2, determinismo y frontera anti-cheat;
+- cap 3 expande materialmente más búsqueda que cap 1;
+- `MAX_WORLDS=4` no se modifica.
+
+Implementación E1-C deliberadamente mínima:
+
+- estilos canónicos: `balanced`, `aggressive`, `cautious`, `technical`;
+- expertise V1: `limited` = cap interno 1, `full` = cap interno 3;
+- no existe un nivel intermedio inventado porque E1-B no certificó cap 2;
+- default compatible: `balanced + full`, equivalente al comportamiento Game-Ready previo;
+- depth 2, 4 mundos, 220 simulaciones por root y **todas las raíces legales externas** permanecen comunes;
+- `TrainerBattleSession` posee los IDs trusted de estilo/expertise por batalla;
+- el proposal recibe un `TrainerProfile` canónico y el cap de expertise;
+- el validador autoritativo revalida profile ID, expertise ID, cap, profundidad, completeness y legalidad exacta;
+- `TrainerGameReadyTieResolver` permanece sin cambios y no usa estilo/expertise como desempate;
+- Battle Core, scheduler/shared budget/660 y FASE34 permanecen fuera de alcance.
+
+Nueva suite focal: `TrainerExpertiseRuntimeIntegrationTestSuite`, **26 checks**. Objetivo Evaluation si no aparece ninguna regresión: **470 PASS / 0 FAIL**.
+
+E1-C no se declarará CLOSED hasta obtener la matriz normal **18/18 SUCCESS** y el total literal **470/0** sobre el SHA técnico exacto.
 
 ## Qué sigue fuera de Expertise V1
 
