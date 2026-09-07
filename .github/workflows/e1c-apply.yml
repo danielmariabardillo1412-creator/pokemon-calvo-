@@ -1,0 +1,31 @@
+name: Apply Trainer AI Expertise E1-C
+
+on:
+  push:
+    branches:
+      - feature/trainer-ai-expertise-v1
+
+permissions:
+  contents: write
+
+jobs:
+  apply-e1c:
+    if: github.event.head_commit.message == 'chore(trainer-ai): stage E1-C apply helper'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feature/trainer-ai-expertise-v1
+          fetch-depth: 0
+      - name: Apply guarded E1-C patch
+        run: python3 tools/e1c_apply.py
+      - name: Commit E1-C and remove helper
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git rm .github/workflows/e1c-apply.yml tools/e1c_apply.py
+          git add modules tests docs/project_book/TRAINER_AI_EXPERTISE.md
+          git diff --cached --check
+          git commit -m "feat(trainer-ai): integrate style and expertise runtime"
+          git push origin HEAD:feature/trainer-ai-expertise-v1
