@@ -14,6 +14,18 @@ jobs:
         with:
           ref: feature/trainer-ai-expertise-v1
           fetch-depth: 0
+      - name: Tighten guarded duplicate occurrence
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path('tools/e1c_apply.py')
+          s = p.read_text(encoding='utf-8')
+          old = '''    count = text.count(old)\n    if count != 1:\n        raise RuntimeError(f"{path}: expected exactly one match, got {count}: {old[:100]!r}")\n    write(path, text.replace(old, new, 1))\n'''
+          new = '''    count = text.count(old)\n    duplicate_report_block = (\n        path == "modules/trainer_ai/trainer_item_aware_action_proposal.gd"\n        and old.startswith('\\t\\t"root_all_legal": true,\\n\\t\\t"inner_max_actions_per_side": INNER_ACTION_CAP')\n    )\n    if count == 2 and duplicate_report_block:\n        write(path, text.replace(old, new, 1))\n        return\n    if count != 1:\n        raise RuntimeError(f"{path}: expected exactly one match, got {count}: {old[:100]!r}")\n    write(path, text.replace(old, new, 1))\n'''
+          if s.count(old) != 1:
+              raise SystemExit('helper guard function did not match exactly once')
+          p.write_text(s.replace(old, new, 1), encoding='utf-8')
+          PY
       - run: python3 tools/e1c_apply.py
       - run: |
           set -euo pipefail
