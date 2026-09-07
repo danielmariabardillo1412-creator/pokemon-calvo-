@@ -43,61 +43,111 @@ Sobre el baseline 27.1:
 6. La telemetría existente declara `profile_tiebreak_used=false` y `fase34_open=false`.
 7. `TrainerGameReadyTieResolver` no usa estilo ni expertise como desempate oculto.
 
-Conclusión provisional: **el sistema de combate está cerrado y game-ready, pero la personalización de estilo/competencia del NPC final todavía no está integrada en el proposal runtime**. Esto es una feature nueva, no una regresión del cierre anterior.
+Conclusión: **el sistema de combate está cerrado y game-ready, pero la personalización de estilo/competencia del NPC final todavía no está integrada en el proposal runtime**. Esto es una feature nueva, no una regresión del cierre anterior.
 
-## E1-A — contrato de auditoría
+## E1-A — contrato de auditoría — CLOSED / CERTIFIED
 
 Scope estricto: **TEST/AUDIT-ONLY**.
 
-Archivos previstos:
+Checkpoint exacto:
 
-- nuevo `tests/trainer_ai/trainer_expertise_contract_audit_test_suite.gd`;
-- una línea de conexión en `trainer_evaluation_corpus_test_runner.gd`;
-- sincronización documental de `docs/current/` y este cuaderno.
+`f8ca9d8ecfe7e2cd259e3affdd2fd048a73d1021`
 
-Cero producción.
+Tree:
 
-La suite debe certificar 18 puntos:
+`229aafd5186b45b7f2c5fac7c0102a19a98a5afd`
 
-- presencia de las fuentes relevantes;
-- cuatro estilos con IDs distintos;
-- pesos materialmente distintos;
-- schema de estilo sin `expertise_id`/`difficulty_id`;
-- schema sin campos de información rival;
-- roundtrip de estilo estable;
-- `StrategicSwitchingTrainerBrain` profile-aware;
-- proposal runtime fijado a `balanced`;
-- ausencia de profile/expertise en la firma del proposal;
+Resultado:
+
+- **18/18 workflows SUCCESS**;
+- Trainer Evaluation Corpus: **426 PASS / 0 FAIL**;
+- 18/18 checks nuevos de expertise PASS;
+- aggregate: `TRAINER_AI_EXPERTISE_CONTRACT_AUDIT_COMPLETE`;
+- cero archivos de producción modificados.
+
+E1-A certificó que:
+
+- los cuatro estilos existen y son materialmente distintos;
+- el schema de estilo no contiene expertise/difficulty ni información rival oculta;
+- `StrategicSwitchingTrainerBrain` ya es profile-aware;
+- el proposal Game-Ready continúa fijado a `TrainerProfile.balanced()`;
+- el proposal no recibe todavía profile/expertise;
 - `profile_tiebreak_used=false`;
 - `fase34_open=false`;
-- sesión sin estado runtime de expertise/difficulty;
-- tie resolver sin fallback de perfil/expertise;
-- aggregate final.
+- `TrainerBattleSession` no tiene estado runtime de expertise/difficulty;
+- el tie resolver Game-Ready no usa estilo/expertise como fallback.
 
-Baseline Evaluation antes de E1-A:
+PR #106 contiene este workstream y permanece separado del PR histórico #105.
 
-`408 PASS / 0 FAIL`
+## Plan de cierre fijo — 4 tramos
 
-Si los 18 checks nuevos reflejan correctamente el contrato, objetivo focal:
+Para no mover el objetivo durante la ejecución, Expertise V1 queda fijado en cuatro tramos:
 
-`426 PASS / 0 FAIL`
+1. **E1-A — contrato y hueco runtime** — COMPLETADO / CERTIFICADO.
+2. **E1-B — seguridad de knobs de competencia** — ACTUAL / TEST-AUDIT-ONLY.
+3. **E1-C — integración productiva mínima de estilo + expertise**.
+4. **E1-D — E2E, regresión, doble certificación y freeze**.
 
-Después: matriz normal **18/18 workflows SUCCESS** sobre el SHA exacto.
+No se añadirá E1-E por inercia. Cualquier ampliación posterior será otra feature separada.
 
-## Qué no se decide todavía
+## E1-B — seguridad de knobs de competencia
 
-E1-A no congela nombres ni comportamiento de niveles de dificultad. En particular no autoriza todavía:
+Objetivo: no convertir cualquier presupuesto existente en una dificultad sin demostrar antes que preserva Game-Ready.
 
-- `novice/normal/expert/master` u otra taxonomía;
-- reducir profundidad o mundos por intuición;
-- introducir errores artificiales;
-- aleatoriedad para hacer NPCs malos;
-- dar perfiles concretos a Líderes/Alto Mando/Campeón;
-- campaign/recovery policy;
+Scope: **TEST/AUDIT-ONLY / cero producción**.
+
+Suite nueva:
+
+`TrainerExpertiseBudgetSafetyAuditTestSuite`
+
+Contrato de 18 checks propios.
+
+### Hipótesis que debe resolver el gate
+
+**Profundidad**
+
+El proposal runtime exige `REQUIRED_DEPTH = 2`. Un presupuesto `depth_turns=1` puede ser determinista, pero solo completa profundidad física 1. Por tanto no puede reutilizarse como “entrenador fácil” sin romper el contrato de propuesta Game-Ready.
+
+**Simulaciones**
+
+Un presupuesto depth-2 demasiado pequeño puede agotarse antes de cerrar el horizonte. E1-B usa el fixture ya certificado con `max_simulations=3` para exigir que ese caso siga marcado incomplete/exhausted. No se congelará un mínimo universal de simulaciones a partir de un solo fixture.
+
+**Branching interno**
+
+El proposal evalúa externamente **todas las raíces legales**. El límite `max_actions_per_side` actúa dentro de cada simulación. E1-B compara cap 1 y cap 3 manteniendo depth 2 y presupuesto suficiente y exige:
+
+- horizonte completo en ambos;
+- determinismo en ambos;
+- frontera anti-cheat idéntica;
+- ausencia de live RNG en trace;
+- más simulaciones con el cap ancho;
+- estado vivo no mutado.
+
+Si estas condiciones pasan, el branching interno queda demostrado como **candidato mecánicamente seguro** para expertise. Esto todavía no demuestra por sí solo que sea el mejor modelo de dificultad humana; E1-C deberá mantener compatibilidad y E1-D comprobará comportamiento final.
+
+**World breadth**
+
+`MAX_WORLDS=4` permanece congelado en E1-B. No se reducirá por intuición porque esta sonda no demuestra todavía que bajar cobertura de mundos preserve la robustez deseada.
+
+### Barreras
+
+- no reducir `REQUIRED_DEPTH`;
+- no aceptar un presupuesto que produzca `budget_exhausted`;
+- no cambiar el conjunto externo de raíces legales;
+- no tocar observation/belief para simular dificultad;
+- no leer acción actual del jugador;
+- no usar live Battle RNG;
+- no usar perfil como desempate oculto;
+- no modificar Battle Core.
+
+## Qué sigue fuera de Expertise V1
+
+- campaign/recovery policy persistente;
 - MCTS/red neuronal;
-- modificar Battle Core.
-
-E1-B solo se abrirá a partir de evidencia E1-A verde y deberá usar el cambio productivo mínimo.
+- dificultad basada en trampas o información oculta;
+- balance definitivo de Líderes/Alto Mando/Campeón;
+- world-agent/rival de mapa completo;
+- cualquier re-apertura de C3f o Game-Ready 27.x.
 
 ## Invariantes externos
 

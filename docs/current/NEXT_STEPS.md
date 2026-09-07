@@ -6,76 +6,76 @@ Rama:
 
 `feature/trainer-ai-expertise-v1`
 
-Parent certificado:
+Baseline cerrado de entrada:
 
 `337a4f787c7da18f9cf649aea929e79912840b2a`
 
-Este workstream es una **feature nueva** posterior al cierre Game-Ready 27.1. No reabre C3f, no crea 27.2 y no invalida el cierre previo.
+PR del workstream:
 
-## Problema que se va a resolver
+`#106 — Trainer AI Expertise V1 — contract audit`
 
-El sistema distingue ya personalidad táctica mediante `TrainerProfile`:
+Trainer AI runtime y Game-Ready siguen cerrados. Expertise V1 es una feature separada.
 
-- `balanced`;
-- `aggressive`;
-- `cautious`;
-- `technical`.
+## Plan fijo — 4/4
 
-Pero el proposal autónomo final usa actualmente `TrainerProfile.balanced()` de forma fija y no existe una capa runtime separada de `expertise`/`difficulty`.
+1. E1-A contrato/hueco runtime — **COMPLETADO / CERTIFICADO**.
+2. E1-B seguridad de knobs — **ACTUAL / TEST-AUDIT-ONLY**.
+3. E1-C integración mínima de estilo + expertise.
+4. E1-D E2E/regresión/doble certificación/freeze.
 
-La regla de diseño permanece:
+No añadir una quinta tranche por inercia.
 
-**estilo != competencia**.
+## E1-A certificado
 
-- estilo = qué decisiones prefiere el entrenador;
-- expertise = qué tan bien utiliza las mismas herramientas legítimas.
+SHA:
 
-Ningún nivel de dificultad puede obtener información oculta adicional.
+`f8ca9d8ecfe7e2cd259e3affdd2fd048a73d1021`
 
-## E1-A — auditoría de contrato (ACTUAL)
+Resultado:
+
+- **18/18 workflows SUCCESS**;
+- Evaluation: **426 PASS / 0 FAIL**;
+- aggregate `TRAINER_AI_EXPERTISE_CONTRACT_AUDIT_COMPLETE`;
+- cero producción.
+
+Hallazgo confirmado:
+
+- los perfiles de estilo existen y son distintos;
+- el runtime proposal sigue usando `TrainerProfile.balanced()` fijo;
+- no existe expertise/difficulty runtime;
+- estilo y expertise siguen sin confundirse;
+- anti-cheat y tie resolver no dependen de difficulty.
+
+## E1-B — seguridad de knobs
 
 Scope: **TEST/AUDIT-ONLY**.
 
-Debe demostrar:
+Debe clasificar parámetros antes de usarlos en producción:
 
-1. que los cuatro estilos existen y son materialmente distintos;
-2. que el schema de `TrainerProfile` no contiene competencia ni información rival oculta;
-3. que `StrategicSwitchingTrainerBrain` ya puede recibir un perfil;
-4. que `TrainerItemAwareActionProposal` final está fijado a `balanced`;
-5. que el proposal no recibe todavía `expertise` ni perfil desde `TrainerBattleSession`;
-6. que la telemetría mantiene `profile_tiebreak_used=false` y `fase34_open=false`;
-7. que el tie resolver Game-Ready no introduce personalidad como desempate oculto;
-8. que el hueco de expertise es real antes de modificar producción.
+### Prohibido como shortcut
 
-Gate focal esperado tras conectar la nueva suite:
+- `depth_turns=1`: el proposal Game-Ready exige profundidad 2;
+- presupuestos que terminen con `budget_exhausted=true` o horizonte incompleto.
 
-- Evaluation anterior: 408 PASS / 0 FAIL;
-- nueva auditoría: 18 checks;
-- objetivo si todo coincide con el contrato: **426 PASS / 0 FAIL**.
+### Candidato a demostrar
 
-Después se exigirá la matriz completa normal de 18 workflows sobre el SHA exacto.
+- `max_actions_per_side` como branching interno: comparar cap 1 vs cap 3 con depth 2, determinismo, horizonte completo y misma frontera anti-cheat.
 
-## Después de E1-A
+### No autorizado todavía
 
-Solo si la auditoría queda verde se diseñará E1-B, con el cambio productivo mínimo necesario para introducir competencia separada de estilo.
+- bajar `MAX_WORLDS=4`;
+- fijar un mínimo universal de simulaciones;
+- errores artificiales/aleatoriedad para entrenadores débiles.
 
-Todavía NO decidir por adelantado:
+La nueva suite debe aportar 18 checks. Si pasa completa, Evaluation debería pasar de 426/0 a **444/0**.
 
-- nombres finales de niveles de expertise;
-- profundidad/budget exactos por nivel;
-- errores artificiales o aleatoriedad de entrenadores débiles;
-- perfiles por Líder/Alto Mando/Campeón;
-- integración de campaign/recovery;
-- MCTS/red neuronal.
+## Barreras permanentes
 
-Esos puntos requieren evidencia y tests antes de convertirse en política.
-
-## Barreras
-
-- misma frontera anti-cheat para todos los niveles;
-- misma legalidad autoritativa de Battle Core;
-- no leer la acción actual elegida por el jugador;
-- no usar live Battle RNG como atajo de dificultad;
-- no debilitar completeness/depth guards para hacer a un entrenador “más fácil”;
-- no mergear PR #105;
-- no mover `main` de `641d4b1fb0bcf964205d616e96f198f05d702197`.
+- todas las dificultades comparten el mismo action-space legal;
+- no leer acción actual del jugador;
+- no conceder movimientos rivales ocultos;
+- no usar RNG privado/live de Battle Core;
+- no relajar completeness guards;
+- profile no se usa como tiebreak oculto;
+- PR #105 permanece OPEN / unmerged;
+- `main` permanece exactamente en `641d4b1fb0bcf964205d616e96f198f05d702197`.
