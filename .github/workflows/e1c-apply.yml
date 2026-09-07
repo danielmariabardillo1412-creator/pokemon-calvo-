@@ -31,7 +31,7 @@ jobs:
           set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git rm .github/workflows/e1c-apply.yml tools/e1c_apply.py
+          git rm -f .github/workflows/e1c-apply.yml tools/e1c_apply.py
           git add modules tests docs/project_book/TRAINER_AI_EXPERTISE.md
           git diff --cached --check
           git commit -m "feat(trainer-ai): integrate style and expertise runtime"
