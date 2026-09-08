@@ -16,7 +16,6 @@ var _director: OverworldEncounterDirector = null
 var _session: WildAdventureSession = null
 var _trainer_session: TrainerBattleSession = null
 var _trainer_campaign_owner: TrainerCampaignRosterOwner = null
-var _trainer_demo_completed: bool = false
 var _catalogs: DefinitionCatalog = null
 var _capture_rng: RandomNumberGenerator = null
 var _escape_rng: RandomNumberGenerator = null
@@ -107,8 +106,6 @@ func trainer_trigger_contains(world_position: Vector2) -> bool:
 
 
 func start_demo_trainer_battle() -> bool:
-	if _trainer_demo_completed:
-		return false
 	if _trainer_session == null or _trainer_campaign_owner == null or not _trainer_campaign_owner.is_ready() or trainer_battle_presentation == null:
 		return false
 	if _session != null and _session.has_active_battle():
@@ -130,6 +127,26 @@ func start_demo_trainer_battle() -> bool:
 	if not trainer_battle_presentation.open_for_active_battle():
 		status_label.text = "El combate de entrenador ha empezado, pero no se ha podido abrir la pantalla"
 		return false
+	return true
+
+
+# P1-D explicit inter-battle campaign action. It is deliberately unavailable while
+# either battle seam is active or while the trainer session is waiting for its
+# completion/reset boundary. Nothing invokes recovery automatically after settlement.
+func recover_demo_trainer_full() -> bool:
+	if _trainer_campaign_owner == null or not _trainer_campaign_owner.is_ready():
+		return false
+	if _session != null and _session.has_active_battle():
+		return false
+	if _trainer_session != null and _trainer_session.status != TrainerBattleSession.READY:
+		return false
+	var trainer_roster := _trainer_campaign_owner.roster_for_battle()
+	if trainer_roster.is_empty():
+		return false
+	for creature in trainer_roster:
+		if creature == null or not _trainer_campaign_owner.recover_creature_full(creature.instance_id):
+			return false
+	status_label.text = "Rival técnico recuperado | Revancha disponible"
 	return true
 
 
@@ -162,7 +179,6 @@ func _on_battle_closed(reason: StringName) -> void:
 
 
 func _on_trainer_battle_closed(reason: StringName) -> void:
-	_trainer_demo_completed = true
 	player.movement_enabled = true
 	status_label.text = "Combate de entrenador terminado: %s | Exploración reanudada" % SpanishGameText.completion_reason(reason)
 
