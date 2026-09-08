@@ -1,0 +1,91 @@
+name: Combat Placeholder Windows Build
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: combat-placeholder-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Smoke test and export one-file Windows EXE
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Godot 4.7 with export templates
+        uses: chickensoft-games/setup-godot@v2.4.1
+        with:
+          version: 4.7.0
+          use-dotnet: false
+          include-templates: true
+
+      - name: Verify Godot version
+        shell: bash
+        run: |
+          set -euo pipefail
+          godot --version | tee godot-version.log
+          godot --version | grep -E '^4\.7([\.-]|$)'
+
+      - name: Import project
+        shell: bash
+        run: |
+          set -euo pipefail
+          godot --headless --path . --import 2>&1 | tee placeholder-import.log
+
+      - name: Smoke test combat placeholder and canonical data file
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 20s godot --headless --path . --quit-after 5 res://scenes/debug/combat_placeholder.tscn 2>&1 | tee placeholder-smoke.log
+          grep -E 'COMBAT_PLACEHOLDER_READY species=[1-9][0-9]* moves=[1-9][0-9]* source=res://data/normalized/pokemon_api.json' placeholder-smoke.log
+          if grep -E 'SCRIPT ERROR|Parse Error|COMBAT_PLACEHOLDER_DATA_ERROR' placeholder-smoke.log; then
+            echo 'Placeholder smoke test found a script/data error.' >&2
+            exit 1
+          fi
+
+      - name: Point disposable CI project at placeholder scene
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          path = Path('project.godot')
+          text = path.read_text(encoding='utf-8')
+          old = 'run/main_scene="res://scenes/overworld/technical_overworld.tscn"'
+          new = 'run/main_scene="res://scenes/debug/combat_placeholder.tscn"'
+          if old not in text:
+              raise SystemExit('Expected main_scene line not found; refusing silent export drift')
+          path.write_text(text.replace(old, new, 1), encoding='utf-8')
+          print(new)
+          PY
+
+      - name: Export single-file Windows build
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p build
+          godot --headless --path . --export-release "Combat Placeholder Windows" build/PokemonCalvo-Combat-Placeholder.exe 2>&1 | tee placeholder-export.log
+          test -s build/PokemonCalvo-Combat-Placeholder.exe
+          if [ -e build/PokemonCalvo-Combat-Placeholder.pck ]; then
+            echo 'Unexpected external PCK: export must remain a single executable.' >&2
+            exit 1
+          fi
+          ls -lh build/PokemonCalvo-Combat-Placeholder.exe
+
+      - name: Upload clickable Windows placeholder
+        uses: actions/upload-artifact@v4
+        with:
+          name: PokemonCalvo-Combat-Placeholder-Windows
+          path: build/PokemonCalvo-Combat-Placeholder.exe
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 14
