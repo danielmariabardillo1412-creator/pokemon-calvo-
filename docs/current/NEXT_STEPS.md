@@ -1,45 +1,78 @@
 # SIGUIENTE TRABAJO
 
-## Paso inmediato — cerrar PR #96
+## Trainer AI — ningún tramo obligatorio activo
 
-La reorganización documental está funcionalmente validada en el checkpoint:
+**Trainer AI Campaign Persistence V1 está CLOSED / CERTIFIED / FROZEN.**
 
-`ee22bd5bcb5c57f0203ba2a95d19775ba01d5cb0`
+No existe P1-E y no debe abrirse una quinta tranche por inercia.
 
-con **18/18 workflows SUCCESS**.
+Los cuatro tramos previstos están terminados:
 
-Después de ese ciclo se completó la auditoría final de documentación formal y se corrigieron dos fuentes todavía obsoletas (`ARCHITECTURE.md` y `DATA_FOUNDATION_V3.md`), preservando sus versiones originales en historial.
+1. P1-A ownership/persistence boundary audit — CLOSED / CERTIFIED.
+2. P1-B persistent-state + recovery/replacement contract — CLOSED / CERTIFIED.
+3. P1-C minimal production integration — CLOSED / CERTIFIED.
+4. P1-D rematch/cross-battle E2E + regression — CLOSED / CERTIFIED.
 
-Como esa corrección mueve el SHA, el nuevo HEAD final debe:
+## Checkpoint técnico final
 
-1. ejecutar los 18 workflows normales;
-2. obtener **18/18 SUCCESS** sobre ese mismo SHA;
-3. mantener un diff frente a `b4f6adc200bef18f8ac51b9144f2f9a838f464fd` limitado a `README.md` y `docs/**`;
-4. cerrar PR #96 **sin merge**;
-5. convertirse en el parent exacto del siguiente workstream.
+`b314b8bb81db439e3063433644c691181ed39ef4`
 
-No hacer un commit posterior para registrar el cierre del PR.
+Parent documental certificado de P1-D:
 
-## Después — Trainer AI
+`bf604176a66abde8ad475dd54f7375420c21c06b`
 
-Abrir la siguiente rama desde el HEAD final certificado de #96 y realizar primero una auditoría corta de la arquitectura existente.
+Evidencia final:
 
-Dirección ya confirmada:
+- P1-D: **46/46 PASS**;
+- Trainer Evaluation Corpus: **628 PASS / 0 FAIL**;
+- Godot 4.7: SUCCESS;
+- Team Composition: SUCCESS;
+- full technical CI: **18/18 workflows SUCCESS**.
 
-- `TrainerProfile` ya cubre **estilo** (`balanced`, `aggressive`, `cautious`, `technical`);
-- la siguiente capa debe representar **competencia/expertise** por separado;
-- los entrenadores serios deben construir sobre `StrategicSwitchingTrainerBrain`;
-- reutilizar Trainer Loadouts y Trainer Team Composition;
-- mantener exactamente la misma frontera de información legítima para todos los niveles;
-- demostrar diferencias de competencia mediante tests/corpus, nunca mediante hidden information;
-- no aumentar depth/branching ni introducir MCTS/red neuronal sin un límite real demostrado.
+Secuencia certificada:
 
-Candidatos narrativos a estudiar, no todavía congelados como contrato: entrenador ordinario, entrenador competente, Líder, Alto Mando, Campeón/boss-tier.
+`KO persistente -> rematch bloqueado -> recovery explícito -> misma CreatureInstance -> segundo combate real`
 
-Referencia operativa:
+La revancha inmediata sin recovery falla con `no_available_opponent_creature`. Recovery no es automático y combat AI permanece aislado de campaign/recovery/replacement.
 
-`docs/project_book/TRAINER_AI.md`.
+## Scope congelado
 
-## Más adelante
+No reabrir como parte de Campaign Persistence V1:
 
-La sustitución/eliminación de la `main` antigua se realizará **después** de esta reorganización y de forma separada. No mezclar ese cambio de rama principal con FASE34 ni con la certificación documental.
+- Save V2;
+- persistencia completa de BattleState;
+- Battle Core;
+- search/proposal/brain/tie resolver;
+- FASE34;
+- scheduler/shared-budget/660;
+- `campaign_snapshot` Game-Ready;
+- auto-heal post-battle;
+- replacement silencioso de Pokémon KO.
+
+## Qué puede venir después
+
+No hay una tarea Trainer AI obligatoria preseleccionada.
+
+Si más adelante se desea ampliar al rival, debe abrirse un **workstream separado** con objetivo y contrato propios. Ejemplos opcionales, no blockers:
+
+- estrategia de campaña a largo plazo;
+- memoria estratégica extendida entre encuentros;
+- MCTS u otra planificación más profunda;
+- aprendizaje continuo o adaptación persistente;
+- persistencia en disco de rivales/campaña;
+- progresión autónoma del rival fuera de combate.
+
+Ninguna de esas features forma parte del cierre actual ni debe iniciarse automáticamente.
+
+## Cierre de snapshot pendiente únicamente de protocolo
+
+El PR #107 es un PR de snapshot y debe cerrarse **sin merge** cuando el HEAD documental final de este freeze haya pasado 18/18 workflows SUCCESS.
+
+Después de ese cierre no queda trabajo funcional pendiente en Campaign Persistence V1.
+
+## Invariantes
+
+- `main` = `641d4b1fb0bcf964205d616e96f198f05d702197`;
+- PR #105 OPEN / unmerged;
+- PR #106 CLOSED / not merged;
+- PR #107 se cierra sin merge tras el gate documental final.

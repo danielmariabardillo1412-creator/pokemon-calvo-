@@ -10,6 +10,23 @@ func _initialize() -> void:
 
 func _run() -> void:
 	TrainerEvaluationCorpusTestSuite.new().run(Callable(self, "_check"))
+	TrainerBattleSessionActionProposalAuditTestSuite.new().run(Callable(self, "_check"))
+	TrainerBattleSessionAuthoritativeSubstitutionAuditTestSuite.new().run(Callable(self, "_check"))
+	TrainerBattleSessionMultiTurnAuthoritativeSubstitutionAuditTestSuite.new().run(Callable(self, "_check"))
+	TrainerBattleSessionAutonomousSideBSubmissionApiAuditTestSuite.new().run(Callable(self, "_check"))
+	TrainerBattleSessionTerminalHorizonCompletenessAuditTestSuite.new().run(Callable(self, "_check"))
+	TrainerBattleSessionCrossBattleResetLifecycleAuditTestSuite.new().run(Callable(self, "_check"))
+	await TrainerBattleRuntimeIntegrationTestSuite.new().run(Callable(self, "_check"), self)
+	await TrainerAIRuntimeFinalClosureTestSuite.new().run(Callable(self, "_check"), self)
+	TrainerGameReadyHardeningTestSuite.new().run(Callable(self, "_check"))
+	TrainerExpertiseContractAuditTestSuite.new().run(Callable(self, "_check"))
+	TrainerExpertiseBudgetSafetyAuditTestSuite.new().run(Callable(self, "_check"))
+	TrainerExpertiseRuntimeIntegrationTestSuite.new().run(Callable(self, "_check"))
+	TrainerExpertiseBattleE2EClosureTestSuite.new().run(Callable(self, "_check"))
+	TrainerCampaignPersistenceBoundaryAuditTestSuite.new().run(Callable(self, "_check"))
+	TrainerCampaignPersistenceContractAuditTestSuite.new().run(Callable(self, "_check"))
+	TrainerCampaignPersistenceOwnerIntegrationTestSuite.new().run(Callable(self, "_check"))
+	await TrainerCampaignPersistenceRematchE2EClosureTestSuite.new().run(Callable(self, "_check"), self)
 	print("\n=== TRAINER EVALUATION CORPUS RESULT: %d PASS / %d FAIL ===" % [_passed, _failed])
 	quit(0 if _failed == 0 else 1)
 

@@ -765,6 +765,82 @@ def _require_plus_minus_side_stats_data_only(
         raise RuntimeError(f"DATA V3 Plus/Minus legacy stat changes mismatch for {sid}: {generated_stats}")
 
 
+
+def _retarget_damage_user_stat_subtrees(specs: list[dict]) -> bool:
+    """Retarget stat-change branches to SELF and report whether subtree contains one."""
+    subtree_has_stage = False
+    for spec in specs:
+        children = spec.get("children") or []
+        child_has_stage = False
+        if isinstance(children, list):
+            child_has_stage = _retarget_damage_user_stat_subtrees(children)
+        if spec.get("kind") == "modify_stat_stage":
+            spec["target"] = "self"
+            subtree_has_stage = True
+        elif child_has_stage:
+            # The legacy converter wraps probabilistic stat changes in CHANCE and
+            # copied the same false target onto that wrapper. It is execution-neutral
+            # today, but keeping the complete branch semantically coherent prevents
+            # later consumers from reading a contradictory target.
+            if spec.get("kind") == "chance":
+                spec["target"] = "self"
+            subtree_has_stage = True
+    return subtree_has_stage
+
+
+def _repair_damage_user_stat_family(m: dict, specs: list[dict], sid: str) -> None:
+    """Source-audit and repair PokeAPI move-category damage-raise stat targets.
+
+    In PokeAPI this category means a damaging move whose stat_changes belong to
+    the user. The move's general target still describes who receives DAMAGE, so
+    deriving stat target from move.target is invalid (e.g. Close Combat,
+    Superpower, Overheat, Metal Claw, Flame Charge).
+    """
+    meta = m.get("meta") or {}
+    category = (meta.get("category") or {}).get("name")
+    if category != "damage-raise":
+        return
+
+    damage_class = (m.get("damage_class") or {}).get("name")
+    power = int(m.get("power") or 0)
+    source_changes: list[tuple[str, int]] = []
+    for change in m.get("stat_changes") or []:
+        source_name = (change.get("stat") or {}).get("name")
+        stat_id = _legacy.STAT_MAP.get(source_name)
+        if stat_id is None:
+            raise RuntimeError(
+                f"DATA V3 damage-user-stat family has unmapped stat for {sid}: {source_name}"
+            )
+        source_changes.append((str(stat_id), int(change.get("change", 0))))
+
+    if damage_class not in ("physical", "special") or power <= 0 or not source_changes:
+        raise RuntimeError(
+            f"DATA V3 damage-user-stat source shape changed for {sid}: "
+            f"class={damage_class} power={power} changes={source_changes}"
+        )
+
+    stages = _matching_effects(specs, "modify_stat_stage")
+    generated_changes = sorted(
+        (str(stage.get("stat_id", "")), int(stage.get("value", 0)))
+        for stage in stages
+    )
+    if generated_changes != sorted(source_changes):
+        raise RuntimeError(
+            f"DATA V3 damage-user-stat generated changes mismatch for {sid}: "
+            f"source={source_changes} generated={generated_changes}"
+        )
+    if any(stage.get("target") not in ("opponent", "self") for stage in stages):
+        raise RuntimeError(
+            f"DATA V3 damage-user-stat unexpected generated target for {sid}: {stages}"
+        )
+
+    _retarget_damage_user_stat_subtrees(specs)
+    repaired = _matching_effects(specs, "modify_stat_stage", "self")
+    if len(repaired) != len(source_changes):
+        raise RuntimeError(
+            f"DATA V3 damage-user-stat repair incomplete for {sid}: {specs}"
+        )
+
 def generate_move_specs(m: dict, contact_set: set):
     """V3 wrapper around the archived move-effect converter.
 
@@ -775,6 +851,8 @@ def generate_move_specs(m: dict, contact_set: set):
         _legacy.generate_move_specs(m, contact_set)
     )
     sid = _legacy.slug(str(m.get("name", "")))
+
+    _repair_damage_user_stat_family(m, specs, sid)
 
     if sid in _SIMPLE_SELF_HEALS:
         _require_single_self_heal(specs, sid, 5000)

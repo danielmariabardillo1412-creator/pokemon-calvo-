@@ -1,18 +1,21 @@
 extends Node2D
 
-# Asset-free technical map for FASE 18. It proves the runtime seam:
-# physical movement -> encounter -> real Battle -> visual Battle adapter -> authoritative player
-# command (move/switch/capture/run) -> settlement/capture/flee -> return to exploration.
-# Runtime consumes normalized canonical data; import remains build/QA only.
+# Asset-free executable integration map.
+# Wild battles keep their original WildAdventureSession/presentation seam.
+# Trainer battles use a separate TrainerBattleSession + TrainerBattlePresentationController seam.
 
 const RUNTIME_DATA_PATH := "res://data/normalized/pokemon_api.json"
+const TECHNICAL_TRAINER_ID := &"technical_trainer"
 
 @onready var player: OverworldPlayer = $Player
 @onready var status_label: Label = $CanvasLayer/StatusLabel
 @onready var battle_presentation: BattlePresentationController = $CanvasLayer/BattlePresentation
+@onready var trainer_battle_presentation: TrainerBattlePresentationController = $CanvasLayer/TrainerBattlePresentation
 
 var _director: OverworldEncounterDirector = null
 var _session: WildAdventureSession = null
+var _trainer_session: TrainerBattleSession = null
+var _trainer_campaign_owner: TrainerCampaignRosterOwner = null
 var _catalogs: DefinitionCatalog = null
 var _capture_rng: RandomNumberGenerator = null
 var _escape_rng: RandomNumberGenerator = null
@@ -21,9 +24,11 @@ var _escape_rng: RandomNumberGenerator = null
 func _ready() -> void:
 	player.step_completed.connect(_on_player_step_completed)
 	battle_presentation.battle_closed.connect(_on_battle_closed)
+	trainer_battle_presentation.battle_closed.connect(_on_trainer_battle_closed)
 	if _bootstrap_demo():
 		battle_presentation.configure(_session, _catalogs, _capture_rng, _escape_rng)
-		status_label.text = "Mundo técnico | Combate: movimientos + cambio + captura + huida"
+		trainer_battle_presentation.configure(_trainer_session, _catalogs)
+		status_label.text = "Mundo técnico | Salvaje: mover/cambiar/capturar/huir | Entrenador: mover/cambiar + IA"
 	else:
 		player.movement_enabled = false
 		status_label.text = "No se ha podido iniciar el mundo"
@@ -33,9 +38,14 @@ func is_demo_ready() -> bool:
 	return (
 		_director != null
 		and _session != null
+		and _trainer_session != null
+		and _trainer_campaign_owner != null
+		and _trainer_campaign_owner.is_ready()
 		and _catalogs != null
 		and _capture_rng != null
 		and _escape_rng != null
+		and battle_presentation != null
+		and trainer_battle_presentation != null
 	)
 
 
@@ -43,8 +53,16 @@ func has_active_demo_battle() -> bool:
 	return _session != null and _session.has_active_battle()
 
 
+func has_active_demo_trainer_battle() -> bool:
+	return _trainer_session != null and _trainer_session.has_active_battle()
+
+
 func is_battle_presentation_visible() -> bool:
 	return battle_presentation != null and battle_presentation.is_presenting_battle()
+
+
+func is_trainer_battle_presentation_visible() -> bool:
+	return trainer_battle_presentation != null and trainer_battle_presentation.is_presenting_battle()
 
 
 func demo_inventory_quantity(item_id: StringName) -> int:
@@ -74,7 +92,71 @@ func zone_at_position(world_position: Vector2) -> StringName:
 	return &""
 
 
+func trainer_trigger_contains(world_position: Vector2) -> bool:
+	var trigger := get_node_or_null("TrainerTrigger") as Area2D
+	if trigger == null:
+		return false
+	var collision := trigger.get_node_or_null("CollisionShape2D") as CollisionShape2D
+	if collision == null or collision.shape == null or not (collision.shape is RectangleShape2D):
+		return false
+	var rectangle := collision.shape as RectangleShape2D
+	var local := trigger.to_local(world_position)
+	var half := rectangle.size * 0.5
+	return absf(local.x) <= half.x and absf(local.y) <= half.y
+
+
+func start_demo_trainer_battle() -> bool:
+	if _trainer_session == null or _trainer_campaign_owner == null or not _trainer_campaign_owner.is_ready() or trainer_battle_presentation == null:
+		return false
+	if _session != null and _session.has_active_battle():
+		return false
+	if _trainer_session.has_active_battle():
+		return false
+	if _trainer_session.status == TrainerBattleSession.COMPLETED:
+		if not _trainer_session.reset_after_completion():
+			return false
+	var trainer_roster := _trainer_campaign_owner.roster_for_battle()
+	if trainer_roster.is_empty():
+		return false
+	if not _trainer_session.begin_battle(TECHNICAL_TRAINER_ID, trainer_roster, 12007):
+		status_label.text = "No se ha podido iniciar el combate de entrenador: %s" % _trainer_session.last_error
+		return false
+
+	player.movement_enabled = false
+	status_label.text = "¡ENTRENADOR! | Rival técnico"
+	if not trainer_battle_presentation.open_for_active_battle():
+		status_label.text = "El combate de entrenador ha empezado, pero no se ha podido abrir la pantalla"
+		return false
+	return true
+
+
+# P1-D explicit inter-battle campaign action. It is deliberately unavailable while
+# either battle seam is active or while the trainer session is waiting for its
+# completion/reset boundary. Nothing invokes recovery automatically after settlement.
+func recover_demo_trainer_full() -> bool:
+	if _trainer_campaign_owner == null or not _trainer_campaign_owner.is_ready():
+		return false
+	if _session != null and _session.has_active_battle():
+		return false
+	if _trainer_session != null and _trainer_session.status != TrainerBattleSession.READY:
+		return false
+	var trainer_roster := _trainer_campaign_owner.roster_for_battle()
+	if trainer_roster.is_empty():
+		return false
+	for creature in trainer_roster:
+		if creature == null or not _trainer_campaign_owner.recover_creature_full(creature.instance_id):
+			return false
+	status_label.text = "Rival técnico recuperado | Revancha disponible"
+	return true
+
+
 func _on_player_step_completed(world_position: Vector2) -> void:
+	# A single apply_motion() can cross multiple step boundaries. Once either seam starts a battle,
+	# ignore any remaining step signals from that same physical movement.
+	if (_trainer_session != null and _trainer_session.has_active_battle()) or (_session != null and _session.has_active_battle()):
+		return
+	if trainer_trigger_contains(world_position) and start_demo_trainer_battle():
+		return
 	if _director == null:
 		return
 	var zone_id := zone_at_position(world_position)
@@ -96,6 +178,11 @@ func _on_battle_closed(reason: StringName) -> void:
 	status_label.text = "Combate terminado: %s | Exploración reanudada" % SpanishGameText.completion_reason(reason)
 
 
+func _on_trainer_battle_closed(reason: StringName) -> void:
+	player.movement_enabled = true
+	status_label.text = "Combate de entrenador terminado: %s | Exploración reanudada" % SpanishGameText.completion_reason(reason)
+
+
 func _bootstrap_demo() -> bool:
 	var normalized := _load_json(RUNTIME_DATA_PATH)
 	if normalized.is_empty():
@@ -111,8 +198,10 @@ func _bootstrap_demo() -> bool:
 	var rules := ProgressionRuleset.new()
 	var starter_species := _catalogs.species_catalog.get_by_id(&"bulbasaur")
 	var bench_species := _catalogs.species_catalog.get_by_id(&"charmander")
-	if starter_species == null or bench_species == null:
+	var trainer_species := _catalogs.species_catalog.get_by_id(&"squirtle")
+	if starter_species == null or bench_species == null or trainer_species == null:
 		return false
+
 	var starter_rng := RandomNumberGenerator.new()
 	starter_rng.seed = 12001
 	var starter := CreatureFactory.create(
@@ -133,17 +222,36 @@ func _bootstrap_demo() -> bool:
 		bench_rng,
 		{"instance_id": &"technical_bench"},
 	)
-	if starter == null or bench == null:
+	var trainer_rng := RandomNumberGenerator.new()
+	trainer_rng.seed = 12008
+	var trainer_creature := CreatureFactory.create(
+		trainer_species,
+		4,
+		_catalogs,
+		rules,
+		trainer_rng,
+		{"instance_id": &"technical_trainer_squirtle"},
+	)
+	if starter == null or bench == null or trainer_creature == null:
 		return false
+	if _catalogs.move(&"tackle") == null:
+		return false
+	var trainer_slots: Array[BattleMoveSlot] = [BattleMoveSlot.new(&"tackle", 35, 35)]
+	var trainer_move_ids: Array[StringName] = [&"tackle"]
+	trainer_creature.moveset = trainer_slots
+	trainer_creature.move_ids = trainer_move_ids
+	var trainer_roster: Array[CreatureInstance] = [trainer_creature]
+	_trainer_campaign_owner = TrainerCampaignRosterOwner.new()
+	if not _trainer_campaign_owner.configure(TECHNICAL_TRAINER_ID, trainer_roster):
+		return false
+
 	var collection := PlayerCollection.new()
 	if not collection.party.add_creature(starter):
 		return false
 	# Second technical party member exists only to exercise elective Switch in the executable slice.
-	# It is a QA fixture, not a decision about the final starter roster or game balance.
 	if not collection.party.add_creature(bench):
 		return false
-	# Small technical inventory only. This is not economy/balance data; it exists so the executable
-	# slice can exercise both non-guaranteed and guaranteed capture paths without external assets.
+	# Small technical inventory belongs only to the Wild seam.
 	if not collection.inventory.add(&"poke_ball", 3):
 		return false
 	if not collection.inventory.add(&"great_ball", 1):
@@ -152,6 +260,7 @@ func _bootstrap_demo() -> bool:
 		return false
 
 	_session = WildAdventureSession.new(collection, _catalogs, rules)
+	_trainer_session = TrainerBattleSession.new(collection, _catalogs, rules)
 	var encounter_rng := RandomNumberGenerator.new()
 	encounter_rng.seed = 12002
 	_director = OverworldEncounterDirector.new(_session, encounter_rng, 12003)

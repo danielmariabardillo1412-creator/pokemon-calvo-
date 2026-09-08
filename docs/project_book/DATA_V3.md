@@ -166,3 +166,40 @@ Ahí están el antiguo notebook 02 y los notebooks 06–25. Se consultan para au
 Documento formal del pipeline/arquitectura:
 
 `docs/architecture/DATA_FOUNDATION_V3.md`
+
+## 11. Corrección semántica 2026-09-02 — stat changes de ataques que afectan al usuario
+
+Durante la calibración C2e-b de Trainer AI se detectó una regresión real del contrato DATA V3/Battle Core. Movimientos dañinos como `close_combat`, `superpower` y `hammer_arm` aparecían como control sobre el rival porque el conversor legado derivaba el objetivo de todos los `stat_changes` desde el `target` general del movimiento.
+
+La fuente PokeAPI demuestra que ese criterio es inválido para la familia `move-category/7` (`damage-raise`): el golpe puede dirigirse a `selected-pokemon`, mientras los cambios secundarios de stats pertenecen al **usuario**. La categoría inmutable contiene **28 movimientos**.
+
+Corrección canónica aplicada en la rama de Trainer AI:
+
+- commit de reparación/regeneración: `a2341d4f77f22f54b89916fd8e91ac7b26d2c8d5`;
+- `tools/pokeapi_adapter.py` audita explícitamente `meta.category == "damage-raise"`, verifica que el paquete de `stat_changes` generado coincide con la fuente y retargetea solo esos subárboles a `self`;
+- se regeneraron `data/raw/pokemon_api.json` y `data/normalized/pokemon_api.json` desde el snapshot inmutable; no se editaron a mano;
+- `DataV3DamageUserStatTargetTestSuite` ejecuta `close_combat` a través de `AuthoritativeBattleServer` y verifica que Defense/SpDef bajan en el actor y no en el rival;
+- la suite ampliada lee directamente `data/api/v2/move-category/7/index.json` y exige que los **28/28** movimientos normalizados estén presentes, tengan stat changes ejecutables y que todos sus `MODIFY_STAT_STAGE` apunten a `SELF`.
+
+La infraestructura temporal usada únicamente para materializar los JSON regenerados fue eliminada del árbol antes de la certificación final. Esta corrección **no amplía el alcance de DATA V3 ni aumenta contadores**: repara la semántica ejecutable de un contrato ya declarado `RUNTIME_SUPPORTED`.
+
+### Recertificación
+
+HEAD exacto de ingeniería + limpieza + regresión + documentación:
+
+`816c8ab1d1a9b0936ccf07bf454b94a13d2a257e`
+
+Resultado sobre ese SHA:
+
+- **18/18 workflows SUCCESS**;
+- `Data Foundation V3 Tests`: SUCCESS;
+- DATA domain: **567 PASS / 0 FAIL**;
+- Spanish/type/runtime: **314 PASS / 0 FAIL**;
+- categoría `damage-raise`: **28/28** presentes, con stat changes y todos apuntando a `SELF`;
+- ejecución real de Close Combat: baja Defense/SpDef del actor, no del rival;
+- regeneración canónica: 1.025 especies, 326 formas, 18 tipos, 919 movimientos, 373 habilidades, 2.222 objetos, 61.102 learnset entries y 554 evoluciones;
+- broken references: **0**;
+- rejected definitions: **0**;
+- provenance inmutable preservada en `2f218ec3765c01c894a42bbbd074f15ddf3f32d1`.
+
+Conclusión: la corrección semántica queda **RECERTIFICADA** en `816c8ab1...`. DATA V3 vuelve a estado cerrado; la investigación posterior pertenece a la calibración Trainer AI, no a una nueva reapertura de DATA V3 salvo que aparezca otra regresión demostrable.

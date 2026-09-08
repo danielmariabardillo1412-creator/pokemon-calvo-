@@ -1,148 +1,169 @@
 # ESTADO ACTUAL DEL PROYECTO
 
-## Baseline funcional certificado
+## Baseline Trainer AI certificado
 
-Último baseline funcional certificado anterior a la reorganización documental:
+Trainer AI queda cerrado en sus sistemas obligatorios actuales:
 
-- PR #95 — `DATA V3 — final end-to-end certification`
-- rama: `audit/data-v3-end-to-end-closure-v1`
-- HEAD final: `b4f6adc200bef18f8ac51b9144f2f9a838f464fd`
-- estado: **cerrado sin merge**
-- validación: **18/18 workflows SUCCESS** sobre el HEAD final.
+- Trainer AI runtime system 26.67 — **CLOSED / COMPLETED**;
+- Trainer AI Game-Ready 27.1 — **CLOSED / VALIDATED**;
+- Trainer AI Expertise V1 — **CLOSED / CERTIFIED / FROZEN**;
+- Trainer AI Campaign Persistence V1 — **CLOSED / CERTIFIED / FROZEN**.
 
-## Reorganización documental — PR #96
+No hay una tranche Trainer AI obligatoria activa después de P1-D.
 
-Rama:
+## DATA V3
 
-`chore/documentation-consolidation-v1`
+Estado: **CERRADO / CERTIFICADO**.
 
-Parent exacto:
+Contrato canónico preservado:
 
-`b4f6adc200bef18f8ac51b9144f2f9a838f464fd`
+- 1.025 especies;
+- 326 formas;
+- 18 tipos runtime;
+- 919 movimientos;
+- 373 habilidades;
+- 2.222 objetos;
+- 61.102 entradas de learnset;
+- 554 evoluciones.
 
-PR:
+No reabrir DATA V3 para subir contadores ni alterar fuentes inmutables.
 
-#96 — `Docs — consolidar estado vivo, cuadernos e historial`
+## Trainer AI de combate — cerrado
 
-Primer checkpoint completo de reorganización:
+El entrenador de combate dispone de memoria bilateral sanitizada, beliefs sin información oculta, búsqueda acotada, MOVE/SWITCH/ITEM donde corresponda, switching estratégico, loadouts/composición, proposal sobre todas las raíces legales, sustitución autónoma side_b, tie resolution game-ready, integración real Overworld/Battle Core, victoria/derrota/reset, full-battle adversarial, estilos y expertise certificados.
 
-`ee22bd5bcb5c57f0203ba2a95d19775ba01d5cb0`
+No reabrir C3f, Game-Ready 27.x ni Expertise V1 salvo regresión reproducible.
 
-Resultado sobre ese SHA:
+## Trainer AI Campaign Persistence V1 — CLOSED / CERTIFIED / FROZEN
 
-**18/18 workflows SUCCESS**.
+Rama snapshot:
 
-Ese ciclo demuestra que la migración de estructura documental no alteró runtime ni regresiones. Después de ese checkpoint se realizó la auditoría final de documentación formal y se encontraron dos documentos presentados como actuales que todavía contenían estado de fases antiguas: `ARCHITECTURE.md` acumulaba totales y referencias fundacionales obsoletas, y `DATA_FOUNDATION_V3.md` todavía describía la validación inicial de PR #32 en lugar del cierre real #95.
+`feature/trainer-ai-campaign-persistence-v1`
 
-La corrección final:
+Parent original:
 
-- reemplaza `docs/architecture/ARCHITECTURE.md` por una visión general actual;
-- actualiza `docs/architecture/DATA_FOUNDATION_V3.md` al contrato certificado final;
-- añade `docs/architecture/README.md` para distinguir especificación de fase de estado operativo;
-- preserva los originales íntegros en `docs/history/worklogs/pre_consolidation/`.
+`f43dc6b158c35fe25139de5524b83f6fe2d3426f`
 
-Como estas correcciones mueven el SHA después del primer 18/18, el nuevo HEAD documental final debe obtener **otro 18/18** antes de cerrar #96 sin merge.
+Parent documental P1-D:
 
-`main` continúa intacta y **no representa actualmente el baseline moderno**. Su sustitución se hará más adelante como operación separada.
+`bf604176a66abde8ad475dd54f7375420c21c06b`
 
-## Estructura documental activa
+Checkpoint técnico final P1-D:
 
-La documentación queda separada por función:
+`b314b8bb81db439e3063433644c691181ed39ef4`
 
-- `docs/current/` — única fuente documental de estado vivo;
-- `docs/project_book/` — memoria temática consolidada;
-- `docs/architecture/` — arquitectura/especificaciones;
-- `docs/adr/` — decisiones arquitectónicas;
-- `docs/reference/` — referencias técnicas;
-- `docs/history/` — research, informes y worklogs cerrados.
+### P1-A — CLOSED / CERTIFIED
 
-Cuadernos temáticos actuales:
+Checkpoint:
 
-- `docs/project_book/DATA_V3.md` — **CERRADO**;
-- `docs/project_book/TRAINER_AI.md` — **ACTIVO / siguiente workstream**.
+`26c11caa635cecb851b95cd636580cb250683a32`
 
-No se crean cuadernos vacíos por anticipación.
+- 23/23 PASS;
+- Evaluation 521/0;
+- 18/18 workflows SUCCESS;
+- 0 producción / 0 Battle Core.
 
-## DATA FOUNDATION V3 — CERRADO
+Localizó el ownership seam entre caller, `TrainerBattleSession` y las mismas `CreatureInstance`.
 
-Fuente inmutable:
+### P1-B — CLOSED / CERTIFIED / CONTRACT-FIRST
 
-- snapshot branch `data/pokeapi-v2-snapshot`
-- commit `2f218ec3765c01c894a42bbbd074f15ddf3f32d1`
-- API tree `8349ea1ce75716897fe96e02a15950d19edba6c3`
-- schema tree `02e031e1928d7e9456bf6f7486daacc4b8946c84`
-- `data/api/v2` y `data/schema/v2` read-only.
+Checkpoint:
 
-Contrato canónico:
+`f900fb79fb324c6e05d218eb741352e4d3a5db1f`
 
-- 1.025 especies
-- 326 formas
-- 18 tipos runtime
-- 919 movimientos
-- 373 habilidades
-- 2.222 objetos
-- 61.102 entradas de learnset
-- 554 evoluciones
-- 0 referencias rotas
-- 0 definiciones rechazadas
-- 18 movimientos XD Shadow excluidos.
+- 27/27 PASS;
+- Evaluation 548/0;
+- 18/18 workflows SUCCESS;
+- 0 producción / 0 Battle Core.
 
-Fronteras runtime:
+Contrato: misma `CreatureInstance`; HP/PP/persistent status sobreviven a `reconcile_post_battle()`; volatile/stages se limpian; no auto-heal; recovery/replacement explícitos; IDs/ownership fail-closed; no BattleState persistido; `campaign_snapshot` no es authority.
 
-- Moves: 590 RUNTIME_SUPPORTED / 71 PARTIAL_RUNTIME / 246 DATA_ONLY / 12 UNSUPPORTED.
-- Abilities: 21 RUNTIME_SUPPORTED / 14 PARTIAL_RUNTIME / 338 DATA_ONLY.
-- Evolutions: 391 RUNTIME_SUPPORTED / 0 PARTIAL_RUNTIME / 149 DATA_ONLY / 14 UNSUPPORTED.
-- Items held: `leftovers`, `sitrus_berry`.
-- Trainer bag: `potion`, `super_potion`, `hyper_potion`, `max_potion`, `full_restore`.
-- Curación Calvo V1: 20 / 60 / 120 / full / full+status.
+HEAD documental P1-B:
 
-Cierre end-to-end:
+`4e96c999818916e90c6f8e9bfbc381f516e347dc` — 18/18 SUCCESS.
 
-- DATA V3 domain: **567 PASS / 0 FAIL**
-- Spanish/type/runtime: **298 PASS / 0 FAIL**.
+### P1-C — CLOSED / CERTIFIED
 
-Referencias:
+Checkpoint:
 
-- `docs/architecture/DATA_FOUNDATION_V3.md`
-- `docs/project_book/DATA_V3.md`.
+`311349938af6c57f4507e2160e157cffbc124afb`
 
-## IA DE ENTRENADORES — STACK EXISTENTE
+- P1-C 34/34 PASS;
+- Evaluation 582/0;
+- Godot SUCCESS;
+- Team Composition SUCCESS;
+- 18/18 workflows SUCCESS.
 
-La línea certificada FASE 19–33 contiene sesión de entrenador, inteligencia táctica, beliefs, búsqueda acotada, self-play/corpus, cobertura adaptativa/pública, items finitos, switching estratégico, loadouts y composición de equipos.
+Producción:
 
-El cerebro serio actual debe evolucionar desde `StrategicSwitchingTrainerBrain`, no volver a una ruta antigua search-only.
+- `TrainerCampaignRosterOwner` como owner estable fuera de BattleState/TrainerBattleSession;
+- misma identidad exacta de `CreatureInstance`;
+- handoff desacopla solo el Array;
+- configuración/replacement atómicos y fail-closed;
+- recovery explícito;
+- Overworld usa `_trainer_campaign_owner`.
 
-`TrainerProfile` ya representa estilo con:
+P1-C no modificó Save V2, Battle Core ni combat AI.
 
-- `balanced`
-- `aggressive`
-- `cautious`
-- `technical`.
+HEAD documental P1-C / parent P1-D:
 
-Esos perfiles cambian prioridades, no legalidad ni acceso a información oculta.
+`bf604176a66abde8ad475dd54f7375420c21c06b` — 18/18 SUCCESS.
 
-La siguiente expansión debe separar **estilo** de **competencia/expertise** y mantener la misma frontera anti-cheat.
+### P1-D — CLOSED / CERTIFIED / FINAL
 
-Referencia: `docs/project_book/TRAINER_AI.md`.
+Checkpoint técnico final:
 
-## Trabajo actual
+`b314b8bb81db439e3063433644c691181ed39ef4`
 
-Cerrar correctamente PR #96:
+Resultado:
 
-1. certificar el HEAD documental final exacto con 18/18;
-2. comprobar que el diff frente a `b4f6adc2...` sigue siendo exclusivamente `README.md` + `docs/**`;
-3. cerrar #96 **sin merge**;
-4. usar ese HEAD final como parent del siguiente workstream.
+- P1-D: **46/46 PASS**;
+- Evaluation: **628 PASS / 0 FAIL**;
+- Godot 4.7: **SUCCESS**;
+- Team Composition: **SUCCESS**;
+- full technical CI: **18/18 workflows SUCCESS**.
 
-No hacer un commit posterior solo para escribir que el PR quedó cerrado: GitHub es la autoridad de ese estado externo.
+Ciclo E2E certificado:
 
-## Después de #96
+`primer combate -> settlement -> rival KO persiste -> revancha inmediata bloqueada -> recovery explícito -> misma CreatureInstance -> segundo combate real`
 
-Retomar directamente Trainer AI y auditar difficulty/archetype/expertise antes de escribir FASE34.
+La revancha sin recovery falla con `no_available_opponent_creature`. No existe auto-heal oculto. Tras recovery explícito se conserva la misma referencia, se restauran HP/PP y el segundo combate vuelve a usar esa misma instancia con memoria fresca y respuesta autónoma side_b.
 
-Continúan fuera de alcance inmediato:
+Combat AI sigue reportando `campaign_policy_used = false`, `recovery_policy_used = false` y `replacement_policy_used = false`.
 
-- reabrir DATA V3 por aumentar contadores;
-- MCTS/red neuronal sin límite real demostrado;
-- sustitución de `main`;
-- traducción masiva del código/runtime.
+### Incidente P1-D registrado
+
+Primer intento:
+
+`c0375c70fe15f76e0a75e51726ec9b083824b166`
+
+Evaluation: **626 PASS / 2 FAIL**.
+
+Los dos fallos eran una falsa alarma de auditoría estática: se buscaba la palabra `BattleState` en el source del owner y apareció en un comentario que describía que el owner vive fuera de BattleState. El runtime P1-D estaba verde.
+
+La corrección fue test-only y sustituyó esa búsqueda textual por comprobaciones de dependencias operativas prohibidas. Checkpoint corregido `b314b8bb...`: **46/46, 628/0, 18/18 CI**.
+
+## Scope congelado
+
+Campaign Persistence V1 no modifica:
+
+- Save V2;
+- Battle Core;
+- persistencia completa de BattleState;
+- search/proposal/brain/tie resolver;
+- FASE34;
+- scheduler/shared-budget/660;
+- conexión de `campaign_snapshot` al proposal Game-Ready.
+
+No introduce auto-recovery ni replacement silencioso.
+
+## Continuación
+
+No hay P1-E ni trabajo Trainer AI obligatorio pendiente. Cualquier ampliación futura —estrategia de campaña avanzada, MCTS, aprendizaje continuo, memoria estratégica extendida o persistencia en disco— debe abrirse como feature separada y opcional, no como continuación automática de este workstream.
+
+## Invariantes externos
+
+- `main` = `641d4b1fb0bcf964205d616e96f198f05d702197`;
+- PR #105 permanece OPEN / unmerged;
+- PR #106 permanece CLOSED / not merged;
+- PR #107 debe cerrarse sin merge después de que el HEAD documental final pase 18/18 CI.

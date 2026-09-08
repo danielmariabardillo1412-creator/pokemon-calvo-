@@ -12,6 +12,7 @@ var brain: TrainerBrain
 var catalog: DefinitionCatalog = null
 var inference: TrainerBeliefInference = null
 var last_context: TrainerDecisionContext = null
+var _campaign_snapshot: Dictionary = {}
 
 
 func _init(
@@ -24,6 +25,10 @@ func _init(
 	catalog = p_catalog
 	if catalog != null:
 		inference = TrainerPublicCoverageBeliefInference.new(catalog)
+
+
+func set_campaign_snapshot(p_campaign_snapshot: Dictionary) -> void:
+	_campaign_snapshot = p_campaign_snapshot.duplicate(true)
 
 
 func begin(server: AuthoritativeBattleServer) -> bool:
@@ -84,6 +89,7 @@ func choose_action(server: AuthoritativeBattleServer) -> BattleAction:
 		belief,
 		memory,
 		legal_actions,
+		_campaign_snapshot,
 	)
 	if last_context == null:
 		return null
