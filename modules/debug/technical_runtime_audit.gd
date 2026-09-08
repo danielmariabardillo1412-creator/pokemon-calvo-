@@ -123,7 +123,8 @@ func _audit_catalogs(catalogs: DefinitionCatalog, checks: Array[Dictionary], met
 		move_classifications[move.classification] = int(move_classifications.get(move.classification, 0)) + 1
 		if move.type_id == &"" or catalogs.type(move.type_id) == null:
 			_sample(invalid_move_types, "%s:%s" % [String(move_id), String(move.type_id)])
-		if move.power < 0 or move.pp < 0 or move.accuracy < 0 or move.accuracy > 100:
+		# accuracy=-1 is the canonical always-hit sentinel used by BattleRuleset.
+		if move.power < 0 or move.pp < 0 or move.accuracy < -1 or move.accuracy > 100:
 			_sample(invalid_move_fields, "%s:power=%d,pp=%d,acc=%d" % [String(move_id), move.power, move.pp, move.accuracy])
 
 	metrics["learnset_entries_checked"] = learnset_count
