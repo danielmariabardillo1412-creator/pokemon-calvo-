@@ -12,7 +12,7 @@ GitHub/CI/artefactos del SHA exacto tienen prioridad sobre cualquier cuaderno.
 
 ### `DATA_V3.md`
 
-Estado: **CERRADO**.
+Estado: **CERRADO / CERTIFICADO**.
 
 Resume fuente, contrato estructural, fronteras runtime, certificación final y condiciones para reabrir DATA V3.
 
@@ -30,9 +30,23 @@ Conserva la fase post-cierre que añadió desempate game-ready, full-battle adve
 
 ### `TRAINER_AI_EXPERTISE.md`
 
-Estado: **ACTIVO**.
+Estado: **CERRADO / CERTIFIED / FROZEN**.
 
-Workstream nuevo y separado para diseñar competencia/dificultad sin confundirla con estilo y sin alterar la frontera anti-cheat.
+Separa estilo táctico de competencia/expertise sin modificar la frontera anti-cheat.
+
+### `TRAINER_AI_CAMPAIGN_PERSISTENCE.md`
+
+Estado: **CERRADO / CERTIFIED / FROZEN**.
+
+Conserva el cierre P1-A..P1-D de ownership, persistencia de consecuencias entre combates, recovery/replacement explícitos y rematch E2E.
+
+### `TRAINER_AI_HANDOFF_2026-09-03.md`
+
+Referencia histórica de relevo. No representa estado vivo posterior al freeze final.
+
+## Próximo cuaderno
+
+No existe todavía `GAME_FOUNDATION.md` durante la consolidación de `main`. Debe crearse al abrir formalmente Game Foundation V1, una vez la nueva `main` haya sido promovida y certificada.
 
 ## Cuándo crear otro cuaderno
 
