@@ -26,6 +26,7 @@ func _run() -> void:
 	TrainerCampaignPersistenceBoundaryAuditTestSuite.new().run(Callable(self, "_check"))
 	TrainerCampaignPersistenceContractAuditTestSuite.new().run(Callable(self, "_check"))
 	TrainerCampaignPersistenceOwnerIntegrationTestSuite.new().run(Callable(self, "_check"))
+	await TrainerCampaignPersistenceRematchE2EClosureTestSuite.new().run(Callable(self, "_check"), self)
 	print("\n=== TRAINER EVALUATION CORPUS RESULT: %d PASS / %d FAIL ===" % [_passed, _failed])
 	quit(0 if _failed == 0 else 1)
 
