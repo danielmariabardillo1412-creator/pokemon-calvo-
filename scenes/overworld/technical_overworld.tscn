@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3]
+[gd_scene load_steps=23 format=3]
 
 [ext_resource type="Script" path="res://scenes/overworld/technical_overworld.gd" id="1_root"]
 [ext_resource type="Script" path="res://modules/overworld/overworld_player.gd" id="2_player"]
@@ -6,6 +6,9 @@
 [ext_resource type="Script" path="res://scenes/debug/diagnostic_wild_battle_presentation.gd" id="4_battle_ui"]
 [ext_resource type="Script" path="res://scenes/debug/diagnostic_trainer_battle_presentation.gd" id="5_trainer_ui"]
 [ext_resource type="Script" path="res://scenes/debug/technical_test_panel.gd" id="6_test_panel"]
+[ext_resource type="Script" path="res://modules/overworld/overworld_portal.gd" id="7_portal"]
+[ext_resource type="Script" path="res://modules/overworld/overworld_ledge.gd" id="8_ledge"]
+[ext_resource type="Script" path="res://modules/overworld/overworld_traversal_controller.gd" id="9_traversal"]
 
 [sub_resource type="RectangleShape2D" id="Rectangle_player"]
 size = Vector2(20, 20)
@@ -16,11 +19,35 @@ size = Vector2(32, 128)
 [sub_resource type="RectangleShape2D" id="Rectangle_wall_border"]
 size = Vector2(640, 24)
 
+[sub_resource type="RectangleShape2D" id="Rectangle_surface_side"]
+size = Vector2(24, 360)
+
 [sub_resource type="RectangleShape2D" id="Rectangle_grass"]
 size = Vector2(192, 160)
 
 [sub_resource type="RectangleShape2D" id="Rectangle_trainer"]
 size = Vector2(72, 72)
+
+[sub_resource type="RectangleShape2D" id="Rectangle_portal"]
+size = Vector2(52, 34)
+
+[sub_resource type="RectangleShape2D" id="Rectangle_ledge_trigger"]
+size = Vector2(96, 24)
+
+[sub_resource type="RectangleShape2D" id="Rectangle_ledge_barrier"]
+size = Vector2(96, 12)
+
+[sub_resource type="RectangleShape2D" id="Rectangle_building_horizontal"]
+size = Vector2(480, 24)
+
+[sub_resource type="RectangleShape2D" id="Rectangle_building_vertical"]
+size = Vector2(24, 360)
+
+[sub_resource type="RectangleShape2D" id="Rectangle_cave_zone"]
+size = Vector2(480, 220)
+
+[sub_resource type="RectangleShape2D" id="Rectangle_cave_side"]
+size = Vector2(24, 360)
 
 [node name="TechnicalOverworld" type="Node2D"]
 script = ExtResource("1_root")
@@ -28,6 +55,13 @@ script = ExtResource("1_root")
 [node name="Background" type="Polygon2D" parent="."]
 polygon = PackedVector2Array(0, 0, 640, 0, 640, 360, 0, 360)
 color = Color(0.18, 0.2, 0.22, 1)
+
+[node name="SurfaceCaption" type="Label" parent="."]
+offset_left = 252.0
+offset_top = 28.0
+offset_right = 388.0
+offset_bottom = 51.0
+text = "EXTERIOR TÉCNICO"
 
 [node name="EncounterZone" type="Area2D" parent="." groups=["encounter_zones"]]
 position = Vector2(480, 180)
@@ -91,6 +125,242 @@ color = Color(0.34, 0.34, 0.36, 1)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="BottomWall"]
 shape = SubResource("Rectangle_wall_border")
 
+[node name="SurfaceLeftWall" type="StaticBody2D" parent="."]
+position = Vector2(12, 180)
+collision_layer = 1
+collision_mask = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SurfaceLeftWall"]
+shape = SubResource("Rectangle_surface_side")
+
+[node name="SurfaceRightWall" type="StaticBody2D" parent="."]
+position = Vector2(628, 180)
+collision_layer = 1
+collision_mask = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SurfaceRightWall"]
+shape = SubResource("Rectangle_surface_side")
+
+[node name="BuildingEntrance" type="Area2D" parent="." groups=["overworld_portals"]]
+position = Vector2(72, 314)
+collision_layer = 2
+collision_mask = 1
+script = ExtResource("7_portal")
+portal_id = &"surface_building_enter"
+transition_kind = &"door"
+source_region_id = &"surface"
+destination_region_id = &"building"
+destination_path = NodePath("../BuildingEntrySpawn")
+
+[node name="Visual" type="Polygon2D" parent="BuildingEntrance"]
+polygon = PackedVector2Array(-26, -17, 26, -17, 26, 17, -26, 17)
+color = Color(0.73, 0.56, 0.18, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BuildingEntrance"]
+shape = SubResource("Rectangle_portal")
+
+[node name="SurfaceBuildingReturn" type="Marker2D" parent="."]
+position = Vector2(72, 268)
+
+[node name="CaveEntrance" type="Area2D" parent="." groups=["overworld_portals"]]
+position = Vector2(560, 314)
+collision_layer = 2
+collision_mask = 1
+script = ExtResource("7_portal")
+portal_id = &"surface_cave_enter"
+transition_kind = &"cave"
+source_region_id = &"surface"
+destination_region_id = &"cave"
+destination_path = NodePath("../CaveEntrySpawn")
+
+[node name="Visual" type="Polygon2D" parent="CaveEntrance"]
+polygon = PackedVector2Array(-26, -17, 26, -17, 26, 17, -26, 17)
+color = Color(0.12, 0.12, 0.14, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CaveEntrance"]
+shape = SubResource("Rectangle_portal")
+
+[node name="SurfaceCaveReturn" type="Marker2D" parent="."]
+position = Vector2(560, 268)
+
+[node name="LedgeBarrier" type="StaticBody2D" parent="."]
+position = Vector2(200, 278)
+collision_layer = 1
+collision_mask = 1
+
+[node name="Visual" type="Polygon2D" parent="LedgeBarrier"]
+polygon = PackedVector2Array(-48, -6, 48, -6, 48, 6, -48, 6)
+color = Color(0.72, 0.3, 0.42, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LedgeBarrier"]
+shape = SubResource("Rectangle_ledge_barrier")
+
+[node name="LedgeTrigger" type="Area2D" parent="." groups=["overworld_ledges"]]
+position = Vector2(200, 252)
+collision_layer = 2
+collision_mask = 1
+script = ExtResource("8_ledge")
+ledge_id = &"surface_down_ledge"
+allowed_direction = Vector2(0, 1)
+landing_path = NodePath("../LedgeLanding")
+jump_duration_msec = 180
+visual_arc_height = 10.0
+
+[node name="Visual" type="Polygon2D" parent="LedgeTrigger"]
+polygon = PackedVector2Array(-48, -12, 48, -12, 48, 12, -48, 12)
+color = Color(0.48, 0.18, 0.34, 0.55)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LedgeTrigger"]
+shape = SubResource("Rectangle_ledge_trigger")
+
+[node name="LedgeLanding" type="Marker2D" parent="."]
+position = Vector2(200, 306)
+
+[node name="BuildingBackground" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(700, 0, 1180, 0, 1180, 360, 700, 360)
+color = Color(0.34, 0.3, 0.22, 1)
+
+[node name="BuildingCaption" type="Label" parent="."]
+offset_left = 868.0
+offset_top = 45.0
+offset_right = 1013.0
+offset_bottom = 68.0
+text = "INTERIOR EDIFICIO"
+
+[node name="BuildingTopWall" type="StaticBody2D" parent="."]
+position = Vector2(940, 12)
+collision_layer = 1
+collision_mask = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BuildingTopWall"]
+shape = SubResource("Rectangle_building_horizontal")
+
+[node name="BuildingBottomWall" type="StaticBody2D" parent="."]
+position = Vector2(940, 348)
+collision_layer = 1
+collision_mask = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BuildingBottomWall"]
+shape = SubResource("Rectangle_building_horizontal")
+
+[node name="BuildingLeftWall" type="StaticBody2D" parent="."]
+position = Vector2(712, 180)
+collision_layer = 1
+collision_mask = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BuildingLeftWall"]
+shape = SubResource("Rectangle_building_vertical")
+
+[node name="BuildingRightWall" type="StaticBody2D" parent="."]
+position = Vector2(1168, 180)
+collision_layer = 1
+collision_mask = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BuildingRightWall"]
+shape = SubResource("Rectangle_building_vertical")
+
+[node name="BuildingExit" type="Area2D" parent="." groups=["overworld_portals"]]
+position = Vector2(940, 314)
+collision_layer = 2
+collision_mask = 1
+script = ExtResource("7_portal")
+portal_id = &"building_surface_exit"
+transition_kind = &"door"
+source_region_id = &"building"
+destination_region_id = &"surface"
+destination_path = NodePath("../SurfaceBuildingReturn")
+
+[node name="Visual" type="Polygon2D" parent="BuildingExit"]
+polygon = PackedVector2Array(-26, -17, 26, -17, 26, 17, -26, 17)
+color = Color(0.73, 0.56, 0.18, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BuildingExit"]
+shape = SubResource("Rectangle_portal")
+
+[node name="BuildingEntrySpawn" type="Marker2D" parent="."]
+position = Vector2(940, 270)
+
+[node name="CaveBackground" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(0, 440, 640, 440, 640, 800, 0, 800)
+color = Color(0.1, 0.11, 0.13, 1)
+
+[node name="CaveCaption" type="Label" parent="."]
+offset_left = 263.0
+offset_top = 492.0
+offset_right = 377.0
+offset_bottom = 515.0
+text = "CUEVA TÉCNICA"
+
+[node name="CaveTopWall" type="StaticBody2D" parent="."]
+position = Vector2(320, 452)
+collision_layer = 1
+collision_mask = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CaveTopWall"]
+shape = SubResource("Rectangle_wall_border")
+
+[node name="CaveBottomWall" type="StaticBody2D" parent="."]
+position = Vector2(320, 788)
+collision_layer = 1
+collision_mask = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CaveBottomWall"]
+shape = SubResource("Rectangle_wall_border")
+
+[node name="CaveLeftWall" type="StaticBody2D" parent="."]
+position = Vector2(12, 620)
+collision_layer = 1
+collision_mask = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CaveLeftWall"]
+shape = SubResource("Rectangle_cave_side")
+
+[node name="CaveRightWall" type="StaticBody2D" parent="."]
+position = Vector2(628, 620)
+collision_layer = 1
+collision_mask = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CaveRightWall"]
+shape = SubResource("Rectangle_cave_side")
+
+[node name="CaveEncounterZone" type="Area2D" parent="." groups=["encounter_zones"]]
+position = Vector2(320, 655)
+collision_layer = 2
+collision_mask = 1
+script = ExtResource("3_zone")
+zone_id = &"technical_cave_floor"
+
+[node name="Visual" type="Polygon2D" parent="CaveEncounterZone"]
+polygon = PackedVector2Array(-240, -110, 240, -110, 240, 110, -240, 110)
+color = Color(0.18, 0.19, 0.23, 0.65)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CaveEncounterZone"]
+shape = SubResource("Rectangle_cave_zone")
+
+[node name="CaveExit" type="Area2D" parent="." groups=["overworld_portals"]]
+position = Vector2(320, 478)
+collision_layer = 2
+collision_mask = 1
+script = ExtResource("7_portal")
+portal_id = &"cave_surface_exit"
+transition_kind = &"cave"
+source_region_id = &"cave"
+destination_region_id = &"surface"
+destination_path = NodePath("../SurfaceCaveReturn")
+
+[node name="Visual" type="Polygon2D" parent="CaveExit"]
+polygon = PackedVector2Array(-26, -17, 26, -17, 26, 17, -26, 17)
+color = Color(0.22, 0.22, 0.26, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CaveExit"]
+shape = SubResource("Rectangle_portal")
+
+[node name="CaveEntrySpawn" type="Marker2D" parent="."]
+position = Vector2(320, 525)
+
+[node name="TraversalController" type="Node" parent="."]
+script = ExtResource("9_traversal")
+
 [node name="Player" type="CharacterBody2D" parent="."]
 position = Vector2(96, 180)
 collision_layer = 1
@@ -103,6 +373,11 @@ color = Color(0.85, 0.76, 0.46, 1)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
 shape = SubResource("Rectangle_player")
+
+[node name="Camera2D" type="Camera2D" parent="Player"]
+enabled = true
+position_smoothing_enabled = true
+position_smoothing_speed = 8.0
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
@@ -141,3 +416,14 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("5_trainer_ui")
+
+[node name="TransitionFade" type="ColorRect" parent="CanvasLayer"]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 1)
