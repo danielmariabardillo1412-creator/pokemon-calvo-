@@ -19,6 +19,8 @@ var _trainer_level_inputs: Array[SpinBox] = []
 var _wild_species_input: LineEdit = null
 var _wild_min_level: SpinBox = null
 var _wild_max_level: SpinBox = null
+var _cave_min_level: SpinBox = null
+var _cave_max_level: SpinBox = null
 var _encounter_chance: SpinBox = null
 var _profile_selector: OptionButton = null
 var _expertise_selector: OptionButton = null
@@ -33,12 +35,16 @@ func _ready() -> void:
 
 
 func current_configuration() -> Dictionary:
+	var fixed_species := _wild_species_input.text.strip_edges().to_lower()
 	return {
 		"player_team": _team_configuration(_player_species_inputs, _player_level_inputs),
 		"trainer_team": _team_configuration(_trainer_species_inputs, _trainer_level_inputs),
-		"wild_species_id": _wild_species_input.text.strip_edges().to_lower(),
+		"wild_species_id": fixed_species,
+		"wild_random_pool": fixed_species.is_empty(),
 		"wild_min_level": int(_wild_min_level.value),
 		"wild_max_level": int(_wild_max_level.value),
+		"cave_min_level": int(_cave_min_level.value),
+		"cave_max_level": int(_cave_max_level.value),
 		"encounter_chance_percent": int(_encounter_chance.value),
 		"trainer_profile_id": String(_profile_selector.get_item_metadata(_profile_selector.selected)),
 		"trainer_expertise_id": String(_expertise_selector.get_item_metadata(_expertise_selector.selected)),
@@ -130,8 +136,8 @@ func _build_config_panel() -> void:
 	hint.text = (
 		"Recorre todo el laboratorio: verde = encuentro salvaje, azul = entrenador IA, "
 		+ "amarillo = edificio, negro = cueva y rosa = salto de barrera. "
-		+ "La probabilidad configurada se aplica por paso válido tanto a hierba como a cueva; "
-		+ "el edificio no debe consumir ninguna tirada de encuentro."
+		+ "Deja Especie fija vacía para usar un pool aleatorio del catálogo real. "
+		+ "Hierba y cueva tienen niveles propios; el edificio no debe consumir tiradas."
 	)
 	hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	root.add_child(hint)
@@ -143,26 +149,41 @@ func _build_config_panel() -> void:
 	teams.add_child(_build_team_editor("TU EQUIPO", _player_species_inputs, _player_level_inputs))
 	teams.add_child(_build_team_editor("ENTRENADOR IA", _trainer_species_inputs, _trainer_level_inputs))
 
-	var wild_row := HBoxContainer.new()
-	root.add_child(wild_row)
-	wild_row.add_child(_label("Salvaje (hierba/cueva):"))
+	var wild_mode_row := HBoxContainer.new()
+	root.add_child(wild_mode_row)
+	wild_mode_row.add_child(_label("Especie fija opcional:"))
 	_wild_species_input = LineEdit.new()
-	_wild_species_input.custom_minimum_size = Vector2(120, 0)
-	wild_row.add_child(_wild_species_input)
-	wild_row.add_child(_label("Nv. mín:"))
-	_wild_min_level = _level_spinbox(4)
-	wild_row.add_child(_wild_min_level)
-	wild_row.add_child(_label("máx:"))
-	_wild_max_level = _level_spinbox(4)
-	wild_row.add_child(_wild_max_level)
-	wild_row.add_child(_label("Prob. % por paso:"))
+	_wild_species_input.placeholder_text = "vacío = aleatorio"
+	_wild_species_input.custom_minimum_size = Vector2(160, 0)
+	wild_mode_row.add_child(_wild_species_input)
+	wild_mode_row.add_child(_label("Prob. % por paso:"))
 	_encounter_chance = SpinBox.new()
 	_encounter_chance.min_value = 0
 	_encounter_chance.max_value = 100
 	_encounter_chance.step = 1
 	_encounter_chance.value = 100
 	_encounter_chance.custom_minimum_size = Vector2(72, 0)
-	wild_row.add_child(_encounter_chance)
+	wild_mode_row.add_child(_encounter_chance)
+	var random_hint := Label.new()
+	random_hint.text = "Pool aleatorio = especies con movimientos válidos al nivel mínimo de la zona"
+	random_hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	random_hint.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	wild_mode_row.add_child(random_hint)
+
+	var zone_levels_row := HBoxContainer.new()
+	root.add_child(zone_levels_row)
+	zone_levels_row.add_child(_label("HIERBA Nv. mín:"))
+	_wild_min_level = _level_spinbox(4)
+	zone_levels_row.add_child(_wild_min_level)
+	zone_levels_row.add_child(_label("máx:"))
+	_wild_max_level = _level_spinbox(6)
+	zone_levels_row.add_child(_wild_max_level)
+	zone_levels_row.add_child(_label("   CUEVA Nv. mín:"))
+	_cave_min_level = _level_spinbox(8)
+	zone_levels_row.add_child(_cave_min_level)
+	zone_levels_row.add_child(_label("máx:"))
+	_cave_max_level = _level_spinbox(12)
+	zone_levels_row.add_child(_cave_max_level)
 
 	var ai_row := HBoxContainer.new()
 	root.add_child(ai_row)
@@ -242,8 +263,9 @@ func _team_configuration(species_inputs: Array[LineEdit], level_inputs: Array[Sp
 func _load_defaults() -> void:
 	_clear_team(_player_species_inputs, _player_level_inputs)
 	_clear_team(_trainer_species_inputs, _trainer_level_inputs)
-	# Keep the historical technical-scene defaults so existing integration tests remain meaningful.
-	# The panel still allows any 1–6 vs 1–6 roster after opening CONFIGURAR PRUEBAS.
+	# Keep the historical technical-scene party defaults so existing integration tests remain meaningful.
+	# Wild encounters now default to a random valid catalog pool, while 100% chance preserves the
+	# deterministic first-step handoff expected by legacy scene tests.
 	_apply_team_defaults(_player_species_inputs, _player_level_inputs, [
 		["bulbasaur", 5], ["charmander", 5],
 	])
@@ -251,9 +273,11 @@ func _load_defaults() -> void:
 		["squirtle", 4],
 	])
 	if _wild_species_input != null:
-		_wild_species_input.text = "pikachu"
+		_wild_species_input.text = ""
 		_wild_min_level.value = 4
-		_wild_max_level.value = 4
+		_wild_max_level.value = 6
+		_cave_min_level.value = 8
+		_cave_max_level.value = 12
 		_encounter_chance.value = 100
 	if _profile_selector != null:
 		_profile_selector.select(0)
