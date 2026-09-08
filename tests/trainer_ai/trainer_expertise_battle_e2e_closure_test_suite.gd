@@ -349,6 +349,7 @@ func _e1d_cross_battle_reset_report() -> Dictionary:
 	if not first_begin or session.battle_state() == null or session.opponent_active() == null:
 		return {"first_finished": false}
 
+	var first_opponent_id := String(session.opponent_active().instance_id)
 	# Deterministic terminal fixture: player's priority-1, accuracy-100 move acts first.
 	session.opponent_active().current_hp = 1
 	var first_action := _e1d_player_action(session)
@@ -402,7 +403,7 @@ func _e1d_cross_battle_reset_report() -> Dictionary:
 		"first_config_leaked": (
 			String(second_report.get("trainer_profile_id", "")) == String(TrainerProfile.AGGRESSIVE)
 			or String(second_report.get("trainer_expertise_id", "")) == String(TrainerExpertise.LIMITED)
-			or second_json.contains("e1d_reset_first")
+			or second_json.contains(first_opponent_id)
 		),
 	}
 
