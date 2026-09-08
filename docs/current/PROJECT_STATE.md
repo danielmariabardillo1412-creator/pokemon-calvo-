@@ -59,23 +59,15 @@ Rama:
 
 `feature/trainer-ai-campaign-persistence-v1`
 
-Parent exacto:
+Parent original:
 
 `f43dc6b158c35fe25139de5524b83f6fe2d3426f`
 
 PR #107: **OPEN / DRAFT / NOT MERGED**.
 
-Objetivo: definir e integrar el ownership persistente de un entrenador rival entre combates, separando claramente:
-
-- estado de batalla;
-- roster owned por caller;
-- persistencia de campaña;
-- recovery policy;
-- replacement policy.
+Objetivo: ownership persistente de un entrenador rival entre combates, separando estado de batalla, roster owned por caller, persistencia de campaña, recovery policy y replacement policy.
 
 ### P1-A — CLOSED / CERTIFIED
-
-Scope: **TEST/AUDIT-ONLY**.
 
 Checkpoint técnico exacto:
 
@@ -83,34 +75,65 @@ Checkpoint técnico exacto:
 
 Resultado:
 
-- `TrainerCampaignPersistenceBoundaryAuditTestSuite`: **23/23 PASS**;
+- suite P1-A: **23/23 PASS**;
 - aggregate: `CAMPAIGN_PERSISTENCE_OWNERSHIP_SEAM_LOCALIZED`;
 - Trainer Evaluation Corpus: **521 PASS / 0 FAIL**;
-- Team Composition workflow: **SUCCESS**;
+- Team Composition: **SUCCESS**;
 - full CI técnico: **18/18 workflows SUCCESS**;
-- **0 cambios de producción / 0 Battle Core**.
+- **0 producción / 0 Battle Core**.
 
-El conector no expuso el conteo agregado literal del job Team Composition para este checkpoint; no se infiere desde ejecuciones anteriores.
+P1-A localizó el ownership seam: `TrainerBattleSession` consume temporalmente referencias externas de `CreatureInstance`, BattleState comparte esas identidades y settlement reconcilia antes de liberar el roster interno. `technical_overworld.gd` poseía el roster externamente, pero la vertical slice seguía siendo one-shot.
 
-P1-A certifica que `TrainerBattleSession` consume temporalmente referencias externas de `CreatureInstance`, BattleState comparte esas identidades y settlement reconcilia antes de liberar el roster interno. `technical_overworld.gd` ya posee el roster externamente, pero la vertical slice es one-shot y no ejerce rematch.
+El `campaign_snapshot` histórico de `TrainerIntelligenceController`/`TrainerDecisionContext` es transporte DTO deep-detached, **no** ownership persistente. El proposal Game-Ready actual no conecta ese snapshot.
 
-También queda fijado que el `campaign_snapshot` histórico de `TrainerIntelligenceController`/`TrainerDecisionContext` es transporte DTO deep-detached, **no** ownership persistente. El proposal Game-Ready actual no conecta ese snapshot.
+### P1-B — CLOSED / CERTIFIED / CONTRACT-FIRST
 
-### P1-B — NEXT / CONTRACT-FIRST
+Checkpoint técnico exacto:
 
-La siguiente tranche debe fijar por tests/audit, todavía sin owner productivo:
+`f900fb79fb324c6e05d218eb741352e4d3a5db1f`
 
-- owner autoritativo estable fuera de `BattleState`/`TrainerBattleSession`;
-- misma identidad de `CreatureInstance`;
-- post-battle por defecto = `reconcile_post_battle()`, sin auto-heal;
-- HP/PP/persistent status sobreviven; volatile battle state se limpia;
-- recovery explícito entre combates;
-- campaign replacement separado de forced replacement;
-- duplicados/double ownership fail-closed;
-- no persistir `BattleState` completo;
-- `campaign_snapshot` como máximo DTO sanitizado, nunca source of truth.
+Resultado:
 
-P1-B no toca Save V2, proposal/search/tie resolver, FASE34, scheduler/shared-budget/660 ni Battle Core. Producción queda reservada a P1-C.
+- suite P1-B: **27/27 PASS**;
+- Trainer Evaluation Corpus: **548 PASS / 0 FAIL**;
+- Team Composition: **SUCCESS**;
+- full CI técnico: **18/18 workflows SUCCESS**;
+- cambios técnicos exclusivamente tests/runner;
+- **0 producción / 0 Battle Core**.
+
+Contrato runtime ejecutable fijado sobre la misma `CreatureInstance`:
+
+- HP `118 -> 115` persiste tras reconciliación;
+- PP `20 -> 19` persiste;
+- persistent status `burn` persiste;
+- volatile status se elimina;
+- Attack stage `+2 -> 0`;
+- la identidad del objeto se conserva.
+
+Contrato canónico:
+
+- owner autoritativo fuera de `BattleState`/`TrainerBattleSession`;
+- mismas `CreatureInstance`, sin clones de identidad;
+- post-battle base = `reconcile_post_battle()`, sin auto-heal;
+- recovery explícito inter-battle;
+- campaign replacement fuera de batalla y separado de forced replacement;
+- IDs duplicados/double ownership fail-closed;
+- no persistir BattleState completo;
+- `campaign_snapshot` como máximo DTO sanitizado/detached, nunca source of truth;
+- Save V2 y Battle Core fuera de scope.
+
+### P1-C — NEXT / MINIMAL PRODUCTION INTEGRATION
+
+P1-C debe introducir y conectar el owner persistente mínimo sin reabrir combate:
+
+- ownership estable por identidad;
+- validación fail-closed;
+- conservación de consecuencias persistentes;
+- recovery/replacement explícitos fuera de Battle Core;
+- sin Save V2, proposal/search/tie resolver, FASE34 ni scheduler/shared-budget/660;
+- el rematch/cross-session E2E completo queda reservado para P1-D.
+
+El HEAD documental que registra el cierre de P1-B debe pasar **18/18 workflows SUCCESS** antes de ser parent certificado de P1-C.
 
 ## Invariantes externos
 
