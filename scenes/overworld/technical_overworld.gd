@@ -438,13 +438,22 @@ func _build_creature(
 		return null
 	var rng := RandomNumberGenerator.new()
 	rng.seed = 880000 + slot_index + (100 if side == "trainer" else 0)
+	var instance_id := StringName("technical_%s_%d_%s" % [side, slot_index + 1, String(species_id)])
+	# Preserve the stable slot identities used by the original technical scene and its
+	# integration tests. They stay slot-based even when the tester selects another species.
+	if side == "player" and slot_index == 0:
+		instance_id = &"technical_starter"
+	elif side == "player" and slot_index == 1:
+		instance_id = &"technical_bench"
+	elif side == "trainer" and slot_index == 0:
+		instance_id = &"technical_trainer_squirtle"
 	var creature := CreatureFactory.create(
 		species,
 		level,
 		_catalogs,
 		rules,
 		rng,
-		{"instance_id": StringName("technical_%s_%d_%s" % [side, slot_index + 1, String(species_id)])},
+		{"instance_id": instance_id},
 	)
 	if creature == null:
 		return null
