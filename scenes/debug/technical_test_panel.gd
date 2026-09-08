@@ -2,6 +2,7 @@ class_name TechnicalTestPanel
 extends Control
 
 signal configuration_applied(config: Dictionary)
+signal automatic_audit_requested
 signal export_report_requested
 signal open_report_folder_requested
 signal panel_visibility_changed(open: bool)
@@ -81,6 +82,12 @@ func _build_toolbar() -> void:
 	config_button.pressed.connect(_open_config)
 	buttons.add_child(config_button)
 
+	var audit_button := Button.new()
+	audit_button.text = "AUTOPRUEBA COMPLETA"
+	audit_button.tooltip_text = "Revisa datos, hierba/encuentros, captura, colisiones y niveles de IA; luego exporta un informe."
+	audit_button.pressed.connect(func(): automatic_audit_requested.emit())
+	buttons.add_child(audit_button)
+
 	var export_button := Button.new()
 	export_button.text = "EXPORTAR INFORME"
 	export_button.pressed.connect(func(): export_report_requested.emit())
@@ -127,7 +134,7 @@ func _build_config_panel() -> void:
 	root.add_child(title)
 
 	var hint := Label.new()
-	hint.text = "Configura equipos y el encuentro salvaje. Después camina por el mapa gris para probar la cadena completa."
+	hint.text = "Configura equipos y el encuentro salvaje. Después puedes jugar manualmente o lanzar AUTOPRUEBA COMPLETA."
 	hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	root.add_child(hint)
 
@@ -168,10 +175,11 @@ func _build_config_panel() -> void:
 	_add_selector_item(_profile_selector, "Cauto", "cautious")
 	_add_selector_item(_profile_selector, "Técnico", "technical")
 	ai_row.add_child(_profile_selector)
-	ai_row.add_child(_label("Profundidad:"))
+	ai_row.add_child(_label("Nivel IA:"))
 	_expertise_selector = OptionButton.new()
-	_add_selector_item(_expertise_selector, "Completa", "full")
-	_add_selector_item(_expertise_selector, "Limitada", "limited")
+	_add_selector_item(_expertise_selector, "Novato", "limited")
+	_add_selector_item(_expertise_selector, "Normal", "standard")
+	_add_selector_item(_expertise_selector, "Experto", "full")
 	ai_row.add_child(_expertise_selector)
 
 	var spacer := Control.new()
@@ -253,7 +261,8 @@ func _load_defaults() -> void:
 	if _profile_selector != null:
 		_profile_selector.select(0)
 	if _expertise_selector != null:
-		_expertise_selector.select(0)
+		# Expert preserves the historical full-search behavior of this technical scene.
+		_expertise_selector.select(2)
 
 
 func _clear_team(species_inputs: Array[LineEdit], level_inputs: Array[SpinBox]) -> void:
