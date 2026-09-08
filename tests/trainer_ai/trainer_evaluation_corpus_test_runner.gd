@@ -23,6 +23,7 @@ func _run() -> void:
 	TrainerExpertiseBudgetSafetyAuditTestSuite.new().run(Callable(self, "_check"))
 	TrainerExpertiseRuntimeIntegrationTestSuite.new().run(Callable(self, "_check"))
 	TrainerExpertiseBattleE2EClosureTestSuite.new().run(Callable(self, "_check"))
+	TrainerCampaignPersistenceBoundaryAuditTestSuite.new().run(Callable(self, "_check"))
 	print("\n=== TRAINER EVALUATION CORPUS RESULT: %d PASS / %d FAIL ===" % [_passed, _failed])
 	quit(0 if _failed == 0 else 1)
 
