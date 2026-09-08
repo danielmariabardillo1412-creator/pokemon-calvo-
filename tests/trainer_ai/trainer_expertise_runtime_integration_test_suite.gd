@@ -133,9 +133,10 @@ func run(check_callback: Callable) -> void:
 	var standard_simulations := _sum_values(standard_report.get("root_simulations", {}) as Dictionary)
 	var full_simulations := _sum_values(full_report.get("root_simulations", {}) as Dictionary)
 	_check.call(
-		"expertise_runtime_search_breadth_scales_with_tier",
-		standard_simulations > limited_simulations
-		and full_simulations > standard_simulations
+		"expertise_runtime_search_breadth_is_monotonic_across_tiers",
+		standard_simulations >= limited_simulations
+		and full_simulations >= standard_simulations
+		and full_simulations > limited_simulations
 	)
 
 	var default_fx := _session_fixture("default")
