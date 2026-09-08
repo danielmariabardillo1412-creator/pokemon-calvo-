@@ -13,7 +13,7 @@ concurrency:
 
 jobs:
   build:
-    name: Smoke test packaged technical build and export Windows EXE
+    name: Audit, smoke test packaged technical build and export Windows EXE
     runs-on: ubuntu-latest
     timeout-minutes: 25
 
@@ -53,6 +53,17 @@ jobs:
           grep -E 'TECHNICAL_TEST_READY species=[1-9][0-9]* moves=[1-9][0-9]* reports=' technical-source-smoke.log
           if grep -E 'SCRIPT ERROR|Parse Error|Cannot get class|Could not find' technical-source-smoke.log; then
             echo 'Technical source smoke test found a runtime error.' >&2
+            exit 1
+          fi
+
+      - name: Run deterministic black-box runtime audit
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 180s godot --headless --path . --script tests/debug/technical_runtime_audit_runner.gd 2>&1 | tee technical-runtime-audit.log
+          grep -E 'TECHNICAL_AUDIT_COMPLETE status=(OK|WARN) ok=[0-9]+ warn=[0-9]+ fail=0 report=' technical-runtime-audit.log
+          if grep -E 'SCRIPT ERROR|Parse Error|Cannot get class|Could not find' technical-runtime-audit.log; then
+            echo 'Technical runtime audit found a script/runtime error.' >&2
             exit 1
           fi
 
