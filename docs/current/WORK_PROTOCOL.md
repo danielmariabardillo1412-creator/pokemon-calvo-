@@ -30,30 +30,37 @@ Cuando haya contradicción:
 
 No editar fuentes inmutables para hacer pasar tests.
 
-## 3. Cadena de snapshots certificados
+## 3. `main` vuelve a ser el baseline canónico
 
-Hasta que el usuario cambie expresamente esta política:
+La política histórica de encadenar snapshots cerrados sin merge terminó con la consolidación certificada de 2026-09-08.
 
-- el siguiente tramo parte del último HEAD certificado exacto;
-- no se parte de `main` por costumbre;
-- el PR se abre contra el snapshot inmediatamente anterior cuando sea práctico;
-- se exige la matriz normal de workflows en verde sobre el SHA exacto final;
-- el PR certificado se cierra **sin merge**;
-- ese HEAD pasa a ser el parent del siguiente tramo.
+Baseline canónico de entrada a Game Foundation V1:
 
-`main` sigue siendo histórica hasta que se sustituya deliberadamente en una operación separada.
+`main = d2ad6796a93e6db56ef24c98431a3909e3874cdf`
+
+Ese SHA pasó la matriz completa vigente entonces (**18/18 SUCCESS**) y absorbió por fast-forward el linaje moderno certificado.
+
+A partir de aquí:
+
+- cada workstream nuevo parte del `main` certificado exacto;
+- se trabaja en una rama dedicada;
+- el PR se abre contra `main`;
+- el HEAD final de la rama debe pasar el gate focal y la matriz normal completa;
+- cuando se promueva, preferir fast-forward de `main` al **mismo SHA ya certificado** cuando la topología lo permita;
+- si una estrategia de merge crea un SHA nuevo distinto, ese nuevo SHA no se considera certificado hasta ejecutar sus gates aplicables;
+- no volver a una cadena de snapshots cerrados sin merge salvo decisión explícita nueva del usuario.
 
 ## 4. Regla de SHA exacto
 
 Un resultado de CI solo certifica el SHA sobre el que se ejecutó.
 
-Si se cambia código, tests, workflows o documentación después de quedar verde, el HEAD nuevo necesita su propia validación cuando vaya a formar parte de la cadena certificada.
+Si se cambia código, tests, workflows o documentación después de quedar verde, el HEAD nuevo necesita su propia validación cuando vaya a conservarse.
 
-No repetir dos ciclos por ritual: se repiten cuando existe un HEAD previo distinto que fue validado y después se modifica. Una rama exclusivamente documental puede cerrarse con un único ciclo completo si ese ciclo se ejecuta sobre su HEAD final exacto.
+No repetir ciclos por ritual. Se repiten cuando existe un HEAD distinto o cuando un fallo de infraestructura deja el gate formalmente rojo. Un fallo de infraestructura puede reintentarse, pero debe quedar investigado y documentado si afecta a una certificación.
 
 ## 5. Matriz de regresión
 
-El baseline de partida de esta reorganización tiene 18 workflows normales:
+Desde Game Foundation V1 la matriz normal contiene **19 workflows**:
 
 - Data Foundation V3
 - Godot 4.7 global
@@ -72,9 +79,12 @@ El baseline de partida de esta reorganización tiene 18 workflows normales:
 - Trainer Item Actions
 - Trainer Strategic Switching V2
 - Trainer Loadouts
-- Trainer Team Composition.
+- Trainer Team Composition
+- **Game Foundation Tests**.
 
-Si la matriz aumenta o cambia, `PROJECT_STATE.md` debe describir el nuevo contrato; no conservar el número 18 por inercia.
+`Game Foundation Tests` es obligatorio para cualquier HEAD de GF1 y para las regresiones futuras que puedan afectar campaña/mapas/eventos/save de mundo.
+
+Si la matriz aumenta o cambia, `PROJECT_STATE.md` debe describir el nuevo contrato; no conservar el número 19 por inercia.
 
 ## 6. DATA V3
 
@@ -88,7 +98,18 @@ Los límites `RUNTIME_SUPPORTED`, `PARTIAL_RUNTIME`, `DATA_ONLY` y `UNSUPPORTED`
 
 `data/api/v2` y `data/schema/v2` son fuentes inmutables. No modificar JSON canónico manualmente.
 
-## 7. Memoria documental
+## 7. Fronteras de Game Foundation
+
+Game Foundation convierte los subsistemas ya certificados en un videojuego, pero no absorbe su autoridad:
+
+- `PlayerCollection` sigue siendo dueño de Party + Storage + Inventory;
+- `CreatureInstance` sigue siendo la identidad persistente de cada criatura;
+- Battle Core sigue siendo autoridad de combate;
+- Trainer AI sigue siendo consumidor no autoritativo de información sanitizada;
+- `GameCampaignState` es dueño solo del estado de campaña/mundo que le corresponda;
+- Save V2 permanece congelado hasta GF1-D; GF1-A..C no deben colar persistencia de mundo dentro del schema V2.
+
+## 8. Memoria documental
 
 Cada descubrimiento material, excepción, corrección, decisión arquitectónica, certificación o diferimiento debe quedar fuera del chat:
 
@@ -97,20 +118,20 @@ Cada descubrimiento material, excepción, corrección, decisión arquitectónica
 - decisión arquitectónica duradera → ADR;
 - diario cerrado / evidencia histórica → `docs/history/worklogs/`.
 
-No crear un archivo nuevo por cada microtramo. Actualizar el cuaderno temático existente y archivar worklogs cuando una fase cierre.
+No crear un archivo nuevo por cada microtramo. Game Foundation V1 usa un único cuaderno `GAME_FOUNDATION.md` durante GF1-A..GF1-F.
 
-## 8. Recuperación de contexto
+## 9. Recuperación de contexto
 
 Una sesión nueva debe:
 
 1. leer `docs/current/START_HERE.md`;
 2. leer `PROJECT_STATE.md` y `NEXT_STEPS.md`;
 3. leer solo el cuaderno temático necesario;
-4. comprobar en GitHub el branch/HEAD/PR mencionado;
+4. comprobar en GitHub el `main` y branch/HEAD/PR mencionados;
 5. verificar CI antes de modificar;
-6. continuar desde el último HEAD certificado, no desde `main` por su nombre.
+6. continuar desde el último HEAD certificado del workstream o, al abrir uno nuevo, desde el `main` certificado.
 
-## 9. Regla de honestidad técnica
+## 10. Regla de honestidad técnica
 
 No subir contadores, aparentar soporte o ampliar la IA solo para que el proyecto parezca más avanzado.
 
