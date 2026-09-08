@@ -1,0 +1,77 @@
+name: Game Foundation Tests
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: game-foundation-tests-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Game Foundation V1 gate
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Godot 4.7
+        uses: chickensoft-games/setup-godot@v2.4.1
+        with:
+          version: 4.7.0
+          use-dotnet: false
+          include-templates: false
+
+      - name: Verify Godot version
+        shell: bash
+        run: |
+          set -euo pipefail
+          godot --version | tee game-foundation-godot-version.log
+          godot --version | grep -E '^4\.7([\.-]|$)'
+
+      - name: Stage pinned PokeAPI report fixtures
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p data/reports
+          cp ci/fixtures/pokeapi_reports/forms_policy_report.json data/reports/forms_policy_report.json
+          cp ci/fixtures/pokeapi_reports/unsupported_mechanics.json data/reports/unsupported_mechanics.json
+          cp ci/fixtures/pokeapi_reports/import_summary.json data/reports/import_summary.json
+
+      - name: Import project
+        shell: bash
+        run: |
+          set -euo pipefail
+          godot --headless --path . --import 2>&1 | tee game-foundation-import.log
+
+      - name: Run Game Foundation suite
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 30s godot --headless --path . --script res://tests/gameplay/game_foundation_test_runner.gd 2>&1 | tee game-foundation-test.log
+          summary="$(grep -E '=== GAME FOUNDATION RESULT: [0-9]+ PASS / 0 FAIL ===' game-foundation-test.log | tail -n 1)"
+          test -n "$summary"
+          pass_count="$(printf '%s\n' "$summary" | sed -E 's/.*RESULT: ([0-9]+) PASS.*/\1/')"
+          if [ "$pass_count" -lt 45 ]; then
+            echo "Game Foundation regression: expected at least 45 passing checks, got $pass_count" >&2
+            exit 1
+          fi
+          echo "Game Foundation gate satisfied: $pass_count PASS / 0 FAIL"
+
+      - name: Upload Game Foundation logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: game-foundation-logs-${{ github.run_id }}
+          path: |
+            game-foundation-godot-version.log
+            game-foundation-import.log
+            game-foundation-test.log
+          if-no-files-found: ignore
+          retention-days: 7
