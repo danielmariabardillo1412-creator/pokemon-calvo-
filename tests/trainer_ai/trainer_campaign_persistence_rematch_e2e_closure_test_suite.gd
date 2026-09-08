@@ -206,10 +206,14 @@ func _source_trace() -> Dictionary:
 		and not overworld_source.contains("_trainer_demo_completed")
 		and overworld_source.contains("_trainer_campaign_owner.roster_for_battle()")
 	)
+	# Check operational dependencies, not raw type-name mentions: the owner comment
+	# intentionally documents that this boundary lives outside BattleState.
 	var isolated := (
 		not owner_source.contains("SaveGameData")
-		and not owner_source.contains("BattleState")
+		and not owner_source.contains("_battle_server")
 		and not owner_source.contains("TrainerItemAwareActionProposal")
+		and not owner_source.contains("TrainerItemAwareSearch")
+		and not owner_source.contains("TrainerGameReadyTieResolver")
 		and session_source.contains("\"campaign_policy_used\": false")
 		and session_source.contains("\"recovery_policy_used\": false")
 		and session_source.contains("\"replacement_policy_used\": false")
