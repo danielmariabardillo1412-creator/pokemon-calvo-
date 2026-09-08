@@ -1,17 +1,20 @@
 # Pokémon Calvo
 
-Proyecto de fangame de criaturas en **Godot 4.7**. El repositorio contiene Battle Core determinista, progresión/captura/overworld y una IA de entrenadores no neuronal con inferencia de información, búsqueda acotada, self-play/evaluación, objetos finitos, switching estratégico, loadouts y composición de equipos.
+Proyecto de fangame de criaturas en **Godot 4.7**. El repositorio contiene Battle Core determinista, progresión/captura/overworld, persistencia, inventario y una IA de entrenadores no neuronal con inferencia de información, búsqueda acotada, switching estratégico, objetos, loadouts, composición de equipos, estilos/expertise y persistencia de roster entre combates.
 
-## Autoridad de desarrollo
+## Baseline moderno
 
-El último baseline funcional certificado antes de la reorganización documental es:
+La línea moderna certificada culmina en el freeze documental:
 
-- PR #95: `DATA V3 — final end-to-end certification`
-- HEAD: `b4f6adc200bef18f8ac51b9144f2f9a838f464fd`
-- estado: cerrado **sin merge**
-- validación: **18/18 workflows SUCCESS** sobre el HEAD final.
+`8552f52158ffc21c27b4e8f1dbc7caa63ac1a467`
 
-La rama `main` es una referencia histórica antigua y **no representa el estado actual del proyecto**. No debe usarse como baseline de trabajo. Su sustitución por el baseline nuevo se hará en una operación separada cuando la reorganización esté terminada y certificada.
+Ese SHA pasó la matriz normal de **18/18 workflows SUCCESS** y cierra Trainer AI Campaign Persistence V1.
+
+La sustitución de la antigua `main` se ejecuta como una operación separada en `chore/main-baseline-consolidation-v1`. El merge histórico inicial `2f63312e8dc3e61c8fadbd02e97972fff6d0eacc` conserva como padres tanto la antigua `main` (`641d4b1f...`) como el freeze moderno (`8552f521...`) y usa exactamente el árbol certificado moderno. La referencia de GitHub sobre el HEAD final certificado de esa operación es la autoridad para la promoción de `main`.
+
+## Estado del producto
+
+Los cimientos técnicos están avanzados, pero el ejecutable visible sigue siendo una **vertical slice técnica**, no una campaña Pokémon completa. La siguiente línea de producto debe convertir los sistemas ya certificados en un juego real: game state global, mapas/transiciones, NPC/eventos, persistencia de mundo y una primera vertical slice de campaña.
 
 ## Por dónde empezar
 
