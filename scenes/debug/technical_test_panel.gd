@@ -23,6 +23,7 @@ var _wild_max_level: SpinBox = null
 var _encounter_chance: SpinBox = null
 var _profile_selector: OptionButton = null
 var _expertise_selector: OptionButton = null
+var _audit_running := false
 
 
 func _ready() -> void:
@@ -31,6 +32,7 @@ func _ready() -> void:
 	_build_toolbar()
 	_build_config_panel()
 	_load_defaults()
+	automatic_audit_requested.connect(_on_automatic_audit_requested)
 
 
 func current_configuration() -> Dictionary:
@@ -58,6 +60,38 @@ func set_report_status(text_value: String) -> void:
 
 func is_panel_open() -> bool:
 	return _config_panel != null and _config_panel.visible
+
+
+func _on_automatic_audit_requested() -> void:
+	if _audit_running:
+		return
+	_audit_running = true
+	set_runtime_status("AUTOPRUEBA — revisando motor real...")
+	set_report_status("Autoprueba en curso: datos + mundo + encuentros + captura + IA")
+	# Give physics one frame so CharacterBody2D.test_move sees the live physics world.
+	await get_tree().physics_frame
+	var world := get_tree().current_scene as Node2D
+	var result := TechnicalRuntimeAuditService.run_and_export(world, current_configuration())
+	if not bool(result.get("ok", false)):
+		var error := String(result.get("error", "unknown_audit_error"))
+		set_runtime_status("AUTOPRUEBA ERROR")
+		set_report_status("ERROR de autoprueba: %s" % error)
+		print("TECHNICAL_AUDIT_COMPLETE status=FAIL ok=0 warn=0 fail=1 error=%s" % error)
+		_audit_running = false
+		return
+	var audit := result.get("audit", {}) as Dictionary
+	var counts := audit.get("counts", {}) as Dictionary
+	var status := String(audit.get("overall_status", "FAIL"))
+	var ok_count := int(counts.get("OK", 0))
+	var warn_count := int(counts.get("WARN", 0))
+	var fail_count := int(counts.get("FAIL", 0))
+	var path := String(result.get("path", ""))
+	set_runtime_status("AUTOPRUEBA %s | OK %d | WARN %d | FAIL %d" % [status, ok_count, warn_count, fail_count])
+	set_report_status("Informe automático: %s" % path)
+	print("TECHNICAL_AUDIT_COMPLETE status=%s ok=%d warn=%d fail=%d report=%s" % [
+		status, ok_count, warn_count, fail_count, path,
+	])
+	_audit_running = false
 
 
 func _build_toolbar() -> void:
