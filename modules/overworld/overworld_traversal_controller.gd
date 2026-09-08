@@ -45,43 +45,21 @@ func is_busy() -> bool:
 	return _busy
 
 
-func _on_portal_requested(portal: OverworldPortal, player: OverworldPlayer) -> void:
-	if player != _player:
-		return
-	_run_portal(portal)
-
-
-func _on_ledge_requested(ledge: OverworldLedge, player: OverworldPlayer) -> void:
-	if player != _player:
-		return
-	_run_ledge(ledge)
-
-
-func _on_ledge_rejected(ledge: OverworldLedge, player: OverworldPlayer, reason: String) -> void:
-	if player != _player:
-		return
-	ledge_rejected.emit({
-		"ledge_id": String(ledge.ledge_id),
-		"reason": reason,
-		"player_position": _vec(_player.global_position) if _player != null else {},
-		"facing": _vec(_player.facing) if _player != null else {},
-	})
-
-
-func _run_portal(portal: OverworldPortal) -> void:
+# Public deterministic seam used by runtime signals and headless tests alike.
+func traverse_portal(portal: OverworldPortal) -> bool:
 	if portal == null or _player == null:
 		_emit_blocked("portal", "missing_dependency", portal)
-		return
+		return false
 	if _busy:
 		_emit_blocked("portal", "traversal_busy", portal)
-		return
+		return false
 	if not _player.movement_enabled:
 		_emit_blocked("portal", "movement_locked", portal)
-		return
+		return false
 	var destination := portal.destination_node()
 	if destination == null:
 		_emit_blocked("portal", "missing_destination", portal)
-		return
+		return false
 
 	_busy = true
 	var start_ticks := Time.get_ticks_msec()
@@ -129,22 +107,24 @@ func _run_portal(portal: OverworldPortal) -> void:
 		"final_position": _vec(final_position),
 		"position_error_px": final_position.distance_to(target_position),
 	})
+	return true
 
 
-func _run_ledge(ledge: OverworldLedge) -> void:
+# Public deterministic seam used by runtime signals and headless tests alike.
+func jump_ledge(ledge: OverworldLedge) -> bool:
 	if ledge == null or _player == null:
 		_emit_blocked("ledge", "missing_dependency", ledge)
-		return
+		return false
 	if _busy:
 		_emit_blocked("ledge", "traversal_busy", ledge)
-		return
+		return false
 	if not _player.movement_enabled:
 		_emit_blocked("ledge", "movement_locked", ledge)
-		return
+		return false
 	var landing := ledge.landing_node()
 	if landing == null:
 		_emit_blocked("ledge", "missing_destination", ledge)
-		return
+		return false
 
 	_busy = true
 	var start_ticks := Time.get_ticks_msec()
@@ -166,14 +146,13 @@ func _run_ledge(ledge: OverworldLedge) -> void:
 	var half_duration := duration * 0.5
 	var midpoint := start_position.lerp(target_position, 0.5)
 	midpoint.y -= ledge.visual_arc_height
-	var tween := create_tween()
-	if half_duration > 0.0:
+	if duration > 0.0:
+		var tween := create_tween()
 		tween.tween_property(_player, "global_position", midpoint, half_duration).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 		tween.tween_property(_player, "global_position", target_position, half_duration).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
+		await tween.finished
 	else:
 		_player.global_position = target_position
-	if duration > 0.0:
-		await tween.finished
 	_player.global_position = target_position
 	_player.velocity = Vector2.ZERO
 	_player.reset_step_meter()
@@ -191,6 +170,30 @@ func _run_ledge(ledge: OverworldLedge) -> void:
 		"final_position": _vec(final_position),
 		"distance_px": start_position.distance_to(target_position),
 		"position_error_px": final_position.distance_to(target_position),
+	})
+	return true
+
+
+func _on_portal_requested(portal: OverworldPortal, player: OverworldPlayer) -> void:
+	if player != _player:
+		return
+	traverse_portal(portal)
+
+
+func _on_ledge_requested(ledge: OverworldLedge, player: OverworldPlayer) -> void:
+	if player != _player:
+		return
+	jump_ledge(ledge)
+
+
+func _on_ledge_rejected(ledge: OverworldLedge, player: OverworldPlayer, reason: String) -> void:
+	if player != _player:
+		return
+	ledge_rejected.emit({
+		"ledge_id": String(ledge.ledge_id),
+		"reason": reason,
+		"player_position": _vec(_player.global_position) if _player != null else {},
+		"facing": _vec(_player.facing) if _player != null else {},
 	})
 
 
