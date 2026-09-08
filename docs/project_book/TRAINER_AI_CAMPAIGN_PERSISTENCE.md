@@ -2,9 +2,9 @@
 
 ## P1.0 — workstream activo
 
-Estado: **OPEN / P1-A CERTIFIED / P1-B CLOSED-CERTIFIED / P1-C NEXT**.
+Estado: **OPEN / P1-A CERTIFIED / P1-B CERTIFIED / P1-C CLOSED-CERTIFIED / P1-D NEXT**.
 
-Parent exacto certificado de entrada:
+Parent original certificado de entrada:
 
 `f43dc6b158c35fe25139de5524b83f6fe2d3426f`
 
@@ -18,39 +18,39 @@ PR:
 
 `#107 — OPEN / DRAFT / NOT MERGED`
 
-Esta feature no reabre C3f, Game-Ready 27.x ni Expertise V1. El sistema de combate Trainer AI continúa cerrado y certificado. El objetivo de este workstream es definir y después integrar qué estado de un entrenador rival sobrevive entre combates y quién lo posee.
+Esta feature no reabre C3f, Game-Ready 27.x ni Expertise V1. El sistema de combate Trainer AI continúa cerrado y certificado. Campaign Persistence define qué estado de un entrenador rival sobrevive entre combates y quién lo posee.
 
 ## Distinción canónica
 
 No confundir:
 
 - **estado de batalla**: HP/PP/status/active/turn y forced replacement mientras Battle Core está activo;
-- **roster owned por el caller**: `CreatureInstance` que existe fuera de `TrainerBattleSession` y puede reutilizarse;
+- **roster owned por campaign**: `CreatureInstance` que existe fuera de `TrainerBattleSession` y se reutiliza por identidad;
 - **persistencia de campaña**: identidad/roster/configuración y consecuencias persistentes que sobreviven deliberadamente entre encuentros;
-- **recovery policy**: reglas explícitas para curar/restaurar entre encuentros;
-- **replacement policy**: reglas explícitas para sustituir miembros fuera de una batalla terminada;
-- **forced replacement de Battle Core**: cambio obligatorio durante una batalla; no es campaign replacement.
+- **recovery policy**: operación explícita para curar/restaurar entre encuentros;
+- **replacement policy**: operación explícita para sustituir miembros fuera de una batalla terminada;
+- **forced replacement de Battle Core**: cambio obligatorio durante batalla; no es campaign replacement.
 
-Campaign/recovery/replacement nunca puede convertirse en un fallback oculto para decidir una acción de combate.
+Campaign/recovery/replacement nunca puede convertirse en fallback oculto para decidir una acción de combate.
 
 ### `campaign_snapshot` histórico
 
 Existe transporte histórico de `campaign_snapshot` en `TrainerIntelligenceController`/`TrainerDecisionContext`, con copia profunda del DTO. Ese transporte **no es el owner persistente de campaña** y no puede convertirse en source of truth.
 
-El path autónomo Game-Ready actual de `TrainerItemAwareActionProposal` crea su `TrainerDecisionContext` sin conectar ese snapshot. Campaign Persistence mantiene deliberadamente separadas ambas responsabilidades.
+El path autónomo Game-Ready de `TrainerItemAwareActionProposal` continúa creando su contexto sin conectar ese snapshot. Campaign Persistence mantiene deliberadamente separadas ambas responsabilidades.
 
 ## Plan fijo — 4 tramos
 
 1. **P1-A — ownership/persistence boundary audit** — **CLOSED / CERTIFIED / TEST-AUDIT-ONLY**.
 2. **P1-B — contrato de estado persistente + recovery/replacement** — **CLOSED / CERTIFIED / CONTRACT-FIRST**.
-3. **P1-C — integración productiva mínima del owner persistente** — **NEXT**.
-4. **P1-D — rematch/cross-session E2E + regresión + freeze** — PENDIENTE.
+3. **P1-C — integración productiva mínima del owner persistente** — **CLOSED / CERTIFIED**.
+4. **P1-D — rematch/cross-battle E2E + regresión + freeze** — **NEXT**.
 
 No añadir una quinta tranche por inercia. Si aparece un blocker real que invalide este plan, debe documentarse antes de ampliar scope.
 
 ## P1-A — CLOSED / CERTIFIED
 
-Scope: **TEST/AUDIT-ONLY**.
+Scope original: **TEST/AUDIT-ONLY**.
 
 Suite:
 
@@ -60,44 +60,27 @@ Audit ID:
 
 `p1_a_campaign_persistence_ownership_boundary_audit_v1`
 
-Resultado certificado:
+Resultado:
 
 `CAMPAIGN_PERSISTENCE_OWNERSHIP_SEAM_LOCALIZED`
 
-Checkpoint técnico exacto:
+Checkpoint técnico original:
 
 `26c11caa635cecb851b95cd636580cb250683a32`
 
-### Evidencia ejecutable P1-A
+### Evidencia P1-A original
 
 - P1-A: **23/23 PASS**.
 - Trainer Evaluation Corpus: **521 PASS / 0 FAIL**.
-- Workflow Team Composition: **SUCCESS**.
-- Full CI del checkpoint técnico: **18/18 workflows SUCCESS**.
-- El conteo agregado literal interno de Team Composition no fue expuesto por el conector para ese job; no se infiere desde checkpoints anteriores.
-- Diff contra el freeze Expertise V1: solo docs/tests; **0 producción / 0 Battle Core**.
+- Team Composition: **SUCCESS**.
+- Full CI: **18/18 workflows SUCCESS**.
+- Diff original: solo docs/tests; **0 producción / 0 Battle Core**.
 
-### Ownership seam certificado
+P1-A localizó que `TrainerBattleSession` consume referencias externas de `CreatureInstance`, BattleState comparte esas identidades, settlement reconcilia y la sesión libera después su roster interno. También fijó que la vertical slice era one-shot y que `campaign_snapshot` histórico era DTO detached, no authority.
 
-P1-A demuestra que:
-
-- `TrainerBattleSession` recibe roster rival owned externamente;
-- BattleState y roster de sesión comparten la misma identidad de `CreatureInstance`;
-- mutaciones runtime sobre esas criaturas son visibles desde el roster owned por el caller;
-- `_roster_with_living_active(...)` conserva referencias y solo reordena;
-- settlement reconcilia las criaturas y luego la sesión libera su roster interno;
-- reset elimina identidad/configuración runtime del oponente;
-- `technical_overworld.gd` ya actúa como owner externo de `_trainer_roster`;
-- la vertical slice actual sigue siendo one-shot y no ejerce rematch;
-- existe transporte histórico deep-detached de `campaign_snapshot`, pero el proposal Game-Ready actual no lo usa;
-- no existe aún un owner productivo dedicado de campaign/recovery/replacement;
-- campaign/recovery/replacement permanecen fuera de proposal/search/tie resolution.
-
-Conclusión: **Battle Core/TrainerBattleSession consumen temporalmente las mismas `CreatureInstance`, pero el lifecycle persistente pertenece a un owner exterior estable**. No hay justificación para persistir `BattleState`, clonar el roster o introducir curación implícita.
+Durante P1-C, cuatro asserts P1-A que congelaban literalmente la forma histórica (`_trainer_roster` ad-hoc y ausencia de owner) se volvieron falsos por el cambio autorizado. La auditoría fue hecha **forward-compatible** sin reducir sus 23 checks: ahora acepta únicamente la forma histórica o el sucesor explícitamente autorizado `TrainerCampaignRosterOwner`, y sigue exigiendo aislamiento respecto de combat AI. Esto fue una corrección de test histórico, no un fallo del owner productivo.
 
 ## P1-B — CLOSED / CERTIFIED / CONTRACT-FIRST
-
-Scope: **TEST/AUDIT-ONLY / CONTRACT-FIRST**. P1-B no introduce todavía el owner productivo.
 
 Suite:
 
@@ -107,66 +90,135 @@ Checkpoint técnico exacto:
 
 `f900fb79fb324c6e05d218eb741352e4d3a5db1f`
 
-### Evidencia ejecutable P1-B
-
 - P1-B: **27/27 PASS**.
 - Trainer Evaluation Corpus: **548 PASS / 0 FAIL**.
-- Full CI del checkpoint técnico: **18/18 workflows SUCCESS**.
-- Team Composition del mismo SHA: **SUCCESS**.
-- El conteo agregado literal interno de Team Composition no se reutiliza ni se infiere si el conector no lo expone de forma verificable.
-- Cambios P1-B técnicos: suite nueva + registro en runner; **0 producción / 0 Battle Core**.
+- Full CI técnico: **18/18 workflows SUCCESS**.
+- Team Composition: **SUCCESS**.
+- **0 producción / 0 Battle Core**.
 
 ### Contrato runtime fijado
 
-El probe ejecutable demuestra la transición post-battle sobre la **misma** `CreatureInstance`:
+Sobre la misma `CreatureInstance`:
 
-- HP: `118 -> 115` y el daño persiste tras `reconcile_post_battle()`;
-- PP: `20 -> 19` y el consumo persiste;
-- persistent status `burn` persiste;
+- HP `118 -> 115` persiste tras `reconcile_post_battle()`;
+- PP `20 -> 19` persiste;
+- `burn` persistente sobrevive;
 - volatile status se elimina;
-- stat stage de Attack `+2 -> 0`;
-- la identidad del objeto no cambia.
+- Attack stage `+2 -> 0`;
+- identidad del objeto conservada.
 
-Por tanto, el contrato canónico para P1-C queda fijado:
+Contrato canónico:
 
-1. El owner autoritativo vive fuera de `BattleState` y `TrainerBattleSession`.
-2. Conserva exactamente las mismas `CreatureInstance`; no crea copias de identidad.
-3. La transición post-battle base es `reconcile_post_battle()`; **no hay auto-heal**.
-4. HP, PP y persistent status sobreviven conforme al contrato actual; volatile/transient battle state se limpia.
-5. Recovery es una operación/policy inter-battle explícita.
-6. Campaign replacement es una operación fuera de batalla y distinta del forced replacement de Battle Core.
-7. IDs duplicados/double ownership fallan cerrado; no se corrigen silenciosamente.
-8. No se persiste el `BattleState` completo.
-9. `campaign_snapshot` histórico, si se proyecta, solo puede ser DTO sanitizado/detached; nunca owner autoritativo.
-10. Campaign/recovery/replacement permanece aislado de proposal/search/tie resolution.
+1. Owner autoritativo fuera de `BattleState`/`TrainerBattleSession`.
+2. Mismas `CreatureInstance`, sin clones de identidad.
+3. Post-battle base = `reconcile_post_battle()`, sin auto-heal.
+4. HP, PP y persistent status sobreviven; volatile/transient battle state se limpia.
+5. Recovery inter-battle explícito.
+6. Campaign replacement fuera de batalla y separado de forced replacement.
+7. IDs duplicados/ownership ambiguo fallan cerrado.
+8. No persistir `BattleState` completo.
+9. `campaign_snapshot` como máximo DTO sanitizado/detached, nunca authority.
+10. Campaign/recovery/replacement aislado de proposal/search/tie resolution.
 
-P1-B utilizó como precedentes arquitectónicos `CreatureInstance.reconcile_post_battle()`, ownership fail-closed de `PlayerCollection`, unicidad por instance ID de `SaveGameData`, settlement sin policy de recovery/replacement y reconciliación sin auto-heal de `WildAdventureSession`. **Save V2 no fue modificado.**
+El HEAD documental P1-B `4e96c999818916e90c6f8e9bfbc381f516e347dc` pasó **18/18 workflows SUCCESS** y fue el parent exacto certificado de P1-C.
 
-## P1-C — NEXT / MINIMAL PRODUCTION INTEGRATION
+## P1-C — CLOSED / CERTIFIED / MINIMAL PRODUCTION INTEGRATION
 
-P1-C está autorizado a introducir el **owner persistente mínimo** y conectarlo en la superficie de integración existente, con estas barreras:
+Checkpoint técnico exacto:
 
-- mantener identidad exacta de `CreatureInstance`;
-- ownership/IDs fail-closed;
-- no auto-heal;
-- recovery y campaign replacement explícitos y fuera de Battle Core;
-- no persistir `BattleState`;
-- no tocar Save V2;
-- no conectar `campaign_snapshot` al proposal Game-Ready;
-- no modificar search, proposal, brain, tie resolver, FASE34 ni scheduler/shared-budget/660;
-- no convertir P1-C todavía en la prueba de revancha: el rematch/cross-session E2E queda reservado para P1-D.
+`311349938af6c57f4507e2160e157cffbc124afb`
 
-La integración debe ser mínima: sustituir ownership ad-hoc por un owner dedicado sin reabrir el comportamiento de combate ya certificado.
+Suite:
 
-## Gate documental P1-B
+`TrainerCampaignPersistenceOwnerIntegrationTestSuite`
 
-Este commit documental debe pasar **18/18 workflows SUCCESS** antes de utilizarse como parent certificado de P1-C. La evidencia técnica P1-B anterior ya está cerrada; este gate certifica únicamente que la sincronización documental no introduce regresión.
+Resultado certificado:
+
+`CAMPAIGN_PERSISTENCE_OWNER_INTEGRATED`
+
+### Evidencia ejecutable P1-C
+
+- P1-C: **34/34 PASS**.
+- P1-A forward-compatible: **23/23 PASS**.
+- P1-B: **27/27 PASS**.
+- Trainer Evaluation Corpus: **582 PASS / 0 FAIL**.
+- Godot 4.7 regression: **SUCCESS**.
+- Team Composition: **SUCCESS**.
+- Full CI del checkpoint técnico: **18/18 workflows SUCCESS**.
+
+### Integración productiva
+
+Nuevo owner:
+
+`modules/gameplay/trainer_campaign_roster_owner.gd`
+
+`TrainerCampaignRosterOwner`:
+
+- posee un `trainer_id` estable y un roster de `CreatureInstance`;
+- valida roster/IDs antes de mutar;
+- rechaza trainer id vacío, roster vacío, nulls, instance ids vacíos y duplicados;
+- conserva exactamente las mismas referencias de `CreatureInstance`;
+- `roster_for_battle()` desacopla solo el contenedor `Array`, no los objetos;
+- `owned_creature(...)` falla cerrado si la identidad fuese ambigua;
+- `recover_creature_full(...)` es una operación explícita, nunca automática;
+- recovery ejecuta reconciliación, restaura HP/PP y limpia persistent status sobre la misma instancia;
+- `replace_member(...)` es campaign replacement explícito y atómico;
+- prohíbe rebind silencioso de un mismo `instance_id` a otro objeto;
+- rechaza replacement con identidad duplicada antes de mutar.
+
+Integración Overworld:
+
+- `technical_overworld.gd` dejó de poseer `_trainer_roster` ad-hoc;
+- ahora posee `_trainer_campaign_owner`;
+- bootstrap configura el owner una vez;
+- cada `begin_battle(...)` recibe un array nuevo con las mismas referencias persistentes;
+- P1-C mantuvo deliberadamente el bloqueo one-shot `_trainer_demo_completed`; rematch quedó reservado para P1-D.
+
+### Incidente de regresión P1-C
+
+Primer HEAD productivo/runner:
+
+`d3238725e564f0ab8cf11ab592c5fcb3c715a096`
+
+Evaluation produjo **578 PASS / 4 FAIL**, pero los **34/34 checks P1-C estaban verdes**. Los cuatro fallos eran asserts P1-A que exigían que el owner nuevo aún no existiera. Se corrigió únicamente la auditoría histórica para reconocer el sucesor autorizado sin perder checks ni barreras. El HEAD corregido `311349...` produjo **582/0** y 18/18 CI.
+
+Conclusión: el incidente fortaleció la regresión histórica; no se ocultó ni se rebajó ninguna condición productiva.
+
+### Scope exacto P1-C
+
+Diff desde el parent certificado P1-B documental `4e96c999...` hasta `311349...`:
+
+1. owner productivo nuevo;
+2. wiring mínimo de `technical_overworld.gd`;
+3. suite P1-C;
+4. una entrada en el runner;
+5. adaptación forward-compatible de la auditoría P1-A.
+
+P1-C no modificó Save V2, Battle Core, proposal/search/brain/tie resolver, FASE34 ni scheduler/shared-budget/660.
+
+## P1-D — NEXT / FINAL CLOSURE
+
+P1-D es **el único tramo restante** de Campaign Persistence V1.
+
+Debe probar en E2E real:
+
+1. primer combate usa exactamente la criatura owned por campaign;
+2. settlement conserva consecuencias persistentes sobre esa misma instancia;
+3. tras una victoria del jugador, el rival KO **no reaparece curado automáticamente**;
+4. un intento de revancha sin recovery falla cerrado por no haber rival vivo;
+5. recovery explícito restaura la misma instancia;
+6. segundo combate puede abrirse después de recovery y vuelve a usar exactamente esa misma instancia;
+7. el segundo encuentro ejecuta y cierra por la ruta real Overworld -> Presentation -> TrainerBattleSession -> Battle Core;
+8. no se introduce persistencia de `BattleState`, Save V2 ni policy oculta en combat AI;
+9. regresión global final verde;
+10. freeze documental y cierre de PR #107 **sin merge** siguiendo el protocolo de snapshots.
+
+P1-D puede retirar el bloqueo one-shot del demo para permitir rematch, pero **no** puede introducir auto-recovery en `_on_trainer_battle_closed`. La recuperación debe seguir siendo una acción inter-battle explícita.
 
 ## Invariantes externas
 
 - `main` permanece exactamente en `641d4b1fb0bcf964205d616e96f198f05d702197`.
 - PR #105 permanece OPEN / unmerged.
 - PR #106 permanece CLOSED / not merged.
-- PR #107 permanece OPEN / DRAFT / unmerged durante el workstream.
-- El parent original de esta feature es el freeze Expertise V1 `f43dc6b...`, no `main`.
-- El PR de esta feature deberá cerrarse sin merge tras P1-D/freeze, siguiendo la cadena de snapshots certificados.
+- PR #107 permanece OPEN / DRAFT / unmerged hasta el freeze P1-D.
+- El parent original de Campaign Persistence sigue siendo Expertise V1 `f43dc6b...`, no `main`.
