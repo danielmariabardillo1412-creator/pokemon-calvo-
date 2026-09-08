@@ -34,6 +34,7 @@ func run(check_callback: Callable) -> void:
 	_p1a_check.call("p1a_demo_is_one_shot_after_completion", bool(source.get("overworld_blocks_rematch_after_completion", false)))
 	_p1a_check.call("p1a_historical_campaign_snapshot_transport_exists", bool(source.get("historical_campaign_snapshot_transport_exists", false)))
 	_p1a_check.call("p1a_historical_campaign_snapshot_is_deep_detached", bool(source.get("historical_campaign_snapshot_deep_detached", false)))
+	_p1a_check.call("p1a_game_ready_proposal_keeps_campaign_snapshot_disconnected", bool(source.get("game_ready_proposal_omits_campaign_snapshot", false)))
 	_p1a_check.call("p1a_no_dedicated_campaign_policy_owner", bool(files.get("no_dedicated_campaign_policy_owner", false)))
 	_p1a_check.call("p1a_no_dedicated_recovery_policy_owner", bool(files.get("no_dedicated_recovery_policy_owner", false)))
 	_p1a_check.call("p1a_no_dedicated_replacement_policy_owner", bool(files.get("no_dedicated_replacement_policy_owner", false)))
@@ -62,6 +63,7 @@ func _build_p1a_report() -> Dictionary:
 		and bool(source.get("overworld_blocks_rematch_after_completion", false))
 		and bool(source.get("historical_campaign_snapshot_transport_exists", false))
 		and bool(source.get("historical_campaign_snapshot_deep_detached", false))
+		and bool(source.get("game_ready_proposal_omits_campaign_snapshot", false))
 		and bool(files.get("no_dedicated_campaign_policy_owner", false))
 		and bool(files.get("no_dedicated_recovery_policy_owner", false))
 		and bool(files.get("no_dedicated_replacement_policy_owner", false))
@@ -74,6 +76,7 @@ func _build_p1a_report() -> Dictionary:
 		"policy_file_scan": files,
 		"ownership_conclusion": "caller_can_own_same_creature_objects_but_session_releases_post_battle_roster",
 		"historical_campaign_snapshot_transport_implemented": bool(source.get("historical_campaign_snapshot_transport_exists", false)),
+		"game_ready_campaign_snapshot_connected": not bool(source.get("game_ready_proposal_omits_campaign_snapshot", false)),
 		"campaign_persistence_owner_implemented": false,
 		"recovery_policy_implemented": false,
 		"replacement_policy_implemented": false,
@@ -124,6 +127,7 @@ func _p1a_source_trace() -> Dictionary:
 	var overworld_source := FileAccess.get_file_as_string("res://scenes/overworld/technical_overworld.gd")
 	var controller_source := FileAccess.get_file_as_string("res://modules/trainer_ai/trainer_intelligence_controller.gd")
 	var context_source := FileAccess.get_file_as_string("res://modules/trainer_ai/trainer_decision_context.gd")
+	var proposal_source := FileAccess.get_file_as_string("res://modules/trainer_ai/trainer_item_aware_action_proposal.gd")
 	return {
 		"session_accepts_external_roster": session_source.contains("p_opponent_roster: Array[CreatureInstance]") and session_source.contains("_roster_with_living_active(p_opponent_roster)"),
 		"living_roster_reuses_creature_objects": session_source.contains("var roster: Array[CreatureInstance] = [first_living]") and session_source.contains("roster.append(creature)"),
@@ -136,6 +140,7 @@ func _p1a_source_trace() -> Dictionary:
 		"overworld_blocks_rematch_after_completion": overworld_source.contains("if _trainer_demo_completed:") and overworld_source.contains("_trainer_demo_completed = true"),
 		"historical_campaign_snapshot_transport_exists": controller_source.contains("var _campaign_snapshot: Dictionary = {}") and controller_source.contains("func set_campaign_snapshot(p_campaign_snapshot: Dictionary) -> void:") and controller_source.contains("_campaign_snapshot,") and context_source.contains("var campaign_snapshot: Dictionary = {}"),
 		"historical_campaign_snapshot_deep_detached": controller_source.contains("_campaign_snapshot = p_campaign_snapshot.duplicate(true)") and context_source.contains("context.campaign_snapshot = p_campaign_snapshot.duplicate(true)"),
+		"game_ready_proposal_omits_campaign_snapshot": proposal_source.contains("TrainerDecisionContext.create(observation, belief, memory_clone, legal_actions)") and not proposal_source.contains("campaign_snapshot"),
 		"proposal_campaign_recovery_replacement_flags_false": session_source.contains("\"campaign_policy_used\": false") and session_source.contains("\"recovery_policy_used\": false") and session_source.contains("\"replacement_policy_used\": false"),
 	}
 
