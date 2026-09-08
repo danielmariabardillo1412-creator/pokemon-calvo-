@@ -1,4 +1,4 @@
-name: Combat Placeholder Windows Build
+name: Pokemon Calvo Technical Test Windows Build
 
 on:
   pull_request:
@@ -8,14 +8,14 @@ permissions:
   contents: read
 
 concurrency:
-  group: combat-placeholder-${{ github.workflow }}-${{ github.ref }}
+  group: technical-test-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
   build:
-    name: Smoke test exported package and build one-file Windows EXE
+    name: Smoke test packaged technical build and export Windows EXE
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 25
 
     steps:
       - name: Checkout
@@ -39,67 +39,55 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          godot --headless --path . --import 2>&1 | tee placeholder-import.log
-
-      - name: Smoke test combat placeholder in source checkout
-        shell: bash
-        run: |
-          set -euo pipefail
-          timeout 20s godot --headless --path . --quit-after 5 res://scenes/debug/combat_placeholder.tscn 2>&1 | tee placeholder-source-smoke.log
-          grep -E 'COMBAT_PLACEHOLDER_READY species=[1-9][0-9]* moves=[1-9][0-9]* source=res://data/normalized/pokemon_api.json' placeholder-source-smoke.log
-          if grep -E 'SCRIPT ERROR|Parse Error|COMBAT_PLACEHOLDER_DATA_ERROR' placeholder-source-smoke.log; then
-            echo 'Placeholder source smoke test found a script/data error.' >&2
+          godot --headless --path . --import 2>&1 | tee technical-import.log
+          if grep -E 'SCRIPT ERROR|Parse Error' technical-import.log; then
+            echo 'Project import found a script/parse error.' >&2
             exit 1
           fi
 
-      - name: Point disposable CI project at placeholder scene
+      - name: Smoke test canonical technical world in source checkout
         shell: bash
         run: |
           set -euo pipefail
-          python - <<'PY'
-          from pathlib import Path
-          path = Path('project.godot')
-          text = path.read_text(encoding='utf-8')
-          old = 'run/main_scene="res://scenes/overworld/technical_overworld.tscn"'
-          new = 'run/main_scene="res://scenes/debug/combat_placeholder.tscn"'
-          if old not in text:
-              raise SystemExit('Expected main_scene line not found; refusing silent export drift')
-          path.write_text(text.replace(old, new, 1), encoding='utf-8')
-          print(new)
-          PY
+          timeout 25s godot --headless --path . --quit-after 5 2>&1 | tee technical-source-smoke.log
+          grep -E 'TECHNICAL_TEST_READY species=[1-9][0-9]* moves=[1-9][0-9]* reports=' technical-source-smoke.log
+          if grep -E 'SCRIPT ERROR|Parse Error|Cannot get class|Could not find' technical-source-smoke.log; then
+            echo 'Technical source smoke test found a runtime error.' >&2
+            exit 1
+          fi
 
-      - name: Export and run verification PCK
+      - name: Export and run isolated verification PCK
         shell: bash
         run: |
           set -euo pipefail
           mkdir -p build
-          godot --headless --path . --export-pack "Combat Placeholder Windows" build/combat-placeholder-verify.pck 2>&1 | tee placeholder-pack-export.log
-          test -s build/combat-placeholder-verify.pck
-          timeout 30s godot --headless --main-pack build/combat-placeholder-verify.pck --quit-after 5 2>&1 | tee placeholder-packed-smoke.log
-          grep -E 'COMBAT_PLACEHOLDER_READY species=[1-9][0-9]* moves=[1-9][0-9]* source=res://data/normalized/pokemon_api.json' placeholder-packed-smoke.log
-          if grep -E 'SCRIPT ERROR|Parse Error|COMBAT_PLACEHOLDER_DATA_ERROR|Cannot get class|Could not find' placeholder-packed-smoke.log; then
-            echo 'EXPORTED PACKAGE IS NOT SELF-CONTAINED.' >&2
+          godot --headless --path . --export-pack "Pokemon Calvo Technical Test Windows" build/technical-test-verify.pck 2>&1 | tee technical-pack-export.log
+          test -s build/technical-test-verify.pck
+          timeout 35s godot --headless --main-pack build/technical-test-verify.pck --quit-after 5 2>&1 | tee technical-packed-smoke.log
+          grep -E 'TECHNICAL_TEST_READY species=[1-9][0-9]* moves=[1-9][0-9]* reports=' technical-packed-smoke.log
+          if grep -E 'SCRIPT ERROR|Parse Error|Cannot get class|Could not find' technical-packed-smoke.log; then
+            echo 'EXPORTED TECHNICAL PACKAGE IS NOT SELF-CONTAINED.' >&2
             exit 1
           fi
-          rm -f build/combat-placeholder-verify.pck
+          rm -f build/technical-test-verify.pck
 
-      - name: Export single-file Windows build
+      - name: Export single-file Windows technical build
         shell: bash
         run: |
           set -euo pipefail
-          godot --headless --path . --export-release "Combat Placeholder Windows" build/PokemonCalvo-Combat-Placeholder.exe 2>&1 | tee placeholder-export.log
-          test -s build/PokemonCalvo-Combat-Placeholder.exe
-          if [ -e build/PokemonCalvo-Combat-Placeholder.pck ]; then
+          godot --headless --path . --export-release "Pokemon Calvo Technical Test Windows" build/PokemonCalvo-Pruebas-Tecnicas.exe 2>&1 | tee technical-export.log
+          test -s build/PokemonCalvo-Pruebas-Tecnicas.exe
+          if [ -e build/PokemonCalvo-Pruebas-Tecnicas.pck ]; then
             echo 'Unexpected external PCK: export must remain a single executable.' >&2
             exit 1
           fi
-          ls -lh build/PokemonCalvo-Combat-Placeholder.exe
+          ls -lh build/PokemonCalvo-Pruebas-Tecnicas.exe
 
-      - name: Upload clickable Windows placeholder
+      - name: Upload Windows technical test build
         uses: actions/upload-artifact@v4
         with:
-          name: PokemonCalvo-Combat-Placeholder-Windows
-          path: build/PokemonCalvo-Combat-Placeholder.exe
+          name: PokemonCalvo-Pruebas-Tecnicas-Windows
+          path: build/PokemonCalvo-Pruebas-Tecnicas.exe
           if-no-files-found: error
           compression-level: 6
           retention-days: 14
