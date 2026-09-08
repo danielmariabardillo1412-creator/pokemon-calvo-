@@ -237,11 +237,13 @@ func _team_configuration(species_inputs: Array[LineEdit], level_inputs: Array[Sp
 func _load_defaults() -> void:
 	_clear_team(_player_species_inputs, _player_level_inputs)
 	_clear_team(_trainer_species_inputs, _trainer_level_inputs)
+	# Keep the historical technical-scene defaults so existing integration tests remain meaningful.
+	# The panel still allows any 1–6 vs 1–6 roster after opening CONFIGURAR PRUEBAS.
 	_apply_team_defaults(_player_species_inputs, _player_level_inputs, [
-		["bulbasaur", 20], ["pikachu", 20], ["geodude", 20],
+		["bulbasaur", 5], ["charmander", 5],
 	])
 	_apply_team_defaults(_trainer_species_inputs, _trainer_level_inputs, [
-		["charmander", 20], ["squirtle", 20], ["pidgeotto", 20],
+		["squirtle", 4],
 	])
 	if _wild_species_input != null:
 		_wild_species_input.text = "pikachu"
