@@ -1,81 +1,72 @@
 # SIGUIENTE TRABAJO
 
-## Workstream activo — Trainer AI Expertise V1
+## Workstream activo — Trainer AI Campaign Persistence V1
 
 Rama:
 
-`feature/trainer-ai-expertise-v1`
+`feature/trainer-ai-campaign-persistence-v1`
 
-Baseline cerrado de entrada:
+Parent certificado de entrada:
 
-`337a4f787c7da18f9cf649aea929e79912840b2a`
+`f43dc6b158c35fe25139de5524b83f6fe2d3426f`
 
-PR del workstream:
+Ese parent es el freeze final de **Trainer AI Expertise V1**.
 
-`#106 — Trainer AI Expertise V1 — contract audit`
+## Plan fijo inicial — 1/4 actual
 
-Trainer AI runtime y Game-Ready siguen cerrados. Expertise V1 es una feature separada.
-
-## Plan fijo — 4/4
-
-1. E1-A contrato/hueco runtime — **COMPLETADO / CERTIFICADO**.
-2. E1-B seguridad de knobs — **ACTUAL / TEST-AUDIT-ONLY**.
-3. E1-C integración mínima de estilo + expertise.
-4. E1-D E2E/regresión/doble certificación/freeze.
+1. **P1-A — ownership/persistence boundary audit** — ACTUAL / TEST-AUDIT-ONLY.
+2. **P1-B — contrato persistente + recovery/replacement** — PENDIENTE.
+3. **P1-C — integración productiva mínima** — PENDIENTE.
+4. **P1-D — rematch/cross-session E2E + freeze** — PENDIENTE.
 
 No añadir una quinta tranche por inercia.
 
-## E1-A certificado
+## P1-A — frontera exacta a certificar
 
-SHA:
+Suite:
 
-`f8ca9d8ecfe7e2cd259e3affdd2fd048a73d1021`
+`TrainerCampaignPersistenceBoundaryAuditTestSuite`
 
-Resultado:
+Audit ID:
 
-- **18/18 workflows SUCCESS**;
-- Evaluation: **426 PASS / 0 FAIL**;
-- aggregate `TRAINER_AI_EXPERTISE_CONTRACT_AUDIT_COMPLETE`;
-- cero producción.
+`p1_a_campaign_persistence_ownership_boundary_audit_v1`
 
-Hallazgo confirmado:
+Resultado objetivo:
 
-- los perfiles de estilo existen y son distintos;
-- el runtime proposal sigue usando `TrainerProfile.balanced()` fijo;
-- no existe expertise/difficulty runtime;
-- estilo y expertise siguen sin confundirse;
-- anti-cheat y tie resolver no dependen de difficulty.
+`CAMPAIGN_PERSISTENCE_OWNERSHIP_SEAM_LOCALIZED`
 
-## E1-B — seguridad de knobs
+Debe certificar:
 
-Scope: **TEST/AUDIT-ONLY**.
+- `TrainerBattleSession` recibe roster rival owned externamente;
+- el filtro de living roster conserva referencias de `CreatureInstance`, no clona criaturas;
+- BattleState y roster de sesión comparten identidad durante la batalla;
+- settlement reconcilia el roster y después la sesión libera su referencia;
+- reset limpia la identidad runtime del oponente;
+- `technical_overworld.gd` ya posee el roster fuera de la sesión;
+- la vertical slice actual bloquea rematch tras completar el combate;
+- no existe un owner/policy dedicado de campaign/recovery/replacement en las superficies esperadas;
+- proposal/substitution sigue declarando esas policies como no usadas;
+- producción y Battle Core permanecen en **0 cambios**.
 
-Debe clasificar parámetros antes de usarlos en producción:
+## Barreras
 
-### Prohibido como shortcut
+P1-A no autoriza:
 
-- `depth_turns=1`: el proposal Game-Ready exige profundidad 2;
-- presupuestos que terminen con `budget_exhausted=true` o horizonte incompleto.
+- curar automáticamente al entrenador;
+- resetear HP/PP por intuición;
+- reemplazar miembros KO fuera de batalla;
+- permadeath;
+- persistir `BattleState` completo;
+- usar campaign/recovery/replacement para decidir una acción;
+- modificar search/proposal/brain;
+- tocar Battle Core;
+- reabrir scheduler/shared budget/660;
+- abrir FASE34;
+- mergear PR #105.
 
-### Candidato a demostrar
+## Invariantes externas
 
-- `max_actions_per_side` como branching interno: comparar cap 1 vs cap 3 con depth 2, determinismo, horizonte completo y misma frontera anti-cheat.
-
-### No autorizado todavía
-
-- bajar `MAX_WORLDS=4`;
-- fijar un mínimo universal de simulaciones;
-- errores artificiales/aleatoriedad para entrenadores débiles.
-
-La nueva suite debe aportar 18 checks. Si pasa completa, Evaluation debería pasar de 426/0 a **444/0**.
-
-## Barreras permanentes
-
-- todas las dificultades comparten el mismo action-space legal;
-- no leer acción actual del jugador;
-- no conceder movimientos rivales ocultos;
-- no usar RNG privado/live de Battle Core;
-- no relajar completeness guards;
-- profile no se usa como tiebreak oculto;
-- PR #105 permanece OPEN / unmerged;
+- PR #105 permanece OPEN / unmerged.
+- PR #106 permanece CLOSED / not merged.
 - `main` permanece exactamente en `641d4b1fb0bcf964205d616e96f198f05d702197`.
+- El siguiente tramo debe partir del HEAD certificado de P1-A, no de `main`.
