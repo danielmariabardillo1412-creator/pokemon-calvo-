@@ -1,78 +1,99 @@
 # SIGUIENTE TRABAJO
 
-## Trainer AI — ningún tramo obligatorio activo
+## Paso inmediato — consolidar `main`
 
-**Trainer AI Campaign Persistence V1 está CLOSED / CERTIFIED / FROZEN.**
+La línea moderna está cerrada y certificada en:
 
-No existe P1-E y no debe abrirse una quinta tranche por inercia.
+`8552f52158ffc21c27b4e8f1dbc7caa63ac1a467`
 
-Los cuatro tramos previstos están terminados:
+La operación separada de promoción vive en:
 
-1. P1-A ownership/persistence boundary audit — CLOSED / CERTIFIED.
-2. P1-B persistent-state + recovery/replacement contract — CLOSED / CERTIFIED.
-3. P1-C minimal production integration — CLOSED / CERTIFIED.
-4. P1-D rematch/cross-battle E2E + regression — CLOSED / CERTIFIED.
+`chore/main-baseline-consolidation-v1`
 
-## Checkpoint técnico final
+Merge histórico inicial:
 
-`b314b8bb81db439e3063433644c691181ed39ef4`
+`2f63312e8dc3e61c8fadbd02e97972fff6d0eacc`
 
-Parent documental certificado de P1-D:
+Ese commit conserva como padres la antigua `main` y el freeze moderno, pero usa exactamente el árbol moderno certificado; el único commit exclusivo de la `main` antigua añadía un archivo vacío sin funcionalidad.
 
-`bf604176a66abde8ad475dd54f7375420c21c06b`
+Para cerrar la promoción:
 
-Evidencia final:
+1. terminar la actualización documental de esta rama;
+2. abrir PR contra `main` para disparar la matriz normal;
+3. exigir **18/18 workflows SUCCESS** sobre el HEAD final exacto;
+4. comprobar que no existe regresión funcional;
+5. mover `main` por fast-forward al HEAD certificado de la rama;
+6. cerrar el PR de consolidación sin crear un SHA adicional no certificado;
+7. desde ese momento, `main` vuelve a ser el baseline de desarrollo normal.
 
-- P1-D: **46/46 PASS**;
-- Trainer Evaluation Corpus: **628 PASS / 0 FAIL**;
-- Godot 4.7: SUCCESS;
-- Team Composition: SUCCESS;
-- full technical CI: **18/18 workflows SUCCESS**.
+No introducir features nuevas dentro de esta operación.
 
-Secuencia certificada:
+## Después — Game Foundation V1
 
-`KO persistente -> rematch bloqueado -> recovery explícito -> misma CreatureInstance -> segundo combate real`
+Trainer AI ya no tiene trabajo obligatorio pendiente. El siguiente workstream de producto debe ser **Game Foundation V1**.
 
-La revancha inmediata sin recovery falla con `no_available_opponent_creature`. Recovery no es automático y combat AI permanece aislado de campaign/recovery/replacement.
+### Objetivo
 
-## Scope congelado
+Llegar a una primera mini-campaña jugable real, aunque use arte provisional, que demuestre el flujo:
 
-No reabrir como parte de Campaign Persistence V1:
+`nueva partida -> inicial -> mapa/pueblo -> ruta -> encuentro/captura -> entrenador -> servicio -> guardar -> cargar -> continuar`
 
-- Save V2;
-- persistencia completa de BattleState;
-- Battle Core;
-- search/proposal/brain/tie resolver;
-- FASE34;
-- scheduler/shared-budget/660;
-- `campaign_snapshot` Game-Ready;
-- auto-heal post-battle;
-- replacement silencioso de Pokémon KO.
+### Orden de construcción
 
-## Qué puede venir después
+1. **GF1-A — Game State + contrato de campaña**
+   - identidad de partida;
+   - mapa actual / spawn point;
+   - flags de historia;
+   - entrenadores derrotados;
+   - inicial escogido;
+   - progreso mínimo de campaña.
 
-No hay una tarea Trainer AI obligatoria preseleccionada.
+2. **GF1-B — mapas y transiciones**
+   - mapas configurables;
+   - puertas/warps;
+   - spawn points;
+   - zonas de encuentro;
+   - triggers de entrenador/NPC.
 
-Si más adelante se desea ampliar al rival, debe abrirse un **workstream separado** con objetivo y contrato propios. Ejemplos opcionales, no blockers:
+3. **GF1-C — NPC, diálogo y eventos data-driven**
+   - diálogo;
+   - condiciones por flags;
+   - acciones/eventos;
+   - entrenador una vez / diálogo posterior;
+   - objetos o desbloqueos simples.
 
-- estrategia de campaña a largo plazo;
-- memoria estratégica extendida entre encuentros;
-- MCTS u otra planificación más profunda;
-- aprendizaje continuo o adaptación persistente;
-- persistencia en disco de rivales/campaña;
-- progresión autónoma del rival fuera de combate.
+4. **GF1-D — Save V3 de mundo/campaña**
+   - extender el save sin romper identidad de criaturas;
+   - persistir posición/mapa/flags/entrenadores/progreso;
+   - carga transaccional y migración explícita desde V2.
 
-Ninguna de esas features forma parte del cierre actual ni debe iniciarse automáticamente.
+5. **GF1-E — servicios y UI mínima**
+   - curación;
+   - tienda;
+   - acceso a PC/storage;
+   - party/bolsa básicas;
+   - menús suficientes para la vertical slice.
 
-## Cierre de snapshot pendiente únicamente de protocolo
+6. **GF1-F — vertical slice de campaña**
+   - escena inicial;
+   - elección de inicial;
+   - primer pueblo;
+   - primera ruta;
+   - encuentro salvaje y captura;
+   - entrenador real con Trainer AI;
+   - servicio de curación/tienda;
+   - save/load E2E.
 
-El PR #107 es un PR de snapshot y debe cerrarse **sin merge** cuando el HEAD documental final de este freeze haya pasado 18/18 workflows SUCCESS.
+Cada tramo debe quedar importable, probado y certificado antes del siguiente. El arte final no bloquea esta fase.
 
-Después de ese cierre no queda trabajo funcional pendiente en Campaign Persistence V1.
+## Después de Game Foundation V1
 
-## Invariantes
+Solo cuando exista esa mini-campaña estable tiene sentido abrir workstreams separados para:
 
-- `main` = `641d4b1fb0bcf964205d616e96f198f05d702197`;
-- PR #105 OPEN / unmerged;
-- PR #106 CLOSED / not merged;
-- PR #107 se cierra sin merge tras el gate documental final.
+- rival autónomo de overworld/campaña;
+- más mapas, gimnasios e historia;
+- arte/sprites/audio final;
+- ampliar mecánicas Pokémon concretas exigidas por el contenido;
+- builds/distribución.
+
+No reabrir DATA V3 ni Trainer AI por inercia.
