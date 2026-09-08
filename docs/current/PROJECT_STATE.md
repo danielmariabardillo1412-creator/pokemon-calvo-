@@ -1,15 +1,47 @@
 # ESTADO ACTUAL DEL PROYECTO
 
-## Baseline Trainer AI certificado
+## Línea moderna certificada
 
-Trainer AI queda cerrado en sus sistemas obligatorios actuales:
+El último freeze funcional/documental moderno antes de consolidar `main` es:
 
-- Trainer AI runtime system 26.67 — **CLOSED / COMPLETED**;
-- Trainer AI Game-Ready 27.1 — **CLOSED / VALIDATED**;
-- Trainer AI Expertise V1 — **CLOSED / CERTIFIED / FROZEN**;
-- Trainer AI Campaign Persistence V1 — **CLOSED / CERTIFIED / FROZEN**.
+`8552f52158ffc21c27b4e8f1dbc7caa63ac1a467`
 
-No hay una tranche Trainer AI obligatoria activa después de P1-D.
+Resultado verificado sobre ese SHA:
+
+- **18/18 workflows SUCCESS**;
+- Trainer Evaluation Corpus: **628 PASS / 0 FAIL**;
+- Trainer AI runtime 26.67 — CLOSED / COMPLETED;
+- Game-Ready 27.1 — CLOSED / VALIDATED;
+- Expertise V1 — CLOSED / CERTIFIED / FROZEN;
+- Campaign Persistence V1 — CLOSED / CERTIFIED / FROZEN.
+
+No existe P1-E ni queda una tranche Trainer AI obligatoria activa.
+
+## Consolidación de `main`
+
+La antigua `main` estaba en:
+
+`641d4b1fb0bcf964205d616e96f198f05d702197`
+
+Ese commit divergía del linaje moderno únicamente por añadir un archivo vacío `this_should_not_be_called`; no contiene una feature del juego que deba conservarse en el árbol final.
+
+La operación autorizada de consolidación vive en:
+
+`chore/main-baseline-consolidation-v1`
+
+Merge histórico inicial:
+
+`2f63312e8dc3e61c8fadbd02e97972fff6d0eacc`
+
+Propiedades del merge inicial:
+
+- parent 1: antigua `main` `641d4b1f...`;
+- parent 2: freeze moderno `8552f521...`;
+- tree exacto: `89835a6797989a8ef027b6b17baea206b1f97f74`, el mismo tree del freeze moderno;
+- no arrastra `this_should_not_be_called`;
+- no introduce cambios de producción respecto de `8552f521...`.
+
+La promoción de `main` solo queda autorizada cuando el HEAD final de esta rama, incluida la actualización documental, pase la matriz normal completa. GitHub/CI sobre ese SHA exacto es la autoridad.
 
 ## DATA V3
 
@@ -26,144 +58,71 @@ Contrato canónico preservado:
 - 61.102 entradas de learnset;
 - 554 evoluciones.
 
-No reabrir DATA V3 para subir contadores ni alterar fuentes inmutables.
+Frontera ejecutable relevante:
 
-## Trainer AI de combate — cerrado
+- Moves: 590 RUNTIME_SUPPORTED / 71 PARTIAL_RUNTIME / 246 DATA_ONLY / 12 UNSUPPORTED;
+- Abilities: 21 RUNTIME_SUPPORTED / 14 PARTIAL_RUNTIME / 338 DATA_ONLY;
+- Evolutions: 391 RUNTIME_SUPPORTED / 149 DATA_ONLY / 14 UNSUPPORTED;
+- held items runtime: `leftovers`, `sitrus_berry`;
+- trainer bag runtime: `potion`, `super_potion`, `hyper_potion`, `max_potion`, `full_restore`.
 
-El entrenador de combate dispone de memoria bilateral sanitizada, beliefs sin información oculta, búsqueda acotada, MOVE/SWITCH/ITEM donde corresponda, switching estratégico, loadouts/composición, proposal sobre todas las raíces legales, sustitución autónoma side_b, tie resolution game-ready, integración real Overworld/Battle Core, victoria/derrota/reset, full-battle adversarial, estilos y expertise certificados.
+No reabrir DATA V3 por subir contadores. Ampliar mecánicas solo cuando una necesidad concreta del juego lo exija.
 
-No reabrir C3f, Game-Ready 27.x ni Expertise V1 salvo regresión reproducible.
+## Trainer AI — cerrado
 
-## Trainer AI Campaign Persistence V1 — CLOSED / CERTIFIED / FROZEN
-
-Rama snapshot:
-
-`feature/trainer-ai-campaign-persistence-v1`
-
-Parent original:
-
-`f43dc6b158c35fe25139de5524b83f6fe2d3426f`
-
-Parent documental P1-D:
-
-`bf604176a66abde8ad475dd54f7375420c21c06b`
+El entrenador de combate dispone de memoria bilateral sanitizada, beliefs sin información oculta, búsqueda acotada, MOVE/SWITCH/ITEM donde corresponda, switching estratégico, loadouts/composición, proposal sobre todas las raíces legales, sustitución autónoma side_b, tie resolution game-ready, integración real Overworld/Battle Core, victoria/derrota/reset, full-battle adversarial, estilos/expertise y persistencia de roster entre combates.
 
 Checkpoint técnico final P1-D:
 
 `b314b8bb81db439e3063433644c691181ed39ef4`
 
-### P1-A — CLOSED / CERTIFIED
-
-Checkpoint:
-
-`26c11caa635cecb851b95cd636580cb250683a32`
-
-- 23/23 PASS;
-- Evaluation 521/0;
-- 18/18 workflows SUCCESS;
-- 0 producción / 0 Battle Core.
-
-Localizó el ownership seam entre caller, `TrainerBattleSession` y las mismas `CreatureInstance`.
-
-### P1-B — CLOSED / CERTIFIED / CONTRACT-FIRST
-
-Checkpoint:
-
-`f900fb79fb324c6e05d218eb741352e4d3a5db1f`
-
-- 27/27 PASS;
-- Evaluation 548/0;
-- 18/18 workflows SUCCESS;
-- 0 producción / 0 Battle Core.
-
-Contrato: misma `CreatureInstance`; HP/PP/persistent status sobreviven a `reconcile_post_battle()`; volatile/stages se limpian; no auto-heal; recovery/replacement explícitos; IDs/ownership fail-closed; no BattleState persistido; `campaign_snapshot` no es authority.
-
-HEAD documental P1-B:
-
-`4e96c999818916e90c6f8e9bfbc381f516e347dc` — 18/18 SUCCESS.
-
-### P1-C — CLOSED / CERTIFIED
-
-Checkpoint:
-
-`311349938af6c57f4507e2160e157cffbc124afb`
-
-- P1-C 34/34 PASS;
-- Evaluation 582/0;
-- Godot SUCCESS;
-- Team Composition SUCCESS;
-- 18/18 workflows SUCCESS.
-
-Producción:
-
-- `TrainerCampaignRosterOwner` como owner estable fuera de BattleState/TrainerBattleSession;
-- misma identidad exacta de `CreatureInstance`;
-- handoff desacopla solo el Array;
-- configuración/replacement atómicos y fail-closed;
-- recovery explícito;
-- Overworld usa `_trainer_campaign_owner`.
-
-P1-C no modificó Save V2, Battle Core ni combat AI.
-
-HEAD documental P1-C / parent P1-D:
-
-`bf604176a66abde8ad475dd54f7375420c21c06b` — 18/18 SUCCESS.
-
-### P1-D — CLOSED / CERTIFIED / FINAL
-
-Checkpoint técnico final:
-
-`b314b8bb81db439e3063433644c691181ed39ef4`
-
-Resultado:
+Evidencia final:
 
 - P1-D: **46/46 PASS**;
 - Evaluation: **628 PASS / 0 FAIL**;
-- Godot 4.7: **SUCCESS**;
-- Team Composition: **SUCCESS**;
-- full technical CI: **18/18 workflows SUCCESS**.
+- full technical CI: **18/18 SUCCESS**.
 
-Ciclo E2E certificado:
+No reabrir C3f, Game-Ready 27.x, Expertise V1 ni Campaign Persistence V1 salvo regresión reproducible o feature nueva explícita.
 
-`primer combate -> settlement -> rival KO persiste -> revancha inmediata bloqueada -> recovery explícito -> misma CreatureInstance -> segundo combate real`
+## Estado del videojuego visible
 
-La revancha sin recovery falla con `no_available_opponent_creature`. No existe auto-heal oculto. Tras recovery explícito se conserva la misma referencia, se restauran HP/PP y el segundo combate vuelve a usar esa misma instancia con memoria fresca y respuesta autónoma side_b.
+El ejecutable actual sigue arrancando en:
 
-Combat AI sigue reportando `campaign_policy_used = false`, `recovery_policy_used = false` y `replacement_policy_used = false`.
+`res://scenes/overworld/technical_overworld.tscn`
 
-### Incidente P1-D registrado
+Ese mundo es una vertical slice técnica asset-free. Ya demuestra movimiento, colisión, encuentros salvajes, captura, switching, combate de entrenador, IA, settlement y revancha/recovery explícitos, pero **no es todavía una campaña completa**.
 
-Primer intento:
+Los sistemas base ya existentes incluyen:
 
-`c0375c70fe15f76e0a75e51726ec9b083824b166`
-
-Evaluation: **626 PASS / 2 FAIL**.
-
-Los dos fallos eran una falsa alarma de auditoría estática: se buscaba la palabra `BattleState` en el source del owner y apareció en un comentario que describía que el owner vive fuera de BattleState. El runtime P1-D estaba verde.
-
-La corrección fue test-only y sustituyó esa búsqueda textual por comprobaciones de dependencias operativas prohibidas. Checkpoint corregido `b314b8bb...`: **46/46, 628/0, 18/18 CI**.
-
-## Scope congelado
-
-Campaign Persistence V1 no modifica:
-
-- Save V2;
 - Battle Core;
-- persistencia completa de BattleState;
-- search/proposal/brain/tie resolver;
-- FASE34;
-- scheduler/shared-budget/660;
-- conexión de `campaign_snapshot` al proposal Game-Ready.
+- criaturas/progresión/evolución dentro de la frontera runtime;
+- captura;
+- party/storage;
+- inventario;
+- Save V2 de criaturas + party + storage + inventory;
+- encuentros/overworld técnico;
+- localización base;
+- Trainer AI cerrada.
 
-No introduce auto-recovery ni replacement silencioso.
+## Siguiente workstream de producto
 
-## Continuación
+Tras consolidar `main`, el siguiente trabajo obligatorio deja de ser Trainer AI y pasa a ser **Game Foundation V1**.
 
-No hay P1-E ni trabajo Trainer AI obligatorio pendiente. Cualquier ampliación futura —estrategia de campaña avanzada, MCTS, aprendizaje continuo, memoria estratégica extendida o persistencia en disco— debe abrirse como feature separada y opcional, no como continuación automática de este workstream.
+Objetivo: convertir los cimientos certificados en una primera mini-campaña reproducible sin depender todavía de arte final.
 
-## Invariantes externos
+Orden previsto:
 
-- `main` = `641d4b1fb0bcf964205d616e96f198f05d702197`;
+1. game state global y contrato de campaña;
+2. infraestructura de mapas/transiciones/spawn points;
+3. NPC + diálogo + flags/eventos data-driven;
+4. Save V3 para mundo/campaña;
+5. servicios básicos (curación, tienda, PC/party UI mínima);
+6. vertical slice jugable: inicio + inicial + pueblo + ruta + encuentro salvaje + entrenador + servicio + guardar/cargar;
+7. después, rival autónomo de overworld y producción de contenido.
+
+## Invariantes externos durante la consolidación
+
 - PR #105 permanece OPEN / unmerged;
-- PR #106 permanece CLOSED / not merged;
-- PR #107 debe cerrarse sin merge después de que el HEAD documental final pase 18/18 CI.
+- PR #106 CLOSED / not merged;
+- PR #107 CLOSED / not merged;
+- no mezclar la consolidación de `main` con nuevas features de Game Foundation hasta certificar la promoción.
