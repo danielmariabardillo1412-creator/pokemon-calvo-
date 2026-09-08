@@ -13,7 +13,7 @@ concurrency:
 
 jobs:
   build:
-    name: Smoke test and export one-file Windows EXE
+    name: Smoke test exported package and build one-file Windows EXE
     runs-on: ubuntu-latest
     timeout-minutes: 20
 
@@ -41,14 +41,14 @@ jobs:
           set -euo pipefail
           godot --headless --path . --import 2>&1 | tee placeholder-import.log
 
-      - name: Smoke test combat placeholder and canonical data file
+      - name: Smoke test combat placeholder in source checkout
         shell: bash
         run: |
           set -euo pipefail
-          timeout 20s godot --headless --path . --quit-after 5 res://scenes/debug/combat_placeholder.tscn 2>&1 | tee placeholder-smoke.log
-          grep -E 'COMBAT_PLACEHOLDER_READY species=[1-9][0-9]* moves=[1-9][0-9]* source=res://data/normalized/pokemon_api.json' placeholder-smoke.log
-          if grep -E 'SCRIPT ERROR|Parse Error|COMBAT_PLACEHOLDER_DATA_ERROR' placeholder-smoke.log; then
-            echo 'Placeholder smoke test found a script/data error.' >&2
+          timeout 20s godot --headless --path . --quit-after 5 res://scenes/debug/combat_placeholder.tscn 2>&1 | tee placeholder-source-smoke.log
+          grep -E 'COMBAT_PLACEHOLDER_READY species=[1-9][0-9]* moves=[1-9][0-9]* source=res://data/normalized/pokemon_api.json' placeholder-source-smoke.log
+          if grep -E 'SCRIPT ERROR|Parse Error|COMBAT_PLACEHOLDER_DATA_ERROR' placeholder-source-smoke.log; then
+            echo 'Placeholder source smoke test found a script/data error.' >&2
             exit 1
           fi
 
@@ -68,11 +68,25 @@ jobs:
           print(new)
           PY
 
-      - name: Export single-file Windows build
+      - name: Export and run verification PCK
         shell: bash
         run: |
           set -euo pipefail
           mkdir -p build
+          godot --headless --path . --export-pack "Combat Placeholder Windows" build/combat-placeholder-verify.pck 2>&1 | tee placeholder-pack-export.log
+          test -s build/combat-placeholder-verify.pck
+          timeout 30s godot --headless --main-pack build/combat-placeholder-verify.pck --quit-after 5 2>&1 | tee placeholder-packed-smoke.log
+          grep -E 'COMBAT_PLACEHOLDER_READY species=[1-9][0-9]* moves=[1-9][0-9]* source=res://data/normalized/pokemon_api.json' placeholder-packed-smoke.log
+          if grep -E 'SCRIPT ERROR|Parse Error|COMBAT_PLACEHOLDER_DATA_ERROR|Cannot get class|Could not find' placeholder-packed-smoke.log; then
+            echo 'EXPORTED PACKAGE IS NOT SELF-CONTAINED.' >&2
+            exit 1
+          fi
+          rm -f build/combat-placeholder-verify.pck
+
+      - name: Export single-file Windows build
+        shell: bash
+        run: |
+          set -euo pipefail
           godot --headless --path . --export-release "Combat Placeholder Windows" build/PokemonCalvo-Combat-Placeholder.exe 2>&1 | tee placeholder-export.log
           test -s build/PokemonCalvo-Combat-Placeholder.exe
           if [ -e build/PokemonCalvo-Combat-Placeholder.pck ]; then
@@ -87,5 +101,5 @@ jobs:
           name: PokemonCalvo-Combat-Placeholder-Windows
           path: build/PokemonCalvo-Combat-Placeholder.exe
           if-no-files-found: error
-          compression-level: 0
+          compression-level: 6
           retention-days: 14
