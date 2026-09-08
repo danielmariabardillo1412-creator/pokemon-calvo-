@@ -2,18 +2,23 @@ extends Node2D
 
 # Asset-free executable integration map.
 # This is the canonical human-test laboratory before art: movement, wild encounters,
-# trainer AI battles, configurable rosters and black-box diagnostics all drive the real runtime.
+# trainer AI battles, configurable rosters, traversal mechanics and black-box diagnostics
+# all drive the real runtime without depending on final visual assets.
 
 const RUNTIME_DATA_PATH := "res://data/normalized/pokemon_api.json"
 const TECHNICAL_TRAINER_ID := &"technical_trainer"
 const TECHNICAL_ZONE_ID := &"technical_grass"
+const TECHNICAL_CAVE_ZONE_ID := &"technical_cave_floor"
 const DEFAULT_PLAYER_POSITION := Vector2(96, 180)
+const MOTION_ANOMALY_LOG_COOLDOWN_MSEC := 250
 
 @onready var player: OverworldPlayer = $Player
 @onready var status_label: Label = $CanvasLayer/StatusLabel
 @onready var battle_presentation: DiagnosticWildBattlePresentation = $CanvasLayer/BattlePresentation
 @onready var trainer_battle_presentation: DiagnosticTrainerBattlePresentation = $CanvasLayer/TrainerBattlePresentation
 @onready var test_panel: TechnicalTestPanel = $CanvasLayer/TechnicalTestPanel
+@onready var traversal_controller: OverworldTraversalController = $TraversalController
+@onready var transition_fade: ColorRect = $CanvasLayer/TransitionFade
 
 var _director: OverworldEncounterDirector = null
 var _session: WildAdventureSession = null
@@ -26,10 +31,13 @@ var _trainer_profile_id: StringName = TrainerProfile.BALANCED
 var _trainer_expertise_id: StringName = TrainerExpertise.FULL
 var _active_config: Dictionary = {}
 var _recorder := TechnicalTestRecorder.new()
+var _metrics := TechnicalAuditMetrics.new()
+var _last_motion_anomaly_log_msec: int = -100000
 
 
 func _ready() -> void:
 	player.step_completed.connect(_on_player_step_completed)
+	player.motion_resolved.connect(_on_player_motion_resolved)
 	battle_presentation.battle_closed.connect(_on_battle_closed)
 	trainer_battle_presentation.battle_closed.connect(_on_trainer_battle_closed)
 	battle_presentation.diagnostic_event.connect(_on_wild_diagnostic_event)
@@ -39,21 +47,53 @@ func _ready() -> void:
 	test_panel.open_report_folder_requested.connect(_on_open_report_folder_requested)
 	test_panel.panel_visibility_changed.connect(_on_test_panel_visibility_changed)
 
+	traversal_controller.configure(player, transition_fade)
+	traversal_controller.transition_started.connect(_on_transition_started)
+	traversal_controller.transition_finished.connect(_on_transition_finished)
+	traversal_controller.ledge_jump_started.connect(_on_ledge_jump_started)
+	traversal_controller.ledge_jump_finished.connect(_on_ledge_jump_finished)
+	traversal_controller.traversal_blocked.connect(_on_traversal_blocked)
+	traversal_controller.ledge_rejected.connect(_on_ledge_rejected)
+	for node in get_tree().get_nodes_in_group("overworld_portals"):
+		var portal := node as OverworldPortal
+		if portal != null:
+			traversal_controller.register_portal(portal)
+	for node in get_tree().get_nodes_in_group("overworld_ledges"):
+		var ledge := node as OverworldLedge
+		if ledge != null:
+			traversal_controller.register_ledge(ledge)
+
 	var recorder_ok := _recorder.start_session({
 		"project": "Pokemon Calvo",
 		"godot": Engine.get_version_info(),
 		"data_path": RUNTIME_DATA_PATH,
 		"purpose": "asset_free_human_validation",
+		"audit_scope": [
+			"movement",
+			"encounter_frequency",
+			"wild_battle",
+			"capture",
+			"trainer_ai",
+			"doors",
+			"caves",
+			"ledges",
+			"state_invariants",
+		],
 	})
 	if recorder_ok:
 		test_panel.set_report_status("Caja negra activa: %s" % _recorder.current_stream_global_path())
 	else:
 		test_panel.set_report_status("ERROR: no se pudo crear la carpeta de informes")
 
-	if _bootstrap_demo(test_panel.current_configuration()):
+	var initial_config := test_panel.current_configuration()
+	if _bootstrap_demo(initial_config):
+		_metrics.begin_run(initial_config)
 		_configure_presentations()
 		player.movement_enabled = true
-		status_label.text = "LABORATORIO | Verde: salvaje | Azul: entrenador IA | Flechas/WASD para moverte"
+		status_label.text = (
+			"LABORATORIO | Verde: salvaje | Azul: entrenador IA | "
+			+ "Amarillo: edificio | Negro: cueva | Rosa: salto"
+		)
 		test_panel.set_runtime_status("LISTO — motor real, sin arte")
 		_recorder.record(&"runtime", &"ready", _runtime_summary())
 		print("TECHNICAL_TEST_READY species=%d moves=%d reports=%s" % [
@@ -80,6 +120,7 @@ func is_demo_ready() -> bool:
 		and _escape_rng != null
 		and battle_presentation != null
 		and trainer_battle_presentation != null
+		and traversal_controller != null
 	)
 
 
@@ -118,6 +159,20 @@ func demo_storage_contains(instance_id: StringName) -> bool:
 	)
 
 
+func technical_region_id() -> StringName:
+	if player == null:
+		return &""
+	return _region_at_position(player.global_position)
+
+
+func technical_audit_summary() -> Dictionary:
+	return _metrics.summary()
+
+
+func traversal_is_busy() -> bool:
+	return traversal_controller != null and traversal_controller.is_busy()
+
+
 func zone_at_position(world_position: Vector2) -> StringName:
 	for node in get_tree().get_nodes_in_group("encounter_zones"):
 		var zone := node as OverworldEncounterZone
@@ -142,6 +197,8 @@ func trainer_trigger_contains(world_position: Vector2) -> bool:
 func start_demo_trainer_battle() -> bool:
 	if _trainer_session == null or _trainer_campaign_owner == null or not _trainer_campaign_owner.is_ready() or trainer_battle_presentation == null:
 		return false
+	if traversal_controller != null and traversal_controller.is_busy():
+		return false
 	if _session != null and _session.has_active_battle():
 		return false
 	if _trainer_session.has_active_battle():
@@ -165,6 +222,7 @@ func start_demo_trainer_battle() -> bool:
 
 	player.movement_enabled = false
 	status_label.text = "¡ENTRENADOR! | Rival técnico"
+	_metrics.note_battle_started(&"trainer")
 	_recorder.record(&"trainer", &"battle_started", {
 		"profile_id": String(_trainer_profile_id),
 		"expertise_id": String(_trainer_expertise_id),
@@ -184,6 +242,8 @@ func start_demo_trainer_battle() -> bool:
 func recover_demo_trainer_full() -> bool:
 	if _trainer_campaign_owner == null or not _trainer_campaign_owner.is_ready():
 		return false
+	if traversal_controller != null and traversal_controller.is_busy():
+		return false
 	if _session != null and _session.has_active_battle():
 		return false
 	if _trainer_session != null and _trainer_session.status != TrainerBattleSession.READY:
@@ -202,11 +262,15 @@ func recover_demo_trainer_full() -> bool:
 func _on_player_step_completed(world_position: Vector2) -> void:
 	if (_trainer_session != null and _trainer_session.has_active_battle()) or (_session != null and _session.has_active_battle()):
 		return
+	if traversal_controller != null and traversal_controller.is_busy():
+		return
 	var zone_id := zone_at_position(world_position)
 	var trainer_hit := trainer_trigger_contains(world_position)
+	_metrics.note_step(zone_id)
 	_recorder.record(&"overworld", &"step_completed", {
 		"x": world_position.x,
 		"y": world_position.y,
+		"region_id": String(_region_at_position(world_position)),
 		"zone_id": String(zone_id),
 		"trainer_trigger": trainer_hit,
 	})
@@ -216,10 +280,15 @@ func _on_player_step_completed(world_position: Vector2) -> void:
 		return
 	var outcome := _director.on_step(zone_id)
 	if outcome.rolled:
+		var encounter_status: StringName = (
+			outcome.encounter.status if outcome.encounter != null else WildEncounterResult.INVALID
+		)
+		_metrics.note_encounter_roll(outcome.battle_started, encounter_status, outcome.reason)
 		var encounter_payload := {
 			"zone_id": String(zone_id),
 			"battle_started": outcome.battle_started,
 			"reason": outcome.reason,
+			"configured_chance_percent": int(_active_config.get("encounter_chance_percent", 0)),
 		}
 		if outcome.encounter != null:
 			encounter_payload["encounter_status"] = String(outcome.encounter.status)
@@ -233,9 +302,11 @@ func _on_player_step_completed(world_position: Vector2) -> void:
 		var label := SpanishGameText.species_name(wild.species_id, _catalogs) if wild != null else "desconocido"
 		var level := wild.level if wild != null else 0
 		status_label.text = "¡ENCUENTRO! | %s salvaje Nv.%d" % [label, level]
+		_metrics.note_battle_started(&"wild")
 		_recorder.record(&"wild", &"battle_started", {
 			"species_id": String(wild.species_id) if wild != null else "",
 			"level": level,
+			"zone_id": String(zone_id),
 			"state": _session.battle_state().to_dict() if _session.battle_state() != null else {},
 		})
 		_record_state_validation(&"wild", _session.battle_state())
@@ -246,9 +317,35 @@ func _on_player_step_completed(world_position: Vector2) -> void:
 		status_label.text = "No ha aparecido ningún Pokémon esta vez"
 
 
+func _on_player_motion_resolved(
+	requested_displacement: Vector2,
+	actual_displacement: Vector2,
+	from_position: Vector2,
+	to_position: Vector2,
+) -> void:
+	var observation := _metrics.note_motion(requested_displacement, actual_displacement)
+	if not bool(observation.get("anomaly", false)):
+		return
+	var now := Time.get_ticks_msec()
+	if now - _last_motion_anomaly_log_msec < MOTION_ANOMALY_LOG_COOLDOWN_MSEC:
+		return
+	_last_motion_anomaly_log_msec = now
+	_recorder.record(&"movement", &"collision_resolution", {
+		"kind": observation.get("kind", "unknown"),
+		"requested_displacement": _vec(requested_displacement),
+		"actual_displacement": _vec(actual_displacement),
+		"requested_distance": observation.get("requested_distance", 0.0),
+		"actual_distance": observation.get("actual_distance", 0.0),
+		"from_position": _vec(from_position),
+		"to_position": _vec(to_position),
+		"region_id": String(_region_at_position(to_position)),
+	})
+
+
 func _on_battle_closed(reason: StringName) -> void:
 	player.movement_enabled = not test_panel.is_panel_open()
 	status_label.text = "Combate terminado: %s | Exploración reanudada" % SpanishGameText.completion_reason(reason)
+	_metrics.note_battle_closed(&"wild")
 	_recorder.record(&"wild", &"battle_closed", {
 		"reason": String(reason),
 		"party_size": demo_party_size(),
@@ -259,33 +356,82 @@ func _on_battle_closed(reason: StringName) -> void:
 func _on_trainer_battle_closed(reason: StringName) -> void:
 	player.movement_enabled = not test_panel.is_panel_open()
 	status_label.text = "Combate de entrenador terminado: %s | Exploración reanudada" % SpanishGameText.completion_reason(reason)
+	_metrics.note_battle_closed(&"trainer")
 	_recorder.record(&"trainer", &"battle_closed", {"reason": String(reason)})
 	_auto_export_after_battle("trainer", reason)
 
 
 func _on_wild_diagnostic_event(entry: Dictionary) -> void:
+	_metrics.note_wild_diagnostic(entry)
 	_recorder.record(&"wild_ui", StringName(entry.get("event", "diagnostic")), entry)
 	if _session != null:
 		_record_state_validation(&"wild", _session.battle_state())
 
 
 func _on_trainer_diagnostic_event(entry: Dictionary) -> void:
+	_metrics.note_trainer_diagnostic(entry)
 	_recorder.record(&"trainer_ui", StringName(entry.get("event", "diagnostic")), entry)
 	if _trainer_session != null:
 		_record_state_validation(&"trainer", _trainer_session.battle_state())
+
+
+func _on_transition_started(payload: Dictionary) -> void:
+	_recorder.record(&"traversal", &"transition_started", payload)
+
+
+func _on_transition_finished(payload: Dictionary) -> void:
+	_metrics.note_transition_finished(payload)
+	_recorder.record(&"traversal", &"transition_finished", payload)
+	status_label.text = "Transición %s: %d ms | destino %s" % [
+		String(payload.get("kind", "")),
+		int(payload.get("elapsed_msec", 0)),
+		String(payload.get("destination_region_id", "")),
+	]
+	_auto_export_checkpoint("transition", payload)
+
+
+func _on_ledge_jump_started(payload: Dictionary) -> void:
+	_recorder.record(&"traversal", &"ledge_started", payload)
+
+
+func _on_ledge_jump_finished(payload: Dictionary) -> void:
+	_metrics.note_ledge_finished(payload)
+	_recorder.record(&"traversal", &"ledge_finished", payload)
+	status_label.text = "Salto de barrera: %d ms | desplazamiento %.1f px" % [
+		int(payload.get("elapsed_msec", 0)),
+		float(payload.get("distance_px", 0.0)),
+	]
+	_auto_export_checkpoint("ledge", payload)
+
+
+func _on_traversal_blocked(payload: Dictionary) -> void:
+	_metrics.note_traversal_blocked()
+	_recorder.record(&"traversal", &"blocked", payload)
+	test_panel.set_runtime_status("TRAVESÍA BLOQUEADA: %s" % String(payload.get("reason", "unknown")))
+
+
+func _on_ledge_rejected(payload: Dictionary) -> void:
+	_metrics.note_ledge_rejected()
+	_recorder.record(&"traversal", &"ledge_rejected", payload)
 
 
 func _on_configuration_applied(config: Dictionary) -> void:
 	if has_active_demo_battle() or has_active_demo_trainer_battle():
 		test_panel.set_runtime_status("No se puede reconfigurar durante un combate")
 		return
+	if traversal_controller != null and traversal_controller.is_busy():
+		test_panel.set_runtime_status("No se puede reconfigurar durante una transición")
+		return
 	player.movement_enabled = false
-	player.position = DEFAULT_PLAYER_POSITION
+	player.global_position = DEFAULT_PLAYER_POSITION
+	player.velocity = Vector2.ZERO
+	player.reset_step_meter()
 	_recorder.record(&"configuration", &"apply_requested", config)
 	if _bootstrap_demo(config):
+		_metrics.begin_run(config)
 		_configure_presentations()
 		player.movement_enabled = true
-		status_label.text = "Configuración aplicada | Camina al verde o al azul"
+		status_label.text = "Configuración aplicada | Recorre exterior, edificio, cueva y salto"
 		test_panel.set_runtime_status("CONFIGURACIÓN OK")
 		_recorder.record(&"configuration", &"applied", _runtime_summary())
 	else:
@@ -315,6 +461,8 @@ func _on_open_report_folder_requested() -> void:
 func _on_test_panel_visibility_changed(open: bool) -> void:
 	if has_active_demo_battle() or has_active_demo_trainer_battle():
 		return
+	if traversal_controller != null and traversal_controller.is_busy():
+		return
 	player.movement_enabled = not open
 
 
@@ -323,6 +471,17 @@ func _auto_export_after_battle(scope: String, reason: StringName) -> void:
 		"auto_export": true,
 		"last_battle_scope": scope,
 		"last_battle_reason": String(reason),
+		"runtime": _runtime_summary(),
+	})
+	if not path.is_empty():
+		test_panel.set_report_status("Informe actualizado automáticamente: %s" % path)
+
+
+func _auto_export_checkpoint(kind: String, payload: Dictionary) -> void:
+	var path := _recorder.export_report({
+		"auto_export": true,
+		"last_checkpoint": kind,
+		"checkpoint_payload": payload.duplicate(true),
 		"runtime": _runtime_summary(),
 	})
 	if not path.is_empty():
@@ -415,12 +574,39 @@ func _bootstrap_demo(config: Dictionary) -> bool:
 	if _catalogs.species_catalog.get_by_id(wild_species_id) == null:
 		return false
 	var chance_percent := clampi(int(config.get("encounter_chance_percent", 100)), 0, 100)
-	var table := WildEncounterTable.new(TECHNICAL_ZONE_ID, chance_percent * 100)
-	if not table.add_slot(WildEncounterSlot.new(&"technical_wild_slot", wild_species_id, 1, wild_min, wild_max)):
+	if not _register_encounter_table(
+		TECHNICAL_ZONE_ID,
+		&"technical_wild_slot",
+		wild_species_id,
+		wild_min,
+		wild_max,
+		chance_percent,
+	):
 		return false
-	if not _director.register_zone(table):
+	if not _register_encounter_table(
+		TECHNICAL_CAVE_ZONE_ID,
+		&"technical_cave_wild_slot",
+		wild_species_id,
+		wild_min,
+		wild_max,
+		chance_percent,
+	):
 		return false
 	return true
+
+
+func _register_encounter_table(
+	zone_id: StringName,
+	slot_id: StringName,
+	species_id: StringName,
+	min_level: int,
+	max_level: int,
+	chance_percent: int,
+) -> bool:
+	var table := WildEncounterTable.new(zone_id, chance_percent * 100)
+	if not table.add_slot(WildEncounterSlot.new(slot_id, species_id, 1, min_level, max_level)):
+		return false
+	return _director.register_zone(table)
 
 
 func _build_creature(
@@ -479,11 +665,20 @@ func _record_state_validation(scope: StringName, state: BattleState) -> void:
 	for side in state.sides:
 		if side.active_id == &"" or not side.owns(side.active_id) or state.creature(side.active_id) == null:
 			issues.append("invalid_active:%s:%s" % [String(side.side_id), String(side.active_id)])
+	_metrics.note_state_validation(issues)
 	_recorder.record(scope, &"state_snapshot", {
 		"validation_ok": issues.is_empty(),
 		"issues": issues,
 		"state": state.to_dict(),
 	})
+
+
+func _region_at_position(world_position: Vector2) -> StringName:
+	if world_position.y >= 420.0:
+		return &"cave"
+	if world_position.x >= 680.0:
+		return &"building"
+	return &"surface"
 
 
 func _runtime_summary() -> Dictionary:
@@ -495,8 +690,13 @@ func _runtime_summary() -> Dictionary:
 		"player_party_size": demo_party_size(),
 		"trainer_profile_id": String(_trainer_profile_id),
 		"trainer_expertise_id": String(_trainer_expertise_id),
+		"current_region_id": String(technical_region_id()),
+		"traversal_busy": traversal_is_busy(),
+		"portal_count": get_tree().get_nodes_in_group("overworld_portals").size(),
+		"ledge_count": get_tree().get_nodes_in_group("overworld_ledges").size(),
 		"report_stream": _recorder.current_stream_global_path(),
 		"report_entries": _recorder.entry_count(),
+		"audit_metrics": _metrics.summary(),
 	}
 
 
@@ -506,3 +706,7 @@ func _load_json(path: String) -> Dictionary:
 		return {}
 	var parsed = JSON.parse_string(file.get_as_text())
 	return parsed as Dictionary if parsed is Dictionary else {}
+
+
+func _vec(value: Vector2) -> Dictionary:
+	return {"x": value.x, "y": value.y}
