@@ -10,6 +10,12 @@ GitHub/CI/artefactos del SHA exacto tienen prioridad sobre cualquier cuaderno.
 
 ## Cuadernos actuales
 
+### `GAME_FOUNDATION.md`
+
+Estado: **ACTIVO — GF1-A**.
+
+Workstream actual para convertir los subsistemas certificados en una mini-campaña real: game state, mapas/transiciones, NPC/eventos, Save V3, servicios/UI mínima y vertical slice E2E.
+
 ### `DATA_V3.md`
 
 Estado: **CERRADO / CERTIFICADO**.
@@ -43,10 +49,6 @@ Conserva el cierre P1-A..P1-D de ownership, persistencia de consecuencias entre 
 ### `TRAINER_AI_HANDOFF_2026-09-03.md`
 
 Referencia histórica de relevo. No representa estado vivo posterior al freeze final.
-
-## Próximo cuaderno
-
-No existe todavía `GAME_FOUNDATION.md` durante la consolidación de `main`. Debe crearse al abrir formalmente Game Foundation V1, una vez la nueva `main` haya sido promovida y certificada.
 
 ## Cuándo crear otro cuaderno
 
