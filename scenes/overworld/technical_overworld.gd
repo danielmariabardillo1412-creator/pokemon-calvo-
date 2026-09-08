@@ -348,7 +348,7 @@ func _bootstrap_demo(config: Dictionary) -> bool:
 		return false
 	_catalogs = game_data.to_definition_catalog()
 	var rules := ProgressionRuleset.new()
-	var player_collection := PlayerCollection.new()
+	var collection := PlayerCollection.new()
 	var player_rows: Array = config.get("player_team", [])
 	var trainer_rows: Array = config.get("trainer_team", [])
 	if player_rows.is_empty() or trainer_rows.is_empty():
@@ -363,7 +363,7 @@ func _bootstrap_demo(config: Dictionary) -> bool:
 			index,
 			rules,
 		)
-		if creature == null or not player_collection.party.add_creature(creature):
+		if creature == null or not collection.party.add_creature(creature):
 			return false
 
 	var trainer_roster: Array[CreatureInstance] = []
@@ -381,19 +381,19 @@ func _bootstrap_demo(config: Dictionary) -> bool:
 		trainer_roster.append(creature)
 
 	# Preserve the established technical-scene inventory contract used by capture regressions.
-	if not player_collection.inventory.add(&"poke_ball", 3):
+	if not collection.inventory.add(&"poke_ball", 3):
 		return false
-	if not player_collection.inventory.add(&"great_ball", 1):
+	if not collection.inventory.add(&"great_ball", 1):
 		return false
-	if not player_collection.inventory.add(&"master_ball", 1):
+	if not collection.inventory.add(&"master_ball", 1):
 		return false
 
 	_trainer_campaign_owner = TrainerCampaignRosterOwner.new()
 	if not _trainer_campaign_owner.configure(TECHNICAL_TRAINER_ID, trainer_roster):
 		return false
 
-	_session = WildAdventureSession.new(player_collection, _catalogs, rules)
-	_trainer_session = TrainerBattleSession.new(player_collection, _catalogs, rules)
+	_session = WildAdventureSession.new(collection, _catalogs, rules)
+	_trainer_session = TrainerBattleSession.new(collection, _catalogs, rules)
 	_trainer_profile_id = StringName(String(config.get("trainer_profile_id", "balanced")))
 	_trainer_expertise_id = StringName(String(config.get("trainer_expertise_id", "full")))
 
