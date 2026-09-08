@@ -320,8 +320,8 @@ func _e1d_ready_report_for_validation(
 	)
 	if String(tie.get("tie_resolution_status", "")) != TrainerGameReadyTieResolver.TIE_RESOLVED:
 		return {}
-	var selected_action := tie.get("selected_action", null)
-	if not (selected_action is Dictionary):
+	var selected_action: Dictionary = tie.get("selected_action", {}) as Dictionary
+	if selected_action.is_empty():
 		return {}
 	var ready := report.duplicate(true)
 	var root_id := String(tie.get("selected_root_id", ""))
@@ -331,7 +331,7 @@ func _e1d_ready_report_for_validation(
 	ready["selected_kind"] = String(tie.get("selected_kind", ""))
 	ready["best_root_ids"] = [root_id]
 	ready["best_kinds"] = [String(tie.get("selected_kind", ""))]
-	ready["proposal_action"] = (selected_action as Dictionary).duplicate(true)
+	ready["proposal_action"] = selected_action.duplicate(true)
 	ready["proposal_action_detached"] = true
 	return ready
 
