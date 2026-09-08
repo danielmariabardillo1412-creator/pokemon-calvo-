@@ -6,6 +6,7 @@ var _failed: int = 0
 
 func _initialize() -> void:
 	GameCampaignStateTestSuite.new().run(Callable(self, "_check"))
+	GameCampaignStateBoundaryTestSuite.new().run(Callable(self, "_check"))
 	print("\n=== GAME FOUNDATION RESULT: %d PASS / %d FAIL ===" % [_passed, _failed])
 	quit(0 if _failed == 0 else 1)
 
