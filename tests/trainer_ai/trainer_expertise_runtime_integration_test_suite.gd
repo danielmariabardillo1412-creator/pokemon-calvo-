@@ -10,10 +10,12 @@ func run(check_callback: Callable) -> void:
 	_check = check_callback
 
 	_check.call("expertise_runtime_limited_supported", TrainerExpertise.is_supported(TrainerExpertise.LIMITED))
+	_check.call("expertise_runtime_standard_supported", TrainerExpertise.is_supported(TrainerExpertise.STANDARD))
 	_check.call("expertise_runtime_full_supported", TrainerExpertise.is_supported(TrainerExpertise.FULL))
 	_check.call(
-		"expertise_runtime_only_e1b_certified_caps_exposed",
+		"expertise_runtime_three_bounded_tiers_exposed",
 		TrainerExpertise.inner_action_cap(TrainerExpertise.LIMITED) == 1
+		and TrainerExpertise.inner_action_cap(TrainerExpertise.STANDARD) == 2
 		and TrainerExpertise.inner_action_cap(TrainerExpertise.FULL) == TrainerItemAwareActionProposal.INNER_ACTION_CAP
 		and TrainerExpertise.inner_action_cap(&"unsupported") == 0
 	)
@@ -72,13 +74,40 @@ func run(check_callback: Callable) -> void:
 		_all_values_equal(limited_report.get("root_risk_weight_basis_points", {}) as Dictionary, 2500)
 	)
 	var limited_json := JSON.stringify(limited_report)
-	_check.call("expertise_runtime_hidden_move_not_leaked", not limited_json.contains(String(OPP_SECRET)))
-	_check.call("expertise_runtime_live_rng_not_leaked", not limited_json.contains("rng_state"))
+	_check.call("expertise_runtime_limited_hidden_move_not_leaked", not limited_json.contains(String(OPP_SECRET)))
+	_check.call("expertise_runtime_limited_live_rng_not_leaked", not limited_json.contains("rng_state"))
 	_check.call(
-		"expertise_runtime_tiebreak_and_fase34_barriers_preserved",
+		"expertise_runtime_limited_tiebreak_and_fase34_barriers_preserved",
 		not bool(limited_report.get("profile_tiebreak_used", true))
 		and not bool(limited_report.get("fase34_open", true))
 	)
+
+	var standard_fx := _session_fixture("standard")
+	var standard_session := standard_fx.session as TrainerBattleSession
+	var standard_ok := standard_session.begin_battle(
+		&"e1c_standard",
+		standard_fx.roster,
+		7201,
+		TrainerProfile.AGGRESSIVE,
+		TrainerExpertise.STANDARD
+	)
+	_check.call("expertise_runtime_standard_begin_ok", standard_ok and standard_session.has_active_battle())
+	_check.call(
+		"expertise_runtime_standard_ids_owned_by_session",
+		standard_session.trainer_profile_id() == TrainerProfile.AGGRESSIVE
+		and standard_session.trainer_expertise_id() == TrainerExpertise.STANDARD
+	)
+	var standard_report := standard_session.trainer_action_proposal_report_for_side(&"side_b")
+	_check.call("expertise_runtime_standard_report_complete", _proposal_complete(standard_report))
+	_check.call("expertise_runtime_standard_cap_two", int(standard_report.get("inner_max_actions_per_side", 0)) == 2)
+	_check.call(
+		"expertise_runtime_standard_outer_roots_all_legal",
+		bool(standard_report.get("root_all_legal", false))
+		and int(standard_report.get("evaluated_root_count", 0)) == int(standard_report.get("legal_action_count", -1))
+	)
+	var standard_json := JSON.stringify(standard_report)
+	_check.call("expertise_runtime_standard_hidden_move_not_leaked", not standard_json.contains(String(OPP_SECRET)))
+	_check.call("expertise_runtime_standard_live_rng_not_leaked", not standard_json.contains("rng_state"))
 
 	var full_fx := _session_fixture("full")
 	var full_session := full_fx.session as TrainerBattleSession
@@ -94,13 +123,19 @@ func run(check_callback: Callable) -> void:
 	_check.call("expertise_runtime_full_report_complete", _proposal_complete(full_report))
 	_check.call("expertise_runtime_full_cap_three", int(full_report.get("inner_max_actions_per_side", 0)) == TrainerItemAwareActionProposal.INNER_ACTION_CAP)
 	_check.call(
-		"expertise_runtime_expertise_keeps_outer_root_set",
-		int(full_report.get("legal_action_count", -1)) == int(limited_report.get("legal_action_count", -2))
+		"expertise_runtime_all_tiers_keep_outer_root_set",
+		int(standard_report.get("legal_action_count", -1)) == int(limited_report.get("legal_action_count", -2))
+		and int(full_report.get("legal_action_count", -3)) == int(limited_report.get("legal_action_count", -2))
+		and (standard_report.get("root_ids", []) as Array).size() == (limited_report.get("root_ids", []) as Array).size()
 		and (full_report.get("root_ids", []) as Array).size() == (limited_report.get("root_ids", []) as Array).size()
 	)
+	var limited_simulations := _sum_values(limited_report.get("root_simulations", {}) as Dictionary)
+	var standard_simulations := _sum_values(standard_report.get("root_simulations", {}) as Dictionary)
+	var full_simulations := _sum_values(full_report.get("root_simulations", {}) as Dictionary)
 	_check.call(
-		"expertise_runtime_full_materially_widens_internal_search",
-		_sum_values(full_report.get("root_simulations", {}) as Dictionary) > _sum_values(limited_report.get("root_simulations", {}) as Dictionary)
+		"expertise_runtime_search_breadth_scales_with_tier",
+		standard_simulations > limited_simulations
+		and full_simulations > standard_simulations
 	)
 
 	var default_fx := _session_fixture("default")
