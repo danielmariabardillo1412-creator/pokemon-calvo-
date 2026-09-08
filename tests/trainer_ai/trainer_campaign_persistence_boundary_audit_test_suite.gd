@@ -3,8 +3,8 @@ extends TrainerBattleSessionCrossBattleResetLifecycleAuditTestSuite
 
 # P1-A was strictly TEST/AUDIT-ONLY. Its permanent responsibility is to verify the
 # ownership seam between TrainerBattleSession and its caller. Later authorized
-# tranches may replace the original ad-hoc caller roster with a dedicated owner, so
-# this audit accepts either the historical shape or that explicitly isolated successor.
+# tranches may replace the original ad-hoc caller roster and one-shot lifecycle with
+# the dedicated owner/rematch successor while preserving the same ownership barriers.
 const P1A_AUDIT_ID := "p1_a_campaign_persistence_ownership_boundary_audit_v1"
 const GAP_LOCALIZED := "CAMPAIGN_PERSISTENCE_OWNERSHIP_SEAM_LOCALIZED"
 const P1A_BLOCKED := "BLOCKED"
@@ -33,7 +33,7 @@ func run(check_callback: Callable) -> void:
 	_p1a_check.call("p1a_reset_clears_opponent_identity", bool(source.get("reset_clears_opponent_identity", false)))
 	_p1a_check.call("p1a_overworld_owns_roster_outside_session", bool(source.get("overworld_owns_trainer_roster", false)))
 	_p1a_check.call("p1a_overworld_builds_roster_before_battle", bool(source.get("overworld_builds_roster_in_bootstrap", false)))
-	_p1a_check.call("p1a_demo_is_one_shot_after_completion", bool(source.get("overworld_blocks_rematch_after_completion", false)))
+	_p1a_check.call("p1a_rematch_boundary_transition_authorized", bool(source.get("overworld_rematch_boundary_authorized", false)))
 	_p1a_check.call("p1a_historical_campaign_snapshot_transport_exists", bool(source.get("historical_campaign_snapshot_transport_exists", false)))
 	_p1a_check.call("p1a_historical_campaign_snapshot_is_deep_detached", bool(source.get("historical_campaign_snapshot_deep_detached", false)))
 	_p1a_check.call("p1a_game_ready_proposal_keeps_campaign_snapshot_disconnected", bool(source.get("game_ready_proposal_omits_campaign_snapshot", false)))
@@ -63,7 +63,7 @@ func _build_p1a_report() -> Dictionary:
 		and bool(source.get("settlement_clears_session_roster", false))
 		and bool(source.get("overworld_owns_trainer_roster", false))
 		and bool(source.get("overworld_builds_roster_in_bootstrap", false))
-		and bool(source.get("overworld_blocks_rematch_after_completion", false))
+		and bool(source.get("overworld_rematch_boundary_authorized", false))
 		and bool(source.get("historical_campaign_snapshot_transport_exists", false))
 		and bool(source.get("historical_campaign_snapshot_deep_detached", false))
 		and bool(source.get("game_ready_proposal_omits_campaign_snapshot", false))
@@ -84,7 +84,7 @@ func _build_p1a_report() -> Dictionary:
 		"recovery_policy_implemented": bool(source.get("successor_explicit_recovery_present", false)),
 		"replacement_policy_implemented": bool(source.get("successor_explicit_replacement_present", false)),
 		"durable_trainer_registry_implemented": false,
-		"rematch_lifecycle_implemented_in_executable_slice": false,
+		"rematch_lifecycle_implemented_in_executable_slice": bool(source.get("successor_explicit_rematch_present", false)),
 		"battle_core_modified": false,
 		"p1a_production_modified": false,
 		"audit_only_scope": true,
@@ -140,6 +140,8 @@ func _p1a_source_trace() -> Dictionary:
 	)
 	var legacy_bootstrap := overworld_source.contains("_trainer_roster.append(trainer_creature)")
 	var successor_bootstrap := overworld_source.contains("_trainer_campaign_owner.configure(TECHNICAL_TRAINER_ID, trainer_roster)")
+	var legacy_one_shot := overworld_source.contains("if _trainer_demo_completed:") and overworld_source.contains("_trainer_demo_completed = true")
+	var successor_rematch := overworld_source.contains("func recover_demo_trainer_full() -> bool:") and not overworld_source.contains("_trainer_demo_completed")
 	return {
 		"session_accepts_external_roster": session_source.contains("p_opponent_roster: Array[CreatureInstance]") and session_source.contains("_roster_with_living_active(p_opponent_roster)"),
 		"living_roster_reuses_creature_objects": session_source.contains("var roster: Array[CreatureInstance] = [first_living]") and session_source.contains("roster.append(creature)"),
@@ -151,9 +153,11 @@ func _p1a_source_trace() -> Dictionary:
 		"successor_campaign_owner_present": successor_owner,
 		"successor_explicit_recovery_present": owner_source.contains("func recover_creature_full("),
 		"successor_explicit_replacement_present": owner_source.contains("func replace_member("),
+		"successor_explicit_rematch_present": successor_rematch,
 		"overworld_owns_trainer_roster": legacy_owner or successor_owner,
 		"overworld_builds_roster_in_bootstrap": legacy_bootstrap or successor_bootstrap,
-		"overworld_blocks_rematch_after_completion": overworld_source.contains("if _trainer_demo_completed:") and overworld_source.contains("_trainer_demo_completed = true"),
+		"legacy_overworld_one_shot": legacy_one_shot,
+		"overworld_rematch_boundary_authorized": legacy_one_shot or successor_rematch,
 		"historical_campaign_snapshot_transport_exists": controller_source.contains("var _campaign_snapshot: Dictionary = {}") and controller_source.contains("func set_campaign_snapshot(p_campaign_snapshot: Dictionary) -> void:") and controller_source.contains("_campaign_snapshot,") and context_source.contains("var campaign_snapshot: Dictionary = {}"),
 		"historical_campaign_snapshot_deep_detached": controller_source.contains("_campaign_snapshot = p_campaign_snapshot.duplicate(true)") and context_source.contains("context.campaign_snapshot = p_campaign_snapshot.duplicate(true)"),
 		"game_ready_proposal_omits_campaign_snapshot": proposal_source.contains("TrainerDecisionContext.create(observation, belief, memory_clone, legal_actions)") and not proposal_source.contains("campaign_snapshot"),
