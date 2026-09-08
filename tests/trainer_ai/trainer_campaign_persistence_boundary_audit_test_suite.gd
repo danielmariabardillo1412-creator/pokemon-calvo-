@@ -5,10 +5,13 @@ extends TrainerBattleSessionCrossBattleResetLifecycleAuditTestSuite
 # ownership seam between TrainerBattleSession and its caller. Later authorized
 # tranches may replace the original ad-hoc caller roster and one-shot lifecycle with
 # the dedicated owner/rematch successor while preserving the same ownership barriers.
+# Game Foundation may also introduce a separate global campaign-state authority; that
+# file is allowed only while it remains operationally isolated from Trainer AI policy.
 const P1A_AUDIT_ID := "p1_a_campaign_persistence_ownership_boundary_audit_v1"
 const GAP_LOCALIZED := "CAMPAIGN_PERSISTENCE_OWNERSHIP_SEAM_LOCALIZED"
 const P1A_BLOCKED := "BLOCKED"
 const P1A_AUTHORIZED_OWNER_PATH := "res://modules/gameplay/trainer_campaign_roster_owner.gd"
+const P1A_AUTHORIZED_GAME_CAMPAIGN_STATE_PATH := "res://modules/gameplay/game_campaign_state.gd"
 
 var _p1a_check: Callable
 
@@ -191,16 +194,37 @@ func _p1a_policy_file_scan() -> Dictionary:
 			recovery_files.append(path)
 		if name.contains("replacement"):
 			replacement_files.append(path)
+	campaign_files.sort()
+
+	var game_campaign_source := FileAccess.get_file_as_string(P1A_AUTHORIZED_GAME_CAMPAIGN_STATE_PATH)
+	var game_campaign_state_isolated := (
+		game_campaign_source.contains("class_name GameCampaignState")
+		and not game_campaign_source.contains("TrainerBattleSession.new")
+		and not game_campaign_source.contains("TrainerItemAwareActionProposal")
+		and not game_campaign_source.contains("TrainerItemAwareSearch")
+		and not game_campaign_source.contains("TrainerGameReadyTieResolver")
+		and not game_campaign_source.contains("_battle_server")
+		and not game_campaign_source.contains("func recover_creature_full(")
+		and not game_campaign_source.contains("func replace_member(")
+		and not game_campaign_source.contains("func roster_for_battle(")
+	)
+
 	var no_campaign_owner := campaign_files.is_empty()
-	var only_authorized_successor := campaign_files.size() == 1 and campaign_files[0] == P1A_AUTHORIZED_OWNER_PATH
+	var expected_authorized_files: Array[String] = [
+		P1A_AUTHORIZED_GAME_CAMPAIGN_STATE_PATH,
+		P1A_AUTHORIZED_OWNER_PATH,
+	]
+	expected_authorized_files.sort()
+	var only_authorized_successors := campaign_files == expected_authorized_files and game_campaign_state_isolated
 	return {
 		"scanned_top_level_gd_files": candidate_files.size(),
 		"campaign_named_files": campaign_files,
 		"recovery_named_files": recovery_files,
 		"replacement_named_files": replacement_files,
 		"no_dedicated_campaign_policy_owner": no_campaign_owner,
-		"authorized_successor_campaign_owner_only": only_authorized_successor,
-		"campaign_owner_transition_authorized": no_campaign_owner or only_authorized_successor,
+		"authorized_successor_campaign_owner_only": only_authorized_successors,
+		"game_campaign_state_isolated_from_trainer_policy": game_campaign_state_isolated,
+		"campaign_owner_transition_authorized": no_campaign_owner or only_authorized_successors,
 		"no_dedicated_recovery_policy_owner": recovery_files.is_empty(),
 		"no_dedicated_replacement_policy_owner": replacement_files.is_empty(),
 	}
