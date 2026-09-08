@@ -15,7 +15,7 @@ const TECHNICAL_TRAINER_ID := &"technical_trainer"
 var _director: OverworldEncounterDirector = null
 var _session: WildAdventureSession = null
 var _trainer_session: TrainerBattleSession = null
-var _trainer_roster: Array[CreatureInstance] = []
+var _trainer_campaign_owner: TrainerCampaignRosterOwner = null
 var _trainer_demo_completed: bool = false
 var _catalogs: DefinitionCatalog = null
 var _capture_rng: RandomNumberGenerator = null
@@ -40,7 +40,8 @@ func is_demo_ready() -> bool:
 		_director != null
 		and _session != null
 		and _trainer_session != null
-		and not _trainer_roster.is_empty()
+		and _trainer_campaign_owner != null
+		and _trainer_campaign_owner.is_ready()
 		and _catalogs != null
 		and _capture_rng != null
 		and _escape_rng != null
@@ -108,7 +109,7 @@ func trainer_trigger_contains(world_position: Vector2) -> bool:
 func start_demo_trainer_battle() -> bool:
 	if _trainer_demo_completed:
 		return false
-	if _trainer_session == null or _trainer_roster.is_empty() or trainer_battle_presentation == null:
+	if _trainer_session == null or _trainer_campaign_owner == null or not _trainer_campaign_owner.is_ready() or trainer_battle_presentation == null:
 		return false
 	if _session != null and _session.has_active_battle():
 		return false
@@ -117,7 +118,10 @@ func start_demo_trainer_battle() -> bool:
 	if _trainer_session.status == TrainerBattleSession.COMPLETED:
 		if not _trainer_session.reset_after_completion():
 			return false
-	if not _trainer_session.begin_battle(TECHNICAL_TRAINER_ID, _trainer_roster, 12007):
+	var trainer_roster := _trainer_campaign_owner.roster_for_battle()
+	if trainer_roster.is_empty():
+		return false
+	if not _trainer_session.begin_battle(TECHNICAL_TRAINER_ID, trainer_roster, 12007):
 		status_label.text = "No se ha podido iniciar el combate de entrenador: %s" % _trainer_session.last_error
 		return false
 
@@ -220,8 +224,10 @@ func _bootstrap_demo() -> bool:
 	var trainer_move_ids: Array[StringName] = [&"tackle"]
 	trainer_creature.moveset = trainer_slots
 	trainer_creature.move_ids = trainer_move_ids
-	_trainer_roster.clear()
-	_trainer_roster.append(trainer_creature)
+	var trainer_roster: Array[CreatureInstance] = [trainer_creature]
+	_trainer_campaign_owner = TrainerCampaignRosterOwner.new()
+	if not _trainer_campaign_owner.configure(TECHNICAL_TRAINER_ID, trainer_roster):
+		return false
 
 	var collection := PlayerCollection.new()
 	if not collection.party.add_creature(starter):
