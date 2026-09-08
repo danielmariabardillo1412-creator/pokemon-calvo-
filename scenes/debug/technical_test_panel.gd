@@ -127,7 +127,12 @@ func _build_config_panel() -> void:
 	root.add_child(title)
 
 	var hint := Label.new()
-	hint.text = "Configura equipos y el encuentro salvaje. Después camina por el mapa gris para probar la cadena completa."
+	hint.text = (
+		"Recorre todo el laboratorio: verde = encuentro salvaje, azul = entrenador IA, "
+		+ "amarillo = edificio, negro = cueva y rosa = salto de barrera. "
+		+ "La probabilidad configurada se aplica por paso válido tanto a hierba como a cueva; "
+		+ "el edificio no debe consumir ninguna tirada de encuentro."
+	)
 	hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	root.add_child(hint)
 
@@ -140,7 +145,7 @@ func _build_config_panel() -> void:
 
 	var wild_row := HBoxContainer.new()
 	root.add_child(wild_row)
-	wild_row.add_child(_label("Salvaje:"))
+	wild_row.add_child(_label("Salvaje (hierba/cueva):"))
 	_wild_species_input = LineEdit.new()
 	_wild_species_input.custom_minimum_size = Vector2(120, 0)
 	wild_row.add_child(_wild_species_input)
@@ -150,7 +155,7 @@ func _build_config_panel() -> void:
 	wild_row.add_child(_label("máx:"))
 	_wild_max_level = _level_spinbox(4)
 	wild_row.add_child(_wild_max_level)
-	wild_row.add_child(_label("Probabilidad %:"))
+	wild_row.add_child(_label("Prob. % por paso:"))
 	_encounter_chance = SpinBox.new()
 	_encounter_chance.min_value = 0
 	_encounter_chance.max_value = 100
