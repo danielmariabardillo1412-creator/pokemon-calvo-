@@ -71,11 +71,30 @@ func _emit_command_result(kind: String, result: WildBattleCommandResult) -> void
 		for event in result.battle_events:
 			if event != null:
 				serialized.append(event.to_dict())
+	var escape_dict: Dictionary = {}
+	if result != null and result.escape_resolution != null:
+		escape_dict = {
+			"escaped": result.escape_resolution.escaped,
+			"attempt": result.escape_resolution.attempt,
+			"odds": result.escape_resolution.odds,
+			"roll": result.escape_resolution.roll,
+			"rng_consumed": result.escape_resolution.rng_consumed,
+			"reason": result.escape_resolution.reason,
+		}
 	diagnostic_event.emit({
 		"event": "command_result",
 		"scope": "wild",
 		"kind": kind,
 		"accepted": result != null and result.accepted,
 		"reason": result.reason if result != null else "missing_result",
+		"turn_consumed": result.turn_consumed if result != null else false,
+		"session_completed": result.session_completed if result != null else false,
+		"battle_finished": result.battle_finished if result != null else false,
+		"capture_outcome": (
+			result.capture_outcome.to_dict()
+			if result != null and result.capture_outcome != null
+			else {}
+		),
+		"escape_resolution": escape_dict,
 		"battle_events": serialized,
 	})
