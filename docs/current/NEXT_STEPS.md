@@ -6,97 +6,80 @@ Rama:
 
 `feature/trainer-ai-campaign-persistence-v1`
 
-Parent original certificado:
-
-`f43dc6b158c35fe25139de5524b83f6fe2d3426f`
-
 PR #107: **OPEN / DRAFT / NOT MERGED**.
 
-## Plan fijo — P1-A/P1-B cerrados, P1-C siguiente
+## Plan fijo — solo queda P1-D
 
-1. **P1-A — ownership/persistence boundary audit** — **CLOSED / CERTIFIED / TEST-AUDIT-ONLY**.
-2. **P1-B — contrato persistente + recovery/replacement** — **CLOSED / CERTIFIED / CONTRACT-FIRST**.
-3. **P1-C — integración productiva mínima** — **NEXT**.
-4. **P1-D — rematch/cross-session E2E + freeze** — PENDIENTE.
+1. P1-A ownership/persistence boundary audit — **CLOSED / CERTIFIED**.
+2. P1-B persistent-state + recovery/replacement contract — **CLOSED / CERTIFIED**.
+3. P1-C minimal production integration — **CLOSED / CERTIFIED**.
+4. **P1-D rematch/cross-battle E2E + regression + freeze — NEXT / FINAL**.
 
 No añadir una quinta tranche por inercia.
 
-## P1-B — evidencia cerrada
+## P1-C — evidencia cerrada
 
 Checkpoint técnico exacto:
 
-`f900fb79fb324c6e05d218eb741352e4d3a5db1f`
+`311349938af6c57f4507e2160e157cffbc124afb`
 
-- suite P1-B: **27/27 PASS**;
-- Trainer Evaluation Corpus: **548 PASS / 0 FAIL**;
+- P1-C: **34/34 PASS**;
+- P1-A forward-compatible: **23/23 PASS**;
+- Evaluation: **582 PASS / 0 FAIL**;
+- Godot 4.7: **SUCCESS**;
 - Team Composition: **SUCCESS**;
-- full CI técnico: **18/18 workflows SUCCESS**;
-- **0 producción / 0 Battle Core**.
+- full CI: **18/18 workflows SUCCESS**.
 
-Probe runtime certificado sobre la misma `CreatureInstance`:
+Owner productivo:
 
-- HP `118 -> 115` persiste;
-- PP `20 -> 19` persiste;
-- `burn` persistente sobrevive;
-- volatile se elimina;
-- Attack stage `+2 -> 0`;
-- identidad preservada.
+`TrainerCampaignRosterOwner`
 
-Esto fija sin ambigüedad que el futuro owner no puede auto-curar, clonar identidades ni persistir BattleState.
+Garantías:
 
-## Gate antes de P1-C
+- misma identidad de `CreatureInstance`;
+- handoff copia solo el contenedor;
+- ownership/IDs fail-closed;
+- configuración y replacement atómicos;
+- sin auto-heal;
+- recovery full explícito;
+- campaign replacement separado de forced replacement;
+- Overworld ya usa el owner dedicado;
+- Save V2/Battle Core/combat AI intactos.
 
-El HEAD documental que sincroniza el cierre de P1-B debe pasar **18/18 workflows SUCCESS**. Solo ese HEAD verde puede utilizarse como parent certificado de producción P1-C.
+El primer run P1-C `d3238725...` fue 578/4 porque cuatro asserts históricos P1-A exigían la ausencia del owner que P1-C acababa de introducir. P1-C estaba 34/34. La auditoría histórica se hizo forward-compatible sin perder checks; `311349...` quedó 582/0.
 
-## P1-C — trabajo autorizado tras gate documental
+## Gate antes de P1-D
 
-P1-C debe ser una integración productiva **mínima**.
+El HEAD documental que registra este cierre P1-C debe pasar **18/18 workflows SUCCESS**. Solo ese HEAD puede ser parent certificado de P1-D.
 
-Objetivo:
+## P1-D — trabajo autorizado después del gate documental
 
-1. Introducir un owner persistente dedicado fuera de `BattleState` y `TrainerBattleSession`.
-2. Hacer que posea las mismas `CreatureInstance`, sin clones de identidad.
-3. Validar IDs/ownership en modo fail-closed.
-4. Mantener por defecto las consecuencias post-battle que deja `reconcile_post_battle()`; **sin auto-heal**.
-5. Exponer recovery como operación inter-battle explícita, no automática.
-6. Exponer campaign replacement como operación fuera de batalla, separada del forced replacement de Battle Core.
-7. Sustituir el ownership ad-hoc del punto de integración actual por este owner con el menor cambio posible.
-8. Mantener la vertical slice one-shot durante P1-C si ello permite separar producción del E2E de revancha; P1-D es el tramo que debe probar dos encuentros/cross-session reales.
+Objetivo final:
 
-### Barreras P1-C
+1. Retirar el bloqueo one-shot del entrenador técnico para permitir un segundo encuentro.
+2. Mantener **cero auto-recovery** al cerrar batalla.
+3. Probar que el primer combate usa exactamente la criatura owned por campaign.
+4. Terminar el primer combate por la ruta real y comprobar que settlement conserva el estado persistente sobre la misma instancia.
+5. Comprobar que, tras quedar KO, el rival no puede iniciar una revancha inmediata.
+6. Ejecutar recovery explícito fuera de batalla.
+7. Comprobar que recovery conserva exactamente la misma instancia y restaura el estado previsto.
+8. Abrir un segundo combate real con esa misma instancia.
+9. Ejecutar/cerrar el segundo encuentro por Overworld -> Presentation -> TrainerBattleSession -> Battle Core.
+10. Mantener Save V2, BattleState persistence, search/proposal/brain/tie resolver, FASE34 y scheduler/shared-budget/660 fuera de scope.
+11. Full regression final verde.
+12. Freeze documental final y cierre de PR #107 **sin merge**.
 
-No autoriza:
+### Criterio de verdad
 
-- tocar Save V2;
-- persistir `BattleState` completo;
-- conectar `campaign_snapshot` histórico al proposal Game-Ready;
-- auto-heal o reset automático de HP/PP;
-- reemplazo silencioso de Pokémon KO;
-- permadeath;
-- modificar search/proposal/brain/tie resolver;
-- tocar Battle Core;
-- reabrir scheduler/shared-budget/660;
-- abrir FASE34;
-- mergear PR #105 o PR #107.
+No vale hacer que el rival se cure al cerrar el primer combate para que el segundo pase. El E2E debe demostrar esta secuencia:
 
-## Criterio de salida P1-C
+`KO persistente -> rematch bloqueado -> recovery explícito -> rematch permitido`
 
-P1-C no se cierra por mera compilación. Debe demostrar mediante tests ejecutables al menos:
+La criatura antes y después debe ser la **misma `CreatureInstance`**.
 
-- creación/configuración válida del owner;
-- roster conserva identidad exacta;
-- duplicados/ownership inválido fallan cerrado;
-- conexión de integración entrega al battle session las mismas referencias;
-- settlement/reconciliation no introduce auto-heal;
-- recovery/replacement explícitos no contaminan Battle Core;
-- regresión completa verde.
+## Invariantes
 
-Después de certificar P1-C, **P1-D** será el único tramo restante para rematch/cross-session E2E, regresión global y freeze final.
-
-## Invariantes externas
-
-- PR #105 permanece OPEN / unmerged.
-- PR #106 permanece CLOSED / not merged.
-- PR #107 permanece OPEN / DRAFT / unmerged.
-- `main` permanece exactamente en `641d4b1fb0bcf964205d616e96f198f05d702197`.
-- P1-C parte del HEAD documental certificado de P1-B, no de `main`.
+- `main` = `641d4b1fb0bcf964205d616e96f198f05d702197`.
+- PR #105 OPEN / unmerged.
+- PR #106 CLOSED / not merged.
+- PR #107 OPEN / DRAFT / unmerged hasta freeze.
