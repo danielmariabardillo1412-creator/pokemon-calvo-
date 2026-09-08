@@ -2,6 +2,7 @@ class_name TechnicalTestPanel
 extends Control
 
 signal configuration_applied(config: Dictionary)
+signal automatic_audit_requested
 signal export_report_requested
 signal open_report_folder_requested
 signal panel_visibility_changed(open: bool)
@@ -22,6 +23,7 @@ var _wild_max_level: SpinBox = null
 var _encounter_chance: SpinBox = null
 var _profile_selector: OptionButton = null
 var _expertise_selector: OptionButton = null
+var _audit_running := false
 
 
 func _ready() -> void:
@@ -30,6 +32,7 @@ func _ready() -> void:
 	_build_toolbar()
 	_build_config_panel()
 	_load_defaults()
+	automatic_audit_requested.connect(_on_automatic_audit_requested)
 
 
 func current_configuration() -> Dictionary:
@@ -59,6 +62,38 @@ func is_panel_open() -> bool:
 	return _config_panel != null and _config_panel.visible
 
 
+func _on_automatic_audit_requested() -> void:
+	if _audit_running:
+		return
+	_audit_running = true
+	set_runtime_status("AUTOPRUEBA — revisando motor real...")
+	set_report_status("Autoprueba en curso: datos + mundo + encuentros + captura + IA")
+	# Give physics one frame so CharacterBody2D.test_move sees the live physics world.
+	await get_tree().physics_frame
+	var world := get_tree().current_scene as Node2D
+	var result := TechnicalRuntimeAuditService.run_and_export(world, current_configuration())
+	if not bool(result.get("ok", false)):
+		var error := String(result.get("error", "unknown_audit_error"))
+		set_runtime_status("AUTOPRUEBA ERROR")
+		set_report_status("ERROR de autoprueba: %s" % error)
+		print("TECHNICAL_AUDIT_COMPLETE status=FAIL ok=0 warn=0 fail=1 error=%s" % error)
+		_audit_running = false
+		return
+	var audit := result.get("audit", {}) as Dictionary
+	var counts := audit.get("counts", {}) as Dictionary
+	var status := String(audit.get("overall_status", "FAIL"))
+	var ok_count := int(counts.get("OK", 0))
+	var warn_count := int(counts.get("WARN", 0))
+	var fail_count := int(counts.get("FAIL", 0))
+	var path := String(result.get("path", ""))
+	set_runtime_status("AUTOPRUEBA %s | OK %d | WARN %d | FAIL %d" % [status, ok_count, warn_count, fail_count])
+	set_report_status("Informe automático: %s" % path)
+	print("TECHNICAL_AUDIT_COMPLETE status=%s ok=%d warn=%d fail=%d report=%s" % [
+		status, ok_count, warn_count, fail_count, path,
+	])
+	_audit_running = false
+
+
 func _build_toolbar() -> void:
 	var toolbar := PanelContainer.new()
 	toolbar.set_anchors_preset(Control.PRESET_BOTTOM_WIDE)
@@ -80,6 +115,12 @@ func _build_toolbar() -> void:
 	config_button.text = "CONFIGURAR PRUEBAS"
 	config_button.pressed.connect(_open_config)
 	buttons.add_child(config_button)
+
+	var audit_button := Button.new()
+	audit_button.text = "AUTOPRUEBA COMPLETA"
+	audit_button.tooltip_text = "Revisa datos, hierba/encuentros, captura, colisiones y niveles de IA; luego exporta un informe."
+	audit_button.pressed.connect(func(): automatic_audit_requested.emit())
+	buttons.add_child(audit_button)
 
 	var export_button := Button.new()
 	export_button.text = "EXPORTAR INFORME"
@@ -127,7 +168,7 @@ func _build_config_panel() -> void:
 	root.add_child(title)
 
 	var hint := Label.new()
-	hint.text = "Configura equipos y el encuentro salvaje. Después camina por el mapa gris para probar la cadena completa."
+	hint.text = "Configura equipos y el encuentro salvaje. Después puedes jugar manualmente o lanzar AUTOPRUEBA COMPLETA."
 	hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	root.add_child(hint)
 
@@ -168,10 +209,11 @@ func _build_config_panel() -> void:
 	_add_selector_item(_profile_selector, "Cauto", "cautious")
 	_add_selector_item(_profile_selector, "Técnico", "technical")
 	ai_row.add_child(_profile_selector)
-	ai_row.add_child(_label("Profundidad:"))
+	ai_row.add_child(_label("Nivel IA:"))
 	_expertise_selector = OptionButton.new()
-	_add_selector_item(_expertise_selector, "Completa", "full")
-	_add_selector_item(_expertise_selector, "Limitada", "limited")
+	_add_selector_item(_expertise_selector, "Novato", "limited")
+	_add_selector_item(_expertise_selector, "Normal", "standard")
+	_add_selector_item(_expertise_selector, "Experto", "full")
 	ai_row.add_child(_expertise_selector)
 
 	var spacer := Control.new()
@@ -253,7 +295,8 @@ func _load_defaults() -> void:
 	if _profile_selector != null:
 		_profile_selector.select(0)
 	if _expertise_selector != null:
-		_expertise_selector.select(0)
+		# Expert preserves the historical full-search behavior of this technical scene.
+		_expertise_selector.select(2)
 
 
 func _clear_team(species_inputs: Array[LineEdit], level_inputs: Array[SpinBox]) -> void:
