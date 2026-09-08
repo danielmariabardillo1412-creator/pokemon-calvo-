@@ -380,9 +380,10 @@ func _bootstrap_demo(config: Dictionary) -> bool:
 			return false
 		trainer_roster.append(creature)
 
-	if not player_collection.inventory.add(&"poke_ball", 10):
+	# Preserve the established technical-scene inventory contract used by capture regressions.
+	if not player_collection.inventory.add(&"poke_ball", 3):
 		return false
-	if not player_collection.inventory.add(&"great_ball", 5):
+	if not player_collection.inventory.add(&"great_ball", 1):
 		return false
 	if not player_collection.inventory.add(&"master_ball", 1):
 		return false
