@@ -1,12 +1,14 @@
 class_name TrainerCampaignPersistenceBoundaryAuditTestSuite
 extends TrainerBattleSessionCrossBattleResetLifecycleAuditTestSuite
 
-# P1-A is strictly TEST/AUDIT-ONLY. It localizes the ownership seam that exists
-# between TrainerBattleSession and its caller before any campaign/recovery/replacement
-# policy is designed or implemented.
+# P1-A was strictly TEST/AUDIT-ONLY. Its permanent responsibility is to verify the
+# ownership seam between TrainerBattleSession and its caller. Later authorized
+# tranches may replace the original ad-hoc caller roster with a dedicated owner, so
+# this audit accepts either the historical shape or that explicitly isolated successor.
 const P1A_AUDIT_ID := "p1_a_campaign_persistence_ownership_boundary_audit_v1"
 const GAP_LOCALIZED := "CAMPAIGN_PERSISTENCE_OWNERSHIP_SEAM_LOCALIZED"
 const P1A_BLOCKED := "BLOCKED"
+const P1A_AUTHORIZED_OWNER_PATH := "res://modules/gameplay/trainer_campaign_roster_owner.gd"
 
 var _p1a_check: Callable
 
@@ -35,11 +37,11 @@ func run(check_callback: Callable) -> void:
 	_p1a_check.call("p1a_historical_campaign_snapshot_transport_exists", bool(source.get("historical_campaign_snapshot_transport_exists", false)))
 	_p1a_check.call("p1a_historical_campaign_snapshot_is_deep_detached", bool(source.get("historical_campaign_snapshot_deep_detached", false)))
 	_p1a_check.call("p1a_game_ready_proposal_keeps_campaign_snapshot_disconnected", bool(source.get("game_ready_proposal_omits_campaign_snapshot", false)))
-	_p1a_check.call("p1a_no_dedicated_campaign_policy_owner", bool(files.get("no_dedicated_campaign_policy_owner", false)))
+	_p1a_check.call("p1a_campaign_owner_state_authorized", bool(files.get("campaign_owner_transition_authorized", false)))
 	_p1a_check.call("p1a_no_dedicated_recovery_policy_owner", bool(files.get("no_dedicated_recovery_policy_owner", false)))
 	_p1a_check.call("p1a_no_dedicated_replacement_policy_owner", bool(files.get("no_dedicated_replacement_policy_owner", false)))
 	_p1a_check.call("p1a_battle_ai_reports_keep_campaign_policies_off", bool(source.get("proposal_campaign_recovery_replacement_flags_false", false)))
-	_p1a_check.call("p1a_scope_audit_only", bool(report.get("audit_only_scope", false)) and not bool(report.get("production_modified", true)) and not bool(report.get("battle_core_modified", true)))
+	_p1a_check.call("p1a_scope_audit_only", bool(report.get("audit_only_scope", false)) and not bool(report.get("p1a_production_modified", true)) and not bool(report.get("battle_core_modified", true)))
 	_p1a_check.call("p1a_report_json_serializable", JSON.parse_string(JSON.stringify(report)) is Dictionary)
 
 	print("\n=== TRAINER CAMPAIGN P1-A PERSISTENCE OWNERSHIP BOUNDARY AUDIT ===")
@@ -60,11 +62,12 @@ func _build_p1a_report() -> Dictionary:
 		and bool(source.get("settlement_reconciles_opponent_roster", false))
 		and bool(source.get("settlement_clears_session_roster", false))
 		and bool(source.get("overworld_owns_trainer_roster", false))
+		and bool(source.get("overworld_builds_roster_in_bootstrap", false))
 		and bool(source.get("overworld_blocks_rematch_after_completion", false))
 		and bool(source.get("historical_campaign_snapshot_transport_exists", false))
 		and bool(source.get("historical_campaign_snapshot_deep_detached", false))
 		and bool(source.get("game_ready_proposal_omits_campaign_snapshot", false))
-		and bool(files.get("no_dedicated_campaign_policy_owner", false))
+		and bool(files.get("campaign_owner_transition_authorized", false))
 		and bool(files.get("no_dedicated_recovery_policy_owner", false))
 		and bool(files.get("no_dedicated_replacement_policy_owner", false))
 	)
@@ -74,16 +77,16 @@ func _build_p1a_report() -> Dictionary:
 		"runtime_ownership_probe": runtime,
 		"source_trace": source,
 		"policy_file_scan": files,
-		"ownership_conclusion": "caller_can_own_same_creature_objects_but_session_releases_post_battle_roster",
+		"ownership_conclusion": "caller_owns_same_creature_objects_outside_session_and_session_releases_post_battle_roster",
 		"historical_campaign_snapshot_transport_implemented": bool(source.get("historical_campaign_snapshot_transport_exists", false)),
 		"game_ready_campaign_snapshot_connected": not bool(source.get("game_ready_proposal_omits_campaign_snapshot", false)),
-		"campaign_persistence_owner_implemented": false,
-		"recovery_policy_implemented": false,
-		"replacement_policy_implemented": false,
+		"campaign_persistence_owner_implemented": bool(source.get("successor_campaign_owner_present", false)),
+		"recovery_policy_implemented": bool(source.get("successor_explicit_recovery_present", false)),
+		"replacement_policy_implemented": bool(source.get("successor_explicit_replacement_present", false)),
 		"durable_trainer_registry_implemented": false,
 		"rematch_lifecycle_implemented_in_executable_slice": false,
 		"battle_core_modified": false,
-		"production_modified": false,
+		"p1a_production_modified": false,
 		"audit_only_scope": true,
 	}
 
@@ -125,9 +128,18 @@ func _p1a_runtime_ownership_probe() -> Dictionary:
 func _p1a_source_trace() -> Dictionary:
 	var session_source := FileAccess.get_file_as_string("res://modules/gameplay/trainer_battle_session.gd")
 	var overworld_source := FileAccess.get_file_as_string("res://scenes/overworld/technical_overworld.gd")
+	var owner_source := FileAccess.get_file_as_string(P1A_AUTHORIZED_OWNER_PATH)
 	var controller_source := FileAccess.get_file_as_string("res://modules/trainer_ai/trainer_intelligence_controller.gd")
 	var context_source := FileAccess.get_file_as_string("res://modules/trainer_ai/trainer_decision_context.gd")
 	var proposal_source := FileAccess.get_file_as_string("res://modules/trainer_ai/trainer_item_aware_action_proposal.gd")
+	var legacy_owner := overworld_source.contains("var _trainer_roster: Array[CreatureInstance] = []")
+	var successor_owner := (
+		owner_source.contains("class_name TrainerCampaignRosterOwner")
+		and overworld_source.contains("var _trainer_campaign_owner: TrainerCampaignRosterOwner")
+		and overworld_source.contains("_trainer_campaign_owner.roster_for_battle()")
+	)
+	var legacy_bootstrap := overworld_source.contains("_trainer_roster.append(trainer_creature)")
+	var successor_bootstrap := overworld_source.contains("_trainer_campaign_owner.configure(TECHNICAL_TRAINER_ID, trainer_roster)")
 	return {
 		"session_accepts_external_roster": session_source.contains("p_opponent_roster: Array[CreatureInstance]") and session_source.contains("_roster_with_living_active(p_opponent_roster)"),
 		"living_roster_reuses_creature_objects": session_source.contains("var roster: Array[CreatureInstance] = [first_living]") and session_source.contains("roster.append(creature)"),
@@ -135,8 +147,12 @@ func _p1a_source_trace() -> Dictionary:
 		"settlement_reconciles_opponent_roster": session_source.contains("_reconcile_roster(_opponent_roster)"),
 		"settlement_clears_session_roster": session_source.contains("_opponent_roster.clear()"),
 		"reset_clears_opponent_identity": session_source.contains("opponent_trainer_id = &\"\""),
-		"overworld_owns_trainer_roster": overworld_source.contains("var _trainer_roster: Array[CreatureInstance] = []"),
-		"overworld_builds_roster_in_bootstrap": overworld_source.contains("_trainer_roster.append(trainer_creature)"),
+		"legacy_overworld_roster_present": legacy_owner,
+		"successor_campaign_owner_present": successor_owner,
+		"successor_explicit_recovery_present": owner_source.contains("func recover_creature_full("),
+		"successor_explicit_replacement_present": owner_source.contains("func replace_member("),
+		"overworld_owns_trainer_roster": legacy_owner or successor_owner,
+		"overworld_builds_roster_in_bootstrap": legacy_bootstrap or successor_bootstrap,
 		"overworld_blocks_rematch_after_completion": overworld_source.contains("if _trainer_demo_completed:") and overworld_source.contains("_trainer_demo_completed = true"),
 		"historical_campaign_snapshot_transport_exists": controller_source.contains("var _campaign_snapshot: Dictionary = {}") and controller_source.contains("func set_campaign_snapshot(p_campaign_snapshot: Dictionary) -> void:") and controller_source.contains("_campaign_snapshot,") and context_source.contains("var campaign_snapshot: Dictionary = {}"),
 		"historical_campaign_snapshot_deep_detached": controller_source.contains("_campaign_snapshot = p_campaign_snapshot.duplicate(true)") and context_source.contains("context.campaign_snapshot = p_campaign_snapshot.duplicate(true)"),
@@ -171,12 +187,16 @@ func _p1a_policy_file_scan() -> Dictionary:
 			recovery_files.append(path)
 		if name.contains("replacement"):
 			replacement_files.append(path)
+	var no_campaign_owner := campaign_files.is_empty()
+	var only_authorized_successor := campaign_files.size() == 1 and campaign_files[0] == P1A_AUTHORIZED_OWNER_PATH
 	return {
 		"scanned_top_level_gd_files": candidate_files.size(),
 		"campaign_named_files": campaign_files,
 		"recovery_named_files": recovery_files,
 		"replacement_named_files": replacement_files,
-		"no_dedicated_campaign_policy_owner": campaign_files.is_empty(),
+		"no_dedicated_campaign_policy_owner": no_campaign_owner,
+		"authorized_successor_campaign_owner_only": only_authorized_successor,
+		"campaign_owner_transition_authorized": no_campaign_owner or only_authorized_successor,
 		"no_dedicated_recovery_policy_owner": recovery_files.is_empty(),
 		"no_dedicated_replacement_policy_owner": replacement_files.is_empty(),
 	}
