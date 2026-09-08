@@ -42,7 +42,7 @@ func run(check_callback: Callable) -> void:
 	_check.call("p1c_missing_current_replacement_rejected", bool(report.get("missing_current_rejected", false)))
 	_check.call("p1c_overworld_uses_campaign_owner", bool(source.get("overworld_uses_campaign_owner", false)))
 	_check.call("p1c_overworld_removed_raw_trainer_roster", bool(source.get("overworld_removed_raw_roster", false)))
-	_check.call("p1c_one_shot_boundary_preserved_for_p1d", bool(source.get("one_shot_boundary_preserved", false)))
+	_check.call("p1c_p1d_boundary_transition_authorized", bool(source.get("p1d_boundary_authorized", false)))
 	_check.call("p1c_owner_does_not_reach_save_or_combat_ai", bool(source.get("owner_scope_isolated", false)))
 	_check.call("p1c_status_integrated", bool(report.get("all_core_contracts_satisfied", false)) and bool(source.get("integration_source_satisfied", false)))
 	_check.call("p1c_report_json_serializable", JSON.parse_string(JSON.stringify({"runtime": report, "source": source})) is Dictionary)
@@ -182,11 +182,16 @@ func _source_trace() -> Dictionary:
 		and overworld_source.contains("_trainer_campaign_owner.configure(TECHNICAL_TRAINER_ID, trainer_roster)")
 	)
 	var removed_raw := not overworld_source.contains("var _trainer_roster: Array[CreatureInstance]")
-	var one_shot := (
+	var legacy_one_shot := (
 		overworld_source.contains("var _trainer_demo_completed: bool = false")
 		and overworld_source.contains("if _trainer_demo_completed:")
 		and overworld_source.contains("_trainer_demo_completed = true")
 	)
+	var p1d_rematch := (
+		overworld_source.contains("func recover_demo_trainer_full() -> bool:")
+		and not overworld_source.contains("_trainer_demo_completed")
+	)
+	var boundary_authorized := legacy_one_shot or p1d_rematch
 	var isolated := (
 		not owner_source.contains("SaveGameData")
 		and not owner_source.contains("TrainerItemAwareActionProposal")
@@ -196,9 +201,11 @@ func _source_trace() -> Dictionary:
 	return {
 		"overworld_uses_campaign_owner": uses_owner,
 		"overworld_removed_raw_roster": removed_raw,
-		"one_shot_boundary_preserved": one_shot,
+		"legacy_one_shot_boundary": legacy_one_shot,
+		"p1d_rematch_live": p1d_rematch,
+		"p1d_boundary_authorized": boundary_authorized,
 		"owner_scope_isolated": isolated,
-		"integration_source_satisfied": uses_owner and removed_raw and one_shot and isolated,
+		"integration_source_satisfied": uses_owner and removed_raw and boundary_authorized and isolated,
 	}
 
 
