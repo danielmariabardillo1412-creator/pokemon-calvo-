@@ -23,11 +23,11 @@ Si dos fuentes se contradicen:
 
 ## Baseline moderno de continuidad
 
-Último HEAD certificado exacto antes del workstream actual:
+Freeze funcional anterior al workstream actual:
 
 `f43dc6b158c35fe25139de5524b83f6fe2d3426f`
 
-Corresponde al freeze final de:
+Corresponde a:
 
 `Trainer AI Expertise V1 — CLOSED / CERTIFIED / FROZEN`
 
@@ -36,19 +36,49 @@ Además permanecen cerrados:
 - Trainer AI runtime system 26.67 — CLOSED / COMPLETED;
 - Trainer AI Game-Ready 27.1 — CLOSED / VALIDATED.
 
-Rama del workstream actual:
+Rama activa:
 
 `feature/trainer-ai-campaign-persistence-v1`
 
-El nuevo trabajo es una feature separada: **Trainer AI Campaign Persistence V1**. No reabre C3f, Game-Ready 27.x ni Expertise V1.
+PR #107: **OPEN / DRAFT / NOT MERGED**.
 
-P1-A actual es estrictamente **TEST/AUDIT-ONLY** y localiza el ownership seam entre roster owned por caller, `TrainerBattleSession`, settlement y el lifecycle one-shot del Overworld antes de diseñar recovery/replacement.
+## Campaign Persistence — punto real
+
+- **P1-A — CLOSED / CERTIFIED / TEST-AUDIT-ONLY**.
+  - technical checkpoint `26c11caa635cecb851b95cd636580cb250683a32`;
+  - 23/23;
+  - Evaluation 521/0;
+  - 18/18 workflows SUCCESS.
+- **P1-B — CLOSED / CERTIFIED / CONTRACT-FIRST**.
+  - technical checkpoint `f900fb79fb324c6e05d218eb741352e4d3a5db1f`;
+  - 27/27;
+  - Evaluation 548/0;
+  - 18/18 workflows SUCCESS;
+  - 0 producción / 0 Battle Core.
+- **P1-C — NEXT**, después de que el HEAD documental actual pase su gate 18/18.
+- **P1-D — PENDING**, reservado para rematch/cross-session E2E + freeze final.
+
+Contrato P1-B que no debe reinterpretarse:
+
+- misma identidad de `CreatureInstance`;
+- `reconcile_post_battle()` como transición base;
+- HP/PP/persistent status sobreviven;
+- volatile/transient state se limpia;
+- no auto-heal;
+- recovery inter-battle explícito;
+- campaign replacement separado de forced replacement;
+- ownership/IDs fail-closed;
+- no persistir BattleState;
+- `campaign_snapshot` histórico no es source of truth.
+
+P1-C puede introducir el owner persistente mínimo e integrarlo en el punto de ownership existente, pero no puede tocar Save V2, Battle Core, proposal/search/tie resolver, FASE34 ni scheduler/shared-budget/660. El E2E de dos encuentros queda para P1-D.
 
 ## Invariantes externos
 
-- `main` sigue siendo histórica y debe permanecer exactamente en `641d4b1fb0bcf964205d616e96f198f05d702197` mientras este workstream no autorice otra cosa.
+- `main` debe permanecer exactamente en `641d4b1fb0bcf964205d616e96f198f05d702197` mientras este workstream no autorice otra cosa.
 - PR #105 permanece OPEN / unmerged y no debe mergearse casualmente.
 - PR #106 permanece CLOSED / not merged.
+- PR #107 permanece OPEN / DRAFT / unmerged.
 - El siguiente tramo parte del último SHA certificado exacto, no de `main` por nombre.
 
 ## Regla de memoria
