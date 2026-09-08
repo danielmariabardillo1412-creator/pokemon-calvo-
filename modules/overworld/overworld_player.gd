@@ -9,6 +9,12 @@ extends CharacterBody2D
 
 signal step_completed(world_position: Vector2)
 signal facing_changed(direction: Vector2)
+signal motion_resolved(
+	requested_displacement: Vector2,
+	actual_displacement: Vector2,
+	from_position: Vector2,
+	to_position: Vector2,
+)
 
 @export var move_speed: float = 96.0
 @export var step_distance: float = 32.0
@@ -38,8 +44,10 @@ func apply_motion(direction: Vector2, delta: float) -> Vector2:
 
 	velocity = cardinal * move_speed
 	var before := global_position
-	move_and_collide(velocity * delta)
+	var requested := velocity * delta
+	move_and_collide(requested)
 	var moved := global_position - before
+	motion_resolved.emit(requested, moved, before, global_position)
 	_track_real_movement(before, moved)
 	return moved
 
