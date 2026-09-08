@@ -4,9 +4,9 @@ extends TrainerBattleSessionCrossBattleResetLifecycleAuditTestSuite
 # P1-A is strictly TEST/AUDIT-ONLY. It localizes the ownership seam that exists
 # between TrainerBattleSession and its caller before any campaign/recovery/replacement
 # policy is designed or implemented.
-const AUDIT_ID := "p1_a_campaign_persistence_ownership_boundary_audit_v1"
+const P1A_AUDIT_ID := "p1_a_campaign_persistence_ownership_boundary_audit_v1"
 const GAP_LOCALIZED := "CAMPAIGN_PERSISTENCE_OWNERSHIP_SEAM_LOCALIZED"
-const BLOCKED := "BLOCKED"
+const P1A_BLOCKED := "BLOCKED"
 
 var _p1a_check: Callable
 
@@ -18,7 +18,7 @@ func run(check_callback: Callable) -> void:
 	var source := report.get("source_trace", {}) as Dictionary
 	var files := report.get("policy_file_scan", {}) as Dictionary
 
-	_p1a_check.call("p1a_audit_id", String(report.get("audit_id", "")) == AUDIT_ID)
+	_p1a_check.call("p1a_audit_id", String(report.get("audit_id", "")) == P1A_AUDIT_ID)
 	_p1a_check.call("p1a_gap_localized", String(report.get("tranche_status", "")) == GAP_LOCALIZED)
 	_p1a_check.call("p1a_runtime_probe_started", bool(runtime.get("session_started", false)) and bool(runtime.get("live_opponent_found", false)))
 	_p1a_check.call("p1a_live_state_shares_session_roster_identity", bool(runtime.get("live_matches_session_roster_reference", false)))
@@ -63,8 +63,8 @@ func _build_p1a_report() -> Dictionary:
 		and bool(files.get("no_dedicated_replacement_policy_owner", false))
 	)
 	return {
-		"audit_id": AUDIT_ID,
-		"tranche_status": GAP_LOCALIZED if localized else BLOCKED,
+		"audit_id": P1A_AUDIT_ID,
+		"tranche_status": GAP_LOCALIZED if localized else P1A_BLOCKED,
 		"runtime_ownership_probe": runtime,
 		"source_trace": source,
 		"policy_file_scan": files,
