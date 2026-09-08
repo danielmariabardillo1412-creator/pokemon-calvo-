@@ -24,7 +24,7 @@ static func _load_catalogs() -> Dictionary:
 	var file := FileAccess.open(RUNTIME_DATA_PATH, FileAccess.READ)
 	if file == null:
 		return {"ok": false, "error": "canonical_data_missing"}
-	var parsed := JSON.parse_string(file.get_as_text())
+	var parsed: Variant = JSON.parse_string(file.get_as_text())
 	if not (parsed is Dictionary):
 		return {"ok": false, "error": "canonical_data_invalid_json"}
 	var game_data := GameData.from_dict(parsed as Dictionary)
