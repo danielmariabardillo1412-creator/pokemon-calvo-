@@ -30,6 +30,7 @@ var _escape_rng: RandomNumberGenerator = null
 var _trainer_profile_id: StringName = TrainerProfile.BALANCED
 var _trainer_expertise_id: StringName = TrainerExpertise.FULL
 var _active_config: Dictionary = {}
+var _encounter_zone_contracts: Dictionary = {}
 var _recorder := TechnicalTestRecorder.new()
 var _metrics := TechnicalAuditMetrics.new()
 var _last_motion_anomaly_log_msec: int = -100000
@@ -169,6 +170,10 @@ func technical_audit_summary() -> Dictionary:
 	return _metrics.summary()
 
 
+func technical_encounter_zone_contract(zone_id: StringName) -> Dictionary:
+	return (_encounter_zone_contracts.get(zone_id, {}) as Dictionary).duplicate(true)
+
+
 func traversal_is_busy() -> bool:
 	return traversal_controller != null and traversal_controller.is_busy()
 
@@ -289,6 +294,7 @@ func _on_player_step_completed(world_position: Vector2) -> void:
 			"battle_started": outcome.battle_started,
 			"reason": outcome.reason,
 			"configured_chance_percent": int(_active_config.get("encounter_chance_percent", 0)),
+			"zone_contract": technical_encounter_zone_contract(zone_id),
 		}
 		if outcome.encounter != null:
 			encounter_payload["encounter_status"] = String(outcome.encounter.status)
@@ -307,6 +313,7 @@ func _on_player_step_completed(world_position: Vector2) -> void:
 			"species_id": String(wild.species_id) if wild != null else "",
 			"level": level,
 			"zone_id": String(zone_id),
+			"zone_contract": technical_encounter_zone_contract(zone_id),
 			"state": _session.battle_state().to_dict() if _session.battle_state() != null else {},
 		})
 		_record_state_validation(&"wild", _session.battle_state())
@@ -564,49 +571,58 @@ func _bootstrap_demo(config: Dictionary) -> bool:
 	_escape_rng = RandomNumberGenerator.new()
 	_escape_rng.seed = 12006
 
-	var wild_species_id := StringName(String(config.get("wild_species_id", "pikachu")))
+	var fixed_species_id := StringName(String(config.get("wild_species_id", "")))
 	var wild_min := clampi(int(config.get("wild_min_level", 4)), 1, 100)
-	var wild_max := clampi(int(config.get("wild_max_level", 4)), 1, 100)
-	if wild_max < wild_min:
-		var swap := wild_min
-		wild_min = wild_max
-		wild_max = swap
-	if _catalogs.species_catalog.get_by_id(wild_species_id) == null:
-		return false
+	var wild_max := clampi(int(config.get("wild_max_level", 6)), 1, 100)
+	var cave_min := clampi(int(config.get("cave_min_level", 8)), 1, 100)
+	var cave_max := clampi(int(config.get("cave_max_level", 12)), 1, 100)
 	var chance_percent := clampi(int(config.get("encounter_chance_percent", 100)), 0, 100)
-	if not _register_encounter_table(
+	_encounter_zone_contracts.clear()
+	if not _register_encounter_pool(
 		TECHNICAL_ZONE_ID,
-		&"technical_wild_slot",
-		wild_species_id,
+		fixed_species_id,
 		wild_min,
 		wild_max,
 		chance_percent,
 	):
 		return false
-	if not _register_encounter_table(
+	if not _register_encounter_pool(
 		TECHNICAL_CAVE_ZONE_ID,
-		&"technical_cave_wild_slot",
-		wild_species_id,
-		wild_min,
-		wild_max,
+		fixed_species_id,
+		cave_min,
+		cave_max,
 		chance_percent,
 	):
 		return false
 	return true
 
 
-func _register_encounter_table(
+func _register_encounter_pool(
 	zone_id: StringName,
-	slot_id: StringName,
-	species_id: StringName,
+	fixed_species_id: StringName,
 	min_level: int,
 	max_level: int,
 	chance_percent: int,
 ) -> bool:
-	var table := WildEncounterTable.new(zone_id, chance_percent * 100)
-	if not table.add_slot(WildEncounterSlot.new(slot_id, species_id, 1, min_level, max_level)):
+	var built := TechnicalEncounterPoolBuilder.build(
+		_catalogs,
+		zone_id,
+		chance_percent,
+		min_level,
+		max_level,
+		fixed_species_id,
+	)
+	if not bool(built.get("ok", false)):
+		push_error("Technical encounter pool failed for %s: %s" % [String(zone_id), String(built.get("reason", "unknown"))])
 		return false
-	return _director.register_zone(table)
+	var table := built.get("table", null) as WildEncounterTable
+	if table == null or not _director.register_zone(table):
+		return false
+	var contract := built.duplicate(true)
+	contract.erase("table")
+	contract.erase("eligible_species_ids")
+	_encounter_zone_contracts[zone_id] = contract
+	return true
 
 
 func _build_creature(
@@ -690,6 +706,7 @@ func _runtime_summary() -> Dictionary:
 		"player_party_size": demo_party_size(),
 		"trainer_profile_id": String(_trainer_profile_id),
 		"trainer_expertise_id": String(_trainer_expertise_id),
+		"encounter_zone_contracts": _encounter_zone_contracts.duplicate(true),
 		"current_region_id": String(technical_region_id()),
 		"traversal_busy": traversal_is_busy(),
 		"portal_count": get_tree().get_nodes_in_group("overworld_portals").size(),
