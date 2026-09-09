@@ -98,6 +98,13 @@ jobs:
             echo 'Technical source smoke test found a runtime error.' >&2
             exit 1
           fi
+          SOURCE_SHA="$(git rev-parse HEAD)"
+          REPORT_DIR="$(sed -n 's/^.*reports=\(.*\)$/\1/p' technical-source-smoke.log | tail -n 1)"
+          test -n "$REPORT_DIR"
+          test -d "$REPORT_DIR"
+          SOURCE_SESSION="$(ls -1t "$REPORT_DIR"/session_*.jsonl | head -n 1)"
+          grep -F "\"source_sha\":\"${SOURCE_SHA}\"" "$SOURCE_SESSION"
+          rm -rf "$REPORT_DIR"
 
       - name: Export and run isolated verification PCK
         shell: bash
@@ -112,6 +119,12 @@ jobs:
             echo 'EXPORTED TECHNICAL PACKAGE IS NOT SELF-CONTAINED.' >&2
             exit 1
           fi
+          SOURCE_SHA="$(git rev-parse HEAD)"
+          REPORT_DIR="$(sed -n 's/^.*reports=\(.*\)$/\1/p' technical-packed-smoke.log | tail -n 1)"
+          test -n "$REPORT_DIR"
+          test -d "$REPORT_DIR"
+          PACKED_SESSION="$(ls -1t "$REPORT_DIR"/session_*.jsonl | head -n 1)"
+          grep -F "\"source_sha\":\"${SOURCE_SHA}\"" "$PACKED_SESSION"
           rm -f build/technical-test-verify.pck
 
       - name: Export single-file Windows technical build
