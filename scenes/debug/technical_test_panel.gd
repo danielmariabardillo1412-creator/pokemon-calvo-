@@ -194,10 +194,10 @@ func _build_config_panel() -> void:
 	_add_selector_item(_profile_selector, "Cauto", "cautious")
 	_add_selector_item(_profile_selector, "Técnico", "technical")
 	ai_row.add_child(_profile_selector)
-	ai_row.add_child(_label("Profundidad:"))
+	ai_row.add_child(_label("Nivel IA:"))
 	_expertise_selector = OptionButton.new()
-	_add_selector_item(_expertise_selector, "Completa", "full")
-	_add_selector_item(_expertise_selector, "Limitada", "limited")
+	_add_selector_item(_expertise_selector, "Avanzado — búsqueda completa", "full")
+	_add_selector_item(_expertise_selector, "Inicial — búsqueda limitada", "limited")
 	ai_row.add_child(_expertise_selector)
 
 	var spacer := Control.new()
