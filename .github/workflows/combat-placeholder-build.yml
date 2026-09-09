@@ -18,8 +18,51 @@ jobs:
     timeout-minutes: 25
 
     steps:
-      - name: Checkout
+      - name: Checkout exact source commit
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+
+      - name: Stamp exact build and canonical data identity
+        shell: bash
+        run: |
+          set -euo pipefail
+          SOURCE_SHA="$(git rev-parse HEAD)"
+          DATA_SHA="$(sha256sum data/normalized/pokemon_api.json | awk '{print $1}')"
+          export SOURCE_SHA DATA_SHA
+          python3 - <<'PY'
+          import datetime
+          import json
+          import os
+          from pathlib import Path
+
+          payload = {
+              "schema_version": 1,
+              "source_sha": os.environ["SOURCE_SHA"],
+              "repository": os.environ.get("GITHUB_REPOSITORY", ""),
+              "build_kind": os.environ.get("GITHUB_EVENT_NAME", ""),
+              "workflow_run_id": os.environ.get("GITHUB_RUN_ID", ""),
+              "built_at_utc": datetime.datetime.now(datetime.timezone.utc).isoformat(),
+              "data_sha256": os.environ["DATA_SHA"],
+          }
+          Path("data/build_metadata.json").write_text(
+              json.dumps(payload, indent=2, sort_keys=True) + "\n",
+              encoding="utf-8",
+          )
+          print(json.dumps(payload, sort_keys=True))
+          PY
+          grep -F "\"source_sha\": \"${SOURCE_SHA}\"" data/build_metadata.json
+          grep -F "\"data_sha256\": \"${DATA_SHA}\"" data/build_metadata.json
+
+      - name: Guard full real-project export contract
+        shell: bash
+        run: |
+          set -euo pipefail
+          grep -F 'export_filter="all_resources"' export_presets.cfg
+          grep -F 'data/normalized/pokemon_api.json' export_presets.cfg
+          grep -F 'data/build_metadata.json' export_presets.cfg
+          test -s data/normalized/pokemon_api.json
+          test -s data/build_metadata.json
 
       - name: Setup Godot 4.7 with export templates
         uses: chickensoft-games/setup-godot@v2.4.1
