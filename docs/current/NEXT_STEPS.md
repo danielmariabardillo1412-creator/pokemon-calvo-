@@ -1,52 +1,55 @@
 # SIGUIENTE TRABAJO
 
-## Paso inmediato — consolidar `main`
+## Baseline canónico
 
-La línea moderna está cerrada y certificada en:
+`main = d2ad6796a93e6db56ef24c98431a3909e3874cdf`
 
-`8552f52158ffc21c27b4e8f1dbc7caa63ac1a467`
+Estado: **CERTIFICADO — 18/18 workflows SUCCESS** antes de abrir Game Foundation V1.
 
-La operación separada de promoción vive en:
+La consolidación de `main` está terminada. No volver a tratar `main` como histórica.
 
-`chore/main-baseline-consolidation-v1`
+## Workstream activo — Game Foundation V1
 
-Merge histórico inicial:
+Rama:
 
-`2f63312e8dc3e61c8fadbd02e97972fff6d0eacc`
+`feature/game-foundation-v1`
 
-Ese commit conserva como padres la antigua `main` y el freeze moderno, pero usa exactamente el árbol moderno certificado; el único commit exclusivo de la `main` antigua añadía un archivo vacío sin funcionalidad.
+Cuaderno:
 
-Para cerrar la promoción:
+`docs/project_book/GAME_FOUNDATION.md`
 
-1. terminar la actualización documental de esta rama;
-2. abrir PR contra `main` para disparar la matriz normal;
-3. exigir **18/18 workflows SUCCESS** sobre el HEAD final exacto;
-4. comprobar que no existe regresión funcional;
-5. mover `main` por fast-forward al HEAD certificado de la rama;
-6. cerrar el PR de consolidación sin crear un SHA adicional no certificado;
-7. desde ese momento, `main` vuelve a ser el baseline de desarrollo normal.
+### GF1-A — Game State + contrato de campaña — ACTIVE
 
-No introducir features nuevas dentro de esta operación.
+Objetivo actual:
 
-## Después — Game Foundation V1
+- autoridad `GameCampaignState` separada de `PlayerCollection` y Battle Core;
+- identidad estable de campaña;
+- mapa + spawn como transición atómica;
+- inicial write-once;
+- story flags;
+- entrenadores derrotados;
+- etapa de campaña monotónica;
+- DTO determinista/desacoplado preparado para Save V3 posterior.
 
-Trainer AI ya no tiene trabajo obligatorio pendiente. El siguiente workstream de producto debe ser **Game Foundation V1**.
+Archivos focales:
 
-### Objetivo
+- `modules/gameplay/game_campaign_state.gd`
+- `tests/gameplay/game_campaign_state_test_suite.gd`
+- `tests/gameplay/game_campaign_state_boundary_test_suite.gd`
+- `tests/gameplay/game_foundation_test_runner.gd`
+- `.github/workflows/game-foundation-tests.yml`
 
-Llegar a una primera mini-campaña jugable real, aunque use arte provisional, que demuestre el flujo:
+### Gate de cierre GF1-A
 
-`nueva partida -> inicial -> mapa/pueblo -> ruta -> encuentro/captura -> entrenador -> servicio -> guardar -> cargar -> continuar`
+1. `Game Foundation Tests` PASS / 0 FAIL;
+2. import Godot 4.7 limpio;
+3. matriz normal completa ahora de **19 workflows** en SUCCESS sobre el mismo HEAD exacto;
+4. registrar SHA real certificado en `GAME_FOUNDATION.md` y `PROJECT_STATE.md`;
+5. solo entonces promover a `main` y abrir GF1-B.
 
-### Orden de construcción
+Save V2 no se modifica en GF1-A.
 
-1. **GF1-A — Game State + contrato de campaña**
-   - identidad de partida;
-   - mapa actual / spawn point;
-   - flags de historia;
-   - entrenadores derrotados;
-   - inicial escogido;
-   - progreso mínimo de campaña.
+## Plan fijo restante
 
 2. **GF1-B — mapas y transiciones**
    - mapas configurables;
@@ -63,37 +66,26 @@ Llegar a una primera mini-campaña jugable real, aunque use arte provisional, qu
    - objetos o desbloqueos simples.
 
 4. **GF1-D — Save V3 de mundo/campaña**
-   - extender el save sin romper identidad de criaturas;
-   - persistir posición/mapa/flags/entrenadores/progreso;
-   - carga transaccional y migración explícita desde V2.
+   - persistir `GameCampaignState` junto al agregado de jugador;
+   - mapa/posición/flags/entrenadores/progreso;
+   - carga transaccional;
+   - migración explícita V2 -> V3.
 
 5. **GF1-E — servicios y UI mínima**
    - curación;
    - tienda;
-   - acceso a PC/storage;
-   - party/bolsa básicas;
-   - menús suficientes para la vertical slice.
+   - PC/storage;
+   - party/bolsa básicas.
 
-6. **GF1-F — vertical slice de campaña**
-   - escena inicial;
+6. **GF1-F — vertical slice jugable E2E**
+   - nueva partida;
    - elección de inicial;
-   - primer pueblo;
-   - primera ruta;
-   - encuentro salvaje y captura;
+   - pueblo + ruta;
+   - encuentro/captura;
    - entrenador real con Trainer AI;
-   - servicio de curación/tienda;
-   - save/load E2E.
+   - servicio;
+   - save/load y continuación.
 
-Cada tramo debe quedar importable, probado y certificado antes del siguiente. El arte final no bloquea esta fase.
-
-## Después de Game Foundation V1
-
-Solo cuando exista esa mini-campaña estable tiene sentido abrir workstreams separados para:
-
-- rival autónomo de overworld/campaña;
-- más mapas, gimnasios e historia;
-- arte/sprites/audio final;
-- ampliar mecánicas Pokémon concretas exigidas por el contenido;
-- builds/distribución.
+Después de GF1-F se decidirá por separado rival autónomo de overworld, contenido, arte/audio, ampliaciones mecánicas concretas y distribución.
 
 No reabrir DATA V3 ni Trainer AI por inercia.
