@@ -163,6 +163,13 @@ jobs:
           fi
           echo "Overworld audit laboratory gate satisfied: $pass_count PASS / 0 FAIL"
 
+      - name: Run visual field integration suite
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 30s godot --headless --path . --script res://tests/gameplay/visual_field_test_runner.gd 2>&1 | tee visual-field-test.log
+          grep -E '=== VISUAL FIELD RESULT: [0-9]+ PASS / 0 FAIL ===' visual-field-test.log
+
       - name: Run battle presentation phase suite
         shell: bash
         run: |
@@ -262,6 +269,7 @@ jobs:
             wild-encounter-test.log
             vertical-slice-test.log
             overworld-test.log
+            visual-field-test.log
             battle-presentation-test.log
             battle-commands-test.log
             battle-capture-presentation-test.log

@@ -1,5 +1,14 @@
 # Third-party code and assets
 
+## Prueba visual de ruta (2026-10-18)
+
+Se seleccionan seis sprites PNG de `PokeAPI/sprites` desde la biblioteca local
+(3.188 bytes). Se conserva el aviso completo del origen en
+`assets/prototype/pokemon/LICENCE.txt`; procedencia, rutas exactas y renombrados
+en `assets/prototype/README.md`. El copyright de las imágenes pertenece a The
+Pokémon Company según ese aviso. Mapa y personaje son dibujos propios en código
+Godot. Las secciones siguientes describen fases históricas previas a estos assets.
+
 ## Foundation V1
 
 No se copió, adaptó ni vendorizó código de terceros. Tampoco se añadieron plugins,

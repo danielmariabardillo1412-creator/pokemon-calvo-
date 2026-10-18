@@ -10,6 +10,13 @@ GitHub/CI/artefactos del SHA exacto tienen prioridad sobre cualquier cuaderno.
 
 ## Cuadernos actuales
 
+### `VISUAL_FIELD.md`
+
+Estado: **PRIMERA PRUEBA VISUAL / VALIDACIÓN** (2026-10-18).
+
+Ruta con imagen sobre el laboratorio real, movimiento, hierba, encuentros regulables,
+captura y transiciones. Incluye cómo ejecutar y distinguir esta prueba de GF1.
+
 ### `DATA_V3.md`
 
 Estado: **CERRADO / CERTIFICADO**.

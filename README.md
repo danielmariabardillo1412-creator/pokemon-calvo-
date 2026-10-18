@@ -18,6 +18,11 @@ Los cimientos técnicos están avanzados, pero el ejecutable visible sigue siend
 
 ## Por dónde empezar
 
+Primera prueba visual: ejecuta `JUGAR_DEMO.cmd` en Windows, o
+`godot --path . res://scenes/visual/field_demo.tscn` tras importar el proyecto.
+La ruta tiene movimiento, hierba animada, encuentros regulables y captura real.
+Controles, límites y estado de validación: [`docs/project_book/VISUAL_FIELD.md`](docs/project_book/VISUAL_FIELD.md).
+
 Para recuperar el proyecto sin leer todo el historial:
 
 1. [`docs/current/START_HERE.md`](docs/current/START_HERE.md)

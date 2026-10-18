@@ -1,0 +1,11 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/overworld/technical_overworld.tscn" id="1_base"]
+[ext_resource type="Script" path="res://scenes/visual/field_demo.gd" id="2_demo"]
+[ext_resource type="Script" path="res://scenes/visual/field_battle_presentation.gd" id="3_battle"]
+
+[node name="FieldDemo" instance=ExtResource("1_base")]
+script = ExtResource("2_demo")
+
+[node name="BattlePresentation" parent="CanvasLayer" index="2"]
+script = ExtResource("3_battle")

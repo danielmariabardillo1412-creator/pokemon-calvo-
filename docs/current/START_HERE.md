@@ -1,5 +1,13 @@
 # EMPEZAR AQUÍ
 
+## Actualización operativa — 2026-10-18
+
+La `main` remota consultada ya está en `e98e09f75b3f55c7d170f8f9906d49792cef5a6c`,
+con matriz de regresión y build Windows correctas. Las instrucciones de consolidación
+que siguen describen el relevo anterior y no ordenan repetirlo.
+El trabajo actual solicitado es la primera prueba visual de ruta:
+`feature/visual-field-lab-v1`, cuaderno `docs/project_book/VISUAL_FIELD.md`.
+
 Este archivo es el punto de entrada para recuperar el proyecto en una conversación, agente o sesión nueva.
 
 ## Lectura mínima

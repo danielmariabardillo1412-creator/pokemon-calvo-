@@ -1,5 +1,18 @@
 # ESTADO ACTUAL DEL PROYECTO
 
+## Actualización — primera prueba visual (2026-10-18)
+
+Baseline remoto real comprobado: `e98e09f75b3f55c7d170f8f9906d49792cef5a6c` en
+`main`; sus 18 workflows de regresión y build Windows están correctos.
+La copia local antigua de agosto no se usa como parent de nuevo trabajo.
+
+Se abre `feature/visual-field-lab-v1`: presentación de ruta, personaje, hierba y
+sprites mínimos sobre las sesiones existentes. Se ejecuta con `JUGAR_DEMO.cmd`;
+`project.godot` conserva la escena técnica histórica. La nueva prueba no implica
+que GF1-A..F esté implementada. Estado y límites: `../project_book/VISUAL_FIELD.md`.
+La validación remota de esta rama debe consultarse sobre su HEAD exacto.
+Los párrafos de consolidación siguientes son contexto histórico del relevo anterior.
+
 ## Línea moderna certificada
 
 El último freeze funcional/documental moderno antes de consolidar `main` es:

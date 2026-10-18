@@ -1,5 +1,13 @@
 # SIGUIENTE TRABAJO
 
+## Prioridad actualizada — 2026-10-18
+
+La `main` actual en `e98e09f75b3f55c7d170f8f9906d49792cef5a6c` ya incorpora la línea
+moderna y tiene CI correcto; no repetir la antigua operación de promoción descrita abajo.
+El usuario prioriza empezar con imagen: probar `scenes/visual/field_demo.tscn`,
+validar controles/legibilidad y ajustar frecuencia de encuentros antes de ampliar campaña.
+Rama y guía: `../project_book/VISUAL_FIELD.md`. GF1-A..F sigue como roadmap posterior.
+
 ## Paso inmediato — consolidar `main`
 
 La línea moderna está cerrada y certificada en:
