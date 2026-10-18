@@ -2,6 +2,12 @@
 
 ## Actualización — primera prueba visual (2026-10-18)
 
+Continuación activa: `fix/map-runtime-hardening-v1`, parent certificado
+`62468af2d52081b95129c435c43323a69d94105a` (PR #114, 19/19 workflows correctos).
+Se corrigen salto cercano/lateral, destinos ocupados, pasos tras iniciar combate,
+ajustes durante transiciones y tiempo parcial en hierba. Se añade overlay F2 y gate
+`map_runtime_test_runner.gd`. Detalles y límites en `../project_book/VISUAL_FIELD.md`.
+
 Baseline remoto real comprobado: `e98e09f75b3f55c7d170f8f9906d49792cef5a6c` en
 `main`; sus 18 workflows de regresión y build Windows están correctos.
 La copia local antigua de agosto no se usa como parent de nuevo trabajo.

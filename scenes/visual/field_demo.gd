@@ -3,6 +3,7 @@ extends "res://scenes/overworld/technical_overworld.gd"
 const FieldTheme = preload("res://scenes/visual/field_theme.gd")
 const FieldArt = preload("res://scenes/visual/field_art.gd")
 const CharacterArt = preload("res://scenes/visual/character_art.gd")
+const CollisionOverlay = preload("res://scenes/visual/collision_overlay.gd")
 const INITIAL_CHANCE := 15
 const CHANCES := [0, 5, 15, 30, 100]
 
@@ -13,6 +14,7 @@ var _place_label: Label
 var _collection_label: Label
 var _chance_button: Button
 var _notice_label: Label
+var _geometry_overlay: Node2D
 var _grass_walking_seconds := 0.0
 var _chance_index := 2
 
@@ -42,6 +44,10 @@ func _ready() -> void:
 	trainer.position = Vector2(144, 80)
 	trainer.z_index = 2
 	add_child(trainer)
+	_geometry_overlay = CollisionOverlay.new()
+	_geometry_overlay.z_index = 5
+	_geometry_overlay.visible = false
+	add_child(_geometry_overlay)
 	var camera := $Player/Camera2D as Camera2D
 	camera.position_smoothing_enabled = false
 	camera.zoom = Vector2(1.15, 1.15)
@@ -82,15 +88,32 @@ func _unhandled_key_input(event: InputEvent) -> void:
 	elif event.keycode == KEY_ESCAPE and test_panel.is_panel_open():
 		test_panel._close_config()
 		get_viewport().set_input_as_handled()
+	elif event.keycode == KEY_F2:
+		toggle_geometry_overlay()
+		get_viewport().set_input_as_handled()
 
 
 func _can_configure() -> bool:
 	return not battle_presentation.visible and not trainer_battle_presentation.visible and not traversal_is_busy()
 
 
-func _observe_walk(_requested: Vector2, actual: Vector2, _from: Vector2, to: Vector2) -> void:
-	if zone_at_position(to) != &"" and player.move_speed > 0:
-		_grass_walking_seconds += actual.length() / player.move_speed
+func _open_settings() -> void:
+	if _can_configure():
+		test_panel._open_config()
+
+
+func toggle_geometry_overlay() -> void:
+	_geometry_overlay.visible = not _geometry_overlay.visible
+	_notice_label.text = "Colisiones: rojo muro · verde hierba · amarillo salto · azul puerta · rosa rival" if _geometry_overlay.visible else ""
+
+
+func _observe_walk(_requested: Vector2, actual: Vector2, from: Vector2, to: Vector2) -> void:
+	if player.move_speed <= 0 or actual.length_squared() <= 0.0:
+		return
+	for node in get_tree().get_nodes_in_group("encounter_zones"):
+		var zone := node as OverworldEncounterZone
+		if zone != null:
+			_grass_walking_seconds += zone.distance_within_segment(from, to) / player.move_speed
 
 
 func cycle_frequency() -> void:
@@ -171,7 +194,8 @@ func _build_hud(canvas: CanvasLayer, theme: Theme) -> void:
 	buttons.add_child(hint)
 	_chance_button = _hud_button(buttons, "Frecuencia: 15 %", cycle_frequency)
 	_hud_button(buttons, "Reiniciar", restart_field_run)
-	_hud_button(buttons, "F1 · Ajustes", func(): test_panel._open_config())
+	_hud_button(buttons, "F1 · Ajustes", _open_settings)
+	_hud_button(buttons, "F2 · Colisiones", toggle_geometry_overlay)
 	_hud_button(buttons, "Informe", func():
 		_on_export_report_requested()
 		_notice_label.text = "Informe exportado · F1 > ABRIR CARPETA DE INFORMES"

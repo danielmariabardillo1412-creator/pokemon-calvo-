@@ -8,6 +8,10 @@ Rama: `feature/visual-field-lab-v1`. Parent: `e98e09f75b3f55c7d170f8f9906d49792c
 Ese parent coincide con la `main` remota consultada y tiene los 18 workflows de
 regresión y la build de Windows correctos (20 runs, incluyendo un Godot duplicado).
 
+La primera entrega quedó en `62468af2d52081b95129c435c43323a69d94105a`, PR #114,
+con 19/19 workflows SUCCESS. La continuación `fix/map-runtime-hardening-v1`
+parte de ese SHA y responde a la prueba humana de salto cercano.
+
 Esta capa visual reutiliza la vertical slice técnica, sus colisiones, tablas,
 sesiones, captura, inventario, Trainer AI y recorder. No reabre DATA V3 ni IA.
 No representa todavía GF1-A..F ni una campaña con guardado de mundo.
@@ -35,6 +39,8 @@ API/schema inmutable; los datos raw/normalized/manifests sí están presentes.
 - Frecuencia: alternar 0, 5, 15, 30 y 100 %. Reinicia equipo, mochila y métricas.
 - Reiniciar: empezar una prueba nueva con la configuración vigente.
 - F1 / Ajustes: panel avanzado de especies, niveles, equipos e IA; pausa el movimiento.
+- F2 / Colisiones: superponer las formas físicas reales (muros, hierba, saltos,
+  puertas, rival y personaje). No altera el RNG ni añade colisionadores.
 - Informe: exportar el recorder existente. Su ruta se comunica en el panel técnico.
 - En combate: ataques, cambio, balls, huida y retorno al mapa usan el dominio real.
 
@@ -76,13 +82,66 @@ godot --path . --script res://tests/gameplay/visual_field_test_runner.gd -- --ca
 ```
 
 El segundo comando produce capturas reales en `.godot/visual_checks/` para revisión
-de ruta, combate, resultado de captura, refugio y cueva. No se versionan esas salidas.
+de ruta, colisiones, combate, resultado de captura, refugio y cueva. No se versionan esas salidas.
 La certificación remota pertenece siempre al SHA exacto del PR; los resultados locales
 no sustituyen una matriz completa en GitHub. El runner histórico de overworld ya
 emitía avisos de recursos/RID al salir en el parent; se distinguen de fallos de gameplay.
 
+## Precisión y correcciones del mapa
+
+`tests/gameplay/map_runtime_test_runner.gd` prueba el salto mediante señales físicas
+Area2D y movimiento/input real, no solo invocando `jump_ledge()` directamente.
+La reproducción inicial dio 12 fallos: partir ya solapando el trigger mirando a
+otro lado no reintentaba; se desplazaba al centro del marcador; un spawn quieto
+podía saltar. Se corrige evaluando intención de movimiento dentro de la zona,
+comprobando geometría actual para evitar señales de solape retrasadas y conservando
+el desplazamiento lateral al aterrizar. No se exige carrerilla.
+
+La ampliación también encontró y corrigió:
+
+- aterrizaje/puerta con destino ocupado: rechazar antes de bloquear o trasladar;
+- frame largo que inicia encuentro: detener el movimiento en el primer paso y no
+  publicar pasos posteriores mientras el combate ya bloquea al personaje;
+- apertura de ajustes por ratón durante fundidos: aplicar la misma guarda de bloqueo
+  que al teclado;
+- medición de tiempo en hierba: recortar cada segmento a los límites reales, incluyendo
+  entradas/salidas parciales, sin aproximarlo por su punto final;
+- diagnóstico de dirección de salto rechazada: no escribir una línea redundante por frame.
+
+La matriz cubre distancias de 1/8/32/56 px; cinco posiciones de ancho; salto
+horizontal; sentido inverso; bloqueo/desbloqueo; quietud; tecla mantenida; paredes
+en los cuatro bordes; movimiento simulado a 20/30/60/120 Hz; pasos exactos;
+bordes de hierba; puerta activada caminando; pausa y Escape; captura duplicada;
+retorno a exploración y ausencia de encuentro por estar quieto.
+
+Las frecuencias se prueban con el servicio real y RNG de semilla fija:
+
+| Probabilidad configurada | Tiradas | Encuentros | Observado |
+|---|---:|---:|---:|
+| 0 % | 40 | 0 | 0 % |
+| 5 % | 4.000 | 181 | 4,525 % |
+| 15 % | 4.000 | 587 | 14,675 % |
+| 30 % | 4.000 | 1.147 | 28,675 % |
+| 100 % | 40 | 40 | 100 % |
+
+El margen de regresión es cinco desviaciones binomiales respecto a la configuración;
+la secuencia es reproducible, no una certificación de todas las posibles semillas
+ni un argumento para considerar cerrado el balance. No se modifica la probabilidad
+del juego para forzar los resultados de la muestra.
+
+```sh
+godot --headless --path . --script res://tests/gameplay/map_runtime_test_runner.gd
+```
+
+El gate queda incluido en Godot CI. El traslado solicitado al SSD se realiza después
+de validar la entrega: la copia activa será un clon independiente, sin depender del
+repositorio antiguo de `F:` para sus objetos Git. No se mezclan sus cambios locales.
+
 ## Siguiente trabajo de producto
 
-Primero jugar y ajustar legibilidad, escala y frecuencia con esta demo. Después,
+Primero jugar y ajustar legibilidad, escala y frecuencia con esta demo. Mantener
+la superposición F2 y las pruebas de movimiento como gate al cambiar geometría.
+Quedan pruebas de contenido para cada mapa futuro (spawns/puertas, destinos libres,
+zonas, NPC y rutas de escape), feedback de captura y servicios de curación. Después,
 GF1-A..F del roadmap para inicial, mapas configurables, NPC/eventos, servicios y
 save de mundo. El contenido/arte final se incorpora de forma selectiva.

@@ -2,6 +2,10 @@
 
 ## Prioridad actualizada — 2026-10-18
 
+Tramo actual: `fix/map-runtime-hardening-v1`, sobre la primera demo certificada.
+Prioridad: cerrar regresiones de salto/movimiento/transiciones y trasladar la copia
+activa a SSD como clon independiente. Conservar F2 como herramienta de prueba humana.
+
 La `main` actual en `e98e09f75b3f55c7d170f8f9906d49792cef5a6c` ya incorpora la línea
 moderna y tiene CI correcto; no repetir la antigua operación de promoción descrita abajo.
 El usuario prioriza empezar con imagen: probar `scenes/visual/field_demo.tscn`,

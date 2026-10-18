@@ -22,6 +22,10 @@ func _run() -> void:
 	_check("initial_mean_uses_distance_and_speed", is_equal_approx(float(scene.encounter_expectation().mean_walking_seconds), 100.0 / 15.0 / 3.0))
 	_check("fixed_demo_species_is_pidgey", scene._active_config.wild_species_id == "pidgey")
 	await _snapshot("route")
+	if _capture:
+		scene.toggle_geometry_overlay()
+		await _snapshot("collisions")
+		scene.toggle_geometry_overlay()
 	# Real input travels through the player's runtime physics callback.
 	var start := player.global_position
 	Input.action_press("ui_right")
