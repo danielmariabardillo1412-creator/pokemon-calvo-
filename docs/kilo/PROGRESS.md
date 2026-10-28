@@ -1,6 +1,6 @@
 # Progreso vigente — 2026-10-28
 
-Estado: **T003_ACCEPTED_WAITING_NEXT_PLAN**.
+Estado: **T004_READY**.
 
 T003: **ACCEPTED_BY_CODEX**. T004–T006: **BLOCKED_REVIEW**.
 T001/T002 continúan aceptados en 866b009bb2abde67014ffe6d0b4ad1dc3cc5e8b5.
@@ -78,3 +78,9 @@ CODEX_REVIEW.* conserva la revisión anterior con correcciones solicitadas.
 Se guarda checkpoint local de la entrega aceptada, sin remotos ni publicación.
 No se ha mezclado con el original. T004–T006 siguen bloqueados; el próximo paso
 es preparar y habilitar el contrato T004 antes de otra ejecución de OpenCode.
+
+Codex habilita T004 desde el checkpoint aceptado 513dd73. Contrato nuevo:
+tasks/T004_FIELD_DIAGNOSTICS.md; prompt: OPENCODE_PROMPT.txt. Incluye catálogo,
+selección/ciclos, despacho de teclas de diagnóstico y comprobación de conexiones.
+Aún no implementado. T005/T006 siguen bloqueados. Un solo ejecutor OpenCode;
+no arrancar Kilo, no tocar el original. Volver a revisión al completar T004.

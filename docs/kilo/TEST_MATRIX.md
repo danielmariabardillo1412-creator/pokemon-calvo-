@@ -60,7 +60,7 @@ Una prueba que necesita otra dependencia queda BLOCKED con su motivo, nunca PASS
 No regenerar recursos ni modificar el runner para salvarla. Guardar el error y
 pedir revisión mediante PROGRESS. No hacer cambios en el proyecto original.
 
-## T003 — fase vigente
+## T003 — aceptado
 
 T001/T002 son historia aceptada; no volver a implementar sus contratos.
 Ejecutar `python tools/architecture_handoff/run_checks.py --phase T003 --quick`
@@ -71,3 +71,20 @@ Quick y completo escriben T003_quick y T003 separados. Los contadores deben ser
 reales; no se fija un número para el nuevo runner ni se autoriza reducir los previos.
 Finalizar con `python tools/architecture_handoff/guard.py --full`.
 El sello vigente está en baseline/T003; no regenerarlo. El anterior se preserva.
+
+## T004 — fase vigente
+
+Pieza aislada: `python tools/architecture_handoff/run_checks.py --phase T004 --piece`.
+Solo requiere el runner nuevo field_diagnostics_test_runner.gd. No acredita integración.
+
+Quick: `python tools/architecture_handoff/run_checks.py --phase T004 --quick`.
+Exige ambos runners nuevos, ejecuta contrato aislado, integración nativa, integración
+con --legacy-field, contratos HUD (431/116), campo nativo y objetos/conexiones.
+
+Completo: `python tools/architecture_handoff/run_checks.py --phase T004`.
+Añade a los 13 grupos del cierre T003 los 3 grupos de diagnóstico anteriores:
+16 grupos, incluida GPU, ejecutados secuencialmente. No contar como tres grupos
+una sola ejecución ni eliminar pruebas anteriores para acelerar.
+Pieza, quick y completo usan T004/piece, T004_quick y T004 respectivamente.
+Final: `python tools/architecture_handoff/guard.py --full`.
+El sello activo es baseline/T004; el ejecutor no lo edita ni regenera.

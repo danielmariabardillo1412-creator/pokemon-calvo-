@@ -1,12 +1,13 @@
 # Etapas posteriores — requieren revisión y nuevos contratos
 
-T001/T002 aceptados. Solo T003 está abierto bajo su contrato específico.
-Este mapa no autoriza T004–T006.
+T001–T003 aceptados. Solo T004 está abierto bajo su contrato específico.
+Este mapa no autoriza T005/T006.
 
 T003: separar formateo/renderizado del HUD a partir de una vista de datos
 explícita. Contrato ejecutable: tasks/T003_HUD_RENDER.md.
 
-T004: separar controles de diagnóstico y sus presets del flujo normal de la
+T004 (activo): contrato tasks/T004_FIELD_DIAGNOSTICS.md. Separar catálogo,
+selección, ciclos y despacho de teclas F4–F11 del flujo normal de la
 partida. Preservar el comportamiento explícito de reinicio de los ensayos y todas
 las teclas existentes. No confundir presets de prueba con cambios de learnset.
 

@@ -3,8 +3,9 @@
   "original_root": "D:/Proyectos/Pokemon Calvo",
   "user_data_name": "Pokemon Calvo - Arquitectura Kilo",
   "authorized_tasks": [
-    "T003"
+    "T004"
   ],
-  "scope": "HUD rendering from primitive snapshot; stop before T004 for Codex review",
-  "accepted_checkpoint": "866b009bb2abde67014ffe6d0b4ad1dc3cc5e8b5"
+  "scope": "Diagnostic preset catalog, selectors and F4-F11 dispatch; stop before T005 for review",
+  "accepted_checkpoint": "513dd738eb4b30097190782d2fcc762bbe652983",
+  "executor": "OpenCode"
 }

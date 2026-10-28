@@ -13,14 +13,15 @@ qué se ha copiado y qué capturas/caches históricos se han omitido.
 1. `AGENTS.md`: límites comunes.
 2. `docs/kilo/ARCHITECTURE_TARGET.md`: mapa actual y destino.
 3. `docs/kilo/TASKS.json`: tarea y puertas de revisión.
-4. `docs/kilo/tasks/T003_HUD_RENDER.md`: único contrato activo; T001/T002 ya aceptados.
+4. `docs/kilo/tasks/T004_FIELD_DIAGNOSTICS.md`: único contrato activo; T001–T003 aceptados.
 5. `docs/kilo/TEST_MATRIX.md`: comandos y evidencia esperada.
 6. Consultar `docs/kilo/PROGRESS.md` antes de retomar una sesión.
 
 Antes de editar, confirmar `Get-Location`, rama actual y `git status --short`.
-Leer `docs/kilo/baseline/T003/BASELINE_COMMIT.txt` y la revisión aceptada
-`docs/kilo/evidence/T002/REVIEW.md`. El punto aceptado es 866b009; el baseline
-T003 añade solo la preparación de planos y comprobadores por Codex. Ejecutar `python tools/architecture_handoff/guard.py`
+Leer `docs/kilo/baseline/T004/BASELINE_COMMIT.txt` y la revisión aceptada
+`docs/kilo/evidence/T003/CODEX_ACCEPTANCE.md`. El juego aceptado está en 513dd73;
+el baseline T004 añade solo planos y comprobadores preparados por Codex.
+Ejecutar `python tools/architecture_handoff/guard.py`
 para comprobar las superficies protegidas. La preparación de la copia corresponde
 a Codex; el ejecutor no debe repetir `prepare_copy.py` ni volver a sellar archivos.
 
@@ -53,11 +54,12 @@ orden de volver al motor anterior o mantener dos autoridades simultáneas.
 
 ## Bloque activo
 
-T001/T002 ya están aceptados. Ejecutar solo el contrato T003: construir una
-instantánea de datos simples en field_demo y presentar sus textos en FieldHud.
-Conservar los 116 checks existentes del HUD sin editarlos. Añadir un runner nuevo.
-Ejecutar quick T003 y después T003 completo; conservar ambos resultados separados.
-STOP: READY_FOR_REVIEW. T004–T006 no están autorizados.
+T001–T003 aceptados. Solo T004: catálogo y selección de ensayos, ciclos y teclas
+F4–F11. Sus pasos A/B/C son continuables si pasan los controles internos.
+Conservar el HUD aceptado, los tests protegidos y las mutaciones en su dueño.
+Ejecutar pieza aislada, quick y completo. STOP: READY_FOR_REVIEW antes de T005.
 
-El guard vigente usa `docs/kilo/baseline/T003/`; el baseline anterior se conserva
-como historia. No editar ni regenerar sellos, verificadores o planes.
+Prompt vigente: docs/kilo/OPENCODE_PROMPT.txt. La copia se sigue llamando
+Arquitectura Kilo por compatibilidad; no renombrarla ni arrancar Kilo en paralelo.
+El guard vigente usa baseline/T004; los sellos anteriores permanecen históricos.
+No editar planes, verificadores, configuraciones o sellos para pasar un control.

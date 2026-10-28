@@ -1,9 +1,9 @@
-# Pokémon Calvo — Arquitectura Kilo
+# Pokémon Calvo — copia de arquitectura
 
-Copia aislada: `D:/Proyectos/Pokemon Calvo - Arquitectura Kilo`.
-Comenzar por `docs/kilo/START_HERE.md`. Original protegido: `D:/Proyectos/Pokemon Calvo`.
+Ejecutor actual: OpenCode. Raíz: `D:/Proyectos/Pokemon Calvo - Arquitectura Kilo`.
+Los nombres kilo de las rutas son históricos: conservarlos, sin duplicar la copia.
+Original protegido: `D:/Proyectos/Pokemon Calvo`.
 
-T001/T002 aceptados por Codex en 866b009. Bloque activo: **T003**,
-renderizado del HUD con datos simples. El resto sigue bloqueado.
-Pegar `docs/kilo/KILO_PROMPT.txt` en Kilo abierto sobre esta copia.
-No repetir la preparación de la copia ni reutilizar instrucciones de otra carpeta.
+Empezar en docs/kilo/START_HERE.md. T001–T003 aceptados. Único bloque activo:
+**T004**, catálogo, selección y teclas de ensayos de diagnóstico, con pruebas.
+Prompt vigente: docs/kilo/OPENCODE_PROMPT.txt. No repetir /init ni la preparación.

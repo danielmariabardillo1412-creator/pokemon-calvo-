@@ -1,0 +1,26 @@
+Trabaja en D:\Proyectos\Pokemon Calvo - Arquitectura Kilo, rama codex/kilo-architecture-v1.
+Eres el único ejecutor OpenCode. T001–T003 están aceptados; último checkpoint 513dd73.
+No rehagas T003. Lee AGENTS.md, docs/kilo/START_HERE.md, TASKS.json y PROGRESS.md.
+Después lee COMPLETO docs/kilo/tasks/T004_FIELD_DIAGNOSTICS.md y TEST_MATRIX.md.
+
+Ejecuta SOLO T004, con sus pasos A/B/C: extraer el catálogo/selección y siete
+cursores de ensayos en FieldDiagnostics sin referencia al mapa; conectar wrappers
+y teclas F4–F11 conservando efectos, rechazos, orden y aliases; probar todo el bloque.
+No muevas autoridades, estado de combate, guardados o servicios a ese componente.
+No amplíes a T005/T006 ni limpies código ajeno al contrato. Los tests anteriores
+(431/116 del HUD incluidos) y field_hud están protegidos: no modificarlos.
+
+Confirma ruta, rama, diff y guard antes de editar. Construye pieza, prueba, conecta,
+prueba integración y completa regresión. Comandos:
+python tools/architecture_handoff/run_checks.py --phase T004 --piece
+python tools/architecture_handoff/run_checks.py --phase T004 --quick
+python tools/architecture_handoff/run_checks.py --phase T004
+python tools/architecture_handoff/guard.py --full
+
+No ejecutes suites simultáneas. Para procesos largos, si necesitas segundo plano,
+ventana oculta + PID/log + espera de salida real. Un timeout no es PASS; preservar
+parcial. No cambiar verificadores, planes, configuraciones, permisos o sellos.
+Conserva resultados reales y REVIEW.md en evidence/T004, actualiza PROGRESS/TASKS.
+Dos intentos fallidos sin progreso: BLOCKED con causa, sin ampliar alcance.
+Al terminar TODO: READY_FOR_REVIEW y DETENTE antes de T005. Codex revisará.
+No tocar el original, F:, Nova, GitHub ni iniciar otros agentes.

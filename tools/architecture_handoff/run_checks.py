@@ -44,10 +44,14 @@ def command(args, logfile):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--phase', choices=['baseline', 'T001', 'T002', 'T003'], required=True)
-    parser.add_argument('--quick', action='store_true')
+    parser.add_argument('--phase', choices=['baseline', 'T001', 'T002', 'T003', 'T004'], required=True)
+    mode = parser.add_mutually_exclusive_group()
+    mode.add_argument('--quick', action='store_true')
+    mode.add_argument('--piece', action='store_true')
     args = parser.parse_args(); guard.check_root()
-    out_name = 'T003_quick' if args.phase == 'T003' and args.quick else args.phase
+    if args.piece and args.phase != 'T004': parser.error('--piece is only supported for T004')
+    out_name = args.phase + '_quick' if args.phase in ['T003', 'T004'] and args.quick else args.phase
+    if args.piece: out_name += '/piece'
     out = ROOT / 'docs/kilo/evidence' / out_name; out.mkdir(parents=True, exist_ok=True)
     results = []
     try:
@@ -59,16 +63,27 @@ def main():
         if args.phase != 'baseline':
             assert (ROOT / 'tests/gameplay/field_hud_contract_test_runner.gd').exists(), 'Missing HUD contract test'
             groups = [('hud_contract', 'field_hud_contract_test_runner.gd', [])] + groups
-        if args.phase == 'T003':
+        if args.phase in ['T003', 'T004']:
             assert (ROOT / 'tests/gameplay/field_hud_render_test_runner.gd').exists(), 'Missing T003 HUD render test'
             groups = [('hud_render', 'field_hud_render_test_runner.gd', [])] + groups
+        if args.phase == 'T004':
+            assert (ROOT / 'tests/gameplay/field_diagnostics_test_runner.gd').exists(), 'Missing diagnostic contract test'
+            diagnostic_groups = [('diagnostics_contract', 'field_diagnostics_test_runner.gd', [])]
+            if args.piece:
+                groups = diagnostic_groups
+            else:
+                assert (ROOT / 'tests/gameplay/field_diagnostics_integration_test_runner.gd').exists(), 'Missing diagnostic integration test'
+                groups = diagnostic_groups + [
+                    ('diagnostics_native', 'field_diagnostics_integration_test_runner.gd', []),
+                    ('diagnostics_legacy', 'field_diagnostics_integration_test_runner.gd', ['--', '--legacy-field']),
+                ] + groups
         for name, script, extra in groups:
             print('ARCHITECTURE_CHECK', args.phase, name, flush=True)
             result = command([GODOT, '--headless', '--path', '.', '--script', 'tests/gameplay/' + script] + extra, out / (name + '.log'))
             result['group'] = name; results.append(result)
             print(result['status'], result['last_line'], flush=True)
             if result['status'] != 'PASS': break
-        if not args.quick and len(results) == len(groups) and all(r['status'] == 'PASS' for r in results):
+        if not args.quick and not args.piece and len(results) == len(groups) and all(r['status'] == 'PASS' for r in results):
             print('ARCHITECTURE_CHECK', args.phase, 'field_items_gpu', flush=True)
             result = command([GODOT, '--path', '.', '--resolution', '1280x720', '--script',
                               'tests/gameplay/item_field_effects_v4.gd', '--', '--capture'], out / 'field_items_gpu.log')
@@ -79,10 +94,10 @@ def main():
             print(result['status'], result['last_line'], flush=True)
         guard_after = guard.verify()
         good = len(results) == len(groups) and all(r['status'] == 'PASS' for r in results)
-        report = {'status': 'PASS' if good else 'FAIL', 'phase': args.phase, 'quick': args.quick,
+        report = {'status': 'PASS' if good else 'FAIL', 'phase': args.phase, 'quick': args.quick, 'piece': args.piece,
                   'groups': results, 'guard_before': guard_before, 'guard_after': guard_after}
     except Exception as e:
-        report = {'status': 'FAIL', 'phase': args.phase, 'quick': args.quick, 'groups': results, 'error': str(e)}
+        report = {'status': 'FAIL', 'phase': args.phase, 'quick': args.quick, 'piece': args.piece, 'groups': results, 'error': str(e)}
     (out / 'results.json').write_text(json.dumps(report, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
     print('ARCHITECTURE_RESULT', report['status'], flush=True)
     sys.exit(0 if report['status'] == 'PASS' else 1)

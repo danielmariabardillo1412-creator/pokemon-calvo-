@@ -41,8 +41,8 @@ El objetivo es reducir conocimiento cruzado por etapas, sin cambiar reglas.
    qué dependencias se pueden retirar o aislar.
 6. Documentación vigente y puntos de entrada únicos para cada recorrido.
 
-Solo el punto 1 y su verificación están autorizados en T003. Los demás
-necesitan planos concretos nuevos tras revisar los cambios y sus dependencias.
+Los puntos 1/T001–T003 están aceptados. Solo la parte del punto 2 descrita en
+el contrato T004 está autorizada ahora. Los puntos siguientes requieren revisión.
 
 ## Contrato histórico del piloto T001/T002 (aceptado)
 
@@ -71,10 +71,19 @@ fuera de res:// como ejecutable, pero el worker y su paquete deben cargar desde
 esta copia. No reinstalar ni actualizar paquetes. No borrar archivos por parecer
 antiguos, duplicados o desconectados sin un contrato posterior que lo autorice.
 
-## Contrato vigente T003
+## Contrato T003 (aceptado)
 
 El contrato anterior describe lo que ya quedó aceptado. Ahora se autoriza mover
 solo el formateo de `_refresh_hud` a FieldHud mediante datos simples, según
 `tasks/T003_HUD_RENDER.md`. Las consultas, los cálculos de encuentros y la
 traducción de especies siguen en field_demo. El resto del mapa propuesto espera
 otra revisión. No cambiar el constructor de controles ya aceptado.
+
+## Contrato vigente T004
+
+La selección de ensayos se separa en FieldDiagnostics, un RefCounted sin referencia
+al mapa ni a sus servicios: catálogo constante, planes de ensayo y siete cursores.
+La escena conserva la autoridad sobre configuración, packs, colección, registros,
+avisos y reinicio. No mover esos efectos a un objeto que reciba self ni duplicarlos.
+Las firmas de entrada y alias existentes se conservan por compatibilidad.
+El contrato completo está en tasks/T004_FIELD_DIAGNOSTICS.md.
