@@ -459,6 +459,103 @@ func encounter_expectation() -> Dictionary:
 	}
 
 
+func field_collection() -> PlayerCollection:
+	return _session.player if _session != null else null
+
+
+func field_definitions() -> DefinitionCatalog:
+	return _catalogs
+
+
+func field_can_configure() -> bool:
+	if not is_demo_ready():
+		return false
+	return _can_configure()
+
+
+func field_can_use_items() -> bool:
+	if not is_demo_ready():
+		return false
+	return _can_use_field_items()
+
+
+func field_can_open_item_bag() -> bool:
+	if not is_demo_ready() or _native_battles == null:
+		return false
+	return _can_configure() and not test_panel.is_panel_open()
+
+
+func field_activity_snapshot() -> Dictionary:
+	return {
+		"native_available": _native_battles != null,
+		"native_occupied": _native_battles != null and _native_battles.occupied(),
+		"traversal_busy": traversal_is_busy(),
+		"panel_open": is_demo_ready() and test_panel.is_panel_open(),
+		"gallery_open": _pokemon_gallery != null and _pokemon_gallery.visible,
+		"doubles_open": _doubles_demo != null and _doubles_demo.visible,
+		"bag_open": _item_bag != null and _item_bag.visible,
+		"can_configure": field_can_configure(),
+		"can_use_items": field_can_use_items(),
+		"can_open_bag": field_can_open_item_bag(),
+	}
+
+
+func field_encounter_snapshot() -> Dictionary:
+	var snapshot := encounter_expectation()
+	snapshot["region_id"] = String(technical_region_id())
+	return snapshot
+
+
+func field_show_notice(message: String) -> void:
+	if _notice_label != null:
+		_notice_label.text = message
+
+
+func field_refresh_hud() -> void:
+	_refresh_hud()
+
+
+func field_item_bag_opened() -> void:
+	player.movement_enabled = false
+
+
+func field_bind_item_service(service: RefCounted) -> bool:
+	if service == null or not service.has_method("configure"):
+		return false
+	if _native_battles == null or not field_can_use_items():
+		return false
+	var collection := field_collection()
+	var definitions := field_definitions()
+	if collection == null or definitions == null:
+		return false
+	var clocks: Dictionary = _native_battles.clocks
+	var binding := _field_item_binding_guard(collection, definitions, clocks)
+	return bool(service.configure(collection, definitions, binding, clocks))
+
+
+func field_item_service_is_current(service: RefCounted) -> bool:
+	if service == null or not service.has_method("configure"):
+		return false
+	if _session == null or _session.player == null or _catalogs == null or _native_battles == null:
+		return false
+	return (
+		is_same(service.get("owner"), _session.player)
+		and is_same(service.get("catalogs"), _catalogs)
+		and is_same(service.get("sleep_clocks"), _native_battles.clocks)
+	)
+
+
+func _field_item_binding_guard(collection: PlayerCollection, definitions: DefinitionCatalog, clocks: Dictionary) -> Callable:
+	return func() -> bool:
+		return field_can_use_items() and _field_item_binding_matches(collection, definitions, clocks)
+
+
+func _field_item_binding_matches(collection: PlayerCollection, definitions: DefinitionCatalog, clocks: Dictionary) -> bool:
+	if _session == null or _session.player == null or _catalogs == null or _native_battles == null:
+		return false
+	return is_same(_session.player, collection) and is_same(_catalogs, definitions) and is_same(_native_battles.clocks, clocks)
+
+
 func _build_hud(canvas: CanvasLayer, theme: Theme) -> void:
 	_hud = preload("res://scenes/visual/field_hud.gd").new()
 	canvas.add_child(_hud)

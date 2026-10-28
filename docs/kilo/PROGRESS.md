@@ -1,9 +1,9 @@
-# Progreso vigente — 2026-10-28
+# Progreso vigente — 2026-10-29
 
-Estado: **T005_READY**.
+Estado: **T005_ACCEPTED_WAITING_NEXT_PLAN**.
 
 T003: **ACCEPTED_BY_CODEX**. T004: **ACCEPTED_BY_CODEX**.
-T005–T006: **BLOCKED_REVIEW**.
+T005: **ACCEPTED_BY_CODEX**. T006: **BLOCKED_REVIEW**.
 T001/T002 continúan aceptados en 866b009bb2abde67014ffe6d0b4ad1dc3cc5e8b5.
 
 S0: copia aislada y baseline de 11 grupos PASS. Rama codex/kilo-architecture-v1,
@@ -125,7 +125,55 @@ evidence/T004/CODEX_ACCEPTANCE.md y CODEX_ACCEPTANCE.json.
 Se guarda checkpoint local aceptado. T005/T006 siguen bloqueados; no continuar
 sin que Codex prepare el siguiente contrato. No se mezcla con el original.
 
-Codex habilita T005 desde 66be8f9. Contrato: tasks/T005_FIELD_API.md.
-API pública del campo + migración de mochila + identidad de colección/relojes
-tras carga y bloqueo de operaciones durante actividad. Aún no implementado.
-T006 sigue bloqueado. Prompt vigente OPENCODE_PROMPT.txt. No tocar el original.
+T005 implementado por OpenCode (esta entrega):
+- `scenes/visual/field_demo.gd`: API pública pequeña en el dueño
+  (`field_collection`, `field_definitions`, `field_can_configure`,
+  `field_can_use_items`, `field_can_open_item_bag`, `field_activity_snapshot`,
+  `field_encounter_snapshot`, `field_show_notice`, `field_refresh_hud`,
+  `field_item_bag_opened`, `field_bind_item_service`,
+  `field_item_service_is_current`). El Callable del guard captura dueño, catálogo
+  y el diccionario exacto de relojes, no el servicio, y comprueba actividad e
+  identidad en cada operación con `is_same`. Sin contexto nativo, abrir mochila
+  devuelve false en vez de desreferenciar null; no se añaden mecánicas legacy.
+- `scenes/visual/field_item_bag.gd`: migrada solo a la API pública; sin accesos
+  `field._*`. Conserva widgets, callbacks, señales, textos, tamaños, posiciones y
+  códigos. Un enlace retirado devuelve el resultado/texto existente `field_locked`
+  antes de mutar, refresca y no reejecuta la acción pendiente sobre la colección
+  nueva; `_ensure_binding` solo reenlaza cuando el dueño lo permite.
+- Tests nuevos: contrato de API con escena real, nativo y legado (225/204); e
+  integración real nativa (220) con mochila real (curación, PP, equipado y
+  Awakening), guardado/carga y segunda carga aislados, reset de configuración,
+  relojes de igual contenido, UI obsoleta, combate/panel/galería, carga inválida
+  y B/Esc + selección + HUD.
+
+Comprobaciones reales:
+- `python tools/architecture_handoff/run_checks.py --phase T005 --piece`
+  → PASS: field_api_native 225, field_api_legacy 204.
+- `python tools/architecture_handoff/run_checks.py --phase T005 --quick`
+  → PASS, 11 grupos: API 225/204, integración 220, diagnósticos 973/476/465,
+  HUD 431/116, field_native 118, field_items 1814 y item_connections 4994.
+- `python tools/architecture_handoff/run_checks.py --phase T005`
+  → PASS, 19 grupos incluida GPU (los 11 anteriores más map_runtime 103/0,
+  visual_legacy 45/0, medicine 120, savegame 40/0, save_adversarial 8/0,
+  item_policy 19, inventory_capture 133 y field_items_gpu 1816 con GPU=true).
+  Todos los grupos con `exit_code: 0`; `guard_before`/`guard_after` del informe
+  PASS con 23.053 archivos.
+- `python tools/architecture_handoff/guard.py --full` → PASS, 23.053 archivos,
+  FULL_CONTENT_HASHES.
+
+Los runners largos se lanzaron en segundo plano con ventana oculta, PID/log y
+espera de salida real; ningún timeout o interrupción se contó como PASS.
+
+Evidencia: `docs/kilo/evidence/T005/REVIEW.md`, `results.json`, logs por grupo,
+`RUN_PID.txt`, `field_items_gpu.png` y `piece/`; quick en `T005_quick/`. No se
+creó commit. T006 sigue bloqueado, no se inicia y no se escribe
+ACCEPTED_BY_CODEX.
+
+Revisión final de Codex — 2026-10-29: T005 aceptado. Repetición independiente
+API nativa 225, API legado 204 e integración real 220 checks PASS. Guard completo
+PASS, 23.053 archivos; verificadas la suite completa de OpenCode (19 grupos
+incluida GPU), quick 11 y pieza 2 con sus logs/hashes. No se cambió código ni tests
+por Codex. No se volvió a ejecutar toda la suite anterior en esta revisión.
+Estado y límites: evidence/T005/CODEX_ACCEPTANCE.md y CODEX_ACCEPTANCE.json.
+Checkpoint local aceptado; copia separada, sin publicación ni mezcla con original.
+T006 sigue bloqueado; preparar su contrato antes de otra ejecución de OpenCode.
