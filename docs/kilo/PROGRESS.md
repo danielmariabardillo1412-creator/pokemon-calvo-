@@ -1,6 +1,6 @@
 # Progreso vigente — 2026-10-28
 
-Estado: **T004_ACCEPTED_WAITING_NEXT_PLAN**.
+Estado: **T005_READY**.
 
 T003: **ACCEPTED_BY_CODEX**. T004: **ACCEPTED_BY_CODEX**.
 T005–T006: **BLOCKED_REVIEW**.
@@ -124,3 +124,8 @@ La suite completa no se repitió en esta revisión. Estado y límites vigentes:
 evidence/T004/CODEX_ACCEPTANCE.md y CODEX_ACCEPTANCE.json.
 Se guarda checkpoint local aceptado. T005/T006 siguen bloqueados; no continuar
 sin que Codex prepare el siguiente contrato. No se mezcla con el original.
+
+Codex habilita T005 desde 66be8f9. Contrato: tasks/T005_FIELD_API.md.
+API pública del campo + migración de mochila + identidad de colección/relojes
+tras carga y bloqueo de operaciones durante actividad. Aún no implementado.
+T006 sigue bloqueado. Prompt vigente OPENCODE_PROMPT.txt. No tocar el original.

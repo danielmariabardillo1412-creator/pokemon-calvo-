@@ -1,7 +1,9 @@
 {
-  "state": "T004_ACCEPTED_WAITING_NEXT_PLAN",
-  "authorized_now": [],
-  "stop_after": "T004",
+  "state": "T005_READY",
+  "authorized_now": [
+    "T005"
+  ],
+  "stop_after": "T005",
   "tasks": [
     {
       "id": "S0",
@@ -47,11 +49,11 @@
     },
     {
       "id": "T005",
-      "status": "BLOCKED_REVIEW",
+      "status": "READY",
       "depends_on": [
-        "T002"
+        "T004"
       ],
-      "plan": "docs/kilo/ROADMAP.md"
+      "plan": "docs/kilo/tasks/T005_FIELD_API.md"
     },
     {
       "id": "T006",
@@ -64,5 +66,6 @@
   ],
   "executor": "OpenCode (manual model selection by user)",
   "accepted_predecessor": "513dd738eb4b30097190782d2fcc762bbe652983",
-  "latest_acceptance": "docs/kilo/evidence/T004/CODEX_ACCEPTANCE.json"
+  "latest_acceptance": "docs/kilo/evidence/T004/CODEX_ACCEPTANCE.json",
+  "accepted_checkpoint": "66be8f932ea6fdc50b6d82004deb4238bfeb3759"
 }

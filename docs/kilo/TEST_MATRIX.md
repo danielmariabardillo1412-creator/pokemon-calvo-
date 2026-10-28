@@ -72,7 +72,7 @@ reales; no se fija un número para el nuevo runner ni se autoriza reducir los pr
 Finalizar con `python tools/architecture_handoff/guard.py --full`.
 El sello vigente está en baseline/T003; no regenerarlo. El anterior se preserva.
 
-## T004 — fase vigente
+## T004 — aceptado
 
 Pieza aislada: `python tools/architecture_handoff/run_checks.py --phase T004 --piece`.
 Solo requiere el runner nuevo field_diagnostics_test_runner.gd. No acredita integración.
@@ -88,3 +88,14 @@ una sola ejecución ni eliminar pruebas anteriores para acelerar.
 Pieza, quick y completo usan T004/piece, T004_quick y T004 respectivamente.
 Final: `python tools/architecture_handoff/guard.py --full`.
 El sello activo es baseline/T004; el ejecutor no lo edita ni regenera.
+
+## T005 — fase vigente
+
+`python tools/architecture_handoff/run_checks.py --phase T005 --piece`: runner
+field_api_test_runner.gd en nativo y --legacy-field (2 grupos). No acredita mochila.
+`python tools/architecture_handoff/run_checks.py --phase T005 --quick`: API en
+ambos perfiles + field_api_integration_test_runner.gd + 8 grupos quick T004 = 11.
+`python tools/architecture_handoff/run_checks.py --phase T005`: los 3 nuevos y los
+16 anteriores = 19 grupos, incluida GPU. Sin omitir grupos anteriores.
+Pieza/quick/completo escriben T005/piece, T005_quick y T005 por separado.
+Cierre: `python tools/architecture_handoff/guard.py --full`. Sello baseline/T005.

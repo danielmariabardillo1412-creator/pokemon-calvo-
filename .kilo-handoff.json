@@ -3,9 +3,9 @@
   "original_root": "D:/Proyectos/Pokemon Calvo",
   "user_data_name": "Pokemon Calvo - Arquitectura Kilo",
   "authorized_tasks": [
-    "T004"
+    "T005"
   ],
-  "scope": "Diagnostic preset catalog, selectors and F4-F11 dispatch; stop before T005 for review",
-  "accepted_checkpoint": "513dd738eb4b30097190782d2fcc762bbe652983",
+  "scope": "Public field UI API and current-owner item bag binding; stop before T006 for review",
+  "accepted_checkpoint": "66be8f932ea6fdc50b6d82004deb4238bfeb3759",
   "executor": "OpenCode"
 }

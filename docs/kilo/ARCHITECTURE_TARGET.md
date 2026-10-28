@@ -41,8 +41,8 @@ El objetivo es reducir conocimiento cruzado por etapas, sin cambiar reglas.
    qué dependencias se pueden retirar o aislar.
 6. Documentación vigente y puntos de entrada únicos para cada recorrido.
 
-Los puntos 1/T001–T003 están aceptados. Solo la parte del punto 2 descrita en
-el contrato T004 está autorizada ahora. Los puntos siguientes requieren revisión.
+T001–T004 están aceptados. Solo la parte del punto 3 descrita en el contrato
+T005 está autorizada ahora. La coordinación y publicación del punto 4 esperan T006.
 
 ## Contrato histórico del piloto T001/T002 (aceptado)
 
@@ -79,7 +79,7 @@ solo el formateo de `_refresh_hud` a FieldHud mediante datos simples, según
 traducción de especies siguen en field_demo. El resto del mapa propuesto espera
 otra revisión. No cambiar el constructor de controles ya aceptado.
 
-## Contrato vigente T004
+## Contrato T004 (aceptado)
 
 La selección de ensayos se separa en FieldDiagnostics, un RefCounted sin referencia
 al mapa ni a sus servicios: catálogo constante, planes de ensayo y siete cursores.
@@ -87,3 +87,13 @@ La escena conserva la autoridad sobre configuración, packs, colección, registr
 avisos y reinicio. No mover esos efectos a un objeto que reciba self ni duplicarlos.
 Las firmas de entrada y alias existentes se conservan por compatibilidad.
 El contrato completo está en tasks/T004_FIELD_DIAGNOSTICS.md.
+
+## Contrato vigente T005
+
+La UI de mochila usa una interfaz pública en field_demo. Las lecturas resuelven
+la colección actual por llamada; no existe otra colección ni un estado de combate
+copiado. El dueño enlaza FieldItemService con la colección y el diccionario de
+relojes originales, y un guard vivo de actividad e identidad. La mochila conserva
+su servicio compatible, sin leer miembros privados del mapa o del puente.
+La carga/publicación del puente permanece intacta hasta T006. Contrato completo:
+tasks/T005_FIELD_API.md. No se autoriza la migración general de todos los consumidores.
