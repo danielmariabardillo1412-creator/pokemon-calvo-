@@ -103,3 +103,23 @@ func _create_action_button(parent: Node, text_value: String, callback: Callable)
 		button.pressed.connect(callback)
 	parent.add_child(button)
 	return button
+
+func render_snapshot(snapshot: Dictionary) -> void:
+	var region_id := String(snapshot.get("region_id", ""))
+	if region_id == "building":
+		place_label.text = "REFUGIO · ZONA SEGURA"
+	elif region_id == "cave":
+		place_label.text = "CUEVA · ENCUENTROS Nv. %d–%d" % [int(snapshot.get("cave_title_min_level", 8)), int(snapshot.get("cave_title_max_level", 12))]
+	else:
+		place_label.text = "RUTA 01 · CLARO DE PRUEBAS"
+	chance_button.text = "Frecuencia: %d %%" % int(snapshot.get("encounter_percent", 0))
+	var enabled := bool(snapshot.get("encounters_enabled", false))
+	if not enabled:
+		frequency_label.text = "Sin encuentros: frecuencia 0 %."
+	else:
+		frequency_label.text = "Media teórica: %.1f pasos / %.1f s en zona · no es un plazo garantizado" % [float(snapshot.get("mean_steps", 0.0)), float(snapshot.get("mean_walking_seconds", 0.0))]
+	observed_label.text = "%d tiradas · %d encuentros · %d capturas · %.1f s andando en zona" % [int(snapshot.get("rolls", 0)), int(snapshot.get("encounters", 0)), int(snapshot.get("captures", 0)), float(snapshot.get("grass_walking_seconds", 0.0))]
+	if region_id == "building":
+		collection_label.text = "Equipo %d/6   ·   Refugio sin encuentros" % int(snapshot.get("party_size", 0))
+	else:
+		collection_label.text = "Equipo %d/6   ·   Poké Balls %d   ·   %s Nv. %d–%d" % [int(snapshot.get("party_size", 0)), int(snapshot.get("poke_balls", 0)), String(snapshot.get("species_label", "")), int(snapshot.get("min_level", 4)), int(snapshot.get("max_level", 6))]

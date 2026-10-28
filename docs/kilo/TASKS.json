@@ -1,8 +1,6 @@
 {
-  "state": "T003_READY",
-  "authorized_now": [
-    "T003"
-  ],
+  "state": "T003_ACCEPTED_WAITING_NEXT_PLAN",
+  "authorized_now": [],
   "stop_after": "T003",
   "tasks": [
     {
@@ -31,11 +29,12 @@
     },
     {
       "id": "T003",
-      "status": "READY",
+      "status": "ACCEPTED_BY_CODEX",
       "depends_on": [
         "T002"
       ],
-      "plan": "docs/kilo/tasks/T003_HUD_RENDER.md"
+      "plan": "docs/kilo/tasks/T003_HUD_RENDER.md",
+      "review": "docs/kilo/evidence/T003/CODEX_ACCEPTANCE.json"
     },
     {
       "id": "T004",
@@ -62,5 +61,7 @@
       "plan": "docs/kilo/ROADMAP.md"
     }
   ],
-  "accepted_checkpoint": "866b009bb2abde67014ffe6d0b4ad1dc3cc5e8b5"
+  "executor": "OpenCode (manual model selection by user)",
+  "accepted_predecessor": "866b009bb2abde67014ffe6d0b4ad1dc3cc5e8b5",
+  "latest_acceptance": "docs/kilo/evidence/T003/CODEX_ACCEPTANCE.json"
 }

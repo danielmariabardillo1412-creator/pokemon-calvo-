@@ -469,33 +469,35 @@ func _hud_button(parent: Node, text_value: String, callback: Callable) -> Button
 	return button
 
 
-func _refresh_hud() -> void:
-	_place_label.text = "RUTA 01 · CLARO DE PRUEBAS"
-	if technical_region_id() == &"building":
-		_place_label.text = "REFUGIO · ZONA SEGURA"
-	elif technical_region_id() == &"cave":
-		_place_label.text = "CUEVA · ENCUENTROS Nv. %d–%d" % [int(_active_config.get("cave_min_level", 8)), int(_active_config.get("cave_max_level", 12))]
+func _hud_snapshot() -> Dictionary:
+	var region := technical_region_id()
 	var expected := encounter_expectation()
-	_chance_button.text = "Frecuencia: %d %%" % int(expected.get("percent", 0))
-	_frequency_label.text = "Sin encuentros: frecuencia 0 %." if not expected.enabled else (
-		"Media teórica: %.1f pasos / %.1f s en zona · no es un plazo garantizado" % [
-			float(expected.mean_steps), float(expected.mean_walking_seconds),
-		]
-	)
 	var current: Dictionary = technical_audit_summary().get("current_run", {})
 	var encounters: Dictionary = current.get("encounters", {})
 	var captures: Dictionary = current.get("capture", {})
-	_observed_label.text = "%d tiradas · %d encuentros · %d capturas · %.1f s andando en zona" % [
-		int(encounters.get("rolls", 0)), int(encounters.get("encounters", 0)),
-		int(captures.get("successes", 0)), _grass_walking_seconds,
-	]
 	var species_id := StringName(String(_active_config.get("wild_species_id", "")))
 	var species_label := "Pool aleatorio" if species_id == &"" else SpanishGameText.species_name(species_id, _catalogs)
-	var cave := technical_region_id() == &"cave"
-	_collection_label.text = "Equipo %d/6   ·   Poké Balls %d   ·   %s Nv. %d–%d" % [
-		demo_party_size(), demo_inventory_quantity(&"poke_ball"), species_label,
-		int(_active_config.get("cave_min_level" if cave else "wild_min_level", 4)),
-		int(_active_config.get("cave_max_level" if cave else "wild_max_level", 6)),
-	]
-	if technical_region_id() == &"building":
-		_collection_label.text = "Equipo %d/6   ·   Refugio sin encuentros" % demo_party_size()
+	var cave := region == &"cave"
+	var min_level := int(_active_config.get("cave_min_level" if cave else "wild_min_level", 4))
+	var max_level := int(_active_config.get("cave_max_level" if cave else "wild_max_level", 6))
+	return {
+		"region_id": String(region),
+		"cave_title_min_level": int(_active_config.get("cave_min_level", 8)),
+		"cave_title_max_level": int(_active_config.get("cave_max_level", 12)),
+		"encounters_enabled": bool(expected.get("enabled", false)),
+		"encounter_percent": int(expected.get("percent", 0)),
+		"mean_steps": (0.0 if not bool(expected.get("enabled", false)) else float(expected.get("mean_steps", 0.0))),
+		"mean_walking_seconds": (0.0 if not bool(expected.get("enabled", false)) else float(expected.get("mean_walking_seconds", 0.0))),
+		"rolls": int(encounters.get("rolls", 0)),
+		"encounters": int(encounters.get("encounters", 0)),
+		"captures": int(captures.get("successes", 0)),
+		"grass_walking_seconds": float(_grass_walking_seconds),
+		"party_size": int(demo_party_size()),
+		"poke_balls": int(demo_inventory_quantity(&"poke_ball")),
+		"species_label": species_label,
+		"min_level": min_level,
+		"max_level": max_level,
+	}
+
+func _refresh_hud() -> void:
+	_hud.render_snapshot(_hud_snapshot())
