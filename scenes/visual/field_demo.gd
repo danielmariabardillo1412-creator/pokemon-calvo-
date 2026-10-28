@@ -436,77 +436,28 @@ func encounter_expectation() -> Dictionary:
 
 
 func _build_hud(canvas: CanvasLayer, theme: Theme) -> void:
-	_hud = Control.new()
-	_hud.name = "FieldHUD"
-	_hud.theme = theme
-	_hud.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	_hud.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_hud = preload("res://scenes/visual/field_hud.gd").new()
 	canvas.add_child(_hud)
 	canvas.move_child(_hud, 0)
-	var top := PanelContainer.new()
-	top.set_anchors_preset(Control.PRESET_TOP_WIDE)
-	top.offset_left = 10
-	top.offset_top = 8
-	top.offset_right = -10
-	top.offset_bottom = 48
-	_hud.add_child(top)
-	var title_row := HBoxContainer.new()
-	top.add_child(title_row)
-	var title := Label.new()
-	title.text = "POKÉMON CALVO"
-	title.add_theme_font_size_override("font_size", 17)
-	title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	title_row.add_child(title)
-	_hud_button(title_row, "F4 · Ensayo Tera (reinicia)", prepare_tera_visual_test)
-	_hud_button(title_row, "F5 · Elementales (reinicia)", cycle_elemental_visual_test)
-	_hud_button(title_row, "F6 · Ensayo parcial", cycle_external_damage_test)
-	_place_label = Label.new()
-	_place_label.add_theme_color_override("font_color", Color("b7cf9d"))
-	title_row.add_child(_place_label)
-	var bottom := PanelContainer.new()
-	bottom.set_anchors_preset(Control.PRESET_BOTTOM_WIDE)
-	bottom.offset_left = 10
-	bottom.offset_right = -10
-	bottom.offset_top = -79
-	bottom.offset_bottom = -8
-	_hud.add_child(bottom)
-	var rows := VBoxContainer.new()
-	rows.add_theme_constant_override("separation", 3)
-	bottom.add_child(rows)
-	var buttons := HBoxContainer.new()
-	rows.add_child(buttons)
-	var hint := Label.new()
-	hint.text = "Flechas · mover | F7/F8 · Cambios | F9 · Clima | F10 · Sustituto | F11 · Transformar | F12 · Dobles"
-	hint.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	buttons.add_child(hint)
-	_chance_button = _hud_button(buttons, "Frecuencia: 15 %", cycle_frequency)
-	_hud_button(buttons, "Reiniciar", restart_field_run)
-	_hud_button(buttons, "F1 · Ajustes", _open_settings)
-	_hud_button(buttons, "F2 · Colisiones", toggle_geometry_overlay)
-	_hud_button(buttons, "F3 · Pokémon", toggle_pokemon_gallery)
-	_hud_button(buttons, "Informe", func():
-		_on_export_report_requested()
-		_notice_label.text = "Informe exportado · F1 > ABRIR CARPETA DE INFORMES"
-	)
-	_frequency_label = Label.new()
-	_frequency_label.add_theme_color_override("font_color", Color("e1d39a"))
-	rows.add_child(_frequency_label)
-	_observed_label = Label.new()
-	rows.add_child(_observed_label)
-	_collection_label = Label.new()
-	_collection_label.position = Vector2(20, 53)
-	_collection_label.add_theme_color_override("font_color", Color("f3f0d8"))
-	_collection_label.add_theme_color_override("font_shadow_color", Color("172d2b"))
-	_collection_label.add_theme_constant_override("shadow_offset_x", 1)
-	_collection_label.add_theme_constant_override("shadow_offset_y", 1)
-	_hud.add_child(_collection_label)
-	_notice_label = Label.new()
-	_notice_label.position = Vector2(20, 77)
-	_notice_label.add_theme_color_override("font_color", Color("f3e7b6"))
-	_notice_label.add_theme_color_override("font_shadow_color", Color("172d2b"))
-	_notice_label.add_theme_constant_override("shadow_offset_x", 1)
-	_notice_label.add_theme_constant_override("shadow_offset_y", 1)
-	_hud.add_child(_notice_label)
+	_hud.build(theme, {
+		"tera": prepare_tera_visual_test,
+		"elemental": cycle_elemental_visual_test,
+		"external": cycle_external_damage_test,
+		"frequency": cycle_frequency,
+		"restart": restart_field_run,
+		"settings": _open_settings,
+		"geometry": toggle_geometry_overlay,
+		"gallery": toggle_pokemon_gallery,
+		"report": func():
+			_on_export_report_requested()
+			_notice_label.text = "Informe exportado · F1 > ABRIR CARPETA DE INFORMES",
+	})
+	_place_label = _hud.place_label
+	_frequency_label = _hud.frequency_label
+	_observed_label = _hud.observed_label
+	_collection_label = _hud.collection_label
+	_chance_button = _hud.chance_button
+	_notice_label = _hud.notice_label
 
 
 func _hud_button(parent: Node, text_value: String, callback: Callable) -> Button:

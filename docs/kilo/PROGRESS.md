@@ -1,28 +1,24 @@
 # Progreso vigente — 2026-10-28
 
-S0 completado por Codex. Copia SHA-256 verificada: 25.467 archivos, 1.864.986.368
-bytes antes de añadir los planos. Se conserva código/arte/datos locales y los
-packs necesarios. Se omiten capturas históricas regenerables. Rama propia y
-sin remotos; nombre de aplicación distinto para aislar las partidas.
+Estado: **PILOT_ACCEPTED_WAITING_NEXT_PLAN**.
 
-Baseline: 11 grupos PASS, incluida GPU. Ver baseline/BASELINE_STATUS.json y
-la evidencia baseline. El primer intento de map_runtime mezclaba dos rutas;
-se documentó y se corrigió su invocación de laboratorio, sin cambiar tests o juego.
+S0: copia aislada y baseline de 11 grupos PASS. Rama codex/kilo-architecture-v1,
+sin remotos y con partidas separadas del original. Datos, recursos y packs se
+conservan. El baseline y las incidencias de preparación están en baseline/.
 
-Siguiente: leer y ejecutar T001. Después T002 y STOP READY_FOR_REVIEW.
-No se ha implementado ninguna extracción todavía. No seguir con T003–T006.
+T001: Kilo extrajo la construcción del HUD conservando aspecto, acciones y alias.
+Su quick pasó. T002 quedó interrumpido al llegar a medicine y el estado PASS
+inicial era prematuro. Codex revisó el diff y terminó las comprobaciones.
 
-El repositorio contiene un punto de partida local completo. Los packs grandes
-que siguen ignorados por Git están físicamente copiados y sellados; no borrarlos.
-No hacer push, merge, reset, clean o cambios en el original.
+Codex reforzó el contrato nuevo del HUD: pasó de una comprobación parcial de
+botones a 116 comprobaciones de las nueve acciones y controles reales. No fue
+necesario cambiar el código del juego entregado por Kilo.
 
-Añadir bajo esta línea pasos, resultados y pendientes concretos del ejecutor.
+Cierre: 12 grupos de T002 PASS, incluida GPU; 21.704 archivos protegidos
+verificados por hash; comparación baseline/candidato de 16 comprobaciones PASS
+y cero diferencias en las regiones capturadas del HUD. Ver evidence/T002/REVIEW.md
+y CODEX_REVIEW.json para alcance, hashes y límites.
 
-## Preparación del ejecutor
-
-El CLI instalado de Kilo 7.8.18 está disponible. El primer inicio creó la sesión
-`ses_e7c14beb8ffeHqUrO1muhlGGWQ`, pero devolvió 401 PAID_MODEL_AUTH_REQUIRED.
-Su modelo por defecto era google/gemini-3-pro-image. No comenzó a modificar código.
-Se ha solicitado al usuario elegir cuenta/modelo de código o autorizar el modelo
-gratuito cuyo proveedor puede utilizar prompts para entrenamiento. No se han
-introducido credenciales ni cambiado sus ajustes globales.
+T001 y T002 quedan aceptados. T003–T006 siguen BLOCKED_REVIEW. No avanzar por
+iniciativa propia, mezclar con el original ni iniciar otra reforma. El siguiente
+paso es que Codex prepare y habilite el contrato del siguiente bloque.

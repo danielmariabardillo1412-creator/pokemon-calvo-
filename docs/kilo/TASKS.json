@@ -1,5 +1,5 @@
 {
-  "state": "WAITING_EXECUTOR_MODEL_OR_AUTH",
+  "state": "PILOT_ACCEPTED_WAITING_NEXT_PLAN",
   "authorized_now": [
     "T001",
     "T002"
@@ -14,19 +14,21 @@
     },
     {
       "id": "T001",
-      "status": "READY",
+      "status": "ACCEPTED_BY_CODEX",
       "depends_on": [
         "S0"
       ],
-      "plan": "docs/kilo/tasks/T001_HUD_EXTRACTION.md"
+      "plan": "docs/kilo/tasks/T001_HUD_EXTRACTION.md",
+      "review": "docs/kilo/evidence/T002/CODEX_REVIEW.json"
     },
     {
       "id": "T002",
-      "status": "PENDING",
+      "status": "ACCEPTED_BY_CODEX",
       "depends_on": [
         "T001"
       ],
-      "plan": "docs/kilo/tasks/T002_INTEGRATION_REVIEW.md"
+      "plan": "docs/kilo/tasks/T002_INTEGRATION_REVIEW.md",
+      "review": "docs/kilo/evidence/T002/CODEX_REVIEW.json"
     },
     {
       "id": "T003",
