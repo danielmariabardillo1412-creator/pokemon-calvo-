@@ -1,26 +1,27 @@
 Trabaja solo en D:\Proyectos\Pokemon Calvo - Arquitectura Kilo, rama codex/kilo-architecture-v1.
-T001–T004 aceptados; último checkpoint 66be8f9. No rehagas los bloques aceptados.
+T001–T005 aceptados; último checkpoint 291861c. No rehacerlos.
 Lee AGENTS.md, docs/kilo/START_HERE.md, TASKS.json, PROGRESS.md y el contrato
-COMPLETO docs/kilo/tasks/T005_FIELD_API.md, además de TEST_MATRIX.md.
+COMPLETO docs/kilo/tasks/T006A_NATIVE_BRIDGE_RUNTIME.md, además de TEST_MATRIX.md.
 
-Ejecuta SOLO T005: API pública de campo, migración de mochila a esa API, enlace
-con colección/relojes actuales y pruebas de identidad/carga/bloqueo. No clonar
-estado ni cambiar autoridades. El guard de servicio debe comprobar actividad e
-identidad en cada operación; no basta con desactivar botones. Conservar comportamiento,
-arte y compatibilidad; rechazar de forma segura contexto ausente y enlaces retirados.
-No modificar puente nativo, FieldItemService, guardados, módulos, HUD, diagnóstico,
-pruebas existentes, configuraciones o reglas. T006 permanece bloqueado.
+Solo T006A autorizado: API del dueño para ejecución del puente nativo, migración
+de encuentros/inicio/cierre/notificaciones, y mapa documentado del arranque.
+Conservar autoridades y orden de RNG/semillas/eventos. Sin getters genéricos de
+privados, estado espejo, cambios de mecánicas ni reorganización del bootstrap.
+Save_game, load_game, _tables_for y recover_battle del puente están CONGELADOS:
+son deuda de T006B, que sigue bloqueado. No migrarlos ni declararlos terminados.
+No tocar módulos, worker, guardado, HUD, mochila, diagnóstico o pruebas previas.
 
-Confirma raíz/rama/diff y guard. Haz A (API y pieza), B (mochila e integración),
-C (regresión completa). Continúa entre pasos cuando sus controles pasen:
-python tools/architecture_handoff/run_checks.py --phase T005 --piece
-python tools/architecture_handoff/run_checks.py --phase T005 --quick
-python tools/architecture_handoff/run_checks.py --phase T005
+Confirma raíz/rama/diff y guard; caracteriza la base, crea pieza, prueba, conecta,
+prueba integración y regresión. Comandos:
+python tools/architecture_handoff/run_checks.py --phase T006A --piece
+python tools/architecture_handoff/run_checks.py --phase T006A --quick
+python tools/architecture_handoff/run_checks.py --phase T006A
 python tools/architecture_handoff/guard.py --full
 
-Procesos largos: si es necesario, segundo plano con ventana oculta, PID/log y
-esperar salida real. Nunca declarar PASS por timeout o proceso aún activo.
-Guarda resultados reales y REVIEW.md en evidence/T005; actualiza PROGRESS/TASKS.
-Dos intentos sin progreso o dependencia fuera de alcance: BLOCKED con causa.
-Si termina todo: READY_FOR_REVIEW y DETENTE antes de T006. No autoaceptación,
-no otros agentes, no original, F:, Nova, GitHub ni ampliación de permisos/sellos.
+Guarda BOOT_MAP.md, REVIEW.md y resultados reales en evidence/T006A; actualiza
+PROGRESS/TASKS: T006A pendiente de revisión, T006 global aún IN_PROGRESS.
+Procesos largos: segundo plano oculto con PID/log si hace falta, esperar salida
+real. No PASS por timeout; no cambiar verificadores, permisos, planos o sellos.
+Dos intentos sin progreso o fuera de alcance: BLOCKED con causa y evidencia.
+Al completar TODO T006A: READY_FOR_REVIEW y DETENTE antes de T006B.
+Un solo ejecutor; no original, F:, Nova, GitHub ni otros agentes.

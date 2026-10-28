@@ -1,1 +1,1 @@
-Read AGENTS.md and docs/kilo/START_HERE.md. T001-T004 accepted. Only T005 authorized. Current executor OpenCode, one writer. Stop READY_FOR_REVIEW before T006. Preserve original and protected tests/data/assets/gameplay.
+Read AGENTS.md and docs/kilo/START_HERE.md. T001-T005 accepted; only T006A authorized. One OpenCode executor. Stop READY_FOR_REVIEW before T006B. Preserve original and protected tests, data, assets, gameplay and persistence methods.

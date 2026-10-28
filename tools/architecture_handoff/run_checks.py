@@ -44,13 +44,13 @@ def command(args, logfile):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--phase', choices=['baseline', 'T001', 'T002', 'T003', 'T004', 'T005'], required=True)
+    parser.add_argument('--phase', choices=['baseline', 'T001', 'T002', 'T003', 'T004', 'T005', 'T006A'], required=True)
     mode = parser.add_mutually_exclusive_group()
     mode.add_argument('--quick', action='store_true')
     mode.add_argument('--piece', action='store_true')
     args = parser.parse_args(); guard.check_root()
-    if args.piece and args.phase not in ['T004', 'T005']: parser.error('--piece is only supported for T004/T005')
-    out_name = args.phase + '_quick' if args.phase in ['T003', 'T004', 'T005'] and args.quick else args.phase
+    if args.piece and args.phase not in ['T004', 'T005', 'T006A']: parser.error('--piece is only supported for T004/T005/T006A')
+    out_name = args.phase + '_quick' if args.phase in ['T003', 'T004', 'T005', 'T006A'] and args.quick else args.phase
     if args.piece: out_name += '/piece'
     out = ROOT / 'docs/kilo/evidence' / out_name; out.mkdir(parents=True, exist_ok=True)
     results = []
@@ -63,10 +63,10 @@ def main():
         if args.phase != 'baseline':
             assert (ROOT / 'tests/gameplay/field_hud_contract_test_runner.gd').exists(), 'Missing HUD contract test'
             groups = [('hud_contract', 'field_hud_contract_test_runner.gd', [])] + groups
-        if args.phase in ['T003', 'T004', 'T005']:
+        if args.phase in ['T003', 'T004', 'T005', 'T006A']:
             assert (ROOT / 'tests/gameplay/field_hud_render_test_runner.gd').exists(), 'Missing T003 HUD render test'
             groups = [('hud_render', 'field_hud_render_test_runner.gd', [])] + groups
-        if args.phase in ['T004', 'T005']:
+        if args.phase in ['T004', 'T005', 'T006A']:
             assert (ROOT / 'tests/gameplay/field_diagnostics_test_runner.gd').exists(), 'Missing diagnostic contract test'
             diagnostic_groups = [('diagnostics_contract', 'field_diagnostics_test_runner.gd', [])]
             if args.piece and args.phase == 'T004':
@@ -77,17 +77,28 @@ def main():
                     ('diagnostics_native', 'field_diagnostics_integration_test_runner.gd', []),
                     ('diagnostics_legacy', 'field_diagnostics_integration_test_runner.gd', ['--', '--legacy-field']),
                 ] + groups
-        if args.phase == 'T005':
+        if args.phase in ['T005', 'T006A']:
             assert (ROOT / 'tests/gameplay/field_api_test_runner.gd').exists(), 'Missing public field API test'
             api_groups = [
                 ('field_api_native', 'field_api_test_runner.gd', []),
                 ('field_api_legacy', 'field_api_test_runner.gd', ['--', '--legacy-field']),
             ]
-            if args.piece:
+            if args.piece and args.phase == 'T005':
                 groups = api_groups
             else:
                 assert (ROOT / 'tests/gameplay/field_api_integration_test_runner.gd').exists(), 'Missing public field API integration test'
                 groups = api_groups + [('field_api_integration', 'field_api_integration_test_runner.gd', [])] + groups
+        if args.phase == 'T006A':
+            assert (ROOT / 'tests/gameplay/field_bridge_world_test_runner.gd').exists(), 'Missing native bridge world contract test'
+            bridge_groups = [
+                ('bridge_world_native', 'field_bridge_world_test_runner.gd', []),
+                ('bridge_world_legacy', 'field_bridge_world_test_runner.gd', ['--', '--legacy-field']),
+            ]
+            if args.piece:
+                groups = bridge_groups
+            else:
+                assert (ROOT / 'tests/gameplay/field_bridge_runtime_test_runner.gd').exists(), 'Missing native bridge runtime integration test'
+                groups = bridge_groups + [('bridge_runtime', 'field_bridge_runtime_test_runner.gd', [])] + groups
         for name, script, extra in groups:
             print('ARCHITECTURE_CHECK', args.phase, name, flush=True)
             result = command([GODOT, '--headless', '--path', '.', '--script', 'tests/gameplay/' + script] + extra, out / (name + '.log'))

@@ -41,8 +41,8 @@ El objetivo es reducir conocimiento cruzado por etapas, sin cambiar reglas.
    qué dependencias se pueden retirar o aislar.
 6. Documentación vigente y puntos de entrada únicos para cada recorrido.
 
-T001–T004 están aceptados. Solo la parte del punto 3 descrita en el contrato
-T005 está autorizada ahora. La coordinación y publicación del punto 4 esperan T006.
+T001–T005 están aceptados. Solo la ejecución del punto 4 y la documentación del
+arranque descritas en T006A están autorizadas. Publicación/carga esperan T006B.
 
 ## Contrato histórico del piloto T001/T002 (aceptado)
 
@@ -88,7 +88,7 @@ avisos y reinicio. No mover esos efectos a un objeto que reciba self ni duplicar
 Las firmas de entrada y alias existentes se conservan por compatibilidad.
 El contrato completo está en tasks/T004_FIELD_DIAGNOSTICS.md.
 
-## Contrato vigente T005
+## Contrato T005 (aceptado)
 
 La UI de mochila usa una interfaz pública en field_demo. Las lecturas resuelven
 la colección actual por llamada; no existe otra colección ni un estado de combate
@@ -97,3 +97,13 @@ relojes originales, y un guard vivo de actividad e identidad. La mochila conserv
 su servicio compatible, sin leer miembros privados del mapa o del puente.
 La carga/publicación del puente permanece intacta hasta T006. Contrato completo:
 tasks/T005_FIELD_API.md. No se autoriza la migración general de todos los consumidores.
+
+## Contrato vigente T006A
+
+El puente conserva orquestación, sesión nativa, presentación, busy/kind y relojes.
+El mundo conserva colección, director/RNG de encuentros, métricas y recorder.
+Las operaciones del mundo se expresan en métodos públicos concretos del dueño,
+sin exponer director/sesiones/recorder a consumidores. Las cuatro funciones de
+persistencia/recuperación del puente quedan textualmente intactas hasta T006B.
+No eliminar herencia/laboratorio: documentar el recorrido real y sus dependencias.
+Contrato: tasks/T006A_NATIVE_BRIDGE_RUNTIME.md. Aceptar A no cierra todo T006.

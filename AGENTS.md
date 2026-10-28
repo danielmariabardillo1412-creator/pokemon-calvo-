@@ -8,11 +8,11 @@ y solo la tarea vigente en `docs/kilo/TASKS.json`. Estas instrucciones describen
 esta copia. Los antiguos `docs/current/START_HERE.md` y documentos de arquitectura
 describen etapas anteriores; no autorizan merges, trabajo funcional ni borrados.
 
-Se permite un ejecutor OpenCode en esta copia, sin agentes paralelos. T001–T004
-están aceptados; último checkpoint 66be8f9. El único bloque activo es T005,
-según docs/kilo/tasks/T005_FIELD_API.md. Incluye pieza, conexión de mochila y
-verificación de identidad/guardado. T006 sigue bloqueado. Al finalizar T005 y sus
-comprobaciones, detenerse con READY_FOR_REVIEW. No continuar automáticamente.
+Se permite un ejecutor OpenCode en esta copia, sin agentes paralelos. T001–T005
+están aceptados; último checkpoint 291861c. T006 se divide en dos entregas:
+solo T006A está autorizado, según docs/kilo/tasks/T006A_NATIVE_BRIDGE_RUNTIME.md.
+T006B (publicación/carga/recuperación) sigue bloqueado. Al acabar T006A y sus
+comprobaciones, detenerse con READY_FOR_REVIEW. No declarar terminado todo T006.
 
 Método: preparar pieza, comprobarla, documentarla, preparar conexión, comprobar
 conexión, activar. Cada cambio debe conservar el comportamiento. No inventar
@@ -27,9 +27,9 @@ No debilitar, eliminar ni saltar pruebas para conseguir PASS. No regenerar packs
 datasets o fixtures. No descargar bibliotecas ni visitar F: o Nova para resolver
 el encargo. Las dependencias necesarias ya están copiadas o documentadas.
 
-Los únicos cambios autorizados están enumerados en el contrato T005. Ejecutar
-`python tools/architecture_handoff/run_checks.py --phase T005 --quick` y después
-`python tools/architecture_handoff/run_checks.py --phase T005`. No alterar el verificador, los sellos o la evidencia
+Los únicos cambios autorizados están enumerados en el contrato T006A. Ejecutar
+`python tools/architecture_handoff/run_checks.py --phase T006A --quick` y después
+`python tools/architecture_handoff/run_checks.py --phase T006A`. No alterar el verificador, los sellos o la evidencia
 baseline. Un fallo de comprobación no es un permiso para ampliar la lista.
 
 No usar `git reset --hard`, `git clean`, restauraciones masivas, rebase, merge o

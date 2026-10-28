@@ -89,7 +89,7 @@ Pieza, quick y completo usan T004/piece, T004_quick y T004 respectivamente.
 Final: `python tools/architecture_handoff/guard.py --full`.
 El sello activo es baseline/T004; el ejecutor no lo edita ni regenera.
 
-## T005 — fase vigente
+## T005 — aceptado
 
 `python tools/architecture_handoff/run_checks.py --phase T005 --piece`: runner
 field_api_test_runner.gd en nativo y --legacy-field (2 grupos). No acredita mochila.
@@ -99,3 +99,16 @@ ambos perfiles + field_api_integration_test_runner.gd + 8 grupos quick T004 = 11
 16 anteriores = 19 grupos, incluida GPU. Sin omitir grupos anteriores.
 Pieza/quick/completo escriben T005/piece, T005_quick y T005 por separado.
 Cierre: `python tools/architecture_handoff/guard.py --full`. Sello baseline/T005.
+
+## T006A — fase vigente
+
+Pieza: `python tools/architecture_handoff/run_checks.py --phase T006A --piece`:
+field_bridge_world_test_runner.gd en nativo/--legacy-field (2 grupos).
+Quick: `python tools/architecture_handoff/run_checks.py --phase T006A --quick`:
+2 anteriores + field_bridge_runtime_test_runner.gd nativo + 11 de T005 = 14.
+Completo: `python tools/architecture_handoff/run_checks.py --phase T006A`:
+3 nuevos + 19 de T005 = 22 grupos incluida GPU; no omitir suites anteriores.
+Cierre: `python tools/architecture_handoff/guard.py --full`.
+Evidencia: T006A/piece, T006A_quick y T006A. Sello vigente baseline/T006A.
+Las cuatro funciones de persistencia del puente siguen textualmente congeladas.
+T006A PASS no implica T006 completo: T006B requiere otra revisión y contrato.

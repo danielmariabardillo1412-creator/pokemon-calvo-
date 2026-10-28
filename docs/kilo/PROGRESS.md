@@ -1,6 +1,6 @@
 # Progreso vigente — 2026-10-29
 
-Estado: **T005_ACCEPTED_WAITING_NEXT_PLAN**.
+Estado: **T006A_READY**.
 
 T003: **ACCEPTED_BY_CODEX**. T004: **ACCEPTED_BY_CODEX**.
 T005: **ACCEPTED_BY_CODEX**. T006: **BLOCKED_REVIEW**.
@@ -177,3 +177,8 @@ por Codex. No se volvió a ejecutar toda la suite anterior en esta revisión.
 Estado y límites: evidence/T005/CODEX_ACCEPTANCE.md y CODEX_ACCEPTANCE.json.
 Checkpoint local aceptado; copia separada, sin publicación ni mezcla con original.
 T006 sigue bloqueado; preparar su contrato antes de otra ejecución de OpenCode.
+
+Codex habilita T006A desde 291861c. T006 queda dividido: A ejecución/API/boot;
+B carga/publicación/recuperación, bloqueado hasta revisión de A y contrato nuevo.
+T006A aún no implementado. Contrato: tasks/T006A_NATIVE_BRIDGE_RUNTIME.md.
+Prompt vigente OPENCODE_PROMPT.txt. Un solo ejecutor OpenCode; original protegido.

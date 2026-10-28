@@ -13,14 +13,14 @@ qué se ha copiado y qué capturas/caches históricos se han omitido.
 1. `AGENTS.md`: límites comunes.
 2. `docs/kilo/ARCHITECTURE_TARGET.md`: mapa actual y destino.
 3. `docs/kilo/TASKS.json`: tarea y puertas de revisión.
-4. `docs/kilo/tasks/T005_FIELD_API.md`: único contrato activo; T001–T004 aceptados.
+4. `docs/kilo/tasks/T006A_NATIVE_BRIDGE_RUNTIME.md`: único contrato activo; T001–T005 aceptados.
 5. `docs/kilo/TEST_MATRIX.md`: comandos y evidencia esperada.
 6. Consultar `docs/kilo/PROGRESS.md` antes de retomar una sesión.
 
 Antes de editar, confirmar `Get-Location`, rama actual y `git status --short`.
-Leer `docs/kilo/baseline/T005/BASELINE_COMMIT.txt` y la revisión aceptada
-`docs/kilo/evidence/T004/CODEX_ACCEPTANCE.md`. El juego aceptado está en 66be8f9;
-el baseline T005 añade solo planos y comprobadores preparados por Codex.
+Leer `docs/kilo/baseline/T006A/BASELINE_COMMIT.txt` y la revisión aceptada
+`docs/kilo/evidence/T005/CODEX_ACCEPTANCE.md`. El juego aceptado está en 291861c;
+el baseline T006A añade solo planos y comprobadores preparados por Codex.
 Ejecutar `python tools/architecture_handoff/guard.py`
 para comprobar las superficies protegidas. La preparación de la copia corresponde
 a Codex; el ejecutor no debe repetir `prepare_copy.py` ni volver a sellar archivos.
@@ -54,8 +54,9 @@ orden de volver al motor anterior o mantener dos autoridades simultáneas.
 
 ## Bloque activo
 
-T001–T004 aceptados. Solo T005: API pública del campo y migración de la mochila,
-con identidad viva de colección/servicios/relojes y pruebas de carga/bloqueos.
-Pieza, integración y regresión antes de READY_FOR_REVIEW. No iniciar T006.
-Prompt: docs/kilo/OPENCODE_PROMPT.txt. Conservar nombre de carpeta y rutas kilo.
-Guard vigente: baseline/T005. No modificar verificadores, sellos o configuración.
+T001–T005 aceptados. Solo T006A: interfaz del mundo para ejecución del puente
+nativo, migración de sus accesos y documentación del arranque/herencia.
+La carga/publicación/recuperación se mantiene idéntica y espera T006B.
+Pieza + integración + regresión antes de READY_FOR_REVIEW; no continuar a B.
+Prompt: docs/kilo/OPENCODE_PROMPT.txt. Sello vigente: baseline/T006A.
+No modificar configuraciones, verificadores, sellos, reglas ni mecánicas.
