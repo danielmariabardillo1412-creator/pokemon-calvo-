@@ -17,3 +17,12 @@ que siguen ignorados por Git están físicamente copiados y sellados; no borrarl
 No hacer push, merge, reset, clean o cambios en el original.
 
 Añadir bajo esta línea pasos, resultados y pendientes concretos del ejecutor.
+
+## Preparación del ejecutor
+
+El CLI instalado de Kilo 7.8.18 está disponible. El primer inicio creó la sesión
+`ses_e7c14beb8ffeHqUrO1muhlGGWQ`, pero devolvió 401 PAID_MODEL_AUTH_REQUIRED.
+Su modelo por defecto era google/gemini-3-pro-image. No comenzó a modificar código.
+Se ha solicitado al usuario elegir cuenta/modelo de código o autorizar el modelo
+gratuito cuyo proveedor puede utilizar prompts para entrenamiento. No se han
+introducido credenciales ni cambiado sus ajustes globales.

@@ -1,5 +1,5 @@
 {
-  "state": "READY_FOR_KILO",
+  "state": "WAITING_EXECUTOR_MODEL_OR_AUTH",
   "authorized_now": [
     "T001",
     "T002"
