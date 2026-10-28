@@ -1,8 +1,9 @@
 # Progreso vigente — 2026-10-28
 
-Estado: **T004_READY**.
+Estado: **READY_FOR_REVIEW** (T004 **IMPLEMENTED_AWAITING_REVIEW**).
 
-T003: **ACCEPTED_BY_CODEX**. T004–T006: **BLOCKED_REVIEW**.
+T003: **ACCEPTED_BY_CODEX**. T004: **ACCEPTED_BY_CODEX**.
+T005–T006: **BLOCKED_REVIEW**.
 T001/T002 continúan aceptados en 866b009bb2abde67014ffe6d0b4ad1dc3cc5e8b5.
 
 S0: copia aislada y baseline de 11 grupos PASS. Rama codex/kilo-architecture-v1,
@@ -84,3 +85,42 @@ tasks/T004_FIELD_DIAGNOSTICS.md; prompt: OPENCODE_PROMPT.txt. Incluye catálogo,
 selección/ciclos, despacho de teclas de diagnóstico y comprobación de conexiones.
 Aún no implementado. T005/T006 siguen bloqueados. Un solo ejecutor OpenCode;
 no arrancar Kilo, no tocar el original. Volver a revisión al completar T004.
+
+T004 implementado por OpenCode (esta entrega):
+- `scenes/visual/field_diagnostics.gd` (+uid): catálogo de seis listas y siete
+  cursores; `action_for_key`, `request_for`, `commit_success`, `index_for` y
+  `describe_move`; sin mapa, Nodes, servicios, catálogos ni Callables.
+- `scenes/visual/field_demo.gd`: preload/instancia, alias constantes, getters de
+  los siete índices, wrappers con `request_for`/`commit_success` solo tras éxito,
+  `describe_move` en `prepare_visual_move_test` y despacho F4–F11 conservando el
+  `handled` del dueño y las prioridades anteriores.
+- Tests nuevos: contrato aislado de 973 checks e integración real nativa/legado
+  (476/465 checks); snapshots de rechazo, teclas reales, release/echo,
+  prioridades, presets de cada familia, reset y guardado/carga aislado.
+
+Comprobaciones reales:
+- `python tools/architecture_handoff/run_checks.py --phase T004 --piece`
+  → PASS, 973 checks.
+- `python tools/architecture_handoff/run_checks.py --phase T004 --quick`
+  → PASS, 8 grupos: 973, 476, 465, 431, 116, 118, 1814 y 4994.
+- `python tools/architecture_handoff/run_checks.py --phase T004`
+  → PASS, 16 grupos incluida GPU (diagnósticos 973/476/465; HUD 431/116;
+  field_native 118; map_runtime 103/0; visual_legacy 45/0; field_items 1814;
+  item_connections 4994; medicine 120; savegame 40/0; save_adversarial 8/0;
+  item_policy 19; inventory_capture 133; field_items_gpu 1816).
+- `python tools/architecture_handoff/guard.py --full` → PASS, 23.047 archivos.
+
+Evidencia: `docs/kilo/evidence/T004/REVIEW.md`, `results.json`, logs por grupo,
+`full_run.log`, `full_run.err.log`, `full_run.pid` y `T004_quick/`; el paso A en
+`T004/piece/`. No se hizo prueba manual ni captura específica de T004; la captura
+GPU es la del grupo existente de objetos. No se creó commit. T005/T006 siguen
+bloqueados y no se escribe ACCEPTED_BY_CODEX.
+
+Revisión final Codex: T004 aceptado. Repetidos de forma independiente contrato
+973, integración nativa 476 y legado 465 checks: todos PASS. Guard completo PASS,
+23.047 archivos. Verificados los 16 grupos/logs de la suite completa de OpenCode,
+incluida GPU, y hashes de la entrega. No se ha modificado código o tests por Codex.
+La suite completa no se repitió en esta revisión. Estado y límites vigentes:
+evidence/T004/CODEX_ACCEPTANCE.md y CODEX_ACCEPTANCE.json.
+Se guarda checkpoint local aceptado. T005/T006 siguen bloqueados; no continuar
+sin que Codex prepare el siguiente contrato. No se mezcla con el original.

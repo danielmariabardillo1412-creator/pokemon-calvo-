@@ -1,8 +1,6 @@
 {
-  "state": "T004_READY",
-  "authorized_now": [
-    "T004"
-  ],
+  "state": "T004_ACCEPTED_WAITING_NEXT_PLAN",
+  "authorized_now": [],
   "stop_after": "T004",
   "tasks": [
     {
@@ -40,11 +38,12 @@
     },
     {
       "id": "T004",
-      "status": "READY",
+      "status": "ACCEPTED_BY_CODEX",
       "depends_on": [
         "T003"
       ],
-      "plan": "docs/kilo/tasks/T004_FIELD_DIAGNOSTICS.md"
+      "plan": "docs/kilo/tasks/T004_FIELD_DIAGNOSTICS.md",
+      "review": "docs/kilo/evidence/T004/CODEX_ACCEPTANCE.json"
     },
     {
       "id": "T005",
@@ -64,7 +63,6 @@
     }
   ],
   "executor": "OpenCode (manual model selection by user)",
-  "accepted_predecessor": "866b009bb2abde67014ffe6d0b4ad1dc3cc5e8b5",
-  "latest_acceptance": "docs/kilo/evidence/T003/CODEX_ACCEPTANCE.json",
-  "accepted_checkpoint": "513dd738eb4b30097190782d2fcc762bbe652983"
+  "accepted_predecessor": "513dd738eb4b30097190782d2fcc762bbe652983",
+  "latest_acceptance": "docs/kilo/evidence/T004/CODEX_ACCEPTANCE.json"
 }

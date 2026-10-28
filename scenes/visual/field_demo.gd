@@ -5,21 +5,37 @@ const FieldArt = preload("res://scenes/visual/field_art.gd")
 const CharacterArt = preload("res://scenes/visual/character_art.gd")
 const CollisionOverlay = preload("res://scenes/visual/collision_overlay.gd")
 const PokemonGallery = preload("res://scenes/visual/pokemon_gallery.gd")
+const FieldDiagnostics = preload("res://scenes/visual/field_diagnostics.gd")
 const INITIAL_CHANCE := 15
 const CHANCES := [0, 5, 15, 30, 100]
-const ELEMENTAL_TEST_MOVES: Array[StringName] = [&"flamethrower", &"thunderbolt", &"ice_beam"]
-var _elemental_test_index := 0
-const EXTERNAL_DAMAGE_TEST_MOVES: Array[StringName] = [&"circle_throw", &"dragon_tail", &"flip_turn", &"u_turn", &"volt_switch"]
-var _external_test_index := 0
-var _switch_test_index := 0
-const STATUS_SWITCH_TEST_MOVES: Array[StringName] = [&"roar", &"whirlwind", &"teleport", &"baton_pass", &"parting_shot"]
-var _status_switch_index := 0
-const WEATHER_TEST_MOVES: Array[StringName] = [&"rain_dance", &"hail", &"sandstorm", &"snowscape", &"chilly_reception"]
-var _weather_index := 0
-const SUBSTITUTE_TEST_MOVES: Array[StringName] = [&"substitute", &"shed_tail"]
-var _substitute_index := 0
-const TRANSFORM_TEST_SPECIES: Array[StringName] = [&"wailord", &"pikachu", &"charizard"]
-var _transform_index := 0
+const ELEMENTAL_TEST_MOVES: Array[StringName] = FieldDiagnostics.ELEMENTAL_TEST_MOVES
+const EXTERNAL_DAMAGE_TEST_MOVES: Array[StringName] = FieldDiagnostics.EXTERNAL_DAMAGE_TEST_MOVES
+const STATUS_SWITCH_TEST_MOVES: Array[StringName] = FieldDiagnostics.STATUS_SWITCH_TEST_MOVES
+const WEATHER_TEST_MOVES: Array[StringName] = FieldDiagnostics.WEATHER_TEST_MOVES
+const SUBSTITUTE_TEST_MOVES: Array[StringName] = FieldDiagnostics.SUBSTITUTE_TEST_MOVES
+const TRANSFORM_TEST_SPECIES: Array[StringName] = FieldDiagnostics.TRANSFORM_TEST_SPECIES
+var _diagnostics := FieldDiagnostics.new()
+var _elemental_test_index: int:
+	get:
+		return _diagnostics.index_for(&"elemental")
+var _external_test_index: int:
+	get:
+		return _diagnostics.index_for(&"external")
+var _switch_test_index: int:
+	get:
+		return _diagnostics.index_for(&"switch")
+var _status_switch_index: int:
+	get:
+		return _diagnostics.index_for(&"status_switch")
+var _weather_index: int:
+	get:
+		return _diagnostics.index_for(&"weather")
+var _substitute_index: int:
+	get:
+		return _diagnostics.index_for(&"substitute")
+var _transform_index: int:
+	get:
+		return _diagnostics.index_for(&"transform")
 
 var _hud: Control
 var _frequency_label: Label
@@ -146,29 +162,25 @@ func _unhandled_key_input(event: InputEvent) -> void:
 	elif event.keycode == KEY_F2:
 		toggle_geometry_overlay()
 		get_viewport().set_input_as_handled()
-	elif event.keycode == KEY_F4:
-		prepare_tera_visual_test()
-		get_viewport().set_input_as_handled()
-	elif event.keycode == KEY_F5:
-		cycle_elemental_visual_test()
-		get_viewport().set_input_as_handled()
-	elif event.keycode == KEY_F6:
-		cycle_external_damage_test()
-		get_viewport().set_input_as_handled()
-	elif event.keycode == KEY_F7:
-		cycle_switch_move_test()
-		get_viewport().set_input_as_handled()
-	elif event.keycode == KEY_F8:
-		cycle_status_switch_test()
-		get_viewport().set_input_as_handled()
-	elif event.keycode == KEY_F11:
-		cycle_transform_test()
-		get_viewport().set_input_as_handled()
-	elif event.keycode == KEY_F10:
-		cycle_substitute_test()
-		get_viewport().set_input_as_handled()
-	elif event.keycode == KEY_F9:
-		cycle_weather_test()
+	elif _diagnostics.action_for_key(event.keycode) != &"":
+		var action: StringName = _diagnostics.action_for_key(event.keycode)
+		match action:
+			&"tera":
+				prepare_tera_visual_test()
+			&"elemental":
+				cycle_elemental_visual_test()
+			&"external":
+				cycle_external_damage_test()
+			&"switch":
+				cycle_switch_move_test()
+			&"status_switch":
+				cycle_status_switch_test()
+			&"weather":
+				cycle_weather_test()
+			&"substitute":
+				cycle_substitute_test()
+			&"transform":
+				cycle_transform_test()
 		get_viewport().set_input_as_handled()
 
 
@@ -230,34 +242,41 @@ func prepare_tera_visual_test() -> bool:
 
 
 func cycle_elemental_visual_test() -> bool:
-	if not prepare_visual_move_test(ELEMENTAL_TEST_MOVES[_elemental_test_index]):
+	var request := _diagnostics.request_for(&"elemental")
+	var move_id: StringName = request.get("move_id", &"")
+	if not prepare_visual_move_test(move_id):
 		return false
-	_elemental_test_index = (_elemental_test_index + 1) % ELEMENTAL_TEST_MOVES.size()
+	_diagnostics.commit_success(&"elemental")
 	return true
 
 
 func cycle_external_damage_test() -> bool:
-	if not prepare_visual_move_test(EXTERNAL_DAMAGE_TEST_MOVES[_external_test_index]):
+	var request := _diagnostics.request_for(&"external")
+	var move_id: StringName = request.get("move_id", &"")
+	if not prepare_visual_move_test(move_id):
 		return false
-	_external_test_index = (_external_test_index + 1) % EXTERNAL_DAMAGE_TEST_MOVES.size()
+	_diagnostics.commit_success(&"external")
 	return true
 
 
 func cycle_switch_move_test() -> bool:
-	if not prepare_visual_move_test(EXTERNAL_DAMAGE_TEST_MOVES[_switch_test_index], true):
+	var request := _diagnostics.request_for(&"switch")
+	var move_id: StringName = request.get("move_id", &"")
+	if not prepare_visual_move_test(move_id, true):
 		return false
-	_switch_test_index = (_switch_test_index + 1) % EXTERNAL_DAMAGE_TEST_MOVES.size()
+	_diagnostics.commit_success(&"switch")
 	return true
 
 
 func prepare_visual_move_test(move_id: StringName, switch_rules: bool = false, weather_rules: bool = false, substitute_rules: bool = false, transform_rules: bool = false) -> bool:
 	# Explicit disposable demo preset, NOT a learnset/TM or save-game mechanic.
-	var external_damage := move_id in EXTERNAL_DAMAGE_TEST_MOVES
-	var status_switch := move_id in STATUS_SWITCH_TEST_MOVES
-	var transform := move_id == &"transform"
-	var substitute := move_id in SUBSTITUTE_TEST_MOVES
-	var weather := move_id in WEATHER_TEST_MOVES
-	if not _can_configure() or test_panel.is_panel_open() or (move_id != &"tera_blast" and not move_id in ELEMENTAL_TEST_MOVES and not external_damage and not status_switch and not weather and not substitute and not transform):
+	var classification := _diagnostics.describe_move(move_id)
+	var external_damage := bool(classification.get("external_damage", false))
+	var status_switch := bool(classification.get("status_switch", false))
+	var transform := bool(classification.get("transform", false))
+	var substitute := bool(classification.get("substitute", false))
+	var weather := bool(classification.get("weather", false))
+	if not _can_configure() or test_panel.is_panel_open() or not bool(classification.get("supported", false)):
 		return false
 	if status_switch and not switch_rules:
 		return false
@@ -305,49 +324,54 @@ func prepare_visual_move_test(move_id: StringName, switch_rules: bool = false, w
 
 
 func cycle_transform_test() -> bool:
-	if not prepare_visual_move_test(&"transform", true, true, true, true): return false
-	var target := TRANSFORM_TEST_SPECIES[_transform_index]
-	_transform_index = (_transform_index + 1) % TRANSFORM_TEST_SPECIES.size()
+	var request := _diagnostics.request_for(&"transform")
+	var move_id: StringName = request.get("move_id", &"")
+	if not prepare_visual_move_test(move_id, bool(request.get("switch_rules", false)), bool(request.get("weather_rules", false)), bool(request.get("substitute_rules", false)), bool(request.get("transform_rules", false))): return false
+	var target: StringName = request.get("target_species", &"")
+	_diagnostics.commit_success(&"transform")
 	_notice_label.text = "F11 · Transformación · Ditto frente a %s · Reiniciar restaura el equipo." % SpanishGameText.species_name(target, _catalogs)
 	_recorder.record(&"visual_test", &"transform_preset", {"move_id": "transform", "target_species": String(target), "mechanics_scope": "transform_singles_v1"})
 	return true
 
 
 func cycle_substitute_test() -> bool:
-	var move := SUBSTITUTE_TEST_MOVES[_substitute_index]
-	if not prepare_visual_move_test(move, true, false, true): return false
+	var request := _diagnostics.request_for(&"substitute")
+	var move_id: StringName = request.get("move_id", &"")
+	if not prepare_visual_move_test(move_id, bool(request.get("switch_rules", false)), bool(request.get("weather_rules", false)), bool(request.get("substitute_rules", false))): return false
 	var actor := _session.player.party.get_active()
 	for id: StringName in [&"tackle", &"flamethrower", &"baton_pass"]:
 		actor.add_move(id, _catalogs)
-	_substitute_index = (_substitute_index + 1) % SUBSTITUTE_TEST_MOVES.size()
-	_notice_label.text = "F10 · %s · Sustituto y relevo con elección de reserva · Reiniciar restaura el equipo." % _catalogs.move(move).display_name
-	_recorder.record(&"visual_test", &"substitute_preset", {"move_id": String(move), "mechanics_scope": "substitute_singles_v1"})
+	_diagnostics.commit_success(&"substitute")
+	_notice_label.text = "F10 · %s · Sustituto y relevo con elección de reserva · Reiniciar restaura el equipo." % _catalogs.move(move_id).display_name
+	_recorder.record(&"visual_test", &"substitute_preset", {"move_id": String(move_id), "mechanics_scope": "substitute_singles_v1"})
 	return true
 
 
 func cycle_weather_test() -> bool:
-	var move := WEATHER_TEST_MOVES[_weather_index]
-	if not prepare_visual_move_test(move, true, true): return false
+	var request := _diagnostics.request_for(&"weather")
+	var move_id: StringName = request.get("move_id", &"")
+	if not prepare_visual_move_test(move_id, bool(request.get("switch_rules", false)), bool(request.get("weather_rules", false))): return false
 	var actor := _session.player.party.get_active()
 	for id: StringName in [&"water_gun", &"flamethrower", &"tackle"]:
 		actor.add_move(id, _catalogs)
-	_weather_index = (_weather_index + 1) % WEATHER_TEST_MOVES.size()
-	_notice_label.text = "F9 · %s · Clima persistente y ataques de prueba · Reiniciar restaura el equipo." % _catalogs.move(move).display_name
-	_recorder.record(&"visual_test", &"weather_preset", {"move_id": String(move), "mechanics_scope": "weather_singles_v1"})
+	_diagnostics.commit_success(&"weather")
+	_notice_label.text = "F9 · %s · Clima persistente y ataques de prueba · Reiniciar restaura el equipo." % _catalogs.move(move_id).display_name
+	_recorder.record(&"visual_test", &"weather_preset", {"move_id": String(move_id), "mechanics_scope": "weather_singles_v1"})
 	return true
 
 
 func cycle_status_switch_test() -> bool:
-	var move := STATUS_SWITCH_TEST_MOVES[_status_switch_index]
-	if not prepare_visual_move_test(move, true):
+	var request := _diagnostics.request_for(&"status_switch")
+	var move_id: StringName = request.get("move_id", &"")
+	if not prepare_visual_move_test(move_id, true):
 		return false
-	if move == &"baton_pass":
+	if move_id == &"baton_pass":
 		var actor := _session.player.party.get_active()
 		actor.stat_stages.change(StatStages.ATTACK, 2)
 		actor.stat_stages.change(StatStages.SPEED, 1)
-	_notice_label.text = "F8 · %s · Ensayo de cambios de estado · Reiniciar restaura el learnset." % _catalogs.move(move).display_name
-	_status_switch_index = (_status_switch_index + 1) % STATUS_SWITCH_TEST_MOVES.size()
-	_recorder.record(&"visual_test", &"status_switch_preset", {"move_id": String(move), "mechanics_scope": "singles_status_switch_v1", "reset_restores_learnset": true})
+	_notice_label.text = "F8 · %s · Ensayo de cambios de estado · Reiniciar restaura el learnset." % _catalogs.move(move_id).display_name
+	_diagnostics.commit_success(&"status_switch")
+	_recorder.record(&"visual_test", &"status_switch_preset", {"move_id": String(move_id), "mechanics_scope": "singles_status_switch_v1", "reset_restores_learnset": true})
 	return true
 
 
