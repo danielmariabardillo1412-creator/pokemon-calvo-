@@ -24,6 +24,7 @@ var status: StringName = READY
 var completion_reason: StringName = &""
 var opponent_trainer_id: StringName = &""
 var last_error: String = ""
+var live_moves_enabled: bool = false
 var last_trainer_shadow_report: Dictionary = {}
 var last_trainer_action_proposal_report: Dictionary = {}
 var last_trainer_action_substitution_report: Dictionary = {}
@@ -425,6 +426,7 @@ func begin_battle(
 		last_error = "trainer_memory_initialization_failed"
 		return false
 
+	if live_moves_enabled: preload("res://modules/battle/application/live_move_profile.gd").apply(state)
 	_battle_server = AuthoritativeBattleServer.new(state, catalogs)
 	_trainer_memory_owner = memory_owner
 	_opponent_roster = trainer_roster.duplicate()
@@ -503,6 +505,7 @@ func submit_player_action(
 		events = _battle_server.submit_turn([player_action, authoritative_opponent_action])
 	else:
 		events = _submit_explicit_opponent_action(player_action, opponent_action)
+	events = _complete_npc_pivots(events)
 	if not _trainer_memory_owner.observe_authoritative(events, _battle_server.state):
 		_trainer_memory_owner.clear()
 		last_error = "trainer_memory_fanout_failed"
@@ -599,6 +602,7 @@ func submit_player_action_with_autonomous_trainer(
 		return []
 
 	var events := _battle_server.submit_turn([player_action, autonomous_opponent_action])
+	events = _complete_npc_pivots(events)
 	if not _trainer_memory_owner.observe_authoritative(events, _battle_server.state):
 		_trainer_memory_owner.clear()
 		last_error = "trainer_memory_fanout_failed"
@@ -606,6 +610,31 @@ func submit_player_action_with_autonomous_trainer(
 	var rejection := _battle_rejection_reason(events)
 	if not rejection.is_empty():
 		last_error = rejection
+	return events
+
+
+func _complete_npc_pivots(events: Array[BattleEvent]) -> Array[BattleEvent]:
+	if not live_moves_enabled: return events
+	for event: BattleEvent in events:
+		if event.kind == BattleEvent.ACTION_REJECTED: return events
+	for n in 4:
+		if _battle_server.state.phase != BattleState.WAITING_FOR_SWITCH or _battle_server.state.pending_switch.get("side_id") != "side_b": break
+		var choice: StringName = preload("res://modules/battle/application/live_move_profile.gd").replacement(_battle_server.state, &"side_b", catalogs)
+		if choice == &"": break
+		events.append_array(_battle_server.submit_switch_choice(&"side_b", choice, _battle_server.state.turn))
+	return events
+
+
+func submit_switch_choice(side: StringName, incoming: StringName, turn: int) -> Array[BattleEvent]:
+	last_error = ""
+	if not has_active_battle() or side != &"side_a":
+		last_error = "invalid_switch_choice"
+		return []
+	var events := _complete_npc_pivots(_battle_server.submit_switch_choice(side, incoming, turn))
+	if not _trainer_memory_owner.observe_authoritative(events, _battle_server.state):
+		last_error = "trainer_memory_fanout_failed"
+	var rejection := _battle_rejection_reason(events)
+	if not rejection.is_empty(): last_error = rejection
 	return events
 
 

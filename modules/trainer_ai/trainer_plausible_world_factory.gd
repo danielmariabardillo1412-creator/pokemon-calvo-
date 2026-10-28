@@ -114,6 +114,14 @@ func _build_world(
 	state.turn = observation.turn
 	state.phase = observation.phase
 	state.battle_started = observation.turn > 0
+	if observation.public_battle_context.get("live_moves_enabled", false):
+		preload("res://modules/battle/application/live_move_profile.gd").apply(state)
+		state.weather = observation.public_battle_context.get("weather", {}).duplicate(true)
+		preload("res://modules/battle/application/binding_move_rules.gd").restore_estimates(state, observation.public_battle_context.get("bindings", {}))
+		for view: Dictionary in observation.observed_opponents:
+			var proxy := state.creature(StringName(view.get("instance_id", view.get("creature_id", ""))))
+			if proxy != null and "substitute" in view.get("volatile_statuses", []):
+				proxy.status_state.add_volatile(&"substitute", {"hp": maxi(1, proxy.stats.max_hp / 4), "max_hp": maxi(1, proxy.stats.max_hp / 4)})
 
 	var world := TrainerPlausibleWorld.new()
 	world.world_id = StringName("world_%02d_a_%s_s_%d_r_%d" % [

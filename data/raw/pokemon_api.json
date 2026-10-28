@@ -16889,25 +16889,10 @@
    "pp": 10,
    "target": "selected-pokemon",
    "effect_summary": "",
-   "effect_specs": [
-    {
-     "kind": "modify_stat_stage",
-     "target": "opponent",
-     "stat_id": "attack",
-     "value": -1,
-     "chance_basis_points": 10000
-    },
-    {
-     "kind": "modify_stat_stage",
-     "target": "opponent",
-     "stat_id": "special_attack",
-     "value": -1,
-     "chance_basis_points": 10000
-    }
-   ],
+   "effect_specs": [],
    "crit_rate_bp": 0,
    "makes_contact": false,
-   "classification": "RUNTIME_SUPPORTED"
+   "classification": "PARTIAL_RUNTIME"
   },
   {
    "id": "tera_starstorm",

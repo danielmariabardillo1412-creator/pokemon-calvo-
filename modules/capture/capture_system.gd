@@ -49,7 +49,7 @@ static func resolve(
 	var ball_def := crs.ball(attempt.ball_id)
 	var species: CreatureSpecies = null
 	if catalogs != null:
-		species = catalogs.species_catalog.get_by_id(target.species_id)
+		species = catalogs.species_catalog.get_by_id(target.base_species_id())
 
 	var status_id := target.status_state.persistent_id
 	var status_mult := crs.status_bonus(status_id)
@@ -71,6 +71,7 @@ static func resolve(
 	r.consume_item = true
 
 	if success:
+		target.restore_battle_transform()
 		r.shake_count = 3
 		r.status = CaptureResult.SUCCESS
 		res.captured = target   # SAME instance - identity/IV/EV/nature/ability preserved
@@ -120,7 +121,7 @@ static func validate_attempt(attempt: CaptureAttempt, catalogs) -> String:
 		return "unknown_ball"
 	var species: CreatureSpecies = null
 	if catalogs != null:
-		species = catalogs.species_catalog.get_by_id(attempt.target.species_id)
+		species = catalogs.species_catalog.get_by_id(attempt.target.base_species_id())
 	if species == null:
 		return "unknown_species"
 	if not CaptureRuleset.is_valid_capture_rate(species.capture_rate):

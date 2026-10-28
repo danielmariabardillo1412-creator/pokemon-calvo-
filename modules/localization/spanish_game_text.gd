@@ -105,6 +105,11 @@ static func species_name(species_id: StringName, catalog: DefinitionCatalog = nu
 	return _prettify(species_id)
 
 
+static func creature_name(creature: CreatureInstance, catalog: DefinitionCatalog = null) -> String:
+	var shiny := bool(creature.battle_transform_original.get("is_shiny", creature.is_shiny))
+	return species_name(creature.base_species_id(), catalog) + (" ★" if shiny else "")
+
+
 static func item_name(item_id: StringName, catalog: DefinitionCatalog = null) -> String:
 	var key := String(item_id)
 	if ITEM_NAMES.has(key):
@@ -150,6 +155,7 @@ static func translate_runtime_message(text: String) -> String:
 	if text.begins_with("A wild ") and text.ends_with(" appeared."):
 		var middle := text.substr(7, text.length() - 17)
 		return "¡Ha aparecido un %s salvaje!" % middle.replace("Lv.", "Nv.")
+	if text in ["Action rejected: trapped", "Switch rejected: trapped"]: return "No puedes cambiar: el Pokémon está atrapado."
 	if text.begins_with("Action rejected: "):
 		return "Acción rechazada: %s" % text.trim_prefix("Action rejected: ")
 	if text.begins_with("Switch rejected: "):

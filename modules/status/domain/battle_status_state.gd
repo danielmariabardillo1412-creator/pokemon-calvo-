@@ -4,6 +4,7 @@ extends RefCounted
 var persistent_id: StringName = &""
 var turns_remaining: int = 0
 var toxic_counter: int = 0
+var rest_sleep: bool = false
 var volatile: Dictionary = {}
 
 
@@ -12,6 +13,7 @@ func clear_persistent() -> StringName:
 	persistent_id = &""
 	turns_remaining = 0
 	toxic_counter = 0
+	rest_sleep = false
 	return removed
 
 
@@ -33,18 +35,21 @@ func to_dict() -> Dictionary:
 	keys.sort()
 	for status_id in keys:
 		serialized_volatile[String(status_id)] = (volatile[status_id] as Dictionary).duplicate(true)
-	return {
+	var result := {
 		"persistent_id": String(persistent_id),
 		"turns_remaining": turns_remaining,
 		"toxic_counter": toxic_counter,
 		"volatile": serialized_volatile,
 	}
+	if rest_sleep: result["rest_sleep"] = true
+	return result
 
 
 static func from_dict(data: Dictionary) -> BattleStatusState:
 	var state := BattleStatusState.new()
 	state.persistent_id = StringName(data.get("persistent_id", ""))
 	state.turns_remaining = maxi(0, int(data.get("turns_remaining", 0)))
+	state.rest_sleep = bool(data.get("rest_sleep", false)) and state.persistent_id == &"sleep"
 	state.toxic_counter = maxi(0, int(data.get("toxic_counter", 0)))
 	for status_id in data.get("volatile", {}).keys():
 		state.volatile[StringName(status_id)] = data["volatile"][status_id].duplicate(true)

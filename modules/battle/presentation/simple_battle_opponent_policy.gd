@@ -21,6 +21,9 @@ static func choose_move_action(
 	var target := state.opponent_of(actor.instance_id)
 	if target == null:
 		return null
+	if state.live_moves_enabled:
+		var ids: Array[StringName] = preload("res://modules/battle/application/live_move_profile.gd").moves(actor, catalog)
+		return BattleAction.new(state.turn + 1, actor.instance_id, ids[0], target.instance_id, BattleAction.MOVE, side_id)
 	for slot_variant in actor.moveset:
 		var slot := slot_variant as BattleMoveSlot
 		if slot == null or slot.current_pp <= 0:

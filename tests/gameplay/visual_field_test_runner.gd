@@ -91,6 +91,12 @@ func _run() -> void:
 		_check("capture_adds_to_party", scene.demo_party_size() == before_party + 1)
 		_check("captured_identity_preserved", ui.session.player.party.contains_instance_id(wild_id))
 		_check("capture_recorded_by_existing_metrics", int(scene.technical_audit_summary().current_run.capture.successes) == 1)
+		_check("capture_return_waits_for_visuals", not ui.continue_after_completion())
+		var capture_steps := 0
+		while ui._playback.is_playing() and capture_steps < 40:
+			ui._playback.advance(float(ui._playback._remaining) + 0.000001)
+			capture_steps += 1
+		_check("capture_visual_finishes", not ui._playback.is_playing())
 		await _snapshot("captured")
 		_check("continue_returns_to_exploration", ui.continue_after_completion())
 		_check("movement_restored", player.movement_enabled)

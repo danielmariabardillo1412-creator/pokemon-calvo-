@@ -1,0 +1,64 @@
+{
+  "state": "READY_FOR_KILO",
+  "authorized_now": [
+    "T001",
+    "T002"
+  ],
+  "stop_after": "T002",
+  "tasks": [
+    {
+      "id": "S0",
+      "status": "PASS",
+      "owner": "Codex",
+      "purpose": "Copy, isolation, baseline and handoff"
+    },
+    {
+      "id": "T001",
+      "status": "READY",
+      "depends_on": [
+        "S0"
+      ],
+      "plan": "docs/kilo/tasks/T001_HUD_EXTRACTION.md"
+    },
+    {
+      "id": "T002",
+      "status": "PENDING",
+      "depends_on": [
+        "T001"
+      ],
+      "plan": "docs/kilo/tasks/T002_INTEGRATION_REVIEW.md"
+    },
+    {
+      "id": "T003",
+      "status": "BLOCKED_REVIEW",
+      "depends_on": [
+        "T002"
+      ],
+      "plan": "docs/kilo/ROADMAP.md"
+    },
+    {
+      "id": "T004",
+      "status": "BLOCKED_REVIEW",
+      "depends_on": [
+        "T002"
+      ],
+      "plan": "docs/kilo/ROADMAP.md"
+    },
+    {
+      "id": "T005",
+      "status": "BLOCKED_REVIEW",
+      "depends_on": [
+        "T002"
+      ],
+      "plan": "docs/kilo/ROADMAP.md"
+    },
+    {
+      "id": "T006",
+      "status": "BLOCKED_REVIEW",
+      "depends_on": [
+        "T002"
+      ],
+      "plan": "docs/kilo/ROADMAP.md"
+    }
+  ]
+}

@@ -1,0 +1,64 @@
+{
+  "status": "PASS",
+  "date": "2026-10-28",
+  "phase": "ITEM_ART_BETA_V1",
+  "beta_art_approved_by_user": true,
+  "final_historical_design_approved": false,
+  "installed_png": 364,
+  "asset_bytes": 4284295,
+  "source_counts": {
+    "SV": 262,
+    "GLOBAL_LINK": 83,
+    "LEGENDS_ARCEUS": 17,
+    "SMALL_SPRITE": 1,
+    "POKEAPI_ROOT": 1
+  },
+  "scope": "359 entries in five reviewed functional families plus five pilot extras. Presentation only; not all canonical items or mechanics.",
+  "small_icon_pending": [
+    "pewter_crunchies"
+  ],
+  "contact_sheet_review": "364 entries inspected in four sheets; static visual review, not certification of every rendering context.",
+  "user_navigation": "JUGAR_DEMO.cmd -> F3 -> Objetos",
+  "integration": [
+    "Existing gallery gains an item tab",
+    "Real battle medicine selection shows its icon",
+    "Capture buttons show Poke Ball / Master Ball icons"
+  ],
+  "tests": {
+    "godot": 1121,
+    "gpu": 1124,
+    "regression_field": 118,
+    "regression_medicines": 120
+  },
+  "existing_files_changed_this_phase": [
+    "scenes/visual/pokemon_gallery.gd",
+    "scenes/visual/showdown_adventure_lab.gd"
+  ],
+  "data_and_selection_policy_unchanged": true,
+  "evidence_directory": "D:\\Proyectos\\Pokemon Calvo\\.godot\\item_art_beta_v1",
+  "source_hashes": {
+    "scenes/visual/item_art_catalog.gd": "eeab06fb22d8004c254f6dd4f86b79a1077309c6e3ce79b7e80ea26ccfe72a74",
+    "scenes/visual/item_gallery.gd": "f5bacf73f34c4e5a3d1c27d17756f404b4d59ea54f3c2946e9599d1f01bf88f2",
+    "scenes/visual/pokemon_gallery.gd": "742c03cfeb3880995b8cdfb3c5a4f82e3e49282304ce028778a5905f27da0b87",
+    "scenes/visual/showdown_adventure_lab.gd": "901b0dd7b914150122ebd3880287a137c1e4c8526361703d8cce731ed663fe72",
+    "tests/gameplay/item_art_beta_test_runner.gd": "84a8a862d830b8a9dea7c2e329214703b934775b042af4398496f256b5f86829",
+    "tools/item_audit/install_art_beta.py": "8e8842ca987a2b03daa6cb5cb69a7ee01b31f72a748a8fa2fe0493835b7048c6",
+    "assets/local_item_catalog/manifest.json": "2f43f8430e80ff410fd42add18fb59543d7974fc567021f8f778e6541457b2ad",
+    "assets/local_item_catalog/CREDITS.md": "27c5e7bfd18b1d20787a30a9d01477d0a3f3951ec90122f5bdea503a771c2dbe"
+  },
+  "baseline_hashes": {
+    "data/normalized/pokemon_api.json": "719d14c082bdba03b26e801d23fb8887d0a0f4376348cf4a27e79a4b0a3c08b3",
+    "data/raw/pokemon_api.json": "2efc1538081e7849d6e04555570ca28c19b13f09f0fe0c7ce38329881972f24a",
+    "config/item_selection_v1.json": "c9305a87bf8e5a0e22d9c81353cc924dbaf432fca5b38f817f189ab8e2d048a2",
+    "scenes/visual/pokemon_gallery.gd": "ad728722d2fb1e8b0236cbe032874c9b99253046e7daab78f89c5cffcd13df57",
+    "scenes/visual/showdown_adventure_lab.gd": "5945b0a6836ab6180f1a9c674c1bea9deb5f947d8249c7baeb8096e704227b89",
+    "scenes/visual/field_demo.gd": "b0ef6fc54bd454084e65175b42bf0e3b82c343e4b06dcb5488de4283293550f1",
+    "modules/creatures/domain/item_definition.gd": "639773eda4c1d01688e292d618ceadc9c19f4d60527ae05c77b144548e744ca0"
+  },
+  "remaining": [
+    "Other art families including Mega Stones, Z Crystals, key items and more training/machine content",
+    "Higher detail Rokikos source",
+    "Future Roman/Viking redesign discussion",
+    "Remaining item mechanics/equip/use bridges remain independent of art integration"
+  ]
+}

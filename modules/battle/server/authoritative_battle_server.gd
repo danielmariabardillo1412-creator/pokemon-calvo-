@@ -9,6 +9,28 @@ var _executor: TurnExecutor
 var _registry: BattleEffectRegistry
 
 
+func pending_switch_request() -> Dictionary:
+	return state.pending_switch.duplicate(true) if state.phase == BattleState.WAITING_FOR_SWITCH else {}
+
+
+func submit_switch_choice(side_id: StringName, incoming_id: StringName, turn: int) -> Array[BattleEvent]:
+	# A continuation is not a new command/turn. Reject before touching RNG or state.
+	if not state.switch_move_rules_enabled or state.phase != BattleState.WAITING_FOR_SWITCH:
+		return [_rejection("no_switch_pending")]
+	if turn != state.turn:
+		return [_rejection("wrong_turn")]
+	var request := state.pending_switch
+	if side_id == &"" or String(side_id) != request.get("side_id", ""):
+		return [_rejection("wrong_participant")]
+	var actor := state.active_for_side(side_id)
+	if actor == null or String(actor.instance_id) != request.get("actor_id", "") or actor.is_knocked_out():
+		return [_rejection("actor_unavailable")]
+	var eligible := preload("res://modules/battle/application/switch_move_rules.gd").replacements(state, side_id)
+	if String(incoming_id) not in eligible or String(incoming_id) not in request.get("candidate_ids", []):
+		return [_rejection("invalid_switch")]
+	return _executor.resume_switch(state, incoming_id, _catalog, _rng)
+
+
 func _init(
 	p_state: BattleState,
 	p_catalog: DefinitionCatalog,
@@ -33,6 +55,7 @@ func submit_turn(actions: Array[BattleAction]) -> Array[BattleEvent]:
 
 
 func validate_reaction_action(action: BattleAction, skipped_side_id: StringName) -> String:
+	if state.active_ids.size() > 2: return "unsupported_battle_format"
 	if state.phase != BattleState.WAITING_FOR_ACTIONS:
 		return "battle_finished"
 	if skipped_side_id == &"" or state.active_for_side(skipped_side_id) == null:
@@ -62,6 +85,7 @@ func snapshot() -> Dictionary:
 
 
 func _validate(actions: Array[BattleAction]) -> String:
+	if state.active_ids.size() > 2: return "unsupported_battle_format"
 	if state.phase != BattleState.WAITING_FOR_ACTIONS:
 		return "battle_finished"
 	if actions.size() != state.active_ids.size():
@@ -102,10 +126,15 @@ func _validate_action(action: BattleAction) -> String:
 		var incoming := state.creature(action.switch_instance_id)
 		if incoming == null or incoming.is_knocked_out():
 			return "switch_target_unavailable"
+		if preload("res://modules/battle/application/binding_move_rules.gd").switch_blocked(state, actor, _catalog):
+			return "trapped"
 	elif action.action_type == BattleAction.ITEM:
 		return _validate_trainer_item_action(action, actor_side)
 	elif action.action_type == BattleAction.MOVE:
-		var slot := actor.move_slot(action.move_id)
+		var live = preload("res://modules/battle/application/live_move_profile.gd")
+		if state.live_moves_enabled and not live.reason(_catalog.move(action.move_id)).is_empty(): return "move_not_available_in_profile"
+		var forced: bool = state.live_moves_enabled and action.move_id == &"struggle" and live.forced_struggle(actor, _catalog)
+		var slot := BattleMoveSlot.new(&"struggle", 1, 1) if forced else actor.move_slot(action.move_id)
 		if slot == null or _catalog.move(action.move_id) == null:
 			return "invalid_move"
 		if slot.current_pp <= 0:

@@ -10,6 +10,7 @@ func _initialize() -> void:
 
 func _run() -> void:
 	DataFoundationV3DomainTestSuite.new().run(Callable(self, "_check"))
+	preload("res://tests/data/data_foundation_v3_tera_blast_test_suite.gd").new().run(Callable(self, "_check"))
 	DataFoundationV3AccuracyTestSuite.new().run(Callable(self, "_check"))
 	DataFoundationV3SelectedSpecialTestSuite.new().run(Callable(self, "_check"))
 	DataFoundationV3SelectedStatefulTestSuite.new().run(Callable(self, "_check"))

@@ -1,5 +1,38 @@
 # Third-party code and assets
 
+## Inventario de objetos (2026-10-28)
+
+El censo y el piloto usan las definiciones canónicas locales y el runtime MIT
+`@pkmn/sim@0.10.11` ya fijado. No se copia otro motor ni se ejecuta código nuevo
+de paquetes comunitarios. Se reutilizan los callbacks nativos de 21 equipados
+y las clases existentes de inventario/propiedad/guardado.
+
+Se consulta como metadato primario el objeto Max Honey de PokeAPI/api-data,
+ID 1630, para confirmar su función revivificadora. Copia de investigación y hash
+en `.godot/item_audit_v1/sources/max_honey.json` y `ITEM_FOUNDATION_V1.json`.
+Fuente: <https://github.com/PokeAPI/api-data/blob/master/data/api/v2/item/1630/index.json>.
+No se incorporan imágenes de objetos ni se elige estilo artístico en esta fase.
+
+## Perfil conjunto de combate (2026-10-28)
+
+Se usa `@pkmn/sim@0.10.11`, derivado de Pokémon Showdown (Guangcong Luo y
+colaboradores), licencia MIT. El aviso íntegro del runtime está en
+`.godot/battle_reference/runtime/node_modules/@pkmn/sim/LICENSE`; conservarlo
+al empaquetar el runtime. Fuente: <https://github.com/smogon/pokemon-showdown>.
+
+`modules/battle/backends/showdown/unified_profile.cjs` es una adaptación propia
+acotada sobre ese runtime: registra formatos Gen9 identificados y habilita su
+entrada nativa de Dinamax. No copia fórmulas, condiciones ni movimientos de
+mods externos. Se conservan el cálculo y los efectos del simulador fijado.
+
+Se inspeccionaron Mega Showdown y Gimme That Gimmick como referencias de
+compatibilidad, sin incorporar sus archivos. Sus licencias actuales requieren
+permiso para reutilizar/distribuir sus cambios; dar créditos no basta. No se
+solicitaron permisos ni se enviaron mensajes. Fuentes inspeccionadas:
+<https://github.com/yajatkaul/CobblemonMegaShowdown> y
+<https://github.com/Provismet/Gimme-That-Gimmick/blob/master/LICENSE>.
+No se añade una dependencia de Minecraft/Cobblemon.
+
 ## Prueba visual de ruta (2026-10-18)
 
 Se seleccionan seis sprites PNG de `PokeAPI/sprites` desde la biblioteca local

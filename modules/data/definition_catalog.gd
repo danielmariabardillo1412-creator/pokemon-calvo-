@@ -12,6 +12,10 @@ var type_catalog := TypeCatalog.new()
 var status_catalog := StatusCatalog.new()
 var ability_catalog := AbilityCatalog.new()
 var item_catalog := ItemCatalog.new()
+var variants_enabled := false
+var shiny_species_ids: Dictionary = {}
+var variant_allowed_species: Dictionary = {}
+var shiny_odds_denominator := 4096
 
 func add_species(def: CreatureSpecies) -> void:
 	species_catalog.add(def)

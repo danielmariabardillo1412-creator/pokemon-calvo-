@@ -1,0 +1,21 @@
+Trabaja SOLO en D:/Proyectos/Pokemon Calvo - Arquitectura Kilo.
+Es una copia aislada; no escribas en D:/Proyectos/Pokemon Calvo ni en otros proyectos.
+
+Lee AGENTS.md, LEEME_KILO.md y docs/kilo/START_HERE.md. Comprueba ubicación,
+rama, baseline PASS, guard y estado de Git. Lee el mapa de arquitectura, la cola
+de tareas y el contrato T001. No te bases en el viejo START_HERE de docs/current.
+
+Implementa T001 (extracción del constructor del HUD) mediante pasos pequeños:
+preparar, probar, documentar, conectar, comprobar y activar. Conserva aspecto,
+callbacks, alias y comportamiento. La vista nueva no puede conocer el mapa ni
+ser autoridad de estado. No modifiques reglas, datos, arte, motor o pruebas existentes.
+
+Cuando T001 pase, ejecuta T002 y sus pruebas completas. Puedes continuar entre
+pasos que pasen; no necesitas preguntar por decisiones rutinarias dentro del
+contrato. Si hay una dependencia fuera del alcance o dos intentos fallidos sin
+progreso, registra BLOCKED con un caso reproducible y detente.
+
+Al finalizar T002, entrega READY_FOR_REVIEW con diff, logs, comandos y capturas.
+No actives T003 ni otra reforma. No lances subagentes ni cambies modelo/proveedor.
+No hagas push, merge, reset --hard, clean o borrados. Se permiten commits locales
+por tarea que pase sus pruebas. Mantén actualizados PROGRESS.md y TASKS.json.

@@ -1,0 +1,10 @@
+{
+  "copy_root": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+  "original_root": "D:/Proyectos/Pokemon Calvo",
+  "user_data_name": "Pokemon Calvo - Arquitectura Kilo",
+  "authorized_tasks": [
+    "T001",
+    "T002"
+  ],
+  "scope": "HUD extraction pilot; stop for Codex review"
+}

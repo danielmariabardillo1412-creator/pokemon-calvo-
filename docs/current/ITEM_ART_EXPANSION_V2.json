@@ -1,0 +1,72 @@
+{
+  "status": "PASS",
+  "date": "2026-10-28",
+  "phase": "ITEM_ART_EXPANSION_V2",
+  "previous_entries_preserved": 364,
+  "new_art_entries": 245,
+  "total_art_entries": 609,
+  "unique_art_hashes": 562,
+  "total_image_bytes": 6594686,
+  "family_additions": {
+    "TRAINING": 63,
+    "MEGA_STONE": 92,
+    "Z_BAG_TOKEN": 32,
+    "Z_CRYSTAL": 32,
+    "TERA_MATERIAL": 18,
+    "BATTLE_STAT_USE": 8
+  },
+  "tests": {
+    "godot": 2134,
+    "gpu": 2139
+  },
+  "static_contact_sheets_reviewed": 3,
+  "mega_and_z_gpu_captures_reviewed": true,
+  "data_and_gameplay_policy_unchanged": true,
+  "excluded_art_ids": {
+    "eevium_z_held": "only_z_move_is_banned_status_move",
+    "eevium_z_bag": "only_z_move_is_banned_status_move",
+    "pikashunium_z_held": "requires_excluded_cap_pikachu_and_signature_move",
+    "pikashunium_z_bag": "requires_excluded_cap_pikachu_and_signature_move",
+    "ultranecrozium_z_held": "requires_absent_ultra_necrozma_and_excluded_signature_move",
+    "ultranecrozium_z_bag": "requires_absent_ultra_necrozma_and_excluded_signature_move"
+  },
+  "deferred_art_ids": {
+    "courage_candy": "lets_go_awakening_values_system_not_part_of_active_gen9_stat_rules",
+    "courage_candy_l": "lets_go_awakening_values_system_not_part_of_active_gen9_stat_rules",
+    "courage_candy_xl": "lets_go_awakening_values_system_not_part_of_active_gen9_stat_rules",
+    "dynamax_candy": "requires_separate_max_level_or_gigantamax_factor_progression_review",
+    "health_candy": "lets_go_awakening_values_system_not_part_of_active_gen9_stat_rules",
+    "health_candy_l": "lets_go_awakening_values_system_not_part_of_active_gen9_stat_rules",
+    "health_candy_xl": "lets_go_awakening_values_system_not_part_of_active_gen9_stat_rules",
+    "max_mushrooms": "requires_separate_max_level_or_gigantamax_factor_progression_review",
+    "mighty_candy": "lets_go_awakening_values_system_not_part_of_active_gen9_stat_rules",
+    "mighty_candy_l": "lets_go_awakening_values_system_not_part_of_active_gen9_stat_rules",
+    "mighty_candy_xl": "lets_go_awakening_values_system_not_part_of_active_gen9_stat_rules",
+    "quick_candy": "lets_go_awakening_values_system_not_part_of_active_gen9_stat_rules",
+    "quick_candy_l": "lets_go_awakening_values_system_not_part_of_active_gen9_stat_rules",
+    "quick_candy_xl": "lets_go_awakening_values_system_not_part_of_active_gen9_stat_rules",
+    "smart_candy": "lets_go_awakening_values_system_not_part_of_active_gen9_stat_rules",
+    "smart_candy_l": "lets_go_awakening_values_system_not_part_of_active_gen9_stat_rules",
+    "smart_candy_xl": "lets_go_awakening_values_system_not_part_of_active_gen9_stat_rules",
+    "tough_candy": "lets_go_awakening_values_system_not_part_of_active_gen9_stat_rules",
+    "tough_candy_l": "lets_go_awakening_values_system_not_part_of_active_gen9_stat_rules",
+    "tough_candy_xl": "lets_go_awakening_values_system_not_part_of_active_gen9_stat_rules"
+  },
+  "sources_sha256": {
+    "assets/local_item_catalog/manifest.json": "a92575f2a0929b8dc1754149a7aac8f7afebf258f46909eb31ba8dffec5dc06f",
+    "assets/local_item_catalog/CREDITS.md": "8c88b416abf3dc9ae2165c5c6a401d1fe0f51dd3f1c65d31a3667c3b5f1bcd86",
+    "scenes/visual/item_gallery.gd": "4417f9c124c0393199a00479a182f6017017c0e358ec72e9e8ebeb6befa3cce4",
+    "tests/gameplay/item_art_beta_test_runner.gd": "a9574bbfafb59a13bf4d7d1099ea49e8a135ec1affff4c7619b64088ef171a78",
+    "tools/item_audit/append_art_batch.py": "4ce6ac31df86a008d819835c3e0cebdb2d049ecd996a9aba13bb172dccc9de0b",
+    "tools/item_audit/build_art_scope.py": "dafef4da5f20625672fa1e4829f61fa6ddc5407f25cdcc73648c1fe6798a960f",
+    "tools/item_audit/install_art_beta.py": "e2dadfb5bb686ac6986b434dddb14845be0cf751fe495c97f3f7eba8def824e8",
+    "docs/current/ITEM_ART_EXPANSION_V2_PLAN.json": "0f6f11c96c41db0a095458a0e66685ff943e90f96e0eeff3efa192f557d0d2cc"
+  },
+  "evidence_directory": "D:\\Proyectos\\Pokemon Calvo\\.godot\\item_art_expansion_v2",
+  "limitations": [
+    "Art registration does not enable mechanics. Mega/Tera are still pending in the active battle profile.",
+    "32 Z crystal appearances have separate bag/held IDs; sharing PNG content does not merge definitions.",
+    "20 items remain under review, not banned.",
+    "Other families remain unreviewed; not all 2222 canonical entries are approved for this game."
+  ]
+}

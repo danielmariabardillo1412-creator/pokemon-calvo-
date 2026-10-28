@@ -344,6 +344,13 @@ func _visual_map_audit() -> void:
 		_check("capture_path_still_updates_party", captured.accepted and captured.session_completed and scene.demo_party_size() == before_party + 1)
 		var duplicate := ui.submit_capture_ball(&"master_ball")
 		_check("duplicate_capture_does_not_duplicate_creature", not duplicate.accepted and scene.demo_party_size() == before_party + 1)
+		var playback: Node = ui.get("_playback")
+		_check("capture_return_waits_for_visuals", not ui.continue_after_completion())
+		var capture_steps := 0
+		while playback.is_playing() and capture_steps < 40:
+			playback.advance(float(playback._remaining) + 0.000001)
+			capture_steps += 1
+		_check("capture_visual_finishes", not playback.is_playing())
 		_check("capture_continue_resumes_once", ui.continue_after_completion() and not ui.continue_after_completion())
 		_check("capture_does_not_trigger_encounter_while_still", not scene.has_active_demo_battle() and int(scene.technical_audit_summary().current_run.encounters.rolls) == 1)
 		actor.apply_motion(Vector2.RIGHT, 1.0 / 60.0)

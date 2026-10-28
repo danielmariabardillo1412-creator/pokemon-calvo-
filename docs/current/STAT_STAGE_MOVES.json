@@ -1,0 +1,134 @@
+{
+  "captures": [
+    {
+      "path": ".godot/stat_stage_move_checks/haze_native.png",
+      "sha256": "65bd65f676fc19eef139250d0682e40cdf6bdc495e026f0c392d4334581bd9f6"
+    },
+    {
+      "path": ".godot/stat_stage_move_checks/haze_after.png",
+      "sha256": "dd70a1eefa0d0e1d194c77d51f5e24647c95ededde0a70dc6c52fd1fd2edc50f"
+    },
+    {
+      "path": ".godot/stat_stage_move_checks/topsy_turvy_native.png",
+      "sha256": "3937af4fa154e34ec4deba0ca2c05b30ed604b382ee5bb96e6d136f3ce5d85cd"
+    },
+    {
+      "path": ".godot/stat_stage_move_checks/topsy_turvy_after.png",
+      "sha256": "91505df0ccaffb2c11e0e6792acdaed8659ad4d2f2cd81b6b820aabc30452fa2"
+    },
+    {
+      "path": ".godot/stat_stage_move_checks/heart_swap_native.png",
+      "sha256": "68b3fe4bd1ba6bd31d02f17a15d6e15a42bf6443b98767391ab479463edda782"
+    },
+    {
+      "path": ".godot/stat_stage_move_checks/heart_swap_after.png",
+      "sha256": "aa7382c05eaa5797355fdecc20e70e4c630d194d381093aa03501ee9e959102d"
+    },
+    {
+      "path": ".godot/stat_stage_move_checks/power_swap_native.png",
+      "sha256": "7d76a349b7eeb688f3784e98f4dbf21edc483a31bb25065d09f8ffe05ba434ab"
+    },
+    {
+      "path": ".godot/stat_stage_move_checks/power_swap_after.png",
+      "sha256": "b19edfc1aa38b1720bff21220d7167b16ed80746c65c288235526ef0d716133d"
+    },
+    {
+      "path": ".godot/stat_stage_move_checks/guard_swap_native.png",
+      "sha256": "7fd52293e6fc59725281d0bf9e3ea7ae1457f0c6be2f33d7f1d34a94337a82b7"
+    },
+    {
+      "path": ".godot/stat_stage_move_checks/guard_swap_after.png",
+      "sha256": "7495461c16fa9b462afdd8baa57e14597ab7498bff2b3f1383dfa156388e1148"
+    },
+    {
+      "path": ".godot/stat_stage_move_checks/acupressure_native.png",
+      "sha256": "75435f846ba3bc9ab04ecef02e788e03381a27a43d23f44504a978018338be75"
+    },
+    {
+      "path": ".godot/stat_stage_move_checks/acupressure_after.png",
+      "sha256": "6673e90101df9e1ce7eafb15408a886f6408d08fbf514fe5613137bca015bd95"
+    },
+    {
+      "path": ".godot/stat_stage_move_checks/clear_smog_native.png",
+      "sha256": "8bb98b98458eb3cefc4123e0dbdbf8def109b6f025ed4c8b64b98b2790807697"
+    },
+    {
+      "path": ".godot/stat_stage_move_checks/clear_smog_after.png",
+      "sha256": "86e8e173a6e580640b4d8b7d18c3168d7f0d3667c51ff025fb1e1ba6d370ad99"
+    },
+    {
+      "path": ".godot/stat_stage_move_checks/spectral_thief_native.png",
+      "sha256": "6c0e01345e23eb7c979c6c5e9d02d3d165ca9f1bdc46c0806238d7f0143fdcc2"
+    },
+    {
+      "path": ".godot/stat_stage_move_checks/spectral_thief_after.png",
+      "sha256": "739d7b5bfbc03e64629e4a736a84d0939df3636f78c3e7f8bc075dda7d6e8c9b"
+    }
+  ],
+  "cases": 192,
+  "checks": 2005,
+  "errors": [],
+  "gpu": true,
+  "moves": [
+    "haze",
+    "topsy_turvy",
+    "heart_swap",
+    "power_swap",
+    "guard_swap",
+    "acupressure",
+    "clear_smog",
+    "spectral_thief"
+  ],
+  "newly_admitted": [
+    "haze",
+    "topsy_turvy",
+    "heart_swap",
+    "power_swap",
+    "guard_swap",
+    "acupressure"
+  ],
+  "reference_actions_sha256": "9d477a6296f8916cbbbfc36ae18bb0729dfda0646e4ee1c00ccb4199661c56d4",
+  "reference_sha256": "43b516fdc01721f53f01de555479dd3d248e5e29d2a6f5072a7bd4a3585a5027",
+  "source_sha256": {
+    ".godot/move_batch_catalog/index.json": "bb327ada0e33347980260a7e4a8af65e8622171002c64d3ecf56759aa92dbee1",
+    "data/normalized/pokemon_api.json": "719d14c082bdba03b26e801d23fb8887d0a0f4376348cf4a27e79a4b0a3c08b3",
+    "data/raw/pokemon_api.json": "2efc1538081e7849d6e04555570ca28c19b13f09f0fe0c7ce38329881972f24a",
+    "modules/battle/application/live_move_profile.gd": "2eae04fe9f7f9d8d21d9e2bad71a91da67efc982c00bb9d97c6b4b9162035650",
+    "modules/battle/application/stat_stage_move_rules.gd": "5452094ef1ed20ead5bd20bb1e52465f569ec9236fcbd7c89ce7a8800bdac763",
+    "modules/battle/application/turn_executor.gd": "0e5cb74f37ede3be56e1a536fe11f32e9d5f347bb0a30ca3095b6fb5ac161adc",
+    "modules/battle/domain/battle_event.gd": "6ee029813b71286a97e0835eef506756ff5fecc84ff4ccc873aa98c236a2559e",
+    "modules/battle/effects/battle_effect_executor.gd": "c0ad648eaf6a6a5dfe0efceb46948488d132e177b824feb8392f27d0f678bac7",
+    "modules/battle/presentation/live_move_event_text.gd": "569faad4e3f640fb7768c731a026fe59a6a2ad5988877e94149d4b1096a3ed43",
+    "modules/battle/presentation/spanish_battle_presentation_controller.gd": "07a64639f95e45f0f7d046105f2f8e39f3960b713786a5c79440d5e4e9689c8a",
+    "scenes/visual/battle_timeline_plan.gd": "158d4993e536d90e2b7f9e36c98cba4228fe975dce005f96eca6a4b5ab2976c5",
+    "scenes/visual/community_move_preview.gd": "7674d3a61e113e085d12132a4e10461aedd3a760516ab68700f2868f0f3fd4de",
+    "scenes/visual/live_battle_catalog.gd": "283a4acff39579cf03d99957a3df8f5194a88bc4bc901d9a8833320a7311cc23",
+    "tests/battle/stat_stage_move_test_runner.gd": "be3a190028a6f5a4564816a71b069227a88c7e2cf2e76e3001f28f4de9e444e3"
+  },
+  "status": "LOCAL_STAT_STAGE_BATCH_VALIDATED",
+  "corrected_existing_admitted": [
+    "clear_smog",
+    "spectral_thief"
+  ],
+  "scope": "Live singles stage clear/swap/inversion/random boost and before-damage theft; frozen DATA V3 unchanged",
+  "validation_report": ".godot/stat_stage_move_checks/gpu.json",
+  "reference_urls": [
+    "https://github.com/smogon/pokemon-showdown/blob/master/data/moves.ts",
+    "https://github.com/smogon/pokemon-showdown/blob/master/sim/battle-actions.ts"
+  ],
+  "contact_sheet": {
+    "path": ".godot\\stat_stage_move_checks\\contact_sheet.png",
+    "sha256": "ac9d4a86b48aa8d460c9a7f694eba2ac481b402eb16b9181acedf3a17bb7988b"
+  },
+  "limits": [
+    "The normal game remains singles. Acupressure selects the user; ally targeting belongs to a future doubles implementation.",
+    "Direct stage assignments are separate events and do not pretend to be ordinary boost/drop triggers.",
+    "Simple/Contrary are handled for receiving these specific boosts, not certified as complete abilities across the engine.",
+    "Topsy-Turvy handles substitute, Infiltrator and one Magic Bounce reflection; general ability suppression, Mold Breaker and future protection mechanics remain outside this batch.",
+    "Spectral Thief contact uses the existing retaliation framework; its previously documented defender-KO limitations are unchanged.",
+    "Psych Up and stored-stat swaps are deferred; they require their separate critical-state or temporary-stat contracts.",
+    "No new artwork, canonical data edits, source PNG edits, export or GitHub publication."
+  ],
+  "admitted_move_count_at_validation": 585,
+  "remaining_mechanics_count_at_validation": 265
+}

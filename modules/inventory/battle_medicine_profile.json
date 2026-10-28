@@ -1,0 +1,20 @@
+{
+  "id": "calvo_medicine_modern_v1",
+  "items": {
+    "potion": {"heal": 20},
+    "super_potion": {"heal": 60},
+    "hyper_potion": {"heal": 120},
+    "max_potion": {"heal": "full"},
+    "full_restore": {"heal": "full", "cure": "all", "confusion": true},
+    "antidote": {"cure": ["psn", "tox"]},
+    "burn_heal": {"cure": ["brn"]},
+    "ice_heal": {"cure": ["frz"]},
+    "awakening": {"cure": ["slp"]},
+    "paralyze_heal": {"cure": ["par"]},
+    "full_heal": {"cure": "all", "confusion": true},
+    "ether": {"pp": 10, "scope": "one"},
+    "max_ether": {"pp": "full", "scope": "one"},
+    "elixir": {"pp": 10, "scope": "all"},
+    "max_elixir": {"pp": "full", "scope": "all"}
+  }
+}

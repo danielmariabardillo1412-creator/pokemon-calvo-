@@ -1,0 +1,174 @@
+{
+  "status": "LOCAL_OPT_IN_SHOWDOWN_BATTLE_VALIDATED",
+  "date": "2026-10-27",
+  "backend": "showdown_singles_v1",
+  "sim_version": "0.10.11",
+  "format": "gen9customgame",
+  "default_backend_changed": false,
+  "main_scene_changed": false,
+  "launcher": "JUGAR_COMBATE_SHOWDOWN.cmd",
+  "scene": "scenes/visual/showdown_battle_lab.tscn",
+  "focal": {
+    "captures": [
+      {
+        "label": "initial",
+        "path": ".godot/showdown_backend_checks/initial.png",
+        "sha256": "48b4ebe5b32c7f2e0943c9dcefe6b99e41aa6a8cce3a779e880a3bc32683a766"
+      },
+      {
+        "label": "protect",
+        "path": ".godot/showdown_backend_checks/protect.png",
+        "sha256": "901b29a8ac1add7a802e2582d318329da8b8b20cdb7342bca3974e21bc6929ae"
+      },
+      {
+        "label": "reflect",
+        "path": ".godot/showdown_backend_checks/reflect.png",
+        "sha256": "2b25698aad215d7afcd90abbf627518da1e3975d5bb48e85b4ff1175aee659d3"
+      },
+      {
+        "label": "pivot",
+        "path": ".godot/showdown_backend_checks/pivot.png",
+        "sha256": "0cd3df561cbb1e21b7bf312ef0085381284257153659e71fa32449d8870d8a2c"
+      },
+      {
+        "label": "switch",
+        "path": ".godot/showdown_backend_checks/switch.png",
+        "sha256": "8c6ac41a03fc72d4bf1de66f4a84692a49f18d690feb92483c3dcf3b73fdaa1c"
+      },
+      {
+        "label": "healing",
+        "path": ".godot/showdown_backend_checks/healing.png",
+        "sha256": "31c22c853b68e02a67565b0efabb2a67ecc36e22f12c4948900e5dea94257adb"
+      },
+      {
+        "label": "battle_0",
+        "path": ".godot/showdown_backend_checks/battle_0.png",
+        "sha256": "db7874feb06b2e29fe965b7eeeb472b23860c7516d2e0a28a16ca2355e21a5c4"
+      },
+      {
+        "label": "battle_1",
+        "path": ".godot/showdown_backend_checks/battle_1.png",
+        "sha256": "0cf3883f553fb27d85ad5574468792a63b22d15a128dd914e35b5a3011fd0125"
+      },
+      {
+        "label": "battle_2",
+        "path": ".godot/showdown_backend_checks/battle_2.png",
+        "sha256": "cab0f2f15c0289fd54833ce6a7642eab1f353bc91e5c705047438fa0e4713c34"
+      },
+      {
+        "label": "battle_3",
+        "path": ".godot/showdown_backend_checks/battle_3.png",
+        "sha256": "694b5ac5926cdc19f8553de9dfbdee7b51e08afef786287ba49729c68f4a94ac"
+      },
+      {
+        "label": "battle_4",
+        "path": ".godot/showdown_backend_checks/battle_4.png",
+        "sha256": "67e25ae2e392ba8473d87e4a8d2a8a87d448187fb5db19ef6f9eaa37f800d9d7"
+      },
+      {
+        "label": "battle_6",
+        "path": ".godot/showdown_backend_checks/battle_6.png",
+        "sha256": "ea7bcbbcdc3b8e8ba3c65f5c2da6443ef37901daf892e423acdf9131b4bed5af"
+      },
+      {
+        "label": "finished",
+        "path": ".godot/showdown_backend_checks/finished.png",
+        "sha256": "e5275cce97957506c4ce1698f5929231809eb1720be8f4b6b941ce6173ebddcf"
+      }
+    ],
+    "checks": 100,
+    "clip_keys": [
+      "protect/back",
+      "reflect/back",
+      "tackle/front",
+      "u_turn/back",
+      "life_dew/back",
+      "surf/back",
+      "shadow_ball/front",
+      "flamethrower/back"
+    ],
+    "errors": [],
+    "gpu": true,
+    "status": "PASS"
+  },
+  "transaction_checks": 10,
+  "regressions": {
+    "core": 472,
+    "playback": 20809,
+    "trainer_corpus": 628
+  },
+  "shared_core_probe": {
+    "node_assertions": 39,
+    "godot_assertions": 27,
+    "native_executions_and_snapshots": 2496,
+    "report": "docs/current/SHOWDOWN_BACKEND_FEASIBILITY.json"
+  },
+  "existing_protected_files": 233,
+  "existing_protected_files_changed": [],
+  "new_protected_sources": [
+    "modules/battle/backends/showdown/event_adapter.gd",
+    "modules/battle/backends/showdown/pipe_client.gd",
+    "modules/battle/backends/showdown/showdown_backend.gd",
+    "scenes/visual/showdown_battle_lab.gd",
+    "scenes/visual/showdown_battle_playback.gd"
+  ],
+  "ordinary_game_admitted": 620,
+  "ordinary_game_mechanics_pending": 230,
+  "source_sha256": {
+    "JUGAR_COMBATE_SHOWDOWN.cmd": "24250e74a653654d1446bc26da290a87110a0f4584a51727fb1c7987fae77cf4",
+    "modules/battle/backends/showdown/event_adapter.gd": "cb7f5f7375498d70fd506f8015ab27bdda3c061bc862dd536fb11d54d94b8285",
+    "modules/battle/backends/showdown/native_engine.cjs": "9b676747b94a824c974beb64fd245fd92f9c1dacb2d9dc1ae7942f38a82cffa9",
+    "modules/battle/backends/showdown/pipe_client.gd": "859bdcfd0da8d859861c427a1c812bd4605f945110d80f4f8d1f1cf0fb594a82",
+    "modules/battle/backends/showdown/README.md": "ea09596819cda30f3b800446fccf99f008f7693e8120afb25fdf485594aebb8f",
+    "modules/battle/backends/showdown/showdown_backend.gd": "8919abad431d5488c69938de6603da912bb4eeeb7b4fedc2a1de854b1fb5d4bb",
+    "modules/battle/backends/showdown/worker.cjs": "b6b04178f12999c8eb3f409fbc323425ce1ba17e301d738adf3a743ef14fe00f",
+    "scenes/visual/showdown_battle_lab.gd": "3395d352758d6ed40dca715d83122468c97d5604e8cb37daaf91a0b547676f60",
+    "scenes/visual/showdown_battle_lab.tscn": "b3142ad8f8a010e6f2a467127d3613b894be810536b798da775a3683c257e312",
+    "scenes/visual/showdown_battle_playback.gd": "f547def1ad546a8e94099170749490f30036fcfbd42541d1ad5a32bd1ea1ef8f",
+    "tests/battle/showdown_backend_test_runner.gd": "f5794cd7873143061c4e391645067da3f4b00085f821062dfbf451be76e0be11",
+    "tools/showdown_engine_probe/engine.cjs": "892eef8007b5956b563ee18a5e0363c092d44a4d92084cbd54e11f0c63f47fdd",
+    "tools/showdown_engine_probe/pipe_client.gd": "bea5d68074642b7d128d683da0541639e8fa59d1ef1f105fd37371d28b398707",
+    "tools/showdown_engine_probe/run.py": "b4d58869bc35880e6283bb7c13734ab68c2544f1db08955756650fce7dac855e",
+    "tools/showdown_engine_probe/transaction_tests.cjs": "df61836c6bd76d724c831d063c903e9dfccaf8008ebe87cf5ff25a552b508950",
+    "tools/showdown_engine_probe/verify_backend.py": "e2f21206480475df1a319c4672e9fbd8c730b67119f6cecd6da15cb7b14dc1bb"
+  },
+  "evidence_sha256": {
+    ".godot/showdown_backend_checks/gpu.json": "ed6f742071e1840107cf76a1c509f2bc4e50dd503dfc6e883dc80f1f8c065586",
+    ".godot/showdown_backend_checks/gpu.log": "f5c8578307b37747db02960afa521376ca18055a124764a5ccdecf2700a246e6",
+    ".godot/showdown_backend_checks/transactions.json": "da93fef88dd1820a3f1e81c21d6016b4e6bdd949f3bf424d57579fed50376727",
+    ".godot/showdown_backend_checks/core.log": "6a38a1e3bfdd2cd0b54df24edfa2a4577254b169d2718e3252f9734cf1f82f94",
+    ".godot/showdown_backend_checks/playback.log": "a4ecb5dfc466963d823d3cb59b37d13699535e4817a47850577ec13b3a49fbb6",
+    ".godot/showdown_backend_checks/trainer.log": "193c7fb2195920ceb9267d2bde159558706333a551e6922e16bf5aa08b94c962",
+    ".godot/showdown_backend_checks/before.json": "ff088ad075572bc4f5e1bce0fd835e6b95bb23e32f642b5a2cd81e307e6a0b5c"
+  },
+  "tested": [
+    "real move and switch requests",
+    "native HP/PP/Protect/Reflect/healing",
+    "mid-turn U-turn save/restore",
+    "forced replacements, KO and player victory",
+    "matching native replay events/RNG",
+    "immutable visual playback",
+    "two-phase native commit/abort and stale token rejection",
+    "rejected unknown transition without source mutation",
+    "worker crash and last-confirmed-snapshot recovery",
+    "content exclusions, regional aliases and shiny appearance"
+  ],
+  "preserved": [
+    "canonical raw/normalized datasets",
+    "artwork/manifests/frozen renderer",
+    "legacy server and default launch",
+    "campaign save format, F: source library, randomlock policy and professional trainer AI"
+  ],
+  "limits": [
+    "Opt-in trainer lab with independent sample teams; not rolled into ordinary wild/campaign battles.",
+    "No capture/bag/escape, campaign settlement or professional AI adapter yet. Lab opponent uses only its own first legal request.",
+    "No implicit legacy save/LCG/sleep-clock migration. Native snapshots are versioned with data/policy hashes.",
+    "Temporary forms/move replacement/substitute/unsupported protocol reject prepared turns. Mirror is presentation-only.",
+    "Gen9 profile only; combined Dynamax/modern profile and portable helper packaging remain separate.",
+    "Development Node and pinned dependency installation required; 256 KiB request/8 MiB response bounds.",
+    "Native smoke is not independent certification of every move. Existing nine DATA V3 failures are not claimed fixed."
+  ],
+  "documentation": "modules/battle/backends/showdown/README.md",
+  "credits": "tools/battle_reference/THIRD_PARTY_NOTICES.md",
+  "github_publication_performed": false
+}

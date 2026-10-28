@@ -64,6 +64,7 @@ func available_move_ids() -> Array[StringName]:
 	var actor := session.player_active()
 	if actor == null:
 		return result
+	if session.battle_state().live_moves_enabled: return preload("res://modules/battle/application/live_move_profile.gd").moves(actor, catalogs)
 	for slot_variant in actor.moveset:
 		var slot := slot_variant as BattleMoveSlot
 		if slot != null and slot.current_pp > 0 and catalogs.move(slot.move_id) != null:
@@ -79,6 +80,7 @@ func available_switch_instance_ids() -> Array[StringName]:
 	var actor := session.player_active()
 	if state == null or actor == null:
 		return result
+	if state.phase != BattleState.WAITING_FOR_SWITCH and preload("res://modules/battle/application/binding_move_rules.gd").switch_blocked(state, actor, catalogs): return result
 	var side := state.side_for_creature(actor.instance_id)
 	if side == null:
 		return result
@@ -144,7 +146,7 @@ func submit_player_move(move_id: StringName) -> Array[BattleEvent]:
 		_append_log("El estado del combate está incompleto.")
 		return empty
 	var slot := actor.move_slot(move_id)
-	if slot == null or slot.current_pp <= 0 or catalogs.move(move_id) == null:
+	if (slot == null or slot.current_pp <= 0) and not (state.live_moves_enabled and move_id == &"struggle" and preload("res://modules/battle/application/live_move_profile.gd").forced_struggle(actor, catalogs)) or catalogs.move(move_id) == null:
 		_append_log("Ese movimiento no se puede usar ahora.")
 		return empty
 	var player_side := state.side_for_creature(actor.instance_id)
@@ -206,7 +208,11 @@ func continue_after_completion() -> bool:
 
 
 func _submit_autonomous_player_action(player_action: BattleAction) -> Array[BattleEvent]:
-	var events := session.submit_player_action_with_autonomous_trainer(player_action)
+	var events: Array[BattleEvent] = []
+	if session.battle_state().phase == BattleState.WAITING_FOR_SWITCH and player_action.action_type == BattleAction.SWITCH:
+		events = session.submit_switch_choice(&"side_a", player_action.switch_instance_id, session.battle_state().turn)
+	else:
+		events = session.submit_player_action_with_autonomous_trainer(player_action)
 	_render_events(events)
 	if not session.last_error.is_empty():
 		_append_log("Acción rechazada: %s" % session.last_error)
@@ -271,7 +277,7 @@ func _refresh_view() -> void:
 
 	_turn_label.text = "Combate terminado" if state.phase == BattleState.FINISHED else "Turno %d" % (state.turn + 1)
 	_player_label.text = "%s  Nv.%d   PS %d/%d" % [
-		SpanishGameText.species_name(player_creature.species_id, catalogs),
+		SpanishGameText.creature_name(player_creature, catalogs),
 		player_creature.level,
 		player_creature.current_hp,
 		player_creature.stats.max_hp,
@@ -279,7 +285,7 @@ func _refresh_view() -> void:
 	_player_hp.max_value = maxi(1, player_creature.stats.max_hp)
 	_player_hp.value = player_creature.current_hp
 	_enemy_label.text = "Entrenador: %s  Nv.%d   PS %d/%d" % [
-		SpanishGameText.species_name(enemy_creature.species_id, catalogs),
+		SpanishGameText.creature_name(enemy_creature, catalogs),
 		enemy_creature.level,
 		enemy_creature.current_hp,
 		enemy_creature.stats.max_hp,
@@ -294,6 +300,7 @@ func _refresh_view() -> void:
 		if i < moves.size():
 			var move_id := moves[i]
 			var slot := player_creature.move_slot(move_id)
+			if slot == null and move_id == &"struggle" and state.live_moves_enabled: slot = BattleMoveSlot.new(&"struggle", 1, 1)
 			move_button.text = "%s  PP %d/%d" % [
 				SpanishGameText.move_name(move_id, catalogs),
 				slot.current_pp,
@@ -305,7 +312,10 @@ func _refresh_view() -> void:
 			move_button.text = "-"
 			move_button.visible = false
 
-	_refresh_switch_controls(state, waiting)
+	var choosing: bool = state.phase == BattleState.WAITING_FOR_SWITCH and state.pending_switch.get("side_id") == "side_a"
+	_refresh_switch_controls(state, waiting or choosing)
+	_switch_button.text = "Enviar" if choosing else "Cambiar Pokémon"
+	if choosing: _turn_label.text = "Elige el Pokémon que entra · continúa el mismo turno"
 
 
 func _refresh_switch_controls(state: BattleState, waiting: bool) -> void:
@@ -317,7 +327,7 @@ func _refresh_switch_controls(state: BattleState, waiting: bool) -> void:
 		if candidate == null:
 			continue
 		_switch_selector.add_item("%s Nv.%d  PS %d/%d" % [
-			SpanishGameText.species_name(candidate.species_id, catalogs),
+			SpanishGameText.creature_name(candidate, catalogs),
 			candidate.level,
 			candidate.current_hp,
 			candidate.stats.max_hp,
@@ -351,6 +361,9 @@ func _render_events(events: Array[BattleEvent]) -> void:
 
 
 func _event_text(event: BattleEvent) -> String:
+	if event != null and session != null and session.live_moves_enabled:
+		var live_text := preload("res://modules/battle/presentation/live_move_event_text.gd").describe(event, _creature_label(event.actor_id), _creature_label(event.target_id), catalogs)
+		if not live_text.is_empty(): return live_text
 	if event == null:
 		return "Evento de combate desconocido."
 	match event.kind:
@@ -395,7 +408,7 @@ func _creature_label(instance_id: StringName) -> String:
 		if state != null:
 			var creature := state.creature(instance_id)
 			if creature != null:
-				return SpanishGameText.species_name(creature.species_id, catalogs)
+				return SpanishGameText.creature_name(creature, catalogs)
 	return String(instance_id).replace("_", " ").capitalize()
 
 

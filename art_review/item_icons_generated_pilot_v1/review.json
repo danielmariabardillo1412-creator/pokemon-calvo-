@@ -1,0 +1,107 @@
+{
+  "status": "PILOT_COMPLETE_NOT_INSTALLED",
+  "items": {
+    "armorite_ore": {
+      "generated_source": "exec-1e88ebf0-4fef-4199-9da0-792b105ad567.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "candidate_size": [
+        160,
+        160
+      ],
+      "real_alpha": true,
+      "alpha_bbox": [
+        33,
+        31,
+        1234,
+        1254
+      ],
+      "solid_alpha_bbox": [
+        240,
+        185,
+        1023,
+        1077
+      ],
+      "source_sha256": "2da190ec302d8d75618276723495b77eed3627eac691c7dd2f61f64f261af7d4",
+      "candidate_sha256": "47812a70d21a773191cc11d6b39e5f0581a66e116d85633b227db960f920f041",
+      "status": "READABLE_CANDIDATE_NOT_FINAL_APPROVAL",
+      "installed": false,
+      "selected_version": 2,
+      "v1_disposition": "superseded_by_v2",
+      "v1_issue": "diagonal pose and bright facet moved to side",
+      "selected_file": "armorite_ore_160_v2.png",
+      "v2_source_size": [
+        1254,
+        1254
+      ]
+    },
+    "lure": {
+      "generated_source": "exec-35e8ee58-16d1-4958-95a9-7e88a0b6aee8.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "candidate_size": [
+        160,
+        160
+      ],
+      "real_alpha": true,
+      "alpha_bbox": [
+        0,
+        54,
+        1182,
+        1254
+      ],
+      "solid_alpha_bbox": [
+        289,
+        122,
+        964,
+        1118
+      ],
+      "source_sha256": "799d764f27a62f165b21b5630b8f1f60bbc249a3e0ca00a28135bb6ed0fdc49a",
+      "candidate_sha256": "c3e3d0410b2b115e79729cce36d239692258d8d06cadbc6ab7e2153895b1b88c",
+      "status": "READABLE_CANDIDATE_NOT_FINAL_APPROVAL",
+      "installed": false,
+      "selected_version": 2,
+      "v1_disposition": "superseded_by_v2",
+      "v1_issue": "invented continuous U-shaped white marking",
+      "selected_file": "lure_160_v2.png",
+      "v2_source_size": [
+        1254,
+        1254
+      ]
+    }
+  },
+  "date": "2026-10-28",
+  "tool": "built-in image_gen",
+  "generated_assets": 2,
+  "generation_calls": 4,
+  "reviewed_pixel_sizes": [
+    128,
+    48,
+    40,
+    32
+  ],
+  "godot_gpu": "PASS",
+  "godot_pixel_dimensions_asserted": true,
+  "godot_log_errors": 0,
+  "comparison_reviewed": true,
+  "alpha_preserved": true,
+  "runtime_manifest_unchanged": true,
+  "runtime_entries": 654,
+  "remaining_ungenerated_ids": [
+    "gold_leaf",
+    "silver_leaf",
+    "super_lure",
+    "max_lure",
+    "wishing_piece"
+  ],
+  "limitations": [
+    "AI reinterpretations of small source sprites, not exact recovered official artwork.",
+    "Both needed one correction; reference fidelity still subject to human visual review.",
+    "Smooth candidates are readable at 32px but darken compared with the bright source pixels; no guarantee of a perfect match.",
+    "No campaign mechanics, catalog entries, or runtime art were changed."
+  ]
+}

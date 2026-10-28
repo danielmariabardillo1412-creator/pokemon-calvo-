@@ -1,0 +1,129 @@
+{
+  "captures": [
+    {
+      "path": ".godot/weather_checks/rain_dance_cast.png",
+      "sha256": "62858c6d03d15f32336cf69bf440076fa70d8c611637174e1c7ddf299bdeb6f2"
+    },
+    {
+      "path": ".godot/weather_checks/rain_dance_persistent.png",
+      "sha256": "16d7bd405394a958765d54fb533993ac834b01d94d9589ad77e36a9a1bc23051"
+    },
+    {
+      "path": ".godot/weather_checks/hail_cast.png",
+      "sha256": "600dc512e6c08c585c82391d31796d6ffb092ca6731260109341acbc084acdbb"
+    },
+    {
+      "path": ".godot/weather_checks/hail_persistent.png",
+      "sha256": "79372ced8de251562172cdf3df946efa59ae142f82f414eab27b7fa17e3c9f20"
+    },
+    {
+      "path": ".godot/weather_checks/sandstorm_cast.png",
+      "sha256": "69ef51b0d9e3bd14f5d242d4932fe5bacac10c2416dd2b679f9437f03012bcb6"
+    },
+    {
+      "path": ".godot/weather_checks/sandstorm_persistent.png",
+      "sha256": "b0fb1ec163a6813a4a6c2e9c48c5b4bf6c75e084e151a5d19736853b2a0ad37b"
+    },
+    {
+      "path": ".godot/weather_checks/snowscape_cast.png",
+      "sha256": "dc4d2afda30cbd38296c9a94f6609db2d0ebf6f34d5e61224bd739afd722bb1d"
+    },
+    {
+      "path": ".godot/weather_checks/snowscape_persistent.png",
+      "sha256": "c0775d4b4fd00ba7d724740e7375dcee370903f78682f41ab8d2c7c030f74d0e"
+    },
+    {
+      "path": ".godot/weather_checks/chilly_reception_cast.png",
+      "sha256": "f613668ce816916c37f161d75ee609ba489c9016acb0a755ed28d7ff9c853f34"
+    },
+    {
+      "path": ".godot/weather_checks/chilly_reception_persistent.png",
+      "sha256": "f3f93f32c5d95dd8be133d7d1f14f7367f4029e62fbff75157f1124e13219e87"
+    },
+    {
+      "path": ".godot/weather_checks/chilly_entry_snow.png",
+      "sha256": "68e44be874242312109124e33330c53d916c2cc77e59ed141cea8880c3c8ae8f"
+    }
+  ],
+  "checks": 1523,
+  "errors": [],
+  "gpu": true,
+  "limitations": [
+    "No global rollout or certification of every weather-dependent move/ability.",
+    "Only Rain Dish and Ice Body recovery plus declared weather chip immunities/suppression are implemented here; speed/evasion abilities, Dry Skin/Hydration and weather-specific move formulas remain pending.",
+    "No ability suppression/Neutralizing Gas, item suppression or automatic weather-setting ability lifecycle."
+  ],
+  "mechanics_added": [
+    "rain_dance",
+    "hail",
+    "sandstorm",
+    "snowscape",
+    "chilly_reception"
+  ],
+  "remaining_unimplemented": [
+    "ally_switch",
+    "shed_tail",
+    "substitute",
+    "transform"
+  ],
+  "scope": "Explicit F9 wild singles weather pilot; trainer-format authoritative core sampled on both sides, no trainer UI/AI rollout.",
+  "source_sha256": {
+    ".godot/move_batch_catalog/index.json": "bb327ada0e33347980260a7e4a8af65e8622171002c64d3ecf56759aa92dbee1",
+    "data/normalized/pokemon_api.json": "719d14c082bdba03b26e801d23fb8887d0a0f4376348cf4a27e79a4b0a3c08b3",
+    "data/raw/pokemon_api.json": "2efc1538081e7849d6e04555570ca28c19b13f09f0fe0c7ce38329881972f24a",
+    "modules/battle/application/turn_executor.gd": "b999bc1d658d240beed3e3e9b3ccb1169517a776b1feb2f7c9382aa8679f6789",
+    "modules/battle/application/weather_rules.gd": "158d58f99d4e4f71572a05afe75dbdfc5dd7ce7af1cea2a3ba8b9d6c8378358e",
+    "modules/battle/domain/battle_event.gd": "580d8e4be2f131401c5bd5782dd0bf5145366b9567d3da4a5e63a01247773616",
+    "modules/battle/domain/battle_state.gd": "fad881dd887c4835237715d182ea361a9fa3970b54b041e016d9f119a3f87edf",
+    "modules/battle/domain/damage_calculator.gd": "4accfb76c7697b8ec1208f661240f6ae4a6ee9e8752c386b9ccec71b5cedcd8d",
+    "modules/battle/effects/battle_effect_executor.gd": "b4a5d2b6d223a02488a34d06ffd31b4ed0589866aa0158efab8b5803c5ab6ac8",
+    "modules/gameplay/wild_adventure_session.gd": "10be590803e6e6a3cfe43dcd2e8c7d3fa71fb7555b7e4632f0d8fedeec5aff11",
+    "modules/status/application/status_system.gd": "1214b4d09ad4a398bbb253e2be5a4c705c1d32120e99b12156a6f451a5ef167c",
+    "scenes/visual/battle_animation_playback.gd": "ed425e3855a08e3e783f198791a127524f9840a7275731cc0ad724d40d261c91",
+    "scenes/visual/battle_status_switch_pilot.gd": "cb58bbcddfed3ad64cf92044bfcc39c397c7bd732404c50335c6e3810984a050",
+    "scenes/visual/battle_timeline_plan.gd": "3799d2aeabfd3f075c25a89febde6d455c2b9edf4febdab87697c085e8170c25",
+    "scenes/visual/battle_weather_cast_pilot.gd": "770d002262a10bb67e00ba19f313cc01aebacbcf1ac0b9dc0db1ecb9bc16bff4",
+    "scenes/visual/battle_weather_layer.gd": "49723228a1a82fe3d1c38bbe4ed6bec14a2c926b04ce89af2abff6332ac58378",
+    "scenes/visual/community_move_preview.gd": "7674d3a61e113e085d12132a4e10461aedd3a760516ab68700f2868f0f3fd4de",
+    "scenes/visual/field_battle_presentation.gd": "a6adec5961bf54a10e700a5a5963687719584d07d52110e02ad6332d8c50ff10",
+    "scenes/visual/field_demo.gd": "d5e5ee9fa5edcbcb6c91b33f73496eb7bfc63353bc200adc5b8afe4ac57d55fe",
+    "tests/battle/weather_pilot_test_runner.gd": "60510e4897cefb777504636453626cb11b1ae59a938e4f9570ff0619ddffa702",
+    "tools/visual/build_weather_pilot.py": "2bb64ddc4aa7d61646deed5c6fe90b80e5836e28bc1895f8257b9c3cb5cd4c55"
+  },
+  "status": "SINGLES_WEATHER_PILOT_VALIDATED_NOT_GLOBAL_ROLLOUT",
+  "validation_status": "PASS",
+  "server_sample_count": 120,
+  "production_rollout_complete": false,
+  "test_report": ".godot\\weather_checks\\gpu.json",
+  "test_report_sha256": "63e814f4f3e732aaea333bf3b95cac0c9f2c60f3d7d78016a17bcd53785a7616",
+  "resource_sha256": {
+    ".godot/battle_weather/manifest.json": "2704e263bb08938ff5a76bbe90eb23f39f62cc1641f89360777ff860c9679bfa",
+    ".godot/battle_weather/common.json": "044675099b36945a28c7838a8d1a5a59257167aa0ce26d5d94fec3970e2ad42d",
+    ".godot/battle_weather/casts.json": "c14aa0a4adae54e980a82ab2dad18b0c7c3dbb684fc847b73cbd5f18875d0704"
+  },
+  "common_loop_frames": [
+    30,
+    30,
+    30,
+    20
+  ],
+  "native_cast_clips_loaded": 10,
+  "notes": [
+    "Only F9 enables this weather scope; default snapshots/AI behavior are unchanged.",
+    "Weather expiration is checked before its final residual callback, following the reference event order. Five-turn weather therefore has four residual callbacks after setting it.",
+    "Sandstorm boosts Rock special defense; snow boosts Ice physical defense. Snow has no hail chip damage.",
+    "Common snow/hail share the original artwork, while their mechanics remain distinct.",
+    "Only back-side weather casts and persistent loops have new GPU captures here. Both sides are covered by the authoritative core samples; this is not a new complete front-side visual certification.",
+    "Chilly Reception establishes snow before requesting a replacement; existing snow still permits the pivot without restarting its timer.",
+    "Pokemon sent out after weather KO do not receive another end-turn status/held-item transaction in this pilot."
+  ],
+  "references": [
+    "https://github.com/smogon/pokemon-showdown/blob/master/data/conditions.ts",
+    "https://github.com/smogon/pokemon-showdown/blob/master/data/moves.ts",
+    "https://github.com/smogon/pokemon-showdown/blob/master/sim/battle.ts"
+  ],
+  "contact_sheet": {
+    "path": ".godot\\weather_checks\\weather_contact_sheet.png",
+    "sha256": "fd0f7859577b171e22f6043cd96ed8781d93ef57c51bc88638c533bc794609eb"
+  }
+}

@@ -19,6 +19,12 @@ var catalogs: DefinitionCatalog
 var progression_ruleset: ProgressionRuleset
 var status: StringName = READY
 var completion_reason: StringName = &""
+var live_moves_enabled: bool = false
+var force_shiny_encounters := false # Explicit laboratory configuration, never a content fallback.
+var switch_move_rules_enabled: bool = false # Explicit singles demo pilot, not a saved content rule.
+var transform_rules_enabled: bool = false
+var substitute_rules_enabled: bool = false
+var weather_rules_enabled: bool = false
 
 var _encounter: WildEncounterResult = null
 var _battle_server: AuthoritativeBattleServer = null
@@ -86,6 +92,8 @@ func begin_encounter(
 		return result
 
 	_encounter = result
+	if force_shiny_encounters and catalogs.shiny_species_ids.has(String(result.creature.species_id)):
+		result.creature.is_shiny = true
 	var battle_id := StringName("wild_battle_%s" % String(result.creature.instance_id))
 	var state := BattleState.create_with_parties(
 		battle_id,
@@ -95,6 +103,12 @@ func begin_encounter(
 		BattleRuleset.ID,
 	)
 	_battle_server = AuthoritativeBattleServer.new(state, catalogs)
+	state.switch_move_rules_enabled = switch_move_rules_enabled
+	state.weather_rules_enabled = weather_rules_enabled
+	state.substitute_rules_enabled = substitute_rules_enabled
+	state.transform_rules_enabled = transform_rules_enabled
+	if live_moves_enabled: preload("res://modules/battle/application/live_move_profile.gd").apply(state)
+	state.battle_kind = &"wild"
 	status = BATTLE_ACTIVE
 	completion_reason = &""
 	_escape_attempts = 0
@@ -105,6 +119,20 @@ func submit_turn(actions: Array[BattleAction]) -> Array[BattleEvent]:
 	if not has_active_battle():
 		return []
 	return _battle_server.submit_turn(actions)
+
+
+func submit_switch_choice(incoming_id: StringName, turn: int) -> WildBattleCommandResult:
+	var out := WildBattleCommandResult.new()
+	out.command_type = WildBattleCommand.ACTION
+	if not has_active_battle():
+		out.reason = "no_active_wild_battle"
+		return out
+	out.battle_events = _battle_server.submit_switch_choice(&"side_a", incoming_id, turn)
+	out.reason = _battle_rejection_reason(out.battle_events)
+	out.accepted = out.reason.is_empty()
+	out.battle_finished = _battle_server.state.phase == BattleState.FINISHED
+	# Continuation spends neither a new command nor another turn.
+	return out
 
 
 # Canonical player-command boundary for the wild battle loop. MOVE/SWITCH use BattleAction,
@@ -228,6 +256,18 @@ func _submit_run_command(
 	if wild == null:
 		out.reason = "wild_target_missing"
 		return out
+	if preload("res://modules/battle/application/binding_move_rules.gd").switch_blocked(_battle_server.state, active_player, catalogs):
+		var blocked_error := _battle_server.validate_reaction_action(opponent_action, player_side.side_id)
+		if not blocked_error.is_empty():
+			out.reason = "invalid_opponent_response:%s" % blocked_error
+			return out
+		out.escape_resolution = WildEscapeResolution.new()
+		out.escape_resolution.attempt = _escape_attempts
+		out.accepted = true
+		out.turn_consumed = true
+		out.battle_events = _battle_server.submit_reaction_turn(opponent_action, player_side.side_id)
+		out.battle_finished = _battle_server.state.phase == BattleState.FINISHED
+		return out
 	if active_player.stats == null or wild.stats == null:
 		out.reason = "escape_stats_missing"
 		return out
@@ -344,6 +384,17 @@ func settle_finished_battle() -> WildBattleSettlement:
 		out.reason = "battle_not_finished"
 		return out
 
+	if state.end_reason == &"forced_escape":
+		_reconcile_player_party()
+		status = COMPLETED
+		completion_reason = COMPLETED_FLED
+		out.ok = true
+		out.session_completed = true
+		_encounter = null
+		_battle_server = null
+		_escape_attempts = 0
+		return out # Neither victory/defeat, XP, capture nor an inventory action.
+	_restore_battle_transforms()
 	var outcome := BattleOutcome.from_battle_state(state, catalogs)
 	out.outcome = outcome
 	out.player_won = outcome.winner_side_id == &"side_a"
@@ -457,7 +508,14 @@ func _battle_roster_with_living_active() -> Array[CreatureInstance]:
 	return roster
 
 
+func _restore_battle_transforms() -> void:
+	if _battle_server == null: return
+	for id: StringName in _battle_server.state.participant_ids:
+		_battle_server.state.creature(id).restore_battle_transform()
+
+
 func _reconcile_player_party() -> void:
+	_restore_battle_transforms()
 	for creature in player.party.get_creatures():
 		if creature != null:
 			creature.reconcile_post_battle()

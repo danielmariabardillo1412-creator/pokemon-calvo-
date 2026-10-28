@@ -17,6 +17,7 @@ var experience: int = 0
 var ivs: Dictionary = {}            # stat_key -> int 0..31
 var evs: Dictionary = {}            # stat_key -> int 0..252
 var nature_id: StringName = &"hardy"
+var is_shiny := false
 var friendship: int = 0
 var current_hp: int
 var stats: StatBlock
@@ -28,6 +29,8 @@ var status_state := BattleStatusState.new()
 var ability_id: StringName = &""
 var held_item_id: StringName = &""
 var held_item_consumed: bool = false
+# Battle-only reversible overlay, omitted from historical creature snapshots.
+var battle_transform_original: Dictionary = {}
 
 
 func _init(
@@ -48,6 +51,31 @@ func _init(
 	status_ids = []
 	for move_id in move_ids:
 		moveset.append(BattleMoveSlot.new(move_id))
+
+
+func base_species_id() -> StringName:
+	return StringName(battle_transform_original.get("species_id", species_id))
+
+
+func appearance_id() -> StringName:
+	return StringName(String(species_id) + ("__shiny" if is_shiny else ""))
+
+
+func restore_battle_transform() -> bool:
+	if battle_transform_original.is_empty(): return false
+	var original := battle_transform_original
+	battle_transform_original = {}
+	species_id = StringName(original.species_id)
+	is_shiny = bool(original.get("is_shiny", is_shiny))
+	stats = StatBlock.from_dict(original.stats)
+	ability_id = StringName(original.ability_id)
+	moveset.clear()
+	move_ids.clear()
+	for row: Dictionary in original.moveset:
+		var slot := BattleMoveSlot.from_dict(row)
+		moveset.append(slot)
+		move_ids.append(slot.move_id)
+	return true
 
 
 func is_knocked_out() -> bool:
@@ -131,6 +159,7 @@ func initialize_move_pp(catalog: DefinitionCatalog) -> void:
 # statuses), keep the persistent status, and clamp HP/PP to legal ranges. Persistent containers
 # and savegames must never inherit a +6 Attack stage or another transient combat modifier.
 func reconcile_post_battle() -> void:
+	restore_battle_transform()
 	stat_stages = StatStages.new()
 	status_state.volatile.clear()
 	current_hp = clampi(current_hp, 0, stats.max_hp)
@@ -155,7 +184,7 @@ func to_dict() -> Dictionary:
 	var ev_out: Dictionary = {}
 	for k in evs.keys():
 		ev_out[String(k)] = int(evs[k])
-	return {
+	var result := {
 		"instance_id": String(instance_id),
 		"species_id": String(species_id),
 		"level": level,
@@ -175,6 +204,9 @@ func to_dict() -> Dictionary:
 		"held_item_id": String(held_item_id),
 		"held_item_consumed": held_item_consumed,
 	}
+	if not battle_transform_original.is_empty(): result["battle_transform"] = battle_transform_original.duplicate(true)
+	if is_shiny: result["is_shiny"] = true
+	return result
 
 
 static func from_dict(data: Dictionary) -> CreatureInstance:
@@ -193,6 +225,7 @@ static func from_dict(data: Dictionary) -> CreatureInstance:
 	creature.ivs = data.get("ivs", {})
 	creature.evs = data.get("evs", {})
 	creature.nature_id = StringName(data.get("nature_id", "hardy"))
+	creature.is_shiny = bool(data.get("is_shiny", false))
 	creature.friendship = int(data.get("friendship", 0))
 	if data.has("moveset"):
 		creature.moveset.clear()
@@ -208,4 +241,6 @@ static func from_dict(data: Dictionary) -> CreatureInstance:
 	creature.ability_id = StringName(data.get("ability_id", ""))
 	creature.held_item_id = StringName(data.get("held_item_id", ""))
 	creature.held_item_consumed = bool(data.get("held_item_consumed", false))
+	var transform_context: Variant = data.get("battle_transform", {})
+	if transform_context is Dictionary: creature.battle_transform_original = transform_context.duplicate(true)
 	return creature

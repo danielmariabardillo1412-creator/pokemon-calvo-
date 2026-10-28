@@ -1,0 +1,285 @@
+{
+  "date": "2026-10-26",
+  "status": "STATIC_AUDIT_COMPLETE_NO_IMPORT",
+  "game_path": "D:\\Proyectos\\Pokemon Calvo",
+  "game_branch": "fix/map-runtime-hardening-v1",
+  "source_folder": "D:\\Proyectos\\Pokemon Calvo Referencias\\fuentes",
+  "protected_game_files": 232,
+  "protected_game_files_changed": [],
+  "current_live_mechanics_pending": 238,
+  "overlap": {
+    "godot_data_rows": 208,
+    "godot_rows_with_exact_code_mentions": 194,
+    "essentials_data_rows": 208,
+    "essentials_rows_with_effect_class": 208
+  },
+  "overlap_caveat": "Coincidencia de ID/código/clase por análisis estático: NO prueba funcionamiento, cobertura completa, semántica correcta ni compatibilidad con nuestro servidor. No cambia admitidos ni pendientes.",
+  "known_godot_port_issues": {
+    "dangling_registry_paths": [
+      {
+        "reference": "src/battle/move_effects_library.gd",
+        "in_upstream_tree": false,
+        "actual": "src/battle/moves/move_effects_library.gd",
+        "actual_in_upstream_tree": true
+      },
+      {
+        "reference": "src/battle/move_effects_calling.gd",
+        "in_upstream_tree": false,
+        "actual": "src/battle/moves/move_effects_calling.gd",
+        "actual_in_upstream_tree": true
+      },
+      {
+        "reference": "src/battle/move_effects_multi_turn.gd",
+        "in_upstream_tree": false,
+        "actual": "src/battle/moves/move_effects_multi_turn.gd",
+        "actual_in_upstream_tree": true
+      },
+      {
+        "reference": "src/battle/move_effects_stat_extras.gd",
+        "in_upstream_tree": false,
+        "actual": "src/battle/moves/move_effects_stat_extras.gd",
+        "actual_in_upstream_tree": true
+      },
+      {
+        "reference": "src/battle/move_effects_item_extras.gd",
+        "in_upstream_tree": false,
+        "actual": "src/battle/moves/move_effects_item_extras.gd",
+        "actual_in_upstream_tree": true
+      },
+      {
+        "reference": "src/battle/move_effects_order_extras.gd",
+        "in_upstream_tree": false,
+        "actual": "src/battle/moves/move_effects_order_extras.gd",
+        "actual_in_upstream_tree": true
+      },
+      {
+        "reference": "src/battle/move_effects_misc_extras.gd",
+        "in_upstream_tree": false,
+        "actual": "src/battle/moves/move_effects_misc_extras.gd",
+        "actual_in_upstream_tree": true
+      },
+      {
+        "reference": "src/battle/move_effects_lingering.gd",
+        "in_upstream_tree": false,
+        "actual": "src/battle/moves/move_effects_lingering.gd",
+        "actual_in_upstream_tree": true
+      },
+      {
+        "reference": "src/battle/move_effects_gimmicks.gd",
+        "in_upstream_tree": false,
+        "actual": "src/battle/moves/move_effects_gimmicks.gd",
+        "actual_in_upstream_tree": true
+      }
+    ],
+    "protect_probability": "ProtectionEffect multiplica denominador por 2, máximo 8; Essentials Gen>=6 usa x3 y referencia local Showdown x3, máximo 729. No importar esa fórmula para nuestro perfil moderno.",
+    "probability_evidence": [
+      "pokemon-godot-essentials/src/battle/moves/move_effects_library.gd:1074-1100",
+      "pokemon-essentials/Data/Scripts/011_Battle/003_Move/004_Move_BaseEffects.rb:436-492",
+      "D:\\Proyectos\\Pokemon Calvo\\.godot\\battle_reference\\runtime\\node_modules\\@pkmn\\sim\\build\\cjs\\data\\conditions.js:455-475"
+    ]
+  },
+  "execution": "No se han ejecutado scripts, juegos ni tests de terceros. No se han descargado ROMs. Código/datos de referencia, sin paquetes gráficos/audio completos.",
+  "import_decision": "Conservar motor propio y comparador Showdown. Adaptar por familia, comprobar condiciones/licencia, generar pruebas independientes y validar servidor/save/replay/IA antes de habilitar.",
+  "repositories": [
+    {
+      "repository": "Kurokamori/Pokemon-Godot-Essentials",
+      "url": "https://github.com/Kurokamori/Pokemon-Godot-Essentials",
+      "commit": "2a0ee58989b5f3f948c6532edd51b75e0f69a36e",
+      "path": "D:\\Proyectos\\Pokemon Calvo Referencias\\fuentes\\pokemon-godot-essentials",
+      "checkout": "source_sparse",
+      "sparse_folders": [
+        "src",
+        "data",
+        "scenes",
+        "shaders",
+        "tools"
+      ],
+      "scope": "Godot 4.8; port reciente, revisión estática, no ejecutado",
+      "license_note": "No se encontró licencia general explícita; README permite uso/fork y acredita Essentials/Gen9. No autoriza asumir MIT. Aclarar condiciones antes de incorporar código.",
+      "notice_files": [
+        {
+          "path": "D:\\Proyectos\\Pokemon Calvo Referencias\\fuentes\\pokemon-godot-essentials\\README.md",
+          "sha256": "88dcc6c23b2228737ab12cc721a7775a841bdb09f96a279c43c6077ef542329b"
+        }
+      ],
+      "upstream_file_count": 35473,
+      "checked_out_files": 4584,
+      "checked_out_bytes": 10359566,
+      "git_metadata_bytes": 8410048,
+      "checked_out_code_files": 271,
+      "checked_out_code_bytes": 1862807,
+      "source_executed": false,
+      "runtime_tests_executed": false
+    },
+    {
+      "repository": "Decryptu/pokerecomp",
+      "url": "https://github.com/Decryptu/pokerecomp",
+      "commit": "6fe9d3992507a79abd720ce8e690a6228fdd0516",
+      "path": "D:\\Proyectos\\Pokemon Calvo Referencias\\fuentes\\pokerecomp",
+      "checkout": "source_sparse",
+      "sparse_folders": [
+        "game",
+        "autoload",
+        "docs",
+        "tests",
+        "tools"
+      ],
+      "scope": "Godot 4.8+, Gen 1/2, Gen 3 experimental; ROM del usuario necesaria para juego completo, innecesaria para esta lectura",
+      "license_note": "MIT (Decryptu, 2026): conservar licencia y aviso de copyright para código reutilizado. No concede derechos sobre recursos de terceros.",
+      "notice_files": [
+        {
+          "path": "D:\\Proyectos\\Pokemon Calvo Referencias\\fuentes\\pokerecomp\\LICENSE",
+          "sha256": "17fc5ba47541082e276444360eae961cc881c82d1bdf532334511c60bab5382c"
+        },
+        {
+          "path": "D:\\Proyectos\\Pokemon Calvo Referencias\\fuentes\\pokerecomp\\README.md",
+          "sha256": "985af1f8b90b593bc7365c15be3531e842694a9a842bde2cb486e8006fc7cb77"
+        }
+      ],
+      "upstream_file_count": 1884,
+      "checked_out_files": 1476,
+      "checked_out_bytes": 17193336,
+      "git_metadata_bytes": 6064919,
+      "checked_out_code_files": 719,
+      "checked_out_code_bytes": 16206166,
+      "source_executed": false,
+      "runtime_tests_executed": false
+    },
+    {
+      "repository": "Maruno17/pokemon-essentials",
+      "url": "https://github.com/Maruno17/pokemon-essentials",
+      "commit": "8c5911e4a4b07b07e832e4bb0d5d8859e88b4a9b",
+      "path": "D:\\Proyectos\\Pokemon Calvo Referencias\\fuentes\\pokemon-essentials",
+      "checkout": "source_sparse",
+      "sparse_folders": [
+        "Data/Scripts",
+        "PBS"
+      ],
+      "scope": "Essentials v21.1, Ruby/RPG Maker XP, configuración de mecánicas Gen 8; no es plugin Godot",
+      "license_note": "CC BY-NC-SA 4.0: atribución, uso no comercial y compartir adaptaciones bajo la misma licencia; no integrar bloques sin revisar compatibilidad y condiciones.",
+      "notice_files": [
+        {
+          "path": "D:\\Proyectos\\Pokemon Calvo Referencias\\fuentes\\pokemon-essentials\\LICENSE",
+          "sha256": "7e135d97949b77b1f2f6aa369e1dc2760f5898e9d58232d69d099d8f272731bf"
+        },
+        {
+          "path": "D:\\Proyectos\\Pokemon Calvo Referencias\\fuentes\\pokemon-essentials\\README.md",
+          "sha256": "b7f80123fe433b80a66c9c4a9d24fd664444ddc44bcb01b41d0ddae7253705cb"
+        }
+      ],
+      "upstream_file_count": 432,
+      "checked_out_files": 406,
+      "checked_out_bytes": 43836998,
+      "git_metadata_bytes": 16868661,
+      "checked_out_code_files": 314,
+      "checked_out_code_bytes": 5095939,
+      "source_executed": false,
+      "runtime_tests_executed": false
+    }
+  ],
+  "external_evidence": [
+    {
+      "path": "D:\\Proyectos\\Pokemon Calvo Referencias\\README.md",
+      "sha256": "ba5c6ca52b45452a1d8d4cfdc8eee2fa1a42f376e48c6ac773d2a48b88d918bf"
+    },
+    {
+      "path": "D:\\Proyectos\\Pokemon Calvo Referencias\\catalogo_fuentes.json",
+      "sha256": "a1e2ade0fc6a609932b6a2b9fec4e586e9e1a98c881165cf997f664f0daddb73"
+    },
+    {
+      "path": "D:\\Proyectos\\Pokemon Calvo Referencias\\pendientes_cruzados.json",
+      "sha256": "a1104c2f7b7238364e8dce587fb608d943a815a467f641f073edad736573099c"
+    },
+    {
+      "path": "D:\\Proyectos\\Pokemon Calvo Referencias\\auditar_fuentes.py",
+      "sha256": "30fc8db71b257cdacca11a18d726ff86b53463499fb82540511d521e178724b6"
+    },
+    {
+      "path": "D:\\Proyectos\\Pokemon Calvo Referencias\\game_sources_before.json",
+      "sha256": "61043b48732c4db440ac1e677008dae15643ca97fd1c0541bab710011813e9df"
+    },
+    {
+      "path": "D:\\Proyectos\\Pokemon Calvo Referencias\\game_sources_after.json",
+      "sha256": "6dcb7a86eb7020a31de39eef7b1bc0c7407ba51a4ff6cff698f85a9470a492a2"
+    }
+  ],
+  "credits_status": "Autores, LICENSE y README originales conservados. No se ha reutilizado código/arte: revisar condiciones y atribuciones concretas por archivo antes de una importación.",
+  "recommended_use": [
+    {
+      "family": "protecciones/pantallas/terrenos",
+      "approach": "Estudiar clases y efectos en las dos variantes de Essentials; corregir interpretación según perfil moderno y comprobar orden, duración, reducción, RNG y persistencia con nuestro comparador."
+    },
+    {
+      "family": "objetos",
+      "approach": "Revisar curación/consumo/bayas/Restos/PP y usos de objetos en pokerecomp MIT; contrastar diferencias de generación con Essentials/Showdown. No sustituye futura revisión del pool ni catálogo artístico."
+    },
+    {
+      "family": "Maxi y otros ausentes",
+      "approach": "Continuar usando referencia Showdown y fuentes específicas; estas descargas no rellenan sus 30 huecos."
+    }
+  ],
+  "game_documents_updated": [
+    "docs/project_book/README.md",
+    "docs/current/NEXT_STEPS.md",
+    "docs/current/PROJECT_STATE.md",
+    "docs/current/EXTERNAL_SOURCE_AUDIT.json"
+  ],
+  "evaluated_not_selected": [
+    {
+      "repository": "Maruno17/godotmon-project",
+      "path": "D:\\Proyectos\\Pokemon Calvo Referencias\\evaluados-sin-checkout\\godotmon-project",
+      "commit": "c8d37957cee67573c25ab2ffa3b6747c1ac98e0c",
+      "counts": {
+        ".gd": 28,
+        ".cs": 0,
+        ".rb": 0,
+        ".json": 1,
+        ".tres": 3
+      },
+      "top": [
+        ".gitattributes",
+        ".gitignore",
+        ".vscode",
+        "README.md",
+        "addons",
+        "assets",
+        "credits.txt",
+        "default_bus_layout.tres",
+        "godot_license.txt",
+        "icon.svg",
+        "icon.svg.import",
+        "project.godot",
+        "src"
+      ],
+      "checkout": "metadata_only_no_source_checkout",
+      "decision": "not_selected",
+      "reason": "Esqueleto temprano; no biblioteca amplia de combate, licencia general no verificada."
+    },
+    {
+      "repository": "NickThorby/pokemon-toolkit",
+      "path": "D:\\Proyectos\\Pokemon Calvo Referencias\\evaluados-sin-checkout\\pokemon-toolkit",
+      "commit": "f1877d6c07ea49a6607aa0b64b9121f2bf373430",
+      "counts": {
+        ".gd": 9,
+        ".cs": 0,
+        ".rb": 0,
+        ".json": 0,
+        ".tres": 57
+      },
+      "top": [
+        ".gitattributes",
+        ".gitignore",
+        "LICENSE",
+        "README.md",
+        "data",
+        "icon.svg",
+        "icon.svg.import",
+        "main.tscn",
+        "project.godot"
+      ],
+      "checkout": "metadata_only_no_source_checkout",
+      "decision": "not_selected",
+      "reason": "MIT; esquemas de recursos, sin ejecutor amplio de movimientos."
+    }
+  ]
+}

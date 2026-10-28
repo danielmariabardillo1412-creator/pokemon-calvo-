@@ -41,6 +41,8 @@ static func build(
 	var skipped_no_moves := 0
 	var eligible_ids: Array[StringName] = []
 	for species_id in candidates:
+		if catalogs is DefinitionCatalog and catalogs.variants_enabled and not catalogs.variant_allowed_species.has(String(species_id)):
+			continue
 		var species = catalogs.species_catalog.get_by_id(species_id)
 		if species == null:
 			continue

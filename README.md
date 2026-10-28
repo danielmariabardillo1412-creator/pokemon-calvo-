@@ -1,3 +1,10 @@
+# Copia aislada — Arquitectura Kilo
+
+Ver `LEEME_KILO.md`. Original protegido: `D:/Proyectos/Pokemon Calvo`.
+Esta copia usa una rama y partidas propias. El encargo inicial está limitado al piloto HUD T001/T002.
+
+---
+
 # Pokémon Calvo
 
 Proyecto de fangame de criaturas en **Godot 4.7**. El repositorio contiene Battle Core determinista, progresión/captura/overworld, persistencia, inventario y una IA de entrenadores no neuronal con inferencia de información, búsqueda acotada, switching estratégico, objetos, loadouts, composición de equipos, estilos/expertise y persistencia de roster entre combates.

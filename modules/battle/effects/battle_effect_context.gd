@@ -10,6 +10,11 @@ var ruleset: BattleRuleset
 var rng: SeededRandomSource
 var events: Array[BattleEvent]
 var last_damage: int = 0
+var body_damage: int = 0
+var last_hit_substitute: bool = false
+var substitute_intercepted: bool = false
+var is_trigger: bool = false
+var substitute_block_reported: bool = false
 
 
 func _init(

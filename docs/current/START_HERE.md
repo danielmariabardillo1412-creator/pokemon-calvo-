@@ -1,3 +1,5 @@
+> COPIA DE ARQUITECTURA KILO: el encargo vigente empieza en `../../LEEME_KILO.md` y `../kilo/START_HERE.md`. Lo que sigue es contexto anterior; no ejecutar consolidaciones ni merges.
+
 # EMPEZAR AQUÍ
 
 ## Actualización operativa — 2026-10-18

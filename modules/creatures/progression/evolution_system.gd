@@ -129,6 +129,7 @@ static func apply_evolution(
 	new_creature.ivs = creature.ivs.duplicate()
 	new_creature.evs = creature.evs.duplicate()
 	new_creature.nature_id = creature.nature_id
+	new_creature.is_shiny = creature.is_shiny
 	new_creature.friendship = creature.friendship
 	new_creature.status_ids = creature.status_ids.duplicate()
 	new_creature.held_item_id = creature.held_item_id

@@ -1,0 +1,164 @@
+{
+  "captures": [
+    {
+      "path": ".godot/status_switch_checks/roar_back_native.png",
+      "sha256": "7fd6fb3e294554751d7a1ba16bb37247ff340777ed1a6622a1937c39e1f3ffee"
+    },
+    {
+      "path": ".godot/status_switch_checks/roar_front_native.png",
+      "sha256": "eba7d53ac61509498c4c0ce8c65e566c069bdb38371a7d4890ef73fb0dd32d83"
+    },
+    {
+      "path": ".godot/status_switch_checks/whirlwind_back_native.png",
+      "sha256": "a4ada5c3309483f84bea51e72da06cbdc84e46211f02874b86d5cbc7b0cf6e8c"
+    },
+    {
+      "path": ".godot/status_switch_checks/whirlwind_front_native.png",
+      "sha256": "121015f3eeec92253b7c0e66f5f7e6837e9046663f05d0fa1aad960079b6c263"
+    },
+    {
+      "path": ".godot/status_switch_checks/teleport_back_native.png",
+      "sha256": "34b210247e6eae10c67b8e069cb36fbcc3afcf48ab6e731e6bcc2a51cd3ea7a3"
+    },
+    {
+      "path": ".godot/status_switch_checks/teleport_front_native.png",
+      "sha256": "06088e3d4fba608be4e1dcf3224e5cae0464ff028ca1def2568b41e8ec7d2410"
+    },
+    {
+      "path": ".godot/status_switch_checks/baton_pass_back_native.png",
+      "sha256": "a8405dcb15b3b57dcd42e26b37d7fd8d41d6a56fdf4a3111021378d3a12f26a9"
+    },
+    {
+      "path": ".godot/status_switch_checks/baton_pass_front_native.png",
+      "sha256": "7737603f8b7f3c221f7b419ec04a52f14a85b2a58ab25cc9db519b6ed336dd10"
+    },
+    {
+      "path": ".godot/status_switch_checks/parting_shot_back_native.png",
+      "sha256": "6d04c1473559c90e71f223814ee00b4483f7618e08f9041fd5edd766479f2252"
+    },
+    {
+      "path": ".godot/status_switch_checks/parting_shot_front_native.png",
+      "sha256": "5beed19baa4e02db9c38a6c824b1d77a24aa435e25c38d7cd5848e4201d210a4"
+    },
+    {
+      "path": ".godot/status_switch_checks/roar_live.png",
+      "sha256": "1afeac4c9d757f00caeaa37c80ef5e3f498428107c3457971bddb613b332cb9a"
+    },
+    {
+      "path": ".godot/status_switch_checks/whirlwind_live.png",
+      "sha256": "0e9e50710661cd752d52c5ab27b2c91a0027c153dcfa7d3f6e8e1989a89a93ce"
+    },
+    {
+      "path": ".godot/status_switch_checks/teleport_live.png",
+      "sha256": "1e54dd59c48b7a3b62fbfb5cbb602a3b7502436860d7dc3129ea697b17d16ee3"
+    },
+    {
+      "path": ".godot/status_switch_checks/teleport_choice.png",
+      "sha256": "1c8e2fe7354606a1d90ff4ff9321df0b2c3a4214419d28c081350c7a05f199ac"
+    },
+    {
+      "path": ".godot/status_switch_checks/baton_pass_live.png",
+      "sha256": "5592fb1a5f89abf5d28c09b6695221c087a599650150e4d6a4885dc72bc2dd75"
+    },
+    {
+      "path": ".godot/status_switch_checks/baton_pass_choice.png",
+      "sha256": "8be24a935b55c73fc8201cb6f033727f7f6060fb92650ca9a1c505e659063bac"
+    },
+    {
+      "path": ".godot/status_switch_checks/parting_shot_live.png",
+      "sha256": "dfca6cc47b9f2b429eb25f57f78a09c1282f1ce326b3b27a5589efda1b080452"
+    },
+    {
+      "path": ".godot/status_switch_checks/parting_shot_choice.png",
+      "sha256": "7c4cca81c6de3de541d8554c10691b5a4c0daaf0820431c9fe907d76ffd1842f"
+    }
+  ],
+  "checks": 1326,
+  "errors": [],
+  "gpu": true,
+  "limitations": [
+    "Baton Pass transfers stages and the declared currently represented volatile subset, not every future volatile mechanic.",
+    "Prankster, ability suppression/Mold Breaker, Magic Coat, side shields and full Substitute/Dynamax interactions are not certified.",
+    "All 19 global handoffs remain open until production rollout/interactions are certified."
+  ],
+  "mechanics_added": [
+    "roar",
+    "whirlwind",
+    "teleport",
+    "baton_pass",
+    "parting_shot"
+  ],
+  "native_clip_ids": [
+    "roar/back",
+    "roar/front",
+    "whirlwind/back",
+    "whirlwind/front",
+    "teleport/back",
+    "teleport/front",
+    "baton_pass/back",
+    "baton_pass/front",
+    "parting_shot/back",
+    "parting_shot/front"
+  ],
+  "pack_sha256": "6e6255dee81de130110edb89c3fa8ca5b161ce72a05524d9d2b4e54bf41ffb81",
+  "remaining_unimplemented": [
+    "ally_switch",
+    "chilly_reception",
+    "hail",
+    "rain_dance",
+    "sandstorm",
+    "shed_tail",
+    "snowscape",
+    "substitute",
+    "transform"
+  ],
+  "scope": "Explicit singles pilot. Native sources unchanged. Core trainer format and both sides tested; full trainer UI/AI rollout remains pending.",
+  "source_sha256": {
+    ".godot/move_batch_catalog/index.json": "bb327ada0e33347980260a7e4a8af65e8622171002c64d3ecf56759aa92dbee1",
+    "data/normalized/pokemon_api.json": "719d14c082bdba03b26e801d23fb8887d0a0f4376348cf4a27e79a4b0a3c08b3",
+    "data/raw/pokemon_api.json": "2efc1538081e7849d6e04555570ca28c19b13f09f0fe0c7ce38329881972f24a",
+    "modules/battle/application/switch_move_rules.gd": "3df876d2f45a1488ae93f6e25bb7a45ce6976fdcf0e615de058eb74d1da400c9",
+    "modules/battle/application/turn_executor.gd": "b999bc1d658d240beed3e3e9b3ccb1169517a776b1feb2f7c9382aa8679f6789",
+    "modules/battle/domain/battle_event.gd": "580d8e4be2f131401c5bd5782dd0bf5145366b9567d3da4a5e63a01247773616",
+    "modules/battle/domain/battle_state.gd": "fad881dd887c4835237715d182ea361a9fa3970b54b041e016d9f119a3f87edf",
+    "modules/battle/server/authoritative_battle_server.gd": "fb7c9b2996b3368bf4fc9347539b73bfbada9e259a106fd4d0df85ac2c6a5168",
+    "modules/gameplay/wild_adventure_session.gd": "10be590803e6e6a3cfe43dcd2e8c7d3fa71fb7555b7e4632f0d8fedeec5aff11",
+    "scenes/visual/battle_animation_playback.gd": "ed425e3855a08e3e783f198791a127524f9840a7275731cc0ad724d40d261c91",
+    "scenes/visual/battle_status_switch_pilot.gd": "cb58bbcddfed3ad64cf92044bfcc39c397c7bd732404c50335c6e3810984a050",
+    "scenes/visual/battle_timeline_plan.gd": "3799d2aeabfd3f075c25a89febde6d455c2b9edf4febdab87697c085e8170c25",
+    "scenes/visual/community_move_preview.gd": "7674d3a61e113e085d12132a4e10461aedd3a760516ab68700f2868f0f3fd4de",
+    "scenes/visual/field_battle_presentation.gd": "a6adec5961bf54a10e700a5a5963687719584d07d52110e02ad6332d8c50ff10",
+    "scenes/visual/field_demo.gd": "d5e5ee9fa5edcbcb6c91b33f73496eb7bfc63353bc200adc5b8afe4ac57d55fe",
+    "tests/battle/status_switch_move_test_runner.gd": "b6f009674454acecf5e93c16240d436020ce28f9307d3069c7c061c9374e7bbd",
+    "tests/battle/switch_move_continuation_test_runner.gd": "03d54e67486d1b7787d1006504a3f0207d43a24929733227d8a9fcbad4652e22",
+    "tools/visual/build_status_switch_pilot.py": "ca637477b30986effc5992ed7b94f987656134608303b885426a0c881a9499e0"
+  },
+  "status": "SINGLES_STATUS_PILOT_VALIDATED_NOT_GLOBAL_ROLLOUT",
+  "validation_status": "PASS",
+  "test_report": ".godot\\status_switch_checks\\gpu.json",
+  "test_report_sha256": "84132c1601bf5711cfc5e315804e1d14c1b3d8188597a97896051095fb477ed5",
+  "production_rollout_complete": false,
+  "server_sample_count": 120,
+  "notes": [
+    "F8 explicitly enables five status-switch mechanics in wild singles. Trainer-format engine tests do not certify trainer UI/AI rollout.",
+    "Modern Teleport pivots an owned Pokemon even in wild encounters; only a wild user ends the encounter.",
+    "Baton Pass transfers stages before entry triggers and only the declared volatile subset; persistent status stays with its owner.",
+    "Whirlwind retains its already-selected GUST visual equivalent. No new image replacements or original PNG changes.",
+    "Exact integral JSON payload values are canonicalized only on enabled snapshots, preserving fractions and legacy disabled wire format."
+  ],
+  "references": [
+    "https://github.com/smogon/pokemon-showdown/blob/master/data/moves.ts",
+    "https://github.com/smogon/pokemon-showdown/blob/master/sim/pokemon.ts",
+    "https://bulbapedia.bulbagarden.net/wiki/Teleport"
+  ],
+  "contact_sheets": [
+    {
+      "path": ".godot\\status_switch_checks\\native_contact_sheet.png",
+      "sha256": "f938a6e15820edbc754bb016f6ea1670b0f459bda1418f7252fa5b3660d963d7"
+    },
+    {
+      "path": ".godot\\status_switch_checks\\live_contact_sheet.png",
+      "sha256": "1ec9c794488888b4db9c1c21056bd2e899f0398c6e6ed8d7c25e024adbc8b6dc"
+    }
+  ]
+}

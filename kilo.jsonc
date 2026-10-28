@@ -1,0 +1,37 @@
+{
+  "$schema": "https://app.kilo.ai/config.json",
+  "instructions": [
+    "AGENTS.md"
+  ],
+  "permission": {
+    "external_directory": "deny",
+    "task": "deny",
+    "webfetch": "deny",
+    "websearch": "deny",
+    "edit": {
+      "*": "deny",
+      "scenes/visual/field_demo.gd": "allow",
+      "scenes/visual/field_hud.gd": "allow",
+      "scenes/visual/field_hud.gd.uid": "allow",
+      "tests/gameplay/field_hud_contract_test_runner.gd": "allow",
+      "tests/gameplay/field_hud_contract_test_runner.gd.uid": "allow",
+      "docs/kilo/PROGRESS.md": "allow",
+      "docs/kilo/TASKS.json": "allow",
+      "docs/kilo/evidence/**": "allow"
+    },
+    "bash": {
+      "*": "deny",
+      "pwd": "allow",
+      "Get-Location": "allow",
+      "git status*": "allow",
+      "git diff*": "allow",
+      "git log*": "allow",
+      "git show*": "allow",
+      "git branch --show-current": "allow",
+      "python tools/architecture_handoff/guard.py*": "allow",
+      "python tools/architecture_handoff/run_checks.py --phase T001 --quick": "allow",
+      "python tools/architecture_handoff/run_checks.py --phase T002": "allow"
+    }
+  },
+  "share": "disabled"
+}

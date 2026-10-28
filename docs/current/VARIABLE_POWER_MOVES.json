@@ -1,0 +1,208 @@
+{
+  "captures": [
+    {
+      "path": ".godot/variable_power_checks/electro_ball_native.png",
+      "sha256": "5aa4092c566f941b6f37a5a6d3cf68564c2dab165b4848c6ef75f569f8d0ab21"
+    },
+    {
+      "path": ".godot/variable_power_checks/electro_ball_after.png",
+      "sha256": "92d3c272d7a2ee9a206c21d940eabc1fede58ce2cdd350e98b3789b356565729"
+    },
+    {
+      "path": ".godot/variable_power_checks/gyro_ball_native.png",
+      "sha256": "ff06c0a8a3a2d94893948b62372e01d26628e52b79e6ca350e9d46d4eaeca0c7"
+    },
+    {
+      "path": ".godot/variable_power_checks/gyro_ball_after.png",
+      "sha256": "6c7b30b00c3c337834c9cb1c9886129d91cbb85a49de0f012a64b8d18f1c7b44"
+    },
+    {
+      "path": ".godot/variable_power_checks/flail_native.png",
+      "sha256": "1095cafb0da78d779224e4fd6b484f93749f3155277702eaab2cc3c4c21c2193"
+    },
+    {
+      "path": ".godot/variable_power_checks/flail_after.png",
+      "sha256": "e85e4d632d46b541e6c740e998f99f028047fe3849889f4c4dc934249a9a8275"
+    },
+    {
+      "path": ".godot/variable_power_checks/reversal_native.png",
+      "sha256": "b95dbf33fd54d2552b7588ac50ba37082bafb054601fc7314c1f1451eba67666"
+    },
+    {
+      "path": ".godot/variable_power_checks/reversal_after.png",
+      "sha256": "607b1b73ee0f1fc72d5495f3cb294f79e178e4ac072194de90fbbcf688d43ab0"
+    },
+    {
+      "path": ".godot/variable_power_checks/crush_grip_native.png",
+      "sha256": "07980add7eb56fc0e1a4158d26af2bee14dc23019a48bfaea278157976df236f"
+    },
+    {
+      "path": ".godot/variable_power_checks/crush_grip_after.png",
+      "sha256": "5d22dc24f08075a2b7831a8fa571e1095333fc84301cd1141b092f13ed528568"
+    },
+    {
+      "path": ".godot/variable_power_checks/wring_out_native.png",
+      "sha256": "9d3cc07f908e14707161edeb3927c41f93c15f6af6e3fa3dd232a392e26e9b95"
+    },
+    {
+      "path": ".godot/variable_power_checks/wring_out_after.png",
+      "sha256": "4820326e87b4b029a81c7df76287e32a8eb5c032a01cdeb78af428383186c489"
+    },
+    {
+      "path": ".godot/variable_power_checks/hard_press_native.png",
+      "sha256": "8c2028498fff63c0731c6842f3ad49e7d09c2b7de7524b58cd0e7c09df13f393"
+    },
+    {
+      "path": ".godot/variable_power_checks/hard_press_after.png",
+      "sha256": "af85baace0e9a5cd2ad452b5fea70b016c2149c354ebfda70e2c7ee4045de5b5"
+    },
+    {
+      "path": ".godot/variable_power_checks/return_native.png",
+      "sha256": "8752fd820c0b1cb56d01efa561072e759351137e418053c24b6f6e3f367de446"
+    },
+    {
+      "path": ".godot/variable_power_checks/return_after.png",
+      "sha256": "6c452556ef49a0ad076764619b22b6cd48094daf868afd7078b6211d1bf46c20"
+    },
+    {
+      "path": ".godot/variable_power_checks/frustration_native.png",
+      "sha256": "d12cace73e3290f0e96b2c31fceeb408e64bbfba757302a549d92f4dfad42253"
+    },
+    {
+      "path": ".godot/variable_power_checks/frustration_after.png",
+      "sha256": "79cdcf64e6eccde6b815e9d762b261fd61118aaab30932cc1950e626eccd70d8"
+    },
+    {
+      "path": ".godot/variable_power_checks/trump_card_native.png",
+      "sha256": "2b2ea90d70b61831e7dc54861071ad364a29464fb492e3f7651d2cc2d0e705e8"
+    },
+    {
+      "path": ".godot/variable_power_checks/trump_card_after.png",
+      "sha256": "e47595cbc3d1e49e33824a32d9fb46fc375cf34a648b42e8cef6c1f573318a5a"
+    },
+    {
+      "path": ".godot/variable_power_checks/punishment_native.png",
+      "sha256": "d0713ec5bc5ac715acf4b498e8da0161f02a0c24e42030e94b131bd1012de7e1"
+    },
+    {
+      "path": ".godot/variable_power_checks/punishment_after.png",
+      "sha256": "3ccbad590fc805f65e4aeb06149827bd08077dfaa67036403bcfad4f0c3c3491"
+    }
+  ],
+  "cases": 264,
+  "checks": 1854,
+  "errors": [],
+  "gpu": true,
+  "moves": [
+    "electro_ball",
+    "gyro_ball",
+    "flail",
+    "reversal",
+    "crush_grip",
+    "wring_out",
+    "hard_press",
+    "return",
+    "frustration",
+    "trump_card",
+    "punishment"
+  ],
+  "source_sha256": {
+    ".godot/move_batch_catalog/index.json": "bb327ada0e33347980260a7e4a8af65e8622171002c64d3ecf56759aa92dbee1",
+    "data/normalized/pokemon_api.json": "719d14c082bdba03b26e801d23fb8887d0a0f4376348cf4a27e79a4b0a3c08b3",
+    "data/raw/pokemon_api.json": "2efc1538081e7849d6e04555570ca28c19b13f09f0fe0c7ce38329881972f24a",
+    "modules/battle/application/live_move_profile.gd": "cd895c83f0950f71f7d7cf48e5c6b0585630fde4e00984062fb0ac88f60b7909",
+    "modules/battle/application/turn_executor.gd": "860dd1395626f0e5b4d3a20c81fa009087873f07ff1c6b1d9db01e37d8b83bd2",
+    "modules/battle/application/variable_power_move_rules.gd": "103b1310490a15d3502d602affb7792b1eae7fe323bfb35c9269c0d0c44ac62a",
+    "modules/battle/domain/turn_resolver.gd": "38d8551721ddc54d310849a044307073da8f1e80bc97c33cd147207def47fbf7",
+    "modules/battle/effects/battle_effect_executor.gd": "1649ae1bcc05e0f2c3fbb2013481378e795e9fedd4a3d8b3d44dac1a0288c897",
+    "scenes/visual/community_move_preview.gd": "7674d3a61e113e085d12132a4e10461aedd3a760516ab68700f2868f0f3fd4de",
+    "tests/battle/variable_power_move_test_runner.gd": "175433af0c6e7ded79f8824030d4873ed8ac7356c7e32c4237a65d3c21d8fdfc"
+  },
+  "status": "LOCAL_VARIABLE_POWER_BATCH_VALIDATED",
+  "scope": "Live singles dynamic base power over frozen DATA V3",
+  "newly_admitted": [
+    "electro_ball",
+    "gyro_ball",
+    "flail",
+    "reversal",
+    "crush_grip",
+    "wring_out",
+    "hard_press",
+    "return",
+    "frustration",
+    "trump_card",
+    "punishment"
+  ],
+  "admitted_move_count_at_validation": 602,
+  "remaining_mechanics_count_at_validation": 248,
+  "external_reference_cases": 4950,
+  "external_variable_power_cases": 3018,
+  "self_tests": {
+    "status": "PASS",
+    "unit_tests": 30,
+    "real_adapter_negative_controls": 3
+  },
+  "regressions": {
+    "core": {
+      "passed": 472,
+      "failed": 0
+    },
+    "playback": {
+      "passed": 20809,
+      "failed": 0
+    },
+    "trainer_corpus": {
+      "passed": 628,
+      "failed": 0
+    },
+    "data_v3": {
+      "passed": 624,
+      "failed": 9,
+      "unchanged_known_failures": [
+        "data_v3_ability_contract_report_counts",
+        "data_v3_ability_contract_report_ids",
+        "data_v3_bad_dreams_source_contract",
+        "data_v3_end_to_end_shadow_exclusion_and_reports_frozen",
+        "data_v3_ice_body_source_contract",
+        "data_v3_merciless_source_contract",
+        "data_v3_rain_dish_source_contract",
+        "data_v3_rivalry_source_contract",
+        "data_v3_stakeout_source_contract"
+      ]
+    }
+  },
+  "protected_game_source_changes": [
+    "modules/battle/application/live_move_profile.gd",
+    "modules/battle/application/turn_executor.gd",
+    "modules/battle/application/variable_power_move_rules.gd",
+    "modules/battle/domain/turn_resolver.gd",
+    "modules/battle/effects/battle_effect_executor.gd"
+  ],
+  "evidence": {
+    ".godot/variable_power_checks/gpu.json": "abf90d1e455cd7188e909d40d4c8e24d7fe82ae33180264a18c2c42a632e7876",
+    ".godot/variable_power_checks/gpu.log": "7936d2be1524743b2d34defb24bf0d1b2b4c9c6a9e3e042ead5893d414e00ceb",
+    ".godot/variable_power_checks/core.log": "6a38a1e3bfdd2cd0b54df24edfa2a4577254b169d2718e3252f9734cf1f82f94",
+    ".godot/variable_power_checks/trainer.log": "f94f5561ad605956fb02c237c91a417861112a5b1738c431fea63d1563a3a5ce",
+    ".godot/variable_power_checks/playback.log": "a4ecb5dfc466963d823d3cb59b37d13699535e4817a47850577ec13b3a49fbb6",
+    ".godot/variable_power_checks/data_v3.log": "d64f159019cf24f9f3747ac83c44fdc2062d210be1dbb8383fd72eb29009da28",
+    ".godot/variable_power_checks/contact_native.png": "7023274808d80e93951d6a0989fdac1fc0c80d7653c544695fff8a3ef265edf5",
+    ".godot/variable_power_checks/contact_after.png": "af3f5aaaeddb71f8def24a48178ac2bba81dcc6d77434606304ac99053183e3c",
+    ".godot/battle_reference/latest/report.json": "57669c8f7c52427b756204871657efb351600b5d21e6535f356c8ceb5e7d8780",
+    ".godot/battle_reference/latest/manifest.json": "44851412bd8850cee1e22c2197298ed9b57e8161a02034d082a42c3b1a283016",
+    ".godot/battle_reference/latest/reference.json": "7dcf4d63a80969d2032d6e27302d54eb1c4e09a0f913e101b6c5edc692efdbad",
+    ".godot/battle_reference/latest/godot.json": "4dfed82fc84e687e7d32ed167cd1f9138cd93d302c8ecae0033db9faefbd1f94",
+    ".godot/battle_reference/latest/sources_before.json": "d395732fad498925e8924e4a96bf1b4999b847dbed774098f12c0260cfb1f5a4",
+    ".godot/battle_reference/negative_controls/checks.json": "4a38bf75a17a603a39897ad06b6577283ebee887c8766d95320b56821610a128",
+    ".godot/battle_reference/self_test.log": "0a326606d9169c0534274cef25f2a1c61c9935309caaa2fdd2f9bb12923ee22b"
+  },
+  "reference_definition_sha256": "79056d03912572ad0e4d86133ff0559f508a77bb13691ea60f0cddcff490b40a",
+  "visual_review": "Eleven existing native clips and after-playback states inspected in 22 GPU samples; actors and HUD restore.",
+  "speed_correction": "Live singles ordering and dynamic power share exact rational stage rounding, paralysis and 10000 speed cap. Legacy flag-off order/RNG remains unchanged.",
+  "limits": [
+    "Exact external base power/contact/hit/PP parity in listed contexts, not exact ordinary damage/critical/RNG parity.",
+    "Existing ability, held-item, protection, defender-KO retaliation and doubles limitations are unchanged; speed modifiers beyond the implemented status/stages remain pending.",
+    "Weight moves remain pending source-backed weight data. Move-calling mechanics and future dynamic-power families are not enabled.",
+    "No heuristic redesign for trainers, randomizer/learnset changes, canonical-data edits, new artwork, export or GitHub publication.",
+    "DATA V3 retains exactly nine preexisting failures."
+  ]
+}

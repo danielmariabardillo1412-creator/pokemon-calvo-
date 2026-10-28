@@ -1,0 +1,5 @@
+# Local development pack; do not publish third-party art automatically.
+/atlases/
+/manifest.json
+/presentation_metrics.json
+/scale_reference.json

@@ -1,0 +1,279 @@
+{
+  "status": "OPT_IN_MEDICINE_BAG_GROUP_VALIDATED",
+  "date": "2026-10-27",
+  "profile": {
+    "id": "calvo_medicine_modern_v1",
+    "items": {
+      "potion": {
+        "heal": 20
+      },
+      "super_potion": {
+        "heal": 60
+      },
+      "hyper_potion": {
+        "heal": 120
+      },
+      "max_potion": {
+        "heal": "full"
+      },
+      "full_restore": {
+        "heal": "full",
+        "cure": "all",
+        "confusion": true
+      },
+      "antidote": {
+        "cure": [
+          "psn",
+          "tox"
+        ]
+      },
+      "burn_heal": {
+        "cure": [
+          "brn"
+        ]
+      },
+      "ice_heal": {
+        "cure": [
+          "frz"
+        ]
+      },
+      "awakening": {
+        "cure": [
+          "slp"
+        ]
+      },
+      "paralyze_heal": {
+        "cure": [
+          "par"
+        ]
+      },
+      "full_heal": {
+        "cure": "all",
+        "confusion": true
+      },
+      "ether": {
+        "pp": 10,
+        "scope": "one"
+      },
+      "max_ether": {
+        "pp": "full",
+        "scope": "one"
+      },
+      "elixir": {
+        "pp": 10,
+        "scope": "all"
+      },
+      "max_elixir": {
+        "pp": "full",
+        "scope": "all"
+      }
+    }
+  },
+  "gameplay": {
+    "checks": 120,
+    "errors": [],
+    "items": [
+      "potion",
+      "super_potion",
+      "hyper_potion",
+      "max_potion",
+      "full_restore",
+      "antidote",
+      "burn_heal",
+      "ice_heal",
+      "awakening",
+      "paralyze_heal",
+      "full_heal",
+      "ether",
+      "max_ether",
+      "elixir",
+      "max_elixir"
+    ],
+    "status": "PASS"
+  },
+  "native": {
+    "status": "PASS",
+    "checks": [
+      {
+        "name": "medicine potion",
+        "status": "PASS"
+      },
+      {
+        "name": "medicine super_potion",
+        "status": "PASS"
+      },
+      {
+        "name": "medicine hyper_potion",
+        "status": "PASS"
+      },
+      {
+        "name": "medicine max_potion",
+        "status": "PASS"
+      },
+      {
+        "name": "medicine full_restore",
+        "status": "PASS"
+      },
+      {
+        "name": "medicine antidote",
+        "status": "PASS"
+      },
+      {
+        "name": "medicine burn_heal",
+        "status": "PASS"
+      },
+      {
+        "name": "medicine ice_heal",
+        "status": "PASS"
+      },
+      {
+        "name": "medicine awakening",
+        "status": "PASS"
+      },
+      {
+        "name": "medicine paralyze_heal",
+        "status": "PASS"
+      },
+      {
+        "name": "medicine full_heal",
+        "status": "PASS"
+      },
+      {
+        "name": "medicine ether",
+        "status": "PASS"
+      },
+      {
+        "name": "medicine max_ether",
+        "status": "PASS"
+      },
+      {
+        "name": "medicine elixir",
+        "status": "PASS"
+      },
+      {
+        "name": "medicine max_elixir",
+        "status": "PASS"
+      },
+      {
+        "name": "healing a reserve keeps its HP and identity private",
+        "status": "PASS"
+      },
+      {
+        "name": "full heal cures confusion even with no major status",
+        "status": "PASS"
+      },
+      {
+        "name": "invalid and ineffective items roll back native state and RNG",
+        "status": "PASS"
+      },
+      {
+        "name": "medicine cannot revive a KO",
+        "status": "PASS"
+      },
+      {
+        "name": "Embargo blocks bag medicine, Heal Block does not block a potion",
+        "status": "PASS"
+      },
+      {
+        "name": "saved continuation is deterministic across different wall-clock seconds",
+        "status": "PASS"
+      }
+    ]
+  },
+  "visual": {
+    "captures": [
+      {
+        "label": "bag",
+        "path": ".godot/showdown_medicine_checks/bag.png",
+        "sha256": "4873f76f681eb4d0991f7c64d283c0f253ccd1548491e4a26fba92367f5cdc7b"
+      },
+      {
+        "label": "potion",
+        "path": ".godot/showdown_medicine_checks/potion.png",
+        "sha256": "925994429a84dfe347b957e8fcd0cc0f48edf736e573ad2857498566c05adbc9"
+      },
+      {
+        "label": "ether_choice",
+        "path": ".godot/showdown_medicine_checks/ether_choice.png",
+        "sha256": "53a56e769ee28ccfbd84d70fa7c3118d092db089e3f5873e9d23a5c823adcde7"
+      },
+      {
+        "label": "ether_result",
+        "path": ".godot/showdown_medicine_checks/ether_result.png",
+        "sha256": "c7610a7cd2140d1b93e74aabf22cb8128ac1aac4e6bb7bc8b72d9eab0199bf35"
+      },
+      {
+        "label": "reserve_heal",
+        "path": ".godot/showdown_medicine_checks/reserve_heal.png",
+        "sha256": "25b5f2fe9a6a972102ff989253d8e17dfcb199e873a7b6f2eb2c74cc3a1024f4"
+      }
+    ],
+    "checks": 23,
+    "errors": [],
+    "status": "PASS"
+  },
+  "regressions": {
+    "adventure": 86,
+    "backend": 100,
+    "native_transactions": 10,
+    "native_reactions": 7
+  },
+  "legacy_production_sources_preserved": 233,
+  "baseline_files": 254,
+  "changed_baseline_files": [
+    "modules/battle/backends/showdown/event_adapter.gd",
+    "modules/battle/backends/showdown/native_engine.cjs",
+    "modules/battle/backends/showdown/showdown_backend.gd",
+    "modules/gameplay/showdown_adventure_session.gd",
+    "scenes/visual/showdown_adventure_lab.gd"
+  ],
+  "default_scene_changed": false,
+  "legacy_server_changed": false,
+  "data_or_art_changed": false,
+  "ai_changed": false,
+  "custom_randomlock_rules_implemented": false,
+  "save_v2_changed": false,
+  "github_published": false,
+  "image_substitutions": [],
+  "adventure_checkpoint_schema": 2,
+  "runtime": "Gen9 singles / @pkmn/sim 0.10.11",
+  "source_basis": "Existing BattleEffectRegistry heal values; local canonical cure/PP descriptions; local Essentials reference checked for modern amount/confusion/Embargo behavior. No Ruby code copied.",
+  "priority": "Finish basic Pokemon systems, retain basic NPC. Professional AI and custom rules later.",
+  "future_rules_recorded_not_implemented": [
+    "Four lives",
+    "Remove dead Pokemon instead of keeping fainted party members"
+  ],
+  "limits": [
+    "Other bag groups including Revive not connected",
+    "Out-of-battle item use pending",
+    "Default map/save owner not connected; launcher collection is in memory",
+    "Previous sleep-import/forms/substitute/combined Dynamax boundaries remain",
+    "Not a complete certification of all Pokemon systems"
+  ],
+  "sources_sha256": {
+    "modules/battle/backends/showdown/event_adapter.gd": "9f56f250e56944a352e6ec9545349f0cf3d6c6007a4f772dc609a2a755ef0e52",
+    "modules/battle/backends/showdown/native_engine.cjs": "eae580e4e9437b2618cbda2fc795c95f22599115e7d0dc04fd32bfcc5ae753d8",
+    "modules/battle/backends/showdown/showdown_backend.gd": "8f028e5ace821ddd4f4dce677d57d03f8a8968c68d23f3b1152464c38670acdd",
+    "modules/gameplay/showdown_adventure_session.gd": "4f645c49fd174b290693aa1a04c72864c1bc4f1f1d3096b35622551c72789bdb",
+    "scenes/visual/showdown_adventure_lab.gd": "7ba2f7bc1a7c6814e8af24035e8d16c1cc5fba2376660a10e77db0bc374ce1df",
+    "modules/inventory/battle_medicine_profile.gd": "909f0622e88001699b1cc7f00d975465fe437e946683b9acdf13ea807d5f08be",
+    "modules/inventory/battle_medicine_profile.json": "7442e0de21715f0ca46f318a0175c49163f3336b38617cbd814a4ba5d4d22c5c",
+    "tests/gameplay/showdown_medicine_test_runner.gd": "915ea56517901dc6eb33fd0d179cedec35f4ede46b66fd948c55ea8f7f775212",
+    "tests/gameplay/showdown_medicine_visual_test_runner.gd": "403847f25d36db720167c6a7e01275ca34287931a41ac2c830107930b2fe43fc",
+    "tools/showdown_engine_probe/medicine_tests.cjs": "f4284b199405d9f1ddcb1536b95ff948eec58ef02cdf73f97e6db7be93d05f20",
+    "tools/showdown_engine_probe/verify_medicines.py": "6767e4bda556b988597ab35fcb348fac5b4236f4d4a7fcf2703e061f3565fc90"
+  },
+  "evidence_sha256": {
+    ".godot/showdown_medicine_checks/before.json": "3db5005196e1cb7d13f59d4475095bbca67805b3c4678092e29f79b3ba94048a",
+    ".godot/showdown_medicine_checks/gameplay.json": "fa5fae98bfaad357426abe3d5cd7b998d9d08fe7ca4d093aa31fee4538aa4aec",
+    ".godot/showdown_medicine_checks/native.json": "c321e150380a7521b5d8af5ea5c868feaf1865a375091e76c51f13e3ca24ffa5",
+    ".godot/showdown_medicine_checks/visual.json": "f260ca84b4d7630b75707e81961975f7837e9131f1a22419140299b42694b9a8",
+    ".godot/showdown_medicine_checks/backend.json": "f4dd32364aa66ee41f1717e97b8cced4f09d6eb97f09f6e6854e68297c6f520b",
+    ".godot/showdown_medicine_checks/gameplay.log": "ccc7186a97d88119a172f3d8adca2bbb4be091c3f10c5fd804062bef070d36f2",
+    ".godot/showdown_medicine_checks/visual.log": "7e7ed1af195199c6d34e64b5bf068d7eba18bc8af8eaa6beef38ecb5fc2d139d",
+    ".godot/showdown_medicine_checks/adventure.log": "f1b9afdf930ee6f62e667cd89307d420b9a4a0dce6523118e46c62c5691af870",
+    ".godot/showdown_medicine_checks/backend.log": "f5c8578307b37747db02960afa521376ca18055a124764a5ccdecf2700a246e6",
+    ".godot/showdown_backend_checks/transactions.json": "da93fef88dd1820a3f1e81c21d6016b4e6bdd949f3bf424d57579fed50376727",
+    ".godot/showdown_adventure_checks/native.json": "43b28be6365719d8d525c8018fd40499958572f1cd8cc5053a90404ffdcb7cb1"
+  }
+}

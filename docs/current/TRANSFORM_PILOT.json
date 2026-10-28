@@ -1,0 +1,113 @@
+{
+  "captures": [
+    {
+      "path": ".godot/transform_checks/wailord_front_copied.png",
+      "sha256": "e518d9287a973f4393fcca90ba7ae2400b93c9ff38cb10422ccf2a13c272df45"
+    },
+    {
+      "path": ".godot/transform_checks/pikachu_front_copied.png",
+      "sha256": "e7ab3fef80c71a63c5a9326eca847d3bb30cc650df7858696676634da6bb9943"
+    },
+    {
+      "path": ".godot/transform_checks/charizard_front_copied.png",
+      "sha256": "fcae2a1cae12cd605e5cb9cb8637aea7ed5918d7e8d143417d35f2537ef7d705"
+    },
+    {
+      "path": ".godot/transform_checks/wailord_transition.png",
+      "sha256": "f55bcb78e2183f043be7fb98fcd50ca60b38a48216793d33ef7de82bb5fdea18"
+    },
+    {
+      "path": ".godot/transform_checks/wailord_back_copied.png",
+      "sha256": "369f064c243378743f245b373707ff539a34f92a882d8d0a9ead16bba26d48a4"
+    },
+    {
+      "path": ".godot/transform_checks/wailord_restored.png",
+      "sha256": "b55747530049241243621318f038ee98dd72bf840c44fe6af0ee0f6587ad1799"
+    },
+    {
+      "path": ".godot/transform_checks/pikachu_transition.png",
+      "sha256": "b24fb08a191c42721936500e6b9e15b153f582b8664eceace7edfb372b21f939"
+    },
+    {
+      "path": ".godot/transform_checks/pikachu_back_copied.png",
+      "sha256": "6fe7c4747c6a9103aa24c8ec07c2cf97f28b7a78ef7d1c91cbf7059505dc2c54"
+    },
+    {
+      "path": ".godot/transform_checks/pikachu_restored.png",
+      "sha256": "d180ba7b78b22418e780827b1f85ea65e14dafe5a49ab0e3c1135399937aad5e"
+    },
+    {
+      "path": ".godot/transform_checks/charizard_transition.png",
+      "sha256": "56d4c229556785b2b19c01ffa96155d66746035759e5f74b83aa12a3557de9e8"
+    },
+    {
+      "path": ".godot/transform_checks/charizard_back_copied.png",
+      "sha256": "434162dc3af5001347ddb439fa1b1a86d8480c60dc7744603a5557515da79323"
+    },
+    {
+      "path": ".godot/transform_checks/charizard_restored.png",
+      "sha256": "b3c79a343fe64e8daae60887037454e2e02781ba8b02b682ef94a91405406918"
+    }
+  ],
+  "checks": 1221,
+  "errors": [],
+  "gpu": true,
+  "limitations": [
+    "No Imposter automation or full ability-start lifecycle beyond represented ON_SWITCH_IN ability callbacks.",
+    "No certification of dynamic types/forms, Tera, Dynamax, Illusion or every move-specific exception.",
+    "Source clip contains body tracks, no particles. Appearance change uses the existing artwork and an adapted transition at frame 8/15."
+  ],
+  "pack_sha256": "b95085da594a3e6f2adc67c919c027a6f19608aa5174fa9b55798c9bd8ebad6d",
+  "references": [
+    "https://github.com/smogon/pokemon-showdown/blob/master/sim/pokemon.ts",
+    "https://github.com/smogon/pokemon-showdown/blob/master/data/moves.ts"
+  ],
+  "scope": "Explicit F11 modern singles Transform pilot; not a global/AI rollout",
+  "source_sha256": {
+    ".godot/move_batch_catalog/index.json": "bb327ada0e33347980260a7e4a8af65e8622171002c64d3ecf56759aa92dbee1",
+    "data/normalized/pokemon_api.json": "719d14c082bdba03b26e801d23fb8887d0a0f4376348cf4a27e79a4b0a3c08b3",
+    "data/raw/pokemon_api.json": "2efc1538081e7849d6e04555570ca28c19b13f09f0fe0c7ce38329881972f24a",
+    "modules/battle/application/transform_rules.gd": "d332cef34beb77fa24a516e70eb6cb295127bae856ca2919b1adb7f4b5342903",
+    "modules/battle/application/turn_executor.gd": "b999bc1d658d240beed3e3e9b3ccb1169517a776b1feb2f7c9382aa8679f6789",
+    "modules/battle/domain/battle_event.gd": "580d8e4be2f131401c5bd5782dd0bf5145366b9567d3da4a5e63a01247773616",
+    "modules/battle/domain/battle_outcome.gd": "d4902083e1cf65e1a3b8ddd0a819d0eafbd39869a593ee165fe11721ae96737a",
+    "modules/battle/domain/battle_state.gd": "fad881dd887c4835237715d182ea361a9fa3970b54b041e016d9f119a3f87edf",
+    "modules/battle/presentation/spanish_battle_presentation_controller.gd": "ac1ce4f12ace1d6634f6811b28152f48d4732da1fae7057de9006c80318f2f7c",
+    "modules/capture/capture_system.gd": "19290560f8a187414c9485ed5d3232f70425e8e60f8bac60326839f54d4bb424",
+    "modules/creatures/domain/creature_instance.gd": "b0c03db87396de5318f164353a2bef7fd41939356320354b65d2255cff1d7f8e",
+    "modules/gameplay/wild_adventure_session.gd": "10be590803e6e6a3cfe43dcd2e8c7d3fa71fb7555b7e4632f0d8fedeec5aff11",
+    "scenes/visual/battle_animation_playback.gd": "ed425e3855a08e3e783f198791a127524f9840a7275731cc0ad724d40d261c91",
+    "scenes/visual/battle_art.gd": "d557adc51893ae11eb8aff3211eaa4269431fbc68e4605954c858da3170722b6",
+    "scenes/visual/battle_timeline_plan.gd": "3799d2aeabfd3f075c25a89febde6d455c2b9edf4febdab87697c085e8170c25",
+    "scenes/visual/battle_transform_pilot.gd": "d11e3d57b43a93641ba4c7ada470359f58bf29b5e2b17c557d8bc1864ae8f2d5",
+    "scenes/visual/community_move_preview.gd": "7674d3a61e113e085d12132a4e10461aedd3a760516ab68700f2868f0f3fd4de",
+    "scenes/visual/field_battle_presentation.gd": "a6adec5961bf54a10e700a5a5963687719584d07d52110e02ad6332d8c50ff10",
+    "scenes/visual/field_demo.gd": "d5e5ee9fa5edcbcb6c91b33f73496eb7bfc63353bc200adc5b8afe4ac57d55fe",
+    "tests/battle/transform_pilot_test_runner.gd": "04406d4c66c5a2d752f2d3f9c18222aeb70426219d2d27e30a21cc7ef631711c",
+    "tools/visual/build_transform_pilot.py": "1f49996b375b3707bbfaf6d14c9ab33c1911168dae1a8c6aa01e8ff8e4a499a5"
+  },
+  "status": "SINGLES_TRANSFORM_PILOT_VALIDATED_NOT_GLOBAL_ROLLOUT",
+  "validation_status": "PASS",
+  "server_sample_count": 72,
+  "test_report": ".godot\\transform_checks\\gpu.json",
+  "test_report_sha256": "a085ee148eb82010bf594740c41e192aaf3f12168f9c0a3bc8371365e84339f9",
+  "mechanics_added": [
+    "transform"
+  ],
+  "remaining_unimplemented": [
+    "ally_switch"
+  ],
+  "production_rollout_complete": false,
+  "notes": [
+    "F11 cycles Ditto against Wailord, Pikachu and Charizard, with the previous switch/weather/substitute pilots enabled only in this disposable preset.",
+    "Copies current species/static typing, non-HP stats, stages, represented crit volatile, ability and moves. Copied PP are min(5, base PP), independent of target current PP.",
+    "Keeps own current/max HP, level, instance ID, progression, item and persistent status. Original move PP after paying Transform are restored on leaving.",
+    "Restore covers switch, KO, terminal battle, forced escape, session capture/run cleanup and post-battle reconciliation. Capture probability and XP identity use original species.",
+    "Three front-side projections and three real player encounters are captured. Actual wild-opponent Transform followed by capture and player Transform followed by run are also tested.",
+    "Source classification UNSUPPORTED and source artwork remain unchanged. There are no native particle cells in the original two clips; the appearance transition is an explicitly recorded adaptation."
+  ],
+  "contact_sheet": {
+    "path": ".godot\\transform_checks\\contact_sheet.png",
+    "sha256": "654a8abafe24f76df9217264bbc0759e2ddcfd1b39752f684b047b75ef0c7092"
+  }
+}

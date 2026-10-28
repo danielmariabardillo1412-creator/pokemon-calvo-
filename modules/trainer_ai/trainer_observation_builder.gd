@@ -26,6 +26,18 @@ static func build(
 	observation.battle_id = state.battle_id
 	observation.turn = state.turn
 	observation.phase = state.phase
+	if state.live_moves_enabled:
+		observation.public_battle_context = {"live_moves_enabled": true}
+		var bindings := {}
+		for id: StringName in state.active_ids:
+			var estimate: Dictionary = preload("res://modules/battle/application/binding_move_rules.gd").public_estimate(state, state.creature(id))
+			if not estimate.is_empty(): bindings[String(id)] = estimate
+		if not bindings.is_empty(): observation.public_battle_context["bindings"] = bindings
+		if not state.weather.is_empty():
+			# Weather is visible; hidden weather rocks and authoritative RNG are not.
+			observation.public_battle_context["weather"] = {"id": state.weather.get("id", ""),
+				"turns_remaining": maxi(1, 4 - (state.turn - int(state.weather.get("set_turn", state.turn)))),
+				"set_turn": int(state.weather.get("set_turn", state.turn))}
 	observation.observer_side_id = observer_side_id
 	observation.opponent_side_id = opponent_side.side_id
 	observation.own_active_id = own_side.active_id
@@ -37,7 +49,10 @@ static func build(
 	for creature_id in own_side.party_ids:
 		var creature := state.creature(creature_id)
 		if creature != null:
-			observation.own_party.append(_own_creature_view(creature, creature_id == own_side.active_id))
+			var own_view := _own_creature_view(creature, creature_id == own_side.active_id)
+			if state.live_moves_enabled and own_view.status_state.volatile.has("partial_trap"):
+				own_view.status_state.volatile["partial_trap"] = preload("res://modules/battle/application/binding_move_rules.gd").public_estimate(state, creature)
+			observation.own_party.append(own_view)
 
 	for creature_id in opponent_side.party_ids:
 		if creature_id != opponent_side.active_id and not memory.has_seen(creature_id):

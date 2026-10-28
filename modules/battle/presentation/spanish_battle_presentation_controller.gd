@@ -22,13 +22,13 @@ func _refresh_view() -> void:
 
 	_turn_label.text = "Combate terminado" if state.phase == BattleState.FINISHED else "Turno %d" % (state.turn + 1)
 	_player_label.text = "%s  Nv.%d   PS %d/%d" % [
-		SpanishGameText.species_name(player_creature.species_id, catalogs),
+		SpanishGameText.creature_name(player_creature, catalogs),
 		player_creature.level,
 		player_creature.current_hp,
 		player_creature.stats.max_hp,
 	]
 	_enemy_label.text = "Salvaje: %s  Nv.%d   PS %d/%d" % [
-		SpanishGameText.species_name(enemy_creature.species_id, catalogs),
+		SpanishGameText.creature_name(enemy_creature, catalogs),
 		enemy_creature.level,
 		enemy_creature.current_hp,
 		enemy_creature.stats.max_hp,
@@ -40,6 +40,7 @@ func _refresh_view() -> void:
 			continue
 		var move_id := moves[i]
 		var slot := player_creature.move_slot(move_id)
+		if slot == null and move_id == &"struggle" and state.live_moves_enabled: slot = BattleMoveSlot.new(&"struggle", 1, 1)
 		if slot != null:
 			_move_buttons[i].text = "%s  PP %d/%d" % [
 				SpanishGameText.move_name(move_id, catalogs),
@@ -57,11 +58,14 @@ func _refresh_view() -> void:
 			session.player.inventory.quantity(ball_id),
 		]
 
-	_refresh_switch_controls_es(state, state.phase == BattleState.WAITING_FOR_ACTIONS)
+	_refresh_switch_controls_es(state, state.phase == BattleState.WAITING_FOR_ACTIONS or (state.phase == BattleState.WAITING_FOR_SWITCH and state.pending_switch.get("side_id") == "side_a"))
 	_translate_control_tree(self)
 
 
 func _event_text(event: BattleEvent) -> String:
+	if event != null and session != null and session.live_moves_enabled:
+		var live_text := preload("res://modules/battle/presentation/live_move_event_text.gd").describe(event, _creature_label(event.actor_id), _creature_label(event.target_id), catalogs)
+		if not live_text.is_empty(): return live_text
 	if event == null:
 		return "Evento de combate desconocido."
 	match event.kind:
@@ -121,7 +125,7 @@ func _refresh_switch_controls_es(state: BattleState, waiting: bool) -> void:
 		if candidate == null:
 			continue
 		_switch_selector.add_item("%s Nv.%d  PS %d/%d" % [
-			SpanishGameText.species_name(candidate.species_id, catalogs),
+			SpanishGameText.creature_name(candidate, catalogs),
 			candidate.level,
 			candidate.current_hp,
 			candidate.stats.max_hp,
@@ -139,7 +143,7 @@ func _creature_label(instance_id: StringName) -> String:
 		if state != null:
 			var creature := state.creature(instance_id)
 			if creature != null:
-				return SpanishGameText.species_name(creature.species_id, catalogs)
+				return SpanishGameText.creature_name(creature, catalogs)
 	return String(instance_id).replace("_", " ").capitalize()
 
 

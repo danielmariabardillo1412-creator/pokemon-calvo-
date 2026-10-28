@@ -1,0 +1,99 @@
+{
+  "base_shiny_pairs": 1011,
+  "canonical_sha256": "719d14c082bdba03b26e801d23fb8887d0a0f4376348cf4a27e79a4b0a3c08b3",
+  "captures": [
+    {
+      "path": "res://.godot/pokemon_variant_checks/regional_shiny_battle.png",
+      "sha256": "73fa628e5f90c0549d0e30ca27af070862387f96286f19c0f9ae554f693f32eb"
+    },
+    {
+      "path": "res://.godot/pokemon_variant_checks/regional_shiny_after_attack.png",
+      "sha256": "9f51d322c4e2407144d221e856bacbccb21e52b459b888d51f78b65a9c655785"
+    },
+    {
+      "path": "res://.godot/pokemon_variant_checks/regional_shiny_gallery.png",
+      "sha256": "ca2b531474cb7cfdc5ba3435070d7575e009132500174ea84c7ac6ae2c24084d"
+    },
+    {
+      "path": "res://.godot/pokemon_variant_checks/regional_shiny_trainer.png",
+      "sha256": "6698da6f3eb71c39a080486d1fd092dda77dd3fdaaf829477aa35f290de9c156"
+    }
+  ],
+  "checks": 13807,
+  "errors": [],
+  "regional_forms": 57,
+  "regional_shiny_pairs": 57,
+  "sample_shiny_count": 8,
+  "status": "LOCAL_REGIONAL_AND_EXISTING_SHINY_INTEGRATION_VALIDATED",
+  "variant_manifest_sha256": "2c8517d0ae6f98b1c7624b39a57aa74d3190a452139bbcfd64e29d0993fff06d",
+  "visual_entries_validated": 1125,
+  "runtime_species": 1082,
+  "base_species": 1025,
+  "allowed_pool_species": 1076,
+  "shiny_odds_denominator": 4096,
+  "shiny_rng": "isolated deterministic cosmetic draw; mechanics RNG unchanged",
+  "source_sha256": {
+    "tools/visual/build_pokemon_variants.py": "82bdd43e74a3dd57c37226fe0686fc2c350910b9fd88fe5d556083a379d37157",
+    "tools/visual/summarize_pokemon_variants.py": "cd9189d80174d24a6c72d98db35424f849180c15a47db1dae34500dab97b4725",
+    "config/pokemon_variants_v1.json": "7bbb63d22caaee73c6f10cdcfe512bed44bcbbc0dba1229a58bf3439fe4534e2",
+    "modules/creatures/progression/pokemon_variant_catalog.gd": "a9079fe9d2cfae12b7ea0d03a1b3032f389cc3746c96e389a0d1ce9ec63aca13",
+    "modules/data/definition_catalog.gd": "725b2bedc6cfe4a1e40754b96b34e9c7dfb6d4460895dd211a3306b41e17dc01",
+    "modules/creatures/domain/creature_instance.gd": "bd48d7f1cd024966e3c300e5f1d23c54c76bc50cbe66cc2165f8d02ff8ab3fbc",
+    "modules/creatures/progression/creature_factory.gd": "6a360a83536966dfb4a7a2342709d60ec456b41b7c0271d4242ffe8cf0b7fada",
+    "modules/creatures/progression/evolution_system.gd": "27773903abc06f5157e96de96a7c0ece9dc25e7c1eea54583f9f91689b56f5ee",
+    "modules/battle/application/transform_rules.gd": "feb0ac2e1b36e95b38954df0ed9d8a634279cc54497a3f3f3ec53f6e111f84c4",
+    "modules/gameplay/wild_adventure_session.gd": "69cdf9bd0776728717e02979d3a905a92420622dc49d6cb6eee82340007ba24e",
+    "modules/debug/technical_encounter_pool_builder.gd": "36cfa363f48d641f24991eac4d0c530f87410cc3353e3f0de5314373d880517a",
+    "modules/localization/spanish_game_text.gd": "12d3bc830e10e716ffdf717079fd6c0b54d9d18e6ee61556cf7e47ce24c254b8",
+    "modules/battle/presentation/spanish_battle_presentation_controller.gd": "7f24a4c3bc715571d9ad69252b984242131ce91e210fa2b73ccca9c1ca01b048",
+    "modules/battle/presentation/trainer_battle_presentation_controller.gd": "f57e9e245e06ead291d0261cf3355dc739155ca30bdc905e2eaa593f1cf3d455",
+    "scenes/overworld/technical_overworld.gd": "cbf95329106645748e9955952d30c92bcd497a1c12725e5197f52621d749e064",
+    "scenes/debug/technical_test_panel.gd": "2c35b219d0069b13748b69ef1364feb56269a9bae83cbbf961471b956a7a90fb",
+    "scenes/visual/battle_sprite_catalog.gd": "379c4420ff082323a6ec74f026cc0d16e13cffc5182f957a5cc8a69da9af7dc6",
+    "scenes/visual/battle_animation_playback.gd": "3429cdffe0595d8b5dff4da4a8ef8a8ef1922572fd7d08bca3c61609d691fd18",
+    "scenes/visual/battle_timeline_plan.gd": "067ac8fe7703efb66f67586dddc65525c0efbe17fef6f910573e6e2ad7159fdd",
+    "scenes/visual/field_battle_presentation.gd": "c7ad339f85bb8626cdb176005ff4d38ab0039f41760253dc35a7cbfa2840a40c",
+    "scenes/visual/field_trainer_presentation.gd": "4dd3893c6814273e0642d08baa737ecece07c741793f9eb7116193c17cd4aae6",
+    "scenes/visual/pokemon_gallery.gd": "ad728722d2fb1e8b0236cbe032874c9b99253046e7daab78f89c5cffcd13df57",
+    "tests/gameplay/pokemon_variant_test_runner.gd": "a0af8c7ac797d7c7c927d9b5bacc69065ebbb57c3afd7710a713827505bd2866",
+    "tests/visual/catalog_integration_test_runner.gd": "7e7a4870990e11a20d285e935b6bb923286b48fcba37db58b1bd567c45387f6a",
+    "tests/visual/battle_sprite_layout_test_runner.gd": "bfefa3560264d22ab5d83dbceb65a9e2e8629c27ae3e8c1560a8d6fec99314bd",
+    "tests/visual/battle_animation_playback_test_runner.gd": "476d3b7d251b049bd2a3b5a6f1ecbff0fe959fe78f8d599829f095579aa093c7"
+  },
+  "build_evidence": ".godot/pokemon_variant_checks/build.json",
+  "gpu_evidence": ".godot/pokemon_variant_checks/gpu.json",
+  "atlas_files": 2250,
+  "frames": 127138,
+  "regression_pass_counts": {
+    "core_regression.log": 472,
+    "field_regression.log": 45,
+    "playback_regression.log": 20809,
+    "catalog_regression.log": 27329,
+    "layout_regression.log": 56274,
+    "transform_regression.log": 1208,
+    "trainer_regression.log": 628
+  },
+  "known_preexisting_data_failures": [
+    "data_v3_ability_contract_report_counts",
+    "data_v3_ability_contract_report_ids",
+    "data_v3_bad_dreams_source_contract",
+    "data_v3_end_to_end_shadow_exclusion_and_reports_frozen",
+    "data_v3_ice_body_source_contract",
+    "data_v3_merciless_source_contract",
+    "data_v3_rain_dish_source_contract",
+    "data_v3_rivalry_source_contract",
+    "data_v3_stakeout_source_contract"
+  ],
+  "pack_bytes": 252690077,
+  "canonical_and_base_pack_unchanged": true,
+  "scope": "57 ordinary regional forms, 1011 existing base shiny pairs, 57 existing regional shiny pairs; local game/gallery/capture/PC/save/evolution/Transform/trainer integration",
+  "limits": [
+    "No new shiny generated for the 14 custom normal candidates.",
+    "Six excluded base species remain in the art archive; they are filtered from ordinary game selection.",
+    "Regional species use their own snapshot types/stats/abilities/selected learnset, not a base-species skin.",
+    "A recorded ability is not a promise that all ability mechanics are supported.",
+    "Only explicitly regional evolution records are routed; friendship/time/location and other unsupported conditions remain blocked.",
+    "Other cosmetic/special forms, Mega/Gigantamax and dynamic form mechanics are not completed by this tranche.",
+    "Local third-party art caches are not packaged for distribution or uploaded to GitHub."
+  ]
+}

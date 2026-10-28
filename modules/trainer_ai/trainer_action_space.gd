@@ -27,7 +27,12 @@ static func from_server(
 	if opponent_side == null:
 		return out
 
+	if state.live_moves_enabled:
+		for id: StringName in preload("res://modules/battle/application/live_move_profile.gd").moves(actor, server._catalog):
+			var action := BattleAction.new(state.turn + 1, actor.instance_id, id, opponent.instance_id, BattleAction.MOVE, side_id)
+			if server.validate_reaction_action(action, opponent_side.side_id).is_empty(): out.append(action)
 	for slot in actor.moveset:
+		if state.live_moves_enabled: continue
 		var move_slot := slot as BattleMoveSlot
 		var move_action := BattleAction.new(
 			state.turn + 1,

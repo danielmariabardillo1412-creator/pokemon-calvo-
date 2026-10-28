@@ -56,6 +56,21 @@ func set_runtime_status(text_value: String) -> void:
 		_runtime_status.text = text_value
 
 
+## Restore the editor's preset without applying it or restarting the campaign.
+func restore_configuration(config: Dictionary) -> void:
+	for entry: Array in [["player_team", _player_species_inputs, _player_level_inputs], ["trainer_team", _trainer_species_inputs, _trainer_level_inputs]]:
+		_clear_team(entry[1], entry[2])
+		for i in mini(config[entry[0]].size(), entry[1].size()):
+			entry[1][i].text = String(config[entry[0]][i].species_id)
+			entry[2][i].value = int(config[entry[0]][i].level)
+	_wild_species_input.text = String(config.get("wild_species_id", ""))
+	for entry: Array in [["wild_min_level", _wild_min_level], ["wild_max_level", _wild_max_level], ["cave_min_level", _cave_min_level], ["cave_max_level", _cave_max_level], ["encounter_chance_percent", _encounter_chance]]:
+		entry[1].value = int(config[entry[0]])
+	for entry: Array in [["trainer_profile_id", _profile_selector], ["trainer_expertise_id", _expertise_selector]]:
+		for i in entry[1].item_count:
+			if String(entry[1].get_item_metadata(i)) == String(config.get(entry[0], "")): entry[1].select(i)
+
+
 func set_report_status(text_value: String) -> void:
 	if _report_status != null:
 		_report_status.text = text_value
@@ -138,6 +153,7 @@ func _build_config_panel() -> void:
 		+ "amarillo = edificio, negro = cueva y rosa = salto de barrera. "
 		+ "Deja Especie fija vacía para usar un pool aleatorio del catálogo real. "
 		+ "Hierba y cueva tienen niveles propios; el edificio no debe consumir tiradas."
+		+ " Regionales: usa IDs como vulpix_alola. Para un shiny de prueba en equipo o especie fija, añade __shiny."
 	)
 	hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	root.add_child(hint)

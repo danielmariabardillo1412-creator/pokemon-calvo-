@@ -29,6 +29,12 @@ var rename_failure_inject: Callable = Callable()
 
 
 func write_atomic(path: String, data: SaveGameData) -> SaveResult:
+	return write_atomic_dictionary(path, data.to_dict())
+
+
+## Application envelopes reuse the same last-known-good replacement contract.
+## Domain validation remains the caller's responsibility.
+func write_atomic_dictionary(path: String, data: Dictionary) -> SaveResult:
 	var res := SaveResult.new()
 	var tmp := path + TMP_SUFFIX
 	var bak := path + BAK_SUFFIX
@@ -38,7 +44,7 @@ func write_atomic(path: String, data: SaveGameData) -> SaveResult:
 	if f == null:
 		res.reason = "cannot_open_temp"
 		return res
-	f.store_string(JSON.stringify(data.to_dict()))
+	f.store_string(JSON.stringify(data))
 	f.close()
 
 	# 2. verify tmp is readable + parseable before we trust it
