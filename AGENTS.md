@@ -8,9 +8,10 @@ y solo la tarea vigente en `docs/kilo/TASKS.json`. Estas instrucciones describen
 esta copia. Los antiguos `docs/current/START_HERE.md` y documentos de arquitectura
 describen etapas anteriores; no autorizan merges, trabajo funcional ni borrados.
 
-Se permite un ejecutor en esta copia, sin agentes paralelos. El bloque inicial
-autorizado es T001 seguido de T002. T003–T006 son propuestas bloqueadas hasta
-revisión de Codex. Al finalizar T002, detenerse con estado READY_FOR_REVIEW.
+Se permite un ejecutor en esta copia, sin agentes paralelos. T001/T002 están
+aceptados en 866b009. El único bloque activo es T003, según su contrato en
+docs/kilo/tasks/T003_HUD_RENDER.md. T004–T006 siguen bloqueados. Al finalizar
+T003 y sus comprobaciones completas, detenerse con READY_FOR_REVIEW.
 
 Método: preparar pieza, comprobarla, documentarla, preparar conexión, comprobar
 conexión, activar. Cada cambio debe conservar el comportamiento. No inventar
@@ -25,9 +26,9 @@ No debilitar, eliminar ni saltar pruebas para conseguir PASS. No regenerar packs
 datasets o fixtures. No descargar bibliotecas ni visitar F: o Nova para resolver
 el encargo. Las dependencias necesarias ya están copiadas o documentadas.
 
-Los cambios autorizados de T001 están enumerados en su contrato. Ejecutar
-`python tools/architecture_handoff/run_checks.py --phase T001 --quick` y después
-el grupo completo de T002. No alterar el verificador, los sellos o la evidencia
+Los únicos cambios autorizados están enumerados en el contrato T003. Ejecutar
+`python tools/architecture_handoff/run_checks.py --phase T003 --quick` y después
+`python tools/architecture_handoff/run_checks.py --phase T003`. No alterar el verificador, los sellos o la evidencia
 baseline. Un fallo de comprobación no es un permiso para ampliar la lista.
 
 No usar `git reset --hard`, `git clean`, restauraciones masivas, rebase, merge o

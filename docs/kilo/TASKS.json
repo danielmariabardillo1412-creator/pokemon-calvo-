@@ -1,10 +1,9 @@
 {
-  "state": "PILOT_ACCEPTED_WAITING_NEXT_PLAN",
+  "state": "T003_READY",
   "authorized_now": [
-    "T001",
-    "T002"
+    "T003"
   ],
-  "stop_after": "T002",
+  "stop_after": "T003",
   "tasks": [
     {
       "id": "S0",
@@ -32,11 +31,11 @@
     },
     {
       "id": "T003",
-      "status": "BLOCKED_REVIEW",
+      "status": "READY",
       "depends_on": [
         "T002"
       ],
-      "plan": "docs/kilo/ROADMAP.md"
+      "plan": "docs/kilo/tasks/T003_HUD_RENDER.md"
     },
     {
       "id": "T004",
@@ -62,5 +61,6 @@
       ],
       "plan": "docs/kilo/ROADMAP.md"
     }
-  ]
+  ],
+  "accepted_checkpoint": "866b009bb2abde67014ffe6d0b4ad1dc3cc5e8b5"
 }

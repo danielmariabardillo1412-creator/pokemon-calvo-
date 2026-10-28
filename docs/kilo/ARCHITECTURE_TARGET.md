@@ -41,10 +41,10 @@ El objetivo es reducir conocimiento cruzado por etapas, sin cambiar reglas.
    qué dependencias se pueden retirar o aislar.
 6. Documentación vigente y puntos de entrada únicos para cada recorrido.
 
-Solo los puntos 1 y su verificación están autorizados en el piloto. Los demás
+Solo el punto 1 y su verificación están autorizados en T003. Los demás
 necesitan planos concretos nuevos tras revisar los cambios y sus dependencias.
 
-## Contrato exacto del piloto
+## Contrato histórico del piloto T001/T002 (aceptado)
 
 Crear `scenes/visual/field_hud.gd`, una vista que extiende Control. Su interfaz
 pública debe permitir construir los controles con Theme y un diccionario de
@@ -70,3 +70,11 @@ de dominio, guardado y pruebas existentes. Las dependencias de Node pueden estar
 fuera de res:// como ejecutable, pero el worker y su paquete deben cargar desde
 esta copia. No reinstalar ni actualizar paquetes. No borrar archivos por parecer
 antiguos, duplicados o desconectados sin un contrato posterior que lo autorice.
+
+## Contrato vigente T003
+
+El contrato anterior describe lo que ya quedó aceptado. Ahora se autoriza mover
+solo el formateo de `_refresh_hud` a FieldHud mediante datos simples, según
+`tasks/T003_HUD_RENDER.md`. Las consultas, los cálculos de encuentros y la
+traducción de especies siguen en field_demo. El resto del mapa propuesto espera
+otra revisión. No cambiar el constructor de controles ya aceptado.

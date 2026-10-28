@@ -3,8 +3,8 @@
   "original_root": "D:/Proyectos/Pokemon Calvo",
   "user_data_name": "Pokemon Calvo - Arquitectura Kilo",
   "authorized_tasks": [
-    "T001",
-    "T002"
+    "T003"
   ],
-  "scope": "HUD extraction pilot; stop for Codex review"
+  "scope": "HUD rendering from primitive snapshot; stop before T004 for Codex review",
+  "accepted_checkpoint": "866b009bb2abde67014ffe6d0b4ad1dc3cc5e8b5"
 }

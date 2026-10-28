@@ -1,4 +1,4 @@
-"""Read-only guard for the bounded HUD pilot. Never reads or writes the original."""
+"""Read-only guard for the bounded HUD render stage. Never reads or writes the original."""
 from pathlib import Path
 import argparse
 import hashlib
@@ -7,10 +7,10 @@ import subprocess
 
 ROOT = Path(__file__).resolve().parents[2]
 EXPECTED = Path('D:/Proyectos/Pokemon Calvo - Arquitectura Kilo')
-BASE = ROOT / 'docs/kilo/baseline'
+BASE = ROOT / 'docs/kilo/baseline/T003'
 MUTABLE = {'scenes/visual/field_demo.gd', 'scenes/visual/field_hud.gd',
-           'scenes/visual/field_hud.gd.uid', 'tests/gameplay/field_hud_contract_test_runner.gd',
-           'tests/gameplay/field_hud_contract_test_runner.gd.uid',
+           'tests/gameplay/field_hud_render_test_runner.gd',
+           'tests/gameplay/field_hud_render_test_runner.gd.uid',
            'docs/kilo/PROGRESS.md', 'docs/kilo/TASKS.json'}
 
 
@@ -31,7 +31,7 @@ def check_root():
 
 
 def allowed(path):
-    return path in MUTABLE or path.startswith('docs/kilo/evidence/')
+    return path in MUTABLE or (path.startswith('docs/kilo/evidence/T003/') or path.startswith('docs/kilo/evidence/T003_quick/'))
 
 
 def verify(full=False):
@@ -52,7 +52,7 @@ def verify(full=False):
                                  capture_output=True, text=True, check=True).stdout.splitlines()
         new = subprocess.run(['git', 'ls-files', '--others', '--exclude-standard'], cwd=ROOT,
                              capture_output=True, text=True, check=True).stdout.splitlines()
-        bad += [p + ': outside pilot scope' for p in changed + new if not allowed(p)]
+        bad += [p + ': outside T003 scope' for p in changed + new if not allowed(p)]
         assert subprocess.run(['git', 'remote'], cwd=ROOT, capture_output=True,
                               text=True, check=True).stdout.strip() == '', 'Unexpected remote'
     assert not bad, '\n'.join(bad[:30])

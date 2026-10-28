@@ -59,3 +59,15 @@ Los `.import` y caches regenerables no son reglas de juego ni están sellados.
 Una prueba que necesita otra dependencia queda BLOCKED con su motivo, nunca PASS.
 No regenerar recursos ni modificar el runner para salvarla. Guardar el error y
 pedir revisión mediante PROGRESS. No hacer cambios en el proyecto original.
+
+## T003 — fase vigente
+
+T001/T002 son historia aceptada; no volver a implementar sus contratos.
+Ejecutar `python tools/architecture_handoff/run_checks.py --phase T003 --quick`
+y después `python tools/architecture_handoff/run_checks.py --phase T003`.
+El runner exige el nuevo field_hud_render_test_runner.gd, conserva también los
+116 checks del contrato previo y todos los grupos completos/GPU de T002.
+Quick y completo escriben T003_quick y T003 separados. Los contadores deben ser
+reales; no se fija un número para el nuevo runner ni se autoriza reducir los previos.
+Finalizar con `python tools/architecture_handoff/guard.py --full`.
+El sello vigente está en baseline/T003; no regenerarlo. El anterior se preserva.

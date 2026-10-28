@@ -12,12 +12,11 @@
       "*": "deny",
       "scenes/visual/field_demo.gd": "allow",
       "scenes/visual/field_hud.gd": "allow",
-      "scenes/visual/field_hud.gd.uid": "allow",
-      "tests/gameplay/field_hud_contract_test_runner.gd": "allow",
-      "tests/gameplay/field_hud_contract_test_runner.gd.uid": "allow",
       "docs/kilo/PROGRESS.md": "allow",
       "docs/kilo/TASKS.json": "allow",
-      "docs/kilo/evidence/**": "allow"
+      "docs/kilo/evidence/**": "allow",
+      "tests/gameplay/field_hud_render_test_runner.gd": "allow",
+      "tests/gameplay/field_hud_render_test_runner.gd.uid": "allow"
     },
     "bash": {
       "*": "deny",
@@ -29,8 +28,8 @@
       "git show*": "allow",
       "git branch --show-current": "allow",
       "python tools/architecture_handoff/guard.py*": "allow",
-      "python tools/architecture_handoff/run_checks.py --phase T001 --quick": "allow",
-      "python tools/architecture_handoff/run_checks.py --phase T002": "allow"
+      "python tools/architecture_handoff/run_checks.py --phase T003 --quick": "allow",
+      "python tools/architecture_handoff/run_checks.py --phase T003": "allow"
     }
   },
   "share": "disabled"

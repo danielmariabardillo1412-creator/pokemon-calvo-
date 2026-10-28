@@ -1,21 +1,21 @@
-Trabaja SOLO en D:/Proyectos/Pokemon Calvo - Arquitectura Kilo.
-Es una copia aislada; no escribas en D:/Proyectos/Pokemon Calvo ni en otros proyectos.
+Continúa en D:\Proyectos\Pokemon Calvo - Arquitectura Kilo, rama codex/kilo-architecture-v1.
+T001/T002 ya han sido revisados y aceptados por Codex en 866b009. No los rehagas.
+Lee AGENTS.md, docs/kilo/START_HERE.md, TASKS.json y el contrato completo
+ docs/kilo/tasks/T003_HUD_RENDER.md, además de TEST_MATRIX.md y PROGRESS.md.
 
-Lee AGENTS.md, LEEME_KILO.md y docs/kilo/START_HERE.md. Comprueba ubicación,
-rama, baseline PASS, guard y estado de Git. Lee el mapa de arquitectura, la cola
-de tareas y el contrato T001. No te bases en el viejo START_HERE de docs/current.
+Ejecuta SOLO T003: separar el formateo del HUD usando una instantánea de datos
+simples. Las consultas y cálculos siguen en field_demo; FieldHud presenta los
+mismos textos. Conserva aspecto, avisos, alias y acciones, sin cambiar mecánicas.
+Añade el test nuevo indicado; no modifiques los 116 checks existentes ni los
+verificadores. Confirma la raíz, rama y guard antes de editar.
 
-Implementa T001 (extracción del constructor del HUD) mediante pasos pequeños:
-preparar, probar, documentar, conectar, comprobar y activar. Conserva aspecto,
-callbacks, alias y comportamiento. La vista nueva no puede conocer el mapa ni
-ser autoridad de estado. No modifiques reglas, datos, arte, motor o pruebas existentes.
+Trabaja por pasos: pieza aislada, prueba, conexión y regresión. Ejecuta:
+python tools/architecture_handoff/run_checks.py --phase T003 --quick
+python tools/architecture_handoff/run_checks.py --phase T003
+python tools/architecture_handoff/guard.py --full
 
-Cuando T001 pase, ejecuta T002 y sus pruebas completas. Puedes continuar entre
-pasos que pasen; no necesitas preguntar por decisiones rutinarias dentro del
-contrato. Si hay una dependencia fuera del alcance o dos intentos fallidos sin
-progreso, registra BLOCKED con un caso reproducible y detente.
-
-Al finalizar T002, entrega READY_FOR_REVIEW con diff, logs, comandos y capturas.
-No actives T003 ni otra reforma. No lances subagentes ni cambies modelo/proveedor.
-No hagas push, merge, reset --hard, clean o borrados. Se permiten commits locales
-por tarea que pase sus pruebas. Mantén actualizados PROGRESS.md y TASKS.json.
+Guarda evidencia y REVIEW.md en docs/kilo/evidence/T003, actualiza PROGRESS y
+TASKS con resultados reales. Un timeout queda pendiente, no PASS. Si necesitas
+salir del alcance o fallas dos veces sin progreso, entrega BLOCKED y explica.
+Si todo pasa, entrega READY_FOR_REVIEW y DETENTE antes de T004. No marques
+aceptación de Codex. No toques el original, no subas a GitHub ni uses otros agentes.

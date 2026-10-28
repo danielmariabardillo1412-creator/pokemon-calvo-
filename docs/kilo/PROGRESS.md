@@ -1,6 +1,6 @@
 # Progreso vigente — 2026-10-28
 
-Estado: **PILOT_ACCEPTED_WAITING_NEXT_PLAN**.
+Estado: **T003_READY**.
 
 S0: copia aislada y baseline de 11 grupos PASS. Rama codex/kilo-architecture-v1,
 sin remotos y con partidas separadas del original. Datos, recursos y packs se
@@ -19,6 +19,8 @@ verificados por hash; comparación baseline/candidato de 16 comprobaciones PASS
 y cero diferencias en las regiones capturadas del HUD. Ver evidence/T002/REVIEW.md
 y CODEX_REVIEW.json para alcance, hashes y límites.
 
-T001 y T002 quedan aceptados. T003–T006 siguen BLOCKED_REVIEW. No avanzar por
-iniciativa propia, mezclar con el original ni iniciar otra reforma. El siguiente
-paso es que Codex prepare y habilite el contrato del siguiente bloque.
+T001 y T002 aceptados en 866b009bb2abde67014ffe6d0b4ad1dc3cc5e8b5.
+Codex habilita T003 con contrato en tasks/T003_HUD_RENDER.md. Aún no implementado.
+T004–T006 siguen BLOCKED_REVIEW. Próximo ejecutor: Kilo, sin agentes paralelos.
+El guard vigente está sellado en baseline/T003, preservando el baseline anterior.
+No mezclar con el original. Al completar T003: READY_FOR_REVIEW y detenerse.

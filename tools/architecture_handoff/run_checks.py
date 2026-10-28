@@ -44,10 +44,11 @@ def command(args, logfile):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--phase', choices=['baseline', 'T001', 'T002'], required=True)
+    parser.add_argument('--phase', choices=['baseline', 'T001', 'T002', 'T003'], required=True)
     parser.add_argument('--quick', action='store_true')
     args = parser.parse_args(); guard.check_root()
-    out = ROOT / 'docs/kilo/evidence' / args.phase; out.mkdir(parents=True, exist_ok=True)
+    out_name = 'T003_quick' if args.phase == 'T003' and args.quick else args.phase
+    out = ROOT / 'docs/kilo/evidence' / out_name; out.mkdir(parents=True, exist_ok=True)
     results = []
     try:
         guard_before = guard.verify()
@@ -58,6 +59,9 @@ def main():
         if args.phase != 'baseline':
             assert (ROOT / 'tests/gameplay/field_hud_contract_test_runner.gd').exists(), 'Missing HUD contract test'
             groups = [('hud_contract', 'field_hud_contract_test_runner.gd', [])] + groups
+        if args.phase == 'T003':
+            assert (ROOT / 'tests/gameplay/field_hud_render_test_runner.gd').exists(), 'Missing T003 HUD render test'
+            groups = [('hud_render', 'field_hud_render_test_runner.gd', [])] + groups
         for name, script, extra in groups:
             print('ARCHITECTURE_CHECK', args.phase, name, flush=True)
             result = command([GODOT, '--headless', '--path', '.', '--script', 'tests/gameplay/' + script] + extra, out / (name + '.log'))

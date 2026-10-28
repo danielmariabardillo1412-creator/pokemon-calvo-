@@ -1,9 +1,10 @@
 # Etapas posteriores — requieren revisión y nuevos contratos
 
-Este mapa no autoriza implementar sus tareas. Solo T001/T002 están abiertos.
+T001/T002 aceptados. Solo T003 está abierto bajo su contrato específico.
+Este mapa no autoriza T004–T006.
 
 T003: separar formateo/renderizado del HUD a partir de una vista de datos
-explícita. Examinar las dependencias y resultados de T001 antes de concretarlo.
+explícita. Contrato ejecutable: tasks/T003_HUD_RENDER.md.
 
 T004: separar controles de diagnóstico y sus presets del flujo normal de la
 partida. Preservar el comportamiento explícito de reinicio de los ensayos y todas
