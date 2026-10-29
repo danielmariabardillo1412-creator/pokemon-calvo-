@@ -41,6 +41,14 @@ revertir a la primera normal; los vetos se conservan. Modo Daruma permanece como
 dependencia de formas, sin consumo; herencia de slots al evolucionar sigue
 separada: [ITEM_FIELD_V10.md](ITEM_FIELD_V10.md).
 
+V11 añade cinco bolas (Nido, Rapid, Ensueño, Sana y Honor), para nueve IDs de
+captura admitidos. 10.760 casos, 32.405 checks headless y 32.407 GPU; nueve grupos
+PASS. Selector nativo, consumo/RNG, fallos con restauración y cura/relojes de
+Sana verificados. Se cuentan aparte de los 69 efectos de campo. La probabilidad
+sigue siendo la aproximación del perfil calvo_capture_v1, sin certificar fórmula
+oficial completa, capturas críticas o penalización de Ultraentes:
+[ITEM_CAPTURE_V11.md](ITEM_CAPTURE_V11.md).
+
 Arte beta de objetos: [ITEM_ART_CURRENT_STATUS.json](ITEM_ART_CURRENT_STATUS.json).
 La presencia de una imagen no certifica su mecánica. Las revisiones artísticas y
 los cambios de aspecto anacrónico quedan separados de esta limpieza.

@@ -24,6 +24,8 @@ func _build_ui() -> void:
 	var capture_row := HBoxContainer.new(); right.add_child(capture_row)
 	_ball.reparent(capture_row); _master.reparent(capture_row); _flee.reparent(capture_row)
 	right.move_child(capture_row, 6)
+	right.move_child(_capture_balls, 6)
+	right.move_child(capture_row, 7)
 	_continue_button.text = "Volver al mapa"
 	_save.text = "Guardar partida"; _load.text = "Cargar partida"
 	for c: Node in _continue_button.get_parent().get_children():
@@ -42,6 +44,7 @@ func _refresh_view() -> void:
 	var locked: bool = _working or session.busy or _playback.is_playing()
 	var wild: bool = session.battle_kind == "wild"
 	_ball.visible = wild; _master.visible = wild; _flee.visible = wild
+	_capture_balls.visible = wild
 	_continue_button.text = "Volver al mapa"
 	_save.show(); _load.show()
 	_save.disabled = locked or owner_bridge == null

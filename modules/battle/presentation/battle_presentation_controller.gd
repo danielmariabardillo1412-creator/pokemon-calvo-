@@ -8,12 +8,7 @@ signal battle_closed(reason: StringName)
 # technical opponent policy for a legal response, submits through the application boundary, and
 # renders semantic results. Capture/Run rules and inventory mutation never live in this UI.
 
-const CAPTURE_BALL_ORDER := [
-	&"poke_ball",
-	&"great_ball",
-	&"ultra_ball",
-	&"master_ball",
-]
+var CAPTURE_BALL_ORDER := CaptureRuleset.ordered_ball_ids()
 
 var session: WildAdventureSession = null
 var catalogs: DefinitionCatalog = null

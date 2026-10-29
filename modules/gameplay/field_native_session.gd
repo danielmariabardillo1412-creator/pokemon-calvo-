@@ -51,8 +51,12 @@ func _finish(reason: String, bag: PlayerInventory, resolution: CaptureResolution
 	for side: Dictionary in _checkpoint.roster:
 		for row: Dictionary in side.pokemon:
 			var id := String(row.instance_id)
-			if player.owned_creature(StringName(id)) == null and (trainer_owner == null or trainer_owner.owned_creature(StringName(id)) == null): continue
-			if row.sleep_clock is Dictionary: native_sleep_clocks[id] = row.sleep_clock.duplicate(true)
+			var owned := player.owned_creature(StringName(id))
+			if owned == null and trainer_owner != null: owned = trainer_owner.owned_creature(StringName(id))
+			if owned == null: continue
+			# Capture-side effects (Heal Ball) publish after the native checkpoint.
+			# Keep clocks only for a creature that is STILL asleep after settlement.
+			if owned.status_state.persistent_id == &"sleep" and row.sleep_clock is Dictionary: native_sleep_clocks[id] = row.sleep_clock.duplicate(true)
 			else: native_sleep_clocks.erase(id)
 	_trainer_stamp = _trainer_fingerprint()
 	return result

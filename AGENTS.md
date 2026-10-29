@@ -12,6 +12,12 @@ al primer slot normal, vistas obsoletas rechazadas y guardado/combate verificado
 69 efectos de campo conectados; docs/current/ITEM_FIELD_V10.md conserva alcance y
 dependencias (Modo Daruma pendiente sin consumo, herencia evolutiva separada).
 V9 de caramelos, V8 de PP y V7 de EV siguen cubiertos por regresiones.
+V11 conecta Nido/Rapid/Ensueno/Sana/Honor Ball: nueve IDs de captura admitidos,
+selector nativo, curacion y relojes finales, guardado/restauracion verificados.
+Ver docs/current/ITEM_CAPTURE_V11.md: se conserva la formula simplificada de
+calvo_capture_v1, sin certificar fidelidad completa a Gen IX. Captura se cuenta
+aparte de los 69 efectos de campo. Las mentas siguen pendientes de una
+representacion persistente distinta de la naturaleza original; no falsearla.
 Antes de caramelos se corrigieron alias/divisor de las curvas XP; ver
 docs/current/PROGRESSION_GROWTH_CURVES_FIX.md. Reutilizar la progresion existente
 y su tabla contrastada; resolver decisiones de aprender/evolucionar antes de consumir.

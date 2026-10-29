@@ -14,10 +14,14 @@ Después se conectaron y verificaron Más PP/PP Máximos (V8); consultar
 [ITEM_SYSTEM_CURRENT_STATUS.json](ITEM_SYSTEM_CURRENT_STATUS.json) y su informe.
 V9 conecta los seis caramelos con decisiones de aprendizaje/evolución y consumo
 transaccional: [ITEM_FIELD_V9.md](ITEM_FIELD_V9.md).
-V10 conecta Cápsula/Parche Habilidad y es el último bloque:
+V10 conecta Cápsula/Parche Habilidad:
 [ITEM_FIELD_V10.md](ITEM_FIELD_V10.md). 5.092 casos de catálogo y mochila/guardado/
 combate nativo verificados; Modo Daruma queda pendiente sin consumo del Parche.
 OpenCode no llegó a iniciar O001; Codex lo terminó por instrucción del usuario.
+V11 es el último bloque: [ITEM_CAPTURE_V11.md](ITEM_CAPTURE_V11.md).
+Cinco bolas adicionales, nueve admitidas; 10.760 casos, guardado/restauración,
+selector del campo y cura de Sana verificados. Se conserva la fórmula aproximada
+calvo_capture_v1; no confundir ese perfil con una reproducción completa de Gen IX.
 La revisión previa a caramelos corrigió las curvas de experiencia; resultado y
 compatibilidad en [PROGRESSION_GROWTH_CURVES_FIX.md](PROGRESSION_GROWTH_CURVES_FIX.md).
 Auditoría de datos original/API y correcciones cerradas:

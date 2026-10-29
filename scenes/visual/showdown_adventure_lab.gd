@@ -3,8 +3,10 @@ extends "res://scenes/visual/showdown_battle_lab.gd"
 const Adventure = preload("res://modules/gameplay/showdown_adventure_session.gd")
 const NativeEvents = preload("res://modules/battle/backends/showdown/event_adapter.gd")
 const ItemArt = preload("res://scenes/visual/item_art_catalog.gd")
+const BallPicker = preload("res://scenes/visual/capture_ball_picker.gd")
 var player: PlayerCollection
 var _ball: Button
+var _capture_balls: OptionButton
 var _master: Button
 var _flee: Button
 var _collection_label: Label
@@ -36,6 +38,8 @@ func _build_ui() -> void:
 		if pressed: _dynamax_toggle.set_pressed_no_signal(false)
 		_refresh_view())
 	_build_medicine_bag()
+	_capture_balls = BallPicker.new(); parent.add_child(_capture_balls)
+	_capture_balls.item_selected.connect(func(_index): _refresh_view())
 	_ball = _button(parent, "Lanzar Poké Ball"); _ball.pressed.connect(func(): await adventure_command("ball"))
 	_master = _button(parent, "Lanzar Master Ball"); _master.pressed.connect(func(): await adventure_command("master"))
 	_ball.icon = ItemArt.texture(&"poke_ball"); _ball.add_theme_constant_override("icon_max_width", 24)
@@ -86,10 +90,14 @@ func _refresh_view() -> void:
 	if _ball == null or session == null or session.battle_state() == null: return
 	var locked: bool = _working or session.busy or _playback.is_playing()
 	var usable: bool = not locked and session.phase() == "move"
-	_ball.text = "Poké Ball · %d" % session.inventory.quantity(&"poke_ball")
+	var capturable: bool = usable and session.battle_kind == "wild"
+	_capture_balls.render_balls(session.inventory, catalogs, not capturable)
+	var selected: StringName = _capture_balls.selected_ball()
+	_ball.text = "%s · %d" % [SpanishGameText.item_name(selected, catalogs), session.inventory.quantity(selected)]
+	_ball.icon = ItemArt.texture(selected)
 	_master.text = "Master Ball · %d" % session.inventory.quantity(&"master_ball")
-	_ball.disabled = not usable or not session.inventory.has(&"poke_ball")
-	_master.disabled = not usable or not session.inventory.has(&"master_ball")
+	_ball.disabled = not capturable or not session.inventory.has(selected)
+	_master.disabled = not capturable or not session.inventory.has(&"master_ball")
 	_flee.disabled = not usable
 	_bag_button.disabled = not usable
 	var native: Dictionary = session.request().get("active", [{}])[0] if not session.request().get("active", []).is_empty() else {}
@@ -124,12 +132,14 @@ func _settle() -> void:
 
 func adventure_command(kind: String) -> Dictionary:
 	if _working or _playback.is_playing() or session == null: return {"accepted": false}
+	if kind not in ["ball", "master", "flee"]: return {"accepted": false, "error": "unknown_adventure_command"}
+	var ball_id: StringName = &"master_ball" if kind == "master" else _capture_balls.selected_ball()
 	_working = true
 	diagnostic_event.emit({"event": "command", "kind": "adventure"})
 	_refresh_view()
 	var result: Dictionary
 	if kind == "flee": result = await session.flee(session.revision)
-	else: result = await session.capture(&"master_ball" if kind == "master" else &"poke_ball", session.revision)
+	else: result = await session.capture(ball_id, session.revision)
 	if result.accepted:
 		var events: Array[BattleEvent] = []; events.assign(result.events)
 		_playback.note_event_messages(events)
