@@ -432,7 +432,7 @@ func apply_evolution_event(event: ProgressionEvent) -> CreatureInstance:
 		return null
 	var allowed := false
 	for candidate in EvolutionSystem.evolution_candidates(
-		species, {"level": current.level}, catalogs
+		species, EvolutionSystem.level_up_context(current), catalogs
 	):
 		if candidate is EvolutionRecord and candidate.species_id == requested_target:
 			allowed = true

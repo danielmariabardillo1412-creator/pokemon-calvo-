@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "canonical_sha256": "719d14c082bdba03b26e801d23fb8887d0a0f4376348cf4a27e79a4b0a3c08b3",
+  "canonical_sha256": "14cd97f59e0f68ff89acdd62e607f8dbff36c7562d001ce682869e0915181b2e",
   "asset_manifest_sha256": "2c8517d0ae6f98b1c7624b39a57aa74d3190a452139bbcfd64e29d0993fff06d",
   "shiny_odds_denominator": 4096,
   "regional_species": {
@@ -21814,7 +21814,7 @@
         "base_species_id": "lilligant",
         "regional_form": "hisui",
         "source_pokemon_id": 10237,
-        "source_sha256": "8aac71522c3c38ac03c6e1f3d963184c26e937d80b02381a703a2d77a81577ee",
+        "source_sha256": "68478720211044090dcf422ef0da95e1723c3a23bbd8618c511798760d423593",
         "learnset_version_group": "scarlet-violet",
         "learnset_selection_reason": "mainline_priority"
       },

@@ -61,7 +61,7 @@ static func gain_experience(
 					{"new_move_id": mid, "current_moves": creature.move_ids.duplicate()},
 				))
 
-	var candidates := EvolutionSystem.evolution_candidates(species, {"level": creature.level}, catalogs)
+	var candidates := EvolutionSystem.evolution_candidates(species, EvolutionSystem.level_up_context(creature), catalogs)
 	for rec in candidates:
 		events.append(ProgressionEvent.new(
 			ProgressionEvent.EVOLUTION_AVAILABLE, creature.instance_id,

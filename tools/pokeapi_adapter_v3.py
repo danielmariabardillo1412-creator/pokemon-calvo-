@@ -241,7 +241,10 @@ def evolution_record(target_name: str, detail: dict) -> dict:
         if key in skip:
             continue
         normalized = condition_value(value)
-        if normalized in (None, "", False, 0, [], {}):
+        # Numeric zero is meaningful (Tyrogue: Attack == Defense). Python's
+        # equality-based membership also treats 0 as False, so use identity for
+        # absent/boolean defaults instead of discarding numeric requirements.
+        if normalized is None or normalized is False or normalized == "" or normalized == [] or normalized == {}:
             continue
         conditions[key] = normalized
     record = {

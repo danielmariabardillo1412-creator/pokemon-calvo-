@@ -45,6 +45,12 @@ Antes de caramelos se corrigió la interpretación de dos nombres de curva XP y 
 divisor del tramo 69–98 de erratic. Las seis tablas completas coinciden con dos
 referencias independientes; 4.209 checks y regresiones PASS. No incorpora aún
 caramelos ni migra partidas antiguas: [PROGRESSION_GROWTH_CURVES_FIX.md](PROGRESSION_GROWTH_CURVES_FIX.md).
+La auditoría de fidelidad a PokéAPI revisó especies, regionales, aprendizaje,
+evoluciones y fichas de movimientos/habilidades/objetos. Se restauró la condición
+Ataque=Defensa de Tyrogue y se conectaron sus tres comparaciones al contexto real
+de progresión/validación del dueño. Procedencia de Lilligant de Hisui corregida;
+textos válidos por generación y duplicado API de Baya Hibis conservados.
+Alcance y pruebas: [POKEAPI_DATA_REPAIRS_V1.md](POKEAPI_DATA_REPAIRS_V1.md).
 Evidencia y límites por fase en los informes de objetos; no duplicar sus matrices.
 
 El comparador V1 terminó 135/135 casos: 86 puertas comunes PASS, 17 adicionales

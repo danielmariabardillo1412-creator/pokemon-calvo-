@@ -445379,7 +445379,10 @@
           "min_level": 20,
           "species_id": "hitmontop",
           "trigger": "level_up",
-          "version_group": "gold_silver"
+          "version_group": "gold_silver",
+          "conditions": {
+            "relative_physical_stats": 0
+          }
         }
       ],
       "growth_rate": "medium",

@@ -14,8 +14,9 @@ Después se conectaron y verificaron Más PP/PP Máximos (V8); consultar
 [ITEM_SYSTEM_CURRENT_STATUS.json](ITEM_SYSTEM_CURRENT_STATUS.json) y su informe.
 La revisión previa a caramelos corrigió las curvas de experiencia; resultado y
 compatibilidad en [PROGRESSION_GROWTH_CURVES_FIX.md](PROGRESSION_GROWTH_CURVES_FIX.md).
-Auditoría de datos original/API completada, con hallazgos pendientes de corregir:
-[POKEAPI_DATA_AUDIT_V1.md](POKEAPI_DATA_AUDIT_V1.md). Leer antes de ampliar progresión.
+Auditoría de datos original/API y correcciones cerradas:
+[POKEAPI_DATA_REPAIRS_V1.md](POKEAPI_DATA_REPAIRS_V1.md). Conserva las diferencias
+de versión válidas; la auditoría inicial sigue en POKEAPI_DATA_AUDIT_V1.md.
 
 Autoridad operativa: instrucciones humanas vigentes, código y pruebas sobre los
 bytes reales de esta copia, estado actual y contratos del dominio. Los informes

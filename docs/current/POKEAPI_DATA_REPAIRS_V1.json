@@ -1,0 +1,450 @@
+{
+  "status": "PASS_REVIEWED_DIFFERENCES",
+  "base": "680b655",
+  "groups": [
+    {
+      "status": "PASS",
+      "checks_reported": 0,
+      "errors": [],
+      "last_line": "[ DONE ] loading_editor_layout",
+      "group": "import",
+      "command": [
+        "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+        "--path",
+        "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+        "--headless",
+        "--editor",
+        "--import",
+        "--quit"
+      ],
+      "exit_code": 0,
+      "seconds": 5.98,
+      "terminated_after_script_error": false,
+      "expected_negative_diagnostics": [],
+      "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\pokeapi_repairs_v1\\runs\\1793295307582867500\\import.log",
+      "log_sha256": "10460b7ea9f3c81382fab0b1676d730be2bae922017704604420034c7bcf6ec2"
+    },
+    {
+      "status": "PASS",
+      "checks_reported": 58,
+      "errors": [],
+      "last_line": "POKEAPI_REPAIR_TEST PASS checks=58 errors=0",
+      "group": "repairs",
+      "command": [
+        "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+        "--path",
+        "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+        "--headless",
+        "--script",
+        "tests/gameplay/pokeapi_repairs_test_runner.gd"
+      ],
+      "exit_code": 0,
+      "seconds": 1.67,
+      "terminated_after_script_error": false,
+      "expected_negative_diagnostics": [],
+      "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\pokeapi_repairs_v1\\runs\\1793295307582867500\\repairs.log",
+      "log_sha256": "ce3e6c826787523f92a4ad661250e4b72cbddc5fb2b9606306b04b43c41bf199"
+    },
+    {
+      "status": "PASS",
+      "checks_reported": 472,
+      "errors": [],
+      "last_line": "=== PROJECT TEST RESULT: 472 PASS / 0 FAIL ===",
+      "group": "core",
+      "command": [
+        "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+        "--path",
+        "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+        "--headless",
+        "--script",
+        "tests/test_runner.gd"
+      ],
+      "exit_code": 0,
+      "seconds": 9.16,
+      "terminated_after_script_error": false,
+      "expected_negative_diagnostics": [
+        "ERROR: Parse JSON failed. Error at line 0: Expected key"
+      ],
+      "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\pokeapi_repairs_v1\\runs\\1793295307582867500\\core.log",
+      "log_sha256": "aa9de68f0c22929ceffa211b3a242db78885d34d92f9c3d971e6d9f31801cd99"
+    },
+    {
+      "status": "PASS",
+      "checks_reported": 4209,
+      "errors": [],
+      "last_line": "PROGRESSION_GROWTH_CURVES PASS checks=4209 failures=0",
+      "group": "growth",
+      "command": [
+        "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+        "--path",
+        "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+        "--headless",
+        "--script",
+        "tests/gameplay/progression_growth_curves_test_runner.gd"
+      ],
+      "exit_code": 0,
+      "seconds": 1.2,
+      "terminated_after_script_error": false,
+      "expected_negative_diagnostics": [],
+      "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\pokeapi_repairs_v1\\runs\\1793295307582867500\\growth.log",
+      "log_sha256": "89b96ebc4309d242d89b442232e2982d61e1dc6a19b54b6c0f07bb62777d98ee"
+    },
+    {
+      "status": "PASS",
+      "checks_reported": 13803,
+      "errors": [],
+      "last_line": "POKEMON_VARIANTS PASS checks=13803 captures=0 shiny_sample=8 errors=[]",
+      "group": "variants",
+      "command": [
+        "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+        "--path",
+        "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+        "--headless",
+        "--script",
+        "tests/gameplay/pokemon_variant_test_runner.gd",
+        "--",
+        "--legacy-field"
+      ],
+      "exit_code": 0,
+      "seconds": 19.27,
+      "terminated_after_script_error": false,
+      "expected_negative_diagnostics": [],
+      "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\pokeapi_repairs_v1\\runs\\1793295307582867500\\variants.log",
+      "log_sha256": "0d257adc5f13a82dfd6c04aeea9356670579bf2dce2de62f8a99e001e740c089"
+    },
+    {
+      "status": "PASS",
+      "checks_reported": 118,
+      "errors": [],
+      "last_line": "FIELD_NATIVE PASS checks=118 GPU=false errors=0",
+      "group": "native_field",
+      "command": [
+        "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+        "--path",
+        "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+        "--headless",
+        "--script",
+        "tests/gameplay/field_native_test_runner.gd"
+      ],
+      "exit_code": 0,
+      "seconds": 54.09,
+      "terminated_after_script_error": false,
+      "expected_negative_diagnostics": [],
+      "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\pokeapi_repairs_v1\\runs\\1793295307582867500\\native_field.log",
+      "log_sha256": "4532edaa65a10230fbf1101f37a4944f5c8487c3292fb8a6d48e1b391f3fb333"
+    },
+    {
+      "status": "PASS",
+      "checks_reported": 912,
+      "errors": [],
+      "last_line": "FIELD_RESTORE_INTEGRATION PASS checks=912 errors=0",
+      "group": "restore",
+      "command": [
+        "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+        "--path",
+        "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+        "--headless",
+        "--script",
+        "tests/gameplay/field_restore_integration_test_runner.gd"
+      ],
+      "exit_code": 0,
+      "seconds": 44.31,
+      "terminated_after_script_error": false,
+      "expected_negative_diagnostics": [],
+      "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\pokeapi_repairs_v1\\runs\\1793295307582867500\\restore.log",
+      "log_sha256": "b680833ccd3f8bdeff5c7b4503bff0c6063eb4adfa9db317e952ca3d48d46478"
+    },
+    {
+      "status": "PASS",
+      "checks_reported": 43588,
+      "errors": [],
+      "last_line": "ITEM_FIELD_V8 PASS checks=43588 contexts=336 catalog_cases=19872 GPU=false",
+      "group": "items",
+      "command": [
+        "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+        "--path",
+        "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+        "--headless",
+        "--script",
+        "tests/gameplay/item_field_pp_v8.gd"
+      ],
+      "exit_code": 0,
+      "seconds": 14.2,
+      "terminated_after_script_error": false,
+      "expected_negative_diagnostics": [],
+      "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\pokeapi_repairs_v1\\runs\\1793295307582867500\\items.log",
+      "log_sha256": "b6b16e1d8a11955ef30ad14af1c2360415c69d40f58fb105e36f41ebab3382bb"
+    }
+  ],
+  "integrity_before": {
+    "status": "PASS",
+    "base": "680b65535da8aa92040badd6e4dd5614caa0816a",
+    "protected_files": 22956,
+    "preserved_absent_skip_worktree": 15647,
+    "mode": "HASH_IF_METADATA_CHANGED",
+    "allowed_changes": [
+      "config/pokemon_variants_v1.json",
+      "data/normalized/pokemon_api.json",
+      "data/raw/pokemon_api.json",
+      "modules/creatures/progression/evolution_system.gd",
+      "modules/creatures/progression/progression_system.gd",
+      "modules/gameplay/wild_adventure_session.gd",
+      "tests/gameplay/pokeapi_repairs_test_runner.gd",
+      "tests/gameplay/pokeapi_repairs_test_runner.gd.uid",
+      "tools/pokeapi_adapter_v3.py",
+      "tools/verification/run_pokeapi_repairs.py",
+      "tools/verification/test_pokeapi_repairs.py"
+    ]
+  },
+  "exact_data_delta": "PASS: one evolution condition per catalog, two binding/provenance hashes",
+  "adapter_tests": {
+    "status": "PASS",
+    "command": [
+      "C:\\Users\\danie\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "tools/verification",
+      "-p",
+      "test_pokeapi_repairs.py",
+      "-v"
+    ],
+    "exit_code": 0,
+    "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\pokeapi_repairs_v1\\runs\\1793295307582867500\\adapter_tests.log",
+    "log_sha256": "ace33c6149aa54b535f873da49e951d431d35b70a64e4e488a02994a4f351875"
+  },
+  "integrity_after": {
+    "status": "PASS",
+    "base": "680b65535da8aa92040badd6e4dd5614caa0816a",
+    "protected_files": 22956,
+    "preserved_absent_skip_worktree": 15647,
+    "mode": "FULL_CONTENT_HASHES",
+    "allowed_changes": [
+      "config/pokemon_variants_v1.json",
+      "data/normalized/pokemon_api.json",
+      "data/raw/pokemon_api.json",
+      "modules/creatures/progression/evolution_system.gd",
+      "modules/creatures/progression/progression_system.gd",
+      "modules/gameplay/wild_adventure_session.gd",
+      "tests/gameplay/pokeapi_repairs_test_runner.gd",
+      "tests/gameplay/pokeapi_repairs_test_runner.gd.uid",
+      "tools/pokeapi_adapter_v3.py",
+      "tools/verification/run_pokeapi_repairs.py",
+      "tools/verification/test_pokeapi_repairs.py"
+    ]
+  },
+  "tested_sources_sha256": {
+    "config/pokemon_variants_v1.json": "4650c8d6c2d8bd0dd90db95cb78b5596a9a6ffd7693b006a6eb9a6fe929aa54c",
+    "data/normalized/pokemon_api.json": "14cd97f59e0f68ff89acdd62e607f8dbff36c7562d001ce682869e0915181b2e",
+    "data/raw/pokemon_api.json": "3660ede9f6b18d9668e2581f6e00f14443d86e81984dc8bb28d5111a28f2b26a",
+    "modules/creatures/progression/evolution_system.gd": "76180ba120a2bde22db7fe6c0e9643b7cf465bba27f06570ca0947447bea973c",
+    "modules/creatures/progression/progression_system.gd": "c95efa3ffd76ba1871f3b17a31f3e1a6b3d61953d221652fce2346b3562df263",
+    "modules/gameplay/wild_adventure_session.gd": "be8bfa7ce087e4fedb3550114fae4b445856474cb414775c420908cf32138cc0",
+    "tests/gameplay/pokeapi_repairs_test_runner.gd": "3673391adfb7e74d29b4aad0f99f7849f978be5da4c81e5de768badeb0aa3c7a",
+    "tests/gameplay/pokeapi_repairs_test_runner.gd.uid": "53d8bab299385ae11b4655ac248d3a0e965a016332bf8c68a73a989a31a5bc27",
+    "tools/pokeapi_adapter_v3.py": "73f2f492b4d9965542f2cdd83b69db64dabe308cfc91462e7a39140db0840495",
+    "tools/verification/run_pokeapi_repairs.py": "27abbd18648be745b952e7fe062ac03d0b4c9d1dc2cf240d347b4969c6844dd4",
+    "tools/verification/test_pokeapi_repairs.py": "abae1423fc4dc979db4ca8abd714d78c2d2ec2ca3c07d08d36ac942c0e475937"
+  },
+  "post_documentation_integrity": {
+    "status": "PASS",
+    "base": "680b65535da8aa92040badd6e4dd5614caa0816a",
+    "protected_files": 22956,
+    "preserved_absent_skip_worktree": 15647,
+    "mode": "FULL_CONTENT_HASHES",
+    "allowed_changes": [
+      "AGENTS.md",
+      "config/pokemon_variants_v1.json",
+      "data/normalized/pokemon_api.json",
+      "data/raw/pokemon_api.json",
+      "docs/current/POKEAPI_DATA_REPAIRS_V1.md",
+      "docs/current/PROJECT_STATE.md",
+      "docs/current/START_HERE.md",
+      "modules/creatures/progression/evolution_system.gd",
+      "modules/creatures/progression/progression_system.gd",
+      "modules/gameplay/wild_adventure_session.gd",
+      "tests/gameplay/pokeapi_repairs_test_runner.gd",
+      "tests/gameplay/pokeapi_repairs_test_runner.gd.uid",
+      "tools/pokeapi_adapter_v3.py",
+      "tools/verification/run_pokeapi_repairs.py",
+      "tools/verification/test_pokeapi_repairs.py"
+    ]
+  },
+  "post_fix_audit": {
+    "report": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\pokeapi_data_audit\\20261029T173235_386832Z\\report.json",
+    "sha256": "41ae270dcc9553afd7f1a7ae915ab20c93a7ad4d935ee7330fd4802282d380f2",
+    "status": "FINDINGS_REVIEW_REQUIRED",
+    "checks": 254610,
+    "finding_count": 14,
+    "all_remaining_findings_match_review": true,
+    "unreviewed_findings": 0,
+    "raw_to_normalized_differences": 0,
+    "source_integrity_differences": 0
+  },
+  "accepted_api_differences": [
+    {
+      "layer": "api_to_raw",
+      "section": "moves",
+      "record": "minimize",
+      "field": "effect_summary",
+      "kind": "VALUE_MISMATCH",
+      "expected": "Raises the user’s evasion by two stages.",
+      "actual": "Raises the user’s evasion by two stages and applies the Minimized state."
+    },
+    {
+      "layer": "api_to_raw",
+      "section": "moves",
+      "record": "sweet_scent",
+      "field": "effect_summary",
+      "kind": "VALUE_MISMATCH",
+      "expected": "Lowers the target’s evasion by one stage.",
+      "actual": "Lowers the target’s evasion by two stages."
+    },
+    {
+      "layer": "api_to_raw",
+      "section": "moves",
+      "record": "beat_up",
+      "field": "effect_summary",
+      "kind": "VALUE_MISMATCH",
+      "expected": "Hits once for every conscious Pokémon the trainer has.",
+      "actual": "Party-dependent multi-hit attack; fainted or statused party members do not contribute."
+    },
+    {
+      "layer": "api_to_raw",
+      "section": "moves",
+      "record": "stockpile",
+      "field": "effect_summary",
+      "kind": "VALUE_MISMATCH",
+      "expected": "Stores energy up to three times for use with Spit Up and Swallow.",
+      "actual": "Stores one Stockpile level (maximum three) and raises Defense and Special Defense by one stage; Spit Up or Swallow consume the stored levels and the associated Stockpile stat boosts."
+    },
+    {
+      "layer": "api_to_raw",
+      "section": "moves",
+      "record": "swallow",
+      "field": "effect_summary",
+      "kind": "VALUE_MISMATCH",
+      "expected": "Recovers 1/4 HP after one Stockpile, 1/2 HP after two Stockpiles, or full HP after three Stockpiles.",
+      "actual": "Consumes Stockpile: heals 25%/50%/100% at levels 1/2/3 and fails at level 0."
+    },
+    {
+      "layer": "api_to_raw",
+      "section": "moves",
+      "record": "autotomize",
+      "field": "effect_summary",
+      "kind": "VALUE_MISMATCH",
+      "expected": "Raises the user’s Speed by two stages and halves the user’s weight.",
+      "actual": "Raises the user’s Speed by two stages and lowers its weight by 100 kg."
+    },
+    {
+      "layer": "api_to_raw",
+      "section": "moves",
+      "record": "rototiller",
+      "field": "effect_summary",
+      "kind": "VALUE_MISMATCH",
+      "expected": "Raises the Attack and Special Attack of all Grass Pokémon in battle.",
+      "actual": "Raises Attack and Special Attack of eligible grounded Grass-type Pokémon; unavailable for selection from Generation VIII onward."
+    },
+    {
+      "layer": "api_to_raw",
+      "section": "moves",
+      "record": "flower_shield",
+      "field": "effect_summary",
+      "kind": "VALUE_MISMATCH",
+      "expected": "Raises the Defense of all Grass Pokémon in battle.",
+      "actual": "Raises Defense of eligible Grass-type Pokémon on the field; unavailable for selection in Generation IX."
+    },
+    {
+      "layer": "api_to_raw",
+      "section": "moves",
+      "record": "purify",
+      "field": "effect_summary",
+      "kind": "VALUE_MISMATCH",
+      "expected": "Cures the target of a major status ailment and heals the user for 50% of its max HP.",
+      "actual": "Cures the target's major status and heals the user by up to 50% only if the cure succeeds."
+    },
+    {
+      "layer": "api_to_raw",
+      "section": "moves",
+      "record": "extreme_evoboost",
+      "field": "effect_summary",
+      "kind": "VALUE_MISMATCH",
+      "expected": "Raises all of the user’s stats by two stages.",
+      "actual": "Eevee's exclusive Z-Move; raises five battle stats by two stages and is not normally selectable from Generation VIII onward."
+    },
+    {
+      "layer": "api_to_raw",
+      "section": "moves",
+      "record": "tidy_up",
+      "field": "effect_summary",
+      "kind": "VALUE_MISMATCH",
+      "expected": "",
+      "actual": "Raises Attack and Speed by one stage and clears hazards and Substitute from both sides."
+    },
+    {
+      "layer": "api_to_raw",
+      "section": "abilities",
+      "record": "tough_claws",
+      "field": "description",
+      "kind": "VALUE_MISMATCH",
+      "expected": "Strengthens moves that make contact to 1.33× their power.",
+      "actual": "Boosts the power of moves that make contact by 30%."
+    },
+    {
+      "layer": "api_to_raw",
+      "section": "abilities",
+      "record": "tough_claws",
+      "field": "effect_summary",
+      "kind": "VALUE_MISMATCH",
+      "expected": "Strengthens moves that make contact to 1.33× their power.",
+      "actual": "Boosts the power of moves that make contact by 30%."
+    },
+    {
+      "layer": "source_ambiguity",
+      "section": "items",
+      "record": "roseli_berry",
+      "field": "normalized_id",
+      "kind": "SOURCE_ID_COLLISION",
+      "expected": "one API record",
+      "actual": [
+        723,
+        2279
+      ]
+    }
+  ],
+  "source_review": {
+    "rationales_in": "docs/current/POKEAPI_DATA_REPAIRS_V1.md",
+    "references": {
+      "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\battle_reference\\runtime\\node_modules\\@pkmn\\sim\\build\\cjs\\data\\moves.js": "79056d03912572ad0e4d86133ff0559f508a77bb13691ea60f0cddcff490b40a",
+      "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\battle_reference\\runtime\\node_modules\\@pkmn\\sim\\build\\cjs\\data\\abilities.js": "f27465a9d9f5a3a00392248c0b5b5498ac2756f9207b2bae62644238aa6f0c7f",
+      "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\battle_reference\\runtime\\node_modules\\@pkmn\\sim\\build\\cjs\\data\\text\\moves.js": "a8118f1ecc42f6610c1b85adf80e5ccfbf727dd885a75ba6cc9bd99f1244b9cd",
+      "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\battle_reference\\runtime\\node_modules\\@pkmn\\sim\\build\\cjs\\data\\text\\abilities.js": "5a9666f06d82843d2c6704ac566ab3afcaf89477aa0299ebdef1b1862991de0b",
+      "D:\\Proyectos\\Pokemon Calvo Referencias\\fuentes\\pokemon-essentials\\Data\\Scripts\\010_Data\\001_Hardcoded data\\007_Evolution.rb": "dfd5e2d91f301b4be5928e34fbc07824c0db84a5e9c3bb5268d0f01525b6685e",
+      "D:\\Proyectos\\Pokemon Calvo Referencias\\fuentes\\pokeemerald-pp-reference\\731ad5bfd6e6f265508d0efcca0ba42f9dcf5881\\src\\pokemon.c": "3607b9aca9c3c02b3d0bbe0117fe00ac8a4f4baeca2161fdf19c56156f3434dd"
+    },
+    "showdown_review": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\pokeapi_repairs_v1\\reference_review\\showdown_review.json",
+    "showdown_review_sha256": "cc671f30c43b50ac00600c3a2a88920981cc6d19fdb99660fc179e22cf954a1b",
+    "source_version": "@pkmn/sim 0.10.11, Essentials 8c5911e, pokeemerald 731ad5b"
+  },
+  "before_fix": {
+    "adapter_tests": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\pokeapi_repairs_v1\\before_fix\\adapter_tests.log",
+    "adapter_exit_code": 1,
+    "failed_adapter_tests": 4,
+    "domain_results": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\pokeapi_repairs_v1\\before_fix_valid\\domain_results.json",
+    "domain_sha256": "c0a8d1f63cc708f67c719c3fdc60bcbf21ef09a1c3fe2d3f76d0b2d2923120bb",
+    "domain_checks": 58,
+    "failed_domain_checks": 21
+  },
+  "initial_invocation_failure": {
+    "results": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\pokeapi_repairs_v1\\runs\\1793295145363054500\\results.json",
+    "cause": "Legacy regional suite requires --legacy-field and its output directory before saving; initial failure retained. No game save code changed."
+  },
+  "limits": [
+    "No regeneration; one added condition in each canonical dataset and two regional binding/provenance hashes only.",
+    "No image, policy, native engine, RNG or save schema edits.",
+    "Existing native field saves bind the old data hash and require an explicit future migration; no default active campaign save found.",
+    "Previously unsupported conditions other than the stat comparison remain deferred.",
+    "Literal API comparison still reports reviewed text/source duplicate differences; no blanket suppression or claims of universal gameplay correctness."
+  ]
+}
