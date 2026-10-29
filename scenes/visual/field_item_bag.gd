@@ -151,6 +151,9 @@ func _refresh_choices() -> void:
 	elif _moves.visible:
 		var taught := service.machine_move(_selected_item())
 		_description.text = "Enseña: " + SpanishGameText.move_name(taught, definitions) if taught != &"" else "Esta máquina necesita una versión de reglas aún pendiente."
+	elif service.FieldEffects.Mochi.supports(_selected_item()):
+		_description.text = "Reinicia a cero todos los puntos de esfuerzo. La amistad no cambia." if _selected_item() == &"fresh_start_mochi" else "Aumenta hasta 10 puntos de esfuerzo de su estadística, respetando los límites. La amistad no cambia."
+		_description.text += " Se consume solo si tiene efecto."
 	elif service.FieldEffects.Training.supports(_selected_item()):
 		_description.text = "Aumenta los puntos de esfuerzo de una estadística y la amistad. Se consume solo si tiene efecto."
 	elif service.FieldEffects.BITTER_HERBS.has(String(_selected_item())):
@@ -189,6 +192,7 @@ func _apply(action: String) -> Dictionary:
 		if result.has("move_id"): _result.text = "¡Ha aprendido %s!" % SpanishGameText.move_name(StringName(result.move_id), definitions)
 		if result.has("boosted_move_id"): _result.text = "Los PP máximos de %s han aumentado a %d." % [SpanishGameText.move_name(StringName(result.boosted_move_id), definitions), result.new_max_pp]
 		if result.has("ability_id"): _result.text = "¡Su habilidad ahora es %s!" % _ability_name(StringName(result.ability_id), definitions)
+		if result.get("action") == "ev_reset": _result.text = "Se han reiniciado todos sus puntos de esfuerzo."
 	else:
 		if result.reason in ["item_has_no_effect", "move_slot_required", "unexpected_move_slot"]:
 			_result.text = {"item_has_no_effect": "No tendría efecto. El objeto se conserva.", "move_slot_required": "Elige el movimiento al que aplicar el objeto.", "unexpected_move_slot": "Este objeto no necesita seleccionar un movimiento."}[result.reason]

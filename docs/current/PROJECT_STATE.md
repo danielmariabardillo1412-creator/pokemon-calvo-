@@ -25,8 +25,8 @@ El barrido fresco del comparador V1 pasó en ambos juegos.
 
 Objetos: 2.222 IDs inventariados. Estado mecánico vigente:
 [ITEM_SYSTEM_CURRENT_STATUS.json](ITEM_SYSTEM_CURRENT_STATUS.json).
-Hay 69 efectos de campo conectados y con rutas verificadas (41 de recuperación y
-28 de entrenamiento: 18 EV/amistad base, 2 de mejoras de PP, 6 caramelos y 2 de habilidades),
+Hay 76 efectos de campo conectados y con rutas verificadas (41 de recuperación y
+35 de entrenamiento: 18 EV/amistad base, 2 de mejoras de PP, 6 caramelos, 2 de habilidades y 7 mochis EV),
 además de las conexiones y límites de equipados, evolución y máquinas registrados
 allí. No están certificados todos los efectos de todos los objetos.
 V9: 6.456 combinaciones especie/objeto y 252 contextos de propiedad/amistad;
@@ -55,6 +55,14 @@ nivel del activo se obtienen del dueño de combate y se reconstruyen al cargar.
 La reserva no concede bonus de Nivel sin entrar al campo. Las nueve bolas
 anteriores mantienen sus regresiones. Siguen siendo 69 los efectos de campo;
 misma aproximación de probabilidad: [ITEM_CAPTURE_V12.md](ITEM_CAPTURE_V12.md).
+
+V13: siete rutas de mochis (+10 EV o reinicio), 30.128 casos de catálogo y 756
+contextos de propiedad, 91.991 checks headless y 91.993 GPU; nueve grupos PASS.
+Mochila, guardado, restauración y combate posterior verificados. Amistad intacta
+según la referencia RHH; equivalencia de amistad con SV no certificada.
+Se detecta y reproduce una dependencia separada: Campana Alivio equipada impide
+iniciar nativo (`Unknown held item`). Servicio de campo conserva ese objeto;
+la prueba nativa de los mochis usa Restos. Detalle: [ITEM_MOCHI_V13.md](ITEM_MOCHI_V13.md).
 
 Arte beta de objetos: [ITEM_ART_CURRENT_STATUS.json](ITEM_ART_CURRENT_STATUS.json).
 La presencia de una imagen no certifica su mecánica. Las revisiones artísticas y

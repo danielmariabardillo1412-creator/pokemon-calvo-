@@ -22,9 +22,13 @@ V11: [ITEM_CAPTURE_V11.md](ITEM_CAPTURE_V11.md).
 Cinco bolas adicionales, nueve admitidas; 10.760 casos, guardado/restauración,
 selector del campo y cura de Sana verificados. Se conserva la fórmula aproximada
 calvo_capture_v1; no confundir ese perfil con una reproducción completa de Gen IX.
-Último bloque V12: [ITEM_CAPTURE_V12.md](ITEM_CAPTURE_V12.md). Veloz/Turno/Nivel
+V12: [ITEM_CAPTURE_V12.md](ITEM_CAPTURE_V12.md). Veloz/Turno/Nivel
 conectadas con turnos/nivel activo reales y restauración; doce bolas admitidas.
 19.368 casos y nueve grupos PASS. La fidelidad completa de captura sigue pendiente.
+Último bloque V13: [ITEM_MOCHI_V13.md](ITEM_MOCHI_V13.md). Siete rutas EV de mochis,
+30.128 casos y nueve grupos PASS; 76 efectos de campo conectados. Se conserva
+amistad según RHH, sin certificar paridad SV. Campana Alivio requiere conexión
+nativa propia; se documenta su rechazo y no se cuenta como soporte de combate.
 La revisión previa a caramelos corrigió las curvas de experiencia; resultado y
 compatibilidad en [PROGRESSION_GROWTH_CURVES_FIX.md](PROGRESSION_GROWTH_CURVES_FIX.md).
 Auditoría de datos original/API y correcciones cerradas:

@@ -1,8 +1,8 @@
 {
   "status": "IN_PROGRESS_CONNECTED_SLICE_VALIDATED",
   "date": "2026-10-29",
-  "latest_report": "docs/current/ITEM_CAPTURE_V12.json",
-  "notes": "docs/current/ITEM_CAPTURE_V12.md",
+  "latest_report": "docs/current/ITEM_MOCHI_V13.json",
+  "notes": "docs/current/ITEM_MOCHI_V13.md",
   "full_item_matrix": "docs/current/ITEM_FIELD_V8.csv.txt",
   "art_status": "docs/current/ITEM_ART_CURRENT_STATUS.json",
   "menu": "B - Mochila",
@@ -15,9 +15,11 @@
   "active_machine_version": "scarlet-violet",
   "legacy_machine_ids_need_profile": 109,
   "all_item_effects_certified": false,
-  "headless_checks": 58185,
-  "gpu_checks": 58187,
+  "headless_checks": 91991,
+  "gpu_checks": 91993,
   "next": [
+    "Native neutral representation of field held items: Soothe Bell rejects battle start with Unknown held item; do not discard or map to empty silently",
+    "Contrast official SV mochi friendship behavior; EV routes use pinned RHH friendship-unchanged profile, not full parity certification",
     "Capture V1 probability fidelity, critical captures and Ultra Beast treatment remain unimplemented; V11/V12 ball routes are verified within V1",
     "IV/nature item routes remain separate pending families",
     "Evolution ability-slot inheritance and automatic ability form routes (Zen Mode) remain pending",
@@ -27,20 +29,20 @@
     "Other capture balls needing map/history/current type/gender or origin metadata; legacy machines and Escape Rope/world systems"
   ],
   "source_data_and_policies_unchanged": true,
-  "latest_verification": "ITEM_CAPTURE_V12",
+  "latest_verification": "ITEM_MOCHI_V13",
   "held_item_ids_with_verified_effect_scenarios": 189,
   "untested_native_contexts": 323,
   "verification_all_effects_complete": false,
   "reviewed_held_and_berry_dependencies_pending": 41,
   "field_medicine_ids_verified": 15,
   "field_ev_berry_ids_verified": 6,
-  "latest_phase_checks_headless": 58185,
-  "latest_phase_checks_gpu": 58187,
+  "latest_phase_checks_headless": 91991,
+  "latest_phase_checks_gpu": 91993,
   "field_recovery_ids_verified": 41,
-  "total_connected_field_effect_ids": 69,
-  "field_training_ids_verified": 28,
+  "total_connected_field_effect_ids": 76,
+  "field_training_ids_verified": 35,
   "field_growth_ids_verified": 6,
-  "full_item_matrix_note": "V8 CSV is the immutable base; apply V9/V10 field overrides and separate V11 capture-item overrides from the current reports. Context-dependent routes remain deferred.",
+  "full_item_matrix_note": "V8 CSV is historical base; apply current V9/V10/V13 field overrides and separate V11/V12 capture overrides. Profile/dependency limits remain explicit.",
   "field_use_overrides": {
     "rare_candy": "FIELD_GROWTH_STAGED_DECISIONS_XP_CAP_HP_BASE_FRIENDSHIP_SAVE_NATIVE_VERIFIED_ORIGIN_BONUS_PENDING",
     "exp_candy_xs": "FIELD_GROWTH_STAGED_DECISIONS_XP_CAP_HP_BASE_FRIENDSHIP_SAVE_NATIVE_VERIFIED_ORIGIN_BONUS_PENDING",
@@ -49,7 +51,14 @@
     "exp_candy_l": "FIELD_GROWTH_STAGED_DECISIONS_XP_CAP_HP_BASE_FRIENDSHIP_SAVE_NATIVE_VERIFIED_ORIGIN_BONUS_PENDING",
     "exp_candy_xl": "FIELD_GROWTH_STAGED_DECISIONS_XP_CAP_HP_BASE_FRIENDSHIP_SAVE_NATIVE_VERIFIED_ORIGIN_BONUS_PENDING",
     "ability_capsule": "FIELD_ABILITY_TRANSACTION_POLICY_SAVE_NATIVE_VERIFIED_FORM_ROUTE_DEPENDENCY_EXPLICIT",
-    "ability_patch": "FIELD_ABILITY_TRANSACTION_POLICY_SAVE_NATIVE_VERIFIED_FORM_ROUTE_DEPENDENCY_EXPLICIT"
+    "ability_patch": "FIELD_ABILITY_TRANSACTION_POLICY_SAVE_NATIVE_VERIFIED_FORM_ROUTE_DEPENDENCY_EXPLICIT",
+    "health_mochi": "MOCHI_EV_ROUTE_OWNERSHIP_SAVE_NATIVE_VERIFIED_RHH_FRIENDSHIP_UNCHANGED_SV_PARITY_PENDING",
+    "muscle_mochi": "MOCHI_EV_ROUTE_OWNERSHIP_SAVE_NATIVE_VERIFIED_RHH_FRIENDSHIP_UNCHANGED_SV_PARITY_PENDING",
+    "resist_mochi": "MOCHI_EV_ROUTE_OWNERSHIP_SAVE_NATIVE_VERIFIED_RHH_FRIENDSHIP_UNCHANGED_SV_PARITY_PENDING",
+    "genius_mochi": "MOCHI_EV_ROUTE_OWNERSHIP_SAVE_NATIVE_VERIFIED_RHH_FRIENDSHIP_UNCHANGED_SV_PARITY_PENDING",
+    "clever_mochi": "MOCHI_EV_ROUTE_OWNERSHIP_SAVE_NATIVE_VERIFIED_RHH_FRIENDSHIP_UNCHANGED_SV_PARITY_PENDING",
+    "swift_mochi": "MOCHI_EV_ROUTE_OWNERSHIP_SAVE_NATIVE_VERIFIED_RHH_FRIENDSHIP_UNCHANGED_SV_PARITY_PENDING",
+    "fresh_start_mochi": "MOCHI_EV_ROUTE_OWNERSHIP_SAVE_NATIVE_VERIFIED_RHH_FRIENDSHIP_UNCHANGED_SV_PARITY_PENDING"
   },
   "field_ability_ids_with_verified_routes": 2,
   "capture_ball_ids_connected": 12,
@@ -68,5 +77,11 @@
   "capture_context_families_verified": [
     "completed_turns",
     "active_catcher_level"
+  ],
+  "field_mochi_ids_with_verified_ev_routes": 7,
+  "mochi_friendship_sv_parity_certified": false,
+  "mochi_friendship_current_change": 0,
+  "native_unmapped_field_held_items_pending": [
+    "soothe_bell"
   ]
 }

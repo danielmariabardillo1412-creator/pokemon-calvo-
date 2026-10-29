@@ -9,18 +9,23 @@ V9 validado: seis caramelos (raro y EXP XS/S/M/L/XL), candidato separado,
 decisiones explicitas en mochila, consumo al finalizar, guardado y combate nativo.
 V10 conecta Capsula/Parche Habilidad, con cambio moderno normal/oculta y regreso
 al primer slot normal, vistas obsoletas rechazadas y guardado/combate verificados.
-69 efectos de campo conectados; docs/current/ITEM_FIELD_V10.md conserva alcance y
+76 efectos de campo conectados tras V13; docs/current/ITEM_FIELD_V10.md conserva alcance y
 dependencias (Modo Daruma pendiente sin consumo, herencia evolutiva separada).
 V9 de caramelos, V8 de PP y V7 de EV siguen cubiertos por regresiones.
 V11 conecta Nido/Rapid/Ensueno/Sana/Honor Ball: nueve IDs de captura admitidos,
 selector nativo, curacion y relojes finales, guardado/restauracion verificados.
 Ver docs/current/ITEM_CAPTURE_V11.md: se conserva la formula simplificada de
 calvo_capture_v1, sin certificar fidelidad completa a Gen IX. Captura se cuenta
-aparte de los 69 efectos de campo. Las mentas siguen pendientes de una
+aparte de los efectos de campo. Las mentas siguen pendientes de una
 representacion persistente distinta de la naturaleza original; no falsearla.
 V12 conecta Veloz/Turno/Nivel Ball con contexto vivo de turnos y nivel activo:
 doce bolas admitidas. Cargar reconstruye el contexto; no hay contadores nuevos
 en el guardado. docs/current/ITEM_CAPTURE_V12.md registra las pruebas y limites.
+V13 conecta siete rutas EV de mochis, con perfil RHH que conserva amistad;
+paridad de amistad con SV pendiente de contraste, sin afirmar equivalencia total.
+Ver docs/current/ITEM_MOCHI_V13.md. Campana Alivio funciona en las pruebas de
+servicio, pero iniciar combate con ella equipada falla por Unknown held item;
+queda pendiente el puente nativo, sin borrar ni sustituir el objeto en silencio.
 Antes de caramelos se corrigieron alias/divisor de las curvas XP; ver
 docs/current/PROGRESSION_GROWTH_CURVES_FIX.md. Reutilizar la progresion existente
 y su tabla contrastada; resolver decisiones de aprender/evolucionar antes de consumir.

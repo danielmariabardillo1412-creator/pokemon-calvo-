@@ -37,6 +37,11 @@ V12 conecta Veloz/Turno/Nivel Ball: doce bolas admitidas; contexto real de turno
 y nivel activo, reconstruido tras guardar/cargar. Ver ITEM_CAPTURE_V12.md.
 No repetir estas conexiones. Otras bolas requieren ambiente, historial, tipos,
 género o metadatos de origen; no habilitarlas con contexto inventado.
+V13 conecta siete rutas EV de mochis: ver ITEM_MOCHI_V13.md. No repetir la
+conexión de EV; amistad conservada según RHH, pendiente de contraste con SV.
+Registrar como bloque propio el puente de equipados de campo: Campana Alivio
+se rechaza en inicio nativo por Unknown held item. No borrarla ni mapearla a
+objeto vacío para ocultar el problema. Las pruebas de mochila sí la conservan.
 Continuar objetos por familias aún pendientes: IV,
 naturalezas, condiciones de formas/evolución, bolas especiales y
 mundo. El estado de referencia es [ITEM_SYSTEM_CURRENT_STATUS.json](ITEM_SYSTEM_CURRENT_STATUS.json).
