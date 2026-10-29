@@ -34,10 +34,15 @@ Las rutas sin sistema disponible siguen pendientes; no simular consumos sin efec
 
 Para caramelos, reutilizar ProgressionSystem/ProgressionRuleset, LearnsetSystem y
 EvolutionSystem; contrastar los handlers y utilidades fijados de Essentials
-8c5911e. La base ya calcula experiencia/niveles y emite decisiones de movimientos
+8c5911e. Corregidos previamente los nombres de dos curvas y el divisor de erratic;
+evidencia y limites en [PROGRESSION_GROWTH_CURVES_FIX.md](PROGRESSION_GROWTH_CURVES_FIX.md).
+La base ya calcula experiencia/niveles y emite decisiones de movimientos
 y evolución. Aún no hay una vista de campo que resuelva esas decisiones: adaptar
 esa conexión sin aprender, sustituir o evolucionar silenciosamente por el jugador,
 sin duplicar las curvas y sin consumir un objeto mientras falte resolver su uso.
+Validar coherencia nivel/XP antes de usar caramelos y revisar compatibilidad de
+partidas importadas antiguas; no reescribir valores silenciosamente. Filtrar las
+nuevas opciones de movimiento/especie con la politica vigente, sin nuevos vetos.
 
 ## Revisión gráfica futura — iconos pequeños de Pokémon
 

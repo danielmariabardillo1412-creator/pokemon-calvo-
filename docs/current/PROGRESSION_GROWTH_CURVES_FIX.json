@@ -1,0 +1,369 @@
+{
+  "status": "PASS",
+  "scope": "PROGRESSION_GROWTH_CURVES_FIX",
+  "base": "52c37164",
+  "groups": [
+    {
+      "status": "PASS",
+      "checks_reported": 0,
+      "errors": [],
+      "last_line": "[ DONE ] loading_editor_layout",
+      "group": "import",
+      "command": [
+        "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+        "--path",
+        "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+        "--headless",
+        "--editor",
+        "--import",
+        "--quit"
+      ],
+      "exit_code": 0,
+      "seconds": 7.83,
+      "terminated_after_script_error": false,
+      "expected_negative_diagnostics": [],
+      "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\progression_growth_curves_audit\\runs\\1793292843924709500\\import.log",
+      "log_sha256": "dc731ca9bb4db7ab45a572eb66ca5776ee6c3f117ba8449c809977144723c5fb"
+    },
+    {
+      "status": "PASS",
+      "checks_reported": 4209,
+      "errors": [],
+      "last_line": "PROGRESSION_GROWTH_CURVES PASS checks=4209 failures=0",
+      "group": "growth_curves",
+      "command": [
+        "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+        "--path",
+        "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+        "--headless",
+        "--script",
+        "tests/gameplay/progression_growth_curves_test_runner.gd"
+      ],
+      "exit_code": 0,
+      "seconds": 1.23,
+      "terminated_after_script_error": false,
+      "expected_negative_diagnostics": [],
+      "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\progression_growth_curves_audit\\runs\\1793292843924709500\\growth_curves.log",
+      "log_sha256": "89b96ebc4309d242d89b442232e2982d61e1dc6a19b54b6c0f07bb62777d98ee"
+    },
+    {
+      "status": "PASS",
+      "checks_reported": 472,
+      "errors": [],
+      "last_line": "=== PROJECT TEST RESULT: 472 PASS / 0 FAIL ===",
+      "group": "core",
+      "command": [
+        "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+        "--path",
+        "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+        "--headless",
+        "--script",
+        "tests/test_runner.gd"
+      ],
+      "exit_code": 0,
+      "seconds": 9.33,
+      "terminated_after_script_error": false,
+      "expected_negative_diagnostics": [
+        "ERROR: Parse JSON failed. Error at line 0: Expected key"
+      ],
+      "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\progression_growth_curves_audit\\runs\\1793292843924709500\\core.log",
+      "log_sha256": "aa9de68f0c22929ceffa211b3a242db78885d34d92f9c3d971e6d9f31801cd99"
+    },
+    {
+      "status": "PASS",
+      "checks_reported": 118,
+      "errors": [],
+      "last_line": "FIELD_NATIVE PASS checks=118 GPU=false errors=0",
+      "group": "native_field",
+      "command": [
+        "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+        "--path",
+        "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+        "--headless",
+        "--script",
+        "tests/gameplay/field_native_test_runner.gd"
+      ],
+      "exit_code": 0,
+      "seconds": 55.25,
+      "terminated_after_script_error": false,
+      "expected_negative_diagnostics": [],
+      "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\progression_growth_curves_audit\\runs\\1793292843924709500\\native_field.log",
+      "log_sha256": "4532edaa65a10230fbf1101f37a4944f5c8487c3292fb8a6d48e1b391f3fb333"
+    },
+    {
+      "status": "PASS",
+      "checks_reported": 912,
+      "errors": [],
+      "last_line": "FIELD_RESTORE_INTEGRATION PASS checks=912 errors=0",
+      "group": "restore",
+      "command": [
+        "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+        "--path",
+        "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+        "--headless",
+        "--script",
+        "tests/gameplay/field_restore_integration_test_runner.gd"
+      ],
+      "exit_code": 0,
+      "seconds": 42.94,
+      "terminated_after_script_error": false,
+      "expected_negative_diagnostics": [],
+      "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\progression_growth_curves_audit\\runs\\1793292843924709500\\restore.log",
+      "log_sha256": "b680833ccd3f8bdeff5c7b4503bff0c6063eb4adfa9db317e952ca3d48d46478"
+    },
+    {
+      "status": "PASS",
+      "checks_reported": 43588,
+      "errors": [],
+      "last_line": "ITEM_FIELD_V8 PASS checks=43588 contexts=336 catalog_cases=19872 GPU=false",
+      "group": "pp_v8",
+      "command": [
+        "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+        "--path",
+        "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+        "--headless",
+        "--script",
+        "tests/gameplay/item_field_pp_v8.gd"
+      ],
+      "exit_code": 0,
+      "seconds": 14.03,
+      "terminated_after_script_error": false,
+      "expected_negative_diagnostics": [],
+      "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\progression_growth_curves_audit\\runs\\1793292843924709500\\pp_v8.log",
+      "log_sha256": "b6b16e1d8a11955ef30ad14af1c2360415c69d40f58fb105e36f41ebab3382bb"
+    },
+    {
+      "status": "PASS",
+      "checks_reported": 6990,
+      "errors": [],
+      "last_line": "ITEM_FIELD_V7 PASS checks=6990 cases=504 GPU=false",
+      "group": "training_v7",
+      "command": [
+        "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+        "--path",
+        "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+        "--headless",
+        "--script",
+        "tests/gameplay/item_field_training_v7.gd"
+      ],
+      "exit_code": 0,
+      "seconds": 9.61,
+      "terminated_after_script_error": false,
+      "expected_negative_diagnostics": [],
+      "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\progression_growth_curves_audit\\runs\\1793292843924709500\\training_v7.log",
+      "log_sha256": "240a74b91ec68c0a5ff1913ba32af1d602b686b99462713fe003b5128a839fc3"
+    },
+    {
+      "status": "PASS",
+      "checks_reported": 628,
+      "errors": [],
+      "last_line": "=== TRAINER EVALUATION CORPUS RESULT: 628 PASS / 0 FAIL ===",
+      "group": "trainer_corpus",
+      "command": [
+        "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+        "--path",
+        "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+        "--headless",
+        "--script",
+        "tests/trainer_ai/trainer_evaluation_corpus_test_runner.gd"
+      ],
+      "exit_code": 0,
+      "seconds": 32.56,
+      "terminated_after_script_error": false,
+      "expected_negative_diagnostics": [],
+      "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\progression_growth_curves_audit\\runs\\1793292843924709500\\trainer_corpus.log",
+      "log_sha256": "a9ed0488beff5a64079a9592bcc20a0a42065ddb5d1c81222433267ad6b861de"
+    },
+    {
+      "status": "PASS",
+      "checks_reported": 43590,
+      "errors": [],
+      "last_line": "ITEM_FIELD_V8 PASS checks=43590 contexts=336 catalog_cases=19872 GPU=true",
+      "group": "pp_v8_gpu",
+      "command": [
+        "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+        "--path",
+        "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+        "--resolution",
+        "1280x720",
+        "--script",
+        "tests/gameplay/item_field_pp_v8.gd",
+        "--",
+        "--capture"
+      ],
+      "exit_code": 0,
+      "seconds": 15.91,
+      "terminated_after_script_error": false,
+      "expected_negative_diagnostics": [],
+      "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\progression_growth_curves_audit\\runs\\1793292843924709500\\pp_v8_gpu.log",
+      "log_sha256": "d83fd65e2c5777a5b1f7322d2c3c36e0040cc8ea4be4acafb6afbd2f22dcc831"
+    }
+  ],
+  "reference": {
+    "status": "PASS",
+    "values": 600,
+    "canonical_curves": 6,
+    "source_git_checkpoint": "52c3716458e11e7a9c2a6fd6e62a11f4686e3305",
+    "community_commit": "8c5911e4a4b07b07e832e4bb0d5d8859e88b4a9b",
+    "reference_sha256": "a00bbfccd3d1a42c4c7a32ac3a02fbeda60875a69d528dcc54703e3cce5fad35"
+  },
+  "integrity_before": {
+    "status": "PASS",
+    "base": "52c3716458e11e7a9c2a6fd6e62a11f4686e3305",
+    "protected_files": 22949,
+    "preserved_absent_skip_worktree": 15647,
+    "mode": "HASH_IF_METADATA_CHANGED",
+    "allowed_changes": [
+      "modules/creatures/progression/progression_ruleset.gd",
+      "tests/fixtures/progression_growth_curves/reference_contract.json",
+      "tests/gameplay/progression_growth_curves_test_runner.gd",
+      "tools/verification/local_phase.py",
+      "tools/verification/run_growth_curves.py"
+    ]
+  },
+  "integrity_after": {
+    "status": "PASS",
+    "base": "52c3716458e11e7a9c2a6fd6e62a11f4686e3305",
+    "protected_files": 22949,
+    "preserved_absent_skip_worktree": 15647,
+    "mode": "FULL_CONTENT_HASHES",
+    "allowed_changes": [
+      "docs/current/PROGRESSION_GROWTH_CURVES_FIX.md",
+      "modules/creatures/progression/progression_ruleset.gd",
+      "tests/fixtures/progression_growth_curves/reference_contract.json",
+      "tests/gameplay/progression_growth_curves_test_runner.gd",
+      "tests/gameplay/progression_growth_curves_test_runner.gd.uid",
+      "tools/verification/local_phase.py",
+      "tools/verification/run_growth_curves.py"
+    ]
+  },
+  "growth_result": {
+    "affected_species": 43,
+    "checks": 4209,
+    "curves": [
+      {
+        "max_exp": 1250000.0,
+        "name": "slow"
+      },
+      {
+        "max_exp": 1000000.0,
+        "name": "medium"
+      },
+      {
+        "max_exp": 800000.0,
+        "name": "fast"
+      },
+      {
+        "max_exp": 1059860.0,
+        "name": "medium-slow"
+      },
+      {
+        "max_exp": 600000.0,
+        "name": "slow-then-very-fast"
+      },
+      {
+        "max_exp": 600000.0,
+        "name": "erratic"
+      },
+      {
+        "max_exp": 1640000.0,
+        "name": "fast-then-very-slow"
+      },
+      {
+        "max_exp": 1640000.0,
+        "name": "fluctuating"
+      }
+    ],
+    "errors": [],
+    "reference_sha256": "a00bbfccd3d1a42c4c7a32ac3a02fbeda60875a69d528dcc54703e3cce5fad35",
+    "status": "PASS"
+  },
+  "sources_sha256": {
+    "modules/creatures/progression/progression_ruleset.gd": "b31ce20ea4defbae014bc8d1cc104692e569ba417ff7b8ce71455def14d31efd",
+    "tests/fixtures/progression_growth_curves/reference_contract.json": "a00bbfccd3d1a42c4c7a32ac3a02fbeda60875a69d528dcc54703e3cce5fad35",
+    "tests/gameplay/progression_growth_curves_test_runner.gd": "0adad81cf99aeabbea6d077e9aaa08b81fa117469e51f0ea2faf66308fb6dda4",
+    "tests/gameplay/progression_growth_curves_test_runner.gd.uid": "6480682b176014bd0c7d784e96136855b059c0dc2be1ac8ab6123622b7bfbd7c",
+    "tools/verification/local_phase.py": "4ebe80a76a560dd55c7406c3ae42f83cf07e7e9a51cac9f0f60365ddc75441a9",
+    "tools/verification/run_growth_curves.py": "ca6b2e38a0a229f3196a0bbf26920a73a5a37d2854480f683de24220d2bab0cd"
+  },
+  "limits": [
+    "No candy integration is claimed by this prerequisite fix.",
+    "Source IDs/data remain unchanged; excluded species stay excluded.",
+    "No save/schema rewrite or automatic migration of historic XP values.",
+    "Independent tables cover levels 1-100 for all six curves, plus aliases and real canonical species."
+  ],
+  "preexisting_source_evidence": {
+    "baseline_sha256": "6dc77ec69723635ddf58038d355042af629bd5dd636c6232970c6c4d8fc2cf6c",
+    "original_source_sha256": "6dc77ec69723635ddf58038d355042af629bd5dd636c6232970c6c4d8fc2cf6c",
+    "preexisting_in_original": true,
+    "default_campaign_save_exists": false,
+    "notes": "Original inspected read-only; never executed or modified. No real campaign save rewritten."
+  },
+  "guard_contract_checks": {
+    "status": "PASS",
+    "checks": [
+      {
+        "check": "valid frozen reference",
+        "status": "PASS"
+      },
+      {
+        "check": "full hash mismatch rejected",
+        "status": "PASS"
+      },
+      {
+        "check": "missing protected file rejected",
+        "status": "PASS"
+      },
+      {
+        "check": "existing baseline cannot be resealed",
+        "status": "PASS"
+      },
+      {
+        "check": "unauthorized delta rejected",
+        "status": "PASS"
+      },
+      {
+        "check": "original project root rejected",
+        "status": "PASS"
+      },
+      {
+        "check": "output outside cache rejected",
+        "status": "PASS"
+      },
+      {
+        "check": "real baseline unchanged by negative probes",
+        "status": "PASS"
+      }
+    ],
+    "fixture_root": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\progression_growth_curves_audit\\guard_contracts\\1793293260824757600",
+    "real_baseline_sha256": "f7a774544d47bfe736f949a8fdbf2909eab2f130da648fefbbb9c59c558fd4e3"
+  },
+  "before_fix": {
+    "result": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\cleanup_checks\\growth_alias_before\\game_results.json",
+    "sha256": "aea0033afdbfdbb3816df1dfc9fe3e69ffced567582fb79401998c0e0f932074",
+    "status": "FAIL",
+    "failed_checks": 1205
+  },
+  "post_documentation_scope": {
+    "status": "PASS",
+    "base": "52c3716458e11e7a9c2a6fd6e62a11f4686e3305",
+    "protected_files": 22949,
+    "preserved_absent_skip_worktree": 15647,
+    "mode": "HASH_IF_METADATA_CHANGED",
+    "allowed_changes": [
+      "AGENTS.md",
+      "docs/current/DEVELOPMENT_CURRENT.md",
+      "docs/current/NEXT_STEPS.md",
+      "docs/current/PROGRESSION_GROWTH_CURVES_FIX.json",
+      "docs/current/PROGRESSION_GROWTH_CURVES_FIX.md",
+      "docs/current/PROJECT_STATE.md",
+      "docs/current/START_HERE.md",
+      "modules/creatures/progression/progression_ruleset.gd",
+      "tests/fixtures/progression_growth_curves/reference_contract.json",
+      "tests/gameplay/progression_growth_curves_test_runner.gd",
+      "tests/gameplay/progression_growth_curves_test_runner.gd.uid",
+      "tools/verification/local_phase.py",
+      "tools/verification/run_growth_curves.py"
+    ]
+  }
+}

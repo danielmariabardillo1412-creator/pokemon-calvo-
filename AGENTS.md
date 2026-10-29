@@ -7,6 +7,12 @@ OpenCode esta detenido. Limpieza cerrada en 941dd297. Autorizacion vigente:
 continuar objetos disponibles manteniendo la arquitectura y comprobar cada bloque.
 V8 validado: Mas PP/PP Maximos, helper puro y amistad positiva compartida,
 mochila/API existente, persistencia y entrada/salida del combate nativo.
+Antes de caramelos se corrigieron alias/divisor de las curvas XP; ver
+docs/current/PROGRESSION_GROWTH_CURVES_FIX.md. Reutilizar la progresion existente
+y su tabla contrastada; resolver decisiones de aprender/evolucionar antes de consumir.
+Auditoria PokéAPI terminada: docs/current/POKEAPI_DATA_AUDIT_V1.md. Sin reescribir
+datos; queda perdida la condicion cero de Tyrogue/Hitmontop. Revisar ese hallazgo
+antes de ampliar caramelos/evoluciones; no revertir textos a la API en bloque.
 Region corregida en 0e2cd3a;
 objetos V5-V7 cerrados hasta eb18a5da. Comparador V1 terminado con hallazgos,
 conservado en 021a9c5. Leer docs/current/START_HERE.md y docs/current/CLEANUP.md.

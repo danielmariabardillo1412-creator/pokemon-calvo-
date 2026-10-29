@@ -41,6 +41,10 @@ seguro de valores mal formados. Objetos V5–V7 cerrados hasta `eb18a5da`.
 V8 añade Más PP/PP Máximos con helper puro y amistad positiva compartida;
 19.872 casos de catálogo, 336 contextos y recorrido nativo de mochila/guardado/
 combate/captura/restauración PASS. Detalle: [ITEM_FIELD_V8.md](ITEM_FIELD_V8.md).
+Antes de caramelos se corrigió la interpretación de dos nombres de curva XP y el
+divisor del tramo 69–98 de erratic. Las seis tablas completas coinciden con dos
+referencias independientes; 4.209 checks y regresiones PASS. No incorpora aún
+caramelos ni migra partidas antiguas: [PROGRESSION_GROWTH_CURVES_FIX.md](PROGRESSION_GROWTH_CURVES_FIX.md).
 Evidencia y límites por fase en los informes de objetos; no duplicar sus matrices.
 
 El comparador V1 terminó 135/135 casos: 86 puertas comunes PASS, 17 adicionales
