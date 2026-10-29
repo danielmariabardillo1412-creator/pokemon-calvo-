@@ -169,14 +169,14 @@ func teach(item_id: StringName, creature_id: StringName, replace_slot := -1) -> 
 	return {"accepted": true, "status": "APPLIED", "action": "teach", "move_id": String(move_id), "version": profile.active_machine_version}
 
 
-func use_item(item_id: StringName, creature_id: StringName, replace_slot := -1, target_species: StringName = &"") -> Dictionary:
+func use_item(item_id: StringName, creature_id: StringName, replace_slot := -1, target_species: StringName = &"", expected_ability_stamp := "") -> Dictionary:
 	var error := _boundary(item_id)
 	if error != "": return _deny(error)
 	if Growth.supports(item_id):
 		if replace_slot != -1 or target_species != &"": return _deny("unexpected_growth_target")
 		return use_growth_item(item_id, creature_id)
 	if FieldEffects.supports(item_id):
-		return _apply_field_effect(item_id, creature_id, replace_slot)
+		return _apply_field_effect(item_id, creature_id, replace_slot, expected_ability_stamp)
 	if profile.machine_rows.has(String(item_id)): return teach(item_id, creature_id, replace_slot)
 	if not evolution_options(item_id, creature_id).is_empty(): return evolve(item_id, creature_id, target_species)
 	var creature := owner.owned_creature(creature_id)
@@ -186,7 +186,7 @@ func use_item(item_id: StringName, creature_id: StringName, replace_slot := -1, 
 	return _deny("field_effect_not_connected", "DEPENDENCY_MISSING")
 
 
-func _growth_stamp(item_id: StringName, creature: CreatureInstance) -> String:
+func _item_state_stamp(item_id: StringName, creature: CreatureInstance) -> String:
 	return JSON.stringify({"binding": _binding_revision, "owner": owner.get_instance_id(),
 		"catalog": catalogs.get_instance_id(), "inventory": owner.inventory.get_instance_id(),
 		"creature": creature.get_instance_id(), "item": String(item_id), "data": creature.to_dict(),
@@ -203,7 +203,7 @@ func use_growth_item(item_id: StringName, creature_id: StringName, decisions: Di
 	if not owner.inventory.has(item_id): return _deny("item_not_owned")
 	error = Growth.validation_error(creature, catalogs)
 	if error != "": return _deny(error)
-	var stamp := _growth_stamp(item_id, creature)
+	var stamp := _item_state_stamp(item_id, creature)
 	if expected_stamp != "" and stamp != expected_stamp: return _deny("growth_state_changed")
 	var result: Dictionary = Growth.plan(creature, item_id, catalogs, content, decisions)
 	if result.status == "NEEDS_CONTEXT":
@@ -213,7 +213,7 @@ func use_growth_item(item_id: StringName, creature_id: StringName, decisions: Di
 	result.erase("candidate")
 	# Revalidate the live owner before synchronous publication. Never store a
 	# partially changed creature or a pending choice in the save format.
-	if _boundary(item_id) != "" or not is_same(owner.owned_creature(creature_id), creature) or _growth_stamp(item_id, creature) != stamp: return _deny("growth_state_changed")
+	if _boundary(item_id) != "" or not is_same(owner.owned_creature(creature_id), creature) or _item_state_stamp(item_id, creature) != stamp: return _deny("growth_state_changed")
 	var staged := _bag_copy()
 	if not staged.remove(item_id): return _deny("item_not_owned")
 	if not owner.replace_owned_same_identity(candidate): return _deny("ownership_changed")
@@ -222,7 +222,20 @@ func use_growth_item(item_id: StringName, creature_id: StringName, decisions: Di
 	return result
 
 
-func _apply_field_effect(item_id: StringName, creature_id: StringName, move_slot: int) -> Dictionary:
+func ability_preview(item_id: StringName, creature_id: StringName) -> Dictionary:
+	var error := _boundary(item_id)
+	if error != "": return _deny(error)
+	var creature := owner.owned_creature(creature_id)
+	if creature == null: return _deny("creature_not_owned")
+	if not owner.inventory.has(item_id): return _deny("item_not_owned")
+	var result: Dictionary = FieldEffects.Abilities.preview(creature, item_id, catalogs)
+	if not result.accepted: return result
+	if not content.ability_allowed(result.ability_id): return _deny("ability_not_permitted")
+	result["stamp"] = _item_state_stamp(item_id, creature)
+	return result
+
+
+func _apply_field_effect(item_id: StringName, creature_id: StringName, move_slot: int, expected_ability_stamp := "") -> Dictionary:
 	var creature := owner.owned_creature(creature_id)
 	if creature == null: return _deny("creature_not_owned")
 	if not owner.inventory.has(item_id): return _deny("item_not_owned")
@@ -232,9 +245,19 @@ func _apply_field_effect(item_id: StringName, creature_id: StringName, move_slot
 	if source_error != "": return _deny(source_error)
 	if FieldEffects.pp_boost_supports(item_id) and not content.move_learnable(String(creature.moveset[move_slot].move_id)):
 		return _deny("move_not_permitted")
+	var ability_change: bool = FieldEffects.Abilities.supports(item_id)
+	var ability: Dictionary = {}
+	if ability_change:
+		ability = ability_preview(item_id, creature_id)
+		if not ability.accepted: return ability
+		if expected_ability_stamp != "" and expected_ability_stamp != ability.stamp: return _deny("ability_state_changed")
 	var copy := CreatureInstance.from_dict(creature.to_dict())
 	var result: Dictionary = FieldEffects.apply(copy, item_id, move_slot, catalogs)
 	if not result.accepted: return result
+	if ability_change:
+		var expected := creature.to_dict(); expected["ability_id"] = ability.ability_id
+		if copy.to_dict() != expected: return _deny("invalid_ability_state")
+		if _boundary(item_id) != "" or not is_same(owner.owned_creature(creature_id), creature) or _item_state_stamp(item_id, creature) != ability.stamp: return _deny("ability_state_changed")
 	var staged := _bag_copy()
 	if not staged.remove(item_id): return _deny("item_not_owned")
 	if not owner.replace_owned_same_identity(copy): return _deny("ownership_changed")

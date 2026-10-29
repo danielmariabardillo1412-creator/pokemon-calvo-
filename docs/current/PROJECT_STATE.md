@@ -25,14 +25,21 @@ El barrido fresco del comparador V1 pasó en ambos juegos.
 
 Objetos: 2.222 IDs inventariados. Estado mecánico vigente:
 [ITEM_SYSTEM_CURRENT_STATUS.json](ITEM_SYSTEM_CURRENT_STATUS.json).
-Hay 67 efectos de campo verificados (41 de recuperación y 26 de entrenamiento:
-18 EV/amistad base, 2 de mejoras de PP y 6 caramelos),
+Hay 69 efectos de campo conectados y con rutas verificadas (41 de recuperación y
+28 de entrenamiento: 18 EV/amistad base, 2 de mejoras de PP, 6 caramelos y 2 de habilidades),
 además de las conexiones y límites de equipados, evolución y máquinas registrados
 allí. No están certificados todos los efectos de todos los objetos.
 V9: 6.456 combinaciones especie/objeto y 252 contextos de propiedad/amistad;
 33.633 checks headless y 33.635 GPU. Mochila con decisiones explícitas, consumo
 al finalizar, guardado/restauración y uso posterior en combate nativo verificados:
 [ITEM_FIELD_V9.md](ITEM_FIELD_V9.md). Cancelar descarta la candidata sin consumir.
+
+V10 conecta Cápsula/Parche Habilidad: 5.092 casos de catálogo, 15.376 checks
+headless y 15.378 GPU; nueve grupos de verificación PASS. Prueba funcional nativa
+de Absorbe Fuego, mochila real, guardado/restauración y captura. El Parche permite
+revertir a la primera normal; los vetos se conservan. Modo Daruma permanece como
+dependencia de formas, sin consumo; herencia de slots al evolucionar sigue
+separada: [ITEM_FIELD_V10.md](ITEM_FIELD_V10.md).
 
 Arte beta de objetos: [ITEM_ART_CURRENT_STATUS.json](ITEM_ART_CURRENT_STATUS.json).
 La presencia de una imagen no certifica su mecánica. Las revisiones artísticas y

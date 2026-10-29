@@ -7,8 +7,11 @@ OpenCode esta detenido. Limpieza cerrada en 941dd297. Autorizacion vigente:
 continuar objetos disponibles manteniendo la arquitectura y comprobar cada bloque.
 V9 validado: seis caramelos (raro y EXP XS/S/M/L/XL), candidato separado,
 decisiones explicitas en mochila, consumo al finalizar, guardado y combate nativo.
-67 efectos de campo conectados; docs/current/ITEM_FIELD_V9.md conserva alcance y
-dependencias. V8 de PP y V7 de EV siguen cubiertos por regresiones.
+V10 conecta Capsula/Parche Habilidad, con cambio moderno normal/oculta y regreso
+al primer slot normal, vistas obsoletas rechazadas y guardado/combate verificados.
+69 efectos de campo conectados; docs/current/ITEM_FIELD_V10.md conserva alcance y
+dependencias (Modo Daruma pendiente sin consumo, herencia evolutiva separada).
+V9 de caramelos, V8 de PP y V7 de EV siguen cubiertos por regresiones.
 Antes de caramelos se corrigieron alias/divisor de las curvas XP; ver
 docs/current/PROGRESSION_GROWTH_CURVES_FIX.md. Reutilizar la progresion existente
 y su tabla contrastada; resolver decisiones de aprender/evolucionar antes de consumir.
@@ -20,10 +23,11 @@ Region corregida en 0e2cd3a;
 objetos V5-V7 cerrados hasta eb18a5da. Comparador V1 terminado con hallazgos,
 conservado en 021a9c5. Leer docs/current/START_HERE.md y docs/current/CLEANUP.md.
 
-Un escritor; sin agentes paralelos. El usuario autoriza ahora OpenCode O001
-(solo dos objetos de habilidad), con
-contrato en docs/opencode/START_HERE.md. Codex supervisa despues; no implementar
-ambos a la vez. No ampliar a otros objetos ni reabrir la arquitectura T001–T006.
+Un escritor; sin agentes paralelos. El usuario indica que OpenCode no esta
+disponible y devolvio a Codex el bloque O001 (Capsula/Parche Habilidad), cerrado como V10.
+No hay encargo externo activo ni revision independiente atribuible a OpenCode.
+Los planos y el guard O001 son historicos: no resellarlos; V10 tiene scope propio.
+No reabrir la arquitectura T001–T006 ni iniciar otro ejecutor simultaneo.
 Mantener el servicio de objetos como autoridad, la UI como vista y el motor nativo
 para combate. Preparar copia, validar, publicar
 y consumir una unidad solo ante efecto real. No usar clases UI como servicios.

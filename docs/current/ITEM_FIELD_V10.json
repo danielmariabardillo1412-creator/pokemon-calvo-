@@ -1,0 +1,377 @@
+{
+  "phase": "ITEM_FIELD_V10",
+  "status": "ABILITY_ITEM_ROUTES_PASS_FORM_DEPENDENCY_EXPLICIT",
+  "date": "2026-10-29",
+  "base": "ce4a4243",
+  "all_item_effects_certified": false,
+  "new_ids": [
+    "ability_capsule",
+    "ability_patch"
+  ],
+  "headless_checks": 15376,
+  "gpu_checks": 15378,
+  "eligible_species_in_matrix": 1076,
+  "unique_current_ability_configurations": 2546,
+  "matrix_cases": 5092,
+  "matrix_outcomes": {
+    "ability_capsule/APPLIED": 1053,
+    "ability_capsule/REJECTED/ability_not_permitted": 81,
+    "ability_capsule/REJECTED/item_has_no_effect": 1412,
+    "ability_patch/APPLIED": 2274,
+    "ability_patch/DEPENDENCY_MISSING/ability_form_route_pending": 2,
+    "ability_patch/REJECTED/ability_not_permitted": 97,
+    "ability_patch/REJECTED/item_has_no_effect": 173
+  },
+  "native_scenarios": [
+    {
+      "ability": "intimidate",
+      "damage_received": 11,
+      "flash_fire": false,
+      "route": "control"
+    },
+    {
+      "ability": "flash_fire",
+      "damage_received": 0,
+      "flash_fire": true,
+      "route": "capsule"
+    },
+    {
+      "ability": "justified",
+      "damage_received": 11,
+      "flash_fire": false,
+      "route": "patch"
+    },
+    {
+      "campaign_unchanged": true,
+      "native_error": "temporary_form_not_supported",
+      "route": "zen_mode_dependency"
+    }
+  ],
+  "total_connected_field_effect_ids": 69,
+  "field_recovery_ids_verified": 41,
+  "field_training_ids_verified": 28,
+  "field_growth_ids_verified": 6,
+  "field_ability_ids_with_verified_routes": 2,
+  "verification": {
+    "status": "PASS",
+    "base": "ce4a4243",
+    "groups": [
+      {
+        "status": "PASS",
+        "checks_reported": 0,
+        "errors": [],
+        "last_line": "[ DONE ] loading_editor_layout",
+        "group": "import",
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--path",
+          "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+          "--headless",
+          "--editor",
+          "--import",
+          "--quit"
+        ],
+        "exit_code": 0,
+        "seconds": 5.98,
+        "terminated_after_script_error": false,
+        "expected_negative_diagnostics": [],
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\item_field_v10\\runs\\1793299917821331700\\import.log",
+        "log_sha256": "10460b7ea9f3c81382fab0b1676d730be2bae922017704604420034c7bcf6ec2"
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 15376,
+        "errors": [],
+        "last_line": "ITEM_FIELD_V10 PASS checks=15376 cases=5092 GPU=false",
+        "group": "ability_items",
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--path",
+          "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+          "--headless",
+          "--script",
+          "tests/gameplay/item_field_ability_v10.gd"
+        ],
+        "exit_code": 0,
+        "seconds": 20.2,
+        "terminated_after_script_error": false,
+        "expected_negative_diagnostics": [],
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\item_field_v10\\runs\\1793299917821331700\\ability_items.log",
+        "log_sha256": "0f8e566c8b636a88872586784e1c92bd4d7e6009352b1f59c6576972d07c62a4"
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 472,
+        "errors": [],
+        "last_line": "=== PROJECT TEST RESULT: 472 PASS / 0 FAIL ===",
+        "group": "core",
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--path",
+          "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+          "--headless",
+          "--script",
+          "tests/test_runner.gd"
+        ],
+        "exit_code": 0,
+        "seconds": 9.0,
+        "terminated_after_script_error": false,
+        "expected_negative_diagnostics": [
+          "ERROR: Parse JSON failed. Error at line 0: Expected key"
+        ],
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\item_field_v10\\runs\\1793299917821331700\\core.log",
+        "log_sha256": "aa9de68f0c22929ceffa211b3a242db78885d34d92f9c3d971e6d9f31801cd99"
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 33633,
+        "errors": [],
+        "last_line": "ITEM_FIELD_V9 PASS checks=33633 cases=6456 GPU=false",
+        "group": "growth",
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--path",
+          "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+          "--headless",
+          "--script",
+          "tests/gameplay/item_field_growth_v9.gd"
+        ],
+        "exit_code": 0,
+        "seconds": 18.27,
+        "terminated_after_script_error": false,
+        "expected_negative_diagnostics": [],
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\item_field_v10\\runs\\1793299917821331700\\growth.log",
+        "log_sha256": "74f5db12e9a6d3437aa5597b8e03b2517d38a1fe1070f5f29b64b0ea171be667"
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 43588,
+        "errors": [],
+        "last_line": "ITEM_FIELD_V8 PASS checks=43588 contexts=336 catalog_cases=19872 GPU=false",
+        "group": "pp",
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--path",
+          "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+          "--headless",
+          "--script",
+          "tests/gameplay/item_field_pp_v8.gd"
+        ],
+        "exit_code": 0,
+        "seconds": 14.02,
+        "terminated_after_script_error": false,
+        "expected_negative_diagnostics": [],
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\item_field_v10\\runs\\1793299917821331700\\pp.log",
+        "log_sha256": "b6b16e1d8a11955ef30ad14af1c2360415c69d40f58fb105e36f41ebab3382bb"
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 6990,
+        "errors": [],
+        "last_line": "ITEM_FIELD_V7 PASS checks=6990 cases=504 GPU=false",
+        "group": "training",
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--path",
+          "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+          "--headless",
+          "--script",
+          "tests/gameplay/item_field_training_v7.gd"
+        ],
+        "exit_code": 0,
+        "seconds": 9.64,
+        "terminated_after_script_error": false,
+        "expected_negative_diagnostics": [],
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\item_field_v10\\runs\\1793299917821331700\\training.log",
+        "log_sha256": "240a74b91ec68c0a5ff1913ba32af1d602b686b99462713fe003b5128a839fc3"
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 118,
+        "errors": [],
+        "last_line": "FIELD_NATIVE PASS checks=118 GPU=false errors=0",
+        "group": "native",
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--path",
+          "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+          "--headless",
+          "--script",
+          "tests/gameplay/field_native_test_runner.gd"
+        ],
+        "exit_code": 0,
+        "seconds": 52.02,
+        "terminated_after_script_error": false,
+        "expected_negative_diagnostics": [],
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\item_field_v10\\runs\\1793299917821331700\\native.log",
+        "log_sha256": "4532edaa65a10230fbf1101f37a4944f5c8487c3292fb8a6d48e1b391f3fb333"
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 912,
+        "errors": [],
+        "last_line": "FIELD_RESTORE_INTEGRATION PASS checks=912 errors=0",
+        "group": "restore",
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--path",
+          "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+          "--headless",
+          "--script",
+          "tests/gameplay/field_restore_integration_test_runner.gd"
+        ],
+        "exit_code": 0,
+        "seconds": 44.78,
+        "terminated_after_script_error": false,
+        "expected_negative_diagnostics": [],
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\item_field_v10\\runs\\1793299917821331700\\restore.log",
+        "log_sha256": "b680833ccd3f8bdeff5c7b4503bff0c6063eb4adfa9db317e952ca3d48d46478"
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 15378,
+        "errors": [],
+        "last_line": "ITEM_FIELD_V10 PASS checks=15378 cases=5092 GPU=true",
+        "group": "ability_gpu",
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--path",
+          "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+          "--resolution",
+          "1280x720",
+          "--script",
+          "tests/gameplay/item_field_ability_v10.gd",
+          "--",
+          "--capture"
+        ],
+        "exit_code": 0,
+        "seconds": 22.47,
+        "terminated_after_script_error": false,
+        "expected_negative_diagnostics": [],
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\item_field_v10\\runs\\1793299917821331700\\ability_gpu.log",
+        "log_sha256": "acc740e82dff69e4b068a65bf7d42b15e8fd0953fcad55f2b87c3deafe04a5ce"
+      }
+    ],
+    "integrity_before": {
+      "status": "PASS",
+      "base": "ce4a4243ba0a9bde3bbdcc97eca85dff7a973523",
+      "protected_files": 22978,
+      "preserved_absent_skip_worktree": 15647,
+      "mode": "HASH_IF_METADATA_CHANGED",
+      "allowed_changes": [
+        "AGENTS.md",
+        "docs/current/ITEM_FIELD_V10.md",
+        "docs/opencode/PROGRESS.md",
+        "docs/opencode/TASKS.json",
+        "modules/inventory/field_ability_effects.gd",
+        "modules/inventory/field_ability_effects.gd.uid",
+        "modules/inventory/field_item_effects.gd",
+        "modules/inventory/field_item_service.gd",
+        "scenes/visual/field_item_bag.gd",
+        "tests/gameplay/item_field_ability_v10.gd",
+        "tests/gameplay/item_field_ability_v10.gd.uid",
+        "tools/verification/run_field_ability_v10.py"
+      ]
+    },
+    "integrity_after": {
+      "status": "PASS",
+      "base": "ce4a4243ba0a9bde3bbdcc97eca85dff7a973523",
+      "protected_files": 22978,
+      "preserved_absent_skip_worktree": 15647,
+      "mode": "FULL_CONTENT_HASHES",
+      "allowed_changes": [
+        "AGENTS.md",
+        "docs/current/ITEM_FIELD_V10.md",
+        "docs/opencode/PROGRESS.md",
+        "docs/opencode/TASKS.json",
+        "modules/inventory/field_ability_effects.gd",
+        "modules/inventory/field_ability_effects.gd.uid",
+        "modules/inventory/field_item_effects.gd",
+        "modules/inventory/field_item_service.gd",
+        "scenes/visual/field_item_bag.gd",
+        "tests/gameplay/item_field_ability_v10.gd",
+        "tests/gameplay/item_field_ability_v10.gd.uid",
+        "tools/verification/run_field_ability_v10.py"
+      ]
+    },
+    "tested_sources_sha256": {
+      "modules/inventory/field_ability_effects.gd": "42ea6cc2ca7ccd3e680990e17c246fbf07f4ef6f4be86ab4488aed6897813b4a",
+      "modules/inventory/field_ability_effects.gd.uid": "3f6b484e28d707a73eb9c432f20f620daf9672e509ed8f0122c179c8b70d3905",
+      "modules/inventory/field_item_effects.gd": "1c8631223f9be72693fe9824d43de8b79af6f9826bbd830c4fe977d53e43e781",
+      "modules/inventory/field_item_service.gd": "2a41c35da34b602addf811fc6c1f7e73dc7fa54edc4e1e10f615cb52056a65b9",
+      "scenes/visual/field_item_bag.gd": "c382885ef9e8b500494d4d7a7e535075dae4a2cef70d1953833be2f1c09bb5a7",
+      "tests/gameplay/item_field_ability_v10.gd": "7998fd6def78a2312c7c5798e4c405fdb294223fc9a5e7a9e65a48e3028f63ea",
+      "tests/gameplay/item_field_ability_v10.gd.uid": "b1be4808f28e04c17b531307973811b3265a8abb2e22d8a4764a3537ac1e938c",
+      "tools/verification/run_field_ability_v10.py": "512c4e186dc94286925975eac06cc0382f3ecccd40e517b4d1a6925ad3e0b157"
+    }
+  },
+  "references": [
+    {
+      "url": "https://raw.githubusercontent.com/rh-hideout/pokeemerald-expansion/8654616bd38d9b28cc7dd8f3d0b4cb030aa2d40c/src/party_menu.c",
+      "repository": "rh-hideout/pokeemerald-expansion",
+      "commit": "8654616bd38d9b28cc7dd8f3d0b4cb030aa2d40c",
+      "path": "src/party_menu.c",
+      "sha256": "fc4e9f8c4fbc6b820987589afa462923ea808180797a6bacb722d0ba2322f7f3",
+      "scope": "Ability Patch reversal to first normal slot; capsule and patch no-effect cases; community implementation reference, not Nintendo official source"
+    },
+    {
+      "repository": "Maruno17/pokemon-essentials",
+      "commit": "8c5911e4a4b07b07e832e4bb0d5d8859e88b4a9b",
+      "path": "Data/Scripts/013_Items/002_Item_Effects.rb",
+      "sha256": "6ed4877769f3d7edddb096481780a8d29da6bd1de331ca9c24ccffb8477a1b15",
+      "scope": "Capsule/no-effect rules; older Patch forward-only behavior is not used as Gen IX reversal"
+    }
+  ],
+  "base_item_matrix": "docs/current/ITEM_FIELD_V8.csv.txt",
+  "field_use_overrides": {
+    "rare_candy": "FIELD_GROWTH_STAGED_DECISIONS_XP_CAP_HP_BASE_FRIENDSHIP_SAVE_NATIVE_VERIFIED_ORIGIN_BONUS_PENDING",
+    "exp_candy_xs": "FIELD_GROWTH_STAGED_DECISIONS_XP_CAP_HP_BASE_FRIENDSHIP_SAVE_NATIVE_VERIFIED_ORIGIN_BONUS_PENDING",
+    "exp_candy_s": "FIELD_GROWTH_STAGED_DECISIONS_XP_CAP_HP_BASE_FRIENDSHIP_SAVE_NATIVE_VERIFIED_ORIGIN_BONUS_PENDING",
+    "exp_candy_m": "FIELD_GROWTH_STAGED_DECISIONS_XP_CAP_HP_BASE_FRIENDSHIP_SAVE_NATIVE_VERIFIED_ORIGIN_BONUS_PENDING",
+    "exp_candy_l": "FIELD_GROWTH_STAGED_DECISIONS_XP_CAP_HP_BASE_FRIENDSHIP_SAVE_NATIVE_VERIFIED_ORIGIN_BONUS_PENDING",
+    "exp_candy_xl": "FIELD_GROWTH_STAGED_DECISIONS_XP_CAP_HP_BASE_FRIENDSHIP_SAVE_NATIVE_VERIFIED_ORIGIN_BONUS_PENDING",
+    "ability_capsule": "FIELD_ABILITY_TRANSACTION_POLICY_SAVE_NATIVE_VERIFIED_FORM_ROUTE_DEPENDENCY_EXPLICIT",
+    "ability_patch": "FIELD_ABILITY_TRANSACTION_POLICY_SAVE_NATIVE_VERIFIED_FORM_ROUTE_DEPENDENCY_EXPLICIT"
+  },
+  "visual_review": {
+    "path": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\item_field_v10\\ability_bag.png",
+    "sha256": "2f58e419a4af71a314aa5fa6dc31d280ca50d983a5ff7f5ac97b2372723246bc",
+    "reviewed": true,
+    "result": "Preview names and controls are legible within 1280x720; no artwork changed."
+  },
+  "limitations": [
+    "Two Patch destinations toward Zen Mode (Darmanitan/base and Galar) are DEPENDENCY_MISSING; no consumption. Native test confirms temporary_form_not_supported without campaign mutation.",
+    "Evolution slot inheritance across species remains separate; the model stores the observed ability ID, not a genetic slot.",
+    "Individual native ability interactions are not exhaustively certified by the catalog routing matrix.",
+    "PC targets verified through service; no new PC UI.",
+    "No eggs, breeding, special forms, save schema or datasets/policies/art changed.",
+    "Only the existing base/regional ability_slots are used. Foreign or ambiguous ability IDs are rejected.",
+    "OpenCode never started; implementation and testing by Codex, without an independent-agent review."
+  ],
+  "post_documentation_integrity": {
+    "status": "PASS",
+    "base": "ce4a4243ba0a9bde3bbdcc97eca85dff7a973523",
+    "protected_files": 22978,
+    "preserved_absent_skip_worktree": 15647,
+    "mode": "FULL_CONTENT_HASHES",
+    "allowed_changes": [
+      "AGENTS.md",
+      "docs/current/ITEM_FIELD_V10.json",
+      "docs/current/ITEM_FIELD_V10.md",
+      "docs/current/ITEM_SYSTEM_CURRENT_STATUS.json",
+      "docs/current/NEXT_STEPS.md",
+      "docs/current/PROJECT_STATE.md",
+      "docs/current/START_HERE.md",
+      "docs/opencode/PROGRESS.md",
+      "docs/opencode/TASKS.json",
+      "modules/inventory/field_ability_effects.gd",
+      "modules/inventory/field_ability_effects.gd.uid",
+      "modules/inventory/field_item_effects.gd",
+      "modules/inventory/field_item_service.gd",
+      "scenes/visual/field_item_bag.gd",
+      "tests/gameplay/item_field_ability_v10.gd",
+      "tests/gameplay/item_field_ability_v10.gd.uid",
+      "tools/verification/run_field_ability_v10.py"
+    ]
+  }
+}

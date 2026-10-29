@@ -1,17 +1,22 @@
 {
-  "state": "PREPARED_NOT_STARTED",
+  "state": "O001_COMPLETED_BY_CODEX_OPENCODE_NOT_STARTED",
   "base": "815967d7139006715b0d2c1f543383e320189fac",
-  "authorized_now": ["O001"],
+  "authorized_now": [],
   "stop_after": "O001",
-  "reviewer": "Codex",
-  "writer": "OpenCode only during implementation",
+  "reviewer": "Codex normal implementation/testing; no independent OpenCode review is claimed",
+  "writer": "Codex, by direct user instruction while OpenCode is unavailable",
   "tasks": [
     {
       "id": "O001",
-      "status": "AUTHORIZED_NOT_STARTED",
+      "status": "COMPLETED_BY_CODEX",
       "plan": "docs/opencode/O001_ABILITY_ITEMS.md",
-      "scope": ["ability_capsule", "ability_patch"],
-      "on_delivery": "IMPLEMENTED_AWAITING_REVIEW"
+      "scope": [
+        "ability_capsule",
+        "ability_patch"
+      ],
+      "on_delivery": "COMPLETED_BY_CODEX_NOT_EXECUTED_BY_OPENCODE",
+      "implementation_phase": "ITEM_FIELD_V10",
+      "evidence": "docs/current/ITEM_FIELD_V10.json"
     },
     {
       "id": "O002",

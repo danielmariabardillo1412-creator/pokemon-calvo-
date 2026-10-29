@@ -17,6 +17,7 @@ var _use: Button
 var _equip: Button
 var _growth := GrowthTransaction.new()
 var _growth_choices: VBoxContainer
+var _ability_stamp := ""
 
 
 func _ready() -> void:
@@ -114,6 +115,7 @@ func _ensure_binding() -> bool:
 
 func _refresh_choices() -> void:
 	_cancel_growth()
+	_ability_stamp = ""
 	_moves.clear(); _moves.add_item("Aprender sin sustituir un movimiento")
 	if field == null or not field.field_item_service_is_current(service) or service.owner == null:
 		_moves.visible = false
@@ -134,7 +136,14 @@ func _refresh_choices() -> void:
 			for slot: BattleMoveSlot in creature.moveset: _moves.add_item("%s · PP %d/%d" % [SpanishGameText.move_name(slot.move_id, definitions), slot.current_pp, slot.max_pp])
 		_moves.visible = true
 	_description.text = ""
-	if service.Growth.supports(_selected_item()):
+	if service.FieldEffects.Abilities.supports(_selected_item()):
+		var preview: Dictionary = service.ability_preview(_selected_item(), _selected_creature())
+		if preview.accepted:
+			_ability_stamp = preview.stamp
+			_description.text = "Cambiará %s por %s. Se consume una unidad al pulsar Usar." % [_ability_name(StringName(preview.previous_ability_id), definitions), _ability_name(StringName(preview.ability_id), definitions)]
+		else:
+			_description.text = _ability_rejection(preview.reason)
+	elif service.Growth.supports(_selected_item()):
 		_description.text = "Sube un nivel." if _selected_item() == &"rare_candy" else "Aporta %d puntos de experiencia." % service.Growth.EXP[String(_selected_item())]
 		_description.text += " Podrás decidir movimientos y evolución antes de consumirlo."
 	elif pp_target:
@@ -168,20 +177,42 @@ func _apply(action: String) -> Dictionary:
 	match action:
 		"equip": result = service.equip(_selected_item(), _selected_creature())
 		"unequip": result = service.unequip(_selected_creature())
-		_: result = service.use_item(_selected_item(), _selected_creature(), _moves.selected - 1 if _moves.visible else -1)
+		_:
+			if service.FieldEffects.Abilities.supports(_selected_item()) and _ability_stamp.is_empty():
+				result = service.ability_preview(_selected_item(), _selected_creature())
+				if result.accepted: result = {"accepted": false, "reason": "ability_state_changed", "status": "REJECTED"}
+			else:
+				result = service.use_item(_selected_item(), _selected_creature(), _moves.selected - 1 if _moves.visible else -1, &"", _ability_stamp)
 	if result.accepted:
 		_result.text = "Objeto equipado." if action == "equip" else "Objeto retirado." if action == "unequip" else "Objeto utilizado."
 		if result.has("species_id"): _result.text = "¡Ha evolucionado a %s!" % SpanishGameText.species_name(StringName(result.species_id), definitions)
 		if result.has("move_id"): _result.text = "¡Ha aprendido %s!" % SpanishGameText.move_name(StringName(result.move_id), definitions)
 		if result.has("boosted_move_id"): _result.text = "Los PP máximos de %s han aumentado a %d." % [SpanishGameText.move_name(StringName(result.boosted_move_id), definitions), result.new_max_pp]
+		if result.has("ability_id"): _result.text = "¡Su habilidad ahora es %s!" % _ability_name(StringName(result.ability_id), definitions)
 	else:
 		if result.reason in ["item_has_no_effect", "move_slot_required", "unexpected_move_slot"]:
 			_result.text = {"item_has_no_effect": "No tendría efecto. El objeto se conserva.", "move_slot_required": "Elige el movimiento al que aplicar el objeto.", "unexpected_move_slot": "Este objeto no necesita seleccionar un movimiento."}[result.reason]
 			refresh(); field.field_refresh_hud(); return result
 		_result.text = {"field_locked": "Espera a terminar el combate o el desplazamiento.", "item_not_owned": "No queda ese objeto en la mochila.", "move_replacement_required": "Elige qué movimiento quieres sustituir.", "move_already_known": "Este Pokémon ya conoce ese movimiento.", "machine_incompatible": "Este Pokémon no puede aprender ese movimiento con esta MT.", "machine_not_in_active_version": "Esta máquina necesita una versión de reglas que todavía no está activa.", "species_machine_version_context_missing": "Faltan datos de compatibilidad para esta versión; no se ha usado el objeto.", "no_eligible_evolution": "Este objeto no provoca una evolución disponible para este Pokémon.", "nothing_equipped": "Este Pokémon no lleva objeto.", "already_equipped": "Este Pokémon ya lleva ese objeto.", "creature_knocked_out": "El Pokémon está debilitado.", "field_effect_not_connected": "La función de este objeto fuera del combate aún está pendiente."}.get(result.reason, "No se ha aplicado la acción. El inventario se conserva.")
+		if service.FieldEffects.Abilities.supports(_selected_item()): _result.text = _ability_rejection(result.reason)
 	refresh()
 	field.field_refresh_hud()
 	return result
+
+
+func _ability_name(id: StringName, definitions: DefinitionCatalog) -> String:
+	var ability := definitions.ability(id)
+	return ability.display_name if ability != null and not ability.display_name.is_empty() else String(id).replace("_", " ").capitalize()
+
+
+func _ability_rejection(reason: String) -> String:
+	return {"ability_not_permitted": "La habilidad de destino está excluida por las reglas. El objeto se conserva.",
+		"ability_form_route_pending": "Esta habilidad necesita un cambio de forma aún pendiente. El objeto se conserva.",
+		"item_has_no_effect": "No tendría efecto. El objeto se conserva.",
+		"ability_state_changed": "El Pokémon o la mochila han cambiado. Revisa el nuevo destino antes de usarlo.",
+		"field_locked": "Espera a terminar el combate o el desplazamiento.",
+		"creature_knocked_out": "El Pokémon está debilitado. El objeto se conserva."}.get(reason,
+		"No se puede determinar un cambio válido de habilidad con los datos actuales. El objeto se conserva.")
 
 
 func _cancel_growth() -> void:

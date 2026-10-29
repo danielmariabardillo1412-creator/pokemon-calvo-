@@ -28,8 +28,9 @@ No modificar sus resultados para presentar una ejecución limpia posterior.
 
 PP Up/Max quedan conectados y verificados en ITEM_FIELD_V8.md.
 Caramelos Raro/EXP XS/S/M/L/XL cerrados en ITEM_FIELD_V9.md.
+V10 conecta Cápsula/Parche Habilidad: ver ITEM_FIELD_V10.md.
 Continuar objetos por familias aún pendientes: IV,
-naturalezas, habilidades, condiciones de formas/evolución, bolas especiales y
+naturalezas, condiciones de formas/evolución, bolas especiales y
 mundo. El estado de referencia es [ITEM_SYSTEM_CURRENT_STATUS.json](ITEM_SYSTEM_CURRENT_STATUS.json).
 Las rutas sin sistema disponible siguen pendientes; no simular consumos sin efecto.
 
@@ -39,8 +40,12 @@ no repetir esa conexión como pendiente. Mantener los módulos separados y el
 servicio como autoridad; no consumir antes de resolver las decisiones. La coherencia
 nivel/XP se valida antes del uso. Bonos de amistad por origen y evoluciones con
 condiciones no implementadas siguen pendientes. No migrar partidas antiguas ni
-reescribir sus hashes silenciosamente. Las mentas y habilidades necesitan acordar
-qué dato persistente cambia, sin confundir naturaleza real y efecto de menta.
+reescribir sus hashes silenciosamente. Las mentas necesitan acordar qué dato
+persistente cambia, sin confundir naturaleza real y efecto de menta.
+Habilidades: el objeto cambia solo ability_id. Quedan fuera de V10 la herencia de
+slots al evolucionar y las rutas automáticas de formas; Parche hacia Modo Daruma
+se rechaza como dependencia sin consumo. No confundir ID observable con slot
+genético ni habilitar formas por cambiar una habilidad.
 
 ## Revisión gráfica futura — iconos pequeños de Pokémon
 
@@ -53,7 +58,7 @@ objetos ni iniciar ahora búsquedas, descargas, generación o sustitución de ar
 
 Multijugador, campaña/mapas finales, reglas personalizadas de vidas/muerte,
 presupuesto común Mega/Z/Max e IA neuronal no forman parte de esta limpieza.
-El usuario autoriza un piloto de objetos con OpenCode: O001 Cápsula/Parche
-Habilidad, en docs/opencode/START_HERE.md. Los planos están preparados; no se
-ha iniciado el ejecutor desde Codex. Un escritor y revisión posterior de Codex,
-sin autorizar otros bloques ni una tarea T007 de arquitectura.
+El piloto O001 de OpenCode no se inició. El usuario devolvió el trabajo a Codex,
+que terminó Cápsula/Parche como V10. Los planos en docs/opencode se conservan como
+históricos; no iniciarlos de nuevo ni atribuir una revisión externa. O002 sigue
+sin autorización concreta ni hay una tarea T007 de arquitectura.
