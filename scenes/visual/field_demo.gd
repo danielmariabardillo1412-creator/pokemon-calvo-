@@ -622,3 +622,107 @@ func _hud_snapshot() -> Dictionary:
 
 func _refresh_hud() -> void:
 	_hud.render_snapshot(_hud_snapshot())
+
+
+func field_trainer_owner() -> TrainerCampaignRosterOwner:
+	return _trainer_campaign_owner
+
+
+func field_has_living_party() -> bool:
+	var collection := field_collection()
+	if collection == null or collection.party == null:
+		return false
+	return collection.party.get_creatures().any(func(creature: CreatureInstance): return creature != null and not creature.is_knocked_out())
+
+
+func field_has_world_overlay() -> bool:
+	if not is_inside_tree():
+		return false
+	return (
+		(test_panel != null and test_panel.is_panel_open())
+		or (_pokemon_gallery != null and _pokemon_gallery.visible)
+		or (_item_bag != null and _item_bag.visible)
+		or (_doubles_demo != null and _doubles_demo.visible)
+	)
+
+
+func field_attach_battle_view(view: Control) -> void:
+	get_node("CanvasLayer").add_child(view)
+
+
+func field_forward_battle_diagnostic(kind: String, entry: Dictionary) -> void:
+	if kind == "trainer":
+		_on_trainer_diagnostic_event(entry)
+	else:
+		_on_wild_diagnostic_event(entry)
+
+
+func field_note_native_step(position: Vector2) -> StringName:
+	if not is_inside_tree():
+		return &""
+	var zone := zone_at_position(position)
+	_metrics.note_step(zone)
+	_recorder.record(&"overworld", &"step_completed", {"x": position.x, "y": position.y, "zone_id": String(zone), "backend": "native"})
+	return zone
+
+
+func field_prepare_native_encounter(zone_id: StringName) -> Dictionary:
+	if _director == null or _session == null or _catalogs == null:
+		return {}
+	if zone_id == &"" or not _director.has_zone(zone_id):
+		return {}
+	if not field_has_living_party():
+		return {}
+	var staged := RandomNumberGenerator.new()
+	staged.state = _director._encounter_rng.state
+	var table := _director._tables.get(zone_id) as WildEncounterTable
+	var encounter := WildEncounterSystem.resolve(table, staged, _catalogs, _session.progression_ruleset)
+	_metrics.note_encounter_roll(encounter.status == WildEncounterResult.ENCOUNTER, encounter.status, encounter.reason)
+	if encounter.status == WildEncounterResult.NONE:
+		_director._encounter_rng.state = staged.state
+	elif encounter.status == WildEncounterResult.ENCOUNTER and encounter.creature != null:
+		if _session.force_shiny_encounters and _catalogs.shiny_species_ids.has(String(encounter.creature.species_id)):
+			encounter.creature.is_shiny = true
+	return {"result": encounter, "next_rng": staged.state}
+
+
+func field_native_seed() -> int:
+	return _director._next_battle_seed if _director != null else -1
+
+
+func field_commit_native_battle_start(next_rng: int, kind: StringName, format_id: String) -> void:
+	if _director == null:
+		return
+	if next_rng != -1:
+		_director._encounter_rng.state = next_rng
+	var seed_value := _director._next_battle_seed
+	_director._next_battle_seed += 1
+	_metrics.note_battle_started(kind)
+	_recorder.record(kind, &"battle_started", {"backend": "native", "format": format_id, "seed": seed_value})
+
+
+func field_lock_battle_world() -> void:
+	if player == null:
+		return
+	player.movement_enabled = false
+	player.velocity = Vector2.ZERO
+
+
+func field_show_battle_view(view: Control) -> void:
+	if view == null:
+		return
+	get_window().content_scale_size = Vector2i(1280, 720)
+	view.show()
+	if _hud != null:
+		_hud.hide()
+
+
+func field_unlock_battle_world() -> void:
+	get_window().content_scale_size = Vector2i(960, 540)
+	if player != null:
+		player.reset_step_meter()
+	player.movement_enabled = not (test_panel != null and test_panel.is_panel_open())
+
+
+func field_record_native_battle_closed(reason: String) -> void:
+	_recorder.record(&"native", &"battle_closed", {"reason": reason})

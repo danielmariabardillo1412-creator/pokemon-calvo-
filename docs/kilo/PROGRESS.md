@@ -1,9 +1,10 @@
 # Progreso vigente — 2026-10-29
 
-Estado: **T006A_READY**.
+Estado: **T006A_ACCEPTED_WAITING_NEXT_PLAN**.
 
 T003: **ACCEPTED_BY_CODEX**. T004: **ACCEPTED_BY_CODEX**.
-T005: **ACCEPTED_BY_CODEX**. T006: **BLOCKED_REVIEW**.
+T005: **ACCEPTED_BY_CODEX**. T006: **IN_PROGRESS**.
+T006A: **ACCEPTED_BY_CODEX**. T006B: **BLOCKED_REVIEW**.
 T001/T002 continúan aceptados en 866b009bb2abde67014ffe6d0b4ad1dc3cc5e8b5.
 
 S0: copia aislada y baseline de 11 grupos PASS. Rama codex/kilo-architecture-v1,
@@ -182,3 +183,53 @@ Codex habilita T006A desde 291861c. T006 queda dividido: A ejecución/API/boot;
 B carga/publicación/recuperación, bloqueado hasta revisión de A y contrato nuevo.
 T006A aún no implementado. Contrato: tasks/T006A_NATIVE_BRIDGE_RUNTIME.md.
 Prompt vigente OPENCODE_PROMPT.txt. Un solo ejecutor OpenCode; original protegido.
+
+T006A implementado por OpenCode (esta entrega):
+- `scenes/visual/field_demo.gd`: añadidas solo las 13 operaciones concretas del
+  dueño (owner de entrenador, equipo vivo, overlays, vista/diagnóstico de
+  combate, paso nativo, preparación de encuentro sobre RNG clonado, semilla,
+  commit tras begin, lock/show/unlock y cierre). Sin getters genéricos ni estado
+  paralelo; las funciones existentes y la API T005 quedan intactas.
+- `scenes/visual/field_native_bridge.gd`: migradas solo las funciones de
+  ejecución permitidas a esa API; se conservan firmas, orden, semilla
+  `[seed,12004,12006,1]`, avisos, métricas, records y el diccionario `clocks`
+  por identidad. Solo los cuatro métodos congelados de persistencia
+  (`save_game`, `load_game`, `_tables_for`, `recover_battle`) conservan acceso
+  privado, inventariado para T006B.
+- Tests nuevos: contrato de mundo con escena real nativo/legado (201/194) e
+  integración real nativa (146) con worker, captura, entrenador, fallo real de
+  begin, NONE/candidato contra el resolver, overlays, notify, HUD y mochila T005.
+- `evidence/T006A/BOOT_MAP.md` documenta entrada, bootstrap, ownership, autoridad
+  nativa/proyección/settlement, carga y la deuda privada de los cuatro métodos.
+
+Comprobaciones reales:
+- `python tools/architecture_handoff/run_checks.py --phase T006A --piece`
+  → PASS: bridge_world_native 201, bridge_world_legacy 194.
+- `python tools/architecture_handoff/run_checks.py --phase T006A --quick`
+  → PASS, 14 grupos: bridge world 201/194, runtime 146, API 225/204,
+  integración 220, diagnósticos 973/476/465, HUD 431/116, field_native 118,
+  field_items 1814 y item_connections 4994; todos `exit_code: 0`.
+- `python tools/architecture_handoff/run_checks.py --phase T006A`
+  → PASS, 22 grupos incluida GPU: los 14 anteriores más map_runtime 103/0,
+  visual_legacy 45/0, medicine 120, savegame 40/0, save_adversarial 8/0,
+  item_policy 19, inventory_capture 133 y field_items_gpu 1816 (`GPU=true`).
+  `guard_before`/`guard_after` PASS con 23.058 archivos; suite lanzada en
+  ventana oculta, PID/log y espera de salida real (`EXIT_CODE=0`).
+- `python tools/architecture_handoff/guard.py --full` → PASS, 23.058 archivos,
+  FULL_CONTENT_HASHES.
+
+Evidencia: `docs/kilo/evidence/T006A/REVIEW.md`, `BOOT_MAP.md`, `results.json`,
+logs por grupo, `field_items_gpu.png`, `RUN_PID.txt`, `run_console.log`,
+`run_console.err.log` y `guard_full.log`; quick en `T006A_quick/`; pieza en
+`T006A/piece/`. No se creó commit, no se marcó ACCEPTED_BY_CODEX y T006B sigue
+bloqueado. El ejecutor se detiene para revisión de T006A.
+
+Revisión final de Codex — 2026-10-29: T006A aceptado. Repetidos mundo nativo
+201, legado 194 e integración real 146 checks, todos PASS. Sonda canónica adicional
+41 checks/8 semillas PASS frente a la llamada original con ProgressionRuleset.new.
+Guard completo PASS (23.058 archivos y sellos por función); verificados los 22
+grupos/logs del completo de OpenCode, quick 14 y pieza 2. No se cambió código ni
+runners entregados; solo correcciones documentales de BOOT_MAP y sonda de revisión.
+No se repitió toda la suite anterior. Estado/límites: evidence/T006A/CODEX_ACCEPTANCE.md
+ y CODEX_ACCEPTANCE.json. Se guarda checkpoint local separado del original.
+T006 global sigue IN_PROGRESS. T006B continúa BLOCKED_REVIEW hasta nuevo contrato.

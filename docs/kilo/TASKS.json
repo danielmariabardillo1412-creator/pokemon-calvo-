@@ -1,8 +1,6 @@
 {
-  "state": "T006A_READY",
-  "authorized_now": [
-    "T006A"
-  ],
+  "state": "T006A_ACCEPTED_WAITING_NEXT_PLAN",
+  "authorized_now": [],
   "stop_after": "T006A",
   "tasks": [
     {
@@ -58,7 +56,7 @@
     },
     {
       "id": "T006",
-      "status": "IN_PROGRESS_PLANNED_SPLIT",
+      "status": "IN_PROGRESS",
       "depends_on": [
         "T005"
       ],
@@ -66,8 +64,9 @@
       "subtasks": [
         {
           "id": "T006A",
-          "status": "READY",
-          "plan": "docs/kilo/tasks/T006A_NATIVE_BRIDGE_RUNTIME.md"
+          "status": "ACCEPTED_BY_CODEX",
+          "plan": "docs/kilo/tasks/T006A_NATIVE_BRIDGE_RUNTIME.md",
+          "review": "docs/kilo/evidence/T006A/CODEX_ACCEPTANCE.json"
         },
         {
           "id": "T006B",
@@ -78,7 +77,6 @@
     }
   ],
   "executor": "OpenCode (manual model selection by user)",
-  "accepted_predecessor": "66be8f932ea6fdc50b6d82004deb4238bfeb3759",
-  "latest_acceptance": "docs/kilo/evidence/T005/CODEX_ACCEPTANCE.json",
-  "accepted_checkpoint": "291861ca706e075b0df546abd8c15102024cf865"
+  "accepted_predecessor": "291861ca706e075b0df546abd8c15102024cf865",
+  "latest_acceptance": "docs/kilo/evidence/T006A/CODEX_ACCEPTANCE.json"
 }

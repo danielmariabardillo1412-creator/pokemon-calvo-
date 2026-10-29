@@ -18,12 +18,11 @@ func configure(world: Node2D) -> void:
 	field = world
 	for arg: String in OS.get_cmdline_user_args():
 		if arg.begins_with("--battle-format=") and arg.get_slice("=", 1) in ["gen8customgame", "gen9customgame", "gen9calvounifiedv1"]: format_id = arg.get_slice("=", 1)
-	view = Presentation.new(); view.catalogs = field._catalogs; view.owner_bridge = self
-	field.get_node("CanvasLayer").add_child(view)
+	view = Presentation.new(); view.catalogs = field.field_definitions(); view.owner_bridge = self
+	field.field_attach_battle_view(view)
 	view.return_requested.connect(leave_battle)
 	view.diagnostic_event.connect(func(entry: Dictionary):
-		if kind == "trainer": field._on_trainer_diagnostic_event(entry)
-		else: field._on_wild_diagnostic_event(entry))
+		field.field_forward_battle_diagnostic(kind, entry))
 
 
 func occupied() -> bool:
@@ -31,44 +30,41 @@ func occupied() -> bool:
 
 
 func _world_overlay_open() -> bool:
-	return field.test_panel.is_panel_open() or field._pokemon_gallery != null and field._pokemon_gallery.visible or field._item_bag != null and field._item_bag.visible or field._doubles_demo != null and field._doubles_demo.visible
+	return field.field_has_world_overlay()
 
 
 func on_step(position: Vector2) -> void:
 	if occupied() or field.traversal_is_busy() or _world_overlay_open(): return
-	var zone: StringName = field.zone_at_position(position)
-	field._metrics.note_step(zone)
-	field._recorder.record(&"overworld", &"step_completed", {"x": position.x, "y": position.y, "zone_id": String(zone), "backend": "native"})
+	var zone: StringName = field.field_note_native_step(position)
 	if field.trainer_trigger_contains(position) and start_trainer(): return
-	if zone == &"" or not field._director.has_zone(zone): return
-	if not field._session.player.party.get_creatures().any(func(c): return not c.is_knocked_out()): return
-	var staged := RandomNumberGenerator.new(); staged.state = field._director._encounter_rng.state
-	var encounter := WildEncounterSystem.resolve(field._director._tables[zone], staged, field._catalogs, ProgressionRuleset.new())
-	field._metrics.note_encounter_roll(encounter.status == WildEncounterResult.ENCOUNTER, encounter.status, encounter.reason)
-	if encounter.status == WildEncounterResult.NONE:
-		field._director._encounter_rng.state = staged.state; return
+	var prepared: Dictionary = field.field_prepare_native_encounter(zone)
+	if prepared.is_empty(): return
+	var encounter := prepared.get("result") as WildEncounterResult
+	if encounter == null or encounter.status == WildEncounterResult.NONE: return
 	if encounter.status != WildEncounterResult.ENCOUNTER: notify("Encuentro rechazado: " + encounter.reason); return
-	if field._session.force_shiny_encounters and field._catalogs.shiny_species_ids.has(String(encounter.creature.species_id)): encounter.creature.is_shiny = true
 	busy = true; kind = "wild"; _lock_world()
-	await _open(encounter.creature, staged.state)
+	await _open(encounter.creature, int(prepared.get("next_rng", -1)))
 
 
 func start_trainer() -> bool:
-	if occupied() or field.traversal_is_busy() or _world_overlay_open() or not field._trainer_campaign_owner.is_ready(): return false
-	if not field._trainer_campaign_owner.roster_for_battle().any(func(c): return not c.is_knocked_out()): return false
-	if not field._session.player.party.get_creatures().any(func(c): return not c.is_knocked_out()): return false
+	if occupied() or field.traversal_is_busy() or _world_overlay_open(): return false
+	var owner: TrainerCampaignRosterOwner = field.field_trainer_owner()
+	if owner == null or not owner.is_ready(): return false
+	if not owner.roster_for_battle().any(func(c): return not c.is_knocked_out()): return false
+	if not field.field_has_living_party(): return false
 	busy = true; kind = "trainer"; _lock_world()
 	_open.call_deferred(null, -1)
 	return true
 
 
 func _open(wild: CreatureInstance, next_rng: int) -> void:
-	var owner: TrainerCampaignRosterOwner = field._trainer_campaign_owner if kind == "trainer" else null
-	var session := Session.new(field._catalogs, field._session.player, clocks, format_id, owner)
-	view.session = session; view.player = field._session.player; view._working = true
+	var collection: PlayerCollection = field.field_collection()
+	var owner: TrainerCampaignRosterOwner = field.field_trainer_owner() if kind == "trainer" else null
+	var session := Session.new(field.field_definitions(), collection, clocks, format_id, owner)
+	view.session = session; view.player = collection; view._working = true
 	view._z_toggle.set_pressed_no_signal(false); view._dynamax_toggle.set_pressed_no_signal(false)
 	view._event_log.text = "Comienza el combate."; _show_battle()
-	var seed_value: int = field._director._next_battle_seed
+	var seed_value: int = field.field_native_seed()
 	var seed_parts := [seed_value, 12004, 12006, 1]
 	var ok: bool
 	if kind == "wild": ok = await session.begin_wild(get_tree(), wild, seed_parts, seed_value)
@@ -77,26 +73,20 @@ func _open(wild: CreatureInstance, next_rng: int) -> void:
 	if not ok:
 		last_error = session.last_error; await session.close(); view.hide(); kind = ""
 		_unlock_world(); notify("No se pudo iniciar el combate: " + last_error); return
-	if next_rng != -1: field._director._encounter_rng.state = next_rng
-	field._director._next_battle_seed += 1
-	field._metrics.note_battle_started(StringName(kind))
-	field._recorder.record(StringName(kind), &"battle_started", {"backend": "native", "format": format_id, "seed": seed_value})
+	field.field_commit_native_battle_start(next_rng, StringName(kind), format_id)
 	view.diagnostic_event.emit({"event": "battle_opened"}); view._refresh_view()
 
 
 func _lock_world() -> void:
-	field.player.movement_enabled = false; field.player.velocity = Vector2.ZERO
+	field.field_lock_battle_world()
 
 
 func _show_battle() -> void:
-	field.get_window().content_scale_size = Vector2i(1280, 720)
-	view.show(); field._hud.hide()
+	field.field_show_battle_view(view)
 
 
 func _unlock_world() -> void:
-	field.get_window().content_scale_size = Vector2i(960, 540)
-	field.player.reset_step_meter()
-	field.player.movement_enabled = not field.test_panel.is_panel_open()
+	field.field_unlock_battle_world()
 
 
 func leave_battle() -> void:
@@ -107,12 +97,12 @@ func leave_battle() -> void:
 	await view.session.close()
 	view.hide(); view._medicine_popup.hide(); view._working = false; busy = false; kind = ""
 	_unlock_world(); notify({"CAPTURED": "Pokémon capturado.", "FLED": "Has escapado.", "VICTORY": "¡Victoria!", "DEFEAT": "Tu equipo se ha debilitado.", "DRAW": "Empate."}.get(reason, "Combate terminado."))
-	field._recorder.record(&"native", &"battle_closed", {"reason": reason})
+	field.field_record_native_battle_closed(reason)
 
 
 func notify(message: String) -> void:
 	last_error = message
-	if field._notice_label != null: field._notice_label.text = message
+	field.field_show_notice(message)
 	if view != null and view.visible: view._event_log.append_text("\n" + message)
 
 
