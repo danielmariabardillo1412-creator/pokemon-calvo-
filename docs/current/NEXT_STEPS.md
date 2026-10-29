@@ -1,4 +1,4 @@
-# Próximo trabajo — 2026-10-29
+# Próximo trabajo — 2026-10-30
 
 ## Limpieza y correcciones cerradas
 
@@ -37,6 +37,9 @@ V12 conecta Veloz/Turno/Nivel Ball: doce bolas admitidas; contexto real de turno
 y nivel activo, reconstruido tras guardar/cargar. Ver ITEM_CAPTURE_V12.md.
 No repetir estas conexiones. Otras bolas requieren ambiente, historial, tipos,
 género o metadatos de origen; no habilitarlas con contexto inventado.
+V15 conecta Amigo/Safari/Competi/Gloria Ball, sin contexto nuevo del mundo:
+ver ITEM_CAPTURE_V15.md. Dieciséis bolas admitidas; no repetir sus conexiones.
+Los eventos/regalos, concursos o formas de conseguirlas no se implementan aquí.
 V13 conecta siete rutas EV de mochis: ver ITEM_MOCHI_V13.md. No repetir la
 conexión de EV; amistad conservada según RHH, pendiente de contraste con SV.
 V14 corrige el rechazo nativo de Campana Alivio: ver ITEM_FIELD_HELD_V14.md.

@@ -21,6 +21,10 @@ representacion persistente distinta de la naturaleza original; no falsearla.
 V12 conecta Veloz/Turno/Nivel Ball con contexto vivo de turnos y nivel activo:
 doce bolas admitidas. Cargar reconstruye el contexto; no hay contadores nuevos
 en el guardado. docs/current/ITEM_CAPTURE_V12.md registra las pruebas y limites.
+V15 conecta Amigo/Safari/Competi/Gloria Ball, dieciseis IDs admitidos. Amigo fija
+amistad 200 solo al capturar; Safari/Competi multiplican por 1,5 y Gloria por 1.
+Mismo perfil aproximado de captura, sin regalos/concursos ni nuevos campos de
+origen de bola. Ver docs/current/ITEM_CAPTURE_V15.md; Lujo sigue pendiente.
 V13 conecta siete rutas EV de mochis, con perfil RHH que conserva amistad;
 paridad de amistad con SV pendiente de contraste, sin afirmar equivalencia total.
 Ver docs/current/ITEM_MOCHI_V13.md. V14 corrige la entrada nativa con Campana

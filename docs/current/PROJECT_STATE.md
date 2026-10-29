@@ -1,4 +1,4 @@
-# Estado del proyecto — 2026-10-29
+# Estado del proyecto — 2026-10-30
 
 Copia activa: `D:/Proyectos/Pokemon Calvo - Arquitectura Kilo`.
 Original separado e intacto: `D:/Proyectos/Pokemon Calvo`.
@@ -71,6 +71,14 @@ La traza ordinaria coincide con el adaptador previo. El barrido de registro
 identifica 62 otros equipables permitidos sin definición nativa; no certifica
 que todos sean neutros o que todos sus sistemas existan:
 [ITEM_FIELD_HELD_V14.md](ITEM_FIELD_HELD_V14.md).
+
+V15 conecta Amigo/Safari/Competi/Gloria Ball: dieciséis IDs de captura admitidos.
+17.216 casos sobre las 1.076 especies/formas permitidas; Amigo fija amistad 200
+solo tras éxito, Safari/Competi usan 1,5 y Gloria 1. Se verifican costes, fallos,
+RNG, equipo lleno/PC, entrada nativa y cuatro rutas reales del selector del mapa
+con guardado/carga. No se agregan concursos ni regalos. Los 76 efectos de campo
+se cuentan aparte; captura conserva su fórmula aproximada. Evidencia:
+[ITEM_CAPTURE_V15.md](ITEM_CAPTURE_V15.md).
 
 Arte beta de objetos: [ITEM_ART_CURRENT_STATUS.json](ITEM_ART_CURRENT_STATUS.json).
 La presencia de una imagen no certifica su mecánica. Las revisiones artísticas y

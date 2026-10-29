@@ -1,4 +1,4 @@
-# Empezar aquí — 2026-10-29
+# Empezar aquí — 2026-10-30
 
 1. Leer `AGENTS.md` en la raíz: copia activa, original protegido y límites.
 2. Leer [PROJECT_STATE.md](PROJECT_STATE.md): estado vigente y cobertura.
@@ -28,10 +28,14 @@ conectadas con turnos/nivel activo reales y restauración; doce bolas admitidas.
 V13: [ITEM_MOCHI_V13.md](ITEM_MOCHI_V13.md). Siete rutas EV de mochis,
 30.128 casos y nueve grupos PASS; 76 efectos de campo conectados. Se conserva
 amistad según RHH, sin certificar paridad SV.
-Último bloque V14: [ITEM_FIELD_HELD_V14.md](ITEM_FIELD_HELD_V14.md). Campana Alivio
+V14: [ITEM_FIELD_HELD_V14.md](ITEM_FIELD_HELD_V14.md). Campana Alivio
 ya entra en nativo y conserva su identidad, transferencias, consumo y guardado.
 Once casos nativos y diez grupos PASS. El inventario señala otros 62 equipables
 permitidos sin definición; continuar por familias, sin inferir efectos neutros.
+Último bloque V15: [ITEM_CAPTURE_V15.md](ITEM_CAPTURE_V15.md). Amigo/Safari/Competi/
+Gloria Ball, dieciséis bolas conectadas. 17.216 casos y cuatro rutas del mapa con
+guardar/cargar; resultados completos en su JSON. La fórmula aproximada de captura
+y los sistemas de obtención/eventos se mantienen separados.
 La revisión previa a caramelos corrigió las curvas de experiencia; resultado y
 compatibilidad en [PROGRESSION_GROWTH_CURVES_FIX.md](PROGRESSION_GROWTH_CURVES_FIX.md).
 Auditoría de datos original/API y correcciones cerradas:
