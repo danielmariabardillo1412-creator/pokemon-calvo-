@@ -1,10 +1,10 @@
 # Progreso vigente — 2026-10-29
 
-Estado: **T006B_READY**.
+Estado: **ARCHITECTURE_PLAN_ACCEPTED**.
 
 T003: **ACCEPTED_BY_CODEX**. T004: **ACCEPTED_BY_CODEX**.
-T005: **ACCEPTED_BY_CODEX**. T006: **IN_PROGRESS**.
-T006A: **ACCEPTED_BY_CODEX**. T006B: **BLOCKED_REVIEW**.
+T005: **ACCEPTED_BY_CODEX**. T006: **ACCEPTED_BY_CODEX**.
+T006A: **ACCEPTED_BY_CODEX**. T006B: **ACCEPTED_BY_CODEX**.
 T001/T002 continúan aceptados en 866b009bb2abde67014ffe6d0b4ad1dc3cc5e8b5.
 
 S0: copia aislada y baseline de 11 grupos PASS. Rama codex/kilo-architecture-v1,
@@ -239,3 +239,57 @@ implementado. Contrato: tasks/T006B_NATIVE_PERSISTENCE.md. Incluye validación,
 publicación síncrona y recuperación con pruebas de identidad y fallos reales.
 Prompt OPENCODE_PROMPT.txt. T006 sigue IN_PROGRESS hasta revisión de B.
 No mezclar con el original ni realizar otra reforma al terminar la entrega.
+
+T006B implementado por OpenCode (esta entrega):
+- `scenes/visual/field_demo.gd`: añadidas solo las siete operaciones del contrato
+  (posición, movimiento, snapshot de mundo con orden exacto, builder de tablas,
+  validador con motivos/orden base, publicación síncrona de referencias y refresh
+  de presentaciones heredadas). Sin getters genéricos, setters ni estado paralelo.
+- `scenes/visual/field_native_bridge.gd`: modificados solo `save_game`,
+  `load_game`, `_tables_for` y `recover_battle`; firmas, vars públicas, aliases,
+  sobre/schema/checksum, poda de clocks, avisos y orden conservados. La candidata
+  se restaura antes de cerrar la sesión anterior; la publicación del mapa ocurre
+  una vez y sin awaits antes de asignar clocks/format/view/toggles. `recover_battle`
+  conserva checkpoint y no sustituye clocks, colección, trainer ni RNG.
+- Eliminados del puente todos los `field._*`, `field.player`, `field.test_panel` y
+  `field.traversal_controller`; solo queda la presentación propia `view._*`.
+- Tests nuevos: contrato de mundo con escena real nativa/legado (1.020/1.020) e
+  integración real nativa (623) con worker real, campo, salvaje, entrenador,
+  candidata rechazada, recuperación real de worker y guards; sin mocks de carga,
+  publicación, identidad o backend.
+
+Comprobaciones reales:
+- `python tools/architecture_handoff/run_checks.py --phase T006B --piece`
+  → PASS: contrato nativo 1.020 y legado 1.020.
+- `python tools/architecture_handoff/run_checks.py --phase T006B --quick`
+  → PASS, 17 grupos: contrato 1.020/1.020, integración 623, bridge world 201/194,
+  runtime 146, API 225/204, integración API 220, diagnósticos 973/476/465,
+  HUD 431/116, field_native 118, field_items 1.814 e item_connections 4.994.
+- `python tools/architecture_handoff/run_checks.py --phase T006B`
+  → PASS, 25 grupos incluida GPU: los 17 anteriores más map_runtime 103/0,
+  visual_legacy 45/0, medicine 120, savegame 40/0, save_adversarial 8/0,
+  item_policy 19, inventory_capture 133 y field_items_gpu 1.816 (`GPU=true`),
+  todos con `exit_code: 0`.
+- `python tools/architecture_handoff/guard.py --full`
+  → PASS: 23.063 archivos protegidos, `FULL_CONTENT_HASHES`.
+
+Los runners largos se ejecutaron de forma secuencial y se esperó su salida real;
+ningún timeout, interrupción o proceso activo se contó como PASS.
+
+Evidencia: `docs/kilo/evidence/T006B/REVIEW.md`,
+`docs/kilo/evidence/T006B/ARCHITECTURE_STATUS.md`, `results.json`, logs por grupo,
+`guard_full.log`; quick en `T006B_quick/` y pieza en `T006B/piece/`. No se creó
+commit, no se publicó, no se mezcló con el original y no se escribió
+`ACCEPTED_BY_CODEX`. T006B queda IMPLEMENTED_AWAITING_REVIEW, T006 PENDING_REVIEW
+y el estado global READY_FOR_REVIEW. El ejecutor se detiene para revisión.
+
+Cierre Codex — 2026-10-29: T006B, T006 y plan T001–T006 aceptados. Contratos
+repetidos 1.020/1.020 e integración real 623 PASS; integridad 23.063 archivos y
+funciones congeladas PASS. Verificados los 25 grupos de OpenCode, quick 17 y pieza 2.
+Sin cambios de código/runners por Codex ni repetición de toda la suite anterior.
+Solo aclaraciones documentales y una sonda aislada de revisión de caso malformado.
+Pendiente previo fuera de alcance ARCH_SAVE_REGION_TYPE confirmado también en la
+base 3fed2a2; no es regresión ni se ha corregido en esta reorganización.
+Estado/límites: evidence/T006B/CODEX_ACCEPTANCE.md/.json. Handoff:
+evidence/T006B/FINAL_HANDOFF.md. Copia local separada, sin merge/publicación.
+No hay tareas activas para OpenCode; los trabajos futuros requieren nuevo alcance.

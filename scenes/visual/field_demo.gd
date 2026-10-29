@@ -726,3 +726,68 @@ func field_unlock_battle_world() -> void:
 
 func field_record_native_battle_closed(reason: String) -> void:
 	_recorder.record(&"native", &"battle_closed", {"reason": reason})
+
+
+func field_player_position() -> Vector2:
+	if player == null:
+		return Vector2.ZERO
+	return player.global_position
+
+
+func field_player_movement_enabled() -> bool:
+	return player != null and player.movement_enabled
+
+
+func field_native_world_snapshot(format_id: String) -> Dictionary:
+	var position := field_player_position()
+	return {"position": [position.x, position.y], "region": String(technical_region_id()),
+		"config": _active_config.duplicate(true), "rng": str(_director._encounter_rng.state), "next_seed": _director._next_battle_seed, "format": format_id}
+
+
+func field_build_native_encounter_tables(config: Dictionary) -> Dictionary:
+	var tables := {}
+	for key: String in ["player_team", "trainer_team"]:
+		if not config.get(key) is Array or config[key].is_empty() or config[key].size() > 6: return {}
+		for row: Variant in config[key]:
+			if not row is Dictionary or not row.get("species_id") is String or not (row.get("level") is int or row.get("level") is float) or row.level != int(row.level) or row.level < 1 or row.level > 100: return {}
+	if not config.get("wild_species_id") is String: return {}
+	for key: String in ["wild_min_level", "wild_max_level", "cave_min_level", "cave_max_level", "encounter_chance_percent"]:
+		if not (config.get(key) is float or config.get(key) is int) or int(config[key]) != config[key] or config[key] < 0 or config[key] > 100: return {}
+	var species := String(config.get("wild_species_id", "")).trim_suffix("__shiny")
+	if String(config.get("wild_species_id", "")).ends_with("__shiny") and not _catalogs.shiny_species_ids.has(species): return {}
+	for row: Array in [[TECHNICAL_ZONE_ID, "wild_min_level", "wild_max_level"], [TECHNICAL_CAVE_ZONE_ID, "cave_min_level", "cave_max_level"]]:
+		if config[row[1]] < 1 or config[row[2]] < config[row[1]]: return {}
+		var built := TechnicalEncounterPoolBuilder.build(_catalogs, row[0], int(config.encounter_chance_percent), int(config[row[1]]), int(config[row[2]]), StringName(species))
+		if not built.ok: return {}
+		tables[row[0]] = built.table
+	return tables
+
+
+func field_validate_native_loaded_world(world: Dictionary) -> Dictionary:
+	if not world.get("position") is Array or world.position.size() != 2 or not world.get("config") is Dictionary or world.get("format") not in ["gen8customgame", "gen9customgame", "gen9calvounifiedv1"] or not world.get("rng") is String or not world.rng.is_valid_int() or not (world.get("next_seed") is int or world.get("next_seed") is float): return {"ok": false, "error": "world_shape"}
+	for v: Variant in world.position:
+		if not (v is int or v is float) or not is_finite(v): return {"ok": false, "error": "world_position"}
+	var position := Vector2(world.position[0], world.position[1])
+	if position.x < 16 or position.x > 1280 or position.y < 16 or position.y > 850 or String(_region_at_position(position)) != world.get("region") or not traversal_controller._destination_is_clear(position): return {"ok": false, "error": "world_position"}
+	if world.next_seed != int(world.next_seed) or world.next_seed < 1 or world.next_seed > 2147483646: return {"ok": false, "error": "world_seed"}
+	var tables := field_build_native_encounter_tables(world.config)
+	if tables.is_empty(): return {"ok": false, "error": "world_encounters"}
+	return {"ok": true, "position": position, "tables": tables}
+
+
+func field_publish_native_loaded_world(collection: PlayerCollection, trainer: TrainerCampaignRosterOwner, world: Dictionary, position: Vector2, tables: Dictionary) -> void:
+	_session = WildAdventureSession.new(collection, _catalogs, ProgressionRuleset.new())
+	_trainer_session = TrainerBattleSession.new(collection, _catalogs, ProgressionRuleset.new())
+	_trainer_campaign_owner = trainer
+	_active_config = world.config.duplicate(true)
+	test_panel.restore_configuration(world.config)
+	_trainer_profile_id = StringName(world.config.get("trainer_profile_id", "balanced"))
+	_trainer_expertise_id = StringName(world.config.get("trainer_expertise_id", "full"))
+	_session.force_shiny_encounters = String(world.config.get("wild_species_id", "")).ends_with("__shiny")
+	_director.session = _session; _director._tables = tables
+	_director._encounter_rng.state = int(world.rng); _director._next_battle_seed = int(world.next_seed)
+	player.global_position = position; player.reset_step_meter()
+
+
+func field_refresh_legacy_presentations() -> void:
+	_configure_presentations()

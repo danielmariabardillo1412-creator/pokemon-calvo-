@@ -112,16 +112,17 @@ func _idle_boundary() -> bool:
 
 func save_game() -> bool:
 	if not _idle_boundary(): return false
-	if not view.visible and not field.player.movement_enabled: return false
+	if not view.visible and not field.field_player_movement_enabled(): return false
 	var battle := {}
 	if view.session != null and view.session.has_active_battle(): battle = view.session.snapshot()
-	var world := {"position": [field.player.global_position.x, field.player.global_position.y], "region": String(field.technical_region_id()),
-		"config": field._active_config.duplicate(true), "rng": str(field._director._encounter_rng.state), "next_seed": field._director._next_battle_seed, "format": format_id}
+	var collection: PlayerCollection = field.field_collection()
+	var owner: TrainerCampaignRosterOwner = field.field_trainer_owner()
+	var world: Dictionary = field.field_native_world_snapshot(format_id)
 	for id: String in clocks.keys():
-		var c: CreatureInstance = field._session.player.owned_creature(StringName(id))
-		if c == null: c = field._trainer_campaign_owner.owned_creature(StringName(id))
+		var c: CreatureInstance = collection.owned_creature(StringName(id)) if collection != null else null
+		if c == null: c = owner.owned_creature(StringName(id)) if owner != null else null
 		if c == null or c.status_state.persistent_id != &"sleep": clocks.erase(id)
-	var ok := saves.write(save_path, field._session.player, world, field._trainer_campaign_owner, clocks, battle, field._catalogs)
+	var ok := saves.write(save_path, collection, world, owner, clocks, battle, field.field_definitions())
 	notify("Partida guardada." if ok else "No se pudo guardar: " + saves.last_error)
 	return ok
 
@@ -129,41 +130,27 @@ func save_game() -> bool:
 func load_game() -> bool:
 	if not _idle_boundary(): return false
 	busy = true; view._working = true; _lock_world(); view._refresh_view()
-	var loaded := saves.read(save_path, field._catalogs)
+	var loaded := saves.read(save_path, field.field_definitions())
 	if not loaded.ok: return _load_failed(saves.last_error)
 	var world: Dictionary = loaded.world
-	if not world.get("position") is Array or world.position.size() != 2 or not world.get("config") is Dictionary or world.get("format") not in ["gen8customgame", "gen9customgame", "gen9calvounifiedv1"] or not world.get("rng") is String or not world.rng.is_valid_int() or not (world.get("next_seed") is int or world.get("next_seed") is float): return _load_failed("world_shape")
-	for v: Variant in world.position:
-		if not (v is int or v is float) or not is_finite(v): return _load_failed("world_position")
-	var position := Vector2(world.position[0], world.position[1])
-	if position.x < 16 or position.x > 1280 or position.y < 16 or position.y > 850 or String(field._region_at_position(position)) != world.get("region") or not field.traversal_controller._destination_is_clear(position): return _load_failed("world_position")
-	if world.next_seed != int(world.next_seed) or world.next_seed < 1 or world.next_seed > 2147483646: return _load_failed("world_seed")
-	var tables := _tables_for(world.config)
-	if tables.is_empty(): return _load_failed("world_encounters")
+	var validated: Dictionary = field.field_validate_native_loaded_world(world)
+	if not bool(validated.get("ok", false)): return _load_failed(String(validated.get("error", "world_shape")))
+	var position: Vector2 = validated.position
+	var tables: Dictionary = validated.tables
 	var candidate: RefCounted
 	if not loaded.battle.is_empty():
 		var is_trainer: bool = loaded.battle.get("adventure", {}).get("kind") == "trainer"
-		candidate = Session.new(field._catalogs, loaded.collection, loaded.clocks, world.format, loaded.trainer if is_trainer else null)
+		candidate = Session.new(field.field_definitions(), loaded.collection, loaded.clocks, world.format, loaded.trainer if is_trainer else null)
 		if not await candidate.restore_saved(get_tree(), loaded.battle):
 			var reason: String = candidate.last_error; await candidate.close(); return _load_failed(reason)
 	if view.session != null: await view.session.close()
 	# Candidate state is fully validated, including its worker. Publish synchronously.
-	field._session = WildAdventureSession.new(loaded.collection, field._catalogs, ProgressionRuleset.new())
-	field._trainer_session = TrainerBattleSession.new(loaded.collection, field._catalogs, ProgressionRuleset.new())
-	field._trainer_campaign_owner = loaded.trainer
-	field._active_config = world.config.duplicate(true)
-	field.test_panel.restore_configuration(world.config)
-	field._trainer_profile_id = StringName(world.config.get("trainer_profile_id", "balanced"))
-	field._trainer_expertise_id = StringName(world.config.get("trainer_expertise_id", "full"))
-	field._session.force_shiny_encounters = String(world.config.get("wild_species_id", "")).ends_with("__shiny")
-	field._director.session = field._session; field._director._tables = tables
-	field._director._encounter_rng.state = int(world.rng); field._director._next_battle_seed = int(world.next_seed)
-	field.player.global_position = position; field.player.reset_step_meter()
+	field.field_publish_native_loaded_world(loaded.collection, loaded.trainer, world, position, tables)
 	clocks = loaded.clocks; format_id = world.format
 	view._playback.cancel(); view._medicine_popup.hide(); view.session = candidate; view.player = loaded.collection
 	view._settlement_error = false; view._working = false
 	view._z_toggle.set_pressed_no_signal(false); view._dynamax_toggle.set_pressed_no_signal(false)
-	field._configure_presentations()
+	field.field_refresh_legacy_presentations()
 	busy = false; kind = String(candidate.battle_kind) if candidate != null else ""
 	if candidate != null:
 		_show_battle(); view._event_log.text = "Combate recuperado."; view.diagnostic_event.emit({"event": "battle_opened"}); view._refresh_view()
@@ -173,22 +160,7 @@ func load_game() -> bool:
 
 
 func _tables_for(config: Dictionary) -> Dictionary:
-	var tables := {}
-	for key: String in ["player_team", "trainer_team"]:
-		if not config.get(key) is Array or config[key].is_empty() or config[key].size() > 6: return {}
-		for row: Variant in config[key]:
-			if not row is Dictionary or not row.get("species_id") is String or not (row.get("level") is int or row.get("level") is float) or row.level != int(row.level) or row.level < 1 or row.level > 100: return {}
-	if not config.get("wild_species_id") is String: return {}
-	for key: String in ["wild_min_level", "wild_max_level", "cave_min_level", "cave_max_level", "encounter_chance_percent"]:
-		if not (config.get(key) is float or config.get(key) is int) or int(config[key]) != config[key] or config[key] < 0 or config[key] > 100: return {}
-	var species := String(config.get("wild_species_id", "")).trim_suffix("__shiny")
-	if String(config.get("wild_species_id", "")).ends_with("__shiny") and not field._catalogs.shiny_species_ids.has(species): return {}
-	for row: Array in [[field.TECHNICAL_ZONE_ID, "wild_min_level", "wild_max_level"], [field.TECHNICAL_CAVE_ZONE_ID, "cave_min_level", "cave_max_level"]]:
-		if config[row[1]] < 1 or config[row[2]] < config[row[1]]: return {}
-		var built := TechnicalEncounterPoolBuilder.build(field._catalogs, row[0], int(config.encounter_chance_percent), int(config[row[1]]), int(config[row[2]]), StringName(species))
-		if not built.ok: return {}
-		tables[row[0]] = built.table
-	return tables
+	return field.field_build_native_encounter_tables(config)
 
 
 func _load_failed(reason: String) -> bool:
@@ -205,7 +177,7 @@ func recover_battle() -> bool:
 	busy = true
 	view._working = true; view._refresh_view()
 	var old: RefCounted = view.session
-	var replacement := Session.new(field._catalogs, field._session.player, clocks, format_id, field._trainer_campaign_owner if kind == "trainer" else null)
+	var replacement := Session.new(field.field_definitions(), field.field_collection(), clocks, format_id, field.field_trainer_owner() if kind == "trainer" else null)
 	var ok: bool = await replacement.restore_saved(get_tree(), old.snapshot())
 	if ok:
 		await old.close(); view.session = replacement; view.diagnostic_event.emit({"event": "battle_opened"})

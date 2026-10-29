@@ -1,8 +1,6 @@
 {
-  "state": "T006B_READY",
-  "authorized_now": [
-    "T006B"
-  ],
+  "state": "ARCHITECTURE_PLAN_ACCEPTED",
+  "authorized_now": [],
   "stop_after": "T006B",
   "tasks": [
     {
@@ -58,7 +56,7 @@
     },
     {
       "id": "T006",
-      "status": "IN_PROGRESS",
+      "status": "ACCEPTED_BY_CODEX",
       "depends_on": [
         "T005"
       ],
@@ -72,18 +70,31 @@
         },
         {
           "id": "T006B",
-          "status": "READY",
+          "status": "ACCEPTED_BY_CODEX",
           "purpose": "Move validated restored-state publication and persistence dependencies to owner API; separate contract required.",
           "depends_on": [
             "T006A"
           ],
-          "plan": "docs/kilo/tasks/T006B_NATIVE_PERSISTENCE.md"
+          "plan": "docs/kilo/tasks/T006B_NATIVE_PERSISTENCE.md",
+          "review": "docs/kilo/evidence/T006B/CODEX_ACCEPTANCE.json"
         }
-      ]
+      ],
+      "review": "docs/kilo/evidence/T006B/CODEX_ACCEPTANCE.json"
     }
   ],
   "executor": "OpenCode (manual model selection by user)",
-  "accepted_predecessor": "291861ca706e075b0df546abd8c15102024cf865",
-  "latest_acceptance": "docs/kilo/evidence/T006A/CODEX_ACCEPTANCE.json",
-  "accepted_checkpoint": "4535c2802a037838f7079ef3af0a6011d0964428"
+  "accepted_predecessor": "4535c2802a037838f7079ef3af0a6011d0964428",
+  "latest_acceptance": "docs/kilo/evidence/T006B/CODEX_ACCEPTANCE.json",
+  "final_handoff": "docs/kilo/evidence/T006B/FINAL_HANDOFF.md",
+  "deferred_findings": [
+    {
+      "id": "ARCH_SAVE_REGION_TYPE",
+      "status": "DEFERRED_OUT_OF_SCOPE",
+      "introduced_by_this_refactor": false,
+      "verified_against": "3fed2a2",
+      "description": "Numeric world.region in a deliberately edited checksummed save triggers a GDScript String/float comparison error in baseline and current. Current releases busy/working via fallback; baseline does not.",
+      "evidence": "docs/kilo/evidence/T006B/codex_review/region_type_probe_canonical.json",
+      "next_action": "Add an explicit region-type validation and regression test in a separate authorized change."
+    }
+  ]
 }
