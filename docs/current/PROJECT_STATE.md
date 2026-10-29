@@ -25,10 +25,14 @@ El barrido fresco del comparador V1 pasó en ambos juegos.
 
 Objetos: 2.222 IDs inventariados. Estado mecánico vigente:
 [ITEM_SYSTEM_CURRENT_STATUS.json](ITEM_SYSTEM_CURRENT_STATUS.json).
-Hay 61 efectos de campo verificados (41 de recuperación y 20 de entrenamiento:
-18 EV/amistad base y 2 de mejoras de PP),
+Hay 67 efectos de campo verificados (41 de recuperación y 26 de entrenamiento:
+18 EV/amistad base, 2 de mejoras de PP y 6 caramelos),
 además de las conexiones y límites de equipados, evolución y máquinas registrados
 allí. No están certificados todos los efectos de todos los objetos.
+V9: 6.456 combinaciones especie/objeto y 252 contextos de propiedad/amistad;
+33.633 checks headless y 33.635 GPU. Mochila con decisiones explícitas, consumo
+al finalizar, guardado/restauración y uso posterior en combate nativo verificados:
+[ITEM_FIELD_V9.md](ITEM_FIELD_V9.md). Cancelar descarta la candidata sin consumir.
 
 Arte beta de objetos: [ITEM_ART_CURRENT_STATUS.json](ITEM_ART_CURRENT_STATUS.json).
 La presencia de una imagen no certifica su mecánica. Las revisiones artísticas y

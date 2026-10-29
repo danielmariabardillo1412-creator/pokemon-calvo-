@@ -4,6 +4,8 @@ signal popup_hide
 
 const Service = preload("res://modules/inventory/field_item_service.gd")
 const Art = preload("res://scenes/visual/item_art_catalog.gd")
+const GrowthTransaction = preload("res://modules/inventory/field_growth_transaction.gd")
+const GrowthChoices = preload("res://scenes/visual/field_growth_choices.gd")
 var field: Node2D
 var service := Service.new()
 var _items: ItemList
@@ -13,12 +15,15 @@ var _result: Label
 var _description: Label
 var _use: Button
 var _equip: Button
+var _growth := GrowthTransaction.new()
+var _growth_choices: VBoxContainer
 
 
 func _ready() -> void:
 	hide()
 	visibility_changed.connect(func():
-		if not visible: popup_hide.emit())
+		if not visible:
+			_cancel_growth(); popup_hide.emit())
 	var box := VBoxContainer.new(); box.custom_minimum_size = Vector2(600, 360); box.add_theme_constant_override("separation", 10); add_child(box)
 	var title := Label.new(); title.text = "MOCHILA · FUERA DEL COMBATE"; box.add_child(title)
 	_items = ItemList.new(); _items.custom_minimum_size.y = 135; _items.fixed_icon_size = Vector2i(32, 32); box.add_child(_items)
@@ -33,6 +38,10 @@ func _ready() -> void:
 	_button(buttons, "Quitar equipado", func(): _apply("unequip"))
 	_button(buttons, "Cerrar · B / Esc", hide)
 	_result = Label.new(); _result.custom_minimum_size.x = 540; _result.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART; box.add_child(_result)
+	_growth_choices = GrowthChoices.new(); box.add_child(_growth_choices)
+	_growth_choices.chosen.connect(func(value): _show_growth_result(_growth.choose(value)))
+	_growth_choices.cancelled.connect(func():
+		_cancel_growth(); _result.text = "Uso cancelado. El Pokémon y el objeto se conservan."; _refresh_choices(); _fit_bag.call_deferred())
 
 
 func _button(parent: Node, text: String, callback: Callable) -> Button:
@@ -70,6 +79,7 @@ func _selected_creature() -> StringName:
 
 
 func refresh() -> void:
+	_cancel_growth()
 	var item_id := _selected_item()
 	var creature_id := _selected_creature()
 	_items.clear(); _targets.clear()
@@ -103,6 +113,7 @@ func _ensure_binding() -> bool:
 
 
 func _refresh_choices() -> void:
+	_cancel_growth()
 	_moves.clear(); _moves.add_item("Aprender sin sustituir un movimiento")
 	if field == null or not field.field_item_service_is_current(service) or service.owner == null:
 		_moves.visible = false
@@ -123,7 +134,10 @@ func _refresh_choices() -> void:
 			for slot: BattleMoveSlot in creature.moveset: _moves.add_item("%s · PP %d/%d" % [SpanishGameText.move_name(slot.move_id, definitions), slot.current_pp, slot.max_pp])
 		_moves.visible = true
 	_description.text = ""
-	if pp_target:
+	if service.Growth.supports(_selected_item()):
+		_description.text = "Sube un nivel." if _selected_item() == &"rare_candy" else "Aporta %d puntos de experiencia." % service.Growth.EXP[String(_selected_item())]
+		_description.text += " Podrás decidir movimientos y evolución antes de consumirlo."
+	elif pp_target:
 		_description.text = "Aumenta los PP máximos del movimiento seleccionado. Se consume solo si puede mejorarlo." if pp_boost else "Recupera PP del movimiento seleccionado."
 	elif _moves.visible:
 		var taught := service.machine_move(_selected_item())
@@ -146,6 +160,9 @@ func _apply(action: String) -> Dictionary:
 		refresh()
 		if field != null: field.field_refresh_hud()
 		return {"accepted": false, "reason": "field_locked", "status": "REJECTED"}
+	_cancel_growth()
+	if action == "use" and service.Growth.supports(_selected_item()):
+		return _show_growth_result(_growth.begin(service, _selected_item(), _selected_creature()))
 	var definitions: DefinitionCatalog = field.field_definitions()
 	var result: Dictionary
 	match action:
@@ -164,4 +181,35 @@ func _apply(action: String) -> Dictionary:
 		_result.text = {"field_locked": "Espera a terminar el combate o el desplazamiento.", "item_not_owned": "No queda ese objeto en la mochila.", "move_replacement_required": "Elige qué movimiento quieres sustituir.", "move_already_known": "Este Pokémon ya conoce ese movimiento.", "machine_incompatible": "Este Pokémon no puede aprender ese movimiento con esta MT.", "machine_not_in_active_version": "Esta máquina necesita una versión de reglas que todavía no está activa.", "species_machine_version_context_missing": "Faltan datos de compatibilidad para esta versión; no se ha usado el objeto.", "no_eligible_evolution": "Este objeto no provoca una evolución disponible para este Pokémon.", "nothing_equipped": "Este Pokémon no lleva objeto.", "already_equipped": "Este Pokémon ya lleva ese objeto.", "creature_knocked_out": "El Pokémon está debilitado.", "field_effect_not_connected": "La función de este objeto fuera del combate aún está pendiente."}.get(result.reason, "No se ha aplicado la acción. El inventario se conserva.")
 	refresh()
 	field.field_refresh_hud()
+	return result
+
+
+func _cancel_growth() -> void:
+	_growth.cancel()
+	if _growth_choices != null: _growth_choices.hide()
+
+
+func _show_growth_result(result: Dictionary) -> Dictionary:
+	if result.status == "NEEDS_CONTEXT":
+		_growth_choices.present(result.prompt, field.field_definitions())
+		_result.text = "El cambio está preparado; aún no se ha consumido el objeto."
+		_use.disabled = true; _equip.disabled = true
+		_fit_bag.call_deferred(); return result
+	_cancel_growth()
+	if result.accepted:
+		_result.text = "Objeto utilizado · +%d EXP · +%d niveles." % [result.exp_gained, result.levels_gained]
+		if result.has("species_id"): _result.text += " ¡Ha evolucionado a %s!" % SpanishGameText.species_name(StringName(result.species_id), field.field_definitions())
+		if not result.learned_moves.is_empty():
+			var names: Array[String] = []
+			for id: String in result.learned_moves: names.append(SpanishGameText.move_name(StringName(id), field.field_definitions()))
+			_result.text += " Movimientos aprendidos: " + ", ".join(names)
+		if result.deferred_evolutions > 0: _result.text += " Algunas evoluciones requieren una mecánica aún pendiente."
+	else:
+		_result.text = {"item_has_no_effect": "No tendría efecto. El objeto se conserva.",
+			"inconsistent_level_experience": "El nivel y la experiencia no coinciden. No se ha usado el objeto.",
+			"creature_knocked_out": "El Pokémon está debilitado. El objeto se conserva.",
+			"growth_state_changed": "El equipo o la mochila han cambiado. Vuelve a elegir el objeto.",
+			"field_locked": "Espera a terminar el combate o el desplazamiento."}.get(result.reason, "No se ha aplicado el cambio. El objeto se conserva.")
+		if result.reason == "evolution_requires_additional_mechanic": _result.text = "Esta evolución requiere una mecánica aún pendiente. El objeto se conserva."
+	refresh(); field.field_refresh_hud(); _fit_bag.call_deferred()
 	return result

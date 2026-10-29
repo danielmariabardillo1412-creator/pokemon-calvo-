@@ -4,6 +4,7 @@ const Selection = preload("res://modules/inventory/item_selection_policy.gd")
 const Content = preload("res://modules/gameplay/randomlock_content_policy.gd")
 const Medicine = preload("res://modules/inventory/battle_medicine_profile.gd")
 const FieldEffects = preload("res://modules/inventory/field_item_effects.gd")
+const Growth = preload("res://modules/inventory/field_growth_effects.gd")
 const PROFILE := "res://modules/inventory/item_connections_v1.json"
 static var _shared_selection: RefCounted
 static var _shared_content: RefCounted
@@ -16,9 +17,11 @@ var content: RefCounted
 var profile: Dictionary = {}
 var _holdable: Dictionary = {}
 var sleep_clocks: Dictionary = {}
+var _binding_revision := 0
 
 
 func configure(collection: PlayerCollection, definitions: DefinitionCatalog, may_mutate: Callable, clocks: Dictionary = {}) -> bool:
+	_binding_revision += 1
 	owner = collection; catalogs = definitions; guard = may_mutate
 	sleep_clocks = clocks
 	if _shared_selection == null:
@@ -169,6 +172,9 @@ func teach(item_id: StringName, creature_id: StringName, replace_slot := -1) -> 
 func use_item(item_id: StringName, creature_id: StringName, replace_slot := -1, target_species: StringName = &"") -> Dictionary:
 	var error := _boundary(item_id)
 	if error != "": return _deny(error)
+	if Growth.supports(item_id):
+		if replace_slot != -1 or target_species != &"": return _deny("unexpected_growth_target")
+		return use_growth_item(item_id, creature_id)
 	if FieldEffects.supports(item_id):
 		return _apply_field_effect(item_id, creature_id, replace_slot)
 	if profile.machine_rows.has(String(item_id)): return teach(item_id, creature_id, replace_slot)
@@ -178,6 +184,42 @@ func use_item(item_id: StringName, creature_id: StringName, replace_slot := -1, 
 		for record: EvolutionRecord in catalogs.species(creature.species_id).evolutions:
 			if record.item_id == item_id: return evolve(item_id, creature_id, target_species)
 	return _deny("field_effect_not_connected", "DEPENDENCY_MISSING")
+
+
+func _growth_stamp(item_id: StringName, creature: CreatureInstance) -> String:
+	return JSON.stringify({"binding": _binding_revision, "owner": owner.get_instance_id(),
+		"catalog": catalogs.get_instance_id(), "inventory": owner.inventory.get_instance_id(),
+		"creature": creature.get_instance_id(), "item": String(item_id), "data": creature.to_dict(),
+		"bag": owner.inventory.to_dict(), "location": String(owner.location_of(creature.instance_id)),
+		"clocks": sleep_clocks}).sha256_text()
+
+
+func use_growth_item(item_id: StringName, creature_id: StringName, decisions: Dictionary = {}, expected_stamp := "") -> Dictionary:
+	var error := _boundary(item_id)
+	if error != "": return _deny(error)
+	if not Growth.supports(item_id): return _deny("field_effect_not_connected")
+	var creature := owner.owned_creature(creature_id)
+	if creature == null: return _deny("creature_not_owned")
+	if not owner.inventory.has(item_id): return _deny("item_not_owned")
+	error = Growth.validation_error(creature, catalogs)
+	if error != "": return _deny(error)
+	var stamp := _growth_stamp(item_id, creature)
+	if expected_stamp != "" and stamp != expected_stamp: return _deny("growth_state_changed")
+	var result: Dictionary = Growth.plan(creature, item_id, catalogs, content, decisions)
+	if result.status == "NEEDS_CONTEXT":
+		result["stamp"] = stamp; return result
+	if not result.accepted: return result
+	var candidate: CreatureInstance = result.candidate
+	result.erase("candidate")
+	# Revalidate the live owner before synchronous publication. Never store a
+	# partially changed creature or a pending choice in the save format.
+	if _boundary(item_id) != "" or not is_same(owner.owned_creature(creature_id), creature) or _growth_stamp(item_id, creature) != stamp: return _deny("growth_state_changed")
+	var staged := _bag_copy()
+	if not staged.remove(item_id): return _deny("item_not_owned")
+	if not owner.replace_owned_same_identity(candidate): return _deny("ownership_changed")
+	_publish_bag(staged)
+	result["item_id"] = String(item_id); result["creature_id"] = String(creature_id)
+	return result
 
 
 func _apply_field_effect(item_id: StringName, creature_id: StringName, move_slot: int) -> Dictionary:

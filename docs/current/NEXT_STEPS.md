@@ -27,22 +27,20 @@ No modificar sus resultados para presentar una ejecución limpia posterior.
 ## Después de la limpieza
 
 PP Up/Max quedan conectados y verificados en ITEM_FIELD_V8.md.
-Continuar objetos por familias aún pendientes: experiencia, IV,
+Caramelos Raro/EXP XS/S/M/L/XL cerrados en ITEM_FIELD_V9.md.
+Continuar objetos por familias aún pendientes: IV,
 naturalezas, habilidades, condiciones de formas/evolución, bolas especiales y
 mundo. El estado de referencia es [ITEM_SYSTEM_CURRENT_STATUS.json](ITEM_SYSTEM_CURRENT_STATUS.json).
 Las rutas sin sistema disponible siguen pendientes; no simular consumos sin efecto.
 
-Para caramelos, reutilizar ProgressionSystem/ProgressionRuleset, LearnsetSystem y
-EvolutionSystem; contrastar los handlers y utilidades fijados de Essentials
-8c5911e. Corregidos previamente los nombres de dos curvas y el divisor de erratic;
-evidencia y limites en [PROGRESSION_GROWTH_CURVES_FIX.md](PROGRESSION_GROWTH_CURVES_FIX.md).
-La base ya calcula experiencia/niveles y emite decisiones de movimientos
-y evolución. Aún no hay una vista de campo que resuelva esas decisiones: adaptar
-esa conexión sin aprender, sustituir o evolucionar silenciosamente por el jugador,
-sin duplicar las curvas y sin consumir un objeto mientras falte resolver su uso.
-Validar coherencia nivel/XP antes de usar caramelos y revisar compatibilidad de
-partidas importadas antiguas; no reescribir valores silenciosamente. Filtrar las
-nuevas opciones de movimiento/especie con la politica vigente, sin nuevos vetos.
+V9 reutiliza ProgressionSystem/ProgressionRuleset, LearnsetSystem y EvolutionSystem
+y la referencia Essentials 8c5911e. Mochila, decisiones y guardado verificados;
+no repetir esa conexión como pendiente. Mantener los módulos separados y el
+servicio como autoridad; no consumir antes de resolver las decisiones. La coherencia
+nivel/XP se valida antes del uso. Bonos de amistad por origen y evoluciones con
+condiciones no implementadas siguen pendientes. No migrar partidas antiguas ni
+reescribir sus hashes silenciosamente. Las mentas y habilidades necesitan acordar
+qué dato persistente cambia, sin confundir naturaleza real y efecto de menta.
 
 ## Revisión gráfica futura — iconos pequeños de Pokémon
 

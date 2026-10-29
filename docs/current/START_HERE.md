@@ -12,6 +12,8 @@ La arquitectura se aceptó en `208c06c0`; los objetos V7 se cerraron en `eb18a5d
 El comparador V1 quedó conservado en `021a9c5`, antes de esta limpieza.
 Después se conectaron y verificaron Más PP/PP Máximos (V8); consultar
 [ITEM_SYSTEM_CURRENT_STATUS.json](ITEM_SYSTEM_CURRENT_STATUS.json) y su informe.
+V9 conecta los seis caramelos con decisiones de aprendizaje/evolución y consumo
+transaccional: [ITEM_FIELD_V9.md](ITEM_FIELD_V9.md). Es el último bloque de objetos.
 La revisión previa a caramelos corrigió las curvas de experiencia; resultado y
 compatibilidad en [PROGRESSION_GROWTH_CURVES_FIX.md](PROGRESSION_GROWTH_CURVES_FIX.md).
 Auditoría de datos original/API y correcciones cerradas:

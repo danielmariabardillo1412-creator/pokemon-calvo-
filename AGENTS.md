@@ -5,8 +5,10 @@ Original protegido: `D:/Proyectos/Pokemon Calvo`; no editarlo ni probarlo.
 T001–T006 estan aceptadas en 208c06c0. Los contratos en docs/kilo son historicos;
 OpenCode esta detenido. Limpieza cerrada en 941dd297. Autorizacion vigente:
 continuar objetos disponibles manteniendo la arquitectura y comprobar cada bloque.
-V8 validado: Mas PP/PP Maximos, helper puro y amistad positiva compartida,
-mochila/API existente, persistencia y entrada/salida del combate nativo.
+V9 validado: seis caramelos (raro y EXP XS/S/M/L/XL), candidato separado,
+decisiones explicitas en mochila, consumo al finalizar, guardado y combate nativo.
+67 efectos de campo conectados; docs/current/ITEM_FIELD_V9.md conserva alcance y
+dependencias. V8 de PP y V7 de EV siguen cubiertos por regresiones.
 Antes de caramelos se corrigieron alias/divisor de las curvas XP; ver
 docs/current/PROGRESSION_GROWTH_CURVES_FIX.md. Reutilizar la progresion existente
 y su tabla contrastada; resolver decisiones de aprender/evolucionar antes de consumir.
