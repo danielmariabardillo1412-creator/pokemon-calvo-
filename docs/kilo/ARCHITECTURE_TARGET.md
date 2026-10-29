@@ -41,8 +41,8 @@ El objetivo es reducir conocimiento cruzado por etapas, sin cambiar reglas.
    qué dependencias se pueden retirar o aislar.
 6. Documentación vigente y puntos de entrada únicos para cada recorrido.
 
-T001–T005 están aceptados. Solo la ejecución del punto 4 y la documentación del
-arranque descritas en T006A están autorizadas. Publicación/carga esperan T006B.
+T001–T005 y T006A están aceptados. Solo persistencia/publicación/recuperación del
+punto 4 según el contrato T006B están autorizadas; no reformar el arranque.
 
 ## Contrato histórico del piloto T001/T002 (aceptado)
 
@@ -98,7 +98,7 @@ su servicio compatible, sin leer miembros privados del mapa o del puente.
 La carga/publicación del puente permanece intacta hasta T006. Contrato completo:
 tasks/T005_FIELD_API.md. No se autoriza la migración general de todos los consumidores.
 
-## Contrato vigente T006A
+## Contrato T006A (aceptado)
 
 El puente conserva orquestación, sesión nativa, presentación, busy/kind y relojes.
 El mundo conserva colección, director/RNG de encuentros, métricas y recorder.
@@ -107,3 +107,13 @@ sin exponer director/sesiones/recorder a consumidores. Las cuatro funciones de
 persistencia/recuperación del puente quedan textualmente intactas hasta T006B.
 No eliminar herencia/laboratorio: documentar el recorrido real y sus dependencias.
 Contrato: tasks/T006A_NATIVE_BRIDGE_RUNTIME.md. Aceptar A no cierra todo T006.
+
+## Contrato vigente T006B
+
+El dueño valida el mundo/tablas y publica las referencias de mapa en una operación
+síncrona con precondiciones ya satisfechas. El puente mantiene disco, candidato,
+worker, relojes y presentación; sus esperas de restore y cierre preceden a la
+publicación del mapa. El serializer, esquema, hashes y settlement no se cambian.
+La actualización final de presentaciones heredadas mantiene su posición después
+de asignar clocks/view del puente. Contrato: tasks/T006B_NATIVE_PERSISTENCE.md.
+No equivale a borrar legado, empaquetar, publicar en GitHub o cerrar mecánicas pendientes.

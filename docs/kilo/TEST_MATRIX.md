@@ -100,7 +100,7 @@ ambos perfiles + field_api_integration_test_runner.gd + 8 grupos quick T004 = 11
 Pieza/quick/completo escriben T005/piece, T005_quick y T005 por separado.
 Cierre: `python tools/architecture_handoff/guard.py --full`. Sello baseline/T005.
 
-## T006A — fase vigente
+## T006A — aceptado
 
 Pieza: `python tools/architecture_handoff/run_checks.py --phase T006A --piece`:
 field_bridge_world_test_runner.gd en nativo/--legacy-field (2 grupos).
@@ -112,3 +112,16 @@ Cierre: `python tools/architecture_handoff/guard.py --full`.
 Evidencia: T006A/piece, T006A_quick y T006A. Sello vigente baseline/T006A.
 Las cuatro funciones de persistencia del puente siguen textualmente congeladas.
 T006A PASS no implica T006 completo: T006B requiere otra revisión y contrato.
+
+## T006B — fase vigente
+
+`python tools/architecture_handoff/run_checks.py --phase T006B --piece`:
+field_restore_contract_test_runner en nativo y --legacy-field, 2 grupos.
+`python tools/architecture_handoff/run_checks.py --phase T006B --quick`:
+2 anteriores + field_restore_integration_test_runner + 14 quick de A = 17.
+`python tools/architecture_handoff/run_checks.py --phase T006B`:
+3 nuevos + 22 anteriores = 25 grupos incluida GPU, sin omitir suites previas.
+Cierre: `python tools/architecture_handoff/guard.py --full`.
+Evidencia T006B/piece, T006B_quick y T006B. Sello activo baseline/T006B.
+Funciones anteriores del mapa y runtime del puente aceptados en A congelados;
+solo los 4 métodos de persistencia se abren a edición en esta fase.

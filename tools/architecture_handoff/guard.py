@@ -1,4 +1,4 @@
-"""Read-only guard for the bounded native runtime bridge stage. Never reads or writes the original."""
+"""Read-only guard for the bounded native persistence stage. Never reads or writes the original."""
 from pathlib import Path
 import argparse
 import hashlib
@@ -7,12 +7,12 @@ import subprocess
 
 ROOT = Path(__file__).resolve().parents[2]
 EXPECTED = Path('D:/Proyectos/Pokemon Calvo - Arquitectura Kilo')
-BASE = ROOT / 'docs/kilo/baseline/T006A'
+BASE = ROOT / 'docs/kilo/baseline/T006B'
 MUTABLE = {'scenes/visual/field_demo.gd', 'scenes/visual/field_native_bridge.gd',
-           'tests/gameplay/field_bridge_world_test_runner.gd',
-           'tests/gameplay/field_bridge_world_test_runner.gd.uid',
-           'tests/gameplay/field_bridge_runtime_test_runner.gd',
-           'tests/gameplay/field_bridge_runtime_test_runner.gd.uid',
+           'tests/gameplay/field_restore_contract_test_runner.gd',
+           'tests/gameplay/field_restore_contract_test_runner.gd.uid',
+           'tests/gameplay/field_restore_integration_test_runner.gd',
+           'tests/gameplay/field_restore_integration_test_runner.gd.uid',
            'docs/kilo/PROGRESS.md', 'docs/kilo/TASKS.json'}
 
 
@@ -33,7 +33,7 @@ def check_root():
 
 
 def allowed(path):
-    return path in MUTABLE or (path.startswith('docs/kilo/evidence/T006A/') or path.startswith('docs/kilo/evidence/T006A_quick/'))
+    return path in MUTABLE or (path.startswith('docs/kilo/evidence/T006B/') or path.startswith('docs/kilo/evidence/T006B_quick/'))
 
 
 def function_sources(source):
@@ -77,7 +77,7 @@ def verify(full=False):
                                  capture_output=True, text=True, check=True).stdout.splitlines()
         new = subprocess.run(['git', 'ls-files', '--others', '--exclude-standard'], cwd=ROOT,
                              capture_output=True, text=True, check=True).stdout.splitlines()
-        bad += [p + ': outside T006A scope' for p in changed + new if not allowed(p)]
+        bad += [p + ': outside T006B scope' for p in changed + new if not allowed(p)]
         assert subprocess.run(['git', 'remote'], cwd=ROOT, capture_output=True,
                               text=True, check=True).stdout.strip() == '', 'Unexpected remote'
     assert not bad, '\n'.join(bad[:30])

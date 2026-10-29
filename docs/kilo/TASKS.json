@@ -1,7 +1,9 @@
 {
-  "state": "T006A_ACCEPTED_WAITING_NEXT_PLAN",
-  "authorized_now": [],
-  "stop_after": "T006A",
+  "state": "T006B_READY",
+  "authorized_now": [
+    "T006B"
+  ],
+  "stop_after": "T006B",
   "tasks": [
     {
       "id": "S0",
@@ -60,7 +62,7 @@
       "depends_on": [
         "T005"
       ],
-      "plan": "docs/kilo/tasks/T006A_NATIVE_BRIDGE_RUNTIME.md",
+      "plan": "docs/kilo/tasks/T006B_NATIVE_PERSISTENCE.md",
       "subtasks": [
         {
           "id": "T006A",
@@ -70,13 +72,18 @@
         },
         {
           "id": "T006B",
-          "status": "BLOCKED_REVIEW",
-          "purpose": "Move validated restored-state publication and persistence dependencies to owner API; separate contract required."
+          "status": "READY",
+          "purpose": "Move validated restored-state publication and persistence dependencies to owner API; separate contract required.",
+          "depends_on": [
+            "T006A"
+          ],
+          "plan": "docs/kilo/tasks/T006B_NATIVE_PERSISTENCE.md"
         }
       ]
     }
   ],
   "executor": "OpenCode (manual model selection by user)",
   "accepted_predecessor": "291861ca706e075b0df546abd8c15102024cf865",
-  "latest_acceptance": "docs/kilo/evidence/T006A/CODEX_ACCEPTANCE.json"
+  "latest_acceptance": "docs/kilo/evidence/T006A/CODEX_ACCEPTANCE.json",
+  "accepted_checkpoint": "4535c2802a037838f7079ef3af0a6011d0964428"
 }

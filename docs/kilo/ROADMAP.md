@@ -1,7 +1,7 @@
 # Etapas posteriores — requieren revisión y nuevos contratos
 
-T001–T005 aceptados. Solo T006A está abierto bajo su contrato específico.
-T006B requiere revisión y otro contrato, no autorizado todavía.
+T001–T005 y T006A aceptados. Solo T006B está abierto bajo su contrato específico.
+No hay autorización para nuevas reformas o para mezclar con el original.
 
 T003: separar formateo/renderizado del HUD a partir de una vista de datos
 explícita. Contrato ejecutable: tasks/T003_HUD_RENDER.md.
@@ -25,8 +25,8 @@ motor anterior serán encargos separados. Las mecánicas pendientes de objetos y
 la IA de entrenadores tampoco se incorporan como arreglos de arquitectura.
 
 Desglose T006 aprobado para planificación:
-- T006A activo: ejecución del puente mediante API del dueño; boot documentado.
+- T006A aceptado: ejecución del puente mediante API del dueño; boot documentado.
   Contrato tasks/T006A_NATIVE_BRIDGE_RUNTIME.md.
-- T006B bloqueado: publicación de estado validado al cargar, persistencia y
-  recuperación. Preparar contrato DESPUÉS de aceptar A; no moverlo ahora.
+- T006B activo: publicación de estado validado al cargar, persistencia y
+  recuperación. Contrato tasks/T006B_NATIVE_PERSISTENCE.md. Revisión al finalizar.
 El bloque global T006 no se considera terminado al cerrar únicamente A.

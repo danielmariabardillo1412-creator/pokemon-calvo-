@@ -1,6 +1,6 @@
 # Progreso vigente — 2026-10-29
 
-Estado: **T006A_ACCEPTED_WAITING_NEXT_PLAN**.
+Estado: **T006B_READY**.
 
 T003: **ACCEPTED_BY_CODEX**. T004: **ACCEPTED_BY_CODEX**.
 T005: **ACCEPTED_BY_CODEX**. T006: **IN_PROGRESS**.
@@ -233,3 +233,9 @@ runners entregados; solo correcciones documentales de BOOT_MAP y sonda de revisi
 No se repitió toda la suite anterior. Estado/límites: evidence/T006A/CODEX_ACCEPTANCE.md
  y CODEX_ACCEPTANCE.json. Se guarda checkpoint local separado del original.
 T006 global sigue IN_PROGRESS. T006B continúa BLOCKED_REVIEW hasta nuevo contrato.
+
+Codex habilita T006B desde 4535c28. T006A aceptado y congelado; B aún no
+implementado. Contrato: tasks/T006B_NATIVE_PERSISTENCE.md. Incluye validación,
+publicación síncrona y recuperación con pruebas de identidad y fallos reales.
+Prompt OPENCODE_PROMPT.txt. T006 sigue IN_PROGRESS hasta revisión de B.
+No mezclar con el original ni realizar otra reforma al terminar la entrega.

@@ -3,9 +3,9 @@
   "original_root": "D:/Proyectos/Pokemon Calvo",
   "user_data_name": "Pokemon Calvo - Arquitectura Kilo",
   "authorized_tasks": [
-    "T006A"
+    "T006B"
   ],
-  "scope": "Native bridge runtime world API and boot documentation; persistence/publication T006B blocked",
-  "accepted_checkpoint": "291861ca706e075b0df546abd8c15102024cf865",
+  "scope": "Native persistence API and synchronous publication of validated restored state; stop for final review",
+  "accepted_checkpoint": "4535c2802a037838f7079ef3af0a6011d0964428",
   "executor": "OpenCode"
 }
