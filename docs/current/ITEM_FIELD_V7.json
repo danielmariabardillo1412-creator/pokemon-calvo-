@@ -1,0 +1,341 @@
+{
+  "phase": "ITEM_FIELD_V7",
+  "date": "2026-10-29",
+  "status": "EV_TRAINING_BASE_ROUTE_PASS_ORIGIN_CONTEXT_PENDING",
+  "all_item_effects_certified": false,
+  "new_ids": [
+    "calcium",
+    "carbos",
+    "clever_wing",
+    "genius_wing",
+    "health_wing",
+    "hp_up",
+    "iron",
+    "muscle_wing",
+    "protein",
+    "resist_wing",
+    "swift_wing",
+    "zinc"
+  ],
+  "total_connected_field_effect_ids": 59,
+  "field_recovery_ids_verified": 41,
+  "field_training_ids_verified": 18,
+  "headless_checks": 6990,
+  "gpu_checks": 6991,
+  "positive_contexts": 504,
+  "reference": {
+    "repository": "https://github.com/Maruno17/pokemon-essentials",
+    "commit": "8c5911e4a4b07b07e832e4bb0d5d8859e88b4a9b",
+    "source_sha256": {
+      "Data/Scripts/001_Settings.rb": "a491c8560378640aa2e7577e8c48793e23efd5bb28ed790f3537f51d1e31f40e",
+      "Data/Scripts/002_BattleSettings.rb": "9d985b5ba37afaf39231601dff2b2143fab9a82b0d8755af095c6482b5481b24",
+      "Data/Scripts/013_Items/001_Item_Utilities.rb": "d475b64f3f0011bf9312ff3e0fbe415edc51edb46a60e00db084b4fc12b1bff8",
+      "Data/Scripts/013_Items/002_Item_Effects.rb": "6ed4877769f3d7edddb096481780a8d29da6bd1de331ca9c24ccffb8477a1b15",
+      "Data/Scripts/014_Pokemon/001_Pokemon.rb": "3a7f233156f09a6d2e3729bdaa9d1962bfa946aaaa7403042aaea5dcdcdf8cb4"
+    },
+    "vitamin_gain": 10,
+    "wing_gain": 1,
+    "stat_cap": 252,
+    "total_cap": 510,
+    "no_legacy_100_cap": true,
+    "base_friendship": {
+      "thresholds": [
+        100,
+        200
+      ],
+      "vitamin": [
+        5,
+        3,
+        2
+      ],
+      "wing": [
+        3,
+        2,
+        1
+      ],
+      "soothe_bell": [
+        3,
+        2
+      ],
+      "soft_cap": "disabled, matching pinned competitive reference (no affection bonuses)"
+    },
+    "unavailable_contexts": [
+      "capture ball bonus",
+      "capture map bonus"
+    ],
+    "hp_max_change": "preserve deficit; do not revive; consume only if EV increases",
+    "canonical_ids": "PokeAPI uses *_wing, not Essentials *_feather; do not create duplicate IDs"
+  },
+  "verification": {
+    "status": "PASS",
+    "scope": "ITEM_FIELD_V7",
+    "base_commit": "87a96506",
+    "groups": [
+      {
+        "status": "PASS",
+        "exit_code": 0,
+        "seconds": 9.47,
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--headless",
+          "--path",
+          ".",
+          "--script",
+          "tests/gameplay/item_field_training_v7.gd"
+        ],
+        "last_line": "ITEM_FIELD_V7 PASS checks=6990 cases=504 GPU=false",
+        "log": ".godot/item_field_v7/field_v7.log",
+        "group": "field_v7"
+      },
+      {
+        "status": "PASS",
+        "exit_code": 0,
+        "seconds": 9.27,
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--headless",
+          "--path",
+          ".",
+          "--script",
+          "tests/gameplay/item_field_herbs_v6.gd"
+        ],
+        "last_line": "ITEM_FIELD_V6 PASS checks=1754 cases=144 GPU=false",
+        "log": ".godot/item_field_v7/field_v6.log",
+        "group": "field_v6"
+      },
+      {
+        "status": "PASS",
+        "exit_code": 0,
+        "seconds": 9.36,
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--headless",
+          "--path",
+          ".",
+          "--script",
+          "tests/gameplay/item_field_recovery_v5.gd"
+        ],
+        "last_line": "ITEM_FIELD_V5 PASS checks=1049 cases=46 GPU=false",
+        "log": ".godot/item_field_v7/field_v5.log",
+        "group": "field_v5"
+      },
+      {
+        "status": "PASS",
+        "exit_code": 0,
+        "seconds": 9.44,
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--headless",
+          "--path",
+          ".",
+          "--script",
+          "tests/gameplay/item_field_effects_v4.gd"
+        ],
+        "last_line": "ITEM_FIELD_V4 PASS checks=1814 cases=192 GPU=false",
+        "log": ".godot/item_field_v7/field_v4.log",
+        "group": "field_v4"
+      },
+      {
+        "status": "PASS",
+        "exit_code": 0,
+        "seconds": 9.92,
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--headless",
+          "--path",
+          ".",
+          "--script",
+          "tests/gameplay/item_connections_test_runner.gd"
+        ],
+        "last_line": "ITEM_CONNECTIONS PASS checks=4994 equip=625 evolutions=72 machines=229",
+        "log": ".godot/item_field_v7/connections.log",
+        "group": "connections"
+      },
+      {
+        "status": "PASS",
+        "exit_code": 0,
+        "seconds": 8.77,
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--headless",
+          "--path",
+          ".",
+          "--script",
+          "tests/gameplay/field_api_integration_test_runner.gd"
+        ],
+        "last_line": "FIELD_API_INTEGRATION PASS checks=220 errors=0",
+        "log": ".godot/item_field_v7/api_integration.log",
+        "group": "api_integration"
+      },
+      {
+        "status": "PASS",
+        "exit_code": 0,
+        "seconds": 42.7,
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--headless",
+          "--path",
+          ".",
+          "--script",
+          "tests/gameplay/field_restore_integration_test_runner.gd"
+        ],
+        "last_line": "FIELD_RESTORE_INTEGRATION PASS checks=912 errors=0",
+        "log": ".godot/item_field_v7/restore_integration.log",
+        "group": "restore_integration"
+      },
+      {
+        "status": "PASS",
+        "exit_code": 0,
+        "seconds": 20.33,
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--headless",
+          "--path",
+          ".",
+          "--script",
+          "tests/gameplay/showdown_medicine_test_runner.gd"
+        ],
+        "last_line": "SHOWDOWN_MEDICINES PASS checks=120 errors=0",
+        "log": ".godot/item_field_v7/medicine.log",
+        "group": "medicine"
+      },
+      {
+        "status": "PASS",
+        "exit_code": 0,
+        "seconds": 0.64,
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--headless",
+          "--path",
+          ".",
+          "--script",
+          "tests/gameplay/item_selection_policy_test_runner.gd"
+        ],
+        "last_line": "ITEM_SELECTION_POLICY PASS checks=19 excluded=43",
+        "log": ".godot/item_field_v7/policy.log",
+        "group": "policy"
+      },
+      {
+        "status": "PASS",
+        "exit_code": 0,
+        "seconds": 10.84,
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--path",
+          ".",
+          "--resolution",
+          "1280x720",
+          "--script",
+          "tests/gameplay/item_field_training_v7.gd",
+          "--",
+          "--capture"
+        ],
+        "last_line": "ITEM_FIELD_V7 PASS checks=6991 cases=504 GPU=true",
+        "log": ".godot/item_field_v7/gpu.log",
+        "group": "gpu"
+      }
+    ],
+    "integrity_before": {
+      "status": "PASS",
+      "historical_protected_files_checked": 23058,
+      "authorized_exceptions": [
+        "AGENTS.md",
+        "docs/current/ITEM_SYSTEM_CURRENT_STATUS.json",
+        "modules/inventory/field_item_effects.gd",
+        "modules/inventory/field_item_service.gd",
+        "scenes/visual/field_item_bag.gd"
+      ],
+      "mode": "TEXT_AND_METADATA",
+      "scope_base_commit": "87a96506",
+      "current_phase_allowed_files": [
+        "docs/current/DEVELOPMENT_CURRENT.md",
+        "docs/current/ITEM_FIELD_V7.csv.txt",
+        "docs/current/ITEM_FIELD_V7.json",
+        "docs/current/ITEM_FIELD_V7.md",
+        "docs/current/ITEM_PENDING_V7.json",
+        "docs/current/ITEM_SYSTEM_CURRENT_STATUS.json",
+        "modules/inventory/field_item_effects.gd",
+        "modules/inventory/field_item_service.gd",
+        "modules/inventory/field_training_effects.gd",
+        "modules/inventory/field_training_effects.gd.uid",
+        "scenes/visual/field_item_bag.gd",
+        "tests/fixtures/item_field_v7/reference_contract.json",
+        "tests/gameplay/item_field_training_v7.gd",
+        "tests/gameplay/item_field_training_v7.gd.uid",
+        "tools/item_audit/run_field_training_v7.py"
+      ]
+    },
+    "import": {
+      "status": "PASS",
+      "exit_code": 0,
+      "seconds": 5.88,
+      "command": [
+        "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+        "--headless",
+        "--path",
+        ".",
+        "--editor",
+        "--import",
+        "--quit"
+      ],
+      "last_line": "\u001b[0m",
+      "log": ".godot/item_field_v7/import.log"
+    },
+    "integrity_after": {
+      "status": "PASS",
+      "historical_protected_files_checked": 23058,
+      "authorized_exceptions": [
+        "AGENTS.md",
+        "docs/current/ITEM_SYSTEM_CURRENT_STATUS.json",
+        "modules/inventory/field_item_effects.gd",
+        "modules/inventory/field_item_service.gd",
+        "scenes/visual/field_item_bag.gd"
+      ],
+      "mode": "FULL_CONTENT_HASHES",
+      "scope_base_commit": "87a96506",
+      "current_phase_allowed_files": [
+        "docs/current/DEVELOPMENT_CURRENT.md",
+        "docs/current/ITEM_FIELD_V7.csv.txt",
+        "docs/current/ITEM_FIELD_V7.json",
+        "docs/current/ITEM_FIELD_V7.md",
+        "docs/current/ITEM_PENDING_V7.json",
+        "docs/current/ITEM_SYSTEM_CURRENT_STATUS.json",
+        "modules/inventory/field_item_effects.gd",
+        "modules/inventory/field_item_service.gd",
+        "modules/inventory/field_training_effects.gd",
+        "modules/inventory/field_training_effects.gd.uid",
+        "scenes/visual/field_item_bag.gd",
+        "tests/fixtures/item_field_v7/reference_contract.json",
+        "tests/gameplay/item_field_training_v7.gd",
+        "tests/gameplay/item_field_training_v7.gd.uid",
+        "tools/item_audit/run_field_training_v7.py"
+      ]
+    }
+  },
+  "sources_sha256": {
+    "modules/inventory/field_item_effects.gd": "8f83f8f954daf76a907fc41073b96450bcc4c8035a5d65c4af9d06fb55acb966",
+    "modules/inventory/field_item_service.gd": "85b1f63b5e045db3b99ed731e9ecae1ae1edfef4d6d53ff7bd21e2d3b02c6ade",
+    "modules/inventory/field_training_effects.gd": "55e2af06e9625871dd2ca6197936e213463cea48f6680e4c5e984fecffa642a4",
+    "modules/inventory/field_training_effects.gd.uid": "739972ddae25f0710ac3029d3447bb16f296f5b49ff6a697ebdfec6ec563064f",
+    "scenes/visual/field_item_bag.gd": "2b260e1200d436be8599a7f84ef2d358bd40e39d089713d4357ed40a64bfe14f",
+    "tests/fixtures/item_field_v7/reference_contract.json": "cf1ce5407a0a034c665d285ab96383c31e631b7ed841010434a27ed17e5227e3",
+    "tests/gameplay/item_field_training_v7.gd": "6080466f9d5e40c8156a3f7ef1f7dd18f206f800f841afba401ecff60627fafc",
+    "tests/gameplay/item_field_training_v7.gd.uid": "92d672f98a318d456e76ec9bd2bbc21c751dd91c8495913a6f848a51769448b1",
+    "tools/item_audit/run_field_training_v7.py": "aaa34485552038701781f4ffce1de8c1490bf2d1fdf8ab85ef8fa783a9ee06c9"
+  },
+  "protected_data_policy_art": {
+    "data/raw/pokemon_api.json": "2efc1538081e7849d6e04555570ca28c19b13f09f0fe0c7ce38329881972f24a",
+    "data/normalized/pokemon_api.json": "719d14c082bdba03b26e801d23fb8887d0a0f4376348cf4a27e79a4b0a3c08b3",
+    "config/item_selection_v1.json": "c9305a87bf8e5a0e22d9c81353cc924dbaf432fca5b38f817f189ab8e2d048a2",
+    "config/randomlock_content_v1.json": "5aed7a35ecf84d2fe6319cff0019b3ea5fadbb43b90556e8e8a9131329dea1cf",
+    "assets/local_item_catalog/manifest.json": "fc1e7a89d7c85144b8103aed3493b5f27ac07fc12d23ea7f006e326716dc5e7e"
+  },
+  "previous_report": "docs/current/ITEM_FIELD_V6.json",
+  "full_item_matrix": "docs/current/ITEM_FIELD_V7.csv.txt",
+  "limitations": [
+    "Only living targets at the established field boundary; no revival.",
+    "Capture-ball/map friendship bonuses remain pending for all 18 EV training/berry IDs.",
+    "The 41 reviewed form/world/breeding dependencies and 323 unreviewed native contexts remain pending.",
+    "No XP/IV/mint/ability, legacy machine, special-ball or conditioned-evolution/world mechanics are activated."
+  ]
+}

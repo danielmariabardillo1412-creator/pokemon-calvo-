@@ -8,7 +8,7 @@ Autorizacion actual: Codex corrige el fallo de region, revisa la ruta vecina y
 continua con objetos mientras el usuario esta ausente. No es un nuevo encargo de
 reestructurar el juego ni de completar sistemas del mundo todavia inexistentes.
 
-Lote activo V5: 23 bebidas/alimentos/bayas de PS, estados y PP fuera de combate,
+Historico V5: 23 bebidas/alimentos/bayas de PS, estados y PP fuera de combate,
 reutilizando FieldItemService y FieldItemEffects. Perfil moderno (Gen 7+) basado
 en la copia local fijada de Pokemon Essentials; no se ejecuta su Ruby.
 Archivos de runtime permitidos: field_item_effects.gd, field_item_service.gd,
@@ -42,3 +42,26 @@ no consumir caramelos simulando solamente un cambio de nivel.
 
 V6 terminado: 3 IDs nuevos, 47 efectos de campo totales. Evidencia e integridad
 PASS; queda pendiente iniciar vitaminas/plumas bajo un contrato propio V7.
+
+V7 terminado contra 87a96506: doce vitaminas/plumas (IDs canonicos *_wing).
+Nuevo helper puro field_training_effects.gd; facade FieldItemEffects valida EV
+originales antes de serializar para no truncar valores invalidos. El servicio
+mantiene sus transacciones y guard de identidad. Archivos runtime autorizados:
+helper nuevo, field_item_effects.gd, field_item_service.gd y descripcion de bag.
+Tambien runner/pruebas/contrato V7 nuevos y docs de estado. Sin cambios a datos,
+politicas, arquitectura de mundo, schema, motor de combate o arte.
+
+Peticion posterior del usuario — comparador general (2026-10-29): despues de
+terminar el lote actual, preparar comprobacion automatica amplia entre la base
+anterior (spaghetti) y esta copia organizada. No se inicia durante V7. Probar en
+copias aisladas, nunca contra partidas reales: mismas semillas/acciones, comparar
+estado de equipo/PC, inventario, campo, progresion, combate y guardado/carga.
+Las funciones nuevas introducen diferencias esperadas que deben declararse.
+Anadir resultados independientes conocidos: equivalencia entre dos versiones no
+prueba ausencia de errores compartidos. Informar cobertura y dependencias sin
+presentar PASS de unos escenarios como garantia universal.
+
+V7 cerrado por pruebas: 12 IDs nuevos, 59 efectos de campo totales (41 de
+recuperacion y 18 EV/amistad base). 6990/6991 checks, 10 grupos y hash completo
+PASS. Siguiente trabajo autorizado por el usuario: comparador general de las dos
+versiones en copias aisladas. Aun no hay un comparador general certificado.

@@ -127,6 +127,8 @@ func _refresh_choices() -> void:
 	elif _moves.visible:
 		var taught := service.machine_move(_selected_item())
 		_description.text = "Enseña: " + SpanishGameText.move_name(taught, definitions) if taught != &"" else "Esta máquina necesita una versión de reglas aún pendiente."
+	elif service.FieldEffects.Training.supports(_selected_item()):
+		_description.text = "Aumenta los puntos de esfuerzo de una estadística y la amistad. Se consume solo si tiene efecto."
 	elif service.FieldEffects.BITTER_HERBS.has(String(_selected_item())):
 		_description.text = "Medicina amarga: cura al Pokémon, pero reduce su amistad. Se consume solo si tiene efecto."
 	elif service.Medicine.supports(_selected_item()) or service.FieldEffects.recovery_supports(_selected_item()):
