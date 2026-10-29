@@ -47,7 +47,11 @@ No repetir ese arreglo ni mapearla a objeto vacío. Se verifica conservar,
 Lanzamiento, Desarme, Truco, captura y persistencia sin duplicación.
 V16 conecta 24 medicinas equipadas; ver ITEM_FIELD_HELD_V16.md. Los usos de
 campo existentes y el perfil de medicina en combate permanecen separados.
-Continuar el puente de equipados de campo por lotes revisados: hay otros 38 IDs
+V17 conecta otros 17 consumibles equipados; ver ITEM_FIELD_HELD_V17.md. Vitaminas,
+mejoras de PP y Caramelo Raro conservan sus usos anteriores. Los ocho potenciadores
+de combate aún requieren conectar su uso desde mochila; campo los rechaza sin
+consumir. No confundir el descriptor equipado con esa acción pendiente.
+Continuar el puente de equipados de campo por lotes revisados: hay otros 21 IDs
 equipables permitidos sin definición nativa. Contrastar metadatos y distinguir
 los efectos de mundo aún pendientes; no habilitar todos como neutros a ciegas.
 Continuar objetos por familias aún pendientes: IV,

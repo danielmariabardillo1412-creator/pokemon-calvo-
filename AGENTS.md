@@ -32,8 +32,11 @@ Alivio mediante metadatos revisados del adaptador propio; probados guardar/carga
 Lanzamiento, Desarme, Truco, captura y ausencia de duplicacion. Ver
 docs/current/ITEM_FIELD_HELD_V14.md. V16 conecta 24 medicinas equipadas mediante
 metadatos revisados, sin curacion automatica ni nuevos usos de medicina en combate.
-Ver docs/current/ITEM_FIELD_HELD_V16.md. Quedan 38 equipables permitidos sin
-definicion nativa; inventario no equivale a permiso para registrarlos como neutros.
+Ver docs/current/ITEM_FIELD_HELD_V16.md. V17 conecta otros 17 consumibles de
+entrenamiento/potenciadores equipados y comparte el contrato nativo de pruebas.
+Ver docs/current/ITEM_FIELD_HELD_V17.md. Quedan 21 equipables permitidos sin
+definicion nativa. Los ocho potenciadores de combate mantienen pendiente su uso
+desde mochila; registro equipado no equivale a efecto de uso implementado.
 Antes de caramelos se corrigieron alias/divisor de las curvas XP; ver
 docs/current/PROGRESSION_GROWTH_CURVES_FIX.md. Reutilizar la progresion existente
 y su tabla contrastada; resolver decisiones de aprender/evolucionar antes de consumir.
@@ -65,6 +68,8 @@ La orden humana de corregir Campana Alivio autoriza el adaptador propio
 native_engine.cjs y un modulo revisado de metadatos para ese objeto (V14).
 La continuacion de objetos V16 amplia solo ese modulo a 24 medicinas revisadas;
 no modifica native_engine.cjs ni instala callbacks para sus usos de campo.
+V17 revisa otros 17 descriptores en ese modulo y extrae pruebas comunes, con
+los mismos limites de metadatos y sin habilitar usos no implementados.
 No agregar callbacks de mecanicas, admitir objetos desconocidos en bloque ni
 editar node_modules para ocultar fallos; el resto queda protegido por hash.
 No borrar motores anteriores ni archivos ausentes con skip-worktree. Antes de

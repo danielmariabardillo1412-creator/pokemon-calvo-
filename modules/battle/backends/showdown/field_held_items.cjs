@@ -5,6 +5,8 @@
 // to FieldFriendship, not an invented battle event.
 // V16: 24 reviewed recovery medicines have Fling power 30 and no held effect
 // in the same pinned RHH table. Using one from the bag remains a separate action.
+// V17: nine training consumables and eight battle-boost consumables reviewed
+// against that source: power 30, no passive held effect. Bag-use support is separate.
 const medicine=(name,gen)=>Object.freeze({name,gen,fling:Object.freeze({basePower:30})});
 const DEFINITIONS=Object.freeze({
  soothebell:Object.freeze({name:'Soothe Bell',gen:3,fling:Object.freeze({basePower:10})}),
@@ -32,6 +34,23 @@ const DEFINITIONS=Object.freeze({
  potion:medicine('Potion',1),
  sodapop:medicine('Soda Pop',1),
  superpotion:medicine('Super Potion',1),
+ calcium:medicine('Calcium',1),
+ carbos:medicine('Carbos',1),
+ hpup:medicine('HP Up',1),
+ iron:medicine('Iron',1),
+ ppmax:medicine('PP Max',3),
+ ppup:medicine('PP Up',1),
+ protein:medicine('Protein',1),
+ rarecandy:medicine('Rare Candy',1),
+ zinc:medicine('Zinc',3),
+ direhit:medicine('Dire Hit',1),
+ guardspec:medicine('Guard Spec.',1),
+ xaccuracy:medicine('X Accuracy',1),
+ xattack:medicine('X Attack',1),
+ xdefense:medicine('X Defense',1),
+ xspatk:medicine('X Sp. Atk',1),
+ xspdef:medicine('X Sp. Def',4),
+ xspeed:medicine('X Speed',1),
 });
 
 function install(Dex) {

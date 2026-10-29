@@ -88,6 +88,13 @@ y uso posterior desde la mochila. El registro pasa a 587/625 equipables permitid
 con definición; quedan 38 ausentes. Los usos de campo y el menú de medicina de
 combate conservan sus perfiles: [ITEM_FIELD_HELD_V16.md](ITEM_FIELD_HELD_V16.md).
 
+V17 conecta otros 17 consumibles equipados: seis vitaminas, dos mejoras de PP,
+Caramelo Raro y ocho potenciadores. Contrato nativo compartido y expectativas
+separadas del código productivo; regresiones de V16 y Campana conservadas.
+El registro llega a 604/625, con 21 ausentes. Los usos de campo de entrenamiento
+siguen funcionando; los ocho potenciadores mantienen pendiente su acción de uso
+desde mochila de combate: [ITEM_FIELD_HELD_V17.md](ITEM_FIELD_HELD_V17.md).
+
 Arte beta de objetos: [ITEM_ART_CURRENT_STATUS.json](ITEM_ART_CURRENT_STATUS.json).
 La presencia de una imagen no certifica su mecánica. Las revisiones artísticas y
 los cambios de aspecto anacrónico quedan separados de esta limpieza.

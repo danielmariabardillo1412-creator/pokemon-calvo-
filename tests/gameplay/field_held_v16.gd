@@ -29,11 +29,16 @@ func _physical_medicine(owner: PlayerCollection,id: StringName) -> int:
 		if c.held_item_id==id and not c.held_item_consumed:count+=1
 	return count
 
-func _medicine_case(id: StringName,route: String) -> void:
+func _medicine_case(id: StringName,route: String,field_supported: bool=true) -> void:
 	var own:=_with_moves(&"medicine_own",["fling" if route=="fling" else "trick" if route=="trick" else "growl"],false)
 	own.friendship=100
+	var training_before:=own.to_dict()
 	var service:=_service(own,id);service.owner.inventory.add(&"master_ball")
-	check("existing medicine use supported "+String(id),Effects.supports(id))
+	var supports_field: bool=Effects.supports(id) or preload("res://modules/inventory/field_growth_effects.gd").supports(id)
+	check("existing field support remains explicit "+String(id),supports_field==field_supported)
+	if not field_supported:
+		var unchanged:=snapshot(service)
+		check("unsupported field use cannot spend item or change creature",not service.use_item(id,own.instance_id).accepted and snapshot(service)==unchanged)
 	check("real medicine equip "+String(id),service.equip(id,own.instance_id).accepted and _physical_medicine(service.owner,id)==3)
 	var before:=snapshot(service)
 	var foe:=_with_moves(&"medicine_foe",["knock_off" if route=="knock_off" else "growl"],false)
@@ -65,6 +70,10 @@ func _medicine_case(id: StringName,route: String) -> void:
 	if route=="trick":check("captured receiver returns transferred unit",service.unequip(foe.instance_id).accepted)
 	check("inventory equals physical units after unequips",service.owner.inventory.quantity(id)==(2 if route in ["fling","knock_off"] else 3))
 	check("holding bitter medicine changes no friendship",service.owner.owned_creature(own.instance_id).friendship==100)
+	var training_after: Dictionary=service.owner.owned_creature(own.instance_id).to_dict()
+	var training_unchanged:=true
+	for key: String in ["level","experience","ivs","evs","nature_id"]:training_unchanged=training_unchanged and training_before[key]==training_after[key]
+	check("holding item grants no levels EVs IVs or nature change",training_unchanged)
 	routes.append({"medicine":String(id),"route":route,"physical_remaining":_physical_medicine(service.owner,id),"restored_after_item_change":true})
 	await session.close()
 

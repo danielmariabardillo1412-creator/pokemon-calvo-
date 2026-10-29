@@ -36,10 +36,14 @@ V15: [ITEM_CAPTURE_V15.md](ITEM_CAPTURE_V15.md). Amigo/Safari/Competi/
 Gloria Ball, dieciséis bolas conectadas. 17.216 casos y cuatro rutas del mapa con
 guardar/cargar; resultados completos en su JSON. La fórmula aproximada de captura
 y los sistemas de obtención/eventos se mantienen separados.
-Último bloque V16: [ITEM_FIELD_HELD_V16.md](ITEM_FIELD_HELD_V16.md). Se conectan
+V16: [ITEM_FIELD_HELD_V16.md](ITEM_FIELD_HELD_V16.md). Se conectan
 24 medicinas equipadas al registro nativo, sin curacion automatica ni nuevas
 medicinas de combate. Quedan 38 equipables permitidos sin definicion. Pruebas
 por objeto, mochila real y guardado/carga; resultados completos en su JSON.
+Último bloque V17: [ITEM_FIELD_HELD_V17.md](ITEM_FIELD_HELD_V17.md). Otros 17
+consumibles equipados revisados; contrato nativo compartido con V16 y usos de
+campo existentes conservados. Quedan 21 equipables sin definición. Los ocho
+potenciadores no ganan todavía una acción de uso desde mochila de combate.
 La revisión previa a caramelos corrigió las curvas de experiencia; resultado y
 compatibilidad en [PROGRESSION_GROWTH_CURVES_FIX.md](PROGRESSION_GROWTH_CURVES_FIX.md).
 Auditoría de datos original/API y correcciones cerradas:
