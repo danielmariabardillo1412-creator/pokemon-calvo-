@@ -32,6 +32,22 @@ naturalezas, habilidades, condiciones de formas/evolución, bolas especiales y
 mundo. El estado de referencia es [ITEM_SYSTEM_CURRENT_STATUS.json](ITEM_SYSTEM_CURRENT_STATUS.json).
 Las rutas sin sistema disponible siguen pendientes; no simular consumos sin efecto.
 
+Para caramelos, reutilizar ProgressionSystem/ProgressionRuleset, LearnsetSystem y
+EvolutionSystem; contrastar los handlers y utilidades fijados de Essentials
+8c5911e. La base ya calcula experiencia/niveles y emite decisiones de movimientos
+y evolución. Aún no hay una vista de campo que resuelva esas decisiones: adaptar
+esa conexión sin aprender, sustituir o evolucionar silenciosamente por el jugador,
+sin duplicar las curvas y sin consumir un objeto mientras falte resolver su uso.
+
+## Revisión gráfica futura — iconos pequeños de Pokémon
+
+Petición del usuario, 2026-10-29: después de estos sistemas, buscar primero un
+conjunto coherente de iconos pequeños para el equipo. Si no se encuentra uno que
+encaje, usar los sprites de reposo de combate que ya tenemos, a escala pequeña.
+El panel de los seis Pokémon tendrá un diseño propio; no es obligatorio copiar
+la presentación clásica. Queda como tarea gráfica posterior, sin bloquear los
+objetos ni iniciar ahora búsquedas, descargas, generación o sustitución de arte.
+
 Multijugador, campaña/mapas finales, reglas personalizadas de vidas/muerte,
 presupuesto común Mega/Z/Max e IA neuronal no forman parte de esta limpieza.
 OpenCode permanece detenido. No hay tarea T007 autorizada automáticamente.
