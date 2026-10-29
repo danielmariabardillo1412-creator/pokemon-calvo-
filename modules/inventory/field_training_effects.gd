@@ -1,5 +1,7 @@
 extends RefCounted
 
+const Friendship = preload("res://modules/inventory/field_friendship_effects.gd")
+
 # Applies modern EV items only to a staged owned creature. No UI/IO/inventory/RNG.
 const VITAMINS := {"hp_up": "hp", "protein": "attack", "iron": "defense", "calcium": "special_attack", "zinc": "special_defense", "carbos": "speed"}
 const WINGS := {"health_wing": "hp", "muscle_wing": "attack", "resist_wing": "defense", "genius_wing": "special_attack", "clever_wing": "special_defense", "swift_wing": "speed"}
@@ -38,10 +40,7 @@ static func apply(creature: CreatureInstance, item_id: StringName, move_slot: in
 	var old_hp := creature.current_hp
 	var old_max := creature.stats.max_hp
 	creature.evs[stat] = old_ev + gain
-	var friendship_gain: int = ([5, 3, 2] if vitamin else [3, 2, 1])[mini(2, creature.friendship / 100)]
-	if creature.held_item_id == &"soothe_bell" and not creature.held_item_consumed: friendship_gain = friendship_gain * 3 / 2
-	# Capture ball/map bonuses remain pending, as with the existing EV berries.
-	creature.friendship = mini(255, creature.friendship + friendship_gain)
+	Friendship.increase(creature, [5, 3, 2] if vitamin else [3, 2, 1])
 	creature.recalculate_stats(catalogs.species(creature.species_id), ProgressionRuleset.new())
 	creature.current_hp = clampi(old_hp + creature.stats.max_hp - old_max, 1, creature.stats.max_hp)
 	return {"accepted": true, "status": "APPLIED", "action": "ev_training", "stat_id": stat, "ev_added": gain}

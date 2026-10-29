@@ -1,0 +1,90 @@
+{
+  "repository": "https://github.com/pret/pokeemerald",
+  "commit": "731ad5bfd6e6f265508d0efcca0ba42f9dcf5881",
+  "sources_sha256": {
+    "src/pokemon.c": "3607b9aca9c3c02b3d0bbe0117fe00ac8a4f4baeca2161fdf19c56156f3434dd",
+    "src/data/pokemon/item_effects.h": "cef26535271175957c2a6ba4642cd1ab894ea9df56cc9f6c004644810e0bd4bc"
+  },
+  "source_root": "D:\\Proyectos\\Pokemon Calvo Referencias\\fuentes\\pokeemerald-pp-reference\\731ad5bfd6e6f265508d0efcca0ba42f9dcf5881",
+  "purpose": "Read-only behavioral reference; no source code copied into game. Credits: pret contributors.",
+  "pp_up_increment": 1,
+  "pp_max_stage": 3,
+  "max_stages": 3,
+  "minimum_base_pp": 5,
+  "maximum_pp_oracle": {
+    "5": [
+      5,
+      6,
+      7,
+      8
+    ],
+    "10": [
+      10,
+      12,
+      14,
+      16
+    ],
+    "15": [
+      15,
+      18,
+      21,
+      24
+    ],
+    "20": [
+      20,
+      24,
+      28,
+      32
+    ],
+    "25": [
+      25,
+      30,
+      35,
+      40
+    ],
+    "30": [
+      30,
+      36,
+      42,
+      48
+    ],
+    "35": [
+      35,
+      42,
+      49,
+      56
+    ],
+    "40": [
+      40,
+      48,
+      56,
+      64
+    ]
+  },
+  "current_pp": "current += new_max - old_max; spent PP retained",
+  "friendship": {
+    "thresholds": [
+      100,
+      200
+    ],
+    "gains": [
+      5,
+      3,
+      2
+    ],
+    "soothe_bell": [
+      3,
+      2
+    ],
+    "max": 255
+  },
+  "deferred": [
+    "Capture ball/map friendship bonuses"
+  ],
+  "existing_save_fields": [
+    "moveset.move_id",
+    "moveset.max_pp",
+    "moveset.current_pp"
+  ],
+  "schema_change": false
+}

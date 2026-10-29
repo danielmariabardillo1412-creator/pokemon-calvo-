@@ -3,6 +3,8 @@ extends RefCounted
 # Field mutations of a staged owned creature. Medicine amounts come from the same
 # contract as native battles. EV berries follow the pinned Essentials reference.
 const Training = preload("res://modules/inventory/field_training_effects.gd")
+const PPBoost = preload("res://modules/inventory/field_pp_boost_effects.gd")
+const Friendship = preload("res://modules/inventory/field_friendship_effects.gd")
 const Medicine = preload("res://modules/inventory/battle_medicine_profile.gd")
 const BITTER_HERBS := {"energy_powder": ["super_potion", 5, 10], "energy_root": ["hyper_potion", 10, 15], "heal_powder": ["full_heal", 5, 10]}
 const RECOVERY_PROFILE := "res://modules/inventory/field_recovery_profile.json"
@@ -26,11 +28,12 @@ static func recovery_supports(item_id: StringName) -> bool:
 
 
 static func supports(item_id: StringName) -> bool:
-	return Training.supports(item_id) or Medicine.supports(item_id) or EV_BERRIES.has(String(item_id)) or BITTER_HERBS.has(String(item_id)) or recovery_supports(item_id)
+	return PPBoost.supports(item_id) or Training.supports(item_id) or Medicine.supports(item_id) or EV_BERRIES.has(String(item_id)) or BITTER_HERBS.has(String(item_id)) or recovery_supports(item_id)
 
 
 static func source_validation_error(creature: CreatureInstance, item_id: StringName, move_slot: int, catalogs: DefinitionCatalog) -> String:
 	# Validate raw EV values before CreatureInstance serialization can coerce them.
+	if PPBoost.supports(item_id): return PPBoost.validation_error(creature, move_slot, catalogs)
 	return Training.validation_error(creature, move_slot, catalogs) if Training.supports(item_id) else ""
 
 
@@ -39,11 +42,16 @@ static func _recovery_spec(item_id: StringName) -> Dictionary:
 
 
 static func pp_target_required(item_id: StringName) -> bool:
-	return _recovery_spec(item_id).get("scope", "") == "one"
+	return PPBoost.supports(item_id) or _recovery_spec(item_id).get("scope", "") == "one"
+
+
+static func pp_boost_supports(item_id: StringName) -> bool:
+	return PPBoost.supports(item_id)
 
 
 static func apply(creature: CreatureInstance, item_id: StringName, move_slot: int, catalogs: DefinitionCatalog) -> Dictionary:
 	if creature == null or creature.is_knocked_out(): return deny("creature_knocked_out")
+	if PPBoost.supports(item_id): return PPBoost.apply(creature, item_id, move_slot, catalogs)
 	if Training.supports(item_id): return Training.apply(creature, item_id, move_slot, catalogs)
 	if EV_BERRIES.has(String(item_id)): return _ev_berry(creature, item_id, move_slot, catalogs)
 	if BITTER_HERBS.has(String(item_id)): return _bitter_herb(creature, item_id, move_slot, catalogs)
@@ -102,11 +110,7 @@ static func _ev_berry(creature: CreatureInstance, item_id: StringName, move_slot
 	var old_hp := creature.current_hp
 	var old_max := creature.stats.max_hp
 	creature.evs[stat] = maxi(0, old_ev - 10)
-	# Capture-ball/map bonuses need origin metadata absent from CreatureInstance.
-	# Keep those contexts explicit in ITEM_PENDING_V4 rather than infer an origin.
-	var gain: int = [10, 5, 2][mini(2, creature.friendship / 100)]
-	if creature.held_item_id == &"soothe_bell" and not creature.held_item_consumed: gain = gain * 3 / 2
-	creature.friendship = mini(255, creature.friendship + gain)
+	Friendship.increase(creature, [10, 5, 2])
 	creature.recalculate_stats(species, ProgressionRuleset.new())
 	# Preserve the HP deficit across a maximum change; Pomeg must never cause a KO.
 	creature.current_hp = clampi(old_hp + creature.stats.max_hp - old_max, 1, creature.stats.max_hp)

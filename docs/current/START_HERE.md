@@ -2,7 +2,7 @@
 
 1. Leer `AGENTS.md` en la raíz: copia activa, original protegido y límites.
 2. Leer [PROJECT_STATE.md](PROJECT_STATE.md): estado vigente y cobertura.
-3. Leer [NEXT_STEPS.md](NEXT_STEPS.md): limpieza y fallos pendientes.
+3. Leer [NEXT_STEPS.md](NEXT_STEPS.md): familias pendientes y límites.
 4. Seguir [WORK_PROTOCOL.md](WORK_PROTOCOL.md) y consultar solo el cuaderno
    temático necesario.
 
@@ -10,6 +10,8 @@ La limpieza y las correcciones declaradas están cerradas; resultados y límites
 en [CLEANUP.md](CLEANUP.md). No hay una tarea T00 pendiente para OpenCode.
 La arquitectura se aceptó en `208c06c0`; los objetos V7 se cerraron en `eb18a5da`.
 El comparador V1 quedó conservado en `021a9c5`, antes de esta limpieza.
+Después se conectaron y verificaron Más PP/PP Máximos (V8); consultar
+[ITEM_SYSTEM_CURRENT_STATUS.json](ITEM_SYSTEM_CURRENT_STATUS.json) y su informe.
 
 Autoridad operativa: instrucciones humanas vigentes, código y pruebas sobre los
 bytes reales de esta copia, estado actual y contratos del dominio. Los informes

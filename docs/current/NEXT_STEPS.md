@@ -26,7 +26,8 @@ No modificar sus resultados para presentar una ejecución limpia posterior.
 
 ## Después de la limpieza
 
-Continuar objetos por familias aún pendientes: PP Up/Max, experiencia, IV,
+PP Up/Max quedan conectados y verificados en ITEM_FIELD_V8.md.
+Continuar objetos por familias aún pendientes: experiencia, IV,
 naturalezas, habilidades, condiciones de formas/evolución, bolas especiales y
 mundo. El estado de referencia es [ITEM_SYSTEM_CURRENT_STATUS.json](ITEM_SYSTEM_CURRENT_STATUS.json).
 Las rutas sin sistema disponible siguen pendientes; no simular consumos sin efecto.

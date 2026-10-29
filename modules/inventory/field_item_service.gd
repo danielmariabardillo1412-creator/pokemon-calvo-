@@ -188,6 +188,8 @@ func _apply_field_effect(item_id: StringName, creature_id: StringName, move_slot
 	if not creature.battle_transform_original.is_empty(): return _deny("temporary_battle_state")
 	var source_error := FieldEffects.source_validation_error(creature, item_id, move_slot, catalogs)
 	if source_error != "": return _deny(source_error)
+	if FieldEffects.pp_boost_supports(item_id) and not content.move_learnable(String(creature.moveset[move_slot].move_id)):
+		return _deny("move_not_permitted")
 	var copy := CreatureInstance.from_dict(creature.to_dict())
 	var result: Dictionary = FieldEffects.apply(copy, item_id, move_slot, catalogs)
 	if not result.accepted: return result

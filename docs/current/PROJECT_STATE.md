@@ -25,7 +25,8 @@ El barrido fresco del comparador V1 pasó en ambos juegos.
 
 Objetos: 2.222 IDs inventariados. Estado mecánico vigente:
 [ITEM_SYSTEM_CURRENT_STATUS.json](ITEM_SYSTEM_CURRENT_STATUS.json).
-Hay 59 efectos de campo verificados (41 de recuperación y 18 EV/amistad base),
+Hay 61 efectos de campo verificados (41 de recuperación y 20 de entrenamiento:
+18 EV/amistad base y 2 de mejoras de PP),
 además de las conexiones y límites de equipados, evolución y máquinas registrados
 allí. No están certificados todos los efectos de todos los objetos.
 
@@ -37,6 +38,9 @@ los cambios de aspecto anacrónico quedan separados de esta limpieza.
 
 El fallo de tipo de región en guardado se corrigió en `0e2cd3a2`, con rechazo
 seguro de valores mal formados. Objetos V5–V7 cerrados hasta `eb18a5da`.
+V8 añade Más PP/PP Máximos con helper puro y amistad positiva compartida;
+19.872 casos de catálogo, 336 contextos y recorrido nativo de mochila/guardado/
+combate/captura/restauración PASS. Detalle: [ITEM_FIELD_V8.md](ITEM_FIELD_V8.md).
 Evidencia y límites por fase en los informes de objetos; no duplicar sus matrices.
 
 El comparador V1 terminó 135/135 casos: 86 puertas comunes PASS, 17 adicionales

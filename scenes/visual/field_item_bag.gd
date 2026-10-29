@@ -116,14 +116,15 @@ func _refresh_choices() -> void:
 		for slot: BattleMoveSlot in creature.moveset: _moves.add_item("Sustituir: " + SpanishGameText.move_name(slot.move_id, definitions))
 	_moves.visible = service.profile.get("machine_rows", {}).has(String(_selected_item()))
 	var pp_target: bool = service.FieldEffects.pp_target_required(_selected_item())
+	var pp_boost: bool = service.FieldEffects.pp_boost_supports(_selected_item())
 	if pp_target:
-		_moves.clear(); _moves.add_item("Elige el movimiento que recuperará PP")
+		_moves.clear(); _moves.add_item("Elige el movimiento cuyos PP máximos aumentarán" if pp_boost else "Elige el movimiento que recuperará PP")
 		if creature != null:
 			for slot: BattleMoveSlot in creature.moveset: _moves.add_item("%s · PP %d/%d" % [SpanishGameText.move_name(slot.move_id, definitions), slot.current_pp, slot.max_pp])
 		_moves.visible = true
 	_description.text = ""
 	if pp_target:
-		_description.text = "Recupera PP del movimiento seleccionado."
+		_description.text = "Aumenta los PP máximos del movimiento seleccionado. Se consume solo si puede mejorarlo." if pp_boost else "Recupera PP del movimiento seleccionado."
 	elif _moves.visible:
 		var taught := service.machine_move(_selected_item())
 		_description.text = "Enseña: " + SpanishGameText.move_name(taught, definitions) if taught != &"" else "Esta máquina necesita una versión de reglas aún pendiente."
@@ -155,9 +156,10 @@ func _apply(action: String) -> Dictionary:
 		_result.text = "Objeto equipado." if action == "equip" else "Objeto retirado." if action == "unequip" else "Objeto utilizado."
 		if result.has("species_id"): _result.text = "¡Ha evolucionado a %s!" % SpanishGameText.species_name(StringName(result.species_id), definitions)
 		if result.has("move_id"): _result.text = "¡Ha aprendido %s!" % SpanishGameText.move_name(StringName(result.move_id), definitions)
+		if result.has("boosted_move_id"): _result.text = "Los PP máximos de %s han aumentado a %d." % [SpanishGameText.move_name(StringName(result.boosted_move_id), definitions), result.new_max_pp]
 	else:
 		if result.reason in ["item_has_no_effect", "move_slot_required", "unexpected_move_slot"]:
-			_result.text = {"item_has_no_effect": "No tendría efecto. El objeto se conserva.", "move_slot_required": "Elige qué movimiento recuperará PP.", "unexpected_move_slot": "Este objeto no necesita seleccionar un movimiento."}[result.reason]
+			_result.text = {"item_has_no_effect": "No tendría efecto. El objeto se conserva.", "move_slot_required": "Elige el movimiento al que aplicar el objeto.", "unexpected_move_slot": "Este objeto no necesita seleccionar un movimiento."}[result.reason]
 			refresh(); field.field_refresh_hud(); return result
 		_result.text = {"field_locked": "Espera a terminar el combate o el desplazamiento.", "item_not_owned": "No queda ese objeto en la mochila.", "move_replacement_required": "Elige qué movimiento quieres sustituir.", "move_already_known": "Este Pokémon ya conoce ese movimiento.", "machine_incompatible": "Este Pokémon no puede aprender ese movimiento con esta MT.", "machine_not_in_active_version": "Esta máquina necesita una versión de reglas que todavía no está activa.", "species_machine_version_context_missing": "Faltan datos de compatibilidad para esta versión; no se ha usado el objeto.", "no_eligible_evolution": "Este objeto no provoca una evolución disponible para este Pokémon.", "nothing_equipped": "Este Pokémon no lleva objeto.", "already_equipped": "Este Pokémon ya lleva ese objeto.", "creature_knocked_out": "El Pokémon está debilitado.", "field_effect_not_connected": "La función de este objeto fuera del combate aún está pendiente."}.get(result.reason, "No se ha aplicado la acción. El inventario se conserva.")
 	refresh()
