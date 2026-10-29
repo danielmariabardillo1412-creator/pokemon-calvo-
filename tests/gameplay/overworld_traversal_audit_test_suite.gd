@@ -58,6 +58,10 @@ func _test_portal_and_ledge_contracts() -> void:
 	_check.call("ow_ledge_accepts_allowed_direction", ledge.direction_matches(Vector2.DOWN))
 	_check.call("ow_ledge_rejects_reverse_direction", not ledge.direction_matches(Vector2.UP))
 	_check.call("ow_ledge_rejects_side_direction", not ledge.direction_matches(Vector2.LEFT))
+	# These contract-only Areas never enter the tree; RefCounted teardown does
+	# not own Nodes. Release both fixtures instead of leaking them at engine exit.
+	ledge.free()
+	portal.free()
 
 
 func _test_executable_traversal_lab(tree: SceneTree) -> void:

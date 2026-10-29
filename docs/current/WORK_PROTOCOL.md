@@ -1,117 +1,41 @@
-# PROTOCOLO DE TRABAJO
+# Protocolo de trabajo de esta copia
 
-Estas reglas existen para poder continuar el repositorio durante sesiones largas sin perder el estado real ni certificar accidentalmente un SHA distinto del que se pretende conservar.
+Trabajar solo en `D:/Proyectos/Pokemon Calvo - Arquitectura Kilo`.
+El original `D:/Proyectos/Pokemon Calvo` está protegido. Un escritor, sin agentes
+paralelos. No hay remoto configurado ni merge/publicación autorizados.
 
-## 1. No acumular fallos
+## Cambios y comprobación
 
-Para cada tramo:
+Identificar consumidores antes de retirar código o recursos. Limpiar por bloques,
+revisar el diff y ejecutar pruebas pertinentes. Si aparece un fallo, explicar su
+causa, corregirla y repetir el bloque afectado antes de seguir. Un archivo antiguo
+puede seguir siendo necesario para ejecutar o reproducir una prueba.
 
-1. investigar primero;
-2. acotar el cambio;
-3. añadir o usar una prueba que represente la verdad buscada;
-4. ejecutar el gate focal;
-5. si falla, detener el avance y encontrar causa raíz;
-6. corregir la causa y repetir focal + regresiones;
-7. continuar solo cuando esté verde.
+Conservar checkpoints locales en Git. No crear copias dispersas de documentación
+retirada. Mantener contratos, evidencia, fuentes y créditos que aún tengan uso.
+El comparador se ejecuta en copias físicas con partidas aisladas; una nueva versión
+requiere una nueva carpeta de resultados. No ejecutar pruebas contra el original.
 
-Nunca construir trabajo nuevo encima de un fallo no explicado.
+Un exit 0 no basta si hay errores de script, asserts fallidos o cero comprobaciones.
+Un timeout no es PASS. Una prueba repetida debe conservar el fallo anterior.
+Un fallo común a ambos juegos sigue requiriendo análisis. Una igualdad de estados
+no demuestra ausencia de errores compartidos.
 
-## 2. Orden de autoridad
+## Autoridad y límites
 
-Cuando haya contradicción:
+Las instrucciones humanas vigentes y el alcance acordado prevalecen. Contrastar
+afirmaciones con el código real y contratos de referencia. CI, snapshots y cuadernos
+históricos describen sus bytes exactos; no son órdenes para repetir promociones
+de ramas ni tareas ya aceptadas.
 
-1. commit/PR/CI/artefactos del SHA exacto;
-2. fuente canónica o inmutable del dominio;
-3. `docs/current/`;
-4. arquitectura y ADR;
-5. cuadernos temáticos;
-6. historial/worklogs;
-7. memoria del chat.
+Datos, políticas y arte quedan fuera de esta limpieza. No regenerar datasets
+ni modificar fuentes inmutables para hacer pasar una prueba. Distinguir presencia
+en catálogo, efectos implementados y mecánicas verificadas.
 
-No editar fuentes inmutables para hacer pasar tests.
+Los verificadores de `tools/architecture_handoff/` conservan los sellos originales
+de T006B y tienen consumidores en los runners de objetos. No resellarlos ni
+usarlos para certificar cambios nuevos fuera de aquel alcance.
 
-## 3. Cadena de snapshots certificados
-
-Hasta que el usuario cambie expresamente esta política:
-
-- el siguiente tramo parte del último HEAD certificado exacto;
-- no se parte de `main` por costumbre;
-- el PR se abre contra el snapshot inmediatamente anterior cuando sea práctico;
-- se exige la matriz normal de workflows en verde sobre el SHA exacto final;
-- el PR certificado se cierra **sin merge**;
-- ese HEAD pasa a ser el parent del siguiente tramo.
-
-`main` sigue siendo histórica hasta que se sustituya deliberadamente en una operación separada.
-
-## 4. Regla de SHA exacto
-
-Un resultado de CI solo certifica el SHA sobre el que se ejecutó.
-
-Si se cambia código, tests, workflows o documentación después de quedar verde, el HEAD nuevo necesita su propia validación cuando vaya a formar parte de la cadena certificada.
-
-No repetir dos ciclos por ritual: se repiten cuando existe un HEAD previo distinto que fue validado y después se modifica. Una rama exclusivamente documental puede cerrarse con un único ciclo completo si ese ciclo se ejecuta sobre su HEAD final exacto.
-
-## 5. Matriz de regresión
-
-El baseline de partida de esta reorganización tiene 18 workflows normales:
-
-- Data Foundation V3
-- Godot 4.7 global
-- Spanish Types Foundation
-- Trainer Battle Session
-- Trainer Intelligence Foundation
-- Trainer Tactical Intelligence
-- Trainer Belief Inference
-- Trainer Search Foundation
-- Trainer Search Depth Budget
-- Trainer Self Play Evaluation
-- Trainer Evaluation Corpus
-- Trainer Search Limit Benchmark
-- Trainer Adaptive Branching
-- Trainer Public Coverage Beliefs
-- Trainer Item Actions
-- Trainer Strategic Switching V2
-- Trainer Loadouts
-- Trainer Team Composition.
-
-Si la matriz aumenta o cambia, `PROJECT_STATE.md` debe describir el nuevo contrato; no conservar el número 18 por inercia.
-
-## 6. DATA V3
-
-No confundir:
-
-- dato presente en PokéAPI;
-- dato preservado por V3;
-- mecánica ejecutable fielmente por Battle Core.
-
-Los límites `RUNTIME_SUPPORTED`, `PARTIAL_RUNTIME`, `DATA_ONLY` y `UNSUPPORTED` son contratos, no objetivos estéticos de cobertura.
-
-`data/api/v2` y `data/schema/v2` son fuentes inmutables. No modificar JSON canónico manualmente.
-
-## 7. Memoria documental
-
-Cada descubrimiento material, excepción, corrección, decisión arquitectónica, certificación o diferimiento debe quedar fuera del chat:
-
-- cambio del estado real → `docs/current/`;
-- conocimiento acumulado de un dominio → cuaderno en `docs/project_book/`;
-- decisión arquitectónica duradera → ADR;
-- diario cerrado / evidencia histórica → `docs/history/worklogs/`.
-
-No crear un archivo nuevo por cada microtramo. Actualizar el cuaderno temático existente y archivar worklogs cuando una fase cierre.
-
-## 8. Recuperación de contexto
-
-Una sesión nueva debe:
-
-1. leer `docs/current/START_HERE.md`;
-2. leer `PROJECT_STATE.md` y `NEXT_STEPS.md`;
-3. leer solo el cuaderno temático necesario;
-4. comprobar en GitHub el branch/HEAD/PR mencionado;
-5. verificar CI antes de modificar;
-6. continuar desde el último HEAD certificado, no desde `main` por su nombre.
-
-## 9. Regla de honestidad técnica
-
-No subir contadores, aparentar soporte o ampliar la IA solo para que el proyecto parezca más avanzado.
-
-Una limitación demostrada y documentada es preferible a una aproximación silenciosa que cambia las reglas del juego.
+Documentar decisiones materiales en el estado vivo o cuaderno temático; mantener
+la evidencia detallada por ejecución. No certificar cobertura global a partir
+de un lote. Pruebas técnicas de imágenes no son aprobación artística.

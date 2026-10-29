@@ -1,1 +1,0 @@
-Ejecutor vigente: OpenCode. Consultar docs/kilo/OPENCODE_PROMPT.txt y START_HERE.md. No iniciar Kilo en paralelo.

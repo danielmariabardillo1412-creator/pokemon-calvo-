@@ -9,6 +9,20 @@ EXCLUDED={
  'tests/gameplay/item_effect_templates_v3.gd':'Generates item fixture templates; not a test gate.',
  'tests/trainer_ai/trainer_search_limit_horizon_diagnostic.gd':'Diagnostic intentionally ignores assertions.',
 }
+# Closed, phase-specific before/after comparisons and source-import audits. Their
+# pre-fix renderers and baseline indexes were
+# local historical inputs, not resources of the current game. Both the scripts
+# and their sole sheet builders were retired in the cleanup (recover at 021a9c5).
+# Keep these explicit when discovering the older source tree; never count them
+# as PASS or silently convert their original failures into successful checks.
+RETIRED_COMPARISONS={
+ 'tests/visual/'+name+'_test_runner.gd':
+ 'Retired historical migration audit, recoverable at 021a9c5. Requires a frozen prior renderer or import-phase index. Not a current regression gate and not counted as PASS; see docs/current/CLEANUP.md for retained gates and coverage limits.'
+ for name in ['move_anchor_group','move_art_motif','move_beam_endpoint','move_local_effect',
+              'move_motion_path','move_projection_group','move_self_body','move_water_layer',
+              'move_gap','move_hue']
+}
+EXCLUDED.update(RETIRED_COMPARISONS)
 LEGACY_REQUIRED={
  'tests/gameplay/map_runtime_test_runner.gd','tests/gameplay/visual_field_test_runner.gd',
  'tests/battle/ally_switch_pilot_test_runner.gd','tests/battle/live_move_integration_test_runner.gd',

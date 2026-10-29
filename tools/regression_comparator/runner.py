@@ -12,13 +12,17 @@ def classify_log(text,code,timed_out=False):
  text=ANSI.sub('',text)
  errors=[l for l in text.splitlines() if 'SCRIPT ERROR' in l or re.match(r'^ERROR:',l) or re.match(r'^FAIL\s',l) or re.search(r'(?<![0-9])[1-9][0-9]* FAIL',l)]
  for line in text.splitlines():
-  if not line.startswith('PASS ') and (re.search(r'\b[1-9][0-9]* failures?\b',line) or re.search(r'\bFAIL\b',line) and not re.search(r'\b0 FAIL\b',line)):
+  # In "checks=4630 failures=0", 4630 counts checks, not failures. Do not
+  # reinterpret a value assigned to another key as a prefix failure count.
+  numeric_failure=re.search(r'(?<![=\w])[1-9][0-9]* failures?\b',line) or re.search(r'\bfailures?[=:]\s*[1-9][0-9]*\b',line)
+  if numeric_failure or not line.startswith('PASS ') and re.search(r'\bFAIL\b',line) and not re.search(r'\b0 FAIL\b',line):
    if line not in errors:errors.append(line)
  counts=[int(x) for x in re.findall(r'checks[=:]\s*(\d+)',text)]
  counts += [int(x) for x in re.findall(r'(\d+) PASS / \d+ FAIL',text)]
  counts += [int(x) for x in re.findall(r'\bPASS\s+(\d+)(?:\s|$)',text)]
  counts += [int(x) for x in re.findall(r'"checks"\s*:\s*(\d+)',text)]
  counts += [int(x) for x in re.findall(r'"passed"\s*:\s*(\d+)',text)]
+ counts += [int(x) for x in re.findall(r'\bpassed[=:]\s*(\d+)',text)]
  counts += [int(x) for x in re.findall(r'(\d+)\s+checks\b',text)]
  count=max(counts,default=0)
  status='TIMEOUT' if timed_out else 'FAIL' if code!=0 or errors else 'PASS' if count>0 else 'INCONCLUSIVE_NO_ASSERTION_COUNT'

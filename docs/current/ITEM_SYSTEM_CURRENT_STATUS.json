@@ -18,7 +18,7 @@
   "headless_checks": 6990,
   "gpu_checks": 6991,
   "next": [
-    "General differential comparator requested by user, after current item slice; PP boosts/XP/IV/nature/ability routes remain separate pending work",
+    "Declared cleanup closed with post-cleanup regressions; next item families are PP boosts/XP/IV/nature/ability routes under separate scope",
     "Capture-ball/map metadata before origin friendship bonuses",
     "26 species-form routes and gender/infatuation/breeding contract",
     "14 food/contest/world-context berries",

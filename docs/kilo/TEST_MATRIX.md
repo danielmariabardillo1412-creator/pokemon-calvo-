@@ -1,5 +1,9 @@
 # Matriz de comprobaciones
 
+Matriz histórica de T001–T006B, aceptada en 208c06c0. Conserva comandos y
+evidencia de esas versiones. Los sellos de entonces no certifican cambios
+posteriores. Estado vivo y verificaciones nuevas: `docs/current/START_HERE.md`.
+
 Todos los comandos se ejecutan desde `D:/Proyectos/Pokemon Calvo - Arquitectura Kilo`.
 Las pruebas usan el directorio de usuario de esta copia. El runner captura stdout
 y stderr, exige exit code cero y rechaza SCRIPT ERROR/ERROR aunque el proceso

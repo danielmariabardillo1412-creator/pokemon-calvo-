@@ -13,10 +13,11 @@ la traza determinista coinciden exactamente, con 38 asserts independientes.
 El barrido nativo nuevo de 900 movimientos permitidos paso en ambas versiones.
 La integridad final de ambas fuentes y referencias quedo verificada.
 
-Quedan por resolver pruebas obsoletas de escena principal, auditorias estaticas,
-informes de datos antiguos y casos visuales. Los resultados no se declaran PASS
-global. Esta evidencia corresponde a los bytes anteriores a la limpieza; los
-cambios posteriores necesitan nuevas pruebas y no alteran el informe V1.
+Al terminar V1 quedaron pruebas obsoletas de escena principal, auditorias estaticas,
+informes de datos antiguos y casos visuales. La revision posterior y retirada
+explicita de audits de migracion cerrados esta en [CLEANUP.md](CLEANUP.md), con
+sus propias pruebas. V1 conserva FINDINGS_REVIEW_REQUIRED: corresponde a los
+bytes anteriores a la limpieza y no se reescribe como PASS retroactivo.
 
 Fuentes de solo lectura:
 - D:/Proyectos/Pokemon Calvo (trabajo local real, incluidos cambios sin commit).

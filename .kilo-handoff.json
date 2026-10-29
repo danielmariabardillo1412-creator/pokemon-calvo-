@@ -2,10 +2,8 @@
   "copy_root": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
   "original_root": "D:/Proyectos/Pokemon Calvo",
   "user_data_name": "Pokemon Calvo - Arquitectura Kilo",
-  "authorized_tasks": [
-    "T006B"
-  ],
-  "scope": "Native persistence API and synchronous publication of validated restored state; stop for final review",
-  "accepted_checkpoint": "4535c2802a037838f7079ef3af0a6011d0964428",
-  "executor": "OpenCode"
+  "authorized_tasks": [],
+  "scope": "Historical workspace identity used by verification helpers; no executor task active",
+  "accepted_checkpoint": "208c06c005a6b31af9a859896b7306299d406e83",
+  "executor": null
 }

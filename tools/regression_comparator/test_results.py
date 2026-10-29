@@ -25,6 +25,14 @@ class ResultContracts(unittest.TestCase):
  def test_json_passed_counter_is_assertion_evidence(self):
   result=classify_log('RESULT {"status":"PASS","passed":542,"failures":[]}',0)
   self.assertEqual((result['status'],result['checks_reported']),('PASS',542))
+ def test_zero_failure_counter_after_checks_is_not_a_failure_count(self):
+  for line,count in [('MOVE_CAMERA_REPAIR PASS checks=4630 failures=0',4630), ('SELF_SCREEN_LAYER PASS passed=8025 failures=0',8025)]:
+   result=classify_log(line,0)
+   self.assertEqual(result['errors'],[])
+   self.assertEqual((result['status'],result['checks_reported']),('PASS',count))
+  self.assertEqual(classify_log('AUDIT checks=4630 failures=2',0)['status'],'FAIL')
+  self.assertEqual(classify_log('AUDIT 4630 checks; 2 failures',0)['status'],'FAIL')
+  self.assertEqual(classify_log('PASS AUDIT checks=4630 failures=2',0)['status'],'FAIL')
  def test_timeout_not_green(self):
   self.assertEqual(classify_log('checks=20',0,True)['status'],'TIMEOUT')
  def test_paired_failure_not_hidden_by_equivalence(self):

@@ -16,7 +16,7 @@ func run(check: Callable) -> void:
 	var by_id := _by_id(raw.get("abilities", []))
 	var registry := BattleEffectRegistry.new()
 
-	var bad_source := _load_json("res://data/api/v2/ability/123/index.json")
+	var bad_source := preload("res://tests/helpers/pokeapi_source_fixture.gd").read("ability/123/index.json")
 	var bad_text := _english_effect_text(bad_source.get("effect_entries", []))
 	check.call(
 		"data_v3_bad_dreams_source_contract",
@@ -28,7 +28,7 @@ func run(check: Callable) -> void:
 		and (bad_source.get("effect_changes", []) as Array).is_empty(),
 	)
 
-	var rain_source := _load_json("res://data/api/v2/ability/44/index.json")
+	var rain_source := preload("res://tests/helpers/pokeapi_source_fixture.gd").read("ability/44/index.json")
 	var rain_text := _english_effect_text(rain_source.get("effect_entries", []))
 	check.call(
 		"data_v3_rain_dish_source_contract",
@@ -39,7 +39,7 @@ func run(check: Callable) -> void:
 		and (rain_source.get("effect_changes", []) as Array).is_empty(),
 	)
 
-	var ice_source := _load_json("res://data/api/v2/ability/115/index.json")
+	var ice_source := preload("res://tests/helpers/pokeapi_source_fixture.gd").read("ability/115/index.json")
 	var ice_text := _english_effect_text(ice_source.get("effect_entries", []))
 	check.call(
 		"data_v3_ice_body_source_contract",

@@ -3,9 +3,10 @@
 Raiz de trabajo: `D:/Proyectos/Pokemon Calvo - Arquitectura Kilo`.
 Original protegido: `D:/Proyectos/Pokemon Calvo`; no editarlo ni probarlo.
 T001–T006 estan aceptadas en 208c06c0. Los contratos en docs/kilo son historicos;
-OpenCode esta detenido. La nueva autorizacion del usuario es corregir
-ARCH_SAVE_REGION_TYPE y continuar los objetos que tengan sistemas disponibles.
-Correccion aceptada por pruebas: 0e2cd3a. Leer docs/current/DEVELOPMENT_CURRENT.md.
+OpenCode esta detenido. Autorizacion vigente: limpiar material obsoleto, corregir
+fallos demostrados y comprobar cada bloque. Region corregida en 0e2cd3a;
+objetos V5-V7 cerrados hasta eb18a5da. Comparador V1 terminado con hallazgos,
+conservado en 021a9c5. Leer docs/current/START_HERE.md y docs/current/CLEANUP.md.
 
 Un escritor; sin agentes paralelos. Mantener el servicio de objetos como autoridad,
 la UI como vista y el motor nativo para combate. Preparar copia, validar, publicar
@@ -15,7 +16,10 @@ Conservar los guards de identidad y actividad. No duplicar reglas en otro motor.
 No modificar el original, F:, datos brutos/normalizados, politicas, arte, packs,
 Node/Showdown, algoritmos de combate, RNG o schema de guardado. No regenerar
 fixtures de datasets ni descargar dependencias para resolver el encargo.
-No borrar motores anteriores ni archivos ausentes con skip-worktree.
+No borrar motores anteriores ni archivos ausentes con skip-worktree. Antes de
+retirar material obsoleto, comprobar consumidores y conservar su historia en Git.
+No duplicar archivos retirados en nuevas carpetas de archivo. Conservar contratos,
+creditos, evidencia y verificadores historicos que todavia tengan consumidores.
 No reset --hard, clean, rebase, merge, push ni remotos. Commits locales pequenos
 tras pruebas pertinentes; conservar todo trabajo ajeno inesperado.
 

@@ -1,7 +1,7 @@
-# Etapas posteriores — requieren revisión y nuevos contratos
+# Etapas de arquitectura — plan cerrado
 
-T001–T005 y T006A aceptados. Solo T006B está abierto bajo su contrato específico.
-No hay autorización para nuevas reformas o para mezclar con el original.
+T001–T006B aceptadas en 208c06c0. Se conserva este desglose como referencia
+histórica, no como trabajo activo. Próximos pasos: docs/current/NEXT_STEPS.md.
 
 T003: separar formateo/renderizado del HUD a partir de una vista de datos
 explícita. Contrato ejecutable: tasks/T003_HUD_RENDER.md.
@@ -27,6 +27,6 @@ la IA de entrenadores tampoco se incorporan como arreglos de arquitectura.
 Desglose T006 aprobado para planificación:
 - T006A aceptado: ejecución del puente mediante API del dueño; boot documentado.
   Contrato tasks/T006A_NATIVE_BRIDGE_RUNTIME.md.
-- T006B activo: publicación de estado validado al cargar, persistencia y
-  recuperación. Contrato tasks/T006B_NATIVE_PERSISTENCE.md. Revisión al finalizar.
-El bloque global T006 no se considera terminado al cerrar únicamente A.
+- T006B aceptado: publicación de estado validado al cargar, persistencia y
+  recuperación. Contrato tasks/T006B_NATIVE_PERSISTENCE.md.
+T006 completo aceptado, con sus dos subetapas. No hay una T007 automática.

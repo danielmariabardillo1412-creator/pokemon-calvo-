@@ -1,7 +1,7 @@
 class_name TrainerBattleRuntimeIntegrationTestSuite
 extends RefCounted
 
-const MAIN_SCENE := "res://scenes/overworld/technical_overworld.tscn"
+const LEGACY_SCENE := "res://scenes/overworld/technical_overworld.tscn"
 const TRAINER_CONTROLLER_SOURCE := "res://modules/battle/presentation/trainer_battle_presentation_controller.gd"
 const WILD_CONTROLLER_SOURCE := "res://modules/battle/presentation/battle_presentation_controller.gd"
 
@@ -15,7 +15,7 @@ func run(check_callback: Callable, tree: SceneTree) -> void:
 
 
 func _test_static_isolation_contract() -> void:
-	_check.call("c3far_main_scene_contract", String(ProjectSettings.get_setting("application/run/main_scene", "")) == MAIN_SCENE)
+	_check.call("c3far_main_scene_contract", preload("res://tests/helpers/field_scene_contract.gd").configured_main_is_field())
 	var trainer_source := _read_text(TRAINER_CONTROLLER_SOURCE)
 	var wild_source := _read_text(WILD_CONTROLLER_SOURCE)
 	_check.call("c3far_trainer_controller_source_present", not trainer_source.is_empty())
@@ -30,7 +30,7 @@ func _test_static_isolation_contract() -> void:
 
 
 func _test_executable_trainer_vertical_slice(tree: SceneTree) -> void:
-	var packed := load(MAIN_SCENE) as PackedScene
+	var packed := load(LEGACY_SCENE) as PackedScene
 	_check.call("c3far_main_scene_loads", packed != null)
 	if packed == null:
 		return

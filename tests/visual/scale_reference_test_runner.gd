@@ -16,11 +16,22 @@ func _run() -> void:
 	var matched := 0
 	var adapted := 0
 	var custom := 0
+	var regional := 0
+	_check("base_and_regional_catalog_count", rows.size() == 1082)
 	for key: String in rows:
 		for side: String in ["front", "back"]:
 			var ref: Dictionary = references.get(key, {}).get(side, {})
 			var view: Dictionary = rows[key].states.reposo[side]
 			var label := key + "/" + side
+			if not references.has(key):
+				# Regional pairs were added after the 1025-base reference table.
+				# They carry their own metrics, not a claimed external calibration.
+				regional += 1
+				var bounds: Array = rows[key].get("metrics", {}).get(side, {}).get("bounds", [])
+				_check("regional_metrics/" + label, bounds.size() == 4 and bounds.all(func(v): return is_finite(float(v))) and float(bounds[2]) > float(bounds[0]) and float(bounds[3]) > float(bounds[1]))
+				_check("regional_independent_atlas/" + label, rows[key].source_family == "showdown_rendered" and String(view.sha256).length() == 64 and not view.regions.is_empty())
+				_check("regional_explicit_scale_fallback/" + label, is_equal_approx(Catalog.presentation_scale(StringName(key), side), 1.0) and is_finite(float(view.unit_scale)) and float(view.unit_scale) > 0.0)
+				continue
 			_check("entry/" + label, not ref.is_empty())
 			if ref.is_empty():
 				continue
@@ -46,13 +57,15 @@ func _run() -> void:
 	_check("matched_view_count", matched == 2003)
 	_check("adapted_view_count", adapted == 19)
 	_check("custom_view_count", custom == 28)
+	_check("regional_views_separate_from_base_references", regional == 114)
 	_check("wailord_front_uses_native_size", is_equal_approx(float(rows.wailord.states.reposo.front.unit_scale) * Catalog.presentation_scale(&"wailord", "front"), 1.0))
 	# The same global frame scale must preserve authored relative proportions.
 	var wailord_height := float(rows.wailord.states.reposo.front.regions[0][3])
 	var joltik_height := float(rows.joltik.states.reposo.front.regions[0][3])
 	_check("preserves_authored_wailord_joltik_ratio", is_equal_approx(wailord_height / joltik_height, 81.0 / 31.0))
 	var result := {"status": "PASS" if _failures.is_empty() else "FAIL", "passed": _passed,
-		"failures": _failures, "matched_views": matched, "adapted_views": adapted, "custom_views": custom}
+		"failures": _failures, "matched_views": matched, "adapted_views": adapted, "custom_views": custom,
+		"regional_views_with_own_metrics": regional, "external_reference_scope": "1025 base species only; regional metrics are local"}
 	DirAccess.make_dir_recursive_absolute("res://.godot/scale_reference_checks")
 	var output := FileAccess.open("res://.godot/scale_reference_checks/result.json", FileAccess.WRITE)
 	output.store_string(JSON.stringify(result, "\t") + "\n")

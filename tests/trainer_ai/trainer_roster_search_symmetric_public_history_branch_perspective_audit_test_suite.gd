@@ -27,6 +27,11 @@ func run(check_callback: Callable) -> void:
 
 
 func _test_symmetric_public_history_and_branch_contract() -> void:
+	var direct := "func submit_turn(actions: Array[BattleAction]) -> Array[BattleEvent]:\n\treturn server.submit_turn(actions)\n"
+	var accumulated := "func submit_turn(actions: Array[BattleAction]) -> Array[BattleEvent]:\n\tvar events := server.submit_turn(actions)\n\tevents.append_array(extra)\n\treturn events\n"
+	_check.call("search_symmetric_history_direct_event_forwarding", _c3fab_fork_returns_events(direct))
+	_check.call("search_symmetric_history_accumulated_event_forwarding", _c3fab_fork_returns_events(accumulated.replace("\n", "\r\n")))
+	_check.call("search_symmetric_history_discarded_events_rejected", not _c3fab_fork_returns_events(accumulated.replace("return events", "return []")))
 	var report_a := _build_c3fab_report()
 	var report_b := _build_c3fab_report()
 	var source := report_a.get("source_contract", {}) as Dictionary
@@ -340,8 +345,7 @@ func _c3fab_source_contract(sources: Dictionary) -> Dictionary:
 		"memory_comment_warns_metadata_diagnostics": _has(memory, "diagnostics or")
 		and _has(memory, "implementation details"),
 		"battle_event_to_dict_includes_metadata": _has(event_source, "\"metadata\": metadata.duplicate(true)"),
-		"fork_submit_returns_events": _has(fork_source, "func submit_turn(actions: Array[BattleAction]) -> Array[BattleEvent]:")
-		and _has(fork_source, "return server.submit_turn(actions)"),
+		"fork_submit_returns_events": _c3fab_fork_returns_events(fork_source),
 		"fork_retains_event_history": _has(fork_source, "var event_history") or _has(fork_source, "var _event_history") or _has(fork_source, "event_log.append"),
 		"memory_roundtrip_clone_api_present": _has(memory, "func to_dict() -> Dictionary:")
 		and _has(memory, "static func from_dict(data: Dictionary) -> TrainerBattleMemory:"),
@@ -373,6 +377,16 @@ func _c3fab_branch_contract(sources: Dictionary, source: Dictionary) -> Dictiona
 			"build_role_local_observation_and_belief",
 		],
 	}
+
+
+func _c3fab_fork_returns_events(source: String) -> bool:
+	var body := _c3fw_function_block(source, "func submit_turn(actions: Array[BattleAction]) -> Array[BattleEvent]:")
+	# Forced-switch continuations now append events before returning the same array.
+	# Keep this as a source audit; executable fork isolation has its own regression.
+	return body.contains("\n\treturn server.submit_turn(actions)") or (
+		body.contains("\n\tvar events := server.submit_turn(actions)")
+		and body.contains("\n\treturn events")
+	)
 
 
 func _has(source: String, needle: String) -> bool:

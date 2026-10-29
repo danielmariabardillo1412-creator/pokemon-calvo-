@@ -174,6 +174,26 @@ func _real_turn(scene: Node, move: MoveDefinition) -> void:
 		if entry.get("community_preparation", false):
 			casts += 1
 			_check("community_preparation_replaces_generic_cast/" + String(move.id), entry.event_kind == String(BattleEvent.ACTION_USED) and not entry.has("move_visual"))
+		if entry.has("catalog_clip"):
+			# The reviewed catalog replaces generic cast/support overlays on the
+			# confirmed event. Verify the real renderer instead of demanding both.
+			casts += 1
+			var key := String(entry.catalog_clip)
+			var origin := String(entry.catalog_origin)
+			var catalog = ui._playback._live_catalog
+			_check("catalog_matches_confirmed_move/" + String(move.id), key == String(move.id) + "/" + origin and origin in ["back", "front"] and catalog.bindings.has(key) and not entry.has("move_visual"))
+			_check("catalog_is_actually_visible/" + String(move.id), is_instance_valid(catalog.preview) and catalog.preview.visible and catalog.preview.clip.get("id") == key)
+			if _capture:
+				await process_frame
+				await process_frame
+				RenderingServer.force_draw(false)
+				var path := "res://.godot/move_vfx_checks/%s_%02d_catalog_%s.png" % [move.id, limit, origin]
+				var saved := root.get_texture().get_image().save_png(path) == OK
+				_check("catalog_gpu_capture/" + key, saved)
+				if saved: _captures += 1
+			if move.damage_class == "status":
+				supports += 1
+				_check("catalog_status_has_confirmed_effect/" + String(move.id), entry.event_kind in [String(BattleEvent.STAT_STAGE_CHANGED), String(BattleEvent.HP_RECOVERED)])
 		if entry.has("move_visual"):
 			var visual: Dictionary = entry.move_visual
 			_check("real_recipe_matches_move/" + String(move.id), visual.type_id == String(move.type_id))

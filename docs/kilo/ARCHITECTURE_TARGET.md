@@ -1,4 +1,8 @@
-# Mapa actual, destino y límites
+# Mapa de la reorganización T001–T006B — histórico cerrado
+
+Plan aceptado en 208c06c0. El texto siguiente conserva el diseño y los límites
+de cada etapa; sus frases de autorización no son tareas vigentes. Estado actual:
+`docs/current/START_HERE.md`. No relanzar ejecutores ni repetir etapas cerradas.
 
 ## Recorrido real de la demo
 
