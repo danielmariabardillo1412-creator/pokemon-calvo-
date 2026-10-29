@@ -453,6 +453,11 @@ func step_two_load_failures() -> void:
 	write_envelope(envelope)
 	await expect_load_failure("checksum", "field_save_checksum")
 
+	for raw_region: Variant in [null, false, true, 1, 1.5, [], {}]:
+		rewrite_world(func(w: Dictionary): w.region = raw_region)
+		await expect_load_failure("world region type " + str(raw_region), "world_shape")
+	rewrite_world(func(w: Dictionary): w.erase("region"))
+	await expect_load_failure("world region missing", "world_shape")
 	rewrite_world(func(w: Dictionary): w.position = [1])
 	await expect_load_failure("world shape", "world_shape")
 	rewrite_world(func(w: Dictionary): w.position = [1, 180])
@@ -519,6 +524,9 @@ func step_three_candidate_failure() -> void:
 	var old_config := JSON.stringify(scene._active_config)
 	var old_position: Vector2 = scene.field_player_position()
 	check("world failure fixture has live battle", view.session.has_active_battle() and bridge.kind == "wild")
+	rewrite_world(func(w: Dictionary): w.region = 1)
+	await expect_load_failure("live battle region type", "world_shape")
+	check("live battle region rejection keeps worker checkpoint", is_same(view.session, old_view_session) and view.session.has_active_battle() and view.session.snapshot() == saved)
 	rewrite_world(func(w: Dictionary): w.position = [1, 180])
 	await expect_load_failure("live battle world failure", "world_position")
 	check("live battle preserved after world failure", is_same(view.session, old_view_session) and view.session.has_active_battle() and view.session.snapshot() == saved)

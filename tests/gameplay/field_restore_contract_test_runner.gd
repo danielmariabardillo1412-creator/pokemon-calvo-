@@ -321,6 +321,11 @@ func check_validator_valid() -> void:
 
 
 func check_validator_rejections() -> void:
+	for raw_region: Variant in [null, false, true, 1, 1.5, [], {}]:
+		var malformed := valid_world(); malformed.region = raw_region
+		rejects_world("shape region " + str(raw_region), malformed, "world_shape")
+	var missing_region := valid_world(); missing_region.erase("region")
+	rejects_world("shape region missing", missing_region, "world_shape")
 	var shape_world := valid_world(); shape_world.position = [96, 180, 0]
 	rejects_world("shape position size", shape_world, "world_shape")
 	shape_world = valid_world(); shape_world.position = "x"

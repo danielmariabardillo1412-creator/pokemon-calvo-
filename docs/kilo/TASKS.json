@@ -89,12 +89,15 @@
   "deferred_findings": [
     {
       "id": "ARCH_SAVE_REGION_TYPE",
-      "status": "DEFERRED_OUT_OF_SCOPE",
+      "status": "RESOLVED_SEPARATE_AUTHORIZED_FIX",
       "introduced_by_this_refactor": false,
       "verified_against": "3fed2a2",
       "description": "Numeric world.region in a deliberately edited checksummed save triggers a GDScript String/float comparison error in baseline and current. Current releases busy/working via fallback; baseline does not.",
       "evidence": "docs/kilo/evidence/T006B/codex_review/region_type_probe_canonical.json",
-      "next_action": "Add an explicit region-type validation and regression test in a separate authorized change."
+      "next_action": "None for this finding; original baseline reproduction retained.",
+      "resolution_date": "2026-10-29",
+      "resolution": "Reject missing/non-String world.region as world_shape before comparisons; preserve live state and worker.",
+      "resolution_evidence": "docs/kilo/evidence/T006B/save_region_fix_2026-10-29/results.json"
     }
   ]
 }

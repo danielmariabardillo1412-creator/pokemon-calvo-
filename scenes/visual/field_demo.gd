@@ -764,7 +764,7 @@ func field_build_native_encounter_tables(config: Dictionary) -> Dictionary:
 
 
 func field_validate_native_loaded_world(world: Dictionary) -> Dictionary:
-	if not world.get("position") is Array or world.position.size() != 2 or not world.get("config") is Dictionary or world.get("format") not in ["gen8customgame", "gen9customgame", "gen9calvounifiedv1"] or not world.get("rng") is String or not world.rng.is_valid_int() or not (world.get("next_seed") is int or world.get("next_seed") is float): return {"ok": false, "error": "world_shape"}
+	if not world.get("region") is String or not world.get("position") is Array or world.position.size() != 2 or not world.get("config") is Dictionary or world.get("format") not in ["gen8customgame", "gen9customgame", "gen9calvounifiedv1"] or not world.get("rng") is String or not world.rng.is_valid_int() or not (world.get("next_seed") is int or world.get("next_seed") is float): return {"ok": false, "error": "world_shape"}
 	for v: Variant in world.position:
 		if not (v is int or v is float) or not is_finite(v): return {"ok": false, "error": "world_position"}
 	var position := Vector2(world.position[0], world.position[1])
