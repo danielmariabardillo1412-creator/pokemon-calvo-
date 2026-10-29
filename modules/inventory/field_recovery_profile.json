@@ -1,0 +1,95 @@
+{
+  "id": "calvo_field_recovery_modern_v1",
+  "items": {
+    "fresh_water": {
+      "heal": 30
+    },
+    "soda_pop": {
+      "heal": 50
+    },
+    "lemonade": {
+      "heal": 70
+    },
+    "moomoo_milk": {
+      "heal": 100
+    },
+    "berry_juice": {
+      "heal": 20
+    },
+    "sweet_heart": {
+      "heal": 20
+    },
+    "oran_berry": {
+      "heal": 10
+    },
+    "sitrus_berry": {
+      "heal": "quarter"
+    },
+    "cheri_berry": {
+      "cure": [
+        "par"
+      ]
+    },
+    "chesto_berry": {
+      "cure": [
+        "slp"
+      ]
+    },
+    "pecha_berry": {
+      "cure": [
+        "psn",
+        "tox"
+      ]
+    },
+    "rawst_berry": {
+      "cure": [
+        "brn"
+      ]
+    },
+    "aspear_berry": {
+      "cure": [
+        "frz"
+      ]
+    },
+    "lum_berry": {
+      "cure": "all",
+      "confusion": true
+    },
+    "lava_cookie": {
+      "cure": "all",
+      "confusion": true
+    },
+    "old_gateau": {
+      "cure": "all",
+      "confusion": true
+    },
+    "casteliacone": {
+      "cure": "all",
+      "confusion": true
+    },
+    "lumiose_galette": {
+      "cure": "all",
+      "confusion": true
+    },
+    "shalour_sable": {
+      "cure": "all",
+      "confusion": true
+    },
+    "big_malasada": {
+      "cure": "all",
+      "confusion": true
+    },
+    "pewter_crunchies": {
+      "cure": "all",
+      "confusion": true
+    },
+    "rage_candy_bar": {
+      "cure": "all",
+      "confusion": true
+    },
+    "leppa_berry": {
+      "pp": 10,
+      "scope": "one"
+    }
+  }
+}

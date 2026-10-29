@@ -1,9 +1,9 @@
 {
   "status": "IN_PROGRESS_CONNECTED_SLICE_VALIDATED",
-  "date": "2026-10-28",
-  "latest_report": "docs/current/ITEM_FIELD_V4.json",
-  "notes": "docs/current/ITEM_FIELD_V4.md",
-  "full_item_matrix": "docs/current/ITEM_FIELD_V4.csv.txt",
+  "date": "2026-10-29",
+  "latest_report": "docs/current/ITEM_FIELD_V5.json",
+  "notes": "docs/current/ITEM_FIELD_V5.md",
+  "full_item_matrix": "docs/current/ITEM_FIELD_V5.csv.txt",
   "art_status": "docs/current/ITEM_ART_CURRENT_STATUS.json",
   "menu": "B - Mochila",
   "canonical_entries_audited": 2222,
@@ -18,18 +18,22 @@
   "headless_checks": 4994,
   "gpu_checks": 4996,
   "next": [
-    "Other field medicines and healing berries, vitamins and other permanent-training item routes",
-    "Capture-ball/map metadata before certifying origin friendship bonuses",
-    "26 species-form item routes and gender/infatuation/breeding contract",
+    "Bitter herbs and friendship; vitamins/feathers and other permanent training routes",
+    "Capture-ball/map metadata before origin friendship bonuses",
+    "26 species-form routes and gender/infatuation/breeding contract",
     "14 food/contest/world-context berries",
     "Special capture balls, legacy machines, conditional evolutions and Escape Rope/world systems"
   ],
   "source_data_and_policies_unchanged": true,
-  "latest_verification": "ITEM_FIELD_V4",
+  "latest_verification": "ITEM_FIELD_V5",
   "held_item_ids_with_verified_effect_scenarios": 189,
   "untested_native_contexts": 323,
   "verification_all_effects_complete": false,
   "reviewed_held_and_berry_dependencies_pending": 41,
   "field_medicine_ids_verified": 15,
-  "field_ev_berry_ids_verified": 6
+  "field_ev_berry_ids_verified": 6,
+  "latest_phase_checks_headless": 1049,
+  "latest_phase_checks_gpu": 1051,
+  "field_recovery_ids_verified": 38,
+  "total_connected_field_effect_ids": 44
 }

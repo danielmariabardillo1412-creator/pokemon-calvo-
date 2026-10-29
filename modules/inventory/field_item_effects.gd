@@ -3,6 +3,8 @@ extends RefCounted
 # Field mutations of a staged owned creature. Medicine amounts come from the same
 # contract as native battles. EV berries follow the pinned Essentials reference.
 const Medicine = preload("res://modules/inventory/battle_medicine_profile.gd")
+const RECOVERY_PROFILE := "res://modules/inventory/field_recovery_profile.json"
+static var _recovery: Dictionary = {}
 const STATUS := {"brn": "burn", "psn": "poison", "tox": "badly_poisoned", "par": "paralysis", "slp": "sleep", "frz": "freeze"}
 const EV_BERRIES := {"pomeg_berry": "hp", "kelpsy_berry": "attack", "qualot_berry": "defense", "hondew_berry": "special_attack", "grepa_berry": "special_defense", "tamato_berry": "speed"}
 
@@ -11,14 +13,32 @@ static func deny(reason: String) -> Dictionary:
 	return {"accepted": false, "status": "REJECTED", "reason": reason}
 
 
+static func recovery_items() -> Dictionary:
+	if _recovery.is_empty():
+		_recovery = JSON.parse_string(FileAccess.get_file_as_string(RECOVERY_PROFILE)).items
+	return _recovery.duplicate(true)
+
+
+static func recovery_supports(item_id: StringName) -> bool:
+	return recovery_items().has(String(item_id))
+
+
+static func supports(item_id: StringName) -> bool:
+	return Medicine.supports(item_id) or EV_BERRIES.has(String(item_id)) or recovery_supports(item_id)
+
+
+static func _recovery_spec(item_id: StringName) -> Dictionary:
+	return Medicine.items().get(String(item_id), recovery_items().get(String(item_id), {}))
+
+
 static func pp_target_required(item_id: StringName) -> bool:
-	return Medicine.items().get(String(item_id), {}).get("scope", "") == "one"
+	return _recovery_spec(item_id).get("scope", "") == "one"
 
 
 static func apply(creature: CreatureInstance, item_id: StringName, move_slot: int, catalogs: DefinitionCatalog) -> Dictionary:
 	if creature == null or creature.is_knocked_out(): return deny("creature_knocked_out")
 	if EV_BERRIES.has(String(item_id)): return _ev_berry(creature, item_id, move_slot, catalogs)
-	var spec: Dictionary = Medicine.items().get(String(item_id), {})
+	var spec := _recovery_spec(item_id)
 	if spec.is_empty(): return deny("field_effect_not_connected")
 	var slots: Array[BattleMoveSlot] = []
 	if spec.has("pp"):
@@ -31,7 +51,9 @@ static func apply(creature: CreatureInstance, item_id: StringName, move_slot: in
 	elif move_slot != -1: return deny("unexpected_move_slot")
 	var before := creature.to_dict()
 	if spec.has("heal"):
-		creature.recover_hp(creature.stats.max_hp if spec.heal is String else int(spec.heal))
+		var amount: int = int(spec.heal) if not spec.heal is String else creature.stats.max_hp
+		if spec.heal is String and spec.heal == "quarter": amount = maxi(1, creature.stats.max_hp / 4)
+		creature.recover_hp(amount)
 	var status := String(creature.status_state.persistent_id)
 	var cure: bool = not status.is_empty() and spec.get("cure") is String and spec.cure == "all"
 	if spec.get("cure") is Array:

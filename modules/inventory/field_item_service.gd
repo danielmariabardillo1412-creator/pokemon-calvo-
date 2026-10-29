@@ -169,7 +169,7 @@ func teach(item_id: StringName, creature_id: StringName, replace_slot := -1) -> 
 func use_item(item_id: StringName, creature_id: StringName, replace_slot := -1, target_species: StringName = &"") -> Dictionary:
 	var error := _boundary(item_id)
 	if error != "": return _deny(error)
-	if Medicine.supports(item_id) or FieldEffects.EV_BERRIES.has(String(item_id)):
+	if FieldEffects.supports(item_id):
 		return _apply_field_effect(item_id, creature_id, replace_slot)
 	if profile.machine_rows.has(String(item_id)): return teach(item_id, creature_id, replace_slot)
 	if not evolution_options(item_id, creature_id).is_empty(): return evolve(item_id, creature_id, target_species)
