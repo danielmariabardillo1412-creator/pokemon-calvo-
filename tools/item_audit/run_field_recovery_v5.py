@@ -20,16 +20,16 @@ ALLOWED={
 def read(p): return json.loads(p.read_text(encoding='utf-8'))
 def sha(p): return hashlib.sha256(p.read_bytes()).hexdigest()
 def write(p,data): p.write_text(json.dumps(data,ensure_ascii=False,indent=2)+'\n',encoding='utf-8',newline='\n')
-def scope(full):
+def scope(full, base=BASE, allowed=ALLOWED):
  guard.check_root()
  assert subprocess.check_output(['git','remote'],cwd=ROOT,text=True).strip()==''
- changed=subprocess.check_output(['git','diff','--name-only',BASE],cwd=ROOT,text=True).splitlines()
+ changed=subprocess.check_output(['git','diff','--name-only',base],cwd=ROOT,text=True).splitlines()
  new=subprocess.check_output(['git','ls-files','--others','--exclude-standard'],cwd=ROOT,text=True).splitlines()
- assert set(changed+new)<=ALLOWED, sorted(set(changed+new)-ALLOWED)
+ assert set(changed+new)<=allowed, sorted(set(changed+new)-allowed)
  frozen=read(guard.BASE/'protected_files.json')
  checked=0
  for row in frozen:
-  if row['path'] in ALLOWED: continue
+  if row['path'] in allowed: continue
   p=ROOT/row['path']; assert p.is_file() and not p.is_symlink(),row['path']
   stat=p.stat()
   if full or row['text'] or stat.st_size!=row['bytes'] or stat.st_mtime_ns!=row['mtime_ns']:
@@ -39,7 +39,7 @@ def scope(full):
  for rel,expected in read(guard.BASE/'function_seals.json').items():
   source=guard.function_sources((ROOT/rel).read_text(encoding='utf-8'))
   for name,digest in expected.items():assert hashlib.sha256(source[name].encode()).hexdigest()==digest,rel+':'+name
- return {'status':'PASS','historical_protected_files_checked':checked,'authorized_exceptions':sorted(set(r['path'] for r in frozen)&ALLOWED),'mode':'FULL_CONTENT_HASHES' if full else 'TEXT_AND_METADATA','scope_base_commit':BASE}
+ return {'status':'PASS','historical_protected_files_checked':checked,'authorized_exceptions':sorted(set(r['path'] for r in frozen)&allowed),'mode':'FULL_CONTENT_HASHES' if full else 'TEXT_AND_METADATA','scope_base_commit':base}
 
 def publish(report):
  new=read(ROOT/'modules/inventory/field_recovery_profile.json')['items']

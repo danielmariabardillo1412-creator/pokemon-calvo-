@@ -1,0 +1,26 @@
+{
+  "repository": "https://github.com/Maruno17/pokemon-essentials",
+  "commit": "8c5911e4a4b07b07e832e4bb0d5d8859e88b4a9b",
+  "source_sha256": {
+    "Data/Scripts/013_Items/002_Item_Effects.rb": "6ed4877769f3d7edddb096481780a8d29da6bd1de331ca9c24ccffb8477a1b15",
+    "Data/Scripts/014_Pokemon/001_Pokemon.rb": "3a7f233156f09a6d2e3729bdaa9d1962bfa946aaaa7403042aaea5dcdcdf8cb4"
+  },
+  "energy_powder": {
+    "hp": 60,
+    "friendship_loss_below_200": 5,
+    "friendship_loss_from_200": 10
+  },
+  "energy_root": {
+    "hp": 120,
+    "friendship_loss_below_200": 10,
+    "friendship_loss_from_200": 15
+  },
+  "heal_powder": {
+    "effect": "existing full_heal convention",
+    "friendship_loss_below_200": 5,
+    "friendship_loss_from_200": 10
+  },
+  "no_effect": "no consumption or friendship loss",
+  "revival_herb": "excluded by existing policy",
+  "soothe_bell_and_origin_bonus": "do not modify negative changes"
+}
