@@ -53,4 +53,7 @@ objetos ni iniciar ahora búsquedas, descargas, generación o sustitución de ar
 
 Multijugador, campaña/mapas finales, reglas personalizadas de vidas/muerte,
 presupuesto común Mega/Z/Max e IA neuronal no forman parte de esta limpieza.
-OpenCode permanece detenido. No hay tarea T007 autorizada automáticamente.
+El usuario autoriza un piloto de objetos con OpenCode: O001 Cápsula/Parche
+Habilidad, en docs/opencode/START_HERE.md. Los planos están preparados; no se
+ha iniciado el ejecutor desde Codex. Un escritor y revisión posterior de Codex,
+sin autorizar otros bloques ni una tarea T007 de arquitectura.

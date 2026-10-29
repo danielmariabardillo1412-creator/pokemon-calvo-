@@ -20,8 +20,12 @@ Region corregida en 0e2cd3a;
 objetos V5-V7 cerrados hasta eb18a5da. Comparador V1 terminado con hallazgos,
 conservado en 021a9c5. Leer docs/current/START_HERE.md y docs/current/CLEANUP.md.
 
-Un escritor; sin agentes paralelos. Mantener el servicio de objetos como autoridad,
-la UI como vista y el motor nativo para combate. Preparar copia, validar, publicar
+Un escritor; sin agentes paralelos. El usuario autoriza ahora OpenCode O001
+(solo dos objetos de habilidad), con
+contrato en docs/opencode/START_HERE.md. Codex supervisa despues; no implementar
+ambos a la vez. No ampliar a otros objetos ni reabrir la arquitectura T001–T006.
+Mantener el servicio de objetos como autoridad, la UI como vista y el motor nativo
+para combate. Preparar copia, validar, publicar
 y consumir una unidad solo ante efecto real. No usar clases UI como servicios.
 Conservar los guards de identidad y actividad. No duplicar reglas en otro motor.
 Toda ampliacion debe conservar esta separacion: reglas en su modulo, coordinacion

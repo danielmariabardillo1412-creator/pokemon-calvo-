@@ -1,0 +1,22 @@
+{
+  "state": "PREPARED_NOT_STARTED",
+  "base": "815967d7139006715b0d2c1f543383e320189fac",
+  "authorized_now": ["O001"],
+  "stop_after": "O001",
+  "reviewer": "Codex",
+  "writer": "OpenCode only during implementation",
+  "tasks": [
+    {
+      "id": "O001",
+      "status": "AUTHORIZED_NOT_STARTED",
+      "plan": "docs/opencode/O001_ABILITY_ITEMS.md",
+      "scope": ["ability_capsule", "ability_patch"],
+      "on_delivery": "IMPLEMENTED_AWAITING_REVIEW"
+    },
+    {
+      "id": "O002",
+      "status": "BLOCKED_REVIEW",
+      "scope": "Future object family; not authorized or specified yet"
+    }
+  ]
+}
