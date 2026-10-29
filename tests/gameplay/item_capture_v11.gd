@@ -130,7 +130,10 @@ func _boundaries() -> void:
 	var storage := CreatureStorage.new(); var routed := CaptureOwnershipRouter.new().route(result, party, storage)
 	check("Heal applied before storage", routed.stored and storage.get_creature(c.instance_id).current_hp == c.stats.max_hp and c.status_state.persistent_id == &"" and c.moveset[0].current_pp == 64 and c.moveset[0].max_pp == 64)
 	for unsupported: StringName in [&"quick_ball", &"timer_ball", &"net_ball", &"luxury_ball", &"banana_ball"]:
-		check("unsupported remains deferred " + String(unsupported), not CaptureRuleset.new().is_known_ball(unsupported))
+		if unsupported in [&"quick_ball", &"timer_ball"]:
+			check("context-free use remains rejected " + String(unsupported), CaptureSystem.validate_attempt(CaptureAttempt.new(c, unsupported, CaptureBattleContext.new()), catalogs) == "capture_turn_context_missing")
+		else:
+			check("unsupported remains deferred " + String(unsupported), not CaptureRuleset.new().is_known_ball(unsupported))
 
 func _native() -> void:
 	for ball: StringName in BALLS:
@@ -199,7 +202,7 @@ func _real_field() -> void:
 	scene.player.global_position = Vector2(420, 150); await scene._on_player_step_completed(scene.player.global_position)
 	var bridge = scene._native_battles; var view = bridge.view
 	view._playback.set_process(false)
-	check("map encounter has ball selector", view.session != null and view.session.has_active_battle() and view._capture_balls.item_count == 8)
+	check("map encounter has ball selector", view.session != null and view.session.has_active_battle() and view._capture_balls.item_count == CaptureRuleset.ordered_ball_ids().size() - 1)
 	for i in view._capture_balls.item_count:
 		if view._capture_balls.get_item_metadata(i) == "heal_ball": view._capture_balls.select(i)
 	view._refresh_view()

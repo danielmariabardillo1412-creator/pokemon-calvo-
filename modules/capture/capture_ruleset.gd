@@ -7,6 +7,7 @@ extends RefCounted
 const ID := &"calvo_capture_v1"
 const SCHEMA_VERSION := 2
 const BallEffects = preload("res://modules/capture/capture_ball_effects.gd")
+const ContextBallEffects = preload("res://modules/capture/capture_context_ball_effects.gd")
 
 # --- Ball definitions (canonical, versioned) ----------------------------
 # PokéAPI items carry no structured capture multiplier, so this table is the source of truth.
@@ -39,10 +40,12 @@ const CAPTURE_RATE_MAX := 255
 
 func _init() -> void:
 	for id: StringName in BallEffects.IDS: BALLS[id] = CaptureBallDefinition.new(id, 1.0, false)
+	for id: StringName in ContextBallEffects.IDS: BALLS[id] = CaptureBallDefinition.new(id, 1.0, false)
 
 static func ordered_ball_ids() -> Array[StringName]:
 	var ids: Array[StringName] = [&"poke_ball", &"great_ball", &"ultra_ball", &"master_ball"]
 	ids.append_array(BallEffects.IDS)
+	ids.append_array(ContextBallEffects.IDS)
 	return ids
 
 

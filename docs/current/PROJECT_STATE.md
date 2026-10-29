@@ -49,6 +49,13 @@ sigue siendo la aproximación del perfil calvo_capture_v1, sin certificar fórmu
 oficial completa, capturas críticas o penalización de Ultraentes:
 [ITEM_CAPTURE_V11.md](ITEM_CAPTURE_V11.md).
 
+V12 añade Veloz/Turno/Nivel Ball: doce IDs de captura admitidos. 19.368 casos,
+58.185 checks headless y 58.187 GPU; nueve grupos PASS. Turnos completados y
+nivel del activo se obtienen del dueño de combate y se reconstruyen al cargar.
+La reserva no concede bonus de Nivel sin entrar al campo. Las nueve bolas
+anteriores mantienen sus regresiones. Siguen siendo 69 los efectos de campo;
+misma aproximación de probabilidad: [ITEM_CAPTURE_V12.md](ITEM_CAPTURE_V12.md).
+
 Arte beta de objetos: [ITEM_ART_CURRENT_STATUS.json](ITEM_ART_CURRENT_STATUS.json).
 La presencia de una imagen no certifica su mecánica. Las revisiones artísticas y
 los cambios de aspecto anacrónico quedan separados de esta limpieza.

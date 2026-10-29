@@ -18,10 +18,13 @@ V10 conecta Cápsula/Parche Habilidad:
 [ITEM_FIELD_V10.md](ITEM_FIELD_V10.md). 5.092 casos de catálogo y mochila/guardado/
 combate nativo verificados; Modo Daruma queda pendiente sin consumo del Parche.
 OpenCode no llegó a iniciar O001; Codex lo terminó por instrucción del usuario.
-V11 es el último bloque: [ITEM_CAPTURE_V11.md](ITEM_CAPTURE_V11.md).
+V11: [ITEM_CAPTURE_V11.md](ITEM_CAPTURE_V11.md).
 Cinco bolas adicionales, nueve admitidas; 10.760 casos, guardado/restauración,
 selector del campo y cura de Sana verificados. Se conserva la fórmula aproximada
 calvo_capture_v1; no confundir ese perfil con una reproducción completa de Gen IX.
+Último bloque V12: [ITEM_CAPTURE_V12.md](ITEM_CAPTURE_V12.md). Veloz/Turno/Nivel
+conectadas con turnos/nivel activo reales y restauración; doce bolas admitidas.
+19.368 casos y nueve grupos PASS. La fidelidad completa de captura sigue pendiente.
 La revisión previa a caramelos corrigió las curvas de experiencia; resultado y
 compatibilidad en [PROGRESSION_GROWTH_CURVES_FIX.md](PROGRESSION_GROWTH_CURVES_FIX.md).
 Auditoría de datos original/API y correcciones cerradas:

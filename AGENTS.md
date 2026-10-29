@@ -18,6 +18,9 @@ Ver docs/current/ITEM_CAPTURE_V11.md: se conserva la formula simplificada de
 calvo_capture_v1, sin certificar fidelidad completa a Gen IX. Captura se cuenta
 aparte de los 69 efectos de campo. Las mentas siguen pendientes de una
 representacion persistente distinta de la naturaleza original; no falsearla.
+V12 conecta Veloz/Turno/Nivel Ball con contexto vivo de turnos y nivel activo:
+doce bolas admitidas. Cargar reconstruye el contexto; no hay contadores nuevos
+en el guardado. docs/current/ITEM_CAPTURE_V12.md registra las pruebas y limites.
 Antes de caramelos se corrigieron alias/divisor de las curvas XP; ver
 docs/current/PROGRESSION_GROWTH_CURVES_FIX.md. Reutilizar la progresion existente
 y su tabla contrastada; resolver decisiones de aprender/evolucionar antes de consumir.

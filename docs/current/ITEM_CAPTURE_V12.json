@@ -1,0 +1,425 @@
+{
+  "phase": "ITEM_CAPTURE_V12",
+  "status": "CONTEXT_BALL_ROUTES_PASS_PROFILE_LIMITS_EXPLICIT",
+  "date": "2026-10-29",
+  "base": "0d0792d",
+  "all_item_effects_certified": false,
+  "new_ids": [
+    "quick_ball",
+    "timer_ball",
+    "level_ball"
+  ],
+  "capture_ball_ids_connected": 12,
+  "total_connected_field_effect_ids": 69,
+  "headless_checks": 58185,
+  "gpu_checks": 58187,
+  "eligible_species_in_matrix": 1076,
+  "matrix_cases": 19368,
+  "matrix_successes": 8270,
+  "matrix_failures": 11098,
+  "matrix_contexts_turns_catcher_timer_multiplier": [
+    [
+      0,
+      100,
+      1.0
+    ],
+    [
+      1,
+      100,
+      1.3
+    ],
+    [
+      9,
+      1,
+      3.7
+    ],
+    [
+      10,
+      50,
+      4.0
+    ],
+    [
+      11,
+      100,
+      4.0
+    ],
+    [
+      100,
+      25,
+      4.0
+    ]
+  ],
+  "native_scenarios": [
+    {
+      "after_restore_probability": 0.0588235294117647,
+      "ball": "quick_ball",
+      "completed_turns_before_second_throw": 1,
+      "first_probability": 0.294117647058823
+    },
+    {
+      "after_restore_probability": 0.235294117647059,
+      "ball": "timer_ball",
+      "completed_turns_before_second_throw": 10,
+      "first_probability": 0.0588235294117647
+    },
+    {
+      "after_restore_probability": 0.333333333333333,
+      "ball": "level_ball",
+      "completed_turns_before_second_throw": 2,
+      "first_probability": 0.0588235294117647
+    }
+  ],
+  "verification": {
+    "status": "PASS",
+    "base": "0d0792d",
+    "groups": [
+      {
+        "status": "PASS",
+        "checks_reported": 0,
+        "errors": [],
+        "last_line": "[ DONE ] loading_editor_layout",
+        "group": "import",
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--path",
+          "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+          "--headless",
+          "--editor",
+          "--import",
+          "--quit"
+        ],
+        "exit_code": 0,
+        "seconds": 6.73,
+        "terminated_after_script_error": false,
+        "expected_negative_diagnostics": [],
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\item_capture_v12\\runs\\1793302369228862200\\import.log",
+        "log_sha256": "91b7afaac23a329898c2ef872627ca2fb04709b45a497ec5847a411e6c384e8d"
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 58185,
+        "errors": [],
+        "last_line": "ITEM_CAPTURE_V12 PASS checks=58185 cases=19368 GPU=false",
+        "group": "context_balls",
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--path",
+          "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+          "--headless",
+          "--script",
+          "tests/gameplay/item_capture_v12.gd"
+        ],
+        "exit_code": 0,
+        "seconds": 21.41,
+        "terminated_after_script_error": false,
+        "expected_negative_diagnostics": [],
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\item_capture_v12\\runs\\1793302369228862200\\context_balls.log",
+        "log_sha256": "523b4d0d8f965232f08de2f397382ac0f5cfc6cc94be415e9436b0ce7c1f29e1"
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 472,
+        "errors": [],
+        "last_line": "=== PROJECT TEST RESULT: 472 PASS / 0 FAIL ===",
+        "group": "core",
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--path",
+          "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+          "--headless",
+          "--script",
+          "tests/test_runner.gd"
+        ],
+        "exit_code": 0,
+        "seconds": 9.39,
+        "terminated_after_script_error": false,
+        "expected_negative_diagnostics": [
+          "ERROR: Parse JSON failed. Error at line 0: Expected key"
+        ],
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\item_capture_v12\\runs\\1793302369228862200\\core.log",
+        "log_sha256": "aa9de68f0c22929ceffa211b3a242db78885d34d92f9c3d971e6d9f31801cd99"
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 32405,
+        "errors": [],
+        "last_line": "ITEM_CAPTURE_V11 PASS checks=32405 cases=10760 GPU=false",
+        "group": "previous_balls",
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--path",
+          "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+          "--headless",
+          "--script",
+          "tests/gameplay/item_capture_v11.gd"
+        ],
+        "exit_code": 0,
+        "seconds": 29.16,
+        "terminated_after_script_error": false,
+        "expected_negative_diagnostics": [],
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\item_capture_v12\\runs\\1793302369228862200\\previous_balls.log",
+        "log_sha256": "7861689472aecbe8012be9f4f33c206568f8583ac4469c649f081cfcc7c03f29"
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 133,
+        "errors": [],
+        "last_line": "ITEM_EXISTING_GROUPS_V2 PASS checks=133",
+        "group": "inventory_capture",
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--path",
+          "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+          "--headless",
+          "--script",
+          "tests/gameplay/item_existing_groups_v2.gd"
+        ],
+        "exit_code": 0,
+        "seconds": 2.28,
+        "terminated_after_script_error": false,
+        "expected_negative_diagnostics": [],
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\item_capture_v12\\runs\\1793302369228862200\\inventory_capture.log",
+        "log_sha256": "a516c75d9c5e18a9b2174f97a863d7678988fea987615b12dd7a39165d82bd27"
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 68,
+        "errors": [],
+        "last_line": "=== BATTLE CAPTURE PRESENTATION RESULT: 68 PASS / 0 FAIL ===",
+        "group": "legacy_capture_ui",
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--path",
+          "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+          "--headless",
+          "--script",
+          "tests/battle/battle_capture_presentation_test_runner.gd"
+        ],
+        "exit_code": 0,
+        "seconds": 4.89,
+        "terminated_after_script_error": false,
+        "expected_negative_diagnostics": [],
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\item_capture_v12\\runs\\1793302369228862200\\legacy_capture_ui.log",
+        "log_sha256": "7c8f278181dbf93e02d2e67951740cb1d5151f6bf529950bafb1b81852ff0641"
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 118,
+        "errors": [],
+        "last_line": "FIELD_NATIVE PASS checks=118 GPU=false errors=0",
+        "group": "native",
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--path",
+          "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+          "--headless",
+          "--script",
+          "tests/gameplay/field_native_test_runner.gd"
+        ],
+        "exit_code": 0,
+        "seconds": 53.94,
+        "terminated_after_script_error": false,
+        "expected_negative_diagnostics": [],
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\item_capture_v12\\runs\\1793302369228862200\\native.log",
+        "log_sha256": "4532edaa65a10230fbf1101f37a4944f5c8487c3292fb8a6d48e1b391f3fb333"
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 912,
+        "errors": [],
+        "last_line": "FIELD_RESTORE_INTEGRATION PASS checks=912 errors=0",
+        "group": "restore",
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--path",
+          "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+          "--headless",
+          "--script",
+          "tests/gameplay/field_restore_integration_test_runner.gd"
+        ],
+        "exit_code": 0,
+        "seconds": 43.25,
+        "terminated_after_script_error": false,
+        "expected_negative_diagnostics": [],
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\item_capture_v12\\runs\\1793302369228862200\\restore.log",
+        "log_sha256": "b680833ccd3f8bdeff5c7b4503bff0c6063eb4adfa9db317e952ca3d48d46478"
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 58187,
+        "errors": [],
+        "last_line": "ITEM_CAPTURE_V12 PASS checks=58187 cases=19368 GPU=true",
+        "group": "context_gpu",
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--path",
+          "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+          "--resolution",
+          "1280x720",
+          "--script",
+          "tests/gameplay/item_capture_v12.gd",
+          "--",
+          "--capture"
+        ],
+        "exit_code": 0,
+        "seconds": 23.08,
+        "terminated_after_script_error": false,
+        "expected_negative_diagnostics": [],
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\item_capture_v12\\runs\\1793302369228862200\\context_gpu.log",
+        "log_sha256": "ccbb3c5b998a82904d92c59155cdc9fb7ae03ad701d2b1cecaaace799f3e14c4"
+      }
+    ],
+    "integrity_before": {
+      "status": "PASS",
+      "base": "0d0792d127a7c43a044c9f286ecff39cddea0e97",
+      "protected_files": 22993,
+      "preserved_absent_skip_worktree": 15647,
+      "mode": "HASH_IF_METADATA_CHANGED",
+      "allowed_changes": [
+        "modules/capture/capture_battle_context.gd",
+        "modules/capture/capture_context_ball_effects.gd",
+        "modules/capture/capture_context_ball_effects.gd.uid",
+        "modules/capture/capture_ruleset.gd",
+        "modules/capture/capture_system.gd",
+        "modules/gameplay/showdown_adventure_session.gd",
+        "modules/gameplay/wild_adventure_session.gd",
+        "tests/gameplay/item_capture_v11.gd",
+        "tests/gameplay/item_capture_v12.gd",
+        "tests/gameplay/item_capture_v12.gd.uid",
+        "tools/verification/run_capture_v12.py"
+      ]
+    },
+    "integrity_after": {
+      "status": "PASS",
+      "base": "0d0792d127a7c43a044c9f286ecff39cddea0e97",
+      "protected_files": 22993,
+      "preserved_absent_skip_worktree": 15647,
+      "mode": "FULL_CONTENT_HASHES",
+      "allowed_changes": [
+        "docs/current/ITEM_CAPTURE_V12.md",
+        "modules/capture/capture_battle_context.gd",
+        "modules/capture/capture_context_ball_effects.gd",
+        "modules/capture/capture_context_ball_effects.gd.uid",
+        "modules/capture/capture_ruleset.gd",
+        "modules/capture/capture_system.gd",
+        "modules/gameplay/showdown_adventure_session.gd",
+        "modules/gameplay/wild_adventure_session.gd",
+        "tests/gameplay/item_capture_v11.gd",
+        "tests/gameplay/item_capture_v12.gd",
+        "tests/gameplay/item_capture_v12.gd.uid",
+        "tools/verification/run_capture_v12.py"
+      ]
+    },
+    "tested_sources_sha256": {
+      "modules/capture/capture_battle_context.gd": "07dfcf0fc6e7031e1f26442b9691946cc33ad05276e6f2c36845aece190de6c7",
+      "modules/capture/capture_context_ball_effects.gd": "8f1eead0a908a3c4a83b2df883ce09c13c16e28689cbe8c34ef4a20c03e5eb35",
+      "modules/capture/capture_context_ball_effects.gd.uid": "69f569a86adcb94bdb6d9f0a1ea00c17c73fa35dc1057c821601c24f5a69e6fe",
+      "modules/capture/capture_ruleset.gd": "b19863077bca2dcfcbd16033d24ec0d2e962d0cd61fc47c653cef99149676ff9",
+      "modules/capture/capture_system.gd": "ced314a39aa731d9aed30915e795960ca4e6906094df15a3f536702e3aa50f73",
+      "modules/gameplay/showdown_adventure_session.gd": "42dc399974f1eac9aa97cd2b85ea0c201cb5af988c546992cc040594effbf63a",
+      "modules/gameplay/wild_adventure_session.gd": "ececf41d7b77a734c4cd530a323f9bff71d1d2f24ff167cc786b1d46c25b5a47",
+      "tests/gameplay/item_capture_v11.gd": "1416974427ba5ba176e42cd68e244349c9d62cefd358a8d31584faecd8d6e158",
+      "tests/gameplay/item_capture_v12.gd": "b955c6cebd775591b71ab523e1813c9313f9009de5fde204519e7029b562b62c",
+      "tests/gameplay/item_capture_v12.gd.uid": "5550b838b8a0e01f7cdb22cb5fb8a7802726a19c15cc0c8ba9da3487ffacce1c",
+      "tools/verification/run_capture_v12.py": "fd45ed335157917f0e8b885547931b09270543103a402dba2c9149172072d4e5"
+    }
+  },
+  "ephemeral_context": {
+    "completed_turns": {
+      "default": -1,
+      "source": "live projected native / technical authoritative battle state.turn"
+    },
+    "catcher_level": {
+      "default": -1,
+      "source": "active player creature.level; not maximum reserve level"
+    },
+    "persisted": false,
+    "save_schema_changed": false
+  },
+  "capture_profile": {
+    "id": "calvo_capture_v1",
+    "full_official_generation_ix_fidelity": false,
+    "prior_nine_ball_effects_unchanged": true,
+    "base_probability_status_and_rng_unchanged": true,
+    "level_ball_modified_rate_cap": 255
+  },
+  "reference": {
+    "repository": "Maruno17/pokemon-essentials",
+    "commit": "8c5911e4a4b07b07e832e4bb0d5d8859e88b4a9b",
+    "local_root": "D:\\Proyectos\\Pokemon Calvo Referencias\\fuentes\\pokemon-essentials",
+    "sha256": {
+      "Data/Scripts/011_Battle/007_Other battle code/010_Battle_PokeBallEffects.rb": "5cf7a70d736d92c56427755100dee768106807eb6e65c807514eb4b89a6fdf65",
+      "Data/Scripts/011_Battle/001_Battle/001_Battle.rb": "cceb07e5b430018d6a4b0227316af5cb3e7f60aa9ec7ee729086b5e494beb56d",
+      "Data/Scripts/011_Battle/001_Battle/002_Battle_StartAndEnd.rb": "e7d7b37b0a60fe4489f4252642abba52085ed344115acc36f42cf675e5fc1ee1"
+    },
+    "executed": false
+  },
+  "base_item_matrix": "docs/current/ITEM_FIELD_V8.csv.txt",
+  "capture_item_overrides": {
+    "nest_ball": "CALVO_CAPTURE_V1_BALL_RULE_INVENTORY_NATIVE_UI_SAVE_RESTORE_VERIFIED",
+    "fast_ball": "CALVO_CAPTURE_V1_BALL_RULE_INVENTORY_NATIVE_UI_SAVE_RESTORE_VERIFIED",
+    "dream_ball": "CALVO_CAPTURE_V1_BALL_RULE_INVENTORY_NATIVE_UI_SAVE_RESTORE_VERIFIED",
+    "heal_ball": "CALVO_CAPTURE_V1_BALL_RULE_INVENTORY_NATIVE_UI_SAVE_RESTORE_VERIFIED",
+    "premier_ball": "CALVO_CAPTURE_V1_BALL_RULE_INVENTORY_NATIVE_UI_SAVE_RESTORE_VERIFIED",
+    "quick_ball": "CALVO_CAPTURE_V1_LIVE_CONTEXT_NATIVE_LEGACY_UI_SAVE_RESTORE_VERIFIED",
+    "timer_ball": "CALVO_CAPTURE_V1_LIVE_CONTEXT_NATIVE_LEGACY_UI_SAVE_RESTORE_VERIFIED",
+    "level_ball": "CALVO_CAPTURE_V1_LIVE_CONTEXT_NATIVE_LEGACY_UI_SAVE_RESTORE_VERIFIED"
+  },
+  "previous_test_contract_updates": {
+    "path": "tests/gameplay/item_capture_v11.gd",
+    "reason": "Quick/Timer are now known IDs but missing-context use remains rejected. Picker count follows the shared catalog. Existing probability/state/RNG/PP/clock assertions retained.",
+    "previous_reports_unchanged": true
+  },
+  "visual_review": {
+    "path": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\item_capture_v12\\context_selector.png",
+    "sha256": "f2a0d47ade07fb51409672ebbb46f05f1abab97e740b5fa2d674cb5789ceecc1",
+    "reviewed": true,
+    "result": "Quick Ball visible after first-turn checkpoint restore; selector and capture/flee controls fit 1280x720."
+  },
+  "attempts_preserved": [
+    {
+      "path": ".godot\\item_capture_v12\\runs\\1793302169581906700\\results.json",
+      "sha256": "a4d7ac8e3fb3fe9af09c30894538920e74085e2309cdd4cab05b743bbf113c13",
+      "status": "PASS"
+    },
+    {
+      "path": ".godot\\item_capture_v12\\runs\\1793302369228862200\\results.json",
+      "sha256": "0595ac21bdc799a76df4cfa443fa5adaa5fc5e66733d6e2ade9118ebf0e26730",
+      "status": "PASS"
+    }
+  ],
+  "limitations": [
+    "Existing calvo_capture_v1 probability remains approximate; not a complete official Gen IX capture algorithm, critical captures or Ultra Beast handling.",
+    "These sessions are singles; no future multi-active ally level selection for double wild capture is certified.",
+    "Map/history/current-type/gender dependent balls remain deferred.",
+    "No origin-ball metadata, mints/Hyper Training schema, datasets, policies, artwork, worker/Node packages or native battle algorithm changed.",
+    "No new ball loot generation or grants to campaigns."
+  ],
+  "post_documentation_integrity": {
+    "status": "PASS",
+    "base": "0d0792d127a7c43a044c9f286ecff39cddea0e97",
+    "protected_files": 22993,
+    "preserved_absent_skip_worktree": 15647,
+    "mode": "HASH_IF_METADATA_CHANGED",
+    "allowed_changes": [
+      "AGENTS.md",
+      "docs/current/ITEM_CAPTURE_V12.json",
+      "docs/current/ITEM_CAPTURE_V12.md",
+      "docs/current/ITEM_SYSTEM_CURRENT_STATUS.json",
+      "docs/current/NEXT_STEPS.md",
+      "docs/current/PROJECT_STATE.md",
+      "docs/current/START_HERE.md",
+      "modules/capture/capture_battle_context.gd",
+      "modules/capture/capture_context_ball_effects.gd",
+      "modules/capture/capture_context_ball_effects.gd.uid",
+      "modules/capture/capture_ruleset.gd",
+      "modules/capture/capture_system.gd",
+      "modules/gameplay/showdown_adventure_session.gd",
+      "modules/gameplay/wild_adventure_session.gd",
+      "tests/gameplay/item_capture_v11.gd",
+      "tests/gameplay/item_capture_v12.gd",
+      "tests/gameplay/item_capture_v12.gd.uid",
+      "tools/verification/run_capture_v12.py"
+    ]
+  }
+}

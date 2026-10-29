@@ -340,6 +340,9 @@ func capture_current(ball_id: StringName, capture_rng: RandomNumberGenerator) ->
 	context.battle_finished = false
 	context.target_owner_trainer_id = &""
 	context.target_side_id = &"side_b"
+	context.completed_turns = _battle_server.state.turn
+	var catcher := player_active()
+	if catcher != null: context.catcher_level = catcher.level
 	var attempt := CaptureAttempt.new(target, ball_id, context)
 	var resolution := CaptureInventoryService.resolve(
 		attempt, capture_rng, catalogs, player.party, player.inventory

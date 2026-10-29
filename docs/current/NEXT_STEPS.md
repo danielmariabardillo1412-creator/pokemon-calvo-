@@ -33,7 +33,10 @@ V11 conecta Nido/Rapid/Ensueño/Sana/Honor Ball y su selector de combate:
 ver ITEM_CAPTURE_V11.md. No repetir estas cinco conexiones como pendientes.
 Captura mantiene la fórmula aproximada calvo_capture_v1; revisión de fidelidad
 oficial, capturas críticas y tratamiento de Ultraentes siguen pendientes.
-Veloz Ball depende del primer turno y es distinta de Rapid Ball.
+V12 conecta Veloz/Turno/Nivel Ball: doce bolas admitidas; contexto real de turnos
+y nivel activo, reconstruido tras guardar/cargar. Ver ITEM_CAPTURE_V12.md.
+No repetir estas conexiones. Otras bolas requieren ambiente, historial, tipos,
+género o metadatos de origen; no habilitarlas con contexto inventado.
 Continuar objetos por familias aún pendientes: IV,
 naturalezas, condiciones de formas/evolución, bolas especiales y
 mundo. El estado de referencia es [ITEM_SYSTEM_CURRENT_STATUS.json](ITEM_SYSTEM_CURRENT_STATUS.json).

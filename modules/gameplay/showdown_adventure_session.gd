@@ -115,6 +115,9 @@ func capture(ball_id: StringName, expected_revision: int) -> Dictionary:
 	var party := CreatureParty.from_dict(player.party.to_dict())
 	var rng := RandomNumberGenerator.new(); rng.state = _capture_rng.state
 	var context := CaptureBattleContext.new(); context.is_wild = true; context.target_side_id = &"side_b"
+	context.completed_turns = battle_state().turn
+	var catcher := battle_state().active_for_side(&"side_a")
+	if catcher != null: context.catcher_level = catcher.level
 	var target := _persistent_copy(battle_state().active_for_side(&"side_b"))
 	var resolution := CaptureInventoryService.resolve(CaptureAttempt.new(target, ball_id, context), rng, catalogs, party, bag)
 	if resolution.result.status == CaptureResult.INVALID:
