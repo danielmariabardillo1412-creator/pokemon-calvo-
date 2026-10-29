@@ -60,9 +60,17 @@ V13: siete rutas de mochis (+10 EV o reinicio), 30.128 casos de catálogo y 756
 contextos de propiedad, 91.991 checks headless y 91.993 GPU; nueve grupos PASS.
 Mochila, guardado, restauración y combate posterior verificados. Amistad intacta
 según la referencia RHH; equivalencia de amistad con SV no certificada.
-Se detecta y reproduce una dependencia separada: Campana Alivio equipada impide
-iniciar nativo (`Unknown held item`). Servicio de campo conserva ese objeto;
-la prueba nativa de los mochis usa Restos. Detalle: [ITEM_MOCHI_V13.md](ITEM_MOCHI_V13.md).
+V13 detectó que Campana Alivio impedía iniciar nativo; su prueba de mochis usa
+Restos. Detalle histórico: [ITEM_MOCHI_V13.md](ITEM_MOCHI_V13.md).
+
+V14 corrige Campana Alivio en el adaptador propio, sin modificar los paquetes
+instalados ni los manejadores de combate. Once casos nativos, 127 comprobaciones
+Godot y 129 GPU; diez grupos PASS. Inicio, guardado/restauración, Desarme,
+Lanzamiento, Truco y captura del receptor conservan cantidades físicas correctas.
+La traza ordinaria coincide con el adaptador previo. El barrido de registro
+identifica 62 otros equipables permitidos sin definición nativa; no certifica
+que todos sean neutros o que todos sus sistemas existan:
+[ITEM_FIELD_HELD_V14.md](ITEM_FIELD_HELD_V14.md).
 
 Arte beta de objetos: [ITEM_ART_CURRENT_STATUS.json](ITEM_ART_CURRENT_STATUS.json).
 La presencia de una imagen no certifica su mecánica. Las revisiones artísticas y

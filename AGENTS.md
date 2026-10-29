@@ -23,9 +23,11 @@ doce bolas admitidas. Cargar reconstruye el contexto; no hay contadores nuevos
 en el guardado. docs/current/ITEM_CAPTURE_V12.md registra las pruebas y limites.
 V13 conecta siete rutas EV de mochis, con perfil RHH que conserva amistad;
 paridad de amistad con SV pendiente de contraste, sin afirmar equivalencia total.
-Ver docs/current/ITEM_MOCHI_V13.md. Campana Alivio funciona en las pruebas de
-servicio, pero iniciar combate con ella equipada falla por Unknown held item;
-queda pendiente el puente nativo, sin borrar ni sustituir el objeto en silencio.
+Ver docs/current/ITEM_MOCHI_V13.md. V14 corrige la entrada nativa con Campana
+Alivio mediante metadatos revisados del adaptador propio; probados guardar/cargar,
+Lanzamiento, Desarme, Truco, captura y ausencia de duplicacion. Ver
+docs/current/ITEM_FIELD_HELD_V14.md. Quedan 62 equipables permitidos sin definicion
+nativa; inventario no equivale a permiso para registrarlos como neutros en bloque.
 Antes de caramelos se corrigieron alias/divisor de las curvas XP; ver
 docs/current/PROGRESSION_GROWTH_CURVES_FIX.md. Reutilizar la progresion existente
 y su tabla contrastada; resolver decisiones de aprender/evolucionar antes de consumir.
@@ -51,8 +53,12 @@ en servicios y presentacion en vistas; no acumular mecanicas en field_demo o UI.
 Compartir comportamientos repetidos y verificar conexiones antes de cerrar el lote.
 
 No modificar el original, F:, datos brutos/normalizados, politicas, arte, packs,
-Node/Showdown, algoritmos de combate, RNG o schema de guardado. No regenerar
+paquetes instalados Node/Showdown, algoritmos de combate, RNG o schema de guardado. No regenerar
 fixtures de datasets ni descargar dependencias para resolver el encargo.
+La orden humana de corregir Campana Alivio autoriza el adaptador propio
+native_engine.cjs y un modulo revisado de metadatos para ese objeto (V14).
+No agregar callbacks de mecanicas, admitir objetos desconocidos en bloque ni
+editar node_modules para ocultar fallos; el resto queda protegido por hash.
 No borrar motores anteriores ni archivos ausentes con skip-worktree. Antes de
 retirar material obsoleto, comprobar consumidores y conservar su historia en Git.
 No duplicar archivos retirados en nuevas carpetas de archivo. Conservar contratos,

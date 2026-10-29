@@ -9,6 +9,7 @@ const runtime = path.join(ROOT, '.godot/battle_reference/runtime/node_modules/@p
 const version = JSON.parse(fs.readFileSync(path.join(runtime, 'package.json'), 'utf8')).version;
 if (version !== '0.10.11') throw Error('The probe requires pinned @pkmn/sim 0.10.11');
 const {Battle, Dex} = require(runtime);
+require('./field_held_items.cjs').install(Dex);
 const Unified = require('./unified_profile.cjs');
 const clone = x => JSON.parse(JSON.stringify(x));
 const hash = x => crypto.createHash('sha256').update(JSON.stringify(x)).digest('hex');

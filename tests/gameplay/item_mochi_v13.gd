@@ -171,8 +171,8 @@ func _native_dependency() -> void:
 	var before := snapshot(service)
 	var session := Native.new(catalogs,service.owner,"gen9calvounifiedv1")
 	var opened: bool = await session.begin_wild(self,_make(&"mew",50,{},"hardy",&"dependency_foe"),[23,19,29,43])
-	check("known field-only held-item dependency is explicit",not opened and session.last_error=="Unknown held item" and snapshot(service)==before)
-	native_rows.append({"route":"soothe_bell_dependency","opened":opened,"error":session.last_error,"campaign_unchanged":snapshot(service)==before})
+	check("field-only held-item now bridges without campaign mutation",opened and session.last_error=="" and snapshot(service)==before and session.battle_state().creature(c.instance_id).held_item_id==&"soothe_bell")
+	native_rows.append({"route":"soothe_bell_bridge_v14","opened":opened,"error":session.last_error,"campaign_unchanged":snapshot(service)==before})
 	await session.close()
 
 func _field() -> void:

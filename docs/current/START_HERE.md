@@ -25,10 +25,13 @@ calvo_capture_v1; no confundir ese perfil con una reproducción completa de Gen 
 V12: [ITEM_CAPTURE_V12.md](ITEM_CAPTURE_V12.md). Veloz/Turno/Nivel
 conectadas con turnos/nivel activo reales y restauración; doce bolas admitidas.
 19.368 casos y nueve grupos PASS. La fidelidad completa de captura sigue pendiente.
-Último bloque V13: [ITEM_MOCHI_V13.md](ITEM_MOCHI_V13.md). Siete rutas EV de mochis,
+V13: [ITEM_MOCHI_V13.md](ITEM_MOCHI_V13.md). Siete rutas EV de mochis,
 30.128 casos y nueve grupos PASS; 76 efectos de campo conectados. Se conserva
-amistad según RHH, sin certificar paridad SV. Campana Alivio requiere conexión
-nativa propia; se documenta su rechazo y no se cuenta como soporte de combate.
+amistad según RHH, sin certificar paridad SV.
+Último bloque V14: [ITEM_FIELD_HELD_V14.md](ITEM_FIELD_HELD_V14.md). Campana Alivio
+ya entra en nativo y conserva su identidad, transferencias, consumo y guardado.
+Once casos nativos y diez grupos PASS. El inventario señala otros 62 equipables
+permitidos sin definición; continuar por familias, sin inferir efectos neutros.
 La revisión previa a caramelos corrigió las curvas de experiencia; resultado y
 compatibilidad en [PROGRESSION_GROWTH_CURVES_FIX.md](PROGRESSION_GROWTH_CURVES_FIX.md).
 Auditoría de datos original/API y correcciones cerradas:
