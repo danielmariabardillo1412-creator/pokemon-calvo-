@@ -45,7 +45,9 @@ conexión de EV; amistad conservada según RHH, pendiente de contraste con SV.
 V14 corrige el rechazo nativo de Campana Alivio: ver ITEM_FIELD_HELD_V14.md.
 No repetir ese arreglo ni mapearla a objeto vacío. Se verifica conservar,
 Lanzamiento, Desarme, Truco, captura y persistencia sin duplicación.
-Continuar el puente de equipados de campo por lotes revisados: hay otros 62 IDs
+V16 conecta 24 medicinas equipadas; ver ITEM_FIELD_HELD_V16.md. Los usos de
+campo existentes y el perfil de medicina en combate permanecen separados.
+Continuar el puente de equipados de campo por lotes revisados: hay otros 38 IDs
 equipables permitidos sin definición nativa. Contrastar metadatos y distinguir
 los efectos de mundo aún pendientes; no habilitar todos como neutros a ciegas.
 Continuar objetos por familias aún pendientes: IV,

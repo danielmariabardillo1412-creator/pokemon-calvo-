@@ -80,6 +80,14 @@ con guardado/carga. No se agregan concursos ni regalos. Los 76 efectos de campo
 se cuentan aparte; captura conserva su fórmula aproximada. Evidencia:
 [ITEM_CAPTURE_V15.md](ITEM_CAPTURE_V15.md).
 
+V16 conecta 24 medicinas equipadas mediante descriptores revisados: nombre,
+generación y Lanzamiento de potencia 30, sin callbacks ni curación automática.
+Las 24 se comprueban en tres perfiles nativos, y con Lanzamiento, Desarme,
+Truco, Espacio Mágico y transacciones; también guardado/carga, cantidades físicas
+y uso posterior desde la mochila. El registro pasa a 587/625 equipables permitidos
+con definición; quedan 38 ausentes. Los usos de campo y el menú de medicina de
+combate conservan sus perfiles: [ITEM_FIELD_HELD_V16.md](ITEM_FIELD_HELD_V16.md).
+
 Arte beta de objetos: [ITEM_ART_CURRENT_STATUS.json](ITEM_ART_CURRENT_STATUS.json).
 La presencia de una imagen no certifica su mecánica. Las revisiones artísticas y
 los cambios de aspecto anacrónico quedan separados de esta limpieza.

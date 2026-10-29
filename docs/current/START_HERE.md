@@ -30,12 +30,16 @@ V13: [ITEM_MOCHI_V13.md](ITEM_MOCHI_V13.md). Siete rutas EV de mochis,
 amistad según RHH, sin certificar paridad SV.
 V14: [ITEM_FIELD_HELD_V14.md](ITEM_FIELD_HELD_V14.md). Campana Alivio
 ya entra en nativo y conserva su identidad, transferencias, consumo y guardado.
-Once casos nativos y diez grupos PASS. El inventario señala otros 62 equipables
-permitidos sin definición; continuar por familias, sin inferir efectos neutros.
-Último bloque V15: [ITEM_CAPTURE_V15.md](ITEM_CAPTURE_V15.md). Amigo/Safari/Competi/
+Once casos nativos y diez grupos PASS. Ese inventario señaló 62 equipables
+permitidos sin definición; V16 reduce el pendiente sin inferir efectos neutros.
+V15: [ITEM_CAPTURE_V15.md](ITEM_CAPTURE_V15.md). Amigo/Safari/Competi/
 Gloria Ball, dieciséis bolas conectadas. 17.216 casos y cuatro rutas del mapa con
 guardar/cargar; resultados completos en su JSON. La fórmula aproximada de captura
 y los sistemas de obtención/eventos se mantienen separados.
+Último bloque V16: [ITEM_FIELD_HELD_V16.md](ITEM_FIELD_HELD_V16.md). Se conectan
+24 medicinas equipadas al registro nativo, sin curacion automatica ni nuevas
+medicinas de combate. Quedan 38 equipables permitidos sin definicion. Pruebas
+por objeto, mochila real y guardado/carga; resultados completos en su JSON.
 La revisión previa a caramelos corrigió las curvas de experiencia; resultado y
 compatibilidad en [PROGRESSION_GROWTH_CURVES_FIX.md](PROGRESSION_GROWTH_CURVES_FIX.md).
 Auditoría de datos original/API y correcciones cerradas:

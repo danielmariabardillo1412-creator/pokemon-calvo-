@@ -24,16 +24,17 @@ function semantic(value,omitHash=false){
  if(value&&typeof value==='object')return Object.fromEntries(Object.entries(value).filter(([k])=>k!=='elapsed_ms'&&!(omitHash&&k==='state_hash')).map(([k,v])=>[k,semantic(v,omitHash)]));
  return value;
 }
-check('only one reviewed descriptor; no native callbacks',()=>{
- assert.deepEqual(Object.keys(Field.DEFINITIONS),['soothebell']);
+check('reviewed descriptors retain Bell; no native callbacks or replaced native items',()=>{
+ assert.ok(Object.hasOwn(Field.DEFINITIONS,'soothebell'));
+ for(const definition of Object.values(Field.DEFINITIONS))assert.deepEqual(Object.keys(definition).sort(),['fling','gen','name']);
  assert.deepEqual(Object.keys(Field.DEFINITIONS.soothebell).sort(),['fling','gen','name']);
  assert.equal(Dex.items.get('soothebell').name,'Soothe Bell');
  assert.equal(Dex.items.get('soothebell').fling.basePower,10);
  assert.equal(Dex.items.get('soothebell').gen,3);
  assert.equal(Dex.mod('gen8').items.get('soothebell').exists,true);
  for(const [id,item] of before)assert.equal(Dex.items.get(id),item);
- assert.equal(Dex.items.all().length,before.size+1);
- Field.install(Dex);assert.equal(Dex.items.all().length,before.size+1);
+ assert.equal(Dex.items.all().length,before.size+Object.keys(Field.DEFINITIONS).length);
+ Field.install(Dex);assert.equal(Dex.items.all().length,before.size+Object.keys(Field.DEFINITIONS).length);
 });
 for(const format of ['gen9customgame','gen8customgame','gen9calvounifiedv1']){
  check(format+' retains Bell, serialization and deterministic continuation',()=>{

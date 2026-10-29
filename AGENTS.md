@@ -30,8 +30,10 @@ paridad de amistad con SV pendiente de contraste, sin afirmar equivalencia total
 Ver docs/current/ITEM_MOCHI_V13.md. V14 corrige la entrada nativa con Campana
 Alivio mediante metadatos revisados del adaptador propio; probados guardar/cargar,
 Lanzamiento, Desarme, Truco, captura y ausencia de duplicacion. Ver
-docs/current/ITEM_FIELD_HELD_V14.md. Quedan 62 equipables permitidos sin definicion
-nativa; inventario no equivale a permiso para registrarlos como neutros en bloque.
+docs/current/ITEM_FIELD_HELD_V14.md. V16 conecta 24 medicinas equipadas mediante
+metadatos revisados, sin curacion automatica ni nuevos usos de medicina en combate.
+Ver docs/current/ITEM_FIELD_HELD_V16.md. Quedan 38 equipables permitidos sin
+definicion nativa; inventario no equivale a permiso para registrarlos como neutros.
 Antes de caramelos se corrigieron alias/divisor de las curvas XP; ver
 docs/current/PROGRESSION_GROWTH_CURVES_FIX.md. Reutilizar la progresion existente
 y su tabla contrastada; resolver decisiones de aprender/evolucionar antes de consumir.
@@ -61,6 +63,8 @@ paquetes instalados Node/Showdown, algoritmos de combate, RNG o schema de guarda
 fixtures de datasets ni descargar dependencias para resolver el encargo.
 La orden humana de corregir Campana Alivio autoriza el adaptador propio
 native_engine.cjs y un modulo revisado de metadatos para ese objeto (V14).
+La continuacion de objetos V16 amplia solo ese modulo a 24 medicinas revisadas;
+no modifica native_engine.cjs ni instala callbacks para sus usos de campo.
 No agregar callbacks de mecanicas, admitir objetos desconocidos en bloque ni
 editar node_modules para ocultar fallos; el resto queda protegido por hash.
 No borrar motores anteriores ni archivos ausentes con skip-worktree. Antes de
