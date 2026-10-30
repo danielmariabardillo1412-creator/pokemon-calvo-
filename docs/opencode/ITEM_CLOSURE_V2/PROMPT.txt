@@ -1,0 +1,13 @@
+Trabaja en D:\Proyectos\Pokemon Calvo - Arquitectura Kilo, rama codex/kilo-architecture-v1.
+
+Lee AGENTS.md y docs/opencode/ITEM_CLOSURE_V2/START_HERE.md. Sigue el encargo completo de WORK_ORDER.md, CONTRACT.json, O110_BATTLE_SUPPORT.md, O120_HELD_CONTEXTS.md y REVIEW_CHECKLIST.md. Los antiguos O001/O002 son históricos; no los reinicies.
+
+Ejecuta primero python tools/verification/opencode_items_v2_guard.py. El sello está preparado: no uses --prepare ni cambies contratos, guardas, paquetes, datos, políticas o arte.
+
+Tienes autorización para realizar O100, O110, O120 y O190 por familias completas, con pruebas y checkpoints locales. Continúa de una familia autorizada a la siguiente sin esperar revisión de Codex y sin devolverme cada objeto por separado. Codex revisará el conjunto después. No hay otro escritor activo.
+
+Reutiliza los sistemas y referencias fijadas, mantén la arquitectura y valida todas las filas del lote. Si una mecánica depende de un sistema ausente, documenta la dependencia real y continúa con trabajo independiente; no inventes soporte ni conviertas objetos desconocidos en neutros. No rehagas sistemas terminados ni crees un juego nuevo.
+
+Mantén STATE.json y PROGRESS.md, fuentes, pruebas, logs y SHA del código ejecutado. Si encuentras trabajo a medias al reanudar, reconcilia el estado real antes de seguir. Un timeout o prueba sin terminar nunca es PASS. No modifiques tests antiguos para conseguir verde.
+
+Entrega una sola vez al terminar O190: READY_FOR_REVIEW o PARTIAL_READY_FOR_REVIEW, con FINAL_REVIEW.md, FINAL_RESULTS.json, commits, familias/IDs verificados y dependencias pendientes. No te atribuyas ACCEPTED_BY_CODEX, no publiques ni hagas merge. Detente antes solo si no puedes continuar de forma segura dentro del contrato y explica el impedimento concreto.

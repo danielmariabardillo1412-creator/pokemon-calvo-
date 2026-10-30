@@ -91,24 +91,12 @@
   "mochi_friendship_current_change": 0,
   "native_unmapped_field_held_items_pending": [
     "amulet_coin",
-    "black_flute",
-    "blue_flute",
-    "blue_scarf",
     "cleanse_tag",
     "exp_share",
-    "fluffy_tail",
-    "green_scarf",
     "linking_cord",
     "luck_incense",
-    "pink_scarf",
-    "poke_doll",
     "pure_incense",
-    "red_flute",
-    "red_scarf",
-    "smoke_ball",
-    "white_flute",
-    "yellow_flute",
-    "yellow_scarf"
+    "smoke_ball"
   ],
   "native_field_held_bridge_ids_verified": [
     "soothe_bell",
@@ -248,5 +236,11 @@
     "No legacy bag command enabled",
     "Held Smoke Ball is separate and pending",
     "Scripted encounters with an additional cannot-run flag are not modeled"
-  ]
+  ],
+  "active_external_handoff": {
+    "packet": "docs/opencode/ITEM_CLOSURE_V2/START_HERE.md",
+    "status": "PREPARED_AWAITING_USER_START",
+    "runtime_base": "da00bd4c36f578606a45edcebc6ebd9a6ba630e8",
+    "runtime_changes_in_handoff": false
+  }
 }

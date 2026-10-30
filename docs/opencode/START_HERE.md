@@ -1,4 +1,9 @@
-# OpenCode — piloto O001 de objetos
+# OpenCode — piloto O001 histórico, ya terminado
+
+**No ejecutar este piloto.** Cápsula/Parche se terminaron como V10. La nueva
+autorización por familias está en
+[ITEM_CLOSURE_V2/START_HERE.md](ITEM_CLOSURE_V2/START_HERE.md).
+El texto siguiente conserva el contrato histórico, no órdenes vigentes.
 
 Autorización humana del 2026-10-29: delegar bloques de objetos a OpenCode con
 planos y revisión de Codex, como en la reorganización. No se delega el proyecto

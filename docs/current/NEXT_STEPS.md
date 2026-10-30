@@ -1,5 +1,10 @@
 # Próximo trabajo — 2026-10-30
 
+Encargo OpenCode preparado: [ITEM_CLOSURE_V2](../opencode/ITEM_CLOSURE_V2/START_HERE.md).
+Cierre por familias O100/O110/O120/O190, sin entregas por objeto. Base funcional
+V21; Codex no implementa en paralelo cuando OpenCode arranque. Aún sin ejecución
+ni revisión independiente atribuida a OpenCode. Los O001/O002 antiguos no se reanudan.
+
 V21: [consumibles de huida](ITEM_ESCAPE_V21.md). Poké Muñeco, Cola Skitty y
 Poké Señuelo ya se usan desde mochila nativa para terminar un encuentro salvaje,
 con consumo único y sin RNG/ataque extra. Son 18 usos directos de mochila con las
@@ -104,5 +109,5 @@ Multijugador, campaña/mapas finales, reglas personalizadas de vidas/muerte,
 presupuesto común Mega/Z/Max e IA neuronal no forman parte de esta limpieza.
 El piloto O001 de OpenCode no se inició. El usuario devolvió el trabajo a Codex,
 que terminó Cápsula/Parche como V10. Los planos en docs/opencode se conservan como
-históricos; no iniciarlos de nuevo ni atribuir una revisión externa. O002 sigue
-sin autorización concreta ni hay una tarea T007 de arquitectura.
+históricos; no iniciarlos de nuevo ni atribuir una revisión externa. El viejo O002 no se reutiliza: la nueva autorización consta en ITEM_CLOSURE_V2.
+No hay una tarea T007 de arquitectura.

@@ -1,5 +1,10 @@
 # Empezar aquí — 2026-10-30
 
+Encargo OpenCode preparado: [ITEM_CLOSURE_V2](../opencode/ITEM_CLOSURE_V2/START_HERE.md).
+Cierre por familias O100/O110/O120/O190, sin entregas por objeto. Base funcional
+V21; Codex no implementa en paralelo cuando OpenCode arranque. Aún sin ejecución
+ni revisión independiente atribuida a OpenCode. Los O001/O002 antiguos no se reanudan.
+
 V21: [consumibles de huida](ITEM_ESCAPE_V21.md). Poké Muñeco, Cola Skitty y
 Poké Señuelo ya se usan desde mochila nativa para terminar un encuentro salvaje,
 con consumo único y sin RNG/ataque extra. Son 18 usos directos de mochila con las

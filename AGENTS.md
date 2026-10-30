@@ -1,9 +1,24 @@
 # Pokemon Calvo — desarrollo tras la arquitectura
 
+ENCARGO EXTERNO ACTUAL: el usuario autoriza de nuevo OpenCode para cierre de
+objetos por familias completas. Leer docs/opencode/ITEM_CLOSURE_V2/START_HERE.md,
+WORK_ORDER y CONTRACT de ese paquete. O100/O110/O120/O190 pueden continuar sin
+revision de Codex entre objetos ni familias autorizadas. O001/O002 son historicos.
+Los planos se preparan sobre V21 (da00bd4c); no se cambia aqui la jugabilidad.
+Cuando el usuario lo arranque, OpenCode sera el unico escritor; Codex revisara
+despues el rango. No hay un segundo ejecutor paralelo ni aceptacion automatica.
+El paquete autoriza un helper de mochila y cambios SOLO en applyMedicine y
+checkpoint de nuestro native_engine.cjs, usando APIs del simulador fijado y el
+canal transaccional existente. Es excepcion expresa a la prohibicion anterior
+de tocar ese adaptador; no autoriza callbacks/Dex, dano, RNG, dispatch, protocolo,
+paquetes o schema. field_demo solo puede delegar en un helper dentro de
+field_prepare_native_encounter. El guard V2 protege el resto, incluidos estos
+planos y AGENTS. OpenCode actualiza sus STATE/PROGRESS y los cuadernos permitidos.
+
 Raiz de trabajo: `D:/Proyectos/Pokemon Calvo - Arquitectura Kilo`.
 Original protegido: `D:/Proyectos/Pokemon Calvo`; no editarlo ni probarlo.
 T001–T006 estan aceptadas en 208c06c0. Los contratos en docs/kilo son historicos;
-OpenCode esta detenido. Limpieza cerrada en 941dd297. Autorizacion vigente:
+la arquitectura no se reabre. Limpieza cerrada en 941dd297. Autorizacion vigente:
 continuar objetos disponibles manteniendo la arquitectura y comprobar cada bloque.
 V9 validado: seis caramelos (raro y EXP XS/S/M/L/XL), candidato separado,
 decisiones explicitas en mochila, consumo al finalizar, guardado y combate nativo.
@@ -74,9 +89,10 @@ Region corregida en 0e2cd3a;
 objetos V5-V7 cerrados hasta eb18a5da. Comparador V1 terminado con hallazgos,
 conservado en 021a9c5. Leer docs/current/START_HERE.md y docs/current/CLEANUP.md.
 
-Un escritor; sin agentes paralelos. El usuario indica que OpenCode no esta
-disponible y devolvio a Codex el bloque O001 (Capsula/Parche Habilidad), cerrado como V10.
-No hay encargo externo activo ni revision independiente atribuible a OpenCode.
+Un escritor; sin agentes paralelos. Historial: cuando OpenCode no estaba
+disponible el usuario devolvio a Codex O001 (Capsula/Parche), cerrado como V10.
+No se atribuye ninguna revision independiente a OpenCode. El piloto anterior
+quedo cerrado; el nuevo encargo autorizado es ITEM_CLOSURE_V2 al inicio de este archivo.
 Los planos y el guard O001 son historicos: no resellarlos; V10 tiene scope propio.
 No reabrir la arquitectura T001–T006 ni iniciar otro ejecutor simultaneo.
 Mantener el servicio de objetos como autoridad, la UI como vista y el motor nativo

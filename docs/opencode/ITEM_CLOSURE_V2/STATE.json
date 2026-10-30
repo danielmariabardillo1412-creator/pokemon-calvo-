@@ -1,0 +1,25 @@
+{
+  "packet": "ITEM_CLOSURE_V2",
+  "status": "PREPARED_AWAITING_USER_START",
+  "writer_active": false,
+  "tasks": {
+    "O100": {
+      "status": "AUTHORIZED_NOT_STARTED",
+      "plan": "WORK_ORDER.md"
+    },
+    "O110": {
+      "status": "AUTHORIZED_NOT_STARTED",
+      "plan": "O110_BATTLE_SUPPORT.md"
+    },
+    "O120": {
+      "status": "AUTHORIZED_NOT_STARTED",
+      "plan": "O120_HELD_CONTEXTS.md"
+    },
+    "O190": {
+      "status": "AUTHORIZED_NOT_STARTED",
+      "plan": "WORK_ORDER.md"
+    }
+  },
+  "independent_codex_review": "NOT_PERFORMED",
+  "notes": "One report at mission end; internal gates and local checkpoints per family, not per item."
+}
