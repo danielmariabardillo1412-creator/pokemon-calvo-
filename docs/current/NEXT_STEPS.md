@@ -1,9 +1,14 @@
 # Próximo trabajo — 2026-10-30
 
+V20: [doce equipables revisados en bloque](ITEM_FIELD_HELD_V20.md). El registro
+nativo pasa a 618/625; quedan siete definiciones pendientes. Los usos especiales
+de mundo/mochila/concurso se mantienen separados; siguen 77 efectos de campo.
+Poké Muñeco conserva su ID mediante un nombre nativo compatible.
+
 V19: [importación automática por familias](ITEM_IMPORT_V19.md). Se compilan 42
 objetos de recuperación en bloque: 41 rutas anteriores conservadas y Flauta Azul
-nueva, reutilizable. Son 77 efectos de campo; los 19 equipables pendientes no
-cambian. La clasificación de 2.222 IDs no certifica sus mecánicas completas.
+nueva, reutilizable. V19 dejó 77 efectos de campo; ver V20 para el registro
+nativo actual. Clasificar 2.222 IDs no certifica todas sus mecánicas.
 
 ## Limpieza y correcciones cerradas
 
@@ -60,8 +65,8 @@ V18 conecta Huevo Suerte a la recompensa de combate y centraliza Piedra Eterna
 para evolucion por nivel; ver ITEM_PROGRESSION_V18.md. El bonus no afecta a caramelos
 ni compañeros. El reparto base de XP sigue siendo calvo_progression_v1; no se
 certifican todas las formulas oficiales ni las demas excepciones de evolucion.
-Continuar el puente de equipados de campo por lotes revisados: hay otros 19 IDs
-equipables permitidos sin definición nativa. Contrastar metadatos y distinguir
+Continuar el puente de equipados de campo por lotes revisados: quedan siete IDs
+equipables permitidos sin definición nativa tras V20. Contrastar metadatos y distinguir
 los efectos de mundo aún pendientes; no habilitar todos como neutros a ciegas.
 Continuar objetos por familias aún pendientes: IV,
 naturalezas, condiciones de formas/evolución, bolas especiales y

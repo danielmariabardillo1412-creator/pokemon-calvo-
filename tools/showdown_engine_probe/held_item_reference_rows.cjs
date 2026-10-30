@@ -13,4 +13,10 @@ const TRAINING=[['calcium','Calcium',1],['carbos','Carbos',1],['hp_up','HP Up',1
  ['dire_hit','Dire Hit',1],['guard_spec','Guard Spec.',1],['x_accuracy','X Accuracy',1],['x_attack','X Attack',1],
  ['x_defense','X Defense',1],['x_sp_atk','X Sp. Atk',1],['x_sp_def','X Sp. Def',4],['x_speed','X Speed',1]];
 const PROGRESSION=[['lucky_egg','Lucky Egg',2],['everstone','Everstone',2]];
-module.exports={MEDICINES,TRAINING,PROGRESSION,ALL:[...MEDICINES,...TRAINING,...PROGRESSION]};
+// V20: power 10 for contest scarves, 30 for the other seven reviewed items.
+const MISC=[['black_flute','Black Flute',3,30],['blue_flute','Blue Flute',3,30],
+ ['blue_scarf','Blue Scarf',3,10],['fluffy_tail','Fluffy Tail',3,30],['green_scarf','Green Scarf',3,10],
+ ['pink_scarf','Pink Scarf',3,10],['poke_doll','Poke Doll',1,30],['red_flute','Red Flute',3,30],
+ ['red_scarf','Red Scarf',3,10],['white_flute','White Flute',3,30],['yellow_flute','Yellow Flute',3,30],
+ ['yellow_scarf','Yellow Scarf',3,10]];
+module.exports={MEDICINES,TRAINING,PROGRESSION,MISC,ALL:[...MEDICINES,...TRAINING,...PROGRESSION,...MISC]};

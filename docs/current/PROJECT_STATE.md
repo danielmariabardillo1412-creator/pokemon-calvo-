@@ -1,9 +1,14 @@
 # Estado del proyecto — 2026-10-30
 
+V20: [doce equipables revisados en bloque](ITEM_FIELD_HELD_V20.md). El registro
+nativo pasa a 618/625; quedan siete definiciones pendientes. Los usos especiales
+de mundo/mochila/concurso se mantienen separados; siguen 77 efectos de campo.
+Poké Muñeco conserva su ID mediante un nombre nativo compatible.
+
 V19: [importación automática por familias](ITEM_IMPORT_V19.md). Se compilan 42
 objetos de recuperación en bloque: 41 rutas anteriores conservadas y Flauta Azul
-nueva, reutilizable. Son 77 efectos de campo; los 19 equipables pendientes no
-cambian. La clasificación de 2.222 IDs no certifica sus mecánicas completas.
+nueva, reutilizable. V19 dejó 77 efectos de campo; ver V20 para el registro
+nativo actual. Clasificar 2.222 IDs no certifica todas sus mecánicas.
 
 Copia activa: `D:/Proyectos/Pokemon Calvo - Arquitectura Kilo`.
 Original separado e intacto: `D:/Proyectos/Pokemon Calvo`.
@@ -105,7 +110,7 @@ en la elegibilidad por nivel. Componente puro, contexto inicial por identidad
 reconstruido desde origin en nativo y transitorio en legado; sin nuevo schema.
 4.304 casos de XP y victorias/restauraciones reales. Se conserva el reparto base
 de calvo_progression_v1 y se limita el evento a XP realmente otorgada. El registro
-alcanza 606/625, con 19 pendientes: [ITEM_PROGRESSION_V18.md](ITEM_PROGRESSION_V18.md).
+alcanzó 606/625; V20 lleva el registro actual a 618/625, con siete pendientes: [ITEM_PROGRESSION_V18.md](ITEM_PROGRESSION_V18.md).
 
 Arte beta de objetos: [ITEM_ART_CURRENT_STATUS.json](ITEM_ART_CURRENT_STATUS.json).
 La presencia de una imagen no certifica su mecánica. Las revisiones artísticas y

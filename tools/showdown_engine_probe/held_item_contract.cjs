@@ -29,19 +29,20 @@ function semantic(v){
 check('exact reviewed list; cache safety; definitions are metadata only',()=>{
  assert.equal(ROWS.length,options.rowCount);
  assert.deepEqual(Object.keys(Field.DEFINITIONS).sort(),['soothebell',...options.allRows.map(r=>norm(r[0]))].sort());
- for(const [id,name,gen] of ROWS){
-  assert.deepEqual(Field.DEFINITIONS[norm(id)],{name,gen,fling:{basePower:30}});
+ for(const [id,name,gen,power=30] of ROWS){
+  assert.deepEqual(Field.DEFINITIONS[norm(id)],{name,gen,fling:{basePower:power}});
   assert.equal(Dex.items.get(id).name,name);assert.equal(Dex.items.get(id).gen,gen);
-  assert.equal(Dex.mod('gen8').items.get(id).fling.basePower,30);
+  assert.equal(Dex.mod('gen8').items.get(id).fling.basePower,power);
  }
  for(const [id,item] of before)assert.equal(Dex.items.get(id),item);
  assert.equal(Dex.items.all().length,before.size+1+options.allRows.length);
  Field.install(Dex);assert.equal(Dex.items.all().length,before.size+1+options.allRows.length);
- for(const id of ['revive','maxrevive','revivalherb','sacredash','amuletcoin','unreviewed_field_item']){
+ for(const id of ['revive','maxrevive','revivalherb','sacredash','amuletcoin','cleansetag','expshare',
+   'linkingcord','luckincense','pureincense','smokeball','unreviewed_field_item']){
   assert.equal(Dex.items.get(id).exists,false);assert.throws(()=>start(id),/Unknown held item/);
  }
 });
-for(const [id] of ROWS){
+for(const [id,,,power=30] of ROWS){
  check(id+' entry, post-turn restore and deterministic continuation in three profiles',()=>{
   for(const format of ['gen8customgame','gen9customgame','gen9calvounifiedv1']){
    const e=start(id,'growl','growl',format),r=new NativeEngine();try{
@@ -59,9 +60,9 @@ for(const [id] of ROWS){
    assert.equal(p(e).status_id,'poison');assert.ok(p(e).hp<100);assert.equal(p(e).moves[0].pp,2);
   }finally{e.close();none.close();}
  });
- check(id+' native Fling equals power 30 control and does not heal its recipient',()=>{
+ check(id+' native Fling equals power '+power+' control and does not heal its recipient',()=>{
   const target={current_hp:100,status_state:{persistent_id:'poison'}};
-  const e=start(id,'fling','growl','gen9calvounifiedv1',{},target),control=start('bottle_cap','fling','growl','gen9calvounifiedv1',{},target);try{
+  const e=start(id,'fling','growl','gen9calvounifiedv1',{},target),control=start(power===10?'soothe_bell':'bottle_cap','fling','growl','gen9calvounifiedv1',{},target);try{
    turn(e);turn(control);assert.equal(p(e).item,'');
    assert.equal(p(e,1).hp,p(control,1).hp);assert.ok(p(e,1).hp<100);
    assert.equal(p(e,1).status_id,'poison');assert.deepEqual(p(e,1).moves,p(control,1).moves);

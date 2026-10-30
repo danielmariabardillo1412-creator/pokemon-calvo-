@@ -8,6 +8,11 @@
 // V17: nine training consumables and eight battle-boost consumables reviewed
 // against that source: power 30, no passive held effect. Bag-use support is separate.
 const medicine=(name,gen)=>Object.freeze({name,gen,fling:Object.freeze({basePower:30})});
+// V20 imports only twelve reviewed IDs without passive held effects. Their bag,
+// encounter and contest uses are separate contexts, not fabricated callbacks.
+const misc=require('./field_misc_items_v20.json');
+const miscDefinitions=Object.fromEntries(Object.entries(misc.items).map(([id,row])=>
+ [id,Object.freeze({name:row.name,gen:row.gen,fling:Object.freeze({basePower:row.fling.basePower})})]));
 const DEFINITIONS=Object.freeze({
  soothebell:Object.freeze({name:'Soothe Bell',gen:3,fling:Object.freeze({basePower:10})}),
  antidote:medicine('Antidote',1),
@@ -54,6 +59,7 @@ const DEFINITIONS=Object.freeze({
  // V18: real post-battle XP / level-evolution effects belong to progression.
  luckyegg:medicine('Lucky Egg',2),
  everstone:medicine('Everstone',2),
+ ...miscDefinitions,
 });
 
 function install(Dex) {

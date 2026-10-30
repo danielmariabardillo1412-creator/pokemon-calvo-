@@ -1,0 +1,210 @@
+{
+  "generation_source_sha256": {
+    "pokecrystal_item_constants.asm": "bb870ffb3448845aa886ede0030a114a7773d7cb6924d2c59acdca0c53a02e58",
+    "pokeemerald_items.h": "6e3a9728b4d90cc23fee0aae9b9ffa9fbd71541e6b3cb2b966f334930b6ad6f8",
+    "pokered_item_constants.asm": "b5a1db015fbf0de637381eb39350f21f35a436a8088e2f6657f65c79f118f97f"
+  },
+  "items": {
+    "blackflute": {
+      "fling": {
+        "basePower": 30
+      },
+      "gen": 3,
+      "name": "Black Flute"
+    },
+    "blueflute": {
+      "fling": {
+        "basePower": 30
+      },
+      "gen": 3,
+      "name": "Blue Flute"
+    },
+    "bluescarf": {
+      "fling": {
+        "basePower": 10
+      },
+      "gen": 3,
+      "name": "Blue Scarf"
+    },
+    "fluffytail": {
+      "fling": {
+        "basePower": 30
+      },
+      "gen": 3,
+      "name": "Fluffy Tail"
+    },
+    "greenscarf": {
+      "fling": {
+        "basePower": 10
+      },
+      "gen": 3,
+      "name": "Green Scarf"
+    },
+    "pinkscarf": {
+      "fling": {
+        "basePower": 10
+      },
+      "gen": 3,
+      "name": "Pink Scarf"
+    },
+    "pokedoll": {
+      "fling": {
+        "basePower": 30
+      },
+      "gen": 1,
+      "name": "Poke Doll"
+    },
+    "redflute": {
+      "fling": {
+        "basePower": 30
+      },
+      "gen": 3,
+      "name": "Red Flute"
+    },
+    "redscarf": {
+      "fling": {
+        "basePower": 10
+      },
+      "gen": 3,
+      "name": "Red Scarf"
+    },
+    "whiteflute": {
+      "fling": {
+        "basePower": 30
+      },
+      "gen": 3,
+      "name": "White Flute"
+    },
+    "yellowflute": {
+      "fling": {
+        "basePower": 30
+      },
+      "gen": 3,
+      "name": "Yellow Flute"
+    },
+    "yellowscarf": {
+      "fling": {
+        "basePower": 10
+      },
+      "gen": 3,
+      "name": "Yellow Scarf"
+    }
+  },
+  "schema_version": 1,
+  "separate_contexts": {
+    "black_flute": {
+      "bag_not_consumed": true,
+      "battle_bag_handler": null,
+      "field_effect": null,
+      "field_handler": "ItemUseOutOfBattle_BlackWhiteFlute",
+      "held_passive_effect": false,
+      "source_name": "ITEM_NAME(\"Black Flute\")",
+      "special_use_certified_by_this_import": false
+    },
+    "blue_flute": {
+      "bag_not_consumed": true,
+      "battle_bag_handler": "EFFECT_ITEM_CURE_STATUS",
+      "field_effect": "gItemEffect_Awakening",
+      "field_handler": "ItemUseOutOfBattle_Medicine",
+      "held_passive_effect": false,
+      "source_name": "ITEM_NAME(\"Blue Flute\")",
+      "special_use_certified_by_this_import": false
+    },
+    "blue_scarf": {
+      "bag_not_consumed": false,
+      "battle_bag_handler": null,
+      "field_effect": null,
+      "field_handler": "ItemUseOutOfBattle_CannotUse",
+      "held_passive_effect": false,
+      "source_name": "ITEM_NAME(\"Blue Scarf\")",
+      "special_use_certified_by_this_import": false
+    },
+    "fluffy_tail": {
+      "bag_not_consumed": false,
+      "battle_bag_handler": "EFFECT_ITEM_ESCAPE",
+      "field_effect": null,
+      "field_handler": "ItemUseOutOfBattle_CannotUse",
+      "held_passive_effect": false,
+      "source_name": "ITEM_NAME(\"Fluffy Tail\")",
+      "special_use_certified_by_this_import": false
+    },
+    "green_scarf": {
+      "bag_not_consumed": false,
+      "battle_bag_handler": null,
+      "field_effect": null,
+      "field_handler": "ItemUseOutOfBattle_CannotUse",
+      "held_passive_effect": false,
+      "source_name": "ITEM_NAME(\"Green Scarf\")",
+      "special_use_certified_by_this_import": false
+    },
+    "pink_scarf": {
+      "bag_not_consumed": false,
+      "battle_bag_handler": null,
+      "field_effect": null,
+      "field_handler": "ItemUseOutOfBattle_CannotUse",
+      "held_passive_effect": false,
+      "source_name": "ITEM_NAME(\"Pink Scarf\")",
+      "special_use_certified_by_this_import": false
+    },
+    "poke_doll": {
+      "bag_not_consumed": false,
+      "battle_bag_handler": "EFFECT_ITEM_ESCAPE",
+      "field_effect": null,
+      "field_handler": "ItemUseOutOfBattle_CannotUse",
+      "held_passive_effect": false,
+      "source_name": "ITEM_NAME(\"Poké Doll\")",
+      "special_use_certified_by_this_import": false
+    },
+    "red_flute": {
+      "bag_not_consumed": true,
+      "battle_bag_handler": "EFFECT_ITEM_CURE_STATUS",
+      "field_effect": "gItemEffect_RedFlute",
+      "field_handler": "ItemUseOutOfBattle_CannotUse",
+      "held_passive_effect": false,
+      "source_name": "ITEM_NAME(\"Red Flute\")",
+      "special_use_certified_by_this_import": false
+    },
+    "red_scarf": {
+      "bag_not_consumed": false,
+      "battle_bag_handler": null,
+      "field_effect": null,
+      "field_handler": "ItemUseOutOfBattle_CannotUse",
+      "held_passive_effect": false,
+      "source_name": "ITEM_NAME(\"Red Scarf\")",
+      "special_use_certified_by_this_import": false
+    },
+    "white_flute": {
+      "bag_not_consumed": true,
+      "battle_bag_handler": null,
+      "field_effect": null,
+      "field_handler": "ItemUseOutOfBattle_BlackWhiteFlute",
+      "held_passive_effect": false,
+      "source_name": "ITEM_NAME(\"White Flute\")",
+      "special_use_certified_by_this_import": false
+    },
+    "yellow_flute": {
+      "bag_not_consumed": true,
+      "battle_bag_handler": "EFFECT_ITEM_CURE_STATUS",
+      "field_effect": "gItemEffect_YellowFlute",
+      "field_handler": "ItemUseOutOfBattle_CannotUse",
+      "held_passive_effect": false,
+      "source_name": "ITEM_NAME(\"Yellow Flute\")",
+      "special_use_certified_by_this_import": false
+    },
+    "yellow_scarf": {
+      "bag_not_consumed": false,
+      "battle_bag_handler": null,
+      "field_effect": null,
+      "field_handler": "ItemUseOutOfBattle_CannotUse",
+      "held_passive_effect": false,
+      "source_name": "ITEM_NAME(\"Yellow Scarf\")",
+      "special_use_certified_by_this_import": false
+    }
+  },
+  "source": "https://github.com/rh-hideout/pokeemerald-expansion/tree/8654616bd38d9b28cc7dd8f3d0b4cb030aa2d40c",
+  "source_sha256": {
+    "item_effect_constants.h": "264f2957eeb8bcfd26e24fd15d800f38a8e1418dd8688ed4155e40a5336e2139",
+    "item_effects.h": "6cf395c29bbfcf425eeb965f2101edb8ba139c6cb24beef0521b92f6853a5e5f",
+    "items.h": "107f1b78a457f3a9c48749f325d674b62fe559b0ebfc365db13e82b00b19ecd3"
+  }
+}

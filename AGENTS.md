@@ -48,6 +48,13 @@ el barrido de 2.222 IDs. El importador no ejecuta C/Ruby y falla ante conflictos
 La autorizacion humana de V19 permite este importador, su manifiesto propio,
 la consulta de recuperacion y consumo en servicio/vista; no regenerar datasets,
 politicas ni baselines anteriores. Mundo/combate/IV/mentas siguen separados.
+V20 importa doce metadatos equipados revisados sin efecto pasivo: cinco panuelos,
+cinco flautas, Poke Muneco y Cola Skitty. Ver docs/current/ITEM_FIELD_HELD_V20.md.
+Son 618/625 definiciones nativas; quedan siete, sin admitirlos como neutros.
+Los 77 efectos de campo no aumentan; los usos de mundo, huida, concurso y
+mochila de combate de estos objetos siguen pendientes excepto Azul de V19.
+Este bloque solo amplia el registro propio mediante manifiesto y pruebas; no
+modifica NativeEngine, algoritmos, paquetes, datos, politicas ni callback alguno.
 Antes de caramelos se corrigieron alias/divisor de las curvas XP; ver
 docs/current/PROGRESSION_GROWTH_CURVES_FIX.md. Reutilizar la progresion existente
 y su tabla contrastada; resolver decisiones de aprender/evolucionar antes de consumir.

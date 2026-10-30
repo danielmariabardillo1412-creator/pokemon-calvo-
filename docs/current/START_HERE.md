@@ -1,9 +1,14 @@
 # Empezar aquí — 2026-10-30
 
+V20: [doce equipables revisados en bloque](ITEM_FIELD_HELD_V20.md). El registro
+nativo pasa a 618/625; quedan siete definiciones pendientes. Los usos especiales
+de mundo/mochila/concurso se mantienen separados; siguen 77 efectos de campo.
+Poké Muñeco conserva su ID mediante un nombre nativo compatible.
+
 V19: [importación automática por familias](ITEM_IMPORT_V19.md). Se compilan 42
 objetos de recuperación en bloque: 41 rutas anteriores conservadas y Flauta Azul
-nueva, reutilizable. Son 77 efectos de campo; los 19 equipables pendientes no
-cambian. La clasificación de 2.222 IDs no certifica sus mecánicas completas.
+nueva, reutilizable. V19 dejó 77 efectos de campo; ver V20 para el registro
+nativo actual. Clasificar 2.222 IDs no certifica todas sus mecánicas.
 
 1. Leer `AGENTS.md` en la raíz: copia activa, original protegido y límites.
 2. Leer [PROJECT_STATE.md](PROJECT_STATE.md): estado vigente y cobertura.
@@ -49,10 +54,11 @@ V17: [ITEM_FIELD_HELD_V17.md](ITEM_FIELD_HELD_V17.md). Otros 17
 consumibles equipados revisados; contrato nativo compartido con V16 y usos de
 campo existentes conservados. Quedan 21 equipables sin definición. Los ocho
 potenciadores no ganan todavía una acción de uso desde mochila de combate.
-Último bloque V18: [ITEM_PROGRESSION_V18.md](ITEM_PROGRESSION_V18.md). Huevo
+V18: [ITEM_PROGRESSION_V18.md](ITEM_PROGRESSION_V18.md). Huevo
 Suerte aplica XP de combate x1,5 con el objeto actual/inicial; Piedra Eterna usa
 la misma puerta de evolucion por nivel en combate y caramelos. Rutas reales,
-guardado/carga y referencias fijadas en el JSON. Quedan 19 equipables sin definición.
+guardado/carga y referencias fijadas en el JSON. V18 dejó 19 definiciones pendientes;
+V20 reduce el pendiente actual a siete.
 La revisión previa a caramelos corrigió las curvas de experiencia; resultado y
 compatibilidad en [PROGRESSION_GROWTH_CURVES_FIX.md](PROGRESSION_GROWTH_CURVES_FIX.md).
 Auditoría de datos original/API y correcciones cerradas:
