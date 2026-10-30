@@ -1,8 +1,8 @@
 {
   "status": "IN_PROGRESS_CONNECTED_SLICE_VALIDATED",
   "date": "2026-10-30",
-  "latest_report": "docs/current/ITEM_FIELD_HELD_V20.json",
-  "notes": "docs/current/ITEM_FIELD_HELD_V20.md",
+  "latest_report": "docs/current/ITEM_ESCAPE_V21.json",
+  "notes": "docs/current/ITEM_ESCAPE_V21.md",
   "full_item_matrix": "docs/current/ITEM_FIELD_V8.csv.txt",
   "art_status": "docs/current/ITEM_ART_CURRENT_STATUS.json",
   "menu": "B - Mochila",
@@ -15,8 +15,8 @@
   "active_machine_version": "scarlet-violet",
   "legacy_machine_ids_need_profile": 109,
   "all_item_effects_certified": false,
-  "headless_checks": 267,
-  "gpu_checks": 71,
+  "headless_checks": 218,
+  "gpu_checks": 46,
   "next": [
     "Extend the automatic importer by reviewed capability families and batch scenarios; V19 compiles 42 recovery IDs, preserving 41 existing routes; outside-pilot rows are not missing-mechanic counts",
     "Review seven remaining permitted native equipped definition gaps with their real effects: Amulet Coin, Cleanse Tag, Exp. Share, Linking Cord, Luck Incense, Pure Incense, Smoke Ball; do not infer neutral behavior",
@@ -32,15 +32,15 @@
     "Complete generation-specific battle XP fidelity and other Everstone evolution-trigger exceptions separately; V18 preserves base progression profile"
   ],
   "source_data_and_policies_unchanged": true,
-  "latest_verification": "ITEM_FIELD_HELD_V20",
+  "latest_verification": "ITEM_ESCAPE_V21",
   "held_item_ids_with_verified_effect_scenarios": 189,
   "untested_native_contexts": 323,
   "verification_all_effects_complete": false,
   "reviewed_held_and_berry_dependencies_pending": 41,
   "field_medicine_ids_verified": 15,
   "field_ev_berry_ids_verified": 6,
-  "latest_phase_checks_headless": 267,
-  "latest_phase_checks_gpu": 71,
+  "latest_phase_checks_headless": 218,
+  "latest_phase_checks_gpu": 46,
   "field_recovery_ids_verified": 42,
   "total_connected_field_effect_ids": 77,
   "field_training_ids_verified": 35,
@@ -232,5 +232,21 @@
     "imported_ids": 12,
     "field_effect_ids_added": 0,
     "source": "modules/battle/backends/showdown/field_misc_items_v20.json"
-  }
+  },
+  "battle_escape_item_use_ids_verified": [
+    "poke_doll",
+    "fluffy_tail",
+    "poke_toy"
+  ],
+  "native_battle_direct_bag_item_ids_supported": 18,
+  "battle_escape_item_use_overrides": {
+    "poke_doll": "NATIVE_WILD_TERMINAL_ESCAPE_ONE_UNIT_NO_RNG_TRAP_BYPASS_REVISION_UI_SAVE_VERIFIED",
+    "fluffy_tail": "NATIVE_WILD_TERMINAL_ESCAPE_ONE_UNIT_NO_RNG_TRAP_BYPASS_REVISION_UI_SAVE_VERIFIED",
+    "poke_toy": "NATIVE_WILD_TERMINAL_ESCAPE_ONE_UNIT_NO_RNG_TRAP_BYPASS_REVISION_UI_SAVE_VERIFIED"
+  },
+  "battle_escape_limits": [
+    "No legacy bag command enabled",
+    "Held Smoke Ball is separate and pending",
+    "Scripted encounters with an additional cannot-run flag are not modeled"
+  ]
 }

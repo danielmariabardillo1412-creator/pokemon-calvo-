@@ -1,5 +1,10 @@
 # Empezar aquí — 2026-10-30
 
+V21: [consumibles de huida](ITEM_ESCAPE_V21.md). Poké Muñeco, Cola Skitty y
+Poké Señuelo ya se usan desde mochila nativa para terminar un encuentro salvaje,
+con consumo único y sin RNG/ataque extra. Son 18 usos directos de mochila con las
+medicinas. Siguen 77 efectos de campo y siete huecos de definición equipada.
+
 V20: [doce equipables revisados en bloque](ITEM_FIELD_HELD_V20.md). El registro
 nativo pasa a 618/625; quedan siete definiciones pendientes. Los usos especiales
 de mundo/mochila/concurso se mantienen separados; siguen 77 efectos de campo.

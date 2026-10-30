@@ -18,6 +18,7 @@ var _settled := false
 var _capture_rng := RandomNumberGenerator.new()
 var _escape_rng := RandomNumberGenerator.new()
 const Medicine = preload("res://modules/inventory/battle_medicine_profile.gd")
+const Escape = preload("res://modules/inventory/battle_escape_profile.gd")
 var _spent_items := {}
 
 
@@ -87,6 +88,7 @@ func submit_medicine(_command: Dictionary, _expected_revision: int) -> Dictionar
 
 func use_item(item_id: StringName, target_id: StringName, expected_revision: int, move_slot: int = -1) -> Dictionary:
 	if not has_active_battle() or busy or _command_busy or needs_recovery or phase() != "move" or expected_revision != revision or not _campaign_unchanged(): return _command_rejected("invalid_item_boundary")
+	if Escape.supports(item_id): return _use_escape_item(item_id, target_id, expected_revision, move_slot)
 	if not Medicine.supports(item_id) or catalogs.item(item_id) == null: return _command_rejected("item_not_battle_usable")
 	if not inventory.has(item_id): return _command_rejected("item_not_owned")
 	var target := battle_state().creature(target_id)
@@ -98,6 +100,29 @@ func use_item(item_id: StringName, target_id: StringName, expected_revision: int
 	if result.accepted:
 		inventory = bag
 		_record_spent(item_id)
+	_command_busy = false
+	return result
+
+
+func battle_item_usable(item_id: StringName) -> bool:
+	return Medicine.supports(item_id) or battle_kind == "wild" and Escape.permitted(item_id, catalogs)
+
+
+func _use_escape_item(item_id: StringName, target_id: StringName, expected_revision: int, move_slot: int) -> Dictionary:
+	if not _external_ready(expected_revision) or not Escape.permitted(item_id, catalogs): return _command_rejected("escape_item_not_usable")
+	if move_slot != -1: return _command_rejected("escape_item_unexpected_move")
+	var actor := battle_state().active_for_side(&"side_a")
+	if actor == null or actor.is_knocked_out() or actor.instance_id != target_id: return _command_rejected("escape_item_requires_active_actor")
+	var bag := PlayerInventory.from_dict(inventory.to_dict())
+	if not bag.remove(item_id): return _command_rejected("item_not_owned")
+	_command_busy = true
+	# Guaranteed item escape bypasses trapping and speed rolls. Finish validates
+	# and publishes synchronously; no enemy turn, RNG draw or partial spending.
+	var result := _finish("FLED", bag)
+	if result.accepted:
+		_record_spent(item_id)
+		result["item_id"] = String(item_id)
+		result["escape_resolution"] = Escape.resolution(escape_attempts)
 	_command_busy = false
 	return result
 

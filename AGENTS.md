@@ -55,6 +55,14 @@ Los 77 efectos de campo no aumentan; los usos de mundo, huida, concurso y
 mochila de combate de estos objetos siguen pendientes excepto Azul de V19.
 Este bloque solo amplia el registro propio mediante manifiesto y pruebas; no
 modifica NativeEngine, algoritmos, paquetes, datos, politicas ni callback alguno.
+V21 conecta tres consumibles de huida desde mochila nativa: poke_doll, fluffy_tail
+y poke_toy. Ver docs/current/ITEM_ESCAPE_V21.md. Terminan FLED, consumen una unidad
+solo al publicar, sin RNG/turno extra y con rechazo ante entrenador/frontera invalida.
+Se reutiliza el cierre sincronico; la UI solo consulta/ofrece/pide. Checkpoints
+activos no pueden inventar gasto de estos objetos terminales. Schema sin cambios.
+Son 18 usos directos de mochila nativa (15 medicinas + 3 huida), aparte de bolas;
+77 efectos de campo y 618/625 definiciones equipadas no cambian. Bola Humo,
+ocho potenciadores y las dependencias de mundo/formas/IV/mentas siguen pendientes.
 Antes de caramelos se corrigieron alias/divisor de las curvas XP; ver
 docs/current/PROGRESSION_GROWTH_CURVES_FIX.md. Reutilizar la progresion existente
 y su tabla contrastada; resolver decisiones de aprender/evolucionar antes de consumir.

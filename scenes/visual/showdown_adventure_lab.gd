@@ -19,6 +19,8 @@ var _medicine_icon: TextureRect
 var _medicine_targets: OptionButton
 var _medicine_moves: OptionButton
 var _medicine_use: Button
+var _medicine_hint: Label
+var _medicine_target_label: Label
 var _dynamax_toggle: CheckButton
 var _battle_format := "gen9customgame"
 
@@ -167,13 +169,14 @@ func _adventure_log(text: String) -> void:
 func _build_medicine_bag() -> void:
 	_medicine_popup = PopupPanel.new(); add_child(_medicine_popup)
 	var box := VBoxContainer.new(); box.custom_minimum_size = Vector2(460, 280); box.add_theme_constant_override("separation", 12); _medicine_popup.add_child(box)
-	_label(box, "MOCHILA · OBJETOS DE CURACIÓN")
+	_label(box, "MOCHILA · OBJETOS DE COMBATE")
 	var item_row := HBoxContainer.new(); box.add_child(item_row)
 	_medicine_icon = TextureRect.new(); _medicine_icon.custom_minimum_size = Vector2(40, 40)
 	_medicine_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE; _medicine_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	_medicine_icon.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR; item_row.add_child(_medicine_icon)
 	_medicine_items = OptionButton.new(); _medicine_items.size_flags_horizontal = Control.SIZE_EXPAND_FILL; item_row.add_child(_medicine_items)
-	_label(box, "¿En qué Pokémon?")
+	_medicine_hint = _label(box, "")
+	_medicine_target_label = _label(box, "¿En qué Pokémon?")
 	_medicine_targets = OptionButton.new(); box.add_child(_medicine_targets)
 	_medicine_moves = OptionButton.new(); box.add_child(_medicine_moves)
 	_medicine_items.item_selected.connect(func(_i): _refresh_medicine_moves())
@@ -186,7 +189,7 @@ func open_medicine_bag() -> void:
 	if _working or _playback.is_playing() or session == null or session.phase() != "move": return
 	_medicine_items.clear(); _medicine_targets.clear()
 	for id: StringName in session.inventory.all_item_ids():
-		if not Adventure.Medicine.supports(id): continue
+		if not session.battle_item_usable(id): continue
 		_medicine_items.add_item("%s · %d" % [SpanishGameText.item_name(id, catalogs), session.inventory.quantity(id)])
 		_medicine_items.set_item_metadata(_medicine_items.item_count - 1, String(id))
 	for cid: StringName in session.battle_state().sides[0].party_ids:
@@ -202,10 +205,14 @@ func open_medicine_bag() -> void:
 func _refresh_medicine_moves() -> void:
 	_medicine_moves.clear()
 	_medicine_use.disabled = _medicine_items.item_count == 0 or _medicine_targets.item_count == 0
+	_medicine_hint.visible = not _medicine_use.disabled
 	if _medicine_use.disabled: _medicine_moves.hide(); _medicine_icon.texture = null; return
 	var id := String(_medicine_items.get_item_metadata(_medicine_items.selected))
 	_medicine_icon.texture = ItemArt.texture(StringName(id))
-	var spec: Dictionary = Adventure.Medicine.items()[id]
+	_medicine_targets.visible = not Adventure.Escape.supports(StringName(id))
+	_medicine_target_label.visible = _medicine_targets.visible
+	_medicine_hint.text = "Huye del combate salvaje. Se consume una unidad." if Adventure.Escape.supports(StringName(id)) else "Elige el Pokémon al que quieres aplicar el objeto."
+	var spec: Dictionary = Adventure.Medicine.items().get(id, {})
 	_medicine_moves.visible = spec.get("scope") == "one"
 	if not _medicine_moves.visible: return
 	var target := StringName(_medicine_targets.get_item_metadata(_medicine_targets.selected))
@@ -215,23 +222,27 @@ func _refresh_medicine_moves() -> void:
 
 
 func use_selected_medicine() -> Dictionary:
-	if _working or _playback.is_playing() or _medicine_use.disabled: return {"accepted": false}
+	if session == null or not session.has_active_battle() or session.phase() != "move" or _working or _playback.is_playing() or _medicine_use.disabled: return {"accepted": false}
 	var id := StringName(_medicine_items.get_item_metadata(_medicine_items.selected))
 	var target := StringName(_medicine_targets.get_item_metadata(_medicine_targets.selected))
+	if Adventure.Escape.supports(id): target = session.battle_state().sides[0].active_id
 	var slot := _medicine_moves.selected if _medicine_moves.visible else -1
 	_medicine_popup.hide()
 	_working = true; diagnostic_event.emit({"event": "command", "kind": "item"}); _refresh_view()
 	var result: Dictionary = await session.use_item(id, target, session.revision, slot)
 	if result.accepted:
+		if session.completion_reason == "FLED": _adventure_log("Has escapado usando %s." % SpanishGameText.item_name(id, catalogs))
 		var events: Array[BattleEvent] = []; events.assign(result.events)
 		_playback.note_event_messages(events)
 		for event: BattleEvent in events:
 			var text := _event_text(event)
 			if not text.is_empty(): _adventure_log(text)
-		diagnostic_event.emit({"event": "turn_resolved", "battle_events": _event_dicts(events)})
+		if session.completion_reason == "FLED":
+			diagnostic_event.emit({"event": "command_result", "kind": "run", "item_id": String(id), "accepted": true, "session_completed": true, "escape_resolution": result.escape_resolution, "battle_events": _event_dicts(events)})
+		else: diagnostic_event.emit({"event": "turn_resolved", "battle_events": _event_dicts(events)})
 	else:
 		_playback.cancel()
-		_event_log.append_text("\nNo se ha usado el objeto. Comprueba el Pokémon y sus PS, estado o PP.")
+		_event_log.append_text("\nNo se ha podido huir con ese objeto. Se conserva en la mochila." if Adventure.Escape.supports(id) else "\nNo se ha usado el objeto. Comprueba el Pokémon y sus PS, estado o PP.")
 	_working = false; _refresh_view()
 	return result
 
