@@ -1,0 +1,702 @@
+{
+  "phase": "ITEM_PROGRESSION_V18",
+  "status": "LUCKY_EGG_BATTLE_XP_AND_EVERSTONE_LEVEL_GATE_PASS",
+  "date": "2026-10-30",
+  "base": "28c550a4",
+  "all_item_effects_certified": false,
+  "new_ids": [
+    "lucky_egg",
+    "everstone"
+  ],
+  "progression_held_effect_ids_verified": [
+    "lucky_egg",
+    "everstone"
+  ],
+  "headless_checks": 8755,
+  "gpu_checks": 39,
+  "matrix_cases": 4304,
+  "eligible_species_and_forms": 1076,
+  "verification": {
+    "status": "PASS",
+    "base": "28c550a4",
+    "groups": [
+      {
+        "group": "native_progression",
+        "status": "PASS",
+        "exit_code": 0,
+        "checks_reported": 14,
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\progression_items_v18\\runs\\1793319365823914800\\native_progression.log",
+        "log_sha256": "f99bbcc7fd3ea6870f608b107c5a6c7378a4ae37e538731af57640f9aa29d32a",
+        "command": [
+          "D:/Herramientas/NodeJS/node.exe",
+          "tools/showdown_engine_probe/field_held_v18.cjs"
+        ]
+      },
+      {
+        "group": "native_previous",
+        "status": "PASS",
+        "exit_code": 0,
+        "checks_reported": 104,
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\progression_items_v18\\runs\\1793319365823914800\\native_previous.log",
+        "log_sha256": "7e40a84830fa54b83279098a42a17d5c6aaafde15ef276fc80898974a0bd6f90",
+        "command": [
+          "D:/Herramientas/NodeJS/node.exe",
+          "tools/showdown_engine_probe/field_held_v17.cjs"
+        ]
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 0,
+        "errors": [],
+        "last_line": "[ DONE ] loading_editor_layout",
+        "group": "import",
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--path",
+          "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+          "--headless",
+          "--editor",
+          "--import",
+          "--quit"
+        ],
+        "exit_code": 0,
+        "seconds": 6.14,
+        "terminated_after_script_error": false,
+        "expected_negative_diagnostics": [],
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\progression_items_v18\\runs\\1793319365823914800\\import.log",
+        "log_sha256": "10460b7ea9f3c81382fab0b1676d730be2bae922017704604420034c7bcf6ec2"
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 8755,
+        "errors": [],
+        "last_line": "PROGRESSION_ITEMS_V18 PASS checks=8755 cases=4304 GPU=false",
+        "group": "progression_items",
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--path",
+          "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+          "--headless",
+          "--script",
+          "tests/gameplay/progression_items_v18.gd"
+        ],
+        "exit_code": 0,
+        "seconds": 35.06,
+        "terminated_after_script_error": false,
+        "expected_negative_diagnostics": [],
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\progression_items_v18\\runs\\1793319365823914800\\progression_items.log",
+        "log_sha256": "d38115f9419ddc5a6c1141e9bf5af407f6cf90669308d7a8bb3f7b487ff696a9"
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 472,
+        "errors": [],
+        "last_line": "=== PROJECT TEST RESULT: 472 PASS / 0 FAIL ===",
+        "group": "core",
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--path",
+          "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+          "--headless",
+          "--script",
+          "tests/test_runner.gd"
+        ],
+        "exit_code": 0,
+        "seconds": 9.2,
+        "terminated_after_script_error": false,
+        "expected_negative_diagnostics": [
+          "ERROR: Parse JSON failed. Error at line 0: Expected key"
+        ],
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\progression_items_v18\\runs\\1793319365823914800\\core.log",
+        "log_sha256": "aa9de68f0c22929ceffa211b3a242db78885d34d92f9c3d971e6d9f31801cd99"
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 33633,
+        "errors": [],
+        "last_line": "ITEM_FIELD_V9 PASS checks=33633 cases=6456 GPU=false",
+        "group": "growth",
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--path",
+          "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+          "--headless",
+          "--script",
+          "tests/gameplay/item_field_growth_v9.gd"
+        ],
+        "exit_code": 0,
+        "seconds": 18.38,
+        "terminated_after_script_error": false,
+        "expected_negative_diagnostics": [],
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\progression_items_v18\\runs\\1793319365823914800\\growth.log",
+        "log_sha256": "74f5db12e9a6d3437aa5597b8e03b2517d38a1fe1070f5f29b64b0ea171be667"
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 4209,
+        "errors": [],
+        "last_line": "PROGRESSION_GROWTH_CURVES PASS checks=4209 failures=0",
+        "group": "growth_curves",
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--path",
+          "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+          "--headless",
+          "--script",
+          "tests/gameplay/progression_growth_curves_test_runner.gd"
+        ],
+        "exit_code": 0,
+        "seconds": 1.2,
+        "terminated_after_script_error": false,
+        "expected_negative_diagnostics": [],
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\progression_items_v18\\runs\\1793319365823914800\\growth_curves.log",
+        "log_sha256": "89b96ebc4309d242d89b442232e2982d61e1dc6a19b54b6c0f07bb62777d98ee"
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 86,
+        "errors": [],
+        "last_line": "SHOWDOWN_ADVENTURE PASS checks=86 errors=0",
+        "group": "native_adventure",
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--path",
+          "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+          "--headless",
+          "--script",
+          "tests/gameplay/showdown_adventure_test_runner.gd"
+        ],
+        "exit_code": 0,
+        "seconds": 21.69,
+        "terminated_after_script_error": false,
+        "expected_negative_diagnostics": [],
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\progression_items_v18\\runs\\1793319365823914800\\native_adventure.log",
+        "log_sha256": "f1b9afdf930ee6f62e667cd89307d420b9a4a0dce6523118e46c62c5691af870"
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 66,
+        "errors": [],
+        "last_line": "=== TRAINER BATTLE SESSION RESULT: 66 PASS / 0 FAIL ===",
+        "group": "trainer_session",
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--path",
+          "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+          "--headless",
+          "--script",
+          "tests/trainer_ai/trainer_battle_session_test_runner.gd"
+        ],
+        "exit_code": 0,
+        "seconds": 2.8,
+        "terminated_after_script_error": false,
+        "expected_negative_diagnostics": [],
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\progression_items_v18\\runs\\1793319365823914800\\trainer_session.log",
+        "log_sha256": "8275c5108c12165014a82a93cfabce958b1c7c3084ad5ef9b04056178c10efc1"
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 118,
+        "errors": [],
+        "last_line": "FIELD_NATIVE PASS checks=118 GPU=false errors=0",
+        "group": "native",
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--path",
+          "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+          "--headless",
+          "--script",
+          "tests/gameplay/field_native_test_runner.gd"
+        ],
+        "exit_code": 0,
+        "seconds": 53.5,
+        "terminated_after_script_error": false,
+        "expected_negative_diagnostics": [],
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\progression_items_v18\\runs\\1793319365823914800\\native.log",
+        "log_sha256": "4532edaa65a10230fbf1101f37a4944f5c8487c3292fb8a6d48e1b391f3fb333"
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 912,
+        "errors": [],
+        "last_line": "FIELD_RESTORE_INTEGRATION PASS checks=912 errors=0",
+        "group": "restore",
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--path",
+          "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+          "--headless",
+          "--script",
+          "tests/gameplay/field_restore_integration_test_runner.gd"
+        ],
+        "exit_code": 0,
+        "seconds": 43.8,
+        "terminated_after_script_error": false,
+        "expected_negative_diagnostics": [],
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\progression_items_v18\\runs\\1793319365823914800\\restore.log",
+        "log_sha256": "b680833ccd3f8bdeff5c7b4503bff0c6063eb4adfa9db317e952ca3d48d46478"
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 39,
+        "errors": [],
+        "last_line": "PROGRESSION_ITEMS_V18 PASS checks=39 cases=0 GPU=true",
+        "group": "progression_gpu",
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--path",
+          "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+          "--resolution",
+          "1280x720",
+          "--script",
+          "tests/gameplay/progression_items_v18.gd",
+          "--",
+          "--capture"
+        ],
+        "exit_code": 0,
+        "seconds": 23.52,
+        "terminated_after_script_error": false,
+        "expected_negative_diagnostics": [],
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\progression_items_v18\\runs\\1793319365823914800\\progression_gpu.log",
+        "log_sha256": "e9a8ae267be89f96d72cfeb954b9c40c7649803ff9f6a9243c137f9aba8b354a"
+      }
+    ],
+    "integrity_before": {
+      "status": "PASS",
+      "base": "28c550a41b4c36f38c1c92cb7cfb29ba3a2af920",
+      "protected_files": 23029,
+      "preserved_absent_skip_worktree": 15647,
+      "mode": "HASH_IF_METADATA_CHANGED",
+      "allowed_changes": [
+        "modules/battle/backends/showdown/field_held_items.cjs",
+        "modules/creatures/progression/evolution_system.gd",
+        "modules/creatures/progression/progression_held_items.gd",
+        "modules/creatures/progression/progression_held_items.gd.uid",
+        "modules/creatures/progression/progression_system.gd",
+        "modules/gameplay/showdown_adventure_session.gd",
+        "modules/gameplay/trainer_battle_session.gd",
+        "modules/gameplay/wild_adventure_session.gd",
+        "modules/inventory/field_growth_effects.gd",
+        "tests/gameplay/progression_items_v18.gd",
+        "tests/gameplay/progression_items_v18.gd.uid",
+        "tools/showdown_engine_probe/field_held_v16.cjs",
+        "tools/showdown_engine_probe/field_held_v17.cjs",
+        "tools/showdown_engine_probe/field_held_v18.cjs",
+        "tools/showdown_engine_probe/held_item_reference_rows.cjs",
+        "tools/verification/run_progression_items_v18.py"
+      ]
+    },
+    "integrity_after": {
+      "status": "PASS",
+      "base": "28c550a41b4c36f38c1c92cb7cfb29ba3a2af920",
+      "protected_files": 23029,
+      "preserved_absent_skip_worktree": 15647,
+      "mode": "FULL_CONTENT_HASHES",
+      "allowed_changes": [
+        "docs/current/ITEM_PROGRESSION_V18.md",
+        "modules/battle/backends/showdown/field_held_items.cjs",
+        "modules/creatures/progression/evolution_system.gd",
+        "modules/creatures/progression/progression_held_items.gd",
+        "modules/creatures/progression/progression_held_items.gd.uid",
+        "modules/creatures/progression/progression_system.gd",
+        "modules/gameplay/showdown_adventure_session.gd",
+        "modules/gameplay/trainer_battle_session.gd",
+        "modules/gameplay/wild_adventure_session.gd",
+        "modules/inventory/field_growth_effects.gd",
+        "tests/gameplay/progression_items_v18.gd",
+        "tests/gameplay/progression_items_v18.gd.uid",
+        "tools/showdown_engine_probe/field_held_v16.cjs",
+        "tools/showdown_engine_probe/field_held_v17.cjs",
+        "tools/showdown_engine_probe/field_held_v18.cjs",
+        "tools/showdown_engine_probe/held_item_reference_rows.cjs",
+        "tools/verification/run_progression_items_v18.py"
+      ]
+    },
+    "tested_sources_sha256": {
+      "modules/battle/backends/showdown/field_held_items.cjs": "3d7e204d10d03e3f4b06b9cade7cc2e4b637f009f30579c7eaf31649f11cd673",
+      "modules/creatures/progression/evolution_system.gd": "b94bf6fb633a51276af0b106e0dbf4a1b9ceace6be4ce2c4a81b37936174a26b",
+      "modules/creatures/progression/progression_held_items.gd": "5e2169a9edd450a11caefecac7e1439c47cfad4f7b5ccabb7c8d8b4e667a4a04",
+      "modules/creatures/progression/progression_held_items.gd.uid": "1ee3bd038f3c6a374c1440633cc5727f1a6f9b26987300984294fc80c44c64e1",
+      "modules/creatures/progression/progression_system.gd": "90fb9565ee57abba06481d641708bfc894729b9d1c0e3051ba895fb58e3803a2",
+      "modules/gameplay/showdown_adventure_session.gd": "09270f8a5654fd2e6c84373374cf8be76f83d7a08d134651ad1e27574c7283fc",
+      "modules/gameplay/trainer_battle_session.gd": "4c971e9f6a48ff9721ae68ae1c3e909e4daf0972152f74605ccc50815bb5d41a",
+      "modules/gameplay/wild_adventure_session.gd": "b0ac3f9a2d51d91335dec06877f7f43036b84220d842f7819693be2b9a0ea109",
+      "modules/inventory/field_growth_effects.gd": "db033cc3cb6f61ba5d02556c02cf27fb6505eeb12354fafedf9a5307a5aa1f7a",
+      "tests/gameplay/progression_items_v18.gd": "9df08e5f0cc8635222f637e4e86999b230896d141a120306b1dbd989dd51d893",
+      "tests/gameplay/progression_items_v18.gd.uid": "04311e2e1b43d848553e804caba5c6120b8109d65617ec7532cf8e42fd9ce2b6",
+      "tools/showdown_engine_probe/field_held_v16.cjs": "3779e021808f2638033b71c93de3a19b34b80323acf60576c9f3214196ef3844",
+      "tools/showdown_engine_probe/field_held_v17.cjs": "850717f3d04a13f3f2b72cc036c86cba58e556f79492a372de139de5582f2c35",
+      "tools/showdown_engine_probe/field_held_v18.cjs": "68e64eeaab368f45a52e5a0bc3e0678390ea6148f7ad69851c0810f335e55c16",
+      "tools/showdown_engine_probe/held_item_reference_rows.cjs": "0be9c94bf0cb67ed6a19b58dfb7937e138757b3a23642428980eb45679cc1a36",
+      "tools/verification/run_progression_items_v18.py": "2011a0872dfc663259dc3381af871d61a8c33f96118417956a40336e7d0e03c2"
+    }
+  },
+  "integration_routes": [
+    {
+      "lost_item_fixture": false,
+      "route": "legacy_reward",
+      "trainer": false,
+      "xp_gained": 7
+    },
+    {
+      "lost_item_fixture": true,
+      "route": "legacy_reward",
+      "trainer": false,
+      "xp_gained": 7
+    },
+    {
+      "lost_item_fixture": false,
+      "route": "legacy_reward",
+      "trainer": true,
+      "xp_gained": 7
+    },
+    {
+      "lost_item_fixture": true,
+      "route": "legacy_reward",
+      "trainer": true,
+      "xp_gained": 7
+    },
+    {
+      "initial_context_restored": true,
+      "mode": "keep",
+      "route": "native_reward",
+      "xp_gained": 417
+    },
+    {
+      "initial_context_restored": true,
+      "mode": "fling",
+      "route": "native_reward",
+      "xp_gained": 417
+    },
+    {
+      "initial_context_restored": true,
+      "mode": "trick",
+      "route": "native_reward",
+      "xp_gained": 417
+    },
+    {
+      "initial_context_restored": true,
+      "mode": "lost",
+      "route": "native_reward",
+      "xp_gained": 417
+    },
+    {
+      "initial_context_restored": true,
+      "mode": "acquired",
+      "route": "native_reward",
+      "xp_gained": 417
+    },
+    {
+      "initial_context_restored": true,
+      "mode": "spent",
+      "route": "native_reward",
+      "xp_gained": 278
+    },
+    {
+      "battle_xp": 3,
+      "item": "lucky_egg",
+      "route": "map_progression",
+      "saved_after_settlement": true
+    },
+    {
+      "battle_xp": 2,
+      "item": "everstone",
+      "route": "map_progression",
+      "saved_after_settlement": true
+    }
+  ],
+  "gpu_routes": [
+    {
+      "battle_xp": 3,
+      "item": "lucky_egg",
+      "route": "map_progression",
+      "saved_after_settlement": true
+    },
+    {
+      "battle_xp": 2,
+      "item": "everstone",
+      "route": "map_progression",
+      "saved_after_settlement": true
+    }
+  ],
+  "native_evidence": {
+    "status": "PASS",
+    "checks": [
+      {
+        "name": "exact reviewed list; cache safety; definitions are metadata only",
+        "status": "PASS"
+      },
+      {
+        "name": "lucky_egg entry, post-turn restore and deterministic continuation in three profiles",
+        "status": "PASS"
+      },
+      {
+        "name": "lucky_egg holding does not use its HP/status/PP field effect",
+        "status": "PASS"
+      },
+      {
+        "name": "lucky_egg native Fling equals power 30 control and does not heal its recipient",
+        "status": "PASS"
+      },
+      {
+        "name": "lucky_egg native Trick transfers the actual item; consumed imports stay absent",
+        "status": "PASS"
+      },
+      {
+        "name": "lucky_egg native Knock Off boost and Magic Room suppression",
+        "status": "PASS"
+      },
+      {
+        "name": "lucky_egg prepare/abort/commit keeps native transaction authority",
+        "status": "PASS"
+      },
+      {
+        "name": "everstone entry, post-turn restore and deterministic continuation in three profiles",
+        "status": "PASS"
+      },
+      {
+        "name": "everstone holding does not use its HP/status/PP field effect",
+        "status": "PASS"
+      },
+      {
+        "name": "everstone native Fling equals power 30 control and does not heal its recipient",
+        "status": "PASS"
+      },
+      {
+        "name": "everstone native Trick transfers the actual item; consumed imports stay absent",
+        "status": "PASS"
+      },
+      {
+        "name": "everstone native Knock Off boost and Magic Room suppression",
+        "status": "PASS"
+      },
+      {
+        "name": "everstone prepare/abort/commit keeps native transaction authority",
+        "status": "PASS"
+      },
+      {
+        "name": "reviewed rows are permitted; all remaining definition gaps explicit",
+        "status": "PASS"
+      }
+    ],
+    "reviewed_progression": [
+      [
+        "lucky_egg",
+        "Lucky Egg",
+        2
+      ],
+      [
+        "everstone",
+        "Everstone",
+        2
+      ]
+    ],
+    "permitted_holdable": 625,
+    "permitted_native_present": 606,
+    "permitted_missing": [
+      "amulet_coin",
+      "black_flute",
+      "blue_flute",
+      "blue_scarf",
+      "cleanse_tag",
+      "exp_share",
+      "fluffy_tail",
+      "green_scarf",
+      "linking_cord",
+      "luck_incense",
+      "pink_scarf",
+      "poke_doll",
+      "pure_incense",
+      "red_flute",
+      "red_scarf",
+      "smoke_ball",
+      "white_flute",
+      "yellow_flute",
+      "yellow_scarf"
+    ],
+    "baseline": "28c550a4"
+  },
+  "reference_proof": {
+    "status": "PASS",
+    "reviewed_items": [
+      {
+        "id": "lucky_egg",
+        "name": "Lucky Egg",
+        "gen": 2,
+        "fling_power": 30,
+        "world_effect": "HOLD_EFFECT_LUCKY_EGG"
+      },
+      {
+        "id": "everstone",
+        "name": "Everstone",
+        "gen": 2,
+        "fling_power": 30,
+        "world_effect": "HOLD_EFFECT_PREVENT_EVOLVE"
+      }
+    ],
+    "metadata_reference": {
+      "repository": "rh-hideout/pokeemerald-expansion",
+      "commit": "8654616bd38d9b28cc7dd8f3d0b4cb030aa2d40c",
+      "path": ".godot\\item_mochi_v13\\references\\items.h",
+      "sha256": "107f1b78a457f3a9c48749f325d674b62fe559b0ebfc365db13e82b00b19ecd3"
+    },
+    "generation_reference": {
+      "url": "https://raw.githubusercontent.com/pret/pokecrystal/master/constants/item_constants.asm",
+      "path": ".godot\\field_held_v16\\references\\pokecrystal_item_constants.asm",
+      "sha256": "bb870ffb3448845aa886ede0030a114a7773d7cb6924d2c59acdca0c53a02e58"
+    },
+    "essentials": {
+      "repository": "Maruno17/pokemon-essentials",
+      "commit": "8c5911e4a4b07b07e832e4bb0d5d8859e88b4a9b",
+      "root": "D:\\Proyectos\\Pokemon Calvo Referencias\\fuentes\\pokemon-essentials",
+      "files": {
+        "Data/Scripts/011_Battle/007_Other battle code/009_Battle_ItemEffects.rb": "a4eea093893b5c290776118a0800dff7b7ce05f5edd50e7b316832d5fc7fa17c",
+        "Data/Scripts/011_Battle/001_Battle/003_Battle_ExpAndMoveLearning.rb": "ea74697615054880cdfb7b9da4444bc9dfc97ef6f1142fc639806b1aaf792c9e",
+        "Data/Scripts/014_Pokemon/001_Pokemon.rb": "3a7f233156f09a6d2e3729bdaa9d1962bfa946aaaa7403042aaea5dcdcdf8cb4"
+      }
+    },
+    "scope": "Lucky Egg current-or-initial item multiplier in existing calvo_progression_v1 reward split; Everstone blocks supported level evolutions only. Other evolution triggers and full generation XP parity not claimed.",
+    "new_downloads": false,
+    "foreign_code_executed": false
+  },
+  "artifacts": {
+    "godot.json": {
+      "path": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\progression_items_v18\\runs\\1793319365823914800\\godot.json",
+      "sha256": "cdc1f97459db713fea401db3ed3552a4ae3c9c656adf9e28c8c31e05a605dff0"
+    },
+    "gpu.json": {
+      "path": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\progression_items_v18\\runs\\1793319365823914800\\gpu.json",
+      "sha256": "ffb016ccf2fafd14595e833b94814d71a48222355cf7e8b1aeb3247cf7c5a624"
+    },
+    "reference_proof.json": {
+      "path": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\progression_items_v18\\runs\\1793319365823914800\\reference_proof.json",
+      "sha256": "863c24fa27215f556b8b6de92b77fd2e8bc86e3deed9f2179f4a82713468ac1a"
+    },
+    "native_progression.json": {
+      "path": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\progression_items_v18\\runs\\1793319365823914800\\native_progression.json",
+      "sha256": "83900b5df7e0ed1d87862cffe86e29968463ccc3f0d3b170eb34b53c085e33e2"
+    },
+    "native_previous.json": {
+      "path": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\progression_items_v18\\runs\\1793319365823914800\\native_previous.json",
+      "sha256": "db216bb4128571a814f3f371822cb0255c3f0b4474565a215d21fc4d5d184c33"
+    }
+  },
+  "visual_review": {
+    "path": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\progression_items_v18\\progression_bag.png",
+    "sha256": "bfdaf95779651a1e448bc390f7dd8e39b2ad28aa92dc0e61da11e2533e1798d8",
+    "reviewed": true,
+    "result": "Mew carries Lucky Egg, two spare units in bag, explicit candy result is +100 EXP rather than +150; bag and controls fit 1280x720."
+  },
+  "contract": {
+    "progression_profile": "calvo_progression_v1",
+    "base_share_formula_changed": false,
+    "full_generation_xp_parity_certified": false,
+    "lucky_egg_factor_numerator": 3,
+    "lucky_egg_factor_denominator": 2,
+    "rounding": "integer floor after current profile individual share",
+    "lucky_egg_applies_to_battle_rewards_only": true,
+    "current_or_initial_item_fallback": true,
+    "already_consumed_initial_item_counts": false,
+    "max_xp_event_clamps_to_actual_award": true,
+    "everstone_scope": "runtime-supported level-up evolution eligibility, shared by battle and candy",
+    "native_initial_context_source": "existing origin.p1 reconstructed after restore",
+    "legacy_initial_context_source": "transient item-ID dictionary by stable instance_id; legacy active battle saving already rejected",
+    "save_schema_changed": false,
+    "native_engine_cjs_changed": false,
+    "vendor_packages_changed": false,
+    "combat_algorithms_changed": false,
+    "rng_changed": false
+  },
+  "registry_delta": {
+    "permitted": 625,
+    "present_before": 604,
+    "present_after": 606,
+    "missing_before": 21,
+    "missing_after": 19,
+    "missing_ids": [
+      "amulet_coin",
+      "black_flute",
+      "blue_flute",
+      "blue_scarf",
+      "cleanse_tag",
+      "exp_share",
+      "fluffy_tail",
+      "green_scarf",
+      "linking_cord",
+      "luck_incense",
+      "pink_scarf",
+      "poke_doll",
+      "pure_incense",
+      "red_flute",
+      "red_scarf",
+      "smoke_ball",
+      "white_flute",
+      "yellow_flute",
+      "yellow_scarf"
+    ],
+    "bridge_definition_count": 44,
+    "registry_presence_equals_all_effects_certified": false
+  },
+  "unchanged_counters": {
+    "field_effects": 76,
+    "capture_balls": 16
+  },
+  "preserved_phase_attempts": [
+    {
+      "path": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\progression_items_v18\\runs\\1793318985390652900\\results.json",
+      "status": "FAIL",
+      "error": "progression_items"
+    },
+    {
+      "path": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\progression_items_v18\\runs\\1793319093195887700\\results.json",
+      "status": "FAIL",
+      "error": "progression_items"
+    },
+    {
+      "path": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\progression_items_v18\\runs\\1793319199395347300\\results.json",
+      "status": "FAIL",
+      "error": "native_adventure"
+    }
+  ],
+  "limitations": [
+    "Existing calvo_progression_v1 XP base/share/sum/floor rules preserved; full generation-specific XP, trainer/outsider/affection bonuses and new Exp Share semantics not certified.",
+    "Everstone level evolution path is connected; trade/item/form exceptions and unsupported conditions remain outside this phase.",
+    "Legacy lost-item cases use an explicit application-boundary mutation fixture; native Fling/Trick/Knock Off cases execute real moves.",
+    "19 permitted equipables still lack native definitions; eight battle-boost bag actions remain pending.",
+    "No new direct-use item IDs, raw/normalized data, art, bans, installed packages, combat algorithms, RNG or save schema changes.",
+    "Initial test parse/type failures and three incorrect Mew curve expectations are retained; expectations now read the independently verified reference table, not modified game data.",
+    "First adventure regression failed writing to a missing output directory; runner now prepares it without changing historical assertions; failed attempt is not PASS."
+  ],
+  "post_documentation_integrity": {
+    "status": "PASS",
+    "base": "28c550a41b4c36f38c1c92cb7cfb29ba3a2af920",
+    "protected_files": 23029,
+    "preserved_absent_skip_worktree": 15647,
+    "mode": "HASH_IF_METADATA_CHANGED",
+    "allowed_changes": [
+      "AGENTS.md",
+      "docs/current/ITEM_PROGRESSION_V18.json",
+      "docs/current/ITEM_PROGRESSION_V18.md",
+      "docs/current/ITEM_SYSTEM_CURRENT_STATUS.json",
+      "docs/current/NEXT_STEPS.md",
+      "docs/current/PROJECT_STATE.md",
+      "docs/current/START_HERE.md",
+      "modules/battle/backends/showdown/field_held_items.cjs",
+      "modules/creatures/progression/evolution_system.gd",
+      "modules/creatures/progression/progression_held_items.gd",
+      "modules/creatures/progression/progression_held_items.gd.uid",
+      "modules/creatures/progression/progression_system.gd",
+      "modules/gameplay/showdown_adventure_session.gd",
+      "modules/gameplay/trainer_battle_session.gd",
+      "modules/gameplay/wild_adventure_session.gd",
+      "modules/inventory/field_growth_effects.gd",
+      "tests/gameplay/progression_items_v18.gd",
+      "tests/gameplay/progression_items_v18.gd.uid",
+      "tools/showdown_engine_probe/field_held_v16.cjs",
+      "tools/showdown_engine_probe/field_held_v17.cjs",
+      "tools/showdown_engine_probe/field_held_v18.cjs",
+      "tools/showdown_engine_probe/held_item_reference_rows.cjs",
+      "tools/verification/run_progression_items_v18.py"
+    ]
+  }
+}

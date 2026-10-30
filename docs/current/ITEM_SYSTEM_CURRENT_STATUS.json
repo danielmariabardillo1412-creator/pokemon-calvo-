@@ -1,8 +1,8 @@
 {
   "status": "IN_PROGRESS_CONNECTED_SLICE_VALIDATED",
   "date": "2026-10-30",
-  "latest_report": "docs/current/ITEM_FIELD_HELD_V17.json",
-  "notes": "docs/current/ITEM_FIELD_HELD_V17.md",
+  "latest_report": "docs/current/ITEM_PROGRESSION_V18.json",
+  "notes": "docs/current/ITEM_PROGRESSION_V18.md",
   "full_item_matrix": "docs/current/ITEM_FIELD_V8.csv.txt",
   "art_status": "docs/current/ITEM_ART_CURRENT_STATUS.json",
   "menu": "B - Mochila",
@@ -15,10 +15,10 @@
   "active_machine_version": "scarlet-violet",
   "legacy_machine_ids_need_profile": 109,
   "all_item_effects_certified": false,
-  "headless_checks": 351,
-  "gpu_checks": 82,
+  "headless_checks": 8755,
+  "gpu_checks": 39,
   "next": [
-    "Continue reviewed native descriptors for 21 other permitted equipables missing from Dex; do not infer neutral behavior or missing world/evolution/economy effects",
+    "Continue reviewed native descriptors for 19 other permitted equipables missing from Dex; do not infer neutral behavior or missing world/evolution/economy effects",
     "Connect explicit bag battle-use actions for eight boost consumables; their V17 held descriptors do not implement those actions",
     "Contrast official SV mochi friendship behavior; EV routes use pinned RHH friendship-unchanged profile, not full parity certification",
     "Capture V1 probability fidelity, critical captures and Ultra Beast treatment remain unimplemented; V11/V12/V15 ball routes are verified within V1",
@@ -27,18 +27,19 @@
     "Capture-ball/map metadata before origin friendship bonuses",
     "Species-form routes, conditioned evolutions and gender/infatuation/breeding contract",
     "Food/contest/world-context berries",
-    "Other capture balls needing map/history/current type/gender or origin metadata; legacy machines and Escape Rope/world systems"
+    "Other capture balls needing map/history/current type/gender or origin metadata; legacy machines and Escape Rope/world systems",
+    "Complete generation-specific battle XP fidelity and other Everstone evolution-trigger exceptions separately; V18 preserves base progression profile"
   ],
   "source_data_and_policies_unchanged": true,
-  "latest_verification": "ITEM_FIELD_HELD_V17",
+  "latest_verification": "ITEM_PROGRESSION_V18",
   "held_item_ids_with_verified_effect_scenarios": 189,
   "untested_native_contexts": 323,
   "verification_all_effects_complete": false,
   "reviewed_held_and_berry_dependencies_pending": 41,
   "field_medicine_ids_verified": 15,
   "field_ev_berry_ids_verified": 6,
-  "latest_phase_checks_headless": 351,
-  "latest_phase_checks_gpu": 82,
+  "latest_phase_checks_headless": 8755,
+  "latest_phase_checks_gpu": 39,
   "field_recovery_ids_verified": 41,
   "total_connected_field_effect_ids": 76,
   "field_training_ids_verified": 35,
@@ -92,13 +93,11 @@
     "blue_flute",
     "blue_scarf",
     "cleanse_tag",
-    "everstone",
     "exp_share",
     "fluffy_tail",
     "green_scarf",
     "linking_cord",
     "luck_incense",
-    "lucky_egg",
     "pink_scarf",
     "poke_doll",
     "pure_incense",
@@ -151,10 +150,12 @@
     "x_defense",
     "x_sp_atk",
     "x_sp_def",
-    "x_speed"
+    "x_speed",
+    "lucky_egg",
+    "everstone"
   ],
-  "native_known_permitted_equipped_ids": 604,
-  "native_missing_permitted_equipped_definition_count": 21,
+  "native_known_permitted_equipped_ids": 606,
+  "native_missing_permitted_equipped_definition_count": 19,
   "native_held_medicine_ids_with_bridge_verified": 24,
   "native_held_training_and_boost_ids_with_bridge_verified": 17,
   "battle_boost_item_use_ids_pending": [
@@ -166,5 +167,15 @@
     "x_sp_atk",
     "x_sp_def",
     "x_speed"
-  ]
+  ],
+  "progression_held_effect_ids_verified": [
+    "lucky_egg",
+    "everstone"
+  ],
+  "progression_battle_profile": "calvo_progression_v1",
+  "progression_full_generation_xp_fidelity_certified": false,
+  "progression_held_item_overrides": {
+    "lucky_egg": "BATTLE_CURRENT_OR_INITIAL_XP_FACTOR_3_2_RESTORED_NATIVE_LEGACY_CAP_CANDY_EXCLUSION_VERIFIED",
+    "everstone": "SUPPORTED_LEVEL_EVOLUTION_GATE_SHARED_BATTLE_CANDY_OWNED_API_RECHECK_AND_SAVE_VERIFIED_OTHER_TRIGGERS_PENDING"
+  }
 }

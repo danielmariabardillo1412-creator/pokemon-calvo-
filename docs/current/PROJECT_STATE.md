@@ -95,6 +95,13 @@ El registro llega a 604/625, con 21 ausentes. Los usos de campo de entrenamiento
 siguen funcionando; los ocho potenciadores mantienen pendiente su acción de uso
 desde mochila de combate: [ITEM_FIELD_HELD_V17.md](ITEM_FIELD_HELD_V17.md).
 
+V18 conecta Huevo Suerte a las recompensas de combate y unifica Piedra Eterna
+en la elegibilidad por nivel. Componente puro, contexto inicial por identidad
+reconstruido desde origin en nativo y transitorio en legado; sin nuevo schema.
+4.304 casos de XP y victorias/restauraciones reales. Se conserva el reparto base
+de calvo_progression_v1 y se limita el evento a XP realmente otorgada. El registro
+alcanza 606/625, con 19 pendientes: [ITEM_PROGRESSION_V18.md](ITEM_PROGRESSION_V18.md).
+
 Arte beta de objetos: [ITEM_ART_CURRENT_STATUS.json](ITEM_ART_CURRENT_STATUS.json).
 La presencia de una imagen no certifica su mecánica. Las revisiones artísticas y
 los cambios de aspecto anacrónico quedan separados de esta limpieza.

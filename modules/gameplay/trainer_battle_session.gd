@@ -32,6 +32,7 @@ var last_trainer_game_ready_tie_report: Dictionary = {}
 
 var _battle_server: AuthoritativeBattleServer = null
 var _opponent_roster: Array[CreatureInstance] = []
+var _reward_starting_items: Dictionary = {}
 var _trainer_memory_owner := TrainerDualSideBattleMemoryOwner.new()
 var _trainer_shadow_item_aware_enabled: bool = false
 var _trainer_action_proposal_enabled: bool = false
@@ -428,6 +429,7 @@ func begin_battle(
 
 	if live_moves_enabled: preload("res://modules/battle/application/live_move_profile.gd").apply(state)
 	_battle_server = AuthoritativeBattleServer.new(state, catalogs)
+	_reward_starting_items=ProgressionSystem.HeldItems.starting_items_from_creatures(player_roster)
 	_trainer_memory_owner = memory_owner
 	_opponent_roster = trainer_roster.duplicate()
 	opponent_trainer_id = p_opponent_trainer_id
@@ -658,7 +660,7 @@ func settle_finished_battle() -> TrainerBattleSettlement:
 	out.player_won = outcome.winner_side_id == &"side_a"
 	if out.player_won:
 		out.progression_events = ProgressionSystem.reconcile_battle_result(
-			player.party.get_creatures(), outcome, catalogs, progression_ruleset
+			player.party.get_creatures(), outcome, catalogs, progression_ruleset, _reward_starting_items
 		)
 	_reconcile_roster(player.party.get_creatures())
 	_reconcile_roster(_opponent_roster)
@@ -671,6 +673,7 @@ func settle_finished_battle() -> TrainerBattleSettlement:
 	_trainer_memory_owner.clear()
 	_battle_server = null
 	_opponent_roster.clear()
+	_reward_starting_items.clear()
 	_trainer_shadow_item_aware_enabled = false
 	last_trainer_shadow_report = {}
 	_trainer_action_proposal_enabled = false

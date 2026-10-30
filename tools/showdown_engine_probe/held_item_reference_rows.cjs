@@ -12,4 +12,5 @@ const TRAINING=[['calcium','Calcium',1],['carbos','Carbos',1],['hp_up','HP Up',1
  ['pp_max','PP Max',3],['pp_up','PP Up',1],['protein','Protein',1],['rare_candy','Rare Candy',1],['zinc','Zinc',3],
  ['dire_hit','Dire Hit',1],['guard_spec','Guard Spec.',1],['x_accuracy','X Accuracy',1],['x_attack','X Attack',1],
  ['x_defense','X Defense',1],['x_sp_atk','X Sp. Atk',1],['x_sp_def','X Sp. Def',4],['x_speed','X Speed',1]];
-module.exports={MEDICINES,TRAINING,ALL:[...MEDICINES,...TRAINING]};
+const PROGRESSION=[['lucky_egg','Lucky Egg',2],['everstone','Everstone',2]];
+module.exports={MEDICINES,TRAINING,PROGRESSION,ALL:[...MEDICINES,...TRAINING,...PROGRESSION]};

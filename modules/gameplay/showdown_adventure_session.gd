@@ -207,7 +207,7 @@ func _finish(reason: String, bag: PlayerInventory, capture_resolution: CaptureRe
 		state.winner_id = state.active_for_side(winner_side).instance_id
 		outcome = BattleOutcome.from_battle_state(state, catalogs)
 		state.winner_id = previous
-		if reason == "VICTORY": progression = ProgressionSystem.reconcile_battle_result(party.get_creatures(), outcome, catalogs, progression_ruleset)
+		if reason == "VICTORY": progression = ProgressionSystem.reconcile_battle_result(party.get_creatures(), outcome, catalogs, progression_ruleset, ProgressionSystem.HeldItems.starting_items_from_records(_origin.p1))
 	var routing: CaptureRoutingResult
 	if capture_resolution != null:
 		var captured := capture_resolution.captured

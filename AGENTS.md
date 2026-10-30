@@ -34,9 +34,12 @@ docs/current/ITEM_FIELD_HELD_V14.md. V16 conecta 24 medicinas equipadas mediante
 metadatos revisados, sin curacion automatica ni nuevos usos de medicina en combate.
 Ver docs/current/ITEM_FIELD_HELD_V16.md. V17 conecta otros 17 consumibles de
 entrenamiento/potenciadores equipados y comparte el contrato nativo de pruebas.
-Ver docs/current/ITEM_FIELD_HELD_V17.md. Quedan 21 equipables permitidos sin
+Ver docs/current/ITEM_FIELD_HELD_V17.md. En V17 quedaron 21 equipables permitidos sin
 definicion nativa. Los ocho potenciadores de combate mantienen pendiente su uso
 desde mochila; registro equipado no equivale a efecto de uso implementado.
+V18 conecta Huevo Suerte (XP de combate actual/inicial, sin bonus a caramelos) y
+unifica Piedra Eterna para evolucion por nivel. Ver docs/current/ITEM_PROGRESSION_V18.md.
+Quedan 19 equipables sin definicion; el reparto base calvo_progression_v1 se conserva.
 Antes de caramelos se corrigieron alias/divisor de las curvas XP; ver
 docs/current/PROGRESSION_GROWTH_CURVES_FIX.md. Reutilizar la progresion existente
 y su tabla contrastada; resolver decisiones de aprender/evolucionar antes de consumir.
@@ -70,6 +73,9 @@ La continuacion de objetos V16 amplia solo ese modulo a 24 medicinas revisadas;
 no modifica native_engine.cjs ni instala callbacks para sus usos de campo.
 V17 revisa otros 17 descriptores en ese modulo y extrae pruebas comunes, con
 los mismos limites de metadatos y sin habilitar usos no implementados.
+V18 amplia progresion y sus tres sesiones para esos dos efectos, reutilizando
+origin del combate nativo y cache transitoria en legado. No cambia native_engine,
+algoritmos de combate, datos ni schema. El helper puro es la autoridad de esos efectos.
 No agregar callbacks de mecanicas, admitir objetos desconocidos en bloque ni
 editar node_modules para ocultar fallos; el resto queda protegido por hash.
 No borrar motores anteriores ni archivos ausentes con skip-worktree. Antes de

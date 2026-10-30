@@ -31,6 +31,7 @@ var _battle_server: AuthoritativeBattleServer = null
 var _save_repository: SaveGameRepository = SaveGameRepository.new()
 var _escape_ruleset: WildEscapeRuleset = WildEscapeRuleset.new()
 var _escape_attempts: int = 0
+var _reward_starting_items: Dictionary = {}
 
 
 func _init(
@@ -88,6 +89,7 @@ func begin_encounter(
 		completion_reason = &""
 		_encounter = null
 		_battle_server = null
+		_reward_starting_items.clear()
 		_escape_attempts = 0
 		return result
 
@@ -103,6 +105,7 @@ func begin_encounter(
 		BattleRuleset.ID,
 	)
 	_battle_server = AuthoritativeBattleServer.new(state, catalogs)
+	_reward_starting_items=ProgressionSystem.HeldItems.starting_items_from_creatures(roster)
 	state.switch_move_rules_enabled = switch_move_rules_enabled
 	state.weather_rules_enabled = weather_rules_enabled
 	state.substitute_rules_enabled = substitute_rules_enabled
@@ -308,6 +311,7 @@ func _submit_run_command(
 		out.session_completed = true
 		_encounter = null
 		_battle_server = null
+		_reward_starting_items.clear()
 		return out
 
 	out.battle_events = _battle_server.submit_reaction_turn(opponent_action, player_side.side_id)
@@ -371,6 +375,7 @@ func capture_current(ball_id: StringName, capture_rng: RandomNumberGenerator) ->
 	out.reason = ""
 	_encounter = null
 	_battle_server = null
+	_reward_starting_items.clear()
 	_escape_attempts = 0
 	return out
 
@@ -395,6 +400,7 @@ func settle_finished_battle() -> WildBattleSettlement:
 		out.session_completed = true
 		_encounter = null
 		_battle_server = null
+		_reward_starting_items.clear()
 		_escape_attempts = 0
 		return out # Neither victory/defeat, XP, capture nor an inventory action.
 	_restore_battle_transforms()
@@ -403,7 +409,7 @@ func settle_finished_battle() -> WildBattleSettlement:
 	out.player_won = outcome.winner_side_id == &"side_a"
 	if out.player_won:
 		out.progression_events = ProgressionSystem.reconcile_battle_result(
-			player.party.get_creatures(), outcome, catalogs, progression_ruleset
+			player.party.get_creatures(), outcome, catalogs, progression_ruleset, _reward_starting_items
 		)
 	_reconcile_player_party()
 
@@ -414,6 +420,7 @@ func settle_finished_battle() -> WildBattleSettlement:
 	out.session_completed = true
 	_encounter = null
 	_battle_server = null
+	_reward_starting_items.clear()
 	_escape_attempts = 0
 	return out
 
@@ -482,6 +489,7 @@ func load_game(path: String) -> LoadResult:
 	completion_reason = &""
 	_encounter = null
 	_battle_server = null
+	_reward_starting_items.clear()
 	_escape_attempts = 0
 	return loaded
 

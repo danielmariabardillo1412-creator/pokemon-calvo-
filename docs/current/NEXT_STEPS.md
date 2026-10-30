@@ -51,7 +51,11 @@ V17 conecta otros 17 consumibles equipados; ver ITEM_FIELD_HELD_V17.md. Vitamina
 mejoras de PP y Caramelo Raro conservan sus usos anteriores. Los ocho potenciadores
 de combate aún requieren conectar su uso desde mochila; campo los rechaza sin
 consumir. No confundir el descriptor equipado con esa acción pendiente.
-Continuar el puente de equipados de campo por lotes revisados: hay otros 21 IDs
+V18 conecta Huevo Suerte a la recompensa de combate y centraliza Piedra Eterna
+para evolucion por nivel; ver ITEM_PROGRESSION_V18.md. El bonus no afecta a caramelos
+ni compañeros. El reparto base de XP sigue siendo calvo_progression_v1; no se
+certifican todas las formulas oficiales ni las demas excepciones de evolucion.
+Continuar el puente de equipados de campo por lotes revisados: hay otros 19 IDs
 equipables permitidos sin definición nativa. Contrastar metadatos y distinguir
 los efectos de mundo aún pendientes; no habilitar todos como neutros a ciegas.
 Continuar objetos por familias aún pendientes: IV,

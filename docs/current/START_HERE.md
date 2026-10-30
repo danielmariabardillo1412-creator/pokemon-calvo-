@@ -40,10 +40,14 @@ V16: [ITEM_FIELD_HELD_V16.md](ITEM_FIELD_HELD_V16.md). Se conectan
 24 medicinas equipadas al registro nativo, sin curacion automatica ni nuevas
 medicinas de combate. Quedan 38 equipables permitidos sin definicion. Pruebas
 por objeto, mochila real y guardado/carga; resultados completos en su JSON.
-Último bloque V17: [ITEM_FIELD_HELD_V17.md](ITEM_FIELD_HELD_V17.md). Otros 17
+V17: [ITEM_FIELD_HELD_V17.md](ITEM_FIELD_HELD_V17.md). Otros 17
 consumibles equipados revisados; contrato nativo compartido con V16 y usos de
 campo existentes conservados. Quedan 21 equipables sin definición. Los ocho
 potenciadores no ganan todavía una acción de uso desde mochila de combate.
+Último bloque V18: [ITEM_PROGRESSION_V18.md](ITEM_PROGRESSION_V18.md). Huevo
+Suerte aplica XP de combate x1,5 con el objeto actual/inicial; Piedra Eterna usa
+la misma puerta de evolucion por nivel en combate y caramelos. Rutas reales,
+guardado/carga y referencias fijadas en el JSON. Quedan 19 equipables sin definición.
 La revisión previa a caramelos corrigió las curvas de experiencia; resultado y
 compatibilidad en [PROGRESSION_GROWTH_CURVES_FIX.md](PROGRESSION_GROWTH_CURVES_FIX.md).
 Auditoría de datos original/API y correcciones cerradas:

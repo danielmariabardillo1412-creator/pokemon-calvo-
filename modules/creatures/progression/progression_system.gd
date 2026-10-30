@@ -8,6 +8,7 @@ extends RefCounted
 const LEARN_MOVE := "LEARN_MOVE"
 const REPLACE_MOVE := "REPLACE_MOVE"
 const DECLINE_MOVE := "DECLINE_MOVE"
+const HeldItems = preload("res://modules/creatures/progression/progression_held_items.gd")
 
 
 # Award experience to a creature. Returns the list of ProgressionEvents produced.
@@ -121,6 +122,7 @@ static func reconcile_battle_result(
 	outcome: BattleOutcome,
 	catalogs,
 	ruleset: ProgressionRuleset,
+	starting_items: Dictionary = {},
 ) -> Array:
 	var events: Array = []
 	var survivors: Array = []
@@ -140,5 +142,7 @@ static func reconcile_battle_result(
 		var species: CreatureSpecies = catalogs.species_catalog.get_by_id(sp.species_id)
 		if species == null:
 			continue
-		events.append_array(gain_experience(sp, share, species, catalogs, ruleset))
+		var maximum:=ruleset.experience_for_level(species.growth_rate,ruleset.MAX_LEVEL)
+		var amount:=HeldItems.battle_reward_amount(share,sp,starting_items,maximum)
+		events.append_array(gain_experience(sp, amount, species, catalogs, ruleset))
 	return events

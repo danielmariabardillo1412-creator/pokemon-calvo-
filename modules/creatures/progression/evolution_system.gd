@@ -13,6 +13,7 @@ const UNSUPPORTED := "UNSUPPORTED"
 const TRIGGER_LEVEL_UP := &"level_up"
 const TRIGGER_USE_ITEM := &"use_item"
 const TRIGGER_TRADE := &"trade"
+const HeldItems = preload("res://modules/creatures/progression/progression_held_items.gd")
 
 # Canonical V3 trigger IDs use underscores. These mechanics have no runtime path in
 # the current progression model and must never fall through as apparently unknown
@@ -82,7 +83,7 @@ static func _integer_number(value: Variant) -> bool:
 
 # Persistent stats after level-up, without temporary battle stages/modifiers.
 static func level_up_context(creature: CreatureInstance) -> Dictionary:
-	var context := {"level": creature.level}
+	var context := {"level": creature.level,"block_level_evolution":HeldItems.blocks_level_evolution(creature)}
 	if creature.stats != null:
 		context["attack"] = creature.stats.attack
 		context["defense"] = creature.stats.defense
@@ -122,7 +123,7 @@ static func evolution_candidates(
 		var eligible := false
 		match rec.trigger:
 			TRIGGER_LEVEL_UP:
-				eligible = level >= rec.min_level
+				eligible = not bool(context.get("block_level_evolution",false)) and level >= rec.min_level
 			TRIGGER_USE_ITEM:
 				eligible = (item_id != &"" and item_id == rec.item_id)
 			TRIGGER_TRADE:

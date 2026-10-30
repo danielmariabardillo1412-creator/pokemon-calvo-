@@ -103,7 +103,7 @@ static func plan(source: CreatureInstance, item_id: StringName, catalogs: Defini
 				if not result.is_empty(): return result
 	if c.level > source.level or item_id == &"rare_candy" and source.level == 100:
 		var options: Array[String] = []
-		if c.held_item_id != &"everstone" or c.held_item_consumed:
+		if not EvolutionSystem.level_up_context(c).block_level_evolution:
 			for record: EvolutionRecord in species.evolutions:
 				if record.trigger == EvolutionSystem.TRIGGER_LEVEL_UP and record.min_level <= c.level and _eligible_species(record.species_id, catalogs, policy) and EvolutionSystem.classify_record(record, catalogs, species.id) != EvolutionSystem.RUNTIME_SUPPORTED:
 					summary.deferred_evolutions += 1

@@ -51,6 +51,9 @@ const DEFINITIONS=Object.freeze({
  xspatk:medicine('X Sp. Atk',1),
  xspdef:medicine('X Sp. Def',4),
  xspeed:medicine('X Speed',1),
+ // V18: real post-battle XP / level-evolution effects belong to progression.
+ luckyegg:medicine('Lucky Egg',2),
+ everstone:medicine('Everstone',2),
 });
 
 function install(Dex) {
