@@ -172,5 +172,8 @@
         "end": "\nfunc field_native_seed("
       }
     ]
-  }
+  },
+  "seal_generation": 2,
+  "seal_directory": ".godot/opencode_items_v2_launch",
+  "previous_unused_seal_preserved": ".godot/opencode_items_v2"
 }

@@ -11,6 +11,8 @@
     "O190"
   ],
   "writer_started": false,
-  "guard_unit_test_methods": 3,
-  "worker_allowed_files": 52
+  "guard_unit_test_methods": 4,
+  "worker_allowed_files": 52,
+  "seal_generation": 2,
+  "initial_guard_issue": "Git/Windows CRLF normalization corrected before launch; initial seal preserved"
 }

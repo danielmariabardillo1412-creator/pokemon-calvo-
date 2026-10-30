@@ -5,9 +5,10 @@ from local_phase import LocalPhase,exclusive_lock
 
 ROOT=Path(__file__).resolve().parents[2]
 CONTRACT=ROOT/'docs/opencode/ITEM_CLOSURE_V2/CONTRACT.json'
-OUT=ROOT/'.godot/opencode_items_v2'
+OUT=ROOT/'.godot/opencode_items_v2_launch'
 
 def mask_source(text,windows):
+    text=text.replace('\r\n','\n').replace('\r','\n')
     # Narrow edit windows prevent an allowed adapter path becoming permission
     # to rewrite turn resolution, damage, RPC transactions, RNG or the map owner.
     spans=[]

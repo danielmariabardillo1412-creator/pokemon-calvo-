@@ -11,6 +11,8 @@ Trabajar exclusivamente en `D:/Proyectos/Pokemon Calvo - Arquitectura Kilo`, ram
 Base funcional cerrada: `da00bd4c36f578606a45edcebc6ebd9a6ba630e8` (V21).
 El commit posterior de estos planos no modifica mecánicas. El guard encuentra
 su ancla con el último commit de CONTRACT.json; no necesita editar este archivo.
+Sello vigente: `.godot/opencode_items_v2_launch/`. El sello preliminar anterior
+queda conservado como evidencia de preparación; no debe ejecutarse ni borrarse.
 
 Leer en este orden:
 

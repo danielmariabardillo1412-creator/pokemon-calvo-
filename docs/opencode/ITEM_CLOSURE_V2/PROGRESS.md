@@ -12,3 +12,9 @@ resultado, evidencia y checkpoint. Continuar hasta O190 sin entrega por objeto.
 
 No hay trabajo de implementación concurrente de Codex previsto. La revisión
 independiente del rango y la aceptación quedarán para después de la entrega.
+
+Preparación: la comprobación contra Git detectó diferencias CRLF/LF en el guard.
+Se normalizaron solo para comparar las ventanas de código y se añadió la prueba.
+El sello inicial sin usar se conserva en `.godot/opencode_items_v2/`; el sello
+vigente de arranque está en `.godot/opencode_items_v2_launch/`. No se resella el
+anterior, no cambia el juego y OpenCode todavía no ha iniciado la misión.

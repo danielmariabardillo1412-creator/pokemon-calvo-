@@ -34,4 +34,10 @@ class GuardTests(unittest.TestCase):
         changed=source.replace('return _director._next_battle_seed if _director != null else -1','return 999')
         self.assertNotEqual(digest(mask_source(changed,windows)),baseline)
 
+    def test_git_and_windows_line_endings_compare_consistently(self):
+        c=json.loads(CONTRACT.read_text(encoding='utf-8'))
+        for rel,windows in c['code_windows'].items():
+            source=(ROOT/rel).read_text(encoding='utf-8')
+            self.assertEqual(mask_source(source.replace('\n','\r\n'),windows),mask_source(source,windows))
+
 if __name__=='__main__':unittest.main(verbosity=2)
