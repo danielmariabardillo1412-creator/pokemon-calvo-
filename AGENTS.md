@@ -40,6 +40,14 @@ desde mochila; registro equipado no equivale a efecto de uso implementado.
 V18 conecta Huevo Suerte (XP de combate actual/inicial, sin bonus a caramelos) y
 unifica Piedra Eterna para evolucion por nivel. Ver docs/current/ITEM_PROGRESSION_V18.md.
 Quedan 19 equipables sin definicion; el reparto base calvo_progression_v1 se conserva.
+V19 prueba importacion automatica de recuperacion desde RHH fijado: 42 IDs en
+manifiesto generado, 41 rutas anteriores preservadas y Flauta Azul nueva sin
+consumo. Son 77 efectos de campo; los 19 equipables pendientes no cambian.
+Ver docs/current/ITEM_IMPORT_V19.md. No inferir cobertura de otras familias por
+el barrido de 2.222 IDs. El importador no ejecuta C/Ruby y falla ante conflictos.
+La autorizacion humana de V19 permite este importador, su manifiesto propio,
+la consulta de recuperacion y consumo en servicio/vista; no regenerar datasets,
+politicas ni baselines anteriores. Mundo/combate/IV/mentas siguen separados.
 Antes de caramelos se corrigieron alias/divisor de las curvas XP; ver
 docs/current/PROGRESSION_GROWTH_CURVES_FIX.md. Reutilizar la progresion existente
 y su tabla contrastada; resolver decisiones de aprender/evolucionar antes de consumir.

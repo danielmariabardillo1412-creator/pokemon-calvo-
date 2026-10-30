@@ -1,15 +1,14 @@
 extends RefCounted
 
-# Field mutations of a staged owned creature. Medicine amounts come from the same
-# contract as native battles. EV berries follow the pinned Essentials reference.
+# Field mutations of a staged owned creature. Recovery rules are compiled from
+# pinned RHH data and checked against the accepted native medicine contract.
 const Training = preload("res://modules/inventory/field_training_effects.gd")
 const Mochi = preload("res://modules/inventory/field_mochi_effects.gd")
 const PPBoost = preload("res://modules/inventory/field_pp_boost_effects.gd")
 const Abilities = preload("res://modules/inventory/field_ability_effects.gd")
 const Friendship = preload("res://modules/inventory/field_friendship_effects.gd")
 const Medicine = preload("res://modules/inventory/battle_medicine_profile.gd")
-const BITTER_HERBS := {"energy_powder": ["super_potion", 5, 10], "energy_root": ["hyper_potion", 10, 15], "heal_powder": ["full_heal", 5, 10]}
-const RECOVERY_PROFILE := "res://modules/inventory/field_recovery_profile.json"
+const RECOVERY_PROFILE := "res://modules/inventory/imported_recovery_v19.json"
 static var _recovery: Dictionary = {}
 const STATUS := {"brn": "burn", "psn": "poison", "tox": "badly_poisoned", "par": "paralysis", "slp": "sleep", "frz": "freeze"}
 const EV_BERRIES := {"pomeg_berry": "hp", "kelpsy_berry": "attack", "qualot_berry": "defense", "hondew_berry": "special_attack", "grepa_berry": "special_defense", "tamato_berry": "speed"}
@@ -19,18 +18,44 @@ static func deny(reason: String) -> Dictionary:
 	return {"accepted": false, "status": "REJECTED", "reason": reason}
 
 
-static func recovery_items() -> Dictionary:
+static func _load_recovery() -> void:
 	if _recovery.is_empty():
 		_recovery = JSON.parse_string(FileAccess.get_file_as_string(RECOVERY_PROFILE)).items
+
+
+static func imported_recovery_items() -> Dictionary:
+	_load_recovery()
 	return _recovery.duplicate(true)
 
 
+static func recovery_items() -> Dictionary:
+	# Preserve the older extra-recovery view: native medicine and bitter herbs
+	# have separate presentation contracts, even though their executor is shared.
+	_load_recovery()
+	var result: Dictionary = {}
+	for id: String in _recovery:
+		if recovery_supports(StringName(id)): result[id] = _recovery_spec(StringName(id))
+	return result
+
+
 static func recovery_supports(item_id: StringName) -> bool:
-	return recovery_items().has(String(item_id))
+	_load_recovery()
+	return _recovery.has(String(item_id)) and not Medicine.supports(item_id) and not bitter_supports(item_id)
+
+
+static func bitter_supports(item_id: StringName) -> bool:
+	return _recovery_spec(item_id).has("friendship_loss")
+
+
+static func consumes_on_use(item_id: StringName) -> bool:
+	# Other families retain their existing one-unit transaction.
+	_load_recovery()
+	return bool(_recovery.get(String(item_id), {}).get("consume", true))
 
 
 static func supports(item_id: StringName) -> bool:
-	return Mochi.supports(item_id) or Abilities.supports(item_id) or PPBoost.supports(item_id) or Training.supports(item_id) or Medicine.supports(item_id) or EV_BERRIES.has(String(item_id)) or BITTER_HERBS.has(String(item_id)) or recovery_supports(item_id)
+	_load_recovery()
+	return Mochi.supports(item_id) or Abilities.supports(item_id) or PPBoost.supports(item_id) or Training.supports(item_id) or EV_BERRIES.has(String(item_id)) or _recovery.has(String(item_id))
 
 
 static func source_validation_error(creature: CreatureInstance, item_id: StringName, move_slot: int, catalogs: DefinitionCatalog) -> String:
@@ -38,11 +63,13 @@ static func source_validation_error(creature: CreatureInstance, item_id: StringN
 	if Mochi.supports(item_id): return Mochi.validation_error(creature, move_slot, catalogs)
 	if Abilities.supports(item_id): return Abilities.validation_error(creature, move_slot, catalogs)
 	if PPBoost.supports(item_id): return PPBoost.validation_error(creature, move_slot, catalogs)
+	if bitter_supports(item_id) and (creature == null or creature.friendship < 0 or creature.friendship > 255): return "invalid_training_state"
 	return Training.validation_error(creature, move_slot, catalogs) if Training.supports(item_id) else ""
 
 
 static func _recovery_spec(item_id: StringName) -> Dictionary:
-	return Medicine.items().get(String(item_id), recovery_items().get(String(item_id), {}))
+	_load_recovery()
+	return _recovery.get(String(item_id), {}).get("effect", {}).duplicate(true)
 
 
 static func pp_target_required(item_id: StringName) -> bool:
@@ -60,9 +87,9 @@ static func apply(creature: CreatureInstance, item_id: StringName, move_slot: in
 	if PPBoost.supports(item_id): return PPBoost.apply(creature, item_id, move_slot, catalogs)
 	if Training.supports(item_id): return Training.apply(creature, item_id, move_slot, catalogs)
 	if EV_BERRIES.has(String(item_id)): return _ev_berry(creature, item_id, move_slot, catalogs)
-	if BITTER_HERBS.has(String(item_id)): return _bitter_herb(creature, item_id, move_slot, catalogs)
 	var spec := _recovery_spec(item_id)
 	if spec.is_empty(): return deny("field_effect_not_connected")
+	if spec.has("friendship_loss") and (creature.friendship < 0 or creature.friendship > 255): return deny("invalid_training_state")
 	var slots: Array[BattleMoveSlot] = []
 	if spec.has("pp"):
 		if spec.scope == "one":
@@ -89,20 +116,11 @@ static func apply(creature: CreatureInstance, item_id: StringName, move_slot: in
 	for slot: BattleMoveSlot in slots:
 		slot.current_pp = mini(slot.max_pp, slot.current_pp + (slot.max_pp if spec.pp is String else int(spec.pp)))
 	if creature.to_dict() == before: return deny("item_has_no_effect")
-	return {"accepted": true, "status": "APPLIED", "action": "medicine"}
-
-
-static func _bitter_herb(creature: CreatureInstance, item_id: StringName, move_slot: int, catalogs: DefinitionCatalog) -> Dictionary:
-	if creature.friendship < 0 or creature.friendship > 255: return deny("invalid_training_state")
-	var herb: Array = BITTER_HERBS[String(item_id)]
-	# Reuse modern medicine effects on the staged creature; never consume twice.
-	var result := apply(creature, StringName(herb[0]), move_slot, catalogs)
-	if not result.accepted: return result
-	var loss := int(herb[2] if creature.friendship >= 200 else herb[1])
-	# Negative changes receive neither Soothe Bell nor capture-origin bonuses.
-	creature.friendship = maxi(0, creature.friendship - loss)
-	result["action"] = "bitter_medicine"
-	return result
+	if spec.has("friendship_loss"):
+		var tier := 0 if creature.friendship < 100 else 1 if creature.friendship < 200 else 2
+		# Apply negative friendship only after a real recovery, without bonuses.
+		creature.friendship = maxi(0, creature.friendship - int(spec.friendship_loss[tier]))
+	return {"accepted": true, "status": "APPLIED", "action": "bitter_medicine" if spec.has("friendship_loss") else "medicine"}
 
 
 static func _ev_berry(creature: CreatureInstance, item_id: StringName, move_slot: int, catalogs: DefinitionCatalog) -> Dictionary:

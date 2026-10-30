@@ -1,5 +1,10 @@
 # Próximo trabajo — 2026-10-30
 
+V19: [importación automática por familias](ITEM_IMPORT_V19.md). Se compilan 42
+objetos de recuperación en bloque: 41 rutas anteriores conservadas y Flauta Azul
+nueva, reutilizable. Son 77 efectos de campo; los 19 equipables pendientes no
+cambian. La clasificación de 2.222 IDs no certifica sus mecánicas completas.
+
 ## Limpieza y correcciones cerradas
 
 Se completó la secuencia siguiente; resultados y límites en CLEANUP.md y

@@ -1,5 +1,10 @@
 # Empezar aquí — 2026-10-30
 
+V19: [importación automática por familias](ITEM_IMPORT_V19.md). Se compilan 42
+objetos de recuperación en bloque: 41 rutas anteriores conservadas y Flauta Azul
+nueva, reutilizable. Son 77 efectos de campo; los 19 equipables pendientes no
+cambian. La clasificación de 2.222 IDs no certifica sus mecánicas completas.
+
 1. Leer `AGENTS.md` en la raíz: copia activa, original protegido y límites.
 2. Leer [PROJECT_STATE.md](PROJECT_STATE.md): estado vigente y cobertura.
 3. Leer [NEXT_STEPS.md](NEXT_STEPS.md): familias pendientes y límites.

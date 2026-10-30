@@ -156,10 +156,10 @@ func _refresh_choices() -> void:
 		_description.text += " Se consume solo si tiene efecto."
 	elif service.FieldEffects.Training.supports(_selected_item()):
 		_description.text = "Aumenta los puntos de esfuerzo de una estadística y la amistad. Se consume solo si tiene efecto."
-	elif service.FieldEffects.BITTER_HERBS.has(String(_selected_item())):
+	elif service.FieldEffects.bitter_supports(_selected_item()):
 		_description.text = "Medicina amarga: cura al Pokémon, pero reduce su amistad. Se consume solo si tiene efecto."
 	elif service.Medicine.supports(_selected_item()) or service.FieldEffects.recovery_supports(_selected_item()):
-		_description.text = "Medicina para el Pokémon seleccionado. Se consume solo si tiene efecto."
+		_description.text = "Medicina para el Pokémon seleccionado. Se consume solo si tiene efecto." if service.FieldEffects.consumes_on_use(_selected_item()) else "Despierta al Pokémon seleccionado. Puede reutilizarse; no se consume."
 	elif service.FieldEffects.EV_BERRIES.has(String(_selected_item())):
 		_description.text = "Reduce hasta 10 EV de una estadística y aumenta la amistad."
 	_use.disabled = _selected_item() == &"" or creature == null

@@ -259,7 +259,7 @@ func _apply_field_effect(item_id: StringName, creature_id: StringName, move_slot
 		if copy.to_dict() != expected: return _deny("invalid_ability_state")
 		if _boundary(item_id) != "" or not is_same(owner.owned_creature(creature_id), creature) or _item_state_stamp(item_id, creature) != ability.stamp: return _deny("ability_state_changed")
 	var staged := _bag_copy()
-	if not staged.remove(item_id): return _deny("item_not_owned")
+	if FieldEffects.consumes_on_use(item_id) and not staged.remove(item_id): return _deny("item_not_owned")
 	if not owner.replace_owned_same_identity(copy): return _deny("ownership_changed")
 	_publish_bag(staged)
 	if creature.status_state.persistent_id == &"sleep" and copy.status_state.persistent_id != &"sleep": sleep_clocks.erase(String(creature_id))
