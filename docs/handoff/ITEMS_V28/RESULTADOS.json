@@ -161,7 +161,7 @@
       "requires_explicit_competitive_relevance_for_next_work": true
     },
     "block_4": {
-      "status": "FAILED_PARSE_FIX_PENDING_RETEST",
+      "status": "SECOND_PARSE_FAILURE_FIXED_RETEST_PENDING",
       "items": [
         "safety_goggles",
         "covert_cloak",
@@ -178,7 +178,15 @@
       "failed_job": 124608393409,
       "failed_sha": "aae2d98606890e94af14765d7391e854e4499547",
       "error": "GDScript parse error line 99, unexpected ternary parser",
-      "effect_tests_executed": false
+      "effect_tests_executed": false,
+      "second_failed": {
+        "sha": "c111b3d044bde60cb51a85a9d6a3b400e849bae4",
+        "run_id": 41225706687,
+        "job_id": 124609309942,
+        "reason": "unclosed check() after native held owner compare, reported at following if line 101"
+      },
+      "static_bracket_validation": "PASS",
+      "functional_test_status": "NOT_RUN_YET"
     }
   },
   "limitations": [

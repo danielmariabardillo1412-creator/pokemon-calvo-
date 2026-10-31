@@ -97,7 +97,7 @@ func _native_protection(spec: Dictionary, equipped: bool) -> void:
 	if not equipped: expected_held = &""
 	var active: CreatureInstance = session.battle_state().creature(id)
 	check("protection exact battle owner and held state " + String(item),
-		active != null and active.held_item_id == expected_held
+		active != null and active.held_item_id == expected_held)
 	if active != null:
 		var observed := _protected_state(active, String(spec.effect))
 		if not equipped: observed = _unprotected_state(active, String(spec.effect))
