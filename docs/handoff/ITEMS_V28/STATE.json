@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "mission": "ITEMS_V28",
-  "status": "IN_PROGRESS_BLOCKS_0_2_VERIFIED",
+  "status": "BLOCK_3_SCOPED_NOT_IMPLEMENTED",
   "base_branch": "main",
   "base_commit": "233b1a4f15ee4df7301e2c5acf8aed84a8f40626",
   "working_branch": "codex/items-v28-from-main",
@@ -14,7 +14,7 @@
     "code_identity_from_v3": true,
     "last_verified_commit": "69e15d74d04063dbe9613575b8618062e1efbed7"
   },
-  "next_action": "Select independently implementable new item family only after V27/current status check; update WORK_ORDER before editing; preserve PR118 draft and stable main. GPU/manual and worker lifecycle debt remain.",
+  "next_action": "Implement only new beast-ball domain handler and new real capture test, hook into existing item CI, inspect actual failures and document.",
   "main_is_official_v27": true,
   "all_2222_items_functional": false,
   "gpu_manual_review": "PENDING",
@@ -100,5 +100,16 @@
       "not all possible item interactions/switch/suppression timing",
       "auxiliary process PID errors on successful Ubuntu log"
     ]
+  },
+  "block_3": {
+    "status": "ALLOWLIST_DECLARED_IMPLEMENTATION_PENDING",
+    "family": "ULTRA_BEAST_CAPTURE",
+    "item_ids": [
+      "beast_ball"
+    ],
+    "scope": "GenVII+ ball modifier in calvo_capture_v1, 11 canonical UBs, validated through actual capture services and physical bag",
+    "depends_on": "existing capture system only",
+    "new_tests": "NOT_WRITTEN",
+    "ci": "NOT_RUN"
   }
 }
