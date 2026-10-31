@@ -233,6 +233,24 @@
       "windows_publication": "PUBLICATION_V27 PASS",
       "unix_pid_error_messages": 19,
       "gpu_manual": "NOT_RUN"
+    },
+    "block_5": {
+      "status": "TESTS_COMMITTED_NOT_VERIFIED",
+      "ids": [
+        "muscle_band",
+        "wise_glasses",
+        "expert_belt"
+      ],
+      "official_pokeapi_ids": [
+        243,
+        244,
+        245
+      ],
+      "test": "tests/gameplay/competitive_damage_items_v28.gd",
+      "native_sessions_planned": 12,
+      "physical_map_routes_planned": 3,
+      "ability_overlap": "DEFERRED, using empty ability to isolate item",
+      "ci": null
     }
   },
   "limitations": [
