@@ -353,24 +353,37 @@
     "Economy, Exp. Share, trade evolution and other profiles pending"
   ],
   "automation_prototype": {
-    "status": "LOCAL_SCOPED_VERIFIED_AWAITING_CI",
+    "status": "SCOPED_CI_VERIFIED",
+    "family": "DECLARATIVE_CHOICE_INTEGRATION_PROTOTYPE",
+    "functional_sha": "0c1f48eb4bd40ca15d794847d89c16ea6614ceb9",
     "ids": [
       "choice_band",
       "choice_specs",
       "choice_scarf"
     ],
-    "functional_sha": null,
-    "contract_unit_tests": 14,
-    "ci": {
-      "status": "PENDING",
-      "ubuntu": "PENDING",
-      "windows": "PENDING",
-      "regressions": "PENDING"
+    "checks_per_platform": 665,
+    "scenarios_per_platform": 15,
+    "contract_unit_tests_per_platform": 14,
+    "competitive_counts": {
+      "selected_candidates": 61,
+      "v28_verified_ids": 22,
+      "historical_contexts_pending_integral_v28_proof": 35,
+      "blocked_dependencies": 4
     },
-    "next_step": "Push coherent functional commit; require real Ubuntu/Windows Godot plus all unchanged regressions, then bind result to SHA/run URL before certification.",
-    "local_checks": 665,
-    "scenarios": 15,
-    "descriptor": "tests/fixtures/item_automation_v28/choice_items.json",
-    "report": "docs/handoff/ITEMS_V28/AUTOMATION_RESULTS.json"
+    "next_step": "Prototype mission complete. Review reusable contract; future families require their own observable expectations, not new simulations per item. Prioritize passive/survival family in ACCELERATION_PLAN, keep dependencies and PID diagnostics separate. No automatic PR merge.",
+    "ci": {
+      "status": "PASS",
+      "run_id": 41237512322,
+      "run_url": "https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41237512322",
+      "workflows_total": 20,
+      "workflows_success": 20
+    },
+    "diagnostics": {
+      "linux_prototype_pid": 48,
+      "linux_full_job_pid_messages": 63,
+      "windows_prototype_pid": 0,
+      "status": "OPEN_TECHNICAL_DEBT"
+    },
+    "gpu_manual": "NOT_RUN"
   }
 }

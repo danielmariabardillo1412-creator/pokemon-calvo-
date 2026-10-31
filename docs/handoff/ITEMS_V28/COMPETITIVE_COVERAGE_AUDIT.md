@@ -4,8 +4,8 @@
 Se cruzan los **47 objetos equipados distintos** que aparecen en los equipos predefinidos competitivos de **Pokémon Showdown, Gen 9, seis categorías Uber/OU/UU/RU/NU/PU** con la matriz de 2.222 IDs de Pokémon Calvo y los bloques con prueba integral de ITEMS_V28. **No equivale a todos los objetos usados en toda modalidad competitiva, VGC o randomlocke**. Es una lista concreta que puede ampliarse por evidencia; no se cuentan indiscriminadamente los 2.222 IDs.
 
 - 47 de la referencia externa: **42** con escenarios de efecto documentados NO exhaustivos en la matriz V8; **4** con dependencia/contexto especial sin cerrar; **1** excluido (`wide_lens`). Los 47 existen en el simulador; 46 transferencias/equipamientos antiguos verificados; el excluido no debe reactivarse sin decisión.
-- V28: **19 IDs** con ruta ampliada (7 EV + 3 defensivos + 9 de daño), de los que **4 están dentro de los 47**: `covert_cloak`, `expert_belt`, `mystic_water`, `never_melt_ice`. Los otros **15 son adicionales**.
-- **Objetivo operativo cuantificado = 47 + 15 - 1 excluido = 61 IDs**. De ellos **19** tienen prueba ampliada V28; **38** poseen escenarios de efecto previos, pero no cierre V28 por ID; **4** siguen bloqueados por dependencia. Pendiente de cierre ampliado: **42 = 38 verificables + 4 bloqueados**, NO 42 efectos por programar.
+- V28: **22 IDs** con ruta ampliada (7 EV + 3 defensivos + 9 de daño + 3 Elección), de los que **7 están dentro de los 47**: `covert_cloak`, `expert_belt`, `mystic_water`, `never_melt_ice`, `choice_band`, `choice_specs`, `choice_scarf`. Los otros **15 son adicionales**.
+- **Objetivo operativo cuantificado = 47 + 15 - 1 excluido = 61 IDs**. De ellos **22** tienen prueba ampliada V28; **35** poseen escenarios previos pero no cierre V28 por ID; **4** tienen dependencias. Pendiente de cierre ampliado: **39 = 35 verificables + 4 bloqueados**, no 39 efectos por programar.
 - El protocolo de V28 no reemplaza pruebas históricas, y un escenario nativo aprobado no certifica todos los disparadores, propietarios, persistencia y rutas gráficas. La revisión GPU/manual permanece pendiente.
 
 ## Fuentes con identidad verificable
@@ -21,12 +21,12 @@ Columnas: **V8** = E (escenario de efecto documentado pero no exhaustivo); D (co
 |---|---|---|---|
 | Heavy-Duty Boots | `heavy_duty_boots` | E | — |
 | Leftovers | `leftovers` | E | — |
-| Choice Scarf | `choice_scarf` | E | — |
+| Choice Scarf | `choice_scarf` | E | Sí, piloto declarativo |
 | Life Orb | `life_orb` | E | — |
 | Rocky Helmet | `rocky_helmet` | E | — |
-| Choice Specs | `choice_specs` | E | — |
+| Choice Specs | `choice_specs` | E | Sí, piloto declarativo |
 | Air Balloon | `air_balloon` | E | — |
-| Choice Band | `choice_band` | E | — |
+| Choice Band | `choice_band` | E | Sí, piloto declarativo |
 | Assault Vest | `assault_vest` | E | — |
 | Loaded Dice | `loaded_dice` | E | — |
 | Lum Berry | `lum_berry` | E | — |
@@ -74,3 +74,7 @@ Columnas: **V8** = E (escenario de efecto documentado pero no exhaustivo); D (co
 La mayor deuda de certificación de la muestra NO son pequeños potenciadores de tipo. Priorizar, por orden de aparición en factory sets, estas familias que ya tienen escenarios nativos: `heavy_duty_boots`, `leftovers`, `choice_scarf`, `life_orb`, `rocky_helmet`, `choice_specs`, `air_balloon`, `choice_band` (ocho IDs). Comprobar qué rutas físicas ya están cubiertas en V27, extender solo las ausentes por familia, sin reimplementar fórmulas ni repetir inventarios. Para objetos con dependencia: `wellspring_mask`, `cornerstone_mask`, `griseous_core`, `rusted_sword`; documentar qué sistema de forma/cambio falta sin dar por cerrada mecánica. `wide_lens` está excluido, no incorporarlo por la lista externa.
 
 **Decisión de alcance pendiente del juego:** esta es una referencia base para *combates individuales competitivos* + ítems V28, no un canon universal de randomlocke. Las reglas específicas del randomlocke deciden qué equipables, curación en combate, generaciones, formas y formatos se permiten. El contador debe actualizarse solo cuando se cambie deliberadamente esa selección y contrastándola con pruebas, no a base de estimaciones sin nombre.
+
+## Cierre del piloto Elección
+
+Código 0c1f48eb4bd40ca15d794847d89c16ea6614ceb9; [Actions #41237512322](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41237512322), 20/20 workflows PASS. Los tres Choice recorren 15 escenarios compartidos, 665 comprobaciones en Ubuntu y 665 en Windows: daño específico/control, orden de turno, propiedad, bloqueo, persistencia, cambio de elección y mochila/mapa real. Los dos artefactos se descargaron y revalidaron por SHA-256 y escenario. No se reimplementaron efectos ni se certifican todas las interacciones. Avisos de ciclo de vida PID Linux y GPU/manual siguen pendientes; ver AUTOMATION_RESULTS.json.
