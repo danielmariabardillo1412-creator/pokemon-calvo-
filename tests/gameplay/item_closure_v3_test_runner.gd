@@ -278,6 +278,13 @@ func _native_ev_remaining_training_items() -> void:
 		await battle.close()
 
 func _map_power() -> void:
+	# Las seis Power y Macho Brace recorren ahora la misma ruta física
+	# mochila -> encuentro -> cierre -> persistencia usada por power_weight.
+	for item: String in POWER_ITEMS:
+		await _map_training_item(item)
+	await _map_training_item("macho_brace")
+
+func _map_training_item(item: String) -> void:
 	scene = load("res://scenes/visual/field_demo.tscn").instantiate()
 	root.add_child(scene)
 	await process_frame
@@ -291,50 +298,74 @@ func _map_power() -> void:
 	var owner: PlayerCollection = scene.field_collection()
 	var own_id: StringName = owner.party.get_creatures()[0].instance_id
 	var creature := _mon(&"mew", 50, own_id, ["quick_attack", "growl"])
-	check("map Power owner replacement", owner.replace_owned_same_identity(creature))
-	owner.inventory.add(&"power_weight", 2)
-	check("map real item bag opens", scene.toggle_item_bag())
+	check("map training owner replacement " + item, owner.replace_owned_same_identity(creature))
+	owner.inventory.add(StringName(item), 2)
+	check("map real item bag opens " + item, scene.toggle_item_bag())
 	var bag = scene._item_bag
-	_select(bag, "power_weight")
-	check("real bag equips Power item", bag._apply("equip").accepted)
+	_select(bag, item)
+	check("real bag equips training item " + item, bag._apply("equip").accepted)
 	bag.hide()
 	await process_frame
 	var bridge = scene._native_battles
-	bridge.save_path = OUT_V3 + "map_power_save.json"
-	check("Power map saved before battle", bridge.save_game())
-	check("Power map loaded before battle", await bridge.load_game())
+	# Guardados aislados por objeto; no heredar el checkpoint del caso anterior.
+	bridge.save_path = OUT_V3 + "map_training_" + item + "_save.json"
+	check("training map saved before battle " + item, bridge.save_game())
+	check("training map loaded before battle " + item, await bridge.load_game())
 	owner = scene.field_collection()
-	var before_ev := int(owner.owned_creature(own_id).evs.get("hp", 0))
+	var prior := owner.owned_creature(own_id)
+	var before_evs: Dictionary = prior.evs.duplicate(true)
+	var prior_xp: int = prior.experience
 	scene.player.global_position = Vector2(420, 150)
 	await scene._on_player_step_completed(scene.player.global_position)
 	var view = bridge.view
 	view._playback.set_process(false)
-	check("Power map battle activated", view.session != null and view.session.battle_state() != null)
+	check("training map native battle activated " + item, view.session != null and view.session.battle_state() != null)
 	if view.session == null:
 		scene.queue_free()
 		await process_frame
 		return
-	check("Power battle checkpoint saves", bridge.save_game())
-	check("Power battle checkpoint restores", await bridge.load_game())
+	check("training battle checkpoint saves " + item, bridge.save_game())
+	check("training battle checkpoint restores " + item, await bridge.load_game())
 	view._playback.set_process(false)
 	var action: Dictionary = await view.choose("move 1")
-	check("map Power attack accepted", action.accepted)
+	check("training map native attack accepted " + item, action.accepted)
 	if not action.accepted:
 		await view.session.close()
 		scene.queue_free()
 		await process_frame
 		return
 	await _drain_view(view)
-	check("Power map finishes by victory", view.session.completion_reason == "VICTORY")
+	check("training map native victory " + item, view.session.completion_reason == "VICTORY")
 	await bridge.leave_battle()
 	owner = scene.field_collection()
-	var expected := int(catalogs.species(&"caterpie").ev_yield.get("hp", 0)) + 8
-	check("map Power grants exact EVs", int(owner.owned_creature(own_id).evs.get("hp", 0)) - before_ev == expected)
-	check("real bag unit physically preserved", _physical_medicine(owner, &"power_weight") == 2)
-	check("Power map final save", bridge.save_game())
-	check("Power map final load", await bridge.load_game())
-	check("map EV and item survive reload", int(scene.field_collection().owned_creature(own_id).evs.get("hp", 0)) == before_ev + expected and _physical_medicine(scene.field_collection(), &"power_weight") == 2)
-	routes.append({"family": "EV_MAP_BAG_SAVE", "item": "power_weight", "foe": "caterpie"})
+	var after := owner.owned_creature(own_id)
+	var defeated: CreatureSpecies = catalogs.species(&"caterpie")
+	var gained_total := 0
+	for key: String in ProgressionRuleset.STAT_KEYS:
+		var amount := int(defeated.ev_yield.get(key, 0))
+		if item == "macho_brace":
+			amount *= 2
+		elif String(POWER_ITEMS.get(item, "")) == key:
+			amount += 8
+		gained_total += amount
+		check("training map EV stat " + item + "/" + key,
+			int(after.evs.get(key, 0)) == int(before_evs.get(key, 0)) + amount)
+	check("training map total EVs " + item,
+		_sum_evs(after) - _sum_dict(before_evs) == gained_total)
+	check("training map XP granted " + item, after.experience > prior_xp)
+	check("training item owner and physical stock " + item,
+		String(after.held_item_id) == item and not after.held_item_consumed
+		and _physical_medicine(owner, StringName(item)) == 2)
+	check("training map final save " + item, bridge.save_game())
+	check("training map final load " + item, await bridge.load_game())
+	owner = scene.field_collection()
+	var reloaded := owner.owned_creature(own_id)
+	check("training map EVs/item survive disk reload " + item,
+		reloaded.evs == after.evs and reloaded.experience == after.experience
+		and String(reloaded.held_item_id) == item
+		and _physical_medicine(owner, StringName(item)) == 2)
+	routes.append({"family": "EV_MAP_BAG_SAVE", "item": item,
+		"foe": "caterpie", "gameplay_route": true})
 	if view.session != null:
 		await view.session.close()
 	scene.queue_free()

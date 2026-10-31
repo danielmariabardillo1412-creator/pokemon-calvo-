@@ -74,7 +74,22 @@
         "nonblocking_for_this_ci": true
       }
     ],
-    "next": "Design next independent item family with actual game consumers; keep main stable; document before changing."
+    "next": "Design next independent item family with actual game consumers; keep main stable; document before changing.",
+    "block_2": {
+      "status": "TESTS_COMMITTED_NOT_RUN",
+      "items": [
+        "power_weight",
+        "power_bracer",
+        "power_belt",
+        "power_lens",
+        "power_band",
+        "power_anklet",
+        "macho_brace"
+      ],
+      "route": "real scene, physical bag equip, save/load before and after combat, native encounter, EV 6 stats and XP, held owner, inventory",
+      "run_id": null,
+      "scope_limit": "separate real map per item; not second battle for each, GPU/manual remains pending"
+    }
   },
   "limitations": [
     "2222 IDs inventoried do not imply all effects functional",
