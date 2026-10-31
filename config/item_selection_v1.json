@@ -9,6 +9,16 @@
     "sacred_ash": "revives_fainted_pokemon",
     "max_honey": "revives_fainted_pokemon",
     "linking_cord": "user_excludes_trade_evolution_replacement_item",
+    "dragon_scale": "trade_evolution_item_not_needed_in_level_evolution_design",
+    "dubious_disc": "trade_evolution_item_not_needed_in_level_evolution_design",
+    "electirizer": "trade_evolution_item_not_needed_in_level_evolution_design",
+    "magmarizer": "trade_evolution_item_not_needed_in_level_evolution_design",
+    "prism_scale": "trade_evolution_item_not_needed_in_level_evolution_design",
+    "protector": "trade_evolution_item_not_needed_in_level_evolution_design",
+    "reaper_cloth": "trade_evolution_item_not_needed_in_level_evolution_design",
+    "sachet": "trade_evolution_item_not_needed_in_level_evolution_design",
+    "up_grade": "trade_evolution_item_not_needed_in_level_evolution_design",
+    "whipped_dream": "trade_evolution_item_not_needed_in_level_evolution_design",
     "wide_lens": "friend_named_ban_confirmed_by_user_delegation",
     "bright_powder": "friend_named_ban_confirmed_by_user_delegation"
   },
@@ -22,6 +32,7 @@
     "Poke Doll has an escape effect; do not classify it as a purely decorative plush.",
     "Max Honey also revives, confirmed by PokeAPI item 1630 flavor text.",
     "Story/futuristic items, machine version mapping and unsupported mechanics require separate review.",
-    "Linking Cord is excluded by the user. Trade evolutions will be adapted later; no replacement levels are active or selected."
+    "Linking Cord is excluded by the user. Trade evolutions will be adapted later; no replacement levels are active or selected.",
+    "V26 excludes the ten reviewed trade-evolution-only items. Generic Fling compatibility alone does not retain an otherwise obsolete item. Metal Coat, King's Rock, Deep Sea Tooth and Deep Sea Scale remain permitted for their separate battle effects."
   ]
 }

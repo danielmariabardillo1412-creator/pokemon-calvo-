@@ -15,8 +15,9 @@ func _initialize() -> void:
 	var excluded: Array[String] = []
 	for id: String in data.items:
 		if not policy.content_allowed(StringName(id)): excluded.append(id)
-	check("exact confirmed scope is 44 IDs", excluded.size() == 44)
-	for id: String in ["revive", "max_revive", "revival_herb", "sacred_ash", "max_honey", "bright_powder", "wide_lens", "dream_mail", "linking_cord"]:
+	check("exact confirmed scope is 54 IDs", excluded.size() == 54)
+	for id: String in ["revive", "max_revive", "revival_herb", "sacred_ash", "max_honey", "bright_powder", "wide_lens", "dream_mail", "linking_cord",
+		"dragon_scale", "dubious_disc", "electirizer", "magmarizer", "prism_scale", "protector", "reaper_cloth", "sachet", "up_grade", "whipped_dream"]:
 		check("confirmed ban cannot enter even a supported pool " + id, not policy.can_generate(StringName(id), {id: true}) and not policy.exclusion_reason(StringName(id)).is_empty())
 	check("no additional evasion ban inferred", policy.content_allowed(&"lax_incense"))
 	check("functional Poke Doll is not classified as decoration", policy.content_allowed(&"poke_doll"))

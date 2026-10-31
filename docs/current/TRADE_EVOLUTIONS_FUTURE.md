@@ -18,5 +18,11 @@ referencia para investigar más adelante, no una norma adoptada para este juego.
 Al retomarlo habrá que resolver niveles, intercambios con objeto, parejas de
 especies, variantes regionales/tamaños y destinos múltiples (p. ej., Clamperl y
 Slowpoke), antes de convertir registros en un adaptador de reglas del juego.
-Se conservarán los objetos con otras funciones de combate. La revisión actual
-de candidatos está en ITEM_SCOPE_V25.md/.json; solo Cordón está excluido ahora.
+Se conservarán los objetos con otras funciones de combate. Cordón y los diez
+evolutivos revisados en ITEM_TRADE_EXCLUSIONS_V26.md/.json quedan excluidos del
+conjunto utilizable. La futura adaptación no deberá reintroducir automáticamente
+requisitos de esos objetos al copiar una referencia de otro randomizador.
+
+El intercambio por sí mismo no fija un nivel mínimo oficial. Los niveles de
+las fases previas, cuando existan, no sustituyen la futura tabla de adaptación.
+Este apunte no implementa ningún cambio de evolución.
