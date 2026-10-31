@@ -16,7 +16,7 @@
     }
   },
   "v28": {
-    "tested_commit": "3a6a12a32e80352cfcc4ba3870957a583b26f323",
+    "tested_commit": "b9638283deb44d92c686f3d22f6fadbb27c2a1a4",
     "real_godot_runs": [
       {
         "commit": "c29db19343ad22717c49a44737099eacd8aa7473",
@@ -76,9 +76,18 @@
         "checks": 122,
         "errors": 0,
         "url": "https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41226013201"
+      },
+      {
+        "commit": "b9638283deb44d92c686f3d22f6fadbb27c2a1a4",
+        "run_id": 41227381283,
+        "result": "PASS",
+        "all_workflows": 20,
+        "checks": 164,
+        "errors": 0,
+        "url": "https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41227381283"
       }
     ],
-    "result": "BLOCKS_0_2_AND_4_SCOPED_CI_PASS_NOT_ALL_ITEMS_DONE",
+    "result": "SCOPED_CI_PASS_BLOCKS_0_2_4_5_NOT_ALL_ITEMS_DONE",
     "notes": "This document is a preparatory handoff, not test proof.",
     "test_expansion": {
       "status": "PASS",
@@ -127,6 +136,13 @@
         "observed_count": 19,
         "where": "Ubuntu verified item job 124610228040",
         "message": "ERROR: The process ... does not exist or is not a child, during multiple sessions; tests passed, console not clean"
+      },
+      {
+        "status": "OPEN",
+        "component": "Node worker/process lifecycle",
+        "observed_count": 30,
+        "where": "Ubuntu item job #124614247458",
+        "message": "ERROR: The process ... does not exist or is not a child. No gameplay assertions failed."
       }
     ],
     "next": "Design next independent item family with actual game consumers; keep main stable; document before changing.",
@@ -235,22 +251,39 @@
       "gpu_manual": "NOT_RUN"
     },
     "block_5": {
-      "status": "TESTS_COMMITTED_NOT_VERIFIED",
+      "status": "SCOPED_CI_VERIFIED",
+      "functional_commit": "b9638283deb44d92c686f3d22f6fadbb27c2a1a4",
+      "run_id": 41227381283,
+      "run_url": "https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41227381283",
+      "workflows_total": 20,
+      "workflows_passed": 20,
+      "checks": 164,
+      "errors": 0,
+      "ubuntu_job_id": 124614247458,
+      "windows_job_id": 124614247707,
       "ids": [
         "muscle_band",
         "wise_glasses",
         "expert_belt"
       ],
-      "official_pokeapi_ids": [
+      "official_ids": [
         243,
         244,
         245
       ],
-      "test": "tests/gameplay/competitive_damage_items_v28.gd",
-      "native_sessions_planned": 12,
-      "physical_map_routes_planned": 3,
-      "ability_overlap": "DEFERRED, using empty ability to isolate item",
-      "ci": null
+      "native_sessions": 12,
+      "physical_map_bag_save_routes": 3,
+      "ability_context": "EMPTY; not verified for abilities",
+      "windows": {
+        "gate": "PUBLICATION_V27 PASS",
+        "item_connections": 4993,
+        "savegame": 40
+      },
+      "limits": [
+        "30 Unix PID/worker messages not yet diagnosed",
+        "No graphical/GPU local test",
+        "No abilities context in native comparisons"
+      ]
     }
   },
   "limitations": [

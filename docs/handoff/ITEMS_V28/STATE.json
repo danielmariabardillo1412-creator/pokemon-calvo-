@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "mission": "ITEMS_V28",
-  "status": "BLOCK_5_WRITTEN_CI_PENDING",
+  "status": "IN_PROGRESS_BLOCKS_0_2_4_5_VERIFIED_BLOCK_3_CANCELLED",
   "base_branch": "main",
   "base_commit": "233b1a4f15ee4df7301e2c5acf8aed84a8f40626",
   "working_branch": "codex/items-v28-from-main",
@@ -14,7 +14,7 @@
     "code_identity_from_v3": true,
     "last_verified_commit": "69e15d74d04063dbe9613575b8618062e1efbed7"
   },
-  "next_action": "Verify new GitHub Actions; isolate failed only item job and logs. Preserve older 20 workflows. Record by SHA. No ability-dependent or beta items.",
+  "next_action": "Select next independent official competitive held-item family after comparing existing native cases & physical routes; defer ability interactions and beta items. Keep PR draft and main V27 unchanged.",
   "main_is_official_v27": true,
   "all_2222_items_functional": false,
   "gpu_manual_review": "PENDING",
@@ -48,27 +48,29 @@
     "total_workflows": 20,
     "success": 20,
     "failures": 0,
-    "run_id": 41226013201,
-    "run_url": "https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41226013201",
+    "run_id": 41227381283,
+    "run_url": "https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41227381283",
     "ubuntu_items_job_id": 124594448485,
-    "windows_portable_job_id": 124610228227,
+    "windows_portable_job_id": 124614247707,
     "headless_ev_checks": 202,
     "headless_ev_assertions_failed": 0,
     "windows_publication_gate": "PUBLICATION_V27 PASS",
     "worker_pid_errors_observed_ubuntu": 7,
     "worker_pid_errors_status": "PENDING_TECHNICAL_DIAGNOSIS",
-    "last_verified_functional_commit": "3a6a12a32e80352cfcc4ba3870957a583b26f323",
+    "last_verified_functional_commit": "b9638283deb44d92c686f3d22f6fadbb27c2a1a4",
     "all_workflows_success": 20,
     "all_workflows_total": 20,
-    "ubuntu_item_job_id": 124610228040,
+    "ubuntu_item_job_id": 124614247458,
     "ev_checks": 404,
     "ev_errors": 0,
     "native_cases": 908,
     "godot_mirror_checks": 23434,
-    "unix_worker_pid_error_messages": 19,
+    "unix_worker_pid_error_messages": 30,
     "unix_worker_pid_error_status": "OPEN_TECHNICAL_DEBT",
     "competitive_protection_checks": 122,
-    "competitive_protection_errors": 0
+    "competitive_protection_errors": 0,
+    "competitive_damage_checks": 164,
+    "competitive_damage_errors": 0
   },
   "block_2": {
     "status": "SCOPED_CI_VERIFIED",
@@ -174,7 +176,7 @@
     "beta_object_admission": "require local normalized + PokeAPI canonical index/detail main-series category + current selection policy; no unverified beta imports"
   },
   "block_5": {
-    "status": "TESTS_IMPLEMENTED_NOT_YET_VERIFIED",
+    "status": "SCOPED_CI_VERIFIED",
     "family": "COMPETITIVE_DAMAGE_ITEMS",
     "ids": [
       "muscle_band",
@@ -186,9 +188,19 @@
       244,
       245
     ],
-    "ability_assumptions": "ability_id empty for native baseline and positive; interactions pending",
-    "ci": "NOT_RUN",
-    "next": "write targeted runner + workflow step",
-    "test": "tests/gameplay/competitive_damage_items_v28.gd"
+    "functional_commit": "b9638283deb44d92c686f3d22f6fadbb27c2a1a4",
+    "ci_run_id": 41227381283,
+    "ubuntu_job_id": 124614247458,
+    "windows_job_id": 124614247707,
+    "assertions": 164,
+    "assertion_errors": 0,
+    "native_real_sessions": 12,
+    "map_bag_save_routes": 3,
+    "ability_combinations": "NOT_TESTED",
+    "status_note": "Objects already supported in simulator; added actual game integration and positive/negative contrast",
+    "warnings": [
+      "30 Unix subprocess PID errors in passed job; still open technical debt",
+      "No GPU/manual visual testing"
+    ]
   }
 }
