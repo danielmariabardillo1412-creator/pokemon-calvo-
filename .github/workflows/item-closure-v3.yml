@@ -115,7 +115,14 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          python -B tools/distribution/verify_update.py --godot "$(command -v godot)" --node "$(command -v node)" 2>&1 | tee item-portable-gate-v3.log
+          if python -B tools/distribution/verify_update.py --godot "$(command -v godot)" --node "$(command -v node)" 2>&1 | tee item-portable-gate-v3.log; then
+            echo "PUBLICATION_V27 completed; see report JSON in artifact"
+          else
+            echo "PUBLICATION_V27 failure: original logs, tests, and thresholds remain unchanged"
+            find .godot/publication_v27/runs -name results.json -print -exec tail -n 120 {} \;
+            find .godot/publication_v27/runs -name test_runner.log -print -exec tail -n 180 {} \;
+            exit 1
+          fi
       - name: Preserve CI logs and generated per-context matrix
         if: always()
         uses: actions/upload-artifact@v4
@@ -126,4 +133,5 @@ jobs:
             .godot/item_closure_v3/*.json
             .godot/publication_v27/runs/
           if-no-files-found: ignore
+          include-hidden-files: true
           retention-days: 14
