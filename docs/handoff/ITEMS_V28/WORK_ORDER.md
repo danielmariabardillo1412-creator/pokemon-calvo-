@@ -1,5 +1,51 @@
 # Orden de trabajo — ITEMS_V28
 
+## Prototipo de automatización Elección — allowlist previa (petición del usuario)
+
+Base de esta misión: `47f42aef1a518eefb744ad310f89b6e2d3ce7108`.
+Únicamente `choice_band`, `choice_specs`, `choice_scarf`. Se ensayan reglas ya
+existentes, no se importan ni implementan nuevas mecánicas.
+
+Archivos permitidos EXACTOS:
+- `tests/fixtures/item_automation_v28/choice_items.json` (nuevo descriptor).
+- `tests/gameplay/item_automation_v28.gd` y su `.uid` (nuevo ejecutor compartido).
+- `tools/item_audit/automation_v28.py` (orquestación, procedencia, guard e informe).
+- `tests/tools/test_item_automation_v28.py` (rechazos de descriptor/evidencia).
+- `.github/workflows/item-closure-v3.yml` (solo pasos/artefactos adicionales;
+  conservar todas las regresiones, umbrales, motores y jobs existentes).
+- `docs/handoff/ITEMS_V28/WORK_ORDER.md`, `START_HERE.md`, `STATE.json`,
+  `PROGRESS.md`, `RESULTADOS.json`, `COMPETITIVE_COVERAGE_AUDIT.md`.
+- `docs/handoff/ITEMS_V28/AUTOMATION_PROTOTYPE.md` y `AUTOMATION_RESULTS.json`.
+Salidas no versionadas: `.godot/item_automation_v28/**`.
+La importación Godot también puede crear cuatro metadatos UID NO versionados de
+scripts antiguos que no tenían UID: `modules/creatures/progression/battle_ev_rewards.gd.uid`,
+`tests/gameplay/competitive_damage_items_v28.gd.uid`,
+`tests/gameplay/competitive_protection_items_v28.gd.uid`,
+`tests/gameplay/item_closure_v3_test_runner.gd.uid`. Solo se tolera su formato
+`uid://...` generado por el motor y se inventarían en el informe; no se editan
+sus fuentes, no se versionan esos cuatro archivos ni se alteran sellos.
+
+Contrato: una tabla declarativa y el mismo ejecutor por familia, con expectativas
+diferentes de daño físico/especial/orden. Cada escenario/variante tiene colección,
+inventario y sesión nuevos; sin habilidad para aislar el objeto. Controles sin
+objeto y objeto en reserva/propietario incorrecto. Equipar por el servicio real,
+comprobar inmovilidad de campaña hasta publicación, objeto no consumido, bloqueo
+de elección y rechazo sin mutación, restauración del bloqueo, cambio que lo libera.
+Ruta física por cada ID: mochila/mapa, cambio de portador, guardar/cargar antes,
+durante y después del combate, cierre idempotente y conservación de existencias.
+La ruta del mapa usa Caterpie para cierre; no certifica por sí sola el bonus.
+
+Reutilizar helpers de los runners Godot V3/V18 y ejecutar sin cambios la batería
+`held_effect_sweep_v3.cjs`, proyección e inventario V3 en CI. No importar ese script
+como biblioteca (ejecuta un barrido en top-level); el nuevo prototipo usa la sesión
+Godot existente, que ya delega al mismo NativeEngine/@pkmn/sim fijado.
+Informes con ID/escenario, entradas/observaciones, controles, checks, errores,
+hashes de fuente/descriptor, SHA funcional y URL Actions. Resultado parcial hasta
+CI real, nunca verde por mera existencia/equipamiento. Cero objetos extra.
+
+Habilidades conservadas aparte en `codex/ability-audit-v1`, funcional `72548cde`,
+nota de reanudación `5d5f8ae`. No se traen cambios de esa rama a esta PR.
+
 Autorización del usuario 31-10-2026: proseguir objetos sobre V27 *oficial*; trabajar incrementalmente, conservar los fallos, documentar cada cambio y pruebas; `main` queda estable y no se toca directamente.
 
 Base inmutable de partida: `233b1a4f15ee4df7301e2c5acf8aed84a8f40626`, merge PR #116. Rama única `codex/items-v28-from-main` y PR en borrador hacia `main` (no merge automático).

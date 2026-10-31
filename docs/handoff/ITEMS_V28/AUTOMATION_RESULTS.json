@@ -1,0 +1,1038 @@
+{
+  "status": "LOCAL_SCOPED_VERIFIED_AWAITING_CI",
+  "base": "47f42aef1a518eefb744ad310f89b6e2d3ce7108",
+  "branch": "codex/items-v28-from-main",
+  "pr": 118,
+  "functional_sha": null,
+  "ids": [
+    "choice_band",
+    "choice_specs",
+    "choice_scarf"
+  ],
+  "local": {
+    "status": "SCOPED_VERIFIED",
+    "all_item_effects_certified": false,
+    "errors": [],
+    "execution": {
+      "status": "PASS",
+      "checks_reported": 665,
+      "errors": [],
+      "last_line": "ITEM_AUTOMATION_V28 PASS checks=665 ids=3 scenarios=15 errors=0",
+      "name": "item_automation",
+      "exit_code": 0,
+      "seconds": 80.48,
+      "log": ".godot/item_automation_v28/runs/1793477122558025400/item_automation.log",
+      "expected_negative_diagnostics": []
+    },
+    "checks": 665,
+    "godot_report": "godot.json",
+    "scenario_results": [
+      {
+        "checks": 42,
+        "errors": [],
+        "id": "choice_band",
+        "observed": {
+          "active": {
+            "damage": 64,
+            "evidence": "choice_band_physical_damage_active.json",
+            "first_actor": "own",
+            "owner": "own",
+            "sha256": "a9586345aaf7aff25cb983f8ab8e9f0be9562c6f58fbf8384e4e1a1e6f6b2ae3",
+            "valid": true
+          },
+          "none": {
+            "damage": 43,
+            "evidence": "choice_band_physical_damage_none.json",
+            "first_actor": "own",
+            "owner": "none",
+            "sha256": "54b0588f4dbeb9bd177b2229cb9a7587db543c0fbf9fed8055d49ddde8d5a4d4",
+            "valid": true
+          },
+          "reserve": {
+            "damage": 43,
+            "evidence": "choice_band_physical_damage_reserve.json",
+            "first_actor": "own",
+            "owner": "reserve",
+            "sha256": "e39227bcf4a56285c1c8b589f1ab162b57d02f1e9ed0b2d5baaeb6865b107c73",
+            "valid": true
+          }
+        },
+        "scenario": "physical_damage",
+        "status": "SCOPED_VERIFIED"
+      },
+      {
+        "checks": 42,
+        "errors": [],
+        "id": "choice_band",
+        "observed": {
+          "active": {
+            "damage": 52,
+            "evidence": "choice_band_special_damage_active.json",
+            "first_actor": "own",
+            "owner": "own",
+            "sha256": "b06d3fa2476555ca4e5b5ca9a3f1a28e565cfa47ba48282c799215fccd105fee",
+            "valid": true
+          },
+          "none": {
+            "damage": 52,
+            "evidence": "choice_band_special_damage_none.json",
+            "first_actor": "own",
+            "owner": "none",
+            "sha256": "13c74a1dfb8cc33757a1d5f52a92e36cb72d50a4a7355641ec28b4591611e0c0",
+            "valid": true
+          },
+          "reserve": {
+            "damage": 52,
+            "evidence": "choice_band_special_damage_reserve.json",
+            "first_actor": "own",
+            "owner": "reserve",
+            "sha256": "e0dd958f4f69abfe7dfd76375df5b7e58ec6abb93640358b441f1a9297dedc30",
+            "valid": true
+          }
+        },
+        "scenario": "special_damage",
+        "status": "SCOPED_VERIFIED"
+      },
+      {
+        "checks": 42,
+        "errors": [],
+        "id": "choice_band",
+        "observed": {
+          "active": {
+            "damage": 20,
+            "evidence": "choice_band_speed_order_active.json",
+            "first_actor": "foe",
+            "owner": "own",
+            "sha256": "d37f87140e2c062090f4e1833a789a20ce0f929ba9e3c3dbc7e8199dab96b4de",
+            "valid": true
+          },
+          "none": {
+            "damage": 20,
+            "evidence": "choice_band_speed_order_none.json",
+            "first_actor": "foe",
+            "owner": "none",
+            "sha256": "51f1051ff5912c42efbc6b7009589196999d80a58c4ec2271af7bbc0f352c56c",
+            "valid": true
+          },
+          "reserve": {
+            "damage": 20,
+            "evidence": "choice_band_speed_order_reserve.json",
+            "first_actor": "foe",
+            "owner": "reserve",
+            "sha256": "b89801881e1a5ec152c80c545e32f56b3ad6dd6a435af576bbc58913ebb1799b",
+            "valid": true
+          }
+        },
+        "scenario": "speed_order",
+        "status": "SCOPED_VERIFIED"
+      },
+      {
+        "checks": 69,
+        "errors": [],
+        "id": "choice_band",
+        "observed": {
+          "active": {
+            "alternate_accepted": false,
+            "disabled": true,
+            "evidence": "choice_band_lock_restore_switch_active_after.json",
+            "restored": true,
+            "sha256": "6253efed67f5bc497955f63410db41b592a877c81ab175ae850274eb2348f125",
+            "unlocked_after_switch": true,
+            "valid": true
+          },
+          "none": {
+            "alternate_accepted": true,
+            "disabled": false,
+            "evidence": "choice_band_lock_restore_switch_none_after.json",
+            "restored": true,
+            "sha256": "988668242d8055855472e3f550cdaf539e07d4187cda94b19c6302d9002bc5a0",
+            "unlocked_after_switch": true,
+            "valid": true
+          },
+          "reserve": {
+            "alternate_accepted": true,
+            "disabled": false,
+            "evidence": "choice_band_lock_restore_switch_reserve_after.json",
+            "restored": true,
+            "sha256": "fc17ff1bbd2dc7e200cf11aa47b47ee55225f4bd23b5fff5c8cb525f7e28dded",
+            "unlocked_after_switch": true,
+            "valid": true
+          }
+        },
+        "scenario": "lock_restore_switch",
+        "status": "SCOPED_VERIFIED"
+      },
+      {
+        "checks": 26,
+        "errors": [],
+        "id": "choice_band",
+        "observed": {
+          "battle_owner": "technical_starter",
+          "map_save": "map_choice_band.json",
+          "physical_units": 2,
+          "second_owner": "recipient_choice_band",
+          "sha256": "da1b97e0d76d113e7958c3905812295873d7db980dfd3ac3e21e75a8c0e4b7d2",
+          "valid": true
+        },
+        "scenario": "map_bag_owner_save",
+        "status": "SCOPED_VERIFIED"
+      },
+      {
+        "checks": 42,
+        "errors": [],
+        "id": "choice_specs",
+        "observed": {
+          "active": {
+            "damage": 43,
+            "evidence": "choice_specs_physical_damage_active.json",
+            "first_actor": "own",
+            "owner": "own",
+            "sha256": "eb1bc1646b946f361815f6a37d80757380eaba2a009ae54ad5787078951e7a7f",
+            "valid": true
+          },
+          "none": {
+            "damage": 43,
+            "evidence": "choice_specs_physical_damage_none.json",
+            "first_actor": "own",
+            "owner": "none",
+            "sha256": "2a79c5e9b34bac00aaa391207db422d97c95298a27c98e08993a0d9033cd5ab6",
+            "valid": true
+          },
+          "reserve": {
+            "damage": 43,
+            "evidence": "choice_specs_physical_damage_reserve.json",
+            "first_actor": "own",
+            "owner": "reserve",
+            "sha256": "4c1103306cf2e2ab4f242dd51d35b1f99338345746d4275dc4ec84f5ccf49b52",
+            "valid": true
+          }
+        },
+        "scenario": "physical_damage",
+        "status": "SCOPED_VERIFIED"
+      },
+      {
+        "checks": 42,
+        "errors": [],
+        "id": "choice_specs",
+        "observed": {
+          "active": {
+            "damage": 79,
+            "evidence": "choice_specs_special_damage_active.json",
+            "first_actor": "own",
+            "owner": "own",
+            "sha256": "fd7e7b9fa212291844fdbbfc72893a9df07539fd6ced4894a0a7ead3cb6319f9",
+            "valid": true
+          },
+          "none": {
+            "damage": 52,
+            "evidence": "choice_specs_special_damage_none.json",
+            "first_actor": "own",
+            "owner": "none",
+            "sha256": "c9225c82c4f7598c7454a7491a94bdfd17e0fcef6a83957d47d85c9a50fda060",
+            "valid": true
+          },
+          "reserve": {
+            "damage": 52,
+            "evidence": "choice_specs_special_damage_reserve.json",
+            "first_actor": "own",
+            "owner": "reserve",
+            "sha256": "6ef41da2c22f74f43d6a737f8d94af4d967433244ae267273be8009675f395ca",
+            "valid": true
+          }
+        },
+        "scenario": "special_damage",
+        "status": "SCOPED_VERIFIED"
+      },
+      {
+        "checks": 42,
+        "errors": [],
+        "id": "choice_specs",
+        "observed": {
+          "active": {
+            "damage": 29,
+            "evidence": "choice_specs_speed_order_active.json",
+            "first_actor": "foe",
+            "owner": "own",
+            "sha256": "d8653d1f6fcee45c50c57536e944e541cdb10a94fabd7e2b7350a0f0f484c8de",
+            "valid": true
+          },
+          "none": {
+            "damage": 20,
+            "evidence": "choice_specs_speed_order_none.json",
+            "first_actor": "foe",
+            "owner": "none",
+            "sha256": "d12485e6c6b3fbfff4397a0122d882241d07f5c67dc601bdbdef6acd02042633",
+            "valid": true
+          },
+          "reserve": {
+            "damage": 20,
+            "evidence": "choice_specs_speed_order_reserve.json",
+            "first_actor": "foe",
+            "owner": "reserve",
+            "sha256": "7c6ffa9fb347e9e31181ac26e9424b46d350c3bd101201135d8fabfa171873d4",
+            "valid": true
+          }
+        },
+        "scenario": "speed_order",
+        "status": "SCOPED_VERIFIED"
+      },
+      {
+        "checks": 69,
+        "errors": [],
+        "id": "choice_specs",
+        "observed": {
+          "active": {
+            "alternate_accepted": false,
+            "disabled": true,
+            "evidence": "choice_specs_lock_restore_switch_active_after.json",
+            "restored": true,
+            "sha256": "ef8df9524810c078eece0a4cefee38c325c23251a374ea0fd09559161612495b",
+            "unlocked_after_switch": true,
+            "valid": true
+          },
+          "none": {
+            "alternate_accepted": true,
+            "disabled": false,
+            "evidence": "choice_specs_lock_restore_switch_none_after.json",
+            "restored": true,
+            "sha256": "de7a980ec8db665ee89d8f646a18e5b33b9cd5938917b97cffea179e0fb3d587",
+            "unlocked_after_switch": true,
+            "valid": true
+          },
+          "reserve": {
+            "alternate_accepted": true,
+            "disabled": false,
+            "evidence": "choice_specs_lock_restore_switch_reserve_after.json",
+            "restored": true,
+            "sha256": "1474e1a1bebe56dd4ef82fed84da2eb4acdff7a38a7e8ed34192b97f8f898b29",
+            "unlocked_after_switch": true,
+            "valid": true
+          }
+        },
+        "scenario": "lock_restore_switch",
+        "status": "SCOPED_VERIFIED"
+      },
+      {
+        "checks": 26,
+        "errors": [],
+        "id": "choice_specs",
+        "observed": {
+          "battle_owner": "technical_starter",
+          "map_save": "map_choice_specs.json",
+          "physical_units": 2,
+          "second_owner": "recipient_choice_specs",
+          "sha256": "341625db50c45fe313e79c799ef1c80c67f857b3ca4b231fed83de8c9e667c66",
+          "valid": true
+        },
+        "scenario": "map_bag_owner_save",
+        "status": "SCOPED_VERIFIED"
+      },
+      {
+        "checks": 42,
+        "errors": [],
+        "id": "choice_scarf",
+        "observed": {
+          "active": {
+            "damage": 43,
+            "evidence": "choice_scarf_physical_damage_active.json",
+            "first_actor": "own",
+            "owner": "own",
+            "sha256": "b6d777e8aee3c60645c084c0e261729233631c2a2961d4829d8b771465258d02",
+            "valid": true
+          },
+          "none": {
+            "damage": 43,
+            "evidence": "choice_scarf_physical_damage_none.json",
+            "first_actor": "own",
+            "owner": "none",
+            "sha256": "9e931a4fead30737500fa7185468ef98f89d1c48caec0d9ea959cc7e88915fff",
+            "valid": true
+          },
+          "reserve": {
+            "damage": 43,
+            "evidence": "choice_scarf_physical_damage_reserve.json",
+            "first_actor": "own",
+            "owner": "reserve",
+            "sha256": "a7c4caae74d2fd91f75dff4d6a7509cabcf75a8a5a93b8526fecff620e510d50",
+            "valid": true
+          }
+        },
+        "scenario": "physical_damage",
+        "status": "SCOPED_VERIFIED"
+      },
+      {
+        "checks": 42,
+        "errors": [],
+        "id": "choice_scarf",
+        "observed": {
+          "active": {
+            "damage": 52,
+            "evidence": "choice_scarf_special_damage_active.json",
+            "first_actor": "own",
+            "owner": "own",
+            "sha256": "7cc4e29c039f4aadd497817b95f9cd6317ce90acddecddd52c1db3b9e8c7b691",
+            "valid": true
+          },
+          "none": {
+            "damage": 52,
+            "evidence": "choice_scarf_special_damage_none.json",
+            "first_actor": "own",
+            "owner": "none",
+            "sha256": "231ce86d433cfe5548362f5adabdedee817e6d7e1f8b9e64083737ca53b44440",
+            "valid": true
+          },
+          "reserve": {
+            "damage": 52,
+            "evidence": "choice_scarf_special_damage_reserve.json",
+            "first_actor": "own",
+            "owner": "reserve",
+            "sha256": "8e65ea595b054cce9fc7bf99cb49b471534fde17b75eb22a5a14a9b27fec2a7a",
+            "valid": true
+          }
+        },
+        "scenario": "special_damage",
+        "status": "SCOPED_VERIFIED"
+      },
+      {
+        "checks": 42,
+        "errors": [],
+        "id": "choice_scarf",
+        "observed": {
+          "active": {
+            "damage": 39,
+            "evidence": "choice_scarf_speed_order_active.json",
+            "first_actor": "own",
+            "owner": "own",
+            "sha256": "bd593b5ab951a63f8eda4cd4bf00ebbcfb35cad0f191fd859600f67b40669ebf",
+            "valid": true
+          },
+          "none": {
+            "damage": 20,
+            "evidence": "choice_scarf_speed_order_none.json",
+            "first_actor": "foe",
+            "owner": "none",
+            "sha256": "a4e802a53494524b7065f711fd11fcbb7eec639a803cc779776976c231e553ad",
+            "valid": true
+          },
+          "reserve": {
+            "damage": 20,
+            "evidence": "choice_scarf_speed_order_reserve.json",
+            "first_actor": "foe",
+            "owner": "reserve",
+            "sha256": "20e42671b375bfdce8bc8a0b526b06b5ebb4fa9461458eb6986724a2a9fde8d8",
+            "valid": true
+          }
+        },
+        "scenario": "speed_order",
+        "status": "SCOPED_VERIFIED"
+      },
+      {
+        "checks": 69,
+        "errors": [],
+        "id": "choice_scarf",
+        "observed": {
+          "active": {
+            "alternate_accepted": false,
+            "disabled": true,
+            "evidence": "choice_scarf_lock_restore_switch_active_after.json",
+            "restored": true,
+            "sha256": "f5110bbedb4b7f80dc3b70980c2666662d42b0b78f34d348e9b92c515ff2da78",
+            "unlocked_after_switch": true,
+            "valid": true
+          },
+          "none": {
+            "alternate_accepted": true,
+            "disabled": false,
+            "evidence": "choice_scarf_lock_restore_switch_none_after.json",
+            "restored": true,
+            "sha256": "52ced0341cfb9277d1ea9607171427e7a5c859cb76d437173c2b43d1013ee220",
+            "unlocked_after_switch": true,
+            "valid": true
+          },
+          "reserve": {
+            "alternate_accepted": true,
+            "disabled": false,
+            "evidence": "choice_scarf_lock_restore_switch_reserve_after.json",
+            "restored": true,
+            "sha256": "da22e783d5ee8407ecdf75fc86d7cb47a2978a95ea6c3dd9a4853f833f0a66f7",
+            "unlocked_after_switch": true,
+            "valid": true
+          }
+        },
+        "scenario": "lock_restore_switch",
+        "status": "SCOPED_VERIFIED"
+      },
+      {
+        "checks": 26,
+        "errors": [],
+        "id": "choice_scarf",
+        "observed": {
+          "battle_owner": "technical_starter",
+          "map_save": "map_choice_scarf.json",
+          "physical_units": 2,
+          "second_owner": "recipient_choice_scarf",
+          "sha256": "08dd594887845dae6f470188f1da755f0771b71ef85644333d2bda1fd382dd0b",
+          "valid": true
+        },
+        "scenario": "map_bag_owner_save",
+        "status": "SCOPED_VERIFIED"
+      }
+    ],
+    "worker_pid_diagnostics": [],
+    "functional_sha": "47f42aef1a518eefb744ad310f89b6e2d3ce7108",
+    "checkout_sha": "47f42aef1a518eefb744ad310f89b6e2d3ce7108",
+    "run_url": "",
+    "items": 3,
+    "scenarios": 15,
+    "per_item": [
+      {
+        "id": "choice_band",
+        "status": "SCOPED_VERIFIED",
+        "scenarios": [
+          {
+            "checks": 42,
+            "errors": [],
+            "id": "choice_band",
+            "observed": {
+              "active": {
+                "damage": 64,
+                "evidence": "choice_band_physical_damage_active.json",
+                "first_actor": "own",
+                "owner": "own",
+                "sha256": "a9586345aaf7aff25cb983f8ab8e9f0be9562c6f58fbf8384e4e1a1e6f6b2ae3",
+                "valid": true
+              },
+              "none": {
+                "damage": 43,
+                "evidence": "choice_band_physical_damage_none.json",
+                "first_actor": "own",
+                "owner": "none",
+                "sha256": "54b0588f4dbeb9bd177b2229cb9a7587db543c0fbf9fed8055d49ddde8d5a4d4",
+                "valid": true
+              },
+              "reserve": {
+                "damage": 43,
+                "evidence": "choice_band_physical_damage_reserve.json",
+                "first_actor": "own",
+                "owner": "reserve",
+                "sha256": "e39227bcf4a56285c1c8b589f1ab162b57d02f1e9ed0b2d5baaeb6865b107c73",
+                "valid": true
+              }
+            },
+            "scenario": "physical_damage",
+            "status": "SCOPED_VERIFIED"
+          },
+          {
+            "checks": 42,
+            "errors": [],
+            "id": "choice_band",
+            "observed": {
+              "active": {
+                "damage": 52,
+                "evidence": "choice_band_special_damage_active.json",
+                "first_actor": "own",
+                "owner": "own",
+                "sha256": "b06d3fa2476555ca4e5b5ca9a3f1a28e565cfa47ba48282c799215fccd105fee",
+                "valid": true
+              },
+              "none": {
+                "damage": 52,
+                "evidence": "choice_band_special_damage_none.json",
+                "first_actor": "own",
+                "owner": "none",
+                "sha256": "13c74a1dfb8cc33757a1d5f52a92e36cb72d50a4a7355641ec28b4591611e0c0",
+                "valid": true
+              },
+              "reserve": {
+                "damage": 52,
+                "evidence": "choice_band_special_damage_reserve.json",
+                "first_actor": "own",
+                "owner": "reserve",
+                "sha256": "e0dd958f4f69abfe7dfd76375df5b7e58ec6abb93640358b441f1a9297dedc30",
+                "valid": true
+              }
+            },
+            "scenario": "special_damage",
+            "status": "SCOPED_VERIFIED"
+          },
+          {
+            "checks": 42,
+            "errors": [],
+            "id": "choice_band",
+            "observed": {
+              "active": {
+                "damage": 20,
+                "evidence": "choice_band_speed_order_active.json",
+                "first_actor": "foe",
+                "owner": "own",
+                "sha256": "d37f87140e2c062090f4e1833a789a20ce0f929ba9e3c3dbc7e8199dab96b4de",
+                "valid": true
+              },
+              "none": {
+                "damage": 20,
+                "evidence": "choice_band_speed_order_none.json",
+                "first_actor": "foe",
+                "owner": "none",
+                "sha256": "51f1051ff5912c42efbc6b7009589196999d80a58c4ec2271af7bbc0f352c56c",
+                "valid": true
+              },
+              "reserve": {
+                "damage": 20,
+                "evidence": "choice_band_speed_order_reserve.json",
+                "first_actor": "foe",
+                "owner": "reserve",
+                "sha256": "b89801881e1a5ec152c80c545e32f56b3ad6dd6a435af576bbc58913ebb1799b",
+                "valid": true
+              }
+            },
+            "scenario": "speed_order",
+            "status": "SCOPED_VERIFIED"
+          },
+          {
+            "checks": 69,
+            "errors": [],
+            "id": "choice_band",
+            "observed": {
+              "active": {
+                "alternate_accepted": false,
+                "disabled": true,
+                "evidence": "choice_band_lock_restore_switch_active_after.json",
+                "restored": true,
+                "sha256": "6253efed67f5bc497955f63410db41b592a877c81ab175ae850274eb2348f125",
+                "unlocked_after_switch": true,
+                "valid": true
+              },
+              "none": {
+                "alternate_accepted": true,
+                "disabled": false,
+                "evidence": "choice_band_lock_restore_switch_none_after.json",
+                "restored": true,
+                "sha256": "988668242d8055855472e3f550cdaf539e07d4187cda94b19c6302d9002bc5a0",
+                "unlocked_after_switch": true,
+                "valid": true
+              },
+              "reserve": {
+                "alternate_accepted": true,
+                "disabled": false,
+                "evidence": "choice_band_lock_restore_switch_reserve_after.json",
+                "restored": true,
+                "sha256": "fc17ff1bbd2dc7e200cf11aa47b47ee55225f4bd23b5fff5c8cb525f7e28dded",
+                "unlocked_after_switch": true,
+                "valid": true
+              }
+            },
+            "scenario": "lock_restore_switch",
+            "status": "SCOPED_VERIFIED"
+          },
+          {
+            "checks": 26,
+            "errors": [],
+            "id": "choice_band",
+            "observed": {
+              "battle_owner": "technical_starter",
+              "map_save": "map_choice_band.json",
+              "physical_units": 2,
+              "second_owner": "recipient_choice_band",
+              "sha256": "da1b97e0d76d113e7958c3905812295873d7db980dfd3ac3e21e75a8c0e4b7d2",
+              "valid": true
+            },
+            "scenario": "map_bag_owner_save",
+            "status": "SCOPED_VERIFIED"
+          }
+        ]
+      },
+      {
+        "id": "choice_specs",
+        "status": "SCOPED_VERIFIED",
+        "scenarios": [
+          {
+            "checks": 42,
+            "errors": [],
+            "id": "choice_specs",
+            "observed": {
+              "active": {
+                "damage": 43,
+                "evidence": "choice_specs_physical_damage_active.json",
+                "first_actor": "own",
+                "owner": "own",
+                "sha256": "eb1bc1646b946f361815f6a37d80757380eaba2a009ae54ad5787078951e7a7f",
+                "valid": true
+              },
+              "none": {
+                "damage": 43,
+                "evidence": "choice_specs_physical_damage_none.json",
+                "first_actor": "own",
+                "owner": "none",
+                "sha256": "2a79c5e9b34bac00aaa391207db422d97c95298a27c98e08993a0d9033cd5ab6",
+                "valid": true
+              },
+              "reserve": {
+                "damage": 43,
+                "evidence": "choice_specs_physical_damage_reserve.json",
+                "first_actor": "own",
+                "owner": "reserve",
+                "sha256": "4c1103306cf2e2ab4f242dd51d35b1f99338345746d4275dc4ec84f5ccf49b52",
+                "valid": true
+              }
+            },
+            "scenario": "physical_damage",
+            "status": "SCOPED_VERIFIED"
+          },
+          {
+            "checks": 42,
+            "errors": [],
+            "id": "choice_specs",
+            "observed": {
+              "active": {
+                "damage": 79,
+                "evidence": "choice_specs_special_damage_active.json",
+                "first_actor": "own",
+                "owner": "own",
+                "sha256": "fd7e7b9fa212291844fdbbfc72893a9df07539fd6ced4894a0a7ead3cb6319f9",
+                "valid": true
+              },
+              "none": {
+                "damage": 52,
+                "evidence": "choice_specs_special_damage_none.json",
+                "first_actor": "own",
+                "owner": "none",
+                "sha256": "c9225c82c4f7598c7454a7491a94bdfd17e0fcef6a83957d47d85c9a50fda060",
+                "valid": true
+              },
+              "reserve": {
+                "damage": 52,
+                "evidence": "choice_specs_special_damage_reserve.json",
+                "first_actor": "own",
+                "owner": "reserve",
+                "sha256": "6ef41da2c22f74f43d6a737f8d94af4d967433244ae267273be8009675f395ca",
+                "valid": true
+              }
+            },
+            "scenario": "special_damage",
+            "status": "SCOPED_VERIFIED"
+          },
+          {
+            "checks": 42,
+            "errors": [],
+            "id": "choice_specs",
+            "observed": {
+              "active": {
+                "damage": 29,
+                "evidence": "choice_specs_speed_order_active.json",
+                "first_actor": "foe",
+                "owner": "own",
+                "sha256": "d8653d1f6fcee45c50c57536e944e541cdb10a94fabd7e2b7350a0f0f484c8de",
+                "valid": true
+              },
+              "none": {
+                "damage": 20,
+                "evidence": "choice_specs_speed_order_none.json",
+                "first_actor": "foe",
+                "owner": "none",
+                "sha256": "d12485e6c6b3fbfff4397a0122d882241d07f5c67dc601bdbdef6acd02042633",
+                "valid": true
+              },
+              "reserve": {
+                "damage": 20,
+                "evidence": "choice_specs_speed_order_reserve.json",
+                "first_actor": "foe",
+                "owner": "reserve",
+                "sha256": "7c6ffa9fb347e9e31181ac26e9424b46d350c3bd101201135d8fabfa171873d4",
+                "valid": true
+              }
+            },
+            "scenario": "speed_order",
+            "status": "SCOPED_VERIFIED"
+          },
+          {
+            "checks": 69,
+            "errors": [],
+            "id": "choice_specs",
+            "observed": {
+              "active": {
+                "alternate_accepted": false,
+                "disabled": true,
+                "evidence": "choice_specs_lock_restore_switch_active_after.json",
+                "restored": true,
+                "sha256": "ef8df9524810c078eece0a4cefee38c325c23251a374ea0fd09559161612495b",
+                "unlocked_after_switch": true,
+                "valid": true
+              },
+              "none": {
+                "alternate_accepted": true,
+                "disabled": false,
+                "evidence": "choice_specs_lock_restore_switch_none_after.json",
+                "restored": true,
+                "sha256": "de7a980ec8db665ee89d8f646a18e5b33b9cd5938917b97cffea179e0fb3d587",
+                "unlocked_after_switch": true,
+                "valid": true
+              },
+              "reserve": {
+                "alternate_accepted": true,
+                "disabled": false,
+                "evidence": "choice_specs_lock_restore_switch_reserve_after.json",
+                "restored": true,
+                "sha256": "1474e1a1bebe56dd4ef82fed84da2eb4acdff7a38a7e8ed34192b97f8f898b29",
+                "unlocked_after_switch": true,
+                "valid": true
+              }
+            },
+            "scenario": "lock_restore_switch",
+            "status": "SCOPED_VERIFIED"
+          },
+          {
+            "checks": 26,
+            "errors": [],
+            "id": "choice_specs",
+            "observed": {
+              "battle_owner": "technical_starter",
+              "map_save": "map_choice_specs.json",
+              "physical_units": 2,
+              "second_owner": "recipient_choice_specs",
+              "sha256": "341625db50c45fe313e79c799ef1c80c67f857b3ca4b231fed83de8c9e667c66",
+              "valid": true
+            },
+            "scenario": "map_bag_owner_save",
+            "status": "SCOPED_VERIFIED"
+          }
+        ]
+      },
+      {
+        "id": "choice_scarf",
+        "status": "SCOPED_VERIFIED",
+        "scenarios": [
+          {
+            "checks": 42,
+            "errors": [],
+            "id": "choice_scarf",
+            "observed": {
+              "active": {
+                "damage": 43,
+                "evidence": "choice_scarf_physical_damage_active.json",
+                "first_actor": "own",
+                "owner": "own",
+                "sha256": "b6d777e8aee3c60645c084c0e261729233631c2a2961d4829d8b771465258d02",
+                "valid": true
+              },
+              "none": {
+                "damage": 43,
+                "evidence": "choice_scarf_physical_damage_none.json",
+                "first_actor": "own",
+                "owner": "none",
+                "sha256": "9e931a4fead30737500fa7185468ef98f89d1c48caec0d9ea959cc7e88915fff",
+                "valid": true
+              },
+              "reserve": {
+                "damage": 43,
+                "evidence": "choice_scarf_physical_damage_reserve.json",
+                "first_actor": "own",
+                "owner": "reserve",
+                "sha256": "a7c4caae74d2fd91f75dff4d6a7509cabcf75a8a5a93b8526fecff620e510d50",
+                "valid": true
+              }
+            },
+            "scenario": "physical_damage",
+            "status": "SCOPED_VERIFIED"
+          },
+          {
+            "checks": 42,
+            "errors": [],
+            "id": "choice_scarf",
+            "observed": {
+              "active": {
+                "damage": 52,
+                "evidence": "choice_scarf_special_damage_active.json",
+                "first_actor": "own",
+                "owner": "own",
+                "sha256": "7cc4e29c039f4aadd497817b95f9cd6317ce90acddecddd52c1db3b9e8c7b691",
+                "valid": true
+              },
+              "none": {
+                "damage": 52,
+                "evidence": "choice_scarf_special_damage_none.json",
+                "first_actor": "own",
+                "owner": "none",
+                "sha256": "231ce86d433cfe5548362f5adabdedee817e6d7e1f8b9e64083737ca53b44440",
+                "valid": true
+              },
+              "reserve": {
+                "damage": 52,
+                "evidence": "choice_scarf_special_damage_reserve.json",
+                "first_actor": "own",
+                "owner": "reserve",
+                "sha256": "8e65ea595b054cce9fc7bf99cb49b471534fde17b75eb22a5a14a9b27fec2a7a",
+                "valid": true
+              }
+            },
+            "scenario": "special_damage",
+            "status": "SCOPED_VERIFIED"
+          },
+          {
+            "checks": 42,
+            "errors": [],
+            "id": "choice_scarf",
+            "observed": {
+              "active": {
+                "damage": 39,
+                "evidence": "choice_scarf_speed_order_active.json",
+                "first_actor": "own",
+                "owner": "own",
+                "sha256": "bd593b5ab951a63f8eda4cd4bf00ebbcfb35cad0f191fd859600f67b40669ebf",
+                "valid": true
+              },
+              "none": {
+                "damage": 20,
+                "evidence": "choice_scarf_speed_order_none.json",
+                "first_actor": "foe",
+                "owner": "none",
+                "sha256": "a4e802a53494524b7065f711fd11fcbb7eec639a803cc779776976c231e553ad",
+                "valid": true
+              },
+              "reserve": {
+                "damage": 20,
+                "evidence": "choice_scarf_speed_order_reserve.json",
+                "first_actor": "foe",
+                "owner": "reserve",
+                "sha256": "20e42671b375bfdce8bc8a0b526b06b5ebb4fa9461458eb6986724a2a9fde8d8",
+                "valid": true
+              }
+            },
+            "scenario": "speed_order",
+            "status": "SCOPED_VERIFIED"
+          },
+          {
+            "checks": 69,
+            "errors": [],
+            "id": "choice_scarf",
+            "observed": {
+              "active": {
+                "alternate_accepted": false,
+                "disabled": true,
+                "evidence": "choice_scarf_lock_restore_switch_active_after.json",
+                "restored": true,
+                "sha256": "f5110bbedb4b7f80dc3b70980c2666662d42b0b78f34d348e9b92c515ff2da78",
+                "unlocked_after_switch": true,
+                "valid": true
+              },
+              "none": {
+                "alternate_accepted": true,
+                "disabled": false,
+                "evidence": "choice_scarf_lock_restore_switch_none_after.json",
+                "restored": true,
+                "sha256": "52ced0341cfb9277d1ea9607171427e7a5c859cb76d437173c2b43d1013ee220",
+                "unlocked_after_switch": true,
+                "valid": true
+              },
+              "reserve": {
+                "alternate_accepted": true,
+                "disabled": false,
+                "evidence": "choice_scarf_lock_restore_switch_reserve_after.json",
+                "restored": true,
+                "sha256": "da22e783d5ee8407ecdf75fc86d7cb47a2978a95ea6c3dd9a4853f833f0a66f7",
+                "unlocked_after_switch": true,
+                "valid": true
+              }
+            },
+            "scenario": "lock_restore_switch",
+            "status": "SCOPED_VERIFIED"
+          },
+          {
+            "checks": 26,
+            "errors": [],
+            "id": "choice_scarf",
+            "observed": {
+              "battle_owner": "technical_starter",
+              "map_save": "map_choice_scarf.json",
+              "physical_units": 2,
+              "second_owner": "recipient_choice_scarf",
+              "sha256": "08dd594887845dae6f470188f1da755f0771b71ef85644333d2bda1fd382dd0b",
+              "valid": true
+            },
+            "scenario": "map_bag_owner_save",
+            "status": "SCOPED_VERIFIED"
+          }
+        ]
+      }
+    ],
+    "provenance": [
+      {
+        "id": "choice_band",
+        "api_id": 197,
+        "source_path": "data/api/v2/item/197/index.json",
+        "source_blob": "3da99029f43ec0877e45eb6b89406b5dabd3ff94",
+        "category": "choice",
+        "generation_indices": 7,
+        "equip_permitted": true,
+        "excluded": false
+      },
+      {
+        "id": "choice_specs",
+        "api_id": 274,
+        "source_path": "data/api/v2/item/274/index.json",
+        "source_blob": "5872ef43deaceb87280cb63a50deea3d1dc76b3c",
+        "category": "choice",
+        "generation_indices": 6,
+        "equip_permitted": true,
+        "excluded": false
+      },
+      {
+        "id": "choice_scarf",
+        "api_id": 264,
+        "source_path": "data/api/v2/item/264/index.json",
+        "source_blob": "c16330c2ef7adae261f30794df4c43673343f713",
+        "category": "choice",
+        "generation_indices": 6,
+        "equip_permitted": true,
+        "excluded": false
+      }
+    ],
+    "protected": {
+      "runtime_files": 878,
+      "absent_skip_worktree": 15647,
+      "outside_allowlist_changed": false,
+      "engine_generated_untracked_uids": []
+    },
+    "test_sources_sha256": {
+      "tools/item_audit/automation_v28.py": "bc102cbe60a199421e8a6353219bf90f4a6a0da896dfb385c1a9bbffaa3d2553",
+      "tests/gameplay/item_automation_v28.gd": "92b0f134c9fdc4744804f405075da81b00aee6372513d4a6ca2ec22524cb5919",
+      "tests/gameplay/item_automation_v28.gd.uid": "9a97ae4f99183d662276e19b42f8d2a8b1dc7cd18c5442ff0a0e04a0d28006c1",
+      "tests/tools/test_item_automation_v28.py": "7b4764d031955b0e578aee35f83df1e727d988d038001cbb4cc910032a09443f",
+      "tests/fixtures/item_automation_v28/choice_items.json": "6c4956d23eaac6ba57c350067786ca1f6159dd2edc2e26407a33a11d159d3bb9",
+      ".github/workflows/item-closure-v3.yml": "f552ba75790925924db659f6cb0b973b1ec8a111765b00158fc91b16d1586d09"
+    },
+    "descriptor_sha256": "6c4956d23eaac6ba57c350067786ca1f6159dd2edc2e26407a33a11d159d3bb9",
+    "limitations": [
+      "Headless, no GPU/manual approval",
+      "Empty abilities; no Gorilla Tactics or other ability interactions",
+      "Map Caterpie battle checks physical persistence/settlement, not the category bonus",
+      "No Trick/Knock Off/suppression timing certification; no new item mechanics"
+    ]
+  },
+  "local_evidence": ".godot/item_automation_v28/runs/1793477122558025400",
+  "contract_unit_tests": 14,
+  "ci": {
+    "status": "PENDING",
+    "ubuntu": "PENDING",
+    "windows": "PENDING",
+    "regressions": "PENDING"
+  },
+  "failures_preserved": [
+    {
+      "local_run": "1793476787710520700",
+      "reason": "Guard detected four editor-generated untracked historical UIDs; no tests ran"
+    },
+    {
+      "local_run": "1793476797217198500",
+      "reason": "New runner used wrong BattleEvent constant and nonexistent PlayerCollection.from_dict; parse failure, no mechanics executed"
+    },
+    {
+      "local_run": "1793476837711656600",
+      "checks_in_json": 665,
+      "errors": 18,
+      "reason": "Fixture used fixed switch index after Showdown reordered party; corrected identity lookup, no production change"
+    }
+  ],
+  "coverage_counter_changed": false,
+  "all_item_effects_certified": false,
+  "next_step": "Push coherent functional commit; require real Ubuntu/Windows Godot plus all unchanged regressions, then bind result to SHA/run URL before certification."
+}

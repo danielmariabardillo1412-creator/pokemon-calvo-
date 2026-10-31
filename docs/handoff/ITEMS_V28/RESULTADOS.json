@@ -351,5 +351,26 @@
     "V3 has scoped evidence for 72 IDs, not all contexts",
     "GPU/manual visual user validation pending",
     "Economy, Exp. Share, trade evolution and other profiles pending"
-  ]
+  ],
+  "automation_prototype": {
+    "status": "LOCAL_SCOPED_VERIFIED_AWAITING_CI",
+    "ids": [
+      "choice_band",
+      "choice_specs",
+      "choice_scarf"
+    ],
+    "functional_sha": null,
+    "contract_unit_tests": 14,
+    "ci": {
+      "status": "PENDING",
+      "ubuntu": "PENDING",
+      "windows": "PENDING",
+      "regressions": "PENDING"
+    },
+    "next_step": "Push coherent functional commit; require real Ubuntu/Windows Godot plus all unchanged regressions, then bind result to SHA/run URL before certification.",
+    "local_checks": 665,
+    "scenarios": 15,
+    "descriptor": "tests/fixtures/item_automation_v28/choice_items.json",
+    "report": "docs/handoff/ITEMS_V28/AUTOMATION_RESULTS.json"
+  }
 }

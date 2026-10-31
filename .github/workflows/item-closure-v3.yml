@@ -7,6 +7,10 @@ on:
 permissions:
   contents: read
 
+env:
+  ITEM_AUTOMATION_FUNCTIONAL_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+  ITEM_AUTOMATION_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
 concurrency:
   group: item-closure-v3-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -134,6 +138,13 @@ jobs:
           timeout 300s godot --headless --path . --script res://tests/gameplay/competitive_damage_items_v28.gd 2>&1 | tee item-damage-v28.log
           if grep -E 'SCRIPT ERROR|Parse Error|timeout' item-damage-v28.log; then exit 1; fi
           grep -E 'COMPETITIVE_DAMAGE_V28 PASS checks=[1-9][0-9]* ids=9 errors=0' item-damage-v28.log
+      - name: Declarative Choice-item integration prototype (isolated effects and physical ownership)
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tests/tools/test_item_automation_v28.py 2>&1 | tee item-automation-contract-v28.log
+          timeout 420s python -B tools/item_audit/automation_v28.py 2>&1 | tee item-automation-v28.log
+          grep -E 'ITEM_AUTOMATION_V28 SCOPED_VERIFIED checks=[1-9][0-9]*' item-automation-v28.log
       - name: Evidence-bound matrix by ID and context
         shell: bash
         run: |
@@ -172,6 +183,7 @@ jobs:
             .godot/item_closure_v3/*.json
             .godot/competitive_protection_v28/*.json
             .godot/competitive_damage_v28/*.json
+            .godot/item_automation_v28/
             .godot/publication_v27/runs/
           if-no-files-found: ignore
           include-hidden-files: true
@@ -261,6 +273,17 @@ jobs:
             Write-Error 'Portable gate did not emit PASS despite exit code zero'
             exit 1
           }
+      - name: Declarative Choice-item prototype on Windows after unchanged portable gate
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $godot = Join-Path $env:USERPROFILE 'godot/Godot_v4.7-stable_win64_console.exe'
+          $node = (Get-Command node).Source
+          & python -B tests/tools/test_item_automation_v28.py
+          if ($LASTEXITCODE -ne 0) { exit 1 }
+          & python -B tools/item_audit/automation_v28.py --godot $godot --node $node 2>&1 | Tee-Object -FilePath item-automation-windows-v28.log
+          if ($LASTEXITCODE -ne 0) { exit 1 }
+          if (-not (Select-String -Path item-automation-windows-v28.log -Pattern 'ITEM_AUTOMATION_V28 SCOPED_VERIFIED checks=[1-9][0-9]*' -Quiet)) { exit 1 }
       - name: Preserve portable gate evidence
         if: always()
         uses: actions/upload-artifact@v4
@@ -268,6 +291,8 @@ jobs:
           name: item-closure-v3-windows-gate
           path: |
             item-portable-windows.log
+            item-automation-windows-v28.log
+            .godot/item_automation_v28/
             .godot/publication_v27/runs/
           include-hidden-files: true
           if-no-files-found: ignore
