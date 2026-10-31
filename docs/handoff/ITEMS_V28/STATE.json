@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "mission": "ITEMS_V28",
-  "status": "BLOCK_2_FAILED_RETEST_PENDING",
+  "status": "IN_PROGRESS_BLOCKS_0_2_VERIFIED",
   "base_branch": "main",
   "base_commit": "233b1a4f15ee4df7301e2c5acf8aed84a8f40626",
   "working_branch": "codex/items-v28-from-main",
@@ -14,7 +14,7 @@
     "code_identity_from_v3": true,
     "last_verified_commit": "69e15d74d04063dbe9613575b8618062e1efbed7"
   },
-  "next_action": "Inspect new Actions step for 7 per-item disk reload cases, identify which separate assertion fails. Do not modify domain or save schema without evidence. Verify Windows portable then document.",
+  "next_action": "Select independently implementable new item family only after V27/current status check; update WORK_ORDER before editing; preserve PR118 draft and stable main. GPU/manual and worker lifecycle debt remain.",
   "main_is_official_v27": true,
   "all_2222_items_functional": false,
   "gpu_manual_review": "PENDING",
@@ -48,18 +48,28 @@
     "total_workflows": 20,
     "success": 20,
     "failures": 0,
-    "run_id": 41220691787,
-    "run_url": "https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41220691787",
+    "run_id": 41222946680,
+    "run_url": "https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41222946680",
     "ubuntu_items_job_id": 124594448485,
-    "windows_portable_job_id": 124594448158,
+    "windows_portable_job_id": 124601131544,
     "headless_ev_checks": 202,
     "headless_ev_assertions_failed": 0,
     "windows_publication_gate": "PUBLICATION_V27 PASS",
     "worker_pid_errors_observed_ubuntu": 7,
-    "worker_pid_errors_status": "PENDING_TECHNICAL_DIAGNOSIS"
+    "worker_pid_errors_status": "PENDING_TECHNICAL_DIAGNOSIS",
+    "last_verified_functional_commit": "ae51793641b6981b4827524208b50f7a7c8e54a0",
+    "all_workflows_success": 20,
+    "all_workflows_total": 20,
+    "ubuntu_item_job_id": 124601131188,
+    "ev_checks": 404,
+    "ev_errors": 0,
+    "native_cases": 908,
+    "godot_mirror_checks": 23434,
+    "unix_worker_pid_error_messages": 12,
+    "unix_worker_pid_error_status": "OPEN_TECHNICAL_DEBT"
   },
   "block_2": {
-    "status": "FAILED_AT_F052B09C_DIAGNOSTIC_ASSERTIONS_WRITTEN",
+    "status": "SCOPED_CI_VERIFIED",
     "item_ids": [
       "power_weight",
       "power_bracer",
@@ -78,6 +88,17 @@
       "checks": 341,
       "errors": 7
     },
-    "next_run": "PENDING"
+    "next_run": "NOT_NEEDED_WITH_UNCHANGED_CODE",
+    "verified_commit": "ae51793641b6981b4827524208b50f7a7c8e54a0",
+    "verified_run": 41222946680,
+    "verified_checks": 404,
+    "errors": 0,
+    "linux_job_id": 124601131188,
+    "windows_job_id": 124601131544,
+    "limitations": [
+      "headless scenes only, not visually inspected GPU",
+      "not all possible item interactions/switch/suppression timing",
+      "auxiliary process PID errors on successful Ubuntu log"
+    ]
   }
 }

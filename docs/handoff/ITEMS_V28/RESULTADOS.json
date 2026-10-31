@@ -16,7 +16,7 @@
     }
   },
   "v28": {
-    "tested_commit": "69e15d74d04063dbe9613575b8618062e1efbed7",
+    "tested_commit": "ae51793641b6981b4827524208b50f7a7c8e54a0",
     "real_godot_runs": [
       {
         "commit": "c29db19343ad22717c49a44737099eacd8aa7473",
@@ -35,9 +35,29 @@
         "ubuntu_job_id": 124594448485,
         "windows_job_id": 124594448158,
         "url": "https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41220691787"
+      },
+      {
+        "commit": "f052b09ce2b63642ce9340500b7d0fae4e699472",
+        "run_id": 41222565742,
+        "result": "FAIL",
+        "ubuntu_job": 124599986734,
+        "checks": 341,
+        "errors": 7,
+        "url": "https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41222565742"
+      },
+      {
+        "commit": "ae51793641b6981b4827524208b50f7a7c8e54a0",
+        "run_id": 41222946680,
+        "result": "PASS",
+        "all_workflows": 20,
+        "ubuntu_job": 124601131188,
+        "windows_job": 124601131544,
+        "checks": 404,
+        "errors": 0,
+        "url": "https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41222946680"
       }
     ],
-    "result": "SCOPED_CI_PASS_NOT_ALL_ITEMS_DONE",
+    "result": "BLOCKS_0_2_SCOPED_CI_PASS_NOT_ALL_ITEMS_DONE",
     "notes": "This document is a preparatory handoff, not test proof.",
     "test_expansion": {
       "status": "PASS",
@@ -72,11 +92,27 @@
         "where": "Ubuntu successful item job includes V18 regression",
         "text": "Godot emitted ERROR: The process ... does not exist or is not a child; not a failed gameplay assertion, not certified clean console",
         "nonblocking_for_this_ci": true
+      },
+      {
+        "status": "OPEN",
+        "component": "Node worker/process lifecycle",
+        "observed_count": 12,
+        "where": "Ubuntu successful item job #124601131188",
+        "message": "Process not existing/not child emitted on shutdown/liveness; gameplay asserts pass but logs not clean"
       }
     ],
     "next": "Design next independent item family with actual game consumers; keep main stable; document before changing.",
     "block_2": {
-      "status": "FAILED_SEVEN_COMPOSITE_ASSERTIONS_RETEST_PENDING",
+      "status": "SCOPED_CI_VERIFIED",
+      "verified_commit": "ae51793641b6981b4827524208b50f7a7c8e54a0",
+      "verified_run": 41222946680,
+      "url": "https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41222946680",
+      "ubuntu_job_id": 124601131188,
+      "windows_job_id": 124601131544,
+      "workflows_passed": 20,
+      "workflows_total": 20,
+      "checks": 404,
+      "errors": 0,
       "items": [
         "power_weight",
         "power_bracer",
@@ -86,17 +122,26 @@
         "power_anklet",
         "macho_brace"
       ],
-      "route": "real scene, physical bag equip, save/load before and after combat, native encounter, EV 6 stats and XP, held owner, inventory",
-      "run_id": null,
-      "scope_limit": "separate real map per item; not second battle for each, GPU/manual remains pending",
-      "initial_commit": "f052b09ce2b63642ce9340500b7d0fae4e699472",
-      "initial_run": 41222565742,
-      "initial_linux_job": 124599986734,
-      "checks": 341,
-      "errors": 7,
-      "failed_pattern": "training map EVs/item survive disk reload for each of seven training items",
-      "corrective_test": "separate six EV values, XP, held item, stats/HP and physical stock; normalized persistent representation; unverified",
-      "new_run": null
+      "route": "seven separate real map + physical bag equip + save/load before/after native fight, EV six stats and XP, held owner, physical stock",
+      "prior_failed": {
+        "sha": "f052b09ce2b63642ce9340500b7d0fae4e699472",
+        "run_id": 41222565742,
+        "job_id": 124599986734,
+        "checks": 341,
+        "errors": 7,
+        "reason": "composite runtime reload assertion failed for 7 item IDs; separate persisted fields retested PASS"
+      },
+      "headless": "PASS",
+      "gpu": "NOT_RUN",
+      "warnings": "12 ERROR messages on child PID lifecycle despite passing Godot headless; technical debt",
+      "native_cases": 908,
+      "real_ipc_ids": 65,
+      "berry_ids": 12,
+      "projection_checks": 23434,
+      "regression_v18_checks": 8755,
+      "windows_item_connections_checks": 4993,
+      "windows_savegame_checks": 40,
+      "windows_gate": "PUBLICATION_V27 PASS"
     }
   },
   "limitations": [
