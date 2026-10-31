@@ -1,0 +1,24 @@
+# Orden de trabajo — ITEMS_V28
+
+Autorización del usuario 31-10-2026: proseguir objetos sobre V27 *oficial*; trabajar incrementalmente, conservar los fallos, documentar cada cambio y pruebas; `main` queda estable y no se toca directamente.
+
+Base inmutable de partida: `233b1a4f15ee4df7301e2c5acf8aed84a8f40626`, merge PR #116. Rama única `codex/items-v28-from-main` y PR en borrador hacia `main` (no merge automático).
+
+## Bloque 0: recuperación comprobada de EV + matrices V3
+Permitidos, copia exacta desde el checkpoint validado `c554ab7635fb847aa395d2dbb5bc523b560bc6de`:
+- `modules/creatures/progression/battle_ev_rewards.gd`
+- `modules/creatures/progression/progression_system.gd`
+- `tests/gameplay/item_closure_v3_test_runner.gd`
+- `tests/tools/test_item_closure_v3.py`
+- `tools/item_audit/item_closure_v3.py`
+- `tools/item_audit/stage_item_connections_ci_v3.py`
+- `.github/workflows/item-closure-v3.yml`
+- `docs/handoff/ITEMS_V28/{START_HERE.md,WORK_ORDER.md,STATE.json,PROGRESS.md,RESULTADOS.json}`.
+
+Comprobar igualdades de blobs con V3, compatibilidad con V27 en `main`; ejecutar GitHub Actions Godot 4.7 Ubuntu + Windows portable y demás regresiones. Estado `NO_VERIFICADO_EN_V28` hasta resultados reales. No copiar los viejos cuadernos como si fueran pruebas nuevas.
+
+## Bloques sucesivos
+Elegir una familia pendiente usando `docs/current/ITEM_SYSTEM_CURRENT_STATUS.json` y los cuadernos específicos. Anotar primero las rutas adicionales y contratos en este documento; separar entrada de catálogo, efecto del simulador, conexión juego/propietario/consumo, guardado y escenario ejercitado. Cerrar con pruebas y evidencias por SHA. No prometer todos los objetos mientras falten sistemas.
+
+## Límites
+No modificar main, node_modules, versión @pkmn/sim, motor de combate/RNG/protocolo, datasets, baselines, políticas de exclusión, recursos/hashes, guardas históricas, schema de partida o EvolutionSystem. Conserva los 14 objetos evolutivos originales y la exclusión de Linking Cord; no implementar aún sustitución de intercambios. Economía para Amulet Coin/Luck Incense, Exp. Share, mentas/IV, crianza/formas y mundo son dependencias, no ceros neutros. Sin shortcuts de calidad: los tests deben tener comprobaciones >0.

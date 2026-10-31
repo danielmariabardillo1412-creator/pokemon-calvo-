@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "evidence": {
+    "v27_merged": {
+      "sha": "233b1a4f15ee4df7301e2c5acf8aed84a8f40626",
+      "pr": "https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/pull/116",
+      "main_godot_ci": "https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41219322020",
+      "conclusion": "success"
+    },
+    "historical_v3": {
+      "sha": "c554ab7635fb847aa395d2dbb5bc523b560bc6de",
+      "pr": "https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/pull/117",
+      "status": "CLOSED_UNMERGED",
+      "ci": "https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41217120667",
+      "result": "20/20 PASS on V3 code, not yet V28"
+    }
+  },
+  "v28": {
+    "tested_commit": null,
+    "real_godot_runs": [],
+    "result": "NOT_RUN",
+    "notes": "This document is a preparatory handoff, not test proof."
+  },
+  "limitations": [
+    "2222 IDs inventoried do not imply all effects functional",
+    "V3 has scoped evidence for 72 IDs, not all contexts",
+    "GPU/manual visual user validation pending",
+    "Economy, Exp. Share, trade evolution and other profiles pending"
+  ]
+}
