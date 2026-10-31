@@ -14,7 +14,7 @@
     "code_identity_from_v3": true,
     "last_verified_commit": "69e15d74d04063dbe9613575b8618062e1efbed7"
   },
-  "next_action": "Read COMPETITIVE_COVERAGE_AUDIT.md; prioritize eight high-occurrence factory-set equipables and inspect only their existing native + map/owner/save checks; extend coverage by behavior, not entire catalog. Preserve main, CI exact SHA, and GPU limitations.",
+  "next_action": "Follow ACCELERATION_PLAN.md: audit native and map route existing for choice_band, choice_specs, choice_scarf; declare exact allowlist, then implement a coherent grouped regression with identity, effect, negative and save/load, run CI on functional SHA. Never touch main.",
   "main_is_official_v27": true,
   "all_2222_items_functional": false,
   "gpu_manual_review": "PENDING",
@@ -279,5 +279,6 @@
     "factory_sets_blob": "d1813dac25222e5a5bf876bab3a14c3aebaca04c",
     "project_matrix_blob": "9509d537622039b2f1919067561631449b8ddc47",
     "criteria": "Gen9 Showdown factory-sets across 6 singles tiers + V28 approved 19, excluding project veto; not a universal competitive catalog"
-  }
+  },
+  "acceleration_plan": "docs/handoff/ITEMS_V28/ACCELERATION_PLAN.md"
 }
