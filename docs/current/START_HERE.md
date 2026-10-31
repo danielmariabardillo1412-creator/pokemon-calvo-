@@ -1,5 +1,9 @@
 # Empezar aquí — 2026-10-31
 
+Publicación de la copia organizada en GitHub: [actualización V27](GITHUB_UPDATE_V27.md).
+Para un checkout nuevo y sus recursos: [preparación y pruebas](GITHUB_ENVIRONMENT_V27.md).
+La publicación no reabre misiones OpenCode ni modifica mecánicas.
+
 Estado actual: **los diez objetos evolutivos están restaurados.**
 La exclusión V26 fue una interpretación incorrecta de Codex, revocada en V27.
 Se conservan los catorce objetos equipados originales de esas rutas: los diez

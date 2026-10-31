@@ -2,7 +2,10 @@
 
 Trabajar solo en `D:/Proyectos/Pokemon Calvo - Arquitectura Kilo`.
 El original `D:/Proyectos/Pokemon Calvo` está protegido. Un escritor, sin agentes
-paralelos. No hay remoto configurado ni merge/publicación autorizados.
+paralelos. El usuario autorizó la publicación V27 en GitHub el 2026-10-31:
+`codex/organized-update-v27`, sin merge de main ni retirada de ramas antiguas.
+Ver GITHUB_UPDATE_V27.md. La prohibición anterior de configurar remoto/publicar
+queda sustituida solo para esta entrega; los sellos históricos no se modifican.
 
 ## Cambios y comprobación
 

@@ -2,7 +2,14 @@
 
 Juego en Godot 4.7. Copia activa: `D:/Proyectos/Pokemon Calvo - Arquitectura Kilo`.
 Original protegido: `D:/Proyectos/Pokemon Calvo`. Rama local:
-`codex/kilo-architecture-v1`, sin remoto configurado.
+de origen `codex/kilo-architecture-v1`. Actualización organizada V27 en
+`codex/organized-update-v27` del [repositorio del juego](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-).
+
+Para descargar esta versión, **seleccionar esa rama**. El código se conserva en
+Git y los recursos visuales grandes se adjuntan a la release de desarrollo.
+No basta con descargar el ZIP de código para tener todas las imágenes.
+Preparación reproducible y pruebas: [entorno V27](docs/current/GITHUB_ENVIRONMENT_V27.md).
+Alcance de la actualización: [entrega V27](docs/current/GITHUB_UPDATE_V27.md).
 
 Ejecutar `JUGAR_DEMO.cmd`. La escena principal es
 `scenes/visual/field_demo.tscn`: movimiento, encuentros, captura, combate nativo,

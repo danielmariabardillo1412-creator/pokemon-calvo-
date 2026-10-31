@@ -1,5 +1,19 @@
 # Pokemon Calvo — desarrollo tras la arquitectura
 
+PUBLICACION V27 autorizada expresamente por el usuario el 2026-10-31:
+repositorio https://github.com/danielmariabardillo1412-creator/pokemon-calvo-.
+La actualizacion se publica en codex/organized-update-v27 y una release de
+desarrollo con recursos existentes. No fusionar main ni borrar ramas/carpetas.
+Esta autorizacion sustituye las restricciones historicas de no configurar remoto
+y no publicar, exclusivamente para esta entrega. No cambia las mecanicas.
+Leer docs/current/GITHUB_UPDATE_V27.md y GITHUB_ENVIRONMENT_V27.md.
+En una futura copia remota, la raiz es la del checkout; nunca intentar crear D:
+ni acceder al original protegido. Los wrappers de fases locales y sus sellos
+son historicos y conservan sus rutas/condiciones originales; no resellarlos.
+El gate portable de esta entrega es tools/distribution/verify_update.py.
+Primero verificar codigo y restauracion; no iniciar tareas antiguas OpenCode.
+No hay una nueva mision de objetos autorizada al ejecutor remoto todavia.
+
 Estado vigente V27: se CORRIGE un error de interpretación de Codex en V26.
 Los diez originales vuelven a estar permitidos: dragon_scale, dubious_disc,
 electirizer, magmarizer, prism_scale, protector, reaper_cloth, sachet, up_grade,
