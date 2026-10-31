@@ -284,6 +284,25 @@
         "No graphical/GPU local test",
         "No abilities context in native comparisons"
       ]
+    },
+    "block_6": {
+      "status": "CODE_COMMITTED_NOT_TESTED",
+      "new_ids": [
+        "charcoal",
+        "mystic_water",
+        "magnet"
+      ],
+      "canonical_pokeapi_item_ids": [
+        226,
+        220,
+        219
+      ],
+      "expected_total_damage_item_ids": 6,
+      "expected_native_sessions": 24,
+      "expected_map_bag_routes": 6,
+      "pokeapi_criteria": "official index + type-enhancement and holdable and game indices",
+      "ability_interactions": "NOT_TESTED",
+      "ci": null
     }
   },
   "limitations": [

@@ -1,7 +1,7 @@
 extends "res://tests/gameplay/item_closure_v3_test_runner.gd"
 
-# Bloque 5: solo objetos oficiales de daño sin activación por habilidades.
-# Los doce enfrentamientos usan ability_id vacío para aislar el objeto.
+# Bloques 5–6: objetos oficiales de daño sin activación por habilidades.
+# Las 24 sesiones nativas usan ability_id vacío para aislar el objeto.
 const DAMAGE_OUT := "res://.godot/competitive_damage_v28/"
 const DAMAGE_ITEMS := [
 	{"id": "muscle_band", "effective_move": "tackle",
@@ -10,6 +10,15 @@ const DAMAGE_ITEMS := [
 		"control_move": "tackle", "foe": "snorlax"},
 	{"id": "expert_belt", "effective_move": "thunder_shock",
 		"control_move": "tackle", "foe": "gyarados"},
+	{"id": "charcoal", "effective_move": "ember",
+		"control_move": "tackle", "foe": "snorlax",
+		"api_id": 226, "api_name": "charcoal"},
+	{"id": "mystic_water", "effective_move": "water_gun",
+		"control_move": "tackle", "foe": "snorlax",
+		"api_id": 220, "api_name": "mystic-water"},
+	{"id": "magnet", "effective_move": "thunder_shock",
+		"control_move": "tackle", "foe": "snorlax",
+		"api_id": 219, "api_name": "magnet"},
 ]
 var damage_routes: Array = []
 
@@ -26,10 +35,31 @@ func _run_damage() -> void:
 	catalogs = GameData.from_dict(JSON.parse_string(FileAccess.get_file_as_string("res://data/normalized/pokemon_api.json"))).to_definition_catalog()
 	check("damage catalog overlay", Variants.apply(catalogs))
 	var selection := service_for()
+	# Control de procedencia: datos PokeAPI originales ya fijados en el repo;
+	# no aceptar un ID solo por existir en el inventario normalizado.
+	var official_index: Dictionary = JSON.parse_string(
+		FileAccess.get_file_as_string("res://data/api/v2/item/index.json"))
 	for spec: Dictionary in DAMAGE_ITEMS:
 		var id := StringName(spec.id)
 		check("official item locally allowed " + String(id),
 			catalogs.item(id) != null and selection.selection.content_allowed(id))
+		if spec.has("api_id"):
+			var api_path := "res://data/api/v2/item/" + str(int(spec.api_id)) + "/index.json"
+			var metadata: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(api_path))
+			var found_in_index := false
+			for original: Dictionary in official_index.results:
+				if original.name == spec.api_name and original.url == "/api/v2/item/" + str(spec.api_id) + "/":
+					found_in_index = true
+					break
+			var attrs: Array[String] = []
+			for attribute: Dictionary in metadata.attributes:
+				attrs.append(String(attribute.name))
+			check("canonical official type booster PokeAPI " + String(id),
+				found_in_index and metadata.name == spec.api_name
+				and metadata.category.name == "type-enhancement"
+				and attrs.has("holdable") and attrs.has("holdable-active"))
+			check("canonical item published generation indices " + String(id),
+				metadata.game_indices.size() >= 1)
 		for positive in [true, false]:
 			var move: String = spec.effective_move
 			if not positive: move = spec.control_move
@@ -53,7 +83,7 @@ func _run_damage() -> void:
 		"checks": checks, "errors": errors, "routes": damage_routes,
 		"ids": DAMAGE_ITEMS.size(),
 		"limits": ["No ability/item interactions asserted (empty ability only)",
-			"Three physical map routes use Caterpie, not matching damage probes",
+			"Six physical map routes use Caterpie, not matching damage probes",
 			"No GPU/manual visuals or beta objects"]}
 	var file := FileAccess.open(DAMAGE_OUT + "godot.json", FileAccess.WRITE)
 	if file != null:
@@ -62,7 +92,7 @@ func _run_damage() -> void:
 	done = true
 	print("COMPETITIVE_DAMAGE_V28 ", outcome.status, " checks=", checks,
 		" ids=", DAMAGE_ITEMS.size(), " errors=", errors.size())
-	quit(0 if errors.is_empty() and checks >= 100 and damage_routes.size() == 9 else 1)
+	quit(0 if errors.is_empty() and checks >= 300 and damage_routes.size() == 18 else 1)
 
 func _native_damage(spec: Dictionary, move: String, equipped: bool) -> Dictionary:
 	var item := StringName(spec.id)

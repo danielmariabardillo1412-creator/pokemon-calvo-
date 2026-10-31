@@ -133,7 +133,7 @@ jobs:
           set -euo pipefail
           timeout 300s godot --headless --path . --script res://tests/gameplay/competitive_damage_items_v28.gd 2>&1 | tee item-damage-v28.log
           if grep -E 'SCRIPT ERROR|Parse Error|timeout' item-damage-v28.log; then exit 1; fi
-          grep -E 'COMPETITIVE_DAMAGE_V28 PASS checks=[1-9][0-9]* ids=3 errors=0' item-damage-v28.log
+          grep -E 'COMPETITIVE_DAMAGE_V28 PASS checks=[1-9][0-9]* ids=6 errors=0' item-damage-v28.log
       - name: Evidence-bound matrix by ID and context
         shell: bash
         run: |
