@@ -131,7 +131,7 @@ func _domain_ev() -> void:
 	var existing_share := rules.experience_for_defeats(one.defeated, 2)
 	check("XP receiver set unchanged", live.experience - old_live_xp == existing_share and other.experience - old_other_xp == existing_share)
 	check("EVs to both eligible living party members", _sum_evs(live) == base_hp + 8 and _sum_evs(other) == base_hp)
-	check("fainted party member never earns EV", knocked.evs.is_empty())
+	check("fainted party member never earns EV", _sum_evs(knocked) == 0)
 	var invalid := _mon(&"mew", 50, &"invalid", ["growl"])
 	invalid.evs = {"hp": 253}
 	var before_invalid := invalid.to_dict()
@@ -139,7 +139,7 @@ func _domain_ev() -> void:
 	check("invalid original EV state rejected unchanged", invalid.to_dict() == before_invalid)
 	var no_foe := _mon(&"mew", 50, &"missing_species", ["growl"])
 	Rewards.award(no_foe, [{"base_experience": 100, "level": 7}], catalogs, rules)
-	check("unidentified foe cannot mint EV", no_foe.evs.is_empty())
+	check("unidentified foe cannot mint EV", _sum_evs(no_foe) == 0)
 	routes.append({"family": "EV_DOMAIN", "ids": ["macho_brace"] + POWER_ITEMS.keys(), "foes": ["caterpie"], "generational_profile": "Gen VII-IX"})
 
 func _sum_dict(values: Dictionary) -> int:
@@ -186,8 +186,26 @@ func _native_ev() -> void:
 	var final_owner := own.to_dict()
 	check("native double-settlement cannot duplicate EV", not session.settle_finished_battle().accepted and own.to_dict() == final_owner)
 	var persisted := CreatureInstance.from_dict(final_owner)
-	check("native EV persists in current save schema", persisted.evs == own.evs and persisted.stats.to_dict() == own.stats.to_dict())
+	var serialized_again := persisted.to_dict()
+	check("native EV persists in current save schema", serialized_again.evs == final_owner.evs and serialized_again.stats == final_owner.stats and int(persisted.evs.get("hp", 0)) == hp_yield + 8)
 	routes.append({"family": "EV_NATIVE", "item": "power_weight", "foe": "caterpie", "restored": loaded, "settled": settled.accepted})
+	await session.close()
+	# Segundo encuentro: los EV previos son persistentes y el siguiente KO
+	# suma exactamente otro bloque sin duplicar el primero.
+	var second_foe := _mon(&"caterpie", 50, &"native_power_foe_2", ["growl"])
+	second_foe.current_hp = 1
+	session = Native.new(catalogs, owner, "gen9calvounifiedv1")
+	var next_open: bool = await session.begin_wild(self, second_foe, [29, 19, 23, 43])
+	check("second battle reads trained EVs and same owner", next_open)
+	if next_open:
+		var second_action: Dictionary = await session.submit("move 1", session.revision)
+		check("second battle really defeats the foe", second_action.accepted and session.phase() == "finished")
+		if second_action.accepted and session.phase() == "finished":
+			var second_close: Dictionary = session.settle_finished_battle()
+			check("second battle adds exactly one bonus", second_close.accepted and int(own.evs.get("hp", 0)) == 2 * (hp_yield + 8))
+			var second_snapshot := own.to_dict()
+			check("second settlement idempotent", not session.settle_finished_battle().accepted and own.to_dict() == second_snapshot)
+			routes.append({"family": "EV_NEXT_BATTLE", "item": "power_weight", "foe": "caterpie", "total_hp_ev": int(own.evs.get("hp", 0))})
 	await session.close()
 
 func _map_power() -> void:
