@@ -125,3 +125,16 @@ Intentos conservados: la primera suite se interrumpió para corregir Respondón;
 la segunda rechazó un escenario nuevo que usaba Salpicadura (vetada). Se cambió
 el escenario a Gruñido; no se alteró la política. Ningún intento cuenta como PASS.
 La suite conjunta definitiva está pendiente; no hay aceptación todavía.
+
+### Cierre de la revisión de Codex
+
+Suite definitiva PASS y tres capturas GPU vistas. Se acepta únicamente el
+alcance implementado, con límites explícitos; no se certifica todo el catálogo.
+No se resellaron guardas ni se reconstruyeron bases históricas por familia.
+Los intentos interrumpidos/fallidos siguen conservados y no cuentan como PASS.
+Los resultados finales y el checkpoint están en FINAL_RESULTS.json.
+
+Límite adicional confirmado: Cleanse Tag/Pure Incense conservan un bloqueo de
+entrada al combate nativo al equiparse (descriptor ausente). Se certifica solo
+la tasa, no el objeto completo. Ver encounter_native_dependency.json en la
+evidencia independiente. Es el siguiente hueco de conexión, sin ocultarlo como PASS.

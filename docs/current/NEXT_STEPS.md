@@ -1,25 +1,31 @@
 # Próximo trabajo — 2026-10-31
 
-Estado de ITEM_CLOSURE_V2: **PARTIAL_READY_FOR_REVIEW**. La corrección de R1–R7
-está en el árbol de trabajo, sin commit: el mapa vuelve a cargar, O110 aplica los
-11 objetos de apoyo desde la mochila nativa y O120 verifica Bola de Humo más la
-tasa parcial de Cleanse Tag/Pure Incense. Las puertas O110/O120 y la puerta de
-cierre pasan con procesos reales, y el guard global `--full` pasa. No hay
-aceptación: los guardas por familia no pudieron aislarse porque los cambios
-comparten archivos autorizados y siguen sin commit.
-[Resultados](../opencode/ITEM_CLOSURE_V2/FINAL_RESULTS.json) ·
-[Revisión final](../opencode/ITEM_CLOSURE_V2/FINAL_REVIEW.md) ·
-[Hallazgos O190](../opencode/ITEM_CLOSURE_V2/evidence/O190/REVIEW.md).
+Estado actual: **REVIEWED_WITH_LIMITS** — revisión y correcciones de Codex.
+Checkpoint funcional local: `0f28371471ff76c878f7cbe2c2fc10b963d29764`. El lote delegado está cerrado y
+OpenCode no tiene un trabajo activo. Se conserva la arquitectura organizada.
 
-Pendientes reales tras el cierre: Amulet Coin, Exp. Share, Linking Cord y Luck
-Incense siguen sin ruta concreta; Cleanse Tag/Pure Incense solo cubren la tasa de
-encuentro, no la semántica por pasos; los multiplicadores EV de Macho Brace y los
-seis objetos Power no están implementados; Max Mushrooms depende de un sistema
-Dynamax/G-Max ausente. No reclamar COMPLETE ni ACCEPTED_BY_CODEX.
+O110 conecta once objetos de apoyo en combate. Codex corrigió Flauta Azul ante
+estados distintos del sueño y el límite de objetos X con Respondón. O120 conecta
+Bola de Humo y la tasa parcial de Cleanse Tag/Pure Incense.
 
-Encargo OpenCode preparado: [ITEM_CLOSURE_V2](../opencode/ITEM_CLOSURE_V2/START_HERE.md).
-Cierre por familias O100/O110/O120/O190, sin entregas por objeto. Base funcional
-V21. Los O001/O002 antiguos no se reanudan.
+Suite conjunta: 6/6 grupos de cierre y 23 grupos de familia PASS,
+con tres capturas GPU revisadas y guardas globales originales. Además: 25 pruebas
+nativas, 37 casos independientes entre tres perfiles/checkpoints anteriores y
+150 comprobaciones de integración de apoyo. Son ejecuciones solapadas; no se
+presentan como número de objetos distintos certificados.
+
+[Informe](../opencode/ITEM_CLOSURE_V2/FINAL_REVIEW.md) ·
+[Resultados](../opencode/ITEM_CLOSURE_V2/FINAL_RESULTS.json).
+
+Pendientes: Amulet Coin, Exp. Share, Linking Cord y Luck Incense; semántica por
+pasos y descriptor nativo de los modificadores de encuentros (no entran equipados
+en combate nativo); EV equipados, Max Mushrooms y las
+rutas documentadas de IV, mentas, formas/evolución y fidelidad de captura/XP.
+No se declara terminado todo el catálogo. Los guardas históricos por familia
+no se reconstruyen: la revisión acepta el conjunto y documenta ese límite.
+
+Los apartados V1–V21 siguientes describen checkpoints históricos; sus recuentos
+no sustituyen el estado actual del informe y del JSON vivo.
 
 V21: [consumibles de huida](ITEM_ESCAPE_V21.md). Poké Muñeco, Cola Skitty y
 Poké Señuelo ya se usan desde mochila nativa para terminar un encuentro salvaje,

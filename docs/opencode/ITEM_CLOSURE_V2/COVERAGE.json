@@ -164,7 +164,7 @@
     "docs/current/ITEM_CAPTURE_V11.json": "014f84c5658e83f7e5fe13db69cfd1c5fe73266d7a82ff6a951e30e6be32c8d2",
     "docs/current/ITEM_CAPTURE_V12.json": "d9bfca4694c53ebddd6d247688cb3101e99f25423ebe33e50ee4d6320e116498",
     "docs/current/ITEM_CAPTURE_V15.json": "270e0138359f64622a55fd8144a808a98f6fcf4879007f4af0e78895c8c09510",
-    "docs/current/ITEM_SYSTEM_CURRENT_STATUS.json": "08ed2eddb3b44f8af0f6db6bf011cd6a36c57f6b71ca9d9c1d7124007a180e99",
+    "docs/current/ITEM_SYSTEM_CURRENT_STATUS.json": "4c060ab6aa3e70c21a4ff2a7216828eddfa63ff1816722b48fc3539fd21e8f89",
     "modules/inventory/battle_support_profile.json": "c64988571bd33907ed0358ec1efe1d7ac84d609e67318aee76e90b2f8e5db0e5",
     "modules/inventory/battle_medicine_profile.json": "7442e0de21715f0ca46f318a0175c49163f3336b38617cbd814a4ba5d4d22c5c",
     "modules/battle/backends/showdown/field_held_items.cjs": "daf6b8d5206bfbd97fb551ef6fb7968b541b28fb8d01eea5c0391d6db197ede2",

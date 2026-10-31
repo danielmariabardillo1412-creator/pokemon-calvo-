@@ -1,6 +1,6 @@
 {
   "packet": "ITEM_CLOSURE_V2",
-  "status": "PARTIAL_READY_FOR_REVIEW",
+  "status": "REVIEWED_WITH_LIMITS",
   "writer_active": false,
   "mission_base": "78c3b0f7d6ccfbe8f26f75070d9737ccdaa90035",
   "tasks": {
@@ -21,27 +21,28 @@
       "evidence": "docs/opencode/ITEM_CLOSURE_V2/evidence/O110/results.json"
     },
     "O120": {
-      "status": "PASS",
+      "status": "PARTIAL_VERIFIED",
       "family_base": "78c3b0f7d6ccfbe8f26f75070d9737ccdaa90035",
       "plan": "O120_HELD_CONTEXTS.md",
-      "note": "Smoke Ball verified at the Run boundary through native held_item_active: no escape RNG and no consumption. Cleanse Tag/Pure Incense are PARTIAL_VERIFIED_RATE_ONLY (validated encounter-table copy; step-period semantics pending). Amulet Coin, Exp. Share, Linking Cord and Luck Incense remain concrete dependencies. Family gate PASS: 9 groups, 1,606 checks, 3 captures including the Smokeball bag and equipped states. Per-family guard isolation not achieved.",
+      "note": "Smoke Ball verified at the Run boundary through native held_item_active: no escape RNG and no consumption. Cleanse Tag/Pure Incense are PARTIAL_VERIFIED_RATE_ONLY (validated encounter-table copy; step-period semantics pending). Amulet Coin, Exp. Share, Linking Cord and Luck Incense remain concrete dependencies. Family gate PASS: 9 groups, 1,606 checks, 3 captures including the Smokeball bag and equipped states. Per-family guard isolation not achieved. Limitación verificada por Codex: Cleanse Tag/Pure Incense aún no pueden entrar equipados en combate nativo por falta de descriptor; solo la tasa está probada.",
       "checks": 1606,
       "evidence": "docs/opencode/ITEM_CLOSURE_V2/evidence/O120/results.json"
     },
     "O190": {
-      "status": "PASS",
+      "status": "REVIEWED_WITH_LIMITS",
       "family_base": "78c3b0f7d6ccfbe8f26f75070d9737ccdaa90035",
       "plan": "WORK_ORDER.md",
-      "note": "Final closure run PASS: 6 groups, 1,285 closure checks, 14,880 family checks, 3 GPU captures 1280x720, two full guards PASS (23,079 protected, 15,647 preserved absent). R1-R7 corrected. Global guard limitation documented: per-family guards could not be isolated because authorized files are shared and uncommitted. Final status PARTIAL_READY_FOR_REVIEW, not COMPLETE and not ACCEPTED_BY_CODEX.",
+      "note": "Revisión agregada de Codex y suite conjunta PASS tras C1/C2. Guardas históricas por familia no reconstruidas; dependencias explícitas.",
       "checks": 1285,
       "evidence": "docs/opencode/ITEM_CLOSURE_V2/FINAL_RESULTS.json"
     }
   },
-  "independent_codex_review": "PENDING",
+  "independent_codex_review": "PASS_WITH_DOCUMENTED_LIMITS",
   "previous_independent_review": "NOT_ACCEPTED",
-  "acceptance_by_codex": false,
-  "notes": "R1-R7 corrected in the working tree. Final closure is real and reproducible from the recorded logs and SHA-256 values. The mission remains PARTIAL_READY_FOR_REVIEW because per-family guard isolation was not possible and concrete dependencies remain (Amulet Coin, Exp. Share, Linking Cord, Luck Incense, step-period semantics, held EV multipliers, Max Mushrooms). No COMPLETE claim and no acceptance claim.",
+  "acceptance_by_codex": true,
+  "notes": "Codex revisó la entrega, reprodujo y corrigió C1/C2, y repitió la suite completa. Aceptado el alcance con límites documentados; no COMPLETE del catálogo. Checkpoint funcional local registrado.",
   "codex_review": "docs/opencode/ITEM_CLOSURE_V2/evidence/O190/REVIEW.md",
   "final_results": "docs/opencode/ITEM_CLOSURE_V2/FINAL_RESULTS.json",
-  "final_review": "docs/opencode/ITEM_CLOSURE_V2/FINAL_REVIEW.md"
+  "final_review": "docs/opencode/ITEM_CLOSURE_V2/FINAL_REVIEW.md",
+  "runtime_checkpoint": "0f28371471ff76c878f7cbe2c2fc10b963d29764"
 }

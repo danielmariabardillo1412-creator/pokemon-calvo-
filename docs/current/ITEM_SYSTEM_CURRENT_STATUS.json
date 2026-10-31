@@ -1,5 +1,5 @@
 {
-  "status": "PARTIAL_READY_FOR_REVIEW",
+  "status": "REVIEWED_WITH_LIMITS",
   "date": "2026-10-31",
   "latest_report": "docs/opencode/ITEM_CLOSURE_V2/FINAL_RESULTS.json",
   "notes": "docs/opencode/ITEM_CLOSURE_V2/FINAL_REVIEW.md",
@@ -18,31 +18,21 @@
   "headless_checks": 218,
   "gpu_checks": 46,
   "next": [
-    "Per-family mission guard isolation was not achieved: O100/O110/O120 changes are uncommitted together and share authorized files; the single global --full guard is the only scope gate actually executed",
-    "Review the four remaining concrete O120 dependencies with real effects: Amulet Coin, Exp. Share, Linking Cord and Luck Incense; native descriptors or their systems are absent",
-    "Cleanse Tag and Pure Incense are PARTIAL_VERIFIED_RATE_ONLY: the encounter-rate copy is implemented and tested, but step-period semantics are not represented",
-    "Held EV-gain multipliers for Macho Brace and the six Power items remain unimplemented (DEPENDENCY_MISSING); do not infer them from native metadata presence",
-    "Max Mushrooms remains DEPENDENCY_MISSING because the Dynamax/G-Max system is absent",
-    "Contrast official SV mochi friendship behavior; EV routes use the pinned RHH friendship-unchanged profile, not full parity certification",
-    "Capture V1 probability fidelity, critical captures and Ultra Beast treatment remain unimplemented; V11/V12/V15 ball routes are verified within V1",
-    "IV/nature item routes remain separate pending families",
-    "Evolution ability-slot inheritance and automatic ability form routes (Zen Mode) remain pending",
-    "Capture-ball/map metadata before origin friendship bonuses",
-    "Species-form routes, conditioned evolutions and gender/infatuation/breeding contract",
-    "Food/contest/world-context berries",
-    "Other capture balls needing map/history/current type/gender or origin metadata; legacy machines and Escape Rope/world systems",
-    "Complete generation-specific battle XP fidelity and other Everstone evolution-trigger exceptions separately; V18 preserves base progression profile"
+    "Cleanse Tag y Pure Incense solo verifican tasa 2/3; faltan tanto la semántica por pasos como sus descriptores nativos. Entrar equipados en combate nativo sigue bloqueado (Unknown held item). No se certifican como objetos completamente utilizables.",
+    "Amulet Coin, Exp. Share, Linking Cord y Luck Incense conservan sus dependencias concretas.",
+    "Siguen pendientes multiplicadores EV de objetos equipados, Max Mushrooms y las rutas documentadas de IV, mentas, formas/evolución y fidelidad de captura/XP.",
+    "El bonus base de amistad está verificado; origen y Lujo siguen pendientes."
   ],
   "source_data_and_policies_unchanged": true,
-  "latest_verification": "ITEM_CLOSURE_V2_PARTIAL_READY_FOR_REVIEW",
+  "latest_verification": "ITEM_CLOSURE_V2_CODEX_REVIEWED_WITH_FIXES",
   "held_item_ids_with_verified_effect_scenarios": 189,
   "untested_native_contexts": 323,
   "verification_all_effects_complete": false,
   "reviewed_held_and_berry_dependencies_pending": 41,
   "field_medicine_ids_verified": 15,
   "field_ev_berry_ids_verified": 6,
-  "latest_phase_checks_headless": 218,
-  "latest_phase_checks_gpu": 46,
+  "latest_phase_checks_headless": 150,
+  "latest_phase_checks_gpu": 37,
   "field_recovery_ids_verified": 42,
   "total_connected_field_effect_ids": 77,
   "field_training_ids_verified": 35,
@@ -242,7 +232,7 @@
     "smoke_ball"
   ],
   "held_escape_limits": [
-    "Smoke Ball is checked at the Run boundary through native held_item_active; a trapped request still rejects the run before any consumption",
+    "Smoke Ball bypasses ordinary trapping when the active held item is effective; trainer and invalid command boundaries still reject",
     "Succeeding with Smoke Ball draws no escape RNG and never consumes the held item",
     "Scripted encounters with an additional cannot-run flag are not modeled"
   ],
@@ -252,7 +242,8 @@
   ],
   "encounter_rate_item_limits": [
     "PARTIAL_VERIFIED_RATE_ONLY uses the validated encounter table copy",
-    "Step-period semantics are not represented in the current profile"
+    "Step-period semantics are not represented in the current profile",
+    "Native held descriptors for Cleanse Tag/Pure Incense remain missing: native battle handoff while equipped is blocked, not verified"
   ],
   "native_battle_direct_bag_item_ids_supported": 29,
   "battle_escape_item_use_overrides": {
@@ -267,7 +258,7 @@
   ],
   "item_closure_v2": {
     "mission_base": "78c3b0f7d6ccfbe8f26f75070d9737ccdaa90035",
-    "status": "PARTIAL_READY_FOR_REVIEW",
+    "status": "REVIEWED_WITH_LIMITS",
     "coverage": "docs/opencode/ITEM_CLOSURE_V2/COVERAGE.json",
     "final_results": "docs/opencode/ITEM_CLOSURE_V2/FINAL_RESULTS.json",
     "audit_states": {
@@ -285,15 +276,19 @@
       "cleanse_tag",
       "pure_incense"
     ],
-    "family_guard_isolation": "NOT_ACHIEVED_SHARED_UNCOMMITTED_FILES"
+    "family_guard_isolation": "NOT_ACHIEVED_SHARED_UNCOMMITTED_FILES",
+    "independent_codex_review": "PASS_WITH_DOCUMENTED_LIMITS",
+    "runtime_checkpoint": "0f28371471ff76c878f7cbe2c2fc10b963d29764",
+    "review": "docs/opencode/ITEM_CLOSURE_V2/evidence/O190/REVIEW.md"
   },
   "active_external_handoff": {
     "packet": "docs/opencode/ITEM_CLOSURE_V2/START_HERE.md",
-    "status": "PARTIAL_READY_FOR_REVIEW",
+    "status": "CLOSED_REVIEWED_WITH_LIMITS",
     "runtime_base": "78c3b0f7d6ccfbe8f26f75070d9737ccdaa90035",
     "runtime_changes_in_handoff": true,
-    "review": "docs/opencode/ITEM_CLOSURE_V2/evidence/O190/REVIEW.md"
+    "review": "docs/opencode/ITEM_CLOSURE_V2/evidence/O190/REVIEW.md",
+    "writer_active": false
   },
-  "working_tree_runtime_status": "IMPLEMENTED_UNCOMMITTED_O110_O120_GATES_PASS_FAMILY_GUARDS_NOT_ISOLATED",
-  "last_verified_functional_commit": "78c3b0f7d6ccfbe8f26f75070d9737ccdaa90035"
+  "working_tree_runtime_status": "VERIFIED_AND_COMMITTED_O110_O120_WITH_DOCUMENTED_LIMITS",
+  "last_verified_functional_commit": "0f28371471ff76c878f7cbe2c2fc10b963d29764"
 }
