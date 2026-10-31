@@ -1,0 +1,264 @@
+{
+  "status": "SCOPE_REVIEW_NO_EVOLUTION_RULE_CHANGE",
+  "date": "2026-10-31",
+  "confirmed_exclusion": [
+    "linking_cord"
+  ],
+  "excluded_count": 44,
+  "trade_level_conversion": {
+    "status": "DEFERRED_BY_USER",
+    "levels_selected": null,
+    "strategy": "Later compare other games/randomizers and any table supplied by the friend. No universal level or replacement code activated."
+  },
+  "canonical_trade_record_count": 30,
+  "canonical_trade_species_count": 25,
+  "trade_item_candidates": [
+    {
+      "id": "dragon_scale",
+      "name_es": "Escama Dragón",
+      "trade_routes": [
+        {
+          "source": "seadra",
+          "target": "kingdra"
+        }
+      ],
+      "currently_excluded": false,
+      "status": "REVIEW_AFTER_TRADE_LEVEL_RULES",
+      "reason": "Evolution requirement may become obsolete; no exclusion or level change applied now. Fling metadata alone is not counted as another meaningful item role."
+    },
+    {
+      "id": "dubious_disc",
+      "name_es": "Disco Extraño",
+      "trade_routes": [
+        {
+          "source": "porygon2",
+          "target": "porygon_z"
+        }
+      ],
+      "currently_excluded": false,
+      "status": "REVIEW_AFTER_TRADE_LEVEL_RULES",
+      "reason": "Evolution requirement may become obsolete; no exclusion or level change applied now. Fling metadata alone is not counted as another meaningful item role."
+    },
+    {
+      "id": "electirizer",
+      "name_es": "Electrizador",
+      "trade_routes": [
+        {
+          "source": "electabuzz",
+          "target": "electivire"
+        }
+      ],
+      "currently_excluded": false,
+      "status": "REVIEW_AFTER_TRADE_LEVEL_RULES",
+      "reason": "Evolution requirement may become obsolete; no exclusion or level change applied now. Fling metadata alone is not counted as another meaningful item role."
+    },
+    {
+      "id": "magmarizer",
+      "name_es": "Magmatizador",
+      "trade_routes": [
+        {
+          "source": "magmar",
+          "target": "magmortar"
+        }
+      ],
+      "currently_excluded": false,
+      "status": "REVIEW_AFTER_TRADE_LEVEL_RULES",
+      "reason": "Evolution requirement may become obsolete; no exclusion or level change applied now. Fling metadata alone is not counted as another meaningful item role."
+    },
+    {
+      "id": "prism_scale",
+      "name_es": "Escama Bella",
+      "trade_routes": [
+        {
+          "source": "feebas",
+          "target": "milotic"
+        }
+      ],
+      "currently_excluded": false,
+      "status": "REVIEW_AFTER_TRADE_LEVEL_RULES",
+      "reason": "Evolution requirement may become obsolete; no exclusion or level change applied now. Fling metadata alone is not counted as another meaningful item role."
+    },
+    {
+      "id": "protector",
+      "name_es": "Protector",
+      "trade_routes": [
+        {
+          "source": "rhydon",
+          "target": "rhyperior"
+        }
+      ],
+      "currently_excluded": false,
+      "status": "REVIEW_AFTER_TRADE_LEVEL_RULES",
+      "reason": "Evolution requirement may become obsolete; no exclusion or level change applied now. Fling metadata alone is not counted as another meaningful item role."
+    },
+    {
+      "id": "reaper_cloth",
+      "name_es": "Tela Terrible",
+      "trade_routes": [
+        {
+          "source": "dusclops",
+          "target": "dusknoir"
+        }
+      ],
+      "currently_excluded": false,
+      "status": "REVIEW_AFTER_TRADE_LEVEL_RULES",
+      "reason": "Evolution requirement may become obsolete; no exclusion or level change applied now. Fling metadata alone is not counted as another meaningful item role."
+    },
+    {
+      "id": "sachet",
+      "name_es": "Saquito Fragante",
+      "trade_routes": [
+        {
+          "source": "spritzee",
+          "target": "aromatisse"
+        }
+      ],
+      "currently_excluded": false,
+      "status": "REVIEW_AFTER_TRADE_LEVEL_RULES",
+      "reason": "Evolution requirement may become obsolete; no exclusion or level change applied now. Fling metadata alone is not counted as another meaningful item role."
+    },
+    {
+      "id": "up_grade",
+      "name_es": "Mejora",
+      "trade_routes": [
+        {
+          "source": "porygon",
+          "target": "porygon2"
+        }
+      ],
+      "currently_excluded": false,
+      "status": "REVIEW_AFTER_TRADE_LEVEL_RULES",
+      "reason": "Evolution requirement may become obsolete; no exclusion or level change applied now. Fling metadata alone is not counted as another meaningful item role."
+    },
+    {
+      "id": "whipped_dream",
+      "name_es": "Dulce de Nata",
+      "trade_routes": [
+        {
+          "source": "swirlix",
+          "target": "slurpuff"
+        }
+      ],
+      "currently_excluded": false,
+      "status": "REVIEW_AFTER_TRADE_LEVEL_RULES",
+      "reason": "Evolution requirement may become obsolete; no exclusion or level change applied now. Fling metadata alone is not counted as another meaningful item role."
+    }
+  ],
+  "retain_for_battle": [
+    {
+      "id": "deep_sea_scale",
+      "name_es": "Escama Marina",
+      "trade_routes": [
+        {
+          "source": "clamperl",
+          "target": "gorebyss"
+        }
+      ],
+      "currently_excluded": false,
+      "status": "KEEP_OTHER_BATTLE_ROLE",
+      "battle_role": "If held by a Clamperl, its Sp. Def is doubled."
+    },
+    {
+      "id": "deep_sea_tooth",
+      "name_es": "Diente Marino",
+      "trade_routes": [
+        {
+          "source": "clamperl",
+          "target": "huntail"
+        }
+      ],
+      "currently_excluded": false,
+      "status": "KEEP_OTHER_BATTLE_ROLE",
+      "battle_role": "If held by a Clamperl, its Sp. Atk is doubled."
+    },
+    {
+      "id": "kings_rock",
+      "name_es": "Roca del Rey",
+      "trade_routes": [
+        {
+          "source": "poliwhirl",
+          "target": "politoed"
+        },
+        {
+          "source": "slowpoke",
+          "target": "slowking"
+        }
+      ],
+      "currently_excluded": false,
+      "status": "KEEP_OTHER_BATTLE_ROLE",
+      "battle_role": "Holder's attacks without a chance to flinch gain a 10% chance to flinch."
+    },
+    {
+      "id": "metal_coat",
+      "name_es": "Revest. Metálico",
+      "trade_routes": [
+        {
+          "source": "onix",
+          "target": "steelix"
+        },
+        {
+          "source": "scyther",
+          "target": "scizor"
+        }
+      ],
+      "currently_excluded": false,
+      "status": "KEEP_OTHER_BATTLE_ROLE",
+      "battle_role": "Holder's Steel-type attacks have 1.2x power."
+    }
+  ],
+  "contest_only_candidates": [
+    {
+      "id": "blue_scarf",
+      "name_es": "Pañuelo Azul",
+      "status": "REVIEW_SIDE_MODE_SCOPE_NOT_EXCLUDED"
+    },
+    {
+      "id": "green_scarf",
+      "name_es": "Pañuelo Verde",
+      "status": "REVIEW_SIDE_MODE_SCOPE_NOT_EXCLUDED"
+    },
+    {
+      "id": "pink_scarf",
+      "name_es": "Pañuelo Rosa",
+      "status": "REVIEW_SIDE_MODE_SCOPE_NOT_EXCLUDED"
+    },
+    {
+      "id": "red_scarf",
+      "name_es": "Pañuelo Rojo",
+      "status": "REVIEW_SIDE_MODE_SCOPE_NOT_EXCLUDED"
+    },
+    {
+      "id": "yellow_scarf",
+      "name_es": "Pañuelo Amarillo",
+      "status": "REVIEW_SIDE_MODE_SCOPE_NOT_EXCLUDED"
+    }
+  ],
+  "native": {
+    "roles": {
+      "metal_coat": "Holder's Steel-type attacks have 1.2x power.",
+      "kings_rock": "Holder's attacks without a chance to flinch gain a 10% chance to flinch.",
+      "deep_sea_tooth": "If held by a Clamperl, its Sp. Atk is doubled.",
+      "deep_sea_scale": "If held by a Clamperl, its Sp. Def is doubled."
+    },
+    "permitted": 624,
+    "native_present": 621,
+    "missing": [
+      "amulet_coin",
+      "exp_share",
+      "luck_incense"
+    ],
+    "cord_registered": false
+  },
+  "rules": [
+    "Only Linking Cord is newly excluded. Other candidates remain unchanged.",
+    "Mails/revival items retain the prior exclusions; Poke Doll remains because it provides escape.",
+    "No trading-to-level conversion, level-37 default, canonical evolution edit or additional item ban is implemented.",
+    "An absent world system does not by itself mean its items should be banned."
+  ],
+  "verification_report": ".godot/item_scope_v25/results.json",
+  "source_sha256": {
+    "data/normalized/pokemon_api.json": "14cd97f59e0f68ff89acdd62e607f8dbff36c7562d001ce682869e0915181b2e",
+    "config/item_selection_v1.json": "d8858b4a582562da477ab45acb419f5dea89c5d7d4c10a4371a1a6dd201c1221",
+    "modules/inventory/item_connections_v1.json": "5fbfd8866a446cb64b5aadd5800fe61779b252dc1c56ceb5a06514d5029cabc8"
+  }
+}

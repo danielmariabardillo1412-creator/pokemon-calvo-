@@ -1,13 +1,14 @@
 {
   "schema_version": 1,
   "profile_id": "calvo_item_selection_v1",
-  "updated": "2026-10-28",
+  "updated": "2026-10-31",
   "excluded_ids": {
     "revive": "revives_fainted_pokemon",
     "max_revive": "revives_fainted_pokemon",
     "revival_herb": "revives_fainted_pokemon",
     "sacred_ash": "revives_fainted_pokemon",
     "max_honey": "revives_fainted_pokemon",
+    "linking_cord": "user_excludes_trade_evolution_replacement_item",
     "wide_lens": "friend_named_ban_confirmed_by_user_delegation",
     "bright_powder": "friend_named_ban_confirmed_by_user_delegation"
   },
@@ -20,6 +21,7 @@
     "Lax Incense is not automatically excluded; no additional competitive bans inferred.",
     "Poke Doll has an escape effect; do not classify it as a purely decorative plush.",
     "Max Honey also revives, confirmed by PokeAPI item 1630 flavor text.",
-    "Story/futuristic items, machine version mapping and unsupported mechanics require separate review."
+    "Story/futuristic items, machine version mapping and unsupported mechanics require separate review.",
+    "Linking Cord is excluded by the user. Trade evolutions will be adapted later; no replacement levels are active or selected."
   ]
 }

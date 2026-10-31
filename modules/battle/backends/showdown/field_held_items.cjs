@@ -24,10 +24,6 @@ const worldDefinitions=Object.fromEntries(Object.entries(world.items).map(([id,r
 const encounter=require('./field_encounter_items_v23.json');
 const encounterDefinitions=Object.fromEntries(Object.entries(encounter.items).map(([id,row])=>
  [id,Object.freeze({name:row.name,gen:row.gen,fling:Object.freeze({basePower:row.fling.basePower})})]));
-// V24: only native identity/Fling; explicit bag evolution is owned by inventory.
-const cord=require('../../../inventory/linking_cord_profile_v24.json');
-const cordDefinitions=Object.fromEntries(Object.entries(cord.items).map(([id,row])=>
- [id,Object.freeze({name:row.name,gen:row.gen,fling:Object.freeze({basePower:row.fling.basePower})})]));
 const DEFINITIONS=Object.freeze({
  soothebell:Object.freeze({name:'Soothe Bell',gen:3,fling:Object.freeze({basePower:10})}),
  antidote:medicine('Antidote',1),
@@ -77,7 +73,6 @@ const DEFINITIONS=Object.freeze({
  ...miscDefinitions,
  ...worldDefinitions,
  ...encounterDefinitions,
- ...cordDefinitions,
 });
 
 function install(Dex) {

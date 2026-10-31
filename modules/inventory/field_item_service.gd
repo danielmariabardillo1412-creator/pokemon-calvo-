@@ -5,7 +5,6 @@ const Content = preload("res://modules/gameplay/randomlock_content_policy.gd")
 const Medicine = preload("res://modules/inventory/battle_medicine_profile.gd")
 const FieldEffects = preload("res://modules/inventory/field_item_effects.gd")
 const Growth = preload("res://modules/inventory/field_growth_effects.gd")
-const LinkingCord = preload("res://modules/inventory/linking_cord_effects.gd")
 const EncounterModifiers = preload("res://modules/gameplay/encounter_item_modifiers.gd")
 const PROFILE := "res://modules/inventory/item_connections_v1.json"
 static var _shared_selection: RefCounted
@@ -97,7 +96,6 @@ func evolution_options(item_id: StringName, creature_id: StringName) -> Array[St
 	var result: Array[StringName] = []
 	var creature := owner.owned_creature(creature_id)
 	if creature == null: return result
-	if LinkingCord.supports(item_id): return LinkingCord.targets(creature, catalogs, content)
 	var species := catalogs.species(creature.species_id)
 	if species == null: return result
 	for record: EvolutionRecord in EvolutionSystem.evolution_candidates(species, {"level": creature.level, "item_id": item_id}, catalogs):
@@ -115,8 +113,6 @@ func evolve(item_id: StringName, creature_id: StringName, requested_target: Stri
 	if not owner.inventory.has(item_id): return _deny("item_not_owned")
 	var options := evolution_options(item_id, creature_id)
 	if options.is_empty():
-		if LinkingCord.supports(item_id) and LinkingCord.deferred_source(creature.species_id):
-			return _deny("evolution_requires_additional_mechanic", "DEPENDENCY_MISSING")
 		for record: EvolutionRecord in catalogs.species(creature.species_id).evolutions:
 			if record.item_id == item_id and EvolutionSystem.classify_record(record, catalogs, creature.species_id) != EvolutionSystem.RUNTIME_SUPPORTED:
 				return _deny("evolution_requires_additional_mechanic", "DEPENDENCY_MISSING")
@@ -182,9 +178,6 @@ func use_item(item_id: StringName, creature_id: StringName, replace_slot := -1, 
 		return use_growth_item(item_id, creature_id)
 	if FieldEffects.supports(item_id):
 		return _apply_field_effect(item_id, creature_id, replace_slot, expected_ability_stamp)
-	if LinkingCord.supports(item_id):
-		if replace_slot != -1: return _deny("unexpected_move_slot")
-		return evolve(item_id, creature_id, target_species)
 	if EncounterModifiers.supports(item_id):
 		if owner.owned_creature(creature_id) == null: return _deny("creature_not_owned")
 		if not owner.inventory.has(item_id): return _deny("item_not_owned")
