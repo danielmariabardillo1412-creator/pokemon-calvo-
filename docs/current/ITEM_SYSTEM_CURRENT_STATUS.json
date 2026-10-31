@@ -1,8 +1,8 @@
 {
-  "status": "IN_PROGRESS_CONNECTED_SLICE_VALIDATED",
-  "date": "2026-10-30",
-  "latest_report": "docs/current/ITEM_ESCAPE_V21.json",
-  "notes": "docs/current/ITEM_ESCAPE_V21.md",
+  "status": "PARTIAL_READY_FOR_REVIEW",
+  "date": "2026-10-31",
+  "latest_report": "docs/opencode/ITEM_CLOSURE_V2/FINAL_RESULTS.json",
+  "notes": "docs/opencode/ITEM_CLOSURE_V2/FINAL_REVIEW.md",
   "full_item_matrix": "docs/current/ITEM_FIELD_V8.csv.txt",
   "art_status": "docs/current/ITEM_ART_CURRENT_STATUS.json",
   "menu": "B - Mochila",
@@ -18,10 +18,12 @@
   "headless_checks": 218,
   "gpu_checks": 46,
   "next": [
-    "Extend the automatic importer by reviewed capability families and batch scenarios; V19 compiles 42 recovery IDs, preserving 41 existing routes; outside-pilot rows are not missing-mechanic counts",
-    "Review seven remaining permitted native equipped definition gaps with their real effects: Amulet Coin, Cleanse Tag, Exp. Share, Linking Cord, Luck Incense, Pure Incense, Smoke Ball; do not infer neutral behavior",
-    "Connect explicit bag battle-use actions for eight boost consumables; their V17 held descriptors do not implement those actions",
-    "Contrast official SV mochi friendship behavior; EV routes use pinned RHH friendship-unchanged profile, not full parity certification",
+    "Per-family mission guard isolation was not achieved: O100/O110/O120 changes are uncommitted together and share authorized files; the single global --full guard is the only scope gate actually executed",
+    "Review the four remaining concrete O120 dependencies with real effects: Amulet Coin, Exp. Share, Linking Cord and Luck Incense; native descriptors or their systems are absent",
+    "Cleanse Tag and Pure Incense are PARTIAL_VERIFIED_RATE_ONLY: the encounter-rate copy is implemented and tested, but step-period semantics are not represented",
+    "Held EV-gain multipliers for Macho Brace and the six Power items remain unimplemented (DEPENDENCY_MISSING); do not infer them from native metadata presence",
+    "Max Mushrooms remains DEPENDENCY_MISSING because the Dynamax/G-Max system is absent",
+    "Contrast official SV mochi friendship behavior; EV routes use the pinned RHH friendship-unchanged profile, not full parity certification",
     "Capture V1 probability fidelity, critical captures and Ultra Beast treatment remain unimplemented; V11/V12/V15 ball routes are verified within V1",
     "IV/nature item routes remain separate pending families",
     "Evolution ability-slot inheritance and automatic ability form routes (Zen Mode) remain pending",
@@ -32,7 +34,7 @@
     "Complete generation-specific battle XP fidelity and other Everstone evolution-trigger exceptions separately; V18 preserves base progression profile"
   ],
   "source_data_and_policies_unchanged": true,
-  "latest_verification": "ITEM_ESCAPE_V21",
+  "latest_verification": "ITEM_CLOSURE_V2_PARTIAL_READY_FOR_REVIEW",
   "held_item_ids_with_verified_effect_scenarios": 189,
   "untested_native_contexts": 323,
   "verification_all_effects_complete": false,
@@ -95,8 +97,7 @@
     "exp_share",
     "linking_cord",
     "luck_incense",
-    "pure_incense",
-    "smoke_ball"
+    "pure_incense"
   ],
   "native_field_held_bridge_ids_verified": [
     "soothe_bell",
@@ -152,15 +153,17 @@
     "poke_doll",
     "red_flute",
     "red_scarf",
+    "smoke_ball",
     "white_flute",
     "yellow_flute",
     "yellow_scarf"
   ],
-  "native_known_permitted_equipped_ids": 618,
-  "native_missing_permitted_equipped_definition_count": 7,
+  "native_known_permitted_equipped_ids": 619,
+  "native_missing_permitted_equipped_definition_count": 6,
   "native_held_medicine_ids_with_bridge_verified": 24,
   "native_held_training_and_boost_ids_with_bridge_verified": 17,
-  "battle_boost_item_use_ids_pending": [
+  "battle_boost_item_use_ids_pending": [],
+  "battle_boost_item_use_ids_verified": [
     "dire_hit",
     "guard_spec",
     "x_accuracy",
@@ -170,6 +173,16 @@
     "x_sp_def",
     "x_speed"
   ],
+  "battle_boost_item_use_overrides": {
+    "dire_hit": "NATIVE_BAG_FOCUS_ENERGY_ONE_UNIT_PER_USE_REJECTION_WITHOUT_SPEND_SAVE_VERIFIED",
+    "guard_spec": "NATIVE_BAG_MIST_ONE_UNIT_PER_USE_REJECTION_WITHOUT_SPEND_SAVE_VERIFIED",
+    "x_accuracy": "NATIVE_BAG_TWO_STAGES_CAP_SIX_ONE_UNIT_PER_USE_REJECTION_WITHOUT_SPEND_SAVE_VERIFIED",
+    "x_attack": "NATIVE_BAG_TWO_STAGES_CAP_SIX_ONE_UNIT_PER_USE_REJECTION_WITHOUT_SPEND_SAVE_VERIFIED",
+    "x_defense": "NATIVE_BAG_TWO_STAGES_CAP_SIX_ONE_UNIT_PER_USE_REJECTION_WITHOUT_SPEND_SAVE_VERIFIED",
+    "x_sp_atk": "NATIVE_BAG_TWO_STAGES_CAP_SIX_ONE_UNIT_PER_USE_REJECTION_WITHOUT_SPEND_SAVE_VERIFIED",
+    "x_sp_def": "NATIVE_BAG_TWO_STAGES_CAP_SIX_ONE_UNIT_PER_USE_REJECTION_WITHOUT_SPEND_SAVE_VERIFIED",
+    "x_speed": "NATIVE_BAG_TWO_STAGES_CAP_SIX_ONE_UNIT_PER_USE_REJECTION_WITHOUT_SPEND_SAVE_VERIFIED"
+  },
   "progression_held_effect_ids_verified": [
     "lucky_egg",
     "everstone"
@@ -211,8 +224,7 @@
     "exp_share",
     "linking_cord",
     "luck_incense",
-    "pure_incense",
-    "smoke_ball"
+    "pure_incense"
   ],
   "native_misc_held_metadata_equals_special_use_implemented": false,
   "automatic_held_metadata_import": {
@@ -226,7 +238,23 @@
     "fluffy_tail",
     "poke_toy"
   ],
-  "native_battle_direct_bag_item_ids_supported": 18,
+  "held_escape_item_ids_verified": [
+    "smoke_ball"
+  ],
+  "held_escape_limits": [
+    "Smoke Ball is checked at the Run boundary through native held_item_active; a trapped request still rejects the run before any consumption",
+    "Succeeding with Smoke Ball draws no escape RNG and never consumes the held item",
+    "Scripted encounters with an additional cannot-run flag are not modeled"
+  ],
+  "encounter_rate_item_partial_ids": [
+    "cleanse_tag",
+    "pure_incense"
+  ],
+  "encounter_rate_item_limits": [
+    "PARTIAL_VERIFIED_RATE_ONLY uses the validated encounter table copy",
+    "Step-period semantics are not represented in the current profile"
+  ],
+  "native_battle_direct_bag_item_ids_supported": 29,
   "battle_escape_item_use_overrides": {
     "poke_doll": "NATIVE_WILD_TERMINAL_ESCAPE_ONE_UNIT_NO_RNG_TRAP_BYPASS_REVISION_UI_SAVE_VERIFIED",
     "fluffy_tail": "NATIVE_WILD_TERMINAL_ESCAPE_ONE_UNIT_NO_RNG_TRAP_BYPASS_REVISION_UI_SAVE_VERIFIED",
@@ -234,13 +262,38 @@
   },
   "battle_escape_limits": [
     "No legacy bag command enabled",
-    "Held Smoke Ball is separate and pending",
+    "Held Smoke Ball is separate from the three direct escape bag items and is verified while held",
     "Scripted encounters with an additional cannot-run flag are not modeled"
   ],
+  "item_closure_v2": {
+    "mission_base": "78c3b0f7d6ccfbe8f26f75070d9737ccdaa90035",
+    "status": "PARTIAL_READY_FOR_REVIEW",
+    "coverage": "docs/opencode/ITEM_CLOSURE_V2/COVERAGE.json",
+    "final_results": "docs/opencode/ITEM_CLOSURE_V2/FINAL_RESULTS.json",
+    "audit_states": {
+      "DEPENDENCY_MISSING": 1604,
+      "EXCLUDED": 43,
+      "IMPLEMENTED_VERIFIED": 291,
+      "NOT_APPLICABLE": 34,
+      "PARTIAL_VERIFIED": 250
+    },
+    "o110_bag_support_ids_verified": 11,
+    "o120_held_escape_ids": [
+      "smoke_ball"
+    ],
+    "o120_encounter_rate_partial_ids": [
+      "cleanse_tag",
+      "pure_incense"
+    ],
+    "family_guard_isolation": "NOT_ACHIEVED_SHARED_UNCOMMITTED_FILES"
+  },
   "active_external_handoff": {
     "packet": "docs/opencode/ITEM_CLOSURE_V2/START_HERE.md",
-    "status": "PREPARED_AWAITING_USER_START",
-    "runtime_base": "da00bd4c36f578606a45edcebc6ebd9a6ba630e8",
-    "runtime_changes_in_handoff": false
-  }
+    "status": "PARTIAL_READY_FOR_REVIEW",
+    "runtime_base": "78c3b0f7d6ccfbe8f26f75070d9737ccdaa90035",
+    "runtime_changes_in_handoff": true,
+    "review": "docs/opencode/ITEM_CLOSURE_V2/evidence/O190/REVIEW.md"
+  },
+  "working_tree_runtime_status": "IMPLEMENTED_UNCOMMITTED_O110_O120_GATES_PASS_FAMILY_GUARDS_NOT_ISOLATED",
+  "last_verified_functional_commit": "78c3b0f7d6ccfbe8f26f75070d9737ccdaa90035"
 }

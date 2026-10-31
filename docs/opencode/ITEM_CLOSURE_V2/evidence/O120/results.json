@@ -1,0 +1,411 @@
+{
+  "family": "O120",
+  "status": "PASS",
+  "mission_base": "78c3b0f7d6ccfbe8f26f75070d9737ccdaa90035",
+  "head": "78c3b0f7d6ccfbe8f26f75070d9737ccdaa90035",
+  "branch": "codex/kilo-architecture-v1",
+  "generated_utc": "2026-10-31T02:45:33Z",
+  "working_tree_committed": false,
+  "family_base": "78c3b0f7d6ccfbe8f26f75070d9737ccdaa90035",
+  "checks_total": 1606,
+  "groups": [
+    {
+      "name": "test_world_held_import_v2.py",
+      "status": "PASS",
+      "exit_code": 0,
+      "seconds": 0.14,
+      "command": [
+        "C:\\Users\\danie\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+        "tests/tools/test_world_held_import_v2.py"
+      ],
+      "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\opencode_items_v2\\world_held\\runs\\1793414360804844900\\world_import_test.log",
+      "log_relative": ".godot/opencode_items_v2/world_held/runs/1793414360804844900/world_import_test.log",
+      "log_sha256": "30b7813683a1a911a74c2a70bff63eae1aff8f33d351b2aaf49452207eccc989"
+    },
+    {
+      "name": "--check",
+      "status": "PASS",
+      "exit_code": 0,
+      "seconds": 0.11,
+      "command": [
+        "C:\\Users\\danie\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+        "tools/item_import/import_world_held_v2.py",
+        "--check"
+      ],
+      "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\opencode_items_v2\\world_held\\runs\\1793414360804844900\\world_import_check.log",
+      "log_relative": ".godot/opencode_items_v2/world_held/runs/1793414360804844900/world_import_check.log",
+      "log_sha256": "06cae8ff871b984c7d90e8a048680ba14bf490addedb3bd42d88d53a89c5dd54"
+    },
+    {
+      "name": "opencode_world_held_v2.cjs",
+      "status": "PASS",
+      "exit_code": 0,
+      "seconds": 0.5,
+      "command": [
+        "node",
+        "tools/showdown_engine_probe/opencode_world_held_v2.cjs"
+      ],
+      "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\opencode_items_v2\\world_held\\runs\\1793414360804844900\\world_held_node.log",
+      "log_relative": ".godot/opencode_items_v2/world_held/runs/1793414360804844900/world_held_node.log",
+      "log_sha256": "3322173e630803237997638b489afee0cf2ea986440d0d8ad1fafdd7d23c7970"
+    },
+    {
+      "name": "world_held_godot",
+      "status": "PASS",
+      "exit_code": 0,
+      "seconds": 20.0,
+      "command": [
+        "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+        "--path",
+        "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+        "--headless",
+        "--script",
+        "tests/gameplay/opencode_world_held_v2.gd"
+      ],
+      "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\opencode_items_v2\\world_held\\runs\\1793414360804844900\\world_held_godot.log",
+      "log_relative": ".godot/opencode_items_v2/world_held/runs/1793414360804844900/world_held_godot.log",
+      "log_sha256": "abaf1ed2b6936ca772e0077e44a3e4e14c7033558c0f45e07f8af58b52df9bb6",
+      "checks_reported": 56,
+      "errors": [],
+      "last_line": "OPENCODE_WORLD_HELD_V2 PASS checks=56 GPU=false"
+    },
+    {
+      "name": "native_field",
+      "status": "PASS",
+      "exit_code": 0,
+      "seconds": 51.42,
+      "command": [
+        "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+        "--path",
+        "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+        "--headless",
+        "--script",
+        "tests/gameplay/field_native_test_runner.gd"
+      ],
+      "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\opencode_items_v2\\world_held\\runs\\1793414360804844900\\native_field.log",
+      "log_relative": ".godot/opencode_items_v2/world_held/runs/1793414360804844900/native_field.log",
+      "log_sha256": "4532edaa65a10230fbf1101f37a4944f5c8487c3292fb8a6d48e1b391f3fb333",
+      "checks_reported": 118,
+      "errors": [],
+      "last_line": "FIELD_NATIVE PASS checks=118 GPU=false errors=0"
+    },
+    {
+      "name": "restore",
+      "status": "PASS",
+      "exit_code": 0,
+      "seconds": 43.59,
+      "command": [
+        "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+        "--path",
+        "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+        "--headless",
+        "--script",
+        "tests/gameplay/field_restore_integration_test_runner.gd"
+      ],
+      "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\opencode_items_v2\\world_held\\runs\\1793414360804844900\\restore.log",
+      "log_relative": ".godot/opencode_items_v2/world_held/runs/1793414360804844900/restore.log",
+      "log_sha256": "b680833ccd3f8bdeff5c7b4503bff0c6063eb4adfa9db317e952ca3d48d46478",
+      "checks_reported": 912,
+      "errors": [],
+      "last_line": "FIELD_RESTORE_INTEGRATION PASS checks=912 errors=0"
+    },
+    {
+      "name": "held_v20",
+      "status": "PASS",
+      "exit_code": 0,
+      "seconds": 77.72,
+      "command": [
+        "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+        "--path",
+        "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+        "--headless",
+        "--script",
+        "tests/gameplay/field_held_v20.gd"
+      ],
+      "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\opencode_items_v2\\world_held\\runs\\1793414360804844900\\held_v20.log",
+      "log_relative": ".godot/opencode_items_v2/world_held/runs/1793414360804844900/held_v20.log",
+      "log_sha256": "f50013f08ef30bd7bb4f229b0137fb4091e08377bb12b2ccacbecdeb9fc48bb8",
+      "checks_reported": 267,
+      "errors": [],
+      "last_line": "FIELD_HELD_V20 PASS checks=267 GPU=false"
+    },
+    {
+      "name": "escape_v21",
+      "status": "PASS",
+      "exit_code": 0,
+      "seconds": 68.39,
+      "command": [
+        "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+        "--path",
+        "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+        "--headless",
+        "--script",
+        "tests/gameplay/item_escape_v21.gd"
+      ],
+      "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\opencode_items_v2\\world_held\\runs\\1793414360804844900\\escape_v21.log",
+      "log_relative": ".godot/opencode_items_v2/world_held/runs/1793414360804844900/escape_v21.log",
+      "log_sha256": "19e34bfb11e9c7f10c1d4145ef27ba6736b86781c9704dd84b9ba24ff46141e8",
+      "checks_reported": 218,
+      "errors": [],
+      "last_line": "ITEM_ESCAPE_V21 PASS checks=218 GPU=false"
+    },
+    {
+      "name": "world_held_gpu",
+      "status": "PASS",
+      "exit_code": 0,
+      "seconds": 14.03,
+      "command": [
+        "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+        "--path",
+        "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+        "--resolution",
+        "1280x720",
+        "--script",
+        "tests/gameplay/opencode_world_held_v2.gd",
+        "--",
+        "--capture"
+      ],
+      "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\opencode_items_v2\\world_held\\runs\\1793414360804844900\\world_held_gpu.log",
+      "log_relative": ".godot/opencode_items_v2/world_held/runs/1793414360804844900/world_held_gpu.log",
+      "log_sha256": "785e4b8cb9489a8557627ca16a1572a93ac9cdf207e40a1827a3266b0f475791",
+      "checks_reported": 35,
+      "errors": [],
+      "last_line": "OPENCODE_WORLD_HELD_V2 PASS checks=35 GPU=true"
+    }
+  ],
+  "group_count": 9,
+  "guard_before": {
+    "status": "PASS",
+    "seconds": 6.27,
+    "command": [
+      "C:\\Users\\danie\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+      "tools/verification/opencode_items_v2_guard.py"
+    ],
+    "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\opencode_items_v2\\world_held\\runs\\1793414360804844900\\guard_before.json.log",
+    "log_sha256": "e67e1784edbc30b9341a29f2feaba5625a82a5d883946798f3b282841e3a2f73",
+    "report": {
+      "status": "PASS",
+      "base": "78c3b0f7d6ccfbe8f26f75070d9737ccdaa90035",
+      "protected_files": 23079,
+      "preserved_absent_skip_worktree": 15647,
+      "mode": "HASH_IF_METADATA_CHANGED",
+      "allowed_changes": [
+        "docs/current/ITEM_SYSTEM_CURRENT_STATUS.json",
+        "docs/current/NEXT_STEPS.md",
+        "docs/current/PROJECT_STATE.md",
+        "docs/current/START_HERE.md",
+        "docs/opencode/ITEM_CLOSURE_V2/COVERAGE.csv",
+        "docs/opencode/ITEM_CLOSURE_V2/COVERAGE.json",
+        "docs/opencode/ITEM_CLOSURE_V2/FINAL_RESULTS.json",
+        "docs/opencode/ITEM_CLOSURE_V2/FINAL_REVIEW.md",
+        "docs/opencode/ITEM_CLOSURE_V2/PROGRESS.md",
+        "docs/opencode/ITEM_CLOSURE_V2/STATE.json",
+        "docs/opencode/ITEM_CLOSURE_V2/evidence/O190/REVIEW.md",
+        "docs/opencode/ITEM_CLOSURE_V2/evidence/O190/results.json",
+        "modules/battle/backends/showdown/field_held_items.cjs",
+        "modules/battle/backends/showdown/field_world_items_v2.json",
+        "modules/battle/backends/showdown/native_bag_effects.cjs",
+        "modules/battle/backends/showdown/native_engine.cjs",
+        "modules/gameplay/encounter_item_modifiers.gd",
+        "modules/gameplay/held_escape_items.gd",
+        "modules/gameplay/showdown_adventure_session.gd",
+        "modules/gameplay/wild_adventure_session.gd",
+        "modules/inventory/battle_support_profile.gd",
+        "modules/inventory/battle_support_profile.json",
+        "scenes/visual/field_demo.gd",
+        "scenes/visual/showdown_adventure_lab.gd",
+        "tests/gameplay/opencode_baseline_v2.gd",
+        "tests/gameplay/opencode_battle_support_v2.gd",
+        "tests/gameplay/opencode_world_held_v2.gd",
+        "tests/tools/test_battle_support_import_v2.py",
+        "tests/tools/test_item_closure_audit_v2.py",
+        "tests/tools/test_world_held_import_v2.py",
+        "tools/item_import/audit_item_closure_v2.py",
+        "tools/item_import/import_battle_support_v2.py",
+        "tools/item_import/import_world_held_v2.py",
+        "tools/showdown_engine_probe/opencode_battle_support_v2.cjs",
+        "tools/showdown_engine_probe/opencode_v2_baseline.cjs",
+        "tools/showdown_engine_probe/opencode_world_held_v2.cjs",
+        "tools/verification/run_opencode_closure_v2.py",
+        "tools/verification/run_opencode_support_v2.py",
+        "tools/verification/run_opencode_world_held_v2.py"
+      ]
+    }
+  },
+  "guard_after": {
+    "status": "PASS",
+    "seconds": 6.16,
+    "command": [
+      "C:\\Users\\danie\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+      "tools/verification/opencode_items_v2_guard.py"
+    ],
+    "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\opencode_items_v2\\world_held\\runs\\1793414360804844900\\guard_after.json.log",
+    "log_sha256": "e67e1784edbc30b9341a29f2feaba5625a82a5d883946798f3b282841e3a2f73",
+    "report": {
+      "status": "PASS",
+      "base": "78c3b0f7d6ccfbe8f26f75070d9737ccdaa90035",
+      "protected_files": 23079,
+      "preserved_absent_skip_worktree": 15647,
+      "mode": "HASH_IF_METADATA_CHANGED",
+      "allowed_changes": [
+        "docs/current/ITEM_SYSTEM_CURRENT_STATUS.json",
+        "docs/current/NEXT_STEPS.md",
+        "docs/current/PROJECT_STATE.md",
+        "docs/current/START_HERE.md",
+        "docs/opencode/ITEM_CLOSURE_V2/COVERAGE.csv",
+        "docs/opencode/ITEM_CLOSURE_V2/COVERAGE.json",
+        "docs/opencode/ITEM_CLOSURE_V2/FINAL_RESULTS.json",
+        "docs/opencode/ITEM_CLOSURE_V2/FINAL_REVIEW.md",
+        "docs/opencode/ITEM_CLOSURE_V2/PROGRESS.md",
+        "docs/opencode/ITEM_CLOSURE_V2/STATE.json",
+        "docs/opencode/ITEM_CLOSURE_V2/evidence/O190/REVIEW.md",
+        "docs/opencode/ITEM_CLOSURE_V2/evidence/O190/results.json",
+        "modules/battle/backends/showdown/field_held_items.cjs",
+        "modules/battle/backends/showdown/field_world_items_v2.json",
+        "modules/battle/backends/showdown/native_bag_effects.cjs",
+        "modules/battle/backends/showdown/native_engine.cjs",
+        "modules/gameplay/encounter_item_modifiers.gd",
+        "modules/gameplay/held_escape_items.gd",
+        "modules/gameplay/showdown_adventure_session.gd",
+        "modules/gameplay/wild_adventure_session.gd",
+        "modules/inventory/battle_support_profile.gd",
+        "modules/inventory/battle_support_profile.json",
+        "scenes/visual/field_demo.gd",
+        "scenes/visual/showdown_adventure_lab.gd",
+        "tests/gameplay/opencode_baseline_v2.gd",
+        "tests/gameplay/opencode_battle_support_v2.gd",
+        "tests/gameplay/opencode_world_held_v2.gd",
+        "tests/tools/test_battle_support_import_v2.py",
+        "tests/tools/test_item_closure_audit_v2.py",
+        "tests/tools/test_world_held_import_v2.py",
+        "tools/item_import/audit_item_closure_v2.py",
+        "tools/item_import/import_battle_support_v2.py",
+        "tools/item_import/import_world_held_v2.py",
+        "tools/showdown_engine_probe/opencode_battle_support_v2.cjs",
+        "tools/showdown_engine_probe/opencode_v2_baseline.cjs",
+        "tools/showdown_engine_probe/opencode_world_held_v2.cjs",
+        "tools/verification/run_opencode_closure_v2.py",
+        "tools/verification/run_opencode_support_v2.py",
+        "tools/verification/run_opencode_world_held_v2.py"
+      ]
+    }
+  },
+  "results_path": "D:/Proyectos/Pokemon Calvo - Arquitectura Kilo/.godot/opencode_items_v2/world_held/results.json",
+  "results_sha256": "3cfa26f1027dbbf00cfa9db94372a113515b9e940b557cbe68676c7fae8c434c",
+  "tested_sources_sha256": {
+    "modules/battle/backends/showdown/field_held_items.cjs": "daf6b8d5206bfbd97fb551ef6fb7968b541b28fb8d01eea5c0391d6db197ede2",
+    "modules/battle/backends/showdown/field_world_items_v2.json": "fd4136b005c8d272c32970f94742179ab0306a2754a43d584ae782fdb252adf9",
+    "modules/battle/backends/showdown/native_engine.cjs": "30e4118893b86de847f8d2c64558f26fce9b7dd795b52dc268d49504b397d59b",
+    "modules/gameplay/encounter_item_modifiers.gd": "191577b702ad10d34200bd52b52d512299cedabcedd1f76f521ec1f4b1dd2663",
+    "modules/gameplay/held_escape_items.gd": "df61e2fea0a9e356209f9835081c2bf0e6c9f8eef1d44f6d16cb5bbc546724ea",
+    "modules/gameplay/showdown_adventure_session.gd": "4021528ab42ba951b78f9106985ec06325cd8640357cd4575b845c5c712da0dc",
+    "modules/gameplay/wild_adventure_session.gd": "c5d09ac0eab7f732b959ceeb482a0a98ee2e4d5f160ee394e30f197ef6333c8d",
+    "scenes/visual/field_demo.gd": "f42d5c01f0b4d796718b07545b7e477eecda8d1778b9883a3fe77952579cb6c0",
+    "tests/gameplay/opencode_world_held_v2.gd": "66943b6944e43ca6ad47eb4ca77a09ed7baf075425e0201e5d59acba6afae83c",
+    "tests/tools/test_world_held_import_v2.py": "475ad86f96fe0df8192f6f794252a92271b434ba4a64e1b902151810acd1a03e",
+    "tools/item_import/import_world_held_v2.py": "3d8a64cd9be651880c4ce25bc99efe269f75d48664006de0ef7059eaa8df6e94",
+    "tools/showdown_engine_probe/opencode_world_held_v2.cjs": "eca53ae51295cb3681e6e911be1e477d82790510561483273f25e61ec19585f9"
+  },
+  "profile": "modules/battle/backends/showdown/field_world_items_v2.json",
+  "profile_sha256": "fd4136b005c8d272c32970f94742179ab0306a2754a43d584ae782fdb252adf9",
+  "verified_ids": [
+    "smoke_ball"
+  ],
+  "partial_ids": [
+    "cleanse_tag",
+    "pure_incense"
+  ],
+  "concrete_dependencies": [
+    "amulet_coin",
+    "exp_share",
+    "linking_cord",
+    "luck_incense"
+  ],
+  "coverage_rows": {
+    "smoke_ball": {
+      "name_es": "Bola de Humo",
+      "permission": "PERMITTED",
+      "native_metadata": "IMPLEMENTED_VERIFIED",
+      "battle_use": "IMPLEMENTED_VERIFIED",
+      "scenario": "IMPLEMENTED_VERIFIED",
+      "overall": "IMPLEMENTED_VERIFIED",
+      "dependency": ""
+    },
+    "cleanse_tag": {
+      "name_es": "Amuleto",
+      "permission": "PERMITTED",
+      "native_metadata": "DEPENDENCY_MISSING",
+      "battle_use": "NOT_APPLICABLE",
+      "scenario": "PARTIAL_VERIFIED",
+      "overall": "PARTIAL_VERIFIED",
+      "dependency": "Native descriptor absent; encounter-rate copy is implemented and tested as PARTIAL_VERIFIED_RATE_ONLY; step-period semantics are not representable in the current profile."
+    },
+    "pure_incense": {
+      "name_es": "Incienso Puro",
+      "permission": "PERMITTED",
+      "native_metadata": "DEPENDENCY_MISSING",
+      "battle_use": "NOT_APPLICABLE",
+      "scenario": "PARTIAL_VERIFIED",
+      "overall": "PARTIAL_VERIFIED",
+      "dependency": "Native descriptor absent; encounter-rate copy is implemented and tested as PARTIAL_VERIFIED_RATE_ONLY; step-period semantics are not representable in the current profile."
+    },
+    "amulet_coin": {
+      "name_es": "Moneda Amuleto",
+      "permission": "PERMITTED",
+      "native_metadata": "DEPENDENCY_MISSING",
+      "battle_use": "DEPENDENCY_MISSING",
+      "scenario": "NOT_APPLICABLE",
+      "overall": "DEPENDENCY_MISSING",
+      "dependency": "Native descriptor absent; Amulet Coin money-reward multiplier has no battle/economy implementation."
+    },
+    "exp_share": {
+      "name_es": "Repartir Exp",
+      "permission": "PERMITTED",
+      "native_metadata": "DEPENDENCY_MISSING",
+      "battle_use": "DEPENDENCY_MISSING",
+      "scenario": "NOT_APPLICABLE",
+      "overall": "DEPENDENCY_MISSING",
+      "dependency": "Native descriptor absent; Exp. Share distribution profile coherent with calvo_progression_v1 is not implemented."
+    },
+    "linking_cord": {
+      "name_es": "Cordón Unión",
+      "permission": "PERMITTED",
+      "native_metadata": "DEPENDENCY_MISSING",
+      "battle_use": "DEPENDENCY_MISSING",
+      "scenario": "NOT_APPLICABLE",
+      "overall": "DEPENDENCY_MISSING",
+      "dependency": "Native descriptor absent; explicit trade-evolution route is not implemented and canonical evolution data is unchanged. | Trade/other evolution context absent."
+    },
+    "luck_incense": {
+      "name_es": "Incienso Duplo",
+      "permission": "PERMITTED",
+      "native_metadata": "DEPENDENCY_MISSING",
+      "battle_use": "DEPENDENCY_MISSING",
+      "scenario": "NOT_APPLICABLE",
+      "overall": "DEPENDENCY_MISSING",
+      "dependency": "Native descriptor absent; money/breeding Luck Incense route is not implemented."
+    }
+  },
+  "captures": [
+    {
+      "path": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\opencode_world_held_v2\\smoke_ball_bag.png",
+      "sha256": "bb097832f0c5c09d03358dd97b03e6cfacbc937c84dc9761f56f9c60fbfe2ad4",
+      "bytes": 87573,
+      "width": 1280,
+      "height": 720
+    },
+    {
+      "path": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\opencode_world_held_v2\\smoke_ball_equipped.png",
+      "sha256": "1ec43d8ca49245f119e7fd1d5d50f7b0b38352f19929818a51f37d5cfe6c06d3",
+      "bytes": 135801,
+      "width": 1280,
+      "height": 720
+    }
+  ],
+  "limitations": [
+    "Smoke Ball is checked at the Run boundary through native held_item_active; the item is never consumed, so success draws no escape RNG.",
+    "Cleanse Tag and Pure Incense are PARTIAL_VERIFIED_RATE_ONLY through a validated encounter-table copy; step-period semantics are not represented.",
+    "Amulet Coin, Exp. Share, Linking Cord and Luck Incense remain DEPENDENCY_MISSING with concrete reasons; no neutral behavior is inferred.",
+    "The family gate passed, but a per-family guard could not be isolated because the working tree also contains O100/O110 changes in shared files."
+  ]
+}

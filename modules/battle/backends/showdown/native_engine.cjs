@@ -20,6 +20,12 @@ const STAT = {hp:'hp',attack:'atk',defense:'def',special_attack:'spa',special_de
 const medicineProfile = JSON.parse(fs.readFileSync(path.join(ROOT,'modules/inventory/battle_medicine_profile.json'),'utf8'));
 
 function applyMedicine(session, battle, command) {
+  // O110: the only adapter change is routing the reviewed bag-effect IDs to the
+  // helper; the medicine branch below stays authoritative for its own IDs.
+  if (require('./native_bag_effects.cjs').reviewed(command?.item_id)) {
+    require('./native_bag_effects.cjs').applyBagEffect(session, battle, command);
+    return;
+  }
   const spec = medicineProfile.items[command?.item_id];
   const name = Object.keys(session.identities).find(n => session.identities[n] === command?.target_id);
   const p = battle.p1.pokemon.find(p => p.name === name);
@@ -205,6 +211,11 @@ function checkpoint(session) {
       pokemon:side.pokemon.map(p=>({instance_id:session.identities[p.name],species_id:p.species.id,
         hp:p.hp,max_hp:p.maxhp,status_id:statusFromPS[p.status] ?? '',status_time:p.statusState.time ?? 0,
         persistent_hp:p.getUndynamaxedHP(),base_max_hp:p.baseMaxhp,
+        // Additive projections only (not part of the canonical state hash): the real
+        // battle-item happiness and the real held-item activity computed with the
+        // simulator's own ignoringItem() suppression (Magic Room/Embargo/Klutz/consumed).
+        friendship:Number.isInteger(p.happiness)?p.happiness:(Number.isInteger(p.set?.happiness)?p.set.happiness:0),
+        held_item_active:!!p.item&&!p.ignoringItem(),
         toxic_stage:p.statusState.stage ?? 0,boosts:clone(p.boosts),item:p.item,ability:p.ability,
         transformed:p.transformed,trapped:!!p.trapped,volatiles:Object.keys(p.volatiles),substitute_hp:p.volatiles.substitute?.hp ?? 0,
         stats:{max_hp:p.maxhp,attack:p.storedStats.atk,defense:p.storedStats.def,special_attack:p.storedStats.spa,special_defense:p.storedStats.spd,speed:p.storedStats.spe},

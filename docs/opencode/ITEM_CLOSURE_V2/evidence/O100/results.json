@@ -1,0 +1,203 @@
+{
+  "family": "O100",
+  "status": "PASS",
+  "mission_base": "78c3b0f7d6ccfbe8f26f75070d9737ccdaa90035",
+  "head": "78c3b0f7d6ccfbe8f26f75070d9737ccdaa90035",
+  "branch": "codex/kilo-architecture-v1",
+  "generated_utc": "2026-10-31T02:45:33Z",
+  "working_tree_committed": false,
+  "closure_run": ".godot/opencode_items_v2/closure/runs/1793413901862561200/results.json",
+  "closure_results_sha256": "708aa77b96af5ed39bc8148ab3330d866e9fd3a2610b120cc629c3771ddeec2f",
+  "coverage": {
+    "json": "docs/opencode/ITEM_CLOSURE_V2/COVERAGE.json",
+    "json_sha256": "7bdca2242a841449486695305e1ba499bf8903d03b07e1edfe83c5b7333768b1",
+    "csv": "docs/opencode/ITEM_CLOSURE_V2/COVERAGE.csv",
+    "csv_sha256": "8e71069a0734ef433ac1ed3ff520c9a32ecb52421004db4b1a83fb3912e4be80",
+    "total_canonical": 2222,
+    "total_processed": 2222,
+    "state_distribution": {
+      "DEPENDENCY_MISSING": 1604,
+      "EXCLUDED": 43,
+      "IMPLEMENTED_VERIFIED": 291,
+      "NOT_APPLICABLE": 34,
+      "PARTIAL_VERIFIED": 250
+    },
+    "context_distributions": {
+      "permission": {
+        "EXCLUDED": 43,
+        "NOT_APPLICABLE": 1554,
+        "PERMITTED": 625
+      },
+      "art": {
+        "DEPENDENCY_MISSING": 1055,
+        "IMPLEMENTED_VERIFIED": 1011,
+        "NOT_APPLICABLE": 156
+      },
+      "equip": {
+        "IMPLEMENTED_VERIFIED": 625,
+        "NOT_APPLICABLE": 1597
+      },
+      "native_metadata": {
+        "DEPENDENCY_MISSING": 6,
+        "IMPLEMENTED_VERIFIED": 619,
+        "NOT_APPLICABLE": 1597
+      },
+      "field_use": {
+        "DEPENDENCY_MISSING": 1450,
+        "IMPLEMENTED_VERIFIED": 291,
+        "NOT_APPLICABLE": 445,
+        "PARTIAL_VERIFIED": 36
+      },
+      "battle_use": {
+        "DEPENDENCY_MISSING": 1335,
+        "IMPLEMENTED_UNVERIFIED": 101,
+        "IMPLEMENTED_VERIFIED": 30,
+        "NOT_APPLICABLE": 549,
+        "PARTIAL_VERIFIED": 207
+      },
+      "evolution": {
+        "DEPENDENCY_MISSING": 6,
+        "IMPLEMENTED_VERIFIED": 15,
+        "NOT_APPLICABLE": 2196,
+        "PARTIAL_VERIFIED": 5
+      },
+      "machine": {
+        "DEPENDENCY_MISSING": 109,
+        "IMPLEMENTED_VERIFIED": 229,
+        "NOT_APPLICABLE": 1884
+      },
+      "scenario": {
+        "IMPLEMENTED_UNVERIFIED": 100,
+        "IMPLEMENTED_VERIFIED": 501,
+        "NOT_APPLICABLE": 1581,
+        "PARTIAL_VERIFIED": 40
+      }
+    },
+    "counters": {
+      "excluded_count": 43,
+      "permitted_holdable": 631,
+      "permitted_after_exclusion": 625,
+      "native_present": 619,
+      "native_missing": 6,
+      "missing_native_ids": [
+        "amulet_coin",
+        "cleanse_tag",
+        "exp_share",
+        "linking_cord",
+        "luck_incense",
+        "pure_incense"
+      ],
+      "art_entries_with_art": 1011,
+      "art_non_excluded_without_prepared": 1055,
+      "art_excluded_from_plan": 156,
+      "machine_ids_mapped": 338,
+      "machine_verified": 229,
+      "machine_pending": 109,
+      "evolution_routes_supported": 57,
+      "evolution_routes_other": 15,
+      "evolution_item_ids": 26,
+      "unknown_rows": 0
+    },
+    "o110": {
+      "reviewed_ids": [
+        "blue_flute",
+        "dire_hit",
+        "guard_spec",
+        "red_flute",
+        "x_accuracy",
+        "x_attack",
+        "x_defense",
+        "x_sp_atk",
+        "x_sp_def",
+        "x_speed",
+        "yellow_flute"
+      ],
+      "consumable_ids": [
+        "dire_hit",
+        "guard_spec",
+        "x_accuracy",
+        "x_attack",
+        "x_defense",
+        "x_sp_atk",
+        "x_sp_def",
+        "x_speed"
+      ],
+      "reusable_ids": [
+        "blue_flute",
+        "red_flute",
+        "yellow_flute"
+      ],
+      "friendship_base_gain": "battleitem +1 under 200; origin/Luxury bonus pending"
+    },
+    "o120": {
+      "smoke_ball": "IMPLEMENTED_VERIFIED at the Run boundary; native descriptor present; no consumption",
+      "cleanse_tag": "PARTIAL_VERIFIED_RATE_ONLY 2/3 encounter rate; step-period semantics pending",
+      "pure_incense": "PARTIAL_VERIFIED_RATE_ONLY 2/3 encounter rate; step-period semantics pending",
+      "concrete_dependencies": [
+        "amulet_coin",
+        "exp_share",
+        "linking_cord",
+        "luck_incense"
+      ]
+    },
+    "sources_sha256": {
+      "data/normalized/pokemon_api.json": "14cd97f59e0f68ff89acdd62e607f8dbff36c7562d001ce682869e0915181b2e",
+      "config/item_selection_v1.json": "c9305a87bf8e5a0e22d9c81353cc924dbaf432fca5b38f817f189ab8e2d048a2",
+      "modules/inventory/item_connections_v1.json": "5fbfd8866a446cb64b5aadd5800fe61779b252dc1c56ceb5a06514d5029cabc8",
+      "docs/current/ITEM_FIELD_V8.csv.txt": "fa6710e5989e36fdb6043c2044166f74aa6a4506d3147b56d13a49cdc4385ce3",
+      "docs/current/ITEM_ART_COVERAGE_V5.json": "bae8e0437ced1a6c3c3cc9fa5cb31b77071d526b6dff7be1a0f8f07e6e489155",
+      "docs/current/ITEM_PROGRESSION_V18.json": "2ba49a222a0fe8aed015e93106e32554111dd1de2ddb6c687031795bf19da0a5",
+      "docs/current/ITEM_IMPORT_V19_AUDIT.json": "ee441fa93beddbe7762e0e0c2166a49b7fa2bdbda2b237459876de1773986592",
+      "docs/current/ITEM_FIELD_HELD_V20.json": "bfa907db5968edda259b5947e1d86480088050b46fd63ccc9c6fedec5bc3a52d",
+      "docs/current/ITEM_ESCAPE_V21.json": "ae649279867aeb4198fe3139952bdc68d3662f3299b7a577829cc2f206c36e43",
+      "docs/current/ITEM_CAPTURE_V11.json": "014f84c5658e83f7e5fe13db69cfd1c5fe73266d7a82ff6a951e30e6be32c8d2",
+      "docs/current/ITEM_CAPTURE_V12.json": "d9bfca4694c53ebddd6d247688cb3101e99f25423ebe33e50ee4d6320e116498",
+      "docs/current/ITEM_CAPTURE_V15.json": "270e0138359f64622a55fd8144a808a98f6fcf4879007f4af0e78895c8c09510",
+      "docs/current/ITEM_SYSTEM_CURRENT_STATUS.json": "08ed2eddb3b44f8af0f6db6bf011cd6a36c57f6b71ca9d9c1d7124007a180e99",
+      "modules/inventory/battle_support_profile.json": "c64988571bd33907ed0358ec1efe1d7ac84d609e67318aee76e90b2f8e5db0e5",
+      "modules/inventory/battle_medicine_profile.json": "7442e0de21715f0ca46f318a0175c49163f3336b38617cbd814a4ba5d4d22c5c",
+      "modules/battle/backends/showdown/field_held_items.cjs": "daf6b8d5206bfbd97fb551ef6fb7968b541b28fb8d01eea5c0391d6db197ede2",
+      "modules/battle/backends/showdown/field_misc_items_v20.json": "fcd6b91041a661cd8179f15f290645aff59a6234a4d6bfb93aa0304119d9453a",
+      "modules/battle/backends/showdown/field_world_items_v2.json": "fd4136b005c8d272c32970f94742179ab0306a2754a43d584ae782fdb252adf9"
+    }
+  },
+  "commands": [
+    {
+      "name": "audit_test",
+      "status": "PASS",
+      "exit_code": 0,
+      "seconds": 2.53,
+      "command": [
+        "C:\\Users\\danie\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+        "tests/tools/test_item_closure_audit_v2.py"
+      ],
+      "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\opencode_items_v2\\closure\\runs\\1793413901862561200\\audit_test.log",
+      "log_relative": ".godot/opencode_items_v2/closure/runs/1793413901862561200/audit_test.log",
+      "log_sha256": "d5c8b50b2b458dbd95a2a4030eec62f50646d598e236d344e0c84b80c674f0c5",
+      "group": "audit_test",
+      "expected_checks": 10
+    },
+    {
+      "name": "audit_check",
+      "status": "PASS",
+      "exit_code": 0,
+      "seconds": 0.44,
+      "command": [
+        "C:\\Users\\danie\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+        "tools/item_import/audit_item_closure_v2.py",
+        "--check"
+      ],
+      "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\opencode_items_v2\\closure\\runs\\1793413901862561200\\audit_check.log",
+      "log_relative": ".godot/opencode_items_v2/closure/runs/1793413901862561200/audit_check.log",
+      "log_sha256": "1f89ce75aee7a6928a93700b64e0dd89a08532fbe383640b6e82ff03204ba2be",
+      "group": "audit_check",
+      "checks_reported": 1
+    }
+  ],
+  "limitations": [
+    "Presence is not effect certification: permission, art, equip, native metadata, field use, battle use, evolution and machine are separate contexts.",
+    "A catalog row can have no applicable context (NOT_APPLICABLE) without being a missing mechanic.",
+    "DEPENDENCY_MISSING means a concrete data, system or decision dependency; it is not a failed test.",
+    "The audit is a per-ID, per-context inventory; it does not certify every in-game combination."
+  ]
+}

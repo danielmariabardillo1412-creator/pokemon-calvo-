@@ -1,0 +1,182 @@
+{
+  "reviewer": "Codex",
+  "status": "CHANGES_REQUESTED",
+  "accepted": false,
+  "delivery_head": "78c3b0f7d6ccfbe8f26f75070d9737ccdaa90035",
+  "worker_commits": 0,
+  "runtime_changed_by_review": false,
+  "scope_guard": {
+    "status": "PASS",
+    "mode": "FULL_CONTENT_HASHES",
+    "protected_files": 23079,
+    "preserved_absent_skip_worktree": 15647,
+    "meaning": "Scope/integrity only; mechanics not certified"
+  },
+  "baseline_fixture_hashes_match": true,
+  "baseline_semantic_compatibility_certified": false,
+  "reproduction_directory": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\opencode_items_v2\\review_codex\\1793386640360892300",
+  "runs": [
+    {
+      "name": "support_cli",
+      "exit_code": 0,
+      "bytes": 0,
+      "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\opencode_items_v2\\review_codex\\1793386640360892300\\support_cli.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "held_cli",
+      "exit_code": 0,
+      "bytes": 0,
+      "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\opencode_items_v2\\review_codex\\1793386640360892300\\held_cli.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "support_node",
+      "exit_code": 1,
+      "bytes": 1226,
+      "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\opencode_items_v2\\review_codex\\1793386640360892300\\support_node.log",
+      "sha256": "800369f88fd3c4dbadb01f3cdd2dd9b614acab4d7482b6cc92081e7deed0d1d2"
+    },
+    {
+      "name": "held_node",
+      "exit_code": 1,
+      "bytes": 1213,
+      "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\opencode_items_v2\\review_codex\\1793386640360892300\\held_node.log",
+      "sha256": "98f3f75d7ad234c9765862e50d2e80b6bbe62b33fa54399a06075e41a1af1a58"
+    },
+    {
+      "status": "FAIL",
+      "checks_reported": 0,
+      "errors": [
+        "SCRIPT ERROR: Parse Error: Identifier \"None\" not declared in the current scope.",
+        "SCRIPT ERROR: Parse Error: Identifier \"True\" not declared in the current scope.",
+        "SCRIPT ERROR: Parse Error: Identifier \"True\" not declared in the current scope.",
+        "ERROR: Failed to load script \"res://tests/gameplay/opencode_battle_support_v2.gd\" with error \"Parse error\"."
+      ],
+      "last_line": "   at: load (modules/gdscript/gdscript_resource_format.cpp:46)",
+      "group": "support_godot",
+      "command": [
+        "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+        "--path",
+        "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+        "--headless",
+        "--script",
+        "tests/gameplay/opencode_battle_support_v2.gd"
+      ],
+      "exit_code": 1,
+      "seconds": 0.86,
+      "terminated_after_script_error": false,
+      "expected_negative_diagnostics": [],
+      "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\opencode_items_v2\\review_codex\\1793386640360892300\\support_godot.log",
+      "log_sha256": "58b2d3213cdbf37802fbc2677ec1d8156a24a361bd9f680fe2481155d16a1bc5"
+    },
+    {
+      "status": "FAIL",
+      "checks_reported": 0,
+      "errors": [
+        "SCRIPT ERROR: Parse Error: Identifier \"True\" not declared in the current scope.",
+        "ERROR: Failed to load script \"res://tests/gameplay/opencode_world_held_v2.gd\" with error \"Parse error\"."
+      ],
+      "last_line": "   at: load (modules/gdscript/gdscript_resource_format.cpp:46)",
+      "group": "held_godot",
+      "command": [
+        "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+        "--path",
+        "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+        "--headless",
+        "--script",
+        "tests/gameplay/opencode_world_held_v2.gd"
+      ],
+      "exit_code": 1,
+      "seconds": 0.2,
+      "terminated_after_script_error": false,
+      "expected_negative_diagnostics": [],
+      "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\opencode_items_v2\\review_codex\\1793386640360892300\\held_godot.log",
+      "log_sha256": "08f328bb2f6b2af98bf07a686998c2749a2728dda81972b4ae6517d8929fab1d"
+    },
+    {
+      "status": "FAIL",
+      "checks_reported": 0,
+      "errors": [
+        "SCRIPT ERROR: Parse Error: Cannot infer the type of \"actor_state\" variable because the value doesn't have a set type.",
+        "ERROR: Failed to load script \"res://scenes/visual/field_demo.gd\" with error \"Parse error\".",
+        "SCRIPT ERROR: Invalid access to property or key '_native_battles' on a base object of type 'Node2D'."
+      ],
+      "last_line": "       [0] _run (res://tests/gameplay/field_native_test_runner.gd:68)",
+      "group": "existing_map_regression",
+      "command": [
+        "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+        "--path",
+        "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+        "--headless",
+        "--script",
+        "tests/gameplay/field_native_test_runner.gd"
+      ],
+      "exit_code": 1,
+      "seconds": 4.27,
+      "terminated_after_script_error": true,
+      "expected_negative_diagnostics": [],
+      "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\opencode_items_v2\\review_codex\\1793386640360892300\\existing_map_regression.log",
+      "log_sha256": "0d8d7dbae99d495f4d873d8593340947617b854e8ec3f53be32bd7010e55da5a"
+    }
+  ],
+  "runner_function_failures": [
+    {
+      "runner": "run_opencode_support_v2",
+      "exception": "AttributeError",
+      "message": "'LocalPhase' object has no attribute 'phase'"
+    },
+    {
+      "runner": "run_opencode_world_held_v2",
+      "exception": "AttributeError",
+      "message": "'LocalPhase' object has no attribute 'phase'"
+    }
+  ],
+  "final_results_json": {
+    "parseable": false,
+    "line": 121,
+    "column": 71
+  },
+  "x_attack_game_api": {
+    "accepted": false,
+    "error": "item_not_battle_usable",
+    "offered": false,
+    "quantity_after": 2
+  },
+  "x_attack_direct_native": {
+    "before_attack_stage": 0,
+    "after_enemy_growl": -1,
+    "expected_with_plus_two": 1,
+    "effect_log_only": true
+  },
+  "report_hash_claims_match": false,
+  "artifacts_missing": [
+    "tools/verification/run_opencode_closure_v2.py",
+    "docs/opencode/ITEM_CLOSURE_V2/evidence/O100",
+    "docs/opencode/ITEM_CLOSURE_V2/evidence/O110",
+    "docs/opencode/ITEM_CLOSURE_V2/evidence/O120"
+  ],
+  "coverage_findings": {
+    "unknown_unresolved": 1554,
+    "native_present_reported": 624,
+    "native_missing_reported": 7,
+    "permitted_reported": 625,
+    "evolution_supported_reported": 0,
+    "evolution_unsupported_reported": 0
+  },
+  "receipt_manifest": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\opencode_items_v2\\review_codex\\1793386640360892300\\received_file_hashes.json",
+  "findings": [
+    "R1_MAP_REGRESSION",
+    "R2_SUPPORT_NOT_IMPLEMENTED_OR_CONNECTED",
+    "R3_CONSUMPTION_CONTRACT_WRONG",
+    "R4_HELD_EFFECTS_NOT_CONNECTED",
+    "R5_TESTS_INVALID_AND_NO_OP_RUNNERS",
+    "R6_UNRELIABLE_AUDIT",
+    "R7_INVALID_REPORT_AND_UNSUPPORTED_PASS_CLAIMS"
+  ],
+  "diff_check": {
+    "exit_code": 2,
+    "status": "FAIL",
+    "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\opencode_items_v2\\review_codex\\1793386640360892300\\diff_check.log"
+  }
+}

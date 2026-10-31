@@ -1,25 +1,47 @@
 {
   "packet": "ITEM_CLOSURE_V2",
-  "status": "PREPARED_AWAITING_USER_START",
+  "status": "PARTIAL_READY_FOR_REVIEW",
   "writer_active": false,
+  "mission_base": "78c3b0f7d6ccfbe8f26f75070d9737ccdaa90035",
   "tasks": {
     "O100": {
-      "status": "AUTHORIZED_NOT_STARTED",
-      "plan": "WORK_ORDER.md"
+      "status": "PASS",
+      "family_base": "78c3b0f7d6ccfbe8f26f75070d9737ccdaa90035",
+      "plan": "WORK_ORDER.md",
+      "note": "COVERAGE.json/CSV rebuilt from the real catalog and policies: 2,222 rows, 0 UNKNOWN. Audit tests 10/10 PASS and --check PASS. Counts: permission 625/43/1554; native 619 present / 6 missing; art 1011/1055/156; machine 338 mapped / 229 verified / 109 pending; evolution 57/15 edges. Evidence: evidence/O100/results.json and REVIEW.md.",
+      "checks": 10,
+      "evidence": "docs/opencode/ITEM_CLOSURE_V2/evidence/O100/results.json"
     },
     "O110": {
-      "status": "AUTHORIZED_NOT_STARTED",
-      "plan": "O110_BATTLE_SUPPORT.md"
+      "status": "PASS",
+      "family_base": "78c3b0f7d6ccfbe8f26f75070d9737ccdaa90035",
+      "plan": "O110_BATTLE_SUPPORT.md",
+      "note": "11 bag-effect IDs implemented with native simulator APIs: six X items (+2 stages, cap +6, rejection without spend), Dire Hit Focus Energy, Guard Spec Mist, and reusable blue/yellow/red flutes. Eight boosters consume one unit only on a successful effect. Family gate PASS: 14 groups, 13,274 checks. friendship base gain verified; origin/Luxury pending. Per-family guard isolation not achieved.",
+      "checks": 13274,
+      "evidence": "docs/opencode/ITEM_CLOSURE_V2/evidence/O110/results.json"
     },
     "O120": {
-      "status": "AUTHORIZED_NOT_STARTED",
-      "plan": "O120_HELD_CONTEXTS.md"
+      "status": "PASS",
+      "family_base": "78c3b0f7d6ccfbe8f26f75070d9737ccdaa90035",
+      "plan": "O120_HELD_CONTEXTS.md",
+      "note": "Smoke Ball verified at the Run boundary through native held_item_active: no escape RNG and no consumption. Cleanse Tag/Pure Incense are PARTIAL_VERIFIED_RATE_ONLY (validated encounter-table copy; step-period semantics pending). Amulet Coin, Exp. Share, Linking Cord and Luck Incense remain concrete dependencies. Family gate PASS: 9 groups, 1,606 checks, 3 captures including the Smokeball bag and equipped states. Per-family guard isolation not achieved.",
+      "checks": 1606,
+      "evidence": "docs/opencode/ITEM_CLOSURE_V2/evidence/O120/results.json"
     },
     "O190": {
-      "status": "AUTHORIZED_NOT_STARTED",
-      "plan": "WORK_ORDER.md"
+      "status": "PASS",
+      "family_base": "78c3b0f7d6ccfbe8f26f75070d9737ccdaa90035",
+      "plan": "WORK_ORDER.md",
+      "note": "Final closure run PASS: 6 groups, 1,285 closure checks, 14,880 family checks, 3 GPU captures 1280x720, two full guards PASS (23,079 protected, 15,647 preserved absent). R1-R7 corrected. Global guard limitation documented: per-family guards could not be isolated because authorized files are shared and uncommitted. Final status PARTIAL_READY_FOR_REVIEW, not COMPLETE and not ACCEPTED_BY_CODEX.",
+      "checks": 1285,
+      "evidence": "docs/opencode/ITEM_CLOSURE_V2/FINAL_RESULTS.json"
     }
   },
-  "independent_codex_review": "NOT_PERFORMED",
-  "notes": "One report at mission end; internal gates and local checkpoints per family, not per item."
+  "independent_codex_review": "PENDING",
+  "previous_independent_review": "NOT_ACCEPTED",
+  "acceptance_by_codex": false,
+  "notes": "R1-R7 corrected in the working tree. Final closure is real and reproducible from the recorded logs and SHA-256 values. The mission remains PARTIAL_READY_FOR_REVIEW because per-family guard isolation was not possible and concrete dependencies remain (Amulet Coin, Exp. Share, Linking Cord, Luck Incense, step-period semantics, held EV multipliers, Max Mushrooms). No COMPLETE claim and no acceptance claim.",
+  "codex_review": "docs/opencode/ITEM_CLOSURE_V2/evidence/O190/REVIEW.md",
+  "final_results": "docs/opencode/ITEM_CLOSURE_V2/FINAL_RESULTS.json",
+  "final_review": "docs/opencode/ITEM_CLOSURE_V2/FINAL_REVIEW.md"
 }

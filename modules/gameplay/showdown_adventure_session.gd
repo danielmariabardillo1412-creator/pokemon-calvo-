@@ -19,6 +19,8 @@ var _capture_rng := RandomNumberGenerator.new()
 var _escape_rng := RandomNumberGenerator.new()
 const Medicine = preload("res://modules/inventory/battle_medicine_profile.gd")
 const Escape = preload("res://modules/inventory/battle_escape_profile.gd")
+const BattleSupport = preload("res://modules/inventory/battle_support_profile.gd")
+const HeldEscapeItems = preload("res://modules/gameplay/held_escape_items.gd")
 var _spent_items := {}
 
 
@@ -89,6 +91,7 @@ func submit_medicine(_command: Dictionary, _expected_revision: int) -> Dictionar
 func use_item(item_id: StringName, target_id: StringName, expected_revision: int, move_slot: int = -1) -> Dictionary:
 	if not has_active_battle() or busy or _command_busy or needs_recovery or phase() != "move" or expected_revision != revision or not _campaign_unchanged(): return _command_rejected("invalid_item_boundary")
 	if Escape.supports(item_id): return _use_escape_item(item_id, target_id, expected_revision, move_slot)
+	if BattleSupport.supports(item_id): return await _use_battle_support_item(item_id, target_id, expected_revision, move_slot)
 	if not Medicine.supports(item_id) or catalogs.item(item_id) == null: return _command_rejected("item_not_battle_usable")
 	if not inventory.has(item_id): return _command_rejected("item_not_owned")
 	var target := battle_state().creature(target_id)
@@ -104,8 +107,35 @@ func use_item(item_id: StringName, target_id: StringName, expected_revision: int
 	return result
 
 
+# O110: the native candidate owns every reviewed effect through the existing
+# medicine RPC channel. Consumption stays here and only publishes after the
+# native commit; the three flutes are reusable and never spend a unit.
+func _use_battle_support_item(item_id: StringName, target_id: StringName, expected_revision: int, move_slot: int) -> Dictionary:
+	# Support items are legal in both wild and trainer battles; the boundary is the
+	# shared item boundary (unlike the wild-only escape consumables).
+	if not has_active_battle() or busy or _command_busy or needs_recovery or phase() != "move" or expected_revision != revision or not _campaign_unchanged(): return _command_rejected("invalid_item_boundary")
+	if catalogs.item(item_id) == null: return _command_rejected("battle_support_not_usable")
+	if move_slot != -1: return _command_rejected("battle_support_unexpected_move")
+	if not inventory.has(item_id): return _command_rejected("item_not_owned")
+	var state := battle_state()
+	var target := state.creature(target_id)
+	if target == null or not state.sides[0].owns(target_id) or target.is_knocked_out(): return _command_rejected("invalid_living_own_target")
+	if BattleSupport.target_scope(item_id) == &"active_own" and state.sides[0].active_id != target_id:
+		return _command_rejected("battle_support_requires_active_actor")
+	var spend := BattleSupport.consumable(item_id)
+	var bag := PlayerInventory.from_dict(inventory.to_dict())
+	if spend and not bag.remove(item_id): return _command_rejected("item_not_owned")
+	_command_busy = true
+	var result: Dictionary = await super.submit_medicine({"item_id": String(item_id), "target_id": String(target_id), "move_slot": -1}, expected_revision)
+	if result.accepted and spend:
+		inventory = bag
+		_record_spent(item_id)
+	_command_busy = false
+	return result
+
+
 func battle_item_usable(item_id: StringName) -> bool:
-	return Medicine.supports(item_id) or battle_kind == "wild" and Escape.permitted(item_id, catalogs)
+	return Medicine.supports(item_id) or BattleSupport.supports(item_id) or battle_kind == "wild" and Escape.permitted(item_id, catalogs)
 
 
 func _use_escape_item(item_id: StringName, target_id: StringName, expected_revision: int, move_slot: int) -> Dictionary:
@@ -171,6 +201,18 @@ func flee(expected_revision: int) -> Dictionary:
 	var active := battle_state().active_for_side(&"side_a")
 	var wild := battle_state().active_for_side(&"side_b")
 	var native: Dictionary = Adapter.roster_row(_checkpoint, String(active.instance_id))
+	# O120: Smoke Ball guarantees Run when the actor's held item is really active.
+	# Activity is the native checkpoint's own projection (ignoringItem covers Magic
+	# Room, Embargo, Klutz, Knock Off/Trick/Fling transfer and consumption), never
+	# the item name alone. Wild-only boundary; no speed roll, no RNG, no counter.
+	var held := String(_items.get(String(native.get("item", "")), ""))
+	if HeldEscapeItems.guaranteed(held, bool(native.get("held_item_active", false))):
+		var smoke := _finish("FLED", inventory)
+		if smoke.accepted:
+			smoke["escape_resolution"] = Escape.resolution(escape_attempts)
+			smoke["smoke_ball"] = true
+		_command_busy = false
+		return smoke
 	var blocked := bool(native.get("trapped", false))
 	var rng := RandomNumberGenerator.new(); rng.state = _escape_rng.state
 	var escape: WildEscapeResolution
@@ -267,6 +309,9 @@ func _persistent_copy(source: CreatureInstance) -> CreatureInstance:
 	var copy := CreatureInstance.from_dict(origin)
 	var native: Dictionary = Adapter.roster_row(_checkpoint, String(source.instance_id))
 	copy.current_hp = int(native.get("persistent_hp", source.current_hp))
+	# O110: the native side projects the real battle-item happiness; snapshots from
+	# before this projection keep their origin value through the fallback.
+	copy.friendship = int(native.get("friendship", copy.friendship))
 	copy.held_item_id = source.held_item_id; copy.held_item_consumed = source.held_item_consumed
 	copy.status_state = BattleStatusState.from_dict(source.status_state.to_dict())
 	copy.status_ids = source.status_ids.duplicate()
@@ -315,7 +360,7 @@ func restore_saved(tree: SceneTree, data: Dictionary) -> bool:
 		if bag.quantity(id) > player.inventory.quantity(id): last_error = "adventure_snapshot_inventory_gain"; return false
 	for id: String in meta.spent_items:
 		var count: Variant = meta.spent_items[id]
-		if not (count is int or count is float) or int(count) != count or int(count) <= 0 or not player.inventory.has(StringName(id), int(count)) or not (Medicine.supports(StringName(id)) or meta.kind == "wild" and CaptureRuleset.new().is_known_ball(StringName(id))): last_error = "adventure_snapshot_spending"; return false
+		if not (count is int or count is float) or int(count) != count or int(count) <= 0 or not player.inventory.has(StringName(id), int(count)) or not (Medicine.supports(StringName(id)) or BattleSupport.consumable(StringName(id)) or meta.kind == "wild" and CaptureRuleset.new().is_known_ball(StringName(id))): last_error = "adventure_snapshot_spending"; return false
 	for id: StringName in player.inventory.all_item_ids():
 		if player.inventory.quantity(id) - bag.quantity(id) != int(meta.spent_items.get(String(id), 0)): last_error = "adventure_snapshot_unrelated_item"; return false
 	var expected: Array = []

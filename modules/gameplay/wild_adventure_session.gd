@@ -8,6 +8,7 @@ extends RefCounted
 const READY := &"READY"
 const BATTLE_ACTIVE := &"BATTLE_ACTIVE"
 const COMPLETED := &"COMPLETED"
+const EncounterModifiers = preload("res://modules/gameplay/encounter_item_modifiers.gd")
 
 const COMPLETED_CAPTURED := &"CAPTURED"
 const COMPLETED_VICTORY := &"VICTORY"
@@ -83,6 +84,9 @@ func begin_encounter(
 	if roster.is_empty():
 		return _encounter_error("no_available_player_creature")
 
+	# O120: same pure encounter-rate rule for the legacy headless slice. The
+	# authored table object is never edited; the helper returns a validated copy.
+	table = EncounterModifiers.prepare_table(table, player.party.get_creatures())
 	var result := WildEncounterSystem.resolve(table, encounter_rng, catalogs, progression_ruleset)
 	if result.status != WildEncounterResult.ENCOUNTER:
 		status = READY

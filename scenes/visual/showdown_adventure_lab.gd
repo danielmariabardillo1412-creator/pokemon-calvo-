@@ -209,9 +209,22 @@ func _refresh_medicine_moves() -> void:
 	if _medicine_use.disabled: _medicine_moves.hide(); _medicine_icon.texture = null; return
 	var id := String(_medicine_items.get_item_metadata(_medicine_items.selected))
 	_medicine_icon.texture = ItemArt.texture(StringName(id))
-	_medicine_targets.visible = not Adventure.Escape.supports(StringName(id))
+	var escape := Adventure.Escape.supports(StringName(id))
+	var support: Dictionary = Adventure.BattleSupport.row(StringName(id))
+	_medicine_targets.visible = not escape
 	_medicine_target_label.visible = _medicine_targets.visible
-	_medicine_hint.text = "Huye del combate salvaje. Se consume una unidad." if Adventure.Escape.supports(StringName(id)) else "Elige el Pokémon al que quieres aplicar el objeto."
+	if escape:
+		_medicine_hint.text = "Huye del combate salvaje. Se consume una unidad."
+	elif not support.is_empty():
+		# O110: scope, reuse and consumption come from the service profile; the
+		# view never derives stages, conditions or friendship on its own.
+		var active_only: bool = support.get("target", "") == "active_own"
+		_medicine_target_label.text = "Solo el Pokémon activo." if active_only else "¿En qué Pokémon?"
+		_medicine_hint.text = "Se consume una unidad al tener efecto." if support.get("consumable", false) else "Es reutilizable; no gasta unidades."
+		if active_only: _select_active_target()
+	else:
+		_medicine_target_label.text = "¿En qué Pokémon?"
+		_medicine_hint.text = "Elige el Pokémon al que quieres aplicar el objeto."
 	var spec: Dictionary = Adventure.Medicine.items().get(id, {})
 	_medicine_moves.visible = spec.get("scope") == "one"
 	if not _medicine_moves.visible: return
@@ -225,7 +238,8 @@ func use_selected_medicine() -> Dictionary:
 	if session == null or not session.has_active_battle() or session.phase() != "move" or _working or _playback.is_playing() or _medicine_use.disabled: return {"accepted": false}
 	var id := StringName(_medicine_items.get_item_metadata(_medicine_items.selected))
 	var target := StringName(_medicine_targets.get_item_metadata(_medicine_targets.selected))
-	if Adventure.Escape.supports(id): target = session.battle_state().sides[0].active_id
+	if Adventure.Escape.supports(id) or Adventure.BattleSupport.target_scope(id) == &"active_own":
+		target = session.battle_state().sides[0].active_id
 	var slot := _medicine_moves.selected if _medicine_moves.visible else -1
 	_medicine_popup.hide()
 	_working = true; diagnostic_event.emit({"event": "command", "kind": "item"}); _refresh_view()
@@ -237,14 +251,27 @@ func use_selected_medicine() -> Dictionary:
 		for event: BattleEvent in events:
 			var text := _event_text(event)
 			if not text.is_empty(): _adventure_log(text)
+		if Adventure.BattleSupport.supports(id) and not Adventure.BattleSupport.consumable(id):
+			_adventure_log("Puedes volver a usar %s." % SpanishGameText.item_name(id, catalogs))
 		if session.completion_reason == "FLED":
 			diagnostic_event.emit({"event": "command_result", "kind": "run", "item_id": String(id), "accepted": true, "session_completed": true, "escape_resolution": result.escape_resolution, "battle_events": _event_dicts(events)})
-		else: diagnostic_event.emit({"event": "turn_resolved", "battle_events": _event_dicts(events)})
+		else: diagnostic_event.emit({"event": "turn_resolved", "item_id": String(id), "battle_events": _event_dicts(events)})
 	else:
 		_playback.cancel()
-		_event_log.append_text("\nNo se ha podido huir con ese objeto. Se conserva en la mochila." if Adventure.Escape.supports(id) else "\nNo se ha usado el objeto. Comprueba el Pokémon y sus PS, estado o PP.")
+		if Adventure.Escape.supports(id): _event_log.append_text("\nNo se ha podido huir con ese objeto. Se conserva en la mochila.")
+		elif Adventure.BattleSupport.supports(id): _event_log.append_text("\nNo se ha usado el objeto: %s. No se ha gastado ninguna unidad." % session.last_error)
+		else: _event_log.append_text("\nNo se ha usado el objeto. Comprueba el Pokémon y sus PS, estado o PP.")
 	_working = false; _refresh_view()
 	return result
+
+
+func _select_active_target() -> void:
+	if session == null or session.battle_state() == null: return
+	var active: StringName = session.battle_state().sides[0].active_id
+	for i: int in _medicine_targets.item_count:
+		if StringName(_medicine_targets.get_item_metadata(i)) == active:
+			_medicine_targets.select(i)
+			return
 
 
 func _event_text(event: BattleEvent) -> String:

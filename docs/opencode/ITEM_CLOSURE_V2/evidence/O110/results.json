@@ -1,0 +1,554 @@
+{
+  "family": "O110",
+  "status": "PASS",
+  "mission_base": "78c3b0f7d6ccfbe8f26f75070d9737ccdaa90035",
+  "head": "78c3b0f7d6ccfbe8f26f75070d9737ccdaa90035",
+  "branch": "codex/kilo-architecture-v1",
+  "generated_utc": "2026-10-31T02:45:33Z",
+  "working_tree_committed": false,
+  "family_base": "78c3b0f7d6ccfbe8f26f75070d9737ccdaa90035",
+  "checks_total": 13274,
+  "groups": [
+    {
+      "name": "test_battle_support_import_v2.py",
+      "status": "PASS",
+      "exit_code": 0,
+      "seconds": 0.17,
+      "command": [
+        "C:\\Users\\danie\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+        "tests/tools/test_battle_support_import_v2.py"
+      ],
+      "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\opencode_items_v2\\support\\runs\\1793413981765224600\\support_import_test.log",
+      "log_relative": ".godot/opencode_items_v2/support/runs/1793413981765224600/support_import_test.log",
+      "log_sha256": "991c08c49dd90c0b593ae08c99f3b946362ce0e8da19ed5893babc0a23ec06a2"
+    },
+    {
+      "name": "--check",
+      "status": "PASS",
+      "exit_code": 0,
+      "seconds": 0.09,
+      "command": [
+        "C:\\Users\\danie\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+        "tools/item_import/import_battle_support_v2.py",
+        "--check"
+      ],
+      "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\opencode_items_v2\\support\\runs\\1793413981765224600\\support_import_check.log",
+      "log_relative": ".godot/opencode_items_v2/support/runs/1793413981765224600/support_import_check.log",
+      "log_sha256": "cd2652488599f08954c111098a4896884034d315ad6235d8bb9ccc868eeca856"
+    },
+    {
+      "name": "opencode_battle_support_v2.cjs",
+      "status": "PASS",
+      "exit_code": 0,
+      "seconds": 1.59,
+      "command": [
+        "node",
+        "tools/showdown_engine_probe/opencode_battle_support_v2.cjs"
+      ],
+      "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\opencode_items_v2\\support\\runs\\1793413981765224600\\support_node.log",
+      "log_relative": ".godot/opencode_items_v2/support/runs/1793413981765224600/support_node.log",
+      "log_sha256": "c70b4f1e1b2407213dc1e7f6ccd88e0f56ec1d55327e80c16b68b61d8275e72b"
+    },
+    {
+      "name": "support_godot",
+      "status": "PASS",
+      "exit_code": 0,
+      "seconds": 46.09,
+      "command": [
+        "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+        "--path",
+        "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+        "--headless",
+        "--script",
+        "tests/gameplay/opencode_battle_support_v2.gd"
+      ],
+      "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\opencode_items_v2\\support\\runs\\1793413981765224600\\support_godot.log",
+      "log_relative": ".godot/opencode_items_v2/support/runs/1793413981765224600/support_godot.log",
+      "log_sha256": "7d08690416df9e29df72766f958cb0168897c221ca68e2d893071df8df530c8c",
+      "checks_reported": 147,
+      "errors": [],
+      "last_line": "OPENCODE_BATTLE_SUPPORT_V2 PASS checks=147 GPU=false"
+    },
+    {
+      "name": "core",
+      "status": "PASS",
+      "exit_code": 0,
+      "seconds": 10.08,
+      "command": [
+        "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+        "--path",
+        "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+        "--headless",
+        "--script",
+        "tests/test_runner.gd"
+      ],
+      "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\opencode_items_v2\\support\\runs\\1793413981765224600\\core.log",
+      "log_relative": ".godot/opencode_items_v2/support/runs/1793413981765224600/core.log",
+      "log_sha256": "aa9de68f0c22929ceffa211b3a242db78885d34d92f9c3d971e6d9f31801cd99",
+      "checks_reported": 472,
+      "errors": [],
+      "last_line": "=== PROJECT TEST RESULT: 472 PASS / 0 FAIL ==="
+    },
+    {
+      "name": "medicine",
+      "status": "PASS",
+      "exit_code": 0,
+      "seconds": 21.73,
+      "command": [
+        "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+        "--path",
+        "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+        "--headless",
+        "--script",
+        "tests/gameplay/showdown_medicine_test_runner.gd"
+      ],
+      "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\opencode_items_v2\\support\\runs\\1793413981765224600\\medicine.log",
+      "log_relative": ".godot/opencode_items_v2/support/runs/1793413981765224600/medicine.log",
+      "log_sha256": "ccc7186a97d88119a172f3d8adca2bbb4be091c3f10c5fd804062bef070d36f2",
+      "checks_reported": 120,
+      "errors": [],
+      "last_line": "SHOWDOWN_MEDICINES PASS checks=120 errors=0"
+    },
+    {
+      "name": "adventure",
+      "status": "PASS",
+      "exit_code": 0,
+      "seconds": 21.66,
+      "command": [
+        "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+        "--path",
+        "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+        "--headless",
+        "--script",
+        "tests/gameplay/showdown_adventure_test_runner.gd"
+      ],
+      "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\opencode_items_v2\\support\\runs\\1793413981765224600\\adventure.log",
+      "log_relative": ".godot/opencode_items_v2/support/runs/1793413981765224600/adventure.log",
+      "log_sha256": "f1b9afdf930ee6f62e667cd89307d420b9a4a0dce6523118e46c62c5691af870",
+      "checks_reported": 86,
+      "errors": [],
+      "last_line": "SHOWDOWN_ADVENTURE PASS checks=86 errors=0"
+    },
+    {
+      "name": "native_field",
+      "status": "PASS",
+      "exit_code": 0,
+      "seconds": 55.7,
+      "command": [
+        "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+        "--path",
+        "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+        "--headless",
+        "--script",
+        "tests/gameplay/field_native_test_runner.gd"
+      ],
+      "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\opencode_items_v2\\support\\runs\\1793413981765224600\\native_field.log",
+      "log_relative": ".godot/opencode_items_v2/support/runs/1793413981765224600/native_field.log",
+      "log_sha256": "4532edaa65a10230fbf1101f37a4944f5c8487c3292fb8a6d48e1b391f3fb333",
+      "checks_reported": 118,
+      "errors": [],
+      "last_line": "FIELD_NATIVE PASS checks=118 GPU=false errors=0"
+    },
+    {
+      "name": "restore",
+      "status": "PASS",
+      "exit_code": 0,
+      "seconds": 49.28,
+      "command": [
+        "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+        "--path",
+        "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+        "--headless",
+        "--script",
+        "tests/gameplay/field_restore_integration_test_runner.gd"
+      ],
+      "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\opencode_items_v2\\support\\runs\\1793413981765224600\\restore.log",
+      "log_relative": ".godot/opencode_items_v2/support/runs/1793413981765224600/restore.log",
+      "log_sha256": "b680833ccd3f8bdeff5c7b4503bff0c6063eb4adfa9db317e952ca3d48d46478",
+      "checks_reported": 912,
+      "errors": [],
+      "last_line": "FIELD_RESTORE_INTEGRATION PASS checks=912 errors=0"
+    },
+    {
+      "name": "recovery_v19",
+      "status": "PASS",
+      "exit_code": 0,
+      "seconds": 11.2,
+      "command": [
+        "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+        "--path",
+        "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+        "--headless",
+        "--script",
+        "tests/gameplay/item_import_v19.gd"
+      ],
+      "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\opencode_items_v2\\support\\runs\\1793413981765224600\\recovery_v19.log",
+      "log_relative": ".godot/opencode_items_v2/support/runs/1793413981765224600/recovery_v19.log",
+      "log_sha256": "12875bce8a7f95038025ea95e083ab061c01e6bb3095e042da3c2b15dbd68ba0",
+      "checks_reported": 2386,
+      "errors": [],
+      "last_line": "ITEM_IMPORT_V19 PASS checks=2386 ids=42 GPU=false"
+    },
+    {
+      "name": "progression_v18",
+      "status": "PASS",
+      "exit_code": 0,
+      "seconds": 45.48,
+      "command": [
+        "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+        "--path",
+        "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+        "--headless",
+        "--script",
+        "tests/gameplay/progression_items_v18.gd"
+      ],
+      "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\opencode_items_v2\\support\\runs\\1793413981765224600\\progression_v18.log",
+      "log_relative": ".godot/opencode_items_v2/support/runs/1793413981765224600/progression_v18.log",
+      "log_sha256": "d38115f9419ddc5a6c1141e9bf5af407f6cf90669308d7a8bb3f7b487ff696a9",
+      "checks_reported": 8755,
+      "errors": [],
+      "last_line": "PROGRESSION_ITEMS_V18 PASS checks=8755 cases=4304 GPU=false"
+    },
+    {
+      "name": "escape_v21",
+      "status": "PASS",
+      "exit_code": 0,
+      "seconds": 73.22,
+      "command": [
+        "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+        "--path",
+        "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+        "--headless",
+        "--script",
+        "tests/gameplay/item_escape_v21.gd"
+      ],
+      "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\opencode_items_v2\\support\\runs\\1793413981765224600\\escape_v21.log",
+      "log_relative": ".godot/opencode_items_v2/support/runs/1793413981765224600/escape_v21.log",
+      "log_sha256": "19e34bfb11e9c7f10c1d4145ef27ba6736b86781c9704dd84b9ba24ff46141e8",
+      "checks_reported": 218,
+      "errors": [],
+      "last_line": "ITEM_ESCAPE_V21 PASS checks=218 GPU=false"
+    },
+    {
+      "name": "support_gpu",
+      "status": "PASS",
+      "exit_code": 0,
+      "seconds": 22.02,
+      "command": [
+        "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+        "--path",
+        "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+        "--resolution",
+        "1280x720",
+        "--script",
+        "tests/gameplay/opencode_battle_support_v2.gd",
+        "--",
+        "--capture"
+      ],
+      "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\opencode_items_v2\\support\\runs\\1793413981765224600\\support_gpu.log",
+      "log_relative": ".godot/opencode_items_v2/support/runs/1793413981765224600/support_gpu.log",
+      "log_sha256": "fb9c94874fc618071c33b61111da673191bd339d8ad339ae729492a50e8b6035",
+      "checks_reported": 37,
+      "errors": [],
+      "last_line": "OPENCODE_BATTLE_SUPPORT_V2 PASS checks=37 GPU=true"
+    },
+    {
+      "name": "medicine_gpu",
+      "status": "PASS",
+      "exit_code": 0,
+      "seconds": 6.75,
+      "command": [
+        "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+        "--path",
+        "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+        "--resolution",
+        "1280x720",
+        "--script",
+        "tests/gameplay/showdown_medicine_visual_test_runner.gd"
+      ],
+      "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\opencode_items_v2\\support\\runs\\1793413981765224600\\medicine_gpu.log",
+      "log_relative": ".godot/opencode_items_v2/support/runs/1793413981765224600/medicine_gpu.log",
+      "log_sha256": "7e7ed1af195199c6d34e64b5bf068d7eba18bc8af8eaa6beef38ecb5fc2d139d",
+      "checks_reported": 23,
+      "errors": [],
+      "last_line": "SHOWDOWN_MEDICINES_VISUAL PASS checks=23 errors=0"
+    }
+  ],
+  "group_count": 14,
+  "guard_before": {
+    "status": "PASS",
+    "seconds": 6.83,
+    "command": [
+      "C:\\Users\\danie\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+      "tools/verification/opencode_items_v2_guard.py"
+    ],
+    "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\opencode_items_v2\\support\\runs\\1793413981765224600\\guard_before.json.log",
+    "log_sha256": "e67e1784edbc30b9341a29f2feaba5625a82a5d883946798f3b282841e3a2f73",
+    "report": {
+      "status": "PASS",
+      "base": "78c3b0f7d6ccfbe8f26f75070d9737ccdaa90035",
+      "protected_files": 23079,
+      "preserved_absent_skip_worktree": 15647,
+      "mode": "HASH_IF_METADATA_CHANGED",
+      "allowed_changes": [
+        "docs/current/ITEM_SYSTEM_CURRENT_STATUS.json",
+        "docs/current/NEXT_STEPS.md",
+        "docs/current/PROJECT_STATE.md",
+        "docs/current/START_HERE.md",
+        "docs/opencode/ITEM_CLOSURE_V2/COVERAGE.csv",
+        "docs/opencode/ITEM_CLOSURE_V2/COVERAGE.json",
+        "docs/opencode/ITEM_CLOSURE_V2/FINAL_RESULTS.json",
+        "docs/opencode/ITEM_CLOSURE_V2/FINAL_REVIEW.md",
+        "docs/opencode/ITEM_CLOSURE_V2/PROGRESS.md",
+        "docs/opencode/ITEM_CLOSURE_V2/STATE.json",
+        "docs/opencode/ITEM_CLOSURE_V2/evidence/O190/REVIEW.md",
+        "docs/opencode/ITEM_CLOSURE_V2/evidence/O190/results.json",
+        "modules/battle/backends/showdown/field_held_items.cjs",
+        "modules/battle/backends/showdown/field_world_items_v2.json",
+        "modules/battle/backends/showdown/native_bag_effects.cjs",
+        "modules/battle/backends/showdown/native_engine.cjs",
+        "modules/gameplay/encounter_item_modifiers.gd",
+        "modules/gameplay/held_escape_items.gd",
+        "modules/gameplay/showdown_adventure_session.gd",
+        "modules/gameplay/wild_adventure_session.gd",
+        "modules/inventory/battle_support_profile.gd",
+        "modules/inventory/battle_support_profile.json",
+        "scenes/visual/field_demo.gd",
+        "scenes/visual/showdown_adventure_lab.gd",
+        "tests/gameplay/opencode_baseline_v2.gd",
+        "tests/gameplay/opencode_battle_support_v2.gd",
+        "tests/gameplay/opencode_world_held_v2.gd",
+        "tests/tools/test_battle_support_import_v2.py",
+        "tests/tools/test_item_closure_audit_v2.py",
+        "tests/tools/test_world_held_import_v2.py",
+        "tools/item_import/audit_item_closure_v2.py",
+        "tools/item_import/import_battle_support_v2.py",
+        "tools/item_import/import_world_held_v2.py",
+        "tools/showdown_engine_probe/opencode_battle_support_v2.cjs",
+        "tools/showdown_engine_probe/opencode_v2_baseline.cjs",
+        "tools/showdown_engine_probe/opencode_world_held_v2.cjs",
+        "tools/verification/run_opencode_closure_v2.py",
+        "tools/verification/run_opencode_support_v2.py",
+        "tools/verification/run_opencode_world_held_v2.py"
+      ]
+    }
+  },
+  "guard_after": {
+    "status": "PASS",
+    "seconds": 6.97,
+    "command": [
+      "C:\\Users\\danie\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+      "tools/verification/opencode_items_v2_guard.py"
+    ],
+    "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\opencode_items_v2\\support\\runs\\1793413981765224600\\guard_after.json.log",
+    "log_sha256": "e67e1784edbc30b9341a29f2feaba5625a82a5d883946798f3b282841e3a2f73",
+    "report": {
+      "status": "PASS",
+      "base": "78c3b0f7d6ccfbe8f26f75070d9737ccdaa90035",
+      "protected_files": 23079,
+      "preserved_absent_skip_worktree": 15647,
+      "mode": "HASH_IF_METADATA_CHANGED",
+      "allowed_changes": [
+        "docs/current/ITEM_SYSTEM_CURRENT_STATUS.json",
+        "docs/current/NEXT_STEPS.md",
+        "docs/current/PROJECT_STATE.md",
+        "docs/current/START_HERE.md",
+        "docs/opencode/ITEM_CLOSURE_V2/COVERAGE.csv",
+        "docs/opencode/ITEM_CLOSURE_V2/COVERAGE.json",
+        "docs/opencode/ITEM_CLOSURE_V2/FINAL_RESULTS.json",
+        "docs/opencode/ITEM_CLOSURE_V2/FINAL_REVIEW.md",
+        "docs/opencode/ITEM_CLOSURE_V2/PROGRESS.md",
+        "docs/opencode/ITEM_CLOSURE_V2/STATE.json",
+        "docs/opencode/ITEM_CLOSURE_V2/evidence/O190/REVIEW.md",
+        "docs/opencode/ITEM_CLOSURE_V2/evidence/O190/results.json",
+        "modules/battle/backends/showdown/field_held_items.cjs",
+        "modules/battle/backends/showdown/field_world_items_v2.json",
+        "modules/battle/backends/showdown/native_bag_effects.cjs",
+        "modules/battle/backends/showdown/native_engine.cjs",
+        "modules/gameplay/encounter_item_modifiers.gd",
+        "modules/gameplay/held_escape_items.gd",
+        "modules/gameplay/showdown_adventure_session.gd",
+        "modules/gameplay/wild_adventure_session.gd",
+        "modules/inventory/battle_support_profile.gd",
+        "modules/inventory/battle_support_profile.json",
+        "scenes/visual/field_demo.gd",
+        "scenes/visual/showdown_adventure_lab.gd",
+        "tests/gameplay/opencode_baseline_v2.gd",
+        "tests/gameplay/opencode_battle_support_v2.gd",
+        "tests/gameplay/opencode_world_held_v2.gd",
+        "tests/tools/test_battle_support_import_v2.py",
+        "tests/tools/test_item_closure_audit_v2.py",
+        "tests/tools/test_world_held_import_v2.py",
+        "tools/item_import/audit_item_closure_v2.py",
+        "tools/item_import/import_battle_support_v2.py",
+        "tools/item_import/import_world_held_v2.py",
+        "tools/showdown_engine_probe/opencode_battle_support_v2.cjs",
+        "tools/showdown_engine_probe/opencode_v2_baseline.cjs",
+        "tools/showdown_engine_probe/opencode_world_held_v2.cjs",
+        "tools/verification/run_opencode_closure_v2.py",
+        "tools/verification/run_opencode_support_v2.py",
+        "tools/verification/run_opencode_world_held_v2.py"
+      ]
+    }
+  },
+  "results_path": "D:/Proyectos/Pokemon Calvo - Arquitectura Kilo/.godot/opencode_items_v2/support/results.json",
+  "results_sha256": "23c7928fa3cc83f9153eed31387ca0779d67a7c4f77b002a414df8954393908c",
+  "tested_sources_sha256": {
+    "modules/battle/backends/showdown/event_adapter.gd": "4b2f597457810758e3461c5f2a203db9b835f193a7535c04fcec03418dd46542",
+    "modules/battle/backends/showdown/native_bag_effects.cjs": "36724bce6bce442a65b7735cf2b0a867ad2e1f9fa6236b03f0a1c617b5207695",
+    "modules/battle/backends/showdown/native_engine.cjs": "30e4118893b86de847f8d2c64558f26fce9b7dd795b52dc268d49504b397d59b",
+    "modules/gameplay/showdown_adventure_session.gd": "4021528ab42ba951b78f9106985ec06325cd8640357cd4575b845c5c712da0dc",
+    "modules/inventory/battle_support_profile.gd": "7831df3218964561310aec375bf3696aa28f635ab99045d6e0db3c637c2f87b5",
+    "modules/inventory/battle_support_profile.json": "c64988571bd33907ed0358ec1efe1d7ac84d609e67318aee76e90b2f8e5db0e5",
+    "scenes/visual/showdown_adventure_lab.gd": "5d595650c535e5d9d357d83e646bebe550c9dda6a45aa3f99c6736ef3b5af38d",
+    "tests/gameplay/opencode_battle_support_v2.gd": "7293127293bce44765673fab81e54295f397c4848c9987ad0d1e1c1a45956c5a",
+    "tests/tools/test_battle_support_import_v2.py": "d3b24cbc02ceb0a261102b5eb169c25091756824893042a28e7156d628af1887",
+    "tools/item_import/import_battle_support_v2.py": "5eb71222666bcece1e48ceca764ab36aee12f8b4a1352668dc3c5478920f8bfa",
+    "tools/showdown_engine_probe/opencode_battle_support_v2.cjs": "2c70d0b8a9afca1383f693cce9f51eb868749d2703d2226128cb2b83fb69090a"
+  },
+  "profile": "modules/inventory/battle_support_profile.json",
+  "profile_sha256": "c64988571bd33907ed0358ec1efe1d7ac84d609e67318aee76e90b2f8e5db0e5",
+  "reviewed_ids": [
+    "blue_flute",
+    "dire_hit",
+    "guard_spec",
+    "red_flute",
+    "x_accuracy",
+    "x_attack",
+    "x_defense",
+    "x_sp_atk",
+    "x_sp_def",
+    "x_speed",
+    "yellow_flute"
+  ],
+  "consumable_ids": [
+    "dire_hit",
+    "guard_spec",
+    "x_accuracy",
+    "x_attack",
+    "x_defense",
+    "x_sp_atk",
+    "x_sp_def",
+    "x_speed"
+  ],
+  "reusable_ids": [
+    "blue_flute",
+    "red_flute",
+    "yellow_flute"
+  ],
+  "friendship_base_gain": "battleitem +1 under 200; origin/Luxury bonus pending",
+  "coverage_rows": {
+    "blue_flute": {
+      "name_es": "Flauta Azul",
+      "permission": "PERMITTED",
+      "native_metadata": "IMPLEMENTED_VERIFIED",
+      "battle_use": "IMPLEMENTED_VERIFIED",
+      "scenario": "IMPLEMENTED_VERIFIED",
+      "overall": "IMPLEMENTED_VERIFIED",
+      "dependency": ""
+    },
+    "dire_hit": {
+      "name_es": "Crítico X",
+      "permission": "PERMITTED",
+      "native_metadata": "IMPLEMENTED_VERIFIED",
+      "battle_use": "IMPLEMENTED_VERIFIED",
+      "scenario": "IMPLEMENTED_VERIFIED",
+      "overall": "IMPLEMENTED_VERIFIED",
+      "dependency": ""
+    },
+    "guard_spec": {
+      "name_es": "Protección X",
+      "permission": "PERMITTED",
+      "native_metadata": "IMPLEMENTED_VERIFIED",
+      "battle_use": "IMPLEMENTED_VERIFIED",
+      "scenario": "IMPLEMENTED_VERIFIED",
+      "overall": "IMPLEMENTED_VERIFIED",
+      "dependency": ""
+    },
+    "red_flute": {
+      "name_es": "Flauta Roja",
+      "permission": "PERMITTED",
+      "native_metadata": "IMPLEMENTED_VERIFIED",
+      "battle_use": "IMPLEMENTED_VERIFIED",
+      "scenario": "IMPLEMENTED_VERIFIED",
+      "overall": "IMPLEMENTED_VERIFIED",
+      "dependency": ""
+    },
+    "x_accuracy": {
+      "name_es": "Precisión X",
+      "permission": "PERMITTED",
+      "native_metadata": "IMPLEMENTED_VERIFIED",
+      "battle_use": "IMPLEMENTED_VERIFIED",
+      "scenario": "IMPLEMENTED_VERIFIED",
+      "overall": "IMPLEMENTED_VERIFIED",
+      "dependency": ""
+    },
+    "x_attack": {
+      "name_es": "Ataque X",
+      "permission": "PERMITTED",
+      "native_metadata": "IMPLEMENTED_VERIFIED",
+      "battle_use": "IMPLEMENTED_VERIFIED",
+      "scenario": "IMPLEMENTED_VERIFIED",
+      "overall": "IMPLEMENTED_VERIFIED",
+      "dependency": ""
+    },
+    "x_defense": {
+      "name_es": "Defensa X",
+      "permission": "PERMITTED",
+      "native_metadata": "IMPLEMENTED_VERIFIED",
+      "battle_use": "IMPLEMENTED_VERIFIED",
+      "scenario": "IMPLEMENTED_VERIFIED",
+      "overall": "IMPLEMENTED_VERIFIED",
+      "dependency": ""
+    },
+    "x_sp_atk": {
+      "name_es": "At. Especial X",
+      "permission": "PERMITTED",
+      "native_metadata": "IMPLEMENTED_VERIFIED",
+      "battle_use": "IMPLEMENTED_VERIFIED",
+      "scenario": "IMPLEMENTED_VERIFIED",
+      "overall": "IMPLEMENTED_VERIFIED",
+      "dependency": ""
+    },
+    "x_sp_def": {
+      "name_es": "Def. Especial X",
+      "permission": "PERMITTED",
+      "native_metadata": "IMPLEMENTED_VERIFIED",
+      "battle_use": "IMPLEMENTED_VERIFIED",
+      "scenario": "IMPLEMENTED_VERIFIED",
+      "overall": "IMPLEMENTED_VERIFIED",
+      "dependency": ""
+    },
+    "x_speed": {
+      "name_es": "Velocidad X",
+      "permission": "PERMITTED",
+      "native_metadata": "IMPLEMENTED_VERIFIED",
+      "battle_use": "IMPLEMENTED_VERIFIED",
+      "scenario": "IMPLEMENTED_VERIFIED",
+      "overall": "IMPLEMENTED_VERIFIED",
+      "dependency": ""
+    },
+    "yellow_flute": {
+      "name_es": "Flauta Amarilla",
+      "permission": "PERMITTED",
+      "native_metadata": "IMPLEMENTED_VERIFIED",
+      "battle_use": "IMPLEMENTED_VERIFIED",
+      "scenario": "IMPLEMENTED_VERIFIED",
+      "overall": "IMPLEMENTED_VERIFIED",
+      "dependency": ""
+    }
+  },
+  "capture": {
+    "path": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\opencode_battle_support_v2\\battle_support_bag.png",
+    "sha256": "ad5c7d60cf436d2d8c4e47dacbe92210fce281b0fe6c624db5ad476df52b4bf2",
+    "bytes": 107524,
+    "width": 1280,
+    "height": 720
+  },
+  "limitations": [
+    "Eight boosters consume exactly one unit only when the effect applies; rejection draws no RNG and spends nothing.",
+    "The three flutes are reusable and spend no unit; repeated use still requires the target condition to be curable.",
+    "Friendship verification covers the base battleitem +1 under 200 projected through the checkpoint roster; capture-origin/Luxury bonuses remain pending.",
+    "The family gate passed, but a per-family guard could not be isolated because the working tree also contains O100/O120 changes in shared files."
+  ]
+}

@@ -673,9 +673,14 @@ func field_prepare_native_encounter(zone_id: StringName) -> Dictionary:
 		return {}
 	if not field_has_living_party():
 		return {}
+	var table := _director._tables.get(zone_id) as WildEncounterTable
+	# O120: the only owner-side change. The pure helper returns the original table
+	# unless the first party member really holds an active Cleanse Tag or Pure
+	# Incense, in which case it returns a validated COPY with the 2/3 rate. The
+	# authored table, resolver, metrics, seeds and RNG stream stay untouched.
+	table = preload("res://modules/gameplay/encounter_item_modifiers.gd").prepare_table(table, _session.player.party.get_creatures())
 	var staged := RandomNumberGenerator.new()
 	staged.state = _director._encounter_rng.state
-	var table := _director._tables.get(zone_id) as WildEncounterTable
 	var encounter := WildEncounterSystem.resolve(table, staged, _catalogs, _session.progression_ruleset)
 	_metrics.note_encounter_roll(encounter.status == WildEncounterResult.ENCOUNTER, encounter.status, encounter.reason)
 	if encounter.status == WildEncounterResult.NONE:

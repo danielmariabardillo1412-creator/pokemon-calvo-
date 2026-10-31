@@ -13,6 +13,12 @@ const medicine=(name,gen)=>Object.freeze({name,gen,fling:Object.freeze({basePowe
 const misc=require('./field_misc_items_v20.json');
 const miscDefinitions=Object.fromEntries(Object.entries(misc.items).map(([id,row])=>
  [id,Object.freeze({name:row.name,gen:row.gen,fling:Object.freeze({basePower:row.fling.basePower})})]));
+// V2 (O120): Smoke Ball metadata only. Native Fling/Knock Off/Trick/suppression
+// stay authoritative; the guaranteed Run rule lives at the session boundary and
+// Cleanse Tag/Pure Incense keep their separate encounter-rate context.
+const world=require('./field_world_items_v2.json');
+const worldDefinitions=Object.fromEntries(Object.entries(world.items).map(([id,row])=>
+ [id,Object.freeze({name:row.name,gen:row.gen,fling:Object.freeze({basePower:row.fling.basePower})})]));
 const DEFINITIONS=Object.freeze({
  soothebell:Object.freeze({name:'Soothe Bell',gen:3,fling:Object.freeze({basePower:10})}),
  antidote:medicine('Antidote',1),
@@ -60,6 +66,7 @@ const DEFINITIONS=Object.freeze({
  luckyegg:medicine('Lucky Egg',2),
  everstone:medicine('Everstone',2),
  ...miscDefinitions,
+ ...worldDefinitions,
 });
 
 function install(Dex) {
