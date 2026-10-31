@@ -1,0 +1,71 @@
+{
+  "status": "PASS",
+  "scope": "CI follow-up only; no game-rule/data edits",
+  "groups": [
+    {
+      "status": "PASS",
+      "checks_reported": 634,
+      "errors": [],
+      "last_line": "=== DATA FOUNDATION V3 DOMAIN RESULT: 634 PASS / 0 FAIL ===",
+      "name": "data_foundation_v3_domain_test_runner",
+      "exit_code": 0,
+      "seconds": 40.05,
+      "log": ".godot/publication_v27/ci_followup/1793457556096290000/data_foundation_v3_domain_test_runner.log",
+      "expected_negative_diagnostics": []
+    },
+    {
+      "status": "PASS",
+      "checks_reported": 58,
+      "errors": [],
+      "last_line": "POKEAPI_REPAIR_TEST PASS checks=58 errors=0",
+      "name": "pokeapi_repairs_test_runner",
+      "exit_code": 0,
+      "seconds": 1.7,
+      "log": ".godot/publication_v27/ci_followup/1793457556096290000/pokeapi_repairs_test_runner.log",
+      "expected_negative_diagnostics": []
+    },
+    {
+      "status": "PASS",
+      "checks_reported": 45,
+      "errors": [],
+      "last_line": "=== VISUAL FIELD RESULT: 45 PASS / 0 FAIL ===",
+      "name": "visual_field_test_runner",
+      "exit_code": 0,
+      "seconds": 9.25,
+      "log": ".godot/publication_v27/ci_followup/1793457556096290000/visual_field_test_runner.log",
+      "expected_negative_diagnostics": []
+    },
+    {
+      "status": "PASS",
+      "checks_reported": 103,
+      "errors": [],
+      "last_line": "=== MAP RUNTIME RESULT: 103 PASS / 0 FAIL ===",
+      "name": "map_runtime_legacy",
+      "exit_code": 0,
+      "seconds": 16.48,
+      "log": ".godot/publication_v27/ci_followup/1793457657900501900/map_runtime_legacy.log",
+      "expected_negative_diagnostics": []
+    }
+  ],
+  "previous_failed_attempts_preserved": [
+    "1793457538226195400",
+    "1793457556096290000"
+  ],
+  "source_checkpoint": "0fa22f1163560ff78a5f4f3097e3291e80fadcd2",
+  "checks": 840,
+  "runtime_files_changed": false,
+  "canonical_datasets_changed": false,
+  "source_regeneration_run_locally": false,
+  "explanation": {
+    "legacy_visual_and_map": "Select --legacy-field for tests written against BattlePresentationController; keep native integration covered separately",
+    "evolution_expectations": "Existing audited Tyrogue logic: 166 conditioned records, three numeric stat relations including 0; exact runtime/data-only/unsupported partition 393/147/14. Only the exact three level-20 Tyrogue routes are additional exceptions. All other real conditions remain blocked.",
+    "search_import": "Original Linux import exited 134 without script errors. A new CI attempt must confirm whether transient; do not call it a passed gameplay test."
+  },
+  "publication_download": {
+    "status": "PASS",
+    "public_url": "https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/releases/download/dev-organized-v27-2026-10-31/verification-inputs-v27.zip",
+    "sha256": "fd43951c19d030b9397f79dbd49bfe30200609fe0f964ae846883a8b6b50081f",
+    "files_restored": 16,
+    "authentication_used": false
+  }
+}

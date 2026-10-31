@@ -167,14 +167,14 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          timeout 30s godot --headless --path . --script res://tests/gameplay/visual_field_test_runner.gd 2>&1 | tee visual-field-test.log
+          timeout 30s godot --headless --path . --script res://tests/gameplay/visual_field_test_runner.gd -- --legacy-field 2>&1 | tee visual-field-test.log
           grep -E '=== VISUAL FIELD RESULT: [0-9]+ PASS / 0 FAIL ===' visual-field-test.log
 
       - name: Run map runtime precision suite
         shell: bash
         run: |
           set -euo pipefail
-          timeout 60s godot --headless --path . --script res://tests/gameplay/map_runtime_test_runner.gd 2>&1 | tee map-runtime-test.log
+          timeout 60s godot --headless --path . --script res://tests/gameplay/map_runtime_test_runner.gd -- --legacy-field 2>&1 | tee map-runtime-test.log
           grep -E '=== MAP RUNTIME RESULT: [0-9]+ PASS / 0 FAIL ===' map-runtime-test.log
 
       - name: Run battle presentation phase suite

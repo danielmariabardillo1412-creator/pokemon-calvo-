@@ -34,9 +34,9 @@ const EXPECTED_ABILITY_CLASSES := {
 	"DATA_ONLY": 338,
 }
 const EXPECTED_EVOLUTION_CLASSES := {
-	EvolutionSystem.RUNTIME_SUPPORTED: 391,
+	EvolutionSystem.RUNTIME_SUPPORTED: 393,
 	EvolutionSystem.PARTIAL: 0,
-	EvolutionSystem.DATA_ONLY: 149,
+	EvolutionSystem.DATA_ONLY: 147,
 	EvolutionSystem.UNSUPPORTED: 14,
 }
 const EXPECTED_HELD_RUNTIME_IDS := [&"leftovers", &"sitrus_berry"]

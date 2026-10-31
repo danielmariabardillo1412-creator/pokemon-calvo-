@@ -5,11 +5,11 @@ extends RefCounted
 # verbatim, but only mechanics proven executable by EvolutionSystem may become
 # runtime candidates.
 const EXPECTED_EVOLUTION_COUNT := 554
-const EXPECTED_CONDITIONED_COUNT := 165
+const EXPECTED_CONDITIONED_COUNT := 166
 const EXPECTED_CLASS_COUNTS := {
-	EvolutionSystem.RUNTIME_SUPPORTED: 391,
+	EvolutionSystem.RUNTIME_SUPPORTED: 393,
 	EvolutionSystem.PARTIAL: 0,
-	EvolutionSystem.DATA_ONLY: 149,
+	EvolutionSystem.DATA_ONLY: 147,
 	EvolutionSystem.UNSUPPORTED: 14,
 }
 const EXPECTED_TRIGGER_COUNTS := {
@@ -50,7 +50,7 @@ const EXPECTED_CONDITION_KEY_COUNTS := {
 	"party_species": 1,
 	"party_type": 1,
 	"region": 13,
-	"relative_physical_stats": 2,
+	"relative_physical_stats": 3,
 	"time_of_day": 22,
 	"trade_species": 2,
 	"turn_upside_down": 1,
@@ -85,6 +85,7 @@ func run(check: Callable) -> void:
 	var broken_items := 0
 	var conditioned_runtime_violation := false
 	var redundant_base_form_runtime := 0
+	var verified_stat_comparison_runtime := 0
 
 	for raw_species in species:
 		if not (raw_species is Dictionary):
@@ -120,9 +121,23 @@ func run(check: Callable) -> void:
 					and conditions.has("base_form")
 					and str(conditions.get("base_form", "")) == source_id
 				)
-				conditioned_runtime_violation = conditioned_runtime_violation or not redundant
+				# The audited Tyrogue correction preserves all three relations,
+				# including numeric zero. Only those exact level-20 routes are
+				# additional executable conditions; all other guards stay strict.
+				var stat_targets := {"hitmonlee": 1, "hitmonchan": -1, "hitmontop": 0}
+				var target_id := str(evolution.get("species_id", ""))
+				var verified_stats: bool = (
+					source_id == "tyrogue" and trigger == "level_up"
+					and int(evolution.get("min_level", 0)) == 20
+					and conditions.size() == 1 and conditions.has("relative_physical_stats")
+					and stat_targets.has(target_id)
+					and conditions.get("relative_physical_stats") == stat_targets[target_id]
+				)
+				conditioned_runtime_violation = conditioned_runtime_violation or not (redundant or verified_stats)
 				if redundant:
 					redundant_base_form_runtime += 1
+				if verified_stats:
+					verified_stat_comparison_runtime += 1
 
 	check.call("data_v3_evolution_closure_exact_record_count", total == EXPECTED_EVOLUTION_COUNT)
 	check.call("data_v3_evolution_closure_exact_trigger_partition", _counts_match(trigger_counts, EXPECTED_TRIGGER_COUNTS))
@@ -130,9 +145,10 @@ func run(check: Callable) -> void:
 	check.call("data_v3_evolution_closure_exact_condition_key_inventory", _counts_match(condition_key_counts, EXPECTED_CONDITION_KEY_COUNTS))
 	check.call("data_v3_evolution_closure_no_broken_target_species", broken_targets == 0)
 	check.call("data_v3_evolution_closure_no_broken_use_item_refs", broken_items == 0)
-	check.call("data_v3_evolution_closure_exact_runtime_boundary_391_149_14", _counts_match(class_counts, EXPECTED_CLASS_COUNTS))
+	check.call("data_v3_evolution_closure_exact_runtime_boundary_393_147_14", _counts_match(class_counts, EXPECTED_CLASS_COUNTS))
 	check.call("data_v3_evolution_closure_no_real_condition_silently_executes", not conditioned_runtime_violation)
 	check.call("data_v3_evolution_closure_exact_redundant_base_form_exceptions", redundant_base_form_runtime == 7)
+	check.call("data_v3_evolution_closure_exact_three_verified_tyrogue_relations", verified_stat_comparison_runtime == 3)
 	check.call("data_v3_evolution_closure_normalized_exotic_triggers_unsupported", _all_exotic_triggers_unsupported())
 	check.call("data_v3_evolution_closure_candidates_gate_data_only_conditions", _candidate_gate_is_honest())
 

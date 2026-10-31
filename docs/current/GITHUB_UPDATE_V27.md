@@ -45,6 +45,11 @@ El gate independiente de publicación está en `tools/distribution/verify_update
 La evidencia de esta entrega se conserva en `GITHUB_UPDATE_V27_RESULTS.json`;
 los logs detallados locales usan `.godot/publication_v27/runs/`.
 
+La ejecución posterior de los workflows remotos y sus ajustes de compatibilidad
+se documentan por separado en [seguimiento CI](GITHUB_CI_V27.md), sin reescribir
+los resultados de la batería previa. El código actualizado está en la rama;
+la release de recursos conserva su checkpoint inicial y sus hashes.
+
 ## Continuación
 
 Primero validar un checkout y sus recursos. La futura misión remota tendrá sus
