@@ -19,6 +19,11 @@ const miscDefinitions=Object.fromEntries(Object.entries(misc.items).map(([id,row
 const world=require('./field_world_items_v2.json');
 const worldDefinitions=Object.fromEntries(Object.entries(world.items).map(([id,row])=>
  [id,Object.freeze({name:row.name,gen:row.gen,fling:Object.freeze({basePower:row.fling.basePower})})]));
+// V23: the existing overworld rate items must also survive native handoff.
+// Only identity/Fling metadata; their rate rule remains in the overworld helper.
+const encounter=require('./field_encounter_items_v23.json');
+const encounterDefinitions=Object.fromEntries(Object.entries(encounter.items).map(([id,row])=>
+ [id,Object.freeze({name:row.name,gen:row.gen,fling:Object.freeze({basePower:row.fling.basePower})})]));
 const DEFINITIONS=Object.freeze({
  soothebell:Object.freeze({name:'Soothe Bell',gen:3,fling:Object.freeze({basePower:10})}),
  antidote:medicine('Antidote',1),
@@ -67,6 +72,7 @@ const DEFINITIONS=Object.freeze({
  everstone:medicine('Everstone',2),
  ...miscDefinitions,
  ...worldDefinitions,
+ ...encounterDefinitions,
 });
 
 function install(Dex) {

@@ -1,0 +1,260 @@
+{
+  "status": "PASS_NATIVE_HANDOFF_PARTIAL_ENCOUNTER_RATE",
+  "date": "2026-10-31",
+  "base": "2fee506c7f309c966efc2a348a13aaf6018b8415",
+  "scope": "Cleanse Tag and Pure Incense native battle identity/Fling, real bag/map/save/settlement; existing rate helper unchanged",
+  "groups": 9,
+  "checks": 1559,
+  "headless_handoff_checks": 253,
+  "gpu_handoff_checks": 45,
+  "native_checks": 17,
+  "permitted_holdable": 625,
+  "permitted_native_present": 621,
+  "permitted_missing": [
+    "amulet_coin",
+    "exp_share",
+    "linking_cord",
+    "luck_incense"
+  ],
+  "run": {
+    "status": "PASS",
+    "base": "2fee506c7f309c966efc2a348a13aaf6018b8415",
+    "groups": [
+      {
+        "group": "import_tests",
+        "status": "PASS",
+        "exit_code": 0,
+        "checks_reported": 7,
+        "seconds": 0.19,
+        "command": [
+          "C:\\Users\\danie\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+          "tests/tools/test_encounter_held_v23.py"
+        ],
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\encounter_held_v23\\runs\\1793417948913569800\\import_tests.log",
+        "log_sha256": "c0b344d2f9cde4f6de12687f495892eede0f78eed6f0dcc60cf31241646a4d90"
+      },
+      {
+        "group": "import_check",
+        "status": "PASS",
+        "exit_code": 0,
+        "checks_reported": 1,
+        "seconds": 0.19,
+        "command": [
+          "C:\\Users\\danie\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+          "tools/item_import/import_encounter_held_v23.py",
+          "--check"
+        ],
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\encounter_held_v23\\runs\\1793417948913569800\\import_check.log",
+        "log_sha256": "b10a8c31687ea36d495c1b0f97454a306f1a198ca1090d4fc6c33ef4c2d1f250"
+      },
+      {
+        "group": "native",
+        "status": "PASS",
+        "exit_code": 0,
+        "checks_reported": 17,
+        "seconds": 0.77,
+        "command": [
+          "D:/Herramientas/NodeJS/node.exe",
+          "tools/showdown_engine_probe/encounter_held_v23.cjs"
+        ],
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\encounter_held_v23\\runs\\1793417948913569800\\native.log",
+        "log_sha256": "5b29c53d7188b5243e27c60924a35e56e4aca20af7c527e55385c38a12f7e207"
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 253,
+        "errors": [],
+        "last_line": "ENCOUNTER_HELD_V23 PASS checks=253 GPU=false",
+        "group": "handoff",
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--path",
+          "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+          "--headless",
+          "--script",
+          "tests/gameplay/encounter_held_v23.gd"
+        ],
+        "exit_code": 0,
+        "seconds": 88.75,
+        "terminated_after_script_error": false,
+        "expected_negative_diagnostics": [],
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\encounter_held_v23\\runs\\1793417948913569800\\handoff.log",
+        "log_sha256": "df6f7bad6c47a4730cdd8cc5bbae2295ccdf21e02ccb99ef916cf1af13969a9d"
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 56,
+        "errors": [],
+        "last_line": "OPENCODE_WORLD_HELD_V2 PASS checks=56 GPU=false",
+        "group": "world_regression",
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--path",
+          "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+          "--headless",
+          "--script",
+          "tests/gameplay/opencode_world_held_v2.gd"
+        ],
+        "exit_code": 0,
+        "seconds": 21.09,
+        "terminated_after_script_error": false,
+        "expected_negative_diagnostics": [],
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\encounter_held_v23\\runs\\1793417948913569800\\world_regression.log",
+        "log_sha256": "abaf1ed2b6936ca772e0077e44a3e4e14c7033558c0f45e07f8af58b52df9bb6"
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 118,
+        "errors": [],
+        "last_line": "FIELD_NATIVE PASS checks=118 GPU=false errors=0",
+        "group": "native_field",
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--path",
+          "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+          "--headless",
+          "--script",
+          "tests/gameplay/field_native_test_runner.gd"
+        ],
+        "exit_code": 0,
+        "seconds": 53.69,
+        "terminated_after_script_error": false,
+        "expected_negative_diagnostics": [],
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\encounter_held_v23\\runs\\1793417948913569800\\native_field.log",
+        "log_sha256": "4532edaa65a10230fbf1101f37a4944f5c8487c3292fb8a6d48e1b391f3fb333"
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 912,
+        "errors": [],
+        "last_line": "FIELD_RESTORE_INTEGRATION PASS checks=912 errors=0",
+        "group": "restore",
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--path",
+          "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+          "--headless",
+          "--script",
+          "tests/gameplay/field_restore_integration_test_runner.gd"
+        ],
+        "exit_code": 0,
+        "seconds": 44.14,
+        "terminated_after_script_error": false,
+        "expected_negative_diagnostics": [],
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\encounter_held_v23\\runs\\1793417948913569800\\restore.log",
+        "log_sha256": "b680833ccd3f8bdeff5c7b4503bff0c6063eb4adfa9db317e952ca3d48d46478"
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 150,
+        "errors": [],
+        "last_line": "OPENCODE_BATTLE_SUPPORT_V2 PASS checks=150 GPU=false",
+        "group": "support_regression",
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--path",
+          "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+          "--headless",
+          "--script",
+          "tests/gameplay/opencode_battle_support_v2.gd"
+        ],
+        "exit_code": 0,
+        "seconds": 40.16,
+        "terminated_after_script_error": false,
+        "expected_negative_diagnostics": [],
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\encounter_held_v23\\runs\\1793417948913569800\\support_regression.log",
+        "log_sha256": "b7e13d3b004015f28f10ed2398d115c71e7db034fd823b114a70f9c43a647ead"
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 45,
+        "errors": [],
+        "last_line": "ENCOUNTER_HELD_V23 PASS checks=45 GPU=true",
+        "group": "handoff_gpu",
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--path",
+          "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+          "--resolution",
+          "1280x720",
+          "--script",
+          "tests/gameplay/encounter_held_v23.gd",
+          "--",
+          "--capture"
+        ],
+        "exit_code": 0,
+        "seconds": 24.94,
+        "terminated_after_script_error": false,
+        "expected_negative_diagnostics": [],
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\encounter_held_v23\\runs\\1793417948913569800\\handoff_gpu.log",
+        "log_sha256": "2be1189ff0306783915bb5fefc2435bea446d899dd9e2592a8c8128e83d0a568"
+      }
+    ],
+    "integrity_before": {
+      "status": "PASS",
+      "base": "2fee506c7f309c966efc2a348a13aaf6018b8415",
+      "protected_files": 23119,
+      "preserved_absent_skip_worktree": 15647,
+      "mode": "HASH_IF_METADATA_CHANGED",
+      "allowed_changes": [
+        "modules/battle/backends/showdown/field_encounter_items_v23.json",
+        "modules/battle/backends/showdown/field_held_items.cjs",
+        "tests/gameplay/encounter_held_v23.gd",
+        "tests/tools/test_encounter_held_v23.py",
+        "tools/item_import/import_encounter_held_v23.py",
+        "tools/showdown_engine_probe/encounter_held_v23.cjs",
+        "tools/verification/run_encounter_held_v23.py"
+      ]
+    },
+    "tested_sources_sha256": {
+      "modules/battle/backends/showdown/field_encounter_items_v23.json": "bef01d76717d8fdd8b3b7ce02c780aab4322bb3091360bf7b56b8036cc87e312",
+      "modules/battle/backends/showdown/field_held_items.cjs": "8f5c3d32b433880a3c54c80df8b625e6f8e998e76b7a34b630b719391a36fb91",
+      "tests/gameplay/encounter_held_v23.gd": "c7c5eb419601bf2bf8396bb53f5ea2cadeef402a1507a5f8d199540783966cf3",
+      "tests/tools/test_encounter_held_v23.py": "45e91afcbf97f5f59bd33e568014a3d8a226898449186a37f00f789e760e447c",
+      "tools/item_import/import_encounter_held_v23.py": "10085bc79fd40cc66e043d706354df3d4d0cfa768c6bcb9e6635554c9c5862ac",
+      "tools/showdown_engine_probe/encounter_held_v23.cjs": "90ea518751a4c763a1e9ce5c2575c550d19292ca97b0c6f121d61df372dd64e5",
+      "tools/verification/run_encounter_held_v23.py": "95be8a534110a47d3f22c58a3a1dd8990907f1b67ce722e351e6de76f12f2ce6"
+    },
+    "integrity_after": {
+      "status": "PASS",
+      "base": "2fee506c7f309c966efc2a348a13aaf6018b8415",
+      "protected_files": 23119,
+      "preserved_absent_skip_worktree": 15647,
+      "mode": "FULL_CONTENT_HASHES",
+      "allowed_changes": [
+        "docs/current/ITEM_ENCOUNTER_HELD_V23.md",
+        "modules/battle/backends/showdown/field_encounter_items_v23.json",
+        "modules/battle/backends/showdown/field_held_items.cjs",
+        "tests/gameplay/encounter_held_v23.gd",
+        "tests/tools/test_encounter_held_v23.py",
+        "tools/item_import/import_encounter_held_v23.py",
+        "tools/showdown_engine_probe/encounter_held_v23.cjs",
+        "tools/verification/run_encounter_held_v23.py"
+      ]
+    }
+  },
+  "captures": [
+    {
+      "path": ".godot\\encounter_held_v23\\cleanse_tag_bag.png",
+      "sha256": "8ec59900e09793257afa0ce1c8578ce4ce2f069813a3cc44d120453761b9e142"
+    },
+    {
+      "path": ".godot\\encounter_held_v23\\pure_incense_bag.png",
+      "sha256": "aba85e598464f49ad3e6308b2da23f37cfabbc92daf260457a69b5be840fda25"
+    }
+  ],
+  "visual_review": "Both equipped IDs, icons and bag quantities inspected. No clipped controls. Generic pending message after explicit bag-use rejection is an existing UI wording limitation, not a claim that the passive rate is absent.",
+  "before_fix_log": {
+    "path": ".godot/encounter_held_v23/native_before_fix.log",
+    "sha256": "5861301feaf67b9a14971f79a4cd0cc601e9c390b8b7db9c011cf56edf01b34d"
+  },
+  "failed_test_fixture": ".godot/encounter_held_v23/runs/1793417868284076800/results.json",
+  "failed_test_fixture_reason": "Test called missing bridge.has_active_battle(); corrected to occupied(). Failed run is not PASS.",
+  "limits": [
+    "PARTIAL_VERIFIED_RATE_ONLY remains: no minimum-step semantics in the current encounter profile.",
+    "Pure Incense breeding effects are not implemented.",
+    "No direct bag-use effect is enabled; these items work when equipped.",
+    "Generic UI rejection text for unsupported direct use still says the field function is pending.",
+    "The historical V2 inventory and proof are snapshots of that checkpoint and are not regenerated as V23 acceptance."
+  ]
+}
