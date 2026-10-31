@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "mission": "ITEMS_V28",
-  "status": "BLOCK_4_SECOND_PARSE_FAILURE_FIXED_PENDING_CI",
+  "status": "IN_PROGRESS_BLOCKS_0_2_AND_4_VERIFIED_BLOCK_3_CANCELLED",
   "base_branch": "main",
   "base_commit": "233b1a4f15ee4df7301e2c5acf8aed84a8f40626",
   "working_branch": "codex/items-v28-from-main",
@@ -14,7 +14,7 @@
     "code_identity_from_v3": true,
     "last_verified_commit": "69e15d74d04063dbe9613575b8618062e1efbed7"
   },
-  "next_action": "Verify CI on new SHA, with syntactically balanced runner. Then inspect exact effect/owner and map assertions, correct root causes as needed.",
+  "next_action": "Select next competitive-relevant unverified physical item integration; verify existing native implementations and V27 status first. No changes to main; records on each failure and SHA, CI tests before PASS. No Beast Ball, no blanket 2222 ID target.",
   "main_is_official_v27": true,
   "all_2222_items_functional": false,
   "gpu_manual_review": "PENDING",
@@ -48,25 +48,27 @@
     "total_workflows": 20,
     "success": 20,
     "failures": 0,
-    "run_id": 41222946680,
-    "run_url": "https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41222946680",
+    "run_id": 41226013201,
+    "run_url": "https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41226013201",
     "ubuntu_items_job_id": 124594448485,
-    "windows_portable_job_id": 124601131544,
+    "windows_portable_job_id": 124610228227,
     "headless_ev_checks": 202,
     "headless_ev_assertions_failed": 0,
     "windows_publication_gate": "PUBLICATION_V27 PASS",
     "worker_pid_errors_observed_ubuntu": 7,
     "worker_pid_errors_status": "PENDING_TECHNICAL_DIAGNOSIS",
-    "last_verified_functional_commit": "ae51793641b6981b4827524208b50f7a7c8e54a0",
+    "last_verified_functional_commit": "3a6a12a32e80352cfcc4ba3870957a583b26f323",
     "all_workflows_success": 20,
     "all_workflows_total": 20,
-    "ubuntu_item_job_id": 124601131188,
+    "ubuntu_item_job_id": 124610228040,
     "ev_checks": 404,
     "ev_errors": 0,
     "native_cases": 908,
     "godot_mirror_checks": 23434,
-    "unix_worker_pid_error_messages": 12,
-    "unix_worker_pid_error_status": "OPEN_TECHNICAL_DEBT"
+    "unix_worker_pid_error_messages": 19,
+    "unix_worker_pid_error_status": "OPEN_TECHNICAL_DEBT",
+    "competitive_protection_checks": 122,
+    "competitive_protection_errors": 0
   },
   "block_2": {
     "status": "SCOPED_CI_VERIFIED",
@@ -125,28 +127,38 @@
     "keep_catalog_data_unchanged": true
   },
   "block_4": {
-    "status": "TWO_PARSE_FAILURES_RECORDED_TEST_NOT_RUN",
+    "status": "SCOPED_CI_VERIFIED",
     "family": "COMPETITIVE_HELD_PROTECTION",
     "ids": [
       "safety_goggles",
       "covert_cloak",
       "clear_amulet"
     ],
-    "existing_native_verification": "held_effect_sweep_v2.cjs",
-    "goal": "native effect positive/negative plus physical bag/map/save real integration",
-    "ci": "NOT_RUN",
-    "test": "tests/gameplay/competitive_protection_items_v28.gd",
-    "first_failed": {
-      "sha": "aae2d98606890e94af14765d7391e854e4499547",
-      "run_id": 41225403708,
-      "job_id": 124608393409,
-      "diagnostic": "Parse Error: Expected else after ternary operator condition, new runner line 99"
-    },
-    "second_failed": {
-      "sha": "c111b3d044bde60cb51a85a9d6a3b400e849bae4",
-      "run_id": 41225706687,
-      "job_id": 124609309942,
-      "diagnostic": "Expected else after ternary condition at line 101; missing right parenthesis at line 100 for check()"
-    }
+    "native_effects": "3 positive and 3 negative controls for spore, nuzzle and charm; observable states",
+    "map_real_bag_routes": 3,
+    "assertions": 122,
+    "errors": 0,
+    "prior_native_verification": "tools/item_audit/held_effect_sweep_v2.cjs",
+    "verified_commit": "3a6a12a32e80352cfcc4ba3870957a583b26f323",
+    "run_id": 41226013201,
+    "ubuntu_job_id": 124610228040,
+    "windows_job_id": 124610228227,
+    "limits": [
+      "Map Caterpie routes do not trigger protection; native matched-opponent routes do",
+      "GPU/manual visual not run",
+      "No expanded doubles/Knock Off/suppression timing coverage"
+    ],
+    "failed_runs": [
+      {
+        "sha": "aae2d98606890e94af14765d7391e854e4499547",
+        "run_id": 41225403708,
+        "reason": "GDScript parser error; no effect test executed"
+      },
+      {
+        "sha": "c111b3d044bde60cb51a85a9d6a3b400e849bae4",
+        "run_id": 41225706687,
+        "reason": "GDScript parser error from missing closing check parenthesis; no effect test executed"
+      }
+    ]
   }
 }

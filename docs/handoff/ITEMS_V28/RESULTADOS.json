@@ -16,7 +16,7 @@
     }
   },
   "v28": {
-    "tested_commit": "ae51793641b6981b4827524208b50f7a7c8e54a0",
+    "tested_commit": "3a6a12a32e80352cfcc4ba3870957a583b26f323",
     "real_godot_runs": [
       {
         "commit": "c29db19343ad22717c49a44737099eacd8aa7473",
@@ -55,9 +55,30 @@
         "checks": 404,
         "errors": 0,
         "url": "https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41222946680"
+      },
+      {
+        "commit": "aae2d98606890e94af14765d7391e854e4499547",
+        "run_id": 41225403708,
+        "result": "FAIL",
+        "reason": "GDScript parse error for new protector test, no effects exercised"
+      },
+      {
+        "commit": "c111b3d044bde60cb51a85a9d6a3b400e849bae4",
+        "run_id": 41225706687,
+        "result": "FAIL",
+        "reason": "GDScript parse error from missing closing check parenthesis"
+      },
+      {
+        "commit": "3a6a12a32e80352cfcc4ba3870957a583b26f323",
+        "run_id": 41226013201,
+        "result": "PASS",
+        "all_workflows": 20,
+        "checks": 122,
+        "errors": 0,
+        "url": "https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41226013201"
       }
     ],
-    "result": "BLOCKS_0_2_SCOPED_CI_PASS_NOT_ALL_ITEMS_DONE",
+    "result": "BLOCKS_0_2_AND_4_SCOPED_CI_PASS_NOT_ALL_ITEMS_DONE",
     "notes": "This document is a preparatory handoff, not test proof.",
     "test_expansion": {
       "status": "PASS",
@@ -99,6 +120,13 @@
         "observed_count": 12,
         "where": "Ubuntu successful item job #124601131188",
         "message": "Process not existing/not child emitted on shutdown/liveness; gameplay asserts pass but logs not clean"
+      },
+      {
+        "status": "OPEN",
+        "component": "Node child process shutdown/liveness",
+        "observed_count": 19,
+        "where": "Ubuntu verified item job 124610228040",
+        "message": "ERROR: The process ... does not exist or is not a child, during multiple sessions; tests passed, console not clean"
       }
     ],
     "next": "Design next independent item family with actual game consumers; keep main stable; document before changing.",
@@ -161,32 +189,50 @@
       "requires_explicit_competitive_relevance_for_next_work": true
     },
     "block_4": {
-      "status": "SECOND_PARSE_FAILURE_FIXED_RETEST_PENDING",
+      "status": "SCOPED_CI_VERIFIED",
+      "functional_commit": "3a6a12a32e80352cfcc4ba3870957a583b26f323",
+      "run_id": 41226013201,
+      "run_url": "https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41226013201",
+      "workflows": 20,
+      "passed": 20,
+      "ubuntu_job_id": 124610228040,
+      "windows_job_id": 124610228227,
+      "checks": 122,
+      "errors": 0,
+      "verified_native_cases": 6,
+      "map_bag_save_routes": 3,
       "items": [
         "safety_goggles",
         "covert_cloak",
         "clear_amulet"
       ],
-      "family": "COMPETITIVE_HELD_PROTECTION",
-      "prior_native_evidence": "tools/item_audit/held_effect_sweep_v2.cjs",
-      "test": "tests/gameplay/competitive_protection_items_v28.gd",
-      "run_id": null,
-      "checked": false,
-      "scope": "native true-vs-false effect, owner/revision/settlement, actual physical bag+map+checkpoint+save",
-      "not_claimed": "new simulator effect implementation",
-      "failed_run": 41225403708,
-      "failed_job": 124608393409,
-      "failed_sha": "aae2d98606890e94af14765d7391e854e4499547",
-      "error": "GDScript parse error line 99, unexpected ternary parser",
-      "effect_tests_executed": false,
-      "second_failed": {
-        "sha": "c111b3d044bde60cb51a85a9d6a3b400e849bae4",
-        "run_id": 41225706687,
-        "job_id": 124609309942,
-        "reason": "unclosed check() after native held owner compare, reported at following if line 101"
-      },
-      "static_bracket_validation": "PASS",
-      "functional_test_status": "NOT_RUN_YET"
+      "effects": [
+        "Spore prevented vs unprotected sleep",
+        "Nuzzle secondary paralysis prevented vs control",
+        "Charm Attack drop prevented vs control"
+      ],
+      "known_gap": "Map Caterpie test proves presence/retention but not defensive trigger, which is proved separately via native matched foe",
+      "failed_before": [
+        {
+          "run_id": 41225403708,
+          "sha": "aae2d98606890e94af14765d7391e854e4499547",
+          "error": "Parse error before assertions"
+        },
+        {
+          "run_id": 41225706687,
+          "sha": "c111b3d044bde60cb51a85a9d6a3b400e849bae4",
+          "error": "Parse error, missing check closure before if"
+        }
+      ],
+      "native_item_scenarios": 908,
+      "godot_mirror_checks": 23434,
+      "existing_ev_checks": 404,
+      "progression_checks": 8755,
+      "windows_item_connections": 4993,
+      "windows_savegame_checks": 40,
+      "windows_publication": "PUBLICATION_V27 PASS",
+      "unix_pid_error_messages": 19,
+      "gpu_manual": "NOT_RUN"
     }
   },
   "limitations": [
