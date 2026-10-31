@@ -21,16 +21,16 @@
     "result": "NOT_RUN",
     "notes": "This document is a preparatory handoff, not test proof.",
     "test_expansion": {
-      "status": "NOT_RUN",
-      "native_training_items": [
-        "power_bracer",
-        "power_belt",
-        "power_lens",
-        "power_band",
-        "power_anklet",
-        "macho_brace"
-      ],
-      "scope": "Native battle, checkpoint, EV/XP/item, serialize, double settlement; no full map/bag for these six"
+      "status": "FAILED_AT_C29DB193_RETEST_PENDING",
+      "commit": "c29db19343ad22717c49a44737099eacd8aa7473",
+      "run_id": 41220331135,
+      "job_id": 124593384280,
+      "checks": 190,
+      "errors": 6,
+      "failed_assertion": "training existing save schema preserves owner <each of six training items>",
+      "diagnosis": "Direct runtime object comparison may not equal normalized dictionary representation; split serialized round-trip into EV/stats/item assertions.",
+      "new_test_status": "NOT_RUN_YET",
+      "log_url": "https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41220331135"
     }
   },
   "limitations": [

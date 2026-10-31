@@ -265,9 +265,14 @@ func _native_ev_remaining_training_items() -> void:
 		check("training no duplicate settlement " + item,
 			not battle.settle_finished_battle().accepted and own.to_dict() == final_state)
 		var persisted := CreatureInstance.from_dict(final_state)
-		check("training existing save schema preserves owner " + item,
-			persisted.evs == own.evs and persisted.stats.to_dict() == own.stats.to_dict()
-			and persisted.held_item_id == own.held_item_id)
+		# El contrato del schema es el diccionario serializado: .to_dict()
+		# normaliza nombres de claves/tipos de Variant, no objetos internos.
+		var roundtrip: Dictionary = persisted.to_dict()
+		check("training save round-trip EV " + item, roundtrip.evs == final_state.evs)
+		check("training save round-trip stats " + item, roundtrip.stats == final_state.stats)
+		check("training save round-trip held item " + item,
+			roundtrip.held_item_id == final_state.held_item_id
+			and roundtrip.held_item_consumed == final_state.held_item_consumed)
 		routes.append({"family": "EV_NATIVE_ADDITIONAL", "item": item,
 			"foe": "caterpie", "restored": restored, "settled": settled.accepted})
 		await battle.close()
