@@ -184,7 +184,9 @@ jobs:
         shell: pwsh
         run: |
           $ErrorActionPreference = 'Stop'
-          & godot --version
+          $godot = Join-Path $env:USERPROFILE 'godot/Godot_v4.7-stable_win64_console.exe'
+          if (-not (Test-Path $godot)) { throw ('Missing pinned Godot console: ' + $godot) }
+          & $godot --headless --version
           if ($LASTEXITCODE -ne 0) { exit 1 }
           & python -B tools/distribution/restore_resources.py
           if ($LASTEXITCODE -ne 0) { exit 1 }
@@ -199,7 +201,8 @@ jobs:
       - name: Execute original portable V27 gate without waived assertions
         shell: pwsh
         run: |
-          $godot = (Get-Command godot).Source
+          $godot = Join-Path $env:USERPROFILE 'godot/Godot_v4.7-stable_win64_console.exe'
+          if (-not (Test-Path $godot)) { throw 'Pinned Godot console not found' }
           $node = (Get-Command node).Source
           Write-Output ("Godot=" + $godot)
           Write-Output ("Node=" + $node)
