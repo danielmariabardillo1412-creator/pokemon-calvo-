@@ -207,7 +207,11 @@ jobs:
           foreach ($name in @('forms_policy_report.json','unsupported_mechanics.json','import_summary.json')) {
             Copy-Item ("ci/fixtures/pokeapi_reports/" + $name) ("data/reports/" + $name)
           }
-          & python -B tools/battle_reference/run.py --install --limit 1
+          & $godot --headless --path . --import
+          if ($LASTEXITCODE -ne 0) { exit 1 }
+          $node = (Get-Command node).Source
+          $npm = (Get-Command npm.cmd).Source
+          & python -B tools/battle_reference/run.py --install --limit 1 --godot $godot --node $node --npm $npm
           if ($LASTEXITCODE -ne 0) { exit 1 }
       - name: Execute original portable V27 gate without waived assertions
         shell: pwsh
