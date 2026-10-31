@@ -1281,5 +1281,41 @@
     "integrated_here": false
   },
   "next_step": "Prototype mission complete. Review reusable contract; future families require their own observable expectations, not new simulations per item. Prioritize passive/survival family in ACCELERATION_PLAN, keep dependencies and PID diagnostics separate. No automatic PR merge.",
-  "documentation_note": "This notebook update is documentation only [skip ci]; its HEAD is not a new functional validation. Evidence remains bound to 0c1f48eb and run 41237512322."
+  "documentation_note": "This notebook update is documentation only [skip ci]; its HEAD is not a new functional validation. Evidence remains bound to 0c1f48eb and run 41237512322.",
+  "second_family_pending": {
+    "status": "LOCAL_VERIFIED_AWAITING_CI",
+    "functional_sha": null,
+    "new_ids": [
+      "leftovers",
+      "life_orb",
+      "rocky_helmet"
+    ],
+    "families": [
+      {
+        "family": "choice_held_items",
+        "items": 3,
+        "scenarios": 15,
+        "scenario_checks": 669,
+        "status": "SCOPED_VERIFIED"
+      },
+      {
+        "family": "passive_reactive_held_items",
+        "items": 3,
+        "scenarios": 15,
+        "scenario_checks": 1263,
+        "status": "SCOPED_VERIFIED"
+      }
+    ],
+    "local_checks": 1935,
+    "scenarios": 30,
+    "unit_tests": {
+      "choice_unchanged": 14,
+      "new_passive": 17
+    },
+    "local_evidence": ".godot\\item_automation_v28\\runs\\1793479631790569300",
+    "local_functional_sources_verified": true,
+    "ci_step_extended_after_local_run": true,
+    "next_step": "Push coherent functional commit and require actual Ubuntu/Windows Godot and all unchanged regression workflows. Counters stay 22/35/4 until CI.",
+    "metadata_gap": "Rocky Helmet PokeAPI 583 has empty attributes; exact reviewed Gen V-IX index/category/English held-contact-effect evidence, plus policy and real equip, is required. Existing Choice criteria unchanged."
+  }
 }

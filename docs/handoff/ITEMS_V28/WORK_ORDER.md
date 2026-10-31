@@ -1,5 +1,51 @@
 # Orden de trabajo — ITEMS_V28
 
+## Segunda familia del automatizador — contrato previo
+
+Reanudar desde `648a2c86541b6a381424413e2b2e28231d127353`. Conservar la base de
+guard `47f42aef` y todas las pruebas/descriptor Elección. Objetos autorizados:
+`leftovers` (PokéAPI 211), `life_orb` (247), `rocky_helmet` (583). Efectos ya
+presentes en items.js 0.10.11 y en held_pilot.cjs; no cambiar producción.
+
+Allowlist exacta ADICIONAL antes de editar:
+- `tests/fixtures/item_automation_v28/passive_items.json`.
+- `tests/gameplay/item_automation_v28.gd` (mínima orquestación y restauración común).
+- `tests/gameplay/item_automation_effects_v28.gd` y `.uid` (expectativas por efecto).
+- `tools/item_audit/automation_v28.py` (múltiples familias; conservar API anterior).
+- `tools/item_audit/automation_contracts_v28.py` (contratos nuevos e informe).
+- `tests/tools/test_item_automation_passive_v28.py` (negativos nuevos).
+- `.github/workflows/item-closure-v3.yml` (extender los pasos actuales; no quitar gates).
+- `docs/handoff/ITEMS_V28/{WORK_ORDER.md,START_HERE.md,STATE.json,PROGRESS.md,RESULTADOS.json,COMPETITIVE_COVERAGE_AUDIT.md,AUTOMATION_PROTOTYPE.md,AUTOMATION_RESULTS.json}`.
+El descriptor Elección, sus 14 pruebas Python y todos los verificadores históricos
+quedan byte a byte intactos. Salidas `.godot/item_automation_v28/**`; mismos cuatro
+UID históricos no versionados, sin ampliar su excepción ni modificar sus fuentes.
+
+Contratos: tres variantes aisladas active/none/reserve para cada disparador.
+Restos: recuperación en varios turnos, tope de PS, ausencia a PS completos y
+propiedad tras cambio de activo. Vidasfera: aumento físico/especial y pérdida
+de PS, sin activación con estado o ataque inmune. Casco Dentado: contacto,
+especial sin contacto, físico sin contacto y nuevo portador activo. Todos
+retenidos, dos unidades físicas, habilidades vacías. Restaurar antes y después
+de activar; comprobar continuación, campaña no publicada y revisiones obsoletas.
+Misma ruta real de mochila/mapa/guardar/cargar/cierre para los seis objetos,
+incluyendo PS persistidos. Expectativas fraccionales son aserciones de prueba;
+no se implementa ninguna regla nueva en el juego o el simulador.
+
+Un solo ejecutor, fixture/equipamiento/IO/restauración/mapa compartidos. Los
+nuevos opcodes reciben observaciones y contratos declarativos, no callbacks
+del motor copiados. Rechazar efectos, casos, propietarios o pruebas omitidas.
+Ejecutar las dos familias juntas, con suelo de cobertura Elección >=665 y todos
+sus 15 casos, más todos los gates previos en Ubuntu/Windows. No certificar GPU,
+supresión/transferencias ni sinergias con habilidades. Fallos preservados y
+contador 22/35/4 sin cambio hasta CI real. Main y PR en borrador sin merge.
+
+Hallazgo de procedencia: PokéAPI 583 conserva `attributes: []`. El verificador
+no debe interpretar esa ausencia como objeto beta ni relajar el criterio de los
+otros IDs. Solo para ese registro fijado se contrasta categoría held-items,
+índice 540 en Gen V–IX y texto inglés explícito Held/contact move/1/6, además
+de índice, catálogo, selección y equipamiento reales. Registrar esa carencia de
+metadatos; ninguna modificación de datos. Prueba negativa de esta excepción.
+
 ## Prototipo de automatización Elección — allowlist previa (petición del usuario)
 
 Base de esta misión: `47f42aef1a518eefb744ad310f89b6e2d3ce7108`.

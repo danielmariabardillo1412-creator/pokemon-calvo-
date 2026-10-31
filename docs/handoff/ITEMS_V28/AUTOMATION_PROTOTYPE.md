@@ -1,5 +1,50 @@
 # Automatizador declarativo V28 — piloto Elección
 
+## Segunda familia en desarrollo — 648a2c86 como checkpoint
+
+El mismo comando y runner reciben ahora dos descriptores: Elección (schema 1,
+sin cambiar sus bytes) y `passive_items.json` (schema 2). Se conserva la API
+Python del primer contrato y sus 14 pruebas. Múltiples familias se validan por
+particiones completas; Elección mantiene 15 escenarios y al menos 665 aserciones
+incluyendo sus dos comprobaciones de preparación originales. No hay fallback
+equip-only para los casos de la segunda familia.
+
+`item_automation_effects_v28.gd` contiene solo predicados de prueba por opcode;
+`automation_contracts_v28.py` valida contratos y observaciones con la evidencia
+nativa. Ambos carecen de simulación, UI o escritura en la campaña. La orquestación,
+fixture, equipamiento, inventario, captura de evidencia, SaveV2, restauración y
+mochila siguen en el runner común. La restauración previamente interna de la
+prueba de bloqueo se extrajo para que las dos familias usen la misma operación.
+
+| Objeto | Contratos nuevos, cada uno con active/none/reserve |
+| --- | --- |
+| Restos | Recuperación parcial en dos turnos; límite con un PS faltante; sin curación a PS completos; efecto del objeto en el nuevo activo después de cambiar |
+| Vidasfera | Aumento físico y retroceso en dos turnos; aumento especial; movimiento de estado sin retroceso; ataque inmune sin daño/retroceso |
+| Casco Dentado | Contacto en dos turnos; especial sin contacto; físico sin contacto; daño al atacante cuando el nuevo activo es el portador |
+
+Cada objeto también recorre la misma quinta ruta física mapa/mochila/portador/
+guardar/cargar/cierre. Se añaden verificaciones de PS reales publicados y
+persistidos a esa ruta común, también para Elección. El mapa sigue sin sustituir
+los disparadores específicos de las pruebas nativas.
+
+Los escenarios de efectos restauran desde disco antes de comenzar y después de
+cada paso. Cada variante tiene owner y worker nuevos, revisiones obsoletas se
+rechazan sin mutación y la campaña no se publica durante el ensayo. Los checkpoints
+nativos inicial/final corroboran PS, identidad y equipo medidos; el informe no
+puede inventar observaciones distintas de su timeline o de esos checkpoints.
+Las fracciones 1/16, 1/10 y 1/6 son expectativas de prueba del efecto conocido;
+no hay nuevo cálculo productivo, callbacks, RNG, protocolo o schema de guardado.
+
+Los tres objetos se conservan sin consumir. Habilidades vacías: sin Magic Guard,
+Sheer Force, Long Reach, supresión o transferencias especiales. Dobles, GPU/manual
+y todas las combinaciones siguen fuera. Contratos seguros, sin dependencias nuevas.
+Casco Dentado PokéAPI 583 tiene `attributes: []`; excepción de metadatos revisada
+solo para su registro fijado: categoría held-items, índice 540 Gen V–IX y efecto
+inglés explícito de contacto. No se modifica ese snapshot ni las reglas de selección.
+
+Hasta resultados reales de las dos plataformas, la nueva familia está EN PRUEBAS,
+no certificada. La evidencia del primer piloto que sigue abajo es histórica.
+
 ## Alcance y arquitectura
 
 Tres objetos oficiales y permitidos: Cinta Elegida `choice_band` (PokéAPI 197),

@@ -13,12 +13,18 @@ import time
 ROOT = Path(__file__).resolve().parents[2]
 BASE = '47f42aef1a518eefb744ad310f89b6e2d3ce7108'
 DESCRIPTOR = 'tests/fixtures/item_automation_v28/choice_items.json'
+PASSIVE_DESCRIPTOR = 'tests/fixtures/item_automation_v28/passive_items.json'
+DESCRIPTORS = [DESCRIPTOR, PASSIVE_DESCRIPTOR]
+sys.path.insert(0, str(ROOT/'tools/item_audit'))
 SCRIPT = 'tests/gameplay/item_automation_v28.gd'
 IDS = {'choice_band', 'choice_specs', 'choice_scarf'}
 SCENARIOS = {'physical_damage', 'special_damage', 'speed_order', 'lock_restore_switch', 'map_bag_owner_save'}
 DOC = 'docs/handoff/ITEMS_V28/'
 ALLOWED = {DESCRIPTOR, SCRIPT, SCRIPT+'.uid', 'tools/item_audit/automation_v28.py',
-           'tests/tools/test_item_automation_v28.py', '.github/workflows/item-closure-v3.yml'} | {
+           'tests/tools/test_item_automation_v28.py', '.github/workflows/item-closure-v3.yml',
+           PASSIVE_DESCRIPTOR, 'tests/gameplay/item_automation_effects_v28.gd',
+           'tests/gameplay/item_automation_effects_v28.gd.uid', 'tools/item_audit/automation_contracts_v28.py',
+           'tests/tools/test_item_automation_passive_v28.py'} | {
     DOC+n for n in ['WORK_ORDER.md', 'START_HERE.md', 'STATE.json', 'PROGRESS.md', 'RESULTADOS.json',
                    'COMPETITIVE_COVERAGE_AUDIT.md', 'AUTOMATION_PROTOTYPE.md', 'AUTOMATION_RESULTS.json']}
 ENGINE_METADATA = {'modules/creatures/progression/battle_ev_rewards.gd.uid',
@@ -34,6 +40,9 @@ def git(*args): return subprocess.check_output(['git', *args], cwd=ROOT, text=Tr
 
 
 def validate_descriptor(d):
+    if d.get('family') == 'passive_reactive_held_items':
+        from automation_contracts_v28 import validate_passive_descriptor
+        return validate_passive_descriptor(d)
     if set(d) != {'schema_version','family','format','seed','level','actor_species','damage_target','speed_target',
                   'physical_move','special_move','speed_move','consumption','variants','scenarios','items'}:
         raise ValueError('Unknown/missing descriptor fields')
@@ -63,6 +72,9 @@ def validate_descriptor(d):
 
 
 def guard():
+    for p in [DESCRIPTOR, 'tests/tools/test_item_automation_v28.py']:
+        if git('diff','648a2c86541b6a381424413e2b2e28231d127353','--',p):
+            raise ValueError('Historical Choice descriptor/tests changed: '+p)
     untracked = set(git('ls-files','--others','--exclude-standard').splitlines())
     metadata = untracked & ENGINE_METADATA
     for p in metadata:
@@ -92,14 +104,17 @@ def provenance(d):
         path = f"data/api/v2/item/{spec['api_id']}/index.json"
         original = json.loads(git('show',BASE+':'+path))
         attrs = {r['name'] for r in original['attributes']}
+        from automation_contracts_v28 import reviewed_attribute_gap
+        attribute_gap = reviewed_attribute_gap(item_id, original)
         if (inventory[item_id]['excluded'] or not inventory[item_id]['equip_permitted'] or
             original['id'] != spec['api_id'] or original['name'] != original_name or
             by_name[original_name]['url'] != f"/api/v2/item/{spec['api_id']}/" or
-            not {'holdable','holdable-active'} <= attrs or not original['game_indices']):
+            (not {'holdable','holdable-active'} <= attrs and not attribute_gap) or not original['game_indices']):
             raise ValueError('Official/allowed/equipable provenance failed: '+item_id)
         rows.append({'id':item_id,'api_id':spec['api_id'],'source_path':path,
                      'source_blob':git('rev-parse',BASE+':'+path),'category':original['category']['name'],
-                     'generation_indices':len(original['game_indices']),'equip_permitted':True,'excluded':False})
+                     'generation_indices':len(original['game_indices']),'equip_permitted':True,'excluded':False,
+                     'attribute_evidence':'reviewed_empty_attributes_pokeapi_583_gen5_9_contact_effect' if attribute_gap else 'explicit_holdable_attributes'})
     return rows
 
 
@@ -146,6 +161,28 @@ def validate_report(d, report, out):
     return True
 
 
+def validate_combined_report(descriptors, report, out):
+    from automation_contracts_v28 import validate_passive_report
+    if report.get('status')!='SCOPED_VERIFIED' or report.get('errors') or report.get('items')!=6 or report.get('checks',0)<665:
+        raise ValueError('Combined execution failed or Choice assertion floor lost')
+    rows=report.get('scenarios',[])
+    ids=[s['id'] for d in descriptors for s in d['items']]
+    if len(ids)!=len(set(ids)) or len(rows)!=30: raise ValueError('Omitted/duplicate family/items')
+    families=[]
+    for d in descriptors:
+        selected=[r for r in rows if r['id'] in {s['id'] for s in d['items']}]
+        partition={**report,'items':len(d['items']),'scenarios':selected}
+        if d['family']=='choice_held_items':
+            validate_report(d,partition,out)
+            if sum(r['checks'] for r in selected)<663: raise ValueError('Old Choice assertions were removed')
+        else: validate_passive_report(d,partition,out,digest)
+        families.append({'family':d['family'],'items':len(d['items']),'scenarios':len(selected),
+                         'scenario_checks':sum(r['checks'] for r in selected),'status':'SCOPED_VERIFIED'})
+    if set(r['id'] for r in rows)!=set(ids) or report['checks']<sum(r['checks'] for r in rows):
+        raise ValueError('Unreviewed object or inconsistent assertion count')
+    return families
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--godot',default=shutil.which('godot') or 'C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe')
@@ -154,12 +191,14 @@ def main():
     out = ROOT/'.godot/item_automation_v28/runs'/str(time.time_ns()); out.mkdir(parents=True)
     receipt = {'status':'FAILED','all_item_effects_certified':False,'errors':[]}
     try:
-        d = validate_descriptor(read(ROOT/DESCRIPTOR))
+        descriptors = [validate_descriptor(read(ROOT/p)) for p in DESCRIPTORS]
+        specs = [s for d in descriptors for s in d['items']]
         before = guard()
         checkout = git('rev-parse','HEAD')
         inputs = {'functional_sha':os.getenv('ITEM_AUTOMATION_FUNCTIONAL_SHA') or checkout,'checkout_sha':checkout,
                   'run_url':os.getenv('ITEM_AUTOMATION_RUN_URL',''),'descriptor_sha256':digest(ROOT/DESCRIPTOR),
-                  'provenance':provenance(d),'base':BASE,
+                  'descriptors':[{'path':p,'sha256':digest(ROOT/p)} for p in DESCRIPTORS],
+                  'provenance':[r for d in descriptors for r in provenance(d)],'base':BASE,
                   'test_sources_sha256':{p:digest(ROOT/p) for p in ALLOWED if (ROOT/p).is_file() and not p.startswith(DOC)},
                   'ability_checkpoint':{'branch':'codex/ability-audit-v1','functional_sha':'72548cde','resume_note_commit':'5d5f8ae','integrated_here':False}}
         write(out/'inputs.json',inputs)
@@ -171,7 +210,9 @@ def main():
         receipt['execution'] = execution
         report = read(out/'godot.json')
         receipt.update(checks=report.get('checks',0),godot_report='godot.json',scenario_results=report.get('scenarios',[]))
-        validate_report(d,report,out)
+        families = validate_combined_report(descriptors,report,out)
+        if report.get('descriptor_hashes') != {p:digest(ROOT/p) for p in DESCRIPTORS}:
+            raise ValueError('Godot did not exercise the validated descriptors')
         if execution['exit_code'] != 0: raise ValueError('Godot process failed')
         # Preserve known process-lifecycle diagnostics verbatim; never suppress
         # script/parser/assertion failures or misreport a clean engine console.
@@ -190,10 +231,10 @@ def main():
         for p,sha in inputs['test_sources_sha256'].items():
             if digest(ROOT/p) != sha: raise ValueError('Test source changed while executing: '+p)
         receipt.update(status='SCOPED_VERIFIED',checks=report['checks'],functional_sha=inputs['functional_sha'],
-                       checkout_sha=checkout,run_url=inputs['run_url'],items=3,scenarios=15,
-                       per_item=[{'id':s['id'],'status':'SCOPED_VERIFIED','scenarios':[r for r in report['scenarios'] if r['id']==s['id']]} for s in d['items']],
+                       checkout_sha=checkout,run_url=inputs['run_url'],items=len(specs),scenarios=len(report['scenarios']),families=families,
+                       per_item=[{'id':s['id'],'status':'SCOPED_VERIFIED','scenarios':[r for r in report['scenarios'] if r['id']==s['id']]} for s in specs],
                        provenance=inputs['provenance'],protected={'runtime_files':len(after['runtime_hashes']),'absent_skip_worktree':after['absent_skip_worktree'], 'outside_allowlist_changed':False,'engine_generated_untracked_uids':after['engine_generated_untracked_uids']},
-                       test_sources_sha256=inputs['test_sources_sha256'],descriptor_sha256=inputs['descriptor_sha256'],limitations=report['limits'])
+                       test_sources_sha256=inputs['test_sources_sha256'],descriptor_sha256=inputs['descriptor_sha256'],descriptor_hashes=report['descriptor_hashes'],limitations=report['limits'])
     except Exception as e:
         receipt['errors'].append(str(e))
     write(out/'results.json',receipt)

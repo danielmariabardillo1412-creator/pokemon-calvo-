@@ -138,11 +138,12 @@ jobs:
           timeout 300s godot --headless --path . --script res://tests/gameplay/competitive_damage_items_v28.gd 2>&1 | tee item-damage-v28.log
           if grep -E 'SCRIPT ERROR|Parse Error|timeout' item-damage-v28.log; then exit 1; fi
           grep -E 'COMPETITIVE_DAMAGE_V28 PASS checks=[1-9][0-9]* ids=9 errors=0' item-damage-v28.log
-      - name: Declarative Choice-item integration prototype (isolated effects and physical ownership)
+      - name: Declarative item families (Choice, recovery, recoil and contact)
         shell: bash
         run: |
           set -euo pipefail
           python -B tests/tools/test_item_automation_v28.py 2>&1 | tee item-automation-contract-v28.log
+          python -B tests/tools/test_item_automation_passive_v28.py 2>&1 | tee item-automation-passive-contract-v28.log
           timeout 420s python -B tools/item_audit/automation_v28.py 2>&1 | tee item-automation-v28.log
           grep -E 'ITEM_AUTOMATION_V28 SCOPED_VERIFIED checks=[1-9][0-9]*' item-automation-v28.log
       - name: Evidence-bound matrix by ID and context
@@ -273,13 +274,15 @@ jobs:
             Write-Error 'Portable gate did not emit PASS despite exit code zero'
             exit 1
           }
-      - name: Declarative Choice-item prototype on Windows after unchanged portable gate
+      - name: Declarative item families on Windows after unchanged portable gate
         shell: pwsh
         run: |
           $ErrorActionPreference = 'Stop'
           $godot = Join-Path $env:USERPROFILE 'godot/Godot_v4.7-stable_win64_console.exe'
           $node = (Get-Command node).Source
           & python -B tests/tools/test_item_automation_v28.py
+          if ($LASTEXITCODE -ne 0) { exit 1 }
+          & python -B tests/tools/test_item_automation_passive_v28.py
           if ($LASTEXITCODE -ne 0) { exit 1 }
           & python -B tools/item_audit/automation_v28.py --godot $godot --node $node 2>&1 | Tee-Object -FilePath item-automation-windows-v28.log
           if ($LASTEXITCODE -ne 0) { exit 1 }
