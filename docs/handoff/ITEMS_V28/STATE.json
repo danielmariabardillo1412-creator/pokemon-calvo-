@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "mission": "ITEMS_V28",
-  "status": "BLOCK_2_MAP_ROUTES_COMMITTED_CI_PENDING",
+  "status": "BLOCK_2_FAILED_RETEST_PENDING",
   "base_branch": "main",
   "base_commit": "233b1a4f15ee4df7301e2c5acf8aed84a8f40626",
   "working_branch": "codex/items-v28-from-main",
@@ -14,7 +14,7 @@
     "code_identity_from_v3": true,
     "last_verified_commit": "69e15d74d04063dbe9613575b8618062e1efbed7"
   },
-  "next_action": "Check Actions on new functional SHA; inspect failures by job/step and 20-50 log lines, fix then rerun. If passed update docs with exact counts and avoid claiming unrelated item families.",
+  "next_action": "Inspect new Actions step for 7 per-item disk reload cases, identify which separate assertion fails. Do not modify domain or save schema without evidence. Verify Windows portable then document.",
   "main_is_official_v27": true,
   "all_2222_items_functional": false,
   "gpu_manual_review": "PENDING",
@@ -59,7 +59,7 @@
     "worker_pid_errors_status": "PENDING_TECHNICAL_DIAGNOSIS"
   },
   "block_2": {
-    "status": "TESTS_WRITTEN_NOT_RUN",
+    "status": "FAILED_AT_F052B09C_DIAGNOSTIC_ASSERTIONS_WRITTEN",
     "item_ids": [
       "power_weight",
       "power_bracer",
@@ -70,6 +70,14 @@
       "macho_brace"
     ],
     "scope": "isolated real map + bag equip + save/restore + native battle + six EV components + owner + XP + physical inventory + disk reload",
-    "prior_verified_functional_commit": "69e15d74d04063dbe9613575b8618062e1efbed7"
+    "prior_verified_functional_commit": "69e15d74d04063dbe9613575b8618062e1efbed7",
+    "first_failed": {
+      "sha": "f052b09ce2b63642ce9340500b7d0fae4e699472",
+      "run_id": 41222565742,
+      "ubuntu_job_id": 124599986734,
+      "checks": 341,
+      "errors": 7
+    },
+    "next_run": "PENDING"
   }
 }

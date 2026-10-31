@@ -76,7 +76,7 @@
     ],
     "next": "Design next independent item family with actual game consumers; keep main stable; document before changing.",
     "block_2": {
-      "status": "TESTS_COMMITTED_NOT_RUN",
+      "status": "FAILED_SEVEN_COMPOSITE_ASSERTIONS_RETEST_PENDING",
       "items": [
         "power_weight",
         "power_bracer",
@@ -88,7 +88,15 @@
       ],
       "route": "real scene, physical bag equip, save/load before and after combat, native encounter, EV 6 stats and XP, held owner, inventory",
       "run_id": null,
-      "scope_limit": "separate real map per item; not second battle for each, GPU/manual remains pending"
+      "scope_limit": "separate real map per item; not second battle for each, GPU/manual remains pending",
+      "initial_commit": "f052b09ce2b63642ce9340500b7d0fae4e699472",
+      "initial_run": 41222565742,
+      "initial_linux_job": 124599986734,
+      "checks": 341,
+      "errors": 7,
+      "failed_pattern": "training map EVs/item survive disk reload for each of seven training items",
+      "corrective_test": "separate six EV values, XP, held item, stats/HP and physical stock; normalized persistent representation; unverified",
+      "new_run": null
     }
   },
   "limitations": [

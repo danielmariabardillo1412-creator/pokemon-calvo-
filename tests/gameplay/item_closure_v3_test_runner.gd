@@ -360,10 +360,24 @@ func _map_training_item(item: String) -> void:
 	check("training map final load " + item, await bridge.load_game())
 	owner = scene.field_collection()
 	var reloaded := owner.owned_creature(own_id)
-	check("training map EVs/item survive disk reload " + item,
-		reloaded.evs == after.evs and reloaded.experience == after.experience
-		and String(reloaded.held_item_id) == item
-		and _physical_medicine(owner, StringName(item)) == 2)
+	# El juego serializa a JSON (claves String y tipos normalizados).
+	# Comparamos propiedades persistentes por separado para distinguir
+	# una discrepancia real de diferencias de representación en memoria.
+	var saved_owner: Dictionary = after.to_dict()
+	var loaded_owner: Dictionary = reloaded.to_dict()
+	for key: String in ProgressionRuleset.STAT_KEYS:
+		check("training map disk reload EV " + item + "/" + key,
+			int(reloaded.evs.get(key, 0)) == int(after.evs.get(key, 0)))
+	check("training map disk reload XP " + item,
+		loaded_owner.experience == saved_owner.experience)
+	check("training map disk reload held item " + item,
+		loaded_owner.held_item_id == saved_owner.held_item_id
+		and not bool(loaded_owner.held_item_consumed))
+	check("training map disk reload persistent stats/HP " + item,
+		loaded_owner.stats == saved_owner.stats
+		and loaded_owner.current_hp == saved_owner.current_hp)
+	check("training map disk reload physical units " + item,
+		_physical_medicine(owner, StringName(item)) == 2)
 	routes.append({"family": "EV_MAP_BAG_SAVE", "item": item,
 		"foe": "caterpie", "gameplay_route": true})
 	if view.session != null:
