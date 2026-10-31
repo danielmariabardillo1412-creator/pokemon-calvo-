@@ -47,6 +47,22 @@ jobs:
           set -euo pipefail
           python -B tools/distribution/restore_resources.py
           python -B tools/distribution/restore_resources.py --check
+      - name: Stage canonical PokeAPI test reports (unchanged V27 CI fixtures)
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p data/reports
+          cp ci/fixtures/pokeapi_reports/forms_policy_report.json data/reports/forms_policy_report.json
+          cp ci/fixtures/pokeapi_reports/unsupported_mechanics.json data/reports/unsupported_mechanics.json
+          cp ci/fixtures/pokeapi_reports/import_summary.json data/reports/import_summary.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          for p in ('forms_policy_report.json','unsupported_mechanics.json','import_summary.json'):
+              f=Path('data/reports')/p
+              assert isinstance(json.loads(f.read_text()),dict)
+              print('ITEM_CLOSURE_V3_CI_REPORT',f)
+          PY
       - name: Fresh inventory and 2222-ID audit
         shell: bash
         run: |
