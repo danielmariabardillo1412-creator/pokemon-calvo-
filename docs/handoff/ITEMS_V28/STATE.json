@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "mission": "ITEMS_V28",
-  "status": "BLOCK_1_FIX_TEST_ASSERTIONS_PENDING_CI",
+  "status": "IN_PROGRESS_BLOCKS_0_1_VERIFIED",
   "base_branch": "main",
   "base_commit": "233b1a4f15ee4df7301e2c5acf8aed84a8f40626",
   "working_branch": "codex/items-v28-from-main",
@@ -9,16 +9,17 @@
   "prior_verified_functional_commit": "c554ab7635fb847aa395d2dbb5bc523b560bc6de",
   "block_0": {
     "scope": "port the exact V3-tested EV rewards and native item verification onto official V27",
-    "status": "PORT_COMPLETE_CI_RUNNING_AT_84071E1E",
-    "ci": "18/20 PASS at initial check, two pending; not final",
-    "code_identity_from_v3": true
+    "status": "SCOPED_CI_VERIFIED",
+    "ci": "PASS at 69e15d74d04063dbe9613575b8618062e1efbed7",
+    "code_identity_from_v3": true,
+    "last_verified_commit": "69e15d74d04063dbe9613575b8618062e1efbed7"
   },
-  "next_action": "Run CI on next commit; verify all six round-trip EV/stats/item independently and Windows portable. If any fail inspect exact test step lines, preserve logs and fix only root cause.",
+  "next_action": "Select next unverified and independently implementable item family. Declare files/contracts in WORK_ORDER, test with Godot CI, record any failure by SHA. Do not assume 2222 effects done; do not merge to main.",
   "main_is_official_v27": true,
   "all_2222_items_functional": false,
   "gpu_manual_review": "PENDING",
   "block_1": {
-    "status": "FAILED_AT_C29DB193_FIX_COMMITTED_UNVERIFIED",
+    "status": "SCOPED_CI_VERIFIED",
     "native_item_ids": [
       "power_bracer",
       "power_belt",
@@ -29,6 +30,32 @@
     ],
     "full_map_bag_save_item": "power_weight",
     "coverage_goal": "same session, per-stat EV, owner, checkpoint restore, save, XP, held and idempotent settlement",
-    "first_failed_run": 41220331135
+    "first_failed_run": 41220331135,
+    "last_verified_commit": "69e15d74d04063dbe9613575b8618062e1efbed7",
+    "checked_native_contexts": [
+      "power_bracer",
+      "power_belt",
+      "power_lens",
+      "power_band",
+      "power_anklet",
+      "macho_brace"
+    ],
+    "fixed_by": "69e15d74d04063dbe9613575b8618062e1efbed7"
+  },
+  "ready_for_review": false,
+  "ci": {
+    "functional_commit": "69e15d74d04063dbe9613575b8618062e1efbed7",
+    "total_workflows": 20,
+    "success": 20,
+    "failures": 0,
+    "run_id": 41220691787,
+    "run_url": "https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41220691787",
+    "ubuntu_items_job_id": 124594448485,
+    "windows_portable_job_id": 124594448158,
+    "headless_ev_checks": 202,
+    "headless_ev_assertions_failed": 0,
+    "windows_publication_gate": "PUBLICATION_V27 PASS",
+    "worker_pid_errors_observed_ubuntu": 7,
+    "worker_pid_errors_status": "PENDING_TECHNICAL_DIAGNOSIS"
   }
 }
