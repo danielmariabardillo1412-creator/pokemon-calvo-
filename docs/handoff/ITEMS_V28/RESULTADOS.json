@@ -19,7 +19,19 @@
     "tested_commit": null,
     "real_godot_runs": [],
     "result": "NOT_RUN",
-    "notes": "This document is a preparatory handoff, not test proof."
+    "notes": "This document is a preparatory handoff, not test proof.",
+    "test_expansion": {
+      "status": "NOT_RUN",
+      "native_training_items": [
+        "power_bracer",
+        "power_belt",
+        "power_lens",
+        "power_band",
+        "power_anklet",
+        "macho_brace"
+      ],
+      "scope": "Native battle, checkpoint, EV/XP/item, serialize, double settlement; no full map/bag for these six"
+    }
   },
   "limitations": [
     "2222 IDs inventoried do not imply all effects functional",

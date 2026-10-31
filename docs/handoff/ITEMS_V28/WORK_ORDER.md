@@ -22,3 +22,7 @@ Elegir una familia pendiente usando `docs/current/ITEM_SYSTEM_CURRENT_STATUS.jso
 
 ## Límites
 No modificar main, node_modules, versión @pkmn/sim, motor de combate/RNG/protocolo, datasets, baselines, políticas de exclusión, recursos/hashes, guardas históricas, schema de partida o EvolutionSystem. Conserva los 14 objetos evolutivos originales y la exclusión de Linking Cord; no implementar aún sustitución de intercambios. Economía para Amulet Coin/Luck Incense, Exp. Share, mentas/IV, crianza/formas y mundo son dependencias, no ceros neutros. Sin shortcuts de calidad: los tests deben tener comprobaciones >0.
+
+
+## Bloque 1: integración real ampliada de entrenamiento (sin cambios de motor)
+Ampliar únicamente `tests/gameplay/item_closure_v3_test_runner.gd` ya permitido: por cada uno de `power_bracer/power_belt/power_lens/power_band/power_anklet/macho_brace`, probar con batalla nativa efectiva, restauración de checkpoint, recompensa al propietario, seis EV exactos, XP no bloqueada, persistencia, conservación del objeto e idempotencia del cierre. No sustituye la ruta física de mochila/mapa/guardado ya comprobada para `power_weight`; dejar el límite explícito. Fallos de objetos heredados se documentarán, no se ocultarán. Ejecutar CI Godot y portable antes de declarar éxito.

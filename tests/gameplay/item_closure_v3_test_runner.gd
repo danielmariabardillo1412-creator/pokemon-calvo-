@@ -24,6 +24,7 @@ func _run_v3() -> void:
 	check("regional catalog overlay", Variants.apply(catalogs))
 	_domain_ev()
 	await _native_ev()
+	await _native_ev_remaining_training_items()
 	await _map_power()
 	var report := {"status": "PASS" if errors.is_empty() else "FAIL", "checks": checks,
 		"errors": errors, "routes": routes, "profile": "Gen VII-IX EV; legacy Macho Brace",
@@ -207,6 +208,69 @@ func _native_ev() -> void:
 			check("second settlement idempotent", not session.settle_finished_battle().accepted and own.to_dict() == second_snapshot)
 			routes.append({"family": "EV_NEXT_BATTLE", "item": "power_weight", "foe": "caterpie", "total_hp_ev": int(own.evs.get("hp", 0))})
 	await session.close()
+
+func _native_ev_remaining_training_items() -> void:
+	# Complementa la ruta completa power_weight (mochila/mapa/guardado) sin
+	# declarar que estos otros equipables hayan recorrido también la mochila.
+	# Cada caso atraviesa el motor real, checkpoint, cierre e instancia persistida.
+	var training_items: Array[String] = [
+		"power_bracer", "power_belt", "power_lens",
+		"power_band", "power_anklet", "macho_brace",
+	]
+	for item: String in training_items:
+		var own := _mon(&"mew", 50, StringName("native_training_" + item), ["quick_attack", "growl"])
+		own.held_item_id = StringName(item)
+		var foe := _mon(&"caterpie", 50, StringName("native_foe_" + item), ["growl"])
+		foe.current_hp = 1
+		var owner := PlayerCollection.new()
+		check("training native accepts original owner " + item, owner.party.add_creature(own))
+		var battle := Native.new(catalogs, owner, "gen9calvounifiedv1")
+		var opened: bool = await battle.begin_wild(self, foe, [23, 19, 29, 43])
+		check("training native opens " + item, opened)
+		if not opened:
+			await battle.close()
+			continue
+		var before: Dictionary = own.evs.duplicate(true)
+		var before_xp := own.experience
+		var saved := battle.snapshot()
+		await battle.close()
+		battle = Native.new(catalogs, owner, "gen9calvounifiedv1")
+		var restored: bool = await battle.restore_saved(self, saved)
+		check("training battle restores " + item, restored)
+		if not restored:
+			await battle.close()
+			continue
+		var action: Dictionary = await battle.submit("move 1", battle.revision)
+		check("training native actually defeats foe " + item, action.accepted and battle.phase() == "finished")
+		check("training native no premature EV " + item, own.evs == before)
+		if not action.accepted or battle.phase() != "finished":
+			await battle.close()
+			continue
+		var settled: Dictionary = battle.settle_finished_battle()
+		check("training settlement and original XP " + item, settled.accepted and own.experience > before_xp)
+		var expected_total := 0
+		for key: String in ProgressionRuleset.STAT_KEYS:
+			var expected := int(catalogs.species(&"caterpie").ev_yield.get(key, 0))
+			if item == "macho_brace":
+				expected *= 2
+			elif String(POWER_ITEMS.get(item, "")) == key:
+				expected += 8
+			expected_total += expected
+			check("training exact native EV " + item + "/" + key,
+				int(own.evs.get(key, 0)) == int(before.get(key, 0)) + expected)
+		check("training EV total " + item, _sum_evs(own) == expected_total)
+		check("training original held item survives " + item,
+			own.held_item_id == StringName(item) and not own.held_item_consumed)
+		var final_state: Dictionary = own.to_dict()
+		check("training no duplicate settlement " + item,
+			not battle.settle_finished_battle().accepted and own.to_dict() == final_state)
+		var persisted := CreatureInstance.from_dict(final_state)
+		check("training existing save schema preserves owner " + item,
+			persisted.evs == own.evs and persisted.stats.to_dict() == own.stats.to_dict()
+			and persisted.held_item_id == own.held_item_id)
+		routes.append({"family": "EV_NATIVE_ADDITIONAL", "item": item,
+			"foe": "caterpie", "restored": restored, "settled": settled.accepted})
+		await battle.close()
 
 func _map_power() -> void:
 	scene = load("res://scenes/visual/field_demo.tscn").instantiate()
