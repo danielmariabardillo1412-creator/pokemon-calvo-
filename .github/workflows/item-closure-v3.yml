@@ -38,6 +38,9 @@ jobs:
           godot --version
           godot --version | grep -E '^4[.]7([.-]|$)'
           node --version
+      - name: Configure pinned Node executable for Godot IPC
+        shell: bash
+        run: echo "POKEMON_CALVO_NODE=$(command -v node)" >> "$GITHUB_ENV"
       - name: Restore existing visual resources with locked hashes
         shell: bash
         run: |
