@@ -63,6 +63,37 @@ jobs:
           set -euo pipefail
           python -B tools/battle_reference/run.py --install --limit 1 | tee item-reference-v3.log
           grep -E 'BATTLE_REFERENCE PASS' item-reference-v3.log
+      - name: C - Re-exercise pinned native held-item and berry behaviors by family
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 120s godot --headless --path . --script res://tests/gameplay/item_effect_templates_v3.gd 2>&1 | tee item-c-templates-v3.log
+          grep -E 'ITEM_EFFECT_TEMPLATES_V3 [1-9][0-9]*' item-c-templates-v3.log
+          timeout 420s node tools/item_audit/held_effect_sweep_v3.cjs 2>&1 | tee item-c-native-v3.log
+          grep -E 'ITEM_EFFECT_NATIVE_V3 [1-9][0-9]* PASS 0 FAIL' item-c-native-v3.log
+          timeout 360s godot --headless --path . --script res://tests/gameplay/item_effect_projection_v3.gd 2>&1 | tee item-c-projection-v3.log
+          if grep -E 'SCRIPT ERROR|Parse Error|timeout' item-c-projection-v3.log; then exit 1; fi
+          grep -E 'ITEM_EFFECT_GODOT_V3 PASS checks=[1-9][0-9]* cases=[1-9][0-9]* pending=0' item-c-projection-v3.log
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          base = Path('.godot/item_verification_v3')
+          native = json.loads((base / 'native.json').read_text())
+          godot = json.loads((base / 'godot.json').read_text())
+          nr = native['results']
+          gr = godot['results']
+          assert len(nr) == len(gr) >= 120, (len(nr), len(gr))
+          assert len({r['id'] for r in nr}) == 65
+          assert all(r['status'] == 'NATIVE_SCENARIO_PASS' for r in nr)
+          assert all(r['status'] == 'PASS' for r in native['branchChecks'])
+          assert godot['pending_protocol_cases'] == 0 and not godot['errors']
+          assert all(r['status'].endswith('_PASS') for r in gr)
+          assert len({r['id'] for r in gr if r.get('live_ipc')}) == 65
+          assert godot['checks'] >= 2000
+          berry_ids = {r['id'] for r in gr if r['id'].endswith('_berry')}
+          assert len(berry_ids) == 12, berry_ids
+          print('ITEM_CLOSURE_V3_C PASS native_cases=', len(nr), 'ipc_ids=65 berry_ids=12 checks=', godot['checks'])
+          PY
       - name: EV awards, six Power items, Macho Brace, native settlement and real bag
         shell: bash
         run: |
