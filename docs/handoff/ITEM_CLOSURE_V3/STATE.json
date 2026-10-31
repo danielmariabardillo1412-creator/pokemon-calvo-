@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "mission": "ITEM_CLOSURE_V3",
-  "status": "IN_PROGRESS",
+  "status": "READY_FOR_REVIEW",
   "repository": "danielmariabardillo1412-creator/pokemon-calvo-",
   "base_branch": "codex/organized-update-v27",
   "base_checkpoint": "e10b79a5eb8c3e83975a9f4f5b48d6615a85e1b7",
@@ -9,44 +9,51 @@
   "blocks": {
     "A": {
       "status": "SCOPED_CI_VERIFIED",
-      "last_verified_commit": "94aca8495e45e17f7829d8709b7e875da4b0ef5a"
+      "last_verified_commit": "c554ab7635fb847aa395d2dbb5bc523b560bc6de"
     },
     "B": {
       "status": "SCOPED_CI_VERIFIED",
-      "last_verified_commit": "94aca8495e45e17f7829d8709b7e875da4b0ef5a"
+      "last_verified_commit": "c554ab7635fb847aa395d2dbb5bc523b560bc6de"
     },
     "C": {
       "status": "SCOPED_CI_VERIFIED",
-      "last_verified_commit": "94aca8495e45e17f7829d8709b7e875da4b0ef5a"
+      "last_verified_commit": "c554ab7635fb847aa395d2dbb5bc523b560bc6de"
     },
     "D": {
-      "status": "WINDOWS_FIX_AWAITING_CI",
-      "last_verified_commit": null
+      "status": "CI_PASS_GPU_MANUAL_PENDING",
+      "last_verified_commit": "c554ab7635fb847aa395d2dbb5bc523b560bc6de"
     }
   },
   "ci": {
-    "status": "PARTIAL_FAILURE_WINDOWS_FIX_AWAITING_RETRY",
+    "status": "ALL_20_WORKFLOWS_PASS_AT_IMPLEMENTATION_COMMIT",
+    "validated_commit": "c554ab7635fb847aa395d2dbb5bc523b560bc6de",
     "runs": [
       {
         "commit": "94aca8495e45e17f7829d8709b7e875da4b0ef5a",
         "id": 41216383124,
         "url": "https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41216383124",
         "linux": "PASS",
-        "windows": "FAIL_ITEM_CONNECTIONS_MISSING_FIXTURES",
-        "native_scenarios": 908,
-        "native_item_ids": 65,
-        "ipc_checks": 23434,
-        "ev_checks": 94,
-        "progression_v18_checks": 8755
+        "windows": "FAIL_FIXTURE_MISSING",
+        "note": "Diagnosed, preserved as historical negative evidence."
       },
       {
-        "commit": "94aca8495e45e17f7829d8709b7e875da4b0ef5a",
+        "commit": "c554ab7635fb847aa395d2dbb5bc523b560bc6de",
+        "id": 41217120667,
+        "url": "https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41217120667",
+        "linux": "PASS",
+        "windows": "PASS",
         "workflows_total": 20,
-        "success": 19,
-        "failure": 1
+        "workflows_success": 20,
+        "native_scenarios": 908,
+        "ipc_checks": 23434,
+        "ev_checks": 94,
+        "progression_v18_checks": 8755,
+        "portable_gate": "PUBLICATION_V27 PASS",
+        "item_connections_checks": 4993
       }
     ]
   },
   "all_item_effects_certified": false,
-  "ready_for_review": false
+  "ready_for_review": true,
+  "manual_gpu_visual_pending": true
 }
