@@ -148,18 +148,6 @@ jobs:
           timeout 300s godot --headless --path . --script res://tests/gameplay/progression_items_v18.gd 2>&1 | tee item-progression-v18.log
           if grep -E 'SCRIPT ERROR|Parse Error|timeout' item-progression-v18.log; then exit 1; fi
           grep -E 'PROGRESSION_ITEMS_V18 PASS checks=[1-9][0-9]*' item-progression-v18.log
-      - name: Portable V27 gate (all existing affected groups)
-        shell: bash
-        run: |
-          set -euo pipefail
-          if python -B tools/distribution/verify_update.py --godot "$(command -v godot)" --node "$(command -v node)" 2>&1 | tee item-portable-gate-v3.log; then
-            echo "PUBLICATION_V27 completed; see report JSON in artifact"
-          else
-            echo "PUBLICATION_V27 failure: original logs, tests, and thresholds remain unchanged"
-            find .godot/publication_v27/runs -name results.json -print -exec tail -n 120 {} \;
-            find .godot/publication_v27/runs -name test_runner.log -print -exec tail -n 180 {} \;
-            exit 1
-          fi
       - name: Preserve CI logs and generated per-context matrix
         if: always()
         uses: actions/upload-artifact@v4
@@ -171,4 +159,71 @@ jobs:
             .godot/publication_v27/runs/
           if-no-files-found: ignore
           include-hidden-files: true
+          retention-days: 14
+
+  portable_windows:
+    name: Portable V27 gate — original checks on Windows
+    runs-on: windows-latest
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: chickensoft-games/setup-godot@v2.4.1
+        with:
+          version: 4.7.0
+          use-dotnet: false
+          include-templates: false
+      - name: Prepare original resources, reports and pinned simulation (no data edits)
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          & godot --version
+          if ($LASTEXITCODE -ne 0) { exit 1 }
+          & python -B tools/distribution/restore_resources.py
+          if ($LASTEXITCODE -ne 0) { exit 1 }
+          & python -B tools/distribution/restore_resources.py --check
+          if ($LASTEXITCODE -ne 0) { exit 1 }
+          New-Item -ItemType Directory -Force data/reports | Out-Null
+          foreach ($name in @('forms_policy_report.json','unsupported_mechanics.json','import_summary.json')) {
+            Copy-Item ("ci/fixtures/pokeapi_reports/" + $name) ("data/reports/" + $name)
+          }
+          & python -B tools/battle_reference/run.py --install --limit 1
+          if ($LASTEXITCODE -ne 0) { exit 1 }
+      - name: Execute original portable V27 gate without waived assertions
+        shell: pwsh
+        run: |
+          $godot = (Get-Command godot).Source
+          $node = (Get-Command node).Source
+          Write-Output ("Godot=" + $godot)
+          Write-Output ("Node=" + $node)
+          & python -B tools/distribution/verify_update.py --godot $godot --node $node 2>&1 | Tee-Object -FilePath item-portable-windows.log
+          $exitCode = $LASTEXITCODE
+          if ($exitCode -ne 0) {
+            Write-Output 'WINDOWS PORTABLE GATE FAILED; retaining unmodified raw diagnostics'
+            Get-ChildItem '.godot/publication_v27/runs' -Recurse -Filter results.json | ForEach-Object {
+              Get-Content $_.FullName | Select-Object -Last 100
+            }
+            exit 1
+          }
+          if (-not (Select-String -Path item-portable-windows.log -Pattern 'PUBLICATION_V27 PASS' -Quiet)) {
+            Write-Error 'Portable gate did not emit PASS despite exit code zero'
+            exit 1
+          }
+      - name: Preserve portable gate evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: item-closure-v3-windows-gate
+          path: |
+            item-portable-windows.log
+            .godot/publication_v27/runs/
+          include-hidden-files: true
+          if-no-files-found: ignore
           retention-days: 14
