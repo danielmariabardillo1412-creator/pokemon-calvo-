@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "mission": "ITEMS_V28",
-  "status": "IN_PROGRESS_BLOCKS_0_2_4_5_VERIFIED_BLOCK_3_CANCELLED",
+  "status": "BLOCK_6_SCOPED_NOT_IMPLEMENTED",
   "base_branch": "main",
   "base_commit": "233b1a4f15ee4df7301e2c5acf8aed84a8f40626",
   "working_branch": "codex/items-v28-from-main",
@@ -14,7 +14,7 @@
     "code_identity_from_v3": true,
     "last_verified_commit": "69e15d74d04063dbe9613575b8618062e1efbed7"
   },
-  "next_action": "Select next independent official competitive held-item family after comparing existing native cases & physical routes; defer ability interactions and beta items. Keep PR draft and main V27 unchanged.",
+  "next_action": "Add three scoped type boosters plus official API metadata assertions and update CI marker ids=6; run Actions on new SHA, record real pass/fail, keep main stable.",
   "main_is_official_v27": true,
   "all_2222_items_functional": false,
   "gpu_manual_review": "PENDING",
@@ -202,5 +202,30 @@
       "30 Unix subprocess PID errors in passed job; still open technical debt",
       "No GPU/manual visual testing"
     ]
+  },
+  "block_6": {
+    "status": "ALLOWLIST_DEFINED_NO_TESTS_YET",
+    "family": "OFFICIAL_TYPE_BOOSTING_HELD_ITEMS",
+    "ids": [
+      "charcoal",
+      "mystic_water",
+      "magnet"
+    ],
+    "pokeapi_item_ids": [
+      226,
+      220,
+      219
+    ],
+    "previous_verified_damage_items": [
+      "muscle_band",
+      "wise_glasses",
+      "expert_belt"
+    ],
+    "files_allowed": [
+      "tests/gameplay/competitive_damage_items_v28.gd",
+      ".github/workflows/item-closure-v3.yml",
+      "docs/handoff/ITEMS_V28"
+    ],
+    "ci": "NOT_RUN"
   }
 }
