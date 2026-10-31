@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "mission": "ITEMS_V28",
-  "status": "IN_PROGRESS_BLOCKS_0_2_4_5_6_VERIFIED_BLOCK_3_CANCELLED",
+  "status": "IN_PROGRESS_BLOCK_7_CI_PENDING_PREVIOUS_BLOCKS_VERIFIED",
   "base_branch": "main",
   "base_commit": "233b1a4f15ee4df7301e2c5acf8aed84a8f40626",
   "working_branch": "codex/items-v28-from-main",
@@ -14,7 +14,7 @@
     "code_identity_from_v3": true,
     "last_verified_commit": "69e15d74d04063dbe9613575b8618062e1efbed7"
   },
-  "next_action": "Continue only with a missing useful competitive official item family after checking current native scenarios/physical coverage; do not duplicate already verified items. Defer ability interactions and beta items, preserve main V27. Verify in CI and document exact SHA.",
+  "next_action": "Confirm exact CI results for block 7 commit 66b14d77 and record PASS only if Godot/Windows jobs and required checks pass; diagnose failures without relaxing tests. Preserve main V27.",
   "main_is_official_v27": true,
   "all_2222_items_functional": false,
   "gpu_manual_review": "PENDING",
@@ -237,5 +237,21 @@
     "beta_items_imported": false,
     "gpu_manual": "NOT_RUN",
     "worker_pid_warnings": 42
+  },
+  "block_7": {
+    "status": "CI_RUNNING_NOT_VERIFIED",
+    "item_ids": [
+      "miracle_seed",
+      "never_melt_ice",
+      "black_belt"
+    ],
+    "test_commit": "66b14d772f4e69746fbdb051f3294ee706cecae9",
+    "run_id": 41233384610,
+    "verified": false,
+    "scope": "three new official elemental boosters; 36 native matched sessions total and nine physical routes planned",
+    "limits": [
+      "no ability combinations",
+      "no GPU/manual"
+    ]
   }
 }
