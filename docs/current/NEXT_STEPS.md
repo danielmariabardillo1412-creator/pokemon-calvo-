@@ -1,31 +1,24 @@
 # Próximo trabajo — 2026-10-31
 
-Estado actual: **REVIEWED_WITH_LIMITS** — revisión y correcciones de Codex.
-Checkpoint funcional local: `0f28371471ff76c878f7cbe2c2fc10b963d29764`. El lote delegado está cerrado y
-OpenCode no tiene un trabajo activo. Se conserva la arquitectura organizada.
+Estado actual: **V23 verificado — Amuleto e Incienso Puro ya entran equipados
+al combate nativo.** Se conservan sus efectos de tasa de encuentros y el estado
+real del objeto tras Lanzamiento, Truco, Desarme y guardar/cargar.
 
-O110 conecta once objetos de apoyo en combate. Codex corrigió Flauta Azul ante
-estados distintos del sueño y el límite de objetos X con Respondón. O120 conecta
-Bola de Humo y la tasa parcial de Cleanse Tag/Pure Incense.
+[Informe V23](ITEM_ENCOUNTER_HELD_V23.md) · [Resultados](ITEM_ENCOUNTER_HELD_V23.json).
+9 grupos PASS, 1.559 comprobaciones (incluidas regresiones), dos capturas GPU
+vistas y nueva guarda completa contra el checkpoint anterior. Código funcional:
+`b9ca439c52ac10aea2da3f1f37c6f1de3090f34f`. Seguimos en la versión organizada, sin publicar ni mergear.
 
-Suite conjunta: 6/6 grupos de cierre y 23 grupos de familia PASS,
-con tres capturas GPU revisadas y guardas globales originales. Además: 25 pruebas
-nativas, 37 casos independientes entre tres perfiles/checkpoints anteriores y
-150 comprobaciones de integración de apoyo. Son ejecuciones solapadas; no se
-presentan como número de objetos distintos certificados.
+Ahora se reconocen 621/625 equipables permitidos. Quedan cuatro descriptores:
+Amulet Coin, Exp. Share, Linking Cord y Luck Incense, ligados a sistemas pendientes.
+La tasa 2/3 sigue siendo parcial: faltan las condiciones de pasos mínimos y la
+crianza de Incienso Puro. El botón «Usar» no es su activación; funcionan equipados.
+El mensaje genérico tras rechazar uso directo queda como deuda de texto de UI.
 
-[Informe](../opencode/ITEM_CLOSURE_V2/FINAL_REVIEW.md) ·
-[Resultados](../opencode/ITEM_CLOSURE_V2/FINAL_RESULTS.json).
-
-Pendientes: Amulet Coin, Exp. Share, Linking Cord y Luck Incense; semántica por
-pasos y descriptor nativo de los modificadores de encuentros (no entran equipados
-en combate nativo); EV equipados, Max Mushrooms y las
-rutas documentadas de IV, mentas, formas/evolución y fidelidad de captura/XP.
-No se declara terminado todo el catálogo. Los guardas históricos por familia
-no se reconstruyen: la revisión acepta el conjunto y documenta ese límite.
-
-Los apartados V1–V21 siguientes describen checkpoints históricos; sus recuentos
-no sustituyen el estado actual del informe y del JSON vivo.
+Los informes ITEM_CLOSURE_V2 son snapshots cerrados de su checkpoint, no se
+regeneran para certificar V23. Su antigua falta de los dos descriptores queda
+superada por V23. No hay un ejecutor OpenCode trabajando en paralelo.
+Los apartados V1–V21 siguientes describen checkpoints históricos.
 
 V21: [consumibles de huida](ITEM_ESCAPE_V21.md). Poké Muñeco, Cola Skitty y
 Poké Señuelo ya se usan desde mochila nativa para terminar un encuentro salvaje,

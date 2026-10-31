@@ -256,5 +256,33 @@
     "No direct bag-use effect is enabled; these items work when equipped.",
     "Generic UI rejection text for unsupported direct use still says the field function is pending.",
     "The historical V2 inventory and proof are snapshots of that checkpoint and are not regenerated as V23 acceptance."
-  ]
+  ],
+  "runtime_checkpoint": "b9ca439c52ac10aea2da3f1f37c6f1de3090f34f",
+  "final_scope_guard": {
+    "result": {
+      "status": "PASS",
+      "base": "2fee506c7f309c966efc2a348a13aaf6018b8415",
+      "protected_files": 23119,
+      "preserved_absent_skip_worktree": 15647,
+      "mode": "FULL_CONTENT_HASHES",
+      "allowed_changes": [
+        "AGENTS.md",
+        "docs/current/ITEM_ENCOUNTER_HELD_V23.json",
+        "docs/current/ITEM_ENCOUNTER_HELD_V23.md",
+        "docs/current/ITEM_SYSTEM_CURRENT_STATUS.json",
+        "docs/current/NEXT_STEPS.md",
+        "docs/current/PROJECT_STATE.md",
+        "docs/current/START_HERE.md",
+        "modules/battle/backends/showdown/field_encounter_items_v23.json",
+        "modules/battle/backends/showdown/field_held_items.cjs",
+        "tests/gameplay/encounter_held_v23.gd",
+        "tests/tools/test_encounter_held_v23.py",
+        "tools/item_import/import_encounter_held_v23.py",
+        "tools/showdown_engine_probe/encounter_held_v23.cjs",
+        "tools/verification/run_encounter_held_v23.py"
+      ]
+    },
+    "log": ".godot\\encounter_held_v23\\final_guard.log",
+    "sha256": "badee072201b79a5e08fc61536074feecf9f9b1bea1d3a780abffe9022878e2d"
+  }
 }

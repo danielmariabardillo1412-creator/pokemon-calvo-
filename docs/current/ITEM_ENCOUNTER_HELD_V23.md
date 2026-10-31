@@ -65,3 +65,5 @@ El intento inicial del test de mapa llamó a una API incorrecta del puente; se
 corrigió el test para consultar `occupied()`. La ejecución fallida se conserva,
 y no cuenta como PASS. La prueba de identidad de caché se limita a objetos del
 simulador: el instalador puede recrear sus propios descriptores revisados.
+
+Checkpoint funcional local: `b9ca439c52ac10aea2da3f1f37c6f1de3090f34f`.

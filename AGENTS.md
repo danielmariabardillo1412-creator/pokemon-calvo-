@@ -1,6 +1,19 @@
 # Pokemon Calvo — desarrollo tras la arquitectura
 
-ENCARGO EXTERNO ACTUAL: el usuario autoriza de nuevo OpenCode para cierre de
+Estado vigente V23: Cleanse Tag/Amuleto y Pure Incense/Incienso Puro tienen
+entrada nativa, propiedad y Lanzamiento revisados. Ver docs/current/START_HERE.md
+y ITEM_ENCOUNTER_HELD_V23.md/.json. 621/625 descriptores permitidos; quedan
+amulet_coin, exp_share, linking_cord y luck_incense. Tasa 2/3 parcial: pasos
+minimos y crianza siguen pendientes. No se habilita uso directo desde mochila.
+Checkpoint funcional: b9ca439c52ac10aea2da3f1f37c6f1de3090f34f.
+Codex retomó el trabajo por petición humana; OpenCode no es escritor activo.
+La guarda nueva tools/verification/run_encounter_held_v23.py protege el resto
+contra 2fee506. Su sello ya existe: no resellarlo. ITEM_CLOSURE_V2 y sus guardas,
+matrices y resultados son históricos; no reescribirlos ni usarlos como prueba de
+V23. Cada ampliación posterior declara su propia base y alcance.
+
+
+ENCARGO EXTERNO HISTORICO (cerrado en 2fee506; no reanudar): el usuario autoriza de nuevo OpenCode para cierre de
 objetos por familias completas. Leer docs/opencode/ITEM_CLOSURE_V2/START_HERE.md,
 WORK_ORDER y CONTRACT de ese paquete. O100/O110/O120/O190 pueden continuar sin
 revision de Codex entre objetos ni familias autorizadas. O001/O002 son historicos.
