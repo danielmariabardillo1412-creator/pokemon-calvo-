@@ -1,5 +1,7 @@
 # Progreso y continuidad — ITEM_CLOSURE_V3
 
+**Inicio rápido para otra conversación:** [CONTEXT_CONTROL.md](CONTEXT_CONTROL.md). Leer ese protocolo y `STATE.json` antes de pedir logs o inventarios de nuevo. No constituye una misión adicional ni cambia el estado READY_FOR_REVIEW.
+
 2026-10-31: rama remota `codex/organized-update-v27` comprobada, HEAD = checkpoint revisado `e10b79a5eb8c3e83975a9f4f5b48d6615a85e1b7`, sin cambios posteriores. PR original #116 sigue en borrador. Creada rama única `codex/item-closure-v3`. Leídos los ocho documentos obligatorios; partes históricas no se toman como inventario vigente.
 
 Hallazgos: catálogo con 2.222 IDs y 44 exclusiones; de los 624 equipables permitidos, 621 tienen descriptor nativo. Únicos huecos de descriptor: `amulet_coin`, `exp_share`, `luck_incense`. Esto NO significa que solo queden tres usos. En V27 los 14 evolutivos originales se conservan, `linking_cord` excluido, y adaptación de intercambio aplazada.
