@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "mission": "ITEMS_V28",
-  "status": "IN_PROGRESS_BLOCKS_0_2_VERIFIED_BLOCK_3_CANCELLED",
+  "status": "BLOCK_4_ALLOWLIST_DECLARED",
   "base_branch": "main",
   "base_commit": "233b1a4f15ee4df7301e2c5acf8aed84a8f40626",
   "working_branch": "codex/items-v28-from-main",
@@ -14,7 +14,7 @@
     "code_identity_from_v3": true,
     "last_verified_commit": "69e15d74d04063dbe9613575b8618062e1efbed7"
   },
-  "next_action": "Select one genuinely competitive-relevant and unimplemented item family; verify against current source and rules before editing. No Beast Ball or all-2222 completion target. Preserve 20/20 verified blocks 0–2, main unchanged.",
+  "next_action": "Implement only scoped Godot runner + one CI step, trigger GitHub Actions on SHA, keep 20 baselines and main untouched; document actual outcomes.",
   "main_is_official_v27": true,
   "all_2222_items_functional": false,
   "gpu_manual_review": "PENDING",
@@ -123,5 +123,17 @@
       "contest/food/breeding/world-only without confirmed competitive use"
     ],
     "keep_catalog_data_unchanged": true
+  },
+  "block_4": {
+    "status": "ALLOWLIST_APPROVED_WORK_NOT_YET_WRITTEN",
+    "family": "COMPETITIVE_HELD_PROTECTION",
+    "ids": [
+      "safety_goggles",
+      "covert_cloak",
+      "clear_amulet"
+    ],
+    "existing_native_verification": "held_effect_sweep_v2.cjs",
+    "goal": "native effect positive/negative plus physical bag/map/save real integration",
+    "ci": "NOT_RUN"
   }
 }
