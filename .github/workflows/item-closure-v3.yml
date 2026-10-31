@@ -213,6 +213,17 @@ jobs:
           $npm = (Get-Command npm.cmd).Source
           & python -B tools/battle_reference/run.py --install --limit 1 --godot $godot --node $node --npm $npm
           if ($LASTEXITCODE -ne 0) { exit 1 }
+      - name: Restore historical item-connection test fixtures without altering tracked data
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $godot = Join-Path $env:USERPROFILE 'godot/Godot_v4.7-stable_win64_console.exe'
+          & python -B tools/item_audit/stage_item_connections_ci_v3.py
+          if ($LASTEXITCODE -ne 0) { exit 1 }
+          & $godot --headless --path . --script res://tests/gameplay/item_inventory_export.gd
+          if ($LASTEXITCODE -ne 0) { exit 1 }
+          & python -B tools/item_audit/stage_item_connections_ci_v3.py --check
+          if ($LASTEXITCODE -ne 0) { exit 1 }
       - name: Execute original portable V27 gate without waived assertions
         shell: pwsh
         run: |

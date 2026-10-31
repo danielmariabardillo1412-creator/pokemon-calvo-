@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "status": "PREPARATION_ONLY",
+  "status": "CI_PARTIAL_FAILURE_FIX_PREPARED_NOT_EXECUTED",
   "commands": [
     {
       "kind": "github_api",
@@ -27,11 +27,87 @@
       "result": "NOT_INSTALLED"
     }
   ],
-  "family_tests": [],
-  "ci_runs": [],
-  "assertions_executed": 0,
+  "family_tests": [
+    {
+      "block": "A",
+      "name": "item_closure_v3 inventory",
+      "status": "PASS",
+      "ids": 2222,
+      "exclusions": 44,
+      "evidence_ids": 72,
+      "run": 41216383124,
+      "commit": "94aca8495e45e17f7829d8709b7e875da4b0ef5a"
+    },
+    {
+      "block": "B",
+      "name": "EV domain/native/field",
+      "status": "PASS",
+      "checks": 94,
+      "ev_held_ids": 7,
+      "native_field_bag_ids": [
+        "power_weight"
+      ],
+      "run": 41216383124,
+      "commit": "94aca8495e45e17f7829d8709b7e875da4b0ef5a"
+    },
+    {
+      "block": "C",
+      "name": "native held/berries + Godot IPC",
+      "status": "PASS",
+      "scenarios": 908,
+      "ids": 65,
+      "berry_ids": 12,
+      "ipc_checks": 23434,
+      "run": 41216383124,
+      "commit": "94aca8495e45e17f7829d8709b7e875da4b0ef5a"
+    },
+    {
+      "block": "D",
+      "name": "Lucky Egg/Everstone V18 regression",
+      "status": "PASS",
+      "checks": 8755,
+      "run": 41216383124,
+      "commit": "94aca8495e45e17f7829d8709b7e875da4b0ef5a"
+    },
+    {
+      "block": "D",
+      "name": "Windows portable V27",
+      "status": "FAIL",
+      "failed_script": "item_connections_test_runner",
+      "checks": 0,
+      "root_cause": "Historical machine/evolution fixture files under .godot not prepared by clean Windows workflow",
+      "run": 41216383124,
+      "commit": "94aca8495e45e17f7829d8709b7e875da4b0ef5a"
+    }
+  ],
+  "ci_runs": [
+    {
+      "commit": "94aca8495e45e17f7829d8709b7e875da4b0ef5a",
+      "run_id": 41216383124,
+      "url": "https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41216383124",
+      "linux": "success",
+      "windows": "failure"
+    },
+    {
+      "commit": "94aca8495e45e17f7829d8709b7e875da4b0ef5a",
+      "workflow_count": 20,
+      "success": 19,
+      "failure": 1
+    }
+  ],
+  "assertions_executed": {
+    "native_scenarios": 908,
+    "ipc_checks": 23434,
+    "ev_checks": 94,
+    "progression_v18_checks": 8755
+  },
   "limitations": [
     "Remote GitHub read/write available; local clone and Godot tests unavailable in present container."
   ],
-  "all_item_effects_certified": false
+  "all_item_effects_certified": false,
+  "next_validation": [
+    "Run new Windows fixture staging and unmodified portable gate in GitHub Actions",
+    "Do not mark READY_FOR_REVIEW until new commit CI results",
+    "Manual GPU/visual check remains pending"
+  ]
 }

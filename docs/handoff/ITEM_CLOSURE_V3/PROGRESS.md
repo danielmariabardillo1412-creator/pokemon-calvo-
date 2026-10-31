@@ -11,3 +11,13 @@ Referencia generación B: EV modernos Gen VII–IX, Power +8, Macho Brace x2, Ge
 Limitación del entorno de esta ejecución: el conector GitHub permite leer y modificar el repositorio; el runtime de contenedor no puede resolver github.com ni tiene `godot` instalado, de modo que el checkout local y el gate portable no están disponibles aquí. Las pruebas remotas se ejecutarán únicamente si GitHub Actions las programa y aportará enlaces; cualquier ejecución no comprobada se registrará pendiente.
 
 **Siguiente paso exacto:** automatizar inventario A con clasificación conservadora, y después conectar EV B con pruebas reproducibles; publicar CI y esperar resultados observables antes de cambiar el estado a READY_FOR_REVIEW.
+
+## Diagnóstico CI real y corrección de preparación Windows (2026-10-31)
+
+Sobre `94aca849`: **19 de 20 workflows PASS**; el único FAIL es [Item Closure V3 #41216383124](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41216383124) por el job Windows. El job Ubuntu de esa misma ejecución PASÓ: inventario 2.222 IDs, native 908 PASS/0 FAIL (65 IDs), IPC 23.434 checks, 12 bayas, EV 94 checks, V18 8.755 checks y 72 IDs con pruebas V3 delimitadas.
+
+Windows restauró los 6.643 recursos, importó Godot 4.7, instaló la simulación fijada y pasó los primeros grupos del verificador portable. El grupo `item_connections_test_runner` produjo 0 checks, JSON ausente y Nil en `item_connections_test_runner.gd` al abrir `source_machine_rows.json`, `godot_inventory.json` y `machine_fixtures.json` bajo `.godot`. El gate no prepara esas salidas históricas desde un checkout limpio: fallo de fixture, no prueba de fallo funcional de la mecánica. No reducir guardas ni declarar PASS.
+
+Corrección CI limitada a `.github/workflows/item-closure-v3.yml` y nuevo `tools/item_audit/stage_item_connections_ci_v3.py`, añadidos a la lista permitida. Reconstruye las dos fixtures de máquina desde los CSV primarios verificados usando el preparador existente, verifica que coinciden con el perfil versionado y ejecuta el exportador Godot existente para obtener el inventario evolutivo. Comprueba los tres archivos antes del gate original. **No regenera ni escribe `modules/inventory/item_connections_v1.json`, ningún dataset ni verificador histórico.**
+
+**Siguiente paso exacto:** comprobar los jobs Windows y Ubuntu de la siguiente ejecución asociada al commit de esta reparación. Si el portable falla en otro grupo, investigar su log antes de declarar READY_FOR_REVIEW. Si pasa, actualizar conjuntamente `STATE.json`, `RESULTADOS.json`, `PROGRESS.md` y esta PR en borrador; queda pendiente GPU/visual en el PC.

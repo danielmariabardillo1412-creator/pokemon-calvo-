@@ -14,6 +14,7 @@ D. Regresiones, CI y revisión consolidada, sin reclamar cierre total del catál
 - `modules/creatures/progression/progression_system.gd`, `progression_held_items.gd`, y nuevo `battle_ev_rewards.gd`.
 - `tests/gameplay/item_closure_v3_test_runner.gd` (nuevo) y `tests/tools/test_item_closure_v3.py` (nuevo).
 - `.github/workflows/item-closure-v3.yml` (nuevo CI específico).
+- `tools/item_audit/stage_item_connections_ci_v3.py` (nuevo, solo fixtures efímeras para CI Windows, lectura de fuentes primarias y perfil fijado; no modifica módulos ni datasets).
 
 Ampliar esta lista **en este documento antes** de editar otros módulos. No tocar field_demo, mochila, adaptador nativo, node_modules, motor de combate, RNG, protocolo, datos, arte, políticas, guardados, EvolutionSystem, verificadores/baselines históricos o hashes.
 
