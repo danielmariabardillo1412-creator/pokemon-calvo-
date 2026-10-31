@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "mission": "ITEMS_V28",
-  "status": "BLOCK_3_SCOPED_NOT_IMPLEMENTED",
+  "status": "BLOCK_3_IMPLEMENTED_TESTS_COMMITTED_CI_PENDING",
   "base_branch": "main",
   "base_commit": "233b1a4f15ee4df7301e2c5acf8aed84a8f40626",
   "working_branch": "codex/items-v28-from-main",
@@ -14,7 +14,7 @@
     "code_identity_from_v3": true,
     "last_verified_commit": "69e15d74d04063dbe9613575b8618062e1efbed7"
   },
-  "next_action": "Implement only new beast-ball domain handler and new real capture test, hook into existing item CI, inspect actual failures and document.",
+  "next_action": "Inspect GitHub Actions on new SHA; check specific Beast Ball Godot step and all regressions. If fail isolate target and preserve evidence; no baseline edits.",
   "main_is_official_v27": true,
   "all_2222_items_functional": false,
   "gpu_manual_review": "PENDING",
@@ -102,14 +102,14 @@
     ]
   },
   "block_3": {
-    "status": "ALLOWLIST_DECLARED_IMPLEMENTATION_PENDING",
+    "status": "IMPLEMENTATION_AND_TESTS_WRITTEN_UNVERIFIED",
     "family": "ULTRA_BEAST_CAPTURE",
     "item_ids": [
       "beast_ball"
     ],
     "scope": "GenVII+ ball modifier in calvo_capture_v1, 11 canonical UBs, validated through actual capture services and physical bag",
     "depends_on": "existing capture system only",
-    "new_tests": "NOT_WRITTEN",
-    "ci": "NOT_RUN"
+    "new_tests": "tests/gameplay/item_capture_beast_v28.gd",
+    "ci": "NOT_RUN_YET"
   }
 }

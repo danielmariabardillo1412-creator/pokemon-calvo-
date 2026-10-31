@@ -142,6 +142,21 @@
       "windows_item_connections_checks": 4993,
       "windows_savegame_checks": 40,
       "windows_gate": "PUBLICATION_V27 PASS"
+    },
+    "block_3": {
+      "status": "CODE_TESTS_WRITTEN_NOT_EXECUTED",
+      "item": "beast_ball",
+      "family": "ULTRA_BEAST_CAPTURE",
+      "gen": "Gen VII+",
+      "rules": {
+        "ultrabeast_multiplier": 5,
+        "non_ultrabeast_multiplier": "410/4096",
+        "ultra_species": 11
+      },
+      "runtime_profile": "calvo_capture_v1",
+      "test": "tests/gameplay/item_capture_beast_v28.gd",
+      "ci_run": null,
+      "verified": false
     }
   },
   "limitations": [
