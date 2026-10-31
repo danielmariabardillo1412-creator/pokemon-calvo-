@@ -1,6 +1,6 @@
 # Automatizador declarativo V28
 
-## Tercera familia — contrato y ampliación en validación
+## Tercera familia — ampliación verificada
 
 `entry_items.json` añade Globo Helio (tres timelines de Tierra/rotura física,
 especial y control de estado) y Botas Gruesas (Trampa Rocas, Púas, Púas Tóxicas,
@@ -27,7 +27,10 @@ esa ejecución como PASS ni se alteran las políticas para admitirlo.
 Se corrige además el recuento del orquestador: son diez casos nuevos (3 + 5
 contratos nativos y 2 de mapa), no once. Los casos no se suprimen.
 PID Linux permanece deuda técnica, habilidades/interacciones especiales y GPU
-fuera de alcance. CI de la ampliación pendiente.
+fuera de alcance.
+
+**TERCERA FAMILIA VERIFICADA:** código `961cb0ac8712e03cd3d22e0115d8b11c1a36e08b`, [Actions #41252124368](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41252124368), **20/20 workflows PASS**. Globo Helio y Botas Gruesas incorporados al automatizador existente: **3335 comprobaciones / 40 escenarios / 8 objetos por plataforma**, más **56 tests del contrato**, Ubuntu y Windows con Godot 4.7. Globo: inmunidad Tierra, rotura física/especial real, pérdida de inmunidad, restauración y consumo persistido. Botas: cuatro peligros colocados realmente, entradas y reentradas, controles sin objeto/otro dueño y conservación. **61 = 27 verificados + 30 pendientes + 4 dependencias**. Evidencia raw de ambas plataformas y hashes revalidados. Linux: 242 diagnósticos PID en los logs capturados del automatizador; deuda abierta, distinguida del resultado funcional. Windows: 0. GPU/manual e interacciones especiales siguen pendientes. Producción y main intactos; PR #118 en borrador. El commit documental [skip ci] no añade certificación. Ver AUTOMATION_RESULTS.json.
+
 
 ## Segunda familia verificada — ampliación desde 648a2c86
 

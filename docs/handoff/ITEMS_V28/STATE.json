@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "mission": "ITEMS_V28",
-  "status": "THIRD_AUTOMATION_FAMILY_VALIDATING",
+  "status": "THIRD_AUTOMATION_FAMILY_SCOPED_CI_VERIFIED",
   "base_branch": "main",
   "base_commit": "233b1a4f15ee4df7301e2c5acf8aed84a8f40626",
   "working_branch": "codex/items-v28-from-main",
@@ -14,7 +14,7 @@
     "code_identity_from_v3": true,
     "last_verified_commit": "69e15d74d04063dbe9613575b8618062e1efbed7"
   },
-  "next_action": "Validate entry-item scenarios locally, then actual Ubuntu/Windows CI; retain 25/32/4 until verified. PID debt and GPU remain separate.",
+  "next_action": "Recommend a fourth consumption family: sitrus_berry and lum_berry (HP threshold/status cure). Inspect existing native coverage, then extend the same fixture/ownership/restore/consumption/save predicates; no production change presumed. PID lifecycle diagnosis is separate; GPU/manual remains pending.",
   "main_is_official_v27": true,
   "all_2222_items_functional": false,
   "gpu_manual_review": "PENDING",
@@ -272,13 +272,13 @@
     "source_factory_excluded": 1,
     "added_verified_v28_outside_factory": 15,
     "selected_nonexcluded_candidates": 61,
-    "verified_v28_ids": 25,
-    "remaining_v28_scope_without_integral_v28_proof": 32,
+    "verified_v28_ids": 27,
+    "remaining_v28_scope_without_integral_v28_proof": 30,
     "blocked_dependencies": 4,
     "not_to_activate": "wide_lens",
     "factory_sets_blob": "d1813dac25222e5a5bf876bab3a14c3aebaca04c",
     "project_matrix_blob": "9509d537622039b2f1919067561631449b8ddc47",
-    "criteria": "47 Gen9 singles factory IDs + 15 approved additional IDs - Wide Lens = 61 candidates; 25 verified, 32 pending integral proof, 4 dependencies; not a universal competitive catalog"
+    "criteria": "47 Gen9 singles factory IDs + 15 approved additional IDs - Wide Lens = 61; 27 verified, 30 pending integral proof, 4 dependencies; not a universal competitive catalog"
   },
   "acceleration_plan": "docs/handoff/ITEMS_V28/ACCELERATION_PLAN.md",
   "automation_prototype": {
@@ -317,9 +317,9 @@
     "historical_checkpoint": true
   },
   "latest_functional_checkpoint": {
-    "sha": "7f973f5bfb63cfae12f1dbaa956512e5291df0aa",
-    "run_id": 41241062641,
-    "scope": "DECLARATIVE_CHOICE_AND_PASSIVE_FAMILIES"
+    "sha": "961cb0ac8712e03cd3d22e0115d8b11c1a36e08b",
+    "run_id": 41252124368,
+    "scope": "DECLARATIVE_CHOICE_PASSIVE_AND_ENTRY_FAMILIES"
   },
   "automation_second_family": {
     "family": "DECLARATIVE_CHOICE_AND_PASSIVE_FAMILIES",
@@ -372,14 +372,175 @@
     "gpu_manual": "NOT_RUN"
   },
   "automation_third_family": {
-    "status": "IN_PROGRESS",
+    "status": "SCOPED_CI_VERIFIED",
+    "family": "DECLARATIVE_CHOICE_PASSIVE_AND_ENTRY_FAMILIES",
+    "functional_sha": "961cb0ac8712e03cd3d22e0115d8b11c1a36e08b",
     "ids": [
+      "choice_band",
+      "choice_specs",
+      "choice_scarf",
+      "leftovers",
+      "life_orb",
+      "rocky_helmet",
       "air_balloon",
       "heavy_duty_boots"
     ],
-    "previous_functional_sha": "7f973f5bfb63cfae12f1dbaa956512e5291df0aa",
-    "production_changes": false,
-    "scenarios_new": 10,
-    "ci": "PENDING"
+    "new_ids": [
+      "air_balloon",
+      "heavy_duty_boots"
+    ],
+    "checks_per_platform": 3335,
+    "scenarios_per_platform": 40,
+    "unit_tests_per_platform": 56,
+    "ci": {
+      "status": "PASS",
+      "functional_sha": "961cb0ac8712e03cd3d22e0115d8b11c1a36e08b",
+      "run_id": 41252124368,
+      "run_url": "https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41252124368",
+      "workflows_total": 20,
+      "workflows_success": 20,
+      "ubuntu_job_id": 124687630763,
+      "windows_job_id": 124687630530,
+      "linux_visible_job_pid_messages": 60,
+      "unit_tests_per_platform": [
+        14,
+        17,
+        25
+      ],
+      "ubuntu_and_windows_engine": "4.7.stable.official.5b4e0cb0f",
+      "workflow_runs": [
+        {
+          "id": 41252124448,
+          "name": "Trainer Battle Session Tests",
+          "conclusion": "success"
+        },
+        {
+          "id": 41252124487,
+          "name": "Spanish Types Foundation Tests",
+          "conclusion": "success"
+        },
+        {
+          "id": 41252124424,
+          "name": "Trainer Public Coverage Beliefs Tests",
+          "conclusion": "success"
+        },
+        {
+          "id": 41252124414,
+          "name": "Trainer Adaptive Branching Tests",
+          "conclusion": "success"
+        },
+        {
+          "id": 41252124410,
+          "name": "Trainer Item Actions Tests",
+          "conclusion": "success"
+        },
+        {
+          "id": 41252124433,
+          "name": "Trainer Evaluation Corpus Tests",
+          "conclusion": "success"
+        },
+        {
+          "id": 41252124457,
+          "name": "Data Foundation V3 Tests",
+          "conclusion": "success"
+        },
+        {
+          "id": 41252124501,
+          "name": "Godot 4.7 Tests",
+          "conclusion": "success"
+        },
+        {
+          "id": 41252124391,
+          "name": "Trainer Strategic Switching V2 Tests",
+          "conclusion": "success"
+        },
+        {
+          "id": 41252124378,
+          "name": "Trainer Belief Inference Tests",
+          "conclusion": "success"
+        },
+        {
+          "id": 41252124376,
+          "name": "Trainer Tactical Intelligence Tests",
+          "conclusion": "success"
+        },
+        {
+          "id": 41252124364,
+          "name": "Trainer Search Foundation Tests",
+          "conclusion": "success"
+        },
+        {
+          "id": 41252124367,
+          "name": "Trainer Intelligence Foundation Tests",
+          "conclusion": "success"
+        },
+        {
+          "id": 41252124396,
+          "name": "Trainer Self Play Evaluation Tests",
+          "conclusion": "success"
+        },
+        {
+          "id": 41252124397,
+          "name": "Trainer Search Depth Budget Tests",
+          "conclusion": "success"
+        },
+        {
+          "id": 41252124398,
+          "name": "Trainer Loadouts Tests",
+          "conclusion": "success"
+        },
+        {
+          "id": 41252124363,
+          "name": "Trainer Search Limit Benchmark Tests",
+          "conclusion": "success"
+        },
+        {
+          "id": 41252124389,
+          "name": "Pokemon Calvo Technical Test Windows Build",
+          "conclusion": "success"
+        },
+        {
+          "id": 41252124382,
+          "name": "Trainer Team Composition Tests",
+          "conclusion": "success"
+        },
+        {
+          "id": 41252124368,
+          "name": "Item Closure V3 (EV, inventory and regressions)",
+          "conclusion": "success"
+        }
+      ]
+    },
+    "competitive_counts": {
+      "selected_candidates": 61,
+      "v28_verified_ids": 27,
+      "remaining_integral_v28_proof": 30,
+      "blocked_dependencies": 4,
+      "added_verified_outside_factory": 15
+    },
+    "technical_debt": {
+      "status": "OPEN_PID_LIFECYCLE_DIAGNOSTICS",
+      "linux_automation_log_pid_messages": 242,
+      "linux_group_counts": {
+        "prior": 147,
+        "entry": 95
+      },
+      "linux_visible_job_console_pid_messages": 60,
+      "sources_are_distinct_not_additive": true,
+      "windows_automation_log_pid_messages": 0,
+      "historical_classifier_per_group": {
+        "prior": "FAIL",
+        "entry": "FAIL"
+      },
+      "functional_result": "all assertions and independent raw evidence pass, child exit_code 0; generic classifier FAIL retained if PID diagnostics appear",
+      "stack": "Existing pipe_client.gd:72 close/OS.is_process_running; production unchanged; diagnosis remains open",
+      "prior_run": {
+        "run_id": 41241062641,
+        "automation_pid_messages": 156,
+        "visible_job_pid_messages": 53
+      }
+    },
+    "next_step": "Recommend a fourth consumption family: sitrus_berry and lum_berry (HP threshold/status cure). Inspect existing native coverage, then extend the same fixture/ownership/restore/consumption/save predicates; no production change presumed. PID lifecycle diagnosis is separate; GPU/manual remains pending.",
+    "evidence": "docs/handoff/ITEMS_V28/AUTOMATION_RESULTS.json"
   }
 }

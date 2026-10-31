@@ -1,12 +1,6 @@
-## Tercera familia en curso — 2026-11-01
+**TERCERA FAMILIA VERIFICADA:** código `961cb0ac8712e03cd3d22e0115d8b11c1a36e08b`, [Actions #41252124368](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41252124368), **20/20 workflows PASS**. Globo Helio y Botas Gruesas incorporados al automatizador existente: **3335 comprobaciones / 40 escenarios / 8 objetos por plataforma**, más **56 tests del contrato**, Ubuntu y Windows con Godot 4.7. Globo: inmunidad Tierra, rotura física/especial real, pérdida de inmunidad, restauración y consumo persistido. Botas: cuatro peligros colocados realmente, entradas y reentradas, controles sin objeto/otro dueño y conservación. **61 = 27 verificados + 30 pendientes + 4 dependencias**. Evidencia raw de ambas plataformas y hashes revalidados. Linux: 242 diagnósticos PID en los logs capturados del automatizador; deuda abierta, distinguida del resultado funcional. Windows: 0. GPU/manual e interacciones especiales siguen pendientes. Producción y main intactos; PR #118 en borrador. El commit documental [skip ci] no añade certificación. Ver AUTOMATION_RESULTS.json.
 
-Se amplía el checkpoint funcional `7f973f5b` con Globo Helio y Botas Gruesas.
-Contrato y lista exacta de archivos en WORK_ORDER.md. Solo pruebas y automatizador;
-no se cambian mecánicas, habilidades, datos, políticas, RNG ni guardados.
-Los contratos ejercitan Tierra/rotura real, cuatro peligros colocados por movimientos,
-controles sin objeto/otro dueño, reentrada, publicación y persistencia.
-Contador confirmado anterior: **25 verificados / 32 pendientes / 4 dependencias**
-hasta nuevas pruebas CI Ubuntu/Windows. PID Linux y GPU/manual siguen pendientes.
+Los checkpoints siguientes son históricos.
 
 **SEGUNDA FAMILIA — VERIFICADA:** funcional `7f973f5bfb63cfae12f1dbaa956512e5291df0aa`, [Actions #41241062641](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41241062641), **20/20 workflows PASS**. Mismo automatizador, dos descriptores, seis objetos: **1935 comprobaciones / 30 escenarios por plataforma**, Ubuntu y Windows. Se conservan las 14 pruebas anteriores y se añaden 17 (31 total); 178 archivos de evidencia por plataforma descargados y revalidados, con SHA-256 y checkpoints nativos. Nuevos: Restos, Vidasfera y Casco Dentado; Elección se reejercita. Recuento actual **61 = 25 verificados + 32 pendientes + 4 dependencias**. Linux: 156 mensajes PID en log capturado del automatizador, 53 en consola visible del job (fuentes distintas); localizados en cierre heredado pipe_client.gd:72, deuda abierta. Windows automatizador 0. GPU/manual pendiente. Ver AUTOMATION_RESULTS.json y AUTOMATION_PROTOTYPE.md. Main intacta; PR #118 en borrador sin merge. El commit siguiente solo de cuadernos [skip ci] no es nueva evidencia funcional. Los checkpoints anteriores que siguen son históricos.
 
