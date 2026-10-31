@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "mission": "ITEMS_V28",
-  "status": "IN_PROGRESS_BLOCKS_0_2_AND_4_VERIFIED_BLOCK_3_CANCELLED",
+  "status": "BLOCK_5_SCOPED_UNTESTED",
   "base_branch": "main",
   "base_commit": "233b1a4f15ee4df7301e2c5acf8aed84a8f40626",
   "working_branch": "codex/items-v28-from-main",
@@ -14,7 +14,7 @@
     "code_identity_from_v3": true,
     "last_verified_commit": "69e15d74d04063dbe9613575b8618062e1efbed7"
   },
-  "next_action": "Select next competitive-relevant unverified physical item integration; verify existing native implementations and V27 status first. No changes to main; records on each failure and SHA, CI tests before PASS. No Beast Ball, no blanket 2222 ID target.",
+  "next_action": "Build strictly scoped test for three main-series damage boosting items and real bag/map/save, then run CI and record outcomes. Do not implement ability-sensitive/beta items.",
   "main_is_official_v27": true,
   "all_2222_items_functional": false,
   "gpu_manual_review": "PENDING",
@@ -160,5 +160,34 @@
         "reason": "GDScript parser error from missing closing check parenthesis; no effect test executed"
       }
     ]
+  },
+  "dependencies_policy": {
+    "ability_integration": "combat native yes, field capsule/patch yes, only 2 verified field ability item routes; combinations not universally verified",
+    "excluded_ability_ids_ref": "config/randomlock_content_v1.json",
+    "ability_sensitive_item_ids_pending": [
+      "ability_shield",
+      "booster_energy",
+      "adrenaline_orb",
+      "choice_band/choice_scarf/choice_specs x gorilla_tactics"
+    ],
+    "klutz": "EXCLUDED_BY_CURRENT_POLICY",
+    "beta_object_admission": "require local normalized + PokeAPI canonical index/detail main-series category + current selection policy; no unverified beta imports"
+  },
+  "block_5": {
+    "status": "ALLOWLIST_DECLARED_NOT_IMPLEMENTED",
+    "family": "COMPETITIVE_DAMAGE_ITEMS",
+    "ids": [
+      "muscle_band",
+      "wise_glasses",
+      "expert_belt"
+    ],
+    "official_pokeapi_item_ids": [
+      243,
+      244,
+      245
+    ],
+    "ability_assumptions": "ability_id empty for native baseline and positive; interactions pending",
+    "ci": "NOT_RUN",
+    "next": "write targeted runner + workflow step"
   }
 }
