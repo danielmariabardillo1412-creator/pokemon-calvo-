@@ -1,27 +1,26 @@
 # Empezar aquí — 2026-10-31
 
-Estado actual: **Cordón Unión excluido; conversión de intercambios a nivel aplazada.**
-El usuario ha decidido que no se necesita ese objeto. Su adaptador y herramientas
-específicas se retiraron del árbol activo; la historia y pruebas V24 se conservan
-en Git, no describen una función que siga activa. Se mantiene el aviso correcto
-de Amuleto/Incienso Puro para equiparlos.
+Estado actual: **diez objetos de evolución por intercambio revisados y excluidos.**
+No tienen otro efecto específico de combate en el simulador fijado; su uso genérico
+con Lanzamiento queda reconocido. Se mantienen Revestimiento Metálico, Roca del Rey,
+Diente Marino y Escama Marina por sus efectos de combate. Cordón Unión sigue excluido.
 
-[Revisión de objetos](ITEM_SCOPE_V25.md) · [Lista de candidatos](ITEM_SCOPE_V25.json) ·
-[Trabajo futuro aplazado](TRADE_EVOLUTIONS_FUTURE.md).
+[Revisión y lista](ITEM_TRADE_EXCLUSIONS_V26.md) · [Resultados](ITEM_TRADE_EXCLUSIONS_V26.json).
+La política bloquea generación, equipamiento y uso; los datos originales, el SDK
+y las cantidades de inventarios antiguos se conservan. No se han cambiado las
+evoluciones ni se han fijado niveles. La adaptación de intercambios sigue aplazada:
+primero se termina lo aplicable de objetos, después se contrastarán otras bases.
 
-No se han cambiado niveles ni evoluciones. No se adopta nivel 37. Se consultarán
-más adelante otros juegos/randomizadores y la tabla que facilite el amigo.
-Diez objetos asociados a esos intercambios y cinco pañuelos de concurso quedan
-para revisar; solo Cordón está excluido ahora. Cuatro objetos con otros usos de
-combate se conservan. Las evoluciones ordinarias por nivel y piedra siguen activas.
+5 grupos PASS / 6.931 comprobaciones, incluidas regresiones. Son 54 exclusiones,
+614 equipables permitidos y 611 reconocidos por el backend. Es una reducción de
+alcance, no más efectos implementados. Los pendientes de descriptor son Amulet
+Coin, Exp. Share y Luck Incense. Otras familias conservan dependencias de sistemas;
+no se certifica todo el catálogo por pasar este lote.
+Checkpoint funcional: `9cda56431025abe0f5f6dbaeb30041800d74e902`.
 
-5 grupos PASS / 6.849 comprobaciones, incluidas regresiones. 621/624 equipables
-permitidos reconocidos; los pendientes nativos son Amulet Coin, Exp. Share y
-Luck Incense. El divisor bajó por excluir Cordón, no por implementar otro objeto.
-Checkpoint funcional: `80a7aab4a494ef4c68e349eeab99f36202d13bfe`.
-
-Los informes V2/V23/V24 son históricos. No se resellan ni se reinterpretan sus
-recuentos como estado actual. Los apartados siguientes describen V1–V21.
+[Trabajo de evoluciones aplazado](TRADE_EVOLUTIONS_FUTURE.md). Los informes
+V2–V25 son históricos; no se resellan ni sus recuentos describen el estado actual.
+Los apartados siguientes describen V1–V21.
 
 V21: [consumibles de huida](ITEM_ESCAPE_V21.md). Poké Muñeco, Cola Skitty y
 Poké Señuelo ya se usan desde mochila nativa para terminar un encuentro salvaje,

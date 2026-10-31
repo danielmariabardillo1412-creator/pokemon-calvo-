@@ -364,5 +364,6 @@
     "SDK/canonical item definitions stay intact; policy excludes new generation, equipment and direct use, not old serialized quantities.",
     "Trade-to-level adaptation remains deferred; no threshold table or minimum levels are invented.",
     "This closes the ten-item review, not all remaining item systems or mechanics."
-  ]
+  ],
+  "runtime_checkpoint": "9cda56431025abe0f5f6dbaeb30041800d74e902"
 }

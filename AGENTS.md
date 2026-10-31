@@ -1,24 +1,29 @@
 # Pokemon Calvo — desarrollo tras la arquitectura
 
-Estado vigente V25: el usuario excluyó linking_cord. Su adaptador de V24,
-manifiesto y herramientas específicas se retiraron; la historia está en Git.
-No reintroducirlo por ser un objeto canónico ni contar su antiguo test como
-funcionalidad activa. Se conserva la mejora del aviso de objetos equipados.
+Estado vigente V26: tras revisión solicitada por el usuario, se excluyen los
+diez objetos ligados únicamente a evoluciones de intercambio en el diseño elegido:
+dragon_scale, dubious_disc, electirizer, magmarizer, prism_scale, protector,
+reaper_cloth, sachet, up_grade y whipped_dream. Linking Cord sigue excluido.
+Su función genérica con Fling no justifica conservarlos aquí. Datos canónicos,
+SDK y cantidades de partidas antiguas no se borran. Metal Coat, King's Rock,
+Deep Sea Tooth y Deep Sea Scale siguen permitidos por sus otros efectos.
 
-La conversión de evoluciones por intercambio a nivel está APLAZADA por orden
-humana expresa. Ahora no se fijan niveles (tampoco 37), no se cambia EvolutionSystem
-ni el dataset y no se descartan otros evolutivos. Más adelante se contrastarán
-otros juegos/randomizadores y la tabla que aporte el amigo. Ver
-TRADE_EVOLUTIONS_FUTURE.md y ITEM_SCOPE_V25.md/.json en docs/current.
-Hay 10 candidatos ligados al intercambio y 4 que conservan otro efecto de combate.
-Solo Cordón es un veto nuevo; respetar el resto de la política existente.
+PRIORIDAD HUMANA: terminar objetos antes de adaptar evoluciones. La conversión
+intercambio -> nivel está APLAZADA. No fijar niveles, no asumir 37, no modificar
+EvolutionSystem ni registros canónicos por un simple «sigue». Para retomarlo se
+contrastarán otros juegos/randomizadores y la tabla que aporte el amigo.
+Ver TRADE_EVOLUTIONS_FUTURE.md y ITEM_TRADE_EXCLUSIONS_V26.md/.json.
 
-Guarda V25: tools/verification/run_item_scope_v25.py contra 4ac657f. El sello
-ya existe; no resellarlo. 621/624 descriptores permitidos presentes; quedan
-amulet_coin, exp_share y luck_incense. Las evoluciones ordinarias siguen activas.
-Codex es el único escritor actual; OpenCode no está trabajando. Las guardas y
-cuadernos V2/V23/V24 son históricos; no reescribirlos para aparentar vigencia.
-Checkpoint funcional: 80a7aab4a494ef4c68e349eeab99f36202d13bfe.
+54 exclusiones; 614 equipables permitidos / 611 con descriptor. Quedan
+amulet_coin, exp_share y luck_incense como dependencias de economía/perfil XP,
+no como neutros para rellenar cobertura. Otras familias (EV equipados, IV/mentas,
+formas, mapa) mantienen sus dependencias; no confundir estos tres con todo lo
+que falta del sistema de objetos. Mantener arquitectura y límites del proyecto.
+
+Guarda nueva: tools/verification/run_trade_item_exclusions_v26.py contra e9a4812.
+Su sello ya existe: no resellar. Guardas/matrices V2–V25 históricas; no editarlas
+para aparentar aceptación actual. Codex es único escritor; OpenCode no trabaja.
+Checkpoint funcional: 9cda56431025abe0f5f6dbaeb30041800d74e902.
 
 ENCARGO EXTERNO HISTORICO (cerrado en 2fee506; no reanudar): el usuario autoriza de nuevo OpenCode para cierre de
 objetos por familias completas. Leer docs/opencode/ITEM_CLOSURE_V2/START_HERE.md,

@@ -67,3 +67,5 @@ y anteriores describen sus checkpoints; no se regeneran con los vetos nuevos.
 
 Informe: [ITEM_TRADE_EXCLUSIONS_V26.json](ITEM_TRADE_EXCLUSIONS_V26.json).
 Evidencia: `.godot/trade_item_exclusions_v26/results.json`.
+
+Checkpoint funcional local: `9cda56431025abe0f5f6dbaeb30041800d74e902`.
