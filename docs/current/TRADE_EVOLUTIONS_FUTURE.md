@@ -1,28 +1,44 @@
 # Evoluciones por intercambio — trabajo aplazado
 
-Decisión del usuario, 2026-10-31: se eliminará la necesidad de intercambiar y
-se adaptarán esas evoluciones a progresión por nivel. **Ahora no se implementa.**
-Cordón Unión queda excluido porque no forma parte de ese diseño. Las evoluciones
-normales por nivel o piedra no se desactivan.
+Regla aclarada por el usuario el 2026-10-31: **se elimina únicamente la necesidad
+de intercambiar. Se conserva el objeto equipado cuando esa evolución lo exige.**
+La adaptación a niveles se hará después de terminar objetos; ahora no se implementa.
 
-Para la fase futura se contrastarán juegos/randomizadores existentes y cualquier
-tabla que facilite el amigo. No se ha elegido un nivel común, no se activa nivel
-37 y no se altera el dataset canónico para simular que esas especies tenían un
-nivel original. El usuario aplazó expresamente esta decisión.
+## Requisito que deberá conservarse
 
-La consulta preliminar a [Universal Pokémon Randomizer ZX, Gen4RomHandler](https://github.com/Ajarmar/universal-pokemon-randomizer-zx/blob/master/src/com/dabomstew/pkrandom/romhandlers/Gen4RomHandler.java)
-muestra criterios distintos según el caso: nivel 37 para intercambio simple,
-objetos conservados en otras rutas y una excepción de Slowpoke con piedra. Es
-referencia para investigar más adelante, no una norma adoptada para este juego.
+- Intercambio con objeto: nivel que se defina + objeto correspondiente equipado,
+  sin necesidad de intercambio. No basta con alcanzar un nivel sin ese objeto.
+- Ejemplo: Onix deberá poder evolucionar a Steelix al cumplir el nivel establecido
+  y llevar Revestimiento Metálico. Sin equipárselo, el jugador puede conservar Onix.
+- También se conservan los demás requisitos de objeto: Electrizador, Magmatizador,
+  Protector, Escama Dragón, etc. Su valor evolutivo es suficiente para mantenerlos,
+  aunque no proporcionen una bonificación adicional durante el combate.
+- Intercambio sin objeto: habrá que definir su adaptación por nivel sin inventarle
+  un objeto nuevo. Cordón Unión permanece excluido; es un sustituto del intercambio,
+  no uno de los objetos equipados originales que el usuario quiere conservar.
+- Revisar destinos múltiples como Clamperl y Slowpoke manteniendo el control del
+  jugador mediante sus objetos. Respetar variantes y las decisiones de evolución.
 
-Al retomarlo habrá que resolver niveles, intercambios con objeto, parejas de
-especies, variantes regionales/tamaños y destinos múltiples (p. ej., Clamperl y
-Slowpoke), antes de convertir registros en un adaptador de reglas del juego.
-Se conservarán los objetos con otras funciones de combate. Cordón y los diez
-evolutivos revisados en ITEM_TRADE_EXCLUSIONS_V26.md/.json quedan excluidos del
-conjunto utilizable. La futura adaptación no deberá reintroducir automáticamente
-requisitos de esos objetos al copiar una referencia de otro randomizador.
+No se ha elegido un nivel común ni se adopta nivel 37. Se contrastarán otros
+juegos/randomizadores y cualquier tabla del amigo cuando se retome esta fase.
+Los niveles de etapas previas no equivalen a un mínimo oficial para el intercambio.
 
-El intercambio por sí mismo no fija un nivel mínimo oficial. Los niveles de
-las fases previas, cuando existan, no sustituyen la futura tabla de adaptación.
-Este apunte no implementa ningún cambio de evolución.
+## Referencias para más adelante
+
+[Universal Pokémon Randomizer ZX, Gen4RomHandler](https://github.com/Ajarmar/universal-pokemon-randomizer-zx/blob/master/src/com/dabomstew/pkrandom/romhandlers/Gen4RomHandler.java)
+usa criterios distintos: nivel 37 para intercambios simples, objetos conservados
+en otras rutas y una excepción de Slowpoke con piedra. Es una referencia para
+comparar, no una norma adoptada. No copiar una excepción que quite el requisito
+de objeto definido por el usuario sin revisar previamente el caso.
+
+Habrá que resolver niveles, disparador de subida, ramas, formas y consumo del
+objeto según la referencia adoptada. No se modifican ahora EvolutionSystem,
+registros canónicos, guardados ni comportamiento de evolución.
+
+## Corrección de la revisión anterior
+
+Codex interpretó incorrectamente la regla y excluyó diez objetos en V26. La
+restauración V27 revoca esa exclusión. Los resultados V26 solo prueban aquel
+checkpoint histórico; no significan que esa decisión siga vigente.
+Los diez están permitidos otra vez, junto con Revestimiento Metálico, Roca del
+Rey, Diente Marino y Escama Marina. Los otros vetos previos siguen sin cambios.
