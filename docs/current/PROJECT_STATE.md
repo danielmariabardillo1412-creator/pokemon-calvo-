@@ -1,26 +1,27 @@
 # Estado del proyecto — 2026-10-31
 
-Estado actual: **diez objetos de evolución por intercambio revisados y excluidos.**
-No tienen otro efecto específico de combate en el simulador fijado; su uso genérico
-con Lanzamiento queda reconocido. Se mantienen Revestimiento Metálico, Roca del Rey,
-Diente Marino y Escama Marina por sus efectos de combate. Cordón Unión sigue excluido.
+Estado actual: **los diez objetos evolutivos están restaurados.**
+La exclusión V26 fue una interpretación incorrecta de Codex, revocada en V27.
+Se conservan los catorce objetos equipados originales de esas rutas: los diez
+restaurados y los cuatro que ya seguían permitidos. Cordón Unión sigue excluido.
 
-[Revisión y lista](ITEM_TRADE_EXCLUSIONS_V26.md) · [Resultados](ITEM_TRADE_EXCLUSIONS_V26.json).
-La política bloquea generación, equipamiento y uso; los datos originales, el SDK
-y las cantidades de inventarios antiguos se conservan. No se han cambiado las
-evoluciones ni se han fijado niveles. La adaptación de intercambios sigue aplazada:
-primero se termina lo aplicable de objetos, después se contrastarán otras bases.
+[Corrección](ITEM_TRADE_RESTORATION_V27.md) · [Resultados](ITEM_TRADE_RESTORATION_V27.json).
+Regla futura del usuario: sustituir solo el intercambio. Donde se exige objeto,
+se conservará **nivel definido + objeto equipado**, sin intercambio. Sin equiparlo,
+el jugador puede conservar el Pokémon; no se hace evolución automática sin ese
+requisito. Ahora no se han implementado niveles ni cambios de evolución.
 
-5 grupos PASS / 6.931 comprobaciones, incluidas regresiones. Son 54 exclusiones,
-614 equipables permitidos y 611 reconocidos por el backend. Es una reducción de
-alcance, no más efectos implementados. Los pendientes de descriptor son Amulet
-Coin, Exp. Share y Luck Incense. Otras familias conservan dependencias de sistemas;
-no se certifica todo el catálogo por pasar este lote.
-Checkpoint funcional: `9cda56431025abe0f5f6dbaeb30041800d74e902`.
+Primero se termina objetos. No excluir un objeto solo porque no dé una ventaja
+de combate: su función evolutiva o de campo también cuenta. Para niveles y ramas
+se consultarán las referencias cuando toque, según [la regla anotada](TRADE_EVOLUTIONS_FUTURE.md).
 
-[Trabajo de evoluciones aplazado](TRADE_EVOLUTIONS_FUTURE.md). Los informes
-V2–V25 son históricos; no se resellan ni sus recuentos describen el estado actual.
-Los apartados siguientes describen V1–V21.
+3 grupos PASS / 5.102 comprobaciones, incluidas regresiones. 44 exclusiones,
+624 equipables permitidos y 621 con descriptor. Onix/Revestimiento Metálico
+comprobado expresamente; cantidades y demás datos se conservan al equipar/quitar.
+Checkpoint funcional: `6629fe570cdf4c891a937c3f2a74b45e960dc902`.
+
+V26 y sus resultados son históricos y su decisión de excluir estos diez no está
+vigente. Los apartados siguientes describen checkpoints anteriores V1–V21.
 
 V21: [consumibles de huida](ITEM_ESCAPE_V21.md). Poké Muñeco, Cola Skitty y
 Poké Señuelo ya se usan desde mochila nativa para terminar un encuentro salvaje,

@@ -45,3 +45,5 @@ no correspondía al diseño del usuario. No se reinterpretan como aceptación ac
 
 Resultados: ITEM_TRADE_RESTORATION_V27.json y
 `.godot/trade_item_restoration_v27/results.json`.
+
+Checkpoint funcional local: `6629fe570cdf4c891a937c3f2a74b45e960dc902`.

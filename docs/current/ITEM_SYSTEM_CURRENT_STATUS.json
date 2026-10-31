@@ -1,13 +1,13 @@
 {
-  "status": "TRADE_ITEM_SCOPE_V26_REVIEWED_EVOLUTIONS_DEFERRED",
+  "status": "V27_HELD_EVOLUTION_ITEMS_RESTORED_RULE_CLARIFIED",
   "date": "2026-10-31",
-  "latest_report": "docs/current/ITEM_TRADE_EXCLUSIONS_V26.json",
-  "notes": "docs/current/ITEM_TRADE_EXCLUSIONS_V26.md",
+  "latest_report": "docs/current/ITEM_TRADE_RESTORATION_V27.json",
+  "notes": "docs/current/ITEM_TRADE_RESTORATION_V27.md",
   "full_item_matrix": "docs/current/ITEM_FIELD_V8.csv.txt",
   "art_status": "docs/current/ITEM_ART_CURRENT_STATUS.json",
   "menu": "B - Mochila",
   "canonical_entries_audited": 2222,
-  "equipment_transfers_verified": 614,
+  "equipment_transfers_verified": 624,
   "evolution_item_routes_verified": 57,
   "evolution_conditioned_or_form_routes_deferred": 15,
   "machine_ids_mapped": 338,
@@ -15,23 +15,22 @@
   "active_machine_version": "scarlet-violet",
   "legacy_machine_ids_need_profile": 109,
   "all_item_effects_certified": false,
-  "headless_checks": 88,
+  "headless_checks": 89,
   "gpu_checks": 0,
   "next": [
-    "Finish remaining applicable item contexts; distinguish native-descriptor gaps from other unimplemented mechanics.",
-    "Amulet Coin/Luck Incense need economy; Exp. Share needs a coherent reward profile. Do not register them as neutral to erase gaps.",
-    "Held EV gains, IV/mints, form routes and map-specific uses retain their documented dependencies.",
-    "Trade-to-level evolution conversion is still DEFERRED BY USER until after items. No threshold table selected or applied."
+    "Finish objects before adapting evolution rules. Keep original held evolution items, including those without another battle benefit.",
+    "Later replace exchange requirement only: level to be defined plus original equipped item where required. No item-free automatic evolution.",
+    "Amulet Coin/Luck Incense economy and Exp. Share profile remain explicit dependencies; other mechanic-dependent item families remain documented."
   ],
   "source_data_and_policies_unchanged": false,
-  "latest_verification": "TRADE_ITEM_EXCLUSIONS_V26_PASS",
+  "latest_verification": "TRADE_ITEM_RESTORATION_V27_PASS",
   "held_item_ids_with_verified_effect_scenarios": 189,
   "untested_native_contexts": 323,
   "verification_all_effects_complete": false,
   "reviewed_held_and_berry_dependencies_pending": 41,
   "field_medicine_ids_verified": 15,
   "field_ev_berry_ids_verified": 6,
-  "latest_phase_checks_headless": 88,
+  "latest_phase_checks_headless": 89,
   "latest_phase_checks_gpu": 0,
   "field_recovery_ids_verified": 42,
   "total_connected_field_effect_ids": 77,
@@ -147,7 +146,7 @@
     "cleanse_tag",
     "pure_incense"
   ],
-  "native_known_permitted_equipped_ids": 611,
+  "native_known_permitted_equipped_ids": 621,
   "native_missing_permitted_equipped_definition_count": 3,
   "native_held_medicine_ids_with_bridge_verified": 24,
   "native_held_training_and_boost_ids_with_bridge_verified": 17,
@@ -285,8 +284,8 @@
     "review": "docs/opencode/ITEM_CLOSURE_V2/evidence/O190/REVIEW.md",
     "writer_active": false
   },
-  "working_tree_runtime_status": "TEN_TRADE_ITEMS_FILTERED_NO_EVOLUTION_CHANGE",
-  "last_verified_functional_commit": "9cda56431025abe0f5f6dbaeb30041800d74e902",
+  "working_tree_runtime_status": "V26_TEN_ITEM_EXCLUSION_REVERTED",
+  "last_verified_functional_commit": "6629fe570cdf4c891a937c3f2a74b45e960dc902",
   "encounter_item_native_handoff_ids_verified": [
     "cleanse_tag",
     "pure_incense"
@@ -318,7 +317,7 @@
   "item_selection_policy_updated": true,
   "legacy_matrix_counters_note": "Historical V8/V2 scenario/dependency totals are not a freshly recomputed remaining-work total. Current permitted/native counts reflect V26; all_item_effects_certified remains false.",
   "trade_item_exclusions_v26": {
-    "status": "PASS",
+    "status": "WITHDRAWN_CODEX_MISINTERPRETATION_CORRECTED_V27",
     "reviewed_ids": [
       "dragon_scale",
       "dubious_disc",
@@ -347,6 +346,31 @@
     ],
     "evolution_level_changes": false,
     "verification_report": ".godot/trade_item_exclusions_v26/results.json",
-    "runtime_checkpoint": "9cda56431025abe0f5f6dbaeb30041800d74e902"
+    "runtime_checkpoint": "9cda56431025abe0f5f6dbaeb30041800d74e902",
+    "superseded_by": "docs/current/ITEM_TRADE_RESTORATION_V27.json"
+  },
+  "trade_item_restoration_v27": {
+    "status": "PASS",
+    "restored_ids": [
+      "dragon_scale",
+      "dubious_disc",
+      "electirizer",
+      "magmarizer",
+      "prism_scale",
+      "protector",
+      "reaper_cloth",
+      "sachet",
+      "up_grade",
+      "whipped_dream"
+    ],
+    "total_excluded_ids": 44,
+    "permitted_holdable_ids": 624,
+    "native_present_ids": 621,
+    "linking_cord_excluded": true,
+    "future_rule": "Level to be defined AND original equipped item when required; replace exchange only.",
+    "evolution_code_changed": false,
+    "level_table_selected": false,
+    "verification_report": ".godot/trade_item_restoration_v27/results.json",
+    "runtime_checkpoint": "6629fe570cdf4c891a937c3f2a74b45e960dc902"
   }
 }
