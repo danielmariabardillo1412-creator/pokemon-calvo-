@@ -20,6 +20,14 @@ no era una ejecución de todos los workflows remotos.
   GDScript identificado. No se oculta ni se trata como éxito; se observa la nueva
   ejecución remota antes de decidir si requiere otro cambio.
 
+Tras repetir, otro importador Linux señaló `docs/current/Z_MOVE_INTEGRATION.csv`
+antes de abortar. La documentación no es un catálogo de traducciones ni recurso
+del juego. Se añade `docs/.gdignore`: sus CSV, evidencias y cuadernos permanecen
+en Git y accesibles como archivos, pero quedan fuera de la importación del editor.
+Se comprobó que módulos, escenas, pruebas y core no cargan recursos de docs con
+load/preload. Importación local posterior PASS; la nueva ejecución CI conserva
+las pruebas funcionales y debe confirmar el resultado, sin ocultar los fallos previos.
+
 Validación local suplementaria: **4 grupos PASS / 840 comprobaciones**: datos 634,
 reparación Tyrogue 58, visual legado 45 y mapa legado 103. Los intentos fallidos
 de preparación se conservan en `.godot/publication_v27/ci_followup/`, sin contarlos

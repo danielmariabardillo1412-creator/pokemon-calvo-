@@ -1,0 +1,2 @@
+# Documentation and CSV evidence are not game assets or translation tables.
+# Keep them versioned and readable through FileAccess, outside editor imports.
