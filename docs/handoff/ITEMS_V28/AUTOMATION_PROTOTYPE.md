@@ -1,4 +1,33 @@
-# Automatizador declarativo V28 — dos familias verificadas
+# Automatizador declarativo V28
+
+## Tercera familia — contrato y ampliación en validación
+
+`entry_items.json` añade Globo Helio (tres timelines de Tierra/rotura física,
+especial y control de estado) y Botas Gruesas (Trampa Rocas, Púas, Púas Tóxicas,
+Red Viscosa y control sin peligros). Diez escenarios, con active/none/reserve
+en los ocho nativos y una ruta real de mochila/mapa por objeto.
+Se conservan los bytes de los dos descriptores, módulos de expectativas pasivas
+y 31 tests anteriores. El helper de esta familia controla solo comandos legales
+del rival, captura pasos y consulta las autoridades existentes. Sin callbacks nuevos.
+
+La orquestación Python ejecuta dos grupos aislados: 30 escenarios previos y 10
+nuevos. Cada proceso mantiene los límites originales (watchdog Godot 360s, monitor
+480s); solo el presupuesto exterior CI pasa a 900s. El resultado completo exige
+ambos grupos y valida evidencia nativa, archivos de guardado y sus SHA-256.
+`--only-entry` es diagnóstico local PARCIAL y nunca certifica todas las familias.
+
+Hallazgos: PokéAPI 584 y 1178 contienen attributes vacíos; se acepta únicamente
+su blob histórico exacto, categoría e índices nativos revisados. Botas tampoco
+tiene texto inglés de efecto. Las reglas ya existen y se prueban ejecutándolas;
+no se completa ni modifica la fuente canónica. Primer mapa con Caterpie falló
+correctamente porque su primer movimiento era Disparo Demora. Solo el fixture
+Globo usa finalmente Pidgey/Placaje para exigir una transición observada real.
+El fixture intermedio Rattata fue rechazado antes de abrir combate; no se acepta
+esa ejecución como PASS ni se alteran las políticas para admitirlo.
+Se corrige además el recuento del orquestador: son diez casos nuevos (3 + 5
+contratos nativos y 2 de mapa), no once. Los casos no se suprimen.
+PID Linux permanece deuda técnica, habilidades/interacciones especiales y GPU
+fuera de alcance. CI de la ampliación pendiente.
 
 ## Segunda familia verificada — ampliación desde 648a2c86
 

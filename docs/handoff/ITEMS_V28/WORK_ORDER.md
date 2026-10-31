@@ -1,5 +1,48 @@
 # Orden de trabajo — ITEMS_V28
 
+## Tercera familia — entrada, inmunidad y consumo (contrato previo, 2026-11-01)
+
+Checkpoint `4d39d3aa`, funcional anterior `7f973f5b` / Actions 41241062641.
+Solo `air_balloon` (PokéAPI 584) y `heavy_duty_boots` (1178). Sus reglas ya están
+en el runtime fijado (items.js/isGrounded/moves.js) y held_pilot.cjs; peligros
+admitidos por el adaptador existente. No se modifica producción ni protocolo.
+
+Archivos permitidos exactos para esta ampliación:
+- `tests/fixtures/item_automation_v28/entry_items.json`.
+- `tests/gameplay/item_automation_entry_v28.gd` y `.uid`.
+- `tests/gameplay/item_automation_opponent_v28.gd` y `.uid` (subclase de prueba
+  que SOLO elige el movimiento legal del rival por el contrato, usando submit).
+- `tests/gameplay/item_automation_v28.gd` (dispatch, constructor de restauración
+  opcional y ruta común de mochila con rotura/guardado cuando corresponda).
+- `tools/item_audit/automation_v28.py` (grupos aislados y conservación de APIs).
+- `tools/item_audit/automation_entry_v28.py` (contratos/expectativas/evidencia).
+- `tests/tools/test_item_automation_entry_v28.py`.
+- `.github/workflows/item-closure-v3.yml` (nuevo test y presupuesto total para
+  dos procesos; mismos gates, umbrales y límites por proceso).
+- `docs/handoff/ITEMS_V28/{WORK_ORDER.md,START_HERE.md,STATE.json,PROGRESS.md,RESULTADOS.json,COMPETITIVE_COVERAGE_AUDIT.md,AUTOMATION_PROTOTYPE.md,AUTOMATION_RESULTS.json}`.
+Salidas efímeras `.godot/item_automation_v28/**`; mismos cuatro UID de importación
+ya inventariados, sin versionarlos. Descriptores y 31 tests previos intactos;
+también se conserva el módulo de contratos/expectativas de la segunda familia.
+BASE histórico 47f42aef permanece sin resellar ni cambiar.
+
+Globo: Tierra antes/después de rotura física y especial; estado que no rompe;
+active/none/reserve, transición real de item a vacío y aviso -enditem, restaurar
+la rotura y perder inmunidad; cierre real, una unidad consumida solo al publicar,
+SaveV2/recarga sin regenerar el objeto. Mochila/mapa: golpe real antes de victoria,
+guardar/cargar tras romperse y después del cierre.
+Botas: Stealth Rock, Spikes, Toxic Spikes y Sticky Web colocados con movimientos
+reales; comprobar sideConditions no vacías y efectos en controles, entrar/salir/
+reentrar al portador, restauración de peligros y equipo retenido. Control sin
+peligros también ejercitado. No inventar estado del simulador ni sustituir reglas.
+
+Se reutilizan fixture, colección/equipamiento, sesión nativa, restauración, mapa,
+guardado e informe. Control del rival solo mediante elección de comandos en una
+subclase de pruebas; no callbacks de mecánicas ni edición de estadísticas/RNG.
+Dos grupos de ejecución: los 1935 checks/30 casos previos y la familia nueva,
+cada uno con el límite por proceso existente. CI exige ambos y un informe agregado.
+No convertir ejecución parcial local en certificación completa. Contador 25/32/4
+hasta CI real. PID Linux sigue registrado aparte y GPU/manual pendiente.
+
 ## Segunda familia del automatizador — contrato previo
 
 Reanudar desde `648a2c86541b6a381424413e2b2e28231d127353`. Conservar la base de

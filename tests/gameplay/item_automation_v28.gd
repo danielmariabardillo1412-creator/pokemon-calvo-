@@ -3,6 +3,7 @@ extends "res://tests/gameplay/item_closure_v3_test_runner.gd"
 # Test orchestration only. All combat still runs through the pinned native session.
 const DESCRIPTORS := "res://tests/fixtures/item_automation_v28/choice_items.json"
 const EffectAssertions = preload("res://tests/gameplay/item_automation_effects_v28.gd")
+const EntryScenarios = preload("res://tests/gameplay/item_automation_entry_v28.gd")
 var automation: Dictionary
 var destination: String
 var automation_rows: Array = []
@@ -54,6 +55,7 @@ func _run_automation() -> void:
 		match String(automation.family):
 			"choice_held_items": await _run_choice_items()
 			"passive_reactive_held_items": await _run_passive_items()
+			"entry_hazard_items": await EntryScenarios.run(self, automation)
 			_: check("unknown family", false)
 	var report := {"status": "SCOPED_VERIFIED" if errors.is_empty() else "FAILED",
 		"checks": checks, "errors": automation_errors, "items": item_count,
@@ -68,7 +70,7 @@ func _run_automation() -> void:
 	report_file.store_string(JSON.stringify(report, "  ")); report_file.close()
 	done = true
 	print("ITEM_AUTOMATION_V28 ", "PASS" if errors.is_empty() else "FAIL", " checks=", checks, " ids=", item_count, " scenarios=", automation_rows.size(), " errors=", errors.size())
-	quit(0 if errors.is_empty() and automation_rows.size() == 30 and checks >= 665 else 1)
+	quit(0 if errors.is_empty() and automation_rows.size() == int(meta.expected_rows) and checks >= int(meta.minimum_checks) else 1)
 
 func _run_choice_items() -> void:
 	for spec: Dictionary in automation.items:
@@ -225,7 +227,7 @@ func _lock_probe(spec: Dictionary, mode: String) -> Dictionary:
 	return {"valid": true, "restored": restored, "disabled": disabled, "alternate_accepted": alternate.accepted,
 		"unlocked_after_switch": unlocked.accepted, "evidence": path + "_after.json", "sha256": after_hash}
 
-func _restore_probe(session: RefCounted, owner: PlayerCollection, path: String, label: String) -> Dictionary:
+func _restore_probe(session: RefCounted, owner: PlayerCollection, path: String, label: String, constructor: Script = null) -> Dictionary:
 	var checkpoint: Dictionary = session.snapshot()
 	_write_evidence(path, {"owner": _owner_data(owner), "checkpoint": checkpoint})
 	await session.close()
@@ -235,7 +237,8 @@ func _restore_probe(session: RefCounted, owner: PlayerCollection, path: String, 
 	if not decoded.ok: return {"valid": false}
 	owner = PlayerCollection.new()
 	owner.party = decoded.party; owner.storage = decoded.storage; owner.inventory = decoded.inventory
-	session = Native.new(catalogs, owner, automation.format)
+	var session_script: Script = Native if constructor == null else constructor
+	session = session_script.new(catalogs, owner, automation.format)
 	var restored: bool = await session.restore_saved(self, disk.checkpoint)
 	check(label + " disk checkpoint restored", restored)
 	if not restored: await session.close(); return {"valid": false}
@@ -305,11 +308,11 @@ func _switch_choice(session: RefCounted, cid: StringName) -> String:
 	check("switch identity exists " + String(cid), false)
 	return "switch 99"
 
-func _map_probe(item: StringName) -> Dictionary:
+func _map_probe(item: StringName, consume_after_hit: bool = false) -> Dictionary:
 	scene = load("res://scenes/visual/field_demo.tscn").instantiate()
 	root.add_child(scene); await process_frame; await physics_frame
 	var config: Dictionary = scene._active_config.duplicate(true)
-	config.encounter_chance_percent = 100; config.wild_species_id = "caterpie"
+	config.encounter_chance_percent = 100; config.wild_species_id = "pidgey" if consume_after_hit else "caterpie"
 	config.wild_min_level = 1; config.wild_max_level = 1
 	scene._on_configuration_applied(config)
 	var owner: PlayerCollection = scene.field_collection()
@@ -343,7 +346,7 @@ func _map_probe(item: StringName) -> Dictionary:
 	var view = bridge.view
 	view._playback.set_process(false)
 	var opened: bool = view.session != null and view.session.battle_state() != null
-	check("map actual native encounter", opened)
+	check("map actual native encounter " + String(bridge.last_error), opened)
 	if not opened:
 		scene.queue_free(); await process_frame; return {"valid": false}
 	check("map item on actual active owner", view.session.battle_state().active_for_side(&"side_a").instance_id == own_id and view.session.battle_state().creature(own_id).held_item_id == item)
@@ -351,6 +354,24 @@ func _map_probe(item: StringName) -> Dictionary:
 	check("map active reload", await bridge.load_game())
 	view._playback.set_process(false)
 	check("map active equipment survived reload", view.session.battle_state().creature(own_id).held_item_id == item)
+	var observed_consumption := false
+	var breaking_evidence := {}
+	if consume_after_hit:
+		var before_snapshot: Dictionary = view.session.snapshot()
+		var hp_before: int = view.session.battle_state().creature(own_id).current_hp
+		var before: bool = view.session.battle_state().creature(own_id).held_item_consumed
+		var hit: Dictionary = await view.choose("move 2")
+		check("map real breaking hit turn", hit.accepted)
+		await _drain_view(view)
+		observed_consumption = not before and view.session.battle_state().creature(own_id).held_item_consumed
+		var break_name := "map_" + String(item) + "_break"
+		breaking_evidence = {"evidence": break_name + ".json", "sha256": _write_evidence(break_name, {"before": before_snapshot, "after": view.session.snapshot(), "owner": String(own_id)})}
+		check("map real loss and item transition", observed_consumption and view.session.battle_state().creature(own_id).current_hp < hp_before)
+		check("map campaign not consumed early", not scene.field_collection().owned_creature(own_id).held_item_consumed)
+		check("map popped battle saves", bridge.save_game())
+		check("map popped battle reloads", await bridge.load_game())
+		view._playback.set_process(false)
+		check("map popped state survived restore", view.session.battle_state().creature(own_id).held_item_consumed)
 	var result: Dictionary = await view.choose("move 1")
 	check("map actual attack accepted", result.accepted)
 	if result.accepted:
@@ -367,11 +388,11 @@ func _map_probe(item: StringName) -> Dictionary:
 		check("map final reload", await bridge.load_game())
 		owner = scene.field_collection()
 		check("map actual HP retained after disk reload", owner.owned_creature(own_id).current_hp == final_hp)
-		check("map item retained after settlement", owner.owned_creature(own_id).held_item_id == item and not owner.owned_creature(own_id).held_item_consumed)
+		check("map expected consumed/retained state after settlement", owner.owned_creature(own_id).held_item_id == item and owner.owned_creature(own_id).held_item_consumed == consume_after_hit)
 		check("map other owner untouched", owner.owned_creature(other_id).held_item_id == &"")
-		check("map physical units not duplicated or consumed", _units(owner, item) == 2 and owner.inventory.quantity(item) == 1)
+		check("map physical units match observed transition", _units(owner, item) == (1 if consume_after_hit else 2) and owner.inventory.quantity(item) == 1)
 	var hash := FileAccess.get_sha256(bridge.save_path)
 	if view.session != null: await view.session.close()
 	scene.queue_free(); await process_frame
 	return {"valid": result.accepted, "map_save": "map_" + String(item) + ".json", "sha256": hash,
-		"battle_owner": String(own_id), "second_owner": String(other_id), "physical_units": _units(owner, item)}
+		"battle_owner": String(own_id), "second_owner": String(other_id), "physical_units": _units(owner, item), "consumed_transition": observed_consumption, "breaking_evidence": breaking_evidence}

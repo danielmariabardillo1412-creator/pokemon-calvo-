@@ -144,7 +144,8 @@ jobs:
           set -euo pipefail
           python -B tests/tools/test_item_automation_v28.py 2>&1 | tee item-automation-contract-v28.log
           python -B tests/tools/test_item_automation_passive_v28.py 2>&1 | tee item-automation-passive-contract-v28.log
-          timeout 420s python -B tools/item_audit/automation_v28.py 2>&1 | tee item-automation-v28.log
+          python -B tests/tools/test_item_automation_entry_v28.py 2>&1 | tee item-automation-entry-contract-v28.log
+          timeout 900s python -B tools/item_audit/automation_v28.py 2>&1 | tee item-automation-v28.log
           grep -E 'ITEM_AUTOMATION_V28 SCOPED_VERIFIED checks=[1-9][0-9]*' item-automation-v28.log
       - name: Evidence-bound matrix by ID and context
         shell: bash
@@ -284,6 +285,8 @@ jobs:
           if ($LASTEXITCODE -ne 0) { exit 1 }
           & python -B tests/tools/test_item_automation_passive_v28.py
           if ($LASTEXITCODE -ne 0) { exit 1 }
+          & python -B tests/tools/test_item_automation_entry_v28.py
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           & python -B tools/item_audit/automation_v28.py --godot $godot --node $node 2>&1 | Tee-Object -FilePath item-automation-windows-v28.log
           if ($LASTEXITCODE -ne 0) { exit 1 }
           if (-not (Select-String -Path item-automation-windows-v28.log -Pattern 'ITEM_AUTOMATION_V28 SCOPED_VERIFIED checks=[1-9][0-9]*' -Quiet)) { exit 1 }

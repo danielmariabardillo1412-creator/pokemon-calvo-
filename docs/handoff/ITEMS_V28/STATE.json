@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "mission": "ITEMS_V28",
-  "status": "SECOND_AUTOMATION_FAMILY_SCOPED_CI_VERIFIED",
+  "status": "THIRD_AUTOMATION_FAMILY_VALIDATING",
   "base_branch": "main",
   "base_commit": "233b1a4f15ee4df7301e2c5acf8aed84a8f40626",
   "working_branch": "codex/items-v28-from-main",
@@ -14,7 +14,7 @@
     "code_identity_from_v3": true,
     "last_verified_commit": "69e15d74d04063dbe9613575b8618062e1efbed7"
   },
-  "next_action": "Recommend Air Balloon and Heavy-Duty Boots: item consumption/immunity and entry hazards. Define their contracts before editing; reuse the shared runner/ownership/restore/map/report components and preserve both families. PID lifecycle debt is separate. No automatic merge.",
+  "next_action": "Validate entry-item scenarios locally, then actual Ubuntu/Windows CI; retain 25/32/4 until verified. PID debt and GPU remain separate.",
   "main_is_official_v27": true,
   "all_2222_items_functional": false,
   "gpu_manual_review": "PENDING",
@@ -370,5 +370,16 @@
       "status": "OPEN_LIFECYCLE_DEBT"
     },
     "gpu_manual": "NOT_RUN"
+  },
+  "automation_third_family": {
+    "status": "IN_PROGRESS",
+    "ids": [
+      "air_balloon",
+      "heavy_duty_boots"
+    ],
+    "previous_functional_sha": "7f973f5bfb63cfae12f1dbaa956512e5291df0aa",
+    "production_changes": false,
+    "scenarios_new": 10,
+    "ci": "PENDING"
   }
 }
