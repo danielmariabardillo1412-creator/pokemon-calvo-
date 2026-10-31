@@ -4,8 +4,8 @@
 Se cruzan los **47 objetos equipados distintos** que aparecen en los equipos predefinidos competitivos de **Pokémon Showdown, Gen 9, seis categorías Uber/OU/UU/RU/NU/PU** con la matriz de 2.222 IDs de Pokémon Calvo y los bloques con prueba integral de ITEMS_V28. **No equivale a todos los objetos usados en toda modalidad competitiva, VGC o randomlocke**. Es una lista concreta que puede ampliarse por evidencia; no se cuentan indiscriminadamente los 2.222 IDs.
 
 - 47 de la referencia externa: **42** con escenarios de efecto documentados NO exhaustivos en la matriz V8; **4** con dependencia/contexto especial sin cerrar; **1** excluido (`wide_lens`). Los 47 existen en el simulador; 46 transferencias/equipamientos antiguos verificados; el excluido no debe reactivarse sin decisión.
-- V28: **22 IDs** con ruta ampliada (7 EV + 3 defensivos + 9 de daño + 3 Elección), de los que **7 están dentro de los 47**: `covert_cloak`, `expert_belt`, `mystic_water`, `never_melt_ice`, `choice_band`, `choice_specs`, `choice_scarf`. Los otros **15 son adicionales**.
-- **Objetivo operativo cuantificado = 47 + 15 - 1 excluido = 61 IDs**. De ellos **22** tienen prueba ampliada V28; **35** poseen escenarios previos pero no cierre V28 por ID; **4** tienen dependencias. Pendiente de cierre ampliado: **39 = 35 verificables + 4 bloqueados**, no 39 efectos por programar.
+- V28: **25 IDs** con ruta ampliada (7 EV + 3 defensivos + 9 de daño + 3 Elección + 3 pasivos/reactivos); **10 están dentro de los 47**: `covert_cloak`, `expert_belt`, `mystic_water`, `never_melt_ice`, `choice_band`, `choice_specs`, `choice_scarf`, `leftovers`, `life_orb`, `rocky_helmet`. Los otros **15 son adicionales**.
+- **Objetivo operativo cuantificado = 47 + 15 - 1 excluido = 61 IDs**. **25** con cierre ampliado V28; **32** con escenarios históricos pero sin prueba integral V28 por ID; **4** con dependencias. Pendiente de cierre ampliado: **36 = 32 verificables + 4 bloqueados**, no 36 efectos por escribir.
 - El protocolo de V28 no reemplaza pruebas históricas, y un escenario nativo aprobado no certifica todos los disparadores, propietarios, persistencia y rutas gráficas. La revisión GPU/manual permanece pendiente.
 
 ## Fuentes con identidad verificable
@@ -20,10 +20,10 @@ Columnas: **V8** = E (escenario de efecto documentado pero no exhaustivo); D (co
 | Objeto (Showdown) | ID interno | V8 | V28 | 
 |---|---|---|---|
 | Heavy-Duty Boots | `heavy_duty_boots` | E | — |
-| Leftovers | `leftovers` | E | — |
+| Leftovers | `leftovers` | E | Sí, segunda familia declarativa |
 | Choice Scarf | `choice_scarf` | E | Sí, piloto declarativo |
-| Life Orb | `life_orb` | E | — |
-| Rocky Helmet | `rocky_helmet` | E | — |
+| Life Orb | `life_orb` | E | Sí, segunda familia declarativa |
+| Rocky Helmet | `rocky_helmet` | E | Sí, segunda familia declarativa |
 | Choice Specs | `choice_specs` | E | Sí, piloto declarativo |
 | Air Balloon | `air_balloon` | E | — |
 | Choice Band | `choice_band` | E | Sí, piloto declarativo |
@@ -78,3 +78,7 @@ La mayor deuda de certificación de la muestra NO son pequeños potenciadores de
 ## Cierre del piloto Elección
 
 Código 0c1f48eb4bd40ca15d794847d89c16ea6614ceb9; [Actions #41237512322](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41237512322), 20/20 workflows PASS. Los tres Choice recorren 15 escenarios compartidos, 665 comprobaciones en Ubuntu y 665 en Windows: daño específico/control, orden de turno, propiedad, bloqueo, persistencia, cambio de elección y mochila/mapa real. Los dos artefactos se descargaron y revalidaron por SHA-256 y escenario. No se reimplementaron efectos ni se certifican todas las interacciones. Avisos de ciclo de vida PID Linux y GPU/manual siguen pendientes; ver AUTOMATION_RESULTS.json.
+
+## Segunda familia declarativa verificada
+
+7f973f5bfb63cfae12f1dbaa956512e5291df0aa; [Actions #41241062641](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41241062641), 20/20 workflows PASS. Misma infraestructura con recuperación residual, daño/retroceso y contacto: Restos, Vidasfera, Casco Dentado. Los seis objetos del automatizador (incluidos Choice) completan 30 escenarios / 1935 aserciones por plataforma y 31 tests del validador. Dos artefactos SHA-256 revalidados por escenario contra checkpoints. Metadatos incompletos de PokéAPI 583 revisados estrictamente; datos intactos. Avisos PID Linux y GPU/manual siguen pendientes. No interpretar el recuento como certificación de todas las interacciones.

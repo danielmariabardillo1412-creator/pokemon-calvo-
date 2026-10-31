@@ -384,17 +384,21 @@
       "windows_prototype_pid": 0,
       "status": "OPEN_TECHNICAL_DEBT"
     },
-    "gpu_manual": "NOT_RUN"
+    "gpu_manual": "NOT_RUN",
+    "historical_checkpoint": true
   },
   "automation_second_family": {
-    "status": "LOCAL_VERIFIED_AWAITING_CI",
-    "functional_sha": null,
+    "family": "DECLARATIVE_CHOICE_AND_PASSIVE_FAMILIES",
+    "functional_sha": "7f973f5bfb63cfae12f1dbaa956512e5291df0aa",
     "new_ids": [
       "leftovers",
       "life_orb",
       "rocky_helmet"
     ],
-    "families": [
+    "checks_per_platform": 1935,
+    "scenarios_per_platform": 30,
+    "unit_tests_per_platform": 31,
+    "families_per_platform": [
       {
         "family": "choice_held_items",
         "items": 3,
@@ -410,16 +414,33 @@
         "status": "SCOPED_VERIFIED"
       }
     ],
-    "local_checks": 1935,
-    "scenarios": 30,
-    "unit_tests": {
-      "choice_unchanged": 14,
-      "new_passive": 17
+    "competitive_counts": {
+      "selected_candidates": 61,
+      "v28_verified_ids": 25,
+      "remaining_integral_v28_proof": 32,
+      "blocked_dependencies": 4
     },
-    "local_evidence": ".godot\\item_automation_v28\\runs\\1793479631790569300",
-    "local_functional_sources_verified": true,
-    "ci_step_extended_after_local_run": true,
-    "next_step": "Push coherent functional commit and require actual Ubuntu/Windows Godot and all unchanged regression workflows. Counters stay 22/35/4 until CI.",
-    "metadata_gap": "Rocky Helmet PokeAPI 583 has empty attributes; exact reviewed Gen V-IX index/category/English held-contact-effect evidence, plus policy and real equip, is required. Existing Choice criteria unchanged."
-  }
+    "next_step": "Recommend Air Balloon and Heavy-Duty Boots: item consumption/immunity and entry hazards. Define their contracts before editing; reuse the shared runner/ownership/restore/map/report components and preserve both families. PID lifecycle debt is separate. No automatic merge.",
+    "status": "SCOPED_CI_VERIFIED",
+    "ci": {
+      "status": "PASS",
+      "run_id": 41241062641,
+      "run_url": "https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41241062641",
+      "workflows_total": 20,
+      "workflows_success": 20
+    },
+    "diagnostics": {
+      "linux_automation_log_pid": 156,
+      "linux_visible_job_console_pid": 53,
+      "windows_automation_log_pid": 0,
+      "status": "OPEN_LIFECYCLE_DEBT"
+    },
+    "gpu_manual": "NOT_RUN"
+  },
+  "latest_functional_checkpoint": {
+    "sha": "7f973f5bfb63cfae12f1dbaa956512e5291df0aa",
+    "run_id": 41241062641,
+    "scope": "DECLARATIVE_CHOICE_AND_PASSIVE_FAMILIES"
+  },
+  "status": "SECOND_AUTOMATION_FAMILY_SCOPED_CI_VERIFIED"
 }

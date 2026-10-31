@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "mission": "ITEMS_V28",
-  "status": "SECOND_AUTOMATION_FAMILY_AWAITING_CI",
+  "status": "SECOND_AUTOMATION_FAMILY_SCOPED_CI_VERIFIED",
   "base_branch": "main",
   "base_commit": "233b1a4f15ee4df7301e2c5acf8aed84a8f40626",
   "working_branch": "codex/items-v28-from-main",
@@ -14,7 +14,7 @@
     "code_identity_from_v3": true,
     "last_verified_commit": "69e15d74d04063dbe9613575b8618062e1efbed7"
   },
-  "next_action": "Push coherent functional commit and require actual Ubuntu/Windows Godot and all unchanged regression workflows. Counters stay 22/35/4 until CI.",
+  "next_action": "Recommend Air Balloon and Heavy-Duty Boots: item consumption/immunity and entry hazards. Define their contracts before editing; reuse the shared runner/ownership/restore/map/report components and preserve both families. PID lifecycle debt is separate. No automatic merge.",
   "main_is_official_v27": true,
   "all_2222_items_functional": false,
   "gpu_manual_review": "PENDING",
@@ -272,13 +272,13 @@
     "source_factory_excluded": 1,
     "added_verified_v28_outside_factory": 15,
     "selected_nonexcluded_candidates": 61,
-    "verified_v28_ids": 22,
-    "remaining_v28_scope_without_integral_v28_proof": 35,
+    "verified_v28_ids": 25,
+    "remaining_v28_scope_without_integral_v28_proof": 32,
     "blocked_dependencies": 4,
     "not_to_activate": "wide_lens",
     "factory_sets_blob": "d1813dac25222e5a5bf876bab3a14c3aebaca04c",
     "project_matrix_blob": "9509d537622039b2f1919067561631449b8ddc47",
-    "criteria": "Gen9 Showdown factory-sets across 6 singles tiers + V28 approved 19, excluding project veto; not a universal competitive catalog"
+    "criteria": "47 Gen9 singles factory IDs + 15 approved additional IDs - Wide Lens = 61 candidates; 25 verified, 32 pending integral proof, 4 dependencies; not a universal competitive catalog"
   },
   "acceleration_plan": "docs/handoff/ITEMS_V28/ACCELERATION_PLAN.md",
   "automation_prototype": {
@@ -313,22 +313,26 @@
       "windows_prototype_pid": 0,
       "status": "OPEN_TECHNICAL_DEBT"
     },
-    "gpu_manual": "NOT_RUN"
+    "gpu_manual": "NOT_RUN",
+    "historical_checkpoint": true
   },
   "latest_functional_checkpoint": {
-    "sha": "0c1f48eb4bd40ca15d794847d89c16ea6614ceb9",
-    "run_id": 41237512322,
-    "scope": "DECLARATIVE_CHOICE_INTEGRATION_PROTOTYPE"
+    "sha": "7f973f5bfb63cfae12f1dbaa956512e5291df0aa",
+    "run_id": 41241062641,
+    "scope": "DECLARATIVE_CHOICE_AND_PASSIVE_FAMILIES"
   },
   "automation_second_family": {
-    "status": "LOCAL_VERIFIED_AWAITING_CI",
-    "functional_sha": null,
+    "family": "DECLARATIVE_CHOICE_AND_PASSIVE_FAMILIES",
+    "functional_sha": "7f973f5bfb63cfae12f1dbaa956512e5291df0aa",
     "new_ids": [
       "leftovers",
       "life_orb",
       "rocky_helmet"
     ],
-    "families": [
+    "checks_per_platform": 1935,
+    "scenarios_per_platform": 30,
+    "unit_tests_per_platform": 31,
+    "families_per_platform": [
       {
         "family": "choice_held_items",
         "items": 3,
@@ -344,16 +348,27 @@
         "status": "SCOPED_VERIFIED"
       }
     ],
-    "local_checks": 1935,
-    "scenarios": 30,
-    "unit_tests": {
-      "choice_unchanged": 14,
-      "new_passive": 17
+    "competitive_counts": {
+      "selected_candidates": 61,
+      "v28_verified_ids": 25,
+      "remaining_integral_v28_proof": 32,
+      "blocked_dependencies": 4
     },
-    "local_evidence": ".godot\\item_automation_v28\\runs\\1793479631790569300",
-    "local_functional_sources_verified": true,
-    "ci_step_extended_after_local_run": true,
-    "next_step": "Push coherent functional commit and require actual Ubuntu/Windows Godot and all unchanged regression workflows. Counters stay 22/35/4 until CI.",
-    "metadata_gap": "Rocky Helmet PokeAPI 583 has empty attributes; exact reviewed Gen V-IX index/category/English held-contact-effect evidence, plus policy and real equip, is required. Existing Choice criteria unchanged."
+    "next_step": "Recommend Air Balloon and Heavy-Duty Boots: item consumption/immunity and entry hazards. Define their contracts before editing; reuse the shared runner/ownership/restore/map/report components and preserve both families. PID lifecycle debt is separate. No automatic merge.",
+    "status": "SCOPED_CI_VERIFIED",
+    "ci": {
+      "status": "PASS",
+      "run_id": 41241062641,
+      "run_url": "https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41241062641",
+      "workflows_total": 20,
+      "workflows_success": 20
+    },
+    "diagnostics": {
+      "linux_automation_log_pid": 156,
+      "linux_visible_job_console_pid": 53,
+      "windows_automation_log_pid": 0,
+      "status": "OPEN_LIFECYCLE_DEBT"
+    },
+    "gpu_manual": "NOT_RUN"
   }
 }

@@ -1,133 +1,180 @@
 {
   "status": "SCOPED_VERIFIED",
-  "family": "DECLARATIVE_CHOICE_INTEGRATION_PROTOTYPE",
-  "branch": "codex/items-v28-from-main",
+  "family": "DECLARATIVE_CHOICE_AND_PASSIVE_FAMILIES",
+  "functional_sha": "7f973f5bfb63cfae12f1dbaa956512e5291df0aa",
+  "working_branch": "codex/items-v28-from-main",
   "pr": 118,
-  "base": "47f42aef1a518eefb744ad310f89b6e2d3ce7108",
-  "functional_sha": "0c1f48eb4bd40ca15d794847d89c16ea6614ceb9",
+  "base_of_extension": "648a2c86541b6a381424413e2b2e28231d127353",
+  "guard_base_unchanged": "47f42aef1a518eefb744ad310f89b6e2d3ce7108",
+  "ids": [
+    "choice_band",
+    "choice_specs",
+    "choice_scarf",
+    "leftovers",
+    "life_orb",
+    "rocky_helmet"
+  ],
+  "new_ids": [
+    "leftovers",
+    "life_orb",
+    "rocky_helmet"
+  ],
+  "checks_per_platform": 1935,
+  "scenarios_per_platform": 30,
+  "unit_tests_per_platform": 31,
+  "families_per_platform": [
+    {
+      "family": "choice_held_items",
+      "items": 3,
+      "scenarios": 15,
+      "scenario_checks": 669,
+      "status": "SCOPED_VERIFIED"
+    },
+    {
+      "family": "passive_reactive_held_items",
+      "items": 3,
+      "scenarios": 15,
+      "scenario_checks": 1263,
+      "status": "SCOPED_VERIFIED"
+    }
+  ],
+  "shared_components": [
+    "single SceneTree runner",
+    "fixture/equipment/inventory ownership",
+    "SaveV2 checkpoint reopen",
+    "map/bag/owner transfer",
+    "settlement and HP persistence",
+    "SHA evidence and report orchestration"
+  ],
+  "new_components": [
+    "passive_items.json",
+    "pure GDScript effect expectations",
+    "Python contract/raw-checkpoint validation",
+    "17 new negative contract tests"
+  ],
   "ci": {
     "status": "PASS",
-    "run_id": 41237512322,
-    "run_url": "https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41237512322",
+    "run_id": 41241062641,
+    "run_url": "https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41241062641",
     "workflows_total": 20,
     "workflows_success": 20,
     "workflows": [
       {
-        "id": 41237515522,
-        "name": "Trainer Battle Session Tests",
-        "status": "completed",
-        "conclusion": "success"
-      },
-      {
-        "id": 41237514515,
-        "name": "Pokemon Calvo Technical Test Windows Build",
-        "status": "completed",
-        "conclusion": "success"
-      },
-      {
-        "id": 41237512359,
-        "name": "Trainer Evaluation Corpus Tests",
-        "status": "completed",
-        "conclusion": "success"
-      },
-      {
-        "id": 41237512337,
-        "name": "Trainer Self Play Evaluation Tests",
-        "status": "completed",
-        "conclusion": "success"
-      },
-      {
-        "id": 41237512326,
-        "name": "Trainer Intelligence Foundation Tests",
-        "status": "completed",
-        "conclusion": "success"
-      },
-      {
-        "id": 41237512304,
-        "name": "Trainer Search Depth Budget Tests",
-        "status": "completed",
-        "conclusion": "success"
-      },
-      {
-        "id": 41237512295,
+        "id": 41241062651,
         "name": "Trainer Tactical Intelligence Tests",
         "status": "completed",
         "conclusion": "success"
       },
       {
-        "id": 41237512361,
-        "name": "Trainer Belief Inference Tests",
-        "status": "completed",
-        "conclusion": "success"
-      },
-      {
-        "id": 41237512294,
-        "name": "Trainer Adaptive Branching Tests",
-        "status": "completed",
-        "conclusion": "success"
-      },
-      {
-        "id": 41237512296,
-        "name": "Trainer Search Limit Benchmark Tests",
-        "status": "completed",
-        "conclusion": "success"
-      },
-      {
-        "id": 41237512315,
+        "id": 41241062614,
         "name": "Trainer Search Foundation Tests",
         "status": "completed",
         "conclusion": "success"
       },
       {
-        "id": 41237512377,
+        "id": 41241062620,
+        "name": "Trainer Search Limit Benchmark Tests",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 41241062592,
+        "name": "Trainer Intelligence Foundation Tests",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 41241062664,
+        "name": "Trainer Search Depth Budget Tests",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 41241062638,
+        "name": "Trainer Belief Inference Tests",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 41241062653,
+        "name": "Trainer Battle Session Tests",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 41241062610,
+        "name": "Trainer Self Play Evaluation Tests",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 41241062636,
         "name": "Trainer Item Actions Tests",
         "status": "completed",
         "conclusion": "success"
       },
       {
-        "id": 41237512313,
+        "id": 41241062689,
         "name": "Trainer Loadouts Tests",
         "status": "completed",
         "conclusion": "success"
       },
       {
-        "id": 41237512297,
+        "id": 41241062665,
         "name": "Trainer Strategic Switching V2 Tests",
         "status": "completed",
         "conclusion": "success"
       },
       {
-        "id": 41237512357,
+        "id": 41241062671,
         "name": "Trainer Public Coverage Beliefs Tests",
         "status": "completed",
         "conclusion": "success"
       },
       {
-        "id": 41237512305,
+        "id": 41241062635,
         "name": "Spanish Types Foundation Tests",
         "status": "completed",
         "conclusion": "success"
       },
       {
-        "id": 41237512292,
+        "id": 41241062680,
         "name": "Data Foundation V3 Tests",
         "status": "completed",
         "conclusion": "success"
       },
       {
-        "id": 41237512386,
+        "id": 41241062593,
+        "name": "Trainer Evaluation Corpus Tests",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 41241062595,
+        "name": "Trainer Adaptive Branching Tests",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 41241062587,
         "name": "Godot 4.7 Tests",
         "status": "completed",
         "conclusion": "success"
       },
       {
-        "id": 41237512339,
+        "id": 41241062695,
+        "name": "Pokemon Calvo Technical Test Windows Build",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 41241062594,
         "name": "Trainer Team Composition Tests",
         "status": "completed",
         "conclusion": "success"
       },
       {
-        "id": 41237512322,
+        "id": 41241062641,
         "name": "Item Closure V3 (EV, inventory and regressions)",
         "status": "completed",
         "conclusion": "success"
@@ -136,19 +183,43 @@
     "platforms": {
       "linux": {
         "status": "SCOPED_VERIFIED",
-        "checks": 665,
-        "items": 3,
-        "scenarios": 15,
-        "functional_sha": "0c1f48eb4bd40ca15d794847d89c16ea6614ceb9",
-        "checkout_sha": "447a516fa4c2d32aa8ee6deb06f106ef0a7b214b",
-        "descriptor_sha256": "6c4956d23eaac6ba57c350067786ca1f6159dd2edc2e26407a33a11d159d3bb9",
-        "test_sources_sha256": {
-          "tests/gameplay/item_automation_v28.gd.uid": "9a97ae4f99183d662276e19b42f8d2a8b1dc7cd18c5442ff0a0e04a0d28006c1",
+        "functional_sha": "7f973f5bfb63cfae12f1dbaa956512e5291df0aa",
+        "checkout_sha": "4a812aeea2a297e9ca396cb82918e12188c027e7",
+        "checks": 1935,
+        "items": 6,
+        "scenarios": 30,
+        "families": [
+          {
+            "family": "choice_held_items",
+            "items": 3,
+            "scenarios": 15,
+            "scenario_checks": 669,
+            "status": "SCOPED_VERIFIED"
+          },
+          {
+            "family": "passive_reactive_held_items",
+            "items": 3,
+            "scenarios": 15,
+            "scenario_checks": 1263,
+            "status": "SCOPED_VERIFIED"
+          }
+        ],
+        "descriptor_hashes": {
           "tests/fixtures/item_automation_v28/choice_items.json": "6c4956d23eaac6ba57c350067786ca1f6159dd2edc2e26407a33a11d159d3bb9",
-          ".github/workflows/item-closure-v3.yml": "f552ba75790925924db659f6cb0b973b1ec8a111765b00158fc91b16d1586d09",
-          "tools/item_audit/automation_v28.py": "bc102cbe60a199421e8a6353219bf90f4a6a0da896dfb385c1a9bbffaa3d2553",
-          "tests/gameplay/item_automation_v28.gd": "92b0f134c9fdc4744804f405075da81b00aee6372513d4a6ca2ec22524cb5919",
-          "tests/tools/test_item_automation_v28.py": "7b4764d031955b0e578aee35f83df1e727d988d038001cbb4cc910032a09443f"
+          "tests/fixtures/item_automation_v28/passive_items.json": "6a0feca42cbf6f54ca1700789534506a40f751c19af10c50adec13cec40e7e1f"
+        },
+        "test_sources_sha256": {
+          "tests/tools/test_item_automation_v28.py": "7b4764d031955b0e578aee35f83df1e727d988d038001cbb4cc910032a09443f",
+          "tests/fixtures/item_automation_v28/passive_items.json": "6a0feca42cbf6f54ca1700789534506a40f751c19af10c50adec13cec40e7e1f",
+          "tests/gameplay/item_automation_v28.gd.uid": "9a97ae4f99183d662276e19b42f8d2a8b1dc7cd18c5442ff0a0e04a0d28006c1",
+          "tests/gameplay/item_automation_v28.gd": "71e4ee67407af2bdf4bf50c30244189b449797a1c9384ccae1f8209777788d84",
+          "tools/item_audit/automation_contracts_v28.py": "d2c288944597b6fad8be2d0e72a2bdfb91a4adf51960d71854a14b0d2bf19047",
+          ".github/workflows/item-closure-v3.yml": "b7f253481bbb232d18137e881f405e988b5c2d8ae844bc2a7ed34e7378ba4f89",
+          "tools/item_audit/automation_v28.py": "56734187109d935754506af06244b9685ae1dec4c3ec3e6b481e4ec413cb0ec3",
+          "tests/tools/test_item_automation_passive_v28.py": "1adb93dd7a03547016e883900de4c9146ca37e029ff0854d9b74c0b8c201eef6",
+          "tests/gameplay/item_automation_effects_v28.gd.uid": "710262e04f3e2058043e4088564c055fed0efac8b24f8e503733aa1ce2d93c94",
+          "tests/fixtures/item_automation_v28/choice_items.json": "6c4956d23eaac6ba57c350067786ca1f6159dd2edc2e26407a33a11d159d3bb9",
+          "tests/gameplay/item_automation_effects_v28.gd": "ee2e372f7f6c41c0eac706c893538e316a5c229985b0a9a658317b9b3d0076c6"
         },
         "protected": {
           "runtime_files": 878,
@@ -302,7 +373,7 @@
                 "status": "SCOPED_VERIFIED"
               },
               {
-                "checks": 26,
+                "checks": 28,
                 "errors": [],
                 "id": "choice_band",
                 "observed": {
@@ -458,7 +529,7 @@
                 "status": "SCOPED_VERIFIED"
               },
               {
-                "checks": 26,
+                "checks": 28,
                 "errors": [],
                 "id": "choice_specs",
                 "observed": {
@@ -614,7 +685,7 @@
                 "status": "SCOPED_VERIFIED"
               },
               {
-                "checks": 26,
+                "checks": 28,
                 "errors": [],
                 "id": "choice_scarf",
                 "observed": {
@@ -629,85 +700,1547 @@
                 "status": "SCOPED_VERIFIED"
               }
             ]
+          },
+          {
+            "id": "leftovers",
+            "status": "SCOPED_VERIFIED",
+            "scenarios": [
+              {
+                "checks": 117,
+                "errors": [],
+                "id": "leftovers",
+                "observed": {
+                  "active": {
+                    "evidence": "leftovers_heal_partial_active.json",
+                    "frames": [
+                      {
+                        "after": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 191,
+                          "target_max_hp": 341
+                        },
+                        "before": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 170,
+                          "target_max_hp": 341
+                        },
+                        "command": "move 1"
+                      },
+                      {
+                        "after": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 212,
+                          "target_max_hp": 341
+                        },
+                        "before": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 191,
+                          "target_max_hp": 341
+                        },
+                        "command": "move 1"
+                      }
+                    ],
+                    "restored": true,
+                    "sha256": "a9f5207d1cc0ae02e613a08641ff7947f19976d95ba66b1516e9926f4687a280",
+                    "valid": true
+                  },
+                  "none": {
+                    "evidence": "leftovers_heal_partial_none.json",
+                    "frames": [
+                      {
+                        "after": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 170,
+                          "target_max_hp": 341
+                        },
+                        "before": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 170,
+                          "target_max_hp": 341
+                        },
+                        "command": "move 1"
+                      },
+                      {
+                        "after": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 170,
+                          "target_max_hp": 341
+                        },
+                        "before": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 170,
+                          "target_max_hp": 341
+                        },
+                        "command": "move 1"
+                      }
+                    ],
+                    "restored": true,
+                    "sha256": "52b0b381d41c341bf9e183358e20305bc0d5b238931c7aecfe67f72f76d0931c",
+                    "valid": true
+                  },
+                  "reserve": {
+                    "evidence": "leftovers_heal_partial_reserve.json",
+                    "frames": [
+                      {
+                        "after": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 170,
+                          "target_max_hp": 341
+                        },
+                        "before": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 170,
+                          "target_max_hp": 341
+                        },
+                        "command": "move 1"
+                      },
+                      {
+                        "after": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 170,
+                          "target_max_hp": 341
+                        },
+                        "before": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 170,
+                          "target_max_hp": 341
+                        },
+                        "command": "move 1"
+                      }
+                    ],
+                    "restored": true,
+                    "sha256": "837c84d576684014ea6da889c2e4505bdd46bd7a700abc3cb1398f07d7e6914c",
+                    "valid": true
+                  }
+                },
+                "scenario": "heal_partial",
+                "status": "SCOPED_VERIFIED"
+              },
+              {
+                "checks": 81,
+                "errors": [],
+                "id": "leftovers",
+                "observed": {
+                  "active": {
+                    "evidence": "leftovers_heal_cap_active.json",
+                    "frames": [
+                      {
+                        "after": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 341,
+                          "target_max_hp": 341
+                        },
+                        "before": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 340,
+                          "target_max_hp": 341
+                        },
+                        "command": "move 1"
+                      }
+                    ],
+                    "restored": true,
+                    "sha256": "1536cbf5c6686926925ebed74ac198448e1f85bbee8ef95bdece86d21176f2b9",
+                    "valid": true
+                  },
+                  "none": {
+                    "evidence": "leftovers_heal_cap_none.json",
+                    "frames": [
+                      {
+                        "after": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 340,
+                          "target_max_hp": 341
+                        },
+                        "before": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 340,
+                          "target_max_hp": 341
+                        },
+                        "command": "move 1"
+                      }
+                    ],
+                    "restored": true,
+                    "sha256": "e2bb888581b9da93f2ad49b9f2bd257cafd62c9b63589929bec633cb295a9139",
+                    "valid": true
+                  },
+                  "reserve": {
+                    "evidence": "leftovers_heal_cap_reserve.json",
+                    "frames": [
+                      {
+                        "after": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 340,
+                          "target_max_hp": 341
+                        },
+                        "before": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 340,
+                          "target_max_hp": 341
+                        },
+                        "command": "move 1"
+                      }
+                    ],
+                    "restored": true,
+                    "sha256": "2046d5b430da87306ade77db37fc27f53cec30b034e9b3be7327ab2481c669e0",
+                    "valid": true
+                  }
+                },
+                "scenario": "heal_cap",
+                "status": "SCOPED_VERIFIED"
+              },
+              {
+                "checks": 81,
+                "errors": [],
+                "id": "leftovers",
+                "observed": {
+                  "active": {
+                    "evidence": "leftovers_full_hp_control_active.json",
+                    "frames": [
+                      {
+                        "after": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 341,
+                          "target_max_hp": 341
+                        },
+                        "before": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 341,
+                          "target_max_hp": 341
+                        },
+                        "command": "move 1"
+                      }
+                    ],
+                    "restored": true,
+                    "sha256": "8db81059826a04c7abea043eddf8fa0164d9290613db85b04a7e1b887ed9a21f",
+                    "valid": true
+                  },
+                  "none": {
+                    "evidence": "leftovers_full_hp_control_none.json",
+                    "frames": [
+                      {
+                        "after": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 341,
+                          "target_max_hp": 341
+                        },
+                        "before": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 341,
+                          "target_max_hp": 341
+                        },
+                        "command": "move 1"
+                      }
+                    ],
+                    "restored": true,
+                    "sha256": "1f01965847ec4a644bd62086cdbeb9b83e32e8017d01681afa81de071898454b",
+                    "valid": true
+                  },
+                  "reserve": {
+                    "evidence": "leftovers_full_hp_control_reserve.json",
+                    "frames": [
+                      {
+                        "after": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 341,
+                          "target_max_hp": 341
+                        },
+                        "before": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 341,
+                          "target_max_hp": 341
+                        },
+                        "command": "move 1"
+                      }
+                    ],
+                    "restored": true,
+                    "sha256": "d470deb7005cc4c6f2787ed10b18fcbd11f5bb806c808384d9be0ce2d60e76f2",
+                    "valid": true
+                  }
+                },
+                "scenario": "full_hp_control",
+                "status": "SCOPED_VERIFIED"
+              },
+              {
+                "checks": 117,
+                "errors": [],
+                "id": "leftovers",
+                "observed": {
+                  "active": {
+                    "evidence": "leftovers_heal_switched_owner_active.json",
+                    "frames": [
+                      {
+                        "after": {
+                          "active_id": "reserve",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 170,
+                          "target_max_hp": 341
+                        },
+                        "before": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 170,
+                          "target_max_hp": 341
+                        },
+                        "command": "switch_to_reserve"
+                      },
+                      {
+                        "after": {
+                          "active_id": "reserve",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 170,
+                          "target_max_hp": 341
+                        },
+                        "before": {
+                          "active_id": "reserve",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 170,
+                          "target_max_hp": 341
+                        },
+                        "command": "move 1"
+                      }
+                    ],
+                    "restored": true,
+                    "sha256": "ca560b682cb34bec1e4b4f5bd1bf8ab48a400c93dfdfaec6351f2cbcfeec61e7",
+                    "valid": true
+                  },
+                  "none": {
+                    "evidence": "leftovers_heal_switched_owner_none.json",
+                    "frames": [
+                      {
+                        "after": {
+                          "active_id": "reserve",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 170,
+                          "target_max_hp": 341
+                        },
+                        "before": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 170,
+                          "target_max_hp": 341
+                        },
+                        "command": "switch_to_reserve"
+                      },
+                      {
+                        "after": {
+                          "active_id": "reserve",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 170,
+                          "target_max_hp": 341
+                        },
+                        "before": {
+                          "active_id": "reserve",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 170,
+                          "target_max_hp": 341
+                        },
+                        "command": "move 1"
+                      }
+                    ],
+                    "restored": true,
+                    "sha256": "a182d1c30fa07e62cea5c271cc367f07d92a1dc2e648d640fecb3bf318a2a0fa",
+                    "valid": true
+                  },
+                  "reserve": {
+                    "evidence": "leftovers_heal_switched_owner_reserve.json",
+                    "frames": [
+                      {
+                        "after": {
+                          "active_id": "reserve",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 191,
+                          "target_max_hp": 341
+                        },
+                        "before": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 170,
+                          "target_max_hp": 341
+                        },
+                        "command": "switch_to_reserve"
+                      },
+                      {
+                        "after": {
+                          "active_id": "reserve",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 212,
+                          "target_max_hp": 341
+                        },
+                        "before": {
+                          "active_id": "reserve",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 191,
+                          "target_max_hp": 341
+                        },
+                        "command": "move 1"
+                      }
+                    ],
+                    "restored": true,
+                    "sha256": "2e596b1e4a077a39b375b39bf43e8ff221ba25087e7688493e92e35906c53d18",
+                    "valid": true
+                  }
+                },
+                "scenario": "heal_switched_owner",
+                "status": "SCOPED_VERIFIED"
+              },
+              {
+                "checks": 28,
+                "errors": [],
+                "id": "leftovers",
+                "observed": {
+                  "battle_owner": "technical_starter",
+                  "map_save": "map_leftovers.json",
+                  "physical_units": 2,
+                  "second_owner": "recipient_leftovers",
+                  "sha256": "838885796718378cb319112809af0ccd6b5dcc350841bb8ac22bb6ded3c7866f",
+                  "valid": true
+                },
+                "scenario": "map_bag_owner_save",
+                "status": "SCOPED_VERIFIED"
+              }
+            ]
+          },
+          {
+            "id": "life_orb",
+            "status": "SCOPED_VERIFIED",
+            "scenarios": [
+              {
+                "checks": 123,
+                "errors": [],
+                "id": "life_orb",
+                "observed": {
+                  "active": {
+                    "evidence": "life_orb_physical_boost_recoil_active.json",
+                    "frames": [
+                      {
+                        "after": {
+                          "active_id": "own",
+                          "foe_hp": 301,
+                          "foe_max_hp": 341,
+                          "target_hp": 307,
+                          "target_max_hp": 341
+                        },
+                        "before": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 341,
+                          "target_max_hp": 341
+                        },
+                        "command": "move 1"
+                      },
+                      {
+                        "after": {
+                          "active_id": "own",
+                          "foe_hp": 263,
+                          "foe_max_hp": 341,
+                          "target_hp": 273,
+                          "target_max_hp": 341
+                        },
+                        "before": {
+                          "active_id": "own",
+                          "foe_hp": 301,
+                          "foe_max_hp": 341,
+                          "target_hp": 307,
+                          "target_max_hp": 341
+                        },
+                        "command": "move 1"
+                      }
+                    ],
+                    "restored": true,
+                    "sha256": "e8ad7583f48a2aa895f69c0e7afb4a71cdbf1779b02b981bbb99a2e85e2a7c3d",
+                    "valid": true
+                  },
+                  "none": {
+                    "evidence": "life_orb_physical_boost_recoil_none.json",
+                    "frames": [
+                      {
+                        "after": {
+                          "active_id": "own",
+                          "foe_hp": 310,
+                          "foe_max_hp": 341,
+                          "target_hp": 341,
+                          "target_max_hp": 341
+                        },
+                        "before": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 341,
+                          "target_max_hp": 341
+                        },
+                        "command": "move 1"
+                      },
+                      {
+                        "after": {
+                          "active_id": "own",
+                          "foe_hp": 281,
+                          "foe_max_hp": 341,
+                          "target_hp": 341,
+                          "target_max_hp": 341
+                        },
+                        "before": {
+                          "active_id": "own",
+                          "foe_hp": 310,
+                          "foe_max_hp": 341,
+                          "target_hp": 341,
+                          "target_max_hp": 341
+                        },
+                        "command": "move 1"
+                      }
+                    ],
+                    "restored": true,
+                    "sha256": "ca203c140280d98f3476702918b3e4031916ba108a88d484fc5e298ab587fd5e",
+                    "valid": true
+                  },
+                  "reserve": {
+                    "evidence": "life_orb_physical_boost_recoil_reserve.json",
+                    "frames": [
+                      {
+                        "after": {
+                          "active_id": "own",
+                          "foe_hp": 310,
+                          "foe_max_hp": 341,
+                          "target_hp": 341,
+                          "target_max_hp": 341
+                        },
+                        "before": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 341,
+                          "target_max_hp": 341
+                        },
+                        "command": "move 1"
+                      },
+                      {
+                        "after": {
+                          "active_id": "own",
+                          "foe_hp": 281,
+                          "foe_max_hp": 341,
+                          "target_hp": 341,
+                          "target_max_hp": 341
+                        },
+                        "before": {
+                          "active_id": "own",
+                          "foe_hp": 310,
+                          "foe_max_hp": 341,
+                          "target_hp": 341,
+                          "target_max_hp": 341
+                        },
+                        "command": "move 1"
+                      }
+                    ],
+                    "restored": true,
+                    "sha256": "238172f45695428ddc939357c75240de64cb59c37d062f8195532c3d9adb56bc",
+                    "valid": true
+                  }
+                },
+                "scenario": "physical_boost_recoil",
+                "status": "SCOPED_VERIFIED"
+              },
+              {
+                "checks": 84,
+                "errors": [],
+                "id": "life_orb",
+                "observed": {
+                  "active": {
+                    "evidence": "life_orb_special_boost_recoil_active.json",
+                    "frames": [
+                      {
+                        "after": {
+                          "active_id": "own",
+                          "foe_hp": 320,
+                          "foe_max_hp": 341,
+                          "target_hp": 307,
+                          "target_max_hp": 341
+                        },
+                        "before": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 341,
+                          "target_max_hp": 341
+                        },
+                        "command": "move 1"
+                      }
+                    ],
+                    "restored": true,
+                    "sha256": "8a403feac3230dd61ff968259f5686aec0f179d1423b226bafb29b5cf6144e6c",
+                    "valid": true
+                  },
+                  "none": {
+                    "evidence": "life_orb_special_boost_recoil_none.json",
+                    "frames": [
+                      {
+                        "after": {
+                          "active_id": "own",
+                          "foe_hp": 325,
+                          "foe_max_hp": 341,
+                          "target_hp": 341,
+                          "target_max_hp": 341
+                        },
+                        "before": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 341,
+                          "target_max_hp": 341
+                        },
+                        "command": "move 1"
+                      }
+                    ],
+                    "restored": true,
+                    "sha256": "4077d4462679122c4c15075341cd99d7dfe10d1664cee981736c0f80de1b9ab1",
+                    "valid": true
+                  },
+                  "reserve": {
+                    "evidence": "life_orb_special_boost_recoil_reserve.json",
+                    "frames": [
+                      {
+                        "after": {
+                          "active_id": "own",
+                          "foe_hp": 325,
+                          "foe_max_hp": 341,
+                          "target_hp": 341,
+                          "target_max_hp": 341
+                        },
+                        "before": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 341,
+                          "target_max_hp": 341
+                        },
+                        "command": "move 1"
+                      }
+                    ],
+                    "restored": true,
+                    "sha256": "ea40748b1acd7e495c5c8b03f9c992bdbe8ad94bd62e821544a436ba3648c379",
+                    "valid": true
+                  }
+                },
+                "scenario": "special_boost_recoil",
+                "status": "SCOPED_VERIFIED"
+              },
+              {
+                "checks": 81,
+                "errors": [],
+                "id": "life_orb",
+                "observed": {
+                  "active": {
+                    "evidence": "life_orb_status_no_recoil_active.json",
+                    "frames": [
+                      {
+                        "after": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 341,
+                          "target_max_hp": 341
+                        },
+                        "before": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 341,
+                          "target_max_hp": 341
+                        },
+                        "command": "move 1"
+                      }
+                    ],
+                    "restored": true,
+                    "sha256": "8d3ce193030bef56b21f5678b0dd39f150b17c74ff4271c726e939e365200ba7",
+                    "valid": true
+                  },
+                  "none": {
+                    "evidence": "life_orb_status_no_recoil_none.json",
+                    "frames": [
+                      {
+                        "after": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 341,
+                          "target_max_hp": 341
+                        },
+                        "before": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 341,
+                          "target_max_hp": 341
+                        },
+                        "command": "move 1"
+                      }
+                    ],
+                    "restored": true,
+                    "sha256": "a3911d82e721b783c9086437b734a05360add3d0f82701d10edc25bb1dde3fd1",
+                    "valid": true
+                  },
+                  "reserve": {
+                    "evidence": "life_orb_status_no_recoil_reserve.json",
+                    "frames": [
+                      {
+                        "after": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 341,
+                          "target_max_hp": 341
+                        },
+                        "before": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 341,
+                          "target_max_hp": 341
+                        },
+                        "command": "move 1"
+                      }
+                    ],
+                    "restored": true,
+                    "sha256": "e005165c002737bf4f338f6a5d1e9baee2848158113950676b265d2288b9a251",
+                    "valid": true
+                  }
+                },
+                "scenario": "status_no_recoil",
+                "status": "SCOPED_VERIFIED"
+              },
+              {
+                "checks": 81,
+                "errors": [],
+                "id": "life_orb",
+                "observed": {
+                  "active": {
+                    "evidence": "life_orb_immune_no_recoil_active.json",
+                    "frames": [
+                      {
+                        "after": {
+                          "active_id": "own",
+                          "foe_hp": 261,
+                          "foe_max_hp": 261,
+                          "target_hp": 341,
+                          "target_max_hp": 341
+                        },
+                        "before": {
+                          "active_id": "own",
+                          "foe_hp": 261,
+                          "foe_max_hp": 261,
+                          "target_hp": 341,
+                          "target_max_hp": 341
+                        },
+                        "command": "move 1"
+                      }
+                    ],
+                    "restored": true,
+                    "sha256": "e7ebf39c0943bc7c68c0580035324cc3ba7d3ea335373b6c2a65e8442a3a2faa",
+                    "valid": true
+                  },
+                  "none": {
+                    "evidence": "life_orb_immune_no_recoil_none.json",
+                    "frames": [
+                      {
+                        "after": {
+                          "active_id": "own",
+                          "foe_hp": 261,
+                          "foe_max_hp": 261,
+                          "target_hp": 341,
+                          "target_max_hp": 341
+                        },
+                        "before": {
+                          "active_id": "own",
+                          "foe_hp": 261,
+                          "foe_max_hp": 261,
+                          "target_hp": 341,
+                          "target_max_hp": 341
+                        },
+                        "command": "move 1"
+                      }
+                    ],
+                    "restored": true,
+                    "sha256": "ad726010502fd4bf74be9041d2ea6830b58db9b5470193ef4ab78445618a4312",
+                    "valid": true
+                  },
+                  "reserve": {
+                    "evidence": "life_orb_immune_no_recoil_reserve.json",
+                    "frames": [
+                      {
+                        "after": {
+                          "active_id": "own",
+                          "foe_hp": 261,
+                          "foe_max_hp": 261,
+                          "target_hp": 341,
+                          "target_max_hp": 341
+                        },
+                        "before": {
+                          "active_id": "own",
+                          "foe_hp": 261,
+                          "foe_max_hp": 261,
+                          "target_hp": 341,
+                          "target_max_hp": 341
+                        },
+                        "command": "move 1"
+                      }
+                    ],
+                    "restored": true,
+                    "sha256": "dc7e26b8d51505daed560e08de999769e1524d5f095effcc3014f194710d22ab",
+                    "valid": true
+                  }
+                },
+                "scenario": "immune_no_recoil",
+                "status": "SCOPED_VERIFIED"
+              },
+              {
+                "checks": 28,
+                "errors": [],
+                "id": "life_orb",
+                "observed": {
+                  "battle_owner": "technical_starter",
+                  "map_save": "map_life_orb.json",
+                  "physical_units": 2,
+                  "second_owner": "recipient_life_orb",
+                  "sha256": "58e40a374f379c4ed27ca42000193a11f63a913d429ec6cdce70576ead43faee",
+                  "valid": true
+                },
+                "scenario": "map_bag_owner_save",
+                "status": "SCOPED_VERIFIED"
+              }
+            ]
+          },
+          {
+            "id": "rocky_helmet",
+            "status": "SCOPED_VERIFIED",
+            "scenarios": [
+              {
+                "checks": 123,
+                "errors": [],
+                "id": "rocky_helmet",
+                "observed": {
+                  "active": {
+                    "evidence": "rocky_helmet_contact_damage_active.json",
+                    "frames": [
+                      {
+                        "after": {
+                          "active_id": "own",
+                          "foe_hp": 285,
+                          "foe_max_hp": 341,
+                          "target_hp": 311,
+                          "target_max_hp": 341
+                        },
+                        "before": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 341,
+                          "target_max_hp": 341
+                        },
+                        "command": "move 1"
+                      },
+                      {
+                        "after": {
+                          "active_id": "own",
+                          "foe_hp": 229,
+                          "foe_max_hp": 341,
+                          "target_hp": 280,
+                          "target_max_hp": 341
+                        },
+                        "before": {
+                          "active_id": "own",
+                          "foe_hp": 285,
+                          "foe_max_hp": 341,
+                          "target_hp": 311,
+                          "target_max_hp": 341
+                        },
+                        "command": "move 1"
+                      }
+                    ],
+                    "restored": true,
+                    "sha256": "0e933e080dc48e4a23854b640f59a63446ccdfeee706f6daeff54d35587162ac",
+                    "valid": true
+                  },
+                  "none": {
+                    "evidence": "rocky_helmet_contact_damage_none.json",
+                    "frames": [
+                      {
+                        "after": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 311,
+                          "target_max_hp": 341
+                        },
+                        "before": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 341,
+                          "target_max_hp": 341
+                        },
+                        "command": "move 1"
+                      },
+                      {
+                        "after": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 280,
+                          "target_max_hp": 341
+                        },
+                        "before": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 311,
+                          "target_max_hp": 341
+                        },
+                        "command": "move 1"
+                      }
+                    ],
+                    "restored": true,
+                    "sha256": "7f101eadd0bb9ada2a32450d6b8517455ad1a9c3ae7ac87687ea61a52f13489a",
+                    "valid": true
+                  },
+                  "reserve": {
+                    "evidence": "rocky_helmet_contact_damage_reserve.json",
+                    "frames": [
+                      {
+                        "after": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 311,
+                          "target_max_hp": 341
+                        },
+                        "before": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 341,
+                          "target_max_hp": 341
+                        },
+                        "command": "move 1"
+                      },
+                      {
+                        "after": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 280,
+                          "target_max_hp": 341
+                        },
+                        "before": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 311,
+                          "target_max_hp": 341
+                        },
+                        "command": "move 1"
+                      }
+                    ],
+                    "restored": true,
+                    "sha256": "c20e7988d6ccfe45f561ef1171a27cc0bf79135c30a1bb242146dd22349c063b",
+                    "valid": true
+                  }
+                },
+                "scenario": "contact_damage",
+                "status": "SCOPED_VERIFIED"
+              },
+              {
+                "checks": 84,
+                "errors": [],
+                "id": "rocky_helmet",
+                "observed": {
+                  "active": {
+                    "evidence": "rocky_helmet_special_no_contact_active.json",
+                    "frames": [
+                      {
+                        "after": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 311,
+                          "target_max_hp": 341
+                        },
+                        "before": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 341,
+                          "target_max_hp": 341
+                        },
+                        "command": "move 1"
+                      }
+                    ],
+                    "restored": true,
+                    "sha256": "4c9dc30e8324c020fddaabab05d8dd2a045365183042d70b312f1725a17d0f0b",
+                    "valid": true
+                  },
+                  "none": {
+                    "evidence": "rocky_helmet_special_no_contact_none.json",
+                    "frames": [
+                      {
+                        "after": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 311,
+                          "target_max_hp": 341
+                        },
+                        "before": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 341,
+                          "target_max_hp": 341
+                        },
+                        "command": "move 1"
+                      }
+                    ],
+                    "restored": true,
+                    "sha256": "ddcc57ff4302e84dc830c82b8df3895587f95255df2a6b698e0aeeb2af7b3949",
+                    "valid": true
+                  },
+                  "reserve": {
+                    "evidence": "rocky_helmet_special_no_contact_reserve.json",
+                    "frames": [
+                      {
+                        "after": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 311,
+                          "target_max_hp": 341
+                        },
+                        "before": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 341,
+                          "target_max_hp": 341
+                        },
+                        "command": "move 1"
+                      }
+                    ],
+                    "restored": true,
+                    "sha256": "364741b529b666f3bee026e1027a9140cc344e9be13ddd4a36d6d5231a45bb4d",
+                    "valid": true
+                  }
+                },
+                "scenario": "special_no_contact",
+                "status": "SCOPED_VERIFIED"
+              },
+              {
+                "checks": 84,
+                "errors": [],
+                "id": "rocky_helmet",
+                "observed": {
+                  "active": {
+                    "evidence": "rocky_helmet_physical_no_contact_active.json",
+                    "frames": [
+                      {
+                        "after": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 268,
+                          "target_max_hp": 341
+                        },
+                        "before": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 341,
+                          "target_max_hp": 341
+                        },
+                        "command": "move 1"
+                      }
+                    ],
+                    "restored": true,
+                    "sha256": "40798d31c0a4648f8191001ef9ccd3b36f3af54d054bab46c8b2585882401283",
+                    "valid": true
+                  },
+                  "none": {
+                    "evidence": "rocky_helmet_physical_no_contact_none.json",
+                    "frames": [
+                      {
+                        "after": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 268,
+                          "target_max_hp": 341
+                        },
+                        "before": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 341,
+                          "target_max_hp": 341
+                        },
+                        "command": "move 1"
+                      }
+                    ],
+                    "restored": true,
+                    "sha256": "5666201d9da9692ecd16a2294a0f1d99de9b3462eed0808e713a821afdb53067",
+                    "valid": true
+                  },
+                  "reserve": {
+                    "evidence": "rocky_helmet_physical_no_contact_reserve.json",
+                    "frames": [
+                      {
+                        "after": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 268,
+                          "target_max_hp": 341
+                        },
+                        "before": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 341,
+                          "target_max_hp": 341
+                        },
+                        "command": "move 1"
+                      }
+                    ],
+                    "restored": true,
+                    "sha256": "d739ccc48def193e76e40b206903f95c66d7805eb3b481cf0e8ebe372992b7aa",
+                    "valid": true
+                  }
+                },
+                "scenario": "physical_no_contact",
+                "status": "SCOPED_VERIFIED"
+              },
+              {
+                "checks": 123,
+                "errors": [],
+                "id": "rocky_helmet",
+                "observed": {
+                  "active": {
+                    "evidence": "rocky_helmet_contact_switched_owner_active.json",
+                    "frames": [
+                      {
+                        "after": {
+                          "active_id": "reserve",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 309,
+                          "target_max_hp": 341
+                        },
+                        "before": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 341,
+                          "target_max_hp": 341
+                        },
+                        "command": "switch_to_reserve"
+                      },
+                      {
+                        "after": {
+                          "active_id": "reserve",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 277,
+                          "target_max_hp": 341
+                        },
+                        "before": {
+                          "active_id": "reserve",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 309,
+                          "target_max_hp": 341
+                        },
+                        "command": "move 1"
+                      }
+                    ],
+                    "restored": true,
+                    "sha256": "4141507945c3a235bfd9557cf215bd3bb38f50559e2bb74519ac22a049890954",
+                    "valid": true
+                  },
+                  "none": {
+                    "evidence": "rocky_helmet_contact_switched_owner_none.json",
+                    "frames": [
+                      {
+                        "after": {
+                          "active_id": "reserve",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 309,
+                          "target_max_hp": 341
+                        },
+                        "before": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 341,
+                          "target_max_hp": 341
+                        },
+                        "command": "switch_to_reserve"
+                      },
+                      {
+                        "after": {
+                          "active_id": "reserve",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 277,
+                          "target_max_hp": 341
+                        },
+                        "before": {
+                          "active_id": "reserve",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 309,
+                          "target_max_hp": 341
+                        },
+                        "command": "move 1"
+                      }
+                    ],
+                    "restored": true,
+                    "sha256": "e3fa1d01d702162cf62a5decc5cda88c6c3cd77ca41cbbd3c0b26bae548f16df",
+                    "valid": true
+                  },
+                  "reserve": {
+                    "evidence": "rocky_helmet_contact_switched_owner_reserve.json",
+                    "frames": [
+                      {
+                        "after": {
+                          "active_id": "reserve",
+                          "foe_hp": 285,
+                          "foe_max_hp": 341,
+                          "target_hp": 309,
+                          "target_max_hp": 341
+                        },
+                        "before": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 341,
+                          "target_max_hp": 341
+                        },
+                        "command": "switch_to_reserve"
+                      },
+                      {
+                        "after": {
+                          "active_id": "reserve",
+                          "foe_hp": 229,
+                          "foe_max_hp": 341,
+                          "target_hp": 277,
+                          "target_max_hp": 341
+                        },
+                        "before": {
+                          "active_id": "reserve",
+                          "foe_hp": 285,
+                          "foe_max_hp": 341,
+                          "target_hp": 309,
+                          "target_max_hp": 341
+                        },
+                        "command": "move 1"
+                      }
+                    ],
+                    "restored": true,
+                    "sha256": "18d524afaad736b306cd40d107064f069a966ac22160a80c15fe3380e4df1c87",
+                    "valid": true
+                  }
+                },
+                "scenario": "contact_switched_owner",
+                "status": "SCOPED_VERIFIED"
+              },
+              {
+                "checks": 28,
+                "errors": [],
+                "id": "rocky_helmet",
+                "observed": {
+                  "battle_owner": "technical_starter",
+                  "map_save": "map_rocky_helmet.json",
+                  "physical_units": 2,
+                  "second_owner": "recipient_rocky_helmet",
+                  "sha256": "b3fda7cde862e637dc2f22f538f9f9fb1efc1a0cd750a732aa11c1c7f929adc1",
+                  "valid": true
+                },
+                "scenario": "map_bag_owner_save",
+                "status": "SCOPED_VERIFIED"
+              }
+            ]
           }
         ],
-        "job_id": 124644284560,
-        "run_url": "https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41237512322",
-        "contract_tests": 14,
-        "raw_artifact_revalidated_locally": true,
+        "job_id": 124654879361,
+        "run_url": "https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41241062641",
+        "unit_tests": {
+          "choice_unchanged": 14,
+          "passive": 17
+        },
         "artifact": {
-          "id": 13056228903,
-          "zip_sha256": "534a29e51a22b3d92eaca9cf9b6e24f84532d53b96b0e1311d209866d5be8bc3"
+          "id": 13057876996,
+          "sha256": "sha256:b0e7b6583b85442e356270b66703dd6fde53e48e4de0beb63d49ef8f2dd08b72",
+          "raw_files_revalidated": 178
         },
         "worker_pid_diagnostics": [
-          "ERROR: The process 4072 does not exist or is not a child of the calling process.",
-          "ERROR: The process 4079 does not exist or is not a child of the calling process.",
-          "ERROR: The process 4086 does not exist or is not a child of the calling process.",
-          "ERROR: The process 4093 does not exist or is not a child of the calling process.",
-          "ERROR: The process 4100 does not exist or is not a child of the calling process.",
-          "ERROR: The process 4107 does not exist or is not a child of the calling process.",
-          "ERROR: The process 4114 does not exist or is not a child of the calling process.",
-          "ERROR: The process 4121 does not exist or is not a child of the calling process.",
-          "ERROR: The process 4128 does not exist or is not a child of the calling process.",
-          "ERROR: The process 4135 does not exist or is not a child of the calling process.",
-          "ERROR: The process 4142 does not exist or is not a child of the calling process.",
-          "ERROR: The process 4149 does not exist or is not a child of the calling process.",
-          "ERROR: The process 4157 does not exist or is not a child of the calling process.",
-          "ERROR: The process 4164 does not exist or is not a child of the calling process.",
-          "ERROR: The process 4171 does not exist or is not a child of the calling process.",
-          "ERROR: The process 4180 does not exist or is not a child of the calling process.",
-          "ERROR: The process 4194 does not exist or is not a child of the calling process.",
-          "ERROR: The process 4201 does not exist or is not a child of the calling process.",
-          "ERROR: The process 4208 does not exist or is not a child of the calling process.",
-          "ERROR: The process 4215 does not exist or is not a child of the calling process.",
-          "ERROR: The process 4222 does not exist or is not a child of the calling process.",
-          "ERROR: The process 4229 does not exist or is not a child of the calling process.",
-          "ERROR: The process 4236 does not exist or is not a child of the calling process.",
-          "ERROR: The process 4243 does not exist or is not a child of the calling process.",
-          "ERROR: The process 4250 does not exist or is not a child of the calling process.",
-          "ERROR: The process 4257 does not exist or is not a child of the calling process.",
-          "ERROR: The process 4265 does not exist or is not a child of the calling process.",
-          "ERROR: The process 4272 does not exist or is not a child of the calling process.",
-          "ERROR: The process 4279 does not exist or is not a child of the calling process.",
-          "ERROR: The process 4286 does not exist or is not a child of the calling process.",
-          "ERROR: The process 4293 does not exist or is not a child of the calling process.",
-          "ERROR: The process 4300 does not exist or is not a child of the calling process.",
-          "ERROR: The process 4316 does not exist or is not a child of the calling process.",
+          "ERROR: The process 4295 does not exist or is not a child of the calling process.",
+          "ERROR: The process 4303 does not exist or is not a child of the calling process.",
+          "ERROR: The process 4310 does not exist or is not a child of the calling process.",
+          "ERROR: The process 4317 does not exist or is not a child of the calling process.",
           "ERROR: The process 4324 does not exist or is not a child of the calling process.",
-          "ERROR: The process 4331 does not exist or is not a child of the calling process.",
-          "ERROR: The process 4338 does not exist or is not a child of the calling process.",
-          "ERROR: The process 4345 does not exist or is not a child of the calling process.",
-          "ERROR: The process 4352 does not exist or is not a child of the calling process.",
-          "ERROR: The process 4359 does not exist or is not a child of the calling process.",
-          "ERROR: The process 4366 does not exist or is not a child of the calling process.",
-          "ERROR: The process 4373 does not exist or is not a child of the calling process.",
-          "ERROR: The process 4380 does not exist or is not a child of the calling process.",
-          "ERROR: The process 4387 does not exist or is not a child of the calling process.",
-          "ERROR: The process 4394 does not exist or is not a child of the calling process.",
-          "ERROR: The process 4401 does not exist or is not a child of the calling process.",
-          "ERROR: The process 4408 does not exist or is not a child of the calling process.",
-          "ERROR: The process 4416 does not exist or is not a child of the calling process.",
-          "ERROR: The process 4425 does not exist or is not a child of the calling process."
+          "ERROR: The process 4333 does not exist or is not a child of the calling process.",
+          "ERROR: The process 4340 does not exist or is not a child of the calling process.",
+          "ERROR: The process 4347 does not exist or is not a child of the calling process.",
+          "ERROR: The process 4355 does not exist or is not a child of the calling process.",
+          "ERROR: The process 4362 does not exist or is not a child of the calling process.",
+          "ERROR: The process 4369 does not exist or is not a child of the calling process.",
+          "ERROR: The process 4376 does not exist or is not a child of the calling process.",
+          "ERROR: The process 4383 does not exist or is not a child of the calling process.",
+          "ERROR: The process 4390 does not exist or is not a child of the calling process.",
+          "ERROR: The process 4397 does not exist or is not a child of the calling process.",
+          "ERROR: The process 4404 does not exist or is not a child of the calling process.",
+          "ERROR: The process 4419 does not exist or is not a child of the calling process.",
+          "ERROR: The process 4426 does not exist or is not a child of the calling process.",
+          "ERROR: The process 4433 does not exist or is not a child of the calling process.",
+          "ERROR: The process 4440 does not exist or is not a child of the calling process.",
+          "ERROR: The process 4447 does not exist or is not a child of the calling process.",
+          "ERROR: The process 4454 does not exist or is not a child of the calling process.",
+          "ERROR: The process 4463 does not exist or is not a child of the calling process.",
+          "ERROR: The process 4470 does not exist or is not a child of the calling process.",
+          "ERROR: The process 4477 does not exist or is not a child of the calling process.",
+          "ERROR: The process 4485 does not exist or is not a child of the calling process.",
+          "ERROR: The process 4493 does not exist or is not a child of the calling process.",
+          "ERROR: The process 4500 does not exist or is not a child of the calling process.",
+          "ERROR: The process 4507 does not exist or is not a child of the calling process.",
+          "ERROR: The process 4514 does not exist or is not a child of the calling process.",
+          "ERROR: The process 4521 does not exist or is not a child of the calling process.",
+          "ERROR: The process 4529 does not exist or is not a child of the calling process.",
+          "ERROR: The process 4544 does not exist or is not a child of the calling process.",
+          "ERROR: The process 4551 does not exist or is not a child of the calling process.",
+          "ERROR: The process 4558 does not exist or is not a child of the calling process.",
+          "ERROR: The process 4565 does not exist or is not a child of the calling process.",
+          "ERROR: The process 4572 does not exist or is not a child of the calling process.",
+          "ERROR: The process 4579 does not exist or is not a child of the calling process.",
+          "ERROR: The process 4586 does not exist or is not a child of the calling process.",
+          "ERROR: The process 4593 does not exist or is not a child of the calling process.",
+          "ERROR: The process 4601 does not exist or is not a child of the calling process.",
+          "ERROR: The process 4608 does not exist or is not a child of the calling process.",
+          "ERROR: The process 4615 does not exist or is not a child of the calling process.",
+          "ERROR: The process 4623 does not exist or is not a child of the calling process.",
+          "ERROR: The process 4630 does not exist or is not a child of the calling process.",
+          "ERROR: The process 4637 does not exist or is not a child of the calling process.",
+          "ERROR: The process 4644 does not exist or is not a child of the calling process.",
+          "ERROR: The process 4652 does not exist or is not a child of the calling process.",
+          "ERROR: The process 4674 does not exist or is not a child of the calling process.",
+          "ERROR: The process 4681 does not exist or is not a child of the calling process.",
+          "ERROR: The process 4688 does not exist or is not a child of the calling process.",
+          "ERROR: The process 4695 does not exist or is not a child of the calling process.",
+          "ERROR: The process 4703 does not exist or is not a child of the calling process.",
+          "ERROR: The process 4711 does not exist or is not a child of the calling process.",
+          "ERROR: The process 4718 does not exist or is not a child of the calling process.",
+          "ERROR: The process 4739 does not exist or is not a child of the calling process.",
+          "ERROR: The process 4746 does not exist or is not a child of the calling process.",
+          "ERROR: The process 4753 does not exist or is not a child of the calling process.",
+          "ERROR: The process 4768 does not exist or is not a child of the calling process.",
+          "ERROR: The process 4775 does not exist or is not a child of the calling process.",
+          "ERROR: The process 4783 does not exist or is not a child of the calling process.",
+          "ERROR: The process 4790 does not exist or is not a child of the calling process.",
+          "ERROR: The process 4797 does not exist or is not a child of the calling process.",
+          "ERROR: The process 4811 does not exist or is not a child of the calling process.",
+          "ERROR: The process 4818 does not exist or is not a child of the calling process.",
+          "ERROR: The process 4825 does not exist or is not a child of the calling process.",
+          "ERROR: The process 4832 does not exist or is not a child of the calling process.",
+          "ERROR: The process 4839 does not exist or is not a child of the calling process.",
+          "ERROR: The process 4853 does not exist or is not a child of the calling process.",
+          "ERROR: The process 4860 does not exist or is not a child of the calling process.",
+          "ERROR: The process 4869 does not exist or is not a child of the calling process.",
+          "ERROR: The process 4876 does not exist or is not a child of the calling process.",
+          "ERROR: The process 4884 does not exist or is not a child of the calling process.",
+          "ERROR: The process 4898 does not exist or is not a child of the calling process.",
+          "ERROR: The process 4905 does not exist or is not a child of the calling process.",
+          "ERROR: The process 4912 does not exist or is not a child of the calling process.",
+          "ERROR: The process 4919 does not exist or is not a child of the calling process.",
+          "ERROR: The process 4926 does not exist or is not a child of the calling process.",
+          "ERROR: The process 4933 does not exist or is not a child of the calling process.",
+          "ERROR: The process 4941 does not exist or is not a child of the calling process.",
+          "ERROR: The process 4948 does not exist or is not a child of the calling process.",
+          "ERROR: The process 4955 does not exist or is not a child of the calling process.",
+          "ERROR: The process 4962 does not exist or is not a child of the calling process.",
+          "ERROR: The process 4969 does not exist or is not a child of the calling process.",
+          "ERROR: The process 4976 does not exist or is not a child of the calling process.",
+          "ERROR: The process 4983 does not exist or is not a child of the calling process.",
+          "ERROR: The process 4993 does not exist or is not a child of the calling process.",
+          "ERROR: The process 5001 does not exist or is not a child of the calling process.",
+          "ERROR: The process 5009 does not exist or is not a child of the calling process.",
+          "ERROR: The process 5016 does not exist or is not a child of the calling process.",
+          "ERROR: The process 5023 does not exist or is not a child of the calling process.",
+          "ERROR: The process 5030 does not exist or is not a child of the calling process.",
+          "ERROR: The process 5037 does not exist or is not a child of the calling process.",
+          "ERROR: The process 5045 does not exist or is not a child of the calling process.",
+          "ERROR: The process 5053 does not exist or is not a child of the calling process.",
+          "ERROR: The process 5061 does not exist or is not a child of the calling process.",
+          "ERROR: The process 5068 does not exist or is not a child of the calling process.",
+          "ERROR: The process 5075 does not exist or is not a child of the calling process.",
+          "ERROR: The process 5089 does not exist or is not a child of the calling process.",
+          "ERROR: The process 5096 does not exist or is not a child of the calling process.",
+          "ERROR: The process 5110 does not exist or is not a child of the calling process.",
+          "ERROR: The process 5117 does not exist or is not a child of the calling process.",
+          "ERROR: The process 5132 does not exist or is not a child of the calling process.",
+          "ERROR: The process 5139 does not exist or is not a child of the calling process.",
+          "ERROR: The process 5146 does not exist or is not a child of the calling process.",
+          "ERROR: The process 5153 does not exist or is not a child of the calling process.",
+          "ERROR: The process 5161 does not exist or is not a child of the calling process.",
+          "ERROR: The process 5175 does not exist or is not a child of the calling process.",
+          "ERROR: The process 5182 does not exist or is not a child of the calling process.",
+          "ERROR: The process 5196 does not exist or is not a child of the calling process.",
+          "ERROR: The process 5204 does not exist or is not a child of the calling process.",
+          "ERROR: The process 5211 does not exist or is not a child of the calling process.",
+          "ERROR: The process 5219 does not exist or is not a child of the calling process.",
+          "ERROR: The process 5226 does not exist or is not a child of the calling process.",
+          "ERROR: The process 5240 does not exist or is not a child of the calling process.",
+          "ERROR: The process 5247 does not exist or is not a child of the calling process.",
+          "ERROR: The process 5261 does not exist or is not a child of the calling process.",
+          "ERROR: The process 5268 does not exist or is not a child of the calling process.",
+          "ERROR: The process 5276 does not exist or is not a child of the calling process.",
+          "ERROR: The process 5292 does not exist or is not a child of the calling process.",
+          "ERROR: The process 5299 does not exist or is not a child of the calling process.",
+          "ERROR: The process 5306 does not exist or is not a child of the calling process.",
+          "ERROR: The process 5313 does not exist or is not a child of the calling process.",
+          "ERROR: The process 5327 does not exist or is not a child of the calling process.",
+          "ERROR: The process 5334 does not exist or is not a child of the calling process.",
+          "ERROR: The process 5343 does not exist or is not a child of the calling process.",
+          "ERROR: The process 5357 does not exist or is not a child of the calling process.",
+          "ERROR: The process 5364 does not exist or is not a child of the calling process.",
+          "ERROR: The process 5371 does not exist or is not a child of the calling process.",
+          "ERROR: The process 5385 does not exist or is not a child of the calling process.",
+          "ERROR: The process 5392 does not exist or is not a child of the calling process.",
+          "ERROR: The process 5400 does not exist or is not a child of the calling process.",
+          "ERROR: The process 5407 does not exist or is not a child of the calling process.",
+          "ERROR: The process 5414 does not exist or is not a child of the calling process.",
+          "ERROR: The process 5421 does not exist or is not a child of the calling process.",
+          "ERROR: The process 5428 does not exist or is not a child of the calling process.",
+          "ERROR: The process 5436 does not exist or is not a child of the calling process.",
+          "ERROR: The process 5443 does not exist or is not a child of the calling process.",
+          "ERROR: The process 5450 does not exist or is not a child of the calling process.",
+          "ERROR: The process 5457 does not exist or is not a child of the calling process.",
+          "ERROR: The process 5471 does not exist or is not a child of the calling process.",
+          "ERROR: The process 5478 does not exist or is not a child of the calling process.",
+          "ERROR: The process 5485 does not exist or is not a child of the calling process.",
+          "ERROR: The process 5492 does not exist or is not a child of the calling process.",
+          "ERROR: The process 5499 does not exist or is not a child of the calling process.",
+          "ERROR: The process 5514 does not exist or is not a child of the calling process.",
+          "ERROR: The process 5521 does not exist or is not a child of the calling process.",
+          "ERROR: The process 5528 does not exist or is not a child of the calling process.",
+          "ERROR: The process 5542 does not exist or is not a child of the calling process.",
+          "ERROR: The process 5549 does not exist or is not a child of the calling process.",
+          "ERROR: The process 5560 does not exist or is not a child of the calling process.",
+          "ERROR: The process 5567 does not exist or is not a child of the calling process.",
+          "ERROR: The process 5576 does not exist or is not a child of the calling process.",
+          "ERROR: The process 5583 does not exist or is not a child of the calling process.",
+          "ERROR: The process 5590 does not exist or is not a child of the calling process.",
+          "ERROR: The process 5598 does not exist or is not a child of the calling process."
         ],
-        "worker_pid_diagnostic_count": 48,
+        "worker_pid_count": 156,
         "original_diagnostic_classifier_status": "FAIL",
+        "seconds": 291.87,
         "diagnostic_note": "Assertions passed; known PID lifecycle errors remain recorded technical debt, not a clean console."
       },
       "windows": {
         "status": "SCOPED_VERIFIED",
-        "checks": 665,
-        "items": 3,
-        "scenarios": 15,
-        "functional_sha": "0c1f48eb4bd40ca15d794847d89c16ea6614ceb9",
-        "checkout_sha": "447a516fa4c2d32aa8ee6deb06f106ef0a7b214b",
-        "descriptor_sha256": "6c4956d23eaac6ba57c350067786ca1f6159dd2edc2e26407a33a11d159d3bb9",
-        "test_sources_sha256": {
+        "functional_sha": "7f973f5bfb63cfae12f1dbaa956512e5291df0aa",
+        "checkout_sha": "4a812aeea2a297e9ca396cb82918e12188c027e7",
+        "checks": 1935,
+        "items": 6,
+        "scenarios": 30,
+        "families": [
+          {
+            "family": "choice_held_items",
+            "items": 3,
+            "scenarios": 15,
+            "scenario_checks": 669,
+            "status": "SCOPED_VERIFIED"
+          },
+          {
+            "family": "passive_reactive_held_items",
+            "items": 3,
+            "scenarios": 15,
+            "scenario_checks": 1263,
+            "status": "SCOPED_VERIFIED"
+          }
+        ],
+        "descriptor_hashes": {
           "tests/fixtures/item_automation_v28/choice_items.json": "6c4956d23eaac6ba57c350067786ca1f6159dd2edc2e26407a33a11d159d3bb9",
+          "tests/fixtures/item_automation_v28/passive_items.json": "6a0feca42cbf6f54ca1700789534506a40f751c19af10c50adec13cec40e7e1f"
+        },
+        "test_sources_sha256": {
+          "tests/gameplay/item_automation_effects_v28.gd.uid": "710262e04f3e2058043e4088564c055fed0efac8b24f8e503733aa1ce2d93c94",
+          "tests/tools/test_item_automation_passive_v28.py": "1adb93dd7a03547016e883900de4c9146ca37e029ff0854d9b74c0b8c201eef6",
+          "tests/gameplay/item_automation_v28.gd": "71e4ee67407af2bdf4bf50c30244189b449797a1c9384ccae1f8209777788d84",
+          "tools/item_audit/automation_contracts_v28.py": "d2c288944597b6fad8be2d0e72a2bdfb91a4adf51960d71854a14b0d2bf19047",
           "tests/tools/test_item_automation_v28.py": "7b4764d031955b0e578aee35f83df1e727d988d038001cbb4cc910032a09443f",
-          ".github/workflows/item-closure-v3.yml": "f552ba75790925924db659f6cb0b973b1ec8a111765b00158fc91b16d1586d09",
-          "tools/item_audit/automation_v28.py": "bc102cbe60a199421e8a6353219bf90f4a6a0da896dfb385c1a9bbffaa3d2553",
+          "tests/fixtures/item_automation_v28/choice_items.json": "6c4956d23eaac6ba57c350067786ca1f6159dd2edc2e26407a33a11d159d3bb9",
           "tests/gameplay/item_automation_v28.gd.uid": "9a97ae4f99183d662276e19b42f8d2a8b1dc7cd18c5442ff0a0e04a0d28006c1",
-          "tests/gameplay/item_automation_v28.gd": "92b0f134c9fdc4744804f405075da81b00aee6372513d4a6ca2ec22524cb5919"
+          "tools/item_audit/automation_v28.py": "56734187109d935754506af06244b9685ae1dec4c3ec3e6b481e4ec413cb0ec3",
+          "tests/fixtures/item_automation_v28/passive_items.json": "6a0feca42cbf6f54ca1700789534506a40f751c19af10c50adec13cec40e7e1f",
+          "tests/gameplay/item_automation_effects_v28.gd": "ee2e372f7f6c41c0eac706c893538e316a5c229985b0a9a658317b9b3d0076c6",
+          ".github/workflows/item-closure-v3.yml": "b7f253481bbb232d18137e881f405e988b5c2d8ae844bc2a7ed34e7378ba4f89"
         },
         "protected": {
           "runtime_files": 878,
@@ -861,7 +2394,7 @@
                 "status": "SCOPED_VERIFIED"
               },
               {
-                "checks": 26,
+                "checks": 28,
                 "errors": [],
                 "id": "choice_band",
                 "observed": {
@@ -1017,7 +2550,7 @@
                 "status": "SCOPED_VERIFIED"
               },
               {
-                "checks": 26,
+                "checks": 28,
                 "errors": [],
                 "id": "choice_specs",
                 "observed": {
@@ -1173,7 +2706,7 @@
                 "status": "SCOPED_VERIFIED"
               },
               {
-                "checks": 26,
+                "checks": 28,
                 "errors": [],
                 "id": "choice_scarf",
                 "observed": {
@@ -1188,134 +2721,1472 @@
                 "status": "SCOPED_VERIFIED"
               }
             ]
+          },
+          {
+            "id": "leftovers",
+            "status": "SCOPED_VERIFIED",
+            "scenarios": [
+              {
+                "checks": 117,
+                "errors": [],
+                "id": "leftovers",
+                "observed": {
+                  "active": {
+                    "evidence": "leftovers_heal_partial_active.json",
+                    "frames": [
+                      {
+                        "after": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 191,
+                          "target_max_hp": 341
+                        },
+                        "before": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 170,
+                          "target_max_hp": 341
+                        },
+                        "command": "move 1"
+                      },
+                      {
+                        "after": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 212,
+                          "target_max_hp": 341
+                        },
+                        "before": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 191,
+                          "target_max_hp": 341
+                        },
+                        "command": "move 1"
+                      }
+                    ],
+                    "restored": true,
+                    "sha256": "a9f5207d1cc0ae02e613a08641ff7947f19976d95ba66b1516e9926f4687a280",
+                    "valid": true
+                  },
+                  "none": {
+                    "evidence": "leftovers_heal_partial_none.json",
+                    "frames": [
+                      {
+                        "after": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 170,
+                          "target_max_hp": 341
+                        },
+                        "before": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 170,
+                          "target_max_hp": 341
+                        },
+                        "command": "move 1"
+                      },
+                      {
+                        "after": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 170,
+                          "target_max_hp": 341
+                        },
+                        "before": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 170,
+                          "target_max_hp": 341
+                        },
+                        "command": "move 1"
+                      }
+                    ],
+                    "restored": true,
+                    "sha256": "52b0b381d41c341bf9e183358e20305bc0d5b238931c7aecfe67f72f76d0931c",
+                    "valid": true
+                  },
+                  "reserve": {
+                    "evidence": "leftovers_heal_partial_reserve.json",
+                    "frames": [
+                      {
+                        "after": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 170,
+                          "target_max_hp": 341
+                        },
+                        "before": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 170,
+                          "target_max_hp": 341
+                        },
+                        "command": "move 1"
+                      },
+                      {
+                        "after": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 170,
+                          "target_max_hp": 341
+                        },
+                        "before": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 170,
+                          "target_max_hp": 341
+                        },
+                        "command": "move 1"
+                      }
+                    ],
+                    "restored": true,
+                    "sha256": "837c84d576684014ea6da889c2e4505bdd46bd7a700abc3cb1398f07d7e6914c",
+                    "valid": true
+                  }
+                },
+                "scenario": "heal_partial",
+                "status": "SCOPED_VERIFIED"
+              },
+              {
+                "checks": 81,
+                "errors": [],
+                "id": "leftovers",
+                "observed": {
+                  "active": {
+                    "evidence": "leftovers_heal_cap_active.json",
+                    "frames": [
+                      {
+                        "after": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 341,
+                          "target_max_hp": 341
+                        },
+                        "before": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 340,
+                          "target_max_hp": 341
+                        },
+                        "command": "move 1"
+                      }
+                    ],
+                    "restored": true,
+                    "sha256": "1536cbf5c6686926925ebed74ac198448e1f85bbee8ef95bdece86d21176f2b9",
+                    "valid": true
+                  },
+                  "none": {
+                    "evidence": "leftovers_heal_cap_none.json",
+                    "frames": [
+                      {
+                        "after": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 340,
+                          "target_max_hp": 341
+                        },
+                        "before": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 340,
+                          "target_max_hp": 341
+                        },
+                        "command": "move 1"
+                      }
+                    ],
+                    "restored": true,
+                    "sha256": "e2bb888581b9da93f2ad49b9f2bd257cafd62c9b63589929bec633cb295a9139",
+                    "valid": true
+                  },
+                  "reserve": {
+                    "evidence": "leftovers_heal_cap_reserve.json",
+                    "frames": [
+                      {
+                        "after": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 340,
+                          "target_max_hp": 341
+                        },
+                        "before": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 340,
+                          "target_max_hp": 341
+                        },
+                        "command": "move 1"
+                      }
+                    ],
+                    "restored": true,
+                    "sha256": "2046d5b430da87306ade77db37fc27f53cec30b034e9b3be7327ab2481c669e0",
+                    "valid": true
+                  }
+                },
+                "scenario": "heal_cap",
+                "status": "SCOPED_VERIFIED"
+              },
+              {
+                "checks": 81,
+                "errors": [],
+                "id": "leftovers",
+                "observed": {
+                  "active": {
+                    "evidence": "leftovers_full_hp_control_active.json",
+                    "frames": [
+                      {
+                        "after": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 341,
+                          "target_max_hp": 341
+                        },
+                        "before": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 341,
+                          "target_max_hp": 341
+                        },
+                        "command": "move 1"
+                      }
+                    ],
+                    "restored": true,
+                    "sha256": "8db81059826a04c7abea043eddf8fa0164d9290613db85b04a7e1b887ed9a21f",
+                    "valid": true
+                  },
+                  "none": {
+                    "evidence": "leftovers_full_hp_control_none.json",
+                    "frames": [
+                      {
+                        "after": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 341,
+                          "target_max_hp": 341
+                        },
+                        "before": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 341,
+                          "target_max_hp": 341
+                        },
+                        "command": "move 1"
+                      }
+                    ],
+                    "restored": true,
+                    "sha256": "1f01965847ec4a644bd62086cdbeb9b83e32e8017d01681afa81de071898454b",
+                    "valid": true
+                  },
+                  "reserve": {
+                    "evidence": "leftovers_full_hp_control_reserve.json",
+                    "frames": [
+                      {
+                        "after": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 341,
+                          "target_max_hp": 341
+                        },
+                        "before": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 341,
+                          "target_max_hp": 341
+                        },
+                        "command": "move 1"
+                      }
+                    ],
+                    "restored": true,
+                    "sha256": "d470deb7005cc4c6f2787ed10b18fcbd11f5bb806c808384d9be0ce2d60e76f2",
+                    "valid": true
+                  }
+                },
+                "scenario": "full_hp_control",
+                "status": "SCOPED_VERIFIED"
+              },
+              {
+                "checks": 117,
+                "errors": [],
+                "id": "leftovers",
+                "observed": {
+                  "active": {
+                    "evidence": "leftovers_heal_switched_owner_active.json",
+                    "frames": [
+                      {
+                        "after": {
+                          "active_id": "reserve",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 170,
+                          "target_max_hp": 341
+                        },
+                        "before": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 170,
+                          "target_max_hp": 341
+                        },
+                        "command": "switch_to_reserve"
+                      },
+                      {
+                        "after": {
+                          "active_id": "reserve",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 170,
+                          "target_max_hp": 341
+                        },
+                        "before": {
+                          "active_id": "reserve",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 170,
+                          "target_max_hp": 341
+                        },
+                        "command": "move 1"
+                      }
+                    ],
+                    "restored": true,
+                    "sha256": "ca560b682cb34bec1e4b4f5bd1bf8ab48a400c93dfdfaec6351f2cbcfeec61e7",
+                    "valid": true
+                  },
+                  "none": {
+                    "evidence": "leftovers_heal_switched_owner_none.json",
+                    "frames": [
+                      {
+                        "after": {
+                          "active_id": "reserve",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 170,
+                          "target_max_hp": 341
+                        },
+                        "before": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 170,
+                          "target_max_hp": 341
+                        },
+                        "command": "switch_to_reserve"
+                      },
+                      {
+                        "after": {
+                          "active_id": "reserve",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 170,
+                          "target_max_hp": 341
+                        },
+                        "before": {
+                          "active_id": "reserve",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 170,
+                          "target_max_hp": 341
+                        },
+                        "command": "move 1"
+                      }
+                    ],
+                    "restored": true,
+                    "sha256": "a182d1c30fa07e62cea5c271cc367f07d92a1dc2e648d640fecb3bf318a2a0fa",
+                    "valid": true
+                  },
+                  "reserve": {
+                    "evidence": "leftovers_heal_switched_owner_reserve.json",
+                    "frames": [
+                      {
+                        "after": {
+                          "active_id": "reserve",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 191,
+                          "target_max_hp": 341
+                        },
+                        "before": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 170,
+                          "target_max_hp": 341
+                        },
+                        "command": "switch_to_reserve"
+                      },
+                      {
+                        "after": {
+                          "active_id": "reserve",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 212,
+                          "target_max_hp": 341
+                        },
+                        "before": {
+                          "active_id": "reserve",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 191,
+                          "target_max_hp": 341
+                        },
+                        "command": "move 1"
+                      }
+                    ],
+                    "restored": true,
+                    "sha256": "2e596b1e4a077a39b375b39bf43e8ff221ba25087e7688493e92e35906c53d18",
+                    "valid": true
+                  }
+                },
+                "scenario": "heal_switched_owner",
+                "status": "SCOPED_VERIFIED"
+              },
+              {
+                "checks": 28,
+                "errors": [],
+                "id": "leftovers",
+                "observed": {
+                  "battle_owner": "technical_starter",
+                  "map_save": "map_leftovers.json",
+                  "physical_units": 2,
+                  "second_owner": "recipient_leftovers",
+                  "sha256": "838885796718378cb319112809af0ccd6b5dcc350841bb8ac22bb6ded3c7866f",
+                  "valid": true
+                },
+                "scenario": "map_bag_owner_save",
+                "status": "SCOPED_VERIFIED"
+              }
+            ]
+          },
+          {
+            "id": "life_orb",
+            "status": "SCOPED_VERIFIED",
+            "scenarios": [
+              {
+                "checks": 123,
+                "errors": [],
+                "id": "life_orb",
+                "observed": {
+                  "active": {
+                    "evidence": "life_orb_physical_boost_recoil_active.json",
+                    "frames": [
+                      {
+                        "after": {
+                          "active_id": "own",
+                          "foe_hp": 301,
+                          "foe_max_hp": 341,
+                          "target_hp": 307,
+                          "target_max_hp": 341
+                        },
+                        "before": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 341,
+                          "target_max_hp": 341
+                        },
+                        "command": "move 1"
+                      },
+                      {
+                        "after": {
+                          "active_id": "own",
+                          "foe_hp": 263,
+                          "foe_max_hp": 341,
+                          "target_hp": 273,
+                          "target_max_hp": 341
+                        },
+                        "before": {
+                          "active_id": "own",
+                          "foe_hp": 301,
+                          "foe_max_hp": 341,
+                          "target_hp": 307,
+                          "target_max_hp": 341
+                        },
+                        "command": "move 1"
+                      }
+                    ],
+                    "restored": true,
+                    "sha256": "e8ad7583f48a2aa895f69c0e7afb4a71cdbf1779b02b981bbb99a2e85e2a7c3d",
+                    "valid": true
+                  },
+                  "none": {
+                    "evidence": "life_orb_physical_boost_recoil_none.json",
+                    "frames": [
+                      {
+                        "after": {
+                          "active_id": "own",
+                          "foe_hp": 310,
+                          "foe_max_hp": 341,
+                          "target_hp": 341,
+                          "target_max_hp": 341
+                        },
+                        "before": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 341,
+                          "target_max_hp": 341
+                        },
+                        "command": "move 1"
+                      },
+                      {
+                        "after": {
+                          "active_id": "own",
+                          "foe_hp": 281,
+                          "foe_max_hp": 341,
+                          "target_hp": 341,
+                          "target_max_hp": 341
+                        },
+                        "before": {
+                          "active_id": "own",
+                          "foe_hp": 310,
+                          "foe_max_hp": 341,
+                          "target_hp": 341,
+                          "target_max_hp": 341
+                        },
+                        "command": "move 1"
+                      }
+                    ],
+                    "restored": true,
+                    "sha256": "ca203c140280d98f3476702918b3e4031916ba108a88d484fc5e298ab587fd5e",
+                    "valid": true
+                  },
+                  "reserve": {
+                    "evidence": "life_orb_physical_boost_recoil_reserve.json",
+                    "frames": [
+                      {
+                        "after": {
+                          "active_id": "own",
+                          "foe_hp": 310,
+                          "foe_max_hp": 341,
+                          "target_hp": 341,
+                          "target_max_hp": 341
+                        },
+                        "before": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 341,
+                          "target_max_hp": 341
+                        },
+                        "command": "move 1"
+                      },
+                      {
+                        "after": {
+                          "active_id": "own",
+                          "foe_hp": 281,
+                          "foe_max_hp": 341,
+                          "target_hp": 341,
+                          "target_max_hp": 341
+                        },
+                        "before": {
+                          "active_id": "own",
+                          "foe_hp": 310,
+                          "foe_max_hp": 341,
+                          "target_hp": 341,
+                          "target_max_hp": 341
+                        },
+                        "command": "move 1"
+                      }
+                    ],
+                    "restored": true,
+                    "sha256": "238172f45695428ddc939357c75240de64cb59c37d062f8195532c3d9adb56bc",
+                    "valid": true
+                  }
+                },
+                "scenario": "physical_boost_recoil",
+                "status": "SCOPED_VERIFIED"
+              },
+              {
+                "checks": 84,
+                "errors": [],
+                "id": "life_orb",
+                "observed": {
+                  "active": {
+                    "evidence": "life_orb_special_boost_recoil_active.json",
+                    "frames": [
+                      {
+                        "after": {
+                          "active_id": "own",
+                          "foe_hp": 320,
+                          "foe_max_hp": 341,
+                          "target_hp": 307,
+                          "target_max_hp": 341
+                        },
+                        "before": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 341,
+                          "target_max_hp": 341
+                        },
+                        "command": "move 1"
+                      }
+                    ],
+                    "restored": true,
+                    "sha256": "8a403feac3230dd61ff968259f5686aec0f179d1423b226bafb29b5cf6144e6c",
+                    "valid": true
+                  },
+                  "none": {
+                    "evidence": "life_orb_special_boost_recoil_none.json",
+                    "frames": [
+                      {
+                        "after": {
+                          "active_id": "own",
+                          "foe_hp": 325,
+                          "foe_max_hp": 341,
+                          "target_hp": 341,
+                          "target_max_hp": 341
+                        },
+                        "before": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 341,
+                          "target_max_hp": 341
+                        },
+                        "command": "move 1"
+                      }
+                    ],
+                    "restored": true,
+                    "sha256": "4077d4462679122c4c15075341cd99d7dfe10d1664cee981736c0f80de1b9ab1",
+                    "valid": true
+                  },
+                  "reserve": {
+                    "evidence": "life_orb_special_boost_recoil_reserve.json",
+                    "frames": [
+                      {
+                        "after": {
+                          "active_id": "own",
+                          "foe_hp": 325,
+                          "foe_max_hp": 341,
+                          "target_hp": 341,
+                          "target_max_hp": 341
+                        },
+                        "before": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 341,
+                          "target_max_hp": 341
+                        },
+                        "command": "move 1"
+                      }
+                    ],
+                    "restored": true,
+                    "sha256": "ea40748b1acd7e495c5c8b03f9c992bdbe8ad94bd62e821544a436ba3648c379",
+                    "valid": true
+                  }
+                },
+                "scenario": "special_boost_recoil",
+                "status": "SCOPED_VERIFIED"
+              },
+              {
+                "checks": 81,
+                "errors": [],
+                "id": "life_orb",
+                "observed": {
+                  "active": {
+                    "evidence": "life_orb_status_no_recoil_active.json",
+                    "frames": [
+                      {
+                        "after": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 341,
+                          "target_max_hp": 341
+                        },
+                        "before": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 341,
+                          "target_max_hp": 341
+                        },
+                        "command": "move 1"
+                      }
+                    ],
+                    "restored": true,
+                    "sha256": "8d3ce193030bef56b21f5678b0dd39f150b17c74ff4271c726e939e365200ba7",
+                    "valid": true
+                  },
+                  "none": {
+                    "evidence": "life_orb_status_no_recoil_none.json",
+                    "frames": [
+                      {
+                        "after": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 341,
+                          "target_max_hp": 341
+                        },
+                        "before": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 341,
+                          "target_max_hp": 341
+                        },
+                        "command": "move 1"
+                      }
+                    ],
+                    "restored": true,
+                    "sha256": "a3911d82e721b783c9086437b734a05360add3d0f82701d10edc25bb1dde3fd1",
+                    "valid": true
+                  },
+                  "reserve": {
+                    "evidence": "life_orb_status_no_recoil_reserve.json",
+                    "frames": [
+                      {
+                        "after": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 341,
+                          "target_max_hp": 341
+                        },
+                        "before": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 341,
+                          "target_max_hp": 341
+                        },
+                        "command": "move 1"
+                      }
+                    ],
+                    "restored": true,
+                    "sha256": "e005165c002737bf4f338f6a5d1e9baee2848158113950676b265d2288b9a251",
+                    "valid": true
+                  }
+                },
+                "scenario": "status_no_recoil",
+                "status": "SCOPED_VERIFIED"
+              },
+              {
+                "checks": 81,
+                "errors": [],
+                "id": "life_orb",
+                "observed": {
+                  "active": {
+                    "evidence": "life_orb_immune_no_recoil_active.json",
+                    "frames": [
+                      {
+                        "after": {
+                          "active_id": "own",
+                          "foe_hp": 261,
+                          "foe_max_hp": 261,
+                          "target_hp": 341,
+                          "target_max_hp": 341
+                        },
+                        "before": {
+                          "active_id": "own",
+                          "foe_hp": 261,
+                          "foe_max_hp": 261,
+                          "target_hp": 341,
+                          "target_max_hp": 341
+                        },
+                        "command": "move 1"
+                      }
+                    ],
+                    "restored": true,
+                    "sha256": "e7ebf39c0943bc7c68c0580035324cc3ba7d3ea335373b6c2a65e8442a3a2faa",
+                    "valid": true
+                  },
+                  "none": {
+                    "evidence": "life_orb_immune_no_recoil_none.json",
+                    "frames": [
+                      {
+                        "after": {
+                          "active_id": "own",
+                          "foe_hp": 261,
+                          "foe_max_hp": 261,
+                          "target_hp": 341,
+                          "target_max_hp": 341
+                        },
+                        "before": {
+                          "active_id": "own",
+                          "foe_hp": 261,
+                          "foe_max_hp": 261,
+                          "target_hp": 341,
+                          "target_max_hp": 341
+                        },
+                        "command": "move 1"
+                      }
+                    ],
+                    "restored": true,
+                    "sha256": "ad726010502fd4bf74be9041d2ea6830b58db9b5470193ef4ab78445618a4312",
+                    "valid": true
+                  },
+                  "reserve": {
+                    "evidence": "life_orb_immune_no_recoil_reserve.json",
+                    "frames": [
+                      {
+                        "after": {
+                          "active_id": "own",
+                          "foe_hp": 261,
+                          "foe_max_hp": 261,
+                          "target_hp": 341,
+                          "target_max_hp": 341
+                        },
+                        "before": {
+                          "active_id": "own",
+                          "foe_hp": 261,
+                          "foe_max_hp": 261,
+                          "target_hp": 341,
+                          "target_max_hp": 341
+                        },
+                        "command": "move 1"
+                      }
+                    ],
+                    "restored": true,
+                    "sha256": "dc7e26b8d51505daed560e08de999769e1524d5f095effcc3014f194710d22ab",
+                    "valid": true
+                  }
+                },
+                "scenario": "immune_no_recoil",
+                "status": "SCOPED_VERIFIED"
+              },
+              {
+                "checks": 28,
+                "errors": [],
+                "id": "life_orb",
+                "observed": {
+                  "battle_owner": "technical_starter",
+                  "map_save": "map_life_orb.json",
+                  "physical_units": 2,
+                  "second_owner": "recipient_life_orb",
+                  "sha256": "58e40a374f379c4ed27ca42000193a11f63a913d429ec6cdce70576ead43faee",
+                  "valid": true
+                },
+                "scenario": "map_bag_owner_save",
+                "status": "SCOPED_VERIFIED"
+              }
+            ]
+          },
+          {
+            "id": "rocky_helmet",
+            "status": "SCOPED_VERIFIED",
+            "scenarios": [
+              {
+                "checks": 123,
+                "errors": [],
+                "id": "rocky_helmet",
+                "observed": {
+                  "active": {
+                    "evidence": "rocky_helmet_contact_damage_active.json",
+                    "frames": [
+                      {
+                        "after": {
+                          "active_id": "own",
+                          "foe_hp": 285,
+                          "foe_max_hp": 341,
+                          "target_hp": 311,
+                          "target_max_hp": 341
+                        },
+                        "before": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 341,
+                          "target_max_hp": 341
+                        },
+                        "command": "move 1"
+                      },
+                      {
+                        "after": {
+                          "active_id": "own",
+                          "foe_hp": 229,
+                          "foe_max_hp": 341,
+                          "target_hp": 280,
+                          "target_max_hp": 341
+                        },
+                        "before": {
+                          "active_id": "own",
+                          "foe_hp": 285,
+                          "foe_max_hp": 341,
+                          "target_hp": 311,
+                          "target_max_hp": 341
+                        },
+                        "command": "move 1"
+                      }
+                    ],
+                    "restored": true,
+                    "sha256": "0e933e080dc48e4a23854b640f59a63446ccdfeee706f6daeff54d35587162ac",
+                    "valid": true
+                  },
+                  "none": {
+                    "evidence": "rocky_helmet_contact_damage_none.json",
+                    "frames": [
+                      {
+                        "after": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 311,
+                          "target_max_hp": 341
+                        },
+                        "before": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 341,
+                          "target_max_hp": 341
+                        },
+                        "command": "move 1"
+                      },
+                      {
+                        "after": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 280,
+                          "target_max_hp": 341
+                        },
+                        "before": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 311,
+                          "target_max_hp": 341
+                        },
+                        "command": "move 1"
+                      }
+                    ],
+                    "restored": true,
+                    "sha256": "7f101eadd0bb9ada2a32450d6b8517455ad1a9c3ae7ac87687ea61a52f13489a",
+                    "valid": true
+                  },
+                  "reserve": {
+                    "evidence": "rocky_helmet_contact_damage_reserve.json",
+                    "frames": [
+                      {
+                        "after": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 311,
+                          "target_max_hp": 341
+                        },
+                        "before": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 341,
+                          "target_max_hp": 341
+                        },
+                        "command": "move 1"
+                      },
+                      {
+                        "after": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 280,
+                          "target_max_hp": 341
+                        },
+                        "before": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 311,
+                          "target_max_hp": 341
+                        },
+                        "command": "move 1"
+                      }
+                    ],
+                    "restored": true,
+                    "sha256": "c20e7988d6ccfe45f561ef1171a27cc0bf79135c30a1bb242146dd22349c063b",
+                    "valid": true
+                  }
+                },
+                "scenario": "contact_damage",
+                "status": "SCOPED_VERIFIED"
+              },
+              {
+                "checks": 84,
+                "errors": [],
+                "id": "rocky_helmet",
+                "observed": {
+                  "active": {
+                    "evidence": "rocky_helmet_special_no_contact_active.json",
+                    "frames": [
+                      {
+                        "after": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 311,
+                          "target_max_hp": 341
+                        },
+                        "before": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 341,
+                          "target_max_hp": 341
+                        },
+                        "command": "move 1"
+                      }
+                    ],
+                    "restored": true,
+                    "sha256": "4c9dc30e8324c020fddaabab05d8dd2a045365183042d70b312f1725a17d0f0b",
+                    "valid": true
+                  },
+                  "none": {
+                    "evidence": "rocky_helmet_special_no_contact_none.json",
+                    "frames": [
+                      {
+                        "after": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 311,
+                          "target_max_hp": 341
+                        },
+                        "before": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 341,
+                          "target_max_hp": 341
+                        },
+                        "command": "move 1"
+                      }
+                    ],
+                    "restored": true,
+                    "sha256": "ddcc57ff4302e84dc830c82b8df3895587f95255df2a6b698e0aeeb2af7b3949",
+                    "valid": true
+                  },
+                  "reserve": {
+                    "evidence": "rocky_helmet_special_no_contact_reserve.json",
+                    "frames": [
+                      {
+                        "after": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 311,
+                          "target_max_hp": 341
+                        },
+                        "before": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 341,
+                          "target_max_hp": 341
+                        },
+                        "command": "move 1"
+                      }
+                    ],
+                    "restored": true,
+                    "sha256": "364741b529b666f3bee026e1027a9140cc344e9be13ddd4a36d6d5231a45bb4d",
+                    "valid": true
+                  }
+                },
+                "scenario": "special_no_contact",
+                "status": "SCOPED_VERIFIED"
+              },
+              {
+                "checks": 84,
+                "errors": [],
+                "id": "rocky_helmet",
+                "observed": {
+                  "active": {
+                    "evidence": "rocky_helmet_physical_no_contact_active.json",
+                    "frames": [
+                      {
+                        "after": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 268,
+                          "target_max_hp": 341
+                        },
+                        "before": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 341,
+                          "target_max_hp": 341
+                        },
+                        "command": "move 1"
+                      }
+                    ],
+                    "restored": true,
+                    "sha256": "40798d31c0a4648f8191001ef9ccd3b36f3af54d054bab46c8b2585882401283",
+                    "valid": true
+                  },
+                  "none": {
+                    "evidence": "rocky_helmet_physical_no_contact_none.json",
+                    "frames": [
+                      {
+                        "after": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 268,
+                          "target_max_hp": 341
+                        },
+                        "before": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 341,
+                          "target_max_hp": 341
+                        },
+                        "command": "move 1"
+                      }
+                    ],
+                    "restored": true,
+                    "sha256": "5666201d9da9692ecd16a2294a0f1d99de9b3462eed0808e713a821afdb53067",
+                    "valid": true
+                  },
+                  "reserve": {
+                    "evidence": "rocky_helmet_physical_no_contact_reserve.json",
+                    "frames": [
+                      {
+                        "after": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 268,
+                          "target_max_hp": 341
+                        },
+                        "before": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 341,
+                          "target_max_hp": 341
+                        },
+                        "command": "move 1"
+                      }
+                    ],
+                    "restored": true,
+                    "sha256": "d739ccc48def193e76e40b206903f95c66d7805eb3b481cf0e8ebe372992b7aa",
+                    "valid": true
+                  }
+                },
+                "scenario": "physical_no_contact",
+                "status": "SCOPED_VERIFIED"
+              },
+              {
+                "checks": 123,
+                "errors": [],
+                "id": "rocky_helmet",
+                "observed": {
+                  "active": {
+                    "evidence": "rocky_helmet_contact_switched_owner_active.json",
+                    "frames": [
+                      {
+                        "after": {
+                          "active_id": "reserve",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 309,
+                          "target_max_hp": 341
+                        },
+                        "before": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 341,
+                          "target_max_hp": 341
+                        },
+                        "command": "switch_to_reserve"
+                      },
+                      {
+                        "after": {
+                          "active_id": "reserve",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 277,
+                          "target_max_hp": 341
+                        },
+                        "before": {
+                          "active_id": "reserve",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 309,
+                          "target_max_hp": 341
+                        },
+                        "command": "move 1"
+                      }
+                    ],
+                    "restored": true,
+                    "sha256": "4141507945c3a235bfd9557cf215bd3bb38f50559e2bb74519ac22a049890954",
+                    "valid": true
+                  },
+                  "none": {
+                    "evidence": "rocky_helmet_contact_switched_owner_none.json",
+                    "frames": [
+                      {
+                        "after": {
+                          "active_id": "reserve",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 309,
+                          "target_max_hp": 341
+                        },
+                        "before": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 341,
+                          "target_max_hp": 341
+                        },
+                        "command": "switch_to_reserve"
+                      },
+                      {
+                        "after": {
+                          "active_id": "reserve",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 277,
+                          "target_max_hp": 341
+                        },
+                        "before": {
+                          "active_id": "reserve",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 309,
+                          "target_max_hp": 341
+                        },
+                        "command": "move 1"
+                      }
+                    ],
+                    "restored": true,
+                    "sha256": "e3fa1d01d702162cf62a5decc5cda88c6c3cd77ca41cbbd3c0b26bae548f16df",
+                    "valid": true
+                  },
+                  "reserve": {
+                    "evidence": "rocky_helmet_contact_switched_owner_reserve.json",
+                    "frames": [
+                      {
+                        "after": {
+                          "active_id": "reserve",
+                          "foe_hp": 285,
+                          "foe_max_hp": 341,
+                          "target_hp": 309,
+                          "target_max_hp": 341
+                        },
+                        "before": {
+                          "active_id": "own",
+                          "foe_hp": 341,
+                          "foe_max_hp": 341,
+                          "target_hp": 341,
+                          "target_max_hp": 341
+                        },
+                        "command": "switch_to_reserve"
+                      },
+                      {
+                        "after": {
+                          "active_id": "reserve",
+                          "foe_hp": 229,
+                          "foe_max_hp": 341,
+                          "target_hp": 277,
+                          "target_max_hp": 341
+                        },
+                        "before": {
+                          "active_id": "reserve",
+                          "foe_hp": 285,
+                          "foe_max_hp": 341,
+                          "target_hp": 309,
+                          "target_max_hp": 341
+                        },
+                        "command": "move 1"
+                      }
+                    ],
+                    "restored": true,
+                    "sha256": "18d524afaad736b306cd40d107064f069a966ac22160a80c15fe3380e4df1c87",
+                    "valid": true
+                  }
+                },
+                "scenario": "contact_switched_owner",
+                "status": "SCOPED_VERIFIED"
+              },
+              {
+                "checks": 28,
+                "errors": [],
+                "id": "rocky_helmet",
+                "observed": {
+                  "battle_owner": "technical_starter",
+                  "map_save": "map_rocky_helmet.json",
+                  "physical_units": 2,
+                  "second_owner": "recipient_rocky_helmet",
+                  "sha256": "b3fda7cde862e637dc2f22f538f9f9fb1efc1a0cd750a732aa11c1c7f929adc1",
+                  "valid": true
+                },
+                "scenario": "map_bag_owner_save",
+                "status": "SCOPED_VERIFIED"
+              }
+            ]
           }
         ],
-        "job_id": 124644284673,
-        "run_url": "https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41237512322",
-        "contract_tests": 14,
-        "raw_artifact_revalidated_locally": true,
+        "job_id": 124654879175,
+        "run_url": "https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41241062641",
+        "unit_tests": {
+          "choice_unchanged": 14,
+          "passive": 17
+        },
         "artifact": {
-          "id": 13056004986,
-          "zip_sha256": "8cd88c355668d06737b00e925c691be36be49d9b1bce47f86a27015fd2a62628"
+          "id": 13057792251,
+          "sha256": "sha256:8fee4a9e3e0a9c0792794152617b705c662f411324a4f8bc6533705ce44b9759",
+          "raw_files_revalidated": 178
         },
         "worker_pid_diagnostics": [],
-        "worker_pid_diagnostic_count": 0,
+        "worker_pid_count": 0,
         "original_diagnostic_classifier_status": "PASS",
-        "diagnostic_note": "No PID lifecycle diagnostics in this prototype run"
+        "seconds": 301.95,
+        "diagnostic_note": "No PID diagnostics in Windows prototype"
       }
     }
   },
-  "ids": [
-    "choice_band",
-    "choice_specs",
-    "choice_scarf"
-  ],
-  "checks_per_platform": 665,
-  "scenarios_per_platform": 15,
-  "contract_unit_tests_per_platform": 14,
-  "local": {
-    "status": "SCOPED_VERIFIED",
+  "prior_choice_checkpoint": {
+    "functional_sha": "0c1f48eb4bd40ca15d794847d89c16ea6614ceb9",
+    "notebook_sha": "648a2c86541b6a381424413e2b2e28231d127353",
+    "run_id": 41237512322,
     "checks": 665,
-    "evidence": ".godot/item_automation_v28/runs/1793477122558025400",
-    "source_hashes": {
-      "tools/item_audit/automation_v28.py": "bc102cbe60a199421e8a6353219bf90f4a6a0da896dfb385c1a9bbffaa3d2553",
-      "tests/gameplay/item_automation_v28.gd": "92b0f134c9fdc4744804f405075da81b00aee6372513d4a6ca2ec22524cb5919",
-      "tests/gameplay/item_automation_v28.gd.uid": "9a97ae4f99183d662276e19b42f8d2a8b1dc7cd18c5442ff0a0e04a0d28006c1",
-      "tests/tools/test_item_automation_v28.py": "7b4764d031955b0e578aee35f83df1e727d988d038001cbb4cc910032a09443f",
-      "tests/fixtures/item_automation_v28/choice_items.json": "6c4956d23eaac6ba57c350067786ca1f6159dd2edc2e26407a33a11d159d3bb9",
-      ".github/workflows/item-closure-v3.yml": "f552ba75790925924db659f6cb0b973b1ec8a111765b00158fc91b16d1586d09"
-    }
+    "status": "HISTORICAL_VERIFIED_AND_REEXERCISED_HERE"
   },
-  "failures_preserved": [
-    {
-      "local_run": "1793476787710520700",
-      "reason": "Guard detected four editor-generated untracked historical UIDs; no tests ran"
-    },
-    {
-      "local_run": "1793476797217198500",
-      "reason": "New runner used wrong BattleEvent constant and nonexistent PlayerCollection.from_dict; parse failure, no mechanics executed"
-    },
-    {
-      "local_run": "1793476837711656600",
-      "checks_in_json": 665,
-      "errors": 18,
-      "reason": "Fixture used fixed switch index after Showdown reordered party; corrected identity lookup, no production change"
-    }
-  ],
-  "functional_scope": "Specific positive/negative damage and turn-order observations; wrong-owner controls; Choice lock, rejected mutation, disk restore, switch reset; physical bag/map/owner/save/settlement for each ID",
-  "historical_regressions": {
+  "regressions": {
     "native_v3_cases": 908,
     "native_v3_ids": 65,
     "godot_projection_checks": 23434,
     "ev_checks": 404,
     "protection_checks": 122,
-    "previous_damage_checks": 500,
+    "old_damage_checks": 500,
     "progression_v18_checks": 8755,
-    "windows_portable_gate": "PUBLICATION_V27 PASS"
+    "windows_gate": "PUBLICATION_V27 PASS"
   },
+  "new_failures_and_findings": [
+    {
+      "kind": "PINNED_METADATA_GAP",
+      "run": "1793479585658147800",
+      "before_godot": true,
+      "id": "rocky_helmet",
+      "reason": "PokeAPI 583 attributes=[]",
+      "resolution": "Exact source review: held-items category, Gen V-IX item index 540 and explicit English held-contact 1/6 effect; independent catalog/policy/equipment checks; strict exception tested; source data unchanged"
+    }
+  ],
+  "provenance": [
+    {
+      "id": "choice_band",
+      "api_id": 197,
+      "source_path": "data/api/v2/item/197/index.json",
+      "source_blob": "3da99029f43ec0877e45eb6b89406b5dabd3ff94",
+      "category": "choice",
+      "generation_indices": 7,
+      "equip_permitted": true,
+      "excluded": false,
+      "attribute_evidence": "explicit_holdable_attributes"
+    },
+    {
+      "id": "choice_specs",
+      "api_id": 274,
+      "source_path": "data/api/v2/item/274/index.json",
+      "source_blob": "5872ef43deaceb87280cb63a50deea3d1dc76b3c",
+      "category": "choice",
+      "generation_indices": 6,
+      "equip_permitted": true,
+      "excluded": false,
+      "attribute_evidence": "explicit_holdable_attributes"
+    },
+    {
+      "id": "choice_scarf",
+      "api_id": 264,
+      "source_path": "data/api/v2/item/264/index.json",
+      "source_blob": "c16330c2ef7adae261f30794df4c43673343f713",
+      "category": "choice",
+      "generation_indices": 6,
+      "equip_permitted": true,
+      "excluded": false,
+      "attribute_evidence": "explicit_holdable_attributes"
+    },
+    {
+      "id": "leftovers",
+      "api_id": 211,
+      "source_path": "data/api/v2/item/211/index.json",
+      "source_blob": "c53bebbbe4a7bf6dc1d8fc66a8493b82476324ae",
+      "category": "held-items",
+      "generation_indices": 8,
+      "equip_permitted": true,
+      "excluded": false,
+      "attribute_evidence": "explicit_holdable_attributes"
+    },
+    {
+      "id": "life_orb",
+      "api_id": 247,
+      "source_path": "data/api/v2/item/247/index.json",
+      "source_blob": "a5055ad5162aa86a10c3280ae7646ba8346def92",
+      "category": "held-items",
+      "generation_indices": 6,
+      "equip_permitted": true,
+      "excluded": false,
+      "attribute_evidence": "explicit_holdable_attributes"
+    },
+    {
+      "id": "rocky_helmet",
+      "api_id": 583,
+      "source_path": "data/api/v2/item/583/index.json",
+      "source_blob": "6de345322024c0632c2daf6429c866a3b126836d",
+      "category": "held-items",
+      "generation_indices": 5,
+      "equip_permitted": true,
+      "excluded": false,
+      "attribute_evidence": "reviewed_empty_attributes_pokeapi_583_gen5_9_contact_effect"
+    }
+  ],
   "technical_debt": {
-    "status": "OPEN",
-    "linux_prototype_pid_diagnostics": 48,
-    "linux_full_job_pid_messages": 63,
-    "windows_prototype_pid_diagnostics": 0,
-    "note": "Original generic diagnostic classifier marked the Linux log FAIL from known PID lifecycle errors. The new verifier records all 48 verbatim, requires process exit 0, all 665 assertions, complete/hash-valid raw evidence and rejects any script/parser/assertion or other engine error. No existing regression classifier, test threshold, production code or mechanics was changed. This certifies the bounded functional scenarios, not a clean Linux engine console."
+    "status": "OPEN_PID_LIFECYCLE_DIAGNOSTICS",
+    "linux_automation_log_pid_messages": 156,
+    "linux_visible_job_console_pid_messages": 53,
+    "windows_automation_log_pid_messages": 0,
+    "locations": {
+      "modules/battle/backends/showdown/pipe_client.gd:72": 156
+    },
+    "diagnosis": "All 156 prototype traces point to the inherited close() second OS.is_process_running query at line 72, after shutdown/first PID query. This locates the symptom and is compatible with checking an already reaped Unix child; isolated lifecycle fix/reproduction remains separate. No transport/protocol or production edits here.",
+    "classification": "Generic historical diagnostic classifier remains FAIL for Linux; recorded verbatim. Scoped verifier requires process exit 0, all 1935 assertions and intact per-case evidence and rejects other errors. Existing regression thresholds/classifier unchanged. This is bounded mechanics verification, not a clean Linux console. Visible job console and captured automation log are separate sources, not an inclusive total."
   },
+  "limits": [
+    "Empty abilities, no Magic Guard/Sheer Force/Long Reach/suppression interactions",
+    "No Trick/Knock Off timing, doubles, alternate formats or all-context claim",
+    "Headless map and bag, no GPU/manual artistic certification",
+    "Map Caterpie route proves ownership/stock/HP persistence; specific effects are measured in separate native scenarios"
+  ],
   "all_item_effects_certified": false,
-  "coverage_counter_changed": true,
   "competitive_counts": {
     "selected_candidates": 61,
-    "v28_verified_ids": 22,
-    "historical_contexts_pending_integral_v28_proof": 35,
+    "v28_verified_ids": 25,
+    "remaining_integral_v28_proof": 32,
     "blocked_dependencies": 4
   },
-  "limitations": [
-    "Headless, no GPU/manual approval",
-    "Empty abilities; no Gorilla Tactics or other ability interactions",
-    "Map Caterpie battle checks physical persistence/settlement, not the category bonus",
-    "No Trick/Knock Off/suppression timing certification; no new item mechanics"
-  ],
-  "ability_resume": {
-    "branch": "codex/ability-audit-v1",
-    "functional_sha": "72548cde",
-    "note_commit": "5d5f8ae",
-    "integrated_here": false
-  },
-  "next_step": "Prototype mission complete. Review reusable contract; future families require their own observable expectations, not new simulations per item. Prioritize passive/survival family in ACCELERATION_PLAN, keep dependencies and PID diagnostics separate. No automatic PR merge.",
-  "documentation_note": "This notebook update is documentation only [skip ci]; its HEAD is not a new functional validation. Evidence remains bound to 0c1f48eb and run 41237512322.",
-  "second_family_pending": {
-    "status": "LOCAL_VERIFIED_AWAITING_CI",
-    "functional_sha": null,
-    "new_ids": [
-      "leftovers",
-      "life_orb",
-      "rocky_helmet"
-    ],
-    "families": [
-      {
-        "family": "choice_held_items",
-        "items": 3,
-        "scenarios": 15,
-        "scenario_checks": 669,
-        "status": "SCOPED_VERIFIED"
-      },
-      {
-        "family": "passive_reactive_held_items",
-        "items": 3,
-        "scenarios": 15,
-        "scenario_checks": 1263,
-        "status": "SCOPED_VERIFIED"
-      }
-    ],
-    "local_checks": 1935,
-    "scenarios": 30,
-    "unit_tests": {
-      "choice_unchanged": 14,
-      "new_passive": 17
-    },
-    "local_evidence": ".godot\\item_automation_v28\\runs\\1793479631790569300",
-    "local_functional_sources_verified": true,
-    "ci_step_extended_after_local_run": true,
-    "next_step": "Push coherent functional commit and require actual Ubuntu/Windows Godot and all unchanged regression workflows. Counters stay 22/35/4 until CI.",
-    "metadata_gap": "Rocky Helmet PokeAPI 583 has empty attributes; exact reviewed Gen V-IX index/category/English held-contact-effect evidence, plus policy and real equip, is required. Existing Choice criteria unchanged."
-  }
+  "next_step": "Recommend Air Balloon and Heavy-Duty Boots: item consumption/immunity and entry hazards. Define their contracts before editing; reuse the shared runner/ownership/restore/map/report components and preserve both families. PID lifecycle debt is separate. No automatic merge.",
+  "documentation_note": "Notebook-only follow-up [skip ci] is not a new functional run. Code evidence is SHA 7f973f5b / run 41241062641; all 11 functional source hashes revalidated from both artifacts."
 }

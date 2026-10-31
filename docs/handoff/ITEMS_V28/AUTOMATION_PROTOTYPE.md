@@ -1,6 +1,6 @@
-# Automatizador declarativo V28 — piloto Elección
+# Automatizador declarativo V28 — dos familias verificadas
 
-## Segunda familia en desarrollo — 648a2c86 como checkpoint
+## Segunda familia verificada — ampliación desde 648a2c86
 
 El mismo comando y runner reciben ahora dos descriptores: Elección (schema 1,
 sin cambiar sus bytes) y `passive_items.json` (schema 2). Se conserva la API
@@ -42,8 +42,11 @@ Casco Dentado PokéAPI 583 tiene `attributes: []`; excepción de metadatos revis
 solo para su registro fijado: categoría held-items, índice 540 Gen V–IX y efecto
 inglés explícito de contacto. No se modifica ese snapshot ni las reglas de selección.
 
-Hasta resultados reales de las dos plataformas, la nueva familia está EN PRUEBAS,
-no certificada. La evidencia del primer piloto que sigue abajo es histórica.
+Resultado real: código `7f973f5bfb63cfae12f1dbaa956512e5291df0aa`, [Actions #41241062641](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41241062641),
+20/20 workflows PASS, 1935 comprobaciones y 30 escenarios en Ubuntu y Windows,
+31 tests del contrato por plataforma. Se revalidaron los dos ZIP y sus 178 archivos
+por ejecución, incluyendo deltas/propietarios desde checkpoints nativos. La evidencia
+del primer piloto que sigue abajo es histórica. Detalles y límites en AUTOMATION_RESULTS.json.
 
 ## Alcance y arquitectura
 
