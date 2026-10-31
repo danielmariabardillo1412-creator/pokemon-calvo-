@@ -185,7 +185,13 @@ jobs:
         run: |
           $ErrorActionPreference = 'Stop'
           $godot = Join-Path $env:USERPROFILE 'godot/Godot_v4.7-stable_win64_console.exe'
-          if (-not (Test-Path $godot)) { throw ('Missing pinned Godot console: ' + $godot) }
+          if (-not (Test-Path $godot)) {
+            Write-Output 'Godot Action cache omitted the console executable; restore official version-locked release zip'
+            $zip = Join-Path $env:RUNNER_TEMP 'Godot_v4.7-stable_win64.exe.zip'
+            Invoke-WebRequest -Uri 'https://github.com/godotengine/godot-builds/releases/download/4.7-stable/Godot_v4.7-stable_win64.exe.zip' -OutFile $zip
+            Expand-Archive -LiteralPath $zip -DestinationPath (Join-Path $env:USERPROFILE 'godot') -Force
+          }
+          if (-not (Test-Path $godot)) { throw ('Pinned Godot console still missing: ' + $godot) }
           & $godot --headless --version
           if ($LASTEXITCODE -ne 0) { exit 1 }
           & python -B tools/distribution/restore_resources.py
