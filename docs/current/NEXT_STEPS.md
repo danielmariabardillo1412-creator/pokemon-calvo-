@@ -1,24 +1,27 @@
 # Próximo trabajo — 2026-10-31
 
-Estado actual: **V23 verificado — Amuleto e Incienso Puro ya entran equipados
-al combate nativo.** Se conservan sus efectos de tasa de encuentros y el estado
-real del objeto tras Lanzamiento, Truco, Desarme y guardar/cargar.
+Estado actual: **Cordón Unión excluido; conversión de intercambios a nivel aplazada.**
+El usuario ha decidido que no se necesita ese objeto. Su adaptador y herramientas
+específicas se retiraron del árbol activo; la historia y pruebas V24 se conservan
+en Git, no describen una función que siga activa. Se mantiene el aviso correcto
+de Amuleto/Incienso Puro para equiparlos.
 
-[Informe V23](ITEM_ENCOUNTER_HELD_V23.md) · [Resultados](ITEM_ENCOUNTER_HELD_V23.json).
-9 grupos PASS, 1.559 comprobaciones (incluidas regresiones), dos capturas GPU
-vistas y nueva guarda completa contra el checkpoint anterior. Código funcional:
-`b9ca439c52ac10aea2da3f1f37c6f1de3090f34f`. Seguimos en la versión organizada, sin publicar ni mergear.
+[Revisión de objetos](ITEM_SCOPE_V25.md) · [Lista de candidatos](ITEM_SCOPE_V25.json) ·
+[Trabajo futuro aplazado](TRADE_EVOLUTIONS_FUTURE.md).
 
-Ahora se reconocen 621/625 equipables permitidos. Quedan cuatro descriptores:
-Amulet Coin, Exp. Share, Linking Cord y Luck Incense, ligados a sistemas pendientes.
-La tasa 2/3 sigue siendo parcial: faltan las condiciones de pasos mínimos y la
-crianza de Incienso Puro. El botón «Usar» no es su activación; funcionan equipados.
-El mensaje genérico tras rechazar uso directo queda como deuda de texto de UI.
+No se han cambiado niveles ni evoluciones. No se adopta nivel 37. Se consultarán
+más adelante otros juegos/randomizadores y la tabla que facilite el amigo.
+Diez objetos asociados a esos intercambios y cinco pañuelos de concurso quedan
+para revisar; solo Cordón está excluido ahora. Cuatro objetos con otros usos de
+combate se conservan. Las evoluciones ordinarias por nivel y piedra siguen activas.
 
-Los informes ITEM_CLOSURE_V2 son snapshots cerrados de su checkpoint, no se
-regeneran para certificar V23. Su antigua falta de los dos descriptores queda
-superada por V23. No hay un ejecutor OpenCode trabajando en paralelo.
-Los apartados V1–V21 siguientes describen checkpoints históricos.
+5 grupos PASS / 6.849 comprobaciones, incluidas regresiones. 621/624 equipables
+permitidos reconocidos; los pendientes nativos son Amulet Coin, Exp. Share y
+Luck Incense. El divisor bajó por excluir Cordón, no por implementar otro objeto.
+Checkpoint funcional: `80a7aab4a494ef4c68e349eeab99f36202d13bfe`.
+
+Los informes V2/V23/V24 son históricos. No se resellan ni se reinterpretan sus
+recuentos como estado actual. Los apartados siguientes describen V1–V21.
 
 V21: [consumibles de huida](ITEM_ESCAPE_V21.md). Poké Muñeco, Cola Skitty y
 Poké Señuelo ya se usan desde mochila nativa para terminar un encuentro salvaje,

@@ -63,3 +63,5 @@ función de huida y no se confunde con una decoración.
 Informe de candidatos: [ITEM_SCOPE_V25.json](ITEM_SCOPE_V25.json). Resultados
 de ejecución y hashes: `.godot/item_scope_v25/results.json`. Las cifras de
 pruebas se solapan con regresiones y no representan objetos distintos.
+
+Checkpoint funcional local: `80a7aab4a494ef4c68e349eeab99f36202d13bfe`.

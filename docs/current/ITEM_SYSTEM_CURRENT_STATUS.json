@@ -1,13 +1,13 @@
 {
-  "status": "ENCOUNTER_NATIVE_HANDOFF_V23_VERIFIED_RATE_PARTIAL",
+  "status": "ITEM_SCOPE_V25_CORD_EXCLUDED_TRADE_LEVELS_DEFERRED",
   "date": "2026-10-31",
-  "latest_report": "docs/current/ITEM_ENCOUNTER_HELD_V23.json",
-  "notes": "docs/current/ITEM_ENCOUNTER_HELD_V23.md",
+  "latest_report": "docs/current/ITEM_SCOPE_V25.json",
+  "notes": "docs/current/ITEM_SCOPE_V25.md",
   "full_item_matrix": "docs/current/ITEM_FIELD_V8.csv.txt",
   "art_status": "docs/current/ITEM_ART_CURRENT_STATUS.json",
   "menu": "B - Mochila",
   "canonical_entries_audited": 2222,
-  "equipment_transfers_verified": 625,
+  "equipment_transfers_verified": 624,
   "evolution_item_routes_verified": 57,
   "evolution_conditioned_or_form_routes_deferred": 15,
   "machine_ids_mapped": 338,
@@ -18,13 +18,12 @@
   "headless_checks": 253,
   "gpu_checks": 45,
   "next": [
-    "Minimum-step encounter semantics remain absent; rate-only profile is still partial",
-    "Amulet Coin / Luck Incense economy, Exp. Share distribution and Linking Cord evolution remain concrete dependencies",
-    "Held EV multipliers, Max Mushrooms, IV, mints, form/evolution routes and capture/XP fidelity remain documented separately",
-    "UI wording: unsupported direct Use still shows a generic pending message for passive encounter items"
+    "Trade-to-level evolution redesign is DEFERRED BY USER; later consult other games/randomizers and the friend table. No levels selected or conversion active.",
+    "Review the 10 trade-evolution-only candidates after defining those rules; keep the four items with separate battle roles. No additional bans now.",
+    "Other item/world dependencies remain documented; absence of a system is not automatic exclusion."
   ],
   "source_data_and_policies_unchanged": true,
-  "latest_verification": "ENCOUNTER_HELD_V23_PASS",
+  "latest_verification": "ITEM_SCOPE_V25_PASS",
   "held_item_ids_with_verified_effect_scenarios": 189,
   "untested_native_contexts": 323,
   "verification_all_effects_complete": false,
@@ -84,7 +83,6 @@
   "native_unmapped_field_held_items_pending": [
     "amulet_coin",
     "exp_share",
-    "linking_cord",
     "luck_incense"
   ],
   "native_field_held_bridge_ids_verified": [
@@ -149,7 +147,7 @@
     "pure_incense"
   ],
   "native_known_permitted_equipped_ids": 621,
-  "native_missing_permitted_equipped_definition_count": 4,
+  "native_missing_permitted_equipped_definition_count": 3,
   "native_held_medicine_ids_with_bridge_verified": 24,
   "native_held_training_and_boost_ids_with_bridge_verified": 17,
   "battle_boost_item_use_ids_pending": [],
@@ -211,7 +209,6 @@
   "native_missing_permitted_equipped_ids": [
     "amulet_coin",
     "exp_share",
-    "linking_cord",
     "luck_incense"
   ],
   "native_misc_held_metadata_equals_special_use_implemented": false,
@@ -287,8 +284,8 @@
     "review": "docs/opencode/ITEM_CLOSURE_V2/evidence/O190/REVIEW.md",
     "writer_active": false
   },
-  "working_tree_runtime_status": "V23_ENCOUNTER_ITEM_NATIVE_HANDOFF_VERIFIED_COMMITTED",
-  "last_verified_functional_commit": "b9ca439c52ac10aea2da3f1f37c6f1de3090f34f",
+  "working_tree_runtime_status": "CORD_ADAPTER_WITHDRAWN_PASSIVE_HINT_RETAINED",
+  "last_verified_functional_commit": "80a7aab4a494ef4c68e349eeab99f36202d13bfe",
   "encounter_item_native_handoff_ids_verified": [
     "cleanse_tag",
     "pure_incense"
@@ -301,5 +298,19 @@
     "checks": 1559,
     "native_missing_count": 4,
     "minimum_step_semantics_complete": false
+  },
+  "item_scope_v25": {
+    "confirmed_exclusions_added": [
+      "linking_cord"
+    ],
+    "total_excluded_ids": 44,
+    "permitted_holdable_ids": 624,
+    "native_present_ids": 621,
+    "trade_level_conversion": "DEFERRED_BY_USER_NOT_IMPLEMENTED",
+    "replacement_levels": null,
+    "trade_item_candidates": 10,
+    "retained_battle_role_items": 4,
+    "verification_report": ".godot/item_scope_v25/results.json",
+    "runtime_checkpoint": "80a7aab4a494ef4c68e349eeab99f36202d13bfe"
   }
 }

@@ -1,17 +1,24 @@
 # Pokemon Calvo — desarrollo tras la arquitectura
 
-Estado vigente V23: Cleanse Tag/Amuleto y Pure Incense/Incienso Puro tienen
-entrada nativa, propiedad y Lanzamiento revisados. Ver docs/current/START_HERE.md
-y ITEM_ENCOUNTER_HELD_V23.md/.json. 621/625 descriptores permitidos; quedan
-amulet_coin, exp_share, linking_cord y luck_incense. Tasa 2/3 parcial: pasos
-minimos y crianza siguen pendientes. No se habilita uso directo desde mochila.
-Checkpoint funcional: b9ca439c52ac10aea2da3f1f37c6f1de3090f34f.
-Codex retomó el trabajo por petición humana; OpenCode no es escritor activo.
-La guarda nueva tools/verification/run_encounter_held_v23.py protege el resto
-contra 2fee506. Su sello ya existe: no resellarlo. ITEM_CLOSURE_V2 y sus guardas,
-matrices y resultados son históricos; no reescribirlos ni usarlos como prueba de
-V23. Cada ampliación posterior declara su propia base y alcance.
+Estado vigente V25: el usuario excluyó linking_cord. Su adaptador de V24,
+manifiesto y herramientas específicas se retiraron; la historia está en Git.
+No reintroducirlo por ser un objeto canónico ni contar su antiguo test como
+funcionalidad activa. Se conserva la mejora del aviso de objetos equipados.
 
+La conversión de evoluciones por intercambio a nivel está APLAZADA por orden
+humana expresa. Ahora no se fijan niveles (tampoco 37), no se cambia EvolutionSystem
+ni el dataset y no se descartan otros evolutivos. Más adelante se contrastarán
+otros juegos/randomizadores y la tabla que aporte el amigo. Ver
+TRADE_EVOLUTIONS_FUTURE.md y ITEM_SCOPE_V25.md/.json en docs/current.
+Hay 10 candidatos ligados al intercambio y 4 que conservan otro efecto de combate.
+Solo Cordón es un veto nuevo; respetar el resto de la política existente.
+
+Guarda V25: tools/verification/run_item_scope_v25.py contra 4ac657f. El sello
+ya existe; no resellarlo. 621/624 descriptores permitidos presentes; quedan
+amulet_coin, exp_share y luck_incense. Las evoluciones ordinarias siguen activas.
+Codex es el único escritor actual; OpenCode no está trabajando. Las guardas y
+cuadernos V2/V23/V24 son históricos; no reescribirlos para aparentar vigencia.
+Checkpoint funcional: 80a7aab4a494ef4c68e349eeab99f36202d13bfe.
 
 ENCARGO EXTERNO HISTORICO (cerrado en 2fee506; no reanudar): el usuario autoriza de nuevo OpenCode para cierre de
 objetos por familias completas. Leer docs/opencode/ITEM_CLOSURE_V2/START_HERE.md,
