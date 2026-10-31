@@ -1,7 +1,7 @@
 extends "res://tests/gameplay/item_closure_v3_test_runner.gd"
 
-# Bloques 5–6: objetos oficiales de daño sin activación por habilidades.
-# Las 24 sesiones nativas usan ability_id vacío para aislar el objeto.
+# Bloques 5–7: objetos oficiales de daño sin activación por habilidades.
+# Las 36 sesiones nativas usan ability_id vacío para aislar el objeto.
 const DAMAGE_OUT := "res://.godot/competitive_damage_v28/"
 const DAMAGE_ITEMS := [
 	{"id": "muscle_band", "effective_move": "tackle",
@@ -19,6 +19,15 @@ const DAMAGE_ITEMS := [
 	{"id": "magnet", "effective_move": "thunder_shock",
 		"control_move": "tackle", "foe": "snorlax",
 		"api_id": 219, "api_name": "magnet"},
+	{"id": "miracle_seed", "effective_move": "energy_ball",
+		"control_move": "tackle", "foe": "snorlax",
+		"api_id": 216, "api_name": "miracle-seed"},
+	{"id": "never_melt_ice", "effective_move": "ice_beam",
+		"control_move": "tackle", "foe": "snorlax",
+		"api_id": 223, "api_name": "never-melt-ice"},
+	{"id": "black_belt", "effective_move": "brick_break",
+		"control_move": "tackle", "foe": "snorlax",
+		"api_id": 218, "api_name": "black-belt"},
 ]
 var damage_routes: Array = []
 
@@ -83,7 +92,7 @@ func _run_damage() -> void:
 		"checks": checks, "errors": errors, "routes": damage_routes,
 		"ids": DAMAGE_ITEMS.size(),
 		"limits": ["No ability/item interactions asserted (empty ability only)",
-			"Six physical map routes use Caterpie, not matching damage probes",
+			"Nine physical map routes use Caterpie, not matching damage probes",
 			"No GPU/manual visuals or beta objects"]}
 	var file := FileAccess.open(DAMAGE_OUT + "godot.json", FileAccess.WRITE)
 	if file != null:
@@ -92,7 +101,7 @@ func _run_damage() -> void:
 	done = true
 	print("COMPETITIVE_DAMAGE_V28 ", outcome.status, " checks=", checks,
 		" ids=", DAMAGE_ITEMS.size(), " errors=", errors.size())
-	quit(0 if errors.is_empty() and checks >= 300 and damage_routes.size() == 18 else 1)
+	quit(0 if errors.is_empty() and checks >= 440 and damage_routes.size() == 27 else 1)
 
 func _native_damage(spec: Dictionary, move: String, equipped: bool) -> Dictionary:
 	var item := StringName(spec.id)
