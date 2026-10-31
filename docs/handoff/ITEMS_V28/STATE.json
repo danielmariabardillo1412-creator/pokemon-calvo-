@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "mission": "ITEMS_V28",
-  "status": "BLOCK_0_PREPARED",
+  "status": "BLOCK_0_PORTED_AWAITING_CI",
   "base_branch": "main",
   "base_commit": "233b1a4f15ee4df7301e2c5acf8aed84a8f40626",
   "working_branch": "codex/items-v28-from-main",
@@ -9,10 +9,11 @@
   "prior_verified_functional_commit": "c554ab7635fb847aa395d2dbb5bc523b560bc6de",
   "block_0": {
     "scope": "port the exact V3-tested EV rewards and native item verification onto official V27",
-    "status": "PLANNED_NOT_YET_PORTED",
-    "ci": "NOT_RUN_IN_V28"
+    "status": "PORT_COMPLETE_IDENTICAL_V3_BLOBS",
+    "ci": "NOT_RUN_YET_AT_NEW_SHA",
+    "code_identity_from_v3": true
   },
-  "next_action": "Copy the seven allowlisted verified V3 blobs atomically; open one draft PR, verify affected CI on its new SHA and record failures or PASS.",
+  "next_action": "Open draft PR against main, inspect CI per job/step. On failure reproduce and fix on branch, preserve logs. Update RESULTADOS.json and PROGRESS.md after real results.",
   "main_is_official_v27": true,
   "all_2222_items_functional": false,
   "gpu_manual_review": "PENDING"
