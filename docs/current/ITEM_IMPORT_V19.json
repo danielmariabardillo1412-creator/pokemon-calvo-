@@ -1,0 +1,298 @@
+{
+  "phase": "ITEM_IMPORT_V19",
+  "status": "AUTOMATIC_RECOVERY_FAMILY_PILOT_PASS",
+  "date": "2026-10-30",
+  "base": "0a139088",
+  "canonical_ids_classified": 2222,
+  "compiled_field_recovery_ids": 42,
+  "preserved_existing_ids": 41,
+  "new_field_ids": [
+    "blue_flute"
+  ],
+  "headless_checks": 2386,
+  "gpu_checks": 2387,
+  "compiler_test_methods": 10,
+  "total_connected_field_effect_ids": 77,
+  "all_item_effects_certified": false,
+  "native_missing_permitted_equipped_definitions": 19,
+  "audit": "docs/current/ITEM_IMPORT_V19_AUDIT.json",
+  "verification": {
+    "status": "PASS",
+    "base": "0a139088",
+    "groups": [
+      {
+        "group": "compiler",
+        "status": "PASS",
+        "exit_code": 0,
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\item_import_v19_validation\\runs\\1793321062621422500\\compiler.log"
+      },
+      {
+        "group": "regeneration",
+        "status": "PASS",
+        "exit_code": 0,
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\item_import_v19_validation\\runs\\1793321062621422500\\regeneration.log"
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 0,
+        "errors": [],
+        "last_line": "[ DONE ] loading_editor_layout",
+        "group": "import",
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--path",
+          "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+          "--headless",
+          "--editor",
+          "--import",
+          "--quit"
+        ],
+        "exit_code": 0,
+        "seconds": 6.23,
+        "terminated_after_script_error": false,
+        "expected_negative_diagnostics": [],
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\item_import_v19_validation\\runs\\1793321062621422500\\import.log",
+        "log_sha256": "91b7afaac23a329898c2ef872627ca2fb04709b45a497ec5847a411e6c384e8d"
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 2386,
+        "errors": [],
+        "last_line": "ITEM_IMPORT_V19 PASS checks=2386 ids=42 GPU=false",
+        "group": "batch",
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--path",
+          "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+          "--headless",
+          "--script",
+          "tests/gameplay/item_import_v19.gd"
+        ],
+        "exit_code": 0,
+        "seconds": 10.08,
+        "terminated_after_script_error": false,
+        "expected_negative_diagnostics": [],
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\item_import_v19_validation\\runs\\1793321062621422500\\batch.log",
+        "log_sha256": "12875bce8a7f95038025ea95e083ab061c01e6bb3095e042da3c2b15dbd68ba0"
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 1814,
+        "errors": [],
+        "last_line": "ITEM_FIELD_V4 PASS checks=1814 cases=192 GPU=false",
+        "group": "medicine_field",
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--path",
+          "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+          "--headless",
+          "--script",
+          "tests/gameplay/item_field_effects_v4.gd"
+        ],
+        "exit_code": 0,
+        "seconds": 9.7,
+        "terminated_after_script_error": false,
+        "expected_negative_diagnostics": [],
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\item_import_v19_validation\\runs\\1793321062621422500\\medicine_field.log",
+        "log_sha256": "73dde6165d4939f699e84c230453cf4cd04196868dc55cf221a425cbc18f807c"
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 1049,
+        "errors": [],
+        "last_line": "ITEM_FIELD_V5 PASS checks=1049 cases=46 GPU=false",
+        "group": "recovery",
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--path",
+          "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+          "--headless",
+          "--script",
+          "tests/gameplay/item_field_recovery_v5.gd"
+        ],
+        "exit_code": 0,
+        "seconds": 9.72,
+        "terminated_after_script_error": false,
+        "expected_negative_diagnostics": [],
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\item_import_v19_validation\\runs\\1793321062621422500\\recovery.log",
+        "log_sha256": "dbf7f96622f2ec1395c33e86ce95bfb6de2fbb26e1aecf6f27b6acd6e8bd5699"
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 6990,
+        "errors": [],
+        "last_line": "ITEM_FIELD_V7 PASS checks=6990 cases=504 GPU=false",
+        "group": "training",
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--path",
+          "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+          "--headless",
+          "--script",
+          "tests/gameplay/item_field_training_v7.gd"
+        ],
+        "exit_code": 0,
+        "seconds": 10.08,
+        "terminated_after_script_error": false,
+        "expected_negative_diagnostics": [],
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\item_import_v19_validation\\runs\\1793321062621422500\\training.log",
+        "log_sha256": "240a74b91ec68c0a5ff1913ba32af1d602b686b99462713fe003b5128a839fc3"
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 120,
+        "errors": [],
+        "last_line": "SHOWDOWN_MEDICINES PASS checks=120 errors=0",
+        "group": "native_medicine",
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--path",
+          "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+          "--headless",
+          "--script",
+          "tests/gameplay/showdown_medicine_test_runner.gd"
+        ],
+        "exit_code": 0,
+        "seconds": 21.5,
+        "terminated_after_script_error": false,
+        "expected_negative_diagnostics": [],
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\item_import_v19_validation\\runs\\1793321062621422500\\native_medicine.log",
+        "log_sha256": "ccc7186a97d88119a172f3d8adca2bbb4be091c3f10c5fd804062bef070d36f2"
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 118,
+        "errors": [],
+        "last_line": "FIELD_NATIVE PASS checks=118 GPU=false errors=0",
+        "group": "native",
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--path",
+          "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+          "--headless",
+          "--script",
+          "tests/gameplay/field_native_test_runner.gd"
+        ],
+        "exit_code": 0,
+        "seconds": 54.81,
+        "terminated_after_script_error": false,
+        "expected_negative_diagnostics": [],
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\item_import_v19_validation\\runs\\1793321062621422500\\native.log",
+        "log_sha256": "4532edaa65a10230fbf1101f37a4944f5c8487c3292fb8a6d48e1b391f3fb333"
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 912,
+        "errors": [],
+        "last_line": "FIELD_RESTORE_INTEGRATION PASS checks=912 errors=0",
+        "group": "restore",
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--path",
+          "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+          "--headless",
+          "--script",
+          "tests/gameplay/field_restore_integration_test_runner.gd"
+        ],
+        "exit_code": 0,
+        "seconds": 44.97,
+        "terminated_after_script_error": false,
+        "expected_negative_diagnostics": [],
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\item_import_v19_validation\\runs\\1793321062621422500\\restore.log",
+        "log_sha256": "b680833ccd3f8bdeff5c7b4503bff0c6063eb4adfa9db317e952ca3d48d46478"
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 2387,
+        "errors": [],
+        "last_line": "ITEM_IMPORT_V19 PASS checks=2387 ids=42 GPU=true",
+        "group": "batch_gpu",
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--path",
+          "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+          "--resolution",
+          "1280x720",
+          "--script",
+          "tests/gameplay/item_import_v19.gd",
+          "--",
+          "--capture"
+        ],
+        "exit_code": 0,
+        "seconds": 13.98,
+        "terminated_after_script_error": false,
+        "expected_negative_diagnostics": [],
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\item_import_v19_validation\\runs\\1793321062621422500\\batch_gpu.log",
+        "log_sha256": "d16fa521a58ea43c08f640411972b420fe7f8b4d8897acb0e5d5b4d53af77d04"
+      }
+    ],
+    "integrity_before": {
+      "status": "PASS",
+      "base": "0a139088f4bc30d74e31757651fb67e6a8b5b825",
+      "protected_files": 23044,
+      "preserved_absent_skip_worktree": 15647,
+      "mode": "HASH_IF_METADATA_CHANGED",
+      "allowed_changes": [
+        "AGENTS.md",
+        "docs/current/ITEM_IMPORT_V19.md",
+        "docs/current/ITEM_IMPORT_V19_AUDIT.json",
+        "modules/inventory/field_item_effects.gd",
+        "modules/inventory/field_item_service.gd",
+        "modules/inventory/imported_recovery_v19.json",
+        "scenes/visual/field_item_bag.gd",
+        "tests/gameplay/item_import_v19.gd",
+        "tests/gameplay/item_import_v19.gd.uid",
+        "tests/tools/test_item_import_v19.py",
+        "tools/item_import/import_recovery.py",
+        "tools/verification/run_item_import_v19.py"
+      ]
+    },
+    "integrity_after": {
+      "status": "PASS",
+      "base": "0a139088f4bc30d74e31757651fb67e6a8b5b825",
+      "protected_files": 23044,
+      "preserved_absent_skip_worktree": 15647,
+      "mode": "FULL_CONTENT_HASHES",
+      "allowed_changes": [
+        "AGENTS.md",
+        "docs/current/ITEM_IMPORT_V19.md",
+        "docs/current/ITEM_IMPORT_V19_AUDIT.json",
+        "docs/current/ITEM_SYSTEM_CURRENT_STATUS.json",
+        "docs/current/NEXT_STEPS.md",
+        "docs/current/PROJECT_STATE.md",
+        "docs/current/START_HERE.md",
+        "modules/inventory/field_item_effects.gd",
+        "modules/inventory/field_item_service.gd",
+        "modules/inventory/imported_recovery_v19.json",
+        "scenes/visual/field_item_bag.gd",
+        "tests/gameplay/item_import_v19.gd",
+        "tests/gameplay/item_import_v19.gd.uid",
+        "tests/tools/test_item_import_v19.py",
+        "tools/item_import/import_recovery.py",
+        "tools/verification/run_item_import_v19.py"
+      ]
+    },
+    "tested_sources_sha256": {
+      "modules/inventory/field_item_effects.gd": "371153bfe8e952964904ad32d4d59d7547ee6517957033fb630e036ece07eb7f",
+      "modules/inventory/field_item_service.gd": "b3210238b88eb8cef30cd31b10d3647f3eddc09f3eeca0a58f3aa748b5863994",
+      "modules/inventory/imported_recovery_v19.json": "644175d4725711902588a3c619a3032734662e6c891e1d28daf2f3df0df7a993",
+      "tests/gameplay/item_import_v19.gd": "dafad00699f459c861b378fccd0eaee70f0c3d182679be8eb804922dd33f7af8",
+      "tests/gameplay/item_import_v19.gd.uid": "9197522b1fdb72109c06fc29a31abdcc2fc8a3ec1acb8960714cd1a5ffb52464",
+      "tests/tools/test_item_import_v19.py": "73d90c10f260d3eb4d302a5800a2e3f50fe01988d24de5cc0588fa59959890af",
+      "tools/item_import/import_recovery.py": "f0643b2ed0b93b587124760da146f70f13a44b1ac05bc52c576a184466da203b",
+      "tools/verification/run_item_import_v19.py": "89f2f7347066bcad89fc8032629cf2c4f2d88ec61416ca8bf9cb380df9d60444"
+    }
+  },
+  "capture": {
+    "path": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\item_import_v19_validation\\runs\\1793321062621422500\\import_bag.png",
+    "sha256": "e67aa13315d51582051b7a46f49ddaa03f938902b1e4bb1d6127c70533a99fc8",
+    "visually_reviewed": true
+  },
+  "source_credit": "RHH / rh-hideout and contributors, pokeemerald-expansion 8654616bd38d9b28cc7dd8f3d0b4cb030aa2d40c",
+  "limits": [
+    "Field recovery only; classified catalog does not imply all effects work",
+    "41 routes already existed; one new field-use ID",
+    "Modern recovery amounts plus RHH field availability, not full generation parity",
+    "19 native held definitions still missing, including Blue Flute held use"
+  ]
+}

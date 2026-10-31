@@ -586,20 +586,21 @@ func run(check: Callable) -> void:
 		)
 	check.call("data_v3_ability_contract_end_turn_blockers_stay_data_only", end_turn_blockers_safe)
 
-	var report := _load_json("res://data/reports/unsupported_mechanics.json")
-	var summary: Dictionary = report.get("summary", {}).get("abilities", {})
+	# The generated local report predates the ability classification contract.
+	# Verify what the game actually loads, against the independently asserted raw
+	# IDs above, instead of requiring an untracked report to have been regenerated.
+	var normalized := _load_json("res://data/normalized/pokemon_api.json")
+	var normalized_classes := _ids_by_classification((normalized.get("abilities", {}) as Dictionary).values())
 	check.call(
-		"data_v3_ability_contract_report_counts",
-		int(summary.get("DATA_READY", -1)) == 373
-		and int(summary.get("RUNTIME_SUPPORTED", -1)) == 21
-		and int(summary.get("PARTIAL_RUNTIME", -1)) == 14
-		and int(summary.get("DATA_ONLY", -1)) == 338,
+		"data_v3_ability_contract_normalized_counts",
+		(normalized.get("abilities", {}) as Dictionary).size() == 373
+		and (normalized_classes.get("RUNTIME_SUPPORTED", []) as Array).size() == 21
+		and (normalized_classes.get("PARTIAL_RUNTIME", []) as Array).size() == 14
+		and (normalized_classes.get("DATA_ONLY", []) as Array).size() == 338,
 	)
-	var report_classes: Dictionary = report.get("ability_runtime_classification", {})
 	check.call(
-		"data_v3_ability_contract_report_ids",
-		(report_classes.get("RUNTIME_SUPPORTED", []) as Array) == FULL_IDS
-		and (report_classes.get("PARTIAL_RUNTIME", []) as Array) == PARTIAL_IDS,
+		"data_v3_ability_contract_raw_normalized_classification_identity",
+		normalized_classes == classes,
 	)
 
 

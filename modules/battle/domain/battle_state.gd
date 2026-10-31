@@ -4,6 +4,7 @@ extends RefCounted
 const SCHEMA_VERSION := 2
 const RNG_ALGORITHM := "lcg32_v1"
 const WAITING_FOR_ACTIONS := &"waiting_for_actions"
+const WAITING_FOR_SWITCH := &"waiting_for_switch"
 const FINISHED := &"finished"
 
 var battle_id: StringName
@@ -20,6 +21,18 @@ var battle_started: bool = false
 # Optional additive field within snapshot schema V2. Empty inventories are omitted
 # from serialization so all historical V2 snapshots remain byte-for-byte stable.
 var side_item_inventories: Dictionary = {} # side_id -> BattleSideItemInventory
+# Explicit singles pilot. Disabled snapshots retain the historical V2 wire format.
+# Continuation is state, not a UI callback, so a restored server can resume it.
+var switch_move_rules_enabled: bool = false
+var battle_kind: StringName = &"trainer"
+var pending_switch: Dictionary = {}
+var remaining_turn_actions: Array[BattleAction] = []
+var end_reason: StringName = &""
+var live_moves_enabled: bool = false
+var transform_rules_enabled: bool = false
+var substitute_rules_enabled: bool = false
+var weather_rules_enabled: bool = false
+var weather: Dictionary = {}
 
 
 func _init(
@@ -172,6 +185,22 @@ func to_dict() -> Dictionary:
 			serialized_inventories[String(side_id)] = inventory.to_dict()
 	if not serialized_inventories.is_empty():
 		result["side_item_inventories"] = serialized_inventories
+	if switch_move_rules_enabled:
+		var remaining: Array[Dictionary] = []
+		for action in remaining_turn_actions:
+			remaining.append(action.to_dict())
+		result["switch_move_context"] = {"version": 1, "battle_kind": String(battle_kind),
+			"pending": pending_switch.duplicate(true), "remaining_actions": remaining,
+			"end_reason": String(end_reason)}
+	if weather_rules_enabled:
+		result["weather_context"] = {"version": 1, "weather": weather.duplicate(true)}
+	if live_moves_enabled: result["live_moves_context"] = {"version": 1}
+	if transform_rules_enabled:
+		result["transform_context"] = {"version": 1}
+	if substitute_rules_enabled:
+		result["substitute_context"] = {"version": 1}
+	if switch_move_rules_enabled or weather_rules_enabled or substitute_rules_enabled or transform_rules_enabled or live_moves_enabled:
+		return _canonical_switch_snapshot(result)
 	return result
 
 
@@ -204,6 +233,27 @@ static func from_dict(data: Dictionary) -> BattleState:
 		state.sides.append(BattleSide.new(&"side_b", [restored_creatures[1].instance_id]))
 	state._refresh_active_ids()
 	state.battle_started = bool(data.get("battle_started", false))
+	var live_context: Variant = data.get("live_moves_context", {})
+	if live_context is Dictionary: state.live_moves_enabled = live_context.get("version", 0) == 1
+	var transform_context: Variant = data.get("transform_context", {})
+	if transform_context is Dictionary: state.transform_rules_enabled = transform_context.get("version", 0) == 1
+	var substitute_context: Variant = data.get("substitute_context", {})
+	if substitute_context is Dictionary:
+		state.substitute_rules_enabled = substitute_context.get("version", 0) == 1
+	var weather_context: Variant = data.get("weather_context", {})
+	if weather_context is Dictionary and weather_context.get("version", 0) == 1:
+		state.weather_rules_enabled = true
+		state.weather = weather_context.get("weather", {}).duplicate(true)
+		for field: String in ["turns_remaining", "set_turn"]:
+			if state.weather.has(field): state.weather[field] = int(state.weather[field])
+	var switch_context: Variant = data.get("switch_move_context", {})
+	if switch_context is Dictionary and switch_context.get("version", 0) == 1:
+		state.switch_move_rules_enabled = true
+		state.battle_kind = StringName(switch_context.get("battle_kind", "trainer"))
+		state.pending_switch = switch_context.get("pending", {}).duplicate(true)
+		state.end_reason = StringName(switch_context.get("end_reason", ""))
+		for action_data: Dictionary in switch_context.get("remaining_actions", []):
+			state.remaining_turn_actions.append(BattleAction.from_dict(action_data))
 	var raw_inventories: Variant = data.get("side_item_inventories", {})
 	if raw_inventories is Dictionary:
 		for raw_side_id in (raw_inventories as Dictionary).keys():
@@ -221,3 +271,22 @@ static func _string_names_to_strings(values: Array[StringName]) -> Array[String]
 	for value in values:
 		result.append(String(value))
 	return result
+
+
+static func _canonical_switch_snapshot(value: Variant) -> Variant:
+	# JSON parses numbers as floats. Canonicalize exact integral payload values so
+	# transferred volatile counters compare identically after save/restore. Preserve
+	# genuine fractions and leave the historical disabled snapshot path unchanged.
+	if value is Dictionary:
+		var result := {}
+		for key: Variant in value:
+			result[key] = _canonical_switch_snapshot(value[key])
+		return result
+	if value is Array:
+		var result := []
+		for item: Variant in value:
+			result.append(_canonical_switch_snapshot(item))
+		return result
+	if value is float and is_finite(value) and absf(value) <= 9007199254740991.0 and value == floor(value):
+		return int(value)
+	return value

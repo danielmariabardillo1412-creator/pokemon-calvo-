@@ -1,0 +1,126 @@
+{
+  "captures": [
+    {
+      "path": ".godot/ally_switch_checks/side_a_0_before.png",
+      "sha256": "4a966a921eb0e7b09473e83538909f2580c66a50be74766cc8ef08cdf60acf73"
+    },
+    {
+      "path": ".godot/ally_switch_checks/side_a_0_swap.png",
+      "sha256": "4e75cc940c708a7c442151f75fa054a602bda2683d26bb0d8177c5dea12a459a"
+    },
+    {
+      "path": ".godot/ally_switch_checks/side_a_0_redirected_hit.png",
+      "sha256": "34e222cfaa0d24c43be44e8101ae0c83190b4850da15417625caefc9cc38d372"
+    },
+    {
+      "path": ".godot/ally_switch_checks/side_a_0_after.png",
+      "sha256": "22c5d92dac001e4772fe964aa9a6420773592ce8b50d45b13c8de951e2e30f84"
+    },
+    {
+      "path": ".godot/ally_switch_checks/side_a_1_before.png",
+      "sha256": "2800ce1cfb9dabddc6ef561409f11fc93610ad9a90cabcf59aebcc814a73c9a7"
+    },
+    {
+      "path": ".godot/ally_switch_checks/side_a_1_swap.png",
+      "sha256": "db36fd6275f44cdcb32d71e8d2b4513b60d93fba628adead1c6dca092ce66018"
+    },
+    {
+      "path": ".godot/ally_switch_checks/side_a_1_redirected_hit.png",
+      "sha256": "651242e9e2bbffff860e5527ede9c7b7768c82bc13305a8328f57682b3592674"
+    },
+    {
+      "path": ".godot/ally_switch_checks/side_a_1_after.png",
+      "sha256": "174ac7c2d196f8922542a01089874bdcfd5d75e948688c063a8ec1c57e197bec"
+    },
+    {
+      "path": ".godot/ally_switch_checks/side_b_0_before.png",
+      "sha256": "4776ef96894864c176140514255ae85d58c1a63b0e89ee99140b61944229696c"
+    },
+    {
+      "path": ".godot/ally_switch_checks/side_b_0_swap.png",
+      "sha256": "7062e3a3c3a35a29e945acaa4b06d17fff0d833a4f41889e7319cfa384de9d13"
+    },
+    {
+      "path": ".godot/ally_switch_checks/side_b_0_redirected_hit.png",
+      "sha256": "15349b7a8ae15463df5abb221ebd8d1538b4e0f4b5d0f2a61e425c1932d4f449"
+    },
+    {
+      "path": ".godot/ally_switch_checks/side_b_0_after.png",
+      "sha256": "7f19f6ec38ef90768629fde3cf3ca5931b6e8057ee044bb54e15c20dd040c26a"
+    },
+    {
+      "path": ".godot/ally_switch_checks/side_b_1_before.png",
+      "sha256": "e72f3f60b88edf15278f0c47346c167fc80df4df111f74178d26e648dd935e8a"
+    },
+    {
+      "path": ".godot/ally_switch_checks/side_b_1_swap.png",
+      "sha256": "25130ec143951cdbb08ccb0d892130ba45f4807c181f55959d6d3fb4ba9210f8"
+    },
+    {
+      "path": ".godot/ally_switch_checks/side_b_1_redirected_hit.png",
+      "sha256": "83dfa8c527748b283d7214a7ab6e41bbec0652cf25e8a352ef83f9eeec1bbd07"
+    },
+    {
+      "path": ".godot/ally_switch_checks/side_b_1_after.png",
+      "sha256": "5a440dd9f90e6438d9a574bd0ee9632e2fc35189e104c39166111b637531886d"
+    }
+  ],
+  "checks": 1044,
+  "errors": [],
+  "format": "doubles_position_pilot_v1",
+  "gpu": true,
+  "limitations": [
+    "Explicit 2-vs-2 adapter; no reserves, abilities/items, spread moves, capture, progression, trainer AI or matchmaking.",
+    "Four diagnostic damage moves only. Existing singles API and snapshots remain separate.",
+    "Four-body camera and movement are an adaptation; original Ally Switch clips have body tracks but no particle cells."
+  ],
+  "pack_sha256": "bc085c4228966202b8037773f773b2b1a7b75864699c021b7e4832e77f85db9d",
+  "references": [
+    "https://github.com/smogon/pokemon-showdown/blob/master/data/moves.ts"
+  ],
+  "source_sha256": {
+    ".godot/move_batch_catalog/index.json": "bb327ada0e33347980260a7e4a8af65e8622171002c64d3ecf56759aa92dbee1",
+    "data/normalized/pokemon_api.json": "719d14c082bdba03b26e801d23fb8887d0a0f4376348cf4a27e79a4b0a3c08b3",
+    "data/raw/pokemon_api.json": "2efc1538081e7849d6e04555570ca28c19b13f09f0fe0c7ce38329881972f24a",
+    "modules/battle/domain/battle_event.gd": "580d8e4be2f131401c5bd5782dd0bf5145366b9567d3da4a5e63a01247773616",
+    "modules/battle/domain/turn_resolver.gd": "99f16c6f7dca04ff2ee05052817e0f54188b7c3df8db70a0fd0b1c4eda681a7c",
+    "modules/battle/server/authoritative_battle_server.gd": "fb7c9b2996b3368bf4fc9347539b73bfbada9e259a106fd4d0df85ac2c6a5168",
+    "modules/battle/server/doubles_position_battle.gd": "3c191fb8f6ef990b33987b9b07bf1aff9bc7987100f5a2881fab591d6c81b8c6",
+    "scenes/visual/community_move_preview.gd": "7674d3a61e113e085d12132a4e10461aedd3a760516ab68700f2868f0f3fd4de",
+    "scenes/visual/doubles_battle_art.gd": "16af02e875568ce933b14e320f59c79f6ae7d0314f1ecaf5d1838bb3eb2400b3",
+    "scenes/visual/doubles_position_demo.gd": "e784e0324ec193f84c7fbe60a8ea995a7cadc84e62a12a46297ac4a1b912ade9",
+    "scenes/visual/doubles_timeline_plan.gd": "51372d7d40395034e1f86372f55bdbb4a44a2bd5d6bdf4ff7d4e77802d1a6528",
+    "scenes/visual/field_demo.gd": "d5e5ee9fa5edcbcb6c91b33f73496eb7bfc63353bc200adc5b8afe4ac57d55fe",
+    "tests/battle/ally_switch_pilot_test_runner.gd": "28f6a6c4408c813c3de32db0dbacca07abf3c1cd251067b26c2ad66df8eb3ccb",
+    "tools/visual/build_ally_switch_pilot.py": "b67cf57d8456f8fa66a8320cf09ca9fbec8b6d63d1b42f3f656452cfcb4ec381"
+  },
+  "status": "DOUBLES_POSITION_PILOT_VALIDATED_NOT_COMPLETE_DOUBLES_ENGINE",
+  "validation_status": "PASS",
+  "server_sample_count": 48,
+  "test_report": ".godot\\ally_switch_checks\\gpu.json",
+  "test_report_sha256": "c9743915bcd16a872c1ae9fca75b541a217dddd3e41105387044748dea0e2809",
+  "mechanics_added": [
+    "ally_switch"
+  ],
+  "remaining_unimplemented_in_original_19_pilots": [],
+  "production_rollout_complete": false,
+  "enabled_scope": "F12 isolated four-participant adapter inside the existing field demo, no main party mutation or rollout to trainer AI.",
+  "notes": [
+    "Target creature IDs are validated and bound to their selected positions before ordering; a swap changes the occupant subsequently hit.",
+    "Original identity, HP, PP, status, stages and party order stay on the creature. It is not a reserve switch and emits no SWITCHED event.",
+    "Priority +2; repeat attempts use 1/3, 1/9 ... 1/729, reset on failure and expire after an intervening turn. Snapshot and packet permutation preserve RNG/results.",
+    "Two sides, either initial slot, 12 seeds; additional repeat/tie/KO/unsupported-scope/terminal tests. UI replays do not change the authoritative snapshot.",
+    "Original 15-frame/20-fps body-only fades are mirrored around a real position swap. Four-body camera, motion and generic diagnostic hit effects are recorded adaptations; original PNGs/catalog/renderer are unchanged.",
+    "Singles APIs explicitly reject four-active-actor commands instead of forwarding them to the historical two-action resolver."
+  ],
+  "contact_sheets": [
+    {
+      "path": ".godot\\ally_switch_checks\\positions_contact_sheet.png",
+      "sha256": "ea9044f978354e240f9ab90e3f826e17d19a2b5794739da3cd11162132f03878"
+    },
+    {
+      "path": ".godot\\ally_switch_checks\\motion_contact_sheet.png",
+      "sha256": "9737bba8107fa8bb8f16dacf7ac216104b3bbaf7e8438c3e9d1383af64cb75d8"
+    }
+  ]
+}

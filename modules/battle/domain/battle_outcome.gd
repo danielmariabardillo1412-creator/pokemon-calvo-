@@ -50,7 +50,7 @@ static func from_battle_state(state: BattleState, catalogs) -> BattleOutcome:
 				continue
 			o.participants.append({
 				"creature_id": String(c.instance_id),
-				"species_id": String(c.species_id),
+				"species_id": String(c.base_species_id()),
 				"side_id": String(winning_side.side_id),
 				"level": c.level,
 				"fainted": c.is_knocked_out(),
@@ -64,9 +64,9 @@ static func from_battle_state(state: BattleState, catalogs) -> BattleOutcome:
 			if c == null:
 				continue
 			if c.is_knocked_out():
-				var species: CreatureSpecies = catalogs.species_catalog.get_by_id(c.species_id) if catalogs != null else null
+				var species: CreatureSpecies = catalogs.species_catalog.get_by_id(c.base_species_id()) if catalogs != null else null
 				o.defeated.append({
-					"species_id": String(c.species_id),
+					"species_id": String(c.base_species_id()),
 					"level": c.level,
 					"base_experience": species.base_experience if species != null else 0,
 				})

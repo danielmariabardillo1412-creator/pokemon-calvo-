@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "profile": "calvo_encounter_held_v23",
+  "source": "https://github.com/rh-hideout/pokeemerald-expansion/tree/8654616bd38d9b28cc7dd8f3d0b4cb030aa2d40c",
+  "source_sha256": {
+    "items.h": "107f1b78a457f3a9c48749f325d674b62fe559b0ebfc365db13e82b00b19ecd3",
+    "item_effects.h": "6cf395c29bbfcf425eeb965f2101edb8ba139c6cb24beef0521b92f6853a5e5f"
+  },
+  "generation_source_sha256": {
+    "pokered_item_constants.asm": "b5a1db015fbf0de637381eb39350f21f35a436a8088e2f6657f65c79f118f97f",
+    "pokecrystal_item_constants.asm": "bb870ffb3448845aa886ede0030a114a7773d7cb6924d2c59acdca0c53a02e58",
+    "pokeemerald_items.h": "6e3a9728b4d90cc23fee0aae9b9ffa9fbd71541e6b3cb2b966f334930b6ad6f8",
+    "pokeplatinum_items.txt": "9b5e48100fff0baf7a899a5355dca6bbe86b46acca5fe4854ede462296c4acb5"
+  },
+  "items": {
+    "cleansetag": {
+      "name": "Cleanse Tag",
+      "gen": 2,
+      "fling": {
+        "basePower": 30
+      }
+    },
+    "pureincense": {
+      "name": "Pure Incense",
+      "gen": 4,
+      "fling": {
+        "basePower": 10
+      }
+    }
+  },
+  "effect_owner": "modules/gameplay/encounter_item_modifiers.gd",
+  "scope": "Native battle identity, Fling and ownership for the existing encounter-rate items. No callbacks or new battle effects.",
+  "limits": [
+    "PARTIAL_VERIFIED_RATE_ONLY: 2/3 rate in the current profile; minimum-step semantics remain absent.",
+    "No direct bag use or new save fields; native Fling/Trick/Knock Off remain authoritative."
+  ]
+}

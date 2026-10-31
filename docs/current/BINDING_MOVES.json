@@ -1,0 +1,285 @@
+{
+  "captures": [
+    {
+      "path": ".godot/binding_checks/bind_native.png",
+      "sha256": "7293fdb27ba8e349bb2d52f0e63f6213e3ef7005ec23f2e61f64f6b53ddea674"
+    },
+    {
+      "path": ".godot/binding_checks/bind_after.png",
+      "sha256": "74c9e098c8352a969b902ab692b2224a5e3dd5b92fa4fa8fb4819875e9e4bf2f"
+    },
+    {
+      "path": ".godot/binding_checks/wrap_native.png",
+      "sha256": "2362fc4d717ead62ce2c77e50c12b7dbab89c8f12f9ee81a4911dde024dac90a"
+    },
+    {
+      "path": ".godot/binding_checks/wrap_after.png",
+      "sha256": "d7b108d6f992747141d1cf2bd5e212c60608468aa10059bf83c138d5458c20cb"
+    },
+    {
+      "path": ".godot/binding_checks/fire_spin_native.png",
+      "sha256": "c0fe89757f58a6f87e9620272a3f10207f5a58eb1724b0046ce6d7c31cf96b55"
+    },
+    {
+      "path": ".godot/binding_checks/fire_spin_after.png",
+      "sha256": "73ebec3f8ac6275101caa261864e4240fd593c6b6c920c770381869f32244a84"
+    },
+    {
+      "path": ".godot/binding_checks/whirlpool_native.png",
+      "sha256": "d44e16166cc385f22b64c25e4a9b256f8a1cea5d76e05d77ed5cecd0c7991271"
+    },
+    {
+      "path": ".godot/binding_checks/whirlpool_after.png",
+      "sha256": "a3be336af7ad70b456c539a7000145c4eb6fc06d4f9ca2d24ed37e704cf8bb75"
+    },
+    {
+      "path": ".godot/binding_checks/clamp_native.png",
+      "sha256": "73b6e4cbb232b679bcbbaa50de836193d54491a0b17eb8243dd4c6ae4a6226d3"
+    },
+    {
+      "path": ".godot/binding_checks/clamp_after.png",
+      "sha256": "037bd5c78586f50ccfc29ea0a3272f3f88c5f5f54e011729a90998eceef38b31"
+    },
+    {
+      "path": ".godot/binding_checks/sand_tomb_native.png",
+      "sha256": "5d26d299b8c1336ca7666844a9cfc9e40cd711c8f3dd260072e03621a71f1bdb"
+    },
+    {
+      "path": ".godot/binding_checks/sand_tomb_after.png",
+      "sha256": "6003a80ad2dc8d94c67287afb628f7753aafdd79ac68813a47a4418895d78c1e"
+    },
+    {
+      "path": ".godot/binding_checks/magma_storm_native.png",
+      "sha256": "47820e1a84ea9787325c013c99764dc90cc4f948f314d97cb2e0bba61c1a03a2"
+    },
+    {
+      "path": ".godot/binding_checks/magma_storm_after.png",
+      "sha256": "da52d73a510030bfb65bc95c02d52e6023ce79b80b9fa362f22d5f16e304623f"
+    },
+    {
+      "path": ".godot/binding_checks/infestation_native.png",
+      "sha256": "a246c30d1bc4e71bace5487f86083ac8c4994161c1311b1aafdc685aee7737b8"
+    },
+    {
+      "path": ".godot/binding_checks/infestation_after.png",
+      "sha256": "967925ddeab4f8503512989bc76bcb0d1afd74a3aaf35f60a2cbcc912432eaf8"
+    },
+    {
+      "path": ".godot/binding_checks/snap_trap_native.png",
+      "sha256": "5ce661fd27b07f3c0ce7c7265c6a6613e8f93aecb8bf2fc042d407ae6a5ca536"
+    },
+    {
+      "path": ".godot/binding_checks/snap_trap_after.png",
+      "sha256": "b0dfc254b569f9e7a1af8d24b07e3f447e7d2a11743f581e3a258907894a31ef"
+    },
+    {
+      "path": ".godot/binding_checks/thunder_cage_native.png",
+      "sha256": "f5bb146183fed0f47641c858a2cb3713ebd4dab0faec5ae9a12c23cef847678d"
+    },
+    {
+      "path": ".godot/binding_checks/thunder_cage_after.png",
+      "sha256": "525bffaaf190d93bf89e51805d67ebf54ba889831484d17eef198596fc4bacab"
+    }
+  ],
+  "cases": 240,
+  "checks": 1883,
+  "errors": [],
+  "gpu": true,
+  "moves": [
+    "bind",
+    "wrap",
+    "fire_spin",
+    "whirlpool",
+    "clamp",
+    "sand_tomb",
+    "magma_storm",
+    "infestation",
+    "snap_trap",
+    "thunder_cage"
+  ],
+  "source_sha256": {
+    ".godot/move_batch_catalog/index.json": "bb327ada0e33347980260a7e4a8af65e8622171002c64d3ecf56759aa92dbee1",
+    "data/normalized/pokemon_api.json": "719d14c082bdba03b26e801d23fb8887d0a0f4376348cf4a27e79a4b0a3c08b3",
+    "data/raw/pokemon_api.json": "2efc1538081e7849d6e04555570ca28c19b13f09f0fe0c7ce38329881972f24a",
+    "modules/battle/application/binding_move_rules.gd": "00e12c7b372e3b384c5d8a2942a4ff5ea8e3ded051446aaa1817d99c4814262d",
+    "modules/battle/application/live_move_profile.gd": "ae3f9184f27bbdb9a6c15fda556340f1e250d68fcf891f58514520ce4ce4a955",
+    "modules/battle/application/switch_move_rules.gd": "e4ea745bf74f4d648d8a05698476cc97a9f9731c75e1deae79972ea7c98c776c",
+    "modules/battle/application/turn_executor.gd": "7e90723f0267168989ea727e4a36e449e4e7cd5d5fd2ba4fb3ec9b1e46025f46",
+    "modules/battle/effects/battle_effect_executor.gd": "4a9eaf97a51c08b2545e8258b594078f0b0fa040b584da0e9bad06fe27f73b6d",
+    "modules/battle/presentation/battle_presentation_controller.gd": "3f09953da77cf8d7e0c2cee49a7c2fbb7e7fef7b6183eaac61b102a1d1e5f48a",
+    "modules/battle/presentation/live_move_event_text.gd": "db91b88e3905a1d1cb786a44e094cf9e764e59e669066de8b9b8556c590f0746",
+    "modules/battle/presentation/trainer_battle_presentation_controller.gd": "e68fee0f133141714db7de29b1b89f0f1698d5c7b011c7fa17be6db5295869fa",
+    "modules/battle/server/authoritative_battle_server.gd": "f20f6bb808efde206f7810417102910895ac59eae25c5d5946338c45747908b8",
+    "modules/gameplay/wild_adventure_session.gd": "ef7a5428a6b69bf398041c14c214b9d2d965226201ee4b15c6eacd04525b4b1c",
+    "modules/localization/spanish_game_text.gd": "24decffef40f6d8bbc5567f8267a57d22c514f638a31302b6f3ec6efea87c381",
+    "modules/trainer_ai/trainer_observation_builder.gd": "88578649a3148d9c3324f6b0f7e83f5938b06bacc133e26716526579297462ee",
+    "modules/trainer_ai/trainer_plausible_world_factory.gd": "0e9b88e00c95245054654fd75a84f544678f33c403bcf8f44539f7c821550a3f",
+    "scenes/visual/community_move_preview.gd": "7674d3a61e113e085d12132a4e10461aedd3a760516ab68700f2868f0f3fd4de",
+    "tests/battle/binding_move_test_runner.gd": "bf0686295b828afb99f559ab7bc3025a2b8e5f1f10b63c7d63e599755dc3f27f"
+  },
+  "status": "LOCAL_BINDING_BATCH_VALIDATED",
+  "visual_samples": [
+    {
+      "actor_level": 50,
+      "displayed_hp": 3493,
+      "move": "bind",
+      "residual_damage": 500,
+      "target_hp": 3493
+    },
+    {
+      "actor_level": 50,
+      "displayed_hp": 3493,
+      "move": "wrap",
+      "residual_damage": 500,
+      "target_hp": 3493
+    },
+    {
+      "actor_level": 50,
+      "displayed_hp": 3493,
+      "move": "fire_spin",
+      "residual_damage": 500,
+      "target_hp": 3493
+    },
+    {
+      "actor_level": 50,
+      "displayed_hp": 3493,
+      "move": "whirlpool",
+      "residual_damage": 500,
+      "target_hp": 3493
+    },
+    {
+      "actor_level": 50,
+      "displayed_hp": 3493,
+      "move": "clamp",
+      "residual_damage": 500,
+      "target_hp": 3493
+    },
+    {
+      "actor_level": 50,
+      "displayed_hp": 3486,
+      "move": "sand_tomb",
+      "residual_damage": 500,
+      "target_hp": 3486
+    },
+    {
+      "actor_level": 50,
+      "displayed_hp": 3479,
+      "move": "magma_storm",
+      "residual_damage": 500,
+      "target_hp": 3479
+    },
+    {
+      "actor_level": 50,
+      "displayed_hp": 3491,
+      "move": "infestation",
+      "residual_damage": 500,
+      "target_hp": 3491
+    },
+    {
+      "actor_level": 50,
+      "displayed_hp": 3472,
+      "move": "snap_trap",
+      "residual_damage": 500,
+      "target_hp": 3472
+    },
+    {
+      "actor_level": 50,
+      "displayed_hp": 3432,
+      "move": "thunder_cage",
+      "residual_damage": 500,
+      "target_hp": 3432
+    }
+  ],
+  "newly_admitted": [
+    "bind",
+    "wrap",
+    "fire_spin",
+    "whirlpool",
+    "clamp",
+    "sand_tomb",
+    "magma_storm",
+    "infestation",
+    "snap_trap",
+    "thunder_cage"
+  ],
+  "admitted_move_count_at_validation": 612,
+  "remaining_mechanics_count_at_validation": 238,
+  "external_reference_cases": 5910,
+  "external_binding_cases": 960,
+  "self_tests": {
+    "status": "PASS",
+    "unit_tests": 36,
+    "real_adapter_negative_controls": 3
+  },
+  "regressions": {
+    "core": {
+      "passed": 472,
+      "failed": 0
+    },
+    "playback": {
+      "passed": 20809,
+      "failed": 0
+    },
+    "trainer_corpus": {
+      "passed": 628,
+      "failed": 0
+    },
+    "data_v3": {
+      "passed": 624,
+      "failed": 9,
+      "unchanged_known_failures": [
+        "data_v3_ability_contract_report_counts",
+        "data_v3_ability_contract_report_ids",
+        "data_v3_bad_dreams_source_contract",
+        "data_v3_end_to_end_shadow_exclusion_and_reports_frozen",
+        "data_v3_ice_body_source_contract",
+        "data_v3_merciless_source_contract",
+        "data_v3_rain_dish_source_contract",
+        "data_v3_rivalry_source_contract",
+        "data_v3_stakeout_source_contract"
+      ]
+    }
+  },
+  "protected_game_source_changes": [
+    "modules/battle/application/binding_move_rules.gd",
+    "modules/battle/application/live_move_profile.gd",
+    "modules/battle/application/switch_move_rules.gd",
+    "modules/battle/application/turn_executor.gd",
+    "modules/battle/effects/battle_effect_executor.gd",
+    "modules/battle/presentation/battle_presentation_controller.gd",
+    "modules/battle/presentation/live_move_event_text.gd",
+    "modules/battle/presentation/trainer_battle_presentation_controller.gd",
+    "modules/battle/server/authoritative_battle_server.gd",
+    "modules/gameplay/wild_adventure_session.gd",
+    "modules/localization/spanish_game_text.gd",
+    "modules/trainer_ai/trainer_observation_builder.gd",
+    "modules/trainer_ai/trainer_plausible_world_factory.gd"
+  ],
+  "evidence": {
+    ".godot/binding_checks/gpu.json": "46a79cb165a8cda74f6d24d9e74655e4dd7576cb905f05445fe39604977da1b0",
+    ".godot/binding_checks/gpu.log": "0240b1927e814a7bd4775178e3192c5d7beaee501ca4142cb8da09b6654f9882",
+    ".godot/binding_checks/core.log": "6a38a1e3bfdd2cd0b54df24edfa2a4577254b169d2718e3252f9734cf1f82f94",
+    ".godot/binding_checks/trainer.log": "77b5a93bf4b5da0c4d24ac4e21b9bd44cc614bb55dfd8715458552bbc1239307",
+    ".godot/binding_checks/playback.log": "a4ecb5dfc466963d823d3cb59b37d13699535e4817a47850577ec13b3a49fbb6",
+    ".godot/binding_checks/data_v3.log": "d64f159019cf24f9f3747ac83c44fdc2062d210be1dbb8383fd72eb29009da28",
+    ".godot/binding_checks/contact_native.png": "3c88b834bfdaffe444d6bf7242277ed9c316e405f95c79337732230fe9a247f0",
+    ".godot/binding_checks/contact_after.png": "52f24afc70ab9cf2aaca724e8fe65e93370df3128921345489223346840574bc",
+    ".godot/battle_reference/latest/report.json": "a00d574012031b920ea924695a39dd3e09c4eec33ad9da160bed0774e8aab7ac",
+    ".godot/battle_reference/latest/manifest.json": "a4759d7c94bee81efb2e2e4b191027f04098beed5ab3e3a74ebb88d8a49d56bc",
+    ".godot/battle_reference/latest/reference.json": "b2be914ddeb90875b3275640aa3d5559ee9d3ee1c7acd355bab55c3bd6e23928",
+    ".godot/battle_reference/latest/godot.json": "b376e1a3aa7c4b0293fcb744bcc1db4d72db8131b7769c24efda82fa97ec3645",
+    ".godot/battle_reference/latest/sources_before.json": "6dcb7a86eb7020a31de39eef7b1bc0c7407ba51a4ff6cff698f85a9470a492a2",
+    ".godot/battle_reference/negative_controls/checks.json": "feea69a5cbfe39d7b089bdd739fe684541fa7886eb0d5f18aef292cf3fb25fc3",
+    ".godot/battle_reference/self_test.log": "3dc9ba1c6635f7cae364a05a7bc2a512f4cf79661ed2d37f54b69687a9095f5a"
+  },
+  "reference_conditions_sha256": "5787f7379aa0edb86e723ce60c360167069db355f07cb6333f93a7007ba7ed2b",
+  "visual_review": "Ten native clips plus after-playback states inspected; HUD equals authoritative HP. Actual blocked RUN and capture cleanup tested.",
+  "ai_privacy": "Announced source/move/start and estimated clock only; private duration/divisor do not cross either side view. Public proxy restores estimates.",
+  "limits": [
+    "Normal singles binding only. G-Max, underwater/Dive, suppression and broader ability/held-item interactions remain outside this batch.",
+    "Natural duration is validated as a range, not equal RNG draws; eight-turn parity uses native deterministic Grip Claw.",
+    "Exact residual component only, not exact ordinary hit damage. Existing combined poison/burn/held-item ordering limits remain; Leftovers before binding is tested.",
+    "Ghost and Shed Shell bypass the binding block; other escape calculations retain the existing wild ruleset.",
+    "No new randomlock rules, canonical classification/item pool edits, images, export or GitHub publication. Nine preexisting DATA V3 failures remain."
+  ]
+}

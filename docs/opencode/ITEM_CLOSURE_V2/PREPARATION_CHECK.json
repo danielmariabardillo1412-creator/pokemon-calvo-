@@ -1,0 +1,18 @@
+{
+  "status": "PASS",
+  "runtime_base": "da00bd4c36f578606a45edcebc6ebd9a6ba630e8",
+  "runtime_unchanged": true,
+  "v21_tested_source_hashes_unchanged": true,
+  "counts_consistent": true,
+  "tasks": [
+    "O100",
+    "O110",
+    "O120",
+    "O190"
+  ],
+  "writer_started": false,
+  "guard_unit_test_methods": 4,
+  "worker_allowed_files": 52,
+  "seal_generation": 2,
+  "initial_guard_issue": "Git/Windows CRLF normalization corrected before launch; initial seal preserved"
+}

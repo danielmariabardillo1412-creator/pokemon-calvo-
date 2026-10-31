@@ -1,0 +1,73 @@
+{
+  "status": "PASS",
+  "date": "2026-10-28",
+  "phase": "ITEM_ART_UTILITY_V3",
+  "previous_entries_preserved": 609,
+  "new_art_entries": 45,
+  "total_art_entries": 654,
+  "unique_art_hashes": 607,
+  "new_image_bytes": 336656,
+  "total_image_bytes": 6931342,
+  "family_additions": {
+    "TREASURE_OR_COLLECTIBLE": 35,
+    "FIELD_USE": 10
+  },
+  "source_additions": {
+    "SV": 18,
+    "GLOBAL_LINK": 27
+  },
+  "tests": {
+    "godot": 2341,
+    "gpu": 2347
+  },
+  "static_contact_sheets_reviewed": 1,
+  "utility_gpu_capture_reviewed": true,
+  "data_and_gameplay_policy_unchanged": true,
+  "protected_files_changed": [
+    "assets/local_item_catalog/manifest.json"
+  ],
+  "excluded_art_ids": {
+    "leaf_letter_eevee": "decorative_partner_letter_same_user_mail_exclusion",
+    "leaf_letter_pikachu": "decorative_partner_letter_same_user_mail_exclusion"
+  },
+  "deferred_content_ids": {
+    "beach_glass": "partner_souvenir_no_role_decided_for_this_game_not_a_permanent_ban",
+    "chalky_stone": "partner_souvenir_no_role_decided_for_this_game_not_a_permanent_ban",
+    "lone_earring": "partner_souvenir_no_role_decided_for_this_game_not_a_permanent_ban",
+    "marble": "partner_souvenir_no_role_decided_for_this_game_not_a_permanent_ban",
+    "polished_mud_ball": "partner_souvenir_no_role_decided_for_this_game_not_a_permanent_ban",
+    "small_bouquet": "partner_souvenir_no_role_decided_for_this_game_not_a_permanent_ban",
+    "stretchy_spring": "partner_souvenir_no_role_decided_for_this_game_not_a_permanent_ban",
+    "tropical_shell": "partner_souvenir_no_role_decided_for_this_game_not_a_permanent_ban",
+    "golden_nanab_berry": "lets_go_throwing_berry_mechanics_need_capture_policy_review",
+    "golden_pinap_berry": "lets_go_throwing_berry_mechanics_need_capture_policy_review",
+    "golden_razz_berry": "lets_go_throwing_berry_mechanics_need_capture_policy_review",
+    "silver_nanab_berry": "lets_go_throwing_berry_mechanics_need_capture_policy_review",
+    "silver_pinap_berry": "lets_go_throwing_berry_mechanics_need_capture_policy_review",
+    "silver_razz_berry": "lets_go_throwing_berry_mechanics_need_capture_policy_review"
+  },
+  "deferred_style_ids": {
+    "armorite_ore": "only_small_sprite_located_in_checked_sources; no similar-looking substitute selected",
+    "gold_leaf": "only_small_sprite_located_in_checked_sources; no similar-looking substitute selected",
+    "lure": "only_small_sprite_located_in_checked_sources; no similar-looking substitute selected",
+    "max_lure": "only_small_sprite_located_in_checked_sources; no similar-looking substitute selected",
+    "silver_leaf": "only_small_sprite_located_in_checked_sources; no similar-looking substitute selected",
+    "super_lure": "only_small_sprite_located_in_checked_sources; no similar-looking substitute selected",
+    "wishing_piece": "only_small_sprite_located_in_checked_sources; no similar-looking substitute selected"
+  },
+  "sources_sha256": {
+    "assets/local_item_catalog/manifest.json": "be2bf1d501af5d719690c8872f0860b935ff0e93d5e224bc4a6691c3eeb72426",
+    "assets/local_item_catalog/CREDITS.md": "8c88b416abf3dc9ae2165c5c6a401d1fe0f51dd3f1c65d31a3667c3b5f1bcd86",
+    "tools/item_audit/append_art_batch.py": "672e180b5945914876440694063dfcc5e10a228b8b92f148153210e9366bfe1b",
+    "tools/item_audit/build_art_scope.py": "2015318224cfe8002bb28bec2dc77b70fdcf26867a62188a7b24f9bc280aabcb",
+    "tests/gameplay/item_art_beta_test_runner.gd": "e2367c57cb2e89e8e7a7002de6f6f5f44eabf9dc16b1d48c38e6721508b2fff8",
+    "docs/current/ITEM_ART_UTILITY_V3_PLAN.json": "682c2781c5f213999a64b1bd25a422041fa19efe59216bf963d426a9ca67cabf"
+  },
+  "evidence_directory": "D:\\Proyectos\\Pokemon Calvo\\.godot\\item_art_utility_v3",
+  "limitations": [
+    "Artwork registration does not implement item effects, trade prices, shops or training mechanics.",
+    "Seven valid small sprites have no matching modern artwork selected; these are style gaps, not missing item definitions.",
+    "Fourteen content decisions in this phase remain pending, not banned.",
+    "Key items, machine/version relations and other families still need review."
+  ]
+}

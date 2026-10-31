@@ -841,6 +841,36 @@ def _repair_damage_user_stat_family(m: dict, specs: list[dict], sid: str) -> Non
             f"DATA V3 damage-user-stat repair incomplete for {sid}: {specs}"
         )
 
+def _require_tera_blast_normal_subset(m: dict, specs: list[dict]) -> None:
+    """Audit the pinned source before discarding Stellar-only stat metadata.
+
+    Normal Tera Blast has no secondary effect. Stellar's drops apply to SELF
+    only while Terastallized, a condition not represented by BattleEffectSpec.
+    Do not convert that data to unconditional SELF or OPPONENT drops.
+    """
+    expected = {"id": 851, "name": "tera-blast", "power": 80,
+                "accuracy": 100, "pp": 10, "priority": 0}
+    if any(m.get(key) != value for key, value in expected.items()) or (
+        (m.get("type") or {}).get("name") != "normal"
+        or (m.get("damage_class") or {}).get("name") != "special"
+        or (m.get("target") or {}).get("name") != "selected-pokemon"
+        or m.get("meta") is not None
+    ):
+        raise RuntimeError("DATA V3 Tera Blast source contract changed")
+    changes = sorted(((c.get("stat") or {}).get("name"), c.get("change"))
+                     for c in m.get("stat_changes") or [])
+    if changes != [("attack", -1), ("special-attack", -1)]:
+        raise RuntimeError("DATA V3 Tera Blast source stat metadata changed")
+    stages = _matching_effects(specs, "modify_stat_stage")
+    if len(specs) != 2 or len(stages) != 2 or sorted(
+        (s.get("stat_id", ""), s.get("value", 0)) for s in stages
+    ) != [("attack", -1), ("special_attack", -1)] or any(
+        s.get("target") != "opponent" or s.get("chance_basis_points") != 10000
+        or s.get("children") for s in stages
+    ):
+        raise RuntimeError("DATA V3 Tera Blast legacy effect shape changed")
+
+
 def generate_move_specs(m: dict, contact_set: set):
     """V3 wrapper around the archived move-effect converter.
 
@@ -853,6 +883,13 @@ def generate_move_specs(m: dict, contact_set: set):
     sid = _legacy.slug(str(m.get("name", "")))
 
     _repair_damage_user_stat_family(m, specs, sid)
+
+    if sid == "tera_blast":
+        _require_tera_blast_normal_subset(m, specs)
+        specs = []
+        # Base Normal/special/80 damage is faithful. Type/category selection and
+        # Stellar power/self-drops still require Tera state: never claim full support.
+        coverage = "PARTIAL_RUNTIME"
 
     if sid in _SIMPLE_SELF_HEALS:
         _require_single_self_heal(specs, sid, 5000)

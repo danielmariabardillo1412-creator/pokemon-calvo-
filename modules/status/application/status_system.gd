@@ -92,7 +92,8 @@ func can_act(
 	match creature.status_state.persistent_id:
 		SLEEP:
 			if creature.status_state.turns_remaining > 0:
-				creature.status_state.turns_remaining -= 1
+				var decrement := 2 if state.live_moves_enabled and creature.status_state.rest_sleep and creature.ability_id == &"early_bird" else 1
+				creature.status_state.turns_remaining = maxi(0, creature.status_state.turns_remaining - decrement)
 				_emit_prevented(state, creature, SLEEP, events)
 				return false
 			cure_persistent(state, creature, creature, events)
@@ -114,10 +115,13 @@ func process_end_turn(
 	state: BattleState,
 	catalog: DefinitionCatalog,
 	ruleset: BattleRuleset = null,
+	eligible_ids: Array[StringName] = [],
 ) -> Array[BattleEvent]:
 	var active_ruleset := ruleset if ruleset != null else BattleRuleset.new()
 	var events: Array[BattleEvent] = []
 	for creature_id in state.active_ids:
+		if not eligible_ids.is_empty() and creature_id not in eligible_ids:
+			continue
 		var creature := state.creature(creature_id)
 		if creature.is_knocked_out():
 			continue

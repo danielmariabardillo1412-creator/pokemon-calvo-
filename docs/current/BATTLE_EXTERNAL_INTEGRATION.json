@@ -1,0 +1,233 @@
+{
+  "version": 1,
+  "status": "PARTIAL",
+  "validation_status": "PASS",
+  "requested_move_count": 19,
+  "confirmed_damage_visual_bindings": 5,
+  "full_special_effects_completed": 0,
+  "full_special_effects_remaining": 19,
+  "observed_no_effect_moves": 14,
+  "server_samples": 38,
+  "native_live_battle_hits": 11,
+  "checks": 475,
+  "test_report": ".godot\\battle_external_integration\\gpu_result.json",
+  "test_report_sha256": "8eb03014a37967b84cd1d934d95cfc2c7187ce3fa33051ad7910857877bfc840",
+  "source_sha256": {
+    ".godot/move_batch_catalog/index.json": "bb327ada0e33347980260a7e4a8af65e8622171002c64d3ecf56759aa92dbee1",
+    "data/normalized/pokemon_api.json": "719d14c082bdba03b26e801d23fb8887d0a0f4376348cf4a27e79a4b0a3c08b3",
+    "data/raw/pokemon_api.json": "2efc1538081e7849d6e04555570ca28c19b13f09f0fe0c7ce38329881972f24a",
+    "scenes/visual/battle_animation_playback.gd": "ed425e3855a08e3e783f198791a127524f9840a7275731cc0ad724d40d261c91",
+    "scenes/visual/battle_external_damage_pilot.gd": "e1524b98730b86475a88aff6f1f1ba4aa9cb3eaddc446d9ef269692acfbb01a9",
+    "scenes/visual/community_move_preview.gd": "7674d3a61e113e085d12132a4e10461aedd3a760516ab68700f2868f0f3fd4de",
+    "scenes/visual/field_demo.gd": "d5e5ee9fa5edcbcb6c91b33f73496eb7bfc63353bc200adc5b8afe4ac57d55fe",
+    "tests/visual/battle_external_integration_test_runner.gd": "281aea1d83c98a669640e30f591a2166fd1ef114bf2f2e95313b97fc5ac62f42"
+  },
+  "pack_sha256": "175ceb67c22c67ec90aca69eb79697b5a4c95f2568226d04c8e82c03079e6105",
+  "moves": [
+    {
+      "move_id": "ally_switch",
+      "classification_in_preserved_dataset": "DATA_ONLY",
+      "registered_effect_kinds": [],
+      "confirmed_damage_visual_connected": false,
+      "full_special_effect_resolved": false,
+      "observed_no_effect_beyond_pp_and_action": true,
+      "remaining_requirement": "Intercambio con un aliado: necesita una escena con dos aliados."
+    },
+    {
+      "move_id": "baton_pass",
+      "classification_in_preserved_dataset": "DATA_ONLY",
+      "registered_effect_kinds": [],
+      "confirmed_damage_visual_connected": false,
+      "full_special_effect_resolved": false,
+      "observed_no_effect_beyond_pp_and_action": true,
+      "remaining_requirement": "Entrada del relevo y transferencia de efectos permitidos."
+    },
+    {
+      "move_id": "chilly_reception",
+      "classification_in_preserved_dataset": "DATA_ONLY",
+      "registered_effect_kinds": [],
+      "confirmed_damage_visual_connected": false,
+      "full_special_effect_resolved": false,
+      "observed_no_effect_beyond_pp_and_action": true,
+      "remaining_requirement": "Nieve persistente y entrada del relevo tras la retirada."
+    },
+    {
+      "move_id": "circle_throw",
+      "classification_in_preserved_dataset": "RUNTIME_SUPPORTED",
+      "registered_effect_kinds": [
+        "damage"
+      ],
+      "confirmed_damage_visual_connected": true,
+      "full_special_effect_resolved": false,
+      "observed_no_effect_beyond_pp_and_action": false,
+      "remaining_requirement": "Resolver la expulsión del objetivo y su relevo o salida del encuentro."
+    },
+    {
+      "move_id": "dragon_tail",
+      "classification_in_preserved_dataset": "RUNTIME_SUPPORTED",
+      "registered_effect_kinds": [
+        "damage"
+      ],
+      "confirmed_damage_visual_connected": true,
+      "full_special_effect_resolved": false,
+      "observed_no_effect_beyond_pp_and_action": false,
+      "remaining_requirement": "Resolver la expulsión del objetivo y su relevo o salida del encuentro."
+    },
+    {
+      "move_id": "flip_turn",
+      "classification_in_preserved_dataset": "PARTIAL_RUNTIME",
+      "registered_effect_kinds": [
+        "damage"
+      ],
+      "confirmed_damage_visual_connected": true,
+      "full_special_effect_resolved": false,
+      "observed_no_effect_beyond_pp_and_action": false,
+      "remaining_requirement": "Entrada del relevo después del impacto y retirada del usuario."
+    },
+    {
+      "move_id": "hail",
+      "classification_in_preserved_dataset": "DATA_ONLY",
+      "registered_effect_kinds": [],
+      "confirmed_damage_visual_connected": false,
+      "full_special_effect_resolved": false,
+      "observed_no_effect_beyond_pp_and_action": true,
+      "remaining_requirement": "Mantener granizo según el estado real del combate."
+    },
+    {
+      "move_id": "parting_shot",
+      "classification_in_preserved_dataset": "DATA_ONLY",
+      "registered_effect_kinds": [],
+      "confirmed_damage_visual_connected": false,
+      "full_special_effect_resolved": false,
+      "observed_no_effect_beyond_pp_and_action": true,
+      "remaining_requirement": "Entrada del relevo después de aplicar los efectos del movimiento."
+    },
+    {
+      "move_id": "rain_dance",
+      "classification_in_preserved_dataset": "DATA_ONLY",
+      "registered_effect_kinds": [],
+      "confirmed_damage_visual_connected": false,
+      "full_special_effect_resolved": false,
+      "observed_no_effect_beyond_pp_and_action": true,
+      "remaining_requirement": "Mantener lluvia según el estado real del combate."
+    },
+    {
+      "move_id": "roar",
+      "classification_in_preserved_dataset": "DATA_ONLY",
+      "registered_effect_kinds": [],
+      "confirmed_damage_visual_connected": false,
+      "full_special_effect_resolved": false,
+      "observed_no_effect_beyond_pp_and_action": true,
+      "remaining_requirement": "Resolver la expulsión del objetivo y su relevo o salida del encuentro."
+    },
+    {
+      "move_id": "sandstorm",
+      "classification_in_preserved_dataset": "DATA_ONLY",
+      "registered_effect_kinds": [],
+      "confirmed_damage_visual_connected": false,
+      "full_special_effect_resolved": false,
+      "observed_no_effect_beyond_pp_and_action": true,
+      "remaining_requirement": "Mantener tormenta de arena según el estado real del combate."
+    },
+    {
+      "move_id": "shed_tail",
+      "classification_in_preserved_dataset": "DATA_ONLY",
+      "registered_effect_kinds": [],
+      "confirmed_damage_visual_connected": false,
+      "full_special_effect_resolved": false,
+      "observed_no_effect_beyond_pp_and_action": true,
+      "remaining_requirement": "Entrada del relevo conservando el sustituto que corresponda."
+    },
+    {
+      "move_id": "snowscape",
+      "classification_in_preserved_dataset": "DATA_ONLY",
+      "registered_effect_kinds": [],
+      "confirmed_damage_visual_connected": false,
+      "full_special_effect_resolved": false,
+      "observed_no_effect_beyond_pp_and_action": true,
+      "remaining_requirement": "Mantener nieve según el estado real del combate."
+    },
+    {
+      "move_id": "substitute",
+      "classification_in_preserved_dataset": "DATA_ONLY",
+      "registered_effect_kinds": [],
+      "confirmed_damage_visual_connected": false,
+      "full_special_effect_resolved": false,
+      "observed_no_effect_beyond_pp_and_action": true,
+      "remaining_requirement": "Muñeco persistente, ligado al sustituto real del combatiente."
+    },
+    {
+      "move_id": "teleport",
+      "classification_in_preserved_dataset": "DATA_ONLY",
+      "registered_effect_kinds": [],
+      "confirmed_damage_visual_connected": false,
+      "full_special_effect_resolved": false,
+      "observed_no_effect_beyond_pp_and_action": true,
+      "remaining_requirement": "Retirada del usuario: relevo o salida del encuentro según el combate."
+    },
+    {
+      "move_id": "transform",
+      "classification_in_preserved_dataset": "UNSUPPORTED",
+      "registered_effect_kinds": [],
+      "confirmed_damage_visual_connected": false,
+      "full_special_effect_resolved": false,
+      "observed_no_effect_beyond_pp_and_action": true,
+      "remaining_requirement": "Apariencia y datos copiados según la transformación real."
+    },
+    {
+      "move_id": "u_turn",
+      "classification_in_preserved_dataset": "RUNTIME_SUPPORTED",
+      "registered_effect_kinds": [
+        "damage"
+      ],
+      "confirmed_damage_visual_connected": true,
+      "full_special_effect_resolved": false,
+      "observed_no_effect_beyond_pp_and_action": false,
+      "remaining_requirement": "Entrada del relevo después del impacto y retirada del usuario."
+    },
+    {
+      "move_id": "volt_switch",
+      "classification_in_preserved_dataset": "RUNTIME_SUPPORTED",
+      "registered_effect_kinds": [
+        "damage"
+      ],
+      "confirmed_damage_visual_connected": true,
+      "full_special_effect_resolved": false,
+      "observed_no_effect_beyond_pp_and_action": false,
+      "remaining_requirement": "Entrada del relevo después del impacto y retirada del usuario."
+    },
+    {
+      "move_id": "whirlwind",
+      "classification_in_preserved_dataset": "DATA_ONLY",
+      "registered_effect_kinds": [],
+      "confirmed_damage_visual_connected": false,
+      "full_special_effect_resolved": false,
+      "observed_no_effect_beyond_pp_and_action": true,
+      "remaining_requirement": "Resolver la expulsión del objetivo y su relevo o salida del encuentro."
+    }
+  ],
+  "scope": "Five damage-only native particle bindings; original bodies and battle outcomes remain authoritative. All 19 special mechanics remain incomplete.",
+  "notes": [
+    "The 38 server samples use the authoritative reaction-turn API in both directions. Five ordinary wild battles and one trainer KO test the actual presentation seam.",
+    "Four RUNTIME_SUPPORTED tags currently result in ordinary damage only. Metadata alone does not certify pivoting or forced switching.",
+    "Thirteen DATA_ONLY moves and Transform (UNSUPPORTED) consume PP without their special effect in these server fixtures.",
+    "Manual switching and KO replacement already emit real SWITCHED events; neither is proof of a pivot/phaze move implementation.",
+    "No mechanic is invented in presentation, no definitions/learnsets/type chart/AI/RNG or source artwork are changed.",
+    "F6 offers an explicit disposable damage-only preset. This is not a permanent learnset or a complete move implementation.",
+    "The counts above describe default/legacy mode. The separate F7-F12 report counts validated opt-in base mechanics across singles and isolated doubles; it does not enable trainer AI or close the 19 global handoffs.",
+    "The engine/default counts here are the explicit flags-off compatibility comparison. Actual ordinary game sessions now use the live singles profile; consult the linked live report rather than treating these nineteen legacy no-ops as current gameplay."
+  ],
+  "explicit_singles_mechanics_pilot": {
+    "path": "docs\\current\\SWITCH_MOVE_PILOT.json",
+    "sha256": "96da4c75e2682f7d8908e8c5e156dd1104f9aa766c8f12b046c1db22281ea3e4",
+    "status": "LOCAL_GAME_SINGLES_PROFILE_ENABLED_COMPETITIVE_CERTIFICATION_OPEN",
+    "move_count": 19,
+    "unimplemented_move_count": 0,
+    "production_rollout_complete": false
+  },
+  "legacy_comparison_only": true,
+  "live_game_report": {
+    "path": "docs\\current\\LIVE_MOVE_INTEGRATION.json",
+    "sha256": "401001cd7ff3ba6dd215ec87f9b6c7da3717b6696c241f4f24afb93ba6a3a7c2"
+  }
+}

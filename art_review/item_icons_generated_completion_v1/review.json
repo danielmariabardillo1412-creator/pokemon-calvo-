@@ -1,0 +1,204 @@
+{
+  "status": "SEVEN_PREPARED_NOT_INSTALLED",
+  "date": "2026-10-28",
+  "tool": "built-in image_gen",
+  "new_candidates": 5,
+  "total_candidates": 7,
+  "runtime_manifest_sha256": "be2bf1d501af5d719690c8872f0860b935ff0e93d5e224bc4a6691c3eeb72426",
+  "runtime_entries": 654,
+  "items": {
+    "gold_leaf": {
+      "display_name": "Hoja de Oro",
+      "selected_file": "art_review/item_icons_generated_completion_v1/gold_leaf_160_v1.png",
+      "source_file": "art_review/item_icons_generated_completion_v1/gold_leaf_generated_v1.png",
+      "original_file": "art_review/item_icons_generated_completion_v1/gold_leaf_original.png",
+      "original_size": [
+        32,
+        32
+      ],
+      "generated_size": [
+        1254,
+        1254
+      ],
+      "candidate_size": [
+        160,
+        160
+      ],
+      "alpha_transparent": true,
+      "solid_bbox": [
+        173,
+        140,
+        1122,
+        1132
+      ],
+      "sha256": "b4bad6b235bbf1defb763af3ed4ab85e827d82ed08c0301e24d4b4cf8b8380f0",
+      "status": "ASSISTANT_VISUALLY_REVIEWED_CANDIDATE",
+      "installed": false,
+      "selected_bytes": 19448
+    },
+    "silver_leaf": {
+      "display_name": "Hoja de Plata",
+      "selected_file": "art_review/item_icons_generated_completion_v1/silver_leaf_160_v1.png",
+      "source_file": "art_review/item_icons_generated_completion_v1/silver_leaf_generated_v1.png",
+      "original_file": "art_review/item_icons_generated_completion_v1/silver_leaf_original.png",
+      "original_size": [
+        32,
+        32
+      ],
+      "generated_size": [
+        1254,
+        1254
+      ],
+      "candidate_size": [
+        160,
+        160
+      ],
+      "alpha_transparent": true,
+      "solid_bbox": [
+        173,
+        139,
+        1125,
+        1133
+      ],
+      "sha256": "f49a8119ed260562244ee4170604f01ccc30671352ba5d9d3b53f964544c4e44",
+      "status": "ASSISTANT_VISUALLY_REVIEWED_CANDIDATE",
+      "installed": false,
+      "selected_bytes": 19641
+    },
+    "super_lure": {
+      "display_name": "Supercolonia",
+      "selected_file": "art_review/item_icons_generated_completion_v1/super_lure_160_v1.png",
+      "source_file": "art_review/item_icons_generated_completion_v1/super_lure_generated_v1.png",
+      "original_file": "art_review/item_icons_generated_completion_v1/super_lure_original.png",
+      "original_size": [
+        32,
+        32
+      ],
+      "generated_size": [
+        1254,
+        1254
+      ],
+      "candidate_size": [
+        160,
+        160
+      ],
+      "alpha_transparent": true,
+      "solid_bbox": [
+        294,
+        146,
+        960,
+        1162
+      ],
+      "sha256": "b731d58c506957b9f80cb9904d1f4fb01b63cad17e535cca3e44cf4fd1150a5c",
+      "status": "ASSISTANT_VISUALLY_REVIEWED_CANDIDATE",
+      "installed": false,
+      "selected_bytes": 18098
+    },
+    "max_lure": {
+      "display_name": "Colonia MÃ¡xima",
+      "selected_file": "art_review/item_icons_generated_completion_v1/max_lure_160_v1.png",
+      "source_file": "art_review/item_icons_generated_completion_v1/max_lure_generated_v1.png",
+      "original_file": "art_review/item_icons_generated_completion_v1/max_lure_original.png",
+      "original_size": [
+        32,
+        32
+      ],
+      "generated_size": [
+        1254,
+        1254
+      ],
+      "candidate_size": [
+        160,
+        160
+      ],
+      "alpha_transparent": true,
+      "solid_bbox": [
+        291,
+        144,
+        961,
+        1163
+      ],
+      "sha256": "9372e665b4072e33621cc79a030a997a6c6639301987be6bb075f00699337bb2",
+      "status": "ASSISTANT_VISUALLY_REVIEWED_CANDIDATE",
+      "installed": false,
+      "selected_bytes": 18943
+    },
+    "wishing_piece": {
+      "display_name": "Trozo Deseo",
+      "selected_file": "art_review/item_icons_generated_completion_v1/wishing_piece_160_v1.png",
+      "source_file": "art_review/item_icons_generated_completion_v1/wishing_piece_generated_v1.png",
+      "original_file": "art_review/item_icons_generated_completion_v1/wishing_piece_original.png",
+      "original_size": [
+        32,
+        32
+      ],
+      "generated_size": [
+        1254,
+        1254
+      ],
+      "candidate_size": [
+        160,
+        160
+      ],
+      "alpha_transparent": true,
+      "solid_bbox": [
+        222,
+        289,
+        1045,
+        1003
+      ],
+      "sha256": "d6b11a78f91a3a38dbe15ac6fb0561b5e3890f944dc72410ed3ef6a7020e4e0a",
+      "status": "ASSISTANT_VISUALLY_REVIEWED_CANDIDATE",
+      "installed": false,
+      "selected_bytes": 16509
+    },
+    "armorite_ore": {
+      "display_name": "Duralium",
+      "selected_file": "art_review/item_icons_generated_pilot_v1/armorite_ore_160_v2.png",
+      "original_file": "art_review/item_icons_generated_pilot_v1/armorite_ore_original.png",
+      "status": "USER_ACCEPTED_VISUAL_CANDIDATE",
+      "installed": false,
+      "sha256": "47812a70d21a773191cc11d6b39e5f0581a66e116d85633b227db960f920f041",
+      "selected_bytes": 19301
+    },
+    "lure": {
+      "display_name": "Colonia",
+      "selected_file": "art_review/item_icons_generated_pilot_v1/lure_160_v2.png",
+      "original_file": "art_review/item_icons_generated_pilot_v1/lure_original.png",
+      "status": "USER_ACCEPTED_VISUAL_CANDIDATE",
+      "installed": false,
+      "sha256": "c3e3d0410b2b115e79729cce36d239692258d8d06cadbc6ab7e2153895b1b88c",
+      "selected_bytes": 18217
+    }
+  },
+  "gpu_preview": "PASS",
+  "gpu_image": "art_review/item_icons_generated_completion_v1/godot_preview.png",
+  "preview_sizes_checked": [
+    96,
+    48,
+    40,
+    32
+  ],
+  "actual_control_sizes_asserted": true,
+  "dark_and_light_comparison_reviewed": true,
+  "runtime_manifest_unchanged": true,
+  "protected_files_unchanged": [
+    "data/normalized/pokemon_api.json",
+    "data/raw/pokemon_api.json",
+    "config/item_selection_v1.json",
+    "config/randomlock_content_v1.json",
+    "scenes/visual/item_gallery.gd",
+    "scenes/visual/showdown_adventure_lab.gd",
+    "scenes/visual/pokemon_gallery.gd"
+  ],
+  "new_generation_calls": 5,
+  "selected_candidate_bytes": 130157,
+  "notes": [
+    "All five new candidates were usable on their first generation; no replacement of unrelated source objects.",
+    "Ordinary green Colonia and Duralium v2 remain selected; white-U Colonia v1 is not reassigned to another item.",
+    "Wishing Piece is intentionally dark navy, with a visible pale edge; fine facets become less distinct at32px.",
+    "These are AI reinterpretations based on original small sprites, not exact recovered official artwork.",
+    "Selected files are 160x160 derivatives with original alpha preserved; full generation outputs retained.",
+    "No runtime artwork, mechanics or data files changed in this generation batch."
+  ]
+}

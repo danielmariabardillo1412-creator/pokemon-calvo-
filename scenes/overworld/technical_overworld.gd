@@ -513,6 +513,9 @@ func _bootstrap_demo(config: Dictionary) -> bool:
 		push_error("Canonical Pokemon type chart is incomplete: %s" % str(type_validation))
 		return false
 	_catalogs = game_data.to_definition_catalog()
+	if not preload("res://modules/creatures/progression/pokemon_variant_catalog.gd").apply(_catalogs):
+		push_error("Regional/shiny catalog could not be validated")
+		return false
 	var rules := ProgressionRuleset.new()
 	var collection := PlayerCollection.new()
 	var player_rows: Array = config.get("player_team", [])
@@ -560,6 +563,8 @@ func _bootstrap_demo(config: Dictionary) -> bool:
 
 	_session = WildAdventureSession.new(collection, _catalogs, rules)
 	_trainer_session = TrainerBattleSession.new(collection, _catalogs, rules)
+	_session.live_moves_enabled = true
+	_trainer_session.live_moves_enabled = true
 	_trainer_profile_id = StringName(String(config.get("trainer_profile_id", "balanced")))
 	_trainer_expertise_id = StringName(String(config.get("trainer_expertise_id", "full")))
 
@@ -572,6 +577,10 @@ func _bootstrap_demo(config: Dictionary) -> bool:
 	_escape_rng.seed = 12006
 
 	var fixed_species_id := StringName(String(config.get("wild_species_id", "")))
+	if String(fixed_species_id).ends_with("__shiny"):
+		fixed_species_id = StringName(String(fixed_species_id).trim_suffix("__shiny"))
+		if not _catalogs.shiny_species_ids.has(String(fixed_species_id)): return false
+		_session.force_shiny_encounters = true
 	var wild_min := clampi(int(config.get("wild_min_level", 4)), 1, 100)
 	var wild_max := clampi(int(config.get("wild_max_level", 6)), 1, 100)
 	var cave_min := clampi(int(config.get("cave_min_level", 8)), 1, 100)
@@ -632,6 +641,8 @@ func _build_creature(
 	slot_index: int,
 	rules: ProgressionRuleset,
 ) -> CreatureInstance:
+	var forced_shiny := String(species_id).ends_with("__shiny")
+	if forced_shiny: species_id = StringName(String(species_id).trim_suffix("__shiny"))
 	if species_id == &"" or level < 1 or level > 100:
 		return null
 	var species := _catalogs.species_catalog.get_by_id(species_id)
@@ -639,6 +650,8 @@ func _build_creature(
 		push_error("Technical test: unknown species %s" % String(species_id))
 		return null
 	var rng := RandomNumberGenerator.new()
+	if _catalogs.variants_enabled and not _catalogs.variant_allowed_species.has(String(species_id)): return null
+	if forced_shiny and not _catalogs.shiny_species_ids.has(String(species_id)): return null
 	rng.seed = 880000 + slot_index + (100 if side == "trainer" else 0)
 	var instance_id := StringName("technical_%s_%d_%s" % [side, slot_index + 1, String(species_id)])
 	# Preserve the stable slot identities used by the original technical scene and its
@@ -659,6 +672,7 @@ func _build_creature(
 	)
 	if creature == null:
 		return null
+	if forced_shiny: creature.is_shiny = true
 	if creature.moveset.is_empty():
 		push_error("Technical test: %s Nv.%d has no usable moves" % [String(species_id), level])
 		return null

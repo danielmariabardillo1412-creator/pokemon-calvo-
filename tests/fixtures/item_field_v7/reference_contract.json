@@ -1,0 +1,43 @@
+{
+  "repository": "https://github.com/Maruno17/pokemon-essentials",
+  "commit": "8c5911e4a4b07b07e832e4bb0d5d8859e88b4a9b",
+  "source_sha256": {
+    "Data/Scripts/001_Settings.rb": "a491c8560378640aa2e7577e8c48793e23efd5bb28ed790f3537f51d1e31f40e",
+    "Data/Scripts/002_BattleSettings.rb": "9d985b5ba37afaf39231601dff2b2143fab9a82b0d8755af095c6482b5481b24",
+    "Data/Scripts/013_Items/001_Item_Utilities.rb": "d475b64f3f0011bf9312ff3e0fbe415edc51edb46a60e00db084b4fc12b1bff8",
+    "Data/Scripts/013_Items/002_Item_Effects.rb": "6ed4877769f3d7edddb096481780a8d29da6bd1de331ca9c24ccffb8477a1b15",
+    "Data/Scripts/014_Pokemon/001_Pokemon.rb": "3a7f233156f09a6d2e3729bdaa9d1962bfa946aaaa7403042aaea5dcdcdf8cb4"
+  },
+  "vitamin_gain": 10,
+  "wing_gain": 1,
+  "stat_cap": 252,
+  "total_cap": 510,
+  "no_legacy_100_cap": true,
+  "base_friendship": {
+    "thresholds": [
+      100,
+      200
+    ],
+    "vitamin": [
+      5,
+      3,
+      2
+    ],
+    "wing": [
+      3,
+      2,
+      1
+    ],
+    "soothe_bell": [
+      3,
+      2
+    ],
+    "soft_cap": "disabled, matching pinned competitive reference (no affection bonuses)"
+  },
+  "unavailable_contexts": [
+    "capture ball bonus",
+    "capture map bonus"
+  ],
+  "hp_max_change": "preserve deficit; do not revive; consume only if EV increases",
+  "canonical_ids": "PokeAPI uses *_wing, not Essentials *_feather; do not create duplicate IDs"
+}

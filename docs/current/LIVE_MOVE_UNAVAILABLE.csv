@@ -1,0 +1,300 @@
+﻿id,name,classification,reason,back_clip,front_clip
+10_000_000_volt_thunderbolt,Gigarrayo Fulminante,RUNTIME_SUPPORTED,content_pending,False,False
+acid_downpour_physical,Diluvio Corrosivo,DATA_ONLY,content_pending,True,True
+acid_downpour_special,Diluvio Corrosivo,DATA_ONLY,content_pending,True,True
+after_you,Cede Paso,DATA_ONLY,mechanics_data_only,True,True
+all_out_pummeling_physical,Ráfaga Demoledora,DATA_ONLY,content_pending,True,True
+all_out_pummeling_special,Ráfaga Demoledora,DATA_ONLY,content_pending,True,True
+ally_switch,Cambio de Banda,DATA_ONLY,requires_doubles,True,True
+aqua_ring,Acua Aro,DATA_ONLY,mechanics_data_only,True,True
+aromatic_mist,Niebla Aromática,DATA_ONLY,mechanics_data_only,True,True
+assist,Ayuda,UNSUPPORTED,mechanics_unsupported,True,True
+attract,Atracción,DATA_ONLY,mechanics_data_only,True,True
+aurora_veil,Velo Aurora,DATA_ONLY,mechanics_data_only,True,True
+autotomize,Aligerar,DATA_ONLY,mechanics_data_only,True,True
+baddy_bad,Umbreozona,RUNTIME_SUPPORTED,content_excluded,False,False
+baneful_bunker,Búnker,DATA_ONLY,mechanics_data_only,True,True
+beat_up,Paliza,DATA_ONLY,mechanics_data_only,True,True
+behemoth_bash,Embate Supremo,PARTIAL_RUNTIME,mechanics_partial_runtime,True,True
+behemoth_blade,Tajo Supremo,PARTIAL_RUNTIME,mechanics_partial_runtime,True,True
+belch,Eructo,UNSUPPORTED,mechanics_unsupported,True,True
+belly_drum,Tambor,DATA_ONLY,mechanics_data_only,True,True
+bestow,Ofrenda,UNSUPPORTED,mechanics_unsupported,True,True
+bide,Venganza,DATA_ONLY,mechanics_data_only,True,True
+black_hole_eclipse_physical,Agujero Negro Aniquilador,DATA_ONLY,content_pending,True,True
+black_hole_eclipse_special,Agujero Negro Aniquilador,DATA_ONLY,content_pending,True,True
+block,Bloqueo,DATA_ONLY,mechanics_data_only,True,True
+bloom_doom_physical,Megatón Floral,DATA_ONLY,content_pending,True,True
+bloom_doom_special,Megatón Floral,DATA_ONLY,content_pending,True,True
+bolt_beak,Electropico,PARTIAL_RUNTIME,mechanics_partial_runtime,True,True
+bouncy_bubble,Vapodrenaje,RUNTIME_SUPPORTED,content_excluded,False,False
+breakneck_blitz_physical,Carrera Arrolladora,DATA_ONLY,content_pending,True,True
+breakneck_blitz_special,Carrera Arrolladora,DATA_ONLY,content_pending,True,True
+burning_bulwark,Llama Protectora,DATA_ONLY,mechanics_data_only,True,True
+buzzy_buzz,Joltioparálisis,RUNTIME_SUPPORTED,content_excluded,False,False
+camouflage,Camuflaje,DATA_ONLY,mechanics_data_only,True,True
+captivate,Seducción,DATA_ONLY,mechanics_data_only,True,True
+catastropika,Pikavoltio Letal,RUNTIME_SUPPORTED,content_pending,True,True
+celebrate,Celebración,DATA_ONLY,mechanics_data_only,True,True
+charge,Carga,PARTIAL_RUNTIME,mechanics_partial_runtime,True,True
+clangorous_soul,Estruendo Escama,DATA_ONLY,mechanics_data_only,True,True
+clangorous_soulblaze,Estruendo Implacable,RUNTIME_SUPPORTED,content_pending,True,True
+coaching,Motivación,DATA_ONLY,mechanics_data_only,True,True
+continental_crush_physical,Aplastamiento Gigalítico,DATA_ONLY,content_pending,True,True
+continental_crush_special,Aplastamiento Gigalítico,DATA_ONLY,content_pending,True,True
+conversion,Conversión,DATA_ONLY,mechanics_data_only,True,True
+conversion_2,Conversión 2,DATA_ONLY,mechanics_data_only,True,True
+copycat,Copión,UNSUPPORTED,mechanics_unsupported,True,True
+corkscrew_crash_physical,Hélice Trepanadora,DATA_ONLY,content_pending,True,True
+corkscrew_crash_special,Hélice Trepanadora,DATA_ONLY,content_pending,True,True
+corrosive_gas,Gas Corrosivo,DATA_ONLY,mechanics_data_only,True,True
+cotton_spore,Esporagodón,DATA_ONLY,mechanics_data_only,True,True
+counter,Contraataque,DATA_ONLY,mechanics_data_only,True,True
+court_change,Cambio de Cancha,DATA_ONLY,mechanics_data_only,True,True
+crafty_shield,Truco Defensa,DATA_ONLY,mechanics_data_only,True,True
+curse,Maldición,DATA_ONLY,mechanics_data_only,True,True
+defense_curl,Rizo Defensa,PARTIAL_RUNTIME,mechanics_partial_runtime,True,True
+defog,Despejar,DATA_ONLY,mechanics_data_only,True,True
+destiny_bond,Mismo Destino,DATA_ONLY,mechanics_data_only,True,True
+detect,Detección,DATA_ONLY,mechanics_data_only,True,True
+devastating_drake_physical,Dracoaliento Devastador,DATA_ONLY,content_pending,True,True
+devastating_drake_special,Dracoaliento Devastador,DATA_ONLY,content_pending,True,True
+disable,Anulación,DATA_ONLY,mechanics_data_only,True,True
+doodle,Decalcomanía,DATA_ONLY,mechanics_data_only,True,True
+dragon_cheer,Bramido Dragón,DATA_ONLY,mechanics_data_only,True,True
+dynamax_cannon,Cañón Dinamax,PARTIAL_RUNTIME,mechanics_partial_runtime,True,True
+eerie_spell,Conjuro Funesto,PARTIAL_RUNTIME,mechanics_partial_runtime,True,True
+electric_terrain,Campo Eléctrico,DATA_ONLY,mechanics_data_only,True,True
+electrify,Electrificación,DATA_ONLY,mechanics_data_only,True,True
+embargo,Embargo,DATA_ONLY,mechanics_data_only,True,True
+encore,Otra Vez,DATA_ONLY,mechanics_data_only,True,True
+endeavor,Esfuerzo,DATA_ONLY,mechanics_data_only,True,True
+endure,Aguante,DATA_ONLY,mechanics_data_only,True,True
+entrainment,Danza Amiga,DATA_ONLY,mechanics_data_only,True,True
+eternabeam,Rayo Infinito,PARTIAL_RUNTIME,mechanics_partial_runtime,True,True
+expanding_force,Vasta Fuerza,PARTIAL_RUNTIME,mechanics_partial_runtime,True,True
+extreme_evoboost,Novena Potencia,DATA_ONLY,content_pending,True,True
+fairy_lock,Cerrojo Feérico,DATA_ONLY,mechanics_data_only,True,True
+false_surrender,Irreverencia,PARTIAL_RUNTIME,mechanics_partial_runtime,True,True
+fillet_away,Deslome,DATA_ONLY,mechanics_data_only,True,True
+final_gambit,Sacrificio,DATA_ONLY,mechanics_data_only,True,True
+fishious_rend,Branquibocado,PARTIAL_RUNTIME,mechanics_partial_runtime,True,True
+fissure,Fisura,DATA_ONLY,mechanics_data_only,True,True
+fling,Lanzamiento,DATA_ONLY,mechanics_data_only,True,True
+floaty_fall,Pikapicado,RUNTIME_SUPPORTED,content_excluded,False,False
+floral_healing,Cura Floral,PARTIAL_RUNTIME,mechanics_partial_runtime,True,True
+flower_shield,Defensa Floral,DATA_ONLY,mechanics_data_only,True,True
+focus_energy,Foco Energía,DATA_ONLY,mechanics_data_only,True,True
+follow_me,Señuelo,DATA_ONLY,mechanics_data_only,True,True
+foresight,Profecía,DATA_ONLY,mechanics_data_only,True,True
+forests_curse,Condena Silvana,DATA_ONLY,mechanics_data_only,True,True
+freezy_frost,Glaceoprisma,RUNTIME_SUPPORTED,content_excluded,False,False
+frost_breath,Vaho Gélido,PARTIAL_RUNTIME,mechanics_partial_runtime,True,True
+gastro_acid,Bilis,DATA_ONLY,mechanics_data_only,True,True
+gear_up,Piñón Auxiliar,DATA_ONLY,mechanics_data_only,True,True
+genesis_supernova,Supernova Original,RUNTIME_SUPPORTED,content_pending,True,True
+geomancy,Geocontrol,DATA_ONLY,mechanics_data_only,True,True
+gigavolt_havoc_physical,Gigavoltio Destructor,DATA_ONLY,content_pending,True,True
+gigavolt_havoc_special,Gigavoltio Destructor,DATA_ONLY,content_pending,True,True
+glitzy_glow,Espeaura,RUNTIME_SUPPORTED,content_excluded,False,False
+grass_knot,Hierba Lazo,DATA_ONLY,mechanics_data_only,True,True
+grassy_glide,Fitoimpulso,PARTIAL_RUNTIME,mechanics_partial_runtime,True,True
+grassy_terrain,Campo de Hierba,DATA_ONLY,mechanics_data_only,True,True
+gravity,Gravedad,DATA_ONLY,mechanics_data_only,True,True
+growth,Desarrollo,PARTIAL_RUNTIME,mechanics_partial_runtime,True,True
+grudge,Rabia,DATA_ONLY,mechanics_data_only,True,True
+guard_split,Isoguardia,DATA_ONLY,mechanics_data_only,True,True
+guardian_of_alola,Cólera del Guardián,DATA_ONLY,content_pending,True,True
+guillotine,Guillotina,DATA_ONLY,mechanics_data_only,True,True
+happy_hour,Paga Extra,DATA_ONLY,mechanics_data_only,True,True
+heal_block,Anticura,DATA_ONLY,mechanics_data_only,True,True
+healing_wish,Deseo Cura,DATA_ONLY,mechanics_data_only,True,True
+heat_crash,Golpe Calor,DATA_ONLY,mechanics_data_only,True,True
+heavy_slam,Cuerpo Pesado,DATA_ONLY,mechanics_data_only,True,True
+helping_hand,Refuerzo,DATA_ONLY,mechanics_data_only,True,True
+hold_hands,Manos Juntas,DATA_ONLY,mechanics_data_only,True,True
+horn_drill,Perforador,DATA_ONLY,mechanics_data_only,True,True
+howl,Aullido,PARTIAL_RUNTIME,mechanics_partial_runtime,True,True
+hydro_vortex_physical,Hidrovórtice Abisal,DATA_ONLY,content_pending,True,True
+hydro_vortex_special,Hidrovórtice Abisal,DATA_ONLY,content_pending,True,True
+imprison,Sellar,DATA_ONLY,mechanics_data_only,True,True
+inferno_overdrive_physical,Hecatombe Pírica,DATA_ONLY,content_pending,True,True
+inferno_overdrive_special,Hecatombe Pírica,DATA_ONLY,content_pending,True,True
+ingrain,Arraigo,DATA_ONLY,mechanics_data_only,True,True
+instruct,Mandato,DATA_ONLY,mechanics_data_only,True,True
+ion_deluge,Cortina Plasma,DATA_ONLY,mechanics_data_only,True,True
+jaw_lock,Presa Maxilar,PARTIAL_RUNTIME,mechanics_partial_runtime,True,True
+kings_shield,Escudo Real,DATA_ONLY,mechanics_data_only,True,True
+laser_focus,Aguzar,DATA_ONLY,mechanics_data_only,True,True
+lash_out,Desahogo,PARTIAL_RUNTIME,mechanics_partial_runtime,True,True
+leech_seed,Drenadoras,DATA_ONLY,mechanics_data_only,True,True
+lets_snuggle_forever,Somanta Amistosa,RUNTIME_SUPPORTED,content_pending,True,True
+light_screen,Pantalla de Luz,DATA_ONLY,mechanics_data_only,True,True
+light_that_burns_the_sky,Fotodestrucción Apocalíptica,RUNTIME_SUPPORTED,content_pending,True,True
+lock_on,Fijar Blanco,DATA_ONLY,mechanics_data_only,True,True
+low_kick,Patada Baja,DATA_ONLY,mechanics_data_only,True,True
+lucky_chant,Conjuro,DATA_ONLY,mechanics_data_only,True,True
+lunar_dance,Danza Lunar,DATA_ONLY,mechanics_data_only,True,True
+magic_coat,Capa Mágica,DATA_ONLY,mechanics_data_only,True,True
+magic_powder,Polvo Mágico,DATA_ONLY,mechanics_data_only,True,True
+magic_room,Zona Mágica,DATA_ONLY,mechanics_data_only,True,True
+magnet_rise,Levitón,DATA_ONLY,mechanics_data_only,True,True
+magnetic_flux,Aura Magnética,DATA_ONLY,mechanics_data_only,True,True
+magnitude,Magnitud,DATA_ONLY,mechanics_data_only,True,True
+malicious_moonsault,Hiperplancha Oscura,RUNTIME_SUPPORTED,content_pending,True,True
+mat_block,Escudo Tatami,DATA_ONLY,mechanics_data_only,True,True
+max_airstream,Maxiciclón,PARTIAL_RUNTIME,mechanics_partial_runtime,True,True
+max_darkness,Maxisombra,PARTIAL_RUNTIME,mechanics_partial_runtime,True,True
+max_flare,Maxignición,PARTIAL_RUNTIME,mechanics_partial_runtime,True,True
+max_flutterby,Maxinsecto,PARTIAL_RUNTIME,mechanics_partial_runtime,True,True
+max_geyser,Maxichorro,PARTIAL_RUNTIME,mechanics_partial_runtime,True,True
+max_guard,Maxibarrera,DATA_ONLY,mechanics_data_only,True,True
+max_hailstorm,Maxihelada,PARTIAL_RUNTIME,mechanics_partial_runtime,True,True
+max_knuckle,Maxipuño,PARTIAL_RUNTIME,mechanics_partial_runtime,True,True
+max_lightning,Maxitormenta,PARTIAL_RUNTIME,mechanics_partial_runtime,True,True
+max_mindstorm,Maxionda,PARTIAL_RUNTIME,mechanics_partial_runtime,True,True
+max_ooze,Maxiácido,PARTIAL_RUNTIME,mechanics_partial_runtime,True,True
+max_overgrowth,Maxiflora,PARTIAL_RUNTIME,mechanics_partial_runtime,True,True
+max_phantasm,Maxiespectro,PARTIAL_RUNTIME,mechanics_partial_runtime,True,True
+max_quake,Maxitemblor,PARTIAL_RUNTIME,mechanics_partial_runtime,True,True
+max_rockfall,Maxilito,PARTIAL_RUNTIME,mechanics_partial_runtime,True,True
+max_starfall,Maxiestela,PARTIAL_RUNTIME,mechanics_partial_runtime,True,True
+max_steelspike,Maximetal,PARTIAL_RUNTIME,mechanics_partial_runtime,True,True
+max_strike,Maxiataque,PARTIAL_RUNTIME,mechanics_partial_runtime,True,True
+max_wyrmwind,Maxidraco,PARTIAL_RUNTIME,mechanics_partial_runtime,True,True
+me_first,Yo Primero,UNSUPPORTED,mechanics_unsupported,True,True
+mean_look,Mal de Ojo,DATA_ONLY,mechanics_data_only,True,True
+memento,Legado,DATA_ONLY,mechanics_data_only,True,True
+menacing_moonraze_maelstrom,Deflagración Lunar,RUNTIME_SUPPORTED,content_pending,True,True
+metal_burst,Represión Metal,DATA_ONLY,mechanics_data_only,True,True
+meteor_assault,Asalto Estelar,PARTIAL_RUNTIME,mechanics_partial_runtime,True,True
+meteor_beam,Rayo Meteórico,PARTIAL_RUNTIME,mechanics_partial_runtime,True,True
+metronome,Metrónomo,UNSUPPORTED,mechanics_unsupported,True,True
+mimic,Mimético,UNSUPPORTED,mechanics_unsupported,True,True
+mind_reader,Telépata,DATA_ONLY,mechanics_data_only,True,True
+minimize,Reducción,DATA_ONLY,mechanics_data_only,True,True
+miracle_eye,Gran Ojo,DATA_ONLY,mechanics_data_only,True,True
+mirror_coat,Manto Espejo,DATA_ONLY,mechanics_data_only,True,True
+mirror_move,Espejo,UNSUPPORTED,mechanics_unsupported,True,True
+mist,Neblina,DATA_ONLY,mechanics_data_only,True,True
+misty_explosion,Bruma Explosiva,PARTIAL_RUNTIME,mechanics_partial_runtime,True,True
+misty_terrain,Campo de Niebla,DATA_ONLY,mechanics_data_only,True,True
+moonlight,Luz Lunar,PARTIAL_RUNTIME,mechanics_partial_runtime,True,True
+morning_sun,Sol Matinal,PARTIAL_RUNTIME,mechanics_partial_runtime,True,True
+mud_sport,Chapoteo Lodo,DATA_ONLY,mechanics_data_only,True,True
+natural_gift,Don Natural,DATA_ONLY,mechanics_data_only,True,True
+nature_power,Adaptación,UNSUPPORTED,mechanics_unsupported,False,False
+never_ending_nightmare_physical,Presa Espectral,DATA_ONLY,content_pending,True,True
+never_ending_nightmare_special,Presa Espectral,DATA_ONLY,content_pending,True,True
+nightmare,Pesadilla,DATA_ONLY,mechanics_data_only,True,True
+no_retreat,Bastión Final,DATA_ONLY,mechanics_data_only,True,True
+obstruct,Obstrucción,DATA_ONLY,mechanics_data_only,True,True
+oceanic_operetta,Sinfonía de la Diva Marina,RUNTIME_SUPPORTED,content_pending,True,True
+octolock,Octopresa,DATA_ONLY,mechanics_data_only,True,True
+odor_sleuth,Rastreo,DATA_ONLY,mechanics_data_only,True,True
+pain_split,Divide Dolor,DATA_ONLY,mechanics_data_only,True,True
+perish_song,Canto Mortal,DATA_ONLY,mechanics_data_only,True,True
+pika_papow,Pikatormenta,DATA_ONLY,content_excluded,False,False
+powder,Polvo Explosivo,DATA_ONLY,mechanics_data_only,True,True
+power_shift,Cambiapoder,DATA_ONLY,content_excluded,True,True
+power_split,Isofuerza,DATA_ONLY,mechanics_data_only,True,True
+power_trick,Truco Fuerza,DATA_ONLY,mechanics_data_only,True,True
+present,Presente,DATA_ONLY,mechanics_data_only,True,True
+protect,Protección,DATA_ONLY,mechanics_data_only,True,True
+psych_up,Autosugestión,DATA_ONLY,mechanics_data_only,True,True
+psychic_terrain,Campo Psíquico,DATA_ONLY,mechanics_data_only,True,True
+psycho_shift,Psicocambio,DATA_ONLY,mechanics_data_only,True,True
+psywave,Psicoonda,DATA_ONLY,mechanics_data_only,True,True
+pulverizing_pancake,Arrojo Intempestivo,RUNTIME_SUPPORTED,content_pending,True,True
+quash,Último Lugar,DATA_ONLY,mechanics_data_only,True,True
+quick_guard,Anticipo,DATA_ONLY,mechanics_data_only,True,True
+rage_powder,Polvo Ira,DATA_ONLY,mechanics_data_only,True,True
+recycle,Reciclaje,DATA_ONLY,mechanics_data_only,True,True
+reflect,Reflejo,DATA_ONLY,mechanics_data_only,True,True
+reflect_type,Clonatipo,DATA_ONLY,mechanics_data_only,True,True
+revival_blessing,Plegaria Vital,DATA_ONLY,mechanics_data_only,True,True
+rising_voltage,Alto Voltaje,PARTIAL_RUNTIME,mechanics_partial_runtime,True,True
+role_play,Imitación,DATA_ONLY,mechanics_data_only,True,True
+roost,Respiro,PARTIAL_RUNTIME,mechanics_partial_runtime,True,True
+rototiller,Fertilizante,DATA_ONLY,mechanics_data_only,True,True
+safeguard,Velo Sagrado,DATA_ONLY,mechanics_data_only,True,True
+sappy_seed,Leafitobombas,PARTIAL_RUNTIME,content_excluded,False,False
+savage_spin_out_physical,Guadaña Sedosa,DATA_ONLY,content_pending,True,True
+savage_spin_out_special,Guadaña Sedosa,DATA_ONLY,content_pending,True,True
+searing_sunraze_smash,Embestida Solar,RUNTIME_SUPPORTED,content_pending,True,True
+secret_power,Daño Secreto,PARTIAL_RUNTIME,mechanics_partial_runtime,False,False
+shattered_psyche_physical,Disruptor Psíquico,DATA_ONLY,content_pending,True,True
+shattered_psyche_special,Disruptor Psíquico,DATA_ONLY,content_pending,True,True
+sheer_cold,Frío Polar,DATA_ONLY,mechanics_data_only,True,True
+shelter,Retracción,DATA_ONLY,mechanics_data_only,True,True
+shore_up,Recogearena,PARTIAL_RUNTIME,mechanics_partial_runtime,True,True
+silk_trap,Telatrampa,DATA_ONLY,mechanics_data_only,True,True
+simple_beam,Onda Simple,DATA_ONLY,mechanics_data_only,True,True
+sinister_arrow_raid,Aluvión de Flechas Sombrías,RUNTIME_SUPPORTED,content_pending,True,True
+sizzly_slide,Flarembestida,RUNTIME_SUPPORTED,content_excluded,False,False
+sketch,Esquema,UNSUPPORTED,mechanics_unsupported,True,True
+skill_swap,Intercambio,DATA_ONLY,mechanics_data_only,True,True
+skull_bash,Cabezazo,PARTIAL_RUNTIME,mechanics_partial_runtime,True,True
+sleep_talk,Sonámbulo,UNSUPPORTED,mechanics_unsupported,True,True
+smack_down,Antiaéreo,PARTIAL_RUNTIME,mechanics_partial_runtime,True,True
+snatch,Robo,DATA_ONLY,mechanics_data_only,True,True
+snipe_shot,Disparo Certero,PARTIAL_RUNTIME,mechanics_partial_runtime,True,True
+soak,Empapar,DATA_ONLY,mechanics_data_only,True,True
+soul_stealing_7_star_strike,Constelación Robaalmas,RUNTIME_SUPPORTED,content_pending,True,True
+sparkly_swirl,Sylveotornado,RUNTIME_SUPPORTED,content_excluded,False,False
+speed_swap,Cambiavelocidad,DATA_ONLY,mechanics_data_only,True,True
+spider_web,Telaraña,DATA_ONLY,mechanics_data_only,True,True
+spikes,Púas,DATA_ONLY,mechanics_data_only,True,True
+spiky_shield,Barrera Espinosa,DATA_ONLY,mechanics_data_only,True,True
+spit_up,Escupir,DATA_ONLY,mechanics_data_only,True,True
+spite,Rencor,DATA_ONLY,mechanics_data_only,True,True
+splash,Salpicadura,DATA_ONLY,content_excluded,True,True
+splintered_stormshards,Tempestad Rocosa,RUNTIME_SUPPORTED,content_pending,True,True
+splishy_splash,Salpikasurf,RUNTIME_SUPPORTED,content_excluded,False,False
+spotlight,Foco,DATA_ONLY,mechanics_data_only,True,True
+stealth_rock,Trampa Rocas,DATA_ONLY,mechanics_data_only,True,True
+steel_beam,Metaláser,PARTIAL_RUNTIME,mechanics_partial_runtime,True,True
+steel_roller,Allanador Férreo,PARTIAL_RUNTIME,mechanics_partial_runtime,True,True
+sticky_web,Red Viscosa,DATA_ONLY,mechanics_data_only,True,True
+stockpile,Reserva,DATA_ONLY,mechanics_data_only,True,True
+stoked_sparksurfer,Surfeo Galvánico,RUNTIME_SUPPORTED,content_pending,True,True
+strength_sap,Absorbefuerza,PARTIAL_RUNTIME,mechanics_partial_runtime,True,True
+stuff_cheeks,Atiborramiento,DATA_ONLY,mechanics_data_only,True,True
+subzero_slammer_physical,Crioaliento Despiadado,DATA_ONLY,content_pending,True,True
+subzero_slammer_special,Crioaliento Despiadado,DATA_ONLY,content_pending,True,True
+sunny_day,Día Soleado,DATA_ONLY,mechanics_data_only,True,True
+supersonic_skystrike_physical,Picado Supersónico,DATA_ONLY,content_pending,True,True
+supersonic_skystrike_special,Picado Supersónico,DATA_ONLY,content_pending,True,True
+swallow,Tragar,DATA_ONLY,mechanics_data_only,True,True
+switcheroo,Trapicheo,DATA_ONLY,mechanics_data_only,True,True
+synthesis,Fotosíntesis,PARTIAL_RUNTIME,mechanics_partial_runtime,True,True
+tailwind,Viento Afín,DATA_ONLY,mechanics_data_only,True,True
+take_heart,Bálsamo Osado,DATA_ONLY,mechanics_data_only,True,True
+tar_shot,Alquitranazo,PARTIAL_RUNTIME,mechanics_partial_runtime,True,True
+taunt,Mofa,DATA_ONLY,mechanics_data_only,True,True
+teatime,Hora del Té,DATA_ONLY,mechanics_data_only,True,True
+tectonic_rage_physical,Barrena Telúrica,DATA_ONLY,content_pending,True,True
+tectonic_rage_special,Barrena Telúrica,DATA_ONLY,content_pending,True,True
+telekinesis,Telequinesis,DATA_ONLY,mechanics_data_only,True,True
+thousand_arrows,Mil Flechas,PARTIAL_RUNTIME,mechanics_partial_runtime,True,True
+throat_chop,Golpe Mordaza,PARTIAL_RUNTIME,mechanics_partial_runtime,True,True
+tidy_up,Limpieza General,DATA_ONLY,mechanics_data_only,True,True
+torment,Tormento,DATA_ONLY,mechanics_data_only,True,True
+toxic_spikes,Púas Tóxicas,DATA_ONLY,mechanics_data_only,True,True
+tri_attack,Triataque,PARTIAL_RUNTIME,mechanics_partial_runtime,True,True
+trick,Truco,DATA_ONLY,mechanics_data_only,True,True
+trick_or_treat,Halloween,DATA_ONLY,mechanics_data_only,True,True
+trick_room,Espacio Raro,DATA_ONLY,mechanics_data_only,True,True
+twinkle_tackle_physical,Arrumaco Sideral,DATA_ONLY,content_pending,True,True
+twinkle_tackle_special,Arrumaco Sideral,DATA_ONLY,content_pending,True,True
+veevee_volley,Eevimpacto,DATA_ONLY,content_excluded,False,False
+venom_drench,Trampa Venenosa,DATA_ONLY,mechanics_data_only,True,True
+victory_dance,Danza Triunfal,DATA_ONLY,mechanics_data_only,True,True
+water_sport,Hidrochorro,DATA_ONLY,mechanics_data_only,True,True
+wicked_blow,Golpe Oscuro,PARTIAL_RUNTIME,mechanics_partial_runtime,True,True
+wide_guard,Vasta Guardia,DATA_ONLY,mechanics_data_only,True,True
+wish,Deseo,DATA_ONLY,mechanics_data_only,True,True
+wonder_room,Zona Extraña,DATA_ONLY,mechanics_data_only,True,True
+worry_seed,Abatidoras,DATA_ONLY,mechanics_data_only,True,True
+yawn,Bostezo,DATA_ONLY,mechanics_data_only,True,True
+zippy_zap,Pikaturbo,RUNTIME_SUPPORTED,content_excluded,False,False

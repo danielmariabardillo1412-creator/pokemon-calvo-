@@ -1,0 +1,86 @@
+{
+  "revision": "2bf639e5572812a67d2b94903fdcb9d095f5aeb2",
+  "files": {
+    "machines.csv": {
+      "url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/2bf639e5572812a67d2b94903fdcb9d095f5aeb2/data/v2/csv/machines.csv",
+      "sha256": "f9df7faaf0a60896fa344abd2b639f83f79c2a24e1fd4bb3560ca7da76e9a6ad",
+      "bytes": 32831,
+      "rows": 2372,
+      "columns": [
+        "machine_number",
+        "version_group_id",
+        "item_id",
+        "move_id"
+      ]
+    },
+    "items.csv": {
+      "url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/2bf639e5572812a67d2b94903fdcb9d095f5aeb2/data/v2/csv/items.csv",
+      "sha256": "f08cd6dc30b447cb91cbe9232c79052e8521f32f6105bb1489b5bfabf4ca3241",
+      "bytes": 59564,
+      "rows": 2223,
+      "columns": [
+        "id",
+        "identifier",
+        "category_id",
+        "cost",
+        "fling_power",
+        "fling_effect_id"
+      ]
+    },
+    "moves.csv": {
+      "url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/2bf639e5572812a67d2b94903fdcb9d095f5aeb2/data/v2/csv/moves.csv",
+      "sha256": "8aafd37bf78f19471495c05b201545180f50f0a08a2a2a844d69f9837dd39ac9",
+      "bytes": 42322,
+      "rows": 937,
+      "columns": [
+        "id",
+        "identifier",
+        "generation_id",
+        "type_id",
+        "power",
+        "pp",
+        "accuracy",
+        "priority",
+        "target_id",
+        "damage_class_id",
+        "effect_id",
+        "effect_chance",
+        "contest_type_id",
+        "contest_effect_id",
+        "super_contest_effect_id"
+      ]
+    },
+    "version_groups.csv": {
+      "url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/2bf639e5572812a67d2b94903fdcb9d095f5aeb2/data/v2/csv/version_groups.csv",
+      "sha256": "28da8d89d8eb4966941f81a9e62b3990510ed4d76dd774158246551a8e7707a7",
+      "bytes": 726,
+      "rows": 32,
+      "columns": [
+        "id",
+        "identifier",
+        "generation_id",
+        "order"
+      ]
+    },
+    "item_flags.csv": {
+      "url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/2bf639e5572812a67d2b94903fdcb9d095f5aeb2/data/v2/csv/item_flags.csv",
+      "sha256": "ac9f0fe5376b9a6b3cba23688866221149354dd761d182092aa7fdee5d312985",
+      "bytes": 139,
+      "rows": 8,
+      "columns": [
+        "id",
+        "identifier"
+      ]
+    },
+    "item_flag_map.csv": {
+      "url": "https://raw.githubusercontent.com/PokeAPI/pokeapi/2bf639e5572812a67d2b94903fdcb9d095f5aeb2/data/v2/csv/item_flag_map.csv",
+      "sha256": "95f94c17edbd2f7f429f490ea04b20c50aeba337ea6a4bc65080ed5f1c62b3cd",
+      "bytes": 3347,
+      "rows": 615,
+      "columns": [
+        "item_id",
+        "item_flag_id"
+      ]
+    }
+  }
+}

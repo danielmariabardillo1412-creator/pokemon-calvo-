@@ -1,0 +1,368 @@
+{
+  "phase": "ITEM_FIELD_V9",
+  "status": "GROWTH_ITEM_ROUTE_PASS_DEPENDENCIES_EXPLICIT",
+  "date": "2026-10-29",
+  "base": "ce0dc71e",
+  "all_item_effects_certified": false,
+  "new_ids": [
+    "rare_candy",
+    "exp_candy_xs",
+    "exp_candy_s",
+    "exp_candy_m",
+    "exp_candy_l",
+    "exp_candy_xl"
+  ],
+  "amounts_exp": {
+    "exp_candy_xs": 100,
+    "exp_candy_s": 800,
+    "exp_candy_m": 3000,
+    "exp_candy_l": 10000,
+    "exp_candy_xl": 30000
+  },
+  "headless_checks": 33633,
+  "gpu_checks": 33635,
+  "matrix_cases": 6456,
+  "eligible_species_in_matrix": 1076,
+  "additional_owned_contexts": 252,
+  "total_connected_field_effect_ids": 67,
+  "field_recovery_ids_verified": 41,
+  "field_training_ids_verified": 26,
+  "field_growth_ids_verified": 6,
+  "verification": {
+    "status": "PASS",
+    "base": "ce0dc71e",
+    "groups": [
+      {
+        "status": "PASS",
+        "checks_reported": 0,
+        "errors": [],
+        "last_line": "[ DONE ] loading_editor_layout",
+        "group": "import",
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--path",
+          "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+          "--headless",
+          "--editor",
+          "--import",
+          "--quit"
+        ],
+        "exit_code": 0,
+        "seconds": 6.67,
+        "terminated_after_script_error": false,
+        "expected_negative_diagnostics": [],
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\item_field_v9\\runs\\1793296461502951100\\import.log",
+        "log_sha256": "91b7afaac23a329898c2ef872627ca2fb04709b45a497ec5847a411e6c384e8d"
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 33633,
+        "errors": [],
+        "last_line": "ITEM_FIELD_V9 PASS checks=33633 cases=6456 GPU=false",
+        "group": "growth_items",
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--path",
+          "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+          "--headless",
+          "--script",
+          "tests/gameplay/item_field_growth_v9.gd"
+        ],
+        "exit_code": 0,
+        "seconds": 19.03,
+        "terminated_after_script_error": false,
+        "expected_negative_diagnostics": [],
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\item_field_v9\\runs\\1793296461502951100\\growth_items.log",
+        "log_sha256": "74f5db12e9a6d3437aa5597b8e03b2517d38a1fe1070f5f29b64b0ea171be667"
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 472,
+        "errors": [],
+        "last_line": "=== PROJECT TEST RESULT: 472 PASS / 0 FAIL ===",
+        "group": "core",
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--path",
+          "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+          "--headless",
+          "--script",
+          "tests/test_runner.gd"
+        ],
+        "exit_code": 0,
+        "seconds": 9.34,
+        "terminated_after_script_error": false,
+        "expected_negative_diagnostics": [
+          "ERROR: Parse JSON failed. Error at line 0: Expected key"
+        ],
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\item_field_v9\\runs\\1793296461502951100\\core.log",
+        "log_sha256": "aa9de68f0c22929ceffa211b3a242db78885d34d92f9c3d971e6d9f31801cd99"
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 4209,
+        "errors": [],
+        "last_line": "PROGRESSION_GROWTH_CURVES PASS checks=4209 failures=0",
+        "group": "growth_curves",
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--path",
+          "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+          "--headless",
+          "--script",
+          "tests/gameplay/progression_growth_curves_test_runner.gd"
+        ],
+        "exit_code": 0,
+        "seconds": 1.09,
+        "terminated_after_script_error": false,
+        "expected_negative_diagnostics": [],
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\item_field_v9\\runs\\1793296461502951100\\growth_curves.log",
+        "log_sha256": "89b96ebc4309d242d89b442232e2982d61e1dc6a19b54b6c0f07bb62777d98ee"
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 58,
+        "errors": [],
+        "last_line": "POKEAPI_REPAIR_TEST PASS checks=58 errors=0",
+        "group": "evolution",
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--path",
+          "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+          "--headless",
+          "--script",
+          "tests/gameplay/pokeapi_repairs_test_runner.gd"
+        ],
+        "exit_code": 0,
+        "seconds": 1.66,
+        "terminated_after_script_error": false,
+        "expected_negative_diagnostics": [],
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\item_field_v9\\runs\\1793296461502951100\\evolution.log",
+        "log_sha256": "ce3e6c826787523f92a4ad661250e4b72cbddc5fb2b9606306b04b43c41bf199"
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 43588,
+        "errors": [],
+        "last_line": "ITEM_FIELD_V8 PASS checks=43588 contexts=336 catalog_cases=19872 GPU=false",
+        "group": "pp_items",
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--path",
+          "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+          "--headless",
+          "--script",
+          "tests/gameplay/item_field_pp_v8.gd"
+        ],
+        "exit_code": 0,
+        "seconds": 14.39,
+        "terminated_after_script_error": false,
+        "expected_negative_diagnostics": [],
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\item_field_v9\\runs\\1793296461502951100\\pp_items.log",
+        "log_sha256": "b6b16e1d8a11955ef30ad14af1c2360415c69d40f58fb105e36f41ebab3382bb"
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 6990,
+        "errors": [],
+        "last_line": "ITEM_FIELD_V7 PASS checks=6990 cases=504 GPU=false",
+        "group": "training",
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--path",
+          "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+          "--headless",
+          "--script",
+          "tests/gameplay/item_field_training_v7.gd"
+        ],
+        "exit_code": 0,
+        "seconds": 9.99,
+        "terminated_after_script_error": false,
+        "expected_negative_diagnostics": [],
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\item_field_v9\\runs\\1793296461502951100\\training.log",
+        "log_sha256": "240a74b91ec68c0a5ff1913ba32af1d602b686b99462713fe003b5128a839fc3"
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 118,
+        "errors": [],
+        "last_line": "FIELD_NATIVE PASS checks=118 GPU=false errors=0",
+        "group": "native_field",
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--path",
+          "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+          "--headless",
+          "--script",
+          "tests/gameplay/field_native_test_runner.gd"
+        ],
+        "exit_code": 0,
+        "seconds": 52.0,
+        "terminated_after_script_error": false,
+        "expected_negative_diagnostics": [],
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\item_field_v9\\runs\\1793296461502951100\\native_field.log",
+        "log_sha256": "4532edaa65a10230fbf1101f37a4944f5c8487c3292fb8a6d48e1b391f3fb333"
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 912,
+        "errors": [],
+        "last_line": "FIELD_RESTORE_INTEGRATION PASS checks=912 errors=0",
+        "group": "restore",
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--path",
+          "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+          "--headless",
+          "--script",
+          "tests/gameplay/field_restore_integration_test_runner.gd"
+        ],
+        "exit_code": 0,
+        "seconds": 43.05,
+        "terminated_after_script_error": false,
+        "expected_negative_diagnostics": [],
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\item_field_v9\\runs\\1793296461502951100\\restore.log",
+        "log_sha256": "b680833ccd3f8bdeff5c7b4503bff0c6063eb4adfa9db317e952ca3d48d46478"
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 33635,
+        "errors": [],
+        "last_line": "ITEM_FIELD_V9 PASS checks=33635 cases=6456 GPU=true",
+        "group": "growth_gpu",
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--path",
+          "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+          "--resolution",
+          "1280x720",
+          "--script",
+          "tests/gameplay/item_field_growth_v9.gd",
+          "--",
+          "--capture"
+        ],
+        "exit_code": 0,
+        "seconds": 19.81,
+        "terminated_after_script_error": false,
+        "expected_negative_diagnostics": [],
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\item_field_v9\\runs\\1793296461502951100\\growth_gpu.log",
+        "log_sha256": "543a91a032249f0af16ac8073e55d0672c949fb5d036001cc07ac52a5059b35d"
+      }
+    ],
+    "integrity_before": {
+      "status": "PASS",
+      "base": "ce0dc71e77939ab2fb912f92d233477d2613ceca",
+      "protected_files": 22965,
+      "preserved_absent_skip_worktree": 15647,
+      "mode": "HASH_IF_METADATA_CHANGED",
+      "allowed_changes": [
+        "modules/inventory/field_growth_effects.gd",
+        "modules/inventory/field_growth_effects.gd.uid",
+        "modules/inventory/field_growth_transaction.gd",
+        "modules/inventory/field_growth_transaction.gd.uid",
+        "modules/inventory/field_item_service.gd",
+        "scenes/visual/field_growth_choices.gd",
+        "scenes/visual/field_growth_choices.gd.uid",
+        "scenes/visual/field_item_bag.gd",
+        "tests/gameplay/item_field_growth_v9.gd",
+        "tests/gameplay/item_field_growth_v9.gd.uid",
+        "tools/verification/run_field_growth_v9.py"
+      ]
+    },
+    "integrity_after": {
+      "status": "PASS",
+      "base": "ce0dc71e77939ab2fb912f92d233477d2613ceca",
+      "protected_files": 22965,
+      "preserved_absent_skip_worktree": 15647,
+      "mode": "FULL_CONTENT_HASHES",
+      "allowed_changes": [
+        "modules/inventory/field_growth_effects.gd",
+        "modules/inventory/field_growth_effects.gd.uid",
+        "modules/inventory/field_growth_transaction.gd",
+        "modules/inventory/field_growth_transaction.gd.uid",
+        "modules/inventory/field_item_service.gd",
+        "scenes/visual/field_growth_choices.gd",
+        "scenes/visual/field_growth_choices.gd.uid",
+        "scenes/visual/field_item_bag.gd",
+        "tests/gameplay/item_field_growth_v9.gd",
+        "tests/gameplay/item_field_growth_v9.gd.uid",
+        "tools/verification/run_field_growth_v9.py"
+      ]
+    },
+    "tested_sources_sha256": {
+      "modules/inventory/field_growth_effects.gd": "432eb0a0d78f17ceaa41f488bb7db4f52d6181c9cb518eb78052304a6677a413",
+      "modules/inventory/field_growth_effects.gd.uid": "d8742f423fa5ed3c9a6a00f60829490f41c1ed25db0311e659a072b42a17895c",
+      "modules/inventory/field_growth_transaction.gd": "84364b1c7ea2cbadbd4707561d9d71f5848aebb6ac103c0ea0cbf1c1235a0947",
+      "modules/inventory/field_growth_transaction.gd.uid": "923d9feb0895249474fdd2d82778fb39a81ab54abefaab72f93dc6bac3f75094",
+      "modules/inventory/field_item_service.gd": "a75c6a42d44eeecf79b1e0974d603de995f00d7492413cb8e9b54fb8ee452e66",
+      "scenes/visual/field_growth_choices.gd": "db7ad0e8a8e10c02c3fc22a4ebfeabea5f3963c45ab2ecb160ad41b2d526fb5d",
+      "scenes/visual/field_growth_choices.gd.uid": "8be0d9767bc68450143ddc6c8ad40ecd2c36e84333d4c7824e72a44efcfa6077",
+      "scenes/visual/field_item_bag.gd": "781fe4dec768ebd55bab875dca65709306235628028b17c585957f2fa55af2a5",
+      "tests/gameplay/item_field_growth_v9.gd": "6767b732aa9e46d137ea425f01ff0bdf78b0366f706ea71c4d40b39873cc85e3",
+      "tests/gameplay/item_field_growth_v9.gd.uid": "2a8995962201dbac238884a420a2cc58c7709f310c6177d7439e885d115f355d",
+      "tools/verification/run_field_growth_v9.py": "874b923dd87b13660e2c7038fb33c1642ab057d6d51b9d98e16148ea06388c46"
+    }
+  },
+  "reference": {
+    "root": "D:\\Proyectos\\Pokemon Calvo Referencias\\fuentes\\pokemon-essentials",
+    "commit": "8c5911e4a4b07b07e832e4bb0d5d8859e88b4a9b",
+    "sha256": {
+      "Data/Scripts/013_Items/001_Item_Utilities.rb": "d475b64f3f0011bf9312ff3e0fbe415edc51edb46a60e00db084b4fc12b1bff8",
+      "Data/Scripts/013_Items/002_Item_Effects.rb": "6ed4877769f3d7edddb096481780a8d29da6bd1de331ca9c24ccffb8477a1b15",
+      "Data/Scripts/016_UI/001_Non-interactive UI/004_UI_Evolution.rb": "de12abdc4726f4402aaaf0ef50a9bb180fc8de13a825b682dc15b1f249394942"
+    }
+  },
+  "canonical_growth_reference_sha256": "a00bbfccd3d1a42c4c7a32ac3a02fbeda60875a69d528dcc54703e3cce5fad35",
+  "base_item_matrix": "docs/current/ITEM_FIELD_V8.csv.txt",
+  "field_use_overrides": {
+    "rare_candy": "FIELD_GROWTH_STAGED_DECISIONS_XP_CAP_HP_BASE_FRIENDSHIP_SAVE_NATIVE_VERIFIED_ORIGIN_BONUS_PENDING",
+    "exp_candy_xs": "FIELD_GROWTH_STAGED_DECISIONS_XP_CAP_HP_BASE_FRIENDSHIP_SAVE_NATIVE_VERIFIED_ORIGIN_BONUS_PENDING",
+    "exp_candy_s": "FIELD_GROWTH_STAGED_DECISIONS_XP_CAP_HP_BASE_FRIENDSHIP_SAVE_NATIVE_VERIFIED_ORIGIN_BONUS_PENDING",
+    "exp_candy_m": "FIELD_GROWTH_STAGED_DECISIONS_XP_CAP_HP_BASE_FRIENDSHIP_SAVE_NATIVE_VERIFIED_ORIGIN_BONUS_PENDING",
+    "exp_candy_l": "FIELD_GROWTH_STAGED_DECISIONS_XP_CAP_HP_BASE_FRIENDSHIP_SAVE_NATIVE_VERIFIED_ORIGIN_BONUS_PENDING",
+    "exp_candy_xl": "FIELD_GROWTH_STAGED_DECISIONS_XP_CAP_HP_BASE_FRIENDSHIP_SAVE_NATIVE_VERIFIED_ORIGIN_BONUS_PENDING"
+  },
+  "visual_review": {
+    "path": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\item_field_v9\\growth_choice.png",
+    "sha256": "b7069b9fbe843d3b3d79332c0666b4b8bce520eb94d9b15a65ef67b954b4887b",
+    "reviewed": true,
+    "result": "Panel and controls fit 1280x720; source level and prepared level are explicit; object remains unconsumed during decisions."
+  },
+  "limitations": [
+    "Captured-ball/origin-area friendship bonuses require missing creature metadata.",
+    "Profile forbids using candies to revive KO creatures.",
+    "Only runtime-supported and permitted evolution routes can be offered; other conditions are reported pending.",
+    "Level-100 Rare Candy is effective only when an eligible level-up evolution is accepted.",
+    "Pending choices are not saved; closing/changing/refreshing the bag cancels the staged use.",
+    "Current selected source learnsets reused; no new randomizer or native combat algorithm implemented.",
+    "PC targets are verified via service; no new PC UI is introduced.",
+    "Literal API/data/source policies and artwork unchanged relative to ce0dc71e."
+  ],
+  "post_documentation_integrity": {
+    "status": "PASS",
+    "base": "ce0dc71e77939ab2fb912f92d233477d2613ceca",
+    "protected_files": 22965,
+    "preserved_absent_skip_worktree": 15647,
+    "mode": "FULL_CONTENT_HASHES",
+    "allowed_changes": [
+      "AGENTS.md",
+      "docs/current/ITEM_FIELD_V9.json",
+      "docs/current/ITEM_FIELD_V9.md",
+      "docs/current/ITEM_SYSTEM_CURRENT_STATUS.json",
+      "docs/current/NEXT_STEPS.md",
+      "docs/current/PROJECT_STATE.md",
+      "docs/current/START_HERE.md",
+      "modules/inventory/field_growth_effects.gd",
+      "modules/inventory/field_growth_effects.gd.uid",
+      "modules/inventory/field_growth_transaction.gd",
+      "modules/inventory/field_growth_transaction.gd.uid",
+      "modules/inventory/field_item_service.gd",
+      "scenes/visual/field_growth_choices.gd",
+      "scenes/visual/field_growth_choices.gd.uid",
+      "scenes/visual/field_item_bag.gd",
+      "tests/gameplay/item_field_growth_v9.gd",
+      "tests/gameplay/item_field_growth_v9.gd.uid",
+      "tools/verification/run_field_growth_v9.py"
+    ]
+  }
+}

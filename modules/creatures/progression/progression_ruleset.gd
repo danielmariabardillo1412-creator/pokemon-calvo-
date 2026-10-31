@@ -26,6 +26,12 @@ const GROWTH_CURVES := [
 	"fast", "medium", "medium-slow", "slow", "erratic", "fluctuating",
 ]
 const DEFAULT_GROWTH_CURVE := "medium"
+# Preserve canonical source IDs in datasets/creatures, translating only at the
+# rules boundary. PokeAPI names these two curves differently from the games.
+const GROWTH_CURVE_ALIASES := {
+	"slow-then-very-fast": "erratic",
+	"fast-then-very-slow": "fluctuating",
+}
 
 # Canonical nature modifier table (game constant). Maps nature_id -> {up, down}.
 # Neutral natures have up == down == "". This is the fixed official table, so it is
@@ -119,7 +125,7 @@ static func _raw_curve(curve: String, n: int) -> float:
 			elif n <= 68:
 				return x * x * x * (150.0 - x) / 100.0
 			elif n <= 98:
-				return x * x * x * floor((1911.0 - 10.0 * x) / 3.0) / 1000.0
+				return x * x * x * floor((1911.0 - 10.0 * x) / 3.0) / 500.0
 			else:
 				return x * x * x * (160.0 - x) / 100.0
 		"fluctuating":
@@ -136,14 +142,14 @@ static func _raw_curve(curve: String, n: int) -> float:
 
 
 static func experience_for_level(curve: String, level: int) -> int:
-	var c := DEFAULT_GROWTH_CURVE if not GROWTH_CURVES.has(curve) else curve
+	var c := canonical_growth_curve(curve)
 	var table: Array = _curve_table(c)
 	var lvl := clampi(level, MIN_LEVEL, MAX_LEVEL)
 	return int(table[lvl])
 
 
 static func level_for_experience(curve: String, exp: int) -> int:
-	var c := DEFAULT_GROWTH_CURVE if not GROWTH_CURVES.has(curve) else curve
+	var c := canonical_growth_curve(curve)
 	var table: Array = _curve_table(c)
 	var target := maxi(0, int(exp))
 	var lvl := MIN_LEVEL
@@ -153,6 +159,11 @@ static func level_for_experience(curve: String, exp: int) -> int:
 		else:
 			break
 	return lvl
+
+
+static func canonical_growth_curve(curve: String) -> String:
+	var resolved: String = GROWTH_CURVE_ALIASES.get(curve, curve)
+	return resolved if GROWTH_CURVES.has(resolved) else DEFAULT_GROWTH_CURVE
 
 
 static func experience_to_next_level(curve: String, level: int) -> int:

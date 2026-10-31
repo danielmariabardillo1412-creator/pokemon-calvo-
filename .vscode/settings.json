@@ -1,0 +1,13 @@
+{
+  "files.watcherExclude": {
+    "**/.godot/**": true,
+    "**/assets/local_battle_catalog/**": true,
+    "**/assets/local_pokemon_catalog/**": true
+  },
+  "search.exclude": {
+    ".godot": true,
+    "assets": true,
+    "data": true,
+    "docs/history": true
+  }
+}

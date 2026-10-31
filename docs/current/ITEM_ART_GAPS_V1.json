@@ -1,0 +1,1115 @@
+{
+  "status": "PASS_WITH_ONE_STYLE_PENDING",
+  "date": "2026-10-28",
+  "scope": "Only the original 40 unresolved entries of the five functional item families; not every item in the game.",
+  "original_unmatched": 40,
+  "illustrations_found": 39,
+  "small_sprite_only": 1,
+  "illustration_sources": {
+    "GLOBAL_LINK": 25,
+    "SV": 2,
+    "LEGENDS_ARCEUS": 12
+  },
+  "artwork_generated": 0,
+  "game_assets_installed": 0,
+  "styles_approved_by_user": false,
+  "native_item_effects_not_certified_here": true,
+  "rejected_sources": [
+    {
+      "id": "pewter_crunchies",
+      "url": "https://raw.githubusercontent.com/PokeAPI/sprites/d8c2fb78563e28ad7b3abe938cf6e79998d04e90/sprites/items/pewter-crunchies.png",
+      "file": "D:\\Proyectos\\Pokemon Calvo Auditoria Visual\\comparacion_objetos_v1\\huecos_40\\pewter_pokeapi.png",
+      "sha256": "ad00f48aed346757ea1baa2c4ec585e3422a280c0c3b9d78c7810e45d1cd1c08",
+      "reason": "Visually corrupted: colored blocks and broken silhouette in source. Rejected; larger canvas is not a quality guarantee."
+    }
+  ],
+  "remaining_ids": [
+    "pewter_crunchies"
+  ],
+  "rows": [
+    {
+      "id": "big_malasada",
+      "name_es": "Malasada Maxi",
+      "variant": "REGULAR",
+      "page_path": "/itemdex/bigmalasada.shtml",
+      "status": "EXISTING_ILLUSTRATION_FOUND",
+      "url": "https://www.serebii.net/itemdex/sprites/pgl/bigmalasada.png",
+      "file": "D:\\Proyectos\\Pokemon Calvo Auditoria Visual\\comparacion_objetos_v1\\huecos_40\\images\\big_malasada.png",
+      "width": 80,
+      "height": 80,
+      "bytes": 2706,
+      "sha256": "361404ed40fff60db65cc10b650d96d0fbfdf59251441b20302a24ce9ed2cbe8",
+      "source_style": "GLOBAL_LINK",
+      "alpha_bbox": [
+        11,
+        16,
+        73,
+        61
+      ],
+      "source_page": "https://www.serebii.net/itemdex/bigmalasada.shtml",
+      "source_page_sha256": "dc5f9a953caa2336af779bfd9e165dc5fd6d19c3a35f54d44bce2fc213afa3a9",
+      "visual_review": "STATIC_CONTACT_SHEET_REVIEWED",
+      "credits": [
+        "The Pokemon Company / Nintendo / Game Freak",
+        "Serebii / Joe Merrick and contributors"
+      ]
+    },
+    {
+      "id": "bug_memory",
+      "name_es": "Disco Bicho",
+      "variant": "REGULAR",
+      "page_path": "/itemdex/bugmemory.shtml",
+      "status": "EXISTING_ILLUSTRATION_FOUND",
+      "url": "https://www.serebii.net/itemdex/sprites/pgl/bugmemory.png",
+      "file": "D:\\Proyectos\\Pokemon Calvo Auditoria Visual\\comparacion_objetos_v1\\huecos_40\\images\\bug_memory.png",
+      "width": 80,
+      "height": 80,
+      "bytes": 2721,
+      "sha256": "cdf34fb17eaf3273b665ebed47254d119549adb250f7d7269d0be6e3eedb4688",
+      "source_style": "GLOBAL_LINK",
+      "alpha_bbox": [
+        13,
+        10,
+        70,
+        69
+      ],
+      "source_page": "https://www.serebii.net/itemdex/bugmemory.shtml",
+      "source_page_sha256": "6b872db3a157f74135bebcf115fdf625d836c752fbc98b3ff802c59dea05cdaa",
+      "visual_review": "STATIC_CONTACT_SHEET_REVIEWED",
+      "credits": [
+        "The Pokemon Company / Nintendo / Game Freak",
+        "Serebii / Joe Merrick and contributors"
+      ]
+    },
+    {
+      "id": "burn_drive",
+      "name_es": "PiroROM",
+      "variant": "REGULAR",
+      "page_path": "/itemdex/burndrive.shtml",
+      "status": "EXISTING_ILLUSTRATION_FOUND",
+      "url": "https://www.serebii.net/itemdex/sprites/pgl/burndrive.png",
+      "file": "D:\\Proyectos\\Pokemon Calvo Auditoria Visual\\comparacion_objetos_v1\\huecos_40\\images\\burn_drive.png",
+      "width": 80,
+      "height": 80,
+      "bytes": 3929,
+      "sha256": "b96cd756b7711db13b04fcdbca23c0c492af788dfdc00a7439c2f6dd21b18c83",
+      "source_style": "GLOBAL_LINK",
+      "alpha_bbox": [
+        8,
+        18,
+        72,
+        64
+      ],
+      "source_page": "https://www.serebii.net/itemdex/burndrive.shtml",
+      "source_page_sha256": "f6bf1778bdb130bbf0377227319a17c7724ff06c2494c12f38dd9e6f8564dfef",
+      "visual_review": "STATIC_CONTACT_SHEET_REVIEWED",
+      "credits": [
+        "The Pokemon Company / Nintendo / Game Freak",
+        "Serebii / Joe Merrick and contributors"
+      ]
+    },
+    {
+      "id": "chill_drive",
+      "name_es": "CrioROM",
+      "variant": "REGULAR",
+      "page_path": "/itemdex/chilldrive.shtml",
+      "status": "EXISTING_ILLUSTRATION_FOUND",
+      "url": "https://www.serebii.net/itemdex/sprites/pgl/chilldrive.png",
+      "file": "D:\\Proyectos\\Pokemon Calvo Auditoria Visual\\comparacion_objetos_v1\\huecos_40\\images\\chill_drive.png",
+      "width": 80,
+      "height": 80,
+      "bytes": 4225,
+      "sha256": "2f3b31fbd0db324c232a07da36da6cbb93082ece1802f3e118830151caf85450",
+      "source_style": "GLOBAL_LINK",
+      "alpha_bbox": [
+        8,
+        18,
+        73,
+        63
+      ],
+      "source_page": "https://www.serebii.net/itemdex/chilldrive.shtml",
+      "source_page_sha256": "1718d9c0ef2ee52f46808047e2f079072dc51e93a73b53ec230bcd7683aad0bf",
+      "visual_review": "STATIC_CONTACT_SHEET_REVIEWED",
+      "credits": [
+        "The Pokemon Company / Nintendo / Game Freak",
+        "Serebii / Joe Merrick and contributors"
+      ]
+    },
+    {
+      "id": "dark_memory",
+      "name_es": "Disco Siniestro",
+      "variant": "REGULAR",
+      "page_path": "/itemdex/darkmemory.shtml",
+      "status": "EXISTING_ILLUSTRATION_FOUND",
+      "url": "https://www.serebii.net/itemdex/sprites/pgl/darkmemory.png",
+      "file": "D:\\Proyectos\\Pokemon Calvo Auditoria Visual\\comparacion_objetos_v1\\huecos_40\\images\\dark_memory.png",
+      "width": 80,
+      "height": 80,
+      "bytes": 2735,
+      "sha256": "52424f94308e1b250a9c23514792a21f2bc1a45426f4d5ec33c9355cce2587cc",
+      "source_style": "GLOBAL_LINK",
+      "alpha_bbox": [
+        13,
+        11,
+        70,
+        71
+      ],
+      "source_page": "https://www.serebii.net/itemdex/darkmemory.shtml",
+      "source_page_sha256": "2b335312aca9014276196cb6a10a40d3d6c766eaecf8c40709b9777766c47561",
+      "visual_review": "STATIC_CONTACT_SHEET_REVIEWED",
+      "credits": [
+        "The Pokemon Company / Nintendo / Game Freak",
+        "Serebii / Joe Merrick and contributors"
+      ]
+    },
+    {
+      "id": "douse_drive",
+      "name_es": "HidroROM",
+      "variant": "REGULAR",
+      "page_path": "/itemdex/dousedrive.shtml",
+      "status": "EXISTING_ILLUSTRATION_FOUND",
+      "url": "https://www.serebii.net/itemdex/sprites/pgl/dousedrive.png",
+      "file": "D:\\Proyectos\\Pokemon Calvo Auditoria Visual\\comparacion_objetos_v1\\huecos_40\\images\\douse_drive.png",
+      "width": 80,
+      "height": 80,
+      "bytes": 4071,
+      "sha256": "525f386151ee4c9f2c6eb6e7c737f1413eebd6bb8b540a2a050e9b400bb11358",
+      "source_style": "GLOBAL_LINK",
+      "alpha_bbox": [
+        8,
+        18,
+        72,
+        63
+      ],
+      "source_page": "https://www.serebii.net/itemdex/dousedrive.shtml",
+      "source_page_sha256": "5081ad17bd658f9121ebc2ce1889096c402853f52955ad91fdb985472b328e7b",
+      "visual_review": "STATIC_CONTACT_SHEET_REVIEWED",
+      "credits": [
+        "The Pokemon Company / Nintendo / Game Freak",
+        "Serebii / Joe Merrick and contributors"
+      ]
+    },
+    {
+      "id": "dragon_memory",
+      "name_es": "Disco Dragón",
+      "variant": "REGULAR",
+      "page_path": "/itemdex/dragonmemory.shtml",
+      "status": "EXISTING_ILLUSTRATION_FOUND",
+      "url": "https://www.serebii.net/itemdex/sprites/pgl/dragonmemory.png",
+      "file": "D:\\Proyectos\\Pokemon Calvo Auditoria Visual\\comparacion_objetos_v1\\huecos_40\\images\\dragon_memory.png",
+      "width": 80,
+      "height": 80,
+      "bytes": 2728,
+      "sha256": "c70b018a08d582a200ea3488f4ebafce6c8ed1ff5f79130d003997b7db45d3d7",
+      "source_style": "GLOBAL_LINK",
+      "alpha_bbox": [
+        14,
+        11,
+        71,
+        69
+      ],
+      "source_page": "https://www.serebii.net/itemdex/dragonmemory.shtml",
+      "source_page_sha256": "abf172e64a203a40b71d5b03484ae224f8ac152d5f2a564e085cbd9e37e2bc46",
+      "visual_review": "STATIC_CONTACT_SHEET_REVIEWED",
+      "credits": [
+        "The Pokemon Company / Nintendo / Game Freak",
+        "Serebii / Joe Merrick and contributors"
+      ]
+    },
+    {
+      "id": "electric_memory",
+      "name_es": "Disco Eléctrico",
+      "variant": "REGULAR",
+      "page_path": "/itemdex/electricmemory.shtml",
+      "status": "EXISTING_ILLUSTRATION_FOUND",
+      "url": "https://www.serebii.net/itemdex/sprites/pgl/electricmemory.png",
+      "file": "D:\\Proyectos\\Pokemon Calvo Auditoria Visual\\comparacion_objetos_v1\\huecos_40\\images\\electric_memory.png",
+      "width": 80,
+      "height": 80,
+      "bytes": 2768,
+      "sha256": "cfc4a620cabacc088e379835d688e56741af40d2e2a52f2a1504129b56ae3201",
+      "source_style": "GLOBAL_LINK",
+      "alpha_bbox": [
+        11,
+        11,
+        69,
+        71
+      ],
+      "source_page": "https://www.serebii.net/itemdex/electricmemory.shtml",
+      "source_page_sha256": "92e784dfd40505dccf14ae71a34abc27b25df02be133070dc1443d2502167797",
+      "visual_review": "STATIC_CONTACT_SHEET_REVIEWED",
+      "credits": [
+        "The Pokemon Company / Nintendo / Game Freak",
+        "Serebii / Joe Merrick and contributors"
+      ]
+    },
+    {
+      "id": "fairy_gem",
+      "name_es": "Gema Hada",
+      "variant": "REGULAR",
+      "page_path": "/itemdex/fairygem.shtml",
+      "status": "EXISTING_ILLUSTRATION_FOUND",
+      "url": "https://www.serebii.net/itemdex/sprites/pgl/fairygem.png",
+      "file": "D:\\Proyectos\\Pokemon Calvo Auditoria Visual\\comparacion_objetos_v1\\huecos_40\\images\\fairy_gem.png",
+      "width": 80,
+      "height": 80,
+      "bytes": 2672,
+      "sha256": "319db6c5542e6c49bd7db2368bead3dc16e3de58b1175a82675744276f09d9c5",
+      "source_style": "GLOBAL_LINK",
+      "alpha_bbox": [
+        15,
+        19,
+        65,
+        63
+      ],
+      "source_page": "https://www.serebii.net/itemdex/fairygem.shtml",
+      "source_page_sha256": "06e3e8c92cca86c8e00f1004be9dc07eb08b2a18b5e07a5e5f9e041cbae9f3b0",
+      "visual_review": "STATIC_CONTACT_SHEET_REVIEWED",
+      "credits": [
+        "The Pokemon Company / Nintendo / Game Freak",
+        "Serebii / Joe Merrick and contributors"
+      ]
+    },
+    {
+      "id": "fairy_memory",
+      "name_es": "Disco Hada",
+      "variant": "REGULAR",
+      "page_path": "/itemdex/fairymemory.shtml",
+      "status": "EXISTING_ILLUSTRATION_FOUND",
+      "url": "https://www.serebii.net/itemdex/sprites/pgl/fairymemory.png",
+      "file": "D:\\Proyectos\\Pokemon Calvo Auditoria Visual\\comparacion_objetos_v1\\huecos_40\\images\\fairy_memory.png",
+      "width": 80,
+      "height": 80,
+      "bytes": 2783,
+      "sha256": "49eb89a77c64153a631fe52388b884c0eeaefa8909254716a3b45e1a3f459113",
+      "source_style": "GLOBAL_LINK",
+      "alpha_bbox": [
+        14,
+        10,
+        71,
+        69
+      ],
+      "source_page": "https://www.serebii.net/itemdex/fairymemory.shtml",
+      "source_page_sha256": "2fe7a970d9d476e4e882e4bef8f3490b86a924f253180ef6a663aa1a08f7353b",
+      "visual_review": "STATIC_CONTACT_SHEET_REVIEWED",
+      "credits": [
+        "The Pokemon Company / Nintendo / Game Freak",
+        "Serebii / Joe Merrick and contributors"
+      ]
+    },
+    {
+      "id": "fighting_memory",
+      "name_es": "Disco Lucha",
+      "variant": "REGULAR",
+      "page_path": "/itemdex/fightingmemory.shtml",
+      "status": "EXISTING_ILLUSTRATION_FOUND",
+      "url": "https://www.serebii.net/itemdex/sprites/pgl/fightingmemory.png",
+      "file": "D:\\Proyectos\\Pokemon Calvo Auditoria Visual\\comparacion_objetos_v1\\huecos_40\\images\\fighting_memory.png",
+      "width": 80,
+      "height": 80,
+      "bytes": 2811,
+      "sha256": "d4832d6378f4e810ccd509783c56c6c5ae708f25218b47cc1754b1e2269b09ef",
+      "source_style": "GLOBAL_LINK",
+      "alpha_bbox": [
+        11,
+        11,
+        69,
+        70
+      ],
+      "source_page": "https://www.serebii.net/itemdex/fightingmemory.shtml",
+      "source_page_sha256": "f7ae02dba5442219f69ca39ec4772ce0f7d4042ed642c57a1808443384ec9928",
+      "visual_review": "STATIC_CONTACT_SHEET_REVIEWED",
+      "credits": [
+        "The Pokemon Company / Nintendo / Game Freak",
+        "Serebii / Joe Merrick and contributors"
+      ]
+    },
+    {
+      "id": "fire_memory",
+      "name_es": "Disco Fuego",
+      "variant": "REGULAR",
+      "page_path": "/itemdex/firememory.shtml",
+      "status": "EXISTING_ILLUSTRATION_FOUND",
+      "url": "https://www.serebii.net/itemdex/sprites/pgl/firememory.png",
+      "file": "D:\\Proyectos\\Pokemon Calvo Auditoria Visual\\comparacion_objetos_v1\\huecos_40\\images\\fire_memory.png",
+      "width": 80,
+      "height": 80,
+      "bytes": 2749,
+      "sha256": "1dd4dacd7278beb92bd3814139bebf4e5126ae196a320fe553a957b02a7b91ec",
+      "source_style": "GLOBAL_LINK",
+      "alpha_bbox": [
+        13,
+        11,
+        71,
+        70
+      ],
+      "source_page": "https://www.serebii.net/itemdex/firememory.shtml",
+      "source_page_sha256": "8d7fa5daa74b2ce3623925c041f4c1b2f1601570f745b2117b2606eb40498ee9",
+      "visual_review": "STATIC_CONTACT_SHEET_REVIEWED",
+      "credits": [
+        "The Pokemon Company / Nintendo / Game Freak",
+        "Serebii / Joe Merrick and contributors"
+      ]
+    },
+    {
+      "id": "flying_memory",
+      "name_es": "Disco Volador",
+      "variant": "REGULAR",
+      "page_path": "/itemdex/flyingmemory.shtml",
+      "status": "EXISTING_ILLUSTRATION_FOUND",
+      "url": "https://www.serebii.net/itemdex/sprites/pgl/flyingmemory.png",
+      "file": "D:\\Proyectos\\Pokemon Calvo Auditoria Visual\\comparacion_objetos_v1\\huecos_40\\images\\flying_memory.png",
+      "width": 80,
+      "height": 80,
+      "bytes": 2734,
+      "sha256": "004d8909e51db1a1487976035b72402fc3f3d746b51312a5da7d2f1e2001b4ef",
+      "source_style": "GLOBAL_LINK",
+      "alpha_bbox": [
+        14,
+        11,
+        71,
+        70
+      ],
+      "source_page": "https://www.serebii.net/itemdex/flyingmemory.shtml",
+      "source_page_sha256": "b02bcf91d28027e45132c823d1ad531d7d2585b6f78ab04ddbdaf1b155bd8006",
+      "visual_review": "STATIC_CONTACT_SHEET_REVIEWED",
+      "credits": [
+        "The Pokemon Company / Nintendo / Game Freak",
+        "Serebii / Joe Merrick and contributors"
+      ]
+    },
+    {
+      "id": "ghost_memory",
+      "name_es": "Disco Fantasma",
+      "variant": "REGULAR",
+      "page_path": "/itemdex/ghostmemory.shtml",
+      "status": "EXISTING_ILLUSTRATION_FOUND",
+      "url": "https://www.serebii.net/itemdex/sprites/pgl/ghostmemory.png",
+      "file": "D:\\Proyectos\\Pokemon Calvo Auditoria Visual\\comparacion_objetos_v1\\huecos_40\\images\\ghost_memory.png",
+      "width": 80,
+      "height": 80,
+      "bytes": 2808,
+      "sha256": "d4c1d36ede91c527311a883ac66a6c4c3b5582d9b6faeb9aedb9dedabb897706",
+      "source_style": "GLOBAL_LINK",
+      "alpha_bbox": [
+        11,
+        13,
+        69,
+        72
+      ],
+      "source_page": "https://www.serebii.net/itemdex/ghostmemory.shtml",
+      "source_page_sha256": "6481dd69910bea4c80fd139fa74cc049fceea3e2dfa1e0b4ffd5e983f0f756ca",
+      "visual_review": "STATIC_CONTACT_SHEET_REVIEWED",
+      "credits": [
+        "The Pokemon Company / Nintendo / Game Freak",
+        "Serebii / Joe Merrick and contributors"
+      ]
+    },
+    {
+      "id": "grass_memory",
+      "name_es": "Disco Planta",
+      "variant": "REGULAR",
+      "page_path": "/itemdex/grassmemory.shtml",
+      "status": "EXISTING_ILLUSTRATION_FOUND",
+      "url": "https://www.serebii.net/itemdex/sprites/pgl/grassmemory.png",
+      "file": "D:\\Proyectos\\Pokemon Calvo Auditoria Visual\\comparacion_objetos_v1\\huecos_40\\images\\grass_memory.png",
+      "width": 80,
+      "height": 80,
+      "bytes": 2754,
+      "sha256": "cc958e7f2a02ec3f9540ff07b70ef43112a1871559ff6532f50d180cceace71e",
+      "source_style": "GLOBAL_LINK",
+      "alpha_bbox": [
+        13,
+        11,
+        70,
+        69
+      ],
+      "source_page": "https://www.serebii.net/itemdex/grassmemory.shtml",
+      "source_page_sha256": "3e3c6644b36ce4aee3fe3bf3944145802c32da935c07838e03f405f3fbb9c53d",
+      "visual_review": "STATIC_CONTACT_SHEET_REVIEWED",
+      "credits": [
+        "The Pokemon Company / Nintendo / Game Freak",
+        "Serebii / Joe Merrick and contributors"
+      ]
+    },
+    {
+      "id": "ground_memory",
+      "name_es": "Disco Tierra",
+      "variant": "REGULAR",
+      "page_path": "/itemdex/groundmemory.shtml",
+      "status": "EXISTING_ILLUSTRATION_FOUND",
+      "url": "https://www.serebii.net/itemdex/sprites/pgl/groundmemory.png",
+      "file": "D:\\Proyectos\\Pokemon Calvo Auditoria Visual\\comparacion_objetos_v1\\huecos_40\\images\\ground_memory.png",
+      "width": 80,
+      "height": 80,
+      "bytes": 2749,
+      "sha256": "4013937ed41c95051e248e67d1555623b557e9a71f3b4923a8e861e5b166793b",
+      "source_style": "GLOBAL_LINK",
+      "alpha_bbox": [
+        13,
+        12,
+        70,
+        71
+      ],
+      "source_page": "https://www.serebii.net/itemdex/groundmemory.shtml",
+      "source_page_sha256": "31b2c9edff5730e74129c54a2b0b4407502728af75467cc776b11619d0db396b",
+      "visual_review": "STATIC_CONTACT_SHEET_REVIEWED",
+      "credits": [
+        "The Pokemon Company / Nintendo / Game Freak",
+        "Serebii / Joe Merrick and contributors"
+      ]
+    },
+    {
+      "id": "heavy_ball",
+      "name_es": "Peso Ball",
+      "variant": "REGULAR",
+      "page_path": "/itemdex/heavyball.shtml",
+      "status": "EXISTING_ILLUSTRATION_FOUND",
+      "url": "https://www.serebii.net/itemdex/sprites/sv/heavyball.png",
+      "file": "D:\\Proyectos\\Pokemon Calvo Auditoria Visual\\comparacion_objetos_v1\\huecos_40\\images\\heavy_ball.png",
+      "width": 160,
+      "height": 160,
+      "bytes": 14496,
+      "sha256": "4ef5540b5bff18387e72437786a93d6f6d06298f80ae4aae139f445b9eb06377",
+      "source_style": "SV",
+      "alpha_bbox": [
+        16,
+        16,
+        148,
+        152
+      ],
+      "source_page": "https://www.serebii.net/itemdex/heavyball.shtml",
+      "source_page_sha256": "2ced68b5240fc48f4dafd0e9931d141f2daa0eabb5e8cc8d2c94582686dc870e",
+      "visual_review": "STATIC_CONTACT_SHEET_REVIEWED",
+      "credits": [
+        "The Pokemon Company / Nintendo / Game Freak",
+        "Serebii / Joe Merrick and contributors"
+      ]
+    },
+    {
+      "id": "hopo_berry",
+      "name_es": "hopo-berry",
+      "variant": "REGULAR",
+      "page_path": "/itemdex/hopoberry.shtml",
+      "status": "EXISTING_ILLUSTRATION_FOUND",
+      "url": "https://www.serebii.net/itemdex/sprites/legends/hopoberry.png",
+      "file": "D:\\Proyectos\\Pokemon Calvo Auditoria Visual\\comparacion_objetos_v1\\huecos_40\\images\\hopo_berry.png",
+      "width": 128,
+      "height": 128,
+      "bytes": 7166,
+      "sha256": "4f979cf67afd1569a3d7f8dcc4d6847d7c37df81cf3e9c86380420be8faeeb82",
+      "source_style": "LEGENDS_ARCEUS",
+      "alpha_bbox": [
+        28,
+        22,
+        101,
+        109
+      ],
+      "source_page": "https://www.serebii.net/itemdex/hopoberry.shtml",
+      "source_page_sha256": "b597655f66ce36e9e7fa4555b79f200635ea37e23e43a759b6c8c0f3cd30004b",
+      "visual_review": "STATIC_CONTACT_SHEET_REVIEWED",
+      "credits": [
+        "The Pokemon Company / Nintendo / Game Freak",
+        "Serebii / Joe Merrick and contributors"
+      ]
+    },
+    {
+      "id": "ice_memory",
+      "name_es": "Disco Hielo",
+      "variant": "REGULAR",
+      "page_path": "/itemdex/icememory.shtml",
+      "status": "EXISTING_ILLUSTRATION_FOUND",
+      "url": "https://www.serebii.net/itemdex/sprites/pgl/icememory.png",
+      "file": "D:\\Proyectos\\Pokemon Calvo Auditoria Visual\\comparacion_objetos_v1\\huecos_40\\images\\ice_memory.png",
+      "width": 80,
+      "height": 79,
+      "bytes": 2705,
+      "sha256": "a4b4843a9f514a1bf913e09d5e10c73396cd05210ff9445169ef230d34073463",
+      "source_style": "GLOBAL_LINK",
+      "alpha_bbox": [
+        13,
+        11,
+        70,
+        68
+      ],
+      "source_page": "https://www.serebii.net/itemdex/icememory.shtml",
+      "source_page_sha256": "f891642487eb2d196e9dd6d9ac356d6670578005c01b33bfc5f3c3ae13fe23bf",
+      "visual_review": "STATIC_CONTACT_SHEET_REVIEWED",
+      "credits": [
+        "The Pokemon Company / Nintendo / Game Freak",
+        "Serebii / Joe Merrick and contributors"
+      ]
+    },
+    {
+      "id": "lafeather_ball",
+      "name_es": "Pluma Ball",
+      "variant": "LEGENDS_ARCEUS",
+      "page_path": "/itemdex/featherball.shtml",
+      "status": "EXISTING_ILLUSTRATION_FOUND",
+      "url": "https://www.serebii.net/itemdex/sprites/legends/featherball.png",
+      "file": "D:\\Proyectos\\Pokemon Calvo Auditoria Visual\\comparacion_objetos_v1\\huecos_40\\images\\lafeather_ball.png",
+      "width": 128,
+      "height": 128,
+      "bytes": 11163,
+      "sha256": "cb8eaf400d36cb8d59d74b386283390fdd9b29c9da90363840f88b5b5f829576",
+      "source_style": "LEGENDS_ARCEUS",
+      "alpha_bbox": [
+        20,
+        23,
+        108,
+        110
+      ],
+      "source_page": "https://www.serebii.net/itemdex/featherball.shtml",
+      "source_page_sha256": "9916d84c4effa300746b9f988ab2047992456f22a252797e52011e366fa0fafa",
+      "visual_review": "STATIC_CONTACT_SHEET_REVIEWED",
+      "credits": [
+        "The Pokemon Company / Nintendo / Game Freak",
+        "Serebii / Joe Merrick and contributors"
+      ]
+    },
+    {
+      "id": "lagigaton_ball",
+      "name_es": "Quintal Ball",
+      "variant": "LEGENDS_ARCEUS",
+      "page_path": "/itemdex/gigatonball.shtml",
+      "status": "EXISTING_ILLUSTRATION_FOUND",
+      "url": "https://www.serebii.net/itemdex/sprites/legends/gigatonball.png",
+      "file": "D:\\Proyectos\\Pokemon Calvo Auditoria Visual\\comparacion_objetos_v1\\huecos_40\\images\\lagigaton_ball.png",
+      "width": 128,
+      "height": 128,
+      "bytes": 11484,
+      "sha256": "63d0d6ec9721529ea26a17072029890b575cc99f47a19164b14ba78287d40e8e",
+      "source_style": "LEGENDS_ARCEUS",
+      "alpha_bbox": [
+        20,
+        23,
+        108,
+        110
+      ],
+      "source_page": "https://www.serebii.net/itemdex/gigatonball.shtml",
+      "source_page_sha256": "545445f8a51ac90c1811be84abdf3ff8fff56f9548e2a3c3913606dd7c926aba",
+      "visual_review": "STATIC_CONTACT_SHEET_REVIEWED",
+      "credits": [
+        "The Pokemon Company / Nintendo / Game Freak",
+        "Serebii / Joe Merrick and contributors"
+      ]
+    },
+    {
+      "id": "lagreat_ball",
+      "name_es": "Super Ball",
+      "variant": "LEGENDS_ARCEUS",
+      "page_path": "/itemdex/greatballlegends.shtml",
+      "status": "EXISTING_ILLUSTRATION_FOUND",
+      "url": "https://www.serebii.net/itemdex/sprites/legends/greatballlegends.png",
+      "file": "D:\\Proyectos\\Pokemon Calvo Auditoria Visual\\comparacion_objetos_v1\\huecos_40\\images\\lagreat_ball.png",
+      "width": 128,
+      "height": 128,
+      "bytes": 10735,
+      "sha256": "d3a41611d603203b0c697c47354b041a78fa5974208ccfc8074b0afa605bf42c",
+      "source_style": "LEGENDS_ARCEUS",
+      "alpha_bbox": [
+        20,
+        23,
+        108,
+        110
+      ],
+      "source_page": "https://www.serebii.net/itemdex/greatballlegends.shtml",
+      "source_page_sha256": "1c081af24c0c2943d4afd543c0bcb7b08fec28bb339fd2a970c4dc72d607ec2e",
+      "visual_review": "STATIC_CONTACT_SHEET_REVIEWED",
+      "credits": [
+        "The Pokemon Company / Nintendo / Game Freak",
+        "Serebii / Joe Merrick and contributors"
+      ]
+    },
+    {
+      "id": "laheavy_ball",
+      "name_es": "Peso Ball",
+      "variant": "LEGENDS_ARCEUS",
+      "page_path": "/itemdex/heavyballlegends.shtml",
+      "status": "EXISTING_ILLUSTRATION_FOUND",
+      "url": "https://www.serebii.net/itemdex/sprites/legends/heavyballlegends.png",
+      "file": "D:\\Proyectos\\Pokemon Calvo Auditoria Visual\\comparacion_objetos_v1\\huecos_40\\images\\laheavy_ball.png",
+      "width": 128,
+      "height": 128,
+      "bytes": 9912,
+      "sha256": "88d028f9953814acb8a974a7c1d6f2945320c0eea38643f4e22ae255341e9042",
+      "source_style": "LEGENDS_ARCEUS",
+      "alpha_bbox": [
+        20,
+        23,
+        108,
+        110
+      ],
+      "source_page": "https://www.serebii.net/itemdex/heavyballlegends.shtml",
+      "source_page_sha256": "293923738ffec23bb2b9a312e867f84934e60a1707af4c2b59aa736e765ab661",
+      "visual_review": "STATIC_CONTACT_SHEET_REVIEWED",
+      "credits": [
+        "The Pokemon Company / Nintendo / Game Freak",
+        "Serebii / Joe Merrick and contributors"
+      ]
+    },
+    {
+      "id": "lajet_ball",
+      "name_es": "Aero Ball",
+      "variant": "LEGENDS_ARCEUS",
+      "page_path": "/itemdex/jetball.shtml",
+      "status": "EXISTING_ILLUSTRATION_FOUND",
+      "url": "https://www.serebii.net/itemdex/sprites/legends/jetball.png",
+      "file": "D:\\Proyectos\\Pokemon Calvo Auditoria Visual\\comparacion_objetos_v1\\huecos_40\\images\\lajet_ball.png",
+      "width": 128,
+      "height": 128,
+      "bytes": 12075,
+      "sha256": "14f488a0a57027d3f388c06c7a3bc95035304745efaed096fce9e644f0663213",
+      "source_style": "LEGENDS_ARCEUS",
+      "alpha_bbox": [
+        20,
+        23,
+        108,
+        110
+      ],
+      "source_page": "https://www.serebii.net/itemdex/jetball.shtml",
+      "source_page_sha256": "c07bd5414f4e4a04f3e861a24500567708fc3a8e2ce5006040539edc0a5d41e0",
+      "visual_review": "STATIC_CONTACT_SHEET_REVIEWED",
+      "credits": [
+        "The Pokemon Company / Nintendo / Game Freak",
+        "Serebii / Joe Merrick and contributors"
+      ]
+    },
+    {
+      "id": "laleaden_ball",
+      "name_es": "Kilo Ball",
+      "variant": "LEGENDS_ARCEUS",
+      "page_path": "/itemdex/leadenball.shtml",
+      "status": "EXISTING_ILLUSTRATION_FOUND",
+      "url": "https://www.serebii.net/itemdex/sprites/legends/leadenball.png",
+      "file": "D:\\Proyectos\\Pokemon Calvo Auditoria Visual\\comparacion_objetos_v1\\huecos_40\\images\\laleaden_ball.png",
+      "width": 128,
+      "height": 128,
+      "bytes": 10123,
+      "sha256": "d7868bb8aa9cb6a26d9e30722e03510a926b24da6302e7efba83cfb4cf07271d",
+      "source_style": "LEGENDS_ARCEUS",
+      "alpha_bbox": [
+        20,
+        23,
+        108,
+        110
+      ],
+      "source_page": "https://www.serebii.net/itemdex/leadenball.shtml",
+      "source_page_sha256": "aa541e0f29d98d4d372dc8c40b69eaa365132b401be2189014dc9f263d884f6f",
+      "visual_review": "STATIC_CONTACT_SHEET_REVIEWED",
+      "credits": [
+        "The Pokemon Company / Nintendo / Game Freak",
+        "Serebii / Joe Merrick and contributors"
+      ]
+    },
+    {
+      "id": "laorigin_ball",
+      "name_es": "Origen Ball",
+      "variant": "LEGENDS_ARCEUS",
+      "page_path": "/itemdex/originball.shtml",
+      "status": "EXISTING_ILLUSTRATION_FOUND",
+      "url": "https://www.serebii.net/itemdex/sprites/legends/originball.png",
+      "file": "D:\\Proyectos\\Pokemon Calvo Auditoria Visual\\comparacion_objetos_v1\\huecos_40\\images\\laorigin_ball.png",
+      "width": 128,
+      "height": 128,
+      "bytes": 11171,
+      "sha256": "e543c5a02d01f32226b0e21e9bcdbee50e4cab92e385545c24952b524ea72da4",
+      "source_style": "LEGENDS_ARCEUS",
+      "alpha_bbox": [
+        20,
+        23,
+        108,
+        110
+      ],
+      "source_page": "https://www.serebii.net/itemdex/originball.shtml",
+      "source_page_sha256": "a50d52f9222c7fa28135507045e9ded3118ab1597a70bf16cc96ada996f0ad30",
+      "visual_review": "STATIC_CONTACT_SHEET_REVIEWED",
+      "credits": [
+        "The Pokemon Company / Nintendo / Game Freak",
+        "Serebii / Joe Merrick and contributors"
+      ]
+    },
+    {
+      "id": "lapoke_ball",
+      "name_es": "Poké Ball",
+      "variant": "LEGENDS_ARCEUS",
+      "page_path": "/itemdex/pokeballlegends.shtml",
+      "status": "EXISTING_ILLUSTRATION_FOUND",
+      "url": "https://www.serebii.net/itemdex/sprites/legends/pokeballlegends.png",
+      "file": "D:\\Proyectos\\Pokemon Calvo Auditoria Visual\\comparacion_objetos_v1\\huecos_40\\images\\lapoke_ball.png",
+      "width": 128,
+      "height": 128,
+      "bytes": 9984,
+      "sha256": "be425ee3bf5fd0912f96858e4120a6611ca5b94a90ed26b553c918e1d655abb2",
+      "source_style": "LEGENDS_ARCEUS",
+      "alpha_bbox": [
+        20,
+        23,
+        108,
+        110
+      ],
+      "source_page": "https://www.serebii.net/itemdex/pokeballlegends.shtml",
+      "source_page_sha256": "4d63dba52cf96ba871fc34e7bbfa4cc2cb667e8e7feb5db7eb64100bbdc299d6",
+      "visual_review": "STATIC_CONTACT_SHEET_REVIEWED",
+      "credits": [
+        "The Pokemon Company / Nintendo / Game Freak",
+        "Serebii / Joe Merrick and contributors"
+      ]
+    },
+    {
+      "id": "laultra_ball",
+      "name_es": "Ultra Ball",
+      "variant": "LEGENDS_ARCEUS",
+      "page_path": "/itemdex/ultraballlegends.shtml",
+      "status": "EXISTING_ILLUSTRATION_FOUND",
+      "url": "https://www.serebii.net/itemdex/sprites/legends/ultraballlegends.png",
+      "file": "D:\\Proyectos\\Pokemon Calvo Auditoria Visual\\comparacion_objetos_v1\\huecos_40\\images\\laultra_ball.png",
+      "width": 128,
+      "height": 128,
+      "bytes": 11125,
+      "sha256": "f433d1be0590fa2be32d9d525e5273f8b504610447ac32850e8fbfd1ff7bec1a",
+      "source_style": "LEGENDS_ARCEUS",
+      "alpha_bbox": [
+        20,
+        23,
+        108,
+        110
+      ],
+      "source_page": "https://www.serebii.net/itemdex/ultraballlegends.shtml",
+      "source_page_sha256": "cd289c0958e9800ca358bab55d9a90975180b0de246e93c9dd06c10602b13668",
+      "visual_review": "STATIC_CONTACT_SHEET_REVIEWED",
+      "credits": [
+        "The Pokemon Company / Nintendo / Game Freak",
+        "Serebii / Joe Merrick and contributors"
+      ]
+    },
+    {
+      "id": "lawing_ball",
+      "name_es": "Ala Ball",
+      "variant": "LEGENDS_ARCEUS",
+      "page_path": "/itemdex/wingball.shtml",
+      "status": "EXISTING_ILLUSTRATION_FOUND",
+      "url": "https://www.serebii.net/itemdex/sprites/legends/wingball.png",
+      "file": "D:\\Proyectos\\Pokemon Calvo Auditoria Visual\\comparacion_objetos_v1\\huecos_40\\images\\lawing_ball.png",
+      "width": 128,
+      "height": 128,
+      "bytes": 11315,
+      "sha256": "46fe2756904308748a5633117c6227dcbc40a8bdcc2242b02c346478f9ca14fe",
+      "source_style": "LEGENDS_ARCEUS",
+      "alpha_bbox": [
+        20,
+        23,
+        108,
+        110
+      ],
+      "source_page": "https://www.serebii.net/itemdex/wingball.shtml",
+      "source_page_sha256": "b88fdc3676b77fbaa46d0fb5626089067554f5da979a2b44b91f8ac0a799fd59",
+      "visual_review": "STATIC_CONTACT_SHEET_REVIEWED",
+      "credits": [
+        "The Pokemon Company / Nintendo / Game Freak",
+        "Serebii / Joe Merrick and contributors"
+      ]
+    },
+    {
+      "id": "linking_cord",
+      "name_es": "Cordón Unión",
+      "variant": "REGULAR",
+      "page_path": "/itemdex/linkingcord.shtml",
+      "status": "EXISTING_ILLUSTRATION_FOUND",
+      "url": "https://www.serebii.net/itemdex/sprites/legends/linkingcord.png",
+      "file": "D:\\Proyectos\\Pokemon Calvo Auditoria Visual\\comparacion_objetos_v1\\huecos_40\\images\\linking_cord.png",
+      "width": 128,
+      "height": 128,
+      "bytes": 7935,
+      "sha256": "98d447ca4f66388fade803497a6d12238f8d228e2f6f6bc0973ae3e02373c511",
+      "source_style": "LEGENDS_ARCEUS",
+      "alpha_bbox": [
+        24,
+        23,
+        112,
+        110
+      ],
+      "source_page": "https://www.serebii.net/itemdex/linkingcord.shtml",
+      "source_page_sha256": "fa31b93b4b1f5e6a4436a81bee05c65adc98d97437ec33a0183f1e03642ef509",
+      "visual_review": "STATIC_CONTACT_SHEET_REVIEWED",
+      "credits": [
+        "The Pokemon Company / Nintendo / Game Freak",
+        "Serebii / Joe Merrick and contributors"
+      ]
+    },
+    {
+      "id": "metal_alloy",
+      "name_es": "Metal Compuesto",
+      "variant": "REGULAR",
+      "page_path": "/itemdex/metalalloy.shtml",
+      "status": "EXISTING_ILLUSTRATION_FOUND",
+      "url": "https://www.serebii.net/itemdex/sprites/sv/metalalloy.png",
+      "file": "D:\\Proyectos\\Pokemon Calvo Auditoria Visual\\comparacion_objetos_v1\\huecos_40\\images\\metal_alloy.png",
+      "width": 160,
+      "height": 160,
+      "bytes": 11674,
+      "sha256": "8b689610c16045c3a6bf2ff74e83226a5623a7e1ec81320cf51564ea72efdf49",
+      "source_style": "SV",
+      "alpha_bbox": [
+        16,
+        28,
+        148,
+        144
+      ],
+      "source_page": "https://www.serebii.net/itemdex/metalalloy.shtml",
+      "source_page_sha256": "91a6301ef23667ab209407fb4c89e655dfd7ad21466e6a36ffb6b9e8272ed959",
+      "visual_review": "STATIC_CONTACT_SHEET_REVIEWED",
+      "credits": [
+        "The Pokemon Company / Nintendo / Game Freak",
+        "Serebii / Joe Merrick and contributors"
+      ]
+    },
+    {
+      "id": "pewter_crunchies",
+      "name_es": "Rokikos",
+      "variant": "REGULAR",
+      "page_path": "/itemdex/pewtercrunchies.shtml",
+      "status": "SMALL_SPRITE_ONLY_STYLE_PENDING",
+      "url": "https://www.serebii.net/itemdex/sprites/pewtercrunchies.png",
+      "file": "D:\\Proyectos\\Pokemon Calvo Auditoria Visual\\comparacion_objetos_v1\\huecos_40\\images\\pewter_crunchies.png",
+      "width": 32,
+      "height": 32,
+      "bytes": 688,
+      "sha256": "8cbfb1232c8d1fe92e3d4751bd1406e05fd2e1ee0296b98b62ac51b14a12d454",
+      "source_style": "SMALL_SPRITE",
+      "alpha_bbox": [
+        3,
+        8,
+        30,
+        28
+      ],
+      "source_page": "https://www.serebii.net/itemdex/pewtercrunchies.shtml",
+      "source_page_sha256": "45041ef8cd13826c464e0438a44d60c8d55a71e3448aa048324a72c540d852c2",
+      "visual_review": "SMALL_PIXEL_ICON_STYLE_PENDING",
+      "credits": [
+        "The Pokemon Company / Nintendo / Game Freak",
+        "Serebii / Joe Merrick and contributors"
+      ]
+    },
+    {
+      "id": "poison_memory",
+      "name_es": "Disco Veneno",
+      "variant": "REGULAR",
+      "page_path": "/itemdex/poisonmemory.shtml",
+      "status": "EXISTING_ILLUSTRATION_FOUND",
+      "url": "https://www.serebii.net/itemdex/sprites/pgl/poisonmemory.png",
+      "file": "D:\\Proyectos\\Pokemon Calvo Auditoria Visual\\comparacion_objetos_v1\\huecos_40\\images\\poison_memory.png",
+      "width": 80,
+      "height": 80,
+      "bytes": 2754,
+      "sha256": "785081697e1fa1cadd1d32277a195d047c06794d8b7edfc66d2aeaeae6341579",
+      "source_style": "GLOBAL_LINK",
+      "alpha_bbox": [
+        14,
+        12,
+        71,
+        71
+      ],
+      "source_page": "https://www.serebii.net/itemdex/poisonmemory.shtml",
+      "source_page_sha256": "2da608465d04fe22166c9eb9af105ae301b970b7c1e2e4a9841a8608e2505c77",
+      "visual_review": "STATIC_CONTACT_SHEET_REVIEWED",
+      "credits": [
+        "The Pokemon Company / Nintendo / Game Freak",
+        "Serebii / Joe Merrick and contributors"
+      ]
+    },
+    {
+      "id": "psychic_memory",
+      "name_es": "Disco Psíquico",
+      "variant": "REGULAR",
+      "page_path": "/itemdex/psychicmemory.shtml",
+      "status": "EXISTING_ILLUSTRATION_FOUND",
+      "url": "https://www.serebii.net/itemdex/sprites/pgl/psychicmemory.png",
+      "file": "D:\\Proyectos\\Pokemon Calvo Auditoria Visual\\comparacion_objetos_v1\\huecos_40\\images\\psychic_memory.png",
+      "width": 80,
+      "height": 80,
+      "bytes": 2732,
+      "sha256": "dbf5e395c4f0866e3f87ee6357aa1dc016527830e3c3e39528bf45125e0d23c4",
+      "source_style": "GLOBAL_LINK",
+      "alpha_bbox": [
+        12,
+        12,
+        69,
+        71
+      ],
+      "source_page": "https://www.serebii.net/itemdex/psychicmemory.shtml",
+      "source_page_sha256": "77f649f3458c703801d7270f31f3a4c50cb1782c7c83da0cd90392869d492fcf",
+      "visual_review": "STATIC_CONTACT_SHEET_REVIEWED",
+      "credits": [
+        "The Pokemon Company / Nintendo / Game Freak",
+        "Serebii / Joe Merrick and contributors"
+      ]
+    },
+    {
+      "id": "rock_memory",
+      "name_es": "Disco Roca",
+      "variant": "REGULAR",
+      "page_path": "/itemdex/rockmemory.shtml",
+      "status": "EXISTING_ILLUSTRATION_FOUND",
+      "url": "https://www.serebii.net/itemdex/sprites/pgl/rockmemory.png",
+      "file": "D:\\Proyectos\\Pokemon Calvo Auditoria Visual\\comparacion_objetos_v1\\huecos_40\\images\\rock_memory.png",
+      "width": 80,
+      "height": 80,
+      "bytes": 2768,
+      "sha256": "cc6c1f75c4197be7540c99ff496ec22cd73f811b262b002a579c63bb746f2cc9",
+      "source_style": "GLOBAL_LINK",
+      "alpha_bbox": [
+        14,
+        13,
+        71,
+        72
+      ],
+      "source_page": "https://www.serebii.net/itemdex/rockmemory.shtml",
+      "source_page_sha256": "d0e92f77208e6bd3b1ab38b9183f3c1421df23d5550b6e8a0c333e9a82340323",
+      "visual_review": "STATIC_CONTACT_SHEET_REVIEWED",
+      "credits": [
+        "The Pokemon Company / Nintendo / Game Freak",
+        "Serebii / Joe Merrick and contributors"
+      ]
+    },
+    {
+      "id": "sachet",
+      "name_es": "Saquito Fragante",
+      "variant": "REGULAR",
+      "page_path": "/itemdex/sachet.shtml",
+      "status": "EXISTING_ILLUSTRATION_FOUND",
+      "url": "https://www.serebii.net/itemdex/sprites/pgl/sachet.png",
+      "file": "D:\\Proyectos\\Pokemon Calvo Auditoria Visual\\comparacion_objetos_v1\\huecos_40\\images\\sachet.png",
+      "width": 80,
+      "height": 80,
+      "bytes": 3738,
+      "sha256": "c55c79847e0cb76e6bb0fbc671a8c1ead76eac30cb64d4ccc09231a0782a2bc1",
+      "source_style": "GLOBAL_LINK",
+      "alpha_bbox": [
+        17,
+        11,
+        63,
+        69
+      ],
+      "source_page": "https://www.serebii.net/itemdex/sachet.shtml",
+      "source_page_sha256": "ff11f48be77cba6e4b992e205dee2eeaa4b80032c8c0e70f3f92c3e76c944570",
+      "visual_review": "STATIC_CONTACT_SHEET_REVIEWED",
+      "credits": [
+        "The Pokemon Company / Nintendo / Game Freak",
+        "Serebii / Joe Merrick and contributors"
+      ]
+    },
+    {
+      "id": "shock_drive",
+      "name_es": "FulgoROM",
+      "variant": "REGULAR",
+      "page_path": "/itemdex/shockdrive.shtml",
+      "status": "EXISTING_ILLUSTRATION_FOUND",
+      "url": "https://www.serebii.net/itemdex/sprites/pgl/shockdrive.png",
+      "file": "D:\\Proyectos\\Pokemon Calvo Auditoria Visual\\comparacion_objetos_v1\\huecos_40\\images\\shock_drive.png",
+      "width": 80,
+      "height": 80,
+      "bytes": 4109,
+      "sha256": "146e3c2b44da6cc9abd395b86569c08df0280e748b919a717fc1f6608f19852d",
+      "source_style": "GLOBAL_LINK",
+      "alpha_bbox": [
+        8,
+        18,
+        72,
+        64
+      ],
+      "source_page": "https://www.serebii.net/itemdex/shockdrive.shtml",
+      "source_page_sha256": "caf60d98b384390a088d2bd867b468d678b68b2d2d9689caab37e70dff3ae7f3",
+      "visual_review": "STATIC_CONTACT_SHEET_REVIEWED",
+      "credits": [
+        "The Pokemon Company / Nintendo / Game Freak",
+        "Serebii / Joe Merrick and contributors"
+      ]
+    },
+    {
+      "id": "steel_memory",
+      "name_es": "Disco Acero",
+      "variant": "REGULAR",
+      "page_path": "/itemdex/steelmemory.shtml",
+      "status": "EXISTING_ILLUSTRATION_FOUND",
+      "url": "https://www.serebii.net/itemdex/sprites/pgl/steelmemory.png",
+      "file": "D:\\Proyectos\\Pokemon Calvo Auditoria Visual\\comparacion_objetos_v1\\huecos_40\\images\\steel_memory.png",
+      "width": 80,
+      "height": 80,
+      "bytes": 2805,
+      "sha256": "94484d83f3f7a79e3d408c2a4406c467c1bc9150dc15d16e240ebe87c975b7f3",
+      "source_style": "GLOBAL_LINK",
+      "alpha_bbox": [
+        11,
+        11,
+        69,
+        69
+      ],
+      "source_page": "https://www.serebii.net/itemdex/steelmemory.shtml",
+      "source_page_sha256": "5800652711d43c185648d071cec17273abbed839ec83aa08d772ffb74ebe63f8",
+      "visual_review": "STATIC_CONTACT_SHEET_REVIEWED",
+      "credits": [
+        "The Pokemon Company / Nintendo / Game Freak",
+        "Serebii / Joe Merrick and contributors"
+      ]
+    },
+    {
+      "id": "water_memory",
+      "name_es": "Disco Agua",
+      "variant": "REGULAR",
+      "page_path": "/itemdex/watermemory.shtml",
+      "status": "EXISTING_ILLUSTRATION_FOUND",
+      "url": "https://www.serebii.net/itemdex/sprites/pgl/watermemory.png",
+      "file": "D:\\Proyectos\\Pokemon Calvo Auditoria Visual\\comparacion_objetos_v1\\huecos_40\\images\\water_memory.png",
+      "width": 80,
+      "height": 80,
+      "bytes": 2796,
+      "sha256": "ba78d9b71a77ff5f90aa9d7eb34b0432a616de868401dc69a567aa31d958ffbf",
+      "source_style": "GLOBAL_LINK",
+      "alpha_bbox": [
+        14,
+        11,
+        71,
+        71
+      ],
+      "source_page": "https://www.serebii.net/itemdex/watermemory.shtml",
+      "source_page_sha256": "0a62830b688a8b6ec06d19a3b336215c683bc50b9b4939aeddf060d0ecc4b33b",
+      "visual_review": "STATIC_CONTACT_SHEET_REVIEWED",
+      "credits": [
+        "The Pokemon Company / Nintendo / Game Freak",
+        "Serebii / Joe Merrick and contributors"
+      ]
+    },
+    {
+      "id": "whipped_dream",
+      "name_es": "Dulce de Nata",
+      "variant": "REGULAR",
+      "page_path": "/itemdex/whippeddream.shtml",
+      "status": "EXISTING_ILLUSTRATION_FOUND",
+      "url": "https://www.serebii.net/itemdex/sprites/pgl/whippeddream.png",
+      "file": "D:\\Proyectos\\Pokemon Calvo Auditoria Visual\\comparacion_objetos_v1\\huecos_40\\images\\whipped_dream.png",
+      "width": 80,
+      "height": 80,
+      "bytes": 4610,
+      "sha256": "15ba87f51c256c96318d0e6e502f109e2a57129087da0e843be03eda9ca8af74",
+      "source_style": "GLOBAL_LINK",
+      "alpha_bbox": [
+        13,
+        10,
+        67,
+        70
+      ],
+      "source_page": "https://www.serebii.net/itemdex/whippeddream.shtml",
+      "source_page_sha256": "8ce36fe7b8a78b1fed0eed7a285a547f38de36eeaf85a6fe16c6cd1cbc712a0d",
+      "visual_review": "STATIC_CONTACT_SHEET_REVIEWED",
+      "credits": [
+        "The Pokemon Company / Nintendo / Game Freak",
+        "Serebii / Joe Merrick and contributors"
+      ]
+    }
+  ],
+  "static_review_date": "2026-10-28",
+  "contact_sheet": "D:\\Proyectos\\Pokemon Calvo Auditoria Visual\\comparacion_objetos_v1\\huecos_40\\los_40_localizados.png",
+  "contact_sheet_sha256": "4f3b208c0ed30bf50e507a142993677cd7d08dd13a9f909525c099baee9dc216",
+  "style_notes": "Global Link drawings are flatter than SV; the 12 Arceus icons have a different rendered shading/edge style. All are research candidates, not final art approval or bag integration."
+}

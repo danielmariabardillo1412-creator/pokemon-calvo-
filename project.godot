@@ -3,8 +3,8 @@ config_version=5
 
 [application]
 
-config/name="Pokemon Calvo"
-run/main_scene="res://scenes/overworld/technical_overworld.tscn"
+config/name="Pokemon Calvo - Arquitectura Kilo"
+run/main_scene="res://scenes/visual/field_demo.tscn"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 
 [display]

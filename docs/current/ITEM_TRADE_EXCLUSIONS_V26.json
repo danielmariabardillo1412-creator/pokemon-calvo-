@@ -1,0 +1,369 @@
+{
+  "status": "PASS_REVIEWED_TRADE_ITEMS_EXCLUDED_EVOLUTIONS_DEFERRED",
+  "date": "2026-10-31",
+  "base": "e9a4812ca44bce5d14f9be72dbb2bd52a4190811",
+  "groups": 5,
+  "checks": 6931,
+  "review": {
+    "checks": 16,
+    "failed": 0,
+    "results": [
+      {
+        "name": "exactly the ten reviewed IDs added; prior bans and category rules unchanged",
+        "status": "PASS"
+      },
+      {
+        "name": "dragon_scale evolution role reviewed and excluded",
+        "status": "PASS"
+      },
+      {
+        "name": "dubious_disc evolution role reviewed and excluded",
+        "status": "PASS"
+      },
+      {
+        "name": "electirizer evolution role reviewed and excluded",
+        "status": "PASS"
+      },
+      {
+        "name": "magmarizer evolution role reviewed and excluded",
+        "status": "PASS"
+      },
+      {
+        "name": "prism_scale evolution role reviewed and excluded",
+        "status": "PASS"
+      },
+      {
+        "name": "protector evolution role reviewed and excluded",
+        "status": "PASS"
+      },
+      {
+        "name": "reaper_cloth evolution role reviewed and excluded",
+        "status": "PASS"
+      },
+      {
+        "name": "sachet evolution role reviewed and excluded",
+        "status": "PASS"
+      },
+      {
+        "name": "up_grade evolution role reviewed and excluded",
+        "status": "PASS"
+      },
+      {
+        "name": "whipped_dream evolution role reviewed and excluded",
+        "status": "PASS"
+      },
+      {
+        "name": "deep_sea_scale distinct battle effect remains permitted",
+        "status": "PASS"
+      },
+      {
+        "name": "deep_sea_tooth distinct battle effect remains permitted",
+        "status": "PASS"
+      },
+      {
+        "name": "kings_rock distinct battle effect remains permitted",
+        "status": "PASS"
+      },
+      {
+        "name": "metal_coat distinct battle effect remains permitted",
+        "status": "PASS"
+      },
+      {
+        "name": "current policy and native coverage counted without deleting definitions",
+        "status": "PASS"
+      }
+    ],
+    "roles": [
+      {
+        "id": "dragon_scale",
+        "name_es": "Escama Dragón",
+        "primary_description": "Evolves Seadra into Kingdra when traded.",
+        "fling_power": 30,
+        "direct_battle_callbacks": [],
+        "canonical_definition_preserved": true,
+        "status": "EXCLUDED_FROM_CURRENT_GAME"
+      },
+      {
+        "id": "dubious_disc",
+        "name_es": "Disco Extraño",
+        "primary_description": "Evolves Porygon2 into Porygon-Z when traded.",
+        "fling_power": 50,
+        "direct_battle_callbacks": [],
+        "canonical_definition_preserved": true,
+        "status": "EXCLUDED_FROM_CURRENT_GAME"
+      },
+      {
+        "id": "electirizer",
+        "name_es": "Electrizador",
+        "primary_description": "Evolves Electabuzz into Electivire when traded.",
+        "fling_power": 80,
+        "direct_battle_callbacks": [],
+        "canonical_definition_preserved": true,
+        "status": "EXCLUDED_FROM_CURRENT_GAME"
+      },
+      {
+        "id": "magmarizer",
+        "name_es": "Magmatizador",
+        "primary_description": "Evolves Magmar into Magmortar when traded.",
+        "fling_power": 80,
+        "direct_battle_callbacks": [],
+        "canonical_definition_preserved": true,
+        "status": "EXCLUDED_FROM_CURRENT_GAME"
+      },
+      {
+        "id": "prism_scale",
+        "name_es": "Escama Bella",
+        "primary_description": "Evolves Feebas into Milotic when traded.",
+        "fling_power": 30,
+        "direct_battle_callbacks": [],
+        "canonical_definition_preserved": true,
+        "status": "EXCLUDED_FROM_CURRENT_GAME"
+      },
+      {
+        "id": "protector",
+        "name_es": "Protector",
+        "primary_description": "Evolves Rhydon into Rhyperior when traded.",
+        "fling_power": 80,
+        "direct_battle_callbacks": [],
+        "canonical_definition_preserved": true,
+        "status": "EXCLUDED_FROM_CURRENT_GAME"
+      },
+      {
+        "id": "reaper_cloth",
+        "name_es": "Tela Terrible",
+        "primary_description": "Evolves Dusclops into Dusknoir when traded.",
+        "fling_power": 10,
+        "direct_battle_callbacks": [],
+        "canonical_definition_preserved": true,
+        "status": "EXCLUDED_FROM_CURRENT_GAME"
+      },
+      {
+        "id": "sachet",
+        "name_es": "Saquito Fragante",
+        "primary_description": "Evolves Spritzee into Aromatisse when traded.",
+        "fling_power": 80,
+        "direct_battle_callbacks": [],
+        "canonical_definition_preserved": true,
+        "status": "EXCLUDED_FROM_CURRENT_GAME"
+      },
+      {
+        "id": "up_grade",
+        "name_es": "Mejora",
+        "primary_description": "Evolves Porygon into Porygon2 when traded.",
+        "fling_power": 30,
+        "direct_battle_callbacks": [],
+        "canonical_definition_preserved": true,
+        "status": "EXCLUDED_FROM_CURRENT_GAME"
+      },
+      {
+        "id": "whipped_dream",
+        "name_es": "Dulce de Nata",
+        "primary_description": "Evolves Swirlix into Slurpuff when traded.",
+        "fling_power": 80,
+        "direct_battle_callbacks": [],
+        "canonical_definition_preserved": true,
+        "status": "EXCLUDED_FROM_CURRENT_GAME"
+      },
+      {
+        "id": "deep_sea_scale",
+        "name_es": "Escama Marina",
+        "primary_description": "If held by a Clamperl, its Sp. Def is doubled. Evolves Clamperl into Gorebyss when traded.",
+        "direct_battle_callbacks": [
+          "onModifySpD"
+        ],
+        "status": "RETAINED_BATTLE_ROLE"
+      },
+      {
+        "id": "deep_sea_tooth",
+        "name_es": "Diente Marino",
+        "primary_description": "If held by a Clamperl, its Sp. Atk is doubled. Evolves Clamperl into Huntail when traded.",
+        "direct_battle_callbacks": [
+          "onModifySpA"
+        ],
+        "status": "RETAINED_BATTLE_ROLE"
+      },
+      {
+        "id": "kings_rock",
+        "name_es": "Roca del Rey",
+        "primary_description": "Holder's attacks without a chance to make the target flinch gain a 10% chance to make the target flinch. Evolves Poliwhirl into Politoed and Slowpoke into Slowking when traded.",
+        "direct_battle_callbacks": [
+          "onModifyMove"
+        ],
+        "status": "RETAINED_BATTLE_ROLE"
+      },
+      {
+        "id": "metal_coat",
+        "name_es": "Revest. Metálico",
+        "primary_description": "Holder's Steel-type attacks have 1.2x power. Evolves Onix into Steelix and Scyther into Scizor when traded.",
+        "direct_battle_callbacks": [
+          "onBasePower"
+        ],
+        "status": "RETAINED_BATTLE_ROLE"
+      }
+    ],
+    "counts": {
+      "excluded": 54,
+      "permitted_holdable": 614,
+      "native_present": 611,
+      "native_missing": [
+        "amulet_coin",
+        "exp_share",
+        "luck_incense"
+      ]
+    }
+  },
+  "run": {
+    "status": "PASS",
+    "base": "e9a4812ca44bce5d14f9be72dbb2bd52a4190811",
+    "groups": [
+      {
+        "group": "roles",
+        "status": "PASS",
+        "exit_code": 0,
+        "checks_reported": 16,
+        "seconds": 1.52,
+        "command": [
+          "D:/Herramientas/NodeJS/node.exe",
+          "tools/showdown_engine_probe/trade_item_roles_v26.cjs"
+        ],
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\trade_item_exclusions_v26\\runs\\1793454267842483200\\roles.log",
+        "log_sha256": "936be7af6605072c8312c479483d58e704f7c96c95dbce2ac157cefa409851fd"
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 88,
+        "errors": [],
+        "last_line": "TRADE_ITEM_EXCLUSIONS_V26 PASS checks=88",
+        "group": "exclusions",
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--path",
+          "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+          "--headless",
+          "--script",
+          "tests/gameplay/trade_item_exclusions_v26.gd"
+        ],
+        "exit_code": 0,
+        "seconds": 3.06,
+        "terminated_after_script_error": false,
+        "expected_negative_diagnostics": [],
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\trade_item_exclusions_v26\\runs\\1793454267842483200\\exclusions.log",
+        "log_sha256": "480dff6d75c6044d5489791d72885884cfeb0d530833f13718af57eabf5cb1e6"
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 30,
+        "errors": [],
+        "last_line": "ITEM_SELECTION_POLICY PASS checks=30 excluded=54",
+        "group": "selection",
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--path",
+          "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+          "--headless",
+          "--script",
+          "tests/gameplay/item_selection_policy_test_runner.gd"
+        ],
+        "exit_code": 0,
+        "seconds": 0.78,
+        "terminated_after_script_error": false,
+        "expected_negative_diagnostics": [],
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\trade_item_exclusions_v26\\runs\\1793454267842483200\\selection.log",
+        "log_sha256": "f2fac2194acc49669bb8b79439a05c752d72dfeaf9072eab274edcdf9c164a2f"
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 4983,
+        "errors": [],
+        "last_line": "ITEM_CONNECTIONS PASS checks=4983 equip=614 evolutions=72 machines=229",
+        "group": "connections",
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--path",
+          "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+          "--headless",
+          "--script",
+          "tests/gameplay/item_connections_test_runner.gd"
+        ],
+        "exit_code": 0,
+        "seconds": 12.38,
+        "terminated_after_script_error": false,
+        "expected_negative_diagnostics": [],
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\trade_item_exclusions_v26\\runs\\1793454267842483200\\connections.log",
+        "log_sha256": "4d695e7b3ebf451ade05ebffb5c481809a90df6106ee2b2f1ca649fdc0d34bf7"
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 1814,
+        "errors": [],
+        "last_line": "ITEM_FIELD_V4 PASS checks=1814 cases=192 GPU=false",
+        "group": "field_effects",
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--path",
+          "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+          "--headless",
+          "--script",
+          "tests/gameplay/item_field_effects_v4.gd"
+        ],
+        "exit_code": 0,
+        "seconds": 9.75,
+        "terminated_after_script_error": false,
+        "expected_negative_diagnostics": [],
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\trade_item_exclusions_v26\\runs\\1793454267842483200\\field_effects.log",
+        "log_sha256": "73dde6165d4939f699e84c230453cf4cd04196868dc55cf221a425cbc18f807c"
+      }
+    ],
+    "integrity_before": {
+      "status": "PASS",
+      "base": "e9a4812ca44bce5d14f9be72dbb2bd52a4190811",
+      "protected_files": 23133,
+      "preserved_absent_skip_worktree": 15647,
+      "mode": "HASH_IF_METADATA_CHANGED",
+      "allowed_changes": [
+        "config/item_selection_v1.json",
+        "tests/gameplay/item_selection_policy_test_runner.gd",
+        "tests/gameplay/trade_item_exclusions_v26.gd",
+        "tools/showdown_engine_probe/trade_item_roles_v26.cjs",
+        "tools/verification/run_trade_item_exclusions_v26.py"
+      ]
+    },
+    "tested_sources_sha256": {
+      "config/item_selection_v1.json": "90137068b8483fa4c996770c7ed48db30d22e3ffd053c46866f2739b939fdfec",
+      "tests/gameplay/item_selection_policy_test_runner.gd": "b4aad4561919500d6e1fa31104b388e0a16004dbd950f8083432b302aee5c5ca",
+      "tests/gameplay/trade_item_exclusions_v26.gd": "9736be1caa63eaa178d4b94cd80df7edcc7acbfcdc5a6f58d28ded01353f3d40",
+      "tools/showdown_engine_probe/trade_item_roles_v26.cjs": "f9f9d5ce75466391f836de723eb07a7c9568801c5034b06ef86dfca2b9426a61",
+      "tools/verification/run_trade_item_exclusions_v26.py": "3958bc19559f12d6ea6230b36b94b19ae1d3618985c88d8472c0b90c9c50bf66"
+    },
+    "integrity_after": {
+      "status": "PASS",
+      "base": "e9a4812ca44bce5d14f9be72dbb2bd52a4190811",
+      "protected_files": 23133,
+      "preserved_absent_skip_worktree": 15647,
+      "mode": "FULL_CONTENT_HASHES",
+      "allowed_changes": [
+        "config/item_selection_v1.json",
+        "tests/gameplay/item_selection_policy_test_runner.gd",
+        "tests/gameplay/trade_item_exclusions_v26.gd",
+        "tools/showdown_engine_probe/trade_item_roles_v26.cjs",
+        "tools/verification/run_trade_item_exclusions_v26.py"
+      ]
+    }
+  },
+  "utf8_role_evidence": {
+    "path": ".godot\\trade_item_exclusions_v26\\roles_utf8.json",
+    "sha256": "2e871a1229dfb4d8316f89c4c411c00656cd6d52325b5627394a40abdce435a2",
+    "note": "Same native review script recaptured with explicit UTF-8 so Spanish names are preserved; not counted as additional coverage."
+  },
+  "evolution_level_changes": false,
+  "canonical_data_changes": false,
+  "other_bans_added": false,
+  "legacy_inventory_purged": false,
+  "limits": [
+    "Generic Fling compatibility is acknowledged but does not retain an otherwise obsolete item in this project.",
+    "SDK/canonical item definitions stay intact; policy excludes new generation, equipment and direct use, not old serialized quantities.",
+    "Trade-to-level adaptation remains deferred; no threshold table or minimum levels are invented.",
+    "This closes the ten-item review, not all remaining item systems or mechanics."
+  ],
+  "runtime_checkpoint": "9cda56431025abe0f5f6dbaeb30041800d74e902"
+}

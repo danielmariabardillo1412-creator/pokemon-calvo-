@@ -1,0 +1,205 @@
+{
+  "version": 1,
+  "profile_id": "randomlock_v1",
+  "updated": "2026-10-27",
+  "move_exclusions": [
+    {
+      "reason": "explicit_user_splash",
+      "presence": "required",
+      "ids": [
+        "splash"
+      ]
+    },
+    {
+      "reason": "lets_go_partner_exclusive",
+      "presence": "required",
+      "ids": [
+        "zippy_zap",
+        "splishy_splash",
+        "floaty_fall",
+        "pika_papow",
+        "bouncy_bubble",
+        "buzzy_buzz",
+        "sizzly_slide",
+        "glitzy_glow",
+        "baddy_bad",
+        "sappy_seed",
+        "freezy_frost",
+        "sparkly_swirl",
+        "veevee_volley"
+      ]
+    },
+    {
+      "reason": "legends_arceus_exclusive",
+      "presence": "required",
+      "ids": [
+        "power_shift"
+      ]
+    },
+    {
+      "reason": "explicit_user_signature_form_not_in_game",
+      "presence": "required",
+      "ids": [
+        "hyperspace_fury",
+        "light_that_burns_the_sky",
+        "10_000_000_volt_thunderbolt"
+      ]
+    },
+    {
+      "reason": "colosseum_xd_shadow_exclusive",
+      "presence": "optional_future_import",
+      "ids": [
+        "shadow_blitz",
+        "shadow_rush",
+        "shadow_break",
+        "shadow_end",
+        "shadow_wave",
+        "shadow_rave",
+        "shadow_storm",
+        "shadow_fire",
+        "shadow_bolt",
+        "shadow_chill",
+        "shadow_blast",
+        "shadow_sky",
+        "shadow_hold",
+        "shadow_mist",
+        "shadow_panic",
+        "shadow_down",
+        "shadow_shed",
+        "shadow_half"
+      ]
+    }
+  ],
+  "excluded_ability_ids": [
+    "truant",
+    "defeatist",
+    "run_away",
+    "normalize",
+    "schooling",
+    "klutz",
+    "gulp_missile",
+    "honey_gather",
+    "anticipation",
+    "forewarn",
+    "shields_down",
+    "forecast",
+    "no_guard",
+    "frisk",
+    "soundproof",
+    "wonder_guard"
+  ],
+  "excluded_species_ids": [
+    "wishiwashi",
+    "minior",
+    "castform",
+    "nincada",
+    "ninjask",
+    "shedinja"
+  ],
+  "excluded_form_ids": [
+    "pikachu_original_cap",
+    "pikachu_hoenn_cap",
+    "pikachu_sinnoh_cap",
+    "pikachu_unova_cap",
+    "pikachu_kalos_cap",
+    "pikachu_alola_cap",
+    "pikachu_partner_cap",
+    "pikachu_world_cap"
+  ],
+  "z_moves": {
+    "decision": "damage_only",
+    "ids": [
+      "10_000_000_volt_thunderbolt",
+      "acid_downpour_physical",
+      "acid_downpour_special",
+      "all_out_pummeling_physical",
+      "all_out_pummeling_special",
+      "black_hole_eclipse_physical",
+      "black_hole_eclipse_special",
+      "bloom_doom_physical",
+      "bloom_doom_special",
+      "breakneck_blitz_physical",
+      "breakneck_blitz_special",
+      "catastropika",
+      "clangorous_soulblaze",
+      "continental_crush_physical",
+      "continental_crush_special",
+      "corkscrew_crash_physical",
+      "corkscrew_crash_special",
+      "devastating_drake_physical",
+      "devastating_drake_special",
+      "extreme_evoboost",
+      "genesis_supernova",
+      "gigavolt_havoc_physical",
+      "gigavolt_havoc_special",
+      "guardian_of_alola",
+      "hydro_vortex_physical",
+      "hydro_vortex_special",
+      "inferno_overdrive_physical",
+      "inferno_overdrive_special",
+      "lets_snuggle_forever",
+      "light_that_burns_the_sky",
+      "malicious_moonsault",
+      "menacing_moonraze_maelstrom",
+      "never_ending_nightmare_physical",
+      "never_ending_nightmare_special",
+      "oceanic_operetta",
+      "pulverizing_pancake",
+      "savage_spin_out_physical",
+      "savage_spin_out_special",
+      "searing_sunraze_smash",
+      "shattered_psyche_physical",
+      "shattered_psyche_special",
+      "sinister_arrow_raid",
+      "soul_stealing_7_star_strike",
+      "splintered_stormshards",
+      "stoked_sparksurfer",
+      "subzero_slammer_physical",
+      "subzero_slammer_special",
+      "supersonic_skystrike_physical",
+      "supersonic_skystrike_special",
+      "tectonic_rage_physical",
+      "tectonic_rage_special",
+      "twinkle_tackle_physical",
+      "twinkle_tackle_special"
+    ],
+    "note": "User confirmed: allow damaging Z actions only; ban every status Z effect while retaining ordinary status moves. Explicit move exclusions take precedence: Light That Burns the Sky and 10,000,000 Volt Thunderbolt are excluded because their required forms are absent/excluded, not pending import. Shared Mega/Z/Dynamax allowance remains undecided."
+  },
+  "protected_max_move_ids": [
+    "max_airstream",
+    "max_darkness",
+    "max_flare",
+    "max_flutterby",
+    "max_geyser",
+    "max_guard",
+    "max_hailstorm",
+    "max_knuckle",
+    "max_lightning",
+    "max_mindstorm",
+    "max_ooze",
+    "max_overgrowth",
+    "max_phantasm",
+    "max_quake",
+    "max_rockfall",
+    "max_starfall",
+    "max_steelspike",
+    "max_strike",
+    "max_wyrmwind"
+  ],
+  "sources": [
+    {
+      "url": "https://github.com/smogon/pokemon-showdown/blob/master/data/moves.ts",
+      "blob_sha": "a3b7cd8943a95a45e8775370a02130e66d788614",
+      "use": "LGPE/isZ/isMax metadata; terminal physical/special Z aliases map to the same upstream move."
+    },
+    {
+      "url": "https://bulbapedia.bulbagarden.net/wiki/Shadow_Moves",
+      "use": "Exact Shadow IDs, not a shadow_ prefix rule."
+    },
+    {
+      "url": "https://bulbapedia.bulbagarden.net/wiki/Power_Shift_(move)",
+      "use": "Power Shift remains Legends Arceus-exclusive; other transferred PLA moves are retained."
+    }
+  ],
+  "scope": "Selection rules only. Eligibility does not imply executable mechanics. Keep immutable data, resources, historical reviews and damage/type rules intact."
+}

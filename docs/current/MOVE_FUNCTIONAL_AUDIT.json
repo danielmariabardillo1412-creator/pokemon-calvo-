@@ -1,0 +1,570 @@
+{
+  "status": "AUDIT_COMPLETE_WITH_OPEN_FINDINGS",
+  "all_moves_functional": false,
+  "date": "2026-10-27",
+  "inventory": 919,
+  "counts": {
+    "Z_PENDING": 53,
+    "INTEGRATION_OK_IN_TESTED_CONTEXTS": 784,
+    "CONTEXT_REQUIRED": 48,
+    "EXCLUDED": 15,
+    "MAX_GEN8_INTEGRATION_OK": 19
+  },
+  "cases": 3362,
+  "native_steps": 13448,
+  "snapshot_roundtrips": 13448,
+  "saved_continuations": 3357,
+  "independent_expected_contracts": [
+    {
+      "case_id": "dragon_rage/contract/1",
+      "id": "dragon_rage",
+      "label": "fixed HP loss 40",
+      "status": "PASS"
+    },
+    {
+      "case_id": "sonic_boom/contract/1",
+      "id": "sonic_boom",
+      "label": "fixed HP loss 20",
+      "status": "PASS"
+    },
+    {
+      "case_id": "seismic_toss/contract/1",
+      "id": "seismic_toss",
+      "label": "fixed HP loss 50",
+      "status": "PASS"
+    },
+    {
+      "case_id": "night_shade/contract/1",
+      "id": "night_shade",
+      "label": "fixed HP loss 50",
+      "status": "PASS"
+    },
+    {
+      "case_id": "super_fang/contract/1",
+      "id": "super_fang",
+      "label": "half current HP",
+      "status": "PASS"
+    },
+    {
+      "case_id": "natures_madness/contract/1",
+      "id": "natures_madness",
+      "label": "half current HP",
+      "status": "PASS"
+    },
+    {
+      "case_id": "ruination/contract/1",
+      "id": "ruination",
+      "label": "half current HP",
+      "status": "PASS"
+    },
+    {
+      "case_id": "swords_dance/contract/1",
+      "id": "swords_dance",
+      "label": "stage atk 2",
+      "status": "PASS"
+    },
+    {
+      "case_id": "tail_whip/contract/1",
+      "id": "tail_whip",
+      "label": "stage def -1",
+      "status": "PASS"
+    },
+    {
+      "case_id": "protect/contract/1",
+      "id": "protect",
+      "label": "Protect blocks damage",
+      "status": "PASS"
+    },
+    {
+      "case_id": "recover/contract/1",
+      "id": "recover",
+      "label": "restore half maximum HP",
+      "status": "PASS"
+    },
+    {
+      "case_id": "roost/contract/1",
+      "id": "roost",
+      "label": "restore half maximum HP",
+      "status": "PASS"
+    },
+    {
+      "case_id": "soft_boiled/contract/1",
+      "id": "soft_boiled",
+      "label": "restore half maximum HP",
+      "status": "PASS"
+    },
+    {
+      "case_id": "spore/contract/1",
+      "id": "spore",
+      "label": "sleep applied",
+      "status": "PASS"
+    },
+    {
+      "case_id": "glare/contract/1",
+      "id": "glare",
+      "label": "paralysis applied",
+      "status": "PASS"
+    }
+  ],
+  "max_gen8_probes": [
+    {
+      "id": "max_airstream",
+      "status": "NATIVE_GEN8_ONLY",
+      "godot": "GEN8_AUDIT_ROW"
+    },
+    {
+      "id": "max_darkness",
+      "status": "NATIVE_GEN8_ONLY",
+      "godot": "GEN8_AUDIT_ROW"
+    },
+    {
+      "id": "max_flare",
+      "status": "NATIVE_GEN8_ONLY",
+      "godot": "GEN8_AUDIT_ROW"
+    },
+    {
+      "id": "max_flutterby",
+      "status": "NATIVE_GEN8_ONLY",
+      "godot": "GEN8_AUDIT_ROW"
+    },
+    {
+      "id": "max_geyser",
+      "status": "NATIVE_GEN8_ONLY",
+      "godot": "GEN8_AUDIT_ROW"
+    },
+    {
+      "id": "max_guard",
+      "status": "NATIVE_GEN8_ONLY",
+      "godot": "GEN8_AUDIT_ROW"
+    },
+    {
+      "id": "max_hailstorm",
+      "status": "NATIVE_GEN8_ONLY",
+      "godot": "GEN8_AUDIT_ROW"
+    },
+    {
+      "id": "max_knuckle",
+      "status": "NATIVE_GEN8_ONLY",
+      "godot": "GEN8_AUDIT_ROW"
+    },
+    {
+      "id": "max_lightning",
+      "status": "NATIVE_GEN8_ONLY",
+      "godot": "GEN8_AUDIT_ROW"
+    },
+    {
+      "id": "max_mindstorm",
+      "status": "NATIVE_GEN8_ONLY",
+      "godot": "GEN8_AUDIT_ROW"
+    },
+    {
+      "id": "max_ooze",
+      "status": "NATIVE_GEN8_ONLY",
+      "godot": "GEN8_AUDIT_ROW"
+    },
+    {
+      "id": "max_overgrowth",
+      "status": "NATIVE_GEN8_ONLY",
+      "godot": "GEN8_AUDIT_ROW"
+    },
+    {
+      "id": "max_phantasm",
+      "status": "NATIVE_GEN8_ONLY",
+      "godot": "GEN8_AUDIT_ROW"
+    },
+    {
+      "id": "max_quake",
+      "status": "NATIVE_GEN8_ONLY",
+      "godot": "GEN8_AUDIT_ROW"
+    },
+    {
+      "id": "max_rockfall",
+      "status": "NATIVE_GEN8_ONLY",
+      "godot": "GEN8_AUDIT_ROW"
+    },
+    {
+      "id": "max_starfall",
+      "status": "NATIVE_GEN8_ONLY",
+      "godot": "GEN8_AUDIT_ROW"
+    },
+    {
+      "id": "max_steelspike",
+      "status": "NATIVE_GEN8_ONLY",
+      "godot": "GEN8_AUDIT_ROW"
+    },
+    {
+      "id": "max_strike",
+      "status": "NATIVE_GEN8_ONLY",
+      "godot": "GEN8_AUDIT_ROW"
+    },
+    {
+      "id": "max_wyrmwind",
+      "status": "NATIVE_GEN8_ONLY",
+      "godot": "GEN8_AUDIT_ROW"
+    }
+  ],
+  "godot_projection_cases": 3362,
+  "protected_files_unchanged": 259,
+  "seconds": 95.53,
+  "cases_use": "Actual CreatureFactory DTOs, current NativeEngine prepare/commit, current Godot event adapter and mirror in offline bounded batches.",
+  "limits": [
+    "Generic healthy/conditioned fixtures, two seeds, up to four native decisions; not all interactions.",
+    "Context failures require targeted scenarios and are not automatically defects.",
+    "Successful native replay checks determinism, not independent Pokemon correctness.",
+    "Max connects through explicit Gen8 Godot profile; Gen9 remains separate.",
+    "This is not GPU/per-move VFX certification.",
+    "Default legacy backend remains separate (620 admitted; 230 mechanics pending)."
+  ],
+  "blockers": [
+    {
+      "id": "after_you",
+      "status": "CONTEXT_REQUIRED",
+      "reasons": []
+    },
+    {
+      "id": "ally_switch",
+      "status": "CONTEXT_REQUIRED",
+      "reasons": []
+    },
+    {
+      "id": "aromatic_mist",
+      "status": "CONTEXT_REQUIRED",
+      "reasons": []
+    },
+    {
+      "id": "attract",
+      "status": "CONTEXT_REQUIRED",
+      "reasons": []
+    },
+    {
+      "id": "aura_wheel",
+      "status": "CONTEXT_REQUIRED",
+      "reasons": []
+    },
+    {
+      "id": "aurora_veil",
+      "status": "CONTEXT_REQUIRED",
+      "reasons": []
+    },
+    {
+      "id": "belch",
+      "status": "CONTEXT_REQUIRED",
+      "reasons": []
+    },
+    {
+      "id": "bestow",
+      "status": "CONTEXT_REQUIRED",
+      "reasons": []
+    },
+    {
+      "id": "burn_up",
+      "status": "CONTEXT_REQUIRED",
+      "reasons": []
+    },
+    {
+      "id": "captivate",
+      "status": "CONTEXT_REQUIRED",
+      "reasons": []
+    },
+    {
+      "id": "coaching",
+      "status": "CONTEXT_REQUIRED",
+      "reasons": []
+    },
+    {
+      "id": "dark_void",
+      "status": "CONTEXT_REQUIRED",
+      "reasons": []
+    },
+    {
+      "id": "doodle",
+      "status": "CONTEXT_REQUIRED",
+      "reasons": []
+    },
+    {
+      "id": "double_shock",
+      "status": "CONTEXT_REQUIRED",
+      "reasons": []
+    },
+    {
+      "id": "dragon_cheer",
+      "status": "CONTEXT_REQUIRED",
+      "reasons": []
+    },
+    {
+      "id": "dream_eater",
+      "status": "CONTEXT_REQUIRED",
+      "reasons": []
+    },
+    {
+      "id": "entrainment",
+      "status": "CONTEXT_REQUIRED",
+      "reasons": []
+    },
+    {
+      "id": "flower_shield",
+      "status": "CONTEXT_REQUIRED",
+      "reasons": []
+    },
+    {
+      "id": "follow_me",
+      "status": "CONTEXT_REQUIRED",
+      "reasons": []
+    },
+    {
+      "id": "gear_up",
+      "status": "CONTEXT_REQUIRED",
+      "reasons": []
+    },
+    {
+      "id": "helping_hand",
+      "status": "CONTEXT_REQUIRED",
+      "reasons": []
+    },
+    {
+      "id": "hold_hands",
+      "status": "CONTEXT_REQUIRED",
+      "reasons": []
+    },
+    {
+      "id": "hyperspace_fury",
+      "status": "CONTEXT_REQUIRED",
+      "reasons": []
+    },
+    {
+      "id": "last_resort",
+      "status": "CONTEXT_REQUIRED",
+      "reasons": []
+    },
+    {
+      "id": "magic_powder",
+      "status": "CONTEXT_REQUIRED",
+      "reasons": []
+    },
+    {
+      "id": "magnetic_flux",
+      "status": "CONTEXT_REQUIRED",
+      "reasons": []
+    },
+    {
+      "id": "max_airstream",
+      "status": "MAX_GEN8_INTEGRATION_OK",
+      "reasons": []
+    },
+    {
+      "id": "max_darkness",
+      "status": "MAX_GEN8_INTEGRATION_OK",
+      "reasons": []
+    },
+    {
+      "id": "max_flare",
+      "status": "MAX_GEN8_INTEGRATION_OK",
+      "reasons": []
+    },
+    {
+      "id": "max_flutterby",
+      "status": "MAX_GEN8_INTEGRATION_OK",
+      "reasons": []
+    },
+    {
+      "id": "max_geyser",
+      "status": "MAX_GEN8_INTEGRATION_OK",
+      "reasons": []
+    },
+    {
+      "id": "max_guard",
+      "status": "MAX_GEN8_INTEGRATION_OK",
+      "reasons": []
+    },
+    {
+      "id": "max_hailstorm",
+      "status": "MAX_GEN8_INTEGRATION_OK",
+      "reasons": []
+    },
+    {
+      "id": "max_knuckle",
+      "status": "MAX_GEN8_INTEGRATION_OK",
+      "reasons": []
+    },
+    {
+      "id": "max_lightning",
+      "status": "MAX_GEN8_INTEGRATION_OK",
+      "reasons": []
+    },
+    {
+      "id": "max_mindstorm",
+      "status": "MAX_GEN8_INTEGRATION_OK",
+      "reasons": []
+    },
+    {
+      "id": "max_ooze",
+      "status": "MAX_GEN8_INTEGRATION_OK",
+      "reasons": []
+    },
+    {
+      "id": "max_overgrowth",
+      "status": "MAX_GEN8_INTEGRATION_OK",
+      "reasons": []
+    },
+    {
+      "id": "max_phantasm",
+      "status": "MAX_GEN8_INTEGRATION_OK",
+      "reasons": []
+    },
+    {
+      "id": "max_quake",
+      "status": "MAX_GEN8_INTEGRATION_OK",
+      "reasons": []
+    },
+    {
+      "id": "max_rockfall",
+      "status": "MAX_GEN8_INTEGRATION_OK",
+      "reasons": []
+    },
+    {
+      "id": "max_starfall",
+      "status": "MAX_GEN8_INTEGRATION_OK",
+      "reasons": []
+    },
+    {
+      "id": "max_steelspike",
+      "status": "MAX_GEN8_INTEGRATION_OK",
+      "reasons": []
+    },
+    {
+      "id": "max_strike",
+      "status": "MAX_GEN8_INTEGRATION_OK",
+      "reasons": []
+    },
+    {
+      "id": "max_wyrmwind",
+      "status": "MAX_GEN8_INTEGRATION_OK",
+      "reasons": []
+    },
+    {
+      "id": "mirror_coat",
+      "status": "CONTEXT_REQUIRED",
+      "reasons": []
+    },
+    {
+      "id": "natural_gift",
+      "status": "CONTEXT_REQUIRED",
+      "reasons": []
+    },
+    {
+      "id": "nightmare",
+      "status": "CONTEXT_REQUIRED",
+      "reasons": []
+    },
+    {
+      "id": "purify",
+      "status": "CONTEXT_REQUIRED",
+      "reasons": []
+    },
+    {
+      "id": "quash",
+      "status": "CONTEXT_REQUIRED",
+      "reasons": []
+    },
+    {
+      "id": "rage_powder",
+      "status": "CONTEXT_REQUIRED",
+      "reasons": []
+    },
+    {
+      "id": "recycle",
+      "status": "CONTEXT_REQUIRED",
+      "reasons": []
+    },
+    {
+      "id": "revival_blessing",
+      "status": "CONTEXT_REQUIRED",
+      "reasons": []
+    },
+    {
+      "id": "role_play",
+      "status": "CONTEXT_REQUIRED",
+      "reasons": []
+    },
+    {
+      "id": "rototiller",
+      "status": "CONTEXT_REQUIRED",
+      "reasons": []
+    },
+    {
+      "id": "sketch",
+      "status": "CONTEXT_REQUIRED",
+      "reasons": []
+    },
+    {
+      "id": "sleep_talk",
+      "status": "CONTEXT_REQUIRED",
+      "reasons": []
+    },
+    {
+      "id": "snore",
+      "status": "CONTEXT_REQUIRED",
+      "reasons": []
+    },
+    {
+      "id": "spit_up",
+      "status": "CONTEXT_REQUIRED",
+      "reasons": []
+    },
+    {
+      "id": "spotlight",
+      "status": "CONTEXT_REQUIRED",
+      "reasons": []
+    },
+    {
+      "id": "steel_roller",
+      "status": "CONTEXT_REQUIRED",
+      "reasons": []
+    },
+    {
+      "id": "stuff_cheeks",
+      "status": "CONTEXT_REQUIRED",
+      "reasons": []
+    },
+    {
+      "id": "swallow",
+      "status": "CONTEXT_REQUIRED",
+      "reasons": []
+    },
+    {
+      "id": "teatime",
+      "status": "CONTEXT_REQUIRED",
+      "reasons": []
+    },
+    {
+      "id": "topsy_turvy",
+      "status": "CONTEXT_REQUIRED",
+      "reasons": []
+    },
+    {
+      "id": "upper_hand",
+      "status": "CONTEXT_REQUIRED",
+      "reasons": []
+    },
+    {
+      "id": "venom_drench",
+      "status": "CONTEXT_REQUIRED",
+      "reasons": []
+    }
+  ],
+  "sources_sha256": {
+    "tools/showdown_engine_probe/audit_moves.py": "a03f62a63e6331983ca900ae8c14fee1fa06c27c0a9fb93813714ed5768cfc59",
+    "tools/showdown_engine_probe/move_audit.cjs": "e57c70174e0078a91649616d1d1ee919bd937f0720cf09e595e0e39abc382165",
+    "tools/showdown_engine_probe/move_audit.gd": "cdf7624a735d848371e139153c2430c252a115f5c178112d8fd8f784b667e4f9"
+  },
+  "evidence_sha256": {
+    ".godot/move_functional_audit/before.json": "28336ca3957c98bbcc579d8665b6418fd45e3b3fbfa9acb5f833ed2f4abb7d71",
+    ".godot/move_functional_audit/manifest.json": "4a763be5948e9bf024ec7d530f4cfe11933caedf07b77556256fdb83611b7196",
+    ".godot/move_functional_audit/native.json": "603bcdeb0bbfadd5e8b4a15ebf708fd0ef9a8f455e0b2bbe4d0b01a4e29a0f70",
+    ".godot/move_functional_audit/moves.json": "3c443b52def83a8d785cd7aee0621d1ebef21adbb4a68c910a6b19da86a8bd07",
+    ".godot/move_functional_audit/godot.jsonl": "1a7fe74436ee7ee7226d820ad33c6177888b1b62ce80125cf75739e0ee38dfbd",
+    ".godot/move_functional_audit/export.log": "7b8f4801a00af170e23941bdd9026200cbe411a805ad6ac80925f69b62b9b63c",
+    ".godot/move_functional_audit/native.log": "055cbc81d7b6325a9ebc40de6b4be33a14d59e5ddc63a1beb84ff9df4c74e010",
+    ".godot/move_functional_audit/godot.log": "0c8689ed1f7142ff1d0c08cd9a75b201aa2c4681c0e64e20800375389a721e19"
+  }
+}

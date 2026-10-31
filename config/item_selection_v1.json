@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "profile_id": "calvo_item_selection_v1",
+  "updated": "2026-10-31",
+  "excluded_ids": {
+    "revive": "revives_fainted_pokemon",
+    "max_revive": "revives_fainted_pokemon",
+    "revival_herb": "revives_fainted_pokemon",
+    "sacred_ash": "revives_fainted_pokemon",
+    "max_honey": "revives_fainted_pokemon",
+    "linking_cord": "user_excludes_trade_evolution_replacement_item",
+    "wide_lens": "friend_named_ban_confirmed_by_user_delegation",
+    "bright_powder": "friend_named_ban_confirmed_by_user_delegation"
+  },
+  "excluded_categories": {
+    "all_mail": "user_excludes_mail_from_this_game"
+  },
+  "notes": [
+    "Selection boundary only. Does not delete canonical definitions, held slots, inventory or saves.",
+    "Content permission is not implementation support. Generation additionally requires an explicit usable-ID set.",
+    "Lax Incense is not automatically excluded; no additional competitive bans inferred.",
+    "Poke Doll has an escape effect; do not classify it as a purely decorative plush.",
+    "Max Honey also revives, confirmed by PokeAPI item 1630 flavor text.",
+    "Story/futuristic items, machine version mapping and unsupported mechanics require separate review.",
+    "Linking Cord is excluded by the user. Trade evolutions will be adapted later; no replacement levels are active or selected.",
+    "V27 corrects the V26 misunderstanding: retain all original held evolution items. Future trade replacement requires the appropriate equipped item plus its defined level, where an item was originally required; no trade and no automatic item-free evolution. Levels/evolution adaptation remain deferred. Linking Cord alone stays excluded."
+  ]
+}

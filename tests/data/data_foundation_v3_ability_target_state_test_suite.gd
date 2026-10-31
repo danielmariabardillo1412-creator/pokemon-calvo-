@@ -16,7 +16,7 @@ func run(check: Callable) -> void:
 	var by_id := _by_id(raw.get("abilities", []))
 	var registry := BattleEffectRegistry.new()
 
-	var merciless_source := _load_json("res://data/api/v2/ability/196/index.json")
+	var merciless_source := preload("res://tests/helpers/pokeapi_source_fixture.gd").read("ability/196/index.json")
 	var merciless_text := _english_effect_text(merciless_source.get("effect_entries", []))
 	check.call(
 		"data_v3_merciless_source_contract",
@@ -27,7 +27,7 @@ func run(check: Callable) -> void:
 		and (merciless_source.get("effect_changes", []) as Array).is_empty(),
 	)
 
-	var rivalry_source := _load_json("res://data/api/v2/ability/79/index.json")
+	var rivalry_source := preload("res://tests/helpers/pokeapi_source_fixture.gd").read("ability/79/index.json")
 	var rivalry_text := _english_effect_text(rivalry_source.get("effect_entries", []))
 	check.call(
 		"data_v3_rivalry_source_contract",
@@ -41,7 +41,7 @@ func run(check: Callable) -> void:
 		and (rivalry_source.get("effect_changes", []) as Array).is_empty(),
 	)
 
-	var stakeout_source := _load_json("res://data/api/v2/ability/198/index.json")
+	var stakeout_source := preload("res://tests/helpers/pokeapi_source_fixture.gd").read("ability/198/index.json")
 	var stakeout_text := _english_effect_text(stakeout_source.get("effect_entries", []))
 	check.call(
 		"data_v3_stakeout_source_contract",

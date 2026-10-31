@@ -27,6 +27,13 @@ func run(check_callback: Callable) -> void:
 
 
 func _test_production_seam_mapping() -> void:
+	# FileAccess preserves CRLF. A blank-line substring used to include every
+	# later function and incorrectly attribute their side_id/context to the sampler.
+	var sample := "func _bounded_actions(actions, limit):\n\treturn actions\n\nfunc next(side_id, context):\n\treturn context\n"
+	var block := _c3fw_function_block(sample, "func _bounded_actions(")
+	_check.call("search_production_seam_function_block_crlf", _c3fw_function_block(sample.replace("\n", "\r\n"), "func _bounded_actions(") == block)
+	_check.call("search_production_seam_function_block_stops_before_neighbor", not block.contains("side_id") and not block.contains("context") and block.contains("return actions"))
+	_check.call("search_production_seam_function_block_missing", _c3fw_function_block(sample, "func absent(").is_empty())
 	var report_a := _build_c3fw_report()
 	var report_b := _build_c3fw_report()
 	var source_status := report_a.get("source_files_loaded", {}) as Dictionary
@@ -317,10 +324,11 @@ func _c3fw_action_signature(actions: Array[BattleAction]) -> Array[String]:
 
 
 func _c3fw_function_block(source: String, signature: String) -> String:
+	source = source.replace("\r\n", "\n")
 	var start := source.find(signature)
 	if start < 0:
 		return ""
-	var next := source.find("\n\nfunc ", start + signature.length())
+	var next := source.find("\nfunc ", start + signature.length())
 	if next < 0:
 		return source.substr(start)
 	return source.substr(start, next - start)

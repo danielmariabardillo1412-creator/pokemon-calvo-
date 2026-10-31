@@ -9,6 +9,7 @@ extends CharacterBody2D
 
 signal step_completed(world_position: Vector2)
 signal facing_changed(direction: Vector2)
+signal motion_requested(direction: Vector2)
 signal motion_resolved(
 	requested_displacement: Vector2,
 	actual_displacement: Vector2,
@@ -41,15 +42,34 @@ func apply_motion(direction: Vector2, delta: float) -> Vector2:
 	if cardinal != facing:
 		facing = cardinal
 		facing_changed.emit(facing)
+	# Traversal may take ownership before collision resolution, even if the player
+	# was already overlapping a trigger before changing direction.
+	motion_requested.emit(cardinal)
+	if not movement_enabled:
+		velocity = Vector2.ZERO
+		return Vector2.ZERO
 
 	velocity = cardinal * move_speed
 	var before := global_position
-	var requested := velocity * delta
-	move_and_collide(requested)
-	var moved := global_position - before
-	motion_resolved.emit(requested, moved, before, global_position)
-	_track_real_movement(before, moved)
-	return moved
+	var remaining := maxf(0.0, move_speed * delta)
+	# Resolve up to one encounter boundary at a time. A step callback can lock
+	# movement (battle/traversal); the rest of a long frame must then be discarded.
+	while remaining > 0.0001 and movement_enabled:
+		var chunk := remaining
+		if step_distance > 0.0:
+			chunk = minf(chunk, maxf(0.0001, step_distance - _distance_since_step))
+		var segment_start := global_position
+		var requested := cardinal * chunk
+		var collision := move_and_collide(requested)
+		var moved := global_position - segment_start
+		motion_resolved.emit(requested, moved, segment_start, global_position)
+		_track_real_movement(segment_start, moved)
+		remaining -= chunk
+		if collision != null or moved.length_squared() <= 0.00000001:
+			break
+	if not movement_enabled:
+		velocity = Vector2.ZERO
+	return global_position - before
 
 
 func reset_step_meter() -> void:
@@ -82,6 +102,8 @@ func _track_real_movement(start_position: Vector2, moved: Vector2) -> void:
 		remaining = maxf(0.0, remaining - distance_to_boundary)
 		_distance_since_step = 0.0
 		step_completed.emit(cursor)
+		if not movement_enabled:
+			return
 		if remaining <= 0.0001:
 			remaining = 0.0
 			break

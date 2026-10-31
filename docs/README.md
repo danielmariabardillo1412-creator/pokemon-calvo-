@@ -1,63 +1,30 @@
-# Índice de documentación
+# Documentación
 
-La documentación está organizada por **función**, no por orden cronológico. El objetivo es que una persona o una IA pueda recuperar el estado actual leyendo pocos archivos y acudir al historial solo cuando necesite trazabilidad.
+## Estado vivo
 
-## 1. Estado vivo — `current/`
+- [Inicio](current/START_HERE.md): recuperación de contexto y límites.
+- [Estado](current/PROJECT_STATE.md): sistemas disponibles y cobertura.
+- [Próximo trabajo](current/NEXT_STEPS.md): limpieza y correcciones pendientes.
+- [Protocolo](current/WORK_PROTOCOL.md): cambios, comprobaciones y evidencia.
+- [Objetos](current/ITEM_SYSTEM_CURRENT_STATUS.json): matriz vigente y límites.
+- [Arte de objetos](current/ITEM_ART_CURRENT_STATUS.json): recursos beta y revisión.
+- [Comparador V1](current/COMPARATOR_GENERAL_V1.md): resultado histórico y alcance.
+- [Limpieza](current/CLEANUP.md): decisiones y comprobaciones actuales.
 
-Leer primero:
+Los demás informes versionados de `current/` conservan resultados por fase;
+su fecha o nombre no los convierte en estado operativo vigente.
 
-- [`current/START_HERE.md`](current/START_HERE.md) — recorrido de recuperación y orden de autoridad.
-- [`current/PROJECT_STATE.md`](current/PROJECT_STATE.md) — baseline certificado y estado técnico actual.
-- [`current/NEXT_STEPS.md`](current/NEXT_STEPS.md) — siguiente trabajo exacto.
-- [`current/WORK_PROTOCOL.md`](current/WORK_PROTOCOL.md) — reglas de trabajo y certificación.
+## Referencia
 
-Estos documentos son los únicos que deben presentarse como **estado operativo actual**.
+`architecture/` describe los sistemas y `adr/` sus decisiones.
+`project_book/` contiene los cuadernos temáticos de datos, IA y demo visual.
+`reference/` conserva entorno, procedencia y código de terceros.
+`history/` conserva investigación y diarios anteriores.
 
-## 2. Cuadernos temáticos — `project_book/`
+`kilo/` es el contrato histórico de la reorganización T001–T006B ya aceptada.
+No tiene una tarea activa ni órdenes para relanzar Kilo/OpenCode. Los sellos y
+evidencia originales se conservan porque verificadores posteriores los usan.
 
-Los cuadernos son memoria de trabajo consolidada. No se crea un archivo nuevo por cada microfase.
-
-- [`project_book/README.md`](project_book/README.md) — política de uso.
-- [`project_book/DATA_V3.md`](project_book/DATA_V3.md) — DATA V3 cerrado y certificado.
-- [`project_book/TRAINER_AI.md`](project_book/TRAINER_AI.md) — estado y continuidad de IA de entrenadores.
-
-Cuando un workstream termine, su cuaderno puede quedar como referencia cerrada; sus diarios detallados pasan a `history/worklogs/`.
-
-## 3. Arquitectura vigente — `architecture/`
-
-Aquí vive la documentación formal del sistema: arquitectura general, Battle Core, progresión, captura, party, persistencia, almacenamiento, reglas y contrato DATA V3.
-
-Los documentos de esta carpeta explican **cómo funciona el sistema**. Los cuadernos explican **qué se decidió, qué está cerrado y dónde continuar**.
-
-## 4. ADR — `adr/`
-
-Los ADR 001–033 documentan decisiones arquitectónicas y límites importantes. No son un historial operativo y no deben sustituirse por resúmenes cuando se necesita conocer la decisión original.
-
-## 5. Referencia — `reference/`
-
-- entorno de desarrollo;
-- procedencia/código de terceros.
-
-## 6. Historial — `history/`
-
-Material preservado que ya no representa estado vivo:
-
-- `phase_reports/` — informes finales de fases;
-- `legacy_data/` — pipelines y auditorías DATA anteriores a V3;
-- `research/` — investigación técnica cerrada;
-- `worklogs/` — antiguos cuadernos/diarios de ejecución, incluidos los diarios completos de DATA V3;
-- `STATUS_PHASE_HISTORY.md` — antiguo estado acumulativo.
-
-## Orden de autoridad
-
-En caso de contradicción:
-
-1. estado real de GitHub sobre el SHA exacto: commit, PR, CI y artefactos;
-2. fuentes inmutables/canónicas del dominio;
-3. `current/`;
-4. arquitectura/ADR vigentes;
-5. cuadernos temáticos;
-6. historial;
-7. memoria de conversación.
-
-`main` no es actualmente el baseline certificado y no debe asumirse como autoridad hasta que se sustituya explícitamente en una operación posterior.
+Los antiguos índices extensos y órdenes de consolidación son recuperables en Git.
+Esta copia local no tiene remoto: no hay un merge ni publicación pendientes por
+el hecho de que lo diga un informe anterior.

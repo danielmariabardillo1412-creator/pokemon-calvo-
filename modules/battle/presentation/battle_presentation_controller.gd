@@ -8,12 +8,7 @@ signal battle_closed(reason: StringName)
 # technical opponent policy for a legal response, submits through the application boundary, and
 # renders semantic results. Capture/Run rules and inventory mutation never live in this UI.
 
-const CAPTURE_BALL_ORDER := [
-	&"poke_ball",
-	&"great_ball",
-	&"ultra_ball",
-	&"master_ball",
-]
+var CAPTURE_BALL_ORDER := CaptureRuleset.ordered_ball_ids()
 
 var session: WildAdventureSession = null
 var catalogs: DefinitionCatalog = null
@@ -88,6 +83,7 @@ func available_move_ids() -> Array[StringName]:
 	var actor := session.player_active()
 	if actor == null:
 		return result
+	if session.battle_state().live_moves_enabled: return preload("res://modules/battle/application/live_move_profile.gd").moves(actor, catalogs)
 	for slot_variant in actor.moveset:
 		var slot := slot_variant as BattleMoveSlot
 		if slot != null and slot.current_pp > 0 and catalogs.move(slot.move_id) != null:
@@ -105,6 +101,7 @@ func available_switch_instance_ids() -> Array[StringName]:
 	var actor := session.player_active()
 	if state == null or actor == null:
 		return result
+	if state.phase != BattleState.WAITING_FOR_SWITCH and preload("res://modules/battle/application/binding_move_rules.gd").switch_blocked(state, actor, catalogs): return result
 	var side := state.side_for_creature(actor.instance_id)
 	if side == null:
 		return result
@@ -207,7 +204,7 @@ func submit_player_move(move_id: StringName) -> Array[BattleEvent]:
 		_append_log("Battle state is incomplete.")
 		return empty
 	var slot := actor.move_slot(move_id)
-	if slot == null or slot.current_pp <= 0 or catalogs.move(move_id) == null:
+	if (slot == null or slot.current_pp <= 0) and not (state.live_moves_enabled and move_id == &"struggle" and preload("res://modules/battle/application/live_move_profile.gd").forced_struggle(actor, catalogs)) or catalogs.move(move_id) == null:
 		_append_log("That move is not currently usable.")
 		return empty
 
@@ -260,6 +257,12 @@ func submit_player_switch(switch_instance_id: StringName) -> WildBattleCommandRe
 		_append_log("No active battle.")
 		return fallback
 	var state := session.battle_state()
+	if state != null and state.phase == BattleState.WAITING_FOR_SWITCH:
+		var chosen := session.submit_switch_choice(switch_instance_id, state.turn)
+		_render_events(chosen.battle_events)
+		_refresh_view()
+		if session.battle_state().phase == BattleState.FINISHED: _settle_finished_battle()
+		return chosen
 	var actor := session.player_active()
 	var target := session.current_wild()
 	if state == null or actor == null or target == null:
@@ -561,6 +564,7 @@ func _refresh_view() -> void:
 		if i < moves.size():
 			var current_move_id := moves[i]
 			var current_slot := player_creature.move_slot(current_move_id)
+			if current_slot == null and current_move_id == &"struggle" and state.live_moves_enabled: current_slot = BattleMoveSlot.new(&"struggle", 1, 1)
 			move_button.text = "%s  PP %d/%d" % [String(current_move_id), current_slot.current_pp, current_slot.max_pp]
 			move_button.visible = true
 			move_button.disabled = not waiting
@@ -568,7 +572,7 @@ func _refresh_view() -> void:
 			move_button.text = "-"
 			move_button.visible = false
 
-	_refresh_switch_controls(state, waiting)
+	_refresh_switch_controls(state, waiting or (state.phase == BattleState.WAITING_FOR_SWITCH and state.pending_switch.get("side_id") == "side_a"))
 
 	var balls := available_capture_ball_ids()
 	for i in _capture_buttons.size():

@@ -1,0 +1,148 @@
+{
+  "status": "OPT_IN_COLLECTION_SESSION_AND_VISUAL_SLICE_VALIDATED",
+  "date": "2026-10-27",
+  "backend": "showdown_singles_v1",
+  "sim_version": "0.10.11",
+  "format": "gen9customgame",
+  "launcher": "JUGAR_AVENTURA_SHOWDOWN.cmd",
+  "collection_lifetime_in_launcher": "in_memory_across_encounters",
+  "session_checks": {
+    "checks": 86,
+    "errors": [],
+    "status": "PASS"
+  },
+  "visual_checks": {
+    "captures": [
+      {
+        "label": "initial",
+        "path": ".godot/showdown_adventure_checks/adventure_initial.png",
+        "sha256": "afd15289f51606bb47fe8c4425f1ab165b07bb74ba7d2be64e0f3cc572615603"
+      },
+      {
+        "label": "captured",
+        "path": ".godot/showdown_adventure_checks/adventure_captured.png",
+        "sha256": "5e8bc5adddbbcd8cc913d7bf7505dad3efaecc4d59e68c9f1145245c279a8a3d"
+      },
+      {
+        "label": "next_encounter",
+        "path": ".godot/showdown_adventure_checks/adventure_next_encounter.png",
+        "sha256": "3be89ad98c4afb573ccefdd26d33eb525b15659cc055622a38c3e3394bf69430"
+      },
+      {
+        "label": "escaped",
+        "path": ".godot/showdown_adventure_checks/adventure_escaped.png",
+        "sha256": "f181ff1a1c2767f0b3c8c47870bd68ff9022d9cf32fe5aa0d396b758410d6692"
+      },
+      {
+        "label": "victory",
+        "path": ".godot/showdown_adventure_checks/adventure_victory.png",
+        "sha256": "0eaae638bfa4469030fc139170c9d62608c1c72ac1be041cf68ee759216d1a18"
+      }
+    ],
+    "checks": 28,
+    "errors": [],
+    "gpu": true,
+    "status": "PASS"
+  },
+  "native_reaction_checks": {
+    "status": "PASS",
+    "checks": [
+      {
+        "name": "ordinary player pass remains illegal",
+        "status": "PASS"
+      },
+      {
+        "name": "failed capture stages one enemy action and one native residual",
+        "status": "PASS"
+      },
+      {
+        "name": "reaction abort restores all native RNG and side effects",
+        "status": "PASS"
+      },
+      {
+        "name": "reaction commit equals the prevalidated turn",
+        "status": "PASS"
+      },
+      {
+        "name": "invalid opponent reaction cannot mutate source",
+        "status": "PASS"
+      },
+      {
+        "name": "reaction rejects forged player moves and unsupported action kinds",
+        "status": "PASS"
+      },
+      {
+        "name": "mid-turn pivot cannot be replaced by an adventure action",
+        "status": "PASS"
+      }
+    ]
+  },
+  "backend_regression": {
+    "checks": 100,
+    "gpu_captures": 13
+  },
+  "other_regressions": {
+    "core": 472,
+    "playback": 20809,
+    "trainer_evaluation_corpus": 628
+  },
+  "reused_services": [
+    "CaptureInventoryService",
+    "CaptureSystem",
+    "CaptureOwnershipRouter",
+    "WildEscapeRuleset",
+    "BattleOutcome",
+    "ProgressionSystem",
+    "BattleAnimationPlayback"
+  ],
+  "preserved_prior_legacy_production_files": 233,
+  "current_phase_baseline_files": 251,
+  "existing_files_changed": [
+    "modules/battle/backends/showdown/native_engine.cjs",
+    "modules/battle/backends/showdown/showdown_backend.gd",
+    "scenes/visual/showdown_battle_playback.gd"
+  ],
+  "other_baseline_files_unchanged": 248,
+  "default_backend_changed": false,
+  "main_scene_changed": false,
+  "save_v2_modified": false,
+  "data_or_art_changed": false,
+  "image_substitutions": [],
+  "github_published": false,
+  "limits": [
+    "Bag supports capture balls; medicines not connected",
+    "NPC uses own first legal request, professional trainer AI pending",
+    "Map/campaign save owner and complete campaign rules not connected",
+    "Not a certification of every Showdown mechanic",
+    "Persistent sleep reimport still rejected pending conversion contract",
+    "Temporary forms/substitutes and combined Gen9/Dynamax profile pending",
+    "Development runtime/launcher not an autonomous export"
+  ],
+  "sources_sha256": {
+    "modules/battle/backends/showdown/native_engine.cjs": "0acd9d6083b78bf3a34d770a506c79b130059718de0db02e7282eed3952d03ab",
+    "modules/battle/backends/showdown/showdown_backend.gd": "3cd9c5ae8c32857fca231b97f6d61854b9d65149ea672d716774808bff0b3696",
+    "scenes/visual/showdown_battle_playback.gd": "80e154a84c36effb63c5c5838657c52b8e6ee228a1507f6662975aa8cb3641fd",
+    "modules/gameplay/showdown_adventure_session.gd": "36c208b469697b8d995b0f86af23a9672ddbe96b0c73347ec81a4ce373b7759e",
+    "scenes/visual/showdown_adventure_lab.gd": "7d0ae21d799e57e810f202f62b89a2d329b3b2693bdabc45581444a037fed11b",
+    "scenes/visual/showdown_adventure_lab.tscn": "706c52a92d60d164e1e72e86a7cbd93202553a88c28c2d5ec8f245f0c72a346b",
+    "tests/gameplay/showdown_adventure_test_runner.gd": "c4eb5cb9254c11c719ebc45ab052d5e7e4d167ddc7325a7896d1b7bb271fbcf5",
+    "tests/gameplay/showdown_adventure_visual_test_runner.gd": "ed95499ac768c86fff58234ded646c302cc2e26db3a2fa76691fc7a5f45ea078",
+    "tools/showdown_engine_probe/adventure_transaction_tests.cjs": "f85421b68901121b49c204b42b6af9991474e18a3105655ad144a48c99e2d472",
+    "tools/showdown_engine_probe/verify_adventure.py": "5bbdb36432b432080f8e028f81663436f07ebd855284788201be05974fddf2ae",
+    "JUGAR_AVENTURA_SHOWDOWN.cmd": "8e370be72d11a591ed1b52b153b5596373efad8a518883e77a5e79ba6fa6d97f"
+  },
+  "evidence_sha256": {
+    ".godot/showdown_adventure_checks/gameplay.json": "5b62c9582dcb53d4048ed9de4ee6220536b63848e21ecb4fc4cea9b9ff602932",
+    ".godot/showdown_adventure_checks/visual.json": "add2c7f8b64c2b5be838a30dd855f6b983b0b1be833525696118be28377f35c1",
+    ".godot/showdown_adventure_checks/native.json": "43b28be6365719d8d525c8018fd40499958572f1cd8cc5053a90404ffdcb7cb1",
+    ".godot/showdown_adventure_checks/backend.json": "112cf68d43f1c1614ca99eeb4af34aa3ba2333f03c7c72cef65d8e14c2ab4a4b",
+    ".godot/showdown_adventure_checks/gameplay.log": "f1b9afdf930ee6f62e667cd89307d420b9a4a0dce6523118e46c62c5691af870",
+    ".godot/showdown_adventure_checks/visual.log": "f2ef9a166ab8bb3ed136c0b26c5ae0797a91c9a47565c2556c9ed76bb9b658f7",
+    ".godot/showdown_adventure_checks/backend.log": "f5c8578307b37747db02960afa521376ca18055a124764a5ccdecf2700a246e6",
+    ".godot/showdown_adventure_checks/core.log": "6a38a1e3bfdd2cd0b54df24edfa2a4577254b169d2718e3252f9734cf1f82f94",
+    ".godot/showdown_adventure_checks/playback.log": "a4ecb5dfc466963d823d3cb59b37d13699535e4817a47850577ec13b3a49fbb6",
+    ".godot/showdown_adventure_checks/trainer.log": "6ffae7c03440b212843bbd747e7b1caa8f0fe3711c726a722fa1e0431c7907a4",
+    ".godot/showdown_adventure_checks/before.json": "fddf03f9558e76d6bf5bc0aacec14c57a788a66d449501c2b007e468aa2615b2",
+    ".godot/showdown_adventure_checks/git-before.txt": "97990b2485d62a956b09d1c104af2e8d84372ec8e195d2361f4e881dc5153788"
+  }
+}

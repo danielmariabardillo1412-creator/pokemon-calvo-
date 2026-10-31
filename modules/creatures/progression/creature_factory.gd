@@ -48,6 +48,9 @@ static func create(
 	creature.ivs = ivs
 	creature.evs = evs
 	creature.nature_id = nature_id
+	if catalogs is DefinitionCatalog and catalogs.variants_enabled:
+		creature.is_shiny = preload("res://modules/creatures/progression/pokemon_variant_catalog.gd").choose_shiny(
+			species.id, catalogs, rng, instance_id, overrides.get("is_shiny"))
 	creature.experience = maxi(0, int(overrides.get("experience", ruleset.experience_for_level(species.growth_rate, lvl))))
 
 	var ability: StringName = overrides.get("ability_id", &"")

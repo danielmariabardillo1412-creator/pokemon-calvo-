@@ -1,0 +1,139 @@
+{
+  "status": "PASS_V26_MISINTERPRETATION_CORRECTED",
+  "date": "2026-10-31",
+  "base": "94716ca9823e4136f5fdf6bc653d200fb44a9309",
+  "supersedes_policy_decision": "V26 exclusions of ten held evolution items",
+  "restored_ids": [
+    "dragon_scale",
+    "dubious_disc",
+    "electirizer",
+    "magmarizer",
+    "prism_scale",
+    "protector",
+    "reaper_cloth",
+    "sachet",
+    "up_grade",
+    "whipped_dream"
+  ],
+  "linking_cord_stays_excluded": true,
+  "correct_future_rule": "Replace exchange requirement only. Retain the original equipped evolution item plus the future defined level when an item is required. No item-free automatic evolution.",
+  "future_evolution_implementation": "DEFERRED",
+  "level_values_selected": null,
+  "evolution_code_changed": false,
+  "canonical_data_changed": false,
+  "policy_matches_prior_approved_exclusions": true,
+  "groups": 3,
+  "checks": 5102,
+  "run": {
+    "status": "PASS",
+    "base": "94716ca9823e4136f5fdf6bc653d200fb44a9309",
+    "groups": [
+      {
+        "status": "PASS",
+        "checks_reported": 89,
+        "errors": [],
+        "last_line": "TRADE_ITEM_RESTORATION_V27 PASS checks=89",
+        "group": "restoration",
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--path",
+          "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+          "--headless",
+          "--script",
+          "tests/gameplay/trade_item_restoration_v27.gd"
+        ],
+        "exit_code": 0,
+        "seconds": 2.88,
+        "terminated_after_script_error": false,
+        "expected_negative_diagnostics": [],
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\trade_item_restoration_v27\\runs\\1793455105508548400\\restoration.log",
+        "log_sha256": "3447bee5fb3212dbb8178839dfd027ac293d08262c0deea91554ad8b5c9faf12"
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 20,
+        "errors": [],
+        "last_line": "ITEM_SELECTION_POLICY PASS checks=20 excluded=44",
+        "group": "selection",
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--path",
+          "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+          "--headless",
+          "--script",
+          "tests/gameplay/item_selection_policy_test_runner.gd"
+        ],
+        "exit_code": 0,
+        "seconds": 0.69,
+        "terminated_after_script_error": false,
+        "expected_negative_diagnostics": [],
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\trade_item_restoration_v27\\runs\\1793455105508548400\\selection.log",
+        "log_sha256": "b9e8b87cc6ce8ac6b3f1af90fb394b56ecd9283ed3697e429751ad495686d512"
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 4993,
+        "errors": [],
+        "last_line": "ITEM_CONNECTIONS PASS checks=4993 equip=624 evolutions=72 machines=229",
+        "group": "connections",
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--path",
+          "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+          "--headless",
+          "--script",
+          "tests/gameplay/item_connections_test_runner.gd"
+        ],
+        "exit_code": 0,
+        "seconds": 13.14,
+        "terminated_after_script_error": false,
+        "expected_negative_diagnostics": [],
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\trade_item_restoration_v27\\runs\\1793455105508548400\\connections.log",
+        "log_sha256": "cc6755b89bd2f1e944b9ef1eea728d6e6ee092b654aac799efdd96d65ed95884"
+      }
+    ],
+    "integrity_before": {
+      "status": "PASS",
+      "base": "94716ca9823e4136f5fdf6bc653d200fb44a9309",
+      "protected_files": 23138,
+      "preserved_absent_skip_worktree": 15647,
+      "mode": "HASH_IF_METADATA_CHANGED",
+      "allowed_changes": [
+        "config/item_selection_v1.json",
+        "tests/gameplay/item_selection_policy_test_runner.gd",
+        "tests/gameplay/trade_item_restoration_v27.gd",
+        "tools/verification/run_trade_item_restoration_v27.py"
+      ]
+    },
+    "tested_sources_sha256": {
+      "config/item_selection_v1.json": "df6b2974a12b6806ea4a3c8fa7b04aae0f02412d48ce66374078619f2f009809",
+      "tests/gameplay/item_selection_policy_test_runner.gd": "f22349a595078b136ce59e053d5f1142fcff81e0431ed101dc6caa37732f1ad4",
+      "tests/gameplay/trade_item_restoration_v27.gd": "269313872a8d8c34b1b563373b90d12c9e1124d6ee67d55df02106d4f3d877a7",
+      "tools/verification/run_trade_item_restoration_v27.py": "0a4f70f71f841b9497374e7b46d1e9f65e18ac87f496b232041290f7711a50e5"
+    },
+    "integrity_after": {
+      "status": "PASS",
+      "base": "94716ca9823e4136f5fdf6bc653d200fb44a9309",
+      "protected_files": 23138,
+      "preserved_absent_skip_worktree": 15647,
+      "mode": "FULL_CONTENT_HASHES",
+      "allowed_changes": [
+        "config/item_selection_v1.json",
+        "tests/gameplay/item_selection_policy_test_runner.gd",
+        "tests/gameplay/trade_item_restoration_v27.gd",
+        "tools/verification/run_trade_item_restoration_v27.py"
+      ]
+    }
+  },
+  "counts": {
+    "excluded_ids": 44,
+    "permitted_holdable_ids": 624,
+    "native_present_ids": 621,
+    "native_missing": [
+      "amulet_coin",
+      "exp_share",
+      "luck_incense"
+    ]
+  },
+  "runtime_checkpoint": "6629fe570cdf4c891a937c3f2a74b45e960dc902"
+}

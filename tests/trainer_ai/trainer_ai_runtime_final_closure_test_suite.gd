@@ -1,7 +1,7 @@
 class_name TrainerAIRuntimeFinalClosureTestSuite
 extends RefCounted
 
-const MAIN_SCENE := "res://scenes/overworld/technical_overworld.tscn"
+const LEGACY_SCENE := "res://scenes/overworld/technical_overworld.tscn"
 const TRAINER_CONTROLLER_SOURCE := "res://modules/battle/presentation/trainer_battle_presentation_controller.gd"
 const WILD_CONTROLLER_SOURCE := "res://modules/battle/presentation/battle_presentation_controller.gd"
 const OVERWORLD_SOURCE := "res://scenes/overworld/technical_overworld.gd"
@@ -24,7 +24,7 @@ func _test_static_final_boundaries() -> void:
 	var overworld_source := _read_text(OVERWORLD_SOURCE)
 	var session_source := _read_text(TRAINER_SESSION_SOURCE)
 
-	_check.call("c3fas_main_scene_contract", String(ProjectSettings.get_setting("application/run/main_scene", "")) == MAIN_SCENE)
+	_check.call("c3fas_main_scene_contract", preload("res://tests/helpers/field_scene_contract.gd").configured_main_is_field())
 	_check.call("c3fas_trainer_controller_source_present", not trainer_source.is_empty())
 	_check.call("c3fas_wild_controller_source_present", not wild_source.is_empty())
 	_check.call("c3fas_overworld_source_present", not overworld_source.is_empty())
@@ -47,7 +47,7 @@ func _test_static_final_boundaries() -> void:
 
 
 func _test_fresh_main_scene_defeat_cycle(tree: SceneTree) -> void:
-	var packed := load(MAIN_SCENE) as PackedScene
+	var packed := load(LEGACY_SCENE) as PackedScene
 	_check.call("c3fas_defeat_main_scene_loads", packed != null)
 	if packed == null:
 		return

@@ -1,0 +1,115 @@
+{
+  "status": "DEFAULT_FIELD_NATIVE_COMBAT_AND_SAVE_VALIDATED",
+  "date": "2026-10-27",
+  "entry_scene": "scenes/visual/field_demo.tscn",
+  "launcher": "JUGAR_DEMO.cmd",
+  "default_map_backend_changed": true,
+  "default_format": "gen9customgame",
+  "optional_explicit_format": "gen8customgame",
+  "checks": {
+    "native_map": 118,
+    "GPU_map": 123,
+    "GPU_captures_generated": 5,
+    "GPU_captures_reviewed": 5,
+    "native_sleep_clocks": 8,
+    "regressions": {
+      "save_v2.log": 40,
+      "save_adversarial.log": 8,
+      "core.log": 472,
+      "legacy_visual.log": 45,
+      "map_runtime.log": 103,
+      "repair.log": 99,
+      "adventure.log": 86,
+      "medicines.log": 120,
+      "medicine_tests.cjs.log": 21,
+      "transaction_tests.cjs.log": 10,
+      "adventure_transaction_tests.cjs.log": 7
+    }
+  },
+  "save": {
+    "path": "user://pokemon_calvo_field.json",
+    "envelope": "calvo_field_native_v1",
+    "collection": "Existing canonical SaveGame V2 embedded unchanged",
+    "atomic_IO": "Existing last-known-good serializer reused; failed publish rollback tested",
+    "active_battle": "Native state/RNG plus baseline collection, staged inventory/journal, trainer, map position and encounter RNG",
+    "publication": "Decode and native recovery finish before replacing the active campaign",
+    "controls": [
+      "Ctrl+S",
+      "Ctrl+L",
+      "Guardar partida",
+      "Cargar partida"
+    ]
+  },
+  "covered": [
+    "Keyboard movement and grass-to-native encounter in the existing field.",
+    "Capture to real party/PC, failed load without publication, active checkpoint rollback, no duplicate capture/XP.",
+    "Map medicine staged/spent inventory, escape, KO, replacement, victory, defeat and return to exploration.",
+    "Trainer owned object HP/PP/status settlement and no automatic recovery/rematch after all KO.",
+    "Observed sleep clock across capture, save/load and next encounter; unknown legacy sleep still rejected.",
+    "Worker death/recovery, commands locked during load, native Z and explicit Gen8 Max checkpoint."
+  ],
+  "limits": [
+    "11 doubles-context moves still need the native Godot doubles command/presentation path.",
+    "Gen8/Gen9 remain separate explicit profiles; final combined special-mechanic rules are not defined here.",
+    "Trainer opponent uses the existing basic native policy; professional AI is retained in the diagnostic legacy path.",
+    "Random learnset generation, custom permanent death/four lives and multiplayer remain later systems.",
+    "Map scenarios do not recertify all possible interactions of the 889 previously tested singles actions."
+  ],
+  "prior_move_inventory": {
+    "path": "docs/current/Z_MOVE_INTEGRATION.json",
+    "sha256": "2bd2cfb4f8db26141cd0483c86253cda8a304ff507de9ea389312d1e10022d3e",
+    "note": "Historical catalogue evidence, not a verifier for the subsequently changed map/backend sources."
+  },
+  "changed_existing_sources": [
+    "modules/battle/backends/showdown/native_engine.cjs",
+    "modules/battle/backends/showdown/showdown_backend.gd",
+    "modules/gameplay/showdown_adventure_session.gd",
+    "modules/save/save_game_repository.gd",
+    "modules/save/save_game_serializer.gd",
+    "project.godot",
+    "scenes/debug/technical_test_panel.gd",
+    "scenes/visual/field_demo.gd"
+  ],
+  "other_protected_files_unchanged": 251,
+  "data_or_art_substitutions": [],
+  "legacy_regression_mode": "--legacy-field (explicit compatibility only, no automatic fallback)",
+  "sources_sha256": {
+    "modules/battle/backends/showdown/native_engine.cjs": "3090555d4eda8097435e3501794e1e9e87457768a96099fca32cfe3a49717db8",
+    "modules/battle/backends/showdown/showdown_backend.gd": "11b4fc9c303b87a8e9a03cf2bb79a41624965d280e99b459734491accd14e463",
+    "modules/gameplay/field_native_session.gd": "4cd2eca2076c12083e01727d487117c369874ae22827836b6dfb0acf21cd4172",
+    "modules/gameplay/showdown_adventure_session.gd": "b5bfc01586682dc81ec8d430b76338aea10b72b04a9af679a9d8c99a1c5125c6",
+    "modules/save/field_native_save.gd": "f1c309760eb39102e0c59413f1228b7904cf9f69ff58061ca1d5684ffa599f1e",
+    "modules/save/save_game_repository.gd": "68da33013d5ec172587fdd5ef53b5f1777e15cf5b633dbfdc85d4014777fa60b",
+    "modules/save/save_game_serializer.gd": "a4f43be1e0c023bc834949408a88fede792c19ff8d110bae5f394355c6362715",
+    "project.godot": "c04e224ad79431899a4f20c1dff5089eeabe195967c6ee29ff2e7df203fe7915",
+    "scenes/debug/technical_test_panel.gd": "f07930b186e9e3f41282cce766c2c42cf294889103a7ecc6d48826bb6a002f63",
+    "scenes/visual/field_demo.gd": "0ef3fe00cf4fa3ab982a827cfc94653846ce8cfd5bafc56c2ba4ec5cc6f0c078",
+    "scenes/visual/field_native_bridge.gd": "59a076d36109224fb495fe1d3694895815617f647200f07042954d98259f9553",
+    "scenes/visual/field_native_presentation.gd": "ab00e5bffe2959fbe5c65a59c6da6a5c52ecccf1a3ef6c12b808ab658e82e69d",
+    "tests/gameplay/field_native_test_runner.gd": "351c5333df3f5b79269e8de5639f3730ab88a722eccec3fab0d49550fc1a0616",
+    "tools/showdown_engine_probe/field_clock_tests.cjs": "bf87630a42eeb136599fb7855066369156f957f6ce800f944ca8f5b6506fa529",
+    "tools/showdown_engine_probe/run_field_integration.py": "c1d56770132f541153ca671ff64769c73b118b3350820d0572657c6ccc694216",
+    "tools/showdown_engine_probe/verify_field_integration.py": "7d2001f1d68004c114f176e37fb6ba2b0721e01f09124b4f7d818abf10bddf7b"
+  },
+  "evidence_sha256": {
+    ".godot/field_native_checks/save_v2.log": "c05fef8e0b17d24ade9e29e637a71fa8068726b6cdf76bba6b7c6791fa334cca",
+    ".godot/field_native_checks/save_adversarial.log": "a3a258a2046fd9c37797552eb21e33db45b54dda87a9e55bab02126e7947b299",
+    ".godot/field_native_checks/core.log": "aa9de68f0c22929ceffa211b3a242db78885d34d92f9c3d971e6d9f31801cd99",
+    ".godot/field_native_checks/legacy_visual.log": "81bdd7a83b4074c730ac55f12db9d790bef3c5f7cb1eaed90ffed1e46c532731",
+    ".godot/field_native_checks/map_runtime.log": "1518ab4cf8fde8d7601506e0cc4588236bbbf4c767852f47ba127b60c9b37fb3",
+    ".godot/field_native_checks/repair.log": "4c71b2819f74e0a0842a109cc230e9f3313a3a4629f27b1746225410ccc99fd0",
+    ".godot/field_native_checks/adventure.log": "f1b9afdf930ee6f62e667cd89307d420b9a4a0dce6523118e46c62c5691af870",
+    ".godot/field_native_checks/medicines.log": "ccc7186a97d88119a172f3d8adca2bbb4be091c3f10c5fd804062bef070d36f2",
+    ".godot/field_native_checks/medicine_tests.cjs.log": "0825460d5fbaca64de667e077d15d8f5c8e3fb5a3f69842604f9e75e18fdb23d",
+    ".godot/field_native_checks/transaction_tests.cjs.log": "82427882b0e0b6e6f890285c6d59dbe2c67b0e73ae03681f7ef9ec30d10a2f0c",
+    ".godot/field_native_checks/adventure_transaction_tests.cjs.log": "788b2e743b1c480bbd24c7622c9753913b523af8e7889a46b21fdbde38aef890",
+    ".godot/field_native_checks/gameplay.json": "981a4e9092f9086b3e886a9f49324c84a5bafe7757e1b76580648f3eeafb3490",
+    ".godot/field_native_checks/gpu.json": "19f70f2893229e452507852b827e4cf6ac2cfb21ce328d27ef77cf9b7fda481a",
+    ".godot/field_native_checks/gameplay.log": "1f070d6d9d6b323444048d574af799a1a4dae4a8fa8080632deb312aa7e49c06",
+    ".godot/field_native_checks/gpu.log": "581fe1c311378208b921379818862de3b8bb7685fc4a9f5368f3a4971fae3ebe",
+    ".godot/field_native_checks/native_clocks.json": "fc45bd45635f306440b95ff6faa0e5274cae194e749a7a70adabdf6b12b7911a",
+    ".godot/field_native_checks/native_clocks.log": "3d797a6bc951bd75bef76fc2c045d6d0e26bc00efcfacba9ced23b829a416df2",
+    ".godot/field_native_checks/before.json": "c885140c8616d229d3f9fc97182f61aabb8642ce7d5c78ffd5c0fd1bd0a933a4",
+    ".godot/field_native_checks/visual_review.json": "37bf646528bf756192aba0fd17a3175ca9617d3a36ab7806131c286723b2c013"
+  }
+}

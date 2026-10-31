@@ -1,0 +1,367 @@
+{
+  "items": {
+    "antidote": {
+      "consume": true,
+      "effect": {
+        "cure": [
+          "psn",
+          "tox"
+        ]
+      },
+      "source_effect": "gItemEffect_Antidote"
+    },
+    "aspear_berry": {
+      "consume": true,
+      "effect": {
+        "cure": [
+          "frz"
+        ]
+      },
+      "source_effect": "gItemEffect_IceHeal"
+    },
+    "awakening": {
+      "consume": true,
+      "effect": {
+        "cure": [
+          "slp"
+        ]
+      },
+      "source_effect": "gItemEffect_Awakening"
+    },
+    "berry_juice": {
+      "consume": true,
+      "effect": {
+        "heal": 20
+      },
+      "source_effect": "gItemEffect_Potion"
+    },
+    "big_malasada": {
+      "consume": true,
+      "effect": {
+        "confusion": true,
+        "cure": "all"
+      },
+      "source_effect": "gItemEffect_FullHeal"
+    },
+    "blue_flute": {
+      "consume": false,
+      "effect": {
+        "cure": [
+          "slp"
+        ]
+      },
+      "source_effect": "gItemEffect_Awakening"
+    },
+    "burn_heal": {
+      "consume": true,
+      "effect": {
+        "cure": [
+          "brn"
+        ]
+      },
+      "source_effect": "gItemEffect_BurnHeal"
+    },
+    "casteliacone": {
+      "consume": true,
+      "effect": {
+        "confusion": true,
+        "cure": "all"
+      },
+      "source_effect": "gItemEffect_FullHeal"
+    },
+    "cheri_berry": {
+      "consume": true,
+      "effect": {
+        "cure": [
+          "par"
+        ]
+      },
+      "source_effect": "gItemEffect_ParalyzeHeal"
+    },
+    "chesto_berry": {
+      "consume": true,
+      "effect": {
+        "cure": [
+          "slp"
+        ]
+      },
+      "source_effect": "gItemEffect_Awakening"
+    },
+    "elixir": {
+      "consume": true,
+      "effect": {
+        "pp": 10,
+        "scope": "all"
+      },
+      "source_effect": "gItemEffect_Elixir"
+    },
+    "energy_powder": {
+      "consume": true,
+      "effect": {
+        "friendship_loss": [
+          5,
+          5,
+          10
+        ],
+        "heal": 60
+      },
+      "source_effect": "gItemEffect_EnergyPowder"
+    },
+    "energy_root": {
+      "consume": true,
+      "effect": {
+        "friendship_loss": [
+          10,
+          10,
+          15
+        ],
+        "heal": 120
+      },
+      "source_effect": "gItemEffect_EnergyRoot"
+    },
+    "ether": {
+      "consume": true,
+      "effect": {
+        "pp": 10,
+        "scope": "one"
+      },
+      "source_effect": "gItemEffect_Ether"
+    },
+    "fresh_water": {
+      "consume": true,
+      "effect": {
+        "heal": 30
+      },
+      "source_effect": "gItemEffect_FreshWater"
+    },
+    "full_heal": {
+      "consume": true,
+      "effect": {
+        "confusion": true,
+        "cure": "all"
+      },
+      "source_effect": "gItemEffect_FullHeal"
+    },
+    "full_restore": {
+      "consume": true,
+      "effect": {
+        "confusion": true,
+        "cure": "all",
+        "heal": "full"
+      },
+      "source_effect": "gItemEffect_FullRestore"
+    },
+    "heal_powder": {
+      "consume": true,
+      "effect": {
+        "confusion": true,
+        "cure": "all",
+        "friendship_loss": [
+          5,
+          5,
+          10
+        ]
+      },
+      "source_effect": "gItemEffect_HealPowder"
+    },
+    "hyper_potion": {
+      "consume": true,
+      "effect": {
+        "heal": 120
+      },
+      "source_effect": "gItemEffect_HyperPotion"
+    },
+    "ice_heal": {
+      "consume": true,
+      "effect": {
+        "cure": [
+          "frz"
+        ]
+      },
+      "source_effect": "gItemEffect_IceHeal"
+    },
+    "lava_cookie": {
+      "consume": true,
+      "effect": {
+        "confusion": true,
+        "cure": "all"
+      },
+      "source_effect": "gItemEffect_FullHeal"
+    },
+    "lemonade": {
+      "consume": true,
+      "effect": {
+        "heal": 70
+      },
+      "source_effect": "gItemEffect_Lemonade"
+    },
+    "leppa_berry": {
+      "consume": true,
+      "effect": {
+        "pp": 10,
+        "scope": "one"
+      },
+      "source_effect": "gItemEffect_LeppaBerry"
+    },
+    "lum_berry": {
+      "consume": true,
+      "effect": {
+        "confusion": true,
+        "cure": "all"
+      },
+      "source_effect": "gItemEffect_FullHeal"
+    },
+    "lumiose_galette": {
+      "consume": true,
+      "effect": {
+        "confusion": true,
+        "cure": "all"
+      },
+      "source_effect": "gItemEffect_FullHeal"
+    },
+    "max_elixir": {
+      "consume": true,
+      "effect": {
+        "pp": "full",
+        "scope": "all"
+      },
+      "source_effect": "gItemEffect_MaxElixir"
+    },
+    "max_ether": {
+      "consume": true,
+      "effect": {
+        "pp": "full",
+        "scope": "one"
+      },
+      "source_effect": "gItemEffect_MaxEther"
+    },
+    "max_potion": {
+      "consume": true,
+      "effect": {
+        "heal": "full"
+      },
+      "source_effect": "gItemEffect_MaxPotion"
+    },
+    "moomoo_milk": {
+      "consume": true,
+      "effect": {
+        "heal": 100
+      },
+      "source_effect": "gItemEffect_MoomooMilk"
+    },
+    "old_gateau": {
+      "consume": true,
+      "effect": {
+        "confusion": true,
+        "cure": "all"
+      },
+      "source_effect": "gItemEffect_FullHeal"
+    },
+    "oran_berry": {
+      "consume": true,
+      "effect": {
+        "heal": 10
+      },
+      "source_effect": "gItemEffect_OranBerry"
+    },
+    "paralyze_heal": {
+      "consume": true,
+      "effect": {
+        "cure": [
+          "par"
+        ]
+      },
+      "source_effect": "gItemEffect_ParalyzeHeal"
+    },
+    "pecha_berry": {
+      "consume": true,
+      "effect": {
+        "cure": [
+          "psn",
+          "tox"
+        ]
+      },
+      "source_effect": "gItemEffect_Antidote"
+    },
+    "pewter_crunchies": {
+      "consume": true,
+      "effect": {
+        "confusion": true,
+        "cure": "all"
+      },
+      "source_effect": "gItemEffect_FullHeal"
+    },
+    "potion": {
+      "consume": true,
+      "effect": {
+        "heal": 20
+      },
+      "source_effect": "gItemEffect_Potion"
+    },
+    "rage_candy_bar": {
+      "consume": true,
+      "effect": {
+        "confusion": true,
+        "cure": "all"
+      },
+      "source_effect": "gItemEffect_FullHeal"
+    },
+    "rawst_berry": {
+      "consume": true,
+      "effect": {
+        "cure": [
+          "brn"
+        ]
+      },
+      "source_effect": "gItemEffect_BurnHeal"
+    },
+    "shalour_sable": {
+      "consume": true,
+      "effect": {
+        "confusion": true,
+        "cure": "all"
+      },
+      "source_effect": "gItemEffect_FullHeal"
+    },
+    "sitrus_berry": {
+      "consume": true,
+      "effect": {
+        "heal": "quarter"
+      },
+      "source_effect": "gItemEffect_SitrusBerry"
+    },
+    "soda_pop": {
+      "consume": true,
+      "effect": {
+        "heal": 50
+      },
+      "source_effect": "gItemEffect_SodaPop"
+    },
+    "super_potion": {
+      "consume": true,
+      "effect": {
+        "heal": 60
+      },
+      "source_effect": "gItemEffect_SuperPotion"
+    },
+    "sweet_heart": {
+      "consume": true,
+      "effect": {
+        "heal": 20
+      },
+      "source_effect": "gItemEffect_Potion"
+    }
+  },
+  "profile": "rhh_modern_field_recovery_v19",
+  "schema_version": 1,
+  "settings": {
+    "I_HEALTH_RECOVERY": "GEN_9",
+    "I_SITRUS_BERRY_HEAL": "GEN_9"
+  },
+  "source": "https://github.com/rh-hideout/pokeemerald-expansion/tree/8654616bd38d9b28cc7dd8f3d0b4cb030aa2d40c",
+  "source_sha256": {
+    "item_effect_constants.h": "264f2957eeb8bcfd26e24fd15d800f38a8e1418dd8688ed4155e40a5336e2139",
+    "item_effects.h": "6cf395c29bbfcf425eeb965f2101edb8ba139c6cb24beef0521b92f6853a5e5f",
+    "items.h": "107f1b78a457f3a9c48749f325d674b62fe559b0ebfc365db13e82b00b19ecd3"
+  }
+}

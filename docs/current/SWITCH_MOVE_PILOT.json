@@ -1,0 +1,606 @@
+{
+  "version": 7,
+  "status": "LOCAL_GAME_SINGLES_PROFILE_ENABLED_COMPETITIVE_CERTIFICATION_OPEN",
+  "validation_status": "PASS",
+  "checks": 7411,
+  "core_samples": 528,
+  "captures": [
+    {
+      "path": ".godot/switch_move_checks/circle_throw_hit.png",
+      "sha256": "fe28c78b7b0b0d33f7ab3fa2c4c9706d6badd385f37b0ccaed2f7f7d6a98a2c5"
+    },
+    {
+      "path": ".godot/switch_move_checks/dragon_tail_hit.png",
+      "sha256": "7333b21298caa163d3341fbee5929a3e3222611f2731b97637fae2aa7ceded11"
+    },
+    {
+      "path": ".godot/switch_move_checks/flip_turn_hit.png",
+      "sha256": "e5c6ed2dbd4bfcd11ab5eeac1ef32532823ef9a7a6825a976f7f975ffb047311"
+    },
+    {
+      "path": ".godot/switch_move_checks/flip_turn_choice.png",
+      "sha256": "ccd154d0b33f053982ce619f350c6db0ccae4d208816f1ff0c3cf79f29bc57df"
+    },
+    {
+      "path": ".godot/switch_move_checks/flip_turn_entry_send_out.png",
+      "sha256": "0229eb2714dfe1aa3999b23e8744d86bfe138205bb9171d01487f2742ae5fc1c"
+    },
+    {
+      "path": ".godot/switch_move_checks/u_turn_hit.png",
+      "sha256": "b0d205962b625d2650f07a168789cfd18ac0f2d944690846d4661eeb2d75263b"
+    },
+    {
+      "path": ".godot/switch_move_checks/u_turn_choice.png",
+      "sha256": "4f017d7b8ab1ce9da5628391345aa1066d5a6365277cccbd5dfb70b080790bac"
+    },
+    {
+      "path": ".godot/switch_move_checks/u_turn_entry_send_out.png",
+      "sha256": "c10872456d433c170c39578164a378ae453d435ec994e9e4292cc128c7b77f6c"
+    },
+    {
+      "path": ".godot/switch_move_checks/volt_switch_hit.png",
+      "sha256": "0cafe253f4706211f3c38d5772f36cf37e90c11032bdc68e8370d29f786cfad8"
+    },
+    {
+      "path": ".godot/switch_move_checks/volt_switch_choice.png",
+      "sha256": "3ef5d9e4d1d0aba6d2d575b308f8837510433e914212dfd9592373296cbc3de5"
+    },
+    {
+      "path": ".godot/switch_move_checks/volt_switch_entry_send_out.png",
+      "sha256": "d6c1259fa8da463ce765ed6cf8cb17d69adc8dd443ea6fb0984efb4c385cf014"
+    },
+    {
+      "path": ".godot/status_switch_checks/roar_back_native.png",
+      "sha256": "7fd6fb3e294554751d7a1ba16bb37247ff340777ed1a6622a1937c39e1f3ffee"
+    },
+    {
+      "path": ".godot/status_switch_checks/roar_front_native.png",
+      "sha256": "eba7d53ac61509498c4c0ce8c65e566c069bdb38371a7d4890ef73fb0dd32d83"
+    },
+    {
+      "path": ".godot/status_switch_checks/whirlwind_back_native.png",
+      "sha256": "a4ada5c3309483f84bea51e72da06cbdc84e46211f02874b86d5cbc7b0cf6e8c"
+    },
+    {
+      "path": ".godot/status_switch_checks/whirlwind_front_native.png",
+      "sha256": "121015f3eeec92253b7c0e66f5f7e6837e9046663f05d0fa1aad960079b6c263"
+    },
+    {
+      "path": ".godot/status_switch_checks/teleport_back_native.png",
+      "sha256": "34b210247e6eae10c67b8e069cb36fbcc3afcf48ab6e731e6bcc2a51cd3ea7a3"
+    },
+    {
+      "path": ".godot/status_switch_checks/teleport_front_native.png",
+      "sha256": "06088e3d4fba608be4e1dcf3224e5cae0464ff028ca1def2568b41e8ec7d2410"
+    },
+    {
+      "path": ".godot/status_switch_checks/baton_pass_back_native.png",
+      "sha256": "a8405dcb15b3b57dcd42e26b37d7fd8d41d6a56fdf4a3111021378d3a12f26a9"
+    },
+    {
+      "path": ".godot/status_switch_checks/baton_pass_front_native.png",
+      "sha256": "7737603f8b7f3c221f7b419ec04a52f14a85b2a58ab25cc9db519b6ed336dd10"
+    },
+    {
+      "path": ".godot/status_switch_checks/parting_shot_back_native.png",
+      "sha256": "6d04c1473559c90e71f223814ee00b4483f7618e08f9041fd5edd766479f2252"
+    },
+    {
+      "path": ".godot/status_switch_checks/parting_shot_front_native.png",
+      "sha256": "5beed19baa4e02db9c38a6c824b1d77a24aa435e25c38d7cd5848e4201d210a4"
+    },
+    {
+      "path": ".godot/status_switch_checks/roar_live.png",
+      "sha256": "1afeac4c9d757f00caeaa37c80ef5e3f498428107c3457971bddb613b332cb9a"
+    },
+    {
+      "path": ".godot/status_switch_checks/whirlwind_live.png",
+      "sha256": "0e9e50710661cd752d52c5ab27b2c91a0027c153dcfa7d3f6e8e1989a89a93ce"
+    },
+    {
+      "path": ".godot/status_switch_checks/teleport_live.png",
+      "sha256": "1e54dd59c48b7a3b62fbfb5cbb602a3b7502436860d7dc3129ea697b17d16ee3"
+    },
+    {
+      "path": ".godot/status_switch_checks/teleport_choice.png",
+      "sha256": "1c8e2fe7354606a1d90ff4ff9321df0b2c3a4214419d28c081350c7a05f199ac"
+    },
+    {
+      "path": ".godot/status_switch_checks/baton_pass_live.png",
+      "sha256": "5592fb1a5f89abf5d28c09b6695221c087a599650150e4d6a4885dc72bc2dd75"
+    },
+    {
+      "path": ".godot/status_switch_checks/baton_pass_choice.png",
+      "sha256": "8be24a935b55c73fc8201cb6f033727f7f6060fb92650ca9a1c505e659063bac"
+    },
+    {
+      "path": ".godot/status_switch_checks/parting_shot_live.png",
+      "sha256": "dfca6cc47b9f2b429eb25f57f78a09c1282f1ce326b3b27a5589efda1b080452"
+    },
+    {
+      "path": ".godot/status_switch_checks/parting_shot_choice.png",
+      "sha256": "7c4cca81c6de3de541d8554c10691b5a4c0daaf0820431c9fe907d76ffd1842f"
+    },
+    {
+      "path": ".godot/weather_checks/rain_dance_cast.png",
+      "sha256": "62858c6d03d15f32336cf69bf440076fa70d8c611637174e1c7ddf299bdeb6f2"
+    },
+    {
+      "path": ".godot/weather_checks/rain_dance_persistent.png",
+      "sha256": "16d7bd405394a958765d54fb533993ac834b01d94d9589ad77e36a9a1bc23051"
+    },
+    {
+      "path": ".godot/weather_checks/hail_cast.png",
+      "sha256": "600dc512e6c08c585c82391d31796d6ffb092ca6731260109341acbc084acdbb"
+    },
+    {
+      "path": ".godot/weather_checks/hail_persistent.png",
+      "sha256": "79372ced8de251562172cdf3df946efa59ae142f82f414eab27b7fa17e3c9f20"
+    },
+    {
+      "path": ".godot/weather_checks/sandstorm_cast.png",
+      "sha256": "69ef51b0d9e3bd14f5d242d4932fe5bacac10c2416dd2b679f9437f03012bcb6"
+    },
+    {
+      "path": ".godot/weather_checks/sandstorm_persistent.png",
+      "sha256": "b0fb1ec163a6813a4a6c2e9c48c5b4bf6c75e084e151a5d19736853b2a0ad37b"
+    },
+    {
+      "path": ".godot/weather_checks/snowscape_cast.png",
+      "sha256": "dc4d2afda30cbd38296c9a94f6609db2d0ebf6f34d5e61224bd739afd722bb1d"
+    },
+    {
+      "path": ".godot/weather_checks/snowscape_persistent.png",
+      "sha256": "c0775d4b4fd00ba7d724740e7375dcee370903f78682f41ab8d2c7c030f74d0e"
+    },
+    {
+      "path": ".godot/weather_checks/chilly_reception_cast.png",
+      "sha256": "f613668ce816916c37f161d75ee609ba489c9016acb0a755ed28d7ff9c853f34"
+    },
+    {
+      "path": ".godot/weather_checks/chilly_reception_persistent.png",
+      "sha256": "f3f93f32c5d95dd8be133d7d1f14f7367f4029e62fbff75157f1124e13219e87"
+    },
+    {
+      "path": ".godot/weather_checks/chilly_entry_snow.png",
+      "sha256": "68e44be874242312109124e33330c53d916c2cc77e59ed141cea8880c3c8ae8f"
+    },
+    {
+      "path": ".godot/substitute_checks/substitute_back_native.png",
+      "sha256": "2746a517bfd34178970cc90a13582a8985a67026f747a44c4ff5ccdde35210c3"
+    },
+    {
+      "path": ".godot/substitute_checks/substitute_front_native.png",
+      "sha256": "25d2ff421ea059e0682b58e04516920044ba6738082a52ed8a79044cfefd3998"
+    },
+    {
+      "path": ".godot/substitute_checks/shed_tail_back_native.png",
+      "sha256": "d5cd2d0bc7553bc79ff0e016f5b4c7641f3c50bfb41de7b966ba0dd568270a07"
+    },
+    {
+      "path": ".godot/substitute_checks/shed_tail_front_native.png",
+      "sha256": "a371b8a45575928bfdb02f7b4d26010fcf79d36d0550cbb058326c3e95c42b05"
+    },
+    {
+      "path": ".godot/substitute_checks/substitute_persistent.png",
+      "sha256": "baf9c6e9388fd916a2595018a9fbdea6e35487a892fbff5a74be40e5998ac3f5"
+    },
+    {
+      "path": ".godot/substitute_checks/substitute_broken.png",
+      "sha256": "cd95fec686f5cbfc58dca71c879506e1cfb2ec72bead9bb5bb643d4de7350596"
+    },
+    {
+      "path": ".godot/substitute_checks/shed_tail_persistent.png",
+      "sha256": "f8dce99e80bc8cccbc352f6911a3f5ac477f0d79321635f9184a47943852ee08"
+    },
+    {
+      "path": ".godot/substitute_checks/shed_entry_doll.png",
+      "sha256": "8e5158ed4a1781389e630da3d866ab669e149a87c86ec37a22e7f891001ddfff"
+    },
+    {
+      "path": ".godot/substitute_checks/shed_tail_broken.png",
+      "sha256": "4d09d4a85cb5c90d219073e8ce9692f7019cd2620d56a976c04480e9e8777129"
+    },
+    {
+      "path": ".godot/transform_checks/wailord_front_copied.png",
+      "sha256": "e518d9287a973f4393fcca90ba7ae2400b93c9ff38cb10422ccf2a13c272df45"
+    },
+    {
+      "path": ".godot/transform_checks/pikachu_front_copied.png",
+      "sha256": "e7ab3fef80c71a63c5a9326eca847d3bb30cc650df7858696676634da6bb9943"
+    },
+    {
+      "path": ".godot/transform_checks/charizard_front_copied.png",
+      "sha256": "fcae2a1cae12cd605e5cb9cb8637aea7ed5918d7e8d143417d35f2537ef7d705"
+    },
+    {
+      "path": ".godot/transform_checks/wailord_transition.png",
+      "sha256": "f55bcb78e2183f043be7fb98fcd50ca60b38a48216793d33ef7de82bb5fdea18"
+    },
+    {
+      "path": ".godot/transform_checks/wailord_back_copied.png",
+      "sha256": "369f064c243378743f245b373707ff539a34f92a882d8d0a9ead16bba26d48a4"
+    },
+    {
+      "path": ".godot/transform_checks/wailord_restored.png",
+      "sha256": "b55747530049241243621318f038ee98dd72bf840c44fe6af0ee0f6587ad1799"
+    },
+    {
+      "path": ".godot/transform_checks/pikachu_transition.png",
+      "sha256": "b24fb08a191c42721936500e6b9e15b153f582b8664eceace7edfb372b21f939"
+    },
+    {
+      "path": ".godot/transform_checks/pikachu_back_copied.png",
+      "sha256": "6fe7c4747c6a9103aa24c8ec07c2cf97f28b7a78ef7d1c91cbf7059505dc2c54"
+    },
+    {
+      "path": ".godot/transform_checks/pikachu_restored.png",
+      "sha256": "d180ba7b78b22418e780827b1f85ea65e14dafe5a49ab0e3c1135399937aad5e"
+    },
+    {
+      "path": ".godot/transform_checks/charizard_transition.png",
+      "sha256": "56d4c229556785b2b19c01ffa96155d66746035759e5f74b83aa12a3557de9e8"
+    },
+    {
+      "path": ".godot/transform_checks/charizard_back_copied.png",
+      "sha256": "434162dc3af5001347ddb439fa1b1a86d8480c60dc7744603a5557515da79323"
+    },
+    {
+      "path": ".godot/transform_checks/charizard_restored.png",
+      "sha256": "b3c79a343fe64e8daae60887037454e2e02781ba8b02b682ef94a91405406918"
+    },
+    {
+      "path": ".godot/ally_switch_checks/side_a_0_before.png",
+      "sha256": "4a966a921eb0e7b09473e83538909f2580c66a50be74766cc8ef08cdf60acf73"
+    },
+    {
+      "path": ".godot/ally_switch_checks/side_a_0_swap.png",
+      "sha256": "4e75cc940c708a7c442151f75fa054a602bda2683d26bb0d8177c5dea12a459a"
+    },
+    {
+      "path": ".godot/ally_switch_checks/side_a_0_redirected_hit.png",
+      "sha256": "34e222cfaa0d24c43be44e8101ae0c83190b4850da15417625caefc9cc38d372"
+    },
+    {
+      "path": ".godot/ally_switch_checks/side_a_0_after.png",
+      "sha256": "22c5d92dac001e4772fe964aa9a6420773592ce8b50d45b13c8de951e2e30f84"
+    },
+    {
+      "path": ".godot/ally_switch_checks/side_a_1_before.png",
+      "sha256": "2800ce1cfb9dabddc6ef561409f11fc93610ad9a90cabcf59aebcc814a73c9a7"
+    },
+    {
+      "path": ".godot/ally_switch_checks/side_a_1_swap.png",
+      "sha256": "db36fd6275f44cdcb32d71e8d2b4513b60d93fba628adead1c6dca092ce66018"
+    },
+    {
+      "path": ".godot/ally_switch_checks/side_a_1_redirected_hit.png",
+      "sha256": "651242e9e2bbffff860e5527ede9c7b7768c82bc13305a8328f57682b3592674"
+    },
+    {
+      "path": ".godot/ally_switch_checks/side_a_1_after.png",
+      "sha256": "174ac7c2d196f8922542a01089874bdcfd5d75e948688c063a8ec1c57e197bec"
+    },
+    {
+      "path": ".godot/ally_switch_checks/side_b_0_before.png",
+      "sha256": "4776ef96894864c176140514255ae85d58c1a63b0e89ee99140b61944229696c"
+    },
+    {
+      "path": ".godot/ally_switch_checks/side_b_0_swap.png",
+      "sha256": "7062e3a3c3a35a29e945acaa4b06d17fff0d833a4f41889e7319cfa384de9d13"
+    },
+    {
+      "path": ".godot/ally_switch_checks/side_b_0_redirected_hit.png",
+      "sha256": "15349b7a8ae15463df5abb221ebd8d1538b4e0f4b5d0f2a61e425c1932d4f449"
+    },
+    {
+      "path": ".godot/ally_switch_checks/side_b_0_after.png",
+      "sha256": "7f19f6ec38ef90768629fde3cf3ca5931b6e8057ee044bb54e15c20dd040c26a"
+    },
+    {
+      "path": ".godot/ally_switch_checks/side_b_1_before.png",
+      "sha256": "e72f3f60b88edf15278f0c47346c167fc80df4df111f74178d26e648dd935e8a"
+    },
+    {
+      "path": ".godot/ally_switch_checks/side_b_1_swap.png",
+      "sha256": "25130ec143951cdbb08ccb0d892130ba45f4807c181f55959d6d3fb4ba9210f8"
+    },
+    {
+      "path": ".godot/ally_switch_checks/side_b_1_redirected_hit.png",
+      "sha256": "83dfa8c527748b283d7214a7ab6e41bbec0652cf25e8a352ef83f9eeec1bbd07"
+    },
+    {
+      "path": ".godot/ally_switch_checks/side_b_1_after.png",
+      "sha256": "5a440dd9f90e6438d9a574bd0ee9632e2fc35189e104c39166111b637531886d"
+    }
+  ],
+  "source_sha256": {
+    ".godot/move_batch_catalog/index.json": "bb327ada0e33347980260a7e4a8af65e8622171002c64d3ecf56759aa92dbee1",
+    "data/normalized/pokemon_api.json": "719d14c082bdba03b26e801d23fb8887d0a0f4376348cf4a27e79a4b0a3c08b3",
+    "data/raw/pokemon_api.json": "2efc1538081e7849d6e04555570ca28c19b13f09f0fe0c7ce38329881972f24a",
+    "modules/battle/application/switch_move_rules.gd": "3df876d2f45a1488ae93f6e25bb7a45ce6976fdcf0e615de058eb74d1da400c9",
+    "modules/battle/application/turn_executor.gd": "b999bc1d658d240beed3e3e9b3ccb1169517a776b1feb2f7c9382aa8679f6789",
+    "modules/battle/domain/battle_event.gd": "580d8e4be2f131401c5bd5782dd0bf5145366b9567d3da4a5e63a01247773616",
+    "modules/battle/domain/battle_state.gd": "fad881dd887c4835237715d182ea361a9fa3970b54b041e016d9f119a3f87edf",
+    "modules/battle/server/authoritative_battle_server.gd": "fb7c9b2996b3368bf4fc9347539b73bfbada9e259a106fd4d0df85ac2c6a5168",
+    "modules/gameplay/wild_adventure_session.gd": "10be590803e6e6a3cfe43dcd2e8c7d3fa71fb7555b7e4632f0d8fedeec5aff11",
+    "scenes/visual/battle_animation_playback.gd": "ed425e3855a08e3e783f198791a127524f9840a7275731cc0ad724d40d261c91",
+    "scenes/visual/battle_external_damage_pilot.gd": "e1524b98730b86475a88aff6f1f1ba4aa9cb3eaddc446d9ef269692acfbb01a9",
+    "scenes/visual/battle_timeline_plan.gd": "3799d2aeabfd3f075c25a89febde6d455c2b9edf4febdab87697c085e8170c25",
+    "scenes/visual/community_move_preview.gd": "7674d3a61e113e085d12132a4e10461aedd3a760516ab68700f2868f0f3fd4de",
+    "scenes/visual/field_battle_presentation.gd": "a6adec5961bf54a10e700a5a5963687719584d07d52110e02ad6332d8c50ff10",
+    "scenes/visual/field_demo.gd": "d5e5ee9fa5edcbcb6c91b33f73496eb7bfc63353bc200adc5b8afe4ac57d55fe",
+    "tests/battle/switch_move_continuation_test_runner.gd": "03d54e67486d1b7787d1006504a3f0207d43a24929733227d8a9fcbad4652e22",
+    "scenes/visual/battle_status_switch_pilot.gd": "cb58bbcddfed3ad64cf92044bfcc39c397c7bd732404c50335c6e3810984a050",
+    "tests/battle/status_switch_move_test_runner.gd": "b6f009674454acecf5e93c16240d436020ce28f9307d3069c7c061c9374e7bbd",
+    "tools/visual/build_status_switch_pilot.py": "ca637477b30986effc5992ed7b94f987656134608303b885426a0c881a9499e0",
+    "modules/battle/application/weather_rules.gd": "158d58f99d4e4f71572a05afe75dbdfc5dd7ce7af1cea2a3ba8b9d6c8378358e",
+    "modules/battle/domain/damage_calculator.gd": "4accfb76c7697b8ec1208f661240f6ae4a6ee9e8752c386b9ccec71b5cedcd8d",
+    "modules/battle/effects/battle_effect_executor.gd": "b4a5d2b6d223a02488a34d06ffd31b4ed0589866aa0158efab8b5803c5ab6ac8",
+    "modules/status/application/status_system.gd": "1214b4d09ad4a398bbb253e2be5a4c705c1d32120e99b12156a6f451a5ef167c",
+    "scenes/visual/battle_weather_cast_pilot.gd": "770d002262a10bb67e00ba19f313cc01aebacbcf1ac0b9dc0db1ecb9bc16bff4",
+    "scenes/visual/battle_weather_layer.gd": "49723228a1a82fe3d1c38bbe4ed6bec14a2c926b04ce89af2abff6332ac58378",
+    "tests/battle/weather_pilot_test_runner.gd": "60510e4897cefb777504636453626cb11b1ae59a938e4f9570ff0619ddffa702",
+    "tools/visual/build_weather_pilot.py": "2bb64ddc4aa7d61646deed5c6fe90b80e5836e28bc1895f8257b9c3cb5cd4c55",
+    "modules/battle/application/substitute_rules.gd": "401a2bffaee89551209908cff9af520f2b919c1cf11c6c80eab5c348f4133846",
+    "modules/battle/effects/battle_effect_context.gd": "50e6dbc07f841838c15c265d0781dcf01f2ab3c8b26a9aed298b351b366eb274",
+    "scenes/visual/battle_art.gd": "d557adc51893ae11eb8aff3211eaa4269431fbc68e4605954c858da3170722b6",
+    "scenes/visual/battle_move_visuals.gd": "380243624c706a4157965d1323c828c3ba5965a964d96d67bec225385de1ada3",
+    "scenes/visual/battle_substitute_pilot.gd": "e0bf5a9619cdb6c30695823e04dc9c23e12e8f6d72e0481422be6ad70da2aa50",
+    "tests/battle/substitute_pilot_test_runner.gd": "c50d0de67baff4649098df9aebc0c2781447774e5e6791e090f21c51eb38a08d",
+    "tools/visual/build_substitute_pilot.py": "9fbcfd12ba089620858d9571db5acca3da3b4543e465aea010df7482ab3b6210",
+    "modules/battle/application/transform_rules.gd": "d332cef34beb77fa24a516e70eb6cb295127bae856ca2919b1adb7f4b5342903",
+    "modules/battle/domain/battle_outcome.gd": "d4902083e1cf65e1a3b8ddd0a819d0eafbd39869a593ee165fe11721ae96737a",
+    "modules/battle/presentation/spanish_battle_presentation_controller.gd": "ac1ce4f12ace1d6634f6811b28152f48d4732da1fae7057de9006c80318f2f7c",
+    "modules/capture/capture_system.gd": "19290560f8a187414c9485ed5d3232f70425e8e60f8bac60326839f54d4bb424",
+    "modules/creatures/domain/creature_instance.gd": "b0c03db87396de5318f164353a2bef7fd41939356320354b65d2255cff1d7f8e",
+    "scenes/visual/battle_transform_pilot.gd": "d11e3d57b43a93641ba4c7ada470359f58bf29b5e2b17c557d8bc1864ae8f2d5",
+    "tests/battle/transform_pilot_test_runner.gd": "04406d4c66c5a2d752f2d3f9c18222aeb70426219d2d27e30a21cc7ef631711c",
+    "tools/visual/build_transform_pilot.py": "1f49996b375b3707bbfaf6d14c9ab33c1911168dae1a8c6aa01e8ff8e4a499a5",
+    "modules/battle/domain/turn_resolver.gd": "99f16c6f7dca04ff2ee05052817e0f54188b7c3df8db70a0fd0b1c4eda681a7c",
+    "modules/battle/server/doubles_position_battle.gd": "3c191fb8f6ef990b33987b9b07bf1aff9bc7987100f5a2881fab591d6c81b8c6",
+    "scenes/visual/doubles_battle_art.gd": "16af02e875568ce933b14e320f59c79f6ae7d0314f1ecaf5d1838bb3eb2400b3",
+    "scenes/visual/doubles_position_demo.gd": "e784e0324ec193f84c7fbe60a8ea995a7cadc84e62a12a46297ac4a1b912ade9",
+    "scenes/visual/doubles_timeline_plan.gd": "51372d7d40395034e1f86372f55bdbb4a44a2bd5d6bdf4ff7d4e77802d1a6528",
+    "tests/battle/ally_switch_pilot_test_runner.gd": "28f6a6c4408c813c3de32db0dbacca07abf3c1cd251067b26c2ad66df8eb3ccb",
+    "tools/visual/build_ally_switch_pilot.py": "b67cf57d8456f8fa66a8320cf09ca9fbec8b6d63d1b42f3f656452cfcb4ec381"
+  },
+  "mechanics_pilot_move_ids": [
+    "circle_throw",
+    "dragon_tail",
+    "flip_turn",
+    "u_turn",
+    "volt_switch",
+    "roar",
+    "whirlwind",
+    "teleport",
+    "baton_pass",
+    "parting_shot",
+    "rain_dance",
+    "hail",
+    "sandstorm",
+    "snowscape",
+    "chilly_reception",
+    "substitute",
+    "shed_tail",
+    "transform",
+    "ally_switch"
+  ],
+  "mechanics_pilot_move_count": 19,
+  "production_rollout_complete": false,
+  "default_mode_full_special_effects_completed": 0,
+  "remaining_unimplemented_move_ids": [],
+  "enabled_scope": "Ordinary local game sessions enable eighteen singles special mechanics through the live profile. F12 remains an isolated doubles adapter. Original per-pilot counts are retained; the separate live report audits all 579 admitted moves and 1822 registered clips.",
+  "limitations": [
+    "The 579 admitted moves execute in an isolated fixture without runtime/rejection errors; this is not full competitive interaction certification.",
+    "The registry validates all 1822 clips and first/middle/last frames structurally. Ten new GPU captures are samples, not a new visual review of every clip/species combination.",
+    "Earlier audited fine impact markers retain priority. General catalog HP resolves at clip completion; missing local assets retain the generic visual fallback.",
+    "Ally Switch stays in F12 doubles. The normal game is singles. The 18 special singles mechanics are enabled at ordinary game session creation.",
+    "NPC replacement uses own HP/moves and publicly visible opposing typing; professional root action selection remains the existing trainer intelligence pipeline.",
+    "Original data, source artwork and frozen renderer are unchanged. Native packs remain local cache resources; standalone export/distribution packaging is separate.",
+    "Full competitive interaction certification and standalone distribution/export remain separate."
+  ],
+  "regressions": {
+    "core": {
+      "passed": 472,
+      "failed": 0,
+      "log": ".godot\\switch_move_checks\\test_runner.log",
+      "sha256": "6a38a1e3bfdd2cd0b54df24edfa2a4577254b169d2718e3252f9734cf1f82f94"
+    },
+    "commands": {
+      "passed": 56,
+      "failed": 0,
+      "log": ".godot\\switch_move_checks\\battle_commands_test_runner.log",
+      "sha256": "e43eaeb76b9b25a0863a581ee1ba0008d37029ee94bfdb00328a1034d3ef3ea9"
+    },
+    "manual_switch": {
+      "passed": 49,
+      "failed": 0,
+      "log": ".godot\\switch_move_checks\\battle_switch_presentation_test_runner.log",
+      "sha256": "a74999b6193e62980fec3f34d6ff6cb4b45e409fe8d427aac7831dd7e735818a"
+    },
+    "capture": {
+      "passed": 68,
+      "failed": 0,
+      "log": ".godot\\switch_move_checks\\battle_capture_presentation_test_runner.log",
+      "sha256": "ef9ccb7535ee970a9dc006a1c880694ffb73b2a79f7cf3685d038b8efeb316b5"
+    },
+    "run": {
+      "passed": 94,
+      "failed": 0,
+      "log": ".godot\\switch_move_checks\\battle_run_presentation_test_runner.log",
+      "sha256": "8aa06ded29da62c5f3f5ad3c59971c7bee319f65436b2f8cf1a13f4a41e7e363"
+    },
+    "vertical_slice": {
+      "passed": 62,
+      "failed": 0,
+      "log": ".godot\\switch_move_checks\\vertical_slice_test_runner.log",
+      "sha256": "ad27887833a7568576c691517f53f4c5c656709b1a9d0b3833041055ff6fac19"
+    },
+    "save_v2": {
+      "passed": 40,
+      "failed": 0,
+      "log": ".godot\\switch_move_checks\\savegame_v2_test_runner.log",
+      "sha256": "c05fef8e0b17d24ade9e29e637a71fa8068726b6cdf76bba6b7c6791fa334cca"
+    },
+    "field": {
+      "passed": 45,
+      "failed": 0,
+      "log": ".godot\\switch_move_checks\\visual_field_test_runner.log",
+      "sha256": "858ff305f05b2a6d59288bbeafc59589692836e3e0810fdfeaa088803ff3ceeb"
+    },
+    "trainer_evaluation": {
+      "passed": 628,
+      "failed": 0,
+      "log": ".godot\\switch_move_checks\\trainer_evaluation.log",
+      "sha256": "2c85770d5acdbb1d969b2e8340e35f554131c516a052ddd24d3cdba6d2dc7323"
+    },
+    "playback": {
+      "passed": 19726,
+      "failed": 0,
+      "log": ".godot\\switch_move_checks\\battle_animation_playback_test_runner.log",
+      "sha256": "4211ee5b7a47288b2314209a8c97e34a9bfa52b9f6b312b965af7627996a68e3"
+    },
+    "prior_native_bindings": {
+      "passed": 407,
+      "failed": 0,
+      "log": ".godot\\switch_move_checks\\battle_community_pilot_test_runner.log",
+      "sha256": "b36ba462090e9d952cc8b8a65e43f1fdb880cecf9b6ee930e380e91d6d3e2706"
+    }
+  },
+  "preexisting_data_audit": {
+    "passed": 624,
+    "failed": 9,
+    "identical_before_and_after": true,
+    "failures": [
+      "data_v3_ability_contract_report_counts",
+      "data_v3_ability_contract_report_ids",
+      "data_v3_bad_dreams_source_contract",
+      "data_v3_end_to_end_shadow_exclusion_and_reports_frozen",
+      "data_v3_ice_body_source_contract",
+      "data_v3_merciless_source_contract",
+      "data_v3_rain_dish_source_contract",
+      "data_v3_rivalry_source_contract",
+      "data_v3_stakeout_source_contract"
+    ],
+    "baseline_log": ".godot\\switch_move_checks\\data_baseline.log",
+    "baseline_sha256": "d64f159019cf24f9f3747ac83c44fdc2062d210be1dbb8383fd72eb29009da28",
+    "current_log": ".godot\\switch_move_checks\\data_foundation_v3_domain_test_runner.log",
+    "current_sha256": "d64f159019cf24f9f3747ac83c44fdc2062d210be1dbb8383fd72eb29009da28"
+  },
+  "notes": [
+    "F7 explicitly enables the pilot for new wild demo encounters; restart restores the natural team/learnset and disables it.",
+    "Trainer-format authoritative engine is tested on both sides; trainer UI/AI/search continuation is not enabled.",
+    "Pause serializes pending replacement and remaining ordered actions; choosing a bench resumes the same turn without extra PP or end-turn ticks.",
+    "Four physical contact flags are corrected on detached execution definitions only in the pilot. Frozen catalog definitions remain unchanged.",
+    "The 19 global external handoffs remain open until mechanics interactions and production consumers are certified.",
+    "F8 adds five status-switch moves. See STATUS_SWITCH_MOVES.json for its separate source/visual evidence. The 19 global handoffs remain open.",
+    "F9 adds four weather setters and Chilly Reception; WEATHER_PILOT.json records the narrower tested interactions and visual scope.",
+    "F10 adds Substitute and Shed Tail: distinct doll HP, capped per-strike damage, blocked target effects, queued selected replacement, JSON restore and original doll art. See SUBSTITUTE_PILOT.json.",
+    "F11 adds reversible Transform with original capture/XP identity, temporary copied PP, real menu updates and an adapted appearance handoff. See TRANSFORM_PILOT.json.",
+    "F12 adds real ally position swaps with position-bound incoming damage, four-action ordering, repeat probability and an isolated four-body UI. All 19 now have scoped base pilots; production integration remains open.",
+    "Earlier per-stage limitations describe their original boundaries. LIVE_MOVE_INTEGRATION.json supersedes the old default-game rollout status; low-level flags-off behavior remains a compatibility contract."
+  ],
+  "references": [
+    "https://github.com/smogon/pokemon-showdown/blob/master/data/moves.ts",
+    "https://github.com/smogon/pokemon-showdown/blob/master/sim/battle-actions.ts",
+    "https://bulbapedia.bulbagarden.net/wiki/Dragon_Tail"
+  ],
+  "test_reports": [
+    {
+      "path": ".godot\\switch_move_checks\\gpu.json",
+      "sha256": "ab4d88761684dec49bd03fa244c1d216fcdca4e6be366aa05af75a5e8e7199a8",
+      "move_count": 5,
+      "checks": 1844,
+      "server_samples": 120
+    },
+    {
+      "path": ".godot\\status_switch_checks\\gpu.json",
+      "sha256": "84132c1601bf5711cfc5e315804e1d14c1b3d8188597a97896051095fb477ed5",
+      "move_count": 5,
+      "checks": 1326,
+      "server_samples": 120
+    },
+    {
+      "path": ".godot\\weather_checks\\gpu.json",
+      "sha256": "63e814f4f3e732aaea333bf3b95cac0c9f2c60f3d7d78016a17bcd53785a7616",
+      "move_count": 5,
+      "checks": 1523,
+      "server_samples": 120
+    },
+    {
+      "path": ".godot\\substitute_checks\\gpu.json",
+      "sha256": "aa43f653475283a31342f6b297c26d374383fd83dae41d69c5c2575d8b27283a",
+      "move_count": 2,
+      "checks": 453,
+      "server_samples": 48
+    },
+    {
+      "path": ".godot\\transform_checks\\gpu.json",
+      "sha256": "a085ee148eb82010bf594740c41e192aaf3f12168f9c0a3bc8371365e84339f9",
+      "move_count": 1,
+      "checks": 1221,
+      "server_samples": 72
+    },
+    {
+      "path": ".godot\\ally_switch_checks\\gpu.json",
+      "sha256": "c9743915bcd16a872c1ae9fca75b541a217dddd3e41105387044748dea0e2809",
+      "move_count": 1,
+      "checks": 1044,
+      "server_samples": 48,
+      "format": "doubles_position_pilot_v1"
+    }
+  ],
+  "status_move_report": {
+    "path": "docs/current/STATUS_SWITCH_MOVES.json",
+    "sha256": "0d2caa90d435a2f6fa82f9c1dd74a02d275e055a0b2a06b76fab68b5c218d882"
+  },
+  "weather_move_report": {
+    "path": "docs/current/WEATHER_PILOT.json",
+    "sha256": "b4fd9f9545def1834d5d1f524ab015606a180e19964daa9de413d3f1b58142d9"
+  },
+  "substitute_report": {
+    "path": "docs/current/SUBSTITUTE_PILOT.json",
+    "sha256": "4bda93d12eafd666aa394e34f02d36aca4360bb9d185f4601b6bc862a4f31046"
+  },
+  "transform_report": {
+    "path": "docs/current/TRANSFORM_PILOT.json",
+    "sha256": "cab355bed6200d1e5b8a51ea558dbb394dca74130afab339b12ec7894c710ec7"
+  },
+  "pending_production_certification_move_ids": [
+    "ally_switch",
+    "baton_pass",
+    "chilly_reception",
+    "circle_throw",
+    "dragon_tail",
+    "flip_turn",
+    "hail",
+    "parting_shot",
+    "rain_dance",
+    "roar",
+    "sandstorm",
+    "shed_tail",
+    "snowscape",
+    "substitute",
+    "teleport",
+    "transform",
+    "u_turn",
+    "volt_switch",
+    "whirlwind"
+  ],
+  "pilot_format_counts": {
+    "wild_singles_move_count": 18,
+    "isolated_doubles_move_count": 1
+  },
+  "ally_switch_report": {
+    "path": "docs/current/ALLY_SWITCH_PILOT.json",
+    "sha256": "8a76a8f96e1f8d4a04ed94844e72d04d080d5ae7f0e1b4efd8d988a4885005e9"
+  },
+  "game_session_single_specials_enabled": 18,
+  "live_runtime_admitted_move_count": 579,
+  "live_visual_registered_move_count": 900,
+  "live_game_report": {
+    "path": "docs\\current\\LIVE_MOVE_INTEGRATION.json",
+    "sha256": "401001cd7ff3ba6dd215ec87f9b6c7da3717b6696c241f4f24afb93ba6a3a7c2"
+  }
+}

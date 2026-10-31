@@ -1,0 +1,436 @@
+{
+  "phase": "ITEM_MOCHI_V13",
+  "status": "EV_ROUTES_PASS_FRIENDSHIP_PARITY_AND_HELD_BRIDGE_LIMITS_EXPLICIT",
+  "date": "2026-10-29",
+  "base": "c1f71c74",
+  "all_item_effects_certified": false,
+  "new_ids": [
+    "health_mochi",
+    "muscle_mochi",
+    "resist_mochi",
+    "genius_mochi",
+    "clever_mochi",
+    "swift_mochi",
+    "fresh_start_mochi"
+  ],
+  "headless_checks": 91991,
+  "gpu_checks": 91993,
+  "eligible_species_in_matrix": 1076,
+  "matrix_cases": 30128,
+  "owned_contexts": 756,
+  "matrix_outcomes": {
+    "APPLIED": 22596,
+    "NO_EFFECT": 7532
+  },
+  "native_scenarios": [
+    {
+      "attack_ev": 252,
+      "damage": 15,
+      "mode": 0
+    },
+    {
+      "attack_ev": 0,
+      "damage": 12,
+      "mode": 1
+    },
+    {
+      "attack_ev": 10,
+      "damage": 12,
+      "mode": 2
+    },
+    {
+      "campaign_unchanged": true,
+      "error": "Unknown held item",
+      "opened": false,
+      "route": "soothe_bell_dependency"
+    }
+  ],
+  "total_connected_field_effect_ids": 76,
+  "field_recovery_ids_verified": 41,
+  "field_training_ids_with_verified_routes": 35,
+  "field_mochi_ids_with_verified_ev_routes": 7,
+  "capture_ball_ids_connected": 12,
+  "friendship_policy": {
+    "change": 0,
+    "reference": "RHH mochi effect table has no friendship flags; retained for this profile",
+    "official_sv_parity_certified": false,
+    "contrast_unadopted": {
+      "repository": "Manurocker95/Pokemon-Essentials-21-With-Unofficial-EBDX",
+      "commit": "ebf87d8d2402457e7413577d6b98ab4595d044d3",
+      "path": "Plugins/Generation 9 Pack Scripts/[005] Items/[002] DLC Items.rb",
+      "sha256": "a89ca07974cff769d63b1014ebdf9a2f9fe75e405e827c82bf3887117d4c50c6"
+    },
+    "notes": "Gen9 Pack copies vitamin handlers and changes friendship even on Reset; not silently combined with RHH. Other public tables also differ."
+  },
+  "known_native_held_dependency": {
+    "id": "soothe_bell",
+    "status": "NATIVE_START_REJECTED_UNMAPPED_HELD_ITEM",
+    "native_error": "Unknown held item",
+    "campaign_unchanged": true,
+    "field_service_cases_verified": true,
+    "native_success_fixture_uses": "leftovers",
+    "resolved": false
+  },
+  "verification": {
+    "status": "PASS",
+    "base": "c1f71c74",
+    "groups": [
+      {
+        "status": "PASS",
+        "checks_reported": 0,
+        "errors": [],
+        "last_line": "[ DONE ] loading_editor_layout",
+        "group": "import",
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--path",
+          "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+          "--headless",
+          "--editor",
+          "--import",
+          "--quit"
+        ],
+        "exit_code": 0,
+        "seconds": 7.52,
+        "terminated_after_script_error": false,
+        "expected_negative_diagnostics": [],
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\item_mochi_v13\\runs\\1793303755435989500\\import.log",
+        "log_sha256": "10460b7ea9f3c81382fab0b1676d730be2bae922017704604420034c7bcf6ec2"
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 91991,
+        "errors": [],
+        "last_line": "ITEM_MOCHI_V13 PASS checks=91991 cases=30128 GPU=false",
+        "group": "mochis",
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--path",
+          "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+          "--headless",
+          "--script",
+          "tests/gameplay/item_mochi_v13.gd"
+        ],
+        "exit_code": 0,
+        "seconds": 40.89,
+        "terminated_after_script_error": false,
+        "expected_negative_diagnostics": [],
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\item_mochi_v13\\runs\\1793303755435989500\\mochis.log",
+        "log_sha256": "32e214bbe6c5e7d3731b467ad68874878d389af5c7ed41be492cb7d101216425"
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 472,
+        "errors": [],
+        "last_line": "=== PROJECT TEST RESULT: 472 PASS / 0 FAIL ===",
+        "group": "core",
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--path",
+          "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+          "--headless",
+          "--script",
+          "tests/test_runner.gd"
+        ],
+        "exit_code": 0,
+        "seconds": 9.38,
+        "terminated_after_script_error": false,
+        "expected_negative_diagnostics": [
+          "ERROR: Parse JSON failed. Error at line 0: Expected key"
+        ],
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\item_mochi_v13\\runs\\1793303755435989500\\core.log",
+        "log_sha256": "aa9de68f0c22929ceffa211b3a242db78885d34d92f9c3d971e6d9f31801cd99"
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 33633,
+        "errors": [],
+        "last_line": "ITEM_FIELD_V9 PASS checks=33633 cases=6456 GPU=false",
+        "group": "growth",
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--path",
+          "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+          "--headless",
+          "--script",
+          "tests/gameplay/item_field_growth_v9.gd"
+        ],
+        "exit_code": 0,
+        "seconds": 18.25,
+        "terminated_after_script_error": false,
+        "expected_negative_diagnostics": [],
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\item_mochi_v13\\runs\\1793303755435989500\\growth.log",
+        "log_sha256": "74f5db12e9a6d3437aa5597b8e03b2517d38a1fe1070f5f29b64b0ea171be667"
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 15376,
+        "errors": [],
+        "last_line": "ITEM_FIELD_V10 PASS checks=15376 cases=5092 GPU=false",
+        "group": "ability",
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--path",
+          "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+          "--headless",
+          "--script",
+          "tests/gameplay/item_field_ability_v10.gd"
+        ],
+        "exit_code": 0,
+        "seconds": 20.02,
+        "terminated_after_script_error": false,
+        "expected_negative_diagnostics": [],
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\item_mochi_v13\\runs\\1793303755435989500\\ability.log",
+        "log_sha256": "0f8e566c8b636a88872586784e1c92bd4d7e6009352b1f59c6576972d07c62a4"
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 6990,
+        "errors": [],
+        "last_line": "ITEM_FIELD_V7 PASS checks=6990 cases=504 GPU=false",
+        "group": "training",
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--path",
+          "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+          "--headless",
+          "--script",
+          "tests/gameplay/item_field_training_v7.gd"
+        ],
+        "exit_code": 0,
+        "seconds": 9.94,
+        "terminated_after_script_error": false,
+        "expected_negative_diagnostics": [],
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\item_mochi_v13\\runs\\1793303755435989500\\training.log",
+        "log_sha256": "240a74b91ec68c0a5ff1913ba32af1d602b686b99462713fe003b5128a839fc3"
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 118,
+        "errors": [],
+        "last_line": "FIELD_NATIVE PASS checks=118 GPU=false errors=0",
+        "group": "native",
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--path",
+          "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+          "--headless",
+          "--script",
+          "tests/gameplay/field_native_test_runner.gd"
+        ],
+        "exit_code": 0,
+        "seconds": 53.47,
+        "terminated_after_script_error": false,
+        "expected_negative_diagnostics": [],
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\item_mochi_v13\\runs\\1793303755435989500\\native.log",
+        "log_sha256": "4532edaa65a10230fbf1101f37a4944f5c8487c3292fb8a6d48e1b391f3fb333"
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 912,
+        "errors": [],
+        "last_line": "FIELD_RESTORE_INTEGRATION PASS checks=912 errors=0",
+        "group": "restore",
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--path",
+          "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+          "--headless",
+          "--script",
+          "tests/gameplay/field_restore_integration_test_runner.gd"
+        ],
+        "exit_code": 0,
+        "seconds": 43.33,
+        "terminated_after_script_error": false,
+        "expected_negative_diagnostics": [],
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\item_mochi_v13\\runs\\1793303755435989500\\restore.log",
+        "log_sha256": "b680833ccd3f8bdeff5c7b4503bff0c6063eb4adfa9db317e952ca3d48d46478"
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 91993,
+        "errors": [],
+        "last_line": "ITEM_MOCHI_V13 PASS checks=91993 cases=30128 GPU=true",
+        "group": "mochi_gpu",
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--path",
+          "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+          "--resolution",
+          "1280x720",
+          "--script",
+          "tests/gameplay/item_mochi_v13.gd",
+          "--",
+          "--capture"
+        ],
+        "exit_code": 0,
+        "seconds": 40.56,
+        "terminated_after_script_error": false,
+        "expected_negative_diagnostics": [],
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\item_mochi_v13\\runs\\1793303755435989500\\mochi_gpu.log",
+        "log_sha256": "d5402fbb042e13780ce485efae8a73b3d73fae83c493a1492b5e8eff59b557a8"
+      }
+    ],
+    "integrity_before": {
+      "status": "PASS",
+      "base": "c1f71c74b35667e55ef412b2657a3ba6311c57a8",
+      "protected_files": 23004,
+      "preserved_absent_skip_worktree": 15647,
+      "mode": "HASH_IF_METADATA_CHANGED",
+      "allowed_changes": [
+        "modules/inventory/field_item_effects.gd",
+        "modules/inventory/field_mochi_effects.gd",
+        "modules/inventory/field_mochi_effects.gd.uid",
+        "scenes/visual/field_item_bag.gd",
+        "tests/gameplay/item_mochi_v13.gd",
+        "tests/gameplay/item_mochi_v13.gd.uid",
+        "tools/verification/run_mochi_v13.py"
+      ]
+    },
+    "integrity_after": {
+      "status": "PASS",
+      "base": "c1f71c74b35667e55ef412b2657a3ba6311c57a8",
+      "protected_files": 23004,
+      "preserved_absent_skip_worktree": 15647,
+      "mode": "FULL_CONTENT_HASHES",
+      "allowed_changes": [
+        "docs/current/ITEM_MOCHI_V13.md",
+        "modules/inventory/field_item_effects.gd",
+        "modules/inventory/field_mochi_effects.gd",
+        "modules/inventory/field_mochi_effects.gd.uid",
+        "scenes/visual/field_item_bag.gd",
+        "tests/gameplay/item_mochi_v13.gd",
+        "tests/gameplay/item_mochi_v13.gd.uid",
+        "tools/verification/run_mochi_v13.py"
+      ]
+    },
+    "tested_sources_sha256": {
+      "modules/inventory/field_item_effects.gd": "718f70ddf73f9d3072cc7a991f4fe2a048e334ef2eafddd9f48582e91e9041ef",
+      "modules/inventory/field_mochi_effects.gd": "98524b8425cfac08048954d3a024a0bb1e9320e4c435a904a275ae8ef9bd1a3b",
+      "modules/inventory/field_mochi_effects.gd.uid": "0c029b8d52fc5cd0259e9a8838d964e8019c400bf124f228e7c3ab76e1fb4990",
+      "scenes/visual/field_item_bag.gd": "12a9067537ad24342d7bc0377c4fed091ceba2d0458b15d826ed81210558c825",
+      "tests/gameplay/item_mochi_v13.gd": "97bbef0df590492f5a2700f99beb88aa74623cd8853e24db62036e23b002e262",
+      "tests/gameplay/item_mochi_v13.gd.uid": "e0427a50aa52c6c298ac522bd8f2ab3fe56b21ee1aabd87e891726149c79dba5",
+      "tools/verification/run_mochi_v13.py": "afab2ac6bb046172f3082dba860d520419b36a4175d5821f9f0dbec1ca977b60"
+    }
+  },
+  "primary_reference": {
+    "repository": "rh-hideout/pokeemerald-expansion",
+    "commit": "8654616bd38d9b28cc7dd8f3d0b4cb030aa2d40c",
+    "files": [
+      {
+        "path": "src/data/items.h",
+        "url": "https://raw.githubusercontent.com/rh-hideout/pokeemerald-expansion/8654616bd38d9b28cc7dd8f3d0b4cb030aa2d40c/src/data/items.h",
+        "sha256": "107f1b78a457f3a9c48749f325d674b62fe559b0ebfc365db13e82b00b19ecd3",
+        "bytes": 506153
+      },
+      {
+        "path": "src/pokemon.c",
+        "url": "https://raw.githubusercontent.com/rh-hideout/pokeemerald-expansion/8654616bd38d9b28cc7dd8f3d0b4cb030aa2d40c/src/pokemon.c",
+        "sha256": "f48b7e7891bb105b5518ebd14ff843a69e32eee246bf05d33d3084a3d6a5ddf0",
+        "bytes": 238018
+      },
+      {
+        "path": "src/data/pokemon/item_effects.h",
+        "url": "https://raw.githubusercontent.com/rh-hideout/pokeemerald-expansion/8654616bd38d9b28cc7dd8f3d0b4cb030aa2d40c/src/data/pokemon/item_effects.h",
+        "sha256": "6cf395c29bbfcf425eeb965f2101edb8ba139c6cb24beef0521b92f6853a5e5f",
+        "bytes": 10623
+      },
+      {
+        "path": "include/constants/item_effects.h",
+        "url": "https://raw.githubusercontent.com/rh-hideout/pokeemerald-expansion/8654616bd38d9b28cc7dd8f3d0b4cb030aa2d40c/include/constants/item_effects.h",
+        "sha256": "264f2957eeb8bcfd26e24fd15d800f38a8e1418dd8688ed4155e40a5336e2139",
+        "bytes": 3866
+      }
+    ],
+    "executed": false
+  },
+  "base_item_matrix": "docs/current/ITEM_FIELD_V8.csv.txt",
+  "field_use_overrides": {
+    "rare_candy": "FIELD_GROWTH_STAGED_DECISIONS_XP_CAP_HP_BASE_FRIENDSHIP_SAVE_NATIVE_VERIFIED_ORIGIN_BONUS_PENDING",
+    "exp_candy_xs": "FIELD_GROWTH_STAGED_DECISIONS_XP_CAP_HP_BASE_FRIENDSHIP_SAVE_NATIVE_VERIFIED_ORIGIN_BONUS_PENDING",
+    "exp_candy_s": "FIELD_GROWTH_STAGED_DECISIONS_XP_CAP_HP_BASE_FRIENDSHIP_SAVE_NATIVE_VERIFIED_ORIGIN_BONUS_PENDING",
+    "exp_candy_m": "FIELD_GROWTH_STAGED_DECISIONS_XP_CAP_HP_BASE_FRIENDSHIP_SAVE_NATIVE_VERIFIED_ORIGIN_BONUS_PENDING",
+    "exp_candy_l": "FIELD_GROWTH_STAGED_DECISIONS_XP_CAP_HP_BASE_FRIENDSHIP_SAVE_NATIVE_VERIFIED_ORIGIN_BONUS_PENDING",
+    "exp_candy_xl": "FIELD_GROWTH_STAGED_DECISIONS_XP_CAP_HP_BASE_FRIENDSHIP_SAVE_NATIVE_VERIFIED_ORIGIN_BONUS_PENDING",
+    "ability_capsule": "FIELD_ABILITY_TRANSACTION_POLICY_SAVE_NATIVE_VERIFIED_FORM_ROUTE_DEPENDENCY_EXPLICIT",
+    "ability_patch": "FIELD_ABILITY_TRANSACTION_POLICY_SAVE_NATIVE_VERIFIED_FORM_ROUTE_DEPENDENCY_EXPLICIT",
+    "health_mochi": "MOCHI_EV_ROUTE_OWNERSHIP_SAVE_NATIVE_VERIFIED_RHH_FRIENDSHIP_UNCHANGED_SV_PARITY_PENDING",
+    "muscle_mochi": "MOCHI_EV_ROUTE_OWNERSHIP_SAVE_NATIVE_VERIFIED_RHH_FRIENDSHIP_UNCHANGED_SV_PARITY_PENDING",
+    "resist_mochi": "MOCHI_EV_ROUTE_OWNERSHIP_SAVE_NATIVE_VERIFIED_RHH_FRIENDSHIP_UNCHANGED_SV_PARITY_PENDING",
+    "genius_mochi": "MOCHI_EV_ROUTE_OWNERSHIP_SAVE_NATIVE_VERIFIED_RHH_FRIENDSHIP_UNCHANGED_SV_PARITY_PENDING",
+    "clever_mochi": "MOCHI_EV_ROUTE_OWNERSHIP_SAVE_NATIVE_VERIFIED_RHH_FRIENDSHIP_UNCHANGED_SV_PARITY_PENDING",
+    "swift_mochi": "MOCHI_EV_ROUTE_OWNERSHIP_SAVE_NATIVE_VERIFIED_RHH_FRIENDSHIP_UNCHANGED_SV_PARITY_PENDING",
+    "fresh_start_mochi": "MOCHI_EV_ROUTE_OWNERSHIP_SAVE_NATIVE_VERIFIED_RHH_FRIENDSHIP_UNCHANGED_SV_PARITY_PENDING"
+  },
+  "visual_review": {
+    "path": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\item_mochi_v13\\mochi_bag.png",
+    "sha256": "0ce2d39191865caa2dbd8ea7a92a661f4f436c6d32d0be6ca2c4555ebe01b0a7",
+    "reviewed": true,
+    "result": "Reset is distinct in bag; description and controls fit 1280x720; existing item artwork retained."
+  },
+  "attempts_preserved": [
+    {
+      "path": ".godot\\item_mochi_v13\\runs\\1793303320849647200\\results.json",
+      "sha256": "33677d74e21edb61efa6f7d7912db3fa1c472f6fe582ba0b37a5c336f4a47957",
+      "status": "FAIL",
+      "error": "mochis"
+    },
+    {
+      "path": ".godot\\item_mochi_v13\\runs\\1793303418157014700\\results.json",
+      "sha256": "f36d3cd3c51947c98e70c711a31bd6c722f724cadf0485d9fc451b4cf11787c1",
+      "status": "FAIL",
+      "error": "mochis"
+    },
+    {
+      "path": ".godot\\item_mochi_v13\\runs\\1793303507780474100\\results.json",
+      "sha256": "370f6ed945d3cb3bb5b88ee1208803d153395ee566e3051bb12a29a7dda0316a",
+      "status": "FAIL",
+      "error": "mochis"
+    },
+    {
+      "path": ".godot\\item_mochi_v13\\runs\\1793303626290908500\\results.json",
+      "sha256": "4ae5bba51e1887167507b562cc88dd9b8290a2c840c5e933857a975852e033e1",
+      "status": "PASS",
+      "error": ""
+    },
+    {
+      "path": ".godot\\item_mochi_v13\\runs\\1793303755435989500\\results.json",
+      "sha256": "3d52f3cd0caea7178efa8e15e08770f3be39829c7a607b40494c08d974b4d754",
+      "status": "PASS",
+      "error": ""
+    }
+  ],
+  "limitations": [
+    "Official SV friendship parity unresolved; this EV implementation preserves friendship according to pinned RHH effects, not vitamin/feather extrapolation.",
+    "Soothe Bell field use verified, but native battle start with it equipped remains blocked by Unknown held item; not certified as native held support.",
+    "Known live-target field boundary rejects KO and temporary battle transforms; no revival.",
+    "HP deficit is preserved with a minimum of one HP when max HP decreases.",
+    "All 1076 permitted species/forms verified for EV routing/stats; not all native ability/item/form interactions exhaustively certified.",
+    "No new loot grants, mints, Hyper Training fields, data/artwork/policies, RNG, native worker packages or save schema changes.",
+    "Failed parse and script-error attempts are retained; the script-error attempt wrote a misleading partial PASS JSON but the outer runner rejected it as FAIL."
+  ],
+  "post_documentation_integrity": {
+    "status": "PASS",
+    "base": "c1f71c74b35667e55ef412b2657a3ba6311c57a8",
+    "protected_files": 23004,
+    "preserved_absent_skip_worktree": 15647,
+    "mode": "HASH_IF_METADATA_CHANGED",
+    "allowed_changes": [
+      "AGENTS.md",
+      "docs/current/ITEM_MOCHI_V13.json",
+      "docs/current/ITEM_MOCHI_V13.md",
+      "docs/current/ITEM_SYSTEM_CURRENT_STATUS.json",
+      "docs/current/NEXT_STEPS.md",
+      "docs/current/PROJECT_STATE.md",
+      "docs/current/START_HERE.md",
+      "modules/inventory/field_item_effects.gd",
+      "modules/inventory/field_mochi_effects.gd",
+      "modules/inventory/field_mochi_effects.gd.uid",
+      "scenes/visual/field_item_bag.gd",
+      "tests/gameplay/item_mochi_v13.gd",
+      "tests/gameplay/item_mochi_v13.gd.uid",
+      "tools/verification/run_mochi_v13.py"
+    ]
+  }
+}

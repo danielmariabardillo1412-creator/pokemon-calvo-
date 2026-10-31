@@ -1,0 +1,48 @@
+{
+  "packet": "ITEM_CLOSURE_V2",
+  "status": "REVIEWED_WITH_LIMITS",
+  "writer_active": false,
+  "mission_base": "78c3b0f7d6ccfbe8f26f75070d9737ccdaa90035",
+  "tasks": {
+    "O100": {
+      "status": "PASS",
+      "family_base": "78c3b0f7d6ccfbe8f26f75070d9737ccdaa90035",
+      "plan": "WORK_ORDER.md",
+      "note": "COVERAGE.json/CSV rebuilt from the real catalog and policies: 2,222 rows, 0 UNKNOWN. Audit tests 10/10 PASS and --check PASS. Counts: permission 625/43/1554; native 619 present / 6 missing; art 1011/1055/156; machine 338 mapped / 229 verified / 109 pending; evolution 57/15 edges. Evidence: evidence/O100/results.json and REVIEW.md.",
+      "checks": 10,
+      "evidence": "docs/opencode/ITEM_CLOSURE_V2/evidence/O100/results.json"
+    },
+    "O110": {
+      "status": "PASS",
+      "family_base": "78c3b0f7d6ccfbe8f26f75070d9737ccdaa90035",
+      "plan": "O110_BATTLE_SUPPORT.md",
+      "note": "11 bag-effect IDs implemented with native simulator APIs: six X items (+2 stages, cap +6, rejection without spend), Dire Hit Focus Energy, Guard Spec Mist, and reusable blue/yellow/red flutes. Eight boosters consume one unit only on a successful effect. Family gate PASS: 14 groups, 13,274 checks. friendship base gain verified; origin/Luxury pending. Per-family guard isolation not achieved.",
+      "checks": 13274,
+      "evidence": "docs/opencode/ITEM_CLOSURE_V2/evidence/O110/results.json"
+    },
+    "O120": {
+      "status": "PARTIAL_VERIFIED",
+      "family_base": "78c3b0f7d6ccfbe8f26f75070d9737ccdaa90035",
+      "plan": "O120_HELD_CONTEXTS.md",
+      "note": "Smoke Ball verified at the Run boundary through native held_item_active: no escape RNG and no consumption. Cleanse Tag/Pure Incense are PARTIAL_VERIFIED_RATE_ONLY (validated encounter-table copy; step-period semantics pending). Amulet Coin, Exp. Share, Linking Cord and Luck Incense remain concrete dependencies. Family gate PASS: 9 groups, 1,606 checks, 3 captures including the Smokeball bag and equipped states. Per-family guard isolation not achieved. Limitación verificada por Codex: Cleanse Tag/Pure Incense aún no pueden entrar equipados en combate nativo por falta de descriptor; solo la tasa está probada.",
+      "checks": 1606,
+      "evidence": "docs/opencode/ITEM_CLOSURE_V2/evidence/O120/results.json"
+    },
+    "O190": {
+      "status": "REVIEWED_WITH_LIMITS",
+      "family_base": "78c3b0f7d6ccfbe8f26f75070d9737ccdaa90035",
+      "plan": "WORK_ORDER.md",
+      "note": "Revisión agregada de Codex y suite conjunta PASS tras C1/C2. Guardas históricas por familia no reconstruidas; dependencias explícitas.",
+      "checks": 1285,
+      "evidence": "docs/opencode/ITEM_CLOSURE_V2/FINAL_RESULTS.json"
+    }
+  },
+  "independent_codex_review": "PASS_WITH_DOCUMENTED_LIMITS",
+  "previous_independent_review": "NOT_ACCEPTED",
+  "acceptance_by_codex": true,
+  "notes": "Codex revisó la entrega, reprodujo y corrigió C1/C2, y repitió la suite completa. Aceptado el alcance con límites documentados; no COMPLETE del catálogo. Checkpoint funcional local registrado.",
+  "codex_review": "docs/opencode/ITEM_CLOSURE_V2/evidence/O190/REVIEW.md",
+  "final_results": "docs/opencode/ITEM_CLOSURE_V2/FINAL_RESULTS.json",
+  "final_review": "docs/opencode/ITEM_CLOSURE_V2/FINAL_REVIEW.md",
+  "runtime_checkpoint": "0f28371471ff76c878f7cbe2c2fc10b963d29764"
+}

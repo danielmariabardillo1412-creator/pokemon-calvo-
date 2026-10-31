@@ -1,0 +1,169 @@
+{
+  "captures": [
+    {
+      "path": ".godot/fixed_damage_checks/dragon_rage_native.png",
+      "sha256": "783012f370f4524447c2a70997528e830d50d4f65eab2bfb9a8866dc53f37d60"
+    },
+    {
+      "path": ".godot/fixed_damage_checks/dragon_rage_after.png",
+      "sha256": "53c05f009235998d22ca13b07c9e77b1b382afee8aaeff5b294c4fd147ea7a4f"
+    },
+    {
+      "path": ".godot/fixed_damage_checks/sonic_boom_native.png",
+      "sha256": "3095d9e58b990dbb3552e0a15c40a9d1694d51302f86cf5d285cbe436542aba6"
+    },
+    {
+      "path": ".godot/fixed_damage_checks/sonic_boom_after.png",
+      "sha256": "6c8443aff38a17cecdd68abc4d733e15643e9b514a413f0c7d54f1dd1b6f8d68"
+    },
+    {
+      "path": ".godot/fixed_damage_checks/seismic_toss_native.png",
+      "sha256": "78f51d2500373cd685ee24e98c0c0aecfb0f0bb2d8922c66a768446ce22a8b0f"
+    },
+    {
+      "path": ".godot/fixed_damage_checks/seismic_toss_after.png",
+      "sha256": "ce160c6a6d89020a9cdc68f1ac2bdb08da0b152799ee903842057e912892437f"
+    },
+    {
+      "path": ".godot/fixed_damage_checks/night_shade_native.png",
+      "sha256": "84d6c26cc7e92c5ea68329d397a87aeda47b03087a412e27fb887bbb67d13be8"
+    },
+    {
+      "path": ".godot/fixed_damage_checks/night_shade_after.png",
+      "sha256": "a43b12ae17789babe8f584b2e4ef76cddd2bc7204b4d667a3e791d5fa5e5639f"
+    },
+    {
+      "path": ".godot/fixed_damage_checks/super_fang_native.png",
+      "sha256": "32157d4a956ac33a37d8a4eef5ec498feed8da44e3d452fb23815e27ed9b2182"
+    },
+    {
+      "path": ".godot/fixed_damage_checks/super_fang_after.png",
+      "sha256": "549635205cea5d686265a66c1d92cd0cf08ccdfef1a47cb0d25c833ee93f74f4"
+    },
+    {
+      "path": ".godot/fixed_damage_checks/natures_madness_native.png",
+      "sha256": "2ea419c02d2cf1c559785c90f5e5b766073e956b5822c3c0aad1be8693b3b87d"
+    },
+    {
+      "path": ".godot/fixed_damage_checks/natures_madness_after.png",
+      "sha256": "6f4b8421157a384e927dfab6a5563e2d6c8b1288e1ebb195ee07ec472460587d"
+    },
+    {
+      "path": ".godot/fixed_damage_checks/ruination_native.png",
+      "sha256": "1c24686b9530ad016be854e5d850df52c6307a79a8f70e91719430ffecc6a669"
+    },
+    {
+      "path": ".godot/fixed_damage_checks/ruination_after.png",
+      "sha256": "920369485313773214e8b3d3d06c87ebb9820ae7d2e02cc92d0f7c004647cc25"
+    }
+  ],
+  "cases": 168,
+  "checks": 1364,
+  "corrected_existing": [
+    "ruination"
+  ],
+  "errors": [],
+  "gpu": true,
+  "moves": [
+    "dragon_rage",
+    "sonic_boom",
+    "seismic_toss",
+    "night_shade",
+    "super_fang",
+    "natures_madness",
+    "ruination"
+  ],
+  "newly_admitted": [
+    "dragon_rage",
+    "sonic_boom",
+    "seismic_toss",
+    "night_shade",
+    "super_fang",
+    "natures_madness"
+  ],
+  "reference_package": "@pkmn/sim@0.10.11",
+  "source_sha256": {
+    ".godot/move_batch_catalog/index.json": "bb327ada0e33347980260a7e4a8af65e8622171002c64d3ecf56759aa92dbee1",
+    "data/normalized/pokemon_api.json": "719d14c082bdba03b26e801d23fb8887d0a0f4376348cf4a27e79a4b0a3c08b3",
+    "data/raw/pokemon_api.json": "2efc1538081e7849d6e04555570ca28c19b13f09f0fe0c7ce38329881972f24a",
+    "modules/battle/application/fixed_damage_move_rules.gd": "e7cdfd7d5d299421e3f65f9d9ac248a87b438a5be32448b59b206ebef7a9d561",
+    "modules/battle/application/live_move_profile.gd": "7edf62c741c449d18a00ad308cbef226d4d42b5dc23973d8b7d2f70a07aec2c6",
+    "modules/battle/application/turn_executor.gd": "0b3f04b257d015055e7b22d112d0cf2058ad84188366a88aaf0151ea86ca5383",
+    "modules/battle/effects/battle_effect_executor.gd": "c0ad648eaf6a6a5dfe0efceb46948488d132e177b824feb8392f27d0f678bac7",
+    "scenes/visual/community_move_preview.gd": "7674d3a61e113e085d12132a4e10461aedd3a760516ab68700f2868f0f3fd4de",
+    "tests/battle/fixed_damage_move_test_runner.gd": "6bee0f2c3fca43b307a142fbfca7205e70f077be4893456a579f8038720c4c71"
+  },
+  "status": "LOCAL_FIXED_DAMAGE_BATCH_VALIDATED",
+  "scope": "Live singles fixed constants/level/current-HP damage; canonical data and artwork unchanged",
+  "admitted_move_count_at_validation": 591,
+  "remaining_mechanics_count_at_validation": 259,
+  "external_reference_cases": 1932,
+  "external_fixed_damage_cases": 1332,
+  "self_tests": {
+    "status": "PASS",
+    "unit_tests": 24,
+    "real_adapter_negative_controls": 3
+  },
+  "regressions": {
+    "core": {
+      "passed": 472,
+      "failed": 0
+    },
+    "playback": {
+      "passed": 20809,
+      "failed": 0
+    },
+    "trainer_corpus": {
+      "passed": 628,
+      "failed": 0
+    },
+    "data_v3": {
+      "passed": 624,
+      "failed": 9,
+      "unchanged_known_failures": [
+        "data_v3_ability_contract_report_counts",
+        "data_v3_ability_contract_report_ids",
+        "data_v3_bad_dreams_source_contract",
+        "data_v3_end_to_end_shadow_exclusion_and_reports_frozen",
+        "data_v3_ice_body_source_contract",
+        "data_v3_merciless_source_contract",
+        "data_v3_rain_dish_source_contract",
+        "data_v3_rivalry_source_contract",
+        "data_v3_stakeout_source_contract"
+      ]
+    }
+  },
+  "protected_game_source_changes": [
+    "modules/battle/application/fixed_damage_move_rules.gd",
+    "modules/battle/application/live_move_profile.gd",
+    "modules/battle/application/turn_executor.gd"
+  ],
+  "evidence": {
+    ".godot/fixed_damage_checks/gpu.json": "cc18bea744b1c927ea0a31bc04440a9e20301182635816fa285ab965d78ec357",
+    ".godot/fixed_damage_checks/gpu.log": "470efe09f322cc5a14a301be28f798aa3da0f949b9e5103a54161e49f3952b95",
+    ".godot/fixed_damage_checks/core.log": "6a38a1e3bfdd2cd0b54df24edfa2a4577254b169d2718e3252f9734cf1f82f94",
+    ".godot/fixed_damage_checks/trainer.log": "f4c3b989dfb4405b7d6f78524c112ab2457fbc7b14f54f91c9eadfac02cd35f6",
+    ".godot/fixed_damage_checks/data_v3.log": "d64f159019cf24f9f3747ac83c44fdc2062d210be1dbb8383fd72eb29009da28",
+    ".godot/fixed_damage_checks/playback.log": "a4ecb5dfc466963d823d3cb59b37d13699535e4817a47850577ec13b3a49fbb6",
+    ".godot/fixed_damage_checks/contact_native.png": "d18327703deb995b8617d0fe5e17b36a097f13715e7f70ff25ecd8745ba21033",
+    ".godot/fixed_damage_checks/contact_after.png": "f0216c111b18099c4822ec152aca54f8acf494f0b5fa869c024a18afa4cefe71",
+    ".godot/battle_reference/latest/report.json": "3780ea561e0d2a5b1851aa2c2d3d3e69e4f2599fbfa8f9155a2e580b3b5655ae",
+    ".godot/battle_reference/latest/manifest.json": "9b537a18d5fb73a62de2c48c878ae5cde1b6d3fa435923dee46c3ba3f7822fa2",
+    ".godot/battle_reference/latest/reference.json": "c358dbee24b55bb7e874c4c442eb7e083acd42bf1af2d77e24c412ac0f2581d6",
+    ".godot/battle_reference/latest/godot.json": "3b9ebcfac1e8f4c1707938989667f5d8092914b12a10938264655a1e7d7e33a1",
+    ".godot/battle_reference/latest/sources_before.json": "7eb79a9341f1c15a22a8160de7ca2600fb711e106a3992bbeab51d55e9b481a3",
+    ".godot/battle_reference/negative_controls/checks.json": "1918fb32aa33c052a0ff2eb9d9ef92e684cfb311253763c009137be96752c829",
+    ".godot/battle_reference/self_test.log": "2b257235eaf4a0a20abe1ec03181b79e29de53c7b7fb2fb42fd9dc25e0509908"
+  },
+  "reference_definition_sha256": "79056d03912572ad0e4d86133ff0559f508a77bb13691ea60f0cddcff490b40a",
+  "visual_review": "Seven native and seven after-playback GPU captures inspected; clips/HUD restore and exact displayed HP confirmed in these samples.",
+  "fixture_correction": "The first UI fixture used excluded Splash, which became Struggle and KOed the low-HP target by recoil. Replaced only that test action with admitted Swords Dance and reran the complete focal gate.",
+  "limits": [
+    "Singles only; no Dynamax, doubles or universal ability/protection certification.",
+    "Ruination power 1 and Super Fang contact=false remain frozen in canonical data; the live extension supplies the correct effect/contact.",
+    "Only fixed damage has exact external HP parity; ordinary damage variance/critical calculations are outside this comparison.",
+    "Contact retaliation reuses the existing framework, including its previous defender-KO limitations; tested external contact cases keep the defender alive.",
+    "Trainer AI uses the existing legal candidates and authoritative simulation; no new heuristic calibration or randomlock rules.",
+    "DATA V3 retains exactly nine preexisting failures. No data regeneration, new images, GitHub publication or export packaging."
+  ]
+}

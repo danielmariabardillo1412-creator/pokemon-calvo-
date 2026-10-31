@@ -54,7 +54,15 @@ func snapshot() -> Dictionary:
 func submit_turn(actions: Array[BattleAction]) -> Array[BattleEvent]:
 	if server == null:
 		return []
-	return server.submit_turn(actions)
+	var events := server.submit_turn(actions)
+	if server.state.live_moves_enabled:
+		for n in 4:
+			if server.state.phase != BattleState.WAITING_FOR_SWITCH: break
+			var side := StringName(server.state.pending_switch.side_id)
+			var choice: StringName = preload("res://modules/battle/application/live_move_profile.gd").replacement(server.state, side, _catalog)
+			if choice == &"": break
+			events.append_array(server.submit_switch_choice(side, choice, server.state.turn))
+	return events
 
 
 func fork() -> BattleSimulationFork:

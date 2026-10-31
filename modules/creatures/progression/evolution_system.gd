@@ -13,6 +13,7 @@ const UNSUPPORTED := "UNSUPPORTED"
 const TRIGGER_LEVEL_UP := &"level_up"
 const TRIGGER_USE_ITEM := &"use_item"
 const TRIGGER_TRADE := &"trade"
+const HeldItems = preload("res://modules/creatures/progression/progression_held_items.gd")
 
 # Canonical V3 trigger IDs use underscores. These mechanics have no runtime path in
 # the current progression model and must never fall through as apparently unknown
@@ -26,9 +27,8 @@ const UNSUPPORTED_TRIGGERS := [
 
 
 # Classify a single evolution record into a support bucket.
-# `source_species_id` is required to prove the only currently tolerated preserved
-# condition: a sole base_form selector equal to the species already being evaluated.
-# Every other preserved V3 condition remains DATA_ONLY until its real subsystem exists.
+# Supported conditions are a matching base_form selector and the level-up
+# Attack/Defense comparison. Every other condition remains DATA_ONLY.
 static func classify_record(
 	record: EvolutionRecord,
 	catalogs = null,
@@ -55,9 +55,7 @@ static func classify_record(
 
 # V3 preserves many real evolution requirements in `conditions`: friendship, time,
 # gender, known moves, held trade items, region/form routing, weather, party state,
-# location and more. None of those may be ignored and simplified to the primary
-# trigger. The sole safe exception is a redundant base_form selector that exactly
-# names the source species already being evaluated.
+# location and more. None may be ignored and simplified to the primary trigger.
 static func _conditions_are_runtime_compatible(
 	record: EvolutionRecord,
 	source_species_id: StringName,
@@ -66,13 +64,44 @@ static func _conditions_are_runtime_compatible(
 		return true
 	if source_species_id == &"":
 		return false
-	if record.conditions.size() != 1 or not record.conditions.has("base_form"):
-		return false
-	return StringName(str(record.conditions.get("base_form", ""))) == source_species_id
+	for key: String in record.conditions:
+		match key:
+			"base_form":
+				if StringName(str(record.conditions[key])) != source_species_id: return false
+			"relative_physical_stats":
+				var value: Variant = record.conditions[key]
+				if record.trigger != TRIGGER_LEVEL_UP or not _integer_number(value): return false
+				if int(value) not in [-1, 0, 1]: return false
+			_:
+				return false
+	return true
+
+
+static func _integer_number(value: Variant) -> bool:
+	return (typeof(value) == TYPE_INT or typeof(value) == TYPE_FLOAT) and float(value) == floor(float(value))
+
+
+# Persistent stats after level-up, without temporary battle stages/modifiers.
+static func level_up_context(creature: CreatureInstance) -> Dictionary:
+	var context := {"level": creature.level,"block_level_evolution":HeldItems.blocks_level_evolution(creature)}
+	if creature.stats != null:
+		context["attack"] = creature.stats.attack
+		context["defense"] = creature.stats.defense
+	return context
+
+
+static func _stat_relation_matches(record: EvolutionRecord, context: Dictionary) -> bool:
+	if not record.conditions.has("relative_physical_stats"): return true
+	var attack: Variant = context.get("attack")
+	var defense: Variant = context.get("defense")
+	if not _integer_number(attack) or not _integer_number(defense): return false
+	if int(attack) <= 0 or int(defense) <= 0: return false
+	var relation := 1 if int(attack) > int(defense) else -1 if int(attack) < int(defense) else 0
+	return relation == int(record.conditions["relative_physical_stats"])
 
 
 # Eligible evolutions for a species given a runtime context.
-# context keys: level (int), item_id (StringName), traded (bool).
+# context keys: level (int), item_id (StringName), traded (bool), attack/defense.
 # DATA_ONLY records are preserved but deliberately not executable: this prevents a
 # conditioned evolution from silently degrading into a weaker level/item/trade rule.
 static func evolution_candidates(
@@ -94,14 +123,14 @@ static func evolution_candidates(
 		var eligible := false
 		match rec.trigger:
 			TRIGGER_LEVEL_UP:
-				eligible = level >= rec.min_level
+				eligible = not bool(context.get("block_level_evolution",false)) and level >= rec.min_level
 			TRIGGER_USE_ITEM:
 				eligible = (item_id != &"" and item_id == rec.item_id)
 			TRIGGER_TRADE:
 				eligible = traded
 			_:
 				eligible = false
-		if eligible:
+		if eligible and _stat_relation_matches(rec, context):
 			out.append(rec)
 	return out
 
@@ -129,6 +158,7 @@ static func apply_evolution(
 	new_creature.ivs = creature.ivs.duplicate()
 	new_creature.evs = creature.evs.duplicate()
 	new_creature.nature_id = creature.nature_id
+	new_creature.is_shiny = creature.is_shiny
 	new_creature.friendship = creature.friendship
 	new_creature.status_ids = creature.status_ids.duplicate()
 	new_creature.held_item_id = creature.held_item_id

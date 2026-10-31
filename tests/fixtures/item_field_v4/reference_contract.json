@@ -1,0 +1,29 @@
+{
+  "repository": "https://github.com/Maruno17/pokemon-essentials",
+  "commit": "8c5911e4a4b07b07e832e4bb0d5d8859e88b4a9b",
+  "source_sha256": {
+    "Data/Scripts/013_Items/001_Item_Utilities.rb": "d475b64f3f0011bf9312ff3e0fbe415edc51edb46a60e00db084b4fc12b1bff8",
+    "Data/Scripts/014_Pokemon/001_Pokemon.rb": "3a7f233156f09a6d2e3729bdaa9d1962bfa946aaaa7403042aaea5dcdcdf8cb4"
+  },
+  "berry_ev_reduction": 10,
+  "friendship_boundaries": [
+    100,
+    200,
+    255
+  ],
+  "friendship_gain": [
+    10,
+    5,
+    2
+  ],
+  "soothe_bell_multiplier": [
+    3,
+    2
+  ],
+  "hp_max_change": "preserve deficit; living target minimum 1 HP",
+  "unavailable_contexts": [
+    "capture-ball friendship bonus",
+    "capture-map friendship bonus"
+  ],
+  "medicine_contract": "modules/inventory/battle_medicine_profile.json"
+}

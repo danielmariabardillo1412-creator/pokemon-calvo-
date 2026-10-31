@@ -1,128 +1,181 @@
-# ESTADO ACTUAL DEL PROYECTO
+# Estado del proyecto — 2026-10-31
 
-## Línea moderna certificada
+Estado actual: **los diez objetos evolutivos están restaurados.**
+La exclusión V26 fue una interpretación incorrecta de Codex, revocada en V27.
+Se conservan los catorce objetos equipados originales de esas rutas: los diez
+restaurados y los cuatro que ya seguían permitidos. Cordón Unión sigue excluido.
 
-El último freeze funcional/documental moderno antes de consolidar `main` es:
+[Corrección](ITEM_TRADE_RESTORATION_V27.md) · [Resultados](ITEM_TRADE_RESTORATION_V27.json).
+Regla futura del usuario: sustituir solo el intercambio. Donde se exige objeto,
+se conservará **nivel definido + objeto equipado**, sin intercambio. Sin equiparlo,
+el jugador puede conservar el Pokémon; no se hace evolución automática sin ese
+requisito. Ahora no se han implementado niveles ni cambios de evolución.
 
-`8552f52158ffc21c27b4e8f1dbc7caa63ac1a467`
+Primero se termina objetos. No excluir un objeto solo porque no dé una ventaja
+de combate: su función evolutiva o de campo también cuenta. Para niveles y ramas
+se consultarán las referencias cuando toque, según [la regla anotada](TRADE_EVOLUTIONS_FUTURE.md).
 
-Resultado verificado sobre ese SHA:
+3 grupos PASS / 5.102 comprobaciones, incluidas regresiones. 44 exclusiones,
+624 equipables permitidos y 621 con descriptor. Onix/Revestimiento Metálico
+comprobado expresamente; cantidades y demás datos se conservan al equipar/quitar.
+Checkpoint funcional: `6629fe570cdf4c891a937c3f2a74b45e960dc902`.
 
-- **18/18 workflows SUCCESS**;
-- Trainer Evaluation Corpus: **628 PASS / 0 FAIL**;
-- Trainer AI runtime 26.67 — CLOSED / COMPLETED;
-- Game-Ready 27.1 — CLOSED / VALIDATED;
-- Expertise V1 — CLOSED / CERTIFIED / FROZEN;
-- Campaign Persistence V1 — CLOSED / CERTIFIED / FROZEN.
+V26 y sus resultados son históricos y su decisión de excluir estos diez no está
+vigente. Los apartados siguientes describen checkpoints anteriores V1–V21.
 
-No existe P1-E ni queda una tranche Trainer AI obligatoria activa.
+V21: [consumibles de huida](ITEM_ESCAPE_V21.md). Poké Muñeco, Cola Skitty y
+Poké Señuelo ya se usan desde mochila nativa para terminar un encuentro salvaje,
+con consumo único y sin RNG/ataque extra. Son 18 usos directos de mochila con las
+medicinas. Siguen 77 efectos de campo y siete huecos de definición equipada.
 
-## Consolidación de `main`
+V20: [doce equipables revisados en bloque](ITEM_FIELD_HELD_V20.md). El registro
+nativo pasa a 618/625; quedan siete definiciones pendientes. Los usos especiales
+de mundo/mochila/concurso se mantienen separados; siguen 77 efectos de campo.
+Poké Muñeco conserva su ID mediante un nombre nativo compatible.
 
-La antigua `main` estaba en:
+V19: [importación automática por familias](ITEM_IMPORT_V19.md). Se compilan 42
+objetos de recuperación en bloque: 41 rutas anteriores conservadas y Flauta Azul
+nueva, reutilizable. V19 dejó 77 efectos de campo; ver V20 para el registro
+nativo actual. Clasificar 2.222 IDs no certifica todas sus mecánicas.
 
-`641d4b1fb0bcf964205d616e96f198f05d702197`
+Copia activa: `D:/Proyectos/Pokemon Calvo - Arquitectura Kilo`.
+Original separado e intacto: `D:/Proyectos/Pokemon Calvo`.
+Rama local: `codex/kilo-architecture-v1`; no hay remoto configurado.
 
-Ese commit divergía del linaje moderno únicamente por añadir un archivo vacío `this_should_not_be_called`; no contiene una feature del juego que deba conservarse en el árbol final.
+## Arquitectura y ejecución
 
-La operación autorizada de consolidación vive en:
+T001–T006B aceptadas en `208c06c0`: HUD, diagnóstico, API del campo, mochila,
+puente nativo y publicación validada de partidas. El motor nativo es la
+autoridad del combate. El servicio de objetos conserva las transacciones.
+El motor anterior sigue teniendo consumidores; no es código descartable.
 
-`chore/main-baseline-consolidation-v1`
+La demo principal visual hereda del mundo técnico. Tiene movimiento, encuentros,
+captura, combates, mochila, PC, progresión y guardado. No es una campaña completa.
+Detalles de controles y arte: `docs/project_book/VISUAL_FIELD.md`.
+Perfil de combate: [BATTLE_PROFILE.md](BATTLE_PROFILE.md).
 
-Merge histórico inicial:
+## Ataques, objetos y arte
 
-`2f63312e8dc3e61c8fadbd02e97972fff6d0eacc`
+El barrido del perfil conjunto cubre positivamente 900 movimientos permitidos
+de 919 IDs: 820 ordinarios, 50 Z de daño, 19 Maxi y 11 de dobles; 19 exclusiones.
+No prueba todas las combinaciones posibles. Evidencia: `UNIFIED_MOVE_SWEEP.json`.
+El barrido fresco del comparador V1 pasó en ambos juegos.
 
-Propiedades del merge inicial:
+Objetos: 2.222 IDs inventariados. Estado mecánico vigente:
+[ITEM_SYSTEM_CURRENT_STATUS.json](ITEM_SYSTEM_CURRENT_STATUS.json).
+Hay 76 efectos de campo conectados y con rutas verificadas (41 de recuperación y
+35 de entrenamiento: 18 EV/amistad base, 2 de mejoras de PP, 6 caramelos, 2 de habilidades y 7 mochis EV),
+además de las conexiones y límites de equipados, evolución y máquinas registrados
+allí. No están certificados todos los efectos de todos los objetos.
+V9: 6.456 combinaciones especie/objeto y 252 contextos de propiedad/amistad;
+33.633 checks headless y 33.635 GPU. Mochila con decisiones explícitas, consumo
+al finalizar, guardado/restauración y uso posterior en combate nativo verificados:
+[ITEM_FIELD_V9.md](ITEM_FIELD_V9.md). Cancelar descarta la candidata sin consumir.
 
-- parent 1: antigua `main` `641d4b1f...`;
-- parent 2: freeze moderno `8552f521...`;
-- tree exacto: `89835a6797989a8ef027b6b17baea206b1f97f74`, el mismo tree del freeze moderno;
-- no arrastra `this_should_not_be_called`;
-- no introduce cambios de producción respecto de `8552f521...`.
+V10 conecta Cápsula/Parche Habilidad: 5.092 casos de catálogo, 15.376 checks
+headless y 15.378 GPU; nueve grupos de verificación PASS. Prueba funcional nativa
+de Absorbe Fuego, mochila real, guardado/restauración y captura. El Parche permite
+revertir a la primera normal; los vetos se conservan. Modo Daruma permanece como
+dependencia de formas, sin consumo; herencia de slots al evolucionar sigue
+separada: [ITEM_FIELD_V10.md](ITEM_FIELD_V10.md).
 
-La promoción de `main` solo queda autorizada cuando el HEAD final de esta rama, incluida la actualización documental, pase la matriz normal completa. GitHub/CI sobre ese SHA exacto es la autoridad.
+V11 añade cinco bolas (Nido, Rapid, Ensueño, Sana y Honor), para nueve IDs de
+captura admitidos. 10.760 casos, 32.405 checks headless y 32.407 GPU; nueve grupos
+PASS. Selector nativo, consumo/RNG, fallos con restauración y cura/relojes de
+Sana verificados. Se cuentan aparte de los 69 efectos de campo. La probabilidad
+sigue siendo la aproximación del perfil calvo_capture_v1, sin certificar fórmula
+oficial completa, capturas críticas o penalización de Ultraentes:
+[ITEM_CAPTURE_V11.md](ITEM_CAPTURE_V11.md).
 
-## DATA V3
+V12 añade Veloz/Turno/Nivel Ball: doce IDs de captura admitidos. 19.368 casos,
+58.185 checks headless y 58.187 GPU; nueve grupos PASS. Turnos completados y
+nivel del activo se obtienen del dueño de combate y se reconstruyen al cargar.
+La reserva no concede bonus de Nivel sin entrar al campo. Las nueve bolas
+anteriores mantienen sus regresiones. Siguen siendo 69 los efectos de campo;
+misma aproximación de probabilidad: [ITEM_CAPTURE_V12.md](ITEM_CAPTURE_V12.md).
 
-Estado: **CERRADO / CERTIFICADO**.
+V13: siete rutas de mochis (+10 EV o reinicio), 30.128 casos de catálogo y 756
+contextos de propiedad, 91.991 checks headless y 91.993 GPU; nueve grupos PASS.
+Mochila, guardado, restauración y combate posterior verificados. Amistad intacta
+según la referencia RHH; equivalencia de amistad con SV no certificada.
+V13 detectó que Campana Alivio impedía iniciar nativo; su prueba de mochis usa
+Restos. Detalle histórico: [ITEM_MOCHI_V13.md](ITEM_MOCHI_V13.md).
 
-Contrato canónico preservado:
+V14 corrige Campana Alivio en el adaptador propio, sin modificar los paquetes
+instalados ni los manejadores de combate. Once casos nativos, 127 comprobaciones
+Godot y 129 GPU; diez grupos PASS. Inicio, guardado/restauración, Desarme,
+Lanzamiento, Truco y captura del receptor conservan cantidades físicas correctas.
+La traza ordinaria coincide con el adaptador previo. El barrido de registro
+identifica 62 otros equipables permitidos sin definición nativa; no certifica
+que todos sean neutros o que todos sus sistemas existan:
+[ITEM_FIELD_HELD_V14.md](ITEM_FIELD_HELD_V14.md).
 
-- 1.025 especies;
-- 326 formas;
-- 18 tipos runtime;
-- 919 movimientos;
-- 373 habilidades;
-- 2.222 objetos;
-- 61.102 entradas de learnset;
-- 554 evoluciones.
+V15 conecta Amigo/Safari/Competi/Gloria Ball: dieciséis IDs de captura admitidos.
+17.216 casos sobre las 1.076 especies/formas permitidas; Amigo fija amistad 200
+solo tras éxito, Safari/Competi usan 1,5 y Gloria 1. Se verifican costes, fallos,
+RNG, equipo lleno/PC, entrada nativa y cuatro rutas reales del selector del mapa
+con guardado/carga. No se agregan concursos ni regalos. Los 76 efectos de campo
+se cuentan aparte; captura conserva su fórmula aproximada. Evidencia:
+[ITEM_CAPTURE_V15.md](ITEM_CAPTURE_V15.md).
 
-Frontera ejecutable relevante:
+V16 conecta 24 medicinas equipadas mediante descriptores revisados: nombre,
+generación y Lanzamiento de potencia 30, sin callbacks ni curación automática.
+Las 24 se comprueban en tres perfiles nativos, y con Lanzamiento, Desarme,
+Truco, Espacio Mágico y transacciones; también guardado/carga, cantidades físicas
+y uso posterior desde la mochila. El registro pasa a 587/625 equipables permitidos
+con definición; quedan 38 ausentes. Los usos de campo y el menú de medicina de
+combate conservan sus perfiles: [ITEM_FIELD_HELD_V16.md](ITEM_FIELD_HELD_V16.md).
 
-- Moves: 590 RUNTIME_SUPPORTED / 71 PARTIAL_RUNTIME / 246 DATA_ONLY / 12 UNSUPPORTED;
-- Abilities: 21 RUNTIME_SUPPORTED / 14 PARTIAL_RUNTIME / 338 DATA_ONLY;
-- Evolutions: 391 RUNTIME_SUPPORTED / 149 DATA_ONLY / 14 UNSUPPORTED;
-- held items runtime: `leftovers`, `sitrus_berry`;
-- trainer bag runtime: `potion`, `super_potion`, `hyper_potion`, `max_potion`, `full_restore`.
+V17 conecta otros 17 consumibles equipados: seis vitaminas, dos mejoras de PP,
+Caramelo Raro y ocho potenciadores. Contrato nativo compartido y expectativas
+separadas del código productivo; regresiones de V16 y Campana conservadas.
+El registro llega a 604/625, con 21 ausentes. Los usos de campo de entrenamiento
+siguen funcionando; los ocho potenciadores mantienen pendiente su acción de uso
+desde mochila de combate: [ITEM_FIELD_HELD_V17.md](ITEM_FIELD_HELD_V17.md).
 
-No reabrir DATA V3 por subir contadores. Ampliar mecánicas solo cuando una necesidad concreta del juego lo exija.
+V18 conecta Huevo Suerte a las recompensas de combate y unifica Piedra Eterna
+en la elegibilidad por nivel. Componente puro, contexto inicial por identidad
+reconstruido desde origin en nativo y transitorio en legado; sin nuevo schema.
+4.304 casos de XP y victorias/restauraciones reales. Se conserva el reparto base
+de calvo_progression_v1 y se limita el evento a XP realmente otorgada. El registro
+alcanzó 606/625; V20 lleva el registro actual a 618/625, con siete pendientes: [ITEM_PROGRESSION_V18.md](ITEM_PROGRESSION_V18.md).
 
-## Trainer AI — cerrado
+Arte beta de objetos: [ITEM_ART_CURRENT_STATUS.json](ITEM_ART_CURRENT_STATUS.json).
+La presencia de una imagen no certifica su mecánica. Las revisiones artísticas y
+los cambios de aspecto anacrónico quedan separados de esta limpieza.
 
-El entrenador de combate dispone de memoria bilateral sanitizada, beliefs sin información oculta, búsqueda acotada, MOVE/SWITCH/ITEM donde corresponda, switching estratégico, loadouts/composición, proposal sobre todas las raíces legales, sustitución autónoma side_b, tie resolution game-ready, integración real Overworld/Battle Core, victoria/derrota/reset, full-battle adversarial, estilos/expertise y persistencia de roster entre combates.
+## Correcciones y validación
 
-Checkpoint técnico final P1-D:
+El fallo de tipo de región en guardado se corrigió en `0e2cd3a2`, con rechazo
+seguro de valores mal formados. Objetos V5–V7 cerrados hasta `eb18a5da`.
+V8 añade Más PP/PP Máximos con helper puro y amistad positiva compartida;
+19.872 casos de catálogo, 336 contextos y recorrido nativo de mochila/guardado/
+combate/captura/restauración PASS. Detalle: [ITEM_FIELD_V8.md](ITEM_FIELD_V8.md).
+Antes de caramelos se corrigió la interpretación de dos nombres de curva XP y el
+divisor del tramo 69–98 de erratic. Las seis tablas completas coinciden con dos
+referencias independientes; 4.209 checks y regresiones PASS. No incorpora aún
+caramelos ni migra partidas antiguas: [PROGRESSION_GROWTH_CURVES_FIX.md](PROGRESSION_GROWTH_CURVES_FIX.md).
+La auditoría de fidelidad a PokéAPI revisó especies, regionales, aprendizaje,
+evoluciones y fichas de movimientos/habilidades/objetos. Se restauró la condición
+Ataque=Defensa de Tyrogue y se conectaron sus tres comparaciones al contexto real
+de progresión/validación del dueño. Procedencia de Lilligant de Hisui corregida;
+textos válidos por generación y duplicado API de Baya Hibis conservados.
+Alcance y pruebas: [POKEAPI_DATA_REPAIRS_V1.md](POKEAPI_DATA_REPAIRS_V1.md).
+Evidencia y límites por fase en los informes de objetos; no duplicar sus matrices.
 
-`b314b8bb81db439e3063433644c691181ed39ef4`
+El comparador V1 terminó 135/135 casos: 86 puertas comunes PASS, 17 adicionales
+de la organizada PASS, 30 intentos con fallo compartido y 2 inconclusos iniciales.
+Varias repeticiones corregidas ya pasaron; esos números no son 32 fallos nuevos.
+No hubo fallo unilateral de la organizada. Coinciden los 18 estados de la traza,
+con 38 asserts independientes. Integridad de las fuentes verificada.
+Resultado global: FINDINGS_REVIEW_REQUIRED. Informe:
+[COMPARATOR_GENERAL_V1.md](COMPARATOR_GENERAL_V1.md).
 
-Evidencia final:
+Limpieza y corrección declaradas cerradas; [CLEANUP.md](CLEANUP.md) registra lo
+retirado, sus límites y las pruebas posteriores. Código y recursos del juego
+siguen idénticos por hash. [NEXT_STEPS.md](NEXT_STEPS.md) indica lo pendiente.
+Los resultados V1 son históricos y no certifican los bytes modificados después.
 
-- P1-D: **46/46 PASS**;
-- Evaluation: **628 PASS / 0 FAIL**;
-- full technical CI: **18/18 SUCCESS**.
-
-No reabrir C3f, Game-Ready 27.x, Expertise V1 ni Campaign Persistence V1 salvo regresión reproducible o feature nueva explícita.
-
-## Estado del videojuego visible
-
-El ejecutable actual sigue arrancando en:
-
-`res://scenes/overworld/technical_overworld.tscn`
-
-Ese mundo es una vertical slice técnica asset-free. Ya demuestra movimiento, colisión, encuentros salvajes, captura, switching, combate de entrenador, IA, settlement y revancha/recovery explícitos, pero **no es todavía una campaña completa**.
-
-Los sistemas base ya existentes incluyen:
-
-- Battle Core;
-- criaturas/progresión/evolución dentro de la frontera runtime;
-- captura;
-- party/storage;
-- inventario;
-- Save V2 de criaturas + party + storage + inventory;
-- encuentros/overworld técnico;
-- localización base;
-- Trainer AI cerrada.
-
-## Siguiente workstream de producto
-
-Tras consolidar `main`, el siguiente trabajo obligatorio deja de ser Trainer AI y pasa a ser **Game Foundation V1**.
-
-Objetivo: convertir los cimientos certificados en una primera mini-campaña reproducible sin depender todavía de arte final.
-
-Orden previsto:
-
-1. game state global y contrato de campaña;
-2. infraestructura de mapas/transiciones/spawn points;
-3. NPC + diálogo + flags/eventos data-driven;
-4. Save V3 para mundo/campaña;
-5. servicios básicos (curación, tienda, PC/party UI mínima);
-6. vertical slice jugable: inicio + inicial + pueblo + ruta + encuentro salvaje + entrenador + servicio + guardar/cargar;
-7. después, rival autónomo de overworld y producción de contenido.
-
-## Invariantes externos durante la consolidación
-
-- PR #105 permanece OPEN / unmerged;
-- PR #106 CLOSED / not merged;
-- PR #107 CLOSED / not merged;
-- no mezclar la consolidación de `main` con nuevas features de Game Foundation hasta certificar la promoción.
+Las versiones extensas anteriores de este estado y de los próximos pasos están
+en Git hasta `021a9c5`. Contratos de arquitectura aceptados en `docs/kilo/`;
+ADR, créditos y procedencia permanecen en sus carpetas.

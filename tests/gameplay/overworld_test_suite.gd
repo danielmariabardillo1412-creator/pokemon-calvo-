@@ -239,7 +239,7 @@ func _test_technical_scene_handoff(tree: SceneTree) -> void:
 	var zone := scene.get_node("EncounterZone") as OverworldEncounterZone
 	_check.call("ow_scene_player_type", player != null)
 	_check.call("ow_scene_zone_valid", zone != null and zone.is_valid_zone())
-	_check.call("ow_scene_main_config", ProjectSettings.get_setting("application/run/main_scene") == "res://scenes/overworld/technical_overworld.tscn")
+	_check.call("ow_scene_main_config", preload("res://tests/helpers/field_scene_contract.gd").configured_main_is_field())
 	if player != null and zone != null:
 		player.global_position = zone.global_position
 		player.reset_step_meter()

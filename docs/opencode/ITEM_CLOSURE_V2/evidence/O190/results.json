@@ -1,0 +1,266 @@
+{
+  "status": "PASS_WITH_DOCUMENTED_LIMITS",
+  "reviewer": "Codex",
+  "date": "2026-10-31",
+  "acceptance": "ACCEPTED_SCOPE_WITH_FIXES",
+  "all_items_complete": false,
+  "mission_base": "78c3b0f7d6ccfbe8f26f75070d9737ccdaa90035",
+  "runtime_checkpoint": "0f28371471ff76c878f7cbe2c2fc10b963d29764",
+  "closure_run": {
+    "path": ".godot\\opencode_items_v2\\closure\\runs\\1793415500568966000\\results.json",
+    "sha256": "500bbb013bcee8b3a78da8a9c18880dace2042cc491fe1a5ea8a77abf805ba93"
+  },
+  "summary": {
+    "closure_groups": 6,
+    "closure_groups_passed": 6,
+    "closure_checks": 1285,
+    "family_checks": 14883,
+    "captures": 3
+  },
+  "fixes": [
+    {
+      "id": "C1",
+      "problem": "Flauta Azul aceptaba cualquier estado persistente.",
+      "fix": "Aceptar únicamente slp; conservar los demás estados sin turno, gasto ni RNG.",
+      "before": {
+        "path": ".godot\\opencode_items_v2\\review_codex\\1793415104322870700\\blue_flute_before_fix.log",
+        "sha256": "e2b979173ad5eb93c4baf20962b8506647960a38cd7ecc5486b5c523de9d84d4"
+      },
+      "after": {
+        "path": ".godot\\opencode_items_v2\\review_codex\\1793415104322870700\\blue_flute_after_fix.log",
+        "sha256": "eda9525225d7f4956075a72b9b11e643e519247b25aff0162c4acc2093fce7ec"
+      }
+    },
+    {
+      "id": "C2",
+      "problem": "El prechequeo de +6 rechazaba objetos X con Respondón.",
+      "fix": "Delegar inversión, multiplicación y límite a battle.boost en la candidata nativa.",
+      "before": {
+        "path": ".godot\\opencode_items_v2\\review_codex\\1793415104322870700\\contrary_before_fix.log",
+        "sha256": "5a2fb71b76d96e89daf88307a35699c58198df26b024141f84322c0c588dda68"
+      },
+      "after": {
+        "path": ".godot\\opencode_items_v2\\review_codex\\1793415104322870700\\contrary_after_fix.log",
+        "sha256": "312b358184e4607d7c6fccdc57c70a38a9c124ab82c80002e482a495ffd93eb1"
+      }
+    }
+  ],
+  "independent_profiles": {
+    "path": ".godot\\opencode_items_v2\\review_codex\\1793415104322870700\\independent_profiles_final.log",
+    "sha256": "ef9fbf58f17fa98ad0654d55b32c591d484491222e4aaed1cf91161e2e640749"
+  },
+  "independent_profiles_script": {
+    "path": ".godot\\opencode_items_v2\\review_codex\\1793415104322870700\\independent_profiles.cjs",
+    "sha256": "2693e90d1727848b0ea30ccbefa3efa84684df11cc4101b617c4f8ba7215ea59"
+  },
+  "native_probe": {
+    "path": ".godot\\opencode_items_v2\\review_codex\\1793415104322870700\\contrary_after_fix.log",
+    "sha256": "312b358184e4607d7c6fccdc57c70a38a9c124ab82c80002e482a495ffd93eb1"
+  },
+  "poison_integration": {
+    "path": ".godot\\opencode_items_v2\\review_codex\\1793415104322870700\\poison_integration\\results.json",
+    "sha256": "e4a94622dfa6c78fe8a6a6f94791540157e7124d96a47f670303c9084fd43136"
+  },
+  "baseline_hashes": [
+    {
+      "path": "field_save.json",
+      "pass": true,
+      "sha256": "eeba45c299c10791175ad047a539118f61d5568c7987c221177314561cf28a0d"
+    },
+    {
+      "path": "godot_baseline.json",
+      "pass": true,
+      "sha256": "cd7de4f41d5f8d6a8a0770cc707c17c6856f4035794bae9899b2c457680b2437"
+    },
+    {
+      "path": "native_baseline.json",
+      "pass": true,
+      "sha256": "722a833e17207240e3d496cf489b16a7d2c548006b8707b953e307638aaec636"
+    }
+  ],
+  "baseline_native_sources_match_mission_base": true,
+  "reviewed_code_sha256": {
+    "modules/battle/backends/showdown/field_held_items.cjs": "daf6b8d5206bfbd97fb551ef6fb7968b541b28fb8d01eea5c0391d6db197ede2",
+    "modules/battle/backends/showdown/field_world_items_v2.json": "fd4136b005c8d272c32970f94742179ab0306a2754a43d584ae782fdb252adf9",
+    "modules/battle/backends/showdown/native_bag_effects.cjs": "71e2586a41cf140c7881d60f34ffe3021b0af1a6eddf763e8c54e79f4fb79f05",
+    "modules/battle/backends/showdown/native_engine.cjs": "0a55519b641a2843de8d0ff6433ad7d7d8f543c1b33804b09aba445e5928dc4d",
+    "modules/gameplay/encounter_item_modifiers.gd": "191577b702ad10d34200bd52b52d512299cedabcedd1f76f521ec1f4b1dd2663",
+    "modules/gameplay/held_escape_items.gd": "df61e2fea0a9e356209f9835081c2bf0e6c9f8eef1d44f6d16cb5bbc546724ea",
+    "modules/gameplay/showdown_adventure_session.gd": "4021528ab42ba951b78f9106985ec06325cd8640357cd4575b845c5c712da0dc",
+    "modules/gameplay/wild_adventure_session.gd": "c5d09ac0eab7f732b959ceeb482a0a98ee2e4d5f160ee394e30f197ef6333c8d",
+    "modules/inventory/battle_support_profile.gd": "7831df3218964561310aec375bf3696aa28f635ab99045d6e0db3c637c2f87b5",
+    "modules/inventory/battle_support_profile.json": "c64988571bd33907ed0358ec1efe1d7ac84d609e67318aee76e90b2f8e5db0e5",
+    "scenes/visual/field_demo.gd": "f42d5c01f0b4d796718b07545b7e477eecda8d1778b9883a3fe77952579cb6c0",
+    "scenes/visual/showdown_adventure_lab.gd": "5d595650c535e5d9d357d83e646bebe550c9dda6a45aa3f99c6736ef3b5af38d",
+    "tests/gameplay/opencode_baseline_v2.gd": "1768e36a80890ec40f4e7f5924cc87ec2d8c9492f0a3ca4671d3e5e3bc7290b7",
+    "tests/gameplay/opencode_battle_support_v2.gd": "4c30bdee54b6b29ab71ed59551b373d816fa2ea0ba307104eaacb40882402e65",
+    "tests/gameplay/opencode_world_held_v2.gd": "66943b6944e43ca6ad47eb4ca77a09ed7baf075425e0201e5d59acba6afae83c",
+    "tests/tools/test_battle_support_import_v2.py": "d3b24cbc02ceb0a261102b5eb169c25091756824893042a28e7156d628af1887",
+    "tests/tools/test_item_closure_audit_v2.py": "93fa1d7d82ee0f1376152462ac101aa975c5d4746b334b0056165cc137736627",
+    "tests/tools/test_world_held_import_v2.py": "475ad86f96fe0df8192f6f794252a92271b434ba4a64e1b902151810acd1a03e",
+    "tools/item_import/audit_item_closure_v2.py": "0261f60967dd2a35ff66ce5f20342d09cf4a74ef2d61b12819db29b848820073",
+    "tools/item_import/import_battle_support_v2.py": "5eb71222666bcece1e48ceca764ab36aee12f8b4a1352668dc3c5478920f8bfa",
+    "tools/item_import/import_world_held_v2.py": "3d8a64cd9be651880c4ce25bc99efe269f75d48664006de0ef7059eaa8df6e94",
+    "tools/showdown_engine_probe/opencode_battle_support_v2.cjs": "1916f8f305fd5563c07d75a4c1f8dd6dfd558dad3030de6d12d2a3b40ae9c35c",
+    "tools/showdown_engine_probe/opencode_v2_baseline.cjs": "0df632f7a19869a8f884000121d9f71cf4e0809f2a67e3b45cdcd5b16a7db1fb",
+    "tools/showdown_engine_probe/opencode_world_held_v2.cjs": "eca53ae51295cb3681e6e911be1e477d82790510561483273f25e61ec19585f9",
+    "tools/verification/run_opencode_closure_v2.py": "ffe41204d49cd32e7be62f6cad4e34ed971c78390b9918ea649267cd5e474f5b",
+    "tools/verification/run_opencode_support_v2.py": "fd1bb9996c2cbebe32d36db5a66e61f5af7f3b160d0d721c04e76e6975aba898",
+    "tools/verification/run_opencode_world_held_v2.py": "77820846f386d4672a9b5241a3e69f48368e94fb57f641b06c2a9afc619b6fec"
+  },
+  "worker_delivery": {
+    "path": ".godot\\opencode_items_v2\\review_codex\\1793415104322870700\\worker_delivery_receipt.json",
+    "sha256": "63f7ef66cdf5bc9beb8b193f87778f1b1610c518e292cf70fce1f12f6b4093c9"
+  },
+  "interrupted_run": ".godot/opencode_items_v2/closure/runs/1793415118216062400/",
+  "failed_test_fixture_run": ".godot/opencode_items_v2/closure/runs/1793415264797652300/results.json",
+  "failed_fixture_reason": "El escenario nuevo usó Salpicadura, vetada por la política. Se cambió a Gruñido, sin cambiar la política.",
+  "independent_fixture_correction": "Primer intento de prueba de tres perfiles no fijaba géneros para atracción; se corrigió el fixture. Logs inicial y final conservados.",
+  "visual_review": [
+    "Mochila de combate: Ataque X, cantidad 3, objetivo activo y aviso de consumo; controles completos sin recortes.",
+    "Mochila de campo: Bola de Humo disponible para equipar; controles completos.",
+    "Mapa tras equipar: vista de campo correcta. El equipamiento lo prueba la aserción; no se infiere del HUD."
+  ],
+  "limitations": [
+    "La aceptación cubre el lote O100/O110/O120/O190 revisado; no certifica los 2.222 objetos ni todas las combinaciones.",
+    "No se reconstruyeron guardas históricas por familia: OpenCode entregó un árbol mixto. Se revisa el conjunto con el sello original, sin resellarlo ni inventar checkpoints.",
+    "Cleanse Tag y Pure Incense solo verifican tasa 2/3; faltan tanto la semántica por pasos como sus descriptores nativos. Entrar equipados en combate nativo sigue bloqueado (Unknown held item). No se certifican como objetos completamente utilizables.",
+    "Amulet Coin, Exp. Share, Linking Cord y Luck Incense conservan sus dependencias concretas.",
+    "Siguen pendientes multiplicadores EV de objetos equipados, Max Mushrooms y las rutas documentadas de IV, mentas, formas/evolución y fidelidad de captura/XP.",
+    "El bonus base de amistad está verificado; origen y Lujo siguen pendientes."
+  ],
+  "final_documentation_audit": [
+    {
+      "command": [
+        "C:\\Users\\danie\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+        "tools/item_import/audit_item_closure_v2.py"
+      ],
+      "exit_code": 0,
+      "log": {
+        "path": ".godot\\opencode_items_v2\\review_codex\\1793415104322870700\\final_coverage_generate.log",
+        "sha256": "4495f76c003c434a0f3492f9f01b7d2357aa89f97dda01a1b281208ce2c1e421"
+      }
+    },
+    {
+      "command": [
+        "C:\\Users\\danie\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+        "tools/item_import/audit_item_closure_v2.py",
+        "--check"
+      ],
+      "exit_code": 0,
+      "log": {
+        "path": ".godot\\opencode_items_v2\\review_codex\\1793415104322870700\\final_coverage_check.log",
+        "sha256": "1f89ce75aee7a6928a93700b64e0dd89a08532fbe383640b6e82ff03204ba2be"
+      }
+    },
+    {
+      "command": [
+        "C:\\Users\\danie\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+        "tests/tools/test_item_closure_audit_v2.py"
+      ],
+      "exit_code": 0,
+      "log": {
+        "path": ".godot\\opencode_items_v2\\review_codex\\1793415104322870700\\final_audit_tests.log",
+        "sha256": "d5c8b50b2b458dbd95a2a4030eec62f50646d598e236d344e0c84b80c674f0c5"
+      }
+    },
+    {
+      "command": [
+        "C:\\Users\\danie\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+        "tools/item_import/audit_item_closure_v2.py"
+      ],
+      "exit_code": 0,
+      "log": {
+        "path": ".godot\\opencode_items_v2\\review_codex\\1793415104322870700\\post_limits_coverage_generate.log",
+        "sha256": "360bfacdcc966e3873166c416d6dd41f71a653ca1400a62cd32ca466a06ebd11"
+      }
+    },
+    {
+      "command": [
+        "C:\\Users\\danie\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+        "tools/item_import/audit_item_closure_v2.py",
+        "--check"
+      ],
+      "exit_code": 0,
+      "log": {
+        "path": ".godot\\opencode_items_v2\\review_codex\\1793415104322870700\\post_limits_coverage_check.log",
+        "sha256": "1f89ce75aee7a6928a93700b64e0dd89a08532fbe383640b6e82ff03204ba2be"
+      }
+    },
+    {
+      "command": [
+        "C:\\Users\\danie\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+        "tests/tools/test_item_closure_audit_v2.py"
+      ],
+      "exit_code": 0,
+      "log": {
+        "path": ".godot\\opencode_items_v2\\review_codex\\1793415104322870700\\post_limits_audit_tests.log",
+        "sha256": "d5c8b50b2b458dbd95a2a4030eec62f50646d598e236d344e0c84b80c674f0c5"
+      }
+    }
+  ],
+  "encounter_native_handoff_dependency": {
+    "path": ".godot\\opencode_items_v2\\review_codex\\1793415104322870700\\encounter_native_dependency.json",
+    "sha256": "531a0e8b0e03e81f1ad6dc6237c09188ea66ef7afadd8076572f139a69aa6f96"
+  },
+  "final_scope_guard": {
+    "result": {
+      "status": "PASS",
+      "base": "78c3b0f7d6ccfbe8f26f75070d9737ccdaa90035",
+      "protected_files": 23079,
+      "preserved_absent_skip_worktree": 15647,
+      "mode": "FULL_CONTENT_HASHES",
+      "allowed_changes": [
+        "docs/current/ITEM_SYSTEM_CURRENT_STATUS.json",
+        "docs/current/NEXT_STEPS.md",
+        "docs/current/PROJECT_STATE.md",
+        "docs/current/START_HERE.md",
+        "docs/opencode/ITEM_CLOSURE_V2/COVERAGE.csv",
+        "docs/opencode/ITEM_CLOSURE_V2/COVERAGE.json",
+        "docs/opencode/ITEM_CLOSURE_V2/FINAL_RESULTS.json",
+        "docs/opencode/ITEM_CLOSURE_V2/FINAL_REVIEW.md",
+        "docs/opencode/ITEM_CLOSURE_V2/PROGRESS.md",
+        "docs/opencode/ITEM_CLOSURE_V2/STATE.json",
+        "docs/opencode/ITEM_CLOSURE_V2/evidence/O100/REVIEW.md",
+        "docs/opencode/ITEM_CLOSURE_V2/evidence/O100/results.json",
+        "docs/opencode/ITEM_CLOSURE_V2/evidence/O110/REVIEW.md",
+        "docs/opencode/ITEM_CLOSURE_V2/evidence/O110/results.json",
+        "docs/opencode/ITEM_CLOSURE_V2/evidence/O120/REVIEW.md",
+        "docs/opencode/ITEM_CLOSURE_V2/evidence/O120/results.json",
+        "docs/opencode/ITEM_CLOSURE_V2/evidence/O190/REVIEW.md",
+        "docs/opencode/ITEM_CLOSURE_V2/evidence/O190/results.json",
+        "modules/battle/backends/showdown/field_held_items.cjs",
+        "modules/battle/backends/showdown/field_world_items_v2.json",
+        "modules/battle/backends/showdown/native_bag_effects.cjs",
+        "modules/battle/backends/showdown/native_engine.cjs",
+        "modules/gameplay/encounter_item_modifiers.gd",
+        "modules/gameplay/held_escape_items.gd",
+        "modules/gameplay/showdown_adventure_session.gd",
+        "modules/gameplay/wild_adventure_session.gd",
+        "modules/inventory/battle_support_profile.gd",
+        "modules/inventory/battle_support_profile.json",
+        "scenes/visual/field_demo.gd",
+        "scenes/visual/showdown_adventure_lab.gd",
+        "tests/gameplay/opencode_baseline_v2.gd",
+        "tests/gameplay/opencode_battle_support_v2.gd",
+        "tests/gameplay/opencode_world_held_v2.gd",
+        "tests/tools/test_battle_support_import_v2.py",
+        "tests/tools/test_item_closure_audit_v2.py",
+        "tests/tools/test_world_held_import_v2.py",
+        "tools/item_import/audit_item_closure_v2.py",
+        "tools/item_import/import_battle_support_v2.py",
+        "tools/item_import/import_world_held_v2.py",
+        "tools/showdown_engine_probe/opencode_battle_support_v2.cjs",
+        "tools/showdown_engine_probe/opencode_v2_baseline.cjs",
+        "tools/showdown_engine_probe/opencode_world_held_v2.cjs",
+        "tools/verification/run_opencode_closure_v2.py",
+        "tools/verification/run_opencode_support_v2.py",
+        "tools/verification/run_opencode_world_held_v2.py"
+      ]
+    },
+    "log": {
+      "path": ".godot\\opencode_items_v2\\review_codex\\1793415104322870700\\final_guard.log",
+      "sha256": "e2042a870c41d066a8485c6351fa08f1900a8eab82c1a12fa8a6c01a4feb518a"
+    }
+  }
+}

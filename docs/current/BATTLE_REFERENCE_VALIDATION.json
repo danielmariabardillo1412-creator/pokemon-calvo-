@@ -1,0 +1,286 @@
+{
+  "reference": {
+    "package": "@pkmn/sim",
+    "version": "0.10.11",
+    "format": "gen9customgame",
+    "lock_sha256": "ee4579046b6f4e4da0d48fcf7eb94a301011983f7ecbdc9916d88f946e305b47"
+  },
+  "engine_versions": {
+    "node": "v24.16.0",
+    "godot": "4.7-stable (official)"
+  },
+  "counts": {
+    "MATCH": 7284,
+    "MISMATCH": 0,
+    "NOT_COMPARABLE": 0
+  },
+  "cases": 7284,
+  "comparison_fields": {
+    "binding": [
+      "binding",
+      "lifecycle",
+      "actor.pp_spent",
+      "actor.move_used",
+      "benches"
+    ],
+    "fixed_damage": [
+      "actor.hp",
+      "target.hp",
+      "actor.substitute_hp",
+      "target.substitute_hp",
+      "actor.knocked_out",
+      "target.knocked_out",
+      "actor.pp_spent",
+      "actor.move_used",
+      "actor.substitute_present",
+      "target.substitute_present",
+      "benches"
+    ],
+    "healing": [
+      "actor.hp",
+      "actor.status_id",
+      "target.hp",
+      "target.status_id",
+      "healing_benches",
+      "actor.pp_spent",
+      "actor.move_used"
+    ],
+    "stat_stages": [
+      "actor.stages",
+      "target.stages",
+      "actor.pp_spent",
+      "actor.move_used",
+      "actor.substitute_present",
+      "target.substitute_present",
+      "benches"
+    ],
+    "variable_power": [
+      "power",
+      "contact",
+      "hit_received",
+      "actor.pp_spent",
+      "actor.move_used",
+      "benches"
+    ]
+  },
+  "limits": [
+    "Exact body HP for fixed_damage/healing and residual component for binding; no ordinary damage or RNG distribution parity",
+    "No animation/event parity",
+    "healing compares initial move HP/status/PP and reserve HP/status in explicit singles contexts; full Rest lifecycle remains in the server focal gate",
+    "variable_power observes actual BasePower event/damage metadata, contact and hit; not ordinary HP parity",
+    "binding compares natural duration range, first tick and blocked switch; exact eight-turn lifecycle only with native Grip Claw",
+    "Only explicit synthetic singles contexts in each family; not all admitted moves/ability interactions",
+    "Ruination canonical power 1 is explicitly normalized against reference basePower 0/current-HP effect"
+  ],
+  "batches": [
+    {
+      "batch": 1,
+      "cases": 500,
+      "counts": {
+        "MATCH": 500,
+        "MISMATCH": 0,
+        "NOT_COMPARABLE": 0
+      },
+      "reference_seconds": 0.805,
+      "godot_seconds": 2.117
+    },
+    {
+      "batch": 2,
+      "cases": 500,
+      "counts": {
+        "MATCH": 500,
+        "MISMATCH": 0,
+        "NOT_COMPARABLE": 0
+      },
+      "reference_seconds": 0.829,
+      "godot_seconds": 2.116
+    },
+    {
+      "batch": 3,
+      "cases": 500,
+      "counts": {
+        "MATCH": 500,
+        "MISMATCH": 0,
+        "NOT_COMPARABLE": 0
+      },
+      "reference_seconds": 0.83,
+      "godot_seconds": 2.118
+    },
+    {
+      "batch": 4,
+      "cases": 500,
+      "counts": {
+        "MATCH": 500,
+        "MISMATCH": 0,
+        "NOT_COMPARABLE": 0
+      },
+      "reference_seconds": 0.882,
+      "godot_seconds": 2.437
+    },
+    {
+      "batch": 5,
+      "cases": 500,
+      "counts": {
+        "MATCH": 500,
+        "MISMATCH": 0,
+        "NOT_COMPARABLE": 0
+      },
+      "reference_seconds": 0.915,
+      "godot_seconds": 2.457
+    },
+    {
+      "batch": 6,
+      "cases": 500,
+      "counts": {
+        "MATCH": 500,
+        "MISMATCH": 0,
+        "NOT_COMPARABLE": 0
+      },
+      "reference_seconds": 0.95,
+      "godot_seconds": 2.335
+    },
+    {
+      "batch": 7,
+      "cases": 500,
+      "counts": {
+        "MATCH": 500,
+        "MISMATCH": 0,
+        "NOT_COMPARABLE": 0
+      },
+      "reference_seconds": 0.92,
+      "godot_seconds": 2.304
+    },
+    {
+      "batch": 8,
+      "cases": 500,
+      "counts": {
+        "MATCH": 500,
+        "MISMATCH": 0,
+        "NOT_COMPARABLE": 0
+      },
+      "reference_seconds": 0.921,
+      "godot_seconds": 2.304
+    },
+    {
+      "batch": 9,
+      "cases": 500,
+      "counts": {
+        "MATCH": 500,
+        "MISMATCH": 0,
+        "NOT_COMPARABLE": 0
+      },
+      "reference_seconds": 0.896,
+      "godot_seconds": 2.386
+    },
+    {
+      "batch": 10,
+      "cases": 500,
+      "counts": {
+        "MATCH": 500,
+        "MISMATCH": 0,
+        "NOT_COMPARABLE": 0
+      },
+      "reference_seconds": 0.997,
+      "godot_seconds": 2.38
+    },
+    {
+      "batch": 11,
+      "cases": 500,
+      "counts": {
+        "MATCH": 500,
+        "MISMATCH": 0,
+        "NOT_COMPARABLE": 0
+      },
+      "reference_seconds": 1.007,
+      "godot_seconds": 2.222
+    },
+    {
+      "batch": 12,
+      "cases": 500,
+      "counts": {
+        "MATCH": 500,
+        "MISMATCH": 0,
+        "NOT_COMPARABLE": 0
+      },
+      "reference_seconds": 0.99,
+      "godot_seconds": 2.21
+    },
+    {
+      "batch": 13,
+      "cases": 500,
+      "counts": {
+        "MATCH": 500,
+        "MISMATCH": 0,
+        "NOT_COMPARABLE": 0
+      },
+      "reference_seconds": 0.888,
+      "godot_seconds": 2.489
+    },
+    {
+      "batch": 14,
+      "cases": 500,
+      "counts": {
+        "MATCH": 500,
+        "MISMATCH": 0,
+        "NOT_COMPARABLE": 0
+      },
+      "reference_seconds": 1.021,
+      "godot_seconds": 2.553
+    },
+    {
+      "batch": 15,
+      "cases": 284,
+      "counts": {
+        "MATCH": 284,
+        "MISMATCH": 0,
+        "NOT_COMPARABLE": 0
+      },
+      "reference_seconds": 0.788,
+      "godot_seconds": 2.229
+    }
+  ],
+  "elapsed_seconds": 62.918,
+  "protected_sources": {
+    "count": 233,
+    "unchanged": true,
+    "changed": [],
+    "snapshot_sha256": "3c24774d47894bb97d1012ae4cfae1c321a1e590f05cad3f7b873182665b6409"
+  },
+  "tool_sha256": {
+    "compare.py": "29c78b37653ec8b8df0f6d2975aaf22afa52ce38820914810839861453d13ee6",
+    "fixtures.py": "e4384a61cfb84f1b6481e055b28bd9ed97c788f540342d977278b0d29e5ac171",
+    "godot_runner.gd": "0acfdf62d0875e171168e3828e4e8bebc0d20ba4515ae81bc1d2739d60d60088",
+    "package-lock.json": "ee4579046b6f4e4da0d48fcf7eb94a301011983f7ecbdc9916d88f946e305b47",
+    "package.json": "61472449e0a86d7047c3585084a9bd772104fdc8405d70a6ab4b136d73ab987d",
+    "reference.cjs": "88d5cf8a52d0072cb597d986576b65833df095c843746514cfba8c309236e0e8",
+    "run.py": "618e05f982bf66a55b2fe14410b8cd7747eb7d74bd8d24e0d39e6043f37e56c2",
+    "self_test.py": "06ca91b250d8f5f507451e729eed5be7ab33f4c84df00d7349ccf47afc8e71df"
+  },
+  "schema_version": 1,
+  "status": "LOCAL_BATTLE_REFERENCE_VALIDATED",
+  "date": "2026-10-26",
+  "scope": "Actual authoritative Godot server vs pinned Showdown; stages/fixed damage/variable power/binding/healing",
+  "cases_by_family": {
+    "stat_stages": 600,
+    "fixed_damage": 1332,
+    "variable_power": 3018,
+    "binding": 960,
+    "healing": 1374
+  },
+  "self_tests": {
+    "status": "PASS",
+    "unit_tests": 42,
+    "real_adapter_negative_controls": 3
+  },
+  "evidence": {
+    ".godot/battle_reference/latest/report.json": "fd0462c84ffb9daf892af8dbcad3a407aca43e20f9c983704cf8b9db82d4f575",
+    ".godot/battle_reference/latest/manifest.json": "6e11e99f31eca5a6477df80e4ccec3d1deebe2764e3cc4f13fd5ef5175eaf6dd",
+    ".godot/battle_reference/latest/reference.json": "9251c22243b26f8316ed37d8080f96122df2baa280890e913fb029836569669c",
+    ".godot/battle_reference/latest/godot.json": "ff34322327716c2f95ff909885ca8ba5d2cf867b6a6fe74a34cd08c4e53a319c",
+    ".godot/battle_reference/self_test.log": "4c5b68d5362d0ff3f7556ce49bc34ffbcc55788e8e2b8003ae9ed58fbed8c378",
+    ".godot/battle_reference/negative_controls/checks.json": "4ec3d4f7d2887d6e77ac5b3031fdd855f35b80bf7696a52444ec59d972797261"
+  },
+  "documentation": "tools/battle_reference/README.md",
+  "credits": "tools/battle_reference/THIRD_PARTY_NOTICES.md",
+  "github_publication_performed": false
+}

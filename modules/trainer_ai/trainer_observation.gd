@@ -10,13 +10,14 @@ var observer_side_id: StringName = &""
 var opponent_side_id: StringName = &""
 var own_active_id: StringName = &""
 var opponent_active_id: StringName = &""
+var public_battle_context: Dictionary = {}
 var own_party: Array[Dictionary] = []
 var own_item_inventory: Dictionary = {}
 var observed_opponents: Array[Dictionary] = []
 
 
 func to_dict() -> Dictionary:
-	return {
+	var result := {
 		"schema_version": SCHEMA_VERSION,
 		"battle_id": String(battle_id),
 		"turn": turn,
@@ -29,3 +30,5 @@ func to_dict() -> Dictionary:
 		"own_item_inventory": own_item_inventory.duplicate(true),
 		"observed_opponents": observed_opponents.duplicate(true),
 	}
+	if not public_battle_context.is_empty(): result["public_battle_context"] = public_battle_context.duplicate(true)
+	return result

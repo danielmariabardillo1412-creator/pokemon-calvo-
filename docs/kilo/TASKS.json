@@ -1,0 +1,103 @@
+{
+  "state": "ARCHITECTURE_PLAN_ACCEPTED",
+  "authorized_now": [],
+  "stop_after": "T006B",
+  "tasks": [
+    {
+      "id": "S0",
+      "status": "PASS",
+      "owner": "Codex",
+      "purpose": "Copy, isolation, baseline and handoff"
+    },
+    {
+      "id": "T001",
+      "status": "ACCEPTED_BY_CODEX",
+      "depends_on": [
+        "S0"
+      ],
+      "plan": "docs/kilo/tasks/T001_HUD_EXTRACTION.md",
+      "review": "docs/kilo/evidence/T002/CODEX_REVIEW.json"
+    },
+    {
+      "id": "T002",
+      "status": "ACCEPTED_BY_CODEX",
+      "depends_on": [
+        "T001"
+      ],
+      "plan": "docs/kilo/tasks/T002_INTEGRATION_REVIEW.md",
+      "review": "docs/kilo/evidence/T002/CODEX_REVIEW.json"
+    },
+    {
+      "id": "T003",
+      "status": "ACCEPTED_BY_CODEX",
+      "depends_on": [
+        "T002"
+      ],
+      "plan": "docs/kilo/tasks/T003_HUD_RENDER.md",
+      "review": "docs/kilo/evidence/T003/CODEX_ACCEPTANCE.json"
+    },
+    {
+      "id": "T004",
+      "status": "ACCEPTED_BY_CODEX",
+      "depends_on": [
+        "T003"
+      ],
+      "plan": "docs/kilo/tasks/T004_FIELD_DIAGNOSTICS.md",
+      "review": "docs/kilo/evidence/T004/CODEX_ACCEPTANCE.json"
+    },
+    {
+      "id": "T005",
+      "status": "ACCEPTED_BY_CODEX",
+      "depends_on": [
+        "T004"
+      ],
+      "plan": "docs/kilo/tasks/T005_FIELD_API.md",
+      "review": "docs/kilo/evidence/T005/CODEX_ACCEPTANCE.json"
+    },
+    {
+      "id": "T006",
+      "status": "ACCEPTED_BY_CODEX",
+      "depends_on": [
+        "T005"
+      ],
+      "plan": "docs/kilo/tasks/T006B_NATIVE_PERSISTENCE.md",
+      "subtasks": [
+        {
+          "id": "T006A",
+          "status": "ACCEPTED_BY_CODEX",
+          "plan": "docs/kilo/tasks/T006A_NATIVE_BRIDGE_RUNTIME.md",
+          "review": "docs/kilo/evidence/T006A/CODEX_ACCEPTANCE.json"
+        },
+        {
+          "id": "T006B",
+          "status": "ACCEPTED_BY_CODEX",
+          "purpose": "Move validated restored-state publication and persistence dependencies to owner API; separate contract required.",
+          "depends_on": [
+            "T006A"
+          ],
+          "plan": "docs/kilo/tasks/T006B_NATIVE_PERSISTENCE.md",
+          "review": "docs/kilo/evidence/T006B/CODEX_ACCEPTANCE.json"
+        }
+      ],
+      "review": "docs/kilo/evidence/T006B/CODEX_ACCEPTANCE.json"
+    }
+  ],
+  "executor": "OpenCode (manual model selection by user)",
+  "accepted_predecessor": "4535c2802a037838f7079ef3af0a6011d0964428",
+  "latest_acceptance": "docs/kilo/evidence/T006B/CODEX_ACCEPTANCE.json",
+  "final_handoff": "docs/kilo/evidence/T006B/FINAL_HANDOFF.md",
+  "deferred_findings": [
+    {
+      "id": "ARCH_SAVE_REGION_TYPE",
+      "status": "RESOLVED_SEPARATE_AUTHORIZED_FIX",
+      "introduced_by_this_refactor": false,
+      "verified_against": "3fed2a2",
+      "description": "Numeric world.region in a deliberately edited checksummed save triggers a GDScript String/float comparison error in baseline and current. Current releases busy/working via fallback; baseline does not.",
+      "evidence": "docs/kilo/evidence/T006B/codex_review/region_type_probe_canonical.json",
+      "next_action": "None for this finding; original baseline reproduction retained.",
+      "resolution_date": "2026-10-29",
+      "resolution": "Reject missing/non-String world.region as world_shape before comparisons; preserve live state and worker.",
+      "resolution_evidence": "docs/kilo/evidence/T006B/save_region_fix_2026-10-29/results.json"
+    }
+  ]
+}

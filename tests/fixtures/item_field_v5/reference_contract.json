@@ -1,0 +1,11 @@
+{
+  "repository": "https://github.com/Maruno17/pokemon-essentials",
+  "commit": "8c5911e4a4b07b07e832e4bb0d5d8859e88b4a9b",
+  "source_sha256": {
+    "Data/Scripts/001_Settings.rb": "a491c8560378640aa2e7577e8c48793e23efd5bb28ed790f3537f51d1e31f40e",
+    "Data/Scripts/013_Items/001_Item_Utilities.rb": "d475b64f3f0011bf9312ff3e0fbe415edc51edb46a60e00db084b4fc12b1bff8",
+    "Data/Scripts/013_Items/002_Item_Effects.rb": "6ed4877769f3d7edddb096481780a8d29da6bd1de331ca9c24ccffb8477a1b15"
+  },
+  "rules": "Modern (Gen 7+) healing amounts and Rage Candy Bar status cure. Sitrus: floor(max_hp/4), minimum 1. Leppa: explicit selected slot. Shared existing full-cure convention also clears confusion. No held trigger changes.",
+  "reference_scope": "No claims of new native-battle medicine support, herbal friendship, flutes, revival or capture-origin bonuses."
+}

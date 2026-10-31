@@ -60,6 +60,9 @@ func traverse_portal(portal: OverworldPortal) -> bool:
 	if destination == null:
 		_emit_blocked("portal", "missing_destination", portal)
 		return false
+	if not _destination_is_clear(destination.global_position):
+		_emit_blocked("portal", "destination_occupied", portal)
+		return false
 
 	_busy = true
 	var start_ticks := Time.get_ticks_msec()
@@ -125,11 +128,14 @@ func jump_ledge(ledge: OverworldLedge) -> bool:
 	if landing == null:
 		_emit_blocked("ledge", "missing_destination", ledge)
 		return false
+	var target_position := ledge.landing_position(_player.global_position)
+	if not _destination_is_clear(target_position):
+		_emit_blocked("ledge", "landing_occupied", ledge)
+		return false
 
 	_busy = true
 	var start_ticks := Time.get_ticks_msec()
 	var start_position := _player.global_position
-	var target_position := landing.global_position
 	var restore_movement := _player.movement_enabled
 	_player.movement_enabled = false
 	_player.velocity = Vector2.ZERO
@@ -209,6 +215,24 @@ func _fade_to(alpha: float, duration_msec: int) -> void:
 	var tween := create_tween()
 	tween.tween_property(_fade_rect, "modulate:a", alpha, float(duration_msec) / 1000.0)
 	await tween.finished
+
+
+func _destination_is_clear(target: Vector2) -> bool:
+	for child in _player.get_children():
+		var collider := child as CollisionShape2D
+		if collider == null or collider.disabled or collider.shape == null:
+			continue
+		var query := PhysicsShapeQueryParameters2D.new()
+		query.shape = collider.shape
+		query.transform = collider.global_transform
+		query.transform.origin += target - _player.global_position
+		query.collision_mask = _player.collision_mask
+		query.exclude = [_player.get_rid()]
+		query.collide_with_areas = false
+		query.margin = 0.01
+		if not _player.get_world_2d().direct_space_state.intersect_shape(query, 1).is_empty():
+			return false
+	return true
 
 
 func _emit_blocked(kind: String, reason: String, source: Variant) -> void:

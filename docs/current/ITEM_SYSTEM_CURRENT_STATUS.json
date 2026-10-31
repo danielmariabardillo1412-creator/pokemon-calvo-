@@ -1,0 +1,376 @@
+{
+  "status": "V27_HELD_EVOLUTION_ITEMS_RESTORED_RULE_CLARIFIED",
+  "date": "2026-10-31",
+  "latest_report": "docs/current/ITEM_TRADE_RESTORATION_V27.json",
+  "notes": "docs/current/ITEM_TRADE_RESTORATION_V27.md",
+  "full_item_matrix": "docs/current/ITEM_FIELD_V8.csv.txt",
+  "art_status": "docs/current/ITEM_ART_CURRENT_STATUS.json",
+  "menu": "B - Mochila",
+  "canonical_entries_audited": 2222,
+  "equipment_transfers_verified": 624,
+  "evolution_item_routes_verified": 57,
+  "evolution_conditioned_or_form_routes_deferred": 15,
+  "machine_ids_mapped": 338,
+  "machine_teaching_ids_verified": 229,
+  "active_machine_version": "scarlet-violet",
+  "legacy_machine_ids_need_profile": 109,
+  "all_item_effects_certified": false,
+  "headless_checks": 89,
+  "gpu_checks": 0,
+  "next": [
+    "Finish objects before adapting evolution rules. Keep original held evolution items, including those without another battle benefit.",
+    "Later replace exchange requirement only: level to be defined plus original equipped item where required. No item-free automatic evolution.",
+    "Amulet Coin/Luck Incense economy and Exp. Share profile remain explicit dependencies; other mechanic-dependent item families remain documented."
+  ],
+  "source_data_and_policies_unchanged": false,
+  "latest_verification": "TRADE_ITEM_RESTORATION_V27_PASS",
+  "held_item_ids_with_verified_effect_scenarios": 189,
+  "untested_native_contexts": 323,
+  "verification_all_effects_complete": false,
+  "reviewed_held_and_berry_dependencies_pending": 41,
+  "field_medicine_ids_verified": 15,
+  "field_ev_berry_ids_verified": 6,
+  "latest_phase_checks_headless": 89,
+  "latest_phase_checks_gpu": 0,
+  "field_recovery_ids_verified": 42,
+  "total_connected_field_effect_ids": 77,
+  "field_training_ids_verified": 35,
+  "field_growth_ids_verified": 6,
+  "full_item_matrix_note": "V8 CSV is historical base; apply current V9/V10/V13 field overrides and separate V11/V12/V15 capture overrides. Profile/dependency limits remain explicit.",
+  "field_use_overrides": {
+    "rare_candy": "FIELD_GROWTH_STAGED_DECISIONS_XP_CAP_HP_BASE_FRIENDSHIP_SAVE_NATIVE_VERIFIED_ORIGIN_BONUS_PENDING",
+    "exp_candy_xs": "FIELD_GROWTH_STAGED_DECISIONS_XP_CAP_HP_BASE_FRIENDSHIP_SAVE_NATIVE_VERIFIED_ORIGIN_BONUS_PENDING",
+    "exp_candy_s": "FIELD_GROWTH_STAGED_DECISIONS_XP_CAP_HP_BASE_FRIENDSHIP_SAVE_NATIVE_VERIFIED_ORIGIN_BONUS_PENDING",
+    "exp_candy_m": "FIELD_GROWTH_STAGED_DECISIONS_XP_CAP_HP_BASE_FRIENDSHIP_SAVE_NATIVE_VERIFIED_ORIGIN_BONUS_PENDING",
+    "exp_candy_l": "FIELD_GROWTH_STAGED_DECISIONS_XP_CAP_HP_BASE_FRIENDSHIP_SAVE_NATIVE_VERIFIED_ORIGIN_BONUS_PENDING",
+    "exp_candy_xl": "FIELD_GROWTH_STAGED_DECISIONS_XP_CAP_HP_BASE_FRIENDSHIP_SAVE_NATIVE_VERIFIED_ORIGIN_BONUS_PENDING",
+    "ability_capsule": "FIELD_ABILITY_TRANSACTION_POLICY_SAVE_NATIVE_VERIFIED_FORM_ROUTE_DEPENDENCY_EXPLICIT",
+    "ability_patch": "FIELD_ABILITY_TRANSACTION_POLICY_SAVE_NATIVE_VERIFIED_FORM_ROUTE_DEPENDENCY_EXPLICIT",
+    "health_mochi": "MOCHI_EV_ROUTE_OWNERSHIP_SAVE_NATIVE_VERIFIED_RHH_FRIENDSHIP_UNCHANGED_SV_PARITY_PENDING",
+    "muscle_mochi": "MOCHI_EV_ROUTE_OWNERSHIP_SAVE_NATIVE_VERIFIED_RHH_FRIENDSHIP_UNCHANGED_SV_PARITY_PENDING",
+    "resist_mochi": "MOCHI_EV_ROUTE_OWNERSHIP_SAVE_NATIVE_VERIFIED_RHH_FRIENDSHIP_UNCHANGED_SV_PARITY_PENDING",
+    "genius_mochi": "MOCHI_EV_ROUTE_OWNERSHIP_SAVE_NATIVE_VERIFIED_RHH_FRIENDSHIP_UNCHANGED_SV_PARITY_PENDING",
+    "clever_mochi": "MOCHI_EV_ROUTE_OWNERSHIP_SAVE_NATIVE_VERIFIED_RHH_FRIENDSHIP_UNCHANGED_SV_PARITY_PENDING",
+    "swift_mochi": "MOCHI_EV_ROUTE_OWNERSHIP_SAVE_NATIVE_VERIFIED_RHH_FRIENDSHIP_UNCHANGED_SV_PARITY_PENDING",
+    "fresh_start_mochi": "MOCHI_EV_ROUTE_OWNERSHIP_SAVE_NATIVE_VERIFIED_RHH_FRIENDSHIP_UNCHANGED_SV_PARITY_PENDING",
+    "blue_flute": "IMPORTED_RHH_FIELD_SLEEP_CURE_REUSABLE_POLICY_OWNERSHIP_SAVE_NATIVE_VERIFIED"
+  },
+  "field_ability_ids_with_verified_routes": 2,
+  "capture_ball_ids_connected": 16,
+  "capture_item_overrides": {
+    "nest_ball": "CALVO_CAPTURE_V1_BALL_RULE_INVENTORY_NATIVE_UI_SAVE_RESTORE_VERIFIED",
+    "fast_ball": "CALVO_CAPTURE_V1_BALL_RULE_INVENTORY_NATIVE_UI_SAVE_RESTORE_VERIFIED",
+    "dream_ball": "CALVO_CAPTURE_V1_BALL_RULE_INVENTORY_NATIVE_UI_SAVE_RESTORE_VERIFIED",
+    "heal_ball": "CALVO_CAPTURE_V1_BALL_RULE_INVENTORY_NATIVE_UI_SAVE_RESTORE_VERIFIED",
+    "premier_ball": "CALVO_CAPTURE_V1_BALL_RULE_INVENTORY_NATIVE_UI_SAVE_RESTORE_VERIFIED",
+    "quick_ball": "CALVO_CAPTURE_V1_LIVE_CONTEXT_NATIVE_LEGACY_UI_SAVE_RESTORE_VERIFIED",
+    "timer_ball": "CALVO_CAPTURE_V1_LIVE_CONTEXT_NATIVE_LEGACY_UI_SAVE_RESTORE_VERIFIED",
+    "level_ball": "CALVO_CAPTURE_V1_LIVE_CONTEXT_NATIVE_LEGACY_UI_SAVE_RESTORE_VERIFIED",
+    "friend_ball": "CALVO_CAPTURE_V1_BALL_RULE_FRIENDSHIP_WHEN_APPLICABLE_INVENTORY_NATIVE_LEGACY_PC_UI_SAVE_RESTORE_VERIFIED",
+    "safari_ball": "CALVO_CAPTURE_V1_BALL_RULE_FRIENDSHIP_WHEN_APPLICABLE_INVENTORY_NATIVE_LEGACY_PC_UI_SAVE_RESTORE_VERIFIED",
+    "sport_ball": "CALVO_CAPTURE_V1_BALL_RULE_FRIENDSHIP_WHEN_APPLICABLE_INVENTORY_NATIVE_LEGACY_PC_UI_SAVE_RESTORE_VERIFIED",
+    "cherish_ball": "CALVO_CAPTURE_V1_BALL_RULE_FRIENDSHIP_WHEN_APPLICABLE_INVENTORY_NATIVE_LEGACY_PC_UI_SAVE_RESTORE_VERIFIED"
+  },
+  "capture_profile_fidelity_complete": false,
+  "capture_profile": "calvo_capture_v1",
+  "capture_context_families_verified": [
+    "completed_turns",
+    "active_catcher_level"
+  ],
+  "field_mochi_ids_with_verified_ev_routes": 7,
+  "mochi_friendship_sv_parity_certified": false,
+  "mochi_friendship_current_change": 0,
+  "native_unmapped_field_held_items_pending": [
+    "amulet_coin",
+    "exp_share",
+    "luck_incense"
+  ],
+  "native_field_held_bridge_ids_verified": [
+    "soothe_bell",
+    "antidote",
+    "awakening",
+    "burn_heal",
+    "elixir",
+    "energy_powder",
+    "energy_root",
+    "ether",
+    "fresh_water",
+    "full_heal",
+    "full_restore",
+    "heal_powder",
+    "hyper_potion",
+    "ice_heal",
+    "lava_cookie",
+    "lemonade",
+    "max_elixir",
+    "max_ether",
+    "max_potion",
+    "moomoo_milk",
+    "old_gateau",
+    "paralyze_heal",
+    "potion",
+    "soda_pop",
+    "super_potion",
+    "calcium",
+    "carbos",
+    "hp_up",
+    "iron",
+    "pp_max",
+    "pp_up",
+    "protein",
+    "rare_candy",
+    "zinc",
+    "dire_hit",
+    "guard_spec",
+    "x_accuracy",
+    "x_attack",
+    "x_defense",
+    "x_sp_atk",
+    "x_sp_def",
+    "x_speed",
+    "lucky_egg",
+    "everstone",
+    "black_flute",
+    "blue_flute",
+    "blue_scarf",
+    "fluffy_tail",
+    "green_scarf",
+    "pink_scarf",
+    "poke_doll",
+    "red_flute",
+    "red_scarf",
+    "smoke_ball",
+    "white_flute",
+    "yellow_flute",
+    "yellow_scarf",
+    "cleanse_tag",
+    "pure_incense"
+  ],
+  "native_known_permitted_equipped_ids": 621,
+  "native_missing_permitted_equipped_definition_count": 3,
+  "native_held_medicine_ids_with_bridge_verified": 24,
+  "native_held_training_and_boost_ids_with_bridge_verified": 17,
+  "battle_boost_item_use_ids_pending": [],
+  "battle_boost_item_use_ids_verified": [
+    "dire_hit",
+    "guard_spec",
+    "x_accuracy",
+    "x_attack",
+    "x_defense",
+    "x_sp_atk",
+    "x_sp_def",
+    "x_speed"
+  ],
+  "battle_boost_item_use_overrides": {
+    "dire_hit": "NATIVE_BAG_FOCUS_ENERGY_ONE_UNIT_PER_USE_REJECTION_WITHOUT_SPEND_SAVE_VERIFIED",
+    "guard_spec": "NATIVE_BAG_MIST_ONE_UNIT_PER_USE_REJECTION_WITHOUT_SPEND_SAVE_VERIFIED",
+    "x_accuracy": "NATIVE_BAG_TWO_STAGES_CAP_SIX_ONE_UNIT_PER_USE_REJECTION_WITHOUT_SPEND_SAVE_VERIFIED",
+    "x_attack": "NATIVE_BAG_TWO_STAGES_CAP_SIX_ONE_UNIT_PER_USE_REJECTION_WITHOUT_SPEND_SAVE_VERIFIED",
+    "x_defense": "NATIVE_BAG_TWO_STAGES_CAP_SIX_ONE_UNIT_PER_USE_REJECTION_WITHOUT_SPEND_SAVE_VERIFIED",
+    "x_sp_atk": "NATIVE_BAG_TWO_STAGES_CAP_SIX_ONE_UNIT_PER_USE_REJECTION_WITHOUT_SPEND_SAVE_VERIFIED",
+    "x_sp_def": "NATIVE_BAG_TWO_STAGES_CAP_SIX_ONE_UNIT_PER_USE_REJECTION_WITHOUT_SPEND_SAVE_VERIFIED",
+    "x_speed": "NATIVE_BAG_TWO_STAGES_CAP_SIX_ONE_UNIT_PER_USE_REJECTION_WITHOUT_SPEND_SAVE_VERIFIED"
+  },
+  "progression_held_effect_ids_verified": [
+    "lucky_egg",
+    "everstone"
+  ],
+  "progression_battle_profile": "calvo_progression_v1",
+  "progression_full_generation_xp_fidelity_certified": false,
+  "progression_held_item_overrides": {
+    "lucky_egg": "BATTLE_CURRENT_OR_INITIAL_XP_FACTOR_3_2_RESTORED_NATIVE_LEGACY_CAP_CANDY_EXCLUSION_VERIFIED",
+    "everstone": "SUPPORTED_LEVEL_EVOLUTION_GATE_SHARED_BATTLE_CANDY_OWNED_API_RECHECK_AND_SAVE_VERIFIED_OTHER_TRIGGERS_PENDING"
+  },
+  "automatic_field_import": {
+    "profile": "rhh_modern_field_recovery_v19",
+    "compiled_ids": 42,
+    "preserved_previously_connected_ids": 41,
+    "new_field_ids": [
+      "blue_flute"
+    ],
+    "audit": "docs/current/ITEM_IMPORT_V19_AUDIT.json",
+    "catalog_classification_only": true,
+    "all_families_supported": false
+  },
+  "native_misc_held_metadata_ids_verified": [
+    "black_flute",
+    "blue_flute",
+    "blue_scarf",
+    "fluffy_tail",
+    "green_scarf",
+    "pink_scarf",
+    "poke_doll",
+    "red_flute",
+    "red_scarf",
+    "white_flute",
+    "yellow_flute",
+    "yellow_scarf"
+  ],
+  "native_missing_permitted_equipped_ids": [
+    "amulet_coin",
+    "exp_share",
+    "luck_incense"
+  ],
+  "native_misc_held_metadata_equals_special_use_implemented": false,
+  "automatic_held_metadata_import": {
+    "profile": "reviewed_nonpassive_v20",
+    "imported_ids": 12,
+    "field_effect_ids_added": 0,
+    "source": "modules/battle/backends/showdown/field_misc_items_v20.json"
+  },
+  "battle_escape_item_use_ids_verified": [
+    "poke_doll",
+    "fluffy_tail",
+    "poke_toy"
+  ],
+  "held_escape_item_ids_verified": [
+    "smoke_ball"
+  ],
+  "held_escape_limits": [
+    "Smoke Ball bypasses ordinary trapping when the active held item is effective; trainer and invalid command boundaries still reject",
+    "Succeeding with Smoke Ball draws no escape RNG and never consumes the held item",
+    "Scripted encounters with an additional cannot-run flag are not modeled"
+  ],
+  "encounter_rate_item_partial_ids": [
+    "cleanse_tag",
+    "pure_incense"
+  ],
+  "encounter_rate_item_limits": [
+    "PARTIAL_VERIFIED_RATE_ONLY: validated 2/3 table copy; minimum-step semantics absent",
+    "Both descriptors are now recognized by the native backend; this does not add direct bag use or Pure Incense breeding"
+  ],
+  "native_battle_direct_bag_item_ids_supported": 29,
+  "battle_escape_item_use_overrides": {
+    "poke_doll": "NATIVE_WILD_TERMINAL_ESCAPE_ONE_UNIT_NO_RNG_TRAP_BYPASS_REVISION_UI_SAVE_VERIFIED",
+    "fluffy_tail": "NATIVE_WILD_TERMINAL_ESCAPE_ONE_UNIT_NO_RNG_TRAP_BYPASS_REVISION_UI_SAVE_VERIFIED",
+    "poke_toy": "NATIVE_WILD_TERMINAL_ESCAPE_ONE_UNIT_NO_RNG_TRAP_BYPASS_REVISION_UI_SAVE_VERIFIED"
+  },
+  "battle_escape_limits": [
+    "No legacy bag command enabled",
+    "Held Smoke Ball is separate from the three direct escape bag items and is verified while held",
+    "Scripted encounters with an additional cannot-run flag are not modeled"
+  ],
+  "item_closure_v2": {
+    "mission_base": "78c3b0f7d6ccfbe8f26f75070d9737ccdaa90035",
+    "status": "REVIEWED_WITH_LIMITS",
+    "coverage": "docs/opencode/ITEM_CLOSURE_V2/COVERAGE.json",
+    "final_results": "docs/opencode/ITEM_CLOSURE_V2/FINAL_RESULTS.json",
+    "audit_states": {
+      "DEPENDENCY_MISSING": 1604,
+      "EXCLUDED": 43,
+      "IMPLEMENTED_VERIFIED": 291,
+      "NOT_APPLICABLE": 34,
+      "PARTIAL_VERIFIED": 250
+    },
+    "o110_bag_support_ids_verified": 11,
+    "o120_held_escape_ids": [
+      "smoke_ball"
+    ],
+    "o120_encounter_rate_partial_ids": [
+      "cleanse_tag",
+      "pure_incense"
+    ],
+    "family_guard_isolation": "NOT_ACHIEVED_SHARED_UNCOMMITTED_FILES",
+    "independent_codex_review": "PASS_WITH_DOCUMENTED_LIMITS",
+    "runtime_checkpoint": "0f28371471ff76c878f7cbe2c2fc10b963d29764",
+    "review": "docs/opencode/ITEM_CLOSURE_V2/evidence/O190/REVIEW.md",
+    "historical_snapshot_note": "Closed at its reviewed checkpoint; V23 supersedes only the encounter-item native-handoff gap. Its original matrices/results are not rewritten."
+  },
+  "active_external_handoff": {
+    "packet": "docs/opencode/ITEM_CLOSURE_V2/START_HERE.md",
+    "status": "CLOSED_REVIEWED_WITH_LIMITS",
+    "runtime_base": "78c3b0f7d6ccfbe8f26f75070d9737ccdaa90035",
+    "runtime_changes_in_handoff": true,
+    "review": "docs/opencode/ITEM_CLOSURE_V2/evidence/O190/REVIEW.md",
+    "writer_active": false
+  },
+  "working_tree_runtime_status": "V26_TEN_ITEM_EXCLUSION_REVERTED",
+  "last_verified_functional_commit": "6629fe570cdf4c891a937c3f2a74b45e960dc902",
+  "encounter_item_native_handoff_ids_verified": [
+    "cleanse_tag",
+    "pure_incense"
+  ],
+  "encounter_held_v23": {
+    "status": "PASS_NATIVE_HANDOFF_PARTIAL_RATE",
+    "report": "docs/current/ITEM_ENCOUNTER_HELD_V23.json",
+    "runtime_checkpoint": "b9ca439c52ac10aea2da3f1f37c6f1de3090f34f",
+    "groups": 9,
+    "checks": 1559,
+    "native_missing_count": 4,
+    "minimum_step_semantics_complete": false
+  },
+  "item_scope_v25": {
+    "confirmed_exclusions_added": [
+      "linking_cord"
+    ],
+    "total_excluded_ids": 44,
+    "permitted_holdable_ids": 624,
+    "native_present_ids": 621,
+    "trade_level_conversion": "DEFERRED_BY_USER_NOT_IMPLEMENTED",
+    "replacement_levels": null,
+    "trade_item_candidates": 10,
+    "retained_battle_role_items": 4,
+    "verification_report": ".godot/item_scope_v25/results.json",
+    "runtime_checkpoint": "80a7aab4a494ef4c68e349eeab99f36202d13bfe"
+  },
+  "canonical_data_unchanged": true,
+  "item_selection_policy_updated": true,
+  "legacy_matrix_counters_note": "Historical V8/V2 scenario/dependency totals are not a freshly recomputed remaining-work total. Current permitted/native counts reflect V26; all_item_effects_certified remains false.",
+  "trade_item_exclusions_v26": {
+    "status": "WITHDRAWN_CODEX_MISINTERPRETATION_CORRECTED_V27",
+    "reviewed_ids": [
+      "dragon_scale",
+      "dubious_disc",
+      "electirizer",
+      "magmarizer",
+      "prism_scale",
+      "protector",
+      "reaper_cloth",
+      "sachet",
+      "up_grade",
+      "whipped_dream"
+    ],
+    "total_excluded_ids": 54,
+    "permitted_holdable_ids": 614,
+    "native_present_ids": 611,
+    "native_missing": [
+      "amulet_coin",
+      "exp_share",
+      "luck_incense"
+    ],
+    "retained_battle_roles": [
+      "metal_coat",
+      "kings_rock",
+      "deep_sea_tooth",
+      "deep_sea_scale"
+    ],
+    "evolution_level_changes": false,
+    "verification_report": ".godot/trade_item_exclusions_v26/results.json",
+    "runtime_checkpoint": "9cda56431025abe0f5f6dbaeb30041800d74e902",
+    "superseded_by": "docs/current/ITEM_TRADE_RESTORATION_V27.json"
+  },
+  "trade_item_restoration_v27": {
+    "status": "PASS",
+    "restored_ids": [
+      "dragon_scale",
+      "dubious_disc",
+      "electirizer",
+      "magmarizer",
+      "prism_scale",
+      "protector",
+      "reaper_cloth",
+      "sachet",
+      "up_grade",
+      "whipped_dream"
+    ],
+    "total_excluded_ids": 44,
+    "permitted_holdable_ids": 624,
+    "native_present_ids": 621,
+    "linking_cord_excluded": true,
+    "future_rule": "Level to be defined AND original equipped item when required; replace exchange only.",
+    "evolution_code_changed": false,
+    "level_table_selected": false,
+    "verification_report": ".godot/trade_item_restoration_v27/results.json",
+    "runtime_checkpoint": "6629fe570cdf4c891a937c3f2a74b45e960dc902"
+  }
+}

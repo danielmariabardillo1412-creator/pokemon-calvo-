@@ -1,46 +1,45 @@
 # Pokémon Calvo
 
-Proyecto de fangame de criaturas en **Godot 4.7**. El repositorio contiene Battle Core determinista, progresión/captura/overworld, persistencia, inventario y una IA de entrenadores no neuronal con inferencia de información, búsqueda acotada, switching estratégico, objetos, loadouts, composición de equipos, estilos/expertise y persistencia de roster entre combates.
+Juego en Godot 4.7. Copia activa: `D:/Proyectos/Pokemon Calvo - Arquitectura Kilo`.
+Original protegido: `D:/Proyectos/Pokemon Calvo`. Rama local:
+de origen `codex/kilo-architecture-v1`. Actualización organizada V27 en
+`codex/organized-update-v27` del [repositorio del juego](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-).
 
-## Baseline moderno
+Para descargar esta versión, **seleccionar esa rama**. El código se conserva en
+Git y los recursos visuales grandes se adjuntan a la release de desarrollo.
+No basta con descargar el ZIP de código para tener todas las imágenes.
+Preparación reproducible y pruebas: [entorno V27](docs/current/GITHUB_ENVIRONMENT_V27.md).
+Alcance de la actualización: [entrega V27](docs/current/GITHUB_UPDATE_V27.md).
 
-La línea moderna certificada culmina en el freeze documental:
+Ejecutar `JUGAR_DEMO.cmd`. La escena principal es
+`scenes/visual/field_demo.tscn`: movimiento, encuentros, captura, combate nativo,
+mochila y guardado. B abre mochila; F3 abre la galería; F12 ensaya dobles.
+Sigue siendo una demo técnica, no una campaña terminada.
 
-`8552f52158ffc21c27b4e8f1dbc7caa63ac1a467`
+Leer [el inicio vigente](docs/current/START_HERE.md), el
+[estado](docs/current/PROJECT_STATE.md) y el
+[trabajo pendiente](docs/current/NEXT_STEPS.md).
+Los controles detallados están en [el cuaderno visual](docs/project_book/VISUAL_FIELD.md).
 
-Ese SHA pasó la matriz normal de **18/18 workflows SUCCESS** y cierra Trainer AI Campaign Persistence V1.
+T001–T006B están aceptadas. OpenCode no tiene tareas pendientes autorizadas.
+Los contratos de `docs/kilo/` son históricos. Las instrucciones actuales para
+agentes están en `AGENTS.md`.
 
-La sustitución de la antigua `main` se ejecuta como una operación separada en `chore/main-baseline-consolidation-v1`. El merge histórico inicial `2f63312e8dc3e61c8fadbd02e97972fff6d0eacc` conserva como padres tanto la antigua `main` (`641d4b1f...`) como el freeze moderno (`8552f521...`) y usa exactamente el árbol certificado moderno. La referencia de GitHub sobre el HEAD final certificado de esa operación es la autoridad para la promoción de `main`.
+El comparador general V1 terminó 135 casos con hallazgos compartidos y pruebas
+obsoletas. La [limpieza posterior](docs/current/CLEANUP.md) registra su resolución,
+retiradas explícitas y límites. V1 corresponde al código anterior a la limpieza;
+no certifica cambios posteriores. Véanse
+[el contrato y los resultados](docs/current/COMPARATOR_GENERAL_V1.md).
 
-## Estado del producto
+Datos, políticas y arte permanecen separados de esta limpieza. No ejecutar
+regeneradores de datasets para arreglar pruebas. El catálogo de objetos y su
+arte no equivalen a tener todas sus mecánicas implementadas.
 
-Los cimientos técnicos están avanzados, pero el ejecutable visible sigue siendo una **vertical slice técnica**, no una campaña Pokémon completa. La siguiente línea de producto debe convertir los sistemas ya certificados en un juego real: game state global, mapas/transiciones, NPC/eventos, persistencia de mundo y una primera vertical slice de campaña.
+Prueba básica (no sustituye las pruebas de cada cambio):
 
-## Por dónde empezar
-
-Para recuperar el proyecto sin leer todo el historial:
-
-1. [`docs/current/START_HERE.md`](docs/current/START_HERE.md)
-2. [`docs/current/PROJECT_STATE.md`](docs/current/PROJECT_STATE.md)
-3. [`docs/current/NEXT_STEPS.md`](docs/current/NEXT_STEPS.md)
-4. el cuaderno temático relevante en [`docs/project_book/`](docs/project_book/)
-
-Índice completo: [`docs/README.md`](docs/README.md).
-
-## Datos canónicos
-
-DATA FOUNDATION V3 parte de un snapshot inmutable de PokéAPI en `data/api/v2` + `data/schema/v2`. `tools/pokeapi_adapter_v3.py` genera el raw/manifiesto y Godot normaliza mediante `tools/run_import.gd`.
-
-El contrato consolidado y el cierre operativo están en:
-
-- [`docs/architecture/DATA_FOUNDATION_V3.md`](docs/architecture/DATA_FOUNDATION_V3.md)
-- [`docs/project_book/DATA_V3.md`](docs/project_book/DATA_V3.md)
-
-## Ejecutar tests
-
-```bash
-godot --headless --path . --import
+```text
 godot --headless --path . --script res://tests/test_runner.gd
+python tools/regression_comparator/test_results.py
 ```
 
-No se fija aquí un número global de PASS: el total crece con el proyecto y la autoridad son los workflows de `.github/workflows/` ejecutados sobre el SHA exacto que se pretende certificar.
+Índice de arquitectura, cuadernos, créditos e historial: [docs/README.md](docs/README.md).

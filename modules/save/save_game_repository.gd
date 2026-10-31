@@ -42,6 +42,12 @@ func load(path: String) -> LoadResult:
 		out.reason = "json_parse_error"
 		return out
 
+	return decode_snapshot(d as Dictionary)
+
+
+## Rebuild an embedded canonical save without a temporary file or publication.
+func decode_snapshot(d: Dictionary) -> LoadResult:
+	var out := LoadResult.new()
 	# Normalize the exact legacy format before constructing a V2 snapshot. No other historic/future
 	# shape is guessed or silently repaired.
 	var migration := SaveGameMigration.normalize(d as Dictionary)

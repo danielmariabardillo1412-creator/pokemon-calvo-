@@ -1,0 +1,65 @@
+{
+  "status": "BETA_ART_INSTALLED",
+  "date": "2026-10-28",
+  "current_phase": "ITEM_ART_REVIEWED_V5",
+  "entries_with_art": 1011,
+  "unique_image_hashes": 738,
+  "image_bytes": 12365532,
+  "manifest": "assets/local_item_catalog/manifest.json",
+  "navigation": "F3 -> Objetos",
+  "latest_report": "docs/current/ITEM_ART_REVIEWED_V5.json",
+  "notes": "docs/current/ITEM_ART_REVIEWED_V5.md",
+  "runtime_item_bans": 43,
+  "art_plan_exclusions": 156,
+  "explicitly_deferred_this_phase": 14,
+  "pending_style": [
+    "pewter_crunchies"
+  ],
+  "remaining": [
+    "Rokikos retains its provisional small icon",
+    "418 small-reference entries need art search or redraw only if their content is retained",
+    "337 MT/MO/DT entries and their movement/version mapping remain deferred",
+    "300 raid-event entries await a system/content decision",
+    "11 Rotom-power illustrations have optional style review",
+    "Item mechanics beyond existing tested paths remain separate"
+  ],
+  "previous_phase_content_deferred": 20,
+  "generated_art_pilot": {
+    "status": "ALL_SEVEN_INSTALLED_IN_V5",
+    "notes": "docs/current/ITEM_ART_GENERATED_COMPLETION_V1.md",
+    "evidence": "art_review/item_icons_generated_completion_v1/review.json",
+    "ids": [
+      "gold_leaf",
+      "silver_leaf",
+      "super_lure",
+      "max_lure",
+      "wishing_piece",
+      "armorite_ore",
+      "lure"
+    ],
+    "integration_report": "docs/current/ITEM_ART_REVIEWED_V5.json"
+  },
+  "prepared_art_awaiting_integration": [],
+  "coverage_audit": {
+    "report": "docs/current/ITEM_ART_COVERAGE_V5.json",
+    "remaining_list": "docs/current/ITEM_ART_REMAINING_REVIEW_V5.csv",
+    "installed_or_prepared_entries": 1011,
+    "non_excluded_source_entries_without_prepared_art": 1055,
+    "final_game_art_requirement_count": "UNDECIDED_PENDING_CONTENT_SCOPE",
+    "provisional_style_ids": [
+      "pewter_crunchies"
+    ]
+  },
+  "latest_source_art_review": {
+    "report": "docs/current/ITEM_ART_REVIEW_V4.json",
+    "ledger": "docs/current/ITEM_ART_REVIEW_V4.csv",
+    "fix_queue": "docs/current/ITEM_ART_FIX_QUEUE_V1.json",
+    "source_images_reviewed_for_entries": 350,
+    "source_image_hashes": 125,
+    "small_reference_style_review_if_retained": 418,
+    "machines_deferred": 337,
+    "raid_items_await_content_review": 300,
+    "runtime_entries_at_source_review": 654,
+    "installed_in_phase": "ITEM_ART_REVIEWED_V5"
+  }
+}

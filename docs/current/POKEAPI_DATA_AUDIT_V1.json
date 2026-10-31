@@ -1,0 +1,494 @@
+{
+  "status": "FINDINGS_REVIEW_REQUIRED",
+  "created_utc": "2026-10-29T17:23:04.773678+00:00",
+  "project": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+  "head": "52c3716458e11e7a9c2a6fd6e62a11f4686e3305",
+  "auditor_sha256": "fc2151509a7119caf2c00d0079493b4ee76c6f193fde2f2b9329124b5318aa25",
+  "source": "F:\\pokemon roma el calvo\\pokeapi-api-data\\data\\api\\v2",
+  "source_api_tree": "8349ea1ce75716897fe96e02a15950d19edba6c3",
+  "source_records": {
+    "ability": 373,
+    "evolution-chain": 541,
+    "growth-rate": 6,
+    "item": 2223,
+    "machine": 2372,
+    "move": 937,
+    "nature": 25,
+    "pokemon": 1351,
+    "pokemon-species": 1025,
+    "type": 21
+  },
+  "canonical_records": {
+    "species": 1025,
+    "moves": 919,
+    "abilities": 373,
+    "items": 2222,
+    "types": 18,
+    "statuses": 0
+  },
+  "checks": {
+    "api_to_raw/abilities": 1493,
+    "api_to_raw/items": 6667,
+    "api_to_raw/moves": 8272,
+    "api_to_raw/species": 18451,
+    "api_to_raw/types": 37,
+    "machine_overlay/items": 2102,
+    "progression_tables/experience": 606,
+    "progression_tables/natures": 26,
+    "raw_to_normalized/abilities": 2612,
+    "raw_to_normalized/items": 11111,
+    "raw_to_normalized/moves": 13786,
+    "raw_to_normalized/species": 21526,
+    "raw_to_normalized/statuses": 1,
+    "raw_to_normalized/types": 73,
+    "read_only/canonical_files": 1,
+    "read_only/source_files": 8874,
+    "references/evolution/items": 100,
+    "references/evolution/moves": 22,
+    "references/evolution/species": 3,
+    "references/evolution/types": 3,
+    "references/normalized/abilities": 2411,
+    "references/normalized/moves": 61102,
+    "references/normalized/species": 554,
+    "references/normalized/types": 1551,
+    "references/raw/abilities": 2411,
+    "references/raw/moves": 61102,
+    "references/raw/species": 554,
+    "references/raw/types": 1551,
+    "references/regional/abilities": 143,
+    "references/regional/moves": 3857,
+    "references/regional/types": 103,
+    "regional_overlay/binding": 1,
+    "regional_overlay/provenance": 57,
+    "regional_overlay/species": 1141,
+    "source_integrity/ability": 746,
+    "source_integrity/evolution-chain": 1082,
+    "source_integrity/growth-rate": 12,
+    "source_integrity/item": 4446,
+    "source_integrity/machine": 4744,
+    "source_integrity/move": 1874,
+    "source_integrity/nature": 50,
+    "source_integrity/pokemon": 2702,
+    "source_integrity/pokemon-species": 2050,
+    "source_integrity/snapshot": 1,
+    "source_integrity/type": 42,
+    "structure/abilities": 373,
+    "structure/items": 2222,
+    "structure/moves": 919,
+    "structure/species": 1025,
+    "structure/types": 18
+  },
+  "total_checks": 254610,
+  "finding_counts_by_layer": {
+    "regional_overlay": 1,
+    "api_to_raw": 14,
+    "source_ambiguity": 1
+  },
+  "findings": [
+    {
+      "layer": "regional_overlay",
+      "section": "provenance",
+      "record": "lilligant_hisui",
+      "field": "source_sha256",
+      "kind": "VALUE_MISMATCH",
+      "expected": "68478720211044090dcf422ef0da95e1723c3a23bbd8618c511798760d423593",
+      "actual": "8aac71522c3c38ac03c6e1f3d963184c26e937d80b02381a703a2d77a81577ee"
+    },
+    {
+      "layer": "api_to_raw",
+      "section": "species",
+      "record": "tyrogue",
+      "field": "evolutions",
+      "kind": "COLLECTION_DIFFERENCE",
+      "expected": [
+        {
+          "conditions": {
+            "relative_physical_stats": 0
+          },
+          "item_id": "",
+          "min_level": 20,
+          "species_id": "hitmontop",
+          "trigger": "level_up",
+          "version_group": "gold_silver"
+        }
+      ],
+      "actual": [
+        {
+          "item_id": "",
+          "min_level": 20,
+          "species_id": "hitmontop",
+          "trigger": "level_up",
+          "version_group": "gold_silver"
+        }
+      ]
+    },
+    {
+      "layer": "api_to_raw",
+      "section": "moves",
+      "record": "minimize",
+      "field": "effect_summary",
+      "kind": "VALUE_MISMATCH",
+      "expected": "Raises the user’s evasion by two stages.",
+      "actual": "Raises the user’s evasion by two stages and applies the Minimized state."
+    },
+    {
+      "layer": "api_to_raw",
+      "section": "moves",
+      "record": "sweet_scent",
+      "field": "effect_summary",
+      "kind": "VALUE_MISMATCH",
+      "expected": "Lowers the target’s evasion by one stage.",
+      "actual": "Lowers the target’s evasion by two stages."
+    },
+    {
+      "layer": "api_to_raw",
+      "section": "moves",
+      "record": "beat_up",
+      "field": "effect_summary",
+      "kind": "VALUE_MISMATCH",
+      "expected": "Hits once for every conscious Pokémon the trainer has.",
+      "actual": "Party-dependent multi-hit attack; fainted or statused party members do not contribute."
+    },
+    {
+      "layer": "api_to_raw",
+      "section": "moves",
+      "record": "stockpile",
+      "field": "effect_summary",
+      "kind": "VALUE_MISMATCH",
+      "expected": "Stores energy up to three times for use with Spit Up and Swallow.",
+      "actual": "Stores one Stockpile level (maximum three) and raises Defense and Special Defense by one stage; Spit Up or Swallow consume the stored levels and the associated Stockpile stat boosts."
+    },
+    {
+      "layer": "api_to_raw",
+      "section": "moves",
+      "record": "swallow",
+      "field": "effect_summary",
+      "kind": "VALUE_MISMATCH",
+      "expected": "Recovers 1/4 HP after one Stockpile, 1/2 HP after two Stockpiles, or full HP after three Stockpiles.",
+      "actual": "Consumes Stockpile: heals 25%/50%/100% at levels 1/2/3 and fails at level 0."
+    },
+    {
+      "layer": "api_to_raw",
+      "section": "moves",
+      "record": "autotomize",
+      "field": "effect_summary",
+      "kind": "VALUE_MISMATCH",
+      "expected": "Raises the user’s Speed by two stages and halves the user’s weight.",
+      "actual": "Raises the user’s Speed by two stages and lowers its weight by 100 kg."
+    },
+    {
+      "layer": "api_to_raw",
+      "section": "moves",
+      "record": "rototiller",
+      "field": "effect_summary",
+      "kind": "VALUE_MISMATCH",
+      "expected": "Raises the Attack and Special Attack of all Grass Pokémon in battle.",
+      "actual": "Raises Attack and Special Attack of eligible grounded Grass-type Pokémon; unavailable for selection from Generation VIII onward."
+    },
+    {
+      "layer": "api_to_raw",
+      "section": "moves",
+      "record": "flower_shield",
+      "field": "effect_summary",
+      "kind": "VALUE_MISMATCH",
+      "expected": "Raises the Defense of all Grass Pokémon in battle.",
+      "actual": "Raises Defense of eligible Grass-type Pokémon on the field; unavailable for selection in Generation IX."
+    },
+    {
+      "layer": "api_to_raw",
+      "section": "moves",
+      "record": "purify",
+      "field": "effect_summary",
+      "kind": "VALUE_MISMATCH",
+      "expected": "Cures the target of a major status ailment and heals the user for 50% of its max HP.",
+      "actual": "Cures the target's major status and heals the user by up to 50% only if the cure succeeds."
+    },
+    {
+      "layer": "api_to_raw",
+      "section": "moves",
+      "record": "extreme_evoboost",
+      "field": "effect_summary",
+      "kind": "VALUE_MISMATCH",
+      "expected": "Raises all of the user’s stats by two stages.",
+      "actual": "Eevee's exclusive Z-Move; raises five battle stats by two stages and is not normally selectable from Generation VIII onward."
+    },
+    {
+      "layer": "api_to_raw",
+      "section": "moves",
+      "record": "tidy_up",
+      "field": "effect_summary",
+      "kind": "VALUE_MISMATCH",
+      "expected": "",
+      "actual": "Raises Attack and Speed by one stage and clears hazards and Substitute from both sides."
+    },
+    {
+      "layer": "api_to_raw",
+      "section": "abilities",
+      "record": "tough_claws",
+      "field": "description",
+      "kind": "VALUE_MISMATCH",
+      "expected": "Strengthens moves that make contact to 1.33× their power.",
+      "actual": "Boosts the power of moves that make contact by 30%."
+    },
+    {
+      "layer": "api_to_raw",
+      "section": "abilities",
+      "record": "tough_claws",
+      "field": "effect_summary",
+      "kind": "VALUE_MISMATCH",
+      "expected": "Strengthens moves that make contact to 1.33× their power.",
+      "actual": "Boosts the power of moves that make contact by 30%."
+    },
+    {
+      "layer": "source_ambiguity",
+      "section": "items",
+      "record": "roseli_berry",
+      "field": "normalized_id",
+      "kind": "SOURCE_ID_COLLISION",
+      "expected": "one API record",
+      "actual": [
+        723,
+        2279
+      ]
+    }
+  ],
+  "profile_exclusions": [
+    {
+      "section": "moves",
+      "record": "shadow_rush",
+      "reason": "NON_STANDARD_TYPE_NOT_IN_18_TYPE_PROFILE"
+    },
+    {
+      "section": "moves",
+      "record": "shadow_blast",
+      "reason": "NON_STANDARD_TYPE_NOT_IN_18_TYPE_PROFILE"
+    },
+    {
+      "section": "moves",
+      "record": "shadow_blitz",
+      "reason": "NON_STANDARD_TYPE_NOT_IN_18_TYPE_PROFILE"
+    },
+    {
+      "section": "moves",
+      "record": "shadow_bolt",
+      "reason": "NON_STANDARD_TYPE_NOT_IN_18_TYPE_PROFILE"
+    },
+    {
+      "section": "moves",
+      "record": "shadow_break",
+      "reason": "NON_STANDARD_TYPE_NOT_IN_18_TYPE_PROFILE"
+    },
+    {
+      "section": "moves",
+      "record": "shadow_chill",
+      "reason": "NON_STANDARD_TYPE_NOT_IN_18_TYPE_PROFILE"
+    },
+    {
+      "section": "moves",
+      "record": "shadow_end",
+      "reason": "NON_STANDARD_TYPE_NOT_IN_18_TYPE_PROFILE"
+    },
+    {
+      "section": "moves",
+      "record": "shadow_fire",
+      "reason": "NON_STANDARD_TYPE_NOT_IN_18_TYPE_PROFILE"
+    },
+    {
+      "section": "moves",
+      "record": "shadow_rave",
+      "reason": "NON_STANDARD_TYPE_NOT_IN_18_TYPE_PROFILE"
+    },
+    {
+      "section": "moves",
+      "record": "shadow_storm",
+      "reason": "NON_STANDARD_TYPE_NOT_IN_18_TYPE_PROFILE"
+    },
+    {
+      "section": "moves",
+      "record": "shadow_wave",
+      "reason": "NON_STANDARD_TYPE_NOT_IN_18_TYPE_PROFILE"
+    },
+    {
+      "section": "moves",
+      "record": "shadow_down",
+      "reason": "NON_STANDARD_TYPE_NOT_IN_18_TYPE_PROFILE"
+    },
+    {
+      "section": "moves",
+      "record": "shadow_half",
+      "reason": "NON_STANDARD_TYPE_NOT_IN_18_TYPE_PROFILE"
+    },
+    {
+      "section": "moves",
+      "record": "shadow_hold",
+      "reason": "NON_STANDARD_TYPE_NOT_IN_18_TYPE_PROFILE"
+    },
+    {
+      "section": "moves",
+      "record": "shadow_mist",
+      "reason": "NON_STANDARD_TYPE_NOT_IN_18_TYPE_PROFILE"
+    },
+    {
+      "section": "moves",
+      "record": "shadow_panic",
+      "reason": "NON_STANDARD_TYPE_NOT_IN_18_TYPE_PROFILE"
+    },
+    {
+      "section": "moves",
+      "record": "shadow_shed",
+      "reason": "NON_STANDARD_TYPE_NOT_IN_18_TYPE_PROFILE"
+    },
+    {
+      "section": "moves",
+      "record": "shadow_sky",
+      "reason": "NON_STANDARD_TYPE_NOT_IN_18_TYPE_PROFILE"
+    },
+    {
+      "section": "types",
+      "record": "unknown",
+      "reason": "NON_STANDARD_TYPE"
+    },
+    {
+      "section": "types",
+      "record": "shadow",
+      "reason": "NON_STANDARD_TYPE"
+    },
+    {
+      "section": "types",
+      "record": "stellar",
+      "reason": "NON_STANDARD_TYPE"
+    }
+  ],
+  "localization_counts": {
+    "species/display_name/es": 1025,
+    "moves/display_name/es": 919,
+    "moves/description/en": 826,
+    "moves/description/absent": 93,
+    "abilities/display_name/es": 311,
+    "abilities/description/en": 313,
+    "abilities/display_name/en": 62,
+    "abilities/description/absent": 60,
+    "items/display_name/es": 2173,
+    "items/description/en": 955,
+    "items/description/absent": 1267,
+    "items/display_name/en": 3,
+    "items/display_name/source_identifier": 46,
+    "types/display_name/es": 18
+  },
+  "source_inventory_sha256": "50736e82b6636c76951d0dda47b019d9f2f3c7be5044d36541363155653d4625",
+  "input_sha256": {
+    "data/raw/pokemon_api.json": "2efc1538081e7849d6e04555570ca28c19b13f09f0fe0c7ce38329881972f24a",
+    "data/normalized/pokemon_api.json": "719d14c082bdba03b26e801d23fb8887d0a0f4376348cf4a27e79a4b0a3c08b3",
+    "data/manifests/pokemon_api_manifest.json": "19c1dd814df65f5a50c3b59be07533568f29ff50bf7429e315482b30942e6eaa",
+    "config/pokemon_variants_v1.json": "7bbb63d22caaee73c6f10cdcfe512bed44bcbbc0dba1229a58bf3439fe4534e2",
+    "modules/inventory/item_connections_v1.json": "5fbfd8866a446cb64b5aadd5800fe61779b252dc1c56ceb5a06514d5029cabc8",
+    "modules/creatures/progression/progression_ruleset.gd": "b31ce20ea4defbae014bc8d1cc104692e569ba417ff7b8ce71455def14d31efd",
+    "tests/fixtures/progression_growth_curves/reference_contract.json": "a00bbfccd3d1a42c4c7a32ac3a02fbeda60875a69d528dcc54703e3cce5fad35",
+    "modules/battle/effects/battle_effect_spec.gd": "e85f065e354c31238ce04d538a2431ac4bf7627e520f5a27a3a8dd58607225d0"
+  },
+  "source_checkout_modes": {
+    "CRLF_TO_LF": 8874
+  },
+  "record_totals": {
+    "learnset_entries": 61102,
+    "evolution_routes": 554,
+    "regional_species": 57
+  },
+  "haunter_evolutions": [
+    {
+      "species_id": "gengar",
+      "min_level": 0,
+      "trigger": "trade",
+      "item_id": "",
+      "version_group": "red_blue"
+    }
+  ],
+  "limits": [
+    "Snapshot equality, not independent proof that PokeAPI itself is correct or up to date.",
+    "No dataset, source snapshot, policy, save, artwork or gameplay code modified.",
+    "Current snapshot fields compared; historical changes are not merged across game versions.",
+    "Learnsets use one documented latest conventional version per Pokemon; fallback is not modernization.",
+    "Effect specs/classifications/contact/critical rules are checked for import preservation, not semantic accuracy against API.",
+    "Native Showdown engine, combat combinations and excluded content availability are outside this data audit.",
+    "Descriptions preserve API language fallback; a correct English fallback is a localization backlog, not numeric corruption.",
+    "25 runtime nature modifiers and 600 stored XP reference values checked; formula execution remains a separate test.",
+    "Only CRLF-to-LF checkout differences are accepted when they exactly reproduce pinned Git blobs; source bytes remain untouched.",
+    "Regional labels are project-owned; numerical fields, learnsets and routed evolution records are compared.",
+    "Machine overlay mappings checked where present; absence may reflect deliberately retained version profile."
+  ],
+  "evidence": {
+    "full_report": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\pokeapi_data_audit\\20261029T172253_137812Z\\report.json",
+    "full_report_sha256": "ac9aef800b5aa546c38f51de6f33dd5ee0141ba3b9ec75bccb1a53d57eb571b8",
+    "source_inventory": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\pokeapi_data_audit\\20261029T172253_137812Z\\source_inventory.json",
+    "source_inventory_file_sha256": "b08d3d39b518caf53fbad885231cc84128a5bb9f28bf8326b837c4094a9abaa5",
+    "comparator_tests": {
+      "command": [
+        "C:\\Users\\danie\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tools/verification",
+        "-p",
+        "test_audit_pokeapi_data.py",
+        "-v"
+      ],
+      "exit_code": 0,
+      "tests": 11,
+      "status": "PASS",
+      "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\pokeapi_data_audit\\20261029T172253_137812Z\\comparator_tests.log",
+      "log_sha256": "c708efe5f1d1c08701f16b4171bf46bf0e9666554485e4a1b54d0cde469bef12",
+      "test_source_sha256": "ba0e28f2f61276378b1a6f17c15dc8545d6453ed93ff6ed386498fe61fa468de"
+    }
+  },
+  "review": {
+    "confirmed_data_loss": [
+      {
+        "record": "tyrogue",
+        "target": "hitmontop",
+        "field": "conditions.relative_physical_stats",
+        "expected": 0,
+        "current": "missing",
+        "cause": "adapter uses equality membership against False/0, dropping meaningful zero",
+        "action": "repair narrowly in a separate phase; no data rewritten by audit"
+      }
+    ],
+    "provenance_mismatch": [
+      {
+        "record": "lilligant_hisui",
+        "field": "source_metadata.source_sha256",
+        "numerical_and_learnset_differences": 0,
+        "action": "trace recorded source hash; do not replace statistics"
+      }
+    ],
+    "text_differences": {
+      "fields": 13,
+      "records": 12,
+      "action": "review against version-specific references and project corrections; do not reset to API text"
+    },
+    "source_duplicate": {
+      "record": "roseli_berry",
+      "api_ids": [
+        723,
+        2279
+      ],
+      "retained": 723,
+      "discarded_record_has_no_spanish_name_or_effect_text": true,
+      "action": "document source collision; no evidence that canonical item is wrong"
+    },
+    "no_differences_detected": [
+      "base species stats/types/abilities/capture/XP identifiers",
+      "selected version level-up and other learnset entries",
+      "canonical raw -> normalized values after explicit serialization defaults",
+      "regional stats/types/abilities/learnsets/evolution routing",
+      "18 type effectiveness definitions",
+      "25 nature modifier pairs",
+      "600 stored XP thresholds",
+      "2102 retained machine/version mappings",
+      "checked references and input integrity"
+    ],
+    "scope": "Data comparison only. Not a complete gameplay or native battle engine certification.",
+    "preexisting_uncommitted_work": "XP curve correction and its evidence were already present before this audit; inputs pinned by SHA256; this audit changes no runtime file.",
+    "initial_calibration": "Earlier cache runs retained; first prototype had CRLF/default-field false positives. Only final report and its exact auditor hash support these conclusions."
+  }
+}

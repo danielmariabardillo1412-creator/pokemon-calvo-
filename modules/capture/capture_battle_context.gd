@@ -13,3 +13,8 @@ var battle_finished: bool = false
 var caller_trainer_id: StringName = &""        # empty for the local player in a wild battle
 var target_owner_trainer_id: StringName = &""  # empty for a wild (unowned) creature
 var target_side_id: StringName = &""
+
+# Missing context must not silently grant a first-turn/level bonus. Reconstructed
+# from the live battle after load/recovery; these are not persistent save fields.
+var completed_turns: int = -1
+var catcher_level: int = -1

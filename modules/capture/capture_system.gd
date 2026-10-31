@@ -49,7 +49,7 @@ static func resolve(
 	var ball_def := crs.ball(attempt.ball_id)
 	var species: CreatureSpecies = null
 	if catalogs != null:
-		species = catalogs.species_catalog.get_by_id(target.species_id)
+		species = catalogs.species_catalog.get_by_id(target.base_species_id())
 
 	var status_id := target.status_state.persistent_id
 	var status_mult := crs.status_bonus(status_id)
@@ -59,7 +59,9 @@ static func resolve(
 		var rate := 0
 		if species != null:
 			rate = species.capture_rate
-		p = crs.catch_probability(rate, ball_def.base_multiplier, status_mult, target.stats.max_hp, target.current_hp)
+		var ball_mult := ball_def.base_multiplier * crs.BallEffects.multiplier(attempt.ball_id, target, species)
+		ball_mult *= crs.ContextBallEffects.multiplier(attempt.ball_id, target, species, attempt.context)
+		p = crs.catch_probability(rate, ball_mult, status_mult, target.stats.max_hp, target.current_hp)
 
 	# Master ball (and any guaranteed ball) succeeds without consuming RNG.
 	var success := guaranteed or (p > 0.0 and rng.randf() < p)
@@ -71,6 +73,8 @@ static func resolve(
 	r.consume_item = true
 
 	if success:
+		target.restore_battle_transform()
+		crs.BallEffects.on_catch(attempt.ball_id, target)
 		r.shake_count = 3
 		r.status = CaptureResult.SUCCESS
 		res.captured = target   # SAME instance - identity/IV/EV/nature/ability preserved
@@ -120,11 +124,15 @@ static func validate_attempt(attempt: CaptureAttempt, catalogs) -> String:
 		return "unknown_ball"
 	var species: CreatureSpecies = null
 	if catalogs != null:
-		species = catalogs.species_catalog.get_by_id(attempt.target.species_id)
+		species = catalogs.species_catalog.get_by_id(attempt.target.base_species_id())
 	if species == null:
 		return "unknown_species"
 	if not CaptureRuleset.is_valid_capture_rate(species.capture_rate):
 		return "invalid_capture_rate"
+	var ball_error := CaptureRuleset.BallEffects.validation_error(attempt.ball_id, attempt.target)
+	if ball_error != "": return ball_error
+	ball_error = CaptureRuleset.ContextBallEffects.validation_error(attempt.ball_id, attempt.target, ctx)
+	if ball_error != "": return ball_error
 	return ""
 
 

@@ -1,0 +1,1634 @@
+{
+  "phase": "ITEM_FIELD_HELD_V16",
+  "status": "24_REVIEWED_HELD_MEDICINES_PASS_38_DEFINITIONS_PENDING",
+  "date": "2026-10-30",
+  "base": "d0b1d8b",
+  "all_item_effects_certified": false,
+  "new_ids": [
+    "antidote",
+    "awakening",
+    "burn_heal",
+    "elixir",
+    "energy_powder",
+    "energy_root",
+    "ether",
+    "fresh_water",
+    "full_heal",
+    "full_restore",
+    "heal_powder",
+    "hyper_potion",
+    "ice_heal",
+    "lava_cookie",
+    "lemonade",
+    "max_elixir",
+    "max_ether",
+    "max_potion",
+    "moomoo_milk",
+    "old_gateau",
+    "paralyze_heal",
+    "potion",
+    "soda_pop",
+    "super_potion"
+  ],
+  "new_definition_count": 24,
+  "bridge_definition_count": 25,
+  "headless_checks": 429,
+  "gpu_checks": 83,
+  "native_case_groups": 146,
+  "native_format_roundtrips": 72,
+  "verification": {
+    "status": "PASS",
+    "base": "d0b1d8b",
+    "groups": [
+      {
+        "group": "native_medicines",
+        "status": "PASS",
+        "exit_code": 0,
+        "checks_reported": 146,
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\field_held_v16\\runs\\1793316805415617800\\native_medicines.log",
+        "log_sha256": "78e92b427ec58ca8df481ef859538c52182fd92f6188820e1f59c806d0124a71",
+        "command": [
+          "D:/Herramientas/NodeJS/node.exe",
+          "tools/showdown_engine_probe/field_held_v16.cjs"
+        ]
+      },
+      {
+        "group": "bell_regression",
+        "status": "PASS",
+        "exit_code": 0,
+        "checks_reported": 11,
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\field_held_v16\\runs\\1793316805415617800\\bell_regression.log",
+        "log_sha256": "2a9df3d0237745db9718247d66854f6118f64da5ac3a43676c4fe23789dae800",
+        "command": [
+          "D:/Herramientas/NodeJS/node.exe",
+          "tools/showdown_engine_probe/field_held_v14.cjs"
+        ]
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 0,
+        "errors": [],
+        "last_line": "[ DONE ] loading_editor_layout",
+        "group": "import",
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--path",
+          "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+          "--headless",
+          "--editor",
+          "--import",
+          "--quit"
+        ],
+        "exit_code": 0,
+        "seconds": 6.16,
+        "terminated_after_script_error": false,
+        "expected_negative_diagnostics": [],
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\field_held_v16\\runs\\1793316805415617800\\import.log",
+        "log_sha256": "10460b7ea9f3c81382fab0b1676d730be2bae922017704604420034c7bcf6ec2"
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 429,
+        "errors": [],
+        "last_line": "FIELD_HELD_V16 PASS checks=429 GPU=false",
+        "group": "held_medicines",
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--path",
+          "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+          "--headless",
+          "--script",
+          "tests/gameplay/field_held_v16.gd"
+        ],
+        "exit_code": 0,
+        "seconds": 119.44,
+        "terminated_after_script_error": false,
+        "expected_negative_diagnostics": [],
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\field_held_v16\\runs\\1793316805415617800\\held_medicines.log",
+        "log_sha256": "08813b7abd5319aaf1823a27ab0e7c452d8e0ae8ba2e5b22994245c766357030"
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 472,
+        "errors": [],
+        "last_line": "=== PROJECT TEST RESULT: 472 PASS / 0 FAIL ===",
+        "group": "core",
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--path",
+          "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+          "--headless",
+          "--script",
+          "tests/test_runner.gd"
+        ],
+        "exit_code": 0,
+        "seconds": 9.69,
+        "terminated_after_script_error": false,
+        "expected_negative_diagnostics": [
+          "ERROR: Parse JSON failed. Error at line 0: Expected key"
+        ],
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\field_held_v16\\runs\\1793316805415617800\\core.log",
+        "log_sha256": "aa9de68f0c22929ceffa211b3a242db78885d34d92f9c3d971e6d9f31801cd99"
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 1814,
+        "errors": [],
+        "last_line": "ITEM_FIELD_V4 PASS checks=1814 cases=192 GPU=false",
+        "group": "field_medicine",
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--path",
+          "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+          "--headless",
+          "--script",
+          "tests/gameplay/item_field_effects_v4.gd"
+        ],
+        "exit_code": 0,
+        "seconds": 9.81,
+        "terminated_after_script_error": false,
+        "expected_negative_diagnostics": [],
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\field_held_v16\\runs\\1793316805415617800\\field_medicine.log",
+        "log_sha256": "73dde6165d4939f699e84c230453cf4cd04196868dc55cf221a425cbc18f807c"
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 1049,
+        "errors": [],
+        "last_line": "ITEM_FIELD_V5 PASS checks=1049 cases=46 GPU=false",
+        "group": "field_recovery",
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--path",
+          "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+          "--headless",
+          "--script",
+          "tests/gameplay/item_field_recovery_v5.gd"
+        ],
+        "exit_code": 0,
+        "seconds": 12.62,
+        "terminated_after_script_error": false,
+        "expected_negative_diagnostics": [],
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\field_held_v16\\runs\\1793316805415617800\\field_recovery.log",
+        "log_sha256": "dbf7f96622f2ec1395c33e86ce95bfb6de2fbb26e1aecf6f27b6acd6e8bd5699"
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 120,
+        "errors": [],
+        "last_line": "SHOWDOWN_MEDICINES PASS checks=120 errors=0",
+        "group": "medicine",
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--path",
+          "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+          "--headless",
+          "--script",
+          "tests/gameplay/showdown_medicine_test_runner.gd"
+        ],
+        "exit_code": 0,
+        "seconds": 21.14,
+        "terminated_after_script_error": false,
+        "expected_negative_diagnostics": [],
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\field_held_v16\\runs\\1793316805415617800\\medicine.log",
+        "log_sha256": "ccc7186a97d88119a172f3d8adca2bbb4be091c3f10c5fd804062bef070d36f2"
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 118,
+        "errors": [],
+        "last_line": "FIELD_NATIVE PASS checks=118 GPU=false errors=0",
+        "group": "native",
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--path",
+          "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+          "--headless",
+          "--script",
+          "tests/gameplay/field_native_test_runner.gd"
+        ],
+        "exit_code": 0,
+        "seconds": 55.19,
+        "terminated_after_script_error": false,
+        "expected_negative_diagnostics": [],
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\field_held_v16\\runs\\1793316805415617800\\native.log",
+        "log_sha256": "4532edaa65a10230fbf1101f37a4944f5c8487c3292fb8a6d48e1b391f3fb333"
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 912,
+        "errors": [],
+        "last_line": "FIELD_RESTORE_INTEGRATION PASS checks=912 errors=0",
+        "group": "restore",
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--path",
+          "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+          "--headless",
+          "--script",
+          "tests/gameplay/field_restore_integration_test_runner.gd"
+        ],
+        "exit_code": 0,
+        "seconds": 44.31,
+        "terminated_after_script_error": false,
+        "expected_negative_diagnostics": [],
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\field_held_v16\\runs\\1793316805415617800\\restore.log",
+        "log_sha256": "b680833ccd3f8bdeff5c7b4503bff0c6063eb4adfa9db317e952ca3d48d46478"
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 83,
+        "errors": [],
+        "last_line": "FIELD_HELD_V16 PASS checks=83 GPU=true",
+        "group": "medicine_gpu",
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--path",
+          "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+          "--resolution",
+          "1280x720",
+          "--script",
+          "tests/gameplay/field_held_v16.gd",
+          "--",
+          "--capture"
+        ],
+        "exit_code": 0,
+        "seconds": 42.91,
+        "terminated_after_script_error": false,
+        "expected_negative_diagnostics": [],
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\field_held_v16\\runs\\1793316805415617800\\medicine_gpu.log",
+        "log_sha256": "df9008123f8fd71c8af8e9f8ce02d6efde529f402dca8a611eb89317eff9bfe8"
+      }
+    ],
+    "integrity_before": {
+      "status": "PASS",
+      "base": "d0b1d8b4cc82f633383b06fb1005acc368b330ee",
+      "protected_files": 23023,
+      "preserved_absent_skip_worktree": 15647,
+      "mode": "HASH_IF_METADATA_CHANGED",
+      "allowed_changes": [
+        "modules/battle/backends/showdown/field_held_items.cjs",
+        "tests/gameplay/field_held_v16.gd",
+        "tests/gameplay/field_held_v16.gd.uid",
+        "tools/showdown_engine_probe/field_held_v14.cjs",
+        "tools/showdown_engine_probe/field_held_v16.cjs",
+        "tools/verification/run_field_held_v16.py"
+      ]
+    },
+    "integrity_after": {
+      "status": "PASS",
+      "base": "d0b1d8b4cc82f633383b06fb1005acc368b330ee",
+      "protected_files": 23023,
+      "preserved_absent_skip_worktree": 15647,
+      "mode": "FULL_CONTENT_HASHES",
+      "allowed_changes": [
+        "AGENTS.md",
+        "docs/current/ITEM_FIELD_HELD_V16.md",
+        "docs/current/NEXT_STEPS.md",
+        "docs/current/PROJECT_STATE.md",
+        "docs/current/START_HERE.md",
+        "modules/battle/backends/showdown/field_held_items.cjs",
+        "tests/gameplay/field_held_v16.gd",
+        "tests/gameplay/field_held_v16.gd.uid",
+        "tools/showdown_engine_probe/field_held_v14.cjs",
+        "tools/showdown_engine_probe/field_held_v16.cjs",
+        "tools/verification/run_field_held_v16.py"
+      ]
+    },
+    "tested_sources_sha256": {
+      "modules/battle/backends/showdown/field_held_items.cjs": "f1967ea35273b5a343cf3212187705ed06c0e102eaaa72895aa7add2c9abc282",
+      "tests/gameplay/field_held_v16.gd": "4d952fc6e250dcfe3128d405a6e31e1d7f0103c45b27f8e8e1a962a96afb5bd0",
+      "tests/gameplay/field_held_v16.gd.uid": "9194ea6fb1ac1279e663f7533ca680030e800a1a10dea71365e45d0860afb485",
+      "tools/showdown_engine_probe/field_held_v14.cjs": "87af2d075461d9a69e5e63907b47b63aaa4e1202183c3017caff2093e2abd65c",
+      "tools/showdown_engine_probe/field_held_v16.cjs": "9d44bdc8eebd0d288b93fba6917490f3ba589faad1d2ee8393dd2e19bb9193e9",
+      "tools/verification/run_field_held_v16.py": "1be5cb3d615bd907a40d3cd0038ee9305bfc59d51e011be0241b4e8955b3d8b1"
+    }
+  },
+  "native_evidence": {
+    "status": "PASS",
+    "checks": [
+      {
+        "name": "exact reviewed list; cache safety; definitions are metadata only",
+        "status": "PASS"
+      },
+      {
+        "name": "antidote entry, post-turn restore and deterministic continuation in three profiles",
+        "status": "PASS"
+      },
+      {
+        "name": "antidote holding does not use its HP/status/PP field effect",
+        "status": "PASS"
+      },
+      {
+        "name": "antidote native Fling equals power 30 control and does not heal its recipient",
+        "status": "PASS"
+      },
+      {
+        "name": "antidote native Trick transfers the actual item; consumed imports stay absent",
+        "status": "PASS"
+      },
+      {
+        "name": "antidote native Knock Off boost and Magic Room suppression",
+        "status": "PASS"
+      },
+      {
+        "name": "antidote prepare/abort/commit keeps native transaction authority",
+        "status": "PASS"
+      },
+      {
+        "name": "awakening entry, post-turn restore and deterministic continuation in three profiles",
+        "status": "PASS"
+      },
+      {
+        "name": "awakening holding does not use its HP/status/PP field effect",
+        "status": "PASS"
+      },
+      {
+        "name": "awakening native Fling equals power 30 control and does not heal its recipient",
+        "status": "PASS"
+      },
+      {
+        "name": "awakening native Trick transfers the actual item; consumed imports stay absent",
+        "status": "PASS"
+      },
+      {
+        "name": "awakening native Knock Off boost and Magic Room suppression",
+        "status": "PASS"
+      },
+      {
+        "name": "awakening prepare/abort/commit keeps native transaction authority",
+        "status": "PASS"
+      },
+      {
+        "name": "burn_heal entry, post-turn restore and deterministic continuation in three profiles",
+        "status": "PASS"
+      },
+      {
+        "name": "burn_heal holding does not use its HP/status/PP field effect",
+        "status": "PASS"
+      },
+      {
+        "name": "burn_heal native Fling equals power 30 control and does not heal its recipient",
+        "status": "PASS"
+      },
+      {
+        "name": "burn_heal native Trick transfers the actual item; consumed imports stay absent",
+        "status": "PASS"
+      },
+      {
+        "name": "burn_heal native Knock Off boost and Magic Room suppression",
+        "status": "PASS"
+      },
+      {
+        "name": "burn_heal prepare/abort/commit keeps native transaction authority",
+        "status": "PASS"
+      },
+      {
+        "name": "elixir entry, post-turn restore and deterministic continuation in three profiles",
+        "status": "PASS"
+      },
+      {
+        "name": "elixir holding does not use its HP/status/PP field effect",
+        "status": "PASS"
+      },
+      {
+        "name": "elixir native Fling equals power 30 control and does not heal its recipient",
+        "status": "PASS"
+      },
+      {
+        "name": "elixir native Trick transfers the actual item; consumed imports stay absent",
+        "status": "PASS"
+      },
+      {
+        "name": "elixir native Knock Off boost and Magic Room suppression",
+        "status": "PASS"
+      },
+      {
+        "name": "elixir prepare/abort/commit keeps native transaction authority",
+        "status": "PASS"
+      },
+      {
+        "name": "energy_powder entry, post-turn restore and deterministic continuation in three profiles",
+        "status": "PASS"
+      },
+      {
+        "name": "energy_powder holding does not use its HP/status/PP field effect",
+        "status": "PASS"
+      },
+      {
+        "name": "energy_powder native Fling equals power 30 control and does not heal its recipient",
+        "status": "PASS"
+      },
+      {
+        "name": "energy_powder native Trick transfers the actual item; consumed imports stay absent",
+        "status": "PASS"
+      },
+      {
+        "name": "energy_powder native Knock Off boost and Magic Room suppression",
+        "status": "PASS"
+      },
+      {
+        "name": "energy_powder prepare/abort/commit keeps native transaction authority",
+        "status": "PASS"
+      },
+      {
+        "name": "energy_root entry, post-turn restore and deterministic continuation in three profiles",
+        "status": "PASS"
+      },
+      {
+        "name": "energy_root holding does not use its HP/status/PP field effect",
+        "status": "PASS"
+      },
+      {
+        "name": "energy_root native Fling equals power 30 control and does not heal its recipient",
+        "status": "PASS"
+      },
+      {
+        "name": "energy_root native Trick transfers the actual item; consumed imports stay absent",
+        "status": "PASS"
+      },
+      {
+        "name": "energy_root native Knock Off boost and Magic Room suppression",
+        "status": "PASS"
+      },
+      {
+        "name": "energy_root prepare/abort/commit keeps native transaction authority",
+        "status": "PASS"
+      },
+      {
+        "name": "ether entry, post-turn restore and deterministic continuation in three profiles",
+        "status": "PASS"
+      },
+      {
+        "name": "ether holding does not use its HP/status/PP field effect",
+        "status": "PASS"
+      },
+      {
+        "name": "ether native Fling equals power 30 control and does not heal its recipient",
+        "status": "PASS"
+      },
+      {
+        "name": "ether native Trick transfers the actual item; consumed imports stay absent",
+        "status": "PASS"
+      },
+      {
+        "name": "ether native Knock Off boost and Magic Room suppression",
+        "status": "PASS"
+      },
+      {
+        "name": "ether prepare/abort/commit keeps native transaction authority",
+        "status": "PASS"
+      },
+      {
+        "name": "fresh_water entry, post-turn restore and deterministic continuation in three profiles",
+        "status": "PASS"
+      },
+      {
+        "name": "fresh_water holding does not use its HP/status/PP field effect",
+        "status": "PASS"
+      },
+      {
+        "name": "fresh_water native Fling equals power 30 control and does not heal its recipient",
+        "status": "PASS"
+      },
+      {
+        "name": "fresh_water native Trick transfers the actual item; consumed imports stay absent",
+        "status": "PASS"
+      },
+      {
+        "name": "fresh_water native Knock Off boost and Magic Room suppression",
+        "status": "PASS"
+      },
+      {
+        "name": "fresh_water prepare/abort/commit keeps native transaction authority",
+        "status": "PASS"
+      },
+      {
+        "name": "full_heal entry, post-turn restore and deterministic continuation in three profiles",
+        "status": "PASS"
+      },
+      {
+        "name": "full_heal holding does not use its HP/status/PP field effect",
+        "status": "PASS"
+      },
+      {
+        "name": "full_heal native Fling equals power 30 control and does not heal its recipient",
+        "status": "PASS"
+      },
+      {
+        "name": "full_heal native Trick transfers the actual item; consumed imports stay absent",
+        "status": "PASS"
+      },
+      {
+        "name": "full_heal native Knock Off boost and Magic Room suppression",
+        "status": "PASS"
+      },
+      {
+        "name": "full_heal prepare/abort/commit keeps native transaction authority",
+        "status": "PASS"
+      },
+      {
+        "name": "full_restore entry, post-turn restore and deterministic continuation in three profiles",
+        "status": "PASS"
+      },
+      {
+        "name": "full_restore holding does not use its HP/status/PP field effect",
+        "status": "PASS"
+      },
+      {
+        "name": "full_restore native Fling equals power 30 control and does not heal its recipient",
+        "status": "PASS"
+      },
+      {
+        "name": "full_restore native Trick transfers the actual item; consumed imports stay absent",
+        "status": "PASS"
+      },
+      {
+        "name": "full_restore native Knock Off boost and Magic Room suppression",
+        "status": "PASS"
+      },
+      {
+        "name": "full_restore prepare/abort/commit keeps native transaction authority",
+        "status": "PASS"
+      },
+      {
+        "name": "heal_powder entry, post-turn restore and deterministic continuation in three profiles",
+        "status": "PASS"
+      },
+      {
+        "name": "heal_powder holding does not use its HP/status/PP field effect",
+        "status": "PASS"
+      },
+      {
+        "name": "heal_powder native Fling equals power 30 control and does not heal its recipient",
+        "status": "PASS"
+      },
+      {
+        "name": "heal_powder native Trick transfers the actual item; consumed imports stay absent",
+        "status": "PASS"
+      },
+      {
+        "name": "heal_powder native Knock Off boost and Magic Room suppression",
+        "status": "PASS"
+      },
+      {
+        "name": "heal_powder prepare/abort/commit keeps native transaction authority",
+        "status": "PASS"
+      },
+      {
+        "name": "hyper_potion entry, post-turn restore and deterministic continuation in three profiles",
+        "status": "PASS"
+      },
+      {
+        "name": "hyper_potion holding does not use its HP/status/PP field effect",
+        "status": "PASS"
+      },
+      {
+        "name": "hyper_potion native Fling equals power 30 control and does not heal its recipient",
+        "status": "PASS"
+      },
+      {
+        "name": "hyper_potion native Trick transfers the actual item; consumed imports stay absent",
+        "status": "PASS"
+      },
+      {
+        "name": "hyper_potion native Knock Off boost and Magic Room suppression",
+        "status": "PASS"
+      },
+      {
+        "name": "hyper_potion prepare/abort/commit keeps native transaction authority",
+        "status": "PASS"
+      },
+      {
+        "name": "ice_heal entry, post-turn restore and deterministic continuation in three profiles",
+        "status": "PASS"
+      },
+      {
+        "name": "ice_heal holding does not use its HP/status/PP field effect",
+        "status": "PASS"
+      },
+      {
+        "name": "ice_heal native Fling equals power 30 control and does not heal its recipient",
+        "status": "PASS"
+      },
+      {
+        "name": "ice_heal native Trick transfers the actual item; consumed imports stay absent",
+        "status": "PASS"
+      },
+      {
+        "name": "ice_heal native Knock Off boost and Magic Room suppression",
+        "status": "PASS"
+      },
+      {
+        "name": "ice_heal prepare/abort/commit keeps native transaction authority",
+        "status": "PASS"
+      },
+      {
+        "name": "lava_cookie entry, post-turn restore and deterministic continuation in three profiles",
+        "status": "PASS"
+      },
+      {
+        "name": "lava_cookie holding does not use its HP/status/PP field effect",
+        "status": "PASS"
+      },
+      {
+        "name": "lava_cookie native Fling equals power 30 control and does not heal its recipient",
+        "status": "PASS"
+      },
+      {
+        "name": "lava_cookie native Trick transfers the actual item; consumed imports stay absent",
+        "status": "PASS"
+      },
+      {
+        "name": "lava_cookie native Knock Off boost and Magic Room suppression",
+        "status": "PASS"
+      },
+      {
+        "name": "lava_cookie prepare/abort/commit keeps native transaction authority",
+        "status": "PASS"
+      },
+      {
+        "name": "lemonade entry, post-turn restore and deterministic continuation in three profiles",
+        "status": "PASS"
+      },
+      {
+        "name": "lemonade holding does not use its HP/status/PP field effect",
+        "status": "PASS"
+      },
+      {
+        "name": "lemonade native Fling equals power 30 control and does not heal its recipient",
+        "status": "PASS"
+      },
+      {
+        "name": "lemonade native Trick transfers the actual item; consumed imports stay absent",
+        "status": "PASS"
+      },
+      {
+        "name": "lemonade native Knock Off boost and Magic Room suppression",
+        "status": "PASS"
+      },
+      {
+        "name": "lemonade prepare/abort/commit keeps native transaction authority",
+        "status": "PASS"
+      },
+      {
+        "name": "max_elixir entry, post-turn restore and deterministic continuation in three profiles",
+        "status": "PASS"
+      },
+      {
+        "name": "max_elixir holding does not use its HP/status/PP field effect",
+        "status": "PASS"
+      },
+      {
+        "name": "max_elixir native Fling equals power 30 control and does not heal its recipient",
+        "status": "PASS"
+      },
+      {
+        "name": "max_elixir native Trick transfers the actual item; consumed imports stay absent",
+        "status": "PASS"
+      },
+      {
+        "name": "max_elixir native Knock Off boost and Magic Room suppression",
+        "status": "PASS"
+      },
+      {
+        "name": "max_elixir prepare/abort/commit keeps native transaction authority",
+        "status": "PASS"
+      },
+      {
+        "name": "max_ether entry, post-turn restore and deterministic continuation in three profiles",
+        "status": "PASS"
+      },
+      {
+        "name": "max_ether holding does not use its HP/status/PP field effect",
+        "status": "PASS"
+      },
+      {
+        "name": "max_ether native Fling equals power 30 control and does not heal its recipient",
+        "status": "PASS"
+      },
+      {
+        "name": "max_ether native Trick transfers the actual item; consumed imports stay absent",
+        "status": "PASS"
+      },
+      {
+        "name": "max_ether native Knock Off boost and Magic Room suppression",
+        "status": "PASS"
+      },
+      {
+        "name": "max_ether prepare/abort/commit keeps native transaction authority",
+        "status": "PASS"
+      },
+      {
+        "name": "max_potion entry, post-turn restore and deterministic continuation in three profiles",
+        "status": "PASS"
+      },
+      {
+        "name": "max_potion holding does not use its HP/status/PP field effect",
+        "status": "PASS"
+      },
+      {
+        "name": "max_potion native Fling equals power 30 control and does not heal its recipient",
+        "status": "PASS"
+      },
+      {
+        "name": "max_potion native Trick transfers the actual item; consumed imports stay absent",
+        "status": "PASS"
+      },
+      {
+        "name": "max_potion native Knock Off boost and Magic Room suppression",
+        "status": "PASS"
+      },
+      {
+        "name": "max_potion prepare/abort/commit keeps native transaction authority",
+        "status": "PASS"
+      },
+      {
+        "name": "moomoo_milk entry, post-turn restore and deterministic continuation in three profiles",
+        "status": "PASS"
+      },
+      {
+        "name": "moomoo_milk holding does not use its HP/status/PP field effect",
+        "status": "PASS"
+      },
+      {
+        "name": "moomoo_milk native Fling equals power 30 control and does not heal its recipient",
+        "status": "PASS"
+      },
+      {
+        "name": "moomoo_milk native Trick transfers the actual item; consumed imports stay absent",
+        "status": "PASS"
+      },
+      {
+        "name": "moomoo_milk native Knock Off boost and Magic Room suppression",
+        "status": "PASS"
+      },
+      {
+        "name": "moomoo_milk prepare/abort/commit keeps native transaction authority",
+        "status": "PASS"
+      },
+      {
+        "name": "old_gateau entry, post-turn restore and deterministic continuation in three profiles",
+        "status": "PASS"
+      },
+      {
+        "name": "old_gateau holding does not use its HP/status/PP field effect",
+        "status": "PASS"
+      },
+      {
+        "name": "old_gateau native Fling equals power 30 control and does not heal its recipient",
+        "status": "PASS"
+      },
+      {
+        "name": "old_gateau native Trick transfers the actual item; consumed imports stay absent",
+        "status": "PASS"
+      },
+      {
+        "name": "old_gateau native Knock Off boost and Magic Room suppression",
+        "status": "PASS"
+      },
+      {
+        "name": "old_gateau prepare/abort/commit keeps native transaction authority",
+        "status": "PASS"
+      },
+      {
+        "name": "paralyze_heal entry, post-turn restore and deterministic continuation in three profiles",
+        "status": "PASS"
+      },
+      {
+        "name": "paralyze_heal holding does not use its HP/status/PP field effect",
+        "status": "PASS"
+      },
+      {
+        "name": "paralyze_heal native Fling equals power 30 control and does not heal its recipient",
+        "status": "PASS"
+      },
+      {
+        "name": "paralyze_heal native Trick transfers the actual item; consumed imports stay absent",
+        "status": "PASS"
+      },
+      {
+        "name": "paralyze_heal native Knock Off boost and Magic Room suppression",
+        "status": "PASS"
+      },
+      {
+        "name": "paralyze_heal prepare/abort/commit keeps native transaction authority",
+        "status": "PASS"
+      },
+      {
+        "name": "potion entry, post-turn restore and deterministic continuation in three profiles",
+        "status": "PASS"
+      },
+      {
+        "name": "potion holding does not use its HP/status/PP field effect",
+        "status": "PASS"
+      },
+      {
+        "name": "potion native Fling equals power 30 control and does not heal its recipient",
+        "status": "PASS"
+      },
+      {
+        "name": "potion native Trick transfers the actual item; consumed imports stay absent",
+        "status": "PASS"
+      },
+      {
+        "name": "potion native Knock Off boost and Magic Room suppression",
+        "status": "PASS"
+      },
+      {
+        "name": "potion prepare/abort/commit keeps native transaction authority",
+        "status": "PASS"
+      },
+      {
+        "name": "soda_pop entry, post-turn restore and deterministic continuation in three profiles",
+        "status": "PASS"
+      },
+      {
+        "name": "soda_pop holding does not use its HP/status/PP field effect",
+        "status": "PASS"
+      },
+      {
+        "name": "soda_pop native Fling equals power 30 control and does not heal its recipient",
+        "status": "PASS"
+      },
+      {
+        "name": "soda_pop native Trick transfers the actual item; consumed imports stay absent",
+        "status": "PASS"
+      },
+      {
+        "name": "soda_pop native Knock Off boost and Magic Room suppression",
+        "status": "PASS"
+      },
+      {
+        "name": "soda_pop prepare/abort/commit keeps native transaction authority",
+        "status": "PASS"
+      },
+      {
+        "name": "super_potion entry, post-turn restore and deterministic continuation in three profiles",
+        "status": "PASS"
+      },
+      {
+        "name": "super_potion holding does not use its HP/status/PP field effect",
+        "status": "PASS"
+      },
+      {
+        "name": "super_potion native Fling equals power 30 control and does not heal its recipient",
+        "status": "PASS"
+      },
+      {
+        "name": "super_potion native Trick transfers the actual item; consumed imports stay absent",
+        "status": "PASS"
+      },
+      {
+        "name": "super_potion native Knock Off boost and Magic Room suppression",
+        "status": "PASS"
+      },
+      {
+        "name": "super_potion prepare/abort/commit keeps native transaction authority",
+        "status": "PASS"
+      },
+      {
+        "name": "registry delta is exactly 24 permitted medicines; all other gaps explicit",
+        "status": "PASS"
+      }
+    ],
+    "reviewed_medicines": [
+      [
+        "antidote",
+        "Antidote",
+        1
+      ],
+      [
+        "awakening",
+        "Awakening",
+        1
+      ],
+      [
+        "burn_heal",
+        "Burn Heal",
+        1
+      ],
+      [
+        "elixir",
+        "Elixir",
+        1
+      ],
+      [
+        "energy_powder",
+        "Energy Powder",
+        2
+      ],
+      [
+        "energy_root",
+        "Energy Root",
+        2
+      ],
+      [
+        "ether",
+        "Ether",
+        1
+      ],
+      [
+        "fresh_water",
+        "Fresh Water",
+        1
+      ],
+      [
+        "full_heal",
+        "Full Heal",
+        1
+      ],
+      [
+        "full_restore",
+        "Full Restore",
+        1
+      ],
+      [
+        "heal_powder",
+        "Heal Powder",
+        2
+      ],
+      [
+        "hyper_potion",
+        "Hyper Potion",
+        1
+      ],
+      [
+        "ice_heal",
+        "Ice Heal",
+        1
+      ],
+      [
+        "lava_cookie",
+        "Lava Cookie",
+        3
+      ],
+      [
+        "lemonade",
+        "Lemonade",
+        1
+      ],
+      [
+        "max_elixir",
+        "Max Elixir",
+        1
+      ],
+      [
+        "max_ether",
+        "Max Ether",
+        1
+      ],
+      [
+        "max_potion",
+        "Max Potion",
+        1
+      ],
+      [
+        "moomoo_milk",
+        "Moomoo Milk",
+        2
+      ],
+      [
+        "old_gateau",
+        "Old Gateau",
+        4
+      ],
+      [
+        "paralyze_heal",
+        "Paralyze Heal",
+        1
+      ],
+      [
+        "potion",
+        "Potion",
+        1
+      ],
+      [
+        "soda_pop",
+        "Soda Pop",
+        1
+      ],
+      [
+        "super_potion",
+        "Super Potion",
+        1
+      ]
+    ],
+    "permitted_holdable": 625,
+    "permitted_native_present": 587,
+    "permitted_missing": [
+      "amulet_coin",
+      "black_flute",
+      "blue_flute",
+      "blue_scarf",
+      "calcium",
+      "carbos",
+      "cleanse_tag",
+      "dire_hit",
+      "everstone",
+      "exp_share",
+      "fluffy_tail",
+      "green_scarf",
+      "guard_spec",
+      "hp_up",
+      "iron",
+      "linking_cord",
+      "luck_incense",
+      "lucky_egg",
+      "pink_scarf",
+      "poke_doll",
+      "pp_max",
+      "pp_up",
+      "protein",
+      "pure_incense",
+      "rare_candy",
+      "red_flute",
+      "red_scarf",
+      "smoke_ball",
+      "white_flute",
+      "x_accuracy",
+      "x_attack",
+      "x_defense",
+      "x_sp_atk",
+      "x_sp_def",
+      "x_speed",
+      "yellow_flute",
+      "yellow_scarf",
+      "zinc"
+    ],
+    "baseline": "d0b1d8b"
+  },
+  "integration_routes": [
+    {
+      "medicine": "antidote",
+      "physical_remaining": 3,
+      "restored_after_item_change": true,
+      "route": "keep"
+    },
+    {
+      "medicine": "awakening",
+      "physical_remaining": 2,
+      "restored_after_item_change": true,
+      "route": "fling"
+    },
+    {
+      "medicine": "burn_heal",
+      "physical_remaining": 3,
+      "restored_after_item_change": true,
+      "route": "trick"
+    },
+    {
+      "medicine": "elixir",
+      "physical_remaining": 2,
+      "restored_after_item_change": true,
+      "route": "knock_off"
+    },
+    {
+      "medicine": "energy_powder",
+      "physical_remaining": 3,
+      "restored_after_item_change": true,
+      "route": "keep"
+    },
+    {
+      "medicine": "energy_root",
+      "physical_remaining": 2,
+      "restored_after_item_change": true,
+      "route": "fling"
+    },
+    {
+      "medicine": "ether",
+      "physical_remaining": 3,
+      "restored_after_item_change": true,
+      "route": "trick"
+    },
+    {
+      "medicine": "fresh_water",
+      "physical_remaining": 2,
+      "restored_after_item_change": true,
+      "route": "knock_off"
+    },
+    {
+      "medicine": "full_heal",
+      "physical_remaining": 3,
+      "restored_after_item_change": true,
+      "route": "keep"
+    },
+    {
+      "medicine": "full_restore",
+      "physical_remaining": 2,
+      "restored_after_item_change": true,
+      "route": "fling"
+    },
+    {
+      "medicine": "heal_powder",
+      "physical_remaining": 3,
+      "restored_after_item_change": true,
+      "route": "trick"
+    },
+    {
+      "medicine": "hyper_potion",
+      "physical_remaining": 2,
+      "restored_after_item_change": true,
+      "route": "knock_off"
+    },
+    {
+      "medicine": "ice_heal",
+      "physical_remaining": 3,
+      "restored_after_item_change": true,
+      "route": "keep"
+    },
+    {
+      "medicine": "lava_cookie",
+      "physical_remaining": 2,
+      "restored_after_item_change": true,
+      "route": "fling"
+    },
+    {
+      "medicine": "lemonade",
+      "physical_remaining": 3,
+      "restored_after_item_change": true,
+      "route": "trick"
+    },
+    {
+      "medicine": "max_elixir",
+      "physical_remaining": 2,
+      "restored_after_item_change": true,
+      "route": "knock_off"
+    },
+    {
+      "medicine": "max_ether",
+      "physical_remaining": 3,
+      "restored_after_item_change": true,
+      "route": "keep"
+    },
+    {
+      "medicine": "max_potion",
+      "physical_remaining": 2,
+      "restored_after_item_change": true,
+      "route": "fling"
+    },
+    {
+      "medicine": "moomoo_milk",
+      "physical_remaining": 3,
+      "restored_after_item_change": true,
+      "route": "trick"
+    },
+    {
+      "medicine": "old_gateau",
+      "physical_remaining": 2,
+      "restored_after_item_change": true,
+      "route": "knock_off"
+    },
+    {
+      "medicine": "paralyze_heal",
+      "physical_remaining": 3,
+      "restored_after_item_change": true,
+      "route": "keep"
+    },
+    {
+      "medicine": "potion",
+      "physical_remaining": 2,
+      "restored_after_item_change": true,
+      "route": "fling"
+    },
+    {
+      "medicine": "soda_pop",
+      "physical_remaining": 3,
+      "restored_after_item_change": true,
+      "route": "trick"
+    },
+    {
+      "medicine": "super_potion",
+      "physical_remaining": 2,
+      "restored_after_item_change": true,
+      "route": "knock_off"
+    },
+    {
+      "explicit_field_use": true,
+      "medicine": "potion",
+      "physical_remaining": 2,
+      "route": "map_keep"
+    },
+    {
+      "explicit_field_use": true,
+      "medicine": "max_elixir",
+      "physical_remaining": 1,
+      "route": "map_fling"
+    },
+    {
+      "explicit_field_use": true,
+      "medicine": "full_heal",
+      "physical_remaining": 2,
+      "route": "map_trick"
+    },
+    {
+      "explicit_field_use": true,
+      "medicine": "energy_root",
+      "physical_remaining": 2,
+      "route": "map_keep"
+    }
+  ],
+  "gpu_routes": [
+    {
+      "explicit_field_use": true,
+      "medicine": "potion",
+      "physical_remaining": 2,
+      "route": "map_keep"
+    },
+    {
+      "explicit_field_use": true,
+      "medicine": "max_elixir",
+      "physical_remaining": 1,
+      "route": "map_fling"
+    },
+    {
+      "explicit_field_use": true,
+      "medicine": "full_heal",
+      "physical_remaining": 2,
+      "route": "map_trick"
+    },
+    {
+      "explicit_field_use": true,
+      "medicine": "energy_root",
+      "physical_remaining": 2,
+      "route": "map_keep"
+    }
+  ],
+  "reference_proof": {
+    "status": "PASS",
+    "reviewed_medicines": [
+      {
+        "id": "antidote",
+        "name": "Antidote",
+        "gen": 1,
+        "fling_power": 30,
+        "hold_effect": "NONE (omitted C struct field)",
+        "rhh_item": "ITEM_ANTIDOTE"
+      },
+      {
+        "id": "awakening",
+        "name": "Awakening",
+        "gen": 1,
+        "fling_power": 30,
+        "hold_effect": "NONE (omitted C struct field)",
+        "rhh_item": "ITEM_AWAKENING"
+      },
+      {
+        "id": "burn_heal",
+        "name": "Burn Heal",
+        "gen": 1,
+        "fling_power": 30,
+        "hold_effect": "NONE (omitted C struct field)",
+        "rhh_item": "ITEM_BURN_HEAL"
+      },
+      {
+        "id": "elixir",
+        "name": "Elixir",
+        "gen": 1,
+        "fling_power": 30,
+        "hold_effect": "NONE (omitted C struct field)",
+        "rhh_item": "ITEM_ELIXIR"
+      },
+      {
+        "id": "energy_powder",
+        "name": "Energy Powder",
+        "gen": 2,
+        "fling_power": 30,
+        "hold_effect": "NONE (omitted C struct field)",
+        "rhh_item": "ITEM_ENERGY_POWDER"
+      },
+      {
+        "id": "energy_root",
+        "name": "Energy Root",
+        "gen": 2,
+        "fling_power": 30,
+        "hold_effect": "NONE (omitted C struct field)",
+        "rhh_item": "ITEM_ENERGY_ROOT"
+      },
+      {
+        "id": "ether",
+        "name": "Ether",
+        "gen": 1,
+        "fling_power": 30,
+        "hold_effect": "NONE (omitted C struct field)",
+        "rhh_item": "ITEM_ETHER"
+      },
+      {
+        "id": "fresh_water",
+        "name": "Fresh Water",
+        "gen": 1,
+        "fling_power": 30,
+        "hold_effect": "NONE (omitted C struct field)",
+        "rhh_item": "ITEM_FRESH_WATER"
+      },
+      {
+        "id": "full_heal",
+        "name": "Full Heal",
+        "gen": 1,
+        "fling_power": 30,
+        "hold_effect": "NONE (omitted C struct field)",
+        "rhh_item": "ITEM_FULL_HEAL"
+      },
+      {
+        "id": "full_restore",
+        "name": "Full Restore",
+        "gen": 1,
+        "fling_power": 30,
+        "hold_effect": "NONE (omitted C struct field)",
+        "rhh_item": "ITEM_FULL_RESTORE"
+      },
+      {
+        "id": "heal_powder",
+        "name": "Heal Powder",
+        "gen": 2,
+        "fling_power": 30,
+        "hold_effect": "NONE (omitted C struct field)",
+        "rhh_item": "ITEM_HEAL_POWDER"
+      },
+      {
+        "id": "hyper_potion",
+        "name": "Hyper Potion",
+        "gen": 1,
+        "fling_power": 30,
+        "hold_effect": "NONE (omitted C struct field)",
+        "rhh_item": "ITEM_HYPER_POTION"
+      },
+      {
+        "id": "ice_heal",
+        "name": "Ice Heal",
+        "gen": 1,
+        "fling_power": 30,
+        "hold_effect": "NONE (omitted C struct field)",
+        "rhh_item": "ITEM_ICE_HEAL"
+      },
+      {
+        "id": "lava_cookie",
+        "name": "Lava Cookie",
+        "gen": 3,
+        "fling_power": 30,
+        "hold_effect": "NONE (omitted C struct field)",
+        "rhh_item": "ITEM_LAVA_COOKIE"
+      },
+      {
+        "id": "lemonade",
+        "name": "Lemonade",
+        "gen": 1,
+        "fling_power": 30,
+        "hold_effect": "NONE (omitted C struct field)",
+        "rhh_item": "ITEM_LEMONADE"
+      },
+      {
+        "id": "max_elixir",
+        "name": "Max Elixir",
+        "gen": 1,
+        "fling_power": 30,
+        "hold_effect": "NONE (omitted C struct field)",
+        "rhh_item": "ITEM_MAX_ELIXIR"
+      },
+      {
+        "id": "max_ether",
+        "name": "Max Ether",
+        "gen": 1,
+        "fling_power": 30,
+        "hold_effect": "NONE (omitted C struct field)",
+        "rhh_item": "ITEM_MAX_ETHER"
+      },
+      {
+        "id": "max_potion",
+        "name": "Max Potion",
+        "gen": 1,
+        "fling_power": 30,
+        "hold_effect": "NONE (omitted C struct field)",
+        "rhh_item": "ITEM_MAX_POTION"
+      },
+      {
+        "id": "moomoo_milk",
+        "name": "Moomoo Milk",
+        "gen": 2,
+        "fling_power": 30,
+        "hold_effect": "NONE (omitted C struct field)",
+        "rhh_item": "ITEM_MOOMOO_MILK"
+      },
+      {
+        "id": "old_gateau",
+        "name": "Old Gateau",
+        "gen": 4,
+        "fling_power": 30,
+        "hold_effect": "NONE (omitted C struct field)",
+        "rhh_item": "ITEM_OLD_GATEAU"
+      },
+      {
+        "id": "paralyze_heal",
+        "name": "Paralyze Heal",
+        "gen": 1,
+        "fling_power": 30,
+        "hold_effect": "NONE (omitted C struct field)",
+        "rhh_item": "ITEM_PARALYZE_HEAL"
+      },
+      {
+        "id": "potion",
+        "name": "Potion",
+        "gen": 1,
+        "fling_power": 30,
+        "hold_effect": "NONE (omitted C struct field)",
+        "rhh_item": "ITEM_POTION"
+      },
+      {
+        "id": "soda_pop",
+        "name": "Soda Pop",
+        "gen": 1,
+        "fling_power": 30,
+        "hold_effect": "NONE (omitted C struct field)",
+        "rhh_item": "ITEM_SODA_POP"
+      },
+      {
+        "id": "super_potion",
+        "name": "Super Potion",
+        "gen": 1,
+        "fling_power": 30,
+        "hold_effect": "NONE (omitted C struct field)",
+        "rhh_item": "ITEM_SUPER_POTION"
+      }
+    ],
+    "fling_reference": {
+      "repository": "rh-hideout/pokeemerald-expansion",
+      "commit": "8654616bd38d9b28cc7dd8f3d0b4cb030aa2d40c",
+      "path": ".godot\\item_mochi_v13\\references\\items.h",
+      "sha256": "107f1b78a457f3a9c48749f325d674b62fe559b0ebfc365db13e82b00b19ecd3"
+    },
+    "generation_sources": [
+      {
+        "url": "https://raw.githubusercontent.com/pret/pokered/master/constants/item_constants.asm",
+        "path": ".godot\\field_held_v16\\references\\pokered_item_constants.asm",
+        "sha256": "b5a1db015fbf0de637381eb39350f21f35a436a8088e2f6657f65c79f118f97f"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/pret/pokecrystal/master/constants/item_constants.asm",
+        "path": ".godot\\field_held_v16\\references\\pokecrystal_item_constants.asm",
+        "sha256": "bb870ffb3448845aa886ede0030a114a7773d7cb6924d2c59acdca0c53a02e58"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/pret/pokeemerald/master/include/constants/items.h",
+        "path": ".godot\\field_held_v16\\references\\pokeemerald_items.h",
+        "sha256": "6e3a9728b4d90cc23fee0aae9b9ffa9fbd71541e6b3cb2b966f334930b6ad6f8"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/pret/pokeplatinum/main/generated/items.txt",
+        "path": ".godot\\field_held_v16\\references\\pokeplatinum_items.txt",
+        "sha256": "9b5e48100fff0baf7a899a5355dca6bbe86b46acca5fe4854ede462296c4acb5"
+      }
+    ],
+    "inference": "Earliest presence among the four primary game disassemblies; legacy spellings mapped explicitly; no foreign code executed."
+  },
+  "artifacts": {
+    "godot.json": {
+      "path": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\field_held_v16\\runs\\1793316805415617800\\godot.json",
+      "sha256": "d975a879ec9d7ad6ca72112b73c3da0ad78e471afa1ed14d6056e4b174aeed3f"
+    },
+    "gpu.json": {
+      "path": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\field_held_v16\\runs\\1793316805415617800\\gpu.json",
+      "sha256": "eb898f3cb7c247094d47ab1ed12668c5f1bb3208bfbf8ece9de9637b75be8ff6"
+    },
+    "reference_proof.json": {
+      "path": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\field_held_v16\\runs\\1793316805415617800\\reference_proof.json",
+      "sha256": "fb2d7ae477e5991b55df54516b22b2b272af0da62444f4c078ca0931de1e1915"
+    },
+    "native_medicines.json": {
+      "path": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\field_held_v16\\runs\\1793316805415617800\\native_medicines.json",
+      "sha256": "d5c75e5f1ee2e0df98bbeace6d831bfcfa6b9794ae05cc31f8e93b7d59405f5c"
+    },
+    "bell_regression.json": {
+      "path": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\field_held_v16\\runs\\1793316805415617800\\bell_regression.json",
+      "sha256": "1886f698302a9f0271220a8aef045161cecffa9e2190d62bcd418ccc78bbdc17"
+    }
+  },
+  "visual_review": {
+    "path": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\field_held_v16\\medicine_bag.png",
+    "sha256": "ed1a7c8442f6c40576f319ab32f494d81e758a732383885b156d520842094df8",
+    "reviewed": true,
+    "result": "Real bag shows Potion equipped on Mew and two units in bag; item art, target, equip/use/unequip controls fit 1280x720."
+  },
+  "contract": {
+    "descriptor_keys": [
+      "name",
+      "gen",
+      "fling"
+    ],
+    "fling_base_power": 30,
+    "callbacks_added": false,
+    "automatic_hp_status_pp_cure": false,
+    "automatic_bitter_friendship_loss": false,
+    "native_engine_cjs_changed": false,
+    "vendor_packages_changed": false,
+    "save_schema_changed": false,
+    "existing_field_effect_count": 76,
+    "existing_capture_ball_count": 16,
+    "battle_medicine_profile_expanded": false,
+    "current_battle_medicine_ids": 15
+  },
+  "registry_delta": {
+    "permitted": 625,
+    "present_before": 563,
+    "present_after": 587,
+    "missing_before": 62,
+    "missing_after": 38,
+    "missing_ids": [
+      "amulet_coin",
+      "black_flute",
+      "blue_flute",
+      "blue_scarf",
+      "calcium",
+      "carbos",
+      "cleanse_tag",
+      "dire_hit",
+      "everstone",
+      "exp_share",
+      "fluffy_tail",
+      "green_scarf",
+      "guard_spec",
+      "hp_up",
+      "iron",
+      "linking_cord",
+      "luck_incense",
+      "lucky_egg",
+      "pink_scarf",
+      "poke_doll",
+      "pp_max",
+      "pp_up",
+      "protein",
+      "pure_incense",
+      "rare_candy",
+      "red_flute",
+      "red_scarf",
+      "smoke_ball",
+      "white_flute",
+      "x_accuracy",
+      "x_attack",
+      "x_defense",
+      "x_sp_atk",
+      "x_sp_def",
+      "x_speed",
+      "yellow_flute",
+      "yellow_scarf",
+      "zinc"
+    ],
+    "registry_presence_equals_all_effects_certified": false
+  },
+  "preserved_phase_attempts": [
+    {
+      "path": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\field_held_v16\\runs\\1793316742562082100\\results.json",
+      "status": "FAIL",
+      "error": "held_medicines"
+    }
+  ],
+  "native_probe_attempts": [
+    {
+      "path": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\field_held_v16\\node_runs\\1793316676688\\results.json",
+      "status": "FAIL"
+    },
+    {
+      "path": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\field_held_v16\\node_runs\\1793316685748\\results.json",
+      "status": "PASS"
+    },
+    {
+      "path": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\field_held_v16\\node_runs\\1793316750027\\results.json",
+      "status": "PASS"
+    },
+    {
+      "path": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\field_held_v16\\node_runs\\1793316812743\\results.json",
+      "status": "PASS"
+    }
+  ],
+  "limitations": [
+    "38 other permitted equipable IDs still have no native definition; do not infer neutral behavior or implement missing world effects.",
+    "Three supported native battle profiles tested; no original-generation battle engine execution claimed.",
+    "No new battle-use medicine IDs: nine reviewed medicines retain existing field-only use; only their held representation is connected here.",
+    "Field effects remain 76 and capture balls 16; no mint/IV/origin-ball/world/form/conditioned evolution mechanics added.",
+    "189 historical native held-effect scenarios remain a separate counter; metadata registration is not blanket effect certification.",
+    "Initial native comparison failed on wall-clock protocol markers; comparison now normalizes time strings only and preserves state hashes/RNG.",
+    "First Godot probe rejected an untyped test variable at parse time; it was declared int; failed execution retained.",
+    "No normalized/raw data, art, bans, installed packages, combat algorithms, RNG or save schema changes."
+  ],
+  "post_documentation_integrity": {
+    "status": "PASS",
+    "base": "d0b1d8b4cc82f633383b06fb1005acc368b330ee",
+    "protected_files": 23023,
+    "preserved_absent_skip_worktree": 15647,
+    "mode": "HASH_IF_METADATA_CHANGED",
+    "allowed_changes": [
+      "AGENTS.md",
+      "docs/current/ITEM_FIELD_HELD_V16.json",
+      "docs/current/ITEM_FIELD_HELD_V16.md",
+      "docs/current/ITEM_SYSTEM_CURRENT_STATUS.json",
+      "docs/current/NEXT_STEPS.md",
+      "docs/current/PROJECT_STATE.md",
+      "docs/current/START_HERE.md",
+      "modules/battle/backends/showdown/field_held_items.cjs",
+      "tests/gameplay/field_held_v16.gd",
+      "tests/gameplay/field_held_v16.gd.uid",
+      "tools/showdown_engine_probe/field_held_v14.cjs",
+      "tools/showdown_engine_probe/field_held_v16.cjs",
+      "tools/verification/run_field_held_v16.py"
+    ]
+  }
+}

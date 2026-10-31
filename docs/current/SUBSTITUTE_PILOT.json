@@ -1,0 +1,99 @@
+{
+  "captures": [
+    {
+      "path": ".godot/substitute_checks/substitute_back_native.png",
+      "sha256": "2746a517bfd34178970cc90a13582a8985a67026f747a44c4ff5ccdde35210c3"
+    },
+    {
+      "path": ".godot/substitute_checks/substitute_front_native.png",
+      "sha256": "25d2ff421ea059e0682b58e04516920044ba6738082a52ed8a79044cfefd3998"
+    },
+    {
+      "path": ".godot/substitute_checks/shed_tail_back_native.png",
+      "sha256": "d5cd2d0bc7553bc79ff0e016f5b4c7641f3c50bfb41de7b966ba0dd568270a07"
+    },
+    {
+      "path": ".godot/substitute_checks/shed_tail_front_native.png",
+      "sha256": "a371b8a45575928bfdb02f7b4d26010fcf79d36d0550cbb058326c3e95c42b05"
+    },
+    {
+      "path": ".godot/substitute_checks/substitute_persistent.png",
+      "sha256": "baf9c6e9388fd916a2595018a9fbdea6e35487a892fbff5a74be40e5998ac3f5"
+    },
+    {
+      "path": ".godot/substitute_checks/substitute_broken.png",
+      "sha256": "cd95fec686f5cbfc58dca71c879506e1cfb2ec72bead9bb5bb643d4de7350596"
+    },
+    {
+      "path": ".godot/substitute_checks/shed_tail_persistent.png",
+      "sha256": "f8dce99e80bc8cccbc352f6911a3f5ac477f0d79321635f9184a47943852ee08"
+    },
+    {
+      "path": ".godot/substitute_checks/shed_entry_doll.png",
+      "sha256": "8e5158ed4a1781389e630da3d866ab669e149a87c86ec37a22e7f891001ddfff"
+    },
+    {
+      "path": ".godot/substitute_checks/shed_tail_broken.png",
+      "sha256": "4d09d4a85cb5c90d219073e8ce9692f7019cd2620d56a976c04480e9e8777129"
+    }
+  ],
+  "checks": 453,
+  "errors": [],
+  "gpu": true,
+  "pack_sha256": "82c25e89c56f754d4715ac6fc7f5eb024473798dae9a1070e0d9c5f0616d5355",
+  "reference": "https://github.com/smogon/pokemon-showdown/blob/master/data/moves.ts",
+  "reference_sha256": "43b516fdc01721f53f01de555479dd3d248e5e29d2a6f5072a7bd4a3585a5027",
+  "scope": "Explicit substitute_rules_enabled singles pilot; no default/trainer AI rollout",
+  "source_sha256": {
+    ".godot/move_batch_catalog/index.json": "bb327ada0e33347980260a7e4a8af65e8622171002c64d3ecf56759aa92dbee1",
+    "data/normalized/pokemon_api.json": "719d14c082bdba03b26e801d23fb8887d0a0f4376348cf4a27e79a4b0a3c08b3",
+    "data/raw/pokemon_api.json": "2efc1538081e7849d6e04555570ca28c19b13f09f0fe0c7ce38329881972f24a",
+    "modules/battle/application/substitute_rules.gd": "401a2bffaee89551209908cff9af520f2b919c1cf11c6c80eab5c348f4133846",
+    "modules/battle/application/switch_move_rules.gd": "3df876d2f45a1488ae93f6e25bb7a45ce6976fdcf0e615de058eb74d1da400c9",
+    "modules/battle/application/turn_executor.gd": "b999bc1d658d240beed3e3e9b3ccb1169517a776b1feb2f7c9382aa8679f6789",
+    "modules/battle/domain/battle_event.gd": "580d8e4be2f131401c5bd5782dd0bf5145366b9567d3da4a5e63a01247773616",
+    "modules/battle/domain/battle_state.gd": "fad881dd887c4835237715d182ea361a9fa3970b54b041e016d9f119a3f87edf",
+    "modules/battle/effects/battle_effect_context.gd": "50e6dbc07f841838c15c265d0781dcf01f2ab3c8b26a9aed298b351b366eb274",
+    "modules/battle/effects/battle_effect_executor.gd": "b4a5d2b6d223a02488a34d06ffd31b4ed0589866aa0158efab8b5803c5ab6ac8",
+    "modules/gameplay/wild_adventure_session.gd": "10be590803e6e6a3cfe43dcd2e8c7d3fa71fb7555b7e4632f0d8fedeec5aff11",
+    "scenes/visual/battle_animation_playback.gd": "ed425e3855a08e3e783f198791a127524f9840a7275731cc0ad724d40d261c91",
+    "scenes/visual/battle_art.gd": "d557adc51893ae11eb8aff3211eaa4269431fbc68e4605954c858da3170722b6",
+    "scenes/visual/battle_move_visuals.gd": "380243624c706a4157965d1323c828c3ba5965a964d96d67bec225385de1ada3",
+    "scenes/visual/battle_substitute_pilot.gd": "e0bf5a9619cdb6c30695823e04dc9c23e12e8f6d72e0481422be6ad70da2aa50",
+    "scenes/visual/battle_timeline_plan.gd": "3799d2aeabfd3f075c25a89febde6d455c2b9edf4febdab87697c085e8170c25",
+    "scenes/visual/community_move_preview.gd": "7674d3a61e113e085d12132a4e10461aedd3a760516ab68700f2868f0f3fd4de",
+    "scenes/visual/field_battle_presentation.gd": "a6adec5961bf54a10e700a5a5963687719584d07d52110e02ad6332d8c50ff10",
+    "scenes/visual/field_demo.gd": "d5e5ee9fa5edcbcb6c91b33f73496eb7bfc63353bc200adc5b8afe4ac57d55fe",
+    "tests/battle/substitute_pilot_test_runner.gd": "c50d0de67baff4649098df9aebc0c2781447774e5e6791e090f21c51eb38a08d",
+    "tools/visual/build_substitute_pilot.py": "9fbcfd12ba089620858d9571db5acca3da3b4543e465aea010df7482ab3b6210"
+  },
+  "status": "SINGLES_SUBSTITUTE_PILOT_VALIDATED_NOT_GLOBAL_ROLLOUT",
+  "validation_status": "PASS",
+  "server_sample_count": 48,
+  "test_report": ".godot\\substitute_checks\\gpu.json",
+  "test_report_sha256": "aa43f653475283a31342f6b297c26d374383fd83dae41d69c5c2575d8b27283a",
+  "mechanics_added": [
+    "substitute",
+    "shed_tail"
+  ],
+  "remaining_unimplemented": [
+    "transform",
+    "ally_switch"
+  ],
+  "production_rollout_complete": false,
+  "limitations": [
+    "Explicit singles pilot only; default sessions and trainer UI/AI/search remain disabled.",
+    "No full competitive certification of suppression/Mold Breaker, Dynamax, doubles or move-specific exceptions.",
+    "Interception applies to damage and effect families represented by this engine; unsupported move mechanics remain unsupported.",
+    "Native creation is projected onto the doll feet. Hits on a doll use the existing generic type impact, not an original attack binding certified for doll-sized targets."
+  ],
+  "visual_adaptations": [
+    "substitute: native original doll creation aligned to feet; persistent doll hidden during native creation to avoid duplicates.",
+    "shed_tail: native original tail/doll cast aligned to feet; existing doll transferred to the selected reserve.",
+    "No original PNGs or catalog entries changed. Front/back original doll tiles remain distinct."
+  ],
+  "contact_sheet": {
+    "path": ".godot\\substitute_checks\\contact_sheet.png",
+    "sha256": "6c3e9a0cfa4dc69296614d05a15826f19e85d6ff4ab725306ac474e6c2f459ed"
+  }
+}

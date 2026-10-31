@@ -1,0 +1,377 @@
+{
+  "status": "PREPUBLICATION_CHECKS_PASS",
+  "branch": "codex/organized-update-v27",
+  "source_checkpoint": "34a7c6f1083419f00eafe3255a313158bd472349",
+  "functional_checkpoint": "6629fe570cdf4c891a937c3f2a74b45e960dc902",
+  "main_observed_before_upload": "e98e09f75b3f55c7d170f8f9906d49792cef5a6c",
+  "game_rules_modified_during_publication": false,
+  "tracked_modules_scenes_config_data_unchanged": true,
+  "persistent_uid_sidecars_generated_by_godot_import": [
+    "modules/gameplay/encounter_item_modifiers.gd.uid",
+    "modules/gameplay/held_escape_items.gd.uid",
+    "modules/inventory/battle_support_profile.gd.uid",
+    "tests/gameplay/encounter_held_v23.gd.uid",
+    "tests/gameplay/item_scope_v25.gd.uid",
+    "tests/gameplay/opencode_baseline_v2.gd.uid",
+    "tests/gameplay/opencode_battle_support_v2.gd.uid",
+    "tests/gameplay/opencode_world_held_v2.gd.uid",
+    "tests/gameplay/trade_item_exclusions_v26.gd.uid",
+    "tests/gameplay/trade_item_restoration_v27.gd.uid"
+  ],
+  "prepublication_gate": {
+    "status": "PASS",
+    "groups": 22,
+    "checks": 12546,
+    "details": [
+      {
+        "status": "PASS",
+        "checks_reported": 5,
+        "errors": [],
+        "last_line": "OK",
+        "name": "resource_installer",
+        "exit_code": 0,
+        "seconds": 0.69,
+        "log": ".godot/publication_v27/runs/1793456466655656400/resource_installer.log",
+        "expected_negative_diagnostics": []
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 0,
+        "errors": [],
+        "last_line": "[ DONE ] loading_editor_layout",
+        "name": "import",
+        "exit_code": 0,
+        "seconds": 15.92,
+        "log": ".godot/publication_v27/runs/1793456466655656400/import.log",
+        "expected_negative_diagnostics": []
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 25,
+        "errors": [],
+        "last_line": "}",
+        "name": "native_opencode_battle_support_v2",
+        "exit_code": 0,
+        "seconds": 5.02,
+        "log": ".godot/publication_v27/runs/1793456466655656400/native_opencode_battle_support_v2.log",
+        "expected_negative_diagnostics": []
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 6,
+        "errors": [],
+        "last_line": "}",
+        "name": "native_opencode_world_held_v2",
+        "exit_code": 0,
+        "seconds": 0.52,
+        "log": ".godot/publication_v27/runs/1793456466655656400/native_opencode_world_held_v2.log",
+        "expected_negative_diagnostics": []
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 472,
+        "errors": [],
+        "last_line": "=== PROJECT TEST RESULT: 472 PASS / 0 FAIL ===",
+        "name": "test_runner",
+        "exit_code": 0,
+        "seconds": 10.25,
+        "log": ".godot/publication_v27/runs/1793456466655656400/test_runner.log",
+        "expected_negative_diagnostics": [
+          "ERROR: Parse JSON failed. Error at line 0: Expected key"
+        ]
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 431,
+        "errors": [],
+        "last_line": "FIELD_HUD_RENDER PASS checks=431",
+        "name": "field_hud_render_test_runner",
+        "exit_code": 0,
+        "seconds": 8.95,
+        "log": ".godot/publication_v27/runs/1793456466655656400/field_hud_render_test_runner.log",
+        "expected_negative_diagnostics": []
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 973,
+        "errors": [],
+        "last_line": "FIELD_DIAGNOSTICS_CONTRACT PASS checks=973 errors=0",
+        "name": "field_diagnostics_test_runner",
+        "exit_code": 0,
+        "seconds": 0.52,
+        "log": ".godot/publication_v27/runs/1793456466655656400/field_diagnostics_test_runner.log",
+        "expected_negative_diagnostics": []
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 476,
+        "errors": [],
+        "last_line": "FIELD_DIAGNOSTICS_INTEGRATION PASS profile=native checks=476 errors=0",
+        "name": "field_diagnostics_integration_test_runner",
+        "exit_code": 0,
+        "seconds": 25.23,
+        "log": ".godot/publication_v27/runs/1793456466655656400/field_diagnostics_integration_test_runner.log",
+        "expected_negative_diagnostics": []
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 225,
+        "errors": [],
+        "last_line": "FIELD_API_CONTRACT PASS profile=native checks=225 errors=0",
+        "name": "field_api_test_runner",
+        "exit_code": 0,
+        "seconds": 7.05,
+        "log": ".godot/publication_v27/runs/1793456466655656400/field_api_test_runner.log",
+        "expected_negative_diagnostics": []
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 220,
+        "errors": [],
+        "last_line": "FIELD_API_INTEGRATION PASS checks=220 errors=0",
+        "name": "field_api_integration_test_runner",
+        "exit_code": 0,
+        "seconds": 9.27,
+        "log": ".godot/publication_v27/runs/1793456466655656400/field_api_integration_test_runner.log",
+        "expected_negative_diagnostics": []
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 201,
+        "errors": [],
+        "last_line": "FIELD_BRIDGE_WORLD PASS profile=native checks=201 errors=0",
+        "name": "field_bridge_world_test_runner",
+        "exit_code": 0,
+        "seconds": 12.77,
+        "log": ".godot/publication_v27/runs/1793456466655656400/field_bridge_world_test_runner.log",
+        "expected_negative_diagnostics": []
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 146,
+        "errors": [],
+        "last_line": "FIELD_BRIDGE_RUNTIME PASS checks=146 errors=0",
+        "name": "field_bridge_runtime_test_runner",
+        "exit_code": 0,
+        "seconds": 22.76,
+        "log": ".godot/publication_v27/runs/1793456466655656400/field_bridge_runtime_test_runner.log",
+        "expected_negative_diagnostics": []
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 1172,
+        "errors": [],
+        "last_line": "FIELD_RESTORE_CONTRACT PASS profile=native checks=1172 errors=0",
+        "name": "field_restore_contract_test_runner",
+        "exit_code": 0,
+        "seconds": 6.12,
+        "log": ".godot/publication_v27/runs/1793456466655656400/field_restore_contract_test_runner.log",
+        "expected_negative_diagnostics": []
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 912,
+        "errors": [],
+        "last_line": "FIELD_RESTORE_INTEGRATION PASS checks=912 errors=0",
+        "name": "field_restore_integration_test_runner",
+        "exit_code": 0,
+        "seconds": 45.2,
+        "log": ".godot/publication_v27/runs/1793456466655656400/field_restore_integration_test_runner.log",
+        "expected_negative_diagnostics": []
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 118,
+        "errors": [],
+        "last_line": "FIELD_NATIVE PASS checks=118 GPU=false errors=0",
+        "name": "field_native_test_runner",
+        "exit_code": 0,
+        "seconds": 59.86,
+        "log": ".godot/publication_v27/runs/1793456466655656400/field_native_test_runner.log",
+        "expected_negative_diagnostics": []
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 89,
+        "errors": [],
+        "last_line": "TRADE_ITEM_RESTORATION_V27 PASS checks=89",
+        "name": "trade_item_restoration_v27",
+        "exit_code": 0,
+        "seconds": 3.05,
+        "log": ".godot/publication_v27/runs/1793456466655656400/trade_item_restoration_v27.log",
+        "expected_negative_diagnostics": []
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 20,
+        "errors": [],
+        "last_line": "ITEM_SELECTION_POLICY PASS checks=20 excluded=44",
+        "name": "item_selection_policy_test_runner",
+        "exit_code": 0,
+        "seconds": 1.42,
+        "log": ".godot/publication_v27/runs/1793456466655656400/item_selection_policy_test_runner.log",
+        "expected_negative_diagnostics": []
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 4993,
+        "errors": [],
+        "last_line": "ITEM_CONNECTIONS PASS checks=4993 equip=624 evolutions=72 machines=229",
+        "name": "item_connections_test_runner",
+        "exit_code": 0,
+        "seconds": 11.28,
+        "log": ".godot/publication_v27/runs/1793456466655656400/item_connections_test_runner.log",
+        "expected_negative_diagnostics": []
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 150,
+        "errors": [],
+        "last_line": "OPENCODE_BATTLE_SUPPORT_V2 PASS checks=150 GPU=false",
+        "name": "opencode_battle_support_v2",
+        "exit_code": 0,
+        "seconds": 45.59,
+        "log": ".godot/publication_v27/runs/1793456466655656400/opencode_battle_support_v2.log",
+        "expected_negative_diagnostics": []
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 56,
+        "errors": [],
+        "last_line": "OPENCODE_WORLD_HELD_V2 PASS checks=56 GPU=false",
+        "name": "opencode_world_held_v2",
+        "exit_code": 0,
+        "seconds": 22.45,
+        "log": ".godot/publication_v27/runs/1793456466655656400/opencode_world_held_v2.log",
+        "expected_negative_diagnostics": []
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 40,
+        "errors": [],
+        "last_line": "=== SAVEGAME V2 TEST RESULT: 40 PASS / 0 FAIL ===",
+        "name": "savegame_v2_test_runner",
+        "exit_code": 0,
+        "seconds": 0.83,
+        "log": ".godot/publication_v27/runs/1793456466655656400/savegame_v2_test_runner.log",
+        "expected_negative_diagnostics": []
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 1816,
+        "errors": [],
+        "last_line": "ITEM_FIELD_V4 PASS checks=1816 cases=192 GPU=true",
+        "name": "field_items_gpu",
+        "exit_code": 0,
+        "seconds": 12.69,
+        "log": ".godot/publication_v27/runs/1793456466655656400/field_items_gpu.log",
+        "expected_negative_diagnostics": []
+      }
+    ]
+  },
+  "clean_restoration": {
+    "status": "PASS",
+    "files": 6643,
+    "source_checkpoint": "34a7c6f1083419f00eafe3255a313158bd472349",
+    "raw_api_snapshot_omitted": true,
+    "node_dependencies": "fresh npm ci from committed lockfile",
+    "source_assets_rebuilt": false
+  },
+  "clean_smoke": {
+    "status": "PASS",
+    "groups": [
+      {
+        "status": "PASS",
+        "checks_reported": 0,
+        "errors": [],
+        "last_line": "[ DONE ] loading_editor_layout",
+        "name": "import",
+        "exit_code": 0,
+        "seconds": 45.53,
+        "log": ".godot/publication_v27/clean_smoke/import.log",
+        "expected_negative_diagnostics": []
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 25,
+        "errors": [],
+        "last_line": "}",
+        "name": "native_opencode_battle_support_v2",
+        "exit_code": 0,
+        "seconds": 1.61,
+        "log": ".godot/publication_v27/clean_smoke/native_opencode_battle_support_v2.log",
+        "expected_negative_diagnostics": []
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 118,
+        "errors": [],
+        "last_line": "FIELD_NATIVE PASS checks=118 GPU=false errors=0",
+        "name": "field_native_test_runner",
+        "exit_code": 0,
+        "seconds": 51.45,
+        "log": ".godot/publication_v27/clean_smoke/field_native_test_runner.log",
+        "expected_negative_diagnostics": []
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 253,
+        "errors": [],
+        "last_line": "ENCOUNTER_HELD_V23 PASS checks=253 GPU=false",
+        "name": "encounter_held_v23",
+        "exit_code": 0,
+        "seconds": 83.22,
+        "log": ".godot/publication_v27/clean_smoke/encounter_held_v23.log",
+        "expected_negative_diagnostics": []
+      }
+    ]
+  },
+  "resources_manifest_sha256": "3eac6f5b6b2a6056f73447a771deb846666e7856aba1350c39aeb93b8788e07d",
+  "packages": [
+    {
+      "name": "pokemon-base-v27.zip",
+      "bytes": 279643693,
+      "files": 2111,
+      "sha256": "fc580e02dc4f25d37eb050cc6e9240cfdccf7d602e068b804ccaf54d1426ffc0"
+    },
+    {
+      "name": "pokemon-variants-v27.zip",
+      "bytes": 250782330,
+      "files": 2253,
+      "sha256": "dc4409950ebc4097066146bf8263721dbb627661687c00d3d7bda0b683b06da5"
+    },
+    {
+      "name": "move-resources-v27.zip",
+      "bytes": 49146918,
+      "files": 2263,
+      "sha256": "74886f35fa3d2873161acbd7b4a40a10e3f9cecf13786537378277c32a75d142"
+    },
+    {
+      "name": "verification-inputs-v27.zip",
+      "bytes": 163443,
+      "files": 16,
+      "sha256": "fd43951c19d030b9397f79dbd49bfe30200609fe0f964ae846883a8b6b50081f"
+    }
+  ],
+  "tracked_secret_scan": "NO_KNOWN_TOKEN_OR_PRIVATE_KEY_PATTERN_MATCHES",
+  "old_local_scope_seals": "NOT_RESEALED; historical wrappers retain their original local conditions",
+  "initial_gate_preflight": {
+    "status": "FAILED_NOT_COUNTED_AS_PASS",
+    "cause": "New publication runner initially named a nonexistent GPU runner; no game tests ran in that attempt",
+    "resolution": "Corrected to existing item_field_effects_v4.gd and ran all 22 groups successfully",
+    "receipt": "runs/1793456428445287900/results.json"
+  },
+  "limits": [
+    "Not an all-mechanics or all-items certification",
+    "Capture remains calvo_capture_v1",
+    "Encounter modifier checks rate only",
+    "No future trade-level conversion implemented",
+    "No remote item mission started",
+    "Clean smoke omits optional raw data/api snapshot; its Git tree remains unchanged"
+  ],
+  "new_tool_sources_sha256": {
+    "tools/distribution/restore_resources.py": "025fd76c41272a4854d9a9fe6d42cc15060563ea3ea0722ac0781aee855dba55",
+    "tools/distribution/verify_update.py": "6d64f3f402ef928ef4e946967e60c23c647c0e55b7bf06d127e00b99bff12f6e",
+    "tests/tools/test_restore_resources_v27.py": "00bb4216ef75bd58a14f377f13bd8f109a9524fc0031d9d8e2eb619ff608b98b"
+  }
+}

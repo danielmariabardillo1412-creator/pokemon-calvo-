@@ -1,0 +1,115 @@
+{
+  "status": "MOVE_CONNECTION_REPAIRS_AND_CONTEXTS_VALIDATED_WITH_DECLARED_LIMITS",
+  "date": "2026-10-27",
+  "inventory": 919,
+  "counts": {
+    "Z_PENDING": 53,
+    "INTEGRATION_OK_IN_TESTED_CONTEXTS": 784,
+    "DOUBLES_NATIVE_ONLY": 11,
+    "TARGETED_CONTEXT_VERIFIED": 36,
+    "EXCLUDED": 15,
+    "FORM_CATALOG_REQUIRED": 1,
+    "MAX_GEN8_INTEGRATION_OK": 19
+  },
+  "singles_tested": 820,
+  "max_gen8_connected": 19,
+  "general_audit": {
+    "cases": 3362,
+    "native_decisions": 13448,
+    "adapter_blocked_moves": 0
+  },
+  "targeted_contexts": {
+    "native_cases": 74,
+    "godot_positive_cases": 72,
+    "form_blocked_cases": 2,
+    "doubles_native_cases": 11
+  },
+  "checks": {
+    "dedicated_gameplay": 99,
+    "GPU": 51,
+    "GPU_captures": 8,
+    "backend": 100,
+    "adventure": 86,
+    "medicines": 120,
+    "medicine_GPU": 23,
+    "native": [
+      21,
+      10,
+      7
+    ],
+    "legacy_playback": 20809
+  },
+  "max_launcher": "JUGAR_COMBATE_MAXI.cmd",
+  "policy_decision": {
+    "z": "Remain pending per current user response; quoted friend message does not specify a definitive list of 53.",
+    "max": "Include all 19, explicitly confirmed priority.",
+    "new_exclusions": []
+  },
+  "changed_existing_sources": [
+    "modules/battle/backends/showdown/event_adapter.gd",
+    "modules/battle/backends/showdown/native_engine.cjs",
+    "modules/battle/backends/showdown/showdown_backend.gd",
+    "modules/gameplay/showdown_adventure_session.gd",
+    "scenes/visual/battle_art.gd",
+    "scenes/visual/battle_timeline_plan.gd",
+    "scenes/visual/showdown_adventure_lab.gd",
+    "scenes/visual/showdown_battle_lab.gd",
+    "scenes/visual/showdown_battle_playback.gd"
+  ],
+  "all_other_baseline_files_unchanged": 247,
+  "default_map_backend_changed": false,
+  "data_or_art_assets_changed": false,
+  "image_substitutions": [],
+  "legacy_shared_consumers": "Timeline accepts explicit native HP/maxHP and Dynamax flag; art scales only explicitly flagged Dynamax views. No legacy combat formulas changed.",
+  "limits": [
+    "11 doubles-only moves have positive native doubles fixtures; Godot doubles UI is not implemented.",
+    "Hyperspace Fury native context passes; Hoopa-Unbound data/art are absent, so its game form remains blocked.",
+    "Gen8 Max and Gen9 are explicit separate profiles; no hybrid mechanics implied.",
+    "Sleeping legacy import, other temporary forms/Tera/Mega and campaign map/save owner remain outside this slice.",
+    "Tested contexts do not certify every move interaction or every per-move VFX.",
+    "Default adventure still uses historical backend; no global migration/activation."
+  ],
+  "sources_sha256": {
+    "JUGAR_COMBATE_MAXI.cmd": "110d05e8dbe2eb8bf68caecb02b391d94153ea7d6131d9ff2592c9d7c6047997",
+    "modules/battle/backends/showdown/event_adapter.gd": "bcee8625217c475cc6dc77eda1fe0c6fca5c759d9e9c5e28499539f2fd3f7793",
+    "modules/battle/backends/showdown/native_engine.cjs": "d5ad0be8d0282f554595ece694b8d7b97a86c46f56d341a91c916e571323d566",
+    "modules/battle/backends/showdown/showdown_backend.gd": "21d7650f0a6ab820daad2e5d80e3f7a7fde62e1eaff6ecf90c9ed780676f0800",
+    "modules/gameplay/showdown_adventure_session.gd": "1110b1902eb8d581f7e53c7001da8b3b0eee3a4bd8b58bce1f4c95b660bffdf9",
+    "scenes/visual/battle_art.gd": "feee2304d7dfa2e02e2dd97e5e080b16b9ef7c5a923f19aeef79128c271ed6ae",
+    "scenes/visual/battle_timeline_plan.gd": "733e093521d80a471e5c050c66ecb9c3e7a466abed391065537129b6f342249c",
+    "scenes/visual/showdown_adventure_lab.gd": "2c463cd3624bf91c4144214923fc42c38f23c84ed24953d37271a823a0fc17cc",
+    "scenes/visual/showdown_battle_lab.gd": "50689c0cfe276fbd2388ede8587ce795bff64a0cf19b15014f03466d043db08c",
+    "scenes/visual/showdown_battle_playback.gd": "96528a5464dfe5a66a4f7352f1e05f4495ecb87425ae244a62149b8e2f386894",
+    "tests/battle/showdown_backend_test_runner.gd": "ce781eb2bd90abdd3cecd33ee3edd69c08044ff7b5f63ea6df4ceb0a4b16d902",
+    "tests/gameplay/showdown_adventure_test_runner.gd": "f76398ee5df0c309b0254b1cee03d94b384eb83ffc54418f07b6d33aa5e3ee26",
+    "tests/gameplay/showdown_medicine_test_runner.gd": "369517aa41b10f419b5991112e73219813f27bdb3dd56c2d7d82a2e892cf88eb",
+    "tests/gameplay/showdown_move_repair_test_runner.gd": "a8ca5cf17490ef823e676c64775cdaacdd942840b64c0b19beba6a2413f1adba",
+    "tests/gameplay/showdown_move_repair_visual_test_runner.gd": "92ded24800018196adeca15332784b51bbb14142271b2d5681f9c41aa91c6b7b",
+    "tools/showdown_engine_probe/context_cases.cjs": "2a32efb3016773986ef15f2fc5baeef9217eb971bc5a457effc298130d014350",
+    "tools/showdown_engine_probe/run_move_connections.py": "0587dd34b5c240edd27d078ddf201b4b5656dc721b7b2e1eae4bf123b0018790",
+    "tools/showdown_engine_probe/verify_move_connections.py": "b4cd6bfb2c8fafea10157252269e9f700f44a7f54d44f49dc78cfcb9dffbbb0a"
+  },
+  "evidence_sha256": {
+    ".godot/showdown_move_repair_checks/gameplay.log": "4c71b2819f74e0a0842a109cc230e9f3313a3a4629f27b1746225410ccc99fd0",
+    ".godot/showdown_move_repair_checks/visual.log": "df24154cdfdd1a4ae2910868cb04d1e81ea9ee9207af0fcd55bc4f47394d01c7",
+    ".godot/showdown_move_repair_checks/backend.log": "f5c8578307b37747db02960afa521376ca18055a124764a5ccdecf2700a246e6",
+    ".godot/showdown_move_repair_checks/adventure.log": "f1b9afdf930ee6f62e667cd89307d420b9a4a0dce6523118e46c62c5691af870",
+    ".godot/showdown_move_repair_checks/medicines.log": "ccc7186a97d88119a172f3d8adca2bbb4be091c3f10c5fd804062bef070d36f2",
+    ".godot/showdown_move_repair_checks/medicine_visual.log": "7e7ed1af195199c6d34e64b5bf068d7eba18bc8af8eaa6beef38ecb5fc2d139d",
+    ".godot/showdown_move_repair_checks/playback.log": "a4ecb5dfc466963d823d3cb59b37d13699535e4817a47850577ec13b3a49fbb6",
+    ".godot/showdown_move_repair_checks/gameplay.json": "26cde274dbf013a401558c9e32cc495d361767b2f1e15db702d38eb3ff4046e6",
+    ".godot/showdown_move_repair_checks/visual.json": "822a510d59aa26d72e121905fe9c153991685ff02fca6ec629b370afd79a9250",
+    ".godot/showdown_move_repair_checks/backend.json": "ba33c99738de1938ad6ff3f59c6faecda9f3af1c14ffe71894670ba9fdeb5f0d",
+    ".godot/showdown_move_repair_checks/before.json": "10c64e102bc8174bd6db9b4215d89a3d51fb989a3366d65e38ecebcaba66be90",
+    ".godot/showdown_context_checks/native.json": "1ad1f58d461864fc3b8243ae904621786bb868cb909469c493097474b4e41c00",
+    ".godot/showdown_context_checks/godot.jsonl": "4078819cd616b1551e5a2e0a48c5a2a389ad21061df5abad28e982923b4482a2",
+    ".godot/showdown_context_checks/godot.log": "f243c5964c4665bb9949c6e08b8c8d2917f156e297cbdefd39e9cdf836c726a3",
+    ".godot/showdown_context_checks/batch_contexts.json": "781bfd79fe98ca860c6ee2a46bbb38931a51840db3dba00657005b2bdc272453",
+    ".godot/showdown_context_checks/prototypes.json": "b656d75887c9711b1d3d3723df464d0e0cdba281b0a4fe0282f083a92c964a1d",
+    "docs/current/MOVE_CONNECTION_REPAIR.csv": "33ae997e06c81dc1474e0c25d906b04052f0ae4285c106e48a2fb56435a0de4a",
+    "docs/current/MOVE_FUNCTIONAL_AUDIT.json": "f57e805e7acb770503155bd516c91ac9a1b84721eae0ab6d7d84364521cac28b",
+    ".godot/showdown_medicine_checks/native.json": "c321e150380a7521b5d8af5ea5c868feaf1865a375091e76c51f13e3ca24ffa5",
+    ".godot/showdown_backend_checks/transactions.json": "da93fef88dd1820a3f1e81c21d6016b4e6bdd949f3bf424d57579fed50376727",
+    ".godot/showdown_adventure_checks/native.json": "43b28be6365719d8d525c8018fd40499958572f1cd8cc5053a90404ffdcb7cb1"
+  }
+}

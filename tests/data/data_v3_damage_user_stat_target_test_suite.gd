@@ -23,9 +23,11 @@ func run(check_callback: Callable) -> void:
 	# damaging moves whose stat_changes belong to the USER even when the move's
 	# general target is the opponent. Validate the immutable category itself so a
 	# future member cannot silently fall back to the legacy target heuristic.
-	var category_file := FileAccess.open(
-		"res://data/api/v2/move-category/7/index.json", FileAccess.READ
-	)
+	var source_path := preload("res://tests/helpers/pokeapi_source_fixture.gd").verified_path("move-category/7/index.json")
+	_expect("data_v3_damage_user_category_source_hash", not source_path.is_empty())
+	if source_path.is_empty():
+		return
+	var category_file := FileAccess.open(source_path, FileAccess.READ)
 	_expect("data_v3_damage_user_category_open", category_file != null)
 	if category_file == null:
 		return

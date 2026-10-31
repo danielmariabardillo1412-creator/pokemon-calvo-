@@ -1,0 +1,1164 @@
+{
+  "phase": "ITEM_FIELD_HELD_V14",
+  "status": "SOOTHE_BELL_NATIVE_BRIDGE_PASS_REMAINING_DEFINITIONS_EXPLICIT",
+  "date": "2026-10-29",
+  "base": "cff1b50",
+  "fixed_id": "soothe_bell",
+  "all_item_effects_certified": false,
+  "headless_checks": 127,
+  "gpu_checks": 129,
+  "native_case_groups": 11,
+  "verification": {
+    "status": "PASS",
+    "base": "cff1b50",
+    "groups": [
+      {
+        "group": "native_items",
+        "status": "PASS",
+        "exit_code": 0,
+        "checks_reported": 11,
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\field_held_v14\\runs\\1793304967225401100\\native_items.log",
+        "log_sha256": "2a9df3d0237745db9718247d66854f6118f64da5ac3a43676c4fe23789dae800",
+        "command": [
+          "D:/Herramientas/NodeJS/node.exe",
+          "tools/showdown_engine_probe/field_held_v14.cjs"
+        ]
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 0,
+        "errors": [],
+        "last_line": "[ DONE ] loading_editor_layout",
+        "group": "import",
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--path",
+          "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+          "--headless",
+          "--editor",
+          "--import",
+          "--quit"
+        ],
+        "exit_code": 0,
+        "seconds": 9.97,
+        "terminated_after_script_error": false,
+        "expected_negative_diagnostics": [],
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\field_held_v14\\runs\\1793304967225401100\\import.log",
+        "log_sha256": "10460b7ea9f3c81382fab0b1676d730be2bae922017704604420034c7bcf6ec2"
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 127,
+        "errors": [],
+        "last_line": "FIELD_HELD_V14 PASS checks=127 GPU=false",
+        "group": "field_held",
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--path",
+          "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+          "--headless",
+          "--script",
+          "tests/gameplay/field_held_v14.gd"
+        ],
+        "exit_code": 0,
+        "seconds": 52.42,
+        "terminated_after_script_error": false,
+        "expected_negative_diagnostics": [],
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\field_held_v14\\runs\\1793304967225401100\\field_held.log",
+        "log_sha256": "a84a814e0f7016f86c79561d15dbc9a05484c30d2dfcea676a829b8794d4b8d6"
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 472,
+        "errors": [],
+        "last_line": "=== PROJECT TEST RESULT: 472 PASS / 0 FAIL ===",
+        "group": "core",
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--path",
+          "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+          "--headless",
+          "--script",
+          "tests/test_runner.gd"
+        ],
+        "exit_code": 0,
+        "seconds": 9.31,
+        "terminated_after_script_error": false,
+        "expected_negative_diagnostics": [
+          "ERROR: Parse JSON failed. Error at line 0: Expected key"
+        ],
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\field_held_v14\\runs\\1793304967225401100\\core.log",
+        "log_sha256": "aa9de68f0c22929ceffa211b3a242db78885d34d92f9c3d971e6d9f31801cd99"
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 33633,
+        "errors": [],
+        "last_line": "ITEM_FIELD_V9 PASS checks=33633 cases=6456 GPU=false",
+        "group": "growth",
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--path",
+          "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+          "--headless",
+          "--script",
+          "tests/gameplay/item_field_growth_v9.gd"
+        ],
+        "exit_code": 0,
+        "seconds": 17.89,
+        "terminated_after_script_error": false,
+        "expected_negative_diagnostics": [],
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\field_held_v14\\runs\\1793304967225401100\\growth.log",
+        "log_sha256": "74f5db12e9a6d3437aa5597b8e03b2517d38a1fe1070f5f29b64b0ea171be667"
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 91991,
+        "errors": [],
+        "last_line": "ITEM_MOCHI_V13 PASS checks=91991 cases=30128 GPU=false",
+        "group": "mochis",
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--path",
+          "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+          "--headless",
+          "--script",
+          "tests/gameplay/item_mochi_v13.gd"
+        ],
+        "exit_code": 0,
+        "seconds": 39.11,
+        "terminated_after_script_error": false,
+        "expected_negative_diagnostics": [],
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\field_held_v14\\runs\\1793304967225401100\\mochis.log",
+        "log_sha256": "32e214bbe6c5e7d3731b467ad68874878d389af5c7ed41be492cb7d101216425"
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 6990,
+        "errors": [],
+        "last_line": "ITEM_FIELD_V7 PASS checks=6990 cases=504 GPU=false",
+        "group": "training",
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--path",
+          "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+          "--headless",
+          "--script",
+          "tests/gameplay/item_field_training_v7.gd"
+        ],
+        "exit_code": 0,
+        "seconds": 10.03,
+        "terminated_after_script_error": false,
+        "expected_negative_diagnostics": [],
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\field_held_v14\\runs\\1793304967225401100\\training.log",
+        "log_sha256": "240a74b91ec68c0a5ff1913ba32af1d602b686b99462713fe003b5128a839fc3"
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 118,
+        "errors": [],
+        "last_line": "FIELD_NATIVE PASS checks=118 GPU=false errors=0",
+        "group": "native",
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--path",
+          "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+          "--headless",
+          "--script",
+          "tests/gameplay/field_native_test_runner.gd"
+        ],
+        "exit_code": 0,
+        "seconds": 54.62,
+        "terminated_after_script_error": false,
+        "expected_negative_diagnostics": [],
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\field_held_v14\\runs\\1793304967225401100\\native.log",
+        "log_sha256": "4532edaa65a10230fbf1101f37a4944f5c8487c3292fb8a6d48e1b391f3fb333"
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 912,
+        "errors": [],
+        "last_line": "FIELD_RESTORE_INTEGRATION PASS checks=912 errors=0",
+        "group": "restore",
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--path",
+          "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+          "--headless",
+          "--script",
+          "tests/gameplay/field_restore_integration_test_runner.gd"
+        ],
+        "exit_code": 0,
+        "seconds": 54.17,
+        "terminated_after_script_error": false,
+        "expected_negative_diagnostics": [],
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\field_held_v14\\runs\\1793304967225401100\\restore.log",
+        "log_sha256": "b680833ccd3f8bdeff5c7b4503bff0c6063eb4adfa9db317e952ca3d48d46478"
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 129,
+        "errors": [],
+        "last_line": "FIELD_HELD_V14 PASS checks=129 GPU=true",
+        "group": "held_gpu",
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--path",
+          "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+          "--resolution",
+          "1280x720",
+          "--script",
+          "tests/gameplay/field_held_v14.gd",
+          "--",
+          "--capture"
+        ],
+        "exit_code": 0,
+        "seconds": 57.95,
+        "terminated_after_script_error": false,
+        "expected_negative_diagnostics": [],
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\field_held_v14\\runs\\1793304967225401100\\held_gpu.log",
+        "log_sha256": "4b0f7171a6ec584dc2dc13c9a22aa4bfa6568947bbb703dfbd7945c621ffd1be"
+      }
+    ],
+    "integrity_before": {
+      "status": "PASS",
+      "base": "cff1b505db40152e66b2058c0d9589e9df2b0db9",
+      "protected_files": 23011,
+      "preserved_absent_skip_worktree": 15647,
+      "mode": "HASH_IF_METADATA_CHANGED",
+      "allowed_changes": [
+        "AGENTS.md",
+        "modules/battle/backends/showdown/field_held_items.cjs",
+        "modules/battle/backends/showdown/native_engine.cjs",
+        "tests/gameplay/field_held_v14.gd",
+        "tests/gameplay/field_held_v14.gd.uid",
+        "tests/gameplay/item_mochi_v13.gd",
+        "tools/showdown_engine_probe/field_held_v14.cjs",
+        "tools/verification/run_field_held_v14.py"
+      ]
+    },
+    "integrity_after": {
+      "status": "PASS",
+      "base": "cff1b505db40152e66b2058c0d9589e9df2b0db9",
+      "protected_files": 23011,
+      "preserved_absent_skip_worktree": 15647,
+      "mode": "FULL_CONTENT_HASHES",
+      "allowed_changes": [
+        "AGENTS.md",
+        "modules/battle/backends/showdown/field_held_items.cjs",
+        "modules/battle/backends/showdown/native_engine.cjs",
+        "tests/gameplay/field_held_v14.gd",
+        "tests/gameplay/field_held_v14.gd.uid",
+        "tests/gameplay/item_mochi_v13.gd",
+        "tools/showdown_engine_probe/field_held_v14.cjs",
+        "tools/verification/run_field_held_v14.py"
+      ]
+    },
+    "tested_sources_sha256": {
+      "modules/battle/backends/showdown/field_held_items.cjs": "dee23d708b3be8284cdd7de8c41a0053d0dfd43784a452614f1729bd4e249c7a",
+      "modules/battle/backends/showdown/native_engine.cjs": "44ccb3c496c49f8fb827f0df85b5ca6804ffce5410f9df0d6609fa7edbb26d0d",
+      "tests/gameplay/field_held_v14.gd": "c96333ea49a9c3c2c00c6bb5fe6b18c45ff6ad49b2c4ac3e8634c08ee92a9d39",
+      "tests/gameplay/field_held_v14.gd.uid": "0c1061b9cd79c74bdbf6009fb722e33fee6910918c444444d7cad61411a1fbef",
+      "tests/gameplay/item_mochi_v13.gd": "5720d32f819ed1940bdca5fbca1dff7b14d0c543a88e92748ce6dc5beac456e2",
+      "tools/showdown_engine_probe/field_held_v14.cjs": "3d4d6633acf232f4eb27b225e2c10269eca5324a9a4bf8b20e7fc2bb0f6d38fa",
+      "tools/verification/run_field_held_v14.py": "173ba7a4da538f2c98a28397666357269dea490c41c7b13efc14bf363b349dc7"
+    }
+  },
+  "node_cases": {
+    "status": "PASS",
+    "checks": [
+      {
+        "name": "only one reviewed descriptor; no native callbacks",
+        "status": "PASS"
+      },
+      {
+        "name": "gen9customgame retains Bell, serialization and deterministic continuation",
+        "status": "PASS"
+      },
+      {
+        "name": "gen8customgame retains Bell, serialization and deterministic continuation",
+        "status": "PASS"
+      },
+      {
+        "name": "gen9calvounifiedv1 retains Bell, serialization and deterministic continuation",
+        "status": "PASS"
+      },
+      {
+        "name": "unknown item still rejected; consumed reviewed item stays absent",
+        "status": "PASS"
+      },
+      {
+        "name": "native Trick transfers Bell instead of dropping it",
+        "status": "PASS"
+      },
+      {
+        "name": "native Knock Off removes Bell and applies its normal held-item damage boost",
+        "status": "PASS"
+      },
+      {
+        "name": "native Fling uses power ten; itemless Fling fails; suppression preserves Bell",
+        "status": "PASS"
+      },
+      {
+        "name": "prepare/abort cannot publish a lost Bell; restore and commit agree",
+        "status": "PASS"
+      },
+      {
+        "name": "Bell on either reserve survives switch and keeps independent ownership",
+        "status": "PASS"
+      },
+      {
+        "name": "ordinary item trace is identical to the exact pre-fix adapter in a fresh process",
+        "status": "PASS"
+      }
+    ],
+    "baseline": "cff1b50"
+  },
+  "integration_routes": [
+    {
+      "projected": true,
+      "route": "fling",
+      "settled": true
+    },
+    {
+      "projected": true,
+      "route": "trick",
+      "settled": true
+    },
+    {
+      "projected": true,
+      "route": "knock_off",
+      "settled": true
+    },
+    {
+      "physical_bells": 2,
+      "route": "map_keep",
+      "save_load": true
+    },
+    {
+      "physical_bells": 1,
+      "route": "map_fling",
+      "save_load": true
+    },
+    {
+      "physical_bells": 2,
+      "route": "map_trick_capture",
+      "save_load": true
+    }
+  ],
+  "definition": {
+    "name": "Soothe Bell",
+    "gen": 3,
+    "fling": {
+      "basePower": 10
+    },
+    "callbacks": false,
+    "vendor_packages_changed": false,
+    "process_local_installation": true
+  },
+  "reference": {
+    "repository": "rh-hideout/pokeemerald-expansion",
+    "commit": "8654616bd38d9b28cc7dd8f3d0b4cb030aa2d40c",
+    "file": {
+      "path": "src/data/items.h",
+      "url": "https://raw.githubusercontent.com/rh-hideout/pokeemerald-expansion/8654616bd38d9b28cc7dd8f3d0b4cb030aa2d40c/src/data/items.h",
+      "sha256": "107f1b78a457f3a9c48749f325d674b62fe559b0ebfc365db13e82b00b19ecd3",
+      "bytes": 506153
+    },
+    "scope": "Reviewed held item name and Fling power; metadata only, no native mechanics copied"
+  },
+  "ordinary_trace_baseline": {
+    "commit": "cff1b50",
+    "fresh_processes": true,
+    "state_and_rng_hashes_identical": true,
+    "wall_clock_protocol_and_elapsed_times_excluded": true
+  },
+  "held_registry_audit": {
+    "holdable_ids": 631,
+    "native_present": 565,
+    "missing_count": 66,
+    "missing": [
+      {
+        "id": "amulet_coin",
+        "name": "Moneda Amuleto",
+        "category": "training"
+      },
+      {
+        "id": "antidote",
+        "name": "Antídoto",
+        "category": "status_cures"
+      },
+      {
+        "id": "awakening",
+        "name": "Despertar",
+        "category": "status_cures"
+      },
+      {
+        "id": "black_flute",
+        "name": "Flauta Negra",
+        "category": "spelunking"
+      },
+      {
+        "id": "blue_flute",
+        "name": "Flauta Azul",
+        "category": "flutes"
+      },
+      {
+        "id": "blue_scarf",
+        "name": "Pañuelo Azul",
+        "category": "scarves"
+      },
+      {
+        "id": "burn_heal",
+        "name": "Antiquemar",
+        "category": "status_cures"
+      },
+      {
+        "id": "calcium",
+        "name": "Calcio",
+        "category": "vitamins"
+      },
+      {
+        "id": "carbos",
+        "name": "Carburante",
+        "category": "vitamins"
+      },
+      {
+        "id": "cleanse_tag",
+        "name": "Amuleto",
+        "category": "training"
+      },
+      {
+        "id": "dire_hit",
+        "name": "Crítico X",
+        "category": "stat_boosts"
+      },
+      {
+        "id": "elixir",
+        "name": "Elixir",
+        "category": "pp_recovery"
+      },
+      {
+        "id": "energy_powder",
+        "name": "Polvo Energía",
+        "category": "healing"
+      },
+      {
+        "id": "energy_root",
+        "name": "Raíz Energía",
+        "category": "healing"
+      },
+      {
+        "id": "ether",
+        "name": "Éter",
+        "category": "pp_recovery"
+      },
+      {
+        "id": "everstone",
+        "name": "Piedra Eterna",
+        "category": "training"
+      },
+      {
+        "id": "exp_share",
+        "name": "Repartir Exp",
+        "category": "training"
+      },
+      {
+        "id": "fluffy_tail",
+        "name": "Cola Skitty",
+        "category": "spelunking"
+      },
+      {
+        "id": "fresh_water",
+        "name": "Agua Fresca",
+        "category": "healing"
+      },
+      {
+        "id": "full_heal",
+        "name": "Cura Total",
+        "category": "status_cures"
+      },
+      {
+        "id": "full_restore",
+        "name": "Restaurar Todo",
+        "category": "healing"
+      },
+      {
+        "id": "green_scarf",
+        "name": "Pañuelo Verde",
+        "category": "scarves"
+      },
+      {
+        "id": "guard_spec",
+        "name": "Protección X",
+        "category": "stat_boosts"
+      },
+      {
+        "id": "heal_powder",
+        "name": "Polvo Curación",
+        "category": "status_cures"
+      },
+      {
+        "id": "hp_up",
+        "name": "Más PS",
+        "category": "vitamins"
+      },
+      {
+        "id": "hyper_potion",
+        "name": "Hiperpoción",
+        "category": "healing"
+      },
+      {
+        "id": "ice_heal",
+        "name": "Antihielo",
+        "category": "status_cures"
+      },
+      {
+        "id": "iron",
+        "name": "Hierro",
+        "category": "vitamins"
+      },
+      {
+        "id": "lava_cookie",
+        "name": "Galleta Lava",
+        "category": "status_cures"
+      },
+      {
+        "id": "lemonade",
+        "name": "Limonada",
+        "category": "healing"
+      },
+      {
+        "id": "linking_cord",
+        "name": "Cordón Unión",
+        "category": "evolution"
+      },
+      {
+        "id": "luck_incense",
+        "name": "Incienso Duplo",
+        "category": "training"
+      },
+      {
+        "id": "lucky_egg",
+        "name": "Huevo Suerte",
+        "category": "training"
+      },
+      {
+        "id": "max_elixir",
+        "name": "Elixir Máximo",
+        "category": "pp_recovery"
+      },
+      {
+        "id": "max_ether",
+        "name": "Éter Máximo",
+        "category": "pp_recovery"
+      },
+      {
+        "id": "max_potion",
+        "name": "Poción Máxima",
+        "category": "healing"
+      },
+      {
+        "id": "max_revive",
+        "name": "Revivir Máximo",
+        "category": "revival"
+      },
+      {
+        "id": "moomoo_milk",
+        "name": "Leche Mu-mu",
+        "category": "healing"
+      },
+      {
+        "id": "old_gateau",
+        "name": "Barrita Plus",
+        "category": "status_cures"
+      },
+      {
+        "id": "paralyze_heal",
+        "name": "Antiparalizador",
+        "category": "status_cures"
+      },
+      {
+        "id": "pink_scarf",
+        "name": "Pañuelo Rosa",
+        "category": "scarves"
+      },
+      {
+        "id": "poke_doll",
+        "name": "Poké Muñeco",
+        "category": "spelunking"
+      },
+      {
+        "id": "potion",
+        "name": "Poción",
+        "category": "healing"
+      },
+      {
+        "id": "pp_max",
+        "name": "PP Máximos",
+        "category": "vitamins"
+      },
+      {
+        "id": "pp_up",
+        "name": "Más PP",
+        "category": "vitamins"
+      },
+      {
+        "id": "protein",
+        "name": "Proteína",
+        "category": "vitamins"
+      },
+      {
+        "id": "pure_incense",
+        "name": "Incienso Puro",
+        "category": "training"
+      },
+      {
+        "id": "rare_candy",
+        "name": "Caramelo Raro",
+        "category": "vitamins"
+      },
+      {
+        "id": "red_flute",
+        "name": "Flauta Roja",
+        "category": "flutes"
+      },
+      {
+        "id": "red_scarf",
+        "name": "Pañuelo Rojo",
+        "category": "scarves"
+      },
+      {
+        "id": "revival_herb",
+        "name": "Hierba Revivir",
+        "category": "revival"
+      },
+      {
+        "id": "revive",
+        "name": "Revivir",
+        "category": "revival"
+      },
+      {
+        "id": "sacred_ash",
+        "name": "Ceniza Sagrada",
+        "category": "revival"
+      },
+      {
+        "id": "smoke_ball",
+        "name": "Bola de Humo",
+        "category": "held_items"
+      },
+      {
+        "id": "soda_pop",
+        "name": "Refresco",
+        "category": "healing"
+      },
+      {
+        "id": "super_potion",
+        "name": "Superpoción",
+        "category": "healing"
+      },
+      {
+        "id": "white_flute",
+        "name": "Flauta Blanca",
+        "category": "spelunking"
+      },
+      {
+        "id": "x_accuracy",
+        "name": "Precisión X",
+        "category": "stat_boosts"
+      },
+      {
+        "id": "x_attack",
+        "name": "Ataque X",
+        "category": "stat_boosts"
+      },
+      {
+        "id": "x_defense",
+        "name": "Defensa X",
+        "category": "stat_boosts"
+      },
+      {
+        "id": "x_sp_atk",
+        "name": "At. Especial X",
+        "category": "stat_boosts"
+      },
+      {
+        "id": "x_sp_def",
+        "name": "Def. Especial X",
+        "category": "stat_boosts"
+      },
+      {
+        "id": "x_speed",
+        "name": "Velocidad X",
+        "category": "stat_boosts"
+      },
+      {
+        "id": "yellow_flute",
+        "name": "Flauta Amarilla",
+        "category": "flutes"
+      },
+      {
+        "id": "yellow_scarf",
+        "name": "Pañuelo Amarillo",
+        "category": "scarves"
+      },
+      {
+        "id": "zinc",
+        "name": "Zinc",
+        "category": "vitamins"
+      }
+    ],
+    "warning": "Registry inventory only; missing definitions may require non-neutral mechanics or absent forms. No automatic registration.",
+    "permitted_holdable_ids": 625,
+    "excluded_missing": [
+      {
+        "id": "max_revive",
+        "name": "Revivir Máximo",
+        "category": "revival"
+      },
+      {
+        "id": "revival_herb",
+        "name": "Hierba Revivir",
+        "category": "revival"
+      },
+      {
+        "id": "revive",
+        "name": "Revivir",
+        "category": "revival"
+      },
+      {
+        "id": "sacred_ash",
+        "name": "Ceniza Sagrada",
+        "category": "revival"
+      }
+    ],
+    "permitted_missing": [
+      {
+        "id": "amulet_coin",
+        "name": "Moneda Amuleto",
+        "category": "training"
+      },
+      {
+        "id": "antidote",
+        "name": "Antídoto",
+        "category": "status_cures"
+      },
+      {
+        "id": "awakening",
+        "name": "Despertar",
+        "category": "status_cures"
+      },
+      {
+        "id": "black_flute",
+        "name": "Flauta Negra",
+        "category": "spelunking"
+      },
+      {
+        "id": "blue_flute",
+        "name": "Flauta Azul",
+        "category": "flutes"
+      },
+      {
+        "id": "blue_scarf",
+        "name": "Pañuelo Azul",
+        "category": "scarves"
+      },
+      {
+        "id": "burn_heal",
+        "name": "Antiquemar",
+        "category": "status_cures"
+      },
+      {
+        "id": "calcium",
+        "name": "Calcio",
+        "category": "vitamins"
+      },
+      {
+        "id": "carbos",
+        "name": "Carburante",
+        "category": "vitamins"
+      },
+      {
+        "id": "cleanse_tag",
+        "name": "Amuleto",
+        "category": "training"
+      },
+      {
+        "id": "dire_hit",
+        "name": "Crítico X",
+        "category": "stat_boosts"
+      },
+      {
+        "id": "elixir",
+        "name": "Elixir",
+        "category": "pp_recovery"
+      },
+      {
+        "id": "energy_powder",
+        "name": "Polvo Energía",
+        "category": "healing"
+      },
+      {
+        "id": "energy_root",
+        "name": "Raíz Energía",
+        "category": "healing"
+      },
+      {
+        "id": "ether",
+        "name": "Éter",
+        "category": "pp_recovery"
+      },
+      {
+        "id": "everstone",
+        "name": "Piedra Eterna",
+        "category": "training"
+      },
+      {
+        "id": "exp_share",
+        "name": "Repartir Exp",
+        "category": "training"
+      },
+      {
+        "id": "fluffy_tail",
+        "name": "Cola Skitty",
+        "category": "spelunking"
+      },
+      {
+        "id": "fresh_water",
+        "name": "Agua Fresca",
+        "category": "healing"
+      },
+      {
+        "id": "full_heal",
+        "name": "Cura Total",
+        "category": "status_cures"
+      },
+      {
+        "id": "full_restore",
+        "name": "Restaurar Todo",
+        "category": "healing"
+      },
+      {
+        "id": "green_scarf",
+        "name": "Pañuelo Verde",
+        "category": "scarves"
+      },
+      {
+        "id": "guard_spec",
+        "name": "Protección X",
+        "category": "stat_boosts"
+      },
+      {
+        "id": "heal_powder",
+        "name": "Polvo Curación",
+        "category": "status_cures"
+      },
+      {
+        "id": "hp_up",
+        "name": "Más PS",
+        "category": "vitamins"
+      },
+      {
+        "id": "hyper_potion",
+        "name": "Hiperpoción",
+        "category": "healing"
+      },
+      {
+        "id": "ice_heal",
+        "name": "Antihielo",
+        "category": "status_cures"
+      },
+      {
+        "id": "iron",
+        "name": "Hierro",
+        "category": "vitamins"
+      },
+      {
+        "id": "lava_cookie",
+        "name": "Galleta Lava",
+        "category": "status_cures"
+      },
+      {
+        "id": "lemonade",
+        "name": "Limonada",
+        "category": "healing"
+      },
+      {
+        "id": "linking_cord",
+        "name": "Cordón Unión",
+        "category": "evolution"
+      },
+      {
+        "id": "luck_incense",
+        "name": "Incienso Duplo",
+        "category": "training"
+      },
+      {
+        "id": "lucky_egg",
+        "name": "Huevo Suerte",
+        "category": "training"
+      },
+      {
+        "id": "max_elixir",
+        "name": "Elixir Máximo",
+        "category": "pp_recovery"
+      },
+      {
+        "id": "max_ether",
+        "name": "Éter Máximo",
+        "category": "pp_recovery"
+      },
+      {
+        "id": "max_potion",
+        "name": "Poción Máxima",
+        "category": "healing"
+      },
+      {
+        "id": "moomoo_milk",
+        "name": "Leche Mu-mu",
+        "category": "healing"
+      },
+      {
+        "id": "old_gateau",
+        "name": "Barrita Plus",
+        "category": "status_cures"
+      },
+      {
+        "id": "paralyze_heal",
+        "name": "Antiparalizador",
+        "category": "status_cures"
+      },
+      {
+        "id": "pink_scarf",
+        "name": "Pañuelo Rosa",
+        "category": "scarves"
+      },
+      {
+        "id": "poke_doll",
+        "name": "Poké Muñeco",
+        "category": "spelunking"
+      },
+      {
+        "id": "potion",
+        "name": "Poción",
+        "category": "healing"
+      },
+      {
+        "id": "pp_max",
+        "name": "PP Máximos",
+        "category": "vitamins"
+      },
+      {
+        "id": "pp_up",
+        "name": "Más PP",
+        "category": "vitamins"
+      },
+      {
+        "id": "protein",
+        "name": "Proteína",
+        "category": "vitamins"
+      },
+      {
+        "id": "pure_incense",
+        "name": "Incienso Puro",
+        "category": "training"
+      },
+      {
+        "id": "rare_candy",
+        "name": "Caramelo Raro",
+        "category": "vitamins"
+      },
+      {
+        "id": "red_flute",
+        "name": "Flauta Roja",
+        "category": "flutes"
+      },
+      {
+        "id": "red_scarf",
+        "name": "Pañuelo Rojo",
+        "category": "scarves"
+      },
+      {
+        "id": "smoke_ball",
+        "name": "Bola de Humo",
+        "category": "held_items"
+      },
+      {
+        "id": "soda_pop",
+        "name": "Refresco",
+        "category": "healing"
+      },
+      {
+        "id": "super_potion",
+        "name": "Superpoción",
+        "category": "healing"
+      },
+      {
+        "id": "white_flute",
+        "name": "Flauta Blanca",
+        "category": "spelunking"
+      },
+      {
+        "id": "x_accuracy",
+        "name": "Precisión X",
+        "category": "stat_boosts"
+      },
+      {
+        "id": "x_attack",
+        "name": "Ataque X",
+        "category": "stat_boosts"
+      },
+      {
+        "id": "x_defense",
+        "name": "Defensa X",
+        "category": "stat_boosts"
+      },
+      {
+        "id": "x_sp_atk",
+        "name": "At. Especial X",
+        "category": "stat_boosts"
+      },
+      {
+        "id": "x_sp_def",
+        "name": "Def. Especial X",
+        "category": "stat_boosts"
+      },
+      {
+        "id": "x_speed",
+        "name": "Velocidad X",
+        "category": "stat_boosts"
+      },
+      {
+        "id": "yellow_flute",
+        "name": "Flauta Amarilla",
+        "category": "flutes"
+      },
+      {
+        "id": "yellow_scarf",
+        "name": "Pañuelo Amarillo",
+        "category": "scarves"
+      },
+      {
+        "id": "zinc",
+        "name": "Zinc",
+        "category": "vitamins"
+      }
+    ],
+    "permitted_native_present": 563,
+    "permitted_missing_categories": {
+      "training": 7,
+      "status_cures": 9,
+      "spelunking": 4,
+      "flutes": 3,
+      "scarves": 5,
+      "vitamins": 9,
+      "stat_boosts": 8,
+      "pp_recovery": 4,
+      "healing": 11,
+      "evolution": 1,
+      "held_items": 1
+    }
+  },
+  "audit_inputs_sha256": {
+    "modules/inventory/item_connections_v1.json": "5fbfd8866a446cb64b5aadd5800fe61779b252dc1c56ceb5a06514d5029cabc8",
+    "data/normalized/pokemon_api.json": "14cd97f59e0f68ff89acdd62e607f8dbff36c7562d001ce682869e0915181b2e",
+    "config/item_selection_v1.json": "c9305a87bf8e5a0e22d9c81353cc924dbaf432fca5b38f817f189ab8e2d048a2",
+    ".godot/battle_reference/runtime/node_modules/@pkmn/sim/package.json": "fd8a69ce6e69638e11f15cd6e3127a40a48faf02437806936611b8e3c29ea113"
+  },
+  "audit_method": "Load reviewed NativeEngine metadata; iterate holdable_ids; normalize existing Z-held aliases exactly as native lookup; test Dex.items.get(id).exists; then apply current excluded_ids and excluded_categories without changing them. Counts are registry presence, not effect certification.",
+  "audit_artifact_sha256": "7df17d5a214a235eb6c17c624cc331dc0dd97681af6ec948860422ddb62e4671",
+  "visual_review": {
+    "path": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\field_held_v14\\bell_bag.png",
+    "sha256": "7f35682fd72a570911e669ad6f1eaecdd7ed1f96203b7614510c1b60ccc9bd0a",
+    "reviewed": true,
+    "result": "Mew shows equipped Cascabel Alivio; physical spare remains in inventory; controls fit 1280x720; original item artwork reused."
+  },
+  "attempts_preserved": [
+    {
+      "path": ".godot\\field_held_v14\\runs\\1793304764565186100\\results.json",
+      "sha256": "6f61ae7149103711315fa8bab45e8d96371039b32077746dc0d97dd2c3a4f3ad",
+      "status": "PASS",
+      "error": ""
+    },
+    {
+      "path": ".godot\\field_held_v14\\runs\\1793304934241475400\\results.json",
+      "sha256": "39c5bc6fcf954979e5099d18b34346f9b5cc93e0e3434ec96746a5b87ce01d77",
+      "status": "FAIL",
+      "error": "native_items"
+    },
+    {
+      "path": ".godot\\field_held_v14\\runs\\1793304967225401100\\results.json",
+      "sha256": "fb7ab3eab7636feb6ffcbd3ea8ead6c2f8440f8702b0f839ea252eb26c956567",
+      "status": "PASS",
+      "error": ""
+    }
+  ],
+  "node_attempts_preserved": [
+    {
+      "path": ".godot\\field_held_v14\\node_runs\\1793304590133\\results.json",
+      "sha256": "2c9d915f574b4998aa2d3ff8f6af882d6210465ae231e0e1d12578fc69b0afc7",
+      "status": "FAIL"
+    },
+    {
+      "path": ".godot\\field_held_v14\\node_runs\\1793304621984\\results.json",
+      "sha256": "aa8d0da1b4ac7fbd3a96967f93e81c75d33778d676f68b8bde59698b361190a9",
+      "status": "PASS"
+    },
+    {
+      "path": ".godot\\field_held_v14\\node_runs\\1793304771750\\results.json",
+      "sha256": "aa8d0da1b4ac7fbd3a96967f93e81c75d33778d676f68b8bde59698b361190a9",
+      "status": "PASS"
+    },
+    {
+      "path": ".godot\\field_held_v14\\node_runs\\1793304942786\\results.json",
+      "sha256": "81503c659e400701bdcc54ee4fdb76ebf6e9457f32afdaf871f18bb77df16840",
+      "status": "FAIL"
+    },
+    {
+      "path": ".godot\\field_held_v14\\node_runs\\1793304974473\\results.json",
+      "sha256": "037f8f350a5fe697bfb5627942e719bb16f31c918980f8f77a53f7b10d67ee7d",
+      "status": "PASS"
+    },
+    {
+      "path": ".godot\\field_held_v14\\node_runs\\initial_direct_probe_failure.json",
+      "sha256": "02abb21a44aa524a6bc3c9707b82bfcd7856111cfde41061b82f832e7f7256d2",
+      "status": "FAIL"
+    }
+  ],
+  "counts_unchanged": {
+    "total_connected_field_effect_ids": 76,
+    "capture_ball_ids_connected": 12,
+    "held_item_ids_with_verified_effect_scenarios": 189
+  },
+  "limitations": [
+    "Only Soothe Bell is registered; 62 other permitted holdable IDs remain absent from the native registry and need reviewed metadata/system classification.",
+    "Registry presence does not certify every effect or missing world/evolution/economy system.",
+    "Mochi friendship parity with SV remains pending; this fix does not change the friendship profile.",
+    "No installed Node/Showdown files, battle handlers, formulas, RNG, canonical data/art/policy or save schema changed.",
+    "Legacy gen8/gen9 initial restore compared semantically because pre-existing formatid insertion order affects hashes; historical hashes are not rewritten. Unified hashes are compared exactly."
+  ],
+  "post_documentation_integrity": {
+    "status": "PASS",
+    "base": "cff1b505db40152e66b2058c0d9589e9df2b0db9",
+    "protected_files": 23011,
+    "preserved_absent_skip_worktree": 15647,
+    "mode": "HASH_IF_METADATA_CHANGED",
+    "allowed_changes": [
+      "AGENTS.md",
+      "docs/current/ITEM_FIELD_HELD_V14.json",
+      "docs/current/ITEM_FIELD_HELD_V14.md",
+      "docs/current/ITEM_SYSTEM_CURRENT_STATUS.json",
+      "docs/current/NEXT_STEPS.md",
+      "docs/current/PROJECT_STATE.md",
+      "docs/current/START_HERE.md",
+      "modules/battle/backends/showdown/field_held_items.cjs",
+      "modules/battle/backends/showdown/native_engine.cjs",
+      "tests/gameplay/field_held_v14.gd",
+      "tests/gameplay/field_held_v14.gd.uid",
+      "tests/gameplay/item_mochi_v13.gd",
+      "tools/showdown_engine_probe/field_held_v14.cjs",
+      "tools/verification/run_field_held_v14.py"
+    ]
+  }
+}

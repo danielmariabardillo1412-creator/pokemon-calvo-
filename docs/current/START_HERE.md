@@ -1,95 +1,106 @@
-# EMPEZAR AQUÍ
+# Empezar aquí — 2026-10-31
 
-Este archivo es el punto de entrada para recuperar el proyecto en una conversación, agente o sesión nueva.
+Publicación de la copia organizada en GitHub: [actualización V27](GITHUB_UPDATE_V27.md).
+Para un checkout nuevo y sus recursos: [preparación y pruebas](GITHUB_ENVIRONMENT_V27.md).
+La publicación no reabre misiones OpenCode ni modifica mecánicas.
 
-## Lectura mínima
+Estado actual: **los diez objetos evolutivos están restaurados.**
+La exclusión V26 fue una interpretación incorrecta de Codex, revocada en V27.
+Se conservan los catorce objetos equipados originales de esas rutas: los diez
+restaurados y los cuatro que ya seguían permitidos. Cordón Unión sigue excluido.
 
-1. `PROJECT_STATE.md` — baseline certificado y estado real.
-2. `NEXT_STEPS.md` — trabajo autorizado ahora.
-3. `WORK_PROTOCOL.md` — reglas de ejecución/certificación.
-4. El cuaderno temático del workstream que esté activo.
+[Corrección](ITEM_TRADE_RESTORATION_V27.md) · [Resultados](ITEM_TRADE_RESTORATION_V27.json).
+Regla futura del usuario: sustituir solo el intercambio. Donde se exige objeto,
+se conservará **nivel definido + objeto equipado**, sin intercambio. Sin equiparlo,
+el jugador puede conservar el Pokémon; no se hace evolución automática sin ese
+requisito. Ahora no se han implementado niveles ni cambios de evolución.
 
-## Autoridad
+Primero se termina objetos. No excluir un objeto solo porque no dé una ventaja
+de combate: su función evolutiva o de campo también cuenta. Para niveles y ramas
+se consultarán las referencias cuando toque, según [la regla anotada](TRADE_EVOLUTIONS_FUTURE.md).
 
-Si dos fuentes se contradicen:
+3 grupos PASS / 5.102 comprobaciones, incluidas regresiones. 44 exclusiones,
+624 equipables permitidos y 621 con descriptor. Onix/Revestimiento Metálico
+comprobado expresamente; cantidades y demás datos se conservan al equipar/quitar.
+Checkpoint funcional: `6629fe570cdf4c891a937c3f2a74b45e960dc902`.
 
-1. commit/branch/PR/CI del SHA exacto en GitHub;
-2. fuente canónica/inmutable del dominio;
-3. `docs/current/`;
-4. arquitectura/ADR vigentes;
-5. cuadernos temáticos;
-6. historial/worklogs;
-7. memoria del chat.
+V26 y sus resultados son históricos y su decisión de excluir estos diez no está
+vigente. Los apartados siguientes describen checkpoints anteriores V1–V21.
 
-## Línea moderna certificada
+V21: [consumibles de huida](ITEM_ESCAPE_V21.md). Poké Muñeco, Cola Skitty y
+Poké Señuelo ya se usan desde mochila nativa para terminar un encuentro salvaje,
+con consumo único y sin RNG/ataque extra. Son 18 usos directos de mochila con las
+medicinas. Siguen 77 efectos de campo y siete huecos de definición equipada.
 
-Freeze moderno de entrada a la consolidación de `main`:
+V20: [doce equipables revisados en bloque](ITEM_FIELD_HELD_V20.md). El registro
+nativo pasa a 618/625; quedan siete definiciones pendientes. Los usos especiales
+de mundo/mochila/concurso se mantienen separados; siguen 77 efectos de campo.
+Poké Muñeco conserva su ID mediante un nombre nativo compatible.
 
-`8552f52158ffc21c27b4e8f1dbc7caa63ac1a467`
+V19: [importación automática por familias](ITEM_IMPORT_V19.md). Se compilan 42
+objetos de recuperación en bloque: 41 rutas anteriores conservadas y Flauta Azul
+nueva, reutilizable. V19 dejó 77 efectos de campo; ver V20 para el registro
+nativo actual. Clasificar 2.222 IDs no certifica todas sus mecánicas.
 
-Ese SHA pasó **18/18 workflows SUCCESS**.
+1. Leer `AGENTS.md` en la raíz: copia activa, original protegido y límites.
+2. Leer [PROJECT_STATE.md](PROJECT_STATE.md): estado vigente y cobertura.
+3. Leer [NEXT_STEPS.md](NEXT_STEPS.md): familias pendientes y límites.
+4. Seguir [WORK_PROTOCOL.md](WORK_PROTOCOL.md) y consultar solo el cuaderno
+   temático necesario.
 
-Trainer AI está cerrado en sus sistemas obligatorios actuales:
+La limpieza y las correcciones declaradas están cerradas; resultados y límites
+en [CLEANUP.md](CLEANUP.md). No hay una tarea T00 pendiente para OpenCode.
+La arquitectura se aceptó en `208c06c0`; los objetos V7 se cerraron en `eb18a5da`.
+El comparador V1 quedó conservado en `021a9c5`, antes de esta limpieza.
+Después se conectaron y verificaron Más PP/PP Máximos (V8); consultar
+[ITEM_SYSTEM_CURRENT_STATUS.json](ITEM_SYSTEM_CURRENT_STATUS.json) y su informe.
+V9 conecta los seis caramelos con decisiones de aprendizaje/evolución y consumo
+transaccional: [ITEM_FIELD_V9.md](ITEM_FIELD_V9.md).
+V10 conecta Cápsula/Parche Habilidad:
+[ITEM_FIELD_V10.md](ITEM_FIELD_V10.md). 5.092 casos de catálogo y mochila/guardado/
+combate nativo verificados; Modo Daruma queda pendiente sin consumo del Parche.
+OpenCode no llegó a iniciar O001; Codex lo terminó por instrucción del usuario.
+V11: [ITEM_CAPTURE_V11.md](ITEM_CAPTURE_V11.md).
+Cinco bolas adicionales, nueve admitidas; 10.760 casos, guardado/restauración,
+selector del campo y cura de Sana verificados. Se conserva la fórmula aproximada
+calvo_capture_v1; no confundir ese perfil con una reproducción completa de Gen IX.
+V12: [ITEM_CAPTURE_V12.md](ITEM_CAPTURE_V12.md). Veloz/Turno/Nivel
+conectadas con turnos/nivel activo reales y restauración; doce bolas admitidas.
+19.368 casos y nueve grupos PASS. La fidelidad completa de captura sigue pendiente.
+V13: [ITEM_MOCHI_V13.md](ITEM_MOCHI_V13.md). Siete rutas EV de mochis,
+30.128 casos y nueve grupos PASS; 76 efectos de campo conectados. Se conserva
+amistad según RHH, sin certificar paridad SV.
+V14: [ITEM_FIELD_HELD_V14.md](ITEM_FIELD_HELD_V14.md). Campana Alivio
+ya entra en nativo y conserva su identidad, transferencias, consumo y guardado.
+Once casos nativos y diez grupos PASS. Ese inventario señaló 62 equipables
+permitidos sin definición; V16 reduce el pendiente sin inferir efectos neutros.
+V15: [ITEM_CAPTURE_V15.md](ITEM_CAPTURE_V15.md). Amigo/Safari/Competi/
+Gloria Ball, dieciséis bolas conectadas. 17.216 casos y cuatro rutas del mapa con
+guardar/cargar; resultados completos en su JSON. La fórmula aproximada de captura
+y los sistemas de obtención/eventos se mantienen separados.
+V16: [ITEM_FIELD_HELD_V16.md](ITEM_FIELD_HELD_V16.md). Se conectan
+24 medicinas equipadas al registro nativo, sin curacion automatica ni nuevas
+medicinas de combate. Quedan 38 equipables permitidos sin definicion. Pruebas
+por objeto, mochila real y guardado/carga; resultados completos en su JSON.
+V17: [ITEM_FIELD_HELD_V17.md](ITEM_FIELD_HELD_V17.md). Otros 17
+consumibles equipados revisados; contrato nativo compartido con V16 y usos de
+campo existentes conservados. Quedan 21 equipables sin definición. Los ocho
+potenciadores no ganan todavía una acción de uso desde mochila de combate.
+V18: [ITEM_PROGRESSION_V18.md](ITEM_PROGRESSION_V18.md). Huevo
+Suerte aplica XP de combate x1,5 con el objeto actual/inicial; Piedra Eterna usa
+la misma puerta de evolucion por nivel en combate y caramelos. Rutas reales,
+guardado/carga y referencias fijadas en el JSON. V18 dejó 19 definiciones pendientes;
+V20 reduce el pendiente actual a siete.
+La revisión previa a caramelos corrigió las curvas de experiencia; resultado y
+compatibilidad en [PROGRESSION_GROWTH_CURVES_FIX.md](PROGRESSION_GROWTH_CURVES_FIX.md).
+Auditoría de datos original/API y correcciones cerradas:
+[POKEAPI_DATA_REPAIRS_V1.md](POKEAPI_DATA_REPAIRS_V1.md). Conserva las diferencias
+de versión válidas; la auditoría inicial sigue en POKEAPI_DATA_AUDIT_V1.md.
 
-- runtime system 26.67 — CLOSED / COMPLETED;
-- Game-Ready 27.1 — CLOSED / VALIDATED;
-- Expertise V1 — CLOSED / CERTIFIED / FROZEN;
-- Campaign Persistence V1 — CLOSED / CERTIFIED / FROZEN.
+Autoridad operativa: instrucciones humanas vigentes, código y pruebas sobre los
+bytes reales de esta copia, estado actual y contratos del dominio. Los informes
+de CI remotos y diarios antiguos solo describen sus versiones exactas; no mandan
+hacer merges, recrear la copia ni repetir tareas cerradas.
 
-No existe P1-E.
-
-## Operación actual — consolidación de `main`
-
-Rama:
-
-`chore/main-baseline-consolidation-v1`
-
-Antigua `main`:
-
-`641d4b1fb0bcf964205d616e96f198f05d702197`
-
-Merge histórico inicial:
-
-`2f63312e8dc3e61c8fadbd02e97972fff6d0eacc`
-
-El único cambio exclusivo de la antigua `main` era un archivo vacío `this_should_not_be_called`; el merge inicial conserva la historia de esa rama como parent, pero usa exactamente el tree moderno certificado `89835a6797989a8ef027b6b17baea206b1f97f74`.
-
-Regla de promoción:
-
-- no tocar `main` hasta que el HEAD final de la rama de consolidación pase la matriz normal completa;
-- después, promocionar ese SHA exacto por fast-forward;
-- no generar después un merge SHA distinto sin certificar.
-
-## Estado del juego
-
-La base técnica incluye Battle Core, DATA V3, criaturas/progresión, captura, party/storage, inventario, Save V2, encuentros/overworld técnico y Trainer AI.
-
-El ejecutable visible sigue siendo una vertical slice técnica. El siguiente objetivo no es ampliar Trainer AI: es construir **Game Foundation V1** para obtener una mini-campaña real jugable.
-
-## Próximo workstream — Game Foundation V1
-
-Objetivo resumido:
-
-`nueva partida -> inicial -> pueblo/mapa -> ruta -> encuentro/captura -> entrenador -> servicio -> save/load -> continuar`
-
-Orden previsto:
-
-- GF1-A Game State + campaña;
-- GF1-B mapas/transiciones;
-- GF1-C NPC/diálogo/eventos;
-- GF1-D Save V3 mundo/campaña;
-- GF1-E servicios/UI mínima;
-- GF1-F vertical slice E2E.
-
-No iniciar GF1 hasta cerrar la consolidación de `main`.
-
-## Invariantes externas
-
-- PR #105 permanece OPEN / unmerged;
-- PR #106 CLOSED / not merged;
-- PR #107 CLOSED / not merged;
-- DATA V3 y Trainer AI no se reabren salvo regresión real o feature nueva explícita.
-
-## Regla de memoria
-
-Las decisiones materiales deben quedar en `docs/current/`, cuaderno temático, ADR o worklog; nunca solo en chat.
+No editar el original, regenerar datos o cambiar recursos gráficos como parte de
+esta tarea. Las decisiones de contenido siguen documentadas en los perfiles.

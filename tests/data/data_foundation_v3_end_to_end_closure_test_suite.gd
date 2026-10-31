@@ -23,8 +23,8 @@ const EXPECTED_FORM_COUNT := 326
 const EXPECTED_EXCLUDED_SHADOW_MOVES := 18
 
 const EXPECTED_MOVE_CLASSES := {
-	"RUNTIME_SUPPORTED": 590,
-	"PARTIAL_RUNTIME": 71,
+	"RUNTIME_SUPPORTED": 589,
+	"PARTIAL_RUNTIME": 72,
 	"DATA_ONLY": 246,
 	"UNSUPPORTED": 12,
 }
@@ -34,9 +34,9 @@ const EXPECTED_ABILITY_CLASSES := {
 	"DATA_ONLY": 338,
 }
 const EXPECTED_EVOLUTION_CLASSES := {
-	EvolutionSystem.RUNTIME_SUPPORTED: 391,
+	EvolutionSystem.RUNTIME_SUPPORTED: 393,
 	EvolutionSystem.PARTIAL: 0,
-	EvolutionSystem.DATA_ONLY: 149,
+	EvolutionSystem.DATA_ONLY: 147,
 	EvolutionSystem.UNSUPPORTED: 14,
 }
 const EXPECTED_HELD_RUNTIME_IDS := [&"leftovers", &"sitrus_berry"]
@@ -49,9 +49,11 @@ func run(check: Callable) -> void:
 	var raw := _load_json("res://data/raw/pokemon_api.json")
 	var normalized := _load_json("res://data/normalized/pokemon_api.json")
 	var manifest := _load_json("res://data/manifests/pokemon_api_manifest.json")
-	var unsupported := _load_json("res://data/reports/unsupported_mechanics.json")
-	var audit := _load_json("res://data/reports/pokeapi_v3_audit.json")
-	var forms := _load_json("res://data/reports/forms_policy_report.json")
+	# Pinned CI snapshots describe import provenance, not the current native
+	# mechanics. Current raw/normalized identities and references are checked below.
+	var unsupported := _load_json("res://ci/fixtures/pokeapi_reports/unsupported_mechanics.json")
+	var audit := _load_json("res://ci/fixtures/pokeapi_reports/import_summary.json")
+	var forms := _load_json("res://ci/fixtures/pokeapi_reports/forms_policy_report.json")
 
 	var raw_types: Array = raw.get("types", [])
 	var raw_species: Array = raw.get("species", [])
@@ -227,7 +229,7 @@ func run(check: Callable) -> void:
 	var unsupported_summary: Dictionary = unsupported.get("summary", {}) as Dictionary
 	var unsupported_moves: Dictionary = unsupported_summary.get("moves", {}) as Dictionary
 	check.call(
-		"data_v3_end_to_end_shadow_exclusion_and_reports_frozen",
+		"data_v3_end_to_end_shadow_exclusion_and_pinned_import_counts",
 		int(unsupported_moves.get("EXCLUDED_NON_STANDARD_TYPE", -1)) == EXPECTED_EXCLUDED_SHADOW_MOVES
 		and int(audit.get("species_total", -1)) == EXPECTED_SPECIES_COUNT
 		and int(audit.get("forms_total", -1)) == EXPECTED_FORM_COUNT

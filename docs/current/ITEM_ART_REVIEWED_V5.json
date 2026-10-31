@@ -1,0 +1,66 @@
+{
+  "status": "PASS",
+  "date": "2026-10-28",
+  "phase": "ITEM_ART_REVIEWED_V5",
+  "previous_entries_preserved": 654,
+  "new_art_entries": 357,
+  "total_art_entries": 1011,
+  "unique_art_hashes": 738,
+  "total_image_bytes": 12365532,
+  "new_image_bytes": 5434190,
+  "generated_entries_added": 7,
+  "existing_source_entries_added": 350,
+  "sources_added": {
+    "POKEAPI_ROOT": 14,
+    "SV": 302,
+    "GLOBAL_LINK": 30,
+    "GENERATED": 7,
+    "LEGENDS_ARCEUS": 4
+  },
+  "tests": {
+    "godot": 4862,
+    "gpu": 4872
+  },
+  "gpu_capture_count": 10,
+  "new_gpu_captures_reviewed": [
+    "generated_mineral",
+    "generated_lure",
+    "reviewed_form_art",
+    "shared_material_art"
+  ],
+  "protected_files_unchanged": {
+    "data/raw/pokemon_api.json": "2efc1538081e7849d6e04555570ca28c19b13f09f0fe0c7ce38329881972f24a",
+    "data/normalized/pokemon_api.json": "719d14c082bdba03b26e801d23fb8887d0a0f4376348cf4a27e79a4b0a3c08b3",
+    "config/item_selection_v1.json": "c9305a87bf8e5a0e22d9c81353cc924dbaf432fca5b38f817f189ab8e2d048a2",
+    "config/randomlock_content_v1.json": "5aed7a35ecf84d2fe6319cff0019b3ea5fadbb43b90556e8e8a9131329dea1cf",
+    "scenes/visual/showdown_adventure_lab.gd": "901b0dd7b914150122ebd3880287a137c1e4c8526361703d8cce731ed663fe72",
+    "scenes/visual/pokemon_gallery.gd": "742c03cfeb3880995b8cdfb3c5a4f82e3e49282304ce028778a5905f27da0b87"
+  },
+  "remaining_without_prepared_art": 1055,
+  "remaining_conditional_small_references": 418,
+  "remaining_machine_entries_deferred": 337,
+  "remaining_raid_event_entries": 300,
+  "provisional_installed_ids": [
+    "pewter_crunchies"
+  ],
+  "excluded_art_count": 156,
+  "generated_reference_and_prompt_provenance_retained": true,
+  "sources_sha256": {
+    "assets/local_item_catalog/manifest.json": "fc1e7a89d7c85144b8103aed3493b5f27ac07fc12d23ea7f006e326716dc5e7e",
+    "assets/local_item_catalog/CREDITS.md": "c09edffb447bdd731ed0ad0779130ee30f9734edcfa51c32a97ad9aa7ae695db",
+    "scenes/visual/item_gallery.gd": "05189f1bbb03005e34c288bc8331ef13ae02224c1c0929524f3bc292765e86f0",
+    "tests/gameplay/item_art_beta_test_runner.gd": "2c0de67747390140a09ec7f2bdf9d1771e90691835b350b4109a60bdc463b13d",
+    "tools/item_audit/install_reviewed_art_v5.py": "062ed057b0643dd0730b876e6aef6098f6dab685e4b6c5ee562fdc18d235ae24",
+    "tools/item_audit/audit_art_coverage.py": "51361bb0ce32f8bcd5537856be66bcf7db8bb7b3a35e2a3664a5889bed0f538d",
+    "docs/current/ITEM_ART_REVIEWED_V5_PLAN.json": "478c5d86718161341ebcad2d4278afa1798fec4bfb261363ebe350bd09999edf",
+    "docs/current/ITEM_ART_COVERAGE_V5.json": "bae8e0437ced1a6c3c3cc9fa5cb31b77071d526b6dff7be1a0f8f07e6e489155",
+    "docs/current/ITEM_ART_SCOPE.json": "aefe3b45024f69fbcd7f6139f75b9e63f2083a1e659a777aeca6fe4cae7c6860"
+  },
+  "evidence_directory": "D:\\Proyectos\\Pokemon Calvo\\.godot\\item_art_reviewed_v5",
+  "limitations": [
+    "Art registration never enables mechanics or approves final content.",
+    "Review remains pending for 418 small-reference entries if their systems are retained.",
+    "MT/MO/DT redesign and machine/version mapping are deferred.",
+    "Full item-effect certification is separate from the visual/native-bag integration checks."
+  ]
+}

@@ -8,6 +8,7 @@ extends RefCounted
 const READY := &"READY"
 const BATTLE_ACTIVE := &"BATTLE_ACTIVE"
 const COMPLETED := &"COMPLETED"
+const EncounterModifiers = preload("res://modules/gameplay/encounter_item_modifiers.gd")
 
 const COMPLETED_CAPTURED := &"CAPTURED"
 const COMPLETED_VICTORY := &"VICTORY"
@@ -19,12 +20,19 @@ var catalogs: DefinitionCatalog
 var progression_ruleset: ProgressionRuleset
 var status: StringName = READY
 var completion_reason: StringName = &""
+var live_moves_enabled: bool = false
+var force_shiny_encounters := false # Explicit laboratory configuration, never a content fallback.
+var switch_move_rules_enabled: bool = false # Explicit singles demo pilot, not a saved content rule.
+var transform_rules_enabled: bool = false
+var substitute_rules_enabled: bool = false
+var weather_rules_enabled: bool = false
 
 var _encounter: WildEncounterResult = null
 var _battle_server: AuthoritativeBattleServer = null
 var _save_repository: SaveGameRepository = SaveGameRepository.new()
 var _escape_ruleset: WildEscapeRuleset = WildEscapeRuleset.new()
 var _escape_attempts: int = 0
+var _reward_starting_items: Dictionary = {}
 
 
 func _init(
@@ -76,16 +84,22 @@ func begin_encounter(
 	if roster.is_empty():
 		return _encounter_error("no_available_player_creature")
 
+	# O120: same pure encounter-rate rule for the legacy headless slice. The
+	# authored table object is never edited; the helper returns a validated copy.
+	table = EncounterModifiers.prepare_table(table, player.party.get_creatures())
 	var result := WildEncounterSystem.resolve(table, encounter_rng, catalogs, progression_ruleset)
 	if result.status != WildEncounterResult.ENCOUNTER:
 		status = READY
 		completion_reason = &""
 		_encounter = null
 		_battle_server = null
+		_reward_starting_items.clear()
 		_escape_attempts = 0
 		return result
 
 	_encounter = result
+	if force_shiny_encounters and catalogs.shiny_species_ids.has(String(result.creature.species_id)):
+		result.creature.is_shiny = true
 	var battle_id := StringName("wild_battle_%s" % String(result.creature.instance_id))
 	var state := BattleState.create_with_parties(
 		battle_id,
@@ -95,6 +109,13 @@ func begin_encounter(
 		BattleRuleset.ID,
 	)
 	_battle_server = AuthoritativeBattleServer.new(state, catalogs)
+	_reward_starting_items=ProgressionSystem.HeldItems.starting_items_from_creatures(roster)
+	state.switch_move_rules_enabled = switch_move_rules_enabled
+	state.weather_rules_enabled = weather_rules_enabled
+	state.substitute_rules_enabled = substitute_rules_enabled
+	state.transform_rules_enabled = transform_rules_enabled
+	if live_moves_enabled: preload("res://modules/battle/application/live_move_profile.gd").apply(state)
+	state.battle_kind = &"wild"
 	status = BATTLE_ACTIVE
 	completion_reason = &""
 	_escape_attempts = 0
@@ -105,6 +126,20 @@ func submit_turn(actions: Array[BattleAction]) -> Array[BattleEvent]:
 	if not has_active_battle():
 		return []
 	return _battle_server.submit_turn(actions)
+
+
+func submit_switch_choice(incoming_id: StringName, turn: int) -> WildBattleCommandResult:
+	var out := WildBattleCommandResult.new()
+	out.command_type = WildBattleCommand.ACTION
+	if not has_active_battle():
+		out.reason = "no_active_wild_battle"
+		return out
+	out.battle_events = _battle_server.submit_switch_choice(&"side_a", incoming_id, turn)
+	out.reason = _battle_rejection_reason(out.battle_events)
+	out.accepted = out.reason.is_empty()
+	out.battle_finished = _battle_server.state.phase == BattleState.FINISHED
+	# Continuation spends neither a new command nor another turn.
+	return out
 
 
 # Canonical player-command boundary for the wild battle loop. MOVE/SWITCH use BattleAction,
@@ -228,6 +263,18 @@ func _submit_run_command(
 	if wild == null:
 		out.reason = "wild_target_missing"
 		return out
+	if preload("res://modules/battle/application/binding_move_rules.gd").switch_blocked(_battle_server.state, active_player, catalogs):
+		var blocked_error := _battle_server.validate_reaction_action(opponent_action, player_side.side_id)
+		if not blocked_error.is_empty():
+			out.reason = "invalid_opponent_response:%s" % blocked_error
+			return out
+		out.escape_resolution = WildEscapeResolution.new()
+		out.escape_resolution.attempt = _escape_attempts
+		out.accepted = true
+		out.turn_consumed = true
+		out.battle_events = _battle_server.submit_reaction_turn(opponent_action, player_side.side_id)
+		out.battle_finished = _battle_server.state.phase == BattleState.FINISHED
+		return out
 	if active_player.stats == null or wild.stats == null:
 		out.reason = "escape_stats_missing"
 		return out
@@ -268,6 +315,7 @@ func _submit_run_command(
 		out.session_completed = true
 		_encounter = null
 		_battle_server = null
+		_reward_starting_items.clear()
 		return out
 
 	out.battle_events = _battle_server.submit_reaction_turn(opponent_action, player_side.side_id)
@@ -300,6 +348,9 @@ func capture_current(ball_id: StringName, capture_rng: RandomNumberGenerator) ->
 	context.battle_finished = false
 	context.target_owner_trainer_id = &""
 	context.target_side_id = &"side_b"
+	context.completed_turns = _battle_server.state.turn
+	var catcher := player_active()
+	if catcher != null: context.catcher_level = catcher.level
 	var attempt := CaptureAttempt.new(target, ball_id, context)
 	var resolution := CaptureInventoryService.resolve(
 		attempt, capture_rng, catalogs, player.party, player.inventory
@@ -328,6 +379,7 @@ func capture_current(ball_id: StringName, capture_rng: RandomNumberGenerator) ->
 	out.reason = ""
 	_encounter = null
 	_battle_server = null
+	_reward_starting_items.clear()
 	_escape_attempts = 0
 	return out
 
@@ -344,12 +396,24 @@ func settle_finished_battle() -> WildBattleSettlement:
 		out.reason = "battle_not_finished"
 		return out
 
+	if state.end_reason == &"forced_escape":
+		_reconcile_player_party()
+		status = COMPLETED
+		completion_reason = COMPLETED_FLED
+		out.ok = true
+		out.session_completed = true
+		_encounter = null
+		_battle_server = null
+		_reward_starting_items.clear()
+		_escape_attempts = 0
+		return out # Neither victory/defeat, XP, capture nor an inventory action.
+	_restore_battle_transforms()
 	var outcome := BattleOutcome.from_battle_state(state, catalogs)
 	out.outcome = outcome
 	out.player_won = outcome.winner_side_id == &"side_a"
 	if out.player_won:
 		out.progression_events = ProgressionSystem.reconcile_battle_result(
-			player.party.get_creatures(), outcome, catalogs, progression_ruleset
+			player.party.get_creatures(), outcome, catalogs, progression_ruleset, _reward_starting_items
 		)
 	_reconcile_player_party()
 
@@ -360,6 +424,7 @@ func settle_finished_battle() -> WildBattleSettlement:
 	out.session_completed = true
 	_encounter = null
 	_battle_server = null
+	_reward_starting_items.clear()
 	_escape_attempts = 0
 	return out
 
@@ -381,7 +446,7 @@ func apply_evolution_event(event: ProgressionEvent) -> CreatureInstance:
 		return null
 	var allowed := false
 	for candidate in EvolutionSystem.evolution_candidates(
-		species, {"level": current.level}, catalogs
+		species, EvolutionSystem.level_up_context(current), catalogs
 	):
 		if candidate is EvolutionRecord and candidate.species_id == requested_target:
 			allowed = true
@@ -428,6 +493,7 @@ func load_game(path: String) -> LoadResult:
 	completion_reason = &""
 	_encounter = null
 	_battle_server = null
+	_reward_starting_items.clear()
 	_escape_attempts = 0
 	return loaded
 
@@ -457,7 +523,14 @@ func _battle_roster_with_living_active() -> Array[CreatureInstance]:
 	return roster
 
 
+func _restore_battle_transforms() -> void:
+	if _battle_server == null: return
+	for id: StringName in _battle_server.state.participant_ids:
+		_battle_server.state.creature(id).restore_battle_transform()
+
+
 func _reconcile_player_party() -> void:
+	_restore_battle_transforms()
 	for creature in player.party.get_creatures():
 		if creature != null:
 			creature.reconcile_post_battle()

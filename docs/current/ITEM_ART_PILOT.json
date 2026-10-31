@@ -1,0 +1,32 @@
+{
+  "status": "SAMPLE_LIST_ONLY",
+  "ids": [
+    "potion",
+    "super_potion",
+    "full_restore",
+    "ether",
+    "poke_ball",
+    "great_ball",
+    "ultra_ball",
+    "master_ball",
+    "dusk_ball",
+    "sitrus_berry",
+    "lum_berry",
+    "figy_berry",
+    "leftovers",
+    "life_orb",
+    "focus_sash",
+    "choice_band",
+    "assault_vest",
+    "heavy_duty_boots",
+    "fire_stone",
+    "rare_candy",
+    "adamant_mint",
+    "tm01",
+    "escape_rope",
+    "repel"
+  ],
+  "purpose": "Compare style and coverage using these representative icons at actual bag size before bulk import.",
+  "images_downloaded": false,
+  "style_selected": false
+}
