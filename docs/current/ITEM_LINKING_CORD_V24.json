@@ -1,0 +1,330 @@
+{
+  "status": "PASS_SUPPORTED_ROUTES_WITH_FORM_DEPENDENCIES",
+  "date": "2026-10-31",
+  "base": "ac6365997a08aa926fd27272884bf071f293c19d",
+  "groups": 10,
+  "checks": 10946,
+  "species_scanned": 1082,
+  "field_checks": 2453,
+  "gpu_checks": 34,
+  "native_checks": 8,
+  "routes": {
+    "boldore": "gigalith",
+    "graveler": "golem",
+    "graveler_alola": "golem_alola",
+    "gurdurr": "conkeldurr",
+    "haunter": "gengar",
+    "kadabra": "alakazam",
+    "machoke": "machamp",
+    "phantump": "trevenant"
+  },
+  "deferred_routes": [
+    {
+      "source": "pumpkaboo_average",
+      "target": "gourgeist_average",
+      "reason": "runtime_form_not_represented"
+    },
+    {
+      "source": "pumpkaboo_large",
+      "target": "gourgeist_large",
+      "reason": "runtime_form_not_represented"
+    },
+    {
+      "source": "pumpkaboo_small",
+      "target": "gourgeist_small",
+      "reason": "runtime_form_not_represented"
+    },
+    {
+      "source": "pumpkaboo_super",
+      "target": "gourgeist_super",
+      "reason": "runtime_form_not_represented"
+    }
+  ],
+  "runtime_context": "RHH item adapter over existing canonical trade records; no network trade or canonical edits",
+  "native_known_permitted_equipped_ids": 622,
+  "native_missing": [
+    "amulet_coin",
+    "exp_share",
+    "luck_incense"
+  ],
+  "run": {
+    "status": "PASS",
+    "base": "ac6365997a08aa926fd27272884bf071f293c19d",
+    "groups": [
+      {
+        "group": "import_tests",
+        "status": "PASS",
+        "exit_code": 0,
+        "checks_reported": 5,
+        "seconds": 0.24,
+        "command": [
+          "C:\\Users\\danie\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+          "tests/tools/test_linking_cord_import_v24.py"
+        ],
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\linking_cord_v24\\runs\\1793452139494737900\\import_tests.log",
+        "log_sha256": "12b3f5b89518b06dfee2fe30dd6bc308fc9e5a68b5baa5f346fa4c5caa981240"
+      },
+      {
+        "group": "import_check",
+        "status": "PASS",
+        "exit_code": 0,
+        "checks_reported": 1,
+        "seconds": 0.22,
+        "command": [
+          "C:\\Users\\danie\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+          "tools/item_import/import_linking_cord_v24.py",
+          "--check"
+        ],
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\linking_cord_v24\\runs\\1793452139494737900\\import_check.log",
+        "log_sha256": "86c947c270c846b1f29af8a7c542e1f29b716ee293089936bb884de849dffcc1"
+      },
+      {
+        "group": "native",
+        "status": "PASS",
+        "exit_code": 0,
+        "checks_reported": 8,
+        "seconds": 0.58,
+        "command": [
+          "D:/Herramientas/NodeJS/node.exe",
+          "tools/showdown_engine_probe/linking_cord_v24.cjs"
+        ],
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\linking_cord_v24\\runs\\1793452139494737900\\native.log",
+        "log_sha256": "7c9661f2e61f80e82f238e18fc00f58f3f16ec507732d757dd7ace7214692f20"
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 2453,
+        "errors": [],
+        "last_line": "LINKING_CORD_V24 PASS checks=2453 GPU=false",
+        "group": "cord",
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--path",
+          "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+          "--headless",
+          "--script",
+          "tests/gameplay/linking_cord_v24.gd"
+        ],
+        "exit_code": 0,
+        "seconds": 37.48,
+        "terminated_after_script_error": false,
+        "expected_negative_diagnostics": [],
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\linking_cord_v24\\runs\\1793452139494737900\\cord.log",
+        "log_sha256": "67a22642829f8b08645f77cd32176a1d57f775188b36b60ae4dbc9c21bf92ac5"
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 472,
+        "errors": [],
+        "last_line": "=== PROJECT TEST RESULT: 472 PASS / 0 FAIL ===",
+        "group": "core",
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--path",
+          "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+          "--headless",
+          "--script",
+          "tests/test_runner.gd"
+        ],
+        "exit_code": 0,
+        "seconds": 10.03,
+        "terminated_after_script_error": false,
+        "expected_negative_diagnostics": [
+          "ERROR: Parse JSON failed. Error at line 0: Expected key"
+        ],
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\linking_cord_v24\\runs\\1793452139494737900\\core.log",
+        "log_sha256": "aa9de68f0c22929ceffa211b3a242db78885d34d92f9c3d971e6d9f31801cd99"
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 4994,
+        "errors": [],
+        "last_line": "ITEM_CONNECTIONS PASS checks=4994 equip=625 evolutions=72 machines=229",
+        "group": "connections",
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--path",
+          "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+          "--headless",
+          "--script",
+          "tests/gameplay/item_connections_test_runner.gd"
+        ],
+        "exit_code": 0,
+        "seconds": 10.62,
+        "terminated_after_script_error": false,
+        "expected_negative_diagnostics": [],
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\linking_cord_v24\\runs\\1793452139494737900\\connections.log",
+        "log_sha256": "e6f0caa65b46ea6d095da5148e3135c91b7d3c9faf009789601cb6cc9a55e13c"
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 1814,
+        "errors": [],
+        "last_line": "ITEM_FIELD_V4 PASS checks=1814 cases=192 GPU=false",
+        "group": "field_effects",
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--path",
+          "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+          "--headless",
+          "--script",
+          "tests/gameplay/item_field_effects_v4.gd"
+        ],
+        "exit_code": 0,
+        "seconds": 9.61,
+        "terminated_after_script_error": false,
+        "expected_negative_diagnostics": [],
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\linking_cord_v24\\runs\\1793452139494737900\\field_effects.log",
+        "log_sha256": "73dde6165d4939f699e84c230453cf4cd04196868dc55cf221a425cbc18f807c"
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 253,
+        "errors": [],
+        "last_line": "ENCOUNTER_HELD_V23 PASS checks=253 GPU=false",
+        "group": "encounter_handoff",
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--path",
+          "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+          "--headless",
+          "--script",
+          "tests/gameplay/encounter_held_v23.gd"
+        ],
+        "exit_code": 0,
+        "seconds": 85.12,
+        "terminated_after_script_error": false,
+        "expected_negative_diagnostics": [],
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\linking_cord_v24\\runs\\1793452139494737900\\encounter_handoff.log",
+        "log_sha256": "df6f7bad6c47a4730cdd8cc5bbae2295ccdf21e02ccb99ef916cf1af13969a9d"
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 912,
+        "errors": [],
+        "last_line": "FIELD_RESTORE_INTEGRATION PASS checks=912 errors=0",
+        "group": "restore",
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--path",
+          "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+          "--headless",
+          "--script",
+          "tests/gameplay/field_restore_integration_test_runner.gd"
+        ],
+        "exit_code": 0,
+        "seconds": 43.59,
+        "terminated_after_script_error": false,
+        "expected_negative_diagnostics": [],
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\linking_cord_v24\\runs\\1793452139494737900\\restore.log",
+        "log_sha256": "b680833ccd3f8bdeff5c7b4503bff0c6063eb4adfa9db317e952ca3d48d46478"
+      },
+      {
+        "status": "PASS",
+        "checks_reported": 34,
+        "errors": [],
+        "last_line": "LINKING_CORD_V24 PASS checks=34 GPU=true",
+        "group": "cord_gpu",
+        "command": [
+          "C:/Godot/4.7/Godot_v4.7-stable_win64_console.exe",
+          "--path",
+          "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo",
+          "--resolution",
+          "1280x720",
+          "--script",
+          "tests/gameplay/linking_cord_v24.gd",
+          "--",
+          "--capture"
+        ],
+        "exit_code": 0,
+        "seconds": 26.92,
+        "terminated_after_script_error": false,
+        "expected_negative_diagnostics": [],
+        "log": "D:\\Proyectos\\Pokemon Calvo - Arquitectura Kilo\\.godot\\linking_cord_v24\\runs\\1793452139494737900\\cord_gpu.log",
+        "log_sha256": "3865475bdcc85628930f922873b02ad8982ff9dfaec59c8ecf125db00369d2b0"
+      }
+    ],
+    "integrity_before": {
+      "status": "PASS",
+      "base": "ac6365997a08aa926fd27272884bf071f293c19d",
+      "protected_files": 23125,
+      "preserved_absent_skip_worktree": 15647,
+      "mode": "HASH_IF_METADATA_CHANGED",
+      "allowed_changes": [
+        "modules/battle/backends/showdown/field_held_items.cjs",
+        "modules/inventory/field_item_service.gd",
+        "modules/inventory/linking_cord_effects.gd",
+        "modules/inventory/linking_cord_profile_v24.json",
+        "scenes/visual/field_item_bag.gd",
+        "tests/gameplay/linking_cord_v24.gd",
+        "tests/tools/test_linking_cord_import_v24.py",
+        "tools/item_import/import_linking_cord_v24.py",
+        "tools/showdown_engine_probe/linking_cord_v24.cjs",
+        "tools/verification/run_linking_cord_v24.py"
+      ]
+    },
+    "tested_sources_sha256": {
+      "modules/battle/backends/showdown/field_held_items.cjs": "0b21df1892ebe8873133940758c89ecb8209d03883e1afc829b580e1f3e9d83c",
+      "modules/inventory/field_item_service.gd": "bb29e13d86ef3e6c1e70f2950fecf3b34ed096d013bbc3f248b1e516698ec514",
+      "modules/inventory/linking_cord_effects.gd": "78fca50675477c7cd3a136f5b5fcb4f31777f2366337b437d5224a08e7844c49",
+      "modules/inventory/linking_cord_profile_v24.json": "364ab0a97876b241cf71fd7d7c666790745df16ad62b29c4c8ce32c95e48ccb8",
+      "scenes/visual/field_item_bag.gd": "8bf4b7962bf3a918dafbdccc6780b16a5caa9e2b50abc35f4ebc020b2bc8edd5",
+      "tests/gameplay/linking_cord_v24.gd": "e4f279c815b2c3ddb2d714c62ecf03847baf9c96903d7d50857e8465c587383a",
+      "tests/tools/test_linking_cord_import_v24.py": "fcb565b9939317f3113cbf7ef9824e5c743b8acef3d25c1ee5b2b64375a3c576",
+      "tools/item_import/import_linking_cord_v24.py": "479f31201e2e025262a773e5ea6e2fa473cfa99c4c9c10099dbf6350e5b9ae4b",
+      "tools/showdown_engine_probe/linking_cord_v24.cjs": "04af6b8387b19dc4e09ee3a489cc5ee74fc09f2b73c73213a1c14adda52f50fe",
+      "tools/verification/run_linking_cord_v24.py": "c30fdbd4e6262a945b546dcaae52864c24c17be16f1678eceb2b43eea5004a8a"
+    },
+    "integrity_after": {
+      "status": "PASS",
+      "base": "ac6365997a08aa926fd27272884bf071f293c19d",
+      "protected_files": 23125,
+      "preserved_absent_skip_worktree": 15647,
+      "mode": "FULL_CONTENT_HASHES",
+      "allowed_changes": [
+        "docs/current/ITEM_LINKING_CORD_V24.md",
+        "modules/battle/backends/showdown/field_held_items.cjs",
+        "modules/inventory/field_item_service.gd",
+        "modules/inventory/linking_cord_effects.gd",
+        "modules/inventory/linking_cord_profile_v24.json",
+        "scenes/visual/field_item_bag.gd",
+        "tests/gameplay/linking_cord_v24.gd",
+        "tests/tools/test_linking_cord_import_v24.py",
+        "tools/item_import/import_linking_cord_v24.py",
+        "tools/showdown_engine_probe/linking_cord_v24.cjs",
+        "tools/verification/run_linking_cord_v24.py"
+      ]
+    }
+  },
+  "captures": [
+    {
+      "path": ".godot\\linking_cord_v24\\haunter_evolved.png",
+      "sha256": "46fc3840447be0f20a87f23ecf65d1a1add7cd4b2ca5cff87d6e9e50e08a5722",
+      "visual_review": "PASS: evolved species/remaining quantity or passive-equipped explanation visible; no clipped controls"
+    },
+    {
+      "path": ".godot\\linking_cord_v24\\graveler_alola_evolved.png",
+      "sha256": "c03192fd30db79c01f88d3832bd0b9876ad3d020c1bd41627f0d71ec16faa3dc",
+      "visual_review": "PASS: evolved species/remaining quantity or passive-equipped explanation visible; no clipped controls"
+    },
+    {
+      "path": ".godot\\linking_cord_v24\\cleanse_tag_hint.png",
+      "sha256": "4c1bf461bb0f999d38de5792c1cf7a64fcc88940e56f042805ed6a964fd69a90",
+      "visual_review": "PASS: evolved species/remaining quantity or passive-equipped explanation visible; no clipped controls"
+    },
+    {
+      "path": ".godot\\linking_cord_v24\\pure_incense_hint.png",
+      "sha256": "c1fe3a3fb5c37425984723c04fddfcebd5c2fd8b8596889754e4725ee81468df",
+      "visual_review": "PASS: evolved species/remaining quantity or passive-equipped explanation visible; no clipped controls"
+    }
+  ],
+  "first_failed_fixture": ".godot/linking_cord_v24/runs/1793452024701396400/results.json",
+  "first_failed_fixture_reason": "Configuration was incorrectly applied after evolving and reset the party. Moved the test setup before evolution; production configuration behavior unchanged.",
+  "limits": [
+    "Four Pumpkaboo sized-form routes are not represented and stay rejected without consuming.",
+    "Trade evolutions needing a held item or a partner species are not weakened into Linking Cord routes.",
+    "The existing evolution/progression model is reused; no claim of all official generation-specific evolution subeffects.",
+    "Encounter minimum-step semantics, Pure Incense breeding, economy, Exp. Share, held EV multipliers and other previously documented systems remain separate."
+  ],
+  "canonical_and_policy_data_unchanged": true
+}

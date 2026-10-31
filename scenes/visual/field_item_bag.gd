@@ -194,6 +194,9 @@ func _apply(action: String) -> Dictionary:
 		if result.has("ability_id"): _result.text = "¡Su habilidad ahora es %s!" % _ability_name(StringName(result.ability_id), definitions)
 		if result.get("action") == "ev_reset": _result.text = "Se han reiniciado todos sus puntos de esfuerzo."
 	else:
+		if result.reason == "equip_for_passive_effect":
+			_result.text = "Su efecto se activa al llevarlo equipado; no se usa directamente."
+			refresh(); field.field_refresh_hud(); return result
 		if result.reason in ["item_has_no_effect", "move_slot_required", "unexpected_move_slot"]:
 			_result.text = {"item_has_no_effect": "No tendría efecto. El objeto se conserva.", "move_slot_required": "Elige el movimiento al que aplicar el objeto.", "unexpected_move_slot": "Este objeto no necesita seleccionar un movimiento."}[result.reason]
 			refresh(); field.field_refresh_hud(); return result
