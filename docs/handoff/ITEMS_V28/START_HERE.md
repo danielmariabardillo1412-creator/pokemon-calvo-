@@ -1,3 +1,5 @@
+**PLAN DE ACELERACIÓN V28 (vigente):** [ACCELERATION_PLAN.md](ACCELERATION_PLAN.md) — lotes por comportamiento, evidencia por ID y CI completo por lote coherente; no reescribir mecánicas ni bajar pruebas. La primera familia propuesta son los tres objetos Elección. Consultar la auditoría de 61 IDs y el estado antes de editar. 
+
 **CHECKPOINT V28 ACTUALIZADO (31-10-2026):** bloque 7 probado en commit funcional `66b14d77` con 20/20 workflows PASS, 500 aserciones de daño para 9 IDs y Windows portable PASS. Auditoría contable en [COMPETITIVE_COVERAGE_AUDIT.md](COMPETITIVE_COVERAGE_AUDIT.md): lista base 47 + 15 adicionales V28 - 1 excluido = **61 candidatos**, 19 con prueba ampliada V28, 38 por cerrar al mismo nivel, 4 bloqueados por sistemas pendientes. Antes de elegir más objetos, leer esa matriz y priorizar relevancia real. Los documentos posteriores son [skip ci], no nuevos resultados funcionales. GPU pendiente.
 
 # ITEMS_V28 — punto único de reanudación (31-10-2026)
