@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "mission": "ITEMS_V28",
-  "status": "BLOCK_4_ALLOWLIST_DECLARED",
+  "status": "BLOCK_4_CODE_WRITTEN_CI_PENDING",
   "base_branch": "main",
   "base_commit": "233b1a4f15ee4df7301e2c5acf8aed84a8f40626",
   "working_branch": "codex/items-v28-from-main",
@@ -14,7 +14,7 @@
     "code_identity_from_v3": true,
     "last_verified_commit": "69e15d74d04063dbe9613575b8618062e1efbed7"
   },
-  "next_action": "Implement only scoped Godot runner + one CI step, trigger GitHub Actions on SHA, keep 20 baselines and main untouched; document actual outcomes.",
+  "next_action": "Run GitHub Actions on new SHA. Inspect item-specific step, if failure preserve job/step logs and modify only root cause. Do not claim protection validated until actual pass.",
   "main_is_official_v27": true,
   "all_2222_items_functional": false,
   "gpu_manual_review": "PENDING",
@@ -125,7 +125,7 @@
     "keep_catalog_data_unchanged": true
   },
   "block_4": {
-    "status": "ALLOWLIST_APPROVED_WORK_NOT_YET_WRITTEN",
+    "status": "IMPLEMENTATION_TESTS_WRITTEN_NOT_RUN",
     "family": "COMPETITIVE_HELD_PROTECTION",
     "ids": [
       "safety_goggles",
@@ -134,6 +134,7 @@
     ],
     "existing_native_verification": "held_effect_sweep_v2.cjs",
     "goal": "native effect positive/negative plus physical bag/map/save real integration",
-    "ci": "NOT_RUN"
+    "ci": "NOT_RUN",
+    "test": "tests/gameplay/competitive_protection_items_v28.gd"
   }
 }

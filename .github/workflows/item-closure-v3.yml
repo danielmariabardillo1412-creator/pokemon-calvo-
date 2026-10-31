@@ -120,6 +120,13 @@ jobs:
           timeout 300s godot --headless --path . --script res://tests/gameplay/item_closure_v3_test_runner.gd 2>&1 | tee item-ev-v3.log
           if grep -E 'SCRIPT ERROR|Parse Error|timeout' item-ev-v3.log; then exit 1; fi
           grep -E 'ITEM_CLOSURE_V3 PASS checks=([5-9][0-9]|[1-9][0-9]{2,}) errors=0' item-ev-v3.log
+      - name: Competitive protection items through native effects and real field bag
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 300s godot --headless --path . --script res://tests/gameplay/competitive_protection_items_v28.gd 2>&1 | tee item-protection-v28.log
+          if grep -E 'SCRIPT ERROR|Parse Error|timeout' item-protection-v28.log; then exit 1; fi
+          grep -E 'COMPETITIVE_PROTECTION_V28 PASS checks=[1-9][0-9]* cases=3 errors=0' item-protection-v28.log
       - name: Evidence-bound matrix by ID and context
         shell: bash
         run: |
@@ -156,6 +163,7 @@ jobs:
           path: |
             item-*.log
             .godot/item_closure_v3/*.json
+            .godot/competitive_protection_v28/*.json
             .godot/publication_v27/runs/
           if-no-files-found: ignore
           include-hidden-files: true

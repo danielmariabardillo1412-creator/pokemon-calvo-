@@ -159,6 +159,21 @@
       "beast_ball": "not connected or used",
       "ultra_beasts": "ordinary capture path unchanged",
       "requires_explicit_competitive_relevance_for_next_work": true
+    },
+    "block_4": {
+      "status": "CODE_COMMITTED_CI_PENDING",
+      "items": [
+        "safety_goggles",
+        "covert_cloak",
+        "clear_amulet"
+      ],
+      "family": "COMPETITIVE_HELD_PROTECTION",
+      "prior_native_evidence": "tools/item_audit/held_effect_sweep_v2.cjs",
+      "test": "tests/gameplay/competitive_protection_items_v28.gd",
+      "run_id": null,
+      "checked": false,
+      "scope": "native true-vs-false effect, owner/revision/settlement, actual physical bag+map+checkpoint+save",
+      "not_claimed": "new simulator effect implementation"
     }
   },
   "limitations": [
