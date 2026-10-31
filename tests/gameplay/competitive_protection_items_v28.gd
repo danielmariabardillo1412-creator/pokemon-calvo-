@@ -93,19 +93,22 @@ func _native_protection(spec: Dictionary, equipped: bool) -> void:
 	if not result.accepted:
 		await session.close()
 		return
+	var expected_held: StringName = item
+	if not equipped: expected_held = &""
 	var active: CreatureInstance = session.battle_state().creature(id)
 	check("protection exact battle owner and held state " + String(item),
-		active != null and active.held_item_id == (item if equipped else &"")
+		active != null and active.held_item_id == expected_held
 	if active != null:
-		check("protection observable native effect " + String(item) + " equipped=" + str(equipped),
-			_protected_state(active, String(spec.effect)) if equipped else _unprotected_state(active, String(spec.effect)))
+		var observed := _protected_state(active, String(spec.effect))
+		if not equipped: observed = _unprotected_state(active, String(spec.effect))
+		check("protection observable native effect " + String(item) + " equipped=" + str(equipped), observed)
 	check("protection no early campaign mutation " + String(item),
 		owner.owned_creature(id).to_dict() == original_owner and owner.inventory.quantity(&"master_ball") == 1)
 	var settled: Dictionary = await session.capture(&"master_ball", session.revision)
 	check("protection capture settlement publishes correctly " + String(item), settled.accepted and owner.inventory.quantity(&"master_ball") == 0)
 	var published: Dictionary = owner.owned_creature(id).to_dict()
 	check("protection same equipment after settlement " + String(item),
-		owner.owned_creature(id).held_item_id == (item if equipped else &"")
+		owner.owned_creature(id).held_item_id == expected_held
 		and not owner.owned_creature(id).held_item_consumed)
 	check("protection no duplicate settlement " + String(item),
 		not (await session.capture(&"master_ball", session.revision)).accepted

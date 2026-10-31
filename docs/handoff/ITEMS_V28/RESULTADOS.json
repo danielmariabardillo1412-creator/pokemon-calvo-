@@ -161,7 +161,7 @@
       "requires_explicit_competitive_relevance_for_next_work": true
     },
     "block_4": {
-      "status": "CODE_COMMITTED_CI_PENDING",
+      "status": "FAILED_PARSE_FIX_PENDING_RETEST",
       "items": [
         "safety_goggles",
         "covert_cloak",
@@ -173,7 +173,12 @@
       "run_id": null,
       "checked": false,
       "scope": "native true-vs-false effect, owner/revision/settlement, actual physical bag+map+checkpoint+save",
-      "not_claimed": "new simulator effect implementation"
+      "not_claimed": "new simulator effect implementation",
+      "failed_run": 41225403708,
+      "failed_job": 124608393409,
+      "failed_sha": "aae2d98606890e94af14765d7391e854e4499547",
+      "error": "GDScript parse error line 99, unexpected ternary parser",
+      "effect_tests_executed": false
     }
   },
   "limitations": [
