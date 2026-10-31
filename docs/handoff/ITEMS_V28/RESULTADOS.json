@@ -16,7 +16,7 @@
     }
   },
   "v28": {
-    "tested_commit": "b9638283deb44d92c686f3d22f6fadbb27c2a1a4",
+    "tested_commit": "001a67a28afdae7916470819275d8c2b947de0a3",
     "real_godot_runs": [
       {
         "commit": "c29db19343ad22717c49a44737099eacd8aa7473",
@@ -85,9 +85,18 @@
         "checks": 164,
         "errors": 0,
         "url": "https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41227381283"
+      },
+      {
+        "commit": "001a67a28afdae7916470819275d8c2b947de0a3",
+        "run_id": 41229994112,
+        "result": "PASS",
+        "all_workflows": 20,
+        "checks": 332,
+        "errors": 0,
+        "url": "https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41229994112"
       }
     ],
-    "result": "SCOPED_CI_PASS_BLOCKS_0_2_4_5_NOT_ALL_ITEMS_DONE",
+    "result": "SCOPED_CI_PASS_BLOCKS_0_2_4_5_6_NOT_ALL_ITEMS_DONE",
     "notes": "This document is a preparatory handoff, not test proof.",
     "test_expansion": {
       "status": "PASS",
@@ -143,6 +152,13 @@
         "observed_count": 30,
         "where": "Ubuntu item job #124614247458",
         "message": "ERROR: The process ... does not exist or is not a child. No gameplay assertions failed."
+      },
+      {
+        "status": "OPEN",
+        "component": "Unix child process lifecycle",
+        "observed_count": 42,
+        "where": "Ubuntu item job 124622026080",
+        "message": "ERROR: The process ... does not exist or is not a child in successful job. No gameplay assertion failures; cause still open."
       }
     ],
     "next": "Design next independent item family with actual game consumers; keep main stable; document before changing.",
@@ -286,23 +302,48 @@
       ]
     },
     "block_6": {
-      "status": "CODE_COMMITTED_NOT_TESTED",
-      "new_ids": [
+      "status": "SCOPED_CI_VERIFIED",
+      "tested_functional_commit": "001a67a28afdae7916470819275d8c2b947de0a3",
+      "run_id": 41229994112,
+      "run_url": "https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41229994112",
+      "total_workflows": 20,
+      "passed_workflows": 20,
+      "ubuntu_job_id": 124622026080,
+      "windows_job_id": 124622026226,
+      "checks": 332,
+      "errors": 0,
+      "verified_item_ids": [
+        "muscle_band",
+        "wise_glasses",
+        "expert_belt",
         "charcoal",
         "mystic_water",
         "magnet"
       ],
-      "canonical_pokeapi_item_ids": [
+      "new_item_ids": [
+        "charcoal",
+        "mystic_water",
+        "magnet"
+      ],
+      "official_pokeapi_ids": [
         226,
         220,
         219
       ],
-      "expected_total_damage_item_ids": 6,
-      "expected_native_sessions": 24,
-      "expected_map_bag_routes": 6,
-      "pokeapi_criteria": "official index + type-enhancement and holdable and game indices",
-      "ability_interactions": "NOT_TESTED",
-      "ci": null
+      "native_comparison_sessions_total": 24,
+      "real_map_bag_save_routes_total": 6,
+      "provenance": "PokeAPI canonical index/details with type-enhancement category, holdable, active, game_indices",
+      "ability_context": "EMPTY (not verified)",
+      "windows": {
+        "publication": "PUBLICATION_V27 PASS",
+        "item_connections_checks": 4993,
+        "savegame_checks": 40
+      },
+      "limits": [
+        "42 Unix PID worker warning/error lines though workflows passed",
+        "GPU manual visual validation pending",
+        "type booster synergies/abilities and other 12+ types not certified by this block"
+      ]
     }
   },
   "limitations": [
