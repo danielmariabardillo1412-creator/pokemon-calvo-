@@ -144,19 +144,21 @@
       "windows_gate": "PUBLICATION_V27 PASS"
     },
     "block_3": {
-      "status": "CODE_TESTS_WRITTEN_NOT_EXECUTED",
+      "status": "CANCELLED_BY_USER_NO_FUNCTIONAL_DELIVERY",
       "item": "beast_ball",
-      "family": "ULTRA_BEAST_CAPTURE",
-      "gen": "Gen VII+",
-      "rules": {
-        "ultrabeast_multiplier": 5,
-        "non_ultrabeast_multiplier": "410/4096",
-        "ultra_species": 11
-      },
-      "runtime_profile": "calvo_capture_v1",
-      "test": "tests/gameplay/item_capture_beast_v28.gd",
-      "ci_run": null,
-      "verified": false
+      "attempt_commit": "224a080d618285e1c30cc40c4f5c7522a0e8d51f",
+      "attempted_run_id": 41224687162,
+      "run_relevance": "OBSOLETE_AFTER_USER_REVOCATION",
+      "reversal_verified_by": "compare against pre-block-3 blob SHAs after next commit",
+      "required_outcome": "Ultra beasts captured with ordinary existing Poké Balls",
+      "no_coverage_claim": true
+    },
+    "scope_policy": {
+      "use_case": "competitive randomlock",
+      "all_2222_target": false,
+      "beast_ball": "not connected or used",
+      "ultra_beasts": "ordinary capture path unchanged",
+      "requires_explicit_competitive_relevance_for_next_work": true
     }
   },
   "limitations": [
