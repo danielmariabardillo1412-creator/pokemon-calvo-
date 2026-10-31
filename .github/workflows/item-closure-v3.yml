@@ -166,6 +166,11 @@ jobs:
     runs-on: windows-latest
     timeout-minutes: 55
     steps:
+      - name: Preserve exact Git blob bytes on Windows (no autocrlf)
+        shell: pwsh
+        run: |
+          git config --global core.autocrlf false
+          git config --global core.safecrlf false
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
