@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "status": "PREPARATION_ONLY",
+  "commands": [
+    {
+      "kind": "github_api",
+      "operation": "compare_commits",
+      "base": "e10b79a5eb8c3e83975a9f4f5b48d6615a85e1b7",
+      "head": "codex/organized-update-v27",
+      "result": "identical, 0 ahead, 0 behind"
+    },
+    {
+      "kind": "github_api",
+      "operation": "create_branch",
+      "branch": "codex/item-closure-v3",
+      "result": "created"
+    },
+    {
+      "kind": "local_environment",
+      "operation": "git ls-remote",
+      "result": "BLOCKED_DNS",
+      "note": "Could not resolve github.com"
+    },
+    {
+      "kind": "local_environment",
+      "operation": "godot --version",
+      "result": "NOT_INSTALLED"
+    }
+  ],
+  "family_tests": [],
+  "ci_runs": [],
+  "assertions_executed": 0,
+  "limitations": [
+    "Remote GitHub read/write available; local clone and Godot tests unavailable in present container."
+  ],
+  "all_item_effects_certified": false
+}

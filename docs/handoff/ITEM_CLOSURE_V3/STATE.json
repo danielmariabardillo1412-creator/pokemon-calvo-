@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "mission": "ITEM_CLOSURE_V3",
+  "status": "IN_PROGRESS",
+  "repository": "danielmariabardillo1412-creator/pokemon-calvo-",
+  "base_branch": "codex/organized-update-v27",
+  "base_checkpoint": "e10b79a5eb8c3e83975a9f4f5b48d6615a85e1b7",
+  "working_branch": "codex/item-closure-v3",
+  "blocks": {
+    "A": {
+      "status": "IN_PROGRESS",
+      "last_verified_commit": null
+    },
+    "B": {
+      "status": "PENDING",
+      "last_verified_commit": null
+    },
+    "C": {
+      "status": "PENDING",
+      "last_verified_commit": null
+    },
+    "D": {
+      "status": "PENDING",
+      "last_verified_commit": null
+    }
+  },
+  "ci": {
+    "status": "NOT_RUN",
+    "runs": []
+  },
+  "all_item_effects_certified": false,
+  "ready_for_review": false
+}
