@@ -155,7 +155,7 @@ def validate_result(f, result, folder):
         require(set(row["field"]) == set(LOCATIONS), "Falta PARTY/STORAGE")
         for mode, v in row["native"].items():
             require(set(v) == {"valid", "hp", "max_hp", "status", "confused",
-                               "consumed", "units", "bag", "save", "evidence", "sha256"},
+                               "native_confusion_started", "consumed", "units", "bag", "save", "evidence", "sha256"},
                     "Contrato de combate incompleto")
             consumed = bool(spec["consumes"]) and mode == "active"
             bag = 2 if mode == "none" else 1
@@ -170,9 +170,15 @@ def validate_result(f, result, folder):
                     and raw["native_hp"] == v["hp"]
                     and raw["native_status"] == v["status"]
                     and raw["native_confused"] is v["confused"]
+                    and raw["native_confusion_started"] is v["native_confusion_started"]
                     and raw["native_consumed"] is consumed
                     and raw["units"] == units,
                     "Evidencia combate no corresponde al resultado")
+            native_events = raw.get("native_confusion_events")
+            require(type(v["native_confusion_started"]) is bool and isinstance(native_events, list)
+                    and all(type(e) is str and e.lower().startswith("|-start|") and "|confusion" in e.lower() for e in native_events)
+                    and bool(native_events) is v["native_confusion_started"],
+                    "Evento de confusión nativo ausente o falsificado")
             saved = raw["owner_after"]
             require(saved["inventory"]["quantities"].get(spec["id"], 0) == bag
                     and stock(saved, spec["id"]) == units,
@@ -193,8 +199,9 @@ def validate_result(f, result, folder):
                 and plain["confused"] is reserve["confused"],
                 "Reserva altera resultado del activo")
         if spec["kind"] == "confusion":
-            require(active["confused"] is False and plain["confused"] is bool(spec["consumes"])
-                    and reserve["confused"] is bool(spec["consumes"]),
+            require(active["native_confusion_started"] is bool(spec["consumes"])
+                    and plain["native_confusion_started"] is bool(spec["consumes"])
+                    and reserve["native_confusion_started"] is bool(spec["consumes"]),
                     "Persim no controla confusion de portador/suplente")
             require(active["status"] == plain["status"] == reserve["status"] == spec["status"],
                     "Persim no debe curar estado persistente")
@@ -209,8 +216,8 @@ def validate_result(f, result, folder):
             require(active["status"] == expected_status
                     and plain["status"] == reserve["status"] == base_status,
                     "Estado curado/no curado fuera del contrato")
-            require(all(v["confused"] is False for v in (active, plain, reserve)),
-                    "Baya especifica genera confusion artificial")
+            require(all(v["native_confusion_started"] is False for v in (active, plain, reserve)),
+                    "Baya específica no relacionada presenta activación nativa de confusión")
         for place, v in row["field"].items():
             require(set(v) == {"valid", "accepted", "hp", "status", "confused", "bag",
                                "save", "evidence", "sha256"}, "Contrato campo incompleto")
