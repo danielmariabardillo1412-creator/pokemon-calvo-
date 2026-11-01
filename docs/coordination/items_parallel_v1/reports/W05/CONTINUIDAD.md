@@ -1,5 +1,13 @@
 # IA5 / W05 — CUADERNO DE CONTINUIDAD · MACHINE
 
+## Actualización de campaña — activación (2026-11-01, anterior al primer `p`)
+
+- **Orden vigente:** `campaigns/CAMP_001_W05.md` en árbitra, blob `ce0e5763accadecc9c4ee971b13dae7dba23a2ef`. `CAMPAIGN_GATE_001.md` `ACTIVADA`, blob `3ef0b39f7eb74f3ebcb688f279c254daec981f8e`.
+- **Base autorizada sincronizada:** rama W05 actualizada por **fast-forward sin force** de `c0683bf49c7de1356266b5e7610af816d941c327` a árbitra `1b52fdd0b7b89e468811a17ad83a917ec7107735` (W05 era ancestro; comparación Git 42 commits ahead/0 behind). Los blobs de `LOTE_001.md`, `LOTE_002.md`, CSV propio y este cuaderno permanecían idénticos antes de esta actualización de cuaderno.
+- **CI base acreditada por GitHub:** [Actions #41341842320](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41341842320), commit `ac34fabbe1a27e69614f0239abee21c29d6fe65e`, resultado `completed/success`. No certifica cambios futuros de libros.
+- **Estado de campaña:** `ACTIVADA_PENDIENTE_MICROBLOQUE_01`. **Microbloques ejecutados: 0/3.** El mensaje de activación no cuenta como `p`; siguiente `p` autoriza únicamente bloque 01 (consulta de máquina y movimiento/tipo). No se ha creado `field_machine_book_profile.gd` ni nuevas pruebas, ni se ha tocado producción en este turno.
+- **Límites vigentes:** solo las rutas W05 listadas en `CAMP_001_W05.md`, ninguna política nueva y ninguna activación de las 19 heredadas. Ante fallo/parada, no adelantar 02/03.
+
 ## 1. Identidad, alcance y autoridad
 
 - **Identidad:** IA5 / W05; familia MACHINE (máquinas/libros de movimientos).
