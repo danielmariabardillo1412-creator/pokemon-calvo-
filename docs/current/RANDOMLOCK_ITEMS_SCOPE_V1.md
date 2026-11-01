@@ -2,9 +2,19 @@
 
 > **Borrador de selección de contenido, no cambio en la lógica del juego.** Clasifica las 2.222 entradas canónicas. Los archivos originales, las partidas guardadas, los objetos ya implementados y las reglas de comercio permanecen intactos. Ninguna decisión de esta rama modifica `config/item_selection_v1.json` ni los generadores actuales.
 
-## Tercera auditoría y decisiones de exclusión (2026-11-01)
+## Estado ACTUAL — cuarta pasada de equivalencias (2026-11-01)
 
-[Informe completo y cola exacta de 168 condicionales](./RANDOMLOCK_ITEMS_AUDIT_PASS3_2026-11-01.md).
+**Este bloque prevalece sobre los recuentos históricos de las pasadas 1, 2 y 3 que se conservan más abajo.**
+
+[Auditoría 4: duplicados auténticos, MO, fusiones, bolas y fósiles](./RANDOMLOCK_ITEMS_AUDIT_PASS4_2026-11-01.md). Se detectaron **15 fósiles** descartados incorrectamente como historia: se devuelven a `CONDICIONAL`, porque pueden restaurar Pokémon pero todavía no está decidida esa mecánica en el randomlock. Se identificaron **3 MO** (`hm02`, `hm03`, `hm07`) que enseñan el mismo ataque que una MT vigente, pero pueden tener **función de campo o reutilización diferente**: se recuperan a `CONDICIONAL`. Los otros **87 ID de DT antiguos** duplicados por movimiento siguen fuera del catálogo de objetos generables, conservando las definiciones.
+
+**Contador vigente comprobado:** **706 PERMITIR + 290 CONDICIONAL + 1.226 DESCARTAR = 2.222 IDs**. **Fase actual: 892 candidatos** (**706 permitidos + 186 condicionales**). **Mega más adelante: 104 (92 megapiedras + 12 accesorios)**. Ningún recuento representa el número de efectos técnicos que faltan por programar.
+
+**No eliminar todavía** las dos variantes `merge/split` de ADN, Necrosol/Necroluna o Riendas Unión ni los meteoritos de Deoxys: pueden representar operaciones/estados internos de **un solo objeto físico**, pero la fusión/desfusión o forma concreta son mecánicas diferentes que requieren una tabla de transformación y pruebas. No eliminar por identidad nominal; documentar antes cómo se sustituyen por un solo objeto en el inventario.
+
+## Histórico: tercera auditoría y decisiones de exclusión (2026-11-01)
+
+[Informe histórico y cola de 168 condicionales tras la tercera pasada](./RANDOMLOCK_ITEMS_AUDIT_PASS3_2026-11-01.md). El listado **vigente** es la [auditoría 4](./RANDOMLOCK_ITEMS_AUDIT_PASS4_2026-11-01.md).
 
 Se han **descartado expresamente** 80 caramelos específicos de Let's Go (AV), 24 objetos de Superlanzador y la Poké Flauta (sin Snorlax dormido en el mapa). La Poké Flauta puede rescatarse si se diseña ese evento con el compañero.
 
@@ -12,7 +22,7 @@ Se han **descartado expresamente** 80 caramelos específicos de Let's Go (AV), 2
 
 Se han **descartado documentalmente** 90 IDs históricos MT/MO/DT que enseñan el **mismo movimiento que una de las 229 MT activas**, sin excluir ni borrar ataques, 3 cristales Z incompatibles con exclusiones anteriores y 3 recuerdos decorativos de Let's Go. Permanecen bajo revisión **19 máquinas históricas sin equivalente** y **32 cristales Z viables en principio**.
 
-**104 entradas pertenecen a la fase Mega aplazada**: 92 megapiedras y 12 anillos/pulseras/accesorios que contienen o habilitan la Piedra Activadora. Quedan **874 candidatos en la fase ordinaria**, de los cuales **168 tienen pendientes de decisión**. Las 706 entradas permitidas **no equivalen a 706 efectos funcionales**. No se ha cambiado el motor ni la política activa del juego.
+**104 entradas pertenecen a la fase Mega aplazada**: 92 megapiedras y 12 anillos/pulseras/accesorios que contienen o habilitan la Piedra Activadora. Quedan **874 candidatos en la fase ordinaria de aquella pasada**, de los cuales **168 estaban pendientes de decisión**. Las 706 entradas permitidas **no equivalen a 706 efectos funcionales**. No se ha cambiado el motor ni la política activa del juego.
 
 ## Histórico: segunda auditoría conservadora (2026-11-01)
 
@@ -24,19 +34,19 @@ Se ha documentado la [segunda revisión cruzada de las 2.222 entradas](./RANDOML
 
 **Decisión expresa del usuario:**
 
-1. **FASE ACTUAL — objetos ordinarios del randomlocke competitivo.** Alcance de catálogo **874 IDs excluyendo los 104 elementos del subsistema Mega**: **706 `PERMITIR` + 168 `CONDICIONAL` corrientes**. Revisar los 168 condicionales; implementar y probar lo funcionalmente pendiente de los permitidos, sin repetir trabajo ya verificado. Los 874 NO son 874 efectos sin programar.
+1. **FASE ACTUAL — objetos ordinarios del randomlocke competitivo.** Alcance del catálogo **892 IDs excluyendo los 104 elementos del subsistema Mega**: **706 `PERMITIR` + 186 `CONDICIONAL` corrientes**. Revisar los 186 condicionales; implementar y probar lo funcionalmente pendiente de los permitidos, sin repetir trabajo ya verificado. Los 892 NO son 892 efectos sin programar.
 2. **FASE SIGUIENTE, solo DESPUÉS de terminar la fase de objetos:** megaevoluciones y su interfaz, formas, activación, pruebas y objetos asociados. Las **92 entradas `MEGA_STONE` y 12 accesorios de activación Mega** se mantienen en estado `CONDICIONAL` y **excluidos del trabajo presente**, no se reparten ni habilitan. La posible **piedra universal con máximo dos unidades** es una propuesta a discutir con el compañero, no una decisión aplicada.
 3. **Conservación:** mantener los 2.222 registros originales y los descartes propuestos sin destrucción, guardar trazabilidad y no modificar la rama oficial `main` ni las pruebas V28 de forma indirecta.
 
-**Comprobación de cierre de cantidades:** 706 permitidos + 168 condicionales corrientes = **874 en fase actual**; 104 elementos Mega aparte (92 piedras y 12 accesorios); 1.244 descartados; **874 + 104 + 1.244 = 2.222**. El criterio `PERMITIR` expresa alcance de contenido, **no** un PASS de implementación. Esta nota es documental; no cambia el generador de objetos.
+**Comprobación de cierre de cantidades:** 706 permitidos + 186 condicionales corrientes = **892 en fase actual**; 104 elementos Mega aparte (92 piedras y 12 accesorios); 1.226 descartados; **892 + 104 + 1.226 = 2.222**. El criterio `PERMITIR` expresa alcance de contenido, **no** un PASS de implementación. Esta nota es documental; no cambia el generador de objetos.
 
-## Estado vigente del catálogo tras tercera auditoría (2026-11-01)
+## Estado vigente del catálogo tras cuarta auditoría (2026-11-01)
 
 | Decisión propuesta | Entradas | Qué significa |
 | --- | ---: | --- |
 | `PERMITIR` | **706** | Tiene función prevista en el randomlocke o competitivo; **NO** significa efecto ya implementado |
-| `CONDICIONAL` | **272** | Conservado para revisión de especie, forma, mecánica de combate, economía o captura; no debe generarse sin resolver dependencia |
-| `DESCARTAR` | **1.244** | No incluir en el catálogo de objetos generables de la versión actual; mantener definición para reversibilidad |
+| `CONDICIONAL` | **290** | Conservado para revisión de especie, forma, mecánica de combate, economía o captura; no debe generarse sin resolver dependencia |
+| `DESCARTAR` | **1.226** | No incluir en el catálogo de objetos generables de la versión actual; mantener definición para reversibilidad |
 | **Total** | **2.222** | Cero IDs sin clasificar; ninguna entrada duplicada |
 
 **Lista individual:** [RANDOMLOCK_ITEMS_SCOPE_V1.csv](./RANDOMLOCK_ITEMS_SCOPE_V1.csv). Contiene cada ID, nombre español, familia, categoría de origen, decisión, subgrupo, motivo, presencia en la muestra competitiva Gen9, exclusión previa, evidencia de campo V8, referencias evolutivas y presencia de definición nativa. **Los 706 no son un nuevo contador de objetos funcionales.**
@@ -45,11 +55,11 @@ Se ha documentado la [segunda revisión cruzada de las 2.222 entradas](./RANDOML
 
 | Familia (origen) | PERMITIR | CONDICIONAL | DESCARTAR | Total |
 | --- | ---: | ---: | ---: | ---: |
-| MT/MO/DT históricas | 229 | 19 | 90 | 338 |
+| MT/MO/DT históricas | 229 | 22 | 87 | 338 |
 | Incursiones Dinamax | 0 | 0 | 300 | 300 |
 | Materiales fabricación MT | 0 | 0 | 222 | 222 |
 | Comida, picnic y recetas | 1 | 0 | 163 | 164 |
-| Historia / llave / forma | 1 | 41 | 179 | 221 |
+| Historia / llave / forma | 1 | 56 | 164 | 221 |
 | Equipables competitivos candidatos | 177 | 0 | 2 | 179 |
 | Megapiedras | 0 | 92 | 0 | 92 |
 | Entrenamiento general | 84 | 0 | 0 | 84 |
@@ -70,12 +80,12 @@ Se ha documentado la [segunda revisión cruzada de las 2.222 entradas](./RANDOML
 | Potenciadores de uso en combate | 9 | 0 | 0 | 9 |
 | Complementos de actividad lateral | 0 | 0 | 5 | 5 |
 | Registros de actividad lateral | 0 | 0 | 27 | 27 |
-| **Total** | **706** | **272** | **1.244** | **2.222** |
+| **Total** | **706** | **290** | **1.226** | **2.222** |
 
 ## Reglas procedentes de las decisiones del proyecto
 
 1. **Sin incursiones:** descartar los 300 cristales Dinamax de evento. Esto **no elimina Pokémon ni movimientos** vinculados en otras fuentes; solo el ítem que inicia una incursión.
-2. **Sin fabricar MT:** descartar 222 materiales. Preservar **229 MT** con enseñanza y consumo verificados en el perfil actual `scarlet-violet`; los **109 identificadores MT/MO/DT históricos** ya se cotejaron por movimiento: **90 IDs son redundantes y están descartados**, y **19 quedan condicionales** por no tener MT equivalente en el perfil actual. No se borró ninguno de sus ataques. Una MT útil puede aparecer directamente en el mapa.
+2. **Sin fabricar MT:** descartar 222 materiales. Preservar **229 MT** con enseñanza y consumo verificados en el perfil actual `scarlet-violet`; los **109 identificadores MT/MO/DT históricos** ya se cotejaron por movimiento: **87 IDs DT redundantes están descartados**, y **22 ID históricos quedan condicionales**, incluidos 3 MO que tienen uso diferente fuera del combate por no tener MT equivalente en el perfil actual. No se borró ninguno de sus ataques. Una MT útil puede aparecer directamente en el mapa.
 3. **Sin picnic ni minijuegos:** descartar comida/ingredientes, correo, accesorios y registros decorativos. Los 24 objetos especiales del Superlanzador han sido **descartados por decisión expresa del usuario**, igual que los 80 caramelos individuales de Let's Go, sin afectar a los potenciadores generales. Se ha rescatado el Emblema del Líder (`leaders_crest`) del grupo `picnic` por su función evolutiva; además los objetos de familia `EVOLUTION` se preservan.
 4. **Megaevolución sí:** conservar las 92 entradas de megapiedras como `CONDICIONAL`; **no permitir que aparezcan todavía todas** hasta verificar especie base permitida, forma mega, activación y generación de procedencia. El catálogo de especies del proyecto parte de **1.025 especies base y 1.076 especies del pool permitido** según la auditoría de variantes; eso no certifica todas las megaformas. Algunos IDs pertenecen a incorporaciones posteriores a la generación IX y deben revisarse individualmente.
 5. **Bayas, equipables, evolución, medicamentos, Poké Balls y entrenamiento sí.** Preservar objetos con capacidad estratégica y utilidad para progresar. Las 9 Poké Balls ordinarias de Leyendas Arceus quedan condicionales hasta adaptar su captura; `laorigin_ball` y `lastrange_ball` se descartan por ser exclusivas de historia/transferencia. `beast_ball` (Ente Ball) se ha **recuperado como PERMITIR** por su ventaja de captura de Ultraentes: excluirla en la primera pasada fue un error, nunca una prohibición del usuario.
@@ -114,7 +124,7 @@ Se ha documentado la [segunda revisión cruzada de las 2.222 entradas](./RANDOML
 
 **Fragmentos tera (`*_tera_shard`, 18): APROBADOS como contenido por el usuario (1-XI-2026).** Sirven para cambiar el teratipo asignado, **no** para activar la teracristalización. Pasan de `CONDICIONAL` a `PERMITIR` en el CSV; **su uso, coste, consumo y guardado todavía requieren implementación y pruebas** antes de permitir su generación en partidas.
 
-**Aritmética V3 vigente:** 706 `PERMITIR` + 272 `CONDICIONAL` + 1244 `DESCARTAR` = 2222. Los **18 fragmentos tera** pasan a `PERMITIR` por decisión expresa del usuario; las **92 megapiedras y 12 accesorios Mega** siguen aparcados; de los 35 cristales Z, 32 permanecen condicionados y 3 están descartados según reglas anteriores. No se modifica la política activa, los datos, V28 ni `main`; sin nuevas pruebas Godot.
+**Aritmética V4 vigente:** 706 `PERMITIR` + 290 `CONDICIONAL` + 1226 `DESCARTAR` = 2222. Los **18 fragmentos tera** pasan a `PERMITIR` por decisión expresa del usuario; las **92 megapiedras y 12 accesorios Mega** siguen aparcados; de los 35 cristales Z, 32 permanecen condicionados y 3 están descartados según reglas anteriores. No se modifica la política activa, los datos, V28 ni `main`; sin nuevas pruebas Godot.
 
 ## Desglose de las 92 megapiedras
 
@@ -143,12 +153,12 @@ Si más adelante se confirma el sistema, la variante para un Pokémon con varias
 - Propuesta técnica no destructiva: mantener las piedras originales y su tabla especie→megaforma como **metadatos del motor nativo**; el objeto de la partida es universal, mientras el adaptador construye el correspondiente ID nativo específico durante la ejecución del combate (siempre que el simulador soporte esa megaforma), sin reescribir cada efecto. En guardado/mapa/bolsa persiste solo el ID universal.
 - La antigua excepción de Rayquaza debe revisarse: bajo límite de dos candidatos, permitir megaevolucionar sin piedra rompería el presupuesto. O se le exige la universal, o se documenta una excepción con coste competitivo equivalente; **pendiente de aprobación**.
 - **Riesgo:** simplificar 92 ítems y su distribución NO elimina el trabajo de implementar/validar las megaformas, su UI, su arte y su integración real. Tampoco garantiza equidad si el reparto de ambas piedras no es equivalente entre jugadores.
-- **No aplicar todavía una política de ejecución** a partir de los recuentos (706 PERMITIR / 272 CONDICIONAL / 1244 DESCARTAR) ni activar nuevas reglas. Si se aprueba, se producirá una V2 del catálogo, sin eliminar las definiciones canónicas, y una especificación funcional separada para el adaptador de megaevolución.
+- **No aplicar todavía una política de ejecución** a partir de los recuentos (706 PERMITIR / 290 CONDICIONAL / 1226 DESCARTAR) ni activar nuevas reglas. Si se aprueba, se producirá una V2 del catálogo, sin eliminar las definiciones canónicas, y una especificación funcional separada para el adaptador de megaevolución.
 
 ## Revisión pendiente antes de aplicar el filtro
 
 - **Ningún descartado se borra.** No cambiar tiendas, drop tables, mapas, partidas guardadas ni políticas runtime con una tabla preliminar.
-- Revisar por ID los **168 condicionales corrientes** detallados en [auditoría 3](./RANDOMLOCK_ITEMS_AUDIT_PASS3_2026-11-01.md): 19 máquinas históricas sin equivalente, 32 cristales Z, 41 tesoros, 38 claves/formas/experiencia/campo, 23 legacy útiles, 9 bolas de Leyendas Arceus y 6 bayas de captura GO. Las 92 megapiedras y 12 accesorios se dejan para fase posterior.
+- Revisar por ID los **186 condicionales corrientes** detallados en [auditoría 4](./RANDOMLOCK_ITEMS_AUDIT_PASS4_2026-11-01.md): 22 máquinas históricas (incluidas 3 MO de campo), 32 cristales Z, 41 tesoros, 53 claves/formas/fósiles/experiencia/campo, 23 legacy útiles, 9 bolas de Leyendas Arceus y 6 bayas de captura GO. Las 92 megapiedras y 12 accesorios se dejan para fase posterior.
 - Confirmar que las **229 MT** corresponden al repertorio elegido para el randomlocke (actualmente Escarlata/Púrpura), sin suponer automáticamente compatibilidad de otras generaciones.
 - La distribución aleatoria debe obtener candidatos **solo de `PERMITIR` con efecto realmente conectado**; un ID en este CSV no certifica implementación, tasas ni balance. Los `CONDICIONAL` permanecen **fuera del generador** hasta aprobación explícita.
 - Cualquier objeto añadido posteriormente se inserta por ID y motivo, conservando trazabilidad. No reconstruir los 2.222 ni reiniciar V28; catálogo de contenido y pruebas de funcionalidad son sistemas distintos.
