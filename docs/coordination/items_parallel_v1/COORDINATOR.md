@@ -1,3 +1,5 @@
+> **Actualización prioritaria 2026-11-01:** durante CAMPAÑA_001 aplicar [CI_AND_HANDOFF_PROTOCOL_V2.md](CI_AND_HANDOFF_PROTOCOL_V2.md). IA6 prepara y clasifica las CI por paquetes, mantiene el STOP de las familias dependientes y ofrece un [prompt único de relevo](PROMPT_RELEVO_W0X_V2.md) para chats caídos. Este complemento no sustituye los permisos de cada `CAMP_001_W0X.md` ni autoriza cambios en `main`.
+
 # PROTOCOLO ÁRBITRA / COORDINADORA — única dueña de asignaciones e integración
 
 **Rama exclusiva:** `codex/calvo-items-20261101-arbitro`. **Roles paralelos:** W01-W05 con ramas propias, detalladas en START_HERE. La árbitra NO es un servicio autónomo: **solo revisa y actúa cuando el usuario abra su conversación y se lo pida**. No puede enviar mensajes a las otras cinco conversaciones automáticamente.
