@@ -16,3 +16,11 @@
 ## Estado inicial
 W01, W02, W03, W04, W05: **CAMPAÑA_001_ASIGNADA, microbloque 01 pendiente**. Ninguna trabajadora ha ejecutado sus microbloques por crear estos documentos. Máximo 3 por W (15 totales), sin obligación de gastar toda la cuota de CI por cada documento.
 **Conflictos cerrados temporalmente a producción:** `beast_ball` contradictoria, 19 máquinas legacy, Mega universal aplazada, Lujo/Ocaso con dependencias de contexto y guardado.
+
+## Incidencia W05 — recuperación excepcional de publicación (2026-11-01)
+
+Por solicitud expresa de la persona usuaria, IA6 intervino una sola vez sobre **las rutas ya autorizadas de W05** tras bloqueos de escritura de esa conversación. No se modificaron main, V28, otras W ni código compartido.
+- W05 publicó previamente el adaptador de solo lectura en `318e6b96`; IA6 consiguió publicar el probe Godot (`62741e4d`), informe `CAMP_001_ITER_01.md`, CSV y actualización de cuaderno (`7ffd45a0`). Esto demuestra escrituras GitHub válidas desde el conector de IA6; no determina el motivo exacto de los rechazos de la sesión W05.
+- El bloque 01 de W05 queda **PREPARADO_PENDIENTE_CI**, no integrado ni probado en Godot. El cotejo del perfil confirma 248 MACHINE = 229 SV + 19 históricas sin activar.
+- **Gate:** antes de certificar o permitir avanzar a un microbloque que dependa del nuevo adaptador, ejecutar prueba Godot del SHA integrado y atender cualquier fallo. Los tests de la CI histórica no cubren este adaptador nuevo. W05 sigue siendo propietaria de su rama; esta intervención no autoriza cambios entre ramas de forma habitual.
+
