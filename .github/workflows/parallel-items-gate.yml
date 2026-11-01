@@ -4,7 +4,11 @@ on:
     branches:
       - codex/calvo-items-20261101-arbitro
     paths:
-      - .github/workflows/parallel-items-gate.yml
+      - '.github/workflows/parallel-items-gate.yml'
+      - 'tests/gameplay/parallel_items_*'
+      - 'tests/tools/test_parallel_items_*'
+      - 'tests/tools/test_parallel_w05_machine_scope.py'
+      - 'tools/item_audit/parallel_w05_machine_scope.py'
   workflow_dispatch:
 
 permissions:
@@ -63,18 +67,24 @@ jobs:
           set -euo pipefail
           python -B tools/battle_reference/run.py --install --limit 1 2>&1 | tee parallel-native.log
       - name: W01 - three held combat items
+        id: w01
+        continue-on-error: true
         shell: bash
         run: |
           set -euo pipefail
           timeout 360s godot --headless --path . --script res://tests/gameplay/parallel_items_w01_held_v1.gd 2>&1 | tee parallel-w01.log
           python -B tests/tools/test_parallel_items_w01_held_v1.py 2>&1 | tee parallel-w01-validate.log
       - name: W02 - berry consumption
+        id: w02
+        continue-on-error: true
         shell: bash
         run: |
           set -euo pipefail
           timeout 360s godot --headless --path . --script res://tests/gameplay/parallel_items_w02_berries_v1.gd 2>&1 | tee parallel-w02.log
           python -B tests/tools/test_parallel_items_w02_berries_v1.py --result .godot/parallel_items/w02_berries_v1/godot.json 2>&1 | tee parallel-w02-validate.log
       - name: W03 - capture characterization only
+        id: w03
+        continue-on-error: true
         shell: bash
         run: |
           set -euo pipefail
@@ -82,10 +92,34 @@ jobs:
           grep -E 'W03_CAPTURE_NET' parallel-w03.log
           # The test must NOT claim Net Ball is connected when it is absent.
       - name: W04 - three evolution paths
+        id: w04
+        continue-on-error: true
         shell: bash
         run: |
           set -euo pipefail
           timeout 220s python -B tests/tools/test_parallel_items_w04_evolution_v1.py --godot godot 2>&1 | tee parallel-w04.log
+
+      - name: Consolidated family verdict (no false green on a failed family)
+        if: always()
+        shell: bash
+        env:
+          FAMILY_W01: ${{ steps.w01.outcome }}
+          FAMILY_W02: ${{ steps.w02.outcome }}
+          FAMILY_W03: ${{ steps.w03.outcome }}
+          FAMILY_W04: ${{ steps.w04.outcome }}
+        run: |
+          set -euo pipefail
+          bad=0
+          for w in W01 W02 W03 W04; do
+            key="FAMILY_${w}"
+            status="${!key}"
+            echo "${w}: ${status}"
+            if [ "${status}" != success ]; then bad=1; fi
+          done
+          if [ "${bad}" -ne 0 ]; then
+            echo 'One or more item families failed; inspect each family log.'
+            exit 1
+          fi
       - name: Preserve bounded failure evidence
         if: always()
         uses: actions/upload-artifact@v4
