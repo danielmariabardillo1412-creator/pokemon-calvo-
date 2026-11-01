@@ -49,7 +49,7 @@ def buscar_cadena(origen: str, destino: str, objeto: str, cadena: dict) -> list[
                 encontrados.extend(
                     x for x in siguiente["evolution_details"]
                     if x["trigger"]["name"] == "use-item"
-                    and x.get("item", {}).get("name") == objeto.replace("_", "-")
+                    and (x.get("item") or {}).get("name") == objeto.replace("_", "-")
                     and x.get("is_default") is True
                 )
             recorrer(siguiente)
