@@ -1,3 +1,17 @@
+# IA6 — Estado vigente (2026-11-01)
+
+**Fuente de órdenes actual:** [CAMPAIGN_GATE_UPDATE_003.md](CAMPAIGN_GATE_UPDATE_003.md). La información de fallos y bloqueos en secciones antiguas de este archivo es HISTÓRICA; la puerta 003 prevalece para próximos `p`.
+
+**Integración acumulada comprobada:** W03 Net Ball `82f9eea2`; W05 libros solo lectura `39df72c1`; W01/W04 pruebas `7b360f90`; W02 pruebas reparadas `52a5515e`. Los cambios de producción son exclusivamente W03/W05 previamente autorizados. Las ramas W01–W05, `main`, V28 y PR #118 no fueron modificadas por IA6 en este cierre.
+
+**Evidencia reciente:** W01 2428 checks/24 filas PASS, W04 313/12 PASS, W03 V11 32406 + V15 51901 PASS, W05 18 checks PASS, W02 Godot 1544/16 PASS y Python 18 + validador PASS. **Importante:** pertenecen a runs concretos de staging y se detallan en [integración W01/W04](integration/CAMP_001_W01_W04.md), [W03/W05](integration/CAMP_001_W03_W05.md) y [W02](integration/CAMP_001_W02.md). No sumar estos números como si fueran comprobaciones únicas del juego entero.
+
+**Regresión en SHA de árbitra posterior a W02:** [GitHub Actions #41354759130](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41354759130), SHA `52a5515e7615f988c3da907930979b86664a6430`: pendiente al publicar esta cabecera. Comprobar antes de certificar el árbol final como PASS. Sin prueba GPU/visual.
+
+**Trabajadoras:** W01/03/04 pueden recibir un `p` para ITER_03; W05 puede recibir un `p` para ITER_02; W02 está terminada y no debe recibir más `p`. IA4 puede recuperarse con [relevo V2](PROMPT_RELEVO_W0X_V2.md) si el chat anterior es irrecuperable.
+
+---
+
 # IA6 — Nueva verificación de rama árbitra (2026-11-01)
 
 **PASS confirmado en árbol integrado `7b360f90b74e18085f5b741722fd67fded88d23b`:** GitHub Actions [#41353674663](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41353674663), `completed/success` con Godot 4.7 y la regresión original LOTE_002. W01/W04 nuevas pruebas 01–02 ya tenían PASS de sus steps sobre staging #41350981613; W02 nuevo test quedó fuera de esa integración al fallar.
