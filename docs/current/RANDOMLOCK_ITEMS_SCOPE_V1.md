@@ -1,5 +1,11 @@
 # Catálogo propuesto para Pokémon Calvo — randomlocke competitivo (1-XI-2026)
 
+## CORRECCIÓN VIGENTE DE MEGA — 2 PIEDRAS Y 2 ACTIVACIONES POR COMBATE
+
+**Decisión expresamente rectificada el 2026-11-01:** por partida hay **DOS piedras físicas**, de un único tipo `mega_stone_universal`, compatibles con todos los Pokémon que tengan Mega válida. Se pueden **megaevolucionar HASTA DOS Pokémon por entrenador dentro del mismo combate**. Los portadores se fijan **ANTES** de comenzar, y **NO** se puede reasignar ninguna piedra ni cambiar su variante durante ese combate. **DESPUÉS** se pueden equipar libremente en otros Pokémon. Se anula cualquier recomendación anterior del documento de «solo una megaevolución por combate». [Regla correcta y pruebas futuras](./RANDOMLOCK_MEGA_UNIVERSAL_SPEC_V1.md).
+
+**Relevo de seis conversaciones:** [CUADERNO DE TRABAJO / START HERE](../coordination/items_parallel_v1/START_HERE.md). La lista sigue siendo **744 tipos = 743 canónicos + 1 tipo universal, del que hay dos copias máximas**. Ningún cambio de Godot/runtime ni fusiones a main está autorizado por esta documentación.
+
 ## LISTA VIGENTE: 744 TIPOS (MEGA UNIVERSAL)
 
 El usuario ha decidido sustituir las 92 megapiedras específicas y 12 accesorios históricos por **un único tipo de megapiedra universal, con dos ejemplares máximos por partida**. Se equipa a cualquier Pokémon que tenga megaforma disponible; no crea megaformas para todos los Pokémon ni se consume.
