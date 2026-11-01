@@ -1,3 +1,4 @@
 campana,microbloque,ids,escenarios,combate,campo,commit_codigo,resultado_estatico,resultado_python,resultado_godot,estado,siguiente
 CAMP_001,01,oran_berry+pecha_berry+cheri_berry,8,24,16,e6873734830914fdc50fb715b5204ef2814fd677,PASS_ESTATICO_15_15,SIN_EJECUTAR,SIN_EJECUTAR,PREPARADO_PENDIENTE_CI,ITER_02
 CAMP_001,02,persim_berry+chesto_berry+rawst_berry,8,24,16,55bdbbbaa3168a89c438541004fb30aba900a336,PASS_ESTATICO_20_20,SIN_EJECUTAR,SIN_EJECUTAR,PREPARADO_PENDIENTE_CI,ITER_03
+CAMP_001,03,oran_berry+pecha_berry+cheri_berry+persim_berry+chesto_berry+rawst_berry,16,48,32,599fa0b1a1af1fe82c3023aaf70816fdeefd44af,PASS_ESTATICO_25_25,SIN_EJECUTAR,SIN_EJECUTAR,PREPARADO_PENDIENTE_CI,STOP_IA6
