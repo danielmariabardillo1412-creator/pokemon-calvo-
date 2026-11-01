@@ -59,7 +59,8 @@ func _probe_live_types() -> void:
 		var owner := PlayerCollection.new()
 		owner.party.add_creature(_mon(&"mew", 50, &"w03_entrenador"))
 		var slots := WildEncounterTable.new(&"w03_sitio")
-		slots.add_slot(WildEncounterSlot.new(&"w03_slot", sid, 5, 5, 1))
+		check("tabla de encuentro válida " + String(sid),
+			slots.add_slot(WildEncounterSlot.new(&"w03_slot", sid, 1, 5, 5)))
 		var encounter_rng := RandomNumberGenerator.new()
 		encounter_rng.seed = 301
 		var session := WildAdventureSession.new(owner, catalogs, ProgressionRuleset.new())
