@@ -1,0 +1,126 @@
+id,nombre,familia,antes,despues,tipo,motivo,aprobacion,modifica_motor
+adamant_crystal,Gran Diamansfera,STORY_KEY_OR_FORM_REVIEW,CONDICIONAL,PERMITIR,FORMAS,Cambio de forma o fusión estratégica,PRESELECCION_TECNICA_REVERSIBLE,NO
+aloraichium_z_held,Alo-Raistal Z,Z_CRYSTAL,CONDICIONAL,PERMITIR,Z_CRISTAL,Permite movimiento Z ofensivo; conexión de objeto pendiente,PRESELECCION_TECNICA_REVERSIBLE,NO
+balm_mushroom,Seta Aroma,TREASURE_OR_COLLECTIBLE,CONDICIONAL,DESCARTAR,TESOROS,"Venta, material o Lanzamiento sin función diferenciada elegida",PRESELECCION_TECNICA_REVERSIBLE,NO
+beach_glass,Cristal Marino,TREASURE_OR_COLLECTIBLE,CONDICIONAL,DESCARTAR,TESOROS,"Venta, material o Lanzamiento sin función diferenciada elegida",PRESELECCION_TECNICA_REVERSIBLE,NO
+big_bamboo_shoot,Bambú Grande,TREASURE_OR_COLLECTIBLE,CONDICIONAL,DESCARTAR,TESOROS,"Venta, material o Lanzamiento sin función diferenciada elegida",PRESELECCION_TECNICA_REVERSIBLE,NO
+big_mushroom,Seta Grande,TREASURE_OR_COLLECTIBLE,CONDICIONAL,DESCARTAR,TESOROS,"Venta, material o Lanzamiento sin función diferenciada elegida",PRESELECCION_TECNICA_REVERSIBLE,NO
+big_nugget,Maxipepita,TREASURE_OR_COLLECTIBLE,CONDICIONAL,PERMITIR,TESOROS,Representante de Lanzamiento o recurso de reaprendizaje,PRESELECCION_TECNICA_REVERSIBLE,NO
+big_pearl,Perla Grande,TREASURE_OR_COLLECTIBLE,CONDICIONAL,DESCARTAR,TESOROS,"Venta, material o Lanzamiento sin función diferenciada elegida",PRESELECCION_TECNICA_REVERSIBLE,NO
+black_mane_hair,Crin Negra,STORY_KEY_OR_FORM_REVIEW,CONDICIONAL,DESCARTAR,FORMAS,"Material de historia, forma excluida o activador de entrenador no generable",PRESELECCION_TECNICA_REVERSIBLE,NO
+blue_orb,Prisma Azul,STORY_KEY_OR_FORM_REVIEW,CONDICIONAL,PERMITIR,FORMAS,Cambio de forma o fusión estratégica,PRESELECCION_TECNICA_REVERSIBLE,NO
+blue_shard,Parte Azul,TREASURE_OR_COLLECTIBLE,CONDICIONAL,DESCARTAR,TESOROS,"Venta, material o Lanzamiento sin función diferenciada elegida",PRESELECCION_TECNICA_REVERSIBLE,NO
+buginium_z_held,Insectostal Z,Z_CRYSTAL,CONDICIONAL,PERMITIR,Z_CRISTAL,Permite movimiento Z ofensivo; conexión de objeto pendiente,PRESELECCION_TECNICA_REVERSIBLE,NO
+chalky_stone,Tiza,TREASURE_OR_COLLECTIBLE,CONDICIONAL,DESCARTAR,TESOROS,"Venta, material o Lanzamiento sin función diferenciada elegida",PRESELECCION_TECNICA_REVERSIBLE,NO
+comet_shard,Fragmento Cometa,TREASURE_OR_COLLECTIBLE,CONDICIONAL,DESCARTAR,TESOROS,"Venta, material o Lanzamiento sin función diferenciada elegida",PRESELECCION_TECNICA_REVERSIBLE,NO
+darkinium_z_held,Nictostal Z,Z_CRYSTAL,CONDICIONAL,PERMITIR,Z_CRISTAL,Permite movimiento Z ofensivo; conexión de objeto pendiente,PRESELECCION_TECNICA_REVERSIBLE,NO
+decidium_z_held,Dueyestal Z,Z_CRYSTAL,CONDICIONAL,PERMITIR,Z_CRISTAL,Permite movimiento Z ofensivo; conexión de objeto pendiente,PRESELECCION_TECNICA_REVERSIBLE,NO
+dna_splicers,Punta ADN,STORY_KEY_OR_FORM_REVIEW,CONDICIONAL,PERMITIR,FORMAS,Cambio de forma o fusión estratégica,PRESELECCION_TECNICA_REVERSIBLE,NO
+dragonium_z_held,Dracostal Z,Z_CRYSTAL,CONDICIONAL,PERMITIR,Z_CRISTAL,Permite movimiento Z ofensivo; conexión de objeto pendiente,PRESELECCION_TECNICA_REVERSIBLE,NO
+dynamax_band,Maximuñequera,STORY_KEY_OR_FORM_REVIEW,CONDICIONAL,DESCARTAR,FORMAS,"Material de historia, forma excluida o activador de entrenador no generable",PRESELECCION_TECNICA_REVERSIBLE,NO
+electrium_z_held,Electrostal Z,Z_CRYSTAL,CONDICIONAL,PERMITIR,Z_CRISTAL,Permite movimiento Z ofensivo; conexión de objeto pendiente,PRESELECCION_TECNICA_REVERSIBLE,NO
+fairium_z_held,Feeristal Z,Z_CRYSTAL,CONDICIONAL,PERMITIR,Z_CRISTAL,Permite movimiento Z ofensivo; conexión de objeto pendiente,PRESELECCION_TECNICA_REVERSIBLE,NO
+fightinium_z_held,Lizastal Z,Z_CRYSTAL,CONDICIONAL,PERMITIR,Z_CRISTAL,Permite movimiento Z ofensivo; conexión de objeto pendiente,PRESELECCION_TECNICA_REVERSIBLE,NO
+firium_z_held,Pirostal Z,Z_CRYSTAL,CONDICIONAL,PERMITIR,Z_CRISTAL,Permite movimiento Z ofensivo; conexión de objeto pendiente,PRESELECCION_TECNICA_REVERSIBLE,NO
+flyinium_z_held,Aerostal Z,Z_CRYSTAL,CONDICIONAL,PERMITIR,Z_CRISTAL,Permite movimiento Z ofensivo; conexión de objeto pendiente,PRESELECCION_TECNICA_REVERSIBLE,NO
+galarica_twig,Rama de Galanuez,TREASURE_OR_COLLECTIBLE,CONDICIONAL,DESCARTAR,TESOROS,"Venta, material o Lanzamiento sin función diferenciada elegida",PRESELECCION_TECNICA_REVERSIBLE,NO
+ghostium_z_held,Espectrostal Z,Z_CRYSTAL,CONDICIONAL,PERMITIR,Z_CRISTAL,Permite movimiento Z ofensivo; conexión de objeto pendiente,PRESELECCION_TECNICA_REVERSIBLE,NO
+gold_leaf,Hoja de Oro,TREASURE_OR_COLLECTIBLE,CONDICIONAL,DESCARTAR,TESOROS,"Venta, material o Lanzamiento sin función diferenciada elegida",PRESELECCION_TECNICA_REVERSIBLE,NO
+gracidea,Gracídea,STORY_KEY_OR_FORM_REVIEW,CONDICIONAL,PERMITIR,FORMAS,Cambio de forma o fusión estratégica,PRESELECCION_TECNICA_REVERSIBLE,NO
+grassium_z_held,Fitostal Z,Z_CRYSTAL,CONDICIONAL,PERMITIR,Z_CRISTAL,Permite movimiento Z ofensivo; conexión de objeto pendiente,PRESELECCION_TECNICA_REVERSIBLE,NO
+green_shard,Parte Verde,TREASURE_OR_COLLECTIBLE,CONDICIONAL,DESCARTAR,TESOROS,"Venta, material o Lanzamiento sin función diferenciada elegida",PRESELECCION_TECNICA_REVERSIBLE,NO
+griseous_core,Gran Griseosfera,STORY_KEY_OR_FORM_REVIEW,CONDICIONAL,PERMITIR,FORMAS,Cambio de forma o fusión estratégica,PRESELECCION_TECNICA_REVERSIBLE,NO
+groundium_z_held,Geostal Z,Z_CRYSTAL,CONDICIONAL,PERMITIR,Z_CRISTAL,Permite movimiento Z ofensivo; conexión de objeto pendiente,PRESELECCION_TECNICA_REVERSIBLE,NO
+heart_scale,Escama Corazón,TREASURE_OR_COLLECTIBLE,CONDICIONAL,PERMITIR,TESOROS,Representante de Lanzamiento o recurso de reaprendizaje,PRESELECCION_TECNICA_REVERSIBLE,NO
+hm01,MO01,MACHINE,CONDICIONAL,PERMITIR,MAQUINAS,"Movimiento sin MT equivalente, candidato a libro",PRESELECCION_TECNICA_REVERSIBLE,NO
+hm02,MO02,MACHINE,CONDICIONAL,DESCARTAR,MAQUINAS,MO con movimiento ya representado en otra MT,PRESELECCION_TECNICA_REVERSIBLE,NO
+hm03,MO03,MACHINE,CONDICIONAL,DESCARTAR,MAQUINAS,MO con movimiento ya representado en otra MT,PRESELECCION_TECNICA_REVERSIBLE,NO
+hm04,MO04,MACHINE,CONDICIONAL,PERMITIR,MAQUINAS,"Movimiento sin MT equivalente, candidato a libro",PRESELECCION_TECNICA_REVERSIBLE,NO
+hm05,MO05,MACHINE,CONDICIONAL,PERMITIR,MAQUINAS,"Movimiento sin MT equivalente, candidato a libro",PRESELECCION_TECNICA_REVERSIBLE,NO
+hm06,MO06,MACHINE,CONDICIONAL,PERMITIR,MAQUINAS,"Movimiento sin MT equivalente, candidato a libro",PRESELECCION_TECNICA_REVERSIBLE,NO
+hm07,MO07,MACHINE,CONDICIONAL,DESCARTAR,MAQUINAS,MO con movimiento ya representado en otra MT,PRESELECCION_TECNICA_REVERSIBLE,NO
+hm08,MO08,MACHINE,CONDICIONAL,PERMITIR,MAQUINAS,"Movimiento sin MT equivalente, candidato a libro",PRESELECCION_TECNICA_REVERSIBLE,NO
+icium_z_held,Criostal Z,Z_CRYSTAL,CONDICIONAL,PERMITIR,Z_CRISTAL,Permite movimiento Z ofensivo; conexión de objeto pendiente,PRESELECCION_TECNICA_REVERSIBLE,NO
+incinium_z_held,Incinostal Z,Z_CRYSTAL,CONDICIONAL,PERMITIR,Z_CRISTAL,Permite movimiento Z ofensivo; conexión de objeto pendiente,PRESELECCION_TECNICA_REVERSIBLE,NO
+kommonium_z_held,Kommostal Z,Z_CRYSTAL,CONDICIONAL,PERMITIR,Z_CRISTAL,Permite movimiento Z ofensivo; conexión de objeto pendiente,PRESELECCION_TECNICA_REVERSIBLE,NO
+lafeather_ball,Pluma Ball,CAPTURE_BALL,CONDICIONAL,DESCARTAR,HISUI,Requiere captura estilo Hisui fuera del combate que Calvo no adopta,PRESELECCION_TECNICA_REVERSIBLE,NO
+lagigaton_ball,Quintal Ball,CAPTURE_BALL,CONDICIONAL,DESCARTAR,HISUI,Requiere captura estilo Hisui fuera del combate que Calvo no adopta,PRESELECCION_TECNICA_REVERSIBLE,NO
+lagreat_ball,Super Ball,CAPTURE_BALL,CONDICIONAL,DESCARTAR,HISUI,Requiere captura estilo Hisui fuera del combate que Calvo no adopta,PRESELECCION_TECNICA_REVERSIBLE,NO
+laheavy_ball,Peso Ball,CAPTURE_BALL,CONDICIONAL,DESCARTAR,HISUI,Requiere captura estilo Hisui fuera del combate que Calvo no adopta,PRESELECCION_TECNICA_REVERSIBLE,NO
+lajet_ball,Aero Ball,CAPTURE_BALL,CONDICIONAL,DESCARTAR,HISUI,Requiere captura estilo Hisui fuera del combate que Calvo no adopta,PRESELECCION_TECNICA_REVERSIBLE,NO
+laleaden_ball,Kilo Ball,CAPTURE_BALL,CONDICIONAL,DESCARTAR,HISUI,Requiere captura estilo Hisui fuera del combate que Calvo no adopta,PRESELECCION_TECNICA_REVERSIBLE,NO
+lapoke_ball,Poké Ball,CAPTURE_BALL,CONDICIONAL,DESCARTAR,HISUI,Requiere captura estilo Hisui fuera del combate que Calvo no adopta,PRESELECCION_TECNICA_REVERSIBLE,NO
+laultra_ball,Ultra Ball,CAPTURE_BALL,CONDICIONAL,DESCARTAR,HISUI,Requiere captura estilo Hisui fuera del combate que Calvo no adopta,PRESELECCION_TECNICA_REVERSIBLE,NO
+lawing_ball,Ala Ball,CAPTURE_BALL,CONDICIONAL,DESCARTAR,HISUI,Requiere captura estilo Hisui fuera del combate que Calvo no adopta,PRESELECCION_TECNICA_REVERSIBLE,NO
+lone_earring,Pendiente,TREASURE_OR_COLLECTIBLE,CONDICIONAL,DESCARTAR,TESOROS,"Venta, material o Lanzamiento sin función diferenciada elegida",PRESELECCION_TECNICA_REVERSIBLE,NO
+lunalium_z_held,Lunalastal Z,Z_CRYSTAL,CONDICIONAL,PERMITIR,Z_CRISTAL,Permite movimiento Z ofensivo; conexión de objeto pendiente,PRESELECCION_TECNICA_REVERSIBLE,NO
+lustrous_globe,Gran Lustresfera,STORY_KEY_OR_FORM_REVIEW,CONDICIONAL,PERMITIR,FORMAS,Cambio de forma o fusión estratégica,PRESELECCION_TECNICA_REVERSIBLE,NO
+lycanium_z_held,Lycanrostal Z,Z_CRYSTAL,CONDICIONAL,PERMITIR,Z_CRISTAL,Permite movimiento Z ofensivo; conexión de objeto pendiente,PRESELECCION_TECNICA_REVERSIBLE,NO
+marble,Canica,TREASURE_OR_COLLECTIBLE,CONDICIONAL,DESCARTAR,TESOROS,"Venta, material o Lanzamiento sin función diferenciada elegida",PRESELECCION_TECNICA_REVERSIBLE,NO
+marshadium_z_held,Marshastal Z,Z_CRYSTAL,CONDICIONAL,PERMITIR,Z_CRISTAL,Permite movimiento Z ofensivo; conexión de objeto pendiente,PRESELECCION_TECNICA_REVERSIBLE,NO
+meteorite,Meteorito,STORY_KEY_OR_FORM_REVIEW,CONDICIONAL,PERMITIR,FORMAS,Cambio de forma o fusión estratégica,PRESELECCION_TECNICA_REVERSIBLE,NO
+meteorite_shard,Frag. Meteorito,STORY_KEY_OR_FORM_REVIEW,CONDICIONAL,DESCARTAR,FORMAS,"Material de historia, forma excluida o activador de entrenador no generable",PRESELECCION_TECNICA_REVERSIBLE,NO
+mewnium_z_held,Mewstal Z,Z_CRYSTAL,CONDICIONAL,PERMITIR,Z_CRISTAL,Permite movimiento Z ofensivo; conexión de objeto pendiente,PRESELECCION_TECNICA_REVERSIBLE,NO
+mimikium_z_held,Mimikyustal Z,Z_CRYSTAL,CONDICIONAL,PERMITIR,Z_CRISTAL,Permite movimiento Z ofensivo; conexión de objeto pendiente,PRESELECCION_TECNICA_REVERSIBLE,NO
+normalium_z_held,Normastal Z,Z_CRYSTAL,CONDICIONAL,PERMITIR,Z_CRISTAL,Permite movimiento Z ofensivo; conexión de objeto pendiente,PRESELECCION_TECNICA_REVERSIBLE,NO
+nugget,Pepita,TREASURE_OR_COLLECTIBLE,CONDICIONAL,PERMITIR,TESOROS,Representante de Lanzamiento o recurso de reaprendizaje,PRESELECCION_TECNICA_REVERSIBLE,NO
+pearl,Perla,TREASURE_OR_COLLECTIBLE,CONDICIONAL,DESCARTAR,TESOROS,"Venta, material o Lanzamiento sin función diferenciada elegida",PRESELECCION_TECNICA_REVERSIBLE,NO
+pearl_string,Sarta Perlas,TREASURE_OR_COLLECTIBLE,CONDICIONAL,DESCARTAR,TESOROS,"Venta, material o Lanzamiento sin función diferenciada elegida",PRESELECCION_TECNICA_REVERSIBLE,NO
+pikanium_z_held,Pikastal Z,Z_CRYSTAL,CONDICIONAL,PERMITIR,Z_CRISTAL,Permite movimiento Z ofensivo; conexión de objeto pendiente,PRESELECCION_TECNICA_REVERSIBLE,NO
+poisonium_z_held,Toxistal Z,Z_CRYSTAL,CONDICIONAL,PERMITIR,Z_CRISTAL,Permite movimiento Z ofensivo; conexión de objeto pendiente,PRESELECCION_TECNICA_REVERSIBLE,NO
+polished_mud_ball,Bola de Arcilla,TREASURE_OR_COLLECTIBLE,CONDICIONAL,DESCARTAR,TESOROS,"Venta, material o Lanzamiento sin función diferenciada elegida",PRESELECCION_TECNICA_REVERSIBLE,NO
+pretty_wing,Pluma Bella,TREASURE_OR_COLLECTIBLE,CONDICIONAL,PERMITIR,TESOROS,Representante de Lanzamiento o recurso de reaprendizaje,PRESELECCION_TECNICA_REVERSIBLE,NO
+primarium_z_held,Primastal Z,Z_CRYSTAL,CONDICIONAL,PERMITIR,Z_CRISTAL,Permite movimiento Z ofensivo; conexión de objeto pendiente,PRESELECCION_TECNICA_REVERSIBLE,NO
+prison_bottle,Vasija Castigo,STORY_KEY_OR_FORM_REVIEW,CONDICIONAL,DESCARTAR,FORMAS,"Material de historia, forma excluida o activador de entrenador no generable",PRESELECCION_TECNICA_REVERSIBLE,NO
+psychium_z_held,Psicostal Z,Z_CRYSTAL,CONDICIONAL,PERMITIR,Z_CRISTAL,Permite movimiento Z ofensivo; conexión de objeto pendiente,PRESELECCION_TECNICA_REVERSIBLE,NO
+rare_bone,Hueso Raro,TREASURE_OR_COLLECTIBLE,CONDICIONAL,PERMITIR,TESOROS,Representante de Lanzamiento o recurso de reaprendizaje,PRESELECCION_TECNICA_REVERSIBLE,NO
+red_orb,Prisma Rojo,STORY_KEY_OR_FORM_REVIEW,CONDICIONAL,PERMITIR,FORMAS,Cambio de forma o fusión estratégica,PRESELECCION_TECNICA_REVERSIBLE,NO
+red_shard,Parte Roja,TREASURE_OR_COLLECTIBLE,CONDICIONAL,DESCARTAR,TESOROS,"Venta, material o Lanzamiento sin función diferenciada elegida",PRESELECCION_TECNICA_REVERSIBLE,NO
+reins_of_unity,Riendas Unión,STORY_KEY_OR_FORM_REVIEW,CONDICIONAL,PERMITIR,FORMAS,Cambio de forma o fusión estratégica,PRESELECCION_TECNICA_REVERSIBLE,NO
+relic_band,Brazal,TREASURE_OR_COLLECTIBLE,CONDICIONAL,DESCARTAR,TESOROS,"Venta, material o Lanzamiento sin función diferenciada elegida",PRESELECCION_TECNICA_REVERSIBLE,NO
+relic_copper,Real Cobre,TREASURE_OR_COLLECTIBLE,CONDICIONAL,DESCARTAR,TESOROS,"Venta, material o Lanzamiento sin función diferenciada elegida",PRESELECCION_TECNICA_REVERSIBLE,NO
+relic_crown,Corona Antigua,TREASURE_OR_COLLECTIBLE,CONDICIONAL,DESCARTAR,TESOROS,"Venta, material o Lanzamiento sin función diferenciada elegida",PRESELECCION_TECNICA_REVERSIBLE,NO
+relic_gold,Real Oro,TREASURE_OR_COLLECTIBLE,CONDICIONAL,DESCARTAR,TESOROS,"Venta, material o Lanzamiento sin función diferenciada elegida",PRESELECCION_TECNICA_REVERSIBLE,NO
+relic_silver,Real Plata,TREASURE_OR_COLLECTIBLE,CONDICIONAL,DESCARTAR,TESOROS,"Venta, material o Lanzamiento sin función diferenciada elegida",PRESELECCION_TECNICA_REVERSIBLE,NO
+relic_statue,Efigie Antigua,TREASURE_OR_COLLECTIBLE,CONDICIONAL,DESCARTAR,TESOROS,"Venta, material o Lanzamiento sin función diferenciada elegida",PRESELECCION_TECNICA_REVERSIBLE,NO
+relic_vase,Ánfora,TREASURE_OR_COLLECTIBLE,CONDICIONAL,DESCARTAR,TESOROS,"Venta, material o Lanzamiento sin función diferenciada elegida",PRESELECCION_TECNICA_REVERSIBLE,NO
+reveal_glass,Espejo Veraz,STORY_KEY_OR_FORM_REVIEW,CONDICIONAL,PERMITIR,FORMAS,Cambio de forma o fusión estratégica,PRESELECCION_TECNICA_REVERSIBLE,NO
+rockium_z_held,Litostal Z,Z_CRYSTAL,CONDICIONAL,PERMITIR,Z_CRISTAL,Permite movimiento Z ofensivo; conexión de objeto pendiente,PRESELECCION_TECNICA_REVERSIBLE,NO
+rotom_catalog,Catálogo Rotom,STORY_KEY_OR_FORM_REVIEW,CONDICIONAL,PERMITIR,FORMAS,Cambio de forma o fusión estratégica,PRESELECCION_TECNICA_REVERSIBLE,NO
+shoal_salt,Sal Cardumen,TREASURE_OR_COLLECTIBLE,CONDICIONAL,DESCARTAR,TESOROS,"Venta, material o Lanzamiento sin función diferenciada elegida",PRESELECCION_TECNICA_REVERSIBLE,NO
+shoal_shell,Concha Cardumen,TREASURE_OR_COLLECTIBLE,CONDICIONAL,DESCARTAR,TESOROS,"Venta, material o Lanzamiento sin función diferenciada elegida",PRESELECCION_TECNICA_REVERSIBLE,NO
+silver_leaf,Hoja de Plata,TREASURE_OR_COLLECTIBLE,CONDICIONAL,DESCARTAR,TESOROS,"Venta, material o Lanzamiento sin función diferenciada elegida",PRESELECCION_TECNICA_REVERSIBLE,NO
+snorlium_z_held,Snorlastal Z,Z_CRYSTAL,CONDICIONAL,PERMITIR,Z_CRISTAL,Permite movimiento Z ofensivo; conexión de objeto pendiente,PRESELECCION_TECNICA_REVERSIBLE,NO
+solganium_z_held,Solgaleostal Z,Z_CRYSTAL,CONDICIONAL,PERMITIR,Z_CRISTAL,Permite movimiento Z ofensivo; conexión de objeto pendiente,PRESELECCION_TECNICA_REVERSIBLE,NO
+sparkling_stone,Piedra Brillante,STORY_KEY_OR_FORM_REVIEW,CONDICIONAL,DESCARTAR,FORMAS,"Material de historia, forma excluida o activador de entrenador no generable",PRESELECCION_TECNICA_REVERSIBLE,NO
+star_piece,Trozo Estrella,TREASURE_OR_COLLECTIBLE,CONDICIONAL,DESCARTAR,TESOROS,"Venta, material o Lanzamiento sin función diferenciada elegida",PRESELECCION_TECNICA_REVERSIBLE,NO
+stardust,Polvo Estelar,TREASURE_OR_COLLECTIBLE,CONDICIONAL,DESCARTAR,TESOROS,"Venta, material o Lanzamiento sin función diferenciada elegida",PRESELECCION_TECNICA_REVERSIBLE,NO
+steelium_z_held,Metalostal Z,Z_CRYSTAL,CONDICIONAL,PERMITIR,Z_CRISTAL,Permite movimiento Z ofensivo; conexión de objeto pendiente,PRESELECCION_TECNICA_REVERSIBLE,NO
+strange_souvenir,Estatuilla Rara,TREASURE_OR_COLLECTIBLE,CONDICIONAL,DESCARTAR,TESOROS,"Venta, material o Lanzamiento sin función diferenciada elegida",PRESELECCION_TECNICA_REVERSIBLE,NO
+stretchy_spring,Muelle Estirado,TREASURE_OR_COLLECTIBLE,CONDICIONAL,DESCARTAR,TESOROS,"Venta, material o Lanzamiento sin función diferenciada elegida",PRESELECCION_TECNICA_REVERSIBLE,NO
+tapunium_z_held,Tapistal Z,Z_CRYSTAL,CONDICIONAL,PERMITIR,Z_CRISTAL,Permite movimiento Z ofensivo; conexión de objeto pendiente,PRESELECCION_TECNICA_REVERSIBLE,NO
+teal_mask,Máscara Turquesa,STORY_KEY_OR_FORM_REVIEW,CONDICIONAL,DESCARTAR,FORMAS,"Material de historia, forma excluida o activador de entrenador no generable",PRESELECCION_TECNICA_REVERSIBLE,NO
+tera_orb,Orbe Teracristal,STORY_KEY_OR_FORM_REVIEW,CONDICIONAL,DESCARTAR,FORMAS,"Material de historia, forma excluida o activador de entrenador no generable",PRESELECCION_TECNICA_REVERSIBLE,NO
+tiny_bamboo_shoot,Bambú Pequeño,TREASURE_OR_COLLECTIBLE,CONDICIONAL,DESCARTAR,TESOROS,"Venta, material o Lanzamiento sin función diferenciada elegida",PRESELECCION_TECNICA_REVERSIBLE,NO
+tiny_mushroom,Miniseta,TREASURE_OR_COLLECTIBLE,CONDICIONAL,DESCARTAR,TESOROS,"Venta, material o Lanzamiento sin función diferenciada elegida",PRESELECCION_TECNICA_REVERSIBLE,NO
+tm00,MT00,MACHINE,CONDICIONAL,PERMITIR,MAQUINAS,"Movimiento sin MT equivalente, candidato a libro",PRESELECCION_TECNICA_REVERSIBLE,NO
+tr13,DT13,MACHINE,CONDICIONAL,PERMITIR,MAQUINAS,"Movimiento sin MT equivalente, candidato a libro",PRESELECCION_TECNICA_REVERSIBLE,NO
+tr19,DT19,MACHINE,CONDICIONAL,PERMITIR,MAQUINAS,"Movimiento sin MT equivalente, candidato a libro",PRESELECCION_TECNICA_REVERSIBLE,NO
+tr28,DT28,MACHINE,CONDICIONAL,PERMITIR,MAQUINAS,"Movimiento sin MT equivalente, candidato a libro",PRESELECCION_TECNICA_REVERSIBLE,NO
+tr31,DT31,MACHINE,CONDICIONAL,PERMITIR,MAQUINAS,"Movimiento sin MT equivalente, candidato a libro",PRESELECCION_TECNICA_REVERSIBLE,NO
+tr39,DT39,MACHINE,CONDICIONAL,PERMITIR,MAQUINAS,"Movimiento sin MT equivalente, candidato a libro",PRESELECCION_TECNICA_REVERSIBLE,NO
+tr41,DT41,MACHINE,CONDICIONAL,PERMITIR,MAQUINAS,"Movimiento sin MT equivalente, candidato a libro",PRESELECCION_TECNICA_REVERSIBLE,NO
+tr44,DT44,MACHINE,CONDICIONAL,PERMITIR,MAQUINAS,"Movimiento sin MT equivalente, candidato a libro",PRESELECCION_TECNICA_REVERSIBLE,NO
+tr50,DT50,MACHINE,CONDICIONAL,PERMITIR,MAQUINAS,"Movimiento sin MT equivalente, candidato a libro",PRESELECCION_TECNICA_REVERSIBLE,NO
+tr72,DT72,MACHINE,CONDICIONAL,PERMITIR,MAQUINAS,"Movimiento sin MT equivalente, candidato a libro",PRESELECCION_TECNICA_REVERSIBLE,NO
+tr83,DT83,MACHINE,CONDICIONAL,PERMITIR,MAQUINAS,"Movimiento sin MT equivalente, candidato a libro",PRESELECCION_TECNICA_REVERSIBLE,NO
+tr85,DT85,MACHINE,CONDICIONAL,PERMITIR,MAQUINAS,"Movimiento sin MT equivalente, candidato a libro",PRESELECCION_TECNICA_REVERSIBLE,NO
+tr91,DT91,MACHINE,CONDICIONAL,PERMITIR,MAQUINAS,"Movimiento sin MT equivalente, candidato a libro",PRESELECCION_TECNICA_REVERSIBLE,NO
+tr93,DT93,MACHINE,CONDICIONAL,PERMITIR,MAQUINAS,"Movimiento sin MT equivalente, candidato a libro",PRESELECCION_TECNICA_REVERSIBLE,NO
+tropical_shell,Concha Tropical,TREASURE_OR_COLLECTIBLE,CONDICIONAL,DESCARTAR,TESOROS,"Venta, material o Lanzamiento sin función diferenciada elegida",PRESELECCION_TECNICA_REVERSIBLE,NO
+waterium_z_held,Hidrostal Z,Z_CRYSTAL,CONDICIONAL,PERMITIR,Z_CRISTAL,Permite movimiento Z ofensivo; conexión de objeto pendiente,PRESELECCION_TECNICA_REVERSIBLE,NO
+white_mane_hair,Crin Blanca,STORY_KEY_OR_FORM_REVIEW,CONDICIONAL,DESCARTAR,FORMAS,"Material de historia, forma excluida o activador de entrenador no generable",PRESELECCION_TECNICA_REVERSIBLE,NO
+yellow_shard,Parte Amarilla,TREASURE_OR_COLLECTIBLE,CONDICIONAL,DESCARTAR,TESOROS,"Venta, material o Lanzamiento sin función diferenciada elegida",PRESELECCION_TECNICA_REVERSIBLE,NO
+z_power_ring,Superpulsera Z,LEGACY_OR_CATEGORY_REVIEW,CONDICIONAL,DESCARTAR,ACCESORIO_Z,"Activador de sistema, no botín",PRESELECCION_TECNICA_REVERSIBLE,NO
+z_ring,Pulsera Z,STORY_KEY_OR_FORM_REVIEW,CONDICIONAL,DESCARTAR,FORMAS,"Material de historia, forma excluida o activador de entrenador no generable",PRESELECCION_TECNICA_REVERSIBLE,NO
+zygarde_cube,Arca de Zygarde,STORY_KEY_OR_FORM_REVIEW,CONDICIONAL,PERMITIR,FORMAS,Cambio de forma o fusión estratégica,PRESELECCION_TECNICA_REVERSIBLE,NO
