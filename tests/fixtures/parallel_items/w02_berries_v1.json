@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "family": "consumable_held_berries",
+  "format": "gen9calvounifiedv1",
+  "level": 100,
+  "seed": [
+    23,
+    19,
+    29,
+    43
+  ],
+  "variants": [
+    "active",
+    "none",
+    "reserve"
+  ],
+  "item_ids": [
+    "sitrus_berry",
+    "lum_berry",
+    "colbur_berry"
+  ],
+  "cases": [
+    {
+      "id": "sitrus_berry",
+      "scenario": "sitrus_low_hp",
+      "kind": "low_hp",
+      "actor_species": "mew",
+      "foe_move": "amnesia",
+      "consumes": true
+    },
+    {
+      "id": "sitrus_berry",
+      "scenario": "sitrus_high_hp",
+      "kind": "high_hp",
+      "actor_species": "mew",
+      "foe_move": "amnesia",
+      "consumes": false
+    },
+    {
+      "id": "lum_berry",
+      "scenario": "lum_poison",
+      "kind": "poison",
+      "actor_species": "mew",
+      "foe_move": "amnesia",
+      "consumes": true
+    },
+    {
+      "id": "lum_berry",
+      "scenario": "lum_healthy",
+      "kind": "healthy",
+      "actor_species": "mew",
+      "foe_move": "amnesia",
+      "consumes": false
+    },
+    {
+      "id": "colbur_berry",
+      "scenario": "colbur_super_dark",
+      "kind": "super_dark",
+      "actor_species": "mew",
+      "foe_move": "dark_pulse",
+      "consumes": true
+    },
+    {
+      "id": "colbur_berry",
+      "scenario": "colbur_neutral_dark",
+      "kind": "neutral_dark",
+      "actor_species": "snorlax",
+      "foe_move": "dark_pulse",
+      "consumes": false
+    },
+    {
+      "id": "colbur_berry",
+      "scenario": "colbur_wrong_type",
+      "kind": "other_type",
+      "actor_species": "mew",
+      "foe_move": "water_gun",
+      "consumes": false
+    }
+  ],
+  "note": "Caso de prueba, no cambio de mecanica. HP/status de entrada en jugador, RNG y rival identicos para controles active/none/reserve. Escenarios no agotan interacciones."
+}

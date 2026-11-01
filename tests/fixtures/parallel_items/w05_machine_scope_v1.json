@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "familia": "MACHINE",
+  "profile_schema_version": 1,
+  "profile_id": "calvo_item_connections_v1",
+  "active_machine_version": "scarlet-violet",
+  "legacy_reference_preference": {
+    "hm": [
+      "omega-ruby-alpha-sapphire",
+      "ruby-sapphire",
+      "red-blue"
+    ],
+    "tm": [
+      "sword-shield"
+    ],
+    "tr": [
+      "sword-shield"
+    ]
+  },
+  "expected_snapshot": {
+    "total": 248,
+    "activas": 229,
+    "heredadas": 19,
+    "por_prefijo": {
+      "hm": 5,
+      "tm": 230,
+      "tr": 13
+    }
+  },
+  "expected_cross_profile_overlaps": [
+    {
+      "heredado": "hm05",
+      "activo": "tm77",
+      "movimiento": "waterfall"
+    }
+  ],
+  "alcance": "Validación estática de catálogo y relación versión/movimiento; no certifica enseñanza, consumo, propiedad, persistencia ni aspecto visual."
+}
