@@ -252,6 +252,24 @@ func _field_case(spec: Dictionary, place: String) -> Dictionary:
 		"save": true, "evidence": file, "sha256": hash}
 
 
+func _summary_by_item(rows: Array) -> Dictionary:
+	var summary := {}
+	for item_id: String in automation.coverage_matrix:
+		var expected: Array = automation.coverage_matrix[item_id].positive + automation.coverage_matrix[item_id].negative
+		var matched := {}
+		var all_pass: bool = true
+		for row: Dictionary in rows:
+			if String(row.id) == item_id:
+				all_pass = all_pass and expected.has(String(row.scenario)) and row.status == "PASS"
+				matched[String(row.scenario)] = true
+		all_pass = all_pass and matched.size() == expected.size()
+		for name: String in expected:
+			all_pass = all_pass and matched.has(name)
+		check(item_id + " cobertura individual", all_pass)
+		summary[item_id] = {"status": "PASS" if all_pass else "FAIL", "cases": matched.size()}
+	return summary
+
+
 func _finish_campaign(rows: Array) -> void:
 	var valid: bool = rows.size() == automation.get("cases", []).size()
 	for row: Dictionary in rows:
