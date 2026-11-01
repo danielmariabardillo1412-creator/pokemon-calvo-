@@ -134,7 +134,7 @@ func _ensayar(caso: Dictionary, modo: String) -> Dictionary:
 	check(modo + " consumo publicado al dueño", propietario.owned_creature(&"own").held_item_consumed == consumida)
 	var segunda: Dictionary = await partida.use_item(&"poke_doll", &"own", partida.revision)
 	check(modo + " cierre duplicado sin cambio", not segunda.accepted and _owner_data(propietario) == publicado)
-	var guardado: Dictionary = SaveGameRepository.new().decode_snapshot(publicado)
+	var guardado: LoadResult = SaveGameRepository.new().decode_snapshot(publicado)
 	check(modo + " SaveV2 decodifica al dueño", guardado.ok)
 	if not guardado.ok:
 		await partida.close()
