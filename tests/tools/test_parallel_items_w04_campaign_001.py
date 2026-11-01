@@ -30,6 +30,79 @@ CASOS_01 = (
 )
 
 
+CASOS_02 = (
+    ("leaf_stone", "eevee", "leafeon", 67),
+    ("leaf_stone", "gloom", "vileplume", 18),
+    ("ice_stone", "eevee", "glaceon", 67),
+    ("moon_stone", "clefairy", "clefable", 14),
+    ("moon_stone", "jigglypuff", "wigglytuff", 16),
+)
+
+
+def buscar_cadena(origen: str, destino: str, objeto: str, cadena: dict) -> list[dict]:
+    """Rutas desde el progenitor real, sin asumir que es raíz de la familia."""
+    encontrados = []
+
+    def recorrer(nodo: dict) -> None:
+        for siguiente in nodo.get("evolves_to", []):
+            if nodo["species"]["name"] == origen and siguiente["species"]["name"] == destino:
+                encontrados.extend(
+                    x for x in siguiente["evolution_details"]
+                    if x["trigger"]["name"] == "use-item"
+                    and x.get("item", {}).get("name") == objeto.replace("_", "-")
+                    and x.get("is_default") is True
+                )
+            recorrer(siguiente)
+
+    recorrer(cadena["chain"])
+    return encontrados
+
+
+def verificar_segundo_bloque(script: str, seleccion: list[dict],
+                             historico: list[dict]) -> int:
+    checks = 0
+    for objeto in ("leaf_stone", "ice_stone", "moon_stone"):
+        filas = [f for f in seleccion if f["id"] == objeto]
+        exigir(len(filas) == 1 and filas[0]["estado_contenido"] == "SELECCIONADO",
+               f"{objeto} no seleccionado o duplicado")
+        checks += 1
+        antiguas = [r for r in historico if r["id"] == objeto]
+        exigir(len(antiguas) == 1 and antiguas[0]["supported_evolution_routes_tested"] > 0,
+               f"{objeto}: evidencia V1 no coincide")
+        checks += 1
+
+    for objeto, origen, destino, numero in CASOS_02:
+        cadena = json.loads(contenido(
+            f"data/api/v2/evolution-chain/{numero}/index.json"))
+        rutas = buscar_cadena(origen, destino, objeto, cadena)
+        exigir(len(rutas) == 1, f"{objeto}/{origen}/{destino}: cadena canónica inválida")
+        checks += 1
+        exigir(rutas[0]["held_item"] is None and rutas[0]["min_level"] is None,
+               f"{objeto}/{origen}: apareció requisito distinto")
+        checks += 1
+        firma = f'{{"objeto": "{objeto}", "origen": "{origen}"}}'
+        exigir(firma in script, f"falta caso {objeto}/{origen} en Godot")
+        checks += 1
+
+    regional = json.loads(contenido(
+        "data/api/v2/evolution-chain/15/index.json"))
+    rutas_alola = buscar_cadena("vulpix", "ninetales", "ice_stone", regional)
+    exigir(len(rutas_alola) == 1
+           and rutas_alola[0].get("base_form", {}).get("name") == "vulpix-alola",
+           "la ruta condicionada del Vulpix de Alola no está identificada")
+    checks += 1
+    for simbolo in ("caso_secundario(", "comprobar_forma_condicionada(",
+                    "comprobar_especie_erronea(", "deposito_pc",
+                    "rechazo_sin_stock", "rechazo_ajeno_sin_consumo",
+                    "rechazo_destino_invalido", "aceptado_y_consumo_unico",
+                    "datos_originales", "no_segunda_evolucion",
+                    "requisito_adicional_conservado",
+                    "CONDITIONAL_ROUTE_NOT_IN_ACTIVE_CATALOG"):
+        exigir(simbolo in script, f"falta escenario de iteración 02: {simbolo}")
+        checks += 1
+    return checks
+
+
 def exigir(condicion: bool, mensaje: str) -> None:
     if not condicion:
         raise AssertionError(mensaje)
@@ -86,8 +159,9 @@ def verificar_contrato() -> int:
     ):
         exigir(caso in script, f"falta aserción: {caso}")
         checks += 1
-    print(f"PARALLEL_ITEMS_W04_CAMP_001_STATIC PASS iteration=1 "
-          f"checks={checks} cases=6 scope=DATOS_SIN_RUNTIME")
+    checks += verificar_segundo_bloque(script, seleccion, historico)
+    print(f"PARALLEL_ITEMS_W04_CAMP_001_STATIC PASS iteration=2 "
+          f"checks={checks} positive_cases=11 conditional_cases=1 scope=DATOS_SIN_RUNTIME")
     return checks
 
 
@@ -105,21 +179,32 @@ def ejecutar(binario: str, timeout: int) -> dict:
     exigir(len(lineas) == 1, "falta resultado único de Godot")
     resultado = json.loads(lineas[0])
     exigir(resultado.get("status") == "PASS"
-           and resultado.get("iteration") == 1 and resultado.get("checks", 0) >= 100
-           and resultado.get("cases") == len(CASOS_01)
+           and resultado.get("iteration") == 2 and resultado.get("checks", 0) >= 200
+           and resultado.get("cases") == len(CASOS_01) + len(CASOS_02) + 1
            and resultado.get("errors") == []
-           and resultado.get("scope") == "W04_CAMP_001_STONES_01",
+           and resultado.get("scope") == "W04_CAMP_001_STONES_02",
            "Godot no superó las aserciones de la iteración 01")
     filas = resultado.get("results", [])
-    exigir(isinstance(filas, list) and len(filas) == len(CASOS_01),
+    exigir(isinstance(filas, list) and len(filas) == len(CASOS_01) + len(CASOS_02) + 1,
            "falta resultado por especie e ID")
-    esperados = {(obj, origen) for obj, origen, _ in CASOS_01}
+    esperados = {(obj, origen) for obj, origen, _ in CASOS_01} | {
+        (obj, origen) for obj, origen, _, _ in CASOS_02
+    }
     actuales = {(row["item_id"], row["source"]) for row in filas}
-    exigir(actuales == esperados and all(
-        row.get("status") == "ASSERTED" and row.get("target_from_catalog") for row in filas
-    ), "algún ID carece de ruta positiva validada")
-    print(f"PARALLEL_ITEMS_W04_CAMP_001_GODOT PASS iteration=1 "
-          f"checks={resultado['checks']} cases=6")
+    positivos = [row for row in filas if row["source"] != "vulpix"]
+    condicional = [row for row in filas if row["item_id"] == "ice_stone"
+                   and row["source"] == "vulpix"]
+    exigir(actuales == esperados | {("ice_stone", "vulpix")}
+           and len(positivos) == len(CASOS_01) + len(CASOS_02)
+           and all(row.get("status") == "ASSERTED"
+                   and row.get("target_from_catalog") for row in positivos)
+           and len(condicional) == 1
+           and condicional[0].get("status") in (
+               "CONDITIONAL_ROUTE_REJECTED",
+               "CONDITIONAL_ROUTE_NOT_IN_ACTIVE_CATALOG",
+           ), "faltan rutas positivas o caracterización regional")
+    print(f"PARALLEL_ITEMS_W04_CAMP_001_GODOT PASS iteration=2 "
+          f"checks={resultado['checks']} cases={resultado['cases']}")
     return resultado
 
 
