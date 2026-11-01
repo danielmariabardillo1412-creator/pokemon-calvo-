@@ -1,5 +1,11 @@
 # Catálogo propuesto para Pokémon Calvo — randomlocke competitivo (1-XI-2026)
 
+## ESTADO VIGENTE — auditoría inversa 13 (2026-11-01)
+
+**743 PERMITIR + 1.375 DESCARTAR + 104 APARCADO_MEGA + 0 CONDICIONAL = 2.222 IDs únicos.** La auditoría inversa ha corregido 35 permisos erróneos: **18 caramelos AV de Let's Go** (no equivalen a EV/Exp.), **13 bayas culinarias sin efecto diferenciado de batalla/captura en el perfil actual** y **4 bonificadores de dinero/encuentros redundantes**. **La Baya Frambu normal permanece**, así como las plateada y dorada por su efecto de captura; también siguen Cola Skitty, Maxiseta, Caramelos Exp., vitaminas y demás estrategias propias.
+
+**Lista actual:** [743 objetos seleccionados para diseñar/conectar](./RANDOMLOCK_ITEMS_BUILD_SCOPE_V1.csv). **Auditoría 13:** [informe técnico](./RANDOMLOCK_ITEMS_AUDIT_PASS13_2026-11-01.md) y [35 cambios por ID](./RANDOMLOCK_ITEMS_AUDIT_PASS13_CHANGES.csv). Las referencias [Mega archivadas](./RANDOMLOCK_ITEMS_MEGA_APARCADO_V1.csv) continúan fuera de cualquier pendiente. Los totales previos de 778/1340/104/0 y anteriores son históricos. **No se ha desconectado ningún efecto ni modificado el juego o las reglas de ejecución.** Falta revisión inversa adicional.
+
 ## ESTADO VIGENTE — cierre de los 125 objetos ordinarios (2026-11-01)
 
 **778 PERMITIR + 1.340 DESCARTAR + 104 APARCADO_MEGA + 0 CONDICIONAL = 2.222 IDs únicos.** El bloque Mega no está en juicio: son 92 piedras específicas y 12 accesorios históricos fuera del trabajo actual. El usuario reafirma **un único tipo de piedra Mega universal con dos copias por partida** en la fase posterior; el objeto nuevo y su implementación todavía no existen.
