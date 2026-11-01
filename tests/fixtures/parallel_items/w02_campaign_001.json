@@ -3,7 +3,8 @@
   "family": "berry_campaign_w02",
   "campaign": "CAMP_001",
   "microblocks_completed": [
-    1
+    1,
+    2
   ],
   "format": "gen9calvounifiedv1",
   "level": 100,
@@ -102,7 +103,113 @@
       "consumes": false,
       "field_applies": false,
       "heal": 0
+    },
+    {
+      "id": "persim_berry",
+      "scenario": "persim_confuse_ray",
+      "kind": "confusion",
+      "initial": "full",
+      "status": "",
+      "consumes": true,
+      "field_applies": false,
+      "heal": 0,
+      "foe_species": "gengar",
+      "foe_move": "confuse_ray",
+      "field_confusion": true
+    },
+    {
+      "id": "persim_berry",
+      "scenario": "persim_no_confusion",
+      "kind": "confusion",
+      "initial": "full",
+      "status": "",
+      "consumes": false,
+      "field_applies": false,
+      "heal": 0,
+      "foe_species": "mew",
+      "foe_move": "amnesia",
+      "field_confusion": false
+    },
+    {
+      "id": "chesto_berry",
+      "scenario": "chesto_spore",
+      "kind": "status",
+      "initial": "full",
+      "status": "",
+      "consumes": true,
+      "field_applies": true,
+      "heal": 0,
+      "foe_species": "gengar",
+      "foe_move": "spore",
+      "field_confusion": false,
+      "field_status": "sleep",
+      "native_expected_status": "sleep"
+    },
+    {
+      "id": "chesto_berry",
+      "scenario": "chesto_burn",
+      "kind": "status",
+      "initial": "full",
+      "status": "burn",
+      "consumes": false,
+      "field_applies": false,
+      "heal": 0,
+      "foe_species": "mew",
+      "foe_move": "amnesia",
+      "field_confusion": false
+    },
+    {
+      "id": "chesto_berry",
+      "scenario": "chesto_healthy",
+      "kind": "status",
+      "initial": "full",
+      "status": "",
+      "consumes": false,
+      "field_applies": false,
+      "heal": 0,
+      "foe_species": "mew",
+      "foe_move": "amnesia",
+      "field_confusion": false
+    },
+    {
+      "id": "rawst_berry",
+      "scenario": "rawst_burn",
+      "kind": "status",
+      "initial": "full",
+      "status": "burn",
+      "consumes": true,
+      "field_applies": true,
+      "heal": 0,
+      "foe_species": "mew",
+      "foe_move": "amnesia",
+      "field_confusion": false
+    },
+    {
+      "id": "rawst_berry",
+      "scenario": "rawst_poison",
+      "kind": "status",
+      "initial": "full",
+      "status": "poison",
+      "consumes": false,
+      "field_applies": false,
+      "heal": 0,
+      "foe_species": "mew",
+      "foe_move": "amnesia",
+      "field_confusion": false
+    },
+    {
+      "id": "rawst_berry",
+      "scenario": "rawst_healthy",
+      "kind": "status",
+      "initial": "full",
+      "status": "",
+      "consumes": false,
+      "field_applies": false,
+      "heal": 0,
+      "foe_species": "mew",
+      "foe_move": "amnesia",
+      "field_confusion": false
     }
   ],
-  "note": "Microbloque 01: contratos separados para equipamiento nativo y uso de campo; los controles de reserva/sin objeto son solo de combate. No prueba ejecutada por definir fixture."
+  "note": "Iteraciones 01+02: ocho casos previos intactos; Persim sin efecto de campo registrado (rechazo comprobable), Chesto/Rawst en su estado específico, controles no aplicables. Sin atribuir PASS nativo antes de CI."
 }
