@@ -1,6 +1,20 @@
 # W02 / IA2 — Cuaderno de continuidad (bayas y consumo)
 
-## ESTADO VIGENTE — CAMPAÑA_001, ITER_01 / 3
+## ESTADO VIGENTE — CAMPAÑA_001, ITER_02 / 3
+
+- **Identidad y rama:** IA2/W02; `codex/calvo-items-20261101-w02`. **Estado:** `PREPARADO_PENDIENTE_CI` (ITER_01+ITER_02 publicadas; ITER_03 solo con próxima `p`). No se ha modificado producción.
+- **Órdenes:** [CAMP_001_W02](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/blob/codex/calvo-items-20261101-arbitro/docs/coordination/items_parallel_v1/campaigns/CAMP_001_W02.md) blob `f6f8f08b13f9e4f84d18970643ebd4aeab5a75b7`; puerta activa blob `3ef0b39f7eb74f3ebcb688f279c254daec981f8e`; último checkpoint árbitra contenido `1b52fdd0b7b89e468811a17ad83a917ec7107735`.
+- **CI históricamente verificada:** [run #41341842320](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41341842320), SHA `ac34fabbe1a27e69614f0239abee21c29d6fe65e`: W02 **503 PASS** sobre antiguos 7 casos Zidra/Ziuela/Dillo. No incluye CAMPAÑA_001.
+- **ITER_02:** `persim_berry`, `chesto_berry`, `rawst_berry`. Se añadieron 8 casos (confusión + control; Spore/sueño + quemadura/sano; Rawst quemadura + veneno/sano) con 3 variantes de combate por caso y 2 de campo. **Total acumulado preparado 16 casos/48 variantes de combate/32 de campo.**
+- **Hechos de implementación:** Persim cura confusión en simulador nativo, pero `imported_recovery_v19.json` no incluye Persim como recuperación de campo: el test exige rechazo sin gasto, no inventa curación integral. Chesto cura únicamente sueño; Rawst únicamente quemadura. Las reglas viven en `@pkmn/sim@0.10.11` y `FieldItemService`; son **solo lectura**.
+- **Fuentes nuevas revisadas:** `tests/fixtures/parallel_items/w02_campaign_001.json` blob `a482aae62a14363463cbfc9e388b4e6c8a971556`, `tests/gameplay/parallel_items_w02_campaign_001.gd` blob `ebdf39d994c1762b3f59c235364684fbb5d54cde`, `tests/tools/test_parallel_items_w02_campaign_001.py` blob `ff39182a725766477763322403afb516155a6e1b`. Commits código `19b6e0be`, `816c6c21`, `55bdbbba`.
+- **Informe:** [CAMP_001_ITER_02.md](./CAMP_001_ITER_02.md), commit `03967c60d3657c0d93c7b09e0cc5fecf4ff5b333`; progreso [CAMP_001_PROGRESO.csv](./CAMP_001_PROGRESO.csv) commit `fe6d53b39efcaa5020da32014e7ee54f1ec11d72`. No reescribir informes aceptados.
+- **Ejecución ITER_02:** 20/20 **inspecciones estáticas reales** de contratos/permiso/identidad en GitHub; **15 pruebas Python definidas SIN_EJECUTAR**, Godot 4.7 **SIN_EJECUTAR**, GPU/manual no realizada. Ningún nuevo ID certificado.
+- **Próximo `p`:** releer STATUS y puerta, comprobar que no hay FAIL/orden superior; ejecutar SOLO **ITER_03** (regresión/SaveV2/matriz por seis IDs), editar únicamente rutas propias, elaborar `CAMP_001_ITER_03.md`, `CAMP_001_FINAL.md`, progreso y cuaderno. **Detenerse y declarar CAMPAÑA_001_FINALIZADA al acabar.**
+- **No tocar:** `main`, V28, árbitra, ramas ajenas, `modules/`, `config/`, `data/`, `.github/`, elección/guardados/RNG ni los viejos tests/fixtures de W02 salvo autorización específica. El HEAD de esta rama es la fuente del commit final del cuaderno.
+
+
+## HISTÓRICO — estado tras ITER_01 / 3
 
 - **Identidad:** IA2/W02, rama propia `codex/calvo-items-20261101-w02`. **Estado:** `PREPARADO_PENDIENTE_CI`, ITER_01 entregada, ITER_02/03 pendientes. La campaña **ACTIVADA** no permite adelantar iteraciones: cada `p` = un microbloque.
 - **Autoridad:** [CAMP_001_W02](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/blob/codex/calvo-items-20261101-arbitro/docs/coordination/items_parallel_v1/campaigns/CAMP_001_W02.md), blob `f6f8f08b13f9e4f84d18970643ebd4aeab5a75b7`, puerta `CAMPAIGN_GATE_001.md` blob `3ef0b39f7eb74f3ebcb688f279c254daec981f8e`. El protocolo anterior decía «propuesta»; la **puerta actual activa** prevalece.
