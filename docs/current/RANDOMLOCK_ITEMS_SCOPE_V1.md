@@ -1,5 +1,17 @@
 # Catálogo propuesto para Pokémon Calvo — randomlocke competitivo (1-XI-2026)
 
+## LISTA VIGENTE: 744 TIPOS (MEGA UNIVERSAL)
+
+El usuario ha decidido sustituir las 92 megapiedras específicas y 12 accesorios históricos por **un único tipo de megapiedra universal, con dos ejemplares máximos por partida**. Se equipa a cualquier Pokémon que tenga megaforma disponible; no crea megaformas para todos los Pokémon ni se consume.
+
+**744 tipos de objetos para la lista de diseño = 743 canónicos seleccionados + 1 tipo nuevo de megapiedra universal.** Las dos copias de la piedra son unidades de un único ID, no dos tipos distintos. El maestro canónico conserva 2.222 IDs (743 PERMITIR, 1.375 DESCARTAR y 104 APARCADO_MEGA); los 104 están archivados y no cuentan en la lista actual de 744.
+
+- [Lista operativa V2: 744 tipos, megapiedra con máximo 2 copias](./RANDOMLOCK_ITEMS_BUILD_SCOPE_V2.csv).
+- [Especificación Mega: equipamiento, contador, megaformas y pruebas futuras](./RANDOMLOCK_MEGA_UNIVERSAL_SPEC_V1.md).
+- [Referencias Mega históricas separadas](./RANDOMLOCK_ITEMS_MEGA_APARCADO_V1.csv).
+
+La regla recomendada de una megaevolución activa por entrenador y combate debe comprobarse con el compañero; el acuerdo confirmado es sobre un tipo de piedra universal y dos unidades máximas por partida. **No se ha cambiado el código, la rama main, V28 ni el filtro de ejecución.**
+
 ## ESTADO VIGENTE — auditoría inversa 13 (2026-11-01)
 
 **743 PERMITIR + 1.375 DESCARTAR + 104 APARCADO_MEGA + 0 CONDICIONAL = 2.222 IDs únicos.** La auditoría inversa ha corregido 35 permisos erróneos: **18 caramelos AV de Let's Go** (no equivalen a EV/Exp.), **13 bayas culinarias sin efecto diferenciado de batalla/captura en el perfil actual** y **4 bonificadores de dinero/encuentros redundantes**. **La Baya Frambu normal permanece**, así como las plateada y dorada por su efecto de captura; también siguen Cola Skitty, Maxiseta, Caramelos Exp., vitaminas y demás estrategias propias.
