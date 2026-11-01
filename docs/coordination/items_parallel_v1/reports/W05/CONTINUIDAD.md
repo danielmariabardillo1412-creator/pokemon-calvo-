@@ -1,3 +1,17 @@
+# ESTADO VIGENTE — CAMP_001 ITER_02 (IA5/W05, 2026-11-01)
+
+- **Estado operativo: `PREPARADO_PENDIENTE_CI`, 02/03 entregados.** Próximo `p`: únicamente ITER_03; no repetir 01/02. Esta sección sustituye el estado antiguo de recuperación del bloque 01, conservado debajo como historial.
+- **Autoridad vigente:** `CAMPAIGN_GATE_UPDATE_003.md` (árbitra, blob `59c553bd7a931ebe4ac10bf4b2b3ce43815220dc`) autoriza expresamente ITER_02 W05. CI previa del adaptador 01 verificada 18 checks Godot, integración `39df72c1`, run [#41350909378](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41350909378) PASS. La CI final de árbitra [#41354759130](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41354759130) también figura `completed/success` en GitHub.
+- **Rama exclusiva:** `codex/calvo-items-20261101-w05`. Sincronizada sin force por merge de dos padres `9d01b3c985915d2070d5d41aa77429df44fc4d01` con árbol de árbitra `8e170550881861daa3a3aefe8aa91909decf84af`, preservando los tres documentos W05 ausentes en árbitra. Sin edición de `main`, V28, otras W ni rama árbitra.
+- **ITER_02 producción propia:** `modules/inventory/field_machine_book_profile.gd`, commit `74e68e55d5d5abbdaf49e2afc6a956f828eeebe2`, blob `b37ff2d0610cce8f49a554f4632afa0f33a37c25`. La nueva `presentacion()` reutiliza `consultar()` y `SpanishGameText` para etiqueta y tipo; no implementa `teach`, consumo, gráficos o nuevas políticas.
+- **ITER_02 test propio:** `tests/gameplay/parallel_items_w05_machine_books_v1.gd`, commit `6d15aba76b8f69874012cd28aa0a2c06c096adc1`, blob `474b66ea4c643564b431e6ea9f6a3304e45c7802`. Lee el CSV de selección y comprueba 229 descripciones canónicas y 19 rechazos. Comando: `godot --headless --path . --script res://tests/gameplay/parallel_items_w05_machine_books_v1.gd`.
+- **Evidencia de ITER_02:** análisis estático de GitHub sobre 248 IDs (229 SV + 19 heredadas), 0 duplicados, 0 faltantes y detección de lectura sin escrituras; **Godot sobre código de ITER_02 SIN_EJECUTAR**, CI nueva PENDIENTE, GPU/visual PENDIENTE. El PASS anterior cubre solo ITER_01.
+- **Documentación:** `reports/W05/CAMP_001_ITER_02.md` y segunda fila de `CAMP_001_PROGRESO.csv`; no modificar reportes previos. LOTE_001/LOTE_002 conservados.
+- **Próximo trabajo autorizado únicamente tras nuevo `p` y ausencia de fallos:** ITER_03, pruebas integradas (248 sin activar 19, muestras de enseñanza/PP/consumo mediante `FieldItemService.teach`, 0 duplicación); IA6 controla CI e integración de 02. Al cerrar 03 crear `CAMP_001_FINAL.md` y detenerse.
+- **Límites:** no tocar esquema de guardado, selección, `field_item_service.gd`, `field_item_bag.gd`, fuentes de movimiento, assets ni 19 heredadas. La presentación todavía no está incorporada a UI real ni aprobada artísticamente.
+
+---
+
 # RECUPERACIÓN VIGENTE — CAMPAÑA_001 / ITER_01 (IA6, 2026-11-01)
 
 - **Estado operativo actual: `PREPARADO_PENDIENTE_CI`, 01/03 preparado.** Esta sección prevalece sobre el histórico de activación `0/3` que se conserva íntegro más abajo.
