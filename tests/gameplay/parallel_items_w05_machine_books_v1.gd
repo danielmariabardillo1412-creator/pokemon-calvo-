@@ -129,7 +129,7 @@ func _instantanea(propietario: PlayerCollection) -> String:
 	return JSON.stringify(SaveGameData.build(propietario.party, propietario.storage, propietario.inventory).to_dict())
 
 
-func _especie_compatible(catalogos: DefinitionCatalog, contenido: RefCounted, movimiento: StringName) -> StringName:
+func _especie_compatible(catalogos: DefinitionCatalog, contenido, movimiento: StringName) -> StringName:
 	var opciones: Array[StringName] = [&"mew"]
 	opciones.append_array(catalogos.species_catalog.all_ids())
 	for id: StringName in opciones:
