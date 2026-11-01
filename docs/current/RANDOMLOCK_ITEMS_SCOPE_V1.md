@@ -164,3 +164,7 @@ Si más adelante se confirma el sistema, la variante para un Pokémon con varias
 - Cualquier objeto añadido posteriormente se inserta por ID y motivo, conservando trazabilidad. No reconstruir los 2.222 ni reiniciar V28; catálogo de contenido y pruebas de funcionalidad son sistemas distintos.
 
 **Estado:** `DRAFT_CLASSIFICATION_ONLY`; `main` intacta, sin aplicación de política o nuevas pruebas de Godot. El trabajo de objetos V28 continúa en su PR #118 independiente.
+
+## Sexta revisión registrada — lotes 25 + 46 (2026-11-01)
+
+La continuación posterior a la quinta auditoría examinó **71 IDs distintos** (25 tesoros y 46 de formas). **No ha alterado las 2.222 filas ni los estados oficiales**: 706/290/1226. De esos 71, **33 ya estaban PERMITIR y 38 CONDICIONAL**. No restar automáticamente objetos de los 290; las recomendaciones de conservación/descartes siguen sujetas a revisión. Las diferencias, dependencias y propuestas están **guardadas por ID** en el [registro de revisión V1](./RANDOMLOCK_ITEMS_REVIEW_LOG_V1.csv) y explicadas en la [sexta auditoría](./RANDOMLOCK_ITEMS_AUDIT_PASS6_2026-11-01.md). **Próxima acción: resolver los condicionales de fase ordinaria sin volver a repasar los 71 salvo que se detecte contradicción.**
