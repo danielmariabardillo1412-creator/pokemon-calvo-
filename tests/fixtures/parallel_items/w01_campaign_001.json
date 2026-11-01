@@ -131,6 +131,144 @@
       "seeds": [
         23
       ]
+    },
+    {
+      "stage": "02",
+      "id": "eviolite_pre_physical",
+      "item_id": "eviolite",
+      "op": "eviolite_resist",
+      "actor_species": "pidgeotto",
+      "level": 100,
+      "foe_species": "mew",
+      "own_move": "growl",
+      "foe_move": "tackle",
+      "hp": "full",
+      "seeds": [
+        19,
+        23
+      ]
+    },
+    {
+      "stage": "02",
+      "id": "eviolite_pre_special",
+      "item_id": "eviolite",
+      "op": "eviolite_resist",
+      "actor_species": "pidgeotto",
+      "level": 100,
+      "foe_species": "mew",
+      "own_move": "growl",
+      "foe_move": "psychic",
+      "hp": "full",
+      "seeds": [
+        19,
+        23
+      ]
+    },
+    {
+      "stage": "02",
+      "id": "eviolite_final_physical",
+      "item_id": "eviolite",
+      "op": "eviolite_final",
+      "actor_species": "pidgeot",
+      "level": 100,
+      "foe_species": "mew",
+      "own_move": "growl",
+      "foe_move": "tackle",
+      "hp": "full",
+      "seeds": [
+        23
+      ]
+    },
+    {
+      "stage": "02",
+      "id": "eviolite_final_special",
+      "item_id": "eviolite",
+      "op": "eviolite_final",
+      "actor_species": "pidgeot",
+      "level": 100,
+      "foe_species": "mew",
+      "own_move": "growl",
+      "foe_move": "psychic",
+      "hp": "full",
+      "seeds": [
+        23
+      ]
+    },
+    {
+      "stage": "02",
+      "id": "belt_supereffective",
+      "item_id": "expert_belt",
+      "op": "super_effective",
+      "actor_species": "mew",
+      "level": 100,
+      "foe_species": "arcanine",
+      "own_move": "water_gun",
+      "foe_move": "reflect",
+      "hp": "full",
+      "seeds": [
+        19,
+        23
+      ]
+    },
+    {
+      "stage": "02",
+      "id": "belt_neutral",
+      "item_id": "expert_belt",
+      "op": "neutral_control",
+      "actor_species": "mew",
+      "level": 100,
+      "foe_species": "mew",
+      "own_move": "water_gun",
+      "foe_move": "reflect",
+      "hp": "full",
+      "seeds": [
+        23
+      ]
+    },
+    {
+      "stage": "02",
+      "id": "goggles_spore",
+      "item_id": "safety_goggles",
+      "op": "powder_immunity",
+      "actor_species": "mew",
+      "level": 100,
+      "foe_species": "breloom",
+      "own_move": "reflect",
+      "foe_move": "spore",
+      "hp": "full",
+      "seeds": [
+        19
+      ]
+    },
+    {
+      "stage": "02",
+      "id": "goggles_sandstorm",
+      "item_id": "safety_goggles",
+      "op": "weather_immunity",
+      "actor_species": "mew",
+      "level": 100,
+      "foe_species": "mew",
+      "own_move": "reflect",
+      "foe_move": "sandstorm",
+      "hp": "full",
+      "seeds": [
+        23
+      ]
+    },
+    {
+      "stage": "02",
+      "id": "goggles_normal",
+      "item_id": "safety_goggles",
+      "op": "irrelevant_control",
+      "actor_species": "mew",
+      "level": 100,
+      "foe_species": "mew",
+      "own_move": "reflect",
+      "foe_move": "amnesia",
+      "hp": "full",
+      "seeds": [
+        23
+      ]
     }
   ]
 }
