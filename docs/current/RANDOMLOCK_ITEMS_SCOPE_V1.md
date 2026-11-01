@@ -94,6 +94,19 @@ Las **92 entradas** del catálogo corresponden a **86 especies megaevolucionable
 
 Fuentes de contraste: [Pokémon, explicación oficial](https://mega.pokemon.com/es-es/), [Bulbapedia: lista de megapiedras](https://bulbapedia.bulbagarden.net/wiki/Mega_Stones), [Pokémon Legends Z-A: megapiedras](https://www.serebii.net/legendsz-a/megastones.shtml). Que existan las 92 entradas en el inventario **no acredita** que las 86 megaformas estén implementadas en el motor ni en el pool de formas del randomlocke. La arquitectura debe reutilizar un **único sistema de megaevolución parametrizado**, no programar una mecánica por piedra.
 
+## Propuesta en debate: megapiedra universal con dos unidades por partida (2026-11-01)
+
+**Estado: propuesta del usuario pendiente de consultarla con su amigo. NO es una decisión final y NO modifica la política activa ni las 92 entradas originales de piedras.**
+
+- En vez de distribuir 92 IDs de megapiedras específicas, distribuir **dos copias totales** de **un único ID nuevo de piedra universal** por partida/guardado. Las piedras no se consumen; se pueden reequipar entre combates. Este máximo debe controlarse en todo el guardado (equipo, PC, bolsa, mapa y transacciones), no solo en la bolsa.
+- Solo puede equiparse para megaevolucionar a una especie que tenga **megaforma definida y válida**. Equiparla no inventa megaforma ni sustituye estadísticas/habilidades/modelos. No se crean nuevas megaformas ni ilustraciones por esta propuesta.
+- **Máximo de dos candidatos equipados simultáneamente y una megaevolución activada por entrenador y combate** si se adopta la mecánica por turnos clásica. No confundir dos piedras disponibles con dos megaevoluciones activas en el mismo combate. Normativa oficial clásica: [Pokémon España](https://www.pokemon.com/es/destacados/mayo-trae-consigo-la-magia-de-la-megaevolucion). El sistema de tiempo real de Leyendas Z-A no debe mezclarse inadvertidamente.
+- Para Charizard, Mewtwo, Raichu y otras especies con variantes X/Y/Z, la **megaforma se preselecciona al preparar el equipo** y queda bloqueada durante ese combate, evitando el cambio oportunista tras ver al rival. La forma exacta sigue pendiente de diseño/validación.
+- Propuesta técnica no destructiva: mantener las piedras originales y su tabla especie→megaforma como **metadatos del motor nativo**; el objeto de la partida es universal, mientras el adaptador construye el correspondiente ID nativo específico durante la ejecución del combate (siempre que el simulador soporte esa megaforma), sin reescribir cada efecto. En guardado/mapa/bolsa persiste solo el ID universal.
+- La antigua excepción de Rayquaza debe revisarse: bajo límite de dos candidatos, permitir megaevolucionar sin piedra rompería el presupuesto. O se le exige la universal, o se documenta una excepción con coste competitivo equivalente; **pendiente de aprobación**.
+- **Riesgo:** simplificar 92 ítems y su distribución NO elimina el trabajo de implementar/validar las megaformas, su UI, su arte y su integración real. Tampoco garantiza equidad si el reparto de ambas piedras no es equivalente entre jugadores.
+- **No cambiar todavía recuentos** (703 PERMITIR / 259 CONDICIONAL / 1260 DESCARTAR) ni activar nuevas reglas. Si se aprueba, se producirá una V2 del catálogo, sin eliminar las definiciones canónicas, y una especificación funcional separada para el adaptador de megaevolución.
+
 ## Revisión pendiente antes de aplicar el filtro
 
 - **Ningún descartado se borra.** No cambiar tiendas, drop tables, mapas, partidas guardadas ni políticas runtime con una tabla preliminar.
