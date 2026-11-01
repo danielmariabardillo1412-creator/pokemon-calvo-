@@ -1,0 +1,745 @@
+id,nombre_es,familia,responsable_orientativo,prioridad,estado_triaje,id_lote_asignado,estado_evidencia,ultimo_commit_validado,observaciones
+ability_capsule,Cáps. Habilidad,TRAINING,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+ability_patch,Parche Habilidad,TRAINING,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+ability_shield,Escudo Habilidad,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+absorb_bulb,Tubérculo,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+adamant_crystal,Gran Diamansfera,STORY_KEY_OR_FORM_REVIEW,W04,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+adamant_mint,Menta Firme,TRAINING,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+adamant_orb,Diamansfera,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+adrenaline_orb,Nerviosfera,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+aguav_berry,Baya Guaya,BERRY,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+air_balloon,Globo Helio,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+aloraichium_z_held,Alo-Raistal Z,Z_CRYSTAL,W03,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+antidote,Antídoto,MEDICINE,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+apicot_berry,Baya Aricoc,BERRY,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+aspear_berry,Baya Perasi,BERRY,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+assault_vest,Chaleco Asalto,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+auspicious_armor,Armadura Auspiciosa,EVOLUTION,W04,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+awakening,Despertar,MEDICINE,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+babiri_berry,Baya Baribá,BERRY,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+beast_ball,Ente Ball,CAPTURE_BALL,W03,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+berry_juice,Zumo de Baya,MEDICINE,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+berry_sweet,Confite Fruto,EVOLUTION,W04,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+big_malasada,Malasada Maxi,MEDICINE,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+big_nugget,Maxipepita,TREASURE_OR_COLLECTIBLE,W04,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+big_root,Raíz Grande,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+binding_band,Banda Atadura,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+black_augurite,Mineral Negro,EVOLUTION,W04,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+black_belt,Cinturón Negro,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+black_flute,Flauta Negra,FIELD_USE,W03,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+black_glasses,Gafas de Sol,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+black_sludge,Lodo Negro,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+blank_plate,Tabla Neutra,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+blue_flute,Flauta Azul,FIELD_USE,W03,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+blue_orb,Prisma Azul,STORY_KEY_OR_FORM_REVIEW,W04,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+blunder_policy,Seguro Fallo,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+bold_mint,Menta Osada,TRAINING,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+booster_energy,Energía Potenciadora,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+bottle_cap,Chapa Plateada,TREASURE_OR_COLLECTIBLE,W04,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+brave_mint,Menta Audaz,TRAINING,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+bug_gem,Gema Bicho,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+bug_memory,Disco Bicho,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+bug_tera_shard,Teralito Bicho,TERA_MATERIAL,W03,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+buginium_z_held,Insectostal Z,Z_CRYSTAL,W03,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+burn_drive,PiroROM,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+burn_heal,Antiquemar,MEDICINE,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+calcium,Calcio,TRAINING,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+calm_mint,Menta Serena,TRAINING,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+carbos,Carburante,TRAINING,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+careful_mint,Menta Cauta,TRAINING,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+casteliacone,Porcehelado,MEDICINE,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+catching_charm,Amuleto Captura,STORY_KEY_OR_FORM_REVIEW,W04,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+cell_battery,Pila,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+charcoal,Carbón,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+charti_berry,Baya Alcho,BERRY,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+cheri_berry,Baya Zreza,BERRY,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+chesto_berry,Baya Atania,BERRY,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+chilan_berry,Baya Chilan,BERRY,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+chill_drive,CrioROM,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+chipped_pot,Tetera Rota,EVOLUTION,W04,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+choice_band,Cinta Elección,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+choice_scarf,Pañuelo Elección,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+choice_specs,Gafas Elección,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+chople_berry,Baya Pomaro,BERRY,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+clear_amulet,Amuleto Puro,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+clever_mochi,Mochi Mente,TRAINING,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+clever_wing,Pluma Mente,TRAINING,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+clover_sweet,Confite Trébol,EVOLUTION,W04,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+coba_berry,Baya Kouba,BERRY,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+colbur_berry,Baya Dillo,BERRY,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+cornerstone_mask,Máscara Cimiento,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+covert_cloak,Capa Furtiva,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+cracked_pot,Tetera Agrietada,EVOLUTION,W04,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+custap_berry,Baya Chiri,BERRY,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+damp_rock,Roca Lluvia,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+dark_gem,Gema Siniestra,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+dark_memory,Disco Siniestro,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+dark_tera_shard,Teralito Siniestro,TERA_MATERIAL,W03,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+darkinium_z_held,Nictostal Z,Z_CRYSTAL,W03,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+dawn_stone,Piedra Alba,EVOLUTION,W04,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+decidium_z_held,Dueyestal Z,Z_CRYSTAL,W03,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+deep_sea_scale,Escama Marina,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+deep_sea_tooth,Diente Marino,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+destiny_knot,Lazo Destino,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+dire_hit,Crítico X,BATTLE_STAT_USE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+dive_ball,Buceo Ball,CAPTURE_BALL,W03,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+dna_splicers,Punta ADN,STORY_KEY_OR_FORM_REVIEW,W04,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+douse_drive,HidroROM,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+draco_plate,Tabla Draco,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+dragon_fang,Colmillo de Dragón,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+dragon_gem,Gema Dragón,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+dragon_memory,Disco Dragón,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+dragon_scale,Escama Dragón,EVOLUTION,W04,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+dragon_tera_shard,Teralito Dragón,TERA_MATERIAL,W03,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+dragonium_z_held,Dracostal Z,Z_CRYSTAL,W03,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+dread_plate,Tabla Oscura,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+dream_ball,Ensueño Ball,CAPTURE_BALL,W03,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+dubious_disc,Disco Extraño,EVOLUTION,W04,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+dusk_ball,Ocaso Ball,CAPTURE_BALL,W03,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+dusk_stone,Piedra Noche,EVOLUTION,W04,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+dynamax_candy,Caramelo Dinamax,TRAINING,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+earth_plate,Tabla Terrax,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+eject_button,Botón Escape,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+eject_pack,Mochila Escape,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+electirizer,Electrizador,EVOLUTION,W04,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+electric_gem,Gema Eléctrica,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+electric_memory,Disco Eléctrico,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+electric_seed,Semilla Electro,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+electric_tera_shard,Teralito Eléctrico,TERA_MATERIAL,W03,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+electrium_z_held,Electrostal Z,Z_CRYSTAL,W03,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+elixir,Elixir,MEDICINE,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+energy_powder,Polvo Energía,MEDICINE,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+energy_root,Raíz Energía,MEDICINE,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+enigma_berry,Baya Enigma,BERRY,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+escape_rope,Cuerda Huida,FIELD_USE,W03,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+ether,Éter,MEDICINE,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+everstone,Piedra Eterna,TRAINING,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+eviolite,Mineral Evol,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+exp_candy_l,Caramelo Exp. L,TRAINING,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+exp_candy_m,Caramelo Exp. M,TRAINING,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+exp_candy_s,Caramelo Exp. S,TRAINING,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+exp_candy_xl,Caramelo Exp. XL,TRAINING,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+exp_candy_xs,Caramelo Exp. XS,TRAINING,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+exp_charm,Amuleto Exp,STORY_KEY_OR_FORM_REVIEW,W04,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+exp_share,Repartir Exp,TRAINING,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+expert_belt,Cinta Experto,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+fairium_z_held,Feeristal Z,Z_CRYSTAL,W03,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+fairy_feather,Pluma Feérica,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+fairy_gem,Gema Hada,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+fairy_memory,Disco Hada,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+fairy_tera_shard,Teralito Hada,TERA_MATERIAL,W03,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+fast_ball,Rapid Ball,CAPTURE_BALL,W03,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+fighting_gem,Gema Lucha,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+fighting_memory,Disco Lucha,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+fighting_tera_shard,Teralito Lucha,TERA_MATERIAL,W03,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+fightinium_z_held,Lizastal Z,Z_CRYSTAL,W03,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+figy_berry,Baya Higog,BERRY,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+fire_gem,Gema Fuego,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+fire_memory,Disco Fuego,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+fire_stone,Piedra Fuego,EVOLUTION,W04,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+fire_tera_shard,Teralito Fuego,TERA_MATERIAL,W03,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+firium_z_held,Pirostal Z,Z_CRYSTAL,W03,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+fist_plate,Tabla Fuerte,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+flame_orb,Llamasfera,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+flame_plate,Tabla Llama,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+float_stone,Piedra Pómez,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+flower_sweet,Confite Flor,EVOLUTION,W04,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+fluffy_tail,Cola Skitty,FIELD_USE,W03,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+flying_gem,Gema Voladora,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+flying_memory,Disco Volador,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+flying_tera_shard,Teralito Volador,TERA_MATERIAL,W03,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+flyinium_z_held,Aerostal Z,Z_CRYSTAL,W03,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+focus_band,Cinta Aguante,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+focus_sash,Banda Aguante,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+fresh_start_mochi,Fresh Start Mochi,TRAINING,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+fresh_water,Agua Fresca,MEDICINE,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+friend_ball,Amigo Ball,CAPTURE_BALL,W03,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+full_heal,Cura Total,MEDICINE,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+full_incense,Incienso Lento,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+full_restore,Restaurar Todo,MEDICINE,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+galarica_cuff,Brazal Galanuez,EVOLUTION,W04,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+galarica_wreath,Corona Galanuez,EVOLUTION,W04,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+ganlon_berry,Baya Gonlan,BERRY,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+genius_mochi,Mochi Intelecto,TRAINING,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+genius_wing,Pluma Intelecto,TRAINING,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+gentle_mint,Menta Amable,TRAINING,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+ghost_gem,Gema Fantasma,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+ghost_memory,Disco Fantasma,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+ghost_tera_shard,Teralito Fantasma,TERA_MATERIAL,W03,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+ghostium_z_held,Espectrostal Z,Z_CRYSTAL,W03,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+gold_bottle_cap,Chapa Dorada,TREASURE_OR_COLLECTIBLE,W04,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+golden_razz_berry,Baya Frambu Dorada,FIELD_USE,W03,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+gracidea,Gracídea,STORY_KEY_OR_FORM_REVIEW,W04,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+grass_gem,Gema Planta,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+grass_memory,Disco Planta,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+grass_tera_shard,Teralito Planta,TERA_MATERIAL,W03,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+grassium_z_held,Fitostal Z,Z_CRYSTAL,W03,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+grassy_seed,Semilla Hierba,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+great_ball,Super Ball,CAPTURE_BALL,W03,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+grepa_berry,Baya Uvav,BERRY,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+grip_claw,Garra Garfio,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+griseous_core,Gran Griseosfera,STORY_KEY_OR_FORM_REVIEW,W04,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+griseous_orb,Griseosfera,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+ground_gem,Gema Tierra,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+ground_memory,Disco Tierra,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+ground_tera_shard,Teralito Tierra,TERA_MATERIAL,W03,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+groundium_z_held,Geostal Z,Z_CRYSTAL,W03,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+guard_spec,Protección X,BATTLE_STAT_USE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+haban_berry,Baya Anjiro,BERRY,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+hard_stone,Piedra Dura,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+hasty_mint,Menta Activa,TRAINING,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+heal_ball,Sana Ball,CAPTURE_BALL,W03,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+heal_powder,Polvo Curación,MEDICINE,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+health_mochi,Mochi Vigor,TRAINING,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+health_wing,Pluma Vigor,TRAINING,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+heart_scale,Escama Corazón,TREASURE_OR_COLLECTIBLE,W04,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+hearthflame_mask,Máscara Horno,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+heat_rock,Roca Calor,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+heavy_ball,Peso Ball,CAPTURE_BALL,W03,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+heavy_duty_boots,Botas Gruesas,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+hm01,MO01,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+hm04,MO04,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+hm05,MO05,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+hm06,MO06,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+hm08,MO08,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+hondew_berry,Baya Meluce,BERRY,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+hopo_berry,hopo-berry,MEDICINE,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+hp_up,Más PS,TRAINING,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+hyper_potion,Hiperpoción,MEDICINE,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+iapapa_berry,Baya Pabaya,BERRY,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+ice_gem,Gema Hielo,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+ice_heal,Antihielo,MEDICINE,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+ice_memory,Disco Hielo,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+ice_stone,Piedra Hielo,EVOLUTION,W04,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+ice_tera_shard,Teralito Hielo,TERA_MATERIAL,W03,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+icicle_plate,Tabla Helada,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+icium_z_held,Criostal Z,Z_CRYSTAL,W03,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+icy_rock,Roca Helada,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+impish_mint,Menta Agitada,TRAINING,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+incinium_z_held,Incinostal Z,Z_CRYSTAL,W03,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+insect_plate,Tabla Bicho,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+iron,Hierro,TRAINING,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+iron_ball,Bola Férrea,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+iron_plate,Tabla Acero,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+jaboca_berry,Baya Jaboca,BERRY,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+jolly_mint,Menta Alegre,TRAINING,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+kasib_berry,Baya Drasi,BERRY,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+kebia_berry,Baya Kebia,BERRY,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+kee_berry,Baya Biglia,BERRY,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+kelpsy_berry,Baya Algama,BERRY,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+kings_rock,Roca del Rey,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+kommonium_z_held,Kommostal Z,Z_CRYSTAL,W03,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+lagging_tail,Cola Plúmbea,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+lansat_berry,Baya Zonlan,BERRY,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+lava_cookie,Galleta Lava,MEDICINE,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+lax_incense,Incienso Suave,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+lax_mint,Menta Floja,TRAINING,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+leaders_crest,Distintivo de Líder,FOOD_OR_PICNIC_ACTIVITY,W04,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+leaf_stone,Piedra Hoja,EVOLUTION,W04,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+leftovers,Restos,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+legend_plate,Tabla Legendaria,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+lemonade,Limonada,MEDICINE,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+leppa_berry,Baya Zanama,BERRY,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+level_ball,Nivel Ball,CAPTURE_BALL,W03,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+liechi_berry,Baya Lichi,BERRY,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+life_orb,Vidasfera,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+light_ball,Bola Luminosa,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+light_clay,Refleluz,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+loaded_dice,Dado Trucado,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+lonely_mint,Menta Huraña,TRAINING,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+love_ball,Amor Ball,CAPTURE_BALL,W03,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+love_sweet,Confite Corazón,EVOLUTION,W04,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+lucky_egg,Huevo Suerte,TRAINING,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+lucky_punch,Puño Suerte,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+lum_berry,Baya Ziuela,BERRY,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+luminous_moss,Musgo Brillante,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+lumiose_galette,Crêpe Luminalia,MEDICINE,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+lunalium_z_held,Lunalastal Z,Z_CRYSTAL,W03,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+lure,Colonia,FIELD_USE,W03,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+lure_ball,Cebo Ball,CAPTURE_BALL,W03,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+lustrous_globe,Gran Lustresfera,STORY_KEY_OR_FORM_REVIEW,W04,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+lustrous_orb,Lustresfera,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+luxury_ball,Lujo Ball,CAPTURE_BALL,W03,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+lycanium_z_held,Lycanrostal Z,Z_CRYSTAL,W03,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+macho_brace,Brazal Firme,TRAINING,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+magmarizer,Magmatizador,EVOLUTION,W04,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+magnet,Imán,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+mago_berry,Baya Ango,BERRY,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+malicious_armor,Armadura Maldita,EVOLUTION,W04,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+maranga_berry,Baya Maranga,BERRY,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+marshadium_z_held,Marshastal Z,Z_CRYSTAL,W03,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+master_ball,Master Ball,CAPTURE_BALL,W03,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+masterpiece_teacup,Cuenco Exquisito,EVOLUTION,W04,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+max_elixir,Elixir Máximo,MEDICINE,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+max_ether,Éter Máximo,MEDICINE,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+max_lure,Colonia Máxima,FIELD_USE,W03,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+max_mushrooms,Maxiseta,BATTLE_STAT_USE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+max_potion,Poción Máxima,MEDICINE,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+max_repel,Repelente Máximo,FIELD_USE,W03,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+meadow_plate,Tabla Pradal,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+mental_herb,Hierba Mental,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+metal_alloy,Metal Compuesto,EVOLUTION,W04,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+metal_coat,Revest. Metálico,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+metal_powder,Polvo Metálico,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+meteorite,Meteorito,STORY_KEY_OR_FORM_REVIEW,W04,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+metronome,Metrónomo,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+mewnium_z_held,Mewstal Z,Z_CRYSTAL,W03,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+micle_berry,Baya Lagro,BERRY,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+mild_mint,Menta Afable,TRAINING,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+mimikium_z_held,Mimikyustal Z,Z_CRYSTAL,W03,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+mind_plate,Tabla Mental,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+miracle_seed,Semilla Milagro,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+mirror_herb,Hierba Copia,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+misty_seed,Semilla Bruma,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+modest_mint,Menta Modesta,TRAINING,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+moomoo_milk,Leche Mu-mu,MEDICINE,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+moon_ball,Luna Ball,CAPTURE_BALL,W03,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+moon_stone,Piedra Lunar,EVOLUTION,W04,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+muscle_band,Cinta Fuerte,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+muscle_mochi,Mochi Músculo,TRAINING,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+muscle_wing,Pluma Músculo,TRAINING,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+mystic_water,Agua Mística,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+n_lunarizer_merge,Necroluna,LEGACY_OR_CATEGORY_REVIEW,W04,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+n_solarizer_merge,Necrosol,LEGACY_OR_CATEGORY_REVIEW,W04,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+naive_mint,Menta Ingenua,TRAINING,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+naughty_mint,Menta Pícara,TRAINING,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+nest_ball,Nido Ball,CAPTURE_BALL,W03,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+net_ball,Malla Ball,CAPTURE_BALL,W03,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+never_melt_ice,Hielo Perpetuo,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+normal_gem,Gema Normal,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+normal_tera_shard,Teralito Normal,TERA_MATERIAL,W03,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+normalium_z_held,Normastal Z,Z_CRYSTAL,W03,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+nugget,Pepita,TREASURE_OR_COLLECTIBLE,W04,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+occa_berry,Baya Caoca,BERRY,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+odd_incense,Incienso Raro,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+old_gateau,Barrita Plus,MEDICINE,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+oran_berry,Baya Aranja,BERRY,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+oval_stone,Piedra Oval,EVOLUTION,W04,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+paralyze_heal,Antiparalizador,MEDICINE,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+pass_orb,Regalosfera,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+passho_berry,Baya Pasio,BERRY,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+payapa_berry,Baya Payapa,BERRY,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+peat_block,Bloque de Turba,EVOLUTION,W04,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+pecha_berry,Baya Meloc,BERRY,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+persim_berry,Baya Caquic,BERRY,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+petaya_berry,Baya Yapati,BERRY,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+pewter_crunchies,Rokikos,MEDICINE,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+pikanium_z_held,Pikastal Z,Z_CRYSTAL,W03,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+pink_nectar,Néctar Rosa,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+pixie_plate,Tabla Duende,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+poison_barb,Flecha Venenosa,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+poison_gem,Gema Veneno,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+poison_memory,Disco Veneno,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+poison_tera_shard,Teralito Veneno,TERA_MATERIAL,W03,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+poisonium_z_held,Toxistal Z,Z_CRYSTAL,W03,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+poke_ball,Poké Ball,CAPTURE_BALL,W03,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+pomeg_berry,Baya Grana,BERRY,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+potion,Poción,MEDICINE,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+power_anklet,Franja Recia,TRAINING,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+power_band,Banda Recia,TRAINING,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+power_belt,Cinto Recio,TRAINING,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+power_bracer,Brazal Recio,TRAINING,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+power_herb,Hierba Única,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+power_lens,Lente Recia,TRAINING,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+power_weight,Pesa Recia,TRAINING,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+pp_max,PP Máximos,TRAINING,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+pp_up,Más PP,TRAINING,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+pretty_wing,Pluma Bella,TREASURE_OR_COLLECTIBLE,W04,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+primarium_z_held,Primastal Z,Z_CRYSTAL,W03,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+prism_scale,Escama Bella,EVOLUTION,W04,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+protective_pads,Paracontacto,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+protector,Protector,EVOLUTION,W04,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+protein,Proteína,TRAINING,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+psychic_gem,Gema Psíquica,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+psychic_memory,Disco Psíquico,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+psychic_seed,Semilla Psique,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+psychic_tera_shard,Teralito Psíquico,TERA_MATERIAL,W03,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+psychium_z_held,Psicostal Z,Z_CRYSTAL,W03,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+punching_glove,Guante de Boxeo,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+purple_nectar,Néctar Violeta,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+qualot_berry,Baya Ispero,BERRY,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+quick_ball,Veloz Ball,CAPTURE_BALL,W03,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+quick_claw,Garra Rápida,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+quick_powder,Polvo Veloz,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+quiet_mint,Menta Mansa,TRAINING,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+rage_candy_bar,Caramelo Furia,STORY_KEY_OR_FORM_REVIEW,W04,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+rare_bone,Hueso Raro,TREASURE_OR_COLLECTIBLE,W04,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+rare_candy,Caramelo Raro,TRAINING,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+rash_mint,Menta Alocada,TRAINING,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+rawst_berry,Baya Safre,BERRY,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+razor_claw,Garra Afilada,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+razor_fang,Colmillo Agudo,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+razz_berry,Baya Frambu,BERRY,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+reaper_cloth,Tela Terrible,EVOLUTION,W04,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+red_card,Tarjeta Roja,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+red_flute,Flauta Roja,FIELD_USE,W03,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+red_nectar,Néctar Rojo,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+red_orb,Prisma Rojo,STORY_KEY_OR_FORM_REVIEW,W04,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+reins_of_unity,Riendas Unión,STORY_KEY_OR_FORM_REVIEW,W04,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+relaxed_mint,Menta Plácida,TRAINING,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+repeat_ball,Acopio Ball,CAPTURE_BALL,W03,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+repel,Repelente,FIELD_USE,W03,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+resist_mochi,Mochi Aguante,TRAINING,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+resist_wing,Pluma Aguante,TRAINING,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+reveal_glass,Espejo Veraz,STORY_KEY_OR_FORM_REVIEW,W04,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+ribbon_sweet,Confite Lazo,EVOLUTION,W04,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+rindo_berry,Baya Tamar,BERRY,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+ring_target,Blanco,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+rock_gem,Gema Roca,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+rock_incense,Incienso Roca,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+rock_memory,Disco Roca,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+rock_tera_shard,Teralito Roca,TERA_MATERIAL,W03,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+rockium_z_held,Litostal Z,Z_CRYSTAL,W03,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+rocky_helmet,Casco Dentado,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+room_service,Servicio Raro,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+rose_incense,Incienso Floral,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+roseli_berry,Baya Hibis,BERRY,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+roto_catch,Cupón Captura,LEGACY_OR_CATEGORY_REVIEW,W04,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+roto_exp_points,Cupón Exp,LEGACY_OR_CATEGORY_REVIEW,W04,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+roto_friendship,Cupón Amistad,LEGACY_OR_CATEGORY_REVIEW,W04,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+rotom_catalog,Catálogo Rotom,STORY_KEY_OR_FORM_REVIEW,W04,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+rowap_berry,Baya Magua,BERRY,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+rusted_shield,Escudo Oxidado,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+rusted_sword,Espada Oxidada,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+sachet,Saquito Fragante,EVOLUTION,W04,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+safari_ball,Safari Ball,CAPTURE_BALL,W03,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+safety_goggles,Gafa Protectora,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+salac_berry,Baya Aslac,BERRY,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+sassy_mint,Menta Grosera,TRAINING,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+scope_lens,Periscopio,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+scroll_of_darkness,Manuscrito Sombras,EVOLUTION,W04,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+scroll_of_waters,Manuscrito Aguas,EVOLUTION,W04,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+sea_incense,Incienso Marino,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+serious_mint,Menta Seria,TRAINING,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+shalour_sable,Galleta Yantra,MEDICINE,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+sharp_beak,Pico Afilado,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+shed_shell,Muda Concha,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+shell_bell,Cascabel Concha,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+shiny_stone,Piedra Día,EVOLUTION,W04,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+shock_drive,FulgoROM,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+shuca_berry,Baya Acardo,BERRY,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+silk_scarf,Pañuelo de Seda,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+silver_powder,Polvo Plata,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+silver_razz_berry,Baya Frambu Plateada,FIELD_USE,W03,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+sitrus_berry,Baya Zidra,BERRY,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+sky_plate,Tabla Cielo,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+smoke_ball,Bola de Humo,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+smooth_rock,Roca Suave,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+snorlium_z_held,Snorlastal Z,Z_CRYSTAL,W03,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+snowball,Bola de Nieve,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+soda_pop,Refresco,MEDICINE,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+soft_sand,Arena Fina,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+solganium_z_held,Solgaleostal Z,Z_CRYSTAL,W03,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+soothe_bell,Cascabel Alivio,TRAINING,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+soul_dew,Rocío Bondad,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+spell_tag,Hechizo,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+splash_plate,Tabla Linfa,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+spooky_plate,Tabla Terror,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+sport_ball,Competi Ball,CAPTURE_BALL,W03,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+star_sweet,Confite Estrella,EVOLUTION,W04,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+starf_berry,Baya Arabol,BERRY,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+steel_gem,Gema Acero,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+steel_memory,Disco Acero,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+steel_tera_shard,Teralito Acero,TERA_MATERIAL,W03,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+steelium_z_held,Metalostal Z,Z_CRYSTAL,W03,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+stick,Puerro,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+sticky_barb,Toxiestrella,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+stone_plate,Tabla Pétrea,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+strawberry_sweet,Confite Fresa,EVOLUTION,W04,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+sun_stone,Piedra Solar,EVOLUTION,W04,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+super_lure,Supercolonia,FIELD_USE,W03,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+super_potion,Superpoción,MEDICINE,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+super_repel,Superrepelente,FIELD_USE,W03,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+sweet_apple,Manzana Dulce,EVOLUTION,W04,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+sweet_heart,Corazón Dulce,MEDICINE,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+swift_mochi,Mochi Ímpetu,TRAINING,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+swift_wing,Pluma Ímpetu,TRAINING,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+syrupy_apple,Manzana Melosa,EVOLUTION,W04,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tamato_berry,Baya Tamate,BERRY,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tanga_berry,Baya Yecana,BERRY,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tapunium_z_held,Tapistal Z,Z_CRYSTAL,W03,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tart_apple,Manzana Ácida,EVOLUTION,W04,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+terrain_extender,Cubresuelos,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+thick_club,Hueso Grueso,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+throat_spray,Espray Bucal,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+thunder_stone,Piedra Trueno,EVOLUTION,W04,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+timer_ball,Turno Ball,CAPTURE_BALL,W03,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+timid_mint,Menta Miedosa,TRAINING,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm00,MT00,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm01,MT01,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm02,MT02,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm03,MT03,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm04,MT04,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm05,MT05,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm06,MT06,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm07,MT07,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm08,MT08,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm09,MT09,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm10,MT10,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm100,MT100,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm101,MT101,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm102,MT102,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm103,MT103,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm104,MT104,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm105,MT105,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm106,MT106,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm107,MT107,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm108,MT108,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm109,MT109,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm11,MT11,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm110,MT110,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm111,MT111,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm112,MT112,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm113,MT113,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm114,MT114,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm115,MT115,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm116,MT116,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm117,MT117,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm118,MT118,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm119,MT119,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm12,MT12,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm120,MT120,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm121,MT121,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm122,MT122,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm123,MT123,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm124,MT124,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm125,MT125,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm126,MT126,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm127,MT127,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm128,MT128,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm129,MT129,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm13,MT13,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm130,MT130,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm131,MT131,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm132,MT132,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm133,MT133,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm134,MT134,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm135,MT135,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm136,MT136,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm137,MT137,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm138,MT138,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm139,MT139,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm14,MT14,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm140,MT140,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm141,MT141,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm142,MT142,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm143,MT143,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm144,MT144,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm145,MT145,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm146,MT146,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm147,MT147,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm148,MT148,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm149,MT149,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm15,MT15,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm150,MT150,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm151,MT151,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm152,MT152,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm153,MT153,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm154,MT154,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm155,MT155,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm156,MT156,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm157,MT157,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm158,MT158,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm159,MT159,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm16,MT16,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm160,MT160,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm161,MT161,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm162,MT162,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm163,MT163,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm164,MT164,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm165,MT165,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm166,MT166,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm167,MT167,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm168,MT168,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm169,MT169,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm17,MT17,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm170,MT170,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm171,MT171,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm172,MT172,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm173,MT173,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm174,MT174,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm175,MT175,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm176,MT176,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm177,MT177,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm178,MT178,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm179,MT179,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm18,MT18,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm180,MT180,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm181,MT181,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm182,MT182,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm183,MT183,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm184,MT184,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm185,MT185,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm186,MT186,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm187,MT187,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm188,MT188,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm189,MT189,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm19,MT19,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm190,MT190,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm191,MT191,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm192,MT192,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm193,MT193,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm194,MT194,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm195,MT195,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm196,MT196,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm197,MT197,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm198,MT198,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm199,MT199,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm20,MT20,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm200,MT200,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm201,MT201,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm202,MT202,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm203,MT203,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm204,MT204,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm205,MT205,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm206,MT206,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm207,MT207,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm208,MT208,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm209,MT209,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm21,MT21,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm210,MT210,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm211,MT211,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm212,MT212,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm213,MT213,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm214,MT214,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm215,MT215,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm216,MT216,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm217,MT217,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm218,MT218,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm219,MT219,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm22,MT22,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm220,MT220,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm221,MT221,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm222,MT222,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm223,MT223,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm224,MT224,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm225,MT225,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm226,MT226,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm227,MT227,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm228,MT228,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm229,MT229,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm23,MT23,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm24,MT24,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm25,MT25,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm26,MT26,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm27,MT27,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm28,MT28,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm29,MT29,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm30,MT30,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm31,MT31,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm32,MT32,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm33,MT33,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm34,MT34,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm35,MT35,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm36,MT36,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm37,MT37,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm38,MT38,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm39,MT39,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm40,MT40,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm41,MT41,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm42,MT42,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm43,MT43,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm44,MT44,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm45,MT45,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm46,MT46,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm47,MT47,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm48,MT48,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm49,MT49,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm50,MT50,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm51,MT51,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm52,MT52,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm53,MT53,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm54,MT54,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm55,MT55,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm56,MT56,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm57,MT57,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm58,MT58,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm59,MT59,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm60,MT60,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm61,MT61,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm62,MT62,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm63,MT63,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm64,MT64,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm65,MT65,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm66,MT66,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm67,MT67,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm68,MT68,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm69,MT69,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm70,MT70,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm71,MT71,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm72,MT72,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm73,MT73,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm74,MT74,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm75,MT75,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm76,MT76,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm77,MT77,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm78,MT78,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm79,MT79,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm80,MT80,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm81,MT81,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm82,MT82,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm83,MT83,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm84,MT84,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm85,MT85,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm86,MT86,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm87,MT87,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm88,MT88,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm89,MT89,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm90,MT90,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm91,MT91,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm92,MT92,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm93,MT93,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm94,MT94,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm95,MT95,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm96,MT96,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm97,MT97,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm98,MT98,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tm99,MT99,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+toxic_orb,Toxisfera,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+toxic_plate,Tabla Tóxica,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tr13,DT13,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tr19,DT19,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tr28,DT28,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tr31,DT31,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tr39,DT39,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tr41,DT41,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tr44,DT44,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tr50,DT50,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tr72,DT72,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tr83,DT83,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tr85,DT85,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tr91,DT91,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+tr93,DT93,MACHINE,W05,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+twisted_spoon,Cuchara Torcida,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+ultra_ball,Ultra Ball,CAPTURE_BALL,W03,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+unremarkable_teacup,Cuenco Mediocre,EVOLUTION,W04,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+up_grade,Mejora,EVOLUTION,W04,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+utility_umbrella,Parasol Multiuso,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+wacan_berry,Baya Gualot,BERRY,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+water_gem,Gema Agua,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+water_memory,Disco Agua,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+water_stone,Piedra Agua,EVOLUTION,W04,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+water_tera_shard,Teralito Agua,TERA_MATERIAL,W03,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+waterium_z_held,Hidrostal Z,Z_CRYSTAL,W03,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+wave_incense,Incienso Acua,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+weakness_policy,Seguro Debilidad,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+wellspring_mask,Máscara Fuente,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+whipped_dream,Dulce de Nata,EVOLUTION,W04,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+white_flute,Flauta Blanca,FIELD_USE,W03,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+white_herb,Hierba Blanca,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+wiki_berry,Baya Wiki,BERRY,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+wise_glasses,Gafas Especiales,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+x_accuracy,Precisión X,BATTLE_STAT_USE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+x_attack,Ataque X,BATTLE_STAT_USE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+x_defense,Defensa X,BATTLE_STAT_USE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+x_sp_atk,At. Especial X,BATTLE_STAT_USE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+x_sp_def,Def. Especial X,BATTLE_STAT_USE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+x_speed,Velocidad X,BATTLE_STAT_USE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+yache_berry,Baya Rimoya,BERRY,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+yellow_flute,Flauta Amarilla,FIELD_USE,W03,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+yellow_nectar,Néctar Amarillo,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+zap_plate,Tabla Trueno,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+zinc,Zinc,TRAINING,W02,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+zoom_lens,Telescopio,HELD_COMBAT_CANDIDATE,W01,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+zygarde_cube,Arca de Zygarde,STORY_KEY_OR_FORM_REVIEW,W04,P1_OBJETOS,SIN_ASIGNAR,,PENDIENTE_AUDITAR_CODIGO_Y_PRUEBAS,,No inferir estado funcional solo por clasificacion PERMITIR
+mega_stone_universal,Megapiedra universal,MEGA_UNIVERSAL,ARBITRA_FASE_MEGA,P2_FASE_MEGA,SIN_ASIGNAR,,APARCADO_DISeNO_APROBADO,,"2 piedras, hasta 2 megaevoluciones por combate, sin reasignar durante combate; no implementar en fase P1"
