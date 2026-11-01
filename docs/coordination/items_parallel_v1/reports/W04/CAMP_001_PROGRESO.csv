@@ -1,0 +1,2 @@
+microbloque,ids,actividad,estado,commit_test_gd,commit_test_python,pruebas_estructurales,pruebas_godot,ci_nuevo,siguiente_paso
+01,"fire_stone;water_stone;thunder_stone","6 escenarios con destino desde catálogo y controles de consumo/propiedad",PREPARADO_PENDIENTE_CI,7f667ba453d0b80a862b1565d17e1c9849d38768,63d396ab0b85401f9e83b319c58bd5efa28dcc8f,40/40_PASS,SIN_EJECUTAR,SIN_EJECUTAR,"02 Leaf/Ice/Moon tras nuevo p; ejecutar CI consolidada en IA6"
