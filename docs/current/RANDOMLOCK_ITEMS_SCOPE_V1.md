@@ -1,5 +1,11 @@
 # Catálogo propuesto para Pokémon Calvo — randomlocke competitivo (1-XI-2026)
 
+## ESTADO VIGENTE — auditoría 11 (2026-11-01)
+
+**Decisión del usuario:** preferir `fluffy_tail` (Cola Skitty) frente a `poke_doll` y `poke_toy`, por ambientación y porque tienen la misma función de huida. `max_mushrooms` (Maxiseta) permanece PERMITIR por subir cinco estadísticas una etapa; el control de balance va en otra revisión. **No se debe desconectar ni borrar ningún objeto técnico ya implementado**: se trabaja únicamente con la lista de futuros objetos a diseñar y distribuir.
+
+**Preselección técnica de esta tanda:** 41 condicionales resueltos como propuesta de contenido (9 PERMITIR, 32 DESCARTAR), sin afirmar que el usuario aprobó uno a uno los 41. **Totales ahora: 710 PERMITIR + 229 CONDICIONAL + 1.283 DESCARTAR = 2.222 IDs únicos**, 104 Mega reservados, 125 condicionales ordinarios. [Auditoría 11](./RANDOMLOCK_ITEMS_AUDIT_PASS11_2026-11-01.md), [cambios individuales](./RANDOMLOCK_ITEMS_AUDIT_PASS11_CHANGES.csv), [matriz vigente V5](./RANDOMLOCK_ITEMS_CONDITIONAL_MATRIX_V5.csv). Los contadores previos del documento son históricos.
+
 ## ESTADO VIGENTE — décima auditoría · criterio «función específica para Pokémon» (2026-11-01)
 
 **El usuario ha precisado que un objeto que solo sirve para explorar, desplazarse, decorar o repetir una función sin aportar estrategia nueva no debe generarse en el randomlocke.** Se retiran del catálogo de selección **10 IDs adicionales**: 5 condicionales de mundo/ropa (`bicycle`, `rotom_bike`, `town_map`, `dowsing_machine`, `discount_coupon`) y 5 permitidos que duplicaban efectos o dependían de evento ajeno (`fluffy_tail`, `poke_toy`, `park_ball`, `cherish_ball`, `premier_ball`). `poke_doll` queda como objeto de huida; no borrar ninguna ruta técnica V15/V21.
