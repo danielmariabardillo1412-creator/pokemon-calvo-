@@ -82,7 +82,7 @@ func _compare_native(spec: Dictionary, held: Dictionary) -> void:
 		plain.hp == reserve.hp and plain.status == reserve.status and plain.confused == reserve.confused)
 	if String(spec.kind) == "confusion":
 		check("Persim elimina confusión únicamente en portador activo",
-			active.confused == not should_consume and plain.confused == should_consume
+			not active.confused and plain.confused == should_consume
 			and reserve.confused == should_consume)
 		check("Persim no cura estado persistente ajeno",
 			active.status == String(spec.status) and plain.status == String(spec.status))
