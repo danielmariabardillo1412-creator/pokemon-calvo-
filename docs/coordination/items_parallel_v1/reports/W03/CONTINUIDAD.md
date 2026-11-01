@@ -1,5 +1,24 @@
 # W03 / IA3 — CUADERNO DE CONTINUIDAD (captura)
 
+## Estado vigente: CAMPAÑA_001, ITER_01/03 entregada
+
+- **Identidad:** IA3/W03; ID exclusivo `net_ball`. **Estado:** `PREPARADO_PENDIENTE_CI` (microbloque 01 terminado), sin Net implementada. Los bloques 02 y 03 no se han iniciado; cada uno necesita nuevo `p`.
+- **Autoridad vigente:** `CAMPAIGN_GATE_001.md` blob `3ef0b39f7eb74f3ebcb688f279c254daec981f8e` (`ACTIVADA`); `campaigns/CAMP_001_W03.md` blob `ecb7d9915c936bf5c43f4854584c0f5873f71101`; `STATUS.md` blob `cb651d4cc3a684d80f5b99752fba87ca8c4adb4d`.
+- **Sincronización:** se hizo fast-forward **sin fuerza** de la rama exclusiva W03 (`37f32d9`) al HEAD árbitra `1b52fdd0b7b89e468811a17ad83a917ec7107735`. W03 y árbitra quedaron idénticas antes de crear archivos propios; `LOTE_001.md` (blob `2ef030e9...`) y `LOTE_002.md` (blob `f45a6cd...`) se conservaron. El checkpoint autorizado `8a74b938...` y SHA de CI `ac34fab...` son ancestros de la rama árbitra.
+- **PASS real de base (histórico, NO nuevo W03):** Actions [41341842320](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41341842320), commit `ac34fabbe1a27e69614f0239abee21c29d6fe65e`, conclusión `success`, Godot 4.7. W03 caracterización PASS con `net_ball` **no implementada**. Del SHA probado hasta la campaña solo hubo archivos de documentación.
+- **ITER_01:** [informe](./CAMP_001_ITER_01.md), [progreso](./CAMP_001_PROGRESO.csv); validador Python de fases [`tests/tools/test_parallel_items_w03_net_campaign_001.py`](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/blob/codex/calvo-items-20261101-w03/tests/tools/test_parallel_items_w03_net_campaign_001.py) creado en `bbde5ef67d181092c24c671228f51eb5e0134fd4`. No hay cambios de producción ni de tests históricos.
+- **Contrato:** Magikarp/Agua ×3,5; Caterpie/Bicho ×3,5; Pidgey/Normal ×1. Dos tipos elegibles no duplican factor. `CaptureSystem.resolve()` ya consulta `CreatureSpecies` y llama a `BallEffects.multiplier()`, mientras `CaptureRuleset` incorpora automáticamente `BallEffects.IDS`. Los tipos usados son los canónicos de especie, no los alterados dinámicamente durante combate; no alterar contexto ni fórmula de RNG.
+- **Reutilización:** `parallel_items_w03_capture_net_v1.gd` ya cubre tres especies, Net desconocida sin consumo/RNG, fallo válido que consume, entrenador rechazado, equipo/PC y SaveV2. **Dos negativos obsoletos al conectar Malla:** bucles `unsupported` de `item_capture_v11.gd` y `item_capture_v15.gd`; reemplazarlos con expectativas positivas, preservando negativos de Lujo y resto.
+- **Pruebas de ITER_01:** revisión estática de blobs GitHub hecha. El **nuevo** Python `--phase baseline`: `SIN_EJECUTAR` sobre checkout; nuevo Godot `SIN_EJECUTAR`; CI sobre commit de este bloque `SIN_EJECUTAR`; GPU `SIN_EJECUTAR`. Contenedor sin Godot, `git ls-remote` falló DNS. No inventar PASS.
+- **Límites de escritura vigentes:** solamente `modules/capture/capture_ball_effects.gd`, tests W03 expresamente listados en `CAMP_001_W03.md`, `reports/W03/CAMP_001_ITER_0N.md`, `CAMP_001_PROGRESO.csv` y este cuaderno. `CaptureRuleset`, `CaptureSystem`, save/schema, sesiones, `.github/`, V28, `main`, árbitra y otras ramas solo lectura.
+- **Próximo `p` (ITER_02):** comprobar primero estado oficial IA6 y rama W03; añadir SOLO `net_ball` a `BallEffects.IDS` y multiplicador puro desde `CreatureSpecies.has_type(&"water")` o `has_type(&"bug")`; cambiar negativos históricos V11/V15 por contratos correctos. Ejecutar `python tests/tools/test_parallel_items_w03_net_campaign_001.py --phase implemented` y Godot cuando exista runner; si no se prueba nueva producción, **PREPARADO_PENDIENTE_CI**, no certificado.
+- **Parada:** cualquier FAIL, choque de rutas, cambio a tipos temporales o necesidad de editar otro módulo requiere IA6. `luxury_ball`, `dusk_ball`, `beast_ball` fuera de campaña. Detener tras ITER_03 y emitir `CAMPAÑA_001_FINALIZADA`.
+
+---
+
+## Registro histórico anterior (LOTE_001 y LOTE_002)
+
+
 **Estado: LISTA_PARA_REVISION / PENDIENTE_CI**. Documento de memoria técnica en la rama **`codex/calvo-items-20261101-w03`**. **No otorga permisos nuevos**. Fecha: 2026-11-01.
 
 ## 1. Identidad, orden oficial y versión base
