@@ -1,0 +1,636 @@
+{
+  "schema_version": 1,
+  "evidence": {
+    "v27_merged": {
+      "sha": "233b1a4f15ee4df7301e2c5acf8aed84a8f40626",
+      "pr": "https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/pull/116",
+      "main_godot_ci": "https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41219322020",
+      "conclusion": "success"
+    },
+    "historical_v3": {
+      "sha": "c554ab7635fb847aa395d2dbb5bc523b560bc6de",
+      "pr": "https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/pull/117",
+      "status": "CLOSED_UNMERGED",
+      "ci": "https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41217120667",
+      "result": "20/20 PASS on V3 code, not yet V28"
+    }
+  },
+  "v28": {
+    "tested_commit": "001a67a28afdae7916470819275d8c2b947de0a3",
+    "real_godot_runs": [
+      {
+        "commit": "c29db19343ad22717c49a44737099eacd8aa7473",
+        "run_id": 41220331135,
+        "result": "FAIL",
+        "errors": 6,
+        "reason": "noncanonical runtime comparison in newly added save round-trip test, fixed and retested",
+        "url": "https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41220331135"
+      },
+      {
+        "commit": "69e15d74d04063dbe9613575b8618062e1efbed7",
+        "run_id": 41220691787,
+        "result": "PASS",
+        "all_workflows": 20,
+        "passed": 20,
+        "ubuntu_job_id": 124594448485,
+        "windows_job_id": 124594448158,
+        "url": "https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41220691787"
+      },
+      {
+        "commit": "f052b09ce2b63642ce9340500b7d0fae4e699472",
+        "run_id": 41222565742,
+        "result": "FAIL",
+        "ubuntu_job": 124599986734,
+        "checks": 341,
+        "errors": 7,
+        "url": "https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41222565742"
+      },
+      {
+        "commit": "ae51793641b6981b4827524208b50f7a7c8e54a0",
+        "run_id": 41222946680,
+        "result": "PASS",
+        "all_workflows": 20,
+        "ubuntu_job": 124601131188,
+        "windows_job": 124601131544,
+        "checks": 404,
+        "errors": 0,
+        "url": "https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41222946680"
+      },
+      {
+        "commit": "aae2d98606890e94af14765d7391e854e4499547",
+        "run_id": 41225403708,
+        "result": "FAIL",
+        "reason": "GDScript parse error for new protector test, no effects exercised"
+      },
+      {
+        "commit": "c111b3d044bde60cb51a85a9d6a3b400e849bae4",
+        "run_id": 41225706687,
+        "result": "FAIL",
+        "reason": "GDScript parse error from missing closing check parenthesis"
+      },
+      {
+        "commit": "3a6a12a32e80352cfcc4ba3870957a583b26f323",
+        "run_id": 41226013201,
+        "result": "PASS",
+        "all_workflows": 20,
+        "checks": 122,
+        "errors": 0,
+        "url": "https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41226013201"
+      },
+      {
+        "commit": "b9638283deb44d92c686f3d22f6fadbb27c2a1a4",
+        "run_id": 41227381283,
+        "result": "PASS",
+        "all_workflows": 20,
+        "checks": 164,
+        "errors": 0,
+        "url": "https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41227381283"
+      },
+      {
+        "commit": "001a67a28afdae7916470819275d8c2b947de0a3",
+        "run_id": 41229994112,
+        "result": "PASS",
+        "all_workflows": 20,
+        "checks": 332,
+        "errors": 0,
+        "url": "https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41229994112"
+      }
+    ],
+    "result": "SCOPED_CI_PASS_BLOCKS_0_2_4_5_6_NOT_ALL_ITEMS_DONE",
+    "notes": "This document is a preparatory handoff, not test proof.",
+    "test_expansion": {
+      "status": "PASS",
+      "verified_commit": "69e15d74d04063dbe9613575b8618062e1efbed7",
+      "checks": 202,
+      "errors": 0,
+      "native_training_items": [
+        "power_bracer",
+        "power_belt",
+        "power_lens",
+        "power_band",
+        "power_anklet",
+        "macho_brace"
+      ],
+      "scope": "6 additional items through actual Native battle, checkpoint, per-stat EV/XP, owner, serialize round-trip, no duplicate settlement; not all via map/bag",
+      "full_map_route_item": "power_weight"
+    },
+    "native_item_cases": 908,
+    "native_item_ids": 65,
+    "godot_item_checks": 23434,
+    "baby_ids_berry": 12,
+    "v3_bounded_effect_ids": 72,
+    "regression_progression_v18": 8755,
+    "windows_item_connections_checks": 4993,
+    "windows_savegame_checks": 40,
+    "windows_gate": "PUBLICATION_V27 PASS",
+    "warnings": [
+      {
+        "status": "OPEN",
+        "component": "Node worker/process lifecycle",
+        "observed_count": 7,
+        "where": "Ubuntu successful item job includes V18 regression",
+        "text": "Godot emitted ERROR: The process ... does not exist or is not a child; not a failed gameplay assertion, not certified clean console",
+        "nonblocking_for_this_ci": true
+      },
+      {
+        "status": "OPEN",
+        "component": "Node worker/process lifecycle",
+        "observed_count": 12,
+        "where": "Ubuntu successful item job #124601131188",
+        "message": "Process not existing/not child emitted on shutdown/liveness; gameplay asserts pass but logs not clean"
+      },
+      {
+        "status": "OPEN",
+        "component": "Node child process shutdown/liveness",
+        "observed_count": 19,
+        "where": "Ubuntu verified item job 124610228040",
+        "message": "ERROR: The process ... does not exist or is not a child, during multiple sessions; tests passed, console not clean"
+      },
+      {
+        "status": "OPEN",
+        "component": "Node worker/process lifecycle",
+        "observed_count": 30,
+        "where": "Ubuntu item job #124614247458",
+        "message": "ERROR: The process ... does not exist or is not a child. No gameplay assertions failed."
+      },
+      {
+        "status": "OPEN",
+        "component": "Unix child process lifecycle",
+        "observed_count": 42,
+        "where": "Ubuntu item job 124622026080",
+        "message": "ERROR: The process ... does not exist or is not a child in successful job. No gameplay assertion failures; cause still open."
+      }
+    ],
+    "next": "Design next independent item family with actual game consumers; keep main stable; document before changing.",
+    "block_2": {
+      "status": "SCOPED_CI_VERIFIED",
+      "verified_commit": "ae51793641b6981b4827524208b50f7a7c8e54a0",
+      "verified_run": 41222946680,
+      "url": "https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41222946680",
+      "ubuntu_job_id": 124601131188,
+      "windows_job_id": 124601131544,
+      "workflows_passed": 20,
+      "workflows_total": 20,
+      "checks": 404,
+      "errors": 0,
+      "items": [
+        "power_weight",
+        "power_bracer",
+        "power_belt",
+        "power_lens",
+        "power_band",
+        "power_anklet",
+        "macho_brace"
+      ],
+      "route": "seven separate real map + physical bag equip + save/load before/after native fight, EV six stats and XP, held owner, physical stock",
+      "prior_failed": {
+        "sha": "f052b09ce2b63642ce9340500b7d0fae4e699472",
+        "run_id": 41222565742,
+        "job_id": 124599986734,
+        "checks": 341,
+        "errors": 7,
+        "reason": "composite runtime reload assertion failed for 7 item IDs; separate persisted fields retested PASS"
+      },
+      "headless": "PASS",
+      "gpu": "NOT_RUN",
+      "warnings": "12 ERROR messages on child PID lifecycle despite passing Godot headless; technical debt",
+      "native_cases": 908,
+      "real_ipc_ids": 65,
+      "berry_ids": 12,
+      "projection_checks": 23434,
+      "regression_v18_checks": 8755,
+      "windows_item_connections_checks": 4993,
+      "windows_savegame_checks": 40,
+      "windows_gate": "PUBLICATION_V27 PASS"
+    },
+    "block_3": {
+      "status": "CANCELLED_BY_USER_NO_FUNCTIONAL_DELIVERY",
+      "item": "beast_ball",
+      "attempt_commit": "224a080d618285e1c30cc40c4f5c7522a0e8d51f",
+      "attempted_run_id": 41224687162,
+      "run_relevance": "OBSOLETE_AFTER_USER_REVOCATION",
+      "reversal_verified_by": "compare against pre-block-3 blob SHAs after next commit",
+      "required_outcome": "Ultra beasts captured with ordinary existing Poké Balls",
+      "no_coverage_claim": true
+    },
+    "scope_policy": {
+      "use_case": "competitive randomlock",
+      "all_2222_target": false,
+      "beast_ball": "not connected or used",
+      "ultra_beasts": "ordinary capture path unchanged",
+      "requires_explicit_competitive_relevance_for_next_work": true
+    },
+    "block_4": {
+      "status": "SCOPED_CI_VERIFIED",
+      "functional_commit": "3a6a12a32e80352cfcc4ba3870957a583b26f323",
+      "run_id": 41226013201,
+      "run_url": "https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41226013201",
+      "workflows": 20,
+      "passed": 20,
+      "ubuntu_job_id": 124610228040,
+      "windows_job_id": 124610228227,
+      "checks": 122,
+      "errors": 0,
+      "verified_native_cases": 6,
+      "map_bag_save_routes": 3,
+      "items": [
+        "safety_goggles",
+        "covert_cloak",
+        "clear_amulet"
+      ],
+      "effects": [
+        "Spore prevented vs unprotected sleep",
+        "Nuzzle secondary paralysis prevented vs control",
+        "Charm Attack drop prevented vs control"
+      ],
+      "known_gap": "Map Caterpie test proves presence/retention but not defensive trigger, which is proved separately via native matched foe",
+      "failed_before": [
+        {
+          "run_id": 41225403708,
+          "sha": "aae2d98606890e94af14765d7391e854e4499547",
+          "error": "Parse error before assertions"
+        },
+        {
+          "run_id": 41225706687,
+          "sha": "c111b3d044bde60cb51a85a9d6a3b400e849bae4",
+          "error": "Parse error, missing check closure before if"
+        }
+      ],
+      "native_item_scenarios": 908,
+      "godot_mirror_checks": 23434,
+      "existing_ev_checks": 404,
+      "progression_checks": 8755,
+      "windows_item_connections": 4993,
+      "windows_savegame_checks": 40,
+      "windows_publication": "PUBLICATION_V27 PASS",
+      "unix_pid_error_messages": 19,
+      "gpu_manual": "NOT_RUN"
+    },
+    "block_5": {
+      "status": "SCOPED_CI_VERIFIED",
+      "functional_commit": "b9638283deb44d92c686f3d22f6fadbb27c2a1a4",
+      "run_id": 41227381283,
+      "run_url": "https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41227381283",
+      "workflows_total": 20,
+      "workflows_passed": 20,
+      "checks": 164,
+      "errors": 0,
+      "ubuntu_job_id": 124614247458,
+      "windows_job_id": 124614247707,
+      "ids": [
+        "muscle_band",
+        "wise_glasses",
+        "expert_belt"
+      ],
+      "official_ids": [
+        243,
+        244,
+        245
+      ],
+      "native_sessions": 12,
+      "physical_map_bag_save_routes": 3,
+      "ability_context": "EMPTY; not verified for abilities",
+      "windows": {
+        "gate": "PUBLICATION_V27 PASS",
+        "item_connections": 4993,
+        "savegame": 40
+      },
+      "limits": [
+        "30 Unix PID/worker messages not yet diagnosed",
+        "No graphical/GPU local test",
+        "No abilities context in native comparisons"
+      ]
+    },
+    "block_6": {
+      "status": "SCOPED_CI_VERIFIED",
+      "tested_functional_commit": "001a67a28afdae7916470819275d8c2b947de0a3",
+      "run_id": 41229994112,
+      "run_url": "https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41229994112",
+      "total_workflows": 20,
+      "passed_workflows": 20,
+      "ubuntu_job_id": 124622026080,
+      "windows_job_id": 124622026226,
+      "checks": 332,
+      "errors": 0,
+      "verified_item_ids": [
+        "muscle_band",
+        "wise_glasses",
+        "expert_belt",
+        "charcoal",
+        "mystic_water",
+        "magnet"
+      ],
+      "new_item_ids": [
+        "charcoal",
+        "mystic_water",
+        "magnet"
+      ],
+      "official_pokeapi_ids": [
+        226,
+        220,
+        219
+      ],
+      "native_comparison_sessions_total": 24,
+      "real_map_bag_save_routes_total": 6,
+      "provenance": "PokeAPI canonical index/details with type-enhancement category, holdable, active, game_indices",
+      "ability_context": "EMPTY (not verified)",
+      "windows": {
+        "publication": "PUBLICATION_V27 PASS",
+        "item_connections_checks": 4993,
+        "savegame_checks": 40
+      },
+      "limits": [
+        "42 Unix PID worker warning/error lines though workflows passed",
+        "GPU manual visual validation pending",
+        "type booster synergies/abilities and other 12+ types not certified by this block"
+      ]
+    }
+  },
+  "limitations": [
+    "2222 IDs inventoried do not imply all effects functional",
+    "V3 has scoped evidence for 72 IDs, not all contexts",
+    "GPU/manual visual user validation pending",
+    "Economy, Exp. Share, trade evolution and other profiles pending"
+  ],
+  "automation_prototype": {
+    "status": "SCOPED_CI_VERIFIED",
+    "family": "DECLARATIVE_CHOICE_INTEGRATION_PROTOTYPE",
+    "functional_sha": "0c1f48eb4bd40ca15d794847d89c16ea6614ceb9",
+    "ids": [
+      "choice_band",
+      "choice_specs",
+      "choice_scarf"
+    ],
+    "checks_per_platform": 665,
+    "scenarios_per_platform": 15,
+    "contract_unit_tests_per_platform": 14,
+    "competitive_counts": {
+      "selected_candidates": 61,
+      "v28_verified_ids": 22,
+      "historical_contexts_pending_integral_v28_proof": 35,
+      "blocked_dependencies": 4
+    },
+    "next_step": "Prototype mission complete. Review reusable contract; future families require their own observable expectations, not new simulations per item. Prioritize passive/survival family in ACCELERATION_PLAN, keep dependencies and PID diagnostics separate. No automatic PR merge.",
+    "ci": {
+      "status": "PASS",
+      "run_id": 41237512322,
+      "run_url": "https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41237512322",
+      "workflows_total": 20,
+      "workflows_success": 20
+    },
+    "diagnostics": {
+      "linux_prototype_pid": 48,
+      "linux_full_job_pid_messages": 63,
+      "windows_prototype_pid": 0,
+      "status": "OPEN_TECHNICAL_DEBT"
+    },
+    "gpu_manual": "NOT_RUN",
+    "historical_checkpoint": true
+  },
+  "automation_second_family": {
+    "family": "DECLARATIVE_CHOICE_AND_PASSIVE_FAMILIES",
+    "functional_sha": "7f973f5bfb63cfae12f1dbaa956512e5291df0aa",
+    "new_ids": [
+      "leftovers",
+      "life_orb",
+      "rocky_helmet"
+    ],
+    "checks_per_platform": 1935,
+    "scenarios_per_platform": 30,
+    "unit_tests_per_platform": 31,
+    "families_per_platform": [
+      {
+        "family": "choice_held_items",
+        "items": 3,
+        "scenarios": 15,
+        "scenario_checks": 669,
+        "status": "SCOPED_VERIFIED"
+      },
+      {
+        "family": "passive_reactive_held_items",
+        "items": 3,
+        "scenarios": 15,
+        "scenario_checks": 1263,
+        "status": "SCOPED_VERIFIED"
+      }
+    ],
+    "competitive_counts": {
+      "selected_candidates": 61,
+      "v28_verified_ids": 25,
+      "remaining_integral_v28_proof": 32,
+      "blocked_dependencies": 4
+    },
+    "next_step": "Recommend Air Balloon and Heavy-Duty Boots: item consumption/immunity and entry hazards. Define their contracts before editing; reuse the shared runner/ownership/restore/map/report components and preserve both families. PID lifecycle debt is separate. No automatic merge.",
+    "status": "SCOPED_CI_VERIFIED",
+    "ci": {
+      "status": "PASS",
+      "run_id": 41241062641,
+      "run_url": "https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41241062641",
+      "workflows_total": 20,
+      "workflows_success": 20
+    },
+    "diagnostics": {
+      "linux_automation_log_pid": 156,
+      "linux_visible_job_console_pid": 53,
+      "windows_automation_log_pid": 0,
+      "status": "OPEN_LIFECYCLE_DEBT"
+    },
+    "gpu_manual": "NOT_RUN"
+  },
+  "latest_functional_checkpoint": {
+    "sha": "961cb0ac8712e03cd3d22e0115d8b11c1a36e08b",
+    "run_id": 41252124368,
+    "scope": "DECLARATIVE_CHOICE_PASSIVE_AND_ENTRY_FAMILIES"
+  },
+  "status": "THIRD_AUTOMATION_FAMILY_SCOPED_CI_VERIFIED",
+  "automation_third_family": {
+    "status": "SCOPED_CI_VERIFIED",
+    "family": "DECLARATIVE_CHOICE_PASSIVE_AND_ENTRY_FAMILIES",
+    "functional_sha": "961cb0ac8712e03cd3d22e0115d8b11c1a36e08b",
+    "ids": [
+      "choice_band",
+      "choice_specs",
+      "choice_scarf",
+      "leftovers",
+      "life_orb",
+      "rocky_helmet",
+      "air_balloon",
+      "heavy_duty_boots"
+    ],
+    "new_ids": [
+      "air_balloon",
+      "heavy_duty_boots"
+    ],
+    "checks_per_platform": 3335,
+    "scenarios_per_platform": 40,
+    "unit_tests_per_platform": 56,
+    "ci": {
+      "status": "PASS",
+      "functional_sha": "961cb0ac8712e03cd3d22e0115d8b11c1a36e08b",
+      "run_id": 41252124368,
+      "run_url": "https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41252124368",
+      "workflows_total": 20,
+      "workflows_success": 20,
+      "ubuntu_job_id": 124687630763,
+      "windows_job_id": 124687630530,
+      "linux_visible_job_pid_messages": 60,
+      "unit_tests_per_platform": [
+        14,
+        17,
+        25
+      ],
+      "ubuntu_and_windows_engine": "4.7.stable.official.5b4e0cb0f",
+      "workflow_runs": [
+        {
+          "id": 41252124448,
+          "name": "Trainer Battle Session Tests",
+          "conclusion": "success"
+        },
+        {
+          "id": 41252124487,
+          "name": "Spanish Types Foundation Tests",
+          "conclusion": "success"
+        },
+        {
+          "id": 41252124424,
+          "name": "Trainer Public Coverage Beliefs Tests",
+          "conclusion": "success"
+        },
+        {
+          "id": 41252124414,
+          "name": "Trainer Adaptive Branching Tests",
+          "conclusion": "success"
+        },
+        {
+          "id": 41252124410,
+          "name": "Trainer Item Actions Tests",
+          "conclusion": "success"
+        },
+        {
+          "id": 41252124433,
+          "name": "Trainer Evaluation Corpus Tests",
+          "conclusion": "success"
+        },
+        {
+          "id": 41252124457,
+          "name": "Data Foundation V3 Tests",
+          "conclusion": "success"
+        },
+        {
+          "id": 41252124501,
+          "name": "Godot 4.7 Tests",
+          "conclusion": "success"
+        },
+        {
+          "id": 41252124391,
+          "name": "Trainer Strategic Switching V2 Tests",
+          "conclusion": "success"
+        },
+        {
+          "id": 41252124378,
+          "name": "Trainer Belief Inference Tests",
+          "conclusion": "success"
+        },
+        {
+          "id": 41252124376,
+          "name": "Trainer Tactical Intelligence Tests",
+          "conclusion": "success"
+        },
+        {
+          "id": 41252124364,
+          "name": "Trainer Search Foundation Tests",
+          "conclusion": "success"
+        },
+        {
+          "id": 41252124367,
+          "name": "Trainer Intelligence Foundation Tests",
+          "conclusion": "success"
+        },
+        {
+          "id": 41252124396,
+          "name": "Trainer Self Play Evaluation Tests",
+          "conclusion": "success"
+        },
+        {
+          "id": 41252124397,
+          "name": "Trainer Search Depth Budget Tests",
+          "conclusion": "success"
+        },
+        {
+          "id": 41252124398,
+          "name": "Trainer Loadouts Tests",
+          "conclusion": "success"
+        },
+        {
+          "id": 41252124363,
+          "name": "Trainer Search Limit Benchmark Tests",
+          "conclusion": "success"
+        },
+        {
+          "id": 41252124389,
+          "name": "Pokemon Calvo Technical Test Windows Build",
+          "conclusion": "success"
+        },
+        {
+          "id": 41252124382,
+          "name": "Trainer Team Composition Tests",
+          "conclusion": "success"
+        },
+        {
+          "id": 41252124368,
+          "name": "Item Closure V3 (EV, inventory and regressions)",
+          "conclusion": "success"
+        }
+      ]
+    },
+    "competitive_counts": {
+      "selected_candidates": 61,
+      "v28_verified_ids": 27,
+      "remaining_integral_v28_proof": 30,
+      "blocked_dependencies": 4,
+      "added_verified_outside_factory": 15
+    },
+    "technical_debt": {
+      "status": "OPEN_PID_LIFECYCLE_DIAGNOSTICS",
+      "linux_automation_log_pid_messages": 242,
+      "linux_group_counts": {
+        "prior": 147,
+        "entry": 95
+      },
+      "linux_visible_job_console_pid_messages": 60,
+      "sources_are_distinct_not_additive": true,
+      "windows_automation_log_pid_messages": 0,
+      "historical_classifier_per_group": {
+        "prior": "FAIL",
+        "entry": "FAIL"
+      },
+      "functional_result": "all assertions and independent raw evidence pass, child exit_code 0; generic classifier FAIL retained if PID diagnostics appear",
+      "stack": "Existing pipe_client.gd:72 close/OS.is_process_running; production unchanged; diagnosis remains open",
+      "prior_run": {
+        "run_id": 41241062641,
+        "automation_pid_messages": 156,
+        "visible_job_pid_messages": 53
+      }
+    },
+    "next_step": "Recommend a fourth consumption family: sitrus_berry and lum_berry (HP threshold/status cure). Inspect existing native coverage, then extend the same fixture/ownership/restore/consumption/save predicates; no production change presumed. PID lifecycle diagnosis is separate; GPU/manual remains pending.",
+    "evidence": "docs/handoff/ITEMS_V28/AUTOMATION_RESULTS.json"
+  },
+  "replay_feasibility": {
+    "status": "FEASIBILITY_DEMONSTRATED_WITH_LIMITS",
+    "functional_sha": "6383f5589619e56daae7d93e9cd712361d41cabf",
+    "ci": {
+      "run_id": 41255004688,
+      "run_url": "https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41255004688",
+      "workflows_total": 20,
+      "workflows_success": 20
+    },
+    "counts_unchanged": [
+      27,
+      30,
+      4
+    ],
+    "report": "docs/handoff/ITEMS_V28/REPLAY_FEASIBILITY.md",
+    "result": "docs/handoff/ITEMS_V28/REPLAY_RESULTS.json",
+    "new_objects_certified": 0
+  }
+}

@@ -1,0 +1,612 @@
+{
+  "schema_version": 1,
+  "mission": "ITEMS_V28",
+  "status": "TYPE_BOOSTER_SCOPED_REPLAY_CI_VERIFIED_NO_NEW_ITEM_CLOSURE",
+  "base_branch": "main",
+  "base_commit": "233b1a4f15ee4df7301e2c5acf8aed84a8f40626",
+  "working_branch": "codex/items-v28-from-main",
+  "archived_prior_pr": 117,
+  "prior_verified_functional_commit": "c554ab7635fb847aa395d2dbb5bc523b560bc6de",
+  "block_0": {
+    "scope": "port the exact V3-tested EV rewards and native item verification onto official V27",
+    "status": "SCOPED_CI_VERIFIED",
+    "ci": "PASS at 69e15d74d04063dbe9613575b8618062e1efbed7",
+    "code_identity_from_v3": true,
+    "last_verified_commit": "69e15d74d04063dbe9613575b8618062e1efbed7"
+  },
+  "next_action": "V28 replay of all 9 selected type boosters verified in 46 scenarios/1395 checks per Ubuntu+Windows at ba290929; 20/20 workflows. Preserve 27/30/4. Next study colbur_berry, occa_berry, shuca_berry using original V2 positive/negative cases and physical consumption. No new certification without additional contracts. PID/GPU pending.",
+  "main_is_official_v27": true,
+  "all_2222_items_functional": false,
+  "gpu_manual_review": "PENDING",
+  "block_1": {
+    "status": "SCOPED_CI_VERIFIED",
+    "native_item_ids": [
+      "power_bracer",
+      "power_belt",
+      "power_lens",
+      "power_band",
+      "power_anklet",
+      "macho_brace"
+    ],
+    "full_map_bag_save_item": "power_weight",
+    "coverage_goal": "same session, per-stat EV, owner, checkpoint restore, save, XP, held and idempotent settlement",
+    "first_failed_run": 41220331135,
+    "last_verified_commit": "69e15d74d04063dbe9613575b8618062e1efbed7",
+    "checked_native_contexts": [
+      "power_bracer",
+      "power_belt",
+      "power_lens",
+      "power_band",
+      "power_anklet",
+      "macho_brace"
+    ],
+    "fixed_by": "69e15d74d04063dbe9613575b8618062e1efbed7"
+  },
+  "ready_for_review": false,
+  "ci": {
+    "functional_commit": "69e15d74d04063dbe9613575b8618062e1efbed7",
+    "total_workflows": 20,
+    "success": 20,
+    "failures": 0,
+    "run_id": 41233384610,
+    "run_url": "https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41233384610",
+    "ubuntu_items_job_id": 124594448485,
+    "windows_portable_job_id": 124622026226,
+    "headless_ev_checks": 202,
+    "headless_ev_assertions_failed": 0,
+    "windows_publication_gate": "PUBLICATION_V27 PASS",
+    "worker_pid_errors_observed_ubuntu": 7,
+    "worker_pid_errors_status": "PENDING_TECHNICAL_DIAGNOSIS",
+    "last_verified_functional_commit": "66b14d772f4e69746fbdb051f3294ee706cecae9",
+    "all_workflows_success": 20,
+    "all_workflows_total": 20,
+    "ubuntu_item_job_id": 124622026080,
+    "ev_checks": 404,
+    "ev_errors": 0,
+    "native_cases": 908,
+    "godot_mirror_checks": 23434,
+    "unix_worker_pid_error_messages": 42,
+    "unix_worker_pid_error_status": "OPEN_TECHNICAL_DEBT",
+    "competitive_protection_checks": 122,
+    "competitive_protection_errors": 0,
+    "competitive_damage_checks": 500,
+    "competitive_damage_errors": 0,
+    "windows_portable_gate": "PUBLICATION_V27 PASS"
+  },
+  "block_2": {
+    "status": "SCOPED_CI_VERIFIED",
+    "item_ids": [
+      "power_weight",
+      "power_bracer",
+      "power_belt",
+      "power_lens",
+      "power_band",
+      "power_anklet",
+      "macho_brace"
+    ],
+    "scope": "isolated real map + bag equip + save/restore + native battle + six EV components + owner + XP + physical inventory + disk reload",
+    "prior_verified_functional_commit": "69e15d74d04063dbe9613575b8618062e1efbed7",
+    "first_failed": {
+      "sha": "f052b09ce2b63642ce9340500b7d0fae4e699472",
+      "run_id": 41222565742,
+      "ubuntu_job_id": 124599986734,
+      "checks": 341,
+      "errors": 7
+    },
+    "next_run": "NOT_NEEDED_WITH_UNCHANGED_CODE",
+    "verified_commit": "ae51793641b6981b4827524208b50f7a7c8e54a0",
+    "verified_run": 41222946680,
+    "verified_checks": 404,
+    "errors": 0,
+    "linux_job_id": 124601131188,
+    "windows_job_id": 124601131544,
+    "limitations": [
+      "headless scenes only, not visually inspected GPU",
+      "not all possible item interactions/switch/suppression timing",
+      "auxiliary process PID errors on successful Ubuntu log"
+    ]
+  },
+  "block_3": {
+    "status": "CANCELLED_BY_USER_NOT_IMPLEMENTED",
+    "family": "ULTRA_BEAST_CAPTURE",
+    "item_ids": [
+      "beast_ball"
+    ],
+    "reason": "El usuario quiere captura ordinaria de ultraentes y objetos útiles solo para randomlocke competitivo",
+    "discarded_code_commit": "224a080d618285e1c30cc40c4f5c7522a0e8d51f",
+    "obsolete_ci_run": 41224687162,
+    "obsolete_ci_result": "NOT_ACCEPTED_AS_EVIDENCE_FOR_PROJECT",
+    "reversal": "restore exact pre-block-3 blobs and delete new test",
+    "gameplay_policy": "No active Beast Ball special capture support"
+  },
+  "scope_policy": {
+    "game_type": "randomlocke competitivo",
+    "goal": "objeto útil dentro del reglamento, no todos los IDs del catálogo",
+    "ultra_beasts": "capture using already-implemented ordinary balls; no dedicated Beast Ball mechanic",
+    "excluded_from_current_work": [
+      "beast_ball",
+      "contest/food/breeding/world-only without confirmed competitive use"
+    ],
+    "keep_catalog_data_unchanged": true
+  },
+  "block_4": {
+    "status": "SCOPED_CI_VERIFIED",
+    "family": "COMPETITIVE_HELD_PROTECTION",
+    "ids": [
+      "safety_goggles",
+      "covert_cloak",
+      "clear_amulet"
+    ],
+    "native_effects": "3 positive and 3 negative controls for spore, nuzzle and charm; observable states",
+    "map_real_bag_routes": 3,
+    "assertions": 122,
+    "errors": 0,
+    "prior_native_verification": "tools/item_audit/held_effect_sweep_v2.cjs",
+    "verified_commit": "3a6a12a32e80352cfcc4ba3870957a583b26f323",
+    "run_id": 41226013201,
+    "ubuntu_job_id": 124610228040,
+    "windows_job_id": 124610228227,
+    "limits": [
+      "Map Caterpie routes do not trigger protection; native matched-opponent routes do",
+      "GPU/manual visual not run",
+      "No expanded doubles/Knock Off/suppression timing coverage"
+    ],
+    "failed_runs": [
+      {
+        "sha": "aae2d98606890e94af14765d7391e854e4499547",
+        "run_id": 41225403708,
+        "reason": "GDScript parser error; no effect test executed"
+      },
+      {
+        "sha": "c111b3d044bde60cb51a85a9d6a3b400e849bae4",
+        "run_id": 41225706687,
+        "reason": "GDScript parser error from missing closing check parenthesis; no effect test executed"
+      }
+    ]
+  },
+  "dependencies_policy": {
+    "ability_integration": "combat native yes, field capsule/patch yes, only 2 verified field ability item routes; combinations not universally verified",
+    "excluded_ability_ids_ref": "config/randomlock_content_v1.json",
+    "ability_sensitive_item_ids_pending": [
+      "ability_shield",
+      "booster_energy",
+      "adrenaline_orb",
+      "choice_band/choice_scarf/choice_specs x gorilla_tactics"
+    ],
+    "klutz": "EXCLUDED_BY_CURRENT_POLICY",
+    "beta_object_admission": "require local normalized + PokeAPI canonical index/detail main-series category + current selection policy; no unverified beta imports"
+  },
+  "block_5": {
+    "status": "SCOPED_CI_VERIFIED",
+    "family": "COMPETITIVE_DAMAGE_ITEMS",
+    "ids": [
+      "muscle_band",
+      "wise_glasses",
+      "expert_belt"
+    ],
+    "official_pokeapi_item_ids": [
+      243,
+      244,
+      245
+    ],
+    "functional_commit": "b9638283deb44d92c686f3d22f6fadbb27c2a1a4",
+    "ci_run_id": 41227381283,
+    "ubuntu_job_id": 124614247458,
+    "windows_job_id": 124614247707,
+    "assertions": 164,
+    "assertion_errors": 0,
+    "native_real_sessions": 12,
+    "map_bag_save_routes": 3,
+    "ability_combinations": "NOT_TESTED",
+    "status_note": "Objects already supported in simulator; added actual game integration and positive/negative contrast",
+    "warnings": [
+      "30 Unix subprocess PID errors in passed job; still open technical debt",
+      "No GPU/manual visual testing"
+    ]
+  },
+  "block_6": {
+    "status": "SCOPED_CI_VERIFIED",
+    "family": "OFFICIAL_TYPE_BOOSTING_HELD_ITEMS",
+    "new_ids": [
+      "charcoal",
+      "mystic_water",
+      "magnet"
+    ],
+    "pokeapi_item_ids": [
+      226,
+      220,
+      219
+    ],
+    "all_damage_test_ids": [
+      "muscle_band",
+      "wise_glasses",
+      "expert_belt",
+      "charcoal",
+      "mystic_water",
+      "magnet"
+    ],
+    "verified_functional_commit": "001a67a28afdae7916470819275d8c2b947de0a3",
+    "run_id": 41229994112,
+    "ubuntu_job_id": 124622026080,
+    "windows_job_id": 124622026226,
+    "assertions": 332,
+    "assertion_errors": 0,
+    "native_sessions_total": 24,
+    "physical_map_bag_save_routes_total": 6,
+    "official_item_provenance": "PokeAPI index and detailed local records + generation game_indices validated in test",
+    "ability_interactions": "NOT_CERTIFIED",
+    "beta_items_imported": false,
+    "gpu_manual": "NOT_RUN",
+    "worker_pid_warnings": 42
+  },
+  "block_7": {
+    "status": "SCOPED_CI_VERIFIED",
+    "item_ids": [
+      "miracle_seed",
+      "never_melt_ice",
+      "black_belt"
+    ],
+    "test_commit": "66b14d772f4e69746fbdb051f3294ee706cecae9",
+    "run_id": 41233384610,
+    "verified": true,
+    "scope": "three new official elemental boosters; 36 native matched sessions total and nine physical routes planned",
+    "limits": [
+      "no ability combinations",
+      "no GPU/manual"
+    ],
+    "assertions": 500,
+    "assertion_errors": 0,
+    "competitive_damage_ids_total": 9,
+    "ubuntu_job_id": 124632025570,
+    "windows_job_id": 124632025320,
+    "github_workflows_total": 20,
+    "github_workflows_success": 20,
+    "windows_portable_gate": "PUBLICATION_V27 PASS",
+    "documentation_commit_later_than_code": true
+  },
+  "competitive_scope_audit": {
+    "path": "docs/handoff/ITEMS_V28/COMPETITIVE_COVERAGE_AUDIT.md",
+    "source_factory_unique_held": 47,
+    "source_factory_battle_scenarios": 42,
+    "source_factory_dependencies": 4,
+    "source_factory_excluded": 1,
+    "added_verified_v28_outside_factory": 15,
+    "selected_nonexcluded_candidates": 61,
+    "verified_v28_ids": 27,
+    "remaining_v28_scope_without_integral_v28_proof": 30,
+    "blocked_dependencies": 4,
+    "not_to_activate": "wide_lens",
+    "factory_sets_blob": "d1813dac25222e5a5bf876bab3a14c3aebaca04c",
+    "project_matrix_blob": "9509d537622039b2f1919067561631449b8ddc47",
+    "criteria": "47 Gen9 singles factory IDs + 15 approved additional IDs - Wide Lens = 61; 27 verified, 30 pending integral proof, 4 dependencies; not a universal competitive catalog"
+  },
+  "acceleration_plan": "docs/handoff/ITEMS_V28/ACCELERATION_PLAN.md",
+  "automation_prototype": {
+    "status": "SCOPED_CI_VERIFIED",
+    "family": "DECLARATIVE_CHOICE_INTEGRATION_PROTOTYPE",
+    "functional_sha": "0c1f48eb4bd40ca15d794847d89c16ea6614ceb9",
+    "ids": [
+      "choice_band",
+      "choice_specs",
+      "choice_scarf"
+    ],
+    "checks_per_platform": 665,
+    "scenarios_per_platform": 15,
+    "contract_unit_tests_per_platform": 14,
+    "competitive_counts": {
+      "selected_candidates": 61,
+      "v28_verified_ids": 22,
+      "historical_contexts_pending_integral_v28_proof": 35,
+      "blocked_dependencies": 4
+    },
+    "next_step": "Prototype mission complete. Review reusable contract; future families require their own observable expectations, not new simulations per item. Prioritize passive/survival family in ACCELERATION_PLAN, keep dependencies and PID diagnostics separate. No automatic PR merge.",
+    "ci": {
+      "status": "PASS",
+      "run_id": 41237512322,
+      "run_url": "https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41237512322",
+      "workflows_total": 20,
+      "workflows_success": 20
+    },
+    "diagnostics": {
+      "linux_prototype_pid": 48,
+      "linux_full_job_pid_messages": 63,
+      "windows_prototype_pid": 0,
+      "status": "OPEN_TECHNICAL_DEBT"
+    },
+    "gpu_manual": "NOT_RUN",
+    "historical_checkpoint": true
+  },
+  "latest_functional_checkpoint": {
+    "sha": "961cb0ac8712e03cd3d22e0115d8b11c1a36e08b",
+    "run_id": 41252124368,
+    "scope": "DECLARATIVE_CHOICE_PASSIVE_AND_ENTRY_FAMILIES"
+  },
+  "automation_second_family": {
+    "family": "DECLARATIVE_CHOICE_AND_PASSIVE_FAMILIES",
+    "functional_sha": "7f973f5bfb63cfae12f1dbaa956512e5291df0aa",
+    "new_ids": [
+      "leftovers",
+      "life_orb",
+      "rocky_helmet"
+    ],
+    "checks_per_platform": 1935,
+    "scenarios_per_platform": 30,
+    "unit_tests_per_platform": 31,
+    "families_per_platform": [
+      {
+        "family": "choice_held_items",
+        "items": 3,
+        "scenarios": 15,
+        "scenario_checks": 669,
+        "status": "SCOPED_VERIFIED"
+      },
+      {
+        "family": "passive_reactive_held_items",
+        "items": 3,
+        "scenarios": 15,
+        "scenario_checks": 1263,
+        "status": "SCOPED_VERIFIED"
+      }
+    ],
+    "competitive_counts": {
+      "selected_candidates": 61,
+      "v28_verified_ids": 25,
+      "remaining_integral_v28_proof": 32,
+      "blocked_dependencies": 4
+    },
+    "next_step": "Recommend Air Balloon and Heavy-Duty Boots: item consumption/immunity and entry hazards. Define their contracts before editing; reuse the shared runner/ownership/restore/map/report components and preserve both families. PID lifecycle debt is separate. No automatic merge.",
+    "status": "SCOPED_CI_VERIFIED",
+    "ci": {
+      "status": "PASS",
+      "run_id": 41241062641,
+      "run_url": "https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41241062641",
+      "workflows_total": 20,
+      "workflows_success": 20
+    },
+    "diagnostics": {
+      "linux_automation_log_pid": 156,
+      "linux_visible_job_console_pid": 53,
+      "windows_automation_log_pid": 0,
+      "status": "OPEN_LIFECYCLE_DEBT"
+    },
+    "gpu_manual": "NOT_RUN"
+  },
+  "automation_third_family": {
+    "status": "SCOPED_CI_VERIFIED",
+    "family": "DECLARATIVE_CHOICE_PASSIVE_AND_ENTRY_FAMILIES",
+    "functional_sha": "961cb0ac8712e03cd3d22e0115d8b11c1a36e08b",
+    "ids": [
+      "choice_band",
+      "choice_specs",
+      "choice_scarf",
+      "leftovers",
+      "life_orb",
+      "rocky_helmet",
+      "air_balloon",
+      "heavy_duty_boots"
+    ],
+    "new_ids": [
+      "air_balloon",
+      "heavy_duty_boots"
+    ],
+    "checks_per_platform": 3335,
+    "scenarios_per_platform": 40,
+    "unit_tests_per_platform": 56,
+    "ci": {
+      "status": "PASS",
+      "functional_sha": "961cb0ac8712e03cd3d22e0115d8b11c1a36e08b",
+      "run_id": 41252124368,
+      "run_url": "https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41252124368",
+      "workflows_total": 20,
+      "workflows_success": 20,
+      "ubuntu_job_id": 124687630763,
+      "windows_job_id": 124687630530,
+      "linux_visible_job_pid_messages": 60,
+      "unit_tests_per_platform": [
+        14,
+        17,
+        25
+      ],
+      "ubuntu_and_windows_engine": "4.7.stable.official.5b4e0cb0f",
+      "workflow_runs": [
+        {
+          "id": 41252124448,
+          "name": "Trainer Battle Session Tests",
+          "conclusion": "success"
+        },
+        {
+          "id": 41252124487,
+          "name": "Spanish Types Foundation Tests",
+          "conclusion": "success"
+        },
+        {
+          "id": 41252124424,
+          "name": "Trainer Public Coverage Beliefs Tests",
+          "conclusion": "success"
+        },
+        {
+          "id": 41252124414,
+          "name": "Trainer Adaptive Branching Tests",
+          "conclusion": "success"
+        },
+        {
+          "id": 41252124410,
+          "name": "Trainer Item Actions Tests",
+          "conclusion": "success"
+        },
+        {
+          "id": 41252124433,
+          "name": "Trainer Evaluation Corpus Tests",
+          "conclusion": "success"
+        },
+        {
+          "id": 41252124457,
+          "name": "Data Foundation V3 Tests",
+          "conclusion": "success"
+        },
+        {
+          "id": 41252124501,
+          "name": "Godot 4.7 Tests",
+          "conclusion": "success"
+        },
+        {
+          "id": 41252124391,
+          "name": "Trainer Strategic Switching V2 Tests",
+          "conclusion": "success"
+        },
+        {
+          "id": 41252124378,
+          "name": "Trainer Belief Inference Tests",
+          "conclusion": "success"
+        },
+        {
+          "id": 41252124376,
+          "name": "Trainer Tactical Intelligence Tests",
+          "conclusion": "success"
+        },
+        {
+          "id": 41252124364,
+          "name": "Trainer Search Foundation Tests",
+          "conclusion": "success"
+        },
+        {
+          "id": 41252124367,
+          "name": "Trainer Intelligence Foundation Tests",
+          "conclusion": "success"
+        },
+        {
+          "id": 41252124396,
+          "name": "Trainer Self Play Evaluation Tests",
+          "conclusion": "success"
+        },
+        {
+          "id": 41252124397,
+          "name": "Trainer Search Depth Budget Tests",
+          "conclusion": "success"
+        },
+        {
+          "id": 41252124398,
+          "name": "Trainer Loadouts Tests",
+          "conclusion": "success"
+        },
+        {
+          "id": 41252124363,
+          "name": "Trainer Search Limit Benchmark Tests",
+          "conclusion": "success"
+        },
+        {
+          "id": 41252124389,
+          "name": "Pokemon Calvo Technical Test Windows Build",
+          "conclusion": "success"
+        },
+        {
+          "id": 41252124382,
+          "name": "Trainer Team Composition Tests",
+          "conclusion": "success"
+        },
+        {
+          "id": 41252124368,
+          "name": "Item Closure V3 (EV, inventory and regressions)",
+          "conclusion": "success"
+        }
+      ]
+    },
+    "competitive_counts": {
+      "selected_candidates": 61,
+      "v28_verified_ids": 27,
+      "remaining_integral_v28_proof": 30,
+      "blocked_dependencies": 4,
+      "added_verified_outside_factory": 15
+    },
+    "technical_debt": {
+      "status": "OPEN_PID_LIFECYCLE_DIAGNOSTICS",
+      "linux_automation_log_pid_messages": 242,
+      "linux_group_counts": {
+        "prior": 147,
+        "entry": 95
+      },
+      "linux_visible_job_console_pid_messages": 60,
+      "sources_are_distinct_not_additive": true,
+      "windows_automation_log_pid_messages": 0,
+      "historical_classifier_per_group": {
+        "prior": "FAIL",
+        "entry": "FAIL"
+      },
+      "functional_result": "all assertions and independent raw evidence pass, child exit_code 0; generic classifier FAIL retained if PID diagnostics appear",
+      "stack": "Existing pipe_client.gd:72 close/OS.is_process_running; production unchanged; diagnosis remains open",
+      "prior_run": {
+        "run_id": 41241062641,
+        "automation_pid_messages": 156,
+        "visible_job_pid_messages": 53
+      }
+    },
+    "next_step": "Recommend a fourth consumption family: sitrus_berry and lum_berry (HP threshold/status cure). Inspect existing native coverage, then extend the same fixture/ownership/restore/consumption/save predicates; no production change presumed. PID lifecycle diagnosis is separate; GPU/manual remains pending.",
+    "evidence": "docs/handoff/ITEMS_V28/AUTOMATION_RESULTS.json"
+  },
+  "replay_feasibility": {
+    "status": "FEASIBILITY_DEMONSTRATED_WITH_LIMITS",
+    "functional_sha": "6383f5589619e56daae7d93e9cd712361d41cabf",
+    "ci": {
+      "run_id": 41255004688,
+      "run_url": "https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41255004688",
+      "workflows_total": 20,
+      "workflows_success": 20
+    },
+    "counts_unchanged": [
+      27,
+      30,
+      4
+    ],
+    "report": "docs/handoff/ITEMS_V28/REPLAY_FEASIBILITY.md",
+    "result": "docs/handoff/ITEMS_V28/REPLAY_RESULTS.json",
+    "new_objects_certified": 0
+  },
+  "type_booster_replay": {
+    "status": "SCOPED_REPLAY_CI_VERIFIED_NOT_FULL_ITEM_CERTIFICATION",
+    "previous_pilot": {
+      "sha": "5ff00014bf791ba63fbc2793f7c9a1b0819e571c",
+      "run_id": 41258538761,
+      "cases_per_platform": 26,
+      "checks_per_platform": 795
+    },
+    "latest_pilot": {
+      "sha": "ba2909297bd5d0049b97517b59e6cc9ee2ca6bd7",
+      "run_id": 41262171581,
+      "run_url": "https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41262171581",
+      "workflows_success": 20,
+      "workflows_total": 20,
+      "replay_cases_per_platform": 46,
+      "replay_checks_per_platform": 1395,
+      "prior_automation_checks_per_platform": 3335,
+      "type_target_replayed": 9
+    },
+    "target_type_ids": [
+      "black_glasses",
+      "silk_scarf",
+      "soft_sand",
+      "spell_tag",
+      "metal_coat",
+      "earth_plate",
+      "splash_plate",
+      "pixie_plate",
+      "insect_plate"
+    ],
+    "new_item_ids_integrally_certified": 0,
+    "counts_unchanged": [
+      27,
+      30,
+      4
+    ],
+    "limits": [
+      "No complete wrong-owner/negative ability/switch/forme interactions",
+      "No Metal Coat evolution or Arceus forme certification",
+      "No GPU/manual review; PID lifecycle Linux still open"
+    ],
+    "report": "docs/handoff/ITEMS_V28/PENDING_30_AUDIT.md",
+    "next_group": [
+      "colbur_berry",
+      "occa_berry",
+      "shuca_berry"
+    ]
+  }
+}

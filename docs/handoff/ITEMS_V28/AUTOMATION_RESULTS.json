@@ -1,0 +1,1235 @@
+{
+  "status": "SCOPED_CI_VERIFIED",
+  "family": "DECLARATIVE_CHOICE_PASSIVE_AND_ENTRY_FAMILIES",
+  "functional_sha": "961cb0ac8712e03cd3d22e0115d8b11c1a36e08b",
+  "working_branch": "codex/items-v28-from-main",
+  "pr": 118,
+  "pr_draft": true,
+  "base_of_extension": "4d39d3aa1413c36485d96fc5108872a28deb03b0",
+  "guard_base_unchanged": "47f42aef1a518eefb744ad310f89b6e2d3ce7108",
+  "ids": [
+    "choice_band",
+    "choice_specs",
+    "choice_scarf",
+    "leftovers",
+    "life_orb",
+    "rocky_helmet",
+    "air_balloon",
+    "heavy_duty_boots"
+  ],
+  "new_ids": [
+    "air_balloon",
+    "heavy_duty_boots"
+  ],
+  "checks_per_platform": 3335,
+  "scenarios_per_platform": 40,
+  "unit_tests_per_platform": 56,
+  "families_per_platform": [
+    {
+      "family": "choice_held_items",
+      "items": 3,
+      "scenarios": 15,
+      "scenario_checks": 669,
+      "status": "SCOPED_VERIFIED"
+    },
+    {
+      "family": "passive_reactive_held_items",
+      "items": 3,
+      "scenarios": 15,
+      "scenario_checks": 1263,
+      "status": "SCOPED_VERIFIED"
+    },
+    {
+      "family": "entry_hazard_items",
+      "items": 2,
+      "scenarios": 10,
+      "scenario_checks": 1398,
+      "status": "SCOPED_VERIFIED"
+    }
+  ],
+  "shared_components": [
+    "common dispatcher and fixture/equipment/collection",
+    "existing native simulator and submit authority",
+    "SaveV2 owner/checkpoint restoration",
+    "real map/bag/equip/unequip/save/reload/settlement",
+    "report/allowlist/runtime/source-hash validation"
+  ],
+  "new_components": [
+    "entry_items.json schema 3 declarative timelines",
+    "item_automation_entry_v28.gd test-only scenarios",
+    "item_automation_opponent_v28.gd legal opponent-command selector only",
+    "automation_entry_v28.py contracts and raw checkpoint/save predicates"
+  ],
+  "modularity_review": {
+    "production_files_changed": 0,
+    "single_shared_runner": true,
+    "new_rule_callbacks": false,
+    "duplicate_simulators": false,
+    "execution_groups": [
+      "prior:1935 checks/30 cases",
+      "entry:1400 checks/10 cases"
+    ],
+    "total_budget_seconds": 900,
+    "per_process_watchdog_unchanged_seconds": 360,
+    "outer_monitor_unchanged_seconds": 480,
+    "old_choice_and_passive_descriptors_tests_and_passive_modules": "BYTE_IDENTICAL; guard enforces historical blobs"
+  },
+  "ci": {
+    "status": "PASS",
+    "functional_sha": "961cb0ac8712e03cd3d22e0115d8b11c1a36e08b",
+    "run_id": 41252124368,
+    "run_url": "https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41252124368",
+    "workflows_total": 20,
+    "workflows_success": 20,
+    "ubuntu_job_id": 124687630763,
+    "windows_job_id": 124687630530,
+    "linux_visible_job_pid_messages": 60,
+    "unit_tests_per_platform": [
+      14,
+      17,
+      25
+    ],
+    "ubuntu_and_windows_engine": "4.7.stable.official.5b4e0cb0f",
+    "workflow_runs": [
+      {
+        "id": 41252124448,
+        "name": "Trainer Battle Session Tests",
+        "conclusion": "success"
+      },
+      {
+        "id": 41252124487,
+        "name": "Spanish Types Foundation Tests",
+        "conclusion": "success"
+      },
+      {
+        "id": 41252124424,
+        "name": "Trainer Public Coverage Beliefs Tests",
+        "conclusion": "success"
+      },
+      {
+        "id": 41252124414,
+        "name": "Trainer Adaptive Branching Tests",
+        "conclusion": "success"
+      },
+      {
+        "id": 41252124410,
+        "name": "Trainer Item Actions Tests",
+        "conclusion": "success"
+      },
+      {
+        "id": 41252124433,
+        "name": "Trainer Evaluation Corpus Tests",
+        "conclusion": "success"
+      },
+      {
+        "id": 41252124457,
+        "name": "Data Foundation V3 Tests",
+        "conclusion": "success"
+      },
+      {
+        "id": 41252124501,
+        "name": "Godot 4.7 Tests",
+        "conclusion": "success"
+      },
+      {
+        "id": 41252124391,
+        "name": "Trainer Strategic Switching V2 Tests",
+        "conclusion": "success"
+      },
+      {
+        "id": 41252124378,
+        "name": "Trainer Belief Inference Tests",
+        "conclusion": "success"
+      },
+      {
+        "id": 41252124376,
+        "name": "Trainer Tactical Intelligence Tests",
+        "conclusion": "success"
+      },
+      {
+        "id": 41252124364,
+        "name": "Trainer Search Foundation Tests",
+        "conclusion": "success"
+      },
+      {
+        "id": 41252124367,
+        "name": "Trainer Intelligence Foundation Tests",
+        "conclusion": "success"
+      },
+      {
+        "id": 41252124396,
+        "name": "Trainer Self Play Evaluation Tests",
+        "conclusion": "success"
+      },
+      {
+        "id": 41252124397,
+        "name": "Trainer Search Depth Budget Tests",
+        "conclusion": "success"
+      },
+      {
+        "id": 41252124398,
+        "name": "Trainer Loadouts Tests",
+        "conclusion": "success"
+      },
+      {
+        "id": 41252124363,
+        "name": "Trainer Search Limit Benchmark Tests",
+        "conclusion": "success"
+      },
+      {
+        "id": 41252124389,
+        "name": "Pokemon Calvo Technical Test Windows Build",
+        "conclusion": "success"
+      },
+      {
+        "id": 41252124382,
+        "name": "Trainer Team Composition Tests",
+        "conclusion": "success"
+      },
+      {
+        "id": 41252124368,
+        "name": "Item Closure V3 (EV, inventory and regressions)",
+        "conclusion": "success"
+      }
+    ]
+  },
+  "platform_artifacts": [
+    {
+      "platform": "Windows",
+      "artifact_id": 13061529466,
+      "digest": "sha256:2ae0a29b48f99c8a2671fd70269c8db6e2943cdbdaa1d70f138df796ebb14ebe",
+      "functional_sha": "961cb0ac8712e03cd3d22e0115d8b11c1a36e08b",
+      "zip_sha256": "2ae0a29b48f99c8a2671fd70269c8db6e2943cdbdaa1d70f138df796ebb14ebe",
+      "evidence_files": 320,
+      "checks": 3335,
+      "scenarios": 40,
+      "items": 8,
+      "groups": [
+        {
+          "name": "prior",
+          "checks": 1935,
+          "scenarios": 30,
+          "pid_messages": 0,
+          "historical_classifier": "PASS",
+          "duration_seconds": 225.08,
+          "rows": [
+            {
+              "id": "choice_band",
+              "scenario": "physical_damage",
+              "checks": 42,
+              "status": "SCOPED_VERIFIED"
+            },
+            {
+              "id": "choice_band",
+              "scenario": "special_damage",
+              "checks": 42,
+              "status": "SCOPED_VERIFIED"
+            },
+            {
+              "id": "choice_band",
+              "scenario": "speed_order",
+              "checks": 42,
+              "status": "SCOPED_VERIFIED"
+            },
+            {
+              "id": "choice_band",
+              "scenario": "lock_restore_switch",
+              "checks": 69,
+              "status": "SCOPED_VERIFIED"
+            },
+            {
+              "id": "choice_band",
+              "scenario": "map_bag_owner_save",
+              "checks": 28,
+              "status": "SCOPED_VERIFIED"
+            },
+            {
+              "id": "choice_specs",
+              "scenario": "physical_damage",
+              "checks": 42,
+              "status": "SCOPED_VERIFIED"
+            },
+            {
+              "id": "choice_specs",
+              "scenario": "special_damage",
+              "checks": 42,
+              "status": "SCOPED_VERIFIED"
+            },
+            {
+              "id": "choice_specs",
+              "scenario": "speed_order",
+              "checks": 42,
+              "status": "SCOPED_VERIFIED"
+            },
+            {
+              "id": "choice_specs",
+              "scenario": "lock_restore_switch",
+              "checks": 69,
+              "status": "SCOPED_VERIFIED"
+            },
+            {
+              "id": "choice_specs",
+              "scenario": "map_bag_owner_save",
+              "checks": 28,
+              "status": "SCOPED_VERIFIED"
+            },
+            {
+              "id": "choice_scarf",
+              "scenario": "physical_damage",
+              "checks": 42,
+              "status": "SCOPED_VERIFIED"
+            },
+            {
+              "id": "choice_scarf",
+              "scenario": "special_damage",
+              "checks": 42,
+              "status": "SCOPED_VERIFIED"
+            },
+            {
+              "id": "choice_scarf",
+              "scenario": "speed_order",
+              "checks": 42,
+              "status": "SCOPED_VERIFIED"
+            },
+            {
+              "id": "choice_scarf",
+              "scenario": "lock_restore_switch",
+              "checks": 69,
+              "status": "SCOPED_VERIFIED"
+            },
+            {
+              "id": "choice_scarf",
+              "scenario": "map_bag_owner_save",
+              "checks": 28,
+              "status": "SCOPED_VERIFIED"
+            },
+            {
+              "id": "leftovers",
+              "scenario": "heal_partial",
+              "checks": 117,
+              "status": "SCOPED_VERIFIED"
+            },
+            {
+              "id": "leftovers",
+              "scenario": "heal_cap",
+              "checks": 81,
+              "status": "SCOPED_VERIFIED"
+            },
+            {
+              "id": "leftovers",
+              "scenario": "full_hp_control",
+              "checks": 81,
+              "status": "SCOPED_VERIFIED"
+            },
+            {
+              "id": "leftovers",
+              "scenario": "heal_switched_owner",
+              "checks": 117,
+              "status": "SCOPED_VERIFIED"
+            },
+            {
+              "id": "leftovers",
+              "scenario": "map_bag_owner_save",
+              "checks": 28,
+              "status": "SCOPED_VERIFIED"
+            },
+            {
+              "id": "life_orb",
+              "scenario": "physical_boost_recoil",
+              "checks": 123,
+              "status": "SCOPED_VERIFIED"
+            },
+            {
+              "id": "life_orb",
+              "scenario": "special_boost_recoil",
+              "checks": 84,
+              "status": "SCOPED_VERIFIED"
+            },
+            {
+              "id": "life_orb",
+              "scenario": "status_no_recoil",
+              "checks": 81,
+              "status": "SCOPED_VERIFIED"
+            },
+            {
+              "id": "life_orb",
+              "scenario": "immune_no_recoil",
+              "checks": 81,
+              "status": "SCOPED_VERIFIED"
+            },
+            {
+              "id": "life_orb",
+              "scenario": "map_bag_owner_save",
+              "checks": 28,
+              "status": "SCOPED_VERIFIED"
+            },
+            {
+              "id": "rocky_helmet",
+              "scenario": "contact_damage",
+              "checks": 123,
+              "status": "SCOPED_VERIFIED"
+            },
+            {
+              "id": "rocky_helmet",
+              "scenario": "special_no_contact",
+              "checks": 84,
+              "status": "SCOPED_VERIFIED"
+            },
+            {
+              "id": "rocky_helmet",
+              "scenario": "physical_no_contact",
+              "checks": 84,
+              "status": "SCOPED_VERIFIED"
+            },
+            {
+              "id": "rocky_helmet",
+              "scenario": "contact_switched_owner",
+              "checks": 123,
+              "status": "SCOPED_VERIFIED"
+            },
+            {
+              "id": "rocky_helmet",
+              "scenario": "map_bag_owner_save",
+              "checks": 28,
+              "status": "SCOPED_VERIFIED"
+            }
+          ]
+        },
+        {
+          "name": "entry",
+          "checks": 1400,
+          "scenarios": 10,
+          "pid_messages": 0,
+          "historical_classifier": "PASS",
+          "duration_seconds": 138.39,
+          "rows": [
+            {
+              "id": "air_balloon",
+              "scenario": "ground_break_ground",
+              "checks": 135,
+              "status": "SCOPED_VERIFIED"
+            },
+            {
+              "id": "air_balloon",
+              "scenario": "status_then_ground",
+              "checks": 122,
+              "status": "SCOPED_VERIFIED"
+            },
+            {
+              "id": "air_balloon",
+              "scenario": "special_break_ground",
+              "checks": 123,
+              "status": "SCOPED_VERIFIED"
+            },
+            {
+              "id": "air_balloon",
+              "scenario": "map_bag_owner_save",
+              "checks": 35,
+              "status": "SCOPED_VERIFIED"
+            },
+            {
+              "id": "heavy_duty_boots",
+              "scenario": "stealth_rock_reentry",
+              "checks": 191,
+              "status": "SCOPED_VERIFIED"
+            },
+            {
+              "id": "heavy_duty_boots",
+              "scenario": "spikes_reentry",
+              "checks": 191,
+              "status": "SCOPED_VERIFIED"
+            },
+            {
+              "id": "heavy_duty_boots",
+              "scenario": "toxic_spikes_reentry",
+              "checks": 191,
+              "status": "SCOPED_VERIFIED"
+            },
+            {
+              "id": "heavy_duty_boots",
+              "scenario": "sticky_web_reentry",
+              "checks": 191,
+              "status": "SCOPED_VERIFIED"
+            },
+            {
+              "id": "heavy_duty_boots",
+              "scenario": "no_hazard_control",
+              "checks": 191,
+              "status": "SCOPED_VERIFIED"
+            },
+            {
+              "id": "heavy_duty_boots",
+              "scenario": "map_bag_owner_save",
+              "checks": 28,
+              "status": "SCOPED_VERIFIED"
+            }
+          ]
+        }
+      ],
+      "pid_messages": 0,
+      "families": [
+        {
+          "family": "choice_held_items",
+          "items": 3,
+          "scenarios": 15,
+          "scenario_checks": 669,
+          "status": "SCOPED_VERIFIED"
+        },
+        {
+          "family": "passive_reactive_held_items",
+          "items": 3,
+          "scenarios": 15,
+          "scenario_checks": 1263,
+          "status": "SCOPED_VERIFIED"
+        },
+        {
+          "family": "entry_hazard_items",
+          "items": 2,
+          "scenarios": 10,
+          "scenario_checks": 1398,
+          "status": "SCOPED_VERIFIED"
+        }
+      ],
+      "provenance": [
+        {
+          "id": "choice_band",
+          "api_id": 197,
+          "source_path": "data/api/v2/item/197/index.json",
+          "source_blob": "3da99029f43ec0877e45eb6b89406b5dabd3ff94",
+          "category": "choice",
+          "generation_indices": 7,
+          "equip_permitted": true,
+          "excluded": false,
+          "attribute_evidence": "explicit_holdable_attributes"
+        },
+        {
+          "id": "choice_specs",
+          "api_id": 274,
+          "source_path": "data/api/v2/item/274/index.json",
+          "source_blob": "5872ef43deaceb87280cb63a50deea3d1dc76b3c",
+          "category": "choice",
+          "generation_indices": 6,
+          "equip_permitted": true,
+          "excluded": false,
+          "attribute_evidence": "explicit_holdable_attributes"
+        },
+        {
+          "id": "choice_scarf",
+          "api_id": 264,
+          "source_path": "data/api/v2/item/264/index.json",
+          "source_blob": "c16330c2ef7adae261f30794df4c43673343f713",
+          "category": "choice",
+          "generation_indices": 6,
+          "equip_permitted": true,
+          "excluded": false,
+          "attribute_evidence": "explicit_holdable_attributes"
+        },
+        {
+          "id": "leftovers",
+          "api_id": 211,
+          "source_path": "data/api/v2/item/211/index.json",
+          "source_blob": "c53bebbbe4a7bf6dc1d8fc66a8493b82476324ae",
+          "category": "held-items",
+          "generation_indices": 8,
+          "equip_permitted": true,
+          "excluded": false,
+          "attribute_evidence": "explicit_holdable_attributes"
+        },
+        {
+          "id": "life_orb",
+          "api_id": 247,
+          "source_path": "data/api/v2/item/247/index.json",
+          "source_blob": "a5055ad5162aa86a10c3280ae7646ba8346def92",
+          "category": "held-items",
+          "generation_indices": 6,
+          "equip_permitted": true,
+          "excluded": false,
+          "attribute_evidence": "explicit_holdable_attributes"
+        },
+        {
+          "id": "rocky_helmet",
+          "api_id": 583,
+          "source_path": "data/api/v2/item/583/index.json",
+          "source_blob": "6de345322024c0632c2daf6429c866a3b126836d",
+          "category": "held-items",
+          "generation_indices": 5,
+          "equip_permitted": true,
+          "excluded": false,
+          "attribute_evidence": "reviewed_empty_attributes_pokeapi_583_gen5_9_contact_effect"
+        },
+        {
+          "id": "air_balloon",
+          "api_id": 584,
+          "source_path": "data/api/v2/item/584/index.json",
+          "source_blob": "c1f399f00287d70a50a06ecd062b069f96057b0b",
+          "category": "held-items",
+          "generation_indices": 5,
+          "equip_permitted": true,
+          "excluded": false,
+          "attribute_evidence": "reviewed_exact_entry_item_source_blob_and_generation_indices"
+        },
+        {
+          "id": "heavy_duty_boots",
+          "api_id": 1178,
+          "source_path": "data/api/v2/item/1178/index.json",
+          "source_blob": "2ccf41014b4aa2de1d28c829f22088ceed04d059",
+          "category": "held-items",
+          "generation_indices": 2,
+          "equip_permitted": true,
+          "excluded": false,
+          "attribute_evidence": "reviewed_exact_entry_item_source_blob_and_generation_indices"
+        }
+      ],
+      "protected": {
+        "runtime_files": 878,
+        "absent_skip_worktree": 0,
+        "outside_allowlist_changed": false,
+        "engine_generated_untracked_uids": [
+          "modules/creatures/progression/battle_ev_rewards.gd.uid",
+          "tests/gameplay/competitive_damage_items_v28.gd.uid",
+          "tests/gameplay/competitive_protection_items_v28.gd.uid",
+          "tests/gameplay/item_closure_v3_test_runner.gd.uid"
+        ]
+      },
+      "test_sources_sha256": {
+        "tests/tools/test_item_automation_passive_v28.py": "1adb93dd7a03547016e883900de4c9146ca37e029ff0854d9b74c0b8c201eef6",
+        "tests/fixtures/item_automation_v28/entry_items.json": "f6f78e46233548c4bb98a7be2c400e0e21ae9c98b32afe5b6a83667303e65ca9",
+        "tests/gameplay/item_automation_opponent_v28.gd": "c4a4003f30149f6ac61cb3f17d56a53b382f21efee068a4e8d9112656b70b3b1",
+        "tests/tools/test_item_automation_v28.py": "7b4764d031955b0e578aee35f83df1e727d988d038001cbb4cc910032a09443f",
+        "tools/item_audit/automation_entry_v28.py": "7e546efb1d0528f5a6a20315fd9c9d8c60d4cfc378b3465c7623ed7c34e3bc05",
+        "tests/gameplay/item_automation_v28.gd": "9c872a028c768b9b2ed0749827b81ce667ddf35e45287ad53827474d8cc2707d",
+        "tests/fixtures/item_automation_v28/passive_items.json": "6a0feca42cbf6f54ca1700789534506a40f751c19af10c50adec13cec40e7e1f",
+        ".github/workflows/item-closure-v3.yml": "eb0db4cb044992e367a4651cf6f1b3750c6c07e92c0b7ec7d121561c0adf90b1",
+        "tests/fixtures/item_automation_v28/choice_items.json": "6c4956d23eaac6ba57c350067786ca1f6159dd2edc2e26407a33a11d159d3bb9",
+        "tools/item_audit/automation_v28.py": "7b0f9980782487fc2e448021755199a91a77e63aaf5f8c7cdd42fc577f7048f4",
+        "tests/gameplay/item_automation_entry_v28.gd.uid": "5728ba85437063916f0d2c17bef97e0bd08e5a2023f063a85ece74d5f70ce3db",
+        "tests/gameplay/item_automation_opponent_v28.gd.uid": "8ad7ccab5d7320d3981716b4e8d53ba42ce5f7997e9b42b202bb4b86acd274fc",
+        "tests/tools/test_item_automation_entry_v28.py": "a7b80dc567433436378814e49258f92a2a3695202d3da868cb05f8d20c10af36",
+        "tests/gameplay/item_automation_v28.gd.uid": "9a97ae4f99183d662276e19b42f8d2a8b1dc7cd18c5442ff0a0e04a0d28006c1",
+        "tests/gameplay/item_automation_entry_v28.gd": "5224e90b3e8df7bd220490ac814fbda3055a99a0f47eea3d3da85ae08f96dc03",
+        "tests/gameplay/item_automation_effects_v28.gd.uid": "710262e04f3e2058043e4088564c055fed0efac8b24f8e503733aa1ce2d93c94",
+        "tests/gameplay/item_automation_effects_v28.gd": "ee2e372f7f6c41c0eac706c893538e316a5c229985b0a9a658317b9b3d0076c6",
+        "tools/item_audit/automation_contracts_v28.py": "d2c288944597b6fad8be2d0e72a2bdfb91a4adf51960d71854a14b0d2bf19047"
+      },
+      "run_url": "https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41252124368"
+    },
+    {
+      "platform": "Ubuntu",
+      "artifact_id": 13062555596,
+      "digest": "sha256:cbc6029c4947f87cd66856c55b416aef3b7d3dbe2ac415d646e3f9fa94b6f212",
+      "functional_sha": "961cb0ac8712e03cd3d22e0115d8b11c1a36e08b",
+      "zip_sha256": "cbc6029c4947f87cd66856c55b416aef3b7d3dbe2ac415d646e3f9fa94b6f212",
+      "evidence_files": 320,
+      "checks": 3335,
+      "scenarios": 40,
+      "items": 8,
+      "groups": [
+        {
+          "name": "prior",
+          "checks": 1935,
+          "scenarios": 30,
+          "pid_messages": 147,
+          "historical_classifier": "FAIL",
+          "duration_seconds": 276.61,
+          "rows": [
+            {
+              "id": "choice_band",
+              "scenario": "physical_damage",
+              "checks": 42,
+              "status": "SCOPED_VERIFIED"
+            },
+            {
+              "id": "choice_band",
+              "scenario": "special_damage",
+              "checks": 42,
+              "status": "SCOPED_VERIFIED"
+            },
+            {
+              "id": "choice_band",
+              "scenario": "speed_order",
+              "checks": 42,
+              "status": "SCOPED_VERIFIED"
+            },
+            {
+              "id": "choice_band",
+              "scenario": "lock_restore_switch",
+              "checks": 69,
+              "status": "SCOPED_VERIFIED"
+            },
+            {
+              "id": "choice_band",
+              "scenario": "map_bag_owner_save",
+              "checks": 28,
+              "status": "SCOPED_VERIFIED"
+            },
+            {
+              "id": "choice_specs",
+              "scenario": "physical_damage",
+              "checks": 42,
+              "status": "SCOPED_VERIFIED"
+            },
+            {
+              "id": "choice_specs",
+              "scenario": "special_damage",
+              "checks": 42,
+              "status": "SCOPED_VERIFIED"
+            },
+            {
+              "id": "choice_specs",
+              "scenario": "speed_order",
+              "checks": 42,
+              "status": "SCOPED_VERIFIED"
+            },
+            {
+              "id": "choice_specs",
+              "scenario": "lock_restore_switch",
+              "checks": 69,
+              "status": "SCOPED_VERIFIED"
+            },
+            {
+              "id": "choice_specs",
+              "scenario": "map_bag_owner_save",
+              "checks": 28,
+              "status": "SCOPED_VERIFIED"
+            },
+            {
+              "id": "choice_scarf",
+              "scenario": "physical_damage",
+              "checks": 42,
+              "status": "SCOPED_VERIFIED"
+            },
+            {
+              "id": "choice_scarf",
+              "scenario": "special_damage",
+              "checks": 42,
+              "status": "SCOPED_VERIFIED"
+            },
+            {
+              "id": "choice_scarf",
+              "scenario": "speed_order",
+              "checks": 42,
+              "status": "SCOPED_VERIFIED"
+            },
+            {
+              "id": "choice_scarf",
+              "scenario": "lock_restore_switch",
+              "checks": 69,
+              "status": "SCOPED_VERIFIED"
+            },
+            {
+              "id": "choice_scarf",
+              "scenario": "map_bag_owner_save",
+              "checks": 28,
+              "status": "SCOPED_VERIFIED"
+            },
+            {
+              "id": "leftovers",
+              "scenario": "heal_partial",
+              "checks": 117,
+              "status": "SCOPED_VERIFIED"
+            },
+            {
+              "id": "leftovers",
+              "scenario": "heal_cap",
+              "checks": 81,
+              "status": "SCOPED_VERIFIED"
+            },
+            {
+              "id": "leftovers",
+              "scenario": "full_hp_control",
+              "checks": 81,
+              "status": "SCOPED_VERIFIED"
+            },
+            {
+              "id": "leftovers",
+              "scenario": "heal_switched_owner",
+              "checks": 117,
+              "status": "SCOPED_VERIFIED"
+            },
+            {
+              "id": "leftovers",
+              "scenario": "map_bag_owner_save",
+              "checks": 28,
+              "status": "SCOPED_VERIFIED"
+            },
+            {
+              "id": "life_orb",
+              "scenario": "physical_boost_recoil",
+              "checks": 123,
+              "status": "SCOPED_VERIFIED"
+            },
+            {
+              "id": "life_orb",
+              "scenario": "special_boost_recoil",
+              "checks": 84,
+              "status": "SCOPED_VERIFIED"
+            },
+            {
+              "id": "life_orb",
+              "scenario": "status_no_recoil",
+              "checks": 81,
+              "status": "SCOPED_VERIFIED"
+            },
+            {
+              "id": "life_orb",
+              "scenario": "immune_no_recoil",
+              "checks": 81,
+              "status": "SCOPED_VERIFIED"
+            },
+            {
+              "id": "life_orb",
+              "scenario": "map_bag_owner_save",
+              "checks": 28,
+              "status": "SCOPED_VERIFIED"
+            },
+            {
+              "id": "rocky_helmet",
+              "scenario": "contact_damage",
+              "checks": 123,
+              "status": "SCOPED_VERIFIED"
+            },
+            {
+              "id": "rocky_helmet",
+              "scenario": "special_no_contact",
+              "checks": 84,
+              "status": "SCOPED_VERIFIED"
+            },
+            {
+              "id": "rocky_helmet",
+              "scenario": "physical_no_contact",
+              "checks": 84,
+              "status": "SCOPED_VERIFIED"
+            },
+            {
+              "id": "rocky_helmet",
+              "scenario": "contact_switched_owner",
+              "checks": 123,
+              "status": "SCOPED_VERIFIED"
+            },
+            {
+              "id": "rocky_helmet",
+              "scenario": "map_bag_owner_save",
+              "checks": 28,
+              "status": "SCOPED_VERIFIED"
+            }
+          ]
+        },
+        {
+          "name": "entry",
+          "checks": 1400,
+          "scenarios": 10,
+          "pid_messages": 95,
+          "historical_classifier": "FAIL",
+          "duration_seconds": 172.4,
+          "rows": [
+            {
+              "id": "air_balloon",
+              "scenario": "ground_break_ground",
+              "checks": 135,
+              "status": "SCOPED_VERIFIED"
+            },
+            {
+              "id": "air_balloon",
+              "scenario": "status_then_ground",
+              "checks": 122,
+              "status": "SCOPED_VERIFIED"
+            },
+            {
+              "id": "air_balloon",
+              "scenario": "special_break_ground",
+              "checks": 123,
+              "status": "SCOPED_VERIFIED"
+            },
+            {
+              "id": "air_balloon",
+              "scenario": "map_bag_owner_save",
+              "checks": 35,
+              "status": "SCOPED_VERIFIED"
+            },
+            {
+              "id": "heavy_duty_boots",
+              "scenario": "stealth_rock_reentry",
+              "checks": 191,
+              "status": "SCOPED_VERIFIED"
+            },
+            {
+              "id": "heavy_duty_boots",
+              "scenario": "spikes_reentry",
+              "checks": 191,
+              "status": "SCOPED_VERIFIED"
+            },
+            {
+              "id": "heavy_duty_boots",
+              "scenario": "toxic_spikes_reentry",
+              "checks": 191,
+              "status": "SCOPED_VERIFIED"
+            },
+            {
+              "id": "heavy_duty_boots",
+              "scenario": "sticky_web_reentry",
+              "checks": 191,
+              "status": "SCOPED_VERIFIED"
+            },
+            {
+              "id": "heavy_duty_boots",
+              "scenario": "no_hazard_control",
+              "checks": 191,
+              "status": "SCOPED_VERIFIED"
+            },
+            {
+              "id": "heavy_duty_boots",
+              "scenario": "map_bag_owner_save",
+              "checks": 28,
+              "status": "SCOPED_VERIFIED"
+            }
+          ]
+        }
+      ],
+      "pid_messages": 242,
+      "families": [
+        {
+          "family": "choice_held_items",
+          "items": 3,
+          "scenarios": 15,
+          "scenario_checks": 669,
+          "status": "SCOPED_VERIFIED"
+        },
+        {
+          "family": "passive_reactive_held_items",
+          "items": 3,
+          "scenarios": 15,
+          "scenario_checks": 1263,
+          "status": "SCOPED_VERIFIED"
+        },
+        {
+          "family": "entry_hazard_items",
+          "items": 2,
+          "scenarios": 10,
+          "scenario_checks": 1398,
+          "status": "SCOPED_VERIFIED"
+        }
+      ],
+      "provenance": [
+        {
+          "id": "choice_band",
+          "api_id": 197,
+          "source_path": "data/api/v2/item/197/index.json",
+          "source_blob": "3da99029f43ec0877e45eb6b89406b5dabd3ff94",
+          "category": "choice",
+          "generation_indices": 7,
+          "equip_permitted": true,
+          "excluded": false,
+          "attribute_evidence": "explicit_holdable_attributes"
+        },
+        {
+          "id": "choice_specs",
+          "api_id": 274,
+          "source_path": "data/api/v2/item/274/index.json",
+          "source_blob": "5872ef43deaceb87280cb63a50deea3d1dc76b3c",
+          "category": "choice",
+          "generation_indices": 6,
+          "equip_permitted": true,
+          "excluded": false,
+          "attribute_evidence": "explicit_holdable_attributes"
+        },
+        {
+          "id": "choice_scarf",
+          "api_id": 264,
+          "source_path": "data/api/v2/item/264/index.json",
+          "source_blob": "c16330c2ef7adae261f30794df4c43673343f713",
+          "category": "choice",
+          "generation_indices": 6,
+          "equip_permitted": true,
+          "excluded": false,
+          "attribute_evidence": "explicit_holdable_attributes"
+        },
+        {
+          "id": "leftovers",
+          "api_id": 211,
+          "source_path": "data/api/v2/item/211/index.json",
+          "source_blob": "c53bebbbe4a7bf6dc1d8fc66a8493b82476324ae",
+          "category": "held-items",
+          "generation_indices": 8,
+          "equip_permitted": true,
+          "excluded": false,
+          "attribute_evidence": "explicit_holdable_attributes"
+        },
+        {
+          "id": "life_orb",
+          "api_id": 247,
+          "source_path": "data/api/v2/item/247/index.json",
+          "source_blob": "a5055ad5162aa86a10c3280ae7646ba8346def92",
+          "category": "held-items",
+          "generation_indices": 6,
+          "equip_permitted": true,
+          "excluded": false,
+          "attribute_evidence": "explicit_holdable_attributes"
+        },
+        {
+          "id": "rocky_helmet",
+          "api_id": 583,
+          "source_path": "data/api/v2/item/583/index.json",
+          "source_blob": "6de345322024c0632c2daf6429c866a3b126836d",
+          "category": "held-items",
+          "generation_indices": 5,
+          "equip_permitted": true,
+          "excluded": false,
+          "attribute_evidence": "reviewed_empty_attributes_pokeapi_583_gen5_9_contact_effect"
+        },
+        {
+          "id": "air_balloon",
+          "api_id": 584,
+          "source_path": "data/api/v2/item/584/index.json",
+          "source_blob": "c1f399f00287d70a50a06ecd062b069f96057b0b",
+          "category": "held-items",
+          "generation_indices": 5,
+          "equip_permitted": true,
+          "excluded": false,
+          "attribute_evidence": "reviewed_exact_entry_item_source_blob_and_generation_indices"
+        },
+        {
+          "id": "heavy_duty_boots",
+          "api_id": 1178,
+          "source_path": "data/api/v2/item/1178/index.json",
+          "source_blob": "2ccf41014b4aa2de1d28c829f22088ceed04d059",
+          "category": "held-items",
+          "generation_indices": 2,
+          "equip_permitted": true,
+          "excluded": false,
+          "attribute_evidence": "reviewed_exact_entry_item_source_blob_and_generation_indices"
+        }
+      ],
+      "protected": {
+        "runtime_files": 878,
+        "absent_skip_worktree": 0,
+        "outside_allowlist_changed": false,
+        "engine_generated_untracked_uids": [
+          "modules/creatures/progression/battle_ev_rewards.gd.uid",
+          "tests/gameplay/competitive_damage_items_v28.gd.uid",
+          "tests/gameplay/competitive_protection_items_v28.gd.uid",
+          "tests/gameplay/item_closure_v3_test_runner.gd.uid"
+        ]
+      },
+      "test_sources_sha256": {
+        "tests/fixtures/item_automation_v28/choice_items.json": "6c4956d23eaac6ba57c350067786ca1f6159dd2edc2e26407a33a11d159d3bb9",
+        "tools/item_audit/automation_contracts_v28.py": "d2c288944597b6fad8be2d0e72a2bdfb91a4adf51960d71854a14b0d2bf19047",
+        ".github/workflows/item-closure-v3.yml": "eb0db4cb044992e367a4651cf6f1b3750c6c07e92c0b7ec7d121561c0adf90b1",
+        "tools/item_audit/automation_entry_v28.py": "7e546efb1d0528f5a6a20315fd9c9d8c60d4cfc378b3465c7623ed7c34e3bc05",
+        "tests/gameplay/item_automation_v28.gd": "9c872a028c768b9b2ed0749827b81ce667ddf35e45287ad53827474d8cc2707d",
+        "tests/tools/test_item_automation_entry_v28.py": "a7b80dc567433436378814e49258f92a2a3695202d3da868cb05f8d20c10af36",
+        "tests/gameplay/item_automation_entry_v28.gd.uid": "5728ba85437063916f0d2c17bef97e0bd08e5a2023f063a85ece74d5f70ce3db",
+        "tests/gameplay/item_automation_v28.gd.uid": "9a97ae4f99183d662276e19b42f8d2a8b1dc7cd18c5442ff0a0e04a0d28006c1",
+        "tests/fixtures/item_automation_v28/passive_items.json": "6a0feca42cbf6f54ca1700789534506a40f751c19af10c50adec13cec40e7e1f",
+        "tests/gameplay/item_automation_effects_v28.gd.uid": "710262e04f3e2058043e4088564c055fed0efac8b24f8e503733aa1ce2d93c94",
+        "tests/tools/test_item_automation_passive_v28.py": "1adb93dd7a03547016e883900de4c9146ca37e029ff0854d9b74c0b8c201eef6",
+        "tests/gameplay/item_automation_effects_v28.gd": "ee2e372f7f6c41c0eac706c893538e316a5c229985b0a9a658317b9b3d0076c6",
+        "tests/tools/test_item_automation_v28.py": "7b4764d031955b0e578aee35f83df1e727d988d038001cbb4cc910032a09443f",
+        "tests/fixtures/item_automation_v28/entry_items.json": "f6f78e46233548c4bb98a7be2c400e0e21ae9c98b32afe5b6a83667303e65ca9",
+        "tests/gameplay/item_automation_opponent_v28.gd.uid": "8ad7ccab5d7320d3981716b4e8d53ba42ce5f7997e9b42b202bb4b86acd274fc",
+        "tests/gameplay/item_automation_entry_v28.gd": "5224e90b3e8df7bd220490ac814fbda3055a99a0f47eea3d3da85ae08f96dc03",
+        "tests/gameplay/item_automation_opponent_v28.gd": "c4a4003f30149f6ac61cb3f17d56a53b382f21efee068a4e8d9112656b70b3b1",
+        "tools/item_audit/automation_v28.py": "7b0f9980782487fc2e448021755199a91a77e63aaf5f8c7cdd42fc577f7048f4"
+      },
+      "run_url": "https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41252124368"
+    }
+  ],
+  "regressions": {
+    "native_v3_cases": 908,
+    "native_v3_ids": 65,
+    "godot_projection_checks": 23434,
+    "ev_checks": 404,
+    "protection_checks": 122,
+    "old_damage_checks": 500,
+    "progression_v18_checks": 8755,
+    "windows_gate": "PUBLICATION_V27 PASS"
+  },
+  "new_failures_and_findings": [
+    {
+      "kind": "METADATA_GAPS",
+      "ids": [
+        "air_balloon",
+        "heavy_duty_boots"
+      ],
+      "detail": "Pinned API 584/1178 attributes empty; 1178 English effect entries empty. Narrow exception requires exact historical source blobs plus category/game indices. Native actual effects exercised; no dataset changes."
+    },
+    {
+      "kind": "LOCAL_REJECTED",
+      "run": "1793488252416091900",
+      "checks": 1399,
+      "assertion_errors": 4,
+      "detail": "Caterpie chose String Shot; no damaging hit, so map consumption assertions correctly failed."
+    },
+    {
+      "kind": "LOCAL_REJECTED",
+      "run": "1793488453449890600",
+      "checks": 1379,
+      "assertion_errors": 1,
+      "detail": "Intermediate Rattata fixture did not open a native encounter. No policy change; final map fixture is allowed Pidgey with Tackle."
+    },
+    {
+      "kind": "COUNT_CORRECTED",
+      "detail": "Orchestration arithmetic initially expected 11 new rows. Exact declared contracts are 3 Balloon + 5 Boots + 2 map = 10; no contract removed."
+    },
+    {
+      "kind": "LOCAL_PASSED_SCOPED_ONLY",
+      "run": "1793488629452917200",
+      "checks": 1400,
+      "scenarios": 10,
+      "status": "PARTIAL_SCOPED_VERIFIED",
+      "detail": "Does not replace full CI. Local guard: 878 runtime files unchanged, 15647 absent skip-worktree files remain absent."
+    }
+  ],
+  "provenance": [
+    {
+      "id": "choice_band",
+      "api_id": 197,
+      "source_path": "data/api/v2/item/197/index.json",
+      "source_blob": "3da99029f43ec0877e45eb6b89406b5dabd3ff94",
+      "category": "choice",
+      "generation_indices": 7,
+      "equip_permitted": true,
+      "excluded": false,
+      "attribute_evidence": "explicit_holdable_attributes"
+    },
+    {
+      "id": "choice_specs",
+      "api_id": 274,
+      "source_path": "data/api/v2/item/274/index.json",
+      "source_blob": "5872ef43deaceb87280cb63a50deea3d1dc76b3c",
+      "category": "choice",
+      "generation_indices": 6,
+      "equip_permitted": true,
+      "excluded": false,
+      "attribute_evidence": "explicit_holdable_attributes"
+    },
+    {
+      "id": "choice_scarf",
+      "api_id": 264,
+      "source_path": "data/api/v2/item/264/index.json",
+      "source_blob": "c16330c2ef7adae261f30794df4c43673343f713",
+      "category": "choice",
+      "generation_indices": 6,
+      "equip_permitted": true,
+      "excluded": false,
+      "attribute_evidence": "explicit_holdable_attributes"
+    },
+    {
+      "id": "leftovers",
+      "api_id": 211,
+      "source_path": "data/api/v2/item/211/index.json",
+      "source_blob": "c53bebbbe4a7bf6dc1d8fc66a8493b82476324ae",
+      "category": "held-items",
+      "generation_indices": 8,
+      "equip_permitted": true,
+      "excluded": false,
+      "attribute_evidence": "explicit_holdable_attributes"
+    },
+    {
+      "id": "life_orb",
+      "api_id": 247,
+      "source_path": "data/api/v2/item/247/index.json",
+      "source_blob": "a5055ad5162aa86a10c3280ae7646ba8346def92",
+      "category": "held-items",
+      "generation_indices": 6,
+      "equip_permitted": true,
+      "excluded": false,
+      "attribute_evidence": "explicit_holdable_attributes"
+    },
+    {
+      "id": "rocky_helmet",
+      "api_id": 583,
+      "source_path": "data/api/v2/item/583/index.json",
+      "source_blob": "6de345322024c0632c2daf6429c866a3b126836d",
+      "category": "held-items",
+      "generation_indices": 5,
+      "equip_permitted": true,
+      "excluded": false,
+      "attribute_evidence": "reviewed_empty_attributes_pokeapi_583_gen5_9_contact_effect"
+    },
+    {
+      "id": "air_balloon",
+      "api_id": 584,
+      "source_path": "data/api/v2/item/584/index.json",
+      "source_blob": "c1f399f00287d70a50a06ecd062b069f96057b0b",
+      "category": "held-items",
+      "generation_indices": 5,
+      "equip_permitted": true,
+      "excluded": false,
+      "attribute_evidence": "reviewed_exact_entry_item_source_blob_and_generation_indices"
+    },
+    {
+      "id": "heavy_duty_boots",
+      "api_id": 1178,
+      "source_path": "data/api/v2/item/1178/index.json",
+      "source_blob": "2ccf41014b4aa2de1d28c829f22088ceed04d059",
+      "category": "held-items",
+      "generation_indices": 2,
+      "equip_permitted": true,
+      "excluded": false,
+      "attribute_evidence": "reviewed_exact_entry_item_source_blob_and_generation_indices"
+    }
+  ],
+  "technical_debt": {
+    "status": "OPEN_PID_LIFECYCLE_DIAGNOSTICS",
+    "linux_automation_log_pid_messages": 242,
+    "linux_group_counts": {
+      "prior": 147,
+      "entry": 95
+    },
+    "linux_visible_job_console_pid_messages": 60,
+    "sources_are_distinct_not_additive": true,
+    "windows_automation_log_pid_messages": 0,
+    "historical_classifier_per_group": {
+      "prior": "FAIL",
+      "entry": "FAIL"
+    },
+    "functional_result": "all assertions and independent raw evidence pass, child exit_code 0; generic classifier FAIL retained if PID diagnostics appear",
+    "stack": "Existing pipe_client.gd:72 close/OS.is_process_running; production unchanged; diagnosis remains open",
+    "prior_run": {
+      "run_id": 41241062641,
+      "automation_pid_messages": 156,
+      "visible_job_pid_messages": 53
+    }
+  },
+  "limits": [
+    "Headless only; GPU/manual review PENDING",
+    "Singles with Mew grounded and empty abilities in native probes",
+    "Four hazard types, one layer each; multi-layer/combinations not certified",
+    "No Gravity, suppression, ability interactions, Substitute, multi-hit, Trick/Knock Off timing certification",
+    "No new item mechanics implemented; existing pinned runtime reused",
+    "Not all 2222 items or every legal interaction certified"
+  ],
+  "all_item_effects_certified": false,
+  "competitive_counts": {
+    "selected_candidates": 61,
+    "v28_verified_ids": 27,
+    "remaining_integral_v28_proof": 30,
+    "blocked_dependencies": 4,
+    "added_verified_outside_factory": 15
+  },
+  "next_step": "Recommend a fourth consumption family: sitrus_berry and lum_berry (HP threshold/status cure). Inspect existing native coverage, then extend the same fixture/ownership/restore/consumption/save predicates; no production change presumed. PID lifecycle diagnosis is separate; GPU/manual remains pending.",
+  "documentation_note": "A notebook-only follow-up [skip ci] is not an additional functional run. Evidence belongs to 961cb0ac / Actions 41252124368.",
+  "prior_second_family": {
+    "functional_sha": "7f973f5bfb63cfae12f1dbaa956512e5291df0aa",
+    "notebook_sha": "4d39d3aa1413c36485d96fc5108872a28deb03b0",
+    "historical_full_results_path": "docs/handoff/ITEMS_V28/AUTOMATION_RESULTS.json",
+    "historical_results_blob": "89148cc4ef6e2bb425aecde31be47438db441f57",
+    "checks_per_platform": 1935,
+    "scenarios_per_platform": 30,
+    "unit_tests_per_platform": 31,
+    "ci": {
+      "status": "PASS",
+      "run_id": 41241062641,
+      "run_url": "https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41241062641",
+      "workflows_total": 20,
+      "workflows_success": 20
+    },
+    "technical_debt": {
+      "status": "OPEN_PID_LIFECYCLE_DIAGNOSTICS",
+      "linux_automation_log_pid_messages": 156,
+      "linux_visible_job_console_pid_messages": 53,
+      "gpu_manual": "PENDING"
+    },
+    "note": "Full prior evidence preserved unchanged in Git at the exact notebook SHA/blob; not copied recursively into every checkpoint."
+  }
+}
