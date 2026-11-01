@@ -1,5 +1,17 @@
 # Catálogo propuesto para Pokémon Calvo — randomlocke competitivo (1-XI-2026)
 
+## ESTADO VIGENTE — cierre de los 125 objetos ordinarios (2026-11-01)
+
+**778 PERMITIR + 1.340 DESCARTAR + 104 APARCADO_MEGA + 0 CONDICIONAL = 2.222 IDs únicos.** El bloque Mega no está en juicio: son 92 piedras específicas y 12 accesorios históricos fuera del trabajo actual. El usuario reafirma **un único tipo de piedra Mega universal con dos copias por partida** en la fase posterior; el objeto nuevo y su implementación todavía no existen.
+
+De los 125 condicionales ordinarios anteriores, **68 se seleccionan y 57 se excluyen**. Los estados antiguos y matrices V1-V5 son históricos. Las siguientes listas sustituyen el uso operativo de los 2.222 como candidatos de desarrollo:
+
+- [Lista de trabajo de 778 objetos seleccionados](./RANDOMLOCK_ITEMS_BUILD_SCOPE_V1.csv)
+- [Archivo independiente de 104 elementos Mega históricos](./RANDOMLOCK_ITEMS_MEGA_APARCADO_V1.csv)
+- [Catálogo maestro con los cuatro estados y los 2.222 IDs](./RANDOMLOCK_ITEMS_SCOPE_V1.csv)
+
+**Se trata de una preselección técnica de contenido**, no de 125 aprobaciones humanas individuales ni de 778 funcionalidades probadas. No desconectar ningún objeto existente; no cambiar motor, partidas, V28, `main` ni las reglas activas de generación. La revisión inversa de permitidos/descartados sigue pendiente.
+
 ## ESTADO VIGENTE — auditoría 11 (2026-11-01)
 
 **Decisión del usuario:** preferir `fluffy_tail` (Cola Skitty) frente a `poke_doll` y `poke_toy`, por ambientación y porque tienen la misma función de huida. `max_mushrooms` (Maxiseta) permanece PERMITIR por subir cinco estadísticas una etapa; el control de balance va en otra revisión. **No se debe desconectar ni borrar ningún objeto técnico ya implementado**: se trabaja únicamente con la lista de futuros objetos a diseñar y distribuir.
