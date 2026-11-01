@@ -1,5 +1,5 @@
 {
-  "status": "LOCAL_FEASIBLE_PENDING_CI",
+  "status": "FEASIBILITY_DEMONSTRATED_WITH_LIMITS",
   "counts_unchanged": [
     27,
     30,
@@ -146,7 +146,9 @@
           "0",
           "tools/item_audit/automation_v28.py"
         ]
-      ]
+      ],
+      "execution_seconds": null,
+      "timing_note": "No comparable portable duration archived in the original receipt"
     },
     {
       "batch": "Pasivos",
@@ -198,7 +200,11 @@
           "9",
           "tools/item_audit/automation_v28.py"
         ]
-      ]
+      ],
+      "execution_seconds": {
+        "Ubuntu": 291.87,
+        "Windows": 301.95
+      }
     },
     {
       "batch": "Globo_Botas",
@@ -260,7 +266,11 @@
           "35",
           "tools/item_audit/automation_v28.py"
         ]
-      ]
+      ],
+      "execution_seconds_for_new_group": {
+        "Ubuntu": 172.4,
+        "Windows": 138.39
+      }
     }
   ],
   "production_lines_added": 0,
@@ -273,6 +283,411 @@
   },
   "modified_code_metadata_ci_files": 6,
   "total_local_seconds": 91.85,
-  "ci": "PENDING",
-  "recommendation": "Continue bounded reuse of existing native assertions; do not equate replay with full certification or start another batch."
+  "ci": {
+    "status": "PASS",
+    "functional_sha": "6383f5589619e56daae7d93e9cd712361d41cabf",
+    "run_id": 41255004688,
+    "run_url": "https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41255004688",
+    "workflows_total": 20,
+    "workflows_success": 20,
+    "ubuntu_job_id": 124696187309,
+    "windows_job_id": 124696187166,
+    "engine": "4.7.stable.official.5b4e0cb0f",
+    "linux_visible_job_pid_messages": 57,
+    "old_unit_tests": 56,
+    "new_unit_tests": 6,
+    "old_godot_checks": 3335,
+    "old_godot_scenarios": 40,
+    "replay_checks": 435,
+    "replay_cases": 14,
+    "regressions": {
+      "native_v3_scenarios": 908,
+      "mirror_checks": 23434,
+      "ev": 404,
+      "protection": 122,
+      "damage": 500,
+      "progression_v18": 8755,
+      "windows_gate": "PUBLICATION_V27 PASS"
+    },
+    "workflow_runs": [
+      {
+        "id": 41255004725,
+        "name": "Spanish Types Foundation Tests",
+        "conclusion": "success"
+      },
+      {
+        "id": 41255004572,
+        "name": "Data Foundation V3 Tests",
+        "conclusion": "success"
+      },
+      {
+        "id": 41255004573,
+        "name": "Pokemon Calvo Technical Test Windows Build",
+        "conclusion": "success"
+      },
+      {
+        "id": 41255004661,
+        "name": "Trainer Team Composition Tests",
+        "conclusion": "success"
+      },
+      {
+        "id": 41255004557,
+        "name": "Trainer Intelligence Foundation Tests",
+        "conclusion": "success"
+      },
+      {
+        "id": 41255004522,
+        "name": "Trainer Loadouts Tests",
+        "conclusion": "success"
+      },
+      {
+        "id": 41255004644,
+        "name": "Trainer Strategic Switching V2 Tests",
+        "conclusion": "success"
+      },
+      {
+        "id": 41255004649,
+        "name": "Trainer Adaptive Branching Tests",
+        "conclusion": "success"
+      },
+      {
+        "id": 41255004570,
+        "name": "Trainer Evaluation Corpus Tests",
+        "conclusion": "success"
+      },
+      {
+        "id": 41255004526,
+        "name": "Trainer Search Limit Benchmark Tests",
+        "conclusion": "success"
+      },
+      {
+        "id": 41255004546,
+        "name": "Trainer Tactical Intelligence Tests",
+        "conclusion": "success"
+      },
+      {
+        "id": 41255004547,
+        "name": "Trainer Item Actions Tests",
+        "conclusion": "success"
+      },
+      {
+        "id": 41255004613,
+        "name": "Trainer Public Coverage Beliefs Tests",
+        "conclusion": "success"
+      },
+      {
+        "id": 41255004600,
+        "name": "Trainer Battle Session Tests",
+        "conclusion": "success"
+      },
+      {
+        "id": 41255004668,
+        "name": "Trainer Search Depth Budget Tests",
+        "conclusion": "success"
+      },
+      {
+        "id": 41255004574,
+        "name": "Trainer Belief Inference Tests",
+        "conclusion": "success"
+      },
+      {
+        "id": 41255004671,
+        "name": "Trainer Search Foundation Tests",
+        "conclusion": "success"
+      },
+      {
+        "id": 41255004669,
+        "name": "Godot 4.7 Tests",
+        "conclusion": "success"
+      },
+      {
+        "id": 41255004685,
+        "name": "Trainer Self Play Evaluation Tests",
+        "conclusion": "success"
+      },
+      {
+        "id": 41255004688,
+        "name": "Item Closure V3 (EV, inventory and regressions)",
+        "conclusion": "success"
+      }
+    ]
+  },
+  "recommendation": "CONTINUE bounded reuse of existing native scenarios/assertions. DO NOT treat replay as full item certification. Do not start another batch without a new scope decision.",
+  "functional_sha": "6383f5589619e56daae7d93e9cd712361d41cabf",
+  "prior_certified_code": "961cb0ac8712e03cd3d22e0115d8b11c1a36e08b",
+  "base_notebook_sha": "a3eed8c9660db5adb01c75a3a38b01c74cef67ac",
+  "platform_artifacts": [
+    {
+      "platform": "Ubuntu",
+      "artifact_id": 13063071036,
+      "digest": "sha256:417ff08bb7690ea9a12cf194d2d633646ba8c2a4c92188c33b25e647532dd541",
+      "zip_sha256": "417ff08bb7690ea9a12cf194d2d633646ba8c2a4c92188c33b25e647532dd541",
+      "parts": {
+        "certified": {
+          "checks": 3335,
+          "scenarios": 40,
+          "groups": [
+            {
+              "name": "prior",
+              "checks": 1935,
+              "pid_messages": 155,
+              "historical_classifier": "FAIL",
+              "seconds": 233.6
+            },
+            {
+              "name": "entry",
+              "checks": 1400,
+              "pid_messages": 95,
+              "historical_classifier": "FAIL",
+              "seconds": 145.64
+            }
+          ],
+          "pid_messages": 250
+        },
+        "replay": {
+          "cases": 14,
+          "checks": 435,
+          "timings": [
+            {
+              "stage": "templates_v2",
+              "seconds": 0.77,
+              "exit_code": 0,
+              "pid_diagnostics": 0
+            },
+            {
+              "stage": "native_v2",
+              "seconds": 3.67,
+              "exit_code": 0,
+              "pid_diagnostics": 0
+            },
+            {
+              "stage": "templates_v3",
+              "seconds": 0.77,
+              "exit_code": 0,
+              "pid_diagnostics": 0
+            },
+            {
+              "stage": "native_v3",
+              "seconds": 10.04,
+              "exit_code": 0,
+              "pid_diagnostics": 0
+            },
+            {
+              "stage": "replay",
+              "seconds": 60.72,
+              "exit_code": 0,
+              "pid_diagnostics": 32
+            }
+          ],
+          "pid_messages": 32,
+          "per_item": {
+            "black_glasses": [
+              "black_glasses/type_boost/1",
+              "black_glasses/type_boost/19",
+              "black_glasses/type_boost_nonmatching/1",
+              "black_glasses/type_boost_nonmatching/19"
+            ],
+            "colbur_berry": [
+              "colbur_berry/resist_berry/1",
+              "colbur_berry/resist_berry/19",
+              "colbur_berry/resist_nonmatching/1",
+              "colbur_berry/resist_nonmatching/19"
+            ],
+            "toxic_orb": [
+              "toxic_orb/end_turn_status/1",
+              "toxic_orb/end_turn_status/19"
+            ],
+            "sticky_barb": [
+              "sticky_barb/residual/1",
+              "sticky_barb/residual/19",
+              "sticky_barb/contact_transfer/1",
+              "sticky_barb/contact_transfer/19"
+            ]
+          },
+          "source_sha256": {
+            "tests/gameplay/item_effect_templates_v2.gd": "7fb99ce64fbd64e798a575d7a8f9ba429098363d4f3114b910dfc41a6e58a53e",
+            "tools/item_audit/held_effect_sweep_v2.cjs": "4100b9e6506129eb8218c90d9678889ace696e527520ec06fedf193fd2c14415",
+            ".godot/item_verification_v2/cases.json": "669d073ca1a3fe3b2ce9bbe9e76c5bfed13f7a44606abae7ddff5161f2e438a1",
+            ".godot/item_verification_v2/native.json": "4b8e077b2445502064ec19480341eb6c36634063ece6777f66cb3c3213d9a3ec",
+            ".godot/item_verification_v2/prototypes.json": "23a25e770d6fa768736790540b6bd102bd6f29bcb77073c5a7bed57fecf0d67a",
+            "tests/gameplay/item_effect_templates_v3.gd": "fc0292ca2a01065d264caeade21d9b9c2d1092845affbb2b70a2972dfb74bdc7",
+            "tools/item_audit/held_effect_sweep_v3.cjs": "cfc272dee0f638941ca4d7f3737f0006138fdf88c6a39cd95d2abe12c1301440",
+            ".godot/item_verification_v3/cases.json": "230d52f9cd88632fd31236b91604da8f963aa51ebe13e65f6e12181b32fd8fcb",
+            ".godot/item_verification_v3/native.json": "027438c4b0bb60db413a0f7356f22fd5bf6b6afb5053f8e3a8c1e8054ec61a4d",
+            ".godot/item_verification_v3/prototypes.json": "7d9c660afe6607cfd7cae87760be996ef08d5748716bf8e2c5d8f68197ebf461"
+          },
+          "code_sha256": {
+            "tests/gameplay/item_case_replay_v28.gd": "de8abef3355f272a8346f8f2e93017b6205698f6ca605b6def22b80c42873e7f",
+            "tests/gameplay/item_case_replay_v28.gd.uid": "449d084193062c884961643cd3b39e4032c119c72e259d120e528c97a8d6b942",
+            "tools/item_audit/replay_v28.py": "f73f642062d82bb437ab23323b4132794e6446bf79e166157c531cf31d7f8548",
+            "tests/tools/test_item_case_replay_v28.py": "b95007fda571f262ba13b7beebb4f5acb5d132e719459a36c7272f10dc193ec1"
+          },
+          "raw_native_proofs_rechecked_locally": true,
+          "case_file_bytes_reproducible": {
+            ".godot/item_verification_v2/cases.json": false,
+            ".godot/item_verification_v3/cases.json": false
+          },
+          "offline_comparison_note": "Only checkpoint.elapsed_ms profiling and views.p1/p2.protocol |t:|UnixSeconds presentation lines excluded from regenerated-file comparison. Full native snapshots, hashes, RNG and original oracle receipts compared unchanged."
+        }
+      }
+    },
+    {
+      "platform": "Windows",
+      "artifact_id": 13063875742,
+      "digest": "sha256:95ee0336db3e0bb9560395a49802fa9eca612fc3ec564138817bd1fb837f307b",
+      "zip_sha256": "95ee0336db3e0bb9560395a49802fa9eca612fc3ec564138817bd1fb837f307b",
+      "parts": {
+        "certified": {
+          "checks": 3335,
+          "scenarios": 40,
+          "groups": [
+            {
+              "name": "prior",
+              "checks": 1935,
+              "pid_messages": 0,
+              "historical_classifier": "PASS",
+              "seconds": 316.94
+            },
+            {
+              "name": "entry",
+              "checks": 1400,
+              "pid_messages": 0,
+              "historical_classifier": "PASS",
+              "seconds": 201.2
+            }
+          ],
+          "pid_messages": 0
+        },
+        "replay": {
+          "cases": 14,
+          "checks": 435,
+          "timings": [
+            {
+              "stage": "templates_v2",
+              "seconds": 1.33,
+              "exit_code": 0,
+              "pid_diagnostics": 0
+            },
+            {
+              "stage": "native_v2",
+              "seconds": 6.23,
+              "exit_code": 0,
+              "pid_diagnostics": 0
+            },
+            {
+              "stage": "templates_v3",
+              "seconds": 1.33,
+              "exit_code": 0,
+              "pid_diagnostics": 0
+            },
+            {
+              "stage": "native_v3",
+              "seconds": 17.03,
+              "exit_code": 0,
+              "pid_diagnostics": 0
+            },
+            {
+              "stage": "replay",
+              "seconds": 88.17,
+              "exit_code": 0,
+              "pid_diagnostics": 0
+            }
+          ],
+          "pid_messages": 0,
+          "per_item": {
+            "black_glasses": [
+              "black_glasses/type_boost/1",
+              "black_glasses/type_boost/19",
+              "black_glasses/type_boost_nonmatching/1",
+              "black_glasses/type_boost_nonmatching/19"
+            ],
+            "colbur_berry": [
+              "colbur_berry/resist_berry/1",
+              "colbur_berry/resist_berry/19",
+              "colbur_berry/resist_nonmatching/1",
+              "colbur_berry/resist_nonmatching/19"
+            ],
+            "toxic_orb": [
+              "toxic_orb/end_turn_status/1",
+              "toxic_orb/end_turn_status/19"
+            ],
+            "sticky_barb": [
+              "sticky_barb/residual/1",
+              "sticky_barb/residual/19",
+              "sticky_barb/contact_transfer/1",
+              "sticky_barb/contact_transfer/19"
+            ]
+          },
+          "source_sha256": {
+            "tests/gameplay/item_effect_templates_v2.gd": "7fb99ce64fbd64e798a575d7a8f9ba429098363d4f3114b910dfc41a6e58a53e",
+            "tools/item_audit/held_effect_sweep_v2.cjs": "4100b9e6506129eb8218c90d9678889ace696e527520ec06fedf193fd2c14415",
+            ".godot/item_verification_v2/cases.json": "904a07a77df6b55217ec10be078d0e4b598f5cf16d040e6e16f2374df40bf00b",
+            ".godot/item_verification_v2/native.json": "4b8e077b2445502064ec19480341eb6c36634063ece6777f66cb3c3213d9a3ec",
+            ".godot/item_verification_v2/prototypes.json": "23a25e770d6fa768736790540b6bd102bd6f29bcb77073c5a7bed57fecf0d67a",
+            "tests/gameplay/item_effect_templates_v3.gd": "fc0292ca2a01065d264caeade21d9b9c2d1092845affbb2b70a2972dfb74bdc7",
+            "tools/item_audit/held_effect_sweep_v3.cjs": "cfc272dee0f638941ca4d7f3737f0006138fdf88c6a39cd95d2abe12c1301440",
+            ".godot/item_verification_v3/cases.json": "cd3605f7abdae3ed17910e06534b204a15bdeb77a4c82a30d254ee58f99298ef",
+            ".godot/item_verification_v3/native.json": "027438c4b0bb60db413a0f7356f22fd5bf6b6afb5053f8e3a8c1e8054ec61a4d",
+            ".godot/item_verification_v3/prototypes.json": "7d9c660afe6607cfd7cae87760be996ef08d5748716bf8e2c5d8f68197ebf461"
+          },
+          "code_sha256": {
+            "tests/gameplay/item_case_replay_v28.gd": "de8abef3355f272a8346f8f2e93017b6205698f6ca605b6def22b80c42873e7f",
+            "tests/gameplay/item_case_replay_v28.gd.uid": "449d084193062c884961643cd3b39e4032c119c72e259d120e528c97a8d6b942",
+            "tools/item_audit/replay_v28.py": "f73f642062d82bb437ab23323b4132794e6446bf79e166157c531cf31d7f8548",
+            "tests/tools/test_item_case_replay_v28.py": "b95007fda571f262ba13b7beebb4f5acb5d132e719459a36c7272f10dc193ec1"
+          },
+          "raw_native_proofs_rechecked_locally": true,
+          "case_file_bytes_reproducible": {
+            ".godot/item_verification_v2/cases.json": false,
+            ".godot/item_verification_v3/cases.json": false
+          },
+          "offline_comparison_note": "Only checkpoint.elapsed_ms profiling and views.p1/p2.protocol |t:|UnixSeconds presentation lines excluded from regenerated-file comparison. Full native snapshots, hashes, RNG and original oracle receipts compared unchanged."
+        }
+      }
+    }
+  ],
+  "coverage": {
+    "native_original_asserted_cases": 14,
+    "godot_replay_and_integration_checks_per_platform": 435,
+    "real_bag_map_routes_per_platform": 4,
+    "prior_automation_checks_preserved": 3335,
+    "prior_automation_scenarios_preserved": 40,
+    "prior_contract_tests_preserved": 56,
+    "new_replay_proof_tests": 6,
+    "new_native_effect_assertions": 0,
+    "new_per_item_contracts": 0,
+    "production_lines_added": 0,
+    "full_item_certification": false,
+    "case_format_rewritten": false,
+    "original_generators_modified": false,
+    "counts_unchanged": [
+      27,
+      30,
+      4
+    ]
+  },
+  "maintenance_estimate": {
+    "scope": "Existing representable cases only; no time/token guarantee",
+    "marginal_new_effect_or_contract_code": 0,
+    "selection": "Four literal IDs; no per-object dispatch",
+    "common_changes_needed_if": "DTO/commands/session or source format changes",
+    "not_automatic": "Missing causal/negative tests, new contexts or absent mechanics"
+  },
+  "cost_scope": "Versioned lines, including whitespace/comments. Six implementation/test/CI/UID files plus seven notebooks; no claim of equivalent certification effort.",
+  "first_failed_local_attempt": {
+    "directory": "replay_1793490967116361300",
+    "checks": 477,
+    "failure": "Order-sensitive native hash after JSON save/restore. Complete native structures identical; hash check retained before disk, full structure after disk. No baseline/generator/rule changed."
+  },
+  "technical_debt": {
+    "status": "OPEN",
+    "replay_linux_pid_messages": 32,
+    "replay_windows_pid_messages": 0,
+    "prior_automation_linux_pid_messages": 250,
+    "linux_visible_job_console_pid_messages": 57,
+    "log_sources_are_distinct_not_additive": true,
+    "gpu_manual": "PENDING",
+    "pid_lifecycle_production_fix": "NOT_ATTEMPTED"
+  },
+  "documentation_note": "The follow-up notebooks commit uses [skip ci]; code/test evidence belongs to 6383f558 and the recorded run, not that later documentation SHA."
 }

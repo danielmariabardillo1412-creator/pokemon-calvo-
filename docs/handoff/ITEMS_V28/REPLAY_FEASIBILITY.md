@@ -2,7 +2,7 @@
 
 ## Resultado y recomendación
 
-**VIABLE con alcance limitado, demostración local ejecutada; CI pendiente.**
+**VIABLE con alcance limitado, demostrado en Ubuntu y Windows con Godot 4.7.**
 Continuar aprovechando los escenarios ya escritos, sin crear contratos por objeto.
 No es un sustituto de una certificación integral: el contador sigue en **27/30/4**.
 Bayas y rediseño amplio quedan suspendidos por la nueva prioridad humana.
@@ -96,3 +96,28 @@ Un efecto ausente o control causal inexistente no se arregla con reproducción:
 se marca fuera de alcance. No ampliar el reproductor con reglas por objeto.
 **Recomendación: continuar con esta vía para reaprovechar pruebas; abandonar la
 idea de que replay por sí solo puede cerrar los 30 pendientes.** No iniciar otro lote.
+
+## Cierre CI real
+
+**REPLAY MÍNIMO DEMOSTRADO:** código `6383f558`, [Actions #41255004688](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41255004688), **20/20 workflows PASS**. Ubuntu y Windows: **14 casos originales / 435 comprobaciones / 4 rutas de mochila-mapa**, más 6 tests de rechazo. Se conservan **3335 checks / 40 escenarios / 56 tests anteriores**. **0 objetos nuevos certificados; 27/30/4 sin cambios.** Producción y generadores intactos; 217 líneas versionadas de infraestructura/pruebas compartidas, 0 contratos/efectos nuevos por objeto. Recomendación: continuar reutilizando escenarios existentes con sus límites; no iniciar otra familia. PID y GPU abiertos; PR #118 en borrador, main intacta.
+
+- Ubuntu: replay 60.72 s; total exportadores + generadores + replay 75.97 s; 32 mensajes PID del replay. ZIP SHA-256 y fuentes/casos/raw revalidados.
+- Windows: replay 88.17 s; total exportadores + generadores + replay 114.09 s; 0 mensajes PID del replay. ZIP SHA-256 y fuentes/casos/raw revalidados.
+
+Los logs PID del replay, del automatizador anterior y de la consola del job son fuentes distintas. El verde funcional no cierra esa deuda. La revisión GPU continúa pendiente. El código funcional es 6383f558; la actualización final de cuadernos [skip ci] no es una prueba adicional.
+
+Los ZIP, fuentes de código, prototipos y recibos `native.json` coinciden con sus
+hashes. Los archivos `cases.json` completos incluyen `elapsed_ms` y líneas de
+presentación `|t:|UnixSeconds` en views.p1/p2.protocol: sus bytes no son reproducibles
+entre ejecuciones. La comparación offline excluye SOLO esos metadatos; compara
+íntegros snapshots nativos, hashes de estado, RNG, identidades, comandos y demás
+contenido de los 14 casos. No se filtra el log nativo ni se cambian pruebas.
+
+Deuda Linux: replay **32** mensajes PID; automatizador anterior **250**; consola
+visible del job **57**, fuentes distintas, no sumar como sucesos únicos. El
+clasificador histórico del automatizador conserva `FAIL` por PID, con exit_code 0
+y sus invariantes/evidencias funcionales aprobadas. Windows replay: **0**.
+
+Duración archivada de la segunda familia en su CI original: Linux 291,87 s y
+Windows 301,95 s (Git 4d39d3aa, AUTOMATION_RESULTS.json/ci/platforms). El primer
+piloto no archivó una duración portable comparable; no se estima retrospectivamente.

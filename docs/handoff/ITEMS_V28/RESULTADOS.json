@@ -614,5 +614,23 @@
     },
     "next_step": "Recommend a fourth consumption family: sitrus_berry and lum_berry (HP threshold/status cure). Inspect existing native coverage, then extend the same fixture/ownership/restore/consumption/save predicates; no production change presumed. PID lifecycle diagnosis is separate; GPU/manual remains pending.",
     "evidence": "docs/handoff/ITEMS_V28/AUTOMATION_RESULTS.json"
+  },
+  "replay_feasibility": {
+    "status": "FEASIBILITY_DEMONSTRATED_WITH_LIMITS",
+    "functional_sha": "6383f5589619e56daae7d93e9cd712361d41cabf",
+    "ci": {
+      "run_id": 41255004688,
+      "run_url": "https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41255004688",
+      "workflows_total": 20,
+      "workflows_success": 20
+    },
+    "counts_unchanged": [
+      27,
+      30,
+      4
+    ],
+    "report": "docs/handoff/ITEMS_V28/REPLAY_FEASIBILITY.md",
+    "result": "docs/handoff/ITEMS_V28/REPLAY_RESULTS.json",
+    "new_objects_certified": 0
   }
 }

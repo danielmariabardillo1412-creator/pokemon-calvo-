@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "mission": "ITEMS_V28",
-  "status": "MINIMAL_REPLAY_FEASIBILITY_VALIDATING",
+  "status": "MINIMAL_REPLAY_FEASIBILITY_DEMONSTRATED",
   "base_branch": "main",
   "base_commit": "233b1a4f15ee4df7301e2c5acf8aed84a8f40626",
   "working_branch": "codex/items-v28-from-main",
@@ -14,7 +14,7 @@
     "code_identity_from_v3": true,
     "last_verified_commit": "69e15d74d04063dbe9613575b8618062e1efbed7"
   },
-  "next_action": "Finish this four-ID feasibility demonstration and report; berries/new families paused. Keep 27/30/4, PID/GPU independent.",
+  "next_action": "Review the bounded feasibility report. No new families/objects authorized; keep 27/30/4. Reuse existing cases first, missing coverage requires separate review. PID/GPU independent.",
   "main_is_official_v27": true,
   "all_2222_items_functional": false,
   "gpu_manual_review": "PENDING",
@@ -544,12 +544,21 @@
     "evidence": "docs/handoff/ITEMS_V28/AUTOMATION_RESULTS.json"
   },
   "replay_feasibility": {
-    "status": "LOCAL_FEASIBLE_PENDING_CI",
-    "report": "docs/handoff/ITEMS_V28/REPLAY_FEASIBILITY.md",
+    "status": "FEASIBILITY_DEMONSTRATED_WITH_LIMITS",
+    "functional_sha": "6383f5589619e56daae7d93e9cd712361d41cabf",
+    "ci": {
+      "run_id": 41255004688,
+      "run_url": "https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41255004688",
+      "workflows_total": 20,
+      "workflows_success": 20
+    },
     "counts_unchanged": [
       27,
       30,
       4
-    ]
+    ],
+    "report": "docs/handoff/ITEMS_V28/REPLAY_FEASIBILITY.md",
+    "result": "docs/handoff/ITEMS_V28/REPLAY_RESULTS.json",
+    "new_objects_certified": 0
   }
 }
