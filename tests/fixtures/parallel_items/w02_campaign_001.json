@@ -1,0 +1,108 @@
+{
+  "schema_version": 1,
+  "family": "berry_campaign_w02",
+  "campaign": "CAMP_001",
+  "microblocks_completed": [
+    1
+  ],
+  "format": "gen9calvounifiedv1",
+  "level": 100,
+  "seed": [
+    23,
+    19,
+    29,
+    43
+  ],
+  "variants": [
+    "active",
+    "none",
+    "reserve"
+  ],
+  "locations": [
+    "PARTY",
+    "STORAGE"
+  ],
+  "cases": [
+    {
+      "id": "oran_berry",
+      "scenario": "oran_low_hp",
+      "kind": "hp",
+      "initial": "quarter",
+      "status": "",
+      "consumes": true,
+      "field_applies": true,
+      "heal": 10
+    },
+    {
+      "id": "oran_berry",
+      "scenario": "oran_full_hp",
+      "kind": "hp",
+      "initial": "full",
+      "status": "",
+      "consumes": false,
+      "field_applies": false,
+      "heal": 10
+    },
+    {
+      "id": "pecha_berry",
+      "scenario": "pecha_poison",
+      "kind": "status",
+      "initial": "full",
+      "status": "poison",
+      "consumes": true,
+      "field_applies": true,
+      "heal": 0
+    },
+    {
+      "id": "pecha_berry",
+      "scenario": "pecha_burn",
+      "kind": "status",
+      "initial": "full",
+      "status": "burn",
+      "consumes": false,
+      "field_applies": false,
+      "heal": 0
+    },
+    {
+      "id": "pecha_berry",
+      "scenario": "pecha_healthy",
+      "kind": "status",
+      "initial": "full",
+      "status": "",
+      "consumes": false,
+      "field_applies": false,
+      "heal": 0
+    },
+    {
+      "id": "cheri_berry",
+      "scenario": "cheri_paralysis",
+      "kind": "status",
+      "initial": "full",
+      "status": "paralysis",
+      "consumes": true,
+      "field_applies": true,
+      "heal": 0
+    },
+    {
+      "id": "cheri_berry",
+      "scenario": "cheri_poison",
+      "kind": "status",
+      "initial": "full",
+      "status": "poison",
+      "consumes": false,
+      "field_applies": false,
+      "heal": 0
+    },
+    {
+      "id": "cheri_berry",
+      "scenario": "cheri_healthy",
+      "kind": "status",
+      "initial": "full",
+      "status": "",
+      "consumes": false,
+      "field_applies": false,
+      "heal": 0
+    }
+  ],
+  "note": "Microbloque 01: contratos separados para equipamiento nativo y uso de campo; los controles de reserva/sin objeto son solo de combate. No prueba ejecutada por definir fixture."
+}
