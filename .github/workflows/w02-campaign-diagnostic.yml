@@ -49,3 +49,5 @@ jobs:
           retention-days: 7
           if-no-files-found: ignore
           path: w02-*.log
+
+# IA6 diagnostic candidate 2: native confusion event comparison; unchanged game code
