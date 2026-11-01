@@ -1,3 +1,17 @@
+# IA6 — VEREDICTO ACTUAL Y CAMPAÑA_001 (2026-11-01)
+
+**Orden vigente:** [CAMPAIGN_GATE_UPDATE_002.md](CAMPAIGN_GATE_UPDATE_002.md), complementa `CAMPAIGN_GATE_001.md`. El texto histórico más abajo donde dice W03/W05 `STOP hasta CI` corresponde al período **anterior** al PASS y se ha sustituido por esta nueva puerta. Se conservan los registros históricos para trazabilidad.
+
+**W03 y W05: INTEGRADAS y VERIFICADAS en IA6.** Commit W03 `82f9eea2`; W05 `39df72c1`. CI sobre árbol integrado [#41350909378](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41350909378): `completed/success`, SHA `71332b256621e49e98676ef5f0af48c145d1e86f`. W03 autorizada para ITER_03 tras nuevo `p`, W05 para ITER_02 tras nuevo `p`, conservando sus límites; ambas pruebas no implican GPU/visual.
+
+**W01 y W04: tests 01–02 VERIFICADOS en staging y ahora INTEGRADOS como tests en IA6**, commit `7b360f90b74e18085f5b741722fd67fded88d23b`. Staging [#41350981613](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41350981613) tuvo W01 PASS (`2428 checks, 24 filas`) y W04 PASS (`313 checks, 12 casos`). Su resultado global es FAIL **por W02**. CI posterior de árbitra [#41353674663](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41353674663), veredicto PENDIENTE al documentar este estado. W01 puede preparar ITER_03; W04 también mediante relevo del chat si lo requiere.
+
+**W02: CAMPAÑA_001_FINALIZADA como preparación, pero DEFECTO EN PRUEBAS / MECÁNICA PENDIENTE DE CLASIFICAR**. En paquete #41350981613 su Godot emitió `CAMP_001_W02 FAIL checks=1544 cases=16`; tres anomalías fuente: comparación de `seed` del fixture, escenario Persim ante `confuse_ray`, y cobertura derivada `per_item`. Los Python unitarios (18) pasaron; no equivale a PASS de Godot. **No enviar otro `p`, no integrar test fallido ni cambiar producción para forzar PASS.** Diagnóstico en staging [#41353549834](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41353549834), con aserciones originales preservadas, pendiente resultado al escribir este documento.
+
+**Regla de trabajo:** IA6 gestiona CI/diagnóstico/integración, [protocolo V2](CI_AND_HANDOFF_PROTOCOL_V2.md), [relevo universal](PROMPT_RELEVO_W0X_V2.md). Ninguna de las cinco conversaciones funciona como agente autónomo de fondo; los nuevos `p` se entregan manualmente solo a chats que tengan bloque permitido. `main`, V28 y las ramas W son intocables para la coordinadora, salvo autorización expresa de recuperación excepcional.
+
+---
+
 # IA6 — Recepción parcial y CI consolidada preparadas (2026-11-01)
 
 **Artefactos vigentes:** [protocolo V2](CI_AND_HANDOFF_PROTOCOL_V2.md), [mensaje único de relevo](PROMPT_RELEVO_W0X_V2.md), [acta W03/W05](integration/CAMP_001_W03_W05.md).
