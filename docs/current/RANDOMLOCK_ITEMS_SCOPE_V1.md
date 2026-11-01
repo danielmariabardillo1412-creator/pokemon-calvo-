@@ -172,3 +172,7 @@ La continuación posterior a la quinta auditoría examinó **71 IDs distintos** 
 ## Séptima revisión — matriz de los 290 condicionales (2026-11-01)
 
 Se ha generado [RANDOMLOCK_ITEMS_CONDITIONAL_MATRIX_V2.csv](./RANDOMLOCK_ITEMS_CONDITIONAL_MATRIX_V2.csv), con **290 filas por ID** y función, dependencia, riesgo y propuesta de decisión. Los **104 elementos Mega permanecen apartados**; los **186 condicionales normales** se han organizado por requisito, de los cuales **38 ya tenían una revisión individual V6 que prevalece sobre agrupaciones posteriores**. [Auditoría 7](./RANDOMLOCK_ITEMS_AUDIT_PASS7_2026-11-01.md). **No se ha modificado el maestro 706/290/1226 ni el estado activo del juego.** Las propuestas son reversibles y pendientes de contraste/decisión.
+
+## Octava pasada — auditoría inversa preliminar (2026-11-01)
+
+Se ha iniciado la revisión inversa con **15 IDs señalados (14 permitidos y un descartado)** en el [registro por ID](./RANDOMLOCK_ITEMS_AUDITORIA_INVERSA_V1.csv) y la [auditoría 8](./RANDOMLOCK_ITEMS_AUDIT_PASS8_2026-11-01.md). **Duralium** puede ser un falso descarte por tutores/EV; Parque Ball/Gloria Ball/Honor Ball requieren justificar su distribución; Maxisetas tiene un potenciador de cinco estadísticas cuya disponibilidad requiere balance. Ningún estado ha sido cambiado aún. Seguir auditando la lista completa y no confundir permisos con verificación técnica.
