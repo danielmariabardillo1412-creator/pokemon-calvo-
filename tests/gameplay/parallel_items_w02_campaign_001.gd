@@ -27,7 +27,7 @@ func _run_campaign() -> void:
 	check("overlay existente", Variants.apply(catalogs))
 	check("formato fijado", String(automation.format) == "gen9calvounifiedv1")
 	print("IA6_W02_DIAG_SEED ", JSON.stringify({"actual": automation.seed, "same": automation.seed == [23, 19, 29, 43], "type": typeof(automation.seed), "first_type": typeof(automation.seed[0])}))
-	check("semilla reproducible", automation.seed == [23, 19, 29, 43])
+	check("semilla reproducible", automation.seed.size() == 4 and int(automation.seed[0]) == 23 and int(automation.seed[1]) == 19 and int(automation.seed[2]) == 29 and int(automation.seed[3]) == 43)
 	check("control dueño activo, ausente y reserva", automation.variants == ["active", "none", "reserve"])
 	check("dos ubicaciones de mochila", automation.locations == ["PARTY", "STORAGE"])
 	var rows: Array = []
@@ -84,8 +84,9 @@ func _compare_native(spec: Dictionary, held: Dictionary) -> void:
 	if String(spec.kind) == "confusion":
 		print("IA6_W02_DIAG_PERSIM ", JSON.stringify({"scenario": spec.scenario, "active": {"confused": active.confused, "consumed": active.consumed, "hp": active.hp, "status": active.status}, "none": {"confused": plain.confused, "consumed": plain.consumed, "hp": plain.hp, "status": plain.status}, "reserve": {"confused": reserve.confused, "consumed": reserve.consumed, "hp": reserve.hp, "status": reserve.status}, "expected_consume": should_consume}))
 		check("Persim elimina confusión únicamente en portador activo",
-			not active.confused and plain.confused == should_consume
-			and reserve.confused == should_consume)
+			not active.confused and active.native_confusion_started == should_consume
+			and plain.native_confusion_started == should_consume
+			and reserve.native_confusion_started == should_consume)
 		check("Persim no cura estado persistente ajeno",
 			active.status == String(spec.status) and plain.status == String(spec.status))
 	elif String(spec.kind) == "hp":
@@ -142,6 +143,17 @@ func _native_case(spec: Dictionary, mode: String) -> Dictionary:
 	var hp: int = observed.current_hp
 	var status: String = String(observed.status_state.persistent_id)
 	var confused: bool = observed.status_state.has_volatile(&"confusion")
+	var native_view: Dictionary = battle.snapshot().get("native", {})
+	var native_battle: Dictionary = native_view.get("native", {})
+	var confusion_started := false
+	for event_line: Variant in native_battle.get("log", []):
+		var line := String(event_line).to_lower()
+		if line.begins_with("|-start|") and line.contains("|confusion"):
+			confusion_started = true
+	if String(spec.kind) == "confusion":
+		print("IA6_W02_NATIVE_CAUSE ", JSON.stringify({"scenario": spec.scenario,
+			"mode": mode, "native_confusion_started": confusion_started,
+			"projected_confusion": confused}))
 	var spent: bool = observed.held_item_consumed
 	check(mode + " campaña intacta antes del cierre",
 		JSON.stringify(_owner_data(player)) == frozen and _units(player, item) == 2)
@@ -193,7 +205,8 @@ func _native_case(spec: Dictionary, mode: String) -> Dictionary:
 	var evidence: String = name + ".json"
 	var hash: String = _write_evidence(name, raw)
 	return {"valid": true, "hp": hp, "max_hp": after_restore.stats.max_hp,
-		"status": status, "confused": confused, "consumed": spent, "units": _units(owner, item),
+		"status": status, "confused": confused, "native_confusion_started": confusion_started,
+		"consumed": spent, "units": _units(owner, item),
 		"bag": owner.inventory.quantity(item), "save": true, "evidence": evidence, "sha256": hash}
 
 
