@@ -4,7 +4,8 @@
   "campaign": "CAMP_001",
   "microblocks_completed": [
     1,
-    2
+    2,
+    3
   ],
   "format": "gen9calvounifiedv1",
   "level": 100,
@@ -211,5 +212,71 @@
       "field_confusion": false
     }
   ],
-  "note": "Iteraciones 01+02: ocho casos previos intactos; Persim sin efecto de campo registrado (rechazo comprobable), Chesto/Rawst en su estado específico, controles no aplicables. Sin atribuir PASS nativo antes de CI."
+  "note": "CAMP_001/03: 16 casos, seis matrices independientes, por ID positivo/negativo, tres modos nativos, dos localizaciones campo, SaveV2; la ausencia de Persim en perfil campo sigue como brecha, no éxito. Ningún PASS nuevo sin Godot.",
+  "coverage_matrix": {
+    "oran_berry": {
+      "effect": "hp_10",
+      "field_profile": "heal_10",
+      "positive": [
+        "oran_low_hp"
+      ],
+      "negative": [
+        "oran_full_hp"
+      ]
+    },
+    "pecha_berry": {
+      "effect": "poison_specific",
+      "field_profile": "poison_specific",
+      "positive": [
+        "pecha_poison"
+      ],
+      "negative": [
+        "pecha_burn",
+        "pecha_healthy"
+      ]
+    },
+    "cheri_berry": {
+      "effect": "paralysis_specific",
+      "field_profile": "paralysis_specific",
+      "positive": [
+        "cheri_paralysis"
+      ],
+      "negative": [
+        "cheri_poison",
+        "cheri_healthy"
+      ]
+    },
+    "persim_berry": {
+      "effect": "volatile_confusion_specific",
+      "field_profile": "NOT_REGISTERED",
+      "positive": [
+        "persim_confuse_ray"
+      ],
+      "negative": [
+        "persim_no_confusion"
+      ]
+    },
+    "chesto_berry": {
+      "effect": "sleep_specific",
+      "field_profile": "sleep_specific",
+      "positive": [
+        "chesto_spore"
+      ],
+      "negative": [
+        "chesto_burn",
+        "chesto_healthy"
+      ]
+    },
+    "rawst_berry": {
+      "effect": "burn_specific",
+      "field_profile": "burn_specific",
+      "positive": [
+        "rawst_burn"
+      ],
+      "negative": [
+        "rawst_poison",
+        "rawst_healthy"
+      ]
+    }
+  }
 }
