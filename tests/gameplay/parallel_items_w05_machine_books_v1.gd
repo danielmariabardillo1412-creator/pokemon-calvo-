@@ -259,7 +259,8 @@ func _probar_ensenanza(perfil: Dictionary, catalogos: DefinitionCatalog) -> void
 	archivo.close()
 	_check("03/19_heredadas_rechazadas", heredadas == 19)
 	# Una única implementación de reglas de enseñanza y gasto: FieldItemService.teach.
-	_check("03/servicio_unico", Servicio.PROFILE == "res://modules/inventory/item_connections_v1.json")
+	_check("03/servicio_unico", Servicio.PROFILE == "res://modules/inventory/item_connections_v1.json"
+		and not Libros.new().has_method("teach") and not Libros.new().has_method("use_item"))
 
 
 func _probar_persistencia(propietario: PlayerCollection, movimiento: StringName, catalogos: DefinitionCatalog) -> void:
