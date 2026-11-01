@@ -33,7 +33,7 @@ ALLOWED = {DESCRIPTOR, SCRIPT, SCRIPT+'.uid', 'tools/item_audit/automation_v28.p
                    'COMPETITIVE_COVERAGE_AUDIT.md', 'AUTOMATION_PROTOTYPE.md', 'AUTOMATION_RESULTS.json']}
 ALLOWED |= {'tests/gameplay/item_case_replay_v28.gd','tests/gameplay/item_case_replay_v28.gd.uid',
             'tools/item_audit/replay_v28.py','tests/tools/test_item_case_replay_v28.py'} | {
-    DOC+n for n in ['REPLAY_FEASIBILITY.md','REPLAY_RESULTS.json']}
+    DOC+n for n in ['REPLAY_FEASIBILITY.md','REPLAY_RESULTS.json','PENDING_30_AUDIT.md']}
 ENGINE_METADATA = {'modules/creatures/progression/battle_ev_rewards.gd.uid',
                    'tests/gameplay/competitive_damage_items_v28.gd.uid',
                    'tests/gameplay/competitive_protection_items_v28.gd.uid',
