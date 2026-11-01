@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "family": "held_combat_w01",
+  "format": "gen9calvounifiedv1",
+  "variants": ["active", "none", "reserve"],
+  "cases": [
+    {"id":"vest_status_gate","item_id":"assault_vest","op":"status_gate","actor_species":"mew","actor_level":100,"foe_species":"mew","foe_level":100,"own_moves":["tackle","reflect"],"foe_move":"amnesia","hp":"full","seeds":[23]},
+    {"id":"vest_special_defense","item_id":"assault_vest","op":"special_resistance","actor_species":"mew","actor_level":100,"foe_species":"mew","foe_level":100,"own_moves":["tackle"],"foe_move":"water_gun","hp":"full","seeds":[19,23]},
+    {"id":"vest_physical_control","item_id":"assault_vest","op":"physical_control","actor_species":"mew","actor_level":100,"foe_species":"mew","foe_level":100,"own_moves":["tackle"],"foe_move":"tackle","hp":"full","seeds":[19]},
+    {"id":"dice_bullet_seed","item_id":"loaded_dice","op":"multihit_variable","actor_species":"mew","actor_level":100,"foe_species":"mew","foe_level":100,"own_moves":["bullet_seed"],"foe_move":"amnesia","hp":"full","seeds":[1,7,19,23,29,43]},
+    {"id":"dice_fixed_two","item_id":"loaded_dice","op":"fixed_multihit_control","actor_species":"mew","actor_level":100,"foe_species":"mew","foe_level":100,"own_moves":["double_kick"],"foe_move":"amnesia","hp":"full","seeds":[23]},
+    {"id":"dice_single_hit","item_id":"loaded_dice","op":"single_hit_control","actor_species":"mew","actor_level":100,"foe_species":"mew","foe_level":100,"own_moves":["tackle"],"foe_move":"amnesia","hp":"full","seeds":[23]},
+    {"id":"sash_full_hp_ko","item_id":"focus_sash","op":"lethal_full","actor_species":"pikachu","actor_level":1,"foe_species":"mew","foe_level":100,"own_moves":["growl"],"foe_move":"double_edge","hp":"full","seeds":[1,19]},
+    {"id":"sash_partial_hp_ko","item_id":"focus_sash","op":"lethal_partial","actor_species":"pikachu","actor_level":1,"foe_species":"mew","foe_level":100,"own_moves":["growl"],"foe_move":"double_edge","hp":"minus_one","seeds":[19]},
+    {"id":"sash_nonlethal","item_id":"focus_sash","op":"nonlethal_control","actor_species":"mew","actor_level":100,"foe_species":"mew","foe_level":1,"own_moves":["growl"],"foe_move":"tackle","hp":"full","seeds":[23]}
+  ]
+}
