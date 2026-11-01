@@ -52,3 +52,5 @@ jobs:
           path: w02-*.log
 
 # IA6 diagnostic candidate 2: native confusion event comparison; unchanged game code
+
+# Re-run after Godot 4.7 explicit bool parse fix
