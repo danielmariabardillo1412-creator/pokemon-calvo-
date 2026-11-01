@@ -2,6 +2,10 @@
 
 > **Borrador de selección de contenido, no cambio en la lógica del juego.** Clasifica las 2.222 entradas canónicas. Los archivos originales, las partidas guardadas, los objetos ya implementados y las reglas de comercio permanecen intactos. Ninguna decisión de esta rama modifica `config/item_selection_v1.json` ni los generadores actuales.
 
+## ESTADO VIGENTE — novena auditoría (2026-11-01) · prevalece sobre todos los contadores anteriores
+
+**Decisión confirmada del usuario: DESCARTAR los 15 fósiles restaurables** porque el randomlocke ya obtiene esas especies por encuentros aleatorios; no habrá restauración de fósiles como nueva vía de Pokémon. Cambiado el CSV maestro por ID, sin borrar definiciones originales. **Totales vigentes: 706 PERMITIR + 275 CONDICIONAL + 1.241 DESCARTAR = 2.222.** De los 275 condicionales, **104 Mega están aparcados** y quedan **171 condicionales ordinarios**; fase de objetos normal **877 candidatos** (706+171). La [matriz vigente V3](./RANDOMLOCK_ITEMS_CONDITIONAL_MATRIX_V3.csv) contiene los 275, y la [novena auditoría](./RANDOMLOCK_ITEMS_AUDIT_PASS9_2026-11-01.md) registra los 15 IDs y la razón. **El histórico V2 de 290 y los recuentos 706/290/1226 de pasadas anteriores ya NO son vigentes.**
+
 ## Estado ACTUAL — cuarta pasada de equivalencias (2026-11-01)
 
 **Este bloque prevalece sobre los recuentos históricos de las pasadas 1, 2 y 3 que se conservan más abajo.**
