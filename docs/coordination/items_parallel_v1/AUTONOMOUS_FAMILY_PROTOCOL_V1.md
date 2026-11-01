@@ -1,3 +1,5 @@
+> **Estado histórico rectificado, 2026-11-01:** este documento se redactó como propuesta. **CAMPAÑA_001 sí está ACTIVADA** por la puerta `CAMPAIGN_GATE_001.md`. Los límites actuales, el cierre por familia y el control CI de IA6 se definen en [CI_AND_HANDOFF_PROTOCOL_V2.md](CI_AND_HANDOFF_PROTOCOL_V2.md). La sección final «NO ACTIVA» describe únicamente el período anterior y no invalida la activación posterior.
+
 # Protocolo de ejecución delegada por familia — IA1–IA5 (propuesta, NO activa aún)
 
 **Fecha:** 2026-11-01. **Motivo:** 744 tipos de diseño, cinco ramas y contextos limitados; el árbitro no debe leer íntegramente cada archivo en cada lote. Se requiere continuar con `sigue` de forma segura y auditable.

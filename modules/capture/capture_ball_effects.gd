@@ -3,7 +3,7 @@ extends RefCounted
 # Pure extensions to calvo_capture_v1, using the pinned Essentials ball handlers.
 # Does not replace the project's capture probability, status bonuses or RNG.
 const IDS: Array[StringName] = [&"nest_ball", &"fast_ball", &"dream_ball", &"heal_ball", &"premier_ball",
-	&"friend_ball", &"safari_ball", &"sport_ball", &"cherish_ball"]
+	&"friend_ball", &"safari_ball", &"sport_ball", &"cherish_ball", &"net_ball"]
 
 static func multiplier(id: StringName, target: CreatureInstance, species: CreatureSpecies) -> float:
 	match id:
@@ -12,6 +12,9 @@ static func multiplier(id: StringName, target: CreatureInstance, species: Creatu
 		# bonus/HP factor. Express that cap as a multiplier, preserving V1's API.
 		&"fast_ball": return minf(4.0, 255.0 / species.capture_rate) if species.base_speed >= 100 else 1.0
 		&"dream_ball": return 4.0 if target.status_state.persistent_id == &"sleep" else 1.0
+		# La especie procede del catálogo validado por CaptureSystem; un doble tipo
+		# Agua/Bicho aplica el factor una sola vez, sin RNG adicional ni estado mutable.
+		&"net_ball": return 3.5 if species.has_type(&"water") or species.has_type(&"bug") else 1.0
 		&"safari_ball", &"sport_ball": return 1.5
 	return 1.0
 

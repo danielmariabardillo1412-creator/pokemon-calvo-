@@ -1,0 +1,122 @@
+name: Parallel Items Campaign - Consolidated Gate
+on:
+  push:
+    branches:
+      - codex/calvo-items-20261101-ci-camp001-pack
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: parallel-campaign-package-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  package:
+    name: Godot 4.7 + Python five family gate
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: chickensoft-games/setup-godot@v2.4.1
+        with:
+          version: 4.7.0
+          use-dotnet: false
+          include-templates: false
+      - name: Prepare exact project assets and pinned native simulator
+        shell: bash
+        run: |
+          set -euo pipefail
+          godot --version | grep -E '^4[.]7([.-]|$)'
+          echo "POKEMON_CALVO_NODE=$(command -v node)" >> "$GITHUB_ENV"
+          python -B tools/distribution/restore_resources.py
+          python -B tools/distribution/restore_resources.py --check
+          mkdir -p data/reports
+          cp ci/fixtures/pokeapi_reports/forms_policy_report.json data/reports/forms_policy_report.json
+          cp ci/fixtures/pokeapi_reports/unsupported_mechanics.json data/reports/unsupported_mechanics.json
+          cp ci/fixtures/pokeapi_reports/import_summary.json data/reports/import_summary.json
+          godot --headless --path . --import 2>&1 | tee camp-pack-import.log
+          if grep -E 'SCRIPT ERROR|Parse Error' camp-pack-import.log; then exit 1; fi
+          python -B tools/battle_reference/run.py --install --limit 1 2>&1 | tee camp-pack-native.log
+      - name: W01 - combat equipment
+        id: w01
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tests/tools/test_parallel_items_w01_campaign_001.py --contracts 2>&1 | tee camp-pack-w01-contract.log
+          python -B tests/tools/test_parallel_items_w01_campaign_001.py --self-test 2>&1 | tee camp-pack-w01-self-test.log
+          timeout 400s godot --headless --path . --script res://tests/gameplay/parallel_items_w01_campaign_001.gd 2>&1 | tee camp-pack-w01-godot.log
+          python -B tests/tools/test_parallel_items_w01_campaign_001.py 2>&1 | tee camp-pack-w01-verify.log
+      - name: W02 - six berries
+        id: w02
+        if: always()
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tests/tools/test_parallel_items_w02_campaign_001.py --unittest 2>&1 | tee camp-pack-w02-python.log
+          timeout 400s godot --headless --path . --script res://tests/gameplay/parallel_items_w02_campaign_001.gd 2>&1 | tee camp-pack-w02-godot.log
+          python -B tests/tools/test_parallel_items_w02_campaign_001.py --result .godot/parallel_items/w02_campaign_001/godot.json 2>&1 | tee camp-pack-w02-verify.log
+      - name: W03 - net_ball and capture regression
+        id: w03
+        if: always()
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tests/tools/test_parallel_items_w03_net_campaign_001.py --phase implemented 2>&1 | tee camp-pack-w03-python.log
+          timeout 180s godot --headless --path . --script res://tests/gameplay/parallel_items_w03_capture_net_v1.gd -- --require-net 2>&1 | tee camp-pack-w03-net.log
+          timeout 180s godot --headless --path . --script res://tests/gameplay/item_capture_v11.gd 2>&1 | tee camp-pack-w03-v11.log
+          timeout 180s godot --headless --path . --script res://tests/gameplay/item_capture_v15.gd 2>&1 | tee camp-pack-w03-v15.log
+      - name: W04 - evolution stones
+        id: w04
+        if: always()
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tests/tools/test_parallel_items_w04_campaign_001.py 2>&1 | tee camp-pack-w04-python.log
+          timeout 400s python -B tests/tools/test_parallel_items_w04_campaign_001.py --godot godot 2>&1 | tee camp-pack-w04-godot.log
+      - name: W05 - books without activation of legacy machines
+        id: w05
+        if: always()
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B -m unittest discover -s tests/tools -p 'test_parallel_w05_machine_scope.py' -v 2>&1 | tee camp-pack-w05-python.log
+          python -B tools/item_audit/parallel_w05_machine_scope.py 2>&1 | tee camp-pack-w05-map.log
+          timeout 180s godot --headless --path . --script res://tests/gameplay/parallel_items_w05_machine_books_v1.gd 2>&1 | tee camp-pack-w05-godot.log
+      - name: Consolidated verdict - no false green
+        if: always()
+        env:
+          W01: ${{ steps.w01.outcome }}
+          W02: ${{ steps.w02.outcome }}
+          W03: ${{ steps.w03.outcome }}
+          W04: ${{ steps.w04.outcome }}
+          W05: ${{ steps.w05.outcome }}
+        run: |
+          failed=0
+          for family in W01 W02 W03 W04 W05; do
+            result="${!family}"
+            echo "$family=$result"
+            if [ "$result" != success ]; then failed=1; fi
+          done
+          exit "$failed"
+        shell: bash
+      - name: Preserve logs for seven days
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: camp-package-${{ github.run_id }}
+          retention-days: 7
+          if-no-files-found: ignore
+          path: camp-pack-*.log
