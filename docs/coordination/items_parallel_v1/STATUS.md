@@ -1,3 +1,15 @@
+# ACTUALIZACIÓN DE IA6 — puerta de ejecución y relevo v2 (2026-11-01)
+
+**Nuevo procedimiento oficial:** [CI_AND_HANDOFF_PROTOCOL_V2.md](CI_AND_HANDOFF_PROTOCOL_V2.md). Los cambios de producción y la certificación por CI son responsabilidad de IA6; las W publican microbloques y evidencias. Relevo de un chat con error: [PROMPT_RELEVO_W0X_V2.md](PROMPT_RELEVO_W0X_V2.md). No modifica las asignaciones vigentes ni permite exceder 3 microbloques por W.
+
+**Estado de ramas comprobado:** W01 02/03, W02 03/03 con `CAMP_001_FINAL.md` (preparación cerrada), W03 02/03 con `net_ball` nueva sin PASS de CI, W04 02/03 preservada con problema de conversación, W05 01/03 con adaptador de lectura nuevo sin PASS de CI. **10/15 microbloques preparados; no 10/15 funcionalmente verificados.**
+
+**CI antecedente #41349870689 = FAIL ENTORNO:** fallaron pruebas V11 tras `worker_handshake`, porque al staging le faltaba preparar simulador Node, y W05 se saltó por dependencia secuencial. No constituye un veredicto funcional negativo de Net ni de libros.
+**CI corregida:** staging `codex/calvo-items-20261101-ci-camp001-smoke` commit `c25f1616366a4c4432ee63fd49c001083d55647b` y [run #41350463036](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41350463036). Incluye simulador fijado, setup Node y tests W03/W05 independientes; **estado pendiente hasta consultar resultado real**.
+**STOP W03/W05:** seguir reteniendo siguiente microbloque hasta prueba de sus módulos y orden expresa IA6. W02 no recibe más `p`; W04 puede retomarse con mismo ID al abrir nueva conversación sin repetir 01–02; W01 tiene bloque 03 autorizado, pendiente de CI.
+
+---
+
 ## Control operativo IA6 — 2026-11-01, actualización de campaña
 
 **Estado comprobado en ramas:** W01 ITER_02/03 publicada (PREPARADO_PENDIENTE_CI); W02 03/03, `CAMP_001_FINAL.md` entregado (no PASS funcional); W03 02/03 con adaptación net_ball escrita y CI pendiente; W04 02/03, conversación con error referido por el usuario, ramas/commits preservados, no intervenir de momento; W05 01/03 recuperado, perfil de lectura de libros pendiente de CI. **Total 10 de 15 microbloques documentados.** La frase `PREPARADO_PENDIENTE_CI` no denota fallo del código; `BLOQUEADO_PENDIENTE_CI` es una puerta de control antes de continuar.
