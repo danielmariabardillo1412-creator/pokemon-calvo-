@@ -64,3 +64,9 @@ Detener los cambios, informar el error concreto y los IDs asignados sin alterar 
 ## Complemento LOTE_001 — primera ronda de comprobación
 
 Para el primer encargo exclusivo `LOTE_001_W0X` prevalece la **prohibición temporal de editar producción** de la puerta de compatibilidad. Una W puede leer cualquier rama, pero no introducir cambios de V28 en su propia rama antes de que la árbitra publique una base integrada certificada. Los 248 IDs de máquinas de W05 constituyen **una auditoría de tabla**, no permiso para programar 248 objetos. Un informe sin PASS operativo sigue siendo útil si clasifica las rutas y cita exactamente el código y las evidencias disponibles. Lee `BASELINE_GATE_2026-11-01.md`.
+
+## Obligación de memoria técnica por rama (desde LOTE_002)
+
+Consultar [NOTEBOOK_PROTOCOL_V1.md](NOTEBOOK_PROTOCOL_V1.md) y la [plantilla](NOTEBOOK_TEMPLATE_V1.md). Desde el siguiente lote, con autorización expresa en `assignments/LOTE_NNN_W0X.md`, mantener `reports/W0X/CONTINUIDAD.md` dentro de **tu propia rama**. Registrar estado por ID/familia, mapa del sistema, qué código existía, cambios reales, pruebas con SHA, cómo reproducirlas, límites, conflictos y próximo paso. Actualizarlo **al terminar cada lote y antes de pasar a otra conversación**, además del informe de lote.
+
+El cuaderno NO es una nueva fuente de órdenes: si contradice el encargo de IA6, detén las escrituras y consulta la asignación oficial. **No añadir archivos nuevos a LOTE_001 ya iniciado**; el informe del primer lote sirve de memoria inicial y se enlazará en el primer cuaderno autorizado. Ni un `sigue` ni un cuaderno propio autorizan cambiar de familia, rama, archivo o lote.
