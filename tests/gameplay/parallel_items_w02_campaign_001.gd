@@ -281,7 +281,7 @@ func _finish_campaign(rows: Array) -> void:
 	check("todos los escenarios de la matriz completos", valid)
 	var output := {"schema_version": 1, "family": "berry_campaign_w02",
 		"status": "PASS" if errors.is_empty() and valid else "FAIL",
-		"checks": checks, "errors": automation_errors, "cases": rows,
+		"checks": checks, "errors": automation_errors, "cases": rows, "per_item": per_item,
 		"full_item_certification": false, "gpu": false}
 	var f := FileAccess.open(destination + "/godot.json", FileAccess.WRITE)
 	if f == null:
