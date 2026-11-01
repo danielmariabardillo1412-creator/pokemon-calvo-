@@ -1,6 +1,24 @@
 # W03 / IA3 — CUADERNO DE CONTINUIDAD (captura)
 
-## Estado vigente — CAMPAÑA_001, ITER_02/03 publicada; nueva producción SIN CI
+## Estado vigente — CAMPAÑA_001_FINALIZADA, ITER_03/03 publicada
+
+- **Identidad:** IA3/W03; rama única `codex/calvo-items-20261101-w03`; ID único `net_ball`. **Estado:** `CAMPAÑA_001_FINALIZADA` por tres entregas, con ITER_03 `PREPARADO_PENDIENTE_CI`. Ningún cuarto bloque autorizado.
+- **Órdenes:** `CAMPAIGN_GATE_UPDATE_003.md` árbitra, blob `59c553bd7a931ebe4ac10bf4b2b3ce43815220dc`; campaña `CAMP_001_W03.md` blob `ecb7d9915c936bf5c43f4854584c0f5873f71101`; protocolo de CI/traspaso V2, blob `89087d3729b80290ebd50c226570dc529453547e`. Actualización 003 autoriza explícitamente ITER_03.
+- **Sincronización segura:** commit Git de dos padres `d29ab409245189621b1469423230aff4e1bdc40f` (primero W03 `428ca1f7...`, segundo árbitra `8e170550...`), no force. Conservó `LOTE_001.md` blob `2ef030e9...`, `LOTE_002.md` blob `f45a6cd...`, cuaderno previo e informes de ITER_01/02, sin modificar árbitra, main ni W ajenas.
+- **Evidencia real de iteración 02, NO de la 03:** IA6 integró Net Ball en `82f9eea26d10976e6eb2702adce911bd7e1ed173` y confirmó PASS en [Actions #41350909378](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41350909378), SHA probado `71332b256621e49e98676ef5f0af48c145d1e86f` (Godot 4.7; V11 32.406, V15 51.901, W03 34 en staging). El PASS no abarca el nuevo test de ITER_03.
+- **ITER_03 real:** creada `tests/gameplay/parallel_items_w03_net_campaign_001.gd` commit `3d17512ad442c282a78bf4a6cf8d84c7aa506fa9`, blob `d22bcdabf30c0d85833c20e9d273bedb37f8f3ab`; actualizada `tests/tools/test_parallel_items_w03_net_campaign_001.py` commit `609e0f2ac6cb386ebdc2e46e797d4a6699393c2d` blob `8efa079c6d5c2b6da38eb1d83ce624a681e74285`. Ambos exclusivos de W03.
+- **Cobertura añadida:** Magikarp/Agua ×3,5 (equipo), Caterpie/Bicho ×3,5 (PC), Pidgey/Normal ×1, Surskit Agua+Bicho ×3,5 no acumulativo, Mew/otros ×1 con fallo RNG elegido; entrenador, combate acabado, KO, ausencia de bola sin consumo ni RNG; SaveV2/PC/propietario; descriptores `ItemDefinition`, `SpanishGameText` y selector `CaptureBallPicker`. Los tres tipos base reutilizan `_probe_live_types()`/ `_probe_net_boundary()` del test W03 anterior.
+- **Verificación en este chat:** comprobación estática de los blobs GitHub de nueva suite + prueba Python, adaptador, V11, V15, APIs de captura/inventario/especie y selector: sin faltantes. **Python ejecutado: NO; Godot ejecutado sobre ITER_03: NO; CI de los nuevos commits: NO; visual/GPU: NO.** No declarar `FUNCIONAL_PASS_COMMIT` para ITER_03.
+- **Entregas de campaña:** [ITER_01](./CAMP_001_ITER_01.md), [ITER_02](./CAMP_001_ITER_02.md), [ITER_03](./CAMP_001_ITER_03.md), [matriz final](./CAMP_001_FINAL.md), [CSV de progreso](./CAMP_001_PROGRESO.csv). Cada archivo en rama W03. Consultar HEAD real para SHA final.
+- **Acción siguiente corresponde SOLO a IA6:** integrar en staging el nuevo test Godot y validador Python, ejecutar Godot 4.7 con Node 22/simulador nativo fijado y controles V11/V15, conservar SHA y reporte de exit codes. Si falla, diagnóstico y nueva orden limitada. **No continuar por `p`; no abrir CAMPAÑA_002 por cuenta propia.**
+- **No tocar:** `CaptureSystem`, `CaptureRuleset`, RNG global, contextos, partidas y migraciones, selección canónica, `luxury_ball`, `dusk_ball`, `beast_ball`, MT/MO legacy, main, V28, PR #118, árbitra u otras ramas. Limitación tipos dinámicos y UI visual queda abierta.
+- **Último commit:** no escribir su propio hash dentro del cuaderno; consultar HEAD e historial para recuperarlo.
+
+---
+
+## Registro histórico hasta ITER_02
+
+### Estado previo a ITER_03 — ITER_02/03 publicada, entonces pendiente de CI
 
 - **IA3/W03:** campaña activa `CAMP_001_W03.md` blob `ecb7d9915c936bf5c43f4854584c0f5873f71101`; puerta `CAMPAIGN_GATE_001.md` blob `3ef0b39f7eb74f3ebcb688f279c254daec981f8e`. **ID único: `net_ball`**.
 - **Rama exclusiva:** `codex/calvo-items-20261101-w03` incorpora checkpoint árbitra `1b52fdd0b7b89e468811a17ad83a917ec7107735` sin fuerza; LOTE_001 y LOTE_002 intactos. No sincronizar copiando sobre otros documentos. PASS base Actions `41341842320` en commit `ac34fabbe...`, **anterior a la implementación**.
