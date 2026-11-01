@@ -1,0 +1,136 @@
+{
+  "schema_version": 1,
+  "family": "held_campaign_w01",
+  "format": "gen9calvounifiedv1",
+  "variants": [
+    "active",
+    "none",
+    "reserve"
+  ],
+  "cases": [
+    {
+      "stage": "01",
+      "id": "sludge_poison_heal",
+      "item_id": "black_sludge",
+      "op": "poison_heal",
+      "actor_species": "gengar",
+      "level": 100,
+      "foe_species": "mew",
+      "own_move": "reflect",
+      "foe_move": "amnesia",
+      "hp": "half",
+      "seeds": [
+        19,
+        23
+      ]
+    },
+    {
+      "stage": "01",
+      "id": "sludge_poison_full",
+      "item_id": "black_sludge",
+      "op": "poison_full",
+      "actor_species": "gengar",
+      "level": 100,
+      "foe_species": "mew",
+      "own_move": "reflect",
+      "foe_move": "amnesia",
+      "hp": "full",
+      "seeds": [
+        23
+      ]
+    },
+    {
+      "stage": "01",
+      "id": "sludge_nonpoison_damage",
+      "item_id": "black_sludge",
+      "op": "nonpoison_damage",
+      "actor_species": "mew",
+      "level": 100,
+      "foe_species": "mew",
+      "own_move": "reflect",
+      "foe_move": "amnesia",
+      "hp": "half",
+      "seeds": [
+        19,
+        23
+      ]
+    },
+    {
+      "stage": "01",
+      "id": "bell_attack_heal",
+      "item_id": "shell_bell",
+      "op": "damage_heal",
+      "actor_species": "mew",
+      "level": 100,
+      "foe_species": "mew",
+      "own_move": "tackle",
+      "foe_move": "amnesia",
+      "hp": "half",
+      "seeds": [
+        19,
+        23
+      ]
+    },
+    {
+      "stage": "01",
+      "id": "bell_status_control",
+      "item_id": "shell_bell",
+      "op": "no_hit",
+      "actor_species": "mew",
+      "level": 100,
+      "foe_species": "mew",
+      "own_move": "reflect",
+      "foe_move": "amnesia",
+      "hp": "half",
+      "seeds": [
+        23
+      ]
+    },
+    {
+      "stage": "01",
+      "id": "bell_immune_control",
+      "item_id": "shell_bell",
+      "op": "immune_no_heal",
+      "actor_species": "mew",
+      "level": 100,
+      "foe_species": "gengar",
+      "own_move": "tackle",
+      "foe_move": "amnesia",
+      "hp": "half",
+      "seeds": [
+        23
+      ]
+    },
+    {
+      "stage": "01",
+      "id": "root_absorb_boost",
+      "item_id": "big_root",
+      "op": "drain_boost",
+      "actor_species": "mew",
+      "level": 100,
+      "foe_species": "mew",
+      "own_move": "absorb",
+      "foe_move": "amnesia",
+      "hp": "half",
+      "seeds": [
+        19,
+        23
+      ]
+    },
+    {
+      "stage": "01",
+      "id": "root_plain_attack_control",
+      "item_id": "big_root",
+      "op": "no_drain",
+      "actor_species": "mew",
+      "level": 100,
+      "foe_species": "mew",
+      "own_move": "tackle",
+      "foe_move": "amnesia",
+      "hp": "half",
+      "seeds": [
+        23
+      ]
+    }
+  ]
+}
