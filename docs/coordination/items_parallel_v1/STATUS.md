@@ -22,3 +22,11 @@ Consultar [AUTONOMOUS_FAMILY_PROTOCOL_V1.md](./AUTONOMOUS_FAMILY_PROTOCOL_V1.md)
 4. Mantener conflictos `beast_ball`, 19 máquinas históricas, tipo/hora/amistad, arte libros y migraciones como **no decididos**.
 
 **Regla permanente:** nunca declarar implementado, funcional, probado o integrado lo que solo está seleccionado o auditado.
+
+## Seguimiento real de Actions (1-XI-2026)
+
+- Primera CI combinada [#41339009393](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41339009393) terminó **FAIL**. W01 pasó Godot **1332 checks, 16 filas, 0 errores**, y el validador Python confirmó 16 ejecuciones × 3 variantes. W02 falló **ANTES de ejecutar sus escenarios** por error GDScript de tipado en `parallel_items_w02_berries_v1.gd:137`: `decode_snapshot()` devuelve `LoadResult`, no `Dictionary`. W03 y W04 quedaron omitidos debido a fallo temprano. W05 superó contratos Python iniciales, no runtime.
+- Corrección mínima aplicada **solo a copia integrada de la árbitra**, commit `45fe42deb64d0fe3bcea9ae561840a9636e89714`: declaración `LoadResult`. W02 rama propia intacta, deberá heredar corrección en próxima sincronización segura.
+- Puerta CI mejorada `d630f0aa36ddfd1319c3a844c7ac529105aba8e2`: ejecutará W01–W04 aun cuando uno falle y consolidará el veredicto rojo al final; incluye disparadores acotados por cambio de scripts.
+- Reejecución [#41341391216](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41341391216), HEAD `d630f0aa...`, **pendiente de resultado definitivo** en el momento de redactar este registro.
+- Las cinco ramas W01–W05 no tenían nuevos commits después de sus entregas LOTE_002 al comprobarlas nuevamente; **no hay campaña ni LOTE_003 autorizado** y no se debe interpretar un `p` como permiso de trabajar fuera de lote.
