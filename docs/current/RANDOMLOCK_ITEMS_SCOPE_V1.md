@@ -72,6 +72,22 @@
 - `config/randomlock_content_v1.json` — exclusiones reales de Pokémon/forma/movimiento; no implica sistema final de randomización.
 - `modules/inventory/item_connections_v1.json` — versión MT activa `scarlet-violet`.
 
+## Aclaración confirmada: equipables, movimientos Z y megapiedras (2026-11-01)
+
+**Equipables competitivos:** están incluidos en los 685 candidatos: `charcoal` (Carbón), `focus_sash` (Banda Aguante), `focus_band` (Cinta Aguante), `choice_band`, `choice_specs`, `life_orb`, `leftovers`, `muscle_band`, etc. **Carbón potencia ataques Fuego, no modifica directamente la estadística Ataque.** Son objetivos del catálogo, no garantía de cobertura integral individual. `wide_lens` y `bright_powder` mantienen su exclusión específica existente, sin prohibir por ello los demás objetos Focus.
+
+**Movimientos Z — resolución histórica, NO volver a decidirlos desde cero.** [Libro de reglas `RANDOMLOCK_RULES.md`](../../docs/project_book/RANDOMLOCK_RULES.md), sección «Decisión Z vigente y solicitudes futuras — 2026-10-27», y [`Z_MOVE_INTEGRATION.json`](./Z_MOVE_INTEGRATION.json):
+- El usuario/amigo había aprobado **movimientos Z de daño SÍ; movimientos Z de estado NO**; los movimientos de estado normales permanecen.
+- Registros vigentes: **50 movimientos Z de daño con integración en contextos probados**, a partir de 53 catalogados; excluidos 1 Z de estado (`extreme_evoboost`) y 2 exclusivos de formas/usuarios ausentes (`light_that_burns_the_sky`, `10_000_000_volt_thunderbolt`). No reinterpretar como «todos los Z cancelados» ni como pruebas universales de combate.
+- Los **35 cristales Z equipables** continúan `CONDICIONAL` **por conexión de objeto y activación**, no porque la política sobre ataques Z esté pendiente. Los **35 tokens `_z_bag`** son duplicados de representación, no equipables.
+- **No confirmada:** una limitación compartida por Mega/Z/Gigamax y la disponibilidad física de los cristales en mapa/randomizer. No cambiar reglas de combate basándose en el catálogo.
+
+**Megapiedras — decisión de diseño aprobada:** mantener megaevolución mediante **piedra equipada y transformación estratégica en combate**, no una evolución irreversible por nivel. Los **92 IDs** se mantienen en el CSV con estado técnico `CONDICIONAL`, ahora bajo el subgrupo `MEGA_APROBADA_IMPLEMENTACION_PENDIENTE`: **permitidos por concepto**, pero no generar ni afirmar que están operativos hasta confirmar especie elegible, megaforma real (incluidas incorporaciones posteriores a IX) y mecanismo probado de activación/reversión. La auditoría previa de objetos registraba **sistema Mega ausente**; datos nativos, iconos o transferencia de piedra no lo sustituyen.
+
+**Fragmentos tera (`*_tera_shard`, 18):** **sirven para cambiar permanentemente el teratipo asignado**, no para activar la teracristalización en combate. Por eso siguen `CONDICIONAL` a que exista una función de cambio de teratipo. En un randomlocke, **si no se ofrece esa modificación, proponer descartarlos**; eso no implica quitar la teracristalización ni el tipo tera del Pokémon.
+
+**Aritmética inalterada:** 685 `PERMITIR` + 277 `CONDICIONAL` + 1260 `DESCARTAR` = 2222. Se han precisado las razones de **92 megapiedras, 35 cristales Z y 18 fragmentos tera**, sin modificar la selección activa, los datos del juego, V28 ni `main`. Ninguna prueba Godot nueva se atribuye a este cambio documental.
+
 ## Revisión pendiente antes de aplicar el filtro
 
 - **Ningún descartado se borra.** No cambiar tiendas, drop tables, mapas, partidas guardadas ni políticas runtime con una tabla preliminar.
