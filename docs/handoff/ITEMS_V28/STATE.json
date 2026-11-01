@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "mission": "ITEMS_V28",
-  "status": "MINIMAL_REPLAY_FEASIBILITY_DEMONSTRATED",
+  "status": "TYPE_BOOSTER_SCOPED_REPLAY_CI_VERIFIED_NO_NEW_ITEM_CLOSURE",
   "base_branch": "main",
   "base_commit": "233b1a4f15ee4df7301e2c5acf8aed84a8f40626",
   "working_branch": "codex/items-v28-from-main",
@@ -14,7 +14,7 @@
     "code_identity_from_v3": true,
     "last_verified_commit": "69e15d74d04063dbe9613575b8618062e1efbed7"
   },
-  "next_action": "Review the bounded feasibility report. No new families/objects authorized; keep 27/30/4. Reuse existing cases first, missing coverage requires separate review. PID/GPU independent.",
+  "next_action": "V28 replay of all 9 selected type boosters verified in 46 scenarios/1395 checks per Ubuntu+Windows at ba290929; 20/20 workflows. Preserve 27/30/4. Next study colbur_berry, occa_berry, shuca_berry using original V2 positive/negative cases and physical consumption. No new certification without additional contracts. PID/GPU pending.",
   "main_is_official_v27": true,
   "all_2222_items_functional": false,
   "gpu_manual_review": "PENDING",
@@ -560,5 +560,53 @@
     "report": "docs/handoff/ITEMS_V28/REPLAY_FEASIBILITY.md",
     "result": "docs/handoff/ITEMS_V28/REPLAY_RESULTS.json",
     "new_objects_certified": 0
+  },
+  "type_booster_replay": {
+    "status": "SCOPED_REPLAY_CI_VERIFIED_NOT_FULL_ITEM_CERTIFICATION",
+    "previous_pilot": {
+      "sha": "5ff00014bf791ba63fbc2793f7c9a1b0819e571c",
+      "run_id": 41258538761,
+      "cases_per_platform": 26,
+      "checks_per_platform": 795
+    },
+    "latest_pilot": {
+      "sha": "ba2909297bd5d0049b97517b59e6cc9ee2ca6bd7",
+      "run_id": 41262171581,
+      "run_url": "https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41262171581",
+      "workflows_success": 20,
+      "workflows_total": 20,
+      "replay_cases_per_platform": 46,
+      "replay_checks_per_platform": 1395,
+      "prior_automation_checks_per_platform": 3335,
+      "type_target_replayed": 9
+    },
+    "target_type_ids": [
+      "black_glasses",
+      "silk_scarf",
+      "soft_sand",
+      "spell_tag",
+      "metal_coat",
+      "earth_plate",
+      "splash_plate",
+      "pixie_plate",
+      "insect_plate"
+    ],
+    "new_item_ids_integrally_certified": 0,
+    "counts_unchanged": [
+      27,
+      30,
+      4
+    ],
+    "limits": [
+      "No complete wrong-owner/negative ability/switch/forme interactions",
+      "No Metal Coat evolution or Arceus forme certification",
+      "No GPU/manual review; PID lifecycle Linux still open"
+    ],
+    "report": "docs/handoff/ITEMS_V28/PENDING_30_AUDIT.md",
+    "next_group": [
+      "colbur_berry",
+      "occa_berry",
+      "shuca_berry"
+    ]
   }
 }
