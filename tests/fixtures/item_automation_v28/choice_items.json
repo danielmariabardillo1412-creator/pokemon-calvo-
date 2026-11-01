@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "family": "choice_held_items",
+  "format": "gen9calvounifiedv1",
+  "seed": [23, 19, 29, 43],
+  "level": 100,
+  "actor_species": "mew",
+  "damage_target": "snorlax",
+  "speed_target": "gengar",
+  "physical_move": "tackle",
+  "special_move": "confusion",
+  "speed_move": "water_gun",
+  "consumption": "retained",
+  "variants": ["active", "none", "reserve"],
+  "scenarios": ["physical_damage", "special_damage", "speed_order", "lock_restore_switch", "map_bag_owner_save"],
+  "items": [
+    {"id": "choice_band", "api_id": 197, "physical_damage": "greater", "special_damage": "equal", "speed_order": "unchanged"},
+    {"id": "choice_specs", "api_id": 274, "physical_damage": "equal", "special_damage": "greater", "speed_order": "unchanged"},
+    {"id": "choice_scarf", "api_id": 264, "physical_damage": "equal", "special_damage": "equal", "speed_order": "reversed"}
+  ]
+}

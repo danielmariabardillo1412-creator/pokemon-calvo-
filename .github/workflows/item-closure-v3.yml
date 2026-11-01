@@ -1,0 +1,316 @@
+name: Item Closure V3 (EV, inventory and regressions)
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  ITEM_AUTOMATION_FUNCTIONAL_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+  ITEM_AUTOMATION_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
+concurrency:
+  group: item-closure-v3-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    name: Item families / Godot 4.7 / pinned Node
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: chickensoft-games/setup-godot@v2.4.1
+        with:
+          version: 4.7.0
+          use-dotnet: false
+          include-templates: false
+      - name: Verify exact engine
+        shell: bash
+        run: |
+          set -euo pipefail
+          godot --version
+          godot --version | grep -E '^4[.]7([.-]|$)'
+          node --version
+      - name: Configure pinned Node executable for Godot IPC
+        shell: bash
+        run: echo "POKEMON_CALVO_NODE=$(command -v node)" >> "$GITHUB_ENV"
+      - name: Restore existing visual resources with locked hashes
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tools/distribution/restore_resources.py
+          python -B tools/distribution/restore_resources.py --check
+      - name: Stage canonical PokeAPI test reports (unchanged V27 CI fixtures)
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p data/reports
+          cp ci/fixtures/pokeapi_reports/forms_policy_report.json data/reports/forms_policy_report.json
+          cp ci/fixtures/pokeapi_reports/unsupported_mechanics.json data/reports/unsupported_mechanics.json
+          cp ci/fixtures/pokeapi_reports/import_summary.json data/reports/import_summary.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          for p in ('forms_policy_report.json','unsupported_mechanics.json','import_summary.json'):
+              f=Path('data/reports')/p
+              assert isinstance(json.loads(f.read_text()),dict)
+              print('ITEM_CLOSURE_V3_CI_REPORT',f)
+          PY
+      - name: Fresh inventory and 2222-ID audit
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tools/item_audit/item_closure_v3.py | tee item-inventory-v3.log
+          python -B tests/tools/test_item_closure_v3.py | tee item-audit-v3.log
+          grep -E 'ITEM_CLOSURE_V3_AUDIT PASS checks=[1-9][0-9]* ids=2222' item-audit-v3.log
+      - name: Import Godot
+        shell: bash
+        run: |
+          set -euo pipefail
+          godot --headless --path . --import 2>&1 | tee item-import-v3.log
+          if grep -E 'SCRIPT ERROR|Parse Error' item-import-v3.log; then exit 1; fi
+      - name: Install pinned native simulation and run one reference check
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tools/battle_reference/run.py --install --limit 1 | tee item-reference-v3.log
+          grep -E 'BATTLE_REFERENCE PASS' item-reference-v3.log
+      - name: C - Re-exercise pinned native held-item and berry behaviors by family
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 120s godot --headless --path . --script res://tests/gameplay/item_effect_templates_v3.gd 2>&1 | tee item-c-templates-v3.log
+          grep -E 'ITEM_EFFECT_TEMPLATES_V3 [1-9][0-9]*' item-c-templates-v3.log
+          timeout 420s node tools/item_audit/held_effect_sweep_v3.cjs 2>&1 | tee item-c-native-v3.log
+          grep -E 'ITEM_EFFECT_NATIVE_V3 [1-9][0-9]* PASS 0 FAIL' item-c-native-v3.log
+          timeout 360s godot --headless --path . --script res://tests/gameplay/item_effect_projection_v3.gd 2>&1 | tee item-c-projection-v3.log
+          if grep -E 'SCRIPT ERROR|Parse Error|timeout' item-c-projection-v3.log; then exit 1; fi
+          grep -E 'ITEM_EFFECT_GODOT_V3 PASS checks=[1-9][0-9]* cases=[1-9][0-9]* pending=0' item-c-projection-v3.log
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          base = Path('.godot/item_verification_v3')
+          native = json.loads((base / 'native.json').read_text())
+          godot = json.loads((base / 'godot.json').read_text())
+          nr = native['results']
+          gr = godot['results']
+          assert len(nr) == len(gr) >= 120, (len(nr), len(gr))
+          assert len({r['id'] for r in nr}) == 65
+          assert all(r['status'] == 'NATIVE_SCENARIO_PASS' for r in nr)
+          assert all(r['status'] == 'PASS' for r in native['branchChecks'])
+          assert godot['pending_protocol_cases'] == 0 and not godot['errors']
+          assert all(r['status'].endswith('_PASS') for r in gr)
+          assert len({r['id'] for r in gr if r.get('live_ipc')}) == 65
+          assert godot['checks'] >= 2000
+          berry_ids = {r['id'] for r in gr if r['id'].endswith('_berry')}
+          assert len(berry_ids) == 12, berry_ids
+          print('ITEM_CLOSURE_V3_C PASS native_cases=', len(nr), 'ipc_ids=65 berry_ids=12 checks=', godot['checks'])
+          PY
+      - name: EV awards, six Power items, Macho Brace, native settlement and real bag
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 300s godot --headless --path . --script res://tests/gameplay/item_closure_v3_test_runner.gd 2>&1 | tee item-ev-v3.log
+          if grep -E 'SCRIPT ERROR|Parse Error|timeout' item-ev-v3.log; then exit 1; fi
+          grep -E 'ITEM_CLOSURE_V3 PASS checks=([5-9][0-9]|[1-9][0-9]{2,}) errors=0' item-ev-v3.log
+      - name: Competitive protection items through native effects and real field bag
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 300s godot --headless --path . --script res://tests/gameplay/competitive_protection_items_v28.gd 2>&1 | tee item-protection-v28.log
+          if grep -E 'SCRIPT ERROR|Parse Error|timeout' item-protection-v28.log; then exit 1; fi
+          grep -E 'COMPETITIVE_PROTECTION_V28 PASS checks=[1-9][0-9]* cases=3 errors=0' item-protection-v28.log
+      - name: Competitive official damage items with and without equipped item
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 300s godot --headless --path . --script res://tests/gameplay/competitive_damage_items_v28.gd 2>&1 | tee item-damage-v28.log
+          if grep -E 'SCRIPT ERROR|Parse Error|timeout' item-damage-v28.log; then exit 1; fi
+          grep -E 'COMPETITIVE_DAMAGE_V28 PASS checks=[1-9][0-9]* ids=9 errors=0' item-damage-v28.log
+      - name: Declarative item families (Choice, recovery, recoil and contact)
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tests/tools/test_item_automation_v28.py 2>&1 | tee item-automation-contract-v28.log
+          python -B tests/tools/test_item_automation_passive_v28.py 2>&1 | tee item-automation-passive-contract-v28.log
+          python -B tests/tools/test_item_automation_entry_v28.py 2>&1 | tee item-automation-entry-contract-v28.log
+          timeout 900s python -B tools/item_audit/automation_v28.py 2>&1 | tee item-automation-v28.log
+          grep -E 'ITEM_AUTOMATION_V28 SCOPED_VERIFIED checks=[1-9][0-9]*' item-automation-v28.log
+      - name: Existing scenario replay feasibility (not item certification)
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tests/tools/test_item_case_replay_v28.py
+          timeout 420s python -B tools/item_audit/replay_v28.py --godot godot --node "$(command -v node)" 2>&1 | tee item-replay-feasibility-v28.log
+          grep -E 'ITEM_CASE_REPLAY_V28 VIABLE cases=[1-9][0-9]* checks=[1-9][0-9]*' item-replay-feasibility-v28.log
+      - name: Evidence-bound matrix by ID and context
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tools/item_audit/item_closure_v3.py --with-evidence | tee item-evidence-v3.log
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          j=json.loads(Path('.godot/item_closure_v3/inventory.json').read_text())
+          n=j['counts']
+          assert j['status']=='SCOPED_EFFECT_EVIDENCE_VALIDATED'
+          assert n['v3_native_item_ids_live_ipc']==65 and n['v3_scenarios_executed']==908
+          assert n['v3_ev_item_ids_domain']==7 and n['v3_ev_native_and_bag_ids']==1
+          assert n['v3_mirror_checks']>=20000 and n['v3_ev_checks']>=94
+          assert n['v3_effect_item_ids_with_proof']>=65
+          assert not j['all_item_effects_certified']
+          for id in ('amulet_coin','exp_share','luck_incense'):
+              row=next(r for r in j['rows'] if r['id']==id)
+              assert not row['scenario_executed_at_v3']
+          print('ITEM_CLOSURE_V3_EVIDENCE PASS ids=',n['v3_effect_item_ids_with_proof'])
+          PY
+      - name: Existing Lucky Egg and Everstone regression (unaltered)
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 300s godot --headless --path . --script res://tests/gameplay/progression_items_v18.gd 2>&1 | tee item-progression-v18.log
+          if grep -E 'SCRIPT ERROR|Parse Error|timeout' item-progression-v18.log; then exit 1; fi
+          grep -E 'PROGRESSION_ITEMS_V18 PASS checks=[1-9][0-9]*' item-progression-v18.log
+      - name: Preserve CI logs and generated per-context matrix
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: item-closure-v3-${{ github.run_id }}
+          path: |
+            item-*.log
+            .godot/item_closure_v3/*.json
+            .godot/competitive_protection_v28/*.json
+            .godot/competitive_damage_v28/*.json
+            .godot/item_automation_v28/
+            .godot/publication_v27/runs/
+          if-no-files-found: ignore
+          include-hidden-files: true
+          retention-days: 14
+
+  portable_windows:
+    name: Portable V27 gate — original checks on Windows
+    runs-on: windows-latest
+    timeout-minutes: 55
+    steps:
+      - name: Preserve exact Git blob bytes on Windows (no autocrlf)
+        shell: pwsh
+        run: |
+          git config --global core.autocrlf false
+          git config --global core.safecrlf false
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: chickensoft-games/setup-godot@v2.4.1
+        with:
+          version: 4.7.0
+          use-dotnet: false
+          include-templates: false
+      - name: Prepare original resources, reports and pinned simulation (no data edits)
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $godot = Join-Path $env:USERPROFILE 'godot/Godot_v4.7-stable_win64_console.exe'
+          if (-not (Test-Path $godot)) {
+            Write-Output 'Godot Action cache omitted the console executable; restore official version-locked release zip'
+            $zip = Join-Path $env:RUNNER_TEMP 'Godot_v4.7-stable_win64.exe.zip'
+            Invoke-WebRequest -Uri 'https://github.com/godotengine/godot-builds/releases/download/4.7-stable/Godot_v4.7-stable_win64.exe.zip' -OutFile $zip
+            Expand-Archive -LiteralPath $zip -DestinationPath (Join-Path $env:USERPROFILE 'godot') -Force
+          }
+          if (-not (Test-Path $godot)) { throw ('Pinned Godot console still missing: ' + $godot) }
+          & $godot --headless --version
+          if ($LASTEXITCODE -ne 0) { exit 1 }
+          & python -B tools/distribution/restore_resources.py
+          if ($LASTEXITCODE -ne 0) { exit 1 }
+          & python -B tools/distribution/restore_resources.py --check
+          if ($LASTEXITCODE -ne 0) { exit 1 }
+          New-Item -ItemType Directory -Force data/reports | Out-Null
+          foreach ($name in @('forms_policy_report.json','unsupported_mechanics.json','import_summary.json')) {
+            Copy-Item ("ci/fixtures/pokeapi_reports/" + $name) ("data/reports/" + $name)
+          }
+          & $godot --headless --path . --import
+          if ($LASTEXITCODE -ne 0) { exit 1 }
+          $node = (Get-Command node).Source
+          $npm = (Get-Command npm.cmd).Source
+          & python -B tools/battle_reference/run.py --install --limit 1 --godot $godot --node $node --npm $npm
+          if ($LASTEXITCODE -ne 0) { exit 1 }
+      - name: Restore historical item-connection test fixtures without altering tracked data
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $godot = Join-Path $env:USERPROFILE 'godot/Godot_v4.7-stable_win64_console.exe'
+          & python -B tools/item_audit/stage_item_connections_ci_v3.py
+          if ($LASTEXITCODE -ne 0) { exit 1 }
+          & $godot --headless --path . --script res://tests/gameplay/item_inventory_export.gd
+          if ($LASTEXITCODE -ne 0) { exit 1 }
+          & python -B tools/item_audit/stage_item_connections_ci_v3.py --check
+          if ($LASTEXITCODE -ne 0) { exit 1 }
+      - name: Execute original portable V27 gate without waived assertions
+        shell: pwsh
+        run: |
+          $godot = Join-Path $env:USERPROFILE 'godot/Godot_v4.7-stable_win64_console.exe'
+          if (-not (Test-Path $godot)) { throw 'Pinned Godot console not found' }
+          $node = (Get-Command node).Source
+          Write-Output ("Godot=" + $godot)
+          Write-Output ("Node=" + $node)
+          & python -B tools/distribution/verify_update.py --godot $godot --node $node 2>&1 | Tee-Object -FilePath item-portable-windows.log
+          $exitCode = $LASTEXITCODE
+          if ($exitCode -ne 0) {
+            Write-Output 'WINDOWS PORTABLE GATE FAILED; retaining unmodified raw diagnostics'
+            Get-ChildItem '.godot/publication_v27/runs' -Recurse -Filter results.json | ForEach-Object {
+              Get-Content $_.FullName | Select-Object -Last 100
+            }
+            exit 1
+          }
+          if (-not (Select-String -Path item-portable-windows.log -Pattern 'PUBLICATION_V27 PASS' -Quiet)) {
+            Write-Error 'Portable gate did not emit PASS despite exit code zero'
+            exit 1
+          }
+      - name: Declarative item families on Windows after unchanged portable gate
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $godot = Join-Path $env:USERPROFILE 'godot/Godot_v4.7-stable_win64_console.exe'
+          $node = (Get-Command node).Source
+          & python -B tests/tools/test_item_automation_v28.py
+          if ($LASTEXITCODE -ne 0) { exit 1 }
+          & python -B tests/tools/test_item_automation_passive_v28.py
+          if ($LASTEXITCODE -ne 0) { exit 1 }
+          & python -B tests/tools/test_item_automation_entry_v28.py
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          & python -B tools/item_audit/automation_v28.py --godot $godot --node $node 2>&1 | Tee-Object -FilePath item-automation-windows-v28.log
+          if ($LASTEXITCODE -ne 0) { exit 1 }
+          if (-not (Select-String -Path item-automation-windows-v28.log -Pattern 'ITEM_AUTOMATION_V28 SCOPED_VERIFIED checks=[1-9][0-9]*' -Quiet)) { exit 1 }
+          & python -B tests/tools/test_item_case_replay_v28.py
+          if ($LASTEXITCODE -ne 0) { exit 1 }
+          & python -B tools/item_audit/replay_v28.py --godot $godot --node $node 2>&1 | Tee-Object -FilePath item-replay-feasibility-windows-v28.log
+          if ($LASTEXITCODE -ne 0) { exit 1 }
+      - name: Preserve portable gate evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: item-closure-v3-windows-gate
+          path: |
+            item-portable-windows.log
+            item-automation-windows-v28.log
+            .godot/item_automation_v28/
+            .godot/publication_v27/runs/
+          include-hidden-files: true
+          if-no-files-found: ignore
+          retention-days: 14
