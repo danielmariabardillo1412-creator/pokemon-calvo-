@@ -168,3 +168,7 @@ Si más adelante se confirma el sistema, la variante para un Pokémon con varias
 ## Sexta revisión registrada — lotes 25 + 46 (2026-11-01)
 
 La continuación posterior a la quinta auditoría examinó **71 IDs distintos** (25 tesoros y 46 de formas). **No ha alterado las 2.222 filas ni los estados oficiales**: 706/290/1226. De esos 71, **33 ya estaban PERMITIR y 38 CONDICIONAL**. No restar automáticamente objetos de los 290; las recomendaciones de conservación/descartes siguen sujetas a revisión. Las diferencias, dependencias y propuestas están **guardadas por ID** en el [registro de revisión V1](./RANDOMLOCK_ITEMS_REVIEW_LOG_V1.csv) y explicadas en la [sexta auditoría](./RANDOMLOCK_ITEMS_AUDIT_PASS6_2026-11-01.md). **Próxima acción: resolver los condicionales de fase ordinaria sin volver a repasar los 71 salvo que se detecte contradicción.**
+
+## Séptima revisión — matriz de los 290 condicionales (2026-11-01)
+
+Se ha generado [RANDOMLOCK_ITEMS_CONDITIONAL_MATRIX_V2.csv](./RANDOMLOCK_ITEMS_CONDITIONAL_MATRIX_V2.csv), con **290 filas por ID** y función, dependencia, riesgo y propuesta de decisión. Los **104 elementos Mega permanecen apartados**; los **186 condicionales normales** se han organizado por requisito, de los cuales **38 ya tenían una revisión individual V6 que prevalece sobre agrupaciones posteriores**. [Auditoría 7](./RANDOMLOCK_ITEMS_AUDIT_PASS7_2026-11-01.md). **No se ha modificado el maestro 706/290/1226 ni el estado activo del juego.** Las propuestas son reversibles y pendientes de contraste/decisión.
