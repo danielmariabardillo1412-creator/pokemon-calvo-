@@ -147,6 +147,13 @@ jobs:
           python -B tests/tools/test_item_automation_entry_v28.py 2>&1 | tee item-automation-entry-contract-v28.log
           timeout 900s python -B tools/item_audit/automation_v28.py 2>&1 | tee item-automation-v28.log
           grep -E 'ITEM_AUTOMATION_V28 SCOPED_VERIFIED checks=[1-9][0-9]*' item-automation-v28.log
+      - name: Existing scenario replay feasibility (not item certification)
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tests/tools/test_item_case_replay_v28.py
+          timeout 420s python -B tools/item_audit/replay_v28.py --godot godot --node "$(command -v node)" 2>&1 | tee item-replay-feasibility-v28.log
+          grep -E 'ITEM_CASE_REPLAY_V28 VIABLE cases=[1-9][0-9]* checks=[1-9][0-9]*' item-replay-feasibility-v28.log
       - name: Evidence-bound matrix by ID and context
         shell: bash
         run: |
@@ -290,6 +297,10 @@ jobs:
           & python -B tools/item_audit/automation_v28.py --godot $godot --node $node 2>&1 | Tee-Object -FilePath item-automation-windows-v28.log
           if ($LASTEXITCODE -ne 0) { exit 1 }
           if (-not (Select-String -Path item-automation-windows-v28.log -Pattern 'ITEM_AUTOMATION_V28 SCOPED_VERIFIED checks=[1-9][0-9]*' -Quiet)) { exit 1 }
+          & python -B tests/tools/test_item_case_replay_v28.py
+          if ($LASTEXITCODE -ne 0) { exit 1 }
+          & python -B tools/item_audit/replay_v28.py --godot $godot --node $node 2>&1 | Tee-Object -FilePath item-replay-feasibility-windows-v28.log
+          if ($LASTEXITCODE -ne 0) { exit 1 }
       - name: Preserve portable gate evidence
         if: always()
         uses: actions/upload-artifact@v4

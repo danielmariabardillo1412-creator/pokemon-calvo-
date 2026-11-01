@@ -1,0 +1,278 @@
+{
+  "status": "LOCAL_FEASIBLE_PENDING_CI",
+  "counts_unchanged": [
+    27,
+    30,
+    4
+  ],
+  "local_result": {
+    "verdict": "VIABLE_SCOPED_REPLAY_NOT_FULL_CERTIFICATION",
+    "functional_sha": "a3eed8c9660db5adb01c75a3a38b01c74cef67ac",
+    "ids": [
+      "black_glasses",
+      "colbur_berry",
+      "toxic_orb",
+      "sticky_barb"
+    ],
+    "cases": 14,
+    "checks": 435,
+    "full_item_certification": false,
+    "counts_unchanged": [
+      27,
+      30,
+      4
+    ],
+    "timings": [
+      {
+        "stage": "templates_v2",
+        "seconds": 1.19,
+        "exit_code": 0,
+        "pid_diagnostics": 0
+      },
+      {
+        "stage": "native_v2",
+        "seconds": 3.52,
+        "exit_code": 0,
+        "pid_diagnostics": 0
+      },
+      {
+        "stage": "templates_v3",
+        "seconds": 1.14,
+        "exit_code": 0,
+        "pid_diagnostics": 0
+      },
+      {
+        "stage": "native_v3",
+        "seconds": 9.38,
+        "exit_code": 0,
+        "pid_diagnostics": 0
+      },
+      {
+        "stage": "replay",
+        "seconds": 76.62,
+        "exit_code": 0,
+        "pid_diagnostics": 0
+      }
+    ],
+    "source_sha256": {
+      "tests/gameplay/item_effect_templates_v2.gd": "7fb99ce64fbd64e798a575d7a8f9ba429098363d4f3114b910dfc41a6e58a53e",
+      "tools/item_audit/held_effect_sweep_v2.cjs": "4100b9e6506129eb8218c90d9678889ace696e527520ec06fedf193fd2c14415",
+      ".godot/item_verification_v2/cases.json": "47e5f360c5a79c3183d0b6335740c65fbeca4a372062ae8a49ef9cff62224c84",
+      ".godot/item_verification_v2/native.json": "4b8e077b2445502064ec19480341eb6c36634063ece6777f66cb3c3213d9a3ec",
+      ".godot/item_verification_v2/prototypes.json": "23a25e770d6fa768736790540b6bd102bd6f29bcb77073c5a7bed57fecf0d67a",
+      "tests/gameplay/item_effect_templates_v3.gd": "fc0292ca2a01065d264caeade21d9b9c2d1092845affbb2b70a2972dfb74bdc7",
+      "tools/item_audit/held_effect_sweep_v3.cjs": "cfc272dee0f638941ca4d7f3737f0006138fdf88c6a39cd95d2abe12c1301440",
+      ".godot/item_verification_v3/cases.json": "e2bc83a2097a671d66999b98270ceb5d6906dcdc52415a1329ca07064cf8935f",
+      ".godot/item_verification_v3/native.json": "027438c4b0bb60db413a0f7356f22fd5bf6b6afb5053f8e3a8c1e8054ec61a4d",
+      ".godot/item_verification_v3/prototypes.json": "7d9c660afe6607cfd7cae87760be996ef08d5748716bf8e2c5d8f68197ebf461"
+    },
+    "per_item": {
+      "black_glasses": [
+        "black_glasses/type_boost/1",
+        "black_glasses/type_boost/19",
+        "black_glasses/type_boost_nonmatching/1",
+        "black_glasses/type_boost_nonmatching/19"
+      ],
+      "colbur_berry": [
+        "colbur_berry/resist_berry/1",
+        "colbur_berry/resist_berry/19",
+        "colbur_berry/resist_nonmatching/1",
+        "colbur_berry/resist_nonmatching/19"
+      ],
+      "toxic_orb": [
+        "toxic_orb/end_turn_status/1",
+        "toxic_orb/end_turn_status/19"
+      ],
+      "sticky_barb": [
+        "sticky_barb/residual/1",
+        "sticky_barb/residual/19",
+        "sticky_barb/contact_transfer/1",
+        "sticky_barb/contact_transfer/19"
+      ]
+    },
+    "code_sha256": {
+      "tests/gameplay/item_case_replay_v28.gd": "de8abef3355f272a8346f8f2e93017b6205698f6ca605b6def22b80c42873e7f",
+      "tests/gameplay/item_case_replay_v28.gd.uid": "449d084193062c884961643cd3b39e4032c119c72e259d120e528c97a8d6b942",
+      "tools/item_audit/replay_v28.py": "64812bbb8c1a0eb5532757933b57b2a9d975d68165c2ffd5dac7a6b4e7b4e55b",
+      "tests/tools/test_item_case_replay_v28.py": "4ba63b21f9bc57167bb0ff77b7e3747882451fbb58fa5df9d222e665ccb8200a"
+    },
+    "limitations": [
+      "Native assertion closures are executed by original generators, not serialized in cases.json",
+      "Replay exact hashes transfer those bounded native proofs; not an independent complete Pokemon oracle",
+      "FLED via existing Poke Doll checks settlement, not victory/defeat/capture",
+      "No new absent/wrong-owner/immunity/transfer-to-owned-recipient scenarios",
+      "Map/bag routes do not certify all effect triggers",
+      "PID lifecycle and GPU remain independent"
+    ]
+  },
+  "historical_costs": [
+    {
+      "batch": "Eleccion",
+      "from": "47f42aef1a518eefb744ad310f89b6e2d3ce7108",
+      "to": "0c1f48eb4bd40ca15d794847d89c16ea6614ceb9",
+      "items": 3,
+      "files": 6,
+      "code_added": 603,
+      "code_deleted": 0,
+      "added_per_item": 201.0,
+      "paths": [
+        [
+          "25",
+          "0",
+          ".github/workflows/item-closure-v3.yml"
+        ],
+        [
+          "21",
+          "0",
+          "tests/fixtures/item_automation_v28/choice_items.json"
+        ],
+        [
+          "286",
+          "0",
+          "tests/gameplay/item_automation_v28.gd"
+        ],
+        [
+          "1",
+          "0",
+          "tests/gameplay/item_automation_v28.gd.uid"
+        ],
+        [
+          "86",
+          "0",
+          "tests/tools/test_item_automation_v28.py"
+        ],
+        [
+          "206",
+          "0",
+          "tools/item_audit/automation_v28.py"
+        ]
+      ]
+    },
+    {
+      "batch": "Pasivos",
+      "from": "648a2c86541b6a381424413e2b2e28231d127353",
+      "to": "7f973f5bfb63cfae12f1dbaa956512e5291df0aa",
+      "items": 3,
+      "files": 8,
+      "code_added": 455,
+      "code_deleted": 41,
+      "added_per_item": 151.67,
+      "paths": [
+        [
+          "5",
+          "2",
+          ".github/workflows/item-closure-v3.yml"
+        ],
+        [
+          "44",
+          "0",
+          "tests/fixtures/item_automation_v28/passive_items.json"
+        ],
+        [
+          "43",
+          "0",
+          "tests/gameplay/item_automation_effects_v28.gd"
+        ],
+        [
+          "1",
+          "0",
+          "tests/gameplay/item_automation_effects_v28.gd.uid"
+        ],
+        [
+          "121",
+          "30",
+          "tests/gameplay/item_automation_v28.gd"
+        ],
+        [
+          "102",
+          "0",
+          "tests/tools/test_item_automation_passive_v28.py"
+        ],
+        [
+          "134",
+          "0",
+          "tools/item_audit/automation_contracts_v28.py"
+        ],
+        [
+          "50",
+          "9",
+          "tools/item_audit/automation_v28.py"
+        ]
+      ]
+    },
+    {
+      "batch": "Globo_Botas",
+      "from": "4d39d3aa1413c36485d96fc5108872a28deb03b0",
+      "to": "961cb0ac8712e03cd3d22e0115d8b11c1a36e08b",
+      "items": 2,
+      "files": 10,
+      "code_added": 494,
+      "code_deleted": 45,
+      "added_per_item": 247.0,
+      "paths": [
+        [
+          "4",
+          "1",
+          ".github/workflows/item-closure-v3.yml"
+        ],
+        [
+          "33",
+          "0",
+          "tests/fixtures/item_automation_v28/entry_items.json"
+        ],
+        [
+          "126",
+          "0",
+          "tests/gameplay/item_automation_entry_v28.gd"
+        ],
+        [
+          "1",
+          "0",
+          "tests/gameplay/item_automation_entry_v28.gd.uid"
+        ],
+        [
+          "7",
+          "0",
+          "tests/gameplay/item_automation_opponent_v28.gd"
+        ],
+        [
+          "1",
+          "0",
+          "tests/gameplay/item_automation_opponent_v28.gd.uid"
+        ],
+        [
+          "30",
+          "9",
+          "tests/gameplay/item_automation_v28.gd"
+        ],
+        [
+          "117",
+          "0",
+          "tests/tools/test_item_automation_entry_v28.py"
+        ],
+        [
+          "144",
+          "0",
+          "tools/item_audit/automation_entry_v28.py"
+        ],
+        [
+          "66",
+          "35",
+          "tools/item_audit/automation_v28.py"
+        ]
+      ]
+    }
+  ],
+  "production_lines_added": 0,
+  "specific_new_effect_or_contract_lines_per_item": 0,
+  "infrastructure_and_tests_added_lines": 217,
+  "new_source_lines": {
+    "gdscript": 90,
+    "python": 91,
+    "tests": 22
+  },
+  "modified_code_metadata_ci_files": 6,
+  "total_local_seconds": 91.85,
+  "ci": "PENDING",
+  "recommendation": "Continue bounded reuse of existing native assertions; do not equate replay with full certification or start another batch."
+}

@@ -1,5 +1,35 @@
 # Orden de trabajo — ITEMS_V28
 
+## Misión vigente: reproducción genérica mínima (2026-11-01)
+
+Sustituye las propuestas no ejecutadas de bayas y rediseño amplio. Base
+a3eed8c9660db5adb01c75a3a38b01c74cef67ac; contador 27/30/4 inmutable.
+Solo black_glasses, colbur_berry, toxic_orb y sticky_barb. Consumir directamente
+cases.json V2/V3 y ejecutar sus generadores y aserciones originales sin cambiarlos.
+No nuevos contratos/efectos ni ejecutores por objeto/familia. Si son necesarios,
+detener y declarar NO VIABLE. Reutilizar la sesión/harness/SaveV2/mapa existentes.
+
+Lista exacta de archivos permitidos antes de código:
+- NUEVOS tests/gameplay/item_case_replay_v28.gd y .uid.
+- NUEVO tools/item_audit/replay_v28.py (orquestación y verificación genérica).
+- NUEVO tests/tools/test_item_case_replay_v28.py (rechazo de evidencia inválida).
+- tools/item_audit/automation_v28.py: SOLO añadir estos archivos/cuadernos a la allowlist.
+- .github/workflows/item-closure-v3.yml: tests/replay adicionales después de los
+  gates intactos; no cambiar las tres familias/56 tests/3335 comprobaciones.
+- docs/handoff/ITEMS_V28/{WORK_ORDER.md,START_HERE.md,STATE.json,PROGRESS.md,RESULTADOS.json,REPLAY_FEASIBILITY.md,REPLAY_RESULTS.json}.
+Salidas temporales: .godot/item_automation_v28/** y salidas ya existentes de los
+exportadores/generadores V2/V3. No cambiar generadores, prototipos versionados,
+producción, habilidades, RNG, datos, políticas, schemas, baselines ni main.
+
+Estrategia: regenerar casos/asserts nativos originales, comprobar fuentes y
+hashes; reconstruir la colección/equipamiento por DTO, reproducir comandos por
+submit, exigir hash nativo exacto por paso, restaurar por SaveV2 y comprobar
+publicación/inventario idempotentes. Cierre de integración mediante Poké Muñeco
+existente (FLED); no sustituye pruebas de victoria/derrota/captura. Mochila/mapa
+reutilizados sin lógica nueva. Replay no es certificación integral ni aumenta
+contador. Registrar cobertura ausente, coste exacto (incluido wrapper genérico),
+tiempos y deudas PID/GPU. Mantener todas las regresiones previas.
+
 ## Tercera familia — entrada, inmunidad y consumo (contrato previo, 2026-11-01)
 
 Checkpoint `4d39d3aa`, funcional anterior `7f973f5b` / Actions 41241062641.
