@@ -274,6 +274,10 @@ func _finish_campaign(rows: Array) -> void:
 	var valid: bool = rows.size() == automation.get("cases", []).size()
 	for row: Dictionary in rows:
 		valid = valid and row.status == "PASS"
+	var per_item: Dictionary = _summary_by_item(rows)
+	valid = valid and per_item.size() == 6
+	for item_id: String in per_item:
+		valid = valid and per_item[item_id].status == "PASS"
 	check("todos los escenarios de la matriz completos", valid)
 	var output := {"schema_version": 1, "family": "berry_campaign_w02",
 		"status": "PASS" if errors.is_empty() and valid else "FAIL",
