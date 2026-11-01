@@ -78,3 +78,19 @@ Blobs de pruebas al cerrar LOTE_002:
 **Último siguiente paso reproducible:** revisión de IA6, integración secuencial y una CI consolidada con import Godot 4.7 + pruebas W04. **PENDIENTE_CI**.
 
 **No tocar:** main, V28, rama árbitra, ramas W01/W02/W03/W05, datasets, política, guardados de usuario, engine/producción y workflows sin asignación explícita.
+
+---
+
+## 7. CAMPAÑA_001 ACTIVADA: seguimiento desde microbloque 01 (2026-11-01)
+
+- Autoridad oficial superior: `CAMPAIGN_GATE_001.md` blob `3ef0b39f7eb74f3ebcb688f279c254daec981f8e` y `campaigns/CAMP_001_W04.md` blob `42a8cb9db9bdbe34c607d745da6b97e107b621bf`. Rango exclusivo: `fire_stone`, `water_stone`, `thunder_stone`, `leaf_stone`, `ice_stone`, `moon_stone`. Máximo 3 microbloques; solo uno por `p`.
+- Bloqueo anterior de sincronización resuelto de forma verificable: antes de trabajar, GitHub comparó W04 y árbitra como **idénticas**, SHA `1b52fdd0b7b89e468811a17ad83a917ec7107735`. LOTE_001/002 conservados sin alterar.
+- Gate actual IA6 CI PASS en `ac34fabbe1a27e69614f0239abee21c29d6fe65e`, run [#41341842320](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41341842320): W04 anterior 100 checks reales, tres IDs del LOTE_002. No confundirlos con los nuevos tests de piedras.
+- **Microbloque 01 realizado: PREPARADO_PENDIENTE_CI.** Fuego/Agua/Trueno con Eevee, Growlithe, Shellder, Pikachu (6 pares); destino obtenido de `FieldItemService.evolution_options` y contrastado contra `EvolutionSystem.classify_record`. No se implementó producción ni se adelantó Leaf/Ice/Moon.
+- Nuevos tests propios: `tests/gameplay/parallel_items_w04_campaign_001.gd` commit `7f667ba453d0b80a862b1565d17e1c9849d38768` y `tests/tools/test_parallel_items_w04_campaign_001.py` commit `63d396ab0b85401f9e83b319c58bd5efa28dcc8f`. Informes: `reports/W04/CAMP_001_ITER_01.md` y `reports/W04/CAMP_001_PROGRESO.csv`.
+- Evidencia nueva: comprobación estructural independiente sobre datos GitHub y código de test **40/40 PASS**, NO ejecución de Python ni Godot. Nuevos scripts GDScript/Python: **SIN_EJECUTAR**; requieren CI Godot 4.7 en checkpoint integrado de IA6. No GPU.
+- Ejecutar cuando IA6 consolide: `python -B tests/tools/test_parallel_items_w04_campaign_001.py`; `godot --headless --path . --import`; `python -B tests/tools/test_parallel_items_w04_campaign_001.py --godot godot`. Si falla, registrar SHA/log/condición y detener, sin tocar motor.
+- **Estado actual:** microbloque 01 publicado, **02 y 03 PENDIENTES**. Siguiente `p` autorizado: **02 piedras Hoja/Hielo/Lunar**, siempre que el gate/encargo sigan vigentes y no haya FAIL. Microbloque 03 reservado a SaveV2 y clasificación de rutas. Tras 03 entregar `CAMP_001_FINAL.md` y detenerse.
+- Rutas escribibles solo las listadas en campaña (dos tests antiguos propios, dos tests nuevos, informes propios, progreso y cuaderno). Resto de motores/producción/datos/políticas/saves/otros W, branch main/V28/arb: SOLO LECTURA.
+
+**Nota de vigencia:** las secciones anteriores de este cuaderno reflejan la situación histórica al cerrar LOTE_002, cuando todavía no se había ejecutado su CI. La evidencia actual de aquel lote es el PASS confirmado por IA6; la campaña 001 es una cobertura distinta pendiente de ejecución.
