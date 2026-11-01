@@ -6,14 +6,14 @@
 
 | Estado | Entradas | Significado |
 | --- | ---: | --- |
-| `PERMITIR` | **705** | Candidato estratégico aprobado; implementación individual puede faltar |
-| `CONDICIONAL` | **275** | Conservado por utilidad potencial o dependencia pendiente; NO generar |
-| `DESCARTAR` | **1.242** | No incluir en distribución del juego; preservar datos originales |
+| `PERMITIR` | **706** | Candidato estratégico aprobado; implementación individual puede faltar |
+| `CONDICIONAL` | **272** | Conservado por utilidad potencial o dependencia pendiente; NO generar |
+| `DESCARTAR` | **1.244** | No incluir en distribución del juego; preservar datos originales |
 | **Total** | **2.222** | Sin duplicados ni filas sin decisión |
 
-**Fases:** 92 IDs de piedras Mega + **12 accesorios para activar Mega** = **104 elementos pospuestos para la fase de megaevolución**. Fase de objetos corrientes: **705 PERMITIR + 171 CONDICIONAL = 876 candidatos** (no 876 pendientes de programar). Los 1.242 descartados siguen documentados en [CSV maestro de decisiones](./RANDOMLOCK_ITEMS_SCOPE_V1.csv).
+**Fases:** 92 IDs de piedras Mega + **12 accesorios para activar Mega** = **104 elementos pospuestos para la fase de megaevolución**. Fase de objetos corrientes: **706 PERMITIR + 168 CONDICIONAL = 874 candidatos** (no 874 pendientes de programar). Los 1.242 descartados siguen documentados en [CSV maestro de decisiones](./RANDOMLOCK_ITEMS_SCOPE_V1.csv).
 
-**Evolución histórica de la clasificación** (sin cambiar el juego): primera pasada 703/259/1260 → segunda 705/476/1041 → decisiones explícitas de usuario 705/371/1146 → análisis de MT/Z 705/278/1239 → examen de regalos y separación de Mega 705/275/1242.
+**Evolución histórica de la clasificación** (sin cambiar el juego): primera pasada 703/259/1260 → segunda 705/476/1041 → decisiones explícitas de usuario 705/371/1146 → análisis de MT/Z 705/278/1239 → examen de regalos y separación de Mega 705/275/1242 → rectificación de captura/incursiones 706/272/1244.
 
 ## 2. Exclusiones expresas del propietario registradas en el CSV
 
@@ -74,26 +74,35 @@ En el CSV se han marcado 12 IDs con `FASE_MEGA_SISTEMA_APARCADA`:
 
 Son objetos de activación/soporte a la megaevolución; no son 12 evoluciones adicionales ni deben repartirse por el mapa. La [Piedra Activadora y accesorios](https://bulbapedia.bulbagarden.net/wiki/Key_Stone) confirman que comparten propósito. Su inclusión final dependerá de si se adopta la propuesta de dos piedras universales y de la interfaz. **La propuesta no está aprobada**, hay que hablarlo con el compañero al terminar los objetos normales.
 
-## 7. Condicionales RESTANTES de la fase corriente: 171 IDs
+## 6 bis. Rectificación de falsos descartes y objetos exclusivos de incursiones o transferencias
+
+- **`beast_ball` (Ente Ball)**: cambia de `DESCARTAR` a **`PERMITIR`**. No existía prohibición expresa del usuario en `config/item_selection_v1.json`; descartarla por el mero hecho de ser especial fue un **error de la pasada inicial**. Sirve para capturar Ultraentes, que no deben confundirse con Pokémon de incursión. El cálculo concreto de captura se verificará en integración; `PERMITIR` no lo certifica. [Bulbapedia, modificadores de Poké Balls](https://bulbapedia.bulbagarden.net/wiki/Pok%C3%A9_Ball).
+- **`glimmering_charm` (Amuleto Cristalino)**: pasa a **`DESCARTAR`**; solo aumenta la recompensa de teralitos de incursiones tera. El juego no tendrá incursiones. Los **18 fragmentos tera permanecen permitidos** para cambiar el teratipo cuando el sistema esté listo. [Bulbapedia](https://bulbapedia.bulbagarden.net/wiki/Glimmering_Charm).
+- **`laorigin_ball` (Origen Ball)**: pasa a **`DESCARTAR`**; captura puntual de Dialga/Palkia en la historia de Leyendas Arceus, no Poké Ball de uso ordinario. [Bulbapedia](https://bulbapedia.bulbagarden.net/wiki/Origin_Ball).
+- **`lastrange_ball` (Extraña Ball)**: pasa a **`DESCARTAR`**; representación de transferencia entre juegos, sin obtención/uso normal en la aventura. [Bulbapedia](https://bulbapedia.bulbagarden.net/wiki/Strange_Ball).
+
+Se conservan como `CONDICIONAL` las 9 Poké Balls de Hisui con utilidad de captura real, que necesitan adaptar su fórmula/contexto al sistema de encuentros. La actualización cambia los totales a **706/272/1.244** y deja **874 candidatos de objetos corrientes** (706 aprobados, 168 pendientes).
+
+## 7. Condicionales RESTANTES de la fase corriente: 168 IDs
 
 | Familia | Pendientes | Criterio de revisión |
 | --- | ---: | --- |
-| STORY_KEY_OR_FORM_REVIEW | **39** | Distinguir objetos que cambian formas/captura/experiencia de instrumentos de mapa y herramientas de modo |
+| STORY_KEY_OR_FORM_REVIEW | **38** | Distinguir objetos que cambian formas/captura/experiencia de instrumentos de mapa y herramientas de modo |
 | Z_CRYSTAL | **32** | Validar objeto equipado, activación y política de daño |
 | TREASURE_OR_COLLECTIBLE | **41** | Distinguir tutor de movimientos, economía y material evolutivo de venta decorativa |
 | LEGACY_OR_CATEGORY_REVIEW | **23** | Roto-poderes/acciones de fusión útiles, sin introducir mecánicas especiales automáticamente |
 | MACHINE | **19** | Movimientos únicos fuera de las MT activas |
-| CAPTURE_BALL | **11** | 11 bolas de Leyendas Arceus; fórmula de captura/escena distinta |
+| CAPTURE_BALL | **9** | 9 bolas generales de Leyendas Arceus; fórmula de captura/escena distinta |
 | FIELD_USE | **6** | 6 bayas de captura variantes GO; reglas de captura todavía no adaptadas |
-| **Total** | **171** | Ninguna se ofrece al jugador automáticamente |
+| **Total** | **168** | Ninguna se ofrece al jugador automáticamente |
 
 **Detalle exacto por grupo (sin mega):**
 
-- **CAPTURE_BALL (11)**: `lafeather_ball`, `lagigaton_ball`, `lagreat_ball`, `laheavy_ball`, `lajet_ball`, `laleaden_ball`, `laorigin_ball`, `lapoke_ball`, `lastrange_ball`, `laultra_ball`, `lawing_ball`
+- **CAPTURE_BALL (9)**: `lafeather_ball`, `lagigaton_ball`, `lagreat_ball`, `laheavy_ball`, `lajet_ball`, `laleaden_ball`, `lapoke_ball`, `laultra_ball`, `lawing_ball`
 - **FIELD_USE (6)**: `golden_nanab_berry`, `golden_pinap_berry`, `golden_razz_berry`, `silver_nanab_berry`, `silver_pinap_berry`, `silver_razz_berry`
 - **LEGACY_OR_CATEGORY_REVIEW (23)**: `dna_splicers_merge`, `dna_splicers_split`, `meteorite_2`, `meteorite_3`, `meteorite_4`, `n_lunarizer_merge`, `n_lunarizer_split`, `n_solarizer_merge`, `n_solarizer_split`, `reins_of_unity_merge`, `reins_of_unity_split`, `roto_bargain`, `roto_boost`, `roto_catch`, `roto_encounter`, `roto_exp_points`, `roto_friendship`, `roto_hatch`, `roto_hp_restore`, `roto_pp_restore`, `roto_prize_money`, `roto_stealth`, `z_power_ring`
 - **MACHINE (19)**: `hm01`, `hm04`, `hm05`, `hm06`, `hm08`, `tm00`, `tr13`, `tr19`, `tr28`, `tr31`, `tr39`, `tr41`, `tr44`, `tr50`, `tr72`, `tr83`, `tr85`, `tr91`, `tr93`
-- **STORY_KEY_OR_FORM_REVIEW (39)**: `adamant_crystal`, `bicycle`, `black_mane_hair`, `blue_orb`, `catching_charm`, `dna_splicers`, `dowsing_machine`, `dynamax_band`, `exp_charm`, `fishing_rod`, `fishing_rod_galar`, `glimmering_charm`, `good_rod`, `gracidea`, `griseous_core`, `honey`, `lustrous_globe`, `meteorite`, `meteorite_shard`, `old_rod`, `oval_charm`, `poke_radar`, `pokemon_box_link`, `prison_bottle`, `red_orb`, `reins_of_unity`, `reveal_glass`, `rotom_bike`, `rotom_catalog`, `shiny_charm`, `sparkling_stone`, `super_rod`, `teal_mask`, `tera_orb`, `town_map`, `vs_seeker`, `white_mane_hair`, `z_ring`, `zygarde_cube`
+- **STORY_KEY_OR_FORM_REVIEW (38)**: `adamant_crystal`, `bicycle`, `black_mane_hair`, `blue_orb`, `catching_charm`, `dna_splicers`, `dowsing_machine`, `dynamax_band`, `exp_charm`, `fishing_rod`, `fishing_rod_galar`, `good_rod`, `gracidea`, `griseous_core`, `honey`, `lustrous_globe`, `meteorite`, `meteorite_shard`, `old_rod`, `oval_charm`, `poke_radar`, `pokemon_box_link`, `prison_bottle`, `red_orb`, `reins_of_unity`, `reveal_glass`, `rotom_bike`, `rotom_catalog`, `shiny_charm`, `sparkling_stone`, `super_rod`, `teal_mask`, `tera_orb`, `town_map`, `vs_seeker`, `white_mane_hair`, `z_ring`, `zygarde_cube`
 - **TREASURE_OR_COLLECTIBLE (41)**: `balm_mushroom`, `beach_glass`, `big_bamboo_shoot`, `big_mushroom`, `big_nugget`, `big_pearl`, `blue_shard`, `chalky_stone`, `comet_shard`, `discount_coupon`, `galarica_twig`, `gold_leaf`, `green_shard`, `heart_scale`, `lone_earring`, `marble`, `nugget`, `pearl`, `pearl_string`, `polished_mud_ball`, `pretty_wing`, `rare_bone`, `red_shard`, `relic_band`, `relic_copper`, `relic_crown`, `relic_gold`, `relic_silver`, `relic_statue`, `relic_vase`, `shoal_salt`, `shoal_shell`, `silver_leaf`, `star_piece`, `stardust`, `strange_souvenir`, `stretchy_spring`, `tiny_bamboo_shoot`, `tiny_mushroom`, `tropical_shell`, `yellow_shard`
 - **Z_CRYSTAL (32)**: `aloraichium_z_held`, `buginium_z_held`, `darkinium_z_held`, `decidium_z_held`, `dragonium_z_held`, `electrium_z_held`, `fairium_z_held`, `fightinium_z_held`, `firium_z_held`, `flyinium_z_held`, `ghostium_z_held`, `grassium_z_held`, `groundium_z_held`, `icium_z_held`, `incinium_z_held`, `kommonium_z_held`, `lunalium_z_held`, `lycanium_z_held`, `marshadium_z_held`, `mewnium_z_held`, `mimikium_z_held`, `normalium_z_held`, `pikanium_z_held`, `poisonium_z_held`, `primarium_z_held`, `psychium_z_held`, `rockium_z_held`, `snorlium_z_held`, `solganium_z_held`, `steelium_z_held`, `tapunium_z_held`, `waterium_z_held`
 
@@ -108,8 +117,8 @@ Son objetos de activación/soporte a la megaevolución; no son 12 evoluciones ad
 
 ## 8. Alcance, siguiente decisión y reversibilidad
 
-**No hay PASS nuevo de Godot.** No cambiar `config/item_selection_v1.json`, data normalizada, saves, MT, sistema de combate, drops ni la rama `main`. Los 705 `PERMITIR` son intención de juego, no 705 efectos funcionando. La ruta técnica de ITEMS_V28 sigue independiente.
+**No hay PASS nuevo de Godot.** No cambiar `config/item_selection_v1.json`, data normalizada, saves, MT, sistema de combate, drops ni la rama `main`. Los 706 `PERMITIR` son intención de juego, no 706 efectos funcionando. La ruta técnica de ITEMS_V28 sigue independiente.
 
-**Próxima revisión sensata:** validar los 171 candidatos por bloques con su dependencia exacta y decidir reglas de economía, captura, tutores y transformación; registrar excepciones nuevas de falsos descartes. No finalizar inventario hasta completar al menos una pasada de 1.242 excluidos atendiendo a posibles efectos poco evidentes.
+**Próxima revisión sensata:** validar los 168 candidatos por bloques con su dependencia exacta y decidir reglas de economía, captura, tutores y transformación; registrar excepciones nuevas de falsos descartes. No finalizar inventario hasta completar al menos una pasada de 1.242 excluidos atendiendo a posibles efectos poco evidentes.
 
 **Fuentes del repositorio leídas:** `docs/current/RANDOMLOCK_ITEMS_SCOPE_V1.csv` (blob `7a9f3e83fc01c3b6d72403744e1a23be7c28adfd`), `docs/current/ITEM_INVENTORY.json` (blob `3000e5e24735a22f17d879f984346af463bda71b`), `modules/inventory/item_connections_v1.json` (blob `0525b37021edfc2e74c4fc2cb96e62f6f5b3e261`), `config/randomlock_content_v1.json` (blob `b75a9c0787ec99acd93c7a1011b35091b9085807`), `docs/current/Z_MOVE_INTEGRATION.json` (blob `b06748ff5691f0da0df27d0f184d7d6e45384c55`). Los datos originales se conservan.
