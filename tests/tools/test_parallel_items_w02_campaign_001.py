@@ -23,6 +23,20 @@ EXPECTED_01 = {
     "cheri_poison": ("cheri_berry", "status", "full", "poison", False, False, 0),
     "cheri_healthy": ("cheri_berry", "status", "full", "", False, False, 0),
 }
+# Contratos ITER_02: los ocho EXPECTED_01 permanecen idénticos.
+# (id,kind,initial,status,consumes,field_applies,heal,foe_species,foe_move,
+#  field_confusion,field_status,native_expected_status)
+EXPECTED_02 = {
+    "persim_confuse_ray": ("persim_berry", "confusion", "full", "", True, False, 0, "gengar", "confuse_ray", True, "", ""),
+    "persim_no_confusion": ("persim_berry", "confusion", "full", "", False, False, 0, "mew", "amnesia", False, "", ""),
+    "chesto_spore": ("chesto_berry", "status", "full", "", True, True, 0, "gengar", "spore", False, "sleep", "sleep"),
+    "chesto_burn": ("chesto_berry", "status", "full", "burn", False, False, 0, "mew", "amnesia", False, "", ""),
+    "chesto_healthy": ("chesto_berry", "status", "full", "", False, False, 0, "mew", "amnesia", False, "", ""),
+    "rawst_burn": ("rawst_berry", "status", "full", "burn", True, True, 0, "mew", "amnesia", False, "", ""),
+    "rawst_poison": ("rawst_berry", "status", "full", "poison", False, False, 0, "mew", "amnesia", False, "", ""),
+    "rawst_healthy": ("rawst_berry", "status", "full", "", False, False, 0, "mew", "amnesia", False, "", ""),
+}
+ALL_EXPECTED = set(EXPECTED_01) | set(EXPECTED_02)
 MODES = ("active", "none", "reserve")
 LOCATIONS = ("PARTY", "STORAGE")
 
@@ -42,27 +56,37 @@ def validate_fixture(f):
                        "variants", "locations", "cases", "note"},
             "Claves de matriz alteradas")
     require(f["schema_version"] == 1 and f["family"] == "berry_campaign_w02"
-            and f["campaign"] == "CAMP_001" and f["microblocks_completed"] == [1],
+            and f["campaign"] == "CAMP_001" and f["microblocks_completed"] == [1, 2],
             "Campaña o microbloque no autorizado")
     require(f["format"] == "gen9calvounifiedv1"
             and f["seed"] == [23, 19, 29, 43] and f["level"] == 100,
             "Simulador/semilla/nivel no reproducibles")
     require(f["variants"] == list(MODES) and f["locations"] == list(LOCATIONS),
             "No hay controles completos de dueño y mochila")
-    require(isinstance(f["cases"], list) and len(f["cases"]) == len(EXPECTED_01),
+    require(isinstance(f["cases"], list) and len(f["cases"]) == len(ALL_EXPECTED),
             "Faltan casos o se han añadido sin permiso")
     seen = set()
     for r in f["cases"]:
-        require(set(r) == {"id", "scenario", "kind", "initial", "status",
-                           "consumes", "field_applies", "heal"},
-                "Campos de caso incompatibles")
         key = r["scenario"]
-        require(key in EXPECTED_01 and key not in seen, "Caso desconocido/repetido")
+        require(key in ALL_EXPECTED and key not in seen, "Caso desconocido/repetido")
         seen.add(key)
-        require((r["id"], r["kind"], r["initial"], r["status"],
-                 r["consumes"], r["field_applies"], r["heal"]) == EXPECTED_01[key],
-                "Expectativa de baya modificada: " + key)
-    require(seen == set(EXPECTED_01), "Matriz sin todos los casos obligatorios")
+        base_fields = {"id", "scenario", "kind", "initial", "status",
+                       "consumes", "field_applies", "heal"}
+        original = (r["id"], r["kind"], r["initial"], r["status"],
+                    r["consumes"], r["field_applies"], r["heal"])
+        if key in EXPECTED_01:
+            require(set(r) == base_fields and original == EXPECTED_01[key],
+                    "ITER_01 alterada: " + key)
+        else:
+            suffix = (r.get("foe_species"), r.get("foe_move"),
+                      r.get("field_confusion"), r.get("field_status", ""),
+                      r.get("native_expected_status", ""))
+            expected_keys = base_fields | {"foe_species", "foe_move", "field_confusion"}
+            if key == "chesto_spore":
+                expected_keys |= {"field_status", "native_expected_status"}
+            require(set(r) == expected_keys and original + suffix == EXPECTED_02[key],
+                    "ITER_02 alterada: " + key)
+    require(seen == ALL_EXPECTED, "Matriz sin todos los casos obligatorios")
     return f
 
 
@@ -116,7 +140,7 @@ def validate_result(f, result, folder):
         require(set(row["native"]) == set(MODES), "Falta control activo/ausente/reserva")
         require(set(row["field"]) == set(LOCATIONS), "Falta PARTY/STORAGE")
         for mode, v in row["native"].items():
-            require(set(v) == {"valid", "hp", "max_hp", "status",
+            require(set(v) == {"valid", "hp", "max_hp", "status", "confused",
                                "consumed", "units", "bag", "save", "evidence", "sha256"},
                     "Contrato de combate incompleto")
             consumed = bool(spec["consumes"]) and mode == "active"
@@ -131,6 +155,7 @@ def validate_result(f, result, folder):
             require(raw["scenario"] == key and raw["mode"] == mode
                     and raw["native_hp"] == v["hp"]
                     and raw["native_status"] == v["status"]
+                    and raw["native_confused"] is v["confused"]
                     and raw["native_consumed"] is consumed
                     and raw["units"] == units,
                     "Evidencia combate no corresponde al resultado")
@@ -150,20 +175,30 @@ def validate_result(f, result, folder):
                 require(not own["held_item_id"] and not reserve["held_item_id"],
                         "Caso control sin objeto tiene equipamiento")
         active, plain, reserve = (row["native"][mode] for mode in MODES)
-        require(plain["hp"] == reserve["hp"] and plain["status"] == reserve["status"],
+        require(plain["hp"] == reserve["hp"] and plain["status"] == reserve["status"]
+                and plain["confused"] is reserve["confused"],
                 "Reserva altera resultado del activo")
-        if spec["kind"] == "hp":
+        if spec["kind"] == "confusion":
+            require(active["confused"] is False and plain["confused"] is bool(spec["consumes"])
+                    and reserve["confused"] is bool(spec["consumes"]),
+                    "Persim no controla confusion de portador/suplente")
+            require(active["status"] == plain["status"] == reserve["status"] == spec["status"],
+                    "Persim no debe curar estado persistente")
+        elif spec["kind"] == "hp":
             require(active["hp"] == min(active["max_hp"],
                     plain["hp"] + (spec["heal"] if spec["consumes"] else 0))
                     and active["status"] == plain["status"],
                     "Aranja incumple cura/tope/control")
         else:
-            expected_status = "" if spec["consumes"] else spec["status"]
+            base_status = spec.get("native_expected_status", spec["status"])
+            expected_status = "" if spec["consumes"] else base_status
             require(active["status"] == expected_status
-                    and plain["status"] == reserve["status"] == spec["status"],
+                    and plain["status"] == reserve["status"] == base_status,
                     "Estado curado/no curado fuera del contrato")
+            require(all(v["confused"] is False for v in (active, plain, reserve)),
+                    "Baya especifica genera confusion artificial")
         for place, v in row["field"].items():
-            require(set(v) == {"valid", "accepted", "hp", "status", "bag",
+            require(set(v) == {"valid", "accepted", "hp", "status", "confused", "bag",
                                "save", "evidence", "sha256"}, "Contrato campo incompleto")
             apply = bool(spec["field_applies"])
             require(v["valid"] is True and v["save"] is True
@@ -171,7 +206,8 @@ def validate_result(f, result, folder):
                     "Campo consumo/rechazo incorrecto")
             raw = verified_raw(folder, v["evidence"], v["sha256"])
             require(raw["scenario"] == key and raw["location"] == place
-                    and raw["accepted"] is apply,
+                    and raw["accepted"] is apply
+                    and raw["confused"] is v["confused"],
                     "Prueba de campo no corresponde a su recibo")
             own = next(x for x in raw["owner_after"]["creatures"]
                        if x["instance_id"] == "own")
@@ -187,6 +223,15 @@ def validate_result(f, result, folder):
                                else status_base)
             require(v["hp"] == expected_hp and v["status"] == expected_status,
                     "Campo cura estado/PS erróneos")
+            require(v["confused"] is raw["initial_confused"]
+                    and v["confused"] is bool(spec.get("field_confusion", False)),
+                    "Confusion campo no registrada/no preservada")
+            if key == "persim_confuse_ray":
+                require(raw["initial_confused"] is True and apply is False,
+                        "Persim no tiene perfil campo; no simular curacion integral")
+            if key == "chesto_spore":
+                require(raw["initial_status"] == "sleep" and v["status"] == "",
+                        "Chesto campo debe quitar sueño")
     require(seen == set(lookup), "Matriz real incompleta")
     return {"status": "PASS_VERIFICADO_ACOTADO", "cases": len(seen),
             "native_variants": len(seen) * 3, "field_variants": len(seen) * 2,
@@ -196,7 +241,7 @@ def validate_result(f, result, folder):
 class ContractTests(unittest.TestCase):
     def setUp(self):
         self.fixture = {"schema_version": 1, "family": "berry_campaign_w02",
-                        "campaign": "CAMP_001", "microblocks_completed": [1],
+                        "campaign": "CAMP_001", "microblocks_completed": [1, 2],
                         "format": "gen9calvounifiedv1", "level": 100,
                         "seed": [23, 19, 29, 43], "variants": list(MODES),
                         "locations": list(LOCATIONS), "note": "test",
@@ -205,13 +250,20 @@ class ContractTests(unittest.TestCase):
                              "initial": v[2], "status": v[3],
                              "consumes": v[4], "field_applies": v[5], "heal": v[6]}
                             for name, v in EXPECTED_01.items()
+                        ] + [
+                            dict(id=v[0], scenario=name, kind=v[1], initial=v[2],
+                                 status=v[3], consumes=v[4], field_applies=v[5], heal=v[6],
+                                 foe_species=v[7], foe_move=v[8], field_confusion=v[9],
+                                 **({"field_status": v[10], "native_expected_status": v[11]}
+                                    if name == "chesto_spore" else {}))
+                            for name, v in EXPECTED_02.items()
                         ]}
 
     def test_real_fixture_passes_contract(self):
-        self.assertEqual(len(validate_fixture(read(FIXTURE))["cases"]), 8)
+        self.assertEqual(len(validate_fixture(read(FIXTURE))["cases"]), 16)
 
     def test_synthetic_fixture_passes(self):
-        self.assertEqual(len(validate_fixture(self.fixture)["cases"]), 8)
+        self.assertEqual(len(validate_fixture(self.fixture)["cases"]), 16)
 
     def test_missing_case_rejected(self):
         data = copy.deepcopy(self.fixture)
@@ -245,7 +297,25 @@ class ContractTests(unittest.TestCase):
 
     def test_other_microblock_unapproved(self):
         data = copy.deepcopy(self.fixture)
-        data["microblocks_completed"] = [1, 2]
+        data["microblocks_completed"] = [1, 2, 3]
+        with self.assertRaises(ValueError): validate_fixture(data)
+
+    def test_persim_field_cure_falsification_rejected(self):
+        data = copy.deepcopy(self.fixture)
+        row = next(x for x in data["cases"] if x["scenario"] == "persim_confuse_ray")
+        row["field_applies"] = True
+        with self.assertRaises(ValueError): validate_fixture(data)
+
+    def test_chesto_spore_trigger_missing_rejected(self):
+        data = copy.deepcopy(self.fixture)
+        row = next(x for x in data["cases"] if x["scenario"] == "chesto_spore")
+        row["foe_move"] = "amnesia"
+        with self.assertRaises(ValueError): validate_fixture(data)
+
+    def test_rawst_wrong_status_rejected(self):
+        data = copy.deepcopy(self.fixture)
+        row = next(x for x in data["cases"] if x["scenario"] == "rawst_poison")
+        row["consumes"] = True
         with self.assertRaises(ValueError): validate_fixture(data)
 
     def test_full_certification_rejected(self):
