@@ -61,7 +61,7 @@ jobs:
           grep -E 'W03_CAPTURE_NET.*"status":"CARACTERIZACION_PASS"' parallel-new-w03-original.log
           timeout 180s godot --headless --path . --script res://tests/gameplay/parallel_items_w03_net_campaign_001.gd 2>&1 | tee parallel-new-w03-final.log
           grep -E 'CAMP_001_W03_NET.*"status":"PASS"' parallel-new-w03-final.log
-      - name: W05 books — 248 IDs, textual presentation, 19 historical blocked
+      - name: W05 books — 248 IDs, teaching/PP/SaveV2 and 19 historical blocked
         id: w05
         if: always()
         continue-on-error: true
@@ -71,7 +71,7 @@ jobs:
           python -B -m unittest discover -s tests/tools -p 'test_parallel_w05_machine_scope.py' -v 2>&1 | tee parallel-new-w05-python.log
           python -B tools/item_audit/parallel_w05_machine_scope.py 2>&1 | tee parallel-new-w05-scope.log
           timeout 180s godot --headless --path . --script res://tests/gameplay/parallel_items_w05_machine_books_v1.gd 2>&1 | tee parallel-new-w05-godot.log
-          grep -E 'W05 CAMP_001/01: [0-9]+ comprobaciones, 0 errores' parallel-new-w05-godot.log
+          grep -E 'W05 CAMP_001/03: [0-9]+ comprobaciones, 0 errores' parallel-new-w05-godot.log
       - name: Bounded family verdict — never mask a failing family
         if: always()
         shell: bash
