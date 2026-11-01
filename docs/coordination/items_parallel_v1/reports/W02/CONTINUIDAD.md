@@ -1,5 +1,23 @@
 # W02 / IA2 — Cuaderno de continuidad (bayas y consumo)
 
+## ESTADO VIGENTE — CAMPAÑA_001, ITER_01 / 3
+
+- **Identidad:** IA2/W02, rama propia `codex/calvo-items-20261101-w02`. **Estado:** `PREPARADO_PENDIENTE_CI`, ITER_01 entregada, ITER_02/03 pendientes. La campaña **ACTIVADA** no permite adelantar iteraciones: cada `p` = un microbloque.
+- **Autoridad:** [CAMP_001_W02](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/blob/codex/calvo-items-20261101-arbitro/docs/coordination/items_parallel_v1/campaigns/CAMP_001_W02.md), blob `f6f8f08b13f9e4f84d18970643ebd4aeab5a75b7`, puerta `CAMPAIGN_GATE_001.md` blob `3ef0b39f7eb74f3ebcb688f279c254daec981f8e`. El protocolo anterior decía «propuesta»; la **puerta actual activa** prevalece.
+- **Base:** fast-forward seguro de W02 a árbitra HEAD `1b52fdd0b7b89e468811a17ad83a917ec7107735`, después nuevos commits solo en W02. Informe LOTE_001 intacto blob `8b49a29d9cbf98dac85ad3947e6b872bba8a6735`; LOTE_002 intacto blob `201a10e1396334277036c92faa9a7bdd914ce21c`.
+- **CI base REAL ya pasada:** [Actions #41341842320](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41341842320), commit `ac34fabbe1a27e69614f0239abee21c29d6fe65e`: Godot 4.7; **W02 anterior 503 checks, 7 casos/21 variantes PASS** (Zidra/Ziuela/Dillo). No cubre los nuevos casos de CAMPAÑA_001.
+- **ITER_01 — Oran/Pecha/Cheri:** `oran_berry`, `pecha_berry`, `cheri_berry`. **8 casos**, **24 variantes nativas** (`active/none/reserve`), **16 variantes campo** (`PARTY/STORAGE`). Positivo, negativo, stock inicial 2 y gasto único, uso de mochila, restauración y publicación tras batalla, SaveV2.
+- **Nuevos archivos de test exclusivos:** `tests/fixtures/parallel_items/w02_campaign_001.json` blob `6a72c1cb043b82cfa79c0a415f3ecfc6668e80e7`; `tests/gameplay/parallel_items_w02_campaign_001.gd` blob `40a9266e2b633ca9cddd9b49766c739acc0c9d69`; `tests/tools/test_parallel_items_w02_campaign_001.py` blob `30babaf9b3a5d7e042f69a2523868b7b52992f02`. **Commits de código:** `3bde944a`, `545f3a61`, `e6873734`.
+- **Registro operativo:** [CAMP_001_ITER_01.md](./CAMP_001_ITER_01.md), commit `3fee53a8b6f03126cf48aa8acd5d15c5b230c2f8`; [CAMP_001_PROGRESO.csv](./CAMP_001_PROGRESO.csv), commit `253c4cbd7548365c276094f86804d0595cb3a562`. El SHA definitivo del cuaderno se consulta en HEAD, no se autorreferencia.
+- **Resultados del microbloque 01:** **15/15 PASS ESTÁTICO REAL** revisando blobs + contratos vía conector GitHub; **12 tests Python definidos, SIN_EJECUTAR**; integración Godot nueva **SIN_EJECUTAR / PENDIENTE_CI**; GPU/manual **NO_REALIZADA**. No confundir preparación con función certificada.
+- **Cómo verificar al integrar:** `python tests/tools/test_parallel_items_w02_campaign_001.py --fixture-only`, `python tests/tools/test_parallel_items_w02_campaign_001.py --unittest`, `godot --headless --path . --script res://tests/gameplay/parallel_items_w02_campaign_001.gd`, `python tests/tools/test_parallel_items_w02_campaign_001.py --result .godot/parallel_items/w02_campaign_001/godot.json`. Requiere checkout funcional Godot 4.7 + runtime `@pkmn/sim@0.10.11`; no ejecutar CI repetida por documentación.
+- **Siguiente `p`:** comprobar puerta/STATUS y que no hay FAIL o cambio de contrato; ejecutar SOLO **ITER_02** para `persim_berry`, `chesto_berry`, `rawst_berry` sobre los mismos archivos de test/fixtures, registrar iteración y progreso; no iniciar ITER_03 hasta posterior `p`.
+- **Prohibido:** producción, archivos compartidos de simulador, RNG, esquema, políticas, `main`, V28 original, árbitra y otras ramas. Mantener los viejos 7 casos W02 sin alterar expectativas. Si falla test funcional tras CI, detener campaña, diagnosticar y pedir IA6. Tras ITER_03 publicar `CAMP_001_FINAL.md` y emitir `CAMPAÑA_001_FINALIZADA`.
+
+---
+
+## ARCHIVO HISTÓRICO — LOTE_001 y LOTE_002 (información de base anterior a la campaña)
+
 > Memoria operativa exclusiva de `codex/calvo-items-20261101-w02`. La **autoridad de encargos** sigue siendo IA6 en `codex/calvo-items-20261101-arbitro`; este cuaderno no concede permisos nuevos.
 
 ## 1. Identidad, base y estado
