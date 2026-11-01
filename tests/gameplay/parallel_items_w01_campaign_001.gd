@@ -103,6 +103,7 @@ func _campaign_probe(row: Dictionary, seed: int, mode: String) -> Dictionary:
 	var foe_before: CreatureInstance = session.battle_state().creature(&"foe")
 	var hp_before: int = p_before.current_hp
 	var foe_hp_before: int = foe_before.current_hp
+	var own_status_before: String = String(p_before.status_state.persistent_id)
 	var stale: Dictionary = await session.submit("move 1", session.revision + 1)
 	check(mode + " revision obsoleta no muta", not stale.get("accepted", false) and session.snapshot() == snapshot_before)
 	var result: Dictionary = await session.submit("move 1", session.revision)
@@ -116,6 +117,7 @@ func _campaign_probe(row: Dictionary, seed: int, mode: String) -> Dictionary:
 	var reserve_after: CreatureInstance = session.battle_state().creature(&"reserve")
 	var hp_after: int = own_after.current_hp
 	var foe_hp_after: int = foe_after.current_hp
+	var own_status_after: String = String(own_after.status_state.persistent_id)
 	var own_has_item: bool = own_after.held_item_id == item
 	var reserve_has_item: bool = reserve_after.held_item_id == item
 	var own_consumed: bool = own_after.held_item_consumed
@@ -137,12 +139,14 @@ func _campaign_probe(row: Dictionary, seed: int, mode: String) -> Dictionary:
 	check(mode + " PS restaurados", projection.current_hp == hp_after)
 	check(mode + " equipo restaurado", (projection.held_item_id == item) == own_has_item)
 	check(mode + " consumo restaurado", projection.held_item_consumed == own_consumed)
+	check(mode + " estado restaurado", String(projection.status_state.persistent_id) == own_status_after)
 	check(mode + " dueno SaveV2 restaurado", JSON.stringify(_owner_data(owner)) == frozen)
 	var payload: Dictionary = {
 		"id": String(row.id), "seed": seed, "mode": mode,
 		"before": snapshot_before, "after": session.snapshot(),
 		"hp_before": hp_before, "hp_after": hp_after,
 		"foe_hp_before": foe_hp_before, "foe_hp_after": foe_hp_after,
+		"own_status_before": own_status_before, "own_status_after": own_status_after,
 		"own_has_item": own_has_item, "reserve_has_item": reserve_has_item,
 		"own_consumed": own_consumed, "reserve_consumed": reserve_consumed,
 		"physical_units": stock, "owner_unchanged": owner_unchanged
@@ -153,6 +157,7 @@ func _campaign_probe(row: Dictionary, seed: int, mode: String) -> Dictionary:
 		"valid": true, "restored": true, "evidence": key + ".json", "sha256": evidence_hash,
 		"hp_before": hp_before, "hp_after": hp_after,
 		"foe_hp_before": foe_hp_before, "foe_hp_after": foe_hp_after,
+		"own_status_before": own_status_before, "own_status_after": own_status_after,
 		"own_has_item": own_has_item, "reserve_has_item": reserve_has_item,
 		"own_consumed": own_consumed, "reserve_consumed": reserve_consumed,
 		"physical_units": stock, "owner_unchanged": owner_unchanged
@@ -182,7 +187,11 @@ func _campaign_assert(row: Dictionary, observed: Dictionary) -> void:
 	var foe_loss_r: int = int(r.foe_hp_before) - int(r.foe_hp_after)
 	check("mismo estado inicial de comparacion", a.hp_before == n.hp_before and n.hp_before == r.hp_before)
 	check("efecto solo en portador activo: reserva igual al control", delta_r == delta_n)
-	check("mismo dano al rival en tres variantes", foe_loss_a == foe_loss_n and foe_loss_n == foe_loss_r)
+	check("dano al rival igual entre control y reserva", foe_loss_n == foe_loss_r)
+	if String(row.op) != "super_effective":
+		check("dano al rival no modificado", foe_loss_a == foe_loss_n)
+	check("estado inicial igual en tres variantes",
+		a.own_status_before == n.own_status_before and n.own_status_before == r.own_status_before)
 	match String(row.op):
 		"poison_heal":
 			check("Lodo Negro cura al tipo Veneno danado", delta_a > 0 and delta_n == 0)
@@ -198,5 +207,28 @@ func _campaign_assert(row: Dictionary, observed: Dictionary) -> void:
 			check("Raiz Grande potencia drenaje real", foe_loss_n > 0 and delta_a > delta_n and delta_n > 0)
 		"no_drain":
 			check("Raiz Grande no cura sin movimiento drenante", delta_a == 0 and delta_n == 0)
+		"eviolite_resist":
+			var damage_a: int = int(a.hp_before) - int(a.hp_after)
+			var damage_n: int = int(n.hp_before) - int(n.hp_after)
+			check("Mineral Evolutivo protege una especie evolucionable",
+				damage_n > 0 and damage_a >= 0 and damage_a < damage_n)
+		"eviolite_final":
+			check("Mineral Evolutivo no protege forma final", delta_n < 0 and delta_a == delta_n)
+		"super_effective":
+			check("Cinta Experto aumenta dano supereficaz sin saturar PS",
+				foe_loss_n > 0 and foe_loss_a > foe_loss_n and foe_loss_a < int(a.foe_hp_before))
+			check("Cinta Experto no altera PS de atacante", delta_a == delta_n)
+		"neutral_control":
+			check("Cinta Experto no aumenta dano neutro", foe_loss_n > 0 and foe_loss_a == foe_loss_n)
+		"powder_immunity":
+			check("Espora duerme control y reserva pero no al portador",
+				a.own_status_after == "" and n.own_status_after == "sleep" and r.own_status_after == "sleep")
+			check("Polvo no altera PS", delta_a == 0 and delta_n == 0)
+		"weather_immunity":
+			check("Gafas impiden dano de tormenta de arena",
+				delta_n < 0 and delta_a == 0 and delta_r == delta_n)
+		"irrelevant_control":
+			check("Sin polvo ni clima las gafas no cambian efectos",
+				delta_a == 0 and delta_n == 0 and a.own_status_after == "" and n.own_status_after == "")
 		_:
 			check("operacion declarativa no autorizada", false)
