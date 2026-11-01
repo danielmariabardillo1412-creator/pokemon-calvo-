@@ -94,3 +94,14 @@ Blobs de pruebas al cerrar LOTE_002:
 - Rutas escribibles solo las listadas en campaña (dos tests antiguos propios, dos tests nuevos, informes propios, progreso y cuaderno). Resto de motores/producción/datos/políticas/saves/otros W, branch main/V28/arb: SOLO LECTURA.
 
 **Nota de vigencia:** las secciones anteriores de este cuaderno reflejan la situación histórica al cerrar LOTE_002, cuando todavía no se había ejecutado su CI. La evidencia actual de aquel lote es el PASS confirmado por IA6; la campaña 001 es una cobertura distinta pendiente de ejecución.
+
+## 8. CAMPAÑA_001 — microbloque 02 (2026-11-01)
+
+- **Estado:** 02 `PREPARADO_PENDIENTE_CI` y registrado en `CAMP_001_ITER_02.md` / `CAMP_001_PROGRESO.csv`; 01 igualmente preparado, 03 PENDIENTE.
+- **Autoridad:** `campaigns/CAMP_001_W04.md` blob `42a8cb9db9bdbe34c607d745da6b97e107b621bf`, puerta IA6 `ACTIVADA`. Rama W04 conserva íntegro el checkpoint árbitra; no se modifican ramas ajenas.
+- **IDs 02:** `leaf_stone`, `ice_stone`, `moon_stone`. Las rutas fuente son Eevee→Leafeon/Glaceon, Gloom→Vileplume, Clefairy→Clefable y Jigglypuff→Wigglytuff (PokeAPI cadenas 67,18,14,16).
+- **Caso especial:** Vulpix común con `ice_stone` no debe evolucionar/gastar por la ruta del Vulpix de Alola (cadena 15, base_form regional); el test diferencia `CONDITIONAL_ROUTE_REJECTED` de `CONDITIONAL_ROUTE_NOT_IN_ACTIVE_CATALOG`. El segundo estado NO certifica ruta condicionada.
+- **Tests extendidos, sin producción:** `tests/gameplay/parallel_items_w04_campaign_001.gd`, commit `b11e53b3811bb23c2d23ff76b5aba5a27a2ee45e`, blob `c78d1642c0e1f67c4510e2f3f1b338b5c70daae1`; `tests/tools/test_parallel_items_w04_campaign_001.py`, commits `98e0748698911c65da01d3328dc11e43039d1b25` y corrección null `2db1acfe7e1b433db2ebbdc7bf8f5ec8393ca13c`, blob `ffd348c51bab97095eb30c3e3c4f8e25674c684e`.
+- **Nuevos escenarios:** 5 rutas positivas en equipo y PC, stock 0/2→1, propietario erróneo, destino falsificado, repetición sin gasto, ubicación/identidad/datos preservados y rechazo para especies incorrectas. Persistencia real SaveV2 reservada para 03.
+- **Pruebas:** comprobación independiente de metadatos y presencia de escenarios en GitHub `44/44 PASS ESTRUCTURAL`. Python del checkout y GDScript Godot `SIN_EJECUTAR`; `PENDIENTE_CI`. La CI base anterior #41341842320 no cubre nuevos commits. GPU/visual sin probar.
+- **Siguiente `p`:** SOLO microbloque 03, ampliar el mismo corredor con persistencia SaveV2, clasificar rutas, preparar `CAMP_001_FINAL.md` y DETENER. Si un test o contrato falla, elevar a IA6; NO modificar `modules/`, `data/`, `config/`, guardados, main, V28, árbitra u otras W.
