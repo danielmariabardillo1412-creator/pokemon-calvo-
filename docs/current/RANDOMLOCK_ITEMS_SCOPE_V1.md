@@ -2,6 +2,16 @@
 
 > **Borrador de selección de contenido, no cambio en la lógica del juego.** Clasifica las 2.222 entradas canónicas. Los archivos originales, las partidas guardadas, los objetos ya implementados y las reglas de comercio permanecen intactos. Ninguna decisión de esta rama modifica `config/item_selection_v1.json` ni los generadores actuales.
 
+## Orden de trabajo confirmado — objetos antes que megaevoluciones (2026-11-01)
+
+**Decisión expresa del usuario:**
+
+1. **FASE ACTUAL — objetos ordinarios del randomlocke competitivo.** Alcance de catálogo **870 IDs excluyendo todas las megapiedras**: **703 `PERMITIR` + 167 `CONDICIONAL` sin mega**. Revisar los 167 condicionales no-mega; implementar y probar lo funcionalmente pendiente de los permitidos, sin repetir trabajo ya verificado. Los 870 NO son 870 efectos sin programar.
+2. **FASE SIGUIENTE, solo DESPUÉS de terminar la fase de objetos:** megaevoluciones y su interfaz, formas, activación, pruebas y objetos asociados. Las **92 entradas `MEGA_STONE`** se mantienen en estado `CONDICIONAL` y **excluidas del trabajo presente**, no se reparten ni habilitan. La posible **piedra universal con máximo dos unidades** es una propuesta a discutir con el compañero, no una decisión aplicada.
+3. **Conservación:** mantener los 2.222 registros originales y los descartes propuestos sin destrucción, guardar trazabilidad y no modificar la rama oficial `main` ni las pruebas V28 de forma indirecta.
+
+**Comprobación de cierre de cantidades:** 703 permitidos + 167 condicionales no mega = **870 en fase de objetos**; 92 megapiedras aparte; 1.260 descartados; **870 + 92 + 1.260 = 2.222**. El criterio `PERMITIR` expresa alcance de contenido, **no** un PASS de implementación. Esta nota es documental; no cambia el generador de objetos.
+
 ## Resultado exacto del primer filtrado
 
 | Decisión propuesta | Entradas | Qué significa |
