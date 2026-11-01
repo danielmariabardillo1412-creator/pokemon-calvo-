@@ -27,7 +27,7 @@ func _run_campaign() -> void:
 	check("overlay existente", Variants.apply(catalogs))
 	check("formato fijado", String(automation.format) == "gen9calvounifiedv1")
 	var expected_seed := [23, 19, 29, 43]
-	var seed_correct := automation.get("seed") is Array and automation.seed.size() == expected_seed.size()
+	var seed_correct: bool = automation.get("seed") is Array and automation.seed.size() == expected_seed.size()
 	if seed_correct:
 		for i in expected_seed.size():
 			seed_correct = seed_correct and (automation.seed[i] is int or automation.seed[i] is float) and float(automation.seed[i]) == float(expected_seed[i])
