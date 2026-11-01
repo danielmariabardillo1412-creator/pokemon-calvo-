@@ -1,3 +1,12 @@
+## Control operativo IA6 — 2026-11-01, actualización de campaña
+
+**Estado comprobado en ramas:** W01 ITER_02/03 publicada (PREPARADO_PENDIENTE_CI); W02 03/03, `CAMP_001_FINAL.md` entregado (no PASS funcional); W03 02/03 con adaptación net_ball escrita y CI pendiente; W04 02/03, conversación con error referido por el usuario, ramas/commits preservados, no intervenir de momento; W05 01/03 recuperado, perfil de lectura de libros pendiente de CI. **Total 10 de 15 microbloques documentados.** La frase `PREPARADO_PENDIENTE_CI` no denota fallo del código; `BLOQUEADO_PENDIENTE_CI` es una puerta de control antes de continuar.
+
+**Prueba de desbloqueo aislada:** staging `codex/calvo-items-20261101-ci-camp001-smoke`, commit `f7a46e7c6ccbd7cb356df14b42f97ab3e8679974`, CI [#41349870689](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41349870689). Coteja en Godot 4.7 únicamente adaptación W03 net_ball, tests V11/V15 y W05 perfil de consulta; `main`, V28, árbitra (producción) y ramas W inalteradas. **No declarar PASS ni levantar bloqueo hasta leer conclusión por SHA y logs.** No usar resultados de staging para certificar W01/W02/W04.
+
+**Siguiente acción exclusiva IA6:** leer conclusión + logs de #41349870689; si FAIL, localizar causa y solicitar corrección estrictamente acotada; si PASS, registrar SHA, revisar diff y decidir integración de W03/W05 en árbitra antes de nueva autorización. W02 cerrado y pendiente de gate propio de seis bayas. La interrupción de chat W04 no invalida sus commits y su trabajo puede retomarse desde cuaderno sin volver a implementar los bloques 01–02.
+
+---
 # ESTADO CENTRAL — CAMPAÑA_001 ACTIVADA (1-XI-2026)
 
 **Resultado de puerta:** PASS GitHub Actions [#41341842320](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41341842320), código `ac34fabbe1a27e69614f0239abee21c29d6fe65e`. Import Godot 4.7 y Node/Python verificados. W01 1332 checks PASS; W02 503 PASS; W03 caracterización de captura PASS **sin implementación de net_ball**; W04 100 PASS; W05 Python 248 MACHINE PASS estático. No se ha hecho GPU/visual.
