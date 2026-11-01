@@ -3,10 +3,14 @@ extends SceneTree
 # W05 CAMP_001/01: prueba de lectura del adaptador de libros de movimientos.
 # Solo consulta el perfil canónico, sin modificar aprendizaje, inventario ni guardados.
 const Libros = preload("res://modules/inventory/field_machine_book_profile.gd")
+const Servicio = preload("res://modules/inventory/field_item_service.gd")
+const Contenido = preload("res://modules/gameplay/randomlock_content_policy.gd")
+const ID_TEST := &"w05_libro_prueba"
 const PERFIL = "res://modules/inventory/item_connections_v1.json"
 const DATOS = "res://data/normalized/pokemon_api.json"
 var comprobaciones := 0
 var errores: Array[String] = []
+var acceso_bloqueado := false
 
 
 func _initialize() -> void:
@@ -110,9 +114,170 @@ func _verificar() -> void:
 		_check("19_heredadas_sin_activar", heredadas == 19)
 		_check("tipos_observados_no_vacios", not mapa_tipos.is_empty())
 		_check("perfil_sin_mutacion_02", JSON.stringify(perfil) == imagen_perfil)
+	_probar_ensenanza(perfil, catalogos)
 	_fin()
 
 
 func _fin() -> void:
-	print("W05 CAMP_001/01: %d comprobaciones, %d errores" % [comprobaciones, errores.size()])
+	print("W05 CAMP_001/03: %d comprobaciones, %d errores" % [comprobaciones, errores.size()])
 	quit(0 if errores.is_empty() else 2)
+
+
+# CAMP_001/03: integración del servicio existente, sin implementar teach de nuevo.
+# El adaptador y la prueba no modifican reglas de consumo, inventario ni guardados.
+func _instantanea(propietario: PlayerCollection) -> String:
+	return JSON.stringify(SaveGameData.build(propietario.party, propietario.storage, propietario.inventory).to_dict())
+
+
+func _especie_compatible(catalogos: DefinitionCatalog, contenido: RefCounted, movimiento: StringName) -> StringName:
+	var opciones: Array[StringName] = [&"mew"]
+	opciones.append_array(catalogos.species_catalog.all_ids())
+	for id: StringName in opciones:
+		if not contenido.species_allowed(String(id)):
+			continue
+		var especie: CreatureSpecies = catalogos.species(id)
+		if especie == null:
+			continue
+		for entrada: LearnSetEntry in especie.learnset:
+			if entrada.method == "machine" and String(entrada.version_group) == "scarlet-violet" and entrada.move_id == movimiento:
+				return id
+	return &""
+
+
+func _servicio_para(catalogos: DefinitionCatalog, especie_id: StringName) -> RefCounted:
+	var especie: CreatureSpecies = catalogos.species(especie_id)
+	_check("03/especie_presente/" + String(especie_id), especie != null)
+	if especie == null:
+		return null
+	var generador := RandomNumberGenerator.new()
+	generador.seed = 805
+	var criatura: CreatureInstance = CreatureFactory.create(especie, 50, catalogos,
+		ProgressionRuleset.new(), generador, {"instance_id": ID_TEST, "moves": ["tackle", "protect"]})
+	_check("03/creatura_creada/" + String(especie_id), criatura != null)
+	if criatura == null:
+		return null
+	var propietario := PlayerCollection.new()
+	var agregada: bool = propietario.party.add_creature(criatura)
+	_check("03/propiedad/" + String(especie_id), agregada)
+	if not agregada:
+		return null
+	var servicio := Servicio.new()
+	var configurado: bool = servicio.configure(propietario, catalogos, func(): return not acceso_bloqueado)
+	_check("03/configuracion/" + String(especie_id), configurado)
+	return servicio if configurado else null
+
+
+func _probar_ensenanza(perfil: Dictionary, catalogos: DefinitionCatalog) -> void:
+	var contenido := Contenido.new()
+	_check("03/politica_cargada", contenido.load_local())
+	if not contenido.valid:
+		return
+	var casos := ["tm01", "tm02", "tm77"]
+	for id: String in casos:
+		var libro: Dictionary = Libros.presentacion(StringName(id), perfil, catalogos)
+		_check("03/libro_activo/" + id, libro.get("disponible", false))
+		if not libro.get("disponible", false):
+			continue
+		var movimiento := StringName(libro.get("move_id", ""))
+		_check("03/movimiento_aprendible/" + id, contenido.move_learnable(String(movimiento)))
+		if not contenido.move_learnable(String(movimiento)):
+			continue
+		var especie_id := _especie_compatible(catalogos, contenido, movimiento)
+		_check("03/especie_compatible/" + id, especie_id != &"")
+		if especie_id == &"":
+			continue
+		var servicio := _servicio_para(catalogos, especie_id)
+		if servicio == null:
+			continue
+		var original: CreatureInstance = servicio.owner.owned_creature(ID_TEST)
+		original.moveset.clear()
+		original.move_ids.clear()
+		_check("03/perfil_servicio/" + id, servicio.machine_move(StringName(id)) == movimiento)
+		var sin_stock := _instantanea(servicio.owner)
+		var rechazo: Dictionary = servicio.teach(StringName(id), ID_TEST)
+		_check("03/sin_stock_no_consumir/" + id, not rechazo.get("accepted", false)
+			and rechazo.get("reason", "") == "item_not_owned" and _instantanea(servicio.owner) == sin_stock)
+		_check("03/agrega_dos/" + id, servicio.owner.inventory.add(StringName(id), 2))
+		var antes := _instantanea(servicio.owner)
+		var ajeno: Dictionary = servicio.teach(StringName(id), &"w05_no_propietario")
+		_check("03/ajeno_no_muta/" + id, not ajeno.get("accepted", false)
+			and ajeno.get("reason", "") == "creature_not_owned" and _instantanea(servicio.owner) == antes)
+		acceso_bloqueado = true
+		var bloqueado: Dictionary = servicio.teach(StringName(id), ID_TEST)
+		acceso_bloqueado = false
+		_check("03/bloqueo_no_muta/" + id, not bloqueado.get("accepted", false)
+			and bloqueado.get("reason", "") == "field_locked" and _instantanea(servicio.owner) == antes)
+		var resultado: Dictionary = servicio.teach(StringName(id), ID_TEST)
+		var actual: CreatureInstance = servicio.owner.owned_creature(ID_TEST)
+		_check("03/ensenanza_real/" + id, resultado.get("accepted", false) and resultado.get("action", "") == "teach"
+			and resultado.get("move_id", "") == String(movimiento) and resultado.get("version", "") == "scarlet-violet")
+		_check("03/consumo_unico/" + id, servicio.owner.inventory.quantity(StringName(id)) == 1)
+		_check("03/identidad_conservada/" + id, actual != null and actual.instance_id == ID_TEST
+			and servicio.owner.location_of(ID_TEST) == &"PARTY")
+		if actual != null:
+			var aprendido: BattleMoveSlot = actual.move_slot(movimiento)
+			var definicion: MoveDefinition = catalogos.move(movimiento)
+			_check("03/movimiento_correcto/" + id, aprendido != null and actual.moveset.size() == 1)
+			_check("03/pp_correctos/" + id, aprendido != null and definicion != null
+				and aprendido.current_pp == definicion.pp and aprendido.max_pp == definicion.pp)
+		var tras_aprender := _instantanea(servicio.owner)
+		var repetido: Dictionary = servicio.teach(StringName(id), ID_TEST)
+		_check("03/repetido_sin_gasto/" + id, not repetido.get("accepted", false)
+			and repetido.get("reason", "") == "move_already_known" and _instantanea(servicio.owner) == tras_aprender)
+		if id == "tm01" and resultado.get("accepted", false):
+			_probar_persistencia(servicio.owner, movimiento, catalogos)
+
+	# Todas las heredadas del catálogo seleccionado deben conservar stock y Pokémon.
+	var archivo := FileAccess.open("res://docs/current/RANDOMLOCK_ITEMS_BUILD_SCOPE_V2.csv", FileAccess.READ)
+	_check("03/catalogo_legacy_legible", archivo != null)
+	if archivo == null:
+		return
+	archivo.get_csv_line()
+	var heredadas := 0
+	var servicio_legacy := _servicio_para(catalogos, &"mew")
+	if servicio_legacy == null:
+		archivo.close()
+		return
+	while not archivo.eof_reached():
+		var fila: PackedStringArray = archivo.get_csv_line()
+		if fila.size() < 5 or fila[2] != "MACHINE" or fila[4] != "SELECCIONADO":
+			continue
+		var id := String(fila[0])
+		var por_version: Dictionary = perfil.get("machine_rows", {}).get(id, {})
+		if not String(por_version.get("scarlet-violet", "")).is_empty():
+			continue
+		heredadas += 1
+		_check("03/stock_legacy/" + id, servicio_legacy.owner.inventory.add(StringName(id)))
+		var antes := _instantanea(servicio_legacy.owner)
+		var denegado: Dictionary = servicio_legacy.teach(StringName(id), ID_TEST)
+		_check("03/legacy_rechazada/" + id, not denegado.get("accepted", false)
+			and denegado.get("reason", "") == "machine_not_in_active_version"
+			and _instantanea(servicio_legacy.owner) == antes)
+		_check("03/legacy_sin_mapeo_activo/" + id,
+			servicio_legacy.machine_move(StringName(id)) == &""
+			and not Libros.presentacion(StringName(id), perfil, catalogos).get("disponible", false))
+	archivo.close()
+	_check("03/19_heredadas_rechazadas", heredadas == 19)
+	# Una única implementación de reglas de enseñanza y gasto: FieldItemService.teach.
+	_check("03/servicio_unico", Servicio.PROFILE == "res://modules/inventory/item_connections_v1.json")
+
+
+func _probar_persistencia(propietario: PlayerCollection, movimiento: StringName, catalogos: DefinitionCatalog) -> void:
+	var ruta := "user://w05_machine_books_camp001_test_only.json"
+	var repositorio := SaveGameRepository.new()
+	var resultado: SaveResult = repositorio.save_collection(ruta, propietario)
+	_check("03/guardado_test_exitoso", resultado.ok)
+	if resultado.ok:
+		var cargado: LoadResult = repositorio.load(ruta)
+		_check("03/carga_test_exitosa", cargado.ok)
+		if cargado.ok:
+			var criatura: CreatureInstance = cargado.party.get_creature(ID_TEST)
+			var mov: BattleMoveSlot = criatura.move_slot(movimiento) if criatura != null else null
+			var definicion: MoveDefinition = catalogos.move(movimiento)
+			_check("03/persistencia_movimiento_y_pp", criatura != null and mov != null
+				and definicion != null and mov.current_pp == definicion.pp)
+			_check("03/persistencia_stock", cargado.inventory.quantity(&"tm01") == 1)
+			_check("03/persistencia_propiedad", cargado.party.get_creature(ID_TEST) != null
+				and cargado.storage.get_creature(ID_TEST) == null)
+	if FileAccess.file_exists(ruta):
+		DirAccess.remove_absolute(ProjectSettings.globalize_path(ruta))
