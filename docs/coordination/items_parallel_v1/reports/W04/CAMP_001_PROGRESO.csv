@@ -1,2 +1,3 @@
 microbloque,ids,actividad,estado,commit_test_gd,commit_test_python,pruebas_estructurales,pruebas_godot,ci_nuevo,siguiente_paso
 01,"fire_stone;water_stone;thunder_stone","6 escenarios con destino desde catálogo y controles de consumo/propiedad",PREPARADO_PENDIENTE_CI,7f667ba453d0b80a862b1565d17e1c9849d38768,63d396ab0b85401f9e83b319c58bd5efa28dcc8f,40/40_PASS,SIN_EJECUTAR,SIN_EJECUTAR,"02 Leaf/Ice/Moon tras nuevo p; ejecutar CI consolidada en IA6"
+02,"leaf_stone;ice_stone;moon_stone","5 rutas positivas, equipo/PC, stock y requisito Vulpix-Alola",PREPARADO_PENDIENTE_CI,b11e53b3811bb23c2d23ff76b5aba5a27a2ee45e,2db1acfe7e1b433db2ebbdc7bf8f5ec8393ca13c,44/44_PASS,SIN_EJECUTAR,SIN_EJECUTAR,"03 SaveV2 y cierre solo tras siguiente p"
