@@ -26,6 +26,7 @@ func _run_campaign() -> void:
 	catalogs = GameData.from_dict(JSON.parse_string(FileAccess.get_file_as_string("res://data/normalized/pokemon_api.json"))).to_definition_catalog()
 	check("overlay existente", Variants.apply(catalogs))
 	check("formato fijado", String(automation.format) == "gen9calvounifiedv1")
+	print("IA6_W02_DIAG_SEED ", JSON.stringify({"actual": automation.seed, "same": automation.seed == [23, 19, 29, 43], "type": typeof(automation.seed), "first_type": typeof(automation.seed[0])}))
 	check("semilla reproducible", automation.seed == [23, 19, 29, 43])
 	check("control dueño activo, ausente y reserva", automation.variants == ["active", "none", "reserve"])
 	check("dos ubicaciones de mochila", automation.locations == ["PARTY", "STORAGE"])
@@ -81,6 +82,7 @@ func _compare_native(spec: Dictionary, held: Dictionary) -> void:
 	check("reserva no altera al activo",
 		plain.hp == reserve.hp and plain.status == reserve.status and plain.confused == reserve.confused)
 	if String(spec.kind) == "confusion":
+		print("IA6_W02_DIAG_PERSIM ", JSON.stringify({"scenario": spec.scenario, "active": {"confused": active.confused, "consumed": active.consumed, "hp": active.hp, "status": active.status}, "none": {"confused": plain.confused, "consumed": plain.consumed, "hp": plain.hp, "status": plain.status}, "reserve": {"confused": reserve.confused, "consumed": reserve.consumed, "hp": reserve.hp, "status": reserve.status}, "expected_consume": should_consume}))
 		check("Persim elimina confusión únicamente en portador activo",
 			not active.confused and plain.confused == should_consume
 			and reserve.confused == should_consume)
