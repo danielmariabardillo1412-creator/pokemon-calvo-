@@ -74,3 +74,7 @@ Cinco trabajadoras por tres objetos implican hasta **15 IDs por ronda coordinada
 A. Auditoría ID-por-ID de **lo ya implementado** vs **lo pendiente de contrato, código o prueba** (no confundir con 743 seleccionados). B. Importadores/perfiles reutilizables por familia. C. Pruebas de lógica, integración, consumo, propietarios/PC, guardado/carga y UI donde corresponda. D. Informe de cobertura por ID y evidencias reproducibles. E. Lista de bloqueos reales, no propuestas vagas. F. Integración secuencial **en rama árbitra**, lista para PR a main **solo si el usuario la autoriza**.
 
 **Estado inicial del cuaderno:** ramas y protocolo preparados; nadie está trabajando automáticamente; ningún lote fue probado/implementado por crear estos documentos.
+
+## Aviso de arranque: LOTE_001 audit-only
+
+Ya existe `BASELINE_GATE_2026-11-01.md` y encargos `assignments/LOTE_001_W01.md` a `LOTE_001_W05.md` en la rama árbitra. No iniciar desarrollo hasta unificar las referencias V27/V28. Las trabajadoras escriben solo informes en ramas exclusivas; lectura de V28 no es importación de V28. Prioridad: no generar código espagueti, comprobar adaptadores reutilizables antes de nuevas implementaciones.

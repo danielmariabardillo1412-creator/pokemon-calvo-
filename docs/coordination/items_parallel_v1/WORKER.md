@@ -60,3 +60,7 @@ Detener los cambios, informar el error concreto y los IDs asignados sin alterar 
 ## Regla Mega literal para no volver a equivocarse
 
 **DOS piedras universales físicas por partida; hasta DOS megaevoluciones por entrenador EN EL MISMO combate.** Los portadores se fijan antes del combate y no pueden cambiar ni traspasar su piedra durante él. Después se pueden asignar a otros Pokémon; especies sin megaforma autorizada no megaevolucionan. No implementar todavía; leer la especificación corregida V2.
+
+## Complemento LOTE_001 — primera ronda de comprobación
+
+Para el primer encargo exclusivo `LOTE_001_W0X` prevalece la **prohibición temporal de editar producción** de la puerta de compatibilidad. Una W puede leer cualquier rama, pero no introducir cambios de V28 en su propia rama antes de que la árbitra publique una base integrada certificada. Los 248 IDs de máquinas de W05 constituyen **una auditoría de tabla**, no permiso para programar 248 objetos. Un informe sin PASS operativo sigue siendo útil si clasifica las rutas y cita exactamente el código y las evidencias disponibles. Lee `BASELINE_GATE_2026-11-01.md`.

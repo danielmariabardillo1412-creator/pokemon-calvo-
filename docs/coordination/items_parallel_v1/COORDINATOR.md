@@ -69,3 +69,9 @@ Al responder, informar: `IDs triados`, `IDs ya verificados`, `IDs implementados`
 ## Fase Mega futura — NO encargar ahora
 
 Regla cerrada: DOS piedras físicas del MISMO tipo universal por jugador/partida, DOS megaevoluciones por entrenador en el mismo combate, sin reasignar portador o forma hasta terminar. Distintas parejas entre combates. Se encuentra en `docs/current/RANDOMLOCK_MEGA_UNIVERSAL_SPEC_V1.md`. No reabrir ni cambiar a una sola activación.
+
+## Complemento 2026-11-01 — base divergente / primera ronda sin código
+
+**Antes de implementar**: consultar `BASELINE_GATE_2026-11-01.md`. La V28 PR #118 añade lógica de progresión, automatización y tests que NO están en la rama de catálogo de la que nacieron W01-W05; no repetirlos ni empezar a programar sobre el checkout antiguo como si fueran inexistentes. Los cinco lotes `LOTE_001_W0X.md` son **auditoría documentada**, no permiso de cambiar producción. Una auditoría de familia (W05: máquinas) puede superar tres IDs cuando comparte analizador; el límite 1-3 del piloto se aplica a *implementaciones riesgosas*, no a leer tablas. La árbitra resolverá el checkpoint de integración antes del LOTE_002.
+
+**Discrepancia a conciliar**: `beast_ball` figura seleccionado en el catálogo, pero V28 documenta veto a la captura especial de Ultraentes. No reactivar ni borrar nada ahora; marcar conflicto para decisión consciente. No confundir las 27 verificaciones V28 con los 744 tipos de contenido ni 229 MT V27 con 248 máquinas seleccionadas.
