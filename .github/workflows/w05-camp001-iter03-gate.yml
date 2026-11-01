@@ -1,0 +1,61 @@
+name: IA6 W05 CAMP001 Iter03 Machine Teach Gate
+on:
+  push:
+    branches: [codex/calvo-items-20261102-w05-iter03-gate]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ia6-w05-iter03-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    name: W05 native teaching and save (Godot 4.7)
+    runs-on: ubuntu-latest
+    timeout-minutes: 17
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: chickensoft-games/setup-godot@v2.4.1
+        with:
+          version: 4.7.0
+          use-dotnet: false
+          include-templates: false
+      - name: Restore project and import
+        shell: bash
+        run: |
+          set -euo pipefail
+          godot --version | grep -E '^4[.]7([.-]|$)'
+          python -B tools/distribution/restore_resources.py
+          python -B tools/distribution/restore_resources.py --check
+          mkdir -p data/reports
+          cp ci/fixtures/pokeapi_reports/forms_policy_report.json data/reports/forms_policy_report.json
+          cp ci/fixtures/pokeapi_reports/unsupported_mechanics.json data/reports/unsupported_mechanics.json
+          cp ci/fixtures/pokeapi_reports/import_summary.json data/reports/import_summary.json
+          godot --headless --path . --import 2>&1 | tee w05-iter03-import.log
+          if grep -E 'SCRIPT ERROR|Parse Error' w05-iter03-import.log; then exit 1; fi
+      - name: Contract on 248 machines and zero activation of legacy
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B -m unittest discover -s tests/tools -p 'test_parallel_w05_machine_scope.py' -v 2>&1 | tee w05-iter03-python.log
+          python -B tools/item_audit/parallel_w05_machine_scope.py 2>&1 | tee w05-iter03-catalog.log
+      - name: W05 integration - teach, PP, consume and SaveV2
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 230s godot --headless --path . --script res://tests/gameplay/parallel_items_w05_machine_books_v1.gd 2>&1 | tee w05-iter03-godot.log
+          grep -E 'W05 CAMP_001/03: [0-9]+ comprobaciones, 0 errores' w05-iter03-godot.log
+      - name: Preserve bounded logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: w05-iter03-${{ github.run_id }}
+          retention-days: 7
+          if-no-files-found: ignore
+          path: w05-iter03-*.log
