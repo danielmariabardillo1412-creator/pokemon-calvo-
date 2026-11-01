@@ -37,6 +37,8 @@ EXPECTED_02 = {
     "rawst_healthy": ("rawst_berry", "status", "full", "", False, False, 0, "mew", "amnesia", False, "", ""),
 }
 ALL_EXPECTED = set(EXPECTED_01) | set(EXPECTED_02)
+MATRIX_PROFILES = {"oran_berry": ("hp_10", "heal_10"), "pecha_berry": ("poison_specific", "poison_specific"), "cheri_berry": ("paralysis_specific", "paralysis_specific"), "persim_berry": ("volatile_confusion_specific", "NOT_REGISTERED"), "chesto_berry": ("sleep_specific", "sleep_specific"), "rawst_berry": ("burn_specific", "burn_specific")}
+
 MODES = ("active", "none", "reserve")
 LOCATIONS = ("PARTY", "STORAGE")
 
@@ -53,10 +55,10 @@ def read(path):
 def validate_fixture(f):
     require(set(f) == {"schema_version", "family", "campaign",
                        "microblocks_completed", "format", "level", "seed",
-                       "variants", "locations", "cases", "note"},
+                       "variants", "locations", "cases", "note", "coverage_matrix"},
             "Claves de matriz alteradas")
     require(f["schema_version"] == 1 and f["family"] == "berry_campaign_w02"
-            and f["campaign"] == "CAMP_001" and f["microblocks_completed"] == [1, 2],
+            and f["campaign"] == "CAMP_001" and f["microblocks_completed"] == [1, 2, 3],
             "Campaña o microbloque no autorizado")
     require(f["format"] == "gen9calvounifiedv1"
             and f["seed"] == [23, 19, 29, 43] and f["level"] == 100,
@@ -87,6 +89,18 @@ def validate_fixture(f):
             require(set(r) == expected_keys and original + suffix == EXPECTED_02[key],
                     "ITER_02 alterada: " + key)
     require(seen == ALL_EXPECTED, "Matriz sin todos los casos obligatorios")
+    matrix = f["coverage_matrix"]
+    require(set(matrix) == set(MATRIX_PROFILES), "Familias fuera del permiso")
+    for item, desc in matrix.items():
+        require(set(desc) == {"effect", "field_profile", "positive", "negative"},
+                "Descriptor incompleto: " + item)
+        require((desc["effect"], desc["field_profile"]) == MATRIX_PROFILES[item],
+                "Perfil no autorizado: " + item)
+        canonical = {**EXPECTED_01, **EXPECTED_02}
+        positive = [name for name, val in canonical.items() if val[0] == item and val[4] is True]
+        negative = [name for name, val in canonical.items() if val[0] == item and val[4] is False]
+        require(desc["positive"] == positive and desc["negative"] == negative,
+                "Contratos positivos/negativos desalineados: " + item)
     return f
 
 
@@ -116,7 +130,7 @@ def stock(owner, item):
 def validate_result(f, result, folder):
     validate_fixture(f)
     require(set(result) == {"schema_version", "family", "status", "checks",
-                            "errors", "cases", "full_item_certification", "gpu"},
+                            "errors", "cases", "per_item", "full_item_certification", "gpu"},
             "Esquema de informe alterado")
     require(result["schema_version"] == 1 and result["family"] == f["family"]
             and result["status"] == "PASS" and result["errors"] == []
@@ -233,6 +247,16 @@ def validate_result(f, result, folder):
                 require(raw["initial_status"] == "sleep" and v["status"] == "",
                         "Chesto campo debe quitar sueño")
     require(seen == set(lookup), "Matriz real incompleta")
+    per_item = result["per_item"]
+    require(set(per_item) == set(f["coverage_matrix"]), "Falta estado por baya")
+    for item, summary in per_item.items():
+        require(set(summary) == {"status", "cases"} and summary["status"] == "PASS",
+                "Una baya no ha pasado su matriz")
+        expected_count = len(f["coverage_matrix"][item]["positive"] +
+                             f["coverage_matrix"][item]["negative"])
+        actual_count = sum(row["id"] == item for row in result["cases"])
+        require(summary["cases"] == expected_count == actual_count,
+                "Resumen atribuye escenarios incorrectos: " + item)
     return {"status": "PASS_VERIFICADO_ACOTADO", "cases": len(seen),
             "native_variants": len(seen) * 3, "field_variants": len(seen) * 2,
             "checks": result["checks"]}
@@ -241,7 +265,7 @@ def validate_result(f, result, folder):
 class ContractTests(unittest.TestCase):
     def setUp(self):
         self.fixture = {"schema_version": 1, "family": "berry_campaign_w02",
-                        "campaign": "CAMP_001", "microblocks_completed": [1, 2],
+                        "campaign": "CAMP_001", "microblocks_completed": [1, 2, 3],
                         "format": "gen9calvounifiedv1", "level": 100,
                         "seed": [23, 19, 29, 43], "variants": list(MODES),
                         "locations": list(LOCATIONS), "note": "test",
@@ -257,7 +281,15 @@ class ContractTests(unittest.TestCase):
                                  **({"field_status": v[10], "native_expected_status": v[11]}
                                     if name == "chesto_spore" else {}))
                             for name, v in EXPECTED_02.items()
-                        ]}
+                        ],
+                        "coverage_matrix": {
+                            item: {"effect": profile[0], "field_profile": profile[1],
+                                   "positive": [key for key, val in {**EXPECTED_01, **EXPECTED_02}.items()
+                                                if val[0] == item and val[4] is True],
+                                   "negative": [key for key, val in {**EXPECTED_01, **EXPECTED_02}.items()
+                                                if val[0] == item and val[4] is False]}
+                            for item, profile in MATRIX_PROFILES.items()
+                        }}
 
     def test_real_fixture_passes_contract(self):
         self.assertEqual(len(validate_fixture(read(FIXTURE))["cases"]), 16)
@@ -297,7 +329,7 @@ class ContractTests(unittest.TestCase):
 
     def test_other_microblock_unapproved(self):
         data = copy.deepcopy(self.fixture)
-        data["microblocks_completed"] = [1, 2, 3]
+        data["microblocks_completed"] = [1, 2, 3, 4]
         with self.assertRaises(ValueError): validate_fixture(data)
 
     def test_persim_field_cure_falsification_rejected(self):
@@ -316,6 +348,22 @@ class ContractTests(unittest.TestCase):
         data = copy.deepcopy(self.fixture)
         row = next(x for x in data["cases"] if x["scenario"] == "rawst_poison")
         row["consumes"] = True
+        with self.assertRaises(ValueError): validate_fixture(data)
+
+    def test_missing_per_berry_contract_rejected(self):
+        data = copy.deepcopy(self.fixture)
+        del data["coverage_matrix"]["rawst_berry"]
+        with self.assertRaises(ValueError): validate_fixture(data)
+
+    def test_swapped_positive_negative_rejected(self):
+        data = copy.deepcopy(self.fixture)
+        row = data["coverage_matrix"]["chesto_berry"]
+        row["negative"] = row["positive"]
+        with self.assertRaises(ValueError): validate_fixture(data)
+
+    def test_persim_field_profile_falsification_rejected(self):
+        data = copy.deepcopy(self.fixture)
+        data["coverage_matrix"]["persim_berry"]["field_profile"] = "all_cure"
         with self.assertRaises(ValueError): validate_fixture(data)
 
     def test_full_certification_rejected(self):
