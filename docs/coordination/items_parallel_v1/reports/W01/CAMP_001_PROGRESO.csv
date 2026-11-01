@@ -1,0 +1,2 @@
+microbloque,ids,objetivo,escenarios,pares_caso_semilla,variantes,estado,validacion_estatica,python_nuevo,godot_nuevo,checkpoint,commit_tests,siguiente
+01,"black_sludge;shell_bell;big_root",curacion_y_dano_residual,8,12,36,PREPARADO_PENDIENTE_CI,PASS_12_INVARIANTES,SIN_EJECUTAR,SIN_EJECUTAR,1b52fdd0b7b89e468811a17ad83a917ec7107735,cb81acaabf6b7d5f1d347ecad9bc6f825ee69919,02_defensa_y_dano_condicional
