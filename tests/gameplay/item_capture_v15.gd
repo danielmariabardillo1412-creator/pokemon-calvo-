@@ -101,8 +101,28 @@ func _rejections_v15() -> void:
 		var rng := RandomNumberGenerator.new();rng.seed=9
 		var result := CaptureSystem.resolve(CaptureAttempt.new(c,&"friend_ball",CaptureBattleContext.new()),rng,catalogs,CreatureParty.new())
 		check("Friend sets 200 rather than adding or clamping old friendship",result.result.status==CaptureResult.SUCCESS and c.friendship==200)
-	for unsupported: StringName in [&"net_ball",&"luxury_ball",&"repeat_ball",&"park_ball",&"banana_ball"]:
+	for unsupported: StringName in [&"luxury_ball",&"repeat_ball",&"park_ball",&"banana_ball"]:
 		check("context-dependent or unknown ball not enabled",not CaptureRuleset.new().is_known_ball(unsupported))
+	# Sustituye la antigua expectativa "Net desconocida" por cobertura de las
+	# probabilidades reales, el consumo de una unidad y la identidad capturada.
+	check("Net is registered in shared capture rules", CaptureRuleset.new().is_known_ball(&"net_ball"))
+	for row: Array in [[&"magikarp", 3.5], [&"caterpie", 3.5], [&"pidgey", 1.0]]:
+		var sid: StringName = row[0]; var factor: float = row[1]
+		var net_creature := _prepared(sid, 15, false)
+		var net_species: CreatureSpecies = catalogs.species(sid)
+		var net_before := net_creature.to_dict()
+		var net_bag := PlayerInventory.new(); net_bag.add(&"net_ball", 2)
+		var net_party := CreatureParty.new()
+		var net_rng := RandomNumberGenerator.new(); net_rng.seed = 1503
+		var expected_p := CaptureRuleset.new().catch_probability(net_species.capture_rate, factor, 1.0,
+			net_creature.stats.max_hp, net_creature.current_hp)
+		var net_resolution := CaptureInventoryService.resolve(CaptureAttempt.new(net_creature, &"net_ball", CaptureBattleContext.new()), net_rng, catalogs, net_party, net_bag)
+		var was_caught := net_resolution.result.status == CaptureResult.SUCCESS
+		check("Net species-based probability " + String(sid), is_equal_approx(net_resolution.result.probability, expected_p)
+			and net_resolution.result.status != CaptureResult.INVALID and net_resolution.result.consume_item)
+		check("Net uses one ball and preserves ownership " + String(sid), net_bag.quantity(&"net_ball") == 1
+			and net_party.size() == (1 if was_caught else 0) and net_creature.to_dict() == net_before
+			and (not was_caught or is_same(net_party.get_creature(net_creature.instance_id), net_creature)))
 
 func _storage_v15() -> void:
 	for ball: StringName in V15_BALLS:

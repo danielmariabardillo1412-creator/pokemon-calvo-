@@ -1,0 +1,71 @@
+name: CAMP001 W03 W05 Smoke (Godot 4.7)
+on:
+  push:
+    branches:
+      - codex/calvo-items-20261101-ci-camp001-smoke
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: camp001-smoke-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: chickensoft-games/setup-godot@v2.4.1
+        with:
+          version: 4.7.0
+          use-dotnet: false
+          include-templates: false
+      - name: Prepare Godot import and fixtures
+        shell: bash
+        run: |
+          set -euo pipefail
+          godot --version | grep -E '^4[.]7([.-]|$)'
+          python -B tools/distribution/restore_resources.py
+          python -B tools/distribution/restore_resources.py --check
+          mkdir -p data/reports
+          cp ci/fixtures/pokeapi_reports/forms_policy_report.json data/reports/forms_policy_report.json
+          cp ci/fixtures/pokeapi_reports/unsupported_mechanics.json data/reports/unsupported_mechanics.json
+          cp ci/fixtures/pokeapi_reports/import_summary.json data/reports/import_summary.json
+          godot --headless --path . --import 2>&1 | tee camp001-import.log
+          if grep -E 'SCRIPT ERROR|Parse Error' camp001-import.log; then exit 1; fi
+      - name: W03 static contract for implemented net_ball
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tests/tools/test_parallel_items_w03_net_campaign_001.py --phase implemented 2>&1 | tee camp001-w03-static.log
+          python -B tests/tools/test_parallel_items_w03_capture_v1.py 2>&1 | tee camp001-w03-regression-static.log
+      - name: W03 actual capture contract and historical regressions
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 180s godot --headless --path . --script res://tests/gameplay/parallel_items_w03_capture_net_v1.gd -- --require-net 2>&1 | tee camp001-w03-capture.log
+          grep -E 'W03_CAPTURE_NET' camp001-w03-capture.log
+          timeout 180s godot --headless --path . --script res://tests/gameplay/item_capture_v11.gd 2>&1 | tee camp001-w03-v11.log
+          timeout 180s godot --headless --path . --script res://tests/gameplay/item_capture_v15.gd 2>&1 | tee camp001-w03-v15.log
+      - name: W05 actual read-only machine book adapter
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B -m unittest discover -s tests/tools -p 'test_parallel_w05_machine_scope.py' -v 2>&1 | tee camp001-w05-static.log
+          python -B tools/item_audit/parallel_w05_machine_scope.py 2>&1 | tee camp001-w05-map.log
+          timeout 180s godot --headless --path . --script res://tests/gameplay/parallel_items_w05_machine_books_v1.gd 2>&1 | tee camp001-w05-godot.log
+          grep -E 'W05 CAMP_001/01:' camp001-w05-godot.log
+      - name: Preserve evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: camp001-w03-w05-smoke-${{ github.run_id }}
+          retention-days: 7
+          if-no-files-found: ignore
+          path: camp001-*.log

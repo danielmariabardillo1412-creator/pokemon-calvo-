@@ -129,11 +129,25 @@ func _boundaries() -> void:
 	check("Heal successful storage route", result.result.status == CaptureResult.SUCCESS and result.disposition == CaptureDisposition.STORAGE_REQUIRED)
 	var storage := CreatureStorage.new(); var routed := CaptureOwnershipRouter.new().route(result, party, storage)
 	check("Heal applied before storage", routed.stored and storage.get_creature(c.instance_id).current_hp == c.stats.max_hp and c.status_state.persistent_id == &"" and c.moveset[0].current_pp == 64 and c.moveset[0].max_pp == 64)
-	for unsupported: StringName in [&"quick_ball", &"timer_ball", &"net_ball", &"luxury_ball", &"banana_ball"]:
+	for unsupported: StringName in [&"quick_ball", &"timer_ball", &"luxury_ball", &"banana_ball"]:
 		if unsupported in [&"quick_ball", &"timer_ball"]:
 			check("context-free use remains rejected " + String(unsupported), CaptureSystem.validate_attempt(CaptureAttempt.new(c, unsupported, CaptureBattleContext.new()), catalogs) == "capture_turn_context_missing")
 		else:
 			check("unsupported remains deferred " + String(unsupported), not CaptureRuleset.new().is_known_ball(unsupported))
+	# Net ya está registrada; preservar la frontera negativa de entrenador y coste.
+	var net_target := _mon(&"magikarp", 15, &"v11_net_target")
+	var net_species: CreatureSpecies = catalogs.species(&"magikarp")
+	check("Net registered through shared ball adapter", CaptureRuleset.new().is_known_ball(&"net_ball")
+		and CaptureSystem.validate_attempt(CaptureAttempt.new(net_target, &"net_ball", CaptureBattleContext.new()), catalogs) == ""
+		and is_equal_approx(BallEffects.multiplier(&"net_ball", net_target, net_species), 3.5))
+	var net_trainer := CaptureBattleContext.new(); net_trainer.is_wild = false
+	var net_bag := PlayerInventory.new(); net_bag.add(&"net_ball", 2)
+	var net_rng := RandomNumberGenerator.new(); net_rng.seed = 11
+	var net_before := net_bag.to_dict(); var net_state := net_rng.state
+	var net_rejected := CaptureInventoryService.resolve(CaptureAttempt.new(net_target, &"net_ball", net_trainer), net_rng, catalogs, CreatureParty.new(), net_bag)
+	check("Net trainer rejection preserves ball and RNG", net_rejected.result.status == CaptureResult.INVALID
+		and net_rejected.result.reason == "trainer_battle_not_capturable" and not net_rejected.result.consume_item
+		and net_bag.to_dict() == net_before and net_rng.state == net_state)
 
 func _native() -> void:
 	for ball: StringName in BALLS:
