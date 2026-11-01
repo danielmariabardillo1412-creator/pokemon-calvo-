@@ -8,15 +8,18 @@ from pathlib import Path
 import automation_v28 as common
 
 ROOT=common.ROOT
-# Three compatible type boosters extend the original V2 causal replay without new effect rules.
-PILOT_TYPE_IDS=('silk_scarf','soft_sand','spell_tag')
-IDS=['black_glasses','colbur_berry','toxic_orb','sticky_barb',*PILOT_TYPE_IDS]
+# Reuse original V2 native positive/negative controls; no duplicate effect implementation.
+PILOT_TYPE_IDS=('silk_scarf','soft_sand','spell_tag','metal_coat')
+PILOT_PLATE_IDS=('earth_plate','splash_plate','pixie_plate','insect_plate')
+IDS=['black_glasses','colbur_berry','toxic_orb','sticky_barb',*PILOT_TYPE_IDS,*PILOT_PLATE_IDS]
 SCRIPT='tests/gameplay/item_case_replay_v28.gd'
 
 
-def select(sources,ids,type_ids=()):
-    if len(set(ids))!=len(ids) or not set(type_ids)<=set(ids):
-        raise ValueError('Duplicate IDs or unrequested type pilots')
+def select(sources,ids,type_ids=(),plate_ids=()):
+    requested=set(ids);types=set(type_ids);plates=set(plate_ids)
+    if (len(requested)!=len(ids) or len(types)!=len(type_ids) or
+            len(plates)!=len(plate_ids) or types&plates or not ((types | plates) <= requested)):
+        raise ValueError('Duplicate/overlapping IDs or unrequested type/plate pilots')
     selected=[]
     for rows,proof in sources:
         passed={r['case_id']:r['status'] for r in proof['results']}
@@ -27,11 +30,12 @@ def select(sources,ids,type_ids=()):
             selected.append(row)
     if {r['id'] for r in selected}!=set(ids) or len({r['case_id'] for r in selected})!=len(selected):
         raise ValueError('Missing item or duplicate case')
-    expected_pairs={(family,seed) for family in ('type_boost','type_boost_nonmatching') for seed in (1,19)}
-    for item in type_ids:
-        actual=[(row.get('family'),row.get('seed')) for row in selected if row['id']==item]
-        if len(actual)!=len(expected_pairs) or set(actual)!=expected_pairs:
-            raise ValueError('Missing or duplicated original matching/nonmatching proof: '+item)
+    for family,ids_for_family in (('type_boost',type_ids),('plate_boost',plate_ids)):
+        expected_pairs={(name,seed) for name in (family,family+'_nonmatching') for seed in (1,19)}
+        for item in ids_for_family:
+            actual=[(row.get('family'),row.get('seed')) for row in selected if row['id']==item]
+            if len(actual)!=len(expected_pairs) or set(actual)!=expected_pairs:
+                raise ValueError('Missing or duplicated original '+family+' matching/nonmatching proof: '+item)
     return selected
 
 
@@ -84,15 +88,15 @@ def main():
         path=f'.godot/item_verification_v{version}/';sources.append({'cases':path+'cases.json','proof':path+'native.json'})
         originals.append((common.read(ROOT/(path+'cases.json')),common.read(ROOT/(path+'native.json'))))
         for name in [template,generator,path+'cases.json',path+'native.json',path+'prototypes.json']: hashes[name]=common.digest(ROOT/name)
-    rows=select(originals,IDS,type_ids=PILOT_TYPE_IDS)
+    rows=select(originals,IDS,type_ids=PILOT_TYPE_IDS,plate_ids=PILOT_PLATE_IDS)
     common.write(out/'selected_cases.json',rows)
-    meta={'ids':IDS,'type_pilot_ids':list(PILOT_TYPE_IDS),'case_count':len(rows),'sources':sources,'sources_sha256':hashes,'functional_sha':os.getenv('ITEM_AUTOMATION_FUNCTIONAL_SHA') or common.git('rev-parse','HEAD')}
+    meta={'ids':IDS,'type_pilot_ids':list(PILOT_TYPE_IDS),'plate_pilot_ids':list(PILOT_PLATE_IDS),'case_count':len(rows),'sources':sources,'sources_sha256':hashes,'functional_sha':os.getenv('ITEM_AUTOMATION_FUNCTIONAL_SHA') or common.git('rev-parse','HEAD')}
     common.write(out/'inputs.json',meta)
     run([args.godot,'--headless','--path',str(ROOT),'--script','res://'+SCRIPT,'--',out.relative_to(ROOT).as_posix()],'replay')
     report=common.read(out/'godot.json');validate(rows,report,out)
     after=common.guard()
     if before['runtime_hashes']!=after['runtime_hashes'] or before['absent_skip_worktree']!=after['absent_skip_worktree'] or any(common.digest(ROOT/p)!=sha for p,sha in hashes.items()): raise ValueError('Protected sources changed')
-    result={'verdict':'VIABLE_SCOPED_REPLAY_NOT_FULL_CERTIFICATION','functional_sha':meta['functional_sha'],'ids':IDS,'type_pilot_ids':list(PILOT_TYPE_IDS),'cases':len(rows),'checks':report['checks'],'full_item_certification':False,'counts_unchanged':[27,30,4],'timings':timings,'source_sha256':hashes,'per_item':{id:[r['case_id'] for r in rows if r['id']==id] for id in IDS},'code_sha256':{p:common.digest(ROOT/p) for p in [SCRIPT,SCRIPT+'.uid','tools/item_audit/replay_v28.py','tests/tools/test_item_case_replay_v28.py']},'limitations':['Native assertion closures are executed by original generators, not serialized in cases.json','Replay exact hashes transfer those bounded native proofs; not an independent complete Pokemon oracle','FLED via existing Poke Doll checks settlement, not victory/defeat/capture','No new absent/wrong-owner/immunity/transfer-to-owned-recipient scenarios; the type pilots reuse V2 matching/nonmatching controls','Map/bag routes do not certify all effect triggers','PID lifecycle and GPU remain independent']}
+    result={'verdict':'VIABLE_SCOPED_REPLAY_NOT_FULL_CERTIFICATION','functional_sha':meta['functional_sha'],'ids':IDS,'type_pilot_ids':list(PILOT_TYPE_IDS),'plate_pilot_ids':list(PILOT_PLATE_IDS),'cases':len(rows),'checks':report['checks'],'full_item_certification':False,'counts_unchanged':[27,30,4],'timings':timings,'source_sha256':hashes,'per_item':{id:[r['case_id'] for r in rows if r['id']==id] for id in IDS},'code_sha256':{p:common.digest(ROOT/p) for p in [SCRIPT,SCRIPT+'.uid','tools/item_audit/replay_v28.py','tests/tools/test_item_case_replay_v28.py']},'limitations':['Native assertion closures are executed by original generators, not serialized in cases.json','Replay exact hashes transfer those bounded native proofs; not an independent complete Pokemon oracle','FLED via existing Poke Doll checks settlement, not victory/defeat/capture','No new absent/wrong-owner/immunity/transfer-to-owned-recipient scenarios; the type and plate pilots reuse V2 matching/nonmatching controls; plate form changes and metal_coat evolution are out of scope','Map/bag routes do not certify all effect triggers','PID lifecycle and GPU remain independent']}
     common.write(out/'results.json',result)
     print('ITEM_CASE_REPLAY_V28 VIABLE cases='+str(len(rows))+' checks='+str(report['checks'])+' '+str(out),flush=True)
 
