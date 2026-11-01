@@ -85,3 +85,28 @@ Se necesita Godot 4.7, `@pkmn/sim@0.10.11` fijado y `POKEMON_CALVO_NODE` correct
 - **Siguiente microbloque, NO EJECUTADO:** 02, `eviolite` (evolución pendiente/final), `expert_belt` (ataque eficaz/control), `safety_goggles` (polvo/clima/control). Antes de una nueva `p`, releer órdenes árbitra, puerta y este cuaderno. Tras 03, emitir `CAMP_001_FINAL.md` y detenerse.
 
 **Rutas fuera de permiso:** toda producción de `modules/`, `scenes/`, `data/`, `config/`, `.github/`, `main`, V28 original, rama árbitra, otras W y docs comunes. **No reclamar integración o PASS nuevo sin CI SHA.**
+
+---
+
+## ACTUALIZACIÓN MÁS RECIENTE — CAMPAÑA_001 / ITER_02 (2026-11-01)
+
+**Autoridad:** IA1/W01, asignación `campaigns/CAMP_001_W01.md` blob `4faaae234c3021944d7f4724789c3b2c5d0652fd`, gate `3ef0b39f7eb74f3ebcb688f279c254daec981f8e` ACTIVADA. **Estado: PREPARADO_PENDIENTE_CI, 02/03 microbloques preparados.**
+
+**Sincronización:** último HEAD árbitra leído `a710d8abe2e94f11974488c4563b9eb80ede5bbc`; merge de dos padres sin force `024c4bafe6ca18873030d89b270f3a04d3a1d5b4`. Se mantienen el contenido de LOTE_001/002 y el informe ITER_01. No sobreescribirlos.
+
+**Nuevos IDs y mecanismos sin implementación duplicada:**
+- `eviolite` → native `onModifyDef|onModifySpD`; Pidgeotto vs Pidgeot, daño físico/especial.
+- `expert_belt` → native `onModifyDamage`; daño supereficaz Water Gun→Arcanine vs neutral→Mew.
+- `safety_goggles` → native `onImmunity|onTryHit`; Espora→Mew, arena y turno neutro. Snapshot observa `status_state.persistent_id`, PS y tenencia.
+- Los tres están en catálogo `RANDOMLOCK_ITEMS_BUILD_SCOPE_V2.csv`, clasificación `HELD_COMBAT_CANDIDATE`, `SELECCIONADO`; esto **no certifica** efectos.
+- Reutilización técnica: `FieldItemService`/helper `_fixture` → `Native` → `_restore_probe` y SaveV2 → archivo JSON y SHA-256 → validador Python; sin tocar `modules/`, workflows ni producción.
+
+**Archivos cambiados en microbloque 02:** `tests/fixtures/parallel_items/w01_campaign_001.json`, `tests/gameplay/parallel_items_w01_campaign_001.gd`, `tests/tools/test_parallel_items_w01_campaign_001.py`, `reports/W01/CAMP_001_ITER_02.md`, `reports/W01/CAMP_001_PROGRESO.csv`, y este `CONTINUIDAD.md`. Commits test `79a26778`, `60673b10`, `c16f7e93`. 9 escenarios nuevos, 12 ejecuciones adicionales, 36 variantes; total acumulado **17/24/72**. El fixture conserva etapa 01, pero su SHA cambió y **necesita volver a comprobarse en el mismo reporte integral**.
+
+**Pruebas:** validación estructural (13 condiciones a partir de los blobs de GitHub) **PASS estático**. Python ejecutado nuevo **SIN_EJECUTAR**; Godot 4.7 de CAMPAÑA_001 **SIN_EJECUTAR**; visual/GPU **NO REALIZADA**. El PASS de [CI #41341842320](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41341842320) cubre solamente LOTE_002 histórico. No declarar nuevos objetos funcionales hasta CI del commit integrado de esta campaña.
+
+**Riesgos y dependencias:** parser GDScript, disponibilidad de `spore/sandstorm/psychic` bajo perfil personalizado, cuantía exacta del daño en semillas fijadas, efecto nativo incompleto y liquidación de campaña aún no contrastados. En caso de FAIL probado, detener y notificar a IA6 con el log; no modificar la mecánica de combate ni relajar las pruebas para obtener PASS.
+
+**Próximo paso reproducible solo mediante nueva `p`:** releer gate/STATUS/campaña, verificar HEAD y diff, ejecutar **microbloque 03 exclusivamente**: auditar cobertura para los seis IDs, integridad de los pares caso-semilla y hashes, documentación de límites y emitir `CAMP_001_FINAL.md`. Después **CAMPAÑA_001_FINALIZADA** y detener hasta nueva asignación. Ningún otro bloque ha sido empezado.
+
+**NO TOCAR:** `main`, PR #118, V28 original, rama árbitra y otras trabajadoras; `modules/`, `scenes/`, `data/`, `config/`, `.github/`, guardados ni políticas. Sin permiso para cambios de producción.
