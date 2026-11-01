@@ -1,10 +1,77 @@
 # W01 / LOTE_001 — informe de entrega
 
-**MARCA DE OCUPACIÓN: EN_CURSO — IA1/W01 — 2026-11-01.**
+**Estado: LISTA_PARA_REVISION.**
+**Marca de ocupación:** `W01 / IA1 — RESERVADA Y AUDITADA — 2026-11-01`. Si otra IA encuentra esta marca, **no ocupar W01 ni sobrescribir este informe**.
+**Encargo original:** [LOTE_001_W01](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/blob/codex/calvo-items-20261101-arbitro/docs/coordination/items_parallel_v1/assignments/LOTE_001_W01.md).
+**Rama de trabajo:** `codex/calvo-items-20261101-w01`. **Base:** `d6d6d5f9285d71b97db3ac18c6bbb70274ab19af`. **Commit de reserva y primera evidencia de autoría:** `fd1acabc98534f37fbc2a5207ce114dc8ada0375`; la entrega completa corresponde al HEAD de esta rama posterior a esa reserva. No se han realizado merges ni rebases.
+**Tipo de trabajo:** auditoría documental y estática; ningún cambio funcional en código, pruebas o producción.
 
-Rama exclusiva: `codex/calvo-items-20261101-w01`.
-Asignación: `docs/coordination/items_parallel_v1/assignments/LOTE_001_W01.md` en `codex/calvo-items-20261101-arbitro`.
+## 1. Alcance y protocolo
 
-**Estado provisional:** reserva creada; auditoría aún no concluida. Ninguna prueba se declara PASS. No tocar producción, main ni V28.
+Únicamente `assault_vest`, `loaded_dice` y `focus_sash`; todos `HELD_COMBAT_CANDIDATE` y `SELECCIONADO` en `docs/current/RANDOMLOCK_ITEMS_BUILD_SCOPE_V2.csv` (blob `8b9b723bf5944bbbde39aa2d49dfbb2f2a64e11b`). No se activa la nueva selección ni se cambia `config/item_selection_v1.json`.
 
-**Aviso de concurrencia:** este archivo es la marca de la trabajadora W01. Otra conversación que encuentre este archivo debe NO ocupar W01 ni sobrescribir el informe; deberá comprobar su propia asignación.
+Se compararon **la base V27/catálogo** de W01 y la documentación de **V28 separada** `codex/items-v28-from-main`. La puerta de compatibilidad `BASELINE_GATE_2026-11-01.md` identifica divergencia; este lote **no fusiona V28** ni atribuye a W01 sus pruebas. El informe V28 `docs/handoff/ITEMS_V28/COMPETITIVE_COVERAGE_AUDIT.md` (blob `91d30a5c5e76f7266a3e4a00acca628781049542`) enumera los tres IDs **sin cierre ampliado V28**; esto no invalida los ensayos históricos más pequeños.
+
+**Etiquetas de esta auditoría:** `FUNCION_Y_PRUEBA` = código y prueba histórica concreta del alcance indicado; `CONEXION_PARCIAL` = conexión técnica con cobertura insuficiente para el contrato completo; `SIN_EVIDENCIA` = ningún caso concreto identificado para la condición; `DEPENDENCIA` = requiere checkpoint común o infraestructura/prueba reservada. **No se ejecutó un nuevo PASS funcional en este lote.**
+
+## 2. Arquitectura de reutilización y conexión compartida
+
+- **Autoridad de la mecánica:** simulador fijado `@pkmn/sim@0.10.11`, mediante `modules/battle/backends/showdown/native_engine.cjs` (blob `1eacd1654d005b53324b4914c1af8db531d00068`). `nativeSet` convierte `held_item_id` al ID nativo; `lookup('items', id)` comprueba existencia; `prepare`/ `commit` preservan revisión y publican tras validación; `serialize`/ `restore` mantienen snapshots. No duplicar callbacks Showdown en GDScript.
+- `modules/battle/backends/showdown/field_held_items.cjs` (blob `56e2420902670506b795f542b94fb1c5dbba4625`) **no implementa estos tres efectos**: aporta solo metadatos faltantes de otros objetos. Añadir aquí sus callbacks duplicaría la fuente de verdad.
+- **Mochila/propiedad:** `modules/inventory/field_item_service.gd` (blob `b682c3af93b7af170c8aea66a130176c908b0745`), funciones `holdable`, `equip`, `unequip`, `_boundary`: rechaza propiedad ajena, actividad inválida o falta de unidad; hace copia transaccional de la bolsa, devuelve el equipado anterior, respeta `held_item_consumed`. Abarca criaturas propias de equipo/PC según `docs/current/ITEM_CONNECTIONS_V1.md`; **la prueba genérica de transferencias no es una prueba de todos los efectos**.
+- **Pruebas reutilizables:** `tools/item_audit/held_pilot.cjs` (blob `c8a59a18f546d772ff34e4f8640a4246a00a822b`) y `tests/gameplay/item_held_pilot_test_runner.gd` (blob `befcbeb474bfe1bc48e9ea02ad3cdfe9bd4d7caa`): escenarios nativos + proyección Godot + IPC + snapshot restaurado. `tools/item_audit/held_effect_sweep_v2.cjs` (blob `c9ba4d7bcddad6ae69f085f4b69983461ad05219`) y `tests/gameplay/item_effect_projection_v2.gd` (blob `877e9984f0d74edd09141bd024ac6d824262dd4b`) ofrecen comparación sin objeto, semilla fijada, proyección e IPC.
+- **Automatización V28 no importada:** `tools/item_audit/automation_v28.py` (blob `ae181662b315f033172a5cfef4a87961088fe8fd` de V28) usa descriptores por familia, controles `active/none/reserve`, guardado y evidencia raw. Sus validadores tienen conjuntos **cerrados** de IDs conocidos; ninguno de nuestros tres está aprobado allí. Se propone ampliar **por contrato/familia con propiedad exclusiva** tras integrar base y revisar el test, no introducir descriptores que el validador rechace.
+- **Versión de Godot requerida:** `project.godot` (blob `fb2e492f1333e495aedee6a4e2c3b23e6f862e26`) fija 4.7, GL Compatibility.
+
+## 3. Matriz de resultados por ID y ruta
+
+| ID / objeto | Catálogo y hook nativo V27 | Escenario de efecto históricamente comprobado | Conexión mochila/PC | Pendiente para certificar contrato completo |
+| --- | --- | --- | --- | --- |
+| `assault_vest` / Chaleco Asalto | `native_entry=True`, `assaultvest`, `onDisableMove\|onModifySpD`. **CONEXION_PARCIAL** (el hook existe, no equivale a prueba íntegra). | **FUNCION_Y_PRUEBA acotada**: `held_pilot.cjs:36` comprueba que un movimiento de estado esté deshabilitado; rechaza la orden de usarlo y verifica que el intento rechazado no cambia el hash. Ensayo con semillas 1 y 19, reutilizado en proyección/IPC histórica. | **FUNCION_Y_PRUEBA genérica de transferencia** V1/V27, no individual de escenario competitivo ni de asentamiento de guardado tras victoria. | **SIN_EVIDENCIA específica** para multiplicador de Def. Esp. 1,5 en daño especial (incluido control sin objeto), cambio de portador, supresión del efecto, permanencia sin consumo, casos con estado frente a ataques, y salida a partida real. |
+| `loaded_dice` / Dado Trucado | `native_entry=True`, `loadeddice`, `onModifyMove`. `ITEM_INVENTORY.csv` añade alerta `missing_description`. **CONEXION_PARCIAL**. | **FUNCION_Y_PRUEBA acotada**: `held_effect_sweep_v2.cjs:61` exige `|-hitcount|` de **4 o 5** para `bullet_seed` (Semilladora). Se simula una referencia sin objeto con igual semilla, pero la aserción **no compara su distribución**; no afirmar ventaja estadística probada. Proyección/IPC V2 declarados por familia. | **FUNCION_Y_PRUEBA genérica de transferencia** y snapshot técnico V2, no test de ciclo íntegro por ID. | **SIN_EVIDENCIA específica** de otros movimientos multigolpe y excepciones, distribución con muchas semillas, control de inactividad, propietario activo/reserva, retención sin consumo, combinación con habilidades y resultado de guardado/carga de campaña. `missing_description` requiere revisión de metadatos/presentación, **no** es prueba de fallo mecánico. |
+| `focus_sash` / Banda Aguante | `native_entry=True`, `focussash`, `onDamage`. **CONEXION_PARCIAL** para contrato total. | **FUNCION_Y_PRUEBA acotada**: `held_pilot.cjs:37` usa enemigo fuerte `mew_100` y `double_edge`; comprueba supervivencia con **1 PS** y consumo (`item==''`). Semillas 1 y 19, restauración de snapshot por harness; proyección/IPC histórica. | **FUNCION_Y_PRUEBA genérica de transferencia**, no prueba explícita de vuelta a campaña con este ID después de combatir. | **SIN_EVIDENCIA específica** de condición PS máximos vs PS previos reducidos, ataques no letales, daño residual, ataques multigolpe, fallo de supervivencia cuando no procede, control sin objeto, propiedad/reserva y consumo único persistido tras resultado de partida. |
+
+**Origen de los estados individuales:** `docs/current/ITEM_INVENTORY.csv` (blob `2aaf18643bb2b071226118a1ad556cffca4707dd`); `docs/current/ITEM_FIELD_V8.csv.txt` (blob `9509d537622039b2f1919067561631449b8ddc47`). Las tres filas V8 indican `equipment_transfer=VERIFIED`, `native_definition_present=True` y `HELD_EFFECT_SCENARIOS_VERIFIED_NOT_EXHAUSTIVE`; para `assault_vest` y `focus_sash` la prueba pertenece al piloto V1 (`new_effect_scenarios=0` en V8); `loaded_dice` tiene `new_effect_scenarios=2` y `live_ipc_case=True` correspondientes a V2. No deducir más de esas columnas.
+
+### Contrato funcional mínimo para el siguiente lote, SIN implementación ahora
+
+1. **Chaleco Asalto:** equipado, retención/no consumo, prohibición de elegir movimientos de estado (sin mutar turno rechazado), mejora de Defensa Especial al recibir golpe especial, controles de atacante/defensor sin objeto y de propietario equivocado; suprimir efecto cuando el simulador así lo determine. Probar mochila, equipo/PC, retorno de combate y restauración.
+2. **Dado Trucado:** equipado, no consumo, perfil de múltiples golpes reconocido por el simulador en las familias autorizadas, distinguir control sin objeto y casos de movimiento al que no aplica; comprobar frecuencia/distribución con criterio reproducible sin prometer validación estadística por dos semillas. Probar cambios de propietario y guardado.
+3. **Banda Aguante:** equipada, consumo **solo** al impedir un KO desde PS completos con impacto aplicable, supervivencia a 1 PS, no activar con PS reducidos ni con daño que no corresponde, no consumo duplicado, equipo/PC y restauración posterior; controles de sustitución y portador.
+
+El simulador es autoridad normativa **de implementación** mientras no haya perfil de balance específico aprobado; sus hooks conocidos no autorizan editar la librería fijada. Toda diferencia frente a reglas modernas requiere contrato aprobado por la árbitra.
+
+## 4. Pruebas y trazabilidad por versión/SHA
+
+| Comprobación | Comando real existente / versión | Resultado |
+| --- | --- | --- |
+| Piloto de 21 equipables: escenarios de Chaleco y Banda + proyección Godot e IPC | `python tools/item_audit/run.py` en histórico V1; Node fijado, Godot 4.7, `held_pilot.cjs` + `item_held_pilot_test_runner.gd` | **PASS HISTÓRICO DOCUMENTADO** en `docs/current/ITEM_FOUNDATION_V1.json` (blob `a447221d8d3055301aa3c7b1077335252838de9d`): 42 casos nativos, 461 checks Godot, 21 IDs. No reproducido aquí. |
+| Dado Trucado + conjunto V2, controles nativos y Godot | `python tools/item_audit/run_verification_v2.py` histórico, `held_effect_sweep_v2.cjs`; motor `@pkmn/sim@0.10.11`; 2026-10-28 | **PASS HISTÓRICO DOCUMENTADO** `docs/current/ITEM_VERIFICATION_V2.md` (blob `38dc0322f6b4dadcaf96a3a73480707282a1e85a`): 368 casos nativos y 6.668 checks Godot del lote V2 (103 IDs), no exclusivos de Dado. No reproducido aquí. |
+| Repetición del piloto V1 y proyección V2 en V3 | `python tools/item_audit/run_verification_v3.py` histórico | **PASS HISTÓRICO DOCUMENTADO** `docs/current/ITEM_VERIFICATION_V3.md` (blob `3ecaaf230ac0a621f75b8470359e33ba3135b074`): 908 casos V3 de otros grupos, más regresión piloto y V2. No añade los controles faltantes de estos tres IDs. |
+| Equipar/retirar y propiedad equipo/PC | `python tools/item_audit/run_connections.py --gpu --regressions` histórico | **PASS HISTÓRICO DOCUMENTADO** `docs/current/ITEM_CONNECTIONS_V1.md` (blob `8f11d1600df6ff644e8a71a363eed5493b64631f`): 625 IDs con transferencia genérica; no equivale a 625 efectos certificados. |
+| Cierre ampliado V28 sobre los tres IDs | `tools/item_audit/automation_v28.py` en rama V28; validadores de IDs cerrados | **SIN_EJECUTAR / SIN COBERTURA ESPECÍFICA** para W01: `COMPETITIVE_COVERAGE_AUDIT.md` identifica los tres sin cierre ampliado. No reetiquetar 20/20 workflows de otras familias como un PASS de estos IDs. |
+| Auditoría funcional nueva en esta rama W01, Godot/Node | — | **SIN_EJECUTAR**: entorno de esta sesión sin binario Godot ni checkout completo con runtime `.godot/battle_reference/runtime/node_modules/@pkmn/sim`; solo lectura directa mediante conector de GitHub. No se inició CI documental innecesaria. |
+| Revisión estática de código, diferencias de ramas y permisos | Lectura GitHub de los blobs con SHA arriba, `compare_commits` contra `d6d6d5f9285d71b97db3ac18c6bbb70274ab19af` | **REALIZADA**; es auditoría estática, **no** PASS de ejecución. |
+
+**Pruebas negativas, propiedad, consumo, PC, guardado:** el piloto de Chaleco verifica rechazo de orden y hash sin cambio; el de Banda verifica consumo tras activación; V2 comprueba en general ausencia de mutación prematura en `prepare`, checkpoint/restauración e IPC. El escenario V1 de liquidación completa a campaña `_settlement` se realiza sobre `sitrus_berry`, **no** sobre Chaleco/Banda/Dado. Quedan los casos específicos arriba detallados; ausencia de un test localizado no prueba por sí misma un bug del motor.
+
+**GPU/visual:** **NO REALIZADA** en este lote. No se certifica interfaz de inventario en GPU ni representación visual de estos tres objetos. El flujo histórico V1/V2/V3 no sustituye observación manual final.
+
+## 5. Duplicaciones, bloqueos, colisiones y recomendación
+
+- **No hay motivo para reimplementar los tres efectos** antes de probarlos contra `@pkmn/sim`. Los hooks nativos ya están catalogados y el motor está integrado. El trabajo real es ampliar las **aserciones y rutas de integración**, no diseñar una función GDScript por objeto.
+- **Colisión futura con V28:** sus archivos `tools/item_audit/automation_v28.py`, `automation_contracts_v28.py`, los fixtures `tests/fixtures/item_automation_v28/*`, `tests/gameplay/item_automation_*.gd` y `.github/workflows/item-closure-v3.yml` son infraestructura compartida. **DEPENDENCIA:** solo IA6 puede reservar un propietario y aprobar checkpoint consolidado; W01 no ha escrito allí.
+- **Colisión potencial de rutas comunes:** `modules/battle/backends/showdown/native_engine.cjs`, `field_held_items.cjs`, `modules/inventory/field_item_service.gd`, servicio de guardado, `event_adapter.gd` y pruebas transversales pertenecen a varios lotes. **No tocar** sin asignación exclusiva y base unificada.
+- **Solución de coste mínimo tras aprobación:** tabla declarativa por efecto/familia con variantes `active / none / reserve`; comprobaciones por ID de activación, control negativo, consumo/retención y persistencia; un solo harness Godot/Node/IPC con resultados y snapshots por SHA. Para multigolpe, perfiles por clase de movimiento con semillas deterministas, no inventar porcentajes ni tocar RNG. Reutilizar `prepare/commit`, propiedad `FieldItemService` y los patrones automatizados de V28.
+- **Riesgo de falsos PASS:** W01 tiene pruebas acotadas históricas reales, no un cierre competitivo integral. El motor nativo y los datos de juego pueden divergir si se mezcla V27/catálogo con V28 sin integración/reprueba.
+- **Control de concurrencia:** `LOTE_001.md` es simultáneamente marca y reporte de W01. No se tocó `QUEUE_V1.csv`, asignación maestra ni informe de otra W. Las otras trabajadoras deben usar sus rutas W02–W05; IA6 debe resolver reservas globales cuando reciba los reportes.
+
+## 6. Archivos y autocontrol
+
+**Modificados realmente en la rama W01:** solo `docs/coordination/items_parallel_v1/reports/W01/LOTE_001.md` (reserva inicial y cierre del informe). **Producción y tests modificados: ninguno.** **Archivos solicitados pero no tocados por reserva:** infraestructura V28 de automatización, motor nativo, servicio de inventario, proyección/guardado y workflow, todos descritos en §5.
+
+**Autocontrol:** no he modificado `main`, V28/`codex/items-v28-from-main`, rama árbitra, otras ramas W, datasets originales, arte, selección vigente, políticas, archivos de guardado, código de producción, pruebas o paquetes congelados. No he reabierto decisiones excluidas ni Mega. La rama W01 continúa aislada respecto del checkpoint `d6d6d5f...`.
+
+**Resultado solicitado a IA6:** revisar y aceptar/rechazar el inventario de huecos, fijar base integrada V27+V28 probada y decidir la propiedad de los validadores para el próximo lote. **No asignar un segundo lote a W01 sin nueva orden publicada.**
+
+**Estado final: `LISTA_PARA_REVISION`.**
