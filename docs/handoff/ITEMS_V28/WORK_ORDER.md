@@ -1,0 +1,272 @@
+# Orden de trabajo — ITEMS_V28
+
+## Misión vigente: reproducción genérica mínima (2026-11-01)
+
+Sustituye las propuestas no ejecutadas de bayas y rediseño amplio. Base
+a3eed8c9660db5adb01c75a3a38b01c74cef67ac; contador 27/30/4 inmutable.
+Solo black_glasses, colbur_berry, toxic_orb y sticky_barb. Consumir directamente
+cases.json V2/V3 y ejecutar sus generadores y aserciones originales sin cambiarlos.
+No nuevos contratos/efectos ni ejecutores por objeto/familia. Si son necesarios,
+detener y declarar NO VIABLE. Reutilizar la sesión/harness/SaveV2/mapa existentes.
+
+Lista exacta de archivos permitidos antes de código:
+- NUEVOS tests/gameplay/item_case_replay_v28.gd y .uid.
+- NUEVO tools/item_audit/replay_v28.py (orquestación y verificación genérica).
+- NUEVO tests/tools/test_item_case_replay_v28.py (rechazo de evidencia inválida).
+- tools/item_audit/automation_v28.py: SOLO añadir estos archivos/cuadernos a la allowlist.
+- .github/workflows/item-closure-v3.yml: tests/replay adicionales después de los
+  gates intactos; no cambiar las tres familias/56 tests/3335 comprobaciones.
+- docs/handoff/ITEMS_V28/{WORK_ORDER.md,START_HERE.md,STATE.json,PROGRESS.md,RESULTADOS.json,REPLAY_FEASIBILITY.md,REPLAY_RESULTS.json}.
+Salidas temporales: .godot/item_automation_v28/** y salidas ya existentes de los
+exportadores/generadores V2/V3. No cambiar generadores, prototipos versionados,
+producción, habilidades, RNG, datos, políticas, schemas, baselines ni main.
+
+Estrategia: regenerar casos/asserts nativos originales, comprobar fuentes y
+hashes; reconstruir la colección/equipamiento por DTO, reproducir comandos por
+submit, exigir hash nativo exacto por paso, restaurar por SaveV2 y comprobar
+publicación/inventario idempotentes. Cierre de integración mediante Poké Muñeco
+existente (FLED); no sustituye pruebas de victoria/derrota/captura. Mochila/mapa
+reutilizados sin lógica nueva. Replay no es certificación integral ni aumenta
+contador. Registrar cobertura ausente, coste exacto (incluido wrapper genérico),
+tiempos y deudas PID/GPU. Mantener todas las regresiones previas.
+
+## Tercera familia — entrada, inmunidad y consumo (contrato previo, 2026-11-01)
+
+Checkpoint `4d39d3aa`, funcional anterior `7f973f5b` / Actions 41241062641.
+Solo `air_balloon` (PokéAPI 584) y `heavy_duty_boots` (1178). Sus reglas ya están
+en el runtime fijado (items.js/isGrounded/moves.js) y held_pilot.cjs; peligros
+admitidos por el adaptador existente. No se modifica producción ni protocolo.
+
+Archivos permitidos exactos para esta ampliación:
+- `tests/fixtures/item_automation_v28/entry_items.json`.
+- `tests/gameplay/item_automation_entry_v28.gd` y `.uid`.
+- `tests/gameplay/item_automation_opponent_v28.gd` y `.uid` (subclase de prueba
+  que SOLO elige el movimiento legal del rival por el contrato, usando submit).
+- `tests/gameplay/item_automation_v28.gd` (dispatch, constructor de restauración
+  opcional y ruta común de mochila con rotura/guardado cuando corresponda).
+- `tools/item_audit/automation_v28.py` (grupos aislados y conservación de APIs).
+- `tools/item_audit/automation_entry_v28.py` (contratos/expectativas/evidencia).
+- `tests/tools/test_item_automation_entry_v28.py`.
+- `.github/workflows/item-closure-v3.yml` (nuevo test y presupuesto total para
+  dos procesos; mismos gates, umbrales y límites por proceso).
+- `docs/handoff/ITEMS_V28/{WORK_ORDER.md,START_HERE.md,STATE.json,PROGRESS.md,RESULTADOS.json,COMPETITIVE_COVERAGE_AUDIT.md,AUTOMATION_PROTOTYPE.md,AUTOMATION_RESULTS.json}`.
+Salidas efímeras `.godot/item_automation_v28/**`; mismos cuatro UID de importación
+ya inventariados, sin versionarlos. Descriptores y 31 tests previos intactos;
+también se conserva el módulo de contratos/expectativas de la segunda familia.
+BASE histórico 47f42aef permanece sin resellar ni cambiar.
+
+Globo: Tierra antes/después de rotura física y especial; estado que no rompe;
+active/none/reserve, transición real de item a vacío y aviso -enditem, restaurar
+la rotura y perder inmunidad; cierre real, una unidad consumida solo al publicar,
+SaveV2/recarga sin regenerar el objeto. Mochila/mapa: golpe real antes de victoria,
+guardar/cargar tras romperse y después del cierre.
+Botas: Stealth Rock, Spikes, Toxic Spikes y Sticky Web colocados con movimientos
+reales; comprobar sideConditions no vacías y efectos en controles, entrar/salir/
+reentrar al portador, restauración de peligros y equipo retenido. Control sin
+peligros también ejercitado. No inventar estado del simulador ni sustituir reglas.
+
+Se reutilizan fixture, colección/equipamiento, sesión nativa, restauración, mapa,
+guardado e informe. Control del rival solo mediante elección de comandos en una
+subclase de pruebas; no callbacks de mecánicas ni edición de estadísticas/RNG.
+Dos grupos de ejecución: los 1935 checks/30 casos previos y la familia nueva,
+cada uno con el límite por proceso existente. CI exige ambos y un informe agregado.
+No convertir ejecución parcial local en certificación completa. Contador 25/32/4
+hasta CI real. PID Linux sigue registrado aparte y GPU/manual pendiente.
+
+## Segunda familia del automatizador — contrato previo
+
+Reanudar desde `648a2c86541b6a381424413e2b2e28231d127353`. Conservar la base de
+guard `47f42aef` y todas las pruebas/descriptor Elección. Objetos autorizados:
+`leftovers` (PokéAPI 211), `life_orb` (247), `rocky_helmet` (583). Efectos ya
+presentes en items.js 0.10.11 y en held_pilot.cjs; no cambiar producción.
+
+Allowlist exacta ADICIONAL antes de editar:
+- `tests/fixtures/item_automation_v28/passive_items.json`.
+- `tests/gameplay/item_automation_v28.gd` (mínima orquestación y restauración común).
+- `tests/gameplay/item_automation_effects_v28.gd` y `.uid` (expectativas por efecto).
+- `tools/item_audit/automation_v28.py` (múltiples familias; conservar API anterior).
+- `tools/item_audit/automation_contracts_v28.py` (contratos nuevos e informe).
+- `tests/tools/test_item_automation_passive_v28.py` (negativos nuevos).
+- `.github/workflows/item-closure-v3.yml` (extender los pasos actuales; no quitar gates).
+- `docs/handoff/ITEMS_V28/{WORK_ORDER.md,START_HERE.md,STATE.json,PROGRESS.md,RESULTADOS.json,COMPETITIVE_COVERAGE_AUDIT.md,AUTOMATION_PROTOTYPE.md,AUTOMATION_RESULTS.json}`.
+El descriptor Elección, sus 14 pruebas Python y todos los verificadores históricos
+quedan byte a byte intactos. Salidas `.godot/item_automation_v28/**`; mismos cuatro
+UID históricos no versionados, sin ampliar su excepción ni modificar sus fuentes.
+
+Contratos: tres variantes aisladas active/none/reserve para cada disparador.
+Restos: recuperación en varios turnos, tope de PS, ausencia a PS completos y
+propiedad tras cambio de activo. Vidasfera: aumento físico/especial y pérdida
+de PS, sin activación con estado o ataque inmune. Casco Dentado: contacto,
+especial sin contacto, físico sin contacto y nuevo portador activo. Todos
+retenidos, dos unidades físicas, habilidades vacías. Restaurar antes y después
+de activar; comprobar continuación, campaña no publicada y revisiones obsoletas.
+Misma ruta real de mochila/mapa/guardar/cargar/cierre para los seis objetos,
+incluyendo PS persistidos. Expectativas fraccionales son aserciones de prueba;
+no se implementa ninguna regla nueva en el juego o el simulador.
+
+Un solo ejecutor, fixture/equipamiento/IO/restauración/mapa compartidos. Los
+nuevos opcodes reciben observaciones y contratos declarativos, no callbacks
+del motor copiados. Rechazar efectos, casos, propietarios o pruebas omitidas.
+Ejecutar las dos familias juntas, con suelo de cobertura Elección >=665 y todos
+sus 15 casos, más todos los gates previos en Ubuntu/Windows. No certificar GPU,
+supresión/transferencias ni sinergias con habilidades. Fallos preservados y
+contador 22/35/4 sin cambio hasta CI real. Main y PR en borrador sin merge.
+
+Hallazgo de procedencia: PokéAPI 583 conserva `attributes: []`. El verificador
+no debe interpretar esa ausencia como objeto beta ni relajar el criterio de los
+otros IDs. Solo para ese registro fijado se contrasta categoría held-items,
+índice 540 en Gen V–IX y texto inglés explícito Held/contact move/1/6, además
+de índice, catálogo, selección y equipamiento reales. Registrar esa carencia de
+metadatos; ninguna modificación de datos. Prueba negativa de esta excepción.
+
+## Prototipo de automatización Elección — allowlist previa (petición del usuario)
+
+Base de esta misión: `47f42aef1a518eefb744ad310f89b6e2d3ce7108`.
+Únicamente `choice_band`, `choice_specs`, `choice_scarf`. Se ensayan reglas ya
+existentes, no se importan ni implementan nuevas mecánicas.
+
+Archivos permitidos EXACTOS:
+- `tests/fixtures/item_automation_v28/choice_items.json` (nuevo descriptor).
+- `tests/gameplay/item_automation_v28.gd` y su `.uid` (nuevo ejecutor compartido).
+- `tools/item_audit/automation_v28.py` (orquestación, procedencia, guard e informe).
+- `tests/tools/test_item_automation_v28.py` (rechazos de descriptor/evidencia).
+- `.github/workflows/item-closure-v3.yml` (solo pasos/artefactos adicionales;
+  conservar todas las regresiones, umbrales, motores y jobs existentes).
+- `docs/handoff/ITEMS_V28/WORK_ORDER.md`, `START_HERE.md`, `STATE.json`,
+  `PROGRESS.md`, `RESULTADOS.json`, `COMPETITIVE_COVERAGE_AUDIT.md`.
+- `docs/handoff/ITEMS_V28/AUTOMATION_PROTOTYPE.md` y `AUTOMATION_RESULTS.json`.
+Salidas no versionadas: `.godot/item_automation_v28/**`.
+La importación Godot también puede crear cuatro metadatos UID NO versionados de
+scripts antiguos que no tenían UID: `modules/creatures/progression/battle_ev_rewards.gd.uid`,
+`tests/gameplay/competitive_damage_items_v28.gd.uid`,
+`tests/gameplay/competitive_protection_items_v28.gd.uid`,
+`tests/gameplay/item_closure_v3_test_runner.gd.uid`. Solo se tolera su formato
+`uid://...` generado por el motor y se inventarían en el informe; no se editan
+sus fuentes, no se versionan esos cuatro archivos ni se alteran sellos.
+
+Contrato: una tabla declarativa y el mismo ejecutor por familia, con expectativas
+diferentes de daño físico/especial/orden. Cada escenario/variante tiene colección,
+inventario y sesión nuevos; sin habilidad para aislar el objeto. Controles sin
+objeto y objeto en reserva/propietario incorrecto. Equipar por el servicio real,
+comprobar inmovilidad de campaña hasta publicación, objeto no consumido, bloqueo
+de elección y rechazo sin mutación, restauración del bloqueo, cambio que lo libera.
+Ruta física por cada ID: mochila/mapa, cambio de portador, guardar/cargar antes,
+durante y después del combate, cierre idempotente y conservación de existencias.
+La ruta del mapa usa Caterpie para cierre; no certifica por sí sola el bonus.
+
+Reutilizar helpers de los runners Godot V3/V18 y ejecutar sin cambios la batería
+`held_effect_sweep_v3.cjs`, proyección e inventario V3 en CI. No importar ese script
+como biblioteca (ejecuta un barrido en top-level); el nuevo prototipo usa la sesión
+Godot existente, que ya delega al mismo NativeEngine/@pkmn/sim fijado.
+Informes con ID/escenario, entradas/observaciones, controles, checks, errores,
+hashes de fuente/descriptor, SHA funcional y URL Actions. Resultado parcial hasta
+CI real, nunca verde por mera existencia/equipamiento. Cero objetos extra.
+
+Habilidades conservadas aparte en `codex/ability-audit-v1`, funcional `72548cde`,
+nota de reanudación `5d5f8ae`. No se traen cambios de esa rama a esta PR.
+
+Autorización del usuario 31-10-2026: proseguir objetos sobre V27 *oficial*; trabajar incrementalmente, conservar los fallos, documentar cada cambio y pruebas; `main` queda estable y no se toca directamente.
+
+Base inmutable de partida: `233b1a4f15ee4df7301e2c5acf8aed84a8f40626`, merge PR #116. Rama única `codex/items-v28-from-main` y PR en borrador hacia `main` (no merge automático).
+
+## Bloque 0: recuperación comprobada de EV + matrices V3
+Permitidos, copia exacta desde el checkpoint validado `c554ab7635fb847aa395d2dbb5bc523b560bc6de`:
+- `modules/creatures/progression/battle_ev_rewards.gd`
+- `modules/creatures/progression/progression_system.gd`
+- `tests/gameplay/item_closure_v3_test_runner.gd`
+- `tests/tools/test_item_closure_v3.py`
+- `tools/item_audit/item_closure_v3.py`
+- `tools/item_audit/stage_item_connections_ci_v3.py`
+- `.github/workflows/item-closure-v3.yml`
+- `docs/handoff/ITEMS_V28/{START_HERE.md,WORK_ORDER.md,STATE.json,PROGRESS.md,RESULTADOS.json}`.
+
+Comprobar igualdades de blobs con V3, compatibilidad con V27 en `main`; ejecutar GitHub Actions Godot 4.7 Ubuntu + Windows portable y demás regresiones. Estado `NO_VERIFICADO_EN_V28` hasta resultados reales. No copiar los viejos cuadernos como si fueran pruebas nuevas.
+
+## Bloques sucesivos
+Elegir una familia pendiente usando `docs/current/ITEM_SYSTEM_CURRENT_STATUS.json` y los cuadernos específicos. Anotar primero las rutas adicionales y contratos en este documento; separar entrada de catálogo, efecto del simulador, conexión juego/propietario/consumo, guardado y escenario ejercitado. Cerrar con pruebas y evidencias por SHA. No prometer todos los objetos mientras falten sistemas.
+
+## Límites
+No modificar main, node_modules, versión @pkmn/sim, motor de combate/RNG/protocolo, datasets, baselines, políticas de exclusión, recursos/hashes, guardas históricas, schema de partida o EvolutionSystem. Conserva los 14 objetos evolutivos originales y la exclusión de Linking Cord; no implementar aún sustitución de intercambios. Economía para Amulet Coin/Luck Incense, Exp. Share, mentas/IV, crianza/formas y mundo son dependencias, no ceros neutros. Sin shortcuts de calidad: los tests deben tener comprobaciones >0.
+
+
+## Bloque 1: integración real ampliada de entrenamiento (sin cambios de motor)
+Ampliar únicamente `tests/gameplay/item_closure_v3_test_runner.gd` ya permitido: por cada uno de `power_bracer/power_belt/power_lens/power_band/power_anklet/macho_brace`, probar con batalla nativa efectiva, restauración de checkpoint, recompensa al propietario, seis EV exactos, XP no bloqueada, persistencia, conservación del objeto e idempotencia del cierre. No sustituye la ruta física de mochila/mapa/guardado ya comprobada para `power_weight`; dejar el límite explícito. Fallos de objetos heredados se documentarán, no se ocultarán. Ejecutar CI Godot y portable antes de declarar éxito.
+
+## Cierre verificado de bloques 0–1
+Código probado en `69e15d74d04063dbe9613575b8618062e1efbed7`, 20/20 workflows PASS, run V28 #41220691787. Bloque 0 conserva siete blobs funcionales idénticos a V3 histórico; bloque 1 añade únicamente cobertura nativa EV para seis equipables (la ruta mapa/mochila sigue solo en `power_weight`). Incidencia de aserción en `c29db193` resuelta por comparación correcta del esquema serializado y comprobada en nuevo CI; no se ha cambiado el esquema. Los avisos de proceso hijo Ubuntu quedan como pendiente de diagnóstico, sin maquillar. Cualquier bloque 2 posterior debe declarar primero familia, consumidores y nuevas rutas, y dejar pruebas registradas por SHA.
+
+## Bloque 2 — cierre de ruta mapa/mochila para toda la familia EV
+Cambiar únicamente `tests/gameplay/item_closure_v3_test_runner.gd`, preservando los asertos anteriores: iterar los seis objetos `power_*` y `macho_brace` por un recorrido **aislado por cada ID** en `field_demo.tscn`, seleccionar y equipar el objeto desde la mochila, guardar/cargar, enfrentar un Caterpie en combate nativo, aplicar EV por las seis estadísticas, confirmar XP, titularidad, stock y guardado en disco. No duplicar mecánicas en el motor ni en UI. No afirmar cierre universal ni segundo combate por familia si no se ejecuta. Si falla, conservar SHA/ejecución y corregir el comportamiento real o el test, según evidencia. CI Ubuntu+Windows y regresiones completas antes de certificar.
+
+## Cierre del bloque 2
+Código `ae51793641b6981b4827524208b50f7a7c8e54a0`, 20/20 workflows GitHub PASS (run #41222946680). Siete recorridos físicos aislados mapa/mochila/combate/guardado, no solo equipados en dominio. Runner único ampliado; motor, adaptador, escenas, datos y política intactos. El fracaso previo de `f052b09c` (#41222565742) fue la aserción compuesta de recarga; la versión aprobada desglosa EV/XP/equipamiento/stats/stock por cada objeto, sin cambiar el contrato. Siguen pendientes pruebas GPU/manuales, mensajes de proceso auxiliares y familias dependientes. Cualquier nuevo bloque requerirá declaración de rutas/consumidores y CI por SHA; no reabrir estos siete sin motivo.
+
+
+## Bloque 3 CANCELADO — Ente Ball no pertenece al randomlocke competitivo
+
+**Cancelado expresamente por el usuario, 31-10-2026.** Ultraentes se capturan con Poké Balls normales ya soportadas. `beast_ball` no se registra ni se utiliza; no se aplican multiplicadores propios de ultraentes, ni regalos ni cambios de política de inventario. La edición `224a080d` fue experimental y quedó anulada en un commit posterior sin merge; **no cuenta como entrega ni éxito**. Se restauran los blobs exactos anteriores del dominio y del workflow, y se elimina `tests/gameplay/item_capture_beast_v28.gd`. No reabrir por iniciativa propia. La descripción detallada del intento permanece en el historial Git y en PROGRESS como auditoría histórica, no como orden vigente.
+
+## Filtro obligatorio antes del siguiente bloque
+
+El objetivo revisado es **Pokémon Calvo como randomlocke competitivo**. Trabajar solo objetos que sirvan efectivamente al combate competitivo, entrenamiento permitido, equipo, mochila de combate, captura ordinaria u otras mecánicas del reglamento que el usuario confirme. No conectar sistemas no pertinentes por completar el inventario: concurso, cocina, crianza, evolución por intercambio ya aplazada, cosméticos, botín/historia, formas sin soporte, economía y `beast_ball` no son automáticamente tareas. Mantener íntegro el catálogo fuente y las exclusiones vigentes: *no utilizar* no implica borrar IDs del dataset ni vetarlos sin una política del juego. Para cada próxima familia: confirmar relevancia competitiva, consumo/propietario/recorrido real y reglas existentes; definir allowlist y tests antes de editar. Bloques 0–2 siguen validados en el SHA `ae517936`, CI #41222946680 20/20 PASS. No repetirlos ni alterar `main`.
+
+## Bloque 4 — equipables de protección competitiva (cobertura real, no motor nuevo)
+**Motivo competitivo:** conservar la utilidad de Gafas Protectoras `safety_goggles`, Capa Furtiva `covert_cloak` y Amuleto Puro `clear_amulet` en combate. Estos tres efectos **ya están implementados y verificados en el motor nativo V2** (tres casos positivos con control sin objeto). No confundir con funcionalidad nueva de fórmulas; el hueco es demostrar su conexión física con el juego y guardado.
+
+**Rutas permitidas declaradas antes de editar:** nuevo `tests/gameplay/competitive_protection_items_v28.gd`, un único paso nuevo en `.github/workflows/item-closure-v3.yml`, y los cinco cuadernos en `docs/handoff/ITEMS_V28/`. Mantener intactos simulador fijado, motor, servicios, UI, escena, schema, datos, exclusiones, archivos históricos y gate portable.
+
+**Contratos y escenarios:** para cada equipable, combate real nativo restaurado y control con el mismo Pokémon/movimientos/semilla SIN objeto; comprobar respectivamente impedir sueño por Espora, parálisis por efecto secundario de Moflete Estático (`nuzzle`) y bajada de Ataque por Encanto (`charm`). No basta con aceptar el comando: leer estado observable tras el turno; comprobar propietario correcto, revisión obsoleta rechazada, no consumir ni mutar la colección antes de publicar, y persistencia del objeto. Cada uno además atraviesa la mochila de `field_demo.tscn`, guardado antes de entrar, checkpoint, encuentro sencillo/cierre, guardado/carga posterior; confirmar stock y equipo. Los tres IDs son de uso competitivo, no se introduce ni un solo objeto de concurso/crianza o Ente Ball.
+
+**Pruebas:** añadir paso Godot 4.7 CI con contador de aserciones >0 y marcador específico. Conservar los 20 workflows, test V3 existente, V18 y Windows portable sin umbrales rebajados. Si falla, preservar SHA y logs ajustados; evitar repetir CI sobre código sin cambios. **No afirmar que estos objetos eran antes inexistentes** ni que 2.222 efectos están completos.
+
+## Cierre comprobado del bloque 4
+Runner nuevo `tests/gameplay/competitive_protection_items_v28.gd` + un paso adicional al workflow `.github/workflows/item-closure-v3.yml`; sin cambios de dominio, motor o UI. Contraste de protección por Espora, Moflete Estático y Encanto con y sin objeto, más conexión real a mochila/mapa, batalla y persistencia. **Código `3a6a12a32e80352cfcc4ba3870957a583b26f323`: 20/20 CI PASS** ([run #41226013201](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41226013201)); `COMPETITIVE_PROTECTION_V28 PASS checks=122 cases=3 errors=0`, Windows portable PASS. Dos errores de parse históricos se conservaron y corrigieron sin relajar aserciones. El efecto no se activa en el combate de mapa con Caterpie, se demuestra en el combate nativo separado. Advertencias de procesos Node/Unix y GPU manual pendientes. **Bloque de protección cerrado en alcance; proyecto de objetos competitivo aún abierto.**
+
+## Regla nueva 31-10-2026: habilidad, objeto beta y fuentes oficiales
+Por petición expresa: **no adelantar objetos cuya activación exige una habilidad o su interacción todavía no integrada o verificada**. No deducir por existencia de un ID de habilidad que el camino del juego ha sido ensayado. Hechos: `modules/inventory/field_ability_effects.gd` soporta Ability Capsule/Patch en la mochila con validaciones; combate nativo Showdown gestiona habilidades; `docs/current/ITEM_SYSTEM_CURRENT_STATUS.json` solo informa de **2 rutas de habilidad de campo probadas**, no de todas las interacciones. `klutz` figura en la lista vigente de habilidades excluidas en `config/randomlock_content_v1.json` (no reactivarla). `gorilla_tactics` figura como `DATA_ONLY` en el informe histórico de habilidades; no declarar su equivalencia con objetos Elección en el juego. Dejar sin puente nuevo los objetos `ability_shield` (supresión), `booster_energy` (Protosynthesis/Quark Drive), `adrenaline_orb` (Intimidate), y combinaciones de `choice_*`/Gorilla Tactics hasta ensayos de contexto; los efectos nativos ya existentes no se borran. No modificar la política de habilidades.
+
+**Regla antibeta:** todo ID nuevo que se conecte debe estar (a) en el catálogo normalizado local, (b) en `data/api/v2/item/index.json`, (c) con ficha original `data/api/v2/item/<id>/index.json` que acredite objeto de juegos principales y efecto jugable, (d) permitido por `config/item_selection_v1.json`. Constar en el catálogo no basta si faltan las otras condiciones. Sin descarga ni importación de objetos beta.
+
+## Bloque 5 — potenciadores de daño sin dependencia de habilidad
+**Tres IDs oficiales contrastados en el repositorio:** `muscle_band` → PokéAPI #243 (x1.1 ataques físicos); `wise_glasses` → #244 (x1.1 especiales); `expert_belt` → #245 (x1.2 solo ataques supereficaces). Los tres figuran como `held-items`, atributos `holdable` y `holdable-active`, con índice Gen IV-VII en PokeAPI y están ya en catálogo. No cambiar el cálculo del daño. El barrido nativo V2 cubre Cinta Fuerte/Gafas Especiales y piloto cubre Cinta Experto; el hueco es conectar/asegurar ruta real mochila y el contraste de daño con y sin objeto.
+
+**Allowlist antes de editar:** nuevo `tests/gameplay/competitive_damage_items_v28.gd`, un paso en `.github/workflows/item-closure-v3.yml`, y `docs/handoff/ITEMS_V28/{WORK_ORDER.md,STATE.json,PROGRESS.md,RESULTADOS.json,START_HERE.md}`. NO cambiar motor, habilidad, RNG, catálogo, políticas, UI, escenas, guardado, tests/baselines viejos ni main.
+
+**Contratos:** 3 × dos tipos de movimiento (compatible/no compatible) × dos configuraciones equipadas y sin objeto, misma semilla/especies/estadísticas, habilidad vacía para aislar interacción. El daño medido del objeto debe superar al control solo en la condición correcta e igualarlo en la errónea. Verificar en el backend real checkpoint/versión, propietario, objeto no consumido y ausencia de cambios persistidos antes de cerrar. 3 rutas reales: equipar desde mochila en mapa, guardar/cargar, entrar y cerrar combate nativo, verificar existencias y equipo tras persistir. Diferenciar que la ruta de mapa no mide daño con el efecto activado si el enemigo es Caterpie; eso ocurre en el ensayo nativo separado.
+
+**Gates:** Godot 4.7 Ubuntu + portable Windows, 20 workflows, fallo escrito por SHA. No declarar verificación hasta CI. Sin GPU manual ni las interacciones con habilidades especiales.
+
+## Bloque 5 cerrado con CI real
+Código `b9638283deb44d92c686f3d22f6fadbb27c2a1a4`, run #41227381283, **20/20 PASS**. Runner nuevo y paso Godot verificados, **164/0**; todos los casos usan `ability_id` vacío para aislar el efecto del objeto. Validación física de 3 IDs desde mochila, mapa, checkpoint, postcombate y guardado; no se prueba que todas las interacciones con habilidades funcionen. Los metadatos PokeAPI locales (243/244/245) acreditan su origen oficial. Regresión Windows `PUBLICATION_V27 PASS` con 4.993 conexiones y 40 guardados; sin relajar umbrales ni modificar producción. Pendiente GPU/manual y 30 avisos PID Linux; seguimiento técnico separado.
+
+**Siguiente filtro:** familia adicional solo si es competitiva, oficial, permitida, no ya cubierta físicamente, y sin dependencia especial de habilidad no verificada. No reabrir tests anteriores sin evidencia.
+
+## Bloque 6 — tres potenciadores elementales oficiales (escala acotada)
+**Objetivo:** ampliar el comprobador existente, sin añadir ni modificar efectos productivos. Tres objetos oficiales del catálogo local: `charcoal` (#226, Fuego +20 %), `mystic_water` (#220, Agua +20 %) y `magnet` (#219, Eléctrico +20 %), cada uno con registros originales en `data/api/v2/item/index.json` y `data/api/v2/item/<id>/index.json`: categoría `type-enhancement`, `holdable` / `holdable-active`, game_indices de Gen II-VII y efecto escrito. Ya figuran en `tools/item_audit/held_effect_sweep_v2.cjs` bajo el diccionario de potenciadores de tipo. No son objetos beta. No modificar políticas ni importar nuevos datos.
+
+**Allowlist exacta fijada ANTES de editar:** `tests/gameplay/competitive_damage_items_v28.gd` (modificar únicamente la tabla de tres ítems → seis, control de procedencia, cantidad y límites; sin tocar ayudas heredadas), `.github/workflows/item-closure-v3.yml` (ajustar el marcador a `ids=6`), y los cinco cuadernos `docs/handoff/ITEMS_V28/`. No editar producción, motor, backend, RNG, datos, esquemas, escenas, UI, baselines, versión Godot ni main.
+
+**Casos:** `charcoal` con `ember` vs `tackle`, `mystic_water` con `water_gun` vs `tackle`, `magnet` con `thunder_shock` vs `tackle`, objetivo `snorlax` al nivel 100 con PS suficientes. Misma semilla y criaturas con habilidades vacías. 3 pares nuevos de efectos positivos/negativos → seis comparaciones con/sin objeto y 12 nuevas sesiones nativas, además de 3 escenas físicas independientes (mochila, combate de mapa, guardado/reinicio). Conservar íntegros los 3 casos anteriores y sus 164 aserciones. La validación del daño es positiva/negativa; **no** demuestra sinergias con habilidades o movimientos de varios golpes, switch, supresión. Control de fuentes oficiales automáticas con PokeAPI local en el nuevo runner. Guardar resultado real por SHA tras 20 workflows y un gate Windows sin cambios.
+
+**Relevancia y límite:** sirven a estrategias de equipamiento del randomlocke competitivo sin habilidades dependientes; seis tipos (tres previos y tres elementales) no significan catálogo ni todos los potenciadores completos. `beast_ball` continúa vetada para implementación, sin revertir la captura normal de ultraentes.
+
+## Cierre de bloque 6 — evidencia real
+Código `001a67a28afdae7916470819275d8c2b947de0a3`, [run #41229994112](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41229994112) **20/20 workflows PASS**; `COMPETITIVE_DAMAGE_V28 PASS checks=332 ids=6 errors=0` (seis potenciadores, tres nuevos elementales), 24 sesiones nativas emparejadas, seis rutas físicas mochila/mapa/guardado. Aserciones PokeAPI de #226/#220/#219 cumplen categoría, atributos y juego principal. Ni habilidades ni efectos de combate modificados. `PUBLICATION_V27 PASS` en Windows: 4.993 conexiones, 40 guardados. Registros Ubuntu con 42 avisos PID/worker: investigar separadamente. La selección futura no debe incorporar beta ni objetos dependientes de habilidades sin evidencia real. Último SHA funcional confirmado permanece `001a67a28afdae7916470819275d8c2b947de0a3` incluso después de commit documental `[skip ci]`.
+
+## Bloque 7 — potenciadores elementales oficiales adicionales (alcance previo, NO VERIFICADO)
+**Justificación competitiva:** cerrar la integración física y nativa de tres equipables permitidos con efectos estándar ya disponibles en el simulador: `miracle_seed` (Semilla Milagro, Grass, PokeAPI #216), `never_melt_ice` (Antiderretir, Ice, #223) y `black_belt` (Cinturón Negro, Fighting, #218). Confirmados en los índices PokeAPI locales con categoría `type-enhancement`, atributos `holdable` y `holdable-active`, índices de generaciones. No suponer que los 15 potenciadores elementales restantes son obligatorios para el randomlocke.
+
+**Allowlist antes de editar:** únicamente `tests/gameplay/competitive_damage_items_v28.gd` (extensión del runner probado de 6 a 9 IDs); `.github/workflows/item-closure-v3.yml` (exigir marcador de 9 IDs); y los cinco cuadernos de `docs/handoff/ITEMS_V28/` para estado y evidencias. No cambiar producción, simulador, datos, habilidades, RNG, esquemas, escenas, UI, políticas, scripts históricos ni `main`.
+
+**Contrastes:** `miracle_seed` con `energy_ball` / `tackle`; `never_melt_ice` con `ice_beam` / `tackle`; `black_belt` con `brick_break` / `tackle`; objetivo Snorlax nivel 100. Mismas semillas, control sin objeto, `ability_id` vacío; daño positivo solo con movimiento del tipo apropiado y ausencia de bonus al movimiento de control. Tres rutas físicas independientes de mochila/equipar/mapa/batalla/guardar/cargar y comprobación de permanencia del objeto, además de las seis anteriores. Aumentar prueba mínima de checks sin rebajar regresiones ni confundir el encuentro físico con activación de daño.
+
+**Salida exigida:** código SHA, 20 workflows y resultados reales Godot 4.7 Ubuntu + portable Windows; si falla, registrar error y no dar por validado. Revisión GPU/manual y sinergias con habilidades quedan pendientes. Estado actual: PLAN DEFINIDO; PR en borrador, main protegido.
+
+## Bloque 7 — cierre demostrado
+Código funcional `66b14d772f4e69746fbdb051f3294ee706cecae9`; run #41233384610 **20/20 workflows PASS**. Godot Ubuntu: `COMPETITIVE_DAMAGE_V28 PASS checks=500 ids=9 errors=0`, nueve recorridos reales mapa/mochila/guardado y 36 simulaciones nativas con/sin objeto, sin habilidades. Windows `PUBLICATION_V27 PASS`. Mantener limitación GPU/manual y deuda de avisos PID. Los tres IDs nuevos están verificados en alcance; no extrapolar a objetos restantes. La selección del siguiente trabajo debe guiarse por [COMPETITIVE_COVERAGE_AUDIT.md](COMPETITIVE_COVERAGE_AUDIT.md), no por barrido del catálogo.
+
+## Cierre real de la tercera familia (2026-11-01)
+
+**TERCERA FAMILIA VERIFICADA:** código `961cb0ac8712e03cd3d22e0115d8b11c1a36e08b`, [Actions #41252124368](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41252124368), **20/20 workflows PASS**. Globo Helio y Botas Gruesas incorporados al automatizador existente: **3335 comprobaciones / 40 escenarios / 8 objetos por plataforma**, más **56 tests del contrato**, Ubuntu y Windows con Godot 4.7. Globo: inmunidad Tierra, rotura física/especial real, pérdida de inmunidad, restauración y consumo persistido. Botas: cuatro peligros colocados realmente, entradas y reentradas, controles sin objeto/otro dueño y conservación. **61 = 27 verificados + 30 pendientes + 4 dependencias**. Evidencia raw de ambas plataformas y hashes revalidados. Linux: 242 diagnósticos PID en los logs capturados del automatizador; deuda abierta, distinguida del resultado funcional. Windows: 0. GPU/manual e interacciones especiales siguen pendientes. Producción y main intactos; PR #118 en borrador. El commit documental [skip ci] no añade certificación. Ver AUTOMATION_RESULTS.json.
+
+Recommend a fourth consumption family: sitrus_berry and lum_berry (HP threshold/status cure). Inspect existing native coverage, then extend the same fixture/ownership/restore/consumption/save predicates; no production change presumed. PID lifecycle diagnosis is separate; GPU/manual remains pending.
