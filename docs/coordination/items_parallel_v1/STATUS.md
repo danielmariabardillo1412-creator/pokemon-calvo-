@@ -1,3 +1,10 @@
+# IA6 — Nueva verificación de rama árbitra (2026-11-01)
+
+**PASS confirmado en árbol integrado `7b360f90b74e18085f5b741722fd67fded88d23b`:** GitHub Actions [#41353674663](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41353674663), `completed/success` con Godot 4.7 y la regresión original LOTE_002. W01/W04 nuevas pruebas 01–02 ya tenían PASS de sus steps sobre staging #41350981613; W02 nuevo test quedó fuera de esa integración al fallar.
+
+**Diagnóstico W02:** el JSON de semilla se lee en Godot como floats; `automation.seed == [23,19,29,43]` da falso por tipos. Para Persim, el espejo `showdown_backend._mirror()` solo proyecta `substitute` entre estados volátiles, mientras que el log nativo sí registra la confusión en los tres modos. El runner W02 de prueba corregido, sobre staging y con el test sin modificar en producción, pasó `1544 comprobaciones/16 casos` en [#41353949072](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41353949072). La versión más estricta con recibos del log nativo y validador Python sigue **PENDIENTE de PASS**: ejecución [#41354434516](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41354434516). No declararla integrada ni modificar ramas W.
+
+---
 # IA6 — VEREDICTO ACTUAL Y CAMPAÑA_001 (2026-11-01)
 
 **Orden vigente:** [CAMPAIGN_GATE_UPDATE_002.md](CAMPAIGN_GATE_UPDATE_002.md), complementa `CAMPAIGN_GATE_001.md`. El texto histórico más abajo donde dice W03/W05 `STOP hasta CI` corresponde al período **anterior** al PASS y se ha sustituido por esta nueva puerta. Se conservan los registros históricos para trazabilidad.
