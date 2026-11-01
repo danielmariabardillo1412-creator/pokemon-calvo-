@@ -6,12 +6,12 @@
 
 | Decisión propuesta | Entradas | Qué significa |
 | --- | ---: | --- |
-| `PERMITIR` | **685** | Tiene función prevista en el randomlocke o competitivo; **NO** significa efecto ya implementado |
-| `CONDICIONAL` | **277** | Conservado para revisión de especie, forma, mecánica de combate, economía o captura; no debe generarse sin resolver dependencia |
+| `PERMITIR` | **703** | Tiene función prevista en el randomlocke o competitivo; **NO** significa efecto ya implementado |
+| `CONDICIONAL` | **259** | Conservado para revisión de especie, forma, mecánica de combate, economía o captura; no debe generarse sin resolver dependencia |
 | `DESCARTAR` | **1.260** | No incluir en el catálogo de objetos generables de la versión actual; mantener definición para reversibilidad |
 | **Total** | **2.222** | Cero IDs sin clasificar; ninguna entrada duplicada |
 
-**Lista individual:** [RANDOMLOCK_ITEMS_SCOPE_V1.csv](./RANDOMLOCK_ITEMS_SCOPE_V1.csv). Contiene cada ID, nombre español, familia, categoría de origen, decisión, subgrupo, motivo, presencia en la muestra competitiva Gen9, exclusión previa, evidencia de campo V8, referencias evolutivas y presencia de definición nativa. **Los 685 no son un nuevo contador de objetos funcionales.**
+**Lista individual:** [RANDOMLOCK_ITEMS_SCOPE_V1.csv](./RANDOMLOCK_ITEMS_SCOPE_V1.csv). Contiene cada ID, nombre español, familia, categoría de origen, decisión, subgrupo, motivo, presencia en la muestra competitiva Gen9, exclusión previa, evidencia de campo V8, referencias evolutivas y presencia de definición nativa. **Los 703 no son un nuevo contador de objetos funcionales.**
 
 ### Desglose operativo
 
@@ -37,12 +37,12 @@
 | Correo | 0 | 0 | 36 | 36 |
 | Objetos de modo lateral (Miracle Shooter) | 0 | 0 | 24 | 24 |
 | Campo, huida y captura | 15 | 6 | 0 | 21 |
-| Fragmentos de teratipo | 0 | 18 | 0 | 18 |
+| Fragmentos de teratipo | 18 | 0 | 0 | 18 |
 | Crecimiento y fabricación de bellotas | 0 | 0 | 15 | 15 |
 | Potenciadores de uso en combate | 9 | 0 | 0 | 9 |
 | Complementos de actividad lateral | 0 | 0 | 5 | 5 |
 | Registros de actividad lateral | 0 | 0 | 27 | 27 |
-| **Total** | **685** | **277** | **1.260** | **2.222** |
+| **Total** | **703** | **259** | **1.260** | **2.222** |
 
 ## Reglas procedentes de las decisiones del proyecto
 
@@ -53,7 +53,7 @@
 5. **Bayas, equipables, evolución, medicamentos, Poké Balls y entrenamiento sí.** Preservar objetos con capacidad estratégica y utilidad para progresar. Las Poké Balls de Leyendas Arceus (11 IDs `la...`) son condicionales porque sus reglas de lanzamiento/captura no equivalen automáticamente a una captura por menú; `beast_ball` se deja descartada como **propuesta del alcance previo**, todavía no se añade a la política activa.
 6. **Historia no:** billetes, llaves, pases de ciudades y objetos de guion heredado no entran en el mapa nuevo. **Excepción deliberada:** herramientas y equipables que realmente cambian formas o afectan al Pokémon, p. ej. `griseous_core`, `adamant_crystal`, `lustrous_globe`, `blue_orb`, `red_orb`, `dna_splicers`, `reveal_glass`, `prison_bottle`, `gracidea`, `reins_of_unity`, `teal_mask`; quedan `CONDICIONAL`, no borrados.
 7. **Cable Unión sigue excluido** (`linking_cord`), como en V27. Se preservan los **10 objetos originalmente necesarios para ciertas evoluciones por intercambio**. Su adaptación a evolución por nivel u objeto **todavía no tiene tabla de niveles aprobada**; no inventar un «nivel oficial mínimo» único, ni retirar el requisito del objeto cuando corresponda.
-8. **Movimientos Z y teracristalización:** los 35 cristales Z **equipables** quedan condicionales por el perfil actual de movimientos Z de daño; los 35 tokens de bolsa `_z_bag` no son objetos equipables y se descartan. Los 18 fragmentos tera son condicionales: un Pokémon puede teracristalizar sin requerir material de cambio de teratipo, que es otra función.
+8. **Movimientos Z y teracristalización:** los 35 cristales Z **equipables** quedan condicionales por el perfil actual de movimientos Z de daño; los 35 tokens de bolsa `_z_bag` no son objetos equipables y se descartan. Los 18 fragmentos tera quedan permitidos por decisión del usuario el 1-XI-2026; un Pokémon puede teracristalizar sin requerirlos, pues sirven para cambiar su teratipo. Su ruta funcional todavía no está implementada/certificada.
 9. **Dinero y tesoros:** se condicionan los objetos meramente vendibles hasta confirmar economía o tiendas; las Chapas/Chapas Doradas se conservan por la mejora de IV. No introducir botín valioso solo para inflar inventario.
 
 ## Contraste externo y sus límites
@@ -74,7 +74,7 @@
 
 ## Aclaración confirmada: equipables, movimientos Z y megapiedras (2026-11-01)
 
-**Equipables competitivos:** están incluidos en los 685 candidatos: `charcoal` (Carbón), `focus_sash` (Banda Aguante), `focus_band` (Cinta Aguante), `choice_band`, `choice_specs`, `life_orb`, `leftovers`, `muscle_band`, etc. **Carbón potencia ataques Fuego, no modifica directamente la estadística Ataque.** Son objetivos del catálogo, no garantía de cobertura integral individual. `wide_lens` y `bright_powder` mantienen su exclusión específica existente, sin prohibir por ello los demás objetos Focus.
+**Equipables competitivos:** están incluidos en los 703 candidatos: `charcoal` (Carbón), `focus_sash` (Banda Aguante), `focus_band` (Cinta Aguante), `choice_band`, `choice_specs`, `life_orb`, `leftovers`, `muscle_band`, etc. **Carbón potencia ataques Fuego, no modifica directamente la estadística Ataque.** Son objetivos del catálogo, no garantía de cobertura integral individual. `wide_lens` y `bright_powder` mantienen su exclusión específica existente, sin prohibir por ello los demás objetos Focus.
 
 **Movimientos Z — resolución histórica, NO volver a decidirlos desde cero.** [Libro de reglas `RANDOMLOCK_RULES.md`](../../docs/project_book/RANDOMLOCK_RULES.md), sección «Decisión Z vigente y solicitudes futuras — 2026-10-27», y [`Z_MOVE_INTEGRATION.json`](./Z_MOVE_INTEGRATION.json):
 - El usuario/amigo había aprobado **movimientos Z de daño SÍ; movimientos Z de estado NO**; los movimientos de estado normales permanecen.
@@ -82,16 +82,22 @@
 - Los **35 cristales Z equipables** continúan `CONDICIONAL` **por conexión de objeto y activación**, no porque la política sobre ataques Z esté pendiente. Los **35 tokens `_z_bag`** son duplicados de representación, no equipables.
 - **No confirmada:** una limitación compartida por Mega/Z/Gigamax y la disponibilidad física de los cristales en mapa/randomizer. No cambiar reglas de combate basándose en el catálogo.
 
-**Megapiedras — decisión de diseño aprobada:** mantener megaevolución mediante **piedra equipada y transformación estratégica en combate**, no una evolución irreversible por nivel. Los **92 IDs** se mantienen en el CSV con estado técnico `CONDICIONAL`, ahora bajo el subgrupo `MEGA_APROBADA_IMPLEMENTACION_PENDIENTE`: **permitidos por concepto**, pero no generar ni afirmar que están operativos hasta confirmar especie elegible, megaforma real (incluidas incorporaciones posteriores a IX) y mecanismo probado de activación/reversión. La auditoría previa de objetos registraba **sistema Mega ausente**; datos nativos, iconos o transferencia de piedra no lo sustituyen.
+**Megapiedras — decisión de diseño aprobada:** mantener megaevolución mediante **piedra equipada y transformación estratégica en combate**, no una evolución irreversible por nivel. Los **92 IDs** se mantienen en el CSV con estado técnico `CONDICIONAL`, bajo `MEGA_APROBADA_IMPLEMENTACION_PENDIENTE`: **permitidos por concepto**, pero no generar ni afirmar que están operativos hasta confirmar especie elegible, megaforma incluida (también las incorporadas en Leyendas Z-A) y mecanismo probado de activación/reversión. La auditoría previa de objetos registraba **sistema Mega ausente**; datos nativos, iconos o transferencia de piedra no lo sustituyen.
 
-**Fragmentos tera (`*_tera_shard`, 18):** **sirven para cambiar permanentemente el teratipo asignado**, no para activar la teracristalización en combate. Por eso siguen `CONDICIONAL` a que exista una función de cambio de teratipo. En un randomlocke, **si no se ofrece esa modificación, proponer descartarlos**; eso no implica quitar la teracristalización ni el tipo tera del Pokémon.
+**Fragmentos tera (`*_tera_shard`, 18): APROBADOS como contenido por el usuario (1-XI-2026).** Sirven para cambiar el teratipo asignado, **no** para activar la teracristalización. Pasan de `CONDICIONAL` a `PERMITIR` en el CSV; **su uso, coste, consumo y guardado todavía requieren implementación y pruebas** antes de permitir su generación en partidas.
 
-**Aritmética inalterada:** 685 `PERMITIR` + 277 `CONDICIONAL` + 1260 `DESCARTAR` = 2222. Se han precisado las razones de **92 megapiedras, 35 cristales Z y 18 fragmentos tera**, sin modificar la selección activa, los datos del juego, V28 ni `main`. Ninguna prueba Godot nueva se atribuye a este cambio documental.
+**Aritmética actualizada:** 703 `PERMITIR` + 259 `CONDICIONAL` + 1260 `DESCARTAR` = 2222. Los **18 fragmentos tera** pasan a `PERMITIR` por decisión expresa del usuario; las **92 megapiedras** y **35 cristales Z** siguen condicionados técnicamente. No se modifica la política activa, los datos, V28 ni `main`; sin nuevas pruebas Godot.
+
+## Desglose de las 92 megapiedras
+
+Las **92 entradas** del catálogo corresponden a **86 especies megaevolucionables**. Hay **seis piedras adicionales por distintas alternativas de forma**: Charizard X/Y, Mewtwo X/Y, Raichu X/Y, y piedras Z alternativas para Absol, Garchomp y Lucario. Cada piedra se asigna a su especie/forma, **no** vale para cualquier Pokémon. Excepción histórica: Rayquaza puede megaevolucionar sin una megapiedra en los juegos donde esa regla se aplica.
+
+Fuentes de contraste: [Pokémon, explicación oficial](https://mega.pokemon.com/es-es/), [Bulbapedia: lista de megapiedras](https://bulbapedia.bulbagarden.net/wiki/Mega_Stones), [Pokémon Legends Z-A: megapiedras](https://www.serebii.net/legendsz-a/megastones.shtml). Que existan las 92 entradas en el inventario **no acredita** que las 86 megaformas estén implementadas en el motor ni en el pool de formas del randomlocke. La arquitectura debe reutilizar un **único sistema de megaevolución parametrizado**, no programar una mecánica por piedra.
 
 ## Revisión pendiente antes de aplicar el filtro
 
 - **Ningún descartado se borra.** No cambiar tiendas, drop tables, mapas, partidas guardadas ni políticas runtime con una tabla preliminar.
-- Revisar por ID los **277 condicionales**, especialmente megapiedras posteriores a Gen9, cambios de forma, variantes de captura, Z/tera, tesoros económicos y objetos de tutor.
+- Revisar por ID los **259 condicionales**, especialmente megapiedras y megaformas de Leyendas Z-A (no inferir su disponibilidad en el motor), cambios de forma, variantes de captura, cristales Z, tesoros económicos y objetos de tutor.
 - Confirmar que las **229 MT** corresponden al repertorio elegido para el randomlocke (actualmente Escarlata/Púrpura), sin suponer automáticamente compatibilidad de otras generaciones.
 - La distribución aleatoria debe obtener candidatos **solo de `PERMITIR` con efecto realmente conectado**; un ID en este CSV no certifica implementación, tasas ni balance. Los `CONDICIONAL` permanecen **fuera del generador** hasta aprobación explícita.
 - Cualquier objeto añadido posteriormente se inserta por ID y motivo, conservando trazabilidad. No reconstruir los 2.222 ni reiniciar V28; catálogo de contenido y pruebas de funcionalidad son sistemas distintos.
