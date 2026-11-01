@@ -29,3 +29,11 @@ El usuario ha pedido explícitamente una **auditoría inversa**: no basta con bu
 **Trabajo técnico separado:** la clasificación no modifica `config/item_selection_v1.json`, `main`, el generador de loot, los ataques permitidos ni los workflows V28. Después de resolver objetos y comprobar la lista completa, la siguiente fase será Mega, incluida la propuesta no aprobada de dos unidades de una piedra universal.
 
 **Fuente principal:** [CSV de 2.222 entradas](./RANDOMLOCK_ITEMS_SCOPE_V1.csv), [cuarta auditoría](./RANDOMLOCK_ITEMS_AUDIT_PASS4_2026-11-01.md). El archivo presente registra las propuestas sin imponerlas al juego.
+
+## Corrección de control antes de aplicar el descarte: Lanzamiento (Fling)
+
+**ATENCIÓN — no ejecutar sin más el lote de 25 descartes económicos.** La comparación de «efecto principal: vender» es insuficiente. El movimiento `fling` usa el objeto equipado como proyectil y puede convertir un tesoro en un recurso ofensivo. `rare_bone` tiene potencia **100** y `big_nugget` tiene potencia **130** en generaciones VIII-IX. Los fósiles también pueden alcanzar potencia 100. Fuentes: https://bulbapedia.bulbagarden.net/wiki/Fling_(move), https://bulbapedia.bulbagarden.net/wiki/Rare_Bone. 
+
+**Recomendación corregida:** mantener TODOS los 25 como `CONDICIONAL` hasta contrastar por ID `puede_equiparse`, `potencia_de_lanzamiento`, `efecto_secundario`, `consumo_y_recuperación_tras_combate`, `disponibilidad_de_fling` y la diferencia entre objetos de venta. Como mínimo `rare_bone` requiere examen especial; no prometer que todos los restantes están exentos de una mecánica relevante. Esto no obliga a conservar docenas de objetos con el mismo poder de Lanzamiento: una vez comparados, elegir representantes por potencia/efecto y conservar los originales solo como datos canónicos.
+
+**El CSV sigue sin ninguna modificación de esta pasada**: 706/290/1226, fase corriente 892. El conteo hipotético 706/265/1251 queda **suspendido** hasta esta comprobación, no se considera objetivo aprobado.
