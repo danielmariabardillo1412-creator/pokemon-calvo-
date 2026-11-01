@@ -1,0 +1,2 @@
+microbloque,id,familia,accion,estado_previo,estado_nuevo,sha_prueba_o_commit,prueba_estatica,prueba_godot,ci_del_commit,siguiente
+01,net_ball,CAPTURE_BALL,Contrato de tipos Agua-Bicho-Normal; auditoria regresiones V11-V15 y validador por fases,SELECCIONADA_NO_OPERATIVA,PREPARADO_PENDIENTE_CI,bbde5ef67d181092c24c671228f51eb5e0134fd4,REVISION_ESTATICA_DE_BLOBS; PY_SIN_EJECUTAR,SIN_EJECUTAR,SIN_EJECUTAR,02_IMPL_ADAPTADOR_Y_REGRESIONES
