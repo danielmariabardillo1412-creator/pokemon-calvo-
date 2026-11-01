@@ -56,12 +56,17 @@ func _run_campaign() -> void:
 	_finish_campaign(rows)
 
 
-func _prepare(spec: Dictionary, creature: CreatureInstance) -> void:
+func _prepare(spec: Dictionary, creature: CreatureInstance, for_field: bool = false) -> void:
 	if spec.initial == "quarter":
 		creature.current_hp = maxi(1, int(floor(float(creature.stats.max_hp) / 4.0)))
-	if not String(spec.status).is_empty():
-		creature.status_state.persistent_id = StringName(spec.status)
-		creature.status_ids.assign([StringName(spec.status)])
+	var initial_status: String = String(spec.get("field_status", spec.status)) if for_field else String(spec.status)
+	if not initial_status.is_empty():
+		creature.status_state.persistent_id = StringName(initial_status)
+		creature.status_ids.assign([StringName(initial_status)])
+		if initial_status == "sleep":
+			creature.status_state.turns_remaining = 2
+	if for_field and bool(spec.get("field_confusion", false)):
+		creature.status_state.add_volatile(&"confusion", {"turns": 3})
 
 
 func _compare_native(spec: Dictionary, held: Dictionary) -> void:
@@ -74,18 +79,27 @@ func _compare_native(spec: Dictionary, held: Dictionary) -> void:
 	check("stock global después de combatir",
 		active.units == (1 if should_consume else 2) and plain.units == 2 and reserve.units == 2)
 	check("reserva no altera al activo",
-		plain.hp == reserve.hp and plain.status == reserve.status)
-	if String(spec.kind) == "hp":
+		plain.hp == reserve.hp and plain.status == reserve.status and plain.confused == reserve.confused)
+	if String(spec.kind) == "confusion":
+		check("Persim elimina confusión únicamente en portador activo",
+			active.confused == not should_consume and plain.confused == should_consume
+			and reserve.confused == should_consume)
+		check("Persim no cura estado persistente ajeno",
+			active.status == String(spec.status) and plain.status == String(spec.status))
+	elif String(spec.kind) == "hp":
 		check("Aranja cura +10 PS equipados o no se activa",
 			active.hp == mini(active.max_hp, plain.hp + (int(spec.heal) if should_consume else 0)))
 		check("Aranja no altera estado", active.status == plain.status)
 	else:
 		check("Baya de estado no altera PS fuera de controles de turno",
 			active.hp == plain.hp or active.hp > plain.hp)
+		var required_status: String = String(spec.get("native_expected_status", spec.status))
 		check("Estado de control esperado",
-			plain.status == String(spec.status) and reserve.status == String(spec.status))
+			plain.status == required_status and reserve.status == required_status)
 		check("Cura solamente estado específico",
-			active.status == ("" if should_consume else String(spec.status)))
+			active.status == ("" if should_consume else required_status))
+		check("Las bayas específicas no curan confusión",
+			not active.confused and not plain.confused and not reserve.confused)
 
 
 func _native_case(spec: Dictionary, mode: String) -> Dictionary:
@@ -94,7 +108,8 @@ func _native_case(spec: Dictionary, mode: String) -> Dictionary:
 	var own: CreatureInstance = _mon(&"mew", int(automation.level), &"own", ["amnesia"])
 	_prepare(spec, own)
 	var backup: CreatureInstance = _mon(&"mew", int(automation.level), &"reserve", ["amnesia"])
-	var foe: CreatureInstance = _mon(&"mew", int(automation.level), &"foe", ["amnesia"])
+	var foe: CreatureInstance = _mon(StringName(spec.get("foe_species", "mew")),
+		int(automation.level), &"foe", [String(spec.get("foe_move", "amnesia"))])
 	check(mode + " party own", player.party.add_creature(own))
 	check(mode + " party reserve", player.party.add_creature(backup))
 	check(mode + " dos bayas en mochila", player.inventory.add(item, 2))
@@ -124,6 +139,7 @@ func _native_case(spec: Dictionary, mode: String) -> Dictionary:
 	var observed: CreatureInstance = battle.battle_state().creature(&"own")
 	var hp: int = observed.current_hp
 	var status: String = String(observed.status_state.persistent_id)
+	var confused: bool = observed.status_state.has_volatile(&"confusion")
 	var spent: bool = observed.held_item_consumed
 	check(mode + " campaña intacta antes del cierre",
 		JSON.stringify(_owner_data(player)) == frozen and _units(player, item) == 2)
@@ -134,8 +150,9 @@ func _native_case(spec: Dictionary, mode: String) -> Dictionary:
 	battle = restored.session
 	player = restored.owner
 	var after_restore: CreatureInstance = battle.battle_state().creature(&"own")
-	check(mode + " restauración PS/estado/consumo", after_restore.current_hp == hp
+	check(mode + " restauración PS/estado/confusión/consumo", after_restore.current_hp == hp
 		and String(after_restore.status_state.persistent_id) == status
+		and after_restore.status_state.has_volatile(&"confusion") == confused
 		and after_restore.held_item_consumed == spent)
 	var ending: Dictionary = await battle.use_item(&"poke_doll", &"own", battle.revision)
 	check(mode + " batalla terminada realmente FLED", ending.accepted and battle.completion_reason == "FLED")
@@ -170,11 +187,11 @@ func _native_case(spec: Dictionary, mode: String) -> Dictionary:
 	await battle.close()
 	var raw := {"scenario": spec.scenario, "mode": mode, "initial": checkpoint,
 		"owner_after": published, "native_hp": hp, "native_status": status,
-		"native_consumed": spent, "units": _units(owner, item)}
+		"native_consumed": spent, "native_confused": confused, "units": _units(owner, item)}
 	var evidence: String = name + ".json"
 	var hash: String = _write_evidence(name, raw)
 	return {"valid": true, "hp": hp, "max_hp": after_restore.stats.max_hp,
-		"status": status, "consumed": spent, "units": _units(owner, item),
+		"status": status, "confused": confused, "consumed": spent, "units": _units(owner, item),
 		"bag": owner.inventory.quantity(item), "save": true, "evidence": evidence, "sha256": hash}
 
 
@@ -182,7 +199,7 @@ func _field_case(spec: Dictionary, place: String) -> Dictionary:
 	var item := StringName(spec.id)
 	var player := PlayerCollection.new()
 	var creature: CreatureInstance = _mon(&"mew", int(automation.level), &"own", ["amnesia"])
-	_prepare(spec, creature)
+	_prepare(spec, creature, true)
 	check(place + " propietario creado", player.party.add_creature(creature))
 	if place == "STORAGE":
 		check(place + " traslado a caja", player.deposit(&"own"))
@@ -193,6 +210,7 @@ func _field_case(spec: Dictionary, place: String) -> Dictionary:
 	var previous: CreatureInstance = player.owned_creature(&"own")
 	var hp_before: int = previous.current_hp
 	var status_before: String = String(previous.status_state.persistent_id)
+	var confusion_before: bool = previous.status_state.has_volatile(&"confusion")
 	var result: Dictionary = service.use_item(item, &"own", -1)
 	var apply: bool = bool(spec.field_applies)
 	check(place + " aplica sólo si hay efecto correcto", result.accepted == apply)
@@ -201,7 +219,8 @@ func _field_case(spec: Dictionary, place: String) -> Dictionary:
 		check(place + " gasta exactamente una unidad", player.inventory.quantity(item) == 1)
 		check(place + " cura exactamente el contrato de campo",
 			after.current_hp == mini(after.stats.max_hp, hp_before + int(spec.heal))
-			and String(after.status_state.persistent_id) == ("" if String(spec.kind) == "status" else status_before))
+			and String(after.status_state.persistent_id) == ("" if String(spec.kind) == "status" else status_before)
+			and after.status_state.has_volatile(&"confusion") == confusion_before)
 		check(place + " retiene identidad/ubicación",
 			after.instance_id == &"own" and String(player.location_of(&"own")) == place)
 	else:
@@ -223,11 +242,13 @@ func _field_case(spec: Dictionary, place: String) -> Dictionary:
 		and again.inventory.quantity(item) == (1 if apply else 2))
 	var name: String = String(spec.scenario) + "_field_" + place.to_lower()
 	var file: String = name + ".json"
+	var confusion_after: bool = final.status_state.has_volatile(&"confusion")
 	var hash: String = _write_evidence(name, {"scenario": spec.scenario, "location": place,
 		"accepted": result.accepted, "owner_after": published, "initial_hp": hp_before,
-		"initial_status": status_before})
+		"initial_status": status_before, "initial_confused": confusion_before, "confused": confusion_after})
 	return {"valid": true, "accepted": result.accepted, "hp": final.current_hp,
-		"status": String(final.status_state.persistent_id), "bag": again.inventory.quantity(item),
+		"status": String(final.status_state.persistent_id), "confused": confusion_after,
+		"bag": again.inventory.quantity(item),
 		"save": true, "evidence": file, "sha256": hash}
 
 
