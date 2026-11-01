@@ -1,0 +1,44 @@
+{
+  "schema_version": 2,
+  "family": "passive_reactive_held_items",
+  "format": "gen9calvounifiedv1",
+  "seed": [23, 19, 29, 43],
+  "level": 100,
+  "actor_species": "mew",
+  "damage_target": "mew",
+  "physical_move": "tackle",
+  "consumption": "retained",
+  "variants": ["active", "none", "reserve"],
+  "items": [
+    {
+      "id": "leftovers", "api_id": 211,
+      "effect": {"op": "residual_heal", "divisor": 16, "basis": "holder_max_hp"},
+      "cases": [
+        {"id": "heal_partial", "hp": "half", "target": "own", "own_move": "reflect", "foe_move": "amnesia", "foe_species": "mew", "commands": ["move 1", "move 1"]},
+        {"id": "heal_cap", "hp": "near_full", "target": "own", "own_move": "reflect", "foe_move": "amnesia", "foe_species": "mew", "commands": ["move 1"]},
+        {"id": "full_hp_control", "hp": "full", "target": "own", "own_move": "reflect", "foe_move": "amnesia", "foe_species": "mew", "commands": ["move 1"]},
+        {"id": "heal_switched_owner", "hp": "half", "target": "reserve", "own_move": "reflect", "foe_move": "amnesia", "foe_species": "mew", "commands": ["switch_to_reserve", "move 1"]}
+      ]
+    },
+    {
+      "id": "life_orb", "api_id": 247,
+      "effect": {"op": "damage_recoil", "divisor": 10, "basis": "holder_max_hp"},
+      "cases": [
+        {"id": "physical_boost_recoil", "hp": "full", "target": "own", "own_move": "tackle", "foe_move": "amnesia", "foe_species": "mew", "commands": ["move 1", "move 1"], "activates": true},
+        {"id": "special_boost_recoil", "hp": "full", "target": "own", "own_move": "water_gun", "foe_move": "amnesia", "foe_species": "mew", "commands": ["move 1"], "activates": true},
+        {"id": "status_no_recoil", "hp": "full", "target": "own", "own_move": "reflect", "foe_move": "amnesia", "foe_species": "mew", "commands": ["move 1"], "activates": false},
+        {"id": "immune_no_recoil", "hp": "full", "target": "own", "own_move": "tackle", "foe_move": "amnesia", "foe_species": "gengar", "commands": ["move 1"], "activates": false}
+      ]
+    },
+    {
+      "id": "rocky_helmet", "api_id": 583,
+      "effect": {"op": "contact_retaliation", "divisor": 6, "basis": "attacker_max_hp"},
+      "cases": [
+        {"id": "contact_damage", "hp": "full", "target": "own", "own_move": "amnesia", "foe_move": "tackle", "foe_species": "mew", "commands": ["move 1", "move 1"], "activates": true},
+        {"id": "special_no_contact", "hp": "full", "target": "own", "own_move": "amnesia", "foe_move": "water_gun", "foe_species": "mew", "commands": ["move 1"], "activates": false},
+        {"id": "physical_no_contact", "hp": "full", "target": "own", "own_move": "amnesia", "foe_move": "earthquake", "foe_species": "mew", "commands": ["move 1"], "activates": false},
+        {"id": "contact_switched_owner", "hp": "full", "target": "reserve", "own_move": "amnesia", "foe_move": "tackle", "foe_species": "mew", "commands": ["switch_to_reserve", "move 1"], "activates": true}
+      ]
+    }
+  ]
+}
