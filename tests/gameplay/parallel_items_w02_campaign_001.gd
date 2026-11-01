@@ -26,8 +26,12 @@ func _run_campaign() -> void:
 	catalogs = GameData.from_dict(JSON.parse_string(FileAccess.get_file_as_string("res://data/normalized/pokemon_api.json"))).to_definition_catalog()
 	check("overlay existente", Variants.apply(catalogs))
 	check("formato fijado", String(automation.format) == "gen9calvounifiedv1")
-	print("IA6_W02_DIAG_SEED ", JSON.stringify({"actual": automation.seed, "same": automation.seed == [23, 19, 29, 43], "type": typeof(automation.seed), "first_type": typeof(automation.seed[0])}))
-	check("semilla reproducible", automation.seed.size() == 4 and int(automation.seed[0]) == 23 and int(automation.seed[1]) == 19 and int(automation.seed[2]) == 29 and int(automation.seed[3]) == 43)
+	var expected_seed := [23, 19, 29, 43]
+	var seed_correct := automation.get("seed") is Array and automation.seed.size() == expected_seed.size()
+	if seed_correct:
+		for i in expected_seed.size():
+			seed_correct = seed_correct and (automation.seed[i] is int or automation.seed[i] is float) and float(automation.seed[i]) == float(expected_seed[i])
+	check("semilla reproducible", seed_correct)
 	check("control dueño activo, ausente y reserva", automation.variants == ["active", "none", "reserve"])
 	check("dos ubicaciones de mochila", automation.locations == ["PARTY", "STORAGE"])
 	var rows: Array = []
@@ -82,7 +86,6 @@ func _compare_native(spec: Dictionary, held: Dictionary) -> void:
 	check("reserva no altera al activo",
 		plain.hp == reserve.hp and plain.status == reserve.status and plain.confused == reserve.confused)
 	if String(spec.kind) == "confusion":
-		print("IA6_W02_DIAG_PERSIM ", JSON.stringify({"scenario": spec.scenario, "active": {"confused": active.confused, "consumed": active.consumed, "hp": active.hp, "status": active.status}, "none": {"confused": plain.confused, "consumed": plain.consumed, "hp": plain.hp, "status": plain.status}, "reserve": {"confused": reserve.confused, "consumed": reserve.consumed, "hp": reserve.hp, "status": reserve.status}, "expected_consume": should_consume}))
 		check("Persim elimina confusión únicamente en portador activo",
 			not active.confused and active.native_confusion_started == should_consume
 			and plain.native_confusion_started == should_consume
@@ -143,17 +146,15 @@ func _native_case(spec: Dictionary, mode: String) -> Dictionary:
 	var hp: int = observed.current_hp
 	var status: String = String(observed.status_state.persistent_id)
 	var confused: bool = observed.status_state.has_volatile(&"confusion")
-	var native_view: Dictionary = battle.snapshot().get("native", {})
-	var native_battle: Dictionary = native_view.get("native", {})
-	var confusion_started := false
-	for event_line: Variant in native_battle.get("log", []):
-		var line := String(event_line).to_lower()
+	# La proyección BattleState solo serializa Substitute: para confusión
+	# usar el log del simulador nativo que queda incluido en el snapshot.
+	var raw_native: Dictionary = battle.snapshot().get("native", {}).get("native", {})
+	var confusion_events: Array[String] = []
+	for line_value: Variant in raw_native.get("log", []):
+		var line := String(line_value).to_lower()
 		if line.begins_with("|-start|") and line.contains("|confusion"):
-			confusion_started = true
-	if String(spec.kind) == "confusion":
-		print("IA6_W02_NATIVE_CAUSE ", JSON.stringify({"scenario": spec.scenario,
-			"mode": mode, "native_confusion_started": confusion_started,
-			"projected_confusion": confused}))
+			confusion_events.append(String(line_value))
+	var confusion_started: bool = not confusion_events.is_empty()
 	var spent: bool = observed.held_item_consumed
 	check(mode + " campaña intacta antes del cierre",
 		JSON.stringify(_owner_data(player)) == frozen and _units(player, item) == 2)
@@ -201,7 +202,9 @@ func _native_case(spec: Dictionary, mode: String) -> Dictionary:
 	await battle.close()
 	var raw := {"scenario": spec.scenario, "mode": mode, "initial": checkpoint,
 		"owner_after": published, "native_hp": hp, "native_status": status,
-		"native_consumed": spent, "native_confused": confused, "units": _units(owner, item)}
+		"native_consumed": spent, "native_confused": confused,
+		"native_confusion_started": confusion_started,
+		"native_confusion_events": confusion_events, "units": _units(owner, item)}
 	var evidence: String = name + ".json"
 	var hash: String = _write_evidence(name, raw)
 	return {"valid": true, "hp": hp, "max_hp": after_restore.stats.max_hp,
