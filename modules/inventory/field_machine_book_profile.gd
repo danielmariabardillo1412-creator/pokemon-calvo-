@@ -45,3 +45,22 @@ static func consultar(item_id: StringName, perfil: Dictionary, catalogos: Defini
 	return {"disponible": true, "estado": "ACTIVA", "item_id": id,
 		"move_id": String(movimiento), "type_id": String(tipo),
 		"version": String(version)}
+
+
+# Vista textual de dominio: no crea texturas ni altera el perfil canónico.
+# La clasificación y los nombres proceden del movimiento ya resuelto.
+static func presentacion(item_id: StringName, perfil: Dictionary, catalogos: DefinitionCatalog) -> Dictionary:
+	var resultado: Dictionary = consultar(item_id, perfil, catalogos)
+	if not resultado.get("disponible", false):
+		return resultado
+	var movimiento := StringName(resultado["move_id"])
+	var tipo := StringName(resultado["type_id"])
+	var nombre_movimiento := SpanishGameText.move_name(movimiento, catalogos)
+	var nombre_tipo := SpanishGameText.type_name(tipo)
+	resultado["categoria_presentacion"] = "LIBRO_MOVIMIENTO"
+	resultado["etiqueta"] = "Libro de movimiento · " + nombre_movimiento
+	resultado["nombre_movimiento"] = nombre_movimiento
+	resultado["clasificacion_tipo"] = String(tipo)
+	resultado["nombre_tipo"] = nombre_tipo
+	# Paleta y seis modelos visuales requieren aprobación artística aparte.
+	return resultado
