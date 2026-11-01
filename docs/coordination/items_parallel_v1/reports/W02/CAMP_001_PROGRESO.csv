@@ -1,0 +1,2 @@
+campana,microbloque,ids,escenarios,combate,campo,commit_codigo,resultado_estatico,resultado_python,resultado_godot,estado,siguiente
+CAMP_001,01,oran_berry+pecha_berry+cheri_berry,8,24,16,e6873734830914fdc50fb715b5204ef2814fd677,PASS_ESTATICO_15_15,SIN_EJECUTAR,SIN_EJECUTAR,PREPARADO_PENDIENTE_CI,ITER_02
