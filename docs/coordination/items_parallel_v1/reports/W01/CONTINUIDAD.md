@@ -110,3 +110,23 @@ Se necesita Godot 4.7, `@pkmn/sim@0.10.11` fijado y `POKEMON_CALVO_NODE` correct
 **Próximo paso reproducible solo mediante nueva `p`:** releer gate/STATUS/campaña, verificar HEAD y diff, ejecutar **microbloque 03 exclusivamente**: auditar cobertura para los seis IDs, integridad de los pares caso-semilla y hashes, documentación de límites y emitir `CAMP_001_FINAL.md`. Después **CAMPAÑA_001_FINALIZADA** y detener hasta nueva asignación. Ningún otro bloque ha sido empezado.
 
 **NO TOCAR:** `main`, PR #118, V28 original, rama árbitra y otras trabajadoras; `modules/`, `scenes/`, `data/`, `config/`, `.github/`, guardados ni políticas. Sin permiso para cambios de producción.
+
+
+---
+
+## CIERRE DEFINITIVO DE ENTREGA — CAMPAÑA_001 / ITER_03 (2026-11-01)
+
+**ESTADO VIGENTE: `CAMPAÑA_001_FINALIZADA` (3/3 microbloques); detenerse.** Las secciones anteriores reflejan el estado histórico de cada iteración y quedan supersedidas por esta actualización.
+
+- **Autoridad actual:** asignación `campaigns/CAMP_001_W01.md` blob `4faaae234c3021944d7f4724789c3b2c5d0652fd`; gate `CAMPAIGN_GATE_001.md` ACTIVADA, complementada por `CAMPAIGN_GATE_UPDATE_003.md` blob `59c553bd7a931ebe4ac10bf4b2b3ce43815220dc` (**permiso solo para ITER_03**, no nueva campaña).
+- **Rama y merge de seguridad:** `codex/calvo-items-20261101-w01`, sincronizada no destructivamente con árbitra HEAD `8e170550881861daa3a3aefe8aa91909decf84af` mediante merge `1f783cdb0ab5ddcacdd80a9deb81d4ae0e947100`. Los blobs propios de informes antiguos y tests se preservaron; tres blobs de campaña coinciden con staging y árbitra sin conflictos.
+- **Informe por microbloque:** `CAMP_001_ITER_01.md` (curación y residual), `CAMP_001_ITER_02.md` (defensa/daño condicional), `CAMP_001_ITER_03.md` (auditoría final); **informe consolidado** `CAMP_001_FINAL.md` y progreso final `CAMP_001_PROGRESO.csv`.
+- **Cobertura exacta:** 6 equipables `black_sludge` 3/5, `shell_bell` 3/4, `big_root` 2/3, `eviolite` 4/6, `expert_belt` 2/3, `safety_goggles` 3/3 (formato casos/pares semilla). TOTAL **17 casos / 24 ejecuciones / 72 variantes activo-ninguno-reserva**. ITER_03 no ha añadido casos, solo auditoría de 15 invariantes estáticos PASS.
+- **Git blob SHA auditados:** `w01_campaign_001.json` = `c8360512855aa2339e8644e0fe4f117542985866`; `parallel_items_w01_campaign_001.gd` = `d2a4bae5e99182c55d37c01c1f67f075bc41ea43`; `test_parallel_items_w01_campaign_001.py` = `d6f5cd51d8d9141a1f691f613bad47216f586a22`. Coinciden en staging `6ea4cb1b9b68e0d1e33ef6a5228dcf57503a3456`, integración `7b360f90b74e18085f5b741722fd67fded88d23b` y W01. Informe Python de Godot exigió además SHA-256 de cada evidencia.
+- **Prueba real W01 (hechos nuevos):** [Actions #41350981613](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41350981613): W01 paso independiente **PASS**, Godot 4.7 **2428 checks, 24 filas, 0 errores**, Python contrato **17/24/72**, 6 manipulaciones negativas rechazadas, evidencia SHA-256 **24/72 PASS**. Run global **FAIL de W02** ajeno. IA6 integró mismos blobs en `7b360f90...`; regresiones originales de LOTE_002 [#41353674663](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41353674663) y [#41354759130](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41354759130) concluyeron SUCCESS (no ejecutan campaña W01).
+- **Nivel correcto:** `VERIFICADO_EN_STAGING` para tests 01–02 e `ITER_03 DOCUMENTADA`; CI de esos blobs con PASS en staging, y tests integrados por IA6. No equivale a CI funcional sobre todo el juego, UI/GPU o cierre de campaña desde mapa.
+- **Qué sigue sin cerrar:** Trick/supresión/cambio de portador, todos los climas/ataques/semillas/formatos, asentamiento de victoria y guardado persistente tras volver al mapa, arte/UI. Estos requieren nueva orden y dueño de código; **no se han implementado ni reclamado**.
+- **Prohibiciones permanentes:** no tocar `main`, V28, PR #118, árbitra, otras W, `modules/`, `data/`, `.github/`, políticas/guardados/producción. No arreglar fallos de IA6 sin encargo acotado. No iterar tras el tercer bloque.
+- **Siguiente acción reproducible:** IA6 recibe [`CAMP_001_FINAL.md`](./CAMP_001_FINAL.md) y revisa informe/CI/manifiesto; asignación posterior **solo** si IA6 la publica expresamente. Una nueva `p` sin nueva campaña no autoriza cambios.
+
+**No prometer trabajo autónomo entre mensajes ni un cuarto microbloque.**
