@@ -9,6 +9,7 @@ const LEARN_MOVE := "LEARN_MOVE"
 const REPLACE_MOVE := "REPLACE_MOVE"
 const DECLINE_MOVE := "DECLINE_MOVE"
 const HeldItems = preload("res://modules/creatures/progression/progression_held_items.gd")
+const BattleEvRewards = preload("res://modules/creatures/progression/battle_ev_rewards.gd")
 
 
 # Award experience to a creature. Returns the list of ProgressionEvents produced.
@@ -136,13 +137,15 @@ static func reconcile_battle_result(
 	for d in outcome.defeated:
 		defeats.append({"base_experience": int(d.get("base_experience", 0)), "level": int(d.get("level", 1))})
 	var share := ruleset.experience_for_defeats(defeats, survivors.size())
-	if share <= 0:
-		return events
 	for sp in survivors:
 		var species: CreatureSpecies = catalogs.species_catalog.get_by_id(sp.species_id)
 		if species == null:
 			continue
-		var maximum:=ruleset.experience_for_level(species.growth_rate,ruleset.MAX_LEVEL)
-		var amount:=HeldItems.battle_reward_amount(share,sp,starting_items,maximum)
-		events.append_array(gain_experience(sp, amount, species, catalogs, ruleset))
+		# El reparto de XP y Lucky Egg siguen intactos. Los EV se calculan
+		# por enemigo derrotado; nivel 100 no impide entrenar EV.
+		if share > 0:
+			var maximum := ruleset.experience_for_level(species.growth_rate, ruleset.MAX_LEVEL)
+			var amount := HeldItems.battle_reward_amount(share, sp, starting_items, maximum)
+			events.append_array(gain_experience(sp, amount, species, catalogs, ruleset))
+		BattleEvRewards.award(sp, outcome.defeated, catalogs, ruleset, starting_items)
 	return events
