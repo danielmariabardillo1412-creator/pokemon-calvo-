@@ -69,7 +69,7 @@ def verificar_datos() -> int:
 
     for item, origen, destino, cadena in RUTAS:
         elegidos = [r for r in seleccion if r["id"] == item]
-        exigir(len(elegidos) == 1 and elegidos[0]["decision"] == "SELECCIONADO",
+        exigir(len(elegidos) == 1 and elegidos[0]["estado_contenido"] == "SELECCIONADO",
                f"{item}: scope no único o no seleccionado")
         comprobaciones += 1
         entrada = [r for r in inventario if r["id"] == item]
