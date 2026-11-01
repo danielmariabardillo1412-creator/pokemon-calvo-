@@ -1,0 +1,282 @@
+{
+  "schema_version": 1,
+  "family": "berry_campaign_w02",
+  "campaign": "CAMP_001",
+  "microblocks_completed": [
+    1,
+    2,
+    3
+  ],
+  "format": "gen9calvounifiedv1",
+  "level": 100,
+  "seed": [
+    23,
+    19,
+    29,
+    43
+  ],
+  "variants": [
+    "active",
+    "none",
+    "reserve"
+  ],
+  "locations": [
+    "PARTY",
+    "STORAGE"
+  ],
+  "cases": [
+    {
+      "id": "oran_berry",
+      "scenario": "oran_low_hp",
+      "kind": "hp",
+      "initial": "quarter",
+      "status": "",
+      "consumes": true,
+      "field_applies": true,
+      "heal": 10
+    },
+    {
+      "id": "oran_berry",
+      "scenario": "oran_full_hp",
+      "kind": "hp",
+      "initial": "full",
+      "status": "",
+      "consumes": false,
+      "field_applies": false,
+      "heal": 10
+    },
+    {
+      "id": "pecha_berry",
+      "scenario": "pecha_poison",
+      "kind": "status",
+      "initial": "full",
+      "status": "poison",
+      "consumes": true,
+      "field_applies": true,
+      "heal": 0
+    },
+    {
+      "id": "pecha_berry",
+      "scenario": "pecha_burn",
+      "kind": "status",
+      "initial": "full",
+      "status": "burn",
+      "consumes": false,
+      "field_applies": false,
+      "heal": 0
+    },
+    {
+      "id": "pecha_berry",
+      "scenario": "pecha_healthy",
+      "kind": "status",
+      "initial": "full",
+      "status": "",
+      "consumes": false,
+      "field_applies": false,
+      "heal": 0
+    },
+    {
+      "id": "cheri_berry",
+      "scenario": "cheri_paralysis",
+      "kind": "status",
+      "initial": "full",
+      "status": "paralysis",
+      "consumes": true,
+      "field_applies": true,
+      "heal": 0
+    },
+    {
+      "id": "cheri_berry",
+      "scenario": "cheri_poison",
+      "kind": "status",
+      "initial": "full",
+      "status": "poison",
+      "consumes": false,
+      "field_applies": false,
+      "heal": 0
+    },
+    {
+      "id": "cheri_berry",
+      "scenario": "cheri_healthy",
+      "kind": "status",
+      "initial": "full",
+      "status": "",
+      "consumes": false,
+      "field_applies": false,
+      "heal": 0
+    },
+    {
+      "id": "persim_berry",
+      "scenario": "persim_confuse_ray",
+      "kind": "confusion",
+      "initial": "full",
+      "status": "",
+      "consumes": true,
+      "field_applies": false,
+      "heal": 0,
+      "foe_species": "gengar",
+      "foe_move": "confuse_ray",
+      "field_confusion": true
+    },
+    {
+      "id": "persim_berry",
+      "scenario": "persim_no_confusion",
+      "kind": "confusion",
+      "initial": "full",
+      "status": "",
+      "consumes": false,
+      "field_applies": false,
+      "heal": 0,
+      "foe_species": "mew",
+      "foe_move": "amnesia",
+      "field_confusion": false
+    },
+    {
+      "id": "chesto_berry",
+      "scenario": "chesto_spore",
+      "kind": "status",
+      "initial": "full",
+      "status": "",
+      "consumes": true,
+      "field_applies": true,
+      "heal": 0,
+      "foe_species": "gengar",
+      "foe_move": "spore",
+      "field_confusion": false,
+      "field_status": "sleep",
+      "native_expected_status": "sleep"
+    },
+    {
+      "id": "chesto_berry",
+      "scenario": "chesto_burn",
+      "kind": "status",
+      "initial": "full",
+      "status": "burn",
+      "consumes": false,
+      "field_applies": false,
+      "heal": 0,
+      "foe_species": "mew",
+      "foe_move": "amnesia",
+      "field_confusion": false
+    },
+    {
+      "id": "chesto_berry",
+      "scenario": "chesto_healthy",
+      "kind": "status",
+      "initial": "full",
+      "status": "",
+      "consumes": false,
+      "field_applies": false,
+      "heal": 0,
+      "foe_species": "mew",
+      "foe_move": "amnesia",
+      "field_confusion": false
+    },
+    {
+      "id": "rawst_berry",
+      "scenario": "rawst_burn",
+      "kind": "status",
+      "initial": "full",
+      "status": "burn",
+      "consumes": true,
+      "field_applies": true,
+      "heal": 0,
+      "foe_species": "mew",
+      "foe_move": "amnesia",
+      "field_confusion": false
+    },
+    {
+      "id": "rawst_berry",
+      "scenario": "rawst_poison",
+      "kind": "status",
+      "initial": "full",
+      "status": "poison",
+      "consumes": false,
+      "field_applies": false,
+      "heal": 0,
+      "foe_species": "mew",
+      "foe_move": "amnesia",
+      "field_confusion": false
+    },
+    {
+      "id": "rawst_berry",
+      "scenario": "rawst_healthy",
+      "kind": "status",
+      "initial": "full",
+      "status": "",
+      "consumes": false,
+      "field_applies": false,
+      "heal": 0,
+      "foe_species": "mew",
+      "foe_move": "amnesia",
+      "field_confusion": false
+    }
+  ],
+  "note": "CAMP_001/03: 16 casos, seis matrices independientes, por ID positivo/negativo, tres modos nativos, dos localizaciones campo, SaveV2; la ausencia de Persim en perfil campo sigue como brecha, no éxito. Ningún PASS nuevo sin Godot.",
+  "coverage_matrix": {
+    "oran_berry": {
+      "effect": "hp_10",
+      "field_profile": "heal_10",
+      "positive": [
+        "oran_low_hp"
+      ],
+      "negative": [
+        "oran_full_hp"
+      ]
+    },
+    "pecha_berry": {
+      "effect": "poison_specific",
+      "field_profile": "poison_specific",
+      "positive": [
+        "pecha_poison"
+      ],
+      "negative": [
+        "pecha_burn",
+        "pecha_healthy"
+      ]
+    },
+    "cheri_berry": {
+      "effect": "paralysis_specific",
+      "field_profile": "paralysis_specific",
+      "positive": [
+        "cheri_paralysis"
+      ],
+      "negative": [
+        "cheri_poison",
+        "cheri_healthy"
+      ]
+    },
+    "persim_berry": {
+      "effect": "volatile_confusion_specific",
+      "field_profile": "NOT_REGISTERED",
+      "positive": [
+        "persim_confuse_ray"
+      ],
+      "negative": [
+        "persim_no_confusion"
+      ]
+    },
+    "chesto_berry": {
+      "effect": "sleep_specific",
+      "field_profile": "sleep_specific",
+      "positive": [
+        "chesto_spore"
+      ],
+      "negative": [
+        "chesto_burn",
+        "chesto_healthy"
+      ]
+    },
+    "rawst_berry": {
+      "effect": "burn_specific",
+      "field_profile": "burn_specific",
+      "positive": [
+        "rawst_burn"
+      ],
+      "negative": [
+        "rawst_poison",
+        "rawst_healthy"
+      ]
+    }
+  }
+}
