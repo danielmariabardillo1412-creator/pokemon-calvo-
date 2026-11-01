@@ -72,6 +72,20 @@ def examinar(raiz: Path, fase: str) -> list[str]:
                "Falta el factor 3.5 consultando los tipos reales de especie")
         exigir('&"net_ball"' not in linea_v11 and '&"net_ball"' not in linea_v15,
                "Negativo obsoleto en V11 o V15: sustituirlo antes del PASS")
+        camp = leer("tests/gameplay/parallel_items_w03_net_campaign_001.gd")
+        for prueba_campania in (
+            '_probe_live_types()', '_probe_net_boundary()',
+            '_probar_doble_tipo()', '_probar_net_equipo_pc_guardado()',
+            '_probar_net_fallo_y_rechazos()', '_probar_selector_y_descriptor()',
+            'species', 'surskit', 'magikarp', 'caterpie', 'pidgey',
+            'CaptureResult.FAILED', 'CaptureResult.INVALID', 'CaptureResult.SUCCESS',
+            'CaptureOwnershipRouter.new()', 'SaveGameRepository.new()',
+            'NET_SAVE_PATH', 'get_item_metadata', 'item.description',
+            'CaptureInventoryService.resolve(', 'owner.location_of(',
+            'CaptureRuleset.new().catch_probability(',
+        ):
+            exigir(prueba_campania in camp,
+                   "Falta regresion de campaña Net: " + prueba_campania)
 
     return errores
 

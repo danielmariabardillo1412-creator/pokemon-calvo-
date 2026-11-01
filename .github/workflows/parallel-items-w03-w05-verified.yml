@@ -1,0 +1,93 @@
+name: Parallel Items - Net Ball and Machine Books (Godot 4.7)
+on:
+  push:
+    branches:
+      - codex/calvo-items-20261101-arbitro
+    paths:
+      - '.github/workflows/parallel-items-w03-w05-verified.yml'
+      - 'modules/capture/capture_ball_effects.gd'
+      - 'modules/inventory/field_machine_book_profile.gd'
+      - 'tests/gameplay/parallel_items_w03_net_campaign_001.gd'
+      - 'tests/gameplay/parallel_items_w03_capture_net_v1.gd'
+      - 'tests/gameplay/parallel_items_w05_machine_books_v1.gd'
+      - 'tests/tools/test_parallel_items_w03_net_campaign_001.py'
+      - 'tests/tools/test_parallel_w05_machine_scope.py'
+      - 'tools/item_audit/parallel_w05_machine_scope.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: parallel-w03-w05-verified-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  contract:
+    name: W03/W05 exact-SHA and family verdicts
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: chickensoft-games/setup-godot@v2.4.1
+        with:
+          version: 4.7.0
+          use-dotnet: false
+          include-templates: false
+      - name: Restore project and import
+        shell: bash
+        run: |
+          set -euo pipefail
+          godot --version | grep -E '^4[.]7([.-]|$)'
+          python -B tools/distribution/restore_resources.py
+          python -B tools/distribution/restore_resources.py --check
+          mkdir -p data/reports
+          cp ci/fixtures/pokeapi_reports/forms_policy_report.json data/reports/forms_policy_report.json
+          cp ci/fixtures/pokeapi_reports/unsupported_mechanics.json data/reports/unsupported_mechanics.json
+          cp ci/fixtures/pokeapi_reports/import_summary.json data/reports/import_summary.json
+          godot --headless --path . --import 2>&1 | tee parallel-new-import.log
+          if grep -E 'SCRIPT ERROR|Parse Error' parallel-new-import.log; then exit 1; fi
+      - name: W03 Net Ball — contract, old probe, final 60-check suite
+        id: w03
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tests/tools/test_parallel_items_w03_net_campaign_001.py --phase implemented 2>&1 | tee parallel-new-w03-python.log
+          timeout 120s godot --headless --path . --script res://tests/gameplay/parallel_items_w03_capture_net_v1.gd -- --require-net 2>&1 | tee parallel-new-w03-original.log
+          grep -E 'W03_CAPTURE_NET.*"status":"CARACTERIZACION_PASS"' parallel-new-w03-original.log
+          timeout 180s godot --headless --path . --script res://tests/gameplay/parallel_items_w03_net_campaign_001.gd 2>&1 | tee parallel-new-w03-final.log
+          grep -E 'CAMP_001_W03_NET.*"status":"PASS"' parallel-new-w03-final.log
+      - name: W05 books — 248 IDs, textual presentation, 19 historical blocked
+        id: w05
+        if: always()
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B -m unittest discover -s tests/tools -p 'test_parallel_w05_machine_scope.py' -v 2>&1 | tee parallel-new-w05-python.log
+          python -B tools/item_audit/parallel_w05_machine_scope.py 2>&1 | tee parallel-new-w05-scope.log
+          timeout 180s godot --headless --path . --script res://tests/gameplay/parallel_items_w05_machine_books_v1.gd 2>&1 | tee parallel-new-w05-godot.log
+          grep -E 'W05 CAMP_001/01: [0-9]+ comprobaciones, 0 errores' parallel-new-w05-godot.log
+      - name: Bounded family verdict — never mask a failing family
+        if: always()
+        shell: bash
+        env:
+          W03: ${{ steps.w03.outcome }}
+          W05: ${{ steps.w05.outcome }}
+        run: |
+          set -euo pipefail
+          echo "W03=$W03"
+          echo "W05=$W05"
+          test "$W03" = success && test "$W05" = success
+      - name: Preserve evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: w03-w05-verified-${{ github.run_id }}
+          retention-days: 7
+          if-no-files-found: ignore
+          path: parallel-new-*.log
