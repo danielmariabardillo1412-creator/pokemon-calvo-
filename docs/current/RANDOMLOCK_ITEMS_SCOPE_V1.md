@@ -1,5 +1,11 @@
 # Catálogo propuesto para Pokémon Calvo — randomlocke competitivo (1-XI-2026)
 
+## ESTADO VIGENTE — décima auditoría · criterio «función específica para Pokémon» (2026-11-01)
+
+**El usuario ha precisado que un objeto que solo sirve para explorar, desplazarse, decorar o repetir una función sin aportar estrategia nueva no debe generarse en el randomlocke.** Se retiran del catálogo de selección **10 IDs adicionales**: 5 condicionales de mundo/ropa (`bicycle`, `rotom_bike`, `town_map`, `dowsing_machine`, `discount_coupon`) y 5 permitidos que duplicaban efectos o dependían de evento ajeno (`fluffy_tail`, `poke_toy`, `park_ball`, `cherish_ball`, `premier_ball`). `poke_doll` queda como objeto de huida; no borrar ninguna ruta técnica V15/V21.
+
+**Contador vigente: 701 PERMITIR + 270 CONDICIONAL + 1.251 DESCARTAR = 2.222 IDs únicos.** Mega aparcada: 104; condicionales ordinarios: 166. [Matriz vigente V4](./RANDOMLOCK_ITEMS_CONDITIONAL_MATRIX_V4.csv) y [auditoría 10 con razones](./RANDOMLOCK_ITEMS_AUDIT_PASS10_2026-11-01.md). **Todos los recuentos anteriores de este archivo son históricos y no deben utilizarse como estado actual.**
+
 > **Borrador de selección de contenido, no cambio en la lógica del juego.** Clasifica las 2.222 entradas canónicas. Los archivos originales, las partidas guardadas, los objetos ya implementados y las reglas de comercio permanecen intactos. Ninguna decisión de esta rama modifica `config/item_selection_v1.json` ni los generadores actuales.
 
 ## ESTADO VIGENTE — novena auditoría (2026-11-01) · prevalece sobre todos los contadores anteriores
