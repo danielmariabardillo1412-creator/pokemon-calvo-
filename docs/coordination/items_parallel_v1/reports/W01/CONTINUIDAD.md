@@ -68,3 +68,20 @@ Se necesita Godot 4.7, `@pkmn/sim@0.10.11` fijado y `POKEMON_CALVO_NODE` correct
 **NO HACER EN OTRO CHAT:** no tocar `main`, V28, árbitra, otras W, `modules/`, `scenes/`, `data/`, `assets/`, `config/`, docs actuales, políticas ni guardados sin nuevo encargo. No reprogramar efectos nativos que ya existen; no asumir LOTE_003 por un simple «sigue».
 
 **Último siguiente paso reproducible:** IA6 revisa `LOTE_002.md`, el fixture y el validador del commit `5f306faa...`, y ejecuta una única CI para obtener el primer PASS/FAIL funcional nuevo. Hasta entonces, estado **LISTA_PARA_REVISION / PENDIENTE_CI**.
+
+
+---
+
+## ACTUALIZACIÓN VIGENTE — CAMPAÑA_001 / ITER_01 (2026-11-01)
+
+- **Orden superior actual:** `campaigns/CAMP_001_W01.md` en árbitra, blob `4faaae234c3021944d7f4724789c3b2c5d0652fd`. Puerta global `CAMPAIGN_GATE_001.md`, blob `3ef0b39f7eb74f3ebcb688f279c254daec981f8e`, ACTIVADA. La campaña asigna **solo** `black_sludge`, `shell_bell`, `big_root` (microbloque 01), `eviolite`, `expert_belt`, `safety_goggles` (02) y consolidación (03).
+- **Base:** rama W01 avanzó por fast-forward normal al HEAD árbitra `1b52fdd0b7b89e468811a17ad83a917ec7107735`; blobs originales de `LOTE_001.md` (`df56277c...`) y `LOTE_002.md` (`9a32f8e...`) comprobados idénticos. No editar la rama árbitra.
+- **CI de referencia YA EJECUTADA**: Actions [#41341842320](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41341842320), commit `ac34fabbe1a27e69614f0239abee21c29d6fe65e`, PASS de **LOTE_002 W01** 1.332 checks / 16 pares / 48 variantes. **No prueba los casos nuevos de la campaña** y sustituye el estado antiguo PENDIENTE_CI de LOTE_002.
+- **Microbloque 01 publicado, estado PREPARADO_PENDIENTE_CI**: `reports/W01/CAMP_001_ITER_01.md` y `CAMP_001_PROGRESO.csv`. Fixture `tests/fixtures/parallel_items/w01_campaign_001.json` (8 casos, 12 pares, 36 variantes); runner `tests/gameplay/parallel_items_w01_campaign_001.gd`; validador `tests/tools/test_parallel_items_w01_campaign_001.py`. Commits de tests `19db170d5aadf29d0b158dc5c3bbbd04c19b1b21`, `320e985db63d1afa86ffadbcccfe30441eb775f4`, `cb81acaabf6b7d5f1d347ecad9bc6f825ee69919`.
+- **Flujo verificado estáticamente:** selección de inventario (`docs/current/RANDOMLOCK_ITEMS_BUILD_SCOPE_V2.csv`) → `FieldItemService.equip` mediante helper `_fixture` V28 → `Native.begin_wild/submit`, nativo `@pkmn/sim@0.10.11`, hooks `blacksludge/onResidual`, `shellbell/onAfterMoveSecondarySelf`, `bigroot/onTryHeal` → `SaveGameData/SaveGameRepository` mediante `_restore_probe` → snapshots y prueba de propietario/reserva; **UI y cierre real de campaña fuera del test**.
+- **Evidencia de pruebas nuevas:** validación estática propia de 12 invariantes de estructura/IDs/rutas/hashes **PASS**; ejecución de Python, Godot y GPU **SIN_EJECUTAR**. Los scripts no equivalen a certificar efectos hasta obtener reporte `.godot/parallel_items/w01_campaign_001/report.json` con los hashes correspondientes.
+- **Riesgos:** posibles fallos de parser/fixtures en Godot aún no comprobados; sin regresión de cambios de portador, supresión y liquidación en mapa; comparación causal con semillas fijadas no equivale a exhaustividad. **Si aparece FAIL, parar e informar a IA6; no maquillar fixtures ni modificar producción.**
+- **Archivos escritos solo en este bloque:** los tres `w01_campaign_001` (runner, validador, fixture), `reports/W01/CAMP_001_ITER_01.md`, `reports/W01/CAMP_001_PROGRESO.csv`, este cuaderno. Los informes LOTE_001/002 y los tests W01 originales **no fueron modificados**.
+- **Siguiente microbloque, NO EJECUTADO:** 02, `eviolite` (evolución pendiente/final), `expert_belt` (ataque eficaz/control), `safety_goggles` (polvo/clima/control). Antes de una nueva `p`, releer órdenes árbitra, puerta y este cuaderno. Tras 03, emitir `CAMP_001_FINAL.md` y detenerse.
+
+**Rutas fuera de permiso:** toda producción de `modules/`, `scenes/`, `data/`, `config/`, `.github/`, `main`, V28 original, rama árbitra, otras W y docs comunes. **No reclamar integración o PASS nuevo sin CI SHA.**
