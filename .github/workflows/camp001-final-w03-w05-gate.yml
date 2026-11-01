@@ -1,0 +1,82 @@
+name: IA6 CAMP001 W03 final and W05 book metadata gate
+on:
+  push:
+    branches:
+      - codex/calvo-items-20261102-ci-w03-w05-final
+  workflow_dispatch:
+
+permissions:
+  contents: read
+concurrency:
+  group: camp001-final-w03-w05-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: chickensoft-games/setup-godot@v2.4.1
+        with:
+          version: 4.7.0
+          use-dotnet: false
+          include-templates: false
+      - name: Restore CI environment
+        shell: bash
+        run: |
+          set -euo pipefail
+          godot --version | grep -E '^4[.]7([.-]|$)'
+          echo "POKEMON_CALVO_NODE=$(command -v node)" >> "$GITHUB_ENV"
+          python -B tools/distribution/restore_resources.py
+          python -B tools/distribution/restore_resources.py --check
+          mkdir -p data/reports
+          cp ci/fixtures/pokeapi_reports/forms_policy_report.json data/reports/forms_policy_report.json
+          cp ci/fixtures/pokeapi_reports/unsupported_mechanics.json data/reports/unsupported_mechanics.json
+          cp ci/fixtures/pokeapi_reports/import_summary.json data/reports/import_summary.json
+          godot --headless --path . --import 2>&1 | tee camp-final-import.log
+          if grep -E 'SCRIPT ERROR|Parse Error' camp-final-import.log; then exit 1; fi
+          python -B tools/battle_reference/run.py --install --limit 1 2>&1 | tee camp-final-native.log
+      - name: W03 final - Net Ball full integration suite
+        id: w03
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tests/tools/test_parallel_items_w03_net_campaign_001.py --phase implemented 2>&1 | tee camp-final-w03-python.log
+          timeout 150s godot --headless --path . --script res://tests/gameplay/parallel_items_w03_capture_net_v1.gd -- --require-net 2>&1 | tee camp-final-w03-base.log
+          timeout 180s godot --headless --path . --script res://tests/gameplay/parallel_items_w03_net_campaign_001.gd 2>&1 | tee camp-final-w03-new.log
+          grep -E 'CAMP_001_W03_NET.*"status":"PASS"' camp-final-w03-new.log
+      - name: W05 new - 229 active book labels and 19 legacy rejections
+        id: w05
+        if: always()
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B -m unittest discover -s tests/tools -p 'test_parallel_w05_machine_scope.py' -v 2>&1 | tee camp-final-w05-static.log
+          timeout 180s godot --headless --path . --script res://tests/gameplay/parallel_items_w05_machine_books_v1.gd 2>&1 | tee camp-final-w05-new.log
+          grep -E 'W05 CAMP_001/01: [0-9]+ comprobaciones, 0 errores' camp-final-w05-new.log
+      - name: Final verdict - no false green
+        if: always()
+        shell: bash
+        env:
+          W03: ${{ steps.w03.outcome }}
+          W05: ${{ steps.w05.outcome }}
+        run: |
+          echo "W03=$W03"
+          echo "W05=$W05"
+          test "$W03" = success && test "$W05" = success
+      - name: Preserve evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: camp-final-w03-w05-${{ github.run_id }}
+          retention-days: 7
+          if-no-files-found: ignore
+          path: camp-final-*.log
