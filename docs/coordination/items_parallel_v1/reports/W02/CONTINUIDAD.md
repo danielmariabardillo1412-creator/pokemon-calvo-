@@ -1,6 +1,20 @@
 # W02 / IA2 — Cuaderno de continuidad (bayas y consumo)
 
-## ESTADO VIGENTE — CAMPAÑA_001, ITER_02 / 3
+## ESTADO FINAL — CAMPAÑA_001_FINALIZADA (03/03)
+
+- **IA2/W02**; rama exclusiva `codex/calvo-items-20261101-w02`. Tres microbloques completados, **STOP** hasta asignación nueva de IA6.
+- **Calificación verificable:** `PREPARADO_PENDIENTE_CI`; Python/CI y Godot **SIN_EJECUTAR** sobre los seis IDs nuevos. El PASS anterior [Actions #41341842320](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41341842320) solo acredita 7 casos anteriores (Zidra/Ziuela/Dillo).
+- **Autoridad:** puerta `CAMPAIGN_GATE_001.md` ACTIVADA, encargo `campaigns/CAMP_001_W02.md`. Sincronización árbitra HEAD `a710d8abe2e94f11974488c4563b9eb80ede5bbc` mediante merge conservador W02 `7cbbf780e6cd36251327018f20c127e53a25c415`, sin tocar ramas ajenas.
+- **IDs finales (seis):** Oran (2 positivos/negativos), Pecha (3), Cheri (3), Persim (2), Chesto (3), Rawst (3). **16 escenarios**, **48 variantes nativas y 32 de campo definidas**, pruebas de dueño, consumo, restauración y SaveV2. Matrix `coverage_matrix` impide asignar todos los PASS a un único ID.
+- **Rutas de prueba finales:** `tests/fixtures/parallel_items/w02_campaign_001.json` blob `8840b37569270054757dc2728af66f882af44db6`; `tests/gameplay/parallel_items_w02_campaign_001.gd` blob `0f66aeab576d099d7de215c27eb5a2746cdcfb0a`; `tests/tools/test_parallel_items_w02_campaign_001.py` blob `aadad7a50e013d831f908c9b4c6585f0a412575b`. Python contiene **18 tests** sintéticos/negativos aún sin ejecutar.
+- **Informes:** [ITER_01](./CAMP_001_ITER_01.md) · [ITER_02](./CAMP_001_ITER_02.md) · [ITER_03](./CAMP_001_ITER_03.md) · [FINAL](./CAMP_001_FINAL.md); [progreso](./CAMP_001_PROGRESO.csv) tiene tres filas.
+- **Comprobaciones estáticas reales:** ITER_01 15/15, ITER_02 20/20, ITER_03 25/25. **NO** equivalen a éxito de los tests de ejecución, interfaz o GPU.
+- **Brecha:** `persim_berry` no está en `modules/inventory/imported_recovery_v19.json` para uso de campo; pruebas esperan rechazo, no una curación inventada. No se ha tocado producción ni políticas.
+- **Para IA6:** integrar cambios acotados y ejecutar Python `--unittest` + Godot 4.7 y validador `--result .godot/parallel_items/w02_campaign_001/godot.json` contra SHA integrado. Ante FAIL, parar y delegar corrección acotada. El resto es **solo lectura**.
+- **No usar `p` para empezar otra tarea**: campaña agotada; esperar nueva asignación publicada por IA6. Los informes LOTE_001/002 y anteriores ITER no se han reescrito.
+
+
+## HISTÓRICO — estado tras ITER_02 / 3
 
 - **Identidad y rama:** IA2/W02; `codex/calvo-items-20261101-w02`. **Estado:** `PREPARADO_PENDIENTE_CI` (ITER_01+ITER_02 publicadas; ITER_03 solo con próxima `p`). No se ha modificado producción.
 - **Órdenes:** [CAMP_001_W02](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/blob/codex/calvo-items-20261101-arbitro/docs/coordination/items_parallel_v1/campaigns/CAMP_001_W02.md) blob `f6f8f08b13f9e4f84d18970643ebd4aeab5a75b7`; puerta activa blob `3ef0b39f7eb74f3ebcb688f279c254daec981f8e`; último checkpoint árbitra contenido `1b52fdd0b7b89e468811a17ad83a917ec7107735`.
