@@ -1,3 +1,13 @@
+# ESTADO ACTUAL — IA6 GATE_004, 2026-11-02
+
+**Leer primero:** [CAMPAIGN_GATE_UPDATE_004.md](CAMPAIGN_GATE_UPDATE_004.md). **13/15 microbloques publicados.** W01/W02/W03 **03/03 cerradas, STOP**; W04 **02/03 congelada a petición del usuario**; W05 **02/03 verificado, autorizada solo ITER_03 al recibir un nuevo `p`**.
+
+**CI recién terminada:** [#41362240030](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41362240030) Godot 4.7 PASS sobre staging `3dba6164...`. W03 nueva suite Malla Ball 60 comprobaciones/0 errores; W05 presentación 959/0; Python W05 14/14. Integración secuencial de esos mismos blobs en IA6 commits `60e2082e` (W03) y `5ebc65b4` (W05). No se han tocado ramas de las trabajadoras, main, V28 ni PR #118.
+
+**Advertencia:** documentos antiguos más abajo contienen estados obsoletos `PREPARADO_PENDIENTE_CI`; prevalece esta puerta con su evidencia y SHA. Nunca abrir CAMPAÑA_002 por pulsar `p`. No hay verificación GPU/visual de libros.
+
+---
+
 # IA6 — Estado vigente (2026-11-01)
 
 **Fuente de órdenes actual:** [CAMPAIGN_GATE_UPDATE_003.md](CAMPAIGN_GATE_UPDATE_003.md). La información de fallos y bloqueos en secciones antiguas de este archivo es HISTÓRICA; la puerta 003 prevalece para próximos `p`.
