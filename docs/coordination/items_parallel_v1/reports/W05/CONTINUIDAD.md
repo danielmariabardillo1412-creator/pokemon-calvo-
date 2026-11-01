@@ -1,3 +1,14 @@
+# RECUPERACIÓN VIGENTE — CAMPAÑA_001 / ITER_01 (IA6, 2026-11-01)
+
+- **Estado operativo actual: `PREPARADO_PENDIENTE_CI`, 01/03 preparado.** Esta sección prevalece sobre el histórico de activación `0/3` que se conserva íntegro más abajo.
+- **Motivo:** la conexión utilizada por W05 rechazó varias escrituras después de publicar el adaptador `318e6b96`. IA6 confirmó que la rama acepta escrituras y reconstruyó prueba/informe/progreso mediante intervención puntual solicitada por la persona usuaria.
+- **Archivos de la recuperación:** `modules/inventory/field_machine_book_profile.gd` (ya publicado por W05); `tests/gameplay/parallel_items_w05_machine_books_v1.gd` (publicado y ajustado por IA6, `62741e4d`); `CAMP_001_ITER_01.md`; `CAMP_001_PROGRESO.csv`.
+- **Comprobación externa disponible:** cotejo estático 248 MACHINE = 229 activas SV + 19 heredadas no habilitadas, sin IDs ausentes del perfil; el probe nuevo Godot NO se ha ejecutado aún.
+- **No ejecutar de nuevo ITER_01 para generar archivos iguales.** En el siguiente `p`, revisar antes puerta/STATUS, este informe, HEAD y evidencia CI. El contrato del microbloque incluyó un adaptador de producción nuevo; si la CI Godot del SHA no está disponible, elevar el gate pendiente a IA6 antes de pasar al 02. Si falla, STOP.
+- **Permisos sin ampliación:** ninguna edición de `main`, V28, ramas ajenas o ficheros no autorizados. IA6 no toma la propiedad continuada de W05; la trabajadora conserva la responsabilidad de los bloques restantes.
+
+---
+
 # IA5 / W05 — CUADERNO DE CONTINUIDAD · MACHINE
 
 ## Actualización de campaña — activación (2026-11-01, anterior al primer `p`)
