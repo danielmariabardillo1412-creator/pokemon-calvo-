@@ -94,6 +94,16 @@ Las **92 entradas** del catálogo corresponden a **86 especies megaevolucionable
 
 Fuentes de contraste: [Pokémon, explicación oficial](https://mega.pokemon.com/es-es/), [Bulbapedia: lista de megapiedras](https://bulbapedia.bulbagarden.net/wiki/Mega_Stones), [Pokémon Legends Z-A: megapiedras](https://www.serebii.net/legendsz-a/megastones.shtml). Que existan las 92 entradas en el inventario **no acredita** que las 86 megaformas estén implementadas en el motor ni en el pool de formas del randomlocke. La arquitectura debe reutilizar un **único sistema de megaevolución parametrizado**, no programar una mecánica por piedra.
 
+## Estado actual: megapiedras pospuestas (2026-11-01)
+
+**Decisión expresa del usuario:** APARCAR la implementación de la megaevolución y el debate de las dos piedras universales hasta hablar con su compañero. Ahora se prioriza el catálogo y la conexión de objetos normales. No programar ni ilustrar megapiedras ni adaptar formularios/combates durante esta fase.
+
+La propuesta de **una clase de megapiedra universal con dos copias por partida** continúa abajo como **idea no aprobada**. Diseño visual también provisional: conservar la forma general de la megapiedra y sustituir el emblema interior por un signo de infinito, con nombre aún por decidir. No producir imagen todavía ni tratar estas dos unidades como límite vigente.
+
+Si más adelante se confirma el sistema, la variante para un Pokémon con varias megaformas (p. ej. Charizard X/Y) debería elegirse **al equipar/preparar el equipo, antes del combate**, y quedar bloqueada para ese combate; luego la megaevolución se activaría opcionalmente durante la batalla. El combate clásico solo permite un Pokémon megaevolucionado por entrenador. Esto es **propuesta UX**, no implementación.
+
+**Sin cambios técnicos ni de recuentos**: los 92 IDs de megapiedra siguen condicionales en la clasificación del catálogo y no se generan; no tocar `main`, el motor de objetos actual, rutas de combate, ni el PR de V28.
+
 ## Propuesta en debate: megapiedra universal con dos unidades por partida (2026-11-01)
 
 **Estado: propuesta del usuario pendiente de consultarla con su amigo. NO es una decisión final y NO modifica la política activa ni las 92 entradas originales de piedras.**
