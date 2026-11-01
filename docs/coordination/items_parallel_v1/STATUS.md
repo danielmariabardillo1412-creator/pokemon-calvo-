@@ -1,3 +1,17 @@
+# IA6 — Recepción parcial y CI consolidada preparadas (2026-11-01)
+
+**Artefactos vigentes:** [protocolo V2](CI_AND_HANDOFF_PROTOCOL_V2.md), [mensaje único de relevo](PROMPT_RELEVO_W0X_V2.md), [acta W03/W05](integration/CAMP_001_W03_W05.md).
+
+**W03 y W05 integradas parcialmente en árbitra**, sin modificar sus ramas de trabajo: W03 commit `82f9eea26d10976e6eb2702adce911bd7e1ed173` (Malla Ball + regresiones V11/V15 + puerta Python); W05 commit `39df72c1edda278108c74f29ed4b6053724528f6` (adaptador solo lectura y prueba Godot). Staging comprobado con Godot 4.7, [run #41350463036](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41350463036) `success`, SHA `c25f1616366a4c4432ee63fd49c001083d55647b`; V11 32.406 checks PASS, V15 51.901 PASS, Net 34 checks sin errores, W05 18 sin errores y mapa 248/229/19. Sin GPU/manual.
+
+**CI exacta de integración árbitra:** [run #41350909378](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41350909378), ejecutada sobre commit funcional-documental `71332b256621e49e98676ef5f0af48c145d1e86f` **SIN VEREDICTO AL PUBLICAR ESTE REGISTRO**. No certificar como `INTEGRADO_VERIFICADO` ni levantar STOP W03/W05 hasta revisar resultado real.
+
+**Prueba de paquete completo de cinco familias:** workflow [parallel-items-campaign-package.yml](../../../.github/workflows/parallel-items-campaign-package.yml), staging `codex/calvo-items-20261101-ci-camp001-pack`, SHA `6ea4cb1b9b68e0d1e33ef6a5228dcf57503a3456`, [run #41350981613](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41350981613). Se incorporaron solo pruebas propias de W01/W02/W04 para obtener cinco veredictos separados. **SIN VEREDICTO AL PUBLICAR ESTE REGISTRO.** No es permiso para reescribir producción ajena ni ejecutar otra campaña.
+
+**Estado actual:** W01 02/03; W02 03/03 `CAMPAÑA_001_FINALIZADA` como entrega pendiente de prueba; W03 02/03 y W05 01/03 con CI de sus adaptadores favorable en staging y pendiente gate de integración; W04 02/03, chat de origen con error y rama preservada. Mantener STOP de W03/W05 por seguridad hasta verificación, W02 detenida por cierre, W04 recuperable por cuaderno, W01 03 solo bajo su campaña.
+
+---
+
 # ACTUALIZACIÓN DE IA6 — puerta de ejecución y relevo v2 (2026-11-01)
 
 **Nuevo procedimiento oficial:** [CI_AND_HANDOFF_PROTOCOL_V2.md](CI_AND_HANDOFF_PROTOCOL_V2.md). Los cambios de producción y la certificación por CI son responsabilidad de IA6; las W publican microbloques y evidencias. Relevo de un chat con error: [PROMPT_RELEVO_W0X_V2.md](PROMPT_RELEVO_W0X_V2.md). No modifica las asignaciones vigentes ni permite exceder 3 microbloques por W.
