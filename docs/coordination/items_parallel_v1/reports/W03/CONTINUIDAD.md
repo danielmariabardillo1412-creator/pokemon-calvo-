@@ -1,6 +1,24 @@
 # W03 / IA3 — CUADERNO DE CONTINUIDAD (captura)
 
-## Estado vigente: CAMPAÑA_001, ITER_01/03 entregada
+## Estado vigente — CAMPAÑA_001, ITER_02/03 publicada; nueva producción SIN CI
+
+- **IA3/W03:** campaña activa `CAMP_001_W03.md` blob `ecb7d9915c936bf5c43f4854584c0f5873f71101`; puerta `CAMPAIGN_GATE_001.md` blob `3ef0b39f7eb74f3ebcb688f279c254daec981f8e`. **ID único: `net_ball`**.
+- **Rama exclusiva:** `codex/calvo-items-20261101-w03` incorpora checkpoint árbitra `1b52fdd0b7b89e468811a17ad83a917ec7107735` sin fuerza; LOTE_001 y LOTE_002 intactos. No sincronizar copiando sobre otros documentos. PASS base Actions `41341842320` en commit `ac34fabbe...`, **anterior a la implementación**.
+- **Microbloque 01:** análisis de contrato y validador por fases `tests/tools/test_parallel_items_w03_net_campaign_001.py`, commit `bbde5ef67d181092c24c671228f51eb5e0134fd4`, informe [ITER_01](./CAMP_001_ITER_01.md). Solo estático.
+- **Microbloque 02:** código **solo en adaptador** `modules/capture/capture_ball_effects.gd` (commit `a87d0b4d0addd1409b2560ab670e6cc89c40d521`) registra `net_ball`. Multiplicador ×3,5 para especie Agua **o** Bicho; ×1 para otras. No duplica ×3,5 con doble tipo. Usa `CreatureSpecies.has_type` de especie basal, NO tipos dinámicos.
+- **Regresiones modificadas:** `tests/gameplay/item_capture_v11.gd` (commit `534b22c4ed4481b71573b936396f8472ec0a8af0`) y `tests/gameplay/item_capture_v15.gd` (`625d276143fdacd55756081d109c4b0d126ae4de`); se han eliminado solo las expectativas negativas anticuadas de Net, sustituyéndolas por contrato positivo de registro/probabilidades, consumo, propietario y control de entrenador. Permanecen negativos Lujo y demás bolas pendientes.
+- **Evidencia del bloque 02:** 21 comprobaciones **estáticas de contenido GitHub PASS**, con blobs SHA. Informe [ITER_02](./CAMP_001_ITER_02.md), progreso [CSV](./CAMP_001_PROGRESO.csv). **Python real: SIN_EJECUTAR; Godot 4.7: SIN_EJECUTAR; CI del nuevo commit: SIN_EJECUTAR; GPU: SIN_EJECUTAR.** No declarar `net_ball` certificada ni lista para juego. En el entorno no hay Godot ni checkout; la CI pertenece a IA6.
+- **Bloqueo siguiente `p`:** como **ITER_02 cambia producción sin prueba Godot nueva**, no preparar ITER_03 hasta que IA6 confirme ejecución real PASS sobre commit integrado o autorice expresamente seguir tras diagnosticar. Si hay FAIL, reportar y detener; no avanzar automáticamente.
+- **Comandos de validación pendientes, desde checkout en CI:** `python tests/tools/test_parallel_items_w03_net_campaign_001.py --phase implemented`, `python tests/tools/test_parallel_items_w03_capture_v1.py`, `godot --headless --path . --script tests/gameplay/parallel_items_w03_capture_net_v1.gd -- --require-net`, ejecutar V11 y V15 con Godot según sus runners. Registrar SHA probado y resultados.
+- **Contratos intactos:** `CaptureRuleset` incorpora `BallEffects.IDS` automáticamente; `CaptureSystem.resolve()` usa especies y cálculo `calvo_capture_v1`; `CaptureInventoryService` descuenta/rollback; `SaveGameRepository` y `CaptureOwnershipRouter` mantienen partidas/PC. No duplicar ni editar módulos compartidos.
+- **Permisos y exclusiones:** mantener fuera `CaptureSystem`, `CaptureRuleset`, sesiones, esquema/guardados, workflows, `main`, V28, árbitra, W01/W02/W04/W05. `luxury_ball`, `dusk_ball`, `beast_ball` no pertenecen a esta campaña. Tres microbloques como máximo.
+- **Último commit propio:** leer HEAD/historial de [este cuaderno](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/commits/codex/calvo-items-20261101-w03/docs/coordination/items_parallel_v1/reports/W03/CONTINUIDAD.md); por diseño el propio SHA no puede insertarse dentro de su commit.
+
+---
+
+## Registro histórico — microbloque 01
+
+### ITER_01 — contrato y validador (histórico)
 
 - **Identidad:** IA3/W03; ID exclusivo `net_ball`. **Estado:** `PREPARADO_PENDIENTE_CI` (microbloque 01 terminado), sin Net implementada. Los bloques 02 y 03 no se han iniciado; cada uno necesita nuevo `p`.
 - **Autoridad vigente:** `CAMPAIGN_GATE_001.md` blob `3ef0b39f7eb74f3ebcb688f279c254daec981f8e` (`ACTIVADA`); `campaigns/CAMP_001_W03.md` blob `ecb7d9915c936bf5c43f4854584c0f5873f71101`; `STATUS.md` blob `cb651d4cc3a684d80f5b99752fba87ca8c4adb4d`.
