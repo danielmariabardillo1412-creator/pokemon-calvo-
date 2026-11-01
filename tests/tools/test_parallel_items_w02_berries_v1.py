@@ -121,6 +121,11 @@ def validate_result(fixture, report, folder):
                     "Falta restauración/cierre/guardado real")
             require(type(data["hp"]) is int and type(data["max_hp"]) is int
                     and 0 < data["hp"] <= data["max_hp"], "PS fuera de rango")
+            initial_hp = (max(1, data["max_hp"] // 4) if original[scenario]["kind"] == "low_hp"
+                          else data["max_hp"] - 1 if original[scenario]["kind"] == "high_hp"
+                          else data["max_hp"])
+            require(type(data["damage"]) is int and data["damage"] == initial_hp - data["hp"],
+                    "Daño/curación no coincide con los PS de entrada")
             consume = expect and mode == "active"
             expected_bag = 2 if mode == "none" else 1
             expected_stock = 1 if consume else 2
@@ -190,10 +195,14 @@ class W02ValidatorTests(unittest.TestCase):
             for mode in MODES:
                 spent = row["consumes"] and mode == "active"
                 status = ("poison" if row["kind"] == "poison" and mode != "active" else "")
-                hp = 200 if row["kind"] == "low_hp" and mode == "active" else (
-                    100 if row["kind"] == "low_hp" else 399 if row["kind"] == "high_hp" else 400)
-                damage = (50 if mode == "active" else 100) if row["kind"] == "super_dark" else (
-                    80 if row["kind"] == "neutral_dark" else 70 if row["kind"] == "other_type" else 400 - hp)
+                hp = (200 if mode == "active" else 100) if row["kind"] == "low_hp" else (
+                    399 if row["kind"] == "high_hp" else
+                    350 if row["kind"] == "super_dark" and mode == "active" else
+                    300 if row["kind"] == "super_dark" else
+                    320 if row["kind"] == "neutral_dark" else
+                    330 if row["kind"] == "other_type" else 400)
+                initial_hp = 100 if row["kind"] == "low_hp" else (399 if row["kind"] == "high_hp" else 400)
+                damage = initial_hp - hp
                 bag = 2 if mode == "none" else 1
                 own = {"instance_id": "own", "current_hp": hp, "held_item_id": row["id"] if mode == "active" else "",
                        "held_item_consumed": spent}
