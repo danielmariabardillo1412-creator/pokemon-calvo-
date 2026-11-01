@@ -1,3 +1,19 @@
+# ESTADO FINAL VIGENTE — CAMP_001 / IA5-W05 (2026-11-02)
+
+**`CAMPAÑA_001_FINALIZADA` como entrega, 03/03 microbloques publicados. STOP: no ejecutar más `p` ni una campaña 002 sin orden de IA6. ITER_03 sigue `PREPARADO_PENDIENTE_CI`, NO certificado funcionalmente.** Esta cabecera prevalece sobre las secciones históricas.
+
+- **Autoridad:** `CAMPAIGN_GATE_UPDATE_004.md`, blob `5a96d80793d0c438ee005d366655f42e9cd4074b`; autorización exacta para ITER_03, sin ampliar permisos. `campaigns/CAMP_001_W05.md` blob `ce0e5763accadecc9c4ee971b13dae7dba23a2ef`.
+- **Rama:** `codex/calvo-items-20261101-w05`; sincronizada mediante merge de dos padres sin force `dcfce415e94e574a41c8d9da0ec1940a4e12ac9e` con árbitra `eaa7d7fca46dc4f92dedd2acebb0a15894929f26`. Se conservaron todos los informes propios. No se editó ninguna rama ajena.
+- **ITER_01:** adaptador solo lectura, certificado anteriormente con 18 checks en Godot por IA6.
+- **ITER_02:** etiquetas canónicas y clasificación por tipos de 229 activas, rechazo de 19 heredadas, Godot **959/0** y Python **14 PASS** sobre código integrado, [CI #41362733419](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41362733419), SHA `ef823e0d045c9d63b72905db638db5255ff10f06` (PASS).
+- **ITER_03 nuevo:** solo `tests/gameplay/parallel_items_w05_machine_books_v1.gd`, último commit de prueba `c48491a3e50f0386cec76d72402b1e5cdcd4d3e3`, blob `10c1d7a7eeac79a83a2e9a1183f1c663aaf1955e`. Prueba `tm01/tm02/tm77` mediante `FieldItemService.teach`, PP, gasto 2→1, rechazo sin gasto, mismo propietario, guardado/carga aislado y 19 negativas legadas. La verificación estática de GitHub fue favorable (248=229+19, cero IDs faltantes/duplicados); **Godot sobre ITER_03 SIN_EJECUTAR**, sin GPU/arte/UI.
+- **Documentación:** `CAMP_001_ITER_03.md`, `CAMP_001_FINAL.md`, `CAMP_001_PROGRESO.csv` al día. Informes anteriores intactos. En el propio informe no incluir SHA final futuro: recuperar HEAD de la rama.
+- **Reproducción CI a cargo de IA6:** `godot --headless --path . --script res://tests/gameplay/parallel_items_w05_machine_books_v1.gd`. Si falla, IA6 debe clasificarlo; no asumir resultado verde ni cambiar tests para fabricar PASS.
+- **Pendiente:** validación real de ITER_03, revisión final IA6, GPU/arte/UI, política de las 19 heredadas; un cierre de 3 microbloques **no certifica juego completo**.
+- **Prohibiciones permanentes:** `main`, V28, PR #118, otras W, árbitra, `FieldItemService`, datos, selección, guardados y archivos compartidos. Nunca activar 19 heredadas por deducción ni crear un nuevo servicio de enseñanza.
+
+---
+
 # ESTADO VIGENTE — CAMP_001 ITER_02 (IA5/W05, 2026-11-01)
 
 - **Estado operativo: `PREPARADO_PENDIENTE_CI`, 02/03 entregados.** Próximo `p`: únicamente ITER_03; no repetir 01/02. Esta sección sustituye el estado antiguo de recuperación del bloque 01, conservado debajo como historial.
