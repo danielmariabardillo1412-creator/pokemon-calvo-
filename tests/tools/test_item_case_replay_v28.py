@@ -36,6 +36,36 @@ class ReplayProof(unittest.TestCase):
         source = self.type_source()
         source[0][1]['results'][-1]['status'] = 'FAIL_NATIVE_OR_FIXTURE'
         with self.assertRaises(ValueError): select(source,['silk_scarf'],type_ids=['silk_scarf'])
+    def plate_source(self):
+        cases = [
+            {'id':'earth_plate','family':family,'seed':seed,
+             'case_id':f'earth_plate/{family}/{seed}','commands':[{}],'steps':[{}]}
+            for family in ('plate_boost','plate_boost_nonmatching') for seed in (1,19)
+        ]
+        proof = {'results':[{'case_id':r['case_id'],'status':'NATIVE_SCENARIO_PASS'} for r in cases]}
+        return [(cases,proof)]
+    def test_complete_plate_pair_accepted(self):
+        self.assertEqual(len(select(self.plate_source(),['earth_plate'],plate_ids=['earth_plate'])),4)
+    def test_plate_pair_missing_negative_rejected(self):
+        sources = self.plate_source()
+        sources[0][0].pop()
+        with self.assertRaises(ValueError): select(sources,['earth_plate'],plate_ids=['earth_plate'])
+    def test_plate_pair_duplicate_seed_rejected(self):
+        sources = self.plate_source()
+        sources[0][0][-1]['seed'] = 1
+        with self.assertRaises(ValueError): select(sources,['earth_plate'],plate_ids=['earth_plate'])
+    def test_plate_pair_failed_original_oracle_rejected(self):
+        sources = self.plate_source()
+        sources[0][1]['results'][-1]['status'] = 'FAIL_NATIVE_OR_FIXTURE'
+        with self.assertRaises(ValueError): select(sources,['earth_plate'],plate_ids=['earth_plate'])
+    def test_plate_wrong_family_rejected(self):
+        sources = self.plate_source()
+        for row in sources[0][0]:
+            if row['family']=='plate_boost': row['family']='type_boost'
+        with self.assertRaises(ValueError): select(sources,['earth_plate'],plate_ids=['earth_plate'])
+    def test_overlapping_type_and_plate_allowlists_rejected(self):
+        with self.assertRaises(ValueError):
+            select(self.type_source(),['silk_scarf'],type_ids=['silk_scarf'],plate_ids=['silk_scarf'])
     def test_full_certification_claim_rejected(self):
         with self.assertRaises(ValueError): validate([],{'status':'REPLAY_INTEGRATION_PASS','errors':[],'full_item_certification':True},Path('.'))
     def test_empty_green_report_rejected(self):
