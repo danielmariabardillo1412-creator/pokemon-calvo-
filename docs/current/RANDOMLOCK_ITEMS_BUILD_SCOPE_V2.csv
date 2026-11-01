@@ -1,0 +1,745 @@
+id,nombre_es,familia,procedencia,estado_contenido,unidades_maximas_por_partida,nota
+ability_capsule,Cáps. Habilidad,TRAINING,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+ability_patch,Parche Habilidad,TRAINING,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+ability_shield,Escudo Habilidad,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+absorb_bulb,Tubérculo,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+adamant_crystal,Gran Diamansfera,STORY_KEY_OR_FORM_REVIEW,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+adamant_mint,Menta Firme,TRAINING,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+adamant_orb,Diamansfera,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+adrenaline_orb,Nerviosfera,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+aguav_berry,Baya Guaya,BERRY,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+air_balloon,Globo Helio,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+aloraichium_z_held,Alo-Raistal Z,Z_CRYSTAL,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+antidote,Antídoto,MEDICINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+apicot_berry,Baya Aricoc,BERRY,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+aspear_berry,Baya Perasi,BERRY,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+assault_vest,Chaleco Asalto,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+auspicious_armor,Armadura Auspiciosa,EVOLUTION,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+awakening,Despertar,MEDICINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+babiri_berry,Baya Baribá,BERRY,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+beast_ball,Ente Ball,CAPTURE_BALL,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+berry_juice,Zumo de Baya,MEDICINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+berry_sweet,Confite Fruto,EVOLUTION,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+big_malasada,Malasada Maxi,MEDICINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+big_nugget,Maxipepita,TREASURE_OR_COLLECTIBLE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+big_root,Raíz Grande,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+binding_band,Banda Atadura,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+black_augurite,Mineral Negro,EVOLUTION,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+black_belt,Cinturón Negro,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+black_flute,Flauta Negra,FIELD_USE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+black_glasses,Gafas de Sol,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+black_sludge,Lodo Negro,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+blank_plate,Tabla Neutra,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+blue_flute,Flauta Azul,FIELD_USE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+blue_orb,Prisma Azul,STORY_KEY_OR_FORM_REVIEW,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+blunder_policy,Seguro Fallo,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+bold_mint,Menta Osada,TRAINING,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+booster_energy,Energía Potenciadora,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+bottle_cap,Chapa Plateada,TREASURE_OR_COLLECTIBLE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+brave_mint,Menta Audaz,TRAINING,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+bug_gem,Gema Bicho,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+bug_memory,Disco Bicho,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+bug_tera_shard,Teralito Bicho,TERA_MATERIAL,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+buginium_z_held,Insectostal Z,Z_CRYSTAL,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+burn_drive,PiroROM,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+burn_heal,Antiquemar,MEDICINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+calcium,Calcio,TRAINING,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+calm_mint,Menta Serena,TRAINING,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+carbos,Carburante,TRAINING,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+careful_mint,Menta Cauta,TRAINING,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+casteliacone,Porcehelado,MEDICINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+catching_charm,Amuleto Captura,STORY_KEY_OR_FORM_REVIEW,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+cell_battery,Pila,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+charcoal,Carbón,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+charti_berry,Baya Alcho,BERRY,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+cheri_berry,Baya Zreza,BERRY,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+chesto_berry,Baya Atania,BERRY,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+chilan_berry,Baya Chilan,BERRY,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+chill_drive,CrioROM,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+chipped_pot,Tetera Rota,EVOLUTION,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+choice_band,Cinta Elección,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+choice_scarf,Pañuelo Elección,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+choice_specs,Gafas Elección,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+chople_berry,Baya Pomaro,BERRY,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+clear_amulet,Amuleto Puro,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+clever_mochi,Mochi Mente,TRAINING,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+clever_wing,Pluma Mente,TRAINING,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+clover_sweet,Confite Trébol,EVOLUTION,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+coba_berry,Baya Kouba,BERRY,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+colbur_berry,Baya Dillo,BERRY,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+cornerstone_mask,Máscara Cimiento,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+covert_cloak,Capa Furtiva,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+cracked_pot,Tetera Agrietada,EVOLUTION,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+custap_berry,Baya Chiri,BERRY,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+damp_rock,Roca Lluvia,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+dark_gem,Gema Siniestra,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+dark_memory,Disco Siniestro,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+dark_tera_shard,Teralito Siniestro,TERA_MATERIAL,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+darkinium_z_held,Nictostal Z,Z_CRYSTAL,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+dawn_stone,Piedra Alba,EVOLUTION,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+decidium_z_held,Dueyestal Z,Z_CRYSTAL,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+deep_sea_scale,Escama Marina,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+deep_sea_tooth,Diente Marino,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+destiny_knot,Lazo Destino,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+dire_hit,Crítico X,BATTLE_STAT_USE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+dive_ball,Buceo Ball,CAPTURE_BALL,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+dna_splicers,Punta ADN,STORY_KEY_OR_FORM_REVIEW,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+douse_drive,HidroROM,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+draco_plate,Tabla Draco,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+dragon_fang,Colmillo de Dragón,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+dragon_gem,Gema Dragón,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+dragon_memory,Disco Dragón,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+dragon_scale,Escama Dragón,EVOLUTION,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+dragon_tera_shard,Teralito Dragón,TERA_MATERIAL,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+dragonium_z_held,Dracostal Z,Z_CRYSTAL,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+dread_plate,Tabla Oscura,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+dream_ball,Ensueño Ball,CAPTURE_BALL,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+dubious_disc,Disco Extraño,EVOLUTION,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+dusk_ball,Ocaso Ball,CAPTURE_BALL,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+dusk_stone,Piedra Noche,EVOLUTION,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+dynamax_candy,Caramelo Dinamax,TRAINING,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+earth_plate,Tabla Terrax,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+eject_button,Botón Escape,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+eject_pack,Mochila Escape,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+electirizer,Electrizador,EVOLUTION,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+electric_gem,Gema Eléctrica,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+electric_memory,Disco Eléctrico,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+electric_seed,Semilla Electro,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+electric_tera_shard,Teralito Eléctrico,TERA_MATERIAL,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+electrium_z_held,Electrostal Z,Z_CRYSTAL,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+elixir,Elixir,MEDICINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+energy_powder,Polvo Energía,MEDICINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+energy_root,Raíz Energía,MEDICINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+enigma_berry,Baya Enigma,BERRY,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+escape_rope,Cuerda Huida,FIELD_USE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+ether,Éter,MEDICINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+everstone,Piedra Eterna,TRAINING,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+eviolite,Mineral Evol,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+exp_candy_l,Caramelo Exp. L,TRAINING,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+exp_candy_m,Caramelo Exp. M,TRAINING,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+exp_candy_s,Caramelo Exp. S,TRAINING,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+exp_candy_xl,Caramelo Exp. XL,TRAINING,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+exp_candy_xs,Caramelo Exp. XS,TRAINING,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+exp_charm,Amuleto Exp,STORY_KEY_OR_FORM_REVIEW,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+exp_share,Repartir Exp,TRAINING,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+expert_belt,Cinta Experto,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+fairium_z_held,Feeristal Z,Z_CRYSTAL,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+fairy_feather,Pluma Feérica,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+fairy_gem,Gema Hada,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+fairy_memory,Disco Hada,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+fairy_tera_shard,Teralito Hada,TERA_MATERIAL,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+fast_ball,Rapid Ball,CAPTURE_BALL,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+fighting_gem,Gema Lucha,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+fighting_memory,Disco Lucha,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+fighting_tera_shard,Teralito Lucha,TERA_MATERIAL,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+fightinium_z_held,Lizastal Z,Z_CRYSTAL,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+figy_berry,Baya Higog,BERRY,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+fire_gem,Gema Fuego,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+fire_memory,Disco Fuego,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+fire_stone,Piedra Fuego,EVOLUTION,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+fire_tera_shard,Teralito Fuego,TERA_MATERIAL,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+firium_z_held,Pirostal Z,Z_CRYSTAL,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+fist_plate,Tabla Fuerte,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+flame_orb,Llamasfera,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+flame_plate,Tabla Llama,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+float_stone,Piedra Pómez,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+flower_sweet,Confite Flor,EVOLUTION,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+fluffy_tail,Cola Skitty,FIELD_USE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+flying_gem,Gema Voladora,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+flying_memory,Disco Volador,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+flying_tera_shard,Teralito Volador,TERA_MATERIAL,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+flyinium_z_held,Aerostal Z,Z_CRYSTAL,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+focus_band,Cinta Aguante,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+focus_sash,Banda Aguante,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+fresh_start_mochi,Fresh Start Mochi,TRAINING,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+fresh_water,Agua Fresca,MEDICINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+friend_ball,Amigo Ball,CAPTURE_BALL,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+full_heal,Cura Total,MEDICINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+full_incense,Incienso Lento,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+full_restore,Restaurar Todo,MEDICINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+galarica_cuff,Brazal Galanuez,EVOLUTION,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+galarica_wreath,Corona Galanuez,EVOLUTION,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+ganlon_berry,Baya Gonlan,BERRY,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+genius_mochi,Mochi Intelecto,TRAINING,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+genius_wing,Pluma Intelecto,TRAINING,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+gentle_mint,Menta Amable,TRAINING,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+ghost_gem,Gema Fantasma,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+ghost_memory,Disco Fantasma,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+ghost_tera_shard,Teralito Fantasma,TERA_MATERIAL,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+ghostium_z_held,Espectrostal Z,Z_CRYSTAL,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+gold_bottle_cap,Chapa Dorada,TREASURE_OR_COLLECTIBLE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+golden_razz_berry,Baya Frambu Dorada,FIELD_USE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+gracidea,Gracídea,STORY_KEY_OR_FORM_REVIEW,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+grass_gem,Gema Planta,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+grass_memory,Disco Planta,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+grass_tera_shard,Teralito Planta,TERA_MATERIAL,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+grassium_z_held,Fitostal Z,Z_CRYSTAL,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+grassy_seed,Semilla Hierba,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+great_ball,Super Ball,CAPTURE_BALL,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+grepa_berry,Baya Uvav,BERRY,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+grip_claw,Garra Garfio,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+griseous_core,Gran Griseosfera,STORY_KEY_OR_FORM_REVIEW,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+griseous_orb,Griseosfera,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+ground_gem,Gema Tierra,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+ground_memory,Disco Tierra,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+ground_tera_shard,Teralito Tierra,TERA_MATERIAL,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+groundium_z_held,Geostal Z,Z_CRYSTAL,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+guard_spec,Protección X,BATTLE_STAT_USE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+haban_berry,Baya Anjiro,BERRY,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+hard_stone,Piedra Dura,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+hasty_mint,Menta Activa,TRAINING,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+heal_ball,Sana Ball,CAPTURE_BALL,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+heal_powder,Polvo Curación,MEDICINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+health_mochi,Mochi Vigor,TRAINING,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+health_wing,Pluma Vigor,TRAINING,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+heart_scale,Escama Corazón,TREASURE_OR_COLLECTIBLE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+hearthflame_mask,Máscara Horno,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+heat_rock,Roca Calor,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+heavy_ball,Peso Ball,CAPTURE_BALL,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+heavy_duty_boots,Botas Gruesas,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+hm01,MO01,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+hm04,MO04,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+hm05,MO05,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+hm06,MO06,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+hm08,MO08,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+hondew_berry,Baya Meluce,BERRY,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+hopo_berry,hopo-berry,MEDICINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+hp_up,Más PS,TRAINING,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+hyper_potion,Hiperpoción,MEDICINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+iapapa_berry,Baya Pabaya,BERRY,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+ice_gem,Gema Hielo,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+ice_heal,Antihielo,MEDICINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+ice_memory,Disco Hielo,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+ice_stone,Piedra Hielo,EVOLUTION,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+ice_tera_shard,Teralito Hielo,TERA_MATERIAL,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+icicle_plate,Tabla Helada,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+icium_z_held,Criostal Z,Z_CRYSTAL,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+icy_rock,Roca Helada,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+impish_mint,Menta Agitada,TRAINING,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+incinium_z_held,Incinostal Z,Z_CRYSTAL,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+insect_plate,Tabla Bicho,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+iron,Hierro,TRAINING,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+iron_ball,Bola Férrea,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+iron_plate,Tabla Acero,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+jaboca_berry,Baya Jaboca,BERRY,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+jolly_mint,Menta Alegre,TRAINING,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+kasib_berry,Baya Drasi,BERRY,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+kebia_berry,Baya Kebia,BERRY,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+kee_berry,Baya Biglia,BERRY,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+kelpsy_berry,Baya Algama,BERRY,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+kings_rock,Roca del Rey,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+kommonium_z_held,Kommostal Z,Z_CRYSTAL,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+lagging_tail,Cola Plúmbea,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+lansat_berry,Baya Zonlan,BERRY,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+lava_cookie,Galleta Lava,MEDICINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+lax_incense,Incienso Suave,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+lax_mint,Menta Floja,TRAINING,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+leaders_crest,Distintivo de Líder,FOOD_OR_PICNIC_ACTIVITY,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+leaf_stone,Piedra Hoja,EVOLUTION,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+leftovers,Restos,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+legend_plate,Tabla Legendaria,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+lemonade,Limonada,MEDICINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+leppa_berry,Baya Zanama,BERRY,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+level_ball,Nivel Ball,CAPTURE_BALL,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+liechi_berry,Baya Lichi,BERRY,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+life_orb,Vidasfera,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+light_ball,Bola Luminosa,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+light_clay,Refleluz,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+loaded_dice,Dado Trucado,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+lonely_mint,Menta Huraña,TRAINING,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+love_ball,Amor Ball,CAPTURE_BALL,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+love_sweet,Confite Corazón,EVOLUTION,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+lucky_egg,Huevo Suerte,TRAINING,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+lucky_punch,Puño Suerte,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+lum_berry,Baya Ziuela,BERRY,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+luminous_moss,Musgo Brillante,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+lumiose_galette,Crêpe Luminalia,MEDICINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+lunalium_z_held,Lunalastal Z,Z_CRYSTAL,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+lure,Colonia,FIELD_USE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+lure_ball,Cebo Ball,CAPTURE_BALL,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+lustrous_globe,Gran Lustresfera,STORY_KEY_OR_FORM_REVIEW,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+lustrous_orb,Lustresfera,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+luxury_ball,Lujo Ball,CAPTURE_BALL,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+lycanium_z_held,Lycanrostal Z,Z_CRYSTAL,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+macho_brace,Brazal Firme,TRAINING,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+magmarizer,Magmatizador,EVOLUTION,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+magnet,Imán,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+mago_berry,Baya Ango,BERRY,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+malicious_armor,Armadura Maldita,EVOLUTION,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+maranga_berry,Baya Maranga,BERRY,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+marshadium_z_held,Marshastal Z,Z_CRYSTAL,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+master_ball,Master Ball,CAPTURE_BALL,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+masterpiece_teacup,Cuenco Exquisito,EVOLUTION,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+max_elixir,Elixir Máximo,MEDICINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+max_ether,Éter Máximo,MEDICINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+max_lure,Colonia Máxima,FIELD_USE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+max_mushrooms,Maxiseta,BATTLE_STAT_USE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+max_potion,Poción Máxima,MEDICINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+max_repel,Repelente Máximo,FIELD_USE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+meadow_plate,Tabla Pradal,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+mental_herb,Hierba Mental,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+metal_alloy,Metal Compuesto,EVOLUTION,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+metal_coat,Revest. Metálico,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+metal_powder,Polvo Metálico,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+meteorite,Meteorito,STORY_KEY_OR_FORM_REVIEW,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+metronome,Metrónomo,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+mewnium_z_held,Mewstal Z,Z_CRYSTAL,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+micle_berry,Baya Lagro,BERRY,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+mild_mint,Menta Afable,TRAINING,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+mimikium_z_held,Mimikyustal Z,Z_CRYSTAL,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+mind_plate,Tabla Mental,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+miracle_seed,Semilla Milagro,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+mirror_herb,Hierba Copia,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+misty_seed,Semilla Bruma,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+modest_mint,Menta Modesta,TRAINING,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+moomoo_milk,Leche Mu-mu,MEDICINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+moon_ball,Luna Ball,CAPTURE_BALL,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+moon_stone,Piedra Lunar,EVOLUTION,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+muscle_band,Cinta Fuerte,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+muscle_mochi,Mochi Músculo,TRAINING,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+muscle_wing,Pluma Músculo,TRAINING,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+mystic_water,Agua Mística,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+n_lunarizer_merge,Necroluna,LEGACY_OR_CATEGORY_REVIEW,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+n_solarizer_merge,Necrosol,LEGACY_OR_CATEGORY_REVIEW,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+naive_mint,Menta Ingenua,TRAINING,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+naughty_mint,Menta Pícara,TRAINING,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+nest_ball,Nido Ball,CAPTURE_BALL,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+net_ball,Malla Ball,CAPTURE_BALL,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+never_melt_ice,Hielo Perpetuo,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+normal_gem,Gema Normal,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+normal_tera_shard,Teralito Normal,TERA_MATERIAL,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+normalium_z_held,Normastal Z,Z_CRYSTAL,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+nugget,Pepita,TREASURE_OR_COLLECTIBLE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+occa_berry,Baya Caoca,BERRY,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+odd_incense,Incienso Raro,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+old_gateau,Barrita Plus,MEDICINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+oran_berry,Baya Aranja,BERRY,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+oval_stone,Piedra Oval,EVOLUTION,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+paralyze_heal,Antiparalizador,MEDICINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+pass_orb,Regalosfera,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+passho_berry,Baya Pasio,BERRY,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+payapa_berry,Baya Payapa,BERRY,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+peat_block,Bloque de Turba,EVOLUTION,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+pecha_berry,Baya Meloc,BERRY,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+persim_berry,Baya Caquic,BERRY,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+petaya_berry,Baya Yapati,BERRY,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+pewter_crunchies,Rokikos,MEDICINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+pikanium_z_held,Pikastal Z,Z_CRYSTAL,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+pink_nectar,Néctar Rosa,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+pixie_plate,Tabla Duende,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+poison_barb,Flecha Venenosa,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+poison_gem,Gema Veneno,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+poison_memory,Disco Veneno,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+poison_tera_shard,Teralito Veneno,TERA_MATERIAL,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+poisonium_z_held,Toxistal Z,Z_CRYSTAL,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+poke_ball,Poké Ball,CAPTURE_BALL,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+pomeg_berry,Baya Grana,BERRY,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+potion,Poción,MEDICINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+power_anklet,Franja Recia,TRAINING,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+power_band,Banda Recia,TRAINING,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+power_belt,Cinto Recio,TRAINING,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+power_bracer,Brazal Recio,TRAINING,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+power_herb,Hierba Única,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+power_lens,Lente Recia,TRAINING,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+power_weight,Pesa Recia,TRAINING,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+pp_max,PP Máximos,TRAINING,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+pp_up,Más PP,TRAINING,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+pretty_wing,Pluma Bella,TREASURE_OR_COLLECTIBLE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+primarium_z_held,Primastal Z,Z_CRYSTAL,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+prism_scale,Escama Bella,EVOLUTION,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+protective_pads,Paracontacto,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+protector,Protector,EVOLUTION,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+protein,Proteína,TRAINING,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+psychic_gem,Gema Psíquica,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+psychic_memory,Disco Psíquico,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+psychic_seed,Semilla Psique,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+psychic_tera_shard,Teralito Psíquico,TERA_MATERIAL,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+psychium_z_held,Psicostal Z,Z_CRYSTAL,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+punching_glove,Guante de Boxeo,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+purple_nectar,Néctar Violeta,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+qualot_berry,Baya Ispero,BERRY,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+quick_ball,Veloz Ball,CAPTURE_BALL,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+quick_claw,Garra Rápida,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+quick_powder,Polvo Veloz,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+quiet_mint,Menta Mansa,TRAINING,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+rage_candy_bar,Caramelo Furia,STORY_KEY_OR_FORM_REVIEW,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+rare_bone,Hueso Raro,TREASURE_OR_COLLECTIBLE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+rare_candy,Caramelo Raro,TRAINING,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+rash_mint,Menta Alocada,TRAINING,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+rawst_berry,Baya Safre,BERRY,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+razor_claw,Garra Afilada,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+razor_fang,Colmillo Agudo,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+razz_berry,Baya Frambu,BERRY,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+reaper_cloth,Tela Terrible,EVOLUTION,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+red_card,Tarjeta Roja,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+red_flute,Flauta Roja,FIELD_USE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+red_nectar,Néctar Rojo,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+red_orb,Prisma Rojo,STORY_KEY_OR_FORM_REVIEW,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+reins_of_unity,Riendas Unión,STORY_KEY_OR_FORM_REVIEW,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+relaxed_mint,Menta Plácida,TRAINING,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+repeat_ball,Acopio Ball,CAPTURE_BALL,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+repel,Repelente,FIELD_USE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+resist_mochi,Mochi Aguante,TRAINING,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+resist_wing,Pluma Aguante,TRAINING,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+reveal_glass,Espejo Veraz,STORY_KEY_OR_FORM_REVIEW,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+ribbon_sweet,Confite Lazo,EVOLUTION,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+rindo_berry,Baya Tamar,BERRY,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+ring_target,Blanco,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+rock_gem,Gema Roca,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+rock_incense,Incienso Roca,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+rock_memory,Disco Roca,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+rock_tera_shard,Teralito Roca,TERA_MATERIAL,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+rockium_z_held,Litostal Z,Z_CRYSTAL,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+rocky_helmet,Casco Dentado,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+room_service,Servicio Raro,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+rose_incense,Incienso Floral,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+roseli_berry,Baya Hibis,BERRY,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+roto_catch,Cupón Captura,LEGACY_OR_CATEGORY_REVIEW,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+roto_exp_points,Cupón Exp,LEGACY_OR_CATEGORY_REVIEW,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+roto_friendship,Cupón Amistad,LEGACY_OR_CATEGORY_REVIEW,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+rotom_catalog,Catálogo Rotom,STORY_KEY_OR_FORM_REVIEW,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+rowap_berry,Baya Magua,BERRY,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+rusted_shield,Escudo Oxidado,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+rusted_sword,Espada Oxidada,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+sachet,Saquito Fragante,EVOLUTION,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+safari_ball,Safari Ball,CAPTURE_BALL,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+safety_goggles,Gafa Protectora,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+salac_berry,Baya Aslac,BERRY,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+sassy_mint,Menta Grosera,TRAINING,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+scope_lens,Periscopio,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+scroll_of_darkness,Manuscrito Sombras,EVOLUTION,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+scroll_of_waters,Manuscrito Aguas,EVOLUTION,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+sea_incense,Incienso Marino,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+serious_mint,Menta Seria,TRAINING,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+shalour_sable,Galleta Yantra,MEDICINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+sharp_beak,Pico Afilado,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+shed_shell,Muda Concha,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+shell_bell,Cascabel Concha,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+shiny_stone,Piedra Día,EVOLUTION,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+shock_drive,FulgoROM,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+shuca_berry,Baya Acardo,BERRY,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+silk_scarf,Pañuelo de Seda,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+silver_powder,Polvo Plata,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+silver_razz_berry,Baya Frambu Plateada,FIELD_USE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+sitrus_berry,Baya Zidra,BERRY,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+sky_plate,Tabla Cielo,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+smoke_ball,Bola de Humo,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+smooth_rock,Roca Suave,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+snorlium_z_held,Snorlastal Z,Z_CRYSTAL,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+snowball,Bola de Nieve,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+soda_pop,Refresco,MEDICINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+soft_sand,Arena Fina,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+solganium_z_held,Solgaleostal Z,Z_CRYSTAL,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+soothe_bell,Cascabel Alivio,TRAINING,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+soul_dew,Rocío Bondad,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+spell_tag,Hechizo,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+splash_plate,Tabla Linfa,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+spooky_plate,Tabla Terror,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+sport_ball,Competi Ball,CAPTURE_BALL,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+star_sweet,Confite Estrella,EVOLUTION,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+starf_berry,Baya Arabol,BERRY,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+steel_gem,Gema Acero,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+steel_memory,Disco Acero,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+steel_tera_shard,Teralito Acero,TERA_MATERIAL,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+steelium_z_held,Metalostal Z,Z_CRYSTAL,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+stick,Puerro,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+sticky_barb,Toxiestrella,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+stone_plate,Tabla Pétrea,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+strawberry_sweet,Confite Fresa,EVOLUTION,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+sun_stone,Piedra Solar,EVOLUTION,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+super_lure,Supercolonia,FIELD_USE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+super_potion,Superpoción,MEDICINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+super_repel,Superrepelente,FIELD_USE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+sweet_apple,Manzana Dulce,EVOLUTION,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+sweet_heart,Corazón Dulce,MEDICINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+swift_mochi,Mochi Ímpetu,TRAINING,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+swift_wing,Pluma Ímpetu,TRAINING,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+syrupy_apple,Manzana Melosa,EVOLUTION,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tamato_berry,Baya Tamate,BERRY,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tanga_berry,Baya Yecana,BERRY,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tapunium_z_held,Tapistal Z,Z_CRYSTAL,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tart_apple,Manzana Ácida,EVOLUTION,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+terrain_extender,Cubresuelos,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+thick_club,Hueso Grueso,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+throat_spray,Espray Bucal,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+thunder_stone,Piedra Trueno,EVOLUTION,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+timer_ball,Turno Ball,CAPTURE_BALL,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+timid_mint,Menta Miedosa,TRAINING,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm00,MT00,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm01,MT01,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm02,MT02,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm03,MT03,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm04,MT04,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm05,MT05,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm06,MT06,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm07,MT07,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm08,MT08,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm09,MT09,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm10,MT10,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm100,MT100,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm101,MT101,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm102,MT102,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm103,MT103,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm104,MT104,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm105,MT105,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm106,MT106,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm107,MT107,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm108,MT108,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm109,MT109,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm11,MT11,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm110,MT110,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm111,MT111,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm112,MT112,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm113,MT113,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm114,MT114,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm115,MT115,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm116,MT116,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm117,MT117,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm118,MT118,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm119,MT119,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm12,MT12,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm120,MT120,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm121,MT121,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm122,MT122,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm123,MT123,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm124,MT124,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm125,MT125,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm126,MT126,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm127,MT127,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm128,MT128,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm129,MT129,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm13,MT13,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm130,MT130,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm131,MT131,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm132,MT132,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm133,MT133,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm134,MT134,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm135,MT135,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm136,MT136,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm137,MT137,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm138,MT138,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm139,MT139,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm14,MT14,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm140,MT140,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm141,MT141,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm142,MT142,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm143,MT143,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm144,MT144,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm145,MT145,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm146,MT146,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm147,MT147,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm148,MT148,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm149,MT149,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm15,MT15,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm150,MT150,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm151,MT151,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm152,MT152,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm153,MT153,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm154,MT154,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm155,MT155,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm156,MT156,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm157,MT157,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm158,MT158,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm159,MT159,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm16,MT16,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm160,MT160,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm161,MT161,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm162,MT162,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm163,MT163,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm164,MT164,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm165,MT165,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm166,MT166,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm167,MT167,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm168,MT168,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm169,MT169,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm17,MT17,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm170,MT170,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm171,MT171,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm172,MT172,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm173,MT173,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm174,MT174,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm175,MT175,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm176,MT176,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm177,MT177,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm178,MT178,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm179,MT179,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm18,MT18,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm180,MT180,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm181,MT181,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm182,MT182,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm183,MT183,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm184,MT184,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm185,MT185,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm186,MT186,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm187,MT187,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm188,MT188,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm189,MT189,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm19,MT19,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm190,MT190,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm191,MT191,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm192,MT192,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm193,MT193,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm194,MT194,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm195,MT195,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm196,MT196,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm197,MT197,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm198,MT198,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm199,MT199,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm20,MT20,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm200,MT200,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm201,MT201,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm202,MT202,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm203,MT203,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm204,MT204,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm205,MT205,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm206,MT206,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm207,MT207,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm208,MT208,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm209,MT209,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm21,MT21,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm210,MT210,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm211,MT211,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm212,MT212,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm213,MT213,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm214,MT214,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm215,MT215,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm216,MT216,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm217,MT217,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm218,MT218,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm219,MT219,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm22,MT22,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm220,MT220,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm221,MT221,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm222,MT222,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm223,MT223,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm224,MT224,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm225,MT225,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm226,MT226,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm227,MT227,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm228,MT228,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm229,MT229,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm23,MT23,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm24,MT24,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm25,MT25,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm26,MT26,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm27,MT27,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm28,MT28,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm29,MT29,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm30,MT30,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm31,MT31,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm32,MT32,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm33,MT33,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm34,MT34,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm35,MT35,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm36,MT36,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm37,MT37,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm38,MT38,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm39,MT39,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm40,MT40,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm41,MT41,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm42,MT42,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm43,MT43,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm44,MT44,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm45,MT45,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm46,MT46,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm47,MT47,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm48,MT48,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm49,MT49,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm50,MT50,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm51,MT51,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm52,MT52,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm53,MT53,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm54,MT54,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm55,MT55,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm56,MT56,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm57,MT57,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm58,MT58,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm59,MT59,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm60,MT60,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm61,MT61,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm62,MT62,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm63,MT63,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm64,MT64,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm65,MT65,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm66,MT66,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm67,MT67,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm68,MT68,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm69,MT69,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm70,MT70,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm71,MT71,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm72,MT72,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm73,MT73,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm74,MT74,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm75,MT75,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm76,MT76,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm77,MT77,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm78,MT78,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm79,MT79,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm80,MT80,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm81,MT81,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm82,MT82,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm83,MT83,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm84,MT84,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm85,MT85,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm86,MT86,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm87,MT87,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm88,MT88,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm89,MT89,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm90,MT90,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm91,MT91,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm92,MT92,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm93,MT93,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm94,MT94,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm95,MT95,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm96,MT96,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm97,MT97,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm98,MT98,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tm99,MT99,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+toxic_orb,Toxisfera,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+toxic_plate,Tabla Tóxica,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tr13,DT13,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tr19,DT19,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tr28,DT28,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tr31,DT31,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tr39,DT39,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tr41,DT41,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tr44,DT44,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tr50,DT50,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tr72,DT72,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tr83,DT83,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tr85,DT85,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tr91,DT91,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+tr93,DT93,MACHINE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+twisted_spoon,Cuchara Torcida,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+ultra_ball,Ultra Ball,CAPTURE_BALL,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+unremarkable_teacup,Cuenco Mediocre,EVOLUTION,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+up_grade,Mejora,EVOLUTION,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+utility_umbrella,Parasol Multiuso,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+wacan_berry,Baya Gualot,BERRY,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+water_gem,Gema Agua,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+water_memory,Disco Agua,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+water_stone,Piedra Agua,EVOLUTION,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+water_tera_shard,Teralito Agua,TERA_MATERIAL,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+waterium_z_held,Hidrostal Z,Z_CRYSTAL,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+wave_incense,Incienso Acua,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+weakness_policy,Seguro Debilidad,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+wellspring_mask,Máscara Fuente,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+whipped_dream,Dulce de Nata,EVOLUTION,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+white_flute,Flauta Blanca,FIELD_USE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+white_herb,Hierba Blanca,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+wiki_berry,Baya Wiki,BERRY,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+wise_glasses,Gafas Especiales,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+x_accuracy,Precisión X,BATTLE_STAT_USE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+x_attack,Ataque X,BATTLE_STAT_USE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+x_defense,Defensa X,BATTLE_STAT_USE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+x_sp_atk,At. Especial X,BATTLE_STAT_USE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+x_sp_def,Def. Especial X,BATTLE_STAT_USE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+x_speed,Velocidad X,BATTLE_STAT_USE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+yache_berry,Baya Rimoya,BERRY,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+yellow_flute,Flauta Amarilla,FIELD_USE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+yellow_nectar,Néctar Amarillo,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+zap_plate,Tabla Trueno,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+zinc,Zinc,TRAINING,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+zoom_lens,Telescopio,HELD_COMBAT_CANDIDATE,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+zygarde_cube,Arca de Zygarde,STORY_KEY_OR_FORM_REVIEW,CANONICO_POKEAPI,SELECCIONADO,,Funcion aprobada para seleccion; comprobar conexion existente antes de disenar o programar de nuevo
+mega_stone_universal,Megapiedra universal,MEGA_UNIVERSAL,NUEVO_OBJETO_PROYECTO,DISENO_APROBADO_IMPLEMENTACION_APARCADA,2,"Una clase universal reutilizable, dos ejemplares maximo por partida; consultar RANDOMLOCK_MEGA_UNIVERSAL_SPEC_V1.md"
