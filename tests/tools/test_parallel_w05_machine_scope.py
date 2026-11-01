@@ -143,6 +143,18 @@ class ValidadorMaquinas(unittest.TestCase):
         with self.assertRaisesRegex(MODULO.ErrorMapa, "inválido"):
             self.ejecutar()
 
+    def test_cli_solo_lectura_y_json(self):
+        import contextlib
+        import io
+        salida = io.StringIO()
+        with contextlib.redirect_stdout(salida):
+            codigo = MODULO.main(["--catalogo", str(self.catalogo), "--perfil", str(self.perfil),
+                                  "--contrato", str(self.contrato)])
+        self.assertEqual(codigo, 0)
+        dato = json.loads(salida.getvalue())
+        self.assertEqual(dato["conteos"]["total"], 4)
+        self.assertNotIn("filas", dato)
+
     def test_ruta_real_248_si_disponible(self):
         if not all(p.is_file() for p in [MODULO.CATALOGO, MODULO.PERFIL, MODULO.CONTRATO]):
             self.skipTest("Sin checkout: control sobre 248 IDs corresponde a CI consolidada")
