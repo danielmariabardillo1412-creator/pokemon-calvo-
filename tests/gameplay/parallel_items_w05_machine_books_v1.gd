@@ -47,7 +47,10 @@ func _verificar() -> void:
 		_check(id + " consulta disponible", respuesta.get("disponible", false))
 		_check(id + " movimiento canónico", respuesta.get("move_id", "") == esperado)
 		var definicion: MoveDefinition = catalogos.move(StringName(esperado))
-		_check(id + " tipo original", definicion != null and respuesta.get("type_id", "") == String(definicion.type_id) if definicion != null else false)
+		if definicion == null:
+			_check(id + " definición de movimiento presente", false)
+		else:
+			_check(id + " tipo original", respuesta.get("type_id", "") == String(definicion.type_id))
 
 	# Una MO histórica no queda habilitada por contar con mapeos de generaciones anteriores.
 	var antigua: Dictionary = Libros.consultar(&"hm01", perfil, catalogos)
