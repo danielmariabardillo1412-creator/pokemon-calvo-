@@ -1,3 +1,21 @@
+# ESTADO VIGENTE IA6 — 2026-11-02, CAMP_002 ITER_02 Y W04 CAMP_001 FINAL
+
+**Puertas de verdad:** [CAMP002/ITER02 de W01–W03](CAMPAIGN_002_ITER02_CI_GATE.md) y [relevo W04 final / W05 ITER02](CAMPAIGN_HANDOFF_CI_GATE_20261102.md). **CI #41493879869 SUCCESS:** W01 Godot 687/0 y recibos Python, W02 800/0 y recibos Python, W03 37/0 negativos. **CI #41538151097 SUCCESS:** W04 SaveV2 559/0 en 12 casos, W05 MT 177/0 en seis enseñanzas; W05 selector 12 y Python 11 PASS. Los cinco conjuntos de pruebas se integraron en árbol árbitra como blobs exactos de staging, **sin modificar las ramas W ni producción**.
+
+| Trabajadora | Estado confirmado | Orden próxima |
+| --- | --- | --- |
+| IA1/W01 | CAMP002 02/03, test 687/0 PASS en staging | `p` ITER03 **tras sincronizar el único runner corregido** desde árbitra blob `cc9fb835e5e999e991e1aa5ac58056ec5855da97` |
+| IA2/W02 | CAMP002 02/03, test 800/0 PASS | `p` ITER03 **tras sincronizar solo el runner corregido** blob `73171d57101dab742bb9a27ce8a3027198b639de` |
+| IA3/W03 | CAMP002 02/03, 37/0 pruebas negativas PASS; bolas sin implementar | `p` ITER03 de auditoría, prohibida implementación |
+| IA4/W04 | CAMP001 03/03, SaveV2 559/0 PASS | **STOP definitivo de CAMP001**; no entra en CAMP002 |
+| IA5/W05 | CAMP002 02/03, seis MT enseñadas 177/0 PASS | `p` ITER03 (ampliación de muestras y regresiones), sin modificar servicio |
+
+**Importante:** pasar CI en staging no actualiza automáticamente las ramas W01/W02/W04. W01 y W02 deben leer [gate ITER02](CAMPAIGN_002_ITER02_CI_GATE.md) y aplicar la corrección mínima en sus ramas antes del tercer bloque, o STOP si hay conflicto. W04 no debe recibir más `p`. IA5 no debe confundir 6 enseñanzas verificadas con 229 enseñanzas individuales, ni con arte/UI aprobada. La nueva entrega ITER03 requiere otra CI. No iniciar CAMP003.
+
+**Protección:** `main`, V28, PR #118, partidas y producción intactas durante esta coordinación. Las pruebas son Godot 4.7 headless y no sustituyen revisión visual/GPU.
+
+---
+
 > **IA6 / CI NUEVA DE ITER_02: BLOQUEO W01/W02 (2026-11-02).** El primer run [#41492689274](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41492689274) fue `FAIL`: W01 error de sintaxis al redefinir `OUT`; W02 sesiones `figy_berry` no arrancan con determinadas naturalezas; W03 37 tests negativos Godot PASS. [Diagnóstico completo](CAMPAIGN_002_ITER02_CI_DIAGNOSTIC.md) y reintento [#41493314741](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41493314741) con corrección/diagnóstico aislados (resultado pendiente al anotar). **No `p` para bloque 03 de W01 o W02 hasta nueva puerta.** El relevo IA4-CAMP001 y IA5-CAMP002 sí está autorizado.
 
 # IA6 — RELEVO DE CHATS Y CAMP002 02/03 (2026-11-02)
