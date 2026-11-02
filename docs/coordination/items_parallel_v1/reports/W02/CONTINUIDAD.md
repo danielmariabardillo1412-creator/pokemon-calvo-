@@ -1,6 +1,26 @@
 # W02 / IA2 — Cuaderno de continuidad (bayas y consumo)
 
-## ESTADO VIGENTE — CAMPAÑA_002, ITER_01/03
+## ESTADO VIGENTE — CAMPAÑA_002, ITER_02/03
+
+- **Identidad/rama:** IA2/W02, `codex/calvo-items-20261102-w02-camp002`; **ITER_01 e ITER_02 publicadas**, ITER_03 pendiente de la siguiente `p`. Estado global `PREPARADO_PENDIENTE_CI` para ITER_02.
+- **Autoridad:** IA6, `campaigns/CAMP_002_W02.md` blob `8e52a9f9e740eaee6210494ffaa764ce1ad9c644`; puerta actual `CAMPAIGN_GATE_002.md` con añadido obligatorio de [CAMPAIGN_002_ITER01_CI_GATE.md](../../CAMPAIGN_002_ITER01_CI_GATE.md) blob `12e9c3021e80f9e03e0f9b0e900853b9a7e6a513`.
+- **PASS real iteración 01:** [Actions #41484879741](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41484879741), staging SHA `967002fcbf26a1159d3a14a020e8921b34cfab8f`: Sitrus/Lum 350 checks Godot, 4 escenarios y 13 unittests Python PASS, recibos validados. No cubre nuevos Leppa/Figy.
+- **Sincronización exacta ordenada por IA6:** `tests/gameplay/parallel_items_w02_campaign_002.gd` blob validado `2e0ac1d2142dad96f110254e7eb4f2a3c5f04c47`, aplicado al inicio de ITER_02 mediante commit `3fba13ac0b17d5e01b082ab498450465d3eef8d5`; arreglo de números JSON 1.0/1, sin merge de ramas.
+- **ITER_02 nuevos:** `leppa_berry` (Zanama) y `figy_berry` (Higog); cinco casos, tres modos cada uno. PP0/PP1 del primer movimiento al elegir `move 2`; Figy PS 1/5 naturaleza `modest` (confusión nativa) y `hardy` (sin confusión), más control PS altos. **Acumulado 4 IDs, 9 escenarios y 27 variantes nativas definidas**, sin prueba Godot nueva.
+- **Perfil verificado:** `tools/item_audit/held_effect_sweep_v3.cjs` contiene Zanama PP0/PP1; `tools/item_audit/held_pilot.cjs` usa `mew_modest` para Higog (+1/3 HP y confusión). `CreatureInstance.nature_id` persistente. `imported_recovery_v19.json` incluye Zanama de campo pero **no Higog**; no se prueban efectos de campo en ITER_02 ni se altera producción.
+- **Archivos actuales:** fixture `tests/fixtures/parallel_items/w02_campaign_002.json` blob `fbce41f9bbda5f920bd0d9135fc3eefe2eeb49dc`; runner Godot `tests/gameplay/parallel_items_w02_campaign_002.gd` blob `540d93c0f29a027dca8f9b94254e7c008366a0b4`; validador Python `tests/tools/test_parallel_items_w02_campaign_002.py` blob `77e5016003eca3a7bfce63261aba265dfda7abdc`. Últimos commits de código `ac3f49f5`, `fbc45d93`, `52640aca`.
+- **Resultados ITER_02:** 31/31 revisiones estáticas sobre blobs GitHub PASS, **17 pruebas Python definidas SIN_EJECUTAR**, Godot 4.7 SIN_EJECUTAR, GPU no realizada. El PASS de ITER_01 no acredita ninguno de los cinco nuevos casos.
+- **Evidencias:** [CAMP_002_ITER_02.md](./CAMP_002_ITER_02.md), commit `362562eeec8bd42c2653884ca819f9a2bf3b37a6`; [CAMP_002_PROGRESO.csv](./CAMP_002_PROGRESO.csv) commit `6f5643ffe6a85c672923914ddb741523341a425b`; informes ITER_01 y pruebas antiguas no se reescribieron.
+- **Verificación IA6:** `python tests/tools/test_parallel_items_w02_campaign_002.py --unittest`; `godot --headless --path . --script res://tests/gameplay/parallel_items_w02_campaign_002.gd`; `python tests/tools/test_parallel_items_w02_campaign_002.py --result .godot/parallel_items/w02_campaign_002/godot.json`. Requiere PASS en SHA nuevo antes de funcional.
+- **Próximo `p`:** consultar gate/STATUS actual y ejecutar **solo ITER_03**, matriz de 4 bayas, SaveV2 y regresión, o detenerse si IA6 registra FAIL. Tras 03 publicar `CAMP_002_FINAL.md` y decir `CAMPAÑA_002_FINALIZADA`.
+- **Prohibido:** `main`, V28, PR #118, todas las ramas CAMP_001, árbitra y las otras workers, IA4 congelada, `modules/`, `config/`, `data/`, `.github/`, simulador/guardados/selección, Mega universal.
+
+---
+
+## HISTÓRICO — estado tras ITER_01/03
+
+
+## ESTADO ANTERIOR — CAMPAÑA_002, ITER_01/03
 
 - **Identidad/rama:** IA2/W02; exclusivamente `codex/calvo-items-20261102-w02-camp002`, base oficial `67959eb8f19abfd2ae391872747a14f603fcab01`. No mezclar rama de 20261101.
 - **Encargo IA6:** `CAMPAIGN_GATE_002.md` blob `ebc787803599e2b13cbd24c169b69112d18f7a42`; `campaigns/CAMP_002_W02.md` blob `8e52a9f9e740eaee6210494ffaa764ce1ad9c644`; manifiesto blob `bb9471862d3116b982f90e1867d512e278f801e0`.
