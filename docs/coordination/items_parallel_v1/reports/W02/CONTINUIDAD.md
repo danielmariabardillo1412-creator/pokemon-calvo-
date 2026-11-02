@@ -1,5 +1,24 @@
 # W02 / IA2 — Cuaderno de continuidad (bayas y consumo)
 
+## ESTADO VIGENTE — CAMPAÑA_002, ITER_01/03
+
+- **Identidad/rama:** IA2/W02; exclusivamente `codex/calvo-items-20261102-w02-camp002`, base oficial `67959eb8f19abfd2ae391872747a14f603fcab01`. No mezclar rama de 20261101.
+- **Encargo IA6:** `CAMPAIGN_GATE_002.md` blob `ebc787803599e2b13cbd24c169b69112d18f7a42`; `campaigns/CAMP_002_W02.md` blob `8e52a9f9e740eaee6210494ffaa764ce1ad9c644`; manifiesto blob `bb9471862d3116b982f90e1867d512e278f801e0`.
+- **Estado:** ITER_01 publicada `PREPARADO_PENDIENTE_CI`; ITER_02/03 pendientes, una por futura `p`, STOP ante error/contrato fuera de alcance. IA6 responsable de CI e integración.
+- **IDs actuales:** `sitrus_berry`/Zidra y `lum_berry`/Ziuela. Cuatro escenarios (PS bajo/alto; veneno/sano); tres modos `active/none/reserve`, 12 pruebas nativas previstas, con consumo único, cierre FLED, dueño físico y SaveV2.
+- **Ruta funcional sin cambios:** catálogo → `FieldItemService.equip` → `@pkmn/sim` mediante `parallel_items_w02_berries_v1.gd` histórico validado → restaurar y cerrar sesión → `SaveGameRepository` SaveV2. Solo se escriben nuevos tests.
+- **Archivos:** `tests/fixtures/parallel_items/w02_campaign_002.json` blob `3c9b7c6f4a7449d295e8f05fc2c7b44aaeb5ed4d`; `tests/gameplay/parallel_items_w02_campaign_002.gd` blob `53b70033578f1a31c13081f558334bacf247ada5`; `tests/tools/test_parallel_items_w02_campaign_002.py` blob `0325554ac8bd329ee920b0a14f4d5037d98818c6`.
+- **Evidencia:** 22/22 comprobaciones ESTÁTICAS del fixture, herencia y recibos SHA-256. **Python nuevo 13 unittests SIN_EJECUTAR; Godot 4.7 SIN_EJECUTAR; GPU NO REALIZADA.** CI base #41364601482/#41364601486 PASS en SHA `a8e09dbf`, no cubre CAMP_002.
+- **Campo:** Sitrus y Lum sí poseen perfil existente en `modules/inventory/imported_recovery_v19.json`; no se ensaya uso de campo en ITER_01. `NOT_TESTED_ITER_01` no significa ausencia funcional.
+- **Informes nuevos:** [ITER_01](./CAMP_002_ITER_01.md) commit `ac51aa230fd974b112e9a1b0f9e3c41c7580dc11`, [progreso](./CAMP_002_PROGRESO.csv) commit `2bb3e57a3f9b90b866da19c258e480a3cea99727`.
+- **Pruebas para IA6:** `python tests/tools/test_parallel_items_w02_campaign_002.py --unittest`; `godot --headless --path . --script res://tests/gameplay/parallel_items_w02_campaign_002.gd`; `python tests/tools/test_parallel_items_w02_campaign_002.py --result .godot/parallel_items/w02_campaign_002/godot.json`.
+- **Siguiente `p`:** ITER_02 Leppa (PP agotados/no agotados) + Figy (perfil de naturaleza y recuperación solo tras cotejo normativo). No anticipar ITER_03.
+- **Prohibiciones:** main, V28, PR #118, W04 congelada, ramas ajenas, ramas CAMP_001, producción, catálogos, RNG, selección, guardados, `.github/`, arte y políticas Mega.
+
+---
+
+## HISTORIAL PREVIO LOTE_002 (no otorga permisos actuales)
+
 > Memoria operativa exclusiva de `codex/calvo-items-20261101-w02`. La **autoridad de encargos** sigue siendo IA6 en `codex/calvo-items-20261101-arbitro`; este cuaderno no concede permisos nuevos.
 
 ## 1. Identidad, base y estado
