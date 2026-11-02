@@ -1,2 +1,2 @@
 microbloque,ids,actividad,estado_previo,estado_nuevo,evidencia_sha,python,godot,ci_propio,proximo
-01,dusk_ball;repeat_ball;dive_ball,Mapa de procedencia real y nueve contratos Python con matriz de falsos positivos,SELECCIONADAS_SIN_CONTEXTOS,PREPARADO_PENDIENTE_CI,e7e814fd30d32f6b80fdb0c522b83103cb6be302,ESTRUCTURA_INSPECCIONADA; EJECUCION_PENDIENTE,SIN_EJECUTAR,SIN_EJECUTAR,ITER_02_REFERENCIAS_Y_NEGATIVOS
+01,dusk_ball;repeat_ball;dive_ball,Mapa de procedencia real y nueve contratos Python con matriz de falsos positivos,SELECCIONADAS_SIN_CONTEXTOS,PREPARADO_PENDIENTE_CI,de6beff3010199417a28054ae81dbe0c3586d8d8,ESTRUCTURA_INSPECCIONADA; EJECUCION_PENDIENTE,SIN_EJECUTAR,SIN_EJECUTAR,ITER_02_REFERENCIAS_Y_NEGATIVOS
