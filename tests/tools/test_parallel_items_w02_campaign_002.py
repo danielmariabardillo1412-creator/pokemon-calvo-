@@ -5,6 +5,7 @@ El resultado --result requiere evidencias generadas realmente por la sesión nat
 """
 import argparse
 import copy
+import hashlib
 import json
 import tempfile
 import unittest
@@ -57,10 +58,10 @@ def read(path):
 def verify_fixture(f):
     demand(set(f) == {"schema_version", "campaign", "worker", "completed_iterations",
                       "family", "format", "level", "seed", "variants", "item_ids",
-                      "field_scope", "cases", "coverage_matrix", "note"},
+                      "field_scope", "cases", "coverage_matrix", "regression_contract", "note"},
            "Estructura de fixture alterada")
     demand(f["schema_version"] == 1 and f["campaign"] == "CAMP_002"
-           and f["worker"] == "W02" and f["completed_iterations"] == [1, 2]
+           and f["worker"] == "W02" and f["completed_iterations"] == [1, 2, 3]
            and f["family"] == "held_berry_revalidation", "Identidad/campaña fuera del gate")
     demand(f["format"] == "gen9calvounifiedv1" and f["level"] == 100
            and f["seed"] == [23, 19, 29, 43], "Semilla o formato ajeno")
@@ -88,6 +89,21 @@ def verify_fixture(f):
                "Descriptor de objeto inválido")
         demand((entry["effect"], entry["field_profile"], tuple(entry["positive"]),
                 tuple(entry["negative"])) == profile, "Positivos y negativos no coinciden")
+    reg = f["regression_contract"]
+    demand(set(reg) == {"expected_scenarios", "expected_native_variants", "expected_owners",
+                       "per_item_cases", "save_v2_required", "single_consumption_required",
+                       "field_tested", "preserve_legacy_persim"},
+           "Contrato de regresión incompleto")
+    expected_counts = {item: len(profile[2] + profile[3])
+                       for item, profile in PROFILES.items()}
+    demand(reg["expected_scenarios"] == 9 and reg["expected_native_variants"] == 27
+           and reg["expected_owners"] == list(MODES)
+           and reg["per_item_cases"] == expected_counts
+           and reg["save_v2_required"] is True
+           and reg["single_consumption_required"] is True
+           and reg["field_tested"] is False
+           and reg["preserve_legacy_persim"] is True,
+           "Matriz de regresión altera cobertura, persistencia o Persim")
     return f
 
 
@@ -95,12 +111,15 @@ def verify_result(f, result, folder):
     verify_fixture(f)
     demand(set(result) == {"schema_version", "campaign", "family", "status", "checks",
                            "errors", "cases", "per_item", "field_scope",
-                           "full_item_certification", "gpu"}, "Esquema de Godot inválido")
+                           "regression", "fixture_sha256", "full_item_certification", "gpu"}, "Esquema de Godot inválido")
     demand(result["schema_version"] == 1 and result["campaign"] == "CAMP_002"
            and result["family"] == f["family"] and result["status"] == "PASS"
            and result["errors"] == [] and result["full_item_certification"] is False
            and result["gpu"] is False and result["field_scope"] == f["field_scope"],
            "Se ha usado PASS ficticio o se ha ampliado alcance")
+    demand(type(result["fixture_sha256"]) is str
+           and result["fixture_sha256"] == hashlib.sha256(FIXTURE.read_bytes()).hexdigest(),
+           "El runner no ha ejecutado el fixture exacto de este SHA")
     demand(type(result["checks"]) is int and result["checks"] >= 120,
            "La ejecución no tiene suficientes aserciones")
     demand(type(result["cases"]) is list and len(result["cases"]) == 9, "Faltan pruebas")
@@ -217,6 +236,16 @@ def verify_result(f, result, folder):
         row = result["per_item"][item]
         demand(set(row) == {"status", "cases"} and row["status"] == "PASS"
                and row["cases"] == len(profile[2] + profile[3]), "PASS no individual")
+    regression = result["regression"]
+    demand(set(regression) == {"status", "scenarios", "native_variants",
+                              "save_v2_variants", "mode_counts", "field_tested"},
+           "Evidencia final de regresión incompleta")
+    demand(regression["status"] == "PASS" and regression["scenarios"] == 9
+           and regression["native_variants"] == 27
+           and regression["save_v2_variants"] == 27
+           and regression["mode_counts"] == {"active": 9, "none": 9, "reserve": 9}
+           and regression["field_tested"] is False,
+           "Regresión 27/27 o SaveV2 no verificada")
     return {"status": "PASS_ACOTADO_VERIFICADO", "cases": len(seen),
             "native_variants": len(seen) * 3, "checks": result["checks"]}
 
@@ -235,7 +264,7 @@ class W02Campaign2Contracts(unittest.TestCase):
 
     def test_no_unapproved_iteration(self):
         f = copy.deepcopy(self.fixture)
-        f["completed_iterations"] = [1, 2, 3]
+        f["completed_iterations"] = [1, 2, 3, 4]
         with self.assertRaises(ValueError): verify_fixture(f)
 
     def test_missing_scenario(self):
@@ -299,6 +328,31 @@ class W02Campaign2Contracts(unittest.TestCase):
     def test_wrong_figy_confusion_rule(self):
         f = copy.deepcopy(self.fixture)
         f["cases"][7]["disliked"] = True
+        with self.assertRaises(ValueError): verify_fixture(f)
+
+    def test_regression_cannot_drop_one_item(self):
+        f = copy.deepcopy(self.fixture)
+        del f["regression_contract"]["per_item_cases"]["figy_berry"]
+        with self.assertRaises(ValueError): verify_fixture(f)
+
+    def test_regression_cannot_hide_save_v2(self):
+        f = copy.deepcopy(self.fixture)
+        f["regression_contract"]["save_v2_required"] = False
+        with self.assertRaises(ValueError): verify_fixture(f)
+
+    def test_regression_cannot_invent_field_tests(self):
+        f = copy.deepcopy(self.fixture)
+        f["regression_contract"]["field_tested"] = True
+        with self.assertRaises(ValueError): verify_fixture(f)
+
+    def test_regression_cannot_rewrite_persim(self):
+        f = copy.deepcopy(self.fixture)
+        f["regression_contract"]["preserve_legacy_persim"] = False
+        with self.assertRaises(ValueError): verify_fixture(f)
+
+    def test_regression_cannot_change_total_variants(self):
+        f = copy.deepcopy(self.fixture)
+        f["regression_contract"]["expected_native_variants"] = 24
         with self.assertRaises(ValueError): verify_fixture(f)
 
     def test_no_evidence_traversal(self):
