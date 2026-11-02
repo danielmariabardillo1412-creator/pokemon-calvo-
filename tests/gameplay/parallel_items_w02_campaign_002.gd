@@ -91,6 +91,8 @@ func _ensayar_especial(spec: Dictionary, mode: String) -> Dictionary:
 		command = String(spec.own_choice)
 	else:
 		own.nature_id = StringName(spec.actor_nature)
+		# Restablecer paridad estricta: el motor nativo recalcula los stats de la naturaleza.
+		own.recalculate_stats(catalogs.species(own.species_id), ProgressionRuleset.new())
 		if String(spec.hp_state) == "fifth":
 			own.current_hp = maxi(1, int(floor(float(own.stats.max_hp) / 5.0)))
 		else:
