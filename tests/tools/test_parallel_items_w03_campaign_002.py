@@ -244,7 +244,7 @@ class ContratoContextoW03(unittest.TestCase):
             "func _probar_net_fallo_y_rechazos()", "func _probar_selector_y_descriptor()",
         ):
             self.assertIn(required, net)
-        self.assertIn('&"net_ball"', ids_adaptador(effects))
+        self.assertIn("net_ball", ids_adaptador(effects))
         self.assertIn('species.has_type(&"water")', effects)
         self.assertIn('species.has_type(&"bug")', effects)
         self.assertIn('3.5 if species.has_type(', effects)
