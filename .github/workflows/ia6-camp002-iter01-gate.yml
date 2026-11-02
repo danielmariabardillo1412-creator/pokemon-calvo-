@@ -1,0 +1,107 @@
+name: IA6 CAMP002 ITER01 four family gate (Godot 4.7)
+on:
+  push:
+    branches: [codex/calvo-items-20261102-ci-camp002-iter01]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ia6-camp002-iter01-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 22
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: chickensoft-games/setup-godot@v2.4.1
+        with:
+          version: 4.7.0
+          use-dotnet: false
+          include-templates: false
+      - name: Import project and prepare native simulator
+        shell: bash
+        run: |
+          set -euo pipefail
+          godot --version | grep -E '^4[.]7([.-]|$)'
+          echo "POKEMON_CALVO_NODE=$(command -v node)" >> "$GITHUB_ENV"
+          python -B tools/distribution/restore_resources.py
+          python -B tools/distribution/restore_resources.py --check
+          mkdir -p data/reports
+          cp ci/fixtures/pokeapi_reports/forms_policy_report.json data/reports/forms_policy_report.json
+          cp ci/fixtures/pokeapi_reports/unsupported_mechanics.json data/reports/unsupported_mechanics.json
+          cp ci/fixtures/pokeapi_reports/import_summary.json data/reports/import_summary.json
+          godot --headless --path . --import 2>&1 | tee camp002-import.log
+          if grep -E 'SCRIPT ERROR|Parse Error' camp002-import.log; then exit 1; fi
+          python -B tools/battle_reference/run.py --install --limit 1 2>&1 | tee camp002-native.log
+      - name: W01 - equipment matrix contract and mutation checks
+        id: w01
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tests/tools/test_parallel_items_w01_campaign_002.py --contracts 2>&1 | tee camp002-w01-contract.log
+          python -B tests/tools/test_parallel_items_w01_campaign_002.py --self-test 2>&1 | tee camp002-w01-mutations.log
+      - name: W02 - berry fixture, unittest, Godot native and receipt validation
+        id: w02
+        if: always()
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tests/tools/test_parallel_items_w02_campaign_002.py --fixture-only 2>&1 | tee camp002-w02-fixture.log
+          python -B tests/tools/test_parallel_items_w02_campaign_002.py --unittest 2>&1 | tee camp002-w02-unit.log
+          timeout 425s godot --headless --path . --script res://tests/gameplay/parallel_items_w02_campaign_002.gd 2>&1 | tee camp002-w02-godot.log
+          grep -E 'PARALLEL_ITEMS_W02_CAMP002 PASS' camp002-w02-godot.log
+          python -B tests/tools/test_parallel_items_w02_campaign_002.py --result .godot/parallel_items/w02_campaign_002/godot.json 2>&1 | tee camp002-w02-receipts.log
+      - name: W03 - capture contexts and nine negative contracts
+        id: w03
+        if: always()
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tests/tools/test_parallel_items_w03_campaign_002.py 2>&1 | tee camp002-w03-context.log
+      - name: W05 - machine sample test and real learnset report
+        id: w05
+        if: always()
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B -m unittest discover -s tests/tools -p 'test_parallel_items_w05_campaign_002.py' -v 2>&1 | tee camp002-w05-unit.log
+          python -B tests/tools/test_parallel_items_w05_campaign_002.py --report 2>&1 | tee camp002-w05-report.log
+      - name: Four family verdict - no false green
+        if: always()
+        shell: bash
+        env:
+          W01: ${{ steps.w01.outcome }}
+          W02: ${{ steps.w02.outcome }}
+          W03: ${{ steps.w03.outcome }}
+          W05: ${{ steps.w05.outcome }}
+        run: |
+          set -euo pipefail
+          failed=0
+          for family in W01 W02 W03 W05; do
+            result="${!family}"
+            echo "$family=$result"
+            if [ "$result" != success ]; then failed=1; fi
+          done
+          exit "$failed"
+      - name: Preserve exact SHA evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: camp002-iter01-${{ github.run_id }}
+          retention-days: 7
+          if-no-files-found: ignore
+          path: camp002-*.log
