@@ -6,7 +6,7 @@
 
 **IA5 tercera iteración VERIFICADA:** [staging #41364434498](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41364434498) y [CI sobre integración árbitra #41364601482](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41364601482), ambas `completed/success`; Godot 4.7 **1083 comprobaciones/0 errores**, Python 14 tests, mapa 248=229 activas SV+19 heredadas rechazadas. W05 test integrado commit `a8e09dbf`, mismo blob, sin editar `FieldItemService.teach`.
 
-**Regresión general histórica** [#41364601486](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41364601486): ejecución pendiente al redactar esta actualización; comprobar antes de certificar la batería anterior. Visual/GPU, interfaz real y modelos de libro siguen sin validar.
+**Regresión general histórica** [#41364601486](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41364601486): **completed/success** sobre SHA integrado `a8e09dbf8b15c61f1b18207d34548ff8a7ca46e4`, con W01–W04 y veredicto consolidado PASS. CI específica W03/W05 [#41364601482](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41364601482) también PASS en el mismo SHA. Visual/GPU, interfaz real y modelos de libro siguen sin validar.
 
 ---
 
