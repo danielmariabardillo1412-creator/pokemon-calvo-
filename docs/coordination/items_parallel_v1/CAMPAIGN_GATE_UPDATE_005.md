@@ -20,7 +20,7 @@
 - Producción `FieldItemService.teach()` **NO se cambió**. Cobertura real de tm01/tm02/tm77, PP y movimiento, propiedad, consumo 2→1, rechazo atómico, guardado/carga de prueba, y 19 IDs históricos sin activar. No asegura 229 rutas de enseñanza con todas las especies.
 - Integra ese mismo blob de la suite W05 en la rama árbitra commit `a8e09dbf8b15c61f1b18207d34548ff8a7ca46e4`, con actualización de la CI permanente para exigir `CAMP_001/03` en lugar de `CAMP_001/01`. Acta [integration/CAMP_001_W05_ITER03.md](integration/CAMP_001_W05_ITER03.md).
 - La nueva CI sobre **ese mismo commit integrado** [#41364601482](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41364601482) concluyó `completed/success` (suites W03/W05 independientes).
-- La regresión histórica simultánea [#41364601486](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41364601486) sigue **pendiente** de veredicto cuando se escribe esta puerta; verificar al reabrir auditoría y no inventar PASS.
+- La regresión histórica simultánea [#41364601486](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41364601486) finalizó **completed/success** sobre SHA integrado `a8e09dbf8b15c61f1b18207d34548ff8a7ca46e4`: W01, W02, W03, W04 y puerta global PASS. Esto verifica el harness histórico; la CI directa #41364601482 verifica W03/W05.
 
 ## Política de cierre
 - **Nadie** debe recibir una `p` para CAMPAÑA_001: W01/02/03/05 por agotamiento 03/03, W04 por congelación de la persona usuaria.
