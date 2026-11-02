@@ -1,0 +1,2 @@
+microbloque,ids,casos,pares_caso_semilla,variantes,estado,validacion_estatica,python,godot,artefactos,sha_pruebas,proximo
+01,"ability_shield;absorb_bulb;adrenaline_orb",7,10,30,PREPARADO_PENDIENTE_CI,PASS_16_INVARIANTES,SIN_EJECUTAR,SIN_EJECUTAR,"tests/fixtures/parallel_items/w01_campaign_002.json;tests/tools/test_parallel_items_w01_campaign_002.py",c2451f93a839c9e6e9b6058e3765da0a68f400b3,ITER_02_RUNNER_GODOT
