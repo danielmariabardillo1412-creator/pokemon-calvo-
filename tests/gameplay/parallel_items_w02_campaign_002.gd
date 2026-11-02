@@ -109,6 +109,11 @@ func _ensayar_especial(spec: Dictionary, mode: String) -> Dictionary:
 	check(mode + " stock antes combate", _units(player, item) == 2)
 	var battle := RivalControlado.new(catalogs, player, automation.format)
 	var opened: bool = await battle.begin_wild(self, foe, automation.seed)
+	if not opened:
+		print("IA6_W02_START_DIAG scenario=", String(spec.scenario), " mode=", mode,
+			" nature=", String(own.nature_id), " level=", own.level,
+			" status=", String(own.status_state.persistent_id),
+			" hp=", own.current_hp, " error=", battle.last_error)
 	check(mode + " inicia combate", opened)
 	if not opened:
 		await battle.close()
