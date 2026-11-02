@@ -268,7 +268,10 @@ func _regresion_cuatro_bayas(rows: Array) -> Dictionary:
 		"leppa_berry": 2, "figy_berry": 3}
 	var count: Dictionary = {"active": 0, "none": 0, "reserve": 0}
 	var good: bool = scope.expected_scenarios == 9 and scope.expected_native_variants == 27
-	good = good and scope.per_item_cases == expected
+	var counts_correct: bool = scope.per_item_cases.size() == expected.size()
+	for id: String in expected:
+		counts_correct = counts_correct and float(scope.per_item_cases.get(id, -1)) == float(expected[id])
+	good = good and counts_correct
 	good = good and scope.expected_owners == ["active", "none", "reserve"]
 	good = good and scope.save_v2_required and scope.single_consumption_required
 	good = good and not scope.field_tested and scope.preserve_legacy_persim
