@@ -1,3 +1,5 @@
+> **DOCUMENTO HISTÓRICO SUPERADO (2026-11-02):** la persona usuaria autorizó CAMPAÑA_002 y la puerta oficial está [ACTIVADA en CAMPAIGN_GATE_002.md](CAMPAIGN_GATE_002.md). Las asignaciones reales están en [CAMPAIGN_002_BRANCH_MANIFEST.md](CAMPAIGN_002_BRANCH_MANIFEST.md). La expresión «NO ACTIVADA» de este borrador describe únicamente su estado previo y **ya no es vigente**. No usar el borrador como orden operativa.
+
 # PRETRIAJE CAMPAÑA_002 — PROPUESTA NO ACTIVADA (IA6, 2026-11-02)
 
 > **Estado: BORRADOR_SIN_AUTORIZACION.** Documento de análisis, no gate ni encargo. NO enviar `p` por esta propuesta, no crear ramas de trabajo, no implementar ni cambiar pruebas, no asignar una campaña 002. Requiere permiso nuevo de la persona usuaria y comprobación de HEAD/CI antes de activar.
