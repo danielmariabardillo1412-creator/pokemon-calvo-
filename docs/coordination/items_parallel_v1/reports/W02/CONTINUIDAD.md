@@ -1,8 +1,27 @@
+> **CIERRE ACTUAL W02:** CAMPAÑA_002 03/03 `CAMPAÑA_002_FINALIZADA`. La nota de IA6 que sigue fue emitida cuando ITER_03 todavía estaba pendiente; **no ejecutar más bloques con `p`**. Confirmar último run automático del SHA nuevo antes de certificar funcionamiento.
+
 > **INSTRUCCIÓN VIGENTE IA6 — CI AUTOMÁTICA V3 (2026-11-02):** el estado histórico `PREPARADO_PENDIENTE_CI` o `STOP HASTA IA6` que aparece más abajo **ya no exige detenerse solo por esperar pruebas**. Lee en rama `codex/calvo-items-20261101-arbitro` [CI_AUTOPILOT_V3.md](../../CI_AUTOPILOT_V3.md) y `CAMPAIGN_GATE_002.md`: se ha instalado el workflow `.github/workflows/parallel-camp002-worker-autoci.yml` **en esta misma rama**; la primera ejecución propia [#41539808520](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41539808520) terminó `completed/success`. **Siguiente `p` ejecuta exclusivamente ITER_03 de CAMP_002** tras comprobar que no exista un FAIL más reciente. Cambios de tests disparan CI sin intervención de IA6; commits solo de informes NO la disparan. Si la nueva CI está `queued/in_progress`, puedes preparar hasta un bloque posterior ya autorizado sin declarar PASS ni borrar tests previos; un FAIL real exige reparar tu prueba en tus rutas exclusivas o STOP ante defecto funcional. **En ITER_03, publicar y STOP sin iniciar ITER_04/CAMP_003.** IA6 ya sincronizó el runner corregido de números JSON/estadísticas Figy; no repetir parche. No tocar `main`, V28, otras ramas ni producción.
 
 # W02 / IA2 — Cuaderno de continuidad (bayas y consumo)
 
-## ESTADO VIGENTE — CAMPAÑA_002, ITER_02/03
+## ESTADO FINAL — CAMPAÑA_002_FINALIZADA / 03 DE 03
+
+- **Rama única:** `codex/calvo-items-20261102-w02-camp002`; **IA2/W02 STOP**, tres bloques entregados; una `p` posterior NO autoriza ITER_04 ni CAMP_003.
+- **Autoridad:** `CI_AUTOPILOT_V3.md` + `CAMPAIGN_GATE_002.md` + `campaigns/CAMP_002_W02.md` (blob `8e52a9f9e740eaee6210494ffaa764ce1ad9c644`). IA6 conserva coordinación y revisión de fallos.
+- **CI previa PASS confirmado:** [W02 #41539808520](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41539808520) `completed/success` SHA `6373ea47cac3069b120e9e2102f49d100ea14698`, no incluye el nuevo contrato de ITER_03.
+- **ITER_03:** 9 escenarios originales conservados, 4 bayas exactas (`sitrus_berry`, `lum_berry`, `leppa_berry`, `figy_berry`), 27 variantes nativas (9×3) con dueño, consumo único, FLED, SaveV2. SHA-256 del fixture comparado con Python y 22 pruebas unitarias definidas. `regression_contract` obliga matriz de IDs, 27 guardados y cero pruebas de campo inventadas.
+- **Archivos finales:** `tests/fixtures/parallel_items/w02_campaign_002.json` blob `767b5998483e9710c1e9c6d1aacb0b2375f35e6c`; `tests/gameplay/parallel_items_w02_campaign_002.gd` blob `67d2d0b79568e31eca24fb2d70aab3de5f156106`; `tests/tools/test_parallel_items_w02_campaign_002.py` blob `a3fe65ae70eeeb201a58c7918de30e4db8414346`.
+- **Última inspección** 24/24 comprobaciones estáticas PASS; **CI del nuevo SHA aún sin confirmación**. Workflow de Actions propio `.github/workflows/parallel-camp002-worker-autoci.yml` se dispara tras escritura de pruebas. Las declaraciones de `PASS` se vinculan siempre al SHA real del run; estático no implica ejecución.
+- **Entregables:** [ITER_01](./CAMP_002_ITER_01.md), [ITER_02](./CAMP_002_ITER_02.md), [ITER_03](./CAMP_002_ITER_03.md), [FINAL](./CAMP_002_FINAL.md), [CSV](./CAMP_002_PROGRESO.csv) (3 filas). El historial anterior y Persim de CAMP_001 no se reescribieron.
+- **Brechas:** no se probaron mochila/campo, interfaz, GPU ni otros formatos; Figy no consta en perfil de recuperación de campo. No inventar efecto nuevo. Se preserva corrección de stats por naturaleza de IA6 y comparación numérica de JSON.
+- **IA6 a continuación:** verificar el último workflow del SHA actual (Godot import, 9 casos, Python 22, 27 recibos SaveV2), atender cualquier FAIL antes de certificar/promover. No modificar producción ni `main`, V28, PR #118, otras ramas o workflows.
+- **Estado administrativo:** `CAMPAÑA_002_FINALIZADA`; estado funcional `PENDIENTE_CI_FINAL` hasta ejecución verificable.
+
+---
+
+
+
+## HISTÓRICO — estado al terminar ITER_02/03
 
 - **Identidad/rama:** IA2/W02, `codex/calvo-items-20261102-w02-camp002`; **ITER_01 e ITER_02 publicadas**, ITER_03 pendiente de la siguiente `p`. Estado global `PREPARADO_PENDIENTE_CI` para ITER_02.
 - **Autoridad:** IA6, `campaigns/CAMP_002_W02.md` blob `8e52a9f9e740eaee6210494ffaa764ce1ad9c644`; puerta actual `CAMPAIGN_GATE_002.md` con añadido obligatorio de [CAMPAIGN_002_ITER01_CI_GATE.md](../../CAMPAIGN_002_ITER01_CI_GATE.md) blob `12e9c3021e80f9e03e0f9b0e900853b9a7e6a513`.
