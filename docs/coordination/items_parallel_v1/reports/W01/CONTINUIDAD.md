@@ -1,5 +1,22 @@
 # W01 — CUADERNO DE CONTINUIDAD
 
+
+## ACTUALIZACIÓN VIGENTE — CAMPAÑA_002 ITER_02 (2026-11-02)
+
+**IA1/W01; rama exclusiva `codex/calvo-items-20261102-w01-camp002`**. Autoridad de IA6: `CAMPAIGN_GATE_002.md` (ACTIVADA), `CAMPAIGN_002_ITER01_CI_GATE.md` blob `12e9c3021e80f9e03e0f9b0e900853b9a7e6a513`, y `campaigns/CAMP_002_W01.md` blob `6ef97f3c0569c96138cb8c322069384e124e5c79`. Solo IDs `ability_shield`, `absorb_bulb`, `adrenaline_orb`. **02/03 microbloques entregados. No ejecutar tercero sin nuevo `p`.**
+
+- **ITER_01 comprobada:** IA6 ejecutó validador de contratos Python (7 escenarios, 10 pares/30 variantes, seis negativos rechazados) sobre staging SHA `967002fcbf26a1159d3a14a020e8921b34cfab8f`; CI [#41484879741](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41484879741) `completed/success`. Ese resultado **NO incluía** runner Godot W01.
+- **ITER_02 publicada:** runner `tests/gameplay/parallel_items_w01_campaign_002.gd` commit `b34e954a7e9a601432d23c470b50607920afec5e`, blob `68b73dd62b0250b5bdbdebdf44c97cd4649a2487`; validador `tests/tools/test_parallel_items_w01_campaign_002.py` extendido con `--native`, commit `b22ff7136b368171c003ef6d0571de964b8e529c`, blob `a6492e1f9f8fa6928af5601a0633f6e830b0238e`. Fixture de ITER_01 sin modificar blob `74c91b2cfb69d7525ee4d42cc1e57f442c4a808d`.
+- **Cobertura de efectos prevista:** Escudo Habilidad `gastro_acid` frente a `synchronize` (protección en slot activo, control sin escudo o en reserva); Tubérculo `water_gun` (+1 `spa` y consumo) frente a golpe Normal/sin golpe; Nerviosfera `intimidate` de Gyarados (+1 `spe` y consumo al entrar) frente a ausencia de Intimidate. Por cada escenario, tres modos `active/none/reserve`; dos semillas 19 y 23 en cada disparador positivo.
+- **Camino técnico, solo tests:** catálogo seleccionado → `FieldItemService.equip` mediante `_fixture` V28 → `Native.begin_wild/submit` sobre `@pkmn/sim@0.10.11` → snapshots y `_checkpoint.roster` nativo (volátiles, stats, consumo) → recibos JSON con SHA-256 → validador Python `--native` obligatorio para declarar PASS. **No se han programado hooks** y no se ha modificado simulador, guardado ni UI.
+- **Evidencia y límites:** comprobación estructural desde GitHub de **20/20 invariantes PASS** (scripts/fixture, callbacks observados, escenario positivo/negativo, seed, hashes); **nueva ejecución de Python y Godot SIN_EJECUTAR**, **GPU/visual SIN_EJECUTAR**, validación SaveV2 tras turno **PENDIENTE ITER_03**. Estado de ITER_02 `PREPARADO_PENDIENTE_CI`, no `FUNCIONAL_PASS`. IA6 gestiona una CI integrada por paquete.
+- **Informes actualizados:** `reports/W01/CAMP_002_ITER_01.md` histórico, `CAMP_002_ITER_02.md` nuevo y `CAMP_002_PROGRESO.csv` con 02/03. Los reportes de CAMPAÑA_001 permanecen en ramas antiguas y **NO se copiaron ni modificaron**.
+- **Siguiente operación autorizable:** tras próximo `p`, leer gate/encargo/CSV y **si no existe FAIL**, ITER_03 exclusivamente: revisar persistencia/restauración SaveV2, matriz causal por ID, recibos SHA, informe final y STOP. Si la CI detecta error de parseo, proyección o efecto, parar y pasar solicitud a IA6; no suprimir aserciones ni tocar producción.
+- **PROHIBIDO:** rama `codex/calvo-items-20261101-w01`, W04 congelada, cualquier otra W, `main`, V28, `modules/`, `data/`, `.github/`, guardados, reglas Mega y política del juego.
+
+---
+
+
 ## ESTADO VIGENTE — IA1/W01 — CAMPAÑA_002 (2026-11-02)
 
 **ÚLTIMA ORDEN OFICIAL:** IA6 `CAMPAIGN_GATE_002.md`, blob `ebc787803599e2b13cbd24c169b69112d18f7a42`; `CAMPAIGN_002_BRANCH_MANIFEST.md`, blob `bb9471862d3116b982f90e1867d512e278f801e0`; encargo `campaigns/CAMP_002_W01.md`, blob `6ef97f3c0569c96138cb8c322069384e124e5c79`. **Identidad W01**, familia equipables, exclusivamente IDs `ability_shield`, `absorb_bulb`, `adrenaline_orb`.
