@@ -170,6 +170,54 @@ class ContratoContextoW03(unittest.TestCase):
         self.assertIn("BallEffects.multiplier(", system)
 
 
+    def test_10_referencia_essentials_fijada_sin_activacion(self) -> None:
+        referencia = self.matriz["reference_profile"]
+        self.assertEqual(referencia["commit"], "8c5911e4a4b07b07e832e4bb0d5d8859e88b4a9b")
+        self.assertEqual(referencia["source_blob_sha"], "3deb95a4d4a38e51bf6950a4702f73e06a806c6f")
+        self.assertEqual(referencia["settings_blob_sha"], "550a358751fba061adf3978460382de3dc3ab556")
+        self.assertEqual(referencia["modern_generation_minimum"], 7)
+        self.assertIn("MECHANICS_GENERATION >= 7", referencia["generation_switch"])
+        expected = {
+            "dusk_ball": ("battle.time == 2", 3.0, 3.5),
+            "repeat_ball": ("battle.pbPlayer.owned?(battler.species)", 3.5, 3.0),
+            "dive_ball": ("battle.environment == :Underwater", 3.5, 3.5),
+        }
+        for item in self.matriz["records"]:
+            with self.subTest(id=item["id"]):
+                rule = item["pinned_reference"]
+                match, modern, old = expected[item["id"]]
+                self.assertEqual(rule["trigger_code"], match)
+                self.assertEqual(rule["multiplier_gen7_plus"], modern)
+                self.assertEqual(rule["multiplier_before_gen7"], old)
+                self.assertEqual(rule["nontrigger_multiplier"], 1.0)
+                self.assertFalse(item["functional_implementation_authorized"])
+                self.assertEqual(item["current_expected_status"], "unknown_ball")
+        self.assertEqual(self.matriz["phase_02"]["status"], "NEGATIVE_CHARACTERIZATION_ONLY")
+
+    def test_11_godot_rechazos_sin_factores_ni_contexto_inventado(self) -> None:
+        ruta = "tests/gameplay/parallel_items_w03_campaign_002.gd"
+        self.assertEqual(self.matriz["phase_02"]["godot_path"], ruta)
+        codigo = self.leer(ruta)
+        for marca in (
+            'CaptureRuleset.new()', 'CaptureRuleset.ordered_ball_ids()',
+            'CaptureSystem.validate_attempt(', 'CaptureInventoryService.resolve(',
+            'unknown_ball', 'CaptureResult.INVALID', 'not resultado.result.consume_item',
+            'mochila.to_dict() == antes_mochila', 'rng.state == antes_rng',
+            'objetivo.to_dict() == antes_objetivo', 'equipo.is_empty()',
+            'trainer_battle_not_capturable', 'battle_finished', 'target_knocked_out',
+            'new_balls_functional": false', 'NEGATIVE_CURRENT_BEHAVIOR_ONLY',
+        ):
+            with self.subTest(marca=marca):
+                self.assertIn(marca, codigo)
+        for prohibido in (
+            "contexto.is_night", "contexto.is_cave", "contexto.is_underwater",
+            "contexto.already_caught", 'multiplier(&"dusk_ball"',
+            'multiplier(&"repeat_ball"', 'multiplier(&"dive_ball"',
+        ):
+            self.assertNotIn(prohibido, codigo)
+
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--root", type=Path, default=Path(__file__).resolve().parents[2])
