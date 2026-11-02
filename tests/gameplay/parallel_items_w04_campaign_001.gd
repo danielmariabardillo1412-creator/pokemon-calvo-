@@ -283,6 +283,100 @@ func comprobar_especie_erronea() -> void:
 			not respuesta.get("accepted", false) and respuesta.get("reason", "") == "no_eligible_evolution"
 			and instantanea(propietario) == antes)
 
+
+# ITER_03: cada piedra, en equipo y PC, pasa por SaveV2 en un fichero
+# aislado. No se reutilizan partidas reales ni se altera producción.
+const PIEDRAS_03 := [
+	{"objeto": "fire_stone", "origen": "eevee"},
+	{"objeto": "water_stone", "origen": "eevee"},
+	{"objeto": "thunder_stone", "origen": "eevee"},
+	{"objeto": "leaf_stone", "origen": "eevee"},
+	{"objeto": "ice_stone", "origen": "eevee"},
+	{"objeto": "moon_stone", "origen": "clefairy"},
+]
+
+func caso_guardado_v2(fila: Dictionary, en_pc: bool) -> void:
+	var objeto := StringName(fila.objeto)
+	var origen := StringName(fila.origen)
+	var lugar := &"STORAGE" if en_pc else &"PARTY"
+	var etiqueta := "savev2/" + String(objeto) + "/" + String(lugar) + "/"
+	var servicio := iniciar(origen)
+	if servicio == null:
+		comprobar(etiqueta + "preparacion", false)
+		return
+	var dueno: PlayerCollection = servicio.owner
+	if en_pc:
+		comprobar(etiqueta + "deposito", dueno.deposit(ID) and dueno.location_of(ID) == lugar)
+	var opciones: Array[StringName] = servicio.evolution_options(objeto, ID)
+	comprobar(etiqueta + "una_opcion", opciones.size() == 1)
+	if opciones.size() != 1:
+		return
+	var destino: StringName = opciones[0]
+	var anterior: CreatureInstance = dueno.owned_creature(ID)
+	var ivs: Dictionary = anterior.ivs.duplicate(true)
+	var evs: Dictionary = anterior.evs.duplicate(true)
+	var movimientos: Array = anterior.move_ids.duplicate()
+	var experiencia := anterior.experience
+	var amistad := anterior.friendship
+	comprobar(etiqueta + "stock_2", dueno.inventory.add(objeto, 2))
+	var estado_previo := instantanea(dueno)
+	var ajeno: Dictionary = servicio.evolve(objeto, &"id_ajeno", destino)
+	comprobar(etiqueta + "rechazo_ajeno", not ajeno.get("accepted", false) and instantanea(dueno) == estado_previo)
+	var invalido: Dictionary = servicio.evolve(objeto, ID, &"mewtwo")
+	comprobar(etiqueta + "rechazo_destino", not invalido.get("accepted", false) and instantanea(dueno) == estado_previo)
+	var resultado: Dictionary = servicio.evolve(objeto, ID, destino)
+	comprobar(etiqueta + "evolucion_un_consumo", resultado.get("accepted", false)
+		and dueno.inventory.quantity(objeto) == 1)
+	var evolucionado: CreatureInstance = dueno.owned_creature(ID)
+	comprobar(etiqueta + "identidad", evolucionado != null
+		and evolucionado.instance_id == ID and evolucionado.species_id == destino
+		and dueno.location_of(ID) == lugar)
+	if evolucionado != null:
+		comprobar(etiqueta + "atributos", evolucionado.ivs == ivs and evolucionado.evs == evs
+			and evolucionado.move_ids == movimientos and evolucionado.experience == experiencia
+			and evolucionado.friendship == amistad)
+	var despues := instantanea(dueno)
+	var repetido: Dictionary = servicio.evolve(objeto, ID, destino)
+	comprobar(etiqueta + "no_segundo_gasto", not repetido.get("accepted", false)
+		and instantanea(dueno) == despues)
+	var repositorio := SaveGameRepository.new()
+	var ruta := "user://w04_camp001_iter03_" + String(objeto) + ("_pc" if en_pc else "_party") + ".json"
+	var guardado: SaveResult = repositorio.save_collection(ruta, dueno)
+	comprobar(etiqueta + "save_v2", guardado.ok)
+	if guardado.ok:
+		var cargado: LoadResult = repositorio.load(ruta)
+		comprobar(etiqueta + "load_v2", cargado.ok and cargado.schema_version == 2
+			and cargado.migrated_from_version == 0)
+		if cargado.ok:
+			var restaurado := PlayerCollection.new()
+			restaurado.party = cargado.party
+			restaurado.storage = cargado.storage
+			restaurado.inventory = cargado.inventory
+			var criatura: CreatureInstance = restaurado.owned_creature(ID)
+			comprobar(etiqueta + "snapshot_idempotente", instantanea(restaurado) == despues)
+			comprobar(etiqueta + "localizacion", restaurado.location_of(ID) == lugar)
+			comprobar(etiqueta + "inventario_un_consumo", restaurado.inventory.quantity(objeto) == 1)
+			comprobar(etiqueta + "pokemon_conservado", criatura != null
+				and criatura.instance_id == ID and criatura.species_id == destino)
+			if criatura != null:
+				comprobar(etiqueta + "iv_ev_movimientos_xp_amistad", criatura.ivs == ivs
+					and criatura.evs == evs and criatura.move_ids == movimientos
+					and criatura.experience == experiencia and criatura.friendship == amistad)
+			var servicio_recargado := Servicio.new()
+			comprobar(etiqueta + "configuracion_recargada",
+				servicio_recargado.configure(restaurado, catalogos, func(): return true))
+			var antes_rechazo := instantanea(restaurado)
+			var segundo: Dictionary = servicio_recargado.evolve(objeto, ID, destino)
+			comprobar(etiqueta + "rechazo_tras_load", not segundo.get("accepted", false)
+				and instantanea(restaurado) == antes_rechazo
+				and restaurado.inventory.quantity(objeto) == 1)
+	DirAccess.remove_absolute(ProjectSettings.globalize_path(ruta))
+	resultados_guardado.append({"item_id": String(objeto), "source": String(origen),
+		"location": String(lugar), "target_from_catalog": String(destino),
+		"status": "ASSERTED"})
+
+var resultados_guardado: Array[Dictionary] = []
+
 func _ejecutar() -> void:
 	var datos: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://data/normalized/pokemon_api.json"))
 	if not datos is Dictionary:
@@ -297,6 +391,9 @@ func _ejecutar() -> void:
 		caso_secundario(fila)
 	comprobar_forma_condicionada()
 	comprobar_especie_erronea()
+	for fila: Dictionary in PIEDRAS_03:
+		caso_guardado_v2(fila, false)
+		caso_guardado_v2(fila, true)
 	finalizar()
 
 
@@ -305,7 +402,8 @@ func finalizar() -> void:
 		return
 	cerrado = true
 	var reporte := {"status": "PASS" if errores.is_empty() else "FAIL",
-		"iteration": 2, "checks": pruebas, "cases": resultados.size(),
-		"results": resultados, "errors": errores, "scope": "W04_CAMP_001_STONES_02"}
+		"iteration": 3, "checks": pruebas, "cases": resultados.size(),
+		"save_cases": resultados_guardado.size(), "save_results": resultados_guardado,
+		"results": resultados, "errors": errores, "scope": "W04_CAMP_001_STONES_SAVEV2_03"}
 	print("PARALLEL_ITEMS_W04_CAMPAIGN_001 ", JSON.stringify(reporte))
 	quit(0 if errores.is_empty() else 1)
