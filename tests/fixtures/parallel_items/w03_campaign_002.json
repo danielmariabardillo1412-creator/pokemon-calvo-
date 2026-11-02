@@ -44,7 +44,18 @@
         "is_dark",
         "darkness",
         "time_of_day"
-      ]
+      ],
+      "pinned_reference": {
+        "line_first": 85,
+        "line_last": 89,
+        "trigger_code": "battle.time == 2",
+        "canonical_condition": "night_or_cave",
+        "multiplier_gen7_plus": 3,
+        "multiplier_before_gen7": 3.5,
+        "nontrigger_multiplier": 1
+      },
+      "current_expected_status": "unknown_ball",
+      "functional_implementation_authorized": false
     },
     {
       "id": "repeat_ball",
@@ -73,7 +84,18 @@
         "caught_species_ids",
         "pokedex_registered",
         "species_registered"
-      ]
+      ],
+      "pinned_reference": {
+        "line_first": 73,
+        "line_last": 77,
+        "trigger_code": "battle.pbPlayer.owned?(battler.species)",
+        "canonical_condition": "species_previously_owned_recorded",
+        "multiplier_gen7_plus": 3.5,
+        "multiplier_before_gen7": 3,
+        "nontrigger_multiplier": 1
+      },
+      "current_expected_status": "unknown_ball",
+      "functional_implementation_authorized": false
     },
     {
       "id": "dive_ball",
@@ -101,7 +123,18 @@
         "diving",
         "capture_underwater",
         "underwater_encounter"
-      ]
+      ],
+      "pinned_reference": {
+        "line_first": 61,
+        "line_last": 64,
+        "trigger_code": "battle.environment == :Underwater",
+        "canonical_condition": "underwater_battle_environment",
+        "multiplier_gen7_plus": 3.5,
+        "multiplier_before_gen7": 3.5,
+        "nontrigger_multiplier": 1
+      },
+      "current_expected_status": "unknown_ball",
+      "functional_implementation_authorized": false
     }
   ],
   "policy": {
@@ -111,5 +144,31 @@
     "no_fake_rng_or_clock": true,
     "multiplier_at_this_phase": null,
     "source_of_truth": "live trusted battle session, canonical save ownership after explicitly authorized schema"
+  },
+  "reference_profile": {
+    "source": "Pokemon Essentials / Maruno17, referencia fijada por V11/V12/V15",
+    "commit": "8c5911e4a4b07b07e832e4bb0d5d8859e88b4a9b",
+    "path": "Data/Scripts/011_Battle/007_Other battle code/010_Battle_PokeBallEffects.rb",
+    "source_blob_sha": "3deb95a4d4a38e51bf6950a4702f73e06a806c6f",
+    "settings_path": "Data/Scripts/002_BattleSettings.rb",
+    "settings_blob_sha": "550a358751fba061adf3978460382de3dc3ab556",
+    "generation_switch": "NEW_POKE_BALL_CATCH_RATES = (MECHANICS_GENERATION >= 7)",
+    "modern_generation_minimum": 7,
+    "notes": "Solo evidencia normativa; no introduce factores en motores ni contexto nuevo."
+  },
+  "phase_02": {
+    "status": "NEGATIVE_CHARACTERIZATION_ONLY",
+    "godot_path": "tests/gameplay/parallel_items_w03_campaign_002.gd",
+    "checks": [
+      "unknown_ball_on_valid_attempt",
+      "no_ball_consumed",
+      "no_capture_rng_advanced",
+      "no_creature_mutation",
+      "no_party_mutation",
+      "trainer_and_finished_rejections_preserved",
+      "net_ball_remains_registered"
+    ],
+    "positive_test_policy": "No positive case can be exercised without trusted context; do not inject made-up fields.",
+    "repro": "godot --headless --path . --script tests/gameplay/parallel_items_w03_campaign_002.gd"
   }
 }

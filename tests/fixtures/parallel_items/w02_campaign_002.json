@@ -3,7 +3,8 @@
   "campaign": "CAMP_002",
   "worker": "W02",
   "completed_iterations": [
-    1
+    1,
+    2
   ],
   "family": "held_berry_revalidation",
   "format": "gen9calvounifiedv1",
@@ -21,9 +22,11 @@
   ],
   "item_ids": [
     "sitrus_berry",
-    "lum_berry"
+    "lum_berry",
+    "leppa_berry",
+    "figy_berry"
   ],
-  "field_scope": "NOT_TESTED_ITER_01",
+  "field_scope": "NOT_TESTED_ITER_02",
   "cases": [
     {
       "id": "sitrus_berry",
@@ -56,6 +59,72 @@
       "actor_species": "mew",
       "foe_move": "amnesia",
       "consumes": false
+    },
+    {
+      "id": "leppa_berry",
+      "scenario": "leppa_zero_pp_c002",
+      "kind": "pp_empty",
+      "actor_species": "mew",
+      "foe_move": "amnesia",
+      "consumes": true,
+      "own_moves": [
+        "tackle",
+        "reflect"
+      ],
+      "own_choice": "move 2",
+      "first_move_pp": 0,
+      "pp_restore": 10
+    },
+    {
+      "id": "leppa_berry",
+      "scenario": "leppa_one_pp_c002",
+      "kind": "pp_nonempty",
+      "actor_species": "mew",
+      "foe_move": "amnesia",
+      "consumes": false,
+      "own_moves": [
+        "tackle",
+        "reflect"
+      ],
+      "own_choice": "move 2",
+      "first_move_pp": 1,
+      "pp_restore": 0
+    },
+    {
+      "id": "figy_berry",
+      "scenario": "figy_modest_low_c002",
+      "kind": "figy_disliked",
+      "actor_species": "mew",
+      "foe_move": "amnesia",
+      "consumes": true,
+      "actor_nature": "modest",
+      "hp_state": "fifth",
+      "disliked": true,
+      "heal_denominator": 3
+    },
+    {
+      "id": "figy_berry",
+      "scenario": "figy_hardy_low_c002",
+      "kind": "figy_neutral",
+      "actor_species": "mew",
+      "foe_move": "amnesia",
+      "consumes": true,
+      "actor_nature": "hardy",
+      "hp_state": "fifth",
+      "disliked": false,
+      "heal_denominator": 3
+    },
+    {
+      "id": "figy_berry",
+      "scenario": "figy_modest_high_c002",
+      "kind": "figy_high_hp",
+      "actor_species": "mew",
+      "foe_move": "amnesia",
+      "consumes": false,
+      "actor_nature": "modest",
+      "hp_state": "near_full",
+      "disliked": true,
+      "heal_denominator": 3
     }
   ],
   "coverage_matrix": {
@@ -78,7 +147,28 @@
       ],
       "effect": "persistent_status_all",
       "field_profile": "PRESENT_NOT_TESTED"
+    },
+    "leppa_berry": {
+      "positive": [
+        "leppa_zero_pp_c002"
+      ],
+      "negative": [
+        "leppa_one_pp_c002"
+      ],
+      "effect": "restore_10_first_move_when_zero_pp",
+      "field_profile": "PRESENT_NOT_TESTED"
+    },
+    "figy_berry": {
+      "positive": [
+        "figy_modest_low_c002",
+        "figy_hardy_low_c002"
+      ],
+      "negative": [
+        "figy_modest_high_c002"
+      ],
+      "effect": "third_hp_low_disliked_spicy_confusion",
+      "field_profile": "NOT_REGISTERED"
     }
   },
-  "note": "ITER_01: ensayos solo sobre equipables reales @pkmn/sim; cada caso se ejecuta active/none/reserve con cierre FLED, restauracion SaveV2 y hash SHA256. Sitrus y Lum tienen perfil de campo existente pero NO se prueba en esta iteracion. No confundir seleccion con implementacion nueva."
+  "note": "CAMP_002 ITER_01+ITER_02: nueve casos, cuatro IDs; tres equipamientos por caso. Leppa PP0 repone +10 al primer movimiento sin usar, PP1 no dispara. Figy umbral bajo y naturaleza modest/hardy segun held_pilot; 1/3 HP y confusion solo si sabor no gusta, observado en log nativo. Campo existente para tres IDs pero no probado; Figy no tiene perfil de campo. Sin PASS nuevo hasta CI."
 }
