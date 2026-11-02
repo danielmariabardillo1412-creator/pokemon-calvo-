@@ -29,7 +29,11 @@ func _run_c002() -> void:
 	check("formato nativo fijado", String(automation.format) == "gen9calvounifiedv1")
 	check("alcance exclusivo de ITER_01",
 		automation.item_ids == ["sitrus_berry", "lum_berry"]
-		and automation.completed_iterations == [1] and automation.cases.size() == 4)
+		and automation.completed_iterations is Array
+		and automation.completed_iterations.size() == 1
+		and (automation.completed_iterations[0] is int or automation.completed_iterations[0] is float)
+		and float(automation.completed_iterations[0]) == 1.0
+		and automation.cases.size() == 4)
 	check("modos de propiedad", automation.variants == ["active", "none", "reserve"])
 	check("campo no ejecutado en este bloque", automation.field_scope == "NOT_TESTED_ITER_01")
 	var expected_seed: Array = [23, 19, 29, 43]
