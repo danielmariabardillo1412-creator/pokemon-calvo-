@@ -1,5 +1,23 @@
 # W01 — CUADERNO DE CONTINUIDAD
 
+## ESTADO VIGENTE — IA1/W01 — CAMPAÑA_002 (2026-11-02)
+
+**ÚLTIMA ORDEN OFICIAL:** IA6 `CAMPAIGN_GATE_002.md`, blob `ebc787803599e2b13cbd24c169b69112d18f7a42`; `CAMPAIGN_002_BRANCH_MANIFEST.md`, blob `bb9471862d3116b982f90e1867d512e278f801e0`; encargo `campaigns/CAMP_002_W01.md`, blob `6ef97f3c0569c96138cb8c322069384e124e5c79`. **Identidad W01**, familia equipables, exclusivamente IDs `ability_shield`, `absorb_bulb`, `adrenaline_orb`.
+
+**NUEVA rama exclusiva:** `codex/calvo-items-20261102-w01-camp002`; nacida exactamente desde `67959eb8f19abfd2ae391872747a14f603fcab01`. **PROHIBIDO** fusionar o reescribir ramas de CAMPAÑA_001; el material antiguo debajo es historia previa, no autoridad vigente. IA4/W04 congelada.
+
+**Progreso de campaña nueva:** ITER_01 de 03 **PREPARADO_PENDIENTE_CI**, ITER_02/ITER_03 **NO INICIADAS**. Informe `CAMP_002_ITER_01.md`; CSV `CAMP_002_PROGRESO.csv`. Dos archivos de pruebas nuevos y solo documentación propia; no GDScript aún.
+- **Referencias existentes:** `tools/item_audit/held_effect_sweep_v3.cjs` (Escudo Habilidad: `gastro_acid`/Synchronize y Nerviosfera: Intimidate/no Intimidate); `held_effect_sweep_v2.cjs` (Tubérculo: Agua y +1 SpA). Los hooks de Dex indexados en `docs/current/ITEM_INVENTORY.csv` son `onSetAbility`, `onDamagingHit` y `onAfterBoost`. Los tres IDs `SELECCIONADO`, no implica efecto probado nuevamente.
+- **Archivos creados en ITER_01:** `tests/fixtures/parallel_items/w01_campaign_002.json` (7 escenarios, 10 semillas combinadas, 30 modalidades de objeto, positivas/negativas, efecto/consumo esperado y reserva) y `tests/tools/test_parallel_items_w01_campaign_002.py` (fija y verifica fuentes Git, hooks, selección, escenarios y seis mutaciones negativas).
+- **Commits de pruebas publicados:** `16cd0d253c17d454e578cced864948e30b69e023` y `c2451f93a839c9e6e9b6058e3765da0a68f400b3`. Informe `9075f82a5167e0793930cf60040fc62245e7f0ea`. CSV `788dfc92304854393972ffd5162d647d6a7764bf`.
+- **Auditoría de contenido REALIZADA:** 16/16 comprobaciones estáticas mediante comparación de blobs GitHub y estructura/causas de la matriz **PASS**. **Python nuevo SIN_EJECUTAR**, **Godot nuevo SIN_EJECUTAR**, **GPU/UI SIN_EJECUTAR**. Referencia CI base #41364601482/#41364601486 preexiste a la campaña; no certificar con ella.
+- **Cómo funciona el flujo futuro (no implementado en ITER_01):** selección canónica → `FieldItemService` equipa portador (existente) → `Native` entrega a simulador `@pkmn/sim@0.10.11` → se observa propiedad activa, sin ítem y reserva → `SaveV2` restaura estado; runner de ITER_02 hará la prueba real. No tocar la lógica nativa ni replicar hooks.
+- **Siguiente acto bajo una nueva `p`:** consultar gate/manifest/encargo y CSV; ITER_02 exclusivamente, crear `tests/gameplay/parallel_items_w01_campaign_002.gd` y ampliar pruebas con observación causal sobre tres modos y segunda semilla, publicar commits/cuaderno. Si hay FAIL, `BLOQUEADO` y consulta IA6, no forzar PASS. ITER_03 futuro: SaveV2/matriz/final/STOP.
+- **Rutas fuera de permiso:** `main`, V28, PR #118, scripts `modules/`, `data/`, `.github/`, ramas antiguas/W04/otras W, arte, UI, partidas, selección, política dos Mega. No comenzar ITER_04.
+
+---
+
+
 ## Identidad y autoridad
 
 - **IA1/W01**, rama exclusiva `codex/calvo-items-20261101-w01`.
