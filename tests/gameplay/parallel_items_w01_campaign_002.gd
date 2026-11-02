@@ -3,7 +3,7 @@ extends "res://tests/gameplay/item_automation_v28.gd"
 # W01 CAMP_002 ITER_02: observacion del motor nativo ya existente; ningun efecto aqui.
 # Usa _fixture / FieldItemService y _restore_probe, NO reproduce hooks de items.
 const SPEC := "res://tests/fixtures/parallel_items/w01_campaign_002.json"
-const OUT := "res://.godot/parallel_items/w01_campaign_002"
+const W01_C002_OUTPUT := "res://.godot/parallel_items/w01_campaign_002"
 var campaign_rows: Array = []
 
 func _initialize() -> void:
@@ -15,7 +15,7 @@ func _initialize() -> void:
 			quit(2))
 
 func _run_w01_campaign_002() -> void:
-	destination = OUT
+	destination = W01_C002_OUTPUT
 	DirAccess.make_dir_recursive_absolute(destination)
 	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(SPEC))
 	if not parsed is Dictionary:

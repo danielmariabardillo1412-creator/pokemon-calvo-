@@ -1,0 +1,130 @@
+name: CAMP002 - CI automatica por trabajadora
+on:
+  push:
+    branches:
+      - codex/calvo-items-20261102-w01-camp002
+      - codex/calvo-items-20261102-w02-camp002
+      - codex/calvo-items-20261102-w03-camp002
+      - codex/calvo-items-20261102-w05-camp002
+    paths:
+      - '.github/workflows/parallel-camp002-worker-autoci.yml'
+      - 'tests/gameplay/parallel_items_w01_campaign_002.gd'
+      - 'tests/gameplay/parallel_items_w02_campaign_002.gd'
+      - 'tests/gameplay/parallel_items_w03_campaign_002.gd'
+      - 'tests/gameplay/parallel_items_w05_campaign_002.gd'
+      - 'tests/tools/test_parallel_items_w01_campaign_002.py'
+      - 'tests/tools/test_parallel_items_w02_campaign_002.py'
+      - 'tests/tools/test_parallel_items_w03_campaign_002.py'
+      - 'tests/tools/test_parallel_items_w05_campaign_002.py'
+      - 'tests/fixtures/parallel_items/w01_campaign_002.json'
+      - 'tests/fixtures/parallel_items/w02_campaign_002.json'
+      - 'tests/fixtures/parallel_items/w03_campaign_002.json'
+      - 'tests/fixtures/parallel_items/w05_campaign_002.json'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: camp002-w-autoci-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  verify:
+    name: Verificacion independiente de ${{ github.ref_name }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 24
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: chickensoft-games/setup-godot@v2.4.1
+        with:
+          version: 4.7.0
+          use-dotnet: false
+          include-templates: false
+      - name: Base Godot 4.7 y fixtures
+        shell: bash
+        run: |
+          set -euo pipefail
+          godot --version | grep -E '^4[.]7([.-]|$)'
+          echo "POKEMON_CALVO_NODE=$(command -v node)" >> "$GITHUB_ENV"
+          python -B tools/distribution/restore_resources.py
+          python -B tools/distribution/restore_resources.py --check
+          mkdir -p data/reports
+          cp ci/fixtures/pokeapi_reports/forms_policy_report.json data/reports/forms_policy_report.json
+          cp ci/fixtures/pokeapi_reports/unsupported_mechanics.json data/reports/unsupported_mechanics.json
+          cp ci/fixtures/pokeapi_reports/import_summary.json data/reports/import_summary.json
+          godot --headless --path . --import 2>&1 | tee auto-import.log
+          if grep -E 'SCRIPT ERROR|Parse Error' auto-import.log; then exit 1; fi
+      - name: Preparar simulador nativo W01 y W02
+        if: contains(github.ref_name, '-w01-') || contains(github.ref_name, '-w02-')
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tools/battle_reference/run.py --install --limit 1 2>&1 | tee auto-native.log
+      - name: W01 - equipables
+        if: contains(github.ref_name, '-w01-')
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tests/tools/test_parallel_items_w01_campaign_002.py --contracts 2>&1 | tee auto-w01-contract.log
+          python -B tests/tools/test_parallel_items_w01_campaign_002.py --self-test 2>&1 | tee auto-w01-self.log
+          test -f tests/gameplay/parallel_items_w01_campaign_002.gd
+          timeout 420s godot --headless --path . --script res://tests/gameplay/parallel_items_w01_campaign_002.gd 2>&1 | tee auto-w01-godot.log
+          grep -E 'W01_CAMP002_GODOT PASS checks=[0-9]+ runs=10 errors=0' auto-w01-godot.log
+          python -B tests/tools/test_parallel_items_w01_campaign_002.py --native 2>&1 | tee auto-w01-receipts.log
+          grep -E 'W01_CAMP002_NATIVE_EVIDENCE_PASS' auto-w01-receipts.log
+      - name: W02 - cuatro bayas
+        if: contains(github.ref_name, '-w02-')
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tests/tools/test_parallel_items_w02_campaign_002.py --fixture-only 2>&1 | tee auto-w02-fixture.log
+          python -B tests/tools/test_parallel_items_w02_campaign_002.py --unittest 2>&1 | tee auto-w02-unit.log
+          test -f tests/gameplay/parallel_items_w02_campaign_002.gd
+          timeout 420s godot --headless --path . --script res://tests/gameplay/parallel_items_w02_campaign_002.gd 2>&1 | tee auto-w02-godot.log
+          grep -E 'PARALLEL_ITEMS_W02_CAMP002 PASS checks=[0-9]+ cases=[0-9]+' auto-w02-godot.log
+          python -B tests/tools/test_parallel_items_w02_campaign_002.py --result .godot/parallel_items/w02_campaign_002/godot.json 2>&1 | tee auto-w02-receipts.log
+      - name: W03 - controles negativos, NO funcionalidad Dusk Repeat Dive
+        if: contains(github.ref_name, '-w03-')
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tests/tools/test_parallel_items_w03_campaign_002.py 2>&1 | tee auto-w03-contract.log
+          test -f tests/gameplay/parallel_items_w03_campaign_002.gd
+          timeout 180s godot --headless --path . --script res://tests/gameplay/parallel_items_w03_campaign_002.gd 2>&1 | tee auto-w03-godot.log
+          grep -E 'CAMP_002_W03_NEGATIVE.*"new_balls_functional":false.*"status":"PASS"' auto-w03-godot.log
+      - name: W05 - 12 MT reales y ensenanza Godot
+        if: contains(github.ref_name, '-w05-')
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B -m unittest discover -s tests/tools -p 'test_parallel_items_w05_campaign_002.py' -v 2>&1 | tee auto-w05-unit.log
+          python -B tests/tools/test_parallel_items_w05_campaign_002.py --report > auto-w05-sample.json
+          python -B -c 'import json; r=json.load(open("auto-w05-sample.json")); assert r["selected_count"] == 12; print("W05_SAMPLE_PASS 12")'
+          test -f tests/gameplay/parallel_items_w05_campaign_002.gd
+          timeout 240s godot --headless --path . --script res://tests/gameplay/parallel_items_w05_campaign_002.gd 2>&1 | tee auto-w05-godot.log
+          python -B - <<'PY'
+          import re
+          from pathlib import Path
+          log=Path("auto-w05-godot.log").read_text(encoding="utf-8",errors="replace")
+          found=re.findall(r"W05_CAMP002_ITER0[23] PASS checks=(\d+) cases=(\d+)",log)
+          assert found and int(found[-1][0])>0 and int(found[-1][1])>=6, "Falta PASS real de 6+ MT"
+          print("W05_GODOT_CI_PASS",found[-1])
+          PY
+      - name: Estado final de esta rama
+        shell: bash
+        run: |
+          echo "RESULTADO DE ${{ github.ref_name }}: PRUEBAS AUTOMATICAS PASS PARA SHA ${{ github.sha }}"
+      - name: Evidencia siete dias
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: camp002-worker-${{ github.run_id }}
+          retention-days: 7
+          if-no-files-found: ignore
+          path: |
+            auto-*.log
+            auto-w05-sample.json
