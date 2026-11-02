@@ -105,3 +105,8 @@ Blobs de pruebas al cerrar LOTE_002:
 - **Nuevos escenarios:** 5 rutas positivas en equipo y PC, stock 0/2→1, propietario erróneo, destino falsificado, repetición sin gasto, ubicación/identidad/datos preservados y rechazo para especies incorrectas. Persistencia real SaveV2 reservada para 03.
 - **Pruebas:** comprobación independiente de metadatos y presencia de escenarios en GitHub `44/44 PASS ESTRUCTURAL`. Python del checkout y GDScript Godot `SIN_EJECUTAR`; `PENDIENTE_CI`. La CI base anterior #41341842320 no cubre nuevos commits. GPU/visual sin probar.
 - **Siguiente `p`:** SOLO microbloque 03, ampliar el mismo corredor con persistencia SaveV2, clasificar rutas, preparar `CAMP_001_FINAL.md` y DETENER. Si un test o contrato falla, elevar a IA6; NO modificar `modules/`, `data/`, `config/`, guardados, main, V28, árbitra u otras W.
+
+
+## 9. Relevo W04 y cierre CAMPAÑA_001 (2026-11-02)
+
+Prioridad sobre apartados antiguos: `CAMP_001_PROGRESO.csv` y `CAMP_001_ITER_03.md`. ITER_03 preparada con tests SaveV2 (12 casos: seis piedras × PARTY/STORAGE), scripts en commits `028e0a8b5ce0bdc7b25e1629da1104a1b55b9919` y `e57b924f8b6cc547e7158b2f87cd626a7cf585d3`. Python/Godot para ITER_03 SIN_EJECUTAR; IA6 responsable de CI final. `CAMP_001_FINAL.md` contiene matriz, riesgos y STOP. No activar CAMP_002 sin nueva puerta.
