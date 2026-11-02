@@ -1,3 +1,15 @@
+# IA6 — RELEVO DE CHATS Y CAMP002 02/03 (2026-11-02)
+
+**Puerta vigente para recuperar IA4 e IA5:** [CAMPAIGN_HANDOFF_GATE_20261102.md](CAMPAIGN_HANDOFF_GATE_20261102.md); [relevo exclusivo IA4](RELEVO_IA4_W04.md), [relevo exclusivo IA5](RELEVO_IA5_W05.md). El usuario ha pedido nuevas conversaciones para IA4/IA5: **se levanta únicamente la congelación de IA4 a fin de completar CAMP_001/ITER_03**; IA4 NO entra en CAMP_002 ni tiene rama nueva. Se conserva su rama antigua y 02/03 ya publicados. La prohibición histórica de reabrir IA4 que figura más abajo queda sustituida por esta puerta nueva para ese único bloque.
+
+**Estado de GitHub hoy:** IA1/W01 CAMP_002 **02/03** (runner Godot de tres equipables nuevo, `PREPARADO_PENDIENTE_CI`); IA2/W02 CAMP_002 **02/03** (Leppa/Figy, CI nueva PENDIENTE), IA3/W03 CAMP_002 **02/03** (contratos de Dusk/Repeat/Dive, CI nueva PENDIENTE), IA5/W05 CAMP_002 **01/03** (selector Python y 12 parejas reales PASS #41484879741), IA4/W04 CAMP_001 **02/03** pendiente de SaveV2.
+
+**CI anterior de ITER_01:** [#41484879741](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41484879741) PASS para cuatro familias. NO acredita los runners/reportes nuevos de ITER_02. IA1 no tiene FAIL probado: su naranja indica solo que falta CI. El próximo gate de pruebas lo dirige IA6, no cada trabajadora. IA4 no debe repetir ITER_01/02, IA5 no debe repetir ITER_01.
+
+**Protección:** no editar `main`, V28, PR #118, ramas ajenas ni producción, y no activar CAMPAÑA_003. Relevo de identidad no equivale a reinicio de rama.
+
+---
+
 # IA6 — CAMPAÑA_002 / ITER_01 CI FINALIZADA (2026-11-02)
 
 **Nuevo gate de continuación:** [CAMPAIGN_002_ITER01_CI_GATE.md](CAMPAIGN_002_ITER01_CI_GATE.md), respaldado por [Actions #41484879741](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41484879741) `success`. **W01 01/03, W02 01/03, W03 01/03, W05 01/03**: todos los microbloques 01 recibidos e integrados documentalmente/de pruebas en árbitra commit `60baf5b5`. Única corrección: W02 debe incorporar en **su rama nueva** el blob de runner `2e0ac1d2` de árbitra antes de continuar; no requiere cambiar producción, ni duplicar CI completa. Un `p` normal habilita ITER_02 bajo obligación de leer este gate. W04 congelada por decisión del usuario, nunca escribir en su rama.
