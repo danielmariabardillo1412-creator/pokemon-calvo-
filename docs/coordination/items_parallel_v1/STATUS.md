@@ -1,3 +1,5 @@
+> **PRETRIAJE PREVENTIVO IA6 — 2026-11-02:** [overlay exacto de 267 evidencias CAMP_001](CAMPAIGN_001_EVIDENCE_OVERLAY_V1.csv) contrastado con 744 filas de la selección, y [propuesta de CAMPAÑA_002 no activada](CAMPAIGN_002_PRETRIAGE_DRAFT.md). **W04 permanece congelada; ninguna W tiene nuevos permisos ni debe recibir `p`.** No sobrescribir `QUEUE_V1.csv` ni interpretar 226 MT sin prueba de enseñanza individual como funcionalidades sin implementar. `main` y V28 intactas.
+
 > **RELEVO Y CONTROL ANTIDUPLICADOS (2026-11-02):** [CAMPAIGN_001_CLOSEOUT_AUDIT.md](CAMPAIGN_001_CLOSEOUT_AUDIT.md). IA6 ha cotejado las CI reales con el árbol integrado: W01/W02/W03/W05 03/03 STOP, W04 02/03 congelada, 14/15 preparados. `QUEUE_V1.csv` y el estado V27 son **anteriores a estas certificaciones**; no reasignar por su etiqueta histórica ni abrir CAMP_002 sin nueva orden. Todos los commits después del último SHA con CI PASS modificaron solo documentación.
 
 # ESTADO VIGENTE — IA6 / CAMPAÑA_001, GATE_005 (2026-11-02)
