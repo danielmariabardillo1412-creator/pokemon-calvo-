@@ -19,8 +19,8 @@ func _run_c002() -> void:
 	DirAccess.make_dir_recursive_absolute(destination)
 	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(FIXTURE_C002))
 	if not parsed is Dictionary:
-		check("fixture C002 legible", false)
-		_finish_c002([])
+		push_error("CAMP_002_W02: fixture JSON no es Dictionary")
+		quit(2)
 		return
 	automation = parsed
 	catalogs = GameData.from_dict(JSON.parse_string(
