@@ -1,3 +1,13 @@
+# CI AUTOPILOTO ACTIVO — 2026-11-02
+
+**Operativa preferente:** [CI_AUTOPILOT_V3.md](CI_AUTOPILOT_V3.md) + [CAMPAIGN_GATE_002.md](CAMPAIGN_GATE_002.md). Cuatro workflows de ejecución por rama `parallel-camp002-worker-autoci.yml` ya instalados y **verificados mediante CI real**: [W01 #41539775567](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41539775567) SUCCESS, [W02 #41539808520](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41539808520) SUCCESS, [W03 #41539840311](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41539840311) SUCCESS, [W05 #41539925530](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41539925530) SUCCESS. **No requieren que IA6 monte un staging para cada `p`.** CI se dispara al subir tests/fixtures; no por informes. W01/W02 ya sincronizadas con sus runners corregidos (blobs `cc9fb835` y `73171d57`) sin alterar producción.
+
+**Semáforo:** W01/W02/W03/W05 permanecen con **02/03 entregados CAMP002** según últimos CSV, y pueden ejecutar **una sola `p` para ITER03** en su rama. Mientras CI corre, puede avanzar un bloque exclusivamente de tests si no depende de resultado previo; debe declarar `EN_CI_AUTOMATICA`, nunca PASS sin comprobar SHA/run. En FAIL reparar script propio o bloquear si la causa no es aislable. **W04 CAMP001 03/03 finalizada, STOP.** Tras ITER03, cuatro workers STOP hasta nueva campaña autorizada; no autoasignar IDs.
+
+**Para IA6:** supervisión por excepción y al final de campaña; no realizar cinco CI manuales por ronda. `main`, V28 y las ramas CAMP001 antiguas no se han modificado con este protocolo.
+
+---
+
 # ESTADO VIGENTE IA6 — 2026-11-02, CAMP_002 ITER_02 Y W04 CAMP_001 FINAL
 
 **Puertas de verdad:** [CAMP002/ITER02 de W01–W03](CAMPAIGN_002_ITER02_CI_GATE.md) y [relevo W04 final / W05 ITER02](CAMPAIGN_HANDOFF_CI_GATE_20261102.md). **CI #41493879869 SUCCESS:** W01 Godot 687/0 y recibos Python, W02 800/0 y recibos Python, W03 37/0 negativos. **CI #41538151097 SUCCESS:** W04 SaveV2 559/0 en 12 casos, W05 MT 177/0 en seis enseñanzas; W05 selector 12 y Python 11 PASS. Los cinco conjuntos de pruebas se integraron en árbol árbitra como blobs exactos de staging, **sin modificar las ramas W ni producción**.
