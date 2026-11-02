@@ -55,7 +55,25 @@
         "nontrigger_multiplier": 1
       },
       "current_expected_status": "unknown_ball",
-      "functional_implementation_authorized": false
+      "functional_implementation_authorized": false,
+      "decision_03": {
+        "state": "DEPENDENCIA_DE_CONTEXTO",
+        "implementation_authorized": false,
+        "owner": "world clock or battle map source -> trusted Wild/Showdown capture session",
+        "required_signal": "night_or_cave_authoritative",
+        "source_proof": "Verified region and/or game-time from encounter origin, never OS clock or turn number",
+        "missing_in_current": "CaptureBattleContext and both session constructors do not expose night/cave",
+        "persistence_contract": "Derive on encounter creation and reconstruct from trusted world/battle state after resume; no global save field without gate",
+        "test_cases": [
+          "day_outside_neutral",
+          "night_outside_bonus",
+          "day_cave_bonus",
+          "night_cave_bonus",
+          "no_authoritative_source_reject_without_cost"
+        ],
+        "request_to_ia6": "Authorize semantics of game-time and cave on both session paths; decide single trusted environment API and generation profile.",
+        "allowed_work": "tests contracts reports only"
+      }
     },
     {
       "id": "repeat_ball",
@@ -95,7 +113,26 @@
         "nontrigger_multiplier": 1
       },
       "current_expected_status": "unknown_ball",
-      "functional_implementation_authorized": false
+      "functional_implementation_authorized": false,
+      "decision_03": {
+        "state": "DEPENDENCIA_DE_CONTEXTO",
+        "implementation_authorized": false,
+        "owner": "authoritative caught-species history / Pokedex and persistent capture transaction",
+        "required_signal": "species_previously_caught_authoritative",
+        "source_proof": "History of caught species prior to attempted capture; not current party or storage membership; not merely seen",
+        "missing_in_current": "SaveGameData V2 only stores owned instances/layout/inventory, no caught-history set",
+        "persistence_contract": "Separate permanent caught-species registry, migration/compatibility of existing saves and atomic update on successful capture, never on failed/invalid attempts",
+        "test_cases": [
+          "never_caught_neutral",
+          "caught_then_released_bonus",
+          "seen_but_not_caught_neutral",
+          "party_owned_unsupported_without_history",
+          "failed_attempt_does_not_register",
+          "load_save_preserves_history"
+        ],
+        "request_to_ia6": "Decide caught-history storage and migration, species vs form identity, and trusted update/transaction on successful capture.",
+        "allowed_work": "tests contracts reports only"
+      }
     },
     {
       "id": "dive_ball",
@@ -134,7 +171,25 @@
         "nontrigger_multiplier": 1
       },
       "current_expected_status": "unknown_ball",
-      "functional_implementation_authorized": false
+      "functional_implementation_authorized": false,
+      "decision_03": {
+        "state": "DEPENDENCIA_DE_CONTEXTO",
+        "implementation_authorized": false,
+        "owner": "trusted map/encounter environment -> Wild/Showdown capture session",
+        "required_signal": "encounter_is_underwater_authoritative",
+        "source_proof": "Actual encounter environment flagged underwater by world source; neither Water type nor diving item name implies it",
+        "missing_in_current": "No underwater-environment field in CaptureBattleContext or both constructors",
+        "persistence_contract": "Reconstruct from trusted encounter location on load/resume; do not infer from Water type, fishing or cave",
+        "test_cases": [
+          "underwater_bonus",
+          "surface_water_neutral",
+          "water_type_on_land_neutral",
+          "cave_without_underwater_neutral",
+          "missing_environment_reject_without_cost"
+        ],
+        "request_to_ia6": "Define underwater location/encounter classification and its trusted propagation to both capture sessions.",
+        "allowed_work": "tests contracts reports only"
+      }
     }
   ],
   "policy": {
@@ -170,5 +225,40 @@
     ],
     "positive_test_policy": "No positive case can be exercised without trusted context; do not inject made-up fields.",
     "repro": "godot --headless --path . --script tests/gameplay/parallel_items_w03_campaign_002.gd"
+  },
+  "phase_03": {
+    "state": "CAMP_002_W03_FINAL_PREPARADO_PENDIENTE_CI",
+    "scope": "decision_per_ball_and_Net_V11_V15_regression_only",
+    "regression_paths": [
+      "tests/gameplay/parallel_items_w03_net_campaign_001.gd",
+      "tests/gameplay/item_capture_v11.gd",
+      "tests/gameplay/item_capture_v15.gd"
+    ],
+    "regression_cases": [
+      {
+        "species_id": "magikarp",
+        "expected_factor": 3.5,
+        "reason": "water"
+      },
+      {
+        "species_id": "caterpie",
+        "expected_factor": 3.5,
+        "reason": "bug"
+      },
+      {
+        "species_id": "pidgey",
+        "expected_factor": 1,
+        "reason": "neutral"
+      },
+      {
+        "species_id": "surskit",
+        "expected_factor": 3.5,
+        "reason": "water_and_bug_once"
+      }
+    ],
+    "old_negative_policy": "V11 and V15 must not list net_ball in their for unsupported loops; V15 repeat_ball remains an expected negative.",
+    "permission": "NO_PRODUCTION_CHANGES_NO_NEW_CAPTURE_CONTEXT",
+    "request_to_ia6": "Separate new gate needed for environment and persistent capture history; do not implement factors from catalog alone",
+    "certification": "Only Godot CI on the new source SHA can validate the new Net regression; negative tests never certify Dusk/Repeat/Dive functional."
   }
 }
