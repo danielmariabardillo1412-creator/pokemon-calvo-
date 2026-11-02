@@ -318,6 +318,8 @@ func caso_guardado_v2(fila: Dictionary, en_pc: bool) -> void:
 	var movimientos: Array = anterior.move_ids.duplicate()
 	var experiencia := anterior.experience
 	var amistad := anterior.friendship
+	# El guardado normaliza claves StringName/String. Comparar valores persistidos canónicos.
+	var datos_originales: Dictionary = anterior.to_dict()
 	comprobar(etiqueta + "stock_2", dueno.inventory.add(objeto, 2))
 	var estado_previo := instantanea(dueno)
 	var ajeno: Dictionary = servicio.evolve(objeto, &"id_ajeno", destino)
@@ -359,9 +361,14 @@ func caso_guardado_v2(fila: Dictionary, en_pc: bool) -> void:
 			comprobar(etiqueta + "pokemon_conservado", criatura != null
 				and criatura.instance_id == ID and criatura.species_id == destino)
 			if criatura != null:
-				comprobar(etiqueta + "iv_ev_movimientos_xp_amistad", criatura.ivs == ivs
-					and criatura.evs == evs and criatura.move_ids == movimientos
-					and criatura.experience == experiencia and criatura.friendship == amistad)
+				var datos_guardados: Dictionary = criatura.to_dict()
+				comprobar(etiqueta + "iv_ev_movimientos_xp_amistad",
+					datos_guardados.get("ivs", {}) == datos_originales.get("ivs", {})
+					and datos_guardados.get("evs", {}) == datos_originales.get("evs", {})
+					and datos_guardados.get("move_ids", []) == datos_originales.get("move_ids", [])
+					and datos_guardados.get("moveset", []) == datos_originales.get("moveset", [])
+					and int(datos_guardados.get("experience", -1)) == int(datos_originales.get("experience", -2))
+					and int(datos_guardados.get("friendship", -1)) == int(datos_originales.get("friendship", -2)))
 			var servicio_recargado := Servicio.new()
 			comprobar(etiqueta + "configuracion_recargada",
 				servicio_recargado.configure(restaurado, catalogos, func(): return true))
