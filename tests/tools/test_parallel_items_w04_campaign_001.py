@@ -160,7 +160,12 @@ def verificar_contrato() -> int:
         exigir(caso in script, f"falta aserción: {caso}")
         checks += 1
     checks += verificar_segundo_bloque(script, seleccion, historico)
-    print(f"PARALLEL_ITEMS_W04_CAMP_001_STATIC PASS iteration=2 "
+    for palabra in ("PIEDRAS_03", "caso_guardado_v2(", "save_collection(", "repositorio.load(",
+                    "no_segundo_gasto", "snapshot_idempotente", "rechazo_tras_load",
+                    "iv_ev_movimientos_xp_amistad", "DirAccess.remove_absolute"):
+        exigir(palabra in script, f"falta cobertura SaveV2: {palabra}")
+        checks += 1
+    print(f"PARALLEL_ITEMS_W04_CAMP_001_STATIC PASS iteration=3 "
           f"checks={checks} positive_cases=11 conditional_cases=1 scope=DATOS_SIN_RUNTIME")
     return checks
 
@@ -179,11 +184,18 @@ def ejecutar(binario: str, timeout: int) -> dict:
     exigir(len(lineas) == 1, "falta resultado único de Godot")
     resultado = json.loads(lineas[0])
     exigir(resultado.get("status") == "PASS"
-           and resultado.get("iteration") == 2 and resultado.get("checks", 0) >= 200
+           and resultado.get("iteration") == 3 and resultado.get("checks", 0) >= 300
            and resultado.get("cases") == len(CASOS_01) + len(CASOS_02) + 1
            and resultado.get("errors") == []
-           and resultado.get("scope") == "W04_CAMP_001_STONES_02",
+           and resultado.get("scope") == "W04_CAMP_001_STONES_SAVEV2_03",
            "Godot no superó las aserciones de la iteración 01")
+    guardados = resultado.get("save_results", [])
+    exigir(resultado.get("save_cases") == 12 and len(guardados) == 12
+           and {(fila["item_id"], fila["location"]) for fila in guardados}
+               == {(item, loc) for item in ("fire_stone", "water_stone", "thunder_stone",
+                   "leaf_stone", "ice_stone", "moon_stone") for loc in ("PARTY", "STORAGE")}
+           and all(fila.get("status") == "ASSERTED" for fila in guardados),
+           "faltan casos SaveV2 por piedra y ubicación")
     filas = resultado.get("results", [])
     exigir(isinstance(filas, list) and len(filas) == len(CASOS_01) + len(CASOS_02) + 1,
            "falta resultado por especie e ID")
@@ -203,7 +215,7 @@ def ejecutar(binario: str, timeout: int) -> dict:
                "CONDITIONAL_ROUTE_REJECTED",
                "CONDITIONAL_ROUTE_NOT_IN_ACTIVE_CATALOG",
            ), "faltan rutas positivas o caracterización regional")
-    print(f"PARALLEL_ITEMS_W04_CAMP_001_GODOT PASS iteration=2 "
+    print(f"PARALLEL_ITEMS_W04_CAMP_001_GODOT PASS iteration=3 "
           f"checks={resultado['checks']} cases={resultado['cases']}")
     return resultado
 

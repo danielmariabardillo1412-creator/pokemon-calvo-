@@ -1,0 +1,79 @@
+name: IA6 W04 SaveV2 Final and W05 MT Teach Iter02 Godot
+on:
+  push:
+    branches:
+      - codex/calvo-items-20261102-ci-w04-final-w05-iter02
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: ia6-w04-final-w05-iter02-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 22
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: chickensoft-games/setup-godot@v2.4.1
+        with:
+          version: 4.7.0
+          use-dotnet: false
+          include-templates: false
+      - name: Import Godot 4.7 with project fixtures
+        shell: bash
+        run: |
+          set -euo pipefail
+          godot --version | grep -E '^4[.]7([.-]|$)'
+          python -B tools/distribution/restore_resources.py
+          python -B tools/distribution/restore_resources.py --check
+          mkdir -p data/reports
+          cp ci/fixtures/pokeapi_reports/forms_policy_report.json data/reports/forms_policy_report.json
+          cp ci/fixtures/pokeapi_reports/unsupported_mechanics.json data/reports/unsupported_mechanics.json
+          cp ci/fixtures/pokeapi_reports/import_summary.json data/reports/import_summary.json
+          godot --headless --path . --import 2>&1 | tee w04w05-import.log
+          if grep -E 'SCRIPT ERROR|Parse Error' w04w05-import.log; then exit 1; fi
+      - name: W04 final — 6 stones with SaveV2 party PC identity and stock
+        id: w04
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tests/tools/test_parallel_items_w04_campaign_001.py 2>&1 | tee w04w05-w04-static.log
+          timeout 240s python -B tests/tools/test_parallel_items_w04_campaign_001.py --godot godot --timeout 210 2>&1 | tee w04w05-w04-godot.log
+          grep -E 'PARALLEL_ITEMS_W04_CAMP_001_GODOT PASS iteration=3' w04w05-w04-godot.log
+      - name: W05 sample selection Python and 6 real MT lessons on Godot
+        id: w05
+        if: always()
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B -m unittest discover -s tests/tools -p 'test_parallel_items_w05_campaign_002.py' -v 2>&1 | tee w04w05-w05-python.log
+          python -B tests/tools/test_parallel_items_w05_campaign_002.py --report > w04w05-w05-sample.json
+          python -B -c 'import json; x=json.load(open("w04w05-w05-sample.json")); assert x["selected_count"]==12; print("W05_SAMPLE_PASS 12")'
+          timeout 240s godot --headless --path . --script res://tests/gameplay/parallel_items_w05_campaign_002.gd 2>&1 | tee w04w05-w05-godot.log
+          grep -E 'W05_CAMP002_ITER02 PASS checks=[0-9]+ cases=6' w04w05-w05-godot.log
+      - name: Strict independent verdict
+        if: always()
+        shell: bash
+        env:
+          W04: ${{ steps.w04.outcome }}
+          W05: ${{ steps.w05.outcome }}
+        run: |
+          set -euo pipefail
+          echo "W04=$W04 W05=$W05"
+          test "$W04" = success && test "$W05" = success
+      - name: Save debugging evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: w04-w05-ci-${{ github.run_id }}
+          retention-days: 7
+          if-no-files-found: ignore
+          path: |
+            w04w05-*.log
+            w04w05-*.json
