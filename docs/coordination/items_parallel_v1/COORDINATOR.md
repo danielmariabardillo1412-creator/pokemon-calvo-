@@ -1,3 +1,5 @@
+> **Puerta obligatoria antes de usar `QUEUE_V1.csv` para otra campaña:** leer [CAMPAIGN_001_CLOSEOUT_AUDIT.md](CAMPAIGN_001_CLOSEOUT_AUDIT.md) y [CAMPAIGN_GATE_UPDATE_005.md](CAMPAIGN_GATE_UPDATE_005.md). El CSV contiene estados pre-CAMP_001 desactualizados (por ejemplo Malla Ball sigue figurando no implementada); no son órdenes para duplicar trabajo. W04 está congelada y 14/15 microbloques están entregados. NO ACTIVA CAMP_002.
+
 > **Actualización prioritaria 2026-11-01:** durante CAMPAÑA_001 aplicar [CI_AND_HANDOFF_PROTOCOL_V2.md](CI_AND_HANDOFF_PROTOCOL_V2.md). IA6 prepara y clasifica las CI por paquetes, mantiene el STOP de las familias dependientes y ofrece un [prompt único de relevo](PROMPT_RELEVO_W0X_V2.md) para chats caídos. Este complemento no sustituye los permisos de cada `CAMP_001_W0X.md` ni autoriza cambios en `main`.
 
 # PROTOCOLO ÁRBITRA / COORDINADORA — única dueña de asignaciones e integración
