@@ -1,0 +1,274 @@
+{
+  "schema_version": 1,
+  "campaign": "CAMP_002",
+  "worker": "W01",
+  "stage": "01",
+  "format": "gen9calvounifiedv1",
+  "execution_state": "EXPECTED_ONLY_NO_RUNTIME",
+  "variants": [
+    "active",
+    "none",
+    "reserve"
+  ],
+  "sources": [
+    {
+      "path": "tools/item_audit/held_effect_sweep_v2.cjs",
+      "blob": "c9ba4d7bcddad6ae69f085f4b69983461ad05219"
+    },
+    {
+      "path": "tools/item_audit/held_effect_sweep_v3.cjs",
+      "blob": "fd5d9d0b1eecf8b84f14e606631df93b40728586"
+    },
+    {
+      "path": "docs/current/ITEM_INVENTORY.csv",
+      "blob": "2aaf18643bb2b071226118a1ad556cffca4707dd"
+    },
+    {
+      "path": "docs/current/RANDOMLOCK_ITEMS_BUILD_SCOPE_V2.csv",
+      "blob": "8b9b723bf5944bbbde39aa2d49dfbb2f2a64e11b"
+    }
+  ],
+  "cases": [
+    {
+      "stage": "01",
+      "id": "shield_gastro_acid",
+      "item_id": "ability_shield",
+      "mechanic": "ability_suppression",
+      "actor_species": "mew",
+      "actor_ability": "synchronize",
+      "foe_species": "mew",
+      "foe_ability": "",
+      "own_move": "reflect",
+      "foe_move": "gastro_acid",
+      "trigger": "ability_suppression_attempt",
+      "condition": "gastro_acid_hit",
+      "expected": {
+        "active": {
+          "triggered": true,
+          "consumed": false,
+          "effect": "ability_not_suppressed"
+        },
+        "none": {
+          "triggered": false,
+          "consumed": false,
+          "effect": "none"
+        },
+        "reserve": {
+          "triggered": false,
+          "consumed": false,
+          "effect": "none"
+        }
+      },
+      "seeds": [
+        19,
+        23
+      ]
+    },
+    {
+      "stage": "01",
+      "id": "shield_no_suppression",
+      "item_id": "ability_shield",
+      "mechanic": "ability_suppression",
+      "actor_species": "mew",
+      "actor_ability": "synchronize",
+      "foe_species": "mew",
+      "foe_ability": "",
+      "own_move": "reflect",
+      "foe_move": "amnesia",
+      "trigger": "no_ability_suppression",
+      "condition": "no_gastro_acid",
+      "expected": {
+        "active": {
+          "triggered": false,
+          "consumed": false,
+          "effect": "none"
+        },
+        "none": {
+          "triggered": false,
+          "consumed": false,
+          "effect": "none"
+        },
+        "reserve": {
+          "triggered": false,
+          "consumed": false,
+          "effect": "none"
+        }
+      },
+      "seeds": [
+        23
+      ]
+    },
+    {
+      "stage": "01",
+      "id": "bulb_water_hit",
+      "item_id": "absorb_bulb",
+      "mechanic": "water_hit_stat_boost",
+      "actor_species": "mew",
+      "actor_ability": "",
+      "foe_species": "mew",
+      "foe_ability": "",
+      "own_move": "reflect",
+      "foe_move": "water_gun",
+      "trigger": "damaging_water_hit",
+      "condition": "water_hit",
+      "expected": {
+        "active": {
+          "triggered": true,
+          "consumed": true,
+          "effect": "spa_plus_one"
+        },
+        "none": {
+          "triggered": false,
+          "consumed": false,
+          "effect": "none"
+        },
+        "reserve": {
+          "triggered": false,
+          "consumed": false,
+          "effect": "none"
+        }
+      },
+      "seeds": [
+        19,
+        23
+      ]
+    },
+    {
+      "stage": "01",
+      "id": "bulb_nonwater_hit",
+      "item_id": "absorb_bulb",
+      "mechanic": "water_hit_stat_boost",
+      "actor_species": "mew",
+      "actor_ability": "",
+      "foe_species": "mew",
+      "foe_ability": "",
+      "own_move": "reflect",
+      "foe_move": "tackle",
+      "trigger": "damaging_nonwater_hit",
+      "condition": "normal_hit",
+      "expected": {
+        "active": {
+          "triggered": false,
+          "consumed": false,
+          "effect": "none"
+        },
+        "none": {
+          "triggered": false,
+          "consumed": false,
+          "effect": "none"
+        },
+        "reserve": {
+          "triggered": false,
+          "consumed": false,
+          "effect": "none"
+        }
+      },
+      "seeds": [
+        23
+      ]
+    },
+    {
+      "stage": "01",
+      "id": "bulb_no_hit",
+      "item_id": "absorb_bulb",
+      "mechanic": "water_hit_stat_boost",
+      "actor_species": "mew",
+      "actor_ability": "",
+      "foe_species": "mew",
+      "foe_ability": "",
+      "own_move": "reflect",
+      "foe_move": "amnesia",
+      "trigger": "no_attack_damage",
+      "condition": "status_only",
+      "expected": {
+        "active": {
+          "triggered": false,
+          "consumed": false,
+          "effect": "none"
+        },
+        "none": {
+          "triggered": false,
+          "consumed": false,
+          "effect": "none"
+        },
+        "reserve": {
+          "triggered": false,
+          "consumed": false,
+          "effect": "none"
+        }
+      },
+      "seeds": [
+        23
+      ]
+    },
+    {
+      "stage": "01",
+      "id": "orb_intimidate",
+      "item_id": "adrenaline_orb",
+      "mechanic": "intimidate_speed_boost",
+      "actor_species": "mew",
+      "actor_ability": "",
+      "foe_species": "gyarados",
+      "foe_ability": "intimidate",
+      "own_move": "reflect",
+      "foe_move": "amnesia",
+      "trigger": "opposing_intimidate",
+      "condition": "intimidate_entry",
+      "expected": {
+        "active": {
+          "triggered": true,
+          "consumed": true,
+          "effect": "speed_plus_one"
+        },
+        "none": {
+          "triggered": false,
+          "consumed": false,
+          "effect": "none"
+        },
+        "reserve": {
+          "triggered": false,
+          "consumed": false,
+          "effect": "none"
+        }
+      },
+      "seeds": [
+        19,
+        23
+      ]
+    },
+    {
+      "stage": "01",
+      "id": "orb_no_intimidate",
+      "item_id": "adrenaline_orb",
+      "mechanic": "intimidate_speed_boost",
+      "actor_species": "mew",
+      "actor_ability": "",
+      "foe_species": "mew",
+      "foe_ability": "",
+      "own_move": "reflect",
+      "foe_move": "amnesia",
+      "trigger": "opponent_no_intimidate",
+      "condition": "no_intimidate",
+      "expected": {
+        "active": {
+          "triggered": false,
+          "consumed": false,
+          "effect": "none"
+        },
+        "none": {
+          "triggered": false,
+          "consumed": false,
+          "effect": "none"
+        },
+        "reserve": {
+          "triggered": false,
+          "consumed": false,
+          "effect": "none"
+        }
+      },
+      "seeds": [
+        23
+      ]
+    }
+  ]
+}
