@@ -162,16 +162,51 @@ func _w01_observe(row: Dictionary, seed: int, mode: String) -> Dictionary:
 	check(mode + " el propietario no publica cambios antes de cerrar", owner_unchanged)
 	check(mode + " solo uno activo o reserva porta item", not (after.active_has_item and after.reserve_has_item))
 	var key: String = String(row.id) + "_" + str(seed) + "_" + mode
+	var final_snapshot: Dictionary = session.snapshot()
+	# SaveV2 real: grabar propietario y checkpoint, cerrar sesion, decodificar,
+	# restaurar con el motor nativo y comparar el estado exacto tras el turno.
+	var restore_key: String = key + "_savev2"
+	var reloaded: Dictionary = await _restore_probe(session, owner, restore_key, mode + " SaveV2")
+	if not reloaded.get("valid", false):
+		return {"valid": false}
+	owner = reloaded.owner
+	session = reloaded.session
+	var restored_frame: Dictionary = _frame(session, id)
+	var restored_checkpoint_equal: bool = session.snapshot() == final_snapshot
+	var restored_owner_unchanged: bool = JSON.stringify(_owner_data(owner)) == frozen
+	var restored_frame_equal: bool = restored_frame == after
+	var restored_stock: int = owner.inventory.quantity(id)
+	for restored_creature: CreatureInstance in [session.battle_state().creature(&"own"), session.battle_state().creature(&"reserve")]:
+		if restored_creature.held_item_id == id and not restored_creature.held_item_consumed:
+			restored_stock += 1
+	check(mode + " SaveV2 snapshot exacto", restored_checkpoint_equal)
+	check(mode + " SaveV2 mismo fotograma nativo", restored_frame_equal)
+	check(mode + " SaveV2 propietario intacto", restored_owner_unchanged)
+	check(mode + " SaveV2 stock sin duplicacion", restored_stock == physical)
+	var restore_hash: String = FileAccess.get_sha256(destination + "/" + restore_key + ".json")
+	check(mode + " SaveV2 recibo escrito", restore_hash.length() == 64)
 	var proof: Dictionary = {
 		"id": String(row.id), "item_id": String(row.item_id), "seed": seed, "mode": mode,
-		"start": start, "after": after, "initial": original, "final": session.snapshot(),
-		"owner_unchanged": owner_unchanged, "physical_units": physical
+		"start": start, "after": after, "initial": original, "final": final_snapshot,
+		"owner_unchanged": owner_unchanged, "physical_units": physical,
+		"restore_valid": true, "restore_exact": restored_checkpoint_equal,
+		"restored_frame_equal": restored_frame_equal,
+		"restored_frame": restored_frame, "restored_checkpoint": session.snapshot(),
+		"restored_owner_unchanged": restored_owner_unchanged,
+		"restored_physical_units": restored_stock,
+		"restore_evidence": restore_key + ".json", "restore_sha256": restore_hash
 	}
 	var hash: String = _write_evidence(key, proof)
 	await session.close()
 	return {
 		"valid": true, "start": start, "after": after,
 		"owner_unchanged": owner_unchanged, "physical_units": physical,
+		"restore_valid": true, "restore_exact": restored_checkpoint_equal,
+		"restored_frame_equal": restored_frame_equal,
+		"restored_frame": restored_frame,
+		"restored_owner_unchanged": restored_owner_unchanged,
+		"restored_physical_units": restored_stock,
+		"restore_evidence": restore_key + ".json", "restore_sha256": restore_hash,
 		"evidence": key + ".json", "sha256": hash
 	}
 
@@ -196,6 +231,11 @@ func _w01_compare(row: Dictionary, observed: Dictionary) -> void:
 			after.reserve_has_item == (mode == "reserve"))
 		check("ninguna duplicacion fisica " + mode,
 			int(o.physical_units) == (1 if expected_consumed else 2))
+		check("SaveV2 exacto y propietario autentico " + mode,
+			o.get("restore_valid", false) and o.get("restore_exact", false)
+			and o.get("restored_frame_equal", false) and o.get("restored_owner_unchanged", false))
+		check("SaveV2 preserva tenencia y consumo " + mode,
+			o.restored_frame == after and int(o.restored_physical_units) == int(o.physical_units))
 	var active: Dictionary = observed.active
 	var plain: Dictionary = observed.none
 	var reserve: Dictionary = observed.reserve
