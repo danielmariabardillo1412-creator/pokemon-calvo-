@@ -1,3 +1,16 @@
+## CIERRE W01 CAMPAÑA_002 / ITER_03
+
+**Estado: CAMPAÑA_002_FINALIZADA, 03/03, STOP.** Rama de trabajo: `codex/calvo-items-20261102-w01-camp002`. Solo `ability_shield`, `absorb_bulb`, `adrenaline_orb`. Sin trabajo adicional autorizado.
+
+- ITER_01 validada en CI #41484879741 (contratos). ITER_02 validada en CI automática #41539775567 (Godot y Python): 687 comprobaciones, 10 ejecuciones y 30 variantes en staging antecedente.
+- ITER_03: añadidas restauraciones SaveV2 por cada variante, igualdad de snapshot/portador/stock y 30 recibos adicionales SHA-256. Commits de pruebas: `72f15884b29a94054220baf0a4208eb9b294347a` y `ee760fc8aebe7fb9d5700aadf25053c13a43f6b7`.
+- Último fixture `74c91b2cfb69d7525ee4d42cc1e57f442c4a808d`; runner `a020292d65f2d4f09e12d6716d15101a8f32a500`; validador `27bd3bc373db74bc3c93298b07e30e71df129188`.
+- La CI de ITER_03 es #41547041337: **EN_CI_AUTOMATICA** al cierre. Auditoría estática 22/22 PASS; no declarar PASS funcional del nuevo código hasta veredicto real.
+- Informes: `CAMP_002_ITER_01.md`, `ITER_02.md`, `ITER_03.md`, `CAMP_002_FINAL.md` y `CAMP_002_PROGRESO.csv` (3 filas).
+- Quedan fuera UI/GPU, cierre de batalla/mapa y casos exhaustivos de cambios de objeto. Ningún cambio de producción, `main`, V28, ramas ajenas ni workflows W01. Una `p` posterior no autoriza ITER_04 ni CAMPAÑA_003.
+
+---
+
 > **INSTRUCCIÓN VIGENTE IA6 — CI AUTOMÁTICA V3 (2026-11-02):** el estado histórico `PREPARADO_PENDIENTE_CI` o `STOP HASTA IA6` que aparece más abajo **ya no exige detenerse solo por esperar pruebas**. Lee en rama `codex/calvo-items-20261101-arbitro` [CI_AUTOPILOT_V3.md](../../CI_AUTOPILOT_V3.md) y `CAMPAIGN_GATE_002.md`: se ha instalado el workflow `.github/workflows/parallel-camp002-worker-autoci.yml` **en esta misma rama**; la primera ejecución propia [#41539775567](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41539775567) terminó `completed/success`. **Siguiente `p` ejecuta exclusivamente ITER_03 de CAMP_002** tras comprobar que no exista un FAIL más reciente. Cambios de tests disparan CI sin intervención de IA6; commits solo de informes NO la disparan. Si la nueva CI está `queued/in_progress`, puedes preparar hasta un bloque posterior ya autorizado sin declarar PASS ni borrar tests previos; un FAIL real exige reparar tu prueba en tus rutas exclusivas o STOP ante defecto funcional. **En ITER_03, publicar y STOP sin iniciar ITER_04/CAMP_003.** IA6 ya sincronizó el runner corregido del conflicto OUT; no repetir parche. No tocar `main`, V28, otras ramas ni producción.
 
 # W01 — CUADERNO DE CONTINUIDAD
