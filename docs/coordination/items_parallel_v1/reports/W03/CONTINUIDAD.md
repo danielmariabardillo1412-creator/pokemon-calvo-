@@ -1,6 +1,27 @@
 # IA3/W03 — Cuaderno operativo CAMPAÑA_002 (captura)
 
-**Rama exclusiva:** `codex/calvo-items-20261102-w03-camp002`. **Estado:** `ITER_01/03_ENTREGADA / PREPARADO_PENDIENTE_CI`. **IDs:** `dusk_ball`, `repeat_ball`, `dive_ball`.
+## ESTADO VIGENTE — ITER_02/03 PUBLICADA; nuevas pruebas PENDIENTES DE CI
+
+- **Rama de escritura única:** `codex/calvo-items-20261102-w03-camp002`, creada originalmente desde checkpoint `67959eb8f19abfd2ae391872747a14f603fcab01`. No fusionar ramas CAMP_001 ni escribir en W04 congelada.
+- **Permiso IA6 actualizado:** puerta `CAMPAIGN_GATE_002.md` blob `2fceaa04646db8a9538f3d3693c85b6e67422fd6`; gate de CI ITER_01 `CAMPAIGN_002_ITER01_CI_GATE.md` blob `12e9c3021e80f9e03e0f9b0e900853b9a7e6a513`; encargo W03 blob `96ec7241e2fad9f3c9f411a555649979c77b3953`. IA6 **autorizó ITER_02** tras PASS de la ITER_01.
+- **PASS real histórico del bloque 01:** [Actions #41484879741](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41484879741) SHA `967002fcbf26a1159d3a14a020e8921b34cfab8f`, `completed/success`, W03 Python **9 tests PASS**; no prueba efectos jugables.
+- **Referencia externa fija y verificada realmente:** Pokémon Essentials / Maruno17 commit `8c5911e4a4b07b07e832e4bb0d5d8859e88b4a9b`; `Data/Scripts/011_Battle/007_Other battle code/010_Battle_PokeBallEffects.rb` blob `3deb95a4d4a38e51bf6950a4702f73e06a806c6f`; settings `Data/Scripts/002_BattleSettings.rb` blob `550a358751fba061adf3978460382de3dc3ab556`, `NEW_POKE_BALL_CATCH_RATES` si gen ≥7.
+- **Ocaso / dusk_ball:** noche/cueva `battle.time == 2`; ×3 para gen ≥7 o ×3,5 pre-7; resto ×1. Falta señal autoritativa de reloj/cueva en `CaptureBattleContext`. Región de cueva en escena no se inyecta a captura.
+- **Acopio / repeat_ball:** `battle.pbPlayer.owned?(battler.species)`; ×3,5 para gen ≥7 o ×3 pre-7; resto ×1. Falta registro histórico de especies propias/capturadas persistente; partido/PC actual no equivale a Pokédex histórica.
+- **Buceo / dive_ball:** `battle.environment == :Underwater`; ×3,5 si subacuático, de lo contrario ×1. Falta flag del ambiente real del encuentro; tipo Agua no implica buceo.
+- **ITER_02 GDScript nuevo:** `tests/gameplay/parallel_items_w03_campaign_002.gd`, commit `89d7ec1193c964f03db3c7efe0de3e897ba949a7`, blob `ccb45a1c31be3385b7bf7520c31a536b457eaaa6`. Valida comportamiento actual `unknown_ball`, rechazo sin gasto/RNG/mutaciones, prioridades de entrenador/KO/combate finalizado, Net y Poké Ball preservadas. **No aplica multiplicadores ni usa contextos inventados.**
+- **Fixture ampliado:** `tests/fixtures/parallel_items/w03_campaign_002.json`, commit `d70d3b8aa2bd48a4524d7012d976a0179cea1a0f`, blob `09d387e36acc7e4bbddd07f3a2f2f7fde4956a21`; referencia SHA/lineas/factores normativos y `NEGATIVE_CHARACTERIZATION_ONLY`.
+- **Python ampliado:** `tests/tools/test_parallel_items_w03_campaign_002.py`, commit `fe0772cd27459b0cf19c2a659570acfcccd3786f`, blob `f91e4b8d30fbbe80b92a8bbaf919e607856c2d50`; 11 unittests, dos nuevos verifican tabla normativa y contratos del runner Godot.
+- **Informe:** [ITER_02](./CAMP_002_ITER_02.md) y [CSV de progreso](./CAMP_002_PROGRESO.csv). **Verificación local de contenido en GitHub: `STATIC_REVIEW_PASS`** (manual). **Unittest Python 11: SIN_EJECUTAR; Godot del script nuevo: SIN_EJECUTAR; CI ITER_02: SIN_EJECUTAR; GPU: SIN_EJECUTAR.** No dar PASS al bloque 02 antes de nuevo run IA6.
+- **Comandos IA6 desde raíz de checkout/import Godot:** `python tests/tools/test_parallel_items_w03_campaign_002.py`; `godot --headless --path . --script tests/gameplay/parallel_items_w03_campaign_002.gd`. Revisar `CAMP_002_W03_NEGATIVE`, código de salida y SHA exacto.
+- **Siguiente orden `p`: solo ITER_03 (decisión y contratos por bola, defensa contra regresiones de Net/V11/V15), tras consultar gate actualizado y detenerse si CI anuncia FAIL/bloqueo. No crear multiplicadores ni cambiar arquitectura. El cierre será `CAMPAÑA_002_FINALIZADA` tras 03/03, no antes.
+- **STOP/permisos:** única escritura en fixture/test GDScript/test Python y reports W03 específicamente enumerados por `CAMP_002_W03.md`. Fuera de alcance: `CaptureSystem`, `CaptureBattleContext`, adaptadores, sesión, RNG, saves, selección, `.github`, arte, main, V28, PR #118 y cualquier rama W ajena.
+
+---
+
+## Histórico conservado — ITER_01
+
+**Rama exclusiva:** `codex/calvo-items-20261102-w03-camp002`. **Estado histórico al cerrar ITER_01:** `ITER_01/03_ENTREGADA / PREPARADO_PENDIENTE_CI`. **IDs:** `dusk_ball`, `repeat_ball`, `dive_ball`.
 **BASE comprobada:** `67959eb8f19abfd2ae391872747a14f603fcab01`. **No reutilizar ni escribir en ramas 20261101.**
 **Órdenes IA6:** `CAMPAIGN_GATE_002.md` blob `ebc787803599e2b13cbd24c169b69112d18f7a42` (ACTIVADA), `CAMPAIGN_002_BRANCH_MANIFEST.md` blob `bb9471862d3116b982f90e1867d512e278f801e0`, `campaigns/CAMP_002_W03.md` blob `96ec7241e2fad9f3c9f411a555649979c77b3953`. Revisar estas órdenes al inicio de cada `p`.
 
