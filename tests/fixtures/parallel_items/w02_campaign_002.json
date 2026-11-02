@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "campaign": "CAMP_002",
+  "worker": "W02",
+  "completed_iterations": [
+    1
+  ],
+  "family": "held_berry_revalidation",
+  "format": "gen9calvounifiedv1",
+  "level": 100,
+  "seed": [
+    23,
+    19,
+    29,
+    43
+  ],
+  "variants": [
+    "active",
+    "none",
+    "reserve"
+  ],
+  "item_ids": [
+    "sitrus_berry",
+    "lum_berry"
+  ],
+  "field_scope": "NOT_TESTED_ITER_01",
+  "cases": [
+    {
+      "id": "sitrus_berry",
+      "scenario": "sitrus_low_hp_c002",
+      "kind": "low_hp",
+      "actor_species": "mew",
+      "foe_move": "amnesia",
+      "consumes": true
+    },
+    {
+      "id": "sitrus_berry",
+      "scenario": "sitrus_high_hp_c002",
+      "kind": "high_hp",
+      "actor_species": "mew",
+      "foe_move": "amnesia",
+      "consumes": false
+    },
+    {
+      "id": "lum_berry",
+      "scenario": "lum_poison_c002",
+      "kind": "poison",
+      "actor_species": "mew",
+      "foe_move": "amnesia",
+      "consumes": true
+    },
+    {
+      "id": "lum_berry",
+      "scenario": "lum_healthy_c002",
+      "kind": "healthy",
+      "actor_species": "mew",
+      "foe_move": "amnesia",
+      "consumes": false
+    }
+  ],
+  "coverage_matrix": {
+    "sitrus_berry": {
+      "positive": [
+        "sitrus_low_hp_c002"
+      ],
+      "negative": [
+        "sitrus_high_hp_c002"
+      ],
+      "effect": "quarter_hp_below_half",
+      "field_profile": "PRESENT_NOT_TESTED"
+    },
+    "lum_berry": {
+      "positive": [
+        "lum_poison_c002"
+      ],
+      "negative": [
+        "lum_healthy_c002"
+      ],
+      "effect": "persistent_status_all",
+      "field_profile": "PRESENT_NOT_TESTED"
+    }
+  },
+  "note": "ITER_01: ensayos solo sobre equipables reales @pkmn/sim; cada caso se ejecuta active/none/reserve con cierre FLED, restauracion SaveV2 y hash SHA256. Sitrus y Lum tienen perfil de campo existente pero NO se prueba en esta iteracion. No confundir seleccion con implementacion nueva."
+}

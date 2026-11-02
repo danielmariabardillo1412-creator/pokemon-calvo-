@@ -1,0 +1,115 @@
+{
+  "schema_version": 1,
+  "campaign": "CAMP_002_W03",
+  "phase": "01_provenance",
+  "result_interpretation": "STATIC_CONTRACT_ONLY_NOT_FUNCTIONAL_PASS",
+  "ids": [
+    "dusk_ball",
+    "repeat_ball",
+    "dive_ball"
+  ],
+  "required_context_schema": [
+    "is_wild",
+    "battle_finished",
+    "caller_trainer_id",
+    "target_owner_trainer_id",
+    "target_side_id",
+    "completed_turns",
+    "catcher_level"
+  ],
+  "records": [
+    {
+      "id": "dusk_ball",
+      "name_es": "Ocaso Ball",
+      "trigger": "night_or_cave",
+      "source_owner": "field/world clock and validated encounter location -> trusted battle session",
+      "context_signal": "night_or_cave_authoritative",
+      "status": "DEPENDENCIA_DE_CONTEXTO",
+      "evidence": [
+        "scenes/visual/field_demo.gd",
+        "modules/gameplay/wild_adventure_session.gd",
+        "modules/gameplay/showdown_adventure_session.gd",
+        "modules/capture/capture_battle_context.gd"
+      ],
+      "false_positive_rejections": [
+        "world_cave_region_not_forwarded_to_capture",
+        "runner_wall_clock_not_game_time",
+        "completed_turns_not_night"
+      ],
+      "forbidden_assumed_context_fields": [
+        "is_night",
+        "night",
+        "is_cave",
+        "in_cave",
+        "is_dark",
+        "darkness",
+        "time_of_day"
+      ]
+    },
+    {
+      "id": "repeat_ball",
+      "name_es": "Acopio Ball",
+      "trigger": "species_registered_before",
+      "source_owner": "persistent authoritative catch-history service / Pokedex, not current ownership",
+      "context_signal": "species_previously_caught_authoritative",
+      "status": "DEPENDENCIA_DE_CONTEXTO",
+      "evidence": [
+        "modules/creatures/storage/player_collection.gd",
+        "modules/save/save_game_data.gd",
+        "modules/gameplay/wild_adventure_session.gd",
+        "modules/gameplay/showdown_adventure_session.gd",
+        "modules/capture/capture_battle_context.gd"
+      ],
+      "false_positive_rejections": [
+        "party_membership_not_caught_history",
+        "storage_membership_not_caught_history",
+        "current_owned_creature_not_prior_capture",
+        "species_catalog_entry_not_prior_capture"
+      ],
+      "forbidden_assumed_context_fields": [
+        "already_caught",
+        "previously_caught",
+        "has_caught_species",
+        "caught_species_ids",
+        "pokedex_registered",
+        "species_registered"
+      ]
+    },
+    {
+      "id": "dive_ball",
+      "name_es": "Buceo Ball",
+      "trigger": "underwater_capture",
+      "source_owner": "trusted encounter map/biome/underwater condition from world session",
+      "context_signal": "encounter_is_underwater_authoritative",
+      "status": "DEPENDENCIA_DE_CONTEXTO",
+      "evidence": [
+        "scenes/visual/field_demo.gd",
+        "modules/gameplay/wild_adventure_session.gd",
+        "modules/gameplay/showdown_adventure_session.gd",
+        "modules/capture/capture_battle_context.gd"
+      ],
+      "false_positive_rejections": [
+        "ball_name_not_dive_location",
+        "cave_not_underwater",
+        "water_type_not_underwater",
+        "any_fishing_zone_not_underwater_without_contract"
+      ],
+      "forbidden_assumed_context_fields": [
+        "underwater",
+        "is_underwater",
+        "is_diving",
+        "diving",
+        "capture_underwater",
+        "underwater_encounter"
+      ]
+    }
+  ],
+  "policy": {
+    "selected_not_enabled": true,
+    "native_entry_not_multiplier": true,
+    "no_production_edits": true,
+    "no_fake_rng_or_clock": true,
+    "multiplier_at_this_phase": null,
+    "source_of_truth": "live trusted battle session, canonical save ownership after explicitly authorized schema"
+  }
+}

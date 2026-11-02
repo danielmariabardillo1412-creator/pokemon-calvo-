@@ -1,0 +1,145 @@
+{
+  "schema_version": 1,
+  "campaign": "CAMP_002_W05",
+  "microblock": "01",
+  "seed": 20261102,
+  "active_version": "scarlet-violet",
+  "source_paths": {
+    "selection": "docs/current/RANDOMLOCK_ITEMS_BUILD_SCOPE_V2.csv",
+    "mapping": "modules/inventory/item_connections_v1.json",
+    "normalized": "data/normalized/pokemon_api.json",
+    "policy": "config/randomlock_content_v1.json"
+  },
+  "scope_expected": {
+    "selected_machines": 248,
+    "active": 229,
+    "legacy": 19
+  },
+  "sample": {
+    "minimum_valid": 12,
+    "max_selected": 12,
+    "exclude_already_tested": [
+      "tm01",
+      "tm02",
+      "tm77"
+    ],
+    "selection_strategy": "prioridad_18_tipos_ordenados_luego_relleno_tipo_clase_lexicografico",
+    "species_strategy": "primer_id_lexicografico_con_learnset_machine_scarlet-violet_y_especie_permitida",
+    "status": "CANDIDATOS_VERIFICABLES_EN_CI_NO_CERTIFICADOS_EN_GODOT",
+    "candidates": [
+      {
+        "item_id": "tm06",
+        "move_id": "scary_face",
+        "type_id": "normal",
+        "damage_class": "status"
+      },
+      {
+        "item_id": "tm12",
+        "move_id": "low_kick",
+        "type_id": "fighting",
+        "damage_class": "physical"
+      },
+      {
+        "item_id": "tm14",
+        "move_id": "acrobatics",
+        "type_id": "flying",
+        "damage_class": "physical"
+      },
+      {
+        "item_id": "tm13",
+        "move_id": "acid_spray",
+        "type_id": "poison",
+        "damage_class": "special"
+      },
+      {
+        "item_id": "tm05",
+        "move_id": "mud_slap",
+        "type_id": "ground",
+        "damage_class": "special"
+      },
+      {
+        "item_id": "tm36",
+        "move_id": "rock_tomb",
+        "type_id": "rock",
+        "damage_class": "physical"
+      },
+      {
+        "item_id": "tm15",
+        "move_id": "struggle_bug",
+        "type_id": "bug",
+        "damage_class": "special"
+      },
+      {
+        "item_id": "tm17",
+        "move_id": "confuse_ray",
+        "type_id": "ghost",
+        "damage_class": "status"
+      },
+      {
+        "item_id": "tm31",
+        "move_id": "metal_claw",
+        "type_id": "steel",
+        "damage_class": "physical"
+      },
+      {
+        "item_id": "tm08",
+        "move_id": "fire_fang",
+        "type_id": "fire",
+        "damage_class": "physical"
+      },
+      {
+        "item_id": "tm11",
+        "move_id": "water_pulse",
+        "type_id": "water",
+        "damage_class": "special"
+      },
+      {
+        "item_id": "tm20",
+        "move_id": "trailblaze",
+        "type_id": "grass",
+        "damage_class": "physical"
+      },
+      {
+        "item_id": "tm09",
+        "move_id": "thunder_fang",
+        "type_id": "electric",
+        "damage_class": "physical"
+      },
+      {
+        "item_id": "tm04",
+        "move_id": "agility",
+        "type_id": "psychic",
+        "damage_class": "status"
+      },
+      {
+        "item_id": "tm10",
+        "move_id": "ice_fang",
+        "type_id": "ice",
+        "damage_class": "physical"
+      },
+      {
+        "item_id": "tm44",
+        "move_id": "dragon_tail",
+        "type_id": "dragon",
+        "damage_class": "physical"
+      },
+      {
+        "item_id": "tm03",
+        "move_id": "fake_tears",
+        "type_id": "dark",
+        "damage_class": "status"
+      },
+      {
+        "item_id": "tm19",
+        "move_id": "disarming_voice",
+        "type_id": "fairy",
+        "damage_class": "special"
+      }
+    ]
+  },
+  "notes": [
+    "Los 18 candidatos se basan en machine_rows SV y moves.csv fijado; una candidatura no acredita compatibilidad con especie.",
+    "El script descarta sin ocultar los IDs sin especie compatible, y sustituye solo mediante el catálogo real en orden determinista.",
+    "No sobrescribir normalized, selección, servicio ni versiones; 12 son un objetivo sujeto a comprobación real."
+  ]
+}
