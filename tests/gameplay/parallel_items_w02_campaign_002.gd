@@ -54,7 +54,10 @@ func _run_c002() -> void:
 		check("objeto presente en catálogo", catalogs.item(StringName(spec.id)) != null)
 		var observed := {}
 		for mode: String in automation.variants:
-			observed[mode] = await _ensayar_especial(spec, mode) if spec.id in ["leppa_berry", "figy_berry"] else await _ensayar(spec, mode)
+			if spec.id in ["leppa_berry", "figy_berry"]:
+				observed[mode] = await _ensayar_especial(spec, mode)
+			else:
+				observed[mode] = await _ensayar(spec, mode)
 		var valid: bool = observed.size() == 3
 		for mode: String in automation.variants:
 			valid = valid and observed[mode].get("valid", false)
