@@ -1,3 +1,11 @@
+# IA6 — CAMPAÑA_002 / ITER_01 CI FINALIZADA (2026-11-02)
+
+**Nuevo gate de continuación:** [CAMPAIGN_002_ITER01_CI_GATE.md](CAMPAIGN_002_ITER01_CI_GATE.md), respaldado por [Actions #41484879741](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41484879741) `success`. **W01 01/03, W02 01/03, W03 01/03, W05 01/03**: todos los microbloques 01 recibidos e integrados documentalmente/de pruebas en árbitra commit `60baf5b5`. Única corrección: W02 debe incorporar en **su rama nueva** el blob de runner `2e0ac1d2` de árbitra antes de continuar; no requiere cambiar producción, ni duplicar CI completa. Un `p` normal habilita ITER_02 bajo obligación de leer este gate. W04 congelada por decisión del usuario, nunca escribir en su rama.
+
+**Alcance:** W01 contrato estático, W02 Godot 350/4 y Python 13, W03 contrato 9, W05 Python 11 y selector de 12 MT compatibles por catálogo. Solo W02 ejecutó nuevas mecánicas en Godot en ITER_01. Resto de las pruebas funcionales se harán en ITER_02/03. La previa [CI #41484446568](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41484446568) falló por el runner W02 comparando `[1]` con `[1.0]`, arreglado en staging y validado en la segunda ejecución. No afirmar que todos los efectos están finalizados.
+
+---
+
 # OPERATIVA VIGENTE — IA6 / CAMPAÑA_002 ACTIVADA (2026-11-02)
 
 **Orden vigente:** [CAMPAIGN_GATE_002.md](CAMPAIGN_GATE_002.md); [manifiesto comprobado](CAMPAIGN_002_BRANCH_MANIFEST.md); [mensaje único a cuatro chats](CAMPAIGN_002_ACTIVATION_MESSAGE.md). La CAMPAÑA_001 se conserva cerrada/suspendida según GATE_005, no se reabre.
