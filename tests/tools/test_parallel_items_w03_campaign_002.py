@@ -21,7 +21,7 @@ CAMP_FIXTURE = Path("tests/fixtures/parallel_items/w03_campaign_002.json")
 
 def campos_gd(fuente: str) -> set[str]:
     """Variables declaradas del contexto real; ignorar comentarios y supuestos."""
-    return set(re.findall(r"(?m)^\s*var\s+([A-Za-z_]\w*)\s*:", fuente))
+    return set(re.findall(r"(?m)^var\s+([A-Za-z_]\w*)\s*:", fuente))
 
 
 def metodo_gd(fuente: str, nombre: str) -> str:
