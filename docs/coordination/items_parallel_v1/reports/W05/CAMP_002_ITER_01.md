@@ -1,0 +1,17 @@
+# IA5 / W05 — CAMPAÑA_002 · ITER_01 · muestra determinista MT
+
+**Estado:** `PREPARADO_PENDIENTE_CI` / **01 de 03**. Se publica el selector y fixture; no se afirma enseñanza ni compatibilidad con especie aún ejecutada.
+
+- **Autoridad:** `CAMPAIGN_GATE_002.md` blob `ebc787803599e2b13cbd24c169b69112d18f7a42`; `CAMP_002_W05.md` blob `b085227766b28e9d4757cefb8d0cdb7c206967c4`.
+- **Rama exclusiva NUEVA:** `codex/calvo-items-20261102-w05-camp002`, HEAD inicial verificado `67959eb8f19abfd2ae391872747a14f603fcab01`. No se fusionó ni escribió en las ramas de CAMP_001.
+- **Fuente:** `modules/inventory/item_connections_v1.json`, selección `docs/current/RANDOMLOCK_ITEMS_BUILD_SCOPE_V2.csv`, CSV fijado `tests/fixtures/item_connections_v1/primary/moves.csv.txt`. Cotejo remoto estático ejecutado: **248 seleccionadas = 229 activas SV + 19 heredadas**.
+- **Fixture propio:** `tests/fixtures/parallel_items/w05_campaign_002.json`, creación commit `790e64769bc9670aac6a2392c052897bcf23c7a3`.
+- **Test/generador propio:** `tests/tools/test_parallel_items_w05_campaign_002.py`, creación commit `cf83fb213ff362c47a3480e8d91b074f04577184`. CLI `--report` carga `data/normalized/pokemon_api.json` REAL del checkout, verifica clase/tipo/PP/política y busca una especie con `learnset(method=machine, version_group=scarlet-violet, move_id)`.
+- **Muestra candidata de 18 tipos (ID → movimiento):** tm06/scary_face, tm12/low_kick, tm14/acrobatics, tm13/acid_spray, tm05/mud_slap, tm36/rock_tomb, tm15/struggle_bug, tm17/confuse_ray, tm31/metal_claw, tm08/fire_fang, tm11/water_pulse, tm20/trailblaze, tm09/thunder_fang, tm04/agility, tm10/ice_fang, tm44/dragon_tail, tm03/fake_tears, tm19/disarming_voice.
+- **Distribución preparada:** 18 tipos distintos, incluyendo movimientos de estado, físicos y especiales; 18/18 pares ID→movimiento/tipo/clase coinciden con la fuente CSV fijada y mapa SV. Ninguno repite `tm01/tm02/tm77` ya probadas.
+- **Selección efectiva en CI:** recorrer candidatos en orden versionado, exigir compatibilidad REAL de especie y política, tomar hasta **12 IDs distintos**; si falta alguno, descartarlo con `motivo` explícito y reemplazar determinísticamente desde otras MT activas. Si no se alcanza 12, **FAIL**, nunca bajar el umbral.
+- **Sin afirmar falsos positivos:** no he leído completo el JSON normalizado de 12 MB mediante conector (archivo compactado); la compatibilidad individual, las 12 parejas finales y sus especies **quedan PENDIENTES de ejecutar Python en checkout / CI**. 18 candidatos no equivalen a 18 enseñanzas verificadas.
+- **Pruebas publicadas:** 10 unitarias sintéticas sobre determinismo, descarte, política, versión, drift y umbral; 1 test con catálogo real condicionado a checkout completo. **NINGUNA ejecutada en Python/Godot de esta campaña en este entorno.**
+- **Cómo reproducir:** `python -m unittest discover -s tests/tools -p 'test_parallel_items_w05_campaign_002.py' -v`; `python tests/tools/test_parallel_items_w05_campaign_002.py --report`. IA6 ejecutará en CI y registrará SHA/evidencia.
+- **Límites:** ninguna modificación de `FieldItemService.teach`, datos, selección, reglas de versiones, UI/arte, `main`, V28, PR #118, ramas antiguas u otras W. Las 19 heredadas permanecen inactivas, IA4 congelada.
+- **Siguiente `p`:** ITER_02 — arnés GDScript parametrizado con al menos seis parejas válidas a partir del selector; no implementar efectos ni proclamar PASS sin Godot.
