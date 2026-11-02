@@ -27,15 +27,17 @@ func _run_c002() -> void:
 		FileAccess.get_file_as_string("res://data/normalized/pokemon_api.json"))).to_definition_catalog()
 	check("overlay ya disponible", Variants.apply(catalogs))
 	check("formato nativo fijado", String(automation.format) == "gen9calvounifiedv1")
-	check("alcance exclusivo de ITER_01",
-		automation.item_ids == ["sitrus_berry", "lum_berry"]
+	check("alcance autorizado ITER_01+02",
+		automation.item_ids == ["sitrus_berry", "lum_berry", "leppa_berry", "figy_berry"]
 		and automation.completed_iterations is Array
-		and automation.completed_iterations.size() == 1
+		and automation.completed_iterations.size() == 2
 		and (automation.completed_iterations[0] is int or automation.completed_iterations[0] is float)
+		and (automation.completed_iterations[1] is int or automation.completed_iterations[1] is float)
 		and float(automation.completed_iterations[0]) == 1.0
-		and automation.cases.size() == 4)
+		and float(automation.completed_iterations[1]) == 2.0
+		and automation.cases.size() == 9)
 	check("modos de propiedad", automation.variants == ["active", "none", "reserve"])
-	check("campo no ejecutado en este bloque", automation.field_scope == "NOT_TESTED_ITER_01")
+	check("campo no ejecutado en este bloque", automation.field_scope == "NOT_TESTED_ITER_02")
 	var expected_seed: Array = [23, 19, 29, 43]
 	var seed_ok: bool = automation.seed is Array and automation.seed.size() == expected_seed.size()
 	if seed_ok:
@@ -52,13 +54,16 @@ func _run_c002() -> void:
 		check("objeto presente en catálogo", catalogs.item(StringName(spec.id)) != null)
 		var observed := {}
 		for mode: String in automation.variants:
-			observed[mode] = await _ensayar(spec, mode)
+			observed[mode] = await _ensayar_especial(spec, mode) if spec.id in ["leppa_berry", "figy_berry"] else await _ensayar(spec, mode)
 		var valid: bool = observed.size() == 3
 		for mode: String in automation.variants:
 			valid = valid and observed[mode].get("valid", false)
 		check("tres variantes nativas completadas", valid)
 		if valid:
-			_comparar(spec, observed)
+			if spec.id in ["leppa_berry", "figy_berry"]:
+				_comparar_especial(spec, observed)
+			else:
+				_comparar(spec, observed)
 			for mode: String in automation.variants:
 				_verify_receipt(spec, mode, observed[mode])
 		rows.append({"id": spec.id, "scenario": spec.scenario,
@@ -93,9 +98,9 @@ func _verify_receipt(spec: Dictionary, mode: String, observed: Dictionary) -> vo
 
 
 func _finish_c002(rows: Array) -> void:
-	var complete: bool = automation.get("cases", []).size() == 4 and rows.size() == 4
+	var complete: bool = automation.get("cases", []).size() == 9 and rows.size() == 9
 	var coverage: Dictionary = {}
-	for item: String in ["sitrus_berry", "lum_berry"]:
+	for item: String in ["sitrus_berry", "lum_berry", "leppa_berry", "figy_berry"]:
 		var relevant: Array = rows.filter(func(x: Dictionary): return String(x.id) == item)
 		var positive: Array = automation.coverage_matrix[item].positive
 		var negative: Array = automation.coverage_matrix[item].negative
@@ -113,7 +118,7 @@ func _finish_c002(rows: Array) -> void:
 	var report := {"schema_version": 1, "campaign": "CAMP_002",
 		"family": "held_berry_revalidation", "status": "PASS" if complete and errors.is_empty() else "FAIL",
 		"checks": checks, "errors": automation_errors, "cases": rows,
-		"per_item": coverage, "field_scope": "NOT_TESTED_ITER_01",
+		"per_item": coverage, "field_scope": "NOT_TESTED_ITER_02",
 		"full_item_certification": false, "gpu": false}
 	var file := FileAccess.open(destination + "/godot.json", FileAccess.WRITE)
 	if file == null:
