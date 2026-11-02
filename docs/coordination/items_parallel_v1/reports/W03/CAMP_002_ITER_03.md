@@ -1,13 +1,13 @@
 # W03 / CAMPAÑA_002 — ITER_03 / decisión por bola y regresión de Net
 
 **Identidad:** IA3/W03. **Rama exclusiva:** `codex/calvo-items-20261102-w03-camp002`.
-**Estado de entrega:** `03/03 PUBLICADO — PREPARADO_EN_CI_AUTOMATICA` (el cierre no significa que Ocaso/Acopio/Buceo funcionen).
+**Estado de entrega:** `03/03 PUBLICADO — CI_AUTOMATICA_PASS` (el cierre no significa que Ocaso/Acopio/Buceo funcionen).
 
 ## Autoridad y resultados anteriores realmente comprobados
 - `campaigns/CAMP_002_W03.md` blob `96ec7241e2fad9f3c9f411a555649979c77b3953`, gate ITER_02 `CAMPAIGN_002_ITER02_CI_GATE.md` blob `ee1feb63c70f9146d7200b3460c37f19e1cecb06`, protocolo `CI_AUTOPILOT_V3.md` blob `7b1ec84bc1ca0477498cafa6fdf52f603307041e`. **Autoriza solo tests/contratos/reports, sin edición de producción.**
 - ITER_01: W03 9 tests estáticos PASS en [CI #41484879741](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41484879741) staging `967002fcbf26a1159d3a14a020e8921b34cfab8f`.
 - ITER_02: 11 tests Python y 37 negativos Godot PASS, 0 errores, en [CI #41493879869](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41493879869) staging `6a5562dd97225d86fd9b2fb994b247aadc33f98e`. CI autónoma de W03 [#41539840311](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41539840311) `completed/success` sobre `b0897ea0de533579c199e41c4a4e8ef8bc7fd7fd`; los commits posteriores previos a ITER_03 fueron documentales.
-- **ITER_03 tests/fixture nuevos:** commit `44ab67c16eb30e5a3f7044b1b13ff9da1d0dace5`, corrección puntual de un test `754b1ece5039a01da79144e9db60ea774cca6b13`. Blobs: fixture `d55fa7b87864ff4d4058dd737505b42bbd560b10`; Godot `f469b38be329b239306806a4c01c08acef2980d9`; Python `34371e7c0284813ccc863ffaed7badbb6d5fa305`. **Nueva CI #41547276442 en cola al verificar; #41547253548 anterior en curso y podrá cancelarse por `cancel-in-progress`. No hay PASS confirmado de ITER_03 a esta fecha.**
+- **ITER_03 tests/fixture nuevos:** commit `44ab67c16eb30e5a3f7044b1b13ff9da1d0dace5`, corrección puntual de un test `754b1ece5039a01da79144e9db60ea774cca6b13`. Blobs: fixture `d55fa7b87864ff4d4058dd737505b42bbd560b10`; Godot `f469b38be329b239306806a4c01c08acef2980d9`; Python `34371e7c0284813ccc863ffaed7badbb6d5fa305`. **CI REAL #41547276442 `completed/success` sobre SHA de tests `754b1ece5039a01da79144e9db60ea774cca6b13`: Python 14/14 PASS; Godot 4.7 `CAMP_002_W03_NEGATIVE` **58 checks / 0 errores / PASS**, `new_balls_functional=false`. La ejecución anterior #41547253548 quedó `cancelled` por una corrección de test; no se usa como evidencia.**
 
 ## DECISIÓN TÉCNICA: tres dependencias, ninguna implementación autorizada
 
@@ -32,6 +32,6 @@ Referencia exacta e inalterada: Pokémon Essentials commit `8c5911e4a4b07b07e832
 4. Solo con **nuevo gate** puede una IA editar `CaptureBattleContext`, sesiones, persistencia/SaveV2 o adaptadores. Reutilizar `CaptureInventoryService`, `CaptureSystem`, `CaptureRuleset`, RNG y selector existentes; evitar duplicados. IA6 debería fijar versión de perfil moderno antes de autorizar código.
 
 ## Evidencia y límites
-- Inspección de blobs/estructura por GitHub: **revisada**; CI de ITER_03 **SIN VEREDICTO REAL AL REDACTAR**. Ejecutar por workflow automático `parallel-camp002-worker-autoci.yml`: Python 14 tests y Godot `CAMP_002_W03_NEGATIVE` con `new_balls_functional=false` y status PASS, bajo SHA real del último commit de tests.
+- Inspección de blobs/estructura por GitHub: **revisada**; CI de ITER_03 **VERIFICADA** por [#41547276442](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41547276442) sobre SHA exacto de tests `754b1ece...`. Logs: `Ran 14 tests ... OK`, `CAMP_002_W03_STATIC_CONTRACT_PASS tests=14; NO_FUNCIONAL_PASS`, Godot `CAMP_002_W03_NEGATIVE` **58 comprobaciones, 0 errores, PASS**, `new_balls_functional=false`. Sólo acredita contrato/negativos y regresiones Net.
 - El workflow comprueba negativos + regresiones Net acotadas, **no** constituye una certificación de las tres bolas nuevas; no verifica GPU/visuales ni migraciones futuras.
 - **STOP formal 03/03:** no ejecutar ITER_04, CAMPAÑA_003 ni cambiar producción por futuras `p`. `main`, V28, PR #118, ramas anteriores y otras W intocables.
