@@ -1,3 +1,5 @@
+> **RELEVO Y CONTROL ANTIDUPLICADOS (2026-11-02):** [CAMPAIGN_001_CLOSEOUT_AUDIT.md](CAMPAIGN_001_CLOSEOUT_AUDIT.md). IA6 ha cotejado las CI reales con el árbol integrado: W01/W02/W03/W05 03/03 STOP, W04 02/03 congelada, 14/15 preparados. `QUEUE_V1.csv` y el estado V27 son **anteriores a estas certificaciones**; no reasignar por su etiqueta histórica ni abrir CAMP_002 sin nueva orden. Todos los commits después del último SHA con CI PASS modificaron solo documentación.
+
 # ESTADO VIGENTE — IA6 / CAMPAÑA_001, GATE_005 (2026-11-02)
 
 **Autoridad actual:** [CAMPAIGN_GATE_UPDATE_005.md](CAMPAIGN_GATE_UPDATE_005.md). Los estados `PREPARADO_PENDIENTE_CI` de IA5 que figuran más abajo son históricos y quedan sustituidos por prueba real.
