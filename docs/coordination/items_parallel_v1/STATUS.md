@@ -1,3 +1,15 @@
+# ESTADO VIGENTE — IA6 / CAMPAÑA_001, GATE_005 (2026-11-02)
+
+**Autoridad actual:** [CAMPAIGN_GATE_UPDATE_005.md](CAMPAIGN_GATE_UPDATE_005.md). Los estados `PREPARADO_PENDIENTE_CI` de IA5 que figuran más abajo son históricos y quedan sustituidos por prueba real.
+
+**Progreso publicado 14/15:** IA1 03/03 STOP; IA2 03/03 STOP; IA3 03/03 STOP; IA4 **02/03 CONGELADA, NO SUSTITUIR** a petición de la persona; IA5 03/03 STOP. La campaña global no se declara terminada 15/15. **No repartir `p` ni abrir nueva campaña** sin autorización expresa.
+
+**IA5 tercera iteración VERIFICADA:** [staging #41364434498](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41364434498) y [CI sobre integración árbitra #41364601482](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41364601482), ambas `completed/success`; Godot 4.7 **1083 comprobaciones/0 errores**, Python 14 tests, mapa 248=229 activas SV+19 heredadas rechazadas. W05 test integrado commit `a8e09dbf`, mismo blob, sin editar `FieldItemService.teach`.
+
+**Regresión general histórica** [#41364601486](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41364601486): ejecución pendiente al redactar esta actualización; comprobar antes de certificar la batería anterior. Visual/GPU, interfaz real y modelos de libro siguen sin validar.
+
+---
+
 # IA6 — Auditoría del 2 de noviembre: doble CI verde, IA4 congelada
 
 **Última decisión:** no ampliar campaña ni pulsar `p` en IA1, IA2 o IA3 (03/03 cerradas). IA4 sigue `CONGELADA_A_PETICION_USUARIO`, 02/03, sin reemplazo. IA5 aún 02/03 en rama propia `fe0ddcb26ea97543979fb20859675ca20d6613e9`; el único `p` permitido sigue siendo **ITER_03** del encargo original.
