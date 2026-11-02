@@ -20,12 +20,28 @@ EXPECTED = {
     "sitrus_high_hp_c002": ("sitrus_berry", "high_hp", "mew", "amnesia", False),
     "lum_poison_c002": ("lum_berry", "poison", "mew", "amnesia", True),
     "lum_healthy_c002": ("lum_berry", "healthy", "mew", "amnesia", False),
+    "leppa_zero_pp_c002": ("leppa_berry", "pp_empty", "mew", "amnesia", True),
+    "leppa_one_pp_c002": ("leppa_berry", "pp_nonempty", "mew", "amnesia", False),
+    "figy_modest_low_c002": ("figy_berry", "figy_disliked", "mew", "amnesia", True),
+    "figy_hardy_low_c002": ("figy_berry", "figy_neutral", "mew", "amnesia", True),
+    "figy_modest_high_c002": ("figy_berry", "figy_high_hp", "mew", "amnesia", False),
+}
+EXTENSIONS = {
+    "leppa_zero_pp_c002": {"own_moves": ["tackle", "reflect"], "own_choice": "move 2", "first_move_pp": 0, "pp_restore": 10},
+    "leppa_one_pp_c002": {"own_moves": ["tackle", "reflect"], "own_choice": "move 2", "first_move_pp": 1, "pp_restore": 0},
+    "figy_modest_low_c002": {"actor_nature": "modest", "hp_state": "fifth", "disliked": True, "heal_denominator": 3},
+    "figy_hardy_low_c002": {"actor_nature": "hardy", "hp_state": "fifth", "disliked": False, "heal_denominator": 3},
+    "figy_modest_high_c002": {"actor_nature": "modest", "hp_state": "near_full", "disliked": True, "heal_denominator": 3},
 }
 PROFILES = {
     "sitrus_berry": ("quarter_hp_below_half", "PRESENT_NOT_TESTED",
                      ("sitrus_low_hp_c002",), ("sitrus_high_hp_c002",)),
     "lum_berry": ("persistent_status_all", "PRESENT_NOT_TESTED",
                   ("lum_poison_c002",), ("lum_healthy_c002",)),
+    "leppa_berry": ("restore_10_first_move_when_zero_pp", "PRESENT_NOT_TESTED",
+                     ("leppa_zero_pp_c002",), ("leppa_one_pp_c002",)),
+    "figy_berry": ("third_hp_low_disliked_spicy_confusion", "NOT_REGISTERED",
+                   ("figy_modest_low_c002", "figy_hardy_low_c002"), ("figy_modest_high_c002",)),
 }
 
 
@@ -44,25 +60,28 @@ def verify_fixture(f):
                       "field_scope", "cases", "coverage_matrix", "note"},
            "Estructura de fixture alterada")
     demand(f["schema_version"] == 1 and f["campaign"] == "CAMP_002"
-           and f["worker"] == "W02" and f["completed_iterations"] == [1]
+           and f["worker"] == "W02" and f["completed_iterations"] == [1, 2]
            and f["family"] == "held_berry_revalidation", "Identidad/campaña fuera del gate")
     demand(f["format"] == "gen9calvounifiedv1" and f["level"] == 100
            and f["seed"] == [23, 19, 29, 43], "Semilla o formato ajeno")
-    demand(f["variants"] == list(MODES) and f["item_ids"] == ["sitrus_berry", "lum_berry"]
-           and f["field_scope"] == "NOT_TESTED_ITER_01", "Rango o alcance alterado")
-    demand(type(f["cases"]) is list and len(f["cases"]) == 4, "Faltan casos obligatorios")
+    demand(f["variants"] == list(MODES) and f["item_ids"] == ["sitrus_berry", "lum_berry", "leppa_berry", "figy_berry"]
+           and f["field_scope"] == "NOT_TESTED_ITER_02", "Rango o alcance alterado")
+    demand(type(f["cases"]) is list and len(f["cases"]) == 9, "Faltan casos obligatorios")
     seen = set()
     for case in f["cases"]:
-        demand(set(case) == {"id", "scenario", "kind", "actor_species", "foe_move", "consumes"},
-               "Caso con campos ausentes o no autorizados")
         scenario = case["scenario"]
+        base_keys = {"id", "scenario", "kind", "actor_species", "foe_move", "consumes"}
+        expected_extension = EXTENSIONS.get(scenario, {})
+        demand(set(case) == base_keys | set(expected_extension), "Campos de caso ajenos/ausentes")
+        for key, value in expected_extension.items():
+            demand(case[key] == value, "Contrato especial manipulado: " + scenario + "/" + key)
         demand(scenario in EXPECTED and scenario not in seen, "Caso extraño o duplicado")
         seen.add(scenario)
         demand((case["id"], case["kind"], case["actor_species"],
                 case["foe_move"], case["consumes"]) == EXPECTED[scenario],
                "Expectativa cambiada para forzar PASS")
     demand(seen == set(EXPECTED), "La familia tiene huecos")
-    demand(set(f["coverage_matrix"]) == set(PROFILES), "La matriz no separa las dos bayas")
+    demand(set(f["coverage_matrix"]) == set(PROFILES), "La matriz no separa las cuatro bayas")
     for item, profile in PROFILES.items():
         entry = f["coverage_matrix"][item]
         demand(set(entry) == {"positive", "negative", "effect", "field_profile"},
@@ -84,7 +103,7 @@ def verify_result(f, result, folder):
            "Se ha usado PASS ficticio o se ha ampliado alcance")
     demand(type(result["checks"]) is int and result["checks"] >= 120,
            "La ejecución no tiene suficientes aserciones")
-    demand(type(result["cases"]) is list and len(result["cases"]) == 4, "Faltan pruebas")
+    demand(type(result["cases"]) is list and len(result["cases"]) == 9, "Faltan pruebas")
     seen = set()
     for row in result["cases"]:
         demand(set(row) == {"id", "scenario", "status", "checks", "observed"},
@@ -99,10 +118,11 @@ def verify_result(f, result, folder):
         demand(set(modes) == set(MODES), "Control nativo incompleto")
         should_consume = EXPECTED[key][4]
         for mode, rec in modes.items():
-            demand(set(rec) == {"valid", "hp", "max_hp", "status", "damage", "consumed",
-                                "stock_total", "bag", "evidence", "sha256",
-                                "restored", "settled_once", "save_v2"},
-                   "Recibo de simulador incompleto")
+            basic = {"valid", "hp", "max_hp", "status", "damage", "consumed",
+                     "stock_total", "bag", "evidence", "sha256",
+                     "restored", "settled_once", "save_v2"}
+            extra = {"initial_hp", "initial_pp", "first_move_pp", "nature", "native_confusion"} if key in EXTENSIONS else set()
+            demand(set(rec) == basic | extra, "Recibo de simulador incompleto")
             demand(all(rec[flag] is True for flag in ("valid", "restored",
                    "settled_once", "save_v2")), "No se guardó/restauró FLED o SaveV2")
             consumed = should_consume and mode == "active"
@@ -116,6 +136,8 @@ def verify_result(f, result, folder):
             initial_hp = (max(1, rec["max_hp"] // 4) if EXPECTED[key][1] == "low_hp"
                           else rec["max_hp"] - 1 if EXPECTED[key][1] == "high_hp"
                           else rec["max_hp"])
+            if key in EXTENSIONS:
+                initial_hp = rec["initial_hp"]
             demand(rec["damage"] == initial_hp - rec["hp"],
                    "PS/daño no atribuibles a estado inicial")
             raw = valid_file(folder, rec["evidence"], rec["sha256"])
@@ -126,6 +148,18 @@ def verify_result(f, result, folder):
                    and raw["native_consumed"] is consumed
                    and raw["stock_total"] == expected_units,
                    "Recibo nativo/propiedad alterado")
+            if key in EXTENSIONS:
+                demand(raw["initial_hp"] == rec["initial_hp"]
+                       and raw["initial_pp"] == rec["initial_pp"]
+                       and raw["native_pp"] == rec["first_move_pp"]
+                       and raw["nature"] == rec["nature"]
+                       and raw["native_confusion"] is rec["native_confusion"],
+                       "PP/naturaleza/confusion no corresponden con recibo")
+                demand(type(raw["native_confusion_events"]) is list, "Eventos del motor no capturados")
+                if rec["native_confusion"]:
+                    demand(any(line.lower().startswith("|-start|") and "|confusion" in line.lower()
+                               for line in raw["native_confusion_events"]),
+                           "Confusion inventada sin evento nativo")
             owner = raw["owner_after"]
             demand(owner["inventory"]["quantities"].get(row["id"], 0) == expected_bag
                    and physical_units(owner, row["id"]) == expected_units,
@@ -134,6 +168,10 @@ def verify_result(f, result, folder):
             reserve = next(c for c in owner["creatures"] if c["instance_id"] == "reserve")
             demand(own["held_item_consumed"] is consumed and own["current_hp"] == rec["hp"],
                    "Dueño activo/snapshot incoherente")
+            if key in EXTENSIONS:
+                demand(own["nature_id"] == rec["nature"]
+                       and own["moveset"][0]["current_pp"] == rec["first_move_pp"],
+                       "SaveV2 perdió PP/naturaleza")
             if mode == "reserve":
                 demand(reserve["held_item_id"] == row["id"]
                        and reserve["held_item_consumed"] is False,
@@ -155,6 +193,24 @@ def verify_result(f, result, folder):
                    "Ziuela no limpia el veneno solo del portador")
         elif kind == "healthy":
             demand(active["status"] == none["status"] == "", "Ziuela se gasta sin estado")
+        elif kind in ("pp_empty", "pp_nonempty"):
+            initial = EXTENSIONS[key]["first_move_pp"]
+            demand(active["first_move_pp"] == initial + (10 if should_consume else 0)
+                   and none["first_move_pp"] == reserve["first_move_pp"] == initial,
+                   "Zanama no restaura PP del slot correcto")
+            demand(active["hp"] == none["hp"] and active["status"] == none["status"],
+                   "Zanama altera PS/estado")
+        elif kind.startswith("figy_"):
+            extra = EXTENSIONS[key]
+            gain = active["max_hp"] // 3 if should_consume else 0
+            demand(active["hp"] == min(active["max_hp"], none["hp"] + gain),
+                   "Higog cura cantidad o umbral erróneos")
+            demand(active["nature"] == none["nature"] == reserve["nature"] == extra["actor_nature"],
+                   "Se ha cambiado la naturaleza para forzar PASS")
+            demand(active["native_confusion"] is (should_consume and extra["disliked"])
+                   and none["native_confusion"] is False
+                   and reserve["native_confusion"] is False,
+                   "Higog confunde por naturaleza incorrecta")
     demand(seen == set(EXPECTED), "Faltan escenas comprobadas")
     demand(set(result["per_item"]) == set(PROFILES), "Faltan bayas en resumen")
     for item, profile in PROFILES.items():
@@ -170,16 +226,16 @@ class W02Campaign2Contracts(unittest.TestCase):
         self.fixture = read(FIXTURE)
 
     def test_fixture(self):
-        self.assertEqual(len(verify_fixture(self.fixture)["cases"]), 4)
+        self.assertEqual(len(verify_fixture(self.fixture)["cases"]), 9)
 
     def test_no_third_item(self):
         f = copy.deepcopy(self.fixture)
-        f["item_ids"].append("leppa_berry")
+        f["item_ids"].append("oran_berry")
         with self.assertRaises(ValueError): verify_fixture(f)
 
     def test_no_unapproved_iteration(self):
         f = copy.deepcopy(self.fixture)
-        f["completed_iterations"] = [1, 2]
+        f["completed_iterations"] = [1, 2, 3]
         with self.assertRaises(ValueError): verify_fixture(f)
 
     def test_missing_scenario(self):
@@ -223,6 +279,26 @@ class W02Campaign2Contracts(unittest.TestCase):
     def test_matrix_cannot_claim_other_id(self):
         f = copy.deepcopy(self.fixture)
         f["coverage_matrix"]["lum_berry"]["positive"] = ["sitrus_low_hp_c002"]
+        with self.assertRaises(ValueError): verify_fixture(f)
+
+    def test_wrong_leppa_slot(self):
+        f = copy.deepcopy(self.fixture)
+        f["cases"][4]["own_choice"] = "move 1"
+        with self.assertRaises(ValueError): verify_fixture(f)
+
+    def test_wrong_leppa_pp_trigger(self):
+        f = copy.deepcopy(self.fixture)
+        f["cases"][5]["consumes"] = True
+        with self.assertRaises(ValueError): verify_fixture(f)
+
+    def test_wrong_figy_nature(self):
+        f = copy.deepcopy(self.fixture)
+        f["cases"][6]["actor_nature"] = "adamant"
+        with self.assertRaises(ValueError): verify_fixture(f)
+
+    def test_wrong_figy_confusion_rule(self):
+        f = copy.deepcopy(self.fixture)
+        f["cases"][7]["disliked"] = True
         with self.assertRaises(ValueError): verify_fixture(f)
 
     def test_no_evidence_traversal(self):

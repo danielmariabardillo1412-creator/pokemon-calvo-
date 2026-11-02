@@ -185,12 +185,128 @@ def self_test(f: dict) -> int:
     return rejected
 
 
+
+def validate_native_report(path: Path, fixture: dict) -> tuple[int, int]:
+    """Exige Godot real + snapshots nativos + evidencias exactas y SHA-256."""
+    ensure(path.is_file(), f"SIN_EJECUTAR: no existe evidencia nativa {path}")
+    report = load_json(path)
+    fields = {"schema_version", "campaign", "worker", "execution_mode",
+              "descriptor_sha256", "status", "checks", "errors", "rows", "limits"}
+    ensure(set(report) == fields, "Forma de reporte Godot desconocida")
+    ensure(report["schema_version"] == 1 and report["campaign"] == "CAMP_002"
+           and report["worker"] == "W01" and report["execution_mode"] == "godot_4_7_native",
+           "Reporte de familia, worker o motor incorrecto")
+    ensure(report["descriptor_sha256"] == hashlib.sha256(FIXTURE.read_bytes()).hexdigest(),
+           "Hash SHA-256 del descriptor no coincide")
+    ensure(report["status"] == "PASS" and report["errors"] == [],
+           "Godot no informo PASS sin errores")
+    ensure(type(report["checks"]) is int and report["checks"] >= 150,
+           "Pocas aserciones ejecutadas")
+    ensure(type(report["limits"]) is list and len(report["limits"]) >= 3,
+           "Limitaciones de verificación ausentes")
+    ensure(type(report["rows"]) is list, "Faltan filas del runner")
+    allowed = {(r["id"], seed) for r in fixture["cases"] for seed in r["seeds"]}
+    spec_by_id = {r["id"]: r for r in fixture["cases"]}
+    seen = set()
+    sample_fields = {"valid", "start", "after", "owner_unchanged", "physical_units",
+                     "evidence", "sha256"}
+    frame_fields = {"valid", "hp", "spe", "spa", "atk", "ability", "gastro_acid",
+                    "native_item", "native_bench_item", "active_has_item",
+                    "reserve_has_item", "consumed", "reserve_consumed", "log_markers"}
+
+    for row in report["rows"]:
+        ensure(type(row) is dict and set(row) == {"id", "item_id", "seed", "checks",
+                   "status", "observed"}, "Fila del runner incompatible")
+        key = (row["id"], row["seed"])
+        ensure(key in allowed and key not in seen, "Par caso-semilla ajeno o repetido")
+        seen.add(key)
+        spec = spec_by_id[row["id"]]
+        ensure(row["item_id"] == spec["item_id"] and row["status"] == "PASS"
+               and type(row["checks"]) is int and row["checks"] >= 15,
+               f"No PASS o fila fuera de contrato: {key}")
+        observations = row["observed"]
+        ensure(type(observations) is dict and set(observations) == set(VARIANTS),
+               f"Faltan variantes: {key}")
+        for mode in VARIANTS:
+            obs = observations[mode]
+            ensure(type(obs) is dict and set(obs) == sample_fields and obs["valid"] is True
+                   and obs["owner_unchanged"] is True, f"Observación invalida: {key}/{mode}")
+            ensure(type(obs["physical_units"]) is int, "Cantidad física no entera")
+            start, after = obs["start"], obs["after"]
+            ensure(type(start) is dict and type(after) is dict
+                   and set(start) == frame_fields and set(after) == frame_fields,
+                   f"Fotograma nativo incompleto: {key}/{mode}")
+            ensure(start["valid"] is True and after["valid"] is True,
+                   f"No existen filas nativas: {key}/{mode}")
+            ensure(type(start["log_markers"]) is list and type(after["log_markers"]) is list,
+                   "No se incluyeron eventos nativos")
+            ensure(type(after["spe"]) is int and type(after["spa"]) is int
+                   and type(after["hp"]) is int, "Valores nativos no enteros")
+            consumed = spec["expected"][mode]["consumed"]
+            ensure(after["consumed"] is consumed
+                   and after["reserve_consumed"] is False
+                   and start["active_has_item"] is (mode == "active")
+                   and start["reserve_has_item"] is (mode == "reserve")
+                   and after["reserve_has_item"] is (mode == "reserve")
+                   and obs["physical_units"] == (1 if consumed else 2),
+                   f"Propiedad/consumo/stock alterados: {key}/{mode}")
+            name = f"{row['id']}_{row['seed']}_{mode}.json"
+            ensure(obs["evidence"] == name and type(obs["sha256"]) is str
+                   and len(obs["sha256"]) == 64, "Recibo declarado incorrecto")
+            file = path.parent / name
+            ensure(file.is_file() and hashlib.sha256(file.read_bytes()).hexdigest() == obs["sha256"],
+                   f"Evidencia ausente o hash modificado: {name}")
+            raw = load_json(file)
+            ensure(raw.get("id") == row["id"] and raw.get("item_id") == row["item_id"]
+                   and raw.get("seed") == row["seed"] and raw.get("mode") == mode
+                   and raw.get("start") == start and raw.get("after") == after
+                   and raw.get("owner_unchanged") is True
+                   and raw.get("physical_units") == obs["physical_units"]
+                   and type(raw.get("initial")) is dict and type(raw.get("final")) is dict
+                   and bool(raw["initial"]) and bool(raw["final"]),
+                   "Recibo nativo sin snapshots o divergente del informe")
+
+        a = observations["active"]
+        n = observations["none"]
+        r = observations["reserve"]
+        if spec["item_id"] == "ability_shield":
+            ensure(a["after"]["ability"] == "synchronize"
+                   and n["after"]["ability"] == "synchronize",
+                   "Habilidad base no conservada")
+            if spec["trigger"] == "ability_suppression_attempt":
+                passed = (not a["after"]["gastro_acid"]
+                          and n["after"]["gastro_acid"] and r["after"]["gastro_acid"])
+            else:
+                passed = not any(x["after"]["gastro_acid"] for x in (a, n, r))
+        elif spec["item_id"] == "absorb_bulb":
+            if spec["trigger"] == "damaging_water_hit":
+                passed = (a["after"]["spa"] == 1 and n["after"]["spa"] == r["after"]["spa"] == 0
+                          and a["after"]["hp"] < a["start"]["hp"]
+                          and n["after"]["hp"] < n["start"]["hp"])
+            else:
+                passed = all(x["after"]["spa"] == 0 for x in (a, n, r))
+        elif spec["item_id"] == "adrenaline_orb":
+            if spec["trigger"] == "opposing_intimidate":
+                passed = (a["start"]["spe"] == 1
+                          and n["start"]["spe"] == r["start"]["spe"] == 0
+                          and a["after"]["spe"] == 1
+                          and n["after"]["spe"] == r["after"]["spe"] == 0)
+            else:
+                passed = all(x["after"]["spe"] == 0 for x in (a, n, r))
+        else:
+            raise ValueError("Objeto ajeno al lote")
+        ensure(passed, f"Observación causal nativa incumplida: {key}")
+    ensure(seen == allowed and len(seen) == 10, "Faltan ejecuciones reales")
+    return len(seen), len(seen) * len(VARIANTS)
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--contracts", action="store_true",
                         help="Solo matriz + referencias reales, NO Godot")
     parser.add_argument("--self-test", action="store_true",
                         help="Rechazar seis mutaciones deliberadas")
+    parser.add_argument("--native", action="store_true", help="Validar pruebas reales Godot y recibos SHA")
+    parser.add_argument("--report", type=Path, default=ROOT / ".godot/parallel_items/w01_campaign_002/report.json")
     args = parser.parse_args()
     try:
         fixture = load_json(FIXTURE)
@@ -199,8 +315,11 @@ def main() -> int:
         print(f"W01_CAMP002_ITER01_CONTRACT_PASS cases={cases} runs={runs} variants={variants} sources=4")
         if args.self_test:
             print(f"W01_CAMP002_ITER01_NEGATIVE_PASS rejected={self_test(fixture)}")
-        if not args.contracts and not args.self_test:
-            print("PREPARADO_PENDIENTE_CI; la ejecución nativa corresponde a ITER_02")
+        if args.native:
+            checked, modes = validate_native_report(args.report, fixture)
+            print(f"W01_CAMP002_NATIVE_EVIDENCE_PASS runs={checked} variants={modes}")
+        elif not args.contracts and not args.self_test:
+            print("PREPARADO_PENDIENTE_CI; invoque --native para exigir reporte Godot real")
         return 0
     except (OSError, ValueError, KeyError, IndexError, TypeError, AssertionError) as exc:
         print(f"W01_CAMP002_ITER01_CONTRACT_FAIL {exc}", file=sys.stderr)
