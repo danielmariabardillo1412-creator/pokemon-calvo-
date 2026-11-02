@@ -1,3 +1,17 @@
+# OPERATIVA VIGENTE — IA6 / CAMPAÑA_002 ACTIVADA (2026-11-02)
+
+**Orden vigente:** [CAMPAIGN_GATE_002.md](CAMPAIGN_GATE_002.md); [manifiesto comprobado](CAMPAIGN_002_BRANCH_MANIFEST.md); [mensaje único a cuatro chats](CAMPAIGN_002_ACTIVATION_MESSAGE.md). La CAMPAÑA_001 se conserva cerrada/suspendida según GATE_005, no se reabre.
+
+**IA1/W01, IA2/W02, IA3/W03, IA5/W05:** CAMPAÑA_002 autorizada, **00/03 cada una** hasta recibir la orden inicial de activación en su conversación. Cuatro **ramas nuevas** `codex/calvo-items-20261102-w01-camp002`, `w02-camp002`, `w03-camp002`, `w05-camp002`, todas creadas y verificadas en SHA inicial `67959eb8f19abfd2ae391872747a14f603fcab01`. No reusar ramas 20261101 ni mezclar informes de campaña antigua. **IA4/W04 congelada**, sin nueva rama ni encargado.
+
+**Evidencia/triaje:** [CAMPAIGN_002_PRETRIAGE_VERIFIED.md](CAMPAIGN_002_PRETRIAGE_VERIFIED.md) separa fuentes existentes de pruebas pendientes, y [overlay de 267 IDs CAMP_001](CAMPAIGN_001_EVIDENCE_OVERLAY_V1.csv) evita duplicados. La cola histórica `QUEUE_V1.csv` y V27 no prueban que falten efectos. En esta campaña hay **12 microbloques potenciales**, solo nuevos tests/fixtures/reports, sin escritura de producción. Ninguna prueba CAMP_002 ejecutada aún.
+
+**CI base:** Godot 4.7 #41364601482 y #41364601486 SUCCESS sobre `a8e09dbf`, seguidos únicamente de commits documentales. No representa PASS de pruebas aún no escritas. IA6 consolida CI por paquete; visual/GPU aparte.
+
+**Activación en chats:** enviar una vez el texto universal a IA1, IA2, IA3 e IA5; ejecutan bloque 01 inmediatamente. Después `p` para 02 y 03 por chat. **No enviar nada a IA4** ni `p` aislada antes de esta reasignación.
+
+---
+
 > **PRETRIAJE PREVENTIVO IA6 — 2026-11-02:** [overlay exacto de 267 evidencias CAMP_001](CAMPAIGN_001_EVIDENCE_OVERLAY_V1.csv) contrastado con 744 filas de la selección, y [propuesta de CAMPAÑA_002 no activada](CAMPAIGN_002_PRETRIAGE_DRAFT.md). **W04 permanece congelada; ninguna W tiene nuevos permisos ni debe recibir `p`.** No sobrescribir `QUEUE_V1.csv` ni interpretar 226 MT sin prueba de enseñanza individual como funcionalidades sin implementar. `main` y V28 intactas.
 
 > **RELEVO Y CONTROL ANTIDUPLICADOS (2026-11-02):** [CAMPAIGN_001_CLOSEOUT_AUDIT.md](CAMPAIGN_001_CLOSEOUT_AUDIT.md). IA6 ha cotejado las CI reales con el árbol integrado: W01/W02/W03/W05 03/03 STOP, W04 02/03 congelada, 14/15 preparados. `QUEUE_V1.csv` y el estado V27 son **anteriores a estas certificaciones**; no reasignar por su etiqueta histórica ni abrir CAMP_002 sin nueva orden. Todos los commits después del último SHA con CI PASS modificaron solo documentación.
