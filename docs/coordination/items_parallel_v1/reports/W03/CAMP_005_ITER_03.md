@@ -1,3 +1,9 @@
+## Validación CI del bloque 03
+
+[GitHub Actions #41719545522](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41719545522), SHA `8b12bbb254f01ec39fa0d24b4959c6c548ee4eef`, **completed/success**. Recibos: `CAMP005_W03_PY PASS blocks=3 checks=63`, `CAMP005_GATE_PY_PASS`, `CAMP005_W03_GODOT PASS blocks=3 checks=63`, `CAMP005_GATE_GODOT_PASS`. Certifica el contrato de evolución lunar positivo y las fronteras pendientes; **Love Ball y Moon Ball todavía no obtienen efectos funcionales de captura**.
+
+---
+
 # IA3/W03 — CAMPAÑA_005 / BLOQUE 03 — Love Ball y Moon Ball
 
 **Reserva autorizada:** `love_ball;moon_ball`. No se cuentan como objetos nuevos. Rama propia: `codex/calvo-items-20261103-w03-camp005`.
