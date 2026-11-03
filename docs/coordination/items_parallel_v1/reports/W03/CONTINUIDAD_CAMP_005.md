@@ -1,3 +1,13 @@
+# IA3/W03 — CONTINUIDAD CAMPAÑA_005 04/10
+
+**Rama exclusiva:** `codex/calvo-items-20261103-w03-camp005`. Bloque 04 `beast_ball;heavy_ball`: ambos `DEPENDENCIA_CONCRETA`. Beast precisa taxonomía ultraente canónica/versionada; Heavy precisa peso por forma y versión de fórmula que modifica tasa. Godot/Python ahora comprueban positivamente el roundtrip de metadatos de especie, tasa y probabilidad determinista, pero NO los efectos Beast/Heavy. Ninguna implementación de producción.
+
+**CI previa 03 confirmada:** [#41719545522](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41719545522), Python 63/Godot 63 PASS, gates IA6 PASS. **CI 04:** verificar `CAMP005_W03_PY PASS blocks=4`, `CAMP005_W03_GODOT PASS blocks=4` y gates sobre SHA con 4 filas CSV; reparar error propio si lo hay.
+
+**Siguiente `p`: bloque 05** exactamente `safari_ball;sport_ball`. En el bloque05 el workflow exige además regresiones CAMP004 y CAMP003. No anticipar. No tocar main/V28, PR #118, otras ramas ni APIs compartidas.
+
+---
+
 ## Validación CI del bloque 03
 
 [GitHub Actions #41719545522](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41719545522), SHA `8b12bbb254f01ec39fa0d24b4959c6c548ee4eef`, **completed/success**. Recibos: `CAMP005_W03_PY PASS blocks=3 checks=63`, `CAMP005_GATE_PY_PASS`, `CAMP005_W03_GODOT PASS blocks=3 checks=63`, `CAMP005_GATE_GODOT_PASS`. Certifica el contrato de evolución lunar positivo y las fronteras pendientes; **Love Ball y Moon Ball todavía no obtienen efectos funcionales de captura**.
