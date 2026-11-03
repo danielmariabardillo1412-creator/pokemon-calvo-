@@ -110,6 +110,11 @@ func _probe_berry(spec: Dictionary, mode: String) -> Dictionary:
 	var hp: int = live.current_hp
 	var status: String = String(live.status_state.persistent_id)
 	var spent: bool = live.held_item_consumed
+	# Jaboca: registrar daño causado al rival real, no inferirlo del consumo.
+	var foe_live: CreatureInstance = battle.battle_state().creature(&"foe")
+	check(mode + " rival nativo presente para contraste", foe_live != null)
+	var foe_hp: int = foe_live.current_hp if foe_live != null else -1
+	var foe_max_hp: int = foe_live.stats.max_hp if foe_live != null else -1
 	var raw_native: Dictionary = battle.snapshot().get("native", {}).get("native", {})
 	var confusion: bool = false
 	var boost_spd: bool = false
@@ -141,6 +146,10 @@ func _probe_berry(spec: Dictionary, mode: String) -> Dictionary:
 	battle = restored.session
 	owner = restored.owner
 	var replay: CreatureInstance = battle.battle_state().creature(&"own")
+	if String(spec.kind) == "retaliate_physical":
+		var foe_replayed: CreatureInstance = battle.battle_state().creature(&"foe")
+		check(mode + " restauracion rival tras Jaboca",
+			foe_replayed != null and foe_replayed.current_hp == foe_hp)
 	check(mode + " restauración HP/status/consumo",
 		replay.current_hp == hp and String(replay.status_state.persistent_id) == status
 		and replay.held_item_consumed == spent)
@@ -181,12 +190,14 @@ func _probe_berry(spec: Dictionary, mode: String) -> Dictionary:
 		"native_events": native_events, "native_confusion": confusion,
 		"native_boost_spd": boost_spd, "native_boost_def": boost_def,
 		"native_first_move_seen": first_move_seen, "native_first_own": first_move_is_own,
+		"native_foe_hp": foe_hp, "native_foe_max_hp": foe_max_hp,
 		"physical_total": total}
 	var digest: String = _write_evidence(file_name, raw)
 	return {"valid": true, "hp": hp, "max_hp": replay.stats.max_hp,
 		"status": status, "consumed": spent, "total": total, "bag": actual_bag,
 		"damage": initial_hp - hp, "confusion": confusion, "boost_spd": boost_spd,
 		"boost_def": boost_def, "first_move_seen": first_move_seen, "first_own": first_move_is_own,
+		"foe_hp": foe_hp, "foe_max_hp": foe_max_hp,
 		"save_v2": true, "restored": true, "settled_once": true,
 		"evidence": file_name + ".json", "sha256": digest}
 
@@ -205,9 +216,9 @@ func _compare_berry(spec: Dictionary, observed: Dictionary) -> void:
 	match String(spec.kind):
 		"heal_flavor":
 			var delta: int = int(floor(float(active.max_hp) / 3.0)) if consume else 0
-			check("Aguav cura 1/3 del máximo sólo con umbral",
+			check("Aguav e Iapapa curan 1/3 del máximo sólo con umbral",
 				active.hp == mini(active.max_hp, none.hp + delta))
-			check("Aguav confunde sólo naturaleza que rechaza sabor",
+			check("Baya de sabor confunde sólo naturaleza que la rechaza",
 				active.confusion == bool(spec.confuses) and not none.confusion and not reserve.confusion)
 		"boost_spd", "boost_def":
 			var key: String = "boost_spd" if String(spec.kind) == "boost_spd" else "boost_def"
@@ -239,6 +250,19 @@ func _compare_berry(spec: Dictionary, observed: Dictionary) -> void:
 				active.hp == mini(active.max_hp, none.hp + heal)
 				and none.hp == reserve.hp)
 			check("enigma conserva estado", active.status == none.status and none.status == reserve.status)
+		"retaliate_physical":
+			var retaliation: int = int(floor(float(active.foe_max_hp) / float(spec.retaliation_denominator))) if consume else 0
+			check("Jaboca: testigos de rival nativo con HP maximo igual",
+				active.foe_max_hp > 0
+				and active.foe_max_hp == none.foe_max_hp
+				and none.foe_max_hp == reserve.foe_max_hp)
+			check("Jaboca: daño 1/8 del maximo al atacante solo en contacto fisico",
+				active.foe_hp == none.foe_hp - retaliation
+				and none.foe_hp == reserve.foe_hp
+				and active.foe_hp > 0)
+			check("Jaboca no reduce daño ni altera estado al portador",
+				active.hp == none.hp and reserve.hp == none.hp
+				and active.status == none.status and none.status == reserve.status)
 		_:
 			check("familia desconocida", false)
 	for mode: String in automation.modes:
@@ -253,7 +277,9 @@ func _compare_berry(spec: Dictionary, observed: Dictionary) -> void:
 			check(mode + " prueba frontera nativa y dueño",
 				receipt is Dictionary and receipt.has("before") and receipt.has("owner_after")
 				and String(receipt.scenario) == String(spec.scenario)
-				and int(receipt.native_hp) == int(rec.hp) and receipt.native_consumed == rec.consumed)
+				and int(receipt.native_hp) == int(rec.hp) and receipt.native_consumed == rec.consumed
+				and int(receipt.native_foe_hp) == int(rec.foe_hp)
+				and int(receipt.native_foe_max_hp) == int(rec.foe_max_hp))
 
 
 func _finish_w02(results: Array) -> void:
