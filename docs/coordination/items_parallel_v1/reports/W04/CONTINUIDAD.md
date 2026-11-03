@@ -286,3 +286,10 @@ La CI principal de los dos bloques [#41718927428](https://github.com/danielmaria
 **Bloque 02 concluye cinco `BLOQUEADO_POR_CONTRATO` (no efecto evolutivo).** Datos: `protector` Rhydon→Rhyperior, `reaper_cloth` Dusclops→Dusknoir, `prism_scale` Feebas→Milotic, `sachet` Spritzee→Aromatisse, `up_grade` Porygon→Porygon2. Ningún mínimo evolutivo está aprobado. El test real de PokeAPI conserva **dos rutas de Feebas por belleza 170** (`DATA_ONLY`) distintas de Escama Bella y evita que `up_grade` salte a Porygon-Z; esa segunda etapa corresponde a `dubious_disc`. Se certifican equipamiento permitido y SaveV2, no conversión por nivel.
 
 **Estado visible:** 2/10 bloques del backlog W04 auditados en CAMP005 (9 IDs entre ambos, **no sumarlos como nuevos**). Siguiente `p`: después de verificar CI02 del CSV, **solo bloque 03** `oval_stone;dawn_stone;peat_block`. No inventar niveles, turno de día o condiciones sin fuente canónica. Regresiones CAMP004/CAMP003/CAMP001 preservadas para hitos 05/10 o parches.
+
+
+## CI final de bloque 02, W04 CAMP005
+
+La CI consolidada [#41719349096](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41719349096), SHA `585dda8cfaa65210220d2f1589e7cd6a2174ced3`, terminó `completed/success`, Python CAMP005 **159**, Godot CAMP005 **194**, manifiesto `completed=2 ids=46`. La CI principal [#41718927428](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41718927428) también pasó. Se confirma `2/10`, **9 IDs del backlog auditados**, no 9 funciones de evolución; cinco del bloque 02 `BLOQUEADO_POR_CONTRATO`. Feebas conserva 2 rutas `min_beauty=170` `DATA_ONLY`, Porygon/Mejora no salta a Porygon-Z. Mantener la norma V27: nivel sin definir + objeto equipado, consumo por decidir.
+
+**Próxima `p` ejecuta SOLO bloque 03/10**: `oval_stone;dawn_stone;peat_block`. Revisar condiciones especiales de hora, nivel y forma con datos originales; reparar en V5 únicamente donde la política sea inequívoca. No cambiar main ni V28 ni otras ramas.
