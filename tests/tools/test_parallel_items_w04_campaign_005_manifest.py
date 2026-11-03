@@ -51,13 +51,13 @@ def validate():
         ids = row["ids"].split(";")
         if not ids or any(not x for x in ids):
             raise ValueError("Bloque con IDs vacíos")
-        if KIND == "FUNCTIONAL_BACKLOG" and len(ids) != (4 if WORKER=="W04" else 6):
+        if KIND == "NEW_IDS" and len(ids) != (4 if WORKER=="W02" else 6):
             raise ValueError("Cantidad de IDs nueva incorrecta")
         for item in ids:
             if item in seen or item not in scope:
                 raise ValueError("Duplicado o no seleccionado: "+item)
-            if KIND=="FUNCTIONAL_BACKLOG":
-                expected_family = "TRAINING" if WORKER=="W04" else "MACHINE"
+            if KIND=="NEW_IDS":
+                expected_family = "TRAINING" if WORKER=="W02" else "MACHINE"
                 if scope[item] != expected_family or item in own_previous or item in previous_in_overlay:
                     raise ValueError("Familia incorrecta o ID ya usado: "+item)
             else:
