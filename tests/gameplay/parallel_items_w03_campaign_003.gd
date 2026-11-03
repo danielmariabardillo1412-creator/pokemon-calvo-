@@ -42,6 +42,7 @@ func _run_campaign() -> void:
 			"05": _block_05(bloque)
 			"06": _block_06(bloque)
 			"07": _block_07(bloque)
+			"08": _block_08(bloque)
 			_: check("Bloque aún sin suite funcional " + str(numero), false)
 	_terminar_campania(numero)
 
@@ -920,6 +921,53 @@ func _block07_reject(id: StringName, reason: String) -> void:
 		and target.to_dict() == before_target and bag.to_dict() == before_bag
 		and rng.state == before_rng and party.is_empty())
 
+
+# 08: auditoría de dependencia, no simulación de efecto funcional.
+# Una bola no registrada debe rechazarse antes de consumir inventario o RNG.
+func _block_08(bloque: Dictionary) -> void:
+	check("Bloque08 reserva exacta Lujo/Cebo",
+		bloque.get("ids", []) == ["luxury_ball", "lure_ball"]
+		and not bool(bloque.get("functional_effect_certified", true)))
+	var rules := CaptureRuleset.new()
+	for id: StringName in [&"luxury_ball", &"lure_ball"]:
+		check("Lujo/Cebo aún sin definición operativa " + String(id),
+			not rules.is_known_ball(id) and rules.ball(id) == null
+			and not CaptureRuleset.ordered_ball_ids().has(id))
+	for case: Dictionary in bloque.get("cases", []):
+		var sid: StringName = StringName(String(case.get("species_id", "")))
+		check("Bloque08 especie real " + String(sid), catalogs.species(sid) != null)
+		if catalogs.species(sid) == null:
+			continue
+		for mode: String in bloque.get("hp_modes", []):
+			for environment: Dictionary in bloque.get("contexts", []):
+				for id: StringName in [&"luxury_ball", &"lure_ball"]:
+					var target: CreatureInstance = _mon(sid, int(case.get("level", 12)),
+						StringName("c003_08_" + String(id) + String(sid) + mode
+						+ String(environment.get("name", ""))))
+					target.current_hp = target.stats.max_hp if mode == "full" else 1
+					var ctx := CaptureBattleContext.new()
+					ctx.completed_turns = int(environment.get("completed_turns", -1))
+					ctx.catcher_level = int(environment.get("catcher_level", -1))
+					var inv := PlayerInventory.new()
+					inv.add(id, 2)
+					var party := CreatureParty.new()
+					var rng := RandomNumberGenerator.new()
+					rng.seed = int(case.get("seed", 8801))
+					var before_rng: int = rng.state
+					var before_target: Dictionary = target.to_dict()
+					var before_inv: Dictionary = inv.to_dict()
+					var attempt := CaptureAttempt.new(target, id, ctx)
+					check("Lujo/Cebo valida rechazo actual " + String(id),
+						CaptureSystem.validate_attempt(attempt, catalogs) == "unknown_ball")
+					var result: CaptureResolution = CaptureInventoryService.resolve(
+						attempt, rng, catalogs, party, inv)
+					check("Lujo/Cebo rechazo seguro sin pérdida ni captura " + String(id),
+						result.result.status == CaptureResult.INVALID
+						and result.result.reason == "unknown_ball"
+						and not result.result.consume_item
+						and result.captured == null and party.is_empty()
+						and inv.to_dict() == before_inv
+						and target.to_dict() == before_target and rng.state == before_rng)
 
 func _terminar_campania(bloques: int) -> void:
 	done = true
