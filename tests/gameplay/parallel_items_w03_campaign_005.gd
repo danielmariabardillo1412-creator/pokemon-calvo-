@@ -37,6 +37,7 @@ func _run_campaign() -> void:
 			"02": _block_02(block)
 			"03": _block_03(block)
 			"04": _block_04(block)
+			"05": _block_05(block)
 			_: check("Bloque sin prueba propia " + str(n), false)
 	_finish(n)
 
@@ -238,6 +239,57 @@ func _block_04(block: Dictionary) -> void:
 			ids.has(String(producer.get("id", ""))
 			) and not String(producer.get("producer", "")).is_empty()
 			and not String(producer.get("decision", "")).is_empty())
+
+# 05: test REAL existing factor and demonstrate missing trusted zone.
+# A green test must NOT be interpreted as successful special-zone gating.
+func _block_05(block: Dictionary) -> void:
+	var ids: Array = block.get("ids", [])
+	check("Reserva Safari/Sport exacta", ids == ["safari_ball", "sport_ball"])
+	check("Bola con factor real pero zona no conectada",
+		block.get("current_state") == "PARTIAL_EXISTING_EFFECT_UNGATED"
+		and not bool(block.get("functional_effect_certified", true)))
+	var ctx := CaptureBattleContext.new()
+	var ctx_fields: Array[String] = []
+	for property: Dictionary in ctx.get_property_list():
+		ctx_fields.append(String(property.get("name", "")))
+	for field: String in ["is_safari_zone", "safari_capture_mode",
+		"is_bug_contest_zone", "contest_capture_mode"]:
+		check("No hay fuente de zona fiable en contexto " + field,
+			not ctx_fields.has(field))
+	var target: CreatureInstance = _mon(&"caterpie", 12, &"c005_05_target")
+	var species: CreatureSpecies = catalogs.species(&"caterpie")
+	check("La especie origen tiene tasa legal", species != null and
+		CaptureRuleset.is_valid_capture_rate(species.capture_rate))
+	var before: Dictionary = target.to_dict()
+	var rules := CaptureRuleset.new()
+	var base_p: float = rules.catch_probability(species.capture_rate, 1.0, 1.0,
+		target.stats.max_hp, target.current_hp)
+	var bonus_p: float = rules.catch_probability(species.capture_rate, 1.5, 1.0,
+		target.stats.max_hp, target.current_hp)
+	check("Efecto de captura x1.5 sí altera probabilidad real",
+		bonus_p > base_p and is_equal_approx(bonus_p, base_p * 1.5))
+	for raw_id: String in ids:
+		var id := StringName(raw_id)
+		check("Bola presente y seleccionada " + raw_id,
+			catalogs.item(id) != null and service_for().selection.content_allowed(id))
+		check("Bola reconocida en motor real " + raw_id,
+			rules.is_known_ball(id))
+		check("Prevuelo de captura legítima " + raw_id,
+			CaptureSystem.validate_attempt(CaptureAttempt.new(target, id, ctx),
+				catalogs) == "")
+		check("Factor real actual incondicional x1.5 " + raw_id,
+			is_equal_approx(CaptureRuleset.BallEffects.multiplier(id, target, species), 1.5))
+		check("No se altera el objetivo al consultar el factor " + raw_id,
+			target.to_dict() == before)
+	check("No marcar zonas como verificadas sin productor",
+		ctx_fields.has("is_wild") and ctx.is_wild
+		and not ctx_fields.has("is_safari_zone")
+		and not ctx_fields.has("is_bug_contest_zone"))
+	for producer: Dictionary in block.get("required_producers", []):
+		check("Contrato de propietario y consumidor " + String(producer.get("id", "")),
+			ids.has(String(producer.get("id", ""))) and
+			not String(producer.get("producer", "")).is_empty() and
+			not String(producer.get("consumer", "")).is_empty())
 
 func _finish(n: int) -> void:
 	done = true
