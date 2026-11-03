@@ -11,6 +11,7 @@ ITEMS_01 = ("dragon_scale", "dubious_disc", "electirizer", "magmarizer")
 ITEMS_02 = ("protector", "reaper_cloth", "prism_scale", "sachet", "up_grade")
 ITEMS_03 = ("oval_stone", "dawn_stone", "peat_block")
 ITEMS_04 = ("galarica_cuff", "galarica_wreath", "scroll_of_darkness", "scroll_of_waters")
+ITEMS_05 = ("berry_sweet", "clover_sweet", "flower_sweet", "love_sweet", "ribbon_sweet", "star_sweet", "strawberry_sweet")
 
 
 def check_rows(path):
@@ -54,10 +55,11 @@ def main():
     field = (ROOT / "modules/inventory/field_item_service.gd").read_text(encoding="utf-8")
 
     check(fixture["worker"] == "W04" and fixture["campaign"] == "CAMP_005", "fixture identidad")
-    check(len(fixture["blocks"]) == 4 and [x["block"] for x in fixture["blocks"]] == ["01", "02", "03", "04"], "fixture acumulativo 01 a 04")
+    check(len(fixture["blocks"]) == 5 and [x["block"] for x in fixture["blocks"]] == ["01", "02", "03", "04", "05"], "fixture acumulativo 01 a 05")
     check(len(queue) == 10 and queue[0]["ids"].split(";") == list(ITEMS_01), "cola oficial 01")
-    check(len(progress) == 4 and [x["bloque"] for x in progress] == ["01", "02", "03", "04"], "progreso bloques 01 a 04")
-    check(progress[0]["ids"].split(";") == list(ITEMS_01) and progress[1]["ids"].split(";") == list(ITEMS_02) and progress[2]["ids"].split(";") == list(ITEMS_03) and progress[3]["ids"].split(";") == list(ITEMS_04), "progreso filas exactas")
+    check(len(progress) == 5 and [x["bloque"] for x in progress] == ["01", "02", "03", "04", "05"], "progreso bloques 01 a 05")
+    check(progress[0]["ids"].split(";") == list(ITEMS_01) and progress[1]["ids"].split(";") == list(ITEMS_02) and progress[2]["ids"].split(";") == list(ITEMS_03) and progress[3]["ids"].split(";") == list(ITEMS_04) and progress[4]["ids"].split(";") == list(ITEMS_05), "progreso filas exactas")
+    check(queue[4]["ids"].split(";") == list(ITEMS_05) and queue[4]["familia"] == "SPECIAL_EVOLUTION", "cola 05 aprobada")
     check(queue[3]["ids"].split(";") == list(ITEMS_04) and queue[3]["familia"] == "EVOLUTION_CONDITIONS", "cola bloque04 oficial")
     check(queue[2]["ids"].split(";") == list(ITEMS_03) and queue[2]["familia"] == "EVOLUTION_CONDITIONS", "cola 03 aprobada")
     check(queue[1]["ids"].split(";") == list(ITEMS_02) and queue[1]["familia"] == "TRADE_OBJECT_REPAIR", "cola oficial 02")
@@ -126,7 +128,7 @@ def main():
     for token in ("func _casos_de_version_y_etapas_02(", "prism_scale/belleza_legacy_no_degradada",
                   "up_grade/dos_objetos_dos_etapas", "up_grade/porygon2_sin_opcion",
                   "up_grade/porygon2_no_evoluciona", "up_grade/porygon2_con_objeto_no_salta_etapa",
-                  "up_grade/porygon2_retirada_sin_mutacion", "bloques_01_a_04_secuenciales",
+                  "up_grade/porygon2_retirada_sin_mutacion", "bloques_01_a_05_secuenciales",
                   "CAMP005_W04_ALT id=prism_scale", "CAMP005_W04_STAGE item=up_grade"):
         check(token in runner, "Falta contrato runtime del bloque 02: " + token)
 
@@ -172,7 +174,7 @@ def main():
     check("var gender:" not in creature and "var gender_id:" not in creature and '"gender":' not in creature, "género no persistido en dominio de criatura")
     check('"time_of_day":' not in evolution.split("static func level_up_context(",1)[1].split("static func _stat_relation_matches(",1)[0], "subida de nivel sin reloj")
     for token in ("func _auditar_condicion_03(", "func _tiene_destino_03(",
-                  "bloques_01_a_04_secuenciales", "sin_opciones_directas",
+                  "bloques_01_a_05_secuenciales", "sin_opciones_directas",
                   "condicion_no_degradable", "no_ignora_condiciones", "sexo_no_persistido",
                   "contexto_sin_requisitos", "uso_rechazado_sin_gasto", "evolucion_rechazada",
                   "estado_savev2_integro", "retirada_sin_perdida", "no_equipable_sin_gasto",
@@ -229,8 +231,41 @@ def main():
                   "04_no_uso_incondicional", "04_forma_no_inventada_savev2",
                   "04_retira_y_restaura", "04_no_equipable_sin_mutacion",
                   "04_forma_persistente_no_contratada", "CAMP005_W04_FORM_CONTRACT",
-                  "bloques_01_a_04_secuenciales", "CAMP005_W04_GODOT PASS blocks=4 checks="):
+                  "bloques_01_a_05_secuenciales", "CAMP005_W04_GODOT PASS blocks=5 checks="):
         check(token in runner, "falta escenario Godot de forma04: " + token)
+
+    # Bloque 05: siete confites seleccionados, pero una sola evolucion original SPIN.
+    # No atribuir a PokeAPI una seleccion de confite que NO codifica esa cadena.
+    confites = fixture["blocks"][4]
+    casos05 = confites["cases"]
+    check(confites["ids"] == list(ITEMS_05) and confites["family"] == "SPECIAL_EVOLUTION", "siete confites reservados")
+    check(confites["classification"] == "DEPENDENCIA_GIRO_FORMA" and len(casos05) == 7, "dependencia de forma documentada")
+    check([x["item_id"] for x in casos05] == list(ITEMS_05), "siete IDs exactos en fixture")
+    check(all(x["source"] == "milcery" and x["target"] == "alcremie" and x["trigger"] == "spin" for x in casos05), "sin evolucion alternativa")
+    check(all(selected[i]["familia"] == "EVOLUTION" and selected[i]["estado_contenido"] == "SELECCIONADO" for i in ITEMS_05), "siete ya seleccionados")
+    check(all(i in held_profile["holdable_ids"] for i in ITEMS_05), "siete equipables")
+    check(all(x["equippable"] is True and x["requires_held_sweet"] is True for x in casos05), "equipar confite antes del giro")
+    check(all(x["canonical_item"] == x["item_id"].replace("_", "-") for x in casos05), "slug canónico de los confites")
+    check(confites["evolution_chain"] == "452" and confites["version"] == "sword-shield", "procedencia giro")
+    chain452 = json.loads((ROOT / "data/api/v2/evolution-chain/452/index.json").read_text(encoding="utf-8"))
+    rutas_spin = [d for src, dst, d in routes_from_chain(chain452["chain"])
+                  if src == "milcery" and dst == "alcremie" and d["trigger"]["name"] == "spin"]
+    check(len(rutas_spin) == 1, "una sola ruta Milcery Alcremie por spin")
+    d = rutas_spin[0]
+    check(d["version_group"]["name"] == "sword-shield", "spin Sword Shield")
+    check(d["item"] is None and d["held_item"] is None and d["min_level"] is None, "PokeAPI no aporta siete rutas ni umbral")
+    check(d["time_of_day"] in (None, ""), "PokeAPI no fija horario de forma")
+    check('&"spin"' in evolution and "UNSUPPORTED_TRIGGERS" in evolution, "trigger spin explicitamente no implementado")
+    check("var held_item_id:" in creature and "var held_item_consumed:" in creature, "el objeto equipado persiste")
+    check("var form_id:" not in creature and '"form_id":' not in creature and
+          "var decoration_id:" not in creature and '"decoration_id":' not in creature, "Alcremie carece de forma/decoracion persistente")
+    for token in ("func _auditar_confite_05(", "05_ruta_spin_real_unica",
+                  "05_giro_no_disfrazado_de_use_item", "05_equipar", "05_uso_rechazado_sin_gasto",
+                  "05_ajeno_sin_gasto", "05_sin_consumo_tras_equipar", "05_sin_forma_por_evolve",
+                  "05_guardar_savev2", "05_cargar_savev2", "05_identidad_confite_savev2",
+                  "05_atributos_savev2", "05_retirada_restaurada", "05_siete_confites_exactos",
+                  "bloques_01_a_05_secuenciales", "CAMP005_W04_GODOT PASS blocks=5 checks="):
+        check(token in runner, "Godot sin contrato observable confites: " + token)
 
     # Prueba de interfaz pendiente: la API de nivel comunica nivel/estadísticas,
     # pero no el objeto equipado que exige V27. Godot prueba el comportamiento real.
@@ -248,11 +283,11 @@ def main():
                   "productor_no_transporta_objeto", "equipamiento_positivo_sin_evolucion",
                   "guardar_savev2", "leer_savev2", "identidad_item_savev2",
                   "retirada_preserva_estado", "mochila_no_es_intercambio",
-                  "CAMP005_W04_GODOT PASS blocks=4 checks="):
+                  "CAMP005_W04_GODOT PASS blocks=5 checks="):
         check(token in runner, "runner sin prueba observable: " + token)
     check((ROOT / "tests/tools/test_parallel_items_w04_campaign_004.py").exists(), "regresión CAMP004 preservada")
     check((ROOT / "tests/tools/test_parallel_items_w04_campaign_003.py").exists(), "regresión CAMP003 preservada")
-    print(f"CAMP005_W04_PY PASS blocks=4 checks={checks}")
+    print(f"CAMP005_W04_PY PASS blocks=5 checks={checks}")
 
 
 if __name__ == "__main__":
