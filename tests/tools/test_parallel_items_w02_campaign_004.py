@@ -2045,6 +2045,276 @@ EXPECTED_09 = json.loads(r'''[
 EXPECTED_IDS_09 = ["old_gateau","paralyze_heal","pewter_crunchies","potion"]
 SOURCES_09 = ["modules/inventory/imported_recovery_v19.json","modules/inventory/field_item_effects.gd","modules/inventory/field_item_service.gd","tests/gameplay/item_field_effects_v4.gd"]
 
+EXPECTED_10 = json.loads(r'''[
+  {
+    "scenario": "shalour_sable_poison_c004",
+    "id": "shalour_sable",
+    "kind": "field_medicine",
+    "start_hp": "full",
+    "status": "poison",
+    "confused": false,
+    "applies": true,
+    "heal_amount": 0,
+    "cures_status": true,
+    "cures_confusion": false
+  },
+  {
+    "scenario": "shalour_sable_toxic_c004",
+    "id": "shalour_sable",
+    "kind": "field_medicine",
+    "start_hp": "full",
+    "status": "badly_poisoned",
+    "confused": false,
+    "applies": true,
+    "heal_amount": 0,
+    "cures_status": true,
+    "cures_confusion": false
+  },
+  {
+    "scenario": "shalour_sable_sleep_c004",
+    "id": "shalour_sable",
+    "kind": "field_medicine",
+    "start_hp": "full",
+    "status": "sleep",
+    "confused": false,
+    "applies": true,
+    "heal_amount": 0,
+    "cures_status": true,
+    "cures_confusion": false,
+    "expect_sleep_clock_clear": true
+  },
+  {
+    "scenario": "shalour_sable_freeze_c004",
+    "id": "shalour_sable",
+    "kind": "field_medicine",
+    "start_hp": "full",
+    "status": "freeze",
+    "confused": false,
+    "applies": true,
+    "heal_amount": 0,
+    "cures_status": true,
+    "cures_confusion": false
+  },
+  {
+    "scenario": "shalour_sable_confusion_c004",
+    "id": "shalour_sable",
+    "kind": "field_medicine",
+    "start_hp": "full",
+    "status": "",
+    "confused": true,
+    "applies": true,
+    "heal_amount": 0,
+    "cures_status": false,
+    "cures_confusion": true
+  },
+  {
+    "scenario": "shalour_sable_paralysis_confusion_c004",
+    "id": "shalour_sable",
+    "kind": "field_medicine",
+    "start_hp": "full",
+    "status": "paralysis",
+    "confused": true,
+    "applies": true,
+    "heal_amount": 0,
+    "cures_status": true,
+    "cures_confusion": true
+  },
+  {
+    "scenario": "shalour_sable_healthy_reject_c004",
+    "id": "shalour_sable",
+    "kind": "field_medicine",
+    "start_hp": "full",
+    "status": "",
+    "confused": false,
+    "applies": false,
+    "heal_amount": 0,
+    "cures_status": false,
+    "cures_confusion": false
+  },
+  {
+    "scenario": "soda_pop_half_c004",
+    "id": "soda_pop",
+    "kind": "field_medicine",
+    "start_hp": "half",
+    "status": "",
+    "confused": false,
+    "applies": true,
+    "heal_amount": 50,
+    "cures_status": false,
+    "cures_confusion": false
+  },
+  {
+    "scenario": "soda_pop_missing7_c004",
+    "id": "soda_pop",
+    "kind": "field_medicine",
+    "start_hp": "missing_7",
+    "status": "",
+    "confused": false,
+    "applies": true,
+    "heal_amount": 50,
+    "cures_status": false,
+    "cures_confusion": false
+  },
+  {
+    "scenario": "soda_pop_full_reject_c004",
+    "id": "soda_pop",
+    "kind": "field_medicine",
+    "start_hp": "full",
+    "status": "",
+    "confused": false,
+    "applies": false,
+    "heal_amount": 50,
+    "cures_status": false,
+    "cures_confusion": false
+  },
+  {
+    "scenario": "soda_pop_half_poison_persists_c004",
+    "id": "soda_pop",
+    "kind": "field_medicine",
+    "start_hp": "half",
+    "status": "poison",
+    "confused": false,
+    "applies": true,
+    "heal_amount": 50,
+    "cures_status": false,
+    "cures_confusion": false
+  },
+  {
+    "scenario": "soda_pop_half_confusion_persists_c004",
+    "id": "soda_pop",
+    "kind": "field_medicine",
+    "start_hp": "half",
+    "status": "",
+    "confused": true,
+    "applies": true,
+    "heal_amount": 50,
+    "cures_status": false,
+    "cures_confusion": false
+  },
+  {
+    "scenario": "super_potion_half_c004",
+    "id": "super_potion",
+    "kind": "field_medicine",
+    "start_hp": "half",
+    "status": "",
+    "confused": false,
+    "applies": true,
+    "heal_amount": 60,
+    "cures_status": false,
+    "cures_confusion": false
+  },
+  {
+    "scenario": "super_potion_missing7_c004",
+    "id": "super_potion",
+    "kind": "field_medicine",
+    "start_hp": "missing_7",
+    "status": "",
+    "confused": false,
+    "applies": true,
+    "heal_amount": 60,
+    "cures_status": false,
+    "cures_confusion": false
+  },
+  {
+    "scenario": "super_potion_full_reject_c004",
+    "id": "super_potion",
+    "kind": "field_medicine",
+    "start_hp": "full",
+    "status": "",
+    "confused": false,
+    "applies": false,
+    "heal_amount": 60,
+    "cures_status": false,
+    "cures_confusion": false
+  },
+  {
+    "scenario": "super_potion_half_poison_persists_c004",
+    "id": "super_potion",
+    "kind": "field_medicine",
+    "start_hp": "half",
+    "status": "poison",
+    "confused": false,
+    "applies": true,
+    "heal_amount": 60,
+    "cures_status": false,
+    "cures_confusion": false
+  },
+  {
+    "scenario": "super_potion_half_confusion_persists_c004",
+    "id": "super_potion",
+    "kind": "field_medicine",
+    "start_hp": "half",
+    "status": "",
+    "confused": true,
+    "applies": true,
+    "heal_amount": 60,
+    "cures_status": false,
+    "cures_confusion": false
+  },
+  {
+    "scenario": "sweet_heart_half_c004",
+    "id": "sweet_heart",
+    "kind": "field_medicine",
+    "start_hp": "half",
+    "status": "",
+    "confused": false,
+    "applies": true,
+    "heal_amount": 20,
+    "cures_status": false,
+    "cures_confusion": false
+  },
+  {
+    "scenario": "sweet_heart_missing7_c004",
+    "id": "sweet_heart",
+    "kind": "field_medicine",
+    "start_hp": "missing_7",
+    "status": "",
+    "confused": false,
+    "applies": true,
+    "heal_amount": 20,
+    "cures_status": false,
+    "cures_confusion": false
+  },
+  {
+    "scenario": "sweet_heart_full_reject_c004",
+    "id": "sweet_heart",
+    "kind": "field_medicine",
+    "start_hp": "full",
+    "status": "",
+    "confused": false,
+    "applies": false,
+    "heal_amount": 20,
+    "cures_status": false,
+    "cures_confusion": false
+  },
+  {
+    "scenario": "sweet_heart_half_poison_persists_c004",
+    "id": "sweet_heart",
+    "kind": "field_medicine",
+    "start_hp": "half",
+    "status": "poison",
+    "confused": false,
+    "applies": true,
+    "heal_amount": 20,
+    "cures_status": false,
+    "cures_confusion": false
+  },
+  {
+    "scenario": "sweet_heart_half_confusion_persists_c004",
+    "id": "sweet_heart",
+    "kind": "field_medicine",
+    "start_hp": "half",
+    "status": "",
+    "confused": true,
+    "applies": true,
+    "heal_amount": 20,
+    "cures_status": false,
+    "cures_confusion": false
+  }
+]''')
+EXPECTED_IDS_10 = ["shalour_sable","soda_pop","super_potion","sweet_heart"]
+SOURCES_10 = ["modules/inventory/imported_recovery_v19.json","modules/inventory/field_item_effects.gd","modules/inventory/field_item_service.gd","tests/gameplay/item_field_effects_v4.gd"]
+
 
 class ContractError(ValueError):
     pass
