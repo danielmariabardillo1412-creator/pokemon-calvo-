@@ -38,3 +38,10 @@ La ejecución [#41591880287](https://github.com/danielmariabardillo1412-creator/
 Resultados individuales: `reveal_glass`, `rotom_catalog` y `zygarde_cube`: `status=DEPENDENCIA records=0 conditioned=0` cada uno, sin ruta de forma. Los tres casos de control rechazan el uso directo/equipamiento sin gasto y persisten en SaveV2. No se certifican formas alternativas. `rotom_catalog` tiene además una marca documental `missing_description`.
 
 El progreso se ha reconciliado en el commit `4e328bdba11bad06bc8d5b7e1f5e8390d5192ae1`, fila 08 `DEPENDENCIA_DOCUMENTADA` con CI `41591880287`. Esa actualización del CSV genera otra CI que debe verificarse por separado.
+
+
+## Segunda CI08: progreso consolidado
+
+GitHub Actions [#41592113216](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41592113216), SHA `4e328bdba11bad06bc8d5b7e1f5e8390d5192ae1`, terminó **completed/success** tras reconciliar el CSV. Recibos: `CAMP004_W04_MANIFEST_PASS reserved=10 completed=8 ids=36`, Python **245 PASS**, Godot **746 PASS**, regresión CAMP003 Python **120 PASS**, Godot **270 PASS**. Los tres objetos vuelven a mostrar `DEPENDENCIA records=0`; no se ha implementado ningún cambio de forma.
+
+**Estado final del microbloque:** 08/10 entregado, probado y documentado; 24 IDs auditados en CAMP004. Siguiente `p` exclusivamente bloque 09.
