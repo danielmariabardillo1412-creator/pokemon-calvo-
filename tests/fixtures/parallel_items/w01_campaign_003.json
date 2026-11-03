@@ -857,6 +857,109 @@
         19
       ],
       "history": "new_negative_status_not_damage"
+    },
+    {
+      "block": "09",
+      "id": "mirror_foe_swords_dance",
+      "item_id": "mirror_herb",
+      "op": "mirror_copy_opponent_boost",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "foe_move": "swords_dance",
+      "own_move": "reflect",
+      "seeds": [
+        19,
+        23
+      ],
+      "history": "held_effect_sweep_v3:positive_copy_swords_dance"
+    },
+    {
+      "block": "09",
+      "id": "mirror_foe_growl",
+      "item_id": "mirror_herb",
+      "op": "mirror_no_negative_copy",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "foe_move": "growl",
+      "own_move": "reflect",
+      "seeds": [
+        19
+      ],
+      "history": "held_effect_sweep_v3:negative_not_copied_growl"
+    },
+    {
+      "block": "09",
+      "id": "muscle_physical_tackle",
+      "item_id": "muscle_band",
+      "op": "muscle_physical_damage_boost",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "foe_move": "amnesia",
+      "own_move": "tackle",
+      "seeds": [
+        19,
+        23
+      ],
+      "history": "held_effect_sweep_v2:category_boost_tackle"
+    },
+    {
+      "block": "09",
+      "id": "muscle_special_water",
+      "item_id": "muscle_band",
+      "op": "muscle_special_no_boost",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "foe_move": "amnesia",
+      "own_move": "water_gun",
+      "seeds": [
+        19
+      ],
+      "history": "new_negative_special_not_physical"
+    },
+    {
+      "block": "09",
+      "id": "pads_helmet_contact",
+      "item_id": "protective_pads",
+      "op": "pads_helmet_contact_protection",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "foe_move": "amnesia",
+      "foe_item": "rocky_helmet",
+      "own_move": "tackle",
+      "seeds": [
+        19,
+        23
+      ],
+      "history": "held_effect_sweep_v2:contact_protection_rocky_helmet"
+    },
+    {
+      "block": "09",
+      "id": "pads_helmet_noncontact",
+      "item_id": "protective_pads",
+      "op": "pads_helmet_noncontact_control",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "foe_move": "amnesia",
+      "foe_item": "rocky_helmet",
+      "own_move": "water_gun",
+      "seeds": [
+        19
+      ],
+      "history": "new_negative_noncontact_with_helmet"
+    },
+    {
+      "block": "09",
+      "id": "pads_no_helmet_contact",
+      "item_id": "protective_pads",
+      "op": "pads_contact_without_helmet",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "foe_move": "amnesia",
+      "own_move": "tackle",
+      "seeds": [
+        19
+      ],
+      "history": "new_negative_contact_without_helmet"
     }
   ]
 }
