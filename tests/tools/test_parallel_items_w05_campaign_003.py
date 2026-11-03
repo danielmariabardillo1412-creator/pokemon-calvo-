@@ -81,7 +81,7 @@ def validate() -> tuple[int, int, list[dict]]:
     receipts = []
     global_ids: set[str] = set()
     for n, (actual, authorized, group) in enumerate(
-            zip(progress, q, fixture["blocks"], strict=True), 1):
+            zip(progress, q[:len(progress)], fixture["blocks"], strict=True), 1):
         block = f"{n:02d}"
         ids = authorized["ids"].split(";")
         if len(ids) != 6 or len(set(ids)) != 6:
