@@ -246,6 +246,109 @@ func _auditar_condicion_03(catalogo: DefinitionCatalog, fila: Dictionary) -> voi
 		comprobar(_estado(pc) == antes, String(item) + "/" + String(origen) + "/no_equipable_sin_gasto")
 	print("CAMP005_W04_ITEM id=", String(item), " status=DEPENDENCIA_CONDICIONES source=", String(origen), " target=", String(destino), " trigger=", String(trig), " key=", key, " value=", str(valor))
 
+func _auditar_forma_04(catalogo: DefinitionCatalog, fila: Dictionary) -> void:
+	var item := StringName(fila.get("item_id", ""))
+	var origen := StringName(fila.get("source", ""))
+	var destino := StringName(fila.get("target", ""))
+	var especie: CreatureSpecies = catalogo.species(origen)
+	comprobar(catalogo.item(item) != null and especie != null and catalogo.species(destino) != null, String(item) + "/04_catalogo")
+	if especie == null:
+		return
+	var registros: Array[EvolutionRecord] = []
+	for ev: EvolutionRecord in especie.evolutions:
+		if ev.species_id == destino and ev.trigger == EvolutionSystem.TRIGGER_USE_ITEM and ev.item_id == item:
+			registros.append(ev)
+	comprobar(registros.size() == 1, String(item) + "/04_registro_por_objeto")
+	if registros.size() != 1:
+		return
+	var registro: EvolutionRecord = registros[0]
+	comprobar(String(registro.version_group).replace("_", "-") == String(fila.get("version", "")), String(item) + "/04_version_importada")
+	comprobar(String(registro.conditions.get("evolved_form", "")).replace("_", "-") == String(fila.get("evolved_form", "")), String(item) + "/04_forma_destino")
+	if fila.has("base_form"):
+		comprobar(String(registro.conditions.get("base_form", "")).replace("_", "-") == String(fila.get("base_form", "")), String(item) + "/04_base_regional")
+	else:
+		comprobar(not registro.conditions.has("base_form"), String(item) + "/04_sin_restriccion_regional_artificial")
+	comprobar(EvolutionSystem.classify_record(registro, catalogo, origen) == EvolutionSystem.DATA_ONLY, String(item) + "/04_condicion_forma_no_degradable")
+	var opciones := EvolutionSystem.evolution_candidates(especie, {"level": 100, "item_id": item, "base_form": fila.get("base_form", ""), "evolved_form": fila.get("evolved_form", "")}, catalogo)
+	comprobar(not _tiene_destino_03(opciones, destino), String(item) + "/04_eligibilidad_no_ignora_forma")
+	var pc := _crear(catalogo, origen)
+	comprobar(pc != null, String(item) + "/04_criatura")
+	if pc == null:
+		return
+	var criatura := pc.owned_creature(ID)
+	comprobar(not criatura.to_dict().has("form_id") and not criatura.to_dict().has("regional_form_id"), String(item) + "/04_forma_persistente_no_contratada")
+	var svc := Servicio.new()
+	comprobar(svc.configure(pc, catalogo, func(): return true), String(item) + "/04_servicio")
+	var equipado_admitido := bool(fila.get("equippable", false))
+	comprobar(svc.holdable(item) == equipado_admitido, String(item) + "/04_perfil_equipamiento")
+	comprobar(pc.inventory.add(item, 2), String(item) + "/04_stock")
+	var antes := _estado(pc)
+	comprobar(svc.evolution_options(item, ID).is_empty(), String(item) + "/04_sin_opcion_sin_forma")
+	var uso: Dictionary = svc.use_item(item, ID)
+	comprobar(not uso.get("accepted", false) and _estado(pc) == antes, String(item) + "/04_no_uso_incondicional")
+	var invocacion: Dictionary = svc.evolve(item, ID, destino)
+	comprobar(not invocacion.get("accepted", false) and _estado(pc) == antes, String(item) + "/04_no_destino_sin_forma")
+	var ajeno: Dictionary = svc.use_item(item, &"w04_c005_ajeno")
+	comprobar(not ajeno.get("accepted", false) and _estado(pc) == antes, String(item) + "/04_no_propietario_ajeno")
+	var equipar: Dictionary = svc.equip(item, ID)
+	comprobar(bool(equipar.get("accepted", false)) == equipado_admitido, String(item) + "/04_equipamiento_segun_perfil")
+	comprobar(criatura.species_id == origen and criatura.instance_id == ID and criatura.held_item_id == (item if equipado_admitido else &"") and pc.inventory.quantity(item) == (1 if equipado_admitido else 2), String(item) + "/04_identidad_inventario")
+	var ruta := "user://w04_c005_04_" + String(item) + ".json"
+	var repo := SaveGameRepository.new()
+	var save: SaveResult = repo.save_collection(ruta, pc)
+	comprobar(save.ok, String(item) + "/04_guardar_savev2")
+	if save.ok:
+		var load: LoadResult = repo.load(ruta)
+		comprobar(load.ok and load.schema_version == 2, String(item) + "/04_cargar_savev2")
+		if load.ok:
+			var restaurada := load.party.get_creature(ID)
+			comprobar(restaurada != null and restaurada.instance_id == ID and restaurada.species_id == origen and restaurada.held_item_id == (item if equipado_admitido else &"") and load.inventory.quantity(item) == (1 if equipado_admitido else 2), String(item) + "/04_forma_no_inventada_savev2")
+	DirAccess.remove_absolute(ProjectSettings.globalize_path(ruta))
+	if equipado_admitido:
+		var quitar := svc.unequip(ID)
+		comprobar(quitar.get("accepted", false) and _estado(pc) == antes, String(item) + "/04_retira_y_restaura")
+	else:
+		comprobar(_estado(pc) == antes, String(item) + "/04_no_equipable_sin_mutacion")
+	print("CAMP005_W04_ITEM id=", String(item), " status=DEPENDENCIA_FORMA source=", String(origen),
+		" target=", String(destino), " evolved_form=", String(fila.get("evolved_form", "")), " need=owner_form_and_form_target")
+
+func _fronteras_regionales_04(catalogo: DefinitionCatalog, casos: Array) -> void:
+	var slowpoke: CreatureSpecies = catalogo.species(&"slowpoke")
+	var kubfu: CreatureSpecies = catalogo.species(&"kubfu")
+	comprobar(slowpoke != null and kubfu != null, "04_dos_origenes")
+	if slowpoke == null or kubfu == null:
+		return
+	var variantes: Dictionary = {}
+	var estilos: Dictionary = {}
+	for caso: Dictionary in casos:
+		var item := StringName(caso["item_id"])
+		var spec: CreatureSpecies = catalogo.species(StringName(caso["source"]))
+		var found := false
+		for record: EvolutionRecord in spec.evolutions:
+			if record.item_id != item or record.trigger != EvolutionSystem.TRIGGER_USE_ITEM:
+				continue
+			found = true
+			if String(caso["source"]) == "slowpoke":
+				variantes[String(item)] = String(record.conditions.get("base_form", "")) + ":" + String(record.conditions.get("evolved_form", ""))
+			else:
+				estilos[String(item)] = String(record.conditions.get("evolved_form", ""))
+		comprobar(found, String(item) + "/04_ruta_presente")
+	comprobar(variantes.size() == 2 and variantes["galarica_cuff"] != variantes["galarica_wreath"], "04_galar_regional_dos_destinos")
+	comprobar(estilos.size() == 2 and estilos["scroll_of_darkness"] != estilos["scroll_of_waters"], "04_urshifu_estilos_distintos_igual_especie")
+	var torre_oscura := 0
+	var torre_agua := 0
+	for rec: EvolutionRecord in kubfu.evolutions:
+		if rec.species_id != &"urshifu":
+			continue
+		if rec.trigger == &"tower_of_darkness":
+			torre_oscura += 1
+			comprobar(EvolutionSystem.classify_record(rec, catalogo, &"kubfu") == EvolutionSystem.UNSUPPORTED, "04_torre_sombras_no_simplificada")
+		if rec.trigger == &"tower_of_waters":
+			torre_agua += 1
+			comprobar(EvolutionSystem.classify_record(rec, catalogo, &"kubfu") == EvolutionSystem.UNSUPPORTED, "04_torre_agua_no_simplificada")
+	comprobar(torre_oscura == 1 and torre_agua == 1, "04_dos_torres_procedencia")
+	print("CAMP005_W04_FORM_CONTRACT Galar=2 distinct_targets Urshifu=2 distinct_forms same_target=urshifu towers=2 unsupported")
+
 func _ejecutar() -> void:
 	var fixture := _abrir(FIXTURE)
 	var policy := _abrir(TRADE_POLICY)
@@ -260,8 +363,8 @@ func _ejecutar() -> void:
 	comprobar(earlier.get("trade_level_conversion", {}).get("levels_selected") == null, "V25_sin_niveles")
 	comprobar(String(policy.get("correct_future_rule", "")).contains("original equipped evolution item"), "conservar_objeto_equipado")
 	var blocks: Array = fixture.get("blocks", [])
-	comprobar(blocks.size() == 3 and blocks[0].get("block") == "01" and blocks[1].get("block") == "02" and blocks[2].get("block") == "03", "bloques_01_a_03_secuenciales")
-	if blocks.size() != 3:
+	comprobar(blocks.size() == 4 and [blocks[0].get("block"), blocks[1].get("block"), blocks[2].get("block"), blocks[3].get("block")] == ["01", "02", "03", "04"], "bloques_01_a_04_secuenciales")
+	if blocks.size() != 4:
 		_finalizar()
 		return
 	for index in range(2):
@@ -274,6 +377,11 @@ func _ejecutar() -> void:
 	comprobar(condicionadas.size() == 4, "cuatro_rutas_condicionadas_03")
 	for caso: Dictionary in condicionadas:
 		_auditar_condicion_03(catalogo, caso)
+	var formas: Array = blocks[3].get("cases", [])
+	comprobar(formas.size() == 4, "cuatro_rutas_forma_04")
+	for caso: Dictionary in formas:
+		_auditar_forma_04(catalogo, caso)
+	_fronteras_regionales_04(catalogo, formas)
 	_finalizar()
 
 func _finalizar() -> void:
@@ -281,7 +389,7 @@ func _finalizar() -> void:
 		return
 	cerrado = true
 	if errores.is_empty():
-		print("CAMP005_W04_GODOT PASS blocks=3 checks=", checks)
+		print("CAMP005_W04_GODOT PASS blocks=4 checks=", checks)
 	else:
 		print("CAMP005_W04_GODOT FAIL errors=", JSON.stringify(errores))
 	quit(0 if errores.is_empty() else 1)
