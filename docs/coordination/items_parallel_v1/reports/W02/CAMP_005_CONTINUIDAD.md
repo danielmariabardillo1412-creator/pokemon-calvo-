@@ -1,3 +1,24 @@
+# IA2/W02 — CONTINUIDAD VIGENTE CAMPAÑA_005 BLOQUE 05/10
+
+**Identidad y autoridad:** W02 (bayas, medicinas, entrenamiento). Rama **exclusiva de escritura** `codex/calvo-items-20261103-w02-camp005`. Encargo oficial IA6: `CAMPAIGN_005_W02_GATE.md`, `CAMPAIGN_005_W02_QUEUE_APPROVED.csv`, `campaigns/CAMP_005_W02.md`, `AUTONOMOUS_REPAIR_V5.md`. **Una `p` = una sola fila de la cola**, nunca más. No tocar `main`, V28, PR118, árbitra IA6, otras ramas, producción, API global ni workflow.
+
+**Progreso publicado:** bloques **01–05 de 10**, 20 objetos distintos, 132 escenarios únicos y 396 variantes preparadas (active PARTY, none PARTY sin ítem, reserve STORAGE). 5 bloques con goldens Python separados, comprobados estructuralmente, sin afirmar ejecutados. **CI CAMP005 bloque05 y regresiones CAMP004/CAMP003 aún PENDIENTES de resultados verificados**; el conector de runs por commit no garantiza acceso a ejecuciones de `push`. La aprobación pasada de CAMP004 no demuestra regresión en CAMP005.
+
+**Bloque 05 publicado:** `health_wing;muscle_wing;resist_wing;genius_wing`, 32 escenarios nuevos (8 por objeto), cada uno +1 EV de PS/Ataque/Defensa/Ataque Especial (no +10 como vitaminas), tope 252 por stat y 510 globales; rechazo por stat completa, total completo o ranura incompatible, y verificación de amistad por tramos [3,2,1] con acercamiento a 255. Propiedad/stock, consumo único, rechazo atómico, estadísticas recalc, EV/IV/PP intactos fuera del objetivo, SaveV2 y recibos SHA256 de Godot. Fuente: `modules/inventory/field_training_effects.gd` y `field_friendship_effects.gd`. Runner ahora admite `kind=wing` sin eliminar `kind=vitamin`. No se modificó producción.
+
+**Commits del bloque 05:**
+- Fixture `tests/fixtures/parallel_items/w02_campaign_005.json`: `7c57a4ceb82b45b3529ba6884f449d414958dca5`.
+- Godot `tests/gameplay/parallel_items_w02_campaign_005.gd`: `ce45833dacd8d78fce7ea96dbd60f6ab26f610fc`.
+- Python `tests/tools/test_parallel_items_w02_campaign_005.py`: `57368d5ef9d192cc67ced3627d2d8afe949023f0`, `138c4a142b86df8481227900cffd32a236a5d41c`, `aa14eb74df373f31f5f88808d75e0e464ea8f458`, `6aef3a4a105d40272586c26308df95666be57133`, `67a13f731cb757c49f5adc0df1cea03352d6ccd1`, `ea5b08c0e2db18d6557b0729e7f4a5b2183dfd20`. Incluye golden05 exacto de 32 y 16 mutaciones adversariales.
+- Progreso `docs/coordination/items_parallel_v1/reports/W02/CAMP_005_PROGRESO.csv`: `ed0867facaf1410abc840b28f2d7c9ac9775eb44`, fila05 `EN_CI_AUTOMATICA`.
+- Informe `docs/coordination/items_parallel_v1/reports/W02/CAMP_005_ITER_05.md`: `e1e438577b9a83f7af46e7b8b5e013532ded14f4`.
+
+**Hito 05, crítico:** workflow IA6 `.github/workflows/parallel-camp005-w02-autoci.yml` exige `CAMP005_W02_PY/GODOT PASS blocks=5`, más `CAMP004_W02_PY/GODOT PASS blocks=10` y `CAMP003_W02_PY/GODOT PASS blocks=10`. No confundir publicación del CSV con aprobación; recuperar **SHA exacto y logs reales**. Si hay fallo de test W02, reparar bajo V5 sin debilitar los controles; si API compartida, consultar IA6. No hay verificación visual/GPU.
+
+**Siguiente `p`:** revisar seis recibos del hito 05 y resolver defectos propios comprobados; después ejecutar **solo bloque 06/10**: `clever_wing;swift_wing;health_mochi;muscle_mochi` de la cola. No ejecutar bloque07 sin nueva `p`.
+
+---
+
 # IA2/W02 — CONTINUIDAD VIGENTE CAMPAÑA_005 BLOQUE 04/10
 
 **Identidad:** IA2/W02, bayas, medicinas y entrenamiento. **Escritura exclusiva:** `codex/calvo-items-20261103-w02-camp005`. Encargo oficial IA6: `CAMPAIGN_005_W02_GATE.md`, `CAMPAIGN_005_W02_QUEUE_APPROVED.csv`, `campaigns/CAMP_005_W02.md` y V5. Tecla `p` = una sola fila autorizada por turno. No tocar `main`, V28, PR118, árbitra, otras trabajadoras, producción, APIs compartidas ni workflows.
