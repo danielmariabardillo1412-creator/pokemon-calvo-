@@ -619,7 +619,7 @@ func _compare_c003(row: Dictionary, obs: Dictionary) -> void:
 			check("Metrónomo: sin repetición se conserva",
 				not a.after.own_consumed and a.physical_units == 2)
 		"mirror_copy_opponent_boost":
-			check("Hierba Copia: solo el portador copia la subida ajena de Espada Santa",
+			check("Hierba Copia: solo el portador copia Danza Espada del rival",
 				a.after.attack_stage == 2 and n.after.attack_stage == 0
 				and r.after.attack_stage == 0)
 			check("Hierba Copia: consumir una unidad solo en activo",
