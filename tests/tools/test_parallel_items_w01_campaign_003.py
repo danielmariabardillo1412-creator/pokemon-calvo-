@@ -22,6 +22,7 @@ REFS = {
     "tests/gameplay/parallel_items_w01_held_v1.gd": "d9551db1ec5e08b1213e04829d031e3a6720188f",
     "tools/item_audit/held_effect_sweep_v3.cjs": "fd5d9d0b1eecf8b84f14e606631df93b40728586",
     "tools/item_audit/held_effect_sweep_v2.cjs": "c9ba4d7bcddad6ae69f085f4b69983461ad05219",
+    "tools/item_audit/held_pilot.cjs": "c8a59a18f546d772ff34e4f8640a4246a00a822b",
 }
 BLOCK_01 = ("air_balloon", "assault_vest", "binding_band")
 SCENARIOS_01 = {
@@ -99,11 +100,26 @@ SCENARIOS_05 = {
     "grassy_seed_no_field": ("grassy_seed", "grassy_no_terrain", "mew", "", "", 100,
         "mew", 100, "amnesia", "reflect", (19,)),
 }
+SCENARIOS_06 = {
+    "grip_trap_seven_turns": ("grip_claw", "trap_extended_duration", "mew", "", "", 100,
+        "snorlax", 100, "amnesia", "infestation", (19,23)),
+    "grip_no_trapping_move": ("grip_claw", "trap_no_activation", "mew", "", "", 100,
+        "snorlax", 100, "amnesia", "tackle", (19,)),
+    "heat_sun_duration": ("heat_rock", "sun_eight_turns", "mew", "", "", 100,
+        "mew", 100, "amnesia", "sunny_day", (19,23)),
+    "heat_no_sun": ("heat_rock", "no_sunny_day", "mew", "", "", 100,
+        "mew", 100, "amnesia", "reflect", (19,)),
+    "boots_rock_switch": ("heavy_duty_boots", "boots_rock_reentry", "mew", "", "", 100,
+        "mew", 100, "stealth_rock", "reflect", (19,23)),
+    "boots_no_rock_switch": ("heavy_duty_boots", "boots_no_rock_control", "mew", "", "", 100,
+        "mew", 100, "amnesia", "reflect", (19,)),
+}
 OPERATIONS = ({r[1] for r in SCENARIOS_01.values()}
               | {r[1] for r in SCENARIOS_02.values()}
               | {r[1] for r in SCENARIOS_03.values()}
               | {r[1] for r in SCENARIOS_04.values()}
-              | {r[1] for r in SCENARIOS_05.values()})
+              | {r[1] for r in SCENARIOS_05.values()}
+              | {r[1] for r in SCENARIOS_06.values()})
 REQUIRED_CASE_FIELDS = {"block", "id", "item_id", "op", "actor_species", "foe_species",
                         "foe_move", "own_move", "seeds", "history"}
 TOTAL_CHECKS = 0
@@ -211,6 +227,21 @@ def validate() -> int:
         require('"lethal_full"' in old_w01 and "lethal_partial" in old_w01
                 and "nonlethal_control" in old_w01,
                 "Banda Aguante: escenarios históricos de PS y KO ausentes")
+    if len(progress) >= 6:
+        native_pilot = (ROOT / "tools/item_audit/held_pilot.cjs").read_text(encoding="utf-8")
+        require("add('grip_claw','partial_trap_duration'" in old_v3
+                and "Array.from({length:6}" in old_v3
+                and "moves:['infestation','reflect']" in old_v3,
+                "Garra Garfio: siete turnos de atrapamiento sin fuente nativa")
+        require("['heat_rock','sunny_day']" in old_v3
+                and "weatherState.duration" in old_v3,
+                "Roca Calor: origen de prolongacion solar no verificado")
+        require("heavy_duty_boots:{foe:['stealth_rock']" in native_pilot
+                and "switch '+slot" in native_pilot,
+                "Botas Gruesas: piloto de salida/entrada ante Trampa Rocas ausente")
+        require("HELD_PILOT_VERIFIED" in next(x for x in inventory.splitlines()
+                                             if x.startswith("heavy_duty_boots,")),
+                "Botas Gruesas: historico piloto no acreditado")
     cases = document["cases"]
     require(type(cases) is list and len(cases) >= 7, "Sin casos suficientes")
     found, pairs = set(), set()
@@ -275,7 +306,15 @@ def validate() -> int:
                       case.get("foe_level", 100), case["foe_move"], case["own_move"],
                       tuple(case["seeds"]))
             require(actual == expected, "Condición o semilla alterada W01/05: " + name)
-        elif stage not in {"01", "02", "03", "04", "05"}:
+        elif stage == "06":
+            require(name in SCENARIOS_06, "Caso ajeno al bloque W01/06")
+            expected = SCENARIOS_06[name]
+            actual = (item, case["op"], case["actor_species"], case.get("actor_ability", ""),
+                      case.get("actor_hp", ""), case.get("actor_level", 100),
+                      case["foe_species"], case.get("foe_level", 100), case["foe_move"],
+                      case["own_move"], tuple(case["seeds"]))
+            require(actual == expected, "Condición de evento o semilla desviada W01/06: "+name)
+        elif stage not in {"01", "02", "03", "04", "05", "06"}:
             raise ValueError("Stage no implementado por validador W01")
     for stage, ids in stage_map.items():
         for item in ids:
@@ -299,6 +338,11 @@ def validate() -> int:
         require(len(cases) == 36 and len(pairs) == 80,
                 "Matriz W01/05 debe preservar 36 escenarios y 80 pares")
         require(set(SCENARIOS_05) <= found, "Faltan escenarios W01/05")
+    if len(progress) == 6:
+        require(len(cases) == 42 and len(pairs) == 89,
+                "Matriz W01/06 exige 42 escenarios y 89 pares")
+        require(set(SCENARIOS_06) <= found,
+                "Faltan 6 positivos/negativos de Garra Garfio, Roca Calor y Botas Gruesas")
     return len(progress)
 
 def main():
