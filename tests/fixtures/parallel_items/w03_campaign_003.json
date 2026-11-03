@@ -191,6 +191,97 @@
       "context_origin": "WildAdventureSession.capture_current usa state.turn; ShowdownAdventureSession.capture usa battle_state().turn; nunca valor inventado por UI.",
       "implementation_authorized": false,
       "ci_required": true
+    },
+    {
+      "bloque": "04",
+      "ids": [
+        "level_ball",
+        "nest_ball"
+      ],
+      "objective": "contexto_nivel",
+      "prior_evidence": {
+        "state": "YA_VERIFICADO_NO_DUPLICAR",
+        "sources": [
+          "modules/capture/capture_context_ball_effects.gd",
+          "modules/capture/capture_ball_effects.gd",
+          "modules/capture/capture_battle_context.gd",
+          "modules/capture/capture_system.gd",
+          "modules/inventory/capture_inventory_service.gd",
+          "modules/gameplay/wild_adventure_session.gd",
+          "modules/gameplay/showdown_adventure_session.gd",
+          "tests/gameplay/item_capture_v11.gd"
+        ],
+        "note": "Level Ball ya emplea nivel activo del capturador y cap 255/rate; Nest Ball usa nivel objetivo sin nivel del capturador. No reimplementar ni duplicar matriz V11."
+      },
+      "level_ball": {
+        "target_level": 10,
+        "catcher_levels": [
+          9,
+          10,
+          11,
+          19,
+          20,
+          39,
+          40,
+          100
+        ],
+        "independent_multipliers": [
+          1,
+          1,
+          2,
+          2,
+          4,
+          4,
+          8,
+          8
+        ],
+        "capped_at_modified_rate": 255,
+        "missing_catcher_levels": [
+          -1,
+          0,
+          101
+        ],
+        "expected_missing_reason": "capture_active_level_context_missing"
+      },
+      "nest_ball": {
+        "target_levels": [
+          1,
+          30,
+          31,
+          40,
+          100
+        ],
+        "independent_multipliers": [
+          4,
+          1.1,
+          1,
+          1,
+          1
+        ],
+        "verify_without_catcher_level": true
+      },
+      "species_cases": [
+        {
+          "species_id": "mew",
+          "seed": 4401
+        },
+        {
+          "species_id": "caterpie",
+          "seed": 4402
+        }
+      ],
+      "hp_modes": [
+        "full",
+        "one_hp"
+      ],
+      "invalid_cases": [
+        "trainer_battle_not_capturable",
+        "item_not_owned"
+      ],
+      "expected_behavior": "Level: thresholds > / >=2 / >=4 target level and cap 255/capture_rate; missing catcher level rejects prior to inventory/RNG; Nest max((41-target_level)/10,1), indifferent to catcher level, validates capture and RNG.",
+      "context_origin": "Both WildAdventureSession.capture_current and ShowdownAdventureSession.capture propagate active catcher.level, not target level or UI input.",
+      "implementation_authorized": false,
+      "ci_required": true
     }
   ]
 }
