@@ -1,3 +1,9 @@
+## CI verificada
+
+Ejecución [#41718649006](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41718649006) sobre SHA `97a86e17e7e25659e34a088ace5245bc50ba930a`: **completed/success**. Recibos `CAMP005_W03_PY PASS blocks=2 checks=48` y `CAMP005_W03_GODOT PASS blocks=2 checks=35`, ambos gates de IA6 PASS. La validación demuestra pruebas de productores y ganancias de amistad existentes, **no** funcionamiento nuevo de Luxury Ball ni Lure Ball.
+
+---
+
 # IA3/W03 — CAMPAÑA_005, bloque 02 — Luxury Ball y Lure Ball
 
 **Rama exclusiva:** `codex/calvo-items-20261103-w03-camp005`. **Backlog**, no dos objetos nuevos. Cola oficial: `luxury_ball;lure_ball`.
