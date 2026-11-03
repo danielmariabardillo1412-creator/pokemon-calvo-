@@ -28,6 +28,17 @@ EXPECTED_01 = {
 }
 
 
+EXPECTED_02 = {
+    "charti_matching_c003": ("charti_berry", "charizard", "smack_down", True, "rock"),
+    "charti_nonmatching_c003": ("charti_berry", "charizard", "tackle", False, "rock"),
+    "chilan_matching_c003": ("chilan_berry", "mew", "tackle", True, "normal"),
+    "chilan_nonmatching_c003": ("chilan_berry", "mew", "surf", False, "normal"),
+    "chople_matching_c003": ("chople_berry", "snorlax", "brick_break", True, "fighting"),
+    "chople_nonmatching_c003": ("chople_berry", "snorlax", "tackle", False, "fighting"),
+    "coba_matching_c003": ("coba_berry", "venusaur", "aerial_ace", True, "flying"),
+    "coba_nonmatching_c003": ("coba_berry", "venusaur", "tackle", False, "flying"),
+}
+
 class ContractError(ValueError):
     pass
 
@@ -105,7 +116,33 @@ def validate(fixture, queue, progress, check):
                              "Contrato de naturaleza/umbral/tipo alterado: " + scenario)
                 check.demand(case["id"] in ids, "Caso ajeno a la reserva")
             check.demand(seen == set(EXPECTED_01), "Cobertura positiva/negativa incompleta")
-        # Las iteraciones posteriores añadirán sus propios contratos inmutables.
+        elif i == 1:
+            check.demand(len(entry["cases"]) == 8 and len(ids) == 4,
+                         "ITER_02 exige ocho escenas nativas exactas")
+            check.demand(entry["source_evidence"] == ["tools/item_audit/held_effect_sweep_v2.cjs"],
+                         "Fuente histórica de resistencias incorrecta")
+            seen = set()
+            for case in entry["cases"]:
+                name = case["scenario"]
+                check.demand(set(case) == {"scenario", "id", "kind", "nature", "start",
+                    "status", "actor_species", "foe_species", "foe_move",
+                    "consumes", "confuses", "expected_type"},
+                    "Esquema de resistencia con campos extra o ausentes")
+                check.demand(name in EXPECTED_02 and name not in seen,
+                             "Escenario repetido o inventado en ITER_02")
+                seen.add(name)
+                expected = EXPECTED_02[name]
+                actual = (case["id"], case["actor_species"], case["foe_move"],
+                          case["consumes"], case["expected_type"])
+                check.demand(actual == expected, "Tipo/especie/consumo adulterado: " + name)
+                check.demand(case["kind"] == "resist_type"
+                             and case["nature"] == "hardy" and case["start"] == "full"
+                             and case["status"] == "" and case["foe_species"] == "mew"
+                             and case["confuses"] is False,
+                             "Control común de testigo de resistencia alterado")
+            check.demand(seen == set(EXPECTED_02), "Falta alguna escena positiva/negativa")
+        else:
+            raise ContractError("Bloque futuro sin contrato específico implementado")
     return count
 
 
@@ -117,7 +154,11 @@ def verify_sources(check):
         check.demand(needle in v3, "No se localizó precedente Aguav: " + needle)
     for needle in ("apicot_berry:'spd'", "aspear_berry:'freeze'",
                    "steel:['babiri_berry','clefable']", "flash_cannon",
-                   "resist_nonmatching", "pinch_not_triggered"):
+                   "resist_nonmatching", "pinch_not_triggered",
+                   "rock:['charti_berry','charizard']", "rock:'smack_down'",
+                   "normal:['chilan_berry','mew']", "normal:'tackle'",
+                   "fighting:['chople_berry','snorlax']", "fighting:'brick_break'",
+                   "flying:['coba_berry','venusaur']", "flying:'aerial_ace'"):
         check.demand(needle in v2, "No se localizó precedente V2: " + needle)
 
 
@@ -132,6 +173,15 @@ def negative_controls(fixture, queue, progress, check):
         lambda f: f["blocks"][0]["cases"][-1].update({"consumes": True}),
         lambda f: f["blocks"][0]["cases"][5].update({"status": ""}),
     ]
+    if len(fixture["blocks"]) >= 2:
+        edits.extend([
+            lambda f: f["blocks"][1]["cases"][0].update({"foe_move": "tackle"}),
+            lambda f: f["blocks"][1]["cases"][2].update({"consumes": False}),
+            lambda f: f["blocks"][1]["cases"][4].update({"actor_species": "mew"}),
+            lambda f: f["blocks"][1]["cases"][-1].update({"expected_type": "fire"}),
+            lambda f: f["blocks"][1]["cases"].pop(),
+            lambda f: f["blocks"][1]["ids"].append("sitrus_berry"),
+        ])
     for i, edit in enumerate(edits):
         tampered = copy.deepcopy(fixture)
         edit(tampered)
