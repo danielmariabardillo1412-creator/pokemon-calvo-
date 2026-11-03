@@ -1469,6 +1469,311 @@ EXPECTED_07 = json.loads(r'''[
 EXPECTED_IDS_07 = ["ice_heal","lava_cookie","lemonade","lumiose_galette"]
 SOURCES_07 = ["modules/inventory/imported_recovery_v19.json","modules/inventory/field_item_effects.gd","modules/inventory/field_item_service.gd","tests/gameplay/item_field_effects_v4.gd"]
 
+EXPECTED_08 = json.loads(r'''[
+  {
+    "scenario": "max_elixir_both_empty_c004",
+    "id": "max_elixir",
+    "kind": "field_medicine",
+    "start_hp": "full",
+    "status": "",
+    "confused": false,
+    "applies": true,
+    "heal_amount": 0,
+    "cures_status": false,
+    "cures_confusion": false,
+    "pp_full": true,
+    "pp_scope": "all",
+    "pp0_start": 0,
+    "pp1_start": 0,
+    "slot": -1
+  },
+  {
+    "scenario": "max_elixir_first_full_second_zero_c004",
+    "id": "max_elixir",
+    "kind": "field_medicine",
+    "start_hp": "full",
+    "status": "",
+    "confused": false,
+    "applies": true,
+    "heal_amount": 0,
+    "cures_status": false,
+    "cures_confusion": false,
+    "pp_full": true,
+    "pp_scope": "all",
+    "pp0_start": "full",
+    "pp1_start": 0,
+    "slot": -1
+  },
+  {
+    "scenario": "max_elixir_first_5_second_2_c004",
+    "id": "max_elixir",
+    "kind": "field_medicine",
+    "start_hp": "full",
+    "status": "",
+    "confused": false,
+    "applies": true,
+    "heal_amount": 0,
+    "cures_status": false,
+    "cures_confusion": false,
+    "pp_full": true,
+    "pp_scope": "all",
+    "pp0_start": 5,
+    "pp1_start": 2,
+    "slot": -1
+  },
+  {
+    "scenario": "max_elixir_both_full_reject_c004",
+    "id": "max_elixir",
+    "kind": "field_medicine",
+    "start_hp": "full",
+    "status": "",
+    "confused": false,
+    "applies": false,
+    "heal_amount": 0,
+    "cures_status": false,
+    "cures_confusion": false,
+    "pp_full": true,
+    "pp_scope": "all",
+    "pp0_start": "full",
+    "pp1_start": "full",
+    "slot": -1
+  },
+  {
+    "scenario": "max_elixir_unexpected_slot_reject_c004",
+    "id": "max_elixir",
+    "kind": "field_medicine",
+    "start_hp": "full",
+    "status": "",
+    "confused": false,
+    "applies": false,
+    "heal_amount": 0,
+    "cures_status": false,
+    "cures_confusion": false,
+    "pp_full": true,
+    "pp_scope": "all",
+    "pp0_start": 0,
+    "pp1_start": 0,
+    "slot": 0
+  },
+  {
+    "scenario": "max_ether_first_zero_c004",
+    "id": "max_ether",
+    "kind": "field_medicine",
+    "start_hp": "full",
+    "status": "",
+    "confused": false,
+    "applies": true,
+    "heal_amount": 0,
+    "cures_status": false,
+    "cures_confusion": false,
+    "pp_full": true,
+    "pp_scope": "one",
+    "pp0_start": 0,
+    "pp1_start": 3,
+    "slot": 0
+  },
+  {
+    "scenario": "max_ether_second_zero_c004",
+    "id": "max_ether",
+    "kind": "field_medicine",
+    "start_hp": "full",
+    "status": "",
+    "confused": false,
+    "applies": true,
+    "heal_amount": 0,
+    "cures_status": false,
+    "cures_confusion": false,
+    "pp_full": true,
+    "pp_scope": "one",
+    "pp0_start": 2,
+    "pp1_start": 0,
+    "slot": 1
+  },
+  {
+    "scenario": "max_ether_first_partial_c004",
+    "id": "max_ether",
+    "kind": "field_medicine",
+    "start_hp": "full",
+    "status": "",
+    "confused": false,
+    "applies": true,
+    "heal_amount": 0,
+    "cures_status": false,
+    "cures_confusion": false,
+    "pp_full": true,
+    "pp_scope": "one",
+    "pp0_start": 7,
+    "pp1_start": 0,
+    "slot": 0
+  },
+  {
+    "scenario": "max_ether_selected_full_other_empty_reject_c004",
+    "id": "max_ether",
+    "kind": "field_medicine",
+    "start_hp": "full",
+    "status": "",
+    "confused": false,
+    "applies": false,
+    "heal_amount": 0,
+    "cures_status": false,
+    "cures_confusion": false,
+    "pp_full": true,
+    "pp_scope": "one",
+    "pp0_start": "full",
+    "pp1_start": 0,
+    "slot": 0
+  },
+  {
+    "scenario": "max_ether_without_slot_reject_c004",
+    "id": "max_ether",
+    "kind": "field_medicine",
+    "start_hp": "full",
+    "status": "",
+    "confused": false,
+    "applies": false,
+    "heal_amount": 0,
+    "cures_status": false,
+    "cures_confusion": false,
+    "pp_full": true,
+    "pp_scope": "one",
+    "pp0_start": 0,
+    "pp1_start": 0,
+    "slot": -1
+  },
+  {
+    "scenario": "max_ether_invalid_slot_reject_c004",
+    "id": "max_ether",
+    "kind": "field_medicine",
+    "start_hp": "full",
+    "status": "",
+    "confused": false,
+    "applies": false,
+    "heal_amount": 0,
+    "cures_status": false,
+    "cures_confusion": false,
+    "pp_full": true,
+    "pp_scope": "one",
+    "pp0_start": 0,
+    "pp1_start": 0,
+    "slot": 99
+  },
+  {
+    "scenario": "max_potion_half_c004",
+    "id": "max_potion",
+    "kind": "field_medicine",
+    "start_hp": "half",
+    "status": "",
+    "confused": false,
+    "applies": true,
+    "heal_amount": 0,
+    "cures_status": false,
+    "cures_confusion": false,
+    "heal_full": true
+  },
+  {
+    "scenario": "max_potion_missing7_c004",
+    "id": "max_potion",
+    "kind": "field_medicine",
+    "start_hp": "missing_7",
+    "status": "",
+    "confused": false,
+    "applies": true,
+    "heal_amount": 0,
+    "cures_status": false,
+    "cures_confusion": false,
+    "heal_full": true
+  },
+  {
+    "scenario": "max_potion_full_reject_c004",
+    "id": "max_potion",
+    "kind": "field_medicine",
+    "start_hp": "full",
+    "status": "",
+    "confused": false,
+    "applies": false,
+    "heal_amount": 0,
+    "cures_status": false,
+    "cures_confusion": false,
+    "heal_full": true
+  },
+  {
+    "scenario": "max_potion_half_poison_persists_c004",
+    "id": "max_potion",
+    "kind": "field_medicine",
+    "start_hp": "half",
+    "status": "poison",
+    "confused": false,
+    "applies": true,
+    "heal_amount": 0,
+    "cures_status": false,
+    "cures_confusion": false,
+    "heal_full": true
+  },
+  {
+    "scenario": "max_potion_half_confusion_persists_c004",
+    "id": "max_potion",
+    "kind": "field_medicine",
+    "start_hp": "half",
+    "status": "",
+    "confused": true,
+    "applies": true,
+    "heal_amount": 0,
+    "cures_status": false,
+    "cures_confusion": false,
+    "heal_full": true
+  },
+  {
+    "scenario": "moomoo_milk_half_c004",
+    "id": "moomoo_milk",
+    "kind": "field_medicine",
+    "start_hp": "half",
+    "status": "",
+    "confused": false,
+    "applies": true,
+    "heal_amount": 100,
+    "cures_status": false,
+    "cures_confusion": false
+  },
+  {
+    "scenario": "moomoo_milk_missing7_c004",
+    "id": "moomoo_milk",
+    "kind": "field_medicine",
+    "start_hp": "missing_7",
+    "status": "",
+    "confused": false,
+    "applies": true,
+    "heal_amount": 100,
+    "cures_status": false,
+    "cures_confusion": false
+  },
+  {
+    "scenario": "moomoo_milk_full_reject_c004",
+    "id": "moomoo_milk",
+    "kind": "field_medicine",
+    "start_hp": "full",
+    "status": "",
+    "confused": false,
+    "applies": false,
+    "heal_amount": 100,
+    "cures_status": false,
+    "cures_confusion": false
+  },
+  {
+    "scenario": "moomoo_milk_half_poison_persists_c004",
+    "id": "moomoo_milk",
+    "kind": "field_medicine",
+    "start_hp": "half",
+    "status": "poison",
+    "confused": false,
+    "applies": true,
+    "heal_amount": 100,
+    "cures_status": false,
+    "cures_confusion": false
+  }
+]''')
+EXPECTED_IDS_08 = ["max_elixir","max_ether","max_potion","moomoo_milk"]
+SOURCES_08 = ["modules/inventory/imported_recovery_v19.json","modules/inventory/field_item_effects.gd","modules/inventory/field_item_service.gd","tests/gameplay/item_field_effects_v4.gd"]
+
 
 class ContractError(ValueError):
     pass
@@ -1625,6 +1930,21 @@ def verify(fixture, queue, progress, chk):
                 seen.add(actual["scenario"])
             chk.demand(seen == {x["scenario"] for x in EXPECTED_07},
                        "Cobertura 07 no contiene todos los escenarios")
+        elif i == 7:
+            chk.demand(block["ids"] == EXPECTED_IDS_08 and block["family"] == "MEDICINE",
+                       "IDs/familia 08 no coinciden con autoridad IA6")
+            chk.demand(block["source_evidence"] == SOURCES_08,
+                       "Fuentes de 08 cambiadas")
+            chk.demand(len(block["cases"]) == len(EXPECTED_08),
+                       "Bloque 08 no contiene 20 escenarios")
+            seen = set()
+            for actual, expected in zip(block["cases"], EXPECTED_08):
+                chk.demand(type(actual) is dict and actual == expected,
+                           "Escenario medicina 08 distinto de contrato: "+str(expected["scenario"]))
+                chk.demand(actual["scenario"] not in seen, "Escenario 08 duplicado")
+                seen.add(actual["scenario"])
+            chk.demand(seen == {z["scenario"] for z in EXPECTED_08},
+                       "Escenarios 08 no cubiertos por completo")
         else:
             raise ContractError("No hay contrato específico de bloque futuro")
     return len(progress)
@@ -1751,6 +2071,23 @@ def verify_sources(chk):
                "Motor de congelación/confusión/HP no conserva ruta nativa")
     chk.demand('"ice_heal": "freeze"' in old,
                "Regresión de Antihielo histórica ausente")
+    expected_08_profiles = {
+        "max_elixir": {"pp": "full", "scope": "all"},
+        "max_ether": {"pp": "full", "scope": "one"},
+        "max_potion": {"heal": "full"},
+        "moomoo_milk": {"heal": 100},
+    }
+    for item, expected in expected_08_profiles.items():
+        chk.demand(profile["items"][item]["effect"] == expected
+                   and profile["items"][item]["consume"] is True,
+                   "Perfil de medicina 08 no coincide: " + item)
+    for fragment in ('spec.scope == "one"', "slots.assign(creature.moveset)",
+                     "slot.current_pp + (slot.max_pp if spec.pp is String else int(spec.pp))",
+                     'if move_slot != -1: return deny("unexpected_move_slot")',
+                     'creature.recover_hp(amount)'):
+        chk.demand(fragment in effects, "Contrato Max PP/PS de motor alterado: " + fragment)
+    chk.demand('"max_potion": 9999' in old,
+               "Regresión histórica de Max Potion ausente")
 
 
 def negative_controls(fixture, queue, progress, chk):
@@ -1849,6 +2186,25 @@ def negative_controls(fixture, queue, progress, chk):
             lambda f: f["blocks"][6]["cases"][18].update({"expect_sleep_clock_clear": False}),
             lambda f: f["blocks"][6]["cases"][20].update({"cures_confusion": False}),
             lambda f: f["blocks"][6]["cases"][21].update({"applies": True}),
+        ])
+    if len(fixture["blocks"]) >= 8:
+        edits.extend([
+            lambda f: f["blocks"][7]["ids"].append("ether"),
+            lambda f: f["blocks"][7]["cases"].pop(),
+            lambda f: f["blocks"][7]["source_evidence"].pop(),
+            lambda f: f["blocks"][7]["cases"][0].update({"pp_full": False}),
+            lambda f: f["blocks"][7]["cases"][1].update({"pp_scope": "one"}),
+            lambda f: f["blocks"][7]["cases"][3].update({"applies": True}),
+            lambda f: f["blocks"][7]["cases"][4].update({"slot": -1}),
+            lambda f: f["blocks"][7]["cases"][5].update({"slot": 1}),
+            lambda f: f["blocks"][7]["cases"][8].update({"applies": True}),
+            lambda f: f["blocks"][7]["cases"][10].update({"slot": 0}),
+            lambda f: f["blocks"][7]["cases"][11].update({"heal_full": False}),
+            lambda f: f["blocks"][7]["cases"][12].update({"start_hp": "full"}),
+            lambda f: f["blocks"][7]["cases"][15].update({"cures_confusion": True}),
+            lambda f: f["blocks"][7]["cases"][16].update({"heal_amount": 60}),
+            lambda f: f["blocks"][7]["cases"][18].update({"applies": True}),
+            lambda f: f["blocks"][7]["cases"][19].update({"cures_status": True}),
         ])
     for i, edit in enumerate(edits):
         altered = copy.deepcopy(fixture)
