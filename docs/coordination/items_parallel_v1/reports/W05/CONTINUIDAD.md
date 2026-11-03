@@ -1,3 +1,17 @@
+# ESTADO VIGENTE IA5/W05 — CAMPAÑA_005 · 09/10 ENTREGADO, CI PENDIENTE (2026-11-04)
+
+**Identidad:** IA5/W05, MT/libros. **Rama exclusiva:** `codex/calvo-items-20261103-w05-camp005`. Autoridad IA6: `CAMPAIGN_005_W05_GATE.md`, `CAMPAIGN_005_W05_QUEUE_APPROVED.csv`, `campaigns/CAMP_005_W05.md`, `AUTONOMOUS_REPAIR_V5.md` de la rama árbitra. Esta cabecera prevalece sobre estados inferiores. CAMP004 y CAMP003, 60 MT cada una, cerradas y conservadas como regresiones.
+
+**BLOQUE 09 ENTREGADO:** `tm190;tm191;tm192;tm193;tm194;tm195` → `solar_blade;uproar;focus_punch;weather_ball;grassy_glide;burning_jealousy` en SV. Fixture `tests/fixtures/parallel_items/w05_campaign_005.json` con **9 bloques/54 MT**, commit `c521dfeb8cf04ca45f224d0690d9e9d600052ca6`. Progreso `reports/W05/CAMP_005_PROGRESO.csv`, fila 09 `EN_CI_AUTOMATICA`, commit `0a69eaf51999f7a26cd69e34cf52f43f7a2ff5ff`. Informe `CAMP_005_ITER_09.md`, commit `da88eeab3420014d86afd5ed287c17cd71d4fa9a`. Cotejo estático: 9 bloques y filas, 54 IDs únicos sin duplicados y movimiento/orden idéntico a cola IA6 y mapeo canónico SV; sin cambios de runners ni producción. Este cotejo no sustituye a CI funcional.
+
+**CI ANTERIOR 01–08 VERIFICADA:** [Actions #41733471535](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41733471535), SHA `e455c80adb322fff21866e914e2538f6586e8706`, `completed/success`; `CAMP005_W05_PY PASS blocks=8 checks=464`, `CAMP005_W05_GODOT PASS blocks=8 checks=1736`, gates PASS. En hito 05 [#41721306449](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41721306449), CAMP004 60 MT y CAMP003 60 MT pasaron Python 580 y Godot 2166 comprobaciones por campaña.
+
+**CI BLOQUE 09 POR VERIFICAR:** [Actions #41737890652](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41737890652), SHA `0a69eaf51999f7a26cd69e34cf52f43f7a2ff5ff`, inicialmente `pending`; run fixture intermedio #41737864787 puede cancelarse por concurrencia. Exigir `completed/success`, recibos `CAMP005_W05_PY PASS blocks=9`, `CAMP005_W05_GODOT PASS blocks=9`, ambos gates. Regresiones CAMP004/003 programadas en hito 10 o cambios de producción, no en bloque 09.
+
+**SIGUIENTE `p`:** comprobar primero CI 09; después ejecutar exclusivamente **bloque 10/10** `tm196;tm197;tm198;tm199;tm200;tm201`, con nueva prueba funcional y regresión completa de CAMP004 y CAMP003 en el mismo run. Si falla cualquier prueba, diagnosticar y autorreparar dentro de W05 según V5, sin rebajar aserciones. Prohibido tocar `main`, V28, PR118, árbitra, otras W, catálogo/learnsets/políticas, 19 MT legacy inactivas, saves, workflows o merge. Una vez acabado 10/10 y CI PASS, publicar consolidado `CAMP_005_FINAL.md`, declarar `CAMPAÑA_005_FINALIZADA` y STOP; sin bloque 11. CI Godot headless no verifica GPU/UI.
+
+---
+
 # ESTADO VIGENTE IA5/W05 — CAMPAÑA_005 · 08/10 CI PASS VERIFICADA (2026-11-03)
 
 **Identidad:** IA5/W05, MT/libros; **rama exclusiva** `codex/calvo-items-20261103-w05-camp005`. Autoridad IA6: `CAMPAIGN_005_W05_GATE.md`, `CAMPAIGN_005_W05_QUEUE_APPROVED.csv`, `campaigns/CAMP_005_W05.md` y `AUTONOMOUS_REPAIR_V5.md`, de la rama árbitra. Este encabezado prevalece sobre notas antiguas. CAMP004 y CAMP003 son campañas previas de 60 MT cada una, conservadas y solo regresionadas.
