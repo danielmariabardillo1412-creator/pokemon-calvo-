@@ -718,8 +718,8 @@ func _block06_capture(id: StringName, sid: StringName, friendship_value: int,
 	var result: CaptureResolution = CaptureInventoryService.resolve(
 		CaptureAttempt.new(target, id, CaptureBattleContext.new()),
 		rng, catalogs, party, inv)
-	var label := String(id) + String(sid) + persistent + "_" + str(friendship_value)
-		+ ("_success" if want_success else "_failure") + ("_pc" if to_pc else "")
+	var label: String = (String(id) + String(sid) + persistent + "_" + str(friendship_value)
+		+ ("_success" if want_success else "_failure") + ("_pc" if to_pc else ""))
 	check("Postcaptura un RNG, una bola, probabilidad canónica " + label,
 		result.result.status != CaptureResult.INVALID
 		and result.result.consume_item and inv.quantity(id) == 1
