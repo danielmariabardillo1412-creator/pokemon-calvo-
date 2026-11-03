@@ -3,6 +3,7 @@ extends "res://tests/gameplay/item_capture_v11.gd"
 # CAMP003 / IA3-W03: sólo pruebas acumulativas. No editar captura o catálogo.
 const CAMP003_W03_FIXTURE := "res://tests/fixtures/parallel_items/w03_campaign_003.json"
 const CAMP003_W03_TURN_EFFECTS = preload("res://modules/capture/capture_context_ball_effects.gd")
+const CAMP003_W03_BASIC_EFFECTS = preload("res://modules/capture/capture_ball_effects.gd")
 
 
 func _initialize() -> void:
@@ -37,6 +38,7 @@ func _run_campaign() -> void:
 			"01": _block_01(bloque)
 			"02": _block_02(bloque)
 			"03": _block_03(bloque)
+			"04": _block_04(bloque)
 			_: check("Bloque aún sin suite funcional " + str(numero), false)
 	_terminar_campania(numero)
 
@@ -370,6 +372,146 @@ func _block_03(bloque: Dictionary) -> void:
 				and result.result.reason == reason and not result.result.consume_item
 				and bag.to_dict() == before_bag and target.to_dict() == before_target
 				and rng.state == before_rng and party.is_empty())
+
+
+# Level Ball: umbrales de niveles reales y tasa modificada limitada a 255.
+# Nest Ball: nivel del OBJETIVO, sin exigir catcher_level.
+func _block_04(bloque: Dictionary) -> void:
+	var reglas := CaptureRuleset.new()
+	var level: Dictionary = bloque.get("level_ball", {})
+	var nest: Dictionary = bloque.get("nest_ball", {})
+	var casos: Array = bloque.get("species_cases", [])
+	check("Bola04 exactamente Level y Nest", bloque.get("ids", []) == ["level_ball", "nest_ball"])
+	check("Bola04 ambas registradas sin garantía",
+		reglas.is_known_ball(&"level_ball") and reglas.is_known_ball(&"nest_ball")
+		and not reglas.ball(&"level_ball").guaranteed and not reglas.ball(&"nest_ball").guaranteed)
+	var target_level: int = int(level.get("target_level", 10))
+	var catcher_levels: Array = level.get("catcher_levels", [])
+	var boundary_factors: Array = level.get("independent_multipliers", [])
+	check("Level incluye ocho fronteras", catcher_levels.size() == 8 and boundary_factors.size() == 8)
+	for caso: Dictionary in casos:
+		var sid: StringName = StringName(String(caso.get("species_id", "")))
+		var species: CreatureSpecies = catalogs.species(sid)
+		check("Especie real para contexto nivel " + String(sid),
+			species != null and species.capture_rate >= 1)
+		if species == null or species.capture_rate < 1:
+			continue
+		for i in catcher_levels.size():
+			var active_level: int = int(catcher_levels[i])
+			var expected_base: float = 1.0
+			if active_level >= target_level * 4:
+				expected_base = 8.0
+			elif active_level >= target_level * 2:
+				expected_base = 4.0
+			elif active_level > target_level:
+				expected_base = 2.0
+			check("Level umbral independiente " + str(active_level),
+				is_equal_approx(expected_base, float(boundary_factors[i])))
+			var factor: float = minf(expected_base, 255.0 / float(species.capture_rate))
+			var target: CreatureInstance = _mon(sid, target_level,
+				StringName("c003_04_level_factor_" + String(sid) + "_" + str(active_level)))
+			var ctx := CaptureBattleContext.new()
+			ctx.catcher_level = active_level
+			check("Level adaptador con límite 255/rate " + String(sid) + str(active_level),
+				is_equal_approx(CAMP003_W03_TURN_EFFECTS.multiplier(
+					&"level_ball", target, species, ctx), factor))
+			for mode: String in bloque.get("hp_modes", []):
+				_check_block04_capture(&"level_ball", sid, target_level, active_level,
+					factor, mode, int(caso.get("seed", 4401)) + active_level)
+		var nest_levels: Array = nest.get("target_levels", [])
+		var nest_factors: Array = nest.get("independent_multipliers", [])
+		check("Nest incluye cinco fronteras", nest_levels.size() == 5 and nest_factors.size() == 5)
+		for i in nest_levels.size():
+			var wild_level: int = int(nest_levels[i])
+			var factor: float = maxf((41.0 - float(wild_level)) / 10.0, 1.0)
+			check("Nest umbral independiente " + str(wild_level),
+				is_equal_approx(factor, float(nest_factors[i])))
+			var wild: CreatureInstance = _mon(sid, wild_level,
+				StringName("c003_04_nest_factor_" + String(sid) + "_" + str(wild_level)))
+			check("Nest factor real por nivel objetivo " + String(sid) + str(wild_level),
+				is_equal_approx(CAMP003_W03_BASIC_EFFECTS.multiplier(
+					&"nest_ball", wild, species), factor))
+			for mode: String in bloque.get("hp_modes", []):
+				_check_block04_capture(&"nest_ball", sid, wild_level, -1,
+					factor, mode, int(caso.get("seed", 4401)) + wild_level)
+	# Level: contexto por defecto -1, cero y >100 deben rechazar sin gasto.
+	for value: Variant in level.get("missing_catcher_levels", []):
+		var active_level: int = int(value)
+		var target: CreatureInstance = _mon(&"mew", 10,
+			StringName("c003_04_missing_" + str(active_level)))
+		var ctx := CaptureBattleContext.new()
+		ctx.catcher_level = active_level
+		check("Level sin nivel activo invalida", CaptureSystem.validate_attempt(
+			CaptureAttempt.new(target, &"level_ball", ctx), catalogs)
+			== "capture_active_level_context_missing")
+		_check_block04_reject(&"level_ball", "capture_active_level_context_missing", active_level)
+	# Con contexto válido, los rechazos de trainer o inventario no gastan.
+	for id: StringName in [&"level_ball", &"nest_ball"]:
+		for reason: String in bloque.get("invalid_cases", []):
+			_check_block04_reject(id, reason, 40)
+
+
+func _check_block04_capture(id: StringName, sid: StringName, target_level: int,
+		catcher_level: int, factor: float, mode: String, seed_value: int) -> void:
+	var species: CreatureSpecies = catalogs.species(sid)
+	var target: CreatureInstance = _mon(sid, target_level,
+		StringName("c003_04_capture_" + String(id) + "_" + String(sid)
+		+ "_" + str(target_level) + "_" + str(catcher_level) + "_" + mode))
+	target.current_hp = target.stats.max_hp if mode == "full" else 1
+	var target_before: Dictionary = target.to_dict()
+	var ctx := CaptureBattleContext.new()
+	ctx.catcher_level = catcher_level
+	var inv := PlayerInventory.new()
+	inv.add(id, 2)
+	var party := CreatureParty.new()
+	var rng := RandomNumberGenerator.new()
+	rng.seed = seed_value
+	var control := RandomNumberGenerator.new()
+	control.state = rng.state
+	var expected: float = clampf(float(species.capture_rate) / 255.0 * factor
+		* float(3 * target.stats.max_hp - 2 * target.current_hp)
+		/ float(3 * target.stats.max_hp), 0.0, 1.0)
+	var expected_success: bool = control.randf() < expected
+	var result: CaptureResolution = CaptureInventoryService.resolve(
+		CaptureAttempt.new(target, id, ctx), rng, catalogs, party, inv)
+	check("Nivel04 probabilidad y gasto/RNG " + String(id) + String(sid)
+			+ str(target_level) + str(catcher_level) + mode,
+		result.result.status != CaptureResult.INVALID and result.result.consume_item
+		and is_equal_approx(result.result.probability, expected)
+		and inv.quantity(id) == 1 and rng.state == control.state
+		and (result.result.status == CaptureResult.SUCCESS) == expected_success)
+	check("Nivel04 propiedad única o fallo intacto " + String(id) + String(sid)
+			+ str(target_level) + str(catcher_level) + mode,
+		(is_same(result.captured, target) and party.contains_instance_id(target.instance_id)
+		and party.size() == 1) if expected_success else
+		(result.result.status == CaptureResult.FAILED and party.is_empty()
+		and target.to_dict() == target_before))
+
+
+func _check_block04_reject(id: StringName, reason: String, active_level: int) -> void:
+	var target: CreatureInstance = _mon(&"mew", 10,
+		StringName("c003_04_reject_" + String(id) + "_" + reason + "_" + str(active_level)))
+	var ctx := CaptureBattleContext.new()
+	ctx.catcher_level = active_level
+	var inv := PlayerInventory.new()
+	inv.add(id, 2)
+	if reason == "trainer_battle_not_capturable":
+		ctx.is_wild = false
+	if reason == "item_not_owned":
+		inv.remove(id, 2)
+	var inventory_before: Dictionary = inv.to_dict()
+	var target_before: Dictionary = target.to_dict()
+	var party := CreatureParty.new()
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 404
+	var rng_before: int = rng.state
+	var result: CaptureResolution = CaptureInventoryService.resolve(
+		CaptureAttempt.new(target, id, ctx), rng, catalogs, party, inv)
+	check("Nivel04 rechazo previo al consumo/RNG " + String(id) + reason,
+		result.result.status == CaptureResult.INVALID
+		and result.result.reason == reason and not result.result.consume_item
+		and inv.to_dict() == inventory_before and target.to_dict() == target_before
+		and rng.state == rng_before and party.is_empty())
 
 
 func _terminar_campania(bloques: int) -> void:
