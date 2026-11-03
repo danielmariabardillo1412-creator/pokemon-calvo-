@@ -270,7 +270,9 @@ func _auditar_forma_04(catalogo: DefinitionCatalog, fila: Dictionary) -> void:
 		comprobar(not registro.conditions.has("base_form"), String(item) + "/04_sin_restriccion_regional_artificial")
 	comprobar(EvolutionSystem.classify_record(registro, catalogo, origen) == EvolutionSystem.DATA_ONLY, String(item) + "/04_condicion_forma_no_degradable")
 	var opciones := EvolutionSystem.evolution_candidates(especie, {"level": 100, "item_id": item, "base_form": fila.get("base_form", ""), "evolved_form": fila.get("evolved_form", "")}, catalogo)
-	comprobar(not _tiene_destino_03(opciones, destino), String(item) + "/04_eligibilidad_no_ignora_forma")
+	comprobar(not opciones.has(registro), String(item) + "/04_eligibilidad_no_ignora_forma")
+	if item == &"galarica_cuff":
+		comprobar(_tiene_destino_03(opciones, &"slowbro"), "galarica_cuff/04_evolucion_normal_nivel_sigue_disponible")
 	var pc := _crear(catalogo, origen)
 	comprobar(pc != null, String(item) + "/04_criatura")
 	if pc == null:
