@@ -1,3 +1,27 @@
+# IA2/W02 — CAMPAÑA_003: CONTINUIDAD VIGENTE / BLOQUE 06 DE 10
+
+**ESTADO:** 06/10 ENTREGADO en `codex/calvo-items-20261103-w02-camp003`, `EN_CI_AUTOMATICA`. El siguiente `p` puede ejecutar **solo el bloque 07** tras verificar semáforo del último workflow; no saltar ningún bloque.
+
+**Autoridad:** `CAMPAIGN_003_QUEUE_APPROVED.csv` blob `ea06a0a000fc4f3b8bab48e45e21fb549d753559`; encargo `campaigns/CAMP_003_W02.md` blob `62498ebd44288a86e59986379dbc1b70e111ef1f`. W04 reincorporado por addendum independiente, sin alterar W02.
+
+**BLOQUE 05 CI REAL CONFIRMADA:** [Actions #41559377763](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41559377763), `completed/success`, SHA `fd6fd0b6a40b2e5a0780607d268c9eb60d51204f`; recibos **Python 327 checks PASS, Godot 3612 checks PASS, 5 bloques**.
+
+**Bloque 06 cuatro IDs:** `mago_berry` (Brave rechazo de sabor y confusión/H ardy sin confusión/PS altos); `maranga_berry` (especial `confusion` +1 SpD vs físico `tackle`); `micle_berry` (PS bajos, efecto diferido `micleberry` tras `reflect`, checkpoint restaurado y consumo del efecto en segundo turno con `hydro_pump`, frente a PS altos); `occa_berry` (Fuego supereficaz contra Scizor vs Normal).
+
+**Cobertura:** nueve nuevos escenarios, 27 variantes; 6 bloques acumulados (9+8+8+9+8+9) = **51 escenarios, 153 variantes, 24 IDs distintos**. Modos `active/none/reserve`, consumo y posición, `SaveGameRepository` SaveV2, restauración sin falsear, FLED, evidencias JSON + SHA256. Se conserva todo lo anterior. Para Micle, `_native_volatile()` lee `_checkpoint.roster` de Godot como proyección nativa de `volatiles` por `instance_id`; comprueba si el efecto persiste después de cargar y termina tras el próximo movimiento. No afirmar incremento porcentual de precisión con un solo movimiento.
+
+**Referencias históricas (read-only):** `held_effect_sweep_v3.cjs` (Mago y Micle, múltiples semillas), `held_effect_sweep_v2.cjs` (Maranga/Occa). No crear callbacks nuevos: los efectos ya están en el motor.
+
+**Pruebas publicadas:** fixture commit `66fbae22a05e84326fdbf9b6a21e9a886238f42e`; Godot `744057924c583f0e73e8900ce4d89b71f19cbd07`; Python `e0791b6d88b680b06bfc8fd5436532adf0e0bcc6`; CSV `e1bd985da220fcff2578be97cd4de4f53167b1af`; informe `ce68e6996f70cd288f5ba6a4b2a7b3106e5a6c61`. Solo rutas de escritura W02.
+
+**CI bloque 06:** [Actions #41560377509](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41560377509) sobre SHA `e1bd985da220fcff2578be97cd4de4f53167b1af`, inicialmente `pending`. Exigir **`CAMP003_W02_PY PASS blocks=6 checks=M` y `CAMP003_W02_GODOT PASS blocks=6 checks=M`**. Si failure, inspeccionar log exacto. Un problema de arnés corregible se repara sin rebajar aserciones; defecto compartido de motor/SaveV2, detener e informar a IA6. No reinterpretar cancelaciones de CI intermedia como fallos funcionales.
+
+**Siguiente `p`:** BLOQUE **07/10** exclusivamente `passho_berry;payapa_berry;petaya_berry;rindo_berry`; verificar CI/progreso antes de escribir. No tocar `main`, V28, PR #118, producción, catálogo, IA6, W04, otras ramas o workflows. Campo e imágenes GPU fuera de alcance.
+
+---
+
+## ARCHIVO HISTÓRICO — ESTADO 05/10 Y ANTERIORES
+
 # IA2/W02 — CAMPAÑA_003: CONTINUIDAD VIGENTE / BLOQUE 05 DE 10
 
 **Estado:** BLOQUE **05/10 PUBLICADO**, `EN_CI_AUTOMATICA` del SHA con cinco filas de progreso, `fd6fd0b6a40b2e5a0780607d268c9eb60d51204f`. Solo la `p` siguiente autoriza **bloque 06** si semáforo CI lo permite. Rama exclusiva `codex/calvo-items-20261103-w02-camp003`.
