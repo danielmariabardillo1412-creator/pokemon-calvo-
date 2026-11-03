@@ -50,6 +50,18 @@ EXPECTED_03 = {
     "ganlon_high_no_boost_c003": ("ganlon_berry", "boost_def", "mew", "mew", "amnesia", "near_full", False, {"boost_stat": "def"}),
 }
 
+EXPECTED_04 = {
+    "haban_dragon_hit_c003": ("haban_berry", "resist_type", "dragonite", "mew", "dragon_pulse", "full", True, "hardy", False, {"expected_type": "dragon"}),
+    "haban_wrong_normal_c003": ("haban_berry", "resist_type", "dragonite", "mew", "tackle", "full", False, "hardy", False, {"expected_type": "dragon"}),
+    "iapapa_lonely_low_c003": ("iapapa_berry", "heal_flavor", "mew", "mew", "amnesia", "fifth", True, "lonely", True, {}),
+    "iapapa_hardy_low_c003": ("iapapa_berry", "heal_flavor", "mew", "mew", "amnesia", "fifth", True, "hardy", False, {}),
+    "iapapa_lonely_high_c003": ("iapapa_berry", "heal_flavor", "mew", "mew", "amnesia", "near_full", False, "lonely", False, {}),
+    "jaboca_physical_tackle_c003": ("jaboca_berry", "retaliate_physical", "mew", "mew", "tackle", "full", True, "hardy", False, {"expected_category": "physical", "retaliation_denominator": 8}),
+    "jaboca_special_confusion_c003": ("jaboca_berry", "retaliate_physical", "mew", "mew", "confusion", "full", False, "hardy", False, {"expected_category": "special", "retaliation_denominator": 8}),
+    "kasib_ghost_hit_c003": ("kasib_berry", "resist_type", "mew", "mew", "shadow_ball", "full", True, "hardy", False, {"expected_type": "ghost"}),
+    "kasib_wrong_normal_c003": ("kasib_berry", "resist_type", "mew", "mew", "tackle", "full", False, "hardy", False, {"expected_type": "ghost"}),
+}
+
 class ContractError(ValueError):
     pass
 
@@ -183,6 +195,38 @@ def validate(fixture, queue, progress, check):
                                  "Expectativa individual manipulada: " + name + "/" + key)
             check.demand(seen == set(EXPECTED_03),
                          "Cobertura positiva/negativa incompleta en bloque 03")
+        elif i == 3:
+            check.demand(entry["source_evidence"] == [
+                "tools/item_audit/held_effect_sweep_v2.cjs",
+                "tools/item_audit/held_effect_sweep_v3.cjs"],
+                "Faltan precedentes exactos de Haban Iapapa Jaboca Kasib")
+            check.demand(len(entry["cases"]) == 9 and len(ids) == 4,
+                         "ITER_04 exige nueve escenarios para cuatro bayas")
+            seen = set()
+            for case in entry["cases"]:
+                name = case["scenario"]
+                check.demand(name in EXPECTED_04 and name not in seen,
+                             "Escenario ITER_04 duplicado o no autorizado")
+                seen.add(name)
+                item, kind, actor, foe, move, hp_state, spent, nature, confused, extra = EXPECTED_04[name]
+                base_keys = {"scenario", "id", "kind", "nature", "start",
+                             "status", "actor_species", "foe_species",
+                             "foe_move", "consumes", "confuses"}
+                check.demand(set(case) == base_keys | set(extra),
+                             "Campos ausentes/extra de resistencia sabor o reaccion")
+                actual = (case["id"], case["kind"], case["actor_species"],
+                          case["foe_species"], case["foe_move"], case["start"],
+                          case["consumes"], case["nature"], case["confuses"])
+                check.demand(actual == (item, kind, actor, foe, move, hp_state,
+                                        spent, nature, confused) and case["status"] == "",
+                             "Contrato de tipo, disparador, naturaleza o HP manipulado: " + name)
+                check.demand(case["id"] in ids,
+                             "Item fuera de reserva oficial de bloque 04")
+                for key, value in extra.items():
+                    check.demand(case[key] == value,
+                                 "Contrato especial modificado: " + name + "/" + key)
+            check.demand(seen == set(EXPECTED_04),
+                         "Falta alguno de los nueve escenarios del bloque 04")
         else:
             raise ContractError("Bloque futuro sin contrato específico implementado")
     return count
@@ -202,12 +246,18 @@ def verify_sources(check):
                    "fighting:['chople_berry','snorlax']", "fighting:'brick_break'",
                    "flying:['coba_berry','venusaur']", "flying:'aerial_ace'",
                    "dark:['colbur_berry','mew']", "dark:'dark_pulse'",
-                   "ganlon_berry:'def'"):
+                   "ganlon_berry:'def'",
+                   "dragon:['haban_berry','dragonite']",
+                   "ghost:['kasib_berry','mew']", "dragon:'dragon_pulse'",
+                   "ghost:'shadow_ball'"):
         check.demand(needle in v2, "No se localizó precedente V2: " + needle)
     for needle in ("'custap_berry','low_hp_order'", "'custap_berry','full_hp'",
                    "'enigma_berry','super_effective_heal'",
                    "'enigma_berry','neutral_no_trigger'",
-                   "foeMoves:['thunder_shock']"):
+                   "foeMoves:['thunder_shock']",
+                   "['iapapa_berry','lonely']",
+                   "['jaboca_berry','tackle','confusion']",
+                   "'category_retaliation'", "'wrong_category'"):
         check.demand(needle in v3, "No se localizo precedente V3: " + needle)
 
 
@@ -241,6 +291,19 @@ def negative_controls(fixture, queue, progress, check):
             lambda f: f["blocks"][2]["cases"][6].update({"boost_stat": "spd"}),
             lambda f: f["blocks"][2]["cases"].pop(),
             lambda f: f["blocks"][2]["ids"].append("figy_berry"),
+        ])
+    if len(fixture["blocks"]) >= 4:
+        edits.extend([
+            lambda f: f["blocks"][3]["cases"][0].update({"foe_move": "tackle"}),
+            lambda f: f["blocks"][3]["cases"][1].update({"consumes": True}),
+            lambda f: f["blocks"][3]["cases"][2].update({"nature": "hardy"}),
+            lambda f: f["blocks"][3]["cases"][3].update({"confuses": True}),
+            lambda f: f["blocks"][3]["cases"][4].update({"start": "fifth"}),
+            lambda f: f["blocks"][3]["cases"][5].update({"retaliation_denominator": 4}),
+            lambda f: f["blocks"][3]["cases"][6].update({"expected_category": "physical"}),
+            lambda f: f["blocks"][3]["cases"][-1].update({"foe_move": "shadow_ball"}),
+            lambda f: f["blocks"][3]["cases"].pop(),
+            lambda f: f["blocks"][3]["ids"].append("lum_berry"),
         ])
     for i, edit in enumerate(edits):
         tampered = copy.deepcopy(fixture)
