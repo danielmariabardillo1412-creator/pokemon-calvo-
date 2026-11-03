@@ -2040,6 +2040,293 @@ EXPECTED_07 = json.loads(r'''[
 IDS_07 = ["resist_mochi","genius_mochi","clever_mochi","swift_mochi"]
 SOURCES_07 = ["modules/inventory/field_mochi_effects.gd","modules/inventory/field_training_effects.gd","modules/inventory/field_item_effects.gd","modules/inventory/field_item_service.gd","tests/gameplay/item_mochi_v13.gd","docs/current/ITEM_MOCHI_V13.md"]
 
+EXPECTED_08 = json.loads(r'''[
+  {
+    "scenario": "reset_hp_100",
+    "id": "fresh_start_mochi",
+    "kind": "mochi_reset",
+    "applies": true,
+    "reset_evs": {
+      "hp": 100
+    }
+  },
+  {
+    "scenario": "reset_attack_252",
+    "id": "fresh_start_mochi",
+    "kind": "mochi_reset",
+    "applies": true,
+    "reset_evs": {
+      "attack": 252
+    }
+  },
+  {
+    "scenario": "reset_defense_60_spatk_70",
+    "id": "fresh_start_mochi",
+    "kind": "mochi_reset",
+    "applies": true,
+    "reset_evs": {
+      "defense": 60,
+      "special_attack": 70
+    }
+  },
+  {
+    "scenario": "reset_all_six_10",
+    "id": "fresh_start_mochi",
+    "kind": "mochi_reset",
+    "applies": true,
+    "reset_evs": {
+      "hp": 10,
+      "attack": 10,
+      "defense": 10,
+      "special_attack": 10,
+      "special_defense": 10,
+      "speed": 10
+    }
+  },
+  {
+    "scenario": "reset_full_510",
+    "id": "fresh_start_mochi",
+    "kind": "mochi_reset",
+    "applies": true,
+    "reset_evs": {
+      "hp": 252,
+      "attack": 252,
+      "defense": 6
+    }
+  },
+  {
+    "scenario": "reset_speed_150",
+    "id": "fresh_start_mochi",
+    "kind": "mochi_reset",
+    "applies": true,
+    "reset_evs": {
+      "speed": 150
+    }
+  },
+  {
+    "scenario": "reset_friendship_254",
+    "id": "fresh_start_mochi",
+    "kind": "mochi_reset",
+    "applies": true,
+    "reset_evs": {
+      "hp": 100,
+      "speed": 50
+    },
+    "start_friendship": 254
+  },
+  {
+    "scenario": "reset_already_zero",
+    "id": "fresh_start_mochi",
+    "kind": "mochi_reset",
+    "applies": false,
+    "reset_evs": {}
+  },
+  {
+    "scenario": "reset_invalid_slot",
+    "id": "fresh_start_mochi",
+    "kind": "mochi_reset",
+    "applies": false,
+    "reset_evs": {
+      "hp": 100
+    },
+    "slot": 0
+  },
+  {
+    "scenario": "reset_510_wrong_slot",
+    "id": "fresh_start_mochi",
+    "kind": "mochi_reset",
+    "applies": false,
+    "reset_evs": {
+      "hp": 252,
+      "attack": 252,
+      "defense": 6
+    },
+    "slot": 1
+  },
+  {
+    "scenario": "adamant_mint_hardy_target",
+    "id": "adamant_mint",
+    "kind": "mint_dependency",
+    "applies": false,
+    "wanted_nature": "adamant",
+    "expect_status": "DEPENDENCY_MISSING",
+    "expect_reason": "field_effect_not_connected",
+    "nature": "hardy"
+  },
+  {
+    "scenario": "adamant_mint_same_nature",
+    "id": "adamant_mint",
+    "kind": "mint_dependency",
+    "applies": false,
+    "wanted_nature": "adamant",
+    "expect_status": "DEPENDENCY_MISSING",
+    "expect_reason": "field_effect_not_connected",
+    "nature": "adamant"
+  },
+  {
+    "scenario": "adamant_mint_foreign_nature",
+    "id": "adamant_mint",
+    "kind": "mint_dependency",
+    "applies": false,
+    "wanted_nature": "adamant",
+    "expect_status": "DEPENDENCY_MISSING",
+    "expect_reason": "field_effect_not_connected",
+    "nature": "modest"
+  },
+  {
+    "scenario": "adamant_mint_friendship_254",
+    "id": "adamant_mint",
+    "kind": "mint_dependency",
+    "applies": false,
+    "wanted_nature": "adamant",
+    "expect_status": "DEPENDENCY_MISSING",
+    "expect_reason": "field_effect_not_connected",
+    "start_friendship": 254
+  },
+  {
+    "scenario": "adamant_mint_with_slot",
+    "id": "adamant_mint",
+    "kind": "mint_dependency",
+    "applies": false,
+    "wanted_nature": "adamant",
+    "expect_status": "DEPENDENCY_MISSING",
+    "expect_reason": "field_effect_not_connected",
+    "slot": 0
+  },
+  {
+    "scenario": "adamant_mint_at_level100",
+    "id": "adamant_mint",
+    "kind": "mint_dependency",
+    "applies": false,
+    "wanted_nature": "adamant",
+    "expect_status": "DEPENDENCY_MISSING",
+    "expect_reason": "field_effect_not_connected",
+    "level": 100
+  },
+  {
+    "scenario": "modest_mint_hardy_target",
+    "id": "modest_mint",
+    "kind": "mint_dependency",
+    "applies": false,
+    "wanted_nature": "modest",
+    "expect_status": "DEPENDENCY_MISSING",
+    "expect_reason": "field_effect_not_connected",
+    "nature": "hardy"
+  },
+  {
+    "scenario": "modest_mint_same_nature",
+    "id": "modest_mint",
+    "kind": "mint_dependency",
+    "applies": false,
+    "wanted_nature": "modest",
+    "expect_status": "DEPENDENCY_MISSING",
+    "expect_reason": "field_effect_not_connected",
+    "nature": "modest"
+  },
+  {
+    "scenario": "modest_mint_foreign_nature",
+    "id": "modest_mint",
+    "kind": "mint_dependency",
+    "applies": false,
+    "wanted_nature": "modest",
+    "expect_status": "DEPENDENCY_MISSING",
+    "expect_reason": "field_effect_not_connected",
+    "nature": "adamant"
+  },
+  {
+    "scenario": "modest_mint_friendship_254",
+    "id": "modest_mint",
+    "kind": "mint_dependency",
+    "applies": false,
+    "wanted_nature": "modest",
+    "expect_status": "DEPENDENCY_MISSING",
+    "expect_reason": "field_effect_not_connected",
+    "start_friendship": 254
+  },
+  {
+    "scenario": "modest_mint_with_slot",
+    "id": "modest_mint",
+    "kind": "mint_dependency",
+    "applies": false,
+    "wanted_nature": "modest",
+    "expect_status": "DEPENDENCY_MISSING",
+    "expect_reason": "field_effect_not_connected",
+    "slot": 0
+  },
+  {
+    "scenario": "modest_mint_at_level100",
+    "id": "modest_mint",
+    "kind": "mint_dependency",
+    "applies": false,
+    "wanted_nature": "modest",
+    "expect_status": "DEPENDENCY_MISSING",
+    "expect_reason": "field_effect_not_connected",
+    "level": 100
+  },
+  {
+    "scenario": "jolly_mint_hardy_target",
+    "id": "jolly_mint",
+    "kind": "mint_dependency",
+    "applies": false,
+    "wanted_nature": "jolly",
+    "expect_status": "DEPENDENCY_MISSING",
+    "expect_reason": "field_effect_not_connected",
+    "nature": "hardy"
+  },
+  {
+    "scenario": "jolly_mint_same_nature",
+    "id": "jolly_mint",
+    "kind": "mint_dependency",
+    "applies": false,
+    "wanted_nature": "jolly",
+    "expect_status": "DEPENDENCY_MISSING",
+    "expect_reason": "field_effect_not_connected",
+    "nature": "jolly"
+  },
+  {
+    "scenario": "jolly_mint_foreign_nature",
+    "id": "jolly_mint",
+    "kind": "mint_dependency",
+    "applies": false,
+    "wanted_nature": "jolly",
+    "expect_status": "DEPENDENCY_MISSING",
+    "expect_reason": "field_effect_not_connected",
+    "nature": "adamant"
+  },
+  {
+    "scenario": "jolly_mint_friendship_254",
+    "id": "jolly_mint",
+    "kind": "mint_dependency",
+    "applies": false,
+    "wanted_nature": "jolly",
+    "expect_status": "DEPENDENCY_MISSING",
+    "expect_reason": "field_effect_not_connected",
+    "start_friendship": 254
+  },
+  {
+    "scenario": "jolly_mint_with_slot",
+    "id": "jolly_mint",
+    "kind": "mint_dependency",
+    "applies": false,
+    "wanted_nature": "jolly",
+    "expect_status": "DEPENDENCY_MISSING",
+    "expect_reason": "field_effect_not_connected",
+    "slot": 0
+  },
+  {
+    "scenario": "jolly_mint_at_level100",
+    "id": "jolly_mint",
+    "kind": "mint_dependency",
+    "applies": false,
+    "wanted_nature": "jolly",
+    "expect_status": "DEPENDENCY_MISSING",
+    "expect_reason": "field_effect_not_connected",
+    "level": 100
+  }
+]''')
+IDS_08 = ["fresh_start_mochi","adamant_mint","modest_mint","jolly_mint"]
+SOURCES_08 = ["modules/inventory/field_mochi_effects.gd","modules/inventory/field_item_effects.gd","modules/inventory/field_item_service.gd","modules/creatures/progression/progression_ruleset.gd","config/item_selection_v1.json","tests/gameplay/item_mochi_v13.gd"]
+
 
 class ContractError(ValueError):
     pass
@@ -2100,7 +2387,7 @@ def verify(fixture, queue, progress, chk):
         for case in block["cases"]:
             chk.demand(case["id"] in block["ids"] and case["scenario"] not in all_scenarios,
                        "Escenario repetido o ID no asignado")
-            chk.demand(case["kind"] in {"ability", "growth", "pp", "vitamin", "wing", "mochi"}
+            chk.demand(case["kind"] in {"ability", "growth", "pp", "vitamin", "wing", "mochi", "mochi_reset", "mint_dependency"}
                        and type(case["applies"]) is bool,
                        "Caso sin operación real ni decisión de aplicación")
             all_scenarios.add(case["scenario"])
