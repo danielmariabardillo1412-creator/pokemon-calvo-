@@ -6,6 +6,7 @@ const BLOQUE_03 := [&"dragon_scale", &"dubious_disc", &"electirizer"]
 const BLOQUE_04 := [&"magmarizer", &"protector", &"reaper_cloth"]
 const BLOQUE_05 := [&"prism_scale", &"sachet", &"up_grade"]
 const BLOQUE_06 := [&"auspicious_armor", &"malicious_armor", &"metal_alloy"]
+const BLOQUE_07 := [&"galarica_cuff", &"galarica_wreath", &"peat_block"]
 const ID := &"w04_c003_01"
 var checks := 0
 var fallos: Array[String] = []
@@ -43,7 +44,7 @@ func _ejecutar() -> void:
 		terminar()
 		return
 	var catalogo: DefinitionCatalog = GameData.from_dict(data).to_definition_catalog()
-	for item: StringName in BLOQUE_01 + BLOQUE_02 + BLOQUE_03 + BLOQUE_04 + BLOQUE_05 + BLOQUE_06:
+	for item: StringName in BLOQUE_01 + BLOQUE_02 + BLOQUE_03 + BLOQUE_04 + BLOQUE_05 + BLOQUE_06 + BLOQUE_07:
 		var compatibles: Array[Dictionary] = []
 		var dependientes := 0
 		var primer_dependiente: Dictionary = {}
@@ -59,11 +60,22 @@ func _ejecutar() -> void:
 					if primer_dependiente.is_empty():
 						primer_dependiente = {"source": sid, "target": rec.species_id, "trigger": String(rec.trigger), "classification": EvolutionSystem.classify_record(rec, catalogo, sid)}
 		validar(catalogo.item(item) != null, String(item) + "/objeto_catalogado")
+		if item in BLOQUE_07:
+			var control_incompatible := _crear(catalogo, &"eevee")
+			validar(control_incompatible != null, String(item) + "/control_especie_incompatible")
+			if control_incompatible != null:
+				var servicio_control := Servicio.new()
+				validar(servicio_control.configure(control_incompatible, catalogo, func(): return true), String(item) + "/servicio_control")
+				validar(control_incompatible.inventory.add(item, 2), String(item) + "/stock_control")
+				var control_antes := JSON.stringify(SaveGameData.build(control_incompatible.party, control_incompatible.storage, control_incompatible.inventory).to_dict())
+				var control_opciones := servicio_control.evolution_options(item, ID)
+				var control_intento: Dictionary = servicio_control.evolve(item, ID)
+				validar(control_opciones.is_empty() and not control_intento.get("accepted", false) and control_incompatible.inventory.quantity(item) == 2 and JSON.stringify(SaveGameData.build(control_incompatible.party, control_incompatible.storage, control_incompatible.inventory).to_dict()) == control_antes, String(item) + "/incompatible_no_consumo")
 		if compatibles.is_empty() and dependientes == 0:
 			print("CAMP003_W04_DEPENDENCIA item=", String(item), " reason=sin_regla_catalogada")
 		if compatibles.is_empty():
 			print("CAMP003_W04_DEPENDENCIA item=", String(item), " records=", dependientes, " example=", JSON.stringify(primer_dependiente))
-			if (item in BLOQUE_03 or item in BLOQUE_04 or item in BLOQUE_05 or item in BLOQUE_06) and not primer_dependiente.is_empty():
+			if (item in BLOQUE_03 or item in BLOQUE_04 or item in BLOQUE_05 or item in BLOQUE_06 or item in BLOQUE_07) and not primer_dependiente.is_empty():
 				var propietario_condicionado := _crear(catalogo, primer_dependiente.source as StringName)
 				validar(propietario_condicionado != null, String(item) + "/creacion_condicionada")
 				if propietario_condicionado != null:
@@ -124,7 +136,7 @@ func terminar() -> void:
 		return
 	cerrado = true
 	if fallos.is_empty():
-		print("CAMP003_W04_GODOT PASS blocks=6 checks=", checks)
+		print("CAMP003_W04_GODOT PASS blocks=7 checks=", checks)
 	else:
 		print("CAMP003_W04_GODOT FAIL errors=", JSON.stringify(fallos))
 	quit(0 if fallos.is_empty() else 1)
