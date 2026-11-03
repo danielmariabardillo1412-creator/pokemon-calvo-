@@ -12,6 +12,7 @@ IDS_03 = ("dragon_scale", "dubious_disc", "electirizer")
 IDS_04 = ("magmarizer", "protector", "reaper_cloth")
 IDS_05 = ("prism_scale", "sachet", "up_grade")
 IDS_06 = ("auspicious_armor", "malicious_armor", "metal_alloy")
+IDS_07 = ("galarica_cuff", "galarica_wreath", "peat_block")
 
 def main():
     ap = argparse.ArgumentParser()
@@ -28,7 +29,9 @@ def main():
         nonlocal checks
         assert cond, msg
         checks += 1
-    check(len(rows) == 6 and [r["bloque"] for r in rows] == ["01", "02", "03", "04", "05", "06"], "progreso no incluye 01 a 06")
+    check(len(rows) == 7 and [r["bloque"] for r in rows] == ["01", "02", "03", "04", "05", "06", "07"], "progreso no incluye 01 a 07")
+    check(tuple(rows[6]["ids"].split(";")) == IDS_07, "IDs del bloque 07 cambiados")
+    check(fixture["blocks"][6]["ids"] == list(IDS_07), "fixture bloque 07 inconsistente")
     check(tuple(rows[5]["ids"].split(";")) == IDS_06, "IDs del bloque 06 cambiados")
     check(fixture["blocks"][5]["ids"] == list(IDS_06), "fixture bloque 06 inconsistente")
     check(tuple(rows[4]["ids"].split(";")) == IDS_05, "IDs del bloque 05 cambiados")
@@ -41,7 +44,7 @@ def main():
     check(fixture["blocks"][1]["ids"] == list(IDS_02), "fixture bloque 02 inconsistente")
     check(tuple(rows[0]["ids"].split(";")) == IDS, "IDs de cola cambiados")
     check(fixture["blocks"][0]["ids"] == list(IDS), "fixture inconsistente")
-    for item in IDS + IDS_02 + IDS_03 + IDS_04 + IDS_05 + IDS_06:
+    for item in IDS + IDS_02 + IDS_03 + IDS_04 + IDS_05 + IDS_06 + IDS_07:
         matches = [r for r in scope if r["id"] == item]
         check(len(matches) == 1 and matches[0]["estado_contenido"] == "SELECCIONADO", item + " no seleccionado")
         check('"' + item + '"' in script, item + " no cubierto por Godot")
@@ -56,7 +59,9 @@ def main():
     check("item in BLOQUE_04" in script, "faltan negativos condicionados bloque 04")
     check("item in BLOQUE_05" in script and "intercambio_no_degradado_a_uso_directo" in script, "sin rechazo condicionado de bloque 05")
     check("item in BLOQUE_06" in script and "opciones_condicionadas.is_empty()" in script, "falta el caso negativo del bloque 06")
-    print(f"CAMP003_W04_PY PASS blocks=6 checks={checks}")
+    for token in ("item in BLOQUE_07", "incompatible_no_consumo", "control_incompatible.inventory.quantity(item) == 2", "control_opciones.is_empty()"):
+        check(token in script, "ausencia de test negativo de Galarica/Turba: " + token)
+    print(f"CAMP003_W04_PY PASS blocks=7 checks={checks}")
 
 if __name__ == "__main__":
     main()
