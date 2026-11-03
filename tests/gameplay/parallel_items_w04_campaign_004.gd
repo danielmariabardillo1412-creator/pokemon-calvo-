@@ -6,6 +6,7 @@ const BLOQUE_02 := [&"love_sweet", &"ribbon_sweet", &"star_sweet"]
 const BLOQUE_03 := [&"strawberry_sweet", &"whipped_dream", &"leaders_crest"]
 const BLOQUE_04 := [&"adamant_crystal", &"blue_orb", &"catching_charm"]
 const BLOQUE_05 := [&"dna_splicers", &"exp_charm", &"gracidea"]
+const BLOQUE_06 := [&"griseous_core", &"lustrous_globe", &"meteorite"]
 const ID := &"w04_c004_01"
 var checks := 0
 var errores: Array[String] = []
@@ -277,6 +278,41 @@ func _ejecutar() -> void:
 			for ruta: Dictionary in rutas:
 				_positivo(catalogo, item, ruta.origen as StringName, ruta.destino as StringName)
 			print("CAMP004_W04_ITEM id=", String(item), " status=FUNCIONAL_VERIFICADO runtime_routes=", rutas.size())
+	for item: StringName in BLOQUE_06:
+		var origen: StringName = &"giratina" if item == &"griseous_core" else &"palkia" if item == &"lustrous_globe" else &"deoxys"
+		verificar(catalogo.item(item) != null, String(item) + "/definicion_bloque06")
+		verificar(catalogo.species(origen) != null, String(item) + "/especie_control_bloque06")
+		var registros := 0
+		var condicionados := 0
+		var rutas: Array[Dictionary] = []
+		for sid: StringName in catalogo.species_catalog.all_ids():
+			var especie_actual: CreatureSpecies = catalogo.species(sid)
+			for record: EvolutionRecord in especie_actual.evolutions:
+				if record.item_id != item:
+					continue
+				registros += 1
+				var clasificacion := EvolutionSystem.classify_record(record, catalogo, sid)
+				if record.trigger == EvolutionSystem.TRIGGER_USE_ITEM and clasificacion == EvolutionSystem.RUNTIME_SUPPORTED:
+					rutas.append({"origen": sid, "destino": record.species_id})
+				else:
+					condicionados += 1
+					verificar(not EvolutionSystem.evolution_candidates(especie_actual, {"level": 40, "item_id": item}, catalogo).has(record), String(item) + "/ruta_forma_no_degradada")
+		if rutas.is_empty():
+			if item == &"meteorite":
+				_auditar_contexto_05(catalogo, item, origen)
+				_auditar_contexto_05(catalogo, item, &"eevee")
+			else:
+				_auditar_contexto_04(catalogo, item, origen)
+				_auditar_contexto_04(catalogo, item, &"eevee")
+			print("CAMP004_W04_ITEM id=", String(item), " status=DEPENDENCIA records=", registros, " conditioned=", condicionados, " reason=", "forma_deoxys_meteorito_sin_servicio" if item == &"meteorite" else "equipamiento_verificado_sin_ruta_forma_certificada")
+		else:
+			if item == &"meteorite":
+				_auditar_contexto_05(catalogo, item, &"eevee")
+			else:
+				_auditar_contexto_04(catalogo, item, &"eevee")
+			for ruta: Dictionary in rutas:
+				_positivo(catalogo, item, ruta.origen as StringName, ruta.destino as StringName)
+			print("CAMP004_W04_ITEM id=", String(item), " status=FUNCIONAL_VERIFICADO runtime_routes=", rutas.size(), " condicionados=", condicionados)
 	_finalizar()
 
 func _finalizar() -> void:
@@ -284,7 +320,7 @@ func _finalizar() -> void:
 		return
 	terminado = true
 	if errores.is_empty():
-		print("CAMP004_W04_GODOT PASS blocks=5 checks=", checks)
+		print("CAMP004_W04_GODOT PASS blocks=6 checks=", checks)
 	else:
 		print("CAMP004_W04_GODOT FAIL errors=", JSON.stringify(errores))
 	quit(0 if errores.is_empty() else 1)
