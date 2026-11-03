@@ -335,6 +335,45 @@
       "missing_shared_integration": "tera_type_change_and_resource_consumption_battle_or_overworld_api",
       "note": "Auditar solo selección del material, transacciones puras PlayerInventory, roundtrip y rechazo actual de FieldItemService; no implementar teracristalización ni atribuir efectos jugables a los fragmentos.",
       "ci_required": true
+    },
+    {
+      "bloque": "08",
+      "familia": "TERA_MATERIAL",
+      "ids": [
+        "fighting_tera_shard",
+        "fire_tera_shard",
+        "flying_tera_shard",
+        "ghost_tera_shard",
+        "grass_tera_shard"
+      ],
+      "objetivo": "auditar_fragmentos_tera_sin_activar_mecanica",
+      "current_state": "DEPENDENCIA_COMPARTIDA",
+      "per_id_status": {
+        "fighting_tera_shard": "DEPENDENCIA_COMPARTIDA",
+        "fire_tera_shard": "DEPENDENCIA_COMPARTIDA",
+        "flying_tera_shard": "DEPENDENCIA_COMPARTIDA",
+        "ghost_tera_shard": "DEPENDENCIA_COMPARTIDA",
+        "grass_tera_shard": "DEPENDENCIA_COMPARTIDA"
+      },
+      "inventory_counts": [
+        0,
+        1,
+        25,
+        999
+      ],
+      "mutations": [
+        "add",
+        "remove",
+        "roundtrip"
+      ],
+      "expected_direct_use": {
+        "reason": "field_effect_not_connected",
+        "status": "DEPENDENCY_MISSING"
+      },
+      "no_terastallization_certified": true,
+      "missing_shared_integration": "tera_type_change_and_resource_consumption_battle_or_overworld_api",
+      "note": "Bloque08: cinco Teralitos seleccionados; verificar contratos existentes de PlayerInventory, rechazo en FieldItemService y preservación sin mutaciones. No habilitar Tera ni interpretar guardado de mochila como transformación o SaveV2 integral.",
+      "ci_required": true
     }
   ]
 }
