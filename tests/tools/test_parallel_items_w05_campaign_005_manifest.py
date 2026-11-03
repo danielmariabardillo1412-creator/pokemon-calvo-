@@ -57,7 +57,7 @@ def validate():
             if item in seen or item not in scope:
                 raise ValueError("Duplicado o no seleccionado: "+item)
             if KIND=="NEW_IDS":
-                expected_family = "TRAINING" if WORKER=="W05" else "MACHINE"
+                expected_family = "TRAINING" if WORKER=="W02" else "MACHINE"
                 if scope[item] != expected_family or item in own_previous or item in previous_in_overlay:
                     raise ValueError("Familia incorrecta o ID ya usado: "+item)
             else:
