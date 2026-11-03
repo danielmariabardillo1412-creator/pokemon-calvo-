@@ -23,3 +23,21 @@ El workflow de la rama debe ejecutar además la regresión acumulativa **CAMPAÑ
 Ningún cambio a `main`, V28, rama árbitra, otros workers, catálogos canónicos, política ni producción. Las próximas `p` avanzan **una fila** en la cola, comenzando por bloque 02 después de un resultado aceptable de la CI 01. Ante fallo de Python/Godot, reparar antes de continuar si está dentro de la especialidad V5.
 
 **CI propia:** [#41575404407](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41575404407).
+
+## Evidencia ejecutada: CI01 aprobada
+
+[GitHub Actions #41575404407](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41575404407), SHA `037b88fad887813b3c8ec996e1d2b2a22e542c65`, concluyó `completed/success`:
+
+- `CAMP004_W04_MANIFEST_PASS reserved=10 completed=1 ids=36`.
+- `CAMP004_W04_PY PASS blocks=1 checks=48`.
+- `CAMP004_W04_GODOT PASS blocks=1 checks=101`.
+- Regresión CAMP003 Python `PASS blocks=10 checks=120` y Godot `PASS blocks=10 checks=270`. La regresión CAMP001 está prevista por el workflow para los bloques 05 y 10; **no se ejecutó en el bloque 01**.
+
+Salida real del runner por objeto:
+- `berry_sweet`: `DEPENDENCIA`, `records=0`, sin ruta directa en catálogo normalizado.
+- `clover_sweet`: `DEPENDENCIA`, `records=0`, sin ruta directa en catálogo normalizado.
+- `flower_sweet`: `DEPENDENCIA`, `records=0`, sin ruta directa en catálogo normalizado.
+
+Las pruebas de `Milcery`/Eevee verificaron rechazos y estado/inventario persistente, pero **no prueban una evolución positiva ni todas las variantes de Alcremie**. Continúa pendiente definir e implementar con contrato canónico `spin`, objeto equipado y resultado de forma. No se propone simplificar a `use_item` de mochila.
+
+**Estado del bloque:** pruebas CI PASS con `DEPENDENCIA_DOCUMENTADA` para los tres IDs. El CSV de progreso se ha reconciliado con run `41575404407` en commit `18607d8a1bc259e534170fed47899e6a0efef34a`. La actualización de ese CSV genera una nueva ejecución de regresión sobre el estado consolidado; se valida por separado. **Próximo bloque por `p`: 02, `love_sweet;ribbon_sweet;star_sweet`.**
