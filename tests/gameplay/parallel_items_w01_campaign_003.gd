@@ -483,5 +483,40 @@ func _compare_c003(row: Dictionary, obs: Dictionary) -> void:
 				and a.after.hp == a.start.hp and n.after.hp == n.start.hp and r.after.hp == r.start.hp)
 			check("Botas Gruesas sin peligro siguen equipadas",
 				not a.after.own_consumed and a.physical_units == 2)
+		"flying_grounded_by_iron_ball":
+			check("Bola Ferrea: Charizard volador pierde inmunidad a Tierra solo si la porta",
+				da > 0 and dn == 0 and dr == 0)
+			check("Bola Ferrea: objeto persistente, sin consumo",
+				not a.after.own_consumed and a.physical_units == 2 and not r.after.reserve_consumed)
+		"iron_ball_speed_order":
+			check("Bola Ferrea: Gengar pasa a moverse tras Garchomp a misma prioridad",
+				a.after.first_move_actor == "foe" and n.after.first_move_actor == "own"
+				and r.after.first_move_actor == "own")
+			check("Bola Ferrea: conserva item y reserva no altera turno",
+				not a.after.own_consumed and a.physical_units == 2 and not r.after.reserve_consumed)
+		"lagging_tail_last":
+			check("Cola Plumbea: mismo nivel de prioridad, portador mueve ultimo",
+				a.after.first_move_actor == "foe" and n.after.first_move_actor == "own"
+				and r.after.first_move_actor == "own")
+			check("Cola Plumbea: sin consumo", not a.after.own_consumed and a.physical_units == 2)
+		"priority_not_overridden":
+			check("Cola Plumbea: Ataque Rapido +1 respeta prioridad ante Tackle",
+				a.after.first_move_actor == "own" and n.after.first_move_actor == "own"
+				and r.after.first_move_actor == "own")
+			check("Cola Plumbea: prioridad no consume objeto",
+				not a.after.own_consumed and a.physical_units == 2)
+		"reflect_duration_plus_three":
+			check("Refleluz: Reflejo gana 3 turnos solo para el portador",
+				a.after.reflect_duration > 0 and
+				a.after.reflect_duration == n.after.reflect_duration + 3
+				and n.after.reflect_duration == r.after.reflect_duration)
+			check("Refleluz: pantalla prolongada sin consumo",
+				not a.after.own_consumed and a.physical_units == 2 and not r.after.reserve_consumed)
+		"no_screen_control":
+			check("Refleluz sin pantalla no inventa duracion",
+				a.after.reflect_duration == 0 and n.after.reflect_duration == 0
+				and r.after.reflect_duration == 0)
+			check("Refleluz sin pantalla conservado",
+				not a.after.own_consumed and a.physical_units == 2)
 		_:
 			check("Operacion no autorizada", false)
