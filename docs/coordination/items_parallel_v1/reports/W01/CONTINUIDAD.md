@@ -1,3 +1,17 @@
+## ACTUALIZACIÓN MÁS RECIENTE — CAMPAÑA_003 02/10 (2026-11-03)
+
+**Identidad:** IA1/W01. Única rama de escritura `codex/calvo-items-20261103-w01-camp003`. Cola aprobada IA6 `CAMPAIGN_003_QUEUE_APPROVED.csv`, fila W01/02; ID exactos `blunder_policy;booster_energy;cell_battery`. Se ejecutó UNA iteración nueva tras recibir la `p`. **No iniciar 03 hasta próxima `p`.**
+
+- **CI del bloque 01 confirmada:** [Actions #41553771307](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41553771307) SUCCESS en SHA de tests/progreso `f9316279e97564f7b12ff71ad0692f572881afa2`; Godot 4.7 `CAMP003_W01_GODOT PASS blocks=1 checks=872`. CSV de 01 corregido a `CI_PASS_VERIFICADO`.
+- **Bloque 02 publicado:** fixture 8 casos nuevos / 18 pares-semilla, 54 variantes; total acumulativo con bloque 01: **15 casos / 28 pares-semilla / 84 variantes**. No se modifican los 7 anteriores. Informes `CAMP_003_ITER_01.md` y `CAMP_003_ITER_02.md` son la entrada más rápida para otra IA.
+- **Mecánicas existentes:** Seguro Fallo `held_effect_sweep_v3.cjs` cambia `spe +2` y consume únicamente al fallar `zap_cannon`; test contrastado contra log `|-miss|` con ocho semillas, y sin objeto/reserva. Energía Potenciadora tiene pruebas V3 con Great Tusk/Protosíntesis, Iron Hands/Carga Cuark, control sin habilidad; ahora se exige activación al entrar, volátil y consumo real. Pila tiene prueba V2 con `thunder_shock` y `atk +1`; controles Normal/estado. No se implementaron hooks nuevos.
+- **Pruebas nuevas autorizadas (acumulativas):** `tests/fixtures/parallel_items/w01_campaign_003.json` blob `07ea3df454b4e83e0e71aac8887dc341c822ca53` (commit `6d5c6f2aa...`); `tests/gameplay/parallel_items_w01_campaign_003.gd` blob `12f59a4997e8f5aebf5659af9c554e0689bb1386` (commit `0c29554638...`); `tests/tools/test_parallel_items_w01_campaign_003.py` blob `c3b5621bc757aa01839e2a2714a74ac955d19f80` (commit `963c8c772e...`). CSV 2 filas, actualización de progreso SHA `594c6772f3b64c9cabc2b31d23d435634bc53bee`.
+- **CI de bloque 02:** último run [#41555265598](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41555265598) sobre último commit de progreso; **EN_CI_AUTOMATICA** al crear cuaderno. Las ejecuciones intermedias canceladas por `concurrency.cancel-in-progress` no son fallos funcionales. Auditoría estructural 12/12 PASS; **no afirmar PASS nativo de bloque 02 antes de resultado real**.
+- **Próxima `p`:** consultar gate y último run. Si `success`, ejecutar exclusivamente W01/03 `clear_amulet;covert_cloak;eject_button`; si `queued/in_progress` se puede preparar un bloque de tests independientes sin declarar PASS; si `failure`, revisar la causa y reparar únicamente propio TEST o STOP por dependencia compartida. Sin cambios en `main`, V28, otras ramas, producción, `modules/`, `data/`, CSV canónicos ni workflow; W04 reincorporada por IA6 mediante addendum, fuera de nuestras asignaciones.
+- **Regla límite:** 10 bloques totales; una `p` autoriza solo el siguiente. Tras 10/10 `CAMPAÑA_003_FINALIZADA` y STOP. No crear nuevas tareas de forma autónoma.
+
+---
+
 # CUADERNO VIGENTE — IA1/W01 · CAMPAÑA_003 (2026-11-03)
 
 ## ACTUALIZACIÓN VIGENTE — IA1 W01 / CAMPAÑA_003 BLOQUE 01
