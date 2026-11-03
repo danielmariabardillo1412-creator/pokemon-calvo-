@@ -3439,6 +3439,35 @@ def verify_sources(chk):
                and "mint" not in creature_08
                and 'return _deny("field_effect_not_connected", "DEPENDENCY_MISSING")' in service,
                "Menta09: dependencia de naturaleza efectiva cambió; requiere reauditoría")
+    for id, name, modifiers in (
+        ("brave_mint", "brave", ('attack', 'speed')),
+        ("quiet_mint", "quiet", ('special_attack', 'speed')),
+        ("impish_mint", "impish", ('defense', 'special_attack')),
+        ("relaxed_mint", "relaxed", ('defense', 'speed')),
+    ):
+        chk.demand(id not in selection_08["excluded_ids"]
+                   and "nature_mints" not in selection_08["excluded_categories"],
+                   "Menta10: objeto excluido por política, no por handler " + id)
+        chk.demand(all(id not in module for module in
+                       (service, field_effects, mochi, growth)),
+                   "Menta10: cambió el ejecutor, hay que reauditar " + id)
+        expected_modifier = '&"' + name + '": ["' + modifiers[0] + '", "' + modifiers[1] + '"]'
+        chk.demand(expected_modifier in rules_08,
+                   "Menta10: tabla de naturalezas alterada " + name)
+    for fragment in (
+        '"nature_id": String(spec.get("nature", "hardy"))',
+        'if String(spec.kind) == "mint_dependency":',
+        'String(result.get("status", "")) == String(spec.expect_status)',
+        'String(result.get("reason", "")) == String(spec.expect_reason)',
+        'now.nature_id == c.nature_id and now.evs == c.evs',
+        'and _owner_data(owner) == before',
+        'SaveGameRepository.new().decode_snapshot(state)',
+    ):
+        chk.demand(fragment in runner,
+                   "Menta10: falta prueba de rechazo atómico con SaveV2 " + fragment)
+    chk.demand('return _deny("field_effect_not_connected", "DEPENDENCY_MISSING")' in service
+               and "effective_nature_id" not in creature_08 and "mint" not in creature_08,
+               "Menta10: falta o cambia dependencia de naturaleza efectiva")
     for old, token in (
         (old_ability, 'TRANSITIONS'),
         (old_growth, 'rare_candy'),
