@@ -768,6 +768,95 @@
         19
       ],
       "history": "new_negative_no_screen_no_effect"
+    },
+    {
+      "block": "08",
+      "id": "moss_water_boost",
+      "item_id": "luminous_moss",
+      "op": "moss_water_special_defense",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "foe_move": "water_gun",
+      "own_move": "reflect",
+      "seeds": [
+        19,
+        23
+      ],
+      "history": "held_effect_sweep_v2:hit_type_stat_boost_water_gun_spd"
+    },
+    {
+      "block": "08",
+      "id": "moss_normal_control",
+      "item_id": "luminous_moss",
+      "op": "moss_no_water_hit",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "foe_move": "tackle",
+      "own_move": "reflect",
+      "seeds": [
+        19
+      ],
+      "history": "negative_no_water_hit_special_defense"
+    },
+    {
+      "block": "08",
+      "id": "mental_taunt_cure",
+      "item_id": "mental_herb",
+      "op": "mental_herb_taunt_cure",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "foe_move": "taunt",
+      "own_move": "reflect",
+      "seeds": [
+        19,
+        23
+      ],
+      "history": "held_pilot.cjs:mental_herb_taunt"
+    },
+    {
+      "block": "08",
+      "id": "mental_no_taunt",
+      "item_id": "mental_herb",
+      "op": "mental_herb_retained",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "foe_move": "amnesia",
+      "own_move": "reflect",
+      "seeds": [
+        19
+      ],
+      "history": "new_negative_no_taunt"
+    },
+    {
+      "block": "08",
+      "id": "metronome_repeat_reset",
+      "item_id": "metronome",
+      "op": "metronome_repeat_reset",
+      "actor_species": "mew",
+      "actor_level": 50,
+      "foe_species": "mew",
+      "foe_level": 100,
+      "foe_move": "reflect",
+      "own_move": "water_gun",
+      "seeds": [
+        19,
+        23
+      ],
+      "history": "held_effect_sweep_v3:repeat_and_reset_water_gun"
+    },
+    {
+      "block": "08",
+      "id": "metronome_status_only",
+      "item_id": "metronome",
+      "op": "metronome_no_repeat_control",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "foe_move": "amnesia",
+      "own_move": "reflect",
+      "seeds": [
+        19
+      ],
+      "history": "new_negative_status_not_damage"
     }
   ]
 }
