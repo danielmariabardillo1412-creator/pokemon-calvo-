@@ -30,3 +30,12 @@ La fila 01 CSV conserva el estado anterior `EN_CI_AUTOMATICA` únicamente para *
 - Bloque 01 cerrado en CSV a `CI_PASS_VERIFICADO` con run 41580332632 (2905 Godot y 111 Python PASS). No se reejecuta CAMP003 por no haber parche funcional de producción ni alcanzar hito 05/10.
 - Nuevos seis escenarios; nueve pares caso-semilla, 27 variantes activas/ausentes/reserva con SaveV2. Total acumulado 14 escenarios, 43 pares, 129 variantes. Controles clima 8 vs 5 turnos (diferencia 3), no activación de roca sin clima, reducción del daño de Grass Knot por Piedra Pómez y control Tackle sin cambio. No se alteran pruebas de bloque 01 ni motor.
 - **Estado:** bloque 02 publicado, `EN_CI_AUTOMATICA` hasta verificar recibos `CAMP004_W01_PY PASS blocks=2 checks=M` y `CAMP004_W01_GODOT PASS blocks=2 checks=M`, conclusión `completed/success` y SHA. Si falla, corregir con V5 en la misma rama. `p` posterior equivale a bloque 03, nunca al 04.
+
+## Bloque 02/10 CERTIFICADO — resultado definitivo (2026-11-03)
+
+- Rama W01; evidencia funcional del SHA `970db4c7696364cc1c5ebaf51719405d60430af0`. Run [#41584708689](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41584708689): `completed/success`.
+- Recibos literales: `CAMP004_W01_PY PASS blocks=2 checks=177` y `CAMP004_W01_GODOT PASS blocks=2 checks=3666`. Manifiesto y dos puertas PASS. Cero fallos.
+- Total: **2/10 bloques funcionalmente verificados**, seis equipables, 14 escenarios, 43 pares caso-semilla, 129 variantes; todos con tres controles y SaveV2. Roca Lluvia/Helada y Piedra Pómez validadas en motor real para los escenarios declarados. Ningún fichero de producción modificado.
+- El primer push del bloque 02 falló en el validador de manifest de casos Python: comparaba 8 originales con 14 acumulados. Corregido en commit `970db4c7` sin eliminar controles; CI posterior aprobada.
+- Fila 02 del CSV conserva temporalmente `EN_CI_AUTOMATICA` por economía de CI, **no significa fallo pendiente**. En el próximo bloque actualizar a `CI_PASS_VERIFICADO` con SHA y run anterior y añadir fila 03 conjuntamente.
+- La siguiente `p` significa **solo bloque 03/10**: `loaded_dice;misty_seed;power_herb`. No tocar `main`, V28, rama árbitra, otros workers ni repetir CAMP003.
