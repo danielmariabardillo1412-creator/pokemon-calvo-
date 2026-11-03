@@ -62,6 +62,65 @@
       "expected_behavior": "Cada intento válido consume exactamente una bola y una tirada RNG; ambas bolas comparten semilla; Great >= Poke con iguales HP y captura.",
       "implementation_authorized": false,
       "ci_required": true
+    },
+    {
+      "bloque": "02",
+      "ids": [
+        "ultra_ball",
+        "master_ball"
+      ],
+      "objective": "captura_super_y_master",
+      "prior_evidence": {
+        "state": "YA_VERIFICADO_NO_DUPLICAR",
+        "sources": [
+          "modules/capture/capture_ruleset.gd",
+          "modules/capture/capture_system.gd",
+          "modules/inventory/capture_inventory_service.gd",
+          "tests/gameplay/item_capture_v11.gd"
+        ],
+        "note": "Ultra x2 con RNG; Master garantizada sin usar RNG."
+      },
+      "balls": [
+        {
+          "id": "ultra_ball",
+          "multiplier": 2,
+          "guaranteed": false
+        },
+        {
+          "id": "master_ball",
+          "multiplier": 1,
+          "guaranteed": true
+        }
+      ],
+      "cases": [
+        {
+          "species_id": "mew",
+          "level": 45,
+          "seed": 2201
+        },
+        {
+          "species_id": "pikachu",
+          "level": 18,
+          "seed": 2202
+        },
+        {
+          "species_id": "caterpie",
+          "level": 10,
+          "seed": 2203
+        }
+      ],
+      "health_modes": [
+        "full",
+        "one_hp"
+      ],
+      "invalid_cases": [
+        "trainer_battle_not_capturable",
+        "item_not_owned",
+        "target_knocked_out"
+      ],
+      "expected_behavior": "Ultra una tirada y un coste; Master captura siempre sin tirada y coste una bola; ambos sin gasto en intento invalido.",
+      "implementation_authorized": false,
+      "ci_required": true
     }
   ]
 }
