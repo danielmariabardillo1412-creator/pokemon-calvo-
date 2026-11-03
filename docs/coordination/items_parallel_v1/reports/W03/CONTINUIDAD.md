@@ -1,3 +1,5 @@
+ACTUALIZACION CI BLOQUE 02: #41555590257 SUCCESS, SHA c48c62f5fb662dba9480327faa432afe56860adf. Recibos: Python blocks=2 checks=56 PASS y Godot blocks=2 checks=108 PASS. No hubo cambio de produccion. El CSV refleja el estado EN_CI_AUTOMATICA al publicar; el veredicto posterior real es PASS.
+
 # IA3/W03 — CAMPAÑA_003: continuidad actualizada a 02/10
 
 **Rama única:** `codex/calvo-items-20261103-w03-camp003`. **Progreso:** dos bloques publicados: `01 poke_ball;great_ball`, `02 ultra_ball;master_ball`. Solo auditoría/contratos/test; prohibido producción, otros IDs o ramas. **Próximo `p`: exactamente 03 quick_ball;timer_ball.**
