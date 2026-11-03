@@ -1792,6 +1792,14 @@ def verify(fixture, queue, progress, chk):
             for actual, expected in zip(block["cases"], EXPECTED_05):
                 chk.demand(type(actual) is dict and actual == expected,
                            "Escenario 05 no coincide: " + expected["scenario"])
+        elif index == 5:
+            chk.demand(block["ids"] == IDS_06 and block["source_evidence"] == SOURCES_06,
+                       "IDs o fuentes de fila 06 no autorizadas")
+            chk.demand(len(block["cases"]) == len(EXPECTED_06) == 32,
+                       "Bloque06 necesita exactamente 32 casos")
+            for actual, expected in zip(block["cases"], EXPECTED_06):
+                chk.demand(type(actual) is dict and actual == expected,
+                           "Caso06 alterado: " + expected["scenario"])
         else:
             raise ContractError("Contrato futuro sin autorización nueva: " + block["block"])
     return len(progress)
