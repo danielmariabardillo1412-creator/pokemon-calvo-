@@ -55,3 +55,10 @@ Fuentes crudas: `data/api/v2/evolution-chain/33/index.json` y `data/api/v2/evolu
 **Límites:** no se ha modificado producción, datos, `main`, V28, rama IA6, PR118, ramas W01/W02/W03/W05 ni interfaces de SaveV2. Este trabajo pretende localizar y comprobar una **dependencia nueva de integración de formas**, no repetir auditorías anteriores ni inventar funcionalidad.
 
 **Próximo `p` después de CI04 correcta:** ejecutar exclusivamente bloque 05/10, siete confites de Milcery: `berry_sweet;clover_sweet;flower_sweet;love_sweet;ribbon_sweet;star_sweet;strawberry_sweet`.
+
+
+## Incidencia de arnés CI04 y reparación
+
+La primera ejecución completa [#41723323786](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41723323786), SHA `59e5d086d53071e27db2a56ba20d8ff120b94f4c`, terminó `failure` en **validador Python**, antes de ejecutar Godot. El arnés antiguo del bloque 02 seguía buscando el marcador literal `bloques_01_a_03_secuenciales`; el runner acumulativo ahora publica `bloques_01_a_04_secuenciales`. No es un fallo funcional ni una ausencia de contrato regional.
+
+Se corrigió exclusivamente ese marcador de test en `tests/tools/test_parallel_items_w04_campaign_005.py`, commit `e3862af4babb283c2257c919b7c792261fd18868`, **sin retirar ni relajar ninguna prueba de forma, consentimiento, inventario, persistencia o versión**. GitHub Actions reinició el bloque en [#41723793802](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41723793802), cuyo resultado es obligatorio comprobar antes de cerrar el bloque.
