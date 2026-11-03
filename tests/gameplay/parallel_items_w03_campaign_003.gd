@@ -34,6 +34,7 @@ func _run_campaign() -> void:
 		numero += 1
 		match String(bloque.get("bloque", "")):
 			"01": _block_01(bloque)
+			"02": _block_02(bloque)
 			_: check("Bloque aún sin suite funcional " + str(numero), false)
 	_terminar_campania(numero)
 
@@ -130,6 +131,127 @@ func _block_01(bloque: Dictionary) -> void:
 				and mochila.to_dict() == inventario_antes
 				and objetivo.to_dict() == criatura_antes
 				and rng.state == estado_rng and equipo.is_empty())
+
+
+# Ultra normal y Master garantizada: probar API canónica, nunca simular captura.
+func _block_02(bloque: Dictionary) -> void:
+	var reglas := CaptureRuleset.new()
+	var bolas: Array = bloque.get("balls", [])
+	var casos: Array = bloque.get("cases", [])
+	check("Bloque02 dos bolas y tres especies", bolas.size() == 2 and casos.size() == 3)
+	for fila: Dictionary in bolas:
+		var id: StringName = StringName(String(fila.get("id", "")))
+		var definicion: CaptureBallDefinition = reglas.ball(id)
+		check("Bola02 registrada " + String(id), definicion != null)
+		if definicion != null:
+			check("Bola02 factor/garantia canónicos " + String(id),
+				is_equal_approx(definicion.base_multiplier, float(fila.get("multiplier", -1)))
+				and definicion.guaranteed == bool(fila.get("guaranteed", false)))
+	for caso: Dictionary in casos:
+		var sid: StringName = StringName(String(caso.get("species_id", "")))
+		var sp: CreatureSpecies = catalogs.species(sid)
+		check("Especie02 de catálogo " + String(sid), sp != null)
+		if sp == null:
+			continue
+		for modo: String in bloque.get("health_modes", []):
+			for fila: Dictionary in bolas:
+				var id: StringName = StringName(String(fila.get("id", "")))
+				var guarantee: bool = bool(fila.get("guaranteed", false))
+				var factor: float = float(fila.get("multiplier", 1))
+				var target: CreatureInstance = _mon(sid, int(caso.get("level", 12)),
+					StringName("c003_02_" + String(sid) + modo + String(id)))
+				target.current_hp = target.stats.max_hp if modo == "full" else 1
+				var before := target.to_dict()
+				var inv := PlayerInventory.new()
+				inv.add(id, 2)
+				var party := CreatureParty.new()
+				var rng := RandomNumberGenerator.new()
+				rng.seed = int(caso.get("seed", 2201))
+				var before_rng: int = rng.state
+				var probe := RandomNumberGenerator.new()
+				probe.state = rng.state
+				var probability: float = clampf(float(sp.capture_rate) / 255.0 * factor
+					* float(3 * target.stats.max_hp - 2 * target.current_hp)
+					/ float(3 * target.stats.max_hp), 0.0, 1.0)
+				check("Bola02 fórmula independiente " + String(id) + String(sid) + modo,
+					is_equal_approx(probability, reglas.catch_probability(
+						sp.capture_rate, factor, 1.0, target.stats.max_hp, target.current_hp)))
+				var expected_success: bool = true
+				if not guarantee:
+					expected_success = probe.randf() < probability
+				var result: CaptureResolution = CaptureInventoryService.resolve(
+					CaptureAttempt.new(target, id, CaptureBattleContext.new()),
+					rng, catalogs, party, inv)
+				if guarantee:
+					check("Master éxito, coste 1 y cero RNG " + String(sid) + modo,
+						result.result.status == CaptureResult.SUCCESS
+						and result.result.consume_item and inv.quantity(id) == 1
+						and rng.state == before_rng
+						and is_zero_approx(result.result.probability))
+					check("Master identidad en equipo " + String(sid) + modo,
+						is_same(result.captured, target)
+						and party.contains_instance_id(target.instance_id)
+						and party.size() == 1)
+				else:
+					check("Ultra factor x2 y única tirada/coste " + String(sid) + modo,
+						is_equal_approx(result.result.probability, probability)
+						and result.result.consume_item and inv.quantity(id) == 1
+						and rng.state == probe.state
+						and (result.result.status == CaptureResult.SUCCESS) == expected_success)
+					check("Ultra identidad éxito y sin alteración en fracaso " + String(sid) + modo,
+						(is_same(result.captured, target)
+						and party.contains_instance_id(target.instance_id)
+						and party.size() == 1) if expected_success else
+						(result.result.status == CaptureResult.FAILED
+						and party.is_empty() and target.to_dict() == before))
+	for fila: Dictionary in bolas:
+		var id: StringName = StringName(String(fila.get("id", "")))
+		for razon: String in bloque.get("invalid_cases", []):
+			var target := _mon(&"mew", 50, StringName("c003_02_invalid_" + String(id) + razon))
+			var ctx := CaptureBattleContext.new()
+			var inv := PlayerInventory.new()
+			inv.add(id, 2)
+			match razon:
+				"trainer_battle_not_capturable": ctx.is_wild = false
+				"item_not_owned": inv.remove(id, 2)
+				"target_knocked_out": target.current_hp = 0
+			var before_target := target.to_dict()
+			var before_inv := inv.to_dict()
+			var party := CreatureParty.new()
+			var rng := RandomNumberGenerator.new()
+			rng.seed = 777
+			var before_rng: int = rng.state
+			var result: CaptureResolution = CaptureInventoryService.resolve(
+				CaptureAttempt.new(target, id, ctx), rng, catalogs, party, inv)
+			check("Bola02 inválida sin gasto/tiro/cambio " + String(id) + razon,
+				result.result.status == CaptureResult.INVALID
+				and result.result.reason == razon and not result.result.consume_item
+				and inv.to_dict() == before_inv and target.to_dict() == before_target
+				and rng.state == before_rng and party.is_empty())
+	# En equipo lleno Master debe encaminarse a PC sin consumir RNG.
+	var full_party := CreatureParty.new()
+	for i in 6:
+		full_party.add_creature(_mon(&"pidgey", 10, StringName("c003_02_full_" + str(i))))
+	var wild := _mon(&"mew", 45, &"c003_02_master_pc")
+	var bag := PlayerInventory.new()
+	bag.add(&"master_ball")
+	var rng_pc := RandomNumberGenerator.new()
+	rng_pc.seed = 915
+	var state_pc: int = rng_pc.state
+	var resolution: CaptureResolution = CaptureInventoryService.resolve(
+		CaptureAttempt.new(wild, &"master_ball", CaptureBattleContext.new()),
+		rng_pc, catalogs, full_party, bag)
+	check("Master llena equipo y exige PC", resolution.result.status == CaptureResult.SUCCESS
+		and resolution.disposition == CaptureDisposition.STORAGE_REQUIRED
+		and is_same(resolution.captured, wild)
+		and full_party.size() == 6 and not full_party.contains_instance_id(wild.instance_id)
+		and bag.quantity(&"master_ball") == 0 and rng_pc.state == state_pc)
+	var storage := CreatureStorage.new()
+	var routed := CaptureOwnershipRouter.new().route(resolution, full_party, storage)
+	check("Master PC propiedad única y referencia", routed.routed and routed.stored
+		and storage.contains_instance_id(wild.instance_id)
+		and is_same(storage.get_creature(wild.instance_id), wild)
+		and not full_party.contains_instance_id(wild.instance_id))
 
 
 func _terminar_campania(bloques: int) -> void:
