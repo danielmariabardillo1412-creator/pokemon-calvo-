@@ -658,6 +658,71 @@
       "required_new_gate": "IA6 debe fijar fuente canónica de sexo/especie de ambos participantes, tratamiento de sexo desconocido y acceso fiable a elegibilidad de evolución Piedra Lunar por especie (incluidas formas); proveer contexto de sesión y recuperación.",
       "implementation_authorized": false,
       "ci_required": true
+    },
+    {
+      "bloque": "10",
+      "ids": [
+        "beast_ball",
+        "heavy_ball"
+      ],
+      "objective": "tasas_y_dependencias",
+      "prior_evidence": {
+        "state": "DEPENDENCIA_COMPARTIDA",
+        "sources": [
+          "modules/capture/capture_ruleset.gd",
+          "modules/capture/capture_ball_effects.gd",
+          "modules/capture/capture_context_ball_effects.gd",
+          "modules/capture/capture_battle_context.gd",
+          "modules/capture/capture_system.gd",
+          "modules/inventory/capture_inventory_service.gd"
+        ],
+        "note": "Ente y Peso no están registradas en reglas de captura. Ente requiere taxonomía canónica Ultraente y tratamiento diferenciado; Peso requiere peso de especie/forma y política de modificación de catch rate."
+      },
+      "cases": [
+        {
+          "species_id": "mew",
+          "level": 35,
+          "seed": 10101
+        },
+        {
+          "species_id": "caterpie",
+          "level": 12,
+          "seed": 10102
+        }
+      ],
+      "hp_modes": [
+        "full",
+        "one_hp"
+      ],
+      "contexts": [
+        {
+          "name": "sin_contexto",
+          "completed_turns": -1,
+          "catcher_level": -1
+        },
+        {
+          "name": "turno_y_nivel_fiables",
+          "completed_turns": 0,
+          "catcher_level": 35
+        }
+      ],
+      "invalid_cases": [
+        "trainer_battle_not_capturable",
+        "target_knocked_out",
+        "battle_finished",
+        "item_not_owned"
+      ],
+      "expected_current_rejection": "unknown_ball",
+      "missing_authoritative_signals": [
+        "target_is_ultra_beast",
+        "target_weight_for_capture",
+        "heavy_ball_weight_rule_profile"
+      ],
+      "functional_effect_certified": false,
+      "expected_behavior": "Ambas bolas desconocidas se rechazan sin consumir bola ni RNG ni modificar el objetivo, tanto en encuentro válido como ante condiciones inválidas. Esto NO certifica factor para Ultraentes ni bono de Peso Ball.",
+      "required_new_gate": "IA6 debe fijar clasificación Ultraente canónica y peso fiable por especie/forma; resolver variación por versiones de Peso Ball y tratamiento de catch rate mínimo; autorizar el contrato de captura antes de implementar.",
+      "implementation_authorized": false,
+      "ci_required": true
     }
   ]
 }
