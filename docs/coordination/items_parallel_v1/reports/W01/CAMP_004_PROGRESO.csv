@@ -1,1 +1,2 @@
 bloque,ids,estado,sha_pruebas,ci_run,notas
+01,"light_ball;lucky_punch;thick_club",EN_CI_AUTOMATICA,97c7141dcbf8af6ca770fa5c0f05cac294ece4e2,PENDIENTE_AUTOCI,8_casos;34_pares;102_variantes;Pikachu_Fisico_Especial;Cubone_Marowak;Chansey_critico_RNG;especies_negativas;SaveV2
