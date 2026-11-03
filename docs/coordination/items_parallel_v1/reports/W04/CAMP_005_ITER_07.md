@@ -72,3 +72,9 @@ Después se dejó en CSV la fila 07 `DEPENDENCIA_DOCUMENTADA`, `ci_run=417381618
 **Resultado técnico:** cinco equipamientos, rechazados seguros, preservación SaveV2 y ninguna falsa forma; **no** cinco transformaciones implementadas. La decisión de integración del subsistema de formas y primigenias sigue pendiente.
 
 **Próximo bloque autorizado:** 08/10, cuatro fusiones, únicamente al recibir la siguiente `p`.
+
+## Segunda CI07: progreso consolidado y aprobado
+
+La segunda ejecución [#41738423220](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41738423220), SHA `df5d656b29f7f147505398c5e7a947aec2e8aa7d`, terminó **completed/success** sobre el CSV ya marcado `DEPENDENCIA_DOCUMENTADA`. Recibos idénticos: `CAMP005_W04_MANIFEST_PASS reserved=10 completed=7 ids=46 kind=FUNCTIONAL_BACKLOG`, `CAMP005_W04_PY PASS blocks=7 checks=426`, `CAMP005_W04_GODOT PASS blocks=7 checks=754` y cruce de Prismas `NO_FALSE_FORM`. Los pasos de regresión histórica aparecen `skipped` porque el bloque 07 no es hito 05/10 ni modifica producción; **no** afirmar que esas regresiones se ejecutaron.
+
+**Bloque 07/10 cerrado como `DEPENDENCIA_DOCUMENTADA`, con equipamiento y SaveV2 verificados, sin certificar ninguna transformación de forma.** Fila 04 sin alterar por la incidencia documentada. Próxima `p` autoriza únicamente el bloque 08/10.
