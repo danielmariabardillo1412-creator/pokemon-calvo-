@@ -225,7 +225,8 @@ func _probe_field_use(spec: Dictionary, mode: String) -> Dictionary:
 			not bool(reply.get("accepted", false))
 			and String(reply.get("status", "")) in ["DEPENDENCY_MISSING", "REJECTED"])
 	if String(spec.kind) == "field_medicine" and expected_acceptance:
-		var expected_action: String = "bitter_medicine" if String(spec.id) == "energy_powder" else "medicine"
+		var bitter: bool = String(spec.id) in ["energy_powder", "energy_root"]
+		var expected_action: String = "bitter_medicine" if bitter else "medicine"
 		check(mode + " medicina usa el servicio existente y su subfamilia",
 			String(reply.get("action", "")) == expected_action)
 	var updated: CreatureInstance = collection.owned_creature(&"own")
@@ -241,10 +242,14 @@ func _probe_field_use(spec: Dictionary, mode: String) -> Dictionary:
 		expected_pp = mini(updated.moveset[0].max_pp,
 			start_pp + (int(spec.expected_delta) if expected_acceptance else 0))
 	elif String(spec.kind) == "field_medicine" and spec.has("pp_gain"):
-		expected_pp = mini(updated.moveset[0].max_pp, start_pp + pp_gain)
+		var pp_scope: String = String(spec.get("pp_scope", "all"))
+		if pp_scope == "all" or (pp_scope == "one" and slot == 0):
+			expected_pp = mini(updated.moveset[0].max_pp, start_pp + pp_gain)
 	var expected_pp_second: int = start_pp_second
 	if String(spec.kind) == "field_medicine" and spec.has("pp_gain"):
-		expected_pp_second = mini(updated.moveset[1].max_pp, start_pp_second + pp_gain)
+		var pp_scope_second: String = String(spec.get("pp_scope", "all"))
+		if pp_scope_second == "all" or (pp_scope_second == "one" and slot == 1):
+			expected_pp_second = mini(updated.moveset[1].max_pp, start_pp_second + pp_gain)
 	check(mode + " campo: PP por slot estrictos, sin propagacion incorrecta",
 		now_pp == expected_pp
 		and updated.moveset[1].current_pp == expected_pp_second)
@@ -376,9 +381,14 @@ func _compare_field_use(spec: Dictionary, observed: Dictionary) -> void:
 			and bool(n.confusion) == bool(spec.confused))
 		if spec.has("pp_gain"):
 			var gain: int = int(spec.pp_gain) if expected else 0
-			check("Elixir aplica la ganancia en ambos slots sin seleccionar movimiento",
-				int(a.pp) == mini(int(a.pp_max), int(n.pp) + gain)
-				and int(a.pp_second) == mini(int(a.pp_second_max), int(n.pp_second) + gain)
+			var pp_scope: String = String(spec.get("pp_scope", "all"))
+			var selected: int = int(spec.get("slot", -1))
+			var expected_first: int = mini(int(n.pp_max), int(n.pp) +
+				(gain if pp_scope == "all" or (pp_scope == "one" and selected == 0) else 0))
+			var expected_second: int = mini(int(n.pp_second_max), int(n.pp_second) +
+				(gain if pp_scope == "all" or (pp_scope == "one" and selected == 1) else 0))
+			check("Elixir/Eter respetan scope, ranura y maximos de PP",
+				int(a.pp) == expected_first and int(a.pp_second) == expected_second
 				and int(s.pp) == int(a.pp) and int(s.pp_second) == int(a.pp_second))
 		if spec.has("friendship_loss"):
 			var expected_friend: int = maxi(0, int(n.friendship) -
