@@ -231,6 +231,59 @@ def main() -> int:
                       and 'not other.has(record)' in runner
                       and 'moon_candidates > 0' in runner,
                       "Faltan persistencia y positivos/negativos Piedra Lunar")
+            elif block["bloque"] == "04":
+                check(ids == ["beast_ball", "heavy_ball"], "Reserva bloque04 alterada")
+                check(block["current_state"] == "DEPENDENCIA_CONCRETA"
+                      and block["functional_effect_certified"] is False,
+                      "No atribuir funcionamiento Beast/Heavy")
+                species = (ROOT / "modules/creatures/domain/creature_species.gd").read_text(
+                    encoding="utf-8")
+                capture = (ROOT / "modules/capture/capture_system.gd").read_text(
+                    encoding="utf-8")
+                rules = (ROOT / "modules/capture/capture_ruleset.gd").read_text(
+                    encoding="utf-8")
+                basic = (ROOT / "modules/capture/capture_ball_effects.gd").read_text(
+                    encoding="utf-8")
+                selected = {r["id"]: r for r in
+                            rows(ROOT / "docs/current/RANDOMLOCK_ITEMS_BUILD_SCOPE_V2.csv")}
+                check(all(selected[item]["estado_contenido"] == "SELECCIONADO"
+                          for item in ids), "Bolas fuera de selección oficial")
+                check("var source_metadata: Dictionary" in species
+                      and '"source_metadata"' in species
+                      and "CreatureSpecies" in species,
+                      "No existe transporte de metadatos canónicos")
+                check(not re.search(r"(?m)^@?export\\s+var\\s+(?:weight_hectograms|weight_kg|is_ultra_beast)\\b", species)
+                      and "var weight_hectograms" not in species
+                      and "var is_ultra_beast" not in species,
+                      "Apareció campo nuevo y exige casos positivos")
+                check("func catch_probability(" in rules
+                      and "CAPTURE_RATE_MIN := 1" in rules
+                      and "CAPTURE_RATE_MAX := 255" in rules
+                      and "crs.catch_probability(" in capture,
+                      "Contrato actual de tasa de captura alterado")
+                check('&"beast_ball"' not in basic and '&"heavy_ball"' not in basic
+                      and '&"beast_ball"' not in rules and '&"heavy_ball"' not in rules,
+                      "Se ha implementado efecto: reauditar multiplicadores")
+                expected = {"beast_ball": {"is_ultra_beast",
+                                          "beast_ball_versioned_factor"},
+                            "heavy_ball": {"weight_hectograms",
+                                           "heavy_ball_versioned_weight_tiers"}}
+                check({p["id"] for p in block["required_producers"]} == set(ids),
+                      "Productores incompletos")
+                for producer in block["required_producers"]:
+                    check(set(producer["missing_fields"]) == expected[producer["id"]]
+                          and producer["producer"].strip()
+                          and producer["consumer"].strip()
+                          and producer["decision"].strip(),
+                          "Frontera no definida para " + producer["id"])
+                check('"04": _block_04(block)' in runner
+                      and "func _block_04(block: Dictionary)" in runner,
+                      "Sin prueba Godot de bloque04")
+                check("CreatureSpecies.from_dict(original)" in runner
+                      and "species.source_metadata" in runner
+                      and "rules.catch_probability(" in runner
+                      and "not properties.has(\"weight_hectograms\")" in runner,
+                      "Sin evidencias positivas de metadatos y cálculo")
             else:
                 check(False, "Bloque sin nueva prueba: " + block["bloque"])
         check(checks > 0, "Sin verificaciones")
