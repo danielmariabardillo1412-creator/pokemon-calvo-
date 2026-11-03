@@ -1,3 +1,5 @@
+> **ESTADO HISTÓRICO SUPERADO:** esta propuesta de 10–12 bloques fue **aprobada y concretada** en [CAMPAIGN_GATE_003.md](CAMPAIGN_GATE_003.md) con **10 bloques por cada una de W01/W02/W03/W05**, cola de 40 filas y CI automática verificada. La frase original `NO ACTIVADO` que sigue más abajo describe solo el momento de redacción del borrador, no el estado actual. Para operar usar el GATE_003, nunca este borrador como encargo.
+
 # PROPUESTA IA6 — CAMPAÑAS LARGAS V4 / «p» continua, sin STOP burocrático
 **Estado: DISEÑO PREPARADO, NO ACTIVADO.** Elaborado 2026-11-03 tras validar que CAMPAÑA_002 4/4 ha completado ITER03 con CI automática. Ninguna IA puede usar este borrador como un nuevo encargo. Requiere autorización inicial única del usuario y publicación del manifiesto con IDs reales, no un `p` aislado.
 
