@@ -36,6 +36,7 @@ func _run_campaign() -> void:
 			"01": _block_01(block)
 			"02": _block_02(block)
 			"03": _block_03(block)
+			"04": _block_04(block)
 			_: check("Bloque sin prueba propia " + str(n), false)
 	_finish(n)
 
@@ -192,6 +193,51 @@ func _block_03(block: Dictionary) -> void:
 			ids.has(String(producer.get("id", ""))) and
 			not String(producer.get("producer", "")).is_empty() and
 			not String(producer.get("consumer", "")).is_empty())
+
+# Block04: authoritatively available species metadata and pure capture rate,
+# not fabricated weight or Ultra Beast classification.
+func _block_04(block: Dictionary) -> void:
+	var ids: Array = block.get("ids", [])
+	check("Bolas autorizadas del bloque 04", ids == ["beast_ball", "heavy_ball"])
+	check("No certificar efecto Beast/Heavy sin esquema",
+		block.get("current_state") == "DEPENDENCIA_CONCRETA"
+		and not bool(block.get("functional_effect_certified", true)))
+	for raw_id: String in ids:
+		var id := StringName(raw_id)
+		check("Catálogo y selección reales " + raw_id,
+			catalogs.item(id) != null and service_for().selection.content_allowed(id))
+		check("Sin registro de factor no autorizado " + raw_id,
+			not CaptureRuleset.new().is_known_ball(id))
+	var species: CreatureSpecies = catalogs.species(&"snorlax")
+	check("Especie con captura válida", species != null
+		and CaptureRuleset.is_valid_capture_rate(species.capture_rate))
+	var original: Dictionary = species.to_dict()
+	var restored: CreatureSpecies = CreatureSpecies.from_dict(original)
+	check("Fuente canónica de especie guarda tasa y metadatos",
+		restored.capture_rate == species.capture_rate
+		and restored.source_metadata == species.source_metadata)
+	var properties: Array[String] = []
+	for prop: Dictionary in species.get_property_list():
+		properties.append(String(prop.get("name", "")))
+	check("Peso canónico no es campo normalizado de especie",
+		not properties.has("weight_hectograms")
+		and not properties.has("weight_kg"))
+	check("Clase ultraente no es campo normalizado de especie",
+		not properties.has("is_ultra_beast"))
+	var rules := CaptureRuleset.new()
+	var probability: float = rules.catch_probability(species.capture_rate, 1.0, 1.0, 100, 100)
+	var expected: float = float(species.capture_rate) / 255.0 / 3.0
+	check("Probabilidad existente determinista y finita",
+		is_equal_approx(probability, expected)
+		and probability > 0.0 and probability <= 1.0)
+	check("Límites de captura protegen la tasa", not CaptureRuleset.is_valid_capture_rate(0)
+		and not CaptureRuleset.is_valid_capture_rate(256))
+	check("No alterar datos de especie en auditoría", species.to_dict() == original)
+	for producer: Dictionary in block.get("required_producers", []):
+		check("Frontera concreta Beast/Heavy " + String(producer.get("id", "")),
+			ids.has(String(producer.get("id", ""))
+			) and not String(producer.get("producer", "")).is_empty()
+			and not String(producer.get("decision", "")).is_empty())
 
 func _finish(n: int) -> void:
 	done = true
