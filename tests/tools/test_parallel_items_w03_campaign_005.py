@@ -103,6 +103,75 @@ def main() -> int:
                 check('result.result.reason == "unknown_ball"' not in runner
                       and 'expected_rejection == "unknown_ball"' not in runner,
                       "La campaña repite la prueba negativa de CAMP004")
+            elif block["bloque"] == "02":
+                check(ids == ["luxury_ball", "lure_ball"],
+                      "Reserva de dos bolas contextual modificada")
+                check(block["current_state"] == "DEPENDENCIA_CONCRETA"
+                      and block["functional_effect_certified"] is False,
+                      "No certificar bonus sin productor")
+                creature = (ROOT / "modules/creatures/domain/creature_instance.gd").read_text(
+                    encoding="utf-8")
+                friendship = (ROOT / "modules/inventory/field_friendship_effects.gd").read_text(
+                    encoding="utf-8")
+                system = (ROOT / "modules/capture/capture_system.gd").read_text(
+                    encoding="utf-8")
+                context = (ROOT / "modules/capture/capture_battle_context.gd").read_text(
+                    encoding="utf-8")
+                session = (ROOT / "modules/gameplay/showdown_adventure_session.gd").read_text(
+                    encoding="utf-8")
+                basic = (ROOT / "modules/capture/capture_ball_effects.gd").read_text(
+                    encoding="utf-8")
+                rules = (ROOT / "modules/capture/capture_ruleset.gd").read_text(
+                    encoding="utf-8")
+                selection = {r["id"]: r for r in
+                             rows(ROOT / "docs/current/RANDOMLOCK_ITEMS_BUILD_SCOPE_V2.csv")}
+                check(all(selection[id]["estado_contenido"] == "SELECCIONADO"
+                          for id in ids), "Bolas no seleccionadas")
+                check("func increase(creature: CreatureInstance, gains: Array)" in friendship
+                      and 'creature.held_item_id == &"soothe_bell"' in friendship
+                      and "creature.friendship = mini(255, before + gain)" in friendship,
+                      "Ruta positiva de amistad cambió")
+                check('"friendship": friendship' in creature
+                      and 'creature.friendship = int(data.get("friendship", 0))' in creature,
+                      "Contrato actual de guardado amistad ausente")
+                check('original_capture_ball_id' not in creature
+                      and 'capture_ball_id' not in creature,
+                      "Origen de captura apareció: hay que integrar y probar")
+                check('origin_ball' not in friendship and 'luxury_ball' not in friendship,
+                      "Se ha conectado Luxury: las pruebas necesitan positivo real")
+                check('func on_catch(' in basic
+                      and 'crs.BallEffects.on_catch(attempt.ball_id, target)' in system,
+                      "No se identifica punto de aplicación tras éxito")
+                check("encounter_method" not in context
+                      and "fishing_provenance" not in context
+                      and "context.completed_turns = battle_state().turn" in session,
+                      "Hay nueva fuente de pesca que exige prueba funcional")
+                check('luxury_ball' not in rules and 'lure_ball' not in rules
+                      and 'luxury_ball' not in basic and 'lure_ball' not in basic,
+                      "Bolas ahora conectadas: reauditar efectos")
+                expected = {"luxury_ball": {"original_capture_ball_id",
+                                           "origin_ball_friendship_multiplier_policy"},
+                            "lure_ball": {"encounter_method", "fishing_provenance"}}
+                check({p["id"] for p in block["required_producers"]} == set(ids),
+                      "Productores no definidos para ambos IDs")
+                for producer in block["required_producers"]:
+                    check(set(producer["missing_fields"]) == expected[producer["id"]]
+                          and producer["producer"].strip()
+                          and producer["consumer"].strip()
+                          and producer["decision"].strip(),
+                          "Falta el contrato preciso de " + producer["id"])
+                check('"02": _block_02(block)' in runner
+                      and 'func _block_02(block: Dictionary)' in runner,
+                      "Godot bloque02 no se ejecuta")
+                check('friendship_effects.increase(restored, [5, 3, 2])' in runner
+                      and 'bell_gain == 7' in runner and 'baseline == 5' in runner,
+                      "Faltan positivos de amistad reales")
+                check('CreatureInstance.from_dict(serialized)' in runner
+                      and 'restored.to_dict() == serialized' in runner,
+                      "No se verifica persistencia de amistad")
+                check('not context_fields.has("encounter_method")' in runner
+                      and 'not original_keys.has("original_capture_ball_id")' in runner,
+                      "No se detectan productores ausentes")
             else:
                 check(False, "Bloque sin nueva prueba: " + block["bloque"])
         check(checks > 0, "Sin verificaciones")
