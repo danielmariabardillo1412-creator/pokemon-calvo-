@@ -70,6 +70,23 @@
         "single_consumption_if_supported",
         "same_identity_iv_ev_moves_exp_friendship_and_savev2_if_supported"
       ]
+    },
+    {
+      "block": "05",
+      "ids": [
+        "prism_scale",
+        "sachet",
+        "up_grade"
+      ],
+      "expected_trigger": "classify_real_records; trade_and_held_conditions_not_direct_use",
+      "policy": "no_direct_use_without_supported_evolution_record",
+      "cases": [
+        "catalog_rule_classification",
+        "dependent_trade_or_held_route_refused_without_spend",
+        "positive_route_only_if_runtime_supported",
+        "single_spend_and_identity_if_supported",
+        "save_v2_if_supported"
+      ]
     }
   ]
 }
