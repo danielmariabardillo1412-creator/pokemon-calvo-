@@ -1,3 +1,5 @@
+> **CI DEFINITIVA VERIFICADA — BLOQUE 03/10 · 2026-11-03:** [GitHub Actions #41719102271](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41719102271), SHA funcional `245b77936642d59990cde21471c86c2c5491dd7f`, job `126207313857`, `completed/success`. Recibos de logs: `CAMP005_W05_MANIFEST_PASS reserved=10 completed=3 ids=60 kind=NEW_IDS`; `CAMP005_W05_PY PASS blocks=3 checks=174`; `CAMP005_GATE_PY_PASS worker=W05 blocks=3 checks=174`; `CAMP005_W05_GODOT PASS blocks=3 checks=661`; `CAMP005_GATE_GODOT_PASS worker=W05 blocks=3 checks=661`. **18/18 MT de CAMP005 certificadas por pruebas automatizadas Python/Godot headless**, no por prueba visual/GPU. Regresiones CAMP004/003 no ejecutadas en este bloque por diseño del workflow; serán exigibles en hitos 05/10 y cambios de producción. Esta certificación posterior prevalece sobre cualquier referencia histórica inferior a CI pendiente. No se ha modificado producción.
+
 # IA5/W05 — CAMPAÑA_005 · ITER_03/10
 
 **Estado inicial:** EN_CI_AUTOMATICA. La comprobación estática no sustituye a las pruebas funcionales.
