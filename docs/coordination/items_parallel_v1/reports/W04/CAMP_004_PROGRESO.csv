@@ -1,2 +1,3 @@
 bloque,ids,estado,sha_pruebas,ci_run,notas
 01,berry_sweet;clover_sweet;flower_sweet,DEPENDENCIA_DOCUMENTADA,f1ad82bc7813af374f82aadb1722a55a6d363559,41575404407,"CI 41575404407 PASS Python 48 Godot 101 y regresion CAMP003 120/270; tres confites sin registro de evolucion por ID en catalogo runtime; giro Milcery y formas pendientes; pruebas negativas y SaveV2 aprobadas"
+02,love_sweet;ribbon_sweet;star_sweet,EN_CI_AUTOMATICA,b4de4a2823fccf54cfae354ca63501db8bb66b8d,PENDIENTE,"Confites Amor Cinta Estrella: catalogo PokeAPI equipar y giro Milcery; negativos mochila/consumo y SaveV2 si equipable; CI02 por confirmar, regresion CAMP003 sin modificaciones"
