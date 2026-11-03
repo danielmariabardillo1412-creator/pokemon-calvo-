@@ -16,6 +16,9 @@ PROGRESS = BASE / "reports/W02/CAMP_005_PROGRESO.csv"
 ABILITY = ROOT / "modules/inventory/field_ability_effects.gd"
 GROWTH = ROOT / "modules/inventory/field_growth_effects.gd"
 PPBOOST = ROOT / "modules/inventory/field_pp_boost_effects.gd"
+TRAINING = ROOT / "modules/inventory/field_training_effects.gd"
+FRIENDSHIP = ROOT / "modules/inventory/field_friendship_effects.gd"
+HIST_TRAINING = ROOT / "tests/gameplay/field_held_v17.gd"
 SERVICE = ROOT / "modules/inventory/field_item_service.gd"
 RUNNER = ROOT / "tests/gameplay/parallel_items_w02_campaign_005.gd"
 HIST_ABILITY = ROOT / "tests/gameplay/item_field_ability_v10.gd"
@@ -178,6 +181,260 @@ EXPECTED_01 = json.loads(r'''[
 IDS_01 = ["ability_capsule","ability_patch","rare_candy","pp_up"]
 SOURCES_01 = ["modules/inventory/field_ability_effects.gd","modules/inventory/field_growth_effects.gd","modules/inventory/field_pp_boost_effects.gd","modules/inventory/field_item_service.gd","tests/gameplay/item_field_ability_v10.gd","tests/gameplay/item_field_growth_v9.gd","tests/gameplay/item_field_pp_v8.gd"]
 
+EXPECTED_02 = json.loads(r'''[
+  {
+    "scenario": "pp_max_zero_boost_first",
+    "id": "pp_max",
+    "kind": "pp",
+    "applies": true,
+    "boosts": 0,
+    "start_pp": 30,
+    "slot": 0,
+    "expected_boosts": 3
+  },
+  {
+    "scenario": "pp_max_one_boost_first",
+    "id": "pp_max",
+    "kind": "pp",
+    "applies": true,
+    "boosts": 1,
+    "start_pp": 33,
+    "slot": 0,
+    "expected_boosts": 3
+  },
+  {
+    "scenario": "pp_max_two_boost_second",
+    "id": "pp_max",
+    "kind": "pp",
+    "applies": true,
+    "boosts": 2,
+    "start_pp": 6,
+    "slot": 1,
+    "expected_boosts": 3
+  },
+  {
+    "scenario": "pp_max_three_boost_reject",
+    "id": "pp_max",
+    "kind": "pp",
+    "applies": false,
+    "boosts": 3,
+    "start_pp": 40,
+    "slot": 0
+  },
+  {
+    "scenario": "pp_max_no_slot_reject",
+    "id": "pp_max",
+    "kind": "pp",
+    "applies": false,
+    "boosts": 0,
+    "start_pp": 30,
+    "slot": -1
+  },
+  {
+    "scenario": "pp_max_invalid_slot_reject",
+    "id": "pp_max",
+    "kind": "pp",
+    "applies": false,
+    "boosts": 0,
+    "start_pp": 30,
+    "slot": 99
+  },
+  {
+    "scenario": "hp_up_zero_ev",
+    "id": "hp_up",
+    "kind": "vitamin",
+    "applies": true,
+    "stat": "hp",
+    "start_ev": 0,
+    "other_ev_total": 0,
+    "start_friendship": 99,
+    "expected_ev_gain": 10
+  },
+  {
+    "scenario": "hp_up_near_stat_cap",
+    "id": "hp_up",
+    "kind": "vitamin",
+    "applies": true,
+    "stat": "hp",
+    "start_ev": 248,
+    "other_ev_total": 0,
+    "start_friendship": 100,
+    "expected_ev_gain": 4
+  },
+  {
+    "scenario": "hp_up_stat_cap_reject",
+    "id": "hp_up",
+    "kind": "vitamin",
+    "applies": false,
+    "stat": "hp",
+    "start_ev": 252,
+    "other_ev_total": 0,
+    "start_friendship": 200
+  },
+  {
+    "scenario": "hp_up_global_508_capped",
+    "id": "hp_up",
+    "kind": "vitamin",
+    "applies": true,
+    "stat": "hp",
+    "start_ev": 0,
+    "other_ev_total": 508,
+    "start_friendship": 200,
+    "expected_ev_gain": 2
+  },
+  {
+    "scenario": "hp_up_global_510_reject",
+    "id": "hp_up",
+    "kind": "vitamin",
+    "applies": false,
+    "stat": "hp",
+    "start_ev": 0,
+    "other_ev_total": 510,
+    "start_friendship": 100
+  },
+  {
+    "scenario": "hp_up_unexpected_slot_reject",
+    "id": "hp_up",
+    "kind": "vitamin",
+    "applies": false,
+    "stat": "hp",
+    "start_ev": 0,
+    "other_ev_total": 0,
+    "start_friendship": 99,
+    "slot": 0
+  },
+  {
+    "scenario": "protein_zero_ev",
+    "id": "protein",
+    "kind": "vitamin",
+    "applies": true,
+    "stat": "attack",
+    "start_ev": 0,
+    "other_ev_total": 0,
+    "start_friendship": 99,
+    "expected_ev_gain": 10
+  },
+  {
+    "scenario": "protein_near_stat_cap",
+    "id": "protein",
+    "kind": "vitamin",
+    "applies": true,
+    "stat": "attack",
+    "start_ev": 248,
+    "other_ev_total": 0,
+    "start_friendship": 100,
+    "expected_ev_gain": 4
+  },
+  {
+    "scenario": "protein_stat_cap_reject",
+    "id": "protein",
+    "kind": "vitamin",
+    "applies": false,
+    "stat": "attack",
+    "start_ev": 252,
+    "other_ev_total": 0,
+    "start_friendship": 200
+  },
+  {
+    "scenario": "protein_global_508_capped",
+    "id": "protein",
+    "kind": "vitamin",
+    "applies": true,
+    "stat": "attack",
+    "start_ev": 0,
+    "other_ev_total": 508,
+    "start_friendship": 200,
+    "expected_ev_gain": 2
+  },
+  {
+    "scenario": "protein_global_510_reject",
+    "id": "protein",
+    "kind": "vitamin",
+    "applies": false,
+    "stat": "attack",
+    "start_ev": 0,
+    "other_ev_total": 510,
+    "start_friendship": 100
+  },
+  {
+    "scenario": "protein_unexpected_slot_reject",
+    "id": "protein",
+    "kind": "vitamin",
+    "applies": false,
+    "stat": "attack",
+    "start_ev": 0,
+    "other_ev_total": 0,
+    "start_friendship": 99,
+    "slot": 0
+  },
+  {
+    "scenario": "iron_zero_ev",
+    "id": "iron",
+    "kind": "vitamin",
+    "applies": true,
+    "stat": "defense",
+    "start_ev": 0,
+    "other_ev_total": 0,
+    "start_friendship": 99,
+    "expected_ev_gain": 10
+  },
+  {
+    "scenario": "iron_near_stat_cap",
+    "id": "iron",
+    "kind": "vitamin",
+    "applies": true,
+    "stat": "defense",
+    "start_ev": 248,
+    "other_ev_total": 0,
+    "start_friendship": 100,
+    "expected_ev_gain": 4
+  },
+  {
+    "scenario": "iron_stat_cap_reject",
+    "id": "iron",
+    "kind": "vitamin",
+    "applies": false,
+    "stat": "defense",
+    "start_ev": 252,
+    "other_ev_total": 0,
+    "start_friendship": 200
+  },
+  {
+    "scenario": "iron_global_508_capped",
+    "id": "iron",
+    "kind": "vitamin",
+    "applies": true,
+    "stat": "defense",
+    "start_ev": 0,
+    "other_ev_total": 508,
+    "start_friendship": 200,
+    "expected_ev_gain": 2
+  },
+  {
+    "scenario": "iron_global_510_reject",
+    "id": "iron",
+    "kind": "vitamin",
+    "applies": false,
+    "stat": "defense",
+    "start_ev": 0,
+    "other_ev_total": 510,
+    "start_friendship": 100
+  },
+  {
+    "scenario": "iron_unexpected_slot_reject",
+    "id": "iron",
+    "kind": "vitamin",
+    "applies": false,
+    "stat": "defense",
+    "start_ev": 0,
+    "other_ev_total": 0,
+    "start_friendship": 99,
+    "slot": 0
+  }
+]''')
+IDS_02 = ["pp_max","hp_up","protein","iron"]
+SOURCES_02 = ["modules/inventory/field_pp_boost_effects.gd","modules/inventory/field_training_effects.gd","modules/inventory/field_friendship_effects.gd","modules/inventory/field_item_service.gd","tests/gameplay/item_field_pp_v8.gd","tests/gameplay/field_held_v17.gd"]
+
 
 class ContractError(ValueError):
     pass
@@ -238,7 +495,7 @@ def verify(fixture, queue, progress, chk):
         for case in block["cases"]:
             chk.demand(case["id"] in block["ids"] and case["scenario"] not in all_scenarios,
                        "Escenario repetido o ID no asignado")
-            chk.demand(case["kind"] in {"ability", "growth", "pp"}
+            chk.demand(case["kind"] in {"ability", "growth", "pp", "vitamin"}
                        and type(case["applies"]) is bool,
                        "Caso sin operación real ni decisión de aplicación")
             all_scenarios.add(case["scenario"])
@@ -250,6 +507,14 @@ def verify(fixture, queue, progress, chk):
             for actual, expected in zip(block["cases"], EXPECTED_01):
                 chk.demand(type(actual) is dict and actual == expected,
                            "Mutación de escenario: " + expected["scenario"])
+        elif index == 1:
+            chk.demand(block["ids"] == IDS_02 and block["source_evidence"] == SOURCES_02,
+                       "IDs/fuentes bloque02 distintos de cola IA6")
+            chk.demand(len(block["cases"]) == len(EXPECTED_02) == 24,
+                       "Bloque02 debe contener 24 escenarios")
+            for actual, expected in zip(block["cases"], EXPECTED_02):
+                chk.demand(type(actual) is dict and actual == expected,
+                           "Escenario02 modificado: " + expected["scenario"])
         else:
             raise ContractError("Contrato futuro sin autorización nueva: " + block["block"])
     return len(progress)
