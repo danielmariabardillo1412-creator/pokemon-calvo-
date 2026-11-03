@@ -1,3 +1,19 @@
+# IA2/W02 — CONTINUIDAD VIGENTE: CAMPAÑA_004 BLOQUE 03/10
+
+**Identidad permanente:** IA2/W02; **rama exclusiva:** `codex/calvo-items-20261103-w02-camp004`. **Una `p` = exactamente siguiente bloque**, sujeto a lectura y reparación previa de fallos de CI. Autoridad: IA6 `CAMPAIGN_004_W02_GATE.md`, `CAMPAIGN_004_W02_QUEUE_APPROVED.csv`, `campaigns/CAMP_004_W02.md`, `AUTONOMOUS_REPAIR_V5.md`.
+
+**Estado nuevo:** 01/10 CI completada/success con Python 83, Godot 1022 y regresión 003 Python 680/Godot 7306 ([run 41573481223](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41573481223)). **02 y 03 publicados, pero no acreditados** por los resultados de CI del último SHA. No confundir contratos publicados con PASS; CI automática con `concurrency.cancel-in-progress` puede cancelar runs intermedios tras nuevos commits.
+
+**Fila 03 realizada:** `antidote;awakening;berry_juice;big_malasada` (MEDICINE), 15 escenarios × 3 modos (equipo con ítem / equipo sin ítem / almacenado con ítem) = 45 variantes; acumulado 42 escenarios y 126 variantes sobre 12 IDs. Contratos reales: Antidote cura poison/toxic sin curar burn; Awakening cura sleep y reloj; Berry Juice +20 PS hasta máximo; Big Malasada cura persistentes/confusión incluyendo combinado. Se comprueba consumo, ausencia de mutación en rechazo, identidad, stock, PP/EV/amistad, SaveV2 y evidencia SHA256. **No se afirma que las ejecuciones nuevas hayan pasado.**
+
+**Archivos del bloque 03:** fixture commit `5aa0a0e2c44fe33f5ac51d23f70fd3dae59ba56d`; validador Python `8a6a9f73aac2037b7d8f7fc71422dc93b47c15cd`; Godot `e9f081890d4b880638342b8a2400c7e476e85d25`, ajuste arnés `7040591c3ff8729649c33ccb8a417a5a090cf4d5`; progreso `042e0f60b1137c326306e3459385a0e575214b07`; informe `docs/coordination/items_parallel_v1/reports/W02/CAMP_004_ITER_03.md` commit `18b29d01a0b674d9dc1ef85e86de80a945401188`.
+
+**DEPENDENCIA abierta del bloque 02:** `razz_berry` no tiene un efecto funcional de uso/combate conectado; negativos no prueban utilidad. Requiere decisión IA6 sobre política/retirada. No modificar reglas globales sin ella.
+
+**Próxima `p`:** localizar run de CI del HEAD (solo se dispone de herramientas para jobs mediante run ID, los métodos de búsqueda de runs por commit están limitados a PR y devolvieron []); exigir `CAMP004_W02_PY/GODOT PASS blocks=3` y `CAMP003_W02_PY/GODOT PASS blocks=10`, corregir errores propios si aparecen. **Una nueva `p` autoriza fila 04 exacta:** `burn_heal;casteliacone;elixir;energy_powder`; no ejecutar 05 sin nueva orden. Nunca editar `main`, V28, rama árbitra, otras ramas ni workflows.
+
+---
+
 # IA2/W02 — CONTINUIDAD VIGENTE: CAMPAÑA_004 BLOQUE 02/10
 
 **Identidad:** IA2/W02, rama única `codex/calvo-items-20261103-w02-camp004`. **Estado:** bloques 01–02 publicados, bloque 01 **CI PASS real** ([run #41573481223](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41573481223) `completed/success`); bloque 02 **EN_CI_AUTOMATICA**, sin atribuir PASS antes de resultados reales. No se modifica CAMP003 10/10 ni `main`, V28, otras ramas, workflow o producción.
