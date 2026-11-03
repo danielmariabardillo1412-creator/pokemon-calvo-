@@ -1,3 +1,15 @@
+> **CERTIFICACIÓN DEFINITIVA BLOQUE 10/10 — CI PASS (2026-11-04).** [GitHub Actions #41742499805](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41742499805), SHA de pruebas `b886c10756ad843d5f92834f29a42d31e63cf262`, job `126287538668`, `completed/success`. Se comprobaron directamente los logs de la ejecución final:
+>
+> - `CAMP005_W05_MANIFEST_PASS reserved=10 completed=10 ids=60 kind=NEW_IDS`
+> - `CAMP005_W05_PY PASS blocks=10 checks=580`
+> - `CAMP005_GATE_PY_PASS worker=W05 blocks=10 checks=580`
+> - `CAMP005_W05_GODOT PASS blocks=10 checks=2166`
+> - `CAMP005_GATE_GODOT_PASS worker=W05 blocks=10 checks=2166`
+> - Regresión CAMP004 de 60 MT: `CAMP004_W05_PY PASS blocks=10 checks=580` y `CAMP004_W05_GODOT PASS blocks=10 checks=2166`
+> - Regresión CAMP003 de 60 MT: `CAMP003_W05_PY PASS blocks=10 checks=580` y `CAMP003_W05_GODOT PASS blocks=10 checks=2166`
+>
+> **VEREDICTO:** 60/60 MT nuevas de CAMP005 con pruebas funcionales Python y Godot aprobadas; 60 MT CAMP004 + 60 MT CAMP003 regresionadas y PASS en el mismo run. **`CAMPAÑA_005_FINALIZADA`, STOP W05.** Este veredicto posterior prevalece sobre referencias históricas inferiores a CI pendiente. No equivale a integración global ni prueba visual/GPU; sin cambios de producción o tests relajados.
+
 # IA5/W05 — CAMPAÑA_005 · ITER_10/10 · CIERRE DE MT
 
 **Estado inicial: 10/10 entregados; CI final pendiente de los recibos reales.**
