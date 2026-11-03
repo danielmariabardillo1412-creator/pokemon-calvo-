@@ -1,0 +1,132 @@
+{
+  "schema_version": 1,
+  "campaign": "CAMP_003",
+  "worker": "W01",
+  "format": "gen9calvounifiedv1",
+  "variants": [
+    "active",
+    "none",
+    "reserve"
+  ],
+  "sources": [
+    {
+      "path": "docs/current/ITEM_INVENTORY.csv",
+      "git_blob_sha": "2aaf18643bb2b071226118a1ad556cffca4707dd"
+    },
+    {
+      "path": "docs/current/RANDOMLOCK_ITEMS_BUILD_SCOPE_V2.csv",
+      "git_blob_sha": "8b9b723bf5944bbbde39aa2d49dfbb2f2a64e11b"
+    },
+    {
+      "path": "tests/gameplay/parallel_items_w01_held_v1.gd",
+      "git_blob_sha": "d9551db1ec5e08b1213e04829d031e3a6720188f"
+    },
+    {
+      "path": "tools/item_audit/held_effect_sweep_v3.cjs",
+      "git_blob_sha": "fd5d9d0b1eecf8b84f14e606631df93b40728586"
+    }
+  ],
+  "cases": [
+    {
+      "block": "01",
+      "id": "balloon_ground_immune",
+      "item_id": "air_balloon",
+      "op": "ground_immunity",
+      "actor_species": "mew",
+      "foe_species": "garchomp",
+      "foe_move": "earthquake",
+      "own_move": "reflect",
+      "seeds": [
+        19,
+        23
+      ],
+      "history": "HELD_PILOT_VERIFIED;plus_SaveV2"
+    },
+    {
+      "block": "01",
+      "id": "balloon_pop_normal",
+      "item_id": "air_balloon",
+      "op": "normal_hit_pops",
+      "actor_species": "mew",
+      "foe_species": "snorlax",
+      "foe_move": "tackle",
+      "own_move": "reflect",
+      "seeds": [
+        23
+      ],
+      "history": "HELD_PILOT_VERIFIED;plus_consumption"
+    },
+    {
+      "block": "01",
+      "id": "balloon_no_hit",
+      "item_id": "air_balloon",
+      "op": "no_hit_retained",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "foe_move": "amnesia",
+      "own_move": "reflect",
+      "seeds": [
+        23
+      ],
+      "history": "HELD_PILOT_VERIFIED;new_negative"
+    },
+    {
+      "block": "01",
+      "id": "vest_lock_restore",
+      "item_id": "assault_vest",
+      "op": "status_lock",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "foe_move": "amnesia",
+      "own_move": "tackle",
+      "seeds": [
+        19,
+        23
+      ],
+      "history": "W01_LOTE_002_VERIFIED;plus_SaveV2"
+    },
+    {
+      "block": "01",
+      "id": "vest_physical_control",
+      "item_id": "assault_vest",
+      "op": "physical_control",
+      "actor_species": "mew",
+      "foe_species": "snorlax",
+      "foe_move": "tackle",
+      "own_move": "tackle",
+      "seeds": [
+        23
+      ],
+      "history": "W01_LOTE_002_VERIFIED;cross_integration"
+    },
+    {
+      "block": "01",
+      "id": "band_trap_residual",
+      "item_id": "binding_band",
+      "op": "trap_residual",
+      "actor_species": "mew",
+      "foe_species": "snorlax",
+      "foe_move": "amnesia",
+      "own_move": "infestation",
+      "seeds": [
+        19,
+        23
+      ],
+      "history": "held_effect_sweep_v3;plus_equipment_SaveV2"
+    },
+    {
+      "block": "01",
+      "id": "band_plain_control",
+      "item_id": "binding_band",
+      "op": "non_trap_control",
+      "actor_species": "mew",
+      "foe_species": "snorlax",
+      "foe_move": "amnesia",
+      "own_move": "tackle",
+      "seeds": [
+        23
+      ],
+      "history": "new_negative_control"
+    }
+  ]
+}
