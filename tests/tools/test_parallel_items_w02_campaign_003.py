@@ -87,6 +87,18 @@ EXPECTED_06 = {
 }
 
 
+EXPECTED_07 = {
+    "passho_water_hit_c003": ("passho_berry", "resist_type", "charizard", "mew", "surf", "full", True, {"expected_type": "water"}),
+    "passho_normal_reject_c003": ("passho_berry", "resist_type", "charizard", "mew", "tackle", "full", False, {"expected_type": "water"}),
+    "payapa_psychic_hit_c003": ("payapa_berry", "resist_type", "gengar", "mew", "psychic", "full", True, {"expected_type": "psychic"}),
+    "payapa_normal_reject_c003": ("payapa_berry", "resist_type", "gengar", "mew", "tackle", "full", False, {"expected_type": "psychic"}),
+    "petaya_pinch_spa_c003": ("petaya_berry", "boost_spa", "mew", "mew", "amnesia", "fifth", True, {"boost_stat": "spa"}),
+    "petaya_high_reject_c003": ("petaya_berry", "boost_spa", "mew", "mew", "amnesia", "near_full", False, {"boost_stat": "spa"}),
+    "rindo_grass_hit_c003": ("rindo_berry", "resist_type", "blastoise", "mew", "energy_ball", "full", True, {"expected_type": "grass"}),
+    "rindo_normal_reject_c003": ("rindo_berry", "resist_type", "blastoise", "mew", "tackle", "full", False, {"expected_type": "grass"}),
+}
+
+
 class ContractError(ValueError):
     pass
 
@@ -316,6 +328,38 @@ def validate(fixture, queue, progress, check):
                                  "Doble turno/efecto de baya alterado: " + name + "/" + key)
             check.demand(seen == set(EXPECTED_06),
                          "Cobertura incompleta de los nueve escenarios del bloque 06")
+        elif i == 6:
+            check.demand(entry["source_evidence"] == [
+                "tools/item_audit/held_effect_sweep_v2.cjs"],
+                "Falta fuente de resistencias y Pinch Petaya V2")
+            check.demand(len(entry["cases"]) == 8 and len(ids) == 4,
+                         "ITER_07 requiere ocho casos de cuatro bayas")
+            seen = set()
+            for case in entry["cases"]:
+                name = case["scenario"]
+                check.demand(name in EXPECTED_07 and name not in seen,
+                             "Escenario 07 inesperado o duplicado")
+                seen.add(name)
+                item, kind, actor, foe, move, hp_state, spent, extra = EXPECTED_07[name]
+                base = {"scenario", "id", "kind", "nature", "start", "status",
+                        "actor_species", "foe_species", "foe_move", "consumes",
+                        "confuses", "own_move"}
+                check.demand(set(case) == base | set(extra),
+                             "Esquema del bloque 07 incompleto o manipulado")
+                actual = (case["id"], case["kind"], case["actor_species"],
+                          case["foe_species"], case["foe_move"], case["start"],
+                          case["consumes"])
+                check.demand(actual == (item, kind, actor, foe, move, hp_state, spent),
+                             "Tipo, especie, disparo o umbral alterado en bloque 07")
+                check.demand(case["nature"] == "hardy" and case["status"] == ""
+                             and case["confuses"] is False
+                             and case["own_move"] == "amnesia" and case["id"] in ids,
+                             "Controles de naturaleza, estado o movimiento no neutrales")
+                for key, value in extra.items():
+                    check.demand(case[key] == value,
+                                 "Expectativa de resistencia o SpA cambiada: " + name)
+            check.demand(seen == set(EXPECTED_07),
+                         "Falta un caso positivo o negativo del bloque 07")
         else:
             raise ContractError("Bloque futuro sin contrato específico implementado")
     return count
@@ -345,7 +389,14 @@ def verify_sources(check):
                    "liechi_berry:'atk'",
                    "fire:['occa_berry','scizor']",
                    "fire:'flamethrower'",
-                   "add('maranga_berry','reactive_stat_berry'"):
+                   "add('maranga_berry','reactive_stat_berry'",
+                   "water:['passho_berry','charizard']",
+                   "water:'surf'",
+                   "psychic:['payapa_berry','gengar']",
+                   "psychic:'psychic'",
+                   "petaya_berry:'spa'",
+                   "grass:['rindo_berry','blastoise']",
+                   "grass:'energy_ball'"):
         check.demand(needle in v2, "No se localizó precedente V2: " + needle)
     for needle in ("'custap_berry','low_hp_order'", "'custap_berry','full_hp'",
                    "'enigma_berry','super_effective_heal'",
@@ -433,6 +484,20 @@ def negative_controls(fixture, queue, progress, check):
             lambda f: f["blocks"][5]["cases"][8].update({"foe_move": "flamethrower"}),
             lambda f: f["blocks"][5]["cases"].pop(),
             lambda f: f["blocks"][5]["ids"].append("sitrus_berry"),
+        ])
+    if len(fixture["blocks"]) >= 7:
+        edits.extend([
+            lambda f: f["blocks"][6]["cases"][0].update({"foe_move": "tackle"}),
+            lambda f: f["blocks"][6]["cases"][1].update({"consumes": True}),
+            lambda f: f["blocks"][6]["cases"][2].update({"actor_species": "mew"}),
+            lambda f: f["blocks"][6]["cases"][3].update({"expected_type": "dark"}),
+            lambda f: f["blocks"][6]["cases"][4].update({"start": "full"}),
+            lambda f: f["blocks"][6]["cases"][5].update({"boost_stat": "spd"}),
+            lambda f: f["blocks"][6]["cases"][6].update({"foe_move": "tackle"}),
+            lambda f: f["blocks"][6]["cases"][7].update({"expected_type": "fire"}),
+            lambda f: f["blocks"][6]["cases"][4].update({"own_move": "swords_dance"}),
+            lambda f: f["blocks"][6]["cases"].pop(),
+            lambda f: f["blocks"][6]["ids"].append("sitrus_berry"),
         ])
     for i, edit in enumerate(edits):
         tampered = copy.deepcopy(fixture)
