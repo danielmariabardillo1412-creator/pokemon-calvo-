@@ -1,26 +1,23 @@
-# IA3/W03 — CAMPAÑA_004, ITERACIÓN 02
+# IA3/W03 — CAMPAÑA_004 — MICROBloque 02/10
 
-**IDs autorizados:** `black_flute;blue_flute;escape_rope`. Exclusivamente rama `codex/calvo-items-20261103-w03-camp004`.
+**Reserva:** `black_flute;blue_flute;escape_rope`. **Rama exclusiva:** `codex/calvo-items-20261103-w03-camp004`.
 
-## Inspección de soporte real
+## Auditoría de código funcional (corrección importante)
 
-Los tres IDs están seleccionados como `FIELD_USE` en `RANDOMLOCK_ITEMS_BUILD_SCOPE_V2.csv`. `FieldItemService.use_item` no encuentra un ejecutor funcional para ellos en las rutas actuales (`FieldEffects`, `Growth`, `EncounterModifiers`, máquinas/evoluciones) y retorna `DEPENDENCY_MISSING / field_effect_not_connected`.
+El perfil `modules/inventory/imported_recovery_v19.json` incluye la **Flauta Azul** con `effect.cure=["slp"]` y `consume=false`. `FieldItemService.use_item` usa `FieldEffects.supports`, prepara copia del Pokémon, aplica el efecto de recuperación y publica un cambio de identidad de criatura preservando el ID. Al curar sueño borra también el reloj correspondiente. Se actualizó la prueba para **verificar el caso positivo real, no rechazarlo**.
 
-La Flauta Azul debería necesitar una acción de curar el sueño; Flauta Negra, conexión al sistema de encuentros; Cuerda Huida, posición y transición de mapa. **No existen contratos autorizados en esta campaña para introducir esos efectos**. La mera presencia de las flautas en el listado de metadatos equipables no prueba que tengan un efecto pasivo/usable. La ausencia de inventario para un objeto sin ejecutor actualmente también termina en `field_effect_not_connected`: registrar como limitación de precedencia, no interpretar como un uso exitoso.
+- **blue_flute:** curación real del sueño con objeto en mochila; reusable, cantidad intacta. Sin sueño y con objeto se rechaza por `item_has_no_effect`; sin objeto se rechaza por `item_not_owned`. Se verificará en CI.
+- **black_flute:** no hay ruta de alteración autoritativa de encuentros; uso directo vuelve `field_effect_not_connected` sin gasto.
+- **escape_rope:** no hay ruta autorizada de navegación/destino de mapa; uso directo vuelve `field_effect_not_connected` sin gasto.
 
-## Pruebas Godot y Python
+## Pruebas reales
 
-La función `_block_02` usa `service_for()` del entorno real y `FieldItemService.use_item`. Recorre 3 objetos, estado normal y dormido, inventario 0/2; exige rechazo y mismo snapshot de criatura, mochila y relojes. Comprueba además roundtrip `PlayerInventory.to_dict/from_dict`, bloqueo de campo, inventario corrupto y objetivo ajeno, todos sin consumo ni efecto. La condición dormida protege contra una falsa curación por Flauta Azul.
+La suite Godot llama a `FieldItemService.use_item` con estado dormido/no dormido y existencias 0/2, comprueba el efecto positivo y persistencia de cantidad en Flauta Azul; para todas las pruebas negativas exige snapshot sin mutaciones, campo bloqueado, inventario corrupto y objetivo ajeno. Un roundtrip `PlayerInventory.from_dict(to_dict())` comprueba la persistencia básica de mochila, **no SaveV2 integral**.
 
-El auditor Python exige los IDs y fuentes reales, comprobaciones de integridad, rechazos, serialización y fuente de selección. **La prueba de roundtrip de mochila es únicamente evidencia del inventario, no de un efecto de campo ni del guardado integral SaveV2**.
+Python verifica la existencia del perfil con cura de sueño no consumible, el enrutamiento funcional y los contratos de dependencias. Los bloques 01 y 02 son acumulativos y CAMP003 se regresiona en el workflow oficial.
 
-## Dependencias para IA6
+**Estado:** Flauta Azul `FUNCIONAL_PENDIENTE_CI`; Flauta Negra y Cuerda Huida `DEPENDENCIA_COMPARTIDA`. **CI de bloque02 pendiente** en el último SHA de pruebas/fixture.
 
-- **Flauta Negra:** fuente de modificaciones de encuentros y duración/persistencia, no un equipable ficticio.
-- **Flauta Azul:** servicio de curación de sueño, elegibilidad y consumo según referencia escogida.
-- **Cuerda Huida:** destino seguro, mapa y transición persistente.
-- En los tres casos, decidir responsabilidades y API de sesión antes de editar producción compartida.
+## Frontera con IA6
 
-**Estado previsto si CI pasa:** `DEPENDENCIA_COMPARTIDA` con rechazo seguro y preservación de inventario comprobados; **no** `FUNCIONAL_VERIFICADO`.
-
-**Regresión:** el workflow mantiene CAMP003 y las pruebas del bloque 01 de CAMP004. No se han modificado módulos de producción, main, V28, workflows, catálogo ni ramas ajenas.
+La conexión de Flauta Negra con encuentros y Cuerda Huida con mapa y guardado son cambios de subsistemas compartidos; no se ha modificado producción. No se ha inventado efecto pasivo o persistencia de posición. `main`, V28, workflows, política, datos y ramas ajenas intactos.
