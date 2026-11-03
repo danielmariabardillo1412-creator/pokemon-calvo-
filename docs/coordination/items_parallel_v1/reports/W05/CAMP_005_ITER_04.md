@@ -1,3 +1,5 @@
+> **CI DEFINITIVA VERIFICADA — BLOQUE 04/10 (2026-11-03):** [GitHub Actions #41720191745](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41720191745), SHA funcional `fc87f105b9f5b979d7f5dc6f0f73f5b026dbca48`, job `126210891293`, `completed/success`. Recibos reales de log: `CAMP005_W05_MANIFEST_PASS reserved=10 completed=4 ids=60 kind=NEW_IDS`, `CAMP005_W05_PY PASS blocks=4 checks=232`, `CAMP005_GATE_PY_PASS worker=W05 blocks=4 checks=232`, `CAMP005_W05_GODOT PASS blocks=4 checks=876`, `CAMP005_GATE_GODOT_PASS worker=W05 blocks=4 checks=876`. **24/24 MT de CAMP005 cubiertas por pruebas funcionales headless.** Las regresiones completas CAMP004/003 no se ejecutaron en este bloque por política del workflow; deben ejecutarse en el siguiente hito 05/10. Este veredicto posterior prevalece sobre notas históricas inferiores de CI pendiente. Sin modificaciones de producción ni rebaja de aserciones.
+
 # IA5/W05 — CAMPAÑA_005 · ITER_04/10
 
 **Estado de publicación: EN_CI_AUTOMATICA.** No se atribuye PASS funcional hasta verificar el run y recibos Python/Godot.
