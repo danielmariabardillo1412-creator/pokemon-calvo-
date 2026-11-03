@@ -1,3 +1,17 @@
+# ESTADO VIGENTE IA5/W05 — CAMPAÑA_005 · 03/10 PUBLICADOS · CI PENDIENTE (2026-11-03)
+
+**Identidad fija:** IA5/W05, MT/libros. **Rama exclusiva activa:** `codex/calvo-items-20261103-w05-camp005`. Gate IA6 `CAMPAIGN_005_W05_GATE.md`, cola `CAMPAIGN_005_W05_QUEUE_APPROVED.csv`, encargo `campaigns/CAMP_005_W05.md` y `AUTONOMOUS_REPAIR_V5.md`. Este estado prevalece sobre el histórico posterior. CAMPAÑAS_004 y 003 preservadas como regresiones, sin repeticiones.
+
+**BLOQUE 03 PUBLICADO:** `tm154;tm155;tm156;tm157;tm158;tm159` → `hydro_cannon;frenzy_plant;outrage;overheat;focus_blast;leaf_storm` según perfil Scarlet/Violet. Fixture acumulado 3 bloques/18 MT, commit `6787fc68b75cc996ba868370655dc3a881e2fbbd`. CSV `reports/W05/CAMP_005_PROGRESO.csv` con fila 03 `EN_CI_AUTOMATICA`, commit `245b77936642d59990cde21471c86c2c5491dd7f`. Informe `CAMP_005_ITER_03.md`, commit `7f400f8cacf5b4b68e18da402607b51c5de107f6`. Comparación estática: 18 IDs únicos, 3 bloques y filas, todos en cola IA6 y mapeo SV exactos; no equivale a prueba funcional. No se ha modificado código de producción ni runners.
+
+**CI BLOQUES 01–02 VALIDADA:** [Actions #41718416082](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41718416082), `completed/success`, SHA `83d89ccc862e2035181e7a0136c6256d73e9d063`; Python `CAMP005_W05_PY PASS blocks=2 checks=116`, Godot `CAMP005_W05_GODOT PASS blocks=2 checks=446`, ambos gates PASS.
+
+**CI BLOQUE 03 INICIALMENTE PENDIENTE:** [Actions #41719102271](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41719102271) sobre SHA de progreso `245b77936642d59990cde21471c86c2c5491dd7f`, en primera consulta `pending`. Run del fixture #41719079083 puede cancelarse por política de concurrencia; no confundir con fallo. Acreditar 18 MT solo con `completed/success`, recibos `CAMP005_W05_PY PASS blocks=3`, `CAMP005_W05_GODOT PASS blocks=3` y ambos gates. Workflow ejecuta CAMP004/CAMP003 como regresiones en hitos 05/10 o al cambiar producción, no en este bloque.
+
+**SIGUIENTE `p`:** comprobar CI bloque 03; si success, ejecutar únicamente bloque **04** `tm160;tm161;tm162;tm163;tm164;tm165`. Si failure, leer logs, reparar defectos W05 con V5 y CI real sin relajar pruebas; elevar conflicto compartido, política global o ACL denegada real. No tocar `main`, V28, PR118, árbitra, otras ramas, catálogo/learnsets canónicos, políticas, 19 legacy, saves o workflows; sin merge. Al 10/10 declarar `CAMPAÑA_005_FINALIZADA` y STOP. CI headless no verifica UI/GPU.
+
+---
+
 # ESTADO VIGENTE IA5/W05 — CAMPAÑA_005 · 02/10 CI PASS VERIFICADA (2026-11-03)
 
 **Rama exclusiva:** `codex/calvo-items-20261103-w05-camp005`, trabajadora IA5/W05, dominio MT/libros. Autoridad de IA6 `CAMPAIGN_005_W05_GATE.md`, `CAMPAIGN_005_W05_QUEUE_APPROVED.csv`, `campaigns/CAMP_005_W05.md` y `AUTONOMOUS_REPAIR_V5.md`. Esta cabecera sustituye las anteriores sobre CI pendiente; CAMPAÑAS_004/003 siguen cerradas y preservadas como regresión.
