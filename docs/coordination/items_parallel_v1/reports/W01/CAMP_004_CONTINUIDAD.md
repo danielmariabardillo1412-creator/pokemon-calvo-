@@ -187,3 +187,22 @@ La segunda CI #41613512888 devolvió `content_policy` al abrir los tres controle
 - Verificar CI `CAMP004_W01_PY PASS blocks=10` y `CAMP004_W01_GODOT PASS blocks=10`, puertas y `completed/success`. **Muy importante:** workflow existente activa automáticamente la **regresión integral CAMP003** para hito 10, exigiendo `CAMP003_W01_PY PASS blocks=10` y `CAMP003_W01_GODOT PASS blocks=10` en el mismo job. No certificar sin ambas.
 - Si CI falla, revisar logs y reparar conforme V5, manteniendo cobertura completa. El problema heredado SaveV2 a mitad de carga de Rayo Solar sigue abierto para IA6. La ejecución headless no verifica rendimiento de GPU ni integración global.
 - Tras CI positiva, certificar B10 en cuaderno e informe, comunicar `CAMPAÑA_004_FINALIZADA` y **STOP**. CSV B10 puede cerrarse con commit documental en el siguiente paso sin necesidad de desencadenar otra CI, pero nunca certificar resultados inexistentes.
+
+## CERTIFICACIÓN FINAL — CAMPAÑA_004_FINALIZADA
+
+CI [#41733777992](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41733777992) **completed/success**; SHA de pruebas `9770b71a7f7c6d5e9b6e93eeaef81e96d42a094b`.
+
+Recibos observados en el job oficial:
+- `CAMP004_W01_MANIFEST_PASS reserved=10 completed=10 ids=30`
+- `CAMP004_W01_PY PASS blocks=10 checks=1028` y `CAMP004_GATE_PY_PASS worker=W01 blocks=10 checks=1028`
+- `CAMP004_W01_GODOT PASS blocks=10 checks=16816` y `CAMP004_GATE_GODOT_PASS worker=W01 blocks=10 checks=16816`
+- `CAMP003_W01_PY PASS blocks=10 checks=806` (regresión completa)
+- `CAMP003_W01_GODOT PASS blocks=10 checks=12392` (regresión completa)
+
+**Resultado verificado:** 10/10 microbloques; 30 equipables; 79 escenarios; 185 pares caso-semilla; 555 variantes de equipamiento. Prueba funcional nativa y SaveV2 de estados estables. Ninguna reducción de cobertura anterior. No se ha editado código de producción, main, V28 ni otras ramas.
+
+**Cierre administrativo:** el CSV 10/10 se certifica en un commit exclusivamente documental posterior al SHA probado, evitando repetir por metadatos la CI ya aprobada. El commit de cierre usa `[skip ci]` y NO constituye una ejecución adicional; la evidencia válida es el run #41733777992 sobre el SHA anterior. Si IA6 necesita checks obligatorios sobre el HEAD documental, debe solicitar reejecución explícita.
+
+**Incidencia residual escalada a IA6:** la proyección SaveV2 de Rayo Solar durante el turno de carga intermedio (bloque 03) no está resuelta; los tests estabilizan esa secuencia para la restauración. La CI headless no acredita test visual/GPU, integración en main/V28 ni retorno al mapa. La rama W01 queda lista para inspección y consolidación independiente por IA6, sin fusionar desde esta conversación.
+
+**Estado: `CAMPAÑA_004_FINALIZADA`. STOP.** No ejecutar nuevos bloques ni campañas sin autorización de IA6.
