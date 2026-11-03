@@ -3,7 +3,8 @@
   "campaign": "CAMP_003",
   "worker": "W02",
   "completed_blocks": [
-    1
+    1,
+    2
   ],
   "format": "gen9calvounifiedv1",
   "level": 100,
@@ -144,6 +145,132 @@
           "confuses": false
         }
       ]
+    },
+    {
+      "block": "02",
+      "ids": [
+        "charti_berry",
+        "chilan_berry",
+        "chople_berry",
+        "coba_berry"
+      ],
+      "source_evidence": [
+        "tools/item_audit/held_effect_sweep_v2.cjs"
+      ],
+      "cases": [
+        {
+          "scenario": "charti_matching_c003",
+          "id": "charti_berry",
+          "kind": "resist_type",
+          "nature": "hardy",
+          "start": "full",
+          "status": "",
+          "actor_species": "charizard",
+          "foe_species": "mew",
+          "foe_move": "smack_down",
+          "consumes": true,
+          "confuses": false,
+          "expected_type": "rock"
+        },
+        {
+          "scenario": "charti_nonmatching_c003",
+          "id": "charti_berry",
+          "kind": "resist_type",
+          "nature": "hardy",
+          "start": "full",
+          "status": "",
+          "actor_species": "charizard",
+          "foe_species": "mew",
+          "foe_move": "tackle",
+          "consumes": false,
+          "confuses": false,
+          "expected_type": "rock"
+        },
+        {
+          "scenario": "chilan_matching_c003",
+          "id": "chilan_berry",
+          "kind": "resist_type",
+          "nature": "hardy",
+          "start": "full",
+          "status": "",
+          "actor_species": "mew",
+          "foe_species": "mew",
+          "foe_move": "tackle",
+          "consumes": true,
+          "confuses": false,
+          "expected_type": "normal"
+        },
+        {
+          "scenario": "chilan_nonmatching_c003",
+          "id": "chilan_berry",
+          "kind": "resist_type",
+          "nature": "hardy",
+          "start": "full",
+          "status": "",
+          "actor_species": "mew",
+          "foe_species": "mew",
+          "foe_move": "surf",
+          "consumes": false,
+          "confuses": false,
+          "expected_type": "normal"
+        },
+        {
+          "scenario": "chople_matching_c003",
+          "id": "chople_berry",
+          "kind": "resist_type",
+          "nature": "hardy",
+          "start": "full",
+          "status": "",
+          "actor_species": "snorlax",
+          "foe_species": "mew",
+          "foe_move": "brick_break",
+          "consumes": true,
+          "confuses": false,
+          "expected_type": "fighting"
+        },
+        {
+          "scenario": "chople_nonmatching_c003",
+          "id": "chople_berry",
+          "kind": "resist_type",
+          "nature": "hardy",
+          "start": "full",
+          "status": "",
+          "actor_species": "snorlax",
+          "foe_species": "mew",
+          "foe_move": "tackle",
+          "consumes": false,
+          "confuses": false,
+          "expected_type": "fighting"
+        },
+        {
+          "scenario": "coba_matching_c003",
+          "id": "coba_berry",
+          "kind": "resist_type",
+          "nature": "hardy",
+          "start": "full",
+          "status": "",
+          "actor_species": "venusaur",
+          "foe_species": "mew",
+          "foe_move": "aerial_ace",
+          "consumes": true,
+          "confuses": false,
+          "expected_type": "flying"
+        },
+        {
+          "scenario": "coba_nonmatching_c003",
+          "id": "coba_berry",
+          "kind": "resist_type",
+          "nature": "hardy",
+          "start": "full",
+          "status": "",
+          "actor_species": "venusaur",
+          "foe_species": "mew",
+          "foe_move": "tackle",
+          "consumes": false,
+          "confuses": false,
+          "expected_type": "flying"
+        }
+      ]
     }
   ],
   "limitations": [
@@ -151,6 +278,7 @@
     "Aguav usa naturaleza Naughty que reduce Defensa Especial y rechaza amargo.",
     "Apicot mejora Defensa Especial (spd) cuando PS bajan.",
     "Aspear cura congelación; Babiri reduce Acero supereficaz sobre Clefable.",
-    "Pruebas históricas son precedentes, no PASS de este fixture."
+    "Pruebas históricas son precedentes, no PASS de este fixture.",
+    "Bloque 02: testigos correspondientes a Roca/Normal/Lucha/Volador. Chilan reduce Normal incluso sin supereficacia."
   ]
 }
