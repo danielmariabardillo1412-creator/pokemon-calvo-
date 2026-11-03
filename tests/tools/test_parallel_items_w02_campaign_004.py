@@ -1198,6 +1198,277 @@ EXPECTED_06 = json.loads(r'''[
 EXPECTED_IDS_06 = ["full_restore","heal_powder","hopo_berry","hyper_potion"]
 SOURCES_06 = ["modules/inventory/imported_recovery_v19.json","modules/inventory/field_item_effects.gd","modules/inventory/field_item_service.gd","data/api/v2/item/2278/index.json","docs/current/ITEM_FIELD_V8.csv.txt"]
 
+EXPECTED_07 = json.loads(r'''[
+  {
+    "scenario": "ice_heal_freeze_c004",
+    "id": "ice_heal",
+    "kind": "field_medicine",
+    "start_hp": "full",
+    "status": "freeze",
+    "confused": false,
+    "applies": true,
+    "heal_amount": 0,
+    "cures_status": true,
+    "cures_confusion": false
+  },
+  {
+    "scenario": "ice_heal_freeze_confusion_preserved_c004",
+    "id": "ice_heal",
+    "kind": "field_medicine",
+    "start_hp": "full",
+    "status": "freeze",
+    "confused": true,
+    "applies": true,
+    "heal_amount": 0,
+    "cures_status": true,
+    "cures_confusion": false
+  },
+  {
+    "scenario": "ice_heal_poison_reject_c004",
+    "id": "ice_heal",
+    "kind": "field_medicine",
+    "start_hp": "full",
+    "status": "poison",
+    "confused": false,
+    "applies": false,
+    "heal_amount": 0,
+    "cures_status": false,
+    "cures_confusion": false
+  },
+  {
+    "scenario": "ice_heal_burn_reject_c004",
+    "id": "ice_heal",
+    "kind": "field_medicine",
+    "start_hp": "full",
+    "status": "burn",
+    "confused": false,
+    "applies": false,
+    "heal_amount": 0,
+    "cures_status": false,
+    "cures_confusion": false
+  },
+  {
+    "scenario": "ice_heal_healthy_reject_c004",
+    "id": "ice_heal",
+    "kind": "field_medicine",
+    "start_hp": "full",
+    "status": "",
+    "confused": false,
+    "applies": false,
+    "heal_amount": 0,
+    "cures_status": false,
+    "cures_confusion": false
+  },
+  {
+    "scenario": "lava_cookie_burn_c004",
+    "id": "lava_cookie",
+    "kind": "field_medicine",
+    "start_hp": "full",
+    "status": "burn",
+    "confused": false,
+    "applies": true,
+    "heal_amount": 0,
+    "cures_status": true,
+    "cures_confusion": false
+  },
+  {
+    "scenario": "lava_cookie_toxic_c004",
+    "id": "lava_cookie",
+    "kind": "field_medicine",
+    "start_hp": "full",
+    "status": "badly_poisoned",
+    "confused": false,
+    "applies": true,
+    "heal_amount": 0,
+    "cures_status": true,
+    "cures_confusion": false
+  },
+  {
+    "scenario": "lava_cookie_sleep_c004",
+    "id": "lava_cookie",
+    "kind": "field_medicine",
+    "start_hp": "full",
+    "status": "sleep",
+    "confused": false,
+    "applies": true,
+    "heal_amount": 0,
+    "cures_status": true,
+    "cures_confusion": false,
+    "expect_sleep_clock_clear": true
+  },
+  {
+    "scenario": "lava_cookie_freeze_c004",
+    "id": "lava_cookie",
+    "kind": "field_medicine",
+    "start_hp": "full",
+    "status": "freeze",
+    "confused": false,
+    "applies": true,
+    "heal_amount": 0,
+    "cures_status": true,
+    "cures_confusion": false
+  },
+  {
+    "scenario": "lava_cookie_confusion_c004",
+    "id": "lava_cookie",
+    "kind": "field_medicine",
+    "start_hp": "full",
+    "status": "",
+    "confused": true,
+    "applies": true,
+    "heal_amount": 0,
+    "cures_status": false,
+    "cures_confusion": true
+  },
+  {
+    "scenario": "lava_cookie_poison_confusion_c004",
+    "id": "lava_cookie",
+    "kind": "field_medicine",
+    "start_hp": "full",
+    "status": "poison",
+    "confused": true,
+    "applies": true,
+    "heal_amount": 0,
+    "cures_status": true,
+    "cures_confusion": true
+  },
+  {
+    "scenario": "lava_cookie_healthy_reject_c004",
+    "id": "lava_cookie",
+    "kind": "field_medicine",
+    "start_hp": "full",
+    "status": "",
+    "confused": false,
+    "applies": false,
+    "heal_amount": 0,
+    "cures_status": false,
+    "cures_confusion": false
+  },
+  {
+    "scenario": "lemonade_half_hp_c004",
+    "id": "lemonade",
+    "kind": "field_medicine",
+    "start_hp": "half",
+    "status": "",
+    "confused": false,
+    "applies": true,
+    "heal_amount": 70,
+    "cures_status": false,
+    "cures_confusion": false
+  },
+  {
+    "scenario": "lemonade_missing7_c004",
+    "id": "lemonade",
+    "kind": "field_medicine",
+    "start_hp": "missing_7",
+    "status": "",
+    "confused": false,
+    "applies": true,
+    "heal_amount": 70,
+    "cures_status": false,
+    "cures_confusion": false
+  },
+  {
+    "scenario": "lemonade_full_reject_c004",
+    "id": "lemonade",
+    "kind": "field_medicine",
+    "start_hp": "full",
+    "status": "",
+    "confused": false,
+    "applies": false,
+    "heal_amount": 70,
+    "cures_status": false,
+    "cures_confusion": false
+  },
+  {
+    "scenario": "lemonade_half_poison_preserved_c004",
+    "id": "lemonade",
+    "kind": "field_medicine",
+    "start_hp": "half",
+    "status": "poison",
+    "confused": false,
+    "applies": true,
+    "heal_amount": 70,
+    "cures_status": false,
+    "cures_confusion": false
+  },
+  {
+    "scenario": "lumiose_galette_poison_c004",
+    "id": "lumiose_galette",
+    "kind": "field_medicine",
+    "start_hp": "full",
+    "status": "poison",
+    "confused": false,
+    "applies": true,
+    "heal_amount": 0,
+    "cures_status": true,
+    "cures_confusion": false
+  },
+  {
+    "scenario": "lumiose_galette_toxic_c004",
+    "id": "lumiose_galette",
+    "kind": "field_medicine",
+    "start_hp": "full",
+    "status": "badly_poisoned",
+    "confused": false,
+    "applies": true,
+    "heal_amount": 0,
+    "cures_status": true,
+    "cures_confusion": false
+  },
+  {
+    "scenario": "lumiose_galette_sleep_c004",
+    "id": "lumiose_galette",
+    "kind": "field_medicine",
+    "start_hp": "full",
+    "status": "sleep",
+    "confused": false,
+    "applies": true,
+    "heal_amount": 0,
+    "cures_status": true,
+    "cures_confusion": false,
+    "expect_sleep_clock_clear": true
+  },
+  {
+    "scenario": "lumiose_galette_confusion_c004",
+    "id": "lumiose_galette",
+    "kind": "field_medicine",
+    "start_hp": "full",
+    "status": "",
+    "confused": true,
+    "applies": true,
+    "heal_amount": 0,
+    "cures_status": false,
+    "cures_confusion": true
+  },
+  {
+    "scenario": "lumiose_galette_poison_confusion_c004",
+    "id": "lumiose_galette",
+    "kind": "field_medicine",
+    "start_hp": "full",
+    "status": "poison",
+    "confused": true,
+    "applies": true,
+    "heal_amount": 0,
+    "cures_status": true,
+    "cures_confusion": true
+  },
+  {
+    "scenario": "lumiose_galette_healthy_reject_c004",
+    "id": "lumiose_galette",
+    "kind": "field_medicine",
+    "start_hp": "full",
+    "status": "",
+    "confused": false,
+    "applies": false,
+    "heal_amount": 0,
+    "cures_status": false,
+    "cures_confusion": false
+  }
+]''')
+EXPECTED_IDS_07 = ["ice_heal","lava_cookie","lemonade","lumiose_galette"]
+SOURCES_07 = ["modules/inventory/imported_recovery_v19.json","modules/inventory/field_item_effects.gd","modules/inventory/field_item_service.gd","tests/gameplay/item_field_effects_v4.gd"]
+
 
 class ContractError(ValueError):
     pass
@@ -1338,6 +1609,22 @@ def verify(fixture, queue, progress, chk):
                 seen.add(actual["scenario"])
             chk.demand(seen == {row["scenario"] for row in EXPECTED_06},
                        "Bloque 06 no cubre todos sus casos")
+        elif i == 6:
+            chk.demand(block["ids"] == EXPECTED_IDS_07 and block["family"] == "MEDICINE",
+                       "IDs o familia del bloque 07 distintos de cola IA6")
+            chk.demand(block["source_evidence"] == SOURCES_07,
+                       "Fuentes del bloque 07 modificadas")
+            chk.demand(len(block["cases"]) == len(EXPECTED_07),
+                       "Bloque 07 carece de los 22 escenarios esperados")
+            seen = set()
+            for actual, expected in zip(block["cases"], EXPECTED_07):
+                chk.demand(type(actual) is dict and actual == expected,
+                           "Escenario de medicina 07 distinto: " + str(expected["scenario"]))
+                chk.demand(actual["scenario"] not in seen,
+                           "Escenario 07 duplicado")
+                seen.add(actual["scenario"])
+            chk.demand(seen == {x["scenario"] for x in EXPECTED_07},
+                       "Cobertura 07 no contiene todos los escenarios")
         else:
             raise ContractError("No hay contrato específico de bloque futuro")
     return len(progress)
@@ -1447,6 +1734,23 @@ def verify_sources(chk):
     chk.demand(any(line.startswith("hopo_berry,hopo-berry,MEDICINE,FIELD_USE_NOT_CONNECTED,NOT_CERTIFIED")
                    for line in inventory.splitlines()),
                "Inventario histórico no acredita dependencia de Hopo")
+    expected_07_profiles = {
+        "ice_heal": {"cure": ["frz"]},
+        "lava_cookie": {"confusion": True, "cure": "all"},
+        "lemonade": {"heal": 70},
+        "lumiose_galette": {"confusion": True, "cure": "all"},
+    }
+    for item, expected in expected_07_profiles.items():
+        chk.demand(profile["items"][item]["effect"] == expected
+                   and profile["items"][item]["consume"] is True,
+                   "Perfil real de medicina 07 distinto: " + item)
+    chk.demand('"frz": "freeze"' in effects and
+               'STATUS.get(code) == status' in effects and
+               'creature.status_state.remove_volatile(&"confusion")' in effects and
+               'creature.recover_hp(amount)' in effects,
+               "Motor de congelación/confusión/HP no conserva ruta nativa")
+    chk.demand('"ice_heal": "freeze"' in old,
+               "Regresión de Antihielo histórica ausente")
 
 
 def negative_controls(fixture, queue, progress, chk):
@@ -1529,6 +1833,22 @@ def negative_controls(fixture, queue, progress, chk):
             lambda f: f["blocks"][5]["cases"][14].update({"kind": "field_medicine"}),
             lambda f: f["blocks"][5]["cases"][17].update({"heal_amount": 60}),
             lambda f: f["blocks"][5]["cases"][19].update({"cures_status": True}),
+        ])
+    if len(fixture["blocks"]) >= 7:
+        edits.extend([
+            lambda f: f["blocks"][6]["ids"].append("full_heal"),
+            lambda f: f["blocks"][6]["cases"].pop(),
+            lambda f: f["blocks"][6]["source_evidence"].pop(),
+            lambda f: f["blocks"][6]["cases"][0].update({"cures_status": False}),
+            lambda f: f["blocks"][6]["cases"][1].update({"cures_confusion": True}),
+            lambda f: f["blocks"][6]["cases"][3].update({"applies": True}),
+            lambda f: f["blocks"][6]["cases"][8].update({"cures_status": False}),
+            lambda f: f["blocks"][6]["cases"][9].update({"cures_confusion": False}),
+            lambda f: f["blocks"][6]["cases"][13].update({"heal_amount": 30}),
+            lambda f: f["blocks"][6]["cases"][14].update({"applies": True}),
+            lambda f: f["blocks"][6]["cases"][18].update({"expect_sleep_clock_clear": False}),
+            lambda f: f["blocks"][6]["cases"][20].update({"cures_confusion": False}),
+            lambda f: f["blocks"][6]["cases"][21].update({"applies": True}),
         ])
     for i, edit in enumerate(edits):
         altered = copy.deepcopy(fixture)
