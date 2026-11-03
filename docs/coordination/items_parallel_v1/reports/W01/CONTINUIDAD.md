@@ -1,3 +1,18 @@
+# CUADERNO VIGENTE — IA1/W01 · CAMPAÑA_003 (2026-11-03)
+
+## ACTUALIZACIÓN VIGENTE — IA1 W01 / CAMPAÑA_003 BLOQUE 01
+
+**Identidad:** IA1/W01; rama exclusiva `codex/calvo-items-20261103-w01-camp003`, nacida del SHA `41c1efeba0346349490f863131179ed7a8fc274c`. **Campaña ACTIVADA 10 bloques** por IA6 y usuario. Autoridad: `CAMPAIGN_GATE_003.md` blob `390f7ce6897462e1ae8e3cc7e3cd5f799b6c2213`; `CAMPAIGN_003_BRANCH_MANIFEST.md` blob `9b797b4d32fbab022e12d580e46b10f063f5690f`; encargo `campaigns/CAMP_003_W01.md` blob `b638d5525b0aec87dd730b5573a99cca53c0522e`; cola aprobada `CAMPAIGN_003_QUEUE_APPROVED.csv` blob `ea06a0a000fc4f3b8bab48e45e21fb549d753559`. No mezclar ramas CAMP001/002; el texto histórico que sigue NO es asignación vigente.
+
+**Avance:** `01/10` bloque 01 publicado; siguiente bloque autorizado con otra `p` es **02**, IDs `blunder_policy;booster_energy;cell_battery`. Si CI FAIL, corregir solo test propio o STOP por problema compartido, nunca pasar a 02 bajo fallo real.
+- **Bloque 01:** `air_balloon`, `assault_vest`, `binding_band`. Globo y Chaleco ya tienen CI histórica: registrar `YA_VERIFICADO_NO_DUPLICAR`; Banda tiene evidencia de residual `held_effect_sweep_v3.cjs`. No han sido reprogramados; hay **nuevas pruebas nativas** de integración y SaveV2 de los tres.
+- **Archivos de prueba de esta campaña:** `tests/fixtures/parallel_items/w01_campaign_003.json` (7 escenarios, 10 pares-semilla, 30 variantes), `tests/gameplay/parallel_items_w01_campaign_003.gd`, `tests/tools/test_parallel_items_w01_campaign_003.py`. El CSV `reports/W01/CAMP_003_PROGRESO.csv` tiene una fila. Informe `reports/W01/CAMP_003_ITER_01.md`. Commits respectivos `36baab52`, `3ab97738`, `c374c1ed`, `f9316279`, informe `4e5900c0`.
+- **Test del bloque:** `Native` usa motor `@pkmn/sim`; _fixture equipa con `FieldItemService`; controles activo/ausente/reserva, restricción Chaleco/PS Globo/trampa Banda, lectura y restauración SaveV2 con `_restore_probe`. Python fija cola, campos, hashes y contratos de la fixture. CI workflow por rama es propiedad de IA6.
+- **Pruebas:** auditoría estática de blobs 16/16 PASS. Última CI al escribir [#41553771307](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41553771307), SHA `f9316279e97564f7b12ff71ad0692f572881afa2`: `EN_CI_AUTOMATICA`, sin PASS confirmado hasta revisar conclusión. Los runs intermedios sin progreso 01 solo certifican bootstrap. Godot headless no prueba interfaz/GPU, mapa, otros eventos.
+- **Reglas siguientes:** cada `p` uno de los bloques 02..10 siguiendo fila exacta de cola/progreso. No inventar nuevos IDs, no modificar V28, main, PR #118, producción (`modules/`, `data/`, `config/`) ni otras W, ni tocar workflow/manifest. Después de 10/10 `CAMPAÑA_003_FINALIZADA` y STOP. IA4 no participa.
+
+---
+
 # W01 — CUADERNO DE CONTINUIDAD
 
 ## Identidad y autoridad
