@@ -145,6 +145,24 @@
         "policy_neutral",
         "policy_no_hit"
       ]
+    },
+    {
+      "block": "09",
+      "ids": [
+        "white_herb",
+        "wise_glasses",
+        "zoom_lens"
+      ],
+      "cases": [
+        "herb_shell_smash",
+        "herb_growl",
+        "herb_no_drop",
+        "glasses_confusion",
+        "glasses_tackle",
+        "glasses_reflect",
+        "zoom_slower",
+        "zoom_faster"
+      ]
     }
   ],
   "format": "gen9calvounifiedv1",
@@ -1137,6 +1155,146 @@
         19
       ],
       "history": "held_effect_sweep_v2:weakness_policy_no_hit_control"
+    },
+    {
+      "block": "09",
+      "id": "herb_shell_smash",
+      "item_id": "white_herb",
+      "op": "white_herb_self_drop",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "own_move": "shell_smash",
+      "foe_move": "amnesia",
+      "seeds": [
+        19,
+        23
+      ],
+      "history": "held_pilot:white_herb_shell_smash"
+    },
+    {
+      "block": "09",
+      "id": "herb_growl",
+      "item_id": "white_herb",
+      "op": "white_herb_external_drop",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "own_move": "reflect",
+      "foe_move": "growl",
+      "seeds": [
+        19
+      ],
+      "history": "held_pilot:white_herb_stat_drop"
+    },
+    {
+      "block": "09",
+      "id": "herb_no_drop",
+      "item_id": "white_herb",
+      "op": "white_herb_no_trigger",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "own_move": "reflect",
+      "foe_move": "amnesia",
+      "seeds": [
+        19
+      ],
+      "history": "held_pilot:white_herb_no_drop"
+    },
+    {
+      "block": "09",
+      "id": "glasses_confusion",
+      "item_id": "wise_glasses",
+      "op": "wise_glasses_special",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "own_move": "confusion",
+      "foe_move": "amnesia",
+      "seeds": [
+        19,
+        23
+      ],
+      "history": "held_effect_sweep_v2:wise_glasses_category_boost"
+    },
+    {
+      "block": "09",
+      "id": "glasses_tackle",
+      "item_id": "wise_glasses",
+      "op": "wise_glasses_physical",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "own_move": "tackle",
+      "foe_move": "amnesia",
+      "seeds": [
+        19
+      ],
+      "history": "held_effect_sweep_v2:wise_glasses_physical_control"
+    },
+    {
+      "block": "09",
+      "id": "glasses_reflect",
+      "item_id": "wise_glasses",
+      "op": "wise_glasses_status",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "own_move": "reflect",
+      "foe_move": "amnesia",
+      "seeds": [
+        19
+      ],
+      "history": "held_effect_sweep_v2:wise_glasses_status_control"
+    },
+    {
+      "block": "09",
+      "id": "zoom_slower",
+      "item_id": "zoom_lens",
+      "op": "zoom_lens_slower_accuracy",
+      "actor_species": "mew",
+      "foe_species": "gengar",
+      "own_move": "hydro_pump",
+      "foe_move": "amnesia",
+      "seeds": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24
+      ],
+      "history": "held_effect_sweep_v3:zoom_lens_slower_accuracy"
+    },
+    {
+      "block": "09",
+      "id": "zoom_faster",
+      "item_id": "zoom_lens",
+      "op": "zoom_lens_faster_control",
+      "actor_species": "gengar",
+      "foe_species": "snorlax",
+      "own_move": "hydro_pump",
+      "foe_move": "amnesia",
+      "seeds": [
+        19,
+        23,
+        31,
+        37
+      ],
+      "history": "held_effect_sweep_v3:zoom_lens_faster_no_boost"
     }
   ]
 }

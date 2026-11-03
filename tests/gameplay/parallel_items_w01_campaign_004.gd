@@ -13,6 +13,9 @@ var c004_dice_four: int = 0
 var c004_dice_five: int = 0
 var c004_scope_lens_exclusive: int = 0
 var c004_scope_lens_critical: int = 0
+var c004_zoom_exclusive_hits: int = 0
+var c004_zoom_other_seeds: int = 0
+var c004_zoom_baseline_misses: int = 0
 
 func _initialize() -> void:
 	capture = false
@@ -58,8 +61,8 @@ func _run_w01_c004() -> void:
 	check("Tres controles de equipamiento", fixture.get("variants") == ["active", "none", "reserve"])
 	var progress: Array = _progress_c004()
 	var completed: int = progress.size()
-	check("Bloques W01 01 a 08 autorizados", completed == 8)
-	if completed != 8:
+	check("Bloques W01 01 a 09 autorizados", completed == 9)
+	if completed != 9:
 		quit(2)
 		return
 	check("Fila 01 e IDs exactos de árbitra", String(progress[0].block) == "01"
@@ -78,13 +81,15 @@ func _run_w01_c004() -> void:
 		and String(progress[6].ids) == "sticky_barb;terrain_extender;throat_spray")
 	check("Fila 08 e IDs exactos de árbitra", String(progress[7].block) == "08"
 		and String(progress[7].ids) == "toxic_orb;utility_umbrella;weakness_policy")
+	check("Fila 09 e IDs exactos de árbitra", String(progress[8].block) == "09"
+		and String(progress[8].ids) == "white_herb;wise_glasses;zoom_lens")
 	var ids_for_block: Dictionary = {}
 	var ids: PackedStringArray = PackedStringArray()
 	for row_progress: Dictionary in progress:
 		ids_for_block[String(row_progress.block)] = String(row_progress.ids).split(";")
 		ids.append_array(ids_for_block[String(row_progress.block)])
 	var cases: Array = fixture.get("cases", [])
-	check("Sesenta y dos escenarios autorizados", cases.size() == 62)
+	check("Setenta escenarios autorizados", cases.size() == 70)
 	var names: Array = []
 	for row: Dictionary in cases:
 		check("Escenario pertenece a bloque autorizado",
@@ -114,7 +119,7 @@ func _run_w01_c004() -> void:
 				"seed": int(value), "checks": checks - before_checks,
 				"status": "PASS" if errors.size() == before_errors else "FAIL",
 				"observed": observed})
-	check("Matriz exacta de 137 pares caso-semilla", c004_rows.size() == 137)
+	check("Matriz exacta de 173 pares caso-semilla", c004_rows.size() == 173)
 	for id: String in ids:
 		check("ID cubierto " + id, cases.any(func(case): return String(case.item_id) == id))
 	check("Puño Suerte demuestra al menos un crítico específico de Chansey", c004_lucky_exclusive > 0)
@@ -127,6 +132,10 @@ func _run_w01_c004() -> void:
 		c004_scope_lens_exclusive > 0)
 	check("Periscopio: registra críticos nativos reales",
 		c004_scope_lens_critical > 0)
+	check("Telescopio: al menos un fallo base convertido en acierto real",
+		c004_zoom_exclusive_hits > 0)
+	check("Telescopio: rama RNG donde no cambia resultado", c004_zoom_other_seeds > 0)
+	check("Telescopio: testigo de fallo real sin equipar", c004_zoom_baseline_misses > 0)
 	var report := {"schema_version": 1, "campaign": "CAMP_004", "worker": "W01",
 		"blocks": completed, "checks": checks, "errors": errors,
 		"lucky_punch_exclusive_critical_witnesses": c004_lucky_exclusive,
@@ -134,6 +143,9 @@ func _run_w01_c004() -> void:
 		"loaded_dice_four_hits": c004_dice_four, "loaded_dice_five_hits": c004_dice_five,
 		"scope_lens_exclusive_crit_witnesses": c004_scope_lens_exclusive,
 		"scope_lens_native_crit_witnesses": c004_scope_lens_critical,
+		"zoom_lens_exclusive_hit_witnesses": c004_zoom_exclusive_hits,
+		"zoom_lens_no_activation_witnesses": c004_zoom_other_seeds,
+		"zoom_lens_baseline_misses": c004_zoom_baseline_misses,
 		"cases": c004_rows,
 		"limits": ["Godot headless sin prueba visual/GPU", "Solo especies y semillas declaradas",
 			"Sin certificación de integración global a main, V28 o mapa"]}
@@ -353,7 +365,8 @@ func _compare_c004(row: Dictionary, observed: Dictionary) -> void:
 		var triggered_consumable: bool = (String(row.op) in [
 			"misty_seed_terrain", "power_herb_skip_charge", "psychic_seed_terrain",
 			"room_service_activated", "snowball_ice_trigger", "throat_spray_sound_trigger",
-			"sticky_barb_transfer", "weakness_policy_super_effective"])
+			"sticky_barb_transfer", "weakness_policy_super_effective",
+			"white_herb_self_drop", "white_herb_external_drop"])
 		check("Unidades físicas coherentes con activación " + mode,
 			x.physical_units == (1 if mode == "active" and triggered_consumable else 2))
 	var a: Dictionary = observed.active
@@ -362,7 +375,8 @@ func _compare_c004(row: Dictionary, observed: Dictionary) -> void:
 	var should_consume: bool = (String(row.op) in [
 		"misty_seed_terrain", "power_herb_skip_charge", "psychic_seed_terrain",
 		"room_service_activated", "snowball_ice_trigger", "throat_spray_sound_trigger",
-		"sticky_barb_transfer", "weakness_policy_super_effective"])
+		"sticky_barb_transfer", "weakness_policy_super_effective",
+			"white_herb_self_drop", "white_herb_external_drop"])
 	check("Consumo exacto por activación, reserva y ausencia intactas",
 		bool(a.after.own_consumed) == should_consume
 		and not r.after.reserve_consumed
@@ -738,6 +752,82 @@ func _compare_c004(row: Dictionary, observed: Dictionary) -> void:
 				and int(r.after.boosts.get("atk", 0)) == 0)
 			check("Seguro Debilidad: sin disparador no se consume",
 				String(a.after.native_item) == "weaknesspolicy"
+				and not a.after.own_consumed and a.physical_units == 2)
+		"white_herb_self_drop":
+			check("Hierba Blanca: Rompecoraza mantiene subidas +2 Ataque y Ataque Especial",
+				int(a.after.boosts.get("atk", 0)) == 2 and int(a.after.boosts.get("spa", 0)) == 2
+				and int(a.after.boosts.get("spe", 0)) == 2
+				and int(n.after.boosts.get("atk", 0)) == 2 and int(r.after.boosts.get("atk", 0)) == 2)
+			check("Hierba Blanca: restaura dos bajadas de Rompecoraza solo portador",
+				int(a.after.boosts.get("def", 0)) == 0
+				and int(a.after.boosts.get("spd", 0)) == 0
+				and int(n.after.boosts.get("def", 0)) == -1
+				and int(n.after.boosts.get("spd", 0)) == -1
+				and int(r.after.boosts.get("def", 0)) == -1
+				and int(r.after.boosts.get("spd", 0)) == -1)
+			check("Hierba Blanca: consume únicamente al restaurar bajadas",
+				a.after.own_consumed and a.physical_units == 1 and r.physical_units == 2)
+		"white_herb_external_drop":
+			check("Hierba Blanca: neutraliza reducción de Ataque por Gruñido rival",
+				int(a.after.boosts.get("atk", 0)) == 0
+				and int(n.after.boosts.get("atk", 0)) == -1
+				and int(r.after.boosts.get("atk", 0)) == -1)
+			check("Hierba Blanca: se consume al retirar bajada externa",
+				a.after.own_consumed and a.physical_units == 1 and r.physical_units == 2)
+		"white_herb_no_trigger":
+			check("Hierba Blanca: sin bajada no se activa ni cambia stats",
+				int(a.after.boosts.get("atk", 0)) == 0
+				and int(n.after.boosts.get("atk", 0)) == 0
+				and int(r.after.boosts.get("atk", 0)) == 0)
+			check("Hierba Blanca: sin bajada conserva objeto",
+				String(a.after.native_item) == "whiteherb"
+				and not a.after.own_consumed and a.physical_units == 2)
+		"wise_glasses_special":
+			check("Gafas Especiales: aumenta daño de Confusión solo portador",
+				a.damage > n.damage and n.damage > 0 and n.damage == r.damage)
+			check("Gafas Especiales: daño especial no consume el equipo",
+				String(a.after.native_item) == "wiseglasses"
+				and not a.after.own_consumed and a.physical_units == 2)
+		"wise_glasses_physical":
+			check("Gafas Especiales: Placaje no recibe bonificación especial",
+				a.damage > 0 and a.damage == n.damage and n.damage == r.damage)
+			check("Gafas Especiales: daño físico mantiene objeto",
+				not a.after.own_consumed and a.physical_units == 2)
+		"wise_glasses_status":
+			check("Gafas Especiales: Reflejo no causa daño ni activa poder",
+				a.damage == 0 and n.damage == 0 and r.damage == 0)
+			check("Gafas Especiales: estado no consume objeto",
+				not a.after.own_consumed and a.physical_units == 2)
+		"zoom_lens_slower_accuracy":
+			check("Telescopio: Mew realmente actúa después de Gengar",
+				String(a.after.first_move_actor) == "foe"
+				and String(n.after.first_move_actor) == "foe"
+				and String(r.after.first_move_actor) == "foe")
+			check("Telescopio: nunca falla Hydro Pump si controles acertarían",
+				(not a.after.missed or n.after.missed)
+				and bool(n.after.missed) == bool(r.after.missed))
+			check("Telescopio: controles sin objeto/reserva mantienen resultado y daño",
+				int(n.damage) == int(r.damage))
+			check("Telescopio: no se consume al modificar precisión",
+				String(a.after.native_item) == "zoomlens"
+				and not a.after.own_consumed and a.physical_units == 2)
+			if bool(n.after.missed):
+				c004_zoom_baseline_misses += 1
+			if not bool(a.after.missed) and bool(n.after.missed):
+				c004_zoom_exclusive_hits += 1
+			else:
+				c004_zoom_other_seeds += 1
+		"zoom_lens_faster_control":
+			check("Telescopio: Gengar realmente actúa antes de Snorlax",
+				String(a.after.first_move_actor) == "own"
+				and String(n.after.first_move_actor) == "own"
+				and String(r.after.first_move_actor) == "own")
+			check("Telescopio: al actuar primero no altera precisión",
+				bool(a.after.missed) == bool(n.after.missed)
+				and bool(n.after.missed) == bool(r.after.missed))
+			check("Telescopio: al actuar primero conserva potencia/consumo",
+				a.damage == n.damage and n.damage == r.damage
+				and String(a.after.native_item) == "zoomlens"
 				and not a.after.own_consumed and a.physical_units == 2)
 		_:
 			check("Operación fuera del contrato de bloque", false)
