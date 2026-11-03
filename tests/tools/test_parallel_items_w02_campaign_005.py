@@ -529,6 +529,9 @@ def verify_sources(chk):
     old_ability = HIST_ABILITY.read_text(encoding="utf-8")
     old_growth = HIST_GROWTH.read_text(encoding="utf-8")
     old_pp = HIST_PP.read_text(encoding="utf-8")
+    training = TRAINING.read_text(encoding="utf-8")
+    friendship = FRIENDSHIP.read_text(encoding="utf-8")
+    historic_training = HIST_TRAINING.read_text(encoding="utf-8")
     for fragment in (
         'item_id in [&"ability_capsule", &"ability_patch"]',
         'destination = 2 if current == 1 else 1',
@@ -566,6 +569,37 @@ def verify_sources(chk):
         'original',
     ):
         chk.demand(fragment in runner, "Runner real o recibos incompletos: " + fragment)
+    for fragment in (
+        'var count := 3 if item_id == &"pp_max" else before_count + 1',
+        'var new_max := base_pp + base_pp * count / 5',
+        'slot.current_pp += added',
+        'if before_count == 3:',
+    ):
+        chk.demand(fragment in pp, "PP Max contrato nativo distinto: " + fragment)
+    for fragment in (
+        '"hp_up": "hp"',
+        '"protein": "attack"',
+        '"iron": "defense"',
+        'ProgressionRuleset.EV_PER_STAT_MAX - old_ev',
+        'ProgressionRuleset.EV_TOTAL_MAX - total',
+        'creature.recalculate_stats(',
+        'Friendship.increase(creature, [5, 3, 2]',
+        '"action": "ev_training"',
+    ):
+        chk.demand(fragment in training, "Vitaminas contrato nativo distinto: " + fragment)
+    for fragment in ('gains[mini(2, creature.friendship / 100)]',
+                     'creature.friendship = mini(255, before + gain)'):
+        chk.demand(fragment in friendship, "Tramos de amistad modificados")
+    for fragment in (
+        'elif String(spec.kind) == "vitamin":',
+        'var expected_evs: Dictionary = start_evs.duplicate(true)',
+        'StatCalculator.compute(',
+        'var friendship_added: int = [5, 3, 2][tier]',
+    ):
+        chk.demand(fragment in runner, "Arnés vitamina incompleto: " + fragment)
+    for fragment in ('&"hp_up"', '&"iron"', '&"pp_max"', '&"protein"'):
+        chk.demand(fragment in historic_training,
+                   "Regresión previa entrenamiento ausente: " + fragment)
     for old, token in (
         (old_ability, 'TRANSITIONS'),
         (old_growth, 'rare_candy'),
@@ -592,6 +626,24 @@ def negative_controls(fixture, queue, progress, chk):
         lambda v: v["blocks"][0]["cases"][15].update({"applies": True}),
         lambda v: v["blocks"][0]["cases"][17].update({"slot": 0}),
     ]
+    if len(fixture["blocks"]) >= 2:
+        mutations.extend([
+            lambda v: v["blocks"][1]["ids"].append("zinc"),
+            lambda v: v["blocks"][1]["source_evidence"].pop(),
+            lambda v: v["blocks"][1]["cases"].pop(),
+            lambda v: v["blocks"][1]["cases"][0].update({"expected_boosts": 1}),
+            lambda v: v["blocks"][1]["cases"][1].update({"boosts": 3}),
+            lambda v: v["blocks"][1]["cases"][3].update({"applies": True}),
+            lambda v: v["blocks"][1]["cases"][5].update({"slot": 0}),
+            lambda v: v["blocks"][1]["cases"][6].update({"expected_ev_gain": 5}),
+            lambda v: v["blocks"][1]["cases"][7].update({"start_ev": 242}),
+            lambda v: v["blocks"][1]["cases"][8].update({"applies": True}),
+            lambda v: v["blocks"][1]["cases"][9].update({"expected_ev_gain": 10}),
+            lambda v: v["blocks"][1]["cases"][10].update({"applies": True}),
+            lambda v: v["blocks"][1]["cases"][12].update({"stat": "hp"}),
+            lambda v: v["blocks"][1]["cases"][18].update({"stat": "attack"}),
+            lambda v: v["blocks"][1]["cases"][23].update({"applies": True}),
+        ])
     for index, mutation in enumerate(mutations):
         altered = copy.deepcopy(fixture)
         mutation(altered)
