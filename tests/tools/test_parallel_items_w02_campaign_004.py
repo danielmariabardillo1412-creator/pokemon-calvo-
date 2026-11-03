@@ -2681,6 +2681,23 @@ def verify_sources(chk):
                "Regresión histórica Antiparalizador/Poción ausente")
 
 
+    expected_10_profiles = {
+        "shalour_sable": {"confusion": True, "cure": "all"},
+        "soda_pop": {"heal": 50},
+        "super_potion": {"heal": 60},
+        "sweet_heart": {"heal": 20},
+    }
+    for item, expected in expected_10_profiles.items():
+        chk.demand(profile["items"][item]["effect"] == expected
+                   and profile["items"][item]["consume"] is True,
+                   "Perfil real de medicina 10 diferente: " + item)
+    chk.demand('"super_potion": 60' in old
+               and 'creature.recover_hp(amount)' in effects
+               and 'creature.status_state.remove_volatile(&"confusion")' in effects
+               and 'if creature.to_dict() == before: return deny("item_has_no_effect")' in effects,
+               "Contratos HP/estado/rechazo y regresion Super Potion ausentes")
+
+
 def negative_controls(fixture, queue, progress, chk):
     edits = [
         lambda f: f.update({"worker": "W03"}),
