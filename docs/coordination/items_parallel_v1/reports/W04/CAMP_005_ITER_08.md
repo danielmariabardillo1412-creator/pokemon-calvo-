@@ -71,3 +71,11 @@ La ejecución ha comprobado que el compañero sigue bajo propiedad del jugador, 
 El CSV fue actualizado a `DEPENDENCIA_DOCUMENTADA`, `ci_run=41742831349`, commit `4552e5f826f45a0c91123552cc2d180498be49cf`; por modificar progreso se desencadena una nueva ejecución CI que se debe comprobar independientemente. La fila 04 se conserva sin reescribir por la denegación anterior.
 
 **Bloque 08/10 cerrado funcionalmente como dependencia pendiente de fusión reversible y SaveV2.** Próxima `p`: únicamente bloque 09/10.
+
+## Segunda CI08: progreso consolidado aprobado
+
+[GitHub Actions #41743093192](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41743093192), SHA `4552e5f826f45a0c91123552cc2d180498be49cf`, terminó **completed/success** sobre el CSV ya clasificado `DEPENDENCIA_DOCUMENTADA`. Recibos comprobados directamente en el log: `CAMP005_W04_MANIFEST_PASS reserved=10 completed=8 ids=46 kind=FUNCTIONAL_BACKLOG`; `CAMP005_W04_PY PASS blocks=8 checks=498`; `CAMP005_W04_GODOT PASS blocks=8 checks=950`. Las seis parejas conservan `status=DEPENDENCIA_DOS_CRIATURAS`; la integración de fusiones positivas y reversibles sigue pendiente.
+
+Las regresiones históricas CAMP004/CAMP003/CAMP001 se mostraron como `skipped` en esta ejecución de bloque 08: **no** afirmar que se ejecutaron. Los ocho bloques de CAMP005 sí se ejecutaron acumulativamente.
+
+**Bloque 08/10 cerrado y validado como dependencia técnica.** Mantener fila04 intacta por el bloqueo de conciliación previo y no iniciar bloque09 sin nueva `p`.
