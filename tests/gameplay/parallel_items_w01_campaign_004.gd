@@ -281,7 +281,7 @@ func _probe_w01_c004(row: Dictionary, seed: int, mode: String) -> Dictionary:
 			restored_physical += 1
 	check(mode + " unidades físicas idénticas tras SaveV2", restored_physical == physical)
 	var smoke_outcome: Dictionary = {}
-	if String(row.op) in ["smoke_ball_escape_trapped", "smoke_ball_escape_normal", "smoke_ball_klutz_suppressed"]:
+	if String(row.op) in ["smoke_ball_escape_trapped", "smoke_ball_escape_normal", "smoke_ball_magic_room_suppressed"]:
 		# Llamada REAL AdventureSession.flee tras restauración, no se crea
 		# una probabilidad ni se imita el motor. Mal de Ojo da un control
 		# negativo determinista (huida normal bloqueada sin gastar RNG).
@@ -559,13 +559,17 @@ func _compare_c004(row: Dictionary, observed: Dictionary) -> void:
 			check("Bola Humo: no inventar garantía si ausente o en reserva",
 				not n.smoke_outcome.smoke_flag and not r.smoke_outcome.smoke_flag
 				and not n.smoke_native_active and not r.smoke_native_active)
-		"smoke_ball_klutz_suppressed":
-			check("Bola Humo: Torpeza invalida actividad incluso equipada",
+		"smoke_ball_magic_room_suppressed":
+			check("Bola Humo: Espacio Magico suprime la actividad del objeto",
 				not a.smoke_native_active and not n.smoke_native_active and not r.smoke_native_active)
-			check("Bola Humo: Torpeza y Mal de Ojo impiden huida garantizada",
-				a.trapped_after_first and not a.smoke_outcome.smoke_flag
-				and a.smoke_outcome.escape_blocked and a.smoke_outcome.battle_active
-				and n.smoke_outcome.battle_active and r.smoke_outcome.battle_active)
+			check("Bola Humo: Espacio Magico obliga a usar algoritmo normal de huida",
+				not a.smoke_outcome.smoke_flag and not n.smoke_outcome.smoke_flag
+				and not r.smoke_outcome.smoke_flag
+				and a.smoke_outcome.command_accepted and n.smoke_outcome.command_accepted
+				and r.smoke_outcome.command_accepted
+				and not a.smoke_outcome.attempts_unchanged
+				and not n.smoke_outcome.attempts_unchanged
+				and not r.smoke_outcome.attempts_unchanged)
 		"smoke_ball_no_trigger":
 			check("Bola Humo: un turno de Reflejo no activa la huida",
 				a.smoke_native_active and not n.smoke_native_active and not r.smoke_native_active

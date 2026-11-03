@@ -104,3 +104,7 @@ CI #41602085941 falló exclusivamente en validador Python: `CAMP004_W01_PY FAIL:
 ### Reparación bloque 06 V5 — primer Godot rojo
 
 Run #41611257621: Python 588 PASS, Godot 9670 checks/4 errores, todos ligados a `smoke_klutz_negative` al abrir Mew con `klutz`. Los demás 42 escenarios no registraron aserciones fallidas. Reparación: reemplazar Mew por Woobat, portador natural de Torpeza, y registrar `session.last_error` al fallar `begin_wild`. Se conserva la prueba de supresión en presencia de trampa; no afirmar causa ni PASS antes de reejecutar. Motor de producción intacto.
+
+## Bloque 06: reparación excluyendo Torpeza prohibida
+
+La segunda CI #41613512888 devolvió `content_policy` al abrir los tres controles de `smoke_klutz_negative`. La regla canónica `config/randomlock_content_v1.json` excluye `klutz`; cambiar Mew por Woobat no la autorizaba. No alterar la política. El control de supresión W01 se traslada a `magic_room` nativo del rival: `smoke_magic_room_negative`, ausencia de actividad del objeto y huida normal mediante `flee`. No se retiran otros casos, semillas ni variantes. Pendiente nueva CI sobre commit de reparación.

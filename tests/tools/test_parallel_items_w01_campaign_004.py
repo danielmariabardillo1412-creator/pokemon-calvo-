@@ -63,7 +63,7 @@ EXPECTED = {
     "shell_no_trap": ("shed_shell", "shed_shell_no_trap_control", "mew", "reflect", "", (19,)),
     "smoke_look_escape": ("smoke_ball", "smoke_ball_escape_trapped", "mew", "reflect", "", (19, 23)),
     "smoke_plain_escape": ("smoke_ball", "smoke_ball_escape_normal", "mew", "reflect", "", (19,)),
-    "smoke_klutz_negative": ("smoke_ball", "smoke_ball_klutz_suppressed", "woobat", "reflect", "", (19,)),
+    "smoke_magic_room_negative": ("smoke_ball", "smoke_ball_magic_room_suppressed", "mew", "reflect", "", (19,)),
     "smoke_no_run": ("smoke_ball", "smoke_ball_no_trigger", "mew", "reflect", "", (19,)),
     "sandstorm_duration": ("smooth_rock", "weather_duration", "mew", "sandstorm", "", (19, 23)),
     "sandstorm_no_weather": ("smooth_rock", "no_weather", "mew", "reflect", "", (19,)),
@@ -77,16 +77,16 @@ BLOCK_03_CASES = {"dice_bullet_seed", "dice_tackle_control", "misty_seed_trigger
                   "misty_seed_wrong_terrain", "power_herb_solar_beam", "power_herb_noncharge"}
 BLOCK_04_CASES = {"psychic_seed_trigger", "psychic_seed_wrong_terrain", "punching_glove_boost", "punching_glove_tackle", "punching_glove_water", "ring_gengar_normal", "ring_charizard_ground", "ring_levitate_immune"}
 BLOCK_05_CASES = {"service_trick_room", "service_no_room", "scope_focus_crit", "scope_no_damage_control", "shell_mean_look", "shell_no_trap"}
-BLOCK_06_CASES = {"smoke_look_escape", "smoke_plain_escape", "smoke_klutz_negative", "smoke_no_run", "sandstorm_duration", "sandstorm_no_weather", "snowball_ice_hit", "snowball_water_hit", "snowball_no_hit"}
+BLOCK_06_CASES = {"smoke_look_escape", "smoke_plain_escape", "smoke_magic_room_negative", "smoke_no_run", "sandstorm_duration", "sandstorm_no_weather", "snowball_ice_hit", "snowball_water_hit", "snowball_no_hit"}
 BLOCK_04_FOE_ITEMS = {"punching_glove_boost": "rocky_helmet", "punching_glove_tackle": "rocky_helmet", "punching_glove_water": "rocky_helmet"}
-BLOCK_04_ABILITIES = {"ring_levitate_immune": "levitate", "smoke_klutz_negative": "klutz"}
+BLOCK_04_ABILITIES = {"ring_levitate_immune": "levitate"}
 EXPECTED_FOE_MOVES = {"weight_grass_knot": "grass_knot", "weight_tackle_control": "tackle",
                       "misty_seed_trigger": "misty_terrain", "misty_seed_wrong_terrain": "electric_terrain",
                       "psychic_seed_trigger": "psychic_terrain", "psychic_seed_wrong_terrain": "electric_terrain",
                       "ring_gengar_normal": "tackle", "ring_charizard_ground": "earthquake",
                       "ring_levitate_immune": "earthquake",
                       "service_trick_room": "trick_room", "shell_mean_look": "mean_look",
-                      "smoke_look_escape": "mean_look", "smoke_klutz_negative": "mean_look",
+                      "smoke_look_escape": "mean_look", "smoke_magic_room_negative": "magic_room",
                       "snowball_ice_hit": "powder_snow", "snowball_water_hit": "water_gun"}
 MODES = ("active", "none", "reserve")
 CHECKS = 0

@@ -98,7 +98,7 @@
       "cases": [
         "smoke_look_escape",
         "smoke_plain_escape",
-        "smoke_klutz_negative",
+        "smoke_magic_room_negative",
         "smoke_no_run",
         "sandstorm_duration",
         "sandstorm_no_weather",
@@ -728,17 +728,16 @@
     {
       "block": "06",
       "foe_species": "mew",
-      "id": "smoke_klutz_negative",
+      "id": "smoke_magic_room_negative",
       "item_id": "smoke_ball",
-      "op": "smoke_ball_klutz_suppressed",
-      "actor_species": "woobat",
-      "actor_ability": "klutz",
+      "op": "smoke_ball_magic_room_suppressed",
+      "actor_species": "mew",
       "own_move": "reflect",
-      "foe_move": "mean_look",
+      "foe_move": "magic_room",
       "seeds": [
         19
       ],
-      "history": "opencode_world_held_v2:smoke_klutz_negative"
+      "history": "opencode_world_held_v2:smoke_magic_room_negative"
     },
     {
       "block": "06",
