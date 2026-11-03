@@ -105,7 +105,7 @@ def main() -> int:
                 scope = rows(ROOT / "docs/current/RANDOMLOCK_ITEMS_BUILD_SCOPE_V2.csv")
                 chosen = {r["id"]: r for r in scope}
                 test(all(chosen[id]["familia"] == "FIELD_USE" and
-                         chosen[id]["estado"] == "SELECCIONADO" for id in ids),
+                         chosen[id]["estado_contenido"] == "SELECCIONADO" for id in ids),
                      "Campo no seleccionado o cambió familia")
                 test(all(id in connections["holdable_ids"] for id in
                          ["black_flute", "blue_flute"]),
