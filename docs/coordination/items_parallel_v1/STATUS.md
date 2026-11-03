@@ -1,3 +1,11 @@
+# IA6 — REVISIÓN DE PROGRESO CAMP003 2026-11-03
+
+**Comprobación GitHub:** IA1 04/10 (`eject_pack;electric_seed;focus_band`, CI nueva en curso), IA2 04/10 publicados y comenzó pruebas de 05/10 (CI nueva en curso), IA3 04/10 (`level_ball;nest_ball`) CI [#41558471582](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41558471582) **SUCCESS**, 122 checks Python + 490 Godot; IA4 02/10 (Sol, Oval, Mineral Negro) CI [#41556682246](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41556682246) **SUCCESS** 29 Python + 54 Godot, dependencia Piedra Oval correctamente sin resolver; IA5 05/10 MT, última CI en curso (04/10 había pasado). Ver [decisión IA4 para seguir con `p`](CAMPAIGN_003_W04_ITER02_REVIEW.md). Ninguna IA tiene 10/10.
+
+**Regla:** no pedir permisos administrativos cada microbloque; `p` avanza un bloque de la cola ya autorizada si independiente. Una dependencia documentada NO se convierte en PASS funcional ni exige detener toda la familia si el siguiente bloque es autónomo. CI in_progress ≠ FAIL. Un FAIL real con raíz en producción/contratos compartidos sí exige STOP. Sin cambios a `main`, V28 ni ramas ajenas.
+
+---
+
 # IA6 — 2026-11-03: CAMPAÑA_003 AMPLIADA A CINCO IAs
 
 **Corrección obligatoria del estado:** W04 sí está **recuperada y disponible**; había completado CAMP001 03/03 y pasó CI 559/0 en [#41538151097](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41538151097). Su antiguo informe `PENDIENTE_CI` es histórico. A petición del usuario se reincorpora a CAMP003 con [gate específico](CAMPAIGN_003_W04_ADDENDUM_GATE.md), [10 bloques/30 IDs nuevos](CAMPAIGN_003_W04_ADDENDUM_QUEUE.csv) y rama nueva `codex/calvo-items-20261103-w04-camp003`. [CI #41554077520](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41554077520) confirma `completed/success` de la **configuración W04 0/10**, NO funcional. Un primer run #41553918508 falló por dos nombres de pasos YAML sin comillas y fue corregido antes del SUCCESS.
