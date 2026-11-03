@@ -1,3 +1,15 @@
+# ESTADO VIGENTE IA5/W05 — CAMPAÑA_005 · 03/10 CI PASS VERIFICADA (2026-11-03)
+
+**Rama propia:** `codex/calvo-items-20261103-w05-camp005`. Identidad IA5/W05, dominio MT/libros. Gate y cola IA6: `CAMPAIGN_005_W05_GATE.md`, `CAMPAIGN_005_W05_QUEUE_APPROVED.csv`, `campaigns/CAMP_005_W05.md`, protocolo `AUTONOMOUS_REPAIR_V5.md`. Esta cabecera prevalece sobre estados históricos inferiores; CAMP004 y CAMP003 se conservan cerradas como regresión.
+
+**BLOQUE 03 CERTIFICADO:** `tm154;tm155;tm156;tm157;tm158;tm159` → `hydro_cannon;frenzy_plant;outrage;overheat;focus_blast;leaf_storm` en SV. Fixture `tests/fixtures/parallel_items/w05_campaign_005.json`, 3 bloques/18 MT, commit `6787fc68b75cc996ba868370655dc3a881e2fbbd`; progreso `reports/W05/CAMP_005_PROGRESO.csv` con tercera fila `EN_CI_AUTOMATICA`, commit `245b77936642d59990cde21471c86c2c5491dd7f`. Informe `CAMP_005_ITER_03.md` actualizado con recibos reales, commit `9941439e5851dd51e506f8ba294d4cb327162b13`. Validación estática de 18 IDs únicos, tres filas y movimientos iguales a cola IA6/perfil SV. Sin cambios de producción ni de arnés.
+
+**CI FUNCIONAL PASS:** [#41719102271](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41719102271), SHA funcional `245b77936642d59990cde21471c86c2c5491dd7f`, job `126207313857`, `completed/success`: `CAMP005_W05_PY PASS blocks=3 checks=174`, `CAMP005_GATE_PY_PASS worker=W05 blocks=3 checks=174`, `CAMP005_W05_GODOT PASS blocks=3 checks=661`, `CAMP005_GATE_GODOT_PASS worker=W05 blocks=3 checks=661`. Tests de enseñanza real con compatible/incompatible, stock, propietario, consumo exacto, PP, repetición, identidad y SaveV2; no se certifica UI/GPU. Regresiones CAMP004 y CAMP003 se ejecutan por workflow en hitos 05 y 10 o al modificar producción, **no en este bloque 03**. Las etiquetas `EN_CI_AUTOMATICA` del CSV son históricas y no se editan solo para declarar PASS.
+
+**SIGUIENTE `p`:** ejecutar exclusivamente bloque **04** `tm160;tm161;tm162;tm163;tm164;tm165`; antes cotejar con cola y perfil SV y estado de rama, agregar un solo bloque a fixture y una fila CSV, ejecutar CI. Ante fallo, investigar y autorreparar defecto W05 según V5 sin relajar pruebas; escalar solo conflicto compartido o permisos reales denegados. No tocar `main`, V28, PR118, árbitra, otras W, catálogos/learnsets canónicos, políticas, 19 MT históricas inactivas, guardados ni workflows. Sin merge; al 10/10 `CAMPAÑA_005_FINALIZADA` y STOP.
+
+---
+
 # ESTADO VIGENTE IA5/W05 — CAMPAÑA_005 · 03/10 PUBLICADOS · CI PENDIENTE (2026-11-03)
 
 **Identidad fija:** IA5/W05, MT/libros. **Rama exclusiva activa:** `codex/calvo-items-20261103-w05-camp005`. Gate IA6 `CAMPAIGN_005_W05_GATE.md`, cola `CAMPAIGN_005_W05_QUEUE_APPROVED.csv`, encargo `campaigns/CAMP_005_W05.md` y `AUTONOMOUS_REPAIR_V5.md`. Este estado prevalece sobre el histórico posterior. CAMPAÑAS_004 y 003 preservadas como regresiones, sin repeticiones.
