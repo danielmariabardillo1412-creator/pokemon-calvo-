@@ -67,8 +67,8 @@
         "escape_rope"
       ],
       "objetivo": "auditar_uso_campo_consecuencia_y_guardado",
-      "current_state": "DEPENDENCIA_COMPARTIDA",
-      "expected_rejection": "field_effect_not_connected",
+      "current_state": "MIXTO_BLUE_FLUTE_FUNCIONAL_BLACK_FLUTE_ESCAPE_ROPE_DEPENDENCIA",
+      "expected_rejection": "field_effect_not_connected_para_black_flute_y_escape_rope",
       "cases": [
         {
           "name": "normal",
@@ -94,8 +94,20 @@
         "overworld_escape_destination",
         "world_position_and_session_transition"
       ],
-      "observed_contract": "FieldItemService.use_item reaches field_effect_not_connected on supported selection without effect executor; no inventory consumed, no creature mutation; PlayerInventory roundtrip preserves quantities but is not proof of a native field-use effect.",
-      "ci_required": true
+      "observed_contract": "Blue Flute recovery profile cures persistent sleep without consuming item, only with item owned; black flute and escape rope remain field_effect_not_connected. All invalid cases preserve state. PlayerInventory roundtrip is not full SaveV2.",
+      "ci_required": true,
+      "per_id_status": {
+        "black_flute": "DEPENDENCIA_COMPARTIDA",
+        "blue_flute": "FUNCIONAL_PENDIENTE_CI",
+        "escape_rope": "DEPENDENCIA_COMPARTIDA"
+      },
+      "blue_flute_reference": {
+        "source": "modules/inventory/imported_recovery_v19.json",
+        "cure": "sleep",
+        "consume": false,
+        "without_sleep": "item_has_no_effect",
+        "without_item": "item_not_owned"
+      }
     }
   ]
 }
