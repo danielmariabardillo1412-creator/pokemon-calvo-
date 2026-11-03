@@ -279,6 +279,68 @@ def main() -> int:
                             "Faltan negativos canónicos de Level/Nest")
                 audit.check(not block["implementation_authorized"] and block["ci_required"],
                             "No existe autorización de producción")
+            elif block["bloque"] == "05":
+                audit.check(ids == ["fast_ball", "dream_ball"], "Reserva 05 alterada")
+                basic = (ROOT / "modules/capture/capture_ball_effects.gd").read_text(encoding="utf-8")
+                rules = (ROOT / "modules/capture/capture_ruleset.gd").read_text(encoding="utf-8")
+                system = (ROOT / "modules/capture/capture_system.gd").read_text(encoding="utf-8")
+                v11 = (ROOT / "tests/gameplay/item_capture_v11.gd").read_text(encoding="utf-8")
+                audit.check('&"fast_ball"' in basic and '&"dream_ball"' in basic,
+                            "Fast y Dream no están ambas en adaptador canónico")
+                audit.check("species.base_speed >= 100" in basic and
+                            "minf(4.0, 255.0 / species.capture_rate)" in basic,
+                            "Fast debe usar base_speed y limitar captura a 255")
+                audit.check('target.status_state.persistent_id == &"sleep"' in basic
+                            and '4.0 if target.status_state.persistent_id' in basic,
+                            "Dream requiere sueño persistente, no Bostezo")
+                audit.check("for id: StringName in BallEffects.IDS:" in rules
+                            and "crs.BallEffects.multiplier(" in system,
+                            "Los efectos no llegan al motor real")
+                audit.check("func _matrix()" in v11 and
+                            'status_state.add_volatile(&"yawn")' in v11,
+                            "Pruebas V11/Yawn históricas ausentes")
+                audit.check('func _block_05(' in runner
+                            and '"05": _block_05(bloque)' in runner
+                            and 'func _block05_capture(' in runner
+                            and 'func _block05_reject(' in runner,
+                            "Falta suite acumulativa de bloque05")
+                audit.check('CAMP003_W03_BASIC_EFFECTS.multiplier(' in runner
+                            and 'CaptureInventoryService.resolve(' in runner
+                            and 'control.randf() < expected' in runner,
+                            "No se ejecuta el servicio de captura y RNG reales")
+                audit.check('target.status_state.add_volatile(&"yawn")' in runner
+                            and 'status(target, &"sleep")' in runner
+                            and 'target.status_state.persistent_id == expected_status' in runner,
+                            "No se prueba diferencia entre Yawn y sueño")
+                audit.check('rng.state == control.state' in runner
+                            and 'rng.state == before_rng' in runner
+                            and 'inv.quantity(id) == 1' in runner
+                            and 'not result.result.consume_item' in runner,
+                            "Falta controlar gastos y RNG en capturas y rechazos")
+                fast = {item["species_id"]: item for item in block["fast_cases"]}
+                audit.check(set(fast) == {"pikachu", "mew", "raichu"},
+                            "Fast debe cubrir 90, 100 y 110 de base_speed")
+                audit.check(fast["pikachu"]["base_speed"] == 90
+                            and fast["pikachu"]["expected_factor"] == 1
+                            and fast["mew"]["base_speed"] == 100
+                            and fast["mew"]["expected_factor"] == 4
+                            and fast["raichu"]["base_speed"] == 110
+                            and fast["raichu"]["capture_rate"] == 75
+                            and fast["raichu"]["expected_factor"] == 3.4,
+                            "Fast altera la frontera 100 o el límite 255")
+                audit.check({item["state"]: (item["expected_factor"], item["status_bonus"])
+                             for item in block["dream_states"]} ==
+                            {"none": (1, 1), "yawn": (1, 1), "sleep": (4, 2)},
+                            "Dream mezcla sueño persistente y volátil")
+                audit.check(set(block["dream_species"]) == {"mew", "caterpie"}
+                            and block["hp_modes"] == ["full", "one_hp"],
+                            "Faltan especies de tasa distinta y PS extremos")
+                audit.check(set(block["invalid_cases"]) ==
+                            {"trainer_battle_not_capturable", "item_not_owned",
+                             "target_knocked_out"}, "Negativos Fast/Dream incompletos")
+                audit.check(block["prior_evidence"]["state"] == "YA_VERIFICADO_NO_DUPLICAR"
+                            and not block["implementation_authorized"],
+                            "La fase no autoriza implementar efectos")
             else:
                 audit.check(False, "Falta contrato incremental específico para " + block["bloque"])
         audit.check(audit.checks > 0, "Sin comprobaciones")
