@@ -1,3 +1,9 @@
+## Resultado del reintento: CI aprobada
+
+[GitHub Actions #41726410961](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41726410961), SHA `0bb581dc9bfe686c38ab1cd9b310b815c33dfe57`, terminó **completed/success**. Recibos: `CAMP005_W03_PY PASS blocks=6 checks=109`, `CAMP005_GATE_PY_PASS`, `CAMP005_W03_GODOT PASS blocks=6 checks=119`, `CAMP005_GATE_GODOT_PASS`. El bloqueo de escritura se resolvió mediante ediciones sucesivas del runner; pruebas y progreso completados. Sigue sin existir integración funcional de repelentes en el mundo.
+
+---
+
 # IA3/W03 — CAMP005 bloque 06: reintento completado y pruebas publicadas
 
 **Reserva:** `repel;super_repel;max_repel`. En el reintento se logró publicar el runner Godot `_block_06` (commit `9ae2821be2e2efda7f97a32e8f28b8d7a3ad4548`) y el auditor Python (commit `ef7cde0aafbeed13ee360ab07306211f23e2aa76`). El bloqueo anterior de actualización ya no afecta a esos dos archivos.
