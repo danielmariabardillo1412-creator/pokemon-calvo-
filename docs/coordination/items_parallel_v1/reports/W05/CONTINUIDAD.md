@@ -1,3 +1,19 @@
+# ESTADO VIGENTE IA5/W05 — CAMPAÑA_004 · 02/10 PUBLICADOS (2026-11-03)
+
+**Identidad:** IA5/W05, familia MT/libros. **Rama exclusiva actual:** `codex/calvo-items-20261103-w05-camp004`. Gate IA6 `CAMPAIGN_004_W05_GATE.md`, `CAMPAIGN_004_W05_QUEUE_APPROVED.csv`, `campaigns/CAMP_004_W05.md`; protocolo de autorreparación V5. Esta cabecera prevalece sobre las anteriores. La CAMP003 está cerrada 10/10 y sus 60 MT de regresión no se repiten ni se alteran.
+
+**BLOQUE 02 entregado:** IDs `tm88;tm89;tm90;tm91;tm92;tm93` con movimientos SV `swords_dance;body_press;spikes;toxic_spikes;imprison;flash_cannon`. Fixture `tests/fixtures/parallel_items/w05_campaign_004.json` ampliado a **2 bloques/12 MT** commit `982c453964bec3c8baad6b12684d2cc78f6a8702`; CSV `reports/W05/CAMP_004_PROGRESO.csv` fila 02 `EN_CI_AUTOMATICA`, commit `fb5cb0433e17d805feb04755eed63b764005e797`; informe `CAMP_004_ITER_02.md` commit `424f2920bd61e9d3e2395398a808565a878b4fc7`.
+
+**Cotejo estático efectuado:** 12 IDs únicos, dos filas de progreso, mismos IDs/orden y movimientos que cola IA6 y perfil Scarlet/Violet sin discrepancias. Los runners propios Python/Godot CAMP004 siguen acumulativos, sin cambios de código; ninguna modificación en producción. Este cotejo no acredita enseñanza de las seis nuevas MT.
+
+**CI bloque 01 VERIFICADA:** [#41571216304](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41571216304) `completed/success` sobre SHA `7d1b5b65da4135dc197a198ab08aa78e1646c84f`; Python `CAMP004_W05_PY PASS blocks=1 checks=58`, Godot `CAMP004_W05_GODOT PASS blocks=1 checks=231`, ambos gates PASS, y regresiones CAMP003 (Python 580 / Godot 2166 comprobaciones para 60 MT) y CAMP002 (11 tests OK).
+
+**CI bloque 02 inicialmente PENDIENTE:** [#41572800181](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41572800181), SHA de progreso `fb5cb0433e17d805feb04755eed63b764005e797`, inicialmente `pending`; run previo de fixture #41572746262 puede cancelarse por concurrencia. Para certificar: `completed/success` y logs `CAMP004_W05_PY PASS blocks=2`, `CAMP004_W05_GODOT PASS blocks=2` con gates y regresiones anteriores. No atribuir `CI_PASS_VERIFICADO` sin estos recibos.
+
+**SIGUIENTE `p`:** primero comprobar CI exacta del bloque 02. Si verde, ejecutar solamente bloque **03** `tm94;tm95;tm96;tm97;tm98;tm99`. Si en curso, solo siguiente bloque independiente sin PASS. Si failure, reparar autónomamente el arnés o defecto propio del perfil/función `teach` con mínimo diff y CI real; conflictos, diseño global o ACL real denegada elevan IA6. Prohibido tocar `main`, V28, PR118, árbitra, otras W, catálogo, políticas, partidas, 19 legacy o workflows. Límite 10/10, entonces `CAMPAÑA_004_FINALIZADA` y STOP. Revisión visual/GPU no certificada.
+
+---
+
 # ESTADO VIGENTE IA5/W05 — CAMPAÑA_004 · 01/10 CI PASS VERIFICADA (2026-11-03)
 
 **Identidad:** IA5/W05, dominio MT/libros. **Única rama activa:** `codex/calvo-items-20261103-w05-camp004`. La puerta `CAMPAIGN_004_W05_GATE.md` y la cola `CAMPAIGN_004_W05_QUEUE_APPROVED.csv` de IA6 habilitan diez bloques nuevos `tm82`–`tm141`, seis por `p`, sin repetir CAMP003; V5 permite reparación de fallos propios demostrados, nunca modificación de otras trabajadoras ni `main`/V28.
