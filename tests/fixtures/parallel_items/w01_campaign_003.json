@@ -589,6 +589,93 @@
         19
       ],
       "history": "new_negative_grassy_seed_no_terrain"
+    },
+    {
+      "block": "06",
+      "id": "grip_trap_seven_turns",
+      "item_id": "grip_claw",
+      "op": "trap_extended_duration",
+      "actor_species": "mew",
+      "foe_species": "snorlax",
+      "foe_move": "amnesia",
+      "own_move": "infestation",
+      "seeds": [
+        19,
+        23
+      ],
+      "history": "held_effect_sweep_v3:grip_claw_partial_trap_duration_seven_turns"
+    },
+    {
+      "block": "06",
+      "id": "grip_no_trapping_move",
+      "item_id": "grip_claw",
+      "op": "trap_no_activation",
+      "actor_species": "mew",
+      "foe_species": "snorlax",
+      "foe_move": "amnesia",
+      "own_move": "tackle",
+      "seeds": [
+        19
+      ],
+      "history": "negative_no_partial_trap"
+    },
+    {
+      "block": "06",
+      "id": "heat_sun_duration",
+      "item_id": "heat_rock",
+      "op": "sun_eight_turns",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "foe_move": "amnesia",
+      "own_move": "sunny_day",
+      "seeds": [
+        19,
+        23
+      ],
+      "history": "held_effect_sweep_v3:heat_rock_weather_duration_plus_three"
+    },
+    {
+      "block": "06",
+      "id": "heat_no_sun",
+      "item_id": "heat_rock",
+      "op": "no_sunny_day",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "foe_move": "amnesia",
+      "own_move": "reflect",
+      "seeds": [
+        19
+      ],
+      "history": "held_effect_sweep_v3:no_weather_retained"
+    },
+    {
+      "block": "06",
+      "id": "boots_rock_switch",
+      "item_id": "heavy_duty_boots",
+      "op": "boots_rock_reentry",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "foe_move": "stealth_rock",
+      "own_move": "reflect",
+      "seeds": [
+        19,
+        23
+      ],
+      "history": "held_pilot.cjs:stealthrock_switch_reserve_switch_actor"
+    },
+    {
+      "block": "06",
+      "id": "boots_no_rock_switch",
+      "item_id": "heavy_duty_boots",
+      "op": "boots_no_rock_control",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "foe_move": "amnesia",
+      "own_move": "reflect",
+      "seeds": [
+        19
+      ],
+      "history": "negative_no_hazard_switch_cycle"
     }
   ]
 }
