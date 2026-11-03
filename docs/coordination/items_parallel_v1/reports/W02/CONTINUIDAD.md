@@ -1,3 +1,17 @@
+# IA2/W02 — CONTINUIDAD VIGENTE: CAMPAÑA_004 BLOQUE 02/10
+
+**Identidad:** IA2/W02, rama única `codex/calvo-items-20261103-w02-camp004`. **Estado:** bloques 01–02 publicados, bloque 01 **CI PASS real** ([run #41573481223](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41573481223) `completed/success`); bloque 02 **EN_CI_AUTOMATICA**, sin atribuir PASS antes de resultados reales. No se modifica CAMP003 10/10 ni `main`, V28, otras ramas, workflow o producción.
+
+**Encargo y control:** arb `CAMPAIGN_004_W02_QUEUE_APPROVED.csv` blob `521f84716cdd043665cefa321a79b9a876517035`, `campaigns/CAMP_004_W02.md` blob `0049bb85210b8caa617771ca01b4ef8bd72894f6`, autonomía V5 blob `ebe71ace6949cc9311eb9831068799081bca8ba7`. Una `p` = exactamente la siguiente fila pendiente; previamente comprobar y, si falla, reparar CI del bloque anterior en la propia rama.
+
+**Bloque 02 publicado:** `qualot_berry;razz_berry;sitrus_berry;tamato_berry`. 12 escenarios × tres variantes = 36 variantes; acumulado 27 escenarios (15+12). Qualot/Tamato EV Defensa/Velocidad -10 y amistad con límites; Sitrus 1/4 HP nativo en combate y bolsa; Razz **NEGATIVO** por ruta de campo no conectada y ausencia de activación al equiparla, se registra **DEPENDENCIA de decisión IA6**, no PASS funcional positivo. Incluye modos active/none/reserve, SaveV2, stock, propietario y recibos SHA256.
+
+**Commits de esta ronda:** fixture `e7176cd1953e215fd9109f569936d3e356080fad`; Python `4ebfd7862dbd2e32d1310746b869f8955f36965c`; Godot `2ff2dbf2f73222c7ab0c1be9330a3e94458b87d6`; CSV `f05c59288b8805fa791f09b652402e3fcc0497ec`; informe ITER02 `8d2963fc83e24ecc17ffedd93f0401b2374a70b7`.
+
+**Próxima acción:** localizar la CI del último SHA de W02 y exigir `CAMP004_W02_PY PASS blocks=2`, `CAMP004_W02_GODOT PASS blocks=2`, regresión `CAMP003_W02_PY/GODOT PASS blocks=10` y gates; si hay sintaxis/contrato de bayas, reparar localmente según V5 sin rebajar negativos. Si pasa, una nueva `p` ejecuta bloque **03/10** (Antidote, Awakening, Berry Juice, Big Malasada); no ejecutar antes por esta misma orden.
+
+---
+
 # IA2/W02 — CONTINUIDAD VIGENTE: CAMPAÑA_004 BLOQUE 01/10
 
 **Rama activa de este chat:** `codex/calvo-items-20261103-w02-camp004`. La antigua `codex/calvo-items-20261103-w02-camp003` queda intacta y fue certificada 10/10 en [#41570972406](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41570972406), Godot 7306 comprobaciones. **No repetir esos 40 IDs.**
