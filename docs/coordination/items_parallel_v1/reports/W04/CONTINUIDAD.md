@@ -93,3 +93,16 @@ Blobs de pruebas al cerrar LOTE_002:
 **Restricciones conservadas:** `main`, V28, producción, catálogo canónico, workflow y ramas ajenas sin tocar. No crear nuevos bloques ni modificar otros objetos. IA6 revisa la integración global y el backlog de dependencias. Al completar 10/10, **W04 se detiene** hasta nuevo encargo oficial. El último documento de referencia del protocolo es `AUTONOMOUS_REPAIR_V5.md` en la rama árbitra.
 
 **Rutas de recuperación:** `tests/gameplay/parallel_items_w04_campaign_003.gd`, `tests/tools/test_parallel_items_w04_campaign_003.py`, `tests/fixtures/parallel_items/w04_campaign_003.json`, `docs/coordination/items_parallel_v1/reports/W04/CAMP_003_PROGRESO.csv` y `CAMP_003_FINAL.md`. Todos los informes ITER_01..ITER_10 permanecen en la misma carpeta.
+
+
+---
+
+## CAMPAÑA_004 — Bloque 01 (2026-11-03)
+
+Esta sección reemplaza exclusivamente la indicación anterior de STOP tras CAMPAÑA_003; **no** borra ni corrige retroactivamente el cierre de CAMP003. Identidad **IA4/W04**, única rama activa de escritura: `codex/calvo-items-20261103-w04-camp004`. Encargo autorizado por IA6: `CAMPAIGN_004_W04_GATE.md`, `CAMPAIGN_004_W04_QUEUE_APPROVED.csv` y `campaigns/CAMP_004_W04.md` en rama árbitra.
+
+**Estado CAMP004:** **01/10 entregado** (`berry_sweet;clover_sweet;flower_sweet`). CI real [#41575404407](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41575404407), PASS: Python 48, Godot 101, regresión CAMP003 Python 120 / Godot 270. Los tres confites están presentes pero tienen **0 registros evolutivos por item en catálogo runtime** y la mecánica canónica de giro de Milcery no tiene ruta positiva soportada. Resultado: `DEPENDENCIA_DOCUMENTADA`; no son tres evoluciones funcionales.
+
+**Rutas de trabajo nuevo:** `tests/gameplay/parallel_items_w04_campaign_004.gd`, `tests/tools/test_parallel_items_w04_campaign_004.py`, `tests/fixtures/parallel_items/w04_campaign_004.json`, `reports/W04/CAMP_004_PROGRESO.csv`, `reports/W04/CAMP_004_ITER_01.md`. Conservar intactos CAMP003 (10/10 y 16 dependencias) y CAMP001 (6 piedras). No editar producción, ramas ajenas ni datasets canónicos sin motivo y límites V5.
+
+**Siguiente orden `p`:** ejecutar únicamente CAMP004 bloque **02/10** `love_sweet;ribbon_sweet;star_sweet`, verificando primero el último run de CI en rama. Seguir los IDs exactos por cola oficial, no anticipar bloques 03–10 ni declarar PASS sin Godot.
