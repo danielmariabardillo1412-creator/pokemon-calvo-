@@ -1,3 +1,23 @@
+# ESTADO DEFINITIVO — CAMPAÑA_004_FINALIZADA · IA5/W05 10/10 · CI PASS (2026-11-03)
+
+**IA5/W05 (MT/libros)** ha terminado oficialmente CAMPAÑA_004: diez microbloques, **60 MT distintas (`tm82` a `tm141`)**, 60/60 validadas funcionalmente. Rama exclusiva `codex/calvo-items-20261103-w05-camp004`. Autoridad de asignación IA6 `CAMPAIGN_004_W05_GATE.md`, `CAMPAIGN_004_W05_QUEUE_APPROVED.csv`, `campaigns/CAMP_004_W05.md`, protocolo `AUTONOMOUS_REPAIR_V5.md`. **Esta cabecera prevalece sobre todas las anotaciones de CI pendiente/STOP antiguas de debajo.**
+
+**CI FINAL VERIFICADA EN LOGS GITHUB:** [Actions #41591821717](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41591821717), SHA `5c9051ca2a0a186d31705372d2f0c350e2dd62db` (commit último progreso y fixture de 60 MT), `completed/success`, job `125770313243`. Recibos exactos:
+- `CAMP004_W05_PY PASS blocks=10 checks=580`
+- `CAMP004_GATE_PY_PASS worker=W05 blocks=10 checks=580`
+- `CAMP004_W05_GODOT PASS blocks=10 checks=2166`
+- `CAMP004_GATE_GODOT_PASS worker=W05 blocks=10 checks=2166`
+- CAMP003, 60 MT anteriores regresionadas: `CAMP003_W05_PY PASS blocks=10 checks=580` y `CAMP003_W05_GODOT PASS blocks=10 checks=2166`.
+- CAMP002: `Ran 11 tests`, `OK`.
+
+**TRAZABILIDAD:** última ampliación de `tests/fixtures/parallel_items/w05_campaign_004.json`, commit `6f1ae6afe42051e9e58b8a5a6e99e83bb343e701`, con bloque `10` y `tm136;tm137;tm138;tm139;tm140;tm141` mapeadas en SV a `electric_terrain;grassy_terrain;psychic_terrain;misty_terrain;nasty_plot;fire_blast`. Última fila de `reports/W05/CAMP_004_PROGRESO.csv` commit `5c9051ca2a0a186d31705372d2f0c350e2dd62db`. Diez bloques de seis IDs, 60 sin duplicados, movimientos exactos respecto a cola aprobada IA6 y perfil canónico. Informes `CAMP_004_ITER_01.md` … `CAMP_004_ITER_10.md` y `CAMP_004_FINAL.md` (certificación commit `2d0b9c07e7aca59965f0e95beb6cc31a637ba212`) publicados. Las etiquetas `EN_CI_AUTOMATICA` del CSV son históricas y no se reescriben para evitar CI innecesaria; prevalece el PASS final comprobado en logs.
+
+**SIN REPARACIONES DE PRODUCCIÓN:** no se encontró fallo funcional en la familia W05 que requiriese parche V5. Los únicos cambios en esta campaña afectan a fixture, progreso e informes/cuaderno propios. No se tocaron `main`, V28, PR118, rama árbitra, otras W, catálogos, políticas, 19 legacy, partidas, workflows o sistemas ajenos. No hay merge. La CI headless prueba lógica y SaveV2 pero **no valida interfaz visual o GPU**.
+
+**SIGUIENTE ACCIÓN Y STOP:** no ejecutar más bloques en CAMP004 ni iniciar campaña nueva solo por una `p`. No hay bloque 11 autorizado. **IA6** debe revisar la entrega, diff y compatibilidad e integrar según sus gates; W05 queda detenido hasta un encargo nuevo explícito. **CAMPAÑA_004_FINALIZADA.**
+
+---
+
 # ESTADO VIGENTE IA5/W05 — CAMPAÑA_004 · 10/10 ENTREGADOS · CI FINAL POR VERIFICAR (2026-11-03)
 
 **Identidad:** IA5/W05, dominio MT/libros; rama exclusiva `codex/calvo-items-20261103-w05-camp004`. El gate `CAMPAIGN_004_W05_GATE.md`, cola `CAMPAIGN_004_W05_QUEUE_APPROVED.csv`, encargo `campaigns/CAMP_004_W05.md` y protocolo `AUTONOMOUS_REPAIR_V5.md` de IA6 son autoridad. Esta cabecera prevalece sobre las anteriores. CAMP003 cerró 10/10, 60 MT; solo se prueba como regresión.
