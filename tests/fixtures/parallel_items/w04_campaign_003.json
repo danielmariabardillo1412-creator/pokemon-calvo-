@@ -36,6 +36,23 @@
         "no_spend_on_rejection",
         "save_v2_if_supported"
       ]
+    },
+    {
+      "block": "03",
+      "ids": [
+        "dragon_scale",
+        "dubious_disc",
+        "electirizer"
+      ],
+      "expected_trigger": "classify_real_records; trade_and_held_item_not_equivalent_to_use_item",
+      "policy": "never_simplify_trade_or_held_item_conditions",
+      "cases": [
+        "catalog_record_classification",
+        "conditional_route_rejection_without_consumption",
+        "positive_evolution_only_when_runtime_supported",
+        "one_consumption_if_supported",
+        "identity_and_savev2_if_supported"
+      ]
     }
   ]
 }
