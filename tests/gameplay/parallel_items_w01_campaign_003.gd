@@ -6,6 +6,8 @@ const W01_C003_OUTPUT := "res://.godot/parallel_items/w01_campaign_003"
 const W01_C003_PROGRESS := "res://docs/coordination/items_parallel_v1/reports/W01/CAMP_003_PROGRESO.csv"
 var w01_c003_rows: Array = []
 var w01_c003_band_survivals: int = 0
+var w01_c003_claw_witnessed: int = 0
+var w01_c003_claw_not_activated: int = 0
 
 func _initialize() -> void:
 	capture = false
@@ -76,11 +78,19 @@ func _run_w01_c003() -> void:
 			if String(row.op) == "random_lethal_survival" and observed.get("active", {}).get("valid", false):
 				if int(observed.active.after.hp) == 1:
 					w01_c003_band_survivals += 1
+			if String(row.op) == "quick_claw_rng" and observed.get("active", {}).get("valid", false):
+				if bool(observed.active.after.quick_claw_activated):
+					w01_c003_claw_witnessed += 1
+				else:
+					w01_c003_claw_not_activated += 1
 			w01_c003_rows.append({"block": stage, "id": String(row.id), "item_id": String(row.item_id),
 				"seed": int(value), "checks": checks - checks_before,
 				"status": "PASS" if errors.size() == errors_before else "FAIL", "observed": observed})
 	if ids_for_block.has("04"):
 		check("Cinta Aguante debe demostrar al menos una supervivencia REAL", w01_c003_band_survivals > 0)
+	if ids_for_block.has("10"):
+		check("Garra Rapida debe demostrar activacion real con RNG nativo", w01_c003_claw_witnessed > 0)
+		check("Garra Rapida debe demostrar rama RNG sin activar", w01_c003_claw_not_activated > 0)
 	for stage in ids_for_block:
 		for id: String in ids_for_block[stage]:
 			var count: int = 0
@@ -92,6 +102,8 @@ func _run_w01_c003() -> void:
 		"schema_version": 1, "worker": "W01", "campaign": "CAMP_003",
 		"blocks": completed, "descriptor_sha256": FileAccess.get_sha256(W01_C003_DESCRIPTOR),
 		"checks": checks, "focus_band_witnessed_survivals": w01_c003_band_survivals,
+		"quick_claw_activated_seeds": w01_c003_claw_witnessed,
+		"quick_claw_not_activated_seeds": w01_c003_claw_not_activated,
 		"status": "PASS" if errors.is_empty() else "FAIL",
 		"errors": errors, "rows": w01_c003_rows,
 		"limits": ["Sin GPU/UI", "No certifica asentamiento de combate ni regreso al mapa",
@@ -133,6 +145,8 @@ func _frame_c003(session: RefCounted, id: StringName) -> Dictionary:
 	var log: Array = session._checkpoint.get("snapshot", {}).get("native", {}).get("log", [])
 	var missed: bool = false
 	var band_activated: bool = false
+	var claw_activated: bool = false
+	var helmet_recoil: bool = false
 	var trap_ticks: int = 0
 	var first_move_actor: String = ""
 	var native_move_events: Array[String] = []
@@ -145,6 +159,10 @@ func _frame_c003(session: RefCounted, id: StringName) -> Dictionary:
 			missed = true
 		if entry.begins_with("|-activate|") and entry.contains("Focus Band"):
 			band_activated = true
+		if entry.contains("item: Quick Claw"):
+			claw_activated = true
+		if entry.begins_with("|-damage|") and entry.contains("[from] item: Rocky Helmet"):
+			helmet_recoil = true
 		if entry.begins_with("|-damage|") and entry.contains("[from] move: Infestation"):
 			trap_ticks += 1
 	var native_snapshot: Dictionary = session._checkpoint.get("snapshot", {}).get("native", {})
@@ -176,10 +194,13 @@ func _frame_c003(session: RefCounted, id: StringName) -> Dictionary:
 		"status_id": String(own.status_state.persistent_id),
 		"forced_switch": forcing,
 		"active_id": String(session._checkpoint.get("roster", [])[0].get("active_id", "")),
+		"foe_active_id": String(session._checkpoint.get("roster", [])[1].get("active_id", "")),
 		"native_ability": String(native.get("ability", "")),
 		"native_volatiles": native.get("volatiles", []).duplicate(true),
 		"missed": missed,
 		"focus_band_activated": band_activated,
+		"quick_claw_activated": claw_activated,
+		"helmet_recoil": helmet_recoil,
 		"trap_ticks": trap_ticks, "sun_duration": sun_duration, "stealth_rock": rock_on_side,
 		"first_move_actor": first_move_actor, "native_move_events": native_move_events.slice(0, 3),
 		"reflect_duration": reflect_duration
@@ -212,7 +233,16 @@ func _probe_c003(row: Dictionary, seed: int, mode: String) -> Dictionary:
 	check(mode + " dos unidades antes", _units(owner, id) == 2)
 	var owner_frozen: String = JSON.stringify(_owner_data(owner))
 	var session := Native.new(catalogs, owner, automation.format)
-	var opened: bool = await session.begin_wild(self, prepared.foe, automation.seed)
+	var opened: bool = false
+	if bool(row.get("foe_reserve", false)):
+		# La Tarjeta Roja requiere al menos dos rivales en el simulador;
+		# se usa el inicio nativo de entrenador, sin tocar el motor compartido.
+		var enemy_roster: Array[CreatureInstance] = [
+			prepared.foe, _mon(StringName(row.foe_species), int(row.get("foe_level", 100)),
+			&"foe_reserve", ["reflect"])]
+		opened = await session.begin_trainer(self, &"w01_c003_red_card", enemy_roster, automation.seed)
+	else:
+		opened = await session.begin_wild(self, prepared.foe, automation.seed)
 	check(mode + " sesion nativa activa", opened)
 	if not opened:
 		await session.close()
@@ -662,6 +692,56 @@ func _compare_c003(row: Dictionary, obs: Dictionary) -> void:
 				not a.start.foe_helmet and not n.start.foe_helmet
 				and not r.start.foe_helmet and da == 0 and dn == 0 and dr == 0)
 			check("Paracontacto: conserva item sin reacción rival",
+				not a.after.own_consumed and a.physical_units == 2)
+		"quick_claw_rng":
+			check("Garra Rapida: Gengar actua primero sin objeto y con objeto en reserva",
+				n.after.first_move_actor == "foe" and r.after.first_move_actor == "foe")
+			check("Garra Rapida: prioridad solo cambia cuando el simulador registra activacion",
+				a.after.first_move_actor == ("own" if a.after.quick_claw_activated else "foe")
+				and not n.after.quick_claw_activated and not r.after.quick_claw_activated)
+			check("Garra Rapida: activacion aleatoria nunca consume el objeto",
+				not a.after.own_consumed and a.physical_units == 2
+				and not r.after.reserve_consumed and r.physical_units == 2)
+		"quick_claw_priority_control":
+			check("Garra Rapida: Ataque Rapido mantiene prioridad +1 en los tres modos",
+				a.after.first_move_actor == "own" and n.after.first_move_actor == "own"
+				and r.after.first_move_actor == "own")
+			check("Garra Rapida: prioridad positiva no consume",
+				not a.after.own_consumed and a.physical_units == 2)
+		"red_card_switch":
+			check("Tarjeta Roja: combate con reserva rival real antes del impacto",
+				a.start.foe_active_id == "foe" and n.start.foe_active_id == "foe"
+				and r.start.foe_active_id == "foe")
+			check("Tarjeta Roja: solo portador expulsa rival que hace daño",
+				da > 0 and da == dn and dn == dr
+				and a.after.foe_active_id == "foe_reserve"
+				and n.after.foe_active_id == "foe" and r.after.foe_active_id == "foe")
+			check("Tarjeta Roja: se consume solo si cambia al rival",
+				a.after.own_consumed and a.physical_units == 1
+				and not r.after.reserve_consumed and r.physical_units == 2)
+		"red_card_no_switch":
+			check("Tarjeta Roja: Amnesia no inflige daño ni expulsa al rival",
+				da == 0 and dn == 0 and dr == 0
+				and a.after.foe_active_id == "foe"
+				and n.after.foe_active_id == "foe" and r.after.foe_active_id == "foe")
+			check("Tarjeta Roja: sin impacto se conserva",
+				not a.after.own_consumed and a.physical_units == 2)
+		"rocky_helmet_contact_recoil":
+			check("Casco Dentado: contacto rival causa retroceso nativo solo en portador",
+				da > 0 and da == dn and dn == dr
+				and fa > 0 and fn == 0 and fr == 0
+				and fa == int(a.start.foe_max_hp / 6))
+			check("Casco Dentado: log de daño por item y cero consumo",
+				a.after.helmet_recoil and not n.after.helmet_recoil
+				and not r.after.helmet_recoil
+				and not a.after.own_consumed and a.physical_units == 2)
+		"rocky_helmet_noncontact_control":
+			check("Casco Dentado: Agua Pistola rival no produce retroceso",
+				da > 0 and da == dn and dn == dr
+				and fa == 0 and fn == 0 and fr == 0
+				and not a.after.helmet_recoil and not n.after.helmet_recoil
+				and not r.after.helmet_recoil)
+			check("Casco Dentado: especial no consume el casco",
 				not a.after.own_consumed and a.physical_units == 2)
 		_:
 			check("Operacion no autorizada", false)
