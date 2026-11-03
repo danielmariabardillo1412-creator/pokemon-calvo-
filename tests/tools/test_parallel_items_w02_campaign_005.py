@@ -1195,6 +1195,28 @@ def verify_sources(chk):
         'int(result.get("exp_gained", -1)) == gain_expected',
     ):
         chk.demand(fragment in runner, "Escenario XP real 03 no instrumentado: " + fragment)
+    for fragment in (
+        '"exp_candy_s": 800',
+        '"exp_candy_m": 3000',
+        '"exp_candy_l": 10000',
+        '"exp_candy_xl": 30000',
+        'var target := mini(maximum, c.experience + int(EXP.get(String(item_id), 0)))',
+        'ProgressionSystem.gain_experience(',
+        'if summary.exp_gained > 0: Friendship.increase(c, [5, 3, 2])',
+    ):
+        chk.demand(fragment in growth, "Caramelos S/M/L/XL: magnitudes/rutas no corresponden: "+fragment)
+    for fragment in (
+        'var nominal_exp: int = int(spec.get("exp_amount", 100))',
+        'expected_exp = mini(cap_exp, c.experience + nominal_exp)',
+        'var gain_expected: int = expected_exp - c.experience',
+        'gain_expected > 0 and gain_expected <= nominal_exp',
+        'int(result.get("exp_gained", -1)) == gain_expected',
+        'bool(spec.get("expect_cap", false))',
+        'bool(spec.get("expect_level_up", false))',
+    ):
+        chk.demand(fragment in runner, "Caramelos S/M/L/XL: prueba Godot incompleta: "+fragment)
+    chk.demand((ROOT / "tests/fixtures/progression_growth_curves/reference_contract.json").is_file(),
+               "Sin referencia independiente de curva de crecimiento")
     for old, token in (
         (old_ability, 'TRANSITIONS'),
         (old_growth, 'rare_candy'),
