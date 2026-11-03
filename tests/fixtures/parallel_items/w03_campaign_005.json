@@ -356,6 +356,100 @@
         "table_roundtrip"
       ],
       "ci_required": true
+    },
+    {
+      "bloque": "07",
+      "familia": "FIELD_CONTEXT",
+      "ids": [
+        "black_flute",
+        "white_flute",
+        "lure",
+        "super_lure",
+        "max_lure"
+      ],
+      "objetivo": "control_frecuencia_encuentros_fuente_mundo",
+      "current_state": "DEPENDENCIA_COMPARTIDA",
+      "functional_effect_certified": false,
+      "per_id_status": {
+        "black_flute": "DEPENDENCIA_COMPARTIDA",
+        "white_flute": "DEPENDENCIA_COMPARTIDA",
+        "lure": "DEPENDENCIA_COMPARTIDA",
+        "super_lure": "DEPENDENCIA_COMPARTIDA",
+        "max_lure": "DEPENDENCIA_COMPARTIDA"
+      },
+      "existing_positive_contracts": [
+        "WildEncounterTable.encounter_chance_bp",
+        "WildEncounterRuleset.CHANCE_BP_MAX",
+        "EncounterItemModifiers.modified_chance_bp",
+        "WildEncounterSystem.resolve"
+      ],
+      "required_producers": [
+        {
+          "id": "black_flute",
+          "producer": "overworld_movement_encounter_scheduler",
+          "consumer": "FieldItemService.use_item -> world step effect state -> WildEncounterTable -> WildEncounterSystem",
+          "missing_fields": [
+            "active_field_encounter_modifier",
+            "remaining_effect_steps_or_duration",
+            "minimum_steps_between_encounters"
+          ],
+          "decision": "IA6 debe fijar versión, amplitud y duración del efecto black_flute; definir acumulación/reemplazo, guardado y oportunidad de encuentros sin introducir tiradas RNG ocultas."
+        },
+        {
+          "id": "white_flute",
+          "producer": "overworld_movement_encounter_scheduler",
+          "consumer": "FieldItemService.use_item -> world step effect state -> WildEncounterTable -> WildEncounterSystem",
+          "missing_fields": [
+            "active_field_encounter_modifier",
+            "remaining_effect_steps_or_duration",
+            "minimum_steps_between_encounters"
+          ],
+          "decision": "IA6 debe fijar versión, amplitud y duración del efecto white_flute; definir acumulación/reemplazo, guardado y oportunidad de encuentros sin introducir tiradas RNG ocultas."
+        },
+        {
+          "id": "lure",
+          "producer": "overworld_movement_encounter_scheduler",
+          "consumer": "FieldItemService.use_item -> world step effect state -> WildEncounterTable -> WildEncounterSystem",
+          "missing_fields": [
+            "active_field_encounter_modifier",
+            "remaining_effect_steps_or_duration",
+            "minimum_steps_between_encounters"
+          ],
+          "decision": "IA6 debe fijar versión, amplitud y duración del efecto lure; definir acumulación/reemplazo, guardado y oportunidad de encuentros sin introducir tiradas RNG ocultas."
+        },
+        {
+          "id": "super_lure",
+          "producer": "overworld_movement_encounter_scheduler",
+          "consumer": "FieldItemService.use_item -> world step effect state -> WildEncounterTable -> WildEncounterSystem",
+          "missing_fields": [
+            "active_field_encounter_modifier",
+            "remaining_effect_steps_or_duration",
+            "minimum_steps_between_encounters"
+          ],
+          "decision": "IA6 debe fijar versión, amplitud y duración del efecto super_lure; definir acumulación/reemplazo, guardado y oportunidad de encuentros sin introducir tiradas RNG ocultas."
+        },
+        {
+          "id": "max_lure",
+          "producer": "overworld_movement_encounter_scheduler",
+          "consumer": "FieldItemService.use_item -> world step effect state -> WildEncounterTable -> WildEncounterSystem",
+          "missing_fields": [
+            "active_field_encounter_modifier",
+            "remaining_effect_steps_or_duration",
+            "minimum_steps_between_encounters"
+          ],
+          "decision": "IA6 debe fijar versión, amplitud y duración del efecto max_lure; definir acumulación/reemplazo, guardado y oportunidad de encuentros sin introducir tiradas RNG ocultas."
+        }
+      ],
+      "positive_tests": [
+        "existing_cleanse_tag_probability_calculation",
+        "wild_encounter_table_validated_copy",
+        "zero_and_max_encounter_chance_limits"
+      ],
+      "negative_tests": [
+        "no_field_lure_or_flute_implementation",
+        "no_world_steps_or_rate_authority"
+      ],
+      "ci_required": true
     }
   ]
 }
