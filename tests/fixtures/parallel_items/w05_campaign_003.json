@@ -235,6 +235,35 @@
           "move_id": "thunder_punch"
         }
       ]
+    },
+    {
+      "block": "09",
+      "items": [
+        {
+          "item_id": "tm69",
+          "move_id": "ice_punch"
+        },
+        {
+          "item_id": "tm70",
+          "move_id": "sleep_talk"
+        },
+        {
+          "item_id": "tm71",
+          "move_id": "seed_bomb"
+        },
+        {
+          "item_id": "tm72",
+          "move_id": "electro_ball"
+        },
+        {
+          "item_id": "tm73",
+          "move_id": "drain_punch"
+        },
+        {
+          "item_id": "tm74",
+          "move_id": "reflect"
+        }
+      ]
     }
   ]
 }
