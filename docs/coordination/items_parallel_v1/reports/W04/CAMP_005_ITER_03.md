@@ -37,3 +37,10 @@ Los niveles 20/30 de las etapas anteriores de Kirlia/Ursaring y 42 de la ruta Sn
 **Aislamiento:** ninguna modificación en `main`, V28, rama árbitra, ramas W01/W02/W03/W05, scripts de producción, datos canónicos ni workflows. Regresiones anteriores conservadas; workflow solo las ejecuta en hitos 05/10 o con parche en `modules/`.
 
 **Próximo `p` autorizado tras aprobar CI03:** exclusivamente bloque 04 `galarica_cuff;galarica_wreath;scroll_of_darkness;scroll_of_waters`.
+
+
+## Reparación V5 del recibo Python
+
+La primera ejecución de bloque 03 [#41721012671](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41721012671), SHA `4f3b07a8c391bee07b6d510eb335fb915cc064e9`, falló en **el validador Python**, antes de ejecutar las pruebas Godot, por un marcador de secuencia obsoleto: buscaba `bloques_01_y_02_secuenciales` cuando el runner acumulativo pasó a `bloques_01_a_03_secuenciales`.
+
+Se corrigió **solo esa referencia de cobertura**, sin retirar ninguna aserción de comportamiento, en commit `94c84a816339d432058c0f2ddb0b56efe3cdc59f`. Reejecución [#41721445674](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41721445674), pendiente de comprobación. No declarar PASS hasta verificar los recibos reales. La primera ejecución fallida no demuestra defectos de las evoluciones canónicas; la segunda deberá confirmarlas.
