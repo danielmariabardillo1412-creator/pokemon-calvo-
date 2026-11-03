@@ -2,6 +2,7 @@ extends "res://tests/gameplay/item_capture_v11.gd"
 
 # CAMP003 / IA3-W03: sólo pruebas acumulativas. No editar captura o catálogo.
 const CAMP003_W03_FIXTURE := "res://tests/fixtures/parallel_items/w03_campaign_003.json"
+const CAMP003_W03_TURN_EFFECTS = preload("res://modules/capture/capture_context_ball_effects.gd")
 
 
 func _initialize() -> void:
@@ -35,6 +36,7 @@ func _run_campaign() -> void:
 		match String(bloque.get("bloque", "")):
 			"01": _block_01(bloque)
 			"02": _block_02(bloque)
+			"03": _block_03(bloque)
 			_: check("Bloque aún sin suite funcional " + str(numero), false)
 	_terminar_campania(numero)
 
@@ -252,6 +254,122 @@ func _block_02(bloque: Dictionary) -> void:
 		and storage.contains_instance_id(wild.instance_id)
 		and is_same(storage.get_creature(wild.instance_id), wild)
 		and not full_party.contains_instance_id(wild.instance_id))
+
+
+# Quick/Timer usan completed_turns de batalla, no turnos del calendario.
+# Se contrasta fórmula independiente, adaptador real, coste, RNG y rechazos.
+func _block_03(bloque: Dictionary) -> void:
+	var reglas := CaptureRuleset.new()
+	var bolas: Array = bloque.get("balls", [])
+	var casos: Array = bloque.get("cases", [])
+	check("Turno03 sólo Quick y Timer y dos especies",
+		bolas.size() == 2 and casos.size() == 2)
+	for fila: Dictionary in bolas:
+		var id: StringName = StringName(String(fila.get("id", "")))
+		var definition: CaptureBallDefinition = reglas.ball(id)
+		check("Quick/Timer registradas sin garantía " + String(id),
+			definition != null and reglas.is_known_ball(id)
+			and not definition.guaranteed and is_equal_approx(definition.base_multiplier, 1.0))
+	for caso: Dictionary in casos:
+		var sid: StringName = StringName(String(caso.get("species_id", "")))
+		var species: CreatureSpecies = catalogs.species(sid)
+		check("Especie03 real de catálogo " + String(sid), species != null)
+		if species == null:
+			continue
+		for turn_variant: Variant in bloque.get("completed_turns", []):
+			var turnos: int = int(turn_variant)
+			for hp_mode: String in bloque.get("hp_modes", []):
+				for fila: Dictionary in bolas:
+					var id: StringName = StringName(String(fila.get("id", "")))
+					var factor: float = (5.0 if turnos == 0 else 1.0) if id == &"quick_ball" else minf(1.0 + 0.3 * turnos, 4.0)
+					var target: CreatureInstance = _mon(sid, int(caso.get("level", 12)),
+						StringName("c003_03_" + String(sid) + "_" + str(turnos) + hp_mode + String(id)))
+					target.current_hp = target.stats.max_hp if hp_mode == "full" else 1
+					var before := target.to_dict()
+					var ctx := CaptureBattleContext.new()
+					ctx.completed_turns = turnos
+					var actual_factor: float = CAMP003_W03_TURN_EFFECTS.multiplier(id, target, species, ctx)
+					check("Quick/Timer factor exacto turno " + String(id) + str(turnos),
+						is_equal_approx(actual_factor, factor))
+					var p_expected: float = clampf(float(species.capture_rate) / 255.0 * factor
+						* float(3 * target.stats.max_hp - 2 * target.current_hp)
+						/ float(3 * target.stats.max_hp), 0.0, 1.0)
+					check("Quick/Timer probabilidad independiente " + String(id) + str(turnos) + hp_mode,
+						is_equal_approx(p_expected, reglas.catch_probability(
+							species.capture_rate, factor, 1.0, target.stats.max_hp, target.current_hp)))
+					var inv := PlayerInventory.new()
+					inv.add(id, 2)
+					var party := CreatureParty.new()
+					var rng := RandomNumberGenerator.new()
+					rng.seed = int(caso.get("seed", 3301)) + turnos
+					var control := RandomNumberGenerator.new()
+					control.state = rng.state
+					var success_expected: bool = control.randf() < p_expected
+					var result: CaptureResolution = CaptureInventoryService.resolve(
+						CaptureAttempt.new(target, id, ctx), rng, catalogs, party, inv)
+					check("Turno válido gasta una bola y una tirada " + String(id) + str(turnos) + hp_mode,
+						result.result.status != CaptureResult.INVALID
+						and result.result.consume_item and inv.quantity(id) == 1
+						and is_equal_approx(result.result.probability, p_expected)
+						and rng.state == control.state
+						and (result.result.status == CaptureResult.SUCCESS) == success_expected)
+					check("Turno válido conserva propiedad/objetivo " + String(id) + str(turnos) + hp_mode,
+						(is_same(result.captured, target) and party.contains_instance_id(target.instance_id)
+						and party.size() == 1) if success_expected else
+						(result.result.status == CaptureResult.FAILED
+						and party.is_empty() and target.to_dict() == before))
+	# El valor por defecto -1 y valores negativos no se deben tratar como turno 0.
+	for fila: Dictionary in bolas:
+		var id: StringName = StringName(String(fila.get("id", "")))
+		for value: Variant in bloque.get("invalid_context_turns", []):
+			var turnos: int = int(value)
+			var target: CreatureInstance = _mon(&"mew", 45,
+				StringName("c003_03_ctx_" + String(id) + str(turnos)))
+			var ctx := CaptureBattleContext.new()
+			ctx.completed_turns = turnos
+			check("Sin turnos fiables, validación rechaza " + String(id) + str(turnos),
+				CaptureSystem.validate_attempt(CaptureAttempt.new(target, id, ctx), catalogs)
+				== "capture_turn_context_missing")
+			var bag := PlayerInventory.new()
+			bag.add(id, 2)
+			var before_target := target.to_dict()
+			var before_bag := bag.to_dict()
+			var party := CreatureParty.new()
+			var rng := RandomNumberGenerator.new()
+			rng.seed = 53
+			var before_rng: int = rng.state
+			var result := CaptureInventoryService.resolve(
+				CaptureAttempt.new(target, id, ctx), rng, catalogs, party, bag)
+			check("Sin contexto nunca hay consumo o RNG " + String(id) + str(turnos),
+				result.result.status == CaptureResult.INVALID
+				and result.result.reason == "capture_turn_context_missing"
+				and not result.result.consume_item
+				and bag.to_dict() == before_bag and target.to_dict() == before_target
+				and rng.state == before_rng and party.is_empty())
+		for reason: String in bloque.get("other_rejections", []):
+			var target: CreatureInstance = _mon(&"mew", 45,
+				StringName("c003_03_invalid_" + String(id) + reason))
+			var ctx := CaptureBattleContext.new()
+			ctx.completed_turns = 0
+			var bag := PlayerInventory.new()
+			bag.add(id, 2)
+			if reason == "trainer_battle_not_capturable":
+				ctx.is_wild = false
+			if reason == "item_not_owned":
+				bag.remove(id, 2)
+			var before_target := target.to_dict()
+			var before_bag := bag.to_dict()
+			var party := CreatureParty.new()
+			var rng := RandomNumberGenerator.new()
+			rng.seed = 59
+			var before_rng: int = rng.state
+			var result := CaptureInventoryService.resolve(
+				CaptureAttempt.new(target, id, ctx), rng, catalogs, party, bag)
+			check("Rechazo en contexto válido no gasta " + String(id) + reason,
+				result.result.status == CaptureResult.INVALID
+				and result.result.reason == reason and not result.result.consume_item
+				and bag.to_dict() == before_bag and target.to_dict() == before_target
+				and rng.state == before_rng and party.is_empty())
 
 
 func _terminar_campania(bloques: int) -> void:
