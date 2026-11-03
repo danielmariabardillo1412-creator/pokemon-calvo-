@@ -21,6 +21,9 @@ FRIENDSHIP = ROOT / "modules/inventory/field_friendship_effects.gd"
 MOCHI = ROOT / "modules/inventory/field_mochi_effects.gd"
 FIELD_EFFECTS = ROOT / "modules/inventory/field_item_effects.gd"
 HIST_MOCHI = ROOT / "tests/gameplay/item_mochi_v13.gd"
+CREATURE_08 = ROOT / "modules/creatures/domain/creature_instance.gd"
+RULES_08 = ROOT / "modules/creatures/progression/progression_ruleset.gd"
+SELECTION_08 = ROOT / "config/item_selection_v1.json"
 HIST_TRAINING = ROOT / "tests/gameplay/field_held_v17.gd"
 SERVICE = ROOT / "modules/inventory/field_item_service.gd"
 RUNNER = ROOT / "tests/gameplay/parallel_items_w02_campaign_005.gd"
@@ -2475,6 +2478,9 @@ def verify_sources(chk):
     mochi = MOCHI.read_text(encoding="utf-8")
     field_effects = FIELD_EFFECTS.read_text(encoding="utf-8")
     historic_mochi = HIST_MOCHI.read_text(encoding="utf-8")
+    creature_08 = CREATURE_08.read_text(encoding="utf-8")
+    rules_08 = RULES_08.read_text(encoding="utf-8")
+    selection_08 = json.loads(SELECTION_08.read_text(encoding="utf-8"))
     for fragment in (
         'item_id in [&"ability_capsule", &"ability_patch"]',
         'destination = 2 if current == 1 else 1',
