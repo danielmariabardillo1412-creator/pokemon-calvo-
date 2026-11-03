@@ -1,3 +1,24 @@
+# IA2/W02 — CONTINUIDAD VIGENTE CAMPAÑA_005 BLOQUE 03/10
+
+**Identidad:** IA2/W02, bayas/medicinas/entrenamiento. **Rama única editable:** `codex/calvo-items-20261103-w02-camp005`. Cola/autoridad IA6: `CAMPAIGN_005_W02_GATE.md`, `CAMPAIGN_005_W02_QUEUE_APPROVED.csv`, `campaigns/CAMP_005_W02.md` y V5. **Cada `p` autoriza un solo microbloque**, nunca un adelanto sin orden. No tocar main, V28, PR118, rama árbitra, ramas ajenas, catálogos, políticas ni workflows.
+
+**Acumulado publicado (NO certificado):** bloques 01, 02, **03** completos en documentos y código de tests, 12 IDs, 68 escenarios y 204 variantes de tres modos (`active`, `none`, `reserve`). CAMP005 Python y Godot **aún sin CI PASS/FAIL con log y SHA verificables** desde esta conversación. El workflow W02 `.github/workflows/parallel-camp005-w02-autoci.yml` debería dispararse por cambios en fixture/tests/progreso, pero GitHub connector para commit workflow runs no retorna los pushes y la URL pública de Actions dio `DisabledError`. Éxito de CAMP004 [#41589286005](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41589286005) es histórico, NO resultado de CAMP005. No inventar recibos ni run IDs.
+
+**Bloque 03:** `calcium;zinc;carbos;exp_candy_xs` (26 casos nuevos). Calcio/Zinc/Carbos aumentan +10 EV de Ataque Especial/Defensa Especial/Velocidad, con límite 252 por estadística y 510 globales: condiciones 0/248/252 EV y 508/510 EV totales, además de rechazo por ranura de PP no permitida. Caramelo Exp XS aporta 100 XP con límite nivel100: pruebas de Mew niveles 20/50/99, XP 40 antes de lvl51, XP 50 antes del nivel100, amistad 200 y rechazos nivel100/slot inesperado. **El XP y nivel esperado se calculan desde `ProgressionRuleset` y el motor `FieldGrowthEffects`; no se inventan aumentos fijos de nivel.** Todos los casos verifican aceptación/rechazo, consumo único, propietario PARTY/STORAGE, HP, PP, EV, amistad, SaveV2 y SHA256.
+
+**Commits bloque 03:**
+- Fixture `tests/fixtures/parallel_items/w02_campaign_005.json`: `c4311e4dd0fc53710049fce2e1a43d1e75492ded`.
+- Godot `tests/gameplay/parallel_items_w02_campaign_005.gd`: `27a4c6d3fb0884044bec71e4caedbd1dc1e11ed7`.
+- Python `tests/tools/test_parallel_items_w02_campaign_005.py`: golden 26 y fuentes `a4479b04d4091ff11c7b512ad36b8f2d1919ad0e`; 15 mutaciones `fb409a9e92e0b84a6df93a9a4ac116164afb1faf`.
+- CSV `docs/coordination/items_parallel_v1/reports/W02/CAMP_005_PROGRESO.csv`: `6ccd56b0b5ad0c94a17d5f0d16451bad7f5aef1a`, fila 03 `EN_CI_AUTOMATICA`.
+- Informe `docs/coordination/items_parallel_v1/reports/W02/CAMP_005_ITER_03.md`: `428a588e8e1acc13736a99bf133a60efd419d41c`.
+
+**Regresiones:** bloques 01/02 siguen íntegros y CAMP004/CAMP003 sin modificar; según gate, deben ejecutarse en hito 05/10 y parches de producción. No se modificaron funciones de producción, APIs compartidas, motor común o workflows. Prueba visual/GPU e integración final fuera de alcance.
+
+**Siguiente `p`:** revisar CI real SHA+logs si accesibles, reparar solo defectos propios bajo V5 sin reducir contratos; si CI aún pendiente, se permite preparar trabajo independiente. Ejecutar únicamente bloque **04/10** `exp_candy_s;exp_candy_m;exp_candy_l;exp_candy_xl`. No ejecutar 05 antes de nueva `p`; no tocar ramas ajenas.
+
+---
+
 # IA2/W02 — CONTINUIDAD VIGENTE CAMPAÑA_005 BLOQUE 02/10
 
 **Identidad:** IA2/W02, bayas/medicinas/entrenamiento. **Única rama editable:** `codex/calvo-items-20261103-w02-camp005`. Autoridad IA6: `CAMPAIGN_005_W02_GATE.md`, `CAMPAIGN_005_W02_QUEUE_APPROVED.csv`, `campaigns/CAMP_005_W02.md` y V5. `p` = **sólo una** fila siguiente por mensaje. No modificar main, V28, PR118, árbitra IA6, otras trabajadoras, datasets canónicos ni workflows.
