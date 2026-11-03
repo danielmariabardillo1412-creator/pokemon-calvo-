@@ -1,3 +1,9 @@
+## Validación de CI — 2026-11-03
+
+GitHub Actions [#41715717542](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41715717542), SHA `a1bf8989427464f32762b49550bc08b06629a4b4`, terminó **success**. Recibos: `CAMP005_W03_PY PASS blocks=1 checks=28`, `CAMP005_GATE_PY_PASS`, `CAMP005_W03_GODOT PASS blocks=1 checks=18`, `CAMP005_GATE_GODOT_PASS`. El primer intento [#41715500393](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41715500393) falló por un falso positivo del auditor al encontrar `unknown_ball` en un comentario; criterio reparado en el SHA validado. El PASS certifica únicamente los contratos fuente disponibles y las dependencias descritas, **no** efectos funcionales nuevos para las tres bolas.
+
+---
+
 # IA3/W03 — CAMPAÑA_005 / BLOQUE 01 — Contrato de integración de captura
 
 **Reservados, no nuevos:** `dive_ball`, `dusk_ball`, `repeat_ball`. Rama exclusiva: `codex/calvo-items-20261103-w03-camp005`.
