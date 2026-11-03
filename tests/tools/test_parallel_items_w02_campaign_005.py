@@ -1956,6 +1956,31 @@ def verify_sources(chk):
         'and now.stats.max_hp - now.current_hp == start_hp_deficit',
     ):
         chk.demand(fragment in runner, "Arnés plumas 05 no implementa EV y amistad: " + fragment)
+    for fragment in (
+        '"clever_wing": "special_defense"',
+        '"swift_wing": "speed"',
+        'Friendship.increase(creature, [5, 3, 2] if vitamin else [3, 2, 1])',
+    ):
+        chk.demand(fragment in training, "Plumas 06 sin +1 EV ni amistad por banda: " + fragment)
+    for fragment in (
+        '"health_mochi": "hp"',
+        '"muscle_mochi": "attack"',
+        'var gain := 0 if reset else mini(10',
+        'ProgressionRuleset.EV_PER_STAT_MAX',
+        'ProgressionRuleset.EV_TOTAL_MAX',
+        'c.recalculate_stats(',
+        'if (reset and total == 0) or (not reset and gain == 0)',
+    ):
+        chk.demand(fragment in mochi, "Mochi 06 desconectado o cambiado: " + fragment)
+    for fragment in (
+        'const Mochi = preload("res://modules/inventory/field_mochi_effects.gd")',
+        'if Mochi.supports(item_id): return Mochi.validation_error',
+        'if Mochi.supports(item_id): return Mochi.apply(',
+    ):
+        chk.demand(fragment in field_effects, "Despacho mochi fuera de FieldItemService: " + fragment)
+    chk.demand('const ITEMS := {"health_mochi": "hp", "muscle_mochi": "attack"' in historic_mochi
+               and 'var expected := _expected(c, item)' in historic_mochi,
+               "Regresión histórica Mochi V13 ausente")
     for old, token in (
         (old_ability, 'TRANSITIONS'),
         (old_growth, 'rare_candy'),
