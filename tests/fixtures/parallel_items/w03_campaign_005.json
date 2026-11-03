@@ -556,6 +556,77 @@
         "owner_location_of_creature_not_world_map"
       ],
       "ci_required": true
+    },
+    {
+      "bloque": "10",
+      "familia": "CAPTURE_INTEGRATION",
+      "ids": [
+        "friend_ball",
+        "heal_ball",
+        "quick_ball",
+        "timer_ball"
+      ],
+      "objetivo": "contrato_fin_captura_amistad_curacion_turno_savev2",
+      "current_state": "EXISTING_FUNCTIONAL_CAPTURE_CONTRACTS",
+      "functional_effect_certified": true,
+      "per_id_status": {
+        "friend_ball": "INTEGRACION_EXISTENTE_REVALIDADA",
+        "heal_ball": "INTEGRACION_EXISTENTE_REVALIDADA",
+        "quick_ball": "INTEGRACION_EXISTENTE_REVALIDADA",
+        "timer_ball": "INTEGRACION_EXISTENTE_REVALIDADA"
+      },
+      "existing_positive_contracts": [
+        "CaptureSystem.success_mutates_friendship_200",
+        "CaptureSystem.success_heals_hp_status_pp",
+        "CaptureBattleContext.completed_turns_from_session",
+        "CaptureContextBallEffects.quick_turn0_5",
+        "CaptureContextBallEffects.timer_turn_scaled_cap4",
+        "CaptureSystem.validate_missing_context_before_rng",
+        "CreatureInstance.to_dict_from_dict_friendship_hp_pp"
+      ],
+      "required_producers": [
+        {
+          "id": "friend_ball",
+          "producer": "CaptureSystem.on_catch_success",
+          "consumer": "CreatureInstance.friendship + serialization",
+          "missing_fields": [],
+          "decision": "Política existente: establecer amistad=200 solo al capturar; no modificar derrota o fallo, ni afirmar certificado SaveV2 integral."
+        },
+        {
+          "id": "heal_ball",
+          "producer": "CaptureSystem.on_catch_success",
+          "consumer": "CreatureInstance HP persistent status moveset PP + serialization",
+          "missing_fields": [],
+          "decision": "Recuperar PS, sueño/estados persistentes y PP hasta máximos actuales solo si captura exitosa; preservar naturaleza/IVs y no alterar RNG de rechazo."
+        },
+        {
+          "id": "quick_ball",
+          "producer": "ShowdownAdventureSession.capture_battle_turn",
+          "consumer": "CaptureBattleContext.completed_turns > CaptureContextBallEffects",
+          "missing_fields": [],
+          "decision": "Quick: multiplicador x5 en turno completado cero, x1 a partir de uno; nunca inferir turno del cliente."
+        },
+        {
+          "id": "timer_ball",
+          "producer": "ShowdownAdventureSession.capture_battle_turn",
+          "consumer": "CaptureBattleContext.completed_turns > CaptureContextBallEffects",
+          "missing_fields": [],
+          "decision": "Timer: 1+0.3×turnos completados, máximo x4; diferenciar contexto ausente de turno cero y preservar RNG antes de validación."
+        }
+      ],
+      "positive_tests": [
+        "friend_on_catch_exact_200_identity_roundtrip",
+        "heal_on_catch_hp_status_pp_identity_roundtrip",
+        "quick_timer_turn_boundary_and_timer_cap",
+        "capture_inventory_service_friend_and_heal_success"
+      ],
+      "negative_tests": [
+        "friend_heal_do_not_mutate_failed_capture",
+        "quick_timer_reject_missing_turn_without_rng_or_item_spend"
+      ],
+      "ci_required": true,
+      "savev2_scope": "creature_serialization_roundtrip_only_no_full_SaveV2_end_to_end",
+      "no_new_objects": true
     }
   ]
 }
