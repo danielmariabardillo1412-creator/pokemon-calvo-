@@ -211,6 +211,40 @@
         "missing_description_rotom_catalog_explicit_dependency",
         "retain_regression_blocks_01_to_07_and_camp003"
       ]
+    },
+    {
+      "block": "09",
+      "ids": [
+        "n_lunarizer_merge",
+        "n_solarizer_merge",
+        "roto_catch",
+        "roto_exp_points",
+        "roto_friendship"
+      ],
+      "family": "LEGACY_OR_CATEGORY_REVIEW",
+      "classification_by_id": {
+        "n_lunarizer_merge": "Necrozma + Lunala fusion; pair and SaveV2 negative tested, no invented fusion engine",
+        "n_solarizer_merge": "Necrozma + Solgaleo fusion; pair and SaveV2 negative tested, no invented fusion engine",
+        "roto_catch": "Roto Capture legacy coupon, do not claim capture effects; W03 owns capture",
+        "roto_exp_points": "Roto Exp Points legacy coupon, no training benefit certified by W04",
+        "roto_friendship": "Roto Friendship legacy coupon, no friendship benefit certified by W04"
+      },
+      "source": "RANDOMLOCK_ITEMS_BUILD_SCOPE_V2.csv, ITEM_FIELD_V8.csv.txt, ITEM_INVENTORY.csv, item_connections_v1.json, imported_recovery_v19.json",
+      "policy": "Keep original LEGACY_OR_CATEGORY_REVIEW and unused/placeholder_description without deletion; never transform Necrozma by bag-use; do not certify capture/XP/friendship outside W04",
+      "cases": [
+        "selected_legacy_ids_and_inventory_category",
+        "all_five_placeholder_description_and_data_only",
+        "none_holdable_or_field_recovery",
+        "necrozma_and_lunala_present_as_two_party_creatures",
+        "necrozma_and_solgaleo_present_as_two_party_creatures",
+        "merge_bag_use_evolve_and_equip_rejected_without_consumption",
+        "two_creatures_and_items_persist_savev2",
+        "roto_catch_no_invented_capture_rate",
+        "roto_exp_points_no_invented_xp_bonus",
+        "roto_friendship_no_invented_friendship_bonus",
+        "legacy_eevee_negative_and_savev2",
+        "regressions_01_to_08_unchanged"
+      ]
     }
   ]
 }
