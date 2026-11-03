@@ -1,3 +1,17 @@
+# ESTADO VIGENTE IA5/W05 — CAMPAÑA_003 · 03/10 PUBLICADOS (2026-11-03)
+
+**Identidad:** IA5/W05, libros/MT. **Única rama de escritura:** `codex/calvo-items-20261103-w05-camp003`. Autorización de la cola IA6 `CAMPAIGN_003_QUEUE_APPROVED.csv`/encargo `campaigns/CAMP_003_W05.md`, no modificar otras ramas ni producción.
+
+**BLOQUE 03 entregado:** `tm30;tm32;tm33;tm34;tm35;tm37` = `snarl;swift;magical_leaf;icy_wind;mud_shot;draining_kiss` según versión Scarlet/Violet del perfil original. Se añadió el bloque 03 al fixture propio `tests/fixtures/parallel_items/w05_campaign_003.json` commit `f4668498b84ca92dc114ed4cac7edff4b001e109`, y una única tercera fila a `reports/W05/CAMP_003_PROGRESO.csv` commit `c3c48e92ddf48708d7d941554e58420a994e55ed`. Informe `CAMP_003_ITER_03.md`, commit `f9c2e665365d3bf41a5ee99f7ff0ab4b966fa15d`. No se tocaron runners previos: acumulan exactamente 18 casos para 03/10.
+
+**CI bloques 01 y 02 VERIFICADA:** GitHub Actions [#41555043090](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41555043090) `completed/success`, SHA `131b4420e2d4878972199bec9aa6fb4ccf86ae4a`, Python `PASS blocks=2 checks=116`, Godot 4.7 `PASS blocks=2 checks=446`. Se leyó el registro real. Los dos primeros renglones del CSV conservan estado histórico `EN_CI_AUTOMATICA` para evitar otra CI redundante, **pero su resultado real es SUCCESS**.
+
+**CI bloque 03:** [#41556713903](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41556713903) sobre `c3c48e92ddf48708d7d941554e58420a994e55ed`; **`pending` al primer vistazo**, no declarar PASS sin revisar la nueva conclusión y logs Python/Godot. El run anterior del fixture #41556696614 podrá ser `cancelled` por `concurrency.cancel-in-progress`. Contrato estricto: `blocks=3`, 18 casos, positiva y negativas completas, SaveV2, cero errores. Consistencia estática entre los 18 IDs de cola, fixture, progreso y perfil SV: **comprobada**, no equivale a resultados de enseñanza.
+
+**Próxima `p`:** leer estado actual del último run del SHA del progreso; si `success`, ejecutar sólo **bloque 04**: `tm38;tm39;tm40;tm41;tm42;tm43`. Si aún en curso, se permite preparar un bloque independiente de pruebas sin PASS. Ante FAIL real, analizar logs: arreglar solo arnés W05 o STOP y reportar IA6 por dependencia de código compartido. No duplicar ID, borrar aserciones, modificar motor, versiones, políticas, catálogo, CI, arte, guardados reales, `main`, V28 o ramas ajenas. Campaña límite 10/10.
+
+---
+
 # ESTADO VIGENTE IA5/W05 — CAMPAÑA_003 · 02/10 PUBLICADOS (2026-11-03)
 
 **Identidad:** IA5/W05, MT/libros. **Rama exclusiva:** `codex/calvo-items-20261103-w05-camp003`. Activación IA6 de diez microbloques en la cola `CAMPAIGN_003_QUEUE_APPROVED.csv` y `campaigns/CAMP_003_W05.md` (rama árbitra).
