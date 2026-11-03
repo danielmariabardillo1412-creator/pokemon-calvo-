@@ -3,7 +3,7 @@
   "campaign": "CAMP_005",
   "worker": "W02",
   "kind": "TRAINING",
-  "purpose": "W02 CAMP005: entrenamiento con rutas FieldItemService reales, propiedad, consumo, SaveV2, rechazos atómicos; no reemplaza regresión CAMP004",
+  "purpose": "CAMP005 W02 acumulada 02/10: PP Max y vitaminas comprobados con motor nativo, tres estados de bolsa/propietario, SaveV2, regresiones CAMP004/003 preservadas; CI funcional pendiente de run.",
   "blocks": [
     {
       "block": "01",
@@ -176,6 +176,275 @@
           "slot": 99
         }
       ]
+    },
+    {
+      "block": "02",
+      "family": "TRAINING",
+      "ids": [
+        "pp_max",
+        "hp_up",
+        "protein",
+        "iron"
+      ],
+      "source_evidence": [
+        "modules/inventory/field_pp_boost_effects.gd",
+        "modules/inventory/field_training_effects.gd",
+        "modules/inventory/field_friendship_effects.gd",
+        "modules/inventory/field_item_service.gd",
+        "tests/gameplay/item_field_pp_v8.gd",
+        "tests/gameplay/field_held_v17.gd"
+      ],
+      "cases": [
+        {
+          "scenario": "pp_max_zero_boost_first",
+          "id": "pp_max",
+          "kind": "pp",
+          "applies": true,
+          "boosts": 0,
+          "start_pp": 30,
+          "slot": 0,
+          "expected_boosts": 3
+        },
+        {
+          "scenario": "pp_max_one_boost_first",
+          "id": "pp_max",
+          "kind": "pp",
+          "applies": true,
+          "boosts": 1,
+          "start_pp": 33,
+          "slot": 0,
+          "expected_boosts": 3
+        },
+        {
+          "scenario": "pp_max_two_boost_second",
+          "id": "pp_max",
+          "kind": "pp",
+          "applies": true,
+          "boosts": 2,
+          "start_pp": 6,
+          "slot": 1,
+          "expected_boosts": 3
+        },
+        {
+          "scenario": "pp_max_three_boost_reject",
+          "id": "pp_max",
+          "kind": "pp",
+          "applies": false,
+          "boosts": 3,
+          "start_pp": 40,
+          "slot": 0
+        },
+        {
+          "scenario": "pp_max_no_slot_reject",
+          "id": "pp_max",
+          "kind": "pp",
+          "applies": false,
+          "boosts": 0,
+          "start_pp": 30,
+          "slot": -1
+        },
+        {
+          "scenario": "pp_max_invalid_slot_reject",
+          "id": "pp_max",
+          "kind": "pp",
+          "applies": false,
+          "boosts": 0,
+          "start_pp": 30,
+          "slot": 99
+        },
+        {
+          "scenario": "hp_up_zero_ev",
+          "id": "hp_up",
+          "kind": "vitamin",
+          "applies": true,
+          "stat": "hp",
+          "start_ev": 0,
+          "other_ev_total": 0,
+          "start_friendship": 99,
+          "expected_ev_gain": 10
+        },
+        {
+          "scenario": "hp_up_near_stat_cap",
+          "id": "hp_up",
+          "kind": "vitamin",
+          "applies": true,
+          "stat": "hp",
+          "start_ev": 248,
+          "other_ev_total": 0,
+          "start_friendship": 100,
+          "expected_ev_gain": 4
+        },
+        {
+          "scenario": "hp_up_stat_cap_reject",
+          "id": "hp_up",
+          "kind": "vitamin",
+          "applies": false,
+          "stat": "hp",
+          "start_ev": 252,
+          "other_ev_total": 0,
+          "start_friendship": 200
+        },
+        {
+          "scenario": "hp_up_global_508_capped",
+          "id": "hp_up",
+          "kind": "vitamin",
+          "applies": true,
+          "stat": "hp",
+          "start_ev": 0,
+          "other_ev_total": 508,
+          "start_friendship": 200,
+          "expected_ev_gain": 2
+        },
+        {
+          "scenario": "hp_up_global_510_reject",
+          "id": "hp_up",
+          "kind": "vitamin",
+          "applies": false,
+          "stat": "hp",
+          "start_ev": 0,
+          "other_ev_total": 510,
+          "start_friendship": 100
+        },
+        {
+          "scenario": "hp_up_unexpected_slot_reject",
+          "id": "hp_up",
+          "kind": "vitamin",
+          "applies": false,
+          "stat": "hp",
+          "start_ev": 0,
+          "other_ev_total": 0,
+          "start_friendship": 99,
+          "slot": 0
+        },
+        {
+          "scenario": "protein_zero_ev",
+          "id": "protein",
+          "kind": "vitamin",
+          "applies": true,
+          "stat": "attack",
+          "start_ev": 0,
+          "other_ev_total": 0,
+          "start_friendship": 99,
+          "expected_ev_gain": 10
+        },
+        {
+          "scenario": "protein_near_stat_cap",
+          "id": "protein",
+          "kind": "vitamin",
+          "applies": true,
+          "stat": "attack",
+          "start_ev": 248,
+          "other_ev_total": 0,
+          "start_friendship": 100,
+          "expected_ev_gain": 4
+        },
+        {
+          "scenario": "protein_stat_cap_reject",
+          "id": "protein",
+          "kind": "vitamin",
+          "applies": false,
+          "stat": "attack",
+          "start_ev": 252,
+          "other_ev_total": 0,
+          "start_friendship": 200
+        },
+        {
+          "scenario": "protein_global_508_capped",
+          "id": "protein",
+          "kind": "vitamin",
+          "applies": true,
+          "stat": "attack",
+          "start_ev": 0,
+          "other_ev_total": 508,
+          "start_friendship": 200,
+          "expected_ev_gain": 2
+        },
+        {
+          "scenario": "protein_global_510_reject",
+          "id": "protein",
+          "kind": "vitamin",
+          "applies": false,
+          "stat": "attack",
+          "start_ev": 0,
+          "other_ev_total": 510,
+          "start_friendship": 100
+        },
+        {
+          "scenario": "protein_unexpected_slot_reject",
+          "id": "protein",
+          "kind": "vitamin",
+          "applies": false,
+          "stat": "attack",
+          "start_ev": 0,
+          "other_ev_total": 0,
+          "start_friendship": 99,
+          "slot": 0
+        },
+        {
+          "scenario": "iron_zero_ev",
+          "id": "iron",
+          "kind": "vitamin",
+          "applies": true,
+          "stat": "defense",
+          "start_ev": 0,
+          "other_ev_total": 0,
+          "start_friendship": 99,
+          "expected_ev_gain": 10
+        },
+        {
+          "scenario": "iron_near_stat_cap",
+          "id": "iron",
+          "kind": "vitamin",
+          "applies": true,
+          "stat": "defense",
+          "start_ev": 248,
+          "other_ev_total": 0,
+          "start_friendship": 100,
+          "expected_ev_gain": 4
+        },
+        {
+          "scenario": "iron_stat_cap_reject",
+          "id": "iron",
+          "kind": "vitamin",
+          "applies": false,
+          "stat": "defense",
+          "start_ev": 252,
+          "other_ev_total": 0,
+          "start_friendship": 200
+        },
+        {
+          "scenario": "iron_global_508_capped",
+          "id": "iron",
+          "kind": "vitamin",
+          "applies": true,
+          "stat": "defense",
+          "start_ev": 0,
+          "other_ev_total": 508,
+          "start_friendship": 200,
+          "expected_ev_gain": 2
+        },
+        {
+          "scenario": "iron_global_510_reject",
+          "id": "iron",
+          "kind": "vitamin",
+          "applies": false,
+          "stat": "defense",
+          "start_ev": 0,
+          "other_ev_total": 510,
+          "start_friendship": 100
+        },
+        {
+          "scenario": "iron_unexpected_slot_reject",
+          "id": "iron",
+          "kind": "vitamin",
+          "applies": false,
+          "stat": "defense",
+          "start_ev": 0,
+          "other_ev_total": 0,
+          "start_friendship": 99,
+          "slot": 0
+        }
+      ]
     }
   ],
   "format": "gen9calvounifiedv1",
@@ -185,13 +454,16 @@
     "reserve"
   ],
   "completed_blocks": [
-    1
+    1,
+    2
   ],
   "seed": 1412,
   "limitations": [
     "Caramelo Raro: casos de Mew sin decisiones adicionales de evolución/aprendizaje; otras especies pueden requerir interfaz de decisiones NEEDS_CONTEXT, se preservan tests históricos.",
     "Más PP: aumento 20% de PP base por aplicación hasta tres, conserva PP gastados y solo afecta ranura seleccionada; no equivale a Éter.",
     "Habilidades: transiciones comprobadas con los slots reales de Growlithe; no se infieren cambios de forma o slots ambiguos; la cobertura total histórica sigue en ITEM_FIELD_V10.",
-    "La CI de esta rama, no los resultados de CAMP004, debe demostrar el bloque 01 con Godot y Python en el SHA publicado."
+    "La CI de esta rama, no los resultados de CAMP004, debe demostrar el bloque 01 con Godot y Python en el SHA publicado.",
+    "PP Máximos fija directamente 3 incrementos sobre PP base del movimiento seleccionado: actual y máximo crecen el mismo diferencial, sin restaurar PP gastados. Rechaza si hay 3 incrementos o la ranura es inválida.",
+    "Vitaminas HP Up, Protein e Iron añaden hasta 10 EV respectivos, limitados a 252 por estadística y 510 global; con límite 508, solo 2 EV. Rechazo sin consumo por topes y slot incompatible."
   ]
 }
