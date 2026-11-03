@@ -411,6 +411,43 @@
       "missing_shared_integration": "tera_type_change_and_resource_consumption_battle_or_overworld_api",
       "note": "Bloque09: 4 materiales Tera seleccionados. Solo inventario, rechazo real y serialización propia de PlayerInventory; sin implementar transformación o SaveV2 integral.",
       "ci_required": true
+    },
+    {
+      "bloque": "10",
+      "familia": "TERA_MATERIAL",
+      "ids": [
+        "psychic_tera_shard",
+        "rock_tera_shard",
+        "steel_tera_shard",
+        "water_tera_shard"
+      ],
+      "objetivo": "auditar_fragmentos_tera_sin_activar_mecanica",
+      "current_state": "DEPENDENCIA_COMPARTIDA",
+      "per_id_status": {
+        "psychic_tera_shard": "DEPENDENCIA_COMPARTIDA",
+        "rock_tera_shard": "DEPENDENCIA_COMPARTIDA",
+        "steel_tera_shard": "DEPENDENCIA_COMPARTIDA",
+        "water_tera_shard": "DEPENDENCIA_COMPARTIDA"
+      },
+      "inventory_counts": [
+        0,
+        1,
+        25,
+        999
+      ],
+      "mutations": [
+        "add",
+        "remove",
+        "roundtrip"
+      ],
+      "expected_direct_use": {
+        "reason": "field_effect_not_connected",
+        "status": "DEPENDENCY_MISSING"
+      },
+      "no_terastallization_certified": true,
+      "missing_shared_integration": "tera_type_change_and_resource_consumption_battle_or_overworld_api",
+      "note": "Bloque10 FINAL: cuatro Teralitos seleccionados. Verificar mochila, rechazo seguro, límites y serialización PlayerInventory; no implementar teracristalización ni certificar SaveV2.",
+      "ci_required": true
     }
   ]
 }
