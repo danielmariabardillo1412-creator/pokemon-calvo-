@@ -1,3 +1,22 @@
+# CAMPAÑA_004_FINALIZADA — IA5/W05 · 10/10 · 60 MT · CI FINAL PASS
+
+**ESTADO DEFINITIVO VERIFICADO (2026-11-03):** entregadas y verificadas 60 MT `tm82`–`tm141` de Scarlet/Violet, 10 bloques completos. La CI [GitHub Actions #41591821717](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41591821717), SHA funcional `5c9051ca2a0a186d31705372d2f0c350e2dd62db`, job `125770313243`, terminó **`completed/success`**; se verificaron personalmente los recibos reales del log:
+
+- `CAMP004_W05_PY PASS blocks=10 checks=580`
+- `CAMP004_GATE_PY_PASS worker=W05 blocks=10 checks=580`
+- `CAMP004_W05_GODOT PASS blocks=10 checks=2166`
+- `CAMP004_GATE_GODOT_PASS worker=W05 blocks=10 checks=2166`
+- Regresión CAMP003 de las 60 MT anteriores: `CAMP003_W05_PY PASS blocks=10 checks=580` y `CAMP003_W05_GODOT PASS blocks=10 checks=2166`
+- Regresión CAMP002: `Ran 11 tests` y `OK`
+
+**DIFF/Y ALCANCE:** únicamente fixture y CSV CAMP004 propios, diez informes iterativos, informe final y continuidad W05. No se corrigió producción porque no hubo defecto demostrado. No se modificó `main`, V28, PR118, rama árbitra, otras W, catálogos, políticas, 19 máquinas legacy, workflows ni partidas reales. No hubo merge; IA6 debe auditar/integrar. Godot headless no acredita validación visual/GPU.
+
+**CI PASS sobre SHA de pruebas**: los commits documentales posteriores no cambian fixture, CSV, runners, perfil o producción; el resultado válido sigue siendo el SHA de progreso `5c9051ca2a0a186d31705372d2f0c350e2dd62db`. La fila CSV 10 mantiene su estado histórico `EN_CI_AUTOMATICA` para no relanzar CI redundante; este informe prevalece en cuanto a veredicto final.
+
+**STOP OFICIAL IA5/W05:** 10/10 autorizado completado, 60/60 verificados funcionalmente, ninguna `p` adicional puede crear bloque 11 o iniciar otra campaña. IA6 continúa con auditoría e integración; W05 permanece detenido.
+
+---
+
 # IA5/W05 — CAMPAÑA_004 · INFORME CONSOLIDADO 10/10
 
 **ESTADO DOCUMENTAL:** diez microbloques entregados, 60 MT nuevas Scarlet/Violet (`tm82`–`tm141`). **ESTADO FUNCIONAL A PRIMERA PUBLICACIÓN:** CI final del décimo bloque pendiente de resultado; no atribuir 60/60 PASS sin comprobación del run.
