@@ -3,7 +3,7 @@
   "campaign": "CAMP_005",
   "worker": "W02",
   "kind": "TRAINING",
-  "purpose": "CAMP005 IA2/W02 5/10 entrenamiento sobre servicios reales; plumas +1 EV y amistad 3/2/1; hitos CI + regresiones CAMP004/CAMP003; no certificar sin logs",
+  "purpose": "CAMP005 W02 filas 01–06: entrenamiento nativo por FieldItemService, oráculos y mutaciones, sin producción ni main",
   "blocks": [
     {
       "block": "01",
@@ -1392,6 +1392,370 @@
           "expected_ev_gain": 1
         }
       ]
+    },
+    {
+      "block": "06",
+      "family": "TRAINING",
+      "ids": [
+        "clever_wing",
+        "swift_wing",
+        "health_mochi",
+        "muscle_mochi"
+      ],
+      "source_evidence": [
+        "modules/inventory/field_training_effects.gd",
+        "modules/inventory/field_mochi_effects.gd",
+        "modules/inventory/field_item_effects.gd",
+        "modules/inventory/field_friendship_effects.gd",
+        "modules/inventory/field_item_service.gd",
+        "tests/gameplay/item_mochi_v13.gd"
+      ],
+      "cases": [
+        {
+          "scenario": "clever_wing_zero",
+          "id": "clever_wing",
+          "kind": "wing",
+          "stat": "special_defense",
+          "applies": true,
+          "start_ev": 0,
+          "other_ev_total": 0,
+          "start_friendship": 99,
+          "expected_ev_gain": 1
+        },
+        {
+          "scenario": "clever_wing_stat_near",
+          "id": "clever_wing",
+          "kind": "wing",
+          "stat": "special_defense",
+          "applies": true,
+          "start_ev": 251,
+          "other_ev_total": 0,
+          "start_friendship": 100,
+          "expected_ev_gain": 1
+        },
+        {
+          "scenario": "clever_wing_stat_reject",
+          "id": "clever_wing",
+          "kind": "wing",
+          "stat": "special_defense",
+          "applies": false,
+          "start_ev": 252,
+          "other_ev_total": 0,
+          "start_friendship": 200
+        },
+        {
+          "scenario": "clever_wing_total_near",
+          "id": "clever_wing",
+          "kind": "wing",
+          "stat": "special_defense",
+          "applies": true,
+          "start_ev": 0,
+          "other_ev_total": 509,
+          "start_friendship": 200,
+          "expected_ev_gain": 1
+        },
+        {
+          "scenario": "clever_wing_total_reject",
+          "id": "clever_wing",
+          "kind": "wing",
+          "stat": "special_defense",
+          "applies": false,
+          "start_ev": 0,
+          "other_ev_total": 510,
+          "start_friendship": 100
+        },
+        {
+          "scenario": "clever_wing_slot_reject",
+          "id": "clever_wing",
+          "kind": "wing",
+          "stat": "special_defense",
+          "applies": false,
+          "start_ev": 0,
+          "other_ev_total": 0,
+          "start_friendship": 99,
+          "slot": 0
+        },
+        {
+          "scenario": "clever_wing_friend_254",
+          "id": "clever_wing",
+          "kind": "wing",
+          "stat": "special_defense",
+          "applies": true,
+          "start_ev": 0,
+          "other_ev_total": 0,
+          "start_friendship": 254,
+          "expected_ev_gain": 1
+        },
+        {
+          "scenario": "clever_wing_total_509",
+          "id": "clever_wing",
+          "kind": "wing",
+          "stat": "special_defense",
+          "applies": true,
+          "start_ev": 0,
+          "other_ev_total": 509,
+          "start_friendship": 100,
+          "expected_ev_gain": 1
+        },
+        {
+          "scenario": "swift_wing_zero",
+          "id": "swift_wing",
+          "kind": "wing",
+          "stat": "speed",
+          "applies": true,
+          "start_ev": 0,
+          "other_ev_total": 0,
+          "start_friendship": 99,
+          "expected_ev_gain": 1
+        },
+        {
+          "scenario": "swift_wing_stat_near",
+          "id": "swift_wing",
+          "kind": "wing",
+          "stat": "speed",
+          "applies": true,
+          "start_ev": 251,
+          "other_ev_total": 0,
+          "start_friendship": 100,
+          "expected_ev_gain": 1
+        },
+        {
+          "scenario": "swift_wing_stat_reject",
+          "id": "swift_wing",
+          "kind": "wing",
+          "stat": "speed",
+          "applies": false,
+          "start_ev": 252,
+          "other_ev_total": 0,
+          "start_friendship": 200
+        },
+        {
+          "scenario": "swift_wing_total_near",
+          "id": "swift_wing",
+          "kind": "wing",
+          "stat": "speed",
+          "applies": true,
+          "start_ev": 0,
+          "other_ev_total": 509,
+          "start_friendship": 200,
+          "expected_ev_gain": 1
+        },
+        {
+          "scenario": "swift_wing_total_reject",
+          "id": "swift_wing",
+          "kind": "wing",
+          "stat": "speed",
+          "applies": false,
+          "start_ev": 0,
+          "other_ev_total": 510,
+          "start_friendship": 100
+        },
+        {
+          "scenario": "swift_wing_slot_reject",
+          "id": "swift_wing",
+          "kind": "wing",
+          "stat": "speed",
+          "applies": false,
+          "start_ev": 0,
+          "other_ev_total": 0,
+          "start_friendship": 99,
+          "slot": 0
+        },
+        {
+          "scenario": "swift_wing_friend_254",
+          "id": "swift_wing",
+          "kind": "wing",
+          "stat": "speed",
+          "applies": true,
+          "start_ev": 0,
+          "other_ev_total": 0,
+          "start_friendship": 254,
+          "expected_ev_gain": 1
+        },
+        {
+          "scenario": "swift_wing_total_509",
+          "id": "swift_wing",
+          "kind": "wing",
+          "stat": "speed",
+          "applies": true,
+          "start_ev": 0,
+          "other_ev_total": 509,
+          "start_friendship": 100,
+          "expected_ev_gain": 1
+        },
+        {
+          "scenario": "health_mochi_zero",
+          "id": "health_mochi",
+          "kind": "mochi",
+          "stat": "hp",
+          "applies": true,
+          "start_ev": 0,
+          "other_ev_total": 0,
+          "start_friendship": 99,
+          "expected_ev_gain": 10
+        },
+        {
+          "scenario": "health_mochi_stat_near",
+          "id": "health_mochi",
+          "kind": "mochi",
+          "stat": "hp",
+          "applies": true,
+          "start_ev": 248,
+          "other_ev_total": 0,
+          "start_friendship": 100,
+          "expected_ev_gain": 4
+        },
+        {
+          "scenario": "health_mochi_stat_reject",
+          "id": "health_mochi",
+          "kind": "mochi",
+          "stat": "hp",
+          "applies": false,
+          "start_ev": 252,
+          "other_ev_total": 0,
+          "start_friendship": 200
+        },
+        {
+          "scenario": "health_mochi_total_near",
+          "id": "health_mochi",
+          "kind": "mochi",
+          "stat": "hp",
+          "applies": true,
+          "start_ev": 0,
+          "other_ev_total": 508,
+          "start_friendship": 200,
+          "expected_ev_gain": 2
+        },
+        {
+          "scenario": "health_mochi_total_reject",
+          "id": "health_mochi",
+          "kind": "mochi",
+          "stat": "hp",
+          "applies": false,
+          "start_ev": 0,
+          "other_ev_total": 510,
+          "start_friendship": 100
+        },
+        {
+          "scenario": "health_mochi_slot_reject",
+          "id": "health_mochi",
+          "kind": "mochi",
+          "stat": "hp",
+          "applies": false,
+          "start_ev": 0,
+          "other_ev_total": 0,
+          "start_friendship": 99,
+          "slot": 0
+        },
+        {
+          "scenario": "health_mochi_friend_254",
+          "id": "health_mochi",
+          "kind": "mochi",
+          "stat": "hp",
+          "applies": true,
+          "start_ev": 0,
+          "other_ev_total": 0,
+          "start_friendship": 254,
+          "expected_ev_gain": 10
+        },
+        {
+          "scenario": "health_mochi_total_509",
+          "id": "health_mochi",
+          "kind": "mochi",
+          "stat": "hp",
+          "applies": true,
+          "start_ev": 0,
+          "other_ev_total": 509,
+          "start_friendship": 100,
+          "expected_ev_gain": 1
+        },
+        {
+          "scenario": "muscle_mochi_zero",
+          "id": "muscle_mochi",
+          "kind": "mochi",
+          "stat": "attack",
+          "applies": true,
+          "start_ev": 0,
+          "other_ev_total": 0,
+          "start_friendship": 99,
+          "expected_ev_gain": 10
+        },
+        {
+          "scenario": "muscle_mochi_stat_near",
+          "id": "muscle_mochi",
+          "kind": "mochi",
+          "stat": "attack",
+          "applies": true,
+          "start_ev": 248,
+          "other_ev_total": 0,
+          "start_friendship": 100,
+          "expected_ev_gain": 4
+        },
+        {
+          "scenario": "muscle_mochi_stat_reject",
+          "id": "muscle_mochi",
+          "kind": "mochi",
+          "stat": "attack",
+          "applies": false,
+          "start_ev": 252,
+          "other_ev_total": 0,
+          "start_friendship": 200
+        },
+        {
+          "scenario": "muscle_mochi_total_near",
+          "id": "muscle_mochi",
+          "kind": "mochi",
+          "stat": "attack",
+          "applies": true,
+          "start_ev": 0,
+          "other_ev_total": 508,
+          "start_friendship": 200,
+          "expected_ev_gain": 2
+        },
+        {
+          "scenario": "muscle_mochi_total_reject",
+          "id": "muscle_mochi",
+          "kind": "mochi",
+          "stat": "attack",
+          "applies": false,
+          "start_ev": 0,
+          "other_ev_total": 510,
+          "start_friendship": 100
+        },
+        {
+          "scenario": "muscle_mochi_slot_reject",
+          "id": "muscle_mochi",
+          "kind": "mochi",
+          "stat": "attack",
+          "applies": false,
+          "start_ev": 0,
+          "other_ev_total": 0,
+          "start_friendship": 99,
+          "slot": 0
+        },
+        {
+          "scenario": "muscle_mochi_friend_254",
+          "id": "muscle_mochi",
+          "kind": "mochi",
+          "stat": "attack",
+          "applies": true,
+          "start_ev": 0,
+          "other_ev_total": 0,
+          "start_friendship": 254,
+          "expected_ev_gain": 10
+        },
+        {
+          "scenario": "muscle_mochi_total_509",
+          "id": "muscle_mochi",
+          "kind": "mochi",
+          "stat": "attack",
+          "applies": true,
+          "start_ev": 0,
+          "other_ev_total": 509,
+          "start_friendship": 100,
+          "expected_ev_gain": 1
+        }
+      ]
     }
   ],
   "format": "gen9calvounifiedv1",
@@ -1405,7 +1769,8 @@
     2,
     3,
     4,
-    5
+    5,
+    6
   ],
   "seed": 1412,
   "limitations": [
@@ -1420,6 +1785,7 @@
     "Caramelos de experiencia S/M/L/XL: aportes nominales 800/3000/10000/30000 XP; la ganancia se limita a la experiencia restante hasta nivel100. Nivel y subida se obtienen de ProgressionRuleset, sin inventar incremento fijo de nivel.",
     "Los escenarios de crecimiento de bloque04 utilizan Mew, con rutas sin decisiones adicionales; en otras especies, el sistema puede devolver NEEDS_CONTEXT por aprendizaje/evolución. Bloque 04 no valida exhaustivamente esas variantes históricas.",
     "Plumas health/muscle/resist/genius incrementan exactamente +1 EV de PS/Ataque/Defensa/Ataque Especial respectivamente, si hay hueco tanto por atributo (252) como global (510); no extrapolar efecto +10 de vitaminas.",
-    "Las plumas aumentan amistad por tramos [3,2,1] sin bonificación de Campana Alivio en escenarios; tres estados de posesión, rechazo atómico y SaveV2. En bloque05 hay gate de regresiones CAMP004/CAMP003; su CI requiere logs concretos."
+    "Las plumas aumentan amistad por tramos [3,2,1] sin bonificación de Campana Alivio en escenarios; tres estados de posesión, rechazo atómico y SaveV2. En bloque05 hay gate de regresiones CAMP004/CAMP003; su CI requiere logs concretos.",
+    "Fila06: plumas +1 EV amistad 3/2/1; mochis +10 EV y sin amistad (contrato RHH V13). Ambos con límites 252/510, stock/propietario SaveV2. CI por verificar."
   ]
 }
