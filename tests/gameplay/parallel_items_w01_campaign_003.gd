@@ -161,7 +161,8 @@ func _frame_c003(session: RefCounted, id: StringName) -> Dictionary:
 	var force_flags: Array = request.get("forceSwitch", [])
 	var forcing: bool = force_flags.has(true)
 	return {
-		"valid": native.has("boosts"), "hp": own.current_hp, "max_hp": own.stats.max_hp, "foe_hp": foe.current_hp,
+		"valid": native.has("boosts"), "hp": own.current_hp, "max_hp": own.stats.max_hp,
+		"foe_helmet": String(foe.held_item_id) == "rocky_helmet", "foe_hp": foe.current_hp,
 		"foe_max_hp": foe.stats.max_hp, "reserve_hp": bench.current_hp, "reserve_max_hp": bench.stats.max_hp,
 		"status_move_disabled": moves.size() > 1 and bool(moves[1].get("disabled", false)),
 		"own_has_item": own.held_item_id == id, "reserve_has_item": bench.held_item_id == id,
@@ -203,6 +204,10 @@ func _probe_c003(row: Dictionary, seed: int, mode: String) -> Dictionary:
 	if row.has("actor_ability") and not String(row.actor_ability).is_empty():
 		actor.ability_id = StringName(row.actor_ability)
 	prepared.foe = _mon(StringName(row.foe_species), int(row.get("foe_level", 100)), &"foe", [String(row.foe_move)])
+	if row.has("foe_item") and not String(row.foe_item).is_empty():
+		prepared.foe.held_item_id = StringName(row.foe_item)
+		check(mode + " rival lleva objeto reactivo correcto",
+			String(prepared.foe.held_item_id) == String(row.foe_item))
 	var id := StringName(row.item_id)
 	check(mode + " dos unidades antes", _units(owner, id) == 2)
 	var owner_frozen: String = JSON.stringify(_owner_data(owner))
@@ -321,7 +326,7 @@ func _compare_c003(row: Dictionary, obs: Dictionary) -> void:
 	var fn: int = int(n.start.foe_hp) - int(n.after.foe_hp)
 	var fr: int = int(r.start.foe_hp) - int(r.after.foe_hp)
 	check("reserva igual al control (PS actor)", dr == dn)
-	if String(row.op) not in ["trap_residual", "trap_extended_duration", "metronome_repeat_reset"]:
+	if String(row.op) not in ["trap_residual", "trap_extended_duration", "metronome_repeat_reset", "muscle_physical_damage_boost"]:
 		check("dano rival sin cambio no autorizado", fa == fn and fn == fr)
 	match String(row.op):
 		"ground_immunity":
@@ -612,6 +617,51 @@ func _compare_c003(row: Dictionary, obs: Dictionary) -> void:
 			check("Metrónomo: movimiento de estado no crea daño",
 				fa == 0 and fn == 0 and fr == 0)
 			check("Metrónomo: sin repetición se conserva",
+				not a.after.own_consumed and a.physical_units == 2)
+		"mirror_copy_opponent_boost":
+			check("Hierba Copia: solo el portador copia la subida ajena de Espada Santa",
+				a.after.attack_stage == 2 and n.after.attack_stage == 0
+				and r.after.attack_stage == 0)
+			check("Hierba Copia: consumir una unidad solo en activo",
+				a.after.own_consumed and a.physical_units == 1
+				and not r.after.reserve_consumed and r.physical_units == 2)
+		"mirror_no_negative_copy":
+			check("Hierba Copia: Growl del rival reduce Ataque, no hay subida copiable",
+				a.after.attack_stage == -1 and n.after.attack_stage == -1
+				and r.after.attack_stage == -1)
+			check("Hierba Copia: sin boost positivo se conserva",
+				not a.after.own_consumed and a.physical_units == 2)
+		"muscle_physical_damage_boost":
+			check("Cinta Fuerte: daño físico real mayor solo en portador",
+				fa > fn and fn > 0 and fr == fn)
+			check("Cinta Fuerte: nunca se consume al potenciar un golpe",
+				not a.after.own_consumed and a.physical_units == 2
+				and not r.after.reserve_consumed)
+		"muscle_special_no_boost":
+			check("Cinta Fuerte: daño especial no aumenta",
+				fa > 0 and fa == fn and fn == fr)
+			check("Cinta Fuerte: control especial mantiene objeto",
+				not a.after.own_consumed and a.physical_units == 2)
+		"pads_helmet_contact_protection":
+			check("Paracontacto: Casco Dentado presente en los tres rivales",
+				a.start.foe_helmet and n.start.foe_helmet and r.start.foe_helmet)
+			check("Paracontacto: tras Tackle solo portador evita daño por contacto",
+				da == 0 and dn > 0 and dr == dn and a.after.hp == a.start.hp)
+			check("Paracontacto: no consume ni altera daño al rival",
+				not a.after.own_consumed and a.physical_units == 2
+				and fa > 0 and fa == fn and fn == fr)
+		"pads_helmet_noncontact_control":
+			check("Paracontacto: Casco Dentado presente también en control especial",
+				a.start.foe_helmet and n.start.foe_helmet and r.start.foe_helmet)
+			check("Paracontacto: Agua Pistola no provoca daño de contacto",
+				da == 0 and dn == 0 and dr == 0 and fa > 0 and fa == fn and fn == fr)
+			check("Paracontacto: no se consume por especial",
+				not a.after.own_consumed and a.physical_units == 2)
+		"pads_contact_without_helmet":
+			check("Paracontacto: sin Casco Dentado no hay daño de contacto extra",
+				not a.start.foe_helmet and not n.start.foe_helmet
+				and not r.start.foe_helmet and da == 0 and dn == 0 and dr == 0)
+			check("Paracontacto: conserva item sin reacción rival",
 				not a.after.own_consumed and a.physical_units == 2)
 		_:
 			check("Operacion no autorizada", false)
