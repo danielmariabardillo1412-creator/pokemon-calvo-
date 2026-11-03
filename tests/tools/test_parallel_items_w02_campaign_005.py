@@ -1339,6 +1339,355 @@ EXPECTED_05 = json.loads(r'''[
 IDS_05 = ["health_wing","muscle_wing","resist_wing","genius_wing"]
 SOURCES_05 = ["modules/inventory/field_training_effects.gd","modules/inventory/field_friendship_effects.gd","modules/inventory/field_item_effects.gd","modules/inventory/field_item_service.gd","tests/gameplay/parallel_items_w02_campaign_005.gd"]
 
+EXPECTED_06 = json.loads(r'''[
+  {
+    "scenario": "clever_wing_zero",
+    "id": "clever_wing",
+    "kind": "wing",
+    "stat": "special_defense",
+    "applies": true,
+    "start_ev": 0,
+    "other_ev_total": 0,
+    "start_friendship": 99,
+    "expected_ev_gain": 1
+  },
+  {
+    "scenario": "clever_wing_stat_near",
+    "id": "clever_wing",
+    "kind": "wing",
+    "stat": "special_defense",
+    "applies": true,
+    "start_ev": 251,
+    "other_ev_total": 0,
+    "start_friendship": 100,
+    "expected_ev_gain": 1
+  },
+  {
+    "scenario": "clever_wing_stat_reject",
+    "id": "clever_wing",
+    "kind": "wing",
+    "stat": "special_defense",
+    "applies": false,
+    "start_ev": 252,
+    "other_ev_total": 0,
+    "start_friendship": 200
+  },
+  {
+    "scenario": "clever_wing_total_near",
+    "id": "clever_wing",
+    "kind": "wing",
+    "stat": "special_defense",
+    "applies": true,
+    "start_ev": 0,
+    "other_ev_total": 509,
+    "start_friendship": 200,
+    "expected_ev_gain": 1
+  },
+  {
+    "scenario": "clever_wing_total_reject",
+    "id": "clever_wing",
+    "kind": "wing",
+    "stat": "special_defense",
+    "applies": false,
+    "start_ev": 0,
+    "other_ev_total": 510,
+    "start_friendship": 100
+  },
+  {
+    "scenario": "clever_wing_slot_reject",
+    "id": "clever_wing",
+    "kind": "wing",
+    "stat": "special_defense",
+    "applies": false,
+    "start_ev": 0,
+    "other_ev_total": 0,
+    "start_friendship": 99,
+    "slot": 0
+  },
+  {
+    "scenario": "clever_wing_friend_254",
+    "id": "clever_wing",
+    "kind": "wing",
+    "stat": "special_defense",
+    "applies": true,
+    "start_ev": 0,
+    "other_ev_total": 0,
+    "start_friendship": 254,
+    "expected_ev_gain": 1
+  },
+  {
+    "scenario": "clever_wing_total_509",
+    "id": "clever_wing",
+    "kind": "wing",
+    "stat": "special_defense",
+    "applies": true,
+    "start_ev": 0,
+    "other_ev_total": 509,
+    "start_friendship": 100,
+    "expected_ev_gain": 1
+  },
+  {
+    "scenario": "swift_wing_zero",
+    "id": "swift_wing",
+    "kind": "wing",
+    "stat": "speed",
+    "applies": true,
+    "start_ev": 0,
+    "other_ev_total": 0,
+    "start_friendship": 99,
+    "expected_ev_gain": 1
+  },
+  {
+    "scenario": "swift_wing_stat_near",
+    "id": "swift_wing",
+    "kind": "wing",
+    "stat": "speed",
+    "applies": true,
+    "start_ev": 251,
+    "other_ev_total": 0,
+    "start_friendship": 100,
+    "expected_ev_gain": 1
+  },
+  {
+    "scenario": "swift_wing_stat_reject",
+    "id": "swift_wing",
+    "kind": "wing",
+    "stat": "speed",
+    "applies": false,
+    "start_ev": 252,
+    "other_ev_total": 0,
+    "start_friendship": 200
+  },
+  {
+    "scenario": "swift_wing_total_near",
+    "id": "swift_wing",
+    "kind": "wing",
+    "stat": "speed",
+    "applies": true,
+    "start_ev": 0,
+    "other_ev_total": 509,
+    "start_friendship": 200,
+    "expected_ev_gain": 1
+  },
+  {
+    "scenario": "swift_wing_total_reject",
+    "id": "swift_wing",
+    "kind": "wing",
+    "stat": "speed",
+    "applies": false,
+    "start_ev": 0,
+    "other_ev_total": 510,
+    "start_friendship": 100
+  },
+  {
+    "scenario": "swift_wing_slot_reject",
+    "id": "swift_wing",
+    "kind": "wing",
+    "stat": "speed",
+    "applies": false,
+    "start_ev": 0,
+    "other_ev_total": 0,
+    "start_friendship": 99,
+    "slot": 0
+  },
+  {
+    "scenario": "swift_wing_friend_254",
+    "id": "swift_wing",
+    "kind": "wing",
+    "stat": "speed",
+    "applies": true,
+    "start_ev": 0,
+    "other_ev_total": 0,
+    "start_friendship": 254,
+    "expected_ev_gain": 1
+  },
+  {
+    "scenario": "swift_wing_total_509",
+    "id": "swift_wing",
+    "kind": "wing",
+    "stat": "speed",
+    "applies": true,
+    "start_ev": 0,
+    "other_ev_total": 509,
+    "start_friendship": 100,
+    "expected_ev_gain": 1
+  },
+  {
+    "scenario": "health_mochi_zero",
+    "id": "health_mochi",
+    "kind": "mochi",
+    "stat": "hp",
+    "applies": true,
+    "start_ev": 0,
+    "other_ev_total": 0,
+    "start_friendship": 99,
+    "expected_ev_gain": 10
+  },
+  {
+    "scenario": "health_mochi_stat_near",
+    "id": "health_mochi",
+    "kind": "mochi",
+    "stat": "hp",
+    "applies": true,
+    "start_ev": 248,
+    "other_ev_total": 0,
+    "start_friendship": 100,
+    "expected_ev_gain": 4
+  },
+  {
+    "scenario": "health_mochi_stat_reject",
+    "id": "health_mochi",
+    "kind": "mochi",
+    "stat": "hp",
+    "applies": false,
+    "start_ev": 252,
+    "other_ev_total": 0,
+    "start_friendship": 200
+  },
+  {
+    "scenario": "health_mochi_total_near",
+    "id": "health_mochi",
+    "kind": "mochi",
+    "stat": "hp",
+    "applies": true,
+    "start_ev": 0,
+    "other_ev_total": 508,
+    "start_friendship": 200,
+    "expected_ev_gain": 2
+  },
+  {
+    "scenario": "health_mochi_total_reject",
+    "id": "health_mochi",
+    "kind": "mochi",
+    "stat": "hp",
+    "applies": false,
+    "start_ev": 0,
+    "other_ev_total": 510,
+    "start_friendship": 100
+  },
+  {
+    "scenario": "health_mochi_slot_reject",
+    "id": "health_mochi",
+    "kind": "mochi",
+    "stat": "hp",
+    "applies": false,
+    "start_ev": 0,
+    "other_ev_total": 0,
+    "start_friendship": 99,
+    "slot": 0
+  },
+  {
+    "scenario": "health_mochi_friend_254",
+    "id": "health_mochi",
+    "kind": "mochi",
+    "stat": "hp",
+    "applies": true,
+    "start_ev": 0,
+    "other_ev_total": 0,
+    "start_friendship": 254,
+    "expected_ev_gain": 10
+  },
+  {
+    "scenario": "health_mochi_total_509",
+    "id": "health_mochi",
+    "kind": "mochi",
+    "stat": "hp",
+    "applies": true,
+    "start_ev": 0,
+    "other_ev_total": 509,
+    "start_friendship": 100,
+    "expected_ev_gain": 1
+  },
+  {
+    "scenario": "muscle_mochi_zero",
+    "id": "muscle_mochi",
+    "kind": "mochi",
+    "stat": "attack",
+    "applies": true,
+    "start_ev": 0,
+    "other_ev_total": 0,
+    "start_friendship": 99,
+    "expected_ev_gain": 10
+  },
+  {
+    "scenario": "muscle_mochi_stat_near",
+    "id": "muscle_mochi",
+    "kind": "mochi",
+    "stat": "attack",
+    "applies": true,
+    "start_ev": 248,
+    "other_ev_total": 0,
+    "start_friendship": 100,
+    "expected_ev_gain": 4
+  },
+  {
+    "scenario": "muscle_mochi_stat_reject",
+    "id": "muscle_mochi",
+    "kind": "mochi",
+    "stat": "attack",
+    "applies": false,
+    "start_ev": 252,
+    "other_ev_total": 0,
+    "start_friendship": 200
+  },
+  {
+    "scenario": "muscle_mochi_total_near",
+    "id": "muscle_mochi",
+    "kind": "mochi",
+    "stat": "attack",
+    "applies": true,
+    "start_ev": 0,
+    "other_ev_total": 508,
+    "start_friendship": 200,
+    "expected_ev_gain": 2
+  },
+  {
+    "scenario": "muscle_mochi_total_reject",
+    "id": "muscle_mochi",
+    "kind": "mochi",
+    "stat": "attack",
+    "applies": false,
+    "start_ev": 0,
+    "other_ev_total": 510,
+    "start_friendship": 100
+  },
+  {
+    "scenario": "muscle_mochi_slot_reject",
+    "id": "muscle_mochi",
+    "kind": "mochi",
+    "stat": "attack",
+    "applies": false,
+    "start_ev": 0,
+    "other_ev_total": 0,
+    "start_friendship": 99,
+    "slot": 0
+  },
+  {
+    "scenario": "muscle_mochi_friend_254",
+    "id": "muscle_mochi",
+    "kind": "mochi",
+    "stat": "attack",
+    "applies": true,
+    "start_ev": 0,
+    "other_ev_total": 0,
+    "start_friendship": 254,
+    "expected_ev_gain": 10
+  },
+  {
+    "scenario": "muscle_mochi_total_509",
+    "id": "muscle_mochi",
+    "kind": "mochi",
+    "stat": "attack",
+    "applies": true,
+    "start_ev": 0,
+    "other_ev_total": 509,
+    "start_friendship": 100,
+    "expected_ev_gain": 1
+  }
+]''')
+IDS_06 = ["clever_wing","swift_wing","health_mochi","muscle_mochi"]
+SOURCES_06 = ["modules/inventory/field_training_effects.gd","modules/inventory/field_mochi_effects.gd","modules/inventory/field_item_effects.gd","modules/inventory/field_friendship_effects.gd","modules/inventory/field_item_service.gd","tests/gameplay/item_mochi_v13.gd"]
+
 
 class ContractError(ValueError):
     pass
@@ -1399,7 +1748,7 @@ def verify(fixture, queue, progress, chk):
         for case in block["cases"]:
             chk.demand(case["id"] in block["ids"] and case["scenario"] not in all_scenarios,
                        "Escenario repetido o ID no asignado")
-            chk.demand(case["kind"] in {"ability", "growth", "pp", "vitamin", "wing"}
+            chk.demand(case["kind"] in {"ability", "growth", "pp", "vitamin", "wing", "mochi"}
                        and type(case["applies"]) is bool,
                        "Caso sin operación real ni decisión de aplicación")
             all_scenarios.add(case["scenario"])
