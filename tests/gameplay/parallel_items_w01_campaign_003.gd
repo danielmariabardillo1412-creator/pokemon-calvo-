@@ -140,7 +140,7 @@ func _frame_c003(session: RefCounted, id: StringName) -> Dictionary:
 		if entry.begins_with("|move|"):
 			native_move_events.append(entry)
 		if entry.begins_with("|move|") and first_move_actor.is_empty():
-			first_move_actor = "own" if entry.contains("|p1a:") else "foe"
+			first_move_actor = "own" if entry.begins_with("|move|p1a:") else "foe"
 		if entry.begins_with("|-miss|") and entry.contains("p1a:"):
 			missed = true
 		if entry.begins_with("|-activate|") and entry.contains("Focus Band"):
