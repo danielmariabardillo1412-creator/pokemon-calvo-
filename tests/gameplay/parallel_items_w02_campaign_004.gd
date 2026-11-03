@@ -44,11 +44,11 @@ func _run_camp004() -> void:
 			var observations: Dictionary = {}
 			for mode: String in automation.modes:
 				match String(spec.kind):
-					"heal_flavor", "lum_held":
+					"heal_flavor", "lum_held", "heal_quarter_held", "inert_held":
 						observations[mode] = await _probe_berry(spec, mode)
 					"field_ev_training":
 						observations[mode] = _probe_field_ev(spec, mode)
-					"field_pp", "field_lum":
+					"field_pp", "field_lum", "field_heal", "field_unsupported":
 						observations[mode] = _probe_field_use(spec, mode)
 					_:
 						check("tipo de ensayo desconocido", false)
@@ -63,15 +63,62 @@ func _run_camp004() -> void:
 						_compare_berry(spec, observations)
 					"lum_held":
 						_compare_lum_held(spec, observations)
+					"heal_quarter_held":
+						_compare_quarter_held(spec, observations)
+					"inert_held":
+						_compare_inert_held(spec, observations)
 					"field_ev_training":
 						_compare_field_ev(spec, observations)
-					"field_pp", "field_lum":
+					"field_pp", "field_lum", "field_heal", "field_unsupported":
 						_compare_field_use(spec, observations)
 			results.append({"block": block.block, "id": spec.id, "scenario": spec.scenario,
 				"status": "PASS" if complete and errors.size() == errors_before else "FAIL",
 				"checks": checks - checks_before, "observed": observations})
 	_finish_camp004(results)
 
+
+
+# Sitrus: 1/4 del maximo de HP, umbral de 1/2. Se compara con
+# el mismo turno nativo SIN baya y con otra unidad en la reserva.
+func _compare_quarter_held(spec: Dictionary, observed: Dictionary) -> void:
+	var active: Dictionary = observed.active
+	var absent: Dictionary = observed.none
+	var storage: Dictionary = observed.reserve
+	var consume: bool = bool(spec.consumes)
+	var amount: int = int(floor(float(active.max_hp) / 4.0)) if consume else 0
+	check("Sitrus 1/4 HP real tras cruzar umbral", 
+		int(active.hp) == mini(int(active.max_hp), int(absent.hp) + amount))
+	check("Sitrus no afecta testigo ni reserva",
+		int(absent.hp) == int(storage.hp)
+		and String(active.status) == String(absent.status)
+		and String(absent.status) == String(storage.status))
+	check("Sitrus consume exactamente una sola si procede",
+		bool(active.consumed) == consume and not bool(absent.consumed)
+		and not bool(storage.consumed)
+		and int(active.total) == (1 if consume else 2)
+		and int(absent.total) == 2 and int(storage.total) == 2)
+	check("Sitrus no provoca confusion",
+		not bool(active.confusion) and not bool(absent.confusion)
+		and not bool(storage.confusion))
+	_verify_held_receipts(spec, observed)
+
+
+# Razz no tiene efecto competitivo activo. PASS aqui significa
+# prueba NEGATIVA (no efecto / no consumo), NO implementacion de uso.
+func _compare_inert_held(spec: Dictionary, observed: Dictionary) -> void:
+	var active: Dictionary = observed.active
+	var absent: Dictionary = observed.none
+	var storage: Dictionary = observed.reserve
+	check("Razz equipada permanece inerte",
+		not bool(active.consumed) and not bool(absent.consumed)
+		and not bool(storage.consumed))
+	check("Razz no altera HP ni estado contra testigos",
+		int(active.hp) == int(absent.hp) and int(absent.hp) == int(storage.hp)
+		and String(active.status) == String(absent.status)
+		and String(absent.status) == String(storage.status))
+	check("Razz inerte mantiene todas las unidades",
+		int(active.total) == 2 and int(absent.total) == 2 and int(storage.total) == 2)
+	_verify_held_receipts(spec, observed)
 
 func _compare_lum_held(spec: Dictionary, observed: Dictionary) -> void:
 	var active: Dictionary = observed.active
@@ -117,13 +164,18 @@ func _probe_field_use(spec: Dictionary, mode: String) -> Dictionary:
 	var item: StringName = StringName(spec.id)
 	var creature: CreatureInstance = _mon(&"mew", int(automation.level), &"own", ["tackle", "reflect"])
 	creature.friendship = 100
+	if String(spec.kind) == "field_heal":
+		if String(spec.get("start_hp", "")) == "half":
+			creature.current_hp = maxi(1, int(creature.stats.max_hp / 2))
+		elif String(spec.get("start_hp", "")) != "full":
+			check("campo Sitrus: estado HP inicial reconocido", false)
 	if String(spec.kind) == "field_pp":
 		creature.moveset[0].current_pp = creature.moveset[0].max_pp if spec.pp_start is String else int(spec.pp_start)
 	else:
-		if String(spec.status) != "":
+		if String(spec.get("status", "")) != "":
 			creature.status_state.persistent_id = StringName(spec.status)
 			creature.status_ids.assign([StringName(spec.status)])
-		if bool(spec.confused):
+		if bool(spec.get("confused", false)):
 			creature.status_state.add_volatile(&"confusion", {"turns": 3})
 	var start: Dictionary = creature.to_dict()
 	var start_pp: int = creature.moveset[0].current_pp
@@ -147,6 +199,10 @@ func _probe_field_use(spec: Dictionary, mode: String) -> Dictionary:
 	var expected_acceptance: bool = bool(spec.applies) and mode != "none"
 	check(mode + " campo: admisión y rechazo correctos",
 		bool(reply.get("accepted", false)) == expected_acceptance)
+	if String(spec.kind) == "field_unsupported":
+		check(mode + " Razz sin conexion: rechazo, no prueba positiva",
+			not bool(reply.get("accepted", false))
+			and String(reply.get("status", "")) in ["DEPENDENCY_MISSING", "REJECTED"])
 	var updated: CreatureInstance = collection.owned_creature(&"own")
 	if updated == null:
 		check(mode + " campo: Pokemon no desaparece", false)
@@ -161,8 +217,12 @@ func _probe_field_use(spec: Dictionary, mode: String) -> Dictionary:
 	check(mode + " campo: estado y confusión según contrato",
 		now_status == ("" if expected_acceptance and String(spec.kind) == "field_lum" else start_status)
 		and now_confusion == (false if expected_acceptance and String(spec.kind) == "field_lum" else start_confusion))
-	check(mode + " campo: PS/amistad/EV fuera de objetivo intactos",
-		updated.current_hp == start_hp and updated.friendship == start_friend
+	var expected_hp: int = start_hp
+	if String(spec.kind) == "field_heal" and expected_acceptance:
+		expected_hp = mini(updated.stats.max_hp,
+			start_hp + maxi(1, int(updated.stats.max_hp / int(spec.heal_denominator))))
+	check(mode + " campo: PS segun contrato, amistad/EV intactos",
+		updated.current_hp == expected_hp and updated.friendship == start_friend
 		and updated.evs == creature.evs)
 	check(mode + " campo: identidad y depósito intactos",
 		updated.instance_id == &"own"
@@ -196,13 +256,15 @@ func _probe_field_use(spec: Dictionary, mode: String) -> Dictionary:
 	var name: String = String(spec.scenario) + "_" + mode
 	var evidence: Dictionary = {"scenario": spec.scenario, "mode": mode, "item": String(item),
 		"kind": spec.kind, "before": before, "after": state, "accepted": bool(reply.get("accepted", false)),
-		"pp": now_pp, "status": now_status, "confusion": now_confusion, "bag": count,
+		"pp": now_pp, "hp": updated.current_hp, "max_hp": updated.stats.max_hp,
+		"status": now_status, "confusion": now_confusion, "bag": count,
 		"location": String(collection.location_of(&"own")), "save_v2": decoded.ok}
 	var sha: String = _write_evidence(name, evidence)
 	check(mode + " campo: recibo SHA256",
 		not sha.is_empty() and FileAccess.get_sha256(destination + "/" + name + ".json") == sha)
 	return {"valid": true, "accepted": bool(reply.get("accepted", false)),
-		"pp": now_pp, "status": now_status, "confusion": now_confusion, "bag": count,
+		"pp": now_pp, "hp": updated.current_hp, "max_hp": updated.stats.max_hp,
+		"status": now_status, "confusion": now_confusion, "bag": count,
 		"location": String(collection.location_of(&"own")), "save_v2": decoded.ok,
 		"evidence": name + ".json", "sha256": sha}
 
@@ -223,6 +285,16 @@ func _compare_field_use(spec: Dictionary, observed: Dictionary) -> void:
 		and bool(a.confusion) == bool(s.confusion))
 	check("campo: SaveV2 los tres modos íntegros",
 		bool(a.save_v2) and bool(n.save_v2) and bool(s.save_v2))
+	if String(spec.kind) == "field_heal":
+		var quarter: int = maxi(1, int(n.max_hp / int(spec.heal_denominator)))
+		check("Sitrus en bolsa cura exactamente 1/4 PS con limite",
+			int(a.hp) == mini(int(a.max_hp), int(n.hp) + (quarter if expected else 0))
+			and int(s.hp) == int(a.hp))
+	if String(spec.kind) == "field_unsupported":
+		check("Razz en bolsa se rechaza en todos los modos sin mutar HP",
+			not bool(a.accepted) and not bool(n.accepted)
+			and not bool(s.accepted)
+			and int(a.hp) == int(n.hp) and int(n.hp) == int(s.hp))
 	for mode: String in automation.modes:
 		var rec: Dictionary = observed[mode]
 		var path: String = destination + "/" + String(rec.evidence)
