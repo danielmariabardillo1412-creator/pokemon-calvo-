@@ -130,7 +130,9 @@ func authorized() -> Array[Dictionary]:
 			continue
 		check(block + "/progress_exact_approval", row[0] == block
 			and assignment[0] == block and row[1] == assignment[3])
-		var ids: Array = Array(String(assignment[3]).split(";"))
+		var ids: Array = []
+		for id: String in String(assignment[3]).split(";"):
+			ids.append(id)
 		check(block + "/exactly_six_ids", ids.size() == 6)
 		approved.append({"block": block, "ids": ids})
 	return approved
