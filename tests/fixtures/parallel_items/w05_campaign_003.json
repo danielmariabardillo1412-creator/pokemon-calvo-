@@ -61,6 +61,35 @@
           "move_id": "hex"
         }
       ]
+    },
+    {
+      "block": "03",
+      "items": [
+        {
+          "item_id": "tm30",
+          "move_id": "snarl"
+        },
+        {
+          "item_id": "tm32",
+          "move_id": "swift"
+        },
+        {
+          "item_id": "tm33",
+          "move_id": "magical_leaf"
+        },
+        {
+          "item_id": "tm34",
+          "move_id": "icy_wind"
+        },
+        {
+          "item_id": "tm35",
+          "move_id": "mud_shot"
+        },
+        {
+          "item_id": "tm37",
+          "move_id": "draining_kiss"
+        }
+      ]
     }
   ]
 }
