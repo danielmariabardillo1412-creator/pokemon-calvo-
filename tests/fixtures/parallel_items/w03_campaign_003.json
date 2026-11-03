@@ -356,6 +356,116 @@
       "expected_behavior": "Fast base_speed >=100 x4 with modified rate cap 255; Dream x4 only on persistent sleep (not volatile yawn), with independent sleep status bonus x2; valid throws one ball/one RNG, invalid none.",
       "implementation_authorized": false,
       "ci_required": true
+    },
+    {
+      "bloque": "06",
+      "ids": [
+        "friend_ball",
+        "heal_ball"
+      ],
+      "objective": "efecto_postcaptura",
+      "prior_evidence": {
+        "state": "YA_VERIFICADO_NO_DUPLICAR",
+        "sources": [
+          "modules/capture/capture_ball_effects.gd",
+          "modules/capture/capture_system.gd",
+          "modules/inventory/capture_inventory_service.gd",
+          "tests/gameplay/item_capture_v11.gd",
+          "modules/creatures/storage/capture_ownership_router.gd"
+        ],
+        "note": "Heal post-catch + storage was tested in V11; add Friend >200, failure no effects, corrupt friendship/PP and ownership checks without reimplementing."
+      },
+      "friend_cases": [
+        {
+          "friendship": 0,
+          "outcome": "success"
+        },
+        {
+          "friendship": 117,
+          "outcome": "success"
+        },
+        {
+          "friendship": 200,
+          "outcome": "success"
+        },
+        {
+          "friendship": 240,
+          "outcome": "success"
+        },
+        {
+          "friendship": 255,
+          "outcome": "success"
+        },
+        {
+          "friendship": 240,
+          "outcome": "failure"
+        }
+      ],
+      "expected_friendship_on_catch": 200,
+      "heal_cases": [
+        {
+          "species_id": "mew",
+          "status": "sleep",
+          "pp_current": 0,
+          "pp_max": 64,
+          "outcome": "success"
+        },
+        {
+          "species_id": "mew",
+          "status": "sleep",
+          "pp_current": 0,
+          "pp_max": 64,
+          "outcome": "failure"
+        },
+        {
+          "species_id": "caterpie",
+          "status": "poison",
+          "pp_current": 1,
+          "pp_max": 64,
+          "outcome": "success"
+        },
+        {
+          "species_id": "mew",
+          "status": "none",
+          "pp_current": 3,
+          "pp_max": 64,
+          "outcome": "success"
+        }
+      ],
+      "invalid_friendship": [
+        -1,
+        256
+      ],
+      "invalid_pp": [
+        {
+          "pp_current": -1,
+          "pp_max": 64
+        },
+        {
+          "pp_current": 65,
+          "pp_max": 64
+        },
+        {
+          "pp_current": 0,
+          "pp_max": 0
+        }
+      ],
+      "invalid_cases": [
+        "trainer_battle_not_capturable",
+        "item_not_owned",
+        "target_knocked_out"
+      ],
+      "route_full_party": [
+        "friend_ball",
+        "heal_ball"
+      ],
+      "seed_search_range": [
+        1,
+        4096
+      ],
+      "expected_behavior": "Friend on successful catch SET friendship to exactly 200 even if >200; Heal on success restores full HP, clears persistent status and status_ids and restores PP to max preserving boosted maximum. Failure and invalid attempts cannot apply effects; both preserve object identity through party/PC.",
+      "implementation_authorized": false,
+      "ci_required": true
     }
   ]
 }
