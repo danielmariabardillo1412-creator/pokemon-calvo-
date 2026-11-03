@@ -1,3 +1,5 @@
+> **CI REAL DEL BLOQUE 01 VERIFICADA — resultado prevalente:** GitHub Actions [#41571216304](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41571216304), SHA `7d1b5b65da4135dc197a198ab08aa78e1646c84f`, `completed/success`, job `125704313130`. Logs directos: `CAMP004_W05_PY PASS blocks=1 checks=58`; `CAMP004_GATE_PY_PASS worker=W05 blocks=1 checks=58`; `CAMP004_W05_GODOT PASS blocks=1 checks=231`; `CAMP004_GATE_GODOT_PASS worker=W05 blocks=1 checks=231`. **Regresiones preservadas en la misma CI:** CAMP003 Python `PASS blocks=10 checks=580` y Godot `PASS blocks=10 checks=2166`; CAMP002 `Ran 11 tests`, `OK`. **Bloque 01/10 funcionalmente verificado.** Las referencias inferiores a CI pendiente se redactaron antes de completarse el run. No hubo reparaciones de producción.
+
 # IA5/W05 — CAMPAÑA_004 · ITER_01/10 — MT Scarlet/Violet
 
 **Estado inicial: EN_CI_AUTOMATICA.** El arranque anterior en verde, con cero bloques, **no** acredita enseñanza funcional.
