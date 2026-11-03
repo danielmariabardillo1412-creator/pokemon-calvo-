@@ -23,3 +23,16 @@ Fixture `tests/fixtures/parallel_items/w04_campaign_004.json` commit `4599a43837
 No se ha modificado producción, `main`, V28, workflows, catálogo canónico, rama árbitra ni ramas ajenas. No se afirma funcionalidad de rutas sin prueba positiva.
 
 **Siguiente `p`:** bloque 04/10 (`adamant_crystal;blue_orb;catching_charm`), previa verificación de esta CI.
+
+
+## CI del bloque 03 verificada
+
+GitHub Actions [#41576674332](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41576674332), SHA `a1b5f4bdcc64c86457b50f4cadb977804a6cf888`, `completed/success`. Recibos:
+- `CAMP004_W04_MANIFEST_PASS reserved=10 completed=3 ids=36`.
+- `CAMP004_W04_PY PASS blocks=3 checks=88`.
+- `CAMP004_W04_GODOT PASS blocks=3 checks=292`.
+- Regresión CAMP003: `CAMP003_W04_PY PASS blocks=10 checks=120` y `CAMP003_W04_GODOT PASS blocks=10 checks=270`.
+
+El runner informó por separado `status=DEPENDENCIA records=0` para `strawberry_sweet`, `whipped_dream` y `leaders_crest`. Se probaron rechazos, persistencia e inventario, **no una evolución positiva**. Los tres permanecen `DEPENDENCIA_DOCUMENTADA`. El bloqueo de disparadores `spin` y `three_defeated_bisharp` no se ha relajado.
+
+Fila 03 reconciliada en `CAMP_004_PROGRESO.csv`, commit `e9035624278e65e06e0e656d17278c1a6daa209d`. El cambio al CSV inicia una nueva CI para comprobar el estado consolidado; no confundir el recibo original con esa ejecución posterior.
