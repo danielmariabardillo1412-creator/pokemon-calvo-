@@ -1,3 +1,13 @@
+# IA3/W03 — Continuidad CAMP005 bloque 07/10
+
+**Rama:** `codex/calvo-items-20261103-w03-camp005`. Bloque07 `black_flute;white_flute;lure;super_lure;max_lure`. Suites Python y Godot publicadas con positivos del helper de probabilidad Cleanse Tag/Pure Incense (6000 → 4000), tabla de encuentros y conservación de la original. Los cinco objetos siguen `DEPENDENCIA_COMPARTIDA`: no existe productor del mundo para pasos/duración, mínimos pasos entre encuentros, fórmula versionada ni persistencia; no se ha implementado uso de campo. IA6 debe resolver reglas y contrato de coordinación con Repel (bloque06).
+
+**CI anterior 06 verificada:** [#41726410961](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41726410961) Python 109 y Godot 119 PASS. **CI 07:** comprobar recibos `CAMP005_W03_PY PASS blocks=7` y `CAMP005_W03_GODOT PASS blocks=7`, gates IA6 y SHA con 7 filas CSV. Si falla, reparar test propio antes de continuar.
+
+**Siguiente `p`: exclusivamente bloque08 `red_flute;yellow_flute;blue_flute`.** No editar main, V28, producción compartida ni ramas ajenas.
+
+---
+
 # IA3/W03 — Continuidad CAMPAÑA_005 06/10 — validado
 
 Rama exclusiva `codex/calvo-items-20261103-w03-camp005`. Bloque 06 `repel;super_repel;max_repel`, reintento terminado con CI [#41726410961](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41726410961) PASS: Python 109/Godot 119, gates IA6 PASS y manifiesto 6/10. Fixture, runner, auditor e informe publicados; último commit de progreso `0bb581dc`.
