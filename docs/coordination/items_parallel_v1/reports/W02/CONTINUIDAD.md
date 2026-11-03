@@ -1,3 +1,5 @@
+> **CI POSTERIOR VERIFICADA — 2026-11-03:** [Actions #41555493832](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41555493832) `completed/success` sobre SHA de tests/progreso `926ad81488c1e83d777177bfa5a2eff35b028eca`. Recibos auténticos de logs: `CAMP003_W02_PY PASS blocks=2 checks=122` y `CAMP003_W02_GODOT PASS blocks=2 checks=1406`. El estado anterior `EN_CI_AUTOMATICA` de este documento/CSV describe la entrega inicial y está superado por esta ejecución. Para evitar otra CI redundante, el CSV de progreso no se reescribe: la evidencia de PASS queda aquí y en el cuaderno. **Próxima `p`: bloque 03/10 solamente.**
+
 # IA2/W02 — ESTADO ACTUAL DE CAMPAÑA_003 (02/10)
 
 **BLOQUES PUBLICADOS:** 01 y 02 de 10. La siguiente `p` autoriza SOLO bloque 03 si semáforo CI permite continuar. Rama `codex/calvo-items-20261103-w02-camp003`, exclusivamente pruebas/fixture/progreso/informes W02. No inventar bloque 11 ni modificar CI compartida.
