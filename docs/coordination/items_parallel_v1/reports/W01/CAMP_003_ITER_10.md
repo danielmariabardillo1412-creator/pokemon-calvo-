@@ -26,3 +26,13 @@
 ## Cierre y límites
 
 **Próxima acción:** comprobar la nueva CI del último bloque. Si fallan test, RNG, montaje de entrenador o límite de tiempo, resolver autónomamente **solo en rutas W01**, conservando causalidad y regresiones; elevar a IA6 únicamente conflictos de otras trabajadoras, permisos reales o cambios compartidos. Una vez CI `success`, actualizar CSV con run de 10 y crear `CAMP_003_FINAL.md` con toda la evidencia; entonces anunciar **`CAMPAÑA_003_FINALIZADA`** y STOP. No existe bloque 11. Esta ejecución no sustituye comprobación manual de UI/GPU ni resultado de partida hasta regreso al mapa.
+
+## Reparación V5 posterior a la primera CI 10/10
+
+La CI [#41574042928](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41574042928) finalizó `completed/failure` tras ejecutar **completamente** el runner Godot, no por timeout: `CAMP003_W01_PY PASS blocks=10 checks=806` y `CAMP003_W01_GODOT FAIL blocks=10 checks=12394 errors=2`. Los dos únicos errores fueron `rocky_helmet_incoming_contact/{19,23}: dano rival sin cambio no autorizado`. Las aserciones causales específicas del casco **sí pasaron**, incluida la pérdida de `floor(max_hp_rival/6)` y la comprobación del evento nativo.
+
+**Causa:** el test genérico para todos los objetos prohíbe cualquier diferencia de daño al rival, pero Casco Dentado debe crear una diferencia explícita por contacto. El propio test del casco ya impone `fa > 0 && fn == fr == 0`, retroceso exacto 1/6 y log; aplicar también `fa == fn` es una contradicción de pruebas, no fallo del simulador.
+
+**Reparación mínima en ruta W01, commit `f084188cb6d560576137c20fa74ea257abbfdb7a`, blob `52abb2513f9498d3a25ad6063db61e053b767698`:** excluir `rocky_helmet_contact_recoil` **solo del invariante genérico de igualdad**. Todos los controles originales siguen activos y la aserción causal de retroceso exacto/consumo/log continúa intacta. No se redujeron semillas, escenarios, restauraciones SaveV2, ni se modificó producción.
+
+**Nueva CI de regresión final:** [#41575150716](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41575150716), SHA del cambio de test, `in_progress` al documentar. Solo `CAMP003_W01_PY PASS blocks=10`, `CAMP003_W01_GODOT PASS blocks=10` y `completed/success` autorizan marcar el bloque 10 como `CI_PASS_VERIFICADO` y comunicar `CAMPAÑA_003_FINALIZADA`.
