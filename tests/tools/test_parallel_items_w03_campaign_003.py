@@ -154,6 +154,61 @@ def main() -> int:
                             {"mew", "pikachu", "caterpie"}, "No se prueban tres especies")
                 audit.check(block["health_modes"] == ["full", "one_hp"],
                             "Falta variación de PS")
+            elif block["bloque"] == "03":
+                audit.check(ids == ["quick_ball", "timer_ball"], "Reserva 03 alterada")
+                context = (ROOT / "modules/capture/capture_battle_context.gd").read_text(encoding="utf-8")
+                effects = (ROOT / "modules/capture/capture_context_ball_effects.gd").read_text(encoding="utf-8")
+                wild = (ROOT / "modules/gameplay/wild_adventure_session.gd").read_text(encoding="utf-8")
+                showdown = (ROOT / "modules/gameplay/showdown_adventure_session.gd").read_text(encoding="utf-8")
+                rules = (ROOT / "modules/capture/capture_ruleset.gd").read_text(encoding="utf-8")
+                audit.check('var completed_turns: int = -1' in context,
+                            "Contexto ausente debe valer -1, nunca cero")
+                audit.check('capture_turn_context_missing' in effects and
+                            'context.completed_turns < 0' in effects,
+                            "No se rechazan turnos incompletos")
+                audit.check('&"quick_ball"' in effects and '&"timer_ball"' in effects and
+                            '&"level_ball"' in effects,
+                            "Registro contextual compartido alterado")
+                audit.check('context.completed_turns == 0' in effects and
+                            '5.0 if context.completed_turns == 0 else 1.0' in effects,
+                            "Quick debe bonificar únicamente primer turno")
+                audit.check('minf(1.0 + 0.3 * context.completed_turns, 4.0)' in effects,
+                            "Timer debe saturar a 4.0 desde 10 turnos")
+                audit.check('for id: StringName in ContextBallEffects.IDS:' in rules,
+                            "El registro contextual no llega a CaptureRuleset")
+                audit.check('context.completed_turns = _battle_server.state.turn' in wild,
+                            "Sesión Wild no transmite turnos del combate real")
+                audit.check('context.completed_turns = battle_state().turn' in showdown,
+                            "Sesión Showdown no transmite turnos del combate real")
+                audit.check('func _block_03(' in runner and
+                            '"03": _block_03(bloque)' in runner and
+                            'CAMP003_W03_TURN_EFFECTS.multiplier(' in runner,
+                            "No existe prueba Godot del efecto contextual real")
+                audit.check('CaptureSystem.validate_attempt(' in runner and
+                            'capture_turn_context_missing' in runner and
+                            'rng.state == before_rng' in runner,
+                            "No se garantiza rechazo sin contexto y sin consumir RNG")
+                audit.check('rng.state == control.state' in runner and
+                            'CaptureInventoryService.resolve(' in runner and
+                            'inv.quantity(id) == 1' in runner,
+                            "No se verifica consumo de un ítem y un RNG válido")
+                audit.check(set(block["ids"]) ==
+                            {item["id"] for item in block["balls"]},
+                            "Factor reservado de objeto diferente")
+                audit.check({int(t) for t in block["completed_turns"]} ==
+                            {0, 1, 3, 9, 10, 11},
+                            "Faltan turnos 0, fronteras y saturación Timer")
+                audit.check(set(block["invalid_context_turns"]) == {-1, -2},
+                            "No se cubre ausencia y negativo explícito")
+                audit.check(set(block["other_rejections"]) ==
+                            {"trainer_battle_not_capturable", "item_not_owned"},
+                            "Faltan rechazos de entrenador o propiedad")
+                audit.check(block["hp_modes"] == ["full", "one_hp"],
+                            "No se prueban ambos extremos PS")
+                audit.check({row["species_id"] for row in block["cases"]} ==
+                            {"mew", "caterpie"}, "No se prueban ambas tasas de captura")
+                audit.check(not block["implementation_authorized"] and block["ci_required"],
+                            "Prohibido inventar turnos o modificar producción")
             else:
                 audit.check(False, "Falta contrato incremental específico para " + block["bloque"])
         audit.check(audit.checks > 0, "Sin comprobaciones")
