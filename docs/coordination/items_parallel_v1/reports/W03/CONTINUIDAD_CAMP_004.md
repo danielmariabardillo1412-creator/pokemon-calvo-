@@ -1,3 +1,15 @@
+# IA3/W03 — CONTINUIDAD CAMP004 02/10
+
+**Rama:** `codex/calvo-items-20261103-w03-camp004`. **Bloques publicados:** 01 Buceo/Ocaso/Acopio; 02 Flauta Negra/Azul/Cuerda Huida. **Próximo `p`: bloque 03 `fluffy_tail;golden_razz_berry;lure`, después de revisar CI.**
+
+- Bloque 01 CI real [#41572312334](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41572312334): Python 22 y Godot 69, además CAMP003 Python 279 y Godot 986, sin regresiones.
+- Bloque 02: todos seleccionados en catálogo pero `FieldItemService.use_item` acaba en `field_effect_not_connected`. Suite nueva de rechazo real con y sin posesión, criatura dormida, guardas, objetivo ajeno y serialización de bolsa; no simula curación, encuentros, huida ni SaveV2 completo.
+- **Dependencia compartida:** servicio de encuentros/efectos temporales para Flauta Negra; curación y regla de consumo para Flauta Azul; navegación/mapa/transición para Cuerda Huida. No modificar producción de otro dominio.
+- Fixture y runner/Python acumulativos, `CAMP_004_ITER_02.md`, CSV 02 y cuaderno publicados. CI 02 debe dar `CAMP004_W03_PY PASS blocks=2` y `CAMP004_W03_GODOT PASS blocks=2` en el mismo SHA. Aún sin PASS hasta comprobar logs.
+- Ningún cambio de `main`, V28, ramas ajenas ni workflows. No adelantar el bloque 03 sin otra `p`.
+
+---
+
 # IA3/W03 — CAMPAÑA_004: CONTINUIDAD 01/10
 
 **Rama:** `codex/calvo-items-20261103-w03-camp004`. **Bloque 01:** `dive_ball;dusk_ball;repeat_ball`. **Siguiente `p`**: bloque 02 `black_flute;blue_flute;escape_rope`, tras revisar CI 01. No saltar fila ni recuperar CAMP003.
