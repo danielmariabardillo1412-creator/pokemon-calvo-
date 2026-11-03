@@ -172,6 +172,65 @@ def main() -> int:
                 check('not context_fields.has("encounter_method")' in runner
                       and 'not original_keys.has("original_capture_ball_id")' in runner,
                       "No se detectan productores ausentes")
+            elif block["bloque"] == "03":
+                check(ids == ["love_ball", "moon_ball"],
+                      "Reserva del bloque03 ha cambiado")
+                check(block["current_state"] == "DEPENDENCIA_CONCRETA"
+                      and block["functional_effect_certified"] is False,
+                      "No certificar bonus Love/Moon sin fuente")
+                creature = (ROOT / "modules/creatures/domain/creature_instance.gd").read_text(
+                    encoding="utf-8")
+                species = (ROOT / "modules/creatures/domain/creature_species.gd").read_text(
+                    encoding="utf-8")
+                records = (ROOT / "modules/creatures/domain/evolution_record.gd").read_text(
+                    encoding="utf-8")
+                evolutions = (ROOT / "modules/creatures/progression/evolution_system.gd").read_text(
+                    encoding="utf-8")
+                basic = (ROOT / "modules/capture/capture_ball_effects.gd").read_text(
+                    encoding="utf-8")
+                rules = (ROOT / "modules/capture/capture_ruleset.gd").read_text(
+                    encoding="utf-8")
+                selected = {r["id"]: r for r in
+                            rows(ROOT / "docs/current/RANDOMLOCK_ITEMS_BUILD_SCOPE_V2.csv")}
+                check(all(selected[id]["estado_contenido"] == "SELECCIONADO" for id in ids),
+                      "Bolas fuera de selección vigente")
+                check(not re.search(r"(?m)^var\\s+(?:gender|gender_id|sex|individual_gender_id)\\s*:", creature)
+                      and '"gender_id":' not in creature,
+                      "Ha aparecido género individual y exige prueba positiva")
+                check('var source_metadata: Dictionary' in species
+                      and 'var item_id: StringName' in records
+                      and 'var version_group: StringName' in records
+                      and 'var conditions: Dictionary' in records,
+                      "Faltan datos canónicos de versión o evolución")
+                check('rec.item_id' in evolutions
+                      and 'TRIGGER_USE_ITEM' in evolutions
+                      and 'evolution_candidates(' in evolutions,
+                      "No existe ruta de elegibilidad real de piedra")
+                check(all(id not in basic and id not in rules for id in
+                          ['&"love_ball"', '&"moon_ball"']),
+                      "Se registró una bola nueva: certificar factor positivo")
+                expected = {"love_ball": {"individual_gender_id",
+                                          "target_and_active_species_gender_validity"},
+                            "moon_ball": {"selected_evolution_version_group",
+                                          "moon_stone_target_evolution_predicate"}}
+                check({p["id"] for p in block["required_producers"]} == set(ids),
+                      "Falta productor para alguna bola")
+                for producer in block["required_producers"]:
+                    check(set(producer["missing_fields"]) == expected[producer["id"]]
+                          and producer["producer"].strip()
+                          and producer["consumer"].strip()
+                          and producer["decision"].strip(),
+                          "Contrato insuficiente de " + producer["id"])
+                check('"03": _block_03(block)' in runner
+                      and 'func _block_03(block: Dictionary)' in runner
+                      and 'EvolutionSystem.evolution_candidates(' in runner
+                      and 'EvolutionSystem.classify_record(' in runner,
+                      "No se prueba la ruta real de evolución")
+                check('CreatureInstance.from_dict(saved)' in runner
+                      and 'not saved.has("gender")' in runner
+                      and 'not other.has(record)' in runner
+                      and 'moon_candidates > 0' in runner,
+                      "Faltan persistencia y positivos/negativos Piedra Lunar")
             else:
                 check(False, "Bloque sin nueva prueba: " + block["bloque"])
         check(checks > 0, "Sin verificaciones")
