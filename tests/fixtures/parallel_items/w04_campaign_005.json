@@ -332,6 +332,106 @@
         "identity, equipped item, inventory and SaveV2 stable after rejected evolution",
         "no API, save schema or canonical data mutation without IA6"
       ]
+    },
+    {
+      "block": "05",
+      "ids": [
+        "berry_sweet",
+        "clover_sweet",
+        "flower_sweet",
+        "love_sweet",
+        "ribbon_sweet",
+        "star_sweet",
+        "strawberry_sweet"
+      ],
+      "family": "SPECIAL_EVOLUTION",
+      "classification": "DEPENDENCIA_GIRO_FORMA",
+      "source": "milcery",
+      "target": "alcremie",
+      "evolution_chain": "452",
+      "version": "sword-shield",
+      "original_trigger": "spin",
+      "cases": [
+        {
+          "item_id": "berry_sweet",
+          "source": "milcery",
+          "target": "alcremie",
+          "canonical_item": "berry-sweet",
+          "equippable": true,
+          "trigger": "spin",
+          "requires_held_sweet": true
+        },
+        {
+          "item_id": "clover_sweet",
+          "source": "milcery",
+          "target": "alcremie",
+          "canonical_item": "clover-sweet",
+          "equippable": true,
+          "trigger": "spin",
+          "requires_held_sweet": true
+        },
+        {
+          "item_id": "flower_sweet",
+          "source": "milcery",
+          "target": "alcremie",
+          "canonical_item": "flower-sweet",
+          "equippable": true,
+          "trigger": "spin",
+          "requires_held_sweet": true
+        },
+        {
+          "item_id": "love_sweet",
+          "source": "milcery",
+          "target": "alcremie",
+          "canonical_item": "love-sweet",
+          "equippable": true,
+          "trigger": "spin",
+          "requires_held_sweet": true
+        },
+        {
+          "item_id": "ribbon_sweet",
+          "source": "milcery",
+          "target": "alcremie",
+          "canonical_item": "ribbon-sweet",
+          "equippable": true,
+          "trigger": "spin",
+          "requires_held_sweet": true
+        },
+        {
+          "item_id": "star_sweet",
+          "source": "milcery",
+          "target": "alcremie",
+          "canonical_item": "star-sweet",
+          "equippable": true,
+          "trigger": "spin",
+          "requires_held_sweet": true
+        },
+        {
+          "item_id": "strawberry_sweet",
+          "source": "milcery",
+          "target": "alcremie",
+          "canonical_item": "strawberry-sweet",
+          "equippable": true,
+          "trigger": "spin",
+          "requires_held_sweet": true
+        }
+      ],
+      "decision_source": "data/api/v2/evolution-chain/452/index.json + CAMPAIGN_005_W04_QUEUE_APPROVED.csv + modules/inventory/item_connections_v1.json",
+      "producer": "Milcery held_item_id + acto de giro real (dirección/duración/hora) + decoración/forma elegida",
+      "consumer": "EvolutionSystem.classify_record/evolution_candidates + FieldItemService.evolve + CreatureInstance/SaveV2",
+      "missing": [
+        "El snapshot PokeAPI solo recoge trigger=spin; no vincula los siete confites en evolution_details. Los siete son equipables en el perfil, no un trigger use_item.",
+        "No hay evento de giro jugable ni contrato aprobado para dirección, duración, hora y forma de crema.",
+        "No hay identidad persistente de decoración/forma Alcremie ni esquema SaveV2/migración correspondiente.",
+        "Falta política aprobada de consumo del confite al aceptar/cancelar la evolución por giro."
+      ],
+      "runtime_contract": [
+        "Los siete IDs corresponden a cola previa, catálogo seleccionado, son equipables y tienen origen Milcery sin inventar siete rutas PokeAPI",
+        "Existe una única evolución Milcery->Alcremie trigger=spin, clasificada UNSUPPORTED",
+        "Ningún confite dispara use_item/evolve ni especie/forma instantánea al equiparse",
+        "Rechazos sin gasto, propietario desconocido, equipado/retirado y persistencia SaveV2 sin pérdida",
+        "Nunca declarar Alcremie jugable hasta contar con el productor de giro, elección de forma y contrato de guardado"
+      ]
     }
   ]
 }
