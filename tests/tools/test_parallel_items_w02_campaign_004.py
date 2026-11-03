@@ -74,6 +74,150 @@ SOURCES_01 = [
     "tests/gameplay/item_field_effects_v4.gd",
 ]
 
+EXPECTED_02 = json.loads(r'''[
+  {
+    "scenario": "qualot_ev20_friend100_c004",
+    "id": "qualot_berry",
+    "kind": "field_ev_training",
+    "stat": "defense",
+    "start_ev": 20,
+    "start_friendship": 100,
+    "start_hp": "full",
+    "applies": true,
+    "ev_removed": 10,
+    "friendship_gain": 5
+  },
+  {
+    "scenario": "qualot_ev0_friend200_c004",
+    "id": "qualot_berry",
+    "kind": "field_ev_training",
+    "stat": "defense",
+    "start_ev": 0,
+    "start_friendship": 200,
+    "start_hp": "full",
+    "applies": true,
+    "ev_removed": 0,
+    "friendship_gain": 2
+  },
+  {
+    "scenario": "qualot_ev0_friend255_noop_c004",
+    "id": "qualot_berry",
+    "kind": "field_ev_training",
+    "stat": "defense",
+    "start_ev": 0,
+    "start_friendship": 255,
+    "start_hp": "full",
+    "applies": false,
+    "ev_removed": 0,
+    "friendship_gain": 0
+  },
+  {
+    "scenario": "razz_field_missing_contract_c004",
+    "id": "razz_berry",
+    "kind": "field_unsupported",
+    "status": "",
+    "confused": false,
+    "applies": false
+  },
+  {
+    "scenario": "razz_held_inert_c004",
+    "id": "razz_berry",
+    "kind": "inert_held",
+    "nature": "hardy",
+    "start": "near_full",
+    "status": "",
+    "actor_species": "mew",
+    "foe_species": "mew",
+    "foe_move": "amnesia",
+    "consumes": false,
+    "confuses": false,
+    "own_move": "reflect"
+  },
+  {
+    "scenario": "sitrus_held_low_hp_c004",
+    "id": "sitrus_berry",
+    "kind": "heal_quarter_held",
+    "nature": "hardy",
+    "start": "full",
+    "status": "",
+    "actor_species": "mew",
+    "foe_species": "snorlax",
+    "foe_move": "endeavor",
+    "consumes": true,
+    "confuses": false,
+    "own_move": "reflect",
+    "foe_initial_hp": 1
+  },
+  {
+    "scenario": "sitrus_held_high_hp_c004",
+    "id": "sitrus_berry",
+    "kind": "heal_quarter_held",
+    "nature": "hardy",
+    "start": "near_full",
+    "status": "",
+    "actor_species": "mew",
+    "foe_species": "mew",
+    "foe_move": "amnesia",
+    "consumes": false,
+    "confuses": false,
+    "own_move": "reflect"
+  },
+  {
+    "scenario": "sitrus_field_half_hp_c004",
+    "id": "sitrus_berry",
+    "kind": "field_heal",
+    "start_hp": "half",
+    "applies": true,
+    "heal_denominator": 4
+  },
+  {
+    "scenario": "sitrus_field_full_hp_noop_c004",
+    "id": "sitrus_berry",
+    "kind": "field_heal",
+    "start_hp": "full",
+    "applies": false,
+    "heal_denominator": 4
+  },
+  {
+    "scenario": "tamato_ev20_friend100_c004",
+    "id": "tamato_berry",
+    "kind": "field_ev_training",
+    "stat": "speed",
+    "start_ev": 20,
+    "start_friendship": 100,
+    "start_hp": "full",
+    "applies": true,
+    "ev_removed": 10,
+    "friendship_gain": 5
+  },
+  {
+    "scenario": "tamato_ev0_friend200_c004",
+    "id": "tamato_berry",
+    "kind": "field_ev_training",
+    "stat": "speed",
+    "start_ev": 0,
+    "start_friendship": 200,
+    "start_hp": "full",
+    "applies": true,
+    "ev_removed": 0,
+    "friendship_gain": 2
+  },
+  {
+    "scenario": "tamato_ev0_friend255_noop_c004",
+    "id": "tamato_berry",
+    "kind": "field_ev_training",
+    "stat": "speed",
+    "start_ev": 0,
+    "start_friendship": 255,
+    "start_hp": "full",
+    "applies": false,
+    "ev_removed": 0,
+    "friendship_gain": 0
+  }
+]''')
+EXPECTED_IDS_02 = ["qualot_berry","razz_berry","sitrus_berry","tamato_berry"]
+SOURCES_02 = ["modules/inventory/field_item_effects.gd","modules/inventory/imported_recovery_v19.json","modules/inventory/field_item_service.gd","modules/inventory/item_connections_v1.json"]
+
 
 class ContractError(ValueError):
     pass
@@ -141,6 +285,19 @@ def verify(fixture, queue, progress, chk):
                 names.add(actual["scenario"])
             chk.demand(names == {case["scenario"] for case in EXPECTED_01},
                        "Falta alguno de los escenarios Figy Kelpsy Leppa Lum")
+        elif i == 1:
+            chk.demand(block["ids"] == EXPECTED_IDS_02 and block["family"] == "BERRY",
+                       "IDs bayas 02 distintos de cola")
+            chk.demand(block["source_evidence"] == SOURCES_02, "Fuentes bloque 02 alteradas")
+            chk.demand(len(block["cases"]) == len(EXPECTED_02), "Faltan escenarios bloque 02")
+            names = set()
+            for actual, expected in zip(block["cases"], EXPECTED_02):
+                chk.demand(type(actual) is dict and actual == expected,
+                           "Escenario bloque 02 alterado: " + str(expected["scenario"]))
+                chk.demand(actual["scenario"] not in names, "Escenario bloque 02 duplicado")
+                names.add(actual["scenario"])
+            chk.demand(names == {case["scenario"] for case in EXPECTED_02},
+                       "Escenarios bloque 02 incompletos")
         else:
             raise ContractError("No hay contrato específico de bloque futuro")
     return len(progress)
@@ -169,6 +326,17 @@ def verify_sources(chk):
         chk.demand(profile["items"][item]["effect"] == expected
                    and profile["items"][item]["consume"] is True,
                    "Perfil recuperación nativo alterado: " + item)
+    chk.demand(profile["items"]["sitrus_berry"]["effect"] == {"heal": "quarter"}
+               and profile["items"]["sitrus_berry"]["consume"] is True,
+               "Sitrus no conserva curación de cuarto de PS")
+    chk.demand('"qualot_berry": "defense"' in effects and
+               '"tamato_berry": "speed"' in effects,
+               "Qualot y Tamato no tienen ruta canónica EV")
+    chk.demand('"razz_berry"' not in effects and "razz_berry" not in profile["items"],
+               "Razz ya tiene ruta de campo: reevaluar dependencia, no inventar")
+    connections = json.loads((ROOT / "modules/inventory/item_connections_v1.json").read_text(encoding="utf-8"))
+    chk.demand(all(x in connections["holdable_ids"] for x in EXPECTED_IDS_02),
+               "Las 4 bayas deben conservar el contrato equipado permitido")
 
 
 def negative_controls(fixture, queue, progress, chk):
@@ -196,6 +364,15 @@ def negative_controls(fixture, queue, progress, chk):
             raise ContractError("No hay mutación de test definida")
         edits.append(lambda f, j=j, key=key, other=other:
                      f["blocks"][0]["cases"][j].update({key: other}))
+    if len(fixture["blocks"]) >= 2:
+        edits.extend([
+            lambda f: f["blocks"][1]["ids"].append("figy_berry"),
+            lambda f: f["blocks"][1]["cases"].pop(),
+            lambda f: f["blocks"][1]["cases"][3].update({"applies": True}),
+            lambda f: f["blocks"][1]["cases"][5].update({"consumes": False}),
+            lambda f: f["blocks"][1]["cases"][7].update({"heal_denominator": 3}),
+            lambda f: f["blocks"][1]["cases"][9].update({"stat": "defense"}),
+        ])
     for i, edit in enumerate(edits):
         altered = copy.deepcopy(fixture)
         edit(altered)
