@@ -172,6 +172,84 @@
         "equipar permitido y SaveV2 preserva objeto/identidad sin evolución directa",
         "sin cambio de arquitectura ni consumo especulativo"
       ]
+    },
+    {
+      "block": "03",
+      "ids": [
+        "oval_stone",
+        "dawn_stone",
+        "peat_block"
+      ],
+      "family": "EVOLUTION_CONDITIONS",
+      "classification": "DEPENDENCIA_DE_CONDICIONES",
+      "cases": [
+        {
+          "item_id": "oval_stone",
+          "source": "happiny",
+          "target": "chansey",
+          "chain": "51",
+          "canonical_item": "oval-stone",
+          "trigger": "level-up",
+          "key": "held_item",
+          "required": "oval-stone",
+          "additional_key": "time_of_day",
+          "additional_value": "day",
+          "equippable": true,
+          "approved_level": null,
+          "missing": "level_up context lacks daytime and held-item condition; cannot infer level"
+        },
+        {
+          "item_id": "dawn_stone",
+          "source": "kirlia",
+          "target": "gallade",
+          "chain": "140",
+          "canonical_item": "dawn-stone",
+          "trigger": "use-item",
+          "key": "gender",
+          "required": 2,
+          "equippable": true,
+          "missing": "creature gender absent from persistent CreatureInstance; must require male and target-safe use"
+        },
+        {
+          "item_id": "dawn_stone",
+          "source": "snorunt",
+          "target": "froslass",
+          "chain": "186",
+          "canonical_item": "dawn-stone",
+          "trigger": "use-item",
+          "key": "gender",
+          "required": 1,
+          "equippable": true,
+          "missing": "creature gender absent from persistent CreatureInstance; must require female and target-safe use"
+        },
+        {
+          "item_id": "peat_block",
+          "source": "ursaring",
+          "target": "ursaluna",
+          "chain": "110",
+          "canonical_item": "peat-block",
+          "trigger": "use-item",
+          "key": "time_of_day",
+          "required": "full-moon",
+          "equippable": false,
+          "missing": "moon-phase context unavailable from FieldItemService/Adventure time; no direct use"
+        }
+      ],
+      "expected_sources": [
+        "data/api/v2/evolution-chain/51/index.json",
+        "data/api/v2/evolution-chain/140/index.json",
+        "data/api/v2/evolution-chain/186/index.json",
+        "data/api/v2/evolution-chain/110/index.json"
+      ],
+      "runtime_contract": [
+        "no false unconditional evolution for high-level Happiny without daylight and oval stone",
+        "no direct dawn stone evolution without saved creature gender and target compatibility",
+        "peat block no evolution without full moon",
+        "equip/unequip only for items allowed by profile",
+        "rejection preserves inventory, identity and SaveV2",
+        "do not confuse the level of prior species with eligibility threshold",
+        "no shared API mutation without arbiter authorization"
+      ]
     }
   ]
 }
