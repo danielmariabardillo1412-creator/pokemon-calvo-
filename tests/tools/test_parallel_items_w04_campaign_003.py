@@ -10,6 +10,7 @@ IDS = ("dawn_stone", "dusk_stone", "shiny_stone")
 IDS_02 = ("sun_stone", "oval_stone", "black_augurite")
 IDS_03 = ("dragon_scale", "dubious_disc", "electirizer")
 IDS_04 = ("magmarizer", "protector", "reaper_cloth")
+IDS_05 = ("prism_scale", "sachet", "up_grade")
 
 def main():
     ap = argparse.ArgumentParser()
@@ -26,7 +27,9 @@ def main():
         nonlocal checks
         assert cond, msg
         checks += 1
-    check(len(rows) == 4 and [r["bloque"] for r in rows] == ["01", "02", "03", "04"], "progreso no incluye 01 a 04")
+    check(len(rows) == 5 and [r["bloque"] for r in rows] == ["01", "02", "03", "04", "05"], "progreso no incluye 01 a 05")
+    check(tuple(rows[4]["ids"].split(";")) == IDS_05, "IDs del bloque 05 cambiados")
+    check(fixture["blocks"][4]["ids"] == list(IDS_05), "fixture bloque 05 inconsistente")
     check(tuple(rows[3]["ids"].split(";")) == IDS_04, "IDs del bloque 04 cambiados")
     check(fixture["blocks"][3]["ids"] == list(IDS_04), "fixture bloque 04 inconsistente")
     check(tuple(rows[2]["ids"].split(";")) == IDS_03, "IDs del bloque 03 cambiados")
@@ -35,7 +38,7 @@ def main():
     check(fixture["blocks"][1]["ids"] == list(IDS_02), "fixture bloque 02 inconsistente")
     check(tuple(rows[0]["ids"].split(";")) == IDS, "IDs de cola cambiados")
     check(fixture["blocks"][0]["ids"] == list(IDS), "fixture inconsistente")
-    for item in IDS + IDS_02 + IDS_03 + IDS_04:
+    for item in IDS + IDS_02 + IDS_03 + IDS_04 + IDS_05:
         matches = [r for r in scope if r["id"] == item]
         check(len(matches) == 1 and matches[0]["estado_contenido"] == "SELECCIONADO", item + " no seleccionado")
         check('"' + item + '"' in script, item + " no cubierto por Godot")
@@ -48,7 +51,8 @@ def main():
     for token in ("primer_dependiente", "intercambio_no_degradado_a_uso_directo", "opciones_condicionadas.is_empty()"):
         check(token in script, "falta asercion de dependencia de intercambio: " + token)
     check("item in BLOQUE_04" in script, "faltan negativos condicionados bloque 04")
-    print(f"CAMP003_W04_PY PASS blocks=4 checks={checks}")
+    check("item in BLOQUE_05" in script and "intercambio_no_degradado_a_uso_directo" in script, "sin rechazo condicionado de bloque 05")
+    print(f"CAMP003_W04_PY PASS blocks=5 checks={checks}")
 
 if __name__ == "__main__":
     main()
