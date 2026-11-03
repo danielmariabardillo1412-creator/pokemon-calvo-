@@ -506,6 +506,56 @@
         "battle_volatile_requires_active_context"
       ],
       "ci_required": true
+    },
+    {
+      "bloque": "09",
+      "familia": "FIELD_CONTEXT",
+      "ids": [
+        "escape_rope",
+        "fluffy_tail"
+      ],
+      "objetivo": "huida_campo_ubicacion_y_rechazo_sin_gasto",
+      "current_state": "PARTIAL_FLUFFY_BATTLE_ESCAPE",
+      "functional_effect_certified": false,
+      "per_id_status": {
+        "escape_rope": "DEPENDENCIA_MUNDO_RETORNO",
+        "fluffy_tail": "BATTLE_ESCAPE_EXISTING_FIELD_REJECTED"
+      },
+      "existing_positive_contracts": [
+        "BattleEscapeProfile.supports_fluffy_tail",
+        "BattleEscapeProfile.guaranteed_no_rng",
+        "ShowdownAdventureSession._use_escape_item_commit",
+        "FieldItemService.use_item_rejects_without_spend"
+      ],
+      "required_producers": [
+        {
+          "id": "escape_rope",
+          "producer": "authoritative_overworld_map_checkpoint",
+          "consumer": "field_item_service_and_world_teleport_transaction",
+          "missing_fields": [
+            "map_location",
+            "last_valid_exit_or_dungeon_entrance",
+            "world_warp_commit_and_savev2"
+          ],
+          "decision": "IA6 debe asignar productor de mapa, retorno seguro, salvaguardas, guardado y consumo sólo tras desplazamiento confirmado; no inferir destino de ubicación de criatura."
+        },
+        {
+          "id": "fluffy_tail",
+          "producer": "active_wild_battle_and_replay_revision",
+          "consumer": "ShowdownAdventureSession.use_item > battle_escape_profile > _finish",
+          "missing_fields": [
+            "none_for_battle",
+            "field_mode_not_supported"
+          ],
+          "decision": "Mantener la huida salvaje existente, gastar exactamente uno tras commit, no gastar al rechazar; no inventar aplicación fuera del combate."
+        }
+      ],
+      "positive_tests": [
+        "fluffy_escape_profile_guaranteed_no_rng",
+        "field_rejection_unchanged_for_both",
+        "owner_location_of_creature_not_world_map"
+      ],
+      "ci_required": true
     }
   ]
 }
