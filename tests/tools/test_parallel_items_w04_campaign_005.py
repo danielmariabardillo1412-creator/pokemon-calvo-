@@ -12,6 +12,7 @@ ITEMS_02 = ("protector", "reaper_cloth", "prism_scale", "sachet", "up_grade")
 ITEMS_03 = ("oval_stone", "dawn_stone", "peat_block")
 ITEMS_04 = ("galarica_cuff", "galarica_wreath", "scroll_of_darkness", "scroll_of_waters")
 ITEMS_05 = ("berry_sweet", "clover_sweet", "flower_sweet", "love_sweet", "ribbon_sweet", "star_sweet", "strawberry_sweet")
+ITEMS_06 = ("whipped_dream", "leaders_crest")
 
 
 def check_rows(path):
@@ -55,10 +56,11 @@ def main():
     field = (ROOT / "modules/inventory/field_item_service.gd").read_text(encoding="utf-8")
 
     check(fixture["worker"] == "W04" and fixture["campaign"] == "CAMP_005", "fixture identidad")
-    check(len(fixture["blocks"]) == 5 and [x["block"] for x in fixture["blocks"]] == ["01", "02", "03", "04", "05"], "fixture acumulativo 01 a 05")
+    check(len(fixture["blocks"]) == 6 and [x["block"] for x in fixture["blocks"]] == ["01", "02", "03", "04", "05", "06"], "fixture acumulativo 01 a 06")
     check(len(queue) == 10 and queue[0]["ids"].split(";") == list(ITEMS_01), "cola oficial 01")
-    check(len(progress) == 5 and [x["bloque"] for x in progress] == ["01", "02", "03", "04", "05"], "progreso bloques 01 a 05")
-    check(progress[0]["ids"].split(";") == list(ITEMS_01) and progress[1]["ids"].split(";") == list(ITEMS_02) and progress[2]["ids"].split(";") == list(ITEMS_03) and progress[3]["ids"].split(";") == list(ITEMS_04) and progress[4]["ids"].split(";") == list(ITEMS_05), "progreso filas exactas")
+    check(len(progress) == 6 and [x["bloque"] for x in progress] == ["01", "02", "03", "04", "05", "06"], "progreso bloques 01 a 06")
+    check(progress[0]["ids"].split(";") == list(ITEMS_01) and progress[1]["ids"].split(";") == list(ITEMS_02) and progress[2]["ids"].split(";") == list(ITEMS_03) and progress[3]["ids"].split(";") == list(ITEMS_04) and progress[4]["ids"].split(";") == list(ITEMS_05) and progress[5]["ids"].split(";") == list(ITEMS_06), "progreso filas exactas")
+    check(queue[5]["ids"].split(";") == list(ITEMS_06) and queue[5]["familia"] == "SPECIAL_EVOLUTION", "cola 06 aprobada")
     check(queue[4]["ids"].split(";") == list(ITEMS_05) and queue[4]["familia"] == "SPECIAL_EVOLUTION", "cola 05 aprobada")
     check(queue[3]["ids"].split(";") == list(ITEMS_04) and queue[3]["familia"] == "EVOLUTION_CONDITIONS", "cola bloque04 oficial")
     check(queue[2]["ids"].split(";") == list(ITEMS_03) and queue[2]["familia"] == "EVOLUTION_CONDITIONS", "cola 03 aprobada")
@@ -128,7 +130,7 @@ def main():
     for token in ("func _casos_de_version_y_etapas_02(", "prism_scale/belleza_legacy_no_degradada",
                   "up_grade/dos_objetos_dos_etapas", "up_grade/porygon2_sin_opcion",
                   "up_grade/porygon2_no_evoluciona", "up_grade/porygon2_con_objeto_no_salta_etapa",
-                  "up_grade/porygon2_retirada_sin_mutacion", "bloques_01_a_05_secuenciales",
+                  "up_grade/porygon2_retirada_sin_mutacion", "bloques_01_a_06_secuenciales",
                   "CAMP005_W04_ALT id=prism_scale", "CAMP005_W04_STAGE item=up_grade"):
         check(token in runner, "Falta contrato runtime del bloque 02: " + token)
 
@@ -174,7 +176,7 @@ def main():
     check("var gender:" not in creature and "var gender_id:" not in creature and '"gender":' not in creature, "género no persistido en dominio de criatura")
     check('"time_of_day":' not in evolution.split("static func level_up_context(",1)[1].split("static func _stat_relation_matches(",1)[0], "subida de nivel sin reloj")
     for token in ("func _auditar_condicion_03(", "func _tiene_destino_03(",
-                  "bloques_01_a_05_secuenciales", "sin_opciones_directas",
+                  "bloques_01_a_06_secuenciales", "sin_opciones_directas",
                   "condicion_no_degradable", "no_ignora_condiciones", "sexo_no_persistido",
                   "contexto_sin_requisitos", "uso_rechazado_sin_gasto", "evolucion_rechazada",
                   "estado_savev2_integro", "retirada_sin_perdida", "no_equipable_sin_gasto",
@@ -231,7 +233,7 @@ def main():
                   "04_no_uso_incondicional", "04_forma_no_inventada_savev2",
                   "04_retira_y_restaura", "04_no_equipable_sin_mutacion",
                   "04_forma_persistente_no_contratada", "CAMP005_W04_FORM_CONTRACT",
-                  "bloques_01_a_05_secuenciales", "CAMP005_W04_GODOT PASS blocks=5 checks="):
+                  "bloques_01_a_06_secuenciales", "CAMP005_W04_GODOT PASS blocks=6 checks="):
         check(token in runner, "falta escenario Godot de forma04: " + token)
 
     # Bloque 05: siete confites seleccionados, pero una sola evolucion original SPIN.
@@ -264,8 +266,70 @@ def main():
                   "05_ajeno_sin_gasto", "05_sin_consumo_tras_equipar", "05_sin_forma_por_evolve",
                   "05_guardar_savev2", "05_cargar_savev2", "05_identidad_confite_savev2",
                   "05_atributos_savev2", "05_retirada_restaurada", "05_siete_confites_exactos",
-                  "bloques_01_a_05_secuenciales", "CAMP005_W04_GODOT PASS blocks=5 checks="):
+                  "bloques_01_a_06_secuenciales", "CAMP005_W04_GODOT PASS blocks=6 checks="):
         check(token in runner, "Godot sin contrato observable confites: " + token)
+
+    # Bloque06: dos rutas muy distintas. Whipped Dream mantiene trade+held_item
+    # y espera los niveles oficiales V27; Leader's Crest no es uso de mochila,
+    # sino derrotas cualificadas que el motor aún no almacena.
+    specials = fixture["blocks"][5]
+    cases06 = specials["cases"]
+    check(specials["family"] == "SPECIAL_EVOLUTION" and specials["ids"] == list(ITEMS_06), "cola bloque06 exacta")
+    check(specials["classification"] == "DEPENDENCIA_INTERCAMBIO_Y_COMBATE" and len(cases06) == 2, "dependencia doble diferenciada")
+    check([r["item_id"] for r in cases06] == list(ITEMS_06), "casos y orden autorizados")
+    check({r["item_id"]: (r["source"], r["target"]) for r in cases06} == {
+        "whipped_dream": ("swirlix", "slurpuff"),
+        "leaders_crest": ("bisharp", "kingambit"),
+    }, "parejas originales exactas")
+    check(all(selected[item]["estado_contenido"] == "SELECCIONADO" for item in ITEMS_06), "dos objetos seleccionados")
+    check(selected["whipped_dream"]["familia"] == "EVOLUTION", "dulce de nata familia original")
+    check(selected["leaders_crest"]["familia"] == "FOOD_OR_PICNIC_ACTIVITY", "discrepancia catalogo no ocultada")
+    check(("whipped_dream" in held_profile["holdable_ids"]) and
+          ("leaders_crest" not in held_profile["holdable_ids"]), "equipamiento real distinto")
+    for r in cases06:
+        name = r["item_id"]
+        chain = json.loads((ROOT / f"data/api/v2/evolution-chain/{r['evolution_chain']}/index.json").read_text(encoding="utf-8"))
+        routes = [(src, dst, d) for src, dst, d in routes_from_chain(chain["chain"])
+                  if src == r["source"] and dst == r["target"]
+                  and d["trigger"]["name"] == r["original_trigger"]]
+        check(len(routes) == 1, name + ": ruta y trigger canónico único")
+        d = routes[0][2]
+        check(d["version_group"]["name"] == r["version"], name + ": versión canónica")
+        check(d["min_level"] is None and r["approved_level"] is None, name + ": no inventar mínimo")
+        check(d["item"] is None, name + ": no trigger item de mochila")
+        check(r["canonical_item"] == name.replace("_", "-"), name + ": alias item no inventado")
+        check(r["holdable"] == (name == "whipped_dream"), name + ": perfil reconocido")
+        if name == "whipped_dream":
+            check(d["held_item"]["name"] == "whipped-dream" and r["held_item_required"] is True,
+                  "swirlix exige dulce equipado en intercambio")
+            check(name in policy["restored_ids"] and policy["level_values_selected"] is None
+                  and policy["future_evolution_implementation"] == "DEFERRED",
+                  "V27 no autoriza umbral de Swirlix")
+        else:
+            check(d["held_item"] is None and r["held_item_required"] is False,
+                  "tres derrotas no exige leaders_crest equipado en el registro")
+            check(d["trigger"]["name"] == "three-defeated-bisharp",
+                  "ruta Kingambit: tres derrotas")
+    chain317 = json.loads((ROOT / "data/api/v2/evolution-chain/317/index.json").read_text(encoding="utf-8"))
+    former = [d for src, dst, d in routes_from_chain(chain317["chain"])
+              if src == "pawniard" and dst == "bisharp" and d["trigger"]["name"] == "level-up"]
+    check(len(former) == 1 and former[0]["min_level"] == 52,
+          "nivel52 solo Pawniard-a-Bisharp; no corresponde a Kingambit")
+    check('&"three_defeated_bisharp"' in evolution and "UNSUPPORTED_TRIGGERS" in evolution,
+          "motor clasifica correctamente evento especial como unsupported")
+    check('"held_item":' not in evolution.split("static func level_up_context(", 1)[1].split("static func _stat_relation_matches(", 1)[0],
+          "level_up_context sin contrato held-item")
+    for token in ("func _auditar_especial_06(", "06_registro_especifico_unico",
+                  "06_trade_requiere_confite_equipado", "06_tres_derrotas_no_implementadas",
+                  "06_nivel52_solo_pawniard_bisharp", "06_no_convertir_a_nivel_arbitrario",
+                  "06_contexto_inventado_no_habilita", "06_equipar_segun_perfil",
+                  "06_uso_bolsa_rechazado_sin_consumo", "06_evolve_rechazado_sin_consumo",
+                  "06_ajeno_rechazado", "06_sin_intercambio_ni_tres_derrotas_falsas",
+                  "06_guardar_savev2", "06_cargar_savev2", "06_identidad_y_stock_savev2",
+                  "06_atributos_savev2", "06_retirar_sin_perder", "06_no_equipable_inmutable",
+                  "06_dos_objetos_exactos", "bloques_01_a_06_secuenciales",
+                  "CAMP005_W04_GODOT PASS blocks=6 checks="):
+        check(token in runner, "faltan aserciones Godot bloque06: " + token)
 
     # Prueba de interfaz pendiente: la API de nivel comunica nivel/estadísticas,
     # pero no el objeto equipado que exige V27. Godot prueba el comportamiento real.
@@ -283,11 +347,11 @@ def main():
                   "productor_no_transporta_objeto", "equipamiento_positivo_sin_evolucion",
                   "guardar_savev2", "leer_savev2", "identidad_item_savev2",
                   "retirada_preserva_estado", "mochila_no_es_intercambio",
-                  "CAMP005_W04_GODOT PASS blocks=5 checks="):
+                  "CAMP005_W04_GODOT PASS blocks=6 checks="):
         check(token in runner, "runner sin prueba observable: " + token)
     check((ROOT / "tests/tools/test_parallel_items_w04_campaign_004.py").exists(), "regresión CAMP004 preservada")
     check((ROOT / "tests/tools/test_parallel_items_w04_campaign_003.py").exists(), "regresión CAMP003 preservada")
-    print(f"CAMP005_W04_PY PASS blocks=5 checks={checks}")
+    print(f"CAMP005_W04_PY PASS blocks=6 checks={checks}")
 
 
 if __name__ == "__main__":
