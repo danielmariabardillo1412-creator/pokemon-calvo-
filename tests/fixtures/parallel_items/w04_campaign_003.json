@@ -157,6 +157,24 @@
         "apple_cross_target_rejected_if_defined",
         "positive_identity_single_consumption_savev2_only_if_supported"
       ]
+    },
+    {
+      "block": "10",
+      "ids": [
+        "syrupy_apple",
+        "scroll_of_darkness",
+        "scroll_of_waters"
+      ],
+      "expected_trigger": "classify_real_record_and_contextual_conditions_without_assumptions",
+      "policy": "cross_target_rejection_and_no_spend; same_species_different_forms_not_proven_by_id_only",
+      "cases": [
+        "catalog_item_presence",
+        "real_evolution_conditions_and_origin_logged",
+        "wrong_species_rejected_without_spend",
+        "conditional_route_rejected_without_spend",
+        "cross_target_rejected_if_separate_species_targets",
+        "positive_single_consumption_identity_save_v2_only_if_supported"
+      ]
     }
   ]
 }
