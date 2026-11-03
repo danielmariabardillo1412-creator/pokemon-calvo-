@@ -41,3 +41,9 @@ Salida real del runner por objeto:
 Las pruebas de `Milcery`/Eevee verificaron rechazos y estado/inventario persistente, pero **no prueban una evolución positiva ni todas las variantes de Alcremie**. Continúa pendiente definir e implementar con contrato canónico `spin`, objeto equipado y resultado de forma. No se propone simplificar a `use_item` de mochila.
 
 **Estado del bloque:** pruebas CI PASS con `DEPENDENCIA_DOCUMENTADA` para los tres IDs. El CSV de progreso se ha reconciliado con run `41575404407` en commit `18607d8a1bc259e534170fed47899e6a0efef34a`. La actualización de ese CSV genera una nueva ejecución de regresión sobre el estado consolidado; se valida por separado. **Próximo bloque por `p`: 02, `love_sweet;ribbon_sweet;star_sweet`.**
+
+## Confirmación final tras actualizar progreso
+
+La CI de verificación del estado **consolidado** [#41575563765](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41575563765) terminó `completed/success` sobre SHA `18607d8a1bc259e534170fed47899e6a0efef34a`. Recibos de los logs: `CAMP004_W04_MANIFEST_PASS reserved=10 completed=1 ids=36`; Python `PASS blocks=1 checks=48`; Godot `PASS blocks=1 checks=101`; regresión CAMP003 Python `PASS blocks=10 checks=120`, Godot `PASS blocks=10 checks=270`. Las tres salidas por item se mantienen `status=DEPENDENCIA records=0`. No confundir el PASS del runner con 3 evoluciones funcionales.
+
+**Microbloque 01 concluido técnicamente y documentado**, sin modificaciones de producción. No iniciar 02 antes del siguiente `p`.
