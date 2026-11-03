@@ -3,7 +3,7 @@
   "campaign": "CAMP_004_W02",
   "worker": "W02",
   "active_policy": "RANDOMLOCK_ITEMS_BUILD_SCOPE_V2",
-  "purpose": "CAMP004 W02: verificar bayas 01-02 mediante servicios nativos; Razz sin efecto conectado queda documentada como dependencia, sin inventar mecánica.",
+  "purpose": "CAMP004 W02: contratos de bayas (01-02) y medicinas (03) contra servicios nativos de campo, propiedad y SaveV2; Razz documentada como dependencia.",
   "format": "gen9calvounifiedv1",
   "level": 100,
   "seed": [
@@ -19,7 +19,8 @@
   ],
   "completed_blocks": [
     1,
-    2
+    2,
+    3
   ],
   "blocks": [
     {
@@ -364,6 +365,205 @@
           "friendship_gain": 0
         }
       ]
+    },
+    {
+      "block": "03",
+      "family": "MEDICINE",
+      "ids": [
+        "antidote",
+        "awakening",
+        "berry_juice",
+        "big_malasada"
+      ],
+      "source_evidence": [
+        "modules/inventory/imported_recovery_v19.json",
+        "modules/inventory/field_item_effects.gd",
+        "modules/inventory/field_item_service.gd",
+        "tests/gameplay/item_field_effects_v4.gd"
+      ],
+      "cases": [
+        {
+          "scenario": "antidote_poison_c004",
+          "id": "antidote",
+          "kind": "field_medicine",
+          "start_hp": "full",
+          "status": "poison",
+          "confused": false,
+          "applies": true,
+          "heal_amount": 0,
+          "cures_status": true,
+          "cures_confusion": false
+        },
+        {
+          "scenario": "antidote_badly_poisoned_c004",
+          "id": "antidote",
+          "kind": "field_medicine",
+          "start_hp": "full",
+          "status": "badly_poisoned",
+          "confused": false,
+          "applies": true,
+          "heal_amount": 0,
+          "cures_status": true,
+          "cures_confusion": false
+        },
+        {
+          "scenario": "antidote_burn_reject_c004",
+          "id": "antidote",
+          "kind": "field_medicine",
+          "start_hp": "full",
+          "status": "burn",
+          "confused": false,
+          "applies": false,
+          "heal_amount": 0,
+          "cures_status": false,
+          "cures_confusion": false
+        },
+        {
+          "scenario": "antidote_healthy_reject_c004",
+          "id": "antidote",
+          "kind": "field_medicine",
+          "start_hp": "full",
+          "status": "",
+          "confused": false,
+          "applies": false,
+          "heal_amount": 0,
+          "cures_status": false,
+          "cures_confusion": false
+        },
+        {
+          "scenario": "awakening_sleep_c004",
+          "id": "awakening",
+          "kind": "field_medicine",
+          "start_hp": "full",
+          "status": "sleep",
+          "confused": false,
+          "applies": true,
+          "heal_amount": 0,
+          "cures_status": true,
+          "cures_confusion": false,
+          "expect_sleep_clock_clear": true
+        },
+        {
+          "scenario": "awakening_poison_reject_c004",
+          "id": "awakening",
+          "kind": "field_medicine",
+          "start_hp": "full",
+          "status": "poison",
+          "confused": false,
+          "applies": false,
+          "heal_amount": 0,
+          "cures_status": false,
+          "cures_confusion": false
+        },
+        {
+          "scenario": "awakening_healthy_reject_c004",
+          "id": "awakening",
+          "kind": "field_medicine",
+          "start_hp": "full",
+          "status": "",
+          "confused": false,
+          "applies": false,
+          "heal_amount": 0,
+          "cures_status": false,
+          "cures_confusion": false
+        },
+        {
+          "scenario": "berry_juice_half_hp_c004",
+          "id": "berry_juice",
+          "kind": "field_medicine",
+          "start_hp": "half",
+          "status": "",
+          "confused": false,
+          "applies": true,
+          "heal_amount": 20,
+          "cures_status": false,
+          "cures_confusion": false
+        },
+        {
+          "scenario": "berry_juice_near_full_c004",
+          "id": "berry_juice",
+          "kind": "field_medicine",
+          "start_hp": "missing_7",
+          "status": "",
+          "confused": false,
+          "applies": true,
+          "heal_amount": 20,
+          "cures_status": false,
+          "cures_confusion": false
+        },
+        {
+          "scenario": "berry_juice_full_reject_c004",
+          "id": "berry_juice",
+          "kind": "field_medicine",
+          "start_hp": "full",
+          "status": "",
+          "confused": false,
+          "applies": false,
+          "heal_amount": 0,
+          "cures_status": false,
+          "cures_confusion": false
+        },
+        {
+          "scenario": "big_malasada_poison_c004",
+          "id": "big_malasada",
+          "kind": "field_medicine",
+          "start_hp": "full",
+          "status": "poison",
+          "confused": false,
+          "applies": true,
+          "heal_amount": 0,
+          "cures_status": true,
+          "cures_confusion": false
+        },
+        {
+          "scenario": "big_malasada_freeze_c004",
+          "id": "big_malasada",
+          "kind": "field_medicine",
+          "start_hp": "full",
+          "status": "freeze",
+          "confused": false,
+          "applies": true,
+          "heal_amount": 0,
+          "cures_status": true,
+          "cures_confusion": false
+        },
+        {
+          "scenario": "big_malasada_confusion_c004",
+          "id": "big_malasada",
+          "kind": "field_medicine",
+          "start_hp": "full",
+          "status": "",
+          "confused": true,
+          "applies": true,
+          "heal_amount": 0,
+          "cures_status": false,
+          "cures_confusion": true
+        },
+        {
+          "scenario": "big_malasada_poison_confusion_c004",
+          "id": "big_malasada",
+          "kind": "field_medicine",
+          "start_hp": "full",
+          "status": "poison",
+          "confused": true,
+          "applies": true,
+          "heal_amount": 0,
+          "cures_status": true,
+          "cures_confusion": true
+        },
+        {
+          "scenario": "big_malasada_healthy_reject_c004",
+          "id": "big_malasada",
+          "kind": "field_medicine",
+          "start_hp": "full",
+          "status": "",
+          "confused": false,
+          "applies": false,
+          "heal_amount": 0,
+          "cures_status": false,
+          "cures_confusion": false
+        }
+      ]
     }
   ],
   "limitations": [
@@ -371,6 +571,7 @@
     "La baya Figy se comprueba con Endeavor del rival a 1 PS y naturaleza modest que rechaza el sabor picante; con Hardy no confunde.",
     "Leppa se comprueba mediante la ruta nativa de uso de PP en bolsa; el barrido histórico held Leppa sigue preservado y se ejecuta en la regresión CAMP003 existente solo si está incluida.",
     "Amistad por bonificaciones de origen pendiente; validación base sin origen especial, sin GPU ni interfaz.",
-    "Razz Berry no tiene efecto de campo conectado en el contrato del proyecto ni efecto competitivo al equiparse; solo se prueba rechazo/inercia. Su inclusion funcional requiere decisión de IA6 sobre alcance; no se finge PASS positivo."
+    "Razz Berry no tiene efecto de campo conectado en el contrato del proyecto ni efecto competitivo al equiparse; solo se prueba rechazo/inercia. Su inclusion funcional requiere decisión de IA6 sobre alcance; no se finge PASS positivo.",
+    "Medicinas bloque 03 comprobadas por uso en bolsa con propietario en equipo o almacenamiento; no se verifica uso de medicinas durante batalla ni UI/GPU."
   ]
 }
