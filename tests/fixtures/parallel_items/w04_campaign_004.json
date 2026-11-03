@@ -156,6 +156,35 @@
         "positive_only_with_actual_item_evolution_rule",
         "regression_campaign003_retained"
       ]
+    },
+    {
+      "block": "07",
+      "ids": [
+        "rage_candy_bar",
+        "red_orb",
+        "reins_of_unity"
+      ],
+      "family": "STORY_KEY_OR_FORM_REVIEW",
+      "classification_by_id": {
+        "rage_candy_bar": "field recovery usable: cures persistent status, consumes 1 only if effect, tested across SaveV2; no evolution",
+        "red_orb": "Groudon held orb supported; Primal Reversion route not established in FieldItemService",
+        "reins_of_unity": "Calyrex fusion with steed requires a real two-creature contract; data only"
+      },
+      "source": "selected scope; ITEM_FIELD_V8.csv.txt; item_connections_v1.json; imported_recovery_v19.json; ITEM_INVENTORY.csv",
+      "policy": "Test existing Rage Candy Bar medicine positively, preserve all rejection contracts for Primal Orb and fusion; do not invent an evolved form or W02 medicine implementation",
+      "cases": [
+        "item_catalog_selection_presence",
+        "rage_candy_bar_healthy_no_effect_no_spend",
+        "rage_candy_bar_burn_cured_spends_one",
+        "rage_candy_bar_no_second_use_no_double_spend",
+        "rage_candy_bar_owner_rejected",
+        "rage_candy_bar_savev2_persists_status_inventory",
+        "red_orb_equipment_transfer_reversible_and_savev2",
+        "red_orb_no_primal_reversion_claim",
+        "reins_of_unity_nonholdable_no_fake_fusion",
+        "reins_of_unity_savev2_no_spend",
+        "regression_blocks_01_to_06_retained"
+      ]
     }
   ]
 }
