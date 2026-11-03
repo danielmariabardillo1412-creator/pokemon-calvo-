@@ -356,7 +356,7 @@ func _compare_c003(row: Dictionary, obs: Dictionary) -> void:
 	var fn: int = int(n.start.foe_hp) - int(n.after.foe_hp)
 	var fr: int = int(r.start.foe_hp) - int(r.after.foe_hp)
 	check("reserva igual al control (PS actor)", dr == dn)
-	if String(row.op) not in ["trap_residual", "trap_extended_duration", "metronome_repeat_reset", "muscle_physical_damage_boost"]:
+	if String(row.op) not in ["trap_residual", "trap_extended_duration", "metronome_repeat_reset", "muscle_physical_damage_boost", "rocky_helmet_contact_recoil"]:
 		check("dano rival sin cambio no autorizado", fa == fn and fn == fr)
 	match String(row.op):
 		"ground_immunity":
