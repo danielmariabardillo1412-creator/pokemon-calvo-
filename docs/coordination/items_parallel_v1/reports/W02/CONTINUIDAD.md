@@ -1,3 +1,23 @@
+# IA2/W02 — CONTINUIDAD VIGENTE: CAMPAÑA_004 BLOQUE 01/10
+
+**Rama activa de este chat:** `codex/calvo-items-20261103-w02-camp004`. La antigua `codex/calvo-items-20261103-w02-camp003` queda intacta y fue certificada 10/10 en [#41570972406](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41570972406), Godot 7306 comprobaciones. **No repetir esos 40 IDs.**
+
+**Cola y gate oficiales** en la rama árbitra `codex/calvo-items-20261101-arbitro`: `CAMPAIGN_004_W02_GATE.md` blob `efec11f7495b0f33eae99a35a0913fd273f321c1`, `CAMPAIGN_004_W02_QUEUE_APPROVED.csv` blob `521f84716cdd043665cefa321a79b9a876517035`, `campaigns/CAMP_004_W02.md` blob `0049bb85210b8caa617771ca01b4ef8bd72894f6`, autonomía V5 blob `ebe71ace6949cc9311eb9831068799081bca8ba7`. Campaña: 10 microbloques, 40 IDs; solo el bloque 01 autorizado y entregado en este turno. Una `p` = exactamente siguiente fila. No modificar main/V28/otras ramas ni workflow.
+
+**Fila 01 publicada:** `figy_berry;kelpsy_berry;leppa_berry;lum_berry` — 15 escenarios, 45 variantes de propiedad previstas, 4 IDs. Figy = pinch 1/3 y rechazo de naturaleza `modest`; Kelpsy = EV Ataque / amistad mediante bolsa; Leppa = 10 PP en slot seleccionado mediante bolsa; Lum = cura estado con baya equipada y cura poison/confusión por uso de bolsa. Tres variantes activo/ausente/reserva en combate; equipo con/sin item y almacenamiento con item en campo. SaveV2, consumo único, stock y recibos SHA256.
+
+**Nuevo runner separado** `tests/gameplay/parallel_items_w02_campaign_004.gd` hereda sólo los métodos de prueba W02 CAMP003; no invoca sus 10 bloques (CI dedicada sí hace regresión completa de CAMP003). Fixture `tests/fixtures/parallel_items/w02_campaign_004.json`; Python `tests/tools/test_parallel_items_w02_campaign_004.py`; CSV `docs/coordination/items_parallel_v1/reports/W02/CAMP_004_PROGRESO.csv`. Informe completo `CAMP_004_ITER_01.md`. Commits: fixture `6ab8d1b9cb563c8925dcbac9072a0761ad250921`; Godot `61d2162d85ab1f144c9c819052dcdfa0919aa903`; Python `9af8486c1ea2a5fa677d64f28b0c18ade3107d2e`; progreso `4fc799c5a7ef6d2705ef598864cdac93bab4d486`; informe `39bee9fac688ea25b109c519740c3a08df698318`.
+
+**CI funcional a verificar:** [#41573481223](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41573481223) sobre SHA `4fc799c5a7ef6d2705ef598864cdac93bab4d486`, inicialmente `in_progress`. Exigir `CAMP004_W02_PY PASS blocks=1 checks=N`, `CAMP004_W02_GODOT PASS blocks=1 checks=M`, y `CAMP003_W02_PY/GODOT PASS blocks=10` para acreditar regresión. Bootstrap 0/10 NO es PASS funcional. Si falla, reparar sin rebajar expectativas; cambio de API común o conflicto de archivo compartido → escalar IA6.
+
+**Limitaciones:** Leppa en combate (held) tiene precedente histórico en `held_effect_sweep_v3.cjs` pero este bloque no lo ejercita; sí Leppa como recuperación de PP en bolsa. Bonos de amistad por origen, escenarios visuales/GPU y resto de las 36 IDs quedan fuera de esta entrega.
+
+**Próxima `p`:** bloque **02** exacto `qualot_berry;razz_berry;sitrus_berry;tamato_berry`, previa revisión del resultado de CI 01. No arrancar dos microbloques con una orden.
+
+---
+
+## HISTÓRICO — CAMPAÑA_003 (PRESERVADO COMO REFERENCIA)
+
 # IA2/W02 — CAMPAÑA_003: CONTINUIDAD VIGENTE / BLOQUE 10 DE 10 — CI PENDIENTE
 
 **Fila 10 EJECUTADA/PUBLICADA, NO CIERRE CERTIFICADO.** Rama `codex/calvo-items-20261103-w02-camp003`. No más filas: STOP al 10. Trabajo pendiente: verificar CI acumulativa y reparar cualquier fallo antes de declarar `CAMPAÑA_003_FINALIZADA`. El usuario ya autorizó avanzar al último bloque si la CI09 había terminado; el run09 [#41566220523](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41566220523) terminó `failure`, fue diagnosticado como comparación de vector Starf en la capa de evidencias y reparado en arnés (`13dc40ee663cd73379e4d21337e8f89ea667a067`). El run de reparación aislado se canceló al publicar bloque10 independiente; **la CI10 debe acreditar también 09**, no dar falso PASS.
