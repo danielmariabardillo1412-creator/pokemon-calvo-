@@ -1584,6 +1584,15 @@ def verify_sources(chk):
         'Friendship.increase(creature, [5, 3, 2] if vitamin else [3, 2, 1])',
     ):
         chk.demand(fragment in training, "Contrato plumas 05 fuera del motor: " + fragment)
+    for fragment in (
+        'if String(spec.kind) in ["vitamin", "wing"]:',
+        'elif String(spec.kind) in ["vitamin", "wing"]:',
+        'var friendship_added: int = ([3, 2, 1] if String(spec.kind) == "wing" else [5, 3, 2])[tier]',
+        'now.evs == expected_evs',
+        'expected_total <= 510',
+        'and now.stats.max_hp - now.current_hp == start_hp_deficit',
+    ):
+        chk.demand(fragment in runner, "Arnés plumas 05 no implementa EV y amistad: " + fragment)
     for old, token in (
         (old_ability, 'TRANSITIONS'),
         (old_growth, 'rare_candy'),
