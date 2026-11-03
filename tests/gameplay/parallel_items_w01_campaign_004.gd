@@ -58,8 +58,8 @@ func _run_w01_c004() -> void:
 	check("Tres controles de equipamiento", fixture.get("variants") == ["active", "none", "reserve"])
 	var progress: Array = _progress_c004()
 	var completed: int = progress.size()
-	check("Bloques W01 01 a 05 autorizados", completed == 5)
-	if completed != 5:
+	check("Bloques W01 01 a 06 autorizados", completed == 6)
+	if completed != 6:
 		quit(2)
 		return
 	check("Fila 01 e IDs exactos de árbitra", String(progress[0].block) == "01"
@@ -72,13 +72,15 @@ func _run_w01_c004() -> void:
 		and String(progress[3].ids) == "psychic_seed;punching_glove;ring_target")
 	check("Fila 05 e IDs exactos de árbitra", String(progress[4].block) == "05"
 		and String(progress[4].ids) == "room_service;scope_lens;shed_shell")
+	check("Fila 06 e IDs exactos de árbitra", String(progress[5].block) == "06"
+		and String(progress[5].ids) == "smoke_ball;smooth_rock;snowball")
 	var ids_for_block: Dictionary = {}
 	var ids: PackedStringArray = PackedStringArray()
 	for row_progress: Dictionary in progress:
 		ids_for_block[String(row_progress.block)] = String(row_progress.ids).split(";")
 		ids.append_array(ids_for_block[String(row_progress.block)])
 	var cases: Array = fixture.get("cases", [])
-	check("Treinta y cuatro escenarios autorizados", cases.size() == 34)
+	check("Cuarenta y tres escenarios autorizados", cases.size() == 43)
 	var names: Array = []
 	for row: Dictionary in cases:
 		check("Escenario pertenece a bloque autorizado",
@@ -103,7 +105,7 @@ func _run_w01_c004() -> void:
 				"seed": int(value), "checks": checks - before_checks,
 				"status": "PASS" if errors.size() == before_errors else "FAIL",
 				"observed": observed})
-	check("Matriz exacta de 98 pares caso-semilla", c004_rows.size() == 98)
+	check("Matriz exacta de 110 pares caso-semilla", c004_rows.size() == 110)
 	for id: String in ids:
 		check("ID cubierto " + id, cases.any(func(case): return String(case.item_id) == id))
 	check("Puño Suerte demuestra al menos un crítico específico de Chansey", c004_lucky_exclusive > 0)
@@ -250,6 +252,17 @@ func _probe_w01_c004(row: Dictionary, seed: int, mode: String) -> Dictionary:
 	for c: CreatureInstance in [session.battle_state().creature(&"own"), session.battle_state().creature(&"reserve")]:
 		if c.held_item_id == id and not c.held_item_consumed:
 			physical += 1
+	# La huida se prueba tras SaveV2 para que las tres variantes comparen
+	# exactamente la misma escena nativa restaurada, sin atajos simulados.
+	var smoke_native_active: bool = false
+	if String(row.item_id) == "smoke_ball":
+		var own_roster: Array = session._checkpoint.get("roster", [])
+		check(mode + " smoke native roster presente", own_roster.size() >= 1)
+		if own_roster.size() >= 1:
+			var native_pokemon: Array = own_roster[0].get("pokemon", [])
+			check(mode + " smoke native actor presente", native_pokemon.size() >= 1)
+			if native_pokemon.size() >= 1:
+				smoke_native_active = bool(native_pokemon[0].get("held_item_active", false))
 	var snapshot: Dictionary = session.snapshot()
 	var key: String = String(row.id) + "_" + str(seed) + "_" + mode
 	var persisted: Dictionary = await _restore_probe(session, owner, key + "_savev2", mode + " SaveV2")
@@ -267,10 +280,29 @@ func _probe_w01_c004(row: Dictionary, seed: int, mode: String) -> Dictionary:
 		if c.held_item_id == id and not c.held_item_consumed:
 			restored_physical += 1
 	check(mode + " unidades físicas idénticas tras SaveV2", restored_physical == physical)
+	var smoke_outcome: Dictionary = {}
+	if String(row.op) in ["smoke_ball_escape_trapped", "smoke_ball_escape_normal", "smoke_ball_klutz_suppressed"]:
+		# Llamada REAL AdventureSession.flee tras restauración, no se crea
+		# una probabilidad ni se imita el motor. Mal de Ojo da un control
+		# negativo determinista (huida normal bloqueada sin gastar RNG).
+		var rng_before: int = session._escape_rng.state
+		var attempts_before: int = session.escape_attempts
+		var escape_command: Dictionary = await session.flee(session.revision)
+		smoke_outcome = {"command_accepted": escape_command.get("accepted", false),
+			"smoke_flag": bool(escape_command.get("smoke_ball", false)),
+			"escaped": session.completion_reason == "FLED",
+			"rng_unchanged": session._escape_rng.state == rng_before,
+			"attempts_unchanged": session.escape_attempts == attempts_before,
+			"battle_active": session.has_active_battle(),
+			"escape_blocked": bool(escape_command.get("escape_blocked", false)),
+			"item_retained": _units(owner, id) == 2}
+		check(mode + " run no consume Bola de Humo",
+			bool(smoke_outcome.item_retained))
 	await session.close()
 	return {"valid": true, "start": before, "after": after,
 		"damage": foe_damage, "critical": critical, "hit_count": hit_count,
 		"trapped_after_first": first_trapped, "shed_switched": shed_switched,
+		"smoke_native_active": smoke_native_active, "smoke_outcome": smoke_outcome,
 		"physical_units": physical,
 		"restored": restored_frame == after, "owner_unchanged": frozen,
 		"save_equal": restored_physical == physical}
@@ -292,7 +324,7 @@ func _compare_c004(row: Dictionary, observed: Dictionary) -> void:
 		check("Reserva no consume " + mode, not x.after.reserve_consumed)
 		var triggered_consumable: bool = (String(row.op) in [
 			"misty_seed_terrain", "power_herb_skip_charge", "psychic_seed_terrain",
-			"room_service_activated"])
+			"room_service_activated", "snowball_ice_trigger"])
 		check("Unidades físicas coherentes con activación " + mode,
 			x.physical_units == (1 if mode == "active" and triggered_consumable else 2))
 	var a: Dictionary = observed.active
@@ -300,7 +332,7 @@ func _compare_c004(row: Dictionary, observed: Dictionary) -> void:
 	var r: Dictionary = observed.reserve
 	var should_consume: bool = (String(row.op) in [
 		"misty_seed_terrain", "power_herb_skip_charge", "psychic_seed_terrain",
-		"room_service_activated"])
+		"room_service_activated", "snowball_ice_trigger"])
 	check("Consumo exacto por activación, reserva y ausencia intactas",
 		bool(a.after.own_consumed) == should_consume
 		and not r.after.reserve_consumed
@@ -505,5 +537,59 @@ func _compare_c004(row: Dictionary, observed: Dictionary) -> void:
 			check("Muda Concha: sin trampa no cambia ni consume",
 				not a.shed_switched and not n.shed_switched and not r.shed_switched
 				and a.after.active_id == "own" and a.physical_units == 2)
+		"smoke_ball_escape_trapped":
+			check("Bola Humo: actividad nativa solo portador no suprimido",
+				a.smoke_native_active and not n.smoke_native_active and not r.smoke_native_active)
+			check("Bola Humo: Mal de Ojo atrapa las tres variantes",
+				a.trapped_after_first and n.trapped_after_first and r.trapped_after_first)
+			check("Bola Humo: huida garantizada incluso atrapado",
+				a.smoke_outcome.command_accepted and a.smoke_outcome.smoke_flag
+				and a.smoke_outcome.escaped and not a.smoke_outcome.battle_active
+				and a.smoke_outcome.rng_unchanged and a.smoke_outcome.attempts_unchanged)
+			check("Bola Humo: sin objeto o en reserva bloqueo de huida real",
+				not n.smoke_outcome.smoke_flag and not r.smoke_outcome.smoke_flag
+				and n.smoke_outcome.battle_active and r.smoke_outcome.battle_active
+				and n.smoke_outcome.escape_blocked and r.smoke_outcome.escape_blocked)
+		"smoke_ball_escape_normal":
+			check("Bola Humo: huida normal segura sin RNG ni consumo",
+				a.smoke_native_active and a.smoke_outcome.smoke_flag
+				and a.smoke_outcome.escaped and a.smoke_outcome.command_accepted
+				and a.smoke_outcome.rng_unchanged and a.smoke_outcome.attempts_unchanged
+				and a.smoke_outcome.item_retained)
+			check("Bola Humo: no inventar garantía si ausente o en reserva",
+				not n.smoke_outcome.smoke_flag and not r.smoke_outcome.smoke_flag
+				and not n.smoke_native_active and not r.smoke_native_active)
+		"smoke_ball_klutz_suppressed":
+			check("Bola Humo: Torpeza invalida actividad incluso equipada",
+				not a.smoke_native_active and not n.smoke_native_active and not r.smoke_native_active)
+			check("Bola Humo: Torpeza y Mal de Ojo impiden huida garantizada",
+				a.trapped_after_first and not a.smoke_outcome.smoke_flag
+				and a.smoke_outcome.escape_blocked and a.smoke_outcome.battle_active
+				and n.smoke_outcome.battle_active and r.smoke_outcome.battle_active)
+		"smoke_ball_no_trigger":
+			check("Bola Humo: un turno de Reflejo no activa la huida",
+				a.smoke_native_active and not n.smoke_native_active and not r.smoke_native_active
+				and a.smoke_outcome.is_empty() and n.smoke_outcome.is_empty()
+				and r.smoke_outcome.is_empty())
+			check("Bola Humo: sin accion Run no afecta danos o consumo",
+				a.damage == 0 and n.damage == 0 and r.damage == 0
+				and a.physical_units == 2 and not a.after.own_consumed)
+		"snowball_ice_trigger":
+			check("Bola de Nieve: golpe de hielo +1 ataque solo portador",
+				int(a.after.attack_stage) == 1 and int(n.after.attack_stage) == 0
+				and int(r.after.attack_stage) == 0)
+			check("Bola de Nieve: consume una unidad solo al activar",
+				a.after.own_consumed and a.physical_units == 1 and r.physical_units == 2)
+		"snowball_wrong_type":
+			check("Bola de Nieve: Agua Pistola no aumenta ataque",
+				int(a.after.attack_stage) == 0 and int(n.after.attack_stage) == 0
+				and int(r.after.attack_stage) == 0)
+			check("Bola de Nieve: no consume con golpe de otro tipo",
+				not a.after.own_consumed and a.physical_units == 2)
+		"snowball_no_hit":
+			check("Bola de Nieve: sin dano no se activa ni consume",
+				int(a.after.attack_stage) == 0 and int(n.after.attack_stage) == 0
+				and int(r.after.attack_stage) == 0
+				and not a.after.own_consumed and a.physical_units == 2)
 		_:
 			check("Operación fuera del contrato de bloque", false)

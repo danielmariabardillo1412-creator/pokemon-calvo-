@@ -22,6 +22,9 @@ REFS = {
     "tools/item_audit/held_effect_sweep_v3.cjs": "fd5d9d0b1eecf8b84f14e606631df93b40728586",
     "tools/item_audit/held_effect_sweep_v2.cjs": "c9ba4d7bcddad6ae69f085f4b69983461ad05219",
     "tools/item_audit/held_pilot.cjs": "c8a59a18f546d772ff34e4f8640a4246a00a822b",
+    "modules/gameplay/showdown_adventure_session.gd": "1542086a8c44c58eb41c7ca8c592a40b61d5abf1",
+    "modules/gameplay/held_escape_items.gd": "7603f52b522e8f8f0a6e26948697562f95dfa44d",
+    "tests/gameplay/opencode_world_held_v2.gd": "5a777a1f11784eb4663662c80cef0b5c9182dd3c",
 }
 EXPECTED = {
     "ball_pikachu_special": ("light_ball", "damage_boost_compatible", "pikachu", "thunder_shock", "", (19, 23)),
@@ -58,6 +61,15 @@ EXPECTED = {
     "scope_no_damage_control": ("scope_lens", "scope_lens_status_control", "mew", "reflect", "", (19,)),
     "shell_mean_look": ("shed_shell", "shed_shell_escape_trap", "mew", "reflect", "", (19, 23)),
     "shell_no_trap": ("shed_shell", "shed_shell_no_trap_control", "mew", "reflect", "", (19,)),
+    "smoke_look_escape": ("smoke_ball", "smoke_ball_escape_trapped", "mew", "reflect", "", (19, 23)),
+    "smoke_plain_escape": ("smoke_ball", "smoke_ball_escape_normal", "mew", "reflect", "", (19,)),
+    "smoke_klutz_negative": ("smoke_ball", "smoke_ball_klutz_suppressed", "mew", "reflect", "", (19,)),
+    "smoke_no_run": ("smoke_ball", "smoke_ball_no_trigger", "mew", "reflect", "", (19,)),
+    "sandstorm_duration": ("smooth_rock", "weather_duration", "mew", "sandstorm", "", (19, 23)),
+    "sandstorm_no_weather": ("smooth_rock", "no_weather", "mew", "reflect", "", (19,)),
+    "snowball_ice_hit": ("snowball", "snowball_ice_trigger", "mew", "reflect", "", (19, 23)),
+    "snowball_water_hit": ("snowball", "snowball_wrong_type", "mew", "reflect", "", (19,)),
+    "snowball_no_hit": ("snowball", "snowball_no_hit", "mew", "reflect", "", (19,)),
 }
 NEW_CASE_IDS = {"rain_duration", "rain_no_weather", "snow_duration", "snow_no_weather",
                 "weight_grass_knot", "weight_tackle_control"}
@@ -65,14 +77,17 @@ BLOCK_03_CASES = {"dice_bullet_seed", "dice_tackle_control", "misty_seed_trigger
                   "misty_seed_wrong_terrain", "power_herb_solar_beam", "power_herb_noncharge"}
 BLOCK_04_CASES = {"psychic_seed_trigger", "psychic_seed_wrong_terrain", "punching_glove_boost", "punching_glove_tackle", "punching_glove_water", "ring_gengar_normal", "ring_charizard_ground", "ring_levitate_immune"}
 BLOCK_05_CASES = {"service_trick_room", "service_no_room", "scope_focus_crit", "scope_no_damage_control", "shell_mean_look", "shell_no_trap"}
+BLOCK_06_CASES = {"smoke_look_escape", "smoke_plain_escape", "smoke_klutz_negative", "smoke_no_run", "sandstorm_duration", "sandstorm_no_weather", "snowball_ice_hit", "snowball_water_hit", "snowball_no_hit"}
 BLOCK_04_FOE_ITEMS = {"punching_glove_boost": "rocky_helmet", "punching_glove_tackle": "rocky_helmet", "punching_glove_water": "rocky_helmet"}
-BLOCK_04_ABILITIES = {"ring_levitate_immune": "levitate"}
+BLOCK_04_ABILITIES = {"ring_levitate_immune": "levitate", "smoke_klutz_negative": "klutz"}
 EXPECTED_FOE_MOVES = {"weight_grass_knot": "grass_knot", "weight_tackle_control": "tackle",
                       "misty_seed_trigger": "misty_terrain", "misty_seed_wrong_terrain": "electric_terrain",
                       "psychic_seed_trigger": "psychic_terrain", "psychic_seed_wrong_terrain": "electric_terrain",
                       "ring_gengar_normal": "tackle", "ring_charizard_ground": "earthquake",
                       "ring_levitate_immune": "earthquake",
-                      "service_trick_room": "trick_room", "shell_mean_look": "mean_look"}
+                      "service_trick_room": "trick_room", "shell_mean_look": "mean_look",
+                      "smoke_look_escape": "mean_look", "smoke_klutz_negative": "mean_look",
+                      "snowball_ice_hit": "powder_snow", "snowball_water_hit": "water_gun"}
 MODES = ("active", "none", "reserve")
 CHECKS = 0
 
@@ -94,7 +109,7 @@ def validate():
     queue = read_rows(QUEUE)
     progress = read_rows(PROGRESS)
     require(len(queue) == 10 and all(x["trabajadora"] == "W01" for x in queue), "Cola de W01 inválida")
-    require(len(progress) == 5, "El contrato exige exactamente los bloques 01 a 05")
+    require(len(progress) == 6, "El contrato exige exactamente los bloques 01 a 06")
     require(progress[0]["bloque"] == "01" and progress[0]["ids"] == "light_ball;lucky_punch;thick_club", "Progreso distinto a W01/01")
     require(progress[0]["ids"] == queue[0]["ids"], "Bloque 01 distinto de cola árbitra")
     require(progress[0]["estado"] == "CI_PASS_VERIFICADO" and progress[0]["ci_run"] == "41580332632",
@@ -119,15 +134,21 @@ def validate():
             "Bloque 04 sin CI aprobada")
     require(progress[4]["bloque"] == "05" and progress[4]["ids"] == queue[4]["ids"],
             "Bloque 05 no autorizado")
-    require(progress[4]["estado"] in ("EN_CI_AUTOMATICA", "ENTREGADO_PENDIENTE_CI", "CI_PASS_VERIFICADO"),
-            "Estado bloque 05 inválido")
+    require(progress[4]["estado"] == "CI_PASS_VERIFICADO"
+            and progress[4]["sha_pruebas"] == "7034b8c783eb9996369cbf1c97229c05713c9a08"
+            and progress[4]["ci_run"] == "41602276948",
+            "Bloque 05 sin certificado CI + regresión CAMP003")
+    require(progress[5]["bloque"] == "06" and progress[5]["ids"] == queue[5]["ids"],
+            "Bloque 06 fuera de cola W01")
+    require(progress[5]["estado"] in ("EN_CI_AUTOMATICA", "ENTREGADO_PENDIENTE_CI", "CI_PASS_VERIFICADO"),
+            "Estado del bloque 06 inválido")
     require(all(row["sha_pruebas"] and row["ci_run"] for row in progress), "Progreso sin trazabilidad")
     fixture = json.loads(FIXTURE.read_text(encoding="utf-8"))
     require(fixture["schema_version"] == 1 and fixture["campaign"] == "CAMP_004" and fixture["worker"] == "W01", "Identidad de fixture incorrecta")
     require(fixture["scope"] == "HELD_COMBAT_CANDIDATE" and fixture["format"] == "gen9calvounifiedv1", "Motor o familia no permitidos")
     require(tuple(fixture["variants"]) == MODES, "Faltan los tres controles activo/ausente/reserva")
-    require(len(fixture["blocks"]) == 5 and [b["block"] for b in fixture["blocks"]] == ["01", "02", "03", "04", "05"],
-            "Fixture debe contener bloques 01 a 05")
+    require(len(fixture["blocks"]) == 6 and [b["block"] for b in fixture["blocks"]] == ["01", "02", "03", "04", "05", "06"],
+            "Fixture debe contener bloques 01 a 06")
     require(fixture["blocks"][0]["ids"] == queue[0]["ids"].split(";"), "Propiedad de IDs alterada")
     require(fixture["blocks"][1]["ids"] == queue[1]["ids"].split(";"), "IDs del bloque 02 alterados")
     require(set(fixture["blocks"][1]["cases"]) == NEW_CASE_IDS, "Casos del bloque 02 incompletos")
@@ -137,8 +158,10 @@ def validate():
     require(set(fixture["blocks"][3]["cases"]) == BLOCK_04_CASES, "Casos bloque 04 incompletos")
     require(fixture["blocks"][4]["ids"] == queue[4]["ids"].split(";"), "IDs bloque 05 incorrectos")
     require(set(fixture["blocks"][4]["cases"]) == BLOCK_05_CASES, "Bloque 05 incompleto")
-    require(len(fixture["cases"]) == len(EXPECTED) == 34, "Se exigen 34 casos únicos")
-    require(set(fixture["blocks"][0]["cases"]) == set(EXPECTED) - NEW_CASE_IDS - BLOCK_03_CASES - BLOCK_04_CASES - BLOCK_05_CASES,
+    require(fixture["blocks"][5]["ids"] == queue[5]["ids"].split(";"), "IDs del bloque 06 distintos de IA6")
+    require(set(fixture["blocks"][5]["cases"]) == BLOCK_06_CASES, "Casos del bloque 06 incompletos")
+    require(len(fixture["cases"]) == len(EXPECTED) == 43, "Se exigen 43 escenarios únicos")
+    require(set(fixture["blocks"][0]["cases"]) == set(EXPECTED) - NEW_CASE_IDS - BLOCK_03_CASES - BLOCK_04_CASES - BLOCK_05_CASES - BLOCK_06_CASES,
             "Falta caso original del bloque 01")
     require(len(fixture["sources"]) == len(REFS), "Fuentes añadidas o omitidas")
     for source in fixture["sources"]:
@@ -153,12 +176,16 @@ def validate():
                  "float_stone": "floatstone", "icy_rock": "icyrock",
                  "loaded_dice": "loadeddice", "misty_seed": "mistyseed", "power_herb": "powerherb",
                  "psychic_seed": "psychicseed", "punching_glove": "punchingglove", "ring_target": "ringtarget",
-                 "room_service": "roomservice", "scope_lens": "scopelens", "shed_shell": "shedshell"}
-    for stage in queue[:5]:
+                 "room_service": "roomservice", "scope_lens": "scopelens", "shed_shell": "shedshell",
+                 "smoke_ball": "", "smooth_rock": "smoothrock", "snowball": "snowball"}
+    for stage in queue[:6]:
         for item in stage["ids"].split(";"):
             require(scope[item]["estado_contenido"] == "SELECCIONADO", "Item no seleccionado: " + item)
             require(inventory[item]["family"] == "HELD_COMBAT_CANDIDATE", "Familia incompatible: " + item)
             require(inventory[item]["native_id"] == canonical[item], "Clave nativa incorrecta: " + item)
+            if item == "smoke_ball":
+                require(inventory[item]["connection"] == "DATA_ONLY" and inventory[item]["native_entry"] == "False",
+                        "Smoke Ball es regla AdventureSession, no efecto de ataque")
     require("onModifyWeight" in inventory["float_stone"]["native_hooks"],
             "Piedra Pómez sin gancho nativo de peso")
     require("onModifyMove" in inventory["loaded_dice"]["native_hooks"],
@@ -177,6 +204,23 @@ def validate():
     require("onMaybeTrapPokemon" in inventory["shed_shell"]["native_hooks"]
             and "onTrapPokemon" in inventory["shed_shell"]["native_hooks"],
             "Muda Concha sin ganchos de escape")
+    require("onDamagingHit" in inventory["snowball"]["native_hooks"],
+            "Bola de Nieve sin gancho por impacto")
+    require(inventory["smooth_rock"]["native_entry"] == "True",
+            "Roca Suave sin descriptor nativo")
+    held_escape = (ROOT / "modules/gameplay/held_escape_items.gd").read_text(encoding="utf-8")
+    adventure = (ROOT / "modules/gameplay/showdown_adventure_session.gd").read_text(encoding="utf-8")
+    world_suite = (ROOT / "tests/gameplay/opencode_world_held_v2.gd").read_text(encoding="utf-8")
+    require('const SMOKE_BALL := &"smoke_ball"' in held_escape
+            and "return held_item_active and supports(held_item_id)" in held_escape,
+            "Bola de Humo debe usar actividad nativa real")
+    require("HeldEscapeItems.guaranteed" in adventure
+            and "func flee(expected_revision: int)" in adventure
+            and 'smoke["smoke_ball"] = true' in adventure,
+            "Bola de Humo no conectada a huida real")
+    require("func smoke_ball_cases()" in world_suite
+            and "func smoke_ball_suppression()" in world_suite,
+            "Sin precedentes nativos de huida y supresión")
     historical_v2 = (ROOT / "tools/item_audit/held_effect_sweep_v2.cjs").read_text(encoding="utf-8")
     pilot = (ROOT / "tools/item_audit/held_pilot.cjs").read_text(encoding="utf-8")
     require("add('loaded_dice','multi_hit_bound'" in historical_v2
@@ -184,6 +228,8 @@ def validate():
             "Sin referencia nativa de Dado Trucado y su contador de impactos")
     require("power_herb:{moves:['solar_beam']" in pilot,
             "Sin referencia nativa de Hierba Única que evita carga")
+    require("['snowball','powder_snow','atk']" in historical_v2,
+            "Bola de Nieve sin contrato histórico de impacto de hielo")
     require("add('punching_glove','punch_boost_and_contact'" in historical_v2
             and "['thunder_punch']" in historical_v2 and "foeItem:'rocky_helmet'" in historical_v2,
             "Sin referencia nativa de Guante de Boxeo y Casco Dentado")
@@ -201,6 +247,7 @@ def validate():
         "add('float_stone','fixed_power_control'",
         "['damp_rock','rain_dance']",
         "['icy_rock','snowscape']",
+        "['smooth_rock','sandstorm']",
         "['psychic_seed','psychic_terrain','spd']",
         "add('ring_target','type_immunity_",
         "add('ring_target','ability_immunity_preserved'",
@@ -216,7 +263,8 @@ def validate():
         name = case["id"]
         require(name in EXPECTED and name not in seen, "Caso no autorizado o duplicado: " + name)
         seen.add(name)
-        expected_block = ("05" if name in BLOCK_05_CASES else
+        expected_block = ("06" if name in BLOCK_06_CASES else
+                          "05" if name in BLOCK_05_CASES else
                           "04" if name in BLOCK_04_CASES else
                           "03" if name in BLOCK_03_CASES else
                           "02" if name in NEW_CASE_IDS else "01")
@@ -231,7 +279,8 @@ def validate():
                 "Casco Dentado no corresponde al escenario")
         require(case.get("actor_ability", "") == BLOCK_04_ABILITIES.get(name, ""),
                 "Habilidad del portador alterada")
-        origin = ("held_effect_sweep_v2:" if case["item_id"] in ("loaded_dice", "punching_glove") else
+        origin = ("opencode_world_held_v2:" if case["item_id"] == "smoke_ball" else
+                  "held_effect_sweep_v2:" if case["item_id"] in ("loaded_dice", "punching_glove", "snowball") else
                   "held_pilot:" if case["item_id"] == "power_herb" else "held_effect_sweep_v3:")
         require(case["history"].startswith(origin), "Sin referencia de origen: " + name)
         require(all(type(i) is int and 1 <= i <= 65535 for i in case["seeds"]), "Semilla inválida: " + name)
@@ -242,7 +291,7 @@ def validate():
         else:
             require("follow_move" not in case, "Secuencia extra no permitida")
         pairs += len(case["seeds"])
-    require(len(seen) == 34 and pairs == 98, "Matriz debe tener 34 casos y 98 pares")
+    require(len(seen) == 43 and pairs == 110, "Matriz debe tener 43 casos y 110 pares")
     runner = (ROOT / "tests/gameplay/parallel_items_w01_campaign_004.gd").read_text(encoding="utf-8")
     for fragment in ("Native.new(catalogs, owner, automation.format)",
                      "await _restore_probe(", "session.submit(", "session._checkpoint",

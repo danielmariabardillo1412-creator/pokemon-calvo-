@@ -87,6 +87,25 @@
         "shell_mean_look",
         "shell_no_trap"
       ]
+    },
+    {
+      "block": "06",
+      "ids": [
+        "smoke_ball",
+        "smooth_rock",
+        "snowball"
+      ],
+      "cases": [
+        "smoke_look_escape",
+        "smoke_plain_escape",
+        "smoke_klutz_negative",
+        "smoke_no_run",
+        "sandstorm_duration",
+        "sandstorm_no_weather",
+        "snowball_ice_hit",
+        "snowball_water_hit",
+        "snowball_no_hit"
+      ]
     }
   ],
   "format": "gen9calvounifiedv1",
@@ -115,6 +134,18 @@
     {
       "path": "tools/item_audit/held_pilot.cjs",
       "git_blob_sha": "c8a59a18f546d772ff34e4f8640a4246a00a822b"
+    },
+    {
+      "path": "modules/gameplay/showdown_adventure_session.gd",
+      "git_blob_sha": "1542086a8c44c58eb41c7ca8c592a40b61d5abf1"
+    },
+    {
+      "path": "modules/gameplay/held_escape_items.gd",
+      "git_blob_sha": "7603f52b522e8f8f0a6e26948697562f95dfa44d"
+    },
+    {
+      "path": "tests/gameplay/opencode_world_held_v2.gd",
+      "git_blob_sha": "5a777a1f11784eb4663662c80cef0b5c9182dd3c"
     }
   ],
   "cases": [
@@ -664,6 +695,136 @@
         19
       ],
       "history": "held_effect_sweep_v3:shed_shell_no_trap"
+    },
+    {
+      "block": "06",
+      "foe_species": "mew",
+      "id": "smoke_look_escape",
+      "item_id": "smoke_ball",
+      "op": "smoke_ball_escape_trapped",
+      "actor_species": "mew",
+      "own_move": "reflect",
+      "foe_move": "mean_look",
+      "seeds": [
+        19,
+        23
+      ],
+      "history": "opencode_world_held_v2:smoke_look_escape"
+    },
+    {
+      "block": "06",
+      "foe_species": "mew",
+      "id": "smoke_plain_escape",
+      "item_id": "smoke_ball",
+      "op": "smoke_ball_escape_normal",
+      "actor_species": "mew",
+      "own_move": "reflect",
+      "foe_move": "amnesia",
+      "seeds": [
+        19
+      ],
+      "history": "opencode_world_held_v2:smoke_plain_escape"
+    },
+    {
+      "block": "06",
+      "foe_species": "mew",
+      "id": "smoke_klutz_negative",
+      "item_id": "smoke_ball",
+      "op": "smoke_ball_klutz_suppressed",
+      "actor_species": "mew",
+      "actor_ability": "klutz",
+      "own_move": "reflect",
+      "foe_move": "mean_look",
+      "seeds": [
+        19
+      ],
+      "history": "opencode_world_held_v2:smoke_klutz_negative"
+    },
+    {
+      "block": "06",
+      "foe_species": "mew",
+      "id": "smoke_no_run",
+      "item_id": "smoke_ball",
+      "op": "smoke_ball_no_trigger",
+      "actor_species": "mew",
+      "own_move": "reflect",
+      "foe_move": "amnesia",
+      "seeds": [
+        19
+      ],
+      "history": "opencode_world_held_v2:smoke_no_run"
+    },
+    {
+      "block": "06",
+      "foe_species": "mew",
+      "id": "sandstorm_duration",
+      "item_id": "smooth_rock",
+      "op": "weather_duration",
+      "actor_species": "mew",
+      "own_move": "sandstorm",
+      "foe_move": "amnesia",
+      "seeds": [
+        19,
+        23
+      ],
+      "history": "held_effect_sweep_v3:sandstorm_duration"
+    },
+    {
+      "block": "06",
+      "foe_species": "mew",
+      "id": "sandstorm_no_weather",
+      "item_id": "smooth_rock",
+      "op": "no_weather",
+      "actor_species": "mew",
+      "own_move": "reflect",
+      "foe_move": "amnesia",
+      "seeds": [
+        19
+      ],
+      "history": "held_effect_sweep_v3:sandstorm_no_weather"
+    },
+    {
+      "block": "06",
+      "foe_species": "mew",
+      "id": "snowball_ice_hit",
+      "item_id": "snowball",
+      "op": "snowball_ice_trigger",
+      "actor_species": "mew",
+      "own_move": "reflect",
+      "foe_move": "powder_snow",
+      "seeds": [
+        19,
+        23
+      ],
+      "history": "held_effect_sweep_v2:snowball_ice_hit"
+    },
+    {
+      "block": "06",
+      "foe_species": "mew",
+      "id": "snowball_water_hit",
+      "item_id": "snowball",
+      "op": "snowball_wrong_type",
+      "actor_species": "mew",
+      "own_move": "reflect",
+      "foe_move": "water_gun",
+      "seeds": [
+        19
+      ],
+      "history": "held_effect_sweep_v2:snowball_water_hit"
+    },
+    {
+      "block": "06",
+      "foe_species": "mew",
+      "id": "snowball_no_hit",
+      "item_id": "snowball",
+      "op": "snowball_no_hit",
+      "actor_species": "mew",
+      "own_move": "reflect",
+      "foe_move": "amnesia",
+      "seeds": [
+        19
+      ],
+      "history": "held_effect_sweep_v2:snowball_no_hit"
     }
   ]
 }
