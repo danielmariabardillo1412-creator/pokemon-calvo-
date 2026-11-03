@@ -1,3 +1,9 @@
+# IA3/W03 — Continuidad CAMP004 08/10
+
+Bloque 08: fighting_tera_shard;fire_tera_shard;flying_tera_shard;ghost_tera_shard;grass_tera_shard. Pruebas Godot y Python acumuladas, inventario positivo y uso Tera todavía no funcional. El progreso CSV ya registra 08; verificar la CI del último SHA antes de certificar. Siguiente p: bloque 09 (ground_tera_shard;ice_tera_shard;normal_tera_shard;poison_tera_shard). Mantener main y V28 sin cambios.
+
+---
+
 # IA3/W03 — CONTINUIDAD CAMP004 07/10
 
 **Rama única:** `codex/calvo-items-20261103-w03-camp004`. **Bloque 07 publicado:** `bug_tera_shard;dark_tera_shard;dragon_tera_shard;electric_tera_shard;fairy_tera_shard`. Se verifican mediante Godot real la selección, conservación y roundtrip de mochila y rechazo de uso sin API Tera; el auditor Python comprueba código y contrato, sin inventar transformación. **Estado de función por ID: `DEPENDENCIA_COMPARTIDA`; no `FUNCIONAL_VERIFICADO`.**
