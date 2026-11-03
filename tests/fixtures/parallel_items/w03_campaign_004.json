@@ -3,5 +3,60 @@
   "campaign": "CAMP_004",
   "worker": "W03",
   "purpose": "Pruebas reales y dependencias explícitas sin falso PASS funcional",
-  "blocks": []
+  "blocks": [
+    {
+      "bloque": "01",
+      "familia": "CAPTURE_BALL",
+      "ids": [
+        "dive_ball",
+        "dusk_ball",
+        "repeat_ball"
+      ],
+      "objetivo": "auditar_captura_contextual",
+      "current_state": "NEGATIVO_VERIFICADO_NO_IMPLEMENTADO",
+      "expected_rejection": "unknown_ball",
+      "cases": [
+        {
+          "species_id": "mew",
+          "level": 35,
+          "seed": 4001
+        },
+        {
+          "species_id": "caterpie",
+          "level": 12,
+          "seed": 4002
+        }
+      ],
+      "hp_modes": [
+        "full",
+        "one_hp"
+      ],
+      "contexts": [
+        {
+          "name": "sin_senales",
+          "completed_turns": -1,
+          "catcher_level": -1
+        },
+        {
+          "name": "turno_y_nivel",
+          "completed_turns": 0,
+          "catcher_level": 35
+        }
+      ],
+      "invalid_cases": [
+        "trainer_battle_not_capturable",
+        "battle_finished",
+        "target_knocked_out",
+        "item_not_owned"
+      ],
+      "missing_authoritative_signals": [
+        "encounter_is_underwater_or_surfing",
+        "encounter_is_dark_or_cave",
+        "species_previously_caught_in_pokedex"
+      ],
+      "note": "Solo certificar rechazo sin consumo/RNG ni cambios de estado para IDs aún desconocidos. No existen señales de origen o Pokédex verificadas dentro de CaptureBattleContext.",
+      "functional_effect_certified": false,
+      "ci_required": true
+    }
+  ]
 }
