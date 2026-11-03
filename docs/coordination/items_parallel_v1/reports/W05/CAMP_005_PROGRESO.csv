@@ -1,1 +1,2 @@
 bloque,ids,estado,sha_pruebas,ci_run,notas
+01,tm142;tm143;tm144;tm145;tm146;tm147,EN_CI_AUTOMATICA,095942fcaf1de2b3cb2a07efc14ec5a85be6cafa,PENDIENTE_GITHUB_ACTIONS,Prueba_real_Python_Godot_compatibilidad_PP_propietario_consumo_SaveV2
