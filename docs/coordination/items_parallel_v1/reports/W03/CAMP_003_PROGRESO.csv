@@ -1,2 +1,3 @@
 bloque,ids,estado,sha_pruebas,ci_run,notas
 01,poke_ball;great_ball,EN_CI_AUTOMATICA,a6f777a43d2a813df59e86788d3f30d52a593875,PENDING_CAMP003_W03_01,YA_VERIFICADO_NO_DUPLICAR; prueba paridad entre bolas; RNG; captura; negativos
+02,ultra_ball;master_ball,EN_CI_AUTOMATICA,7ab607fbeb49f8e6e7a895132f7def58e8619def,CI_PENDIENTE_CAMP003_02,YA_VERIFICADO_NO_DUPLICAR;Ultra_x2_RNG;Master_sin_RNG;PC;negativos
