@@ -6,7 +6,8 @@
     1,
     2,
     3,
-    4
+    4,
+    5
   ],
   "format": "gen9calvounifiedv1",
   "level": 100,
@@ -542,6 +543,141 @@
           "expected_type": "ghost"
         }
       ]
+    },
+    {
+      "block": "05",
+      "ids": [
+        "kebia_berry",
+        "kee_berry",
+        "lansat_berry",
+        "liechi_berry"
+      ],
+      "source_evidence": [
+        "tools/item_audit/held_effect_sweep_v2.cjs",
+        "tools/item_audit/held_effect_sweep_v3.cjs"
+      ],
+      "cases": [
+        {
+          "scenario": "kebia_poison_hit_c003",
+          "id": "kebia_berry",
+          "kind": "resist_type",
+          "nature": "hardy",
+          "start": "full",
+          "status": "",
+          "actor_species": "clefable",
+          "foe_species": "mew",
+          "foe_move": "sludge_bomb",
+          "consumes": true,
+          "confuses": false,
+          "own_move": "amnesia",
+          "expected_type": "poison"
+        },
+        {
+          "scenario": "kebia_normal_reject_c003",
+          "id": "kebia_berry",
+          "kind": "resist_type",
+          "nature": "hardy",
+          "start": "full",
+          "status": "",
+          "actor_species": "clefable",
+          "foe_species": "mew",
+          "foe_move": "tackle",
+          "consumes": false,
+          "confuses": false,
+          "own_move": "amnesia",
+          "expected_type": "poison"
+        },
+        {
+          "scenario": "kee_physical_trigger_c003",
+          "id": "kee_berry",
+          "kind": "reactive_def",
+          "nature": "hardy",
+          "start": "full",
+          "status": "",
+          "actor_species": "mew",
+          "foe_species": "mew",
+          "foe_move": "tackle",
+          "consumes": true,
+          "confuses": false,
+          "own_move": "amnesia",
+          "boost_stat": "def"
+        },
+        {
+          "scenario": "kee_special_reject_c003",
+          "id": "kee_berry",
+          "kind": "reactive_def",
+          "nature": "hardy",
+          "start": "full",
+          "status": "",
+          "actor_species": "mew",
+          "foe_species": "mew",
+          "foe_move": "confusion",
+          "consumes": false,
+          "confuses": false,
+          "own_move": "amnesia",
+          "boost_stat": "def"
+        },
+        {
+          "scenario": "lansat_pinch_focus_c003",
+          "id": "lansat_berry",
+          "kind": "critical_focus",
+          "nature": "hardy",
+          "start": "fifth",
+          "status": "",
+          "actor_species": "mew",
+          "foe_species": "mew",
+          "foe_move": "amnesia",
+          "consumes": true,
+          "confuses": false,
+          "own_move": "amnesia",
+          "expected_volatile": "focusenergy"
+        },
+        {
+          "scenario": "lansat_high_reject_c003",
+          "id": "lansat_berry",
+          "kind": "critical_focus",
+          "nature": "hardy",
+          "start": "near_full",
+          "status": "",
+          "actor_species": "mew",
+          "foe_species": "mew",
+          "foe_move": "amnesia",
+          "consumes": false,
+          "confuses": false,
+          "own_move": "amnesia",
+          "expected_volatile": "focusenergy"
+        },
+        {
+          "scenario": "liechi_pinch_attack_c003",
+          "id": "liechi_berry",
+          "kind": "boost_atk",
+          "nature": "hardy",
+          "start": "fifth",
+          "status": "",
+          "actor_species": "mew",
+          "foe_species": "mew",
+          "foe_move": "amnesia",
+          "consumes": true,
+          "confuses": false,
+          "own_move": "amnesia",
+          "boost_stat": "atk"
+        },
+        {
+          "scenario": "liechi_high_reject_c003",
+          "id": "liechi_berry",
+          "kind": "boost_atk",
+          "nature": "hardy",
+          "start": "near_full",
+          "status": "",
+          "actor_species": "mew",
+          "foe_species": "mew",
+          "foe_move": "amnesia",
+          "consumes": false,
+          "confuses": false,
+          "own_move": "amnesia",
+          "boost_stat": "atk"
+        }
+      ]
     }
   ],
   "limitations": [
@@ -552,6 +688,7 @@
     "Pruebas históricas son precedentes, no PASS de este fixture.",
     "Bloque 02: testigos correspondientes a Roca/Normal/Lucha/Volador. Chilan reduce Normal incluso sin supereficacia.",
     "Bloque 03: Custap necesita comparar primer evento |move|p1a contra Gengar rápido sin forzar prioridad; Enigma recupera 1/4 PS tras daño Eléctrico supereficaz a Gyarados, no ante Tackle.",
-    "Bloque 04: Jaboca reacciona a categoría física (Tackle), no especial (Confusion); se mide PS del rival contra controles sin equipar y reserva. Iapapa naturaleza Lonely rechaza sabor, Hardy neutra."
+    "Bloque 04: Jaboca reacciona a categoría física (Tackle), no especial (Confusion); se mide PS del rival contra controles sin equipar y reserva. Iapapa naturaleza Lonely rechaza sabor, Hardy neutra.",
+    "Bloque 05: la decisión de Kee depende de categoría física vs especial; Lansat conserva la volatile focusenergy sólo con PS bajos. Los cuatro casos de boosts usan move propio amnesia para que Swords Dance no falsee la subida ATK de Liechi."
   ]
 }
