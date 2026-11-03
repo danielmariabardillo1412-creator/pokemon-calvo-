@@ -7,6 +7,7 @@ const BLOQUE_04 := [&"magmarizer", &"protector", &"reaper_cloth"]
 const BLOQUE_05 := [&"prism_scale", &"sachet", &"up_grade"]
 const BLOQUE_06 := [&"auspicious_armor", &"malicious_armor", &"metal_alloy"]
 const BLOQUE_07 := [&"galarica_cuff", &"galarica_wreath", &"peat_block"]
+const BLOQUE_08 := [&"chipped_pot", &"cracked_pot", &"masterpiece_teacup"]
 const ID := &"w04_c003_01"
 var checks := 0
 var fallos: Array[String] = []
@@ -44,7 +45,7 @@ func _ejecutar() -> void:
 		terminar()
 		return
 	var catalogo: DefinitionCatalog = GameData.from_dict(data).to_definition_catalog()
-	for item: StringName in BLOQUE_01 + BLOQUE_02 + BLOQUE_03 + BLOQUE_04 + BLOQUE_05 + BLOQUE_06 + BLOQUE_07:
+	for item: StringName in BLOQUE_01 + BLOQUE_02 + BLOQUE_03 + BLOQUE_04 + BLOQUE_05 + BLOQUE_06 + BLOQUE_07 + BLOQUE_08:
 		var compatibles: Array[Dictionary] = []
 		var dependientes := 0
 		var primer_dependiente: Dictionary = {}
@@ -53,6 +54,10 @@ func _ejecutar() -> void:
 			for rec: EvolutionRecord in sp.evolutions:
 				if rec.item_id != item:
 					continue
+				if item in BLOQUE_08:
+					print("CAMP003_W04_FORMA item=", String(item), " source=", String(sid), " target=", String(rec.species_id), " conditions=", JSON.stringify(rec.conditions))
+					if rec.conditions.has("base_form") and StringName(str(rec.conditions["base_form"])) != sid:
+						validar(EvolutionSystem.classify_record(rec, catalogo, sid) != EvolutionSystem.RUNTIME_SUPPORTED, String(item) + "/forma_distinta_bloqueada")
 				if rec.trigger == EvolutionSystem.TRIGGER_USE_ITEM and EvolutionSystem.classify_record(rec, catalogo, sid) == EvolutionSystem.RUNTIME_SUPPORTED:
 					compatibles.append({"source": sid, "target": rec.species_id})
 				else:
@@ -60,7 +65,7 @@ func _ejecutar() -> void:
 					if primer_dependiente.is_empty():
 						primer_dependiente = {"source": sid, "target": rec.species_id, "trigger": String(rec.trigger), "classification": EvolutionSystem.classify_record(rec, catalogo, sid)}
 		validar(catalogo.item(item) != null, String(item) + "/objeto_catalogado")
-		if item in BLOQUE_07:
+		if item in BLOQUE_07 or item in BLOQUE_08:
 			var control_incompatible := _crear(catalogo, &"eevee")
 			validar(control_incompatible != null, String(item) + "/control_especie_incompatible")
 			if control_incompatible != null:
@@ -75,7 +80,7 @@ func _ejecutar() -> void:
 			print("CAMP003_W04_DEPENDENCIA item=", String(item), " reason=sin_regla_catalogada")
 		if compatibles.is_empty():
 			print("CAMP003_W04_DEPENDENCIA item=", String(item), " records=", dependientes, " example=", JSON.stringify(primer_dependiente))
-			if (item in BLOQUE_03 or item in BLOQUE_04 or item in BLOQUE_05 or item in BLOQUE_06 or item in BLOQUE_07) and not primer_dependiente.is_empty():
+			if (item in BLOQUE_03 or item in BLOQUE_04 or item in BLOQUE_05 or item in BLOQUE_06 or item in BLOQUE_07 or item in BLOQUE_08) and not primer_dependiente.is_empty():
 				var propietario_condicionado := _crear(catalogo, primer_dependiente.source as StringName)
 				validar(propietario_condicionado != null, String(item) + "/creacion_condicionada")
 				if propietario_condicionado != null:
@@ -136,7 +141,7 @@ func terminar() -> void:
 		return
 	cerrado = true
 	if fallos.is_empty():
-		print("CAMP003_W04_GODOT PASS blocks=7 checks=", checks)
+		print("CAMP003_W04_GODOT PASS blocks=8 checks=", checks)
 	else:
 		print("CAMP003_W04_GODOT FAIL errors=", JSON.stringify(fallos))
 	quit(0 if fallos.is_empty() else 1)
