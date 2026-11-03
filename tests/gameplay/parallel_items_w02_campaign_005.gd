@@ -101,6 +101,13 @@ func _probe_training(spec: Dictionary, mode: String) -> Dictionary:
 	check(mode + " identidad y localización", now.instance_id == &"own"
 		and owner.location_of(&"own") == (&"STORAGE" if mode == "reserve" else &"PARTY"))
 	check(mode + " origen no modificado", c.to_dict() == original)
+	if String(spec.kind) == "mint_dependency":
+		check(mode + " menta: dependencia explícita sin falsa aplicación",
+			String(result.get("status", "")) == String(spec.expect_status)
+			and String(result.get("reason", "")) == String(spec.expect_reason))
+		check(mode + " menta: naturaleza original intacta",
+			now.nature_id == c.nature_id and now.evs == c.evs
+			and now.stats.to_dict() == c.stats.to_dict())
 	if not expected:
 		check(mode + " rechazo atómico", not bool(result.get("accepted", false))
 			and _owner_data(owner) == before)
