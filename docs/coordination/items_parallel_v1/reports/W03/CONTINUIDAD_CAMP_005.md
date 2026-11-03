@@ -1,3 +1,11 @@
+# IA3/W03 — Continuidad final CAMPAÑA_005 — 10/10 preparado para CI
+
+**Rama única:** `codex/calvo-items-20261103-w03-camp005`. **Bloque10:** `friend_ball;heal_ball;quick_ball;timer_ball` revalida funcionalidad de captura existente, no nuevos objetos. Friend establece amistad 200 solo al capturar; Heal restaura PS/estado/PP; Quick usa turno0×5 y Timer escalado hasta×4. Los tests propios Godot verifican captura real mediante inventario, consumo unitario, identidad, roundtrip de CreatureInstance, rechazo sin gasto ni RNG por contexto de turno inválido. Python contrasta los puntos de producción. `CreatureInstance.to_dict/from_dict` no equivale a SaveV2 integral. Reporte: `CAMP_005_ITER_10.md`.
+
+**Gate final:** verificar `CAMP005_W03_PY PASS blocks=10` y `CAMP005_W03_GODOT PASS blocks=10`, gates IA6, **regresiones CAMP004 y CAMP003 completas**. CI09 previa [#41738147298](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41738147298), Python 153/Godot 179 PASS. Si el gate final falla, reparar únicamente arnés propio. Al obtener SUCCESS sobre el último SHA, comunicar `CAMPAÑA_005_FINALIZADA` y STOP. No aceptar otro `p` como nuevo bloque sin activación de IA6. No cambiar main, V28, PR118 ni ramas ajenas.
+
+---
+
 ## Verificación final de CI del bloque 09
 
 [GitHub Actions #41738147298](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41738147298), SHA `0c66c18a1e97533ed6422c7aded283593648f5aa`, terminó **completed/success**. Recibos: `CAMP005_W03_PY PASS blocks=9 checks=153`, `CAMP005_GATE_PY_PASS`, `CAMP005_W03_GODOT PASS blocks=9 checks=179`, `CAMP005_GATE_GODOT_PASS`. La validación confirma la huida salvaje de Cola Esponjosa existente y el rechazo seguro de campo, pero no implementa el retorno al mapa de Cuerda Huida.
