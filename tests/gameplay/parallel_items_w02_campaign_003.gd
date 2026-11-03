@@ -71,6 +71,8 @@ func _probe_berry(spec: Dictionary, mode: String) -> Dictionary:
 	var reserve: CreatureInstance = _mon(&"mew", int(automation.level), &"reserve", ["swords_dance"])
 	var foe: CreatureInstance = _mon(StringName(spec.foe_species), int(automation.level),
 		&"foe", [String(spec.foe_move)])
+	if spec.has("foe_initial_hp"):
+		foe.current_hp = int(spec.foe_initial_hp)
 	own.nature_id = StringName(spec.nature)
 	own.recalculate_stats(catalogs.species(own.species_id), ProgressionRuleset.new())
 	match String(spec.start):
@@ -96,6 +98,10 @@ func _probe_berry(spec: Dictionary, mode: String) -> Dictionary:
 	var battle := Controlled.new(catalogs, owner, automation.format)
 	var opened: bool = await battle.begin_wild(self, foe, automation.seed)
 	check(mode + " inicio real @pkmn/sim", opened)
+	if opened and spec.has("foe_initial_hp"):
+		var opponent: CreatureInstance = battle.battle_state().creature(&"foe")
+		check(mode + " Endeavor rival con exactamente 1 HP inicial", opponent != null
+			and opponent.current_hp == int(spec.foe_initial_hp))
 	if not opened:
 		await battle.close()
 		return {"valid": false}
@@ -282,8 +288,13 @@ func _compare_berry(spec: Dictionary, observed: Dictionary) -> void:
 	match String(spec.kind):
 		"heal_flavor":
 			var delta: int = int(floor(float(active.max_hp) / 3.0)) if consume else 0
-			check("Aguav e Iapapa curan 1/3 del máximo sólo con umbral",
-				active.hp == mini(active.max_hp, none.hp + delta))
+			var heals_by_third: bool = active.hp == mini(active.max_hp, none.hp + delta)
+			if not heals_by_third:
+				print("CAMP003_W02_HEAL_DIAG scenario=", String(spec.scenario),
+					" active=", active.hp, " none=", none.hp, " reserve=", reserve.hp,
+					" expected=", mini(active.max_hp, none.hp + delta),
+					" max=", active.max_hp, " consumes=", consume)
+			check("baya de sabor cura 1/3 de PS tras el umbral, con control paralelo", heals_by_third)
 			check("Baya de sabor confunde sólo naturaleza que la rechaza",
 				active.confusion == bool(spec.confuses) and not none.confusion and not reserve.confusion)
 		"boost_spd", "boost_spa", "boost_def", "boost_atk", "reactive_def":
