@@ -600,6 +600,94 @@ func _cruce_prismas_07(catalogo: DefinitionCatalog) -> void:
 	print("CAMP005_W04_ORB_CROSS blue_orb=>groudon red_orb=>kyogre status=NO_FALSE_FORM")
 
 
+func _auditar_fusion_08(catalogo: DefinitionCatalog, caso: Dictionary) -> void:
+	var item := StringName(caso.get("item_id", ""))
+	var origen := StringName(caso.get("source", ""))
+	var socio := StringName(caso.get("partner", ""))
+	var target_form := String(caso.get("target_variety", ""))
+	var species: CreatureSpecies = catalogo.species(origen)
+	var partner_species: CreatureSpecies = catalogo.species(socio)
+	comprobar(catalogo.item(item) != null and species != null and partner_species != null, String(item) + "/" + String(socio) + "/08_catalogo_tres_partes")
+	if species == null or partner_species == null:
+		return
+	var key := String(item) + "/" + String(socio)
+	var source_data := _abrir("res://data/api/v2/pokemon-species/" + str(int(caso.get("species_number", 0))) + "/index.json")
+	comprobar(String(source_data.get("name", "")) == String(origen), key + "/08_fuente_especie")
+	var form_matches := 0
+	for row: Dictionary in source_data.get("varieties", []):
+		if String(row.get("pokemon", {}).get("name", "")) == target_form and not bool(row.get("is_default", false)):
+			form_matches += 1
+	comprobar(form_matches == 1, key + "/08_forma_fusion_canonica")
+	var chain := _abrir("res://data/api/v2/evolution-chain/" + str(int(caso.get("evolution_chain", 0))) + "/index.json")
+	comprobar(String(chain.get("chain", {}).get("species", {}).get("name", "")) == String(origen) and chain.get("chain", {}).get("evolves_to", []).is_empty(), key + "/08_fusion_no_es_evolucion")
+	comprobar(species.evolutions.is_empty(), key + "/08_sin_arista_evolucion_runtime")
+	var pc := _crear(catalogo, origen)
+	comprobar(pc != null, key + "/08_criatura_principal")
+	if pc == null:
+		return
+	var socio_id := StringName("w04_c005_08_" + String(item) + "_" + String(socio))
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 20261104
+	var partner_creature := CreatureFactory.create(partner_species, 40, catalogo, ProgressionRuleset.new(), rng,
+		{"instance_id": socio_id, "nature_id": &"hardy", "moves": ["tackle", "protect"]})
+	comprobar(partner_creature != null and partner_creature.instance_id == socio_id, key + "/08_criatura_socia")
+	if partner_creature == null:
+		return
+	comprobar(pc.party.add_creature(partner_creature), key + "/08_propiedad_segunda_criatura")
+	var in_storage := bool(caso.get("partner_storage", false))
+	if in_storage:
+		comprobar(pc.deposit(socio_id), key + "/08_socio_depositado_pc")
+	var expected_location := &"STORAGE" if in_storage else &"PARTY"
+	comprobar(pc.location_of(ID) == &"PARTY" and pc.location_of(socio_id) == expected_location, key + "/08_party_y_storage_independientes")
+	comprobar(pc.owned_creature(ID) != null and pc.owned_creature(socio_id) != null and not is_same(pc.owned_creature(ID), pc.owned_creature(socio_id)), key + "/08_dos_identidades_sin_duplicacion")
+	var servicio := Servicio.new()
+	comprobar(servicio.configure(pc, catalogo, func(): return true), key + "/08_servicio_con_propiedad")
+	comprobar(not servicio.holdable(item), key + "/08_item_fusion_no_equipable")
+	comprobar(not servicio.has_method("fuse") and not servicio.has_method("unfuse"), key + "/08_no_api_fusion_dos_criaturas")
+	comprobar(pc.inventory.add(item, 2), key + "/08_inventario_dos_unidades")
+	var snap := SaveGameData.build(pc.party, pc.storage, pc.inventory)
+	comprobar(snap.validate().get("ok", false), key + "/08_savev2_registro_doble_valido")
+	var ids: Array[String] = []
+	for cd: Dictionary in snap.creatures:
+		ids.append(String(cd.get("instance_id", "")))
+	comprobar(ids.size() == 2 and ids.has(String(ID)) and ids.has(String(socio_id)) and ids[0] != ids[1], key + "/08_registro_dos_ids_exactos")
+	var before := _estado(pc)
+	comprobar(servicio.evolution_options(item, ID).is_empty(), key + "/08_no_evolucion_por_objeto")
+	var attempt_main: Dictionary = servicio.use_item(item, ID)
+	comprobar(not attempt_main.get("accepted", false) and _estado(pc) == before, key + "/08_no_fusion_mochila_principal")
+	var attempt_partner: Dictionary = servicio.use_item(item, socio_id)
+	comprobar(not attempt_partner.get("accepted", false) and _estado(pc) == before, key + "/08_no_fusion_mochila_socio")
+	var direct_evolution: Dictionary = servicio.evolve(item, ID, origen)
+	comprobar(not direct_evolution.get("accepted", false) and _estado(pc) == before, key + "/08_no_fusion_por_evolve")
+	var direct_equip: Dictionary = servicio.equip(item, ID)
+	comprobar(not direct_equip.get("accepted", false) and _estado(pc) == before, key + "/08_no_fusion_por_equipar")
+	var third_party: Dictionary = servicio.use_item(item, &"w04_c005_ajeno")
+	comprobar(not third_party.get("accepted", false) and _estado(pc) == before, key + "/08_ajeno_sin_gasto")
+	comprobar(pc.inventory.quantity(item) == 2 and pc.owned_creature(ID).species_id == origen and pc.owned_creature(socio_id).species_id == socio, key + "/08_dos_especies_intactas_y_sin_consumo")
+	var uri := "user://w04_c005_08_" + String(item) + "_" + String(socio) + ".json"
+	var repo := SaveGameRepository.new()
+	var save: SaveResult = repo.save_collection(uri, pc)
+	comprobar(save.ok, key + "/08_guardar_doble_savev2")
+	if save.ok:
+		var load: LoadResult = repo.load(uri)
+		comprobar(load.ok and load.schema_version == 2, key + "/08_recuperar_doble_savev2")
+		if load.ok:
+			var main_loaded := load.party.get_creature(ID)
+			var partner_loaded := load.storage.get_creature(socio_id) if in_storage else load.party.get_creature(socio_id)
+			comprobar(main_loaded != null and partner_loaded != null and main_loaded.instance_id == ID and partner_loaded.instance_id == socio_id and main_loaded.species_id == origen and partner_loaded.species_id == socio, key + "/08_recuperar_dos_especies_identidades")
+			comprobar(load.inventory.quantity(item) == 2 and (load.storage.get_creature(socio_id) == null if not in_storage else load.party.get_creature(socio_id) == null), key + "/08_pc_o_party_sin_duplicacion")
+			if main_loaded != null and partner_loaded != null:
+				var before_main := pc.owned_creature(ID).to_dict()
+				var after_main := main_loaded.to_dict()
+				var before_partner := pc.owned_creature(socio_id).to_dict()
+				var after_partner := partner_loaded.to_dict()
+				comprobar(before_main.get("ivs") == after_main.get("ivs") and before_main.get("evs") == after_main.get("evs") and before_main.get("move_ids") == after_main.get("move_ids") and before_main.get("experience") == after_main.get("experience") and before_main.get("friendship") == after_main.get("friendship"), key + "/08_principal_persistencia_completa")
+				comprobar(before_partner.get("ivs") == after_partner.get("ivs") and before_partner.get("evs") == after_partner.get("evs") and before_partner.get("move_ids") == after_partner.get("move_ids") and before_partner.get("experience") == after_partner.get("experience") and before_partner.get("friendship") == after_partner.get("friendship"), key + "/08_socio_persistencia_completa")
+	DirAccess.remove_absolute(ProjectSettings.globalize_path(uri))
+	comprobar(_estado(pc) == before and pc.location_of(socio_id) == expected_location and pc.location_of(ID) == &"PARTY", key + "/08_estado_inalterado_cero_fusiones")
+	print("CAMP005_W04_FUSION item=", String(item), " source=", String(origen), " partner=", String(socio), " target_form=", target_form, " status=DEPENDENCIA_DOS_CRIATURAS need=fusion_transaction+partner_identity+savev2")
+
+
 func _ejecutar() -> void:
 	var fixture := _abrir(FIXTURE)
 	var policy := _abrir(TRADE_POLICY)
@@ -614,8 +702,8 @@ func _ejecutar() -> void:
 	comprobar(earlier.get("trade_level_conversion", {}).get("levels_selected") == null, "V25_sin_niveles")
 	comprobar(String(policy.get("correct_future_rule", "")).contains("original equipped evolution item"), "conservar_objeto_equipado")
 	var blocks: Array = fixture.get("blocks", [])
-	comprobar(blocks.size() == 7 and [blocks[0].get("block"), blocks[1].get("block"), blocks[2].get("block"), blocks[3].get("block"), blocks[4].get("block"), blocks[5].get("block"), blocks[6].get("block")] == ["01", "02", "03", "04", "05", "06", "07"], "bloques_01_a_07_secuenciales")
-	if blocks.size() != 7:
+	comprobar(blocks.size() == 8 and [blocks[0].get("block"), blocks[1].get("block"), blocks[2].get("block"), blocks[3].get("block"), blocks[4].get("block"), blocks[5].get("block"), blocks[6].get("block"), blocks[7].get("block")] == ["01", "02", "03", "04", "05", "06", "07", "08"], "bloques_01_a_08_secuenciales")
+	if blocks.size() != 8:
 		_finalizar()
 		return
 	for index in range(2):
@@ -646,6 +734,10 @@ func _ejecutar() -> void:
 	for caso: Dictionary in formas_equipables:
 		_auditar_forma_equipable_07(catalogo, caso)
 	_cruce_prismas_07(catalogo)
+	var fusiones: Array = blocks[7].get("cases", [])
+	comprobar(fusiones.size() == 6, "08_seis_parejas_cuatro_objetos")
+	for caso: Dictionary in fusiones:
+		_auditar_fusion_08(catalogo, caso)
 	_finalizar()
 
 func _finalizar() -> void:
@@ -653,7 +745,7 @@ func _finalizar() -> void:
 		return
 	cerrado = true
 	if errores.is_empty():
-		print("CAMP005_W04_GODOT PASS blocks=7 checks=", checks)
+		print("CAMP005_W04_GODOT PASS blocks=8 checks=", checks)
 	else:
 		print("CAMP005_W04_GODOT FAIL errors=", JSON.stringify(errores))
 	quit(0 if errores.is_empty() else 1)
