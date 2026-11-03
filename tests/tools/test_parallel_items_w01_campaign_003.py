@@ -208,7 +208,7 @@ def validate() -> int:
         require("HELD_PILOT_VERIFIED" in next(x for x in inventory.splitlines()
                                              if x.startswith("focus_sash,")),
                 "Banda Aguante: piloto histórico sin evidencia")
-        require(""""lethal_full"""" in old_w01 and "lethal_partial" in old_w01
+        require('"lethal_full"' in old_w01 and "lethal_partial" in old_w01
                 and "nonlethal_control" in old_w01,
                 "Banda Aguante: escenarios históricos de PS y KO ausentes")
     cases = document["cases"]
