@@ -200,6 +200,54 @@
       "functional_effect_certified": false,
       "note": "Catálogo no implica funcionalidad. FieldItemService no tiene ruta Max Lure, Max Repel ni Red Flute; no descontar ni crear duración o cura de confusión inexistentes. Roundtrip PlayerInventory no es SaveV2 integral.",
       "ci_required": true
+    },
+    {
+      "bloque": "05",
+      "familia": "FIELD_USE",
+      "ids": [
+        "repel",
+        "silver_razz_berry",
+        "super_lure"
+      ],
+      "objetivo": "auditar_uso_campo_consecuencia_y_guardado",
+      "current_state": "DEPENDENCIA_COMPARTIDA",
+      "per_id_status": {
+        "repel": "DEPENDENCIA_COMPARTIDA",
+        "silver_razz_berry": "DEPENDENCIA_COMPARTIDA",
+        "super_lure": "DEPENDENCIA_COMPARTIDA"
+      },
+      "expected_rejection": "field_effect_not_connected",
+      "cases": [
+        {
+          "name": "normal",
+          "status": "none"
+        },
+        {
+          "name": "confusion",
+          "status": "confusion"
+        },
+        {
+          "name": "sleep",
+          "status": "sleep"
+        }
+      ],
+      "inventory_counts": [
+        0,
+        2
+      ],
+      "invalid_cases": [
+        "field_locked",
+        "invalid_inventory",
+        "unknown_target"
+      ],
+      "missing_authoritative_integrations": [
+        "repel_overworld_encounter_steps_and_lead_level",
+        "silver_razz_berry_catch_bait_transaction",
+        "super_lure_overworld_encounter_rate_and_duration"
+      ],
+      "functional_effect_certified": false,
+      "note": "Los tres IDs están seleccionados como FIELD_USE pero no conectados a FieldItemService. Probar rechazo seguro, protección de estado y PlayerInventory roundtrip; no atribuir implementación de captura/encuentros ni SaveV2 integral.",
+      "ci_required": true
     }
   ]
 }
