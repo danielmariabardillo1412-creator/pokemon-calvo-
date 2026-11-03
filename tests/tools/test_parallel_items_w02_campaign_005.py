@@ -2662,6 +2662,48 @@ def verify_sources(chk):
         'and now.stats.max_hp - now.current_hp == start_hp_deficit',
     ):
         chk.demand(fragment in runner, "Mochis bloque07: runner Godot incompleto " + fragment)
+    for fragment in (
+        'return id == &"fresh_start_mochi" or MOCHIS.has(String(id))',
+        'var reset := id == &"fresh_start_mochi"',
+        'if reset:',
+        'for key: Variant in c.evs: c.evs[key] = 0',
+        'if (reset and total == 0) or (not reset and gain == 0)',
+        '"action": "ev_reset" if reset else "ev_training"',
+        '"ev_removed": total if reset else 0',
+    ):
+        chk.demand(fragment in mochi, "Mochi Reinicio08 no respaldado: " + fragment)
+    for fragment in (
+        'if String(spec.kind) == "mochi_reset":',
+        'elif String(spec.kind) == "mochi_reset":',
+        'now.evs == zero_evs',
+        'int(result.get("ev_removed", -1)) == removed',
+        'now.friendship == start_friend',
+        'now.stats.max_hp - now.current_hp == start_hp_deficit',
+        'SaveGameRepository.new().decode_snapshot(state)',
+    ):
+        chk.demand(fragment in runner, "Prueba de reset08 incompleta: " + fragment)
+    for fragment in (
+        'if String(spec.kind) == "mint_dependency":',
+        'String(result.get("status", "")) == String(spec.expect_status)',
+        'String(result.get("reason", "")) == String(spec.expect_reason)',
+        'and _owner_data(owner) == before',
+    ):
+        chk.demand(fragment in runner, "Menta08 no exige rechazo atómico: " + fragment)
+    for id in ("adamant_mint", "modest_mint", "jolly_mint"):
+        chk.demand(all(id not in src for src in (service, field_effects, mochi, growth)),
+                   "Menta08 dependencia alterada: se encontró ruta real " + id)
+        chk.demand(id not in selection_08["excluded_ids"]
+                   and "nature_mints" not in selection_08["excluded_categories"],
+                   "Menta08 excluida por política, no es dependencia de efecto")
+    chk.demand('var nature_id: StringName' in creature_08
+               and '"nature_id": String(nature_id)' in creature_08
+               and "mint" not in creature_08
+               and 'return _deny("field_effect_not_connected", "DEPENDENCY_MISSING")' in service,
+               "Mentas08 sin contrato de naturaleza efectiva ni ruta segura de aplicación")
+    chk.demand('"adamant": ["attack", "special_attack"]' in rules_08
+               and '"modest": ["special_attack", "attack"]' in rules_08
+               and '"jolly": ["speed", "special_attack"]' in rules_08,
+               "Menta08 tabla de naturalezas base alterada")
     for old, token in (
         (old_ability, 'TRANSITIONS'),
         (old_growth, 'rare_candy'),
