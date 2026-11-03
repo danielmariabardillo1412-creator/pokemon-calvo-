@@ -1,0 +1,156 @@
+{
+  "schema_version": 1,
+  "campaign": "CAMP_003",
+  "worker": "W02",
+  "completed_blocks": [
+    1
+  ],
+  "format": "gen9calvounifiedv1",
+  "level": 100,
+  "seed": [
+    23,
+    19,
+    29,
+    43
+  ],
+  "modes": [
+    "active",
+    "none",
+    "reserve"
+  ],
+  "field_scope": "NOT_TESTED",
+  "blocks": [
+    {
+      "block": "01",
+      "ids": [
+        "aguav_berry",
+        "apicot_berry",
+        "aspear_berry",
+        "babiri_berry"
+      ],
+      "source_evidence": [
+        "tools/item_audit/held_effect_sweep_v3.cjs",
+        "tools/item_audit/held_effect_sweep_v2.cjs"
+      ],
+      "cases": [
+        {
+          "scenario": "aguav_disliked_naughty",
+          "id": "aguav_berry",
+          "kind": "heal_flavor",
+          "nature": "naughty",
+          "start": "fifth",
+          "status": "",
+          "foe_species": "mew",
+          "foe_move": "amnesia",
+          "consumes": true,
+          "confuses": true
+        },
+        {
+          "scenario": "aguav_neutral_hardy",
+          "id": "aguav_berry",
+          "kind": "heal_flavor",
+          "nature": "hardy",
+          "start": "fifth",
+          "status": "",
+          "foe_species": "mew",
+          "foe_move": "amnesia",
+          "consumes": true,
+          "confuses": false
+        },
+        {
+          "scenario": "aguav_above_threshold",
+          "id": "aguav_berry",
+          "kind": "heal_flavor",
+          "nature": "naughty",
+          "start": "near_full",
+          "status": "",
+          "foe_species": "mew",
+          "foe_move": "amnesia",
+          "consumes": false,
+          "confuses": false
+        },
+        {
+          "scenario": "apicot_pinch",
+          "id": "apicot_berry",
+          "kind": "boost_spd",
+          "nature": "hardy",
+          "start": "fifth",
+          "status": "",
+          "foe_species": "mew",
+          "foe_move": "amnesia",
+          "consumes": true,
+          "confuses": false
+        },
+        {
+          "scenario": "apicot_not_triggered",
+          "id": "apicot_berry",
+          "kind": "boost_spd",
+          "nature": "hardy",
+          "start": "near_full",
+          "status": "",
+          "foe_species": "mew",
+          "foe_move": "amnesia",
+          "consumes": false,
+          "confuses": false
+        },
+        {
+          "scenario": "aspear_frozen",
+          "id": "aspear_berry",
+          "kind": "cure_freeze",
+          "nature": "hardy",
+          "start": "full",
+          "status": "freeze",
+          "foe_species": "mew",
+          "foe_move": "amnesia",
+          "consumes": true,
+          "confuses": false
+        },
+        {
+          "scenario": "aspear_healthy",
+          "id": "aspear_berry",
+          "kind": "cure_freeze",
+          "nature": "hardy",
+          "start": "full",
+          "status": "",
+          "foe_species": "mew",
+          "foe_move": "amnesia",
+          "consumes": false,
+          "confuses": false
+        },
+        {
+          "scenario": "babiri_super_effective_steel",
+          "id": "babiri_berry",
+          "kind": "resist_steel",
+          "nature": "hardy",
+          "start": "full",
+          "status": "",
+          "actor_species": "clefable",
+          "foe_species": "mew",
+          "foe_move": "flash_cannon",
+          "consumes": true,
+          "confuses": false
+        },
+        {
+          "scenario": "babiri_wrong_type",
+          "id": "babiri_berry",
+          "kind": "resist_steel",
+          "nature": "hardy",
+          "start": "full",
+          "status": "",
+          "actor_species": "clefable",
+          "foe_species": "mew",
+          "foe_move": "tackle",
+          "consumes": false,
+          "confuses": false
+        }
+      ]
+    }
+  ],
+  "limitations": [
+    "Solo objetos EQUIPADOS. No probar campo ni afirmar cobertura GPU.",
+    "Aguav usa naturaleza Naughty que reduce Defensa Especial y rechaza amargo.",
+    "Apicot mejora Defensa Especial (spd) cuando PS bajan.",
+    "Aspear cura congelación; Babiri reduce Acero supereficaz sobre Clefable.",
+    "Pruebas históricas son precedentes, no PASS de este fixture."
+  ]
+}
