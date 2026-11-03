@@ -10,6 +10,7 @@ BASE = ROOT / "docs/coordination/items_parallel_v1"
 ITEMS_01 = ("dragon_scale", "dubious_disc", "electirizer", "magmarizer")
 ITEMS_02 = ("protector", "reaper_cloth", "prism_scale", "sachet", "up_grade")
 ITEMS_03 = ("oval_stone", "dawn_stone", "peat_block")
+ITEMS_04 = ("galarica_cuff", "galarica_wreath", "scroll_of_darkness", "scroll_of_waters")
 
 
 def check_rows(path):
@@ -53,10 +54,11 @@ def main():
     field = (ROOT / "modules/inventory/field_item_service.gd").read_text(encoding="utf-8")
 
     check(fixture["worker"] == "W04" and fixture["campaign"] == "CAMP_005", "fixture identidad")
-    check(len(fixture["blocks"]) == 3 and [x["block"] for x in fixture["blocks"]] == ["01", "02", "03"], "fixture acumulativo 01 a 03")
+    check(len(fixture["blocks"]) == 4 and [x["block"] for x in fixture["blocks"]] == ["01", "02", "03", "04"], "fixture acumulativo 01 a 04")
     check(len(queue) == 10 and queue[0]["ids"].split(";") == list(ITEMS_01), "cola oficial 01")
-    check(len(progress) == 3 and [x["bloque"] for x in progress] == ["01", "02", "03"], "progreso bloques 01 a 03")
-    check(progress[0]["ids"].split(";") == list(ITEMS_01) and progress[1]["ids"].split(";") == list(ITEMS_02) and progress[2]["ids"].split(";") == list(ITEMS_03), "progreso filas exactas")
+    check(len(progress) == 4 and [x["bloque"] for x in progress] == ["01", "02", "03", "04"], "progreso bloques 01 a 04")
+    check(progress[0]["ids"].split(";") == list(ITEMS_01) and progress[1]["ids"].split(";") == list(ITEMS_02) and progress[2]["ids"].split(";") == list(ITEMS_03) and progress[3]["ids"].split(";") == list(ITEMS_04), "progreso filas exactas")
+    check(queue[3]["ids"].split(";") == list(ITEMS_04) and queue[3]["familia"] == "EVOLUTION_CONDITIONS", "cola bloque04 oficial")
     check(queue[2]["ids"].split(";") == list(ITEMS_03) and queue[2]["familia"] == "EVOLUTION_CONDITIONS", "cola 03 aprobada")
     check(queue[1]["ids"].split(";") == list(ITEMS_02) and queue[1]["familia"] == "TRADE_OBJECT_REPAIR", "cola oficial 02")
     check(fixture["blocks"][0]["ids"] == list(ITEMS_01) and fixture["blocks"][0]["family"] == "TRADE_OBJECT_REPAIR", "familia 01")
@@ -65,6 +67,8 @@ def main():
     check(all(block["ids"] == [x["item_id"] for x in block["pairs"]] for block in fixture["blocks"][:2]), "fixture IDs y parejas congruentes")
     check(fixture["blocks"][2]["ids"] == list(ITEMS_03) and fixture["blocks"][2]["family"] == "EVOLUTION_CONDITIONS", "fixture 03 y familia")
     check(fixture["blocks"][2]["classification"] == "DEPENDENCIA_DE_CONDICIONES" and len(fixture["blocks"][2]["cases"]) == 4, "cuatro rutas con condiciones")
+    check(fixture["blocks"][3]["ids"] == list(ITEMS_04) and fixture["blocks"][3]["family"] == "EVOLUTION_CONDITIONS", "fixture 04 autorizada")
+    check(fixture["blocks"][3]["classification"] == "DEPENDENCIA_FORMA_REGIONAL" and len(fixture["blocks"][3]["cases"]) == 4, "cuatro contratos de formas")
     check(fixture["kind"] == "FUNCTIONAL_BACKLOG", "backlog previo, no nuevos IDs")
 
     check(policy["status"] == "PASS_V26_MISINTERPRETATION_CORRECTED", "norma V27")
@@ -168,12 +172,65 @@ def main():
     check("var gender:" not in creature and "var gender_id:" not in creature and '"gender":' not in creature, "género no persistido en dominio de criatura")
     check('"time_of_day":' not in evolution.split("static func level_up_context(",1)[1].split("static func _stat_relation_matches(",1)[0], "subida de nivel sin reloj")
     for token in ("func _auditar_condicion_03(", "func _tiene_destino_03(",
-                  "bloques_01_a_03_secuenciales", "sin_opciones_directas",
+                  "bloques_01_a_04_secuenciales", "sin_opciones_directas",
                   "condicion_no_degradable", "no_ignora_condiciones", "sexo_no_persistido",
                   "contexto_sin_requisitos", "uso_rechazado_sin_gasto", "evolucion_rechazada",
                   "estado_savev2_integro", "retirada_sin_perdida", "no_equipable_sin_gasto",
                   "CAMP005_W04_ITEM id=", "status=DEPENDENCIA_CONDICIONES"):
         check(token in runner, "runner sin contrato 03 " + token)
+
+    # Bloque 04: la forma regional y el estilo Urshifu son parte del
+    # resultado del disparador; no se representan solo con species_id.
+    form_cases = fixture["blocks"][3]["cases"]
+    check([case["item_id"] for case in form_cases] == list(ITEMS_04), "cuatro ID de formas reservados")
+    check({(case["source"], case["target"]) for case in form_cases} == {
+        ("slowpoke", "slowbro"), ("slowpoke", "slowking"),
+        ("kubfu", "urshifu"),
+    }, "origen y especies destino sin forma artificial")
+    inventory04 = {row["id"]: row for row in check_rows(ROOT / "docs/current/ITEM_INVENTORY.csv")}
+    field04 = {row["id"]: row for row in check_rows(ROOT / "docs/current/ITEM_FIELD_V8.csv.txt")}
+    check(all(selected[i]["estado_contenido"] == "SELECCIONADO" and selected[i]["familia"] == "EVOLUTION" for i in ITEMS_04), "cuatro objetos seleccionados antes")
+    check(set(c["evolved_form"] for c in form_cases) == {
+        "slowbro-galar","slowking-galar","urshifu-single-strike","urshifu-rapid-strike",
+    }, "cuatro formas reales distintas")
+    check({c["base_form"] for c in form_cases if c["source"] == "slowpoke"} == {"slowpoke-galar"}, "Slowpoke Galar es obligatorio")
+    check({c["target"] for c in form_cases if c["source"] == "kubfu"} == {"urshifu"}, "Urshifu dos formas misma especie")
+    for case in form_cases:
+        name = case["item_id"]
+        chain = json.loads((ROOT / f"data/api/v2/evolution-chain/{case['chain']}/index.json").read_text(encoding="utf-8"))
+        matched = [d for src, dst, d in routes_from_chain(chain["chain"])
+                   if src == case["source"] and dst == case["target"]
+                   and d["trigger"]["name"] == "use-item" and (d.get("item") or {}).get("name") == case["canonical_item"]]
+        check(len(matched) == 1, name + " ruta canónica única")
+        d = matched[0]
+        check(d["version_group"]["name"] == case["version"], name + " versión canónica")
+        check(d["evolved_form"]["name"] == case["evolved_form"], name + " evolved_form requerido")
+        check(d.get("min_level") is None, name + " sin nivel inventado")
+        check(((d.get("base_form") or {}).get("name") == case.get("base_form")), name + " forma origen")
+        check((name in held_profile["holdable_ids"]) is case["equippable"], name + " perfil holdable")
+        check(inventory04[name]["connection"] == "EVOLUTION_ELIGIBILITY_RULES_NO_BAG_BRIDGE", name + " entrada sin puente")
+        check("missing_description" in inventory04[name]["flags"], name + " metadatos pendientes")
+        check(field04[name]["supported_evolution_routes_tested"] == "0", name + " ninguna forma positiva aún")
+    chain470 = json.loads((ROOT / "data/api/v2/evolution-chain/470/index.json").read_text(encoding="utf-8"))
+    tower_rows = [d for src,dst,d in routes_from_chain(chain470["chain"])
+                  if src == "kubfu" and dst == "urshifu" and d["trigger"]["name"] in ("tower-of-darkness","tower-of-waters")]
+    check(len(tower_rows) == 2, "dos torres alternativas de Isle of Armor")
+    check({d["evolved_form"]["name"] for d in tower_rows} ==
+          {"urshifu-single-strike","urshifu-rapid-strike"}, "torres no mezclan estilos")
+    check(all(d["version_group"]["name"] == "the-isle-of-armor" for d in tower_rows), "torres son versión Isle of Armor")
+    check(all(c["version"] == "scarlet-violet" for c in form_cases if c["source"] == "kubfu"), "manuscritos son Scarlet-Violet")
+    # No hay una identidad regional/forma por criatura en el modelo persistido.
+    check("var form_id:" not in creature and "var regional_form_id:" not in creature, "CreatureInstance aún sin forma persistida")
+    check('"form_id":' not in creature and '"regional_form_id":' not in creature, "SaveV2 sin contrato form_id")
+    for token in ("func _auditar_forma_04(", "func _fronteras_regionales_04(",
+                  "04_base_regional", "04_forma_destino", "04_urshifu_estilos_distintos_igual_especie",
+                  "04_galar_regional_dos_destinos", "04_torre_sombras_no_simplificada",
+                  "04_torre_agua_no_simplificada", "04_no_destino_sin_forma",
+                  "04_no_uso_incondicional", "04_forma_no_inventada_savev2",
+                  "04_retira_y_restaura", "04_no_equipable_sin_mutacion",
+                  "04_forma_persistente_no_contratada", "CAMP005_W04_FORM_CONTRACT",
+                  "bloques_01_a_04_secuenciales", "CAMP005_W04_GODOT PASS blocks=4 checks="):
+        check(token in runner, "falta escenario Godot de forma04: " + token)
 
     # Prueba de interfaz pendiente: la API de nivel comunica nivel/estadísticas,
     # pero no el objeto equipado que exige V27. Godot prueba el comportamiento real.
@@ -191,11 +248,11 @@ def main():
                   "productor_no_transporta_objeto", "equipamiento_positivo_sin_evolucion",
                   "guardar_savev2", "leer_savev2", "identidad_item_savev2",
                   "retirada_preserva_estado", "mochila_no_es_intercambio",
-                  "CAMP005_W04_GODOT PASS blocks=3 checks="):
+                  "CAMP005_W04_GODOT PASS blocks=4 checks="):
         check(token in runner, "runner sin prueba observable: " + token)
     check((ROOT / "tests/tools/test_parallel_items_w04_campaign_004.py").exists(), "regresión CAMP004 preservada")
     check((ROOT / "tests/tools/test_parallel_items_w04_campaign_003.py").exists(), "regresión CAMP003 preservada")
-    print(f"CAMP005_W04_PY PASS blocks=3 checks={checks}")
+    print(f"CAMP005_W04_PY PASS blocks=4 checks={checks}")
 
 
 if __name__ == "__main__":
