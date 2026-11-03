@@ -4,5 +4,62 @@
   "worker": "W03",
   "kind": "FUNCTIONAL_BACKLOG",
   "purpose": "Arranque autorizado; blocks vacio no prueba efectos; no marcar funcional sin nuevos contratos reales",
-  "blocks": []
+  "blocks": [
+    {
+      "bloque": "01",
+      "familia": "CAPTURE_CONTEXT",
+      "ids": [
+        "dive_ball",
+        "dusk_ball",
+        "repeat_ball"
+      ],
+      "objetivo": "integracion_contexto_mundo_noche_pokedex",
+      "current_state": "DEPENDENCIA_CONCRETA",
+      "functional_effect_certified": false,
+      "existing_positive_contracts": [
+        "completed_turns_from_battle_state_turn",
+        "catcher_level_from_active_for_side"
+      ],
+      "required_producers": [
+        {
+          "id": "dive_ball",
+          "producer": "authoritative_overworld_encounter_origin",
+          "consumer": "ShowdownAdventureSession.capture > CaptureBattleContext > CaptureSystem",
+          "missing_fields": [
+            "origin_water_kind",
+            "encounter_was_fishing_or_surfing_or_underwater"
+          ],
+          "decision": "definir disparador segun generacion y origen certificado, sin derivarlo de especie/tipo"
+        },
+        {
+          "id": "dusk_ball",
+          "producer": "authoritative_world_clock_and_map_light",
+          "consumer": "ShowdownAdventureSession.capture > CaptureBattleContext > CaptureSystem",
+          "missing_fields": [
+            "time_of_day",
+            "map_is_cave_or_dark"
+          ],
+          "decision": "definir fuente, regla nocturna y validacion de oscuridad/cueva con mundo y zona"
+        },
+        {
+          "id": "repeat_ball",
+          "producer": "persistent_player_pokedex_caught_species_set",
+          "consumer": "ShowdownAdventureSession.capture > CaptureBattleContext > CaptureSystem",
+          "missing_fields": [
+            "captured_base_species_ids",
+            "pokedex_state_revision"
+          ],
+          "decision": "definir conjunto autentico de especies capturadas antes del intento y persistencia SaveV2"
+        }
+      ],
+      "evidence_paths": [
+        "modules/gameplay/showdown_adventure_session.gd",
+        "modules/capture/capture_battle_context.gd",
+        "modules/capture/capture_context_ball_effects.gd",
+        "modules/capture/capture_ruleset.gd"
+      ],
+      "scope": "Nueva verificacion de contrato de productores y ejemplo positivo existente para turno/nivel; SIN repetir ensayo unknown_ball de CAMP004, SIN bonus ficticio, SIN editar APIs compartidas.",
+      "ci_required": true
+    }
+  ]
 }
