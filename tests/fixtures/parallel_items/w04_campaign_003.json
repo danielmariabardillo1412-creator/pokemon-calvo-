@@ -19,6 +19,23 @@
         "same_identity",
         "save_v2"
       ]
+    },
+    {
+      "block": "02",
+      "ids": [
+        "sun_stone",
+        "oval_stone",
+        "black_augurite"
+      ],
+      "expected_trigger": "verify_from_runtime_records",
+      "policy": "do_not_reduce_held_item_level_or_trade_to_use_item",
+      "cases": [
+        "catalog_record_classification",
+        "supported_positive_only",
+        "conditional_dependency_no_false_positive",
+        "no_spend_on_rejection",
+        "save_v2_if_supported"
+      ]
     }
   ]
 }
