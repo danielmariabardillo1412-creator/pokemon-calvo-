@@ -3,7 +3,7 @@
   "campaign": "CAMP_004_W02",
   "worker": "W02",
   "active_policy": "RANDOMLOCK_ITEMS_BUILD_SCOPE_V2",
-  "purpose": "CAMP004 W02 bloques 01–09: verificación acumulada de medicinas/bayas a través de inventario real, propietarias PARTY/STORAGE, SaveV2 y recibos; Razz/Hopo siguen como dependencias.",
+  "purpose": "CAMPAÑA_004 IA2/W02: diez microbloques autorizados (40 IDs), pruebas acumuladas de efectos nativos de bayas/medicinas, consumo atomico, propiedad PARTY/STORAGE y SaveV2 con recibos; CI requiere logs/SHA y dos dependencias Razz/Hopo siguen abiertas.",
   "format": "gen9calvounifiedv1",
   "level": 100,
   "seed": [
@@ -26,7 +26,8 @@
     6,
     7,
     8,
-    9
+    9,
+    10
   ],
   "blocks": [
     {
@@ -2290,6 +2291,289 @@
           "cures_confusion": false
         }
       ]
+    },
+    {
+      "block": "10",
+      "family": "MEDICINE",
+      "ids": [
+        "shalour_sable",
+        "soda_pop",
+        "super_potion",
+        "sweet_heart"
+      ],
+      "source_evidence": [
+        "modules/inventory/imported_recovery_v19.json",
+        "modules/inventory/field_item_effects.gd",
+        "modules/inventory/field_item_service.gd",
+        "tests/gameplay/item_field_effects_v4.gd"
+      ],
+      "cases": [
+        {
+          "scenario": "shalour_sable_poison_c004",
+          "id": "shalour_sable",
+          "kind": "field_medicine",
+          "start_hp": "full",
+          "status": "poison",
+          "confused": false,
+          "applies": true,
+          "heal_amount": 0,
+          "cures_status": true,
+          "cures_confusion": false
+        },
+        {
+          "scenario": "shalour_sable_toxic_c004",
+          "id": "shalour_sable",
+          "kind": "field_medicine",
+          "start_hp": "full",
+          "status": "badly_poisoned",
+          "confused": false,
+          "applies": true,
+          "heal_amount": 0,
+          "cures_status": true,
+          "cures_confusion": false
+        },
+        {
+          "scenario": "shalour_sable_sleep_c004",
+          "id": "shalour_sable",
+          "kind": "field_medicine",
+          "start_hp": "full",
+          "status": "sleep",
+          "confused": false,
+          "applies": true,
+          "heal_amount": 0,
+          "cures_status": true,
+          "cures_confusion": false,
+          "expect_sleep_clock_clear": true
+        },
+        {
+          "scenario": "shalour_sable_freeze_c004",
+          "id": "shalour_sable",
+          "kind": "field_medicine",
+          "start_hp": "full",
+          "status": "freeze",
+          "confused": false,
+          "applies": true,
+          "heal_amount": 0,
+          "cures_status": true,
+          "cures_confusion": false
+        },
+        {
+          "scenario": "shalour_sable_confusion_c004",
+          "id": "shalour_sable",
+          "kind": "field_medicine",
+          "start_hp": "full",
+          "status": "",
+          "confused": true,
+          "applies": true,
+          "heal_amount": 0,
+          "cures_status": false,
+          "cures_confusion": true
+        },
+        {
+          "scenario": "shalour_sable_paralysis_confusion_c004",
+          "id": "shalour_sable",
+          "kind": "field_medicine",
+          "start_hp": "full",
+          "status": "paralysis",
+          "confused": true,
+          "applies": true,
+          "heal_amount": 0,
+          "cures_status": true,
+          "cures_confusion": true
+        },
+        {
+          "scenario": "shalour_sable_healthy_reject_c004",
+          "id": "shalour_sable",
+          "kind": "field_medicine",
+          "start_hp": "full",
+          "status": "",
+          "confused": false,
+          "applies": false,
+          "heal_amount": 0,
+          "cures_status": false,
+          "cures_confusion": false
+        },
+        {
+          "scenario": "soda_pop_half_c004",
+          "id": "soda_pop",
+          "kind": "field_medicine",
+          "start_hp": "half",
+          "status": "",
+          "confused": false,
+          "applies": true,
+          "heal_amount": 50,
+          "cures_status": false,
+          "cures_confusion": false
+        },
+        {
+          "scenario": "soda_pop_missing7_c004",
+          "id": "soda_pop",
+          "kind": "field_medicine",
+          "start_hp": "missing_7",
+          "status": "",
+          "confused": false,
+          "applies": true,
+          "heal_amount": 50,
+          "cures_status": false,
+          "cures_confusion": false
+        },
+        {
+          "scenario": "soda_pop_full_reject_c004",
+          "id": "soda_pop",
+          "kind": "field_medicine",
+          "start_hp": "full",
+          "status": "",
+          "confused": false,
+          "applies": false,
+          "heal_amount": 50,
+          "cures_status": false,
+          "cures_confusion": false
+        },
+        {
+          "scenario": "soda_pop_half_poison_persists_c004",
+          "id": "soda_pop",
+          "kind": "field_medicine",
+          "start_hp": "half",
+          "status": "poison",
+          "confused": false,
+          "applies": true,
+          "heal_amount": 50,
+          "cures_status": false,
+          "cures_confusion": false
+        },
+        {
+          "scenario": "soda_pop_half_confusion_persists_c004",
+          "id": "soda_pop",
+          "kind": "field_medicine",
+          "start_hp": "half",
+          "status": "",
+          "confused": true,
+          "applies": true,
+          "heal_amount": 50,
+          "cures_status": false,
+          "cures_confusion": false
+        },
+        {
+          "scenario": "super_potion_half_c004",
+          "id": "super_potion",
+          "kind": "field_medicine",
+          "start_hp": "half",
+          "status": "",
+          "confused": false,
+          "applies": true,
+          "heal_amount": 60,
+          "cures_status": false,
+          "cures_confusion": false
+        },
+        {
+          "scenario": "super_potion_missing7_c004",
+          "id": "super_potion",
+          "kind": "field_medicine",
+          "start_hp": "missing_7",
+          "status": "",
+          "confused": false,
+          "applies": true,
+          "heal_amount": 60,
+          "cures_status": false,
+          "cures_confusion": false
+        },
+        {
+          "scenario": "super_potion_full_reject_c004",
+          "id": "super_potion",
+          "kind": "field_medicine",
+          "start_hp": "full",
+          "status": "",
+          "confused": false,
+          "applies": false,
+          "heal_amount": 60,
+          "cures_status": false,
+          "cures_confusion": false
+        },
+        {
+          "scenario": "super_potion_half_poison_persists_c004",
+          "id": "super_potion",
+          "kind": "field_medicine",
+          "start_hp": "half",
+          "status": "poison",
+          "confused": false,
+          "applies": true,
+          "heal_amount": 60,
+          "cures_status": false,
+          "cures_confusion": false
+        },
+        {
+          "scenario": "super_potion_half_confusion_persists_c004",
+          "id": "super_potion",
+          "kind": "field_medicine",
+          "start_hp": "half",
+          "status": "",
+          "confused": true,
+          "applies": true,
+          "heal_amount": 60,
+          "cures_status": false,
+          "cures_confusion": false
+        },
+        {
+          "scenario": "sweet_heart_half_c004",
+          "id": "sweet_heart",
+          "kind": "field_medicine",
+          "start_hp": "half",
+          "status": "",
+          "confused": false,
+          "applies": true,
+          "heal_amount": 20,
+          "cures_status": false,
+          "cures_confusion": false
+        },
+        {
+          "scenario": "sweet_heart_missing7_c004",
+          "id": "sweet_heart",
+          "kind": "field_medicine",
+          "start_hp": "missing_7",
+          "status": "",
+          "confused": false,
+          "applies": true,
+          "heal_amount": 20,
+          "cures_status": false,
+          "cures_confusion": false
+        },
+        {
+          "scenario": "sweet_heart_full_reject_c004",
+          "id": "sweet_heart",
+          "kind": "field_medicine",
+          "start_hp": "full",
+          "status": "",
+          "confused": false,
+          "applies": false,
+          "heal_amount": 20,
+          "cures_status": false,
+          "cures_confusion": false
+        },
+        {
+          "scenario": "sweet_heart_half_poison_persists_c004",
+          "id": "sweet_heart",
+          "kind": "field_medicine",
+          "start_hp": "half",
+          "status": "poison",
+          "confused": false,
+          "applies": true,
+          "heal_amount": 20,
+          "cures_status": false,
+          "cures_confusion": false
+        },
+        {
+          "scenario": "sweet_heart_half_confusion_persists_c004",
+          "id": "sweet_heart",
+          "kind": "field_medicine",
+          "start_hp": "half",
+          "status": "",
+          "confused": true,
+          "applies": true,
+          "heal_amount": 20,
+          "cures_status": false,
+          "cures_confusion": false
+        }
+      ]
     }
   ],
   "limitations": [
@@ -2306,6 +2590,8 @@
     "Bloque 07 conserva el contrato de Freeze como estado persistente 'freeze'; Ice Heal solo cura congelación y no confusión concomitante. Lava Cookie y Lumiose Galette sí curan todo estado/confusión. Lemonade +70 PS, no cura estado.",
     "Max Elixir rellena PP de todos los movimientos y rechaza índice explícito; Max Ether rellena PP solamente del movimiento seleccionado y rechaza índice ausente/inválido. Ambos sin efecto con PP ya al máximo, sin gasto.",
     "Max Potion recupera PS hasta máximo pero no cura estado/confusión; Leche Mu-mu recupera 100 PS, tampoco estados. No atribuir a estos ítems curación de Full Restore.",
-    "Old Gateau y Pewter Crunchies curan estado/confusión según perfil cure:all; Paralyze Heal cura exclusivamente paralysis conservando confusión; Potion +20 PS con límite sin limpiar poison. No afirmar CI PASS sin ejecución."
+    "Old Gateau y Pewter Crunchies curan estado/confusión según perfil cure:all; Paralyze Heal cura exclusivamente paralysis conservando confusión; Potion +20 PS con límite sin limpiar poison. No afirmar CI PASS sin ejecución.",
+    "Bloque 10: Shalour Sable elimina estado y confusión; Soda Pop cura 50 PS, Super Potion 60 PS, Sweet Heart 20 PS; las tres recuperaciones nunca eliminan el estado o confusión. Rechazo sin consumir si HP ya está al máximo.",
+    "CAMP004 cerrada documentalmente 10/10 en rama W02. CI funcional de los bloques 02–10 no puede declararse PASS sin recuperar run y registros. Sin integrar en main/V28, sin GPU/UI; Razz Berry y Hopo Berry requieren decisión de IA6."
   ]
 }
