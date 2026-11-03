@@ -54,3 +54,21 @@ Inventario → FieldItemService.equip/unequip → CreatureInstance.held_item_id
 **Aislamiento:** únicamente archivos de prueba, fixture y reporte W04; no `main`, V28, otras ramas, producción, catálogo, workflows, guardados, PR #118.
 
 **Próxima `p`:** bloque 08/10 `dna_splicers;reins_of_unity;n_lunarizer_merge;n_solarizer_merge` exclusivamente tras cerrar este bloque.
+
+## CI07 real — validada la dependencia, NO la transformación
+
+[GitHub Actions #41738161812](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41738161812), SHA `97d01a5738420c40382bfa99c3b5fff0bb882afa` (fixture+tests+progreso), terminó **completed/success**.
+
+Recibos extraídos de los logs de GitHub:
+- `CAMP005_W04_MANIFEST_PASS reserved=10 completed=7 ids=46 kind=FUNCTIONAL_BACKLOG`.
+- `CAMP005_W04_PY PASS blocks=7 checks=426`.
+- `CAMP005_W04_GODOT PASS blocks=7 checks=754`.
+- Los cinco `CAMP005_W04_ITEM id=...` muestran `status=DEPENDENCIA_FORMA`; apuntan a los cinco pares correctos de especie y variedad de origen/primigenia, con `need=form_resolver_and_lifecycle`.
+- `CAMP005_W04_ORB_CROSS blue_orb=>groudon red_orb=>kyogre status=NO_FALSE_FORM`.
+- El workflow no ejecutó regresiones históricas CAMP004/003/001 en el bloque 07 (pasos `skipped`); **sí** ejecutó completo el arnés acumulativo de CAMP005 bloques 01–07.
+
+Después se dejó en CSV la fila 07 `DEPENDENCIA_DOCUMENTADA`, `ci_run=41738161812`, commit `df5d656b29f7f147505398c5e7a947aec2e8aa7d`. Este cambio administrativo activa una segunda CI, por lo que no debe declararse aprobado ese commit sin comprobar el nuevo run. La fila 04 sigue sin alterar por su incidencia de permisos.
+
+**Resultado técnico:** cinco equipamientos, rechazados seguros, preservación SaveV2 y ninguna falsa forma; **no** cinco transformaciones implementadas. La decisión de integración del subsistema de formas y primigenias sigue pendiente.
+
+**Próximo bloque autorizado:** 08/10, cuatro fusiones, únicamente al recibir la siguiente `p`.
