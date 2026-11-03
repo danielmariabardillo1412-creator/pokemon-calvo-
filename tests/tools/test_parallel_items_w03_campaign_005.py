@@ -486,6 +486,51 @@ def main() -> int:
                       and 'service.sleep_clocks.is_empty()' in runner
                       and 'snapshot(service) == no_effect_before' in runner,
                       "Faltan positivos y negativos reales de Flauta Azul")
+            elif block["bloque"] == "09":
+                check(ids == ["escape_rope", "fluffy_tail"],
+                      "Reserva del bloque09 incorrecta")
+                check(block["current_state"] == "PARTIAL_FLUFFY_BATTLE_ESCAPE"
+                      and block["functional_effect_certified"] is False,
+                      "No declarar teletransporte de Cuerda Huida")
+                escape = json.loads((ROOT / "modules/inventory/battle_escape_profile.json").read_text(
+                    encoding="utf-8"))["items"]
+                check(escape["fluffy_tail"] == {
+                    "consume": 1, "guaranteed": True,
+                    "rng_consumed": False, "wild_only": True},
+                    "Contrato de huida garantizada cambió")
+                check("escape_rope" not in escape,
+                      "Se conectó Cuerda Huida al perfil de batalla")
+                profile = (ROOT / "modules/inventory/battle_escape_profile.gd").read_text(
+                    encoding="utf-8")
+                session = (ROOT / "modules/gameplay/showdown_adventure_session.gd").read_text(
+                    encoding="utf-8")
+                field = (ROOT / "modules/inventory/field_item_service.gd").read_text(
+                    encoding="utf-8")
+                check("func _use_escape_item(" in session
+                      and "Escape.supports(item_id)" in session
+                      and "bag.remove(item_id)" in session
+                      and '_finish("FLED", bag)' in session
+                      and 'Escape.resolution(escape_attempts)' in session,
+                      "La huida de batalla ya existente no es comprobable")
+                check('return _deny("field_effect_not_connected", "DEPENDENCY_MISSING")' in field
+                      and "&\"escape_rope\"" not in field
+                      and "&\"fluffy_tail\"" not in field,
+                      "Ruta de campo modificada: reauditar")
+                check("static func resolution(" in profile
+                      and '"rng_consumed": false' in profile,
+                      "No se garantiza huida sin RNG")
+                check({x["id"] for x in block["required_producers"]} == set(ids),
+                      "Productores faltantes")
+                for producer in block["required_producers"]:
+                    check(producer["producer"].strip()
+                          and producer["consumer"].strip()
+                          and producer["decision"].strip(),
+                          "No se precisó contrato de " + producer["id"])
+                check('"09": _block_09(block)' in runner
+                      and "func _block_09(block: Dictionary)" in runner
+                      and 'service.use_item(id, &"field_item_target")' in runner
+                      and "snapshot(service) == before" in runner,
+                      "No hay tests reales de rechazo sin gasto")
             else:
                 check(False, "Bloque sin nueva prueba: " + block["bloque"])
         check(checks > 0, "Sin verificaciones")
