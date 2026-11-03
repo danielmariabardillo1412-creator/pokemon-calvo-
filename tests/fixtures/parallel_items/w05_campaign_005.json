@@ -34,6 +34,35 @@
           "move_id": "wild_charge"
         }
       ]
+    },
+    {
+      "block": "02",
+      "items": [
+        {
+          "item_id": "tm148",
+          "move_id": "sludge_bomb"
+        },
+        {
+          "item_id": "tm149",
+          "move_id": "earthquake"
+        },
+        {
+          "item_id": "tm150",
+          "move_id": "stone_edge"
+        },
+        {
+          "item_id": "tm151",
+          "move_id": "phantom_force"
+        },
+        {
+          "item_id": "tm152",
+          "move_id": "giga_impact"
+        },
+        {
+          "item_id": "tm153",
+          "move_id": "blast_burn"
+        }
+      ]
     }
   ]
 }
