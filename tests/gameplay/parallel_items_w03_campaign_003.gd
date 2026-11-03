@@ -44,6 +44,7 @@ func _run_campaign() -> void:
 			"07": _block_07(bloque)
 			"08": _block_08(bloque)
 			"09": _block_09(bloque)
+			"10": _block_10(bloque)
 			_: check("Bloque aún sin suite funcional " + str(numero), false)
 	_terminar_campania(numero)
 
@@ -1037,6 +1038,80 @@ func _block_09(bloque: Dictionary) -> void:
 			check("Amor/Luna prioridad rechazo seguro " + String(id) + reason,
 				result.result.status == CaptureResult.INVALID
 				and result.result.reason == reason
+				and not result.result.consume_item and result.captured == null
+				and party.is_empty() and inv.to_dict() == before_inv
+				and target.to_dict() == before_target and rng.state == before_rng)
+
+
+# 10: Ente/Peso: auditar ausencia actual de regla sin simular clasificación
+# de Ultraentes ni peso. El motor real debe rechazar sin efectos.
+func _block_10(bloque: Dictionary) -> void:
+	check("Bloque10 IDs Ente/Peso reservados",
+		bloque.get("ids", []) == ["beast_ball", "heavy_ball"]
+		and not bool(bloque.get("functional_effect_certified", true)))
+	var rules := CaptureRuleset.new()
+	for id: StringName in [&"beast_ball", &"heavy_ball"]:
+		check("Ente/Peso no operativas ni garantizadas " + String(id),
+			not rules.is_known_ball(id) and rules.ball(id) == null
+			and not CaptureRuleset.ordered_ball_ids().has(id))
+	for case: Dictionary in bloque.get("cases", []):
+		var sid: StringName = StringName(String(case.get("species_id", "")))
+		check("Bloque10 especie real " + String(sid), catalogs.species(sid) != null)
+		if catalogs.species(sid) == null:
+			continue
+		for mode: String in bloque.get("hp_modes", []):
+			for environment: Dictionary in bloque.get("contexts", []):
+				for id: StringName in [&"beast_ball", &"heavy_ball"]:
+					var target: CreatureInstance = _mon(sid, int(case.get("level", 12)),
+						StringName("c003_10_" + String(id) + String(sid)
+						+ mode + String(environment.get("name", ""))))
+					target.current_hp = target.stats.max_hp if mode == "full" else 1
+					var ctx := CaptureBattleContext.new()
+					ctx.completed_turns = int(environment.get("completed_turns", -1))
+					ctx.catcher_level = int(environment.get("catcher_level", -1))
+					var inv := PlayerInventory.new()
+					inv.add(id, 2)
+					var party := CreatureParty.new()
+					var rng := RandomNumberGenerator.new()
+					rng.seed = int(case.get("seed", 10101))
+					var before_rng: int = rng.state
+					var before_target: Dictionary = target.to_dict()
+					var before_inv: Dictionary = inv.to_dict()
+					var attempt := CaptureAttempt.new(target, id, ctx)
+					check("Ente/Peso rechazo previo al inventario " + String(id),
+						CaptureSystem.validate_attempt(attempt, catalogs) == "unknown_ball")
+					var result: CaptureResolution = CaptureInventoryService.resolve(
+						attempt, rng, catalogs, party, inv)
+					check("Ente/Peso sin gasto RNG ni captura " + String(id),
+						result.result.status == CaptureResult.INVALID
+						and result.result.reason == "unknown_ball"
+						and not result.result.consume_item and result.captured == null
+						and party.is_empty() and inv.to_dict() == before_inv
+						and target.to_dict() == before_target and rng.state == before_rng)
+	for id: StringName in [&"beast_ball", &"heavy_ball"]:
+		for reason: String in bloque.get("invalid_cases", []):
+			var target: CreatureInstance = _mon(&"mew", 35,
+				StringName("c003_10_invalid_" + String(id) + reason))
+			var ctx := CaptureBattleContext.new()
+			var inv := PlayerInventory.new()
+			inv.add(id, 2)
+			match reason:
+				"trainer_battle_not_capturable": ctx.is_wild = false
+				"target_knocked_out": target.current_hp = 0
+				"battle_finished": ctx.battle_finished = true
+				"item_not_owned": inv.remove(id, 2)
+			var before_target: Dictionary = target.to_dict()
+			var before_inv: Dictionary = inv.to_dict()
+			var rng := RandomNumberGenerator.new()
+			rng.seed = 1010
+			var before_rng: int = rng.state
+			var party := CreatureParty.new()
+			var result: CaptureResolution = CaptureInventoryService.resolve(
+				CaptureAttempt.new(target, id, ctx), rng, catalogs, party, inv)
+			var expected_reason: String = "unknown_ball" if reason == "item_not_owned" else reason
+			check("Ente/Peso precedencia y rechazo seguro " + String(id) + reason,
+				result.result.status == CaptureResult.INVALID
+				and result.result.reason == expected_reason
 				and not result.result.consume_item and result.captured == null
 				and party.is_empty() and inv.to_dict() == before_inv
 				and target.to_dict() == before_target and rng.state == before_rng)
