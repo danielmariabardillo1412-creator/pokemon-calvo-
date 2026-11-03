@@ -1,3 +1,24 @@
+# IA2/W02 — CONTINUIDAD VIGENTE CAMPAÑA_005 BLOQUE 04/10
+
+**Identidad:** IA2/W02, bayas, medicinas y entrenamiento. **Escritura exclusiva:** `codex/calvo-items-20261103-w02-camp005`. Encargo oficial IA6: `CAMPAIGN_005_W02_GATE.md`, `CAMPAIGN_005_W02_QUEUE_APPROVED.csv`, `campaigns/CAMP_005_W02.md` y V5. Tecla `p` = una sola fila autorizada por turno. No tocar `main`, V28, PR118, árbitra, otras trabajadoras, producción, APIs compartidas ni workflows.
+
+**Estado publicado acumulado:** 04/10 bloques, **16 IDs**, 100 escenarios únicos, **300 variantes planificadas** (3 situaciones de dueño por caso). CI CAMP005 W02 **sin ejecución Python/Godot recuperada con PASS SHA+logs en esta sesión**; no afirmar certificación con solo revisión estática. CI anterior CAMP004 10/10 aprobada según gate IA6 [#41589286005](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41589286005), no extrapolable a CAMP005. Los bloques 01–03 se conservan íntegros y se verifican sus golden; regresión histórica CAMP004/CAMP003 no se ha modificado.
+
+**Bloque 04 publicado:** `exp_candy_s;exp_candy_m;exp_candy_l;exp_candy_xl`. 32 escenarios nuevos: cuatro caramelos S 800, M 3000, L 10000, XL 30000 XP; para cada uno niveles 50/90/99, lvl99 con solo 50 XP restantes, lvl50 con 80 XP hasta próximo nivel, nivel 100 rechazo, ranura inesperada rechazo, amistad 200. `FieldGrowthEffects` fija techo XP del nivel100; nivel final se deriva mediante `ProgressionRuleset.level_for_experience`, manteniendo IV/EV/naturaleza, PP, déficit HP, ubicación/consumo y `SaveV2`. No asumir incremento fijo de nivel; se usan Mew y no se generalizan decisiones `NEEDS_CONTEXT` de otras especies. Runner Godot genera recibos SHA256 y `CAMP005_W02_GODOT PASS blocks=4` solo al ejecutarse; Python `CAMP005_W02_PY PASS blocks=4` igualmente precisa ejecución real.
+
+**Commits bloque04:**
+- Fixture `tests/fixtures/parallel_items/w02_campaign_005.json` `8ea4575de1ef5cb95a26e5ddbe735ea9342d4b9c`.
+- Godot `tests/gameplay/parallel_items_w02_campaign_005.gd` `fd3ee2148a8d212fadbfc36924b88181276243a6`.
+- Python `tests/tools/test_parallel_items_w02_campaign_005.py`: `8979e0e13415cde375b6147643fb5f79da4e5cd5`, `c5ea35ed91423b48e0152cdef92eabfe2b2ea2e6`, `8d1952aa84d06b7df7b860025d12b786df4dbf14`, `613402863a376d19ff17cab506ad6fac0cb71b2d`, `f188b8b3a05c28303b293fb2c295d615371d7673` (golden 32, 16 mutaciones y fuentes).
+- CSV `docs/coordination/items_parallel_v1/reports/W02/CAMP_005_PROGRESO.csv`, fila04 `EN_CI_AUTOMATICA`, `9fcffee3aa161c7123c2c36206ac27cce0e20915`.
+- Informe `docs/coordination/items_parallel_v1/reports/W02/CAMP_005_ITER_04.md`, `847f88b51f77422b6988f7c9ef25a0a807e8dee2`.
+
+**Pendiente:** consultar CI sobre HEAD y registrar `CAMP005_W02_PY/GODOT PASS blocks=4` con SHA/logs si accesibles; reparar solo fallos propios V5. Si requiere API compartida, coordinar IA6. UI/GPU no verificados.
+
+**Siguiente `p`:** bloque 05/10 **`health_wing;muscle_wing;resist_wing;genius_wing`** de la cola IA6. El workflow CAMP005 ejecuta además regresiones CAMP004/CAMP003 en el hito 05; verificar esos logs, no dar por exitosas las regresiones sin ejecución. No adelantar bloque 06.
+
+---
+
 # IA2/W02 — CONTINUIDAD VIGENTE CAMPAÑA_005 BLOQUE 03/10
 
 **Identidad:** IA2/W02, bayas/medicinas/entrenamiento. **Rama única editable:** `codex/calvo-items-20261103-w02-camp005`. Cola/autoridad IA6: `CAMPAIGN_005_W02_GATE.md`, `CAMPAIGN_005_W02_QUEUE_APPROVED.csv`, `campaigns/CAMP_005_W02.md` y V5. **Cada `p` autoriza un solo microbloque**, nunca un adelanto sin orden. No tocar main, V28, PR118, rama árbitra, ramas ajenas, catálogos, políticas ni workflows.
