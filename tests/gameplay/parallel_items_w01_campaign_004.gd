@@ -11,6 +11,8 @@ var c004_lucky_hits: int = 0
 var c004_dice_baseline_short: int = 0
 var c004_dice_four: int = 0
 var c004_dice_five: int = 0
+var c004_scope_lens_exclusive: int = 0
+var c004_scope_lens_critical: int = 0
 
 func _initialize() -> void:
 	capture = false
@@ -56,8 +58,8 @@ func _run_w01_c004() -> void:
 	check("Tres controles de equipamiento", fixture.get("variants") == ["active", "none", "reserve"])
 	var progress: Array = _progress_c004()
 	var completed: int = progress.size()
-	check("Bloques W01 01 a 04 autorizados", completed == 4)
-	if completed != 4:
+	check("Bloques W01 01 a 05 autorizados", completed == 5)
+	if completed != 5:
 		quit(2)
 		return
 	check("Fila 01 e IDs exactos de árbitra", String(progress[0].block) == "01"
@@ -68,13 +70,15 @@ func _run_w01_c004() -> void:
 		and String(progress[2].ids) == "loaded_dice;misty_seed;power_herb")
 	check("Fila 04 e IDs exactos de árbitra", String(progress[3].block) == "04"
 		and String(progress[3].ids) == "psychic_seed;punching_glove;ring_target")
+	check("Fila 05 e IDs exactos de árbitra", String(progress[4].block) == "05"
+		and String(progress[4].ids) == "room_service;scope_lens;shed_shell")
 	var ids_for_block: Dictionary = {}
 	var ids: PackedStringArray = PackedStringArray()
 	for row_progress: Dictionary in progress:
 		ids_for_block[String(row_progress.block)] = String(row_progress.ids).split(";")
 		ids.append_array(ids_for_block[String(row_progress.block)])
 	var cases: Array = fixture.get("cases", [])
-	check("Veintiocho escenarios autorizados", cases.size() == 28)
+	check("Treinta y cuatro escenarios autorizados", cases.size() == 34)
 	var names: Array = []
 	for row: Dictionary in cases:
 		check("Escenario pertenece a bloque autorizado",
@@ -99,7 +103,7 @@ func _run_w01_c004() -> void:
 				"seed": int(value), "checks": checks - before_checks,
 				"status": "PASS" if errors.size() == before_errors else "FAIL",
 				"observed": observed})
-	check("Matriz exacta de 75 pares caso-semilla", c004_rows.size() == 75)
+	check("Matriz exacta de 98 pares caso-semilla", c004_rows.size() == 98)
 	for id: String in ids:
 		check("ID cubierto " + id, cases.any(func(case): return String(case.item_id) == id))
 	check("Puño Suerte demuestra al menos un crítico específico de Chansey", c004_lucky_exclusive > 0)
@@ -108,11 +112,17 @@ func _run_w01_c004() -> void:
 		c004_dice_baseline_short > 0)
 	check("Dado Trucado: el simulador muestra tanto cuatro como cinco golpes",
 		c004_dice_four > 0 and c004_dice_five > 0)
+	check("Periscopio: demuestra un crítico exclusivo con objeto activo",
+		c004_scope_lens_exclusive > 0)
+	check("Periscopio: registra críticos nativos reales",
+		c004_scope_lens_critical > 0)
 	var report := {"schema_version": 1, "campaign": "CAMP_004", "worker": "W01",
 		"blocks": completed, "checks": checks, "errors": errors,
 		"lucky_punch_exclusive_critical_witnesses": c004_lucky_exclusive,
 		"loaded_dice_baseline_short_witnesses": c004_dice_baseline_short,
 		"loaded_dice_four_hits": c004_dice_four, "loaded_dice_five_hits": c004_dice_five,
+		"scope_lens_exclusive_crit_witnesses": c004_scope_lens_exclusive,
+		"scope_lens_native_crit_witnesses": c004_scope_lens_critical,
 		"cases": c004_rows,
 		"limits": ["Godot headless sin prueba visual/GPU", "Solo especies y semillas declaradas",
 			"Sin certificación de integración global a main, V28 o mapa"]}
@@ -180,6 +190,25 @@ func _probe_w01_c004(row: Dictionary, seed: int, mode: String) -> Dictionary:
 		if not follow.get("accepted", false):
 			await session.close()
 			return {"valid": false}
+	# Registrar también el permiso real de cambio tras Mal de Ojo; el estado
+	# de trampa se extrae de la solicitud al jugador, nunca se inventa.
+	var first_trapped: bool = false
+	var req: Dictionary = session._checkpoint.get("views", {}).get("p1", {}).get("request", {})
+	var request_active: Array = req.get("active", [])
+	if request_active.size() > 0:
+		first_trapped = bool(request_active[0].get("trapped", false))
+	var shed_switched: bool = false
+	if String(row.op) == "shed_shell_escape_trap" and mode == "active":
+		check(mode + " Muda Concha elimina bloqueo de cambio nativo",
+			not first_trapped)
+		var actual_switch: Dictionary = await session.submit("switch 2", session.revision)
+		check(mode + " Muda Concha permite orden real switch 2",
+			actual_switch.get("accepted", false))
+		if not actual_switch.get("accepted", false):
+			await session.close()
+			return {"valid": false}
+		shed_switched = String(session._checkpoint.get("roster", [])[0].get("active_id", "")) == "reserve"
+		check(mode + " cambio real a la reserva con Muda Concha", shed_switched)
 	# Un movimiento de carga sin Hierba Única conserva su fase intermedia
 	# tras el primer turno. Primero comprobar esa observación real; después
 	# completar el segundo turno antes de evaluar SaveV2 de un estado estable.
@@ -241,6 +270,7 @@ func _probe_w01_c004(row: Dictionary, seed: int, mode: String) -> Dictionary:
 	await session.close()
 	return {"valid": true, "start": before, "after": after,
 		"damage": foe_damage, "critical": critical, "hit_count": hit_count,
+		"trapped_after_first": first_trapped, "shed_switched": shed_switched,
 		"physical_units": physical,
 		"restored": restored_frame == after, "owner_unchanged": frozen,
 		"save_equal": restored_physical == physical}
@@ -261,14 +291,16 @@ func _compare_c004(row: Dictionary, observed: Dictionary) -> void:
 			and bool(x.start.reserve_has_item) == (mode == "reserve"))
 		check("Reserva no consume " + mode, not x.after.reserve_consumed)
 		var triggered_consumable: bool = (String(row.op) in [
-			"misty_seed_terrain", "power_herb_skip_charge", "psychic_seed_terrain"])
+			"misty_seed_terrain", "power_herb_skip_charge", "psychic_seed_terrain",
+			"room_service_activated"])
 		check("Unidades físicas coherentes con activación " + mode,
 			x.physical_units == (1 if mode == "active" and triggered_consumable else 2))
 	var a: Dictionary = observed.active
 	var n: Dictionary = observed.none
 	var r: Dictionary = observed.reserve
 	var should_consume: bool = (String(row.op) in [
-		"misty_seed_terrain", "power_herb_skip_charge", "psychic_seed_terrain"])
+		"misty_seed_terrain", "power_herb_skip_charge", "psychic_seed_terrain",
+		"room_service_activated"])
 	check("Consumo exacto por activación, reserva y ausencia intactas",
 		bool(a.after.own_consumed) == should_consume
 		and not r.after.reserve_consumed
@@ -428,5 +460,50 @@ func _compare_c004(row: Dictionary, observed: Dictionary) -> void:
 				and r.after.hp == r.start.hp)
 			check("Blanco no se consume ante inmunidad por habilidad",
 				not a.after.own_consumed and a.physical_units == 2)
+		"room_service_activated":
+			check("Servicio Raro: Espacio Raro reduce Velocidad solo al portador",
+				int(a.after.speed_stage) == -1 and int(n.after.speed_stage) == 0
+				and int(r.after.speed_stage) == 0)
+			check("Servicio Raro: consumo unico en combate nativo",
+				a.after.own_consumed and a.physical_units == 1 and r.physical_units == 2)
+		"room_service_not_activated":
+			check("Servicio Raro: sin Espacio Raro no baja Velocidad",
+				int(a.after.speed_stage) == 0 and int(n.after.speed_stage) == 0
+				and int(r.after.speed_stage) == 0)
+			check("Servicio Raro: no se consume sin efecto",
+				not a.after.own_consumed and a.physical_units == 2)
+		"scope_lens_focus_critical":
+			check("Periscopio: Foco Energia y Placaje provocan critico activo",
+				a.critical and a.damage > 0)
+			check("Periscopio: los dos controles reproducen mismo crítico y daño",
+				n.critical == r.critical and n.damage == r.damage)
+			check("Periscopio: aumenta o mantiene daño y nunca se consume",
+				a.damage >= n.damage and a.physical_units == 2 and not a.after.own_consumed)
+			if a.critical:
+				c004_scope_lens_critical += 1
+			if a.critical and not n.critical and not r.critical:
+				c004_scope_lens_exclusive += 1
+		"scope_lens_status_control":
+			check("Periscopio: Reflejo no causa daño ni crítico",
+				a.damage == 0 and n.damage == 0 and r.damage == 0
+				and not a.critical and not n.critical and not r.critical)
+			check("Periscopio: objeto se conserva sin usar ataque crítico",
+				a.physical_units == 2 and not a.after.own_consumed)
+		"shed_shell_escape_trap":
+			check("Muda Concha: Mal de Ojo deja atrapados los dos controles",
+				not a.trapped_after_first and n.trapped_after_first and r.trapped_after_first)
+			check("Muda Concha: solo portador realiza switch 2",
+				a.shed_switched and not n.shed_switched and not r.shed_switched
+				and a.after.active_id == "reserve" and n.after.active_id == "own"
+				and r.after.active_id == "own")
+			check("Muda Concha: sin consumo por escapar",
+				not a.after.own_consumed and a.physical_units == 2 and r.physical_units == 2)
+		"shed_shell_no_trap_control":
+			check("Muda Concha: sin Mal de Ojo ninguna variante queda atrapada",
+				not a.trapped_after_first and not n.trapped_after_first
+				and not r.trapped_after_first)
+			check("Muda Concha: sin trampa no cambia ni consume",
+				not a.shed_switched and not n.shed_switched and not r.shed_switched
+				and a.after.active_id == "own" and a.physical_units == 2)
 		_:
 			check("Operación fuera del contrato de bloque", false)

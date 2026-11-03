@@ -73,3 +73,9 @@ Primer run #41589392286, SHA a26c444b: Godot 5254 checks, **8 fallos** concentra
 - Total **4/10 bloques**, 12 equipables cubiertos, 28 escenarios, 75 pares caso-semilla, 225 variantes; negativos, consumo correcto y SaveV2; resultado local de rama, no de integración ni visual/GPU.
 - Bloque 04: Semilla Psique, Guante de Boxeo, Blanco. El archivo CSV conserva fila 04 en `EN_CI_AUTOMATICA` para actualizar con el bloque 05 y evitar gasto redundante de CI; evidencia funcional es el run + SHA.
 - Próxima `p`: **únicamente bloque 05/10** `room_service;scope_lens;shed_shell`, que exige regresión completa CAMP003 según gate IA6. No tocar main, V28, árbitra ni otras ramas. Limitación SaveV2 mid-charge de bloque 03 continúa para IA6.
+
+## 05/10 — bloque en ejecución (2026-11-03)
+
+- Asignación IA6 y rama W01 únicas: `room_service;scope_lens;shed_shell`. Fila 04 se cierra con `CI_PASS_VERIFICADO`, SHA `ec13e1c6b30a58c8ac8c7c6bab3052d2ddec8699`, run `41592180823` (6593 Godot, 388 Python).
+- Bloque 05: 6 escenarios, 23 pares, 69 variantes; acumulado 34 escenarios, 98 pares, 294 variantes. Pruebas reales de Espacio Raro, crítico de Periscopio y escape de Mal de Ojo, tres equipamientos, SaveV2, no consumo indebido. Sin producción editada.
+- **Gate obligatorio por el hito 05:** el workflow existente ejecutará regresión completa CAMP003 W01 Python+Godot, además de CAMP004. No cerrar hasta confirmar los cuatro recibos y `completed/success` en mismo SHA. Si falla, reparar en propia rama bajo protocolo V5.

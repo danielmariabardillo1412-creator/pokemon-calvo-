@@ -52,19 +52,27 @@ EXPECTED = {
     "ring_gengar_normal": ("ring_target", "ring_target_type_immunity", "gengar", "reflect", "", (19, 23)),
     "ring_charizard_ground": ("ring_target", "ring_target_type_immunity", "charizard", "reflect", "", (19, 23)),
     "ring_levitate_immune": ("ring_target", "ring_target_ability_immunity", "mew", "reflect", "", (19,)),
+    "service_trick_room": ("room_service", "room_service_activated", "mew", "reflect", "", (19, 23)),
+    "service_no_room": ("room_service", "room_service_not_activated", "mew", "reflect", "", (19,)),
+    "scope_focus_crit": ("scope_lens", "scope_lens_focus_critical", "mew", "focus_energy", "tackle", (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16)),
+    "scope_no_damage_control": ("scope_lens", "scope_lens_status_control", "mew", "reflect", "", (19,)),
+    "shell_mean_look": ("shed_shell", "shed_shell_escape_trap", "mew", "reflect", "", (19, 23)),
+    "shell_no_trap": ("shed_shell", "shed_shell_no_trap_control", "mew", "reflect", "", (19,)),
 }
 NEW_CASE_IDS = {"rain_duration", "rain_no_weather", "snow_duration", "snow_no_weather",
                 "weight_grass_knot", "weight_tackle_control"}
 BLOCK_03_CASES = {"dice_bullet_seed", "dice_tackle_control", "misty_seed_trigger",
                   "misty_seed_wrong_terrain", "power_herb_solar_beam", "power_herb_noncharge"}
 BLOCK_04_CASES = {"psychic_seed_trigger", "psychic_seed_wrong_terrain", "punching_glove_boost", "punching_glove_tackle", "punching_glove_water", "ring_gengar_normal", "ring_charizard_ground", "ring_levitate_immune"}
+BLOCK_05_CASES = {"service_trick_room", "service_no_room", "scope_focus_crit", "scope_no_damage_control", "shell_mean_look", "shell_no_trap"}
 BLOCK_04_FOE_ITEMS = {"punching_glove_boost": "rocky_helmet", "punching_glove_tackle": "rocky_helmet", "punching_glove_water": "rocky_helmet"}
 BLOCK_04_ABILITIES = {"ring_levitate_immune": "levitate"}
 EXPECTED_FOE_MOVES = {"weight_grass_knot": "grass_knot", "weight_tackle_control": "tackle",
                       "misty_seed_trigger": "misty_terrain", "misty_seed_wrong_terrain": "electric_terrain",
                       "psychic_seed_trigger": "psychic_terrain", "psychic_seed_wrong_terrain": "electric_terrain",
                       "ring_gengar_normal": "tackle", "ring_charizard_ground": "earthquake",
-                      "ring_levitate_immune": "earthquake"}
+                      "ring_levitate_immune": "earthquake",
+                      "service_trick_room": "trick_room", "shell_mean_look": "mean_look"}
 MODES = ("active", "none", "reserve")
 CHECKS = 0
 
@@ -86,7 +94,7 @@ def validate():
     queue = read_rows(QUEUE)
     progress = read_rows(PROGRESS)
     require(len(queue) == 10 and all(x["trabajadora"] == "W01" for x in queue), "Cola de W01 inválida")
-    require(len(progress) == 4, "El contrato exige exactamente los bloques 01 a 04")
+    require(len(progress) == 5, "El contrato exige exactamente los bloques 01 a 05")
     require(progress[0]["bloque"] == "01" and progress[0]["ids"] == "light_ball;lucky_punch;thick_club", "Progreso distinto a W01/01")
     require(progress[0]["ids"] == queue[0]["ids"], "Bloque 01 distinto de cola árbitra")
     require(progress[0]["estado"] == "CI_PASS_VERIFICADO" and progress[0]["ci_run"] == "41580332632",
@@ -105,15 +113,21 @@ def validate():
             "Bloque 03 sin certificado CI")
     require(progress[3]["bloque"] == "04" and progress[3]["ids"] == queue[3]["ids"],
             "Bloque 04 fuera de cola")
-    require(progress[3]["estado"] in ("EN_CI_AUTOMATICA", "ENTREGADO_PENDIENTE_CI", "CI_PASS_VERIFICADO"),
-            "Estado de bloque 04 inválido")
+    require(progress[3]["estado"] == "CI_PASS_VERIFICADO"
+            and progress[3]["sha_pruebas"] == "ec13e1c6b30a58c8ac8c7c6bab3052d2ddec8699"
+            and progress[3]["ci_run"] == "41592180823",
+            "Bloque 04 sin CI aprobada")
+    require(progress[4]["bloque"] == "05" and progress[4]["ids"] == queue[4]["ids"],
+            "Bloque 05 no autorizado")
+    require(progress[4]["estado"] in ("EN_CI_AUTOMATICA", "ENTREGADO_PENDIENTE_CI", "CI_PASS_VERIFICADO"),
+            "Estado bloque 05 inválido")
     require(all(row["sha_pruebas"] and row["ci_run"] for row in progress), "Progreso sin trazabilidad")
     fixture = json.loads(FIXTURE.read_text(encoding="utf-8"))
     require(fixture["schema_version"] == 1 and fixture["campaign"] == "CAMP_004" and fixture["worker"] == "W01", "Identidad de fixture incorrecta")
     require(fixture["scope"] == "HELD_COMBAT_CANDIDATE" and fixture["format"] == "gen9calvounifiedv1", "Motor o familia no permitidos")
     require(tuple(fixture["variants"]) == MODES, "Faltan los tres controles activo/ausente/reserva")
-    require(len(fixture["blocks"]) == 4 and [b["block"] for b in fixture["blocks"]] == ["01", "02", "03", "04"],
-            "Fixture debe contener bloques 01 a 04")
+    require(len(fixture["blocks"]) == 5 and [b["block"] for b in fixture["blocks"]] == ["01", "02", "03", "04", "05"],
+            "Fixture debe contener bloques 01 a 05")
     require(fixture["blocks"][0]["ids"] == queue[0]["ids"].split(";"), "Propiedad de IDs alterada")
     require(fixture["blocks"][1]["ids"] == queue[1]["ids"].split(";"), "IDs del bloque 02 alterados")
     require(set(fixture["blocks"][1]["cases"]) == NEW_CASE_IDS, "Casos del bloque 02 incompletos")
@@ -121,8 +135,10 @@ def validate():
     require(set(fixture["blocks"][2]["cases"]) == BLOCK_03_CASES, "Casos del bloque 03 incompletos")
     require(fixture["blocks"][3]["ids"] == queue[3]["ids"].split(";"), "IDs bloque 04 incorrectos")
     require(set(fixture["blocks"][3]["cases"]) == BLOCK_04_CASES, "Casos bloque 04 incompletos")
-    require(len(fixture["cases"]) == len(EXPECTED) == 28, "Se exigen 28 casos únicos")
-    require(set(fixture["blocks"][0]["cases"]) == set(EXPECTED) - NEW_CASE_IDS - BLOCK_03_CASES - BLOCK_04_CASES,
+    require(fixture["blocks"][4]["ids"] == queue[4]["ids"].split(";"), "IDs bloque 05 incorrectos")
+    require(set(fixture["blocks"][4]["cases"]) == BLOCK_05_CASES, "Bloque 05 incompleto")
+    require(len(fixture["cases"]) == len(EXPECTED) == 34, "Se exigen 34 casos únicos")
+    require(set(fixture["blocks"][0]["cases"]) == set(EXPECTED) - NEW_CASE_IDS - BLOCK_03_CASES - BLOCK_04_CASES - BLOCK_05_CASES,
             "Falta caso original del bloque 01")
     require(len(fixture["sources"]) == len(REFS), "Fuentes añadidas o omitidas")
     for source in fixture["sources"]:
@@ -136,8 +152,9 @@ def validate():
                  "thick_club": "thickclub", "damp_rock": "damprock",
                  "float_stone": "floatstone", "icy_rock": "icyrock",
                  "loaded_dice": "loadeddice", "misty_seed": "mistyseed", "power_herb": "powerherb",
-                 "psychic_seed": "psychicseed", "punching_glove": "punchingglove", "ring_target": "ringtarget"}
-    for stage in queue[:4]:
+                 "psychic_seed": "psychicseed", "punching_glove": "punchingglove", "ring_target": "ringtarget",
+                 "room_service": "roomservice", "scope_lens": "scopelens", "shed_shell": "shedshell"}
+    for stage in queue[:5]:
         for item in stage["ids"].split(";"):
             require(scope[item]["estado_contenido"] == "SELECCIONADO", "Item no seleccionado: " + item)
             require(inventory[item]["family"] == "HELD_COMBAT_CANDIDATE", "Familia incompatible: " + item)
@@ -153,6 +170,13 @@ def validate():
     require("onTerrainChange" in inventory["psychic_seed"]["native_hooks"], "Sin gancho de Semilla Psique")
     require("onModifyMove" in inventory["punching_glove"]["native_hooks"]
             and "onBasePower" in inventory["punching_glove"]["native_hooks"], "Sin ganchos Guante de Boxeo")
+    require("onAnyPseudoWeatherChange" in inventory["room_service"]["native_hooks"],
+            "Servicio Raro sin efecto pseudo-clima")
+    require("onModifyCritRatio" in inventory["scope_lens"]["native_hooks"],
+            "Periscopio sin efecto crítico")
+    require("onMaybeTrapPokemon" in inventory["shed_shell"]["native_hooks"]
+            and "onTrapPokemon" in inventory["shed_shell"]["native_hooks"],
+            "Muda Concha sin ganchos de escape")
     historical_v2 = (ROOT / "tools/item_audit/held_effect_sweep_v2.cjs").read_text(encoding="utf-8")
     pilot = (ROOT / "tools/item_audit/held_pilot.cjs").read_text(encoding="utf-8")
     require("add('loaded_dice','multi_hit_bound'" in historical_v2
@@ -180,6 +204,10 @@ def validate():
         "['psychic_seed','psychic_terrain','spd']",
         "add('ring_target','type_immunity_",
         "add('ring_target','ability_immunity_preserved'",
+        "add('room_service','trick_room'",
+        "add('room_service','no_room'",
+        "add('shed_shell','switch_despite_trap'",
+        "for(const id of ['scope_lens','razor_claw','lucky_punch','stick'])",
     ):
         require(fragment in historical, "Referencia histórica sin contrato: " + fragment)
     seen = set()
@@ -188,7 +216,8 @@ def validate():
         name = case["id"]
         require(name in EXPECTED and name not in seen, "Caso no autorizado o duplicado: " + name)
         seen.add(name)
-        expected_block = ("04" if name in BLOCK_04_CASES else
+        expected_block = ("05" if name in BLOCK_05_CASES else
+                          "04" if name in BLOCK_04_CASES else
                           "03" if name in BLOCK_03_CASES else
                           "02" if name in NEW_CASE_IDS else "01")
         require(case["block"] == expected_block, "Caso fuera de bloque " + expected_block)
@@ -207,13 +236,13 @@ def validate():
         require(case["history"].startswith(origin), "Sin referencia de origen: " + name)
         require(all(type(i) is int and 1 <= i <= 65535 for i in case["seeds"]), "Semilla inválida: " + name)
         require(len(case["seeds"]) == len(set(case["seeds"])), "Semillas repetidas: " + name)
-        if case["item_id"] == "lucky_punch":
+        if case["item_id"] in ("lucky_punch", "scope_lens"):
             require(case["follow_move"] == "tackle" and case["own_move"] == "focus_energy",
-                    "Puño Suerte sin secuencia de crítico real")
+                    "Objeto de crítico sin secuencia real Foco Energía + Placaje")
         else:
             require("follow_move" not in case, "Secuencia extra no permitida")
         pairs += len(case["seeds"])
-    require(len(seen) == 28 and pairs == 75, "Matriz debe tener 28 casos y 75 pares")
+    require(len(seen) == 34 and pairs == 98, "Matriz debe tener 34 casos y 98 pares")
     runner = (ROOT / "tests/gameplay/parallel_items_w01_campaign_004.gd").read_text(encoding="utf-8")
     for fragment in ("Native.new(catalogs, owner, automation.format)",
                      "await _restore_probe(", "session.submit(", "session._checkpoint",

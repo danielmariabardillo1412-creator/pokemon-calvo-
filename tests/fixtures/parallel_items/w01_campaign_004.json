@@ -71,6 +71,22 @@
         "ring_charizard_ground",
         "ring_levitate_immune"
       ]
+    },
+    {
+      "block": "05",
+      "ids": [
+        "room_service",
+        "scope_lens",
+        "shed_shell"
+      ],
+      "cases": [
+        "service_trick_room",
+        "service_no_room",
+        "scope_focus_crit",
+        "scope_no_damage_control",
+        "shell_mean_look",
+        "shell_no_trap"
+      ]
     }
   ],
   "format": "gen9calvounifiedv1",
@@ -546,6 +562,108 @@
       ],
       "actor_ability": "levitate",
       "history": "held_effect_sweep_v3:ring_levitate_immune"
+    },
+    {
+      "block": "05",
+      "id": "service_trick_room",
+      "item_id": "room_service",
+      "op": "room_service_activated",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "own_move": "reflect",
+      "foe_move": "trick_room",
+      "seeds": [
+        19,
+        23
+      ],
+      "history": "held_effect_sweep_v3:room_service_trick_room"
+    },
+    {
+      "block": "05",
+      "id": "service_no_room",
+      "item_id": "room_service",
+      "op": "room_service_not_activated",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "own_move": "reflect",
+      "foe_move": "amnesia",
+      "seeds": [
+        19
+      ],
+      "history": "held_effect_sweep_v3:room_service_no_room"
+    },
+    {
+      "block": "05",
+      "id": "scope_focus_crit",
+      "item_id": "scope_lens",
+      "op": "scope_lens_focus_critical",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "own_move": "focus_energy",
+      "follow_move": "tackle",
+      "foe_move": "amnesia",
+      "seeds": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16
+      ],
+      "history": "held_effect_sweep_v3:scope_lens_critical_stage"
+    },
+    {
+      "block": "05",
+      "id": "scope_no_damage_control",
+      "item_id": "scope_lens",
+      "op": "scope_lens_status_control",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "own_move": "reflect",
+      "foe_move": "amnesia",
+      "seeds": [
+        19
+      ],
+      "history": "held_effect_sweep_v3:scope_lens_no_direct_damage"
+    },
+    {
+      "block": "05",
+      "id": "shell_mean_look",
+      "item_id": "shed_shell",
+      "op": "shed_shell_escape_trap",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "own_move": "reflect",
+      "foe_move": "mean_look",
+      "seeds": [
+        19,
+        23
+      ],
+      "history": "held_effect_sweep_v3:shed_shell_switch_despite_trap"
+    },
+    {
+      "block": "05",
+      "id": "shell_no_trap",
+      "item_id": "shed_shell",
+      "op": "shed_shell_no_trap_control",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "own_move": "reflect",
+      "foe_move": "amnesia",
+      "seeds": [
+        19
+      ],
+      "history": "held_effect_sweep_v3:shed_shell_no_trap"
     }
   ]
 }
