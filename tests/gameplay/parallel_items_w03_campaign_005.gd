@@ -292,6 +292,40 @@ func _block_05(block: Dictionary) -> void:
 			not String(producer.get("producer", "")).is_empty() and
 			not String(producer.get("consumer", "")).is_empty())
 
+func _block_06(block: Dictionary) -> void:
+	var ids: Array = block.get("ids", [])
+	check("Cola exacta bloque 06", ids == ["repel", "super_repel", "max_repel"])
+	check("Pendiente productor mundo", block.get("current_state") == "DEPENDENCIA_COMPARTIDA"
+		and not bool(block.get("functional_effect_certified", true)))
+	var table := WildEncounterTable.new(&"zone_06", 0)
+	check("Tabla válida con un slot", table.add_slot(WildEncounterSlot.new(
+		&"slot_06", &"caterpie", 1, 8, 8)))
+	var packed: Dictionary = table.to_dict()
+	var restored := WildEncounterTable.from_dict(packed)
+	check("Roundtrip tabla", not restored.corrupted and restored.to_dict() == packed)
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 60606
+	var previous_state: int = rng.state
+	var missed := WildEncounterSystem.resolve(restored, rng, catalogs)
+	check("Encuentro al cero: NONE y RNG intacto",
+		missed.status == WildEncounterResult.NONE and
+		missed.reason == "chance_miss" and rng.state == previous_state)
+	var guaranteed := WildEncounterTable.new(&"zone_06", 10000)
+	check("Slot de encuentro seguro", guaranteed.add_slot(
+		WildEncounterSlot.new(&"slot_06", &"caterpie", 1, 8, 8)))
+	var found := WildEncounterSystem.resolve(guaranteed, rng, catalogs)
+	check("Encuentro real a nivel ocho", found.status == WildEncounterResult.ENCOUNTER
+		and found.creature != null and found.level == 8)
+	for raw_id: String in ids:
+		var id := StringName(raw_id)
+		check("Repelente seleccionado " + raw_id,
+			catalogs.item(id) != null and service_for().selection.content_allowed(id))
+		var has_owner := false
+		for producer: Dictionary in block.get("required_producers", []):
+			if String(producer.get("id", "")) == raw_id:
+				has_owner = String(producer.get("producer", "")) == "overworld_steps"
+		check("Frontera del contador descrita " + raw_id, has_owner)
+
 func _finish(n: int) -> void:
 	done = true
 	if errors.is_empty() and n > 0 and checks > 0:
