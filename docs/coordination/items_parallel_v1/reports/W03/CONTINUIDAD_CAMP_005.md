@@ -1,3 +1,9 @@
+## CI validada — bloque 04
+
+La ejecución [GitHub Actions #41720389165](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41720389165) en SHA `890824fb682faacf916c6430a9c34cff3962ad6b` terminó **completed/success**. Recibos: `CAMP005_W03_PY PASS blocks=4 checks=78`, `CAMP005_GATE_PY_PASS`, `CAMP005_W03_GODOT PASS blocks=4 checks=80`, `CAMP005_GATE_GODOT_PASS`. Esta aprobación verifica los contratos presentes y las dependencias concretas; **no** acredita efecto funcional de Beast Ball ni Heavy Ball.
+
+---
+
 # IA3/W03 — CONTINUIDAD CAMPAÑA_005 04/10
 
 **Rama exclusiva:** `codex/calvo-items-20261103-w03-camp005`. Bloque 04 `beast_ball;heavy_ball`: ambos `DEPENDENCIA_CONCRETA`. Beast precisa taxonomía ultraente canónica/versionada; Heavy precisa peso por forma y versión de fórmula que modifica tasa. Godot/Python ahora comprueban positivamente el roundtrip de metadatos de especie, tasa y probabilidad determinista, pero NO los efectos Beast/Heavy. Ninguna implementación de producción.
