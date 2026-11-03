@@ -1691,6 +1691,355 @@ EXPECTED_06 = json.loads(r'''[
 IDS_06 = ["clever_wing","swift_wing","health_mochi","muscle_mochi"]
 SOURCES_06 = ["modules/inventory/field_training_effects.gd","modules/inventory/field_mochi_effects.gd","modules/inventory/field_item_effects.gd","modules/inventory/field_friendship_effects.gd","modules/inventory/field_item_service.gd","tests/gameplay/item_mochi_v13.gd"]
 
+EXPECTED_07 = json.loads(r'''[
+  {
+    "scenario": "resist_mochi_zero_ev",
+    "id": "resist_mochi",
+    "kind": "mochi",
+    "applies": true,
+    "stat": "defense",
+    "start_ev": 0,
+    "other_ev_total": 0,
+    "start_friendship": 99,
+    "expected_ev_gain": 10
+  },
+  {
+    "scenario": "resist_mochi_near_stat_cap_248",
+    "id": "resist_mochi",
+    "kind": "mochi",
+    "applies": true,
+    "stat": "defense",
+    "start_ev": 248,
+    "other_ev_total": 0,
+    "start_friendship": 100,
+    "expected_ev_gain": 4
+  },
+  {
+    "scenario": "resist_mochi_stat_cap_252_reject",
+    "id": "resist_mochi",
+    "kind": "mochi",
+    "applies": false,
+    "stat": "defense",
+    "start_ev": 252,
+    "other_ev_total": 0,
+    "start_friendship": 200
+  },
+  {
+    "scenario": "resist_mochi_near_total_508",
+    "id": "resist_mochi",
+    "kind": "mochi",
+    "applies": true,
+    "stat": "defense",
+    "start_ev": 0,
+    "other_ev_total": 508,
+    "start_friendship": 200,
+    "expected_ev_gain": 2
+  },
+  {
+    "scenario": "resist_mochi_total_510_reject",
+    "id": "resist_mochi",
+    "kind": "mochi",
+    "applies": false,
+    "stat": "defense",
+    "start_ev": 0,
+    "other_ev_total": 510,
+    "start_friendship": 100
+  },
+  {
+    "scenario": "resist_mochi_unexpected_slot_reject",
+    "id": "resist_mochi",
+    "kind": "mochi",
+    "applies": false,
+    "stat": "defense",
+    "start_ev": 0,
+    "other_ev_total": 0,
+    "start_friendship": 99,
+    "slot": 0
+  },
+  {
+    "scenario": "resist_mochi_friendship_254_preserved",
+    "id": "resist_mochi",
+    "kind": "mochi",
+    "applies": true,
+    "stat": "defense",
+    "start_ev": 0,
+    "other_ev_total": 0,
+    "start_friendship": 254,
+    "expected_ev_gain": 10
+  },
+  {
+    "scenario": "resist_mochi_total_509_one_ev",
+    "id": "resist_mochi",
+    "kind": "mochi",
+    "applies": true,
+    "stat": "defense",
+    "start_ev": 0,
+    "other_ev_total": 509,
+    "start_friendship": 100,
+    "expected_ev_gain": 1
+  },
+  {
+    "scenario": "genius_mochi_zero_ev",
+    "id": "genius_mochi",
+    "kind": "mochi",
+    "applies": true,
+    "stat": "special_attack",
+    "start_ev": 0,
+    "other_ev_total": 0,
+    "start_friendship": 99,
+    "expected_ev_gain": 10
+  },
+  {
+    "scenario": "genius_mochi_near_stat_cap_248",
+    "id": "genius_mochi",
+    "kind": "mochi",
+    "applies": true,
+    "stat": "special_attack",
+    "start_ev": 248,
+    "other_ev_total": 0,
+    "start_friendship": 100,
+    "expected_ev_gain": 4
+  },
+  {
+    "scenario": "genius_mochi_stat_cap_252_reject",
+    "id": "genius_mochi",
+    "kind": "mochi",
+    "applies": false,
+    "stat": "special_attack",
+    "start_ev": 252,
+    "other_ev_total": 0,
+    "start_friendship": 200
+  },
+  {
+    "scenario": "genius_mochi_near_total_508",
+    "id": "genius_mochi",
+    "kind": "mochi",
+    "applies": true,
+    "stat": "special_attack",
+    "start_ev": 0,
+    "other_ev_total": 508,
+    "start_friendship": 200,
+    "expected_ev_gain": 2
+  },
+  {
+    "scenario": "genius_mochi_total_510_reject",
+    "id": "genius_mochi",
+    "kind": "mochi",
+    "applies": false,
+    "stat": "special_attack",
+    "start_ev": 0,
+    "other_ev_total": 510,
+    "start_friendship": 100
+  },
+  {
+    "scenario": "genius_mochi_unexpected_slot_reject",
+    "id": "genius_mochi",
+    "kind": "mochi",
+    "applies": false,
+    "stat": "special_attack",
+    "start_ev": 0,
+    "other_ev_total": 0,
+    "start_friendship": 99,
+    "slot": 0
+  },
+  {
+    "scenario": "genius_mochi_friendship_254_preserved",
+    "id": "genius_mochi",
+    "kind": "mochi",
+    "applies": true,
+    "stat": "special_attack",
+    "start_ev": 0,
+    "other_ev_total": 0,
+    "start_friendship": 254,
+    "expected_ev_gain": 10
+  },
+  {
+    "scenario": "genius_mochi_total_509_one_ev",
+    "id": "genius_mochi",
+    "kind": "mochi",
+    "applies": true,
+    "stat": "special_attack",
+    "start_ev": 0,
+    "other_ev_total": 509,
+    "start_friendship": 100,
+    "expected_ev_gain": 1
+  },
+  {
+    "scenario": "clever_mochi_zero_ev",
+    "id": "clever_mochi",
+    "kind": "mochi",
+    "applies": true,
+    "stat": "special_defense",
+    "start_ev": 0,
+    "other_ev_total": 0,
+    "start_friendship": 99,
+    "expected_ev_gain": 10
+  },
+  {
+    "scenario": "clever_mochi_near_stat_cap_248",
+    "id": "clever_mochi",
+    "kind": "mochi",
+    "applies": true,
+    "stat": "special_defense",
+    "start_ev": 248,
+    "other_ev_total": 0,
+    "start_friendship": 100,
+    "expected_ev_gain": 4
+  },
+  {
+    "scenario": "clever_mochi_stat_cap_252_reject",
+    "id": "clever_mochi",
+    "kind": "mochi",
+    "applies": false,
+    "stat": "special_defense",
+    "start_ev": 252,
+    "other_ev_total": 0,
+    "start_friendship": 200
+  },
+  {
+    "scenario": "clever_mochi_near_total_508",
+    "id": "clever_mochi",
+    "kind": "mochi",
+    "applies": true,
+    "stat": "special_defense",
+    "start_ev": 0,
+    "other_ev_total": 508,
+    "start_friendship": 200,
+    "expected_ev_gain": 2
+  },
+  {
+    "scenario": "clever_mochi_total_510_reject",
+    "id": "clever_mochi",
+    "kind": "mochi",
+    "applies": false,
+    "stat": "special_defense",
+    "start_ev": 0,
+    "other_ev_total": 510,
+    "start_friendship": 100
+  },
+  {
+    "scenario": "clever_mochi_unexpected_slot_reject",
+    "id": "clever_mochi",
+    "kind": "mochi",
+    "applies": false,
+    "stat": "special_defense",
+    "start_ev": 0,
+    "other_ev_total": 0,
+    "start_friendship": 99,
+    "slot": 0
+  },
+  {
+    "scenario": "clever_mochi_friendship_254_preserved",
+    "id": "clever_mochi",
+    "kind": "mochi",
+    "applies": true,
+    "stat": "special_defense",
+    "start_ev": 0,
+    "other_ev_total": 0,
+    "start_friendship": 254,
+    "expected_ev_gain": 10
+  },
+  {
+    "scenario": "clever_mochi_total_509_one_ev",
+    "id": "clever_mochi",
+    "kind": "mochi",
+    "applies": true,
+    "stat": "special_defense",
+    "start_ev": 0,
+    "other_ev_total": 509,
+    "start_friendship": 100,
+    "expected_ev_gain": 1
+  },
+  {
+    "scenario": "swift_mochi_zero_ev",
+    "id": "swift_mochi",
+    "kind": "mochi",
+    "applies": true,
+    "stat": "speed",
+    "start_ev": 0,
+    "other_ev_total": 0,
+    "start_friendship": 99,
+    "expected_ev_gain": 10
+  },
+  {
+    "scenario": "swift_mochi_near_stat_cap_248",
+    "id": "swift_mochi",
+    "kind": "mochi",
+    "applies": true,
+    "stat": "speed",
+    "start_ev": 248,
+    "other_ev_total": 0,
+    "start_friendship": 100,
+    "expected_ev_gain": 4
+  },
+  {
+    "scenario": "swift_mochi_stat_cap_252_reject",
+    "id": "swift_mochi",
+    "kind": "mochi",
+    "applies": false,
+    "stat": "speed",
+    "start_ev": 252,
+    "other_ev_total": 0,
+    "start_friendship": 200
+  },
+  {
+    "scenario": "swift_mochi_near_total_508",
+    "id": "swift_mochi",
+    "kind": "mochi",
+    "applies": true,
+    "stat": "speed",
+    "start_ev": 0,
+    "other_ev_total": 508,
+    "start_friendship": 200,
+    "expected_ev_gain": 2
+  },
+  {
+    "scenario": "swift_mochi_total_510_reject",
+    "id": "swift_mochi",
+    "kind": "mochi",
+    "applies": false,
+    "stat": "speed",
+    "start_ev": 0,
+    "other_ev_total": 510,
+    "start_friendship": 100
+  },
+  {
+    "scenario": "swift_mochi_unexpected_slot_reject",
+    "id": "swift_mochi",
+    "kind": "mochi",
+    "applies": false,
+    "stat": "speed",
+    "start_ev": 0,
+    "other_ev_total": 0,
+    "start_friendship": 99,
+    "slot": 0
+  },
+  {
+    "scenario": "swift_mochi_friendship_254_preserved",
+    "id": "swift_mochi",
+    "kind": "mochi",
+    "applies": true,
+    "stat": "speed",
+    "start_ev": 0,
+    "other_ev_total": 0,
+    "start_friendship": 254,
+    "expected_ev_gain": 10
+  },
+  {
+    "scenario": "swift_mochi_total_509_one_ev",
+    "id": "swift_mochi",
+    "kind": "mochi",
+    "applies": true,
+    "stat": "speed",
+    "start_ev": 0,
+    "other_ev_total": 509,
+    "start_friendship": 100,
+    "expected_ev_gain": 1
+  }
+]''')
+IDS_07 = ["resist_mochi","genius_mochi","clever_mochi","swift_mochi"]
+SOURCES_07 = ["modules/inventory/field_mochi_effects.gd","modules/inventory/field_training_effects.gd","modules/inventory/field_item_effects.gd","modules/inventory/field_item_service.gd","tests/gameplay/item_mochi_v13.gd","docs/current/ITEM_MOCHI_V13.md"]
+
 
 class ContractError(ValueError):
     pass
