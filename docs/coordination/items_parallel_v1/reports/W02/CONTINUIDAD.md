@@ -1,6 +1,26 @@
+# IA2/W02 — ESTADO ACTUAL DE CAMPAÑA_003 (02/10)
+
+**BLOQUES PUBLICADOS:** 01 y 02 de 10. La siguiente `p` autoriza SOLO bloque 03 si semáforo CI permite continuar. Rama `codex/calvo-items-20261103-w02-camp003`, exclusivamente pruebas/fixture/progreso/informes W02. No inventar bloque 11 ni modificar CI compartida.
+
+**Reparación anterior verificada:** CI #41553745691 FALLÓ en Apicot por atribución a `p2a` de boost SpD de Amnesia del rival; filtrado en prueba `|-boost|p1a:` commit `2449baf285ef9eaffdb4fa030f78dfe3ee8c551c`; [CI #41554998986](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41554998986) `completed/success`. Ningún cambio en producción.
+
+**Bloque 02:** `charti_berry`, `chilan_berry`, `chople_berry`, `coba_berry`; histórico `held_effect_sweep_v2.cjs` ya verifica resistencia ante Roca/Normal/Lucha/Volador. Positivos `smack_down/tackle/brick_break/aerial_ace`, controles negativos `tackle/surf/tackle/tackle`, portadores `charizard/mew/snorlax/venusaur`. Chilan protege de Normal sin supereficacia.
+
+**Suite acumulativa:** 9 casos del bloque 01 (4 IDs) + 8 casos del bloque 02 (4 IDs) = **17 escenarios, 51 variantes nativas previstas** (`active/none/reserve`). Integridad SHA256 de recibos, recuperación y SaveV2; solo equipadas. Campo/UI/GPU no probados. Python obliga cumplimiento exacto de 8 casos y 6 controles adversariales nuevos; evita falsos PASS de bloque futuro.
+
+**Pruebas publicadas:** fixture commit `919f36e444a572b973852b3ef4f114c83d6f6707`; runner `ed5c2f2dd1ca8620f6fcb0d066942dd721734fcd`; validador Python `feddccce4d23571d989784e89919305dceede825`; CSV `926ad81488c1e83d777177bfa5a2eff35b028eca`; informe `d5d76f0940653b60af1018f845d986f663576038`.
+
+**CI del bloque 02:** [#41555493832](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41555493832), inicialmente pending, SHA de pruebas publicado con bloque 02 en CSV `926ad81488c1e83d777177bfa5a2eff35b028eca`. Exige `CAMP003_W02_PY PASS blocks=2 checks=M` y `CAMP003_W02_GODOT PASS blocks=2 checks=M`, sin inventar PASS antes de resultado. Los runs previos del mismo bloque se cancelan por concurrencia.
+
+**Siguiente `p`:** bloque **03** de cola IA6: `colbur_berry;custap_berry;enigma_berry;ganlon_berry`. Consultar run más reciente, detener si FAIL real, reparar test propio si demuestra bug del arnés. Nada de producción, `main`, V28, PR #118, otras ramas o IA4.
+
+---
+
+# ARCHIVO HISTÓRICO — ESTADO AL FINAL DEL BLOQUE 01
+
 # IA2/W02 — CONTINUIDAD VIGENTE / CAMPAÑA_003
 
-**ESTADO:** BLOQUE **01/10 ENTREGADO**, `EN_CI_AUTOMATICA`, pendiente verificación de GitHub Actions #41553745691 (primer SHA con CSV 1/10). Los PASS de bootstrap 00/10 no acreditan funcionamiento.
+**ESTADO HISTÓRICO:** BLOQUE **01/10 ENTREGADO**, `EN_CI_AUTOMATICA`, pendiente verificación de GitHub Actions #41553745691 (primer SHA con CSV 1/10). Los PASS de bootstrap 00/10 no acreditan funcionamiento.
 
 **Rama exclusiva:** `codex/calvo-items-20261103-w02-camp003`. Arranque de IA6 `41c1efeba0346349490f863131179ed7a8fc274c`. No fusionar CAMP001/CAMP002. La rama contiene el workflow/validador global de IA6 que **no puede editar W02**.
 
