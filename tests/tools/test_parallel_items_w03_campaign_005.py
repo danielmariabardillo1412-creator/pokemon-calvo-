@@ -337,6 +337,57 @@ def main() -> int:
                 check('not ctx_fields.has("is_safari_zone")' in runner
                       and 'not ctx_fields.has("is_bug_contest_zone")' in runner,
                       "No se vigila el contrato de zona")
+            elif block["bloque"] == "06":
+                check(ids == ["repel", "super_repel", "max_repel"],
+                      "Reserva de repelentes alterada")
+                check(block["current_state"] == "DEPENDENCIA_COMPARTIDA"
+                      and block["functional_effect_certified"] is False,
+                      "No certificar una mecánica sin pasos del mundo")
+                encounter = (ROOT / "modules/encounters/wild_encounter_system.gd").read_text(
+                    encoding="utf-8")
+                table = (ROOT / "modules/encounters/wild_encounter_table.gd").read_text(
+                    encoding="utf-8")
+                inventory = (ROOT / "modules/inventory/field_item_service.gd").read_text(
+                    encoding="utf-8")
+                modifiers = (ROOT / "modules/gameplay/encounter_item_modifiers.gd").read_text(
+                    encoding="utf-8")
+                check('if table.encounter_chance_bp == 0:' in encounter
+                      and 'out.status = WildEncounterResult.NONE' in encounter
+                      and 'out.reason = "chance_miss"' in encounter,
+                      "Frontera positiva de encuentros no verificable")
+                check("func resolve(" in encounter
+                      and "encounter_chance_bp" in table
+                      and "func to_dict()" in table
+                      and "static func from_dict(" in table,
+                      "Contratos básicos de encuentro cambiados")
+                check("CLEANSE_TAG" in modifiers and "PURE_INCENSE" in modifiers
+                      and "func prepare_table(" in modifiers,
+                      "No existe precedente de modificación de encuentros")
+                check(all(item not in inventory and item not in modifiers
+                          and item not in encounter
+                          for item in ['&"repel"', '&"super_repel"', '&"max_repel"']),
+                      "Apareció ruta de repelentes: auditar funcionalidad")
+                selected = {x["id"]: x for x in
+                            rows(ROOT / "docs/current/RANDOMLOCK_ITEMS_BUILD_SCOPE_V2.csv")}
+                check(all(selected[item]["estado_contenido"] == "SELECCIONADO"
+                          for item in ids), "Repelentes fuera del alcance aprobado")
+                check({p["id"] for p in block["required_producers"]} == set(ids),
+                      "Productores incompletos")
+                for producer in block["required_producers"]:
+                    check(producer["producer"] == "overworld_steps"
+                          and producer["consumer"] == "encounter_coordinator"
+                          and set(producer["missing_fields"]) ==
+                          {"remaining_steps", "effective_lead_level", "wild_level_filter"}
+                          and producer["decision"].strip(),
+                          "Frontera de pasos insuficiente")
+                check('"06": _block_06(block)' in runner
+                      and "func _block_06(block: Dictionary)" in runner
+                      and "WildEncounterSystem.resolve(" in runner
+                      and "rng.state == previous_state" in runner,
+                      "Falta prueba positiva Godot de encuentros y RNG")
+                check("WildEncounterTable.from_dict(packed)" in runner
+                      and "found.level == 8" in runner,
+                      "Falta roundtrip y límite de nivel")
             else:
                 check(False, "Bloque sin nueva prueba: " + block["bloque"])
         check(checks > 0, "Sin verificaciones")
