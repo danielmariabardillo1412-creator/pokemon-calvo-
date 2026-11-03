@@ -990,6 +990,355 @@ EXPECTED_04 = json.loads(r'''[
 IDS_04 = ["exp_candy_s","exp_candy_m","exp_candy_l","exp_candy_xl"]
 SOURCES_04 = ["modules/inventory/field_growth_effects.gd","modules/inventory/field_friendship_effects.gd","modules/inventory/field_item_service.gd","tests/gameplay/item_field_growth_v9.gd","tests/fixtures/progression_growth_curves/reference_contract.json"]
 
+EXPECTED_05 = json.loads(r'''[
+  {
+    "scenario": "health_wing_base_0_ev",
+    "id": "health_wing",
+    "kind": "wing",
+    "applies": true,
+    "stat": "hp",
+    "start_ev": 0,
+    "other_ev_total": 0,
+    "start_friendship": 99,
+    "expected_ev_gain": 1
+  },
+  {
+    "scenario": "health_wing_near_stat_251",
+    "id": "health_wing",
+    "kind": "wing",
+    "applies": true,
+    "stat": "hp",
+    "start_ev": 251,
+    "other_ev_total": 0,
+    "start_friendship": 100,
+    "expected_ev_gain": 1
+  },
+  {
+    "scenario": "health_wing_stat_cap_252_reject",
+    "id": "health_wing",
+    "kind": "wing",
+    "applies": false,
+    "stat": "hp",
+    "start_ev": 252,
+    "other_ev_total": 0,
+    "start_friendship": 200
+  },
+  {
+    "scenario": "health_wing_near_total_509",
+    "id": "health_wing",
+    "kind": "wing",
+    "applies": true,
+    "stat": "hp",
+    "start_ev": 0,
+    "other_ev_total": 509,
+    "start_friendship": 200,
+    "expected_ev_gain": 1
+  },
+  {
+    "scenario": "health_wing_total_cap_510_reject",
+    "id": "health_wing",
+    "kind": "wing",
+    "applies": false,
+    "stat": "hp",
+    "start_ev": 0,
+    "other_ev_total": 510,
+    "start_friendship": 100
+  },
+  {
+    "scenario": "health_wing_unexpected_slot_reject",
+    "id": "health_wing",
+    "kind": "wing",
+    "applies": false,
+    "stat": "hp",
+    "start_ev": 0,
+    "other_ev_total": 0,
+    "start_friendship": 99,
+    "slot": 0
+  },
+  {
+    "scenario": "health_wing_friendship_254_cap",
+    "id": "health_wing",
+    "kind": "wing",
+    "applies": true,
+    "stat": "hp",
+    "start_ev": 0,
+    "other_ev_total": 0,
+    "start_friendship": 254,
+    "expected_ev_gain": 1
+  },
+  {
+    "scenario": "health_wing_dual_cap_target250_total509",
+    "id": "health_wing",
+    "kind": "wing",
+    "applies": true,
+    "stat": "hp",
+    "start_ev": 250,
+    "other_ev_total": 259,
+    "start_friendship": 100,
+    "expected_ev_gain": 1
+  },
+  {
+    "scenario": "muscle_wing_base_0_ev",
+    "id": "muscle_wing",
+    "kind": "wing",
+    "applies": true,
+    "stat": "attack",
+    "start_ev": 0,
+    "other_ev_total": 0,
+    "start_friendship": 99,
+    "expected_ev_gain": 1
+  },
+  {
+    "scenario": "muscle_wing_near_stat_251",
+    "id": "muscle_wing",
+    "kind": "wing",
+    "applies": true,
+    "stat": "attack",
+    "start_ev": 251,
+    "other_ev_total": 0,
+    "start_friendship": 100,
+    "expected_ev_gain": 1
+  },
+  {
+    "scenario": "muscle_wing_stat_cap_252_reject",
+    "id": "muscle_wing",
+    "kind": "wing",
+    "applies": false,
+    "stat": "attack",
+    "start_ev": 252,
+    "other_ev_total": 0,
+    "start_friendship": 200
+  },
+  {
+    "scenario": "muscle_wing_near_total_509",
+    "id": "muscle_wing",
+    "kind": "wing",
+    "applies": true,
+    "stat": "attack",
+    "start_ev": 0,
+    "other_ev_total": 509,
+    "start_friendship": 200,
+    "expected_ev_gain": 1
+  },
+  {
+    "scenario": "muscle_wing_total_cap_510_reject",
+    "id": "muscle_wing",
+    "kind": "wing",
+    "applies": false,
+    "stat": "attack",
+    "start_ev": 0,
+    "other_ev_total": 510,
+    "start_friendship": 100
+  },
+  {
+    "scenario": "muscle_wing_unexpected_slot_reject",
+    "id": "muscle_wing",
+    "kind": "wing",
+    "applies": false,
+    "stat": "attack",
+    "start_ev": 0,
+    "other_ev_total": 0,
+    "start_friendship": 99,
+    "slot": 0
+  },
+  {
+    "scenario": "muscle_wing_friendship_254_cap",
+    "id": "muscle_wing",
+    "kind": "wing",
+    "applies": true,
+    "stat": "attack",
+    "start_ev": 0,
+    "other_ev_total": 0,
+    "start_friendship": 254,
+    "expected_ev_gain": 1
+  },
+  {
+    "scenario": "muscle_wing_dual_cap_target250_total509",
+    "id": "muscle_wing",
+    "kind": "wing",
+    "applies": true,
+    "stat": "attack",
+    "start_ev": 250,
+    "other_ev_total": 259,
+    "start_friendship": 100,
+    "expected_ev_gain": 1
+  },
+  {
+    "scenario": "resist_wing_base_0_ev",
+    "id": "resist_wing",
+    "kind": "wing",
+    "applies": true,
+    "stat": "defense",
+    "start_ev": 0,
+    "other_ev_total": 0,
+    "start_friendship": 99,
+    "expected_ev_gain": 1
+  },
+  {
+    "scenario": "resist_wing_near_stat_251",
+    "id": "resist_wing",
+    "kind": "wing",
+    "applies": true,
+    "stat": "defense",
+    "start_ev": 251,
+    "other_ev_total": 0,
+    "start_friendship": 100,
+    "expected_ev_gain": 1
+  },
+  {
+    "scenario": "resist_wing_stat_cap_252_reject",
+    "id": "resist_wing",
+    "kind": "wing",
+    "applies": false,
+    "stat": "defense",
+    "start_ev": 252,
+    "other_ev_total": 0,
+    "start_friendship": 200
+  },
+  {
+    "scenario": "resist_wing_near_total_509",
+    "id": "resist_wing",
+    "kind": "wing",
+    "applies": true,
+    "stat": "defense",
+    "start_ev": 0,
+    "other_ev_total": 509,
+    "start_friendship": 200,
+    "expected_ev_gain": 1
+  },
+  {
+    "scenario": "resist_wing_total_cap_510_reject",
+    "id": "resist_wing",
+    "kind": "wing",
+    "applies": false,
+    "stat": "defense",
+    "start_ev": 0,
+    "other_ev_total": 510,
+    "start_friendship": 100
+  },
+  {
+    "scenario": "resist_wing_unexpected_slot_reject",
+    "id": "resist_wing",
+    "kind": "wing",
+    "applies": false,
+    "stat": "defense",
+    "start_ev": 0,
+    "other_ev_total": 0,
+    "start_friendship": 99,
+    "slot": 0
+  },
+  {
+    "scenario": "resist_wing_friendship_254_cap",
+    "id": "resist_wing",
+    "kind": "wing",
+    "applies": true,
+    "stat": "defense",
+    "start_ev": 0,
+    "other_ev_total": 0,
+    "start_friendship": 254,
+    "expected_ev_gain": 1
+  },
+  {
+    "scenario": "resist_wing_dual_cap_target250_total509",
+    "id": "resist_wing",
+    "kind": "wing",
+    "applies": true,
+    "stat": "defense",
+    "start_ev": 250,
+    "other_ev_total": 259,
+    "start_friendship": 100,
+    "expected_ev_gain": 1
+  },
+  {
+    "scenario": "genius_wing_base_0_ev",
+    "id": "genius_wing",
+    "kind": "wing",
+    "applies": true,
+    "stat": "special_attack",
+    "start_ev": 0,
+    "other_ev_total": 0,
+    "start_friendship": 99,
+    "expected_ev_gain": 1
+  },
+  {
+    "scenario": "genius_wing_near_stat_251",
+    "id": "genius_wing",
+    "kind": "wing",
+    "applies": true,
+    "stat": "special_attack",
+    "start_ev": 251,
+    "other_ev_total": 0,
+    "start_friendship": 100,
+    "expected_ev_gain": 1
+  },
+  {
+    "scenario": "genius_wing_stat_cap_252_reject",
+    "id": "genius_wing",
+    "kind": "wing",
+    "applies": false,
+    "stat": "special_attack",
+    "start_ev": 252,
+    "other_ev_total": 0,
+    "start_friendship": 200
+  },
+  {
+    "scenario": "genius_wing_near_total_509",
+    "id": "genius_wing",
+    "kind": "wing",
+    "applies": true,
+    "stat": "special_attack",
+    "start_ev": 0,
+    "other_ev_total": 509,
+    "start_friendship": 200,
+    "expected_ev_gain": 1
+  },
+  {
+    "scenario": "genius_wing_total_cap_510_reject",
+    "id": "genius_wing",
+    "kind": "wing",
+    "applies": false,
+    "stat": "special_attack",
+    "start_ev": 0,
+    "other_ev_total": 510,
+    "start_friendship": 100
+  },
+  {
+    "scenario": "genius_wing_unexpected_slot_reject",
+    "id": "genius_wing",
+    "kind": "wing",
+    "applies": false,
+    "stat": "special_attack",
+    "start_ev": 0,
+    "other_ev_total": 0,
+    "start_friendship": 99,
+    "slot": 0
+  },
+  {
+    "scenario": "genius_wing_friendship_254_cap",
+    "id": "genius_wing",
+    "kind": "wing",
+    "applies": true,
+    "stat": "special_attack",
+    "start_ev": 0,
+    "other_ev_total": 0,
+    "start_friendship": 254,
+    "expected_ev_gain": 1
+  },
+  {
+    "scenario": "genius_wing_dual_cap_target250_total509",
+    "id": "genius_wing",
+    "kind": "wing",
+    "applies": true,
+    "stat": "special_attack",
+    "start_ev": 250,
+    "other_ev_total": 259,
+    "start_friendship": 100,
+    "expected_ev_gain": 1
+  }
+]''')
+IDS_05 = ["health_wing","muscle_wing","resist_wing","genius_wing"]
+SOURCES_05 = ["modules/inventory/field_training_effects.gd","modules/inventory/field_friendship_effects.gd","modules/inventory/field_item_effects.gd","modules/inventory/field_item_service.gd","tests/gameplay/parallel_items_w02_campaign_005.gd"]
+
 
 class ContractError(ValueError):
     pass
@@ -1050,7 +1399,7 @@ def verify(fixture, queue, progress, chk):
         for case in block["cases"]:
             chk.demand(case["id"] in block["ids"] and case["scenario"] not in all_scenarios,
                        "Escenario repetido o ID no asignado")
-            chk.demand(case["kind"] in {"ability", "growth", "pp", "vitamin"}
+            chk.demand(case["kind"] in {"ability", "growth", "pp", "vitamin", "wing"}
                        and type(case["applies"]) is bool,
                        "Caso sin operación real ni decisión de aplicación")
             all_scenarios.add(case["scenario"])
