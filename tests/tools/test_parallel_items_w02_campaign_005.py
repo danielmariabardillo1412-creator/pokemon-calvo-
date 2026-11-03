@@ -1279,6 +1279,25 @@ def negative_controls(fixture, queue, progress, chk):
             lambda v: v["blocks"][2]["cases"][24].update({"applies": True}),
             lambda v: v["blocks"][2]["cases"][25].update({"start_friendship": 99}),
         ])
+    if len(fixture["blocks"]) >= 4:
+        mutations.extend([
+            lambda v: v["blocks"][3]["ids"].append("exp_candy_xs"),
+            lambda v: v["blocks"][3]["source_evidence"].pop(),
+            lambda v: v["blocks"][3]["cases"].pop(),
+            lambda v: v["blocks"][3]["cases"][0].update({"exp_amount": 100}),
+            lambda v: v["blocks"][3]["cases"][1].update({"level": 99}),
+            lambda v: v["blocks"][3]["cases"][3].update({"expected_exp_gain": 800}),
+            lambda v: v["blocks"][3]["cases"][4].update({"expect_level_up": False}),
+            lambda v: v["blocks"][3]["cases"][5].update({"applies": True}),
+            lambda v: v["blocks"][3]["cases"][6].update({"slot": -1}),
+            lambda v: v["blocks"][3]["cases"][7].update({"start_friendship": 99}),
+            lambda v: v["blocks"][3]["cases"][8].update({"exp_amount": 800}),
+            lambda v: v["blocks"][3]["cases"][16].update({"exp_amount": 3000}),
+            lambda v: v["blocks"][3]["cases"][24].update({"exp_amount": 10000}),
+            lambda v: v["blocks"][3]["cases"][26].update({"expect_cap": False}),
+            lambda v: v["blocks"][3]["cases"][28].update({"exp_until_next": 500}),
+            lambda v: v["blocks"][3]["cases"][31].update({"start_friendship": 199}),
+        ])
     for index, mutation in enumerate(mutations):
         altered = copy.deepcopy(fixture)
         mutation(altered)
