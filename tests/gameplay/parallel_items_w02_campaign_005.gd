@@ -143,9 +143,11 @@ func _probe_training(spec: Dictionary, mode: String) -> Dictionary:
 			expected_evs, c.nature_id, c.level).to_dict()
 		check(mode + " vitaminas: EV objetivo exactos y resto sin cambios",
 			now.evs == expected_evs)
+		var expected_total: int = 0
+		for value: Variant in expected_evs.values():
+			expected_total += int(value)
 		check(mode + " vitaminas: total 510 y límite 252 respetados",
-			int(expected_evs[stat]) <= 252
-			and int(expected_evs.values().reduce(func(a: int, v: int): return a + v, 0)) <= 510)
+			int(expected_evs[stat]) <= 252 and expected_total <= 510)
 		check(mode + " vitaminas: estadísticas recalculadas y déficit PS conservado",
 			now.stats.to_dict() == expected_stats
 			and now.stats.max_hp - now.current_hp == start_hp_deficit)
