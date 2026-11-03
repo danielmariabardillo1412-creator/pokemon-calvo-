@@ -153,3 +153,11 @@ La segunda CI #41613512888 devolvió `content_policy` al abrir los tres controle
 - Primera CI [#41719364484](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41719364484), SHA `63c2aa2f09b89fe75a87ff05e555780be8e64ee0`: `CAMP004_W01_PY PASS blocks=8 checks=818` y manifiesto PASS. Godot terminó con código 124 por `timeout 900s` antes de producir recibo; **8/10 aún no certificado funcionalmente**.
 - Ajuste mínimo del arnés W01: tres lanes independientes `active`, `none`, `reserve` dentro de cada par caso-semilla, usando el patrón ya aprobado de CAMP003. Preserva 62 escenarios, 137 pares, 411 variantes, objetos y SaveV2. No altera producción, reglas, datos, workflow ni tests antiguos. Causa y reparación registradas en `CAMP_004_ITER_08.md`.
 - Repetir CI en SHA de reparación. Si reaparece timeout, revisar coste y logs y escalar límite de workflow a IA6; no recortar aserciones.
+
+## 08/10 — Certificación final CI
+
+- CI oficial [#41722166088](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41722166088), `completed/success` en SHA `6b484eab6899d3ac653a3cf0b13cf5ea4c75668b`, sin errores finales.
+- Recibos literales del job: `CAMP004_W01_MANIFEST_PASS reserved=10 completed=8 ids=30`; `CAMP004_W01_PY PASS blocks=8 checks=818`; `CAMP004_GATE_PY_PASS worker=W01 blocks=8 checks=818`; `CAMP004_W01_GODOT PASS blocks=8 checks=12485`; `CAMP004_GATE_GODOT_PASS worker=W01 blocks=8 checks=12485`.
+- Se recupera la velocidad del runner con tres lanes independientes por par caso-semilla; no se han recortado ni modificado los 62 escenarios, 137 pares ni las 411 variantes. Todos los checks de actividad, negativos, inventario y SaveV2 pasaron en la misma ejecución.
+- Estado W01 **8/10 verificados**, 24 equipables cubiertos; CAMPAÑA_003 completa ya fue aprobada en hito 05/10 y debe repetirse en hito 10/10 o ante cambio funcional. El problema SaveV2 a mitad de carga de Rayo Solar continúa escalado a IA6; no afirmar que se ha corregido.
+- La fila administrativa 08 del CSV permanece temporalmente `EN_CI_AUTOMATICA` para no gastar otro workflow por documentación. Con la próxima `p`, cambiar a `CI_PASS_VERIFICADO` con SHA `6b484eab6899d3ac653a3cf0b13cf5ea4c75668b` y CI `41722166088`, junto al bloque 09 `white_herb;wise_glasses;zoom_lens`. No iniciar 10 hasta otra `p`.
