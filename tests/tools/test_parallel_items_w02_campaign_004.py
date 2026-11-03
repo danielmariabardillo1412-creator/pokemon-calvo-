@@ -404,6 +404,263 @@ EXPECTED_03 = json.loads(r'''[
 EXPECTED_IDS_03 = ["antidote","awakening","berry_juice","big_malasada"]
 SOURCES_03 = ["modules/inventory/imported_recovery_v19.json","modules/inventory/field_item_effects.gd","modules/inventory/field_item_service.gd","tests/gameplay/item_field_effects_v4.gd"]
 
+EXPECTED_04 = json.loads(r'''[
+  {
+    "scenario": "burn_heal_burn_c004",
+    "id": "burn_heal",
+    "kind": "field_medicine",
+    "start_hp": "full",
+    "status": "burn",
+    "confused": false,
+    "applies": true,
+    "heal_amount": 0,
+    "cures_status": true,
+    "cures_confusion": false
+  },
+  {
+    "scenario": "burn_heal_poison_reject_c004",
+    "id": "burn_heal",
+    "kind": "field_medicine",
+    "start_hp": "full",
+    "status": "poison",
+    "confused": false,
+    "applies": false,
+    "heal_amount": 0,
+    "cures_status": false,
+    "cures_confusion": false
+  },
+  {
+    "scenario": "burn_heal_sleep_reject_c004",
+    "id": "burn_heal",
+    "kind": "field_medicine",
+    "start_hp": "full",
+    "status": "sleep",
+    "confused": false,
+    "applies": false,
+    "heal_amount": 0,
+    "cures_status": false,
+    "cures_confusion": false
+  },
+  {
+    "scenario": "burn_heal_healthy_reject_c004",
+    "id": "burn_heal",
+    "kind": "field_medicine",
+    "start_hp": "full",
+    "status": "",
+    "confused": false,
+    "applies": false,
+    "heal_amount": 0,
+    "cures_status": false,
+    "cures_confusion": false
+  },
+  {
+    "scenario": "casteliacone_burn_c004",
+    "id": "casteliacone",
+    "kind": "field_medicine",
+    "start_hp": "full",
+    "status": "burn",
+    "confused": false,
+    "applies": true,
+    "heal_amount": 0,
+    "cures_status": true,
+    "cures_confusion": false
+  },
+  {
+    "scenario": "casteliacone_toxic_c004",
+    "id": "casteliacone",
+    "kind": "field_medicine",
+    "start_hp": "full",
+    "status": "badly_poisoned",
+    "confused": false,
+    "applies": true,
+    "heal_amount": 0,
+    "cures_status": true,
+    "cures_confusion": false
+  },
+  {
+    "scenario": "casteliacone_sleep_c004",
+    "id": "casteliacone",
+    "kind": "field_medicine",
+    "start_hp": "full",
+    "status": "sleep",
+    "confused": false,
+    "applies": true,
+    "heal_amount": 0,
+    "cures_status": true,
+    "cures_confusion": false,
+    "expect_sleep_clock_clear": true
+  },
+  {
+    "scenario": "casteliacone_confusion_c004",
+    "id": "casteliacone",
+    "kind": "field_medicine",
+    "start_hp": "full",
+    "status": "",
+    "confused": true,
+    "applies": true,
+    "heal_amount": 0,
+    "cures_status": false,
+    "cures_confusion": true
+  },
+  {
+    "scenario": "casteliacone_poison_confusion_c004",
+    "id": "casteliacone",
+    "kind": "field_medicine",
+    "start_hp": "full",
+    "status": "poison",
+    "confused": true,
+    "applies": true,
+    "heal_amount": 0,
+    "cures_status": true,
+    "cures_confusion": true
+  },
+  {
+    "scenario": "casteliacone_healthy_reject_c004",
+    "id": "casteliacone",
+    "kind": "field_medicine",
+    "start_hp": "full",
+    "status": "",
+    "confused": false,
+    "applies": false,
+    "heal_amount": 0,
+    "cures_status": false,
+    "cures_confusion": false
+  },
+  {
+    "scenario": "elixir_both_empty_c004",
+    "id": "elixir",
+    "kind": "field_medicine",
+    "start_hp": "full",
+    "status": "",
+    "confused": false,
+    "applies": true,
+    "heal_amount": 0,
+    "cures_status": false,
+    "cures_confusion": false,
+    "pp0_start": 0,
+    "pp1_start": 0,
+    "pp_gain": 10
+  },
+  {
+    "scenario": "elixir_one_full_other_low_c004",
+    "id": "elixir",
+    "kind": "field_medicine",
+    "start_hp": "full",
+    "status": "",
+    "confused": false,
+    "applies": true,
+    "heal_amount": 0,
+    "cures_status": false,
+    "cures_confusion": false,
+    "pp0_start": "full",
+    "pp1_start": 2,
+    "pp_gain": 10
+  },
+  {
+    "scenario": "elixir_two_full_reject_c004",
+    "id": "elixir",
+    "kind": "field_medicine",
+    "start_hp": "full",
+    "status": "",
+    "confused": false,
+    "applies": false,
+    "heal_amount": 0,
+    "cures_status": false,
+    "cures_confusion": false,
+    "pp0_start": "full",
+    "pp1_start": "full",
+    "pp_gain": 10
+  },
+  {
+    "scenario": "elixir_wrong_slot_reject_c004",
+    "id": "elixir",
+    "kind": "field_medicine",
+    "start_hp": "full",
+    "status": "",
+    "confused": false,
+    "applies": false,
+    "heal_amount": 0,
+    "cures_status": false,
+    "cures_confusion": false,
+    "pp0_start": 0,
+    "pp1_start": 0,
+    "pp_gain": 10,
+    "slot": 0
+  },
+  {
+    "scenario": "energy_powder_hp_half_friend100_c004",
+    "id": "energy_powder",
+    "kind": "field_medicine",
+    "start_hp": "half",
+    "status": "",
+    "confused": false,
+    "applies": true,
+    "heal_amount": 60,
+    "cures_status": false,
+    "cures_confusion": false,
+    "start_friendship": 100,
+    "friendship_loss": 5
+  },
+  {
+    "scenario": "energy_powder_hp_half_friend200_c004",
+    "id": "energy_powder",
+    "kind": "field_medicine",
+    "start_hp": "half",
+    "status": "",
+    "confused": false,
+    "applies": true,
+    "heal_amount": 60,
+    "cures_status": false,
+    "cures_confusion": false,
+    "start_friendship": 200,
+    "friendship_loss": 10
+  },
+  {
+    "scenario": "energy_powder_hp_half_friend0_c004",
+    "id": "energy_powder",
+    "kind": "field_medicine",
+    "start_hp": "half",
+    "status": "",
+    "confused": false,
+    "applies": true,
+    "heal_amount": 60,
+    "cures_status": false,
+    "cures_confusion": false,
+    "start_friendship": 0,
+    "friendship_loss": 5
+  },
+  {
+    "scenario": "energy_powder_hp_missing7_friend199_c004",
+    "id": "energy_powder",
+    "kind": "field_medicine",
+    "start_hp": "missing_7",
+    "status": "",
+    "confused": false,
+    "applies": true,
+    "heal_amount": 60,
+    "cures_status": false,
+    "cures_confusion": false,
+    "start_friendship": 199,
+    "friendship_loss": 5
+  },
+  {
+    "scenario": "energy_powder_hp_full_reject_c004",
+    "id": "energy_powder",
+    "kind": "field_medicine",
+    "start_hp": "full",
+    "status": "",
+    "confused": false,
+    "applies": false,
+    "heal_amount": 60,
+    "cures_status": false,
+    "cures_confusion": false,
+    "start_friendship": 200,
+    "friendship_loss": 10
+  }
+]''')
+EXPECTED_IDS_04 = ["burn_heal","casteliacone","elixir","energy_powder"]
+SOURCES_04 = ["modules/inventory/imported_recovery_v19.json","modules/inventory/field_item_effects.gd","modules/inventory/field_item_service.gd","tests/gameplay/item_field_effects_v4.gd"]
+
 
 class ContractError(ValueError):
     pass
@@ -499,6 +756,21 @@ def verify(fixture, queue, progress, chk):
                 names.add(actual["scenario"])
             chk.demand(names == {x["scenario"] for x in EXPECTED_03},
                        "Escenarios MEDICINE 03 incompletos")
+        elif i == 3:
+            chk.demand(block["ids"] == EXPECTED_IDS_04 and block["family"] == "MEDICINE",
+                       "IDs/familia bloque 04 cambian respecto a la cola")
+            chk.demand(block["source_evidence"] == SOURCES_04,
+                       "Fuentes de medicinas 04 modificadas")
+            chk.demand(len(block["cases"]) == len(EXPECTED_04),
+                       "Bloque 04 no contiene 19 escenarios")
+            names = set()
+            for actual, expected in zip(block["cases"], EXPECTED_04):
+                chk.demand(type(actual) is dict and actual == expected,
+                           "Escenario medicina 04 alterado: " + str(expected["scenario"]))
+                chk.demand(actual["scenario"] not in names, "Escenario 04 duplicado")
+                names.add(actual["scenario"])
+            chk.demand(names == {case["scenario"] for case in EXPECTED_04},
+                       "Bloque 04 no cubre la matriz completa")
         else:
             raise ContractError("No hay contrato específico de bloque futuro")
     return len(progress)
@@ -556,6 +828,23 @@ def verify_sources(chk):
                '"antidote": "badly_poisoned"' in old and
                '"awakening": "sleep"' in old,
                "Regresiones históricas de estado no disponibles")
+    expected_04_profiles = {
+        "burn_heal": {"cure": ["brn"]},
+        "casteliacone": {"confusion": True, "cure": "all"},
+        "elixir": {"pp": 10, "scope": "all"},
+        "energy_powder": {"friendship_loss": [5, 5, 10], "heal": 60},
+    }
+    for item, expected in expected_04_profiles.items():
+        chk.demand(profile["items"][item]["effect"] == expected
+                   and profile["items"][item]["consume"] is True,
+                   "Perfil real medicina 04 distinto: " + item)
+    for fragment in ('spec.scope == "one"', "slots.assign(creature.moveset)",
+                     "creature.friendship = maxi(0, creature.friendship - int(spec.friendship_loss[tier]))",
+                     'creature.recover_hp(amount)', 'return deny("item_has_no_effect")'):
+        chk.demand(fragment in effects, "Ruta real para PP/amistad/PS incompleta: " + fragment)
+    chk.demand('"burn_heal": "burn"' in old and
+               '"elixir"' in old and '"burn"' in old,
+               "Regresiones históricas para Burn Heal y Elixir ausentes")
 
 
 def negative_controls(fixture, queue, progress, chk):
@@ -601,6 +890,17 @@ def negative_controls(fixture, queue, progress, chk):
             lambda f: f["blocks"][2]["cases"][8].update({"heal_amount": 7}),
             lambda f: f["blocks"][2]["cases"][12].update({"cures_confusion": False}),
             lambda f: f["blocks"][2]["cases"][14].update({"applies": True}),
+        ])
+    if len(fixture["blocks"]) >= 4:
+        edits.extend([
+            lambda f: f["blocks"][3]["ids"].append("energy_root"),
+            lambda f: f["blocks"][3]["cases"].pop(),
+            lambda f: f["blocks"][3]["cases"][0].update({"applies": False}),
+            lambda f: f["blocks"][3]["cases"][4].update({"cures_status": False}),
+            lambda f: f["blocks"][3]["cases"][10].update({"pp_gain": 5}),
+            lambda f: f["blocks"][3]["cases"][12].update({"applies": True}),
+            lambda f: f["blocks"][3]["cases"][14].update({"friendship_loss": 10}),
+            lambda f: f["blocks"][3]["cases"][18].update({"friendship_loss": 0}),
         ])
     for i, edit in enumerate(edits):
         altered = copy.deepcopy(fixture)
