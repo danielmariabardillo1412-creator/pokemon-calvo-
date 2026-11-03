@@ -54,3 +54,10 @@ Salidas individuales: `griseous_core` y `lustrous_globe`, `DEPENDENCIA records=0
 CSV de progreso reconciliado a `DEPENDENCIA_DOCUMENTADA` con run `41584355240`, commit `ce99a4a70514b3d952a59ee863f07f770af71f6a`. La propia actualización del CSV activa CI adicional; no se debe atribuir su resultado hasta verificarlo.
 
 **Resumen:** bloque 06 entregado con 18 IDs acumulados auditados. Próximo `p`: bloque 07, si esta última CI no revela fallo.
+
+
+## Segunda CI06: progreso consolidado
+
+La ejecución [#41584473320](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41584473320), SHA `ce99a4a70514b3d952a59ee863f07f770af71f6a`, terminó **completed/success** sobre el CSV reconciliado. Los logs repiten `CAMP004_W04_MANIFEST_PASS reserved=10 completed=6 ids=36`, Python **181 PASS**, Godot **565 PASS**, regresión CAMP003 Python **120 PASS** y Godot **270 PASS**. Los tres ID del bloque 06 mantienen `DEPENDENCIA records=0`, sin atribuirles cambios de forma.
+
+**Bloque 06/10 cerrado:** auditoría y pruebas aprobadas, efectos reales de formas pendientes. Al próximo `p`, iniciar exclusivamente bloque 07.
