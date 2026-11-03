@@ -1,3 +1,19 @@
+# ESTADO VIGENTE IA5/W05 — CAMPAÑA_003 · 08/10 PUBLICADOS (2026-11-03)
+
+**Identidad:** IA5/W05, MT/libros. **Única rama autorizada:** `codex/calvo-items-20261103-w05-camp003`. Reglas: `CAMPAIGN_GATE_003.md`, `CAMPAIGN_003_QUEUE_APPROVED.csv`, `campaigns/CAMP_003_W05.md` en rama árbitra. Cada `p` = solo primer bloque pendiente de cola (máximo 10, después STOP). Esta cabecera prevalece sobre las históricas inferiores.
+
+**BLOQUE 08 ENTREGADO:** `tm63;tm64;tm65;tm66;tm67;tm68`, mapeo real SV `psychic_fangs;bulk_up;air_slash;body_slam;fire_punch;thunder_punch`. Fixture acumulativo `tests/fixtures/parallel_items/w05_campaign_003.json` ampliado a **8 bloques/48 MT**, commit `75082f500b06d27c80de3b117c2ce8a25d67ec56`. CSV `reports/W05/CAMP_003_PROGRESO.csv` con una sola fila nueva `08`, commit `aeaa0ec2a4add2ab134ceb4b8d06c12afca6e40c`. Informe `CAMP_003_ITER_08.md`, commit `cab17daf4bfe7155e452192d4e084f7cd8ede16d`. Scripts Python/Godot acumulativos **sin cambios**, no reprogramar `FieldItemService.teach`. **Validación estática comprobada:** 48 IDs únicos y correspondencia exacta con cola IA6, orden de filas y perfil SV. Esto NO implica CI funcional del bloque 08.
+
+**CI BLOQUES 01–07 CONFIRMADA:** GitHub Actions [#41560159198](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41560159198), SHA `fc41a3e6cd53ee85cfccd08ca6da3a3fac2521e0`, `completed/success`; Python `CAMP003_W05_PY PASS blocks=7 checks=406`, Godot 4.7 `CAMP003_W05_GODOT PASS blocks=7 checks=1521`, ambos leídos en los registros. 42 MT cubiertas en ese SHA. Los estados históricos `EN_CI_AUTOMATICA` del CSV se preservan para no disparar CI innecesaria; el resultado real está verificado aquí.
+
+**CI BLOQUE 08 PENDIENTE:** [#41560433553](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41560433553), SHA de progreso `aeaa0ec2a4add2ab134ceb4b8d06c12afca6e40c`, inicialmente `pending`. La ejecución anterior #41560420588 puede quedar `cancelled` por `concurrency.cancel-in-progress`. Exigir ambos recibos Python/Godot `PASS blocks=8` en último SHA para certificar 48 MT. Informes no activan CI.
+
+**SIGUIENTE `p`:** revisar último run del SHA de progreso. Con `success`, ejecutar solamente **bloque 09** (`tm69;tm70;tm71;tm72;tm73;tm74`) y anexar exactamente seis casos y una fila nuevos. Si el run continúa, solo bloque independiente de tests sin PASS; si falla arnés W05, corregir sin reducir aserciones; fallo de servicio, catálogo, SaveV2 o contrato compartido implica STOP y notificación a IA6. Límite 10/10, `CAMPAÑA_003_FINALIZADA` y STOP.
+
+**PROTECCIÓN:** `main`, V28, PR118, rama árbitra, otras W, producción, `modules/`, `data/`, `config/`, workflows, guardados reales, 19 legacy y arte/GPU/UI intactos.
+
+---
+
 # ESTADO VIGENTE IA5/W05 — CAMPAÑA_003 · 07/10 PUBLICADOS (2026-11-03)
 
 **Identidad:** IA5/W05, MT/libros. **Rama exclusiva:** `codex/calvo-items-20261103-w05-camp003`. Única autoridad para los diez bloques: gate y `CAMPAIGN_003_QUEUE_APPROVED.csv` / `campaigns/CAMP_003_W05.md` de IA6. Esta sección prevalece sobre los historiales inferiores.
