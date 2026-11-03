@@ -35,6 +35,7 @@ func _run_campaign() -> void:
 		match String(block.get("bloque", "")):
 			"01": _block_01(block)
 			"02": _block_02(block)
+			"03": _block_03(block)
 			_: check("Bloque sin prueba propia " + str(n), false)
 	_finish(n)
 
@@ -135,6 +136,62 @@ func _block_02(block: Dictionary) -> void:
 	var unchanged: Dictionary = target.to_dict()
 	check("Auditoría sin mutación accidental de Pokémon original",
 		target.to_dict() == unchanged)
+
+# 03: verificar evolución REAL por Piedra Lunar, sin inventar sexo individual.
+func _block_03(block: Dictionary) -> void:
+	var ids: Array = block.get("ids", [])
+	check("Reserva 03 exacta", ids == ["love_ball", "moon_ball"])
+	check("Sin certificación de bonus ficticio", block.get("current_state") == "DEPENDENCIA_CONCRETA"
+		and not bool(block.get("functional_effect_certified", true)))
+	for raw_id: String in ids:
+		var id := StringName(raw_id)
+		check("Catálogo y selección Love/Moon " + raw_id,
+			catalogs.item(id) != null and service_for().selection.content_allowed(id))
+		check("Motor de captura no registra Love/Moon " + raw_id,
+			not CaptureRuleset.new().is_known_ball(id))
+	var target: CreatureInstance = _mon(&"nidorino", 25, &"c005_03_genderless_contract")
+	var saved: Dictionary = target.to_dict()
+	var restored: CreatureInstance = CreatureInstance.from_dict(saved)
+	check("Sexo individual ausente del Save criatura",
+		not saved.has("gender") and not saved.has("gender_id")
+		and not saved.has("sex") and not saved.has("individual_gender_id"))
+	check("Identidad de especie real sin sexo inventado",
+		restored.to_dict() == saved and target.base_species_id() == &"nidorino"
+		and restored.base_species_id() == &"nidorino")
+	check("Piedra Lunar presente en catálogo", catalogs.item(&"moon_stone") != null)
+	var moon_records := 0
+	var moon_candidates := 0
+	var other_item_rejects := 0
+	var conditioned_moon := 0
+	for sid: StringName in catalogs.species_catalog.all_ids():
+		var species: CreatureSpecies = catalogs.species(sid)
+		if species == null:
+			continue
+		for record: EvolutionRecord in species.evolutions:
+			if record.item_id != &"moon_stone":
+				continue
+			moon_records += 1
+			var cls: String = EvolutionSystem.classify_record(record, catalogs, species.id)
+			if cls == EvolutionSystem.RUNTIME_SUPPORTED:
+				var context := {"level": 25, "item_id": &"moon_stone"}
+				var possible: Array = EvolutionSystem.evolution_candidates(species, context, catalogs)
+				check("Piedra Lunar activa ruta exacta para " + String(sid), possible.has(record))
+				moon_candidates += 1
+				var other: Array = EvolutionSystem.evolution_candidates(species,
+					{"level": 25, "item_id": &"water_stone"}, catalogs)
+				check("Piedra Agua no activa ruta Lunar " + String(sid), not other.has(record))
+				other_item_rejects += 1
+			else:
+				conditioned_moon += 1
+	check("Existen datos reales de evolución Lunar", moon_records > 0)
+	check("Existen rutas reales activas para la Piedra Lunar", moon_candidates > 0)
+	check("Los registros no se convierten a elegibles sin versión", moon_records >= moon_candidates
+		and other_item_rejects == moon_candidates and conditioned_moon >= 0)
+	for producer: Dictionary in block.get("required_producers", []):
+		check("Frontera exacta de contexto " + String(producer.get("id", "")),
+			ids.has(String(producer.get("id", ""))) and
+			not String(producer.get("producer", "")).is_empty() and
+			not String(producer.get("consumer", "")).is_empty())
 
 func _finish(n: int) -> void:
 	done = true
