@@ -106,3 +106,12 @@ Esta sección reemplaza exclusivamente la indicación anterior de STOP tras CAMP
 **Rutas de trabajo nuevo:** `tests/gameplay/parallel_items_w04_campaign_004.gd`, `tests/tools/test_parallel_items_w04_campaign_004.py`, `tests/fixtures/parallel_items/w04_campaign_004.json`, `reports/W04/CAMP_004_PROGRESO.csv`, `reports/W04/CAMP_004_ITER_01.md`. Conservar intactos CAMP003 (10/10 y 16 dependencias) y CAMP001 (6 piedras). No editar producción, ramas ajenas ni datasets canónicos sin motivo y límites V5.
 
 **Siguiente orden `p`:** ejecutar únicamente CAMP004 bloque **02/10** `love_sweet;ribbon_sweet;star_sweet`, verificando primero el último run de CI en rama. Seguir los IDs exactos por cola oficial, no anticipar bloques 03–10 ni declarar PASS sin Godot.
+
+
+---
+
+## CAMPAÑA_004 — Bloque 02 (2026-11-03)
+
+**IA4/W04**, rama exclusiva `codex/calvo-items-20261103-w04-camp004`. Nuevo bloque **02/10** con `love_sweet;ribbon_sweet;star_sweet`, en runner y validador acumulativos de CAMP004 y fixture `tests/fixtures/parallel_items/w04_campaign_004.json`. Informes en `reports/W04/CAMP_004_ITER_02.md`. La CI de entrega es [#41575954355](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41575954355), pendiente de contrastar resultado final. No se ha editado producción ni ramas ajenas.
+
+Todos los confites probados están asociados al requisito de giro `spin` de Milcery, clasificado `UNSUPPORTED`, sin inventar `use_item`. **CI PASS de pruebas negativas no implica evolución positiva ni selección de formas**. Continúan las tres dependencias del bloque 01 y las dieciséis de CAMP003. Próximo `p`: únicamente bloque **03** (`strawberry_sweet;whipped_dream;leaders_crest`), comprobando primero CI02. Mantener intactos CAMP003 y CAMP001.
