@@ -21,6 +21,7 @@ REFS = {
     "docs/current/RANDOMLOCK_ITEMS_BUILD_SCOPE_V2.csv": "8b9b723bf5944bbbde39aa2d49dfbb2f2a64e11b",
     "tests/gameplay/parallel_items_w01_held_v1.gd": "d9551db1ec5e08b1213e04829d031e3a6720188f",
     "tools/item_audit/held_effect_sweep_v3.cjs": "fd5d9d0b1eecf8b84f14e606631df93b40728586",
+    "tools/item_audit/held_effect_sweep_v2.cjs": "c9ba4d7bcddad6ae69f085f4b69983461ad05219",
 }
 BLOCK_01 = ("air_balloon", "assault_vest", "binding_band")
 SCENARIOS_01 = {
@@ -50,7 +51,23 @@ SCENARIOS_02 = {
     "battery_no_hit": ("cell_battery", "no_hit_control", "mew", "",
         "mew", "amnesia", "reflect", (19,)),
 }
-OPERATIONS = {r[1] for r in SCENARIOS_01.values()} | {r[1] for r in SCENARIOS_02.values()}
+SCENARIOS_03 = {
+    "amulet_charm_block": ("clear_amulet", "opponent_drop_block", "mew", "",
+        "mew", "charm", "reflect", (19,23)),
+    "amulet_no_drop": ("clear_amulet", "no_drop_control", "mew", "",
+        "mew", "amnesia", "reflect", (19,)),
+    "cloak_nuzzle_secondary": ("covert_cloak", "secondary_status_block", "mew", "",
+        "mew", "nuzzle", "reflect", (19,23)),
+    "cloak_plain_hit": ("covert_cloak", "normal_damage_control", "mew", "",
+        "mew", "tackle", "reflect", (19,)),
+    "eject_on_hit": ("eject_button", "hit_forces_switch", "mew", "",
+        "snorlax", "tackle", "reflect", (19,23)),
+    "eject_without_hit": ("eject_button", "no_hit_no_switch", "mew", "",
+        "mew", "amnesia", "reflect", (19,)),
+}
+OPERATIONS = ({r[1] for r in SCENARIOS_01.values()}
+              | {r[1] for r in SCENARIOS_02.values()}
+              | {r[1] for r in SCENARIOS_03.values()})
 REQUIRED_CASE_FIELDS = {"block", "id", "item_id", "op", "actor_species", "foe_species",
                         "foe_move", "own_move", "seeds", "history"}
 TOTAL_CHECKS = 0
@@ -123,6 +140,17 @@ def validate() -> int:
     require("HELD_PILOT_VERIFIED" in next(x for x in inventory.splitlines()
                                          if x.startswith("air_balloon,")),
             "Globo Helio: historial nativo ausente")
+    old_v2 = (ROOT / "tools/item_audit/held_effect_sweep_v2.cjs").read_text(encoding="utf-8")
+    if len(progress) >= 3:
+        require("add('clear_amulet','opponent_drop_protection'" in old_v2
+                and "foeMoves:['charm']" in old_v2,
+                "Amuleto Puro: prueba histórica de descenso ausente")
+        require("add('covert_cloak','secondary_protection'" in old_v2
+                and "foeMoves:['nuzzle']" in old_v2,
+                "Capa Furtiva: control de Nuzzle ausente")
+        require("HELD_PILOT_VERIFIED" in next(x for x in inventory.splitlines()
+                                             if x.startswith("eject_button,")),
+                "Botón Escape: evidencia piloto ausente")
     cases = document["cases"]
     require(type(cases) is list and len(cases) >= 7, "Sin casos suficientes")
     found, pairs = set(), set()
@@ -159,6 +187,13 @@ def validate() -> int:
                       tuple(case["seeds"]))
             require(actual == (item0, op, actor, ability, foe, foe_move, own_move, seeds),
                     "Cambio no autorizado de causa/semilla: "+name)
+        elif stage == "03":
+            require(name in SCENARIOS_03, "Caso ajeno a bloque W01/03")
+            expected = SCENARIOS_03[name]
+            actual = (item, case["op"], case["actor_species"], case.get("actor_ability", ""),
+                      case["foe_species"], case["foe_move"], case["own_move"],
+                      tuple(case["seeds"]))
+            require(actual == expected, "Desvío de causas/semillas W01/03: "+name)
     for stage, ids in stage_map.items():
         for item in ids:
             require((stage,item) in per_id, "Objeto sin caso de test: "+item)
@@ -168,6 +203,10 @@ def validate() -> int:
     if len(progress) == 2:
         require(len(cases) == 15 and len(pairs) == 28, "Matriz acumulativa 15/28 alterada")
         require(set(SCENARIOS_02) <= found, "Faltan 8 casos del bloque 02")
+    if len(progress) == 3:
+        require(len(cases) == 21 and len(pairs) == 37,
+                "Matriz acumulativa W01 03 incorrecta: esperados 21 casos/37 corridas")
+        require(set(SCENARIOS_03) <= found, "Faltan 6 casos autorizados del bloque 03")
     return len(progress)
 
 def main():
