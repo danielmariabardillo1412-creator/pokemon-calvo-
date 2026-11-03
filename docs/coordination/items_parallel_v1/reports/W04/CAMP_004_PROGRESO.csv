@@ -1,1 +1,2 @@
 bloque,ids,estado,sha_pruebas,ci_run,notas
+01,berry_sweet;clover_sweet;flower_sweet,EN_CI_AUTOMATICA,f1ad82bc7813af374f82aadb1722a55a6d363559,PENDIENTE,"Milcery/Alcremie requieren giro y contexto de confite equipado; pruebas reales de rechazo sin gasto, equipamiento si permitido y SaveV2; CI en curso, sin PASS aun"
