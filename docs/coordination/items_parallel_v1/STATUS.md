@@ -1,3 +1,15 @@
+# IA6 — CAMPAÑA_003 LARGA ACTIVADA / AUTOPILOTO CI COMPROBADO (2026-11-03)
+
+**Autoridad actual:** [GATE_003](CAMPAIGN_GATE_003.md), [manifiesto y cuatro arranques SUCCESS](CAMPAIGN_003_BRANCH_MANIFEST.md), [cola de 40 bloques/150 IDs](CAMPAIGN_003_QUEUE_APPROVED.csv), [mensaje único a cuatro chats](CAMPAIGN_003_ACTIVATION_MESSAGE.md). **W01/W02/W03/W05: 00/10**, sus ramas nuevas `codex/calvo-items-20261103-w0x-camp003` existen y están listas. IA4 CAMP001 **03/03 cerrada**, sin encargo nuevo.
+
+**Nueva cadencia:** una activación inicial por trabajadora ejecuta bloque 01; cada `p` posterior ejecuta exclusivamente el siguiente de 02 a 10, sin nueva aprobación de IA6. Automatización al hacer push de test/fixture/progreso. Un run pendiente no significa fallo, y uno verde de bootstrap 00/10 **no certifica mecánica**. Falta de contexto/learnset o test fallido con causa de producción → STOP y auditoría; nunca modificar módulos compartidos sin permiso. Al 10/10 STOP.
+
+**CI bootstrap 4/4 PASS (únicamente manifiesto):** W01 [#41551945208](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41551945208), W02 [#41551952771](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41551952771), W03 [#41551961372](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41551961372), W05 [#41551975872](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41551975872); no ejecutaron pruebas nuevas de Godot por no haber bloques.
+
+**Límites:** CI y cola no prueban implementación de 150 IDs, ni 60 enseñanzas individuales, ni bolas sin contexto; W05 verifica compatibilidad según learnsets antes de enseñar. No tocar `main`, V28, PR #118, ramas viejas, reglas Mega, producción ni datos canónicos. Las entradas inferiores de CAMP002 03/03 y «CAMPAÑA_003 V4 no activada» ahora son históricas.
+
+---
+
 # IA6 — 2026-11-03: CAMPAÑA_002 03/03 TODAS, CI VERDE; V4 SIN ACTIVAR
 
 **VERDAD ACTUAL (prevalece sobre estados antiguos `EN_CI_AUTOMATICA`, `PENDIENTE`, `02/03` que se ven más abajo):** [fotografía exacta de cierre](CAMPAIGN_002_FINAL_CI_SNAPSHOT_20261103.md). W01, W02, W03, W05 han publicado **03/03 de CAMPAÑA_002** y su última CI de GitHub Actions pasó en sus ramas: W01 [#41547041337](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41547041337) 1017/0, W02 [#41547218742](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41547218742) 838/0, W03 [#41547276442](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41547276442) 58/0 **negativos de tres bolas NO implementadas**, W05 [#41547169973](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41547169973) 703/0 (12 MT enseñadas). W04 finalizó CAMPAÑA_001 03/03 y tiene [CI #41538151097](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41538151097) PASS (559/0, SaveV2). Los HEAD posteriores a CI son **solo informes**, sin nuevos tests.
