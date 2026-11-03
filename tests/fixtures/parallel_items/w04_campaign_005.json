@@ -504,6 +504,98 @@
         "Preserve creature identity, IV/EV, experience, friendship, moves and inventory through failed attempts and SaveV2",
         "Conclude integration dependency, not a positive Kingambit/Slurpuff evolution"
       ]
+    },
+    {
+      "block": "07",
+      "ids": [
+        "adamant_crystal",
+        "blue_orb",
+        "griseous_core",
+        "lustrous_globe",
+        "red_orb"
+      ],
+      "family": "FORM_DEPENDENCY",
+      "classification": "DEPENDENCIA_FORMA_EQUIPABLE",
+      "cases": [
+        {
+          "item_id": "adamant_crystal",
+          "source_species": "dialga",
+          "base_variety": "dialga",
+          "target_variety": "dialga-origin",
+          "species_number": 483,
+          "chain_id": 244,
+          "forms_switchable": false,
+          "route_kind": "origin_held",
+          "holdable": true
+        },
+        {
+          "item_id": "blue_orb",
+          "source_species": "kyogre",
+          "base_variety": "kyogre",
+          "target_variety": "kyogre-primal",
+          "species_number": 382,
+          "chain_id": 198,
+          "forms_switchable": true,
+          "route_kind": "primal_on_switch",
+          "holdable": true
+        },
+        {
+          "item_id": "griseous_core",
+          "source_species": "giratina",
+          "base_variety": "giratina-altered",
+          "target_variety": "giratina-origin",
+          "species_number": 487,
+          "chain_id": 248,
+          "forms_switchable": true,
+          "route_kind": "origin_held",
+          "holdable": true
+        },
+        {
+          "item_id": "lustrous_globe",
+          "source_species": "palkia",
+          "base_variety": "palkia",
+          "target_variety": "palkia-origin",
+          "species_number": 484,
+          "chain_id": 245,
+          "forms_switchable": false,
+          "route_kind": "origin_held",
+          "holdable": true
+        },
+        {
+          "item_id": "red_orb",
+          "source_species": "groudon",
+          "base_variety": "groudon",
+          "target_variety": "groudon-primal",
+          "species_number": 383,
+          "chain_id": 199,
+          "forms_switchable": true,
+          "route_kind": "primal_on_switch",
+          "holdable": true
+        }
+      ],
+      "decision_sources": [
+        "data/api/v2/pokemon-species/{382,383,483,484,487}/index.json",
+        "data/api/v2/evolution-chain/{198,199,244,245,248}/index.json",
+        "modules/inventory/item_connections_v1.json",
+        "docs/current/RANDOMLOCK_ITEMS_BUILD_SCOPE_V2.csv"
+      ],
+      "contract_boundary": {
+        "producer": "FieldItemService.equip/unequip produces held_item_id only; battle switch-in for primal forms and item-dependent origin form activation need explicit hooks",
+        "consumer": "Battle form/state resolver and persistent or derivable CreatureInstance form identifier, not EvolutionSystem species evolution",
+        "missing": [
+          "Runtime item-to-form activation and reversal for Origin Dialga/Palkia/Giratina",
+          "Runtime primal switch-in/exit/restore for Kyogre Blue Orb and Groudon Red Orb without cross-wiring",
+          "Stable form identity and SaveV2 contract for retained/equipped vs temporary battle form",
+          "Form item effects vs type power modifiers must not be conflated"
+        ]
+      },
+      "runtime_contract": [
+        "Each item maps to canonical species default and alternate variety; five chains have zero evolution edges",
+        "All five equip as held items but this alone does not certify transformations",
+        "Wrong-species orb cannot create evolution or alter species identity",
+        "Bag item use/evolve is rejected without spending; held item survives SaveV2, unequip recovers original inventory",
+        "Preserve identity, IV/EV, friendship, experience, moves and species, no invented persistent form fields"
+      ]
     }
   ]
 }
