@@ -148,6 +148,35 @@
           "move_id": "rain_dance"
         }
       ]
+    },
+    {
+      "block": "06",
+      "items": [
+        {
+          "item_id": "tm51",
+          "move_id": "sandstorm"
+        },
+        {
+          "item_id": "tm52",
+          "move_id": "snowscape"
+        },
+        {
+          "item_id": "tm53",
+          "move_id": "smart_strike"
+        },
+        {
+          "item_id": "tm54",
+          "move_id": "psyshock"
+        },
+        {
+          "item_id": "tm55",
+          "move_id": "dig"
+        },
+        {
+          "item_id": "tm56",
+          "move_id": "bullet_seed"
+        }
+      ]
     }
   ]
 }
