@@ -421,6 +421,94 @@ func _auditar_confite_05(catalogo: DefinitionCatalog, caso: Dictionary) -> void:
 	print("CAMP005_W04_ITEM id=", String(item), " status=DEPENDENCIA_GIRO_FORMA source=", String(origen), " target=", String(destino), " trigger=spin need=spin_event+alcremie_form+savev2")
 
 
+func _auditar_especial_06(catalogo: DefinitionCatalog, caso: Dictionary, policy: Dictionary) -> void:
+	var item := StringName(caso.get("item_id", ""))
+	var origen := StringName(caso.get("source", ""))
+	var destino := StringName(caso.get("target", ""))
+	var especie: CreatureSpecies = catalogo.species(origen)
+	comprobar(catalogo.item(item) != null and especie != null and catalogo.species(destino) != null, String(item) + "/06_catalogo")
+	if especie == null:
+		return
+	var trade := item == &"whipped_dream"
+	var trigger := EvolutionSystem.TRIGGER_TRADE if trade else &"three_defeated_bisharp"
+	var registros: Array[EvolutionRecord] = []
+	for record: EvolutionRecord in especie.evolutions:
+		if record.species_id == destino and record.trigger == trigger:
+			registros.append(record)
+	comprobar(registros.size() == 1, String(item) + "/06_registro_especifico_unico")
+	if registros.size() != 1:
+		return
+	var rec: EvolutionRecord = registros[0]
+	comprobar(String(rec.version_group).replace("_", "-") == String(caso.get("version", "")), String(item) + "/06_version_canonica")
+	comprobar(rec.min_level == 0 and rec.item_id == &"", String(item) + "/06_sin_nivel_ni_item_de_mochila")
+	if trade:
+		comprobar(StringName(str(rec.conditions.get("held_item", ""))) == item, String(item) + "/06_trade_requiere_confite_equipado")
+		comprobar(EvolutionSystem.classify_record(rec, catalogo, origen) == EvolutionSystem.DATA_ONLY, String(item) + "/06_trade_held_data_only")
+		comprobar(policy.get("level_values_selected") == null, String(item) + "/06_nivel_no_aprobado")
+		var hipotetica := EvolutionRecord.new(destino, 0, EvolutionSystem.TRIGGER_LEVEL_UP, &"", &"", true, {"held_item": String(item)})
+		comprobar(EvolutionSystem.classify_record(hipotetica, catalogo, origen) == EvolutionSystem.DATA_ONLY, String(item) + "/06_no_convertir_a_nivel_arbitrario")
+	else:
+		comprobar(rec.conditions.is_empty(), String(item) + "/06_sin_condicion_item_ficticia")
+		comprobar(EvolutionSystem.classify_record(rec, catalogo, origen) == EvolutionSystem.UNSUPPORTED, String(item) + "/06_tres_derrotas_no_implementadas")
+		var pawniard: CreatureSpecies = catalogo.species(&"pawniard")
+		comprobar(pawniard != null, String(item) + "/06_pawniard_definido")
+		if pawniard != null:
+			var base_level := false
+			for previous: EvolutionRecord in pawniard.evolutions:
+				if previous.species_id == origen and previous.trigger == EvolutionSystem.TRIGGER_LEVEL_UP and previous.min_level == 52:
+					base_level = true
+			comprobar(base_level, String(item) + "/06_nivel52_solo_pawniard_bisharp")
+	var no_contexto := EvolutionSystem.evolution_candidates(especie, {"level": 100, "item_id": item}, catalogo)
+	var contexto_falso := EvolutionSystem.evolution_candidates(especie, {"level": 100, "item_id": item, "held_item_id": item, "traded": true, "three_defeated_bisharp": true}, catalogo)
+	comprobar(not no_contexto.has(rec) and not contexto_falso.has(rec), String(item) + "/06_contexto_inventado_no_habilita")
+	var pc := _crear(catalogo, origen)
+	comprobar(pc != null, String(item) + "/06_crear_criatura")
+	if pc == null:
+		return
+	var service := Servicio.new()
+	comprobar(service.configure(pc, catalogo, func(): return true), String(item) + "/06_configurar_servicio")
+	comprobar(service.holdable(item) == bool(caso.get("holdable", false)), String(item) + "/06_perfil_holdable")
+	comprobar(pc.inventory.add(item, 2), String(item) + "/06_stock")
+	var initial := _estado(pc)
+	comprobar(service.evolution_options(item, ID).is_empty(), String(item) + "/06_no_opciones_de_mochila")
+	var bag: Dictionary = service.use_item(item, ID)
+	comprobar(not bag.get("accepted", false) and _estado(pc) == initial, String(item) + "/06_uso_bolsa_rechazado_sin_consumo")
+	var bypass: Dictionary = service.evolve(item, ID, destino)
+	comprobar(not bypass.get("accepted", false) and _estado(pc) == initial, String(item) + "/06_evolve_rechazado_sin_consumo")
+	var another: Dictionary = service.use_item(item, &"w04_c005_intruso")
+	comprobar(not another.get("accepted", false) and _estado(pc) == initial, String(item) + "/06_ajeno_rechazado")
+	var equipar: Dictionary = service.equip(item, ID)
+	comprobar(bool(equipar.get("accepted", false)) == trade, String(item) + "/06_equipar_segun_perfil")
+	var pokemon := pc.owned_creature(ID)
+	var expected_hold := item if trade else &""
+	var expected_count := 1 if trade else 2
+	comprobar(pokemon != null and pokemon.instance_id == ID and pokemon.species_id == origen and pokemon.held_item_id == expected_hold and pc.inventory.quantity(item) == expected_count, String(item) + "/06_identidad_y_consumo")
+	var with_item := _estado(pc)
+	var retry: Dictionary = service.evolve(item, ID, destino)
+	comprobar(not retry.get("accepted", false) and _estado(pc) == with_item, String(item) + "/06_sin_intercambio_ni_tres_derrotas_falsas")
+	var ruta := "user://w04_c005_06_" + String(item) + ".json"
+	var save_repo := SaveGameRepository.new()
+	var guardado: SaveResult = save_repo.save_collection(ruta, pc)
+	comprobar(guardado.ok, String(item) + "/06_guardar_savev2")
+	if guardado.ok:
+		var load: LoadResult = save_repo.load(ruta)
+		comprobar(load.ok and load.schema_version == 2, String(item) + "/06_cargar_savev2")
+		if load.ok:
+			var restored := load.party.get_creature(ID)
+			comprobar(restored != null and restored.species_id == origen and restored.instance_id == ID and restored.held_item_id == expected_hold and load.inventory.quantity(item) == expected_count, String(item) + "/06_identidad_y_stock_savev2")
+			if restored != null:
+				var orig_data: Dictionary = pokemon.to_dict()
+				var restored_data: Dictionary = restored.to_dict()
+				comprobar(orig_data.get("ivs") == restored_data.get("ivs") and orig_data.get("evs") == restored_data.get("evs") and orig_data.get("move_ids") == restored_data.get("move_ids") and orig_data.get("experience") == restored_data.get("experience") and orig_data.get("friendship") == restored_data.get("friendship"), String(item) + "/06_atributos_savev2")
+	DirAccess.remove_absolute(ProjectSettings.globalize_path(ruta))
+	if trade:
+		var retirar: Dictionary = service.unequip(ID)
+		comprobar(retirar.get("accepted", false) and _estado(pc) == initial, String(item) + "/06_retirar_sin_perder")
+	else:
+		comprobar(_estado(pc) == initial, String(item) + "/06_no_equipable_inmutable")
+	print("CAMP005_W04_ITEM id=", String(item), " status=", "BLOQUEADO_POR_CONTRATO" if trade else "DEPENDENCIA_COMBATE", " source=", String(origen), " target=", String(destino), " need=", "approved_level+held_item" if trade else "three_qualified_battle_events")
+
+
 func _ejecutar() -> void:
 	var fixture := _abrir(FIXTURE)
 	var policy := _abrir(TRADE_POLICY)
@@ -435,8 +523,8 @@ func _ejecutar() -> void:
 	comprobar(earlier.get("trade_level_conversion", {}).get("levels_selected") == null, "V25_sin_niveles")
 	comprobar(String(policy.get("correct_future_rule", "")).contains("original equipped evolution item"), "conservar_objeto_equipado")
 	var blocks: Array = fixture.get("blocks", [])
-	comprobar(blocks.size() == 5 and [blocks[0].get("block"), blocks[1].get("block"), blocks[2].get("block"), blocks[3].get("block"), blocks[4].get("block")] == ["01", "02", "03", "04", "05"], "bloques_01_a_05_secuenciales")
-	if blocks.size() != 5:
+	comprobar(blocks.size() == 6 and [blocks[0].get("block"), blocks[1].get("block"), blocks[2].get("block"), blocks[3].get("block"), blocks[4].get("block"), blocks[5].get("block")] == ["01", "02", "03", "04", "05", "06"], "bloques_01_a_06_secuenciales")
+	if blocks.size() != 6:
 		_finalizar()
 		return
 	for index in range(2):
@@ -458,6 +546,10 @@ func _ejecutar() -> void:
 	comprobar(confites.size() == 7, "05_siete_confites_exactos")
 	for caso: Dictionary in confites:
 		_auditar_confite_05(catalogo, caso)
+	var especiales: Array = blocks[5].get("cases", [])
+	comprobar(especiales.size() == 2, "06_dos_objetos_exactos")
+	for caso: Dictionary in especiales:
+		_auditar_especial_06(catalogo, caso, policy)
 	_finalizar()
 
 func _finalizar() -> void:
@@ -465,7 +557,7 @@ func _finalizar() -> void:
 		return
 	cerrado = true
 	if errores.is_empty():
-		print("CAMP005_W04_GODOT PASS blocks=5 checks=", checks)
+		print("CAMP005_W04_GODOT PASS blocks=6 checks=", checks)
 	else:
 		print("CAMP005_W04_GODOT FAIL errors=", JSON.stringify(errores))
 	quit(0 if errores.is_empty() else 1)
