@@ -36,6 +36,7 @@ func _run_campaign() -> void:
 			"02": _block_02(block)
 			"03": _block_03(block)
 			"04": _block_04(block)
+			"05": _block_05(block)
 			_: check("Bloque sin suite funcional " + str(n), false)
 	_finish(n)
 
@@ -319,6 +320,74 @@ func _block_04(block: Dictionary) -> void:
 		var before_foreign: String = snapshot(foreign_service)
 		var foreign: Dictionary = foreign_service.use_item(id, &"foreign_creature")
 		check("Objetivo ajeno sin efecto ni gasto " + raw_id,
+			foreign.get("accepted", true) == false
+			and String(foreign.get("reason", "")) == "field_effect_not_connected"
+			and snapshot(foreign_service) == before_foreign)
+
+# 05: Repelente, Baya Frambu Plateada y Supercolonia.
+# No fingir efectos de encuentro/captura sin contrato de integración.
+func _block_05(block: Dictionary) -> void:
+	var ids: Array = block.get("ids", [])
+	check("Bloque05 IDs autorizados", ids == ["repel", "silver_razz_berry", "super_lure"])
+	check("Bloque05 sin efectos ficticios", not bool(block.get("functional_effect_certified", true)))
+	for raw_id: String in ids:
+		var id := StringName(raw_id)
+		check("Catálogo contiene ID " + raw_id, catalogs.item(id) != null)
+		for case: Dictionary in block.get("cases", []):
+			for count: int in block.get("inventory_counts", []):
+				var service := service_for()
+				check("Política de selección permite " + raw_id, service.selection.content_allowed(id))
+				var creature: CreatureInstance = service.owner.owned_creature(&"field_item_target")
+				match String(case.get("status", "")):
+					"confusion":
+						creature.status_state.add_volatile(&"confusion", {"turns": 3})
+					"sleep":
+						status(creature, &"sleep")
+						service.sleep_clocks[String(creature.instance_id)] = {
+							"version": "0.10.11", "start_time": 3, "time": 2}
+				if count > 0:
+					check("Existencias preparadas " + raw_id, service.owner.inventory.add(id, count))
+				var before: String = snapshot(service)
+				var result: Dictionary = service.use_item(id, creature.instance_id)
+				check("Rechazo seguro de efecto no conectado " + raw_id,
+					result.get("accepted", true) == false
+					and String(result.get("reason", "")) == "field_effect_not_connected"
+					and String(result.get("status", "")) == "DEPENDENCY_MISSING"
+					and snapshot(service) == before
+					and service.owner.inventory.quantity(id) == count)
+				var saved: Dictionary = service.owner.inventory.to_dict()
+				var loaded: PlayerInventory = PlayerInventory.from_dict(saved)
+				check("Inventario conserva cantidades tras roundtrip " + raw_id,
+					not loaded.corrupted and loaded.to_dict() == saved
+					and loaded.quantity(id) == count)
+				if String(case.get("status", "")) == "confusion":
+					check("No alterar confusión por un objeto sin ejecutor " + raw_id,
+						creature.status_state.has_volatile(&"confusion"))
+		var locked_service := service_for()
+		check("Mochila bloqueo preparada " + raw_id, locked_service.owner.inventory.add(id, 2))
+		var before_locked: String = snapshot(locked_service)
+		locked = true
+		var denied: Dictionary = locked_service.use_item(id, &"field_item_target")
+		locked = false
+		check("Campo bloqueado conserva estado " + raw_id,
+			denied.get("accepted", true) == false
+			and String(denied.get("reason", "")) == "field_locked"
+			and snapshot(locked_service) == before_locked)
+		var corrupt_service := service_for()
+		check("Preparación mochila corrupta " + raw_id, corrupt_service.owner.inventory.add(id, 2))
+		corrupt_service.owner.inventory.corrupted = true
+		var before_corrupt: String = snapshot(corrupt_service)
+		var invalid: Dictionary = corrupt_service.use_item(id, &"field_item_target")
+		check("Mochila corrupta rechaza sin gasto " + raw_id,
+			invalid.get("accepted", true) == false
+			and String(invalid.get("reason", "")) == "invalid_inventory"
+			and snapshot(corrupt_service) == before_corrupt)
+		var foreign_service := service_for()
+		check("Mochila objetivo ajeno preparada " + raw_id,
+			foreign_service.owner.inventory.add(id, 2))
+		var before_foreign: String = snapshot(foreign_service)
+		var foreign: Dictionary = foreign_service.use_item(id, &"foreign_creature")
+		check("Objetivo ajeno sin gasto ni efectos " + raw_id,
 			foreign.get("accepted", true) == false
 			and String(foreign.get("reason", "")) == "field_effect_not_connected"
 			and snapshot(foreign_service) == before_foreign)
