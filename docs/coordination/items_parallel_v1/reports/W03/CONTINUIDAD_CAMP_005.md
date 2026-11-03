@@ -1,3 +1,11 @@
+## Recibos verificados — hito 05
+
+[GitHub Actions #41721510769](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41721510769), SHA `3d6989141f2919a7b35b4e03281fc339a9fce98c`, terminó **completed/success**. Resultado acumulado: `CAMP005_W03_PY PASS blocks=5 checks=93`, `CAMP005_W03_GODOT PASS blocks=5 checks=103`, gates Python y Godot IA6 PASS. Regresiones del hito obligatorias: `CAMP004_W03_PY PASS blocks=10 checks=187`, `CAMP004_W03_GODOT PASS blocks=10 checks=1344`, `CAMP003_W03_PY PASS blocks=10 checks=279`, `CAMP003_W03_GODOT PASS blocks=10 checks=986`.
+
+El éxito de CI comprueba ×1,5 actualmente operativo y la dependencia de contexto especial, **no** garantiza validación de zona Safari/Concurso Bicho. IA6 debe decidir si el uso se limita a esas zonas.
+
+---
+
 # W03 CAMP005 — Continuidad 05/10
 
 Bloque 05: safari_ball y sport_ball. Existe factor ×1,5 implementado en CaptureBallEffects y usado por CaptureSystem. El contexto no identifica zona Safari ni Concurso Bicho; el factor se aplica sin comprobar zona. IA6 debe decidir si el uso será libre o restringido y asignar productor autoritativo. Estado PARTIAL_EXISTING_EFFECT_UNGATED. Pruebas Godot/Python positivas del factor existente. Hito 05 requiere regresiones CAMP004/CAMP003. CI 04 previa PASS #41720389165. Siguiente p ejecutará solo bloque 06 si CI 05 se valida.
