@@ -1,0 +1,8 @@
+{
+  "schema_version": 1,
+  "campaign": "CAMP_004",
+  "worker": "W01",
+  "scope": "HELD_COMBAT_CANDIDATE",
+  "purpose": "Prueba y clasificación real de equipables; bootstrap 0/10 sin funcionalidad certificada",
+  "blocks": []
+}
