@@ -531,6 +531,71 @@ def main() -> int:
                       and 'service.use_item(id, &"field_item_target")' in runner
                       and "snapshot(service) == before" in runner,
                       "No hay tests reales de rechazo sin gasto")
+            elif block["bloque"] == "10":
+                check(ids == ["friend_ball", "heal_ball", "quick_ball", "timer_ball"],
+                      "Cola final modificada")
+                check(block["current_state"] == "EXISTING_FUNCTIONAL_CAPTURE_CONTRACTS"
+                      and block["functional_effect_certified"] is True
+                      and block["no_new_objects"] is True,
+                      "Los efectos son existentes, no nuevas altas")
+                check(block["savev2_scope"] ==
+                      "creature_serialization_roundtrip_only_no_full_SaveV2_end_to_end",
+                      "No certificar SaveV2 completo por serialización parcial")
+                basic = (ROOT / "modules/capture/capture_ball_effects.gd").read_text(
+                    encoding="utf-8")
+                contextual = (ROOT / "modules/capture/capture_context_ball_effects.gd").read_text(
+                    encoding="utf-8")
+                capture = (ROOT / "modules/capture/capture_system.gd").read_text(
+                    encoding="utf-8")
+                session = (ROOT / "modules/gameplay/showdown_adventure_session.gd").read_text(
+                    encoding="utf-8")
+                creature = (ROOT / "modules/creatures/domain/creature_instance.gd").read_text(
+                    encoding="utf-8")
+                check('if id == &"friend_ball": target.friendship = 200' in basic
+                      and 'if id != &"heal_ball": return' in basic
+                      and 'target.current_hp = target.stats.max_hp' in basic
+                      and 'slot.current_pp = slot.max_pp' in basic,
+                      "Friend/Heal éxito ya no tiene contrato verificable")
+                check('&"quick_ball", &"timer_ball", &"level_ball"' in contextual
+                      and 'context.completed_turns < 0' in contextual
+                      and 'context.completed_turns == 0' in contextual
+                      and '0.3 * context.completed_turns' in contextual,
+                      "Quick/Timer no reciben contrato por turno")
+                check('crs.BallEffects.on_catch(attempt.ball_id, target)' in capture
+                      and 'crs.ContextBallEffects.multiplier(' in capture
+                      and 'var invalid_reason := validate_attempt(attempt, catalogs)' in capture,
+                      "No está probado el punto de éxito y validación")
+                check('context.completed_turns = battle_state().turn' in session
+                      and 'CaptureInventoryService.resolve(' in session
+                      and 'if resolution.result.status == CaptureResult.INVALID:' in session,
+                      "La sesión no produce contexto de turno seguro")
+                check('"friendship": friendship' in creature
+                      and '"current_hp": current_hp' in creature
+                      and '"moveset": serialized_moveset' in creature
+                      and "static func from_dict(" in creature,
+                      "La persistencia serializable de criatura cambió")
+                check({p["id"] for p in block["required_producers"]} == set(ids)
+                      and all(not p["missing_fields"] for p in
+                              block["required_producers"]),
+                      "No se deben declarar productores ficticios")
+                check('"10": _block_10(block)' in runner
+                      and 'func _block_10(block: Dictionary)' in runner
+                      and 'CaptureInventoryService.resolve(' in runner,
+                      "Falta captura ejecutable propia")
+                check('outcome.result.status == CaptureResult.SUCCESS' in runner
+                      and 'c.friendship == 200' in runner
+                      and 'c.current_hp == c.stats.max_hp' in runner
+                      and 'CreatureInstance.from_dict(c.to_dict())' in runner,
+                      "Faltan casos positivos y serialización de Friend/Heal")
+                check('context.completed_turns = 10' in runner
+                      and 'context.completed_turns = -1' in runner
+                      and 'rng.state == before_rng' in runner
+                      and 'bag.to_dict() == before_bag' in runner,
+                      "Faltan límites Quick/Timer y rechazo sin consumo")
+                selected = {r["id"]: r for r in
+                            rows(ROOT / "docs/current/RANDOMLOCK_ITEMS_BUILD_SCOPE_V2.csv")}
+                check(all(selected[id]["estado_contenido"] == "SELECCIONADO"
+                          for id in ids), "Bolas fuera del alcance aprobado")
             else:
                 check(False, "Bloque sin nueva prueba: " + block["bloque"])
         check(checks > 0, "Sin verificaciones")
