@@ -30,3 +30,12 @@ Consultar última CI de la rama y exigir `CAMP004_W04_PY PASS blocks=6 checks=N`
 Sin cambios en producción, `main`, V28, datasets, workflow, rama árbitra ni ramas ajenas. Las 16 dependencias de CAMPAÑA_003 siguen intactas.
 
 **Siguiente `p`:** bloque 07/10 (`rage_candy_bar;red_orb;reins_of_unity`), solamente después de revisar la CI06 y reparar cualquier fallo propio.
+
+
+## Corrección V5 de validación Python
+
+La primera CI [#41584213703](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41584213703) falló en el validador Python por un literal de salida **obsoleto**: el contrato de bloque 05 buscaba `CAMP004_W04_GODOT PASS blocks=5 checks=` aunque el runner acumulativo pasó correctamente a seis bloques. No se ejecutó Godot funcional en esa CI por el fallo anterior de Python.
+
+Corrección mínima en `tests/tools/test_parallel_items_w04_campaign_004.py`, commit `64f688735428722fb0f5970a0be0f9ebb11a42e1`: retirar únicamente esa referencia específica al antiguo número de bloques. Se conservan los tests de comportamiento del bloque 05 y el recibo final exacto de seis bloques, que se verifica dentro de los contratos del bloque 06.
+
+**Nueva CI:** [#41584355240](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41584355240), pendiente de comprobación final. No afirmar PASS hasta registros reales.
