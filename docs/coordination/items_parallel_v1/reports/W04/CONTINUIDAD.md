@@ -181,3 +181,18 @@ Las **16 dependencias CAMP003** y **9 dependencias CAMP004 bloques 01–03** sig
 **Regresiones:** CAMPAÑA_003 mantiene 10/10 y sus 16 dependencias funcionales. CAMPAÑA_001 está conservada y se ejecuta específicamente en bloques 05 y 10. Sin cambios en producción, catálogo, workflow, `main`, V28, rama árbitra u otras trabajadoras.
 
 **Próxima `p`:** revisar CI07, reparar fallos propios; después ejecutar **solo bloque 08/10** `reveal_glass;rotom_catalog;zygarde_cube`. No repetir los 7 bloques ni avanzar antes de aceptar.
+
+
+---
+
+## CAMPAÑA_004 — Bloque 08 (2026-11-03)
+
+**Identidad:** IA4/W04, rama exclusiva `codex/calvo-items-20261103-w04-camp004`.
+
+**Puerta previa:** CI de bloque 07 consolidado [#41589609852](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41589609852), `completed/success` en SHA `dc2b596533dac833ccb509753e93847b391c67a6`, Python CAMP004 **211** comprobaciones, Godot **656**, regresión CAMP003 Python **120** / Godot **270**. `rage_candy_bar` tiene efecto de recuperación de quemadura y consumo unitario **positivo verificado**; `red_orb` y `reins_of_unity` conservan dependencias. Este dato reemplaza la nota anterior del bloque 07 que decía comprobar su estado.
+
+**Bloque 08/10 publicado**, IDs autorizados `reveal_glass;rotom_catalog;zygarde_cube`, pruebas en `tests/gameplay/parallel_items_w04_campaign_004.gd`, validador `tests/tools/test_parallel_items_w04_campaign_004.py`, fixture `tests/fixtures/parallel_items/w04_campaign_004.json`, estado `reports/W04/CAMP_004_PROGRESO.csv`, informe `reports/W04/CAMP_004_ITER_08.md`. CI de entrega [#41591880287](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41591880287), SHA `2ac9b2cef1486e074f57ecf01232333bbaf793e7` — comprobar final y corregir errores si procede.
+
+**Contratos:** los tres objetos están seleccionados y tienen `DATA_ONLY`, no son equipables bajo el perfil actual. `rotom_catalog` conserva `missing_description`. El runner comprueba origen/controles de Tornadus, Rotom, Zygarde y Eevee, rechazos sin consumo, identidad y SaveV2, y no promete cambios de formas sin motor. No se han tocado las 16 dependencias CAMP003, las pruebas de CAMP001, `main`, V28, rama árbitra, producción ni ramas ajenas.
+
+**Siguiente `p`:** una vez comprobada CI08, ejecutar exclusivamente el bloque **09/10**: `n_lunarizer_merge;n_solarizer_merge;roto_catch;roto_exp_points;roto_friendship`. No adelantar trabajo de captura/entrenamiento de W03/W02.
