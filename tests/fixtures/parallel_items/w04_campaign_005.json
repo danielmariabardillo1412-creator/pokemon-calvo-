@@ -1,0 +1,8 @@
+{
+  "schema_version": 1,
+  "campaign": "CAMP_005",
+  "worker": "W04",
+  "kind": "FUNCTIONAL_BACKLOG",
+  "purpose": "No recontar IDs antiguos como nuevos. 0/10 no certifica funcionalidad",
+  "blocks": []
+}
