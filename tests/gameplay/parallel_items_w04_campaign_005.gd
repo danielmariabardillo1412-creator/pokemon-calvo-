@@ -110,6 +110,59 @@ func _auditar_pareja(catalogo: DefinitionCatalog, fila: Dictionary, policy: Dict
 	print("CAMP005_W04_ITEM id=", String(item), " status=BLOQUEADO_POR_CONTRATO source=", String(source), " target=", String(target),
 		" required=approved_level+held_item producer=level_up_context consumer=evolution_candidates")
 
+func _casos_de_version_y_etapas_02(catalogo: DefinitionCatalog) -> void:
+	var feebas: CreatureSpecies = catalogo.species(&"feebas")
+	comprobar(feebas != null, "prism_scale/feebas_definicion")
+	if feebas != null:
+		var alternativas := 0
+		var condicionadas := 0
+		for record: EvolutionRecord in feebas.evolutions:
+			if record.species_id != &"milotic":
+				continue
+			if record.trigger == EvolutionSystem.TRIGGER_LEVEL_UP and record.conditions.has("min_beauty"):
+				alternativas += 1
+				if EvolutionSystem.classify_record(record, catalogo, &"feebas") == EvolutionSystem.DATA_ONLY:
+					condicionadas += 1
+		comprobar(alternativas > 0 and alternativas == condicionadas, "prism_scale/belleza_legacy_no_degradada")
+		print("CAMP005_W04_ALT id=prism_scale source=feebas target=milotic min_beauty=170 routes=", alternativas, " status=DATA_ONLY")
+	var porygon: CreatureSpecies = catalogo.species(&"porygon")
+	var porygon2: CreatureSpecies = catalogo.species(&"porygon2")
+	comprobar(porygon != null and porygon2 != null, "up_grade/dos_etapas_porygon")
+	if porygon == null or porygon2 == null:
+		return
+	var primero := 0
+	var segundo := 0
+	var equivocado := 0
+	for record: EvolutionRecord in porygon.evolutions:
+		if record.trigger == EvolutionSystem.TRIGGER_TRADE and record.species_id == &"porygon2" and StringName(str(record.conditions.get("held_item", ""))) == &"up_grade":
+			primero += 1
+	for record: EvolutionRecord in porygon2.evolutions:
+		if record.trigger == EvolutionSystem.TRIGGER_TRADE and record.species_id == &"porygon_z" and StringName(str(record.conditions.get("held_item", ""))) == &"dubious_disc":
+			segundo += 1
+		if record.conditions.get("held_item", "") == "up_grade":
+			equivocado += 1
+	comprobar(primero == 1 and segundo == 1 and equivocado == 0, "up_grade/dos_objetos_dos_etapas")
+	var pc := _crear(catalogo, &"porygon2")
+	comprobar(pc != null, "up_grade/propietario_etapa_incorrecta")
+	if pc == null:
+		return
+	var service := Servicio.new()
+	comprobar(service.configure(pc, catalogo, func(): return true), "up_grade/servicio_etapa_incorrecta")
+	comprobar(pc.inventory.add(&"up_grade", 2), "up_grade/stock_etapa_incorrecta")
+	var antes := _estado(pc)
+	comprobar(service.evolution_options(&"up_grade", ID).is_empty(), "up_grade/porygon2_sin_opcion")
+	var forzado: Dictionary = service.evolve(&"up_grade", ID, &"porygon_z")
+	comprobar(not forzado.get("accepted", false) and _estado(pc) == antes, "up_grade/porygon2_no_evoluciona")
+	var equipado: Dictionary = service.equip(&"up_grade", ID)
+	comprobar(equipado.get("accepted", false) and pc.owned_creature(ID).species_id == &"porygon2" and pc.inventory.quantity(&"up_grade") == 1, "up_grade/equipamiento_no_salta_etapa")
+	if equipado.get("accepted", false):
+		var durante := _estado(pc)
+		var otra: Dictionary = service.use_item(&"up_grade", ID)
+		comprobar(not otra.get("accepted", false) and _estado(pc) == durante, "up_grade/porygon2_con_objeto_no_salta_etapa")
+		var retirada: Dictionary = service.unequip(ID)
+		comprobar(retirada.get("accepted", false) and _estado(pc) == antes, "up_grade/porygon2_retirada_sin_mutacion")
+	print("CAMP005_W04_STAGE item=up_grade porygon_to_porygon2=1 porygon2_to_porygon_z=dubious_disc wrong_stage_rejected=true")
+
 func _ejecutar() -> void:
 	var fixture := _abrir(FIXTURE)
 	var policy := _abrir(TRADE_POLICY)
@@ -124,14 +177,16 @@ func _ejecutar() -> void:
 	comprobar(earlier.get("trade_level_conversion", {}).get("levels_selected") == null, "V25_sin_niveles")
 	comprobar(String(policy.get("correct_future_rule", "")).contains("original equipped evolution item"), "conservar_objeto_equipado")
 	var blocks: Array = fixture.get("blocks", [])
-	comprobar(blocks.size() == 1 and blocks[0].get("block") == "01", "solo_bloque_01")
-	if blocks.is_empty():
+	comprobar(blocks.size() == 2 and blocks[0].get("block") == "01" and blocks[1].get("block") == "02", "bloques_01_y_02_secuenciales")
+	if blocks.size() != 2:
 		_finalizar()
 		return
-	var pairs: Array = blocks[0].get("pairs", [])
-	comprobar(pairs.size() == 4, "exactamente_cuatro_parejas")
-	for pareja: Dictionary in pairs:
-		_auditar_pareja(catalogo, pareja, policy)
+	for index in range(blocks.size()):
+		var pairs: Array = blocks[index].get("pairs", [])
+		comprobar(pairs.size() == (4 if index == 0 else 5), "tamano_bloque_" + str(index + 1))
+		for pareja: Dictionary in pairs:
+			_auditar_pareja(catalogo, pareja, policy)
+	_casos_de_version_y_etapas_02(catalogo)
 	_finalizar()
 
 func _finalizar() -> void:
@@ -139,7 +194,7 @@ func _finalizar() -> void:
 		return
 	cerrado = true
 	if errores.is_empty():
-		print("CAMP005_W04_GODOT PASS blocks=1 checks=", checks)
+		print("CAMP005_W04_GODOT PASS blocks=2 checks=", checks)
 	else:
 		print("CAMP005_W04_GODOT FAIL errors=", JSON.stringify(errores))
 	quit(0 if errores.is_empty() else 1)
