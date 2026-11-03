@@ -81,7 +81,7 @@ def validate():
     require(fixture["blocks"][1]["ids"] == queue[1]["ids"].split(";"), "IDs del bloque 02 alterados")
     require(set(fixture["blocks"][1]["cases"]) == NEW_CASE_IDS, "Casos del bloque 02 incompletos")
     require(len(fixture["cases"]) == len(EXPECTED) == 14, "Se exigen catorce casos, no duplicados")
-    require(set(fixture["blocks"][0]["cases"]) == set(EXPECTED), "Falta caso del manifiesto")
+    require(set(fixture["blocks"][0]["cases"]) == set(EXPECTED) - NEW_CASE_IDS, "Falta caso original del manifiesto")
     require(len(fixture["sources"]) == len(REFS), "Fuentes añadidas o omitidas")
     for source in fixture["sources"]:
         path = source["path"]

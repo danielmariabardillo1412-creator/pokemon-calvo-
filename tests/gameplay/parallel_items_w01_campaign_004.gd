@@ -131,6 +131,9 @@ func _probe_w01_c004(row: Dictionary, seed: int, mode: String) -> Dictionary:
 	var second: String = String(row.get("follow_move", "reflect"))
 	if second.is_empty():
 		second = "reflect"
+	# Evitar un slot duplicado de Reflejo en los controles sin clima.
+	if second == String(row.own_move):
+		second = "tackle"
 	check(mode + " movimiento de control disponible", actor.add_move(StringName(second), catalogs))
 	prepared.foe = _mon(StringName(row.foe_species), 100, &"foe", [String(row.foe_move)])
 	var id := StringName(row.item_id)
