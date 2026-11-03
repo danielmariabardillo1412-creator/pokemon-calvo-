@@ -3,7 +3,7 @@
   "campaign": "CAMP_004_W02",
   "worker": "W02",
   "active_policy": "RANDOMLOCK_ITEMS_BUILD_SCOPE_V2",
-  "purpose": "Verificar cuatro bayas reservadas en combate/campo con contratos nativos, propiedad y SaveV2; CI real, sin atribuir PASS previo.",
+  "purpose": "CAMP004 W02: verificar bayas 01-02 mediante servicios nativos; Razz sin efecto conectado queda documentada como dependencia, sin inventar mecánica.",
   "format": "gen9calvounifiedv1",
   "level": 100,
   "seed": [
@@ -18,7 +18,8 @@
     "reserve"
   ],
   "completed_blocks": [
-    1
+    1,
+    2
   ],
   "blocks": [
     {
@@ -206,12 +207,170 @@
           "applies": false
         }
       ]
+    },
+    {
+      "block": "02",
+      "family": "BERRY",
+      "ids": [
+        "qualot_berry",
+        "razz_berry",
+        "sitrus_berry",
+        "tamato_berry"
+      ],
+      "source_evidence": [
+        "modules/inventory/field_item_effects.gd",
+        "modules/inventory/imported_recovery_v19.json",
+        "modules/inventory/field_item_service.gd",
+        "modules/inventory/item_connections_v1.json"
+      ],
+      "cases": [
+        {
+          "scenario": "qualot_ev20_friend100_c004",
+          "id": "qualot_berry",
+          "kind": "field_ev_training",
+          "stat": "defense",
+          "start_ev": 20,
+          "start_friendship": 100,
+          "start_hp": "full",
+          "applies": true,
+          "ev_removed": 10,
+          "friendship_gain": 5
+        },
+        {
+          "scenario": "qualot_ev0_friend200_c004",
+          "id": "qualot_berry",
+          "kind": "field_ev_training",
+          "stat": "defense",
+          "start_ev": 0,
+          "start_friendship": 200,
+          "start_hp": "full",
+          "applies": true,
+          "ev_removed": 0,
+          "friendship_gain": 2
+        },
+        {
+          "scenario": "qualot_ev0_friend255_noop_c004",
+          "id": "qualot_berry",
+          "kind": "field_ev_training",
+          "stat": "defense",
+          "start_ev": 0,
+          "start_friendship": 255,
+          "start_hp": "full",
+          "applies": false,
+          "ev_removed": 0,
+          "friendship_gain": 0
+        },
+        {
+          "scenario": "razz_field_missing_contract_c004",
+          "id": "razz_berry",
+          "kind": "field_unsupported",
+          "status": "",
+          "confused": false,
+          "applies": false
+        },
+        {
+          "scenario": "razz_held_inert_c004",
+          "id": "razz_berry",
+          "kind": "inert_held",
+          "nature": "hardy",
+          "start": "near_full",
+          "status": "",
+          "actor_species": "mew",
+          "foe_species": "mew",
+          "foe_move": "amnesia",
+          "consumes": false,
+          "confuses": false,
+          "own_move": "reflect"
+        },
+        {
+          "scenario": "sitrus_held_low_hp_c004",
+          "id": "sitrus_berry",
+          "kind": "heal_quarter_held",
+          "nature": "hardy",
+          "start": "full",
+          "status": "",
+          "actor_species": "mew",
+          "foe_species": "snorlax",
+          "foe_move": "endeavor",
+          "consumes": true,
+          "confuses": false,
+          "own_move": "reflect",
+          "foe_initial_hp": 1
+        },
+        {
+          "scenario": "sitrus_held_high_hp_c004",
+          "id": "sitrus_berry",
+          "kind": "heal_quarter_held",
+          "nature": "hardy",
+          "start": "near_full",
+          "status": "",
+          "actor_species": "mew",
+          "foe_species": "mew",
+          "foe_move": "amnesia",
+          "consumes": false,
+          "confuses": false,
+          "own_move": "reflect"
+        },
+        {
+          "scenario": "sitrus_field_half_hp_c004",
+          "id": "sitrus_berry",
+          "kind": "field_heal",
+          "start_hp": "half",
+          "applies": true,
+          "heal_denominator": 4
+        },
+        {
+          "scenario": "sitrus_field_full_hp_noop_c004",
+          "id": "sitrus_berry",
+          "kind": "field_heal",
+          "start_hp": "full",
+          "applies": false,
+          "heal_denominator": 4
+        },
+        {
+          "scenario": "tamato_ev20_friend100_c004",
+          "id": "tamato_berry",
+          "kind": "field_ev_training",
+          "stat": "speed",
+          "start_ev": 20,
+          "start_friendship": 100,
+          "start_hp": "full",
+          "applies": true,
+          "ev_removed": 10,
+          "friendship_gain": 5
+        },
+        {
+          "scenario": "tamato_ev0_friend200_c004",
+          "id": "tamato_berry",
+          "kind": "field_ev_training",
+          "stat": "speed",
+          "start_ev": 0,
+          "start_friendship": 200,
+          "start_hp": "full",
+          "applies": true,
+          "ev_removed": 0,
+          "friendship_gain": 2
+        },
+        {
+          "scenario": "tamato_ev0_friend255_noop_c004",
+          "id": "tamato_berry",
+          "kind": "field_ev_training",
+          "stat": "speed",
+          "start_ev": 0,
+          "start_friendship": 255,
+          "start_hp": "full",
+          "applies": false,
+          "ev_removed": 0,
+          "friendship_gain": 0
+        }
+      ]
     }
   ],
   "limitations": [
     "Los modos de campo son: equipo con ítem, equipo sin ítem y almacenado con ítem; los modos de combate siguen activo/ausente/reserva equipada.",
     "La baya Figy se comprueba con Endeavor del rival a 1 PS y naturaleza modest que rechaza el sabor picante; con Hardy no confunde.",
     "Leppa se comprueba mediante la ruta nativa de uso de PP en bolsa; el barrido histórico held Leppa sigue preservado y se ejecuta en la regresión CAMP003 existente solo si está incluida.",
-    "Amistad por bonificaciones de origen pendiente; validación base sin origen especial, sin GPU ni interfaz."
+    "Amistad por bonificaciones de origen pendiente; validación base sin origen especial, sin GPU ni interfaz.",
+    "Razz Berry no tiene efecto de campo conectado en el contrato del proyecto ni efecto competitivo al equiparse; solo se prueba rechazo/inercia. Su inclusion funcional requiere decisión de IA6 sobre alcance; no se finge PASS positivo."
   ]
 }
