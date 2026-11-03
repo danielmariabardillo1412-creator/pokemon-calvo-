@@ -424,6 +424,29 @@ func _block_08(block: Dictionary) -> void:
 			and String(denied.get("reason", "")) == "field_effect_not_connected"
 			and snapshot(other) == before)
 
+func _block_09(block: Dictionary) -> void:
+	var ids: Array = block.get("ids", [])
+	check("Cola 09 exacta", ids == ["escape_rope", "fluffy_tail"])
+	var profile: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(
+		"res://modules/inventory/battle_escape_profile.json"))
+	var spec: Dictionary = profile.get("items", {}).get("fluffy_tail", {})
+	check("Cola Esponjosa tiene huida garantizada sin RNG",
+		spec.get("consume", 0) == 1 and spec.get("guaranteed", false)
+		and spec.get("wild_only", false) and not spec.get("rng_consumed", true))
+	for raw_id: String in ids:
+		var service := service_for()
+		var id := StringName(raw_id)
+		check("Objeto seleccionado " + raw_id,
+			catalogs.item(id) != null and service.selection.content_allowed(id))
+		check("Mochila admite objeto " + raw_id,
+			service.owner.inventory.add(id, 2))
+		var before: String = snapshot(service)
+		var result: Dictionary = service.use_item(id, &"field_item_target")
+		check("Rechazo de campo no consume " + raw_id,
+			not bool(result.get("accepted", false))
+			and String(result.get("reason", "")) == "field_effect_not_connected"
+			and snapshot(service) == before)
+
 func _finish(n: int) -> void:
 	done = true
 	if errors.is_empty() and n > 0 and checks > 0:
