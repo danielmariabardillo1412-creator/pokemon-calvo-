@@ -62,3 +62,18 @@ Exigir `CAMP005_W04_MANIFEST_PASS reserved=10 completed=6 ids=46 kind=FUNCTIONAL
 Sin cambios en `main`, V28, otras ramas, código de producción, datos compartidos, workflows ni guardados reales.
 
 **Tras CI06 válida:** próxima `p` autorizada para bloque 07 `adamant_crystal;blue_orb;griseous_core;lustrous_globe;red_orb` exclusivamente.
+
+## CI06 real — ejecutado sin inventar evolución
+
+[GitHub Actions #41733707261](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41733707261), SHA `c570b7ea746a93a6995f9cdb9cc92af1344e41a7`, terminó `completed/success`.
+
+Recibos de los logs:
+- `CAMP005_W04_MANIFEST_PASS reserved=10 completed=6 ids=46 kind=FUNCTIONAL_BACKLOG`.
+- `CAMP005_W04_PY PASS blocks=6 checks=356`.
+- `CAMP005_W04_GODOT PASS blocks=6 checks=611`.
+- `CAMP005_W04_ITEM id=whipped_dream status=BLOQUEADO_POR_CONTRATO source=swirlix target=slurpuff need=approved_level+held_item`.
+- `CAMP005_W04_ITEM id=leaders_crest status=DEPENDENCIA_COMBATE source=bisharp target=kingambit need=three_qualified_battle_events`.
+
+Esta CI comprueba fuente, condiciones, rechazos seguros, equipamiento/retirada, identidad y SaveV2. **No comprueba evolución positiva porque el contrato sigue sin implementarse**. En bloque 06 el workflow **no ejecutó** regresiones CAMP004/CAMP003/CAMP001; las pruebas acumulativas CAMP005 de bloques 01–06 sí se ejecutaron completas. Las regresiones históricas siguen preservadas para hitos 10 o parches autorizados.
+
+El CSV se consolidó como `DEPENDENCIA_DOCUMENTADA` con el recibo anterior (commit `d55808c3d11e3000b9266f31c9ac9ca6f6519f19`); dicho commit desencadena segunda CI que debe comprobarse separadamente. Bloque 04 sin modificar por la incidencia de permiso anterior.
