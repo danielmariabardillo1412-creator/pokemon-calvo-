@@ -153,10 +153,10 @@ def main():
         check(len(routes) == 1, f"{name}/{case['source']}: ruta canónica única")
         d = routes[0][2]
         check(d["min_level"] is None, f"{name}/{case['source']}: no inventar nivel")
-        field = d.get(case["key"])
+        requirement_value = d.get(case["key"])
         if case["key"] == "held_item":
-            field = field.get("name") if field else None
-        check(field == case["required"], f"{name}/{case['source']}: requisito canónico")
+            requirement_value = requirement_value.get("name") if requirement_value else None
+        check(requirement_value == case["required"], f"{name}/{case['source']}: requisito canónico")
         if "additional_key" in case:
             check(d.get(case["additional_key"]) == case["additional_value"], name + " día exacto")
         check((name in profile) is case["equippable"], name + " perfil de equipamiento")
