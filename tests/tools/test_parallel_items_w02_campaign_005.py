@@ -435,6 +435,271 @@ EXPECTED_02 = json.loads(r'''[
 IDS_02 = ["pp_max","hp_up","protein","iron"]
 SOURCES_02 = ["modules/inventory/field_pp_boost_effects.gd","modules/inventory/field_training_effects.gd","modules/inventory/field_friendship_effects.gd","modules/inventory/field_item_service.gd","tests/gameplay/item_field_pp_v8.gd","tests/gameplay/field_held_v17.gd"]
 
+EXPECTED_03 = json.loads(r'''[
+  {
+    "scenario": "calcium_zero_ev",
+    "id": "calcium",
+    "kind": "vitamin",
+    "applies": true,
+    "stat": "special_attack",
+    "start_ev": 0,
+    "other_ev_total": 0,
+    "start_friendship": 99,
+    "expected_ev_gain": 10
+  },
+  {
+    "scenario": "calcium_stat_248_to_252",
+    "id": "calcium",
+    "kind": "vitamin",
+    "applies": true,
+    "stat": "special_attack",
+    "start_ev": 248,
+    "other_ev_total": 0,
+    "start_friendship": 100,
+    "expected_ev_gain": 4
+  },
+  {
+    "scenario": "calcium_stat_252_reject",
+    "id": "calcium",
+    "kind": "vitamin",
+    "applies": false,
+    "stat": "special_attack",
+    "start_ev": 252,
+    "other_ev_total": 0,
+    "start_friendship": 200
+  },
+  {
+    "scenario": "calcium_total_508_to_510",
+    "id": "calcium",
+    "kind": "vitamin",
+    "applies": true,
+    "stat": "special_attack",
+    "start_ev": 0,
+    "other_ev_total": 508,
+    "start_friendship": 200,
+    "expected_ev_gain": 2
+  },
+  {
+    "scenario": "calcium_total_510_reject",
+    "id": "calcium",
+    "kind": "vitamin",
+    "applies": false,
+    "stat": "special_attack",
+    "start_ev": 0,
+    "other_ev_total": 510,
+    "start_friendship": 100
+  },
+  {
+    "scenario": "calcium_wrong_slot_reject",
+    "id": "calcium",
+    "kind": "vitamin",
+    "applies": false,
+    "stat": "special_attack",
+    "start_ev": 0,
+    "other_ev_total": 0,
+    "start_friendship": 99,
+    "slot": 0
+  },
+  {
+    "scenario": "zinc_zero_ev",
+    "id": "zinc",
+    "kind": "vitamin",
+    "applies": true,
+    "stat": "special_defense",
+    "start_ev": 0,
+    "other_ev_total": 0,
+    "start_friendship": 99,
+    "expected_ev_gain": 10
+  },
+  {
+    "scenario": "zinc_stat_248_to_252",
+    "id": "zinc",
+    "kind": "vitamin",
+    "applies": true,
+    "stat": "special_defense",
+    "start_ev": 248,
+    "other_ev_total": 0,
+    "start_friendship": 100,
+    "expected_ev_gain": 4
+  },
+  {
+    "scenario": "zinc_stat_252_reject",
+    "id": "zinc",
+    "kind": "vitamin",
+    "applies": false,
+    "stat": "special_defense",
+    "start_ev": 252,
+    "other_ev_total": 0,
+    "start_friendship": 200
+  },
+  {
+    "scenario": "zinc_total_508_to_510",
+    "id": "zinc",
+    "kind": "vitamin",
+    "applies": true,
+    "stat": "special_defense",
+    "start_ev": 0,
+    "other_ev_total": 508,
+    "start_friendship": 200,
+    "expected_ev_gain": 2
+  },
+  {
+    "scenario": "zinc_total_510_reject",
+    "id": "zinc",
+    "kind": "vitamin",
+    "applies": false,
+    "stat": "special_defense",
+    "start_ev": 0,
+    "other_ev_total": 510,
+    "start_friendship": 100
+  },
+  {
+    "scenario": "zinc_wrong_slot_reject",
+    "id": "zinc",
+    "kind": "vitamin",
+    "applies": false,
+    "stat": "special_defense",
+    "start_ev": 0,
+    "other_ev_total": 0,
+    "start_friendship": 99,
+    "slot": 0
+  },
+  {
+    "scenario": "carbos_zero_ev",
+    "id": "carbos",
+    "kind": "vitamin",
+    "applies": true,
+    "stat": "speed",
+    "start_ev": 0,
+    "other_ev_total": 0,
+    "start_friendship": 99,
+    "expected_ev_gain": 10
+  },
+  {
+    "scenario": "carbos_stat_248_to_252",
+    "id": "carbos",
+    "kind": "vitamin",
+    "applies": true,
+    "stat": "speed",
+    "start_ev": 248,
+    "other_ev_total": 0,
+    "start_friendship": 100,
+    "expected_ev_gain": 4
+  },
+  {
+    "scenario": "carbos_stat_252_reject",
+    "id": "carbos",
+    "kind": "vitamin",
+    "applies": false,
+    "stat": "speed",
+    "start_ev": 252,
+    "other_ev_total": 0,
+    "start_friendship": 200
+  },
+  {
+    "scenario": "carbos_total_508_to_510",
+    "id": "carbos",
+    "kind": "vitamin",
+    "applies": true,
+    "stat": "speed",
+    "start_ev": 0,
+    "other_ev_total": 508,
+    "start_friendship": 200,
+    "expected_ev_gain": 2
+  },
+  {
+    "scenario": "carbos_total_510_reject",
+    "id": "carbos",
+    "kind": "vitamin",
+    "applies": false,
+    "stat": "speed",
+    "start_ev": 0,
+    "other_ev_total": 510,
+    "start_friendship": 100
+  },
+  {
+    "scenario": "carbos_wrong_slot_reject",
+    "id": "carbos",
+    "kind": "vitamin",
+    "applies": false,
+    "stat": "speed",
+    "start_ev": 0,
+    "other_ev_total": 0,
+    "start_friendship": 99,
+    "slot": 0
+  },
+  {
+    "scenario": "exp_candy_xs_level_20_plus_100",
+    "id": "exp_candy_xs",
+    "kind": "growth",
+    "applies": true,
+    "level": 20,
+    "exp_gain": 100
+  },
+  {
+    "scenario": "exp_candy_xs_level_50_plus_100",
+    "id": "exp_candy_xs",
+    "kind": "growth",
+    "applies": true,
+    "level": 50,
+    "exp_gain": 100
+  },
+  {
+    "scenario": "exp_candy_xs_level_99_plus_100",
+    "id": "exp_candy_xs",
+    "kind": "growth",
+    "applies": true,
+    "level": 99,
+    "exp_gain": 100
+  },
+  {
+    "scenario": "exp_candy_xs_level_99_near_cap",
+    "id": "exp_candy_xs",
+    "kind": "growth",
+    "applies": true,
+    "level": 99,
+    "exp_gain": 50,
+    "exp_until_next": 50
+  },
+  {
+    "scenario": "exp_candy_xs_level_50_crosses",
+    "id": "exp_candy_xs",
+    "kind": "growth",
+    "applies": true,
+    "level": 50,
+    "exp_gain": 100,
+    "exp_until_next": 40
+  },
+  {
+    "scenario": "exp_candy_xs_level_100_reject",
+    "id": "exp_candy_xs",
+    "kind": "growth",
+    "applies": false,
+    "level": 100,
+    "exp_gain": 0
+  },
+  {
+    "scenario": "exp_candy_xs_wrong_slot_reject",
+    "id": "exp_candy_xs",
+    "kind": "growth",
+    "applies": false,
+    "level": 50,
+    "slot": 0,
+    "exp_gain": 0
+  },
+  {
+    "scenario": "exp_candy_xs_friendship_high",
+    "id": "exp_candy_xs",
+    "kind": "growth",
+    "applies": true,
+    "level": 50,
+    "start_friendship": 200,
+    "exp_gain": 100
+  }
+]''')
+IDS_03 = ["calcium","zinc","carbos","exp_candy_xs"]
+SOURCES_03 = ["modules/inventory/field_training_effects.gd","modules/inventory/field_friendship_effects.gd","modules/inventory/field_growth_effects.gd","modules/inventory/field_item_service.gd","tests/gameplay/item_field_growth_v9.gd","tests/gameplay/field_held_v17.gd"]
+
 
 class ContractError(ValueError):
     pass
@@ -515,6 +780,14 @@ def verify(fixture, queue, progress, chk):
             for actual, expected in zip(block["cases"], EXPECTED_02):
                 chk.demand(type(actual) is dict and actual == expected,
                            "Escenario02 modificado: " + expected["scenario"])
+        elif index == 2:
+            chk.demand(block["ids"] == IDS_03 and block["source_evidence"] == SOURCES_03,
+                       "IDs y fuentes del bloque 03 divergentes")
+            chk.demand(len(block["cases"]) == len(EXPECTED_03) == 26,
+                       "Bloque 03 debe contener exactamente 26 escenarios")
+            for actual, expected in zip(block["cases"], EXPECTED_03):
+                chk.demand(type(actual) is dict and actual == expected,
+                           "Caso del bloque 03 alterado: " + expected["scenario"])
         else:
             raise ContractError("Contrato futuro sin autorización nueva: " + block["block"])
     return len(progress)
