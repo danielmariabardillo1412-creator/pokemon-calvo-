@@ -57,7 +57,7 @@ jobs:
           cp ci/fixtures/pokeapi_reports/import_summary.json data/reports/import_summary.json
           godot --headless --path . --import 2>&1 | tee w04c003-import.log
           if grep -E 'SCRIPT ERROR|Parse Error' w04c003-import.log; then exit 1; fi
-      - name: Python: contratos reales acumulativos
+      - name: 'Python: contratos reales acumulativos'
         if: steps.scope.outputs.blocks != '0'
         shell: bash
         run: |
@@ -65,7 +65,7 @@ jobs:
           test -f tests/tools/test_parallel_items_w04_campaign_003.py
           python -B tests/tools/test_parallel_items_w04_campaign_003.py --ci 2>&1 | tee w04c003-python.log
           python -B tests/tools/test_parallel_items_w04_campaign_003_manifest.py --verify-output PY --log w04c003-python.log
-      - name: Godot: evoluciones reales y negativos acumulados
+      - name: 'Godot: evoluciones reales y negativos acumulados'
         if: steps.scope.outputs.blocks != '0'
         shell: bash
         run: |
