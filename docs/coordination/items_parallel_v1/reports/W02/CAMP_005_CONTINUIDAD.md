@@ -1,3 +1,24 @@
+# IA2/W02 — CONTINUIDAD VIGENTE CAMPAÑA_005 BLOQUE 02/10
+
+**Identidad:** IA2/W02, bayas/medicinas/entrenamiento. **Única rama editable:** `codex/calvo-items-20261103-w02-camp005`. Autoridad IA6: `CAMPAIGN_005_W02_GATE.md`, `CAMPAIGN_005_W02_QUEUE_APPROVED.csv`, `campaigns/CAMP_005_W02.md` y V5. `p` = **sólo una** fila siguiente por mensaje. No modificar main, V28, PR118, árbitra IA6, otras trabajadoras, datasets canónicos ni workflows.
+
+**Estado:** bloques 01 y 02 publicados, 8 IDs, 42 escenarios y 126 variantes programadas sobre `FieldItemService` real con tres situaciones de propietario y SaveV2. **No equivale a CI PASS**: CAMP005 W02 Python/Godot 01–02 aún sin run/log verificable en esta ventana; GitHub commit-workflow runs sólo expone PR y no garantiza listado de pushes. El gate de IA6 acredita CAMP004 previo con CI [#41589286005](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41589286005), no reutilizarlo como CAMP005.
+
+**Bloque 02 publicado:** `pp_max;hp_up;protein;iron` (6 pruebas por ID, 24 escenarios nuevos × 3 modos = 72 variantes). `pp_max` aplica tercer boost +60% de PP base en el movimiento seleccionado, sin restaurar puntos gastados; negativos con boost ya máximo, sin slot y slot inválido. Vitaminas HP Up (hp), Protein (attack), Iron (defense) aumentan hasta 10 EV, con límite de 252 por atributo/510 global; casos con 0, 248, 252 EV, total previo 508/510 y slot incorrecto. Amistad [5,3,2] por tramo y preservación del déficit de HP se cotejan con las funciones reales. No se ha modificado producción.
+
+**Commits:**
+- Fixture `tests/fixtures/parallel_items/w02_campaign_005.json`: `c740f5281d868fd8689f2f8a09955793653536c2`.
+- Runner Godot `tests/gameplay/parallel_items_w02_campaign_005.gd`: `55fdcc416e1c6fc4a0191d686b834e3b4cb58d43` y `ca7ed514ff8eefff8aea77907b94d7931f39510b`.
+- Validador Python `tests/tools/test_parallel_items_w02_campaign_005.py`: `c9e38e271f8e3681d83d88eb9e85116269ae86fe`, `3dabb4ed6aaab4e9b09f37913dc840143213502e` (golden exacto, 15 mutaciones del 02).
+- Progreso `docs/coordination/items_parallel_v1/reports/W02/CAMP_005_PROGRESO.csv`: `24e65b3a481802763b71a0ae16240385dfc9d71f`; fila 02 `EN_CI_AUTOMATICA`.
+- Informe `docs/coordination/items_parallel_v1/reports/W02/CAMP_005_ITER_02.md`: `64923e44ac25370fca677fb24c26da75bf091614`.
+
+**Pruebas heredadas:** los 18 escenarios de bloque 01, CAMP004 y CAMP003 permanecen intactos. El runner acumula bloque 01/02 y registra `CAMP005_W02_GODOT PASS blocks=N checks=M` solo cuando todas las aserciones Godot se ejecuten; Python igualmente requiere ejecutar su validador. Un commit o chequeo de estructura no constituye ejecución.
+
+**Siguiente `p`:** comprobar resultados/logs reales de CI para HEAD y reparar fallos propios bajo V5 sin quitar pruebas. Ejecutar **sólo fila 03**, `calcium;zinc;carbos;exp_candy_xs`, sin adelantar 04. Los cambios de API compartida requieren coordinación IA6. GPU/UI y merge en main/V28 siguen fuera de alcance.
+
+---
+
 # IA2/W02 — CONTINUIDAD VIGENTE CAMPAÑA_005 BLOQUE 01/10
 
 **Identidad y función:** W02, bayas/medicinas/entrenamiento. **Rama exclusiva:** `codex/calvo-items-20261103-w02-camp005`. La autoridad es IA6 en `CAMPAIGN_005_W02_GATE.md`, `CAMPAIGN_005_W02_QUEUE_APPROVED.csv`, `campaigns/CAMP_005_W02.md` y V5. Primera orden resuelta: bloque 01 `ability_capsule;ability_patch;rare_candy;pp_up`. Cada `p` posterior permite exactamente un bloque, no otra campaña. No modificar `main`, V28, PR118, rama árbitra, otras trabajadoras, datos canónicos o workflows.
