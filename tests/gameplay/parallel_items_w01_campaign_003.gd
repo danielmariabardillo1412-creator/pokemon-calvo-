@@ -135,7 +135,10 @@ func _frame_c003(session: RefCounted, id: StringName) -> Dictionary:
 	var band_activated: bool = false
 	var trap_ticks: int = 0
 	var first_move_actor: String = ""
+	var native_move_events: Array[String] = []
 	for entry: String in log:
+		if entry.begins_with("|move|"):
+			native_move_events.append(entry)
 		if entry.begins_with("|move|") and first_move_actor.is_empty():
 			first_move_actor = "own" if entry.contains("|p1a:") else "foe"
 		if entry.begins_with("|-miss|") and entry.contains("p1a:"):
@@ -176,7 +179,8 @@ func _frame_c003(session: RefCounted, id: StringName) -> Dictionary:
 		"missed": missed,
 		"focus_band_activated": band_activated,
 		"trap_ticks": trap_ticks, "sun_duration": sun_duration, "stealth_rock": rock_on_side,
-		"first_move_actor": first_move_actor, "reflect_duration": reflect_duration
+		"first_move_actor": first_move_actor, "native_move_events": native_move_events.slice(0, 3),
+		"reflect_duration": reflect_duration
 	}
 
 func _probe_c003(row: Dictionary, seed: int, mode: String) -> Dictionary:
@@ -231,7 +235,9 @@ func _probe_c003(row: Dictionary, seed: int, mode: String) -> Dictionary:
 				await session.close()
 				return {"valid": false}
 	elif String(row.op) in ["boots_rock_reentry", "boots_no_rock_control"]:
-		for move: String in ["switch 2", "switch 1"]:
+		# Showdown reordena las plazas al cambiar. Tras switch 2,
+		# el Pokémon original pasa a ocupar de nuevo la segunda plaza.
+		for move: String in ["switch 2", "switch 2"]:
 			var switched: Dictionary = await session.submit(move, session.revision)
 			check(mode + " cambio de batalla " + move + " aceptado", switched.get("accepted", false))
 			if not switched.get("accepted", false):
@@ -290,6 +296,11 @@ func _compare_c003(row: Dictionary, obs: Dictionary) -> void:
 	var a: Dictionary = obs.active
 	var n: Dictionary = obs.none
 	var r: Dictionary = obs.reserve
+	if String(row.op) in ["iron_ball_speed_order", "lagging_tail_last"]:
+		print("W01_C003_ORDER_TRACE ", row.id, " active=", a.after.first_move_actor,
+			" none=", n.after.first_move_actor, " reserve=", r.after.first_move_actor,
+			" active_logs=", JSON.stringify(a.after.native_move_events),
+			" none_logs=", JSON.stringify(n.after.native_move_events))
 	var da: int = int(a.start.hp) - int(a.after.hp)
 	var dn: int = int(n.start.hp) - int(n.after.hp)
 	var dr: int = int(r.start.hp) - int(r.after.hp)
