@@ -1,3 +1,5 @@
+**CI bloque 06 VERIFICADA:** [GitHub Actions #41560663065](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41560663065), `completed/success`, SHA de pruebas y CSV `922e1d8d1561a16c014faa6f10ca9045811fceb7`. Logs del job `125670317654`: `CAMP003_W03_PY PASS blocks=6 checks=180`, `CAMP003_W03_GODOT PASS blocks=6 checks=735`, `CAMP003_GATE_PY_PASS` y `CAMP003_GATE_GODOT_PASS`. **Se certifican pruebas de auditoría y regresión, no nuevas funciones de producción.** CSV conserva `EN_CI_AUTOMATICA` como estado histórico de publicación para evitar CI redundante. Siguiente `p`: únicamente la fila oficial 07.
+
 # IA3/W03 — CAMPAÑA_003 / CUADERNO VIGENTE: 06/10
 
 **Identidad:** IA3/W03. **Rama única:** `codex/calvo-items-20261103-w03-camp003`. **Bloque 06 ejecutado por esta `p`: `friend_ball;heal_ball`**. **Siguiente `p`: exclusivamente bloque 07 de `CAMPAIGN_003_QUEUE_APPROVED.csv`**, previa revisión de CI. No anticipar bloque 08; máximo 10 y STOP.
