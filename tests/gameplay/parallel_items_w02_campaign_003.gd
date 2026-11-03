@@ -48,17 +48,153 @@ func _run_w02() -> void:
 			check("efecto pertenece a catálogo", catalogs.item(StringName(spec.id)) != null)
 			var observed: Dictionary = {}
 			for mode: String in automation.modes:
-				observed[mode] = await _probe_berry(spec, mode)
+				if String(spec.kind) == "field_ev_training":
+					observed[mode] = _probe_field_ev(spec, mode)
+				else:
+					observed[mode] = await _probe_berry(spec, mode)
 			var complete: bool = observed.size() == 3
 			for mode: String in automation.modes:
 				complete = complete and bool(observed[mode].get("valid", false))
 			check("activo/ausente/reserva válidos", complete)
 			if complete:
-				_compare_berry(spec, observed)
+				if String(spec.kind) == "field_ev_training":
+					_compare_field_ev(spec, observed)
+				else:
+					_compare_berry(spec, observed)
 			results.append({"block": block.block, "id": spec.id, "scenario": spec.scenario,
 				"status": "PASS" if complete and errors.size() == fails_before else "FAIL",
 				"checks": checks - count_before, "observed": observed})
 	_finish_w02(results)
+
+
+# Grepa/Hondew/Pomeg: son USO DE CAMPO desde bolsa, no bayas equipadas en batalla.
+# Modos reutilizados: active=party con item, none=party sin item, reserve=storage con item.
+# No se duplican los 6x28 ensayos historicos de EV; aqui se cruza SaveV2/propiedad.
+func _probe_field_ev(spec: Dictionary, mode: String) -> Dictionary:
+	var item: StringName = StringName(spec.id)
+	var stat: String = String(spec.stat)
+	var own: CreatureInstance = _mon(&"mew", int(automation.level), &"own", ["reflect"])
+	own.friendship = int(spec.start_friendship)
+	own.evs[stat] = int(spec.start_ev)
+	own.recalculate_stats(catalogs.species(own.species_id), ProgressionRuleset.new())
+	own.current_hp = 1 if String(spec.start_hp) == "one" else own.stats.max_hp
+	var owner := PlayerCollection.new()
+	check(mode + " campo: Pokemon propio en equipo", owner.party.add_creature(own))
+	if mode == "reserve":
+		check(mode + " campo: depositar Pokemon en almacenamiento", owner.deposit(&"own"))
+	if mode != "none":
+		check(mode + " campo: dos bayas en bolsa", owner.inventory.add(item, 2))
+	var service := Service.new()
+	check(mode + " campo: servicio real preparado",
+		service.configure(owner, catalogs, func(): return true))
+	var original: CreatureInstance = owner.owned_creature(&"own")
+	if original == null:
+		check(mode + " campo: objetivo propio existe", false)
+		return {"valid": false}
+	var original_dict: Dictionary = original.to_dict()
+	var initial_hp: int = original.current_hp
+	var initial_max_hp: int = original.stats.max_hp
+	var initial_evs: Dictionary = original.evs.duplicate(true)
+	var before: Dictionary = _owner_data(owner)
+	var response: Dictionary = service.use_item(item, &"own")
+	var expected: bool = bool(spec.applies) and mode != "none"
+	var accepted: bool = bool(response.get("accepted", false))
+	check(mode + " campo: aceptacion/rechazo exacto", accepted == expected)
+	var after: CreatureInstance = owner.owned_creature(&"own")
+	if after == null:
+		check(mode + " campo: propietario conserva el objetivo", false)
+		return {"valid": false}
+	check(mode + " campo: misma identidad/ubicacion tras usar baya",
+		after.instance_id == &"own"
+		and owner.location_of(&"own") == (&"STORAGE" if mode == "reserve" else &"PARTY"))
+	var expected_ev: int = int(spec.start_ev) - (int(spec.ev_removed) if expected else 0)
+	var expected_friendship: int = mini(255, int(spec.start_friendship) + (int(spec.friendship_gain) if expected else 0))
+	var expected_hp: int = clampi(initial_hp + after.stats.max_hp - initial_max_hp, 1, after.stats.max_hp) if expected else initial_hp
+	check(mode + " campo: EV de estadistica exacto",
+		int(after.evs.get(stat, -999)) == expected_ev)
+	check(mode + " campo: amistad exacta sin bonificaciones de origen",
+		after.friendship == expected_friendship)
+	check(mode + " campo: PS y deficit conservados con Pomeg",
+		after.current_hp == expected_hp)
+	var expected_evs: Dictionary = initial_evs.duplicate(true)
+	expected_evs[stat] = expected_ev
+	check(mode + " campo: solo EV seleccionado cambia, identidad/IV/naturaleza",
+		after.evs == expected_evs and after.ivs == original.ivs
+		and after.nature_id == original.nature_id and after.level == original.level
+		and after.ability_id == original.ability_id)
+	check(mode + " campo: copia original no mutada", original.to_dict() == original_dict)
+	var bag_count: int = owner.inventory.quantity(item)
+	check(mode + " campo: consumo unico en bolsa", bag_count == (1 if expected else (0 if mode == "none" else 2)))
+	if expected:
+		check(mode + " campo: ruta canónica EV/amistad y magnitud real",
+			String(response.get("action", "")) == "ev_berry"
+			and String(response.get("stat_id", "")) == stat
+			and int(response.get("ev_removed", -999)) == int(spec.ev_removed))
+	else:
+		check(mode + " campo: rechazo atomico sin mutar dueño",
+			not accepted and _owner_data(owner) == before)
+	var published: Dictionary = _owner_data(owner)
+	var decoded: LoadResult = SaveGameRepository.new().decode_snapshot(published)
+	check(mode + " campo: SaveV2 carga y valida", decoded.ok)
+	if not decoded.ok:
+		return {"valid": false}
+	var saved := PlayerCollection.new()
+	saved.party = decoded.party
+	saved.storage = decoded.storage
+	saved.inventory = decoded.inventory
+	var saved_mon: CreatureInstance = saved.owned_creature(&"own")
+	check(mode + " campo: SaveV2 retiene Pokemon, ubicacion y una unidad",
+		saved_mon != null and saved.location_of(&"own") == owner.location_of(&"own")
+		and saved.inventory.quantity(item) == bag_count)
+	if saved_mon != null:
+		check(mode + " campo: SaveV2 retiene EV, amistad y deficit HP",
+			saved_mon.evs == expected_evs and saved_mon.friendship == expected_friendship
+			and saved_mon.current_hp == expected_hp and saved_mon.stats.max_hp == after.stats.max_hp)
+	var evidence: String = String(spec.scenario) + "_" + mode
+	var raw: Dictionary = {"scenario": spec.scenario, "kind": spec.kind, "mode": mode,
+		"stat": stat, "before": before, "after": published, "accepted": accepted,
+		"ev": int(after.evs.get(stat, -999)), "friendship": after.friendship,
+		"hp": after.current_hp, "max_hp": after.stats.max_hp, "bag": bag_count,
+		"save_v2": decoded.ok, "location": String(owner.location_of(&"own"))}
+	var sha: String = _write_evidence(evidence, raw)
+	check(mode + " campo: recibo SHA256 autentico",
+		not sha.is_empty() and FileAccess.file_exists(destination + "/" + evidence + ".json")
+		and FileAccess.get_sha256(destination + "/" + evidence + ".json") == sha)
+	return {"valid": true, "accepted": accepted, "ev": int(after.evs.get(stat, -999)),
+		"friendship": after.friendship, "hp": after.current_hp,
+		"max_hp": after.stats.max_hp, "bag": bag_count, "location": String(owner.location_of(&"own")),
+		"save_v2": decoded.ok, "sha256": sha, "evidence": evidence + ".json"}
+
+
+func _compare_field_ev(spec: Dictionary, observed: Dictionary) -> void:
+	var active: Dictionary = observed.active
+	var absent: Dictionary = observed.none
+	var storage: Dictionary = observed.reserve
+	var should_apply: bool = bool(spec.applies)
+	var expected_ev: int = int(spec.start_ev) - (int(spec.ev_removed) if should_apply else 0)
+	var expected_friendship: int = mini(255, int(spec.start_friendship) + (int(spec.friendship_gain) if should_apply else 0))
+	check("baya de entrenamiento: solo existe uso desde bolsa real",
+		bool(active.accepted) == should_apply
+		and not bool(absent.accepted) and bool(storage.accepted) == should_apply)
+	check("baya de entrenamiento: equipo y almacen logran mismo efecto",
+		int(active.ev) == expected_ev and int(storage.ev) == expected_ev
+		and int(active.friendship) == expected_friendship
+		and int(storage.friendship) == expected_friendship)
+	check("baya de entrenamiento: ausencia de item no altera EV ni amistad",
+		int(absent.ev) == int(spec.start_ev)
+		and int(absent.friendship) == int(spec.start_friendship))
+	check("baya de entrenamiento: ubicacion y bolsa intactas tras SaveV2",
+		String(active.location) == "PARTY" and String(absent.location) == "PARTY"
+		and String(storage.location) == "STORAGE"
+		and int(active.bag) == (1 if should_apply else 2)
+		and int(absent.bag) == 0
+		and int(storage.bag) == (1 if should_apply else 2)
+		and bool(active.save_v2) and bool(absent.save_v2) and bool(storage.save_v2))
+	for mode: String in automation.modes:
+		var rec: Dictionary = observed[mode]
+		var path: String = destination + "/" + String(rec.evidence)
+		check(mode + " campo: evidencia vinculada al estado guardado",
+			FileAccess.get_sha256(path) == String(rec.sha256))
 
 
 func _probe_berry(spec: Dictionary, mode: String) -> Dictionary:
