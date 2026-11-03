@@ -3,7 +3,7 @@
   "campaign": "CAMP_004_W02",
   "worker": "W02",
   "active_policy": "RANDOMLOCK_ITEMS_BUILD_SCOPE_V2",
-  "purpose": "CAMP004 W02: contratos de bayas (01-02) y medicinas (03) contra servicios nativos de campo, propiedad y SaveV2; Razz documentada como dependencia.",
+  "purpose": "CAMP004 W02 bloques 01–04: bayas y medicinas en servicios nativos, SaveV2, stock y propietario; dependencia Razz documentada sin efecto inventado.",
   "format": "gen9calvounifiedv1",
   "level": 100,
   "seed": [
@@ -20,7 +20,8 @@
   "completed_blocks": [
     1,
     2,
-    3
+    3,
+    4
   ],
   "blocks": [
     {
@@ -564,6 +565,276 @@
           "cures_confusion": false
         }
       ]
+    },
+    {
+      "block": "04",
+      "family": "MEDICINE",
+      "ids": [
+        "burn_heal",
+        "casteliacone",
+        "elixir",
+        "energy_powder"
+      ],
+      "source_evidence": [
+        "modules/inventory/imported_recovery_v19.json",
+        "modules/inventory/field_item_effects.gd",
+        "modules/inventory/field_item_service.gd",
+        "tests/gameplay/item_field_effects_v4.gd"
+      ],
+      "cases": [
+        {
+          "scenario": "burn_heal_burn_c004",
+          "id": "burn_heal",
+          "kind": "field_medicine",
+          "start_hp": "full",
+          "status": "burn",
+          "confused": false,
+          "applies": true,
+          "heal_amount": 0,
+          "cures_status": true,
+          "cures_confusion": false
+        },
+        {
+          "scenario": "burn_heal_poison_reject_c004",
+          "id": "burn_heal",
+          "kind": "field_medicine",
+          "start_hp": "full",
+          "status": "poison",
+          "confused": false,
+          "applies": false,
+          "heal_amount": 0,
+          "cures_status": false,
+          "cures_confusion": false
+        },
+        {
+          "scenario": "burn_heal_sleep_reject_c004",
+          "id": "burn_heal",
+          "kind": "field_medicine",
+          "start_hp": "full",
+          "status": "sleep",
+          "confused": false,
+          "applies": false,
+          "heal_amount": 0,
+          "cures_status": false,
+          "cures_confusion": false
+        },
+        {
+          "scenario": "burn_heal_healthy_reject_c004",
+          "id": "burn_heal",
+          "kind": "field_medicine",
+          "start_hp": "full",
+          "status": "",
+          "confused": false,
+          "applies": false,
+          "heal_amount": 0,
+          "cures_status": false,
+          "cures_confusion": false
+        },
+        {
+          "scenario": "casteliacone_burn_c004",
+          "id": "casteliacone",
+          "kind": "field_medicine",
+          "start_hp": "full",
+          "status": "burn",
+          "confused": false,
+          "applies": true,
+          "heal_amount": 0,
+          "cures_status": true,
+          "cures_confusion": false
+        },
+        {
+          "scenario": "casteliacone_toxic_c004",
+          "id": "casteliacone",
+          "kind": "field_medicine",
+          "start_hp": "full",
+          "status": "badly_poisoned",
+          "confused": false,
+          "applies": true,
+          "heal_amount": 0,
+          "cures_status": true,
+          "cures_confusion": false
+        },
+        {
+          "scenario": "casteliacone_sleep_c004",
+          "id": "casteliacone",
+          "kind": "field_medicine",
+          "start_hp": "full",
+          "status": "sleep",
+          "confused": false,
+          "applies": true,
+          "heal_amount": 0,
+          "cures_status": true,
+          "cures_confusion": false,
+          "expect_sleep_clock_clear": true
+        },
+        {
+          "scenario": "casteliacone_confusion_c004",
+          "id": "casteliacone",
+          "kind": "field_medicine",
+          "start_hp": "full",
+          "status": "",
+          "confused": true,
+          "applies": true,
+          "heal_amount": 0,
+          "cures_status": false,
+          "cures_confusion": true
+        },
+        {
+          "scenario": "casteliacone_poison_confusion_c004",
+          "id": "casteliacone",
+          "kind": "field_medicine",
+          "start_hp": "full",
+          "status": "poison",
+          "confused": true,
+          "applies": true,
+          "heal_amount": 0,
+          "cures_status": true,
+          "cures_confusion": true
+        },
+        {
+          "scenario": "casteliacone_healthy_reject_c004",
+          "id": "casteliacone",
+          "kind": "field_medicine",
+          "start_hp": "full",
+          "status": "",
+          "confused": false,
+          "applies": false,
+          "heal_amount": 0,
+          "cures_status": false,
+          "cures_confusion": false
+        },
+        {
+          "scenario": "elixir_both_empty_c004",
+          "id": "elixir",
+          "kind": "field_medicine",
+          "start_hp": "full",
+          "status": "",
+          "confused": false,
+          "applies": true,
+          "heal_amount": 0,
+          "cures_status": false,
+          "cures_confusion": false,
+          "pp0_start": 0,
+          "pp1_start": 0,
+          "pp_gain": 10
+        },
+        {
+          "scenario": "elixir_one_full_other_low_c004",
+          "id": "elixir",
+          "kind": "field_medicine",
+          "start_hp": "full",
+          "status": "",
+          "confused": false,
+          "applies": true,
+          "heal_amount": 0,
+          "cures_status": false,
+          "cures_confusion": false,
+          "pp0_start": "full",
+          "pp1_start": 2,
+          "pp_gain": 10
+        },
+        {
+          "scenario": "elixir_two_full_reject_c004",
+          "id": "elixir",
+          "kind": "field_medicine",
+          "start_hp": "full",
+          "status": "",
+          "confused": false,
+          "applies": false,
+          "heal_amount": 0,
+          "cures_status": false,
+          "cures_confusion": false,
+          "pp0_start": "full",
+          "pp1_start": "full",
+          "pp_gain": 10
+        },
+        {
+          "scenario": "elixir_wrong_slot_reject_c004",
+          "id": "elixir",
+          "kind": "field_medicine",
+          "start_hp": "full",
+          "status": "",
+          "confused": false,
+          "applies": false,
+          "heal_amount": 0,
+          "cures_status": false,
+          "cures_confusion": false,
+          "pp0_start": 0,
+          "pp1_start": 0,
+          "pp_gain": 10,
+          "slot": 0
+        },
+        {
+          "scenario": "energy_powder_hp_half_friend100_c004",
+          "id": "energy_powder",
+          "kind": "field_medicine",
+          "start_hp": "half",
+          "status": "",
+          "confused": false,
+          "applies": true,
+          "heal_amount": 60,
+          "cures_status": false,
+          "cures_confusion": false,
+          "start_friendship": 100,
+          "friendship_loss": 5
+        },
+        {
+          "scenario": "energy_powder_hp_half_friend200_c004",
+          "id": "energy_powder",
+          "kind": "field_medicine",
+          "start_hp": "half",
+          "status": "",
+          "confused": false,
+          "applies": true,
+          "heal_amount": 60,
+          "cures_status": false,
+          "cures_confusion": false,
+          "start_friendship": 200,
+          "friendship_loss": 10
+        },
+        {
+          "scenario": "energy_powder_hp_half_friend0_c004",
+          "id": "energy_powder",
+          "kind": "field_medicine",
+          "start_hp": "half",
+          "status": "",
+          "confused": false,
+          "applies": true,
+          "heal_amount": 60,
+          "cures_status": false,
+          "cures_confusion": false,
+          "start_friendship": 0,
+          "friendship_loss": 5
+        },
+        {
+          "scenario": "energy_powder_hp_missing7_friend199_c004",
+          "id": "energy_powder",
+          "kind": "field_medicine",
+          "start_hp": "missing_7",
+          "status": "",
+          "confused": false,
+          "applies": true,
+          "heal_amount": 60,
+          "cures_status": false,
+          "cures_confusion": false,
+          "start_friendship": 199,
+          "friendship_loss": 5
+        },
+        {
+          "scenario": "energy_powder_hp_full_reject_c004",
+          "id": "energy_powder",
+          "kind": "field_medicine",
+          "start_hp": "full",
+          "status": "",
+          "confused": false,
+          "applies": false,
+          "heal_amount": 60,
+          "cures_status": false,
+          "cures_confusion": false,
+          "start_friendship": 200,
+          "friendship_loss": 10
+        }
+      ]
     }
   ],
   "limitations": [
@@ -572,6 +843,7 @@
     "Leppa se comprueba mediante la ruta nativa de uso de PP en bolsa; el barrido histórico held Leppa sigue preservado y se ejecuta en la regresión CAMP003 existente solo si está incluida.",
     "Amistad por bonificaciones de origen pendiente; validación base sin origen especial, sin GPU ni interfaz.",
     "Razz Berry no tiene efecto de campo conectado en el contrato del proyecto ni efecto competitivo al equiparse; solo se prueba rechazo/inercia. Su inclusion funcional requiere decisión de IA6 sobre alcance; no se finge PASS positivo.",
-    "Medicinas bloque 03 comprobadas por uso en bolsa con propietario en equipo o almacenamiento; no se verifica uso de medicinas durante batalla ni UI/GPU."
+    "Medicinas bloque 03 comprobadas por uso en bolsa con propietario en equipo o almacenamiento; no se verifica uso de medicinas durante batalla ni UI/GPU.",
+    "Elixir se verifica con 2 movimientos de PP distintos, incluidos rechazo al seleccionar slot, sin enseñar movimientos; Polvo Energía usa las penalizaciones de amistad del perfil importado y nunca las aplica si rechaza por PS completos."
   ]
 }
