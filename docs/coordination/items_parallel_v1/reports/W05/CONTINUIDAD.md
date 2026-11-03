@@ -1,3 +1,15 @@
+# ESTADO VIGENTE IA5/W05 — CAMPAÑA_003 · 01/10 PUBLICADO (2026-11-03)
+
+**Identidad:** W05, MT/libros. **ÚNICA rama de escritura:** `codex/calvo-items-20261103-w05-camp003`. Activación IA6 en `CAMPAIGN_GATE_003.md`, `CAMPAIGN_003_BRANCH_MANIFEST.md` y `campaigns/CAMP_003_W05.md`. Diez bloques, seis MT cada uno; completar uno por `p` y STOP en 10/10. **El historial CAMP001/002 más abajo es obsoleto para permisos y rama.**
+
+**BLOQUE 01 entregado, CI sin resultado comprobado:** `tm07;tm16;tm18;tm21;tm22;tm23`. Fixture `tests/fixtures/parallel_items/w05_campaign_003.json`, Python `tests/tools/test_parallel_items_w05_campaign_003.py`, Godot `tests/gameplay/parallel_items_w05_campaign_003.gd`, informe `CAMP_003_ITER_01.md`, progreso `CAMP_003_PROGRESO.csv`. Commit Python final `c622e29bd06c5a40c189ff780a4effc8755d0275`, Godot final `a43b182e532d9bc123d64acc9a89bdc602bad08d`, trigger del progreso `a2047a58a02760380b3a55f4620417051984dea7`. **No afirmar CI PASS** hasta comprobar resultado del SHA exacto. No se pudieron verificar especies/PP manualmente en JSON normalizado por límite del conector: la CI Python y el runner verifican learnsets, metadatos, consumo y SaveV2 reales.
+
+**Siguiente `p`:** primero consultar resultado CI de `codex/calvo-items-20261103-w05-camp003`. Si success, ejecutar **bloque 02** reservado `tm24;tm25;tm26;tm27;tm28;tm29`, anexando al fixture, conservando y probando bloque01 en scripts acumulativos. Si CI queued/in_progress, puede preparar solo bloque independiente sin PASS. Si fallo funcional o dependencia compartida, STOP y comunicar a IA6. Nunca adelantar más de un bloque por mensaje ni editar scripts de otras W o motor.
+
+**CI inmutable:** `.github/workflows/parallel-camp003-worker-autoci.yml`, validador de manifiesto compartido inmutable. Pruebas con recibo estricto `CAMP003_W05_PY/GODOT PASS blocks=N checks=M` y N igual a progreso. No tocar `main`, V28, PR118, otras ramas, producción, datos, config, catálogo, saves reales ni activar las 19 legacy. Arte/UI/GPU no validados.
+
+---
+
 # IA5 / W05 — CUADERNO DE CONTINUIDAD · MACHINE
 
 ## 1. Identidad, alcance y autoridad
