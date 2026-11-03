@@ -1,3 +1,13 @@
+# IA6 — AUTORREPARACIÓN V5 ACTIVADA (2026-11-03)
+
+**Orden operativa vigente:** [AUTONOMOUS_REPAIR_V5.md](AUTONOMOUS_REPAIR_V5.md), incorporada a [CAMPAIGN_GATE_003.md](CAMPAIGN_GATE_003.md), [adendo W04](CAMPAIGN_003_W04_ADDENDUM_GATE.md) y encargos W01–W05. Las cinco IA pueden diagnosticar y corregir tests, fixtures y defectos reales **de sus IDs y especialidad en su propia rama**, incluido el código de producción estrictamente perteneciente al dominio autorizado; conservando contrato, tests, regresiones y CI, sin pedir permiso IA6 por cada arreglo. **No** se autoriza modificar otra rama, `main`, V28, reglas globales sin definir ni funciones ajenas con conflicto. El límite 10 bloques permanece.
+
+**CI de módulos:** los filtros del workflow en W01/W02/W03/W05 y el baseline árbitra se ampliaron para disparar pruebas al cambiar `modules/**`, además de pruebas. **W04 es una excepción comprobada:** una edición del workflow de su propia rama fue **DENEGADA por controles de seguridad de la herramienta**; NO debe intentar evadir ese control. La CI W04 existente sigue activa por cambios en su test/fixture/progreso, y un parche acompañado de pruebas sobre su SHA puede verificarse así. También fue denegada la escritura del archivo `COORDINATOR.md`; los demás documentos de autoridad se actualizaron. **Un protocolo no altera permisos/controles de seguridad reales de GitHub o herramientas.**
+
+**Estado W04 tras consulta:** su rama `codex/calvo-items-20261103-w04-camp003` publicó pruebas del bloque 05 y el último workflow [#41560419495](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41560419495) terminó `completed/success`; la hoja de progreso a esa lectura aún reflejaba 04/10. Los commits exitosos demuestran capacidad general para publicar en su rama, pero no garantizan escritura de cada archivo. Evitar detenerse por prohibiciones antiguas no aplicables, respetando bloqueos técnicos reales.
+
+---
+
 # IA6 — REVISIÓN DE PROGRESO CAMP003 2026-11-03
 
 **Comprobación GitHub:** IA1 04/10 (`eject_pack;electric_seed;focus_band`, CI nueva en curso), IA2 04/10 publicados y comenzó pruebas de 05/10 (CI nueva en curso), IA3 04/10 (`level_ball;nest_ball`) CI [#41558471582](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41558471582) **SUCCESS**, 122 checks Python + 490 Godot; IA4 02/10 (Sol, Oval, Mineral Negro) CI [#41556682246](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41556682246) **SUCCESS** 29 Python + 54 Godot, dependencia Piedra Oval correctamente sin resolver; IA5 05/10 MT, última CI en curso (04/10 había pasado). Ver [decisión IA4 para seguir con `p`](CAMPAIGN_003_W04_ITER02_REVIEW.md). Ninguna IA tiene 10/10.
