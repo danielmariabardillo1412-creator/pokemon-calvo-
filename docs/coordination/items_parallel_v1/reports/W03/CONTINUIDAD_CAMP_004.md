@@ -1,3 +1,15 @@
+# IA3/W03 — CONTINUIDAD CAMP004 07/10
+
+**Rama única:** `codex/calvo-items-20261103-w03-camp004`. **Bloque 07 publicado:** `bug_tera_shard;dark_tera_shard;dragon_tera_shard;electric_tera_shard;fairy_tera_shard`. Se verifican mediante Godot real la selección, conservación y roundtrip de mochila y rechazo de uso sin API Tera; el auditor Python comprueba código y contrato, sin inventar transformación. **Estado de función por ID: `DEPENDENCIA_COMPARTIDA`; no `FUNCIONAL_VERIFICADO`.**
+
+**CI previa 06 confirmada:** [#41575966667](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41575966667), SHA `0fd53a96369fabc310e70b35a44f94477381aa7e`: CAMP004 Python 115/Godot 598 PASS; regresión CAMP003 Python 279/Godot 986 PASS.
+
+**CI 07:** comprobar recibos Python y Godot `blocks=7` en último SHA de progreso. No confundir CI verde con capacidad Tera. Mantener separación de SaveV2 integral vs roundtrip `PlayerInventory`.
+
+**Siguiente `p`: bloque 08** `fighting_tera_shard;fire_tera_shard;flying_tera_shard;ghost_tera_shard;grass_tera_shard` (cinco IDs). No adelantar sin nuevo `p`. Prohibido tocar `main`, V28, producción, PR #118 o ramas ajenas.
+
+---
+
 # IA3/W03 — CONTINUIDAD CAMP004 05/10
 
 **Rama:** `codex/calvo-items-20261103-w03-camp004`. Se ejecutó solo bloque 05: `repel;silver_razz_berry;super_lure`. Estado de los tres `DEPENDENCIA_COMPARTIDA`: sus usos directos no tienen ejecutor actual; pruebas Godot y Python comprueban rechazo `field_effect_not_connected`, no consumo, mochila guardada/reconstruida, relojes intactos, confusión, dormido y bloqueos.
