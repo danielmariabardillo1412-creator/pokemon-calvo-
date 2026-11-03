@@ -1,3 +1,17 @@
+## V5 ACTIVADO — AUTORREPARACIÓN W01, CI BLOQUE 07 (2026-11-03)
+
+**Norma prevalente leída:** `docs/coordination/items_parallel_v1/AUTONOMOUS_REPAIR_V5.md` de árbitra IA6, blob `ebe71ace6949cc9311eb9831068799081bca8ba7`. W01 puede reparar pruebas y **efectos estrictamente propios de sus equipables** en su única rama, con diff mínimo, test de regresión y CI del SHA completo. Sin permiso para `main`, V28, otros IDs, otras ramas, arquitectura global o modificar workflows ajenos. La actualización NO consume bloque y el siguiente `p` sigue siendo **W01/08: `luminous_moss;mental_herb;metronome`**.
+
+**Diagnóstico CI actual:** [run #41563668757](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41563668757) `completed/failure` por `timeout 600s` del paso Godot, **exit code 124**, tras `CAMP003_W01_PY PASS blocks=7 checks=582`. No existe resultado Godot PASS de los bloques 04–07. La actualización del workflow por IA6 fue un commit separado `96627e6e17796699c004af31f680f49193cb196d`, no una alteración W01. El timeout NO prueba por sí mismo fallo de mecánica.
+
+**Reparación local de W01:** commit `fdc2e8623376de6f0981d2cd4a91d467dc4951e3`, archivo único `tests/gameplay/parallel_items_w01_campaign_003.gd`, blob `225600b833f94d65df9dbca4452e234d1d5c79ac`. Paraleliza solo `active/none/reserve` del **mismo caso y semilla**, con tres propietarios y sesiones nativas independientes, espera tres respuestas y compara TODO lo anterior (48 casos, 99 pares-semilla, 297 variantes; mismos controles, consumos, SaveV2, log y testigo Focus Band). No se tocó producción ni motor compartido. Inspección estructural 10/10 PASS; no supone veredicto funcional.
+
+**Nueva CI:** [run #41565500695](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41565500695) sobre SHA de **código de prueba** `fdc2e8623376de6f0981d2cd4a91d467dc4951e3`; `in_progress` al publicar. Si falla por concurrencia, depurar y reparar exclusivamente W01 según V5, sin rebajar aserciones. Si vuelve a agotar el límite compartido de 600 s incluso con las optimizaciones, identificar duración y escalar a IA6 la dependencia **workflow** sin alterar este por cuenta propia.
+
+**CSV:** 01..03 CI_PASS_VERIFICADO; 04..06 ENTREGADO_PENDIENTE_CI; 07 EN_CI_AUTOMATICA (todavía sin PASS). La CI del nuevo SHA, no las canceladas ni el timeout anterior, es la autoridad para actualizarlos. El siguiente bloque 08 solo con nueva `p` y sin fallo dependiente pendiente.
+
+---
+
 ## ACTUALIZACIÓN VIGENTE — CAMPAÑA_003 07/10 (2026-11-03)
 
 **Identidad IA1/W01**; escritura exclusiva `codex/calvo-items-20261103-w01-camp003`. La `p` presente autoriza **solo W01/07**, asignación oficial `iron_ball;lagging_tail;light_clay`. **07/10 entregado, CI funcional pendiente**. No adelantar 08 hasta siguiente `p`. El siguiente bloque será `luminous_moss;mental_herb;metronome`.
