@@ -126,3 +126,15 @@ La segunda CI #41613512888 devolvió `content_policy` al abrir los tres controle
 - Toxiestrella: residual 1/8, transferencia por Placaje del rival, no transferencia frente a Agua Pistola. Para transferencia, el objeto sale del dueño y aparece en la proyección nativa del rival; NO se registra como item destruido. Cubresuelos: terreno eléctrico y psíquico duran +3 turnos, control sin terreno. Espray Bucal: `round` y `growl` como sonido positivo, `tackle` y `reflect` negativos; consumo único, SaveV2.
 - Sin tocar producción, `main`, V28, árbitra ni otras ramas. Repetir la CI CAMP004 con los seis bloques anteriores; puerta CAMP003 completa correspondía a 05/10 y regresará 10/10 o tras cambio productivo. Bloque 07 no se declara PASS hasta recibir Godot/Python y `completed/success` para SHA de pruebas.
 - Aviso previo SaveV2 durante carga intermedia de Rayo Solar de bloque 03 sigue pendiente para IA6.
+
+## 07/10 — CI aprobada y cuaderno certificado
+
+- Rama de propiedad exclusiva `codex/calvo-items-20261103-w01-camp004`, sin modificaciones en producción, main, V28, árbitra ni otras ramas.
+- CI final [#41711361003](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41711361003), `completed/success`, SHA de pruebas `328227633b204f04aebffe3af1773ca30e9d4955`, 0 errores.
+- `CAMP004_W01_PY PASS blocks=7 checks=707`; `CAMP004_W01_GODOT PASS blocks=7 checks=11316`; ambos gates PASS y manifiesto 7/10 PASS.
+- Acumulado: **7/10 microbloques**, **21 equipables**, **53 escenarios**, **124 pares caso-semilla**, **372 variantes** de portador activo, sin objeto y en reserva, SaveV2. Bloque 07: 10 escenarios, 14 pares, 42 variantes.
+- Toxiestrella residual por turno + transferencia por contacto al rival preservando objeto (negativo Agua Pistola); Cubresuelos +3 duración de Campo Eléctrico/Campo Psíquico (negativo Reflejo); Espray Bucal `round` y `growl` +1 AtEsp y consumo (negativos Placaje/Reflejo).
+- CAMPAÑA_003 completa sigue acreditada por la CI del hito 05 run #41602276948, Godot 12392 / Python 806. No se repitió en este bloque: regresión total siguiente en hito 10, o antes si hay modificación de producción.
+- Fila CSV 07 queda `EN_CI_AUTOMATICA` solo para evitar CI redundante. Con la **siguiente `p`** cerrarla con `CI_PASS_VERIFICADO`, SHA `328227633b204f04aebffe3af1773ca30e9d4955`, run `41711361003`, y agregar bloque 08.
+- Incidencia anterior SaveV2 mid-charge de Solar Beam sigue pendiente de IA6. No prometer verificación visual/GPU o integración a main/V28.
+- **Próxima `p`: exclusivamente bloque 08/10 `toxic_orb;utility_umbrella;weakness_policy`**; no iniciar bloque 09.
