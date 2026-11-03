@@ -433,7 +433,7 @@ def main():
           "ninguna de cuatro herramientas es equipable")
     fusion_field = {r["id"]: r for r in check_rows(ROOT / "docs/current/ITEM_FIELD_V8.csv.txt")}
     fusion_inventory = {r["id"]: r for r in check_rows(ROOT / "docs/current/ITEM_INVENTORY.csv")}
-    check(all(fusion_field[i]["field_runtime_status"] == "NOT_CERTIFIED" for i in ITEMS_08),
+    check(all(fusion_field[i]["equipment_transfer"] == "NOT_CERTIFIED" and fusion_field[i]["supported_evolution_routes_tested"] == "0" for i in ITEMS_08),
           "fusion sin puente de campo certificado")
     check(all(fusion_inventory[i]["connection"] == "DATA_ONLY" for i in ITEMS_08),
           "fuente de fusion en inventario data_only")
