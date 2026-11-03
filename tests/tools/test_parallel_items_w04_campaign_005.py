@@ -9,6 +9,7 @@ ROOT = Path(__file__).resolve().parents[2]
 BASE = ROOT / "docs/coordination/items_parallel_v1"
 ITEMS_01 = ("dragon_scale", "dubious_disc", "electirizer", "magmarizer")
 ITEMS_02 = ("protector", "reaper_cloth", "prism_scale", "sachet", "up_grade")
+ITEMS_03 = ("oval_stone", "dawn_stone", "peat_block")
 
 
 def check_rows(path):
@@ -52,15 +53,18 @@ def main():
     field = (ROOT / "modules/inventory/field_item_service.gd").read_text(encoding="utf-8")
 
     check(fixture["worker"] == "W04" and fixture["campaign"] == "CAMP_005", "fixture identidad")
-    check(len(fixture["blocks"]) == 2 and [x["block"] for x in fixture["blocks"]] == ["01", "02"], "fixture acumulativo 01 y 02")
+    check(len(fixture["blocks"]) == 3 and [x["block"] for x in fixture["blocks"]] == ["01", "02", "03"], "fixture acumulativo 01 a 03")
     check(len(queue) == 10 and queue[0]["ids"].split(";") == list(ITEMS_01), "cola oficial 01")
-    check(len(progress) == 2 and [x["bloque"] for x in progress] == ["01", "02"], "progreso bloques 01 y 02")
-    check(progress[0]["ids"].split(";") == list(ITEMS_01) and progress[1]["ids"].split(";") == list(ITEMS_02), "progreso filas exactas")
+    check(len(progress) == 3 and [x["bloque"] for x in progress] == ["01", "02", "03"], "progreso bloques 01 a 03")
+    check(progress[0]["ids"].split(";") == list(ITEMS_01) and progress[1]["ids"].split(";") == list(ITEMS_02) and progress[2]["ids"].split(";") == list(ITEMS_03), "progreso filas exactas")
+    check(queue[2]["ids"].split(";") == list(ITEMS_03) and queue[2]["familia"] == "EVOLUTION_CONDITIONS", "cola 03 aprobada")
     check(queue[1]["ids"].split(";") == list(ITEMS_02) and queue[1]["familia"] == "TRADE_OBJECT_REPAIR", "cola oficial 02")
     check(fixture["blocks"][0]["ids"] == list(ITEMS_01) and fixture["blocks"][0]["family"] == "TRADE_OBJECT_REPAIR", "familia 01")
     check(len(fixture["blocks"][0]["pairs"]) == 4 and len(fixture["blocks"][1]["pairs"]) == 5, "nueve rutas exactas")
     check(fixture["blocks"][1]["ids"] == list(ITEMS_02) and fixture["blocks"][1]["family"] == "TRADE_OBJECT_REPAIR", "fixture 02 y familia")
-    check(all(block["ids"] == [x["item_id"] for x in block["pairs"]] for block in fixture["blocks"]), "fixture IDs y parejas congruentes")
+    check(all(block["ids"] == [x["item_id"] for x in block["pairs"]] for block in fixture["blocks"][:2]), "fixture IDs y parejas congruentes")
+    check(fixture["blocks"][2]["ids"] == list(ITEMS_03) and fixture["blocks"][2]["family"] == "EVOLUTION_CONDITIONS", "fixture 03 y familia")
+    check(fixture["blocks"][2]["classification"] == "DEPENDENCIA_DE_CONDICIONES" and len(fixture["blocks"][2]["cases"]) == 4, "cuatro rutas con condiciones")
     check(fixture["kind"] == "FUNCTIONAL_BACKLOG", "backlog previo, no nuevos IDs")
 
     check(policy["status"] == "PASS_V26_MISINTERPRETATION_CORRECTED", "norma V27")
@@ -74,7 +78,7 @@ def main():
     restored = set(policy["restored_ids"])
     candidate_by_id = {row["id"]: row for row in prior_scope["trade_item_candidates"]}
     normalized = []
-    for pair in [pair for block in fixture["blocks"] for pair in block["pairs"]]:
+    for pair in [pair for block in fixture["blocks"][:2] for pair in block["pairs"]]:
         item = pair["item_id"]
         source = pair["source"]
         target = pair["target"]
@@ -122,6 +126,55 @@ def main():
                   "CAMP005_W04_ALT id=prism_scale", "CAMP005_W04_STAGE item=up_grade"):
         check(token in runner, "Falta contrato runtime del bloque 02: " + token)
 
+    # Bloque 03: contrastar rutas originales de PokeAPI y no degradar condiciones.
+    cases = fixture["blocks"][2]["cases"]
+    required_ids = {case["item_id"] for case in cases}
+    check(required_ids == set(ITEMS_03), "bloque03 exactamente tres objetos autorizados")
+    check({(case["source"], case["target"]) for case in cases} == {
+        ("happiny", "chansey"), ("kirlia", "gallade"),
+        ("snorunt", "froslass"), ("ursaring", "ursaluna"),
+    }, "origen/destino cuatro rutas")
+    check(selected["oval_stone"]["familia"] == "EVOLUTION" and all(selected[i]["estado_contenido"] == "SELECCIONADO" for i in ITEMS_03), "objetos 03 seleccionados")
+    profile = held_profile["holdable_ids"]
+    check("oval_stone" in profile and "dawn_stone" in profile and "peat_block" not in profile, "perfil equipamiento 03")
+    inventory = {row["id"]: row for row in check_rows(ROOT / "docs/current/ITEM_INVENTORY.csv")}
+    check(inventory["peat_block"]["connection"] == "EVOLUTION_ELIGIBILITY_RULES_NO_BAG_BRIDGE", "turba sin puente de mochila")
+    check("missing_description" in inventory["peat_block"]["flags"], "turba descripción pendiente")
+    check(inventory["dawn_stone"]["evolution_links"] == "2", "dawn dos rutas de evolución")
+    for case in cases:
+        name = case["item_id"]
+        chain = json.loads((ROOT / f"data/api/v2/evolution-chain/{case['chain']}/index.json").read_text(encoding="utf-8"))
+        routes = [(src,dst,detail) for src,dst,detail in routes_from_chain(chain["chain"])
+                  if src == case["source"] and dst == case["target"] and detail["trigger"]["name"] == case["trigger"]]
+        if case["trigger"] == "use-item":
+            routes = [x for x in routes if x[2].get("item", {}).get("name") == case["canonical_item"]]
+        else:
+            routes = [x for x in routes if x[2].get("held_item", {}).get("name") == case["canonical_item"]]
+        check(len(routes) == 1, f"{name}/{case['source']}: ruta canónica única")
+        d = routes[0][2]
+        check(d["min_level"] is None, f"{name}/{case['source']}: no inventar nivel")
+        field = d.get(case["key"])
+        if case["key"] == "held_item":
+            field = field.get("name") if field else None
+        check(field == case["required"], f"{name}/{case['source']}: requisito canónico")
+        if "additional_key" in case:
+            check(d.get(case["additional_key"]) == case["additional_value"], name + " día exacto")
+        check((name in profile) is case["equippable"], name + " perfil de equipamiento")
+    check(any(case["key"] == "gender" and case["required"] == 2 for case in cases), "Kirlia macho requerido")
+    check(any(case["key"] == "gender" and case["required"] == 1 for case in cases), "Snorunt hembra requerida")
+    # The creature snapshot does not preserve a sex identifier, so a gender
+    # condition cannot be implemented honestly from its current state.
+    creature = (ROOT / "modules/creatures/domain/creature_instance.gd").read_text(encoding="utf-8")
+    check("var gender:" not in creature and "var gender_id:" not in creature and '"gender":' not in creature, "género no persistido en dominio de criatura")
+    check('"time_of_day":' not in evolution.split("static func level_up_context(",1)[1].split("static func _stat_relation_matches(",1)[0], "subida de nivel sin reloj")
+    for token in ("func _auditar_condicion_03(", "func _tiene_destino_03(",
+                  "bloques_01_a_03_secuenciales", "sin_opciones_directas",
+                  "condicion_no_degradable", "no_ignora_condiciones", "sexo_no_persistido",
+                  "contexto_sin_requisitos", "uso_rechazado_sin_gasto", "evolucion_rechazada",
+                  "estado_savev2_integro", "retirada_sin_perdida", "no_equipable_sin_gasto",
+                  "CAMP005_W04_ITEM id=", "status=DEPENDENCIA_CONDICIONES"):
+        check(token in runner, "runner sin contrato 03 " + token)
+
     # Prueba de interfaz pendiente: la API de nivel comunica nivel/estadísticas,
     # pero no el objeto equipado que exige V27. Godot prueba el comportamiento real.
     lvl_context = evolution.split("static func level_up_context(", 1)[1].split("static func _stat_relation_matches(", 1)[0]
@@ -138,11 +191,11 @@ def main():
                   "productor_no_transporta_objeto", "equipamiento_positivo_sin_evolucion",
                   "guardar_savev2", "leer_savev2", "identidad_item_savev2",
                   "retirada_preserva_estado", "mochila_no_es_intercambio",
-                  "CAMP005_W04_GODOT PASS blocks=2 checks="):
+                  "CAMP005_W04_GODOT PASS blocks=3 checks="):
         check(token in runner, "runner sin prueba observable: " + token)
     check((ROOT / "tests/tools/test_parallel_items_w04_campaign_004.py").exists(), "regresión CAMP004 preservada")
     check((ROOT / "tests/tools/test_parallel_items_w04_campaign_003.py").exists(), "regresión CAMP003 preservada")
-    print(f"CAMP005_W04_PY PASS blocks=2 checks={checks}")
+    print(f"CAMP005_W04_PY PASS blocks=3 checks={checks}")
 
 
 if __name__ == "__main__":
