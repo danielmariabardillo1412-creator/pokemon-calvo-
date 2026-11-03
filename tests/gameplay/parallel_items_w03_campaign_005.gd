@@ -448,6 +448,103 @@ func _block_09(block: Dictionary) -> void:
 			and String(result.get("reason", "")) == "field_effect_not_connected"
 			and snapshot(service) == before)
 
+# 10: exercise real capture transactions and creature serialization.
+func _block_10(block: Dictionary) -> void:
+	var ids: Array = block.get("ids", [])
+	check("Cola final exacta", ids == ["friend_ball", "heal_ball", "quick_ball", "timer_ball"])
+	check("Contratos ya existentes, no cuatro objetos nuevos",
+		block.get("current_state") == "EXISTING_FUNCTIONAL_CAPTURE_CONTRACTS"
+		and bool(block.get("functional_effect_certified", false))
+		and bool(block.get("no_new_objects", false)))
+	var rules := CaptureRuleset.new()
+	var species: CreatureSpecies = catalogs.species(&"caterpie")
+	check("Fuente de captura canónica", species != null
+		and CaptureRuleset.is_valid_capture_rate(species.capture_rate))
+	for raw_id: String in ids:
+		var id := StringName(raw_id)
+		check("Bola seleccionada e integrada " + raw_id,
+			catalogs.item(id) != null
+			and service_for().selection.content_allowed(id)
+			and rules.is_known_ball(id))
+	for raw_id: String in ["friend_ball", "heal_ball"]:
+		var id := StringName(raw_id)
+		var c := _mon(&"caterpie", 8, StringName("w03_final_" + raw_id))
+		c.friendship = 231
+		c.current_hp = 1
+		status(c, &"sleep")
+		c.moveset[0].max_pp = 48
+		c.moveset[0].current_pp = 1
+		var initial: Dictionary = c.to_dict()
+		var rng := RandomNumberGenerator.new()
+		rng.seed = 1010
+		var bag := PlayerInventory.new()
+		check("Preparar bola " + raw_id, bag.add(id, 2))
+		var party := CreatureParty.new()
+		var outcome := CaptureInventoryService.resolve(
+			CaptureAttempt.new(c, id, CaptureBattleContext.new()),
+			rng, catalogs, party, bag)
+		check("Captura real exitosa con " + raw_id,
+			outcome.result.status == CaptureResult.SUCCESS
+			and outcome.result.consume_item
+			and party.size() == 1 and bag.quantity(id) == 1
+			and is_same(outcome.captured, c))
+		var roundtrip := CreatureInstance.from_dict(c.to_dict())
+		check("Serialización de criatura capturada " + raw_id,
+			roundtrip.to_dict() == c.to_dict()
+			and roundtrip.instance_id == c.instance_id
+			and c.to_dict() != initial)
+		if id == &"friend_ball":
+			check("Friend fija 200 aun si la amistad previa es mayor",
+				c.friendship == 200 and roundtrip.friendship == 200)
+			check("Friend no cura PS ni sueño ni restaura PP",
+				c.current_hp == 1 and c.status_state.persistent_id == &"sleep"
+				and c.moveset[0].current_pp == 1 and c.moveset[0].max_pp == 48)
+		else:
+			check("Heal cura PS, estado persistente y PP reforzados",
+				c.current_hp == c.stats.max_hp
+				and c.status_state.persistent_id == &""
+				and c.status_ids.is_empty()
+				and c.moveset[0].current_pp == 48
+				and c.moveset[0].max_pp == 48)
+			check("Heal no altera amistad",
+				c.friendship == 231 and roundtrip.friendship == 231)
+	var context := CaptureBattleContext.new()
+	context.completed_turns = 0
+	var wild := _mon(&"caterpie", 8, &"w03_final_turn_context")
+	check("Quick en turno inicial ×5",
+		is_equal_approx(CaptureRuleset.ContextBallEffects.multiplier(
+			&"quick_ball", wild, species, context), 5.0))
+	check("Timer en turno inicial ×1",
+		is_equal_approx(CaptureRuleset.ContextBallEffects.multiplier(
+			&"timer_ball", wild, species, context), 1.0))
+	context.completed_turns = 1
+	check("Quick después de turno ×1",
+		is_equal_approx(CaptureRuleset.ContextBallEffects.multiplier(
+			&"quick_ball", wild, species, context), 1.0))
+	context.completed_turns = 10
+	check("Timer máximo ×4", is_equal_approx(
+		CaptureRuleset.ContextBallEffects.multiplier(
+			&"timer_ball", wild, species, context), 4.0))
+	context.completed_turns = -1
+	for id: StringName in [&"quick_ball", &"timer_ball"]:
+		var bag := PlayerInventory.new()
+		check("Preparar bola de turno " + String(id), bag.add(id, 2))
+		var party := CreatureParty.new()
+		var rng := RandomNumberGenerator.new()
+		rng.seed = 9981
+		var before_rng: int = rng.state
+		var before_bag: Dictionary = bag.to_dict()
+		var before_wild: Dictionary = wild.to_dict()
+		var attempt := CaptureAttempt.new(wild, id, context)
+		var rejected := CaptureInventoryService.resolve(
+			attempt, rng, catalogs, party, bag)
+		check("Sin contexto no se gasta bola ni RNG " + String(id),
+			rejected.result.status == CaptureResult.INVALID
+			and rejected.result.reason == "capture_turn_context_missing"
+			and not rejected.result.consume_item and rng.state == before_rng
+			and bag.to_dict() == before_bag and wild.to_dict() == before_wild
+			and party.is_empty())
+
 func _finish(n: int) -> void:
 	done = true
 	if errors.is_empty() and n > 0 and checks > 0:
