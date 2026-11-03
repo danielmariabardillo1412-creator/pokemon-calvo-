@@ -237,6 +237,35 @@
           "move_id": "heat_crash"
         }
       ]
+    },
+    {
+      "block": "09",
+      "items": [
+        {
+          "item_id": "tm190",
+          "move_id": "solar_blade"
+        },
+        {
+          "item_id": "tm191",
+          "move_id": "uproar"
+        },
+        {
+          "item_id": "tm192",
+          "move_id": "focus_punch"
+        },
+        {
+          "item_id": "tm193",
+          "move_id": "weather_ball"
+        },
+        {
+          "item_id": "tm194",
+          "move_id": "grassy_glide"
+        },
+        {
+          "item_id": "tm195",
+          "move_id": "burning_jealousy"
+        }
+      ]
     }
   ]
 }
