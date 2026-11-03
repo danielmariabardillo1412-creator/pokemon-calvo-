@@ -152,6 +152,54 @@
       "functional_effect_certified": false,
       "note": "El servicio de uso directo no conecta estos IDs. Pruebas de rechazo sin consumo, daño ni alteración de relojes; la serialización standalone de PlayerInventory no acredita SaveV2 ni acciones de mundo.",
       "ci_required": true
+    },
+    {
+      "bloque": "04",
+      "familia": "FIELD_USE",
+      "ids": [
+        "max_lure",
+        "max_repel",
+        "red_flute"
+      ],
+      "objetivo": "auditar_uso_campo_consecuencia_y_guardado",
+      "current_state": "DEPENDENCIA_COMPARTIDA",
+      "per_id_status": {
+        "max_lure": "DEPENDENCIA_COMPARTIDA",
+        "max_repel": "DEPENDENCIA_COMPARTIDA",
+        "red_flute": "DEPENDENCIA_COMPARTIDA"
+      },
+      "expected_rejection": "field_effect_not_connected",
+      "cases": [
+        {
+          "name": "normal",
+          "status": "none"
+        },
+        {
+          "name": "confusion",
+          "status": "confusion"
+        },
+        {
+          "name": "sleep",
+          "status": "sleep"
+        }
+      ],
+      "inventory_counts": [
+        0,
+        2
+      ],
+      "invalid_cases": [
+        "field_locked",
+        "invalid_inventory",
+        "unknown_target"
+      ],
+      "missing_authoritative_integrations": [
+        "max_lure_overworld_encounter_rate_duration",
+        "max_repel_overworld_encounter_suppression_steps",
+        "red_flute_confusion_heal_field_route"
+      ],
+      "functional_effect_certified": false,
+      "note": "Catálogo no implica funcionalidad. FieldItemService no tiene ruta Max Lure, Max Repel ni Red Flute; no descontar ni crear duración o cura de confusión inexistentes. Roundtrip PlayerInventory no es SaveV2 integral.",
+      "ci_required": true
     }
   ]
 }
