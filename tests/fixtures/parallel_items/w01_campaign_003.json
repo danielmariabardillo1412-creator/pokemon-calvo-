@@ -467,6 +467,128 @@
         19
       ],
       "history": "new_negative_nonlethal_no_activation"
+    },
+    {
+      "block": "05",
+      "id": "flame_burn_end_turn",
+      "item_id": "flame_orb",
+      "op": "end_turn_burn",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "foe_move": "amnesia",
+      "own_move": "reflect",
+      "seeds": [
+        19,
+        23
+      ],
+      "history": "held_effect_sweep_v2:end_turn_status_burn"
+    },
+    {
+      "block": "05",
+      "id": "flame_fire_type_immune",
+      "item_id": "flame_orb",
+      "op": "fire_type_immunity",
+      "actor_species": "charizard",
+      "foe_species": "mew",
+      "foe_move": "amnesia",
+      "own_move": "scratch",
+      "seeds": [
+        19
+      ],
+      "history": "native_fire_type_status_immunity_negative"
+    },
+    {
+      "block": "05",
+      "id": "sash_full_hp_lethal",
+      "item_id": "focus_sash",
+      "op": "focus_sash_full_hp",
+      "actor_species": "pikachu",
+      "actor_level": 1,
+      "foe_species": "mew",
+      "foe_level": 100,
+      "foe_move": "seismic_toss",
+      "own_move": "growl",
+      "seeds": [
+        1,
+        19
+      ],
+      "history": "W01_LOTE_002:lethal_full;new_seismic_toss_SaveV2"
+    },
+    {
+      "block": "05",
+      "id": "sash_partial_hp_lethal",
+      "item_id": "focus_sash",
+      "op": "focus_sash_not_full",
+      "actor_species": "pikachu",
+      "actor_level": 1,
+      "actor_hp": "minus_one",
+      "foe_species": "mew",
+      "foe_level": 100,
+      "foe_move": "seismic_toss",
+      "own_move": "growl",
+      "seeds": [
+        19
+      ],
+      "history": "W01_LOTE_002:lethal_partial;SaveV2"
+    },
+    {
+      "block": "05",
+      "id": "sash_nonlethal",
+      "item_id": "focus_sash",
+      "op": "focus_sash_nonlethal",
+      "actor_species": "mew",
+      "actor_level": 100,
+      "foe_species": "mew",
+      "foe_level": 1,
+      "foe_move": "tackle",
+      "own_move": "growl",
+      "seeds": [
+        23
+      ],
+      "history": "W01_LOTE_002:nonlethal_control;SaveV2"
+    },
+    {
+      "block": "05",
+      "id": "grassy_seed_field",
+      "item_id": "grassy_seed",
+      "op": "grassy_field_defense",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "foe_move": "grassy_terrain",
+      "own_move": "reflect",
+      "seeds": [
+        19,
+        23
+      ],
+      "history": "held_effect_sweep_v3:grassy_seed_terrain"
+    },
+    {
+      "block": "05",
+      "id": "grassy_seed_wrong_field",
+      "item_id": "grassy_seed",
+      "op": "grassy_wrong_terrain",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "foe_move": "electric_terrain",
+      "own_move": "reflect",
+      "seeds": [
+        19
+      ],
+      "history": "held_effect_sweep_v3:wrong_terrain_retained"
+    },
+    {
+      "block": "05",
+      "id": "grassy_seed_no_field",
+      "item_id": "grassy_seed",
+      "op": "grassy_no_terrain",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "foe_move": "amnesia",
+      "own_move": "reflect",
+      "seeds": [
+        19
+      ],
+      "history": "new_negative_grassy_seed_no_terrain"
     }
   ]
 }
