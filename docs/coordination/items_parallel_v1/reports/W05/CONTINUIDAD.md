@@ -1,3 +1,15 @@
+# ESTADO VIGENTE IA5/W05 — CAMPAÑA_005 · 01/10 CI PASS VERIFICADA (2026-11-03)
+
+**Rama activa exclusiva:** `codex/calvo-items-20261103-w05-camp005`, identidad W05/MT-libros. Autoridad IA6 `CAMPAIGN_005_W05_GATE.md`, `CAMPAIGN_005_W05_QUEUE_APPROVED.csv`, `campaigns/CAMP_005_W05.md` y autorreparación V5. Nueva campaña autorizada explícitamente; CAMP004 y CAMP003 permanecen cerradas como regresiones. Esta cabecera prevalece sobre estados antiguos.
+
+**BLOQUE 01 FUNCIONALMENTE CERTIFICADO:** `tm142;tm143;tm144;tm145;tm146;tm147` → `hydro_pump;blizzard;fire_pledge;water_pledge;grass_pledge;wild_charge` en Scarlet/Violet. Runner Python `tests/tools/test_parallel_items_w05_campaign_005.py`, commit `1a7832904a18d2adb0c57130999a3ae5dcfcef35`; runner Godot `tests/gameplay/parallel_items_w05_campaign_005.gd`, commit `da5b10d32a8478db725d03bb438d8eb84d5d3524`; fixture 1 bloque/6 MT commit `095942fcaf1de2b3cb2a07efc14ec5a85be6cafa`; CSV `reports/W05/CAMP_005_PROGRESO.csv`, una fila `EN_CI_AUTOMATICA`, commit `c18760b7df5978a4bdcbb6395f2bcd85c113b7fb`. Informe `CAMP_005_ITER_01.md` certificado por commit `f2d63736727e106932d434a524f477eec73dcdc9`. Cotejo estático con cola IA6 y perfil SV sin discrepancias.
+
+**RECIBOS CI REALES:** [GitHub Actions #41715365400](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41715365400) sobre SHA `c18760b7df5978a4bdcbb6395f2bcd85c113b7fb`, job `126193834698`, `completed/success`: `CAMP005_W05_PY PASS blocks=1 checks=58`, `CAMP005_GATE_PY_PASS worker=W05 blocks=1 checks=58`, `CAMP005_W05_GODOT PASS blocks=1 checks=231`, `CAMP005_GATE_GODOT_PASS worker=W05 blocks=1 checks=231`. Aprendizaje probado con el servicio real, negativos de propiedad/stock/compatibilidad, consumo, PP e identidad y SaveV2. No se modificó producción. Las regresiones CAMP004 y CAMP003 están programadas en el workflow de IA6 para hitos 05/10 o parches de producción y **no se ejecutaron en bloque 01**.
+
+**SIGUIENTE `p`:** ejecutar exclusivamente bloque 02 `tm148;tm149;tm150;tm151;tm152;tm153`, cotejando mapeos SV y la cola oficial antes de publicar. No repetir bloque 01 ni volver a CAMP004. Cada `p` un bloque y su CI. Autonomía V5: reparar solo defecto demostrable en W05/enseñanza, sin tocar catálogo, learnsets o 19 máquinas históricas. Prohibido `main`, V28, PR118, árbitra, ramas W01–W04, otras W05, políticas, saves, workflows y merge. Al 10/10 `CAMPAÑA_005_FINALIZADA` y STOP. CI headless no certifica UI/GPU.
+
+---
+
 # ESTADO VIGENTE IA5/W05 — CAMPAÑA_005 · 01/10 PUBLICADO · CI EN CURSO (2026-11-03)
 
 **Identidad fija** IA5/W05, MT/libros. **Rama exclusiva nueva:** `codex/calvo-items-20261103-w05-camp005`. Nueva autorización formal de IA6: `CAMPAIGN_005_W05_GATE.md`, `CAMPAIGN_005_W05_QUEUE_APPROVED.csv`, `campaigns/CAMP_005_W05.md`; `AUTONOMOUS_REPAIR_V5.md`. **Esta cabecera prevalece sobre las anteriores**: CAMP004 10/10 CI PASS es histórica y ahora es regresión, no un STOP contra la nueva campaña explícita.
