@@ -2831,6 +2831,15 @@ def negative_controls(fixture, queue, progress, chk):
             lambda f: f["blocks"][8]["cases"][20].update({"applies": True}),
             lambda f: f["blocks"][8]["cases"][21].update({"cures_status": True}),
         ])
+    if len(fixture["blocks"]) >= 10:
+        edits.extend([
+            lambda f: f["blocks"][9]["ids"].append("potion"),
+            lambda f: f["blocks"][9]["cases"].pop(),
+            lambda f: f["blocks"][9]["cases"][0].update({"cures_status": False}),
+            lambda f: f["blocks"][9]["cases"][7].update({"heal_amount": 60}),
+            lambda f: f["blocks"][9]["cases"][14].update({"applies": True}),
+            lambda f: f["blocks"][9]["cases"][21].update({"cures_confusion": True}),
+        ])
     for i, edit in enumerate(edits):
         altered = copy.deepcopy(fixture)
         edit(altered)
