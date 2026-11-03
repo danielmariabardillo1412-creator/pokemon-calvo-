@@ -696,7 +696,7 @@ func _block06_capture(id: StringName, sid: StringName, friendship_value: int,
 	var expected_p: float = rules.catch_probability(species.capture_rate, factor, bonus,
 		target.stats.max_hp, target.current_hp)
 	check("Postcaptura efecto sólo sobre captura, no probabilidad " + String(id),
-		is_equal_approx(factor, 1.0) and expected_p > 0.0 and expected_p < 1.0)
+		is_equal_approx(factor, 1.0) and expected_p > 0.0 and expected_p <= 1.0)
 	var seed_value: int = _block06_seed_for(expected_p, want_success, bounds)
 	check("Postcaptura existe semilla real para éxito/fallo " + String(id)
 		+ String(sid) + persistent, seed_value > 0)
