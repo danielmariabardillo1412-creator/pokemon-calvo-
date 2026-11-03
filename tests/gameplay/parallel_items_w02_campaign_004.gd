@@ -169,7 +169,7 @@ func _probe_field_use(spec: Dictionary, mode: String) -> Dictionary:
 			var starting: Variant = spec.get("pp%d_start" % index, "full")
 			creature.moveset[index].current_pp = (
 				creature.moveset[index].max_pp if starting is String else int(starting))
-	if String(spec.kind) in ["field_heal", "field_medicine"]:
+	if String(spec.kind) in ["field_heal", "field_medicine", "field_unsupported"]:
 		match String(spec.get("start_hp", "full")):
 			"half":
 				creature.current_hp = maxi(1, int(creature.stats.max_hp / 2))
@@ -225,7 +225,7 @@ func _probe_field_use(spec: Dictionary, mode: String) -> Dictionary:
 			not bool(reply.get("accepted", false))
 			and String(reply.get("status", "")) in ["DEPENDENCY_MISSING", "REJECTED"])
 	if String(spec.kind) == "field_medicine" and expected_acceptance:
-		var bitter: bool = String(spec.id) in ["energy_powder", "energy_root"]
+		var bitter: bool = String(spec.id) in ["energy_powder", "energy_root", "heal_powder"]
 		var expected_action: String = "bitter_medicine" if bitter else "medicine"
 		check(mode + " medicina usa el servicio existente y su subfamilia",
 			String(reply.get("action", "")) == expected_action)
@@ -276,8 +276,8 @@ func _probe_field_use(spec: Dictionary, mode: String) -> Dictionary:
 		expected_hp = mini(updated.stats.max_hp,
 			start_hp + maxi(1, int(updated.stats.max_hp / int(spec.heal_denominator))))
 	elif String(spec.kind) == "field_medicine" and expected_acceptance:
-		expected_hp = mini(updated.stats.max_hp,
-			start_hp + int(spec.get("heal_amount", 0)))
+		expected_hp = updated.stats.max_hp if bool(spec.get("heal_full", false)) else mini(
+			updated.stats.max_hp, start_hp + int(spec.get("heal_amount", 0)))
 	var expected_friendship: int = start_friend
 	if String(spec.kind) == "field_medicine" and expected_acceptance and spec.has("friendship_loss"):
 		expected_friendship = maxi(0, start_friend - int(spec.friendship_loss))
@@ -360,7 +360,7 @@ func _compare_field_use(spec: Dictionary, observed: Dictionary) -> void:
 			int(a.hp) == mini(int(a.max_hp), int(n.hp) + (quarter if expected else 0))
 			and int(s.hp) == int(a.hp))
 	if String(spec.kind) == "field_unsupported":
-		check("Razz en bolsa se rechaza en todos los modos sin mutar HP",
+		check("Item sin contrato (Razz/Hopo) se rechaza en todos los modos sin mutar HP",
 			not bool(a.accepted) and not bool(n.accepted)
 			and not bool(s.accepted)
 			and int(a.hp) == int(n.hp) and int(n.hp) == int(s.hp))
@@ -369,6 +369,8 @@ func _compare_field_use(spec: Dictionary, observed: Dictionary) -> void:
 		var should_cure_confusion: bool = expected and bool(spec.get("cures_confusion", false))
 		var expected_healed_hp: int = mini(int(a.max_hp),
 			int(n.hp) + (int(spec.heal_amount) if expected else 0))
+		if expected and bool(spec.get("heal_full", false)):
+			expected_healed_hp = int(a.max_hp)
 		check("medicina cura PS exactos o mantiene PS al curar estado",
 			int(a.hp) == expected_healed_hp and int(s.hp) == expected_healed_hp)
 		check("medicina solo cura estado especificado si se consume",
