@@ -57,6 +57,45 @@
       "note": "Solo certificar rechazo sin consumo/RNG ni cambios de estado para IDs aún desconocidos. No existen señales de origen o Pokédex verificadas dentro de CaptureBattleContext.",
       "functional_effect_certified": false,
       "ci_required": true
+    },
+    {
+      "bloque": "02",
+      "familia": "FIELD_USE",
+      "ids": [
+        "black_flute",
+        "blue_flute",
+        "escape_rope"
+      ],
+      "objetivo": "auditar_uso_campo_consecuencia_y_guardado",
+      "current_state": "DEPENDENCIA_COMPARTIDA",
+      "expected_rejection": "field_effect_not_connected",
+      "cases": [
+        {
+          "name": "normal",
+          "status": "none"
+        },
+        {
+          "name": "asleep",
+          "status": "sleep"
+        }
+      ],
+      "inventory_counts": [
+        0,
+        2
+      ],
+      "invalid_cases": [
+        "field_locked",
+        "invalid_inventory",
+        "unknown_target"
+      ],
+      "supported_effects_certified": false,
+      "requires_shared_features": [
+        "encounter_rate_world_context",
+        "overworld_escape_destination",
+        "world_position_and_session_transition"
+      ],
+      "observed_contract": "FieldItemService.use_item reaches field_effect_not_connected on supported selection without effect executor; no inventory consumed, no creature mutation; PlayerInventory roundtrip preserves quantities but is not proof of a native field-use effect.",
+      "ci_required": true
     }
   ]
 }
