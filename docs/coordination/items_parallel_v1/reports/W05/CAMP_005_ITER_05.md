@@ -1,3 +1,14 @@
+> **CERTIFICACIÓN FUNCIONAL DEFINITIVA — HITO 05/10 (2026-11-03).** [GitHub Actions #41721306449](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41721306449), SHA funcional `b47e6ecc45d96b0b6d3bb901a5aed66a9370c85a`, job `126215005633`, `completed/success`. Recibos de log reales:
+> - `CAMP005_W05_MANIFEST_PASS reserved=10 completed=5 ids=60 kind=NEW_IDS`
+> - `CAMP005_W05_PY PASS blocks=5 checks=290`
+> - `CAMP005_GATE_PY_PASS worker=W05 blocks=5 checks=290`
+> - `CAMP005_W05_GODOT PASS blocks=5 checks=1091`
+> - `CAMP005_GATE_GODOT_PASS worker=W05 blocks=5 checks=1091`
+> - Regresión CAMP004 60 MT: `CAMP004_W05_PY PASS blocks=10 checks=580` y `CAMP004_W05_GODOT PASS blocks=10 checks=2166`
+> - Regresión CAMP003 60 MT: `CAMP003_W05_PY PASS blocks=10 checks=580` y `CAMP003_W05_GODOT PASS blocks=10 checks=2166`
+>
+> **RESULTADO:** 30/30 MT de CAMP005 validadas por Python/Godot, con regresiones completas CAMP004 y CAMP003 también PASS. Este veredicto prevalece sobre el estado CI pendiente que aparece más abajo como registro histórico. No se modificó producción. Godot headless no certifica interfaz/GPU.
+
 # IA5/W05 — CAMPAÑA_005 · ITER_05/10 · HITO DE REGRESIÓN
 
 **Estado inicial al publicar: EN_CI_AUTOMATICA.** La validación documental no acredita enseñanza funcional ni regresiones hasta leer los logs CI.
