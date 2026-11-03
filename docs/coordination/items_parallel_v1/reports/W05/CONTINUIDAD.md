@@ -1,3 +1,17 @@
+# ESTADO VIGENTE IA5/W05 — CAMPAÑA_003 · 02/10 PUBLICADOS (2026-11-03)
+
+**Identidad:** IA5/W05, MT/libros. **Rama exclusiva:** `codex/calvo-items-20261103-w05-camp003`. Activación IA6 de diez microbloques en la cola `CAMPAIGN_003_QUEUE_APPROVED.csv` y `campaigns/CAMP_003_W05.md` (rama árbitra).
+
+**BLOQUE 02 publicado, estado EN_CI_AUTOMATICA, sin PASS confirmado:** `tm24;tm25;tm26;tm27;tm28;tm29` mapeadas a `fire_spin;facade;poison_tail;aerial_ace;bulldoze;hex` en Scarlet/Violet. Se añadieron al fixture acumulativo (commit `f006f83ab42290609c65ab159652a68dc9017d64`) y al progreso (commit `131b4420e2d4878972199bec9aa6fb4ccf86ae4a`). **Bloque 01 conservado completo**; son 12 MT repartidas en dos bloques, todavía no doce enseñanzas certificadas por CI. Informe `CAMP_003_ITER_02.md`, commit `0f76b80eb15c7a77ae97efcfa7e0247495a3a970`.
+
+**Control real ejecutado:** lectura y cotejo de los 12 IDs y movimientos en fixture, cola IA6, CSV de progreso y perfil SV: **coherentes**. No equivale a ejecución de Godot ni a verificación de learnsets. Se intentó obtener el veredicto de la CI anterior, pero no se recibió resultado fiable de Actions; por ello se avanzó solo **un bloque independiente de tests** y NO se marcó `CI_PASS_VERIFICADO`. El workflow `.github/workflows/parallel-camp003-worker-autoci.yml` se dispara por los pushes de fixture/progreso; no se ha tocado.
+
+**Siguiente `p`:** consultar el último run real de CI para el último SHA de pruebas/progreso de **02/10**. Con `success`, ejecutar solo **bloque 03** (`tm30;tm32;tm33;tm34;tm35;tm37`) y anexar al fixture y CSV sin borrar previos. Con `queued/in_progress`, aplicar el gate V4 de independencia y no inferir PASS. Con `failure` de contrato compartido, motor o SaveV2, STOP y elevar a IA6; reparar solo test propio si error aislado. No acumular indefinidamente trabajo si sigue inaccesible el estado de CI.
+
+**Protección:** `main`, V28, PR118, árbitra, otras W, `modules/`, `data/`, `config/`, catálogo canónico, scripts de workflow y partida real intactos. 19 legacy siguen inactivas. GPU/arte/UI excluidos.
+
+---
+
 # ESTADO VIGENTE IA5/W05 — CAMPAÑA_003 · 01/10 PUBLICADO (2026-11-03)
 
 **Identidad:** W05, MT/libros. **ÚNICA rama de escritura:** `codex/calvo-items-20261103-w05-camp003`. Activación IA6 en `CAMPAIGN_GATE_003.md`, `CAMPAIGN_003_BRANCH_MANIFEST.md` y `campaigns/CAMP_003_W05.md`. Diez bloques, seis MT cada uno; completar uno por `p` y STOP en 10/10. **El historial CAMP001/002 más abajo es obsoleto para permisos y rama.**
