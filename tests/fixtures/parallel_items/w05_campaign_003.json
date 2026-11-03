@@ -32,6 +32,35 @@
           "move_id": "charge_beam"
         }
       ]
+    },
+    {
+      "block": "02",
+      "items": [
+        {
+          "item_id": "tm24",
+          "move_id": "fire_spin"
+        },
+        {
+          "item_id": "tm25",
+          "move_id": "facade"
+        },
+        {
+          "item_id": "tm26",
+          "move_id": "poison_tail"
+        },
+        {
+          "item_id": "tm27",
+          "move_id": "aerial_ace"
+        },
+        {
+          "item_id": "tm28",
+          "move_id": "bulldoze"
+        },
+        {
+          "item_id": "tm29",
+          "move_id": "hex"
+        }
+      ]
     }
   ]
 }
