@@ -1,3 +1,15 @@
+# ESTADO VIGENTE IA5/W05 — CAMPAÑA_005 · 02/10 CI PASS VERIFICADA (2026-11-03)
+
+**Rama exclusiva:** `codex/calvo-items-20261103-w05-camp005`, trabajadora IA5/W05, dominio MT/libros. Autoridad de IA6 `CAMPAIGN_005_W05_GATE.md`, `CAMPAIGN_005_W05_QUEUE_APPROVED.csv`, `campaigns/CAMP_005_W05.md` y `AUTONOMOUS_REPAIR_V5.md`. Esta cabecera sustituye las anteriores sobre CI pendiente; CAMPAÑAS_004/003 siguen cerradas y preservadas como regresión.
+
+**BLOQUE 02 CERTIFICADO:** `tm148;tm149;tm150;tm151;tm152;tm153` → `sludge_bomb;earthquake;stone_edge;phantom_force;giga_impact;blast_burn` en mapeo `scarlet-violet`. Fixture `tests/fixtures/parallel_items/w05_campaign_005.json`, dos bloques/12 IDs, commit `ae06a0a83e5ae35011077ae465030fcda745cf74`. CSV `reports/W05/CAMP_005_PROGRESO.csv` segunda fila, commit `83d89ccc862e2035181e7a0136c6256d73e9d063`. Informe `CAMP_005_ITER_02.md` certificación commit `cec145b54b302b2ea30403d414c684a5d0cf0d13`. Cotejo estático: 12 IDs distintos, 2 filas y dos bloques, movimientos y orden idénticos a cola IA6/perfil SV. Runners y producción sin cambios.
+
+**CI REAL PASS EN SHA DE PROGRESO:** [Actions #41718416082](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41718416082), SHA `83d89ccc862e2035181e7a0136c6256d73e9d063`, job `126205002195`, `completed/success`. Logs: `CAMP005_W05_PY PASS blocks=2 checks=116`, `CAMP005_GATE_PY_PASS worker=W05 blocks=2 checks=116`, `CAMP005_W05_GODOT PASS blocks=2 checks=446`, `CAMP005_GATE_GODOT_PASS worker=W05 blocks=2 checks=446`; el manifiesto W05 también PASS con dos bloques de diez y 60 IDs reservados. CI Godot headless prueba enseñanza real, stock/propietario, compatibles/incompatibles, consumo, PP y SaveV2, no UI/GPU. Regresiones CAMP004/003 se ejecutarán según workflow en hitos 05, 10 y parches propios, **no se ejecutaron en 02**, por tanto no afirmar que pasaron en este run. La etiqueta histórica `EN_CI_AUTOMATICA` en CSV no se reescribe solo para reflejar PASS y evitar un nuevo run.
+
+**SIGUIENTE `p`:** ejecutar exclusivamente bloque 03 `tm154;tm155;tm156;tm157;tm158;tm159`, consultar cola IA6 y mapeo SV, ampliar fixture y CSV una vez y ejecutar CI. Si un nuevo run falla, reparar autónomamente según V5 sólo tests o producción W05 de enseñanza con defecto probado, nunca rebajar aserciones. Prohibido tocar `main`, V28, PR118, rama árbitra, otras W, datasets/learnsets canónicos, políticas, 19 MT legacy, guardados o workflows; sin merge. Al 10/10 `CAMPAÑA_005_FINALIZADA` y STOP.
+
+---
+
 # ESTADO VIGENTE IA5/W05 — CAMPAÑA_005 · 02/10 PUBLICADOS (2026-11-03)
 
 **Identidad:** IA5/W05, MT/libros. **Rama exclusiva activa:** `codex/calvo-items-20261103-w05-camp005`. Gate IA6 `CAMPAIGN_005_W05_GATE.md`, cola `CAMPAIGN_005_W05_QUEUE_APPROVED.csv`, encargo `campaigns/CAMP_005_W05.md` y `AUTONOMOUS_REPAIR_V5.md` de la rama árbitra. Esta cabecera prevalece sobre los estados históricos inferiores. CAMP004 y CAMP003 se conservan íntegros como regresión.
