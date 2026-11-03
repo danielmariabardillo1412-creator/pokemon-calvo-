@@ -1,3 +1,5 @@
+> **CI DEFINITIVA VERIFICADA — BLOQUE 09/10 (2026-11-04):** [GitHub Actions #41737890652](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41737890652), SHA funcional `0a69eaf51999f7a26cd69e34cf52f43f7a2ff5ff`, job `126272071488`, `completed/success`. Recibos de logs reales: `CAMP005_W05_MANIFEST_PASS reserved=10 completed=9 ids=60 kind=NEW_IDS`; `CAMP005_W05_PY PASS blocks=9 checks=522`; `CAMP005_GATE_PY_PASS worker=W05 blocks=9 checks=522`; `CAMP005_W05_GODOT PASS blocks=9 checks=1951`; `CAMP005_GATE_GODOT_PASS worker=W05 blocks=9 checks=1951`. **54/54 MT de CAMP005 verificadas por pruebas Python y Godot headless.** Regresiones CAMP004 y CAMP003 no ejecutadas en bloque 09; fueron verificadas en el hito 05 y deberán repetirse en el hito final 10. Este veredicto prevalece sobre estados históricos de CI pendiente que aparecen debajo. Sin cambios de producción ni rebaja de pruebas; UI/GPU no acreditadas.
+
 # IA5/W05 — CAMPAÑA_005 · ITER_09/10
 
 **Estado de publicación: EN_CI_AUTOMATICA.** La concordancia estática no se considera PASS de enseñanza real hasta verificar la CI sobre el SHA de progreso.
