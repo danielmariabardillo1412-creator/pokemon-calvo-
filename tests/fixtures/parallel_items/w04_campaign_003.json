@@ -1,0 +1,24 @@
+{
+  "campaign": "003",
+  "worker": "W04",
+  "blocks": [
+    {
+      "block": "01",
+      "ids": [
+        "dawn_stone",
+        "dusk_stone",
+        "shiny_stone"
+      ],
+      "expected_trigger": "use_item",
+      "policy": "discover_active_catalog; never bypass conditions",
+      "cases": [
+        "eligible_evolution_if_supported",
+        "wrong_species_no_spend",
+        "wrong_target_no_spend",
+        "one_consumption",
+        "same_identity",
+        "save_v2"
+      ]
+    }
+  ]
+}
