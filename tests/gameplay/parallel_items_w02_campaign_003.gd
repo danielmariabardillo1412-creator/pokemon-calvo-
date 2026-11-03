@@ -119,7 +119,7 @@ func _probe_berry(spec: Dictionary, mode: String) -> Dictionary:
 		if line.begins_with("|-start|") and line.contains("|confusion"):
 			confusion = true
 			native_events.append(String(value))
-		if line.begins_with("|-boost|") and line.contains("|spd|"):
+		if line.begins_with("|-boost|p1a:") and line.contains("|spd|"):
 			boost_spd = true
 			native_events.append(String(value))
 	check(mode + " dueño inmutable antes de settlement",
