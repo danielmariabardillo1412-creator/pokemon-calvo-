@@ -3,7 +3,7 @@
   "campaign": "CAMP_005",
   "worker": "W02",
   "kind": "TRAINING",
-  "purpose": "CAMP005 W02: siete filas de entrenamiento con oráculos independientes, servicio real y SaveV2; sin modificaciones compartidas, CI se evalúa por SHA y logs",
+  "purpose": "CAMP005 W02 nueve filas acumuladas: bloque09 mentas con DEPENDENCY_MISSING real, rechazo atómico y SaveV2, sin escrituras de producción",
   "blocks": [
     {
       "block": "01",
@@ -2422,6 +2422,366 @@
           "level": 100
         }
       ]
+    },
+    {
+      "block": "09",
+      "family": "TRAINING",
+      "ids": [
+        "timid_mint",
+        "bold_mint",
+        "calm_mint",
+        "careful_mint"
+      ],
+      "source_evidence": [
+        "modules/inventory/field_item_service.gd",
+        "modules/inventory/field_item_effects.gd",
+        "modules/inventory/field_growth_effects.gd",
+        "modules/creatures/domain/creature_instance.gd",
+        "modules/creatures/progression/progression_ruleset.gd",
+        "config/item_selection_v1.json"
+      ],
+      "cases": [
+        {
+          "scenario": "timid_mint_neutral_hardy",
+          "id": "timid_mint",
+          "kind": "mint_dependency",
+          "applies": false,
+          "wanted_nature": "timid",
+          "expect_status": "DEPENDENCY_MISSING",
+          "expect_reason": "field_effect_not_connected",
+          "nature": "hardy"
+        },
+        {
+          "scenario": "timid_mint_same_nature",
+          "id": "timid_mint",
+          "kind": "mint_dependency",
+          "applies": false,
+          "wanted_nature": "timid",
+          "expect_status": "DEPENDENCY_MISSING",
+          "expect_reason": "field_effect_not_connected",
+          "nature": "timid"
+        },
+        {
+          "scenario": "timid_mint_another_nature",
+          "id": "timid_mint",
+          "kind": "mint_dependency",
+          "applies": false,
+          "wanted_nature": "timid",
+          "expect_status": "DEPENDENCY_MISSING",
+          "expect_reason": "field_effect_not_connected",
+          "nature": "jolly"
+        },
+        {
+          "scenario": "timid_mint_friendship_zero",
+          "id": "timid_mint",
+          "kind": "mint_dependency",
+          "applies": false,
+          "wanted_nature": "timid",
+          "expect_status": "DEPENDENCY_MISSING",
+          "expect_reason": "field_effect_not_connected",
+          "nature": "hardy",
+          "start_friendship": 0
+        },
+        {
+          "scenario": "timid_mint_friendship_254",
+          "id": "timid_mint",
+          "kind": "mint_dependency",
+          "applies": false,
+          "wanted_nature": "timid",
+          "expect_status": "DEPENDENCY_MISSING",
+          "expect_reason": "field_effect_not_connected",
+          "nature": "jolly",
+          "start_friendship": 254
+        },
+        {
+          "scenario": "timid_mint_move_slot_0",
+          "id": "timid_mint",
+          "kind": "mint_dependency",
+          "applies": false,
+          "wanted_nature": "timid",
+          "expect_status": "DEPENDENCY_MISSING",
+          "expect_reason": "field_effect_not_connected",
+          "nature": "hardy",
+          "slot": 0
+        },
+        {
+          "scenario": "timid_mint_move_slot_1",
+          "id": "timid_mint",
+          "kind": "mint_dependency",
+          "applies": false,
+          "wanted_nature": "timid",
+          "expect_status": "DEPENDENCY_MISSING",
+          "expect_reason": "field_effect_not_connected",
+          "nature": "timid",
+          "slot": 1
+        },
+        {
+          "scenario": "timid_mint_level_100",
+          "id": "timid_mint",
+          "kind": "mint_dependency",
+          "applies": false,
+          "wanted_nature": "timid",
+          "expect_status": "DEPENDENCY_MISSING",
+          "expect_reason": "field_effect_not_connected",
+          "nature": "jolly",
+          "level": 100
+        },
+        {
+          "scenario": "bold_mint_neutral_hardy",
+          "id": "bold_mint",
+          "kind": "mint_dependency",
+          "applies": false,
+          "wanted_nature": "bold",
+          "expect_status": "DEPENDENCY_MISSING",
+          "expect_reason": "field_effect_not_connected",
+          "nature": "hardy"
+        },
+        {
+          "scenario": "bold_mint_same_nature",
+          "id": "bold_mint",
+          "kind": "mint_dependency",
+          "applies": false,
+          "wanted_nature": "bold",
+          "expect_status": "DEPENDENCY_MISSING",
+          "expect_reason": "field_effect_not_connected",
+          "nature": "bold"
+        },
+        {
+          "scenario": "bold_mint_another_nature",
+          "id": "bold_mint",
+          "kind": "mint_dependency",
+          "applies": false,
+          "wanted_nature": "bold",
+          "expect_status": "DEPENDENCY_MISSING",
+          "expect_reason": "field_effect_not_connected",
+          "nature": "adamant"
+        },
+        {
+          "scenario": "bold_mint_friendship_zero",
+          "id": "bold_mint",
+          "kind": "mint_dependency",
+          "applies": false,
+          "wanted_nature": "bold",
+          "expect_status": "DEPENDENCY_MISSING",
+          "expect_reason": "field_effect_not_connected",
+          "nature": "hardy",
+          "start_friendship": 0
+        },
+        {
+          "scenario": "bold_mint_friendship_254",
+          "id": "bold_mint",
+          "kind": "mint_dependency",
+          "applies": false,
+          "wanted_nature": "bold",
+          "expect_status": "DEPENDENCY_MISSING",
+          "expect_reason": "field_effect_not_connected",
+          "nature": "adamant",
+          "start_friendship": 254
+        },
+        {
+          "scenario": "bold_mint_move_slot_0",
+          "id": "bold_mint",
+          "kind": "mint_dependency",
+          "applies": false,
+          "wanted_nature": "bold",
+          "expect_status": "DEPENDENCY_MISSING",
+          "expect_reason": "field_effect_not_connected",
+          "nature": "hardy",
+          "slot": 0
+        },
+        {
+          "scenario": "bold_mint_move_slot_1",
+          "id": "bold_mint",
+          "kind": "mint_dependency",
+          "applies": false,
+          "wanted_nature": "bold",
+          "expect_status": "DEPENDENCY_MISSING",
+          "expect_reason": "field_effect_not_connected",
+          "nature": "bold",
+          "slot": 1
+        },
+        {
+          "scenario": "bold_mint_level_100",
+          "id": "bold_mint",
+          "kind": "mint_dependency",
+          "applies": false,
+          "wanted_nature": "bold",
+          "expect_status": "DEPENDENCY_MISSING",
+          "expect_reason": "field_effect_not_connected",
+          "nature": "adamant",
+          "level": 100
+        },
+        {
+          "scenario": "calm_mint_neutral_hardy",
+          "id": "calm_mint",
+          "kind": "mint_dependency",
+          "applies": false,
+          "wanted_nature": "calm",
+          "expect_status": "DEPENDENCY_MISSING",
+          "expect_reason": "field_effect_not_connected",
+          "nature": "hardy"
+        },
+        {
+          "scenario": "calm_mint_same_nature",
+          "id": "calm_mint",
+          "kind": "mint_dependency",
+          "applies": false,
+          "wanted_nature": "calm",
+          "expect_status": "DEPENDENCY_MISSING",
+          "expect_reason": "field_effect_not_connected",
+          "nature": "calm"
+        },
+        {
+          "scenario": "calm_mint_another_nature",
+          "id": "calm_mint",
+          "kind": "mint_dependency",
+          "applies": false,
+          "wanted_nature": "calm",
+          "expect_status": "DEPENDENCY_MISSING",
+          "expect_reason": "field_effect_not_connected",
+          "nature": "modest"
+        },
+        {
+          "scenario": "calm_mint_friendship_zero",
+          "id": "calm_mint",
+          "kind": "mint_dependency",
+          "applies": false,
+          "wanted_nature": "calm",
+          "expect_status": "DEPENDENCY_MISSING",
+          "expect_reason": "field_effect_not_connected",
+          "nature": "hardy",
+          "start_friendship": 0
+        },
+        {
+          "scenario": "calm_mint_friendship_254",
+          "id": "calm_mint",
+          "kind": "mint_dependency",
+          "applies": false,
+          "wanted_nature": "calm",
+          "expect_status": "DEPENDENCY_MISSING",
+          "expect_reason": "field_effect_not_connected",
+          "nature": "modest",
+          "start_friendship": 254
+        },
+        {
+          "scenario": "calm_mint_move_slot_0",
+          "id": "calm_mint",
+          "kind": "mint_dependency",
+          "applies": false,
+          "wanted_nature": "calm",
+          "expect_status": "DEPENDENCY_MISSING",
+          "expect_reason": "field_effect_not_connected",
+          "nature": "hardy",
+          "slot": 0
+        },
+        {
+          "scenario": "calm_mint_move_slot_1",
+          "id": "calm_mint",
+          "kind": "mint_dependency",
+          "applies": false,
+          "wanted_nature": "calm",
+          "expect_status": "DEPENDENCY_MISSING",
+          "expect_reason": "field_effect_not_connected",
+          "nature": "calm",
+          "slot": 1
+        },
+        {
+          "scenario": "calm_mint_level_100",
+          "id": "calm_mint",
+          "kind": "mint_dependency",
+          "applies": false,
+          "wanted_nature": "calm",
+          "expect_status": "DEPENDENCY_MISSING",
+          "expect_reason": "field_effect_not_connected",
+          "nature": "modest",
+          "level": 100
+        },
+        {
+          "scenario": "careful_mint_neutral_hardy",
+          "id": "careful_mint",
+          "kind": "mint_dependency",
+          "applies": false,
+          "wanted_nature": "careful",
+          "expect_status": "DEPENDENCY_MISSING",
+          "expect_reason": "field_effect_not_connected",
+          "nature": "hardy"
+        },
+        {
+          "scenario": "careful_mint_same_nature",
+          "id": "careful_mint",
+          "kind": "mint_dependency",
+          "applies": false,
+          "wanted_nature": "careful",
+          "expect_status": "DEPENDENCY_MISSING",
+          "expect_reason": "field_effect_not_connected",
+          "nature": "careful"
+        },
+        {
+          "scenario": "careful_mint_another_nature",
+          "id": "careful_mint",
+          "kind": "mint_dependency",
+          "applies": false,
+          "wanted_nature": "careful",
+          "expect_status": "DEPENDENCY_MISSING",
+          "expect_reason": "field_effect_not_connected",
+          "nature": "bold"
+        },
+        {
+          "scenario": "careful_mint_friendship_zero",
+          "id": "careful_mint",
+          "kind": "mint_dependency",
+          "applies": false,
+          "wanted_nature": "careful",
+          "expect_status": "DEPENDENCY_MISSING",
+          "expect_reason": "field_effect_not_connected",
+          "nature": "hardy",
+          "start_friendship": 0
+        },
+        {
+          "scenario": "careful_mint_friendship_254",
+          "id": "careful_mint",
+          "kind": "mint_dependency",
+          "applies": false,
+          "wanted_nature": "careful",
+          "expect_status": "DEPENDENCY_MISSING",
+          "expect_reason": "field_effect_not_connected",
+          "nature": "bold",
+          "start_friendship": 254
+        },
+        {
+          "scenario": "careful_mint_move_slot_0",
+          "id": "careful_mint",
+          "kind": "mint_dependency",
+          "applies": false,
+          "wanted_nature": "careful",
+          "expect_status": "DEPENDENCY_MISSING",
+          "expect_reason": "field_effect_not_connected",
+          "nature": "hardy",
+          "slot": 0
+        },
+        {
+          "scenario": "careful_mint_move_slot_1",
+          "id": "careful_mint",
+          "kind": "mint_dependency",
+          "applies": false,
+          "wanted_nature": "careful",
+          "expect_status": "DEPENDENCY_MISSING",
+          "expect_reason": "field_effect_not_connected",
+          "nature": "careful",
+          "slot": 1
+        },
+        {
+          "scenario": "careful_mint_level_100",
+          "id": "careful_mint",
+          "kind": "mint_dependency",
+          "applies": false,
+          "wanted_nature": "careful",
+          "expect_status": "DEPENDENCY_MISSING",
+          "expect_reason": "field_effect_not_connected",
+          "nature": "bold",
+          "level": 100
+        }
+      ]
     }
   ],
   "format": "gen9calvounifiedv1",
@@ -2438,7 +2798,8 @@
     5,
     6,
     7,
-    8
+    8,
+    9
   ],
   "seed": 1412,
   "limitations": [
@@ -2457,6 +2818,7 @@
     "Fila06: plumas +1 EV amistad 3/2/1; mochis +10 EV y sin amistad (contrato RHH V13). Ambos con límites 252/510, stock/propietario SaveV2. CI por verificar.",
     "Fila 07: mochis Resist/Genius/Clever/Swift suman hasta 10 EV en Defensa, Ataque especial, Defensa especial y Velocidad; límite 252 por stat/510 global, sin amistad por contrato RHH V13 existente, no inferir paridad oficial.",
     "Bloque08: fresh_start_mochi resetea los seis EV existentes sin aumentar amistad, rechazando EV cero o slot inesperado. Contratos reales de Mochi V13.",
-    "Menthas adamant/modest/jolly: registradas en catálogo pero sin ejecutor de campo ni persistencia de naturaleza efectiva independiente de la naturaleza original. Se registra DEPENDENCY_MISSING, se exige no consumir el item. No simular éxito ni escribir API compartida."
+    "Menthas adamant/modest/jolly: registradas en catálogo pero sin ejecutor de campo ni persistencia de naturaleza efectiva independiente de la naturaleza original. Se registra DEPENDENCY_MISSING, se exige no consumir el item. No simular éxito ni escribir API compartida.",
+    "Fila09: timid/bold/calm/careful_mint sin handler nativo ni naturaleza estadística efectiva persistente; contrato negativo DEPENDENCY_MISSING/field_effect_not_connected sin consumo, en PARTY/STORAGE y sin stock. No atribuir funcionalidad positiva ni CI PASS."
   ]
 }
