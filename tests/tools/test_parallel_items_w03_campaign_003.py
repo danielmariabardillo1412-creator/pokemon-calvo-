@@ -52,7 +52,8 @@ def main() -> int:
         runner = (ROOT / RUNNER).read_text(encoding="utf-8")
         audit.check('func _run_campaign()' in runner and
                     "CAMP003_W03_GODOT PASS blocks=" in runner and
-                    "quit(1 if not errors.is_empty() else 0)" in runner,
+                    "if errors.is_empty()" in runner and
+                    "quit(0)" in runner and "quit(1)" in runner,
                     "Falta runner real y fallo estricto")
         audit.check("CaptureInventoryService.resolve(" in runner and
                     "CaptureResult.INVALID" in runner and
