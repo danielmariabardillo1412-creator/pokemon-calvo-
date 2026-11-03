@@ -75,14 +75,14 @@ EXPECTED_05 = {
 
 
 EXPECTED_06 = {
-    "mago_brave_disliked_c003": ("mago_berry", "heal_flavor", "mew", "mew", "amnesia", "fifth", True, "brave", True, "amnesia", {}),
-    "mago_hardy_neutral_c003": ("mago_berry", "heal_flavor", "mew", "mew", "amnesia", "fifth", True, "hardy", False, "amnesia", {}),
+    "mago_brave_disliked_c003": ("mago_berry", "heal_flavor", "mew", "snorlax", "endeavor", "full", True, "brave", True, "amnesia", {"foe_initial_hp": 1}),
+    "mago_hardy_neutral_c003": ("mago_berry", "heal_flavor", "mew", "snorlax", "endeavor", "full", True, "hardy", False, "amnesia", {"foe_initial_hp": 1}),
     "mago_above_threshold_c003": ("mago_berry", "heal_flavor", "mew", "mew", "amnesia", "near_full", False, "brave", False, "amnesia", {}),
-    "maranga_special_hit_c003": ("maranga_berry", "boost_spd", "mew", "mew", "confusion", "full", True, "hardy", False, "amnesia", {"boost_stat": "spd"}),
-    "maranga_physical_reject_c003": ("maranga_berry", "boost_spd", "mew", "mew", "tackle", "full", False, "hardy", False, "amnesia", {"boost_stat": "spd"}),
+    "maranga_special_hit_c003": ("maranga_berry", "boost_spd", "mew", "mew", "confusion", "full", True, "hardy", False, "reflect", {"boost_stat": "spd"}),
+    "maranga_physical_reject_c003": ("maranga_berry", "boost_spd", "mew", "mew", "tackle", "full", False, "hardy", False, "reflect", {"boost_stat": "spd"}),
     "micle_low_next_move_c003": ("micle_berry", "accuracy_next_move", "mew", "mew", "amnesia", "fifth", True, "hardy", False, "reflect", {"own_moves": ["reflect", "hydro_pump"], "next_move_slot": 2, "expected_volatile": "micleberry"}),
     "micle_high_reject_c003": ("micle_berry", "accuracy_next_move", "mew", "mew", "amnesia", "near_full", False, "hardy", False, "reflect", {"own_moves": ["reflect", "hydro_pump"], "next_move_slot": 2, "expected_volatile": "micleberry"}),
-    "occa_fire_hit_c003": ("occa_berry", "resist_type", "scizor", "mew", "flamethrower", "full", True, "hardy", False, "amnesia", {"expected_type": "fire"}),
+    "occa_fire_hit_c003": ("occa_berry", "resist_type", "scizor", "mew", "ember", "full", True, "hardy", False, "amnesia", {"expected_type": "fire"}),
     "occa_normal_reject_c003": ("occa_berry", "resist_type", "scizor", "mew", "tackle", "full", False, "hardy", False, "amnesia", {"expected_type": "fire"}),
 }
 
@@ -474,14 +474,18 @@ def negative_controls(fixture, queue, progress, check):
     if len(fixture["blocks"]) >= 6:
         edits.extend([
             lambda f: f["blocks"][5]["cases"][0].update({"nature": "hardy"}),
+            lambda f: f["blocks"][5]["cases"][0].update({"foe_initial_hp": 2}),
             lambda f: f["blocks"][5]["cases"][1].update({"confuses": True}),
+            lambda f: f["blocks"][5]["cases"][1].update({"foe_move": "amnesia"}),
             lambda f: f["blocks"][5]["cases"][2].update({"start": "fifth"}),
             lambda f: f["blocks"][5]["cases"][3].update({"foe_move": "tackle"}),
             lambda f: f["blocks"][5]["cases"][4].update({"consumes": True}),
+            lambda f: f["blocks"][5]["cases"][3].update({"own_move": "amnesia"}),
             lambda f: f["blocks"][5]["cases"][5].update({"next_move_slot": 1}),
             lambda f: f["blocks"][5]["cases"][6].update({"expected_volatile": "focusenergy"}),
             lambda f: f["blocks"][5]["cases"][7].update({"expected_type": "water"}),
             lambda f: f["blocks"][5]["cases"][8].update({"foe_move": "flamethrower"}),
+            lambda f: f["blocks"][5]["cases"][7].update({"foe_move": "flamethrower"}),
             lambda f: f["blocks"][5]["cases"].pop(),
             lambda f: f["blocks"][5]["ids"].append("sitrus_berry"),
         ])
