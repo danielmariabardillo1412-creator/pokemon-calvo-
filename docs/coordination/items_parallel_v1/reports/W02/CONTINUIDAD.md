@@ -1,3 +1,27 @@
+# IA2/W02 — CAMPAÑA_003: CONTINUIDAD VIGENTE / BLOQUE 09 DE 10
+
+**Estado:** bloque **09/10 publicado** en `codex/calvo-items-20261103-w02-camp003`; último SHA tests/progreso `93bd706149928f63c2cf5cd318ce4a32fa013bc8` `EN_CI_AUTOMATICA`. **No atribuir PASS al bloque 09 hasta resultado nativo del último SHA.** La siguiente `p` autoriza exactamente bloque **10/10**, no otra campaña.
+
+**Autoridad:** cola `CAMPAIGN_003_QUEUE_APPROVED.csv` blob `ea06a0a000fc4f3b8bab48e45e21fb549d753559`, encargo W02 blob `62498ebd44288a86e59986379dbc1b70e111ef1f`, reparación V5 `AUTONOMOUS_REPAIR_V5.md` blob `ebe71ace6949cc9311eb9831068799081bca8ba7`. V5 permite arreglar código funcional de nuestras bayas en la propia rama sin permiso administrativo repetitivo, no cambiar mecánicas globales ni las de otra trabajadora.
+
+**Bloque 09 exacto:** `starf_berry` (al 20% PS un solo atributo aleatorio +2, no fijo; con PS altos nada), `tanga_berry` (Bicho `bug_buzz` vs Normal `tackle`), `wacan_berry` (Eléctrico `thunder_shock` supereficaz a Gyarados vs Normal), `wiki_berry` (Adamant confunde tras curar 1/3 PS con Endeavor/HP1 de Snorlax; Hardy no confunde; con PS altos no activa). **9 escenas nuevas, 27 variantes**. Históricos reales V2 para Tanga/Wacan y V3 para Starf/Wiki. Fixture de Wiki reusa configuración Endeavor que ya corrigió y validó Mago.
+
+**Prueba nativa específica Starf:** `_native_starf_boosts()` obtiene los cinco valores `atk,def,spa,spd,spe` de `_checkpoint.roster.pokemon.boosts` del ID `own` real; se exigen un único +2 y suma +2, cuatro ceros, y cero en `none/reserve`. Se comprueba vector idéntico tras SaveV2 checkpoint y recibo SHA256; RNG fija semilla pero no se presupone estadística concreta.
+
+**Suite acumulada:** 9 bloques consecutivos, **36 IDs**, 9+8+8+9+8+9+8+8+9 = **76 escenarios**, **228 variantes** `active/none/reserve` previstas. Incluye consumo, stock, reserva inerte, restauración, cierre FLED, no doble consumo, SaveV2 e identidad del portador, evidencias JSON + SHA256; campo/UI/GPU no certificados.
+
+**Última CI VERIFICADA:** [Actions #41563958549](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41563958549), `completed/success`, SHA `992b31cde4984d1c6ca3e1f87a192b96247f71f4`. Recibos `CAMP003_W02_PY PASS blocks=8 checks=535`, `CAMP003_W02_GODOT PASS blocks=8 checks=5795`. Certifica 01–08, incluidas correcciones Mago/Maranga/Occa. **No certifica 09**.
+
+**CI bloque 09:** [Actions #41566220523](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41566220523), SHA `93bd706149928f63c2cf5cd318ce4a32fa013bc8`, inicialmente pendiente. Exigir `CAMP003_W02_PY PASS blocks=9 checks=M` y `CAMP003_W02_GODOT PASS blocks=9 checks=M`; si falla, leer error real, investigar y reparar rama propia según V5. Cancelaciones por pushes anteriores no implican FAIL ni PASS.
+
+**Commits 09:** fixture `62aa15f89b2ab49e1c097f4f888ff1ff33263e1d`, Godot `9af9ddf3df656ba416acf217df0a86b1ede749a1`, Python `df292337f4f2ccb69bb35e8e04e807051f7daee6`, progreso `93bd706149928f63c2cf5cd318ce4a32fa013bc8`, informe `00c42de22a84a877ddafc8cd16ecf5d8c0455abe`. Solo rutas W02 para este bloque. Existe un cambio ajeno de workflow `43876a6d833958d2d7ad86ce15014b011778007a` incorporado por IA6, no tocarlo ni presentarlo como propio.
+
+**Próxima `p`:** bloque **10/10**: `yache_berry;grepa_berry;hondew_berry;pomeg_berry`. Revisar resultado de CI 09 antes, preservar regresiones y al terminar crear `CAMP_003_FINAL.md`; entonces parar y comunicar `CAMPAÑA_003_FINALIZADA`. Nunca iniciar fila 11 ni campaña nueva por impulso.
+
+---
+
+## ARCHIVO HISTÓRICO — ESTADOS 08/10 Y ANTERIORES
+
 > **ACTUALIZACIÓN DE CI VERIFICADA (2026-11-03):** [Actions #41563958549](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41563958549), SHA de pruebas/progreso `992b31cde4984d1c6ca3e1f87a192b96247f71f4`, `completed/success`. Recibos auténticos: `CAMP003_W02_PY PASS blocks=8 checks=535`, `CAMP003_GATE_PY_PASS worker=W02 blocks=8 checks=535`, `CAMP003_W02_GODOT PASS blocks=8 checks=5795`, `CAMP003_GATE_GODOT_PASS worker=W02 blocks=8 checks=5795`. Certificados los bloques 01–08, incluidas las reparaciones del arnés del bloque 06. Las referencias anteriores a "CI pendiente" de este documento describen el estado histórico al publicarse, ya reemplazado por este PASS. **No se ha ejecutado la fila 09.** Se incorpora `AUTONOMOUS_REPAIR_V5.md` (blob `ebe71ace6949cc9311eb9831068799081bca8ba7`) como autorización vigente para reparar pruebas y código funcional de las bayas propias exclusivamente en esta rama, con regresiones y sin modificar `main`, V28 ni funciones de otra IA.
 
 > **EXCEPCIÓN DE AUTORÍA EN LA RAMA:** además de los 13 archivos W02, existe un cambio de workflow publicado directamente por IA6/usuario en commit `43876a6d833958d2d7ad86ce15014b011778007a`: `.github/workflows/parallel-camp003-worker-autoci.yml` añade `modules/**` a los triggers de CI. **W02 no realizó ni revirtió ese cambio.** Por tanto no presentar la totalidad del diff de rama como de autoría W02. La CI vigente del bloque 08 sigue siendo [#41563958549](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41563958549), SHA de tests/progreso `992b31cde4984d1c6ca3e1f87a192b96247f71f4`.
