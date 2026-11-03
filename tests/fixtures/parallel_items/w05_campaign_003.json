@@ -90,6 +90,35 @@
           "move_id": "draining_kiss"
         }
       ]
+    },
+    {
+      "block": "04",
+      "items": [
+        {
+          "item_id": "tm38",
+          "move_id": "flame_charge"
+        },
+        {
+          "item_id": "tm39",
+          "move_id": "low_sweep"
+        },
+        {
+          "item_id": "tm40",
+          "move_id": "air_cutter"
+        },
+        {
+          "item_id": "tm41",
+          "move_id": "stored_power"
+        },
+        {
+          "item_id": "tm42",
+          "move_id": "night_shade"
+        },
+        {
+          "item_id": "tm43",
+          "move_id": "fling"
+        }
+      ]
     }
   ]
 }
