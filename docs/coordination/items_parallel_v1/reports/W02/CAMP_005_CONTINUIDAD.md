@@ -1,3 +1,24 @@
+# IA2/W02 — CONTINUIDAD VIGENTE CAMPAÑA_005 BLOQUE 09/10
+
+**Identidad y autoridad:** IA2/W02, bayas, medicinas y entrenamiento. **Única rama de escritura:** `codex/calvo-items-20261103-w02-camp005`. Autoriza IA6 mediante `CAMPAIGN_005_W02_GATE.md`, `CAMPAIGN_005_W02_QUEUE_APPROVED.csv` fila 09, `campaigns/CAMP_005_W02.md`, `AUTONOMOUS_REPAIR_V5.md`. Cada `p` ejecuta una sola fila. No tocar main, V28, PR118, árbitra, ramas ajenas, producción, API compartida ni workflows.
+
+**Acumulado publicado:** **9/10 bloques**, **36 objetos asignados**, **256 escenarios** únicos, **768 variantes programadas** (`active`, `none`, `reserve`). Los nueve golden Python son independientes y coinciden con sus fixtures. **No equivale a 36 objetos funcionales ni a CI PASS**. Las consultas del conector sobre el HEAD08 `7dd33cf4c988c7f7db0c7cddd88205578963c4c1` dan listas vacías de workflow runs y statuses, que no prueban ni aprobación ni fracaso. Hito05 CAMP003/CAMP004 regresiones aún sin logs verificados.
+
+**Fila09 — DEPENDENCIA_DOCUMENTADA:** `timid_mint;bold_mint;calm_mint;careful_mint`. 32 casos de rechazo y 96 variantes; cada menta tiene ocho contextos: `hardy`, naturaleza original igual, diferente, amistad 0/254, slot0/slot1, nivel100. Todas esperan `accepted=false`, `status=DEPENDENCY_MISSING`, `reason=field_effect_not_connected`; la instantánea del Pokémon/bolsa, propietario, PP, EV, IV, amistad, naturaleza y SaveV2 debe quedar intacta. Las cuatro naturalezas están definidas en `ProgressionRuleset.NATURE_MODIFIERS`, pero **no hay ejecutor de mentas** en FieldItemService/Effects/Growth/Mochi, ni `effective_nature_id` en CreatureInstance. La política no excluye las mentas. No fingir funcionalidad positiva ni reescribir `nature_id`.
+
+**Commits bloque 09:**
+- Fixture `tests/fixtures/parallel_items/w02_campaign_005.json` — `41f4ffc81a3a1281ce9ffd745184396fb5da1fa1`.
+- Python `tests/tools/test_parallel_items_w02_campaign_005.py`: golden09 `0bb461929928f47b375125972ec66e2db08afcb8`, contrato09 `e92f847437d22766c81d71245254e858f51d2012`, guardas fuente `6e393fe2c7a63bea57495cadefbcf02b69b5faa6`, 16 mutaciones negativas `4d3eeee97fe829fe34e54c5cc89df202f91169d6`.
+- CSV `docs/coordination/items_parallel_v1/reports/W02/CAMP_005_PROGRESO.csv`: fila09 `DEPENDENCIA_DOCUMENTADA`, CI pendiente, `60e15a0405fb2d2eed687fa09d606d369f2d2438`.
+- Informe `docs/coordination/items_parallel_v1/reports/W02/CAMP_005_ITER_09.md`: `7b74e176f7241aac9a5a04660c66d47c6df0e88a`.
+- Runner Godot propio no cambió en fila09; reutiliza verificador `mint_dependency` del bloque08, con criatura de naturaleza inicial realmente variable y rechazo atómico más SaveV2.
+
+**Dependencia IA6:** diseñar y conectar `effective_nature_id` distinto de naturaleza original, cálculo estadístico y batalla, serialización SaveV2, transacciones de mentas y política de redundancia antes de pruebas positivas. No es un permiso de W02 para cambiar APIs. **CI no verificada**, no tocar producción para simularla.
+
+**Siguiente `p`:** consultar HEAD/CI y ejecutar exclusivamente el bloque **10/10**, `brave_mint;quiet_mint;impish_mint;relaxed_mint`. Confirmar el estado del código antes de tratarlo como dependencia. Hito final: solicitar regresiones CAMP005 Python/Godot y CAMP004/CAMP003 desde CI, registrar resultados con SHA/logs verificables. Al terminar bloque10, señalar `CAMPAÑA_005_FINALIZADA` solo para entrega en rama, **no** para integración o certificación funcional de mentas.
+
+---
+
 # IA2/W02 — CONTINUIDAD VIGENTE CAMPAÑA_005 BLOQUE 08/10
 
 **Identidad:** IA2/W02, bayas, medicinas y entrenamiento. **Rama exclusiva:** `codex/calvo-items-20261103-w02-camp005`. Autoridad IA6: `CAMPAIGN_005_W02_GATE.md`, `CAMPAIGN_005_W02_QUEUE_APPROVED.csv`, `campaigns/CAMP_005_W02.md`, `AUTONOMOUS_REPAIR_V5.md`. `p` = avanzar solamente una fila. No tocar `main`, V28, PR118, árbitra, otros workers, código de dominio/API compartida ni workflow.
