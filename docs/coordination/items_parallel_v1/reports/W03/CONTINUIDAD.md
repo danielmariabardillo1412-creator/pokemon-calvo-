@@ -1,3 +1,27 @@
+# IA3/W03 — CAMPAÑA_003: continuidad actualizada a 02/10
+
+**Rama única:** `codex/calvo-items-20261103-w03-camp003`. **Progreso:** dos bloques publicados: `01 poke_ball;great_ball`, `02 ultra_ball;master_ball`. Solo auditoría/contratos/test; prohibido producción, otros IDs o ramas. **Próximo `p`: exactamente 03 quick_ball;timer_ball.**
+
+**01 — CI verificada tras reparación de propio test:**
+- `6e5db746...` publicó primer test; [#41553752377](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41553752377) FAIL en validador Python (literal de `quit` incorrecto; Godot no corrió).
+- Commit de reparación exclusiva `70fb7f7a2746abbdbd7fd70b3b95e65fef07d704`: exige `if errors.is_empty()`, `quit(0)` y `quit(1)` sin falsos negativos de sintaxis; no quita casos.
+- [#41555095544](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41555095544), SHA `70fb7f7a...`: **completed/success**, `CAMP003_W03_PY PASS blocks=1 checks=31`, `CAMP003_W03_GODOT PASS blocks=1 checks=56`. Es evidencia funcional acotada a casos testados de Poké/Gran.
+
+**02 — pruebas publicadas, CI automática por verificar:**
+- Fixture `tests/fixtures/parallel_items/w03_campaign_003.json`, commit `479e90c43e8bea3225ea68a7a947454ef6627320`: 01 preservado + 02 `ultra_ball;master_ball`, tres especies, dos estados de PS y negativos.
+- Godot `tests/gameplay/parallel_items_w03_campaign_003.gd`, commit `248b62289d5c90f0e115ccc7e78ff55f9f98ce96`: Ultra ×2 (un coste y una tirada), Master garantizada (un coste, RNG sin cambiar), propiedad de equipo/PC, intentos inválidos sin gasto. Bloque 01 inalterado.
+- Python `tests/tools/test_parallel_items_w03_campaign_003.py`, commit `cf266efa94bcfe7080d0efcb12d27ddf67207beb`: mantiene contratos 01 y añade reglas 02 de tabla canónica y motor.
+- Progreso `CAMP_003_PROGRESO.csv`, commit `c48c62f5fb662dba9480327faa432afe56860adf`: dos filas, 02 `EN_CI_AUTOMATICA`, SHA de blob runner.
+- Informe técnico [ITER02](./CAMP_003_ITER_02.md). Última CI nueva al escribir: [#41555590257](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41555590257) sobre `c48c62f5...` **SIN PASS CONFIRMADO**. No atribuirle éxito sin consultar run y salida estricta `blocks=2` en Python/Godot. Cancels de commits intermedios no son fallos funcionales.
+
+**Orden al recibir `p`:** leer primero Gate003, orden `CAMP_003_W03.md`, rama HEAD y CSV real, último run CI; si FAILED por test propio reparar sin reducir cobertura, si falla producción/guardado STOP a IA6. Si CI completed/success o pending y bloque independiente, crear solo 03 `quick_ball;timer_ball`, sin borrar 01/02. Nunca ejecutar 04 sin otro `p`; 10/10 STOP.
+
+**No tocar:** main, V28, `.github/workflows`, `modules/`, `data/`, catálogo, árbitra, W01/W02/W04/W05, ramas antiguas. IA4 ha sido reincorporada únicamente bajo su adenda separada, no cambia esta cola.
+
+---
+
+## Archivo histórico preservado: estado tras bloque 01
+
 # IA3/W03 — Cuaderno actual CAMPAÑA_003 (solo esta rama)
 
 **IDENTIDAD:** IA3/W03. **RAMa exclusiva:** `codex/calvo-items-20261103-w03-camp003`. **ESTADO:** 01/10 publicado; `EN_CI_AUTOMATICA` al publicar. **Puntero oficial:** `CAMPAIGN_GATE_003.md`, manifiesto, cola aprobada, `campaigns/CAMP_003_W03.md` en árbitra. **Nunca leer el cuaderno heredado CAMP001 como orden vigente.**
