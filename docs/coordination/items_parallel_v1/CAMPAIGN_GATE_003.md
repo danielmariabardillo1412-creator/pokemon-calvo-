@@ -1,0 +1,26 @@
+# CAMPAÑA_003 — GATE OFICIAL DE ACTIVACIÓN, V4
+**Fecha: 2026-11-03. ESTADO: ACTIVADA POR SOLICITUD DEL USUARIO.** Base documental previa `cf4e67d5182f2eb02d3e57995c45b38e0c1b5d08`. El manifiesto `CAMPAIGN_003_BRANCH_MANIFEST.md` registrará el SHA inicial realmente creado.
+
+## Cuatro trabajadoras, cuarenta bloques
+La cola exacta [CAMPAIGN_003_QUEUE_APPROVED.csv](CAMPAIGN_003_QUEUE_APPROVED.csv) contiene **40 microbloques, 150 IDs y ninguna reserva duplicada**. Por trabajadora:
+- IA1/W01, 30 equipables (3 por bloque), [encargo](campaigns/CAMP_003_W01.md).
+- IA2/W02, 40 bayas (4 por bloque), [encargo](campaigns/CAMP_003_W02.md).
+- IA3/W03, 20 Poké Balls (2 por bloque), [encargo](campaigns/CAMP_003_W03.md). Solo contratos, auditoría y pruebas: NO se autoriza implementar multiplicadores o contextos ausentes.
+- IA5/W05, 60 MT activas SV (6 por bloque), [encargo](campaigns/CAMP_003_W05.md). Ampliar prueba de enseñanza, PP, consumo, compatibilidad y SaveV2; NO implementar de nuevo `FieldItemService.teach`.
+- **IA4/W04:** CAMPAÑA_001 03/03 cerrada y sin nuevos encargos. No crear una rama CAMP003 W04 ni enviarle `p`.
+
+**No duplicar:** CAMP001 267 IDs y CAMP002 10 IDs de otros equipos ya auditados; las 60 MT de W05 ya tenían metadatos, pero no están en las 12 enseñanzas nuevas de CAMP002 ni en `tm01/tm02/tm77`. Un test histórico equivalente se reaprovecha, no se vuelve a implementar. Una selección por ID NO significa funcionalidad nueva ni certificada.
+
+## Autopiloto «p» por diez bloques
+1. El usuario envía **una única orden de activación** a cada una de las cuatro conversaciones; ejecutan bloque 01, sin repetir campaña anterior. Las siguientes `p` ejecutan 02, 03,...,10 en secuencia, **sin autorización intermedia de IA6**.
+2. Cada trabajadora trabaja exclusivamente en `codex/calvo-items-20261103-w0x-camp003`, lee su CSV de progreso y la **siguiente fila autorizada** de la cola. Publica SOLO sus pruebas, fixtures y reportes propios; no escribir producción, selección, otras ramas ni código compartido.
+3. CI GitHub Actions por rama en `.github/workflows/parallel-camp003-worker-autoci.yml`, con validador `tests/tools/test_parallel_items_campaign_003_manifest.py`. Push de tests, fixture o progreso activa la prueba. Solo informes no activan CI. `concurrency.cancel-in-progress` evita trabajos repetidos; inicial bootstrap con cero filas NO es PASS funcional.
+4. `success`: siguiente `p` normal; `queued/in_progress`: se permite ejecutar un bloque de **tests independientes** sin declarar PASS, si no necesita validar la implementación previa; FAIL real: reparar solo test propio sin reducir aserciones o STOP si afecta contrato/producción/guardados/seguridad; cancelado: consultar run del SHA más reciente, no atribuir PASS.
+5. Contrato de salidas estrictas por W: `tests/tools/test_parallel_items_w0x_campaign_003.py --ci` imprime `CAMP003_W0X_PY PASS blocks=N checks=M` y el script Godot imprime `CAMP003_W0X_GODOT PASS blocks=N checks=M`. N coincide con el CSV y M es positivo. Si no hay prueba real, fallar el test y registrar dependencia, no fingir verificación.
+6. Al completar 10/10, reportar `CAMPAÑA_003_FINALIZADA` como entrega y STOP. No generar bloque 11 ni otra campaña sin permiso nuevo. IA6 revisa resultados/CI por excepción y al cierre, no cada tres pulsaciones.
+
+## Verificaciones y protección
+Últimos tests CAMP002 de cada W llegaron a SUCCESS en ramas propias: W01 #41547041337 (1017), W02 #41547218742 (838), W03 #41547276442 (58 negativos), W05 #41547169973 (703, 12 MT). Sus 12 archivos de pruebas/fixtures verificados se copiaron como blobs exactos a la árbitra commit `0166ef6862f58b2a83e724512cb4b3c0703215d9`. La CI histórica sobre la árbitra es independiente y no confirma CAMP003; no hay nuevos bloques ejecutados.
+**Prohibiciones absolutas:** `main`, V28, PR #118, `modules/`, `data/`, `config/`, partidas reales, catálogo canónico, W04 y ramas ajenas. Las dos piedras Mega universales quedan fuera. GPU/arte/UI no se certifican con Godot headless.
+
+**Siguiente acto:** crear cuatro ramas nuevas basadas exactamente en el commit de esta puerta y publicar [manifiesto](CAMPAIGN_003_BRANCH_MANIFEST.md) + [mensaje único](CAMPAIGN_003_ACTIVATION_MESSAGE.md). Si el manifiesto no está disponible, no ejecutar `p` en una rama inventada.
