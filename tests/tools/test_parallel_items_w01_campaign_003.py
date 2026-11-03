@@ -142,6 +142,22 @@ SCENARIOS_08 = {
     "metronome_status_only": ("metronome", "metronome_no_repeat_control", "mew",
         "", "", 100, "mew", 100, "amnesia", "reflect", (19,)),
 }
+SCENARIOS_09 = {
+    "mirror_foe_swords_dance": ("mirror_herb", "mirror_copy_opponent_boost", "mew",
+        "", "", 100, "mew", 100, "swords_dance", "", "reflect", (19,23)),
+    "mirror_foe_growl": ("mirror_herb", "mirror_no_negative_copy", "mew",
+        "", "", 100, "mew", 100, "growl", "", "reflect", (19,)),
+    "muscle_physical_tackle": ("muscle_band", "muscle_physical_damage_boost", "mew",
+        "", "", 100, "mew", 100, "amnesia", "", "tackle", (19,23)),
+    "muscle_special_water": ("muscle_band", "muscle_special_no_boost", "mew",
+        "", "", 100, "mew", 100, "amnesia", "", "water_gun", (19,)),
+    "pads_helmet_contact": ("protective_pads", "pads_helmet_contact_protection", "mew",
+        "", "", 100, "mew", 100, "amnesia", "rocky_helmet", "tackle", (19,23)),
+    "pads_helmet_noncontact": ("protective_pads", "pads_helmet_noncontact_control", "mew",
+        "", "", 100, "mew", 100, "amnesia", "rocky_helmet", "water_gun", (19,)),
+    "pads_no_helmet_contact": ("protective_pads", "pads_contact_without_helmet", "mew",
+        "", "", 100, "mew", 100, "amnesia", "", "tackle", (19,)),
+}
 OPERATIONS = ({r[1] for r in SCENARIOS_01.values()}
               | {r[1] for r in SCENARIOS_02.values()}
               | {r[1] for r in SCENARIOS_03.values()}
@@ -149,7 +165,8 @@ OPERATIONS = ({r[1] for r in SCENARIOS_01.values()}
               | {r[1] for r in SCENARIOS_05.values()}
               | {r[1] for r in SCENARIOS_06.values()}
               | {r[1] for r in SCENARIOS_07.values()}
-              | {r[1] for r in SCENARIOS_08.values()})
+              | {r[1] for r in SCENARIOS_08.values()}
+              | {r[1] for r in SCENARIOS_09.values()})
 REQUIRED_CASE_FIELDS = {"block", "id", "item_id", "op", "actor_species", "foe_species",
                         "foe_move", "own_move", "seeds", "history"}
 TOTAL_CHECKS = 0
@@ -302,6 +319,18 @@ def validate() -> int:
         require("HELD_PILOT_VERIFIED" in next(x for x in inventory.splitlines()
                                              if x.startswith("mental_herb,")),
                 "Hierba Mental: validación histórica del piloto ausente")
+    if len(progress) >= 9:
+        require("add('mirror_herb','positive_copy'" in old_v3
+                and "add('mirror_herb','negative_not_copied'" in old_v3
+                and "foeMoves:['swords_dance']" in old_v3
+                and "foeMoves:['growl']" in old_v3,
+                "Hierba Copia: historial nativo de subida positiva y bajada ajena ausente")
+        require("['muscle_band','tackle']" in old_v2
+                and "category_boost" in old_v2,
+                "Cinta Fuerte: incremento de daño físico no acreditado históricamente")
+        require("add('protective_pads','contact_protection'" in old_v2
+                and "foeItem:'rocky_helmet'" in old_v2,
+                "Paracontacto: ensayo con Casco Dentado no acreditado")
     cases = document["cases"]
     require(type(cases) is list and len(cases) >= 7, "Sin casos suficientes")
     found, pairs = set(), set()
@@ -309,7 +338,7 @@ def validate() -> int:
     stage_map = {r["bloque"]: set(r["ids"].split(";")) for r in tasks[:len(progress)]}
     for case in cases:
         require(type(case) is dict and REQUIRED_CASE_FIELDS <= set(case)
-                and set(case) <= REQUIRED_CASE_FIELDS | {"actor_ability", "actor_hp", "actor_level", "foe_level"},
+                and set(case) <= REQUIRED_CASE_FIELDS | {"actor_ability", "actor_hp", "actor_level", "foe_level", "foe_item"},
                 "Caso con forma inválida")
         name, stage, item = case["id"], case["block"], case["item_id"]
         require(type(name) is str and name not in found and stage in stage_map
@@ -391,7 +420,16 @@ def validate() -> int:
                       case.get("foe_level", 100), case["foe_move"],
                       case["own_move"], tuple(case["seeds"]))
             require(actual == expected, "Desviación de causa o semilla W01/08: "+name)
-        elif stage not in {"01", "02", "03", "04", "05", "06", "07", "08"}:
+        elif stage == "09":
+            require(name in SCENARIOS_09, "Caso ajeno a W01/09")
+            expected = SCENARIOS_09[name]
+            actual = (item, case["op"], case["actor_species"],
+                      case.get("actor_ability", ""), case.get("actor_hp", ""),
+                      case.get("actor_level", 100), case["foe_species"],
+                      case.get("foe_level", 100), case["foe_move"],
+                      case.get("foe_item", ""), case["own_move"], tuple(case["seeds"]))
+            require(actual == expected, "Desviación de causa/tenencia/semilla W01/09: "+name)
+        elif stage not in {"01", "02", "03", "04", "05", "06", "07", "08", "09"}:
             raise ValueError("Stage no implementado por validador W01")
     for stage, ids in stage_map.items():
         for item in ids:
@@ -428,6 +466,10 @@ def validate() -> int:
         require(len(cases) == 54 and len(pairs) == 108,
                 "Matriz W01/08 requiere 54 escenarios y 108 pares")
         require(set(SCENARIOS_08) <= found, "Faltan seis casos W01/08")
+    if len(progress) == 9:
+        require(len(cases) == 61 and len(pairs) == 118,
+                "Matriz W01/09 requiere 61 escenarios y 118 pares")
+        require(set(SCENARIOS_09) <= found, "Faltan los siete casos W01/09")
     return len(progress)
 
 def main():
