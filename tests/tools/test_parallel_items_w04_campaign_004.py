@@ -16,6 +16,7 @@ ITEMS_04 = ("adamant_crystal", "blue_orb", "catching_charm")
 ITEMS_05 = ("dna_splicers", "exp_charm", "gracidea")
 ITEMS_06 = ("griseous_core", "lustrous_globe", "meteorite")
 ITEMS_07 = ("rage_candy_bar", "red_orb", "reins_of_unity")
+ITEMS_08 = ("reveal_glass", "rotom_catalog", "zygarde_cube")
 
 
 def rows(path):
@@ -45,7 +46,9 @@ def main():
 
     check(fixture["worker"] == "W04" and fixture["campaign"] == "CAMP_004", "identidad/fixture")
     check(len(queue) == 10, "cola de diez bloques")
-    check(len(done) == 7 and [r["bloque"] for r in done] == ["01", "02", "03", "04", "05", "06", "07"], "progreso de bloques 01 a 07")
+    check(len(done) == 8 and [r["bloque"] for r in done] == ["01", "02", "03", "04", "05", "06", "07", "08"], "progreso de bloques 01 a 08")
+    check(done[7]["ids"] == ";".join(ITEMS_08), "IDs de progreso 08")
+    check(queue[7]["ids"] == ";".join(ITEMS_08), "reserva 08 distinta")
     check(done[6]["ids"] == ";".join(ITEMS_07), "IDs de progreso 07")
     check(queue[6]["ids"] == ";".join(ITEMS_07), "reserva 07 distinta")
     check(done[5]["ids"] == ";".join(ITEMS_06), "IDs progreso 06")
@@ -60,7 +63,9 @@ def main():
     check(queue[1]["ids"] == ";".join(ITEMS_02), "reserva 02 distinta")
     check(done[0]["ids"] == ";".join(ITEMS), "IDs de progreso")
     check(queue[0]["ids"] == ";".join(ITEMS), "reserva oficial distinta")
-    check(len(fixture["blocks"]) == 7 and [v["block"] for v in fixture["blocks"]] == ["01", "02", "03", "04", "05", "06", "07"], "fixture acumulativo 01 a 07")
+    check(len(fixture["blocks"]) == 8 and [v["block"] for v in fixture["blocks"]] == ["01", "02", "03", "04", "05", "06", "07", "08"], "fixture acumulativo 01 a 08")
+    check(fixture["blocks"][7]["ids"] == list(ITEMS_08), "fixture IDs 08")
+    check(fixture["blocks"][7]["family"] == "STORY_KEY_OR_FORM_REVIEW", "familia bloque08 cambiada")
     check(fixture["blocks"][6]["ids"] == list(ITEMS_07), "fixture IDs 07")
     check(fixture["blocks"][6]["family"] == "STORY_KEY_OR_FORM_REVIEW", "familia bloque07 cambiada")
     check(fixture["blocks"][5]["ids"] == list(ITEMS_06), "fixture IDs 06")
@@ -144,6 +149,15 @@ def main():
     check(imported["rage_candy_bar"]["effect"]["confusion"] is True, "Caramelo Furia quita confusión")
     field_effects = (ROOT / "modules/inventory/field_item_effects.gd").read_text()
     check("static func supports(" in field_effects and "_recovery.has(String(item_id))" in field_effects, "medicina no conectada al motor")
+    for item in ITEMS_08:
+        found = [entry for entry in selected if entry["id"] == item]
+        check(len(found) == 1 and found[0]["estado_contenido"] == "SELECCIONADO" and found[0]["familia"] == "STORY_KEY_OR_FORM_REVIEW", item + " seleccion original")
+        check(item not in held, item + " no figura como equipable en perfil actual")
+        check(source_fields[item]["field_use_status"] == "STORY_FORM_OR_SIDE_SYSTEM_CONTEXT_NEEDED", item + " sin contrato especial documentado")
+        check(source_fields[item]["equipment_transfer"] == "NOT_CERTIFIED", item + " equipamiento no certificado")
+        check(inventory_rows[item]["connection"] == "DATA_ONLY" and inventory_rows[item]["native_entry"] == "False", item + " no es efecto directo nativo")
+        check(('"' + item + '"') in runner, item + " sin coverage en Godot")
+    check("missing_description" in inventory_rows["rotom_catalog"]["flags"], "falta descripción del Catalogo Rotom no consignada")
     for term in ("UNSUPPORTED_TRIGGERS", '&"spin"', "func classify_record(", "RUNTIME_SUPPORTED", "UNSUPPORTED"):
         check(term in engine, "no existe contrato en EvolutionSystem: " + term)
     for term in ("func configure(", "func evolution_options(", "func evolve(", "func use_item(", "func equip(", "func unequip(", "holdable("):
@@ -162,11 +176,13 @@ def main():
         check(token in runner, "negativo del bloque 05 no cubierto: " + token)
     for token in ("const BLOQUE_06 :=", "giratina", "palkia", "deoxys", "forma_deoxys_meteorito_sin_servicio", "equipamiento_verificado_sin_ruta_forma_certificada", "_auditar_contexto_04(catalogo, item, origen)", "_auditar_contexto_05(catalogo, item, origen)", "ruta_forma_no_degradada", "_persistencia(pc, item"):
         check(token in runner, "escenario 06 ausente: " + token)
-    for token in ("const BLOQUE_07 :=", "func _recuperacion_07(", "sano_sin_consumo", "curacion_consumo_unico", "cura_sin_evolucion", "sin_segunda_consumicion", "orbe_equipable_primal_no_certificado", "union_calyrex_fusion_no_conectada", "_auditar_contexto_04(catalogo, item, &\"groudon\")", "_auditar_contexto_05(catalogo, item, &\"calyrex\")", "CAMP004_W04_GODOT PASS blocks=7 checks="):
+    for token in ("const BLOQUE_07 :=", "func _recuperacion_07(", "sano_sin_consumo", "curacion_consumo_unico", "cura_sin_evolucion", "sin_segunda_consumicion", "orbe_equipable_primal_no_certificado", "union_calyrex_fusion_no_conectada", "_auditar_contexto_04(catalogo, item, &\"groudon\")", "_auditar_contexto_05(catalogo, item, &\"calyrex\")", "CAMP004_W04_GODOT PASS blocks=8 checks="):
         check(token in runner, "bloque07 sin escenario real: " + token)
+    for token in ("const BLOQUE_08 :=", "tornadus", "rotom", "zygarde", "tornadus_trio_cambio_forma_no_conectado", "rotom_cambio_electrodomestico_no_conectado", "zygarde_celulas_y_formas_no_conectadas", "_auditar_contexto_05(catalogo, item, origen)", "_auditar_contexto_05(catalogo, item, &\"eevee\")", "ruta_forma_08_no_degradada", "CAMP004_W04_GODOT PASS blocks=8 checks="):
+        check(token in runner, "falta escenario real bloque08: " + token)
     check((ROOT / "tests/gameplay/parallel_items_w04_campaign_003.gd").exists(), "regresión CAMP003 ausente")
     check((ROOT / "tests/tools/test_parallel_items_w04_campaign_001.py").exists(), "regresión CAMP001 ausente")
-    print(f"CAMP004_W04_PY PASS blocks=7 checks={checks}")
+    print(f"CAMP004_W04_PY PASS blocks=8 checks={checks}")
 
 
 if __name__ == "__main__":
