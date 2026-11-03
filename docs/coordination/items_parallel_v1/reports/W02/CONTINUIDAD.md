@@ -1,3 +1,29 @@
+# IA2/W02 — CONTINUIDAD VIGENTE / CAMPAÑA_003
+
+**ESTADO:** BLOQUE **01/10 ENTREGADO**, `EN_CI_AUTOMATICA`, pendiente verificación de GitHub Actions #41553745691 (primer SHA con CSV 1/10). Los PASS de bootstrap 00/10 no acreditan funcionamiento.
+
+**Rama exclusiva:** `codex/calvo-items-20261103-w02-camp003`. Arranque de IA6 `41c1efeba0346349490f863131179ed7a8fc274c`. No fusionar CAMP001/CAMP002. La rama contiene el workflow/validador global de IA6 que **no puede editar W02**.
+
+**Autoridad:** `CAMPAIGN_GATE_003.md` blob `390f7ce6897462e1ae8e3cc7e3cd5f799b6c2213`; `campaigns/CAMP_003_W02.md` blob `62498ebd44288a86e59986379dbc1b70e111ef1f`; cola `CAMPAIGN_003_QUEUE_APPROVED.csv` blob `ea06a0a000fc4f3b8bab48e45e21fb549d753559`. Diez bloques fijos: `p` ejecuta SOLO el siguiente. W04 no participa.
+
+**BLOQUE 01 IDs:** `aguav_berry`, `apicot_berry`, `aspear_berry`, `babiri_berry`. Nuevos nueve escenarios, 27 variantes previstas de portador activo/sin objeto/reserva, consumo, curación/confusión, boost SpD, cura freeze, resistencia Steel, SaveV2/recibos SHA256. **No pruebas de campo ni cambios de producción**.
+
+**Fuente técnica:** `tools/item_audit/held_effect_sweep_v3.cjs` (Aguav Naughty/Hardy); `held_effect_sweep_v2.cjs` (Apicot SpD, Aspear freeze, Babiri acero sobre Clefable). Reutiliza `tests/gameplay/item_automation_v28.gd` y `item_automation_opponent_v28.gd`; motor `@pkmn/sim` sigue fijado. Fuentes existentes no equivalen al PASS de nuevas variantes.
+
+**Archivos de escritura permitidos:** `tests/gameplay/parallel_items_w02_campaign_003.gd`, `tests/tools/test_parallel_items_w02_campaign_003.py`, `tests/fixtures/parallel_items/w02_campaign_003.json`, `reports/W02/CAMP_003_PROGRESO.csv`, informes `reports/W02/CAMP_003_ITER_XX.md`, `CONTINUIDAD.md`. No escribir workflow, manifiesto global, otro worker ni producción.
+
+**Commits:** fixture `da00c3ab3565d46d42000e1a9f21c399bbc9270d`; Godot `a580fb13d27e074f5d847ce491bac04bd0128d76`; Python `3c8f2808a2011803b0450fd3d3a10726a4be0374`; CSV `a278495a20345e86458d13e536198140d78ae5f9`; informe `3e092736549f219778504b5ccaa9d7052400b7e2`. El HEAD final se consulta GitHub, no se incrusta recursivamente.
+
+**CI:** [run #41553745691](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41553745691). Exige recibos `CAMP003_W02_PY PASS blocks=1 checks=M` y `CAMP003_W02_GODOT PASS blocks=1 checks=M`. Si FAIL por pruebas reparables, corregir SOLO pruebas W02 sin relajar contrato; defecto nativo/SaveV2 compartido, STOP y pedir IA6.
+
+**Siguiente `p`:** bloque 02 por cola oficial: `charti_berry;chilan_berry;chople_berry;coba_berry`. Leer CSV/último SHA de CI antes de escribir, ampliar arnés acumulativo y documentar. No saltar a bloque 03 ni iniciar fuera de 10/10.
+
+**Prohibiciones:** `main`, V28, ramas ajenas, `modules`, `data`, `config`, guardados reales, catálogo, Mega, CI compartida, IA4. Fines visuales/GPU fuera del alcance headless.
+
+---
+
+## ARCHIVO HISTÓRICO ANTERIOR (LOTE_002, no concede autoridad CAMP003)
+
 # W02 / IA2 — Cuaderno de continuidad (bayas y consumo)
 
 > Memoria operativa exclusiva de `codex/calvo-items-20261101-w02`. La **autoridad de encargos** sigue siendo IA6 en `codex/calvo-items-20261101-arbitro`; este cuaderno no concede permisos nuevos.
