@@ -124,6 +124,23 @@ EXPECTED_09 = {
 }
 
 
+EXPECTED_10_BATTLE = {
+    "yache_ice_shard_hit_c003": ("yache_berry", "ice_shard", True, "ice"),
+    "yache_normal_reject_c003": ("yache_berry", "tackle", False, "ice"),
+}
+EXPECTED_10_FIELD = {
+    "grepa_ev20_friend100_c003": ("grepa_berry", "special_defense", 20, 100, "full", True, 10, 5),
+    "grepa_ev0_friend200_c003": ("grepa_berry", "special_defense", 0, 200, "full", True, 0, 2),
+    "grepa_ev0_friend255_noop_c003": ("grepa_berry", "special_defense", 0, 255, "full", False, 0, 0),
+    "hondew_ev20_friend100_c003": ("hondew_berry", "special_attack", 20, 100, "full", True, 10, 5),
+    "hondew_ev0_friend200_c003": ("hondew_berry", "special_attack", 0, 200, "full", True, 0, 2),
+    "hondew_ev0_friend255_noop_c003": ("hondew_berry", "special_attack", 0, 255, "full", False, 0, 0),
+    "pomeg_ev252_hp1_c003": ("pomeg_berry", "hp", 252, 100, "one", True, 10, 5),
+    "pomeg_ev0_friend200_c003": ("pomeg_berry", "hp", 0, 200, "full", True, 0, 2),
+    "pomeg_ev0_friend255_noop_c003": ("pomeg_berry", "hp", 0, 255, "full", False, 0, 0),
+}
+
+
 class ContractError(ValueError):
     pass
 
@@ -450,6 +467,51 @@ def validate(fixture, queue, progress, check):
                                  "Contrato individual alterado: " + name + "/" + key)
             check.demand(seen == set(EXPECTED_09),
                          "Falta un escenario positivo/negativo del bloque 09")
+        elif i == 9:
+            check.demand(entry["source_evidence"] == [
+                "tools/item_audit/held_effect_sweep_v2.cjs",
+                "tests/gameplay/item_field_effects_v4.gd",
+                "modules/inventory/field_item_effects.gd"],
+                "Bloque 10 no distingue Yache combate y EV bayas de campo")
+            check.demand(len(entry["cases"]) == 11 and len(ids) == 4,
+                         "ITER_10 exige dos Yache y nueve EV/amistad")
+            seen = set()
+            for case in entry["cases"]:
+                name = case["scenario"]
+                check.demand(name not in seen and
+                             (name in EXPECTED_10_BATTLE or name in EXPECTED_10_FIELD),
+                             "Escenario bloque 10 extra o duplicado")
+                seen.add(name)
+                check.demand(case["id"] in ids, "Item fuera de la fila 10")
+                if name in EXPECTED_10_BATTLE:
+                    item, move, consumes, expected_type = EXPECTED_10_BATTLE[name]
+                    check.demand(set(case) == {
+                        "scenario", "id", "kind", "nature", "start", "status",
+                        "actor_species", "foe_species", "foe_move", "consumes",
+                        "confuses", "own_move", "expected_type"},
+                        "Esquema Yache combate distinto de contrato")
+                    check.demand(
+                        (case["id"], case["foe_move"], case["consumes"],
+                         case["expected_type"]) == (item, move, consumes, expected_type)
+                        and (case["kind"], case["actor_species"], case["foe_species"],
+                             case["nature"], case["start"], case["status"],
+                             case["own_move"], case["confuses"]) ==
+                            ("resist_type", "dragonite", "mew", "hardy", "full", "",
+                             "reflect", False),
+                        "Yache falta tipo supereficaz/control o se altera fuerza del golpe")
+                else:
+                    expected = EXPECTED_10_FIELD[name]
+                    check.demand(set(case) == {
+                        "scenario", "id", "kind", "stat", "start_ev", "start_friendship",
+                        "start_hp", "applies", "ev_removed", "friendship_gain"},
+                        "Esquema EV de campo inventado/modificado")
+                    actual = (case["id"], case["stat"], case["start_ev"],
+                              case["start_friendship"], case["start_hp"],
+                              case["applies"], case["ev_removed"], case["friendship_gain"])
+                    check.demand(actual == expected and case["kind"] == "field_ev_training",
+                                 "EV, amistad, aceptación, HP o naturaleza de uso alterada")
+            check.demand(seen == set(EXPECTED_10_BATTLE) | set(EXPECTED_10_FIELD),
+                         "Falta control de rechazo/SaveV2 de bloque 10")
         else:
             raise ContractError("Bloque futuro sin contrato específico implementado")
     return count
@@ -494,8 +556,23 @@ def verify_sources(check):
                    "bug:['tanga_berry','mew']",
                    "bug:'bug_buzz'",
                    "electric:['wacan_berry','gyarados']",
-                   "electric:'thunderbolt'"):
+                   "electric:'thunderbolt'",
+                   "ice:['yache_berry','dragonite']"):
         check.demand(needle in v2, "No se localizó precedente V2: " + needle)
+    field_v4 = (ROOT / "tests/gameplay/item_field_effects_v4.gd").read_text(encoding="utf-8")
+    field_runtime = (ROOT / "modules/inventory/field_item_effects.gd").read_text(encoding="utf-8")
+    for needle in ('"grepa_berry": "special_defense"', '"hondew_berry": "special_attack"',
+                   '"pomeg_berry": "hp"', "static func _ev_berry(",
+                   'creature.evs[stat] = maxi(0, old_ev - 10)',
+                   'Friendship.increase(creature, [10, 5, 2])',
+                   'creature.current_hp = clampi('):
+        check.demand(needle in field_runtime,
+                     "Falta implementación canónica de baya de entrenamiento: " + needle)
+    for needle in ('"pomeg_berry": "hp"', '"grepa_berry": "special_defense"',
+                   '"hondew_berry": "special_attack"', "berry EV -10 lower bound",
+                   "full health follows new maximum", "Pomeg HP deficit without KO"):
+        check.demand(needle in field_v4,
+                     "No localizada prueba histórica de entrenamiento: " + needle)
     for needle in ("'custap_berry','low_hp_order'", "'custap_berry','full_hp'",
                    "'enigma_berry','super_effective_heal'",
                    "'enigma_berry','neutral_no_trigger'",
@@ -637,6 +714,25 @@ def negative_controls(fixture, queue, progress, check):
             lambda f: f["blocks"][8]["cases"][8].update({"start": "fifth"}),
             lambda f: f["blocks"][8]["cases"].pop(),
             lambda f: f["blocks"][8]["ids"].append("sitrus_berry"),
+        ])
+    if len(fixture["blocks"]) >= 10:
+        edits.extend([
+            lambda f: f["blocks"][9]["cases"][0].update({"foe_move": "tackle"}),
+            lambda f: f["blocks"][9]["cases"][0].update({"actor_species": "mew"}),
+            lambda f: f["blocks"][9]["cases"][1].update({"consumes": True}),
+            lambda f: f["blocks"][9]["cases"][2].update({"start_ev": 0}),
+            lambda f: f["blocks"][9]["cases"][2].update({"ev_removed": 9}),
+            lambda f: f["blocks"][9]["cases"][3].update({"friendship_gain": 10}),
+            lambda f: f["blocks"][9]["cases"][4].update({"applies": True}),
+            lambda f: f["blocks"][9]["cases"][5].update({"stat": "speed"}),
+            lambda f: f["blocks"][9]["cases"][6].update({"start_ev": 251}),
+            lambda f: f["blocks"][9]["cases"][7].update({"start_friendship": 255}),
+            lambda f: f["blocks"][9]["cases"][8].update({"friendship_gain": 5}),
+            lambda f: f["blocks"][9]["cases"][9].update({"start_hp": "full"}),
+            lambda f: f["blocks"][9]["cases"][9].update({"start_ev": 0}),
+            lambda f: f["blocks"][9]["cases"][10].update({"applies": True}),
+            lambda f: f["blocks"][9]["cases"].pop(),
+            lambda f: f["blocks"][9]["ids"].append("sitrus_berry"),
         ])
     for i, edit in enumerate(edits):
         tampered = copy.deepcopy(fixture)
