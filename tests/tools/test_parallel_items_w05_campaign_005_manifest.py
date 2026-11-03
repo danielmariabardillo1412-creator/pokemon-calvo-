@@ -45,7 +45,8 @@ def validate():
     else:
         own_previous |= listed(OLD_GLOBAL, WORKER)
     previous_in_overlay = {r["id"] for r in read_csv(OVERLAY)
-                           if r["trabajador"] == WORKER}
+                           if r["trabajador"] == WORKER and
+                           r["estado_evidencia_20261102"] == "METADATOS_Y_ENSENANZA_MUESTRA_PASS"}
     seen=set()
     for row in rows:
         ids = row["ids"].split(";")
