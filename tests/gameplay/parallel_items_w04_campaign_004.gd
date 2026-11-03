@@ -9,6 +9,8 @@ const BLOQUE_05 := [&"dna_splicers", &"exp_charm", &"gracidea"]
 const BLOQUE_06 := [&"griseous_core", &"lustrous_globe", &"meteorite"]
 const BLOQUE_07 := [&"rage_candy_bar", &"red_orb", &"reins_of_unity"]
 const BLOQUE_08 := [&"reveal_glass", &"rotom_catalog", &"zygarde_cube"]
+const BLOQUE_09 := [&"n_lunarizer_merge", &"n_solarizer_merge", &"roto_catch", &"roto_exp_points", &"roto_friendship"]
+const ID_COMPAÑERO_09 := &"w04_c004_09_companero"
 const ID := &"w04_c004_01"
 var checks := 0
 var errores: Array[String] = []
@@ -215,6 +217,43 @@ func _recuperacion_07(catalogo: DefinitionCatalog, item: StringName) -> void:
 	var segundo: Dictionary = servicio.use_item(item, ID)
 	verificar(not segundo.get("accepted", false) and _estado(afectado) == ya_curado and afectado.inventory.quantity(item) == 1, String(item) + "/sin_segunda_consumicion")
 
+func _auditar_fusion_09(catalogo: DefinitionCatalog, item: StringName, companero: StringName) -> void:
+	var pc := _crear(catalogo, &"necrozma")
+	verificar(pc != null and catalogo.species(companero) != null, String(item) + "/necrozma_y_companero_catalogados")
+	if pc == null or catalogo.species(companero) == null:
+		return
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 20261104
+	var aliado := CreatureFactory.create(catalogo.species(companero), 40, catalogo, ProgressionRuleset.new(), rng, {"instance_id": ID_COMPAÑERO_09, "nature_id": &"hardy", "moves": ["tackle", "protect"]})
+	verificar(aliado != null and pc.party.add_creature(aliado), String(item) + "/compañero_añadido")
+	if pc.party.get_creature(ID_COMPAÑERO_09) == null:
+		return
+	var servicio := Servicio.new()
+	verificar(servicio.configure(pc, catalogo, func(): return true), String(item) + "/servicio_fusion")
+	verificar(pc.inventory.add(item, 2), String(item) + "/inventario_fusion")
+	var previo := _estado(pc)
+	verificar(not servicio.holdable(item), String(item) + "/fusion_no_equipable")
+	verificar(servicio.evolution_options(item, ID).is_empty(), String(item) + "/fusion_sin_evolucion_directa")
+	var campo: Dictionary = servicio.use_item(item, ID)
+	verificar(not campo.get("accepted", false) and _estado(pc) == previo, String(item) + "/fusion_no_activa_use_item")
+	var dirigida: Dictionary = servicio.evolve(item, ID, companero)
+	verificar(not dirigida.get("accepted", false) and _estado(pc) == previo, String(item) + "/fusion_no_es_evolucion")
+	var equipar: Dictionary = servicio.equip(item, ID)
+	verificar(not equipar.get("accepted", false) and _estado(pc) == previo, String(item) + "/fusion_no_es_equipo")
+	verificar(pc.party.get_creature(ID_COMPAÑERO_09).species_id == companero and pc.owned_creature(ID).species_id == &"necrozma" and pc.inventory.quantity(item) == 2, String(item) + "/dos_criaturas_e_inventario_intactos")
+	var repo := SaveGameRepository.new()
+	var ruta := "user://w04_c004_" + String(item) + "_pareja09.json"
+	var guardado: SaveResult = repo.save_collection(ruta, pc)
+	verificar(guardado.ok, String(item) + "/pareja_guardada")
+	if guardado.ok:
+		var cargado: LoadResult = repo.load(ruta)
+		verificar(cargado.ok and cargado.schema_version == 2, String(item) + "/pareja_cargada_v2")
+		if cargado.ok:
+			var necrozma := cargado.party.get_creature(ID)
+			var otro := cargado.party.get_creature(ID_COMPAÑERO_09)
+			verificar(necrozma != null and necrozma.species_id == &"necrozma" and otro != null and otro.species_id == companero and cargado.inventory.quantity(item) == 2, String(item) + "/pareja_y_cantidades_savev2")
+	DirAccess.remove_absolute(ProjectSettings.globalize_path(ruta))
+
 func _ejecutar() -> void:
 	var data: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://data/normalized/pokemon_api.json"))
 	if not data is Dictionary:
@@ -404,6 +443,37 @@ func _ejecutar() -> void:
 			for ruta: Dictionary in rutas:
 				_positivo(catalogo, item, ruta.origen as StringName, ruta.destino as StringName)
 			print("CAMP004_W04_ITEM id=", String(item), " status=FUNCIONAL_VERIFICADO runtime_routes=", rutas.size(), " conditioned=", condicionados)
+	for item: StringName in BLOQUE_09:
+		verificar(catalogo.item(item) != null, String(item) + "/definicion_09")
+		var registros := 0
+		var condicionados := 0
+		var rutas: Array[Dictionary] = []
+		for sid: StringName in catalogo.species_catalog.all_ids():
+			var especie_actual: CreatureSpecies = catalogo.species(sid)
+			for record: EvolutionRecord in especie_actual.evolutions:
+				if record.item_id != item:
+					continue
+				registros += 1
+				var clasificacion := EvolutionSystem.classify_record(record, catalogo, sid)
+				if record.trigger == EvolutionSystem.TRIGGER_USE_ITEM and clasificacion == EvolutionSystem.RUNTIME_SUPPORTED:
+					rutas.append({"origen": sid, "destino": record.species_id})
+				else:
+					condicionados += 1
+					verificar(not EvolutionSystem.evolution_candidates(especie_actual, {"level": 40, "item_id": item}, catalogo).has(record), String(item) + "/regla_legacy_no_degradada")
+		if rutas.is_empty():
+			if item == &"n_lunarizer_merge" or item == &"n_solarizer_merge":
+				var socio: StringName = &"lunala" if item == &"n_lunarizer_merge" else &"solgaleo"
+				_auditar_fusion_09(catalogo, item, socio)
+				_auditar_contexto_05(catalogo, item, &"necrozma")
+				print("CAMP004_W04_ITEM id=", String(item), " status=DEPENDENCIA records=", registros, " conditioned=", condicionados, " reason=necrozma_fusion_dos_criaturas_sin_contrato")
+			else:
+				_auditar_contexto_05(catalogo, item, &"eevee")
+				print("CAMP004_W04_ITEM id=", String(item), " status=AUDITORIA_LEGACY records=", registros, " conditioned=", condicionados, " reason=", "captura_fuera_de_W04" if item == &"roto_catch" else "experiencia_fuera_de_W04" if item == &"roto_exp_points" else "amistad_fuera_de_W04")
+		else:
+			_auditar_contexto_05(catalogo, item, &"eevee")
+			for ruta: Dictionary in rutas:
+				_positivo(catalogo, item, ruta.origen as StringName, ruta.destino as StringName)
+			print("CAMP004_W04_ITEM id=", String(item), " status=FUNCIONAL_VERIFICADO runtime_routes=", rutas.size(), " conditioned=", condicionados)
 	_finalizar()
 
 func _finalizar() -> void:
@@ -411,7 +481,7 @@ func _finalizar() -> void:
 		return
 	terminado = true
 	if errores.is_empty():
-		print("CAMP004_W04_GODOT PASS blocks=8 checks=", checks)
+		print("CAMP004_W04_GODOT PASS blocks=9 checks=", checks)
 	else:
 		print("CAMP004_W04_GODOT FAIL errors=", JSON.stringify(errores))
 	quit(0 if errores.is_empty() else 1)
