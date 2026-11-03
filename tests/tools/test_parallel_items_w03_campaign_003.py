@@ -594,6 +594,56 @@ def main() -> int:
                             {"trainer_battle_not_capturable",
                              "target_knocked_out", "battle_finished"},
                             "Faltan negativos con precedencia sobre unknown_ball")
+            elif block["bloque"] == "10":
+                audit.check(ids == ["beast_ball", "heavy_ball"], "Reserva 10 alterada")
+                rules = (ROOT / "modules/capture/capture_ruleset.gd").read_text(encoding="utf-8")
+                effects = (ROOT / "modules/capture/capture_ball_effects.gd").read_text(encoding="utf-8")
+                context_effects = (ROOT / "modules/capture/capture_context_ball_effects.gd").read_text(encoding="utf-8")
+                battle_context = (ROOT / "modules/capture/capture_battle_context.gd").read_text(encoding="utf-8")
+                engine = (ROOT / "modules/capture/capture_system.gd").read_text(encoding="utf-8")
+                inventory = (ROOT / "modules/inventory/capture_inventory_service.gd").read_text(encoding="utf-8")
+                audit.check(all(f'&"{ball}"' not in rules
+                                and f'&"{ball}"' not in effects
+                                and f'&"{ball}"' not in context_effects
+                                for ball in ids),
+                            "Ente/Peso incorporadas al motor: requiere caracterizar efectos")
+                audit.check(block["prior_evidence"]["state"] == "DEPENDENCIA_COMPARTIDA"
+                            and block["functional_effect_certified"] is False
+                            and block["implementation_authorized"] is False,
+                            "No certificar factor Ultraente/Peso sin fuente canónica")
+                audit.check(block["missing_authoritative_signals"] ==
+                            ["target_is_ultra_beast", "target_weight_for_capture",
+                             "heavy_ball_weight_rule_profile"],
+                            "Contrato de origen/versión no documentado")
+                audit.check(not any(f'var {name}:' in battle_context
+                                    for name in block["missing_authoritative_signals"]),
+                            "Contexto cambió: verificar nueva fuente y origen")
+                audit.check(block["expected_current_rejection"] == "unknown_ball"
+                            and 'return "unknown_ball"' in engine
+                            and 'CaptureSystem.validate_attempt(attempt, catalogs)' in inventory
+                            and 'inventory.remove(attempt.ball_id, 1)' in inventory,
+                            "No está acreditado el rechazo sin gasto")
+                audit.check('func _block_10(' in runner
+                            and '"10": _block_10(bloque)' in runner
+                            and 'CaptureInventoryService.resolve(' in runner
+                            and 'CaptureSystem.validate_attempt(attempt, catalogs)' in runner,
+                            "No existe caracterización Godot real de bloque10")
+                audit.check('result.result.reason == "unknown_ball"' in runner
+                            and 'result.result.reason == expected_reason' in runner
+                            and 'rng.state == before_rng' in runner
+                            and 'inv.to_dict() == before_inv' in runner
+                            and 'target.to_dict() == before_target' in runner,
+                            "Faltan comprobaciones de rechazo, precedencia y no mutación")
+                audit.check({x["species_id"] for x in block["cases"]} ==
+                            {"mew", "caterpie"} and block["hp_modes"] == ["full", "one_hp"],
+                            "Falta matriz de especies y PS")
+                audit.check({x["name"] for x in block["contexts"]} ==
+                            {"sin_contexto", "turno_y_nivel_fiables"},
+                            "No inventar señales de Ultraentes/peso")
+                audit.check(set(block["invalid_cases"]) ==
+                            {"trainer_battle_not_capturable", "target_knocked_out",
+                             "battle_finished", "item_not_owned"},
+                            "Faltan negativos de precedencia")
             else:
                 audit.check(False, "Falta contrato incremental específico para " + block["bloque"])
         audit.check(audit.checks > 0, "Sin comprobaciones")
