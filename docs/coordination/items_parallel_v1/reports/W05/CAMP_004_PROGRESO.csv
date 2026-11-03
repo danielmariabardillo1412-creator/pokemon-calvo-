@@ -1,1 +1,2 @@
 bloque,ids,estado,sha_pruebas,ci_run,notas
+01,tm82;tm83;tm84;tm85;tm86;tm87,EN_CI_AUTOMATICA,b467ae2f219627c5e227ed830ea976435bd432a5,PENDIENTE_GITHUB_ACTIONS,Nueva_suite_6_MT_SV_regresion_CAMP003_60_MT_CAMP002
