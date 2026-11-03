@@ -48,6 +48,36 @@
         "savev2_identity_stock_for_supported_equipment",
         "regression_block_01_retained"
       ]
+    },
+    {
+      "block": "03",
+      "ids": [
+        "strawberry_sweet",
+        "whipped_dream",
+        "leaders_crest"
+      ],
+      "family": "EVOLUTION_AND_CONTEXT_REVIEW",
+      "sources": [
+        "PokeAPI item/1167: strawberry-sweet; Milcery holds and spins",
+        "docs/current/ITEM_SCOPE_V25.md: whipped_dream Swirlix to Slurpuff",
+        "docs/current/ITEM_CONTENT_SCOPE.md: leaders_crest selected despite picnic category"
+      ],
+      "canonical_triggers": [
+        "spin",
+        "trade_or_held_item_context",
+        "three_defeated_bisharp"
+      ],
+      "policy": "Do not change category of leaders_crest or bypass held/trade/three-defeated conditions with direct bag use",
+      "cases": [
+        "catalog_item_selected_and_species_exist",
+        "strawberry_sweet_spin_no_direct_use",
+        "swirlix_whipped_dream_no_trade_bypass",
+        "bisharp_leaders_crest_no_defeat_bypass",
+        "eevee_negative_no_inventory_mutation",
+        "equip_if_supported_does_not_trigger_evolution",
+        "savev2_negative_and_equipment_if_supported",
+        "positive_evolution_only_if_exact_runtime_record_supported"
+      ]
     }
   ]
 }
