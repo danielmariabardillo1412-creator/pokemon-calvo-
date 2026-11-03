@@ -61,3 +61,14 @@ Godot verificó los casos:
 Las cuatro rutas están presentes, pero **no ejecutables** sin los contextos obligatorios. Se han probado rechazo seguro sin gasto, perfil de equipamiento y SaveV2; **ninguna evolución positiva**. Se preserva la continuidad de los bloques 01 y 02 con sus 9 rutas `BLOQUEADO_POR_CONTRATO`.
 
 La fila CSV 03 quedó en `DEPENDENCIA_DOCUMENTADA` con recibo `41721445674` mediante commit `76fe1d316da4885f51186b01e704d3d5854e373e`; dicha actualización dispara CI independiente sobre el progreso reconciliado, que se verifica antes del cierre definitivo. Regresiones CAMP004/CAMP003/CAMP001 preservadas y no ejecutadas en este bloque (reservadas a puertas 05/10 o cambios de producción).
+
+
+## Segunda CI03 sobre progreso consolidado
+
+[GitHub Actions #41721683837](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41721683837), SHA `76fe1d316da4885f51186b01e704d3d5854e373e`, terminó **completed/success** tras publicar el CSV como `DEPENDENCIA_DOCUMENTADA`. Los logs vuelven a confirmar:
+- `CAMP005_W04_MANIFEST_PASS reserved=10 completed=3 ids=46 kind=FUNCTIONAL_BACKLOG`.
+- `CAMP005_W04_PY PASS blocks=3 checks=205`.
+- `CAMP005_W04_GODOT PASS blocks=3 checks=284`.
+- Cuatro rutas del bloque 03 identificadas como `DEPENDENCIA_CONDICIONES`, con los tres IDs y sus requisitos correctos.
+
+**Bloque 03/10 cerrado como diagnóstico de integración con contratos y SaveV2 verificados.** No se ha ejecutado ninguna evolución ignorando día, sexo o luna llena. Las regresiones de CAMP004/CAMP003/CAMP001 permanecen conservadas para las puertas 05/10 y parches de producción.
