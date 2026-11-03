@@ -960,6 +960,105 @@
         19
       ],
       "history": "new_negative_contact_without_helmet"
+    },
+    {
+      "block": "10",
+      "id": "quick_claw_order_rng",
+      "item_id": "quick_claw",
+      "op": "quick_claw_rng",
+      "actor_species": "mew",
+      "foe_species": "gengar",
+      "foe_move": "tackle",
+      "own_move": "tackle",
+      "seeds": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "history": "held_effect_sweep_v3:order_rng_64_seeds_native_priority"
+    },
+    {
+      "block": "10",
+      "id": "quick_claw_priority_control",
+      "item_id": "quick_claw",
+      "op": "quick_claw_priority_control",
+      "actor_species": "mew",
+      "foe_species": "gengar",
+      "foe_move": "tackle",
+      "own_move": "quick_attack",
+      "seeds": [
+        19
+      ],
+      "history": "negative_positive_move_priority_and_no_consumption"
+    },
+    {
+      "block": "10",
+      "id": "red_card_forced_foe_switch",
+      "item_id": "red_card",
+      "op": "red_card_switch",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "foe_reserve": true,
+      "foe_move": "tackle",
+      "own_move": "reflect",
+      "seeds": [
+        19,
+        23
+      ],
+      "history": "held_pilot.cjs:red_card_foe_reserve_after_damaging_move"
+    },
+    {
+      "block": "10",
+      "id": "red_card_no_damaging_hit",
+      "item_id": "red_card",
+      "op": "red_card_no_switch",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "foe_reserve": true,
+      "foe_move": "amnesia",
+      "own_move": "reflect",
+      "seeds": [
+        19
+      ],
+      "history": "negative_no_hit_does_not_consume_or_switch"
+    },
+    {
+      "block": "10",
+      "id": "rocky_helmet_incoming_contact",
+      "item_id": "rocky_helmet",
+      "op": "rocky_helmet_contact_recoil",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "foe_move": "tackle",
+      "own_move": "reflect",
+      "seeds": [
+        19,
+        23
+      ],
+      "history": "held_pilot.cjs:rocky_helmet_foe_hp_minus_maxhp_sixth"
+    },
+    {
+      "block": "10",
+      "id": "rocky_helmet_noncontact",
+      "item_id": "rocky_helmet",
+      "op": "rocky_helmet_noncontact_control",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "foe_move": "water_gun",
+      "own_move": "reflect",
+      "seeds": [
+        19
+      ],
+      "history": "new_negative_non_contact_no_recoil"
     }
   ]
 }
