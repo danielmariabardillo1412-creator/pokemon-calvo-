@@ -98,11 +98,16 @@ func _run_w01_c004() -> void:
 			current_case = String(row.id) + "/" + str(int(value))
 			var before_checks: int = checks
 			var before_errors: int = errors.size()
-			# Las sesiones se cierran/restauran antes del siguiente modo:
-			# cero estado de simulador compartido, misma semilla en los tres.
+			# Los tres controles no comparten propietario ni sesión. Ejecutarlos
+			# como carriles independientes concurrentes, igual que CAMP003 W01,
+			# evita agotar el límite CI de 900 segundos sin reducir ninguna prueba.
+			# Cada carril usa la MISMA semilla y fixture; SaveV2 conserva clave
+			# exclusiva de caso/semilla/modo y todos los checks anteriores.
 			var observed: Dictionary = {}
 			for mode: String in ["active", "none", "reserve"]:
-				observed[mode] = await _probe_w01_c004(row, int(value), mode)
+				call_deferred("_w01_c004_probe_lane", row, int(value), mode, observed)
+			while observed.size() < 3:
+				await process_frame
 			_compare_c004(row, observed)
 			c004_rows.append({"block": String(row.block), "id": String(row.id),
 				"item_id": String(row.item_id),
@@ -145,6 +150,11 @@ func _run_w01_c004() -> void:
 		print("CAMP004_W01_GODOT FAIL blocks=", completed, " checks=", checks,
 			" errors=", errors.size())
 		quit(1)
+
+# Misma pauta de concurrencia comprobada en CAMP003. Cada sesión,
+# propietario y snapshot son privados de su carril; sólo se reúne evidencia.
+func _w01_c004_probe_lane(row: Dictionary, seed: int, mode: String, observed: Dictionary) -> void:
+	observed[mode] = await _probe_w01_c004(row, seed, mode)
 
 func _probe_w01_c004(row: Dictionary, seed: int, mode: String) -> Dictionary:
 	automation = {"actor_species": String(row.actor_species), "level": 100,

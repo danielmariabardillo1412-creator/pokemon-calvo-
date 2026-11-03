@@ -147,3 +147,9 @@ La segunda CI #41613512888 devolvió `content_policy` al abrir los tres controle
 - Fuente histórica: `held_effect_sweep_v2.cjs` (Toxisfera y Seguro Debilidad) y `held_effect_sweep_v3.cjs` (Parasol Multiuso); datos canónicos inmóviles. No se modifica producción ni las pruebas de CAMPAÑA_003. La regresión total CAMP003 queda programada en hito 10 o ante parche de producción, según puerta IA6.
 - Hasta obtener CI real, NO declarar bloque 08 funcionalmente verificado; diagnosticar fallos propios bajo V5 sin alterar el contrato o evadir políticas. Continúa abierto el problema de proyección SaveV2 a mitad de carga de Rayo Solar (bloque 03), dependencia compartida de IA6.
 - Próxima `p` tras CI positiva: exclusivamente bloque 09/10 `white_herb;wise_glasses;zoom_lens`. Prohibidos `main`, V28, rama árbitra y ramas W02–W05.
+
+## Bloque 08 — fallo de tiempo y optimización autorizada V5
+
+- Primera CI [#41719364484](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41719364484), SHA `63c2aa2f09b89fe75a87ff05e555780be8e64ee0`: `CAMP004_W01_PY PASS blocks=8 checks=818` y manifiesto PASS. Godot terminó con código 124 por `timeout 900s` antes de producir recibo; **8/10 aún no certificado funcionalmente**.
+- Ajuste mínimo del arnés W01: tres lanes independientes `active`, `none`, `reserve` dentro de cada par caso-semilla, usando el patrón ya aprobado de CAMP003. Preserva 62 escenarios, 137 pares, 411 variantes, objetos y SaveV2. No altera producción, reglas, datos, workflow ni tests antiguos. Causa y reparación registradas en `CAMP_004_ITER_08.md`.
+- Repetir CI en SHA de reparación. Si reaparece timeout, revisar coste y logs y escalar límite de workflow a IA6; no recortar aserciones.

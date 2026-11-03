@@ -23,3 +23,9 @@ Matriz **9 casos / 13 pares semilla / 39 variantes**, y acumulado **62 casos / 1
 ## Riesgos residuales
 
 La proyección SaveV2 de Rayo Solar en fase intermedia sigue pendiente de IA6 (bloque 03), y la CI headless no demuestra GPU/UI ni integración en `main`/V28. Regresión integral CAMPAÑA_003 en hito 10 (o tras parche de producción), ya aprobada en hito 05.
+
+## Primera CI y reparación de rendimiento del arnés
+
+Primera ejecución [#41719364484](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41719364484), SHA `63c2aa2f09b89fe75a87ff05e555780be8e64ee0`: contrato, manifiesto y Python aprobaron (`CAMP004_W01_PY PASS blocks=8 checks=818`). Godot se interrumpió por límite externo `timeout 900s` / `exit code 124`, **sin recibo de verificación funcional**. Los avisos repetidos de procesos PID inexistentes al cerrar `pipe_client.gd` son históricos y no se han usado para suprimir pruebas.
+
+**Reparación V5 dentro del runner propio:** ejecutar de forma concurrente los tres controles independientes activo/ausente/reserva de cada caso mediante `call_deferred` + reunión de resultados, calcando el patrón aprobado de `parallel_items_w01_campaign_003.gd`. Se mantienen los 62 casos, 137 pares, las 411 variantes, todos los checks, snapshots e identidades SaveV2. Sin cambios de motor, política, workflow ni datos. Nueva CI pendiente: todavía NO es válido declarar PASS Godot.
