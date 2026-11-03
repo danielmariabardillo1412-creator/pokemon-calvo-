@@ -3,6 +3,9 @@ extends "res://tests/gameplay/parallel_items_w02_campaign_004.gd"
 # W02 CAMPAÑA_005: reutiliza utilidades reales de propietario, SaveV2 y recibos.
 # No ejecuta _run_camp004 ni modifica los contratos de campañas previas.
 const SOURCE_005 := "res://tests/fixtures/parallel_items/w02_campaign_005.json"
+const MOCHI_STATS_005 := {"health_mochi": "hp", "muscle_mochi": "attack",
+	"resist_mochi": "defense", "genius_mochi": "special_attack",
+	"clever_mochi": "special_defense", "swift_mochi": "speed"}
 
 
 func _initialize() -> void:
@@ -160,6 +163,16 @@ func _probe_training(spec: Dictionary, mode: String) -> Dictionary:
 	elif String(spec.kind) in ["vitamin", "wing", "mochi"]:
 		var stat: String = String(spec.stat)
 		var gain: int = int(spec.expected_ev_gain)
+		if String(spec.kind) == "mochi":
+			var real_stat: String = String(MOCHI_STATS_005.get(String(item), ""))
+			var initial_total: int = 0
+			for value: Variant in start_evs.values():
+				initial_total += int(value)
+			var native_gain: int = mini(10, mini(
+				ProgressionRuleset.EV_PER_STAT_MAX - int(start_evs.get(real_stat, 0)),
+				ProgressionRuleset.EV_TOTAL_MAX - initial_total))
+			check(mode + " mochi ruta propia y +10 EV con ambos límites",
+				real_stat == stat and gain == native_gain)
 		var expected_evs: Dictionary = start_evs.duplicate(true)
 		expected_evs[stat] = int(start_evs.get(stat, 0)) + gain
 		var tier: int = mini(2, int(start_friend / 100))
