@@ -78,3 +78,18 @@ Blobs de pruebas al cerrar LOTE_002:
 **Último siguiente paso reproducible:** revisión de IA6, integración secuencial y una CI consolidada con import Godot 4.7 + pruebas W04. **PENDIENTE_CI**.
 
 **No tocar:** main, V28, rama árbitra, ramas W01/W02/W03/W05, datasets, política, guardados de usuario, engine/producción y workflows sin asignación explícita.
+
+
+---
+
+## ACTUALIZACIÓN 2026-11-03 — CIERRE CAMPAÑA_003
+
+**Prevalece sobre los datos históricos LOTE_001/002 de este cuaderno.** La identidad sigue siendo **IA4/W04**, especialista en evolución. Rama de escritura actual y exclusiva: `codex/calvo-items-20261103-w04-camp003` (no reabrir `codex/calvo-items-20261101-w04`).
+
+**Estado:** 10/10 bloques y 30 IDs entregados; CI final [#41573737061](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41573737061), `completed/success` en SHA `5622c3d3e8927b7da4cba8c587c81ab4997c5bab`: Python 120 comprobaciones, Godot 270; regresión CAMPAÑA_001: 559 comprobaciones y 12 casos SaveV2 correctos. Informe técnico y clasificación de los 30 IDs: `docs/coordination/items_parallel_v1/reports/W04/CAMP_003_FINAL.md`.
+
+**Resultado técnico:** 14 objetos con evolución positiva en motor; 10 sin regla catalogada; 6 con ruta `DATA_ONLY`. Los dos pergaminos de Kubfu tienen diferenciación de forma en catálogo que no soporta actualmente el runtime. Las condiciones de autenticidad de ciertas teteras no están definidas en los registros examinados. No confundir pruebas PASS con 30 evoluciones jugables.
+
+**Restricciones conservadas:** `main`, V28, producción, catálogo canónico, workflow y ramas ajenas sin tocar. No crear nuevos bloques ni modificar otros objetos. IA6 revisa la integración global y el backlog de dependencias. Al completar 10/10, **W04 se detiene** hasta nuevo encargo oficial. El último documento de referencia del protocolo es `AUTONOMOUS_REPAIR_V5.md` en la rama árbitra.
+
+**Rutas de recuperación:** `tests/gameplay/parallel_items_w04_campaign_003.gd`, `tests/tools/test_parallel_items_w04_campaign_003.py`, `tests/fixtures/parallel_items/w04_campaign_003.json`, `docs/coordination/items_parallel_v1/reports/W04/CAMP_003_PROGRESO.csv` y `CAMP_003_FINAL.md`. Todos los informes ITER_01..ITER_10 permanecen en la misma carpeta.
