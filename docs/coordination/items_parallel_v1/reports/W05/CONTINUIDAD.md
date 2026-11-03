@@ -1,3 +1,15 @@
+# ESTADO VIGENTE IA5/W05 — CAMPAÑA_005 · 04/10 CI PASS VERIFICADA (2026-11-03)
+
+**Identidad:** IA5/W05 responsable de MT/libros. **Rama exclusiva:** `codex/calvo-items-20261103-w05-camp005`. Autoridad IA6: `CAMPAIGN_005_W05_GATE.md`, `CAMPAIGN_005_W05_QUEUE_APPROVED.csv`, `campaigns/CAMP_005_W05.md`, `AUTONOMOUS_REPAIR_V5.md`. Este estado prevalece sobre cabeceras antiguas. CAMP004 (60 MT) y CAMP003 (60 MT) cerradas: mantener regresión, sin repetir trabajo.
+
+**BLOQUE 04 CERTIFICADO:** `tm160;tm161;tm162;tm163;tm164;tm165` → `hurricane;trick_room;bug_buzz;hyper_beam;brave_bird;flare_blitz` en Scarlet/Violet. Fixture `tests/fixtures/parallel_items/w05_campaign_005.json` de cuatro bloques/24 MT, commit `f01eb2223d6b5e44a8f55b58c049bf7a9d08e05b`. CSV `reports/W05/CAMP_005_PROGRESO.csv` con única fila 04, commit `fc87f105b9f5b979d7f5dc6f0f73f5b026dbca48`. Informe `CAMP_005_ITER_04.md` certificado con commit `08510860f070aa82dc43b5354f6898e956be4664`. Control estático: 24 IDs distintos, cuatro bloques y filas idénticos a cola IA6/mapeo SV. Runners Python/Godot y producción sin cambios.
+
+**CI FUNCIONAL PASS:** [Actions #41720191745](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41720191745), SHA `fc87f105b9f5b979d7f5dc6f0f73f5b026dbca48`, job `126210891293`, `completed/success`. Logs reales: `CAMP005_W05_PY PASS blocks=4 checks=232`, `CAMP005_GATE_PY_PASS worker=W05 blocks=4 checks=232`, `CAMP005_W05_GODOT PASS blocks=4 checks=876`, `CAMP005_GATE_GODOT_PASS worker=W05 blocks=4 checks=876`. Los contratos acumulativos ejercitan enseñanza real mediante `FieldItemService.teach`, compatibles/incompatibles, stock, propietario, PP, consumo y SaveV2. CI headless no prueba interfaz/GPU. Regresiones CAMP004/CAMP003 **no ejecutadas en bloque 04**, al no ser hito ni haberse modificado producción; están programadas en 05/10 y 10/10. CSV sigue con estado histórico `EN_CI_AUTOMATICA` para no relanzar CI solo por cambiar etiquetas.
+
+**SIGUIENTE `p`:** ejecutar **únicamente bloque 05** `tm166;tm167;tm168;tm169;tm170;tm171` tras cotejo de cola IA6/perfil SV. Además de CI funcional CAMP005, verificar en los logs regresiones CAMP004 de 60 MT y CAMP003 de 60 MT (Python/Godot), dado que 05 es hito obligatorio; si fallan, diagnosticar y reparar bajo V5 sin relajar pruebas. Prohibido tocar `main`, V28, PR118, rama árbitra, otras W, catálogos/learnsets/políticas, 19 MT legacy inactivas, saves, workflows o merge. Al 10/10 declarar `CAMPAÑA_005_FINALIZADA` y STOP.
+
+---
+
 # ESTADO VIGENTE IA5/W05 — CAMPAÑA_005 · 04/10 ENTREGADO, CI PENDIENTE (2026-11-03)
 
 **Identidad fija:** IA5/W05, MT y libros. **Rama exclusiva** `codex/calvo-items-20261103-w05-camp005`. Autoridad IA6: `CAMPAIGN_005_W05_GATE.md`, `CAMPAIGN_005_W05_QUEUE_APPROVED.csv`, `campaigns/CAMP_005_W05.md` y `AUTONOMOUS_REPAIR_V5.md`. Esta cabecera prevalece sobre el historial inferior. CAMP004 (60 MT) y CAMP003 (60 MT) están cerradas y se conservan como regresión.
