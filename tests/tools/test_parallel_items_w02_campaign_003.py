@@ -99,6 +99,18 @@ EXPECTED_07 = {
 }
 
 
+EXPECTED_08 = {
+    "roseli_fairy_effective_c003": ("roseli_berry", "resist_type", "garchomp", "mew", "dazzling_gleam", "full", True, {"expected_type": "fairy"}),
+    "roseli_normal_reject_c003": ("roseli_berry", "resist_type", "garchomp", "mew", "tackle", "full", False, {"expected_type": "fairy"}),
+    "rowap_special_retaliation_c003": ("rowap_berry", "retaliate_special", "mew", "mew", "confusion", "full", True, {"expected_category": "special", "retaliation_denominator": 8}),
+    "rowap_physical_reject_c003": ("rowap_berry", "retaliate_special", "mew", "mew", "tackle", "full", False, {"expected_category": "physical", "retaliation_denominator": 8}),
+    "salac_pinch_speed_c003": ("salac_berry", "boost_spe", "mew", "mew", "amnesia", "fifth", True, {"boost_stat": "spe"}),
+    "salac_high_reject_c003": ("salac_berry", "boost_spe", "mew", "mew", "amnesia", "near_full", False, {"boost_stat": "spe"}),
+    "shuca_ground_effective_c003": ("shuca_berry", "resist_type", "pikachu", "mew", "bulldoze", "full", True, {"expected_type": "ground"}),
+    "shuca_normal_reject_c003": ("shuca_berry", "resist_type", "pikachu", "mew", "tackle", "full", False, {"expected_type": "ground"}),
+}
+
+
 class ContractError(ValueError):
     pass
 
@@ -360,6 +372,39 @@ def validate(fixture, queue, progress, check):
                                  "Expectativa de resistencia o SpA cambiada: " + name)
             check.demand(seen == set(EXPECTED_07),
                          "Falta un caso positivo o negativo del bloque 07")
+        elif i == 7:
+            check.demand(entry["source_evidence"] == [
+                "tools/item_audit/held_effect_sweep_v2.cjs",
+                "tools/item_audit/held_effect_sweep_v3.cjs"],
+                "Precedentes V2 y V3 imprescindibles para bloque 08")
+            check.demand(len(entry["cases"]) == 8 and len(ids) == 4,
+                         "Bloque 08 exige ocho escenas para cuatro IDs")
+            seen = set()
+            for case in entry["cases"]:
+                name = case["scenario"]
+                check.demand(name in EXPECTED_08 and name not in seen,
+                             "Escenario 08 no autorizado o repetido")
+                seen.add(name)
+                item, kind, actor, foe, move, start_hp, spent, extra = EXPECTED_08[name]
+                base = {"scenario", "id", "kind", "nature", "start",
+                        "status", "actor_species", "foe_species",
+                        "foe_move", "consumes", "confuses", "own_move"}
+                check.demand(set(case) == base | set(extra),
+                             "Campos nuevos, perdidos o falsos en bloque 08")
+                actual = (case["id"], case["kind"], case["actor_species"],
+                          case["foe_species"], case["foe_move"], case["start"],
+                          case["consumes"])
+                check.demand(actual == (item, kind, actor, foe, move, start_hp, spent),
+                             "Tipo, especie, disparo o naturaleza de uso alterados")
+                check.demand(case["nature"] == "hardy" and case["status"] == ""
+                             and case["confuses"] is False and case["own_move"] == "amnesia"
+                             and case["id"] in ids,
+                             "Testigos de categoría/umbral cambiados en bloque 08")
+                for key, value in extra.items():
+                    check.demand(case[key] == value,
+                                 "Expectativa de protección/devolución/Velocidad alterada: " + name)
+            check.demand(seen == set(EXPECTED_08),
+                         "Falta caso positivo o negativo del bloque 08")
         else:
             raise ContractError("Bloque futuro sin contrato específico implementado")
     return count
@@ -396,7 +441,11 @@ def verify_sources(check):
                    "psychic:'psychic'",
                    "petaya_berry:'spa'",
                    "grass:['rindo_berry','blastoise']",
-                   "grass:'energy_ball'"):
+                   "grass:'energy_ball'",
+                   "fairy:['roseli_berry','garchomp']",
+                   "fairy:'dazzling_gleam'",
+                   "salac_berry:'spe'",
+                   "ground:['shuca_berry','pikachu']"):
         check.demand(needle in v2, "No se localizó precedente V2: " + needle)
     for needle in ("'custap_berry','low_hp_order'", "'custap_berry','full_hp'",
                    "'enigma_berry','super_effective_heal'",
@@ -410,7 +459,8 @@ def verify_sources(check):
                    "['mago_berry','brave']",
                    "add('micle_berry','next_move_accuracy'",
                    "add('micle_berry','full_hp'",
-                   "moves:['reflect','hydro_pump']"):
+                   "moves:['reflect','hydro_pump']",
+                   "['rowap_berry','confusion','tackle']"):
         check.demand(needle in v3, "No se localizo precedente V3: " + needle)
 
 
@@ -502,6 +552,21 @@ def negative_controls(fixture, queue, progress, check):
             lambda f: f["blocks"][6]["cases"][4].update({"own_move": "swords_dance"}),
             lambda f: f["blocks"][6]["cases"].pop(),
             lambda f: f["blocks"][6]["ids"].append("sitrus_berry"),
+        ])
+    if len(fixture["blocks"]) >= 8:
+        edits.extend([
+            lambda f: f["blocks"][7]["cases"][0].update({"foe_move": "tackle"}),
+            lambda f: f["blocks"][7]["cases"][1].update({"consumes": True}),
+            lambda f: f["blocks"][7]["cases"][2].update({"expected_category": "physical"}),
+            lambda f: f["blocks"][7]["cases"][2].update({"retaliation_denominator": 4}),
+            lambda f: f["blocks"][7]["cases"][3].update({"foe_move": "confusion"}),
+            lambda f: f["blocks"][7]["cases"][4].update({"boost_stat": "atk"}),
+            lambda f: f["blocks"][7]["cases"][5].update({"start": "fifth"}),
+            lambda f: f["blocks"][7]["cases"][6].update({"foe_move": "earth_power"}),
+            lambda f: f["blocks"][7]["cases"][6].update({"expected_type": "fire"}),
+            lambda f: f["blocks"][7]["cases"][7].update({"consumes": True}),
+            lambda f: f["blocks"][7]["cases"].pop(),
+            lambda f: f["blocks"][7]["ids"].append("sitrus_berry"),
         ])
     for i, edit in enumerate(edits):
         tampered = copy.deepcopy(fixture)
