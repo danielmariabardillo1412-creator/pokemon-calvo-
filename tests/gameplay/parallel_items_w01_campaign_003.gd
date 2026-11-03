@@ -124,7 +124,10 @@ func _frame_c003(session: RefCounted, id: StringName) -> Dictionary:
 	var missed: bool = false
 	var band_activated: bool = false
 	var trap_ticks: int = 0
+	var first_move_actor: String = ""
 	for entry: String in log:
+		if entry.begins_with("|move|") and first_move_actor.is_empty():
+			first_move_actor = "own" if entry.contains("|p1a:") else "foe"
 		if entry.begins_with("|-miss|") and entry.contains("p1a:"):
 			missed = true
 		if entry.begins_with("|-activate|") and entry.contains("Focus Band"):
@@ -137,6 +140,8 @@ func _frame_c003(session: RefCounted, id: StringName) -> Dictionary:
 	var sides: Array = native_snapshot.get("sides", [])
 	var own_hazards: Dictionary = sides[0].get("sideConditions", {}) if sides.size() > 0 else {}
 	var rock_on_side: bool = own_hazards.has("stealthrock")
+	var reflect_state: Variant = own_hazards.get("reflect", {})
+	var reflect_duration: int = int(reflect_state.get("duration", 0)) if reflect_state is Dictionary else 0
 	var request: Dictionary = session._checkpoint.get("views", {}).get("p1", {}).get("request", {})
 	var active_requests: Array = request.get("active", [])
 	var moves: Array = active_requests[0].get("moves", []) if active_requests.size() > 0 else []
@@ -160,7 +165,8 @@ func _frame_c003(session: RefCounted, id: StringName) -> Dictionary:
 		"native_volatiles": native.get("volatiles", []).duplicate(true),
 		"missed": missed,
 		"focus_band_activated": band_activated,
-		"trap_ticks": trap_ticks, "sun_duration": sun_duration, "stealth_rock": rock_on_side
+		"trap_ticks": trap_ticks, "sun_duration": sun_duration, "stealth_rock": rock_on_side,
+		"first_move_actor": first_move_actor, "reflect_duration": reflect_duration
 	}
 
 func _probe_c003(row: Dictionary, seed: int, mode: String) -> Dictionary:
