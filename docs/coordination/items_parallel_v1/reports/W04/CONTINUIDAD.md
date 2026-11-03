@@ -304,3 +304,14 @@ La CI consolidada [#41719349096](https://github.com/danielmariabardillo1412-crea
 **Contratos canónicos:** Happiny→Chansey: `level_up` con `held_item=oval_stone` y `time_of_day=day` (chain 51); Kirlia→Gallade: `use_item=dawn_stone` y `gender=2` macho (chain 140); Snorunt→Froslass: `use_item=dawn_stone` y `gender=1` hembra (chain 186); Ursaring→Ursaluna: `use_item=peat_block` y `time_of_day=full-moon` (chain 110). No inventar niveles ni simplificar condiciones. El motor clasifica como `DATA_ONLY` las condiciones `gender`, `held_item` y `time_of_day`. `CreatureInstance` no almacena sexo; `EvolutionSystem.level_up_context` tampoco día/fase lunar/held. Se prueba ausencia de evolución falsa, propiedad, equipamiento autorizado, inventario y SaveV2. Peat Block no figura como equipable. **Sin reparación positiva** mientras no exista contrato de sexo persistente, reloj/luna y consumo.
 
 Próximo `p`, una vez pasada CI03: **solo bloque 04/10** `galarica_cuff;galarica_wreath;scroll_of_darkness;scroll_of_waters`. Mantener ramas ajenas, `main`, V28, producción y APIs compartidas intactas, sin recontar ítems históricos.
+
+
+## CAMP005 W04 — Bloque 03, primera CI verificada
+
+IA4/W04 continúa exclusivamente en `codex/calvo-items-20261103-w04-camp005`. **Bloque 03/10**, `oval_stone;dawn_stone;peat_block`, entregado con fixture, Godot, Python, CSV e informe `reports/W04/CAMP_005_ITER_03.md`. Hubo un fallo inicial de marcador obsoleto del validador Python [#41721012671](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41721012671); se corrigió sin quitar aserciones en `94c84a816339d432058c0f2ddb0b56efe3cdc59f`.
+
+**CI de código:** [#41721445674](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41721445674), `completed/success`, manifiesto `reserved=10 completed=3 ids=46`, Python **205**, Godot **284**. La fila 03 del CSV se consolidó `DEPENDENCIA_DOCUMENTADA` en `76fe1d316da4885f51186b01e704d3d5854e373e`; su nueva CI [#41721683837](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41721683837) debe verificarse antes de avanzar.
+
+**Rutas sin degradar:** Happiny→Chansey (Piedra Oval equipada y día); Kirlia macho→Gallade y Snorunt hembra→Froslass (Piedra Alba); Ursaring→Ursaluna (Bloque de Turba y luna llena). Cuatro rutas originales en tres ítems, ninguna ejecutada positivamente porque faltan sexo persistente, contexto día y luna, validación de condiciones y política de consumo. Godot confirma ausencia de consumo falso, equipamiento según perfil y SaveV2. **No volver a contar como objetos nuevos ni programar evoluciones ignorando requisitos.**
+
+**Siguiente `p`, solamente si CI consolidada correcta:** bloque **04/10** `galarica_cuff;galarica_wreath;scroll_of_darkness;scroll_of_waters`. No tocar `main`, V28, producción compartida o ramas ajenas.
