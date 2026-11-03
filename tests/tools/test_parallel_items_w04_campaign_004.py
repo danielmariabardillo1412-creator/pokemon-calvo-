@@ -13,6 +13,7 @@ ITEMS_02 = ("love_sweet", "ribbon_sweet", "star_sweet")
 RAW_IDS_02 = (1168, 1173, 1172)
 ITEMS_03 = ("strawberry_sweet", "whipped_dream", "leaders_crest")
 ITEMS_04 = ("adamant_crystal", "blue_orb", "catching_charm")
+ITEMS_05 = ("dna_splicers", "exp_charm", "gracidea")
 
 
 def rows(path):
@@ -42,7 +43,9 @@ def main():
 
     check(fixture["worker"] == "W04" and fixture["campaign"] == "CAMP_004", "identidad/fixture")
     check(len(queue) == 10, "cola de diez bloques")
-    check(len(done) == 4 and [r["bloque"] for r in done] == ["01", "02", "03", "04"], "progreso de bloques 01 a 04")
+    check(len(done) == 5 and [r["bloque"] for r in done] == ["01", "02", "03", "04", "05"], "progreso de bloques 01 a 05")
+    check(done[4]["ids"] == ";".join(ITEMS_05), "IDs de progreso 05")
+    check(queue[4]["ids"] == ";".join(ITEMS_05), "reserva 05 distinta")
     check(done[3]["ids"] == ";".join(ITEMS_04), "IDs de progreso 04")
     check(queue[3]["ids"] == ";".join(ITEMS_04), "reserva 04 distinta")
     check(done[2]["ids"] == ";".join(ITEMS_03), "IDs de progreso 03")
@@ -51,7 +54,9 @@ def main():
     check(queue[1]["ids"] == ";".join(ITEMS_02), "reserva 02 distinta")
     check(done[0]["ids"] == ";".join(ITEMS), "IDs de progreso")
     check(queue[0]["ids"] == ";".join(ITEMS), "reserva oficial distinta")
-    check(len(fixture["blocks"]) == 4 and [v["block"] for v in fixture["blocks"]] == ["01", "02", "03", "04"], "fixture acumulativo 01 a 04")
+    check(len(fixture["blocks"]) == 5 and [v["block"] for v in fixture["blocks"]] == ["01", "02", "03", "04", "05"], "fixture acumulativo 01 a 05")
+    check(fixture["blocks"][4]["ids"] == list(ITEMS_05), "fixture IDs 05")
+    check(fixture["blocks"][4]["family"] == "STORY_KEY_OR_FORM_REVIEW", "familia 05 no conservada")
     check(fixture["blocks"][3]["ids"] == list(ITEMS_04), "fixture IDs 04")
     check(fixture["blocks"][3]["family"] == "STORY_KEY_OR_FORM_REVIEW", "categoría del encargo 04")
     check(fixture["blocks"][2]["ids"] == list(ITEMS_03), "fixture IDs 03")
@@ -90,6 +95,16 @@ def main():
     check(source_fields["adamant_crystal"]["equipment_transfer"] == "VERIFIED", "adamant equipamiento")
     check(source_fields["blue_orb"]["equipment_transfer"] == "VERIFIED", "blue orb equipamiento")
     check(source_fields["catching_charm"]["equipment_transfer"] == "NOT_CERTIFIED", "captura fuera W04")
+    for item in ITEMS_05:
+        found = [entry for entry in selected if entry["id"] == item]
+        check(len(found) == 1 and found[0]["estado_contenido"] == "SELECCIONADO" and found[0]["familia"] == "STORY_KEY_OR_FORM_REVIEW", item + " seleccion original")
+        check(('"' + item + '"') in runner, item + " no cubierto por Godot")
+        check(item not in held, item + " no debería ser equipable en el perfil actual")
+        check(source_fields[item]["field_use_status"] == "STORY_FORM_OR_SIDE_SYSTEM_CONTEXT_NEEDED", item + " contexto especial no implementado")
+        check(source_fields[item]["equipment_transfer"] == "NOT_CERTIFIED", item + " equipamiento erroneamente certificado")
+    inventory_rows = {row["id"]: row for row in rows(ROOT / "docs/current/ITEM_INVENTORY.csv")}
+    for item in ITEMS_05:
+        check(inventory_rows[item]["connection"] == "DATA_ONLY" and inventory_rows[item]["native_entry"] == "False", item + " sin runtime documentado")
     for term in ("UNSUPPORTED_TRIGGERS", '&"spin"', "func classify_record(", "RUNTIME_SUPPORTED", "UNSUPPORTED"):
         check(term in engine, "no existe contrato en EvolutionSystem: " + term)
     for term in ("func configure(", "func evolution_options(", "func evolve(", "func use_item(", "func equip(", "func unequip(", "holdable("):
@@ -104,9 +119,11 @@ def main():
     check('&"three_defeated_bisharp"' in engine, "EvolutionSystem no reconoce disparador de Bisharp")
     for token in ("const BLOQUE_04 :=", "func _auditar_contexto_04(", "_auditar_contexto_04(catalogo, item, origen)", "sin_transformacion_por_uso", "equipar_no_activa_forma_o_reversion", "amuleto_no_es_equipable", "captura_pertenece_W03_no_certificada", "estado_forma_final_intacto", "_persistencia(pc, item"):
         check(token in runner, "no se ejecuta negativo real del bloque 04: " + token)
+    for token in ("const BLOQUE_05 :=", "func _auditar_contexto_05(", "fusion_kyurem_no_implementada", "bono_experiencia_fuera_del_servicio_W04", "forma_shaymin_necesita_contexto", "no_equipable", "uso_sin_contrato_rechazado", "forma_y_estado_inalterados", "propietario_invalido_rechazado", "_persistencia(pc, item", "CAMP004_W04_GODOT PASS blocks=5 checks="):
+        check(token in runner, "negativo del bloque 05 no cubierto: " + token)
     check((ROOT / "tests/gameplay/parallel_items_w04_campaign_003.gd").exists(), "regresión CAMP003 ausente")
     check((ROOT / "tests/tools/test_parallel_items_w04_campaign_001.py").exists(), "regresión CAMP001 ausente")
-    print(f"CAMP004_W04_PY PASS blocks=4 checks={checks}")
+    print(f"CAMP004_W04_PY PASS blocks=5 checks={checks}")
 
 
 if __name__ == "__main__":
