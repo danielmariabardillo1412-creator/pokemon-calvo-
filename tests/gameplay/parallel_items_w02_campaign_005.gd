@@ -25,7 +25,7 @@ func _training_creature(spec: Dictionary) -> CreatureInstance:
 	var level: int = int(spec.get("level", 50))
 	var c: CreatureInstance = CreatureFactory.create(catalogs.species(species), level,
 		catalogs, ProgressionRuleset.new(), rng,
-		{"instance_id": &"own", "ability_id": ability, "nature_id": "hardy",
+		{"instance_id": &"own", "ability_id": ability, "nature_id": String(spec.get("nature", "hardy")),
 		"moves": ["growl", "protect"]})
 	if spec.has("exp_until_next"):
 		var curve: String = String(catalogs.species(c.species_id).growth_rate)
