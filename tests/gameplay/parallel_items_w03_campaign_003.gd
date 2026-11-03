@@ -41,6 +41,7 @@ func _run_campaign() -> void:
 			"04": _block_04(bloque)
 			"05": _block_05(bloque)
 			"06": _block_06(bloque)
+			"07": _block_07(bloque)
 			_: check("Bloque aún sin suite funcional " + str(numero), false)
 	_terminar_campania(numero)
 
@@ -810,6 +811,114 @@ func _block06_reject(id: StringName, reason: String,
 		and not result.result.consume_item
 		and target.to_dict() == before and inv.to_dict() == inventory_before
 		and rng.state == rng_before and party.is_empty())
+
+
+# 07: caracterizar factor actual x1.5, NO certificar entorno Safari/Concurso.
+# No existen flags de zona fiables en CaptureBattleContext: comprobar neutralidad.
+func _block_07(bloque: Dictionary) -> void:
+	var rules := CaptureRuleset.new()
+	check("Bloque07 solo Safari y Sport", bloque.get("ids", []) == ["safari_ball", "sport_ball"])
+	for id: StringName in [&"safari_ball", &"sport_ball"]:
+		var definition: CaptureBallDefinition = rules.ball(id)
+		check("Safari/Sport registrados sin garantía " + String(id),
+			definition != null and not definition.guaranteed
+			and is_equal_approx(definition.base_multiplier, 1.0)
+			and CaptureRuleset.ordered_ball_ids().count(id) == 1)
+	check("Sin contexto de recinto no hay certificación de funcionalidad",
+		not bool(bloque.get("context_effect_certified", true))
+		and not bool(bloque.get("implementation_authorized", true)))
+	for case: Dictionary in bloque.get("cases", []):
+		var sid: StringName = StringName(String(case.get("species_id", "")))
+		var species: CreatureSpecies = catalogs.species(sid)
+		check("Safari/Sport especie real " + String(sid), species != null)
+		if species == null:
+			continue
+		for environment: Dictionary in bloque.get("contexts", []):
+			for mode: String in bloque.get("hp_modes", []):
+				for status_name: String in bloque.get("statuses", []):
+					var results: Dictionary = {}
+					for id: StringName in [&"safari_ball", &"sport_ball"]:
+						var target: CreatureInstance = _mon(sid, int(case.get("level", 12)),
+							StringName("c003_07_" + String(id) + "_" + String(sid)
+							+ "_" + String(environment.get("name", "")) + mode + status_name))
+						target.current_hp = target.stats.max_hp if mode == "full" else 1
+						if status_name == "sleep":
+							status(target, &"sleep")
+						var before: Dictionary = target.to_dict()
+						var factor: float = CAMP003_W03_BASIC_EFFECTS.multiplier(id, target, species)
+						check("Safari/Sport factor actual incondicional " + String(id),
+							is_equal_approx(factor, float(bloque.get("current_multiplier", -1))))
+						var ctx := CaptureBattleContext.new()
+						ctx.completed_turns = int(environment.get("completed_turns", -1))
+						ctx.catcher_level = int(environment.get("catcher_level", -1))
+						var expected: float = clampf(float(species.capture_rate) / 255.0
+							* float(bloque.get("current_multiplier", 1.0))
+							* rules.status_bonus(target.status_state.persistent_id)
+							* float(3 * target.stats.max_hp - 2 * target.current_hp)
+							/ float(3 * target.stats.max_hp), 0.0, 1.0)
+						var inventory := PlayerInventory.new()
+						inventory.add(id, 2)
+						var party := CreatureParty.new()
+						var rng := RandomNumberGenerator.new()
+						rng.seed = int(case.get("seed", 7701))
+						var control := RandomNumberGenerator.new()
+						control.state = rng.state
+						var expected_success: bool = control.randf() < expected
+						var res: CaptureResolution = CaptureInventoryService.resolve(
+							CaptureAttempt.new(target, id, ctx), rng, catalogs, party, inventory)
+						check("Safari/Sport una tirada, un consumo, probabilidad " + String(id),
+							res.result.status != CaptureResult.INVALID
+							and res.result.consume_item and inventory.quantity(id) == 1
+							and is_equal_approx(res.result.probability, expected)
+							and rng.state == control.state
+							and (res.result.status == CaptureResult.SUCCESS) == expected_success)
+						check("Safari/Sport no modifican criatura al capturar " + String(id),
+							target.to_dict() == before
+							and ((is_same(res.captured, target)
+								and party.contains_instance_id(target.instance_id)
+								and party.size() == 1) if expected_success else
+								(res.result.status == CaptureResult.FAILED and party.is_empty())))
+						results[String(id)] = {
+							"probability": res.result.probability,
+							"status": res.result.status,
+							"rng_state": rng.state,
+						}
+					if results.has("safari_ball") and results.has("sport_ball"):
+						var safari: Dictionary = results["safari_ball"]
+						var sport: Dictionary = results["sport_ball"]
+						check("Safari/Sport resultados idénticos con misma semilla y objetivo",
+							is_equal_approx(float(safari.probability), float(sport.probability))
+							and safari.status == sport.status
+							and safari.rng_state == sport.rng_state)
+	for id: StringName in [&"safari_ball", &"sport_ball"]:
+		for reason: String in bloque.get("invalid_cases", []):
+			_block07_reject(id, reason)
+
+
+func _block07_reject(id: StringName, reason: String) -> void:
+	var target: CreatureInstance = _mon(&"mew", 35,
+		StringName("c003_07_bad_" + String(id) + "_" + reason))
+	var ctx := CaptureBattleContext.new()
+	var bag := PlayerInventory.new()
+	bag.add(id, 2)
+	match reason:
+		"trainer_battle_not_capturable": ctx.is_wild = false
+		"item_not_owned": bag.remove(id, 2)
+		"target_knocked_out": target.current_hp = 0
+		"battle_finished": ctx.battle_finished = true
+	var before_target: Dictionary = target.to_dict()
+	var before_bag: Dictionary = bag.to_dict()
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 707
+	var before_rng: int = rng.state
+	var party := CreatureParty.new()
+	var res: CaptureResolution = CaptureInventoryService.resolve(
+		CaptureAttempt.new(target, id, ctx), rng, catalogs, party, bag)
+	check("Safari/Sport invalidez sin consumo/RNG/cambios " + String(id) + reason,
+		res.result.status == CaptureResult.INVALID
+		and res.result.reason == reason and not res.result.consume_item
+		and target.to_dict() == before_target and bag.to_dict() == before_bag
+		and rng.state == before_rng and party.is_empty())
 
 
 func _terminar_campania(bloques: int) -> void:

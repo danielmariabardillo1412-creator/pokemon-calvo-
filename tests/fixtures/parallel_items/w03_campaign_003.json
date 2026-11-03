@@ -466,6 +466,74 @@
       "expected_behavior": "Friend on successful catch SET friendship to exactly 200 even if >200; Heal on success restores full HP, clears persistent status and status_ids and restores PP to max preserving boosted maximum. Failure and invalid attempts cannot apply effects; both preserve object identity through party/PC.",
       "implementation_authorized": false,
       "ci_required": true
+    },
+    {
+      "bloque": "07",
+      "ids": [
+        "safari_ball",
+        "sport_ball"
+      ],
+      "objective": "contextos_safari",
+      "prior_evidence": {
+        "state": "FACTOR_YA_IMPLEMENTADO_CONTEXTO_PENDIENTE",
+        "sources": [
+          "modules/capture/capture_ball_effects.gd",
+          "modules/capture/capture_ruleset.gd",
+          "modules/capture/capture_battle_context.gd",
+          "modules/capture/capture_system.gd",
+          "modules/inventory/capture_inventory_service.gd",
+          "tests/gameplay/item_capture_v11.gd"
+        ],
+        "note": "Ambas bolas registradas con x1.5 INCONDICIONAL: el motor no recibe datos Safari/Concurso; no certifica la restricción contextual."
+      },
+      "current_multiplier": 1.5,
+      "contexts": [
+        {
+          "name": "sin_origen",
+          "completed_turns": -1,
+          "catcher_level": -1
+        },
+        {
+          "name": "combate_documentado",
+          "completed_turns": 0,
+          "catcher_level": 35
+        }
+      ],
+      "cases": [
+        {
+          "species_id": "mew",
+          "level": 35,
+          "seed": 7701
+        },
+        {
+          "species_id": "caterpie",
+          "level": 12,
+          "seed": 7702
+        }
+      ],
+      "hp_modes": [
+        "full",
+        "one_hp"
+      ],
+      "statuses": [
+        "none",
+        "sleep"
+      ],
+      "invalid_cases": [
+        "trainer_battle_not_capturable",
+        "item_not_owned",
+        "target_knocked_out",
+        "battle_finished"
+      ],
+      "missing_authoritative_signals": [
+        "encounter_is_safari",
+        "encounter_is_bug_catching_contest"
+      ],
+      "expected_current_behavior": "safari_ball and sport_ball both use unconditional x1.5; valid throws use same RNG draw and spend one each; no mutation beyond capture ownership; invalid requests spend nothing.",
+      "required_new_gate": "IA6 must decide whether these balls are permitted outside Safari/contest and establish trusted area/event context for Wild and Showdown before implementing any environment gating.",
+      "context_effect_certified": false,
+      "implementation_authorized": false,
+      "ci_required": true
     }
   ]
 }

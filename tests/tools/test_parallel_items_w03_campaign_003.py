@@ -430,6 +430,76 @@ def main() -> int:
                 audit.check(not block["implementation_authorized"] and block["ci_required"]
                             and block["prior_evidence"]["state"] == "YA_VERIFICADO_NO_DUPLICAR",
                             "El bloque06 no autoriza rediseñar captura")
+            elif block["bloque"] == "07":
+                audit.check(ids == ["safari_ball", "sport_ball"],
+                            "IDs de Safari/Sport fuera de la reserva 07")
+                effects = (ROOT / "modules/capture/capture_ball_effects.gd").read_text(encoding="utf-8")
+                context = (ROOT / "modules/capture/capture_battle_context.gd").read_text(encoding="utf-8")
+                engine = (ROOT / "modules/capture/capture_system.gd").read_text(encoding="utf-8")
+                rules = (ROOT / "modules/capture/capture_ruleset.gd").read_text(encoding="utf-8")
+                inventory = (ROOT / "modules/inventory/capture_inventory_service.gd").read_text(encoding="utf-8")
+                historical = (ROOT / "tests/gameplay/item_capture_v11.gd").read_text(encoding="utf-8")
+                audit.check('&"safari_ball", &"sport_ball": return 1.5' in effects,
+                            "El factor genérico de ambas bolas ha cambiado")
+                audit.check('&"safari_ball"' in effects
+                            and '&"sport_ball"' in effects
+                            and "for id: StringName in BallEffects.IDS:" in rules,
+                            "Registro de Safari/Sport no compartido")
+                audit.check('crs.BallEffects.multiplier(attempt.ball_id, target, species)' in engine
+                            and 'rng.randf() < p' in engine
+                            and 'inventory.remove(attempt.ball_id, 1)' in inventory,
+                            "Faltan integración, RNG o consumo reales")
+                fields = set(re.findall(r"^var\s+([a-zA-Z_]\w*)", context, re.M))
+                audit.check(not any("safari" in field or "sport" in field
+                                    or "contest" in field or "encounter_mode" in field
+                                    for field in fields),
+                            "El motor cambió el contrato de contexto; reauditar")
+                audit.check('safari_ball' not in engine
+                            and 'sport_ball' not in engine,
+                            "Existe validación contextual desconocida; no afirmar ausencia")
+                audit.check("func _matrix()" in historical,
+                            "Se perdió el test histórico; prohibido duplicar V11")
+                audit.check('func _block_07(' in runner
+                            and '"07": _block_07(bloque)' in runner
+                            and 'func _block07_reject(' in runner,
+                            "Faltan casos Godot del bloque 07")
+                audit.check('CAMP003_W03_BASIC_EFFECTS.multiplier(' in runner
+                            and 'CaptureInventoryService.resolve(' in runner
+                            and 'CaptureRuleset.ordered_ball_ids().count(id) == 1' in runner,
+                            "Falta factor real o protección contra bolas duplicadas")
+                audit.check('rng.state == control.state' in runner
+                            and 'rng.state == before_rng' in runner
+                            and 'inventory.quantity(id) == 1' in runner,
+                            "Falta comprobar un RNG, una bola y rechazo sin gasto")
+                audit.check('target.to_dict() == before' in runner
+                            and 'results.has("safari_ball")' in runner
+                            and 'results.has("sport_ball")' in runner,
+                            "No se comprueba inmutabilidad/paridad de ambas bolas")
+                audit.check(block["current_multiplier"] == 1.5
+                            and block["context_effect_certified"] is False,
+                            "Factor global no significa contexto Safari funcional")
+                audit.check(block["prior_evidence"]["state"] ==
+                            "FACTOR_YA_IMPLEMENTADO_CONTEXTO_PENDIENTE"
+                            and block["implementation_authorized"] is False,
+                            "Intento de certificar recinto sin fuente/gate")
+                audit.check(block["missing_authoritative_signals"] ==
+                            ["encounter_is_safari", "encounter_is_bug_catching_contest"],
+                            "Faltan contratos independientes de Safari y concurso")
+                audit.check(block["contexts"] ==
+                            [{"name": "sin_origen", "completed_turns": -1, "catcher_level": -1},
+                             {"name": "combate_documentado", "completed_turns": 0, "catcher_level": 35}],
+                            "El fixture pretende simular origen inexistente")
+                audit.check({row["species_id"] for row in block["cases"]} ==
+                            {"mew", "caterpie"}
+                            and block["hp_modes"] == ["full", "one_hp"]
+                            and block["statuses"] == ["none", "sleep"],
+                            "Falta comparación de tasa, PS y sueño")
+                audit.check(set(block["invalid_cases"]) ==
+                            {"trainer_battle_not_capturable", "item_not_owned",
+                             "target_knocked_out", "battle_finished"},
+                            "Faltan rechazos generales de Safari/Sport")
+                audit.check(block["ci_required"] and block["required_new_gate"],
+                            "La dependencia debe quedar registrada para IA6")
             else:
                 audit.check(False, "Falta contrato incremental específico para " + block["bloque"])
         audit.check(audit.checks > 0, "Sin comprobaciones")

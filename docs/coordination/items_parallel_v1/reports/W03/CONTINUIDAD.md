@@ -1,3 +1,18 @@
+# IA3/W03 — CONTINUIDAD VIGENTE CAMPAÑA_003: 07/10
+
+**Rama exclusiva:** `codex/calvo-items-20261103-w03-camp003`. **Última `p`: bloque 07 `safari_ball;sport_ball`**. **Siguiente `p`: solo bloque 08 de la cola oficial**, después de revisar estado CI y progreso. No saltar al 09 ni repetir bloque 07.
+
+- **01–06 PASS de regresión real:** [CI #41560663065](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41560663065) `success`, SHA `922e1d8d1561a16c014faa6f10ca9045811fceb7`, Python `blocks=6 checks=180`, Godot `blocks=6 checks=735`.
+- **07 hallazgo de arquitectura:** `CaptureBallEffects` reconoce Safari y Sport con **multiplicador ×1,5 INCONDICIONAL** y el motor no tiene contexto de zona ni concurso en `CaptureBattleContext`. Por eso su factor es `YA_IMPLEMENTADO`, pero la selección/limitación de entorno queda `DEPENDENCIA_DE_CONTEXTO`; ninguna prueba puede certificar zonas Safari o concursos hasta que IA6 autorice señales autoritativas.
+- **Suite acumulativa 07:** fixture blob `5e1ec32c47d9771f223645bf5a39c6ffaaac46b5`, Godot blob `399513bae1fe5ef55fd17078a3b233bad29ec1c1`, Python blob `d11302526a1f6216b1a12f3a9ba55c725d333c25`. Comprueba 2 especies, PS completos/bajos, estado normal/dormido, mismo RNG para ambas, probabilidades, 1 bola por intento, sin cambios de la criatura, negativos por entrenador/inventario/KO/finalizado. No hay simulación de zona.
+- **CSV:** 7 filas, la última `07,safari_ball;sport_ball,EN_CI_AUTOMATICA`; la prueba sólo está `CI_PASS` si el workflow confirma `blocks=7` tanto Python como Godot sobre el commit de siete filas. Informe `CAMP_003_ITER_07.md`.
+- **Solicitud concreta IA6:** decidir el uso fuera de Zona Safari/Concurso; identificar fuente fiable y propagación desde ambas sesiones; recuperación al cargar; errores sin gasto ante señal ausente. No tocar contexto, sesiones, guardados, adaptadores ni producción sin nueva autorización.
+- **Permisos:** rama W03 solamente, archivos exclusivos de runner/Python/fixture/progreso/reportes; no `main`, V28, `.github`, catálogo, PR #118, árbitra, IA4 ni ramas ajenas. Un fallo propio de tests se repara sin retirar aserciones; fallo compartido → STOP e IA6.
+
+---
+
+## Histórico anterior (01–06)
+
 **CI bloque 06 VERIFICADA:** [GitHub Actions #41560663065](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41560663065), `completed/success`, SHA de pruebas y CSV `922e1d8d1561a16c014faa6f10ca9045811fceb7`. Logs del job `125670317654`: `CAMP003_W03_PY PASS blocks=6 checks=180`, `CAMP003_W03_GODOT PASS blocks=6 checks=735`, `CAMP003_GATE_PY_PASS` y `CAMP003_GATE_GODOT_PASS`. **Se certifican pruebas de auditoría y regresión, no nuevas funciones de producción.** CSV conserva `EN_CI_AUTOMATICA` como estado histórico de publicación para evitar CI redundante. Siguiente `p`: únicamente la fila oficial 07.
 
 # IA3/W03 — CAMPAÑA_003 / CUADERNO VIGENTE: 06/10
