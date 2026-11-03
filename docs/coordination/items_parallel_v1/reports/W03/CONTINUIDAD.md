@@ -1,3 +1,16 @@
+# IA3/W03 — CONTINUIDAD CAMPAÑA_003: 08/10
+
+**Rama:** `codex/calvo-items-20261103-w03-camp003`. Bloque 08: `luxury_ball;lure_ball`. **Siguiente `p`: 09 `love_ball;moon_ball` tras verificar CI 08.** Máximo diez bloques.
+
+- Los siete primeros ya tenían CI confirmada: [#41563348010](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41563348010), Python 210/Godot 861 comprobaciones PASS para 7 bloques, sin certificar contextos Safari.
+- Bloque 08 registra DEPENDENCIA_COMPARTIDA: ni Lujo ni Cebo están operativas en `CaptureRuleset`. No existe contexto de pesca verificable ni ruta de conservación de bola de origen para la bonificación futura de amistad.
+- Nuevas pruebas acumulativas: `_block_08` en Godot, fixture de 8 filas y auditor Python. Verifican `unknown_ball` mediante servicios reales sin gastar objetos, RNG ni mutar criatura; no falsifican efectos. Informe `CAMP_003_ITER_08.md`.
+- **CI 08 pendiente de comprobar** después de publicar progreso; no acreditar PASS hasta run con 8 bloques y SHA correcto.
+- V5 autoriza reparar fallos locales de captura, no inventar datos compartidos de sesión/SaveV2. Elevar solo la decisión de integración de pesca/amistad a IA6; resto de la campaña puede avanzar por bloques independientes.
+- `main`, V28, workflow, catálogo, otras ramas y producción ajena sin cambios.
+
+---
+
 # IA3/W03 — CONTINUIDAD VIGENTE CAMPAÑA_003: 07/10
 
 **Rama exclusiva:** `codex/calvo-items-20261103-w03-camp003`. **Última `p`: bloque 07 `safari_ball;sport_ball`**. **Siguiente `p`: solo bloque 08 de la cola oficial**, después de revisar estado CI y progreso. No saltar al 09 ni repetir bloque 07.
