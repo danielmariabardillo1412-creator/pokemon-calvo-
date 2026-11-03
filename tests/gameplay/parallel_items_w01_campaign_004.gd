@@ -61,8 +61,8 @@ func _run_w01_c004() -> void:
 	check("Tres controles de equipamiento", fixture.get("variants") == ["active", "none", "reserve"])
 	var progress: Array = _progress_c004()
 	var completed: int = progress.size()
-	check("Bloques W01 01 a 09 autorizados", completed == 9)
-	if completed != 9:
+	check("Bloques W01 01 a 10 autorizados", completed == 10)
+	if completed != 10:
 		quit(2)
 		return
 	check("Fila 01 e IDs exactos de árbitra", String(progress[0].block) == "01"
@@ -83,13 +83,15 @@ func _run_w01_c004() -> void:
 		and String(progress[7].ids) == "toxic_orb;utility_umbrella;weakness_policy")
 	check("Fila 09 e IDs exactos de árbitra", String(progress[8].block) == "09"
 		and String(progress[8].ids) == "white_herb;wise_glasses;zoom_lens")
+	check("Fila 10 e IDs exactos de árbitra", String(progress[9].block) == "10"
+		and String(progress[9].ids) == "black_belt;charcoal;magnet")
 	var ids_for_block: Dictionary = {}
 	var ids: PackedStringArray = PackedStringArray()
 	for row_progress: Dictionary in progress:
 		ids_for_block[String(row_progress.block)] = String(row_progress.ids).split(";")
 		ids.append_array(ids_for_block[String(row_progress.block)])
 	var cases: Array = fixture.get("cases", [])
-	check("Setenta escenarios autorizados", cases.size() == 70)
+	check("Setenta y nueve escenarios autorizados", cases.size() == 79)
 	var names: Array = []
 	for row: Dictionary in cases:
 		check("Escenario pertenece a bloque autorizado",
@@ -119,7 +121,7 @@ func _run_w01_c004() -> void:
 				"seed": int(value), "checks": checks - before_checks,
 				"status": "PASS" if errors.size() == before_errors else "FAIL",
 				"observed": observed})
-	check("Matriz exacta de 173 pares caso-semilla", c004_rows.size() == 173)
+	check("Matriz exacta de 185 pares caso-semilla", c004_rows.size() == 185)
 	for id: String in ids:
 		check("ID cubierto " + id, cases.any(func(case): return String(case.item_id) == id))
 	check("Puño Suerte demuestra al menos un crítico específico de Chansey", c004_lucky_exclusive > 0)
@@ -828,6 +830,31 @@ func _compare_c004(row: Dictionary, observed: Dictionary) -> void:
 			check("Telescopio: al actuar primero conserva potencia/consumo",
 				a.damage == n.damage and n.damage == r.damage
 				and String(a.after.native_item) == "zoomlens"
+				and not a.after.own_consumed and a.physical_units == 2)
+		"type_booster_matching":
+			check("Potenciador de tipo: movimiento nativo del tipo correcto",
+				(String(row.item_id) == "black_belt" and String(row.own_move) == "brick_break")
+				or (String(row.item_id) == "charcoal" and String(row.own_move) == "flamethrower")
+				or (String(row.item_id) == "magnet" and String(row.own_move) == "thunderbolt"))
+			check("Potenciador de tipo: daño real mayor SOLO con objeto activo",
+				a.damage > n.damage and n.damage > 0 and n.damage == r.damage)
+			check("Potenciador de tipo: sigue nativamente equipado, no se consume",
+				String(a.after.native_item) == String(row.item_id).replace("_", "")
+				and not a.after.own_consumed and a.physical_units == 2
+				and r.physical_units == 2)
+		"type_booster_nonmatching":
+			check("Potenciador de tipo: Placaje normal no recibe aumento de poder",
+				String(row.own_move) == "tackle"
+				and a.damage > 0 and a.damage == n.damage and n.damage == r.damage)
+			check("Potenciador de tipo: tipo erróneo mantiene objeto sin consumo",
+				String(a.after.native_item) == String(row.item_id).replace("_", "")
+				and not a.after.own_consumed and a.physical_units == 2)
+		"type_booster_status":
+			check("Potenciador de tipo: Reflejo no inflige daño ni lo modifica",
+				String(row.own_move) == "reflect"
+				and a.damage == 0 and n.damage == 0 and r.damage == 0)
+			check("Potenciador de tipo: movimiento de estado no gasta objeto",
+				String(a.after.native_item) == String(row.item_id).replace("_", "")
 				and not a.after.own_consumed and a.physical_units == 2)
 		_:
 			check("Operación fuera del contrato de bloque", false)

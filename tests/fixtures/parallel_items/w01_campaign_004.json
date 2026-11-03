@@ -163,6 +163,25 @@
         "zoom_slower",
         "zoom_faster"
       ]
+    },
+    {
+      "block": "10",
+      "ids": [
+        "black_belt",
+        "charcoal",
+        "magnet"
+      ],
+      "cases": [
+        "belt_brick_break",
+        "belt_tackle_control",
+        "belt_reflect_control",
+        "charcoal_flamethrower",
+        "charcoal_tackle_control",
+        "charcoal_reflect_control",
+        "magnet_thunderbolt",
+        "magnet_tackle_control",
+        "magnet_reflect_control"
+      ]
     }
   ],
   "format": "gen9calvounifiedv1",
@@ -1295,6 +1314,135 @@
         37
       ],
       "history": "held_effect_sweep_v3:zoom_lens_faster_no_boost"
+    },
+    {
+      "block": "10",
+      "id": "belt_brick_break",
+      "item_id": "black_belt",
+      "op": "type_booster_matching",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "own_move": "brick_break",
+      "foe_move": "amnesia",
+      "seeds": [
+        19,
+        23
+      ],
+      "history": "held_effect_sweep_v2:type_boost_black_belt_brick_break"
+    },
+    {
+      "block": "10",
+      "id": "belt_tackle_control",
+      "item_id": "black_belt",
+      "op": "type_booster_nonmatching",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "own_move": "tackle",
+      "foe_move": "amnesia",
+      "seeds": [
+        19
+      ],
+      "history": "held_effect_sweep_v2:type_boost_black_belt_tackle"
+    },
+    {
+      "block": "10",
+      "id": "belt_reflect_control",
+      "item_id": "black_belt",
+      "op": "type_booster_status",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "own_move": "reflect",
+      "foe_move": "amnesia",
+      "seeds": [
+        19
+      ],
+      "history": "held_effect_sweep_v2:type_boost_black_belt_reflect"
+    },
+    {
+      "block": "10",
+      "id": "charcoal_flamethrower",
+      "item_id": "charcoal",
+      "op": "type_booster_matching",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "own_move": "flamethrower",
+      "foe_move": "amnesia",
+      "seeds": [
+        19,
+        23
+      ],
+      "history": "held_effect_sweep_v2:type_boost_charcoal_flamethrower"
+    },
+    {
+      "block": "10",
+      "id": "charcoal_tackle_control",
+      "item_id": "charcoal",
+      "op": "type_booster_nonmatching",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "own_move": "tackle",
+      "foe_move": "amnesia",
+      "seeds": [
+        19
+      ],
+      "history": "held_effect_sweep_v2:type_boost_charcoal_tackle"
+    },
+    {
+      "block": "10",
+      "id": "charcoal_reflect_control",
+      "item_id": "charcoal",
+      "op": "type_booster_status",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "own_move": "reflect",
+      "foe_move": "amnesia",
+      "seeds": [
+        19
+      ],
+      "history": "held_effect_sweep_v2:type_boost_charcoal_reflect"
+    },
+    {
+      "block": "10",
+      "id": "magnet_thunderbolt",
+      "item_id": "magnet",
+      "op": "type_booster_matching",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "own_move": "thunderbolt",
+      "foe_move": "amnesia",
+      "seeds": [
+        19,
+        23
+      ],
+      "history": "held_effect_sweep_v2:type_boost_magnet_thunderbolt"
+    },
+    {
+      "block": "10",
+      "id": "magnet_tackle_control",
+      "item_id": "magnet",
+      "op": "type_booster_nonmatching",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "own_move": "tackle",
+      "foe_move": "amnesia",
+      "seeds": [
+        19
+      ],
+      "history": "held_effect_sweep_v2:type_boost_magnet_tackle"
+    },
+    {
+      "block": "10",
+      "id": "magnet_reflect_control",
+      "item_id": "magnet",
+      "op": "type_booster_status",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "own_move": "reflect",
+      "foe_move": "amnesia",
+      "seeds": [
+        19
+      ],
+      "history": "held_effect_sweep_v2:type_boost_magnet_reflect"
     }
   ]
 }

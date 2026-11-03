@@ -178,3 +178,12 @@ La segunda CI #41613512888 devolvió `content_policy` al abrir los tres controle
 - El CSV mantiene la fila 09 temporalmente en `EN_CI_AUTOMATICA` para evitar una ejecución adicional disparada por metadatos. En el siguiente bloque 10 autorizado mediante `p`, cerrar a `CI_PASS_VERIFICADO` con SHA y run oficiales antes de agregar la fila 10.
 - Próxima `p`: únicamente bloque 10/10 `black_belt;charcoal;magnet`, con regresión completa de CAMPAÑA_003 obligatoria. Tras 10/10, comunicar CAMPAÑA_004_FINALIZADA y STOP. No tocar main, V28 ni ramas ajenas.
 - Incidencia previa SaveV2 en fase intermedia de Rayo Solar sigue pendiente para IA6. La CI no demuestra GPU/UI ni integración global.
+
+## Bloque 10/10 — entregado, pendiente de CI y regresión CAMP003
+
+- Única rama escribible W01 `codex/calvo-items-20261103-w01-camp004`; objetos exactos `black_belt;charcoal;magnet`. El bloque 09 queda administrativamente cerrado con SHA `30ee5f992dcd3f0e640b8f844c86cfed8c10cc94`, CI #41726708467, Godot 15731 PASS y Python 917 PASS.
+- Pruebas B10: daño potenciado de `brick_break` (Lucha/Cinturón Negro), `flamethrower` (Fuego/Carbón) y `thunderbolt` (Eléctrico/Imán), dos semillas por positivo; `tackle` sin potencia y `reflect` sin daño, una semilla cada control. Los tres modos activo/ausente/reserva y SaveV2 se comparan contra la salida real del motor.
+- B10 añade 9 escenarios, 12 pares y 36 variantes; matriz final 30 objetos, 79 escenarios, 185 pares y 555 variantes. Sin cambios de producción ni módulos, reglas, main, V28, ramas árbitra u otras IAs.
+- Verificar CI `CAMP004_W01_PY PASS blocks=10` y `CAMP004_W01_GODOT PASS blocks=10`, puertas y `completed/success`. **Muy importante:** workflow existente activa automáticamente la **regresión integral CAMP003** para hito 10, exigiendo `CAMP003_W01_PY PASS blocks=10` y `CAMP003_W01_GODOT PASS blocks=10` en el mismo job. No certificar sin ambas.
+- Si CI falla, revisar logs y reparar conforme V5, manteniendo cobertura completa. El problema heredado SaveV2 a mitad de carga de Rayo Solar sigue abierto para IA6. La ejecución headless no verifica rendimiento de GPU ni integración global.
+- Tras CI positiva, certificar B10 en cuaderno e informe, comunicar `CAMPAÑA_004_FINALIZADA` y **STOP**. CSV B10 puede cerrarse con commit documental en el siguiente paso sin necesidad de desencadenar otra CI, pero nunca certificar resultados inexistentes.
