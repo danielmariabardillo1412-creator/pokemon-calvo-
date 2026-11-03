@@ -432,6 +432,78 @@
         "Rechazos sin gasto, propietario desconocido, equipado/retirado y persistencia SaveV2 sin pérdida",
         "Nunca declarar Alcremie jugable hasta contar con el productor de giro, elección de forma y contrato de guardado"
       ]
+    },
+    {
+      "block": "06",
+      "ids": [
+        "whipped_dream",
+        "leaders_crest"
+      ],
+      "family": "SPECIAL_EVOLUTION",
+      "classification": "DEPENDENCIA_INTERCAMBIO_Y_COMBATE",
+      "cases": [
+        {
+          "item_id": "whipped_dream",
+          "source": "swirlix",
+          "target": "slurpuff",
+          "canonical_item": "whipped-dream",
+          "evolution_chain": "351",
+          "original_trigger": "trade",
+          "held_item_required": true,
+          "holdable": true,
+          "approved_level": null,
+          "version": "x-y",
+          "classification": "BLOQUEADO_POR_CONTRATO"
+        },
+        {
+          "item_id": "leaders_crest",
+          "source": "bisharp",
+          "target": "kingambit",
+          "canonical_item": "leaders-crest",
+          "evolution_chain": "317",
+          "original_trigger": "three-defeated-bisharp",
+          "held_item_required": false,
+          "holdable": false,
+          "approved_level": null,
+          "version": "scarlet-violet",
+          "classification": "DEPENDENCIA_COMBATE"
+        }
+      ],
+      "decision_sources": [
+        "data/api/v2/evolution-chain/351/index.json",
+        "data/api/v2/evolution-chain/317/index.json",
+        "docs/current/ITEM_TRADE_RESTORATION_V27.json",
+        "docs/current/RANDOMLOCK_ITEMS_BUILD_SCOPE_V2.csv",
+        "modules/inventory/item_connections_v1.json"
+      ],
+      "boundary": {
+        "whipped_dream": {
+          "producer": "ProgressionSystem.gain_experience + approved level + current equipped item",
+          "consumer": "EvolutionSystem.level_up_context/classify_record + PlayerCollection replacement",
+          "missing": [
+            "approved level for Swirlix-to-Slurpuff remains null",
+            "level_up context does not carry held-item validation",
+            "approved consume/retain policy for equipped trade-evolution object"
+          ]
+        },
+        "leaders_crest": {
+          "producer": "battle event log with canonical defeated Bisharp qualifying conditions and ownership",
+          "consumer": "EvolutionSystem three_defeated_bisharp + player collection",
+          "missing": [
+            "no event accumulator for three eligible defeated Bisharp tied to the evolving Bisharp",
+            "no confirmed item possession/consumption policy for leaders_crest",
+            "Pokemon API route records trigger, not direct use-item or held-item condition"
+          ]
+        }
+      },
+      "catalogue_discrepancy": "leaders_crest selected as FOOD_OR_PICNIC_ACTIVITY while queue assigns W04 SPECIAL_EVOLUTION; do not reclassify shared catalogue here",
+      "runtime_contract": [
+        "Check the exact PokeAPI original route without taking Pawniard-to-Bisharp level 52 as a new requirement",
+        "Whipped Dream may be equipped, but no direct bag use, trade shortcut or numeric level is invented",
+        "Leader's Crest not holdable by current profile, trigger three_defeated_bisharp remains unsupported, and no item is spent on invalid requests",
+        "Preserve creature identity, IV/EV, experience, friendship, moves and inventory through failed attempts and SaveV2",
+        "Conclude integration dependency, not a positive Kingambit/Slurpuff evolution"
+      ]
     }
   ]
 }
