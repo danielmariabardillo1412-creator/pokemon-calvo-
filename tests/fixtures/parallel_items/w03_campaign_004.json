@@ -248,6 +248,54 @@
       "functional_effect_certified": false,
       "note": "Los tres IDs están seleccionados como FIELD_USE pero no conectados a FieldItemService. Probar rechazo seguro, protección de estado y PlayerInventory roundtrip; no atribuir implementación de captura/encuentros ni SaveV2 integral.",
       "ci_required": true
+    },
+    {
+      "bloque": "06",
+      "familia": "FIELD_USE",
+      "ids": [
+        "super_repel",
+        "white_flute",
+        "yellow_flute"
+      ],
+      "objetivo": "auditar_uso_campo_consecuencia_y_guardado",
+      "current_state": "DEPENDENCIA_COMPARTIDA",
+      "per_id_status": {
+        "super_repel": "DEPENDENCIA_COMPARTIDA",
+        "white_flute": "DEPENDENCIA_COMPARTIDA",
+        "yellow_flute": "DEPENDENCIA_COMPARTIDA"
+      },
+      "expected_rejection": "field_effect_not_connected",
+      "cases": [
+        {
+          "name": "normal",
+          "status": "none"
+        },
+        {
+          "name": "confusion",
+          "status": "confusion"
+        },
+        {
+          "name": "sleep",
+          "status": "sleep"
+        }
+      ],
+      "inventory_counts": [
+        0,
+        2
+      ],
+      "invalid_cases": [
+        "field_locked",
+        "invalid_inventory",
+        "unknown_target"
+      ],
+      "missing_authoritative_integrations": [
+        "super_repel_overworld_encounter_steps_and_lead_level",
+        "white_flute_overworld_encounter_modifier",
+        "yellow_flute_confusion_cure_field_route"
+      ],
+      "functional_effect_certified": false,
+      "note": "Superrepelente, Flauta Blanca y Flauta Amarilla no poseen ejecutor en FieldItemService. Verificar uso rechazado sin consumo ni efectos; roundtrip PlayerInventory no prueba SaveV2 completo.",
+      "ci_required": true
     }
   ]
 }
