@@ -1,3 +1,9 @@
+## CORRECCIÓN CI DE BLOQUE 02 — CONTRATO DE SEMILLAS
+
+**Fallo real de contrato Python, no de mecánica:** [CI #41555265598](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41555265598) `failure`, porque el validador W01 exigía máximo 4 semillas en todos los casos y `blunder_accuracy_event` reserva exactamente 8. La CI se detuvo antes de Godot. Corrección solo de test, sin bajar controles: commit `95de5b7581b54183a7fd108ccf6066a1ddb32154`; límite 8 para ese caso, pero lista exacta inmutable en `SCENARIOS_02`. Resto sigue tope 4. CSV actualizado `45e06d1b14f1969a0ee178caf42543a69139cdbb`. **Nueva CI de último SHA debe pasar antes de atribuir PASS de 02**; si falla motor/contrato ajeno, detenerse.
+
+---
+
 ## ACTUALIZACIÓN MÁS RECIENTE — CAMPAÑA_003 02/10 (2026-11-03)
 
 **Identidad:** IA1/W01. Única rama de escritura `codex/calvo-items-20261103-w01-camp003`. Cola aprobada IA6 `CAMPAIGN_003_QUEUE_APPROVED.csv`, fila W01/02; ID exactos `blunder_policy;booster_energy;cell_battery`. Se ejecutó UNA iteración nueva tras recibir la `p`. **No iniciar 03 hasta próxima `p`.**
