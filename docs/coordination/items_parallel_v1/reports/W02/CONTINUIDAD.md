@@ -1,3 +1,19 @@
+# IA2/W02 — CIERRE VIGENTE CAMPAÑA_004 10/10 · ENTREGA PUBLICADA / CI PENDIENTE
+
+**Identidad:** W02 (bayas/medicinas/entrenamiento). **Única rama editable:** `codex/calvo-items-20261103-w02-camp004`. La fila 10 es la última autorizada: **detenerse, no ejecutar otra `p`, no inventar CAMPAÑA_005**. Prohibido tocar main, V28, PR #118, árbitra IA6, ramas ajenas, workflow, producción o políticas globales.
+
+**Cierre real de entrega:** 10/10 bloques, 40 IDs, 187 escenarios, 561 variantes preparadas, fixture, golden Python, runner Godot W02 y CSV de 10 filas. Informe `docs/coordination/items_parallel_v1/reports/W02/CAMP_004_ITER_10.md`. Commits bloque 10: fixture `caf1249f5381506c380084721b5484855c93f7b4`, Python `b544289bd2f6e855963ad6a2a39ed69423502aaa`, `c732cfe8d84f92ea3a59a84370ab13b457c48461`, `9eaca581d3388704fb92401a1f9408bcd17f6e9e`, `78b2943be16ecb169067bc2d040ac1845499103e`; CSV `3c633256bb75b19e569242072ba2c5b31003b879`, informe `ed89dd5df77bb0e503c55e641764da0b5abc2539`.
+
+**Fila 10:** `shalour_sable` cura todos los estados y confusión; `soda_pop` 50 PS; `super_potion` 60 PS; `sweet_heart` 20 PS, con topes y rechazo atómico. 22 escenarios × 3 modalidades. Aserciones de SaveV2, propietario, bolsa, PS, PP y estado en runner existente. Sin cambio de producción.
+
+**Certificación:** únicamente fila 01 CAMP004 tiene CI PASS demostrada en [run #41573481223](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41573481223), Python 83/Godot 1022 y regresión CAMP003 Python 680/Godot 7306. **Filas 02–10 aún sin resultados CI recuperados**; ni PASS ni FAIL. Antes de integrar, IA6 debe recoger logs reales asociados al SHA exacto con `CAMP004_W02_PY/GODOT PASS blocks=10` y `CAMP003_W02_PY/GODOT PASS blocks=10`. Si hay fallo, reparar bajo V5 únicamente lo propio; APIs compartidas exigen coordinación IA6. No afirmarse 40 objetos operativos hasta verificar.
+
+**Dependencias abiertas:** `razz_berry` (02) y `hopo_berry` (06) solo tienen controles de rechazo sin efecto positivo conectado. IA6 decide contrato o exclusión autorizada. GPU/UI y pruebas integradas pendientes.
+
+**Estado de salida: `CAMPAÑA_004_FINALIZADA — ENTREGA 10/10 — CI PENDIENTE`.** No hay fila 11.
+
+---
+
 # IA2/W02 — CONTINUIDAD VIGENTE: CAMPAÑA_004 BLOQUE 09/10
 
 **Identidad:** IA2/W02, bayas/medicinas/entrenamiento; **rama exclusiva editable** `codex/calvo-items-20261103-w02-camp004`. Tecla `p` = ejecutar **una sola fila** siguiente de la cola oficial IA6. No tocar `main`, V28, PR #118, otras ramas, rama árbitra, workflow, producción ni reglas compartidas. Autorreparación V5 restringida a pruebas/componentes propios; intervención en API común exige coordinación de IA6.
