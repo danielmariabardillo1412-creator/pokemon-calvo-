@@ -1,3 +1,15 @@
+## V5 — REPARACIÓN COMPLETADA / 08 DE 10 CI PASS (2026-11-03)
+
+**Máxima prioridad para la siguiente IA o la siguiente `p`: CAMPAÑA_003 W01 está en 08/10, con los 16 errores históricos reparados y CI ACUMULATIVA SUCCESS.** No repetir bloque 08. **Próxima `p` solo bloque 09: `mirror_herb;muscle_band;protective_pads`**. 10 será último. La campaña sigue en rama `codex/calvo-items-20261103-w01-camp003`.
+
+- **CI definitiva**, [GitHub Actions #41569533376](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41569533376), `completed/success`, SHA de pruebas `8fe7e3e9d51462aeb6dcf18d01c2274d6835a831`; recibos auténticos `CAMP003_W01_PY PASS blocks=8 checks=649` y `CAMP003_W01_GODOT PASS blocks=8 checks=9780`. La puerta de manifiesto IA6 también PASS en ambas. **0 errores**, regresiones de 01..08 superadas, sin timeout.
+- **Diagnóstico detallado:** 12 de los 16 errores de Botas Gruesas se corrigieron reintroduciendo el original con `switch 2` tras la reordenación de plazas (`switch 2` / `switch 2`); quedó acreditado en CI #41567242610 (12 errores desaparecen). Los cuatro restantes (Bola Férrea, Cola Plúmbea, dos semillas por objeto) eran falsos fallos: el lector de `|move|` buscaba `entry.contains("|p1a:")` e identificaba el **objetivo** como atacante. Commit V5 `8fe7e3e9d51462aeb6dcf18d01c2274d6835a831` corrigió a `entry.begins_with("|move|p1a:")`. La CI final muestra `active=foe none=own reserve=own` para ambos casos y Godot PASS. No se rebajó ninguna aserción ni se modificaron reglas ni motor compartido.
+- **Alcance de pruebas:** 54 escenarios, 108 pares caso-semilla, 324 variantes (activo/ausente/reserva), propietario, consumo, reglas nativas, SaveV2 y controles negativos. Python 649 checks; Godot 9780. Los bloques **01..08** están certificados funcionalmente en la única CI final, además de los recibos históricos de 01..03.
+- **Estado documental:** `CAMP_003_ITER_08.md` contiene el cierre y enlace a la prueba. `CAMP_003_PROGRESO.csv` tiene todavía los estados pre-veredicto de 04–08 porque editar CSV por sí solo desencadenaría otra CI de Godot innecesaria. En la **próxima `p` (bloque 09)** actualizar conjuntamente esas cinco filas a `CI_PASS_VERIFICADO` con run `41569533376` y publicar fila nueva 09 para hacer **una sola** ejecución automática. No corregir ficticiamente esos estados sin referenciar este run.
+- **Límites:** ninguna comprobación de GPU/UI o final de combate; no hay cambios en `main`, V28, producción ajena ni ramas de otras trabajadoras. V5 sigue autorizando reparar autónomamente defectos propios ante futuras CI fallidas, conservando regresiones.
+
+---
+
 ## REPARACIÓN V5 CRÍTICA — ERRORES 16 → 4, RUN 08 EN REGRESIÓN (2026-11-03)
 
 **NO CONSUME BLOQUE.** W01/08 ya está entregado; no iniciar W01/09 hasta otra `p`. El usuario pidió corregir íntegramente los 16 errores antiguos. Se han revisado logs Godot reales de [#41565500695](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41565500695) y [#41567242610](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41567242610).
