@@ -153,7 +153,7 @@ func _frame_c003(session: RefCounted, id: StringName) -> Dictionary:
 	}
 
 func _probe_c003(row: Dictionary, seed: int, mode: String) -> Dictionary:
-	automation = {"actor_species": String(row.actor_species), "level": 100, "format": "gen9calvounifiedv1",
+	automation = {"actor_species": String(row.actor_species), "level": int(row.get("actor_level", 100)), "format": "gen9calvounifiedv1",
 		"seed": [seed, 2, 3, 4], "physical_move": String(row.own_move),
 		"special_move": "water_gun", "speed_target": String(row.foe_species), "damage_target": String(row.foe_species)}
 	var prepared: Dictionary = _fixture({"id": row.item_id}, "physical_damage", mode)
@@ -165,9 +165,12 @@ func _probe_c003(row: Dictionary, seed: int, mode: String) -> Dictionary:
 	check(mode + " control status existe", actor.add_move(&"reflect" if row.own_move != "reflect" else &"tackle", catalogs))
 	if row.has("actor_hp") and String(row.actor_hp) == "one":
 		actor.current_hp = 1
+	elif row.has("actor_hp") and String(row.actor_hp) == "minus_one":
+		actor.current_hp = actor.stats.max_hp - 1
+	check(mode + " actor PS de fixture válidos", actor.current_hp > 0 and actor.current_hp <= actor.stats.max_hp)
 	if row.has("actor_ability") and not String(row.actor_ability).is_empty():
 		actor.ability_id = StringName(row.actor_ability)
-	prepared.foe = _mon(StringName(row.foe_species), 100, &"foe", [String(row.foe_move)])
+	prepared.foe = _mon(StringName(row.foe_species), int(row.get("foe_level", 100)), &"foe", [String(row.foe_move)])
 	var id := StringName(row.item_id)
 	check(mode + " dos unidades antes", _units(owner, id) == 2)
 	var owner_frozen: String = JSON.stringify(_owner_data(owner))
@@ -372,6 +375,42 @@ func _compare_c003(row: Dictionary, obs: Dictionary) -> void:
 				da > 0 and da < a.start.hp and da == dn and dn == dr
 				and not a.after.focus_band_activated)
 			check("Cinta Aguante: no se consume con golpe no letal",
+				not a.after.own_consumed and a.physical_units == 2)
+		"end_turn_burn":
+			check("Llamasfera quema al portador al final de turno",
+				a.after.status_id == "burn" and n.after.status_id.is_empty() and r.after.status_id.is_empty())
+			check("Llamasfera no se consume por quemadura",
+				not a.after.own_consumed and a.physical_units == 2 and not r.after.reserve_consumed)
+		"fire_type_immunity":
+			check("Llamasfera no puede quemar al tipo Fuego",
+				a.after.status_id.is_empty() and n.after.status_id.is_empty() and r.after.status_id.is_empty())
+			check("Llamasfera en tipo Fuego se conserva",
+				not a.after.own_consumed and a.physical_units == 2)
+		"focus_sash_full_hp":
+			check("Banda Aguante: golpe letal desde PS máximos deja 1 PS solo al portador",
+				a.start.hp > 1 and a.after.hp == 1 and n.after.hp == 0 and r.after.hp == 0)
+			check("Banda Aguante: consumo físico solo cuando evita KO",
+				a.after.own_consumed and a.physical_units == 1 and not r.after.reserve_consumed and r.physical_units == 2)
+		"focus_sash_not_full":
+			check("Banda Aguante: sin PS máximos no impide el KO",
+				a.start.hp > 0 and a.start.hp < 20 and a.after.hp == 0 and n.after.hp == 0 and r.after.hp == 0)
+			check("Banda Aguante: sin activarse conserva objeto",
+				not a.after.own_consumed and a.physical_units == 2)
+		"focus_sash_nonlethal":
+			check("Banda Aguante: golpe no letal no dispara efecto",
+				da > 0 and da < a.start.hp and a.after.hp > 0 and da == dn and dn == dr)
+			check("Banda Aguante: no se consume ante daño no letal",
+				not a.after.own_consumed and a.physical_units == 2 and not r.after.reserve_consumed)
+		"grassy_field_defense":
+			check("Semilla Hierba: Campo Hierba concede +1 Defensa exclusivamente al portador",
+				a.after.defense_stage == 1 and n.after.defense_stage == 0 and r.after.defense_stage == 0)
+			check("Semilla Hierba: consumo único, ninguna activación en reserva",
+				a.after.own_consumed and a.physical_units == 1 and not n.after.own_consumed
+				and not r.after.reserve_consumed and r.physical_units == 2)
+		"grassy_wrong_terrain", "grassy_no_terrain":
+			check("Semilla Hierba: campo distinto o inexistente no concede Defensa",
+				a.after.defense_stage == 0 and n.after.defense_stage == 0 and r.after.defense_stage == 0)
+			check("Semilla Hierba: sin Campo Hierba se conserva",
 				not a.after.own_consumed and a.physical_units == 2)
 		_:
 			check("Operacion no autorizada", false)
