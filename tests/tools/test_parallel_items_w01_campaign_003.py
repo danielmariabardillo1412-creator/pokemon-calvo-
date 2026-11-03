@@ -158,6 +158,21 @@ SCENARIOS_09 = {
     "pads_no_helmet_contact": ("protective_pads", "pads_contact_without_helmet", "mew",
         "", "", 100, "mew", 100, "amnesia", "", "tackle", (19,)),
 }
+SCENARIOS_10 = {
+    "quick_claw_order_rng": ("quick_claw", "quick_claw_rng", "mew", "", "", 100,
+        "gengar", 100, "tackle", "", False, "tackle", tuple(range(1,13))),
+    "quick_claw_priority_control": ("quick_claw", "quick_claw_priority_control",
+        "mew", "", "", 100, "gengar", 100, "tackle", "", False,
+        "quick_attack", (19,)),
+    "red_card_forced_foe_switch": ("red_card", "red_card_switch", "mew", "", "", 100,
+        "mew", 100, "tackle", "", True, "reflect", (19,23)),
+    "red_card_no_damaging_hit": ("red_card", "red_card_no_switch", "mew", "", "", 100,
+        "mew", 100, "amnesia", "", True, "reflect", (19,)),
+    "rocky_helmet_incoming_contact": ("rocky_helmet", "rocky_helmet_contact_recoil",
+        "mew", "", "", 100, "mew", 100, "tackle", "", False, "reflect", (19,23)),
+    "rocky_helmet_noncontact": ("rocky_helmet", "rocky_helmet_noncontact_control",
+        "mew", "", "", 100, "mew", 100, "water_gun", "", False, "reflect", (19,)),
+}
 OPERATIONS = ({r[1] for r in SCENARIOS_01.values()}
               | {r[1] for r in SCENARIOS_02.values()}
               | {r[1] for r in SCENARIOS_03.values()}
@@ -166,7 +181,8 @@ OPERATIONS = ({r[1] for r in SCENARIOS_01.values()}
               | {r[1] for r in SCENARIOS_06.values()}
               | {r[1] for r in SCENARIOS_07.values()}
               | {r[1] for r in SCENARIOS_08.values()}
-              | {r[1] for r in SCENARIOS_09.values()})
+              | {r[1] for r in SCENARIOS_09.values()}
+              | {r[1] for r in SCENARIOS_10.values()})
 REQUIRED_CASE_FIELDS = {"block", "id", "item_id", "op", "actor_species", "foe_species",
                         "foe_move", "own_move", "seeds", "history"}
 TOTAL_CHECKS = 0
@@ -331,6 +347,21 @@ def validate() -> int:
         require("add('protective_pads','contact_protection'" in old_v2
                 and "foeItem:'rocky_helmet'" in old_v2,
                 "Paracontacto: ensayo con Casco Dentado no acreditado")
+    if len(progress) == 10:
+        native_pilot = (ROOT / "tools/item_audit/held_pilot.cjs").read_text(encoding="utf-8")
+        require("add('quick_claw','order_rng'" in old_v3
+                and "item: Quick Claw" in old_v3
+                and "first(a)" in old_v3,
+                "Garra Rapida: historial nativo RNG prioridad ausente")
+        require("red_card:{foe:['tackle']" in native_pilot
+                and "a.roster[1].active_id,'foe_reserve'" in native_pilot,
+                "Tarjeta Roja: piloto nativo de cambio de rival ausente")
+        require("rocky_helmet:{foe:['tackle']" in native_pilot
+                and "Math.floor(foe(ref).max_hp/6)" in native_pilot,
+                "Casco Dentado: piloto de contacto y sexto de PS ausente")
+        require(all("HELD_PILOT_VERIFIED" in next(x for x in inventory.splitlines()
+                 if x.startswith(item + ",")) for item in ["red_card", "rocky_helmet"]),
+                "Tarjeta Roja/Casco Dentado: piloto canónico no verificado")
     cases = document["cases"]
     require(type(cases) is list and len(cases) >= 7, "Sin casos suficientes")
     found, pairs = set(), set()
@@ -338,7 +369,7 @@ def validate() -> int:
     stage_map = {r["bloque"]: set(r["ids"].split(";")) for r in tasks[:len(progress)]}
     for case in cases:
         require(type(case) is dict and REQUIRED_CASE_FIELDS <= set(case)
-                and set(case) <= REQUIRED_CASE_FIELDS | {"actor_ability", "actor_hp", "actor_level", "foe_level", "foe_item"},
+                and set(case) <= REQUIRED_CASE_FIELDS | {"actor_ability", "actor_hp", "actor_level", "foe_level", "foe_item", "foe_reserve"},
                 "Caso con forma inválida")
         name, stage, item = case["id"], case["block"], case["item_id"]
         require(type(name) is str and name not in found and stage in stage_map
@@ -348,7 +379,7 @@ def validate() -> int:
                 and len(case["history"]) >= 8, "Especie/historial no justificado")
         require(case["op"] in OPERATIONS, "Operacion no implementada por runner: "+case["op"])
         require(type(case["seeds"]) is list and 1 <= len(case["seeds"]) <=
-                (24 if name == "focus_band_lethal_rng" else 8 if name == "blunder_accuracy_event" else 4),
+                (24 if name == "focus_band_lethal_rng" else 12 if name == "quick_claw_order_rng" else 8 if name == "blunder_accuracy_event" else 4),
                 "Semillas ausentes o excesivas para el caso")
         for seed in case["seeds"]:
             require(type(seed) is int and 0 <= seed <= 65535
@@ -429,7 +460,19 @@ def validate() -> int:
                       case.get("foe_level", 100), case["foe_move"],
                       case.get("foe_item", ""), case["own_move"], tuple(case["seeds"]))
             require(actual == expected, "Desviación de causa/tenencia/semilla W01/09: "+name)
-        elif stage not in {"01", "02", "03", "04", "05", "06", "07", "08", "09"}:
+        elif stage == "10":
+            require(name in SCENARIOS_10, "Caso ajeno a bloque final W01/10")
+            expected = SCENARIOS_10[name]
+            actual = (item, case["op"], case["actor_species"],
+                      case.get("actor_ability", ""), case.get("actor_hp", ""),
+                      case.get("actor_level", 100), case["foe_species"],
+                      case.get("foe_level", 100), case["foe_move"],
+                      case.get("foe_item", ""), case.get("foe_reserve", False),
+                      case["own_move"], tuple(case["seeds"]))
+            require(actual == expected, "Desviación de equipo/rival/semillas W01/10: "+name)
+            require(type(case.get("foe_reserve", False)) is bool,
+                    "foe_reserve debe ser booleano, no texto o número")
+        elif stage not in {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10"}:
             raise ValueError("Stage no implementado por validador W01")
     for stage, ids in stage_map.items():
         for item in ids:
@@ -470,6 +513,10 @@ def validate() -> int:
         require(len(cases) == 61 and len(pairs) == 118,
                 "Matriz W01/09 requiere 61 escenarios y 118 pares")
         require(set(SCENARIOS_09) <= found, "Faltan los siete casos W01/09")
+    if len(progress) == 10:
+        require(len(cases) == 67 and len(pairs) == 137,
+                "Matriz W01/10 requiere 67 escenarios y 137 pares, sin caso extra")
+        require(set(SCENARIOS_10) <= found, "Faltan seis casos del bloque 10")
     return len(progress)
 
 def main():
