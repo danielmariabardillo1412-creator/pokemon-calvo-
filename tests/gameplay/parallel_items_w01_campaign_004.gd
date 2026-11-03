@@ -172,8 +172,27 @@ func _probe_w01_c004(row: Dictionary, seed: int, mode: String) -> Dictionary:
 		if not follow.get("accepted", false):
 			await session.close()
 			return {"valid": false}
+	# Un movimiento de carga sin Hierba Única conserva su fase intermedia
+	# tras el primer turno. Primero comprobar esa observación real; después
+	# completar el segundo turno antes de evaluar SaveV2 de un estado estable.
+	# No se elimina ningún control de snapshot ni de proyección restaurada.
+	var first_turn: Dictionary = _frame_c003(session, id)
+	check(mode + " primer turno nativo válido", first_turn.valid)
+	var first_turn_damage: int = int(before.foe_hp) - int(first_turn.foe_hp)
+	if String(row.op) == "power_herb_skip_charge" and mode != "active":
+		check(mode + " Rayo Solar sin Hierba Única no daña en turno de carga",
+			first_turn_damage == 0)
+		var finish_charge: Dictionary = await session.submit("move 1", session.revision)
+		check(mode + " segundo turno real de Rayo Solar aceptado",
+			finish_charge.get("accepted", false))
+		if not finish_charge.get("accepted", false):
+			await session.close()
+			return {"valid": false}
 	var after: Dictionary = _frame_c003(session, id)
 	check(mode + " estado final nativo", after.valid)
+	if String(row.op) == "power_herb_skip_charge" and mode != "active":
+		check(mode + " segundo turno termina carga y golpea",
+			int(before.foe_hp) > int(after.foe_hp))
 	var battle_log: Array = session._checkpoint.get("snapshot", {}).get("native", {}).get("log", [])
 	var critical: bool = false
 	var hit_count: int = 0
@@ -184,7 +203,10 @@ func _probe_w01_c004(row: Dictionary, seed: int, mode: String) -> Dictionary:
 				hit_count = int(pieces[pieces.size() - 1])
 		if entry.begins_with("|-crit|p2a:"):
 			critical = true
-	var foe_damage: int = int(before.foe_hp) - int(after.foe_hp)
+	# Las comparaciones de Hierba Única se refieren siempre al PRIMER turno:
+	# el control completa el ataque al segundo solo para guardar estado estable.
+	var foe_damage: int = first_turn_damage if String(row.op) == "power_herb_skip_charge" else (
+		int(before.foe_hp) - int(after.foe_hp))
 	var frozen: bool = JSON.stringify(_owner_data(owner)) == original_owner
 	check(mode + " propietario no asentado anticipadamente", frozen)
 	var physical: int = owner.inventory.quantity(id)
