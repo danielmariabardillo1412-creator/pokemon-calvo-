@@ -29,3 +29,10 @@
 - No se certifican UI/GPU, vuelta a mapa, distribución estadística completa, otros formatos ni todas las habilidades.
 
 **Siguiente `p`:** consultar primero el último run; si no hay FAIL y el bloque 02 quedó confirmado o su ejecución continúa sin dependencia, ejecutar solamente **03**: `clear_amulet;covert_cloak;eject_button`. No adelantarlo aquí.
+
+## Incidencia de CI y corrección propia
+
+- [Actions #41555265598](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41555265598) concluyó **FAIL en Python** con `CAMP003_W01_PY FAIL Semillas ausentes o excesivas`, antes de Godot. Causa reproducida por lectura: tope general de 4 semillas heredado del bloque 01 que rechazaba las 8 fijadas para `blunder_accuracy_event`. **No hubo fallo funcional nativo demostrado** en ese run.
+- Corrección propia de contrato, **sin suprimir cobertura:** commit `95de5b7581b54183a7fd108ccf6066a1ddb32154`, valida 1–8 semillas solo para el caso de Seguro Fallo y mantiene 1–4 para los demás; el mapa `SCENARIOS_02` sigue obligando a sus 8 semillas exactas.
+- La fila del CSV fue ligada al nuevo SHA de tests en commit `45e06d1b14f1969a0ee178caf42543a69139cdbb`, que dispara CI final por rama. **Estado: EN_CI_AUTOMATICA**, sin reclamar PASS de bloque 02 hasta veredicto del último run. Los runs previos `cancelled` se deben a `concurrency.cancel-in-progress`.
+
