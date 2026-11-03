@@ -1,3 +1,19 @@
+# ESTADO VIGENTE IA5/W05 — CAMPAÑA_003 · 06/10 PUBLICADOS (2026-11-03)
+
+**Identidad:** IA5/W05, MT/libros. **ÚNICA rama de escritura:** `codex/calvo-items-20261103-w05-camp003`. Gate/cola autorizados por IA6 en `codex/calvo-items-20261101-arbitro`, `CAMPAIGN_GATE_003.md`, `CAMPAIGN_003_QUEUE_APPROVED.csv`, `campaigns/CAMP_003_W05.md`. Historial más abajo es obsoleto para la siguiente autorización.
+
+**BLOQUE 06 entregado (sin PASS CI aún):** `tm51;tm52;tm53;tm54;tm55;tm56` con mapeo SV `sandstorm;snowscape;smart_strike;psyshock;dig;bullet_seed`. Se añadió al fixture propio `tests/fixtures/parallel_items/w05_campaign_003.json` commit `856c08cce2ac3b6b6ff6894d20c7debf2cb8a583` y al progreso `reports/W05/CAMP_003_PROGRESO.csv` commit `920a647db1bfa5f5ad9f34c13bab5d6b2fa48143`. Informe `CAMP_003_ITER_06.md` commit `104b52ef08f6ceaa915e78c4b8a6d41ba6f2cd0e`. Las suites Python/Godot siguen **acumulativas, sin ediciones de script**, para 6 bloques y 36 MT. Consistencia documental exacta entre fixture, progreso, cola y perfil SV: **verificada, 36 IDs únicos**.
+
+**CI BLOQUES 01–05 VERIFICADA:** GitHub Actions [#41559168692](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41559168692) `completed/success`, SHA `7692702bb5969de282a28604a93c44d01a8b092a`. Logs leídos: Python `CAMP003_W05_PY PASS blocks=5 checks=290`, Godot 4.7 `CAMP003_W05_GODOT PASS blocks=5 checks=1091`. Los campos históricos de estado `EN_CI_AUTOMATICA` del CSV de bloques 01–05 no se han reescrito para no disparar ejecuciones repetidas.
+
+**CI BLOQUE 06:** último run del SHA `920a647db1bfa5f5ad9f34c13bab5d6b2fa48143` [#41559866278](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41559866278); observado inicialmente como `pending`. El run intermedio de fixture #41559852441 puede cancelarse por política de concurrencia. No declarar 36 MT PASS sin `completed/success` y los dos recibos `blocks=6` sobre último SHA de progreso.
+
+**SIGUIENTE `p`:** verificar CI exacta 06/10, luego ejecutar **solo bloque 07** `tm57;tm58;tm59;tm60;tm61;tm62` de la cola autorizada. Si CI en curso, la puerta permite como máximo un bloque de tests independiente, sin PASS; si falla runner propio, corregir sin quitar aserciones; si se detecta problema real de motor, SaveV2, catálogo, permisos o dependencia compartida → STOP y comunicar IA6. Nunca inventar nuevas MT ni avanzar más de un bloque por tecla. Límite diez bloques, después `CAMPAÑA_003_FINALIZADA` y STOP.
+
+**Seguridad:** ninguna modificación en `main`, V28, PR118, árbitra, otras ramas, producción, `modules/`, `data/`, `config/`, workflows, guardados reales o catálogo canónico. Las 19 legacy siguen inactivas; visual/GPU no comprobada.
+
+---
+
 # ESTADO VIGENTE IA5/W05 — CAMPAÑA_003 · 05/10 PUBLICADOS (2026-11-03)
 
 **Identidad:** W05/IA5, libros MT. **Rama EXCLUSIVA:** `codex/calvo-items-20261103-w05-camp003`. Cola y gate IA6 de CAMPAÑA_003, 10 bloques autorizados, seis IDs SV por bloque, uno por `p`. Los estados históricos inferiores no sustituyen esta cabecera.
