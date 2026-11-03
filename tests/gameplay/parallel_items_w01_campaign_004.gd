@@ -69,8 +69,9 @@ func _run_w01_c004() -> void:
 		check("Escenario único", not names.has(String(row.id)))
 		names.append(String(row.id))
 		for value: Variant in row.seeds:
-			check("Semilla válida", value is int and int(value) >= 1 and int(value) <= 65535)
-			current_case = String(row.id) + "/" + str(value)
+			check("Semilla válida", (value is int or value is float)
+				and float(value) == float(int(value)) and int(value) >= 1 and int(value) <= 65535)
+			current_case = String(row.id) + "/" + str(int(value))
 			var before_checks: int = checks
 			var before_errors: int = errors.size()
 			# Las sesiones se cierran/restauran antes del siguiente modo:
