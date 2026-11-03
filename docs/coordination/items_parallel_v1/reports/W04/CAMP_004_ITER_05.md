@@ -23,3 +23,20 @@ En bloque 05 el workflow debe ejecutar **Python/Godot CAMP004**, **Python/Godot 
 **Límites:** no se ha modificado producción, `main`, V28, rama árbitra, W01/W02/W03/W05, workflows, datasets ni reglas globales. La CI de negativos no certifica Kyurem fusionado, forma cielo de Shaymin ni aumento de experiencia.
 
 **Próximo `p`:** bloque 06/10 `griseous_core;lustrous_globe;meteorite`, después de revisar CI05. 
+
+
+## Recibos CI 05 ejecutados
+
+[GitHub Actions #41579180249](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41579180249), SHA `26da57ec3496f03b728cc60f4ffc9206ec71a485`, terminó `completed/success`. Los logs verifican:
+- `CAMP004_W04_MANIFEST_PASS reserved=10 completed=5 ids=36`.
+- `CAMP004_W04_PY PASS blocks=5 checks=147`.
+- `CAMP004_W04_GODOT PASS blocks=5 checks=455`.
+- Regresión CAMPAÑA_003 Python `PASS blocks=10 checks=120` y Godot `PASS blocks=10 checks=270`.
+- Regresión CAMPAÑA_001 `PARALLEL_ITEMS_W04_CAMP_001_GODOT PASS iteration=3 checks=559 cases=12`.
+
+**Clasificación exacta de Godot:**
+- `dna_splicers`: `DEPENDENCIA records=0`, `fusion_kyurem_no_implementada`.
+- `exp_charm`: `DEPENDENCIA records=0`, `bono_experiencia_fuera_del_servicio_W04`.
+- `gracidea`: `DEPENDENCIA records=0`, `forma_shaymin_necesita_contexto`.
+
+La prueba demuestra invariantes de rechazo y SaveV2, **no** una fusión, ganancia real de experiencia o cambio de forma. Progreso consolidado en commit `ba870381e0a5b2215a925be44487e5613157b777` con estado `DEPENDENCIA_DOCUMENTADA` y recibo CI. Se comprueba aparte la nueva ejecución automática que dicho CSV produce.
