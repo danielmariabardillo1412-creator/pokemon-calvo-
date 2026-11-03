@@ -148,6 +148,35 @@
           "move_id": "giga_drain"
         }
       ]
+    },
+    {
+      "block": "06",
+      "items": [
+        {
+          "item_id": "tm112",
+          "move_id": "aura_sphere"
+        },
+        {
+          "item_id": "tm113",
+          "move_id": "tailwind"
+        },
+        {
+          "item_id": "tm114",
+          "move_id": "shadow_ball"
+        },
+        {
+          "item_id": "tm115",
+          "move_id": "dragon_pulse"
+        },
+        {
+          "item_id": "tm116",
+          "move_id": "stealth_rock"
+        },
+        {
+          "item_id": "tm117",
+          "move_id": "hyper_voice"
+        }
+      ]
     }
   ]
 }
