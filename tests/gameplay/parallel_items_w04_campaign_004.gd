@@ -5,6 +5,7 @@ const BLOQUE_01 := [&"berry_sweet", &"clover_sweet", &"flower_sweet"]
 const BLOQUE_02 := [&"love_sweet", &"ribbon_sweet", &"star_sweet"]
 const BLOQUE_03 := [&"strawberry_sweet", &"whipped_dream", &"leaders_crest"]
 const BLOQUE_04 := [&"adamant_crystal", &"blue_orb", &"catching_charm"]
+const BLOQUE_05 := [&"dna_splicers", &"exp_charm", &"gracidea"]
 const ID := &"w04_c004_01"
 var checks := 0
 var errores: Array[String] = []
@@ -148,6 +149,30 @@ func _auditar_contexto_04(catalogo: DefinitionCatalog, item: StringName, origen:
 	verificar(_estado(pc) == previo, String(item) + "/estado_forma_final_intacto")
 	_persistencia(pc, item, String(origen) + "_final", 2, origen, &"")
 
+func _auditar_contexto_05(catalogo: DefinitionCatalog, item: StringName, origen: StringName) -> void:
+	verificar(catalogo.item(item) != null, String(item) + "/" + String(origen) + "/definicion")
+	var pc := _crear(catalogo, origen)
+	verificar(pc != null, String(item) + "/" + String(origen) + "/especie_catalogada")
+	if pc == null:
+		return
+	var servicio := Servicio.new()
+	verificar(servicio.configure(pc, catalogo, func(): return true), String(item) + "/" + String(origen) + "/servicio")
+	verificar(pc.inventory.add(item, 2), String(item) + "/" + String(origen) + "/inventario")
+	var antes := _estado(pc)
+	verificar(not servicio.holdable(item), String(item) + "/" + String(origen) + "/no_equipable")
+	var equipar: Dictionary = servicio.equip(item, ID)
+	verificar(not equipar.get("accepted", false) and _estado(pc) == antes, String(item) + "/" + String(origen) + "/equipamiento_no_soportado")
+	var opciones := servicio.evolution_options(item, ID)
+	verificar(opciones.is_empty(), String(item) + "/" + String(origen) + "/no_evolucion_directa")
+	var usar: Dictionary = servicio.use_item(item, ID)
+	verificar(not usar.get("accepted", false) and _estado(pc) == antes and pc.inventory.quantity(item) == 2, String(item) + "/" + String(origen) + "/uso_sin_contrato_rechazado")
+	var evolucion: Dictionary = servicio.evolve(item, ID)
+	verificar(not evolucion.get("accepted", false) and _estado(pc) == antes and pc.inventory.quantity(item) == 2, String(item) + "/" + String(origen) + "/evolucion_no_inventada")
+	var ajeno: Dictionary = servicio.use_item(item, &"id_ajeno")
+	verificar(not ajeno.get("accepted", false) and _estado(pc) == antes, String(item) + "/" + String(origen) + "/propietario_invalido_rechazado")
+	verificar(pc.owned_creature(ID).species_id == origen and pc.owned_creature(ID).held_item_id == &"" and _estado(pc) == antes, String(item) + "/" + String(origen) + "/forma_y_estado_inalterados")
+	_persistencia(pc, item, String(origen) + "_sin_contexto", 2, origen, &"")
+
 func _ejecutar() -> void:
 	var data: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://data/normalized/pokemon_api.json"))
 	if not data is Dictionary:
@@ -224,6 +249,34 @@ func _ejecutar() -> void:
 		if item != &"catching_charm":
 			_auditar_contexto_04(catalogo, item, &"eevee")
 		print("CAMP004_W04_ITEM id=", String(item), " status=", "AUDITORIA_DE_DATOS" if item == &"catching_charm" else "DEPENDENCIA", " reason=", "captura_pertenece_W03_no_certificada" if item == &"catching_charm" else "objeto_equipable_sin_ruta_forma_en_field_item_service")
+	for item: StringName in BLOQUE_05:
+		var origen: StringName = &"kyurem" if item == &"dna_splicers" else &"shaymin" if item == &"gracidea" else &"eevee"
+		verificar(catalogo.item(item) != null, String(item) + "/catalogado")
+		var registros := 0
+		var pendientes := 0
+		var rutas: Array[Dictionary] = []
+		for sid: StringName in catalogo.species_catalog.all_ids():
+			var especie_actual: CreatureSpecies = catalogo.species(sid)
+			for record: EvolutionRecord in especie_actual.evolutions:
+				if record.item_id != item:
+					continue
+				registros += 1
+				var clasificacion := EvolutionSystem.classify_record(record, catalogo, sid)
+				if record.trigger == EvolutionSystem.TRIGGER_USE_ITEM and clasificacion == EvolutionSystem.RUNTIME_SUPPORTED:
+					rutas.append({"origen": sid, "destino": record.species_id})
+				else:
+					pendientes += 1
+					verificar(not EvolutionSystem.evolution_candidates(especie_actual, {"level": 40, "item_id": item}, catalogo).has(record), String(item) + "/modalidad_no_ejecutable")
+		if rutas.is_empty():
+			_auditar_contexto_05(catalogo, item, origen)
+			if origen != &"eevee":
+				_auditar_contexto_05(catalogo, item, &"eevee")
+			print("CAMP004_W04_ITEM id=", String(item), " status=DEPENDENCIA records=", registros, " conditioned=", pendientes, " reason=", "fusion_kyurem_no_implementada" if item == &"dna_splicers" else "bono_experiencia_fuera_del_servicio_W04" if item == &"exp_charm" else "forma_shaymin_necesita_contexto")
+		else:
+			_auditar_contexto_05(catalogo, item, &"eevee")
+			for ruta: Dictionary in rutas:
+				_positivo(catalogo, item, ruta.origen as StringName, ruta.destino as StringName)
+			print("CAMP004_W04_ITEM id=", String(item), " status=FUNCIONAL_VERIFICADO runtime_routes=", rutas.size())
 	_finalizar()
 
 func _finalizar() -> void:
@@ -231,7 +284,7 @@ func _finalizar() -> void:
 		return
 	terminado = true
 	if errores.is_empty():
-		print("CAMP004_W04_GODOT PASS blocks=4 checks=", checks)
+		print("CAMP004_W04_GODOT PASS blocks=5 checks=", checks)
 	else:
 		print("CAMP004_W04_GODOT FAIL errors=", JSON.stringify(errores))
 	quit(0 if errores.is_empty() else 1)
