@@ -231,6 +231,68 @@
         "no_versioned_formula"
       ],
       "ci_required": true
+    },
+    {
+      "bloque": "05",
+      "familia": "CAPTURE_CONTEXT",
+      "ids": [
+        "safari_ball",
+        "sport_ball"
+      ],
+      "objetivo": "validacion_contexto_zona_especial_sin_factor_incondicional",
+      "current_state": "PARTIAL_EXISTING_EFFECT_UNGATED",
+      "functional_effect_certified": false,
+      "per_id_status": {
+        "safari_ball": "PRESENT_UNCONDITIONAL_1_5",
+        "sport_ball": "PRESENT_UNCONDITIONAL_1_5"
+      },
+      "existing_positive_contracts": [
+        "CaptureBallEffects.IDS_registrado",
+        "CaptureBallEffects.multiplier_1_5",
+        "CaptureRuleset.catch_probability",
+        "CaptureSystem.validate_attempt"
+      ],
+      "required_producers": [
+        {
+          "id": "safari_ball",
+          "producer": "trusted_world_safari_zone_and_capture_rules",
+          "consumer": "ShowdownAdventureSession.capture > CaptureBattleContext > CaptureSystem",
+          "missing_fields": [
+            "is_safari_zone",
+            "safari_capture_mode",
+            "safari_profile_version"
+          ],
+          "decision": "IA6 debe definir si Safari Ball es utilizable libremente con x1.5 o requiere zona/modo Safari; el juego actual aplica x1.5 sin comprobar zona."
+        },
+        {
+          "id": "sport_ball",
+          "producer": "trusted_world_bug_contest_zone_and_capture_rules",
+          "consumer": "ShowdownAdventureSession.capture > CaptureBattleContext > CaptureSystem",
+          "missing_fields": [
+            "is_bug_contest_zone",
+            "contest_capture_mode",
+            "sport_profile_version"
+          ],
+          "decision": "IA6 debe decidir si Sport Ball requiere Concurso Bicho o es bola genérica; la regla actual aplica x1.5 sin contexto de zona."
+        }
+      ],
+      "evidence_paths": [
+        "modules/capture/capture_ball_effects.gd",
+        "modules/capture/capture_ruleset.gd",
+        "modules/capture/capture_system.gd",
+        "modules/capture/capture_battle_context.gd",
+        "modules/gameplay/showdown_adventure_session.gd"
+      ],
+      "positive_tests": [
+        "safari_sport_existing_real_1_5_multiplier",
+        "capture_probability_relative_to_base",
+        "capture_validation_registered"
+      ],
+      "negative_tests": [
+        "capture_context_lacks_special_zone_authority",
+        "unconditional_bonus_does_not_certify_special_zone_rules"
+      ],
+      "ci_required": true
     }
   ]
 }
