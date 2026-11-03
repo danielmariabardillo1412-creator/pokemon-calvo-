@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "campaign": "CAMP_003",
+  "worker": "W03",
+  "scope": "AUDITORIA_Y_PRUEBAS_NO_PRODUCCION",
+  "blocks": [
+    {
+      "bloque": "01",
+      "ids": [
+        "poke_ball",
+        "great_ball"
+      ],
+      "objective": "capturas_basicas",
+      "prior_evidence": {
+        "state": "YA_VERIFICADO_NO_DUPLICAR",
+        "sources": [
+          "docs/architecture/CAPTURE_RULESET_CALVO_V1.md",
+          "tests/gameplay/item_capture_v11.gd",
+          "modules/capture/capture_ruleset.gd",
+          "modules/capture/capture_system.gd",
+          "modules/inventory/capture_inventory_service.gd"
+        ],
+        "note": "Regresión focalizada de paridad de semilla y monotonicidad, sin repetir matriz exhaustiva."
+      },
+      "balls": [
+        {
+          "id": "poke_ball",
+          "multiplier": 1,
+          "guaranteed": false
+        },
+        {
+          "id": "great_ball",
+          "multiplier": 1.5,
+          "guaranteed": false
+        }
+      ],
+      "cases": [
+        {
+          "species_id": "caterpie",
+          "level": 12,
+          "seed": 801
+        },
+        {
+          "species_id": "pikachu",
+          "level": 12,
+          "seed": 802
+        },
+        {
+          "species_id": "mew",
+          "level": 12,
+          "seed": 803
+        }
+      ],
+      "health_modes": [
+        "full",
+        "one_hp"
+      ],
+      "invalid_cases": [
+        "trainer_battle_not_capturable",
+        "item_not_owned"
+      ],
+      "expected_behavior": "Cada intento válido consume exactamente una bola y una tirada RNG; ambas bolas comparten semilla; Great >= Poke con iguales HP y captura.",
+      "implementation_authorized": false,
+      "ci_required": true
+    }
+  ]
+}
