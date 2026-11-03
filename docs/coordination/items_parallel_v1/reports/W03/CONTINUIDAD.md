@@ -1,3 +1,22 @@
+# IA3/W03 — CAMPAÑA_003 / CUADERNO VIGENTE: 06/10
+
+**Identidad:** IA3/W03. **Rama única:** `codex/calvo-items-20261103-w03-camp003`. **Bloque 06 ejecutado por esta `p`: `friend_ball;heal_ball`**. **Siguiente `p`: exclusivamente bloque 07 de `CAMPAIGN_003_QUEUE_APPROVED.csv`**, previa revisión de CI. No anticipar bloque 08; máximo 10 y STOP.
+
+## Evidencia y decisiones
+- **01–05 CI verificada:** [Actions #41559647462](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41559647462), SHA de suite `d3a9ce8bee76564a18cc5e997cdcd0bef5dd5c74`; Python `blocks=5 checks=148` PASS, Godot `blocks=5 checks=619` PASS, dos puertas IA6 PASS.
+- **06 Ya implementado, no duplicar:** `CaptureBallEffects.on_catch` (blob `4e96b60ffe7b947817774d630b8e8afcca8d8591`): Friend fija amistad EXACTA 200 después de éxito, incluso desde 240/255; Heal repone PS, limpia estado persistente e IDs, restaura PP sin bajar su máximo. `CaptureSystem.resolve` solo llama `on_catch` si `success`. V11 ya verifica Sana al PC, UI y una matriz exhaustiva previa.
+- **Nueva cobertura incremental 06:** Friend amistad inicial `0,117,200,240,255` en éxitos más fallo desde 240; Heal normal/sueño/veneno y PP 0/1/3 de máximo 64, éxito y fallo sin efectos secundarios; ambas con equipo completo y `CaptureOwnershipRouter` al PC. Negativos: entrenador, sin objeto, objetivo KO, amistad fuera de `[0,255]` y PP inválidos (actual negativo, mayor que máximo, máximo cero). Revisar inventario, RNG, propiedad, identidad y snapshot exacto.
+- **Determinismo:** buscar semillas reales acotadas `1..4096` con `RandomNumberGenerator` sin alterar el motor; comparar `rng.state` con control después de un lanzamiento. Las capturas con probabilidad 1 consumen RNG si no son garantizadas, por contrato del motor.
+- **Archivos propios:** fixture `tests/fixtures/parallel_items/w03_campaign_003.json` blob `2edc944346c64fd71a01e4a086d086a38b251cf0`; Godot `tests/gameplay/parallel_items_w03_campaign_003.gd` blob `c7b3049aefe85bdfbcd34e14b00e18c9a47157ca`; Python `tests/tools/test_parallel_items_w03_campaign_003.py` blob `a87e67c12247f396d64cb6cb073ff980eafdb19b`. Todos preservan suites 01–05.
+- **CSV `CAMP_003_PROGRESO.csv`** ahora 6 filas, última `06,friend_ball;heal_ball`, estado histórico de publicación `EN_CI_AUTOMATICA`. **Commit de pruebas/CSV** `922e1d8d1561a16c014faa6f10ca9045811fceb7`. [CI #41560663065](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41560663065) **estaba ejecutando import Godot al redactar**. No registrar `CI_PASS` sin logs para `CAMP003_W03_PY PASS blocks=6 checks=M` y `CAMP003_W03_GODOT PASS blocks=6 checks=M` en ese SHA.
+- **Informe:** [CAMP_003_ITER_06.md](./CAMP_003_ITER_06.md). Informe y cuaderno son cambios documentales; no alteran pruebas ni activan otro run.
+- **Instrucción siguiente:** revisar último run en esta rama y número de filas CSV. Si fallo propio, corregir test manteniendo aserciones, si problema compartido producción/estado/guardado STOP y avisar a IA6. Si PASS, continuar únicamente bloque 07 por próxima `p`.
+- **Protección:** no modificar `main`, V28, PR #118, `.github`, `modules/`, catálogo, guardados, árbitra, IA4 ni ninguna otra rama. No reimplementar Friend/Heal.
+
+---
+
+## Histórico 01–05 conservado
+
 **CI bloque05 VERIFICADA:** [Actions #41559647462](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41559647462) terminó SUCCESS en SHA `d3a9ce8bee76564a18cc5e997cdcd0bef5dd5c74`. Logs del job `125667075993`: `CAMP003_W03_PY PASS blocks=5 checks=148`, `CAMP003_W03_GODOT PASS blocks=5 checks=619`, puertas de IA6 PASS. No atribuir este resultado a cambios de producción: solo auditoría y pruebas de Fast/Dream. Siguiente `p` = 06 `friend_ball;heal_ball`. CSV conserva estado de publicación EN_CI_AUTOMATICA para evitar activar otra CI con una mera edición documental.
 
 # IA3/W03 — CONTINUIDAD VIGENTE CAMPAÑA_003: 05/10
