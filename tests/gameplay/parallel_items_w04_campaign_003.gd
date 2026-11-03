@@ -4,6 +4,7 @@ const BLOQUE_01 := [&"dawn_stone", &"dusk_stone", &"shiny_stone"]
 const BLOQUE_02 := [&"sun_stone", &"oval_stone", &"black_augurite"]
 const BLOQUE_03 := [&"dragon_scale", &"dubious_disc", &"electirizer"]
 const BLOQUE_04 := [&"magmarizer", &"protector", &"reaper_cloth"]
+const BLOQUE_05 := [&"prism_scale", &"sachet", &"up_grade"]
 const ID := &"w04_c003_01"
 var checks := 0
 var fallos: Array[String] = []
@@ -41,7 +42,7 @@ func _ejecutar() -> void:
 		terminar()
 		return
 	var catalogo: DefinitionCatalog = GameData.from_dict(data).to_definition_catalog()
-	for item: StringName in BLOQUE_01 + BLOQUE_02 + BLOQUE_03 + BLOQUE_04:
+	for item: StringName in BLOQUE_01 + BLOQUE_02 + BLOQUE_03 + BLOQUE_04 + BLOQUE_05:
 		var compatibles: Array[Dictionary] = []
 		var dependientes := 0
 		var primer_dependiente: Dictionary = {}
@@ -61,7 +62,7 @@ func _ejecutar() -> void:
 			print("CAMP003_W04_DEPENDENCIA item=", String(item), " reason=sin_regla_catalogada")
 		if compatibles.is_empty():
 			print("CAMP003_W04_DEPENDENCIA item=", String(item), " records=", dependientes, " example=", JSON.stringify(primer_dependiente))
-			if (item in BLOQUE_03 or item in BLOQUE_04) and not primer_dependiente.is_empty():
+			if (item in BLOQUE_03 or item in BLOQUE_04 or item in BLOQUE_05) and not primer_dependiente.is_empty():
 				var propietario_condicionado := _crear(catalogo, primer_dependiente.source as StringName)
 				validar(propietario_condicionado != null, String(item) + "/creacion_condicionada")
 				if propietario_condicionado != null:
@@ -122,7 +123,7 @@ func terminar() -> void:
 		return
 	cerrado = true
 	if fallos.is_empty():
-		print("CAMP003_W04_GODOT PASS blocks=4 checks=", checks)
+		print("CAMP003_W04_GODOT PASS blocks=5 checks=", checks)
 	else:
 		print("CAMP003_W04_GODOT FAIL errors=", JSON.stringify(fallos))
 	quit(0 if fallos.is_empty() else 1)
