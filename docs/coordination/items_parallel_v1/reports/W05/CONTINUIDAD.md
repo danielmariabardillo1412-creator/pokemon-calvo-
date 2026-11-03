@@ -1,3 +1,19 @@
+# ESTADO VIGENTE IA5/W05 — CAMPAÑA_003 · 05/10 PUBLICADOS (2026-11-03)
+
+**Identidad:** W05/IA5, libros MT. **Rama EXCLUSIVA:** `codex/calvo-items-20261103-w05-camp003`. Cola y gate IA6 de CAMPAÑA_003, 10 bloques autorizados, seis IDs SV por bloque, uno por `p`. Los estados históricos inferiores no sustituyen esta cabecera.
+
+**BLOQUE 05 ENTREGADO:** `tm45;tm46;tm47;tm48;tm49;tm50` = `venoshock;avalanche;endure;volt_switch;sunny_day;rain_dance` de versión Scarlet/Violet. Fixture acumulativo de 30 IDs, commit `4c305e29a1b418ccd531593071355220692c8f4b`; fila 05 del progreso, commit `7692702bb5969de282a28604a93c44d01a8b092a`. Informe `CAMP_003_ITER_05.md` en commit `ff3c12276c1e15cf6eb0744474545dea64ec46b5`. **Consistencia documental comprobada:** 5 bloques/30 IDs sin duplicados, mapeos SV iguales a cola IA6 y perfil. No se han reescrito scripts acumulativos ni código compartido.
+
+**CI BLOQUES 01–04 VERIFICADA:** [#41558194753](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41558194753), SHA `d9c38c6cb606bbe3081eebc16d4560944370a48a`, `completed/success`; `CAMP003_W05_PY PASS blocks=4 checks=232` y `CAMP003_W05_GODOT PASS blocks=4 checks=876` leídos de logs.
+
+**CI BLOQUE 05:** estado del progreso `EN_CI_AUTOMATICA` hasta confirmar nueva ejecución del SHA `7692702bb5969de282a28604a93c44d01a8b092a`. Exigir `CAMP003_W05_PY PASS blocks=5` y `CAMP003_W05_GODOT PASS blocks=5`, sin atribuir éxito al bootstrap ni a ejecuciones canceladas de fixture. El informe y esta cabecera no disparan otra CI.
+
+**Siguiente `p`:** primero revisar el último workflow por rama sobre el SHA del progreso. Si success, ejecutar exclusivamente bloque **06** (`tm51;tm52;tm53;tm54;tm55;tm56`) añadiendo seis casos a fixture y una fila de progreso. Si en curso, se admite solo bloque independiente de pruebas sin PASS; un fallo real de arnés propio se repara con aserciones intactas; fallo de motor, guardados o catálogo compartido implica STOP y arbitraje IA6. Al 10/10 declarar `CAMPAÑA_003_FINALIZADA` y detenerse.
+
+**Protección:** `main`, V28, PR118, árbitra, otras ramas, producción, `modules/`, `data/`, `config/`, CI inmutable, 19 legacy, guardados reales y arte/GPU/UI intocados.
+
+---
+
 # ESTADO VIGENTE IA5/W05 — CAMPAÑA_003 · 04/10 PUBLICADOS (2026-11-03)
 
 **Identidad:** IA5/W05 · MT/libros. **Única rama de escritura:** `codex/calvo-items-20261103-w05-camp003`. Activación IA6 de diez microbloques según `CAMPAIGN_GATE_003.md`, `campaigns/CAMP_003_W05.md` y `CAMPAIGN_003_QUEUE_APPROVED.csv`. Historias previas inferiores no tienen autoridad para bloques siguientes.
