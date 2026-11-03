@@ -1,3 +1,9 @@
+# W03 CAMP005 — Continuidad 05/10
+
+Bloque 05: safari_ball y sport_ball. Existe factor ×1,5 implementado en CaptureBallEffects y usado por CaptureSystem. El contexto no identifica zona Safari ni Concurso Bicho; el factor se aplica sin comprobar zona. IA6 debe decidir si el uso será libre o restringido y asignar productor autoritativo. Estado PARTIAL_EXISTING_EFFECT_UNGATED. Pruebas Godot/Python positivas del factor existente. Hito 05 requiere regresiones CAMP004/CAMP003. CI 04 previa PASS #41720389165. Siguiente p ejecutará solo bloque 06 si CI 05 se valida.
+
+---
+
 ## CI validada — bloque 04
 
 La ejecución [GitHub Actions #41720389165](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41720389165) en SHA `890824fb682faacf916c6430a9c34cff3962ad6b` terminó **completed/success**. Recibos: `CAMP005_W03_PY PASS blocks=4 checks=78`, `CAMP005_GATE_PY_PASS`, `CAMP005_W03_GODOT PASS blocks=4 checks=80`, `CAMP005_GATE_GODOT_PASS`. Esta aprobación verifica los contratos presentes y las dependencias concretas; **no** acredita efecto funcional de Beast Ball ni Heavy Ball.
