@@ -99,49 +99,13 @@ jobs:
         run: |
           set -euo pipefail
           python -B tests/tools/test_parallel_items_w02_campaign_004.py --ci 2>&1 | tee camp005-regression-camp004-py.log
-          grep -E '^CAMP004_W02_PY PASS blocks=10 checks=[1-9][0-9]*
-      - name: Conservar evidencia 7 dias
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: camp005-w02-${{ github.run_id }}
-          retention-days: 7
-          if-no-files-found: ignore
-          path: camp005-*.log
- camp005-regression-camp004-py.log
+          grep -E '^CAMP004_W02_PY PASS blocks=10 checks=[1-9][0-9]*$' camp005-regression-camp004-py.log
           timeout 900s godot --headless --path . --script res://tests/gameplay/parallel_items_w02_campaign_004.gd 2>&1 | tee camp005-regression-camp004-godot.log
-          grep -E '^CAMP004_W02_GODOT PASS blocks=10 checks=[1-9][0-9]*
-      - name: Conservar evidencia 7 dias
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: camp005-w02-${{ github.run_id }}
-          retention-days: 7
-          if-no-files-found: ignore
-          path: camp005-*.log
- camp005-regression-camp004-godot.log
+          grep -E '^CAMP004_W02_GODOT PASS blocks=10 checks=[1-9][0-9]*$' camp005-regression-camp004-godot.log
           python -B tests/tools/test_parallel_items_w02_campaign_003.py --ci 2>&1 | tee camp005-regression-camp003-py.log
-          grep -E '^CAMP003_W02_PY PASS blocks=10 checks=[1-9][0-9]*
-      - name: Conservar evidencia 7 dias
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: camp005-w02-${{ github.run_id }}
-          retention-days: 7
-          if-no-files-found: ignore
-          path: camp005-*.log
- camp005-regression-camp003-py.log
+          grep -E '^CAMP003_W02_PY PASS blocks=10 checks=[1-9][0-9]*$' camp005-regression-camp003-py.log
           timeout 900s godot --headless --path . --script res://tests/gameplay/parallel_items_w02_campaign_003.gd 2>&1 | tee camp005-regression-camp003-godot.log
-          grep -E '^CAMP003_W02_GODOT PASS blocks=10 checks=[1-9][0-9]*
-      - name: Conservar evidencia 7 dias
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: camp005-w02-${{ github.run_id }}
-          retention-days: 7
-          if-no-files-found: ignore
-          path: camp005-*.log
- camp005-regression-camp003-godot.log
+          grep -E '^CAMP003_W02_GODOT PASS blocks=10 checks=[1-9][0-9]*$' camp005-regression-camp003-godot.log
       - name: Conservar evidencia 7 dias
         if: always()
         uses: actions/upload-artifact@v4
