@@ -266,6 +266,35 @@
           "move_id": "burning_jealousy"
         }
       ]
+    },
+    {
+      "block": "10",
+      "items": [
+        {
+          "item_id": "tm196",
+          "move_id": "flip_turn"
+        },
+        {
+          "item_id": "tm197",
+          "move_id": "dual_wingbeat"
+        },
+        {
+          "item_id": "tm198",
+          "move_id": "poltergeist"
+        },
+        {
+          "item_id": "tm199",
+          "move_id": "lash_out"
+        },
+        {
+          "item_id": "tm200",
+          "move_id": "scale_shot"
+        },
+        {
+          "item_id": "tm201",
+          "move_id": "misty_explosion"
+        }
+      ]
     }
   ]
 }
