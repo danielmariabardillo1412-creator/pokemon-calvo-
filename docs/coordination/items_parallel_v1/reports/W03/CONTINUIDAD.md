@@ -1,3 +1,15 @@
+# IA3/W03 — CIERRE CAMPAÑA_003: 10/10 ENTREGADOS
+
+**Rama exclusiva:** `codex/calvo-items-20261103-w03-camp003`. **No existe bloque 11 autorizado. STOP tras verificar CI del décimo bloque.**
+
+- **Último PASS real previo:** [Actions #41566688185](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41566688185), SHA `990273b4153127e41246fbb0e579bd8750ec75ce`, Python 256 y Godot 941 checks, nueve bloques y gates PASS.
+- **Bloque 10:** `beast_ball;heavy_ball`. Pruebas de rechazo `unknown_ball` en dos especies, PS completos/1, contexto de turno/nivel ausente o presente, y cuatro negativas por bola; conservación total de estado/RNG/inventario y prioridad de los rechazos.
+- **DEPENDENCIA_COMPARTIDA:** clasificación Ultraente, peso de especie/forma y versión de fórmula de Peso Ball. No se fabricaron multiplicadores ni se amplió arquitectura; no hay certificación de funciones pendientes.
+- **Entregas:** `CAMP_003_ITER_10.md`, fixture acumulativo, runner Godot, auditor Python y CSV 10/10. La última CI debe completar en el SHA exacto del CSV antes de declarar las 10 suites verificadas.
+- **Siguiente paso:** STOP, entregar a IA6 la auditoría consolidada. IA6 decide nuevos contratos para bolas pendientes; W03 no inicia CAMP004 ni modifica otra rama.
+
+---
+
 # IA3/W03 — CONTINUIDAD CAMPAÑA_003: 09/10
 
 **Rama exclusiva:** `codex/calvo-items-20261103-w03-camp003`. Se ha ejecutado el bloque 09 `love_ball;moon_ball`; siguiente `p` **exclusivamente bloque 10 `beast_ball;heavy_ball`** tras consultar CI. STOP definitivo al completar 10/10.
