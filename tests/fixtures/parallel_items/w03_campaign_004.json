@@ -108,6 +108,50 @@
         "without_sleep": "item_has_no_effect",
         "without_item": "item_not_owned"
       }
+    },
+    {
+      "bloque": "03",
+      "familia": "FIELD_USE",
+      "ids": [
+        "fluffy_tail",
+        "golden_razz_berry",
+        "lure"
+      ],
+      "objetivo": "auditar_uso_campo_consecuencia_y_guardado",
+      "current_state": "DEPENDENCIA_COMPARTIDA",
+      "per_id_status": {
+        "fluffy_tail": "DEPENDENCIA_COMPARTIDA",
+        "golden_razz_berry": "DEPENDENCIA_COMPARTIDA",
+        "lure": "DEPENDENCIA_COMPARTIDA"
+      },
+      "expected_rejection": "field_effect_not_connected",
+      "cases": [
+        {
+          "name": "normal",
+          "status": "none"
+        },
+        {
+          "name": "asleep",
+          "status": "sleep"
+        }
+      ],
+      "inventory_counts": [
+        0,
+        2
+      ],
+      "invalid_cases": [
+        "field_locked",
+        "invalid_inventory",
+        "unknown_target"
+      ],
+      "missing_authoritative_integrations": [
+        "battle_escape_action_for_fluffy_tail",
+        "catch_encounter_berry_mechanic_for_golden_razz_berry",
+        "overworld_encounter_rate_duration_for_lure"
+      ],
+      "functional_effect_certified": false,
+      "note": "El servicio de uso directo no conecta estos IDs. Pruebas de rechazo sin consumo, daño ni alteración de relojes; la serialización standalone de PlayerInventory no acredita SaveV2 ni acciones de mundo.",
+      "ci_required": true
     }
   ]
 }
