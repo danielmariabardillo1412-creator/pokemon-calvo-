@@ -293,6 +293,69 @@
         "unconditional_bonus_does_not_certify_special_zone_rules"
       ],
       "ci_required": true
+    },
+    {
+      "bloque": "06",
+      "familia": "FIELD_CONTEXT",
+      "ids": [
+        "repel",
+        "super_repel",
+        "max_repel"
+      ],
+      "objetivo": "efecto_repelente_en_encuentros_y_pasos",
+      "current_state": "DEPENDENCIA_COMPARTIDA",
+      "functional_effect_certified": false,
+      "per_id_status": {
+        "repel": "DEPENDENCIA_COMPARTIDA",
+        "super_repel": "DEPENDENCIA_COMPARTIDA",
+        "max_repel": "DEPENDENCIA_COMPARTIDA"
+      },
+      "existing_positive_contracts": [
+        "WildEncounterTable.encounter_chance_bp",
+        "WildEncounterSystem.no_encounter_no_rng",
+        "WildEncounterSlot.level_range"
+      ],
+      "required_producers": [
+        {
+          "id": "repel",
+          "producer": "overworld_steps",
+          "consumer": "encounter_coordinator",
+          "missing_fields": [
+            "remaining_steps",
+            "effective_lead_level",
+            "wild_level_filter"
+          ],
+          "decision": "Definir duración y reglas versionadas del repelente, guardar pasos, comparar niveles sin consumir RNG de forma indebida."
+        },
+        {
+          "id": "super_repel",
+          "producer": "overworld_steps",
+          "consumer": "encounter_coordinator",
+          "missing_fields": [
+            "remaining_steps",
+            "effective_lead_level",
+            "wild_level_filter"
+          ],
+          "decision": "Definir duración diferente y transición de estados y contador compartido."
+        },
+        {
+          "id": "max_repel",
+          "producer": "overworld_steps",
+          "consumer": "encounter_coordinator",
+          "missing_fields": [
+            "remaining_steps",
+            "effective_lead_level",
+            "wild_level_filter"
+          ],
+          "decision": "Definir duración y guardado de pasos, reemplazo y caducidad."
+        }
+      ],
+      "positive_tests": [
+        "zero_chance_without_rng",
+        "guaranteed_encounter_and_level",
+        "table_roundtrip"
+      ],
+      "ci_required": true
     }
   ]
 }
