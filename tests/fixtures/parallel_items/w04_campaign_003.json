@@ -87,6 +87,23 @@
         "single_spend_and_identity_if_supported",
         "save_v2_if_supported"
       ]
+    },
+    {
+      "block": "06",
+      "ids": [
+        "auspicious_armor",
+        "malicious_armor",
+        "metal_alloy"
+      ],
+      "expected_trigger": "real_species_records_only",
+      "policy": "do_not_invent_region_form_or_level_conditions",
+      "cases": [
+        "item_catalog_presence",
+        "runtime_evolution_record_classification",
+        "conditional_use_rejected_without_consumption",
+        "evolution_positive_only_when_runtime_supported",
+        "identity_and_save_v2_if_supported"
+      ]
     }
   ]
 }
