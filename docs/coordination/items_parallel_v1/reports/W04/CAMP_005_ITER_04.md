@@ -62,3 +62,12 @@ Fuentes crudas: `data/api/v2/evolution-chain/33/index.json` y `data/api/v2/evolu
 La primera ejecución completa [#41723323786](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41723323786), SHA `59e5d086d53071e27db2a56ba20d8ff120b94f4c`, terminó `failure` en **validador Python**, antes de ejecutar Godot. El arnés antiguo del bloque 02 seguía buscando el marcador literal `bloques_01_a_03_secuenciales`; el runner acumulativo ahora publica `bloques_01_a_04_secuenciales`. No es un fallo funcional ni una ausencia de contrato regional.
 
 Se corrigió exclusivamente ese marcador de test en `tests/tools/test_parallel_items_w04_campaign_005.py`, commit `e3862af4babb283c2257c919b7c792261fd18868`, **sin retirar ni relajar ninguna prueba de forma, consentimiento, inventario, persistencia o versión**. GitHub Actions reinició el bloque en [#41723793802](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41723793802), cuyo resultado es obligatorio comprobar antes de cerrar el bloque.
+
+
+## Incidencia de escenario Godot: coexistencia de rutas
+
+En la segunda CI [#41723793802](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41723793802), SHA `e3862af4babb283c2257c919b7c792261fd18868`, el validador Python pasó **273 comprobaciones**, pero Godot detectó `galarica_cuff/04_eligibilidad_no_ignora_forma`. **Causa identificada:** el test buscaba ausencia de cualquier destino `slowbro` dentro de `evolution_candidates` con nivel 100, pero la ruta **normal** Slowpoke→Slowbro por nivel 37 es correctamente ejecutable en el catálogo. La existencia de esa ruta NO demuestra que el Brazal Galanuez produzca Slowbro de Galar ni que se ignore `base_form`.
+
+**Reparación mínima del propio test, sin tocar producción:** commit `226b617d86beef8251aeb624843ec9f4cbcdc702`, comprueba que el registro exacto `TRIGGER_USE_ITEM + galarica_cuff + base_form/evolved_form` **no** aparezca entre los candidatos y, además, que el registro legítimo de Slowpoke normal→Slowbro por nivel **siga disponible**. El validador Python exige esta nueva cobertura desde commit `243c7e4cb5348297a2dd2a13ca61c229b8bb397f`.
+
+Última CI de reparación completa [#41724227089](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41724227089): comprobar logs/estado antes de declarar cierre. Se preservan todas las pruebas de formas regionales, Urshifu, equipamiento, identidad y SaveV2.
