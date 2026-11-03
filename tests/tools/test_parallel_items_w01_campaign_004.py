@@ -75,8 +75,8 @@ def validate():
     inventory = {r["id"]: r for r in read_rows(ROOT / "docs/current/ITEM_INVENTORY.csv")}
     for item in queue[0]["ids"].split(";"):
         require(scope[item]["estado_contenido"] == "SELECCIONADO", "Item no seleccionado: " + item)
-        require(inventory[item]["familia"] == "HELD_COMBAT_CANDIDATE", "Familia incompatible: " + item)
-        require(inventory[item]["native_key"] in ("lightball", "luckypunch", "thickclub"), "Clave nativa ausente: " + item)
+        require(inventory[item]["family"] == "HELD_COMBAT_CANDIDATE", "Familia incompatible: " + item)
+        require(inventory[item]["native_id"] in ("lightball", "luckypunch", "thickclub"), "Clave nativa ausente: " + item)
     historical = NATIVE.read_text(encoding="utf-8")
     for fragment in (
         "['light_ball','pikachu','thunder_shock']",
