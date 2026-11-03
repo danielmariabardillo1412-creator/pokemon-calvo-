@@ -1,1 +1,2 @@
 bloque,ids,estado,sha_pruebas,ci_run,notas
+01,tm07;tm16;tm18;tm21;tm22;tm23,EN_CI_AUTOMATICA,c622e29bd06c5a40c189ff780a4effc8755d0275,PENDIENTE_GITHUB_ACTIONS,Fixture_Godot_Python_seis_MT_no_es_PASS_sin_CI
