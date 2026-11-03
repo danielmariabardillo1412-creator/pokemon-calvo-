@@ -170,6 +170,7 @@ func _frame_c003(session: RefCounted, id: StringName) -> Dictionary:
 		"boosts": native.get("boosts", {}).duplicate(true),
 		"attack_stage": int(native.get("boosts", {}).get("atk", 0)),
 		"defense_stage": int(native.get("boosts", {}).get("def", 0)),
+		"special_defense_stage": int(native.get("boosts", {}).get("spd", 0)),
 		"speed_stage": int(native.get("boosts", {}).get("spe", 0)),
 		"status_id": String(own.status_state.persistent_id),
 		"forced_switch": forcing,
@@ -225,6 +226,8 @@ func _probe_c003(row: Dictionary, seed: int, mode: String) -> Dictionary:
 	if not action.get("accepted", false):
 		await session.close()
 		return {"valid": false}
+	var foe_hp_timeline: Array[int] = [int(start.foe_hp),
+		int(session.battle_state().creature(&"foe").current_hp)]
 	# Los objetos de duración y peligros de entrada necesitan más de un turno.
 	# Se usan únicamente comandos legítimos del motor; nunca se simulan efectos.
 	if String(row.op) == "trap_extended_duration":
@@ -234,6 +237,15 @@ func _probe_c003(row: Dictionary, seed: int, mode: String) -> Dictionary:
 			if not continuation.get("accepted", false):
 				await session.close()
 				return {"valid": false}
+	elif String(row.op) == "metronome_repeat_reset":
+		# Agua Pistola tres veces, Reflejo rompe cadena, Agua Pistola reinicia.
+		for command: String in ["move 1", "move 1", "move 2", "move 1"]:
+			var repeated: Dictionary = await session.submit(command, session.revision)
+			check(mode + " cadena metronomo " + command + " aceptada", repeated.get("accepted", false))
+			if not repeated.get("accepted", false):
+				await session.close()
+				return {"valid": false}
+			foe_hp_timeline.append(int(session.battle_state().creature(&"foe").current_hp))
 	elif String(row.op) in ["boots_rock_reentry", "boots_no_rock_control"]:
 		# Showdown reordena las plazas al cambiar. Tras switch 2,
 		# el Pokémon original pasa a ocupar de nuevo la segunda plaza.
@@ -270,14 +282,15 @@ func _probe_c003(row: Dictionary, seed: int, mode: String) -> Dictionary:
 	check(mode + " SaveV2 sin duplicacion", units == restored_units)
 	var evidence: Dictionary = {
 		"id": String(row.id), "block": String(row.block), "item_id": String(row.item_id),
-		"seed": seed, "mode": mode, "start": start, "after": after,
+		"seed": seed, "mode": mode, "start": start, "after": after, "foe_hp_timeline": foe_hp_timeline,
 		"initial": initial_snapshot, "final": terminal_snapshot,
 		"snapshot_equal": snapshot_equal, "restore_frame_equal": restored_frame == after,
 		"restored_units": restored_units, "physical_units": units, "owner_unchanged": frozen
 	}
 	var hash: String = _write_evidence(key, evidence)
 	await session.close()
-	return {"valid": true, "start": start, "after": after, "restored": snapshot_equal and restored_frame == after,
+	return {"valid": true, "start": start, "after": after, "foe_hp_timeline": foe_hp_timeline,
+		"restored": snapshot_equal and restored_frame == after,
 		"owner_unchanged": frozen, "physical_units": units, "sha256": hash, "evidence": key + ".json"}
 
 func _compare_c003(row: Dictionary, obs: Dictionary) -> void:
@@ -308,7 +321,7 @@ func _compare_c003(row: Dictionary, obs: Dictionary) -> void:
 	var fn: int = int(n.start.foe_hp) - int(n.after.foe_hp)
 	var fr: int = int(r.start.foe_hp) - int(r.after.foe_hp)
 	check("reserva igual al control (PS actor)", dr == dn)
-	if String(row.op) not in ["trap_residual", "trap_extended_duration"]:
+	if String(row.op) not in ["trap_residual", "trap_extended_duration", "metronome_repeat_reset"]:
 		check("dano rival sin cambio no autorizado", fa == fn and fn == fr)
 	match String(row.op):
 		"ground_immunity":
@@ -538,6 +551,67 @@ func _compare_c003(row: Dictionary, obs: Dictionary) -> void:
 				a.after.reflect_duration == 0 and n.after.reflect_duration == 0
 				and r.after.reflect_duration == 0)
 			check("Refleluz sin pantalla conservado",
+				not a.after.own_consumed and a.physical_units == 2)
+		"moss_water_special_defense":
+			check("Musgo Brillante: impacto de Agua da +1 Def Esp solo al portador",
+				da > 0 and da == dn and dn == dr
+				and a.after.special_defense_stage == 1
+				and n.after.special_defense_stage == 0 and r.after.special_defense_stage == 0)
+			check("Musgo Brillante: consume una unidad solo si activo",
+				a.after.own_consumed and a.physical_units == 1
+				and not n.after.own_consumed and not r.after.reserve_consumed and r.physical_units == 2)
+		"moss_no_water_hit":
+			check("Musgo Brillante: daño normal no sube Def Esp",
+				a.after.special_defense_stage == 0
+				and n.after.special_defense_stage == 0 and r.after.special_defense_stage == 0)
+			check("Musgo Brillante sin golpe Agua se retiene",
+				not a.after.own_consumed and a.physical_units == 2)
+		"mental_herb_taunt_cure":
+			check("Hierba Mental: elimina Mofa solo en portador al recibirla",
+				not a.after.native_volatiles.has("taunt")
+				and n.after.native_volatiles.has("taunt")
+				and r.after.native_volatiles.has("taunt"))
+			check("Hierba Mental: consume una unidad, reserva intacta",
+				a.after.own_consumed and a.physical_units == 1
+				and not r.after.reserve_consumed and r.physical_units == 2)
+		"mental_herb_retained":
+			check("Hierba Mental: sin Mofa no activa",
+				not a.after.native_volatiles.has("taunt")
+				and not n.after.native_volatiles.has("taunt")
+				and not r.after.native_volatiles.has("taunt"))
+			check("Hierba Mental sin Mofa no se consume",
+				not a.after.own_consumed and a.physical_units == 2)
+		"metronome_repeat_reset":
+			var active_hps: Array = a.foe_hp_timeline
+			var none_hps: Array = n.foe_hp_timeline
+			var reserve_hps: Array = r.foe_hp_timeline
+			check("Metrónomo: cinco turnos reales en los tres modos",
+				active_hps.size() == 6 and none_hps.size() == 6 and reserve_hps.size() == 6)
+			if active_hps.size() == 6 and none_hps.size() == 6 and reserve_hps.size() == 6:
+				var base0: int = int(none_hps[0]) - int(none_hps[1])
+				var boost0: int = int(active_hps[0]) - int(active_hps[1])
+				var base1: int = int(none_hps[1]) - int(none_hps[2])
+				var boost1: int = int(active_hps[1]) - int(active_hps[2])
+				var base2: int = int(none_hps[2]) - int(none_hps[3])
+				var boost2: int = int(active_hps[2]) - int(active_hps[3])
+				var base4: int = int(none_hps[4]) - int(none_hps[5])
+				var boost4: int = int(active_hps[4]) - int(active_hps[5])
+				check("Metrónomo: primer Agua Pistola igual a control",
+					base0 > 0 and boost0 == base0)
+				check("Metrónomo: repeticiones segunda y tercera aumentan daño",
+					boost1 > base1 and boost2 > base2
+					and base1 > 0 and base2 > 0)
+				check("Metrónomo: Reflejo rompe la cadena y quinto ataque vuelve a daño base",
+					boost4 == base4 and base4 > 0)
+				check("Metrónomo: reserva no altera serie de daño",
+					none_hps == reserve_hps)
+			check("Metrónomo: nunca se consume por repetir o romper cadena",
+				not a.after.own_consumed and a.physical_units == 2
+				and not r.after.reserve_consumed)
+		"metronome_no_repeat_control":
+			check("Metrónomo: movimiento de estado no crea daño",
+				fa == 0 and fn == 0 and fr == 0)
+			check("Metrónomo: sin repetición se conserva",
 				not a.after.own_consumed and a.physical_units == 2)
 		_:
 			check("Operacion no autorizada", false)
