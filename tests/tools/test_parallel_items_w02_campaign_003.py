@@ -111,6 +111,19 @@ EXPECTED_08 = {
 }
 
 
+EXPECTED_09 = {
+    "starf_low_two_random_c003": ("starf_berry", "boost_random_two", "mew", "mew", "amnesia", "fifth", True, "hardy", False, "reflect", {"expected_stage": 2}),
+    "starf_high_no_boost_c003": ("starf_berry", "boost_random_two", "mew", "mew", "amnesia", "near_full", False, "hardy", False, "reflect", {"expected_stage": 2}),
+    "tanga_bug_effective_c003": ("tanga_berry", "resist_type", "mew", "mew", "bug_buzz", "full", True, "hardy", False, "reflect", {"expected_type": "bug"}),
+    "tanga_normal_reject_c003": ("tanga_berry", "resist_type", "mew", "mew", "tackle", "full", False, "hardy", False, "reflect", {"expected_type": "bug"}),
+    "wacan_electric_effective_c003": ("wacan_berry", "resist_type", "gyarados", "mew", "thunder_shock", "full", True, "hardy", False, "reflect", {"expected_type": "electric"}),
+    "wacan_normal_reject_c003": ("wacan_berry", "resist_type", "gyarados", "mew", "tackle", "full", False, "hardy", False, "reflect", {"expected_type": "electric"}),
+    "wiki_adamant_disliked_c003": ("wiki_berry", "heal_flavor", "mew", "snorlax", "endeavor", "full", True, "adamant", True, "reflect", {"foe_initial_hp": 1}),
+    "wiki_hardy_neutral_c003": ("wiki_berry", "heal_flavor", "mew", "snorlax", "endeavor", "full", True, "hardy", False, "reflect", {"foe_initial_hp": 1}),
+    "wiki_high_no_trigger_c003": ("wiki_berry", "heal_flavor", "mew", "mew", "amnesia", "near_full", False, "adamant", False, "reflect", {}),
+}
+
+
 class ContractError(ValueError):
     pass
 
@@ -405,6 +418,38 @@ def validate(fixture, queue, progress, check):
                                  "Expectativa de protección/devolución/Velocidad alterada: " + name)
             check.demand(seen == set(EXPECTED_08),
                          "Falta caso positivo o negativo del bloque 08")
+        elif i == 8:
+            check.demand(entry["source_evidence"] == [
+                "tools/item_audit/held_effect_sweep_v2.cjs",
+                "tools/item_audit/held_effect_sweep_v3.cjs"],
+                "Faltan pruebas nativas V2/V3 Starf Tanga Wacan Wiki")
+            check.demand(len(entry["cases"]) == 9 and len(ids) == 4,
+                         "ITER_09 exige 9 escenarios para exactamente 4 bayas")
+            seen = set()
+            for case in entry["cases"]:
+                name = case["scenario"]
+                check.demand(name in EXPECTED_09 and name not in seen,
+                             "Escenario bloque 09 no autorizado o repetido")
+                seen.add(name)
+                item, kind, actor, foe, move, hp_state, spent, nature, confused, own_move, extra = EXPECTED_09[name]
+                schema = {"scenario", "id", "kind", "nature", "start",
+                          "status", "actor_species", "foe_species",
+                          "foe_move", "consumes", "confuses", "own_move"} | set(extra)
+                check.demand(set(case) == schema,
+                             "Esquema incompleto o manipulado del bloque 09")
+                actual = (case["id"], case["kind"], case["actor_species"],
+                          case["foe_species"], case["foe_move"], case["start"],
+                          case["consumes"], case["nature"], case["confuses"],
+                          case["own_move"])
+                check.demand(actual == (item, kind, actor, foe, move, hp_state,
+                                        spent, nature, confused, own_move)
+                             and case["status"] == "" and case["id"] in ids,
+                             "Umbral, efecto, especie, naturaleza o consumo manipulado")
+                for key, value in extra.items():
+                    check.demand(case[key] == value,
+                                 "Contrato individual alterado: " + name + "/" + key)
+            check.demand(seen == set(EXPECTED_09),
+                         "Falta un escenario positivo/negativo del bloque 09")
         else:
             raise ContractError("Bloque futuro sin contrato específico implementado")
     return count
@@ -445,7 +490,11 @@ def verify_sources(check):
                    "fairy:['roseli_berry','garchomp']",
                    "fairy:'dazzling_gleam'",
                    "salac_berry:'spe'",
-                   "ground:['shuca_berry','pikachu']"):
+                   "ground:['shuca_berry','pikachu']",
+                   "bug:['tanga_berry','mew']",
+                   "bug:'bug_buzz'",
+                   "electric:['wacan_berry','gyarados']",
+                   "electric:'thunderbolt'"):
         check.demand(needle in v2, "No se localizó precedente V2: " + needle)
     for needle in ("'custap_berry','low_hp_order'", "'custap_berry','full_hp'",
                    "'enigma_berry','super_effective_heal'",
@@ -460,7 +509,10 @@ def verify_sources(check):
                    "add('micle_berry','next_move_accuracy'",
                    "add('micle_berry','full_hp'",
                    "moves:['reflect','hydro_pump']",
-                   "['rowap_berry','confusion','tackle']"):
+                   "['rowap_berry','confusion','tackle']",
+                   "['wiki_berry','adamant']",
+                   "add('starf_berry','one_random_stat'",
+                   "add('starf_berry','full_hp'"):
         check.demand(needle in v3, "No se localizo precedente V3: " + needle)
 
 
@@ -567,6 +619,24 @@ def negative_controls(fixture, queue, progress, check):
             lambda f: f["blocks"][7]["cases"][7].update({"consumes": True}),
             lambda f: f["blocks"][7]["cases"].pop(),
             lambda f: f["blocks"][7]["ids"].append("sitrus_berry"),
+        ])
+    if len(fixture["blocks"]) >= 9:
+        edits.extend([
+            lambda f: f["blocks"][8]["cases"][0].update({"expected_stage": 1}),
+            lambda f: f["blocks"][8]["cases"][0].update({"own_move": "swords_dance"}),
+            lambda f: f["blocks"][8]["cases"][1].update({"consumes": True}),
+            lambda f: f["blocks"][8]["cases"][1].update({"start": "fifth"}),
+            lambda f: f["blocks"][8]["cases"][2].update({"foe_move": "tackle"}),
+            lambda f: f["blocks"][8]["cases"][3].update({"consumes": True}),
+            lambda f: f["blocks"][8]["cases"][4].update({"actor_species": "mew"}),
+            lambda f: f["blocks"][8]["cases"][4].update({"expected_type": "fairy"}),
+            lambda f: f["blocks"][8]["cases"][5].update({"foe_move": "thunder_shock"}),
+            lambda f: f["blocks"][8]["cases"][6].update({"foe_initial_hp": 2}),
+            lambda f: f["blocks"][8]["cases"][6].update({"nature": "hardy"}),
+            lambda f: f["blocks"][8]["cases"][7].update({"confuses": True}),
+            lambda f: f["blocks"][8]["cases"][8].update({"start": "fifth"}),
+            lambda f: f["blocks"][8]["cases"].pop(),
+            lambda f: f["blocks"][8]["ids"].append("sitrus_berry"),
         ])
     for i, edit in enumerate(edits):
         tampered = copy.deepcopy(fixture)
