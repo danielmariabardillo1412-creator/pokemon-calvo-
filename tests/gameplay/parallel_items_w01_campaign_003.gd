@@ -123,11 +123,20 @@ func _frame_c003(session: RefCounted, id: StringName) -> Dictionary:
 	var log: Array = session._checkpoint.get("snapshot", {}).get("native", {}).get("log", [])
 	var missed: bool = false
 	var band_activated: bool = false
+	var trap_ticks: int = 0
 	for entry: String in log:
 		if entry.begins_with("|-miss|") and entry.contains("p1a:"):
 			missed = true
 		if entry.begins_with("|-activate|") and entry.contains("Focus Band"):
 			band_activated = true
+		if entry.begins_with("|-damage|") and entry.contains("[from] move: Infestation"):
+			trap_ticks += 1
+	var native_snapshot: Dictionary = session._checkpoint.get("snapshot", {}).get("native", {})
+	var weather_state: Variant = native_snapshot.get("field", {}).get("weatherState", {})
+	var sun_duration: int = int(weather_state.get("duration", 0)) if weather_state is Dictionary else 0
+	var sides: Array = native_snapshot.get("sides", [])
+	var own_hazards: Dictionary = sides[0].get("sideConditions", {}) if sides.size() > 0 else {}
+	var rock_on_side: bool = own_hazards.has("stealthrock")
 	var request: Dictionary = session._checkpoint.get("views", {}).get("p1", {}).get("request", {})
 	var active_requests: Array = request.get("active", [])
 	var moves: Array = active_requests[0].get("moves", []) if active_requests.size() > 0 else []
@@ -135,7 +144,8 @@ func _frame_c003(session: RefCounted, id: StringName) -> Dictionary:
 	var forcing: bool = force_flags.has(true)
 	return {
 		"valid": native.has("boosts"), "hp": own.current_hp, "max_hp": own.stats.max_hp, "foe_hp": foe.current_hp,
-		"foe_max_hp": foe.stats.max_hp, "status_move_disabled": moves.size() > 1 and bool(moves[1].get("disabled", false)),
+		"foe_max_hp": foe.stats.max_hp, "reserve_hp": bench.current_hp, "reserve_max_hp": bench.stats.max_hp,
+		"status_move_disabled": moves.size() > 1 and bool(moves[1].get("disabled", false)),
 		"own_has_item": own.held_item_id == id, "reserve_has_item": bench.held_item_id == id,
 		"own_consumed": own.held_item_consumed, "reserve_consumed": bench.held_item_consumed,
 		"native_item": String(native.get("item", "")),
@@ -149,7 +159,8 @@ func _frame_c003(session: RefCounted, id: StringName) -> Dictionary:
 		"native_ability": String(native.get("ability", "")),
 		"native_volatiles": native.get("volatiles", []).duplicate(true),
 		"missed": missed,
-		"focus_band_activated": band_activated
+		"focus_band_activated": band_activated,
+		"trap_ticks": trap_ticks, "sun_duration": sun_duration, "stealth_rock": rock_on_side
 	}
 
 func _probe_c003(row: Dictionary, seed: int, mode: String) -> Dictionary:
@@ -194,6 +205,22 @@ func _probe_c003(row: Dictionary, seed: int, mode: String) -> Dictionary:
 	if not action.get("accepted", false):
 		await session.close()
 		return {"valid": false}
+	# Los objetos de duración y peligros de entrada necesitan más de un turno.
+	# Se usan únicamente comandos legítimos del motor; nunca se simulan efectos.
+	if String(row.op) == "trap_extended_duration":
+		for turn in 6:
+			var continuation: Dictionary = await session.submit("move 2", session.revision)
+			check(mode + " atrapamiento turno " + str(turn + 2) + " aceptado", continuation.get("accepted", false))
+			if not continuation.get("accepted", false):
+				await session.close()
+				return {"valid": false}
+	elif String(row.op) in ["boots_rock_reentry", "boots_no_rock_control"]:
+		for move: String in ["switch 2", "switch 1"]:
+			var switched: Dictionary = await session.submit(move, session.revision)
+			check(mode + " cambio de batalla " + move + " aceptado", switched.get("accepted", false))
+			if not switched.get("accepted", false):
+				await session.close()
+				return {"valid": false}
 	var after: Dictionary = _frame_c003(session, id)
 	check(mode + " estado final nativo", after.valid)
 	var units: int = owner.inventory.quantity(id)
@@ -254,7 +281,7 @@ func _compare_c003(row: Dictionary, obs: Dictionary) -> void:
 	var fn: int = int(n.start.foe_hp) - int(n.after.foe_hp)
 	var fr: int = int(r.start.foe_hp) - int(r.after.foe_hp)
 	check("reserva igual al control (PS actor)", dr == dn)
-	if String(row.op) != "trap_residual":
+	if String(row.op) not in ["trap_residual", "trap_extended_duration"]:
 		check("dano rival sin cambio no autorizado", fa == fn and fn == fr)
 	match String(row.op):
 		"ground_immunity":
@@ -411,6 +438,44 @@ func _compare_c003(row: Dictionary, obs: Dictionary) -> void:
 			check("Semilla Hierba: campo distinto o inexistente no concede Defensa",
 				a.after.defense_stage == 0 and n.after.defense_stage == 0 and r.after.defense_stage == 0)
 			check("Semilla Hierba: sin Campo Hierba se conserva",
+				not a.after.own_consumed and a.physical_units == 2)
+		"trap_extended_duration":
+			check("Garra Garfio: prolonga Infestacion durante siete turnos de dano nativo",
+				a.after.trap_ticks in [7, 14] and a.after.trap_ticks > n.after.trap_ticks
+				and n.after.trap_ticks == r.after.trap_ticks and n.after.trap_ticks <= 10)
+			check("Garra Garfio: residual adicional real frente a controles",
+				fa > fn and fn == fr and not a.after.own_consumed and a.physical_units == 2)
+		"trap_no_activation":
+			check("Garra Garfio: Tackle no crea Infestacion",
+				a.after.trap_ticks == 0 and n.after.trap_ticks == 0 and r.after.trap_ticks == 0
+				and fa == fn and fn == fr)
+			check("Garra Garfio se retiene sin efecto", not a.after.own_consumed and a.physical_units == 2)
+		"sun_eight_turns":
+			check("Roca Calor: Dia Soleado dura tres turnos mas solo con portador",
+				a.after.sun_duration > 0 and a.after.sun_duration == n.after.sun_duration + 3
+				and n.after.sun_duration == r.after.sun_duration)
+			check("Roca Calor no se gasta", not a.after.own_consumed and a.physical_units == 2)
+		"no_sunny_day":
+			check("Sin Dia Soleado no hay duracion artificial",
+				a.after.sun_duration == 0 and n.after.sun_duration == 0 and r.after.sun_duration == 0)
+			check("Roca Calor sin activar se conserva", not a.after.own_consumed and a.physical_units == 2)
+		"boots_rock_reentry":
+			check("Botas Gruesas: Trampa Rocas existe en los tres combates", 
+				a.after.stealth_rock and n.after.stealth_rock and r.after.stealth_rock)
+			check("Botas Gruesas: portador activo vuelve sin perder PS",
+				a.after.active_id == "own" and n.after.active_id == "own" and r.after.active_id == "own"
+				and a.after.hp == a.start.hp and n.after.hp < n.start.hp
+				and r.after.hp == n.after.hp)
+			check("Botas Gruesas: reserva protegida solo cuando las lleva",
+				r.after.reserve_hp == r.after.reserve_max_hp
+				and n.after.reserve_hp < n.start.reserve_hp
+				and a.after.reserve_hp == n.after.reserve_hp)
+			check("Botas Gruesas no se consumen", not a.after.own_consumed and a.physical_units == 2)
+		"boots_no_rock_control":
+			check("Botas Gruesas: sin peligro, cambios no causan dano",
+				not a.after.stealth_rock and not n.after.stealth_rock and not r.after.stealth_rock
+				and a.after.hp == a.start.hp and n.after.hp == n.start.hp and r.after.hp == r.start.hp)
+			check("Botas Gruesas sin peligro siguen equipadas",
 				not a.after.own_consumed and a.physical_units == 2)
 		_:
 			check("Operacion no autorizada", false)
