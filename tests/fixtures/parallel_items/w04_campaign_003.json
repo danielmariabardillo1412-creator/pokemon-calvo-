@@ -121,6 +121,24 @@
         "conditional_source_rejected_without_spend",
         "eligible_source_single_spend_and_savev2_only_if_supported"
       ]
+    },
+    {
+      "block": "08",
+      "ids": [
+        "chipped_pot",
+        "cracked_pot",
+        "masterpiece_teacup"
+      ],
+      "expected_trigger": "validate_catalog_form_conditions_and_item_use",
+      "policy": "never_convert_missing_form_data_to_unrestricted_evolution",
+      "cases": [
+        "item_catalog_presence",
+        "enumerate_source_target_and_form_conditions",
+        "different_form_never_runtime_supported",
+        "wrong_species_cannot_evolve_or_consume",
+        "conditional_route_rejected_without_spend",
+        "eligible_route_identity_consumption_savev2_only_if_supported"
+      ]
     }
   ]
 }
