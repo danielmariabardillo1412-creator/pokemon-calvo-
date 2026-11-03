@@ -164,7 +164,7 @@ func _probe_field_use(spec: Dictionary, mode: String) -> Dictionary:
 	var item: StringName = StringName(spec.id)
 	var creature: CreatureInstance = _mon(&"mew", int(automation.level), &"own", ["tackle", "reflect"])
 	creature.friendship = int(spec.get("start_friendship", 100))
-	if spec.has("pp_gain"):
+	if spec.has("pp_gain") or bool(spec.get("pp_full", false)):
 		for index: int in range(2):
 			var starting: Variant = spec.get("pp%d_start" % index, "full")
 			creature.moveset[index].current_pp = (
@@ -237,19 +237,22 @@ func _probe_field_use(spec: Dictionary, mode: String) -> Dictionary:
 	var now_status: String = String(updated.status_state.persistent_id)
 	var now_confusion: bool = updated.status_state.has_volatile(&"confusion")
 	var pp_gain: int = int(spec.get("pp_gain", 0)) if expected_acceptance else 0
+	var pp_full: bool = bool(spec.get("pp_full", false)) and expected_acceptance
 	var expected_pp: int = start_pp
 	if String(spec.kind) == "field_pp":
 		expected_pp = mini(updated.moveset[0].max_pp,
 			start_pp + (int(spec.expected_delta) if expected_acceptance else 0))
-	elif String(spec.kind) == "field_medicine" and spec.has("pp_gain"):
+	elif String(spec.kind) == "field_medicine" and (spec.has("pp_gain") or spec.has("pp_full")):
 		var pp_scope: String = String(spec.get("pp_scope", "all"))
 		if pp_scope == "all" or (pp_scope == "one" and slot == 0):
-			expected_pp = mini(updated.moveset[0].max_pp, start_pp + pp_gain)
+			expected_pp = (updated.moveset[0].max_pp if pp_full else
+			mini(updated.moveset[0].max_pp, start_pp + pp_gain))
 	var expected_pp_second: int = start_pp_second
-	if String(spec.kind) == "field_medicine" and spec.has("pp_gain"):
+	if String(spec.kind) == "field_medicine" and (spec.has("pp_gain") or spec.has("pp_full")):
 		var pp_scope_second: String = String(spec.get("pp_scope", "all"))
 		if pp_scope_second == "all" or (pp_scope_second == "one" and slot == 1):
-			expected_pp_second = mini(updated.moveset[1].max_pp, start_pp_second + pp_gain)
+			expected_pp_second = (updated.moveset[1].max_pp if pp_full else
+			mini(updated.moveset[1].max_pp, start_pp_second + pp_gain))
 	check(mode + " campo: PP por slot estrictos, sin propagacion incorrecta",
 		now_pp == expected_pp
 		and updated.moveset[1].current_pp == expected_pp_second)
@@ -381,15 +384,20 @@ func _compare_field_use(spec: Dictionary, observed: Dictionary) -> void:
 			bool(a.confusion) == (false if should_cure_confusion else bool(spec.confused))
 			and bool(s.confusion) == bool(a.confusion)
 			and bool(n.confusion) == bool(spec.confused))
-		if spec.has("pp_gain"):
-			var gain: int = int(spec.pp_gain) if expected else 0
+		if spec.has("pp_gain") or bool(spec.get("pp_full", false)):
+			var gain: int = int(spec.get("pp_gain", 0)) if expected else 0
+			var full: bool = expected and bool(spec.get("pp_full", false))
 			var pp_scope: String = String(spec.get("pp_scope", "all"))
 			var selected: int = int(spec.get("slot", -1))
-			var expected_first: int = mini(int(n.pp_max), int(n.pp) +
-				(gain if pp_scope == "all" or (pp_scope == "one" and selected == 0) else 0))
-			var expected_second: int = mini(int(n.pp_second_max), int(n.pp_second) +
-				(gain if pp_scope == "all" or (pp_scope == "one" and selected == 1) else 0))
-			check("Elixir/Eter respetan scope, ranura y maximos de PP",
+			var first_is_target: bool = pp_scope == "all" or (pp_scope == "one" and selected == 0)
+			var second_is_target: bool = pp_scope == "all" or (pp_scope == "one" and selected == 1)
+			var expected_first: int = int(n.pp)
+			var expected_second: int = int(n.pp_second)
+			if first_is_target:
+				expected_first = int(n.pp_max) if full else mini(int(n.pp_max), int(n.pp) + gain)
+			if second_is_target:
+				expected_second = int(n.pp_second_max) if full else mini(int(n.pp_second_max), int(n.pp_second) + gain)
+			check("Elixir/Eter normal o Max: scope, ranura y PP maximos",
 				int(a.pp) == expected_first and int(a.pp_second) == expected_second
 				and int(s.pp) == int(a.pp) and int(s.pp_second) == int(a.pp_second))
 		if spec.has("friendship_loss"):
