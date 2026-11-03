@@ -112,12 +112,23 @@ func _probe_training(spec: Dictionary, mode: String) -> Dictionary:
 			check(mode + " Caramelo Raro sube exactamente un nivel",
 				now.level == start_level + 1)
 		else:
-			expected_exp = mini(
-				ProgressionRuleset.experience_for_level(curve, 100), c.experience + 100)
+			var nominal_exp: int = int(spec.get("exp_amount", 100))
+			var cap_exp: int = ProgressionRuleset.experience_for_level(curve, 100)
+			expected_exp = mini(cap_exp, c.experience + nominal_exp)
 			next_level = ProgressionRuleset.level_for_experience(curve, expected_exp)
-			check(mode + " Caramelo Exp XS gana XP real, máximo 100",
-				expected_exp - c.experience == int(spec.exp_gain)
-				and int(result.get("exp_gained", -1)) == int(spec.exp_gain))
+			var gain_expected: int = expected_exp - c.experience
+			check(mode + " Caramelo Exp: nominal y tope de experiencia",
+				gain_expected > 0 and gain_expected <= nominal_exp
+				and int(result.get("exp_gained", -1)) == gain_expected)
+			if spec.has("exp_gain") or spec.has("expected_exp_gain"):
+				check(mode + " Caramelo Exp: ganancia exacta en fixture",
+					gain_expected == int(spec.get("expected_exp_gain", spec.get("exp_gain", -1))))
+			if bool(spec.get("expect_cap", false)):
+				check(mode + " Caramelo Exp llega exactamente al máximo nivel100",
+					expected_exp == cap_exp and next_level == 100)
+			if bool(spec.get("expect_level_up", false)):
+				check(mode + " Caramelo Exp atraviesa umbral de nivel",
+					next_level > start_level and now.level == next_level)
 		check(mode + " crecimiento XP y nivel por curva real", now.level == next_level
 			and now.experience == expected_exp)
 		check(mode + " déficits PS y amistad", now.stats.max_hp - now.current_hp == start_hp_deficit
