@@ -223,3 +223,20 @@ El CSV está consolidado en commit `d338594b9e085f1de1698e44006a99d0b5a83c36`, c
 ## CI09 del progreso consolidado
 
 La segunda ejecución [#41602238413](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41602238413), SHA `d338594b9e085f1de1698e44006a99d0b5a83c36`, terminó `completed/success`: Python CAMP004 **312**, Godot **847**, regresiones CAMP003 Python **120** y Godot **270**. Confirmados dos objetos de fusión `DEPENDENCIA` y tres cupones `AUDITORIA_LEGACY`; sin efectos inventados. **CAMPAÑA_004 09/10**, 29 IDs auditados. Próxima tecla `p`: exclusivamente bloque 10/10 de siete tesoros `big_nugget;bottle_cap;gold_bottle_cap;heart_scale;nugget;pretty_wing;rare_bone`. Conservar V28, `main`, producción y demás ramas.
+
+
+---
+
+## CIERRE VIGENTE W04 — CAMPAÑA_004_FINALIZADA
+
+**La sección presente prevalece sobre las instrucciones históricas de bloques 01–09 o notas que decían pendiente CI.** Identidad **IA4/W04**. Única rama en que se publicó esta campaña: `codex/calvo-items-20261103-w04-camp004`. Al completar el bloque 10 **NO hay siguiente microbloque autorizado**.
+
+**CAMPAÑA_004 finalizada: 10/10 microbloques, 36/36 IDs únicos auditados.** Primera CI [#41610829772](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41610829772), SHA `eb7f9046cb1a0cc04e0ea15764dbf32646925033`, `completed/success`. CI final tras consolidar CSV [#41611102944](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41611102944), SHA `1f4021c4ec00f26a4df3e24428e53b0989caabe8`, **`completed/success`**. En ambos: manifest `reserved=10 completed=10 ids=36`; Python CAMP004 **387**, Godot CAMP004 **1.090**, CAMP003 Python **120**, Godot **270**, regresión CAMP001 **559 comprobaciones y 12 casos**.
+
+**Resultados funcionales REALES de CAMP004:** 31 `DEPENDENCIA` (sin efecto principal certificado, aunque se certificaron rechazos/equipamiento/persistencia según caso); 1 `AUDITORIA_DE_DATOS` (`catching_charm`, captura es W03); 3 `AUDITORIA_LEGACY` (`roto_catch`, `roto_exp_points`, `roto_friendship`, captura/XP/amistad no acreditadas); 1 `RECUPERACION_VERIFICADA` (`rage_candy_bar`: cura positiva, consumo único, SaveV2). **No declarar 36 efectos positivos.** CAMP003 conserva sus **16 dependencias** y resultados 14/10/6 anteriores.
+
+**Bloque 10:** `big_nugget;bottle_cap;gold_bottle_cap;heart_scale;nugget;pretty_wing;rare_bone` auditados. Los cuatro equipables `big_nugget;bottle_cap;gold_bottle_cap;rare_bone` conservan identidad, equipamiento/retirada y SaveV2; los otros tres `DATA_ONLY` conservan rechazo, inventario e identidad. Venta, economía, Hyper Training y reaprendizaje **no están certificados**. No editar subsistemas de entrenamiento W02 ni inventar tiendas.
+
+**Puntos para IA6:** leer el informe completo `docs/coordination/items_parallel_v1/reports/W04/CAMP_004_FINAL.md` y `CAMP_004_ITER_10.md`; conservar los 31 pendientes funcionales de CAMP004 y las 16 dependencias de CAMP003 sin confundir con PASS de pruebas negativas. Coordinar decisiones de formas/fusiones, `rotom_catalog` con `missing_description`, cupones `unused`/`placeholder_description`, captura W03 y entrenamiento W02. Ninguna modificación de producción, `main`, V28, rama árbitra, PR118 ni ramas ajenas. No integrar en `main` automáticamente. Comprobación visual/GPU sigue pendiente.
+
+**STOP W04 — `CAMPAÑA_004_FINALIZADA`.** Un nuevo `p` NO autoriza un bloque 11 ni una CAMPAÑA_005; esperar nuevo encargo oficial de IA6.
