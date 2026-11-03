@@ -1,3 +1,9 @@
+# IA3/W03 — Continuidad CAMP004 09/10
+
+Bloque 09: ground_tera_shard;ice_tera_shard;normal_tera_shard;poison_tera_shard. Fixture, Godot y auditor Python publicados, con soporte de inventario y rechazo de uso que no implica teracristalización. Los cuatro tienen dependencia funcional compartida. CI anterior 08 aprobada: #41578378122, Python 151/Godot 1012, regresión CAMP003 279/986. Para certificar 09 comprobar el workflow después de añadir novena fila CSV. Próximo p: bloque 10 (psychic_tera_shard;rock_tera_shard;steel_tera_shard;water_tera_shard); luego detenerse, no inventar campaña nueva. main/V28 intactos.
+
+---
+
 # IA3/W03 — Continuidad CAMP004 08/10
 
 Bloque 08: fighting_tera_shard;fire_tera_shard;flying_tera_shard;ghost_tera_shard;grass_tera_shard. Pruebas Godot y Python acumuladas, inventario positivo y uso Tera todavía no funcional. El progreso CSV ya registra 08; verificar la CI del último SHA antes de certificar. Siguiente p: bloque 09 (ground_tera_shard;ice_tera_shard;normal_tera_shard;poison_tera_shard). Mantener main y V28 sin cambios.
