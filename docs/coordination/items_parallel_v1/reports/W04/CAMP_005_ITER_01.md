@@ -64,3 +64,17 @@ Los **niveles 32 y 30 de etapas anteriores de algunas cadenas no son mínimos au
 **CI pendiente:** [#41716388712](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41716388712). Exigir `CAMP005_W04_MANIFEST_PASS reserved=10 completed=1 ids=46`, `CAMP005_W04_PY PASS blocks=1 checks=N` y `CAMP005_W04_GODOT PASS blocks=1 checks=N`. Regresiones CAMP004/CAMP003 obligatorias si se cambia producción, y en hitos 05/10, según workflow. Este bloque no ha modificado ningún módulo funcional, por falta de requisitos aprobados.
 
 **Siguiente `p` autorizado:** solo bloque 02 (`protector;reaper_cloth;prism_scale;sachet;up_grade`), previa verificación de CI01. No avanzar hasta el siguiente turno.
+
+
+## CI real: bloque 01
+
+La ejecución [#41716388712](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41716388712), SHA `44b0208269af6ae8a9245e77c511f448a59725d5`, terminó **completed/success**. Recibos de logs:
+- `CAMP005_W04_MANIFEST_PASS reserved=10 completed=1 ids=46 kind=FUNCTIONAL_BACKLOG`.
+- `CAMP005_W04_PY PASS blocks=1 checks=83`.
+- `CAMP005_W04_GODOT PASS blocks=1 checks=86`.
+
+Los cuatro IDs reportaron `status=BLOQUEADO_POR_CONTRATO`, con productor `level_up_context`, consumidor `evolution_candidates` y requisitos `approved_level+held_item`. **La CI prueba fuente canónica, equipar/retirar y SaveV2, no un cambio de especie positivo.** Se conserva `future_evolution_implementation=DEFERRED`.
+
+El CSV quedó actualizado a `DEPENDENCIA_DOCUMENTADA` para cumplir la puerta de estados, con explicación literal `BLOQUEADO_POR_CONTRATO`, run `41716388712`, commit `624add4071c871b5894bc5bb2f303cbcdb6975bd`. La actualización provoca una nueva CI, que debe comprobarse por separado.
+
+Regresiones CAMP004/CAMP003/CAMP001 están preservadas pero **no se han ejecutado en este bloque 01** porque el workflow las reserva para hitos 05 y 10 y cambios de producción. Ningún módulo de producción fue modificado.
