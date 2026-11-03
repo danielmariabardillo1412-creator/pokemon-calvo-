@@ -26,6 +26,28 @@
         "identity_and_savev2_for_allowed_equip",
         "positive_evolution_identity_consumption_savev2_if_supported"
       ]
+    },
+    {
+      "block": "02",
+      "ids": [
+        "love_sweet",
+        "ribbon_sweet",
+        "star_sweet"
+      ],
+      "family": "EVOLUTION",
+      "source": "PokeAPI items 1168,1173,1172; Milcery holds sweet and spins",
+      "canonical_trigger": "spin",
+      "policy": "do_not_turn_spin_into_direct_bag_use_or_claim_alcremie_form_selection",
+      "expected_outcome": "negative_runtime_and_inventory_preservation_if_no_supported_route; positive_only_with_real_runtime_rule",
+      "cases": [
+        "catalog_and_pokeapi_consistency",
+        "spin_evolution_classification",
+        "eevee_direct_use_rejected_no_consumption",
+        "milcery_use_item_and_evolve_rejected_if_no_supported_record",
+        "held_sweet_does_not_simulate_spin",
+        "savev2_identity_stock_for_supported_equipment",
+        "regression_block_01_retained"
+      ]
     }
   ]
 }
