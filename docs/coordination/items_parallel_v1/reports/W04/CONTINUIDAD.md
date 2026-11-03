@@ -196,3 +196,18 @@ Las **16 dependencias CAMP003** y **9 dependencias CAMP004 bloques 01–03** sig
 **Contratos:** los tres objetos están seleccionados y tienen `DATA_ONLY`, no son equipables bajo el perfil actual. `rotom_catalog` conserva `missing_description`. El runner comprueba origen/controles de Tornadus, Rotom, Zygarde y Eevee, rechazos sin consumo, identidad y SaveV2, y no promete cambios de formas sin motor. No se han tocado las 16 dependencias CAMP003, las pruebas de CAMP001, `main`, V28, rama árbitra, producción ni ramas ajenas.
 
 **Siguiente `p`:** una vez comprobada CI08, ejecutar exclusivamente el bloque **09/10**: `n_lunarizer_merge;n_solarizer_merge;roto_catch;roto_exp_points;roto_friendship`. No adelantar trabajo de captura/entrenamiento de W03/W02.
+
+
+---
+
+## CAMPAÑA_004 — Bloque 09 (2026-11-03)
+
+**IA4/W04**, rama única de escritura `codex/calvo-items-20261103-w04-camp004`.
+
+**Bloque 08 previamente validado:** GitHub Actions [#41592113216](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41592113216), `completed/success`, SHA `4e328bdba11bad06bc8d5b7e1f5e8390d5192ae1`, Python **245**, Godot **746**, regresión CAMP003 Python **120** y Godot **270**. Los tres IDs de bloque08 son `DEPENDENCIA records=0`; `rotom_catalog` conserva bandera `missing_description`. Este resultado prevalece sobre la instrucción histórica anterior de comprobar bloque08.
+
+**Bloque 09/10 publicado en pruebas:** `n_lunarizer_merge;n_solarizer_merge;roto_catch;roto_exp_points;roto_friendship`. Cinco objetos `LEGACY_OR_CATEGORY_REVIEW`, selección vigente, con origen `unused`, `DATA_ONLY`, `native_entry=False`, `placeholder_description`, no equipables. Pruebas en `tests/gameplay/parallel_items_w04_campaign_004.gd`, `tests/tools/test_parallel_items_w04_campaign_004.py`, fixture `tests/fixtures/parallel_items/w04_campaign_004.json`, CSV `reports/W04/CAMP_004_PROGRESO.csv` e informe `reports/W04/CAMP_004_ITER_09.md`. La CI principal es [#41602009788](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41602009788), a comprobar antes de marcar PASS.
+
+**Alcance técnico:** Necrozma con Lunala o Solgaleo por separado (pareja real en el equipo) debe conservar ambas identidades, objetos y SaveV2 cuando fusión no está conectada. Los tres cupones Roto solo comprueban el servicio de campo y rechazo sin gasto; captura W03 y experiencia/amistad W02 no quedan certificadas. No eliminar entradas `unused` sin decisión de IA6.
+
+**Próximo `p` si CI09 correcta:** bloque **10/10** `big_nugget;bottle_cap;gold_bottle_cap;heart_scale;nugget;pretty_wing;rare_bone`. No iniciarlo hasta una orden nueva. Conservadas CAMP003 (16 dependencias), regresiones CAMP001, producción, `main`, V28, rama árbitra y ramas de otras trabajadoras.
