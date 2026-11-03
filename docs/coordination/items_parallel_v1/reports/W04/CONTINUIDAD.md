@@ -255,3 +255,12 @@ La segunda ejecución [#41602238413](https://github.com/danielmariabardillo1412-
 **Regresiones:** pruebas CAMP004/CAMP003 y CAMP001 preservadas, ejecución obligatoria en hitos 05/10 o parches de producción según workflow. Nada tocado en main, V28, rama árbitra, datos ni APIs compartidas.
 
 **Siguiente `p`:** verificar CI01 y ejecutar solamente bloque 02 `protector;reaper_cloth;prism_scale;sachet;up_grade`. No repetir auditorías históricas ni empezar otro bloque por anticipado.
+
+
+## CI05 bloque 01 consolidada
+
+La CI principal [#41716388712](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41716388712) y la CI del CSV reconciliado [#41716727991](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41716727991), SHA `624add4071c871b5894bc5bb2f303cbcdb6975bd`, terminaron **completed/success**, ambas Python 83 y Godot 86. Manifiesto `reserved=10 completed=1 ids=46 kind=FUNCTIONAL_BACKLOG`; las cuatro especies y objetos conservan `status=BLOQUEADO_POR_CONTRATO`, **ninguna evolución de nivel implementada ni certificada**. CSV fila 01 `DEPENDENCIA_DOCUMENTADA`; ver `CAMP_005_ITER_01.md`.
+
+La causa no es un fallo de CI: documento V27 `level_values_selected=null`, productor `ProgressionSystem.gain_experience` y `EvolutionSystem.level_up_context` sin `held_item`, y consumidor `EvolutionSystem.classify_record` no admite `held_item` como condición level-up; falta además política de consumo al evolucionar. Se preserva equipamiento y SaveV2. El bloque 02 debe investigar cinco IDs nuevos del **backlog histórico** sin repetir auditorías ni añadir objetos al recuento global. Regresiones CAMP004/CAMP003/CAMP001 no ejecutadas en bloque 01, solo en hitos 05/10 o tras parche de producción según workflow.
+
+**Estado vigente: CAMPAÑA_005 1/10; próximo `p` ejecuta únicamente bloque 02 (`protector;reaper_cloth;prism_scale;sachet;up_grade`).** No tocar main/V28/otras ramas ni inventar umbrales.
