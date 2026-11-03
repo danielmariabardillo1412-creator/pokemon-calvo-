@@ -39,3 +39,18 @@ La primera CI [#41584213703](https://github.com/danielmariabardillo1412-creator/
 Corrección mínima en `tests/tools/test_parallel_items_w04_campaign_004.py`, commit `64f688735428722fb0f5970a0be0f9ebb11a42e1`: retirar únicamente esa referencia específica al antiguo número de bloques. Se conservan los tests de comportamiento del bloque 05 y el recibo final exacto de seis bloques, que se verifica dentro de los contratos del bloque 06.
 
 **Nueva CI:** [#41584355240](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41584355240), pendiente de comprobación final. No afirmar PASS hasta registros reales.
+
+
+## CI06 corregida y verificada
+
+Después del fallo inicial de Python por el marcador antiguo `blocks=5`, se publicó la reparación mínima `64f688735428722fb0f5970a0be0f9ebb11a42e1`. La nueva [GitHub Actions #41584355240](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41584355240) terminó `completed/success` sobre ese SHA. Recibos extraídos de logs:
+- `CAMP004_W04_MANIFEST_PASS reserved=10 completed=6 ids=36`.
+- `CAMP004_W04_PY PASS blocks=6 checks=181`.
+- `CAMP004_W04_GODOT PASS blocks=6 checks=565`.
+- Regresiones CAMP003: Python `PASS blocks=10 checks=120`; Godot `PASS blocks=10 checks=270`.
+
+Salidas individuales: `griseous_core` y `lustrous_globe`, `DEPENDENCIA records=0`, equipamiento verificado pero sin ruta de forma certificada; `meteorite`, `DEPENDENCIA records=0`, cambio de Deoxys no conectado. Las aserciones de no consumo, identidad y SaveV2 pasaron, **no** la forma real de esos Pokémon.
+
+CSV de progreso reconciliado a `DEPENDENCIA_DOCUMENTADA` con run `41584355240`, commit `ce99a4a70514b3d952a59ee863f07f770af71f6a`. La propia actualización del CSV activa CI adicional; no se debe atribuir su resultado hasta verificarlo.
+
+**Resumen:** bloque 06 entregado con 18 IDs acumulados auditados. Próximo `p`: bloque 07, si esta última CI no revela fallo.
