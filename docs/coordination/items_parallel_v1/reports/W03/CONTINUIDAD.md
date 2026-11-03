@@ -1,3 +1,20 @@
+# IA3/W03 — CONTINUIDAD ACTUAL CAMPAÑA_003: 04/10
+
+**Rama exclusiva:** `codex/calvo-items-20261103-w03-camp003`. **Progreso acumulativo:** cuatro bloques publicados (01 Poké/Gran, 02 Ultra/Master, 03 Quick/Timer, 04 Level/Nest). **Siguiente tecla `p`: exactamente 05 `fast_ball;dream_ball`, tras leer último run.** No ejecutar 06 sin nueva `p`.
+
+## Estado verificado al publicar 04
+- **Bloques 01–03 con CI real PASS:** [#41556927911](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41556927911), SHA de pruebas `5ec49e9290a3eba5230c7eb9b96e69a4b16ff4d9`: Python `blocks=3 checks=88`, Godot `blocks=3 checks=317`.
+- **Bloque 04 de Level/Nest:** Nivel Ball factor ×1/×2/×4/×8 según nivel activo vs objetivo, cap 255/tasa de especie; Nest factor max((41−nivel objetivo)/10,1), sin necesitar nivel del capturador. Se reutiliza producción existente: ningún multiplicador nuevo. Probadas por GDScript propuesto 2 especies (Mew/Caterpie) × 2 modos PS y umbrales. Nivel activo inválido `-1,0,101` debe rechazar `capture_active_level_context_missing` sin RNG/consumo.
+- **Fuente fiable:** `WildAdventureSession.capture_current` y `ShowdownAdventureSession.capture` pasan `catcher.level` al contexto real. No crear reloj/contador ficticio ni modificar `CaptureBattleContext`.
+- **Suite acumulativa y blobs de pruebas:** fixture `1dc12e0190c848c0f25079df81d208ac875bd56d`, runner Godot `3e7180db53076ebe0cb26e9d8bd9279ea05d58cd`, Python `6fce102ddf72cbc4da61e8e1a63894892a16be93`. Se preservaron funciones y entradas 01–03; `CAMP_003_PROGRESO.csv` contiene exactamente 04 filas. `CAMP_003_ITER_04.md` describe pruebas y límites.
+- **Commit de activación CI:** `34d963e5c0cab2c840189b24a6c447353a4dd5db`, run [#41558471582](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41558471582) **EN COLA al redactar**. Esta rama puede tener commits documentales posteriores sin reejecución de tests. Para dictaminar PASS, buscar el run cuyo SHA sea el de CSV/test indicado, con logs `CAMP003_W03_PY PASS blocks=4 checks=M` y `CAMP003_W03_GODOT PASS blocks=4 checks=M`.
+- **Estado de validación:** revisión estructural en GitHub OK; **nueva CI sin PASS hasta comprobar ejecución real**. Si falla un assert propio, corregir únicamente test/fixture/cuaderno sin eliminar cobertura; si el motor compartido falla, STOP y solicitud a IA6.
+- **Seguridad:** sólo escrituras de W03 en runner/fixture/Python/progreso/reports de esta rama. `main`, V28, producción, `.github`, catálogo canónico, otras W y árbitra intocables. IA4 opera por adenda independiente.
+
+---
+
+## Histórico anterior conservado
+
 # IA3/W03 — CAMPAÑA_003: estado actual 03/10
 
 **Rama de trabajo exclusiva:** `codex/calvo-items-20261103-w03-camp003`. **Progreso:** 03/10 publicados, solo auditoría/contratos/tests. **Siguiente `p`: exactamente bloque 04 `level_ball;nest_ball`**, no ejecutar 05 sin orden posterior.
