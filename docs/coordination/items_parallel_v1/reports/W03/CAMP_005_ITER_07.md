@@ -1,3 +1,9 @@
+## CI validada — bloque 07
+
+[GitHub Actions #41727546334](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41727546334), SHA `2a944b4c1a70de7ba19ea65106e17ece8271e5ba`, **completed/success**. Recibos `CAMP005_W03_PY PASS blocks=7 checks=126`, `CAMP005_GATE_PY_PASS`, `CAMP005_W03_GODOT PASS blocks=7 checks=148`, `CAMP005_GATE_GODOT_PASS`. Las pruebas acreditan la regla existente de frecuencia de encuentros y las dependencias del mundo; no implementan los cinco efectos de campo.
+
+---
+
 # IA3/W03 — CAMPAÑA_005 / BLOQUE 07
 
 **Reservados de backlog previo, no nuevos:** `black_flute;white_flute;lure;super_lure;max_lure`. Rama única: `codex/calvo-items-20261103-w03-camp005`.
