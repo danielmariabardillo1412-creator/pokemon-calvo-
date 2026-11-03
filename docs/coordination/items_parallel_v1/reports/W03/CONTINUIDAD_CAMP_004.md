@@ -1,3 +1,13 @@
+# IA3/W03 — CONTINUIDAD CAMP004 04/10
+
+**Rama única:** `codex/calvo-items-20261103-w03-camp004`. **Bloque 04 entregado:** `max_lure;max_repel;red_flute`. Tres objetos seleccionados pero sin ejecución de campo autorizada. El runner prueba rechazo sin consumo/mutación para estado normal/dormido/confundido, bloqueo de campo, corrupción, objetivo ajeno y persistencia pura de inventario. No fingir curación, modificación de encuentros, contador de pasos o SaveV2.
+
+**BLOQUE 03:** CI [#41573762889](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41573762889) seguía en ejecución al arrancar 04; comprobar su estado, sin atribuirle PASS. La CI de 04 acumulativa vuelve a ejecutar bloques 01–04 y regresión CAMP003. Ejecutar reparaciones locales del arnés cuando proceda; no modificar APIs compartidas para forzar funcionalidad.
+
+**Siguiente `p`: bloque 05** exclusivamente `repel;silver_razz_berry;super_lure`, previa comprobación del último run. Sin cambios de `main`, V28, ramas ajenas, políticas o producción. Dependencias para IA6: encontros/duración/pasos y cura de confusión.
+
+---
+
 # IA3/W03 — CONTINUIDAD CAMP004 03/10
 
 **Bloque 03:** `fluffy_tail;golden_razz_berry;lure`. Los tres seleccionados pero sin ruta autorizada de efecto directo en `FieldItemService`; caracterización de rechazo sin consumo, estado intacto y roundtrip de mochila. Dependencias: acción de huida del combate, aplicación de baya de captura, y modificador/duración de encuentros. **No certificados funcionalmente.**
