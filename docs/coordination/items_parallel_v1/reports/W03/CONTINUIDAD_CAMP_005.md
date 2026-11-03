@@ -1,3 +1,13 @@
+# IA3/W03 — Continuidad CAMPAÑA_005 06/10 — validado
+
+Rama exclusiva `codex/calvo-items-20261103-w03-camp005`. Bloque 06 `repel;super_repel;max_repel`, reintento terminado con CI [#41726410961](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41726410961) PASS: Python 109/Godot 119, gates IA6 PASS y manifiesto 6/10. Fixture, runner, auditor e informe publicados; último commit de progreso `0bb581dc`.
+
+**Estado de juego:** los tres repelentes NO se han conectado a los pasos. `WildEncounterSystem` demuestra un caso real con probabilidad cero y RNG inalterado y un encuentro garantizado con nivel, pero eso no sustituye el filtro dinámico por nivel líder. Falta el productor mundo de pasos restantes, duración versionada, persistencia y filtro previo. Registrar `DEPENDENCIA_COMPARTIDA` para IA6. Sin cambios en producción, `main`, V28 o ramas ajenas.
+
+**Siguiente `p`: bloque 07** `black_flute;white_flute;lure;super_lure;max_lure`, exclusivamente. No repetir bloque 06 ni abrir otras campañas.
+
+---
+
 ## Recibos verificados — hito 05
 
 [GitHub Actions #41721510769](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41721510769), SHA `3d6989141f2919a7b35b4e03281fc339a9fce98c`, terminó **completed/success**. Resultado acumulado: `CAMP005_W03_PY PASS blocks=5 checks=93`, `CAMP005_W03_GODOT PASS blocks=5 checks=103`, gates Python y Godot IA6 PASS. Regresiones del hito obligatorias: `CAMP004_W03_PY PASS blocks=10 checks=187`, `CAMP004_W03_GODOT PASS blocks=10 checks=1344`, `CAMP003_W03_PY PASS blocks=10 checks=279`, `CAMP003_W03_GODOT PASS blocks=10 checks=986`.
