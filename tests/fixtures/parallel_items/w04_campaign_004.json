@@ -130,6 +130,32 @@
         "save_v2_inventory_identity",
         "regression_campaign_003_and_001"
       ]
+    },
+    {
+      "block": "06",
+      "ids": [
+        "griseous_core",
+        "lustrous_globe",
+        "meteorite"
+      ],
+      "family": "STORY_KEY_OR_FORM_REVIEW",
+      "classification_by_id": {
+        "griseous_core": "held equipment supported; Giratina form route not certified",
+        "lustrous_globe": "held equipment supported; Palkia form route not certified",
+        "meteorite": "not holdable in profile; Deoxys form use not connected"
+      },
+      "source": "RANDOMLOCK_ITEMS_BUILD_SCOPE_V2.csv, ITEM_FIELD_V8.csv.txt, ITEM_INVENTORY.csv, item_connections_v1.json",
+      "policy": "Do not infer Giratina/Palkia/Deoxys form changes from equip, held native hooks or inventory data; positive only if actual RUNTIME_SUPPORTED route",
+      "cases": [
+        "catalog_selection_and_species_controls",
+        "griseous_lustrous_held_equip_unequip",
+        "meteorite_non_holdable_negative",
+        "field_use_and_evolution_rejection_without_spend",
+        "no_form_change_on_equip",
+        "SaveV2_equipped_and_restored",
+        "positive_only_with_actual_item_evolution_rule",
+        "regression_campaign003_retained"
+      ]
     }
   ]
 }
