@@ -17,3 +17,17 @@ El fixture `tests/fixtures/parallel_items/w04_campaign_004.json`, commit `40d808
 **Dependencias preservadas:** 3 confites del bloque 01 y 16 IDs de CAMPAÑA_003 permanecen pendientes de efecto funcional. No se ha cambiado producción, `main`, V28, otras ramas, catálogo, workflows ni reglas generales.
 
 **Siguiente `p`:** únicamente bloque 03/10, `strawberry_sweet;whipped_dream;leaders_crest`, previa comprobación de CI02. No iniciar bloque 03 dentro del presente encargo.
+
+
+## CI 02 verificada
+
+[GitHub Actions #41575954355](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41575954355), SHA `b74dbd8f73bb5f46b5df851aa580f15d4ab81e00`, `completed/success`:
+- `CAMP004_W04_MANIFEST_PASS reserved=10 completed=2 ids=36`.
+- `CAMP004_W04_PY PASS blocks=2 checks=65`.
+- `CAMP004_W04_GODOT PASS blocks=2 checks=200`.
+- Regresión CAMPAÑA_003: Python `PASS blocks=10 checks=120`; Godot `PASS blocks=10 checks=270`.
+- Regresión CAMPAÑA_001 se ejecuta en bloques 05 y 10; no consta en esta ejecución del bloque 02.
+
+**Salida real:** `love_sweet`, `ribbon_sweet` y `star_sweet` aparecen cada uno como `status=DEPENDENCIA records=0`, al igual que los tres anteriores. El resultado comprueba el rechazo de evolución directa y la no pérdida de estado, **no una evolución positiva**. Los seis confites quedan pendientes de contrato de giro/equipamiento/formas.
+
+CSV reconciliado como `DEPENDENCIA_DOCUMENTADA`, run `41575954355`, commit `581f04a763cd85b0857f256354d97be9972d3db7`. Este cambio documental activa otra comprobación CI; el PASS citado corresponde al árbol con las pruebas finales y la segunda fila del progreso antes de la reconciliación.
