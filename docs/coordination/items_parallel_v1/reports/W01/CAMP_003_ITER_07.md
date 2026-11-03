@@ -28,3 +28,17 @@ Las CI 01–03 están confirmadas, última [#41556859548](https://github.com/dan
 Si hay FAIL de un script W01, corregirlo sin reducir aserciones; si la dependencia está en producción o el workflow compartido, **STOP y escalar a IA6**. No se cubren UI/GPU, retorno al mapa ni todas las combinaciones.
 
 **Siguiente `p` autoriza exclusivamente bloque W01/08:** `luminous_moss;mental_herb;metronome`, previa lectura del último run. No iniciar antes ni modificar `main`, V28, otras ramas, producción o catálogo.
+
+## Incidencia de rendimiento y reparación autónoma V5 (posterior al bloque 07)
+
+La puerta árbitra vigente **`AUTONOMOUS_REPAIR_V5.md`** (blob `ebe71ace6949cc9311eb9831068799081bca8ba7`) confirma la autorreparación dentro de W01, sin modificar `main`, V28, otras ramas ni arquitectura compartida. No es una nueva iteración y no autoriza comenzar W01/08 sin `p`.
+
+El run de bloque 07 [#41561052781](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41561052781) finalizó `failure`. El nuevo run tras actualización del workflow por IA6 [#41563668757](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41563668757) también finalizó `failure`, **no por una aserción de objetos** sino por el límite explícito `timeout 600s` del paso Godot: salida `exit code 124`. En ese run el contrato Python sí pasó `CAMP003_W01_PY PASS blocks=7 checks=582`. Godot NO generó `CAMP003_W01_GODOT PASS`; los bloques 04–07 permanecen **sin PASS funcional**.
+
+**Diagnóstico:** el arnés W01 serializaba `active`, `none`, `reserve` para cada uno de los 99 pares caso-semilla; cada variante abre/cierra y restaura una sesión nativa con worker Node, lo que crea 297 recorridos secuenciales. Los avisos de PID obsoleto de `pipe_client.gd` son ruido secundario; no se modificó el adaptador compartido.
+
+**Parche autónomo mínimo:** commit `fdc2e8623376de6f0981d2cd4a91d467dc4951e3`, blob del runner `225600b833f94d65df9dbca4452e234d1d5c79ac`. Los tres modos de **un mismo par caso-semilla** ahora se programan de forma concurrente mediante `call_deferred` y una función auxiliar asíncrona; cada modo crea su propio propietario, motor y evidencia. El comparador espera los tres resultados antes de continuar y ejecuta las mismas aserciones causales y SaveV2. La ejecución por caso/semilla y el resto de 48 escenarios, 99 pares y 297 variantes no cambia. **No se ha suprimido ningún test ni ampliado arbitrariamente el timeout**.
+
+Auditoría estática del parche: 10/10 comprobaciones de conservación de matriz, modos, restauración, evidencia, contrato Python y testigos RNG. **Esta auditoría NO demuestra que el paralelismo funcione correctamente en Godot**.
+
+**Nueva CI de reparación:** [#41565500695](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41565500695), SHA exacto `fdc2e8623376de6f0981d2cd4a91d467dc4951e3`: estaba `in_progress` al documentarlo. Requiere `CAMP003_W01_PY PASS blocks=7`, `CAMP003_W01_GODOT PASS blocks=7` y conclusión `success` antes de marcar PASS. Si aparece nueva condición de carrera o fallo del propio test, corregir W01 autónomamente conforme a V5; si sigue siendo exclusivamente límite de workflow compartido pese a optimizar y no es viable con pruebas íntegras, elevar **solo ese límite** a IA6.
