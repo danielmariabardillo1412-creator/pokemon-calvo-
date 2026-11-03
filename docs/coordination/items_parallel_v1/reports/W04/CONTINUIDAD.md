@@ -264,3 +264,16 @@ La CI principal [#41716388712](https://github.com/danielmariabardillo1412-creato
 La causa no es un fallo de CI: documento V27 `level_values_selected=null`, productor `ProgressionSystem.gain_experience` y `EvolutionSystem.level_up_context` sin `held_item`, y consumidor `EvolutionSystem.classify_record` no admite `held_item` como condición level-up; falta además política de consumo al evolucionar. Se preserva equipamiento y SaveV2. El bloque 02 debe investigar cinco IDs nuevos del **backlog histórico** sin repetir auditorías ni añadir objetos al recuento global. Regresiones CAMP004/CAMP003/CAMP001 no ejecutadas en bloque 01, solo en hitos 05/10 o tras parche de producción según workflow.
 
 **Estado vigente: CAMPAÑA_005 1/10; próximo `p` ejecuta únicamente bloque 02 (`protector;reaper_cloth;prism_scale;sachet;up_grade`).** No tocar main/V28/otras ramas ni inventar umbrales.
+
+
+## CAMPAÑA_005 W04 — Bloque 02
+
+**Rama de trabajo:** `codex/calvo-items-20261103-w04-camp005`; no `main`, V28 ni ramas ajenas. Bloque 01 cerró con CI doble PASS [#41716388712](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41716388712) y [#41716727991](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41716727991): Python 83 y Godot 86; cuatro evoluciones `BLOQUEADO_POR_CONTRATO` y ninguna conversión por nivel implementada.
+
+El **bloque 02/10 autorizado** contiene `protector;reaper_cloth;prism_scale;sachet;up_grade`. Su fixture, pruebas Godot y Python, CSV e informe `reports/W04/CAMP_005_ITER_02.md` están publicados. CI de bloque 02 [#41718927428](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41718927428) debe verificarse, reparando defectos reales dentro de W04. No atribuir PASS anticipado.
+
+**Hallazgos nuevos:** todas estas cinco rutas originales son `trade + held_item` (Rhydon/Protector→Rhyperior, Dusclops/Tela Terrible→Dusknoir, Feebas/Escama Bella→Milotic, Spritzee/Saquito→Aromatisse, Porygon/Mejora→Porygon2). Todos sus `min_level` originales son null. La cadena de Feebas posee **alternativas level-up con `min_beauty=170` específicas de versión** que no deben degradarse a un nivel general. La cadena Porygon consta de **dos etapas y dos objetos**: `up_grade` para Porygon→Porygon2 y `dubious_disc` para Porygon2→Porygon-Z; la segunda no puede usar el primer objeto. El runner verifica ambas fronteras además de los invariantes de equipamiento y SaveV2.
+
+**Dependencia para IA6:** sigue `ITEM_TRADE_RESTORATION_V27.json` con `level_values_selected=null`; se necesita aprobar nivel para cada ruta, transportar `held_item` desde `ProgressionSystem`, validarlo en `EvolutionSystem`, decidir política de consumo/retención al evolucionar y preservar rutas alternativas/ramas. No programar umbrales, modificar el dataset ni afirmar evoluciones positivas sin esas decisiones. Los cinco objetos ya existían en CAMP003: no contarlos como nuevos.
+
+Al recibir nueva `p` y previa CI02 correcta, trabajar **únicamente bloque 03/10**: `oval_stone;dawn_stone;peat_block`. No repetir 01/02 ni iniciar 04.
