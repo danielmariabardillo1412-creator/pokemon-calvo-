@@ -3,7 +3,7 @@
   "campaign": "CAMP_004_W02",
   "worker": "W02",
   "active_policy": "RANDOMLOCK_ITEMS_BUILD_SCOPE_V2",
-  "purpose": "CAMP004 W02 hasta bloque 06: objetos de recuperación y bayas, casos ejecutables sobre servicio nativo. Hopo Berry y Razz señaladas explícitamente como dependencias sin función conectada.",
+  "purpose": "CAMP004 W02 01–07: verificadores acumulados de bayas/medicinas sobre servicios reales Godot, tres estados de propiedad y SaveV2, dependencias Razz/Hopo separadas.",
   "format": "gen9calvounifiedv1",
   "level": 100,
   "seed": [
@@ -23,7 +23,8 @@
     3,
     4,
     5,
-    6
+    6,
+    7
   ],
   "blocks": [
     {
@@ -1401,6 +1402,290 @@
           "cures_confusion": false
         }
       ]
+    },
+    {
+      "block": "07",
+      "family": "MEDICINE",
+      "ids": [
+        "ice_heal",
+        "lava_cookie",
+        "lemonade",
+        "lumiose_galette"
+      ],
+      "source_evidence": [
+        "modules/inventory/imported_recovery_v19.json",
+        "modules/inventory/field_item_effects.gd",
+        "modules/inventory/field_item_service.gd",
+        "tests/gameplay/item_field_effects_v4.gd"
+      ],
+      "cases": [
+        {
+          "scenario": "ice_heal_freeze_c004",
+          "id": "ice_heal",
+          "kind": "field_medicine",
+          "start_hp": "full",
+          "status": "freeze",
+          "confused": false,
+          "applies": true,
+          "heal_amount": 0,
+          "cures_status": true,
+          "cures_confusion": false
+        },
+        {
+          "scenario": "ice_heal_freeze_confusion_preserved_c004",
+          "id": "ice_heal",
+          "kind": "field_medicine",
+          "start_hp": "full",
+          "status": "freeze",
+          "confused": true,
+          "applies": true,
+          "heal_amount": 0,
+          "cures_status": true,
+          "cures_confusion": false
+        },
+        {
+          "scenario": "ice_heal_poison_reject_c004",
+          "id": "ice_heal",
+          "kind": "field_medicine",
+          "start_hp": "full",
+          "status": "poison",
+          "confused": false,
+          "applies": false,
+          "heal_amount": 0,
+          "cures_status": false,
+          "cures_confusion": false
+        },
+        {
+          "scenario": "ice_heal_burn_reject_c004",
+          "id": "ice_heal",
+          "kind": "field_medicine",
+          "start_hp": "full",
+          "status": "burn",
+          "confused": false,
+          "applies": false,
+          "heal_amount": 0,
+          "cures_status": false,
+          "cures_confusion": false
+        },
+        {
+          "scenario": "ice_heal_healthy_reject_c004",
+          "id": "ice_heal",
+          "kind": "field_medicine",
+          "start_hp": "full",
+          "status": "",
+          "confused": false,
+          "applies": false,
+          "heal_amount": 0,
+          "cures_status": false,
+          "cures_confusion": false
+        },
+        {
+          "scenario": "lava_cookie_burn_c004",
+          "id": "lava_cookie",
+          "kind": "field_medicine",
+          "start_hp": "full",
+          "status": "burn",
+          "confused": false,
+          "applies": true,
+          "heal_amount": 0,
+          "cures_status": true,
+          "cures_confusion": false
+        },
+        {
+          "scenario": "lava_cookie_toxic_c004",
+          "id": "lava_cookie",
+          "kind": "field_medicine",
+          "start_hp": "full",
+          "status": "badly_poisoned",
+          "confused": false,
+          "applies": true,
+          "heal_amount": 0,
+          "cures_status": true,
+          "cures_confusion": false
+        },
+        {
+          "scenario": "lava_cookie_sleep_c004",
+          "id": "lava_cookie",
+          "kind": "field_medicine",
+          "start_hp": "full",
+          "status": "sleep",
+          "confused": false,
+          "applies": true,
+          "heal_amount": 0,
+          "cures_status": true,
+          "cures_confusion": false,
+          "expect_sleep_clock_clear": true
+        },
+        {
+          "scenario": "lava_cookie_freeze_c004",
+          "id": "lava_cookie",
+          "kind": "field_medicine",
+          "start_hp": "full",
+          "status": "freeze",
+          "confused": false,
+          "applies": true,
+          "heal_amount": 0,
+          "cures_status": true,
+          "cures_confusion": false
+        },
+        {
+          "scenario": "lava_cookie_confusion_c004",
+          "id": "lava_cookie",
+          "kind": "field_medicine",
+          "start_hp": "full",
+          "status": "",
+          "confused": true,
+          "applies": true,
+          "heal_amount": 0,
+          "cures_status": false,
+          "cures_confusion": true
+        },
+        {
+          "scenario": "lava_cookie_poison_confusion_c004",
+          "id": "lava_cookie",
+          "kind": "field_medicine",
+          "start_hp": "full",
+          "status": "poison",
+          "confused": true,
+          "applies": true,
+          "heal_amount": 0,
+          "cures_status": true,
+          "cures_confusion": true
+        },
+        {
+          "scenario": "lava_cookie_healthy_reject_c004",
+          "id": "lava_cookie",
+          "kind": "field_medicine",
+          "start_hp": "full",
+          "status": "",
+          "confused": false,
+          "applies": false,
+          "heal_amount": 0,
+          "cures_status": false,
+          "cures_confusion": false
+        },
+        {
+          "scenario": "lemonade_half_hp_c004",
+          "id": "lemonade",
+          "kind": "field_medicine",
+          "start_hp": "half",
+          "status": "",
+          "confused": false,
+          "applies": true,
+          "heal_amount": 70,
+          "cures_status": false,
+          "cures_confusion": false
+        },
+        {
+          "scenario": "lemonade_missing7_c004",
+          "id": "lemonade",
+          "kind": "field_medicine",
+          "start_hp": "missing_7",
+          "status": "",
+          "confused": false,
+          "applies": true,
+          "heal_amount": 70,
+          "cures_status": false,
+          "cures_confusion": false
+        },
+        {
+          "scenario": "lemonade_full_reject_c004",
+          "id": "lemonade",
+          "kind": "field_medicine",
+          "start_hp": "full",
+          "status": "",
+          "confused": false,
+          "applies": false,
+          "heal_amount": 70,
+          "cures_status": false,
+          "cures_confusion": false
+        },
+        {
+          "scenario": "lemonade_half_poison_preserved_c004",
+          "id": "lemonade",
+          "kind": "field_medicine",
+          "start_hp": "half",
+          "status": "poison",
+          "confused": false,
+          "applies": true,
+          "heal_amount": 70,
+          "cures_status": false,
+          "cures_confusion": false
+        },
+        {
+          "scenario": "lumiose_galette_poison_c004",
+          "id": "lumiose_galette",
+          "kind": "field_medicine",
+          "start_hp": "full",
+          "status": "poison",
+          "confused": false,
+          "applies": true,
+          "heal_amount": 0,
+          "cures_status": true,
+          "cures_confusion": false
+        },
+        {
+          "scenario": "lumiose_galette_toxic_c004",
+          "id": "lumiose_galette",
+          "kind": "field_medicine",
+          "start_hp": "full",
+          "status": "badly_poisoned",
+          "confused": false,
+          "applies": true,
+          "heal_amount": 0,
+          "cures_status": true,
+          "cures_confusion": false
+        },
+        {
+          "scenario": "lumiose_galette_sleep_c004",
+          "id": "lumiose_galette",
+          "kind": "field_medicine",
+          "start_hp": "full",
+          "status": "sleep",
+          "confused": false,
+          "applies": true,
+          "heal_amount": 0,
+          "cures_status": true,
+          "cures_confusion": false,
+          "expect_sleep_clock_clear": true
+        },
+        {
+          "scenario": "lumiose_galette_confusion_c004",
+          "id": "lumiose_galette",
+          "kind": "field_medicine",
+          "start_hp": "full",
+          "status": "",
+          "confused": true,
+          "applies": true,
+          "heal_amount": 0,
+          "cures_status": false,
+          "cures_confusion": true
+        },
+        {
+          "scenario": "lumiose_galette_poison_confusion_c004",
+          "id": "lumiose_galette",
+          "kind": "field_medicine",
+          "start_hp": "full",
+          "status": "poison",
+          "confused": true,
+          "applies": true,
+          "heal_amount": 0,
+          "cures_status": true,
+          "cures_confusion": true
+        },
+        {
+          "scenario": "lumiose_galette_healthy_reject_c004",
+          "id": "lumiose_galette",
+          "kind": "field_medicine",
+          "start_hp": "full",
+          "status": "",
+          "confused": false,
+          "applies": false,
+          "heal_amount": 0,
+          "cures_status": false,
+          "cures_confusion": false
+        }
+      ]
     }
   ],
   "limitations": [
@@ -1413,6 +1698,7 @@
     "Elixir se verifica con 2 movimientos de PP distintos, incluidos rechazo al seleccionar slot, sin enseñar movimientos; Polvo Energía usa las penalizaciones de amistad del perfil importado y nunca las aplica si rechaza por PS completos.",
     "Ether recupera PP de una ranura escogida (scope=one) con slot obligatorio; no modificar el otro movimiento. Energy Root pierde amistad por tramo [10,10,15] con suelo 0, solo al sanar, y Fresh Water recupera 30 PS según perfil real.",
     "Hopo Berry (id 2278) figura como categoría pp-recovery en PokeAPI importada, pero no hay efecto ni cantidad de PP conectados en imported_recovery_v19.json; en este bloque sólo se prueba rechazo transaccional y se deja DEPENDENCIA para IA6, no se inventa efecto.",
-    "Full Restore sana HP completo y estados/confusión; Heal Powder cura estados con amargor amistad [5,5,10] aun sin curación HP; Hyper Potion +120 PS sin eliminar status."
+    "Full Restore sana HP completo y estados/confusión; Heal Powder cura estados con amargor amistad [5,5,10] aun sin curación HP; Hyper Potion +120 PS sin eliminar status.",
+    "Bloque 07 conserva el contrato de Freeze como estado persistente 'freeze'; Ice Heal solo cura congelación y no confusión concomitante. Lava Cookie y Lumiose Galette sí curan todo estado/confusión. Lemonade +70 PS, no cura estado."
   ]
 }
