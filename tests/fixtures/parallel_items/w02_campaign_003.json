@@ -9,7 +9,8 @@
     4,
     5,
     6,
-    7
+    7,
+    8
   ],
   "format": "gen9calvounifiedv1",
   "level": 100,
@@ -973,6 +974,143 @@
           "expected_type": "grass"
         }
       ]
+    },
+    {
+      "block": "08",
+      "ids": [
+        "roseli_berry",
+        "rowap_berry",
+        "salac_berry",
+        "shuca_berry"
+      ],
+      "source_evidence": [
+        "tools/item_audit/held_effect_sweep_v2.cjs",
+        "tools/item_audit/held_effect_sweep_v3.cjs"
+      ],
+      "cases": [
+        {
+          "scenario": "roseli_fairy_effective_c003",
+          "id": "roseli_berry",
+          "kind": "resist_type",
+          "nature": "hardy",
+          "start": "full",
+          "status": "",
+          "actor_species": "garchomp",
+          "foe_species": "mew",
+          "foe_move": "dazzling_gleam",
+          "consumes": true,
+          "confuses": false,
+          "own_move": "amnesia",
+          "expected_type": "fairy"
+        },
+        {
+          "scenario": "roseli_normal_reject_c003",
+          "id": "roseli_berry",
+          "kind": "resist_type",
+          "nature": "hardy",
+          "start": "full",
+          "status": "",
+          "actor_species": "garchomp",
+          "foe_species": "mew",
+          "foe_move": "tackle",
+          "consumes": false,
+          "confuses": false,
+          "own_move": "amnesia",
+          "expected_type": "fairy"
+        },
+        {
+          "scenario": "rowap_special_retaliation_c003",
+          "id": "rowap_berry",
+          "kind": "retaliate_special",
+          "nature": "hardy",
+          "start": "full",
+          "status": "",
+          "actor_species": "mew",
+          "foe_species": "mew",
+          "foe_move": "confusion",
+          "consumes": true,
+          "confuses": false,
+          "own_move": "amnesia",
+          "expected_category": "special",
+          "retaliation_denominator": 8
+        },
+        {
+          "scenario": "rowap_physical_reject_c003",
+          "id": "rowap_berry",
+          "kind": "retaliate_special",
+          "nature": "hardy",
+          "start": "full",
+          "status": "",
+          "actor_species": "mew",
+          "foe_species": "mew",
+          "foe_move": "tackle",
+          "consumes": false,
+          "confuses": false,
+          "own_move": "amnesia",
+          "expected_category": "physical",
+          "retaliation_denominator": 8
+        },
+        {
+          "scenario": "salac_pinch_speed_c003",
+          "id": "salac_berry",
+          "kind": "boost_spe",
+          "nature": "hardy",
+          "start": "fifth",
+          "status": "",
+          "actor_species": "mew",
+          "foe_species": "mew",
+          "foe_move": "amnesia",
+          "consumes": true,
+          "confuses": false,
+          "own_move": "amnesia",
+          "boost_stat": "spe"
+        },
+        {
+          "scenario": "salac_high_reject_c003",
+          "id": "salac_berry",
+          "kind": "boost_spe",
+          "nature": "hardy",
+          "start": "near_full",
+          "status": "",
+          "actor_species": "mew",
+          "foe_species": "mew",
+          "foe_move": "amnesia",
+          "consumes": false,
+          "confuses": false,
+          "own_move": "amnesia",
+          "boost_stat": "spe"
+        },
+        {
+          "scenario": "shuca_ground_effective_c003",
+          "id": "shuca_berry",
+          "kind": "resist_type",
+          "nature": "hardy",
+          "start": "full",
+          "status": "",
+          "actor_species": "pikachu",
+          "foe_species": "mew",
+          "foe_move": "bulldoze",
+          "consumes": true,
+          "confuses": false,
+          "own_move": "amnesia",
+          "expected_type": "ground"
+        },
+        {
+          "scenario": "shuca_normal_reject_c003",
+          "id": "shuca_berry",
+          "kind": "resist_type",
+          "nature": "hardy",
+          "start": "full",
+          "status": "",
+          "actor_species": "pikachu",
+          "foe_species": "mew",
+          "foe_move": "tackle",
+          "consumes": false,
+          "confuses": false,
+          "own_move": "amnesia",
+          "expected_type": "ground"
+        }
+      ]
     }
   ],
   "limitations": [
@@ -987,6 +1125,7 @@
     "Bloque 05: la decisión de Kee depende de categoría física vs especial; Lansat conserva la volatile focusenergy sólo con PS bajos. Los cuatro casos de boosts usan move propio amnesia para que Swords Dance no falsee la subida ATK de Liechi.",
     "Micle: verificar efecto micleberry nativo tras primer turno, preservación del checkpoint y gasto del efecto durante Hydro Pump del siguiente turno. No reclamar incremento estadístico de precisión sin medida.",
     "Bloque 07: Passho/Payapa/Rindo reducen Agua/Psíquico/Planta sólo en portador supereficaz; Petaya mejora SpA bajo umbral, propia Amnesia sólo mejora SpD, por lo que no falsea el test SpA.",
-    "Diagnóstico CI bloque 07 #41560981081: el test Mago-Brave a 1/5 pudo autolesionarse por confusión en el mismo turno; cambiar a control histórico Snorlax Endeavor desde PS máximos para observar curación sin autogolpe. Maranga con Reflect evita SpD de Amnesia; Occa con Ember evita OHKO Scizor y conserva control de Fuego supereficaz."
+    "Diagnóstico CI bloque 07 #41560981081: el test Mago-Brave a 1/5 pudo autolesionarse por confusión en el mismo turno; cambiar a control histórico Snorlax Endeavor desde PS máximos para observar curación sin autogolpe. Maranga con Reflect evita SpD de Amnesia; Occa con Ember evita OHKO Scizor y conserva control de Fuego supereficaz.",
+    "Bloque 08: Rowap mide exactamente 1/8 HP máximo rival como Jaboca pero sólo ante categoría especial. Shuca usa Bulldoze en lugar de Earth Power del sweep V2 para conservar vivo al testigo Pikachu sin baya; se comprueba daño reducido y consumo nativos sin debilitar aserciones."
   ]
 }
