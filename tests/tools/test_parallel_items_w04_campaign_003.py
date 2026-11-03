@@ -7,6 +7,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 IDS = ("dawn_stone", "dusk_stone", "shiny_stone")
+IDS_02 = ("sun_stone", "oval_stone", "black_augurite")
 
 def main():
     ap = argparse.ArgumentParser()
@@ -23,10 +24,12 @@ def main():
         nonlocal checks
         assert cond, msg
         checks += 1
-    check(len(rows) == 1 and rows[0]["bloque"] == "01", "progreso no es bloque 01")
+    check(len(rows) == 2 and [r["bloque"] for r in rows] == ["01", "02"], "progreso no incluye 01 y 02")
+    check(tuple(rows[1]["ids"].split(";")) == IDS_02, "IDs del bloque 02 cambiados")
+    check(fixture["blocks"][1]["ids"] == list(IDS_02), "fixture bloque 02 inconsistente")
     check(tuple(rows[0]["ids"].split(";")) == IDS, "IDs de cola cambiados")
     check(fixture["blocks"][0]["ids"] == list(IDS), "fixture inconsistente")
-    for item in IDS:
+    for item in IDS + IDS_02:
         matches = [r for r in scope if r["id"] == item]
         check(len(matches) == 1 and matches[0]["estado_contenido"] == "SELECCIONADO", item + " no seleccionado")
         check('"' + item + '"' in script, item + " no cubierto por Godot")
@@ -36,7 +39,7 @@ def main():
         check(token in service, "contrato FieldItemService ausente: " + token)
     for token in ("save_collection(", "repo.load(", "rechazo_ajeno", "rechazo_destino", "sin_segundo_consumo"):
         check(token in script, "escenario Godot ausente: " + token)
-    print(f"CAMP003_W04_PY PASS blocks=1 checks={checks}")
+    print(f"CAMP003_W04_PY PASS blocks=2 checks={checks}")
 
 if __name__ == "__main__":
     main()
