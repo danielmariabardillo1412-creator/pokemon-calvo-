@@ -235,6 +235,35 @@
           "move_id": "calm_mind"
         }
       ]
+    },
+    {
+      "block": "09",
+      "items": [
+        {
+          "item_id": "tm130",
+          "move_id": "helping_hand"
+        },
+        {
+          "item_id": "tm131",
+          "move_id": "pollen_puff"
+        },
+        {
+          "item_id": "tm132",
+          "move_id": "baton_pass"
+        },
+        {
+          "item_id": "tm133",
+          "move_id": "earth_power"
+        },
+        {
+          "item_id": "tm134",
+          "move_id": "reversal"
+        },
+        {
+          "item_id": "tm135",
+          "move_id": "ice_beam"
+        }
+      ]
     }
   ]
 }
