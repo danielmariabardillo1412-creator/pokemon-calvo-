@@ -104,6 +104,23 @@
         "evolution_positive_only_when_runtime_supported",
         "identity_and_save_v2_if_supported"
       ]
+    },
+    {
+      "block": "07",
+      "ids": [
+        "galarica_cuff",
+        "galarica_wreath",
+        "peat_block"
+      ],
+      "expected_trigger": "read_catalog_rules; never_assume_region_or_moon_phase",
+      "policy": "conditional_routes_no_false_direct_evolution",
+      "cases": [
+        "item_definition_present",
+        "real_evolution_record_classification",
+        "wrong_species_rejected_without_spend",
+        "conditional_source_rejected_without_spend",
+        "eligible_source_single_spend_and_savev2_only_if_supported"
+      ]
     }
   ]
 }
