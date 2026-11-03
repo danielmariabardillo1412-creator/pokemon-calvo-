@@ -1,3 +1,24 @@
+# IA2/W02 — CONTINUIDAD VIGENTE: CAMPAÑA_004 BLOQUE 08/10
+
+**Identidad IA2/W02:** bayas, medicinas y entrenamiento. **Única rama de escritura:** `codex/calvo-items-20261103-w02-camp004`. Una tecla `p` autoriza solo el microbloque siguiente de la cola IA6; no repetir filas ni ejecutar varias. Mantener `main`, V28, PR #118, rama árbitra IA6, W01/W03/W04/W05, producción, catálogos, políticas compartidas y workflows sin cambios. Autorreparación V5 limitada al alcance propio; cualquier API común requiere coordinación IA6.
+
+**Estado seguro y reproducible:** CAMP004 bloques **01–08 publicados**; 32 IDs, 143 escenarios, 429 variantes de tres propietarios. **No confundir publicación con certificación.** El único run CAMP004 realmente verificado aquí es [GitHub Actions #41573481223](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41573481223) para bloque 01: Python `PASS blocks=1 checks=83`, Godot `PASS blocks=1 checks=1022`, regresión CAMP003 10/10 (Python 680, Godot 7306). **02–08 siguen `EN_CI_AUTOMATICA` sin logs verificados**: el conector `fetch_commit_workflow_runs` enumera únicamente eventos de PR, mientras la CI W02 se inicia por push. Un `[]` de ese método no certifica PASS, FAIL ni ausencia de ejecución.
+
+**Bloque 08 publicado:** `max_elixir;max_ether;max_potion;moomoo_milk`. 20 escenarios × 3 modos = 60 variantes. Max Elixir llena PP de todos los movimientos sin pedir slot; Max Ether llena PP de un movimiento seleccionado (slot obligatorio), ambos rechazan sin consumo al no aportar beneficio; Max Potion rellena HP sin curar estado; Leche Mu-mu cura **100 PS** sin tocar status/confusión. Contratos exactos importados `modules/inventory/imported_recovery_v19.json`. Pruebas comprueban presencia/ausencia de ítem, PARTY/STORAGE, dos ranuras de PP, topes HP/PP, rechazo atómico, amistad, EV, estados, consumos y SaveV2 SHA256.
+
+**Commits bloque 08:**
+- `b00892f57e6e9807cf3f8139019b4d27e4296998` fixture `tests/fixtures/parallel_items/w02_campaign_004.json`.
+- `7eb2bd7f97f3e6a80413ab77a988708736c7cb85` runner `tests/gameplay/parallel_items_w02_campaign_004.gd` para `pp_full` con 2 slots, preservando `pp_gain:10` de bloque 04/05.
+- `55426d2b867f10674cc37eb7ed08ccf47095992f` validador Python `tests/tools/test_parallel_items_w02_campaign_004.py`, 20 casos golden, perfiles y 16 mutaciones adversariales.
+- `684657a846ef1478948f5e540bda2aa65eea6951` progreso `docs/coordination/items_parallel_v1/reports/W02/CAMP_004_PROGRESO.csv` fila 08 `EN_CI_AUTOMATICA`.
+- `3fb256e3c32a317a0112b346e6b13997f8d245dc` informe `docs/coordination/items_parallel_v1/reports/W02/CAMP_004_ITER_08.md`.
+
+**Dependencias aún sin permiso/contrato:** `razz_berry` (bloque02) y `hopo_berry` (bloque06). Las pruebas actuales confirman solo controles negativos y rechazos; IA6 debe definir su utilidad/retirada según política. No inventar capturas, PP ni marcar como funcional. Visual/UI/GPU y integración final siguen pendientes.
+
+**Siguiente `p`:** intentar recuperar CI real de HEAD `CAMP004_W02_PY/GODOT PASS blocks=8` con regresión `CAMP003_W02_PY/GODOT PASS blocks=10`, y reparar fallos de nuestra familia bajo V5 sin eliminar aserciones; si necesita API compartida, escalar IA6. Ejecutar a lo sumo **fila 09 de 10**: `old_gateau;paralyze_heal;pewter_crunchies;potion`. Fila 10 necesita otra `p`. No alterar `main`, V28 u otras ramas.
+
+---
+
 # IA2/W02 — CONTINUIDAD VIGENTE: CAMPAÑA_004 BLOQUE 07/10
 
 **Identidad:** IA2/W02, bayas/medicinas/entrenamiento. **Rama única:** `codex/calvo-items-20261103-w02-camp004`. **`p` significa ejecutar como máximo un microbloque siguiente de la cola IA6.** Nunca tocar `main`, V28, PR #118, rama árbitra, otras trabajadoras, workflow, producción ni políticas compartidas. Reparar arnés propio (V5) si CI revela errores; si exige API global, escalar a IA6.
