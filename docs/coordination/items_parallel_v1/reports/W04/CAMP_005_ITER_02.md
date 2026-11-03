@@ -75,3 +75,10 @@ Godot emitió `status=BLOQUEADO_POR_CONTRATO` para **los nueve IDs de los bloque
 El CSV se actualizó a `DEPENDENCIA_DOCUMENTADA` con run `41718927428`, commit `585dda8cfaa65210220d2f1589e7cd6a2174ced3`. La modificación activa una **nueva CI de consolidación**, cuyo resultado se comprueba por separado.
 
 **Los tests nuevos son cobertura de contrato/integración y equipamiento real, NO reparación positiva de la evolución por nivel.** Sin nuevos niveles adoptados, API compartida ni producción modificada. Las regresiones históricas se preservan y su ejecución completa corresponde a los hitos 05/10 o a cambios de producción según el workflow.
+
+
+## Segunda CI02 sobre progreso consolidado
+
+La ejecución [#41719349096](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41719349096), SHA `585dda8cfaa65210220d2f1589e7cd6a2174ced3`, terminó **completed/success** sobre el CSV ya `DEPENDENCIA_DOCUMENTADA`. Repitió los recibos `CAMP005_W04_MANIFEST_PASS reserved=10 completed=2 ids=46 kind=FUNCTIONAL_BACKLOG`, Python **159 PASS**, Godot **194 PASS**. Feebas registró 2 rutas `min_beauty=170` `DATA_ONLY` y `up_grade` rechazo en Porygon2; los 9 ID de los bloques 01–02 siguen `BLOQUEADO_POR_CONTRATO`, no implementados por nivel.
+
+**Bloque 02/10 cerrado en W04:** auditoría de contrato nueva aprobada y persistencia probada; niveles y política de consumo continúan pendientes de IA6.
