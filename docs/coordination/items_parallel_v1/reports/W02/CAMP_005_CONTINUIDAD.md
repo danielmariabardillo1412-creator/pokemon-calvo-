@@ -1,3 +1,24 @@
+# IA2/W02 — CONTINUIDAD VIGENTE CAMPAÑA_005 BLOQUE 07/10
+
+**Trabajadora W02**, bayas, medicinas y entrenamiento. **Única rama con escritura:** `codex/calvo-items-20261103-w02-camp005`. Autoridad: IA6 `CAMPAIGN_005_W02_GATE.md`, `CAMPAIGN_005_W02_QUEUE_APPROVED.csv`, `campaigns/CAMP_005_W02.md` y `AUTONOMOUS_REPAIR_V5.md`. Cada `p` significa una sola fila. No tocar `main`, V28, PR118, árbitra, otras trabajadoras, workflow ni API global.
+
+**Estado actual de publicación (NO certificación):** 7 de 10 microbloques; **28 IDs, 196 escenarios únicos, 588 variantes programadas** en `active` (PARTY con ítem), `none` (sin ítem) y `reserve` (STORAGE con ítem). Los siete golden del verificador Python se cotejaron contra la fixture acumulativa y fueron iguales; el runner Godot está conectado a `FieldItemService`, pero no se han obtenido logs concluyentes de ejecución de CAMP005 en esta sesión. No atribuir CI PASS por archivos subidos.
+
+**Fila07 completada:** `resist_mochi;genius_mochi;clever_mochi;swift_mochi`, 32 escenarios nuevos × 3 modos. Los cuatro suben hasta **+10 EV** en Defensa, Ataque Especial, Defensa Especial y Velocidad respectivamente, limitados a 252 por estadística y 510 totales. Mochi V13/RHH **no cambia amistad**, a diferencia de vitaminas o plumas; discrepancia con referencias Gen9 documentada en `docs/current/ITEM_MOCHI_V13.md`. Se comprueban EV 0/248/252, total global 508/509/510, ranura inesperada, amistad 254, consumo y no consumo, copia/propiedad, estadísticas y HP, PP, IV, naturaleza, SaveV2 y SHA256. Oráculo Godot `MOCHI_STATS_005` mapea los seis mochis de mejora sin basarse en la fixture.
+
+**Commits:**
+- Fixture `tests/fixtures/parallel_items/w02_campaign_005.json`: `3ef494afaa0ae37e8adb90f12385bd4a27905bb7`.
+- Godot `tests/gameplay/parallel_items_w02_campaign_005.gd`: `6cbc6211ab876a00b6be3c5c2d730879d6f2ff04`.
+- Python `tests/tools/test_parallel_items_w02_campaign_005.py`: `04ab6baeb92dce7cbeb04af214d7a6c2000f9f4c`, `a83f601f7ac44c99bed9cec69c5e6eeb2ee1695c`, `44413f741a9dd963d53589e7b8bd89f57b4cfb76`, `7a60642ab83d500c78a60c3f0e976501d838ac54`.
+- Progreso `docs/coordination/items_parallel_v1/reports/W02/CAMP_005_PROGRESO.csv`: `981b7f4a6e60db6777a8b98e298be2fcc02458e8`, fila 07 `EN_CI_AUTOMATICA`.
+- Informe `docs/coordination/items_parallel_v1/reports/W02/CAMP_005_ITER_07.md`: `f9e8c5278cab2b42812129be0b0643a5d9115942`.
+
+**CI y regresiones:** workflow `.github/workflows/parallel-camp005-w02-autoci.yml` configura Python+Godot CAMP005 para N=7, con regresiones CAMP004 y CAMP003 en hitos 05 y 10. Revisar RUN, SHA y logs de seis recibos cuando corresponda; `fetch_commit_workflow_runs` y `get_commit_combined_status` sobre HEAD06 devolvieron `[]`, que NO certifica éxito ni fracaso. La CI histórica CAMP004 no sustituye la de CAMP005. GPU/UI/integración global no verificadas. Reparar únicamente fallos propios V5 sin borrar pruebas; APIs compartidas requieren IA6.
+
+**Siguiente `p`:** revisar CI y ejecutar **solo bloque 08** `fresh_start_mochi;adamant_mint;modest_mint;jolly_mint`. Mochi Reinicio limpia EV sin incrementar amistad, mientras las mentas son otro contrato; inspeccionar funcionalidad real antes de escribir expectativas, registrar dependencias si falta. No ejecutar bloque 09 sin otra orden.
+
+---
+
 # IA2/W02 — CONTINUIDAD VIGENTE CAMPAÑA_005 BLOQUE 06/10
 
 **Trabajadora:** W02 (bayas, medicinas, entrenamiento). **Rama única de escritura:** `codex/calvo-items-20261103-w02-camp005`. Encargo IA6 en `CAMPAIGN_005_W02_GATE.md`, `CAMPAIGN_005_W02_QUEUE_APPROVED.csv`, `campaigns/CAMP_005_W02.md` y `AUTONOMOUS_REPAIR_V5.md`. Una tecla `p` = una sola fila siguiente. Nunca tocar `main`, V28, PR118, rama árbitra, otras trabajadoras, producción común o workflows.
