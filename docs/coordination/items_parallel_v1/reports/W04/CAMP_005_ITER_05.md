@@ -66,3 +66,9 @@ Después de la CI, la fila 05 de `CAMP_005_PROGRESO.csv` quedó `DEPENDENCIA_DOC
 **Diagnóstico cerrado:** equipamiento positivo, rechazos negativos seguros y SaveV2 verificados, pero ninguna ruta de evolución `spin` ejecutable. No se consideran los confites funcionales como transformación Alcremie.
 
 **Estado al término del bloque:** 05/10; la siguiente `p` corresponde solo al bloque 06 (`whipped_dream;leaders_crest`).
+
+## Segunda CI05 — progreso consolidado
+
+La segunda ejecución [#41728245417](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41728245417) sobre SHA `aacdf87c45ff6de5d01d5edeca34aa04571f8b70`, después de cambiar la fila 05 a `DEPENDENCIA_DOCUMENTADA`, terminó **completed/success**. Los logs confirman otra vez: manifest `reserved=10 completed=5 ids=46`, `CAMP005_W04_PY PASS blocks=5 checks=307`, `CAMP005_W04_GODOT PASS blocks=5 checks=560`; regresiones CAMP004 387/1090, CAMP003 120/270 y CAMP001 Godot 559, todas PASS.
+
+**Bloque 05/10 entregado, validado y documentado.** Su resultado funcional es dependencia de giro/forma, no evolución positiva. La incidencia CSV del bloque 04 permanece sin cambios.
