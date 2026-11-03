@@ -3,7 +3,7 @@
   "campaign": "CAMP_005",
   "worker": "W02",
   "kind": "TRAINING",
-  "purpose": "CAMPAÑA_005 W02: tres bloques acumulados sobre servicio real, EV, PP, habilidad y crecimiento, con SaveV2 y propiedad; no afirmar CI sin logs.",
+  "purpose": "CAMP005 W02 4/10: XP nativa de caramelos S/M/L/XL más bloques 01–03, propietario y bolsa, SaveV2, CI pendiente",
   "blocks": [
     {
       "block": "01",
@@ -725,6 +725,310 @@
           "exp_gain": 100
         }
       ]
+    },
+    {
+      "block": "04",
+      "family": "TRAINING",
+      "ids": [
+        "exp_candy_s",
+        "exp_candy_m",
+        "exp_candy_l",
+        "exp_candy_xl"
+      ],
+      "source_evidence": [
+        "modules/inventory/field_growth_effects.gd",
+        "modules/inventory/field_friendship_effects.gd",
+        "modules/inventory/field_item_service.gd",
+        "tests/gameplay/item_field_growth_v9.gd",
+        "tests/fixtures/progression_growth_curves/reference_contract.json"
+      ],
+      "cases": [
+        {
+          "scenario": "exp_candy_s_level50_gain",
+          "id": "exp_candy_s",
+          "kind": "growth",
+          "applies": true,
+          "exp_amount": 800,
+          "level": 50
+        },
+        {
+          "scenario": "exp_candy_s_level90_gain",
+          "id": "exp_candy_s",
+          "kind": "growth",
+          "applies": true,
+          "exp_amount": 800,
+          "level": 90
+        },
+        {
+          "scenario": "exp_candy_s_level99_gain",
+          "id": "exp_candy_s",
+          "kind": "growth",
+          "applies": true,
+          "exp_amount": 800,
+          "level": 99
+        },
+        {
+          "scenario": "exp_candy_s_level99_cap_50xp",
+          "id": "exp_candy_s",
+          "kind": "growth",
+          "applies": true,
+          "exp_amount": 800,
+          "level": 99,
+          "exp_until_next": 50,
+          "expected_exp_gain": 50,
+          "expect_cap": true
+        },
+        {
+          "scenario": "exp_candy_s_level50_cross_80xp",
+          "id": "exp_candy_s",
+          "kind": "growth",
+          "applies": true,
+          "exp_amount": 800,
+          "level": 50,
+          "exp_until_next": 80,
+          "expect_level_up": true
+        },
+        {
+          "scenario": "exp_candy_s_level100_no_effect",
+          "id": "exp_candy_s",
+          "kind": "growth",
+          "applies": false,
+          "exp_amount": 800,
+          "level": 100
+        },
+        {
+          "scenario": "exp_candy_s_explicit_slot_rejected",
+          "id": "exp_candy_s",
+          "kind": "growth",
+          "applies": false,
+          "exp_amount": 800,
+          "level": 50,
+          "slot": 0
+        },
+        {
+          "scenario": "exp_candy_s_friendship_high_200",
+          "id": "exp_candy_s",
+          "kind": "growth",
+          "applies": true,
+          "exp_amount": 800,
+          "level": 50,
+          "start_friendship": 200
+        },
+        {
+          "scenario": "exp_candy_m_level50_gain",
+          "id": "exp_candy_m",
+          "kind": "growth",
+          "applies": true,
+          "exp_amount": 3000,
+          "level": 50
+        },
+        {
+          "scenario": "exp_candy_m_level90_gain",
+          "id": "exp_candy_m",
+          "kind": "growth",
+          "applies": true,
+          "exp_amount": 3000,
+          "level": 90
+        },
+        {
+          "scenario": "exp_candy_m_level99_gain",
+          "id": "exp_candy_m",
+          "kind": "growth",
+          "applies": true,
+          "exp_amount": 3000,
+          "level": 99
+        },
+        {
+          "scenario": "exp_candy_m_level99_cap_50xp",
+          "id": "exp_candy_m",
+          "kind": "growth",
+          "applies": true,
+          "exp_amount": 3000,
+          "level": 99,
+          "exp_until_next": 50,
+          "expected_exp_gain": 50,
+          "expect_cap": true
+        },
+        {
+          "scenario": "exp_candy_m_level50_cross_80xp",
+          "id": "exp_candy_m",
+          "kind": "growth",
+          "applies": true,
+          "exp_amount": 3000,
+          "level": 50,
+          "exp_until_next": 80,
+          "expect_level_up": true
+        },
+        {
+          "scenario": "exp_candy_m_level100_no_effect",
+          "id": "exp_candy_m",
+          "kind": "growth",
+          "applies": false,
+          "exp_amount": 3000,
+          "level": 100
+        },
+        {
+          "scenario": "exp_candy_m_explicit_slot_rejected",
+          "id": "exp_candy_m",
+          "kind": "growth",
+          "applies": false,
+          "exp_amount": 3000,
+          "level": 50,
+          "slot": 0
+        },
+        {
+          "scenario": "exp_candy_m_friendship_high_200",
+          "id": "exp_candy_m",
+          "kind": "growth",
+          "applies": true,
+          "exp_amount": 3000,
+          "level": 50,
+          "start_friendship": 200
+        },
+        {
+          "scenario": "exp_candy_l_level50_gain",
+          "id": "exp_candy_l",
+          "kind": "growth",
+          "applies": true,
+          "exp_amount": 10000,
+          "level": 50
+        },
+        {
+          "scenario": "exp_candy_l_level90_gain",
+          "id": "exp_candy_l",
+          "kind": "growth",
+          "applies": true,
+          "exp_amount": 10000,
+          "level": 90
+        },
+        {
+          "scenario": "exp_candy_l_level99_gain",
+          "id": "exp_candy_l",
+          "kind": "growth",
+          "applies": true,
+          "exp_amount": 10000,
+          "level": 99
+        },
+        {
+          "scenario": "exp_candy_l_level99_cap_50xp",
+          "id": "exp_candy_l",
+          "kind": "growth",
+          "applies": true,
+          "exp_amount": 10000,
+          "level": 99,
+          "exp_until_next": 50,
+          "expected_exp_gain": 50,
+          "expect_cap": true
+        },
+        {
+          "scenario": "exp_candy_l_level50_cross_80xp",
+          "id": "exp_candy_l",
+          "kind": "growth",
+          "applies": true,
+          "exp_amount": 10000,
+          "level": 50,
+          "exp_until_next": 80,
+          "expect_level_up": true
+        },
+        {
+          "scenario": "exp_candy_l_level100_no_effect",
+          "id": "exp_candy_l",
+          "kind": "growth",
+          "applies": false,
+          "exp_amount": 10000,
+          "level": 100
+        },
+        {
+          "scenario": "exp_candy_l_explicit_slot_rejected",
+          "id": "exp_candy_l",
+          "kind": "growth",
+          "applies": false,
+          "exp_amount": 10000,
+          "level": 50,
+          "slot": 0
+        },
+        {
+          "scenario": "exp_candy_l_friendship_high_200",
+          "id": "exp_candy_l",
+          "kind": "growth",
+          "applies": true,
+          "exp_amount": 10000,
+          "level": 50,
+          "start_friendship": 200
+        },
+        {
+          "scenario": "exp_candy_xl_level50_gain",
+          "id": "exp_candy_xl",
+          "kind": "growth",
+          "applies": true,
+          "exp_amount": 30000,
+          "level": 50
+        },
+        {
+          "scenario": "exp_candy_xl_level90_gain",
+          "id": "exp_candy_xl",
+          "kind": "growth",
+          "applies": true,
+          "exp_amount": 30000,
+          "level": 90
+        },
+        {
+          "scenario": "exp_candy_xl_level99_gain",
+          "id": "exp_candy_xl",
+          "kind": "growth",
+          "applies": true,
+          "exp_amount": 30000,
+          "level": 99,
+          "expect_cap": true
+        },
+        {
+          "scenario": "exp_candy_xl_level99_cap_50xp",
+          "id": "exp_candy_xl",
+          "kind": "growth",
+          "applies": true,
+          "exp_amount": 30000,
+          "level": 99,
+          "exp_until_next": 50,
+          "expected_exp_gain": 50,
+          "expect_cap": true
+        },
+        {
+          "scenario": "exp_candy_xl_level50_cross_80xp",
+          "id": "exp_candy_xl",
+          "kind": "growth",
+          "applies": true,
+          "exp_amount": 30000,
+          "level": 50,
+          "exp_until_next": 80,
+          "expect_level_up": true
+        },
+        {
+          "scenario": "exp_candy_xl_level100_no_effect",
+          "id": "exp_candy_xl",
+          "kind": "growth",
+          "applies": false,
+          "exp_amount": 30000,
+          "level": 100
+        },
+        {
+          "scenario": "exp_candy_xl_explicit_slot_rejected",
+          "id": "exp_candy_xl",
+          "kind": "growth",
+          "applies": false,
+          "exp_amount": 30000,
+          "level": 50,
+          "slot": 0
+        },
+        {
+          "scenario": "exp_candy_xl_friendship_high_200",
+          "id": "exp_candy_xl",
+          "kind": "growth",
+          "applies": true,
+          "exp_amount": 30000,
+          "level": 50,
+          "start_friendship": 200
+        }
+      ]
     }
   ],
   "format": "gen9calvounifiedv1",
@@ -736,7 +1040,8 @@
   "completed_blocks": [
     1,
     2,
-    3
+    3,
+    4
   ],
   "seed": 1412,
   "limitations": [
@@ -747,6 +1052,8 @@
     "PP Máximos fija directamente 3 incrementos sobre PP base del movimiento seleccionado: actual y máximo crecen el mismo diferencial, sin restaurar PP gastados. Rechaza si hay 3 incrementos o la ranura es inválida.",
     "Vitaminas HP Up, Protein e Iron añaden hasta 10 EV respectivos, limitados a 252 por estadística y 510 global; con límite 508, solo 2 EV. Rechazo sin consumo por topes y slot incompatible.",
     "Caramelo Exp. XS aporta hasta 100 XP con tope nivel 100 (puede subir nivel si cruza umbral), salvo estado inválido; conserva movimientos, déficit de HP y EV/IV. Casos del fixture usan Mew sin decisiones de evolución, no generalizar a especies con elecciones.",
-    "Calcio/Zinc/Carbos son vitaminas +10 EV de Ataque Especial/Defensa Especial/Velocidad con topes 252 y 510; se validan tres propietarios y rechazos sin consumo."
+    "Calcio/Zinc/Carbos son vitaminas +10 EV de Ataque Especial/Defensa Especial/Velocidad con topes 252 y 510; se validan tres propietarios y rechazos sin consumo.",
+    "Caramelos de experiencia S/M/L/XL: aportes nominales 800/3000/10000/30000 XP; la ganancia se limita a la experiencia restante hasta nivel100. Nivel y subida se obtienen de ProgressionRuleset, sin inventar incremento fijo de nivel.",
+    "Los escenarios de crecimiento de bloque04 utilizan Mew, con rutas sin decisiones adicionales; en otras especies, el sistema puede devolver NEEDS_CONTEXT por aprendizaje/evolución. Bloque 04 no valida exhaustivamente esas variantes históricas."
   ]
 }
