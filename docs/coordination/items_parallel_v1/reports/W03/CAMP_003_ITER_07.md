@@ -26,7 +26,7 @@
 
 **CI anterior comprobada:** [#41560663065](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41560663065) SHA `922e1d8d1561a16c014faa6f10ca9045811fceb7`: Python **180** y Godot **735** PASS para 6 bloques, no aplica automáticamente a los tests nuevos.
 
-**CI del 07:** al publicar, `EN_CI_AUTOMATICA`, debe verificar en el SHA del commit con siete filas `CAMP003_W03_PY PASS blocks=7 checks=M` y `CAMP003_W03_GODOT PASS blocks=7 checks=M`. No declarar PASS hasta recibir veredicto y logs reales. Reportes no deben disparar una nueva CI.
+**CI del 07 verificada:** [Actions #41563348010](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41563348010) `completed/success` sobre SHA exacto de siete filas `cfb7e516e745b0e541f670cc4efa7ce0ca3b8229`; log job `125678884464`: `CAMP003_W03_PY PASS blocks=7 checks=210`, `CAMP003_W03_GODOT PASS blocks=7 checks=861`; puertas `CAMP003_GATE_PY_PASS` y `CAMP003_GATE_GODOT_PASS`, sin errores. El CSV mantiene el estado histórico `EN_CI_AUTOMATICA` al publicar para evitar CI redundante. **No certifica recinto Safari/Concurso.**
 
 **Solicitud a IA6 / dependencia:** definir si Safari y Sport pueden usarse fuera de sus recintos, cómo se detectan zonas y concursos desde encuentros Wild y Showdown, cómo se mantienen tras guardar/cargar, y cómo fallan sin gastar si no hay señal confiable. Prohibidos cambios de `CaptureBattleContext`, sesiones o reglas sin nuevo gate.
 
