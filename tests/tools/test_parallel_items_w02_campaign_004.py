@@ -661,6 +661,287 @@ EXPECTED_04 = json.loads(r'''[
 EXPECTED_IDS_04 = ["burn_heal","casteliacone","elixir","energy_powder"]
 SOURCES_04 = ["modules/inventory/imported_recovery_v19.json","modules/inventory/field_item_effects.gd","modules/inventory/field_item_service.gd","tests/gameplay/item_field_effects_v4.gd"]
 
+EXPECTED_05 = json.loads(r'''[
+  {
+    "scenario": "energy_root_half_friend0_c004",
+    "id": "energy_root",
+    "kind": "field_medicine",
+    "start_hp": "half",
+    "status": "",
+    "confused": false,
+    "applies": true,
+    "heal_amount": 120,
+    "cures_status": false,
+    "cures_confusion": false,
+    "start_friendship": 0,
+    "friendship_loss": 10
+  },
+  {
+    "scenario": "energy_root_half_friend100_c004",
+    "id": "energy_root",
+    "kind": "field_medicine",
+    "start_hp": "half",
+    "status": "",
+    "confused": false,
+    "applies": true,
+    "heal_amount": 120,
+    "cures_status": false,
+    "cures_confusion": false,
+    "start_friendship": 100,
+    "friendship_loss": 10
+  },
+  {
+    "scenario": "energy_root_half_friend200_c004",
+    "id": "energy_root",
+    "kind": "field_medicine",
+    "start_hp": "half",
+    "status": "",
+    "confused": false,
+    "applies": true,
+    "heal_amount": 120,
+    "cures_status": false,
+    "cures_confusion": false,
+    "start_friendship": 200,
+    "friendship_loss": 15
+  },
+  {
+    "scenario": "energy_root_nearfull_friend199_c004",
+    "id": "energy_root",
+    "kind": "field_medicine",
+    "start_hp": "missing_7",
+    "status": "",
+    "confused": false,
+    "applies": true,
+    "heal_amount": 120,
+    "cures_status": false,
+    "cures_confusion": false,
+    "start_friendship": 199,
+    "friendship_loss": 10
+  },
+  {
+    "scenario": "energy_root_full_reject_c004",
+    "id": "energy_root",
+    "kind": "field_medicine",
+    "start_hp": "full",
+    "status": "",
+    "confused": false,
+    "applies": false,
+    "heal_amount": 120,
+    "cures_status": false,
+    "cures_confusion": false,
+    "start_friendship": 200,
+    "friendship_loss": 15
+  },
+  {
+    "scenario": "ether_first_empty_c004",
+    "id": "ether",
+    "kind": "field_medicine",
+    "start_hp": "full",
+    "status": "",
+    "confused": false,
+    "applies": true,
+    "heal_amount": 0,
+    "cures_status": false,
+    "cures_confusion": false,
+    "pp_scope": "one",
+    "pp0_start": 0,
+    "pp1_start": 2,
+    "slot": 0,
+    "pp_gain": 10
+  },
+  {
+    "scenario": "ether_second_empty_c004",
+    "id": "ether",
+    "kind": "field_medicine",
+    "start_hp": "full",
+    "status": "",
+    "confused": false,
+    "applies": true,
+    "heal_amount": 0,
+    "cures_status": false,
+    "cures_confusion": false,
+    "pp_scope": "one",
+    "pp0_start": 2,
+    "pp1_start": 0,
+    "slot": 1,
+    "pp_gain": 10
+  },
+  {
+    "scenario": "ether_selected_full_reject_c004",
+    "id": "ether",
+    "kind": "field_medicine",
+    "start_hp": "full",
+    "status": "",
+    "confused": false,
+    "applies": false,
+    "heal_amount": 0,
+    "cures_status": false,
+    "cures_confusion": false,
+    "pp_scope": "one",
+    "pp0_start": "full",
+    "pp1_start": 0,
+    "slot": 0,
+    "pp_gain": 10
+  },
+  {
+    "scenario": "ether_missing_slot_reject_c004",
+    "id": "ether",
+    "kind": "field_medicine",
+    "start_hp": "full",
+    "status": "",
+    "confused": false,
+    "applies": false,
+    "heal_amount": 0,
+    "cures_status": false,
+    "cures_confusion": false,
+    "pp_scope": "one",
+    "pp0_start": 0,
+    "pp1_start": 0,
+    "slot": -1,
+    "pp_gain": 10
+  },
+  {
+    "scenario": "ether_invalid_slot_reject_c004",
+    "id": "ether",
+    "kind": "field_medicine",
+    "start_hp": "full",
+    "status": "",
+    "confused": false,
+    "applies": false,
+    "heal_amount": 0,
+    "cures_status": false,
+    "cures_confusion": false,
+    "pp_scope": "one",
+    "pp0_start": 0,
+    "pp1_start": 0,
+    "slot": 99,
+    "pp_gain": 10
+  },
+  {
+    "scenario": "fresh_water_half_c004",
+    "id": "fresh_water",
+    "kind": "field_medicine",
+    "start_hp": "half",
+    "status": "",
+    "confused": false,
+    "applies": true,
+    "heal_amount": 30,
+    "cures_status": false,
+    "cures_confusion": false
+  },
+  {
+    "scenario": "fresh_water_missing7_c004",
+    "id": "fresh_water",
+    "kind": "field_medicine",
+    "start_hp": "missing_7",
+    "status": "",
+    "confused": false,
+    "applies": true,
+    "heal_amount": 30,
+    "cures_status": false,
+    "cures_confusion": false
+  },
+  {
+    "scenario": "fresh_water_full_reject_c004",
+    "id": "fresh_water",
+    "kind": "field_medicine",
+    "start_hp": "full",
+    "status": "",
+    "confused": false,
+    "applies": false,
+    "heal_amount": 30,
+    "cures_status": false,
+    "cures_confusion": false
+  },
+  {
+    "scenario": "full_heal_poison_c004",
+    "id": "full_heal",
+    "kind": "field_medicine",
+    "start_hp": "full",
+    "status": "poison",
+    "confused": false,
+    "applies": true,
+    "heal_amount": 0,
+    "cures_status": true,
+    "cures_confusion": false
+  },
+  {
+    "scenario": "full_heal_toxic_c004",
+    "id": "full_heal",
+    "kind": "field_medicine",
+    "start_hp": "full",
+    "status": "badly_poisoned",
+    "confused": false,
+    "applies": true,
+    "heal_amount": 0,
+    "cures_status": true,
+    "cures_confusion": false
+  },
+  {
+    "scenario": "full_heal_sleep_c004",
+    "id": "full_heal",
+    "kind": "field_medicine",
+    "start_hp": "full",
+    "status": "sleep",
+    "confused": false,
+    "applies": true,
+    "heal_amount": 0,
+    "cures_status": true,
+    "cures_confusion": false,
+    "expect_sleep_clock_clear": true
+  },
+  {
+    "scenario": "full_heal_burn_c004",
+    "id": "full_heal",
+    "kind": "field_medicine",
+    "start_hp": "full",
+    "status": "burn",
+    "confused": false,
+    "applies": true,
+    "heal_amount": 0,
+    "cures_status": true,
+    "cures_confusion": false
+  },
+  {
+    "scenario": "full_heal_confusion_c004",
+    "id": "full_heal",
+    "kind": "field_medicine",
+    "start_hp": "full",
+    "status": "",
+    "confused": true,
+    "applies": true,
+    "heal_amount": 0,
+    "cures_status": false,
+    "cures_confusion": true
+  },
+  {
+    "scenario": "full_heal_poison_confusion_c004",
+    "id": "full_heal",
+    "kind": "field_medicine",
+    "start_hp": "full",
+    "status": "poison",
+    "confused": true,
+    "applies": true,
+    "heal_amount": 0,
+    "cures_status": true,
+    "cures_confusion": true
+  },
+  {
+    "scenario": "full_heal_healthy_reject_c004",
+    "id": "full_heal",
+    "kind": "field_medicine",
+    "start_hp": "full",
+    "status": "",
+    "confused": false,
+    "applies": false,
+    "heal_amount": 0,
+    "cures_status": false,
+    "cures_confusion": false
+  }
+]''')
+EXPECTED_IDS_05 = ["energy_root","ether","fresh_water","full_heal"]
+SOURCES_05 = ["modules/inventory/imported_recovery_v19.json","modules/inventory/field_item_effects.gd","modules/inventory/field_item_service.gd","tests/gameplay/item_field_effects_v4.gd"]
+
 
 class ContractError(ValueError):
     pass
@@ -771,6 +1052,21 @@ def verify(fixture, queue, progress, chk):
                 names.add(actual["scenario"])
             chk.demand(names == {case["scenario"] for case in EXPECTED_04},
                        "Bloque 04 no cubre la matriz completa")
+        elif i == 4:
+            chk.demand(block["ids"] == EXPECTED_IDS_05 and block["family"] == "MEDICINE",
+                       "IDs/familia bloque 05 cambian")
+            chk.demand(block["source_evidence"] == SOURCES_05,
+                       "Fuentes medicinas 05 distintas")
+            chk.demand(len(block["cases"]) == len(EXPECTED_05),
+                       "20 escenarios de medicina 05 no completos")
+            seen = set()
+            for actual, expected in zip(block["cases"], EXPECTED_05):
+                chk.demand(type(actual) is dict and actual == expected,
+                           "Escenario medicina 05 alterado: "+str(expected["scenario"]))
+                chk.demand(actual["scenario"] not in seen, "Escenario 05 duplicado")
+                seen.add(actual["scenario"])
+            chk.demand(seen == {case["scenario"] for case in EXPECTED_05},
+                       "IDs y escenarios bloque 05 incompletos")
         else:
             raise ContractError("No hay contrato específico de bloque futuro")
     return len(progress)
@@ -845,6 +1141,22 @@ def verify_sources(chk):
     chk.demand('"burn_heal": "burn"' in old and
                '"elixir"' in old and '"burn"' in old,
                "Regresiones históricas para Burn Heal y Elixir ausentes")
+    expected_05_profiles = {
+        "energy_root": {"friendship_loss": [10, 10, 15], "heal": 120},
+        "ether": {"pp": 10, "scope": "one"},
+        "fresh_water": {"heal": 30},
+        "full_heal": {"confusion": True, "cure": "all"},
+    }
+    for item, expected in expected_05_profiles.items():
+        chk.demand(profile["items"][item]["effect"] == expected
+                   and profile["items"][item]["consume"] is True,
+                   "Perfil de medicina 05 desviado: "+item)
+    chk.demand("if move_slot < 0 or move_slot >= creature.moveset.size()" in effects
+               and "slots.append(creature.moveset[move_slot])" in effects,
+               "Eter: ranura obligatoria no conectada")
+    chk.demand('"full_heal": "poison"' in old and '"ether"' in old
+               and '"fresh_water"' in old,
+               "Regresión histórica Full Heal/Eter/Agua Fresca ausente")
 
 
 def negative_controls(fixture, queue, progress, chk):
@@ -901,6 +1213,19 @@ def negative_controls(fixture, queue, progress, chk):
             lambda f: f["blocks"][3]["cases"][12].update({"applies": True}),
             lambda f: f["blocks"][3]["cases"][14].update({"friendship_loss": 10}),
             lambda f: f["blocks"][3]["cases"][18].update({"friendship_loss": 0}),
+        ])
+    if len(fixture["blocks"]) >= 5:
+        edits.extend([
+            lambda f: f["blocks"][4]["ids"].append("max_ether"),
+            lambda f: f["blocks"][4]["cases"].pop(),
+            lambda f: f["blocks"][4]["cases"][2].update({"friendship_loss": 10}),
+            lambda f: f["blocks"][4]["cases"][5].update({"slot": -1}),
+            lambda f: f["blocks"][4]["cases"][6].update({"pp_gain": 7}),
+            lambda f: f["blocks"][4]["cases"][7].update({"applies": True}),
+            lambda f: f["blocks"][4]["cases"][10].update({"heal_amount": 20}),
+            lambda f: f["blocks"][4]["cases"][15].update({"cures_status": False}),
+            lambda f: f["blocks"][4]["cases"][18].update({"cures_confusion": False}),
+            lambda f: f["blocks"][4]["cases"][19].update({"applies": True}),
         ])
     for i, edit in enumerate(edits):
         altered = copy.deepcopy(fixture)
