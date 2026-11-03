@@ -2502,6 +2502,22 @@ def verify(fixture, queue, progress, chk):
                 seen.add(actual["scenario"])
             chk.demand(seen == {x["scenario"] for x in EXPECTED_09},
                        "Matriz de bloque09 incompleta")
+        elif i == 9:
+            chk.demand(block["ids"] == EXPECTED_IDS_10 and block["family"] == "MEDICINE",
+                       "IDs/familia del bloque 10 distintos de la cola IA6")
+            chk.demand(block["source_evidence"] == SOURCES_10,
+                       "Fuentes del bloque 10 cambiadas")
+            chk.demand(len(block["cases"]) == len(EXPECTED_10),
+                       "Bloque 10 carece de sus 22 escenarios")
+            names = set()
+            for actual, expected in zip(block["cases"], EXPECTED_10):
+                chk.demand(type(actual) is dict and actual == expected,
+                           "Escenario 10 alterado: " + str(expected["scenario"]))
+                chk.demand(actual["scenario"] not in names,
+                           "Escenario 10 duplicado")
+                names.add(actual["scenario"])
+            chk.demand(names == {x["scenario"] for x in EXPECTED_10},
+                       "Matriz de bloque 10 incompleta")
         else:
             raise ContractError("No hay contrato específico de bloque futuro")
     return len(progress)
