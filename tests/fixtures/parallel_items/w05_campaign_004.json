@@ -3,5 +3,35 @@
   "campaign": "CAMP_004_W05",
   "active_version": "scarlet-violet",
   "purpose": "Cobertura de enseñanza W05 en CAMPAÑA_004; cero bloques en bootstrap, nunca es PASS funcional",
-  "blocks": []
+  "blocks": [
+    {
+      "block": "01",
+      "items": [
+        {
+          "item_id": "tm82",
+          "move_id": "thunder_wave"
+        },
+        {
+          "item_id": "tm83",
+          "move_id": "poison_jab"
+        },
+        {
+          "item_id": "tm84",
+          "move_id": "stomping_tantrum"
+        },
+        {
+          "item_id": "tm85",
+          "move_id": "rest"
+        },
+        {
+          "item_id": "tm86",
+          "move_id": "rock_slide"
+        },
+        {
+          "item_id": "tm87",
+          "move_id": "taunt"
+        }
+      ]
+    }
+  ]
 }
