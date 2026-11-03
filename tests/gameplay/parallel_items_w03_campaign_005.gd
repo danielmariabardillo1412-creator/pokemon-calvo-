@@ -369,6 +369,60 @@ func _block_07(block: Dictionary) -> void:
 				found = producer.get("producer", "") == "overworld_movement_encounter_scheduler"
 		check("Contrato de productor identificado " + raw_id, found)
 
+# 08: Blue Flute has a real field effect; Red/Yellow require battle volatile context.
+func _block_08(block: Dictionary) -> void:
+	var ids: Array = block.get("ids", [])
+	check("Reserva exacta flautas 08", ids == ["red_flute", "yellow_flute", "blue_flute"])
+	check("Distinguir efecto Azul de dependencias volátiles",
+		block.get("current_state") == "PARTIAL_BLUE_FIELD_FUNCTIONAL"
+		and not bool(block.get("functional_effect_certified", true)))
+	var profile: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(
+		"res://modules/inventory/imported_recovery_v19.json"))
+	var blue: Dictionary = profile.get("items", {}).get("blue_flute", {})
+	check("Flauta Azul: fuente real no consumible y cura sueño",
+		blue.get("consume", true) == false
+		and blue.get("effect", {}).get("cure", []).has("slp"))
+	for raw_id: String in ids:
+		check("Flauta seleccionada " + raw_id,
+			catalogs.item(StringName(raw_id)) != null
+			and service_for().selection.content_allowed(StringName(raw_id)))
+	var service := service_for()
+	var target: CreatureInstance = service.owner.owned_creature(&"field_item_target")
+	status(target, &"sleep")
+	service.sleep_clocks[String(target.instance_id)] = {
+		"version": "0.10.11", "start_time": 3, "time": 2}
+	check("Mochila recibe Flauta Azul", service.owner.inventory.add(&"blue_flute", 2))
+	var old_target: Dictionary = target.to_dict()
+	var result: Dictionary = service.use_item(&"blue_flute", target.instance_id)
+	var recovered: CreatureInstance = service.owner.owned_creature(target.instance_id)
+	check("Flauta Azul cura sueño en servicio real",
+		result.get("accepted", false) == true
+		and recovered != null and recovered.status_state.persistent_id == &""
+		and recovered.status_ids.is_empty())
+	check("Flauta Azul se conserva y mantiene identidad",
+		service.owner.inventory.quantity(&"blue_flute") == 2
+		and recovered.instance_id == target.instance_id
+		and target.to_dict() == old_target)
+	check("Flauta Azul elimina reloj de sueño", service.sleep_clocks.is_empty())
+	var no_effect_before: String = snapshot(service)
+	var no_effect: Dictionary = service.use_item(&"blue_flute", recovered.instance_id)
+	check("Flauta Azul sin efecto no muta ni consume",
+		not bool(no_effect.get("accepted", false))
+		and String(no_effect.get("reason", "")) == "item_has_no_effect"
+		and snapshot(service) == no_effect_before)
+	for id: StringName in [&"red_flute", &"yellow_flute"]:
+		var other := service_for()
+		check("Flauta de batalla añadida " + String(id),
+			other.owner.inventory.add(id, 2))
+		var own: CreatureInstance = other.owner.owned_creature(&"field_item_target")
+		own.status_state.add_volatile(&"confusion")
+		var before: String = snapshot(other)
+		var denied: Dictionary = other.use_item(id, own.instance_id)
+		check("No inventar curación de campo " + String(id),
+			not bool(denied.get("accepted", false))
+			and String(denied.get("reason", "")) == "field_effect_not_connected"
+			and snapshot(other) == before)
+
 func _finish(n: int) -> void:
 	done = true
 	if errors.is_empty() and n > 0 and checks > 0:
