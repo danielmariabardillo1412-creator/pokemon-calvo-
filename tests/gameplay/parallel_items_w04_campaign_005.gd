@@ -509,6 +509,97 @@ func _auditar_especial_06(catalogo: DefinitionCatalog, caso: Dictionary, policy:
 	print("CAMP005_W04_ITEM id=", String(item), " status=", "BLOQUEADO_POR_CONTRATO" if trade else "DEPENDENCIA_COMBATE", " source=", String(origen), " target=", String(destino), " need=", "approved_level+held_item" if trade else "three_qualified_battle_events")
 
 
+func _auditar_forma_equipable_07(catalogo: DefinitionCatalog, caso: Dictionary) -> void:
+	var item := StringName(caso.get("item_id", ""))
+	var origen := StringName(caso.get("source_species", ""))
+	var especie: CreatureSpecies = catalogo.species(origen)
+	comprobar(catalogo.item(item) != null and especie != null, String(item) + "/07_item_y_especie")
+	if especie == null:
+		return
+	var original := _abrir("res://data/api/v2/pokemon-species/" + str(int(caso.get("species_number", 0))) + "/index.json")
+	comprobar(String(original.get("name", "")) == String(origen), String(item) + "/07_fuente_especie")
+	comprobar(bool(original.get("forms_switchable", false)) == bool(caso.get("forms_switchable", false)), String(item) + "/07_forms_switchable_canonico")
+	var base := 0
+	var variante := 0
+	for fila: Dictionary in original.get("varieties", []):
+		var nombre := String(fila.get("pokemon", {}).get("name", ""))
+		if nombre == String(caso.get("base_variety", "")) and bool(fila.get("is_default", false)):
+			base += 1
+		if nombre == String(caso.get("target_variety", "")) and not bool(fila.get("is_default", false)):
+			variante += 1
+	comprobar(base == 1 and variante == 1, String(item) + "/07_variedades_default_y_alterna")
+	var chain := _abrir("res://data/api/v2/evolution-chain/" + str(int(caso.get("chain_id", 0))) + "/index.json")
+	comprobar(String(chain.get("chain", {}).get("species", {}).get("name", "")) == String(origen) and chain.get("chain", {}).get("evolves_to", []).is_empty(), String(item) + "/07_forma_no_evolucion_especie")
+	comprobar(especie.evolutions.is_empty(), String(item) + "/07_sin_evoluciones_de_cadena")
+	var pc := _crear(catalogo, origen)
+	comprobar(pc != null, String(item) + "/07_creacion")
+	if pc == null:
+		return
+	var svc := Servicio.new()
+	comprobar(svc.configure(pc, catalogo, func(): return true), String(item) + "/07_configuracion")
+	comprobar(svc.holdable(item), String(item) + "/07_perfil_equipable")
+	comprobar(pc.inventory.add(item, 2), String(item) + "/07_stock")
+	var antes := _estado(pc)
+	comprobar(svc.evolution_options(item, ID).is_empty(), String(item) + "/07_sin_evolucion_mochila")
+	var uso: Dictionary = svc.use_item(item, ID)
+	comprobar(not uso.get("accepted", false) and _estado(pc) == antes, String(item) + "/07_bolsa_no_activa_forma")
+	var bypass: Dictionary = svc.evolve(item, ID, origen)
+	comprobar(not bypass.get("accepted", false) and _estado(pc) == antes, String(item) + "/07_evolve_no_es_forma")
+	var ajeno: Dictionary = svc.use_item(item, &"w04_c005_ajeno")
+	comprobar(not ajeno.get("accepted", false) and _estado(pc) == antes, String(item) + "/07_ajeno_sin_gasto")
+	var equipado: Dictionary = svc.equip(item, ID)
+	comprobar(equipado.get("accepted", false), String(item) + "/07_equipar_positivo")
+	if not equipado.get("accepted", false):
+		return
+	var pokemon := pc.owned_creature(ID)
+	comprobar(pokemon != null and pokemon.instance_id == ID and pokemon.species_id == origen and pokemon.held_item_id == item and pc.inventory.quantity(item) == 1, String(item) + "/07_equipamiento_sin_cambio_especie")
+	comprobar(pokemon != null and not pokemon.to_dict().has("form_id") and not pokemon.to_dict().has("variant_id") and not pokemon.to_dict().has("primal_form_id"), String(item) + "/07_forma_no_persistida")
+	var equipado_antes := _estado(pc)
+	comprobar(svc.evolution_options(item, ID).is_empty(), String(item) + "/07_sin_evolucion_tras_equipar")
+	var falso: Dictionary = svc.use_item(item, ID)
+	comprobar(not falso.get("accepted", false) and _estado(pc) == equipado_antes, String(item) + "/07_uso_equipado_no_transforma")
+	var repo := SaveGameRepository.new()
+	var ruta := "user://w04_c005_07_" + String(item) + ".json"
+	var save: SaveResult = repo.save_collection(ruta, pc)
+	comprobar(save.ok, String(item) + "/07_guardar_savev2")
+	if save.ok:
+		var load: LoadResult = repo.load(ruta)
+		comprobar(load.ok and load.schema_version == 2, String(item) + "/07_cargar_savev2")
+		if load.ok:
+			var restored := load.party.get_creature(ID)
+			comprobar(restored != null and restored.instance_id == ID and restored.species_id == origen and restored.held_item_id == item and load.inventory.quantity(item) == 1, String(item) + "/07_identidad_y_stock_savev2")
+			if restored != null:
+				var a: Dictionary = pokemon.to_dict()
+				var b: Dictionary = restored.to_dict()
+				comprobar(a.get("ivs") == b.get("ivs") and a.get("evs") == b.get("evs") and a.get("move_ids") == b.get("move_ids") and a.get("experience") == b.get("experience") and a.get("friendship") == b.get("friendship"), String(item) + "/07_atributos_savev2")
+	DirAccess.remove_absolute(ProjectSettings.globalize_path(ruta))
+	var quitar: Dictionary = svc.unequip(ID)
+	comprobar(quitar.get("accepted", false) and _estado(pc) == antes, String(item) + "/07_retirar_y_restaurar")
+	print("CAMP005_W04_ITEM id=", String(item), " status=DEPENDENCIA_FORMA source=", String(origen), " target_variety=", String(caso.get("target_variety", "")), " route=", String(caso.get("route_kind", "")), " need=form_resolver_and_lifecycle")
+
+
+func _cruce_prismas_07(catalogo: DefinitionCatalog) -> void:
+	var pares: Array = [{"species": &"groudon", "item": &"blue_orb"}, {"species": &"kyogre", "item": &"red_orb"}]
+	for fila: Dictionary in pares:
+		var source: StringName = fila.get("species", &"")
+		var item: StringName = fila.get("item", &"")
+		var pc := _crear(catalogo, source)
+		comprobar(pc != null, String(item) + "/07_cruce_crear")
+		if pc == null:
+			continue
+		var svc := Servicio.new()
+		comprobar(svc.configure(pc, catalogo, func(): return true), String(item) + "/07_cruce_servicio")
+		comprobar(pc.inventory.add(item, 1), String(item) + "/07_cruce_stock")
+		var antes := _estado(pc)
+		var equip: Dictionary = svc.equip(item, ID)
+		comprobar(equip.get("accepted", false), String(item) + "/07_cruce_equipamiento_generico_no_seleccion_forma")
+		if equip.get("accepted", false):
+			comprobar(pc.owned_creature(ID).species_id == source and pc.owned_creature(ID).held_item_id == item and svc.evolution_options(item, ID).is_empty(), String(item) + "/07_prisma_no_cambia_especie_ajena")
+			var quitar: Dictionary = svc.unequip(ID)
+			comprobar(quitar.get("accepted", false) and _estado(pc) == antes, String(item) + "/07_cruce_sin_persistencia")
+	print("CAMP005_W04_ORB_CROSS blue_orb=>groudon red_orb=>kyogre status=NO_FALSE_FORM")
+
+
 func _ejecutar() -> void:
 	var fixture := _abrir(FIXTURE)
 	var policy := _abrir(TRADE_POLICY)
@@ -523,8 +614,8 @@ func _ejecutar() -> void:
 	comprobar(earlier.get("trade_level_conversion", {}).get("levels_selected") == null, "V25_sin_niveles")
 	comprobar(String(policy.get("correct_future_rule", "")).contains("original equipped evolution item"), "conservar_objeto_equipado")
 	var blocks: Array = fixture.get("blocks", [])
-	comprobar(blocks.size() == 6 and [blocks[0].get("block"), blocks[1].get("block"), blocks[2].get("block"), blocks[3].get("block"), blocks[4].get("block"), blocks[5].get("block")] == ["01", "02", "03", "04", "05", "06"], "bloques_01_a_06_secuenciales")
-	if blocks.size() != 6:
+	comprobar(blocks.size() == 7 and [blocks[0].get("block"), blocks[1].get("block"), blocks[2].get("block"), blocks[3].get("block"), blocks[4].get("block"), blocks[5].get("block"), blocks[6].get("block")] == ["01", "02", "03", "04", "05", "06", "07"], "bloques_01_a_07_secuenciales")
+	if blocks.size() != 7:
 		_finalizar()
 		return
 	for index in range(2):
@@ -550,6 +641,11 @@ func _ejecutar() -> void:
 	comprobar(especiales.size() == 2, "06_dos_objetos_exactos")
 	for caso: Dictionary in especiales:
 		_auditar_especial_06(catalogo, caso, policy)
+	var formas_equipables: Array = blocks[6].get("cases", [])
+	comprobar(formas_equipables.size() == 5, "07_cinco_objetos_exactos")
+	for caso: Dictionary in formas_equipables:
+		_auditar_forma_equipable_07(catalogo, caso)
+	_cruce_prismas_07(catalogo)
 	_finalizar()
 
 func _finalizar() -> void:
@@ -557,7 +653,7 @@ func _finalizar() -> void:
 		return
 	cerrado = true
 	if errores.is_empty():
-		print("CAMP005_W04_GODOT PASS blocks=6 checks=", checks)
+		print("CAMP005_W04_GODOT PASS blocks=7 checks=", checks)
 	else:
 		print("CAMP005_W04_GODOT FAIL errors=", JSON.stringify(errores))
 	quit(0 if errores.is_empty() else 1)
