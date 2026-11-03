@@ -57,3 +57,17 @@ Sin contratos de `FUSION_TXN`, `UNFUSE_TXN`, política de posesión/consumo del 
 **Aislamiento:** solo pruebas, fixture, progreso e informe W04; `main`, V28, PR118, otras ramas, código de producción, catálogos, workflows y SaveV2 compartido intactos.
 
 **Siguiente `p` autorizada tras cierre:** 09/10 `gracidea;meteorite;reveal_glass;rotom_catalog;zygarde_cube`.
+
+## CI08 real: contrato de dos propietarios validado
+
+[GitHub Actions #41742831349](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41742831349), SHA `cf61dfc8d5285a63340a144088620d4ed6e16073`, concluyó **completed/success** con los siguientes recibos exactos:
+- `CAMP005_W04_MANIFEST_PASS reserved=10 completed=8 ids=46 kind=FUNCTIONAL_BACKLOG`.
+- `CAMP005_W04_PY PASS blocks=8 checks=498`.
+- `CAMP005_W04_GODOT PASS blocks=8 checks=950`.
+- Seis líneas `CAMP005_W04_FUSION` con `status=DEPENDENCIA_DOS_CRIATURAS`, mapeos correctos y `need=fusion_transaction+partner_identity+savev2`.
+
+La ejecución ha comprobado que el compañero sigue bajo propiedad del jugador, tanto en PARTY como en STORAGE, con IDs y datos persistentes intactos. **No ha implementado ni validado fusiones positivas.** Los pasos de regresión histórica CAMP004/CAMP003/CAMP001 fueron `skipped` por ser el bloque 08 sin cambios en producción; las pruebas acumulativas CAMP005 de los ocho bloques sí pasaron.
+
+El CSV fue actualizado a `DEPENDENCIA_DOCUMENTADA`, `ci_run=41742831349`, commit `4552e5f826f45a0c91123552cc2d180498be49cf`; por modificar progreso se desencadena una nueva ejecución CI que se debe comprobar independientemente. La fila 04 se conserva sin reescribir por la denegación anterior.
+
+**Bloque 08/10 cerrado funcionalmente como dependencia pendiente de fusión reversible y SaveV2.** Próxima `p`: únicamente bloque 09/10.
