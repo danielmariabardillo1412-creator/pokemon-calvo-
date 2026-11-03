@@ -28,7 +28,7 @@ func _training_creature(spec: Dictionary) -> CreatureInstance:
 		var curve: String = String(catalogs.species(c.species_id).growth_rate)
 		c.experience = ProgressionRuleset.experience_for_level(curve, c.level + 1) - int(spec.exp_until_next)
 	c.friendship = int(spec.get("start_friendship", 99))
-	if String(spec.kind) in ["vitamin", "wing"]:
+	if String(spec.kind) in ["vitamin", "wing", "mochi"]:
 		var stat: String = String(spec.stat)
 		c.evs[stat] = int(spec.get("start_ev", 0))
 		var other_stats: Array[String] = ["hp", "attack", "defense",
@@ -157,13 +157,13 @@ func _probe_training(spec: Dictionary, mode: String) -> Dictionary:
 		check(mode + " integridad de habilidad/experiencia/EV/IV", now.ability_id == c.ability_id
 			and now.level == c.level and now.experience == c.experience
 			and now.evs == c.evs and now.ivs == c.ivs)
-	elif String(spec.kind) in ["vitamin", "wing"]:
+	elif String(spec.kind) in ["vitamin", "wing", "mochi"]:
 		var stat: String = String(spec.stat)
 		var gain: int = int(spec.expected_ev_gain)
 		var expected_evs: Dictionary = start_evs.duplicate(true)
 		expected_evs[stat] = int(start_evs.get(stat, 0)) + gain
 		var tier: int = mini(2, int(start_friend / 100))
-		var friendship_added: int = ([3, 2, 1] if String(spec.kind) == "wing" else [5, 3, 2])[tier]
+		var friendship_added: int = (0 if String(spec.kind) == "mochi" else ([3, 2, 1] if String(spec.kind) == "wing" else [5, 3, 2])[tier])
 		var expected_stats: Dictionary = StatCalculator.compute(
 			catalogs.species(c.species_id).base_stat_block(), c.ivs,
 			expected_evs, c.nature_id, c.level).to_dict()
