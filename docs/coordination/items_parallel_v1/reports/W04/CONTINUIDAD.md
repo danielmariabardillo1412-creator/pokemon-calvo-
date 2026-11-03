@@ -130,3 +130,14 @@ Todos los confites probados están asociados al requisito de giro `spin` de Milc
 **Rutas:** `tests/gameplay/parallel_items_w04_campaign_004.gd`, `tests/tools/test_parallel_items_w04_campaign_004.py`, `tests/fixtures/parallel_items/w04_campaign_004.json`, `reports/W04/CAMP_004_PROGRESO.csv`, `reports/W04/CAMP_004_ITER_03.md`. Mantener intactas las pruebas CAMP003/CAMP001.
 
 **Siguiente `p`:** bloque 04/10 `adamant_crystal;blue_orb;catching_charm`, previa verificación de la CI posterior a la reconciliación CSV. No editar `main`, V28, rama árbitra, ramas de otras trabajadoras, catálogo ni arquitectura.
+
+
+---
+
+## CAMPAÑA_004 — Bloque 04 (2026-11-03)
+
+**IA4/W04**, rama exclusiva `codex/calvo-items-20261103-w04-camp004`. El microbloque **04/10** está publicado con `adamant_crystal;blue_orb;catching_charm`, fixture 04, runner Godot acumulativo y Python, CSV `CAMP_004_PROGRESO.csv` e informe `CAMP_004_ITER_04.md`. CI del primer SHA completo: [#41578460848](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41578460848), verificar antes de afirmar PASS (sha `f3cb82b986443123a0a56336b0e76d09a8e446f3`).
+
+**Hechos comprobados en perfiles:** `adamant_crystal` y `blue_orb` figuran como equipables, pero la transferencia del objeto no certifica forma de Dialga ni reversión primigenia de Kyogre; `catching_charm` no está entre los equipables. El runner prueba uso directo/evolución falsa rechazados sin gasto, propiedad, equipamiento y SaveV2 cuando corresponde. **No prueba ni modifica efectos de captura de W03**. Son revisiones de contexto, no implementaciones de formas o mejoras de captura.
+
+Las **16 dependencias CAMP003** y **9 dependencias CAMP004 bloques 01–03** siguen intactas. No se ha tocado producción, políticas, datasets, otras ramas, `main` ni V28. La cola sigue la puerta de IA6, siguiente `p` **bloque 05/10**: `dna_splicers;exp_charm;gracidea`, previa verificación de CI04 y reparación si procede.
