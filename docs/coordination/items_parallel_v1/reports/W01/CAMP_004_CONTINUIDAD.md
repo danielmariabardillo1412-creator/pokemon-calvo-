@@ -108,3 +108,13 @@ Run #41611257621: Python 588 PASS, Godot 9670 checks/4 errores, todos ligados a 
 ## Bloque 06: reparación excluyendo Torpeza prohibida
 
 La segunda CI #41613512888 devolvió `content_policy` al abrir los tres controles de `smoke_klutz_negative`. La regla canónica `config/randomlock_content_v1.json` excluye `klutz`; cambiar Mew por Woobat no la autorizaba. No alterar la política. El control de supresión W01 se traslada a `magic_room` nativo del rival: `smoke_magic_room_negative`, ausencia de actividad del objeto y huida normal mediante `flee`. No se retiran otros casos, semillas ni variantes. Pendiente nueva CI sobre commit de reparación.
+
+## Bloque 06/10 finalizado — evidencia GitHub Actions
+
+- Rama: `codex/calvo-items-20261103-w01-camp004`. Run [#41707616043](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41707616043), `completed/success`, SHA probado `bc2f236ba9cd23072b78589d6f100437c436e7e8`.
+- Recibos: `CAMP004_W01_PY PASS blocks=6 checks=588`, `CAMP004_W01_GODOT PASS blocks=6 checks=9729`, manifest/gates PASS; 0 errores.
+- Estado acumulado **6/10**, 18 objetos, 43 escenarios, 110 pares, 330 variantes de tres equipamientos con SaveV2.
+- Dos fallos previos en Bola Humo/Torpeza diagnosticados: `klutz` excluida en `config/randomlock_content_v1.json`. Control negativo reemplazado solo por `magic_room` permitido, verificando `held_item_active` y `flee` reales, sin saltarse política. El resto de casos no se tocó.
+- Última regresión total CAMP003: gate 05 run #41602276948, 12392 Godot/806 Python, PASÓ. En 06 no procede volver a correr CAMP003 sin cambios de producción. Sigue pendiente para IA6 la vista SaveV2 midcharge del bloque 03.
+- CSV 06 permanece `EN_CI_AUTOMATICA` exclusivamente para evitar un nuevo run disparado por un cambio documental; al próximo `p`, cerrar con SHA `bc2f236ba9cd23072b78589d6f100437c436e7e8` y CI `41707616043`.
+- **Próxima `p` = únicamente bloque 07/10: `sticky_barb;terrain_extender;throat_spray`.** Prohibido tocar `main`, V28, otras ramas o iniciar bloque 08.

@@ -31,3 +31,23 @@ Run [#41611257621](https://github.com/danielmariabardillo1412-creator/pokemon-ca
 CI [#41613512888](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41613512888), SHA `61db95e508a5164879cc62f07163aed82d9b823e`, obtuvo Python PASS (588) pero Godot FAIL (9670 checks, 4 errores) al abrir el control `smoke_klutz_negative`: causa explícita `content_policy`. La política de usuario `config/randomlock_content_v1.json` **excluye** `klutz` para cualquier especie, incluido Woobat; no es un problema de especie.
 
 Sin modificar esa política ni producción, se sustituye solo el negativo incompatible por `smoke_magic_room_negative`. El rival invoca `magic_room` realmente y se exige que el objeto quede inactivo en el snapshot nativo y que `flee` no use bandera de garantía: procesa el intento normal en los tres modos. Se preservan los otros ocho escenarios del bloque 06, los 34 anteriores, todas las semillas, 110 pares y 330 variantes, y SaveV2. El test técnico antiguo de Torpeza sin política sigue existiendo, pero **no cuenta como escenario jugable Randomlock**. Nueva CI pendiente.
+
+## Certificación oficial bloque 06/10 — CI reparada
+
+**Run:** [GitHub Actions #41707616043](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41707616043), **`completed/success`**, SHA funcional `bc2f236ba9cd23072b78589d6f100437c436e7e8`, 0 errores. Recibos literales comprobados en logs del job:
+
+- `CAMP004_W01_MANIFEST_PASS reserved=10 completed=6 ids=30`
+- `CAMP004_W01_PY PASS blocks=6 checks=588`
+- `CAMP004_GATE_PY_PASS worker=W01 blocks=6 checks=588`
+- `CAMP004_W01_GODOT PASS blocks=6 checks=9729`
+- `CAMP004_GATE_GODOT_PASS worker=W01 blocks=6 checks=9729`
+
+**Cobertura acumulada certificada en CAMPAÑA_004:** seis bloques, 18 objetos, 43 escenarios, 110 pares de caso/semilla, 330 variantes (active, none, reserve) con pruebas nativas y SaveV2. Bloque 06: 3 objetos, 9 escenarios, 12 pares, 36 variantes. Roca Suave y Bola de Nieve mantienen sus positivos y negativos; Bola de Humo valida `flee` real, no consumo y supresión por Espacio Mágico.
+
+**Reparación autónoma documentada y validada:** dos intentos previos fallaron en `smoke_klutz_negative`. El error no era del motor de combate ni de Woobat: la regla explícita `config/randomlock_content_v1.json` excluye la habilidad `klutz`. El último commit `bc2f236b` sustituye el único caso incompatible por Espacio Mágico, sin reducir escenarios ni variantes ni tocar política, producción o otras ramas. La CI final pasó íntegra.
+
+**Regresiones:** la suite CAMP004 acumulada incluye bloques 01 a 06. La regresión CAMP003 completa se verificó ya en el hito 05 [#41602276948](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41602276948), Godot 12.392 y Python 806; **no se reejecutó CAMP003 en este hito 06**, ya que no hubo cambio de módulos de producción. La siguiente repetición obligatoria será el hito 10, o antes si se modifica producción.
+
+**Limitaciones:** no certifica visual/GPU ni integración en `main` o V28; persiste la incidencia SaveV2 de proyección de carga intermedia de Rayo Solar del bloque 03 para IA6.
+
+**Economía de CI:** fila 06 de `CAMP_004_PROGRESO.csv` queda `EN_CI_AUTOMATICA` hasta el siguiente `p`, para actualizar junto al bloque 07 y evitar disparar CI solo por metadatos. El PASS funcional está acreditado exclusivamente por el run y SHA anteriores. Próxima `p`: **solo 07/10 `sticky_barb;terrain_extender;throat_spray`**.
