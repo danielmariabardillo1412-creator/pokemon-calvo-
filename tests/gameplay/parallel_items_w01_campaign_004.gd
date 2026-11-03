@@ -8,6 +8,9 @@ const C004_OUTPUT := "res://.godot/parallel_items/w01_campaign_004"
 var c004_rows: Array = []
 var c004_lucky_exclusive: int = 0
 var c004_lucky_hits: int = 0
+var c004_dice_baseline_short: int = 0
+var c004_dice_four: int = 0
+var c004_dice_five: int = 0
 
 func _initialize() -> void:
 	capture = false
@@ -53,21 +56,23 @@ func _run_w01_c004() -> void:
 	check("Tres controles de equipamiento", fixture.get("variants") == ["active", "none", "reserve"])
 	var progress: Array = _progress_c004()
 	var completed: int = progress.size()
-	check("Bloques W01 01 y 02 autorizados", completed == 2)
-	if completed != 2:
+	check("Bloques W01 01 a 03 autorizados", completed == 3)
+	if completed != 3:
 		quit(2)
 		return
 	check("Fila 01 e IDs exactos de árbitra", String(progress[0].block) == "01"
 		and String(progress[0].ids) == "light_ball;lucky_punch;thick_club")
 	check("Fila 02 e IDs exactos de árbitra", String(progress[1].block) == "02"
 		and String(progress[1].ids) == "damp_rock;float_stone;icy_rock")
+	check("Fila 03 e IDs exactos de árbitra", String(progress[2].block) == "03"
+		and String(progress[2].ids) == "loaded_dice;misty_seed;power_herb")
 	var ids_for_block: Dictionary = {}
 	var ids: PackedStringArray = PackedStringArray()
 	for row_progress: Dictionary in progress:
 		ids_for_block[String(row_progress.block)] = String(row_progress.ids).split(";")
 		ids.append_array(ids_for_block[String(row_progress.block)])
 	var cases: Array = fixture.get("cases", [])
-	check("Catorce escenarios autorizados", cases.size() == 14)
+	check("Veinte escenarios autorizados", cases.size() == 20)
 	var names: Array = []
 	for row: Dictionary in cases:
 		check("Escenario pertenece a bloque autorizado",
@@ -92,14 +97,20 @@ func _run_w01_c004() -> void:
 				"seed": int(value), "checks": checks - before_checks,
 				"status": "PASS" if errors.size() == before_errors else "FAIL",
 				"observed": observed})
-	check("Matriz exacta de 43 pares caso-semilla", c004_rows.size() == 43)
+	check("Matriz exacta de 62 pares caso-semilla", c004_rows.size() == 62)
 	for id: String in ids:
 		check("ID cubierto " + id, cases.any(func(case): return String(case.item_id) == id))
 	check("Puño Suerte demuestra al menos un crítico específico de Chansey", c004_lucky_exclusive > 0)
 	check("Puño Suerte registra críticos reales con Chansey", c004_lucky_hits > 0)
+	check("Dado Trucado: al menos una semilla sin equipar tiene dos o tres golpes",
+		c004_dice_baseline_short > 0)
+	check("Dado Trucado: el simulador muestra tanto cuatro como cinco golpes",
+		c004_dice_four > 0 and c004_dice_five > 0)
 	var report := {"schema_version": 1, "campaign": "CAMP_004", "worker": "W01",
 		"blocks": completed, "checks": checks, "errors": errors,
 		"lucky_punch_exclusive_critical_witnesses": c004_lucky_exclusive,
+		"loaded_dice_baseline_short_witnesses": c004_dice_baseline_short,
+		"loaded_dice_four_hits": c004_dice_four, "loaded_dice_five_hits": c004_dice_five,
 		"cases": c004_rows,
 		"limits": ["Godot headless sin prueba visual/GPU", "Solo especies y semillas declaradas",
 			"Sin certificación de integración global a main, V28 o mapa"]}
@@ -165,7 +176,12 @@ func _probe_w01_c004(row: Dictionary, seed: int, mode: String) -> Dictionary:
 	check(mode + " estado final nativo", after.valid)
 	var battle_log: Array = session._checkpoint.get("snapshot", {}).get("native", {}).get("log", [])
 	var critical: bool = false
+	var hit_count: int = 0
 	for entry: String in battle_log:
+		if entry.begins_with("|-hitcount|") and entry.contains("p2a:"):
+			var pieces: PackedStringArray = entry.split("|")
+			if pieces.size() >= 4:
+				hit_count = int(pieces[pieces.size() - 1])
 		if entry.begins_with("|-crit|p2a:"):
 			critical = true
 	var foe_damage: int = int(before.foe_hp) - int(after.foe_hp)
@@ -194,7 +210,8 @@ func _probe_w01_c004(row: Dictionary, seed: int, mode: String) -> Dictionary:
 	check(mode + " unidades físicas idénticas tras SaveV2", restored_physical == physical)
 	await session.close()
 	return {"valid": true, "start": before, "after": after,
-		"damage": foe_damage, "critical": critical, "physical_units": physical,
+		"damage": foe_damage, "critical": critical, "hit_count": hit_count,
+		"physical_units": physical,
 		"restored": restored_frame == after, "owner_unchanged": frozen,
 		"save_equal": restored_physical == physical}
 
@@ -213,13 +230,20 @@ func _compare_c004(row: Dictionary, observed: Dictionary) -> void:
 			bool(x.start.own_has_item) == (mode == "active")
 			and bool(x.start.reserve_has_item) == (mode == "reserve"))
 		check("Reserva no consume " + mode, not x.after.reserve_consumed)
-		check("Unidades físicas sin consumo " + mode, x.physical_units == 2)
+		var triggered_consumable: bool = (String(row.op) == "misty_seed_terrain"
+			or String(row.op) == "power_herb_skip_charge")
+		check("Unidades físicas coherentes con activación " + mode,
+			x.physical_units == (1 if mode == "active" and triggered_consumable else 2))
 	var a: Dictionary = observed.active
 	var n: Dictionary = observed.none
 	var r: Dictionary = observed.reserve
-	check("Objeto equipable retenido tras combate sin consumo",
-		not a.after.own_consumed and not r.after.reserve_consumed and
-		a.physical_units == 2 and n.physical_units == 2 and r.physical_units == 2)
+	var should_consume: bool = (String(row.op) == "misty_seed_terrain"
+		or String(row.op) == "power_herb_skip_charge")
+	check("Consumo exacto por activación, reserva y ausencia intactas",
+		bool(a.after.own_consumed) == should_consume
+		and not r.after.reserve_consumed
+		and a.physical_units == (1 if should_consume else 2)
+		and n.physical_units == 2 and r.physical_units == 2)
 	match String(row.op):
 		"damage_boost_compatible":
 			check("Especie compatible: daño nativo aumenta exclusivamente en portador",
@@ -277,5 +301,50 @@ func _compare_c004(row: Dictionary, observed: Dictionary) -> void:
 				active_loss > 0 and active_loss == none_loss and none_loss == reserve_loss)
 			check("Piedra Pomez: no consume en movimiento de potencia fija",
 				not a.after.own_consumed and a.physical_units == 2 and r.physical_units == 2)
+		"loaded_dice_multihit":
+			check("Dado Trucado: contador de golpes nativo real del objetivo",
+				int(a.hit_count) in [4, 5]
+				and int(n.hit_count) in [2, 3, 4, 5]
+				and int(r.hit_count) == int(n.hit_count))
+			check("Dado Trucado: mismo movimiento y semilla sin alterar control",
+				a.damage > 0 and n.damage > 0 and n.damage == r.damage)
+			check("Dado Trucado: efecto retenido sin consumo",
+				not a.after.own_consumed and a.physical_units == 2 and r.physical_units == 2)
+			if int(n.hit_count) in [2, 3]:
+				c004_dice_baseline_short += 1
+			if int(a.hit_count) == 4:
+				c004_dice_four += 1
+			if int(a.hit_count) == 5:
+				c004_dice_five += 1
+		"loaded_dice_single_hit":
+			check("Dado Trucado: Placaje no activa golpes multiples",
+				int(a.hit_count) == 0 and int(n.hit_count) == 0 and int(r.hit_count) == 0
+				and a.damage > 0 and a.damage == n.damage and n.damage == r.damage)
+		"misty_seed_terrain":
+			check("Semilla Bruma: Campo de Niebla sube solo Defensa Especial del portador",
+				int(a.after.special_defense_stage) == 1
+				and int(n.after.special_defense_stage) == 0
+				and int(r.after.special_defense_stage) == 0)
+			check("Semilla Bruma: consumo unico solo al activar el terreno",
+				a.after.own_consumed and a.physical_units == 1
+				and not r.after.reserve_consumed and r.physical_units == 2)
+		"misty_seed_no_trigger":
+			check("Semilla Bruma: Campo Electrico no activa Defensa Especial",
+				int(a.after.special_defense_stage) == 0
+				and int(n.after.special_defense_stage) == 0
+				and int(r.after.special_defense_stage) == 0)
+			check("Semilla Bruma: no se consume en terreno equivocado",
+				not a.after.own_consumed and a.physical_units == 2)
+		"power_herb_skip_charge":
+			check("Hierba Unica: Rayo Solar golpea en el primer turno solo equipado",
+				a.damage > 0 and n.damage == 0 and r.damage == 0)
+			check("Hierba Unica: consumida una sola vez en el portador",
+				a.after.own_consumed and a.physical_units == 1
+				and not r.after.reserve_consumed and r.physical_units == 2)
+		"power_herb_no_charge_control":
+			check("Hierba Unica: Placaje no usa efecto de carga",
+				a.damage > 0 and a.damage == n.damage and n.damage == r.damage)
+			check("Hierba Unica: no se consume con movimiento inmediato",
+				not a.after.own_consumed and a.physical_units == 2)
 		_:
 			check("Operación fuera del contrato de bloque", false)

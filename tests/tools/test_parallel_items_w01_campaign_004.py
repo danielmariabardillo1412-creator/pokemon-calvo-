@@ -20,6 +20,8 @@ REFS = {
     "docs/current/ITEM_INVENTORY.csv": "2aaf18643bb2b071226118a1ad556cffca4707dd",
     "docs/current/RANDOMLOCK_ITEMS_BUILD_SCOPE_V2.csv": "8b9b723bf5944bbbde39aa2d49dfbb2f2a64e11b",
     "tools/item_audit/held_effect_sweep_v3.cjs": "fd5d9d0b1eecf8b84f14e606631df93b40728586",
+    "tools/item_audit/held_effect_sweep_v2.cjs": "c9ba4d7bcddad6ae69f085f4b69983461ad05219",
+    "tools/item_audit/held_pilot.cjs": "c8a59a18f546d772ff34e4f8640a4246a00a822b",
 }
 EXPECTED = {
     "ball_pikachu_special": ("light_ball", "damage_boost_compatible", "pikachu", "thunder_shock", "", (19, 23)),
@@ -36,10 +38,19 @@ EXPECTED = {
     "snow_no_weather": ("icy_rock", "no_weather", "mew", "reflect", "", (19,)),
     "weight_grass_knot": ("float_stone", "weight_damage_reduced", "garchomp", "reflect", "", (19, 23)),
     "weight_tackle_control": ("float_stone", "fixed_power_control", "garchomp", "reflect", "", (19,)),
+    "dice_bullet_seed": ("loaded_dice", "loaded_dice_multihit", "mew", "bullet_seed", "", tuple(range(1, 13))),
+    "dice_tackle_control": ("loaded_dice", "loaded_dice_single_hit", "mew", "tackle", "", (19,)),
+    "misty_seed_trigger": ("misty_seed", "misty_seed_terrain", "mew", "reflect", "", (19, 23)),
+    "misty_seed_wrong_terrain": ("misty_seed", "misty_seed_no_trigger", "mew", "reflect", "", (19,)),
+    "power_herb_solar_beam": ("power_herb", "power_herb_skip_charge", "mew", "solar_beam", "", (19, 23)),
+    "power_herb_noncharge": ("power_herb", "power_herb_no_charge_control", "mew", "tackle", "", (19,)),
 }
 NEW_CASE_IDS = {"rain_duration", "rain_no_weather", "snow_duration", "snow_no_weather",
                 "weight_grass_knot", "weight_tackle_control"}
-EXPECTED_FOE_MOVES = {"weight_grass_knot": "grass_knot", "weight_tackle_control": "tackle"}
+BLOCK_03_CASES = {"dice_bullet_seed", "dice_tackle_control", "misty_seed_trigger",
+                  "misty_seed_wrong_terrain", "power_herb_solar_beam", "power_herb_noncharge"}
+EXPECTED_FOE_MOVES = {"weight_grass_knot": "grass_knot", "weight_tackle_control": "tackle",
+                      "misty_seed_trigger": "misty_terrain", "misty_seed_wrong_terrain": "electric_terrain"}
 MODES = ("active", "none", "reserve")
 CHECKS = 0
 
@@ -61,27 +72,36 @@ def validate():
     queue = read_rows(QUEUE)
     progress = read_rows(PROGRESS)
     require(len(queue) == 10 and all(x["trabajadora"] == "W01" for x in queue), "Cola de W01 inválida")
-    require(len(progress) == 2, "Esta versión del contrato exige exactamente los bloques 01 y 02")
+    require(len(progress) == 3, "El contrato exige exactamente los bloques 01 a 03")
     require(progress[0]["bloque"] == "01" and progress[0]["ids"] == "light_ball;lucky_punch;thick_club", "Progreso distinto a W01/01")
     require(progress[0]["ids"] == queue[0]["ids"], "Bloque 01 distinto de cola árbitra")
     require(progress[0]["estado"] == "CI_PASS_VERIFICADO" and progress[0]["ci_run"] == "41580332632",
             "Bloque 01 sin certificado CI oficial")
     require(progress[1]["bloque"] == "02" and progress[1]["ids"] == queue[1]["ids"],
             "Bloque 02 no coincide con la cola autorizada")
-    require(progress[1]["estado"] in ("EN_CI_AUTOMATICA", "ENTREGADO_PENDIENTE_CI", "CI_PASS_VERIFICADO"),
-            "Bloque 02 tiene estado inválido")
+    require(progress[1]["estado"] == "CI_PASS_VERIFICADO"
+            and progress[1]["ci_run"] == "41584708689"
+            and progress[1]["sha_pruebas"] == "970db4c7696364cc1c5ebaf51719405d60430af0",
+            "Bloque 02 sin certificado CI oficial")
+    require(progress[2]["bloque"] == "03" and progress[2]["ids"] == queue[2]["ids"],
+            "Bloque 03 fuera de cola W01")
+    require(progress[2]["estado"] in ("EN_CI_AUTOMATICA", "ENTREGADO_PENDIENTE_CI", "CI_PASS_VERIFICADO"),
+            "Estado del bloque 03 inválido")
     require(all(row["sha_pruebas"] and row["ci_run"] for row in progress), "Progreso sin trazabilidad")
     fixture = json.loads(FIXTURE.read_text(encoding="utf-8"))
     require(fixture["schema_version"] == 1 and fixture["campaign"] == "CAMP_004" and fixture["worker"] == "W01", "Identidad de fixture incorrecta")
     require(fixture["scope"] == "HELD_COMBAT_CANDIDATE" and fixture["format"] == "gen9calvounifiedv1", "Motor o familia no permitidos")
     require(tuple(fixture["variants"]) == MODES, "Faltan los tres controles activo/ausente/reserva")
-    require(len(fixture["blocks"]) == 2 and [b["block"] for b in fixture["blocks"]] == ["01", "02"],
-            "Fixture debe contener exactamente los bloques 01 y 02")
+    require(len(fixture["blocks"]) == 3 and [b["block"] for b in fixture["blocks"]] == ["01", "02", "03"],
+            "Fixture debe contener exactamente los bloques 01 a 03")
     require(fixture["blocks"][0]["ids"] == queue[0]["ids"].split(";"), "Propiedad de IDs alterada")
     require(fixture["blocks"][1]["ids"] == queue[1]["ids"].split(";"), "IDs del bloque 02 alterados")
     require(set(fixture["blocks"][1]["cases"]) == NEW_CASE_IDS, "Casos del bloque 02 incompletos")
-    require(len(fixture["cases"]) == len(EXPECTED) == 14, "Se exigen catorce casos, no duplicados")
-    require(set(fixture["blocks"][0]["cases"]) == set(EXPECTED) - NEW_CASE_IDS, "Falta caso original del manifiesto")
+    require(fixture["blocks"][2]["ids"] == queue[2]["ids"].split(";"), "IDs del bloque 03 alterados")
+    require(set(fixture["blocks"][2]["cases"]) == BLOCK_03_CASES, "Casos del bloque 03 incompletos")
+    require(len(fixture["cases"]) == len(EXPECTED) == 20, "Se exigen veinte casos, no duplicados")
+    require(set(fixture["blocks"][0]["cases"]) == set(EXPECTED) - NEW_CASE_IDS - BLOCK_03_CASES,
+            "Falta caso original del bloque 01")
     require(len(fixture["sources"]) == len(REFS), "Fuentes añadidas o omitidas")
     for source in fixture["sources"]:
         path = source["path"]
@@ -92,14 +112,28 @@ def validate():
     inventory = {r["id"]: r for r in read_rows(ROOT / "docs/current/ITEM_INVENTORY.csv")}
     canonical = {"light_ball": "lightball", "lucky_punch": "luckypunch",
                  "thick_club": "thickclub", "damp_rock": "damprock",
-                 "float_stone": "floatstone", "icy_rock": "icyrock"}
-    for stage in queue[:2]:
+                 "float_stone": "floatstone", "icy_rock": "icyrock",
+                 "loaded_dice": "loadeddice", "misty_seed": "mistyseed", "power_herb": "powerherb"}
+    for stage in queue[:3]:
         for item in stage["ids"].split(";"):
             require(scope[item]["estado_contenido"] == "SELECCIONADO", "Item no seleccionado: " + item)
             require(inventory[item]["family"] == "HELD_COMBAT_CANDIDATE", "Familia incompatible: " + item)
             require(inventory[item]["native_id"] == canonical[item], "Clave nativa incorrecta: " + item)
     require("onModifyWeight" in inventory["float_stone"]["native_hooks"],
             "Piedra Pómez sin gancho nativo de peso")
+    require("onModifyMove" in inventory["loaded_dice"]["native_hooks"],
+            "Dado Trucado sin gancho nativo de golpes múltiples")
+    require("onTerrainChange" in inventory["misty_seed"]["native_hooks"],
+            "Semilla Bruma sin gancho nativo de terreno")
+    require("onChargeMove" in inventory["power_herb"]["native_hooks"],
+            "Hierba Única sin gancho nativo de carga")
+    historical_v2 = (ROOT / "tools/item_audit/held_effect_sweep_v2.cjs").read_text(encoding="utf-8")
+    pilot = (ROOT / "tools/item_audit/held_pilot.cjs").read_text(encoding="utf-8")
+    require("add('loaded_dice','multi_hit_bound'" in historical_v2
+            and "['bullet_seed']" in historical_v2 and "'|-hitcount|'" in historical_v2,
+            "Sin referencia nativa de Dado Trucado y su contador de impactos")
+    require("power_herb:{moves:['solar_beam']" in pilot,
+            "Sin referencia nativa de Hierba Única que evita carga")
     historical = NATIVE.read_text(encoding="utf-8")
     for fragment in (
         "['light_ball','pikachu','thunder_shock']",
@@ -122,7 +156,7 @@ def validate():
         name = case["id"]
         require(name in EXPECTED and name not in seen, "Caso no autorizado o duplicado: " + name)
         seen.add(name)
-        expected_block = "02" if name in NEW_CASE_IDS else "01"
+        expected_block = "03" if name in BLOCK_03_CASES else ("02" if name in NEW_CASE_IDS else "01")
         require(case["block"] == expected_block, "Caso fuera de bloque " + expected_block)
         actual = (case["item_id"], case["op"], case["actor_species"], case["own_move"],
                   case.get("follow_move", ""), tuple(case["seeds"]))
@@ -130,7 +164,9 @@ def validate():
         require(case["foe_species"] == "mew" and
                 case["foe_move"] == EXPECTED_FOE_MOVES.get(name, "amnesia"),
                 "Rival o movimiento alterado: " + name)
-        require(case["history"].startswith("held_effect_sweep_v3:"), "Sin referencia de origen: " + name)
+        origin = ("held_effect_sweep_v2:" if case["item_id"] == "loaded_dice" else
+                  "held_pilot:" if case["item_id"] == "power_herb" else "held_effect_sweep_v3:")
+        require(case["history"].startswith(origin), "Sin referencia de origen: " + name)
         require(all(type(i) is int and 1 <= i <= 65535 for i in case["seeds"]), "Semilla inválida: " + name)
         require(len(case["seeds"]) == len(set(case["seeds"])), "Semillas repetidas: " + name)
         if case["item_id"] == "lucky_punch":
@@ -139,7 +175,7 @@ def validate():
         else:
             require("follow_move" not in case, "Secuencia extra no permitida")
         pairs += len(case["seeds"])
-    require(len(seen) == 14 and pairs == 43, "Matriz debe tener 14 casos y 43 pares")
+    require(len(seen) == 20 and pairs == 62, "Matriz debe tener 20 casos y 62 pares")
     runner = (ROOT / "tests/gameplay/parallel_items_w01_campaign_004.gd").read_text(encoding="utf-8")
     for fragment in ("Native.new(catalogs, owner, automation.format)",
                      "await _restore_probe(", "session.submit(", "session._checkpoint",

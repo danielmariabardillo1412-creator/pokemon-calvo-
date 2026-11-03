@@ -37,6 +37,22 @@
         "weight_grass_knot",
         "weight_tackle_control"
       ]
+    },
+    {
+      "block": "03",
+      "ids": [
+        "loaded_dice",
+        "misty_seed",
+        "power_herb"
+      ],
+      "cases": [
+        "dice_bullet_seed",
+        "dice_tackle_control",
+        "misty_seed_trigger",
+        "misty_seed_wrong_terrain",
+        "power_herb_solar_beam",
+        "power_herb_noncharge"
+      ]
     }
   ],
   "format": "gen9calvounifiedv1",
@@ -57,6 +73,14 @@
     {
       "path": "tools/item_audit/held_effect_sweep_v3.cjs",
       "git_blob_sha": "fd5d9d0b1eecf8b84f14e606631df93b40728586"
+    },
+    {
+      "path": "tools/item_audit/held_effect_sweep_v2.cjs",
+      "git_blob_sha": "c9ba4d7bcddad6ae69f085f4b69983461ad05219"
+    },
+    {
+      "path": "tools/item_audit/held_pilot.cjs",
+      "git_blob_sha": "c8a59a18f546d772ff34e4f8640a4246a00a822b"
     }
   ],
   "cases": [
@@ -286,6 +310,103 @@
         19
       ],
       "history": "held_effect_sweep_v3:float_stone_fixed_power_control"
+    },
+    {
+      "block": "03",
+      "id": "dice_bullet_seed",
+      "item_id": "loaded_dice",
+      "op": "loaded_dice_multihit",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "own_move": "bullet_seed",
+      "foe_move": "amnesia",
+      "seeds": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "history": "held_effect_sweep_v2:loaded_dice_multi_hit_bound"
+    },
+    {
+      "block": "03",
+      "id": "dice_tackle_control",
+      "item_id": "loaded_dice",
+      "op": "loaded_dice_single_hit",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "own_move": "tackle",
+      "foe_move": "amnesia",
+      "seeds": [
+        19
+      ],
+      "history": "held_effect_sweep_v2:loaded_dice_non_multihit_control"
+    },
+    {
+      "block": "03",
+      "id": "misty_seed_trigger",
+      "item_id": "misty_seed",
+      "op": "misty_seed_terrain",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "own_move": "reflect",
+      "foe_move": "misty_terrain",
+      "seeds": [
+        19,
+        23
+      ],
+      "history": "held_effect_sweep_v3:misty_seed_terrain_mew"
+    },
+    {
+      "block": "03",
+      "id": "misty_seed_wrong_terrain",
+      "item_id": "misty_seed",
+      "op": "misty_seed_no_trigger",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "own_move": "reflect",
+      "foe_move": "electric_terrain",
+      "seeds": [
+        19
+      ],
+      "history": "held_effect_sweep_v3:misty_seed_wrong_terrain"
+    },
+    {
+      "block": "03",
+      "id": "power_herb_solar_beam",
+      "item_id": "power_herb",
+      "op": "power_herb_skip_charge",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "own_move": "solar_beam",
+      "foe_move": "amnesia",
+      "seeds": [
+        19,
+        23
+      ],
+      "history": "held_pilot:power_herb_solar_beam"
+    },
+    {
+      "block": "03",
+      "id": "power_herb_noncharge",
+      "item_id": "power_herb",
+      "op": "power_herb_no_charge_control",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "own_move": "tackle",
+      "foe_move": "amnesia",
+      "seeds": [
+        19
+      ],
+      "history": "held_pilot:power_herb_charge_not_triggered"
     }
   ]
 }

@@ -39,3 +39,10 @@ La fila 01 CSV conserva el estado anterior `EN_CI_AUTOMATICA` únicamente para *
 - El primer push del bloque 02 falló en el validador de manifest de casos Python: comparaba 8 originales con 14 acumulados. Corregido en commit `970db4c7` sin eliminar controles; CI posterior aprobada.
 - Fila 02 del CSV conserva temporalmente `EN_CI_AUTOMATICA` por economía de CI, **no significa fallo pendiente**. En el próximo bloque actualizar a `CI_PASS_VERIFICADO` con SHA y run anterior y añadir fila 03 conjuntamente.
 - La siguiente `p` significa **solo bloque 03/10**: `loaded_dice;misty_seed;power_herb`. No tocar `main`, V28, rama árbitra, otros workers ni repetir CAMP003.
+
+## Bloque 03/10 — avance (2026-11-03)
+
+- **Rama única:** `codex/calvo-items-20261103-w01-camp004`. Autorización de IA6: exclusivamente `loaded_dice;misty_seed;power_herb`. El bloque 02 está certificado por CI [#41584708689](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41584708689), 177 checks Python y 3666 Godot, y su fila CSV se cierra junto con fila 03.
+- Se reutiliza el motor `gen9calvounifiedv1`: seis casos nuevos, 19 pares, 57 variantes; acumulado 20 casos/62 pares/186 variantes, cada una con SaveV2.
+- Fuentes adicionales históricas con SHA fijo: `held_effect_sweep_v2.cjs` para `loaded_dice`; `held_pilot.cjs` para `power_herb`. `misty_seed` usa V3. En dado se verifican conteo de impactos y testigos RNG; en Semilla Bruma +1 Def. Especial y consumo; en Hierba Única Rayo Solar primer turno y consumo; negativos de reserva/no equipar/activador incorrecto.
+- Se han modificado únicamente fixture, runner Python, runner Godot, progreso, reporte y continuidad W01 de CAMP004. **Estado hasta ejecutar CI sobre SHA final: EN_CI_AUTOMATICA, no PASS funcional**. Reparar fallos propios bajo V5. Próxima `p` bloque 04, y no ejecutar simultáneamente otra fila.

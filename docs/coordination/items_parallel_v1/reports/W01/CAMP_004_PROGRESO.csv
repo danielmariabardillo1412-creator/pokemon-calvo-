@@ -1,3 +1,4 @@
 bloque,ids,estado,sha_pruebas,ci_run,notas
 01,"light_ball;lucky_punch;thick_club",CI_PASS_VERIFICADO,525991c4ad55dd8952ed2f62a4fc7f2a820540f3,41580332632,8_casos;34_pares;102_variantes;Godot_2905_PASS;Python_111_PASS;SaveV2
-02,"damp_rock;float_stone;icy_rock",EN_CI_AUTOMATICA,PENDIENTE_SHA_BLOQUE02,PENDIENTE_AUTOCI,6_casos;9_pares;27_variantes;rain_dance;snowscape;grass_knot;control_tackle;SaveV2
+02,"damp_rock;float_stone;icy_rock",CI_PASS_VERIFICADO,970db4c7696364cc1c5ebaf51719405d60430af0,41584708689,6_casos;9_pares;27_variantes;Godot_3666_PASS;Python_177_PASS;SaveV2
+03,"loaded_dice;misty_seed;power_herb",EN_CI_AUTOMATICA,PENDIENTE_SHA_BLOQUE03,PENDIENTE_AUTOCI,6_casos;19_pares;57_variantes;bullet_seed_hits;misty_terrain;solar_beam;consumption;SaveV2
