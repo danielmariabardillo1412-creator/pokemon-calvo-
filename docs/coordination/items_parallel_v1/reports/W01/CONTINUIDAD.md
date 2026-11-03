@@ -1,3 +1,14 @@
+## REPARACIÓN V5 CRÍTICA — ERRORES 16 → 4, RUN 08 EN REGRESIÓN (2026-11-03)
+
+**NO CONSUME BLOQUE.** W01/08 ya está entregado; no iniciar W01/09 hasta otra `p`. El usuario pidió corregir íntegramente los 16 errores antiguos. Se han revisado logs Godot reales de [#41565500695](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41565500695) y [#41567242610](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41567242610).
+
+- El primer run completó 8.793 checks, 16 fallos: 12 por orden de cambio a reserva/regreso `heavy_duty_boots`, cuatro por lectura de orden `iron_ball`/`lagging_tail`. Con `switch 2` dos veces, Godot volvió a ejecutar los cambios con éxito y el segundo run solo falló en **4** comparaciones de orden (9.780 checks). Las otras 12 incidencias han desaparecido, veredicto real de CI.
+- Trazas auténticas en #41567242610 prueban que el equipable hace mover al rival primero: `|move|p2a: ...|Tackle|p1a: ...`. El lector propio erraba porque buscaba `entry.contains("|p1a:")` y capturaba tanto al atacante como al **objetivo**. Se corrigió para comparar únicamente el prefijo `entry.begins_with("|move|p1a:")`, commit **`8fe7e3e9d51462aeb6dcf18d01c2274d6835a831`**. No se elimina ni relaja ninguna aserción, no cambia fixture, Python, SaveV2 ni producción.
+- **CI nueva:** [#41569533376](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41569533376), SHA de prueba `8fe7e3e9d51462aeb6dcf18d01c2274d6835a831`. Pendiente veredicto al redactar; para declarar reparada CAMP003 W01 01..08 debe terminar `success` con `CAMP003_W01_PY PASS blocks=8` y `CAMP003_W01_GODOT PASS blocks=8`. Mientras tanto 01–03 PASS reales y 04–08 SIN PASS definitivo. Estado sin alterar en CSV.
+- **Informe:** `CAMP_003_ITER_08.md` se amplió con análisis detallado de 16→4, logs y el parche. V5 autoriza estas reparaciones de W01; trabajo fuera de rama, motor compartido, `main`, V28 y demás IAs intocables.
+
+---
+
 ## ACTUALIZACIÓN VIGENTE — CAMPAÑA_003 08/10 (2026-11-03)
 
 **W01 IA1**, rama de escritura exclusiva `codex/calvo-items-20261103-w01-camp003`. El usuario ha escrito **una `p`** y autoriza **solo microbloque 08** (`luminous_moss;mental_herb;metronome`) de la cola IA6. Bloque **08/10 publicado**; no iniciar 09 hasta nueva `p`. Protocolo [`AUTONOMOUS_REPAIR_V5.md`](../../AUTONOMOUS_REPAIR_V5.md) permite arreglar autónomamente fallos propios de tests o producción de W01, pero no otras ramas, `main`, V28, reglas compartidas sin consenso ni reescrituras ajenas.
