@@ -450,6 +450,62 @@
         "no_world_steps_or_rate_authority"
       ],
       "ci_required": true
+    },
+    {
+      "bloque": "08",
+      "familia": "FIELD_CONTEXT",
+      "ids": [
+        "red_flute",
+        "yellow_flute",
+        "blue_flute"
+      ],
+      "objetivo": "efecto_estado_y_rechazo_en_campo",
+      "current_state": "PARTIAL_BLUE_FIELD_FUNCTIONAL",
+      "functional_effect_certified": false,
+      "per_id_status": {
+        "red_flute": "DEPENDENCIA_BATTLE_VOLATILE",
+        "yellow_flute": "DEPENDENCIA_BATTLE_VOLATILE",
+        "blue_flute": "FIELD_FUNCTIONAL_SLEEP_CURE_REUSABLE"
+      },
+      "existing_positive_contracts": [
+        "FieldItemEffects.blue_flute_sleep_cure",
+        "FieldItemService.use_item_transaction",
+        "FieldItemEffects.consumes_on_use_false",
+        "FieldItemService.sleep_clock_cleanup"
+      ],
+      "required_producers": [
+        {
+          "id": "red_flute",
+          "producer": "battle_volatile_attract_state",
+          "consumer": "battle_item_use_and_active_creature_target",
+          "missing_fields": [
+            "battle_active_target_attraction",
+            "field_to_battle_volatile_contract"
+          ],
+          "decision": "Conectar sólo en batalla/activo con semántica attraction (Showdown attract), sin atribuir al campo una atracción inexistente en la criatura persistente."
+        },
+        {
+          "id": "yellow_flute",
+          "producer": "battle_volatile_confusion_state",
+          "consumer": "battle_item_use_and_active_creature_target",
+          "missing_fields": [
+            "battle_active_target_confusion",
+            "field_to_battle_volatile_contract"
+          ],
+          "decision": "Conectar sólo al estado de confusión volátil autorizado de batalla; evitar falso no-op si el Pokémon no está confuso."
+        }
+      ],
+      "positive_tests": [
+        "blue_flute_sleep_cure_no_consumption",
+        "blue_flute_no_effect_no_mutation",
+        "blue_flute_sleep_clock_cleared",
+        "profile_non_consumable"
+      ],
+      "negative_tests": [
+        "red_yellow_no_field_executor",
+        "battle_volatile_requires_active_context"
+      ],
+      "ci_required": true
     }
   ]
 }
