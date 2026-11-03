@@ -1,3 +1,17 @@
+# ESTADO VIGENTE IA5/W05 — CAMPAÑA_004 · 08/10 ENTREGADOS (2026-11-03)
+
+**Identidad:** IA5/W05, especialista en MT y libros. **Rama exclusiva:** `codex/calvo-items-20261103-w05-camp004`. Puerta IA6 `CAMPAIGN_004_W05_GATE.md`, cola `CAMPAIGN_004_W05_QUEUE_APPROVED.csv`, encargo `campaigns/CAMP_004_W05.md` y autorreparación V5. Este encabezado es el estado vigente; las notas de abajo preservan el historial. CAMP003 está finalizada 10/10 y sus 60 MT sólo se comprueban como regresión.
+
+**BLOQUE 08 ENTREGADO:** `tm124;tm125;tm126;tm127;tm128;tm129` → `ice_spinner;flamethrower;thunderbolt;play_rough;amnesia;calm_mind` para Scarlet/Violet. Fixture `tests/fixtures/parallel_items/w05_campaign_004.json` suma **8 bloques/48 MT**, commit `dae8a132e33574e87d04676154648a7229fc73ac`. CSV `reports/W05/CAMP_004_PROGRESO.csv` con una nueva fila 08, commit `2d62f9efda8f47c1c434fe5a9b5b8dbd166b9f43`. Informe `CAMP_004_ITER_08.md` commit `3206d1bebf1a8b13d616fb82bb878885df55224f`. Comparación directa de 8 filas, 48 IDs únicos, asignación, orden y mapeo SV frente a IA6/catálogo: **sin discrepancias**. Runners de Python/Godot y producción sin cambios; no usar cotejo estático como PASS funcional.
+
+**CI bloques 01–07 VERIFICADA:** [#41579505939](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41579505939), SHA `c6d5c738d2a3a68ced8d3388da370f5abcfc37e4`, `completed/success`. Logs `CAMP004_W05_PY PASS blocks=7 checks=406`, `CAMP004_W05_GODOT PASS blocks=7 checks=1521`, gates PASS. Regresión CAMP003 60 MT Python 580/Godot 2166 comprobaciones PASS y CAMP002 11 tests OK. Las filas viejas `EN_CI_AUTOMATICA` del CSV son históricas y no se reescriben para evitar ejecuciones redundantes; prevalece evidencia del run real.
+
+**CI bloque 08 inicialmente PENDIENTE:** [#41584156568](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41584156568), SHA de progreso `2d62f9efda8f47c1c434fe5a9b5b8dbd166b9f43`, primera consulta `pending`. El run anterior de fixture #41584143411 puede ser cancelado por concurrencia. Exigir run `completed/success` y logs `CAMP004_W05_PY PASS blocks=8`, `CAMP004_W05_GODOT PASS blocks=8`, ambos gates y regresiones para certificar las 48 MT.
+
+**SIGUIENTE `p`:** comprobar CI 08. Si `success`, ejecutar **solamente bloque 09** `tm130;tm131;tm132;tm133;tm134;tm135`, un fixture/CSV/informe/cuaderno W05 CAMP004. Si la CI aún corre, permitir sólo un bloque independiente sin declarar PASS; si falla, diagnosticar logs y corregir pruebas propias o defecto probado de perfil/función `teach` bajo V5, con regresión y nuevo SHA CI. Conflicto de función/API con otra trabajadora, diseño general o acceso efectivamente denegado → IA6. No modificar `main`, V28, PR118, árbitra, ramas ajenas, catálogo, políticas, 19 máquinas históricas, guardados, workflows ni otras familias; sin merge. Límite 10/10, `CAMPAÑA_004_FINALIZADA`, STOP. CI headless no valida GPU/visuales.
+
+---
+
 # ESTADO VIGENTE IA5/W05 — CAMPAÑA_004 · 07/10 ENTREGADOS (2026-11-03)
 
 **Identidad:** IA5/W05, MT/libros. **Rama exclusiva:** `codex/calvo-items-20261103-w05-camp004`. Puerta y cola IA6 `CAMPAIGN_004_W05_GATE.md`, `CAMPAIGN_004_W05_QUEUE_APPROVED.csv`, `campaigns/CAMP_004_W05.md`, autonomía V5. Esta cabecera prevalece sobre estados antiguos. CAMP003 10/10, 60 MT, sólo se comprueban como regresión, sin repetir trabajo.
