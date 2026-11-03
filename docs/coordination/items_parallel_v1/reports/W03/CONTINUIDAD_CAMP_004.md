@@ -1,3 +1,13 @@
+# IA3/W03 — CONTINUIDAD CAMP004 03/10
+
+**Bloque 03:** `fluffy_tail;golden_razz_berry;lure`. Los tres seleccionados pero sin ruta autorizada de efecto directo en `FieldItemService`; caracterización de rechazo sin consumo, estado intacto y roundtrip de mochila. Dependencias: acción de huida del combate, aplicación de baya de captura, y modificador/duración de encuentros. **No certificados funcionalmente.**
+
+**CI 02 verificada:** [#41573170728](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41573170728), SHA `539c5dcbdc3e3ffe59bf3b3764e290656a283e5e`, Python 43 y Godot 155, gates PASS; regresión CAMP003 Python 279/Godot 986 PASS. Flauta Azul sí funcional, no consumible.
+
+**CI 03:** comprobar en el último SHA posterior a CSV. Si falla, reparar en rama propia; no ocultar dependencias. Próximo `p` será **bloque 04**, exactamente `max_lure;max_repel;red_flute`. Sin autorizar otros bloques ni campañas.
+
+---
+
 # Corrección de auditoría W03 / bloque 02
 
 **Flauta Azul sí es funcional** según `imported_recovery_v19.json`: cura el sueño y no se consume. Pruebas Godot/Python actualizadas con caso positivo, sin sueño, sin objeto, guardas, serialización de inventario y limpieza de reloj. **No confundir con Flauta Negra/Cuerda Huida**, que siguen sin conexión de campo. Última CI debe ejecutarse con SHA actualizado tras esta corrección. El siguiente `p` sigue siendo bloque 03; no ejecutarlo en esta orden.
