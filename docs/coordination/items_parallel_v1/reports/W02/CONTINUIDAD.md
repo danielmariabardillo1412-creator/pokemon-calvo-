@@ -1,3 +1,27 @@
+# IA2/W02 — CAMPAÑA_003: CONTINUIDAD VIGENTE / 04 DE 10
+
+**Estado operativo:** bloque **04/10 ENTREGADO**, `EN_CI_AUTOMATICA` hasta verificar `completed/success` del SHA `1e1e71d9c29bf00e764f5fe6039a8648feed1f46`. Rama exclusiva `codex/calvo-items-20261103-w02-camp003`. Una `p` posterior ejecutará únicamente **05/10**, nunca dos bloques en una orden.
+
+**Autoridad:** cola `CAMPAIGN_003_QUEUE_APPROVED.csv` blob `ea06a0a000fc4f3b8bab48e45e21fb549d753559`; encargo W02 `campaigns/CAMP_003_W02.md` blob `62498ebd44288a86e59986379dbc1b70e111ef1f`; gate V4 vigente. La incorporación separada de IA4 no altera las diez filas de W02.
+
+**Última CI anterior VERIFICADA:** [Actions #41556875512](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41556875512) `completed/success`, SHA `44482761ab0217323335d9a1bc63f060cbcad513`. Recibos `CAMP003_W02_PY PASS blocks=3 checks=187` y `CAMP003_W02_GODOT PASS blocks=3 checks=2071`. No representa el nuevo bloque 04.
+
+**Bloque 04 entregado:** `haban_berry` (resiste Dragón supereficaz), `iapapa_berry` (PS bajos, rechaza sabor en `lonely`, neutra `hardy`, PS altos control), `jaboca_berry` (daño físico al atacante `floor(maxHP/8)`, no especial), `kasib_berry` (resiste Fantasma supereficaz). **9 escenas nuevas, 27 variantes**; acumuladas **34 escenas/102 variantes** en 16 bayas. Todas incluyen `active/none/reserve` y SaveV2.
+
+**Fuentes:** `tools/item_audit/held_effect_sweep_v2.cjs` para Haban/Kasib, `held_effect_sweep_v3.cjs` para Iapapa/Jaboca. Reutilizar lógica existente, nunca crear efectos nativos. Para Jaboca verificar PS del enemigo real; para Iapapa filtrar confusión y recalcular stats de naturaleza.
+
+**Archivos W02 ya publicados:** fixture commit `35e019737ff554ee784870df113ffd7a100be78d`, runner `8e4b99d66025b43cb5cdbcb641465adf64e9d374`, Python `d4af169883004f0929371738b66b2eb48585f8fb`, CSV bloque 04 `1e1e71d9c29bf00e764f5fe6039a8648feed1f46`, informe `fb3be6a30bc57b80e4f5edbb0b5ccd58a9c417c6`. Rutas: `tests/fixtures/parallel_items/w02_campaign_003.json`, `tests/gameplay/parallel_items_w02_campaign_003.gd`, `tests/tools/test_parallel_items_w02_campaign_003.py`, `docs/coordination/items_parallel_v1/reports/W02/CAMP_003_PROGRESO.csv`, `CAMP_003_ITER_04.md` y este cuaderno.
+
+**CI actual:** [Actions #41558465659](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41558465659), SHA de progreso `1e1e71d9c29bf00e764f5fe6039a8648feed1f46`. Exigir `CAMP003_W02_PY PASS blocks=4 checks=M` y `CAMP003_W02_GODOT PASS blocks=4 checks=M`. Hasta logs y SHA, **no afirmar PASS nuevo**. Cancelaciones de runs de test intermedios son esperadas.
+
+**Siguiente `p`:** solo bloque **05** `kebia_berry;kee_berry;lansat_berry;liechi_berry`, verificar último workflow primero, no repetir bloques 01–04; cualquier fallo de prueba propia se repara sin reducir expectativas y cualquier dependencia de producción detiene y avisa IA6.
+
+**Protecciones:** jamás tocar `main`, V28, PR #118, IA6, otras ramas, W04, `modules/`, `data/`, `config/`, catálogo, producción o workflows compartidos. Campo, pantalla y GPU no probados por este arnés.
+
+---
+
+## HISTÓRICO — ESTADO 03/10 Y ANTERIORES
+
 # W02 — CAMPAÑA_003: CONTINUIDAD VIGENTE / 03 DE 10
 
 **Estado:** bloque **03/10 ENTREGADO**, `EN_CI_AUTOMATICA` para SHA que incorpora tres filas de progreso. **Solo la siguiente `p` ejecutará bloque 04** si el último run no es FAILURE. Rama exclusiva `codex/calvo-items-20261103-w02-camp003`.
