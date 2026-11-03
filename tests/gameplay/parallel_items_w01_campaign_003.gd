@@ -5,6 +5,7 @@ const W01_C003_DESCRIPTOR := "res://tests/fixtures/parallel_items/w01_campaign_0
 const W01_C003_OUTPUT := "res://.godot/parallel_items/w01_campaign_003"
 const W01_C003_PROGRESS := "res://docs/coordination/items_parallel_v1/reports/W01/CAMP_003_PROGRESO.csv"
 var w01_c003_rows: Array = []
+var w01_c003_band_survivals: int = 0
 
 func _initialize() -> void:
 	capture = false
@@ -67,9 +68,14 @@ func _run_w01_c003() -> void:
 			for mode: String in ["active", "none", "reserve"]:
 				observed[mode] = await _probe_c003(row, int(value), mode)
 			_compare_c003(row, observed)
+			if String(row.op) == "random_lethal_survival" and observed.get("active", {}).get("valid", false):
+				if int(observed.active.after.hp) == 1:
+					w01_c003_band_survivals += 1
 			w01_c003_rows.append({"block": stage, "id": String(row.id), "item_id": String(row.item_id),
 				"seed": int(value), "checks": checks - checks_before,
 				"status": "PASS" if errors.size() == errors_before else "FAIL", "observed": observed})
+	if ids_for_block.has("04"):
+		check("Cinta Aguante debe demostrar al menos una supervivencia REAL", w01_c003_band_survivals > 0)
 	for stage in ids_for_block:
 		for id: String in ids_for_block[stage]:
 			var count: int = 0
@@ -80,7 +86,8 @@ func _run_w01_c003() -> void:
 	var output := {
 		"schema_version": 1, "worker": "W01", "campaign": "CAMP_003",
 		"blocks": completed, "descriptor_sha256": FileAccess.get_sha256(W01_C003_DESCRIPTOR),
-		"checks": checks, "status": "PASS" if errors.is_empty() else "FAIL",
+		"checks": checks, "focus_band_witnessed_survivals": w01_c003_band_survivals,
+		"status": "PASS" if errors.is_empty() else "FAIL",
 		"errors": errors, "rows": w01_c003_rows,
 		"limits": ["Sin GPU/UI", "No certifica asentamiento de combate ni regreso al mapa",
 			"Solo escenarios fijados por semillas; motor @pkmn/sim sin modificar"]
@@ -115,9 +122,12 @@ func _frame_c003(session: RefCounted, id: StringName) -> Dictionary:
 	var native: Dictionary = _native_item(session, "own")
 	var log: Array = session._checkpoint.get("snapshot", {}).get("native", {}).get("log", [])
 	var missed: bool = false
+	var band_activated: bool = false
 	for entry: String in log:
 		if entry.begins_with("|-miss|") and entry.contains("p1a:"):
 			missed = true
+		if entry.begins_with("|-activate|") and entry.contains("Focus Band"):
+			band_activated = true
 	var request: Dictionary = session._checkpoint.get("views", {}).get("p1", {}).get("request", {})
 	var active_requests: Array = request.get("active", [])
 	var moves: Array = active_requests[0].get("moves", []) if active_requests.size() > 0 else []
@@ -131,13 +141,15 @@ func _frame_c003(session: RefCounted, id: StringName) -> Dictionary:
 		"native_item": String(native.get("item", "")),
 		"boosts": native.get("boosts", {}).duplicate(true),
 		"attack_stage": int(native.get("boosts", {}).get("atk", 0)),
+		"defense_stage": int(native.get("boosts", {}).get("def", 0)),
 		"speed_stage": int(native.get("boosts", {}).get("spe", 0)),
 		"status_id": String(own.status_state.persistent_id),
 		"forced_switch": forcing,
 		"active_id": String(session._checkpoint.get("roster", [])[0].get("active_id", "")),
 		"native_ability": String(native.get("ability", "")),
 		"native_volatiles": native.get("volatiles", []).duplicate(true),
-		"missed": missed
+		"missed": missed,
+		"focus_band_activated": band_activated
 	}
 
 func _probe_c003(row: Dictionary, seed: int, mode: String) -> Dictionary:
@@ -151,6 +163,8 @@ func _probe_c003(row: Dictionary, seed: int, mode: String) -> Dictionary:
 	actor.move_ids.clear()
 	check(mode + " own move existe", actor.add_move(StringName(row.own_move), catalogs))
 	check(mode + " control status existe", actor.add_move(&"reflect" if row.own_move != "reflect" else &"tackle", catalogs))
+	if row.has("actor_hp") and String(row.actor_hp) == "one":
+		actor.current_hp = 1
 	if row.has("actor_ability") and not String(row.actor_ability).is_empty():
 		actor.ability_id = StringName(row.actor_ability)
 	prepared.foe = _mon(StringName(row.foe_species), 100, &"foe", [String(row.foe_move)])
@@ -320,5 +334,44 @@ func _compare_c003(row: Dictionary, obs: Dictionary) -> void:
 			check("Pila no dispara si falta impacto eléctrico",
 				a.after.attack_stage == 0 and n.after.attack_stage == 0 and r.after.attack_stage == 0
 				and not a.after.own_consumed and a.physical_units == 2)
+		"own_stat_drop_forces_switch":
+			check("Mochila Escape: Close Combat reduce stats del actor en los tres modos",
+				a.after.defense_stage < 0 and n.after.defense_stage < 0 and r.after.defense_stage < 0 and fa > 0)
+			check("Mochila Escape: solo portador recibe peticion de cambio",
+				a.after.forced_switch and not n.after.forced_switch and not r.after.forced_switch)
+			check("Mochila Escape: solo activo consume y reserva intacta",
+				a.after.own_consumed and a.physical_units == 1 and not n.after.own_consumed
+				and not r.after.reserve_consumed and r.physical_units == 2)
+		"own_no_drop_control":
+			check("Mochila Escape sin bajada propia no pide cambio",
+				a.after.defense_stage == 0 and not a.after.forced_switch and not n.after.forced_switch
+				and not r.after.forced_switch)
+			check("Mochila Escape se retiene sin activacion",
+				not a.after.own_consumed and a.physical_units == 2)
+		"electric_field_defense":
+			check("Semilla Electro +1 Defensa solo en portador tras Campo Electrico",
+				a.after.defense_stage == 1 and n.after.defense_stage == 0 and r.after.defense_stage == 0)
+			check("Semilla Electro se consume al entrar campo",
+				a.after.own_consumed and a.physical_units == 1 and not n.after.own_consumed
+				and not r.after.reserve_consumed and r.physical_units == 2)
+		"non_electric_field", "no_terrain_control":
+			check("Semilla Electro no activa con campo ajeno o ausente",
+				a.after.defense_stage == 0 and n.after.defense_stage == 0 and r.after.defense_stage == 0)
+			check("Semilla Electro se retiene en control negativo",
+				not a.after.own_consumed and a.physical_units == 2)
+		"random_lethal_survival":
+			check("Cinta Aguante: mismo golpe letal de Seismic Toss en controles",
+				a.start.hp == 1 and n.start.hp == 1 and r.start.hp == 1
+				and n.after.hp == 0 and r.after.hp == 0)
+			check("Cinta Aguante: la supervivencia aleatoria deja exactamente 1 PS, o 0",
+				a.after.hp in [0, 1] and (a.after.hp != 1 or a.after.focus_band_activated))
+			check("Cinta Aguante: el objeto nunca se consume incluso si se activa",
+				not a.after.own_consumed and a.physical_units == 2 and not r.after.reserve_consumed)
+		"nonlethal_control":
+			check("Cinta Aguante: golpe no letal no activa efecto",
+				da > 0 and da < a.start.hp and da == dn and dn == dr
+				and not a.after.focus_band_activated)
+			check("Cinta Aguante: no se consume con golpe no letal",
+				not a.after.own_consumed and a.physical_units == 2)
 		_:
 			check("Operacion no autorizada", false)
