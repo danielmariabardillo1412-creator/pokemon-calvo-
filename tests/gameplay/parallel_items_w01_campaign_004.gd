@@ -56,8 +56,8 @@ func _run_w01_c004() -> void:
 	check("Tres controles de equipamiento", fixture.get("variants") == ["active", "none", "reserve"])
 	var progress: Array = _progress_c004()
 	var completed: int = progress.size()
-	check("Bloques W01 01 a 03 autorizados", completed == 3)
-	if completed != 3:
+	check("Bloques W01 01 a 04 autorizados", completed == 4)
+	if completed != 4:
 		quit(2)
 		return
 	check("Fila 01 e IDs exactos de árbitra", String(progress[0].block) == "01"
@@ -66,13 +66,15 @@ func _run_w01_c004() -> void:
 		and String(progress[1].ids) == "damp_rock;float_stone;icy_rock")
 	check("Fila 03 e IDs exactos de árbitra", String(progress[2].block) == "03"
 		and String(progress[2].ids) == "loaded_dice;misty_seed;power_herb")
+	check("Fila 04 e IDs exactos de árbitra", String(progress[3].block) == "04"
+		and String(progress[3].ids) == "psychic_seed;punching_glove;ring_target")
 	var ids_for_block: Dictionary = {}
 	var ids: PackedStringArray = PackedStringArray()
 	for row_progress: Dictionary in progress:
 		ids_for_block[String(row_progress.block)] = String(row_progress.ids).split(";")
 		ids.append_array(ids_for_block[String(row_progress.block)])
 	var cases: Array = fixture.get("cases", [])
-	check("Veinte escenarios autorizados", cases.size() == 20)
+	check("Veintiocho escenarios autorizados", cases.size() == 28)
 	var names: Array = []
 	for row: Dictionary in cases:
 		check("Escenario pertenece a bloque autorizado",
@@ -97,7 +99,7 @@ func _run_w01_c004() -> void:
 				"seed": int(value), "checks": checks - before_checks,
 				"status": "PASS" if errors.size() == before_errors else "FAIL",
 				"observed": observed})
-	check("Matriz exacta de 62 pares caso-semilla", c004_rows.size() == 62)
+	check("Matriz exacta de 75 pares caso-semilla", c004_rows.size() == 75)
 	for id: String in ids:
 		check("ID cubierto " + id, cases.any(func(case): return String(case.item_id) == id))
 	check("Puño Suerte demuestra al menos un crítico específico de Chansey", c004_lucky_exclusive > 0)
@@ -146,7 +148,13 @@ func _probe_w01_c004(row: Dictionary, seed: int, mode: String) -> Dictionary:
 	if second == String(row.own_move):
 		second = "tackle"
 	check(mode + " movimiento de control disponible", actor.add_move(StringName(second), catalogs))
+	if row.has("actor_ability"):
+		actor.ability_id = StringName(row.actor_ability)
+		check(mode + " habilidad de control", String(actor.ability_id) == String(row.actor_ability))
 	prepared.foe = _mon(StringName(row.foe_species), 100, &"foe", [String(row.foe_move)])
+	if row.has("foe_item"):
+		prepared.foe.held_item_id = StringName(row.foe_item)
+		check(mode + " item reactivo del rival", String(prepared.foe.held_item_id) == String(row.foe_item))
 	var id := StringName(row.item_id)
 	var original_owner: String = JSON.stringify(_owner_data(owner))
 	check(mode + " dos unidades físicas antes del combate", _units(owner, id) == 2)
@@ -252,15 +260,15 @@ func _compare_c004(row: Dictionary, observed: Dictionary) -> void:
 			bool(x.start.own_has_item) == (mode == "active")
 			and bool(x.start.reserve_has_item) == (mode == "reserve"))
 		check("Reserva no consume " + mode, not x.after.reserve_consumed)
-		var triggered_consumable: bool = (String(row.op) == "misty_seed_terrain"
-			or String(row.op) == "power_herb_skip_charge")
+		var triggered_consumable: bool = (String(row.op) in [
+			"misty_seed_terrain", "power_herb_skip_charge", "psychic_seed_terrain"])
 		check("Unidades físicas coherentes con activación " + mode,
 			x.physical_units == (1 if mode == "active" and triggered_consumable else 2))
 	var a: Dictionary = observed.active
 	var n: Dictionary = observed.none
 	var r: Dictionary = observed.reserve
-	var should_consume: bool = (String(row.op) == "misty_seed_terrain"
-		or String(row.op) == "power_herb_skip_charge")
+	var should_consume: bool = (String(row.op) in [
+		"misty_seed_terrain", "power_herb_skip_charge", "psychic_seed_terrain"])
 	check("Consumo exacto por activación, reserva y ausencia intactas",
 		bool(a.after.own_consumed) == should_consume
 		and not r.after.reserve_consumed
@@ -367,6 +375,58 @@ func _compare_c004(row: Dictionary, observed: Dictionary) -> void:
 			check("Hierba Unica: Placaje no usa efecto de carga",
 				a.damage > 0 and a.damage == n.damage and n.damage == r.damage)
 			check("Hierba Unica: no se consume con movimiento inmediato",
+				not a.after.own_consumed and a.physical_units == 2)
+		"psychic_seed_terrain":
+			check("Semilla Psique aumenta +1 DefEsp solo activa en Campo Psiquico",
+				int(a.after.special_defense_stage) == 1
+				and int(n.after.special_defense_stage) == 0 and int(r.after.special_defense_stage) == 0)
+			check("Semilla Psique consume solo al activar", a.after.own_consumed
+				and a.physical_units == 1 and r.physical_units == 2)
+		"psychic_seed_wrong_terrain":
+			check("Semilla Psique no activa en Campo Electrico",
+				int(a.after.special_defense_stage) == 0
+				and int(n.after.special_defense_stage) == 0 and int(r.after.special_defense_stage) == 0)
+			check("Semilla Psique conserva item si no se activa",
+				not a.after.own_consumed and a.physical_units == 2)
+		"punching_glove_punch":
+			check("Guante de Boxeo aumenta dano de Puno Trueno",
+				a.damage > n.damage and n.damage > 0 and n.damage == r.damage)
+			check("Guante de Boxeo evita Casco Dentado exclusivamente en punetazo",
+				a.start.foe_helmet and n.start.foe_helmet and r.start.foe_helmet
+				and a.after.hp == a.start.hp
+				and int(n.after.hp) < int(n.start.hp) and n.after.hp == r.after.hp
+				and not a.after.helmet_recoil and n.after.helmet_recoil and r.after.helmet_recoil)
+		"punching_glove_contact_control":
+			check("Guante de Boxeo no potencia Placaje",
+				a.damage > 0 and a.damage == n.damage and n.damage == r.damage)
+			check("Placaje conserva dano de Casco aun con Guante",
+				a.start.foe_helmet and n.start.foe_helmet and r.start.foe_helmet
+				and int(a.after.hp) < int(a.start.hp)
+				and a.after.hp == n.after.hp and n.after.hp == r.after.hp
+				and a.after.helmet_recoil and n.after.helmet_recoil and r.after.helmet_recoil)
+		"punching_glove_noncontact_control":
+			check("Guante no potencia Agua Pistola",
+				a.damage > 0 and a.damage == n.damage and n.damage == r.damage)
+			check("Agua Pistola no desencadena Casco",
+				a.start.foe_helmet and n.start.foe_helmet and r.start.foe_helmet
+				and a.after.hp == a.start.hp
+				and n.after.hp == n.start.hp and r.after.hp == r.start.hp
+				and not a.after.helmet_recoil and not n.after.helmet_recoil and not r.after.helmet_recoil)
+		"ring_target_type_immunity":
+			check("Blanco anula inmunidad por tipo solo en portador",
+				int(a.after.hp) < int(a.start.hp)
+				and n.after.hp == n.start.hp and r.after.hp == r.start.hp)
+			check("Blanco conserva item y no modifica accion propia",
+				a.damage == n.damage and n.damage == r.damage
+				and not a.after.own_consumed and a.physical_units == 2)
+		"ring_target_ability_immunity":
+			check("Blanco NO anula inmunidad de Levitacion",
+				String(a.after.native_ability) == "levitate"
+				and String(n.after.native_ability) == "levitate"
+				and String(r.after.native_ability) == "levitate"
+				and a.after.hp == a.start.hp and n.after.hp == n.start.hp
+				and r.after.hp == r.start.hp)
+			check("Blanco no se consume ante inmunidad por habilidad",
 				not a.after.own_consumed and a.physical_units == 2)
 		_:
 			check("Operación fuera del contrato de bloque", false)

@@ -59,3 +59,9 @@ Primer run #41589392286, SHA a26c444b: Godot 5254 checks, **8 fallos** concentra
 - Reparación de test para `power_herb`: evidencia del primer turno de Rayo Solar y segundo turno de finalización en los controles; SaveV2 estricto al terminar carga. **Limitación conocida:** vista transitoria tras restaurar mid-charge sin item puede diferir aunque snapshot coincida; revisión de API compartida corresponde a IA6, no declarar ese caso resuelto.
 - El CSV fila 03 sigue `EN_CI_AUTOMATICA` solo por el disparador de CI; junto al próximo bloque cambiar a `CI_PASS_VERIFICADO` con SHA `b9aa52cd282938221e1b2554132a31ce0189d886` y run `41590511208`.
 - **Próxima `p`: únicamente bloque 04/10** `psychic_seed;punching_glove;ring_target`. Seguir V5 y preservar los nueve equipables ya cubiertos.
+
+## Bloque 04/10 — preparación y lanzamiento
+- Identidad IA1/W01, rama `codex/calvo-items-20261103-w01-camp004`. Bloque 03 formalmente cerrado en CSV con SHA `b9aa52cd282938221e1b2554132a31ce0189d886` y run 41590511208, Godot 5452/249 Python PASS.
+- Bloque 04: `psychic_seed;punching_glove;ring_target`, 8 escenarios, 13 pares caso-semilla, 39 variantes. Acumulado 28 escenarios/75 pares/225 variantes con SaveV2 y controles active/none/reserve.
+- Fuente histórica: `held_effect_sweep_v3.cjs` para Semilla Psique y Blanco; V2 para Guante de Boxeo. Terreno correcto/incorrecto; Puño Trueno contra Casco, Placaje con contacto y Agua Pistola sin contacto; Gengar vs Placaje y Charizard vs Terremoto, Levitación sigue inmune.
+- Producción intacta. Estado EN_CI_AUTOMATICA hasta run con dos recibos PASS. No tocar main, V28, ni otras ramas. Incidencia compartida de visualización SaveV2 midcharge del bloque 03 permanece anotada para IA6.

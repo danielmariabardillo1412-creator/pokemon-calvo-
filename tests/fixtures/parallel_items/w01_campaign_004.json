@@ -53,6 +53,24 @@
         "power_herb_solar_beam",
         "power_herb_noncharge"
       ]
+    },
+    {
+      "block": "04",
+      "ids": [
+        "psychic_seed",
+        "punching_glove",
+        "ring_target"
+      ],
+      "cases": [
+        "psychic_seed_trigger",
+        "psychic_seed_wrong_terrain",
+        "punching_glove_boost",
+        "punching_glove_tackle",
+        "punching_glove_water",
+        "ring_gengar_normal",
+        "ring_charizard_ground",
+        "ring_levitate_immune"
+      ]
     }
   ],
   "format": "gen9calvounifiedv1",
@@ -407,6 +425,127 @@
         19
       ],
       "history": "held_pilot:power_herb_charge_not_triggered"
+    },
+    {
+      "block": "04",
+      "id": "psychic_seed_trigger",
+      "item_id": "psychic_seed",
+      "op": "psychic_seed_terrain",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "own_move": "reflect",
+      "foe_move": "psychic_terrain",
+      "seeds": [
+        19,
+        23,
+        31
+      ],
+      "history": "held_effect_sweep_v3:psychic_seed_trigger"
+    },
+    {
+      "block": "04",
+      "id": "psychic_seed_wrong_terrain",
+      "item_id": "psychic_seed",
+      "op": "psychic_seed_wrong_terrain",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "own_move": "reflect",
+      "foe_move": "electric_terrain",
+      "seeds": [
+        19
+      ],
+      "history": "held_effect_sweep_v3:psychic_seed_wrong_terrain"
+    },
+    {
+      "block": "04",
+      "id": "punching_glove_boost",
+      "item_id": "punching_glove",
+      "op": "punching_glove_punch",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "own_move": "thunder_punch",
+      "foe_move": "amnesia",
+      "seeds": [
+        19,
+        23
+      ],
+      "foe_item": "rocky_helmet",
+      "history": "held_effect_sweep_v2:punching_glove_boost"
+    },
+    {
+      "block": "04",
+      "id": "punching_glove_tackle",
+      "item_id": "punching_glove",
+      "op": "punching_glove_contact_control",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "own_move": "tackle",
+      "foe_move": "amnesia",
+      "seeds": [
+        19
+      ],
+      "foe_item": "rocky_helmet",
+      "history": "held_effect_sweep_v2:punching_glove_tackle"
+    },
+    {
+      "block": "04",
+      "id": "punching_glove_water",
+      "item_id": "punching_glove",
+      "op": "punching_glove_noncontact_control",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "own_move": "water_gun",
+      "foe_move": "amnesia",
+      "seeds": [
+        19
+      ],
+      "foe_item": "rocky_helmet",
+      "history": "held_effect_sweep_v2:punching_glove_water"
+    },
+    {
+      "block": "04",
+      "id": "ring_gengar_normal",
+      "item_id": "ring_target",
+      "op": "ring_target_type_immunity",
+      "actor_species": "gengar",
+      "foe_species": "mew",
+      "own_move": "reflect",
+      "foe_move": "tackle",
+      "seeds": [
+        19,
+        23
+      ],
+      "history": "held_effect_sweep_v3:ring_gengar_normal"
+    },
+    {
+      "block": "04",
+      "id": "ring_charizard_ground",
+      "item_id": "ring_target",
+      "op": "ring_target_type_immunity",
+      "actor_species": "charizard",
+      "foe_species": "mew",
+      "own_move": "reflect",
+      "foe_move": "earthquake",
+      "seeds": [
+        19,
+        23
+      ],
+      "history": "held_effect_sweep_v3:ring_charizard_ground"
+    },
+    {
+      "block": "04",
+      "id": "ring_levitate_immune",
+      "item_id": "ring_target",
+      "op": "ring_target_ability_immunity",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "own_move": "reflect",
+      "foe_move": "earthquake",
+      "seeds": [
+        19
+      ],
+      "actor_ability": "levitate",
+      "history": "held_effect_sweep_v3:ring_levitate_immune"
     }
   ]
 }
