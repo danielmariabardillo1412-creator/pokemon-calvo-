@@ -163,7 +163,12 @@ func _verify_held_receipts(spec: Dictionary, observed: Dictionary) -> void:
 func _probe_field_use(spec: Dictionary, mode: String) -> Dictionary:
 	var item: StringName = StringName(spec.id)
 	var creature: CreatureInstance = _mon(&"mew", int(automation.level), &"own", ["tackle", "reflect"])
-	creature.friendship = 100
+	creature.friendship = int(spec.get("start_friendship", 100))
+	if spec.has("pp_gain"):
+		for index: int in range(2):
+			var starting: Variant = spec.get("pp%d_start" % index, "full")
+			creature.moveset[index].current_pp = (
+				creature.moveset[index].max_pp if starting is String else int(starting))
 	if String(spec.kind) in ["field_heal", "field_medicine"]:
 		match String(spec.get("start_hp", "full")):
 			"half":
@@ -190,6 +195,7 @@ func _probe_field_use(spec: Dictionary, mode: String) -> Dictionary:
 			creature.status_state.add_volatile(&"confusion", {"turns": 3})
 	var start: Dictionary = creature.to_dict()
 	var start_pp: int = creature.moveset[0].current_pp
+	var start_pp_second: int = creature.moveset[1].current_pp
 	var start_friend: int = creature.friendship
 	var start_hp: int = creature.current_hp
 	var start_status: String = String(creature.status_state.persistent_id)
@@ -209,7 +215,7 @@ func _probe_field_use(spec: Dictionary, mode: String) -> Dictionary:
 		service.configure(collection, catalogs, can_use, sleep_clocks))
 	var original: CreatureInstance = collection.owned_creature(&"own")
 	var before: Dictionary = _owner_data(collection)
-	var slot: int = int(spec.slot) if String(spec.kind) == "field_pp" else -1
+	var slot: int = int(spec.get("slot", -1))
 	var reply: Dictionary = service.use_item(item, &"own", slot)
 	var expected_acceptance: bool = bool(spec.applies) and mode != "none"
 	check(mode + " campo: admisión y rechazo correctos",
@@ -219,8 +225,9 @@ func _probe_field_use(spec: Dictionary, mode: String) -> Dictionary:
 			not bool(reply.get("accepted", false))
 			and String(reply.get("status", "")) in ["DEPENDENCY_MISSING", "REJECTED"])
 	if String(spec.kind) == "field_medicine" and expected_acceptance:
-		check(mode + " medicina usa el servicio existente",
-			String(reply.get("action", "")) == "medicine")
+		var expected_action: String = "bitter_medicine" if String(spec.id) == "energy_powder" else "medicine"
+		check(mode + " medicina usa el servicio existente y su subfamilia",
+			String(reply.get("action", "")) == expected_action)
 	var updated: CreatureInstance = collection.owned_creature(&"own")
 	if updated == null:
 		check(mode + " campo: Pokemon no desaparece", false)
@@ -228,10 +235,19 @@ func _probe_field_use(spec: Dictionary, mode: String) -> Dictionary:
 	var now_pp: int = updated.moveset[0].current_pp
 	var now_status: String = String(updated.status_state.persistent_id)
 	var now_confusion: bool = updated.status_state.has_volatile(&"confusion")
-	var expected_pp: int = mini(updated.moveset[0].max_pp,
-		start_pp + (int(spec.expected_delta) if expected_acceptance else 0)) if String(spec.kind) == "field_pp" else start_pp
-	check(mode + " campo: PP estrictos y slot no contaminado", now_pp == expected_pp
-		and updated.moveset[1].current_pp == creature.moveset[1].current_pp)
+	var pp_gain: int = int(spec.get("pp_gain", 0)) if expected_acceptance else 0
+	var expected_pp: int = start_pp
+	if String(spec.kind) == "field_pp":
+		expected_pp = mini(updated.moveset[0].max_pp,
+			start_pp + (int(spec.expected_delta) if expected_acceptance else 0))
+	elif String(spec.kind) == "field_medicine" and spec.has("pp_gain"):
+		expected_pp = mini(updated.moveset[0].max_pp, start_pp + pp_gain)
+	var expected_pp_second: int = start_pp_second
+	if String(spec.kind) == "field_medicine" and spec.has("pp_gain"):
+		expected_pp_second = mini(updated.moveset[1].max_pp, start_pp_second + pp_gain)
+	check(mode + " campo: PP por slot estrictos, sin propagacion incorrecta",
+		now_pp == expected_pp
+		and updated.moveset[1].current_pp == expected_pp_second)
 	var cures_status: bool = expected_acceptance and (
 		String(spec.kind) == "field_lum" or
 		(String(spec.kind) == "field_medicine" and bool(spec.get("cures_status", false))))
@@ -257,8 +273,11 @@ func _probe_field_use(spec: Dictionary, mode: String) -> Dictionary:
 	elif String(spec.kind) == "field_medicine" and expected_acceptance:
 		expected_hp = mini(updated.stats.max_hp,
 			start_hp + int(spec.get("heal_amount", 0)))
-	check(mode + " campo: PS segun contrato, amistad/EV intactos",
-		updated.current_hp == expected_hp and updated.friendship == start_friend
+	var expected_friendship: int = start_friend
+	if String(spec.kind) == "field_medicine" and expected_acceptance and spec.has("friendship_loss"):
+		expected_friendship = maxi(0, start_friend - int(spec.friendship_loss))
+	check(mode + " campo: PS y amistad segun contrato, EV intactos",
+		updated.current_hp == expected_hp and updated.friendship == expected_friendship
 		and updated.evs == creature.evs)
 	check(mode + " campo: identidad y depósito intactos",
 		updated.instance_id == &"own"
@@ -286,22 +305,27 @@ func _probe_field_use(spec: Dictionary, mode: String) -> Dictionary:
 	if restored_mon != null:
 		check(mode + " campo: SaveV2 estado y PP exactos",
 			restored_mon.moveset[0].current_pp == now_pp
+			and restored_mon.moveset[1].current_pp == expected_pp_second
 			and String(restored_mon.status_state.persistent_id) == now_status
 			and restored_mon.status_state.has_volatile(&"confusion") == now_confusion
-			and restored_mon.friendship == start_friend
+			and restored_mon.friendship == expected_friendship
 			and restored_mon.current_hp == expected_hp
 			and restored_mon.evs == updated.evs)
 	var name: String = String(spec.scenario) + "_" + mode
 	var evidence: Dictionary = {"scenario": spec.scenario, "mode": mode, "item": String(item),
 		"kind": spec.kind, "before": before, "after": state, "accepted": bool(reply.get("accepted", false)),
-		"pp": now_pp, "hp": updated.current_hp, "max_hp": updated.stats.max_hp,
+		"pp": now_pp, "pp_max": updated.moveset[0].max_pp,
+		"pp_second": updated.moveset[1].current_pp, "pp_second_max": updated.moveset[1].max_pp,
+		"friendship": updated.friendship, "hp": updated.current_hp, "max_hp": updated.stats.max_hp,
 		"status": now_status, "confusion": now_confusion, "bag": count,
 		"location": String(collection.location_of(&"own")), "save_v2": decoded.ok}
 	var sha: String = _write_evidence(name, evidence)
 	check(mode + " campo: recibo SHA256",
 		not sha.is_empty() and FileAccess.get_sha256(destination + "/" + name + ".json") == sha)
 	return {"valid": true, "accepted": bool(reply.get("accepted", false)),
-		"pp": now_pp, "hp": updated.current_hp, "max_hp": updated.stats.max_hp,
+		"pp": now_pp, "pp_max": updated.moveset[0].max_pp,
+		"pp_second": updated.moveset[1].current_pp, "pp_second_max": updated.moveset[1].max_pp,
+		"friendship": updated.friendship, "hp": updated.current_hp, "max_hp": updated.stats.max_hp,
 		"status": now_status, "confusion": now_confusion, "bag": count,
 		"location": String(collection.location_of(&"own")), "save_v2": decoded.ok,
 		"evidence": name + ".json", "sha256": sha}
@@ -321,6 +345,8 @@ func _compare_field_use(spec: Dictionary, observed: Dictionary) -> void:
 	check("campo: PC no altera PP/status/condición de aplicación",
 		int(a.pp) == int(s.pp) and String(a.status) == String(s.status)
 		and bool(a.confusion) == bool(s.confusion))
+	check("campo: PP adicional y amistad consistentes entre equipo y PC",
+		int(a.pp_second) == int(s.pp_second) and int(a.friendship) == int(s.friendship))
 	check("campo: SaveV2 los tres modos íntegros",
 		bool(a.save_v2) and bool(n.save_v2) and bool(s.save_v2))
 	if String(spec.kind) == "field_heal":
@@ -348,6 +374,17 @@ func _compare_field_use(spec: Dictionary, observed: Dictionary) -> void:
 			bool(a.confusion) == (false if should_cure_confusion else bool(spec.confused))
 			and bool(s.confusion) == bool(a.confusion)
 			and bool(n.confusion) == bool(spec.confused))
+		if spec.has("pp_gain"):
+			var gain: int = int(spec.pp_gain) if expected else 0
+			check("Elixir aplica la ganancia en ambos slots sin seleccionar movimiento",
+				int(a.pp) == mini(int(a.pp_max), int(n.pp) + gain)
+				and int(a.pp_second) == mini(int(a.pp_second_max), int(n.pp_second) + gain)
+				and int(s.pp) == int(a.pp) and int(s.pp_second) == int(a.pp_second))
+		if spec.has("friendship_loss"):
+			var expected_friend: int = maxi(0, int(n.friendship) -
+				(int(spec.friendship_loss) if expected else 0))
+			check("Polvo Energia amarga: amistad solo baja si cura",
+				int(a.friendship) == expected_friend and int(s.friendship) == expected_friend)
 	for mode: String in automation.modes:
 		var rec: Dictionary = observed[mode]
 		var path: String = destination + "/" + String(rec.evidence)
