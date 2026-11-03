@@ -15,6 +15,7 @@ ITEMS_03 = ("strawberry_sweet", "whipped_dream", "leaders_crest")
 ITEMS_04 = ("adamant_crystal", "blue_orb", "catching_charm")
 ITEMS_05 = ("dna_splicers", "exp_charm", "gracidea")
 ITEMS_06 = ("griseous_core", "lustrous_globe", "meteorite")
+ITEMS_07 = ("rage_candy_bar", "red_orb", "reins_of_unity")
 
 
 def rows(path):
@@ -44,7 +45,9 @@ def main():
 
     check(fixture["worker"] == "W04" and fixture["campaign"] == "CAMP_004", "identidad/fixture")
     check(len(queue) == 10, "cola de diez bloques")
-    check(len(done) == 6 and [r["bloque"] for r in done] == ["01", "02", "03", "04", "05", "06"], "progreso de bloques 01 a 06")
+    check(len(done) == 7 and [r["bloque"] for r in done] == ["01", "02", "03", "04", "05", "06", "07"], "progreso de bloques 01 a 07")
+    check(done[6]["ids"] == ";".join(ITEMS_07), "IDs de progreso 07")
+    check(queue[6]["ids"] == ";".join(ITEMS_07), "reserva 07 distinta")
     check(done[5]["ids"] == ";".join(ITEMS_06), "IDs progreso 06")
     check(queue[5]["ids"] == ";".join(ITEMS_06), "reserva 06 distinta")
     check(done[4]["ids"] == ";".join(ITEMS_05), "IDs de progreso 05")
@@ -57,7 +60,9 @@ def main():
     check(queue[1]["ids"] == ";".join(ITEMS_02), "reserva 02 distinta")
     check(done[0]["ids"] == ";".join(ITEMS), "IDs de progreso")
     check(queue[0]["ids"] == ";".join(ITEMS), "reserva oficial distinta")
-    check(len(fixture["blocks"]) == 6 and [v["block"] for v in fixture["blocks"]] == ["01", "02", "03", "04", "05", "06"], "fixture acumulativo 01 a 06")
+    check(len(fixture["blocks"]) == 7 and [v["block"] for v in fixture["blocks"]] == ["01", "02", "03", "04", "05", "06", "07"], "fixture acumulativo 01 a 07")
+    check(fixture["blocks"][6]["ids"] == list(ITEMS_07), "fixture IDs 07")
+    check(fixture["blocks"][6]["family"] == "STORY_KEY_OR_FORM_REVIEW", "familia bloque07 cambiada")
     check(fixture["blocks"][5]["ids"] == list(ITEMS_06), "fixture IDs 06")
     check(fixture["blocks"][5]["family"] == "STORY_KEY_OR_FORM_REVIEW", "familia bloque 06 cambiada")
     check(fixture["blocks"][4]["ids"] == list(ITEMS_05), "fixture IDs 05")
@@ -123,6 +128,22 @@ def main():
     check("meteorite" not in held, "Meteorite no debe ser equipable")
     check(source_fields["meteorite"]["equipment_transfer"] == "NOT_CERTIFIED", "Meteorite equipamiento no certificado")
     check(inventory_rows["meteorite"]["connection"] == "DATA_ONLY" and inventory_rows["meteorite"]["native_entry"] == "False", "Meteorite sin efecto de forma")
+    for item in ITEMS_07:
+        found = [entry for entry in selected if entry["id"] == item]
+        check(len(found) == 1 and found[0]["estado_contenido"] == "SELECCIONADO" and found[0]["familia"] == "STORY_KEY_OR_FORM_REVIEW", item + " alcance original")
+        check(('"' + item + '"') in runner, item + " sin runner Godot")
+    check("red_orb" in held and "rage_candy_bar" not in held and "reins_of_unity" not in held, "perfil holdable bloque07 distinto")
+    check(source_fields["red_orb"]["equipment_transfer"] == "VERIFIED", "Orbe Rojo equipamiento sin certificar")
+    check(source_fields["rage_candy_bar"]["field_use_status"] == "MODERN_FIELD_RECOVERY_OWNERSHIP_CONSUMPTION_SAVE_AND_NATIVE_HANDOFF_VERIFIED", "Caramelo Furia requiere curación real")
+    check(source_fields["reins_of_unity"]["equipment_transfer"] == "NOT_CERTIFIED", "Riendas no equipables")
+    check(inventory_rows["red_orb"]["connection"] == "NATIVE_ENTRY_REQUIRES_EFFECT_CASE", "Orbe Rojo pendiente de efecto")
+    check(inventory_rows["reins_of_unity"]["connection"] == "DATA_ONLY", "Riendas requieren fusión real")
+    imported = json.loads((ROOT / "modules/inventory/imported_recovery_v19.json").read_text())["items"]
+    check(imported["rage_candy_bar"]["consume"] is True, "Caramelo Furia consume al curar")
+    check(imported["rage_candy_bar"]["effect"]["cure"] == "all", "Caramelo Furia cura estados")
+    check(imported["rage_candy_bar"]["effect"]["confusion"] is True, "Caramelo Furia quita confusión")
+    field_effects = (ROOT / "modules/inventory/field_item_effects.gd").read_text()
+    check("static func supports(" in field_effects and "_recovery.has(String(item_id))" in field_effects, "medicina no conectada al motor")
     for term in ("UNSUPPORTED_TRIGGERS", '&"spin"', "func classify_record(", "RUNTIME_SUPPORTED", "UNSUPPORTED"):
         check(term in engine, "no existe contrato en EvolutionSystem: " + term)
     for term in ("func configure(", "func evolution_options(", "func evolve(", "func use_item(", "func equip(", "func unequip(", "holdable("):
@@ -139,11 +160,13 @@ def main():
         check(token in runner, "no se ejecuta negativo real del bloque 04: " + token)
     for token in ("const BLOQUE_05 :=", "func _auditar_contexto_05(", "fusion_kyurem_no_implementada", "bono_experiencia_fuera_del_servicio_W04", "forma_shaymin_necesita_contexto", "no_equipable", "uso_sin_contrato_rechazado", "forma_y_estado_inalterados", "propietario_invalido_rechazado", "_persistencia(pc, item"):
         check(token in runner, "negativo del bloque 05 no cubierto: " + token)
-    for token in ("const BLOQUE_06 :=", "giratina", "palkia", "deoxys", "forma_deoxys_meteorito_sin_servicio", "equipamiento_verificado_sin_ruta_forma_certificada", "_auditar_contexto_04(catalogo, item, origen)", "_auditar_contexto_05(catalogo, item, origen)", "ruta_forma_no_degradada", "_persistencia(pc, item", "CAMP004_W04_GODOT PASS blocks=6 checks="):
+    for token in ("const BLOQUE_06 :=", "giratina", "palkia", "deoxys", "forma_deoxys_meteorito_sin_servicio", "equipamiento_verificado_sin_ruta_forma_certificada", "_auditar_contexto_04(catalogo, item, origen)", "_auditar_contexto_05(catalogo, item, origen)", "ruta_forma_no_degradada", "_persistencia(pc, item"):
         check(token in runner, "escenario 06 ausente: " + token)
+    for token in ("const BLOQUE_07 :=", "func _recuperacion_07(", "sano_sin_consumo", "curacion_consumo_unico", "cura_sin_evolucion", "sin_segunda_consumicion", "orbe_equipable_primal_no_certificado", "union_calyrex_fusion_no_conectada", "_auditar_contexto_04(catalogo, item, &\"groudon\")", "_auditar_contexto_05(catalogo, item, &\"calyrex\")", "CAMP004_W04_GODOT PASS blocks=7 checks="):
+        check(token in runner, "bloque07 sin escenario real: " + token)
     check((ROOT / "tests/gameplay/parallel_items_w04_campaign_003.gd").exists(), "regresión CAMP003 ausente")
     check((ROOT / "tests/tools/test_parallel_items_w04_campaign_001.py").exists(), "regresión CAMP001 ausente")
-    print(f"CAMP004_W04_PY PASS blocks=6 checks={checks}")
+    print(f"CAMP004_W04_PY PASS blocks=7 checks={checks}")
 
 
 if __name__ == "__main__":
