@@ -2683,6 +2683,7 @@ def verify_sources(chk):
     ):
         chk.demand(fragment in runner, "Prueba de reset08 incompleta: " + fragment)
     for fragment in (
+        '"nature_id": String(spec.get("nature", "hardy"))',
         'if String(spec.kind) == "mint_dependency":',
         'String(result.get("status", "")) == String(spec.expect_status)',
         'String(result.get("reason", "")) == String(spec.expect_reason)',
