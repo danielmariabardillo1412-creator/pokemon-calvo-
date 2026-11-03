@@ -1,3 +1,19 @@
+# IA2/W02 — CONTINUIDAD VIGENTE: CAMPAÑA_004 BLOQUE 04/10
+
+**Identidad fija:** IA2/W02 (bayas, medicinas y entrenamiento); única rama de escritura `codex/calvo-items-20261103-w02-camp004`. Una `p` autoriza exactamente la siguiente fila de la cola W02; nunca tocar `main`, V28, árbitra IA6, otras ramas, workflow o catálogos. Protocolo `AUTONOMOUS_REPAIR_V5.md`: reparar arnés y función propia de medicina, escalar conflicto en API/servicio compartido.
+
+**Estado:** 4 bloques publicados de 10, **16 IDs**; 61 escenarios × 3 modos = 183 variantes. **Certificación:** solo bloque 01 `completed/success` confirmado en [GitHub Actions 41573481223](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41573481223) con `CAMP004_W02_PY PASS blocks=1 checks=83`, `CAMP004_W02_GODOT PASS blocks=1 checks=1022` y regresión CAMP003 Python 680 / Godot 7306. **Bloques 02, 03 y 04 EN_CI_AUTOMATICA, sin run ID posterior verificado**, debido a limitación de conector (consulta `fetch_commit_workflow_runs` solo PR; nuestros push devuelven []). No suponer PASS/FAIL/no-run. Revisar Actions directamente si surge un ID válido y leer job/logs reales.
+
+**Bloque 04 publicado:** `burn_heal;casteliacone;elixir;energy_powder`, 19 escenarios y 57 variantes previstas. Burn Heal cura burn solo; Casteliacone cura estados y confusion; Elixir restaura 10 PP en todos los movimientos, respeta máximos y rechaza slot; Energy Powder restaura 60 PS y penaliza amistad [5,5,10] por umbrales, sin penalizar/reducir stock si hay rechazo. Propiedad PARTY, sin item y STORAGE; SaveV2, stock, recibos SHA256. Los 4 perfiles corresponden a `modules/inventory/imported_recovery_v19.json`. Se conservan todos los casos y negativos de 01-03, con regresión CAMP003 de 10 bloques intacta.
+
+**Commits bloque 04:** fixture `2d804bebc55a8c20f396d762bd7d3acd3445df0b`; Godot `1e488420a421fc0eb998427631ce863385495a66`; Python `34b384dceaf8e6a97dedb5d1f7854b1b7e3fdb8a`; progreso `14ddaca6c00a19cf2b2ec380d88fe3df96aa5b3c`; informe `f39dd8790b43ee1783570e45bd2b8462a57f4739` en `reports/W02/CAMP_004_ITER_04.md`. El progreso `reports/W02/CAMP_004_PROGRESO.csv` marca solo 01 CI PASS y 02-04 pendientes.
+
+**Dependencia Razz:** incluida en fila 02 con tests negativos de inercia/uso rechazado; no es funcionamiento útil y IA6 tiene que decidir si hay uso propio o exclusión por política. No inventar captura/Let's Go ni modificar políticas.
+
+**Próxima `p`:** verificar resultado CI de HEAD (requiere `CAMP004_W02_PY/GODOT PASS blocks=4` y `CAMP003_W02_PY/GODOT PASS blocks=10` sobre mismo SHA; reparar fallos propios sin rebajar aserciones); ejecutar **únicamente bloque 05** `energy_root;ether;fresh_water;full_heal` si permisos vigentes. No 06 sin otro mensaje.
+
+---
+
 # IA2/W02 — CONTINUIDAD VIGENTE: CAMPAÑA_004 BLOQUE 03/10
 
 **Identidad permanente:** IA2/W02; **rama exclusiva:** `codex/calvo-items-20261103-w02-camp004`. **Una `p` = exactamente siguiente bloque**, sujeto a lectura y reparación previa de fallos de CI. Autoridad: IA6 `CAMPAIGN_004_W02_GATE.md`, `CAMPAIGN_004_W02_QUEUE_APPROVED.csv`, `campaigns/CAMP_004_W02.md`, `AUTONOMOUS_REPAIR_V5.md`.
