@@ -3,6 +3,7 @@ extends SceneTree
 const Servicio = preload("res://modules/inventory/field_item_service.gd")
 const BLOQUE_01 := [&"berry_sweet", &"clover_sweet", &"flower_sweet"]
 const BLOQUE_02 := [&"love_sweet", &"ribbon_sweet", &"star_sweet"]
+const BLOQUE_03 := [&"strawberry_sweet", &"whipped_dream", &"leaders_crest"]
 const ID := &"w04_c004_01"
 var checks := 0
 var errores: Array[String] = []
@@ -49,7 +50,7 @@ func _persistencia(pc: PlayerCollection, item: StringName, etiqueta: String, can
 			verificar(poke != null and poke.species_id == especie and poke.held_item_id == equipado and cargado.inventory.quantity(item) == cantidad, String(item) + "/" + etiqueta + "/savev2_identidad_stock")
 	DirAccess.remove_absolute(ProjectSettings.globalize_path(ruta))
 
-func _negativo(catalogo: DefinitionCatalog, item: StringName, especie: StringName) -> void:
+func _negativo(catalogo: DefinitionCatalog, item: StringName, especie: StringName, destino_objetivo: StringName = &"alcremie") -> void:
 	var pc := _crear(catalogo, especie)
 	verificar(pc != null, String(item) + "/" + String(especie) + "/creacion")
 	if pc == null:
@@ -62,7 +63,7 @@ func _negativo(catalogo: DefinitionCatalog, item: StringName, especie: StringNam
 	verificar(opciones.is_empty(), String(item) + "/" + String(especie) + "/sin_opcion_directa")
 	var directo: Dictionary = servicio.use_item(item, ID)
 	verificar(not directo.get("accepted", false) and _estado(pc) == antes and pc.inventory.quantity(item) == 2, String(item) + "/" + String(especie) + "/uso_directo_rechazado_sin_consumo")
-	var evolucion: Dictionary = servicio.evolve(item, ID, &"alcremie")
+	var evolucion: Dictionary = servicio.evolve(item, ID, destino_objetivo)
 	verificar(not evolucion.get("accepted", false) and _estado(pc) == antes and pc.inventory.quantity(item) == 2, String(item) + "/" + String(especie) + "/evolucion_forzada_rechazada")
 	if servicio.holdable(item):
 		var equipar: Dictionary = servicio.equip(item, ID)
@@ -70,7 +71,7 @@ func _negativo(catalogo: DefinitionCatalog, item: StringName, especie: StringNam
 		if equipar.get("accepted", false):
 			_persistencia(pc, item, String(especie) + "_equipado", 1, especie, item)
 			var equipado_antes := _estado(pc)
-			var con_equipamiento: Dictionary = servicio.evolve(item, ID, &"alcremie")
+			var con_equipamiento: Dictionary = servicio.evolve(item, ID, destino_objetivo)
 			verificar(not con_equipamiento.get("accepted", false) and _estado(pc) == equipado_antes and servicio.evolution_options(item, ID).is_empty(), String(item) + "/" + String(especie) + "/equipar_no_simula_giro")
 			var quitar: Dictionary = servicio.unequip(ID)
 			verificar(quitar.get("accepted", false) and pc.inventory.quantity(item) == 2 and pc.owned_creature(ID).held_item_id == &"", String(item) + "/" + String(especie) + "/devolver_equipamiento")
@@ -120,7 +121,7 @@ func _ejecutar() -> void:
 		for record: EvolutionRecord in milcery.evolutions:
 			if record.trigger == &"spin":
 				verificar(EvolutionSystem.classify_record(record, catalogo, &"milcery") == EvolutionSystem.UNSUPPORTED, "spin_no_degradado_a_use_item")
-	for item: StringName in BLOQUE_01 + BLOQUE_02:
+	for item: StringName in BLOQUE_01 + BLOQUE_02 + [BLOQUE_03[0]]:
 		verificar(catalogo.item(item) != null, String(item) + "/item_catalogado")
 		var positivos: Array[Dictionary] = []
 		var total_registros := 0
@@ -146,6 +147,37 @@ func _ejecutar() -> void:
 			for ruta: Dictionary in positivos:
 				_positivo(catalogo, item, ruta.origen as StringName, ruta.destino as StringName)
 			print("CAMP004_W04_ITEM id=", String(item), " status=FUNCIONAL_VERIFICADO runtime_routes=", positivos.size(), " conditioned=", condicionados)
+	# Dos contratos especiales autorizados de este bloque. No mutar los triggers.
+	verificar(EvolutionSystem.UNSUPPORTED_TRIGGERS.has(&"three_defeated_bisharp"), "bisharp_derrotas_trigger_no_ejecutable")
+	for item: StringName in [BLOQUE_03[1], BLOQUE_03[2]]:
+		verificar(catalogo.item(item) != null, String(item) + "/item_catalogado")
+		var origen: StringName = &"swirlix" if item == &"whipped_dream" else &"bisharp"
+		var destino: StringName = &"slurpuff" if item == &"whipped_dream" else &"kingambit"
+		verificar(catalogo.species(origen) != null and catalogo.species(destino) != null, String(item) + "/especies_catalogadas")
+		var positivos: Array[Dictionary] = []
+		var n_registros := 0
+		var dependencias := 0
+		for sid: StringName in catalogo.species_catalog.all_ids():
+			var especie_actual: CreatureSpecies = catalogo.species(sid)
+			for rec: EvolutionRecord in especie_actual.evolutions:
+				if rec.item_id != item:
+					continue
+				n_registros += 1
+				var clasificacion := EvolutionSystem.classify_record(rec, catalogo, sid)
+				if rec.trigger == EvolutionSystem.TRIGGER_USE_ITEM and clasificacion == EvolutionSystem.RUNTIME_SUPPORTED:
+					positivos.append({"origen": sid, "destino": rec.species_id})
+				else:
+					dependencias += 1
+					verificar(not EvolutionSystem.evolution_candidates(especie_actual, {"level": 40, "item_id": item, "traded": false}, catalogo).has(rec), String(item) + "/mecanica_condicionada_no_degradada")
+		_negativo(catalogo, item, &"eevee", destino)
+		if not positivos.any(func(p): return p.origen == origen):
+			_negativo(catalogo, item, origen, destino)
+		if positivos.is_empty():
+			print("CAMP004_W04_ITEM id=", String(item), " status=DEPENDENCIA records=", n_registros, " conditioned=", dependencias, " reason=intercambio_equipado_o_derrotas_requieren_contexto")
+		else:
+			for ruta: Dictionary in positivos:
+				_positivo(catalogo, item, ruta.origen as StringName, ruta.destino as StringName)
+			print("CAMP004_W04_ITEM id=", String(item), " status=FUNCIONAL_VERIFICADO runtime_routes=", positivos.size())
 	_finalizar()
 
 func _finalizar() -> void:
@@ -153,7 +185,7 @@ func _finalizar() -> void:
 		return
 	terminado = true
 	if errores.is_empty():
-		print("CAMP004_W04_GODOT PASS blocks=2 checks=", checks)
+		print("CAMP004_W04_GODOT PASS blocks=3 checks=", checks)
 	else:
 		print("CAMP004_W04_GODOT FAIL errors=", JSON.stringify(errores))
 	quit(0 if errores.is_empty() else 1)
