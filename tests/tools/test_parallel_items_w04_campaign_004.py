@@ -137,7 +137,7 @@ def main():
     check('&"three_defeated_bisharp"' in engine, "EvolutionSystem no reconoce disparador de Bisharp")
     for token in ("const BLOQUE_04 :=", "func _auditar_contexto_04(", "_auditar_contexto_04(catalogo, item, origen)", "sin_transformacion_por_uso", "equipar_no_activa_forma_o_reversion", "amuleto_no_es_equipable", "captura_pertenece_W03_no_certificada", "estado_forma_final_intacto", "_persistencia(pc, item"):
         check(token in runner, "no se ejecuta negativo real del bloque 04: " + token)
-    for token in ("const BLOQUE_05 :=", "func _auditar_contexto_05(", "fusion_kyurem_no_implementada", "bono_experiencia_fuera_del_servicio_W04", "forma_shaymin_necesita_contexto", "no_equipable", "uso_sin_contrato_rechazado", "forma_y_estado_inalterados", "propietario_invalido_rechazado", "_persistencia(pc, item", "CAMP004_W04_GODOT PASS blocks=5 checks="):
+    for token in ("const BLOQUE_05 :=", "func _auditar_contexto_05(", "fusion_kyurem_no_implementada", "bono_experiencia_fuera_del_servicio_W04", "forma_shaymin_necesita_contexto", "no_equipable", "uso_sin_contrato_rechazado", "forma_y_estado_inalterados", "propietario_invalido_rechazado", "_persistencia(pc, item"):
         check(token in runner, "negativo del bloque 05 no cubierto: " + token)
     for token in ("const BLOQUE_06 :=", "giratina", "palkia", "deoxys", "forma_deoxys_meteorito_sin_servicio", "equipamiento_verificado_sin_ruta_forma_certificada", "_auditar_contexto_04(catalogo, item, origen)", "_auditar_contexto_05(catalogo, item, origen)", "ruta_forma_no_degradada", "_persistencia(pc, item", "CAMP004_W04_GODOT PASS blocks=6 checks="):
         check(token in runner, "escenario 06 ausente: " + token)
