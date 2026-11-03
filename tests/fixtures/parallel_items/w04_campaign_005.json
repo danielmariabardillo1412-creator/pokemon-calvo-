@@ -596,6 +596,97 @@
         "Bag item use/evolve is rejected without spending; held item survives SaveV2, unequip recovers original inventory",
         "Preserve identity, IV/EV, friendship, experience, moves and species, no invented persistent form fields"
       ]
+    },
+    {
+      "block": "08",
+      "ids": [
+        "dna_splicers",
+        "reins_of_unity",
+        "n_lunarizer_merge",
+        "n_solarizer_merge"
+      ],
+      "family": "FORM_FUSION",
+      "classification": "DEPENDENCIA_FUSION_DOS_PROPIETARIOS",
+      "cases": [
+        {
+          "item_id": "dna_splicers",
+          "source": "kyurem",
+          "partner": "zekrom",
+          "target_variety": "kyurem-black",
+          "species_number": 646,
+          "evolution_chain": 333,
+          "partner_storage": false
+        },
+        {
+          "item_id": "dna_splicers",
+          "source": "kyurem",
+          "partner": "reshiram",
+          "target_variety": "kyurem-white",
+          "species_number": 646,
+          "evolution_chain": 333,
+          "partner_storage": true
+        },
+        {
+          "item_id": "reins_of_unity",
+          "source": "calyrex",
+          "partner": "glastrier",
+          "target_variety": "calyrex-ice",
+          "species_number": 898,
+          "evolution_chain": 476,
+          "partner_storage": true
+        },
+        {
+          "item_id": "reins_of_unity",
+          "source": "calyrex",
+          "partner": "spectrier",
+          "target_variety": "calyrex-shadow",
+          "species_number": 898,
+          "evolution_chain": 476,
+          "partner_storage": false
+        },
+        {
+          "item_id": "n_lunarizer_merge",
+          "source": "necrozma",
+          "partner": "lunala",
+          "target_variety": "necrozma-dawn",
+          "species_number": 800,
+          "evolution_chain": 421,
+          "partner_storage": true
+        },
+        {
+          "item_id": "n_solarizer_merge",
+          "source": "necrozma",
+          "partner": "solgaleo",
+          "target_variety": "necrozma-dusk",
+          "species_number": 800,
+          "evolution_chain": 421,
+          "partner_storage": false
+        }
+      ],
+      "canonical_sources": [
+        "data/api/v2/pokemon-species/{646,898,800}/index.json",
+        "data/api/v2/evolution-chain/{333,476,421}/index.json",
+        "docs/current/RANDOMLOCK_ITEMS_BUILD_SCOPE_V2.csv",
+        "docs/current/ITEM_INVENTORY.csv",
+        "modules/inventory/item_connections_v1.json"
+      ],
+      "source_caveat": "PokeAPI species varieties substantiate target forms; routes and partners require separately approved project rules, not present as evolution_chain edges. n_lunarizer_merge/n_solarizer_merge are selected legacy item IDs rather than PokéAPI use-item evolutions.",
+      "producer": "PlayerCollection ownership (Party or Storage) for two distinct instance IDs; fusion intent with main/partner/item and reversible state",
+      "consumer": "Fusion ownership transaction / form resolver / SaveGameRepository SaveV2 migration",
+      "missing": [
+        "A public API for selecting two owned creatures, fusion/undo and distinct ownership semantics",
+        "Rules for parking or hiding partner creature while fused, and restoring exactly the same partner with its IV/EV/moves/level/held item",
+        "Persistent fusion pair identities and form target in SaveV2, plus battle prohibition and unmerge on invalid/deleted partner",
+        "Item consumption/refund and target-form policy for legacy merge IDs; cannot be guessed from the standard evolution chain"
+      ],
+      "runtime_contract": [
+        "Six ordered source+partner+target-form pairs from four IDs; do not conflate the two routes per shared item",
+        "All four are currently selected but not in holdable_ids, and have no positive certified field route",
+        "Two independently owned CreatureInstance objects remain distinct before and after rejected item use; cover Party and Storage",
+        "SaveV2 must preserve both unique instance IDs/ownership and all persistent creature data when no fusion occurs",
+        "No item consumption or silent target replacement from bag/evolve/equip; no false positive fusion",
+        "Never serialize fake fused species, destroy/duplicate the partner, modify SaveV2 schema or shared producers"
+      ]
     }
   ]
 }
