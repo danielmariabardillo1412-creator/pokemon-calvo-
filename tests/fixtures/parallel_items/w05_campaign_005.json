@@ -121,6 +121,35 @@
           "move_id": "flare_blitz"
         }
       ]
+    },
+    {
+      "block": "05",
+      "items": [
+        {
+          "item_id": "tm166",
+          "move_id": "thunder"
+        },
+        {
+          "item_id": "tm167",
+          "move_id": "close_combat"
+        },
+        {
+          "item_id": "tm168",
+          "move_id": "solar_beam"
+        },
+        {
+          "item_id": "tm169",
+          "move_id": "draco_meteor"
+        },
+        {
+          "item_id": "tm170",
+          "move_id": "steel_beam"
+        },
+        {
+          "item_id": "tm171",
+          "move_id": "tera_blast"
+        }
+      ]
     }
   ]
 }
