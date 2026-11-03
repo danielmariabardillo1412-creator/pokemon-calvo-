@@ -418,6 +418,58 @@ def main() -> int:
                 test(set(block["inventory_counts"]) == {0, 1, 25, 999}
                      and set(block["mutations"]) == {"add", "remove", "roundtrip"},
                      "Casos de inventario Tera incompletos")
+            elif block["bloque"] == "08":
+                test(ids == ["fighting_tera_shard", "fire_tera_shard", "flying_tera_shard",
+                             "ghost_tera_shard", "grass_tera_shard"],
+                     "Teralitos bloque08 fuera de cola")
+                selected = {r["id"]: r for r in
+                            rows(ROOT / "docs/current/RANDOMLOCK_ITEMS_BUILD_SCOPE_V2.csv")}
+                test(all(selected[id]["familia"] == "TERA_MATERIAL"
+                         and selected[id]["estado_contenido"] == "SELECCIONADO"
+                         for id in ids), "Teralitos no seleccionados como material")
+                selection = json.loads((ROOT / "config/item_selection_v1.json").read_text(encoding="utf-8"))
+                test(all(id not in selection["excluded_ids"] for id in ids),
+                     "Algún material Tera ha sido excluido")
+                source = (ROOT / "modules/inventory/player_inventory.gd").read_text(encoding="utf-8")
+                policy = (ROOT / "modules/inventory/inventory_ruleset.gd").read_text(encoding="utf-8")
+                service = (ROOT / "modules/inventory/field_item_service.gd").read_text(encoding="utf-8")
+                recovery = json.loads((ROOT / "modules/inventory/imported_recovery_v19.json").read_text(encoding="utf-8"))
+                field = (ROOT / "modules/inventory/field_item_effects.gd").read_text(encoding="utf-8")
+                modifiers = (ROOT / "modules/gameplay/encounter_item_modifiers.gd").read_text(encoding="utf-8")
+                test(all(id not in recovery["items"] and id not in field
+                         and id not in modifiers for id in ids),
+                     "Hay una ruta funcional nueva de Tera, reauditar")
+                test('return _deny("field_effect_not_connected", "DEPENDENCY_MISSING")' in service,
+                     "Cambió la respuesta de uso de campo")
+                test(all(f"func {name}(" in source
+                         for name in ["quantity", "has", "add", "remove", "to_dict", "from_dict"]),
+                     "No existe contrato completo de inventario")
+                test('const MAX_STACK := 999' in policy
+                     and 'not loaded.add(id)' in runner,
+                     "Límite del inventario no comprobado")
+                test(block["current_state"] == "DEPENDENCIA_COMPARTIDA"
+                     and block["no_terastallization_certified"] is True
+                     and set(block["per_id_status"]) == set(ids)
+                     and all(s == "DEPENDENCIA_COMPARTIDA"
+                             for s in block["per_id_status"].values()),
+                     "Los fragmentos no son prueba de teracristalizacion")
+                test(block["missing_shared_integration"] ==
+                     "tera_type_change_and_resource_consumption_battle_or_overworld_api",
+                     "No se ha documentado la dependencia de mecánica")
+                test('"08": _block_08(block)' in runner
+                     and 'func _block_08(block: Dictionary)' in runner
+                     and 'service.use_item(id, &"field_item_target")' in runner,
+                     "El bloque08 no prueba el servicio real")
+                test('snapshot(service) == before' in runner
+                     and 'String(result.get("reason", "")) == "field_effect_not_connected"' in runner,
+                     "La prueba debe demostrar rechazo sin mutación")
+                test('PlayerInventory.from_dict(serialized)' in runner
+                     and 'loaded.to_dict() == serialized' in runner
+                     and 'loaded.remove(id)' in runner and 'loaded.add(id)' in runner,
+                     "No se prueba carga, extracción y reposición")
+                test(set(block["inventory_counts"]) == {0, 1, 25, 999}
+                     and set(block["mutations"]) == {"add", "remove", "roundtrip"},
+                     "Casos de inventario Tera incompletos")
             else:
                 test(False, "Bloque sin implementación de test: " + block["bloque"])
         test(checks > 0, "Sin verificaciones")
