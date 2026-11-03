@@ -1,3 +1,19 @@
+# ESTADO VIGENTE IA5/W05 — CAMPAÑA_003 · 10/10 ENTREGADOS (2026-11-03)
+
+**Identidad:** IA5/W05 (familia MT/libros). **Rama exclusiva:** `codex/calvo-items-20261103-w05-camp003`. Autoridad de IDs: cola IA6 `CAMPAIGN_003_QUEUE_APPROVED.csv`; alcance y reparación: `campaigns/CAMP_003_W05.md` y `AUTONOMOUS_REPAIR_V5.md` de `codex/calvo-items-20261101-arbitro`. **Los diez microbloques están entregados. Ninguna nueva `p` puede crear un bloque 11 ni una nueva campaña.**
+
+**ÚLTIMO BLOQUE 10 publicado:** `tm75;tm76;tm78;tm79;tm80;tm81` mapeados a `light_screen;rock_blast;dragon_claw;dazzling_gleam;metronome;grass_knot` en perfil Scarlet/Violet. Fixture propio acumulativo `tests/fixtures/parallel_items/w05_campaign_003.json` commit `f6f41b505173d303bf0f03062d4034fc63f182b4`, progreso `reports/W05/CAMP_003_PROGRESO.csv` commit `984a80a128f5c6847664325ae487956adb838f49`. Informe `CAMP_003_ITER_10.md` commit `55985e3de43d6f2c24650afb24248924fc6182de`. Informe consolidado `CAMP_003_FINAL.md` commit `05a361d8237c13f25c2b7c7b0271c050c9902ff3`.
+
+**Control estático:** cotejados los 10 bloques del fixture y las 10 filas de progreso contra las diez asignaciones W05 de cola IA6 y `machine_rows[*]["scarlet-violet"]`. **60 IDs únicos, seis por bloque, cero discrepancias**. Tests Python/Godot W05 acumulativos mantenidos, sin modificar producción. La autorización V5 solo se usa si hay fallo comprobado; no implica inventar parches.
+
+**CI bloques 01–09 VERIFICADA:** [#41563688381](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41563688381), SHA `ad5b3164f3ac116b79deef8538b8f36aca93c8e4`, `completed/success`. Logs `CAMP003_W05_PY PASS blocks=9 checks=522` y `CAMP003_W05_GODOT PASS blocks=9 checks=1951`. 54 MT con CI PASS en ese SHA.
+
+**CI bloque 10:** [#41565822563](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41565822563), SHA `984a80a128f5c6847664325ae487956adb838f49`, `in_progress` en consulta previa. El run anterior de fixture #41565804120 quedó cancelado por nueva ejecución. Solo declarar 60/60 MT CI PASS si se comprueba `completed/success` y logs `CAMP003_W05_PY PASS blocks=10` / `CAMP003_W05_GODOT PASS blocks=10`. Informes posteriores no alteran los tests ni disparan CI.
+
+**Regla de cierre:** `CAMPAÑA_003_FINALIZADA` como **entrega de diez bloques**, sin declarar certificada la CI final aún. **STOP de nuevos microbloques**. Si falla el run final, diagnóstico y reparación autónoma permitida en dominio W05 según V5, sin rebajar aserciones, sin tocar otras funciones de fichero compartido y con CI real tras parche. IA6 integra/revisa en lote. No modificar `main`, V28, PR118, ramas ajenas, catálogos, `data/`, `config/`, saves ni 19 máquinas legacy; UI/arte/GPU fuera de alcance.
+
+---
+
 # ACTUALIZACIÓN PREVALENTE W05 — AUTONOMOUS_REPAIR_V5 (2026-11-03)
 
 **Estado oficial:** leído `docs/coordination/items_parallel_v1/AUTONOMOUS_REPAIR_V5.md` de la rama IA6 `codex/calvo-items-20261101-arbitro`, blob `ebe71ace6949cc9311eb9831068799081bca8ba7`. **Prevalece sobre la prohibición antigua de tocar cualquier producción:** W05 puede diagnosticar y reparar autónomamente fallos de su familia de MT/libros **solo en su rama**, limitando los cambios a `modules/inventory/field_machine_book_profile.gd` y **solo la función `teach`** de `modules/inventory/field_item_service.gd`, si hay evidencia de fallo real, con diff mínimo, regresión que falle antes/pase después, casos positivos y negativos intactos, y CI de SHA que incluya tests y producción. No modificar otras funciones de ese archivo compartido, APIs ajenas, `main`, V28, ramas de otras trabajadoras, catálogos, políticas o 19 máquinas legacy; no inventar compatibilidad ni reglas de juego.
