@@ -2,7 +2,196 @@
   "schema_version": 1,
   "campaign": "CAMP_005",
   "worker": "W02",
-  "kind": "NEW_IDS",
-  "purpose": "Arranque autorizado; blocks vacio no prueba efectos; no marcar funcional sin nuevos contratos reales",
-  "blocks": []
+  "kind": "TRAINING",
+  "purpose": "W02 CAMP005: entrenamiento con rutas FieldItemService reales, propiedad, consumo, SaveV2, rechazos atómicos; no reemplaza regresión CAMP004",
+  "blocks": [
+    {
+      "block": "01",
+      "family": "TRAINING",
+      "ids": [
+        "ability_capsule",
+        "ability_patch",
+        "rare_candy",
+        "pp_up"
+      ],
+      "source_evidence": [
+        "modules/inventory/field_ability_effects.gd",
+        "modules/inventory/field_growth_effects.gd",
+        "modules/inventory/field_pp_boost_effects.gd",
+        "modules/inventory/field_item_service.gd",
+        "tests/gameplay/item_field_ability_v10.gd",
+        "tests/gameplay/item_field_growth_v9.gd",
+        "tests/gameplay/item_field_pp_v8.gd"
+      ],
+      "cases": [
+        {
+          "scenario": "capsule_normal_1_to_2",
+          "id": "ability_capsule",
+          "kind": "ability",
+          "applies": true,
+          "ability": "intimidate",
+          "expected_ability": "flash_fire"
+        },
+        {
+          "scenario": "capsule_normal_2_to_1",
+          "id": "ability_capsule",
+          "kind": "ability",
+          "applies": true,
+          "ability": "flash_fire",
+          "expected_ability": "intimidate"
+        },
+        {
+          "scenario": "capsule_hidden_rejected",
+          "id": "ability_capsule",
+          "kind": "ability",
+          "applies": false,
+          "ability": "justified"
+        },
+        {
+          "scenario": "capsule_explicit_slot_rejected",
+          "id": "ability_capsule",
+          "kind": "ability",
+          "applies": false,
+          "ability": "intimidate",
+          "slot": 0
+        },
+        {
+          "scenario": "patch_normal_1_to_hidden",
+          "id": "ability_patch",
+          "kind": "ability",
+          "applies": true,
+          "ability": "intimidate",
+          "expected_ability": "justified"
+        },
+        {
+          "scenario": "patch_normal_2_to_hidden",
+          "id": "ability_patch",
+          "kind": "ability",
+          "applies": true,
+          "ability": "flash_fire",
+          "expected_ability": "justified"
+        },
+        {
+          "scenario": "patch_hidden_to_first_normal",
+          "id": "ability_patch",
+          "kind": "ability",
+          "applies": true,
+          "ability": "justified",
+          "expected_ability": "intimidate"
+        },
+        {
+          "scenario": "patch_explicit_slot_rejected",
+          "id": "ability_patch",
+          "kind": "ability",
+          "applies": false,
+          "ability": "flash_fire",
+          "slot": 1
+        },
+        {
+          "scenario": "rare_level_50_to_51",
+          "id": "rare_candy",
+          "kind": "growth",
+          "applies": true,
+          "level": 50,
+          "expected_level": 51
+        },
+        {
+          "scenario": "rare_level_99_to_100",
+          "id": "rare_candy",
+          "kind": "growth",
+          "applies": true,
+          "level": 99,
+          "expected_level": 100
+        },
+        {
+          "scenario": "rare_level_100_no_effect",
+          "id": "rare_candy",
+          "kind": "growth",
+          "applies": false,
+          "level": 100
+        },
+        {
+          "scenario": "rare_explicit_move_slot_rejected",
+          "id": "rare_candy",
+          "kind": "growth",
+          "applies": false,
+          "level": 50,
+          "slot": 0
+        },
+        {
+          "scenario": "pp_up_zero_boost",
+          "id": "pp_up",
+          "kind": "pp",
+          "applies": true,
+          "boosts": 0,
+          "start_pp": 30,
+          "slot": 0,
+          "expected_boosts": 1
+        },
+        {
+          "scenario": "pp_up_one_boost",
+          "id": "pp_up",
+          "kind": "pp",
+          "applies": true,
+          "boosts": 1,
+          "start_pp": 32,
+          "slot": 0,
+          "expected_boosts": 2
+        },
+        {
+          "scenario": "pp_up_second_move",
+          "id": "pp_up",
+          "kind": "pp",
+          "applies": true,
+          "boosts": 0,
+          "start_pp": 6,
+          "slot": 1,
+          "expected_boosts": 1
+        },
+        {
+          "scenario": "pp_up_max_boost_rejected",
+          "id": "pp_up",
+          "kind": "pp",
+          "applies": false,
+          "boosts": 3,
+          "start_pp": 40,
+          "slot": 0
+        },
+        {
+          "scenario": "pp_up_no_slot_rejected",
+          "id": "pp_up",
+          "kind": "pp",
+          "applies": false,
+          "boosts": 0,
+          "start_pp": 30,
+          "slot": -1
+        },
+        {
+          "scenario": "pp_up_invalid_slot_rejected",
+          "id": "pp_up",
+          "kind": "pp",
+          "applies": false,
+          "boosts": 0,
+          "start_pp": 30,
+          "slot": 99
+        }
+      ]
+    }
+  ],
+  "format": "gen9calvounifiedv1",
+  "modes": [
+    "active",
+    "none",
+    "reserve"
+  ],
+  "completed_blocks": [
+    1
+  ],
+  "seed": 1412,
+  "limitations": [
+    "Caramelo Raro: casos de Mew sin decisiones adicionales de evolución/aprendizaje; otras especies pueden requerir interfaz de decisiones NEEDS_CONTEXT, se preservan tests históricos.",
+    "Más PP: aumento 20% de PP base por aplicación hasta tres, conserva PP gastados y solo afecta ranura seleccionada; no equivale a Éter.",
+    "Habilidades: transiciones comprobadas con los slots reales de Growlithe; no se infieren cambios de forma o slots ambiguos; la cobertura total histórica sigue en ITEM_FIELD_V10.",
+    "La CI de esta rama, no los resultados de CAMP004, debe demostrar el bloque 01 con Godot y Python en el SHA publicado."
+  ]
 }
