@@ -1574,6 +1574,16 @@ def verify_sources(chk):
         chk.demand(fragment in runner, "Caramelos S/M/L/XL: prueba Godot incompleta: "+fragment)
     chk.demand((ROOT / "tests/fixtures/progression_growth_curves/reference_contract.json").is_file(),
                "Sin referencia independiente de curva de crecimiento")
+    for fragment in (
+        '"health_wing": "hp"',
+        '"muscle_wing": "attack"',
+        '"resist_wing": "defense"',
+        '"genius_wing": "special_attack"',
+        'var vitamin := VITAMINS.has(String(item_id))',
+        'var gain := mini(10 if vitamin else 1',
+        'Friendship.increase(creature, [5, 3, 2] if vitamin else [3, 2, 1])',
+    ):
+        chk.demand(fragment in training, "Contrato plumas 05 fuera del motor: " + fragment)
     for old, token in (
         (old_ability, 'TRANSITIONS'),
         (old_growth, 'rare_candy'),
