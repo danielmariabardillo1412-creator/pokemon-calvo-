@@ -206,6 +206,35 @@
           "move_id": "foul_play"
         }
       ]
+    },
+    {
+      "block": "08",
+      "items": [
+        {
+          "item_id": "tm63",
+          "move_id": "psychic_fangs"
+        },
+        {
+          "item_id": "tm64",
+          "move_id": "bulk_up"
+        },
+        {
+          "item_id": "tm65",
+          "move_id": "air_slash"
+        },
+        {
+          "item_id": "tm66",
+          "move_id": "body_slam"
+        },
+        {
+          "item_id": "tm67",
+          "move_id": "fire_punch"
+        },
+        {
+          "item_id": "tm68",
+          "move_id": "thunder_punch"
+        }
+      ]
     }
   ]
 }
