@@ -3,5 +3,29 @@
   "campaign": "CAMP_004",
   "worker": "W04",
   "purpose": "Evolución, formas, legacy y tesoros: contratos reales o dependencias, sin falsos positivos",
-  "blocks": []
+  "blocks": [
+    {
+      "block": "01",
+      "ids": [
+        "berry_sweet",
+        "clover_sweet",
+        "flower_sweet"
+      ],
+      "family": "EVOLUTION",
+      "source": "PokeAPI items 1169-1171; Milcery holds sweet and spins",
+      "canonical_trigger": "spin",
+      "policy": "Do not downgrade spin/held-form-context to use_item or invent selectable Alcremie forms",
+      "expected_outcome": "positive only if runtime catalog has an executable compatible route; otherwise dependency with verified non-consumption",
+      "cases": [
+        "item_in_catalog_and_source_flavor",
+        "classify_real_evolution_records",
+        "spin_remains_unsupported",
+        "wrong_species_direct_use_rejected_without_spend",
+        "milcery_direct_use_rejected_when_not_supported",
+        "held_sweet_not_equivalent_to_spin",
+        "identity_and_savev2_for_allowed_equip",
+        "positive_evolution_identity_consumption_savev2_if_supported"
+      ]
+    }
+  ]
 }
