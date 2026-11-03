@@ -113,6 +113,9 @@ func _probe_berry(spec: Dictionary, mode: String) -> Dictionary:
 	var raw_native: Dictionary = battle.snapshot().get("native", {}).get("native", {})
 	var confusion: bool = false
 	var boost_spd: bool = false
+	var boost_def: bool = false
+	var first_move_seen: bool = false
+	var first_move_is_own: bool = false
 	var native_events: Array[String] = []
 	for value: Variant in raw_native.get("log", []):
 		var line: String = String(value).to_lower()
@@ -121,6 +124,13 @@ func _probe_berry(spec: Dictionary, mode: String) -> Dictionary:
 			native_events.append(String(value))
 		if line.begins_with("|-boost|p1a:") and line.contains("|spd|"):
 			boost_spd = true
+			native_events.append(String(value))
+		if line.begins_with("|-boost|p1a:") and line.contains("|def|"):
+			boost_def = true
+			native_events.append(String(value))
+		if line.begins_with("|move|") and not first_move_seen:
+			first_move_seen = true
+			first_move_is_own = line.begins_with("|move|p1a:")
 			native_events.append(String(value))
 	check(mode + " dueño inmutable antes de settlement",
 		JSON.stringify(_owner_data(owner)) == frozen and _units(owner, item) == 2)
@@ -169,11 +179,14 @@ func _probe_berry(spec: Dictionary, mode: String) -> Dictionary:
 		"mode": mode, "before": before, "owner_after": published,
 		"native_hp": hp, "native_status": status, "native_consumed": spent,
 		"native_events": native_events, "native_confusion": confusion,
-		"native_boost_spd": boost_spd, "physical_total": total}
+		"native_boost_spd": boost_spd, "native_boost_def": boost_def,
+		"native_first_move_seen": first_move_seen, "native_first_own": first_move_is_own,
+		"physical_total": total}
 	var digest: String = _write_evidence(file_name, raw)
 	return {"valid": true, "hp": hp, "max_hp": replay.stats.max_hp,
 		"status": status, "consumed": spent, "total": total, "bag": actual_bag,
 		"damage": initial_hp - hp, "confusion": confusion, "boost_spd": boost_spd,
+		"boost_def": boost_def, "first_move_seen": first_move_seen, "first_own": first_move_is_own,
 		"save_v2": true, "restored": true, "settled_once": true,
 		"evidence": file_name + ".json", "sha256": digest}
 
@@ -196,10 +209,11 @@ func _compare_berry(spec: Dictionary, observed: Dictionary) -> void:
 				active.hp == mini(active.max_hp, none.hp + delta))
 			check("Aguav confunde sólo naturaleza que rechaza sabor",
 				active.confusion == bool(spec.confuses) and not none.confusion and not reserve.confusion)
-		"boost_spd":
-			check("Apicot aumenta Defensa Especial sólo cuando toca",
-				active.boost_spd == consume and not none.boost_spd and not reserve.boost_spd)
-			check("Apicot no altera HP/estado", active.hp == none.hp and active.status == none.status)
+		"boost_spd", "boost_def":
+			var key: String = "boost_spd" if String(spec.kind) == "boost_spd" else "boost_def"
+			check("baya de umbral mejora solo la estadistica del portador",
+				bool(active[key]) == consume and not bool(none[key]) and not bool(reserve[key]))
+			check("baya de umbral no altera HP/estado", active.hp == none.hp and active.status == none.status)
 		"cure_freeze":
 			check("Aspear cura congelación sólo al portador",
 				active.status == ("" if consume else String(spec.status))
@@ -211,6 +225,20 @@ func _compare_berry(spec: Dictionary, observed: Dictionary) -> void:
 			else:
 				check("tipo no coincidente, ninguna reducción ni consumo",
 					active.damage == none.damage and reserve.damage == none.damage)
+		"priority_order":
+			check("custap tiene eventos move reales de ambos testigos",
+				active.first_move_seen and none.first_move_seen and reserve.first_move_seen)
+			check("custap actua primero solo con HP bajos y titular equipado",
+				active.first_own == bool(spec.expected_first)
+				and not none.first_own and not reserve.first_own)
+			check("custap no cura ni cambia estado", active.hp == none.hp
+				and reserve.hp == none.hp and active.status == none.status)
+		"heal_super_effective":
+			var heal: int = int(floor(float(active.max_hp) / float(spec.heal_denominator))) if consume else 0
+			check("enigma cura cuarto de HP solo tras ataque supereficaz",
+				active.hp == mini(active.max_hp, none.hp + heal)
+				and none.hp == reserve.hp)
+			check("enigma conserva estado", active.status == none.status and none.status == reserve.status)
 		_:
 			check("familia desconocida", false)
 	for mode: String in automation.modes:
