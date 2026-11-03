@@ -1,0 +1,8 @@
+{
+  "schema_version": 1,
+  "campaign": "CAMP_005",
+  "worker": "W03",
+  "kind": "FUNCTIONAL_BACKLOG",
+  "purpose": "Arranque autorizado; blocks vacio no prueba efectos; no marcar funcional sin nuevos contratos reales",
+  "blocks": []
+}
