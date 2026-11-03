@@ -1,3 +1,11 @@
+## Actualización del reintento (2026-11-03)
+
+La edición previamente bloqueada se ha completado mediante una nueva operación autorizada. El auditor Python incorpora los contratos del bloque 06 en el commit `10e592c8fd2795da4274fb025d6d1b80afabcc52`. El progreso CSV registra las seis filas tras el commit `0fd53a96369fabc310e70b35a44f94477381aa7e`. **CI final:** [#41575966667](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41575966667), pendiente de verificación; no afirmar PASS sin logs.
+
+La CI anterior [#41575147569](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41575147569) falló por `CAMP004_W03_PY FAIL Fixture no igual a progreso`: había seis fixtures frente a cinco filas. Esta desincronización quedó reparada con la fila 06. El informe histórico de bloqueo anterior se conserva como trazabilidad, pero **ya no refleja el estado de escritura actual**.
+
+---
+
 # IA3/W03 — CAMPAÑA_004, bloque 06 (BLOQUEO TÉCNICO)
 
 **Rama exclusiva:** `codex/calvo-items-20261103-w03-camp004`.
