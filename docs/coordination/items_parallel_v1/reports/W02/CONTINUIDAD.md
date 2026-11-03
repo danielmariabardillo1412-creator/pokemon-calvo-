@@ -1,3 +1,19 @@
+# IA2/W02 — CONTINUIDAD VIGENTE: CAMPAÑA_004 BLOQUE 05/10
+
+**Identidad:** W02, responsable de bayas, medicinas y entrenamiento. **Rama exclusiva:** `codex/calvo-items-20261103-w02-camp004`. **Una tecla `p` = una fila autorizada**, sin repetir. Asegurar no tocar `main`, V28, árbitra IA6, PR #118, otras ramas, catálogos ni workflows. Reparación autónoma V5 únicamente del área propia; conflictos de API compartida para IA6.
+
+**Estado cierto:** 05/10 bloques publicados; **20 IDs** asignados; 81 escenarios × 3 propietarios = **243 variantes diseñadas**. No son 20 objetos certificados. Único `completed/success` verificado en CAMP004: [Actions #41573481223](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41573481223), `CAMP004_W02_PY PASS blocks=1 checks=83`, `CAMP004_W02_GODOT PASS blocks=1 checks=1022`, `CAMP003_W02_PY PASS blocks=10 checks=680` y `CAMP003_W02_GODOT PASS blocks=10 checks=7306`. **02–05 no tienen CI verificable desde los resultados recibidos en este chat**: consulta por SHA sólo muestra runs de PR y devuelve [] para los pushes; no significan FAIL ni PASS. El CSV registra `EN_CI_AUTOMATICA` sin inventar número de run.
+
+**Bloque 05 publicado:** `energy_root;ether;fresh_water;full_heal`, 20 escenarios × tres variantes. Raíz Energía: +120 PS y amargor -10/-10/-15 amistad por umbral, suelo 0, rechazo a PS máximo; Éter: +10 PP de **un único** movimiento con selección obligatoria y negativos slot lleno/incorrecto; Agua Fresca: +30 PS sin exceso, rechazo HP completo; Cura Total: todos los estados persistentes, confusión sola/combinada y reloj de sueño, rechazo sano. Solo rutas originales `FieldItemService.use_item` y `FieldItemEffects.apply`, SaveV2, tres tipos de propietario, inventario, consumo y recibos SHA256.
+
+**Commits esta `p`:** fixture `38e83a85ab58421f5b39730936c9103f32740fbf`; runner `aaf2881d4f82e396f5e6547b36734a9e5b9f251a`; Python `306b4cf56b5d16a26291ef7fc5994c1668d60173` y corrección de referencia a histórica Agua Fresca `d2bb09d504f9e8e6351735d5303cfcbaa13f3184`; progreso `ff862ec7063841701ac2dbeb83d4c170eccea43b`; informe `8367440a504e88468d65b0189bc21feaa871692d` en `docs/coordination/items_parallel_v1/reports/W02/CAMP_004_ITER_05.md`.
+
+**RIESGO/DEPENDENCIA persistente:** `razz_berry` de bloque 02 sólo tiene negativo/inercia, no utilidad positiva implementada; decidir con IA6 si excluir del catálogo útil o conectar mecánica explícitamente autorizada. No modificar política para 'hacer pasar'.
+
+**Próxima `p`:** localizar un **run válido** de CI CAMP004 en SHA actual (por los métodos de consulta que sí soportan run ID), revisar log y corregir fallos propios según V5 sin borrar negativos. Requerir recibos `CAMP004_W02_PY/GODOT PASS blocks=5` y `CAMP003_W02_PY/GODOT PASS blocks=10`. Ejecutar entonces, en esa misma orden como máximo, **bloque 06** `full_restore;heal_powder;hopo_berry;hyper_potion`. No iniciar 07 sin nueva tecla. Si dependencia real/permiso, STOP concreto.
+
+---
+
 # IA2/W02 — CONTINUIDAD VIGENTE: CAMPAÑA_004 BLOQUE 04/10
 
 **Identidad fija:** IA2/W02 (bayas, medicinas y entrenamiento); única rama de escritura `codex/calvo-items-20261103-w02-camp004`. Una `p` autoriza exactamente la siguiente fila de la cola W02; nunca tocar `main`, V28, árbitra IA6, otras ramas, workflow o catálogos. Protocolo `AUTONOMOUS_REPAIR_V5.md`: reparar arnés y función propia de medicina, escalar conflicto en API/servicio compartido.
