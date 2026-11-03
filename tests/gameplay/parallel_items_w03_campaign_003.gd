@@ -39,6 +39,7 @@ func _run_campaign() -> void:
 			"02": _block_02(bloque)
 			"03": _block_03(bloque)
 			"04": _block_04(bloque)
+			"05": _block_05(bloque)
 			_: check("Bloque aún sin suite funcional " + str(numero), false)
 	_terminar_campania(numero)
 
@@ -512,6 +513,122 @@ func _check_block04_reject(id: StringName, reason: String, active_level: int) ->
 		and result.result.reason == reason and not result.result.consume_item
 		and inv.to_dict() == inventory_before and target.to_dict() == target_before
 		and rng.state == rng_before and party.is_empty())
+
+
+# 05: Fast usa velocidad BASE y limita tasa; Dream distingue sueño persistente de Bostezo.
+func _block_05(bloque: Dictionary) -> void:
+	var rules := CaptureRuleset.new()
+	check("Bloque05 IDs y registro", bloque.get("ids", []) == ["fast_ball", "dream_ball"]
+		and rules.is_known_ball(&"fast_ball") and rules.is_known_ball(&"dream_ball"))
+	for row: Dictionary in bloque.get("fast_cases", []):
+		var sid: StringName = StringName(String(row.get("species_id", "")))
+		var species: CreatureSpecies = catalogs.species(sid)
+		check("Fast especie auténtica " + String(sid), species != null)
+		if species == null:
+			continue
+		check("Fast datos base originales " + String(sid),
+			species.base_speed == int(row.get("base_speed", -1))
+			and species.capture_rate == int(row.get("capture_rate", -1)))
+		var factor: float = minf(4.0, 255.0 / float(species.capture_rate)) if species.base_speed >= 100 else 1.0
+		check("Fast frontera 100 y cap 255 " + String(sid),
+			is_equal_approx(factor, float(row.get("expected_factor", -1.0))))
+		var sample: CreatureInstance = _mon(sid, 35, StringName("c003_05_fast_" + String(sid)))
+		check("Fast adaptador real " + String(sid),
+			is_equal_approx(CAMP003_W03_BASIC_EFFECTS.multiplier(&"fast_ball", sample, species), factor))
+		for mode: String in bloque.get("hp_modes", []):
+			_block05_capture(&"fast_ball", sid, "none", factor, 1.0,
+				mode, int(row.get("seed", 5501)))
+	for sid_text: String in bloque.get("dream_species", []):
+		var sid: StringName = StringName(sid_text)
+		var species: CreatureSpecies = catalogs.species(sid)
+		check("Dream especie auténtica " + sid_text, species != null)
+		if species == null:
+			continue
+		for row: Dictionary in bloque.get("dream_states", []):
+			for mode: String in bloque.get("hp_modes", []):
+				_block05_capture(&"dream_ball", sid, String(row.get("state", "")),
+					float(row.get("expected_factor", -1.0)),
+					float(row.get("status_bonus", -1.0)), mode,
+					5601 + (17 if sid == &"caterpie" else 0))
+	for id: StringName in [&"fast_ball", &"dream_ball"]:
+		for reason: String in bloque.get("invalid_cases", []):
+			_block05_reject(id, reason)
+
+
+func _block05_capture(id: StringName, sid: StringName, state: String,
+		factor: float, bonus: float, mode: String, seed_value: int) -> void:
+	var species: CreatureSpecies = catalogs.species(sid)
+	var target: CreatureInstance = _mon(sid, 35,
+		StringName("c003_05_" + String(id) + "_" + String(sid) + "_" + state + "_" + mode))
+	target.current_hp = target.stats.max_hp if mode == "full" else 1
+	if state == "sleep":
+		status(target, &"sleep")
+	elif state == "yawn":
+		target.status_state.add_volatile(&"yawn")
+	var expected_status: StringName = &"sleep" if state == "sleep" else &""
+	check("Dream Bostezo no es sueño persistente " + String(sid) + state,
+		target.status_state.persistent_id == expected_status)
+	check("Fast/Dream factor " + String(id) + String(sid) + state,
+		is_equal_approx(CAMP003_W03_BASIC_EFFECTS.multiplier(id, target, species), factor))
+	check("Fast/Dream bonus estado independiente " + String(id) + String(sid) + state,
+		is_equal_approx(CaptureRuleset.new().status_bonus(
+			target.status_state.persistent_id), bonus))
+	var expected: float = clampf(float(species.capture_rate) / 255.0 * factor * bonus
+		* float(3 * target.stats.max_hp - 2 * target.current_hp)
+		/ float(3 * target.stats.max_hp), 0.0, 1.0)
+	check("Fast/Dream probabilidad independiente " + String(id) + String(sid) + state,
+		is_equal_approx(CaptureRuleset.new().catch_probability(
+			species.capture_rate, factor, bonus,
+			target.stats.max_hp, target.current_hp), expected))
+	var before_target: Dictionary = target.to_dict()
+	var inv := PlayerInventory.new()
+	inv.add(id, 2)
+	var party := CreatureParty.new()
+	var rng := RandomNumberGenerator.new()
+	rng.seed = seed_value
+	var control := RandomNumberGenerator.new()
+	control.state = rng.state
+	var expected_success: bool = control.randf() < expected
+	var result: CaptureResolution = CaptureInventoryService.resolve(
+		CaptureAttempt.new(target, id, CaptureBattleContext.new()), rng, catalogs, party, inv)
+	check("Fast/Dream una bola y RNG " + String(id) + String(sid) + state + mode,
+		result.result.status != CaptureResult.INVALID
+		and result.result.consume_item and inv.quantity(id) == 1
+		and rng.state == control.state
+		and is_equal_approx(result.result.probability, expected)
+		and (result.result.status == CaptureResult.SUCCESS) == expected_success)
+	check("Fast/Dream identidad y estado sin efectos extra " + String(id) + String(sid) + state + mode,
+		(is_same(result.captured, target) and party.contains_instance_id(target.instance_id)
+		and party.size() == 1 and target.to_dict() == before_target) if expected_success else
+		(result.result.status == CaptureResult.FAILED and party.is_empty()
+		and target.to_dict() == before_target))
+
+
+func _block05_reject(id: StringName, reason: String) -> void:
+	var target: CreatureInstance = _mon(&"mew", 35,
+		StringName("c003_05_bad_" + String(id) + "_" + reason))
+	status(target, &"sleep")
+	var ctx := CaptureBattleContext.new()
+	var inv := PlayerInventory.new()
+	inv.add(id, 2)
+	if reason == "trainer_battle_not_capturable":
+		ctx.is_wild = false
+	elif reason == "item_not_owned":
+		inv.remove(id, 2)
+	elif reason == "target_knocked_out":
+		target.current_hp = 0
+	var before_target: Dictionary = target.to_dict()
+	var before_inv: Dictionary = inv.to_dict()
+	var party := CreatureParty.new()
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 505
+	var before_rng: int = rng.state
+	var result: CaptureResolution = CaptureInventoryService.resolve(
+		CaptureAttempt.new(target, id, ctx), rng, catalogs, party, inv)
+	check("Fast/Dream rechazo sin bola ni tirada " + String(id) + reason,
+		result.result.status == CaptureResult.INVALID and result.result.reason == reason
+		and not result.result.consume_item and inv.to_dict() == before_inv
+		and target.to_dict() == before_target and rng.state == before_rng and party.is_empty())
 
 
 func _terminar_campania(bloques: int) -> void:
