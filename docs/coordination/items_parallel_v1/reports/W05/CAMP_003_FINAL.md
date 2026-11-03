@@ -1,3 +1,5 @@
+> **ACTUALIZACIÓN PREVALENTE DE CIERRE — CI FINAL VERIFICADA (2026-11-03):** [GitHub Actions #41565822563](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41565822563), SHA `984a80a128f5c6847664325ae487956adb838f49`, `completed/success`, job `125687201922` completado sin fallo. Logs reales: `CAMP003_W05_PY PASS blocks=10 checks=580`, `CAMP003_GATE_PY_PASS worker=W05 blocks=10 checks=580`, `CAMP003_W05_GODOT PASS blocks=10 checks=2166`, `CAMP003_GATE_GODOT_PASS worker=W05 blocks=10 checks=2166`. **Las 60 MT de los diez bloques quedan cubiertas por CI funcional acumulativa real. CAMPAÑA_003_FINALIZADA (entrega y CI de rama PASS). STOP de nuevos bloques.** Los párrafos inferiores sobre CI pendiente son la fotografía tomada antes de que el run concluyera. No se modificó producción ni se realizó merge; integración global y visual siguen fuera del alcance.
+
 # IA5/W05 — CAMPAÑA_003 · CIERRE DOCUMENTAL (10/10)
 
 ## Resultado entregado
