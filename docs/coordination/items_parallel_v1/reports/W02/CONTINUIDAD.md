@@ -1,3 +1,27 @@
+# W02 — CAMPAÑA_003: CONTINUIDAD VIGENTE / 03 DE 10
+
+**Estado:** bloque **03/10 ENTREGADO**, `EN_CI_AUTOMATICA` para SHA que incorpora tres filas de progreso. **Solo la siguiente `p` ejecutará bloque 04** si el último run no es FAILURE. Rama exclusiva `codex/calvo-items-20261103-w02-camp003`.
+
+**Autoridad:** `CAMPAIGN_003_QUEUE_APPROVED.csv` blob `ea06a0a000fc4f3b8bab48e45e21fb549d753559`, `campaigns/CAMP_003_W02.md` blob `62498ebd44288a86e59986379dbc1b70e111ef1f`. IA6 mantiene íntegra W02 bajo ampliación de W04; no modifica la cola de 40.
+
+**Bloques precedentes verificados:** 01/02 en [Actions #41555493832](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41555493832), SHA `926ad81488c1e83d777177bfa5a2eff35b028eca`, **Python 122 checks PASS, Godot 1406 checks PASS, 2 bloques**. El filtro Apicot solo `p1a` sigue conservado (error anterior ya reparado; no volver a modificar por cuenta propia).
+
+**BLOQUE 03 nuevos:** `colbur_berry` Siniestro contra Mew/ataque no coincidente; `custap_berry` orden de acción Snorlax lento vs Gengar rápido al 1/5 de PS/PS máximos; `enigma_berry` curación tras `thunder_shock` eléctrico supereficaz a Gyarados vs `tackle` no disparador; `ganlon_berry` subida de Defensa al cruzar 1/4 PS vs PS altos. Hay **ocho escenarios nuevos, 24 variantes**.
+
+**Acumulado:** 3 bloques, 12 bayas diferentes, 25 escenarios, 75 variantes `active,none,reserve`; pruebas de consumo único, actor correcto en el log, no gasto de reserva, cierre FLED, SaveV2 y recibos SHA256. No pruebas de campo, GUI, GPU ni producción.
+
+**Contratos de referencia:** `tools/item_audit/held_effect_sweep_v2.cjs`: Colbur/Ganlon; `held_effect_sweep_v3.cjs`: Custap/Enigma. Son pruebas de mecanismo existente; no se implementaron nuevas mecánicas.
+
+**Archivos W02 escritos:** `tests/fixtures/parallel_items/w02_campaign_003.json` commit `cd837d26ca2283296a11dbd41af8672208694de0`; `tests/gameplay/parallel_items_w02_campaign_003.gd` commit `94d107df596ced40283845430e8cb36e9e7a686f`; `tests/tools/test_parallel_items_w02_campaign_003.py` commit `8e5b6b111c17259d0f73c08d8bb307a64155afa7`; `CAMP_003_PROGRESO.csv` tercera fila commit `44482761ab0217323335d9a1bc63f060cbcad513`; `CAMP_003_ITER_03.md` commit `88f5654fcaccff06ac8a3e297825e129864377f9`. Ningún otro archivo autorizado para escribir.
+
+**CI automática:** comprobar run más reciente de la rama, en SHA de pruebas/progreso `44482761ab0217323335d9a1bc63f060cbcad513`. Se exige `CAMP003_W02_PY PASS blocks=3 checks=M` y `CAMP003_W02_GODOT PASS blocks=3 checks=M`. Si FAILED, inspeccionar log, reparar solo prueba propia sin rebajar aserciones; si defecto compartido, STOP y ticket IA6. Cancelled de runs previos por nuevo push no equivale a FAIL.
+
+**Siguiente `p`:** bloque 04 de cola exacta `haban_berry;iapapa_berry;jaboca_berry;kasib_berry`; consultar progreso y último run. No iniciar bloque 05 ni 11, ni tocar `main`, V28, producción/catálogo/IA6/ramas ajenas ni W04.
+
+---
+
+## HISTÓRICO — 02/10 Y ANTERIORES
+
 > **CI POSTERIOR VERIFICADA — 2026-11-03:** [Actions #41555493832](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41555493832) `completed/success` sobre SHA de tests/progreso `926ad81488c1e83d777177bfa5a2eff35b028eca`. Recibos auténticos de logs: `CAMP003_W02_PY PASS blocks=2 checks=122` y `CAMP003_W02_GODOT PASS blocks=2 checks=1406`. El estado anterior `EN_CI_AUTOMATICA` de este documento/CSV describe la entrega inicial y está superado por esta ejecución. Para evitar otra CI redundante, el CSV de progreso no se reescribe: la evidencia de PASS queda aquí y en el cuaderno. **Próxima `p`: bloque 03/10 solamente.**
 
 # IA2/W02 — ESTADO ACTUAL DE CAMPAÑA_003 (02/10)
