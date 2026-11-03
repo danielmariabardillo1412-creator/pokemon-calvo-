@@ -4,5 +4,74 @@
   "worker": "W04",
   "kind": "FUNCTIONAL_BACKLOG",
   "purpose": "No recontar IDs antiguos como nuevos. 0/10 no certifica funcionalidad",
-  "blocks": []
+  "blocks": [
+    {
+      "block": "01",
+      "ids": [
+        "dragon_scale",
+        "dubious_disc",
+        "electirizer",
+        "magmarizer"
+      ],
+      "family": "TRADE_OBJECT_REPAIR",
+      "classification": "BLOQUEADO_POR_CONTRATO",
+      "pairs": [
+        {
+          "item_id": "dragon_scale",
+          "source": "seadra",
+          "target": "kingdra",
+          "canonical_item": "dragon-scale",
+          "evolution_chain": "54",
+          "approved_level": null,
+          "original_trigger": "trade",
+          "held_item_required": true
+        },
+        {
+          "item_id": "dubious_disc",
+          "source": "porygon2",
+          "target": "porygon_z",
+          "canonical_item": "dubious-disc",
+          "evolution_chain": "68",
+          "approved_level": null,
+          "original_trigger": "trade",
+          "held_item_required": true
+        },
+        {
+          "item_id": "electirizer",
+          "source": "electabuzz",
+          "target": "electivire",
+          "canonical_item": "electirizer",
+          "evolution_chain": "60",
+          "approved_level": null,
+          "original_trigger": "trade",
+          "held_item_required": true
+        },
+        {
+          "item_id": "magmarizer",
+          "source": "magmar",
+          "target": "magmortar",
+          "canonical_item": "magmarizer",
+          "evolution_chain": "61",
+          "approved_level": null,
+          "original_trigger": "trade",
+          "held_item_required": true
+        }
+      ],
+      "decision_source": "docs/current/ITEM_TRADE_RESTORATION_V27.json",
+      "consumer": "modules/creatures/progression/evolution_system.gd::evolution_candidates",
+      "producer": "modules/creatures/progression/progression_system.gd::gain_experience",
+      "missing": [
+        "min_level aprobados por cada especie",
+        "condicion de objeto equipado en disparador level_up",
+        "politica de consumo del objeto equipado al evolucionar"
+      ],
+      "runtime_contract": [
+        "verificar rutas trade+held_item en catalogo normalizado",
+        "ningun nivel sin aprobacion activa evolucion",
+        "held_item no soportado como condicion level_up",
+        "equipamiento legitimo y SaveV2 sin cambio de especie",
+        "no convertir en uso de bolsa ni retirar objeto"
+      ]
+    }
+  ]
 }
