@@ -1,0 +1,359 @@
+#!/usr/bin/env python3
+"""IA2/W02 CAMPAÑA_005: contrato real, adversarial y acumulativo por fila."""
+from __future__ import annotations
+
+import argparse
+import copy
+import csv
+import json
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[2]
+BASE = ROOT / "docs/coordination/items_parallel_v1"
+FIXTURE = ROOT / "tests/fixtures/parallel_items/w02_campaign_005.json"
+QUEUE = BASE / "CAMPAIGN_005_W02_QUEUE_APPROVED.csv"
+PROGRESS = BASE / "reports/W02/CAMP_005_PROGRESO.csv"
+ABILITY = ROOT / "modules/inventory/field_ability_effects.gd"
+GROWTH = ROOT / "modules/inventory/field_growth_effects.gd"
+PPBOOST = ROOT / "modules/inventory/field_pp_boost_effects.gd"
+SERVICE = ROOT / "modules/inventory/field_item_service.gd"
+RUNNER = ROOT / "tests/gameplay/parallel_items_w02_campaign_005.gd"
+HIST_ABILITY = ROOT / "tests/gameplay/item_field_ability_v10.gd"
+HIST_GROWTH = ROOT / "tests/gameplay/item_field_growth_v9.gd"
+HIST_PP = ROOT / "tests/gameplay/item_field_pp_v8.gd"
+
+EXPECTED_01 = json.loads(r'''[
+  {
+    "scenario": "capsule_normal_1_to_2",
+    "id": "ability_capsule",
+    "kind": "ability",
+    "applies": true,
+    "ability": "intimidate",
+    "expected_ability": "flash_fire"
+  },
+  {
+    "scenario": "capsule_normal_2_to_1",
+    "id": "ability_capsule",
+    "kind": "ability",
+    "applies": true,
+    "ability": "flash_fire",
+    "expected_ability": "intimidate"
+  },
+  {
+    "scenario": "capsule_hidden_rejected",
+    "id": "ability_capsule",
+    "kind": "ability",
+    "applies": false,
+    "ability": "justified"
+  },
+  {
+    "scenario": "capsule_explicit_slot_rejected",
+    "id": "ability_capsule",
+    "kind": "ability",
+    "applies": false,
+    "ability": "intimidate",
+    "slot": 0
+  },
+  {
+    "scenario": "patch_normal_1_to_hidden",
+    "id": "ability_patch",
+    "kind": "ability",
+    "applies": true,
+    "ability": "intimidate",
+    "expected_ability": "justified"
+  },
+  {
+    "scenario": "patch_normal_2_to_hidden",
+    "id": "ability_patch",
+    "kind": "ability",
+    "applies": true,
+    "ability": "flash_fire",
+    "expected_ability": "justified"
+  },
+  {
+    "scenario": "patch_hidden_to_first_normal",
+    "id": "ability_patch",
+    "kind": "ability",
+    "applies": true,
+    "ability": "justified",
+    "expected_ability": "intimidate"
+  },
+  {
+    "scenario": "patch_explicit_slot_rejected",
+    "id": "ability_patch",
+    "kind": "ability",
+    "applies": false,
+    "ability": "flash_fire",
+    "slot": 1
+  },
+  {
+    "scenario": "rare_level_50_to_51",
+    "id": "rare_candy",
+    "kind": "growth",
+    "applies": true,
+    "level": 50,
+    "expected_level": 51
+  },
+  {
+    "scenario": "rare_level_99_to_100",
+    "id": "rare_candy",
+    "kind": "growth",
+    "applies": true,
+    "level": 99,
+    "expected_level": 100
+  },
+  {
+    "scenario": "rare_level_100_no_effect",
+    "id": "rare_candy",
+    "kind": "growth",
+    "applies": false,
+    "level": 100
+  },
+  {
+    "scenario": "rare_explicit_move_slot_rejected",
+    "id": "rare_candy",
+    "kind": "growth",
+    "applies": false,
+    "level": 50,
+    "slot": 0
+  },
+  {
+    "scenario": "pp_up_zero_boost",
+    "id": "pp_up",
+    "kind": "pp",
+    "applies": true,
+    "boosts": 0,
+    "start_pp": 30,
+    "slot": 0,
+    "expected_boosts": 1
+  },
+  {
+    "scenario": "pp_up_one_boost",
+    "id": "pp_up",
+    "kind": "pp",
+    "applies": true,
+    "boosts": 1,
+    "start_pp": 32,
+    "slot": 0,
+    "expected_boosts": 2
+  },
+  {
+    "scenario": "pp_up_second_move",
+    "id": "pp_up",
+    "kind": "pp",
+    "applies": true,
+    "boosts": 0,
+    "start_pp": 6,
+    "slot": 1,
+    "expected_boosts": 1
+  },
+  {
+    "scenario": "pp_up_max_boost_rejected",
+    "id": "pp_up",
+    "kind": "pp",
+    "applies": false,
+    "boosts": 3,
+    "start_pp": 40,
+    "slot": 0
+  },
+  {
+    "scenario": "pp_up_no_slot_rejected",
+    "id": "pp_up",
+    "kind": "pp",
+    "applies": false,
+    "boosts": 0,
+    "start_pp": 30,
+    "slot": -1
+  },
+  {
+    "scenario": "pp_up_invalid_slot_rejected",
+    "id": "pp_up",
+    "kind": "pp",
+    "applies": false,
+    "boosts": 0,
+    "start_pp": 30,
+    "slot": 99
+  }
+]''')
+IDS_01 = ["ability_capsule","ability_patch","rare_candy","pp_up"]
+SOURCES_01 = ["modules/inventory/field_ability_effects.gd","modules/inventory/field_growth_effects.gd","modules/inventory/field_pp_boost_effects.gd","modules/inventory/field_item_service.gd","tests/gameplay/item_field_ability_v10.gd","tests/gameplay/item_field_growth_v9.gd","tests/gameplay/item_field_pp_v8.gd"]
+
+
+class ContractError(ValueError):
+    pass
+
+
+class Checks:
+    def __init__(self):
+        self.count = 0
+
+    def demand(self, condition, message):
+        self.count += 1
+        if not condition:
+            raise ContractError(message)
+
+
+def csv_rows(path):
+    with path.open(encoding="utf-8-sig", newline="") as handle:
+        return list(csv.DictReader(handle))
+
+
+def verify(fixture, queue, progress, chk):
+    chk.demand(type(fixture) is dict, "Fixture incorrecta")
+    chk.demand(set(fixture) == {
+        "schema_version", "campaign", "worker", "kind", "purpose",
+        "blocks", "format", "modes", "completed_blocks", "seed", "limitations"
+    }, "Esquema CAMP005 alterado")
+    chk.demand(fixture["schema_version"] == 1 and fixture["campaign"] == "CAMP_005"
+               and fixture["worker"] == "W02" and fixture["kind"] == "TRAINING",
+               "Identidad/campaña/familia distintas")
+    chk.demand(fixture["format"] == "gen9calvounifiedv1"
+               and fixture["modes"] == ["active", "none", "reserve"]
+               and fixture["seed"] == 1412, "Formato, semilla o modos cambiados")
+    chk.demand(len(fixture["limitations"]) >= 3, "Limitaciones contractuales retiradas")
+    chk.demand(len(queue) == 10 and all(
+        row["trabajadora"] == "W02" and row["bloque"] == f"{n:02d}"
+        for n, row in enumerate(queue, 1)), "Cola autorizada IA6 alterada")
+    chk.demand(len(progress) == len(fixture["blocks"]) and 1 <= len(progress) <= 10,
+               "Progreso sin correspondencia con bloques")
+    chk.demand(fixture["completed_blocks"] == list(range(1, len(progress) + 1)),
+               "Bloques ejecutados discontinuos")
+    chk.demand(all(row["estado"] in {
+        "EN_CI_AUTOMATICA", "ENTREGADO_PENDIENTE_CI", "DEPENDENCIA_DOCUMENTADA",
+        "CI_PASS_VERIFICADO"} for row in progress), "Estado CI no autorizado")
+    all_ids, all_scenarios = set(), set()
+    for index, block in enumerate(fixture["blocks"]):
+        official = queue[index]
+        progress_row = progress[index]
+        chk.demand(block["block"] == official["bloque"]
+                   and block["family"] == official["familia"] == "TRAINING"
+                   and block["ids"] == official["ids"].split(";")
+                   and progress_row["bloque"] == official["bloque"]
+                   and progress_row["ids"] == official["ids"],
+                   "IDs/familia no corresponden con IA6")
+        chk.demand(len(block["ids"]) == 4 and not all_ids.intersection(block["ids"]),
+                   "ID duplicado o número incorrecto")
+        all_ids.update(block["ids"])
+        chk.demand(len(block["cases"]) > 0, "Bloque sin escenarios funcionales")
+        for case in block["cases"]:
+            chk.demand(case["id"] in block["ids"] and case["scenario"] not in all_scenarios,
+                       "Escenario repetido o ID no asignado")
+            chk.demand(case["kind"] in {"ability", "growth", "pp"}
+                       and type(case["applies"]) is bool,
+                       "Caso sin operación real ni decisión de aplicación")
+            all_scenarios.add(case["scenario"])
+        if index == 0:
+            chk.demand(block["ids"] == IDS_01 and block["source_evidence"] == SOURCES_01,
+                       "Contrato de ID/fuente 01 modificado")
+            chk.demand(len(block["cases"]) == len(EXPECTED_01) == 18,
+                       "Bloque 01 no tiene 18 escenarios")
+            for actual, expected in zip(block["cases"], EXPECTED_01):
+                chk.demand(type(actual) is dict and actual == expected,
+                           "Mutación de escenario: " + expected["scenario"])
+        else:
+            raise ContractError("Contrato futuro sin autorización nueva: " + block["block"])
+    return len(progress)
+
+
+def verify_sources(chk):
+    ability = ABILITY.read_text(encoding="utf-8")
+    growth = GROWTH.read_text(encoding="utf-8")
+    pp = PPBOOST.read_text(encoding="utf-8")
+    service = SERVICE.read_text(encoding="utf-8")
+    runner = RUNNER.read_text(encoding="utf-8")
+    old_ability = HIST_ABILITY.read_text(encoding="utf-8")
+    old_growth = HIST_GROWTH.read_text(encoding="utf-8")
+    old_pp = HIST_PP.read_text(encoding="utf-8")
+    for fragment in (
+        'item_id in [&"ability_capsule", &"ability_patch"]',
+        'destination = 2 if current == 1 else 1',
+        'destination = 1 if current == 3 else 3',
+        'ability_form_route_pending',
+    ):
+        chk.demand(fragment in ability, "Ruta habilidad nativa ausente: " + fragment)
+    for fragment in (
+        'item_id == &"rare_candy"',
+        'ProgressionRuleset.experience_for_level(species.growth_rate, c.level + 1)',
+        'ProgressionSystem.gain_experience(',
+        'return deny("item_has_no_effect")',
+    ):
+        chk.demand(fragment in growth, "Ruta Caramelo Raro incompleta: " + fragment)
+    for fragment in (
+        'item_id in [&"pp_up", &"pp_max"]',
+        'if before_count == 3:',
+        'new_max - slot.max_pp',
+        'slot.current_pp += added',
+    ):
+        chk.demand(fragment in pp, "Ruta Mas PP incompleta: " + fragment)
+    for fragment in (
+        'if Growth.supports(item_id):',
+        'if FieldEffects.supports(item_id):',
+        'FieldEffects.Abilities.preview(creature, item_id, catalogs)',
+        'owner.replace_owned_same_identity(',
+        'if not staged.remove(item_id)',
+    ):
+        chk.demand(fragment in service, "Transacción real no conectada: " + fragment)
+    for fragment in (
+        '_probe_training(spec, mode)',
+        'service.use_item(item, &"own", slot, &"", stamp)',
+        'SaveGameRepository.new().decode_snapshot(state)',
+        'FileAccess.get_sha256(',
+        'original',
+    ):
+        chk.demand(fragment in runner, "Runner real o recibos incompletos: " + fragment)
+    for old, token in (
+        (old_ability, 'TRANSITIONS'),
+        (old_growth, 'rare_candy'),
+        (old_pp, 'pp_up'),
+    ):
+        chk.demand(token in old, "Regresión histórica ausente: " + token)
+
+
+def negative_controls(fixture, queue, progress, chk):
+    mutations = [
+        lambda v: v.update({"worker": "W03"}),
+        lambda v: v.update({"campaign": "CAMP_004"}),
+        lambda v: v.update({"format": "gen8ou"}),
+        lambda v: v["completed_blocks"].append(2),
+        lambda v: v["blocks"][0]["ids"].append("pp_max"),
+        lambda v: v["blocks"][0]["source_evidence"].pop(),
+        lambda v: v["blocks"][0]["cases"].pop(),
+        lambda v: v["blocks"][0]["cases"].append(copy.deepcopy(v["blocks"][0]["cases"][0])),
+        lambda v: v["blocks"][0]["cases"][0].update({"expected_ability": "justified"}),
+        lambda v: v["blocks"][0]["cases"][2].update({"applies": True}),
+        lambda v: v["blocks"][0]["cases"][8].update({"expected_level": 53}),
+        lambda v: v["blocks"][0]["cases"][10].update({"applies": True}),
+        lambda v: v["blocks"][0]["cases"][12].update({"expected_boosts": 3}),
+        lambda v: v["blocks"][0]["cases"][15].update({"applies": True}),
+        lambda v: v["blocks"][0]["cases"][17].update({"slot": 0}),
+    ]
+    for index, mutation in enumerate(mutations):
+        altered = copy.deepcopy(fixture)
+        mutation(altered)
+        rejected = False
+        try:
+            verify(altered, queue, progress, Checks())
+        except (ContractError, KeyError, TypeError, IndexError):
+            rejected = True
+        chk.demand(rejected, f"Mutación adversarial {index} no rechazada")
+
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--ci", action="store_true")
+    args = parser.parse_args()
+    fixture = json.loads(FIXTURE.read_text(encoding="utf-8"))
+    queue = csv_rows(QUEUE)
+    progress = csv_rows(PROGRESS)
+    checks = Checks()
+    count = verify(fixture, queue, progress, checks)
+    verify_sources(checks)
+    negative_controls(fixture, queue, progress, checks)
+    if args.ci:
+        print(f"CAMP005_W02_PY PASS blocks={count} checks={checks.count}")
+    else:
+        print(f"W02 CAMP005 static verified blocks={count} checks={checks.count}; no Godot runtime")
+
+
+if __name__ == "__main__":
+    main()
