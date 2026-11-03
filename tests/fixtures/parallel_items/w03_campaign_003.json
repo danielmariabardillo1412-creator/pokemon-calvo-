@@ -121,6 +121,76 @@
       "expected_behavior": "Ultra una tirada y un coste; Master captura siempre sin tirada y coste una bola; ambos sin gasto en intento invalido.",
       "implementation_authorized": false,
       "ci_required": true
+    },
+    {
+      "bloque": "03",
+      "ids": [
+        "quick_ball",
+        "timer_ball"
+      ],
+      "objective": "contexto_turnos",
+      "prior_evidence": {
+        "state": "YA_VERIFICADO_NO_DUPLICAR",
+        "sources": [
+          "modules/capture/capture_context_ball_effects.gd",
+          "modules/capture/capture_battle_context.gd",
+          "modules/capture/capture_system.gd",
+          "modules/inventory/capture_inventory_service.gd",
+          "modules/gameplay/wild_adventure_session.gd",
+          "modules/gameplay/showdown_adventure_session.gd",
+          "tests/gameplay/item_capture_v11.gd"
+        ],
+        "note": "Los multiplicadores de Quick/Timer existen; prueba focos de turnos, RNG y rechazo sin contexto, sin nuevas reglas."
+      },
+      "balls": [
+        {
+          "id": "quick_ball",
+          "initial_multiplier": 5,
+          "later_multiplier": 1
+        },
+        {
+          "id": "timer_ball",
+          "initial_multiplier": 1,
+          "increase_per_turn": 0.3,
+          "max_multiplier": 4
+        }
+      ],
+      "cases": [
+        {
+          "species_id": "mew",
+          "level": 35,
+          "seed": 3301
+        },
+        {
+          "species_id": "caterpie",
+          "level": 12,
+          "seed": 3302
+        }
+      ],
+      "completed_turns": [
+        0,
+        1,
+        3,
+        9,
+        10,
+        11
+      ],
+      "hp_modes": [
+        "full",
+        "one_hp"
+      ],
+      "invalid_context_turns": [
+        -1,
+        -2
+      ],
+      "other_rejections": [
+        "trainer_battle_not_capturable",
+        "item_not_owned"
+      ],
+      "expected_behavior": "Quick x5 sólo con completed_turns=0; Timer min(1+0.3*completed_turns,4), tope desde turno 10. Contexto negativo rechaza sin consumo ni RNG; con turnos válidos una tirada y una bola.",
+      "context_origin": "WildAdventureSession.capture_current usa state.turn; ShowdownAdventureSession.capture usa battle_state().turn; nunca valor inventado por UI.",
+      "implementation_authorized": false,
+      "ci_required": true
     }
   ]
 }
