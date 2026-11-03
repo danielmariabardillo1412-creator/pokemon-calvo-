@@ -1,3 +1,11 @@
+## CI FINAL comprobada — CAMPAÑA_005_FINALIZADA
+
+Ejecución [GitHub Actions #41742709006](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41742709006) sobre SHA funcional `5fe580ece1498eccdd4dce51fda630fa2b021416`: **completed/success**. Recibos literales: `CAMP005_W03_MANIFEST_PASS reserved=10 completed=10 ids=28 kind=FUNCTIONAL_BACKLOG`; `CAMP005_W03_PY PASS blocks=10 checks=169`; `CAMP005_GATE_PY_PASS`; `CAMP005_W03_GODOT PASS blocks=10 checks=208`; `CAMP005_GATE_GODOT_PASS`. Regresiones del hito final: `CAMP004_W03_PY PASS blocks=10 checks=187`, `CAMP004_W03_GODOT PASS blocks=10 checks=1344`, `CAMP003_W03_PY PASS blocks=10 checks=279`, `CAMP003_W03_GODOT PASS blocks=10 checks=986`.
+
+**CI completa significa pruebas y contratos aprobados, no que los 28 objetos de backlog sean plenamente jugables**. Únicamente el bloque10 revalida Friend/Heal/Quick/Timer funcionales. No hay alta de objetos nuevos, modificación de producción ni certificación SaveV2 integral. STOP tras 10/10, pendiente de nueva campaña explícita de IA6.
+
+---
+
 # IA3/W03 — Continuidad final CAMPAÑA_005 — 10/10 preparado para CI
 
 **Rama única:** `codex/calvo-items-20261103-w03-camp005`. **Bloque10:** `friend_ball;heal_ball;quick_ball;timer_ball` revalida funcionalidad de captura existente, no nuevos objetos. Friend establece amistad 200 solo al capturar; Heal restaura PS/estado/PP; Quick usa turno0×5 y Timer escalado hasta×4. Los tests propios Godot verifican captura real mediante inventario, consumo unitario, identidad, roundtrip de CreatureInstance, rechazo sin gasto ni RNG por contexto de turno inválido. Python contrasta los puntos de producción. `CreatureInstance.to_dict/from_dict` no equivale a SaveV2 integral. Reporte: `CAMP_005_ITER_10.md`.
