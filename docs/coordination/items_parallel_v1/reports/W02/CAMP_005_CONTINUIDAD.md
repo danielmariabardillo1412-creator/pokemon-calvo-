@@ -1,3 +1,24 @@
+# IA2/W02 — CIERRE VIGENTE CAMPAÑA_005 10/10 · ENTREGA FINALIZADA, CI PENDIENTE
+
+**Identidad:** W02 — bayas, medicinas, entrenamiento. **Rama de trabajo exclusiva:** `codex/calvo-items-20261103-w02-camp005`. Autoridad IA6 en `CAMPAIGN_005_W02_GATE.md`, `CAMPAIGN_005_W02_QUEUE_APPROVED.csv`, `campaigns/CAMP_005_W02.md`, `AUTONOMOUS_REPAIR_V5.md`. **STOP** tras fila10: no ejecutar otra `p` como nuevo microbloque sin nuevo gate. No tocar `main`, V28, PR118, otras ramas, árbitra, producción, motor común, API/SaveV2 compartida ni workflows; ningún merge autorizado.
+
+**Estado de publicación:** `CAMPAÑA_005_FINALIZADA` solo como **10/10 bloques entregados**, **40 IDs** únicos, **288 escenarios** sin duplicado y **864 variantes preparadas** (`active` PARTY con stock, `none` PARTY sin stock, `reserve` STORAGE con stock). Diez goldens Python independientes coincidentes con la fixture. **El motor funcional de 29 IDs dispone de rutas positivas identificadas**, pero no se ha certificado la ejecución de Godot/Python en esta conversación. **Las 11 mentas de filas08–10 están pendientes de implementación**, catalogadas y no excluidas pero sin `FieldItemService` handler ni `effective_nature_id` separado de `nature_id`. Todos sus casos documentan rechazo atómico `DEPENDENCY_MISSING`/`field_effect_not_connected`, sin consumo. No declarar 40 objetos funcionales o integrados.
+
+**Fila10 completa:** `brave_mint;quiet_mint;impish_mint;relaxed_mint`, 32 casos negativos (8 por menta) y 96 variantes de rechazo seguro. Naturalezas: Audaz +Ataque −Velocidad; Mansa +Ataque Especial −Velocidad; Agitada +Defensa −Ataque Especial; Plácida +Defensa −Velocidad. Rechazo con naturaleza original neutra/igual/diferente, amistad 0/254, slots 0/1 y lvl100; propiedad, PP, EV/IV, naturaleza, inventario, SaveV2 intactos. Sin cambios de producción.
+
+**Evidencia en GitHub:**
+- Fixture `tests/fixtures/parallel_items/w02_campaign_005.json`, commit `f5517796764ffad0ec11b579b29bdd5369f640f7`.
+- Python `tests/tools/test_parallel_items_w02_campaign_005.py`: golden `e3f3f855894c524c463611b57aba020f62fe44c0`, verificador fila10 `5be713faac297825dd1065f1470e4ba077a6aca1`, fuentes `1026678370774d896d6559cb6c549f79d5b76065`, 16 negativos adversariales `ddf6fd8cab3c055e756b51a2ecbd8444b2631e47`.
+- CSV `docs/coordination/items_parallel_v1/reports/W02/CAMP_005_PROGRESO.csv`, fila10 `DEPENDENCIA_DOCUMENTADA`, CI `AUTOMATICA_PENDIENTE`, commit `82f797ff8d704f77fadea1dd11b5ff85466deb18`.
+- Informe final `docs/coordination/items_parallel_v1/reports/W02/CAMP_005_ITER_10.md`, commit `d78a3d200b0560c7c516f7f57f00d1074243cb1f`.
+- Runner `tests/gameplay/parallel_items_w02_campaign_005.gd` no cambió en fila10: reutiliza `mint_dependency` con naturaleza de origen real, rechazando sin mutación en los tres modos y SaveV2.
+
+**CI / regresiones:** el workflow IA6 `.github/workflows/parallel-camp005-w02-autoci.yml` contempla CAMP005 Python y Godot, y al completar diez bloques debe ejecutar regresiones CAMP004/CAMP003 (Python+Godot). **No hay seis recibos de hito10 ni SHA+logs comprobados**. El conector `fetch_commit_workflow_runs` y statuses por SHA ha devuelto listas vacías para commits precedentes; una lista vacía no permite inferir ni PASS, ni FAIL ni que la ejecución no se lanzara. No escribir `CI_PASS_VERIFICADO` ni afirmar integración a `main`/V28. GPU/UI tampoco verificadas.
+
+**Pendiente IA6 / siguiente trabajo autorizado solo por nuevo gate:** 1) recuperar/verificar seis recibos hito10 con SHA y logs; 2) reparar regresiones de pruebas propias W02 según V5 sin debilitar oráculos; 3) coordinar naturaleza original `nature_id` vs naturaleza efectiva `effective_nature_id` y su serialización SaveV2/consumidores de combate, para implementar efectos positivos de 11 mentas; 4) tras ello repetir pruebas positivas y regresiones y decidir integración. La tecla `p` ya no autoriza un bloque 11 inexistente. 
+
+---
+
 # IA2/W02 — CONTINUIDAD VIGENTE CAMPAÑA_005 BLOQUE 09/10
 
 **Identidad y autoridad:** IA2/W02, bayas, medicinas y entrenamiento. **Única rama de escritura:** `codex/calvo-items-20261103-w02-camp005`. Autoriza IA6 mediante `CAMPAIGN_005_W02_GATE.md`, `CAMPAIGN_005_W02_QUEUE_APPROVED.csv` fila 09, `campaigns/CAMP_005_W02.md`, `AUTONOMOUS_REPAIR_V5.md`. Cada `p` ejecuta una sola fila. No tocar main, V28, PR118, árbitra, ramas ajenas, producción, API compartida ni workflows.
