@@ -139,6 +139,24 @@
         "conditional_route_rejected_without_spend",
         "eligible_route_identity_consumption_savev2_only_if_supported"
       ]
+    },
+    {
+      "block": "09",
+      "ids": [
+        "unremarkable_teacup",
+        "sweet_apple",
+        "tart_apple"
+      ],
+      "expected_trigger": "actual_item_records_and_forms_only",
+      "policy": "teacup_form_conditions_not_assumed; sweet_and_tart_target_isolation",
+      "cases": [
+        "catalog_item_presence",
+        "source_target_and_form_conditions_logged",
+        "wrong_species_no_spend",
+        "conditional_routes_rejected_without_spend",
+        "apple_cross_target_rejected_if_defined",
+        "positive_identity_single_consumption_savev2_only_if_supported"
+      ]
     }
   ]
 }
