@@ -1,3 +1,22 @@
+# ESTADO VIGENTE IA5/W05 — CAMPAÑA_005 · 05/10 CI Y REGRESIONES PASS (2026-11-03)
+
+**Identidad:** IA5/W05 responsable de MT/libros. **Rama exclusiva:** `codex/calvo-items-20261103-w05-camp005`. Fuente IA6 `CAMPAIGN_005_W05_GATE.md`, `CAMPAIGN_005_W05_QUEUE_APPROVED.csv`, `campaigns/CAMP_005_W05.md`, `AUTONOMOUS_REPAIR_V5.md`. Esta cabecera prevalece sobre estados históricos de CI pendiente que aparecen más abajo. CAMP004 y CAMP003 son 60 MT anteriores cada una, conservadas y verificadas como regresión.
+
+**BLOQUE 05 CERTIFICADO:** `tm166;tm167;tm168;tm169;tm170;tm171` → `thunder;close_combat;solar_beam;draco_meteor;steel_beam;tera_blast` en SV. Fixture `tests/fixtures/parallel_items/w05_campaign_005.json` **5 bloques / 30 MT únicas**, commit `c58a37bfd5f06550d0097ab58405680188622a0a`; CSV `reports/W05/CAMP_005_PROGRESO.csv`, fila 05 `EN_CI_AUTOMATICA`, commit `b47e6ecc45d96b0b6d3bb901a5aed66a9370c85a`; informe `CAMP_005_ITER_05.md` certificado, commit `3d29ffc74f80ade859c2e642c3011dd952c7a070`. Revisión estática real: cinco bloques y filas, 30 IDs distintos sin duplicados, movimientos idénticos a cola IA6 y perfil SV. Tests y producción intactos.
+
+**CI HITO 05 COMPLETED/SUCCESS VERIFICADA:** [Actions #41721306449](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41721306449), SHA `b47e6ecc45d96b0b6d3bb901a5aed66a9370c85a`, job `126215005633`, logs:
+- `CAMP005_W05_PY PASS blocks=5 checks=290`
+- `CAMP005_GATE_PY_PASS worker=W05 blocks=5 checks=290`
+- `CAMP005_W05_GODOT PASS blocks=5 checks=1091`
+- `CAMP005_GATE_GODOT_PASS worker=W05 blocks=5 checks=1091`
+- CAMP004, 60 MT: `CAMP004_W05_PY PASS blocks=10 checks=580`, `CAMP004_W05_GODOT PASS blocks=10 checks=2166`
+- CAMP003, 60 MT: `CAMP003_W05_PY PASS blocks=10 checks=580`, `CAMP003_W05_GODOT PASS blocks=10 checks=2166`.
+**30/30 MT de CAMP005 certificadas en CI real y 120 MT anteriores regresionadas con PASS.** El CSV mantiene la etiqueta histórica de publicación `EN_CI_AUTOMATICA`: no reescribir para evitar CI redundante. Sin cambios de producción ni merge. Godot headless no valida UI/GPU.
+
+**PRÓXIMA `p`:** ejecutar exclusivamente bloque **06** `tm172;tm173;tm174;tm175;tm176;tm177` previa comprobación de la rama y asignación/mapeos SV de IA6; ampliar sólo fixture, CSV e informe/cuaderno W05. Regresiones completas nuevamente obligatorias en hito 10 o si se modifica producción propia; no atribuirlas a runs intermedios sin logs. Ante fallo investigar y autorreparar en W05 bajo V5 sin rebajar casos. No tocar `main`, V28, PR118, rama árbitra, otras W, catálogos/learnsets/políticas, 19 MT legacy inactivas, partidas o workflows. Al 10/10 decir `CAMPAÑA_005_FINALIZADA` y STOP, sin merge automático.
+
+---
+
 # ESTADO VIGENTE IA5/W05 — CAMPAÑA_005 · 05/10 ENTREGADO · CI Y REGRESIONES PENDIENTES (2026-11-03)
 
 **Identidad:** IA5/W05 responsable de MT y libros. **Rama exclusiva** `codex/calvo-items-20261103-w05-camp005`. Gate IA6 `CAMPAIGN_005_W05_GATE.md`, cola `CAMPAIGN_005_W05_QUEUE_APPROVED.csv`, encargo `campaigns/CAMP_005_W05.md`, protocolo `AUTONOMOUS_REPAIR_V5.md`. Esta cabecera prevalece sobre las anteriores; CAMP004 y CAMP003 son las dos familias de regresión de 60 MT cada una, no se repiten como nuevos trabajos.
