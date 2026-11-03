@@ -3,7 +3,7 @@
   "campaign": "CAMP_004_W02",
   "worker": "W02",
   "active_policy": "RANDOMLOCK_ITEMS_BUILD_SCOPE_V2",
-  "purpose": "CAMP004 W02 01–08: perfiles nativos de PP/PS/estado/amistad, pruebas transaccionales en tres modos, SaveV2; Razz/Hopo continúan pendientes de contrato.",
+  "purpose": "CAMP004 W02 bloques 01–09: verificación acumulada de medicinas/bayas a través de inventario real, propietarias PARTY/STORAGE, SaveV2 y recibos; Razz/Hopo siguen como dependencias.",
   "format": "gen9calvounifiedv1",
   "level": 100,
   "seed": [
@@ -25,7 +25,8 @@
     5,
     6,
     7,
-    8
+    8,
+    9
   ],
   "blocks": [
     {
@@ -2005,6 +2006,290 @@
           "cures_confusion": false
         }
       ]
+    },
+    {
+      "block": "09",
+      "family": "MEDICINE",
+      "ids": [
+        "old_gateau",
+        "paralyze_heal",
+        "pewter_crunchies",
+        "potion"
+      ],
+      "source_evidence": [
+        "modules/inventory/imported_recovery_v19.json",
+        "modules/inventory/field_item_effects.gd",
+        "modules/inventory/field_item_service.gd",
+        "tests/gameplay/item_field_effects_v4.gd"
+      ],
+      "cases": [
+        {
+          "scenario": "old_gateau_poison_c004",
+          "id": "old_gateau",
+          "kind": "field_medicine",
+          "start_hp": "full",
+          "status": "poison",
+          "confused": false,
+          "applies": true,
+          "heal_amount": 0,
+          "cures_status": true,
+          "cures_confusion": false
+        },
+        {
+          "scenario": "old_gateau_toxic_c004",
+          "id": "old_gateau",
+          "kind": "field_medicine",
+          "start_hp": "full",
+          "status": "badly_poisoned",
+          "confused": false,
+          "applies": true,
+          "heal_amount": 0,
+          "cures_status": true,
+          "cures_confusion": false
+        },
+        {
+          "scenario": "old_gateau_sleep_c004",
+          "id": "old_gateau",
+          "kind": "field_medicine",
+          "start_hp": "full",
+          "status": "sleep",
+          "confused": false,
+          "applies": true,
+          "heal_amount": 0,
+          "cures_status": true,
+          "cures_confusion": false,
+          "expect_sleep_clock_clear": true
+        },
+        {
+          "scenario": "old_gateau_freeze_c004",
+          "id": "old_gateau",
+          "kind": "field_medicine",
+          "start_hp": "full",
+          "status": "freeze",
+          "confused": false,
+          "applies": true,
+          "heal_amount": 0,
+          "cures_status": true,
+          "cures_confusion": false
+        },
+        {
+          "scenario": "old_gateau_confusion_c004",
+          "id": "old_gateau",
+          "kind": "field_medicine",
+          "start_hp": "full",
+          "status": "",
+          "confused": true,
+          "applies": true,
+          "heal_amount": 0,
+          "cures_status": false,
+          "cures_confusion": true
+        },
+        {
+          "scenario": "old_gateau_poison_confusion_c004",
+          "id": "old_gateau",
+          "kind": "field_medicine",
+          "start_hp": "full",
+          "status": "poison",
+          "confused": true,
+          "applies": true,
+          "heal_amount": 0,
+          "cures_status": true,
+          "cures_confusion": true
+        },
+        {
+          "scenario": "old_gateau_healthy_reject_c004",
+          "id": "old_gateau",
+          "kind": "field_medicine",
+          "start_hp": "full",
+          "status": "",
+          "confused": false,
+          "applies": false,
+          "heal_amount": 0,
+          "cures_status": false,
+          "cures_confusion": false
+        },
+        {
+          "scenario": "paralyze_heal_paralysis_c004",
+          "id": "paralyze_heal",
+          "kind": "field_medicine",
+          "start_hp": "full",
+          "status": "paralysis",
+          "confused": false,
+          "applies": true,
+          "heal_amount": 0,
+          "cures_status": true,
+          "cures_confusion": false
+        },
+        {
+          "scenario": "paralyze_heal_paralysis_confusion_stays_c004",
+          "id": "paralyze_heal",
+          "kind": "field_medicine",
+          "start_hp": "full",
+          "status": "paralysis",
+          "confused": true,
+          "applies": true,
+          "heal_amount": 0,
+          "cures_status": true,
+          "cures_confusion": false
+        },
+        {
+          "scenario": "paralyze_heal_poison_reject_c004",
+          "id": "paralyze_heal",
+          "kind": "field_medicine",
+          "start_hp": "full",
+          "status": "poison",
+          "confused": false,
+          "applies": false,
+          "heal_amount": 0,
+          "cures_status": false,
+          "cures_confusion": false
+        },
+        {
+          "scenario": "paralyze_heal_sleep_reject_c004",
+          "id": "paralyze_heal",
+          "kind": "field_medicine",
+          "start_hp": "full",
+          "status": "sleep",
+          "confused": false,
+          "applies": false,
+          "heal_amount": 0,
+          "cures_status": false,
+          "cures_confusion": false
+        },
+        {
+          "scenario": "paralyze_heal_healthy_reject_c004",
+          "id": "paralyze_heal",
+          "kind": "field_medicine",
+          "start_hp": "full",
+          "status": "",
+          "confused": false,
+          "applies": false,
+          "heal_amount": 0,
+          "cures_status": false,
+          "cures_confusion": false
+        },
+        {
+          "scenario": "pewter_crunchies_burn_c004",
+          "id": "pewter_crunchies",
+          "kind": "field_medicine",
+          "start_hp": "full",
+          "status": "burn",
+          "confused": false,
+          "applies": true,
+          "heal_amount": 0,
+          "cures_status": true,
+          "cures_confusion": false
+        },
+        {
+          "scenario": "pewter_crunchies_toxic_c004",
+          "id": "pewter_crunchies",
+          "kind": "field_medicine",
+          "start_hp": "full",
+          "status": "badly_poisoned",
+          "confused": false,
+          "applies": true,
+          "heal_amount": 0,
+          "cures_status": true,
+          "cures_confusion": false
+        },
+        {
+          "scenario": "pewter_crunchies_sleep_c004",
+          "id": "pewter_crunchies",
+          "kind": "field_medicine",
+          "start_hp": "full",
+          "status": "sleep",
+          "confused": false,
+          "applies": true,
+          "heal_amount": 0,
+          "cures_status": true,
+          "cures_confusion": false,
+          "expect_sleep_clock_clear": true
+        },
+        {
+          "scenario": "pewter_crunchies_confusion_c004",
+          "id": "pewter_crunchies",
+          "kind": "field_medicine",
+          "start_hp": "full",
+          "status": "",
+          "confused": true,
+          "applies": true,
+          "heal_amount": 0,
+          "cures_status": false,
+          "cures_confusion": true
+        },
+        {
+          "scenario": "pewter_crunchies_poison_confusion_c004",
+          "id": "pewter_crunchies",
+          "kind": "field_medicine",
+          "start_hp": "full",
+          "status": "poison",
+          "confused": true,
+          "applies": true,
+          "heal_amount": 0,
+          "cures_status": true,
+          "cures_confusion": true
+        },
+        {
+          "scenario": "pewter_crunchies_healthy_reject_c004",
+          "id": "pewter_crunchies",
+          "kind": "field_medicine",
+          "start_hp": "full",
+          "status": "",
+          "confused": false,
+          "applies": false,
+          "heal_amount": 0,
+          "cures_status": false,
+          "cures_confusion": false
+        },
+        {
+          "scenario": "potion_half_hp_c004",
+          "id": "potion",
+          "kind": "field_medicine",
+          "start_hp": "half",
+          "status": "",
+          "confused": false,
+          "applies": true,
+          "heal_amount": 20,
+          "cures_status": false,
+          "cures_confusion": false
+        },
+        {
+          "scenario": "potion_missing7_c004",
+          "id": "potion",
+          "kind": "field_medicine",
+          "start_hp": "missing_7",
+          "status": "",
+          "confused": false,
+          "applies": true,
+          "heal_amount": 20,
+          "cures_status": false,
+          "cures_confusion": false
+        },
+        {
+          "scenario": "potion_full_hp_reject_c004",
+          "id": "potion",
+          "kind": "field_medicine",
+          "start_hp": "full",
+          "status": "",
+          "confused": false,
+          "applies": false,
+          "heal_amount": 20,
+          "cures_status": false,
+          "cures_confusion": false
+        },
+        {
+          "scenario": "potion_half_poison_stays_c004",
+          "id": "potion",
+          "kind": "field_medicine",
+          "start_hp": "half",
+          "status": "poison",
+          "confused": false,
+          "applies": true,
+          "heal_amount": 20,
+          "cures_status": false,
+          "cures_confusion": false
+        }
+      ]
     }
   ],
   "limitations": [
@@ -2020,6 +2305,7 @@
     "Full Restore sana HP completo y estados/confusión; Heal Powder cura estados con amargor amistad [5,5,10] aun sin curación HP; Hyper Potion +120 PS sin eliminar status.",
     "Bloque 07 conserva el contrato de Freeze como estado persistente 'freeze'; Ice Heal solo cura congelación y no confusión concomitante. Lava Cookie y Lumiose Galette sí curan todo estado/confusión. Lemonade +70 PS, no cura estado.",
     "Max Elixir rellena PP de todos los movimientos y rechaza índice explícito; Max Ether rellena PP solamente del movimiento seleccionado y rechaza índice ausente/inválido. Ambos sin efecto con PP ya al máximo, sin gasto.",
-    "Max Potion recupera PS hasta máximo pero no cura estado/confusión; Leche Mu-mu recupera 100 PS, tampoco estados. No atribuir a estos ítems curación de Full Restore."
+    "Max Potion recupera PS hasta máximo pero no cura estado/confusión; Leche Mu-mu recupera 100 PS, tampoco estados. No atribuir a estos ítems curación de Full Restore.",
+    "Old Gateau y Pewter Crunchies curan estado/confusión según perfil cure:all; Paralyze Heal cura exclusivamente paralysis conservando confusión; Potion +20 PS con límite sin limpiar poison. No afirmar CI PASS sin ejecución."
   ]
 }
