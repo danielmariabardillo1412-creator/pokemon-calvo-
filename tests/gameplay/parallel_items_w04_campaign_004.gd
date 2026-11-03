@@ -2,6 +2,7 @@ extends SceneTree
 # W04 CAMP004: pruebas de runtime. Un PASS negativo NO certifica evolucion positiva.
 const Servicio = preload("res://modules/inventory/field_item_service.gd")
 const BLOQUE_01 := [&"berry_sweet", &"clover_sweet", &"flower_sweet"]
+const BLOQUE_02 := [&"love_sweet", &"ribbon_sweet", &"star_sweet"]
 const ID := &"w04_c004_01"
 var checks := 0
 var errores: Array[String] = []
@@ -119,7 +120,7 @@ func _ejecutar() -> void:
 		for record: EvolutionRecord in milcery.evolutions:
 			if record.trigger == &"spin":
 				verificar(EvolutionSystem.classify_record(record, catalogo, &"milcery") == EvolutionSystem.UNSUPPORTED, "spin_no_degradado_a_use_item")
-	for item: StringName in BLOQUE_01:
+	for item: StringName in BLOQUE_01 + BLOQUE_02:
 		verificar(catalogo.item(item) != null, String(item) + "/item_catalogado")
 		var positivos: Array[Dictionary] = []
 		var total_registros := 0
@@ -152,7 +153,7 @@ func _finalizar() -> void:
 		return
 	terminado = true
 	if errores.is_empty():
-		print("CAMP004_W04_GODOT PASS blocks=1 checks=", checks)
+		print("CAMP004_W04_GODOT PASS blocks=2 checks=", checks)
 	else:
 		print("CAMP004_W04_GODOT FAIL errors=", JSON.stringify(errores))
 	quit(0 if errores.is_empty() else 1)
