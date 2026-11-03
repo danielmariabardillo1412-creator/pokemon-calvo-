@@ -500,6 +500,50 @@ def main() -> int:
                             "Faltan rechazos generales de Safari/Sport")
                 audit.check(block["ci_required"] and block["required_new_gate"],
                             "La dependencia debe quedar registrada para IA6")
+            elif block["bloque"] == "08":
+                audit.check(ids == ["luxury_ball", "lure_ball"], "Reserva 08 no coincide")
+                rules = (ROOT / "modules/capture/capture_ruleset.gd").read_text(encoding="utf-8")
+                effects = (ROOT / "modules/capture/capture_ball_effects.gd").read_text(encoding="utf-8")
+                context_effects = (ROOT / "modules/capture/capture_context_ball_effects.gd").read_text(encoding="utf-8")
+                battle_context = (ROOT / "modules/capture/capture_battle_context.gd").read_text(encoding="utf-8")
+                engine = (ROOT / "modules/capture/capture_system.gd").read_text(encoding="utf-8")
+                inventory = (ROOT / "modules/inventory/capture_inventory_service.gd").read_text(encoding="utf-8")
+                audit.check(all(f'&"{ball}"' not in rules
+                                and f'&"{ball}"' not in effects
+                                and f'&"{ball}"' not in context_effects
+                                for ball in ids),
+                            "Se han registrado bolas nuevas; reauditar los contratos de captura")
+                audit.check(all(f'"{signal}"' not in battle_context
+                                for signal in block["missing_authoritative_signals"]),
+                            "Se añadió contexto: revisar autenticidad y propagación")
+                audit.check(block["missing_authoritative_signals"] ==
+                            ["capture_origin_ball_for_friendship_gain", "encounter_is_fishing"],
+                            "Faltan señales autoritativas de amistad/pesca")
+                audit.check(block["prior_evidence"]["state"] == "DEPENDENCIA_COMPARTIDA"
+                            and block["functional_effect_certified"] is False,
+                            "No certificar multiplicador ni amistad futura")
+                audit.check(block["expected_current_rejection"] == "unknown_ball"
+                            and 'return "unknown_ball"' in engine,
+                            "No existe rechazo seguro de bola desconocida")
+                audit.check("CaptureSystem.validate_attempt(attempt, catalogs)" in inventory
+                            and "inventory.remove(attempt.ball_id, 1)" in inventory,
+                            "El rechazo debe preceder a consumo")
+                audit.check('func _block_08(' in runner
+                            and '"08": _block_08(bloque)' in runner
+                            and "CaptureInventoryService.resolve(" in runner
+                            and "CaptureSystem.validate_attempt(attempt, catalogs)" in runner,
+                            "Falta integración real del test de rechazo W03 08")
+                audit.check("rng.state == before_rng" in runner
+                            and "inv.to_dict() == before_inv" in runner
+                            and "target.to_dict() == before_target" in runner,
+                            "Falta verificar ausencia de efectos secundarios")
+                audit.check({x["species_id"] for x in block["cases"]} ==
+                            {"mew", "caterpie"} and block["hp_modes"] == ["full", "one_hp"],
+                            "No se cubre diversidad de especies y PS")
+                audit.check(len(block["contexts"]) == 2
+                            and block["contexts"][0]["name"] == "sin_senales"
+                            and block["contexts"][1]["name"] == "combate_real_sin_pesca",
+                            "No crear señales falsas de pesca")
             else:
                 audit.check(False, "Falta contrato incremental específico para " + block["bloque"])
         audit.check(audit.checks > 0, "Sin comprobaciones")
