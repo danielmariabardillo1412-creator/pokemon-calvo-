@@ -1,3 +1,9 @@
+## Verificación final de CI del bloque 09
+
+[GitHub Actions #41738147298](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41738147298), SHA `0c66c18a1e97533ed6422c7aded283593648f5aa`, terminó **completed/success**. Recibos: `CAMP005_W03_PY PASS blocks=9 checks=153`, `CAMP005_GATE_PY_PASS`, `CAMP005_W03_GODOT PASS blocks=9 checks=179`, `CAMP005_GATE_GODOT_PASS`. La validación confirma la huida salvaje de Cola Esponjosa existente y el rechazo seguro de campo, pero no implementa el retorno al mapa de Cuerda Huida.
+
+---
+
 # IA3/W03 — CAMPAÑA_005 / BLOQUE 09 — Cuerda Huida y Cola Esponjosa
 
 **Reserva IA6:** `escape_rope;fluffy_tail`. Ambos pertenecen al backlog anterior: no se contabilizan como nuevos.
