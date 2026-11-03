@@ -315,3 +315,10 @@ IA4/W04 continúa exclusivamente en `codex/calvo-items-20261103-w04-camp005`. **
 **Rutas sin degradar:** Happiny→Chansey (Piedra Oval equipada y día); Kirlia macho→Gallade y Snorunt hembra→Froslass (Piedra Alba); Ursaring→Ursaluna (Bloque de Turba y luna llena). Cuatro rutas originales en tres ítems, ninguna ejecutada positivamente porque faltan sexo persistente, contexto día y luna, validación de condiciones y política de consumo. Godot confirma ausencia de consumo falso, equipamiento según perfil y SaveV2. **No volver a contar como objetos nuevos ni programar evoluciones ignorando requisitos.**
 
 **Siguiente `p`, solamente si CI consolidada correcta:** bloque **04/10** `galarica_cuff;galarica_wreath;scroll_of_darkness;scroll_of_waters`. No tocar `main`, V28, producción compartida o ramas ajenas.
+
+
+## CI03 consolidada, W04 CAMP005
+
+La CI de código [#41721445674](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41721445674) y la consolidada [#41721683837](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41721683837), SHA `76fe1d316da4885f51186b01e704d3d5854e373e`, terminaron **completed/success** con Python **205** y Godot **284**. Manifest `completed=3 ids=46`; `oval_stone`, `dawn_stone`, `peat_block` conservan `DEPENDENCIA_CONDICIONES` para día/held, sexo persistente y luna llena. El CSV ya declara `DEPENDENCIA_DOCUMENTADA`. Ninguna evolución positiva se ha implementado.
+
+**Estado vigente: CAMPAÑA_005 3/10**, 12 IDs del backlog previamente auditados, no nuevos. Próxima tecla `p` autoriza **únicamente bloque 04** `galarica_cuff;galarica_wreath;scroll_of_darkness;scroll_of_waters`. No tocar producción compartida, main, V28 ni ramas ajenas.
