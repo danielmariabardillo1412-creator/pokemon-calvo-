@@ -207,7 +207,7 @@ func _recuperacion_07(catalogo: DefinitionCatalog, item: StringName) -> void:
 	var estampilla := _estado(afectado)
 	var curacion: Dictionary = servicio.use_item(item, ID)
 	verificar(curacion.get("accepted", false) and afectado.inventory.quantity(item) == 1, String(item) + "/curacion_consumo_unico")
-	verificar(pokemon.species_id == &"eevee" and pokemon.status_state.persistent_id == &"" and pokemon.status_ids.is_empty(), String(item) + "/cura_sin_evolucion")
+	verificar(afectado.owned_creature(ID).species_id == &"eevee" and afectado.owned_creature(ID).status_state.persistent_id == &"" and afectado.owned_creature(ID).status_ids.is_empty(), String(item) + "/cura_sin_evolucion")
 	verificar(_estado(afectado) != estampilla and afectado.owned_creature(ID).instance_id == ID, String(item) + "/mismo_id_y_estado_curado")
 	_persistencia(afectado, item, "estado_curado", 1, &"eevee", &"")
 	var ya_curado := _estado(afectado)
