@@ -113,6 +113,11 @@ func _frame_c003(session: RefCounted, id: StringName) -> Dictionary:
 	var bench: CreatureInstance = session.battle_state().creature(&"reserve")
 	var foe: CreatureInstance = session.battle_state().creature(&"foe")
 	var native: Dictionary = _native_item(session, "own")
+	var log: Array = session._checkpoint.get("snapshot", {}).get("native", {}).get("log", [])
+	var missed: bool = false
+	for entry: String in log:
+		if entry.begins_with("|-miss|") and entry.contains("p1a:"):
+			missed = true
 	var moves: Array = session._checkpoint.get("views", {}).get("p1", {}).get("request", {}).get("active", [{}])[0].get("moves", [])
 	return {
 		"valid": native.has("boosts"), "hp": own.current_hp, "foe_hp": foe.current_hp,
@@ -120,7 +125,12 @@ func _frame_c003(session: RefCounted, id: StringName) -> Dictionary:
 		"own_has_item": own.held_item_id == id, "reserve_has_item": bench.held_item_id == id,
 		"own_consumed": own.held_item_consumed, "reserve_consumed": bench.held_item_consumed,
 		"native_item": String(native.get("item", "")),
-		"boosts": native.get("boosts", {}).duplicate(true)
+		"boosts": native.get("boosts", {}).duplicate(true),
+		"attack_stage": int(native.get("boosts", {}).get("atk", 0)),
+		"speed_stage": int(native.get("boosts", {}).get("spe", 0)),
+		"native_ability": String(native.get("ability", "")),
+		"native_volatiles": native.get("volatiles", []).duplicate(true),
+		"missed": missed
 	}
 
 func _probe_c003(row: Dictionary, seed: int, mode: String) -> Dictionary:
@@ -134,6 +144,8 @@ func _probe_c003(row: Dictionary, seed: int, mode: String) -> Dictionary:
 	actor.move_ids.clear()
 	check(mode + " own move existe", actor.add_move(StringName(row.own_move), catalogs))
 	check(mode + " control status existe", actor.add_move(&"reflect" if row.own_move != "reflect" else &"tackle", catalogs))
+	if row.has("actor_ability") and not String(row.actor_ability).is_empty():
+		actor.ability_id = StringName(row.actor_ability)
 	prepared.foe = _mon(StringName(row.foe_species), 100, &"foe", [String(row.foe_move)])
 	var id := StringName(row.item_id)
 	check(mode + " dos unidades antes", _units(owner, id) == 2)
@@ -241,5 +253,36 @@ func _compare_c003(row: Dictionary, obs: Dictionary) -> void:
 		"non_trap_control":
 			check("Banda no cambia ataque simple", fa > 0 and fa == fn and fn == fr)
 			check("Banda conservada", not a.after.own_consumed and a.physical_units == 2)
+		"accuracy_miss_trigger":
+			check("Seguro Fallo: misma tirada de precision", a.after.missed == n.after.missed and n.after.missed == r.after.missed)
+			var miss: bool = bool(a.after.missed)
+			check("Seguro Fallo: +2 Vel solo al fallar de verdad",
+				a.after.speed_stage == (2 if miss else 0) and n.after.speed_stage == 0 and r.after.speed_stage == 0)
+			check("Seguro Fallo: consumo solo por fallo real",
+				a.after.own_consumed == miss and a.physical_units == (1 if miss else 2) and not r.after.reserve_consumed)
+		"accuracy_control":
+			check("Ataque de precision 100 no dispara Seguro Fallo",
+				not a.after.missed and a.after.speed_stage == 0 and not a.after.own_consumed and a.physical_units == 2)
+		"paradox_activation":
+			var ability: String = String(row.actor_ability).replace("_", "")
+			check("Energia Potenciadora: habilidad autentica",
+				a.start.native_ability == ability and n.start.native_ability == ability)
+			check("Energia Potenciadora: volátil causal al entrar",
+				a.start.native_volatiles.has(ability) and not n.start.native_volatiles.has(ability) and not r.start.native_volatiles.has(ability))
+			check("Energia Potenciadora: gasto de una unidad al entrar",
+				a.start.own_consumed and a.after.own_consumed and a.physical_units == 1 and not n.after.own_consumed and not r.after.reserve_consumed)
+		"wrong_ability_control":
+			check("Energia Potenciadora sin habilidad correcta no activa",
+				not a.start.own_consumed and not a.after.own_consumed and a.physical_units == 2
+				and a.start.native_volatiles == n.start.native_volatiles)
+		"electric_damage_boost":
+			check("Pila da +1 At solo al portador tras impacto eléctrico",
+				a.after.attack_stage == 1 and n.after.attack_stage == 0 and r.after.attack_stage == 0
+				and da > 0 and dn > 0 and dr == dn)
+			check("Pila se consume al activarse", a.after.own_consumed and a.physical_units == 1 and not r.after.reserve_consumed)
+		"non_electric_control", "no_hit_control":
+			check("Pila no dispara si falta impacto eléctrico",
+				a.after.attack_stage == 0 and n.after.attack_stage == 0 and r.after.attack_stage == 0
+				and not a.after.own_consumed and a.physical_units == 2)
 		_:
 			check("Operacion no autorizada", false)
