@@ -168,3 +168,16 @@ Las **16 dependencias CAMP003** y **9 dependencias CAMP004 bloques 01–03** sig
 
 
 **CI posterior de CSV consolidado (bloque 06):** [#41584473320](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41584473320), SHA `ce99a4a70514b3d952a59ee863f07f770af71f6a`, `completed/success`: CAMP004 Python 181, Godot 565 y regresiones CAMP003 120/270. **Cierre del bloque 06 verificado 6/10**, 18 IDs auditados en CAMP004 y 16 dependencias heredadas de CAMP003 sin resolver. Siguiente `p` exclusivamente bloque 07: `rage_candy_bar;red_orb;reins_of_unity`.
+
+
+---
+
+## CAMPAÑA_004 — Bloque 07 (2026-11-03)
+
+**Identidad:** IA4/W04. **Rama exclusiva:** `codex/calvo-items-20261103-w04-camp004`. Bloque **07/10 publicado** para `rage_candy_bar;red_orb;reins_of_unity`: runner Godot, Python, fixture, CSV e informe `reports/W04/CAMP_004_ITER_07.md`. La ejecución que contiene toda la entrega es [#41589367209](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41589367209), commit `0c02e95ba2d13f726dfb4c02cb692946680bd990`. **Comprobar estado y logs antes de aceptar.**
+
+**Hallazgo diferenciador:** `rage_candy_bar` **sí está conectado** en `modules/inventory/imported_recovery_v19.json`: curación de estados/confusión, consume al funcionar. El registro `ITEM_INVENTORY.csv` como `DATA_ONLY` se refiere a su entrada de otro motor, y no debe interpretarse como ausencia de recuperación de campo. Las pruebas publicadas verifican cura positiva de quemadura y no doble gasto, junto a SaveV2. **No modificar sistema de medicina de W02.** `red_orb` es equipable, sin reversión primigenia certificada; `reins_of_unity` no es equipable, fusión de Calyrex sin contrato funcional. No inventar transformaciones de forma.
+
+**Regresiones:** CAMPAÑA_003 mantiene 10/10 y sus 16 dependencias funcionales. CAMPAÑA_001 está conservada y se ejecuta específicamente en bloques 05 y 10. Sin cambios en producción, catálogo, workflow, `main`, V28, rama árbitra u otras trabajadoras.
+
+**Próxima `p`:** revisar CI07, reparar fallos propios; después ejecutar **solo bloque 08/10** `reveal_glass;rotom_catalog;zygarde_cube`. No repetir los 7 bloques ni avanzar antes de aceptar.
