@@ -41,7 +41,7 @@ def validate(worker):
 
 def verify_output(worker, blocks, kind, logfile):
     actual = Path(logfile).read_text(encoding="utf-8", errors="replace")
-    pattern = rf"^CAMP003_{re.escape(worker)}_{re.escape(kind)} PASS blocks=(\\d+) checks=(\\d+)\\s*$"
+    pattern = rf"^CAMP003_{re.escape(worker)}_{re.escape(kind)} PASS blocks=(\d+) checks=(\d+)\s*$"
     matches = re.findall(pattern, actual, re.MULTILINE)
     if not matches:
         raise ValueError(f"Falta recibo explícito de {kind} — no se puede declarar PASS")
