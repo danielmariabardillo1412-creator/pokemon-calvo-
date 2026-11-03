@@ -177,6 +177,35 @@
           "move_id": "bullet_seed"
         }
       ]
+    },
+    {
+      "block": "07",
+      "items": [
+        {
+          "item_id": "tm57",
+          "move_id": "false_swipe"
+        },
+        {
+          "item_id": "tm58",
+          "move_id": "brick_break"
+        },
+        {
+          "item_id": "tm59",
+          "move_id": "zen_headbutt"
+        },
+        {
+          "item_id": "tm60",
+          "move_id": "u_turn"
+        },
+        {
+          "item_id": "tm61",
+          "move_id": "shadow_claw"
+        },
+        {
+          "item_id": "tm62",
+          "move_id": "foul_play"
+        }
+      ]
     }
   ]
 }
