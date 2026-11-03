@@ -1,3 +1,24 @@
+# IA2/W02 — CONTINUIDAD VIGENTE CAMPAÑA_005 BLOQUE 06/10
+
+**Trabajadora:** W02 (bayas, medicinas, entrenamiento). **Rama única de escritura:** `codex/calvo-items-20261103-w02-camp005`. Encargo IA6 en `CAMPAIGN_005_W02_GATE.md`, `CAMPAIGN_005_W02_QUEUE_APPROVED.csv`, `campaigns/CAMP_005_W02.md` y `AUTONOMOUS_REPAIR_V5.md`. Una tecla `p` = una sola fila siguiente. Nunca tocar `main`, V28, PR118, rama árbitra, otras trabajadoras, producción común o workflows.
+
+**Progreso actual:** bloques **01–06** publicados, 24 IDs únicos, 164 escenarios, 492 variantes programadas (PARTY con ítem, PARTY sin ítem y STORAGE con ítem). Todos los golden Python de 01–06 coinciden estructuralmente con las fixtures y se contrastaron fuentes; **no equivale a Godot/Python ejecutados o CI aprobada**. El workflow `.github/workflows/parallel-camp005-w02-autoci.yml` requiere `CAMP005_W02_PY/GODOT PASS blocks=6`. El hito 05 además requiere regresión de CAMP004 y CAMP003 Python/Godot (10 bloques cada una). Logs y SHA finales **no recuperados**: conectores de runs/status por commit dan listas vacías para pushes; no inferir PASS ni FAIL.
+
+**Bloque06 completo en rama W02:** `clever_wing;swift_wing;health_mochi;muscle_mochi`, 32 casos nuevos y 96 variantes. Clever/Swift Wing +1 EV de Defensa Especial/Velocidad, amistad 3/2/1 según tramo. Health/Muscle Mochi hasta +10 EV de PS/Ataque, **amistad intacta** según motor real Mochi V13 (referencia RHH). La discrepancia con otras implementaciones/contratos de amistad está documentada en `docs/current/ITEM_MOCHI_V13.md`: no afirmar paridad oficial. Comprobar EV inicial 0, atributo próximo al tope 252, bloqueo en 252, total de EV en 509 o 510, slot no permitido, amistad 254. Se preservan HP, PP, IV, naturaleza, XP, identidad, consumo, rechazo atómico, SaveV2 y recibos.
+
+**Commits W02 bloque06:**
+- Fixture `tests/fixtures/parallel_items/w02_campaign_005.json`: `d8bba42bcf99f89a22b51d0ea22ee59ed333ae25`.
+- Runner `tests/gameplay/parallel_items_w02_campaign_005.gd`: `ab22963ab96d9bcef169788b60bb0493fcec2605`.
+- Python `tests/tools/test_parallel_items_w02_campaign_005.py`: `d66ef9c09a12f77d95db7e7995b93d4b28d25dd6`, `bb0fb83c6ed5b618d743a9811081a45dd0e2a00b`, `6fa7e167d2764c48b0988e0afa6d6ab1bbf5caf3`, `a41ac8303e1b92a1e11debd99328f3a82b95937a`, `3d582173bb0dde77c2ad0d31811631eb49c4fffc`, `628ba038521f4b7a3c2ea5d3470c9d6b75d7fbbc`.
+- Progreso `docs/coordination/items_parallel_v1/reports/W02/CAMP_005_PROGRESO.csv`: `7a6610469ae891fd38897f3d83d72534e20c3aba`; fila06 `EN_CI_AUTOMATICA`.
+- Informe `docs/coordination/items_parallel_v1/reports/W02/CAMP_005_ITER_06.md`: `bb2aca2131d346e644f7464e38035df0bcb04f8f`.
+
+**Regresiones y seguridad:** CAMP004/CAMP003 permanecen intactas y deben comprobarse con logs de los runs del hito05 y 10, sin rehacerlas ni borrar tests. El runner W02 005 hereda utilidades de 004 pero ejecuta fixture 005 independiente. Reparar defectos propios V5, nunca alterar API compartida sin IA6. No se ha probado visual/GPU ni integrado en producción.
+
+**Próxima `p`:** revisar CI real de 06, y especialmente los seis recibos de hito05, corregir fallos propios con autorización V5; ejecutar **solamente fila07** `resist_mochi;genius_mochi;clever_mochi;swift_mochi`. No adelantar fila08 ni abrir campañas nuevas.
+
+---
+
 # IA2/W02 — CONTINUIDAD VIGENTE CAMPAÑA_005 BLOQUE 05/10
 
 **Identidad y autoridad:** W02 (bayas, medicinas, entrenamiento). Rama **exclusiva de escritura** `codex/calvo-items-20261103-w02-camp005`. Encargo oficial IA6: `CAMPAIGN_005_W02_GATE.md`, `CAMPAIGN_005_W02_QUEUE_APPROVED.csv`, `campaigns/CAMP_005_W02.md`, `AUTONOMOUS_REPAIR_V5.md`. **Una `p` = una sola fila de la cola**, nunca más. No tocar `main`, V28, PR118, árbitra IA6, otras ramas, producción, API global ni workflow.
