@@ -128,6 +128,7 @@ func _probe_berry(spec: Dictionary, mode: String) -> Dictionary:
 	var confusion: bool = false
 	var boost_spd: bool = false
 	var boost_spa: bool = false
+	var boost_spe: bool = false
 	var boost_def: bool = false
 	var boost_atk: bool = false
 	var focus_energy: bool = false
@@ -144,6 +145,9 @@ func _probe_berry(spec: Dictionary, mode: String) -> Dictionary:
 			native_events.append(String(value))
 		if line.begins_with("|-boost|p1a:") and line.contains("|spa|"):
 			boost_spa = true
+			native_events.append(String(value))
+		if line.begins_with("|-boost|p1a:") and line.contains("|spe|"):
+			boost_spe = true
 			native_events.append(String(value))
 		if line.begins_with("|-boost|p1a:") and line.contains("|def|"):
 			boost_def = true
@@ -171,7 +175,7 @@ func _probe_berry(spec: Dictionary, mode: String) -> Dictionary:
 	battle = restored.session
 	owner = restored.owner
 	var replay: CreatureInstance = battle.battle_state().creature(&"own")
-	if String(spec.kind) == "retaliate_physical":
+	if String(spec.kind) in ["retaliate_physical", "retaliate_special"]:
 		var foe_replayed: CreatureInstance = battle.battle_state().creature(&"foe")
 		check(mode + " restauracion rival tras Jaboca",
 			foe_replayed != null and foe_replayed.current_hp == foe_hp)
@@ -237,7 +241,8 @@ func _probe_berry(spec: Dictionary, mode: String) -> Dictionary:
 		"mode": mode, "before": before, "owner_after": published,
 		"native_hp": hp, "native_status": status, "native_consumed": spent,
 		"native_events": native_events, "native_confusion": confusion,
-		"native_boost_spd": boost_spd, "native_boost_spa": boost_spa, "native_boost_def": boost_def,
+		"native_boost_spd": boost_spd, "native_boost_spa": boost_spa,
+		"native_boost_spe": boost_spe, "native_boost_def": boost_def,
 		"native_boost_atk": boost_atk, "native_focus_energy": focus_energy,
 		"native_first_move_seen": first_move_seen, "native_first_own": first_move_is_own,
 		"native_foe_hp": foe_hp, "native_foe_max_hp": foe_max_hp,
@@ -250,7 +255,7 @@ func _probe_berry(spec: Dictionary, mode: String) -> Dictionary:
 	return {"valid": true, "hp": hp, "max_hp": replay.stats.max_hp,
 		"status": status, "consumed": spent, "total": total, "bag": actual_bag,
 		"damage": initial_hp - hp, "confusion": confusion, "boost_spd": boost_spd,
-		"boost_spa": boost_spa, "boost_def": boost_def, "boost_atk": boost_atk, "focus_energy": focus_energy,
+		"boost_spa": boost_spa, "boost_spe": boost_spe, "boost_def": boost_def, "boost_atk": boost_atk, "focus_energy": focus_energy,
 		"first_move_seen": first_move_seen, "first_own": first_move_is_own,
 		"foe_hp": foe_hp, "foe_max_hp": foe_max_hp,
 		"micle_pending": micle_pending_before_restore, "micle_restored": micle_restored,
@@ -297,8 +302,8 @@ func _compare_berry(spec: Dictionary, observed: Dictionary) -> void:
 			check("baya de sabor cura 1/3 de PS tras el umbral, con control paralelo", heals_by_third)
 			check("Baya de sabor confunde sólo naturaleza que la rechaza",
 				active.confusion == bool(spec.confuses) and not none.confusion and not reserve.confusion)
-		"boost_spd", "boost_spa", "boost_def", "boost_atk", "reactive_def":
-			var key: String = "boost_atk" if String(spec.kind) == "boost_atk" else ("boost_spa" if String(spec.kind) == "boost_spa" else ("boost_spd" if String(spec.kind) == "boost_spd" else "boost_def"))
+		"boost_spd", "boost_spa", "boost_spe", "boost_def", "boost_atk", "reactive_def":
+			var key: String = "boost_spe" if String(spec.kind) == "boost_spe" else ("boost_atk" if String(spec.kind) == "boost_atk" else ("boost_spa" if String(spec.kind) == "boost_spa" else ("boost_spd" if String(spec.kind) == "boost_spd" else "boost_def")))
 			check("baya mejora solo la estadistica del portador cuando se activa",
 				bool(active[key]) == consume and not bool(none[key]) and not bool(reserve[key]))
 			check("baya de estadistica no altera daño de este turno ni estado",
@@ -349,17 +354,17 @@ func _compare_berry(spec: Dictionary, observed: Dictionary) -> void:
 			check("Micle no altera HP ni estado por sí sola",
 				active.hp == none.hp and none.hp == reserve.hp
 				and active.status == none.status and none.status == reserve.status)
-		"retaliate_physical":
+		"retaliate_physical", "retaliate_special":
 			var retaliation: int = int(floor(float(active.foe_max_hp) / float(spec.retaliation_denominator))) if consume else 0
-			check("Jaboca: testigos de rival nativo con HP maximo igual",
+			check("Jaboca/Rowap: testigos rivales con HP maximo igual",
 				active.foe_max_hp > 0
 				and active.foe_max_hp == none.foe_max_hp
 				and none.foe_max_hp == reserve.foe_max_hp)
-			check("Jaboca: daño 1/8 del maximo al atacante solo en contacto fisico",
+			check("Jaboca/Rowap: daño 1/8 del maximo al atacante solo en categoria correcta",
 				active.foe_hp == none.foe_hp - retaliation
 				and none.foe_hp == reserve.foe_hp
 				and active.foe_hp > 0)
-			check("Jaboca no reduce daño ni altera estado al portador",
+			check("Jaboca/Rowap no reduce daño ni altera estado al portador",
 				active.hp == none.hp and reserve.hp == none.hp
 				and active.status == none.status and none.status == reserve.status)
 		_:
@@ -380,6 +385,7 @@ func _compare_berry(spec: Dictionary, observed: Dictionary) -> void:
 				and int(receipt.native_foe_hp) == int(rec.foe_hp)
 				and int(receipt.native_foe_max_hp) == int(rec.foe_max_hp)
 				and bool(receipt.native_boost_spa) == bool(rec.boost_spa)
+				and bool(receipt.native_boost_spe) == bool(rec.boost_spe)
 				and bool(receipt.native_micle_pending) == bool(rec.micle_pending)
 				and bool(receipt.native_micle_after_next) == bool(rec.micle_after_next))
 
