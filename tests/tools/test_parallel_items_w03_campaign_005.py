@@ -457,7 +457,7 @@ def main() -> int:
                 service = (ROOT / "modules/inventory/field_item_service.gd").read_text(
                     encoding="utf-8")
                 battle = json.loads((ROOT / "modules/inventory/battle_support_profile.json").read_text(
-                    encoding="utf-8"))
+                    encoding="utf-8"))["items"]
                 check(battle["blue_flute"]["cure"] == "sleep"
                       and battle["red_flute"]["cure"] == "attraction"
                       and battle["yellow_flute"]["cure"] == "confusion",
