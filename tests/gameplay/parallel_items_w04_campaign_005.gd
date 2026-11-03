@@ -351,6 +351,76 @@ func _fronteras_regionales_04(catalogo: DefinitionCatalog, casos: Array) -> void
 	comprobar(torre_oscura == 1 and torre_agua == 1, "04_dos_torres_procedencia")
 	print("CAMP005_W04_FORM_CONTRACT Galar=2 distinct_targets Urshifu=2 distinct_forms same_target=urshifu towers=2 unsupported")
 
+func _auditar_confite_05(catalogo: DefinitionCatalog, caso: Dictionary) -> void:
+	var item := StringName(caso.get("item_id", ""))
+	var origen := StringName(caso.get("source", ""))
+	var destino := StringName(caso.get("target", ""))
+	var especie: CreatureSpecies = catalogo.species(origen)
+	comprobar(catalogo.item(item) != null and especie != null and catalogo.species(destino) != null, String(item) + "/05_catalogo")
+	if especie == null:
+		return
+	var giros: Array[EvolutionRecord] = []
+	for registro: EvolutionRecord in especie.evolutions:
+		if registro.trigger == &"spin" and registro.species_id == destino:
+			giros.append(registro)
+	comprobar(giros.size() == 1, String(item) + "/05_ruta_spin_real_unica")
+	if giros.size() != 1:
+		return
+	var giro: EvolutionRecord = giros[0]
+	comprobar(giro.item_id == &"" and giro.min_level == 0, String(item) + "/05_sin_item_directo_ni_nivel_inventado")
+	comprobar(String(giro.version_group).replace("_", "-") == "sword-shield", String(item) + "/05_version_original")
+	comprobar(EvolutionSystem.classify_record(giro, catalogo, origen) == EvolutionSystem.UNSUPPORTED, String(item) + "/05_giro_no_disfrazado_de_use_item")
+	var candidatos: Array = EvolutionSystem.evolution_candidates(especie, {"level": 100, "item_id": item, "held_item_id": item, "spin": true}, catalogo)
+	comprobar(not candidatos.has(giro), String(item) + "/05_spin_no_aparece_en_candidatos")
+	var pc := _crear(catalogo, origen)
+	comprobar(pc != null, String(item) + "/05_criatura")
+	if pc == null:
+		return
+	var servicio := Servicio.new()
+	comprobar(servicio.configure(pc, catalogo, func(): return true), String(item) + "/05_servicio")
+	comprobar(servicio.holdable(item), String(item) + "/05_confite_equipable")
+	comprobar(pc.inventory.add(item, 2), String(item) + "/05_dos_confites")
+	var original := _estado(pc)
+	comprobar(servicio.evolution_options(item, ID).is_empty(), String(item) + "/05_sin_opcion_de_mochila")
+	var uso: Dictionary = servicio.use_item(item, ID)
+	comprobar(not uso.get("accepted", false) and _estado(pc) == original, String(item) + "/05_uso_rechazado_sin_gasto")
+	var intento: Dictionary = servicio.evolve(item, ID, destino)
+	comprobar(not intento.get("accepted", false) and _estado(pc) == original, String(item) + "/05_evolve_no_sustituye_giro")
+	var ajeno: Dictionary = servicio.use_item(item, &"w04_c005_ajeno")
+	comprobar(not ajeno.get("accepted", false) and _estado(pc) == original, String(item) + "/05_ajeno_sin_gasto")
+	var equipado: Dictionary = servicio.equip(item, ID)
+	comprobar(equipado.get("accepted", false), String(item) + "/05_equipar")
+	if not equipado.get("accepted", false):
+		return
+	var pokemon := pc.owned_creature(ID)
+	comprobar(pokemon != null and pokemon.instance_id == ID and pokemon.species_id == origen and pokemon.held_item_id == item and pc.inventory.quantity(item) == 1, String(item) + "/05_identidad_y_consumo_no_anticipado")
+	var equipado_antes := _estado(pc)
+	comprobar(servicio.evolution_options(item, ID).is_empty(), String(item) + "/05_equipar_no_activacion")
+	var falso: Dictionary = servicio.use_item(item, ID)
+	comprobar(not falso.get("accepted", false) and _estado(pc) == equipado_antes, String(item) + "/05_sin_consumo_tras_equipar")
+	var falso_destino: Dictionary = servicio.evolve(item, ID, destino)
+	comprobar(not falso_destino.get("accepted", false) and _estado(pc) == equipado_antes, String(item) + "/05_sin_forma_por_evolve")
+	comprobar(not pokemon.to_dict().has("form_id") and not pokemon.to_dict().has("decoration_id"), String(item) + "/05_identidad_forma_no_inventada")
+	var ruta := "user://w04_c005_05_" + String(item) + ".json"
+	var repo := SaveGameRepository.new()
+	var save: SaveResult = repo.save_collection(ruta, pc)
+	comprobar(save.ok, String(item) + "/05_guardar_savev2")
+	if save.ok:
+		var load: LoadResult = repo.load(ruta)
+		comprobar(load.ok and load.schema_version == 2, String(item) + "/05_cargar_savev2")
+		if load.ok:
+			var restaurada := load.party.get_creature(ID)
+			comprobar(restaurada != null and restaurada.instance_id == ID and restaurada.species_id == origen and restaurada.held_item_id == item and load.inventory.quantity(item) == 1, String(item) + "/05_identidad_confite_savev2")
+			if restaurada != null:
+				var antes := pokemon.to_dict()
+				var despues := restaurada.to_dict()
+				comprobar(antes.get("ivs") == despues.get("ivs") and antes.get("evs") == despues.get("evs") and antes.get("move_ids") == despues.get("move_ids") and antes.get("experience") == despues.get("experience") and antes.get("friendship") == despues.get("friendship"), String(item) + "/05_atributos_savev2")
+	DirAccess.remove_absolute(ProjectSettings.globalize_path(ruta))
+	var retirar: Dictionary = servicio.unequip(ID)
+	comprobar(retirar.get("accepted", false) and pc.inventory.quantity(item) == 2 and pc.owned_creature(ID).held_item_id == &"" and _estado(pc) == original, String(item) + "/05_retirada_restaurada")
+	print("CAMP005_W04_ITEM id=", String(item), " status=DEPENDENCIA_GIRO_FORMA source=", String(origen), " target=", String(destino), " trigger=spin need=spin_event+alcremie_form+savev2")
+
+
 func _ejecutar() -> void:
 	var fixture := _abrir(FIXTURE)
 	var policy := _abrir(TRADE_POLICY)
@@ -365,8 +435,8 @@ func _ejecutar() -> void:
 	comprobar(earlier.get("trade_level_conversion", {}).get("levels_selected") == null, "V25_sin_niveles")
 	comprobar(String(policy.get("correct_future_rule", "")).contains("original equipped evolution item"), "conservar_objeto_equipado")
 	var blocks: Array = fixture.get("blocks", [])
-	comprobar(blocks.size() == 4 and [blocks[0].get("block"), blocks[1].get("block"), blocks[2].get("block"), blocks[3].get("block")] == ["01", "02", "03", "04"], "bloques_01_a_04_secuenciales")
-	if blocks.size() != 4:
+	comprobar(blocks.size() == 5 and [blocks[0].get("block"), blocks[1].get("block"), blocks[2].get("block"), blocks[3].get("block"), blocks[4].get("block")] == ["01", "02", "03", "04", "05"], "bloques_01_a_05_secuenciales")
+	if blocks.size() != 5:
 		_finalizar()
 		return
 	for index in range(2):
@@ -384,6 +454,10 @@ func _ejecutar() -> void:
 	for caso: Dictionary in formas:
 		_auditar_forma_04(catalogo, caso)
 	_fronteras_regionales_04(catalogo, formas)
+	var confites: Array = blocks[4].get("cases", [])
+	comprobar(confites.size() == 7, "05_siete_confites_exactos")
+	for caso: Dictionary in confites:
+		_auditar_confite_05(catalogo, caso)
 	_finalizar()
 
 func _finalizar() -> void:
@@ -391,7 +465,7 @@ func _finalizar() -> void:
 		return
 	cerrado = true
 	if errores.is_empty():
-		print("CAMP005_W04_GODOT PASS blocks=4 checks=", checks)
+		print("CAMP005_W04_GODOT PASS blocks=5 checks=", checks)
 	else:
 		print("CAMP005_W04_GODOT FAIL errors=", JSON.stringify(errores))
 	quit(0 if errores.is_empty() else 1)
