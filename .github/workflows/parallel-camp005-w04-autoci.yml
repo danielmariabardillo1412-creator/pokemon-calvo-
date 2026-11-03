@@ -93,56 +93,20 @@ jobs:
         run: |
           set -euo pipefail
           python -B tests/tools/test_parallel_items_w04_campaign_004.py --ci 2>&1 | tee camp005-regression-camp004-py.log
-          grep -E '^CAMP004_W04_PY PASS blocks=10 checks=[1-9][0-9]*
-      - name: Regresion historica W04 CAMP001 (piedras)
+          grep -E '^CAMP004_W04_PY PASS blocks=10 checks=[1-9][0-9]*$' camp005-regression-camp004-py.log
+          timeout 900s godot --headless --path . --script res://tests/gameplay/parallel_items_w04_campaign_004.gd 2>&1 | tee camp005-regression-camp004-godot.log
+          grep -E '^CAMP004_W04_GODOT PASS blocks=10 checks=[1-9][0-9]*$' camp005-regression-camp004-godot.log
+          python -B tests/tools/test_parallel_items_w04_campaign_003.py --ci 2>&1 | tee camp005-regression-camp003-py.log
+          grep -E '^CAMP003_W04_PY PASS blocks=10 checks=[1-9][0-9]*$' camp005-regression-camp003-py.log
+          timeout 900s godot --headless --path . --script res://tests/gameplay/parallel_items_w04_campaign_003.gd 2>&1 | tee camp005-regression-camp003-godot.log
+          grep -E '^CAMP003_W04_GODOT PASS blocks=10 checks=[1-9][0-9]*$' camp005-regression-camp003-godot.log
+      - name: Regresion W04 CAMP001 (piedras)
         if: steps.scope.outputs.blocks == '5' || steps.scope.outputs.blocks == '10'
         shell: bash
         run: |
           set -euo pipefail
           timeout 240s python -B tests/tools/test_parallel_items_w04_campaign_001.py --godot godot --timeout 210 2>&1 | tee camp005-regression-camp001.log
           grep -E 'PARALLEL_ITEMS_W04_CAMP_001_GODOT PASS iteration=3' camp005-regression-camp001.log
-      - name: Conservar evidencia 7 dias
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: camp005-w04-${{ github.run_id }}
-          retention-days: 7
-          if-no-files-found: ignore
-          path: camp005-*.log
- camp005-regression-camp004-py.log
-          timeout 900s godot --headless --path . --script res://tests/gameplay/parallel_items_w04_campaign_004.gd 2>&1 | tee camp005-regression-camp004-godot.log
-          grep -E '^CAMP004_W04_GODOT PASS blocks=10 checks=[1-9][0-9]*
-      - name: Conservar evidencia 7 dias
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: camp005-w04-${{ github.run_id }}
-          retention-days: 7
-          if-no-files-found: ignore
-          path: camp005-*.log
- camp005-regression-camp004-godot.log
-          python -B tests/tools/test_parallel_items_w04_campaign_003.py --ci 2>&1 | tee camp005-regression-camp003-py.log
-          grep -E '^CAMP003_W04_PY PASS blocks=10 checks=[1-9][0-9]*
-      - name: Conservar evidencia 7 dias
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: camp005-w04-${{ github.run_id }}
-          retention-days: 7
-          if-no-files-found: ignore
-          path: camp005-*.log
- camp005-regression-camp003-py.log
-          timeout 900s godot --headless --path . --script res://tests/gameplay/parallel_items_w04_campaign_003.gd 2>&1 | tee camp005-regression-camp003-godot.log
-          grep -E '^CAMP003_W04_GODOT PASS blocks=10 checks=[1-9][0-9]*
-      - name: Conservar evidencia 7 dias
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: camp005-w04-${{ github.run_id }}
-          retention-days: 7
-          if-no-files-found: ignore
-          path: camp005-*.log
- camp005-regression-camp003-godot.log
       - name: Conservar evidencia 7 dias
         if: always()
         uses: actions/upload-artifact@v4
