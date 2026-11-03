@@ -2,6 +2,7 @@ extends SceneTree
 const Servicio = preload("res://modules/inventory/field_item_service.gd")
 const BLOQUE_01 := [&"dawn_stone", &"dusk_stone", &"shiny_stone"]
 const BLOQUE_02 := [&"sun_stone", &"oval_stone", &"black_augurite"]
+const BLOQUE_03 := [&"dragon_scale", &"dubious_disc", &"electirizer"]
 const ID := &"w04_c003_01"
 var checks := 0
 var fallos: Array[String] = []
@@ -39,9 +40,10 @@ func _ejecutar() -> void:
 		terminar()
 		return
 	var catalogo: DefinitionCatalog = GameData.from_dict(data).to_definition_catalog()
-	for item: StringName in BLOQUE_01 + BLOQUE_02:
+	for item: StringName in BLOQUE_01 + BLOQUE_02 + BLOQUE_03:
 		var compatibles: Array[Dictionary] = []
 		var dependientes := 0
+		var primer_dependiente: Dictionary = {}
 		for sid: StringName in catalogo.species_catalog.all_ids():
 			var sp: CreatureSpecies = catalogo.species(sid)
 			for rec: EvolutionRecord in sp.evolutions:
@@ -51,11 +53,24 @@ func _ejecutar() -> void:
 					compatibles.append({"source": sid, "target": rec.species_id})
 				else:
 					dependientes += 1
+					if primer_dependiente.is_empty():
+						primer_dependiente = {"source": sid, "target": rec.species_id, "trigger": String(rec.trigger), "classification": EvolutionSystem.classify_record(rec, catalogo, sid)}
 		validar(catalogo.item(item) != null, String(item) + "/objeto_catalogado")
 		if compatibles.is_empty() and dependientes == 0:
 			print("CAMP003_W04_DEPENDENCIA item=", String(item), " reason=sin_regla_catalogada")
 		if compatibles.is_empty():
-			print("CAMP003_W04_DEPENDENCIA item=", String(item), " records=", dependientes)
+			print("CAMP003_W04_DEPENDENCIA item=", String(item), " records=", dependientes, " example=", JSON.stringify(primer_dependiente))
+			if item in BLOQUE_03 and not primer_dependiente.is_empty():
+				var propietario_condicionado := _crear(catalogo, primer_dependiente.source as StringName)
+				validar(propietario_condicionado != null, String(item) + "/creacion_condicionada")
+				if propietario_condicionado != null:
+					var servicio_condicionado := Servicio.new()
+					validar(servicio_condicionado.configure(propietario_condicionado, catalogo, func(): return true), String(item) + "/configuracion_condicionada")
+					validar(propietario_condicionado.inventory.add(item, 2), String(item) + "/stock_condicionado")
+					var antes_condicionado := JSON.stringify(SaveGameData.build(propietario_condicionado.party, propietario_condicionado.storage, propietario_condicionado.inventory).to_dict())
+					var opciones_condicionadas := servicio_condicionado.evolution_options(item, ID)
+					var intento_condicionado: Dictionary = servicio_condicionado.evolve(item, ID, primer_dependiente.target as StringName)
+					validar(opciones_condicionadas.is_empty() and not intento_condicionado.get("accepted", false) and propietario_condicionado.inventory.quantity(item) == 2 and JSON.stringify(SaveGameData.build(propietario_condicionado.party, propietario_condicionado.storage, propietario_condicionado.inventory).to_dict()) == antes_condicionado, String(item) + "/intercambio_no_degradado_a_uso_directo")
 			continue
 		var elegido: Dictionary = compatibles[0]
 		var pc := _crear(catalogo, elegido.source as StringName)
@@ -106,7 +121,7 @@ func terminar() -> void:
 		return
 	cerrado = true
 	if fallos.is_empty():
-		print("CAMP003_W04_GODOT PASS blocks=2 checks=", checks)
+		print("CAMP003_W04_GODOT PASS blocks=3 checks=", checks)
 	else:
 		print("CAMP003_W04_GODOT FAIL errors=", JSON.stringify(fallos))
 	quit(0 if fallos.is_empty() else 1)
