@@ -675,7 +675,8 @@ func _auditar_fusion_08(catalogo: DefinitionCatalog, caso: Dictionary) -> void:
 			var main_loaded := load.party.get_creature(ID)
 			var partner_loaded := load.storage.get_creature(socio_id) if in_storage else load.party.get_creature(socio_id)
 			comprobar(main_loaded != null and partner_loaded != null and main_loaded.instance_id == ID and partner_loaded.instance_id == socio_id and main_loaded.species_id == origen and partner_loaded.species_id == socio, key + "/08_recuperar_dos_especies_identidades")
-			comprobar(load.inventory.quantity(item) == 2 and (load.storage.get_creature(socio_id) == null if not in_storage else load.party.get_creature(socio_id) == null), key + "/08_pc_o_party_sin_duplicacion")
+			var otro_contenedor_libre := load.party.get_creature(socio_id) == null if in_storage else load.storage.get_creature(socio_id) == null
+			comprobar(load.inventory.quantity(item) == 2 and otro_contenedor_libre, key + "/08_pc_o_party_sin_duplicacion")
 			if main_loaded != null and partner_loaded != null:
 				var before_main := pc.owned_creature(ID).to_dict()
 				var after_main := main_loaded.to_dict()
