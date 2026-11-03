@@ -77,3 +77,9 @@ Recibos de los logs:
 Esta CI comprueba fuente, condiciones, rechazos seguros, equipamiento/retirada, identidad y SaveV2. **No comprueba evolución positiva porque el contrato sigue sin implementarse**. En bloque 06 el workflow **no ejecutó** regresiones CAMP004/CAMP003/CAMP001; las pruebas acumulativas CAMP005 de bloques 01–06 sí se ejecutaron completas. Las regresiones históricas siguen preservadas para hitos 10 o parches autorizados.
 
 El CSV se consolidó como `DEPENDENCIA_DOCUMENTADA` con el recibo anterior (commit `d55808c3d11e3000b9266f31c9ac9ca6f6519f19`); dicho commit desencadena segunda CI que debe comprobarse separadamente. Bloque 04 sin modificar por la incidencia de permiso anterior.
+
+## CI06 de progreso consolidado
+
+La segunda CI [#41734006254](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41734006254), SHA `d55808c3d11e3000b9266f31c9ac9ca6f6519f19`, terminó **completed/success** sobre el CSV ya marcado `DEPENDENCIA_DOCUMENTADA`. Recibos idénticos: `CAMP005_W04_MANIFEST_PASS reserved=10 completed=6 ids=46 kind=FUNCTIONAL_BACKLOG`, `CAMP005_W04_PY PASS blocks=6 checks=356` y `CAMP005_W04_GODOT PASS blocks=6 checks=611`. Los dos casos conservan `BLOQUEADO_POR_CONTRATO` y `DEPENDENCIA_COMBATE` respectivamente; ninguna evolución positiva inventada.
+
+**Bloque 06/10 cerrado como diagnóstico de dependencia, no como implementación funcional.** Fila 04 sin tocar. Próximo bloque reservado 07, exclusivamente cuando llegue la siguiente `p`.
