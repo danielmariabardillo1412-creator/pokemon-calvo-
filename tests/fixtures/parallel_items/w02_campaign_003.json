@@ -10,7 +10,8 @@
     5,
     6,
     7,
-    8
+    8,
+    9
   ],
   "format": "gen9calvounifiedv1",
   "level": 100,
@@ -1111,6 +1112,155 @@
           "expected_type": "ground"
         }
       ]
+    },
+    {
+      "block": "09",
+      "ids": [
+        "starf_berry",
+        "tanga_berry",
+        "wacan_berry",
+        "wiki_berry"
+      ],
+      "source_evidence": [
+        "tools/item_audit/held_effect_sweep_v2.cjs",
+        "tools/item_audit/held_effect_sweep_v3.cjs"
+      ],
+      "cases": [
+        {
+          "scenario": "starf_low_two_random_c003",
+          "id": "starf_berry",
+          "kind": "boost_random_two",
+          "nature": "hardy",
+          "start": "fifth",
+          "status": "",
+          "actor_species": "mew",
+          "foe_species": "mew",
+          "foe_move": "amnesia",
+          "consumes": true,
+          "confuses": false,
+          "own_move": "reflect",
+          "expected_stage": 2
+        },
+        {
+          "scenario": "starf_high_no_boost_c003",
+          "id": "starf_berry",
+          "kind": "boost_random_two",
+          "nature": "hardy",
+          "start": "near_full",
+          "status": "",
+          "actor_species": "mew",
+          "foe_species": "mew",
+          "foe_move": "amnesia",
+          "consumes": false,
+          "confuses": false,
+          "own_move": "reflect",
+          "expected_stage": 2
+        },
+        {
+          "scenario": "tanga_bug_effective_c003",
+          "id": "tanga_berry",
+          "kind": "resist_type",
+          "nature": "hardy",
+          "start": "full",
+          "status": "",
+          "actor_species": "mew",
+          "foe_species": "mew",
+          "foe_move": "bug_buzz",
+          "consumes": true,
+          "confuses": false,
+          "own_move": "reflect",
+          "expected_type": "bug"
+        },
+        {
+          "scenario": "tanga_normal_reject_c003",
+          "id": "tanga_berry",
+          "kind": "resist_type",
+          "nature": "hardy",
+          "start": "full",
+          "status": "",
+          "actor_species": "mew",
+          "foe_species": "mew",
+          "foe_move": "tackle",
+          "consumes": false,
+          "confuses": false,
+          "own_move": "reflect",
+          "expected_type": "bug"
+        },
+        {
+          "scenario": "wacan_electric_effective_c003",
+          "id": "wacan_berry",
+          "kind": "resist_type",
+          "nature": "hardy",
+          "start": "full",
+          "status": "",
+          "actor_species": "gyarados",
+          "foe_species": "mew",
+          "foe_move": "thunder_shock",
+          "consumes": true,
+          "confuses": false,
+          "own_move": "reflect",
+          "expected_type": "electric"
+        },
+        {
+          "scenario": "wacan_normal_reject_c003",
+          "id": "wacan_berry",
+          "kind": "resist_type",
+          "nature": "hardy",
+          "start": "full",
+          "status": "",
+          "actor_species": "gyarados",
+          "foe_species": "mew",
+          "foe_move": "tackle",
+          "consumes": false,
+          "confuses": false,
+          "own_move": "reflect",
+          "expected_type": "electric"
+        },
+        {
+          "scenario": "wiki_adamant_disliked_c003",
+          "id": "wiki_berry",
+          "kind": "heal_flavor",
+          "nature": "adamant",
+          "start": "full",
+          "status": "",
+          "actor_species": "mew",
+          "foe_species": "snorlax",
+          "foe_move": "endeavor",
+          "consumes": true,
+          "confuses": true,
+          "own_move": "reflect",
+          "foe_initial_hp": 1
+        },
+        {
+          "scenario": "wiki_hardy_neutral_c003",
+          "id": "wiki_berry",
+          "kind": "heal_flavor",
+          "nature": "hardy",
+          "start": "full",
+          "status": "",
+          "actor_species": "mew",
+          "foe_species": "snorlax",
+          "foe_move": "endeavor",
+          "consumes": true,
+          "confuses": false,
+          "own_move": "reflect",
+          "foe_initial_hp": 1
+        },
+        {
+          "scenario": "wiki_high_no_trigger_c003",
+          "id": "wiki_berry",
+          "kind": "heal_flavor",
+          "nature": "adamant",
+          "start": "near_full",
+          "status": "",
+          "actor_species": "mew",
+          "foe_species": "mew",
+          "foe_move": "amnesia",
+          "consumes": false,
+          "confuses": false,
+          "own_move": "reflect"
+        }
+      ]
     }
   ],
   "limitations": [
@@ -1126,6 +1276,7 @@
     "Micle: verificar efecto micleberry nativo tras primer turno, preservación del checkpoint y gasto del efecto durante Hydro Pump del siguiente turno. No reclamar incremento estadístico de precisión sin medida.",
     "Bloque 07: Passho/Payapa/Rindo reducen Agua/Psíquico/Planta sólo en portador supereficaz; Petaya mejora SpA bajo umbral, propia Amnesia sólo mejora SpD, por lo que no falsea el test SpA.",
     "Diagnóstico CI bloque 07 #41560981081: el test Mago-Brave a 1/5 pudo autolesionarse por confusión en el mismo turno; cambiar a control histórico Snorlax Endeavor desde PS máximos para observar curación sin autogolpe. Maranga con Reflect evita SpD de Amnesia; Occa con Ember evita OHKO Scizor y conserva control de Fuego supereficaz.",
-    "Bloque 08: Rowap mide exactamente 1/8 HP máximo rival como Jaboca pero sólo ante categoría especial. Shuca usa Bulldoze en lugar de Earth Power del sweep V2 para conservar vivo al testigo Pikachu sin baya; se comprueba daño reducido y consumo nativos sin debilitar aserciones."
+    "Bloque 08: Rowap mide exactamente 1/8 HP máximo rival como Jaboca pero sólo ante categoría especial. Shuca usa Bulldoze en lugar de Earth Power del sweep V2 para conservar vivo al testigo Pikachu sin baya; se comprueba daño reducido y consumo nativos sin debilitar aserciones.",
+    "Bloque 09: Starf usa el vector nativo de boosts atk/def/spa/spd/spe, exige exactamente un +2 y cuatro ceros, sin predeterminar la estadística aleatoria. Wiki utiliza Snorlax/Endeavor con 1 HP, mismo testigo de curación ya verificado con Mago; ningún efecto de campo probado."
   ]
 }
