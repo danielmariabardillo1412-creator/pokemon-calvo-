@@ -323,6 +323,49 @@ def main() -> int:
                 test(set(block["invalid_cases"]) ==
                      {"field_locked", "invalid_inventory", "unknown_target"},
                      "Negativos incompletos")
+            elif block["bloque"] == "06":
+                test(ids == ["super_repel", "white_flute", "yellow_flute"],
+                     "La reserva del bloque 06 no coincide")
+                service = (ROOT / "modules/inventory/field_item_service.gd").read_text(encoding="utf-8")
+                field = (ROOT / "modules/inventory/field_item_effects.gd").read_text(encoding="utf-8")
+                modifiers = (ROOT / "modules/gameplay/encounter_item_modifiers.gd").read_text(encoding="utf-8")
+                recovery = json.loads((ROOT / "modules/inventory/imported_recovery_v19.json").read_text(encoding="utf-8"))
+                selected = {r["id"]: r for r in rows(ROOT / "docs/current/RANDOMLOCK_ITEMS_BUILD_SCOPE_V2.csv")}
+                test(all(selected[id]["familia"] == "FIELD_USE"
+                         and selected[id]["estado_contenido"] == "SELECCIONADO" for id in ids),
+                     "La selección oficial del bloque 06 ha cambiado")
+                test(all(id not in recovery["items"] and id not in field
+                         and id not in modifiers for id in ids),
+                     "Hay efectos registrados: revisar el contrato real")
+                test('return _deny("field_effect_not_connected", "DEPENDENCY_MISSING")' in service,
+                     "La ruta de rechazo ya no coincide")
+                test(block["current_state"] == "DEPENDENCIA_COMPARTIDA"
+                     and block["functional_effect_certified"] is False
+                     and set(block["per_id_status"]) == set(ids)
+                     and all(v == "DEPENDENCIA_COMPARTIDA"
+                             for v in block["per_id_status"].values()),
+                     "No certificar una funcionalidad ausente")
+                test(block["missing_authoritative_integrations"] ==
+                     ["super_repel_overworld_encounter_steps_and_lead_level",
+                      "white_flute_overworld_encounter_modifier",
+                      "yellow_flute_confusion_cure_field_route"],
+                     "Dependencias incompletas")
+                test('"06": _block_06(block)' in runner
+                     and 'func _block_06(block: Dictionary)' in runner
+                     and 'service.use_item(id, creature.instance_id)' in runner,
+                     "Falta la prueba con el servicio de campo real")
+                test('String(result.get("reason", "")) == "field_effect_not_connected"' in runner
+                     and 'snapshot(service) == before' in runner
+                     and 'creature.status_state.has_volatile(&"confusion")' in runner,
+                     "No se comprueban los rechazos y la conservación del estado")
+                test('PlayerInventory.from_dict(saved)' in runner
+                     and 'loaded.to_dict() == saved' in runner,
+                     "No se verifica la serialización de inventario")
+                test({r["status"] for r in block["cases"]} == {"none", "sleep", "confusion"}
+                     and set(block["inventory_counts"]) == {0, 2}
+                     and set(block["invalid_cases"]) ==
+                     {"field_locked", "invalid_inventory", "unknown_target"},
+                     "La matriz de casos no está completa")
             else:
                 test(False, "Bloque sin implementación de test: " + block["bloque"])
         test(checks > 0, "Sin verificaciones")
