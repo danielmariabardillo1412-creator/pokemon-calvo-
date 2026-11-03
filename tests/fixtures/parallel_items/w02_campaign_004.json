@@ -3,7 +3,7 @@
   "campaign": "CAMP_004_W02",
   "worker": "W02",
   "active_policy": "RANDOMLOCK_ITEMS_BUILD_SCOPE_V2",
-  "purpose": "CAMP004 W02 bloques 01–04: bayas y medicinas en servicios nativos, SaveV2, stock y propietario; dependencia Razz documentada sin efecto inventado.",
+  "purpose": "W02 CAMP004 bloques 01-05, validación de bayas y medicinas sobre FieldItemService y combate nativo, 3 propietarios, SaveV2, recibos; Razz dependencia reconocida.",
   "format": "gen9calvounifiedv1",
   "level": 100,
   "seed": [
@@ -21,7 +21,8 @@
     1,
     2,
     3,
-    4
+    4,
+    5
   ],
   "blocks": [
     {
@@ -835,6 +836,300 @@
           "friendship_loss": 10
         }
       ]
+    },
+    {
+      "block": "05",
+      "family": "MEDICINE",
+      "ids": [
+        "energy_root",
+        "ether",
+        "fresh_water",
+        "full_heal"
+      ],
+      "source_evidence": [
+        "modules/inventory/imported_recovery_v19.json",
+        "modules/inventory/field_item_effects.gd",
+        "modules/inventory/field_item_service.gd",
+        "tests/gameplay/item_field_effects_v4.gd"
+      ],
+      "cases": [
+        {
+          "scenario": "energy_root_half_friend0_c004",
+          "id": "energy_root",
+          "kind": "field_medicine",
+          "start_hp": "half",
+          "status": "",
+          "confused": false,
+          "applies": true,
+          "heal_amount": 120,
+          "cures_status": false,
+          "cures_confusion": false,
+          "start_friendship": 0,
+          "friendship_loss": 10
+        },
+        {
+          "scenario": "energy_root_half_friend100_c004",
+          "id": "energy_root",
+          "kind": "field_medicine",
+          "start_hp": "half",
+          "status": "",
+          "confused": false,
+          "applies": true,
+          "heal_amount": 120,
+          "cures_status": false,
+          "cures_confusion": false,
+          "start_friendship": 100,
+          "friendship_loss": 10
+        },
+        {
+          "scenario": "energy_root_half_friend200_c004",
+          "id": "energy_root",
+          "kind": "field_medicine",
+          "start_hp": "half",
+          "status": "",
+          "confused": false,
+          "applies": true,
+          "heal_amount": 120,
+          "cures_status": false,
+          "cures_confusion": false,
+          "start_friendship": 200,
+          "friendship_loss": 15
+        },
+        {
+          "scenario": "energy_root_nearfull_friend199_c004",
+          "id": "energy_root",
+          "kind": "field_medicine",
+          "start_hp": "missing_7",
+          "status": "",
+          "confused": false,
+          "applies": true,
+          "heal_amount": 120,
+          "cures_status": false,
+          "cures_confusion": false,
+          "start_friendship": 199,
+          "friendship_loss": 10
+        },
+        {
+          "scenario": "energy_root_full_reject_c004",
+          "id": "energy_root",
+          "kind": "field_medicine",
+          "start_hp": "full",
+          "status": "",
+          "confused": false,
+          "applies": false,
+          "heal_amount": 120,
+          "cures_status": false,
+          "cures_confusion": false,
+          "start_friendship": 200,
+          "friendship_loss": 15
+        },
+        {
+          "scenario": "ether_first_empty_c004",
+          "id": "ether",
+          "kind": "field_medicine",
+          "start_hp": "full",
+          "status": "",
+          "confused": false,
+          "applies": true,
+          "heal_amount": 0,
+          "cures_status": false,
+          "cures_confusion": false,
+          "pp_scope": "one",
+          "pp0_start": 0,
+          "pp1_start": 2,
+          "slot": 0,
+          "pp_gain": 10
+        },
+        {
+          "scenario": "ether_second_empty_c004",
+          "id": "ether",
+          "kind": "field_medicine",
+          "start_hp": "full",
+          "status": "",
+          "confused": false,
+          "applies": true,
+          "heal_amount": 0,
+          "cures_status": false,
+          "cures_confusion": false,
+          "pp_scope": "one",
+          "pp0_start": 2,
+          "pp1_start": 0,
+          "slot": 1,
+          "pp_gain": 10
+        },
+        {
+          "scenario": "ether_selected_full_reject_c004",
+          "id": "ether",
+          "kind": "field_medicine",
+          "start_hp": "full",
+          "status": "",
+          "confused": false,
+          "applies": false,
+          "heal_amount": 0,
+          "cures_status": false,
+          "cures_confusion": false,
+          "pp_scope": "one",
+          "pp0_start": "full",
+          "pp1_start": 0,
+          "slot": 0,
+          "pp_gain": 10
+        },
+        {
+          "scenario": "ether_missing_slot_reject_c004",
+          "id": "ether",
+          "kind": "field_medicine",
+          "start_hp": "full",
+          "status": "",
+          "confused": false,
+          "applies": false,
+          "heal_amount": 0,
+          "cures_status": false,
+          "cures_confusion": false,
+          "pp_scope": "one",
+          "pp0_start": 0,
+          "pp1_start": 0,
+          "slot": -1,
+          "pp_gain": 10
+        },
+        {
+          "scenario": "ether_invalid_slot_reject_c004",
+          "id": "ether",
+          "kind": "field_medicine",
+          "start_hp": "full",
+          "status": "",
+          "confused": false,
+          "applies": false,
+          "heal_amount": 0,
+          "cures_status": false,
+          "cures_confusion": false,
+          "pp_scope": "one",
+          "pp0_start": 0,
+          "pp1_start": 0,
+          "slot": 99,
+          "pp_gain": 10
+        },
+        {
+          "scenario": "fresh_water_half_c004",
+          "id": "fresh_water",
+          "kind": "field_medicine",
+          "start_hp": "half",
+          "status": "",
+          "confused": false,
+          "applies": true,
+          "heal_amount": 30,
+          "cures_status": false,
+          "cures_confusion": false
+        },
+        {
+          "scenario": "fresh_water_missing7_c004",
+          "id": "fresh_water",
+          "kind": "field_medicine",
+          "start_hp": "missing_7",
+          "status": "",
+          "confused": false,
+          "applies": true,
+          "heal_amount": 30,
+          "cures_status": false,
+          "cures_confusion": false
+        },
+        {
+          "scenario": "fresh_water_full_reject_c004",
+          "id": "fresh_water",
+          "kind": "field_medicine",
+          "start_hp": "full",
+          "status": "",
+          "confused": false,
+          "applies": false,
+          "heal_amount": 30,
+          "cures_status": false,
+          "cures_confusion": false
+        },
+        {
+          "scenario": "full_heal_poison_c004",
+          "id": "full_heal",
+          "kind": "field_medicine",
+          "start_hp": "full",
+          "status": "poison",
+          "confused": false,
+          "applies": true,
+          "heal_amount": 0,
+          "cures_status": true,
+          "cures_confusion": false
+        },
+        {
+          "scenario": "full_heal_toxic_c004",
+          "id": "full_heal",
+          "kind": "field_medicine",
+          "start_hp": "full",
+          "status": "badly_poisoned",
+          "confused": false,
+          "applies": true,
+          "heal_amount": 0,
+          "cures_status": true,
+          "cures_confusion": false
+        },
+        {
+          "scenario": "full_heal_sleep_c004",
+          "id": "full_heal",
+          "kind": "field_medicine",
+          "start_hp": "full",
+          "status": "sleep",
+          "confused": false,
+          "applies": true,
+          "heal_amount": 0,
+          "cures_status": true,
+          "cures_confusion": false,
+          "expect_sleep_clock_clear": true
+        },
+        {
+          "scenario": "full_heal_burn_c004",
+          "id": "full_heal",
+          "kind": "field_medicine",
+          "start_hp": "full",
+          "status": "burn",
+          "confused": false,
+          "applies": true,
+          "heal_amount": 0,
+          "cures_status": true,
+          "cures_confusion": false
+        },
+        {
+          "scenario": "full_heal_confusion_c004",
+          "id": "full_heal",
+          "kind": "field_medicine",
+          "start_hp": "full",
+          "status": "",
+          "confused": true,
+          "applies": true,
+          "heal_amount": 0,
+          "cures_status": false,
+          "cures_confusion": true
+        },
+        {
+          "scenario": "full_heal_poison_confusion_c004",
+          "id": "full_heal",
+          "kind": "field_medicine",
+          "start_hp": "full",
+          "status": "poison",
+          "confused": true,
+          "applies": true,
+          "heal_amount": 0,
+          "cures_status": true,
+          "cures_confusion": true
+        },
+        {
+          "scenario": "full_heal_healthy_reject_c004",
+          "id": "full_heal",
+          "kind": "field_medicine",
+          "start_hp": "full",
+          "status": "",
+          "confused": false,
+          "applies": false,
+          "heal_amount": 0,
+          "cures_status": false,
+          "cures_confusion": false
+        }
+      ]
     }
   ],
   "limitations": [
@@ -844,6 +1139,7 @@
     "Amistad por bonificaciones de origen pendiente; validación base sin origen especial, sin GPU ni interfaz.",
     "Razz Berry no tiene efecto de campo conectado en el contrato del proyecto ni efecto competitivo al equiparse; solo se prueba rechazo/inercia. Su inclusion funcional requiere decisión de IA6 sobre alcance; no se finge PASS positivo.",
     "Medicinas bloque 03 comprobadas por uso en bolsa con propietario en equipo o almacenamiento; no se verifica uso de medicinas durante batalla ni UI/GPU.",
-    "Elixir se verifica con 2 movimientos de PP distintos, incluidos rechazo al seleccionar slot, sin enseñar movimientos; Polvo Energía usa las penalizaciones de amistad del perfil importado y nunca las aplica si rechaza por PS completos."
+    "Elixir se verifica con 2 movimientos de PP distintos, incluidos rechazo al seleccionar slot, sin enseñar movimientos; Polvo Energía usa las penalizaciones de amistad del perfil importado y nunca las aplica si rechaza por PS completos.",
+    "Ether recupera PP de una ranura escogida (scope=one) con slot obligatorio; no modificar el otro movimiento. Energy Root pierde amistad por tramo [10,10,15] con suelo 0, solo al sanar, y Fresh Water recupera 30 PS según perfil real."
   ]
 }
