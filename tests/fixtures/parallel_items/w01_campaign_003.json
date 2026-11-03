@@ -127,6 +127,131 @@
         23
       ],
       "history": "new_negative_control"
+    },
+    {
+      "block": "02",
+      "id": "blunder_accuracy_event",
+      "item_id": "blunder_policy",
+      "op": "accuracy_miss_trigger",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "foe_move": "amnesia",
+      "own_move": "zap_cannon",
+      "seeds": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "history": "held_effect_sweep_v3:conditional_miss_speed_plus_two"
+    },
+    {
+      "block": "02",
+      "id": "blunder_never_miss",
+      "item_id": "blunder_policy",
+      "op": "accuracy_control",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "foe_move": "amnesia",
+      "own_move": "tackle",
+      "seeds": [
+        19
+      ],
+      "history": "new_control_no_accuracy_failure"
+    },
+    {
+      "block": "02",
+      "id": "booster_protosynthesis",
+      "item_id": "booster_energy",
+      "op": "paradox_activation",
+      "actor_species": "great_tusk",
+      "actor_ability": "protosynthesis",
+      "foe_species": "mew",
+      "foe_move": "amnesia",
+      "own_move": "reflect",
+      "seeds": [
+        19,
+        23
+      ],
+      "history": "held_effect_sweep_v3:paradox_great_tusk"
+    },
+    {
+      "block": "02",
+      "id": "booster_quark_drive",
+      "item_id": "booster_energy",
+      "op": "paradox_activation",
+      "actor_species": "iron_hands",
+      "actor_ability": "quark_drive",
+      "foe_species": "mew",
+      "foe_move": "amnesia",
+      "own_move": "reflect",
+      "seeds": [
+        19,
+        23
+      ],
+      "history": "held_effect_sweep_v3:paradox_iron_hands"
+    },
+    {
+      "block": "02",
+      "id": "booster_wrong_ability",
+      "item_id": "booster_energy",
+      "op": "wrong_ability_control",
+      "actor_species": "mew",
+      "actor_ability": "",
+      "foe_species": "mew",
+      "foe_move": "amnesia",
+      "own_move": "reflect",
+      "seeds": [
+        19
+      ],
+      "history": "held_effect_sweep_v3:wrong_ability_retained"
+    },
+    {
+      "block": "02",
+      "id": "battery_electric_hit",
+      "item_id": "cell_battery",
+      "op": "electric_damage_boost",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "foe_move": "thunder_shock",
+      "own_move": "reflect",
+      "seeds": [
+        19,
+        23
+      ],
+      "history": "held_effect_sweep_v2:hit_type_stat_boost"
+    },
+    {
+      "block": "02",
+      "id": "battery_non_electric_hit",
+      "item_id": "cell_battery",
+      "op": "non_electric_control",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "foe_move": "tackle",
+      "own_move": "reflect",
+      "seeds": [
+        19
+      ],
+      "history": "new_negative_non_electric_hit"
+    },
+    {
+      "block": "02",
+      "id": "battery_no_hit",
+      "item_id": "cell_battery",
+      "op": "no_hit_control",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "foe_move": "amnesia",
+      "own_move": "reflect",
+      "seeds": [
+        19
+      ],
+      "history": "new_negative_status_only"
     }
   ]
 }
