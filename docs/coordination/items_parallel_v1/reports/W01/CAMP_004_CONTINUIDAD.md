@@ -138,3 +138,12 @@ La segunda CI #41613512888 devolvió `content_policy` al abrir los tres controle
 - Fila CSV 07 queda `EN_CI_AUTOMATICA` solo para evitar CI redundante. Con la **siguiente `p`** cerrarla con `CI_PASS_VERIFICADO`, SHA `328227633b204f04aebffe3af1773ca30e9d4955`, run `41711361003`, y agregar bloque 08.
 - Incidencia anterior SaveV2 mid-charge de Solar Beam sigue pendiente de IA6. No prometer verificación visual/GPU o integración a main/V28.
 - **Próxima `p`: exclusivamente bloque 08/10 `toxic_orb;utility_umbrella;weakness_policy`**; no iniciar bloque 09.
+
+## 08/10 — pruebas incorporadas (pendientes de CI)
+
+- Bloque autorizado únicamente para W01: `toxic_orb;utility_umbrella;weakness_policy`, 9 escenarios, 13 pares caso-semilla, 39 variantes. Acumulado 8 bloques, 24 objetos, 62 escenarios, 137 pares y 411 variantes.
+- CSV bloque 07 cerrado con evidencia CI #41711361003, SHA `328227633b204f04aebffe3af1773ca30e9d4955`, 11.316 comprobaciones Godot y 707 Python. La nueva fila 08 permanece `EN_CI_AUTOMATICA` hasta comprobar dos recibos y `completed/success` para el nuevo SHA.
+- Toxisfera: status `badly_poisoned` al final de turno; Gengar de tipo Veneno inmune y supresión por Espacio Mágico. Parasol Multiuso: contraste de Ascuas bajo Sol y Agua Pistola bajo Lluvia del rival Snorlax; control sin clima. Seguro Debilidad: Gyarados con impacto eléctrico supereficaz (+2 Atq / +2 AtEsp y consumo), golpe neutro y turno sin daño. Cada caso incluye activo, ausencia, reserva, inventario, no consumo indebido y SaveV2.
+- Fuente histórica: `held_effect_sweep_v2.cjs` (Toxisfera y Seguro Debilidad) y `held_effect_sweep_v3.cjs` (Parasol Multiuso); datos canónicos inmóviles. No se modifica producción ni las pruebas de CAMPAÑA_003. La regresión total CAMP003 queda programada en hito 10 o ante parche de producción, según puerta IA6.
+- Hasta obtener CI real, NO declarar bloque 08 funcionalmente verificado; diagnosticar fallos propios bajo V5 sin alterar el contrato o evadir políticas. Continúa abierto el problema de proyección SaveV2 a mitad de carga de Rayo Solar (bloque 03), dependencia compartida de IA6.
+- Próxima `p` tras CI positiva: exclusivamente bloque 09/10 `white_herb;wise_glasses;zoom_lens`. Prohibidos `main`, V28, rama árbitra y ramas W02–W05.

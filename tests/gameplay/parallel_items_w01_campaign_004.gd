@@ -58,8 +58,8 @@ func _run_w01_c004() -> void:
 	check("Tres controles de equipamiento", fixture.get("variants") == ["active", "none", "reserve"])
 	var progress: Array = _progress_c004()
 	var completed: int = progress.size()
-	check("Bloques W01 01 a 07 autorizados", completed == 7)
-	if completed != 7:
+	check("Bloques W01 01 a 08 autorizados", completed == 8)
+	if completed != 8:
 		quit(2)
 		return
 	check("Fila 01 e IDs exactos de árbitra", String(progress[0].block) == "01"
@@ -76,13 +76,15 @@ func _run_w01_c004() -> void:
 		and String(progress[5].ids) == "smoke_ball;smooth_rock;snowball")
 	check("Fila 07 e IDs exactos de árbitra", String(progress[6].block) == "07"
 		and String(progress[6].ids) == "sticky_barb;terrain_extender;throat_spray")
+	check("Fila 08 e IDs exactos de árbitra", String(progress[7].block) == "08"
+		and String(progress[7].ids) == "toxic_orb;utility_umbrella;weakness_policy")
 	var ids_for_block: Dictionary = {}
 	var ids: PackedStringArray = PackedStringArray()
 	for row_progress: Dictionary in progress:
 		ids_for_block[String(row_progress.block)] = String(row_progress.ids).split(";")
 		ids.append_array(ids_for_block[String(row_progress.block)])
 	var cases: Array = fixture.get("cases", [])
-	check("Cincuenta y tres escenarios autorizados", cases.size() == 53)
+	check("Sesenta y dos escenarios autorizados", cases.size() == 62)
 	var names: Array = []
 	for row: Dictionary in cases:
 		check("Escenario pertenece a bloque autorizado",
@@ -107,7 +109,7 @@ func _run_w01_c004() -> void:
 				"seed": int(value), "checks": checks - before_checks,
 				"status": "PASS" if errors.size() == before_errors else "FAIL",
 				"observed": observed})
-	check("Matriz exacta de 124 pares caso-semilla", c004_rows.size() == 124)
+	check("Matriz exacta de 137 pares caso-semilla", c004_rows.size() == 137)
 	for id: String in ids:
 		check("ID cubierto " + id, cases.any(func(case): return String(case.item_id) == id))
 	check("Puño Suerte demuestra al menos un crítico específico de Chansey", c004_lucky_exclusive > 0)
@@ -341,7 +343,7 @@ func _compare_c004(row: Dictionary, observed: Dictionary) -> void:
 		var triggered_consumable: bool = (String(row.op) in [
 			"misty_seed_terrain", "power_herb_skip_charge", "psychic_seed_terrain",
 			"room_service_activated", "snowball_ice_trigger", "throat_spray_sound_trigger",
-			"sticky_barb_transfer"])
+			"sticky_barb_transfer", "weakness_policy_super_effective"])
 		check("Unidades físicas coherentes con activación " + mode,
 			x.physical_units == (1 if mode == "active" and triggered_consumable else 2))
 	var a: Dictionary = observed.active
@@ -350,7 +352,7 @@ func _compare_c004(row: Dictionary, observed: Dictionary) -> void:
 	var should_consume: bool = (String(row.op) in [
 		"misty_seed_terrain", "power_herb_skip_charge", "psychic_seed_terrain",
 		"room_service_activated", "snowball_ice_trigger", "throat_spray_sound_trigger",
-		"sticky_barb_transfer"])
+		"sticky_barb_transfer", "weakness_policy_super_effective"])
 	check("Consumo exacto por activación, reserva y ausencia intactas",
 		bool(a.after.own_consumed) == should_consume
 		and not r.after.reserve_consumed
@@ -664,5 +666,68 @@ func _compare_c004(row: Dictionary, observed: Dictionary) -> void:
 				and int(r.after.boosts.get("spa", 0)) == 0)
 			check("Espray Bucal: no se consume con Placaje o Reflejo",
 				not a.after.own_consumed and a.physical_units == 2)
+		"toxic_orb_end_turn":
+			check("Toxisfera: portador sano acaba gravemente envenenado",
+				String(a.after.status_id) == "badly_poisoned"
+				and String(n.after.status_id).is_empty()
+				and String(r.after.status_id).is_empty())
+			check("Toxisfera: activación al final del turno sin consumir el objeto",
+				String(a.after.native_item) == "toxicorb"
+				and not a.after.own_consumed and a.physical_units == 2)
+		"toxic_orb_type_immune":
+			check("Toxisfera: Gengar de tipo veneno no adquiere intoxicación",
+				String(a.after.status_id).is_empty()
+				and String(n.after.status_id).is_empty()
+				and String(r.after.status_id).is_empty())
+			check("Toxisfera: inmunidad de tipo mantiene objeto", not a.after.own_consumed
+				and a.physical_units == 2)
+		"toxic_orb_suppressed":
+			check("Toxisfera: Espacio Mágico suprime intoxicación",
+				String(a.after.status_id).is_empty()
+				and String(n.after.status_id).is_empty()
+				and String(r.after.status_id).is_empty())
+			check("Toxisfera: supresión mantiene objeto", not a.after.own_consumed
+				and a.physical_units == 2)
+		"utility_umbrella_weather":
+			var active_loss: int = int(a.start.hp) - int(a.after.hp)
+			var none_loss: int = int(n.start.hp) - int(n.after.hp)
+			var reserve_loss: int = int(r.start.hp) - int(r.after.hp)
+			check("Parasol Multiuso: reduce daño por clima ofensivo al portador",
+				active_loss >= 0 and none_loss > active_loss and none_loss == reserve_loss)
+			check("Parasol Multiuso: no se consume con Sol o Lluvia",
+				String(a.after.native_item) == "utilityumbrella"
+				and a.physical_units == 2 and not a.after.own_consumed)
+		"utility_umbrella_clear":
+			var active_loss: int = int(a.start.hp) - int(a.after.hp)
+			var none_loss: int = int(n.start.hp) - int(n.after.hp)
+			var reserve_loss: int = int(r.start.hp) - int(r.after.hp)
+			check("Parasol Multiuso: sin clima no modifica daño de Ascuas",
+				active_loss > 0 and active_loss == none_loss and none_loss == reserve_loss)
+			check("Parasol Multiuso: permanece equipado sin clima",
+				String(a.after.native_item) == "utilityumbrella"
+				and a.physical_units == 2 and not a.after.own_consumed)
+		"weakness_policy_super_effective":
+			check("Seguro Debilidad: ataque eléctrico supereficaz causa daño",
+				int(a.start.hp) > int(a.after.hp)
+				and int(a.start.hp) - int(a.after.hp) == int(n.start.hp) - int(n.after.hp)
+				and int(n.start.hp) - int(n.after.hp) == int(r.start.hp) - int(r.after.hp))
+			check("Seguro Debilidad: +2 Ataque y +2 Ataque Especial solo portador",
+				int(a.after.boosts.get("atk", 0)) == 2
+				and int(a.after.boosts.get("spa", 0)) == 2
+				and int(n.after.boosts.get("atk", 0)) == 0
+				and int(n.after.boosts.get("spa", 0)) == 0
+				and int(r.after.boosts.get("atk", 0)) == 0
+				and int(r.after.boosts.get("spa", 0)) == 0)
+			check("Seguro Debilidad: consumo único del portador", a.after.own_consumed
+				and a.physical_units == 1 and n.physical_units == 2 and r.physical_units == 2)
+		"weakness_policy_no_trigger":
+			check("Seguro Debilidad: sin golpe supereficaz no aumenta estadísticas",
+				int(a.after.boosts.get("atk", 0)) == 0
+				and int(a.after.boosts.get("spa", 0)) == 0
+				and int(n.after.boosts.get("atk", 0)) == 0
+				and int(r.after.boosts.get("atk", 0)) == 0)
+			check("Seguro Debilidad: sin disparador no se consume",
+				String(a.after.native_item) == "weaknesspolicy"
+				and not a.after.own_consumed and a.physical_units == 2)
 		_:
 			check("Operación fuera del contrato de bloque", false)

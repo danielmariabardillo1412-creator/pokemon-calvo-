@@ -126,6 +126,25 @@
         "spray_tackle",
         "spray_reflect"
       ]
+    },
+    {
+      "block": "08",
+      "ids": [
+        "toxic_orb",
+        "utility_umbrella",
+        "weakness_policy"
+      ],
+      "cases": [
+        "toxic_end_turn",
+        "toxic_poison_immune",
+        "toxic_magic_room",
+        "umbrella_sun_fire",
+        "umbrella_rain_water",
+        "umbrella_clear_fire",
+        "policy_electric",
+        "policy_neutral",
+        "policy_no_hit"
+      ]
     }
   ],
   "format": "gen9calvounifiedv1",
@@ -988,6 +1007,136 @@
         19
       ],
       "history": "held_pilot:throat_spray_reflect_control"
+    },
+    {
+      "block": "08",
+      "id": "toxic_end_turn",
+      "item_id": "toxic_orb",
+      "op": "toxic_orb_end_turn",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "own_move": "reflect",
+      "foe_move": "amnesia",
+      "seeds": [
+        19,
+        23
+      ],
+      "history": "held_effect_sweep_v2:toxic_orb_end_turn_status"
+    },
+    {
+      "block": "08",
+      "id": "toxic_poison_immune",
+      "item_id": "toxic_orb",
+      "op": "toxic_orb_type_immune",
+      "actor_species": "gengar",
+      "foe_species": "mew",
+      "own_move": "reflect",
+      "foe_move": "amnesia",
+      "seeds": [
+        19
+      ],
+      "history": "held_effect_sweep_v2:toxic_orb_type_immunity"
+    },
+    {
+      "block": "08",
+      "id": "toxic_magic_room",
+      "item_id": "toxic_orb",
+      "op": "toxic_orb_suppressed",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "own_move": "reflect",
+      "foe_move": "magic_room",
+      "seeds": [
+        19
+      ],
+      "history": "held_effect_sweep_v2:toxic_orb_magic_room_control"
+    },
+    {
+      "block": "08",
+      "id": "umbrella_sun_fire",
+      "item_id": "utility_umbrella",
+      "op": "utility_umbrella_weather",
+      "actor_species": "mew",
+      "foe_species": "snorlax",
+      "own_move": "sunny_day",
+      "foe_move": "ember",
+      "seeds": [
+        19,
+        23
+      ],
+      "history": "held_effect_sweep_v3:utility_umbrella_incoming_sun_fire"
+    },
+    {
+      "block": "08",
+      "id": "umbrella_rain_water",
+      "item_id": "utility_umbrella",
+      "op": "utility_umbrella_weather",
+      "actor_species": "mew",
+      "foe_species": "snorlax",
+      "own_move": "rain_dance",
+      "foe_move": "water_gun",
+      "seeds": [
+        19,
+        23
+      ],
+      "history": "held_effect_sweep_v3:utility_umbrella_incoming_rain_water"
+    },
+    {
+      "block": "08",
+      "id": "umbrella_clear_fire",
+      "item_id": "utility_umbrella",
+      "op": "utility_umbrella_clear",
+      "actor_species": "mew",
+      "foe_species": "snorlax",
+      "own_move": "reflect",
+      "foe_move": "ember",
+      "seeds": [
+        19
+      ],
+      "history": "held_effect_sweep_v3:utility_umbrella_clear_weather"
+    },
+    {
+      "block": "08",
+      "id": "policy_electric",
+      "item_id": "weakness_policy",
+      "op": "weakness_policy_super_effective",
+      "actor_species": "gyarados",
+      "foe_species": "mew",
+      "own_move": "reflect",
+      "foe_move": "thunder_shock",
+      "seeds": [
+        19,
+        23
+      ],
+      "history": "held_effect_sweep_v2:weakness_policy_super_effective_boost"
+    },
+    {
+      "block": "08",
+      "id": "policy_neutral",
+      "item_id": "weakness_policy",
+      "op": "weakness_policy_no_trigger",
+      "actor_species": "gyarados",
+      "foe_species": "mew",
+      "own_move": "reflect",
+      "foe_move": "tackle",
+      "seeds": [
+        19
+      ],
+      "history": "held_effect_sweep_v2:weakness_policy_neutral_control"
+    },
+    {
+      "block": "08",
+      "id": "policy_no_hit",
+      "item_id": "weakness_policy",
+      "op": "weakness_policy_no_trigger",
+      "actor_species": "gyarados",
+      "foe_species": "mew",
+      "own_move": "reflect",
+      "foe_move": "amnesia",
+      "seeds": [
+        19
+      ],
+      "history": "held_effect_sweep_v2:weakness_policy_no_hit_control"
     }
   ]
 }
