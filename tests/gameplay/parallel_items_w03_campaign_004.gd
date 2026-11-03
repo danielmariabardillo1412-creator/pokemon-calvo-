@@ -37,6 +37,7 @@ func _run_campaign() -> void:
 			"03": _block_03(block)
 			"04": _block_04(block)
 			"05": _block_05(block)
+			"06": _block_06(block)
 			_: check("Bloque sin suite funcional " + str(n), false)
 	_finish(n)
 
@@ -388,6 +389,73 @@ func _block_05(block: Dictionary) -> void:
 		var before_foreign: String = snapshot(foreign_service)
 		var foreign: Dictionary = foreign_service.use_item(id, &"foreign_creature")
 		check("Objetivo ajeno sin gasto ni efectos " + raw_id,
+			foreign.get("accepted", true) == false
+			and String(foreign.get("reason", "")) == "field_effect_not_connected"
+			and snapshot(foreign_service) == before_foreign)
+
+# 06: Superrepelente, Flauta Blanca y Flauta Amarilla; integracion no existente.
+func _block_06(block: Dictionary) -> void:
+	var ids: Array = block.get("ids", [])
+	check("Bloque06 reserva exacta", ids == ["super_repel", "white_flute", "yellow_flute"])
+	check("Bloque06 no declara efecto sin API", not bool(block.get("functional_effect_certified", true)))
+	for raw_id: String in ids:
+		var id := StringName(raw_id)
+		check("Objeto de catálogo " + raw_id, catalogs.item(id) != null)
+		for case: Dictionary in block.get("cases", []):
+			for count: int in block.get("inventory_counts", []):
+				var service := service_for()
+				check("Objeto seleccionado por política " + raw_id, service.selection.content_allowed(id))
+				var creature: CreatureInstance = service.owner.owned_creature(&"field_item_target")
+				match String(case.get("status", "")):
+					"confusion":
+						creature.status_state.add_volatile(&"confusion", {"turns": 3})
+					"sleep":
+						status(creature, &"sleep")
+						service.sleep_clocks[String(creature.instance_id)] = {
+							"version": "0.10.11", "start_time": 3, "time": 2}
+				if count > 0:
+					check("Mochila inicial " + raw_id, service.owner.inventory.add(id, count))
+				var before: String = snapshot(service)
+				var result: Dictionary = service.use_item(id, creature.instance_id)
+				check("Efecto ausente rechaza sin consumir " + raw_id,
+					result.get("accepted", true) == false
+					and String(result.get("reason", "")) == "field_effect_not_connected"
+					and String(result.get("status", "")) == "DEPENDENCY_MISSING"
+					and snapshot(service) == before
+					and service.owner.inventory.quantity(id) == count)
+				var saved: Dictionary = service.owner.inventory.to_dict()
+				var loaded: PlayerInventory = PlayerInventory.from_dict(saved)
+				check("Roundtrip de inventario sin perdida " + raw_id,
+					not loaded.corrupted and loaded.to_dict() == saved
+					and loaded.quantity(id) == count)
+				if String(case.get("status", "")) == "confusion":
+					check("Flauta Amarilla aun no cura confusion " + raw_id,
+						creature.status_state.has_volatile(&"confusion"))
+		var locked_service := service_for()
+		check("Mochila para bloqueo " + raw_id, locked_service.owner.inventory.add(id, 2))
+		var before_locked: String = snapshot(locked_service)
+		locked = true
+		var denied: Dictionary = locked_service.use_item(id, &"field_item_target")
+		locked = false
+		check("Bloqueo de campo seguro " + raw_id,
+			denied.get("accepted", true) == false
+			and String(denied.get("reason", "")) == "field_locked"
+			and snapshot(locked_service) == before_locked)
+		var bad_service := service_for()
+		check("Mochila para corrupcion " + raw_id, bad_service.owner.inventory.add(id, 2))
+		bad_service.owner.inventory.corrupted = true
+		var before_bad: String = snapshot(bad_service)
+		var invalid: Dictionary = bad_service.use_item(id, &"field_item_target")
+		check("Bolsa corrupta conserva estado " + raw_id,
+			invalid.get("accepted", true) == false
+			and String(invalid.get("reason", "")) == "invalid_inventory"
+			and snapshot(bad_service) == before_bad)
+		var foreign_service := service_for()
+		check("Bolsa para criatura ajena " + raw_id,
+			foreign_service.owner.inventory.add(id, 2))
+		var before_foreign: String = snapshot(foreign_service)
+		var foreign: Dictionary = foreign_service.use_item(id, &"foreign_creature")
+		check("Objetivo ajeno no activa ni consume " + raw_id,
 			foreign.get("accepted", true) == false
 			and String(foreign.get("reason", "")) == "field_effect_not_connected"
 			and snapshot(foreign_service) == before_foreign)
