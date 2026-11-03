@@ -180,6 +180,57 @@
         "no_love_or_moon_ball_multiplier"
       ],
       "ci_required": true
+    },
+    {
+      "bloque": "04",
+      "familia": "CAPTURE_CONTEXT",
+      "ids": [
+        "beast_ball",
+        "heavy_ball"
+      ],
+      "objetivo": "ultraente_peso_y_formula_versionada",
+      "current_state": "DEPENDENCIA_CONCRETA",
+      "functional_effect_certified": false,
+      "per_id_status": {
+        "beast_ball": "DEPENDENCIA_CONCRETA",
+        "heavy_ball": "DEPENDENCIA_CONCRETA"
+      },
+      "existing_positive_contracts": [
+        "CreatureSpecies.source_metadata_roundtrip",
+        "CaptureRuleset.catch_probability"
+      ],
+      "required_producers": [
+        {
+          "id": "beast_ball",
+          "producer": "species_ultra_beast_flag",
+          "consumer": "CaptureSystem.resolve",
+          "missing_fields": [
+            "is_ultra_beast",
+            "beast_ball_versioned_factor"
+          ],
+          "decision": "Definir taxonomía y fórmula por generación antes de integrar captura."
+        },
+        {
+          "id": "heavy_ball",
+          "producer": "species_weight_by_form",
+          "consumer": "CaptureSystem.resolve",
+          "missing_fields": [
+            "weight_hectograms",
+            "heavy_ball_versioned_weight_tiers"
+          ],
+          "decision": "Definir peso y bandas por versión con caps de tasa de captura; no sustituir por multiplicador genérico."
+        }
+      ],
+      "positive_tests": [
+        "species_metadata_roundtrip",
+        "capture_probability_function"
+      ],
+      "negative_tests": [
+        "no_ultra_beast_flag",
+        "no_weight_field",
+        "no_versioned_formula"
+      ],
+      "ci_required": true
     }
   ]
 }
