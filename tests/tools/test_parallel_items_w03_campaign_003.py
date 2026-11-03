@@ -341,6 +341,95 @@ def main() -> int:
                 audit.check(block["prior_evidence"]["state"] == "YA_VERIFICADO_NO_DUPLICAR"
                             and not block["implementation_authorized"],
                             "La fase no autoriza implementar efectos")
+            elif block["bloque"] == "06":
+                audit.check(ids == ["friend_ball", "heal_ball"], "Reserva 06 desviada")
+                basic = (ROOT / "modules/capture/capture_ball_effects.gd").read_text(encoding="utf-8")
+                system = (ROOT / "modules/capture/capture_system.gd").read_text(encoding="utf-8")
+                inventory = (ROOT / "modules/inventory/capture_inventory_service.gd").read_text(encoding="utf-8")
+                old_v11 = (ROOT / "tests/gameplay/item_capture_v11.gd").read_text(encoding="utf-8")
+                router = (ROOT / "modules/creatures/storage/capture_ownership_router.gd").read_text(encoding="utf-8")
+                audit.check('if id == &"friend_ball": target.friendship = 200' in basic,
+                            "Amigo debe fijar amistad EXACTAMENTE en 200")
+                audit.check('if id != &"heal_ball": return' in basic
+                            and "target.current_hp = target.stats.max_hp" in basic
+                            and "target.status_state.clear_persistent()" in basic
+                            and "target.status_ids.clear()" in basic,
+                            "Sana debe curar PS/estado únicamente en captura")
+                audit.check('for slot: BattleMoveSlot in target.moveset: slot.current_pp = slot.max_pp' in basic,
+                            "Sana restaura PP hasta máximo existente")
+                audit.check('id == &"friend_ball" and (target.friendship < 0 or target.friendship > 255)' in basic
+                            and 'invalid_ball_friendship_state' in basic,
+                            "Amigo debe validar amistad fuera de 0..255")
+                audit.check('id == &"heal_ball"' in basic
+                            and 'slot.max_pp < 1 or slot.current_pp < 0 or slot.current_pp > slot.max_pp' in basic
+                            and 'invalid_ball_pp_state' in basic,
+                            "Sana debe validar PP incoherentes antes de gastar")
+                audit.check('crs.BallEffects.on_catch(attempt.ball_id, target)' in system
+                            and "if success:" in system
+                            and "inventory.remove(attempt.ball_id, 1)" in inventory,
+                            "Efecto postcaptura no está protegido por éxito y consumo")
+                audit.check('Heal applied before storage' in old_v11
+                            and 'special ball cost settled exactly once' in old_v11,
+                            "No existe la evidencia histórica V11 de Sana/PC")
+                audit.check("CaptureDisposition.STORAGE_REQUIRED:" in router
+                            and "out.stored = storage.add_creature(c)" in router,
+                            "No hay enrutamiento seguro al PC")
+                audit.check('func _block_06(' in runner and
+                            '"06": _block_06(bloque)' in runner
+                            and 'func _block06_capture(' in runner
+                            and 'func _block06_reject(' in runner
+                            and 'func _block06_seed_for(' in runner,
+                            "No hay ejecución real de 06 con éxito, fallo y rechazo")
+                audit.check("CaptureInventoryService.resolve(" in runner
+                            and "CaptureOwnershipRouter.new().route(" in runner
+                            and "CaptureSystem.validate_attempt(" in runner,
+                            "No se prueban servicios reales de captura, validación y PC")
+                audit.check('status(target, &"sleep")' in runner
+                            and 'status(target, &"poison")' in runner
+                            and 'target.moveset[0].max_pp = maximum_pp' in runner
+                            and 'target.friendship = friendship_value' in runner,
+                            "No se preparan estados/PP/amistad reales de captura")
+                audit.check('expected["friendship"] = 200' in runner
+                            and 'expected["status_state"] = BattleStatusState.new().to_dict()' in runner
+                            and 'slot.current_pp = slot.max_pp' in runner,
+                            "Falta comparación del efecto postcaptura completo")
+                audit.check("result.result.status == CaptureResult.FAILED" in runner
+                            and "target.to_dict() == before" in runner
+                            and "rng.state == rng_before" in runner
+                            and "not result.result.consume_item" in runner,
+                            "No se garantizan fallos e inválidos sin efectos")
+                audit.check("rng.state == control.state" in runner
+                            and "inv.quantity(id) == 1" in runner,
+                            "No se contrasta una tirada/una bola")
+                audit.check([c["friendship"] for c in block["friend_cases"]] ==
+                            [0, 117, 200, 240, 255, 240]
+                            and [c["outcome"] for c in block["friend_cases"]] ==
+                            ["success", "success", "success", "success", "success", "failure"]
+                            and block["expected_friendship_on_catch"] == 200,
+                            "Amigo debe cubrir límite, reducción superior a 200 y fallo")
+                audit.check({(c["species_id"], c["status"], c["outcome"])
+                             for c in block["heal_cases"]} ==
+                            {("mew", "sleep", "success"),
+                             ("mew", "sleep", "failure"),
+                             ("caterpie", "poison", "success"),
+                             ("mew", "none", "success")},
+                            "Sana no cubre sueño, veneno, normal y fallo")
+                audit.check(block["invalid_friendship"] == [-1, 256]
+                            and {(c["pp_current"], c["pp_max"]) for c in block["invalid_pp"]} ==
+                            {(-1, 64), (65, 64), (0, 0)},
+                            "No se prueban datos de amistad/PP fuera de rango")
+                audit.check(set(block["invalid_cases"]) ==
+                            {"trainer_battle_not_capturable", "item_not_owned",
+                             "target_knocked_out"}
+                            and set(block["route_full_party"]) ==
+                            {"friend_ball", "heal_ball"},
+                            "Faltan rechazos o rutas reales a PC")
+                audit.check(block["seed_search_range"] == [1, 4096]
+                            and 'trial.randf() < probability' in runner,
+                            "No se selecciona una semilla mediante RNG real")
+                audit.check(not block["implementation_authorized"] and block["ci_required"]
+                            and block["prior_evidence"]["state"] == "YA_VERIFICADO_NO_DUPLICAR",
+                            "El bloque06 no autoriza rediseñar captura")
             else:
                 audit.check(False, "Falta contrato incremental específico para " + block["bloque"])
         audit.check(audit.checks > 0, "Sin comprobaciones")
