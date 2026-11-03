@@ -63,6 +63,35 @@
           "move_id": "blast_burn"
         }
       ]
+    },
+    {
+      "block": "03",
+      "items": [
+        {
+          "item_id": "tm154",
+          "move_id": "hydro_cannon"
+        },
+        {
+          "item_id": "tm155",
+          "move_id": "frenzy_plant"
+        },
+        {
+          "item_id": "tm156",
+          "move_id": "outrage"
+        },
+        {
+          "item_id": "tm157",
+          "move_id": "overheat"
+        },
+        {
+          "item_id": "tm158",
+          "move_id": "focus_blast"
+        },
+        {
+          "item_id": "tm159",
+          "move_id": "leaf_storm"
+        }
+      ]
     }
   ]
 }
