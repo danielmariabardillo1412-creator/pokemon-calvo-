@@ -1,3 +1,4 @@
 bloque,ids,estado,sha_pruebas,ci_run,notas
 01,dawn_stone;dusk_stone;shiny_stone,EN_CI_AUTOMATICA,dd082b0cdca4e684283272d4cf58786836ba16eb,PENDIENTE,"Tres piedras; catálogo activo y runtime se verifican por CI; SaveV2 y rechazos, sin afirmar PASS"
 02,sun_stone;oval_stone;black_augurite,DEPENDENCIA_DOCUMENTADA,fee9897f34148c9dda7b243c6a0bf67169430c00,PENDIENTE,"Oval Stone depende de evolución condicionada no equivalente a use_item; CI Godot/Python sin verificar; solicitar auditoría IA6"
+03,dragon_scale;dubious_disc;electirizer,EN_CI_AUTOMATICA,5cd61817ec494e3092c9e2c0a2632a3a068b92e7,PENDIENTE,"Evoluciones de intercambio y objeto equipado: distinguir clasificación real, rechazar uso directo sin consumo, verificar positivos y SaveV2 solo si compatibles; CI 03 pendiente"
