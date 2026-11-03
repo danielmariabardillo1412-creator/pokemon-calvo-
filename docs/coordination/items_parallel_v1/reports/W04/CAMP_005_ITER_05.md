@@ -49,3 +49,20 @@ CreatureInstance + SaveV2: falta estado persistente de forma/decoración
 **Aislamiento:** solo pruebas, fixture, CSV e informe W04; no producción, datos, workflows, guardados reales, `main`, V28, PR118 ni ramas ajenas.
 
 **Después de CI05:** próximo bloque 06/10 `whipped_dream;leaders_crest`, únicamente con la siguiente `p`.
+
+## CI05 real — contrato verificado, evolución por giro pendiente
+
+[GitHub Actions #41727839947](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41727839947), SHA `477d737fbc16db580c06d97bda70263538f2b725` (incluye pruebas+fixture+CSV), terminó **completed/success**.
+
+Recibos exactos de los logs:
+- `CAMP005_W04_MANIFEST_PASS reserved=10 completed=5 ids=46 kind=FUNCTIONAL_BACKLOG`.
+- `CAMP005_W04_PY PASS blocks=5 checks=307`.
+- `CAMP005_W04_GODOT PASS blocks=5 checks=560`.
+- Los siete IDs `*_sweet` devolvieron `status=DEPENDENCIA_GIRO_FORMA` sin evolución positiva.
+- Hito 05, regresiones ejecutadas y correctas: `CAMP004_W04_PY PASS blocks=10 checks=387`, `CAMP004_W04_GODOT PASS blocks=10 checks=1090`, `CAMP003_W04_PY PASS blocks=10 checks=120`, `CAMP003_W04_GODOT PASS blocks=10 checks=270`, `PARALLEL_ITEMS_W04_CAMP_001_GODOT PASS iteration=3 checks=559 cases=12`.
+
+Después de la CI, la fila 05 de `CAMP_005_PROGRESO.csv` quedó `DEPENDENCIA_DOCUMENTADA` con `ci_run=41727839947`. Esa modificación no cambia tests ni producción y **activa otra CI de consolidación**, que requiere su propia comprobación. La fila 04 se conserva sin alterar por la denegación anterior.
+
+**Diagnóstico cerrado:** equipamiento positivo, rechazos negativos seguros y SaveV2 verificados, pero ninguna ruta de evolución `spin` ejecutable. No se consideran los confites funcionales como transformación Alcremie.
+
+**Estado al término del bloque:** 05/10; la siguiente `p` corresponde solo al bloque 06 (`whipped_dream;leaders_crest`).
