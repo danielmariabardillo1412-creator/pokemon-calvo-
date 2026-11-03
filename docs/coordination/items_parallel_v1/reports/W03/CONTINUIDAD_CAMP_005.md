@@ -1,3 +1,13 @@
+# IA3/W03 — CONTINUIDAD CAMPAÑA_005 03/10
+
+**Rama única:** `codex/calvo-items-20261103-w03-camp005`. **Bloque 03:** `love_ball;moon_ball`, ya auditados antes; ahora dependencia precisa: Love requiere sexo individual persistente (ausente) y semántica de especie base; Moon dispone de `EvolutionRecord.item_id` y ruta `EvolutionSystem` verificable, pero precisa selector de versión y norma de bonificación. Suite Godot prueba evoluciones reales por Piedra Lunar y negativas con Piedra Agua. Ninguna de las dos bolas se declara funcional.
+
+**CI anterior 02 confirmada:** [#41718649006](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41718649006): Python 48/Godot 35 PASS, puertas IA6 PASS. **CI bloque03:** verificar recibos Python/Godot blocks=3 sobre último SHA con tercera fila CSV. Reparar fallos del arnés propio. Informar dependencia a IA6; no editar productor sexo, SaveV2 ni reglas globales.
+
+**Siguiente `p`: bloque04** `beast_ball;heavy_ball`. Un bloque por turno, sin inventar encargos. No tocar main, V28, PR #118 o ramas ajenas.
+
+---
+
 ## CI verificada
 
 Ejecución [#41718649006](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41718649006) sobre SHA `97a86e17e7e25659e34a088ace5245bc50ba930a`: **completed/success**. Recibos `CAMP005_W03_PY PASS blocks=2 checks=48` y `CAMP005_W03_GODOT PASS blocks=2 checks=35`, ambos gates de IA6 PASS. La validación demuestra pruebas de productores y ganancias de amistad existentes, **no** funcionamiento nuevo de Luxury Ball ni Lure Ball.
