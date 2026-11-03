@@ -264,6 +264,35 @@
           "move_id": "reflect"
         }
       ]
+    },
+    {
+      "block": "10",
+      "items": [
+        {
+          "item_id": "tm75",
+          "move_id": "light_screen"
+        },
+        {
+          "item_id": "tm76",
+          "move_id": "rock_blast"
+        },
+        {
+          "item_id": "tm78",
+          "move_id": "dragon_claw"
+        },
+        {
+          "item_id": "tm79",
+          "move_id": "dazzling_gleam"
+        },
+        {
+          "item_id": "tm80",
+          "move_id": "metronome"
+        },
+        {
+          "item_id": "tm81",
+          "move_id": "grass_knot"
+        }
+      ]
     }
   ]
 }
