@@ -1,3 +1,17 @@
+# IA2/W02 — CONTINUIDAD VIGENTE: CAMPAÑA_004 BLOQUE 06/10
+
+**IA2/W02:** bayas, medicinas y entrenamiento. **Única rama editable** `codex/calvo-items-20261103-w02-camp004`. Una tecla `p` = una fila de la cola oficial IA6 y comprobación de la CI anterior. No modificar `main`, V28, rama árbitra, ramas W01/W03/W04/W05, workflow, PR #118 ni políticas globales. Autorreparación V5 sólo de código propio.
+
+**Acumulado de campaña:** bloques 01–06 publicados, **24 IDs**, 101 escenarios y 303 variantes de propiedad previstas. **No son objetos certificados.** Bloque 01 con CI real PASS en run [41573481223](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41573481223), Python `blocks=1 checks=83`, Godot `blocks=1 checks=1022`, regresión CAMP003 completa `blocks=10 checks=680/7306`. **Bloques 02–06 EN_CI_AUTOMATICA, sin CI verificable** por limitación de consulta de runs push (consulta GitHub sobre commit sólo enumera PR y web Actions inaccesible). No afirmar CI PASS ni funcionalidad completa sin run y logs exactos.
+
+**Bloque 06 publicado:** `full_restore;heal_powder;hopo_berry;hyper_potion`. 20 escenarios × 3 modalidades = 60 variantes. Full Restore restaura HP al máximo y cura estados/confusión; Heal Powder cura estados/confusión con amistad amarga [5,5,10]; Hyper Potion +120 HP sin limpiar estado. **Hopo Berry sin efecto de inventario conectado**: `data/api/v2/item/2278/index.json` la clasifica `pp-recovery` pero sin `effect_entries`; falta de `imported_recovery_v19.json` y `docs/current/ITEM_FIELD_V8.csv.txt` la marca `FIELD_USE_NOT_CONNECTED`, `NOT_CERTIFIED`. Se verificará exclusivamente rechazo atómico, **NO funcionalidad**. IA6 debe autorizar retirada o contrato PP cuantitativo específico; no inventarlo. Mantener también dependencia abierta `razz_berry` en fila 02.
+
+**Commits:** fixture `cfcfd451bd4fb4478c57d08229d5c09961d46296`; Godot `bd251617fa51af00e30d3021ec1659c619931ed1`; Python `1532cbd2cc16d1d2f7772747c2c447d55cdd32f0`; progreso `f2f427848f9bc1c4790ad452e1157d4e1821f88a`; informe `6c2d510f3d40574c33d9373799fc78528cf4f952` en `docs/coordination/items_parallel_v1/reports/W02/CAMP_004_ITER_06.md`.
+
+**Siguiente `p`:** primero CI real sobre HEAD si se recupera run, exigir `CAMP004_W02_PY/GODOT PASS blocks=6` y `CAMP003_W02_PY/GODOT PASS blocks=10`; reparar errores W02 según V5 sin rebajar expectativas y escalar si requiere alterar API compartida. Ejecutar **sólo fila 07**, `ice_heal;lava_cookie;lemonade;lumiose_galette`. No 08 antes de siguiente orden.
+
+---
+
 # IA2/W02 — CONTINUIDAD VIGENTE: CAMPAÑA_004 BLOQUE 05/10
 
 **Identidad:** W02, responsable de bayas, medicinas y entrenamiento. **Rama exclusiva:** `codex/calvo-items-20261103-w02-camp004`. **Una tecla `p` = una fila autorizada**, sin repetir. Asegurar no tocar `main`, V28, árbitra IA6, PR #118, otras ramas, catálogos ni workflows. Reparación autónoma V5 únicamente del área propia; conflictos de API compartida para IA6.
