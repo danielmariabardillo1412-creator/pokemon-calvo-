@@ -44,3 +44,16 @@ GitHub Actions [#41602009788](https://github.com/danielmariabardillo1412-creator
 El CSV se reconcilió a `DEPENDENCIA_DOCUMENTADA` con recibo `41602009788`, commit `d338594b9e085f1de1698e44006a99d0b5a83c36`. La actualización del CSV provoca una segunda ejecución CI sobre el progreso consolidado, cuyo resultado se verifica por separado.
 
 **Bloque 09 técnicamente entregado, pendiente solo de la confirmación CI de consolidación.**
+
+
+## Segunda CI09 consolidada
+
+La ejecución [#41602238413](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41602238413), SHA `d338594b9e085f1de1698e44006a99d0b5a83c36`, terminó **completed/success** después de registrar la fila 09 como `DEPENDENCIA_DOCUMENTADA`. Recibos repetidos del log:
+- `CAMP004_W04_MANIFEST_PASS reserved=10 completed=9 ids=36`.
+- `CAMP004_W04_PY PASS blocks=9 checks=312`.
+- `CAMP004_W04_GODOT PASS blocks=9 checks=847`.
+- Regresión CAMPAÑA_003 Python **120** y Godot **270** PASS.
+
+Los dos objetos de fusión se mantienen `DEPENDENCIA records=0` y los tres cupones `AUDITORIA_LEGACY records=0`. El PASS confirma los contratos de rechazo, inventario y SaveV2 de W04, no efectos de fusión, captura, experiencia o amistad.
+
+**Bloque 09/10 cerrado.** No iniciar bloque 10 hasta otro `p`.
