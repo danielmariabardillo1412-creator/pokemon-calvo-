@@ -120,6 +120,66 @@
         "no_ball_registration"
       ],
       "ci_required": true
+    },
+    {
+      "bloque": "03",
+      "familia": "CAPTURE_CONTEXT",
+      "ids": [
+        "love_ball",
+        "moon_ball"
+      ],
+      "objetivo": "sexo_especie_y_condicion_piedra_lunar",
+      "current_state": "DEPENDENCIA_CONCRETA",
+      "functional_effect_certified": false,
+      "per_id_status": {
+        "love_ball": "DEPENDENCIA_CONCRETA",
+        "moon_ball": "DEPENDENCIA_CONCRETA"
+      },
+      "existing_positive_contracts": [
+        "CreatureInstance.base_species_id",
+        "EvolutionRecord.use_item_moon_stone",
+        "EvolutionSystem.evolution_candidates_with_item_id"
+      ],
+      "required_producers": [
+        {
+          "id": "love_ball",
+          "producer": "trusted_individual_gender_source_and_SaveV2",
+          "consumer": "CaptureSystem.resolve > CaptureBallEffects.multiplier",
+          "missing_fields": [
+            "individual_gender_id",
+            "target_and_active_species_gender_validity"
+          ],
+          "decision": "Fijar sexo individual y persistente de capturador y objetivo, comparación de especie base, reglas de género desconocido/neutral y forma; no derivar sexo de metadatos porcentuales por especie."
+        },
+        {
+          "id": "moon_ball",
+          "producer": "versioned_moon_stone_evolution_eligibility_from_catalog",
+          "consumer": "CaptureSystem.resolve > CaptureBallEffects.multiplier",
+          "missing_fields": [
+            "selected_evolution_version_group",
+            "moon_stone_target_evolution_predicate"
+          ],
+          "decision": "Decidir versión y si la condición es que la especie pueda evolucionar con Piedra Lunar en alguna ruta o en la ruta aplicable; evitar suponer que todos los registros/versiones son activos."
+        }
+      ],
+      "evidence_paths": [
+        "modules/creatures/domain/creature_instance.gd",
+        "modules/creatures/domain/creature_species.gd",
+        "modules/creatures/domain/evolution_record.gd",
+        "modules/creatures/progression/evolution_system.gd",
+        "modules/capture/capture_ball_effects.gd",
+        "modules/capture/capture_ruleset.gd"
+      ],
+      "positive_tests": [
+        "moon_stone_evolution_record_item_id",
+        "evolution_system_item_candidate_route",
+        "species_data_provenance"
+      ],
+      "negative_tests": [
+        "no_individual_gender",
+        "no_love_or_moon_ball_multiplier"
+      ],
+      "ci_required": true
     }
   ]
 }
