@@ -29,3 +29,18 @@ Verificar `CAMP004_W04_MANIFEST_PASS reserved=10 completed=9 ids=36`, `CAMP004_W
 No se han modificado producción, `main`, V28, rama árbitra, otras trabajadoras, catálogos ni workflow. Las 16 dependencias heredadas de CAMPAÑA_003 siguen sin resolver.
 
 **Siguiente `p` cuando esta CI sea satisfactoria:** bloque 10/10, `big_nugget;bottle_cap;gold_bottle_cap;heart_scale;nugget;pretty_wing;rare_bone`. No iniciarlo en esta iteración.
+
+## Evidencia real CI09
+
+GitHub Actions [#41602009788](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41602009788), SHA `cf6111da607eb850da867759b61840ad188f3494`, ha terminado **completed/success**. Recibos exactos de los logs:
+
+- `CAMP004_W04_MANIFEST_PASS reserved=10 completed=9 ids=36`.
+- `CAMP004_W04_PY PASS blocks=9 checks=312`.
+- `CAMP004_W04_GODOT PASS blocks=9 checks=847`.
+- Regresión CAMPAÑA_003: Python `PASS blocks=10 checks=120` y Godot `PASS blocks=10 checks=270`.
+
+**Salida por ID:** `n_lunarizer_merge` y `n_solarizer_merge`: `status=DEPENDENCIA records=0 conditioned=0` por fusión de dos criaturas sin contrato; `roto_catch`, `roto_exp_points` y `roto_friendship`: `status=AUDITORIA_LEGACY records=0 conditioned=0`, respectivamente captura W03, experiencia y amistad fuera de W04. Ninguno queda certificado como efecto jugable.
+
+El CSV se reconcilió a `DEPENDENCIA_DOCUMENTADA` con recibo `41602009788`, commit `d338594b9e085f1de1698e44006a99d0b5a83c36`. La actualización del CSV provoca una segunda ejecución CI sobre el progreso consolidado, cuyo resultado se verifica por separado.
+
+**Bloque 09 técnicamente entregado, pendiente solo de la confirmación CI de consolidación.**
