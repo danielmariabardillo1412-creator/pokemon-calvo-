@@ -1,0 +1,7 @@
+{
+  "schema_version": 1,
+  "campaign": "CAMP_004_W05",
+  "active_version": "scarlet-violet",
+  "purpose": "Cobertura de enseñanza W05 en CAMPAÑA_004; cero bloques en bootstrap, nunca es PASS funcional",
+  "blocks": []
+}
