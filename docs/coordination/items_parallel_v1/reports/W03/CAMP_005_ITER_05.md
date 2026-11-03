@@ -1,3 +1,11 @@
+## Recibos verificados — hito 05
+
+[GitHub Actions #41721510769](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41721510769), SHA `3d6989141f2919a7b35b4e03281fc339a9fce98c`, terminó **completed/success**. Resultado acumulado: `CAMP005_W03_PY PASS blocks=5 checks=93`, `CAMP005_W03_GODOT PASS blocks=5 checks=103`, gates Python y Godot IA6 PASS. Regresiones del hito obligatorias: `CAMP004_W03_PY PASS blocks=10 checks=187`, `CAMP004_W03_GODOT PASS blocks=10 checks=1344`, `CAMP003_W03_PY PASS blocks=10 checks=279`, `CAMP003_W03_GODOT PASS blocks=10 checks=986`.
+
+El éxito de CI comprueba ×1,5 actualmente operativo y la dependencia de contexto especial, **no** garantiza validación de zona Safari/Concurso Bicho. IA6 debe decidir si el uso se limita a esas zonas.
+
+---
+
 # IA3/W03 — CAMPAÑA_005 / BLOQUE 05 — Safari Ball y Sport Ball
 
 **Rama exclusiva:** `codex/calvo-items-20261103-w03-camp005`. **Backlog:** `safari_ball;sport_ball`, no contar como objetos nuevos.
