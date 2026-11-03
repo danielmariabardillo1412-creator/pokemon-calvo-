@@ -1,3 +1,19 @@
+# ESTADO VIGENTE IA5/W05 — CAMPAÑA_003 · 09/10 PUBLICADOS (2026-11-03)
+
+**Identidad:** IA5/W05, familia de MT/libros. **ÚNICA rama:** `codex/calvo-items-20261103-w05-camp003`. Encargo/cola IA6: `CAMPAIGN_GATE_003.md`, `CAMPAIGN_003_QUEUE_APPROVED.csv`, `campaigns/CAMP_003_W05.md` en rama `codex/calvo-items-20261101-arbitro`. Esta cabecera prevalece sobre los históricos inferiores.
+
+**BLOQUE 09 ENTREGADO:** `tm69;tm70;tm71;tm72;tm73;tm74` mapeadas en Scarlet/Violet a `ice_punch;sleep_talk;seed_bomb;electro_ball;drain_punch;reflect`. Fixture acumulativo de **9 bloques / 54 MT distintas**, commit `cdcd2ed0ce02913c0508e5da297a4d54b37dddf2`, y fila `09` del progreso `reports/W05/CAMP_003_PROGRESO.csv`, commit `d17bffb0134d80b03f762c8c5f650e4e07f5e34f`. Informe `CAMP_003_ITER_09.md`, commit `b7670550c6765b6e93d5aed1d41f2a7de08f7134`. Scripts Python/Godot propios sin cambios; continúan leyendo fixture/progreso acumulativamente. **Cotejo estático verificado:** 54 IDs no repetidos, nueve filas y mapeos idénticos a cola IA6 y fuente SV. No equivale a PASS funcional de seis nuevas enseñanzas.
+
+**CI BLOQUES 01–08 VERIFICADA:** [#41560433553](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41560433553), SHA `aeaa0ec2a4add2ab134ceb4b8d06c12afca6e40c`, `completed/success`, logs Python `CAMP003_W05_PY PASS blocks=8 checks=464`, Godot 4.7 `CAMP003_W05_GODOT PASS blocks=8 checks=1736`. Se conservaron estados históricos `EN_CI_AUTOMATICA` de los primeros ocho bloques en el CSV para evitar nuevos runs redundantes; el veredicto real queda aquí.
+
+**CI BLOQUE 09 AÚN SIN PASS:** [#41563035302](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41563035302), SHA de progreso `d17bffb0134d80b03f762c8c5f650e4e07f5e34f`, inicialmente `pending`; el run intermedio de fixture #41563021095 puede cancelarse por concurrencia. Para certificar exigir `completed/success` y ambos recibos `PASS blocks=9`. El progreso, informe y HEAD posteriores no equivalen a CI exitosa.
+
+**Próxima `p`:** consultar CI del SHA del progreso 09/10; si `success`, ejecutar solo el **último bloque 10** `tm75;tm76;tm78;tm79;tm80;tm81`. Si en curso, un único bloque independiente de tests sin PASS; si FAIL del arnés, corregir sin perder aserciones; si falla servicio, SaveV2, catálogo o lógica compartida STOP y comunicar IA6. Una vez publicado bloque 10, anunciar `CAMPAÑA_003_FINALIZADA` **como entrega**, verificar CI final aparte y STOP. Nunca bloque 11 ni nueva campaña.
+
+**Protección:** `main`, V28, PR118, árbitra, W01–W04, producción, `modules/`, `data/`, `config/`, CI/manifest compartidos, partidas reales, 19 MT legacy y arte/GPU/UI intactos.
+
+---
+
 # ESTADO VIGENTE IA5/W05 — CAMPAÑA_003 · 08/10 PUBLICADOS (2026-11-03)
 
 **Identidad:** IA5/W05, MT/libros. **Única rama autorizada:** `codex/calvo-items-20261103-w05-camp003`. Reglas: `CAMPAIGN_GATE_003.md`, `CAMPAIGN_003_QUEUE_APPROVED.csv`, `campaigns/CAMP_003_W05.md` en rama árbitra. Cada `p` = solo primer bloque pendiente de cola (máximo 10, después STOP). Esta cabecera prevalece sobre las históricas inferiores.
