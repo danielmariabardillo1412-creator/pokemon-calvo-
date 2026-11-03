@@ -12,3 +12,9 @@
 - El arnés Python `test_parallel_items_w04_campaign_004.py` y Godot `parallel_items_w04_campaign_004.gd` deberán crearse por IA4 con sus primeras pruebas; **no hay placeholder que finja PASS**.
 - El antecedente histórico de denegación de edición de workflow W04 era una operación concreta; se ha creado un workflow nuevo para campaña autorizada. Cualquier nueva denegación real se respeta y escala, no se sortea.
 - **No** tocar `main`, V28, PR #118 ni ramas W01/W02/W03/W05. No hacer merge a árbitra automáticamente; IA6 deberá integrar tras auditoría.
+
+## Validación de arranque definitiva (2026-11-03)
+
+- Primer run [#41574785492](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41574785492): `failure` porque faltaban en la nueva rama las copias de solo lectura de `CAMPAIGN_004_W02_QUEUE_APPROVED.csv`, `CAMPAIGN_004_W03_QUEUE_APPROVED.csv` y `CAMPAIGN_004_W05_QUEUE_APPROVED.csv`. No hubo error de Godot ni código de evolución.
+- IA6 copió esos tres CSV sin editarlos, únicamente como evidencias anticolisión. El bootstrap se reactivó con el archivo W04 propio `reports/W04/CAMP_004_BOOTSTRAP.md`, commit `748e320b4042185f259eca5a7dc43e4bfa5f119e`.
+- **Run definitivo [#41574901308](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41574901308) `completed/success`**, job `125716019722`. Log literal: `CAMP004_W04_MANIFEST_PASS reserved=10 completed=0 ids=36`, `BOOTSTRAP_NO_FUNCIONAL`, `BOOTSTRAP_W04_NO_FUNCIONAL 0/10`. Los pasos Godot/Python de mecánica nueva no se ejecutan con 0/10, por diseño. La nueva rama está preparada para activar bloque 01.
