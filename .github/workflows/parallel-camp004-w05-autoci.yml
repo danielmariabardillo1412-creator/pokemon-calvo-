@@ -115,25 +115,9 @@ jobs:
         run: |
           set -euo pipefail
           python -B tests/tools/test_parallel_items_w05_campaign_003.py --ci 2>&1 | tee camp004-regression-camp003-python.log
-          grep -E '^CAMP003_W05_PY PASS blocks=10 checks=[1-9][0-9]*
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: camp004-${{ github.run_id }}
-          if-no-files-found: ignore
-          retention-days: 7
-          path: camp004-*.log
- camp004-regression-camp003-python.log
+          grep -E '^CAMP003_W05_PY PASS blocks=10 checks=[1-9][0-9]*$' camp004-regression-camp003-python.log
           timeout 600s godot --headless --path . --script res://tests/gameplay/parallel_items_w05_campaign_003.gd 2>&1 | tee camp004-regression-camp003-godot.log
-          grep -E '^CAMP003_W05_GODOT PASS blocks=10 checks=[1-9][0-9]*
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: camp004-${{ github.run_id }}
-          if-no-files-found: ignore
-          retention-days: 7
-          path: camp004-*.log
- camp004-regression-camp003-godot.log
+          grep -E '^CAMP003_W05_GODOT PASS blocks=10 checks=[1-9][0-9]*$' camp004-regression-camp003-godot.log
       - name: Publicar evidencia efimera
         if: always()
         uses: actions/upload-artifact@v4
