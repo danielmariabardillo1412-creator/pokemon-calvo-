@@ -29,3 +29,13 @@ Cada prueba exige tres variantes **activo / ausente / reserva**, compara efectos
 - Nueva CI [#41567242610](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41567242610), `pending` al redactar. Debe emitir `CAMP003_W01_PY PASS blocks=8` y `CAMP003_W01_GODOT PASS blocks=8` y concluir `success`.
 
 **Siguiente `p`:** verificar/reparar CI acumulativa y, solo si corresponde, ejecutar **bloque 09/10 `mirror_herb;muscle_band;protective_pads`**. Nunca tocar `main`, V28, producción ajena ni otras ramas. No certificar GPU/UI.
+
+## Reparación V5 posterior a la entrega del bloque 08
+
+**Veredicto nuevo del run 08:** [#41567242610](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41567242610) `completed/failure`. Python `CAMP003_W01_PY PASS blocks=8 checks=649`; Godot `CAMP003_W01_GODOT FAIL blocks=8 checks=9780 errors=4`. **Las 12 incidencias del ciclo Botas Gruesas de la CI 07 desaparecieron**, confirmando la corrección de orden de ranuras de cambio `["switch 2", "switch 2"]`; los únicos cuatro errores quedaron en el clasificador de primer movimiento `iron_speed_delay/{19,23}` y `lagging_same_priority_last/{19,23}`.
+
+**Evidencia del log auténtico:** para los modos equipados la primera entrada fue `|move|p2a: calvo_p2_0|Tackle|p1a: calvo_p1_0`, mientras que en los controles fue `|move|p1a: calvo_p1_0|Tackle|p2a: calvo_p2_0`. Las aserciones de mecánica de Bola Férrea y Cola Plúmbea eran correctas: ambas hacen actuar después del oponente. El arnés defectuoso usaba `entry.contains("|p1a:")`, que encontraba el **objetivo** del movimiento incluso cuando el atacante era `p2a`, y por eso etiquetaba a ambos como `own`.
+
+**Parche propio, sin tocar producción ni debilitar controles:** commit `8fe7e3e9d51462aeb6dcf18d01c2274d6835a831` (solo `tests/gameplay/parallel_items_w01_campaign_003.gd`). Corrige exclusivamente la identificación del actor a `entry.begins_with("|move|p1a:")`; se conservan la aserción estricta equipable `foe`/ausente `own`/reserva `own`, los 54 escenarios del fixture, las 108 semillas-escenario, las 324 variantes, el arnés SaveV2 y la comprobación del ciclo de Botas.
+
+**Nueva CI acumulativa:** [#41569533376](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41569533376), SHA del parche anterior; estado inicialmente `in_progress`. Se requiere `CAMP003_W01_PY PASS blocks=8`, `CAMP003_W01_GODOT PASS blocks=8` y `completed/success` para certificar 04–08. Antes de ese resultado se mantiene `ENTREGADO_PENDIENTE_CI` para 04–07 y `EN_CI_AUTOMATICA` para 08.
