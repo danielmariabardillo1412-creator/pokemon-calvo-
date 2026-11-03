@@ -39,3 +39,15 @@ Cada prueba exige tres variantes **activo / ausente / reserva**, compara efectos
 **Parche propio, sin tocar producción ni debilitar controles:** commit `8fe7e3e9d51462aeb6dcf18d01c2274d6835a831` (solo `tests/gameplay/parallel_items_w01_campaign_003.gd`). Corrige exclusivamente la identificación del actor a `entry.begins_with("|move|p1a:")`; se conservan la aserción estricta equipable `foe`/ausente `own`/reserva `own`, los 54 escenarios del fixture, las 108 semillas-escenario, las 324 variantes, el arnés SaveV2 y la comprobación del ciclo de Botas.
 
 **Nueva CI acumulativa:** [#41569533376](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41569533376), SHA del parche anterior; estado inicialmente `in_progress`. Se requiere `CAMP003_W01_PY PASS blocks=8`, `CAMP003_W01_GODOT PASS blocks=8` y `completed/success` para certificar 04–08. Antes de ese resultado se mantiene `ENTREGADO_PENDIENTE_CI` para 04–07 y `EN_CI_AUTOMATICA` para 08.
+
+## Cierre confirmado de la incidencia — CI SUCCESS de los 8 bloques
+
+[**GitHub Actions #41569533376**](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41569533376): `completed/success` sobre SHA exacto de **pruebas** `8fe7e3e9d51462aeb6dcf18d01c2274d6835a831`, sin error de paso ni de contratos. Registro oficial:
+- `CAMP003_W01_PY PASS blocks=8 checks=649`
+- `CAMP003_GATE_PY_PASS worker=W01 blocks=8 checks=649`
+- `CAMP003_W01_GODOT PASS blocks=8 checks=9780`
+- `CAMP003_GATE_GODOT_PASS worker=W01 blocks=8 checks=9780`
+
+**Resultado comprobado:** 0 errores; **los 16 fallos de las pasadas anteriores resueltos**, incluyendo el ciclo de cambios de `heavy_duty_boots` y los cuatro casos en dos semillas de `iron_ball`/`lagging_tail`. La traza de Godot muestra `active=foe none=own reserve=own` para `iron_speed_delay` y `lagging_same_priority_last`, como exige el test causal. Los objetos de los bloques 01–08, con 54 casos/108 pares/324 variantes, se revalidaron juntos, incluidos controles negativos y SaveV2.
+
+**No hay necesidad de modificar producción ni el workflow**. La matriz Python/fixture sigue inalterada. El registro `CAMP_003_PROGRESO.csv` mantiene por ahora las etiquetas previas a esta CI (04–07 pendiente y 08 en curso); para **evitar volver a consumir una CI de casi toda la campaña solo por un cambio de metadatos**, actualizar las filas a `CI_PASS_VERIFICADO`, referenciando el run `41569533376`, conjuntamente con el próximo bloque 09 cuando el usuario envíe la siguiente `p`. La evidencia autoritativa de PASS ya está enlazada aquí y en el cuaderno W01. Esta actualización documental NO consume otro microbloque.
