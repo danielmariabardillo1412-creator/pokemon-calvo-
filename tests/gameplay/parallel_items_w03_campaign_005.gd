@@ -34,6 +34,7 @@ func _run_campaign() -> void:
 		n += 1
 		match String(block.get("bloque", "")):
 			"01": _block_01(block)
+			"02": _block_02(block)
 			_: check("Bloque sin prueba propia " + str(n), false)
 	_finish(n)
 
@@ -81,6 +82,59 @@ func _block_01(block: Dictionary) -> void:
 	check("No se muta criatura ni contexto durante sondeo",
 		target.to_dict() == before[0] and ctx.completed_turns == before[1]
 		and ctx.catcher_level == before[2])
+
+# 02: Luxury Ball needs persistable capture-origin metadata; Lure Ball needs
+# a trusted fishing producer. Test the existing REAL positive friendship path.
+func _block_02(block: Dictionary) -> void:
+	var ids: Array = block.get("ids", [])
+	check("Reserva bloque02 exacta", ids == ["luxury_ball", "lure_ball"])
+	check("Contratos siguen pendientes", block.get("current_state") == "DEPENDENCIA_CONCRETA"
+		and not bool(block.get("functional_effect_certified", true)))
+	var context := CaptureBattleContext.new()
+	var context_fields: Array[String] = []
+	for prop: Dictionary in context.get_property_list():
+		context_fields.append(String(prop.get("name", "")))
+	var target: CreatureInstance = _mon(&"caterpie", 12, &"c005_02_target")
+	var serialized: Dictionary = target.to_dict()
+	var original_keys: Array[String] = []
+	for k: Variant in serialized.keys():
+		original_keys.append(String(k))
+	var restored: CreatureInstance = CreatureInstance.from_dict(serialized)
+	check("La criatura mantiene identidad y amistad tras reconstrucción",
+		restored.to_dict() == serialized and restored.instance_id == target.instance_id
+		and restored.friendship == target.friendship)
+	var friendship_effects = preload("res://modules/inventory/field_friendship_effects.gd")
+	restored.friendship = 0
+	var baseline: int = friendship_effects.increase(restored, [5, 3, 2])
+	check("Ganancia real de amistad ya funciona sin Luxury",
+		baseline == 5 and restored.friendship == 5)
+	restored.friendship = 0
+	restored.held_item_id = &"soothe_bell"
+	var bell_gain: int = friendship_effects.increase(restored, [5, 3, 2])
+	check("Bonificación existente Campana Alivio funcional",
+		bell_gain == 7 and restored.friendship == 7)
+	check("No se debe confundir la captura Luxury con objeto equipado",
+		restored.held_item_id == &"soothe_bell")
+	check("Falta origen Ball serializado — integración de captura pendiente",
+		not original_keys.has("original_capture_ball_id")
+		and not original_keys.has("capture_ball_id"))
+	check("Falta método de pesca en contexto de captura",
+		not context_fields.has("encounter_method")
+		and not context_fields.has("fishing_provenance"))
+	for raw_id: String in ids:
+		var id := StringName(raw_id)
+		check("Objeto seleccionado y presente " + raw_id,
+			catalogs.item(id) != null and service_for().selection.content_allowed(id))
+		check("No registrar bola sin contexto fiable " + raw_id,
+			not CaptureRuleset.new().is_known_ball(id))
+	for producer: Dictionary in block.get("required_producers", []):
+		check("Dependencia ligada a ID " + String(producer.get("id", "")),
+			ids.has(String(producer.get("id", "")))
+			and String(producer.get("producer", "")) != ""
+			and String(producer.get("consumer", "")) != "")
+	var unchanged: Dictionary = target.to_dict()
+	check("Auditoría sin mutación accidental de Pokémon original",
+		target.to_dict() == unchanged)
 
 func _finish(n: int) -> void:
 	done = true
