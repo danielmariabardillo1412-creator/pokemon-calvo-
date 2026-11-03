@@ -163,6 +163,89 @@ func _casos_de_version_y_etapas_02(catalogo: DefinitionCatalog) -> void:
 		comprobar(retirada.get("accepted", false) and _estado(pc) == antes, "up_grade/porygon2_retirada_sin_mutacion")
 	print("CAMP005_W04_STAGE item=up_grade porygon_to_porygon2=1 porygon2_to_porygon_z=dubious_disc wrong_stage_rejected=true")
 
+func _tiene_destino_03(records: Array, destino: StringName) -> bool:
+	for record in records:
+		if record is EvolutionRecord and record.species_id == destino:
+			return true
+	return false
+
+func _auditar_condicion_03(catalogo: DefinitionCatalog, fila: Dictionary) -> void:
+	var item := StringName(fila.get("item_id", ""))
+	var origen := StringName(fila.get("source", ""))
+	var destino := StringName(fila.get("target", ""))
+	var trig := StringName(String(fila.get("trigger", "")).replace("-", "_"))
+	var key := String(fila.get("key", ""))
+	var spec: CreatureSpecies = catalogo.species(origen)
+	comprobar(catalogo.item(item) != null and spec != null and catalogo.species(destino) != null, String(item) + "/" + String(origen) + "/catálogo")
+	if spec == null:
+		return
+	var encontrados := 0
+	var relevante: EvolutionRecord = null
+	for ev: EvolutionRecord in spec.evolutions:
+		if ev.species_id != destino or ev.trigger != trig:
+			continue
+		if trig == EvolutionSystem.TRIGGER_USE_ITEM and ev.item_id != item:
+			continue
+		if trig == EvolutionSystem.TRIGGER_LEVEL_UP and StringName(str(ev.conditions.get("held_item", ""))) != item:
+			continue
+		encontrados += 1
+		relevante = ev
+	comprobar(encontrados == 1 and relevante != null, String(item) + "/" + String(origen) + "/registro_específico")
+	if relevante == null:
+		return
+	comprobar(EvolutionSystem.classify_record(relevante, catalogo, origen) == EvolutionSystem.DATA_ONLY, String(item) + "/" + String(origen) + "/condicion_no_degradable")
+	comprobar(relevante.min_level == 0 and relevante.conditions.has(key), String(item) + "/" + String(origen) + "/requisito_original")
+	var valor: Variant = relevante.conditions.get(key)
+	var esperado: Variant = fila.get("required")
+	var coincide := int(valor) == int(esperado) if key == "gender" else String(valor).replace("-", "_") == String(esperado).replace("-", "_")
+	comprobar(coincide, String(item) + "/" + String(origen) + "/valor_condicion")
+	if fila.has("additional_key"):
+		var extra := String(fila["additional_key"])
+		comprobar(String(relevante.conditions.get(extra, "")).replace("-", "_") == String(fila.get("additional_value", "")).replace("-", "_"), String(item) + "/" + String(origen) + "/día_y_objeto")
+	var contexto: Dictionary = {"level": 100, "item_id": item, "held_item_id": item, "gender": fila.get("required"), "time_of_day": "full-moon", "moon_phase": "full"}
+	comprobar(not _tiene_destino_03(EvolutionSystem.evolution_candidates(spec, contexto, catalogo), destino), String(item) + "/" + String(origen) + "/no_ignora_condiciones")
+	var pc := _crear(catalogo, origen)
+	comprobar(pc != null, String(item) + "/" + String(origen) + "/criatura")
+	if pc == null:
+		return
+	var criatura := pc.owned_creature(ID)
+	comprobar(not criatura.to_dict().has("gender"), String(item) + "/" + String(origen) + "/sexo_no_persistido")
+	var nivel_contexto := EvolutionSystem.level_up_context(criatura)
+	comprobar(not nivel_contexto.has("gender") and not nivel_contexto.has("time_of_day") and not nivel_contexto.has("held_item_id"), String(item) + "/" + String(origen) + "/contexto_sin_requisitos")
+	var svc := Servicio.new()
+	comprobar(svc.configure(pc, catalogo, func(): return true), String(item) + "/" + String(origen) + "/servicio")
+	comprobar(svc.holdable(item) == bool(fila.get("equippable", false)), String(item) + "/" + String(origen) + "/perfil_equipamiento")
+	comprobar(pc.inventory.add(item, 2), String(item) + "/" + String(origen) + "/inventario")
+	var antes := _estado(pc)
+	comprobar(svc.evolution_options(item, ID).is_empty(), String(item) + "/" + String(origen) + "/sin_opciones_directas")
+	var uso := svc.use_item(item, ID)
+	comprobar(not uso.get("accepted", false) and _estado(pc) == antes, String(item) + "/" + String(origen) + "/uso_rechazado_sin_gasto")
+	var evolucion := svc.evolve(item, ID, destino)
+	comprobar(not evolucion.get("accepted", false) and _estado(pc) == antes, String(item) + "/" + String(origen) + "/evolucion_rechazada")
+	var ajeno := svc.use_item(item, &"w04_ajeno")
+	comprobar(not ajeno.get("accepted", false) and _estado(pc) == antes, String(item) + "/" + String(origen) + "/propietario_ajeno")
+	var equipamiento := svc.equip(item, ID)
+	var se_equipa := bool(fila.get("equippable", false))
+	comprobar(bool(equipamiento.get("accepted", false)) == se_equipa, String(item) + "/" + String(origen) + "/equipar_segun_perfil")
+	comprobar(criatura.species_id == origen and pc.inventory.quantity(item) == (1 if se_equipa else 2) and criatura.held_item_id == (item if se_equipa else &""), String(item) + "/" + String(origen) + "/identidad_inventario_y_objeto")
+	var guardado := SaveGameRepository.new()
+	var ruta := "user://w04_c005_03_" + String(item) + "_" + String(origen) + ".json"
+	var resp: SaveResult = guardado.save_collection(ruta, pc)
+	comprobar(resp.ok, String(item) + "/" + String(origen) + "/guardar_savev2")
+	if resp.ok:
+		var loaded: LoadResult = guardado.load(ruta)
+		comprobar(loaded.ok and loaded.schema_version == 2, String(item) + "/" + String(origen) + "/leer_savev2")
+		if loaded.ok:
+			var restaurada := loaded.party.get_creature(ID)
+			comprobar(restaurada != null and restaurada.instance_id == ID and restaurada.species_id == origen and restaurada.held_item_id == (item if se_equipa else &"") and loaded.inventory.quantity(item) == (1 if se_equipa else 2), String(item) + "/" + String(origen) + "/estado_savev2_integro")
+	DirAccess.remove_absolute(ProjectSettings.globalize_path(ruta))
+	if se_equipa:
+		var quitar := svc.unequip(ID)
+		comprobar(quitar.get("accepted", false) and _estado(pc) == antes, String(item) + "/" + String(origen) + "/retirada_sin_perdida")
+	else:
+		comprobar(_estado(pc) == antes, String(item) + "/" + String(origen) + "/no_equipable_sin_gasto")
+	print("CAMP005_W04_ITEM id=", String(item), " status=DEPENDENCIA_CONDICIONES source=", String(origen), " target=", String(destino), " trigger=", String(trig), " key=", key, " value=", str(valor))
+
 func _ejecutar() -> void:
 	var fixture := _abrir(FIXTURE)
 	var policy := _abrir(TRADE_POLICY)
@@ -177,16 +260,20 @@ func _ejecutar() -> void:
 	comprobar(earlier.get("trade_level_conversion", {}).get("levels_selected") == null, "V25_sin_niveles")
 	comprobar(String(policy.get("correct_future_rule", "")).contains("original equipped evolution item"), "conservar_objeto_equipado")
 	var blocks: Array = fixture.get("blocks", [])
-	comprobar(blocks.size() == 2 and blocks[0].get("block") == "01" and blocks[1].get("block") == "02", "bloques_01_y_02_secuenciales")
-	if blocks.size() != 2:
+	comprobar(blocks.size() == 3 and blocks[0].get("block") == "01" and blocks[1].get("block") == "02" and blocks[2].get("block") == "03", "bloques_01_a_03_secuenciales")
+	if blocks.size() != 3:
 		_finalizar()
 		return
-	for index in range(blocks.size()):
+	for index in range(2):
 		var pairs: Array = blocks[index].get("pairs", [])
 		comprobar(pairs.size() == (4 if index == 0 else 5), "tamano_bloque_" + str(index + 1))
 		for pareja: Dictionary in pairs:
 			_auditar_pareja(catalogo, pareja, policy)
 	_casos_de_version_y_etapas_02(catalogo)
+	var condicionadas: Array = blocks[2].get("cases", [])
+	comprobar(condicionadas.size() == 4, "cuatro_rutas_condicionadas_03")
+	for caso: Dictionary in condicionadas:
+		_auditar_condicion_03(catalogo, caso)
 	_finalizar()
 
 func _finalizar() -> void:
@@ -194,7 +281,7 @@ func _finalizar() -> void:
 		return
 	cerrado = true
 	if errores.is_empty():
-		print("CAMP005_W04_GODOT PASS blocks=2 checks=", checks)
+		print("CAMP005_W04_GODOT PASS blocks=3 checks=", checks)
 	else:
 		print("CAMP005_W04_GODOT FAIL errors=", JSON.stringify(errores))
 	quit(0 if errores.is_empty() else 1)
