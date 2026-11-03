@@ -38,6 +38,7 @@ func _run_campaign() -> void:
 			"03": _block_03(block)
 			"04": _block_04(block)
 			"05": _block_05(block)
+			"06": _block_06(block)
 			_: check("Bloque sin prueba propia " + str(n), false)
 	_finish(n)
 
