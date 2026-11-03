@@ -440,6 +440,52 @@ def main() -> int:
                       and "WildEncounterTable.from_dict(packed)" in runner
                       and "reduced.validate(catalogs).ok" in runner,
                       "No se ejecutan pruebas positivas de frecuencia")
+            elif block["bloque"] == "08":
+                check(ids == ["red_flute", "yellow_flute", "blue_flute"],
+                      "Reserva del bloque08 ha cambiado")
+                check(block["current_state"] == "PARTIAL_BLUE_FIELD_FUNCTIONAL"
+                      and block["functional_effect_certified"] is False,
+                      "No certificar Red/Yellow como funcionales en campo")
+                profile = json.loads((ROOT / "modules/inventory/imported_recovery_v19.json").read_text(
+                    encoding="utf-8"))
+                blue = profile["items"].get("blue_flute", {})
+                check(blue.get("consume") is False
+                      and blue.get("effect", {}).get("cure") == ["slp"],
+                      "Fuente real Azul no reutilizable o no cura sueño")
+                field = (ROOT / "modules/inventory/field_item_effects.gd").read_text(
+                    encoding="utf-8")
+                service = (ROOT / "modules/inventory/field_item_service.gd").read_text(
+                    encoding="utf-8")
+                battle = json.loads((ROOT / "modules/inventory/battle_support_profile.json").read_text(
+                    encoding="utf-8"))
+                check(battle["blue_flute"]["cure"] == "sleep"
+                      and battle["red_flute"]["cure"] == "attraction"
+                      and battle["yellow_flute"]["cure"] == "confusion",
+                      "Contrato externo de flautas no coincide")
+                check('FieldEffects.consumes_on_use(item_id)' in service
+                      and 'sleep_clocks.erase(String(creature_id))' in service
+                      and 'FieldEffects.apply(copy, item_id, move_slot, catalogs)' in service,
+                      "Transacción y reloj de sueño no comprobables")
+                check('creature.status_state.clear_persistent()' in field
+                      and 'STATUS.get(code) == status' in field
+                      and 'return _recovery.has(String(item_id))' in field,
+                      "Ruta de medicina importada no identificada")
+                check("red_flute" not in profile["items"]
+                      and "yellow_flute" not in profile["items"],
+                      "Hay ruta de campo nueva: reauditar efectos positivos")
+                selected = {r["id"]: r for r in
+                            rows(ROOT / "docs/current/RANDOMLOCK_ITEMS_BUILD_SCOPE_V2.csv")}
+                check(all(selected[item]["estado_contenido"] == "SELECCIONADO"
+                          for item in ids), "Flautas fuera de alcance")
+                check({p["id"] for p in block["required_producers"]} ==
+                      {"red_flute", "yellow_flute"}, "Contratos volátiles incompletos")
+                check('"08": _block_08(block)' in runner
+                      and "func _block_08(block: Dictionary)" in runner
+                      and 'service.use_item(&"blue_flute", target.instance_id)' in runner
+                      and 'service.owner.inventory.quantity(&"blue_flute") == 2' in runner
+                      and 'service.sleep_clocks.is_empty()' in runner
+                      and 'snapshot(service) == no_effect_before' in runner,
+                      "Faltan positivos y negativos reales de Flauta Azul")
             else:
                 check(False, "Bloque sin nueva prueba: " + block["bloque"])
         check(checks > 0, "Sin verificaciones")
