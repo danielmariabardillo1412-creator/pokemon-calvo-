@@ -115,62 +115,79 @@ func _block_01(block: Dictionary) -> void:
 # Se comprueban contrato de rechazo, estado de criatura, bolsa y roundtrip.
 func _block_02(block: Dictionary) -> void:
 	var ids: Array = block.get("ids", [])
-	check("Bloque02 tres IDs exactos", ids == ["black_flute", "blue_flute", "escape_rope"]
-		and not bool(block.get("supported_effects_certified", true)))
+	check("Bloque02 tres IDs exactos", ids == ["black_flute", "blue_flute", "escape_rope"])
 	for raw_id: String in ids:
 		var id := StringName(raw_id)
-		check("Objeto presente en catálogo " + raw_id, catalogs.item(id) != null)
+		check("Objeto campo registrado en catálogo " + raw_id, catalogs.item(id) != null)
+		var blue: bool = id == &"blue_flute"
 		for case: Dictionary in block.get("cases", []):
 			for quantity: int in block.get("inventory_counts", []):
 				var service := service_for()
-				check("Selección permite objeto del bloque02 " + raw_id,
+				check("Política de selección permite objeto " + raw_id,
 					service.selection.content_allowed(id))
 				var target: CreatureInstance = service.owner.owned_creature(&"field_item_target")
-				if String(case.get("status", "none")) == "sleep":
+				var asleep: bool = String(case.get("status", "")) == "sleep"
+				if asleep:
 					status(target, &"sleep")
-				check("Inventario preparada " + raw_id, service.owner.inventory.add(id, quantity) if quantity > 0 else true)
+					service.sleep_clocks[String(target.instance_id)] = {
+						"version": "0.10.11", "start_time": 3, "time": 2}
+				if quantity > 0:
+					check("Mochila preparada " + raw_id, service.owner.inventory.add(id, quantity))
 				var before: String = snapshot(service)
+				var before_target: Dictionary = target.to_dict()
 				var result: Dictionary = service.use_item(id, target.instance_id)
-				check("Sin ejecutor de campo debe rechazarse sin efectos " + raw_id,
-					result.get("accepted", true) == false
-					and String(result.get("reason", "")) == "field_effect_not_connected"
-					and String(result.get("status", "")) == "DEPENDENCY_MISSING"
-					and snapshot(service) == before
-					and service.owner.inventory.quantity(id) == quantity)
+				if blue and asleep and quantity > 0:
+					var after: CreatureInstance = service.owner.owned_creature(&"field_item_target")
+					check("Flauta Azul cura sueño con efecto real", result.get("accepted", false) == true
+						and String(result.get("status", "")) == "APPLIED"
+						and after != null and after.status_state.persistent_id == &""
+						and after.status_ids.is_empty() and after.instance_id == target.instance_id
+						and after.current_hp == target.current_hp
+						and after.friendship == target.friendship)
+					check("Flauta Azul reutilizable, reloj sueño eliminado", 
+						service.owner.inventory.quantity(id) == quantity
+						and service.sleep_clocks.is_empty()
+						and target.to_dict() == before_target)
+				else:
+					var expected: String = "field_effect_not_connected"
+					if blue:
+						expected = "item_not_owned" if quantity == 0 else "item_has_no_effect"
+					check("Rechazo de campo sin mutación " + raw_id + String(case.get("name", "")),
+						result.get("accepted", true) == false
+						and String(result.get("reason", "")) == expected
+						and snapshot(service) == before
+						and service.owner.inventory.quantity(id) == quantity)
 				var saved: Dictionary = service.owner.inventory.to_dict()
 				var loaded: PlayerInventory = PlayerInventory.from_dict(saved)
-				check("Roundtrip inventario de item campo " + raw_id,
+				check("Mochila roundtrip con cantidad intacta " + raw_id,
 					not loaded.corrupted and loaded.to_dict() == saved
 					and loaded.quantity(id) == quantity)
-				check("No suprime sueño por falsa Flauta Azul " + raw_id,
-					String(case.get("status", "")) != "sleep"
-					or target.status_state.persistent_id == &"sleep")
-		var service_locked := service_for()
-		check("Bolsa preparada bloqueo " + raw_id, service_locked.owner.inventory.add(id, 2))
-		var before_locked: String = snapshot(service_locked)
+		var locked_service := service_for()
+		check("Bolsa para bloqueo " + raw_id, locked_service.owner.inventory.add(id, 2))
+		var locked_before: String = snapshot(locked_service)
 		locked = true
-		var denied: Dictionary = service_locked.use_item(id, &"field_item_target")
+		var denied: Dictionary = locked_service.use_item(id, &"field_item_target")
 		locked = false
-		check("Bloqueo impide uso y consumo " + raw_id,
+		check("Bloqueo de campo previo a acción " + raw_id,
 			denied.get("accepted", true) == false
 			and String(denied.get("reason", "")) == "field_locked"
-			and snapshot(service_locked) == before_locked)
-		var service_bad := service_for()
-		check("Bolsa preparada corrupción " + raw_id, service_bad.owner.inventory.add(id, 2))
-		service_bad.owner.inventory.corrupted = true
-		var before_bad: String = snapshot(service_bad)
-		var invalid: Dictionary = service_bad.use_item(id, &"field_item_target")
-		check("Bolsa corrupta rechaza sin mutar " + raw_id,
+			and snapshot(locked_service) == locked_before)
+		var bad_service := service_for()
+		check("Bolsa para corrupción " + raw_id, bad_service.owner.inventory.add(id, 2))
+		bad_service.owner.inventory.corrupted = true
+		var bad_before: String = snapshot(bad_service)
+		var invalid: Dictionary = bad_service.use_item(id, &"field_item_target")
+		check("Corrupción de mochila sin cambio " + raw_id,
 			invalid.get("accepted", true) == false
 			and String(invalid.get("reason", "")) == "invalid_inventory"
-			and snapshot(service_bad) == before_bad)
-		var service_foreign := service_for()
-		check("Bolsa preparada objetivo ajeno " + raw_id, service_foreign.owner.inventory.add(id, 2))
-		var before_foreign: String = snapshot(service_foreign)
-		var missing: Dictionary = service_foreign.use_item(id, &"not_owned")
-		check("No hay aplicación a objetivo ajeno " + raw_id,
+			and snapshot(bad_service) == bad_before)
+		var foreign_service := service_for()
+		check("Bolsa para objetivo ajeno " + raw_id, foreign_service.owner.inventory.add(id, 2))
+		var foreign_before: String = snapshot(foreign_service)
+		var missing: Dictionary = foreign_service.use_item(id, &"not_owned")
+		check("Objetivo ajeno nunca aplica efecto " + raw_id,
 			missing.get("accepted", true) == false
-			and snapshot(service_foreign) == before_foreign)
+			and snapshot(foreign_service) == foreign_before)
 
 func _finish(n: int) -> void:
 	done = true
