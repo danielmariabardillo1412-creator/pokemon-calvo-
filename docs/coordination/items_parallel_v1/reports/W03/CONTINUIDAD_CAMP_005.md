@@ -1,3 +1,11 @@
+# IA3/W03 — Continuidad CAMP005 08/10
+
+Rama exclusiva `codex/calvo-items-20261103-w03-camp005`. Bloque08 `red_flute;yellow_flute;blue_flute`: **Azul tiene ejecución real** de curación de sueño en campo vía `FieldItemService.use_item`, no se consume y borra `sleep_clocks`; pruebas positivas y rechazo no-op publicadas. **Roja y Amarilla** son efectos volátiles de batalla (atracción y confusión respectivamente), sin ejecutor de campo; depende de interfaz battle bag/Showdown para conectar objetivos activos. Informes, fixture, Godot y Python publicados, no producción. CI 07 previa PASS [#41727546334](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41727546334), Python 126, Godot 148. Verificar CI 08 Python/Godot blocks=8, gates IA6 antes de certificar.
+
+Siguiente `p`: solo bloque09 `escape_rope;fluffy_tail` después de comprobar CI08. No tocar main, V28, otros trabajadores ni sistemas compartidos.
+
+---
+
 ## CI validada — bloque 07
 
 [GitHub Actions #41727546334](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41727546334), SHA `2a944b4c1a70de7ba19ea65106e17ece8271e5ba`, **completed/success**. Recibos `CAMP005_W03_PY PASS blocks=7 checks=126`, `CAMP005_GATE_PY_PASS`, `CAMP005_W03_GODOT PASS blocks=7 checks=148`, `CAMP005_GATE_GODOT_PASS`. Las pruebas acreditan la regla existente de frecuencia de encuentros y las dependencias del mundo; no implementan los cinco efectos de campo.
