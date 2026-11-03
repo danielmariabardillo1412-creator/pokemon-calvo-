@@ -1,3 +1,23 @@
+# IA2/W02 — CAMPAÑA_003: CONTINUIDAD VIGENTE / BLOQUE 10 DE 10 — CI PENDIENTE
+
+**Fila 10 EJECUTADA/PUBLICADA, NO CIERRE CERTIFICADO.** Rama `codex/calvo-items-20261103-w02-camp003`. No más filas: STOP al 10. Trabajo pendiente: verificar CI acumulativa y reparar cualquier fallo antes de declarar `CAMPAÑA_003_FINALIZADA`. El usuario ya autorizó avanzar al último bloque si la CI09 había terminado; el run09 [#41566220523](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41566220523) terminó `failure`, fue diagnosticado como comparación de vector Starf en la capa de evidencias y reparado en arnés (`13dc40ee663cd73379e4d21337e8f89ea667a067`). El run de reparación aislado se canceló al publicar bloque10 independiente; **la CI10 debe acreditar también 09**, no dar falso PASS.
+
+**IDs exactos de fila 10:** `yache_berry;grepa_berry;hondew_berry;pomeg_berry`. Yache hielo equipada con positivos/negativos nativos; Grepa (EV Def. Especial), Hondew (EV At. Especial) y Pomeg (EV PS) son uso directo de bolsa `FieldItemService.use_item`, no held battle. Aprovechar ruta `modules/inventory/field_item_effects.gd` y evidencia histórica `tests/gameplay/item_field_effects_v4.gd` sin duplicar 28×6 tests. Nuevos 11 escenarios, 33 variantes, 87 casos y 261 variantes totales previstas en 40 IDs.
+
+**Controles nuevos:** Yache activa/ausente/reserva, Ice Shard vs Tackle; EV bayas en equipo con objeto, equipo sin objeto (rechazo), almacenadas con objeto, EV−10 con límite 0, amistad 100→105/200→202, sin efecto a EV=0 amistad=255, Pomeg desde 1 PS nunca KO, copia original sin mutación, consumo exacto, SaveV2 con ubicación/EV/amistad/HP y recibos SHA256. Fuera de alcance: bonificadores de amistad de origen no resueltos, GPU, campo/clima.
+
+**Commits:** fixture `773a3ed100637761e2f10b71a2febda01c370ab7`; runner W02 `3ccac60d4324f8f3916f556aee1a06c352b4e819`; Python `cd70cb65eeb30e962ddac5bb5f1964d8bb437aec`; CSV con 10 filas `680713149f39e742d92a9c64503e4caeb78d8aee`; informe ITER10 `f49589f14ecc5ff66eb2f60bdc7041fb353f0540`.
+
+**CI actual:** [Actions #41570674107](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41570674107) sobre SHA `680713149f39e742d92a9c64503e4caeb78d8aee`. Exigir `completed/success`, `CAMP003_W02_PY PASS blocks=10 checks=N`, `CAMP003_W02_GODOT PASS blocks=10 checks=M` y gates de manifiesto correctos. No aceptar un run de SHA anterior o cancelado. Último éxito total acreditado hasta este punto: [#41563958549](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41563958549) blocks=8, Python 535, Godot 5795.
+
+**Autonomía V5:** reparar in situ fallos propios, tanto test como función de bayas reservadas, sin cambiar trabajo ajeno/arquitectura. Si error de import/script/permiso, diagnosticar; si error de EV/SaveV2, distinguir infraestructura compartida frente a regla de baya, no inventar semántica. Mantener `main`, V28 y ramas ajenas intactas. IA6 editó previamente el workflow en `43876a6d833958d2d7ad86ce15014b011778007a`; autoría separada.
+
+**Siguiente acción:** consultar y depurar CI10. Cuando PASS real, publicar `CAMP_003_FINAL.md`, actualizar cuaderno, reportar `CAMPAÑA_003_FINALIZADA`, STOP hasta nuevo encargo. No existe fila 11.
+
+---
+
+## HISTÓRICO — ESTADO 09/10 Y ANTERIORES
+
 # IA2/W02 — CAMPAÑA_003: CONTINUIDAD VIGENTE / BLOQUE 09 DE 10
 
 **Estado:** bloque **09/10 publicado** en `codex/calvo-items-20261103-w02-camp003`; último SHA tests/progreso `93bd706149928f63c2cf5cd318ce4a32fa013bc8` `EN_CI_AUTOMATICA`. **No atribuir PASS al bloque 09 hasta resultado nativo del último SHA.** La siguiente `p` autoriza exactamente bloque **10/10**, no otra campaña.
