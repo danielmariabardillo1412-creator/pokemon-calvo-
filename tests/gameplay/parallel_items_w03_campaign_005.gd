@@ -327,6 +327,47 @@ func _block_06(block: Dictionary) -> void:
 				has_owner = String(producer.get("producer", "")) == "overworld_steps"
 		check("Frontera del contador descrita " + raw_id, has_owner)
 
+# 07: test an EXISTING field-rate modifier; no invented lure/flute effect.
+func _block_07(block: Dictionary) -> void:
+	var ids: Array = block.get("ids", [])
+	check("Cola 07 exacta", ids == ["black_flute", "white_flute",
+		"lure", "super_lure", "max_lure"])
+	check("No certificar efecto sin fuente mundo",
+		block.get("current_state") == "DEPENDENCIA_COMPARTIDA"
+		and not bool(block.get("functional_effect_certified", true)))
+	var modifier := preload("res://modules/gameplay/encounter_item_modifiers.gd")
+	check("Existe regla real de frecuencia Cleanse Tag",
+		modifier.supports(&"cleanse_tag") and modifier.supports(&"pure_incense"))
+	check("Regla real reduce 6000 a 4000",
+		modifier.modified_chance_bp(6000) == 4000)
+	check("Regla real respeta cero y límite de redondeo",
+		modifier.modified_chance_bp(0) == 0
+		and modifier.modified_chance_bp(1) >= 1)
+	var table := WildEncounterTable.new(&"w03_zone_07", 6000)
+	check("Tabla real de frecuencia admite slot",
+		table.add_slot(WildEncounterSlot.new(&"w03_slot_07", &"caterpie", 1, 8, 8)))
+	var packed: Dictionary = table.to_dict()
+	var restored := WildEncounterTable.from_dict(packed)
+	check("Roundtrip del contrato de frecuencia",
+		not restored.corrupted and restored.to_dict() == packed)
+	var reduced := WildEncounterTable.from_dict(packed)
+	reduced.encounter_chance_bp = modifier.modified_chance_bp(table.encounter_chance_bp)
+	check("Tabla de frecuencia adaptada es válida",
+		reduced.validate(catalogs).ok and reduced.encounter_chance_bp == 4000)
+	check("La tabla original y su RNG permanecen ajenos a la consulta",
+		table.to_dict() == packed and restored.encounter_chance_bp == 6000)
+	for raw_id: String in ids:
+		var id := StringName(raw_id)
+		check("ID aprobado y seleccionado " + raw_id,
+			catalogs.item(id) != null and service_for().selection.content_allowed(id))
+		check("No confundir objeto de campo con Cleanse Tag " + raw_id,
+			not modifier.supports(id))
+		var found := false
+		for producer: Dictionary in block.get("required_producers", []):
+			if producer.get("id", "") == raw_id:
+				found = producer.get("producer", "") == "overworld_movement_encounter_scheduler"
+		check("Contrato de productor identificado " + raw_id, found)
+
 func _finish(n: int) -> void:
 	done = true
 	if errors.is_empty() and n > 0 and checks > 0:
