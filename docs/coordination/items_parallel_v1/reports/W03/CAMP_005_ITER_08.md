@@ -1,3 +1,9 @@
+## CI verificada — bloque 08
+
+[GitHub Actions #41733987301](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41733987301), SHA `f5e80a92a38c16caf6c7e2cb543eb28ab235844f`, terminó **completed/success** con `CAMP005_W03_PY PASS blocks=8 checks=139`, `CAMP005_GATE_PY_PASS`, `CAMP005_W03_GODOT PASS blocks=8 checks=169`, `CAMP005_GATE_GODOT_PASS`. La primera ejecución [#41733755176](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41733755176) falló por leer el perfil `battle_support_profile.json` desde la raíz en lugar de `items`; corregido el auditor en el SHA validado. **Flauta Azul funcional en campo**: cura sueño, no se consume, limpia reloj y rechaza no-op. Roja y Amarilla mantienen dependencia de interfaz de estados volátiles de combate.
+
+---
+
 # IA3/W03 — CAMPAÑA_005 / BLOQUE 08 — Flautas Roja, Amarilla y Azul
 
 **Cola oficial:** `red_flute;yellow_flute;blue_flute`. Estos IDs ya estaban auditados, no se cuentan como nuevos. Rama propia: `codex/calvo-items-20261103-w03-camp005`.
