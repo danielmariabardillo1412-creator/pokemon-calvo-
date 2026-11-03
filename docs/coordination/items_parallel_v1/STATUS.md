@@ -1,3 +1,11 @@
+# IA6 — 2026-11-03: CAMPAÑA_003 AMPLIADA A CINCO IAs
+
+**Corrección obligatoria del estado:** W04 sí está **recuperada y disponible**; había completado CAMP001 03/03 y pasó CI 559/0 en [#41538151097](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41538151097). Su antiguo informe `PENDIENTE_CI` es histórico. A petición del usuario se reincorpora a CAMP003 con [gate específico](CAMPAIGN_003_W04_ADDENDUM_GATE.md), [10 bloques/30 IDs nuevos](CAMPAIGN_003_W04_ADDENDUM_QUEUE.csv) y rama nueva `codex/calvo-items-20261103-w04-camp003`. [CI #41554077520](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41554077520) confirma `completed/success` de la **configuración W04 0/10**, NO funcional. Un primer run #41553918508 falló por dos nombres de pasos YAML sin comillas y fue corregido antes del SUCCESS.
+
+**Estado operativo:** cinco trabajadoras W01/W02/W03/W04/W05; cada una con diez bloques autorizados, **50 bloques en total** y **180 IDs reservados**. La cola original de 40/150 para W01/W02/W03/W05 no cambia. La cola aditiva W04 es independiente para no interrumpir los chats ya activados. **Solo IA4 necesita el mensaje inicial [CAMPAIGN_003_W04_ACTIVATION_MESSAGE.md](CAMPAIGN_003_W04_ACTIVATION_MESSAGE.md)**; ejecutará su bloque 01, después `p` del 02 al 10. Ninguna modificación a las otras cuatro ramas, `main`, V28 o producción.
+
+---
+
 # IA6 — CAMPAÑA_003 LARGA ACTIVADA / AUTOPILOTO CI COMPROBADO (2026-11-03)
 
 **Autoridad actual:** [GATE_003](CAMPAIGN_GATE_003.md), [manifiesto y cuatro arranques SUCCESS](CAMPAIGN_003_BRANCH_MANIFEST.md), [cola de 40 bloques/150 IDs](CAMPAIGN_003_QUEUE_APPROVED.csv), [mensaje único a cuatro chats](CAMPAIGN_003_ACTIVATION_MESSAGE.md). **W01/W02/W03/W05: 00/10**, sus ramas nuevas `codex/calvo-items-20261103-w0x-camp003` existen y están listas. IA4 CAMP001 **03/03 cerrada**, sin encargo nuevo.
