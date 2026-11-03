@@ -19,11 +19,13 @@ HISTORIC = ROOT / "tests/gameplay/item_field_effects_v4.gd"
 
 
 def held(scenario, item, foe_move, consumed, **kw):
-    return dict(scenario=scenario, id=item,
-                kind="heal_flavor" if item == "figy_berry" else "lum_held",
-                nature="hardy", start="full", status="", actor_species="mew",
-                foe_species="mew", foe_move=foe_move, consumes=consumed,
-                confuses=False, own_move="reflect", **kw)
+    result = dict(scenario=scenario, id=item,
+                  kind="heal_flavor" if item == "figy_berry" else "lum_held",
+                  nature="hardy", start="full", status="", actor_species="mew",
+                  foe_species="mew", foe_move=foe_move, consumes=consumed,
+                  confuses=False, own_move="reflect")
+    result.update(kw)
+    return result
 
 
 def ev(scenario, amount, friendship, accepted, removed, gain):
