@@ -680,6 +680,94 @@
         19
       ],
       "history": "negative_no_hazard_switch_cycle"
+    },
+    {
+      "block": "07",
+      "id": "iron_grounded_charizard",
+      "item_id": "iron_ball",
+      "op": "flying_grounded_by_iron_ball",
+      "actor_species": "charizard",
+      "foe_species": "garchomp",
+      "foe_move": "earthquake",
+      "own_move": "reflect",
+      "seeds": [
+        19,
+        23
+      ],
+      "history": "held_effect_sweep_v3:grounded_flying_holder"
+    },
+    {
+      "block": "07",
+      "id": "iron_speed_delay",
+      "item_id": "iron_ball",
+      "op": "iron_ball_speed_order",
+      "actor_species": "gengar",
+      "foe_species": "garchomp",
+      "foe_move": "tackle",
+      "own_move": "tackle",
+      "seeds": [
+        19,
+        23
+      ],
+      "history": "held_effect_sweep_v3:speed_halved+native_move_order"
+    },
+    {
+      "block": "07",
+      "id": "lagging_same_priority_last",
+      "item_id": "lagging_tail",
+      "op": "lagging_tail_last",
+      "actor_species": "gengar",
+      "foe_species": "snorlax",
+      "foe_move": "tackle",
+      "own_move": "tackle",
+      "seeds": [
+        19,
+        23
+      ],
+      "history": "held_effect_sweep_v3:last_same_priority"
+    },
+    {
+      "block": "07",
+      "id": "lagging_quick_attack_priority",
+      "item_id": "lagging_tail",
+      "op": "priority_not_overridden",
+      "actor_species": "gengar",
+      "foe_species": "snorlax",
+      "foe_move": "tackle",
+      "own_move": "quick_attack",
+      "seeds": [
+        19
+      ],
+      "history": "held_effect_sweep_v3:priority_preserved"
+    },
+    {
+      "block": "07",
+      "id": "light_reflect_longer",
+      "item_id": "light_clay",
+      "op": "reflect_duration_plus_three",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "foe_move": "amnesia",
+      "own_move": "reflect",
+      "seeds": [
+        19,
+        23
+      ],
+      "history": "held_pilot.cjs:light_clay_reflect_duration"
+    },
+    {
+      "block": "07",
+      "id": "light_no_screen",
+      "item_id": "light_clay",
+      "op": "no_screen_control",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "foe_move": "amnesia",
+      "own_move": "tackle",
+      "seeds": [
+        19
+      ],
+      "history": "new_negative_no_screen_no_effect"
     }
   ]
 }
