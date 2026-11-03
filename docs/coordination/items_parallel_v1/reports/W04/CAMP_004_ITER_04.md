@@ -35,3 +35,10 @@ Los mensajes individuales de Godot fueron:
 - `catching_charm`: `AUDITORIA_DE_DATOS`, no se certifican efectos de captura; W03 es propietaria de captura.
 
 La fila 04 del CSV queda `DEPENDENCIA_DOCUMENTADA` (incluye la auditoría de datos del amuleto porque la puerta admite esos estados), run `41578460848`, commit `4b93b0af42bebc2c5298fe26f384e191a84bdafa`. La CI de ese CSV consolidado se comprueba aparte. Ninguna afirmación de funcionalidad de combate o captura procede de este PASS.
+
+
+## Segunda CI del progreso consolidado
+
+La ejecución [#41578687219](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41578687219), SHA `4b93b0af42bebc2c5298fe26f384e191a84bdafa`, terminó **completed/success** tras actualizar la fila 04 a `DEPENDENCIA_DOCUMENTADA`. Confirmó nuevamente `CAMP004_W04_MANIFEST_PASS reserved=10 completed=4 ids=36`, Python **114 PASS**, Godot **382 PASS** y regresiones CAMP003 Python **120 PASS**, Godot **270 PASS**. `adamant_crystal` y `blue_orb` continúan como `DEPENDENCIA`; `catching_charm` como `AUDITORIA_DE_DATOS` fuera de captura W04.
+
+**Estado del bloque 04:** pruebas aprobadas y documentación publicada, no implementación funcional de formas ni captura. Siguiente `p` autorizado: bloque 05.
