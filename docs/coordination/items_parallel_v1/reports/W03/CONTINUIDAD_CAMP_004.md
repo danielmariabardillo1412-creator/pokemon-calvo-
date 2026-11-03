@@ -1,3 +1,9 @@
+# IA3/W03 — Continuidad CAMP004 10/10 — CI FINAL PENDIENTE
+
+Bloque 10: psychic_tera_shard;rock_tera_shard;steel_tera_shard;water_tera_shard. Fixture, pruebas reales Godot, auditor Python e informe CAMP_004_ITER_10 publicados. Los cuatro Teralitos tienen almacenamiento inventario verificable y rechazo de uso sin mecánica Tera; no certificar teracristalización, SaveV2 integral ni objetos funcionales. Tras añadir la fila 10 de progreso, revisar recibos CAMP004 Python/Godot blocks=10 y regresión CAMP003, con éxito completo antes de comunicar CAMPAÑA_004_FINALIZADA. Última CI aprobada CAMP004 09: #41579091544 (Python 169, Godot 1178, regresiones 279/986). Si falla, corregir solamente en W03. No crear CAMPAÑA_005 sin autorización ni tocar main/V28.
+
+---
+
 # IA3/W03 — Continuidad CAMP004 09/10
 
 Bloque 09: ground_tera_shard;ice_tera_shard;normal_tera_shard;poison_tera_shard. Fixture, Godot y auditor Python publicados, con soporte de inventario y rechazo de uso que no implica teracristalización. Los cuatro tienen dependencia funcional compartida. CI anterior 08 aprobada: #41578378122, Python 151/Godot 1012, regresión CAMP003 279/986. Para certificar 09 comprobar el workflow después de añadir novena fila CSV. Próximo p: bloque 10 (psychic_tera_shard;rock_tera_shard;steel_tera_shard;water_tera_shard); luego detenerse, no inventar campaña nueva. main/V28 intactos.
