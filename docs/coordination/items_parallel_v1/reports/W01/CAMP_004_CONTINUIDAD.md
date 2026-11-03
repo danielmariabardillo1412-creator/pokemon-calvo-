@@ -65,3 +65,11 @@ Primer run #41589392286, SHA a26c444b: Godot 5254 checks, **8 fallos** concentra
 - Bloque 04: `psychic_seed;punching_glove;ring_target`, 8 escenarios, 13 pares caso-semilla, 39 variantes. Acumulado 28 escenarios/75 pares/225 variantes con SaveV2 y controles active/none/reserve.
 - Fuente histórica: `held_effect_sweep_v3.cjs` para Semilla Psique y Blanco; V2 para Guante de Boxeo. Terreno correcto/incorrecto; Puño Trueno contra Casco, Placaje con contacto y Agua Pistola sin contacto; Gengar vs Placaje y Charizard vs Terremoto, Levitación sigue inmune.
 - Producción intacta. Estado EN_CI_AUTOMATICA hasta run con dos recibos PASS. No tocar main, V28, ni otras ramas. Incidencia compartida de visualización SaveV2 midcharge del bloque 03 permanece anotada para IA6.
+
+## 04/10 — CI completada y verificada (2026-11-03)
+
+- **Run #41592180823** https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41592180823, `completed/success` en SHA `ec13e1c6b30a58c8ac8c7c6bab3052d2ddec8699`.
+- Contratos `CAMP004_W01_PY PASS blocks=4 checks=388` y `CAMP004_W01_GODOT PASS blocks=4 checks=6593` más sus dos gates PASS, sin fallos.
+- Total **4/10 bloques**, 12 equipables cubiertos, 28 escenarios, 75 pares caso-semilla, 225 variantes; negativos, consumo correcto y SaveV2; resultado local de rama, no de integración ni visual/GPU.
+- Bloque 04: Semilla Psique, Guante de Boxeo, Blanco. El archivo CSV conserva fila 04 en `EN_CI_AUTOMATICA` para actualizar con el bloque 05 y evitar gasto redundante de CI; evidencia funcional es el run + SHA.
+- Próxima `p`: **únicamente bloque 05/10** `room_service;scope_lens;shed_shell`, que exige regresión completa CAMP003 según gate IA6. No tocar main, V28, árbitra ni otras ramas. Limitación SaveV2 mid-charge de bloque 03 continúa para IA6.
