@@ -44,3 +44,20 @@ Los niveles 20/30 de las etapas anteriores de Kirlia/Ursaring y 42 de la ruta Sn
 La primera ejecución de bloque 03 [#41721012671](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41721012671), SHA `4f3b07a8c391bee07b6d510eb335fb915cc064e9`, falló en **el validador Python**, antes de ejecutar las pruebas Godot, por un marcador de secuencia obsoleto: buscaba `bloques_01_y_02_secuenciales` cuando el runner acumulativo pasó a `bloques_01_a_03_secuenciales`.
 
 Se corrigió **solo esa referencia de cobertura**, sin retirar ninguna aserción de comportamiento, en commit `94c84a816339d432058c0f2ddb0b56efe3cdc59f`. Reejecución [#41721445674](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41721445674), pendiente de comprobación. No declarar PASS hasta verificar los recibos reales. La primera ejecución fallida no demuestra defectos de las evoluciones canónicas; la segunda deberá confirmarlas.
+
+
+## CI03 real tras reparación
+
+La segunda ejecución del código del bloque [#41721445674](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41721445674) sobre SHA `94c84a816339d432058c0f2ddb0b56efe3cdc59f` terminó **completed/success**. Recibos de los logs:
+- `CAMP005_W04_MANIFEST_PASS reserved=10 completed=3 ids=46 kind=FUNCTIONAL_BACKLOG`.
+- `CAMP005_W04_PY PASS blocks=3 checks=205`.
+- `CAMP005_W04_GODOT PASS blocks=3 checks=284`.
+
+Godot verificó los casos:
+- `oval_stone`: `status=DEPENDENCIA_CONDICIONES source=happiny target=chansey trigger=level_up key=held_item value=oval_stone`. La condición de día también fue comprobada en el runtime.
+- `dawn_stone`: dos rutas `DEPENDENCIA_CONDICIONES`, Kirlia→Gallade `gender=2` y Snorunt→Froslass `gender=1`.
+- `peat_block`: `DEPENDENCIA_CONDICIONES source=ursaring target=ursaluna trigger=use_item key=time_of_day value=full-moon`.
+
+Las cuatro rutas están presentes, pero **no ejecutables** sin los contextos obligatorios. Se han probado rechazo seguro sin gasto, perfil de equipamiento y SaveV2; **ninguna evolución positiva**. Se preserva la continuidad de los bloques 01 y 02 con sus 9 rutas `BLOQUEADO_POR_CONTRATO`.
+
+La fila CSV 03 quedó en `DEPENDENCIA_DOCUMENTADA` con recibo `41721445674` mediante commit `76fe1d316da4885f51186b01e704d3d5854e373e`; dicha actualización dispara CI independiente sobre el progreso reconciliado, que se verifica antes del cierre definitivo. Regresiones CAMP004/CAMP003/CAMP001 preservadas y no ejecutadas en este bloque (reservadas a puertas 05/10 o cambios de producción).
