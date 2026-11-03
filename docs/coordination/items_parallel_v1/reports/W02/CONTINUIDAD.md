@@ -1,3 +1,27 @@
+# IA2/W02 — CAMPAÑA_003: CONTINUIDAD VIGENTE / BLOQUE 05 DE 10
+
+**Estado:** BLOQUE **05/10 PUBLICADO**, `EN_CI_AUTOMATICA` del SHA con cinco filas de progreso, `fd6fd0b6a40b2e5a0780607d268c9eb60d51204f`. Solo la `p` siguiente autoriza **bloque 06** si semáforo CI lo permite. Rama exclusiva `codex/calvo-items-20261103-w02-camp003`.
+
+**Autorización:** cola `CAMPAIGN_003_QUEUE_APPROVED.csv` (blob `ea06a0a000fc4f3b8bab48e45e21fb549d753559`) y `campaigns/CAMP_003_W02.md` (blob `62498ebd44288a86e59986379dbc1b70e111ef1f`). IA4 reincorporada por addendum distinto; nada cambia en la cola W02.
+
+**Bloque 04 CONFIRMADO en CI:** [#41558465659](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41558465659), `completed/success`, SHA `1e1e71d9c29bf00e764f5fe6039a8648feed1f46`; Python **256 comprobaciones PASS**, Godot **2925 comprobaciones PASS**, `blocks=4`. Un PASS previo no certifica el 05.
+
+**Bloque 05 exacto:** `kebia_berry` (Poison supereficaz contra Clefable/no coincidente), `kee_berry` (golpe físico +1 Defensa vs especial), `lansat_berry` (PS bajos +focusenergy vs PS altos), `liechi_berry` (PS bajos +1 Ataque vs altos). Dos escenas por ID: **8 escenarios ×3 modos de dueño = 24 variantes nuevas**.
+
+**Matriz acumulativa:** bloques 01–05, **20 IDs**, 9+8+8+9+8 = **42 escenarios**, **126 variantes nativas previstas**. Mantener todas las anteriores; equipamiento `active,none,reserve`, checkpoint/restore, SaveV2, cierre FLED, inventario y consumo atómico, recibos con SHA256. En bloque 05 los movimientos propios son `amnesia` para que la subida de Ataque de Liechi no se confunda con Swords Dance. Boosts/volatile se atribuyen solo a `p1a`.
+
+**Referencias reales (read-only):** `tools/item_audit/held_effect_sweep_v2.cjs`: `kebia_berry`, `kee_berry`, `liechi_berry`; `tools/item_audit/held_effect_sweep_v3.cjs`: `lansat_berry` con `critical_focus/full_hp`. Reutilizar motor fijado, nunca escribir callbacks nuevos.
+
+**Commits del bloque 05:** fixture `4ef4dae9861d422c1d940a2e3dc67c90f2170db0`, Godot `829d52379bb90bb99ddc10631e400c9961aa1024`, Python `78edab9ff8df12ee202552ca55642ccb7503d9af`, CSV `fd6fd0b6a40b2e5a0780607d268c9eb60d51204f`, informe `57491cb24a3a7e569484e65c4cc3437ef9dbbc58`. Solo seis archivos W02 modificados en este bloque (fixture, runner, Python, CSV, informe y cuaderno).
+
+**CI bloque 05:** [#41559377763](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41559377763), run asociado al SHA de pruebas/progreso `fd6fd0b6a40b2e5a0780607d268c9eb60d51204f`. Verificar `completed/success` y recibos `CAMP003_W02_PY PASS blocks=5 checks=M`, `CAMP003_W02_GODOT PASS blocks=5 checks=M`. Hasta entonces estado de CI pendiente. FAIL real: reparar SOLO tests/fixtures W02 sin rebajar contrato; defecto compartido o persistencia → detener y escalar a IA6. Cancelled intermedios no equivalen a FAIL.
+
+**Siguiente `p`:** bloque **06/10**, `mago_berry;maranga_berry;micle_berry;occa_berry`. Nunca bloque 07 simultáneo ni nuevos IDs fuera de reserva. Prohibidos `main`, V28, PR #118, production `modules/`, `data/`, `config/`, catálogo, IA6, workflows, ramas ajenas. Campo/GPU sin cobertura de esta suite.
+
+---
+
+## HISTÓRICO — ESTADO 04/10 Y ANTERIORES
+
 # IA2/W02 — CAMPAÑA_003: CONTINUIDAD VIGENTE / 04 DE 10
 
 **Estado operativo:** bloque **04/10 ENTREGADO**, `EN_CI_AUTOMATICA` hasta verificar `completed/success` del SHA `1e1e71d9c29bf00e764f5fe6039a8648feed1f46`. Rama exclusiva `codex/calvo-items-20261103-w02-camp003`. Una `p` posterior ejecutará únicamente **05/10**, nunca dos bloques en una orden.
