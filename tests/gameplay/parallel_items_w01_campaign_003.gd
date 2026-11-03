@@ -134,7 +134,7 @@ func _frame_c003(session: RefCounted, id: StringName) -> Dictionary:
 	var force_flags: Array = request.get("forceSwitch", [])
 	var forcing: bool = force_flags.has(true)
 	return {
-		"valid": native.has("boosts"), "hp": own.current_hp, "foe_hp": foe.current_hp,
+		"valid": native.has("boosts"), "hp": own.current_hp, "max_hp": own.stats.max_hp, "foe_hp": foe.current_hp,
 		"foe_max_hp": foe.stats.max_hp, "status_move_disabled": moves.size() > 1 and bool(moves[1].get("disabled", false)),
 		"own_has_item": own.held_item_id == id, "reserve_has_item": bench.held_item_id == id,
 		"own_consumed": own.held_item_consumed, "reserve_consumed": bench.held_item_consumed,
@@ -388,12 +388,12 @@ func _compare_c003(row: Dictionary, obs: Dictionary) -> void:
 				not a.after.own_consumed and a.physical_units == 2)
 		"focus_sash_full_hp":
 			check("Banda Aguante: golpe letal desde PS máximos deja 1 PS solo al portador",
-				a.start.hp > 1 and a.after.hp == 1 and n.after.hp == 0 and r.after.hp == 0)
+				a.start.hp == a.start.max_hp and a.start.hp > 1 and a.after.hp == 1 and n.after.hp == 0 and r.after.hp == 0)
 			check("Banda Aguante: consumo físico solo cuando evita KO",
 				a.after.own_consumed and a.physical_units == 1 and not r.after.reserve_consumed and r.physical_units == 2)
 		"focus_sash_not_full":
 			check("Banda Aguante: sin PS máximos no impide el KO",
-				a.start.hp > 0 and a.start.hp < 20 and a.after.hp == 0 and n.after.hp == 0 and r.after.hp == 0)
+				a.start.hp > 0 and a.start.hp < a.start.max_hp and a.after.hp == 0 and n.after.hp == 0 and r.after.hp == 0)
 			check("Banda Aguante: sin activarse conserva objeto",
 				not a.after.own_consumed and a.physical_units == 2)
 		"focus_sash_nonlethal":
