@@ -177,6 +177,35 @@
           "move_id": "hyper_voice"
         }
       ]
+    },
+    {
+      "block": "07",
+      "items": [
+        {
+          "item_id": "tm118",
+          "move_id": "heat_wave"
+        },
+        {
+          "item_id": "tm119",
+          "move_id": "energy_ball"
+        },
+        {
+          "item_id": "tm120",
+          "move_id": "psychic"
+        },
+        {
+          "item_id": "tm121",
+          "move_id": "heavy_slam"
+        },
+        {
+          "item_id": "tm122",
+          "move_id": "encore"
+        },
+        {
+          "item_id": "tm123",
+          "move_id": "surf"
+        }
+      ]
     }
   ]
 }
