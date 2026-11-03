@@ -118,7 +118,11 @@ func _frame_c003(session: RefCounted, id: StringName) -> Dictionary:
 	for entry: String in log:
 		if entry.begins_with("|-miss|") and entry.contains("p1a:"):
 			missed = true
-	var moves: Array = session._checkpoint.get("views", {}).get("p1", {}).get("request", {}).get("active", [{}])[0].get("moves", [])
+	var request: Dictionary = session._checkpoint.get("views", {}).get("p1", {}).get("request", {})
+	var active_requests: Array = request.get("active", [])
+	var moves: Array = active_requests[0].get("moves", []) if active_requests.size() > 0 else []
+	var force_flags: Array = request.get("forceSwitch", [])
+	var forcing: bool = force_flags.has(true)
 	return {
 		"valid": native.has("boosts"), "hp": own.current_hp, "foe_hp": foe.current_hp,
 		"foe_max_hp": foe.stats.max_hp, "status_move_disabled": moves.size() > 1 and bool(moves[1].get("disabled", false)),
@@ -128,6 +132,9 @@ func _frame_c003(session: RefCounted, id: StringName) -> Dictionary:
 		"boosts": native.get("boosts", {}).duplicate(true),
 		"attack_stage": int(native.get("boosts", {}).get("atk", 0)),
 		"speed_stage": int(native.get("boosts", {}).get("spe", 0)),
+		"status_id": String(own.status_state.persistent_id),
+		"forced_switch": forcing,
+		"active_id": String(session._checkpoint.get("roster", [])[0].get("active_id", "")),
 		"native_ability": String(native.get("ability", "")),
 		"native_volatiles": native.get("volatiles", []).duplicate(true),
 		"missed": missed
@@ -280,6 +287,35 @@ func _compare_c003(row: Dictionary, obs: Dictionary) -> void:
 				a.after.attack_stage == 1 and n.after.attack_stage == 0 and r.after.attack_stage == 0
 				and da > 0 and dn > 0 and dr == dn)
 			check("Pila se consume al activarse", a.after.own_consumed and a.physical_units == 1 and not r.after.reserve_consumed)
+		"opponent_drop_block":
+			check("Amuleto Puro: Charm reduce Ataque solo sin amuleto",
+				a.after.attack_stage == 0 and n.after.attack_stage < 0 and r.after.attack_stage == n.after.attack_stage)
+			check("Amuleto Puro no se consume", not a.after.own_consumed and a.physical_units == 2)
+		"no_drop_control":
+			check("Amuleto Puro: sin bajada enemiga no cambia estadisticas",
+				a.after.attack_stage == 0 and n.after.attack_stage == 0 and r.after.attack_stage == 0)
+			check("Amuleto Puro retenido en control", not a.after.own_consumed and a.physical_units == 2)
+		"secondary_status_block":
+			check("Capa Furtiva: Nuzzle hace dano incluso con capa",
+				da > 0 and da == dn and dr == dn)
+			check("Capa Furtiva: evita la paralisis secundaria",
+				a.after.status_id.is_empty() and n.after.status_id == "paralysis" and r.after.status_id == "paralysis")
+			check("Capa Furtiva no consumida", not a.after.own_consumed and a.physical_units == 2)
+		"normal_damage_control":
+			check("Capa Furtiva no altera golpe normal ni su estado",
+				da > 0 and da == dn and dr == dn and a.after.status_id == n.after.status_id and n.after.status_id == r.after.status_id)
+			check("Capa Furtiva retenida", not a.after.own_consumed and a.physical_units == 2)
+		"hit_forces_switch":
+			check("Boton Escape: impacto real comprobado en los tres modos", da > 0 and da == dn and dn == dr)
+			check("Boton Escape: solo portador solicita cambio forzado",
+				a.after.forced_switch and not n.after.forced_switch and not r.after.forced_switch)
+			check("Boton Escape: un objeto consumido y reserva intacta",
+				a.after.own_consumed and a.physical_units == 1 and not r.after.reserve_consumed and r.physical_units == 2)
+		"no_hit_no_switch":
+			check("Boton Escape: sin recibir dano no se fuerza cambio",
+				da == 0 and dn == 0 and not a.after.forced_switch and not n.after.forced_switch and not r.after.forced_switch)
+			check("Boton Escape: sin golpe conserva item",
+				not a.after.own_consumed and a.physical_units == 2)
 		"non_electric_control", "no_hit_control":
 			check("Pila no dispara si falta impacto eléctrico",
 				a.after.attack_stage == 0 and n.after.attack_stage == 0 and r.after.attack_stage == 0
