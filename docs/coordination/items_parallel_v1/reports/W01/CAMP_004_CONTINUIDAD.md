@@ -50,3 +50,12 @@ La fila 01 CSV conserva el estado anterior `EN_CI_AUTOMATICA` únicamente para *
 ## Reparación autónoma V5 del bloque 03 — carga transitoria
 
 Primer run #41589392286, SHA a26c444b: Godot 5254 checks, **8 fallos** concentrados en `power_herb_solar_beam` sin item y en reserva, dos semillas: comparación de `_frame_c003` tras SaveV2 a mitad de carga. Igualdad del snapshot pasó, efectos de combate y consumo también. Se conserva como **limitación explícita de proyección de estado durante carga de movimientos**, pendiente de examen de arquitectura compartida por IA6. Para mantener pruebas funcionales del objeto sin editar el adaptador compartido, el runner registra daño del primer turno y exige que el control complete la carga en un segundo turno real antes de restablecer/validar exactamente el estado estable con SaveV2. Matriz íntegra, más aserciones; CI nueva pendiente.
+
+## 03/10 CI PASS — cierre definitivo de este tramo
+
+- Evidencia oficial [#41590511208](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41590511208), SHA `b9aa52cd282938221e1b2554132a31ce0189d886`, **completed/success** y cero errores.
+- `CAMP004_W01_PY PASS blocks=3 checks=249`; `CAMP004_W01_GODOT PASS blocks=3 checks=5452`; puertas de manifiesto Python/Godot PASS.
+- Tres bloques acumulados, **9 equipables** validados en **20 escenarios, 62 pares y 186 variantes**, sin tocar producción, CAMP003, main, V28 ni otras ramas. Bloque 03: `loaded_dice`, `misty_seed`, `power_herb`.
+- Reparación de test para `power_herb`: evidencia del primer turno de Rayo Solar y segundo turno de finalización en los controles; SaveV2 estricto al terminar carga. **Limitación conocida:** vista transitoria tras restaurar mid-charge sin item puede diferir aunque snapshot coincida; revisión de API compartida corresponde a IA6, no declarar ese caso resuelto.
+- El CSV fila 03 sigue `EN_CI_AUTOMATICA` solo por el disparador de CI; junto al próximo bloque cambiar a `CI_PASS_VERIFICADO` con SHA `b9aa52cd282938221e1b2554132a31ce0189d886` y run `41590511208`.
+- **Próxima `p`: únicamente bloque 04/10** `psychic_seed;punching_glove;ring_target`. Seguir V5 y preservar los nueve equipables ya cubiertos.

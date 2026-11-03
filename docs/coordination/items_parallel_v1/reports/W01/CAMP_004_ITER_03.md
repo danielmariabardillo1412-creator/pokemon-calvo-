@@ -28,3 +28,19 @@ La causa localizada es que sin Hierba Única Rayo Solar permanece en su **turno 
 Parche de prueba W01: conserva el dato del **primer turno** para demostrar que Hierba Única golpea inmediatamente y los dos controles no; a continuación obliga a los dos controles a ejecutar un **segundo turno real** y exige que se acepte y que produzca daño. Solo entonces se ejecutan las aserciones originales estrictas de snapshot/proyección/propietario tras SaveV2 en estado estable. Se añaden comprobaciones, no se quita ninguna ni se reduce la matriz de 20 casos/62 pares. La restauración de la **fase intermedia de carga** queda como frontera pendiente de revisión por IA6, sin declarar que pase.
 
 La CI sobre el commit reparado debe decidir PASS del bloque 03. No certificar mientras siga ejecutándose.
+
+## Certificación funcional final — bloque 03/10
+
+**Ejecución oficial:** [GitHub Actions #41590511208](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41590511208), SHA de pruebas y reparación `b9aa52cd282938221e1b2554132a31ce0189d886`. **Estado `completed/success`, cero errores**. Recibos literales de CI:
+
+- `CAMP004_W01_MANIFEST_PASS reserved=10 completed=3 ids=30`
+- `CAMP004_W01_PY PASS blocks=3 checks=249`
+- `CAMP004_GATE_PY_PASS worker=W01 blocks=3 checks=249`
+- `CAMP004_W01_GODOT PASS blocks=3 checks=5452`
+- `CAMP004_GATE_GODOT_PASS worker=W01 blocks=3 checks=5452`
+
+La suite **acumulativa de CAMPAÑA_004: 3/10 bloques, 9 objetos, 20 escenarios, 62 pares caso-semilla y 186 variantes** está aprobada para las mecánicas de combate realmente ejercitadas. Las variantes comprueban propiedad, consumo cuando corresponde, controles negativos, integridad del snapshot y restauración SaveV2 **en estado estable**.
+
+**Límite no ocultado:** la primera CI reveló discrepancia de proyección tras restaurar en medio del turno de carga de Rayo Solar *sin Hierba Única*; la igualdad de snapshot sí pasaba. La suite actual no proclama solucionar ni certificar esa proyección transitoria: completa el segundo turno del control, comprobando que el primero no hizo daño y el segundo sí, y después certifica íntegramente el ciclo SaveV2 estable. Esta limitación pertenece a vistas/restauración compartida y debe llegar a IA6 si se exige continuidad exacta de interfaz durante el movimiento cargado. No se modificó producción ni contrato compartido.
+
+La fila 03 de `CAMP_004_PROGRESO.csv` conserva temporalmente `EN_CI_AUTOMATICA` por eficiencia de minutos CI; la prueba funcional está certificada por el run y SHA anteriores. En el siguiente `p` autorizado, actualizar fila 03 a `CI_PASS_VERIFICADO` y añadir fila 04 conjuntamente. No hay bloque 05 autorizado por esta orden; próxima tarea **04/10** `psychic_seed;punching_glove;ring_target`.
