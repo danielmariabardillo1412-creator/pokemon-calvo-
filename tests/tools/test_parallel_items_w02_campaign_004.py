@@ -1154,9 +1154,8 @@ def verify_sources(chk):
     chk.demand("if move_slot < 0 or move_slot >= creature.moveset.size()" in effects
                and "slots.append(creature.moveset[move_slot])" in effects,
                "Eter: ranura obligatoria no conectada")
-    chk.demand('"full_heal": "poison"' in old and '"ether"' in old
-               and '"fresh_water"' in old,
-               "Regresión histórica Full Heal/Eter/Agua Fresca ausente")
+    chk.demand('"full_heal": "poison"' in old and '"ether"' in old,
+               "Regresión histórica Full Heal/Eter ausente; Agua Fresca contrastada con perfil")
 
 
 def negative_controls(fixture, queue, progress, chk):
