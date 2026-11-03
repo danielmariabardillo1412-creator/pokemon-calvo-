@@ -44,3 +44,12 @@ Resultados individuales en Godot: `big_nugget`, `bottle_cap`, `gold_bottle_cap`,
 El log acumulado contiene exactamente 36 IDs únicos: **31 `DEPENDENCIA`**, **1 `AUDITORIA_DE_DATOS`** (`catching_charm`), **3 `AUDITORIA_LEGACY`** (`roto_*`) y **1 `RECUPERACION_VERIFICADA`** (`rage_candy_bar`); este último sí prueba curación real, gasto unitario y SaveV2. La regresión CAMP003 sigue con 16 dependencias funcionales propias.
 
 La fila 10 del CSV está reconciliada como `DEPENDENCIA_DOCUMENTADA`, run `41610829772`, commit `1f4021c4ec00f26a4df3e24428e53b0989caabe8`. **Queda pendiente de confirmar la CI disparada por ese cambio documental antes de declarar cierre total.** Ningún dato funcional del juego ha sido modificado.
+
+
+## CI del progreso final y STOP
+
+La segunda ejecución [#41611102944](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41611102944) terminó `completed/success` en SHA `1f4021c4ec00f26a4df3e24428e53b0989caabe8`, **después** de registrar el bloque 10 como `DEPENDENCIA_DOCUMENTADA`. Se verificaron otra vez los recibos `CAMP004_W04_MANIFEST_PASS reserved=10 completed=10 ids=36`, Python **387**, Godot **1.090**, CAMP003 Python **120** / Godot **270** y CAMP001 Godot **559** / **12** casos. Los siete tesoros mantienen `status=DEPENDENCIA records=0`.
+
+Informe consolidado para IA6: `reports/W04/CAMP_004_FINAL.md`. La clasificación individual de 36 IDs fue comprobada en el log completo: **31 dependencias**, **1 auditoría de datos**, **3 auditorías legacy**, **1 recuperación positiva**. La campaña está completada como **auditoría, pruebas, documentación y delimitación de las funciones faltantes**, no como implementación de 36 mecánicas. El cierre no requiere modificar producción ni repetir trabajo.
+
+**Estado: `CAMPAÑA_004_FINALIZADA` — STOP IA4/W04** hasta nuevo encargo oficial.
