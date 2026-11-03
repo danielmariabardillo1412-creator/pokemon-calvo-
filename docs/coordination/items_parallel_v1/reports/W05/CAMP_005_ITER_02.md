@@ -1,3 +1,5 @@
+> **CI DEFINITIVA VERIFICADA — BLOQUE 02/10 (2026-11-03):** [GitHub Actions #41718416082](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41718416082), SHA funcional `83d89ccc862e2035181e7a0136c6256d73e9d063`, job `126205002195`, `completed/success`. Recibos extraídos de logs reales: `CAMP005_W05_MANIFEST_PASS reserved=10 completed=2 ids=60 kind=NEW_IDS`; `CAMP005_W05_PY PASS blocks=2 checks=116`; `CAMP005_GATE_PY_PASS worker=W05 blocks=2 checks=116`; `CAMP005_W05_GODOT PASS blocks=2 checks=446`; `CAMP005_GATE_GODOT_PASS worker=W05 blocks=2 checks=446`. Por tanto **12/12 MT de CAMPAÑA_005 están verificadas por pruebas Python/Godot headless**. Regresiones CAMP004 y CAMP003 no ejecutadas en este bloque por diseño del workflow: se ejecutan en 05/10 y parches de producción. Esta certificación prevalece sobre las menciones históricas inferiores a CI pendiente; no hubo modificaciones de producción ni tests relajados.
+
 # IA5/W05 — CAMPAÑA_005 · ITER_02/10 — MT Scarlet/Violet
 
 **Estado al publicar: EN_CI_AUTOMATICA.** No dar por aprobado el bloque 02 sin verificar los recibos Python y Godot del run de progreso.
