@@ -162,6 +162,12 @@ func _probe_berry(spec: Dictionary, mode: String) -> Dictionary:
 			first_move_seen = true
 			first_move_is_own = line.begins_with("|move|p1a:")
 			native_events.append(String(value))
+	# Starf: cinco boosts nativos; no confundir la elección aleatoria con una bandera.
+	var starf_native_boosts: Dictionary = {}
+	if String(spec.kind) == "boost_random_two":
+		starf_native_boosts = _native_starf_boosts(battle, &"own")
+		check(mode + " Starf tiene vector nativo de cinco boosts",
+			starf_native_boosts.size() == 5)
 	# Proyección de VOLATILES del checkpoint nativo real; no del nombre del objeto.
 	var micle_pending_before_restore: bool = false
 	if String(spec.kind) == "accuracy_next_move":
@@ -182,6 +188,9 @@ func _probe_berry(spec: Dictionary, mode: String) -> Dictionary:
 	check(mode + " restauración HP/status/consumo",
 		replay.current_hp == hp and String(replay.status_state.persistent_id) == status
 		and replay.held_item_consumed == spent)
+	if String(spec.kind) == "boost_random_two":
+		check(mode + " Starf conserva los cinco boosts tras checkpoint restaurado",
+			_native_starf_boosts(battle, &"own") == starf_native_boosts)
 	var micle_restored: bool = false
 	var micle_after_next: bool = false
 	var micle_used_next: bool = false
@@ -250,6 +259,7 @@ func _probe_berry(spec: Dictionary, mode: String) -> Dictionary:
 		"native_micle_restored": micle_restored,
 		"native_micle_after_next": micle_after_next,
 		"native_micle_used_next": micle_used_next,
+		"native_starf_boosts": starf_native_boosts,
 		"physical_total": total}
 	var digest: String = _write_evidence(file_name, raw)
 	return {"valid": true, "hp": hp, "max_hp": replay.stats.max_hp,
@@ -260,8 +270,29 @@ func _probe_berry(spec: Dictionary, mode: String) -> Dictionary:
 		"foe_hp": foe_hp, "foe_max_hp": foe_max_hp,
 		"micle_pending": micle_pending_before_restore, "micle_restored": micle_restored,
 		"micle_after_next": micle_after_next, "micle_used_next": micle_used_next,
+		"starf_boosts": starf_native_boosts,
 		"save_v2": true, "restored": true, "settled_once": true,
 		"evidence": file_name + ".json", "sha256": digest}
+
+
+# Starf: se leen stats de la proyección de la batalla nativa, no el texto del efecto.
+func _native_starf_boosts(session: RefCounted, cid: StringName) -> Dictionary:
+	var teams: Variant = session._checkpoint.get("roster", [])
+	if not teams is Array:
+		return {}
+	for side: Variant in teams:
+		if not side is Dictionary:
+			continue
+		for monster: Variant in side.get("pokemon", []):
+			if monster is Dictionary and String(monster.get("instance_id", "")) == String(cid):
+				var native_stages: Variant = monster.get("boosts", {})
+				if not native_stages is Dictionary:
+					return {}
+				var result: Dictionary = {}
+				for stat: String in ["atk", "def", "spa", "spd", "spe"]:
+					result[stat] = int(native_stages.get(stat, -100))
+				return result
+	return {}
 
 
 # Sólo inspecciona la proyección verificada de las volátiles en el checkpoint nativo.
@@ -302,6 +333,26 @@ func _compare_berry(spec: Dictionary, observed: Dictionary) -> void:
 			check("baya de sabor cura 1/3 de PS tras el umbral, con control paralelo", heals_by_third)
 			check("Baya de sabor confunde sólo naturaleza que la rechaza",
 				active.confusion == bool(spec.confuses) and not none.confusion and not reserve.confusion)
+		"boost_random_two":
+			var boosted_count: int = 0
+			var stages_sum: int = 0
+			var witnesses_clean: bool = true
+			for stat: String in ["atk", "def", "spa", "spd", "spe"]:
+				var stage: int = int(active.starf_boosts.get(stat, -100))
+				stages_sum += stage
+				if stage == int(spec.expected_stage):
+					boosted_count += 1
+				witnesses_clean = witnesses_clean and int(none.starf_boosts.get(stat, -100)) == 0
+				witnesses_clean = witnesses_clean and int(reserve.starf_boosts.get(stat, -100)) == 0
+			check("Starf: un único stat aleatorio +2, el resto 0 y no simple consumo",
+				boosted_count == (1 if consume else 0)
+				and stages_sum == (int(spec.expected_stage) if consume else 0))
+			check("Starf: testigos sin boosts en los cinco stats",
+				witnesses_clean and active.starf_boosts.size() == 5
+				and none.starf_boosts.size() == 5 and reserve.starf_boosts.size() == 5)
+			check("Starf no altera HP ni estado de los testigos",
+				active.hp == none.hp and none.hp == reserve.hp
+				and active.status == none.status and none.status == reserve.status)
 		"boost_spd", "boost_spa", "boost_spe", "boost_def", "boost_atk", "reactive_def":
 			var key: String = "boost_spe" if String(spec.kind) == "boost_spe" else ("boost_atk" if String(spec.kind) == "boost_atk" else ("boost_spa" if String(spec.kind) == "boost_spa" else ("boost_spd" if String(spec.kind) == "boost_spd" else "boost_def")))
 			check("baya mejora solo la estadistica del portador cuando se activa",
@@ -386,6 +437,7 @@ func _compare_berry(spec: Dictionary, observed: Dictionary) -> void:
 				and int(receipt.native_foe_max_hp) == int(rec.foe_max_hp)
 				and bool(receipt.native_boost_spa) == bool(rec.boost_spa)
 				and bool(receipt.native_boost_spe) == bool(rec.boost_spe)
+				and receipt.native_starf_boosts == rec.starf_boosts
 				and bool(receipt.native_micle_pending) == bool(rec.micle_pending)
 				and bool(receipt.native_micle_after_next) == bool(rec.micle_after_next))
 
