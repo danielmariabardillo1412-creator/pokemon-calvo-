@@ -1,1 +1,2 @@
 bloque,ids,estado,sha_pruebas,ci_run,notas
+01,dawn_stone;dusk_stone;shiny_stone,EN_CI_AUTOMATICA,dd082b0cdca4e684283272d4cf58786836ba16eb,PENDIENTE,"Tres piedras; catálogo activo y runtime se verifican por CI; SaveV2 y rechazos, sin afirmar PASS"
