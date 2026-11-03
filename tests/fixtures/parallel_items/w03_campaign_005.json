@@ -60,6 +60,66 @@
       ],
       "scope": "Nueva verificacion de contrato de productores y ejemplo positivo existente para turno/nivel; SIN repetir ensayo unknown_ball de CAMP004, SIN bonus ficticio, SIN editar APIs compartidas.",
       "ci_required": true
+    },
+    {
+      "bloque": "02",
+      "familia": "CAPTURE_CONTEXT",
+      "ids": [
+        "luxury_ball",
+        "lure_ball"
+      ],
+      "objetivo": "bonificacion_amistad_origen_y_contexto_pesca",
+      "current_state": "DEPENDENCIA_CONCRETA",
+      "per_id_status": {
+        "luxury_ball": "DEPENDENCIA_CONCRETA",
+        "lure_ball": "DEPENDENCIA_CONCRETA"
+      },
+      "functional_effect_certified": false,
+      "existing_positive_contracts": [
+        "FieldFriendshipEffects.increase_base_gain",
+        "CaptureBattleContext.completed_turns_from_battle",
+        "CaptureSystem_success_on_catch_and_party_identity"
+      ],
+      "required_producers": [
+        {
+          "id": "luxury_ball",
+          "producer": "CaptureSystem_success_capture_ball_origin_then_CreatureInstance_serialization",
+          "consumer": "CaptureSystem.resolve > CreatureInstance.to_dict/from_dict > FieldFriendshipEffects.increase",
+          "missing_fields": [
+            "original_capture_ball_id",
+            "origin_ball_friendship_multiplier_policy"
+          ],
+          "decision": "La Poké Ball de origen debe persistir de forma versionada; determinar multiplicador de futuras ganancias por Luxury Ball, apilamiento con Soothe Bell y migración SaveV2, sin suplantar held_item_id."
+        },
+        {
+          "id": "lure_ball",
+          "producer": "trusted_overworld_fishing_encounter_origin",
+          "consumer": "ShowdownAdventureSession.capture > CaptureBattleContext > CaptureSystem",
+          "missing_fields": [
+            "encounter_method",
+            "fishing_provenance"
+          ],
+          "decision": "Definir fuente exacta de encuentros producidos por caña, regla de bonus versionada y protocolo de contexto firmado; ni tipo Agua ni zona acuática equivalen a pesca."
+        }
+      ],
+      "evidence_paths": [
+        "modules/creatures/domain/creature_instance.gd",
+        "modules/inventory/field_friendship_effects.gd",
+        "modules/capture/capture_system.gd",
+        "modules/capture/capture_battle_context.gd",
+        "modules/gameplay/showdown_adventure_session.gd"
+      ],
+      "positive_tests": [
+        "friendship_gain_non_luxury_baseline",
+        "soothe_bell_existing_gain",
+        "creature_roundtrip_without_origin_metadata"
+      ],
+      "negative_tests": [
+        "no_origin_ball_persistence",
+        "no_fishing_context",
+        "no_ball_registration"
+      ],
+      "ci_required": true
     }
   ]
 }
