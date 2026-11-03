@@ -64,9 +64,14 @@ func _run_w01_c003() -> void:
 			current_case = String(row.id) + "/" + str(int(value))
 			var checks_before: int = checks
 			var errors_before: int = errors.size()
+			# Tres propietarios totalmente independientes: ejecutar concurrentemente
+			# la MISMA matriz de casos, semillas, controles y SaveV2. Solo se
+			# paralelizan modos de un mismo par caso-semilla, nunca bloques distintos.
 			var observed: Dictionary = {}
 			for mode: String in ["active", "none", "reserve"]:
-				observed[mode] = await _probe_c003(row, int(value), mode)
+				call_deferred("_w01_c003_probe_lane", row, int(value), mode, observed)
+			while observed.size() < 3:
+				await process_frame
 			_compare_c003(row, observed)
 			if String(row.op) == "random_lethal_survival" and observed.get("active", {}).get("valid", false):
 				if int(observed.active.after.hp) == 1:
@@ -105,6 +110,11 @@ func _run_w01_c003() -> void:
 	else:
 		print("CAMP003_W01_GODOT FAIL blocks=", completed, " checks=", checks, " errors=", errors.size())
 	quit(0 if errors.is_empty() else 1)
+
+# Cada carril crea su propio propietario y motor @pkmn/sim, sin estado
+# compartido mutable entre variantes; la clave de evidencia contiene el modo.
+func _w01_c003_probe_lane(row: Dictionary, seed: int, mode: String, observed: Dictionary) -> void:
+	observed[mode] = await _probe_c003(row, seed, mode)
 
 func _native_item(session: RefCounted, instance: String) -> Dictionary:
 	for side: Dictionary in session._checkpoint.get("roster", []):
