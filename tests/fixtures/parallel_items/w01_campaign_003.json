@@ -252,6 +252,93 @@
         19
       ],
       "history": "new_negative_status_only"
+    },
+    {
+      "block": "03",
+      "id": "amulet_charm_block",
+      "item_id": "clear_amulet",
+      "op": "opponent_drop_block",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "foe_move": "charm",
+      "own_move": "reflect",
+      "seeds": [
+        19,
+        23
+      ],
+      "history": "held_effect_sweep_v2:opponent_drop_protection"
+    },
+    {
+      "block": "03",
+      "id": "amulet_no_drop",
+      "item_id": "clear_amulet",
+      "op": "no_drop_control",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "foe_move": "amnesia",
+      "own_move": "reflect",
+      "seeds": [
+        19
+      ],
+      "history": "new_negative_no_opponent_stat_drop"
+    },
+    {
+      "block": "03",
+      "id": "cloak_nuzzle_secondary",
+      "item_id": "covert_cloak",
+      "op": "secondary_status_block",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "foe_move": "nuzzle",
+      "own_move": "reflect",
+      "seeds": [
+        19,
+        23
+      ],
+      "history": "held_effect_sweep_v2:secondary_protection"
+    },
+    {
+      "block": "03",
+      "id": "cloak_plain_hit",
+      "item_id": "covert_cloak",
+      "op": "normal_damage_control",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "foe_move": "tackle",
+      "own_move": "reflect",
+      "seeds": [
+        19
+      ],
+      "history": "new_negative_no_secondary_effect"
+    },
+    {
+      "block": "03",
+      "id": "eject_on_hit",
+      "item_id": "eject_button",
+      "op": "hit_forces_switch",
+      "actor_species": "mew",
+      "foe_species": "snorlax",
+      "foe_move": "tackle",
+      "own_move": "reflect",
+      "seeds": [
+        19,
+        23
+      ],
+      "history": "HELD_PILOT_VERIFIED;new_native_force_switch_savev2"
+    },
+    {
+      "block": "03",
+      "id": "eject_without_hit",
+      "item_id": "eject_button",
+      "op": "no_hit_no_switch",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "foe_move": "amnesia",
+      "own_move": "reflect",
+      "seeds": [
+        19
+      ],
+      "history": "new_negative_no_damage_no_switch"
     }
   ]
 }
