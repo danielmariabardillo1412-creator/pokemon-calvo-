@@ -10,6 +10,8 @@ const BLOQUE_06 := [&"griseous_core", &"lustrous_globe", &"meteorite"]
 const BLOQUE_07 := [&"rage_candy_bar", &"red_orb", &"reins_of_unity"]
 const BLOQUE_08 := [&"reveal_glass", &"rotom_catalog", &"zygarde_cube"]
 const BLOQUE_09 := [&"n_lunarizer_merge", &"n_solarizer_merge", &"roto_catch", &"roto_exp_points", &"roto_friendship"]
+const BLOQUE_10 := [&"big_nugget", &"bottle_cap", &"gold_bottle_cap", &"heart_scale", &"nugget", &"pretty_wing", &"rare_bone"]
+const EQUIPABLE_10 := [&"big_nugget", &"bottle_cap", &"gold_bottle_cap", &"rare_bone"]
 const ID_COMPAÑERO_09 := &"w04_c004_09_companero"
 const ID := &"w04_c004_01"
 var checks := 0
@@ -474,6 +476,37 @@ func _ejecutar() -> void:
 			for ruta: Dictionary in rutas:
 				_positivo(catalogo, item, ruta.origen as StringName, ruta.destino as StringName)
 			print("CAMP004_W04_ITEM id=", String(item), " status=FUNCIONAL_VERIFICADO runtime_routes=", rutas.size(), " conditioned=", condicionados)
+	for item: StringName in BLOQUE_10:
+		verificar(catalogo.item(item) != null, String(item) + "/definicion_tesoro_10")
+		var registros := 0
+		var condicionados := 0
+		var rutas: Array[Dictionary] = []
+		for sid: StringName in catalogo.species_catalog.all_ids():
+			var especie_actual: CreatureSpecies = catalogo.species(sid)
+			for record: EvolutionRecord in especie_actual.evolutions:
+				if record.item_id != item:
+					continue
+				registros += 1
+				var clasificacion := EvolutionSystem.classify_record(record, catalogo, sid)
+				if record.trigger == EvolutionSystem.TRIGGER_USE_ITEM and clasificacion == EvolutionSystem.RUNTIME_SUPPORTED:
+					rutas.append({"origen": sid, "destino": record.species_id})
+				else:
+					condicionados += 1
+					verificar(not EvolutionSystem.evolution_candidates(especie_actual, {"level": 40, "item_id": item}, catalogo).has(record), String(item) + "/tesoro_no_evolucion_condicionada")
+		if rutas.is_empty():
+			if EQUIPABLE_10.has(item):
+				_auditar_contexto_04(catalogo, item, &"eevee")
+				_auditar_contexto_04(catalogo, item, &"magikarp")
+				print("CAMP004_W04_ITEM id=", String(item), " status=DEPENDENCIA records=", registros, " conditioned=", condicionados, " reason=equipamiento_y_savev2_verificados_efecto_venta_entrenamiento_pendiente")
+			else:
+				_auditar_contexto_05(catalogo, item, &"eevee")
+				_auditar_contexto_05(catalogo, item, &"magikarp")
+				print("CAMP004_W04_ITEM id=", String(item), " status=DEPENDENCIA records=", registros, " conditioned=", condicionados, " reason=tesoro_data_only_sin_venta_uso_especial_certificados")
+		else:
+			_auditar_contexto_05(catalogo, item, &"eevee")
+			for ruta: Dictionary in rutas:
+				_positivo(catalogo, item, ruta.origen as StringName, ruta.destino as StringName)
+			print("CAMP004_W04_ITEM id=", String(item), " status=FUNCIONAL_VERIFICADO runtime_routes=", rutas.size(), " conditioned=", condicionados)
 	_finalizar()
 
 func _finalizar() -> void:
@@ -481,7 +514,7 @@ func _finalizar() -> void:
 		return
 	terminado = true
 	if errores.is_empty():
-		print("CAMP004_W04_GODOT PASS blocks=9 checks=", checks)
+		print("CAMP004_W04_GODOT PASS blocks=10 checks=", checks)
 	else:
 		print("CAMP004_W04_GODOT FAIL errors=", JSON.stringify(errores))
 	quit(0 if errores.is_empty() else 1)
