@@ -40,6 +40,7 @@ func _run_campaign() -> void:
 			"06": _block_06(block)
 			"07": _block_07(block)
 			"08": _block_08(block)
+			"09": _block_09(block)
 			_: check("Bloque sin suite funcional " + str(n), false)
 	_finish(n)
 
@@ -534,6 +535,72 @@ func _block_08(block: Dictionary) -> void:
 	check("Bloque08 IDs Tera autorizados",
 		ids == ["fighting_tera_shard", "fire_tera_shard", "flying_tera_shard",
 		"ghost_tera_shard", "grass_tera_shard"])
+	check("No certificar teracristalizacion",
+		bool(block.get("no_terastallization_certified", false)))
+	for raw_id: String in ids:
+		var id := StringName(raw_id)
+		check("Teralito presente en catalogo " + raw_id, catalogs.item(id) != null)
+		for count: int in block.get("inventory_counts", []):
+			var service := service_for()
+			check("Teralito seleccionado " + raw_id, service.selection.content_allowed(id))
+			if count > 0:
+				check("Inventario admite Teralito " + raw_id, service.owner.inventory.add(id, count))
+			check("Inventario cantidad y presencia " + raw_id,
+				service.owner.inventory.quantity(id) == count
+				and service.owner.inventory.has(id) == (count > 0))
+			var before: String = snapshot(service)
+			var result: Dictionary = service.use_item(id, &"field_item_target")
+			check("Sin API Tera, uso directo rechaza sin gasto " + raw_id,
+				result.get("accepted", true) == false
+				and String(result.get("reason", "")) == "field_effect_not_connected"
+				and String(result.get("status", "")) == "DEPENDENCY_MISSING"
+				and snapshot(service) == before)
+			var serialized: Dictionary = service.owner.inventory.to_dict()
+			var loaded: PlayerInventory = PlayerInventory.from_dict(serialized)
+			check("Roundtrip puro mochila Tera " + raw_id,
+				not loaded.corrupted and loaded.to_dict() == serialized
+				and loaded.quantity(id) == count)
+			if count > 0:
+				check("Extraccion transaccional valida " + raw_id,
+					loaded.remove(id) and loaded.quantity(id) == count - 1)
+				check("Reposicion exacta Tera " + raw_id,
+					loaded.add(id) and loaded.to_dict() == serialized)
+				check("No hay consumo al rechazar Tera " + raw_id,
+					service.owner.inventory.quantity(id) == count)
+			else:
+				check("Sin Teralito no se extrae " + raw_id,
+					not loaded.remove(id) and loaded.is_empty())
+			if count == InventoryRuleset.MAX_STACK:
+				check("Limite de stack sin desbordamiento " + raw_id,
+					not loaded.add(id) and loaded.quantity(id) == count)
+		var locked_service := service_for()
+		check("Preparar Teralito para bloqueo " + raw_id,
+			locked_service.owner.inventory.add(id, 2))
+		var locked_before: String = snapshot(locked_service)
+		locked = true
+		var denied: Dictionary = locked_service.use_item(id, &"field_item_target")
+		locked = false
+		check("Frontera de campo para Tera " + raw_id,
+			denied.get("accepted", true) == false
+			and String(denied.get("reason", "")) == "field_locked"
+			and snapshot(locked_service) == locked_before)
+		var bad_service := service_for()
+		check("Preparar bolsa para corrupcion Tera " + raw_id,
+			bad_service.owner.inventory.add(id, 2))
+		bad_service.owner.inventory.corrupted = true
+		var bad_before: String = snapshot(bad_service)
+		var invalid: Dictionary = bad_service.use_item(id, &"field_item_target")
+		check("Tera no atraviesa inventario corrupto " + raw_id,
+			invalid.get("accepted", true) == false
+			and String(invalid.get("reason", "")) == "invalid_inventory"
+			and snapshot(bad_service) == bad_before)
+
+# 09: Teralitos Tierra Hielo Normal Veneno; no activar Tera.
+func _block_09(block: Dictionary) -> void:
+	var ids: Array = block.get("ids", [])
+	check("Bloque09 IDs Tera autorizados",
+		ids == ["ground_tera_shard", "ice_tera_shard", "normal_tera_shard",
+		"poison_tera_shard"])
 	check("No certificar teracristalizacion",
 		bool(block.get("no_terastallization_certified", false)))
 	for raw_id: String in ids:
