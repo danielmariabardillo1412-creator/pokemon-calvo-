@@ -3644,6 +3644,25 @@ def negative_controls(fixture, queue, progress, chk):
             lambda f: f["blocks"][8]["cases"][24].update({"kind": "vitamin"}),
             lambda f: f["blocks"][8]["cases"][31].update({"expect_reason": "item_has_no_effect"}),
         ])
+    if len(fixture["blocks"]) >= 10:
+        mutations.extend([
+            lambda f: f["blocks"][9]["ids"].append("timid_mint"),
+            lambda f: f["blocks"][9]["source_evidence"].pop(),
+            lambda f: f["blocks"][9]["cases"].pop(),
+            lambda f: f["blocks"][9]["cases"][0].update({"applies": True}),
+            lambda f: f["blocks"][9]["cases"][1].update({"wanted_nature": "quiet"}),
+            lambda f: f["blocks"][9]["cases"][2].update({"nature": "hardy"}),
+            lambda f: f["blocks"][9]["cases"][3].update({"start_friendship": 254}),
+            lambda f: f["blocks"][9]["cases"][4].update({"start_friendship": 0}),
+            lambda f: f["blocks"][9]["cases"][5].update({"slot": 1}),
+            lambda f: f["blocks"][9]["cases"][6].update({"slot": 0}),
+            lambda f: f["blocks"][9]["cases"][7].update({"level": 50}),
+            lambda f: f["blocks"][9]["cases"][8].update({"id": "brave_mint"}),
+            lambda f: f["blocks"][9]["cases"][10].update({"expect_status": "APPLIED"}),
+            lambda f: f["blocks"][9]["cases"][16].update({"wanted_nature": "relaxed"}),
+            lambda f: f["blocks"][9]["cases"][24].update({"kind": "vitamin"}),
+            lambda f: f["blocks"][9]["cases"][31].update({"expect_reason": "item_has_no_effect"}),
+        ])
     for index, mutation in enumerate(mutations):
         altered = copy.deepcopy(fixture)
         mutation(altered)
