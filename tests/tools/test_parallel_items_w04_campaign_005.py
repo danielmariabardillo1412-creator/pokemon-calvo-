@@ -223,7 +223,7 @@ def main():
     check("var form_id:" not in creature and "var regional_form_id:" not in creature, "CreatureInstance aún sin forma persistida")
     check('"form_id":' not in creature and '"regional_form_id":' not in creature, "SaveV2 sin contrato form_id")
     for token in ("func _auditar_forma_04(", "func _fronteras_regionales_04(",
-                  "04_base_regional", "04_forma_destino", "04_urshifu_estilos_distintos_igual_especie",
+                  "04_base_regional", "04_forma_destino", "04_evolucion_normal_nivel_sigue_disponible", "04_urshifu_estilos_distintos_igual_especie",
                   "04_galar_regional_dos_destinos", "04_torre_sombras_no_simplificada",
                   "04_torre_agua_no_simplificada", "04_no_destino_sin_forma",
                   "04_no_uso_incondicional", "04_forma_no_inventada_savev2",
