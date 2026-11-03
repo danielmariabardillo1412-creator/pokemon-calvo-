@@ -2700,9 +2700,9 @@ def verify_sources(chk):
                and "mint" not in creature_08
                and 'return _deny("field_effect_not_connected", "DEPENDENCY_MISSING")' in service,
                "Mentas08 sin contrato de naturaleza efectiva ni ruta segura de aplicación")
-    chk.demand('"adamant": ["attack", "special_attack"]' in rules_08
-               and '"modest": ["special_attack", "attack"]' in rules_08
-               and '"jolly": ["speed", "special_attack"]' in rules_08,
+    chk.demand('&"adamant": ["attack", "special_attack"]' in rules_08
+               and '&"modest": ["special_attack", "attack"]' in rules_08
+               and '&"jolly": ["speed", "special_attack"]' in rules_08,
                "Menta08 tabla de naturalezas base alterada")
     for old, token in (
         (old_ability, 'TRANSITIONS'),
