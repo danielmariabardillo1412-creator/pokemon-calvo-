@@ -544,6 +544,56 @@ def main() -> int:
                             and block["contexts"][0]["name"] == "sin_senales"
                             and block["contexts"][1]["name"] == "combate_real_sin_pesca",
                             "No crear señales falsas de pesca")
+            elif block["bloque"] == "09":
+                audit.check(ids == ["love_ball", "moon_ball"], "Reserva 09 alterada")
+                rules = (ROOT / "modules/capture/capture_ruleset.gd").read_text(encoding="utf-8")
+                effects = (ROOT / "modules/capture/capture_ball_effects.gd").read_text(encoding="utf-8")
+                context_effects = (ROOT / "modules/capture/capture_context_ball_effects.gd").read_text(encoding="utf-8")
+                battle_context = (ROOT / "modules/capture/capture_battle_context.gd").read_text(encoding="utf-8")
+                engine = (ROOT / "modules/capture/capture_system.gd").read_text(encoding="utf-8")
+                inventory = (ROOT / "modules/inventory/capture_inventory_service.gd").read_text(encoding="utf-8")
+                audit.check(all(f'&"{ball}"' not in rules
+                                and f'&"{ball}"' not in effects
+                                and f'&"{ball}"' not in context_effects
+                                for ball in ids),
+                            "Love/Moon registradas desde auditoría; actualizar pruebas de efectos")
+                audit.check(all(f'var {field}:' not in battle_context
+                                for field in block["missing_authoritative_signals"]),
+                            "Hay nueva señal en el contexto: reauditar fuente")
+                audit.check(block["missing_authoritative_signals"] ==
+                            ["catcher_species_id", "catcher_gender", "target_gender",
+                             "moon_stone_evolution_eligibility"],
+                            "Sin fuentes reales de especie/sexo/evolución lunar")
+                audit.check(block["prior_evidence"]["state"] == "DEPENDENCIA_COMPARTIDA"
+                            and block["functional_effect_certified"] is False
+                            and block["implementation_authorized"] is False,
+                            "No certificar efectos Love/Moon sin implementación")
+                audit.check(block["expected_current_rejection"] == "unknown_ball"
+                            and 'return "unknown_ball"' in engine
+                            and "CaptureSystem.validate_attempt(attempt, catalogs)" in inventory
+                            and "inventory.remove(attempt.ball_id, 1)" in inventory,
+                            "Falta rechazo preconsumo fiable")
+                audit.check("func _block_09(" in runner
+                            and '"09": _block_09(bloque)' in runner
+                            and "CaptureInventoryService.resolve(" in runner
+                            and "CaptureSystem.validate_attempt(attempt, catalogs)" in runner,
+                            "No hay suite real de captura 09")
+                audit.check("result.result.reason == reason" in runner
+                            and "result.result.reason == \"unknown_ball\"" in runner
+                            and "rng.state == before_rng" in runner
+                            and "target.to_dict() == before_target" in runner
+                            and "inv.to_dict() == before_inv" in runner,
+                            "Falta controlar prioridad de rechazo o efectos secundarios")
+                audit.check({x["species_id"] for x in block["cases"]} ==
+                            {"mew", "caterpie"}
+                            and block["hp_modes"] == ["full", "one_hp"]
+                            and {x["name"] for x in block["contexts"]} ==
+                            {"sin_contexto", "batalla_con_turno_y_nivel"},
+                            "Falta diversidad de casos de captura")
+                audit.check(set(block["invalid_cases"]) ==
+                            {"trainer_battle_not_capturable",
+                             "target_knocked_out", "battle_finished"},
+                            "Faltan negativos con precedencia sobre unknown_ball")
             else:
                 audit.check(False, "Falta contrato incremental específico para " + block["bloque"])
         audit.check(audit.checks > 0, "Sin comprobaciones")
