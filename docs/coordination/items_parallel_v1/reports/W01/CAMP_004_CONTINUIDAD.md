@@ -83,3 +83,13 @@ Primer run #41589392286, SHA a26c444b: Godot 5254 checks, **8 fallos** concentra
 ### 05/10 — fallo previo Godot y reparación de contrato
 
 CI #41602085941 falló exclusivamente en validador Python: `CAMP004_W01_PY FAIL: 'follow_move'` al validar `scope_no_damage_control`. `follow_move` es obligatorio sólo en tres escenarios con secuencia de críticos, no en todos los casos de Periscopio. Corrección mínima del contrato, ningún escenario suprimido; reejecutar CI entera y puerta CAMP003. No afirmar PASS antes de ver los recibos.
+
+## Bloque 05/10 CI SUCCESS — cierre comprobado (2026-11-03)
+
+- Branch IA1/W01 `codex/calvo-items-20261103-w01-camp004`. Última CI funcional [#41602276948](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41602276948), SHA `7034b8c783eb9996369cbf1c97229c05713c9a08`, `completed/success`.
+- `CAMP004_W01_PY PASS blocks=5 checks=468`, `CAMP004_W01_GODOT PASS blocks=5 checks=8639`, puertas Python y Godot PASS.
+- Hito 05 **regresión CAMP003 W01 total aprobada**: `CAMP003_W01_PY PASS blocks=10 checks=806` y `CAMP003_W01_GODOT PASS blocks=10 checks=12392`. Sin modificaciones de producción, 10/10 bloques CAMP003 preservados.
+- Estado campaña W01 **5/10 funcionalmente verificados**, 15 equipables, 34 escenarios, 98 pares, 294 variantes con SaveV2. Bloque 05: `room_service;scope_lens;shed_shell`, positivo/negativo, crítico garantizado y testigos RNG, bloqueo Mal de Ojo y cambio real.
+- Fallo del primer intento #41602085941 fue exclusivamente exigencia accidental de `follow_move` en control de Periscopio. Reparado bajo V5 en commit `7034b8c7`; sin pérdida de cobertura.
+- CSV fila 05 aún `EN_CI_AUTOMATICA` **solo por economía de CI**, pero evidencia real CI_PASS arriba. En siguiente `p` cambiar a `CI_PASS_VERIFICADO` + SHA `7034b8c783eb9996369cbf1c97229c05713c9a08` + run `41602276948` y crear fila 06 en el mismo push.
+- Precauciones: SaveV2 midcharge de bloque 03 pendiente para IA6; no certificar pantallas/GPU, no merge a main ni cambios V28. **Próxima `p` = únicamente bloque 06/10: `smoke_ball;smooth_rock;snowball`.**

@@ -22,3 +22,23 @@ Bloque 04 previamente aprobado run [#41592180823](https://github.com/danielmaria
 ## Primera CI y reparación V5
 
 El run [#41602085941](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41602085941) tuvo error `CAMP004_W01_PY FAIL: 'follow_move'` en el validador. Causa: una condición basada en la familia `scope_lens` exigía injustificadamente `follow_move` en el control de Reflejo, que intencionalmente sólo tiene un movimiento. La prueba de escenario de crítico sí requiere exactamente `focus_energy` seguido de `tackle`. El parche limita esa condición a los tres escenarios de críticos con secuencia de dos turnos (`punch_chansey_critical`, `punch_wrong_species` y `scope_focus_crit`), preservando el negativo de Periscopio, los otros 33 escenarios y los 98 pares. El fallo fue anterior a Godot, por lo que no demuestra ni descarta defectos de combate. Publicar y revisar CI completa, incluida regresión CAMP003.
+
+## Cierre certificado — GitHub Actions del bloque 05
+
+**Run oficial:** [#41602276948](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41602276948), `completed/success`, SHA funcional `7034b8c783eb9996369cbf1c97229c05713c9a08`, **0 errores finales**. Recibos exactos:
+
+- `CAMP004_W01_MANIFEST_PASS reserved=10 completed=5 ids=30`
+- `CAMP004_W01_PY PASS blocks=5 checks=468`
+- `CAMP004_GATE_PY_PASS worker=W01 blocks=5 checks=468`
+- `CAMP004_W01_GODOT PASS blocks=5 checks=8639`
+- `CAMP004_GATE_GODOT_PASS worker=W01 blocks=5 checks=8639`
+- `CAMP003_W01_PY PASS blocks=10 checks=806`
+- `CAMP003_W01_GODOT PASS blocks=10 checks=12392`
+
+Se ha superado el **gate obligatorio de la regresión completa de CAMPAÑA_003** en el hito 05, tanto Python como Godot, con 10/10 bloques. La campaña actual queda **5/10 bloques funcionalmente certificados**, quince objetos, 34 escenarios, 98 pares caso-semilla, 294 variantes (active, none, reserve) con pruebas de efectos, controles e integridad SaveV2.
+
+**Incidencia reparada bajo V5:** el primer run [#41602085941](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41602085941), sobre SHA `27d8199d8d50176a00696aa7feff00e0b1dc7a29`, falló en el contrato Python con `CAMP004_W01_PY FAIL: 'follow_move'`, antes de ejecutar Godot. Se exigía por error `follow_move` al escenario de Reflejo sin daño de Periscopio. En SHA `7034b8c7` la exigencia se limita a los tres casos de críticos de dos movimientos. **No se retiraron casos, semillas, controles o aserciones**. El run posterior completó todas las baterías con éxito.
+
+**Límites conocidos:** la CI headless no cubre interfaz ni GPU; no demuestra integración de ramas en `main`/V28. Persiste el aviso de proyección de vista en restauración **durante carga intermedia de Rayo Solar sin Hierba Única**, documentado en bloque 03 para IA6; ninguna prueba del bloque 05 lo declara resuelto.
+
+**Administración:** la fila 05 del progreso CSV conserva `EN_CI_AUTOMATICA` por el disparador de CI para ahorrar ejecución documental redundante. La certificación definitiva se acredita con el run y SHA citados; cerrar esa fila a `CI_PASS_VERIFICADO` al añadir la fila 06 en el siguiente `p`. **Próxima asignación: bloque 06/10 `smoke_ball;smooth_rock;snowball`**, y solo con una nueva `p`.
