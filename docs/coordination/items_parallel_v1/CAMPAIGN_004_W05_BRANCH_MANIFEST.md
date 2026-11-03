@@ -1,0 +1,13 @@
+# IA6 — MANIFIESTO DE RAMA W05 / CAMPAÑA_004
+**Fecha:** 2026-11-03. **Estado:** ACTIVADA y rama comprobada. Autorización del usuario: continuar entregando trabajo a W05 sin esperar otras trabajadoras.
+
+- **Identidad exclusiva:** IA5/W05. Especialidad MT/libros Scarlet/Violet; ninguna otra W incluida.
+- **Nueva rama:** `codex/calvo-items-20261103-w05-camp004`.
+- **Rama fuente:** `codex/calvo-items-20261103-w05-camp003`, HEAD exacto al crear `d03ef3f434151ff94c7cd8ca2b3f0033da997caa`. Se preservan íntegros los tests y documentos CAMP003 previos, sin merge de `main` ni árbitra.
+- **CI final de CAMP003 sobre SHA funcional:** [#41565822563](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41565822563) `completed/success` en `984a80a128f5c6847664325ae487956adb838f49` (Python 580 / Godot 2166). Los commits documentales posteriores no alteraron sus runners.
+- **Nueva reserva oficial:** [CAMPAIGN_004_W05_QUEUE_APPROVED.csv](CAMPAIGN_004_W05_QUEUE_APPROVED.csv), diez grupos consecutivos, 60 MT (`tm82`–`tm141`) activos según perfil y no incluidos en muestras previas. La cola está copiada de forma idéntica tanto en árbitra como en rama W05 para que los tests y el humano consulten el mismo contenido.
+- **Nuevo encargo:** [campaigns/CAMP_004_W05.md](campaigns/CAMP_004_W05.md); nuevo gate [CAMPAIGN_004_W05_GATE.md](CAMPAIGN_004_W05_GATE.md). Progreso `reports/W05/CAMP_004_PROGRESO.csv` parte sin filas, fixture `w05_campaign_004.json` con `blocks=[]` (0/10); ninguna MT nueva certificada todavía.
+- **Runners preparados:** `tests/tools/test_parallel_items_campaign_004_manifest.py`, `tests/tools/test_parallel_items_w05_campaign_004.py`, `tests/gameplay/parallel_items_w05_campaign_004.gd`. Están basados en los métodos acumulativos CAMP003 e incorporan exclusión de 81 IDs históricos.
+- **CI propia:** `.github/workflows/parallel-camp004-w05-autoci.yml`, rama W05, 10 bloques, contrato Python/Godot y regresión CAMP003. Inicialmente el YAML sufrió error de generación previo a jobs (run [#41570776523](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41570776523)); reparado en commit `e91c103ca7085d9ef9dd3b809efaa37063cc0bd6`. Nuevo run bootstrap [#41570901863](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41570901863). **Comprobar su resultado antes de afirmar PASS.** Un bootstrap 0/10 solo certifica configuración, no efectos de las MT.
+
+**Alcance:** W05 puede utilizar autonomía de reparación V5 dentro de su dominio únicamente, con regresiones y CI. Ningún cambio a `main`, V28, PR #118 ni ramas W01–W04. La identidad se asigna explícitamente al abrir un nuevo chat, nunca mediante memoria compartida.
