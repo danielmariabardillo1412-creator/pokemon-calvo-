@@ -4,6 +4,7 @@ const Servicio = preload("res://modules/inventory/field_item_service.gd")
 const BLOQUE_01 := [&"berry_sweet", &"clover_sweet", &"flower_sweet"]
 const BLOQUE_02 := [&"love_sweet", &"ribbon_sweet", &"star_sweet"]
 const BLOQUE_03 := [&"strawberry_sweet", &"whipped_dream", &"leaders_crest"]
+const BLOQUE_04 := [&"adamant_crystal", &"blue_orb", &"catching_charm"]
 const ID := &"w04_c004_01"
 var checks := 0
 var errores: Array[String] = []
@@ -108,6 +109,45 @@ func _positivo(catalogo: DefinitionCatalog, item: StringName, origen: StringName
 		var repeticion: Dictionary = servicio.evolve(item, ID, destino)
 		verificar(not repeticion.get("accepted", false) and posterior == _estado(pc), String(item) + "/sin_doble_gasto")
 
+func _auditar_contexto_04(catalogo: DefinitionCatalog, item: StringName, origen: StringName) -> void:
+	verificar(catalogo.item(item) != null, String(item) + "/" + String(origen) + "/catalogo")
+	var pc := _crear(catalogo, origen)
+	verificar(pc != null, String(item) + "/" + String(origen) + "/especie")
+	if pc == null:
+		return
+	var servicio := Servicio.new()
+	verificar(servicio.configure(pc, catalogo, func(): return true), String(item) + "/servicio_forma")
+	verificar(pc.inventory.add(item, 2), String(item) + "/inventario_forma")
+	var previo := _estado(pc)
+	var opciones := servicio.evolution_options(item, ID)
+	verificar(opciones.is_empty(), String(item) + "/no_evolucion_por_objeto")
+	var campo: Dictionary = servicio.use_item(item, ID)
+	verificar(not campo.get("accepted", false) and _estado(pc) == previo and pc.inventory.quantity(item) == 2, String(item) + "/sin_transformacion_por_uso")
+	var evolucion: Dictionary = servicio.evolve(item, ID)
+	verificar(not evolucion.get("accepted", false) and _estado(pc) == previo, String(item) + "/sin_evolucion_falsa")
+	var ajeno: Dictionary = servicio.use_item(item, &"id_ajeno")
+	verificar(not ajeno.get("accepted", false) and _estado(pc) == previo, String(item) + "/propietario_ajeno_intacto")
+	if item == &"catching_charm":
+		verificar(not servicio.holdable(item), String(item) + "/sin_equipamiento_ajeno")
+		var equipar_invalido: Dictionary = servicio.equip(item, ID)
+		verificar(not equipar_invalido.get("accepted", false) and _estado(pc) == previo, String(item) + "/amuleto_no_es_equipable")
+	else:
+		verificar(servicio.holdable(item), String(item) + "/equipamiento_registrado")
+		if servicio.holdable(item):
+			var equipado: Dictionary = servicio.equip(item, ID)
+			var criatura := pc.owned_creature(ID)
+			verificar(equipado.get("accepted", false) and criatura != null and criatura.species_id == origen and criatura.held_item_id == item and pc.inventory.quantity(item) == 1, String(item) + "/equipar_sin_cambiar_forma")
+			if equipado.get("accepted", false):
+				_persistencia(pc, item, String(origen) + "_equipado", 1, origen, item)
+				var estado_equipado := _estado(pc)
+				var uso_equipado: Dictionary = servicio.use_item(item, ID)
+				var evolucion_equipada: Dictionary = servicio.evolve(item, ID)
+				verificar(not uso_equipado.get("accepted", false) and not evolucion_equipada.get("accepted", false) and servicio.evolution_options(item, ID).is_empty() and _estado(pc) == estado_equipado, String(item) + "/equipar_no_activa_forma_o_reversion")
+				var retirar: Dictionary = servicio.unequip(ID)
+				verificar(retirar.get("accepted", false) and pc.inventory.quantity(item) == 2 and pc.owned_creature(ID).held_item_id == &"" and pc.owned_creature(ID).species_id == origen, String(item) + "/retirar_sin_transformacion")
+	verificar(_estado(pc) == previo, String(item) + "/estado_forma_final_intacto")
+	_persistencia(pc, item, String(origen) + "_final", 2, origen, &"")
+
 func _ejecutar() -> void:
 	var data: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://data/normalized/pokemon_api.json"))
 	if not data is Dictionary:
@@ -178,6 +218,12 @@ func _ejecutar() -> void:
 			for ruta: Dictionary in positivos:
 				_positivo(catalogo, item, ruta.origen as StringName, ruta.destino as StringName)
 			print("CAMP004_W04_ITEM id=", String(item), " status=FUNCIONAL_VERIFICADO runtime_routes=", positivos.size())
+	for item: StringName in BLOQUE_04:
+		var origen: StringName = &"dialga" if item == &"adamant_crystal" else &"kyogre" if item == &"blue_orb" else &"eevee"
+		_auditar_contexto_04(catalogo, item, origen)
+		if item != &"catching_charm":
+			_auditar_contexto_04(catalogo, item, &"eevee")
+		print("CAMP004_W04_ITEM id=", String(item), " status=", "AUDITORIA_DE_DATOS" if item == &"catching_charm" else "DEPENDENCIA", " reason=", "captura_pertenece_W03_no_certificada" if item == &"catching_charm" else "objeto_equipable_sin_ruta_forma_en_field_item_service")
 	_finalizar()
 
 func _finalizar() -> void:
@@ -185,7 +231,7 @@ func _finalizar() -> void:
 		return
 	terminado = true
 	if errores.is_empty():
-		print("CAMP004_W04_GODOT PASS blocks=3 checks=", checks)
+		print("CAMP004_W04_GODOT PASS blocks=4 checks=", checks)
 	else:
 		print("CAMP004_W04_GODOT FAIL errors=", JSON.stringify(errores))
 	quit(0 if errores.is_empty() else 1)
