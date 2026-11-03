@@ -65,9 +65,26 @@ SCENARIOS_03 = {
     "eject_without_hit": ("eject_button", "no_hit_no_switch", "mew", "",
         "mew", "amnesia", "reflect", (19,)),
 }
+SCENARIOS_04 = {
+    "eject_pack_self_drop": ("eject_pack", "own_stat_drop_forces_switch", "mew", "", "",
+        "snorlax", "amnesia", "close_combat", (19,23)),
+    "eject_pack_no_drop": ("eject_pack", "own_no_drop_control", "mew", "", "",
+        "snorlax", "amnesia", "tackle", (19,)),
+    "electric_seed_field": ("electric_seed", "electric_field_defense", "mew", "", "",
+        "mew", "electric_terrain", "reflect", (19,23)),
+    "electric_seed_wrong_field": ("electric_seed", "non_electric_field", "mew", "", "",
+        "mew", "misty_terrain", "reflect", (19,)),
+    "electric_seed_no_field": ("electric_seed", "no_terrain_control", "mew", "", "",
+        "mew", "amnesia", "reflect", (19,)),
+    "focus_band_lethal_rng": ("focus_band", "random_lethal_survival", "mew", "", "one",
+        "mew", "seismic_toss", "reflect", tuple(range(1,25))),
+    "focus_band_nonlethal": ("focus_band", "nonlethal_control", "mew", "", "",
+        "mew", "tackle", "reflect", (19,)),
+}
 OPERATIONS = ({r[1] for r in SCENARIOS_01.values()}
               | {r[1] for r in SCENARIOS_02.values()}
-              | {r[1] for r in SCENARIOS_03.values()})
+              | {r[1] for r in SCENARIOS_03.values()}
+              | {r[1] for r in SCENARIOS_04.values()})
 REQUIRED_CASE_FIELDS = {"block", "id", "item_id", "op", "actor_species", "foe_species",
                         "foe_move", "own_move", "seeds", "history"}
 TOTAL_CHECKS = 0
@@ -151,13 +168,26 @@ def validate() -> int:
         require("HELD_PILOT_VERIFIED" in next(x for x in inventory.splitlines()
                                              if x.startswith("eject_button,")),
                 "Botón Escape: evidencia piloto ausente")
+    if len(progress) >= 4:
+        require("add('eject_pack','self_drop'" in old_v3
+                and "moves:['close_combat']" in old_v3
+                and "add('eject_pack','no_drop'" in old_v3,
+                "Mochila Escape: referencia nativa de bajada propia ausente")
+        require("['electric_seed','electric_terrain','def']" in old_v3
+                and "add(id,'wrong_terrain'" in old_v3,
+                "Semilla Electro: terreno efectivo y terreno equivocado no acreditados")
+        require("add('focus_band','survival_rng'" in old_v3
+                and "foeMoves:['seismic_toss']" in old_v3,
+                "Cinta Aguante: fuente RNG de supervivencia ausente")
     cases = document["cases"]
     require(type(cases) is list and len(cases) >= 7, "Sin casos suficientes")
     found, pairs = set(), set()
     per_id = {}
     stage_map = {r["bloque"]: set(r["ids"].split(";")) for r in tasks[:len(progress)]}
     for case in cases:
-        require(type(case) is dict and set(case) in (REQUIRED_CASE_FIELDS, REQUIRED_CASE_FIELDS | {"actor_ability"}), "Caso con forma inválida")
+        require(type(case) is dict and REQUIRED_CASE_FIELDS <= set(case)
+                and set(case) <= REQUIRED_CASE_FIELDS | {"actor_ability", "actor_hp"},
+                "Caso con forma inválida")
         name, stage, item = case["id"], case["block"], case["item_id"]
         require(type(name) is str and name not in found and stage in stage_map
                 and item in stage_map[stage], "Caso duplicado/fuera de encargo")
@@ -165,7 +195,8 @@ def validate() -> int:
         require(type(case["actor_species"]) is str and bool(case["actor_species"]) and type(case["history"]) is str
                 and len(case["history"]) >= 8, "Especie/historial no justificado")
         require(case["op"] in OPERATIONS, "Operacion no implementada por runner: "+case["op"])
-        require(type(case["seeds"]) is list and 1 <= len(case["seeds"]) <= (8 if name == "blunder_accuracy_event" else 4),
+        require(type(case["seeds"]) is list and 1 <= len(case["seeds"]) <=
+                (24 if name == "focus_band_lethal_rng" else 8 if name == "blunder_accuracy_event" else 4),
                 "Semillas ausentes o excesivas para el caso")
         for seed in case["seeds"]:
             require(type(seed) is int and 0 <= seed <= 65535
@@ -188,12 +219,22 @@ def validate() -> int:
             require(actual == (item0, op, actor, ability, foe, foe_move, own_move, seeds),
                     "Cambio no autorizado de causa/semilla: "+name)
         elif stage == "03":
+            require("actor_hp" not in case, "Stage03 sin condiciones de HP ajenas")
             require(name in SCENARIOS_03, "Caso ajeno a bloque W01/03")
             expected = SCENARIOS_03[name]
             actual = (item, case["op"], case["actor_species"], case.get("actor_ability", ""),
                       case["foe_species"], case["foe_move"], case["own_move"],
                       tuple(case["seeds"]))
             require(actual == expected, "Desvío de causas/semillas W01/03: "+name)
+        elif stage == "04":
+            require(name in SCENARIOS_04, "Caso ajeno al bloque W01/04")
+            expected = SCENARIOS_04[name]
+            actual = (item, case["op"], case["actor_species"], case.get("actor_ability", ""),
+                      case.get("actor_hp", ""), case["foe_species"], case["foe_move"],
+                      case["own_move"], tuple(case["seeds"]))
+            require(actual == expected, "Mecánica o semilla desviada W01/04: "+name)
+        elif stage not in {"01", "02", "03", "04"}:
+            raise ValueError("Stage no implementado por validador W01")
     for stage, ids in stage_map.items():
         for item in ids:
             require((stage,item) in per_id, "Objeto sin caso de test: "+item)
@@ -207,6 +248,11 @@ def validate() -> int:
         require(len(cases) == 21 and len(pairs) == 37,
                 "Matriz acumulativa W01 03 incorrecta: esperados 21 casos/37 corridas")
         require(set(SCENARIOS_03) <= found, "Faltan 6 casos autorizados del bloque 03")
+    if len(progress) == 4:
+        require(len(cases) == 28 and len(pairs) == 69,
+                "Matriz W01/04 debe tener 28 escenarios y 69 pares")
+        require(set(SCENARIOS_04) <= found,
+                "Faltan 7 casos positivos/negativos del bloque W01/04")
     return len(progress)
 
 def main():
