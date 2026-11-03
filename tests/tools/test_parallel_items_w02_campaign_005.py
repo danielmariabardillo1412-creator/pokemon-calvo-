@@ -873,6 +873,30 @@ def verify_sources(chk):
     for fragment in ('&"hp_up"', '&"iron"', '&"pp_max"', '&"protein"'):
         chk.demand(fragment in historic_training,
                    "Regresión previa entrenamiento ausente: " + fragment)
+    for fragment in (
+        '"calcium": "special_attack"',
+        '"zinc": "special_defense"',
+        '"carbos": "speed"',
+        'var gain := mini(10 if vitamin else 1',
+        'ProgressionRuleset.EV_PER_STAT_MAX - old_ev',
+        'ProgressionRuleset.EV_TOTAL_MAX - total',
+    ):
+        chk.demand(fragment in training, "Límites y mapa de vitamina 03 cambiados: " + fragment)
+    for fragment in (
+        'const EXP := {"exp_candy_xs": 100',
+        'item_id == &"rare_candy" or EXP.has(String(item_id))',
+        'var target := mini(maximum, c.experience + int(EXP.get(String(item_id), 0)))',
+        'ProgressionSystem.gain_experience(',
+        'if summary.exp_gained > 0: Friendship.increase(c, [5, 3, 2])',
+    ):
+        chk.demand(fragment in growth, "Caramelo Exp XS no respaldado por motor: " + fragment)
+    for fragment in (
+        'if spec.has("exp_until_next"):',
+        'c.experience = ProgressionRuleset.experience_for_level(curve, c.level + 1)',
+        'ProgressionRuleset.level_for_experience(curve, expected_exp)',
+        'int(result.get("exp_gained", -1)) == int(spec.exp_gain)',
+    ):
+        chk.demand(fragment in runner, "Escenario XP real 03 no instrumentado: " + fragment)
     for old, token in (
         (old_ability, 'TRANSITIONS'),
         (old_growth, 'rare_candy'),
@@ -916,6 +940,24 @@ def negative_controls(fixture, queue, progress, chk):
             lambda v: v["blocks"][1]["cases"][12].update({"stat": "hp"}),
             lambda v: v["blocks"][1]["cases"][18].update({"stat": "attack"}),
             lambda v: v["blocks"][1]["cases"][23].update({"applies": True}),
+        ])
+    if len(fixture["blocks"]) >= 3:
+        mutations.extend([
+            lambda v: v["blocks"][2]["ids"].append("exp_candy_s"),
+            lambda v: v["blocks"][2]["source_evidence"].pop(),
+            lambda v: v["blocks"][2]["cases"].pop(),
+            lambda v: v["blocks"][2]["cases"][0].update({"stat": "attack"}),
+            lambda v: v["blocks"][2]["cases"][1].update({"expected_ev_gain": 10}),
+            lambda v: v["blocks"][2]["cases"][2].update({"applies": True}),
+            lambda v: v["blocks"][2]["cases"][3].update({"expected_ev_gain": 10}),
+            lambda v: v["blocks"][2]["cases"][6].update({"stat": "hp"}),
+            lambda v: v["blocks"][2]["cases"][12].update({"stat": "special_attack"}),
+            lambda v: v["blocks"][2]["cases"][18].update({"exp_gain": 800}),
+            lambda v: v["blocks"][2]["cases"][21].update({"exp_gain": 100}),
+            lambda v: v["blocks"][2]["cases"][22].update({"exp_until_next": 1000}),
+            lambda v: v["blocks"][2]["cases"][23].update({"applies": True}),
+            lambda v: v["blocks"][2]["cases"][24].update({"applies": True}),
+            lambda v: v["blocks"][2]["cases"][25].update({"start_friendship": 99}),
         ])
     for index, mutation in enumerate(mutations):
         altered = copy.deepcopy(fixture)
