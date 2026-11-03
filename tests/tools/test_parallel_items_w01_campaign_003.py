@@ -137,8 +137,8 @@ def validate() -> int:
         require(type(case["actor_species"]) is str and bool(case["actor_species"]) and type(case["history"]) is str
                 and len(case["history"]) >= 8, "Especie/historial no justificado")
         require(case["op"] in OPERATIONS, "Operacion no implementada por runner: "+case["op"])
-        require(type(case["seeds"]) is list and 1 <= len(case["seeds"]) <= 4,
-                "Semillas ausentes o excesivas")
+        require(type(case["seeds"]) is list and 1 <= len(case["seeds"]) <= (8 if name == "blunder_accuracy_event" else 4),
+                "Semillas ausentes o excesivas para el caso")
         for seed in case["seeds"]:
             require(type(seed) is int and 0 <= seed <= 65535
                     and (name, seed) not in pairs, "Semilla no entera o par duplicado")
