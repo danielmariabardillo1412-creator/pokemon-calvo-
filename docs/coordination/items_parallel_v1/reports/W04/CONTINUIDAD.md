@@ -211,3 +211,10 @@ Las **16 dependencias CAMP003** y **9 dependencias CAMP004 bloques 01–03** sig
 **Alcance técnico:** Necrozma con Lunala o Solgaleo por separado (pareja real en el equipo) debe conservar ambas identidades, objetos y SaveV2 cuando fusión no está conectada. Los tres cupones Roto solo comprueban el servicio de campo y rechazo sin gasto; captura W03 y experiencia/amistad W02 no quedan certificadas. No eliminar entradas `unused` sin decisión de IA6.
 
 **Próximo `p` si CI09 correcta:** bloque **10/10** `big_nugget;bottle_cap;gold_bottle_cap;heart_scale;nugget;pretty_wing;rare_bone`. No iniciarlo hasta una orden nueva. Conservadas CAMP003 (16 dependencias), regresiones CAMP001, producción, `main`, V28, rama árbitra y ramas de otras trabajadoras.
+
+
+## Actualización CI09 verificada
+
+GitHub Actions [#41602009788](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41602009788), SHA `cf6111da607eb850da867759b61840ad188f3494`, `completed/success`: CAMP004 Python **312** comprobaciones, Godot **847**, regresión CAMP003 Python **120**, Godot **270**. El runner confirmó 2 objetos Necrozma (`n_lunarizer_merge`, `n_solarizer_merge`) como `DEPENDENCIA records=0` y 3 cupones Rotom como `AUDITORIA_LEGACY records=0`. La prueba de pareja Necrozma–Lunala o Necrozma–Solgaleo conserva ambos Pokémon e inventario en SaveV2. No afirmar fusión, captura, experiencia o amistad funcionales.
+
+El CSV está consolidado en commit `d338594b9e085f1de1698e44006a99d0b5a83c36`, cuya segunda CI es [#41602238413](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41602238413), pendiente de comprobación final. **Estado provisional 09/10 publicados**, 29 IDs auditados. El siguiente `p` inicia solo bloque **10/10** `big_nugget;bottle_cap;gold_bottle_cap;heart_scale;nugget;pretty_wing;rare_bone` tras verificar la segunda CI. Las 16 dependencias históricas de CAMP003 permanecen abiertas.
