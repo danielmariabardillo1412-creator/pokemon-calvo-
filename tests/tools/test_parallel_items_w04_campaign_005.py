@@ -126,7 +126,7 @@ def main():
     for token in ("func _casos_de_version_y_etapas_02(", "prism_scale/belleza_legacy_no_degradada",
                   "up_grade/dos_objetos_dos_etapas", "up_grade/porygon2_sin_opcion",
                   "up_grade/porygon2_no_evoluciona", "up_grade/porygon2_con_objeto_no_salta_etapa",
-                  "up_grade/porygon2_retirada_sin_mutacion", "bloques_01_a_03_secuenciales",
+                  "up_grade/porygon2_retirada_sin_mutacion", "bloques_01_a_04_secuenciales",
                   "CAMP005_W04_ALT id=prism_scale", "CAMP005_W04_STAGE item=up_grade"):
         check(token in runner, "Falta contrato runtime del bloque 02: " + token)
 
