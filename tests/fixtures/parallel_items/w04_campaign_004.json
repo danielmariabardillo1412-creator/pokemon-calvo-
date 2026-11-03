@@ -104,6 +104,32 @@
         "post_unequip_state_unchanged",
         "capture_effect_not_tested_in_W04"
       ]
+    },
+    {
+      "block": "05",
+      "ids": [
+        "dna_splicers",
+        "exp_charm",
+        "gracidea"
+      ],
+      "family": "STORY_KEY_OR_FORM_REVIEW",
+      "classification_by_id": {
+        "dna_splicers": "Kyurem fusion requires two-creature form contract absent",
+        "exp_charm": "XP passive/story subsystem not certified by evolution worker",
+        "gracidea": "Shaymin form requires specific form/time constraints absent from current field service"
+      },
+      "source": "RANDOMLOCK_ITEMS_BUILD_SCOPE_V2.csv; ITEM_FIELD_V8.csv.txt; ITEM_INVENTORY.csv; item_connections_v1.json",
+      "policy": "No invented Kyurem fusion, XP rewards, or Shaymin form; only direct routes when runtime actually supports them",
+      "cases": [
+        "catalog_and_selection_for_three_items",
+        "non_holdable_contract",
+        "kyurem_shaymin_eevee_wrong_use_rejections",
+        "inventory_and_same_creature_identity_untouched",
+        "no_direct_evolution_without_supported_record",
+        "positive_only_if_true_runtime_evolution_exists",
+        "save_v2_inventory_identity",
+        "regression_campaign_003_and_001"
+      ]
     }
   ]
 }
