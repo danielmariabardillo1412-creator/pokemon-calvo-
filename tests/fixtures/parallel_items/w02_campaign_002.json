@@ -4,7 +4,8 @@
   "worker": "W02",
   "completed_iterations": [
     1,
-    2
+    2,
+    3
   ],
   "family": "held_berry_revalidation",
   "format": "gen9calvounifiedv1",
@@ -170,5 +171,24 @@
       "field_profile": "NOT_REGISTERED"
     }
   },
-  "note": "CAMP_002 ITER_01+ITER_02: nueve casos, cuatro IDs; tres equipamientos por caso. Leppa PP0 repone +10 al primer movimiento sin usar, PP1 no dispara. Figy umbral bajo y naturaleza modest/hardy segun held_pilot; 1/3 HP y confusion solo si sabor no gusta, observado en log nativo. Campo existente para tres IDs pero no probado; Figy no tiene perfil de campo. Sin PASS nuevo hasta CI."
+  "note": "CAMP_002/03: 9 escenarios originales inalterados, 4 bayas, 27 variantes nativas active/none/reserve, contrato de regresion y SaveV2 por dueño. Leppa PP y Figy naturaleza/confusion con log nativo. Campo no ensayado; Persim CAMP_001 intocable. No certificar CI del SHA nuevo sin ejecución.",
+  "regression_contract": {
+    "expected_scenarios": 9,
+    "expected_native_variants": 27,
+    "expected_owners": [
+      "active",
+      "none",
+      "reserve"
+    ],
+    "per_item_cases": {
+      "sitrus_berry": 2,
+      "lum_berry": 2,
+      "leppa_berry": 2,
+      "figy_berry": 3
+    },
+    "save_v2_required": true,
+    "single_consumption_required": true,
+    "field_tested": false,
+    "preserve_legacy_persim": true
+  }
 }

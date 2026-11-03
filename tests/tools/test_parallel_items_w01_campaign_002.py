@@ -209,7 +209,9 @@ def validate_native_report(path: Path, fixture: dict) -> tuple[int, int]:
     spec_by_id = {r["id"]: r for r in fixture["cases"]}
     seen = set()
     sample_fields = {"valid", "start", "after", "owner_unchanged", "physical_units",
-                     "evidence", "sha256"}
+                     "evidence", "sha256", "restore_valid", "restore_exact",
+                     "restored_frame_equal", "restored_frame", "restored_owner_unchanged",
+                     "restored_physical_units", "restore_evidence", "restore_sha256"}
     frame_fields = {"valid", "hp", "spe", "spa", "atk", "ability", "gastro_acid",
                     "native_item", "native_bench_item", "active_has_item",
                     "reserve_has_item", "consumed", "reserve_consumed", "log_markers"}
@@ -232,7 +234,16 @@ def validate_native_report(path: Path, fixture: dict) -> tuple[int, int]:
             ensure(type(obs) is dict and set(obs) == sample_fields and obs["valid"] is True
                    and obs["owner_unchanged"] is True, f"Observación invalida: {key}/{mode}")
             ensure(type(obs["physical_units"]) is int, "Cantidad física no entera")
+            ensure(obs["restore_valid"] is True and obs["restore_exact"] is True
+                   and obs["restored_frame_equal"] is True
+                   and obs["restored_owner_unchanged"] is True,
+                   f"Restore SaveV2 no demostrado: {key}/{mode}")
+            ensure(type(obs["restored_physical_units"]) is int
+                   and obs["restored_physical_units"] == obs["physical_units"],
+                   f"SaveV2 cambió existencias: {key}/{mode}")
             start, after = obs["start"], obs["after"]
+            ensure(obs["restored_frame"] == after,
+                   f"SaveV2 diverge de estado nativo observado: {key}/{mode}")
             ensure(type(start) is dict and type(after) is dict
                    and set(start) == frame_fields and set(after) == frame_fields,
                    f"Fotograma nativo incompleto: {key}/{mode}")
@@ -262,9 +273,35 @@ def validate_native_report(path: Path, fixture: dict) -> tuple[int, int]:
                    and raw.get("start") == start and raw.get("after") == after
                    and raw.get("owner_unchanged") is True
                    and raw.get("physical_units") == obs["physical_units"]
+                   and raw.get("restore_valid") is True
+                   and raw.get("restore_exact") is True
+                   and raw.get("restored_frame_equal") is True
+                   and raw.get("restored_frame") == after
+                   and raw.get("restored_owner_unchanged") is True
+                   and raw.get("restored_physical_units") == obs["physical_units"]
+                   and raw.get("restore_evidence") == obs["restore_evidence"]
+                   and raw.get("restore_sha256") == obs["restore_sha256"]
+                   and type(raw.get("restored_checkpoint")) is dict
+                   and raw.get("restored_checkpoint") == raw.get("final")
                    and type(raw.get("initial")) is dict and type(raw.get("final")) is dict
                    and bool(raw["initial"]) and bool(raw["final"]),
                    "Recibo nativo sin snapshots o divergente del informe")
+            restore_name = f"{row['id']}_{row['seed']}_{mode}_savev2.json"
+            ensure(obs["restore_evidence"] == restore_name
+                   and type(obs["restore_sha256"]) is str
+                   and len(obs["restore_sha256"]) == 64,
+                   f"Nombre o hash de SaveV2 no válido: {key}/{mode}")
+            restore_path = path.parent / restore_name
+            ensure(restore_path.is_file()
+                   and hashlib.sha256(restore_path.read_bytes()).hexdigest() == obs["restore_sha256"],
+                   f"Recibo SaveV2 no existe o fue alterado: {restore_name}")
+            restored = load_json(restore_path)
+            ensure(set(restored) == {"owner", "checkpoint"}
+                   and type(restored["owner"]) is dict and bool(restored["owner"])
+                   and type(restored["checkpoint"]) is dict
+                   and restored["checkpoint"] == raw["final"]
+                   and restored["checkpoint"] == raw["restored_checkpoint"],
+                   f"Checkpoint SaveV2 no corresponde al estado de combate: {restore_name}")
 
         a = observations["active"]
         n = observations["none"]

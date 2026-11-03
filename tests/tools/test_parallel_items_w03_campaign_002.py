@@ -218,6 +218,93 @@ class ContratoContextoW03(unittest.TestCase):
 
 
 
+    def test_12_regresiones_historicas_net_v11_v15_conservadas(self) -> None:
+        v11 = self.leer("tests/gameplay/item_capture_v11.gd")
+        v15 = self.leer("tests/gameplay/item_capture_v15.gd")
+        net = self.leer("tests/gameplay/parallel_items_w03_net_campaign_001.gd")
+        effects = self.leer("modules/capture/capture_ball_effects.gd")
+        negativos = (
+            next((line for line in v11.splitlines()
+                  if "for unsupported:" in line), ""),
+            next((line for line in v15.splitlines()
+                  if "for unsupported:" in line), ""),
+        )
+        for line in negativos:
+            self.assertTrue(line, "Se perdió el bucle histórico de bolas no conectadas")
+            self.assertNotIn('&"net_ball"', line, "Regresión Net pasó a no implementada")
+            self.assertIn('&"luxury_ball"', line)
+        self.assertIn('&"repeat_ball"', negativos[1],
+                      "Acopio sigue pendiente: no quitar la expectativa negativa de V15")
+        self.assertIn("Net registered through shared ball adapter", v11)
+        self.assertIn("Net trainer rejection preserves ball and RNG", v11)
+        self.assertIn("Net species-based probability", v15)
+        self.assertIn("Net uses one ball and preserves ownership", v15)
+        for required in (
+            "func _probar_doble_tipo()", "func _probar_net_equipo_pc_guardado()",
+            "func _probar_net_fallo_y_rechazos()", "func _probar_selector_y_descriptor()",
+        ):
+            self.assertIn(required, net)
+        self.assertIn("net_ball", ids_adaptador(effects))
+        self.assertIn('species.has_type(&"water")', effects)
+        self.assertIn('species.has_type(&"bug")', effects)
+        self.assertIn('3.5 if species.has_type(', effects)
+
+    def test_13_decisiones_por_bola_sin_permisos_nuevos(self) -> None:
+        stage = self.matriz["phase_03"]
+        self.assertEqual(stage["scope"],
+                         "decision_per_ball_and_Net_V11_V15_regression_only")
+        self.assertEqual(stage["permission"], "NO_PRODUCTION_CHANGES_NO_NEW_CAPTURE_CONTEXT")
+        expected = {
+            "dusk_ball": "night_or_cave_authoritative",
+            "repeat_ball": "species_previously_caught_authoritative",
+            "dive_ball": "encounter_is_underwater_authoritative",
+        }
+        self.assertEqual(set(expected), {r["id"] for r in self.matriz["records"]})
+        for row in self.matriz["records"]:
+            with self.subTest(id=row["id"]):
+                decision = row["decision_03"]
+                self.assertEqual(decision["state"], "DEPENDENCIA_DE_CONTEXTO")
+                self.assertFalse(decision["implementation_authorized"])
+                self.assertEqual(decision["allowed_work"], "tests contracts reports only")
+                self.assertEqual(decision["required_signal"], expected[row["id"]])
+                self.assertGreaterEqual(len(decision["test_cases"]), 5)
+                for field in ("owner", "source_proof", "missing_in_current",
+                              "persistence_contract", "request_to_ia6"):
+                    self.assertTrue(decision[field])
+        if any(r["decision_03"]["implementation_authorized"]
+               for r in self.matriz["records"]):
+            self.fail("El fixture intenta autorizar implementación sin gate IA6")
+
+    def test_14_regresion_net_viva_sin_volver_a_ejecutar_v11_v15(self) -> None:
+        script = self.leer("tests/gameplay/parallel_items_w03_campaign_002.gd")
+        for token in (
+            "_test_regresiones_net_v11_v15(reglas, fixture)",
+            "func _test_regresiones_net_v11_v15(",
+            "CAMP_002_W03_BALL_EFFECTS.multiplier(",
+            "reglas.catch_probability(",
+            'CaptureAttempt.new(objetivo, &"net_ball"',
+            "CaptureInventoryService.resolve(",
+            "CaptureResult.INVALID",
+            "mochila.quantity(&\"net_ball\") == 1",
+            "FileAccess.get_file_as_string(\"res://tests/gameplay/item_capture_v11.gd\")",
+            "FileAccess.get_file_as_string(\"res://tests/gameplay/item_capture_v15.gd\")",
+            "NEGATIVE_CURRENT_BEHAVIOR_ONLY",
+            '"new_balls_functional": false',
+        ):
+            with self.subTest(token=token):
+                self.assertIn(token, script)
+        for token in ("contexto.is_night", "contexto.is_underwater",
+                      "contexto.already_caught", 'multiplier(&"dusk_ball"',
+                      'multiplier(&"repeat_ball"', 'multiplier(&"dive_ball"'):
+            self.assertNotIn(token, script)
+        expected = self.matriz["phase_03"]["regression_cases"]
+        self.assertEqual({row["species_id"] for row in expected},
+                         {"magikarp", "caterpie", "pidgey", "surskit"})
+        self.assertEqual({row["species_id"]: row["expected_factor"] for row in expected},
+                         {"magikarp": 3.5, "caterpie": 3.5, "pidgey": 1.0,
+                          "surskit": 3.5})
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--root", type=Path, default=Path(__file__).resolve().parents[2])

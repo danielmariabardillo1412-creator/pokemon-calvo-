@@ -4,6 +4,7 @@ extends "res://tests/gameplay/item_capture_v11.gd"
 # No calcula factores ni agrega contexto inventado: lo normativo vive en el
 # fixture y la prueba de Python; aquí se ejecuta el servicio ACTUAL.
 const CAMP_002_W03_FIXTURE := "res://tests/fixtures/parallel_items/w03_campaign_002.json"
+const CAMP_002_W03_BALL_EFFECTS = preload("res://modules/capture/capture_ball_effects.gd")
 
 
 func _initialize() -> void:
@@ -36,6 +37,7 @@ func _run() -> void:
 	check("Poke Ball anterior sigue registrada", reglas.is_known_ball(&"poke_ball"))
 	for registro: Dictionary in registros:
 		_test_bola(registro, reglas)
+	_test_regresiones_net_v11_v15(reglas, fixture)
 	_finish()
 
 
@@ -111,6 +113,78 @@ func _test_bola(registro: Dictionary, reglas: CaptureRuleset) -> void:
 			and mochila.to_dict() == antes
 			and salvaje.to_dict() == antes_pokemon
 			and rng.state == estado)
+
+
+
+# Solo regresiones breves del motor EXISTENTE; no reejecutar miles de casos V11/V15.
+# No se habilita Ocaso/Acopio/Buceo ni se inventan señales de contexto.
+func _test_regresiones_net_v11_v15(reglas: CaptureRuleset, fixture: Dictionary) -> void:
+	var etapa: Dictionary = fixture.get("phase_03", {})
+	check("ITER03 contrato de decisiones y regresiones presente",
+		etapa.get("permission", "") == "NO_PRODUCTION_CHANGES_NO_NEW_CAPTURE_CONTEXT")
+	check("Net no duplicada en selector",
+		reglas.is_known_ball(&"net_ball")
+		and CaptureRuleset.ordered_ball_ids().count(&"net_ball") == 1)
+	# Confirmar que siguen existiendo las pruebas anteriores, sin modificarlas.
+	var v11 := FileAccess.get_file_as_string("res://tests/gameplay/item_capture_v11.gd")
+	var v15 := FileAccess.get_file_as_string("res://tests/gameplay/item_capture_v15.gd")
+	var no_soportadas_v11 := ""
+	var no_soportadas_v15 := ""
+	for linea in v11.split("\n"):
+		if linea.contains("for unsupported:"):
+			no_soportadas_v11 = linea
+			break
+	for linea in v15.split("\n"):
+		if linea.contains("for unsupported:"):
+			no_soportadas_v15 = linea
+			break
+	check("V11 mantiene negativos sin volver a excluir Net",
+		not no_soportadas_v11.is_empty() and not no_soportadas_v11.contains("net_ball")
+		and no_soportadas_v11.contains("luxury_ball")
+		and v11.contains("Net registered through shared ball adapter"))
+	check("V15 sigue rechazando Acopio y admitiendo Net",
+		not no_soportadas_v15.is_empty() and no_soportadas_v15.contains("repeat_ball")
+		and no_soportadas_v15.contains("luxury_ball")
+		and not no_soportadas_v15.contains("net_ball")
+		and v15.contains("Net species-based probability"))
+	# Comprobar el efecto REAL de Malla sin modificar fórmulas o semillas.
+	for caso: Dictionary in etapa.get("regression_cases", []):
+		var sid: StringName = StringName(String(caso.get("species_id", "")))
+		var especie: CreatureSpecies = catalogs.species(sid)
+		check("Net especie real presente " + String(sid), especie != null)
+		if especie == null:
+			continue
+		var esperado_factor: float = float(caso.get("expected_factor", -1))
+		var objetivo: CreatureInstance = _mon(sid, 12, StringName("w03_c002_net_" + String(sid)))
+		objetivo.current_hp = 1
+		var efectivo: float = CAMP_002_W03_BALL_EFFECTS.multiplier(&"net_ball", objetivo, especie)
+		check("Net factor canónico sin dobles premios " + String(sid),
+			is_equal_approx(efectivo, esperado_factor))
+		if sid == &"surskit":
+			check("Surskit confirma ambos tipos de especie",
+				especie.has_type(&"water") and especie.has_type(&"bug"))
+		var esperado_p: float = reglas.catch_probability(
+			especie.capture_rate, esperado_factor, 1.0,
+			objetivo.stats.max_hp, objetivo.current_hp)
+		var mochila := PlayerInventory.new()
+		mochila.add(&"net_ball", 2)
+		var equipo := CreatureParty.new()
+		var rng := RandomNumberGenerator.new()
+		rng.seed = 2303
+		var rng_antes := rng.state
+		var resultado := CaptureInventoryService.resolve(
+			CaptureAttempt.new(objetivo, &"net_ball", CaptureBattleContext.new()),
+			rng, catalogs, equipo, mochila)
+		check("Net probabilidad, consumo y RNG " + String(sid),
+			resultado.result.status != CaptureResult.INVALID
+			and resultado.result.consume_item
+			and is_equal_approx(resultado.result.probability, esperado_p)
+			and mochila.quantity(&"net_ball") == 1
+			and rng.state != rng_antes)
+		check("Net identidad y equipo si captura " + String(sid),
+			resultado.result.status != CaptureResult.SUCCESS
+			or (is_same(resultado.captured, objetivo)
+				and equipo.contains_instance_id(objetivo.instance_id)))
 
 
 func _finish() -> void:

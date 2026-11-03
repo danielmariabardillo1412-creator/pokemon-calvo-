@@ -27,14 +27,16 @@ func _run_c002() -> void:
 		FileAccess.get_file_as_string("res://data/normalized/pokemon_api.json"))).to_definition_catalog()
 	check("overlay ya disponible", Variants.apply(catalogs))
 	check("formato nativo fijado", String(automation.format) == "gen9calvounifiedv1")
-	check("alcance autorizado ITER_01+02",
+	check("alcance autorizado ITER_01+02+03",
 		automation.item_ids == ["sitrus_berry", "lum_berry", "leppa_berry", "figy_berry"]
 		and automation.completed_iterations is Array
-		and automation.completed_iterations.size() == 2
+		and automation.completed_iterations.size() == 3
 		and (automation.completed_iterations[0] is int or automation.completed_iterations[0] is float)
 		and (automation.completed_iterations[1] is int or automation.completed_iterations[1] is float)
+		and (automation.completed_iterations[2] is int or automation.completed_iterations[2] is float)
 		and float(automation.completed_iterations[0]) == 1.0
 		and float(automation.completed_iterations[1]) == 2.0
+		and float(automation.completed_iterations[2]) == 3.0
 		and automation.cases.size() == 9)
 	check("modos de propiedad", automation.variants == ["active", "none", "reserve"])
 	check("campo no ejecutado en este bloque", automation.field_scope == "NOT_TESTED_ITER_02")
@@ -260,6 +262,61 @@ func _verify_receipt(spec: Dictionary, mode: String, observed: Dictionary) -> vo
 		observed.restored and observed.settled_once and observed.save_v2)
 
 
+func _regresion_cuatro_bayas(rows: Array) -> Dictionary:
+	var scope: Dictionary = automation.regression_contract
+	var expected: Dictionary = {"sitrus_berry": 2, "lum_berry": 2,
+		"leppa_berry": 2, "figy_berry": 3}
+	var count: Dictionary = {"active": 0, "none": 0, "reserve": 0}
+	var good: bool = scope.expected_scenarios == 9 and scope.expected_native_variants == 27
+	var counts_correct: bool = scope.per_item_cases.size() == expected.size()
+	for id: String in expected:
+		counts_correct = counts_correct and float(scope.per_item_cases.get(id, -1)) == float(expected[id])
+	good = good and counts_correct
+	good = good and scope.expected_owners == ["active", "none", "reserve"]
+	good = good and scope.save_v2_required and scope.single_consumption_required
+	good = good and not scope.field_tested and scope.preserve_legacy_persim
+	check("matriz de regresion autorizada sin extrapolacion", good)
+	var lookup: Dictionary = {}
+	for spec: Dictionary in automation.cases:
+		var scenario: String = String(spec.scenario)
+		good = good and not lookup.has(scenario)
+		lookup[scenario] = spec
+	var observed_scenarios := {}
+	var saves: int = 0
+	for row: Dictionary in rows:
+		var scenario: String = String(row.scenario)
+		var has_spec: bool = lookup.has(scenario) and not observed_scenarios.has(scenario)
+		check("regresion escenario unico y autorizado " + scenario, has_spec)
+		good = good and has_spec and row.status == "PASS"
+		observed_scenarios[scenario] = true
+		if not has_spec:
+			continue
+		var spec: Dictionary = lookup[scenario]
+		good = good and String(spec.id) == String(row.id)
+		for mode: String in automation.variants:
+			var rec: Dictionary = row.observed.get(mode, {})
+			var valid: bool = bool(rec.get("valid", false))
+			if valid:
+				count[mode] = int(count[mode]) + 1
+			var retained: bool = bool(spec.consumes) and mode == "active"
+			var physical: bool = valid and rec.get("save_v2", false)
+			physical = physical and rec.get("restored", false) and rec.get("settled_once", false)
+			physical = physical and bool(rec.get("consumed", not retained)) == retained
+			physical = physical and int(rec.get("stock_total", -1)) == (1 if retained else 2)
+			physical = physical and int(rec.get("bag", -1)) == (2 if mode == "none" else 1)
+			check("SaveV2, titular y consumo unico " + scenario + "/" + mode, physical)
+			if physical:
+				saves += 1
+			good = good and physical
+	good = good and observed_scenarios.size() == 9 and saves == 27
+	for mode: String in ["active", "none", "reserve"]:
+		good = good and int(count[mode]) == 9
+	check("27 variantes de tres dueños validadas sin doble consumo", good)
+	return {"status": "PASS" if good else "FAIL", "scenarios": rows.size(),
+		"native_variants": int(count["active"]) + int(count["none"]) + int(count["reserve"]),
+		"save_v2_variants": saves, "mode_counts": count, "field_tested": false}
+
+
 func _finish_c002(rows: Array) -> void:
 	var complete: bool = automation.get("cases", []).size() == 9 and rows.size() == 9
 	var coverage: Dictionary = {}
@@ -277,11 +334,14 @@ func _finish_c002(rows: Array) -> void:
 		check(item + " cobertura individual sin atribución ajena", good)
 		complete = complete and good
 		coverage[item] = {"status": "PASS" if good else "FAIL", "cases": relevant.size()}
+	var regression: Dictionary = _regresion_cuatro_bayas(rows)
+	complete = complete and regression.status == "PASS"
 	check("matriz C002 completa y exclusiva", complete)
 	var report := {"schema_version": 1, "campaign": "CAMP_002",
 		"family": "held_berry_revalidation", "status": "PASS" if complete and errors.is_empty() else "FAIL",
 		"checks": checks, "errors": automation_errors, "cases": rows,
 		"per_item": coverage, "field_scope": "NOT_TESTED_ITER_02",
+		"regression": regression, "fixture_sha256": FileAccess.get_sha256(FIXTURE_C002),
 		"full_item_certification": false, "gpu": false}
 	var file := FileAccess.open(destination + "/godot.json", FileAccess.WRITE)
 	if file == null:
