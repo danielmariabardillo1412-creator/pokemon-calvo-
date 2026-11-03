@@ -1,3 +1,5 @@
+> **EXCEPCIÓN DE AUTORÍA EN LA RAMA:** además de los 13 archivos W02, existe un cambio de workflow publicado directamente por IA6/usuario en commit `43876a6d833958d2d7ad86ce15014b011778007a`: `.github/workflows/parallel-camp003-worker-autoci.yml` añade `modules/**` a los triggers de CI. **W02 no realizó ni revirtió ese cambio.** Por tanto no presentar la totalidad del diff de rama como de autoría W02. La CI vigente del bloque 08 sigue siendo [#41563958549](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41563958549), SHA de tests/progreso `992b31cde4984d1c6ca3e1f87a192b96247f71f4`.
+
 # IA2/W02 — CAMPAÑA_003: CONTINUIDAD VIGENTE / BLOQUE 08 DE 10
 
 **Estado de entrega:** **08/10 PUBLICADO** en rama exclusiva `codex/calvo-items-20261103-w02-camp003`; octava fila de progreso `EN_CI_AUTOMATICA`. **CI nativa 06–08 aún no certificada**. La siguiente `p` ejecutará únicamente la fila 09; no ejecutar 10 hasta orden separada.
