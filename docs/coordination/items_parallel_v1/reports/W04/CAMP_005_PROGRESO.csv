@@ -1,1 +1,2 @@
 bloque,ids,estado,sha_pruebas,ci_run,notas
+01,dragon_scale;dubious_disc;electirizer;magmarizer,EN_CI_AUTOMATICA,8c19acdaf36d392cf992a715a268c426c1177ce5,PENDIENTE,"BLOQUEADO_POR_CONTRATO: PokeAPI prueba intercambio con objeto, V27 exige nivel aprobado mas held_item, level_values_selected null; ProgressionSystem.level_up_context no transporta held_item y EvolutionSystem no lo valida; positivo equipamiento/SaveV2 y control de falsa evolucion en CI pendiente"
