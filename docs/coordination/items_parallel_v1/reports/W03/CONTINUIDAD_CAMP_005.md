@@ -1,3 +1,13 @@
+# IA3/W03 — CONTINUIDAD CAMP005 02/10
+
+**Rama única:** `codex/calvo-items-20261103-w03-camp005`. Bloque02 `luxury_ball;lure_ball` publicado, **no son objetos nuevos**. Estado `DEPENDENCIA_CONCRETA`: Luxury exige origen de captura persistente en CreatureInstance + política de bonificación futura y migración SaveV2; Lure necesita origen de pesca autenticado por mundo/sesión. Nuevas pruebas positivas solo de amistad base, Campana Alivio y serialización existente, NO de funcionamiento Luxury/Lure. No modificar productores compartidos sin IA6.
+
+Bloque01 validado [CI #41715717542](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41715717542), Python 28/Godot 18 PASS. Bloque02: verificar recibos `CAMP005_W03_PY PASS blocks=2` y `CAMP005_W03_GODOT PASS blocks=2` con gates en SHA definitivo de progreso. Reparar fallos de arnés propios; no confundir PASS con funcionamiento de bolas.
+
+**Siguiente `p`: bloque03 `love_ball;moon_ball`**, sin adelantar en este turno. Prohibido tocar main, V28, PR #118 o ramas ajenas.
+
+---
+
 ## Validación de CI — 2026-11-03
 
 GitHub Actions [#41715717542](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41715717542), SHA `a1bf8989427464f32762b49550bc08b06629a4b4`, terminó **success**. Recibos: `CAMP005_W03_PY PASS blocks=1 checks=28`, `CAMP005_GATE_PY_PASS`, `CAMP005_W03_GODOT PASS blocks=1 checks=18`, `CAMP005_GATE_GODOT_PASS`. El primer intento [#41715500393](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41715500393) falló por un falso positivo del auditor al encontrar `unknown_ball` en un comentario; criterio reparado en el SHA validado. El PASS certifica únicamente los contratos fuente disponibles y las dependencias descritas, **no** efectos funcionales nuevos para las tres bolas.
