@@ -1,3 +1,5 @@
+**CI bloque05 VERIFICADA:** [Actions #41559647462](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41559647462) terminó SUCCESS en SHA `d3a9ce8bee76564a18cc5e997cdcd0bef5dd5c74`. Logs del job `125667075993`: `CAMP003_W03_PY PASS blocks=5 checks=148`, `CAMP003_W03_GODOT PASS blocks=5 checks=619`, puertas de IA6 PASS. No atribuir este resultado a cambios de producción: solo auditoría y pruebas de Fast/Dream. Siguiente `p` = 06 `friend_ball;heal_ball`. CSV conserva estado de publicación EN_CI_AUTOMATICA para evitar activar otra CI con una mera edición documental.
+
 # IA3/W03 — CONTINUIDAD VIGENTE CAMPAÑA_003: 05/10
 
 **Rama exclusiva:** `codex/calvo-items-20261103-w03-camp003`. **Fila 05 ejecutada:** `fast_ball;dream_ball`. **Siguiente `p`: fila oficial 06 `friend_ball;heal_ball`**, después de revisar CI de 05. Prohibido saltar a 07 sin otra `p`.
