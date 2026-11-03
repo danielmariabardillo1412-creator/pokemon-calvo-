@@ -100,3 +100,7 @@ CI #41602085941 falló exclusivamente en validador Python: `CAMP004_W01_PY FAIL:
 - Bola de Humo **no es descriptor de ataque**: su regla real está en `held_escape_items.gd` y `showdown_adventure_session.gd:flee`. Se prueba huida garantizada incluso bajo Mal de Ojo, ausencia/reserva, supresión por Torpeza, no gasto y sin consumo, además de un turno sin Run. No inventar ni duplicar efectos de Showdown. Referencias fijas y test O120 anterior incluidos.
 - Roca Suave: tormenta de arena +3 duración frente a control y no clima negativo. Bola de Nieve: Polvo Nieve aumenta Ataque +1 y consume; Agua Pistola y movimiento no dañino no activan.
 - No se modifican módulos de producción, camp003, main, V28, árbitra ni otras ramas. Estado inicial bloque 06 `EN_CI_AUTOMATICA` hasta ver recibos Godot/Python y `completed/success`. Pendiente compartido de fase intermedia SaveV2 de bloque 03 permanece para IA6.
+
+### Reparación bloque 06 V5 — primer Godot rojo
+
+Run #41611257621: Python 588 PASS, Godot 9670 checks/4 errores, todos ligados a `smoke_klutz_negative` al abrir Mew con `klutz`. Los demás 42 escenarios no registraron aserciones fallidas. Reparación: reemplazar Mew por Woobat, portador natural de Torpeza, y registrar `session.last_error` al fallar `begin_wild`. Se conserva la prueba de supresión en presencia de trampa; no afirmar causa ni PASS antes de reejecutar. Motor de producción intacto.

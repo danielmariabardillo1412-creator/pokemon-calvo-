@@ -63,7 +63,7 @@ EXPECTED = {
     "shell_no_trap": ("shed_shell", "shed_shell_no_trap_control", "mew", "reflect", "", (19,)),
     "smoke_look_escape": ("smoke_ball", "smoke_ball_escape_trapped", "mew", "reflect", "", (19, 23)),
     "smoke_plain_escape": ("smoke_ball", "smoke_ball_escape_normal", "mew", "reflect", "", (19,)),
-    "smoke_klutz_negative": ("smoke_ball", "smoke_ball_klutz_suppressed", "mew", "reflect", "", (19,)),
+    "smoke_klutz_negative": ("smoke_ball", "smoke_ball_klutz_suppressed", "woobat", "reflect", "", (19,)),
     "smoke_no_run": ("smoke_ball", "smoke_ball_no_trigger", "mew", "reflect", "", (19,)),
     "sandstorm_duration": ("smooth_rock", "weather_duration", "mew", "sandstorm", "", (19, 23)),
     "sandstorm_no_weather": ("smooth_rock", "no_weather", "mew", "reflect", "", (19,)),

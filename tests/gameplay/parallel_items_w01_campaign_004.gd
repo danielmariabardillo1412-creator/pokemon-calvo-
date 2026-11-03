@@ -172,7 +172,7 @@ func _probe_w01_c004(row: Dictionary, seed: int, mode: String) -> Dictionary:
 	check(mode + " dos unidades físicas antes del combate", _units(owner, id) == 2)
 	var session := Native.new(catalogs, owner, automation.format)
 	var opened: bool = await session.begin_wild(self, prepared.foe, automation.seed)
-	check(mode + " abre combate nativo", opened)
+	check(mode + " abre combate nativo " + String(session.last_error), opened)
 	if not opened:
 		await session.close()
 		return {"valid": false}

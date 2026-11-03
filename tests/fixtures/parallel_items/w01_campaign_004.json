@@ -731,7 +731,7 @@
       "id": "smoke_klutz_negative",
       "item_id": "smoke_ball",
       "op": "smoke_ball_klutz_suppressed",
-      "actor_species": "mew",
+      "actor_species": "woobat",
       "actor_ability": "klutz",
       "own_move": "reflect",
       "foe_move": "mean_look",
