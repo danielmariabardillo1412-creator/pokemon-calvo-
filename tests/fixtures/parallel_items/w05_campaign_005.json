@@ -5,5 +5,35 @@
   "active_version": "scarlet-violet",
   "kind": "NEW_IDS",
   "purpose": "0 bloques bootstrap, sin efecto funcional certificado",
-  "blocks": []
+  "blocks": [
+    {
+      "block": "01",
+      "items": [
+        {
+          "item_id": "tm142",
+          "move_id": "hydro_pump"
+        },
+        {
+          "item_id": "tm143",
+          "move_id": "blizzard"
+        },
+        {
+          "item_id": "tm144",
+          "move_id": "fire_pledge"
+        },
+        {
+          "item_id": "tm145",
+          "move_id": "water_pledge"
+        },
+        {
+          "item_id": "tm146",
+          "move_id": "grass_pledge"
+        },
+        {
+          "item_id": "tm147",
+          "move_id": "wild_charge"
+        }
+      ]
+    }
+  ]
 }
