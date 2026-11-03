@@ -26,3 +26,15 @@ Exigir GitHub Actions `CAMP004_W04_PY PASS blocks=8 checks=N`, `CAMP004_W04_GODO
 No se han modificado producción, `main`, V28, rama árbitra, W01/W02/W03/W05, catálogos ni workflows. Las 16 dependencias heredadas de CAMP003 permanecen abiertas.
 
 **Próximo `p`:** bloque 09/10, con `n_lunarizer_merge;n_solarizer_merge;roto_catch;roto_exp_points;roto_friendship`, después de comprobar y reparar si procede esta CI08. No ejecutar la cola 09 antes de ese mensaje.
+
+## CI08 inicial verificada
+
+La ejecución [#41591880287](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41591880287) en SHA `2ac9b2cef1486e074f57ecf01232333bbaf793e7` terminó **completed/success**. Logs reales:
+- `CAMP004_W04_MANIFEST_PASS reserved=10 completed=8 ids=36`.
+- `CAMP004_W04_PY PASS blocks=8 checks=245`.
+- `CAMP004_W04_GODOT PASS blocks=8 checks=746`.
+- Regresiones CAMPAÑA_003: Python **120**, Godot **270** PASS.
+
+Resultados individuales: `reveal_glass`, `rotom_catalog` y `zygarde_cube`: `status=DEPENDENCIA records=0 conditioned=0` cada uno, sin ruta de forma. Los tres casos de control rechazan el uso directo/equipamiento sin gasto y persisten en SaveV2. No se certifican formas alternativas. `rotom_catalog` tiene además una marca documental `missing_description`.
+
+El progreso se ha reconciliado en el commit `4e328bdba11bad06bc8d5b7e1f5e8390d5192ae1`, fila 08 `DEPENDENCIA_DOCUMENTADA` con CI `41591880287`. Esa actualización del CSV genera otra CI que debe verificarse por separado.
