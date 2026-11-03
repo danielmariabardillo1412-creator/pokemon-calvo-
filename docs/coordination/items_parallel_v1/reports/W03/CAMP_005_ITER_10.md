@@ -1,3 +1,11 @@
+## CI FINAL comprobada — CAMPAÑA_005_FINALIZADA
+
+Ejecución [GitHub Actions #41742709006](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41742709006) sobre SHA funcional `5fe580ece1498eccdd4dce51fda630fa2b021416`: **completed/success**. Recibos literales: `CAMP005_W03_MANIFEST_PASS reserved=10 completed=10 ids=28 kind=FUNCTIONAL_BACKLOG`; `CAMP005_W03_PY PASS blocks=10 checks=169`; `CAMP005_GATE_PY_PASS`; `CAMP005_W03_GODOT PASS blocks=10 checks=208`; `CAMP005_GATE_GODOT_PASS`. Regresiones del hito final: `CAMP004_W03_PY PASS blocks=10 checks=187`, `CAMP004_W03_GODOT PASS blocks=10 checks=1344`, `CAMP003_W03_PY PASS blocks=10 checks=279`, `CAMP003_W03_GODOT PASS blocks=10 checks=986`.
+
+**CI completa significa pruebas y contratos aprobados, no que los 28 objetos de backlog sean plenamente jugables**. Únicamente el bloque10 revalida Friend/Heal/Quick/Timer funcionales. No hay alta de objetos nuevos, modificación de producción ni certificación SaveV2 integral. STOP tras 10/10, pendiente de nueva campaña explícita de IA6.
+
+---
+
 # IA3/W03 — CAMPAÑA_005 / BLOQUE 10 — Cierre de captura, amistad, curación, turno y persistencia
 
 **Rama exclusiva:** `codex/calvo-items-20261103-w03-camp005`. **IDs oficiales:** `friend_ball;heal_ball;quick_ball;timer_ball`. Son **cuatro elementos del backlog anterior**, no objetos nuevos. Último microbloque autorizado de diez.
