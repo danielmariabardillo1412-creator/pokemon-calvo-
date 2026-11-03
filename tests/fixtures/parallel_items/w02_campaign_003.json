@@ -11,7 +11,8 @@
     6,
     7,
     8,
-    9
+    9,
+    10
   ],
   "format": "gen9calvounifiedv1",
   "level": 100,
@@ -1261,6 +1262,160 @@
           "own_move": "reflect"
         }
       ]
+    },
+    {
+      "block": "10",
+      "ids": [
+        "yache_berry",
+        "grepa_berry",
+        "hondew_berry",
+        "pomeg_berry"
+      ],
+      "source_evidence": [
+        "tools/item_audit/held_effect_sweep_v2.cjs",
+        "tests/gameplay/item_field_effects_v4.gd",
+        "modules/inventory/field_item_effects.gd"
+      ],
+      "cases": [
+        {
+          "scenario": "yache_ice_shard_hit_c003",
+          "id": "yache_berry",
+          "kind": "resist_type",
+          "nature": "hardy",
+          "start": "full",
+          "status": "",
+          "actor_species": "dragonite",
+          "foe_species": "mew",
+          "foe_move": "ice_shard",
+          "consumes": true,
+          "confuses": false,
+          "own_move": "reflect",
+          "expected_type": "ice"
+        },
+        {
+          "scenario": "yache_normal_reject_c003",
+          "id": "yache_berry",
+          "kind": "resist_type",
+          "nature": "hardy",
+          "start": "full",
+          "status": "",
+          "actor_species": "dragonite",
+          "foe_species": "mew",
+          "foe_move": "tackle",
+          "consumes": false,
+          "confuses": false,
+          "own_move": "reflect",
+          "expected_type": "ice"
+        },
+        {
+          "scenario": "grepa_ev20_friend100_c003",
+          "id": "grepa_berry",
+          "kind": "field_ev_training",
+          "stat": "special_defense",
+          "start_ev": 20,
+          "start_friendship": 100,
+          "start_hp": "full",
+          "applies": true,
+          "ev_removed": 10,
+          "friendship_gain": 5
+        },
+        {
+          "scenario": "grepa_ev0_friend200_c003",
+          "id": "grepa_berry",
+          "kind": "field_ev_training",
+          "stat": "special_defense",
+          "start_ev": 0,
+          "start_friendship": 200,
+          "start_hp": "full",
+          "applies": true,
+          "ev_removed": 0,
+          "friendship_gain": 2
+        },
+        {
+          "scenario": "grepa_ev0_friend255_noop_c003",
+          "id": "grepa_berry",
+          "kind": "field_ev_training",
+          "stat": "special_defense",
+          "start_ev": 0,
+          "start_friendship": 255,
+          "start_hp": "full",
+          "applies": false,
+          "ev_removed": 0,
+          "friendship_gain": 0
+        },
+        {
+          "scenario": "hondew_ev20_friend100_c003",
+          "id": "hondew_berry",
+          "kind": "field_ev_training",
+          "stat": "special_attack",
+          "start_ev": 20,
+          "start_friendship": 100,
+          "start_hp": "full",
+          "applies": true,
+          "ev_removed": 10,
+          "friendship_gain": 5
+        },
+        {
+          "scenario": "hondew_ev0_friend200_c003",
+          "id": "hondew_berry",
+          "kind": "field_ev_training",
+          "stat": "special_attack",
+          "start_ev": 0,
+          "start_friendship": 200,
+          "start_hp": "full",
+          "applies": true,
+          "ev_removed": 0,
+          "friendship_gain": 2
+        },
+        {
+          "scenario": "hondew_ev0_friend255_noop_c003",
+          "id": "hondew_berry",
+          "kind": "field_ev_training",
+          "stat": "special_attack",
+          "start_ev": 0,
+          "start_friendship": 255,
+          "start_hp": "full",
+          "applies": false,
+          "ev_removed": 0,
+          "friendship_gain": 0
+        },
+        {
+          "scenario": "pomeg_ev252_hp1_c003",
+          "id": "pomeg_berry",
+          "kind": "field_ev_training",
+          "stat": "hp",
+          "start_ev": 252,
+          "start_friendship": 100,
+          "start_hp": "one",
+          "applies": true,
+          "ev_removed": 10,
+          "friendship_gain": 5
+        },
+        {
+          "scenario": "pomeg_ev0_friend200_c003",
+          "id": "pomeg_berry",
+          "kind": "field_ev_training",
+          "stat": "hp",
+          "start_ev": 0,
+          "start_friendship": 200,
+          "start_hp": "full",
+          "applies": true,
+          "ev_removed": 0,
+          "friendship_gain": 2
+        },
+        {
+          "scenario": "pomeg_ev0_friend255_noop_c003",
+          "id": "pomeg_berry",
+          "kind": "field_ev_training",
+          "stat": "hp",
+          "start_ev": 0,
+          "start_friendship": 255,
+          "start_hp": "full",
+          "applies": false,
+          "ev_removed": 0,
+          "friendship_gain": 0
+        }
+      ]
     }
   ],
   "limitations": [
@@ -1277,6 +1432,7 @@
     "Bloque 07: Passho/Payapa/Rindo reducen Agua/Psíquico/Planta sólo en portador supereficaz; Petaya mejora SpA bajo umbral, propia Amnesia sólo mejora SpD, por lo que no falsea el test SpA.",
     "Diagnóstico CI bloque 07 #41560981081: el test Mago-Brave a 1/5 pudo autolesionarse por confusión en el mismo turno; cambiar a control histórico Snorlax Endeavor desde PS máximos para observar curación sin autogolpe. Maranga con Reflect evita SpD de Amnesia; Occa con Ember evita OHKO Scizor y conserva control de Fuego supereficaz.",
     "Bloque 08: Rowap mide exactamente 1/8 HP máximo rival como Jaboca pero sólo ante categoría especial. Shuca usa Bulldoze en lugar de Earth Power del sweep V2 para conservar vivo al testigo Pikachu sin baya; se comprueba daño reducido y consumo nativos sin debilitar aserciones.",
-    "Bloque 09: Starf usa el vector nativo de boosts atk/def/spa/spd/spe, exige exactamente un +2 y cuatro ceros, sin predeterminar la estadística aleatoria. Wiki utiliza Snorlax/Endeavor con 1 HP, mismo testigo de curación ya verificado con Mago; ningún efecto de campo probado."
+    "Bloque 09: Starf usa el vector nativo de boosts atk/def/spa/spd/spe, exige exactamente un +2 y cuatro ceros, sin predeterminar la estadística aleatoria. Wiki utiliza Snorlax/Endeavor con 1 HP, mismo testigo de curación ya verificado con Mago; ningún efecto de campo probado.",
+    "Bloque10: Yache se valida equipada en combate (Ice Shard 4x vs Dragonite); Grepa/Hondew/Pomeg NO se equipan: su ruta canónica es FieldItemService.use_item; probar party/storage/bag ausente, consumo, EV-amistad y SaveV2. Efectos de origen de amistad pendientes según auditoría histórica y fuera de alcance; no atribuir PASS universal."
   ]
 }
