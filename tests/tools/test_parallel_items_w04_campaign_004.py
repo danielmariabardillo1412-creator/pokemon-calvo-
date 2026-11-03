@@ -18,6 +18,8 @@ ITEMS_06 = ("griseous_core", "lustrous_globe", "meteorite")
 ITEMS_07 = ("rage_candy_bar", "red_orb", "reins_of_unity")
 ITEMS_08 = ("reveal_glass", "rotom_catalog", "zygarde_cube")
 ITEMS_09 = ("n_lunarizer_merge", "n_solarizer_merge", "roto_catch", "roto_exp_points", "roto_friendship")
+ITEMS_10 = ("big_nugget", "bottle_cap", "gold_bottle_cap", "heart_scale", "nugget", "pretty_wing", "rare_bone")
+HOLDABLE_10 = ("big_nugget", "bottle_cap", "gold_bottle_cap", "rare_bone")
 
 
 def rows(path):
@@ -47,7 +49,10 @@ def main():
 
     check(fixture["worker"] == "W04" and fixture["campaign"] == "CAMP_004", "identidad/fixture")
     check(len(queue) == 10, "cola de diez bloques")
-    check(len(done) == 9 and [r["bloque"] for r in done] == ["01", "02", "03", "04", "05", "06", "07", "08", "09"], "progreso de bloques 01 a 09")
+    check(len(done) == 10 and [r["bloque"] for r in done] == [f"{i:02d}" for i in range(1, 11)], "progreso de bloques 01 a 10")
+    check(done[9]["ids"] == ";".join(ITEMS_10), "IDs de progreso 10")
+    check(queue[9]["ids"] == ";".join(ITEMS_10), "reserva de bloque 10 no coincide")
+    check(queue[9]["familia"] == "TREASURE_OR_COLLECTIBLE", "familia oficial del ultimo bloque")
     check(done[8]["ids"] == ";".join(ITEMS_09), "IDs de progreso 09")
     check(queue[8]["ids"] == ";".join(ITEMS_09), "reserva de bloque 09 no coincide")
     check(done[7]["ids"] == ";".join(ITEMS_08), "IDs de progreso 08")
@@ -66,7 +71,12 @@ def main():
     check(queue[1]["ids"] == ";".join(ITEMS_02), "reserva 02 distinta")
     check(done[0]["ids"] == ";".join(ITEMS), "IDs de progreso")
     check(queue[0]["ids"] == ";".join(ITEMS), "reserva oficial distinta")
-    check(len(fixture["blocks"]) == 9 and [v["block"] for v in fixture["blocks"]] == ["01", "02", "03", "04", "05", "06", "07", "08", "09"], "fixture acumulativo 01 a 09")
+    check(len(fixture["blocks"]) == 10 and [v["block"] for v in fixture["blocks"]] == [f"{i:02d}" for i in range(1, 11)], "fixture acumulativo 01 a 10")
+    check(fixture["blocks"][9]["ids"] == list(ITEMS_10), "fixture IDs 10")
+    check(fixture["blocks"][9]["family"] == "TREASURE_OR_COLLECTIBLE", "familia fixture10 incorrecta")
+    check(all(block["ids"] == queue[i]["ids"].split(";") for i, block in enumerate(fixture["blocks"])), "fixture no corresponde a la cola aprobada")
+    all_ids = [item for block in fixture["blocks"] for item in block["ids"]]
+    check(len(all_ids) == 36 and len(set(all_ids)) == 36, "36 IDs exactos sin duplicados")
     check(fixture["blocks"][8]["ids"] == list(ITEMS_09), "fixture IDs 09")
     check(fixture["blocks"][8]["family"] == "LEGACY_OR_CATEGORY_REVIEW", "familia legacy no preservada")
     check(fixture["blocks"][7]["ids"] == list(ITEMS_08), "fixture IDs 08")
@@ -175,6 +185,23 @@ def main():
         check(('"' + item + '"') in runner, item + " sin cobertura Godot")
         check(item not in imported, item + " no tiene recuperación de campo inventada")
     check("n_lunarizer_merge" != "n_solarizer_merge", "IDs de fusion diferenciados")
+    for item in ITEMS_10:
+        found = [entry for entry in selected if entry["id"] == item]
+        check(len(found) == 1 and found[0]["estado_contenido"] == "SELECCIONADO" and found[0]["familia"] == "TREASURE_OR_COLLECTIBLE", item + " seleccionado o familia incorrecta")
+        check(source_fields[item]["field_use_status"] == "SELL_TRADE_OR_TRAINING_CONTEXT_NEEDED", item + " venta/formacion no certificada")
+        check(inventory_rows[item]["family"] == "TREASURE_OR_COLLECTIBLE" and inventory_rows[item]["evolution_links"] == "0", item + " no es objeto evolutivo")
+        check(item not in imported, item + " no se debe confundir con medicina de campo")
+        check(('"'+item+'"') in runner, item + " sin prueba de runtime")
+    for item in HOLDABLE_10:
+        check(item in held, item + " debe ser equipable")
+        check(source_fields[item]["equipment_transfer"] == "VERIFIED", item + " transferencia no verificada")
+        check(inventory_rows[item]["connection"] == "NATIVE_ENTRY_REQUIRES_EFFECT_CASE" and inventory_rows[item]["native_entry"] == "True", item + " entrada nativa sin efecto pendiente")
+    for item in ITEMS_10:
+        if item in HOLDABLE_10:
+            continue
+        check(item not in held, item + " no debe ser equipable")
+        check(source_fields[item]["equipment_transfer"] == "NOT_CERTIFIED", item + " equipamiento no certificado")
+        check(inventory_rows[item]["connection"] == "DATA_ONLY" and inventory_rows[item]["native_entry"] == "False", item + " dato sin entrada nativa")
     for term in ("UNSUPPORTED_TRIGGERS", '&"spin"', "func classify_record(", "RUNTIME_SUPPORTED", "UNSUPPORTED"):
         check(term in engine, "no existe contrato en EvolutionSystem: " + term)
     for term in ("func configure(", "func evolution_options(", "func evolve(", "func use_item(", "func equip(", "func unequip(", "holdable("):
@@ -193,15 +220,17 @@ def main():
         check(token in runner, "negativo del bloque 05 no cubierto: " + token)
     for token in ("const BLOQUE_06 :=", "giratina", "palkia", "deoxys", "forma_deoxys_meteorito_sin_servicio", "equipamiento_verificado_sin_ruta_forma_certificada", "_auditar_contexto_04(catalogo, item, origen)", "_auditar_contexto_05(catalogo, item, origen)", "ruta_forma_no_degradada", "_persistencia(pc, item"):
         check(token in runner, "escenario 06 ausente: " + token)
-    for token in ("const BLOQUE_07 :=", "func _recuperacion_07(", "sano_sin_consumo", "curacion_consumo_unico", "cura_sin_evolucion", "sin_segunda_consumicion", "orbe_equipable_primal_no_certificado", "union_calyrex_fusion_no_conectada", "_auditar_contexto_04(catalogo, item, &\"groudon\")", "_auditar_contexto_05(catalogo, item, &\"calyrex\")", "CAMP004_W04_GODOT PASS blocks=9 checks="):
+    for token in ("const BLOQUE_07 :=", "func _recuperacion_07(", "sano_sin_consumo", "curacion_consumo_unico", "cura_sin_evolucion", "sin_segunda_consumicion", "orbe_equipable_primal_no_certificado", "union_calyrex_fusion_no_conectada", "_auditar_contexto_04(catalogo, item, &\"groudon\")", "_auditar_contexto_05(catalogo, item, &\"calyrex\")", "CAMP004_W04_GODOT PASS blocks=10 checks="):
         check(token in runner, "bloque07 sin escenario real: " + token)
-    for token in ("const BLOQUE_08 :=", "tornadus", "rotom", "zygarde", "tornadus_trio_cambio_forma_no_conectado", "rotom_cambio_electrodomestico_no_conectado", "zygarde_celulas_y_formas_no_conectadas", "_auditar_contexto_05(catalogo, item, origen)", "_auditar_contexto_05(catalogo, item, &\"eevee\")", "ruta_forma_08_no_degradada", "CAMP004_W04_GODOT PASS blocks=9 checks="):
+    for token in ("const BLOQUE_08 :=", "tornadus", "rotom", "zygarde", "tornadus_trio_cambio_forma_no_conectado", "rotom_cambio_electrodomestico_no_conectado", "zygarde_celulas_y_formas_no_conectadas", "_auditar_contexto_05(catalogo, item, origen)", "_auditar_contexto_05(catalogo, item, &\"eevee\")", "ruta_forma_08_no_degradada", "CAMP004_W04_GODOT PASS blocks=10 checks="):
         check(token in runner, "falta escenario real bloque08: " + token)
-    for token in ("const BLOQUE_09 :=", "func _auditar_fusion_09(", "ID_COMPAÑERO_09", "necrozma", "lunala", "solgaleo", "compañero_añadido", "pareja_y_cantidades_savev2", "fusion_no_activa_use_item", "fusion_no_es_evolucion", "fusion_no_es_equipo", "necrozma_fusion_dos_criaturas_sin_contrato", "captura_fuera_de_W04", "experiencia_fuera_de_W04", "amistad_fuera_de_W04", "_auditar_contexto_05(catalogo, item, &\"eevee\")", "CAMP004_W04_GODOT PASS blocks=9 checks="):
+    for token in ("const BLOQUE_09 :=", "func _auditar_fusion_09(", "ID_COMPAÑERO_09", "necrozma", "lunala", "solgaleo", "compañero_añadido", "pareja_y_cantidades_savev2", "fusion_no_activa_use_item", "fusion_no_es_evolucion", "fusion_no_es_equipo", "necrozma_fusion_dos_criaturas_sin_contrato", "captura_fuera_de_W04", "experiencia_fuera_de_W04", "amistad_fuera_de_W04", "_auditar_contexto_05(catalogo, item, &\"eevee\")", "CAMP004_W04_GODOT PASS blocks=10 checks="):
         check(token in runner, "falta contrato del bloque09: " + token)
+    for token in ("const BLOQUE_10 :=", "const EQUIPABLE_10 :=", "magikarp", "eevee", "tesoro_no_evolucion_condicionada", "equipamiento_y_savev2_verificados_efecto_venta_entrenamiento_pendiente", "tesoro_data_only_sin_venta_uso_especial_certificados", "_auditar_contexto_04(catalogo, item, &\"eevee\")", "_auditar_contexto_04(catalogo, item, &\"magikarp\")", "_auditar_contexto_05(catalogo, item, &\"eevee\")", "_auditar_contexto_05(catalogo, item, &\"magikarp\")", "CAMP004_W04_GODOT PASS blocks=10 checks="):
+        check(token in runner, "sin comprobación del tesoro 10: " + token)
     check((ROOT / "tests/gameplay/parallel_items_w04_campaign_003.gd").exists(), "regresión CAMP003 ausente")
     check((ROOT / "tests/tools/test_parallel_items_w04_campaign_001.py").exists(), "regresión CAMP001 ausente")
-    print(f"CAMP004_W04_PY PASS blocks=9 checks={checks}")
+    print(f"CAMP004_W04_PY PASS blocks=10 checks={checks}")
 
 
 if __name__ == "__main__":
