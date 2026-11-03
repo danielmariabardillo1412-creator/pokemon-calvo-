@@ -2338,6 +2338,29 @@ def verify_sources(chk):
     chk.demand('const ITEMS := {"health_mochi": "hp", "muscle_mochi": "attack"' in historic_mochi
                and 'var expected := _expected(c, item)' in historic_mochi,
                "Regresión histórica Mochi V13 ausente")
+    for fragment in (
+        '"resist_mochi": "defense"',
+        '"genius_mochi": "special_attack"',
+        '"clever_mochi": "special_defense"',
+        '"swift_mochi": "speed"',
+        'var gain := 0 if reset else mini(10',
+        'ProgressionRuleset.EV_TOTAL_MAX - total',
+        'c.recalculate_stats(',
+    ):
+        chk.demand(fragment in mochi, "Mochis bloque07: perfil real alterado " + fragment)
+    chk.demand("Friendship.increase(" not in mochi,
+               "Mochis bloque07: amistad nativa cambió, actualizar oráculo mediante IA6")
+    for fragment in (
+        'const MOCHI_STATS_005 := {"health_mochi": "hp", "muscle_mochi": "attack"',
+        '"resist_mochi": "defense"',
+        '"genius_mochi": "special_attack"',
+        '"clever_mochi": "special_defense"',
+        '"swift_mochi": "speed"',
+        'var native_gain: int = mini(10, mini(',
+        'real_stat == stat and gain == native_gain',
+        'and now.stats.max_hp - now.current_hp == start_hp_deficit',
+    ):
+        chk.demand(fragment in runner, "Mochis bloque07: runner Godot incompleto " + fragment)
     for old, token in (
         (old_ability, 'TRANSITIONS'),
         (old_growth, 'rare_candy'),
