@@ -1,3 +1,27 @@
+# IA2/W02 — CAMPAÑA_003: CONTINUIDAD VIGENTE / BLOQUE 08 DE 10
+
+**Estado de entrega:** **08/10 PUBLICADO** en rama exclusiva `codex/calvo-items-20261103-w02-camp003`; octava fila de progreso `EN_CI_AUTOMATICA`. **CI nativa 06–08 aún no certificada**. La siguiente `p` ejecutará únicamente la fila 09; no ejecutar 10 hasta orden separada.
+
+**Autoridad:** fila 08 de `CAMPAIGN_003_QUEUE_APPROVED.csv` blob `ea06a0a000fc4f3b8bab48e45e21fb549d753559` y `campaigns/CAMP_003_W02.md` blob `62498ebd44288a86e59986379dbc1b70e111ef1f`. Gate permite pruebas independientes durante CI pending, sin declarar PASS. Todas las ramas y producción ajenas prohibidas.
+
+**Cuatro objetos de bloque 08:** `roseli_berry` (Hada vs Garchomp, `dazzling_gleam` positiva, `tackle` negativa); `rowap_berry` (devolución 1/8 del HP máximo del atacante tras `confusion` especial; `tackle` físico no dispara); `salac_berry` (1/5 PS, +1 Velocidad `p1a|spe|` y consumo; PS altos no); `shuca_berry` (Tierra vs Pikachu, `bulldoze` positiva, `tackle` negativa). Preferir Bulldoze a Earth Power para evitar KO del control y garantizar FLED; mantiene supereficacia y exigencia de reducción de daño.
+
+**Suite acumulativa:** 32 bayas, 67 escenarios (9+8+8+9+8+9+8+8), 201 variantes `active/none/reserve`. SaveV2, checkout/checkpoint, FLED, inventario, consumo único, reserva inerte, recibos JSON SHA256. Rowap lee HP del enemigo del motor; Salac lee `|-boost|p1a:...|spe|` sin contaminar con movimientos. Campo/UI/GPU no cubiertos.
+
+**Último PASS funcional previo:** [CI #41559377763](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41559377763), `completed/success` sobre bloques 01–05, Python 327 PASS, Godot 3612 PASS.
+
+**FALLO REAL de bloque 07 (NO OMISIÓN):** [CI #41560981081](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41560981081), Python 463 PASS blocks=7, Godot FAIL blocks=6 checks=5073. Causas del arnés en bloque 06: Mago autolesión por confusión afecta cálculo de HP, Maranga falso boost SpD de Amnesia, Occa KO del Scizor sin baya. Reparación test-only: `dd0c3e9eaca1724fb525b24f1b56cd8238133feb`, `9773e00baf10b23185a43657a473b5fff5852284`, `5faad6d8f95d8976e521c391611ca5affc1ca251`. Se mantienen todas las expectativas: Mago debe curar 1/3 PS con Endeavor de Snorlax a 1 HP, Maranga gana SpD sin Amnesia, Occa reduce golpe de fuego sin KO del testigo. Reejecuciones intermedias canceladas por pushes `cancel-in-progress`, **sin PASS todavía**.
+
+**Bloque 08 commits:** fixture `6623c6a8b8a2e8f7db2c7e989736807a3a117f78`, GDScript `19e266594e233e375e5b1e21f6259d6f146d5aac`, validador Python `6049e1cdd2a14ad43088535c476c0ccaad7ef34d`, octava fila CSV `992b31cde4984d1c6ca3e1f87a192b96247f71f4`, informe `d0fcc6ee66511123a96bd0793d4b87c478ac569f`. Ningún cambio fuera de archivos W02.
+
+**CI actual:** [#41563958549](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41563958549), SHA de tests/progreso `992b31cde4984d1c6ca3e1f87a192b96247f71f4` (primer commit con 8 filas). Exigir **`CAMP003_W02_PY PASS blocks=8 checks=M` y `CAMP003_W02_GODOT PASS blocks=8 checks=M`** para considerar verificados 06–08. Si falla, inspeccionar el log y reparar exclusivamente tests propios sin reducir exigencia; defecto compartido de motor/SaveV2 => STOP y consultar IA6. Cancelled no es éxito ni defecto funcional.
+
+**Siguiente `p`:** fila **09/10**: `starf_berry;tanga_berry;wacan_berry;wiki_berry`. Revisar CI primero, seguir solo si no hay un fallo funcional irresuelto. No tocar `main`, V28, PR #118, producción, catálogo, CI compartida, IA6, W04 ni otras ramas.
+
+---
+
+## HISTÓRICO — ESTADO 07/10 Y ANTERIORES
+
 # IA2/W02 — CAMPAÑA_003: CONTINUIDAD VIGENTE / BLOQUE 07 DE 10
 
 **ESTADO:** 07/10 ENTREGADO, `EN_CI_AUTOMATICA` en rama propia `codex/calvo-items-20261103-w02-camp003`. La `p` siguiente autoriza únicamente **08/10** y exige consultar primero el resultado de CI de los bloques 06–07. No iniciar 09 con la misma orden.
