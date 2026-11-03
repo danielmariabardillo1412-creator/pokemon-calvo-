@@ -1,3 +1,21 @@
+# IA3/W03 — CAMPAÑA_003: estado actual 03/10
+
+**Rama de trabajo exclusiva:** `codex/calvo-items-20261103-w03-camp003`. **Progreso:** 03/10 publicados, solo auditoría/contratos/tests. **Siguiente `p`: exactamente bloque 04 `level_ball;nest_ball`**, no ejecutar 05 sin orden posterior.
+
+## Resultados verificables
+- **01 Poké/Gran:** CI corregida [#41555095544](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41555095544) `success`, Python 31, Godot 56.
+- **02 Ultra/Master:** CI [#41555590257](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41555590257) `success`, Python 56, Godot 108. La primera CI 01 había fallado por un literal de `quit` en el validador Python, corregido sin reducir cobertura en `70fb7f7a...`. Los informes anteriores contienen el histórico; no confundirlo con fallo del motor.
+- **03 Quick/Timer:** IDs exactos de fila 03 `quick_ball;timer_ball`. Factores canónicos de `capture_context_ball_effects.gd`: Quick ×5 solo al turno 0, ×1 después; Timer `min(1+0.3*turnos,4)`, tope a 10. Fuente de turnos: `WildAdventureSession.capture_current` y `ShowdownAdventureSession.capture` desde estado de batalla real; el contexto default -1 debe rechazar, nunca bonificar. No se tocó ningún módulo ni catálogo.
+- **Suite acumulativa 03**: `tests/fixtures/parallel_items/w03_campaign_003.json` blob `71fe990cbe8fb9a77c72c035439e19df79272b2f` (turnos 0,1,3,9,10,11, valores inválidos -1,-2); `tests/gameplay/parallel_items_w03_campaign_003.gd` blob `0dadec944cde62080431cc386c3b1926d0765d16` (captura RNG/coste/propiedad y negativos); `tests/tools/test_parallel_items_w03_campaign_003.py` blob `d46f87697164237442eef999cc5ab08b00cf3e86` (fuentes de contexto + contratos; 01/02 preservados).
+- **Commit CSV de 03:** `5ec49e9290a3eba5230c7eb9b96e69a4b16ff4d9`, nueva ejecución automática [#41556927911](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41556927911) **en cola al redactar**, debe dar `CAMP003_W03_PY PASS blocks=3 checks=M` y `CAMP003_W03_GODOT PASS blocks=3 checks=M`. Aún **no hay PASS confirmado** de 03 hasta observar logs reales.
+- **Informe** [ITER03](./CAMP_003_ITER_03.md); CSV de progreso `CAMP_003_PROGRESO.csv` con exactamente 3 filas. Los estados anteriores `EN_CI_AUTOMATICA` son estados de publicación, no veredictos definitivos.
+- **Siguiente `p`:** comprobar gate/CSV/última CI. Si PASS, ejecutar únicamente 04 `level_ball;nest_ball`; si fallo de test propio, reparación sin reducir pruebas; si motor compartido, detenerse y solicitar IA6. 10/10 STOP.
+- **Prohibiciones:** `main`, V28, `.github/`, `modules/`, `data/`, `config/`, catálogo, guardados, árbitra y ramas ajenas; IA4 adenda independiente y fuera de este trabajo.
+
+---
+
+## Historial anterior conservado
+
 ACTUALIZACION CI BLOQUE 02: #41555590257 SUCCESS, SHA c48c62f5fb662dba9480327faa432afe56860adf. Recibos: Python blocks=2 checks=56 PASS y Godot blocks=2 checks=108 PASS. No hubo cambio de produccion. El CSV refleja el estado EN_CI_AUTOMATICA al publicar; el veredicto posterior real es PASS.
 
 # IA3/W03 — CAMPAÑA_003: continuidad actualizada a 02/10
