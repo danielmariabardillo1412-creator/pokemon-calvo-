@@ -206,6 +206,35 @@
           "move_id": "surf"
         }
       ]
+    },
+    {
+      "block": "08",
+      "items": [
+        {
+          "item_id": "tm124",
+          "move_id": "ice_spinner"
+        },
+        {
+          "item_id": "tm125",
+          "move_id": "flamethrower"
+        },
+        {
+          "item_id": "tm126",
+          "move_id": "thunderbolt"
+        },
+        {
+          "item_id": "tm127",
+          "move_id": "play_rough"
+        },
+        {
+          "item_id": "tm128",
+          "move_id": "amnesia"
+        },
+        {
+          "item_id": "tm129",
+          "move_id": "calm_mind"
+        }
+      ]
     }
   ]
 }
