@@ -245,6 +245,44 @@
         "legacy_eevee_negative_and_savev2",
         "regressions_01_to_08_unchanged"
       ]
+    },
+    {
+      "block": "10",
+      "ids": [
+        "big_nugget",
+        "bottle_cap",
+        "gold_bottle_cap",
+        "heart_scale",
+        "nugget",
+        "pretty_wing",
+        "rare_bone"
+      ],
+      "family": "TREASURE_OR_COLLECTIBLE",
+      "classification_by_id": {
+        "big_nugget": "native and holdable, no money or sales verified",
+        "bottle_cap": "native and holdable, no Hyper Training or IV changes certified",
+        "gold_bottle_cap": "native and holdable, no Hyper Training or IV changes certified",
+        "heart_scale": "DATA_ONLY, no move relearn functionality certified",
+        "nugget": "DATA_ONLY, no currency or sale certified",
+        "pretty_wing": "DATA_ONLY, no special effect or sale certified",
+        "rare_bone": "native and holdable, no sale or economic effect certified"
+      },
+      "source": "RANDOMLOCK_ITEMS_BUILD_SCOPE_V2.csv, ITEM_FIELD_V8.csv.txt, ITEM_INVENTORY.csv, item_connections_v1.json, imported_recovery_v19.json",
+      "policy": "No invented shop economy, Hyper Training, move relearn or sale. Four items may be held and transferred according to real profile; three cannot. Reject direct bag use without contract, preserve inventory/IV and SaveV2. Keep regressions 01-09, CAMP003 and CAMP001.",
+      "cases": [
+        "scope_exact_7_treasures",
+        "catalog_all_items",
+        "native_entry_four_holdable_and_three_data_only",
+        "no_field_recovery_medicine",
+        "two_species_eevee_and_magikarp_controls",
+        "no_direct_use_or_fabricated_evolution",
+        "equip_transfer_and_unequip_four_items",
+        "non_holdable_three_refuse_equipment",
+        "savev2_equipped_and_final_state_identity_stock",
+        "no_shop_sale_hyper_training_move_relearn_claims",
+        "regression_campaign003_30_ids",
+        "regression_campaign001_6_stones"
+      ]
     }
   ]
 }
