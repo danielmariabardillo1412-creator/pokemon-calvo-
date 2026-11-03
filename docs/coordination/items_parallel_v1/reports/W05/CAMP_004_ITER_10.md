@@ -1,3 +1,5 @@
+> **CI DEFINITIVA DEL BLOQUE 10 VERIFICADA (2026-11-03).** [GitHub Actions #41591821717](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41591821717) SHA `5c9051ca2a0a186d31705372d2f0c350e2dd62db`, `completed/success`, job `125770313243`. Recibos de logs: `CAMP004_W05_PY PASS blocks=10 checks=580`, `CAMP004_GATE_PY_PASS worker=W05 blocks=10 checks=580`, `CAMP004_W05_GODOT PASS blocks=10 checks=2166`, `CAMP004_GATE_GODOT_PASS worker=W05 blocks=10 checks=2166`. En el mismo run, regresiones CAMP003 (60 MT anteriores) Python 580 y Godot 2166 PASS; CAMP002 11 tests OK. **Esta anotación definitiva prevalece sobre las referencias inferiores a CI pendiente, redactadas antes de la conclusión del run.** El cierre se recoge en `CAMP_004_FINAL.md`. No hubo modificación de producción. **CAMPAÑA_004_FINALIZADA · STOP W05.**
+
 # IA5/W05 — CAMPAÑA_004 · ITER_10/10 · último bloque
 
 **ESTADO A LA PUBLICACIÓN: 10/10 ENTREGADOS, CI FINAL PENDIENTE.** La verificación funcional se certificará únicamente con el run exacto del último cambio de fixture y CSV.
