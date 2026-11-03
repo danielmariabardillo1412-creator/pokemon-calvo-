@@ -1,3 +1,15 @@
+# IA3/W03 — CONTINUIDAD CAMP004 05/10
+
+**Rama:** `codex/calvo-items-20261103-w03-camp004`. Se ejecutó solo bloque 05: `repel;silver_razz_berry;super_lure`. Estado de los tres `DEPENDENCIA_COMPARTIDA`: sus usos directos no tienen ejecutor actual; pruebas Godot y Python comprueban rechazo `field_effect_not_connected`, no consumo, mochila guardada/reconstruida, relojes intactos, confusión, dormido y bloqueos.
+
+**CI previa 04 confirmada:** [#41574038050](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41574038050), SHA `f99415d94bf3503b18f80213e555c284142b0463`, CAMP004 Python 82/Godot 360 PASS; regresiones CAMP003 Python 279/Godot 986 PASS. Gates aprobados.
+
+**CI 05:** comprobar último SHA con progreso en 5 filas y recibos `CAMP004_W03_PY PASS blocks=5` y `CAMP004_W03_GODOT PASS blocks=5`. No afirmar PASS por runs previos/cancelados. Reparar errores propios en W03. Dependencias compartidas para IA6: encuentros con pasos/nivel de líder; baya de captura; duración de Supercolonia.
+
+**Siguiente `p`: bloque 06** exactamente `super_repel;white_flute;yellow_flute`. No ejecutar otro bloque en este turno. No tocar `main`, V28, otras ramas ni módulos compartidos.
+
+---
+
 # IA3/W03 — CONTINUIDAD CAMP004 04/10
 
 **Rama única:** `codex/calvo-items-20261103-w03-camp004`. **Bloque 04 entregado:** `max_lure;max_repel;red_flute`. Tres objetos seleccionados pero sin ejecución de campo autorizada. El runner prueba rechazo sin consumo/mutación para estado normal/dormido/confundido, bloqueo de campo, corrupción, objetivo ajeno y persistencia pura de inventario. No fingir curación, modificación de encuentros, contador de pasos o SaveV2.
