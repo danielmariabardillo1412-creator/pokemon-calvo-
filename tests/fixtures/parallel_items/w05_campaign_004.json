@@ -119,6 +119,35 @@
           "move_id": "x_scissor"
         }
       ]
+    },
+    {
+      "block": "05",
+      "items": [
+        {
+          "item_id": "tm106",
+          "move_id": "drill_run"
+        },
+        {
+          "item_id": "tm107",
+          "move_id": "will_o_wisp"
+        },
+        {
+          "item_id": "tm108",
+          "move_id": "crunch"
+        },
+        {
+          "item_id": "tm109",
+          "move_id": "trick"
+        },
+        {
+          "item_id": "tm110",
+          "move_id": "liquidation"
+        },
+        {
+          "item_id": "tm111",
+          "move_id": "giga_drain"
+        }
+      ]
     }
   ]
 }
