@@ -208,6 +208,35 @@
           "move_id": "super_fang"
         }
       ]
+    },
+    {
+      "block": "08",
+      "items": [
+        {
+          "item_id": "tm184",
+          "move_id": "vacuum_wave"
+        },
+        {
+          "item_id": "tm185",
+          "move_id": "lunge"
+        },
+        {
+          "item_id": "tm186",
+          "move_id": "high_horsepower"
+        },
+        {
+          "item_id": "tm187",
+          "move_id": "icicle_spear"
+        },
+        {
+          "item_id": "tm188",
+          "move_id": "scald"
+        },
+        {
+          "item_id": "tm189",
+          "move_id": "heat_crash"
+        }
+      ]
     }
   ]
 }
