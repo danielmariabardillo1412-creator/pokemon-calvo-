@@ -670,6 +670,148 @@ func _block06_seed_for(probability: float, want_success: bool, bounds: Array) ->
 	return -1
 
 
+func _block06_capture(id: StringName, sid: StringName, friendship_value: int,
+		persistent: String, current_pp: int, maximum_pp: int,
+		want_success: bool, to_pc: bool, bounds: Array) -> void:
+	var species: CreatureSpecies = catalogs.species(sid)
+	check("Postcaptura especie real " + String(id) + String(sid), species != null)
+	if species == null:
+		return
+	var target: CreatureInstance = _mon(sid, 35, StringName(
+		"c003_06_" + String(id) + "_" + String(sid) + "_" + str(friendship_value)
+		+ "_" + persistent + "_" + str(current_pp) + "_"
+		+ ("success" if want_success else "failure") + ("_pc" if to_pc else "_party")))
+	target.friendship = friendship_value
+	target.current_hp = maxi(1, int(target.stats.max_hp / 2.0))
+	target.moveset[0].max_pp = maximum_pp
+	target.moveset[0].current_pp = current_pp
+	if persistent == "sleep":
+		status(target, &"sleep")
+	elif persistent == "poison":
+		status(target, &"poison")
+	var before: Dictionary = target.to_dict()
+	var rules := CaptureRuleset.new()
+	var factor: float = CAMP003_W03_BASIC_EFFECTS.multiplier(id, target, species)
+	var bonus: float = rules.status_bonus(target.status_state.persistent_id)
+	var expected_p: float = rules.catch_probability(species.capture_rate, factor, bonus,
+		target.stats.max_hp, target.current_hp)
+	check("Postcaptura efecto sólo sobre captura, no probabilidad " + String(id),
+		is_equal_approx(factor, 1.0) and expected_p > 0.0 and expected_p < 1.0)
+	var seed_value: int = _block06_seed_for(expected_p, want_success, bounds)
+	check("Postcaptura existe semilla real para éxito/fallo " + String(id)
+		+ String(sid) + persistent, seed_value > 0)
+	if seed_value < 1:
+		return
+	var rng := RandomNumberGenerator.new()
+	rng.seed = seed_value
+	var control := RandomNumberGenerator.new()
+	control.state = rng.state
+	check("Semilla seleccionada reproduce resultado " + String(id),
+		(control.randf() < expected_p) == want_success)
+	var inv := PlayerInventory.new()
+	inv.add(id, 2)
+	var party := CreatureParty.new()
+	if to_pc:
+		for i in 6:
+			party.add_creature(_mon(&"pidgey", 10, StringName(
+				"c003_06_owned_" + String(id) + "_" + str(i))))
+	var result: CaptureResolution = CaptureInventoryService.resolve(
+		CaptureAttempt.new(target, id, CaptureBattleContext.new()),
+		rng, catalogs, party, inv)
+	var label := String(id) + String(sid) + persistent + "_" + str(friendship_value)
+		+ ("_success" if want_success else "_failure") + ("_pc" if to_pc else "")
+	check("Postcaptura un RNG, una bola, probabilidad canónica " + label,
+		result.result.status != CaptureResult.INVALID
+		and result.result.consume_item and inv.quantity(id) == 1
+		and rng.state == control.state
+		and is_equal_approx(result.result.probability, expected_p)
+		and (result.result.status == CaptureResult.SUCCESS) == want_success)
+	if not want_success:
+		check("Postcaptura fallo no aplica amistad, sanación ni cambia equipo " + label,
+			result.result.status == CaptureResult.FAILED and result.captured == null
+			and target.to_dict() == before and party.is_empty())
+		return
+	var expected: Dictionary = before.duplicate(true)
+	if id == &"friend_ball":
+		expected["friendship"] = 200
+	elif id == &"heal_ball":
+		expected["current_hp"] = target.stats.max_hp
+		expected["status_ids"] = []
+		expected["status_state"] = BattleStatusState.new().to_dict()
+		for slot: Dictionary in expected.moveset:
+			slot.current_pp = slot.max_pp
+	check("Friend fija amistad 200 o Heal repone sin alterar nada más " + label,
+		target.to_dict() == expected and is_same(result.captured, target))
+	if id == &"friend_ball":
+		check("Friend también reduce amistad superior a 200 " + label,
+			target.friendship == 200 and target.status_state.persistent_id == &"sleep"
+			and target.moveset[0].current_pp == current_pp
+			and target.moveset[0].max_pp == maximum_pp)
+	else:
+		check("Heal restaura PS, estado persistente y PP máximo ampliado " + label,
+			target.current_hp == target.stats.max_hp and target.status_ids.is_empty()
+			and target.status_state.persistent_id == &""
+			and target.moveset[0].current_pp == maximum_pp
+			and target.moveset[0].max_pp == maximum_pp
+			and target.friendship == friendship_value)
+	if to_pc:
+		check("Postcaptura con equipo completo requiere PC " + label,
+			result.disposition == CaptureDisposition.STORAGE_REQUIRED
+			and party.size() == 6 and not party.contains_instance_id(target.instance_id))
+		var storage := CreatureStorage.new()
+		var routing := CaptureOwnershipRouter.new().route(result, party, storage)
+		check("Postcaptura tras PC mantiene identidad y efecto " + label,
+			routing.routed and routing.stored
+			and storage.contains_instance_id(target.instance_id)
+			and is_same(storage.get_creature(target.instance_id), target)
+			and target.to_dict() == expected
+			and not party.contains_instance_id(target.instance_id))
+	else:
+		check("Postcaptura en equipo tiene un propietario " + label,
+			result.disposition == CaptureDisposition.PARTY
+			and party.size() == 1 and party.contains_instance_id(target.instance_id))
+
+
+func _block06_reject(id: StringName, reason: String,
+		friendship_value: int, current_pp: int, maximum_pp: int) -> void:
+	var target: CreatureInstance = _mon(&"mew", 35,
+		StringName("c003_06_reject_" + String(id) + "_" + reason
+		+ "_" + str(friendship_value) + "_" + str(current_pp)
+		+ "_" + str(maximum_pp)))
+	target.current_hp = maxi(1, int(target.stats.max_hp / 2.0))
+	status(target, &"sleep")
+	target.friendship = friendship_value
+	target.moveset[0].max_pp = maximum_pp
+	target.moveset[0].current_pp = current_pp
+	var ctx := CaptureBattleContext.new()
+	var inv := PlayerInventory.new()
+	inv.add(id, 2)
+	if reason == "trainer_battle_not_capturable":
+		ctx.is_wild = false
+	elif reason == "item_not_owned":
+		inv.remove(id, 2)
+	elif reason == "target_knocked_out":
+		target.current_hp = 0
+	var attempt := CaptureAttempt.new(target, id, ctx)
+	if reason != "item_not_owned":
+		check("Postcaptura validación rechaza estado incoherente " + String(id) + reason,
+			CaptureSystem.validate_attempt(attempt, catalogs) == reason)
+	var before: Dictionary = target.to_dict()
+	var inventory_before: Dictionary = inv.to_dict()
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 606
+	var rng_before: int = rng.state
+	var party := CreatureParty.new()
+	var result: CaptureResolution = CaptureInventoryService.resolve(
+		attempt, rng, catalogs, party, inv)
+	check("Postcaptura inválida sin efectos, gasto ni RNG " + String(id) + reason,
+		result.result.status == CaptureResult.INVALID
+		and result.result.reason == reason
+		and not result.result.consume_item
+		and target.to_dict() == before and inv.to_dict() == inventory_before
+		and rng.state == rng_before and party.is_empty())
+
+
 func _terminar_campania(bloques: int) -> void:
 	done = true
 	if errors.is_empty() and bloques > 0 and checks > 0:
