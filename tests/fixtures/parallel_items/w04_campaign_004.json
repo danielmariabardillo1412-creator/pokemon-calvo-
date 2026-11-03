@@ -78,6 +78,32 @@
         "savev2_negative_and_equipment_if_supported",
         "positive_evolution_only_if_exact_runtime_record_supported"
       ]
+    },
+    {
+      "block": "04",
+      "ids": [
+        "adamant_crystal",
+        "blue_orb",
+        "catching_charm"
+      ],
+      "family": "STORY_KEY_OR_FORM_REVIEW",
+      "classification_by_id": {
+        "adamant_crystal": "held_item_form_route_needs_context",
+        "blue_orb": "held_item_primal_reversion_needs_battle_context",
+        "catching_charm": "passive_capture_context_owned_by_W03"
+      },
+      "source": "docs/current/ITEM_FIELD_V8.csv.txt and item_connections_v1.json, canonical item selection",
+      "policy": "Never trigger Dialga/Kyogre forms via use_item without a supported route; do not implement or certify capture",
+      "cases": [
+        "catalog_definition_for_all_three",
+        "dialga_kyogre_eevee_controls",
+        "field_use_no_mutation_or_consumption",
+        "evolution_api_no_false_forms",
+        "adamant_blue_equipment_same_species_and_save_v2",
+        "catching_charm_not_equipment_in_current_profile",
+        "post_unequip_state_unchanged",
+        "capture_effect_not_tested_in_W04"
+      ]
     }
   ]
 }
