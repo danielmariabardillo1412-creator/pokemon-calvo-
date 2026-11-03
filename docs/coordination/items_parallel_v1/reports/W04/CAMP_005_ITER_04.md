@@ -71,3 +71,18 @@ En la segunda CI [#41723793802](https://github.com/danielmariabardillo1412-creat
 **Reparación mínima del propio test, sin tocar producción:** commit `226b617d86beef8251aeb624843ec9f4cbcdc702`, comprueba que el registro exacto `TRIGGER_USE_ITEM + galarica_cuff + base_form/evolved_form` **no** aparezca entre los candidatos y, además, que el registro legítimo de Slowpoke normal→Slowbro por nivel **siga disponible**. El validador Python exige esta nueva cobertura desde commit `243c7e4cb5348297a2dd2a13ca61c229b8bb397f`.
 
 Última CI de reparación completa [#41724227089](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41724227089): comprobar logs/estado antes de declarar cierre. Se preservan todas las pruebas de formas regionales, Urshifu, equipamiento, identidad y SaveV2.
+
+
+## CI04 de pruebas acumuladas aprobada
+
+[GitHub Actions #41724227089](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41724227089), SHA `243c7e4cb5348297a2dd2a13ca61c229b8bb397f`, terminó **completed/success**. Recibos exactos de CI:
+- `CAMP005_W04_MANIFEST_PASS reserved=10 completed=4 ids=46 kind=FUNCTIONAL_BACKLOG`.
+- `CAMP005_W04_PY PASS blocks=4 checks=274`.
+- `CAMP005_W04_GODOT PASS blocks=4 checks=384`.
+- Godot clasificó los cuatro IDs como `DEPENDENCIA_FORMA` y comprobó `Galar=2 distinct_targets Urshifu=2 distinct_forms same_target=urshifu towers=2 unsupported`.
+
+Los contratos de formas, rechazos seguros, equipamiento/retirada y SaveV2 han pasado. La prueba corregida preserva también la ruta *normal* Slowpoke→Slowbro por nivel; no atribuye esa evolución a Brazal Galanuez. **No se ha implementado la forma regional ni ninguna de las dos formas de Urshifu.**
+
+**Incidencia de publicación:** tras la CI verde se intentó cambiar la fila 04 de `CAMP_005_PROGRESO.csv` de `EN_CI_AUTOMATICA` a `DEPENDENCIA_DOCUMENTADA` incluyendo el recibo `41724227089`. Esa operación fue **bloqueada por los controles de seguridad de OpenAI**; una nueva lectura confirmó que el CSV conserva la fila provisional. No forzar otro endpoint ni declarar éxito de actualización. Por esa razón **no existe segunda CI de progreso consolidado**. Se conserva la primera CI válida en el enlace anterior.
+
+**Estado verificable:** código de test y fixture publicados; 4/10 bloques técnicamente probados, CSV por reconciliar y ninguna función de forma jugable nueva. IA6 puede consultar este informe y el run para resolver el bloqueo de publicación sin tocar producción ni inventar mecánicas.
