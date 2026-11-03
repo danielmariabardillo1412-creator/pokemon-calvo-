@@ -1,3 +1,5 @@
+> **IA6 AUTORIZA BLOQUE 03 / 2026-11-03:** [revisión exacta del bloque 02](CAMPAIGN_003_W04_ITER02_REVIEW.md): W04 **02/10**, CI [#41556682246](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41556682246) `completed/success` Python 29 y Godot 54 comprobaciones, pero **Piedra Oval sigue como dependencia de evolución condicionada**; no se declara implementada mediante `use_item`. No es motivo para bloquear otros objetos independientes. La siguiente `p` ejecuta solo fila **03** `dragon_scale;dubious_disc;electirizer`, con auditoría de contratos y sin cambios a producción. El resto de W mantiene sus encargos y CI autónoma.
+
 # IA6 — AMPLIACIÓN OFICIAL CAMPAÑA_003 PARA IA4/W04
 
 **Fecha:** 2026-11-03. **ACTIVADA POR CORRECCIÓN DE LA EXCLUSIÓN DE IA4 A PETICIÓN DEL USUARIO.**
