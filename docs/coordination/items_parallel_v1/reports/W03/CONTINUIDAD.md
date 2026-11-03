@@ -1,3 +1,18 @@
+# IA3/W03 — CONTINUIDAD VIGENTE CAMPAÑA_003: 05/10
+
+**Rama exclusiva:** `codex/calvo-items-20261103-w03-camp003`. **Fila 05 ejecutada:** `fast_ball;dream_ball`. **Siguiente `p`: fila oficial 06 `friend_ball;heal_ball`**, después de revisar CI de 05. Prohibido saltar a 07 sin otra `p`.
+
+- **01–04 PASS real:** [Actions #41558471582](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41558471582), SHA de tests `34d963e5...`, Python 122 / Godot 490, 0 errores. El último HEAD previo a 05 era documental `fc1558e2...`.
+- **05 Fast/Dream son mecánicas EXISTENTES**; histórico `item_capture_v11.gd` prueba 10.760 casos, por lo que no se duplica. Nueva cobertura complementaria: especies Pikachu base_speed90/×1, Mew100/×4 y Raichu110/rate75/×3,4 cap255; sueño persistente ×4 además del bono de estado ×2, Bostezo volátil no activa Ensueño; dos especies y dos modos PS; inventario/RNG, identidad y negativos con ambas.
+- **Rutas propias de pruebas:** `tests/fixtures/parallel_items/w03_campaign_003.json` blob `0aa75d9f67bdc6d7c04693db58675628604819f7`; `tests/gameplay/parallel_items_w03_campaign_003.gd` blob `66bba61156102ddc7f3d668b683f5881cd49db55`; `tests/tools/test_parallel_items_w03_campaign_003.py` blob `bb6460ee07c63b496a6d85fa57f2b273b0b3af49`.
+- **CSV 05 publicado:** `CAMP_003_PROGRESO.csv` blob `922ccad449b1c845f6fd04b2caa0f425e501bc22`, commit de pruebas/progreso `d3a9ce8bee76564a18cc5e997cdcd0bef5dd5c74`. **CI [#41559647462](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41559647462) EN EJECUCIÓN** al redactar; consultar run y logs `CAMP003_W03_PY PASS blocks=5 checks=M` / `CAMP003_W03_GODOT PASS blocks=5 checks=M` antes de certificar.
+- **Informe:** [CAMP_003_ITER_05.md](./CAMP_003_ITER_05.md), publicado. La revisión estructural de 5 bloques pasó; no equivale a ejecución. Solo IA6 consolida CI; W03 no cambia workflows, producción, `main`, V28, catálogo, otras ramas.
+- **Al siguiente `p`:** verificar CI de 05 sobre SHA `d3a9ce8...`; si PASS, 06 `friend_ball;heal_ball`. Si falla test propio, corregir SIN quitar aserciones; fallo real motor/contrato compartido → STOP y solicitar IA6.
+
+---
+
+## Histórico previo conservado (01–04)
+
 # IA3/W03 — CONTINUIDAD ACTUAL CAMPAÑA_003: 04/10
 
 **Rama exclusiva:** `codex/calvo-items-20261103-w03-camp003`. **Progreso acumulativo:** cuatro bloques publicados (01 Poké/Gran, 02 Ultra/Master, 03 Quick/Timer, 04 Level/Nest). **Siguiente tecla `p`: exactamente 05 `fast_ball;dream_ball`, tras leer último run.** No ejecutar 06 sin nueva `p`.
