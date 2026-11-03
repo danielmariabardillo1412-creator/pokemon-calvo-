@@ -119,6 +119,35 @@
           "move_id": "fling"
         }
       ]
+    },
+    {
+      "block": "05",
+      "items": [
+        {
+          "item_id": "tm45",
+          "move_id": "venoshock"
+        },
+        {
+          "item_id": "tm46",
+          "move_id": "avalanche"
+        },
+        {
+          "item_id": "tm47",
+          "move_id": "endure"
+        },
+        {
+          "item_id": "tm48",
+          "move_id": "volt_switch"
+        },
+        {
+          "item_id": "tm49",
+          "move_id": "sunny_day"
+        },
+        {
+          "item_id": "tm50",
+          "move_id": "rain_dance"
+        }
+      ]
     }
   ]
 }
