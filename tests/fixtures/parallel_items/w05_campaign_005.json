@@ -179,6 +179,35 @@
           "move_id": "spite"
         }
       ]
+    },
+    {
+      "block": "07",
+      "items": [
+        {
+          "item_id": "tm178",
+          "move_id": "gravity"
+        },
+        {
+          "item_id": "tm179",
+          "move_id": "smack_down"
+        },
+        {
+          "item_id": "tm180",
+          "move_id": "gyro_ball"
+        },
+        {
+          "item_id": "tm181",
+          "move_id": "knock_off"
+        },
+        {
+          "item_id": "tm182",
+          "move_id": "bug_bite"
+        },
+        {
+          "item_id": "tm183",
+          "move_id": "super_fang"
+        }
+      ]
     }
   ]
 }
