@@ -72,6 +72,106 @@
         "equipamiento legitimo y SaveV2 sin cambio de especie",
         "no convertir en uso de bolsa ni retirar objeto"
       ]
+    },
+    {
+      "block": "02",
+      "ids": [
+        "protector",
+        "reaper_cloth",
+        "prism_scale",
+        "sachet",
+        "up_grade"
+      ],
+      "family": "TRADE_OBJECT_REPAIR",
+      "classification": "BLOQUEADO_POR_CONTRATO",
+      "pairs": [
+        {
+          "item_id": "protector",
+          "source": "rhydon",
+          "target": "rhyperior",
+          "canonical_item": "protector",
+          "evolution_chain": "50",
+          "approved_level": null,
+          "original_trigger": "trade",
+          "held_item_required": true
+        },
+        {
+          "item_id": "reaper_cloth",
+          "source": "dusclops",
+          "target": "dusknoir",
+          "canonical_item": "reaper-cloth",
+          "evolution_chain": "182",
+          "approved_level": null,
+          "original_trigger": "trade",
+          "held_item_required": true
+        },
+        {
+          "item_id": "prism_scale",
+          "source": "feebas",
+          "target": "milotic",
+          "canonical_item": "prism-scale",
+          "evolution_chain": "178",
+          "approved_level": null,
+          "original_trigger": "trade",
+          "held_item_required": true
+        },
+        {
+          "item_id": "sachet",
+          "source": "spritzee",
+          "target": "aromatisse",
+          "canonical_item": "sachet",
+          "evolution_chain": "350",
+          "approved_level": null,
+          "original_trigger": "trade",
+          "held_item_required": true
+        },
+        {
+          "item_id": "up_grade",
+          "source": "porygon",
+          "target": "porygon2",
+          "canonical_item": "up-grade",
+          "evolution_chain": "68",
+          "approved_level": null,
+          "original_trigger": "trade",
+          "held_item_required": true
+        }
+      ],
+      "decision_source": "docs/current/ITEM_TRADE_RESTORATION_V27.json",
+      "consumer": "modules/creatures/progression/evolution_system.gd::evolution_candidates",
+      "producer": "modules/creatures/progression/progression_system.gd::gain_experience",
+      "missing": [
+        "nivel aprobado para cada pareja",
+        "condición level_up con objeto equipado sin intercambio",
+        "política de consumo/persistencia del objeto en evolución o cancelación"
+      ],
+      "special_cases": [
+        {
+          "item_id": "prism_scale",
+          "source": "feebas",
+          "target": "milotic",
+          "legacy_alternative_trigger": "level-up",
+          "legacy_alternative_min_beauty": 170,
+          "legacy_alternative_source": "data/api/v2/evolution-chain/178/index.json",
+          "requirement": "Mantener distinta la ruta belleza legacy de la ruta intercambio con objeto; no degradar condición de belleza."
+        },
+        {
+          "item_id": "up_grade",
+          "source": "porygon",
+          "target": "porygon2",
+          "next_stage": "porygon2",
+          "next_stage_item": "dubious_disc",
+          "next_target": "porygon_z",
+          "requirement": "No permitir up_grade en Porygon2; distinguir dos etapas y requisitos."
+        }
+      ],
+      "runtime_contract": [
+        "comprobar pareja trade y held_item real",
+        "no introducir nivel universal, ni extrapolar nivel 37 de Dusclops ni 42 de Rhydon",
+        "prism_scale ruta alternativa belleza 170 no habilita level_up sin condición",
+        "up_grade distinto de dubious_disc en etapas Porygon",
+        "equipar permitido y SaveV2 preserva objeto/identidad sin evolución directa",
+        "sin cambio de arquitectura ni consumo especulativo"
+      ]
     }
   ]
 }
