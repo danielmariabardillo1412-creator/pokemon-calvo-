@@ -236,7 +236,7 @@ def validate():
         require(case["history"].startswith(origin), "Sin referencia de origen: " + name)
         require(all(type(i) is int and 1 <= i <= 65535 for i in case["seeds"]), "Semilla inválida: " + name)
         require(len(case["seeds"]) == len(set(case["seeds"])), "Semillas repetidas: " + name)
-        if case["item_id"] in ("lucky_punch", "scope_lens"):
+        if name in ("punch_chansey_critical", "punch_wrong_species", "scope_focus_crit"):
             require(case["follow_move"] == "tackle" and case["own_move"] == "focus_energy",
                     "Objeto de crítico sin secuencia real Foco Energía + Placaje")
         else:

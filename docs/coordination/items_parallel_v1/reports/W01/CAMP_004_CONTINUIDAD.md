@@ -79,3 +79,7 @@ Primer run #41589392286, SHA a26c444b: Godot 5254 checks, **8 fallos** concentra
 - Asignación IA6 y rama W01 únicas: `room_service;scope_lens;shed_shell`. Fila 04 se cierra con `CI_PASS_VERIFICADO`, SHA `ec13e1c6b30a58c8ac8c7c6bab3052d2ddec8699`, run `41592180823` (6593 Godot, 388 Python).
 - Bloque 05: 6 escenarios, 23 pares, 69 variantes; acumulado 34 escenarios, 98 pares, 294 variantes. Pruebas reales de Espacio Raro, crítico de Periscopio y escape de Mal de Ojo, tres equipamientos, SaveV2, no consumo indebido. Sin producción editada.
 - **Gate obligatorio por el hito 05:** el workflow existente ejecutará regresión completa CAMP003 W01 Python+Godot, además de CAMP004. No cerrar hasta confirmar los cuatro recibos y `completed/success` en mismo SHA. Si falla, reparar en propia rama bajo protocolo V5.
+
+### 05/10 — fallo previo Godot y reparación de contrato
+
+CI #41602085941 falló exclusivamente en validador Python: `CAMP004_W01_PY FAIL: 'follow_move'` al validar `scope_no_damage_control`. `follow_move` es obligatorio sólo en tres escenarios con secuencia de críticos, no en todos los casos de Periscopio. Corrección mínima del contrato, ningún escenario suprimido; reejecutar CI entera y puerta CAMP003. No afirmar PASS antes de ver los recibos.
