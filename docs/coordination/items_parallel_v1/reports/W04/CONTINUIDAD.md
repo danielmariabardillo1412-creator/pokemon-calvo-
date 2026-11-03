@@ -152,3 +152,16 @@ Las **16 dependencias CAMP003** y **9 dependencias CAMP004 bloques 01–03** sig
 **CI inicial:** [#41579180249](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41579180249), SHA `26da57ec3496f03b728cc60f4ffc9206ec71a485`, `completed/success`: CAMP004 Python **147**, Godot **455**, regresión CAMP003 Python **120** y Godot **270**, regresión CAMP001 SaveV2 seis piedras **559 comprobaciones/12 casos**. Tres objetos clasificados DEPENDENCIA por ausencia de sistema propio de fusión/EXP/forma; CSV consolidado a DEPENDENCIA_DOCUMENTADA. No se atribuyen fusiones Kyurem, efectos EXP ni forma Shaymin por un PASS negativo.
 
 **CI consolidada:** [#41579352482](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41579352482), SHA `ba870381e0a5b2215a925be44487e5613157b777`, `completed/success`. Repite CAMP004 Python 147/Godot 455; regresiones CAMP003 120/270 y CAMP001 559 comprobaciones/12 casos. Bloque 05 terminado como auditoría y dependencias documentadas; próxima `p` ejecuta exclusivamente bloque 06. Próximo `p`: **bloque 06**, `griseous_core;lustrous_globe;meteorite`. No actuar sobre otros bloques ni tocar producción compartida, main, V28 o ramas ajenas. 16 dependencias CAMP003 siguen pendientes.
+
+
+---
+
+## CAMPAÑA_004 — Bloque 06 (2026-11-03)
+
+**IA4/W04**, rama exclusiva `codex/calvo-items-20261103-w04-camp004`. Bloque **06/10 publicado** para `griseous_core;lustrous_globe;meteorite`, en `tests/gameplay/parallel_items_w04_campaign_004.gd`, `tests/tools/test_parallel_items_w04_campaign_004.py`, `tests/fixtures/parallel_items/w04_campaign_004.json`, `reports/W04/CAMP_004_PROGRESO.csv` y `reports/W04/CAMP_004_ITER_06.md`. La nueva CI [#41584213703](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41584213703) está pendiente de verificar al redactar esta nota. No declarar PASS hasta `completed/success`.
+
+**Contratos del bloque 06:** Gran Griseosfera y Gran Lustresfera son equipables y su transferencia está documentada `VERIFIED`, pero su forma especial/efecto continúa `NATIVE_ENTRY_REQUIRES_EFFECT_CASE`; Meteorito no es equipable y aparece `DATA_ONLY`. El runner rechaza falsos cambios de forma y consumo desde mochila, controla equipar/retirar e identidad/SaveV2. No se han implementado transformaciones ni manipulado producción.
+
+**Incidencia previa:** el intento de escritura anterior del runner fue bloqueado por un control de seguridad. Con el nuevo `p` se reintentó la **misma operación normal en la rama propia** y funcionó (commit `4940c32e47488bc24d606876f3f5c127344b6433`); no hubo modificación de permisos ni derivación. Regresiones CAMP003 y CAMP001 preservadas.
+
+**Al siguiente `p`:** comprobar la CI definitiva del bloque 06 y reparar errores propios si los hay. Si CI correcta, ejecutar solamente **bloque 07/10** `rage_candy_bar;red_orb;reins_of_unity`. Mantener backlog de 16 dependencias CAMP003 sin repetir su trabajo. No editar `main`, V28, rama árbitra o ramas ajenas.
