@@ -27,3 +27,20 @@ Exigir CI real sobre el SHA de pruebas y progreso: `CAMP004_W04_MANIFEST_PASS re
 Sin cambios en producción, catálogos, `main`, V28, rama árbitra o ramas W01/W02/W03/W05. **Las 16 dependencias funcionales de CAMPAÑA_003 siguen pendientes**. El cierre solo certificará el trabajo de auditoría/contratos autorizado y mantendrá un listado de dependencias por dominio para IA6.
 
 **Al alcanzar CI final aprobada:** reconciliar CSV con recibo, actualizar este informe, crear `CAMP_004_FINAL.md`, actualizar `CONTINUIDAD.md`, comprobar nueva CI de CSV consolidado y declarar `CAMPAÑA_004_FINALIZADA`. Después STOP; no inventar CAMPAÑA_005.
+
+
+## Primera CI final ejecutada
+
+[GitHub Actions #41610829772](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41610829772), SHA `eb7f9046cb1a0cc04e0ea15764dbf32646925033`, terminó **completed/success**, con recibos de logs:
+
+- `CAMP004_W04_MANIFEST_PASS reserved=10 completed=10 ids=36`.
+- `CAMP004_W04_PY PASS blocks=10 checks=387`.
+- `CAMP004_W04_GODOT PASS blocks=10 checks=1090`.
+- Regresión CAMP003: Python `PASS blocks=10 checks=120` y Godot `PASS blocks=10 checks=270`.
+- Regresión CAMP001: `PARALLEL_ITEMS_W04_CAMP_001_GODOT PASS iteration=3 checks=559 cases=12`.
+
+Resultados individuales en Godot: `big_nugget`, `bottle_cap`, `gold_bottle_cap`, `rare_bone` figuran `status=DEPENDENCIA records=0` con equipamiento y SaveV2 verificados, pero venta, economía y entrenamiento sin efecto certificado; `heart_scale`, `nugget` y `pretty_wing` figuran `status=DEPENDENCIA records=0` y `DATA_ONLY`, con rechazos seguros, identidad y SaveV2 correctos. Los siete carecen de rutas evolutivas asociadas.
+
+El log acumulado contiene exactamente 36 IDs únicos: **31 `DEPENDENCIA`**, **1 `AUDITORIA_DE_DATOS`** (`catching_charm`), **3 `AUDITORIA_LEGACY`** (`roto_*`) y **1 `RECUPERACION_VERIFICADA`** (`rage_candy_bar`); este último sí prueba curación real, gasto unitario y SaveV2. La regresión CAMP003 sigue con 16 dependencias funcionales propias.
+
+La fila 10 del CSV está reconciliada como `DEPENDENCIA_DOCUMENTADA`, run `41610829772`, commit `1f4021c4ec00f26a4df3e24428e53b0989caabe8`. **Queda pendiente de confirmar la CI disparada por ese cambio documental antes de declarar cierre total.** Ningún dato funcional del juego ha sido modificado.
