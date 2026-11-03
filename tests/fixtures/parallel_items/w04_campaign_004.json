@@ -185,6 +185,32 @@
         "reins_of_unity_savev2_no_spend",
         "regression_blocks_01_to_06_retained"
       ]
+    },
+    {
+      "block": "08",
+      "ids": [
+        "reveal_glass",
+        "rotom_catalog",
+        "zygarde_cube"
+      ],
+      "family": "STORY_KEY_OR_FORM_REVIEW",
+      "classification_by_id": {
+        "reveal_glass": "Tornadus/forces of nature change of form requires explicit form contract",
+        "rotom_catalog": "Rotom appliance forms require a form choice and moveset contract; inventory notes missing_description",
+        "zygarde_cube": "Zygarde assembly, cells, and forms require collection/party and special form contract"
+      },
+      "source": "RANDOMLOCK_ITEMS_BUILD_SCOPE_V2.csv, ITEM_FIELD_V8.csv.txt, ITEM_INVENTORY.csv, item_connections_v1.json",
+      "policy": "No direct bag evolution, no held transformation, no arbitrary form or Zygarde cell conversion; only supported runtime records count as positive",
+      "cases": [
+        "catalog_and_source_category",
+        "species_tornadus_rotom_zygarde_and_eevee_controls",
+        "non_holdable_field_equipment_rejected_without_spend",
+        "use_item_and_evolve_rejected_without_supported_record",
+        "negative_player_identity_and_savev2",
+        "form_triggers_classified_from_real_catalog",
+        "missing_description_rotom_catalog_explicit_dependency",
+        "retain_regression_blocks_01_to_07_and_camp003"
+      ]
     }
   ]
 }
