@@ -3,6 +3,186 @@
   "campaign": "CAMP_004",
   "worker": "W01",
   "scope": "HELD_COMBAT_CANDIDATE",
-  "purpose": "Prueba y clasificación real de equipables; bootstrap 0/10 sin funcionalidad certificada",
-  "blocks": []
+  "blocks": [
+    {
+      "block": "01",
+      "ids": [
+        "light_ball",
+        "lucky_punch",
+        "thick_club"
+      ],
+      "cases": [
+        "ball_pikachu_special",
+        "ball_pikachu_physical",
+        "ball_wrong_species",
+        "club_cubone_physical",
+        "club_marowak_physical",
+        "club_wrong_species",
+        "punch_chansey_critical",
+        "punch_wrong_species"
+      ]
+    }
+  ],
+  "format": "gen9calvounifiedv1",
+  "variants": [
+    "active",
+    "none",
+    "reserve"
+  ],
+  "sources": [
+    {
+      "path": "docs/current/ITEM_INVENTORY.csv",
+      "git_blob_sha": "2aaf18643bb2b071226118a1ad556cffca4707dd"
+    },
+    {
+      "path": "docs/current/RANDOMLOCK_ITEMS_BUILD_SCOPE_V2.csv",
+      "git_blob_sha": "8b9b723bf5944bbbde39aa2d49dfbb2f2a64e11b"
+    },
+    {
+      "path": "tools/item_audit/held_effect_sweep_v3.cjs",
+      "git_blob_sha": "fd5d9d0b1eecf8b84f14e606631df93b40728586"
+    }
+  ],
+  "cases": [
+    {
+      "block": "01",
+      "id": "ball_pikachu_special",
+      "item_id": "light_ball",
+      "op": "damage_boost_compatible",
+      "actor_species": "pikachu",
+      "foe_species": "mew",
+      "own_move": "thunder_shock",
+      "foe_move": "amnesia",
+      "seeds": [
+        19,
+        23
+      ],
+      "history": "held_effect_sweep_v3:light_ball_pikachu_thunder_shock"
+    },
+    {
+      "block": "01",
+      "id": "ball_pikachu_physical",
+      "item_id": "light_ball",
+      "op": "damage_boost_compatible",
+      "actor_species": "pikachu",
+      "foe_species": "mew",
+      "own_move": "tackle",
+      "foe_move": "amnesia",
+      "seeds": [
+        19,
+        23
+      ],
+      "history": "held_effect_sweep_v3:light_ball_pikachu_tackle"
+    },
+    {
+      "block": "01",
+      "id": "ball_wrong_species",
+      "item_id": "light_ball",
+      "op": "wrong_holder_no_damage_boost",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "own_move": "thunder_shock",
+      "foe_move": "amnesia",
+      "seeds": [
+        19
+      ],
+      "history": "held_effect_sweep_v3:wrong_holder_light_ball"
+    },
+    {
+      "block": "01",
+      "id": "club_cubone_physical",
+      "item_id": "thick_club",
+      "op": "damage_boost_compatible",
+      "actor_species": "cubone",
+      "foe_species": "mew",
+      "own_move": "tackle",
+      "foe_move": "amnesia",
+      "seeds": [
+        19,
+        23
+      ],
+      "history": "held_effect_sweep_v3:thick_club_cubone_tackle"
+    },
+    {
+      "block": "01",
+      "id": "club_marowak_physical",
+      "item_id": "thick_club",
+      "op": "damage_boost_compatible",
+      "actor_species": "marowak",
+      "foe_species": "mew",
+      "own_move": "tackle",
+      "foe_move": "amnesia",
+      "seeds": [
+        19,
+        23
+      ],
+      "history": "held_effect_sweep_v3:thick_club_marowak_tackle"
+    },
+    {
+      "block": "01",
+      "id": "club_wrong_species",
+      "item_id": "thick_club",
+      "op": "wrong_holder_no_damage_boost",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "own_move": "tackle",
+      "foe_move": "amnesia",
+      "seeds": [
+        19
+      ],
+      "history": "held_effect_sweep_v3:wrong_holder_thick_club"
+    },
+    {
+      "block": "01",
+      "id": "punch_chansey_critical",
+      "item_id": "lucky_punch",
+      "op": "critical_ratio_compatible",
+      "actor_species": "chansey",
+      "foe_species": "mew",
+      "own_move": "focus_energy",
+      "follow_move": "tackle",
+      "foe_move": "amnesia",
+      "seeds": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16
+      ],
+      "history": "held_effect_sweep_v3:lucky_punch_critical_stage_focus_energy_tackle"
+    },
+    {
+      "block": "01",
+      "id": "punch_wrong_species",
+      "item_id": "lucky_punch",
+      "op": "wrong_holder_no_critical_ratio",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "own_move": "focus_energy",
+      "follow_move": "tackle",
+      "foe_move": "amnesia",
+      "seeds": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "history": "held_effect_sweep_v3:lucky_punch_wrong_species_focus_energy_tackle"
+    }
+  ]
 }
