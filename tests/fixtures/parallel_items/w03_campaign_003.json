@@ -592,6 +592,72 @@
       "required_new_gate": "IA6 debe decidir ruta de persistencia de bola de origen y fuente fiable de pesca (ambas sesiones), incluida recuperación SaveV2; la implementación no puede inventar flags.",
       "implementation_authorized": false,
       "ci_required": true
+    },
+    {
+      "bloque": "09",
+      "ids": [
+        "love_ball",
+        "moon_ball"
+      ],
+      "objective": "contextos_amistad_luna",
+      "prior_evidence": {
+        "state": "DEPENDENCIA_COMPARTIDA",
+        "sources": [
+          "modules/capture/capture_ruleset.gd",
+          "modules/capture/capture_ball_effects.gd",
+          "modules/capture/capture_context_ball_effects.gd",
+          "modules/capture/capture_battle_context.gd",
+          "modules/capture/capture_system.gd",
+          "modules/inventory/capture_inventory_service.gd",
+          "modules/creatures/progression/evolution_system.gd"
+        ],
+        "note": "Love y Moon no están registradas como operativas. No existe contrato de captura para sexo del capturador y comparación con objetivo; Moon requiere relación canónica de especie y evolución por Piedra Lunar."
+      },
+      "cases": [
+        {
+          "species_id": "mew",
+          "level": 35,
+          "seed": 9901
+        },
+        {
+          "species_id": "caterpie",
+          "level": 12,
+          "seed": 9902
+        }
+      ],
+      "hp_modes": [
+        "full",
+        "one_hp"
+      ],
+      "contexts": [
+        {
+          "name": "sin_contexto",
+          "completed_turns": -1,
+          "catcher_level": -1
+        },
+        {
+          "name": "batalla_con_turno_y_nivel",
+          "completed_turns": 0,
+          "catcher_level": 35
+        }
+      ],
+      "invalid_cases": [
+        "trainer_battle_not_capturable",
+        "target_knocked_out",
+        "battle_finished"
+      ],
+      "expected_current_rejection": "unknown_ball",
+      "missing_authoritative_signals": [
+        "catcher_species_id",
+        "catcher_gender",
+        "target_gender",
+        "moon_stone_evolution_eligibility"
+      ],
+      "functional_effect_certified": false,
+      "expected_behavior": "Love/Moon no registradas se rechazan de forma determinista sin coste/RNG/captura; los rechazos anteriores a registro tienen prioridad. No se certifica multiplicador basado en género o evolución.",
+      "required_new_gate": "IA6 debe fijar fuente canónica de sexo/especie de ambos participantes, tratamiento de sexo desconocido y acceso fiable a elegibilidad de evolución Piedra Lunar por especie (incluidas formas); proveer contexto de sesión y recuperación.",
+      "implementation_authorized": false,
+      "ci_required": true
     }
   ]
 }
