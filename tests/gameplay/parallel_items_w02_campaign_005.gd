@@ -172,6 +172,31 @@ func _probe_training(spec: Dictionary, mode: String) -> Dictionary:
 		check(mode + " integridad de habilidad/experiencia/EV/IV", now.ability_id == c.ability_id
 			and now.level == c.level and now.experience == c.experience
 			and now.evs == c.evs and now.ivs == c.ivs)
+	elif String(spec.kind) == "mochi_reset":
+		var zero_evs: Dictionary = start_evs.duplicate(true)
+		var removed: int = 0
+		for key: Variant in zero_evs:
+			removed += int(start_evs[key])
+			zero_evs[key] = 0
+		var reset_stats: Dictionary = StatCalculator.compute(
+			catalogs.species(c.species_id).base_stat_block(), c.ivs,
+			zero_evs, c.nature_id, c.level).to_dict()
+		check(mode + " Mochi Reinicio borra exactamente seis EV", now.evs == zero_evs
+			and removed > 0)
+		check(mode + " Mochi Reinicio recalcula stats preservando deficit HP",
+			now.stats.to_dict() == reset_stats
+			and now.stats.max_hp - now.current_hp == start_hp_deficit)
+		check(mode + " Mochi Reinicio operacion y EV retirados",
+			String(result.get("action", "")) == "ev_reset"
+			and int(result.get("ev_removed", -1)) == removed
+			and int(result.get("ev_added", -1)) == 0)
+		check(mode + " Mochi Reinicio sin cambios de amistad/PP/naturaleza/IV",
+			now.friendship == start_friend
+			and now.moveset[0].to_dict() == start_first
+			and now.moveset[1].to_dict() == start_second
+			and now.nature_id == c.nature_id and now.ivs == c.ivs
+			and now.level == c.level and now.experience == c.experience
+			and now.ability_id == c.ability_id)
 	elif String(spec.kind) in ["vitamin", "wing", "mochi"]:
 		var stat: String = String(spec.stat)
 		var gain: int = int(spec.expected_ev_gain)
