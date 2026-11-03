@@ -429,6 +429,15 @@ func _compare_berry(spec: Dictionary, observed: Dictionary) -> void:
 		check(mode + " SHA256 recibo real", authenticated)
 		if authenticated:
 			var receipt: Variant = JSON.parse_string(FileAccess.get_file_as_string(path))
+			var stats_authentic: bool = false
+			if receipt is Dictionary and receipt.get("native_starf_boosts", {}) is Dictionary:
+				var stored_stages: Dictionary = receipt.native_starf_boosts
+				var measured_stages: Dictionary = rec.starf_boosts
+				stats_authentic = stored_stages.size() == measured_stages.size()
+				for key: Variant in measured_stages:
+					stats_authentic = stats_authentic and stored_stages.has(key)
+					if stored_stages.has(key):
+						stats_authentic = stats_authentic and int(stored_stages[key]) == int(measured_stages[key])
 			check(mode + " prueba frontera nativa y dueño",
 				receipt is Dictionary and receipt.has("before") and receipt.has("owner_after")
 				and String(receipt.scenario) == String(spec.scenario)
@@ -437,7 +446,7 @@ func _compare_berry(spec: Dictionary, observed: Dictionary) -> void:
 				and int(receipt.native_foe_max_hp) == int(rec.foe_max_hp)
 				and bool(receipt.native_boost_spa) == bool(rec.boost_spa)
 				and bool(receipt.native_boost_spe) == bool(rec.boost_spe)
-				and receipt.native_starf_boosts == rec.starf_boosts
+				and stats_authentic
 				and bool(receipt.native_micle_pending) == bool(rec.micle_pending)
 				and bool(receipt.native_micle_after_next) == bool(rec.micle_after_next))
 
