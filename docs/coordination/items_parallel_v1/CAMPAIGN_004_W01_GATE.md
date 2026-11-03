@@ -5,8 +5,8 @@
 CAMPAÑA_003 de W01 tiene 10/10 bloques entregados. Último run [#41575150716](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41575150716) en SHA `f084188cb6d560576137c20fa74ea257abbfdb7a`, `completed/success`, `CAMP003_W01_PY PASS blocks=10 checks=806` y `CAMP003_W01_GODOT PASS blocks=10 checks=12392`, gates de manifiesto PASS. Esto certifica casos ejecutados en rama, no integración a main ni todas las interacciones competitivas. **La última fila del CSV CAMP003 aún conservaba estado histórico EN_CI_AUTOMATICA a la última consulta; prevalece el run real verificado, no falsificar estado documental.** Los errores previos de Botas Gruesas/Bola Férrea/Cola Plúmbea se resolvieron en esa suite.
 
 ## Nueva reserva
-30 IDs `HELD_COMBAT_CANDIDATE` seleccionados en `docs/current/RANDOMLOCK_ITEMS_BUILD_SCOPE_V2.csv`, libres frente a CAMP001 W01, colas CAMP003 y CAMP004 de las otras cuatro, sin repetir CAMP003 W01:
-- **01:** `ability_shield;absorb_bulb;adrenaline_orb`
+30 IDs `HELD_COMBAT_CANDIDATE` seleccionados en `docs/current/RANDOMLOCK_ITEMS_BUILD_SCOPE_V2.csv`, libres frente a CAMP001 W01, colas CAMP003 y CAMP004 de las otras cuatro, sin repetir CAMP002 W01 (los tres `ability_shield;absorb_bulb;adrenaline_orb`) ni CAMP003 W01:
+- **01:** `light_ball;lucky_punch;thick_club`
 - **02:** `damp_rock;float_stone;icy_rock`
 - **03:** `loaded_dice;misty_seed;power_herb`
 - **04:** `psychic_seed;punching_glove;ring_target`
@@ -17,7 +17,7 @@ CAMPAÑA_003 de W01 tiene 10/10 bloques entregados. Último run [#41575150716](h
 - **09:** `white_herb;wise_glasses;zoom_lens`
 - **10:** `black_belt;charcoal;magnet`
 
-**Importante:** un ID seleccionado no es implementación funcional. Algunos objetos requieren clima, terreno, acción de una habilidad, RNG, tipos, umbrales, cambios de turno o contexto ausente; el objetivo es verificar con pruebas positivas y negativas de motor real donde haya contrato y declarar `DEPENDENCIA_COMPARTIDA` si falta una API o regla. No inventar efectos ni eliminar objetos por cuenta propia. `adrenaline_orb` podría depender de mecánicas no presentes: registrar incompatibilidad sin falsear activación.
+**Importante:** un ID seleccionado no es implementación funcional. Algunos objetos requieren clima, terreno, acción de una habilidad, RNG, tipos, umbrales, cambios de turno o contexto ausente; el objetivo es verificar con pruebas positivas y negativas de motor real donde haya contrato y declarar `DEPENDENCIA_COMPARTIDA` si falta una API o regla. No inventar efectos ni eliminar objetos por cuenta propia. `light_ball`, `lucky_punch` y `thick_club` requieren especies portadoras específicas: no aplicar bonificaciones a especies no compatibles.
 
 ## Protocolo de ejecución
 1. Crear rama nueva desde HEAD de W01 CAMP003, preservar los 30 tests anteriores. La antigua rama queda sin cambios; no alterar `main` ni V28. La primera orden activa bloque **01**, cada `p` siguiente ejecuta exclusivamente un bloque 02..10. Al completar 10/10: `CAMPAÑA_004_FINALIZADA` y STOP.
