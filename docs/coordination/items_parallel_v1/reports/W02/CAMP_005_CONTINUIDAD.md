@@ -1,3 +1,24 @@
+# IA2/W02 — CONTINUIDAD VIGENTE CAMPAÑA_005 BLOQUE 08/10
+
+**Identidad:** IA2/W02, bayas, medicinas y entrenamiento. **Rama exclusiva:** `codex/calvo-items-20261103-w02-camp005`. Autoridad IA6: `CAMPAIGN_005_W02_GATE.md`, `CAMPAIGN_005_W02_QUEUE_APPROVED.csv`, `campaigns/CAMP_005_W02.md`, `AUTONOMOUS_REPAIR_V5.md`. `p` = avanzar solamente una fila. No tocar `main`, V28, PR118, árbitra, otros workers, código de dominio/API compartida ni workflow.
+
+**Estado actual:** bloques 01–**08/10** publicados en rama W02, **32 IDs asignados, 224 escenarios únicos y 672 variantes de pruebas programadas** (PARTY con objeto, PARTY sin objeto, STORAGE con objeto). Ocho goldens de Python exactos e independientes de fixture y checks estructurales correctos; no implica CI Python/Godot PASS ni integración global. Los logs/run CI del hito05 (CAMP004 y CAMP003 regresiones) aún no verificables.
+
+**Bloque08: resultado MIXTO.** `fresh_start_mochi` implementado por `modules/inventory/field_mochi_effects.gd`: diez escenarios (7 positivos y 3 negativos), limpieza de 6 EV, stats y déficit HP recalc, amistad sin cambio, PP, IV, naturaleza, experiencia, SaveV2 y recibos. `adamant_mint`, `modest_mint`, `jolly_mint`: **DEPENDENCY_MISSING**. Catalogados y seleccionados, pero sin handler en `FieldItemService`/`FieldItemEffects`/`Growth`; criatura persiste `nature_id` sin campo `effective_nature_id` distinto. Cada menta: seis escenarios de rechazo, todos los modos, `field_effect_not_connected`/ `DEPENDENCY_MISSING` y sin consumo. No fingir un cambio de naturaleza original. IA6 debe diseñar/coordinar estado de naturaleza efectiva, SaveV2 y todos los consumidores de stats antes de pruebas positivas. Progreso fila08 en `DEPENDENCIA_DOCUMENTADA`, distinto de certificación funcional.
+
+**Commits bloque08:**
+- Fixture `tests/fixtures/parallel_items/w02_campaign_005.json`: `9cab2ac454f5c422e9d5884d22f5750ec916850a`.
+- Godot `tests/gameplay/parallel_items_w02_campaign_005.gd`: `c946fbd2f02e1b3513ce92b3bcf4515c54dd1541`, `da1bfedd68c1f33924ed53988e62996c6f0b856d`, `75124b5c642e556b5712f3e3474d57ffc321d7f9`.
+- Python `tests/tools/test_parallel_items_w02_campaign_005.py`: `e535765b7efae09d3e2c3e33083dd64d3e26f12d`, `ed338158eecf9463f665bb40b810a1c14bd76be3`, `da302ed69ae753fec96e312660f5b650c071bbaa`, `fbb934a9d941c27ad84a8762d99d9df7344faef9`, `6f3c5c3d70b1e9533b1c3f1f7a16ca010a9fe5f7`, `4bfc7b2eef9e5a5aca7cb0a677c9a98788d32755`.
+- Progreso `docs/coordination/items_parallel_v1/reports/W02/CAMP_005_PROGRESO.csv`: `3292808445297cd0968f4acbcdd874692121d920`, fila08 `DEPENDENCIA_DOCUMENTADA`.
+- Informe `docs/coordination/items_parallel_v1/reports/W02/CAMP_005_ITER_08.md`: `8b80de30f22f7ce3d9d7cc1137a3e4b90a673577`.
+
+**CI pendiente:** el workflow IA6 `.github/workflows/parallel-camp005-w02-autoci.yml` espera `CAMP005_W02_PY/GODOT PASS blocks=8`; una lista vacía de `fetch_commit_workflow_runs` no garantiza PASS/FAIL/ausencia de ejecución. No ejecutar simulaciones y certificarlas como Godot real. No se cambió producción. CAMP004/CAMP003 permanecen sin modificar y sus regresiones deben acreditarse en logs hito05/10.
+
+**Siguiente `p`:** verificar CI real y ejecutar **sólo bloque09** `timid_mint;bold_mint;calm_mint;careful_mint`, releyendo código fuente antes de afirmar dependencia; si sigue sin handler de mentas, usar pruebas negativas y `DEPENDENCIA_DOCUMENTADA` sin inventar implementación. Bloque10 requiere otra `p`; detener al finalizar 10/10.
+
+---
+
 # IA2/W02 — CONTINUIDAD VIGENTE CAMPAÑA_005 BLOQUE 07/10
 
 **Trabajadora W02**, bayas, medicinas y entrenamiento. **Única rama con escritura:** `codex/calvo-items-20261103-w02-camp005`. Autoridad: IA6 `CAMPAIGN_005_W02_GATE.md`, `CAMPAIGN_005_W02_QUEUE_APPROVED.csv`, `campaigns/CAMP_005_W02.md` y `AUTONOMOUS_REPAIR_V5.md`. Cada `p` significa una sola fila. No tocar `main`, V28, PR118, árbitra, otras trabajadoras, workflow ni API global.
