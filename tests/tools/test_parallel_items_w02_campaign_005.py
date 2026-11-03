@@ -2081,6 +2081,25 @@ def negative_controls(fixture, queue, progress, chk):
             lambda v: v["blocks"][4]["cases"][27].update({"other_ev_total": 510}),
             lambda v: v["blocks"][4]["cases"][31].update({"expected_ev_gain": 0}),
         ])
+    if len(fixture["blocks"]) >= 6:
+        mutations.extend([
+            lambda f: f["blocks"][5]["ids"].append("resist_mochi"),
+            lambda f: f["blocks"][5]["source_evidence"].pop(),
+            lambda f: f["blocks"][5]["cases"].pop(),
+            lambda f: f["blocks"][5]["cases"][0].update({"stat": "attack"}),
+            lambda f: f["blocks"][5]["cases"][1].update({"expected_ev_gain": 10}),
+            lambda f: f["blocks"][5]["cases"][2].update({"applies": True}),
+            lambda f: f["blocks"][5]["cases"][3].update({"other_ev_total": 508}),
+            lambda f: f["blocks"][5]["cases"][6].update({"start_friendship": 99}),
+            lambda f: f["blocks"][5]["cases"][8].update({"stat": "hp"}),
+            lambda f: f["blocks"][5]["cases"][12].update({"applies": True}),
+            lambda f: f["blocks"][5]["cases"][16].update({"expected_ev_gain": 1}),
+            lambda f: f["blocks"][5]["cases"][17].update({"start_ev": 251}),
+            lambda f: f["blocks"][5]["cases"][19].update({"expected_ev_gain": 10}),
+            lambda f: f["blocks"][5]["cases"][22].update({"start_friendship": 200}),
+            lambda f: f["blocks"][5]["cases"][24].update({"kind": "vitamin"}),
+            lambda f: f["blocks"][5]["cases"][30].update({"start_friendship": 99}),
+        ])
     for index, mutation in enumerate(mutations):
         altered = copy.deepcopy(fixture)
         mutation(altered)
