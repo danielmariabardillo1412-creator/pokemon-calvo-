@@ -1,3 +1,5 @@
+> **ACTUALIZACIÓN POSTERIOR A LA FOTO (misma consulta):** W03 ya ha publicado la fila 09/10 (`love_ball;moon_ball`), HEAD `990273b4153127e41246fbb0e579bd8750ec75ce`. La CI más reciente [#41566688185](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41566688185) está `in_progress`; la anterior #41566553143 figura `cancelled` por un push posterior, NO FAIL ni PASS. Su pendiente real pasa a **solo bloque 10**. W01 se mantiene 07/10 con **16 aserciones fallidas**; W02 09/10 CI en ejecución; W04 05/10 CI PASS; W05 10/10 CI PASS.
+
 # IA6 — CAMPAÑA_003, foto operativa de cinco IAs (2026-11-03, aprox. 03:30 CET)
 
 **Fuente de verdad:** ramas propias y GitHub Actions, no colores/textos del chat. Los datos siguientes son una fotografía; si aparece un commit/run posterior, actualizar lectura antes de dar una nueva orden.
