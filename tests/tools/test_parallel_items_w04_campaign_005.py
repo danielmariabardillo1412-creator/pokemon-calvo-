@@ -8,6 +8,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 BASE = ROOT / "docs/coordination/items_parallel_v1"
 ITEMS_01 = ("dragon_scale", "dubious_disc", "electirizer", "magmarizer")
+ITEMS_02 = ("protector", "reaper_cloth", "prism_scale", "sachet", "up_grade")
 
 
 def check_rows(path):
@@ -51,11 +52,15 @@ def main():
     field = (ROOT / "modules/inventory/field_item_service.gd").read_text(encoding="utf-8")
 
     check(fixture["worker"] == "W04" and fixture["campaign"] == "CAMP_005", "fixture identidad")
-    check(len(fixture["blocks"]) == 1 and fixture["blocks"][0]["block"] == "01", "fixture bloque 01 exacto")
+    check(len(fixture["blocks"]) == 2 and [x["block"] for x in fixture["blocks"]] == ["01", "02"], "fixture acumulativo 01 y 02")
     check(len(queue) == 10 and queue[0]["ids"].split(";") == list(ITEMS_01), "cola oficial 01")
-    check(len(progress) == 1 and progress[0]["bloque"] == "01" and progress[0]["ids"].split(";") == list(ITEMS_01), "progreso 01")
+    check(len(progress) == 2 and [x["bloque"] for x in progress] == ["01", "02"], "progreso bloques 01 y 02")
+    check(progress[0]["ids"].split(";") == list(ITEMS_01) and progress[1]["ids"].split(";") == list(ITEMS_02), "progreso filas exactas")
+    check(queue[1]["ids"].split(";") == list(ITEMS_02) and queue[1]["familia"] == "TRADE_OBJECT_REPAIR", "cola oficial 02")
     check(fixture["blocks"][0]["ids"] == list(ITEMS_01) and fixture["blocks"][0]["family"] == "TRADE_OBJECT_REPAIR", "familia 01")
-    check(len(fixture["blocks"][0]["pairs"]) == 4, "cuatro rutas exactas")
+    check(len(fixture["blocks"][0]["pairs"]) == 4 and len(fixture["blocks"][1]["pairs"]) == 5, "nueve rutas exactas")
+    check(fixture["blocks"][1]["ids"] == list(ITEMS_02) and fixture["blocks"][1]["family"] == "TRADE_OBJECT_REPAIR", "fixture 02 y familia")
+    check(all(block["ids"] == [x["item_id"] for x in block["pairs"]] for block in fixture["blocks"]), "fixture IDs y parejas congruentes")
     check(fixture["kind"] == "FUNCTIONAL_BACKLOG", "backlog previo, no nuevos IDs")
 
     check(policy["status"] == "PASS_V26_MISINTERPRETATION_CORRECTED", "norma V27")
@@ -69,11 +74,11 @@ def main():
     restored = set(policy["restored_ids"])
     candidate_by_id = {row["id"]: row for row in prior_scope["trade_item_candidates"]}
     normalized = []
-    for pair in fixture["blocks"][0]["pairs"]:
+    for pair in [pair for block in fixture["blocks"] for pair in block["pairs"]]:
         item = pair["item_id"]
         source = pair["source"]
         target = pair["target"]
-        check(item in ITEMS_01 and item in restored, item + ": no restaurado")
+        check(item in ITEMS_01 + ITEMS_02 and item in restored, item + ": no restaurado")
         check(pair["approved_level"] is None and pair["held_item_required"] is True, item + ": requisito futuro")
         check(pair["original_trigger"] == "trade", item + ": disparador original")
         check(selected[item]["estado_contenido"] == "SELECCIONADO" and selected[item]["familia"] == "EVOLUTION", item + ": selección real")
@@ -91,7 +96,31 @@ def main():
         check(detail["min_level"] is None, item + ": PokeAPI no proporciona nivel de intercambio")
         check(not detail.get("known_move") and not detail.get("trade_species"), item + ": no inventar condición adicional")
         normalized.append(f"{source}:{item}:{target}")
-    check(len(set(normalized)) == 4, "rutas canónicas sin duplicados")
+    check(len(set(normalized)) == 9, "nueve rutas canónicas sin duplicados")
+
+    # Condiciones de versión diferentes en una misma pareja. Evitar perder la
+    # vía de belleza de Feebas al adaptar por nivel su vía de intercambio.
+    feebas_chain = json.loads((ROOT / "data/api/v2/evolution-chain/178/index.json").read_text(encoding="utf-8"))
+    paths = [(a,b,d) for a,b,d in routes_from_chain(feebas_chain["chain"]) if a == "feebas" and b == "milotic"]
+    beauty = [d for _,_,d in paths if d["trigger"]["name"] == "level-up" and d.get("min_beauty") == 170]
+    trade = [d for _,_,d in paths if d["trigger"]["name"] == "trade" and d.get("held_item", {}).get("name") == "prism-scale"]
+    check(len(beauty) >= 1 and len(trade) == 1, "Feebas tiene rutas belleza e intercambio distintas")
+    check(all(x.get("min_level") is None for x in beauty + trade), "Feebas no tiene umbral nivel de intercambio")
+    check(all(x.get("version_group") for x in beauty + trade), "rutas Feebas se diferencian por versión")
+    check(all(x.get("min_beauty") is None for x in trade), "no confundir Escama Bella y belleza")
+    porygon_chain = json.loads((ROOT / "data/api/v2/evolution-chain/68/index.json").read_text(encoding="utf-8"))
+    graph = routes_from_chain(porygon_chain["chain"])
+    first = [d for a,b,d in graph if a == "porygon" and b == "porygon2" and d.get("held_item", {}).get("name") == "up-grade"]
+    second = [d for a,b,d in graph if a == "porygon2" and b == "porygon_z" and d.get("held_item", {}).get("name") == "dubious-disc"]
+    check(len(first) == 1 and len(second) == 1, "Porygon debe preservar dos etapas/objetos")
+    check(not any(d.get("held_item", {}).get("name") == "up-grade" for a,b,d in graph if a == "porygon2"), "up-grade no debe saltar a Porygon-Z")
+    check(not any(d.get("min_level") is not None for d in first + second), "dos niveles de intercambio aún sin aprobar")
+    for token in ("func _casos_de_version_y_etapas_02(", "prism_scale/belleza_legacy_no_degradada",
+                  "up_grade/dos_objetos_dos_etapas", "up_grade/porygon2_sin_opcion",
+                  "up_grade/porygon2_no_evoluciona", "up_grade/porygon2_con_objeto_no_salta_etapa",
+                  "up_grade/porygon2_retirada_sin_mutacion", "bloques_01_y_02_secuenciales",
+                  "CAMP005_W04_ALT id=prism_scale", "CAMP005_W04_STAGE item=up_grade"):
+        check(token in runner, "Falta contrato runtime del bloque 02: " + token)
 
     # Prueba de interfaz pendiente: la API de nivel comunica nivel/estadísticas,
     # pero no el objeto equipado que exige V27. Godot prueba el comportamiento real.
@@ -109,11 +138,11 @@ def main():
                   "productor_no_transporta_objeto", "equipamiento_positivo_sin_evolucion",
                   "guardar_savev2", "leer_savev2", "identidad_item_savev2",
                   "retirada_preserva_estado", "mochila_no_es_intercambio",
-                  "CAMP005_W04_GODOT PASS blocks=1 checks="):
+                  "CAMP005_W04_GODOT PASS blocks=2 checks="):
         check(token in runner, "runner sin prueba observable: " + token)
     check((ROOT / "tests/tools/test_parallel_items_w04_campaign_004.py").exists(), "regresión CAMP004 preservada")
     check((ROOT / "tests/tools/test_parallel_items_w04_campaign_003.py").exists(), "regresión CAMP003 preservada")
-    print(f"CAMP005_W04_PY PASS blocks=1 checks={checks}")
+    print(f"CAMP005_W04_PY PASS blocks=2 checks={checks}")
 
 
 if __name__ == "__main__":
