@@ -53,19 +53,26 @@ func _run_w01_c004() -> void:
 	check("Tres controles de equipamiento", fixture.get("variants") == ["active", "none", "reserve"])
 	var progress: Array = _progress_c004()
 	var completed: int = progress.size()
-	check("Solo primer bloque W01 autorizado", completed == 1)
-	if completed != 1:
+	check("Bloques W01 01 y 02 autorizados", completed == 2)
+	if completed != 2:
 		quit(2)
 		return
 	check("Fila 01 e IDs exactos de árbitra", String(progress[0].block) == "01"
 		and String(progress[0].ids) == "light_ball;lucky_punch;thick_club")
-	var ids: PackedStringArray = String(progress[0].ids).split(";")
+	check("Fila 02 e IDs exactos de árbitra", String(progress[1].block) == "02"
+		and String(progress[1].ids) == "damp_rock;float_stone;icy_rock")
+	var ids_for_block: Dictionary = {}
+	var ids: PackedStringArray = PackedStringArray()
+	for row_progress: Dictionary in progress:
+		ids_for_block[String(row_progress.block)] = String(row_progress.ids).split(";")
+		ids.append_array(ids_for_block[String(row_progress.block)])
 	var cases: Array = fixture.get("cases", [])
-	check("Ocho escenarios autorizados", cases.size() == 8)
+	check("Catorce escenarios autorizados", cases.size() == 14)
 	var names: Array = []
 	for row: Dictionary in cases:
-		check("Escenario pertenece al bloque 01", String(row.block) == "01"
-			and ids.has(String(row.item_id)))
+		check("Escenario pertenece a bloque autorizado",
+			ids_for_block.has(String(row.block))
+			and ids_for_block.get(String(row.block), PackedStringArray()).has(String(row.item_id)))
 		check("Escenario único", not names.has(String(row.id)))
 		names.append(String(row.id))
 		for value: Variant in row.seeds:
@@ -80,11 +87,12 @@ func _run_w01_c004() -> void:
 			for mode: String in ["active", "none", "reserve"]:
 				observed[mode] = await _probe_w01_c004(row, int(value), mode)
 			_compare_c004(row, observed)
-			c004_rows.append({"id": String(row.id), "item_id": String(row.item_id),
+			c004_rows.append({"block": String(row.block), "id": String(row.id),
+				"item_id": String(row.item_id),
 				"seed": int(value), "checks": checks - before_checks,
 				"status": "PASS" if errors.size() == before_errors else "FAIL",
 				"observed": observed})
-	check("Matriz exacta de 34 pares caso-semilla", c004_rows.size() == 34)
+	check("Matriz exacta de 43 pares caso-semilla", c004_rows.size() == 43)
 	for id: String in ids:
 		check("ID cubierto " + id, cases.any(func(case): return String(case.item_id) == id))
 	check("Puño Suerte demuestra al menos un crítico específico de Chansey", c004_lucky_exclusive > 0)
@@ -233,5 +241,38 @@ func _compare_c004(row: Dictionary, observed: Dictionary) -> void:
 				a.critical == n.critical and n.critical == r.critical)
 			check("Puño Suerte en Mew no modifica daño",
 				a.damage == n.damage and n.damage == r.damage)
+		"weather_duration":
+			check("Roca climatica: duracion nativa ampliada tres turnos solo equipada",
+				int(a.after.sun_duration) > 0
+				and int(a.after.sun_duration) == int(n.after.sun_duration) + 3
+				and int(n.after.sun_duration) == int(r.after.sun_duration))
+			check("Roca climatica: ambos controles provocan el mismo clima nativo",
+				int(n.after.sun_duration) > 0 and int(r.after.sun_duration) > 0)
+			check("Roca climatica: no se consume por invocar el clima",
+				not a.after.own_consumed and a.physical_units == 2 and r.physical_units == 2)
+		"no_weather":
+			check("Roca climatica: sin invocacion no aparece clima ni incremento",
+				int(a.after.sun_duration) == 0 and int(n.after.sun_duration) == 0
+				and int(r.after.sun_duration) == 0)
+			check("Roca climatica: retencion en ausencia del disparador",
+				not a.after.own_consumed and a.physical_units == 2 and r.physical_units == 2)
+		"weight_damage_reduced":
+			var active_loss: int = int(a.start.hp) - int(a.after.hp)
+			var none_loss: int = int(n.start.hp) - int(n.after.hp)
+			var reserve_loss: int = int(r.start.hp) - int(r.after.hp)
+			check("Piedra Pomez: Hierba Lazo causa menos dano al portador",
+				none_loss > 0 and active_loss >= 0 and active_loss < none_loss)
+			check("Piedra Pomez: reserva no reduce el dano basado en peso",
+				none_loss == reserve_loss)
+			check("Piedra Pomez: no se consume al modificar el peso",
+				not a.after.own_consumed and a.physical_units == 2 and r.physical_units == 2)
+		"fixed_power_control":
+			var active_loss: int = int(a.start.hp) - int(a.after.hp)
+			var none_loss: int = int(n.start.hp) - int(n.after.hp)
+			var reserve_loss: int = int(r.start.hp) - int(r.after.hp)
+			check("Piedra Pomez: Placaje de potencia fija no cambia por peso",
+				active_loss > 0 and active_loss == none_loss and none_loss == reserve_loss)
+			check("Piedra Pomez: no consume en movimiento de potencia fija",
+				not a.after.own_consumed and a.physical_units == 2 and r.physical_units == 2)
 		_:
 			check("Operación fuera del contrato de bloque", false)

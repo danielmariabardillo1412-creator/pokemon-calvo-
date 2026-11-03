@@ -23,3 +23,10 @@ La CI [#41580332632](https://github.com/danielmariabardillo1412-creator/pokemon-
 La fila 01 CSV conserva el estado anterior `EN_CI_AUTOMATICA` únicamente para **evitar un disparo innecesario de CI** por un cambio documental; en la siguiente `p` autorizada, actualizar la fila a `CI_PASS_VERIFICADO` con el run y SHA anteriores junto con el bloque 02.
 
 **Próxima `p` = microbloque 02/10: `damp_rock;float_stone;icy_rock`**. Mantener la rama `codex/calvo-items-20261103-w01-camp004`. No repetir bloque 01, no tocar CAMP003/producción fuera de los IDs propios, `main`, V28 ni otras ramas.
+
+## Bloque 02/10 — continuación tras cambio de ventana (2026-11-03)
+
+- **Rama:** `codex/calvo-items-20261103-w01-camp004`. Se ha retomado únicamente el bloque 02 de la cola de IA6: `damp_rock;float_stone;icy_rock`.
+- Bloque 01 cerrado en CSV a `CI_PASS_VERIFICADO` con run 41580332632 (2905 Godot y 111 Python PASS). No se reejecuta CAMP003 por no haber parche funcional de producción ni alcanzar hito 05/10.
+- Nuevos seis escenarios; nueve pares caso-semilla, 27 variantes activas/ausentes/reserva con SaveV2. Total acumulado 14 escenarios, 43 pares, 129 variantes. Controles clima 8 vs 5 turnos (diferencia 3), no activación de roca sin clima, reducción del daño de Grass Knot por Piedra Pómez y control Tackle sin cambio. No se alteran pruebas de bloque 01 ni motor.
+- **Estado:** bloque 02 publicado, `EN_CI_AUTOMATICA` hasta verificar recibos `CAMP004_W01_PY PASS blocks=2 checks=M` y `CAMP004_W01_GODOT PASS blocks=2 checks=M`, conclusión `completed/success` y SHA. Si falla, corregir con V5 en la misma rama. `p` posterior equivale a bloque 03, nunca al 04.

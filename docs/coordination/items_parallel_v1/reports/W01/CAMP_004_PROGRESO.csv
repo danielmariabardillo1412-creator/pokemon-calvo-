@@ -1,2 +1,3 @@
 bloque,ids,estado,sha_pruebas,ci_run,notas
-01,"light_ball;lucky_punch;thick_club",EN_CI_AUTOMATICA,97c7141dcbf8af6ca770fa5c0f05cac294ece4e2,PENDIENTE_AUTOCI,8_casos;34_pares;102_variantes;Pikachu_Fisico_Especial;Cubone_Marowak;Chansey_critico_RNG;especies_negativas;SaveV2
+01,"light_ball;lucky_punch;thick_club",CI_PASS_VERIFICADO,525991c4ad55dd8952ed2f62a4fc7f2a820540f3,41580332632,8_casos;34_pares;102_variantes;Godot_2905_PASS;Python_111_PASS;SaveV2
+02,"damp_rock;float_stone;icy_rock",EN_CI_AUTOMATICA,PENDIENTE_SHA_BLOQUE02,PENDIENTE_AUTOCI,6_casos;9_pares;27_variantes;rain_dance;snowscape;grass_knot;control_tackle;SaveV2

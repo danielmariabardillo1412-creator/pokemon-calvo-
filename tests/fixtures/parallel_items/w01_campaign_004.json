@@ -21,6 +21,22 @@
         "punch_chansey_critical",
         "punch_wrong_species"
       ]
+    },
+    {
+      "block": "02",
+      "ids": [
+        "damp_rock",
+        "float_stone",
+        "icy_rock"
+      ],
+      "cases": [
+        "rain_duration",
+        "rain_no_weather",
+        "snow_duration",
+        "snow_no_weather",
+        "weight_grass_knot",
+        "weight_tackle_control"
+      ]
     }
   ],
   "format": "gen9calvounifiedv1",
@@ -183,6 +199,93 @@
         8
       ],
       "history": "held_effect_sweep_v3:lucky_punch_wrong_species_focus_energy_tackle"
+    },
+    {
+      "block": "02",
+      "foe_species": "mew",
+      "id": "rain_duration",
+      "item_id": "damp_rock",
+      "op": "weather_duration",
+      "actor_species": "mew",
+      "own_move": "rain_dance",
+      "foe_move": "amnesia",
+      "seeds": [
+        19,
+        23
+      ],
+      "history": "held_effect_sweep_v3:damp_rock_weather_duration"
+    },
+    {
+      "block": "02",
+      "foe_species": "mew",
+      "id": "rain_no_weather",
+      "item_id": "damp_rock",
+      "op": "no_weather",
+      "actor_species": "mew",
+      "own_move": "reflect",
+      "foe_move": "amnesia",
+      "seeds": [
+        19
+      ],
+      "history": "held_effect_sweep_v3:damp_rock_no_weather"
+    },
+    {
+      "block": "02",
+      "foe_species": "mew",
+      "id": "snow_duration",
+      "item_id": "icy_rock",
+      "op": "weather_duration",
+      "actor_species": "mew",
+      "own_move": "snowscape",
+      "foe_move": "amnesia",
+      "seeds": [
+        19,
+        23
+      ],
+      "history": "held_effect_sweep_v3:icy_rock_weather_duration"
+    },
+    {
+      "block": "02",
+      "foe_species": "mew",
+      "id": "snow_no_weather",
+      "item_id": "icy_rock",
+      "op": "no_weather",
+      "actor_species": "mew",
+      "own_move": "reflect",
+      "foe_move": "amnesia",
+      "seeds": [
+        19
+      ],
+      "history": "held_effect_sweep_v3:icy_rock_no_weather"
+    },
+    {
+      "block": "02",
+      "foe_species": "mew",
+      "id": "weight_grass_knot",
+      "item_id": "float_stone",
+      "op": "weight_damage_reduced",
+      "actor_species": "garchomp",
+      "own_move": "reflect",
+      "foe_move": "grass_knot",
+      "seeds": [
+        19,
+        23
+      ],
+      "history": "held_effect_sweep_v3:float_stone_weight_threshold"
+    },
+    {
+      "block": "02",
+      "foe_species": "mew",
+      "id": "weight_tackle_control",
+      "item_id": "float_stone",
+      "op": "fixed_power_control",
+      "actor_species": "garchomp",
+      "own_move": "reflect",
+      "foe_move": "tackle",
+      "seeds": [
+        19
+      ],
+      "history": "held_effect_sweep_v3:float_stone_fixed_power_control"
     }
   ]
 }
