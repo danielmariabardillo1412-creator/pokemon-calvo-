@@ -1876,10 +1876,10 @@ def verify_sources(chk):
                      'creature.friendship = mini(255, before + gain)'):
         chk.demand(fragment in friendship, "Tramos de amistad modificados")
     for fragment in (
-        'elif String(spec.kind) in ["vitamin", "wing"]:',
+        'elif String(spec.kind) in ["vitamin", "wing", "mochi"]:',
         'var expected_evs: Dictionary = start_evs.duplicate(true)',
         'StatCalculator.compute(',
-        'var friendship_added: int = ([3, 2, 1] if String(spec.kind) == "wing" else [5, 3, 2])[tier]',
+        'var friendship_added: int = (0 if String(spec.kind) == "mochi" else ([3, 2, 1] if String(spec.kind) == "wing" else [5, 3, 2])[tier])',
     ):
         chk.demand(fragment in runner, "Arnés vitamina incompleto: " + fragment)
     for fragment in ('&"hp_up"', '&"iron"', '&"pp_max"', '&"protein"'):
@@ -1942,9 +1942,9 @@ def verify_sources(chk):
     ):
         chk.demand(fragment in training, "Contrato plumas 05 fuera del motor: " + fragment)
     for fragment in (
-        'if String(spec.kind) in ["vitamin", "wing"]:',
-        'elif String(spec.kind) in ["vitamin", "wing"]:',
-        'var friendship_added: int = ([3, 2, 1] if String(spec.kind) == "wing" else [5, 3, 2])[tier]',
+        'if String(spec.kind) in ["vitamin", "wing", "mochi"]:',
+        'elif String(spec.kind) in ["vitamin", "wing", "mochi"]:',
+        'var friendship_added: int = (0 if String(spec.kind) == "mochi" else ([3, 2, 1] if String(spec.kind) == "wing" else [5, 3, 2])[tier])',
         'now.evs == expected_evs',
         'expected_total <= 510',
         'and now.stats.max_hp - now.current_hp == start_hp_deficit',
