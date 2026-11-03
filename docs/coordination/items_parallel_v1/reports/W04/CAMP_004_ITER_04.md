@@ -18,3 +18,20 @@
 **Límites:** sin edición en módulos de producción, `main`, V28, ramas W01/W02/W03/W05, rama árbitra, workflow o catálogo canónico. Las 16 dependencias de CAMP003 y nueve dependencias previas de CAMP004 se conservan.
 
 **Próximo `p` autorizado:** bloque 05 (`dna_splicers;exp_charm;gracidea`), previa verificación de esta CI.
+
+
+## CI04 verificada
+
+La ejecución [#41578460848](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41578460848) sobre SHA `f3cb82b986443123a0a56336b0e76d09a8e446f3` terminó `completed/success`, con recibos del log:
+
+- `CAMP004_W04_MANIFEST_PASS reserved=10 completed=4 ids=36`.
+- `CAMP004_W04_PY PASS blocks=4 checks=114`.
+- `CAMP004_W04_GODOT PASS blocks=4 checks=382`.
+- Regresión CAMP003: Python 120 y Godot 270 comprobaciones PASS.
+
+Los mensajes individuales de Godot fueron:
+- `adamant_crystal`: `DEPENDENCIA`, equipable pero **sin transformación de forma ejecutable mediante FieldItemService**.
+- `blue_orb`: `DEPENDENCIA`, equipable pero **sin reversión primigenia ejecutable mediante FieldItemService**.
+- `catching_charm`: `AUDITORIA_DE_DATOS`, no se certifican efectos de captura; W03 es propietaria de captura.
+
+La fila 04 del CSV queda `DEPENDENCIA_DOCUMENTADA` (incluye la auditoría de datos del amuleto porque la puerta admite esos estados), run `41578460848`, commit `4b93b0af42bebc2c5298fe26f384e191a84bdafa`. La CI de ese CSV consolidado se comprueba aparte. Ninguna afirmación de funcionalidad de combate o captura procede de este PASS.
