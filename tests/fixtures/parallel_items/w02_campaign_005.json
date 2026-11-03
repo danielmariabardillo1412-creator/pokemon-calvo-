@@ -2120,6 +2120,308 @@
           "expected_ev_gain": 1
         }
       ]
+    },
+    {
+      "block": "08",
+      "family": "TRAINING",
+      "ids": [
+        "fresh_start_mochi",
+        "adamant_mint",
+        "modest_mint",
+        "jolly_mint"
+      ],
+      "source_evidence": [
+        "modules/inventory/field_mochi_effects.gd",
+        "modules/inventory/field_item_effects.gd",
+        "modules/inventory/field_item_service.gd",
+        "modules/creatures/progression/progression_ruleset.gd",
+        "config/item_selection_v1.json",
+        "tests/gameplay/item_mochi_v13.gd"
+      ],
+      "cases": [
+        {
+          "scenario": "reset_hp_100",
+          "id": "fresh_start_mochi",
+          "kind": "mochi_reset",
+          "applies": true,
+          "reset_evs": {
+            "hp": 100
+          }
+        },
+        {
+          "scenario": "reset_attack_252",
+          "id": "fresh_start_mochi",
+          "kind": "mochi_reset",
+          "applies": true,
+          "reset_evs": {
+            "attack": 252
+          }
+        },
+        {
+          "scenario": "reset_defense_60_spatk_70",
+          "id": "fresh_start_mochi",
+          "kind": "mochi_reset",
+          "applies": true,
+          "reset_evs": {
+            "defense": 60,
+            "special_attack": 70
+          }
+        },
+        {
+          "scenario": "reset_all_six_10",
+          "id": "fresh_start_mochi",
+          "kind": "mochi_reset",
+          "applies": true,
+          "reset_evs": {
+            "hp": 10,
+            "attack": 10,
+            "defense": 10,
+            "special_attack": 10,
+            "special_defense": 10,
+            "speed": 10
+          }
+        },
+        {
+          "scenario": "reset_full_510",
+          "id": "fresh_start_mochi",
+          "kind": "mochi_reset",
+          "applies": true,
+          "reset_evs": {
+            "hp": 252,
+            "attack": 252,
+            "defense": 6
+          }
+        },
+        {
+          "scenario": "reset_speed_150",
+          "id": "fresh_start_mochi",
+          "kind": "mochi_reset",
+          "applies": true,
+          "reset_evs": {
+            "speed": 150
+          }
+        },
+        {
+          "scenario": "reset_friendship_254",
+          "id": "fresh_start_mochi",
+          "kind": "mochi_reset",
+          "applies": true,
+          "reset_evs": {
+            "hp": 100,
+            "speed": 50
+          },
+          "start_friendship": 254
+        },
+        {
+          "scenario": "reset_already_zero",
+          "id": "fresh_start_mochi",
+          "kind": "mochi_reset",
+          "applies": false,
+          "reset_evs": {}
+        },
+        {
+          "scenario": "reset_invalid_slot",
+          "id": "fresh_start_mochi",
+          "kind": "mochi_reset",
+          "applies": false,
+          "reset_evs": {
+            "hp": 100
+          },
+          "slot": 0
+        },
+        {
+          "scenario": "reset_510_wrong_slot",
+          "id": "fresh_start_mochi",
+          "kind": "mochi_reset",
+          "applies": false,
+          "reset_evs": {
+            "hp": 252,
+            "attack": 252,
+            "defense": 6
+          },
+          "slot": 1
+        },
+        {
+          "scenario": "adamant_mint_hardy_target",
+          "id": "adamant_mint",
+          "kind": "mint_dependency",
+          "applies": false,
+          "wanted_nature": "adamant",
+          "expect_status": "DEPENDENCY_MISSING",
+          "expect_reason": "field_effect_not_connected",
+          "nature": "hardy"
+        },
+        {
+          "scenario": "adamant_mint_same_nature",
+          "id": "adamant_mint",
+          "kind": "mint_dependency",
+          "applies": false,
+          "wanted_nature": "adamant",
+          "expect_status": "DEPENDENCY_MISSING",
+          "expect_reason": "field_effect_not_connected",
+          "nature": "adamant"
+        },
+        {
+          "scenario": "adamant_mint_foreign_nature",
+          "id": "adamant_mint",
+          "kind": "mint_dependency",
+          "applies": false,
+          "wanted_nature": "adamant",
+          "expect_status": "DEPENDENCY_MISSING",
+          "expect_reason": "field_effect_not_connected",
+          "nature": "modest"
+        },
+        {
+          "scenario": "adamant_mint_friendship_254",
+          "id": "adamant_mint",
+          "kind": "mint_dependency",
+          "applies": false,
+          "wanted_nature": "adamant",
+          "expect_status": "DEPENDENCY_MISSING",
+          "expect_reason": "field_effect_not_connected",
+          "start_friendship": 254
+        },
+        {
+          "scenario": "adamant_mint_with_slot",
+          "id": "adamant_mint",
+          "kind": "mint_dependency",
+          "applies": false,
+          "wanted_nature": "adamant",
+          "expect_status": "DEPENDENCY_MISSING",
+          "expect_reason": "field_effect_not_connected",
+          "slot": 0
+        },
+        {
+          "scenario": "adamant_mint_at_level100",
+          "id": "adamant_mint",
+          "kind": "mint_dependency",
+          "applies": false,
+          "wanted_nature": "adamant",
+          "expect_status": "DEPENDENCY_MISSING",
+          "expect_reason": "field_effect_not_connected",
+          "level": 100
+        },
+        {
+          "scenario": "modest_mint_hardy_target",
+          "id": "modest_mint",
+          "kind": "mint_dependency",
+          "applies": false,
+          "wanted_nature": "modest",
+          "expect_status": "DEPENDENCY_MISSING",
+          "expect_reason": "field_effect_not_connected",
+          "nature": "hardy"
+        },
+        {
+          "scenario": "modest_mint_same_nature",
+          "id": "modest_mint",
+          "kind": "mint_dependency",
+          "applies": false,
+          "wanted_nature": "modest",
+          "expect_status": "DEPENDENCY_MISSING",
+          "expect_reason": "field_effect_not_connected",
+          "nature": "modest"
+        },
+        {
+          "scenario": "modest_mint_foreign_nature",
+          "id": "modest_mint",
+          "kind": "mint_dependency",
+          "applies": false,
+          "wanted_nature": "modest",
+          "expect_status": "DEPENDENCY_MISSING",
+          "expect_reason": "field_effect_not_connected",
+          "nature": "adamant"
+        },
+        {
+          "scenario": "modest_mint_friendship_254",
+          "id": "modest_mint",
+          "kind": "mint_dependency",
+          "applies": false,
+          "wanted_nature": "modest",
+          "expect_status": "DEPENDENCY_MISSING",
+          "expect_reason": "field_effect_not_connected",
+          "start_friendship": 254
+        },
+        {
+          "scenario": "modest_mint_with_slot",
+          "id": "modest_mint",
+          "kind": "mint_dependency",
+          "applies": false,
+          "wanted_nature": "modest",
+          "expect_status": "DEPENDENCY_MISSING",
+          "expect_reason": "field_effect_not_connected",
+          "slot": 0
+        },
+        {
+          "scenario": "modest_mint_at_level100",
+          "id": "modest_mint",
+          "kind": "mint_dependency",
+          "applies": false,
+          "wanted_nature": "modest",
+          "expect_status": "DEPENDENCY_MISSING",
+          "expect_reason": "field_effect_not_connected",
+          "level": 100
+        },
+        {
+          "scenario": "jolly_mint_hardy_target",
+          "id": "jolly_mint",
+          "kind": "mint_dependency",
+          "applies": false,
+          "wanted_nature": "jolly",
+          "expect_status": "DEPENDENCY_MISSING",
+          "expect_reason": "field_effect_not_connected",
+          "nature": "hardy"
+        },
+        {
+          "scenario": "jolly_mint_same_nature",
+          "id": "jolly_mint",
+          "kind": "mint_dependency",
+          "applies": false,
+          "wanted_nature": "jolly",
+          "expect_status": "DEPENDENCY_MISSING",
+          "expect_reason": "field_effect_not_connected",
+          "nature": "jolly"
+        },
+        {
+          "scenario": "jolly_mint_foreign_nature",
+          "id": "jolly_mint",
+          "kind": "mint_dependency",
+          "applies": false,
+          "wanted_nature": "jolly",
+          "expect_status": "DEPENDENCY_MISSING",
+          "expect_reason": "field_effect_not_connected",
+          "nature": "adamant"
+        },
+        {
+          "scenario": "jolly_mint_friendship_254",
+          "id": "jolly_mint",
+          "kind": "mint_dependency",
+          "applies": false,
+          "wanted_nature": "jolly",
+          "expect_status": "DEPENDENCY_MISSING",
+          "expect_reason": "field_effect_not_connected",
+          "start_friendship": 254
+        },
+        {
+          "scenario": "jolly_mint_with_slot",
+          "id": "jolly_mint",
+          "kind": "mint_dependency",
+          "applies": false,
+          "wanted_nature": "jolly",
+          "expect_status": "DEPENDENCY_MISSING",
+          "expect_reason": "field_effect_not_connected",
+          "slot": 0
+        },
+        {
+          "scenario": "jolly_mint_at_level100",
+          "id": "jolly_mint",
+          "kind": "mint_dependency",
+          "applies": false,
+          "wanted_nature": "jolly",
+          "expect_status": "DEPENDENCY_MISSING",
+          "expect_reason": "field_effect_not_connected",
+          "level": 100
+        }
+      ]
     }
   ],
   "format": "gen9calvounifiedv1",
@@ -2135,7 +2437,8 @@
     4,
     5,
     6,
-    7
+    7,
+    8
   ],
   "seed": 1412,
   "limitations": [
@@ -2152,6 +2455,8 @@
     "Plumas health/muscle/resist/genius incrementan exactamente +1 EV de PS/Ataque/Defensa/Ataque Especial respectivamente, si hay hueco tanto por atributo (252) como global (510); no extrapolar efecto +10 de vitaminas.",
     "Las plumas aumentan amistad por tramos [3,2,1] sin bonificación de Campana Alivio en escenarios; tres estados de posesión, rechazo atómico y SaveV2. En bloque05 hay gate de regresiones CAMP004/CAMP003; su CI requiere logs concretos.",
     "Fila06: plumas +1 EV amistad 3/2/1; mochis +10 EV y sin amistad (contrato RHH V13). Ambos con límites 252/510, stock/propietario SaveV2. CI por verificar.",
-    "Fila 07: mochis Resist/Genius/Clever/Swift suman hasta 10 EV en Defensa, Ataque especial, Defensa especial y Velocidad; límite 252 por stat/510 global, sin amistad por contrato RHH V13 existente, no inferir paridad oficial."
+    "Fila 07: mochis Resist/Genius/Clever/Swift suman hasta 10 EV en Defensa, Ataque especial, Defensa especial y Velocidad; límite 252 por stat/510 global, sin amistad por contrato RHH V13 existente, no inferir paridad oficial.",
+    "Bloque08: fresh_start_mochi resetea los seis EV existentes sin aumentar amistad, rechazando EV cero o slot inesperado. Contratos reales de Mochi V13.",
+    "Menthas adamant/modest/jolly: registradas en catálogo pero sin ejecutor de campo ni persistencia de naturaleza efectiva independiente de la naturaleza original. Se registra DEPENDENCY_MISSING, se exige no consumir el item. No simular éxito ni escribir API compartida."
   ]
 }
