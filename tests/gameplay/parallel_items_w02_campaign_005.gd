@@ -24,7 +24,19 @@ func _training_creature(spec: Dictionary) -> CreatureInstance:
 		catalogs, ProgressionRuleset.new(), rng,
 		{"instance_id": &"own", "ability_id": ability, "nature_id": "hardy",
 		"moves": ["growl", "protect"]})
-	c.friendship = 99
+	c.friendship = int(spec.get("start_friendship", 99))
+	if String(spec.kind) == "vitamin":
+		var stat: String = String(spec.stat)
+		c.evs[stat] = int(spec.get("start_ev", 0))
+		var other_stats: Array[String] = ["hp", "attack", "defense",
+			"special_attack", "special_defense", "speed"]
+		other_stats.erase(stat)
+		var left: int = int(spec.get("other_ev_total", 0))
+		for key: String in other_stats:
+			var amount: int = mini(252, left)
+			c.evs[key] = amount
+			left -= amount
+		c.recalculate_stats(catalogs.species(c.species_id), ProgressionRuleset.new())
 	c.current_hp = maxi(1, c.stats.max_hp - 9)
 	c.status_state.persistent_id = &"poison"
 	c.status_ids.assign([&"poison"])
@@ -55,6 +67,7 @@ func _probe_training(spec: Dictionary, mode: String) -> Dictionary:
 	var start_level: int = c.level
 	var start_hp_deficit: int = c.stats.max_hp - c.current_hp
 	var start_friend: int = c.friendship
+	var start_evs: Dictionary = c.evs.duplicate(true)
 	var start_first: Dictionary = c.moveset[0].to_dict()
 	var start_second: Dictionary = c.moveset[1].to_dict()
 	var slot: int = int(spec.get("slot", -1))
@@ -118,6 +131,36 @@ func _probe_training(spec: Dictionary, mode: String) -> Dictionary:
 		check(mode + " integridad de habilidad/experiencia/EV/IV", now.ability_id == c.ability_id
 			and now.level == c.level and now.experience == c.experience
 			and now.evs == c.evs and now.ivs == c.ivs)
+	elif String(spec.kind) == "vitamin":
+		var stat: String = String(spec.stat)
+		var gain: int = int(spec.expected_ev_gain)
+		var expected_evs: Dictionary = start_evs.duplicate(true)
+		expected_evs[stat] = int(start_evs.get(stat, 0)) + gain
+		var tier: int = mini(2, int(start_friend / 100))
+		var friendship_added: int = [5, 3, 2][tier]
+		var expected_stats: Dictionary = StatCalculator.compute(
+			catalogs.species(c.species_id).base_stat_block(), c.ivs,
+			expected_evs, c.nature_id, c.level).to_dict()
+		check(mode + " vitaminas: EV objetivo exactos y resto sin cambios",
+			now.evs == expected_evs)
+		check(mode + " vitaminas: total 510 y límite 252 respetados",
+			int(expected_evs[stat]) <= 252
+			and int(expected_evs.values().reduce(func(a: int, v: int): return a + v, 0)) <= 510)
+		check(mode + " vitaminas: estadísticas recalculadas y déficit PS conservado",
+			now.stats.to_dict() == expected_stats
+			and now.stats.max_hp - now.current_hp == start_hp_deficit)
+		check(mode + " vitaminas: amistad por tramo",
+			now.friendship == mini(255, start_friend + friendship_added))
+		check(mode + " vitaminas: acción y cantidad devuelta",
+			String(result.get("action", "")) == "ev_training"
+			and String(result.get("stat_id", "")) == stat
+			and int(result.get("ev_added", -1)) == gain)
+		check(mode + " vitaminas: PP/IV/experiencia y habilidad no contaminadas",
+			now.moveset[0].to_dict() == start_first
+			and now.moveset[1].to_dict() == start_second
+			and now.ivs == c.ivs and now.nature_id == c.nature_id
+			and now.ability_id == c.ability_id and now.level == c.level
+			and now.experience == c.experience)
 	var state: Dictionary = _owner_data(owner)
 	var decoded: LoadResult = SaveGameRepository.new().decode_snapshot(state)
 	check(mode + " SaveV2 descodifica", decoded.ok)
@@ -205,6 +248,8 @@ func _run_camp005() -> void:
 					a.ability == s.ability and a.level == s.level
 					and a.pp0 == s.pp0 and a.pp1 == s.pp1
 					and a.friendship == s.friendship)
+				check("entrenamiento y reserva comparten PS",
+					int(a.hp) == int(s.hp))
 			results.append({"block": block.block, "scenario": spec.scenario, "id": spec.id,
 				"status": "PASS" if valid and errors.size() == errors_before else "FAIL",
 				"checks": checks - checks_before, "observed": observations})
