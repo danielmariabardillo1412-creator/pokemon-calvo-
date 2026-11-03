@@ -150,6 +150,35 @@
           "move_id": "tera_blast"
         }
       ]
+    },
+    {
+      "block": "06",
+      "items": [
+        {
+          "item_id": "tm172",
+          "move_id": "roar"
+        },
+        {
+          "item_id": "tm173",
+          "move_id": "charge"
+        },
+        {
+          "item_id": "tm174",
+          "move_id": "haze"
+        },
+        {
+          "item_id": "tm175",
+          "move_id": "toxic"
+        },
+        {
+          "item_id": "tm176",
+          "move_id": "sand_tomb"
+        },
+        {
+          "item_id": "tm177",
+          "move_id": "spite"
+        }
+      ]
     }
   ]
 }
