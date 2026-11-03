@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "campaign": "CAMP_003_W05",
+  "active_version": "scarlet-violet",
+  "purpose": "Pruebas acumulativas de enseñanza; sin habilitar legacy ni alterar datos",
+  "blocks": [
+    {
+      "block": "01",
+      "items": [
+        {
+          "item_id": "tm07",
+          "move_id": "protect"
+        },
+        {
+          "item_id": "tm16",
+          "move_id": "psybeam"
+        },
+        {
+          "item_id": "tm18",
+          "move_id": "thief"
+        },
+        {
+          "item_id": "tm21",
+          "move_id": "pounce"
+        },
+        {
+          "item_id": "tm22",
+          "move_id": "chilling_water"
+        },
+        {
+          "item_id": "tm23",
+          "move_id": "charge_beam"
+        }
+      ]
+    }
+  ]
+}
