@@ -211,6 +211,64 @@ def main() -> int:
                 test(set(block["invalid_cases"]) ==
                      {"field_locked", "invalid_inventory", "unknown_target"},
                      "Faltan casos negativos aprobados")
+            elif block["bloque"] == "04":
+                test(ids == ["max_lure", "max_repel", "red_flute"],
+                     "Reserva 04 alterada")
+                service = (ROOT / "modules/inventory/field_item_service.gd").read_text(encoding="utf-8")
+                field = (ROOT / "modules/inventory/field_item_effects.gd").read_text(encoding="utf-8")
+                modifiers = (ROOT / "modules/gameplay/encounter_item_modifiers.gd").read_text(encoding="utf-8")
+                recovery = json.loads((ROOT / "modules/inventory/imported_recovery_v19.json").read_text(encoding="utf-8"))
+                selected = {r["id"]: r for r in
+                            rows(ROOT / "docs/current/RANDOMLOCK_ITEMS_BUILD_SCOPE_V2.csv")}
+                test(all(selected[id]["familia"] == "FIELD_USE"
+                         and selected[id]["estado_contenido"] == "SELECCIONADO"
+                         for id in ids), "Selección de campo 04 alterada")
+                test(all(id not in recovery["items"] for id in ids),
+                     "Una curación ya existe y requiere positivos")
+                test(all(id not in field and id not in modifiers for id in ids),
+                     "Una ruta ya registra ID: no asumir rechazo")
+                test('return _deny("field_effect_not_connected", "DEPENDENCY_MISSING")' in service,
+                     "Contrato de rechazo de campo perdido")
+                test('if FieldEffects.supports(item_id):' in service
+                     and 'if EncounterModifiers.supports(item_id):' in service,
+                     "Enrutamiento de campo cambiado")
+                test(block["current_state"] == "DEPENDENCIA_COMPARTIDA"
+                     and block["functional_effect_certified"] is False
+                     and set(block["per_id_status"]) == set(ids)
+                     and all(s == "DEPENDENCIA_COMPARTIDA"
+                             for s in block["per_id_status"].values()),
+                     "No atribuir funcionalidad que no está conectada")
+                test(block["missing_authoritative_integrations"] ==
+                     ["max_lure_overworld_encounter_rate_duration",
+                      "max_repel_overworld_encounter_suppression_steps",
+                      "red_flute_confusion_heal_field_route"],
+                     "Dependencias de campo incompletas")
+                test('func _block_04(block: Dictionary)' in runner
+                     and '"04": _block_04(block)' in runner
+                     and 'service.use_item(id, creature.instance_id)' in runner,
+                     "Falta prueba real de campo")
+                test('response.get("accepted", true) == false' in runner
+                     and 'String(response.get("reason", "")) == "field_effect_not_connected"' in runner
+                     and 'String(response.get("status", "")) == "DEPENDENCY_MISSING"' in runner
+                     and 'snapshot(service) == before' in runner,
+                     "No se verifica rechazo con estado completo")
+                test('creature.status_state.has_volatile(&"confusion")' in runner,
+                     "Flauta Roja no prueba la confusión retenida")
+                test('PlayerInventory.from_dict(saved)' in runner
+                     and 'loaded.to_dict() == saved' in runner
+                     and 'loaded.quantity(id) == count' in runner,
+                     "Falta prueba de persistencia de mochila")
+                test('String(denied.get("reason", "")) == "field_locked"' in runner
+                     and 'String(invalid.get("reason", "")) == "invalid_inventory"' in runner
+                     and 'String(foreign.get("reason", "")) == "field_effect_not_connected"' in runner,
+                     "Faltan guardas sobre campo e inventario")
+                test({r["status"] for r in block["cases"]} ==
+                     {"none", "sleep", "confusion"}
+                     and set(block["inventory_counts"]) == {0, 2},
+                     "Falta matriz de estado/posesión")
+                test(set(block["invalid_cases"]) ==
+                     {"field_locked", "invalid_inventory", "unknown_target"},
+                     "Faltan negativos de campo")
             else:
                 test(False, "Bloque sin implementación de test: " + block["bloque"])
         test(checks > 0, "Sin verificaciones")
