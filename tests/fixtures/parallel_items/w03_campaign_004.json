@@ -1,0 +1,7 @@
+{
+  "schema_version": 1,
+  "campaign": "CAMP_004",
+  "worker": "W03",
+  "purpose": "Pruebas reales y dependencias explícitas sin falso PASS funcional",
+  "blocks": []
+}
