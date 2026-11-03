@@ -204,12 +204,12 @@ func _compare_berry(spec: Dictionary, observed: Dictionary) -> void:
 			check("Aspear cura congelación sólo al portador",
 				active.status == ("" if consume else String(spec.status))
 				and none.status == String(spec.status) and reserve.status == String(spec.status))
-		"resist_steel":
+		"resist_steel", "resist_type":
 			if consume:
-				check("Babiri reduce acero supereficaz", active.damage > 0
+				check("baya del titular reduce daño del tipo autorizado", active.damage > 0
 					and active.damage < none.damage and reserve.damage == none.damage)
 			else:
-				check("Babiri no protege de tipo no coincidente",
+				check("tipo no coincidente, ninguna reducción ni consumo",
 					active.damage == none.damage and reserve.damage == none.damage)
 		_:
 			check("familia desconocida", false)
