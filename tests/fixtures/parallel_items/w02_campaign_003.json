@@ -5,7 +5,8 @@
   "completed_blocks": [
     1,
     2,
-    3
+    3,
+    4
   ],
   "format": "gen9calvounifiedv1",
   "level": 100,
@@ -401,6 +402,146 @@
           "boost_stat": "def"
         }
       ]
+    },
+    {
+      "block": "04",
+      "ids": [
+        "haban_berry",
+        "iapapa_berry",
+        "jaboca_berry",
+        "kasib_berry"
+      ],
+      "source_evidence": [
+        "tools/item_audit/held_effect_sweep_v2.cjs",
+        "tools/item_audit/held_effect_sweep_v3.cjs"
+      ],
+      "cases": [
+        {
+          "scenario": "haban_dragon_hit_c003",
+          "id": "haban_berry",
+          "kind": "resist_type",
+          "nature": "hardy",
+          "start": "full",
+          "status": "",
+          "actor_species": "dragonite",
+          "foe_species": "mew",
+          "foe_move": "dragon_pulse",
+          "consumes": true,
+          "confuses": false,
+          "expected_type": "dragon"
+        },
+        {
+          "scenario": "haban_wrong_normal_c003",
+          "id": "haban_berry",
+          "kind": "resist_type",
+          "nature": "hardy",
+          "start": "full",
+          "status": "",
+          "actor_species": "dragonite",
+          "foe_species": "mew",
+          "foe_move": "tackle",
+          "consumes": false,
+          "confuses": false,
+          "expected_type": "dragon"
+        },
+        {
+          "scenario": "iapapa_lonely_low_c003",
+          "id": "iapapa_berry",
+          "kind": "heal_flavor",
+          "nature": "lonely",
+          "start": "fifth",
+          "status": "",
+          "actor_species": "mew",
+          "foe_species": "mew",
+          "foe_move": "amnesia",
+          "consumes": true,
+          "confuses": true
+        },
+        {
+          "scenario": "iapapa_hardy_low_c003",
+          "id": "iapapa_berry",
+          "kind": "heal_flavor",
+          "nature": "hardy",
+          "start": "fifth",
+          "status": "",
+          "actor_species": "mew",
+          "foe_species": "mew",
+          "foe_move": "amnesia",
+          "consumes": true,
+          "confuses": false
+        },
+        {
+          "scenario": "iapapa_lonely_high_c003",
+          "id": "iapapa_berry",
+          "kind": "heal_flavor",
+          "nature": "lonely",
+          "start": "near_full",
+          "status": "",
+          "actor_species": "mew",
+          "foe_species": "mew",
+          "foe_move": "amnesia",
+          "consumes": false,
+          "confuses": false
+        },
+        {
+          "scenario": "jaboca_physical_tackle_c003",
+          "id": "jaboca_berry",
+          "kind": "retaliate_physical",
+          "nature": "hardy",
+          "start": "full",
+          "status": "",
+          "actor_species": "mew",
+          "foe_species": "mew",
+          "foe_move": "tackle",
+          "consumes": true,
+          "confuses": false,
+          "expected_category": "physical",
+          "retaliation_denominator": 8
+        },
+        {
+          "scenario": "jaboca_special_confusion_c003",
+          "id": "jaboca_berry",
+          "kind": "retaliate_physical",
+          "nature": "hardy",
+          "start": "full",
+          "status": "",
+          "actor_species": "mew",
+          "foe_species": "mew",
+          "foe_move": "confusion",
+          "consumes": false,
+          "confuses": false,
+          "expected_category": "special",
+          "retaliation_denominator": 8
+        },
+        {
+          "scenario": "kasib_ghost_hit_c003",
+          "id": "kasib_berry",
+          "kind": "resist_type",
+          "nature": "hardy",
+          "start": "full",
+          "status": "",
+          "actor_species": "mew",
+          "foe_species": "mew",
+          "foe_move": "shadow_ball",
+          "consumes": true,
+          "confuses": false,
+          "expected_type": "ghost"
+        },
+        {
+          "scenario": "kasib_wrong_normal_c003",
+          "id": "kasib_berry",
+          "kind": "resist_type",
+          "nature": "hardy",
+          "start": "full",
+          "status": "",
+          "actor_species": "mew",
+          "foe_species": "mew",
+          "foe_move": "tackle",
+          "consumes": false,
+          "confuses": false,
+          "expected_type": "ghost"
+        }
+      ]
     }
   ],
   "limitations": [
@@ -410,6 +551,7 @@
     "Aspear cura congelación; Babiri reduce Acero supereficaz sobre Clefable.",
     "Pruebas históricas son precedentes, no PASS de este fixture.",
     "Bloque 02: testigos correspondientes a Roca/Normal/Lucha/Volador. Chilan reduce Normal incluso sin supereficacia.",
-    "Bloque 03: Custap necesita comparar primer evento |move|p1a contra Gengar rápido sin forzar prioridad; Enigma recupera 1/4 PS tras daño Eléctrico supereficaz a Gyarados, no ante Tackle."
+    "Bloque 03: Custap necesita comparar primer evento |move|p1a contra Gengar rápido sin forzar prioridad; Enigma recupera 1/4 PS tras daño Eléctrico supereficaz a Gyarados, no ante Tackle.",
+    "Bloque 04: Jaboca reacciona a categoría física (Tackle), no especial (Confusion); se mide PS del rival contra controles sin equipar y reserva. Iapapa naturaleza Lonely rechaza sabor, Hardy neutra."
   ]
 }
