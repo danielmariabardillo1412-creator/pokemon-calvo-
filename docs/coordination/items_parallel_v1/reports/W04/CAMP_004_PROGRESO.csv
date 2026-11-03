@@ -1,3 +1,4 @@
 bloque,ids,estado,sha_pruebas,ci_run,notas
 01,berry_sweet;clover_sweet;flower_sweet,DEPENDENCIA_DOCUMENTADA,f1ad82bc7813af374f82aadb1722a55a6d363559,41575404407,"CI 41575404407 PASS Python 48 Godot 101 y regresion CAMP003 120/270; tres confites sin registro de evolucion por ID en catalogo runtime; giro Milcery y formas pendientes; pruebas negativas y SaveV2 aprobadas"
 02,love_sweet;ribbon_sweet;star_sweet,DEPENDENCIA_DOCUMENTADA,b4de4a2823fccf54cfae354ca63501db8bb66b8d,41575954355,"CI 41575954355 PASS Python 65 Godot 200 CAMP003 Python 120 Godot 270; tres confites con 0 reglas directas, spin Milcery no ejecutable; rechazos/consumo y SaveV2 verificados"
+03,strawberry_sweet;whipped_dream;leaders_crest,EN_CI_AUTOMATICA,f3ffcb1ebc80254bd3cfaff579f79418ab8b328b,PENDIENTE,"Prueba Milcery giro sin uso directo, Swirlix intercambio+equipamiento y Bisharp derrotas; preserva categoria FOOD_OR_PICNIC_ACTIVITY del Distintivo; CI03 y regresion CAMP003 pendientes"
