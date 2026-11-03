@@ -114,12 +114,27 @@ SCENARIOS_06 = {
     "boots_no_rock_switch": ("heavy_duty_boots", "boots_no_rock_control", "mew", "", "", 100,
         "mew", 100, "amnesia", "reflect", (19,)),
 }
+SCENARIOS_07 = {
+    "iron_grounded_charizard": ("iron_ball", "flying_grounded_by_iron_ball", "charizard",
+        "", "", 100, "garchomp", 100, "earthquake", "reflect", (19,23)),
+    "iron_speed_delay": ("iron_ball", "iron_ball_speed_order", "gengar",
+        "", "", 100, "garchomp", 100, "tackle", "tackle", (19,23)),
+    "lagging_same_priority_last": ("lagging_tail", "lagging_tail_last", "gengar",
+        "", "", 100, "snorlax", 100, "tackle", "tackle", (19,23)),
+    "lagging_quick_attack_priority": ("lagging_tail", "priority_not_overridden",
+        "gengar", "", "", 100, "snorlax", 100, "tackle", "quick_attack", (19,)),
+    "light_reflect_longer": ("light_clay", "reflect_duration_plus_three", "mew",
+        "", "", 100, "mew", 100, "amnesia", "reflect", (19,23)),
+    "light_no_screen": ("light_clay", "no_screen_control", "mew",
+        "", "", 100, "mew", 100, "amnesia", "tackle", (19,)),
+}
 OPERATIONS = ({r[1] for r in SCENARIOS_01.values()}
               | {r[1] for r in SCENARIOS_02.values()}
               | {r[1] for r in SCENARIOS_03.values()}
               | {r[1] for r in SCENARIOS_04.values()}
               | {r[1] for r in SCENARIOS_05.values()}
-              | {r[1] for r in SCENARIOS_06.values()})
+              | {r[1] for r in SCENARIOS_06.values()}
+              | {r[1] for r in SCENARIOS_07.values()})
 REQUIRED_CASE_FIELDS = {"block", "id", "item_id", "op", "actor_species", "foe_species",
                         "foe_move", "own_move", "seeds", "history"}
 TOTAL_CHECKS = 0
@@ -242,6 +257,22 @@ def validate() -> int:
         require("HELD_PILOT_VERIFIED" in next(x for x in inventory.splitlines()
                                              if x.startswith("heavy_duty_boots,")),
                 "Botas Gruesas: historico piloto no acreditado")
+    if len(progress) >= 7:
+        native_pilot = (ROOT / "tools/item_audit/held_pilot.cjs").read_text(encoding="utf-8")
+        require("add('iron_ball','speed_halved'" in old_v3
+                and "add('iron_ball','grounded_flying_holder'" in old_v3
+                and "foeMoves:['earthquake']" in old_v3,
+                "Bola Ferrea: velocidad e inmunidad de Charizard sin fuente")
+        require("['full_incense','lagging_tail']" in old_v3
+                and "last_same_priority" in old_v3
+                and "priority_preserved" in old_v3,
+                "Cola Plumbea: no se acredita prioridad normal y positiva")
+        require("light_clay:{moves:['reflect']" in native_pilot
+                and "sideConditions.reflect.duration+3" in native_pilot,
+                "Refleluz: fuente de duracion de Reflect ausente")
+        require("HELD_PILOT_VERIFIED" in next(x for x in inventory.splitlines()
+                                             if x.startswith("light_clay,")),
+                "Refleluz: piloto de efecto no reconocido")
     cases = document["cases"]
     require(type(cases) is list and len(cases) >= 7, "Sin casos suficientes")
     found, pairs = set(), set()
@@ -314,7 +345,15 @@ def validate() -> int:
                       case["foe_species"], case.get("foe_level", 100), case["foe_move"],
                       case["own_move"], tuple(case["seeds"]))
             require(actual == expected, "Condición de evento o semilla desviada W01/06: "+name)
-        elif stage not in {"01", "02", "03", "04", "05", "06"}:
+        elif stage == "07":
+            require(name in SCENARIOS_07, "Caso fuera del bloque W01/07")
+            expected = SCENARIOS_07[name]
+            actual = (item, case["op"], case["actor_species"], case.get("actor_ability", ""),
+                      case.get("actor_hp", ""), case.get("actor_level", 100),
+                      case["foe_species"], case.get("foe_level", 100),
+                      case["foe_move"], case["own_move"], tuple(case["seeds"]))
+            require(actual == expected, "Desviacion de mecanismo o semilla W01/07: "+name)
+        elif stage not in {"01", "02", "03", "04", "05", "06", "07"}:
             raise ValueError("Stage no implementado por validador W01")
     for stage, ids in stage_map.items():
         for item in ids:
@@ -343,6 +382,10 @@ def validate() -> int:
                 "Matriz W01/06 exige 42 escenarios y 89 pares")
         require(set(SCENARIOS_06) <= found,
                 "Faltan 6 positivos/negativos de Garra Garfio, Roca Calor y Botas Gruesas")
+    if len(progress) == 7:
+        require(len(cases) == 48 and len(pairs) == 99,
+                "Matriz W01/07 requiere 48 escenarios y 99 pares")
+        require(set(SCENARIOS_07) <= found, "Faltan 6 escenarios del bloque 07")
     return len(progress)
 
 def main():
