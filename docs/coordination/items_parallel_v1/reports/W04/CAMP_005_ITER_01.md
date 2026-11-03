@@ -78,3 +78,16 @@ Los cuatro IDs reportaron `status=BLOQUEADO_POR_CONTRATO`, con productor `level_
 El CSV quedó actualizado a `DEPENDENCIA_DOCUMENTADA` para cumplir la puerta de estados, con explicación literal `BLOQUEADO_POR_CONTRATO`, run `41716388712`, commit `624add4071c871b5894bc5bb2f303cbcdb6975bd`. La actualización provoca una nueva CI, que debe comprobarse por separado.
 
 Regresiones CAMP004/CAMP003/CAMP001 están preservadas pero **no se han ejecutado en este bloque 01** porque el workflow las reserva para hitos 05 y 10 y cambios de producción. Ningún módulo de producción fue modificado.
+
+
+## CI sobre progreso consolidado
+
+La segunda ejecución [#41716727991](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41716727991), SHA `624add4071c871b5894bc5bb2f303cbcdb6975bd`, terminó **completed/success** tras actualizar el CSV. Los logs vuelven a mostrar:
+- `CAMP005_W04_MANIFEST_PASS reserved=10 completed=1 ids=46 kind=FUNCTIONAL_BACKLOG`.
+- `CAMP005_W04_PY PASS blocks=1 checks=83`.
+- `CAMP005_W04_GODOT PASS blocks=1 checks=86`.
+- Los cuatro ítems con `status=BLOQUEADO_POR_CONTRATO`, `required=approved_level+held_item`.
+
+**Bloque 01/10 cerrado como investigación de dependencia de integración, NO como cuatro evoluciones jugables.** Se ha entregado al árbitro el productor, consumidor, fuente autoritativa, política y tres decisiones faltantes. El alcance de CAMPAÑA_005 sigue siendo reparar dependencias previamente contadas, no sumar objetos.
+
+**Próximo `p`:** exclusivamente bloque 02 `protector;reaper_cloth;prism_scale;sachet;up_grade`, repitiendo la búsqueda de niveles aprobados antes de cualquier cambio de evolución.
