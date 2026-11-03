@@ -61,3 +61,17 @@ No hay autorización para asignar niveles numéricos, modificar los datos canón
 **Aislamiento:** solo archivos W04 de test/fixture/progreso/informe. Sin cambios en módulos de producción, datasets, workflow, `main`, V28, rama árbitra, PR118 ni ramas W01/W02/W03/W05.
 
 **Próximo `p` cuando la CI02 pase:** bloque 03/10 `oval_stone;dawn_stone;peat_block`. No ejecutarlo en este turno.
+
+
+## CI real de bloque 02
+
+[GitHub Actions #41718927428](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41718927428), SHA `1a6ceb323b77efecfcdc480665ad1a8707f79e14`, terminó **completed/success**. Recibos:
+- `CAMP005_W04_MANIFEST_PASS reserved=10 completed=2 ids=46 kind=FUNCTIONAL_BACKLOG`.
+- `CAMP005_W04_PY PASS blocks=2 checks=159`.
+- `CAMP005_W04_GODOT PASS blocks=2 checks=194`.
+
+Godot emitió `status=BLOQUEADO_POR_CONTRATO` para **los nueve IDs de los bloques 01–02**. Prueba especial `CAMP005_W04_ALT id=prism_scale source=feebas target=milotic min_beauty=170 routes=2 status=DATA_ONLY`: dos registros de versión diferentes preservados e inejecutables con el motor actual. Prueba especial `CAMP005_W04_STAGE item=up_grade ... wrong_stage_rejected=true`: Mejora queda separada de Disco Extraño; nunca provoca Porygon2→Porygon-Z.
+
+El CSV se actualizó a `DEPENDENCIA_DOCUMENTADA` con run `41718927428`, commit `585dda8cfaa65210220d2f1589e7cd6a2174ced3`. La modificación activa una **nueva CI de consolidación**, cuyo resultado se comprueba por separado.
+
+**Los tests nuevos son cobertura de contrato/integración y equipamiento real, NO reparación positiva de la evolución por nivel.** Sin nuevos niveles adoptados, API compartida ni producción modificada. Las regresiones históricas se preservan y su ejecución completa corresponde a los hitos 05/10 o a cambios de producción según el workflow.
