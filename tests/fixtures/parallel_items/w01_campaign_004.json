@@ -106,6 +106,26 @@
         "snowball_water_hit",
         "snowball_no_hit"
       ]
+    },
+    {
+      "block": "07",
+      "ids": [
+        "sticky_barb",
+        "terrain_extender",
+        "throat_spray"
+      ],
+      "cases": [
+        "sticky_residual",
+        "sticky_contact_transfer",
+        "sticky_special_no_transfer",
+        "terrain_electric_extended",
+        "terrain_psychic_extended",
+        "terrain_none",
+        "spray_round",
+        "spray_growl",
+        "spray_tackle",
+        "spray_reflect"
+      ]
     }
   ],
   "format": "gen9calvounifiedv1",
@@ -824,6 +844,150 @@
         19
       ],
       "history": "held_effect_sweep_v2:snowball_no_hit"
+    },
+    {
+      "block": "07",
+      "id": "sticky_residual",
+      "item_id": "sticky_barb",
+      "op": "sticky_barb_residual",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "own_move": "reflect",
+      "foe_move": "amnesia",
+      "seeds": [
+        19,
+        23
+      ],
+      "history": "held_effect_sweep_v3:sticky_barb_residual"
+    },
+    {
+      "block": "07",
+      "id": "sticky_contact_transfer",
+      "item_id": "sticky_barb",
+      "op": "sticky_barb_transfer",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "own_move": "reflect",
+      "foe_move": "tackle",
+      "seeds": [
+        19,
+        23
+      ],
+      "history": "held_effect_sweep_v3:sticky_barb_contact_transfer"
+    },
+    {
+      "block": "07",
+      "id": "sticky_special_no_transfer",
+      "item_id": "sticky_barb",
+      "op": "sticky_barb_no_contact",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "own_move": "reflect",
+      "foe_move": "water_gun",
+      "seeds": [
+        19
+      ],
+      "history": "held_effect_sweep_v3:sticky_barb_no_contact_control"
+    },
+    {
+      "block": "07",
+      "id": "terrain_electric_extended",
+      "item_id": "terrain_extender",
+      "op": "terrain_extender_duration",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "own_move": "electric_terrain",
+      "foe_move": "amnesia",
+      "seeds": [
+        19,
+        23
+      ],
+      "history": "held_effect_sweep_v3:terrain_extender_electric_terrain"
+    },
+    {
+      "block": "07",
+      "id": "terrain_psychic_extended",
+      "item_id": "terrain_extender",
+      "op": "terrain_extender_duration",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "own_move": "psychic_terrain",
+      "foe_move": "amnesia",
+      "seeds": [
+        19
+      ],
+      "history": "held_effect_sweep_v3:terrain_extender_psychic_terrain"
+    },
+    {
+      "block": "07",
+      "id": "terrain_none",
+      "item_id": "terrain_extender",
+      "op": "terrain_extender_no_terrain",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "own_move": "reflect",
+      "foe_move": "amnesia",
+      "seeds": [
+        19
+      ],
+      "history": "held_effect_sweep_v3:terrain_extender_no_terrain"
+    },
+    {
+      "block": "07",
+      "id": "spray_round",
+      "item_id": "throat_spray",
+      "op": "throat_spray_sound_trigger",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "own_move": "round",
+      "foe_move": "amnesia",
+      "seeds": [
+        19,
+        23
+      ],
+      "history": "held_pilot:throat_spray_round"
+    },
+    {
+      "block": "07",
+      "id": "spray_growl",
+      "item_id": "throat_spray",
+      "op": "throat_spray_sound_trigger",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "own_move": "growl",
+      "foe_move": "amnesia",
+      "seeds": [
+        19
+      ],
+      "history": "held_pilot:throat_spray_growl"
+    },
+    {
+      "block": "07",
+      "id": "spray_tackle",
+      "item_id": "throat_spray",
+      "op": "throat_spray_non_sound",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "own_move": "tackle",
+      "foe_move": "amnesia",
+      "seeds": [
+        19
+      ],
+      "history": "held_pilot:throat_spray_tackle_control"
+    },
+    {
+      "block": "07",
+      "id": "spray_reflect",
+      "item_id": "throat_spray",
+      "op": "throat_spray_non_sound",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "own_move": "reflect",
+      "foe_move": "amnesia",
+      "seeds": [
+        19
+      ],
+      "history": "held_pilot:throat_spray_reflect_control"
     }
   ]
 }

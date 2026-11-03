@@ -58,8 +58,8 @@ func _run_w01_c004() -> void:
 	check("Tres controles de equipamiento", fixture.get("variants") == ["active", "none", "reserve"])
 	var progress: Array = _progress_c004()
 	var completed: int = progress.size()
-	check("Bloques W01 01 a 06 autorizados", completed == 6)
-	if completed != 6:
+	check("Bloques W01 01 a 07 autorizados", completed == 7)
+	if completed != 7:
 		quit(2)
 		return
 	check("Fila 01 e IDs exactos de árbitra", String(progress[0].block) == "01"
@@ -74,13 +74,15 @@ func _run_w01_c004() -> void:
 		and String(progress[4].ids) == "room_service;scope_lens;shed_shell")
 	check("Fila 06 e IDs exactos de árbitra", String(progress[5].block) == "06"
 		and String(progress[5].ids) == "smoke_ball;smooth_rock;snowball")
+	check("Fila 07 e IDs exactos de árbitra", String(progress[6].block) == "07"
+		and String(progress[6].ids) == "sticky_barb;terrain_extender;throat_spray")
 	var ids_for_block: Dictionary = {}
 	var ids: PackedStringArray = PackedStringArray()
 	for row_progress: Dictionary in progress:
 		ids_for_block[String(row_progress.block)] = String(row_progress.ids).split(";")
 		ids.append_array(ids_for_block[String(row_progress.block)])
 	var cases: Array = fixture.get("cases", [])
-	check("Cuarenta y tres escenarios autorizados", cases.size() == 43)
+	check("Cincuenta y tres escenarios autorizados", cases.size() == 53)
 	var names: Array = []
 	for row: Dictionary in cases:
 		check("Escenario pertenece a bloque autorizado",
@@ -105,7 +107,7 @@ func _run_w01_c004() -> void:
 				"seed": int(value), "checks": checks - before_checks,
 				"status": "PASS" if errors.size() == before_errors else "FAIL",
 				"observed": observed})
-	check("Matriz exacta de 110 pares caso-semilla", c004_rows.size() == 110)
+	check("Matriz exacta de 124 pares caso-semilla", c004_rows.size() == 124)
 	for id: String in ids:
 		check("ID cubierto " + id, cases.any(func(case): return String(case.item_id) == id))
 	check("Puño Suerte demuestra al menos un crítico específico de Chansey", c004_lucky_exclusive > 0)
@@ -229,6 +231,16 @@ func _probe_w01_c004(row: Dictionary, seed: int, mode: String) -> Dictionary:
 			return {"valid": false}
 	var after: Dictionary = _frame_c003(session, id)
 	check(mode + " estado final nativo", after.valid)
+	var native_terrain_state: Variant = session._checkpoint.get("snapshot", {}).get("native", {}).get("field", {}).get("terrainState", {})
+	var terrain_duration: int = int(native_terrain_state.get("duration", 0)) if native_terrain_state is Dictionary else 0
+	var foe_native_item: String = ""
+	for side: Dictionary in session._checkpoint.get("roster", []):
+		if String(side.get("id", "")) != "p2":
+			continue
+		for pokemon: Dictionary in side.get("pokemon", []):
+			if String(pokemon.get("instance_id", "")) == "foe":
+				foe_native_item = String(pokemon.get("item", ""))
+	# Transferir Toxiestrella al rival no la destruye: debe aparecer en su equipo nativo.
 	if String(row.op) == "power_herb_skip_charge" and mode != "active":
 		check(mode + " segundo turno termina carga y golpea",
 			int(before.foe_hp) > int(after.foe_hp))
@@ -280,6 +292,9 @@ func _probe_w01_c004(row: Dictionary, seed: int, mode: String) -> Dictionary:
 		if c.held_item_id == id and not c.held_item_consumed:
 			restored_physical += 1
 	check(mode + " unidades físicas idénticas tras SaveV2", restored_physical == physical)
+	var restored_terrain_state: Variant = session._checkpoint.get("snapshot", {}).get("native", {}).get("field", {}).get("terrainState", {})
+	var restored_terrain_duration: int = int(restored_terrain_state.get("duration", 0)) if restored_terrain_state is Dictionary else 0
+	check(mode + " duración terreno idéntica tras SaveV2", terrain_duration == restored_terrain_duration)
 	var smoke_outcome: Dictionary = {}
 	if String(row.op) in ["smoke_ball_escape_trapped", "smoke_ball_escape_normal", "smoke_ball_magic_room_suppressed"]:
 		# Llamada REAL AdventureSession.flee tras restauración, no se crea
@@ -303,6 +318,7 @@ func _probe_w01_c004(row: Dictionary, seed: int, mode: String) -> Dictionary:
 		"damage": foe_damage, "critical": critical, "hit_count": hit_count,
 		"trapped_after_first": first_trapped, "shed_switched": shed_switched,
 		"smoke_native_active": smoke_native_active, "smoke_outcome": smoke_outcome,
+		"terrain_duration": terrain_duration, "foe_native_item": foe_native_item,
 		"physical_units": physical,
 		"restored": restored_frame == after, "owner_unchanged": frozen,
 		"save_equal": restored_physical == physical}
@@ -324,7 +340,8 @@ func _compare_c004(row: Dictionary, observed: Dictionary) -> void:
 		check("Reserva no consume " + mode, not x.after.reserve_consumed)
 		var triggered_consumable: bool = (String(row.op) in [
 			"misty_seed_terrain", "power_herb_skip_charge", "psychic_seed_terrain",
-			"room_service_activated", "snowball_ice_trigger"])
+			"room_service_activated", "snowball_ice_trigger", "throat_spray_sound_trigger",
+			"sticky_barb_transfer"])
 		check("Unidades físicas coherentes con activación " + mode,
 			x.physical_units == (1 if mode == "active" and triggered_consumable else 2))
 	var a: Dictionary = observed.active
@@ -332,7 +349,8 @@ func _compare_c004(row: Dictionary, observed: Dictionary) -> void:
 	var r: Dictionary = observed.reserve
 	var should_consume: bool = (String(row.op) in [
 		"misty_seed_terrain", "power_herb_skip_charge", "psychic_seed_terrain",
-		"room_service_activated", "snowball_ice_trigger"])
+		"room_service_activated", "snowball_ice_trigger", "throat_spray_sound_trigger",
+		"sticky_barb_transfer"])
 	check("Consumo exacto por activación, reserva y ausencia intactas",
 		bool(a.after.own_consumed) == should_consume
 		and not r.after.reserve_consumed
@@ -595,5 +613,56 @@ func _compare_c004(row: Dictionary, observed: Dictionary) -> void:
 				int(a.after.attack_stage) == 0 and int(n.after.attack_stage) == 0
 				and int(r.after.attack_stage) == 0
 				and not a.after.own_consumed and a.physical_units == 2)
+		"sticky_barb_residual":
+			check("Toxiestrella: al final del turno resta 1/8 PS solo portador",
+				int(a.start.hp) - int(a.after.hp) == int(a.start.max_hp) / 8
+				and n.after.hp == n.start.hp and r.after.hp == r.start.hp)
+			check("Toxiestrella: daño residual no consume item ni lo transfiere",
+				a.after.native_item == "stickybarb"
+				and a.foe_native_item == "" and n.foe_native_item == ""
+				and a.physical_units == 2 and not a.after.own_consumed)
+		"sticky_barb_transfer":
+			check("Toxiestrella: golpe de contacto pasa el item al rival nativo",
+				a.after.native_item == "" and a.foe_native_item == "stickybarb"
+				and n.foe_native_item == "" and r.foe_native_item == "")
+			check("Toxiestrella: transferida, no destruida, inventario del dueño conserva unidad",
+				a.after.own_consumed and a.physical_units == 1
+				and n.physical_units == 2 and r.physical_units == 2
+				and not r.after.reserve_consumed)
+		"sticky_barb_no_contact":
+			check("Toxiestrella: ataque especial sin contacto no transfiere al rival",
+				a.after.native_item == "stickybarb"
+				and a.foe_native_item == "" and n.foe_native_item == "" and r.foe_native_item == "")
+			check("Toxiestrella: objeto permanece y produce residual",
+				int(a.start.hp) - int(a.after.hp) > int(n.start.hp) - int(n.after.hp)
+				and a.physical_units == 2 and not a.after.own_consumed)
+		"terrain_extender_duration":
+			check("Cubresuelos: duración del terreno +3 turnos solo en portador",
+				a.terrain_duration > 0 and n.terrain_duration > 0
+				and a.terrain_duration == n.terrain_duration + 3
+				and n.terrain_duration == r.terrain_duration)
+			check("Cubresuelos: no se consume por crear terreno",
+				a.physical_units == 2 and not a.after.own_consumed
+				and r.physical_units == 2)
+		"terrain_extender_no_terrain":
+			check("Cubresuelos: no crea terreno por sí mismo",
+				a.terrain_duration == 0 and n.terrain_duration == 0 and r.terrain_duration == 0)
+			check("Cubresuelos: sin terreno no se consume",
+				a.physical_units == 2 and not a.after.own_consumed)
+		"throat_spray_sound_trigger":
+			check("Espray Bucal: movimiento sonoro válido aumenta +1 Ataque Especial",
+				int(a.after.boosts.get("spa", 0)) == 1
+				and int(n.after.boosts.get("spa", 0)) == 0
+				and int(r.after.boosts.get("spa", 0)) == 0)
+			check("Espray Bucal: se consume solo en portador tras sonido",
+				a.after.own_consumed and a.physical_units == 1
+				and n.physical_units == 2 and r.physical_units == 2)
+		"throat_spray_non_sound":
+			check("Espray Bucal: sin movimiento sonoro no sube Ataque Especial",
+				int(a.after.boosts.get("spa", 0)) == 0
+				and int(n.after.boosts.get("spa", 0)) == 0
+				and int(r.after.boosts.get("spa", 0)) == 0)
+			check("Espray Bucal: no se consume con Placaje o Reflejo",
+				not a.after.own_consumed and a.physical_units == 2)
 		_:
 			check("Operación fuera del contrato de bloque", false)

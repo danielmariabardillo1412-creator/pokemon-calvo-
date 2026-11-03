@@ -118,3 +118,11 @@ La segunda CI #41613512888 devolvió `content_policy` al abrir los tres controle
 - Última regresión total CAMP003: gate 05 run #41602276948, 12392 Godot/806 Python, PASÓ. En 06 no procede volver a correr CAMP003 sin cambios de producción. Sigue pendiente para IA6 la vista SaveV2 midcharge del bloque 03.
 - CSV 06 permanece `EN_CI_AUTOMATICA` exclusivamente para evitar un nuevo run disparado por un cambio documental; al próximo `p`, cerrar con SHA `bc2f236ba9cd23072b78589d6f100437c436e7e8` y CI `41707616043`.
 - **Próxima `p` = únicamente bloque 07/10: `sticky_barb;terrain_extender;throat_spray`.** Prohibido tocar `main`, V28, otras ramas o iniciar bloque 08.
+
+## 07/10 — bloque autorizado en ejecución
+
+- Propiedad IA1/W01 y rama única `codex/calvo-items-20261103-w01-camp004`. El bloque 06 pasa a CI_PASS_VERIFICADO con SHA `bc2f236ba9cd23072b78589d6f100437c436e7e8` y run `41707616043`; 9729 Godot + 588 Python.
+- Bloque 07: `sticky_barb;terrain_extender;throat_spray`. Diez casos, catorce pares caso/semilla, 42 variantes (active/none/reserve); acumulado 53 escenarios, 124 pares, 372 variantes, 21 objetos.
+- Toxiestrella: residual 1/8, transferencia por Placaje del rival, no transferencia frente a Agua Pistola. Para transferencia, el objeto sale del dueño y aparece en la proyección nativa del rival; NO se registra como item destruido. Cubresuelos: terreno eléctrico y psíquico duran +3 turnos, control sin terreno. Espray Bucal: `round` y `growl` como sonido positivo, `tackle` y `reflect` negativos; consumo único, SaveV2.
+- Sin tocar producción, `main`, V28, árbitra ni otras ramas. Repetir la CI CAMP004 con los seis bloques anteriores; puerta CAMP003 completa correspondía a 05/10 y regresará 10/10 o tras cambio productivo. Bloque 07 no se declara PASS hasta recibir Godot/Python y `completed/success` para SHA de pruebas.
+- Aviso previo SaveV2 durante carga intermedia de Rayo Solar de bloque 03 sigue pendiente para IA6.
