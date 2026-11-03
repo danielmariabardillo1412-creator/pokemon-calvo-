@@ -204,8 +204,9 @@ func _probe_field_use(spec: Dictionary, mode: String) -> Dictionary:
 	var sleep_clocks: Dictionary = {}
 	if String(spec.get("status", "")) == "sleep":
 		sleep_clocks["own"] = {"version": "0.10.11", "start_time": 3, "time": 2}
+	var can_use: Callable = func(): return true
 	check(mode + " campo: servicio de inventario real",
-		service.configure(collection, catalogs, func(): return true, sleep_clocks))
+		service.configure(collection, catalogs, can_use, sleep_clocks))
 	var original: CreatureInstance = collection.owned_creature(&"own")
 	var before: Dictionary = _owner_data(collection)
 	var slot: int = int(spec.slot) if String(spec.kind) == "field_pp" else -1
@@ -248,7 +249,7 @@ func _probe_field_use(spec: Dictionary, mode: String) -> Dictionary:
 			and not updated.status_state.rest_sleep
 			and not updated.status_state.has_volatile(&"nightmare")))
 			and (not bool(spec.get("expect_sleep_clock_clear", false)) or
-			((sleep_clocks.is_empty() if expected_acceptance else sleep_clocks.has("own")))))
+			((service.sleep_clocks.is_empty() if expected_acceptance else service.sleep_clocks.has("own")))))
 	var expected_hp: int = start_hp
 	if String(spec.kind) == "field_heal" and expected_acceptance:
 		expected_hp = mini(updated.stats.max_hp,
