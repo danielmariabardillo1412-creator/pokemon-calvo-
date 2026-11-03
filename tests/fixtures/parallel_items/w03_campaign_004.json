@@ -296,6 +296,45 @@
       "functional_effect_certified": false,
       "note": "Superrepelente, Flauta Blanca y Flauta Amarilla no poseen ejecutor en FieldItemService. Verificar uso rechazado sin consumo ni efectos; roundtrip PlayerInventory no prueba SaveV2 completo.",
       "ci_required": true
+    },
+    {
+      "bloque": "07",
+      "familia": "TERA_MATERIAL",
+      "ids": [
+        "bug_tera_shard",
+        "dark_tera_shard",
+        "dragon_tera_shard",
+        "electric_tera_shard",
+        "fairy_tera_shard"
+      ],
+      "objetivo": "auditar_fragmentos_tera_sin_activar_mecanica",
+      "current_state": "DEPENDENCIA_COMPARTIDA",
+      "per_id_status": {
+        "bug_tera_shard": "DEPENDENCIA_COMPARTIDA",
+        "dark_tera_shard": "DEPENDENCIA_COMPARTIDA",
+        "dragon_tera_shard": "DEPENDENCIA_COMPARTIDA",
+        "electric_tera_shard": "DEPENDENCIA_COMPARTIDA",
+        "fairy_tera_shard": "DEPENDENCIA_COMPARTIDA"
+      },
+      "inventory_counts": [
+        0,
+        1,
+        25,
+        999
+      ],
+      "mutations": [
+        "add",
+        "remove",
+        "roundtrip"
+      ],
+      "expected_direct_use": {
+        "reason": "field_effect_not_connected",
+        "status": "DEPENDENCY_MISSING"
+      },
+      "no_terastallization_certified": true,
+      "missing_shared_integration": "tera_type_change_and_resource_consumption_battle_or_overworld_api",
+      "note": "Auditar solo selección del material, transacciones puras PlayerInventory, roundtrip y rechazo actual de FieldItemService; no implementar teracristalización ni atribuir efectos jugables a los fragmentos.",
+      "ci_required": true
     }
   ]
 }
