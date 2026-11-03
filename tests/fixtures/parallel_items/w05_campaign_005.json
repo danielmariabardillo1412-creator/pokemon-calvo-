@@ -92,6 +92,35 @@
           "move_id": "leaf_storm"
         }
       ]
+    },
+    {
+      "block": "04",
+      "items": [
+        {
+          "item_id": "tm160",
+          "move_id": "hurricane"
+        },
+        {
+          "item_id": "tm161",
+          "move_id": "trick_room"
+        },
+        {
+          "item_id": "tm162",
+          "move_id": "bug_buzz"
+        },
+        {
+          "item_id": "tm163",
+          "move_id": "hyper_beam"
+        },
+        {
+          "item_id": "tm164",
+          "move_id": "brave_bird"
+        },
+        {
+          "item_id": "tm165",
+          "move_id": "flare_blitz"
+        }
+      ]
     }
   ]
 }
