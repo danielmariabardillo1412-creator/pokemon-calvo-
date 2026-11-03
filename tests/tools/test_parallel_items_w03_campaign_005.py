@@ -388,6 +388,58 @@ def main() -> int:
                 check("WildEncounterTable.from_dict(packed)" in runner
                       and "found.level == 8" in runner,
                       "Falta roundtrip y límite de nivel")
+            elif block["bloque"] == "07":
+                expected_ids = ["black_flute", "white_flute", "lure",
+                                "super_lure", "max_lure"]
+                check(ids == expected_ids, "Reserva bloque07 cambiada")
+                check(block["current_state"] == "DEPENDENCIA_COMPARTIDA"
+                      and block["functional_effect_certified"] is False,
+                      "No certificar modificación de mundo sin productor")
+                modifier = (ROOT / "modules/gameplay/encounter_item_modifiers.gd").read_text(
+                    encoding="utf-8")
+                table = (ROOT / "modules/encounters/wild_encounter_table.gd").read_text(
+                    encoding="utf-8")
+                resolver = (ROOT / "modules/encounters/wild_encounter_system.gd").read_text(
+                    encoding="utf-8")
+                field = (ROOT / "modules/inventory/field_item_service.gd").read_text(
+                    encoding="utf-8")
+                check("func modified_chance_bp(" in modifier
+                      and "RATE_NUMERATOR := 2" in modifier
+                      and "RATE_DENOMINATOR := 3" in modifier
+                      and "func prepare_table(" in modifier,
+                      "La regla positiva de frecuencia dejó de existir")
+                check("encounter_chance_bp" in table
+                      and "func validate(" in table
+                      and "func to_dict(" in table
+                      and "static func from_dict(" in table,
+                      "No se verifica transporte de probabilidad")
+                check("table.encounter_chance_bp" in resolver
+                      and "WildEncounterRuleset.CHANCE_BP_MAX" in resolver,
+                      "La frontera del resolver cambió")
+                check(all(f'&"{item}"' not in modifier and
+                          f'&"{item}"' not in field for item in ids),
+                      "Ha aparecido integración: reauditar con pruebas positivas")
+                scope = {r["id"]: r for r in
+                         rows(ROOT / "docs/current/RANDOMLOCK_ITEMS_BUILD_SCOPE_V2.csv")}
+                check(all(scope[item]["estado_contenido"] == "SELECCIONADO"
+                          for item in ids), "Un objeto salió del alcance aprobado")
+                check({p["id"] for p in block["required_producers"]} == set(ids),
+                      "Productores o IDs ausentes")
+                for producer in block["required_producers"]:
+                    check(producer["producer"] == "overworld_movement_encounter_scheduler"
+                          and all(v in producer["missing_fields"] for v in
+                                  ["active_field_encounter_modifier",
+                                   "remaining_effect_steps_or_duration",
+                                   "minimum_steps_between_encounters"])
+                          and producer["consumer"].strip()
+                          and producer["decision"].strip(),
+                          "Contrato de mundo insuficiente")
+                check('"07": _block_07(block)' in runner and
+                      "func _block_07(block: Dictionary)" in runner
+                      and "modifier.modified_chance_bp(6000) == 4000" in runner
+                      and "WildEncounterTable.from_dict(packed)" in runner
+                      and "reduced.validate(catalogs).ok" in runner,
+                      "No se ejecutan pruebas positivas de frecuencia")
             else:
                 check(False, "Bloque sin nueva prueba: " + block["bloque"])
         check(checks > 0, "Sin verificaciones")
