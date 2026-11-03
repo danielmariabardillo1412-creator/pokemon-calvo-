@@ -534,6 +534,64 @@
       "context_effect_certified": false,
       "implementation_authorized": false,
       "ci_required": true
+    },
+    {
+      "bloque": "08",
+      "ids": [
+        "luxury_ball",
+        "lure_ball"
+      ],
+      "objective": "contextos_ubicacion",
+      "prior_evidence": {
+        "state": "DEPENDENCIA_COMPARTIDA",
+        "sources": [
+          "modules/capture/capture_ruleset.gd",
+          "modules/capture/capture_ball_effects.gd",
+          "modules/capture/capture_context_ball_effects.gd",
+          "modules/capture/capture_battle_context.gd",
+          "modules/capture/capture_system.gd",
+          "modules/inventory/capture_inventory_service.gd"
+        ],
+        "note": "Bolas ausentes del registro operativo. Lujo exige procedencia de captura para amistad futura; Cebo, origen pesca autoritativo."
+      },
+      "cases": [
+        {
+          "species_id": "mew",
+          "level": 35,
+          "seed": 8801
+        },
+        {
+          "species_id": "caterpie",
+          "level": 12,
+          "seed": 8802
+        }
+      ],
+      "hp_modes": [
+        "full",
+        "one_hp"
+      ],
+      "contexts": [
+        {
+          "name": "sin_senales",
+          "completed_turns": -1,
+          "catcher_level": -1
+        },
+        {
+          "name": "combate_real_sin_pesca",
+          "completed_turns": 0,
+          "catcher_level": 35
+        }
+      ],
+      "expected_current_rejection": "unknown_ball",
+      "missing_authoritative_signals": [
+        "capture_origin_ball_for_friendship_gain",
+        "encounter_is_fishing"
+      ],
+      "functional_effect_certified": false,
+      "expected_behavior": "Sin registro no hay captura ni consumo ni RNG ni mutacion del objetivo. El contrato no acredita bonus de amistad ni multiplicador por pesca.",
+      "required_new_gate": "IA6 debe decidir ruta de persistencia de bola de origen y fuente fiable de pesca (ambas sesiones), incluida recuperación SaveV2; la implementación no puede inventar flags.",
+      "implementation_authorized": false,
+      "ci_required": true
     }
   ]
 }
