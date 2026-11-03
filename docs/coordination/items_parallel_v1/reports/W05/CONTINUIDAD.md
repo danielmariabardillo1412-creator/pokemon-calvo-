@@ -1,3 +1,19 @@
+# ESTADO VIGENTE IA5/W05 — CAMPAÑA_003 · 04/10 PUBLICADOS (2026-11-03)
+
+**Identidad:** IA5/W05 · MT/libros. **Única rama de escritura:** `codex/calvo-items-20261103-w05-camp003`. Activación IA6 de diez microbloques según `CAMPAIGN_GATE_003.md`, `campaigns/CAMP_003_W05.md` y `CAMPAIGN_003_QUEUE_APPROVED.csv`. Historias previas inferiores no tienen autoridad para bloques siguientes.
+
+**BLOQUE 04 publicado, estado EN_CI_AUTOMATICA:** `tm38;tm39;tm40;tm41;tm42;tm43` mapeados en SV a `flame_charge;low_sweep;air_cutter;stored_power;night_shade;fling`. Fixture acumulativo ampliado a **4 bloques/24 MT** en commit `e74d3d4cbdb38bd71624cbb31516b335c121b1ed`. Una sola fila nueva del progreso en commit `d9c38c6cb606bbe3081eebc16d4560944370a48a`. Informe `CAMP_003_ITER_04.md` publicado commit `e68362958e8f2a019f3cc437a92d91f930ed8d66`. Scripts Python/Godot de W05 permanecen intactos; su contrato es acumulativo y no se ha vuelto a implementar `FieldItemService.teach`.
+
+**CI bloques 01–03 VERIFICADA:** [#41556713903](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41556713903) SUCCESS, SHA `c3c48e92ddf48708d7d941554e58420a994e55ed`, Python **174** checks, Godot 4.7 **661** checks, `blocks=3`, cero errores. Recibos leídos directamente de logs.
+
+**CI bloque 04 pendiente al publicar:** [#41558194753](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41558194753), SHA `d9c38c6cb606bbe3081eebc16d4560944370a48a`, inicialmente `pending`. La CI intermedia [#41558142876](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41558142876) puede quedar `cancelled` por cancelación deliberada de runs anteriores. No declarar PASS de 24 MT sin verificar `completed/success` y logs Python/Godot `blocks=4`. El cotejo estático de **24 IDs únicos**, 4 filas y perfil SV sí fue coherente.
+
+**Próxima `p`:** verificar último run SHA del progreso del bloque 04. Si success, ejecutar solo **bloque 05** de la cola (`tm45;tm46;tm47;tm48;tm49;tm50`). Si todavía corre, un único bloque siguiente independiente permitido, sin declararlo PASS; FAIL de arnés propio se corrige sin reducir aserciones, FAIL funcional compartido → STOP e intervención IA6. Al completar 10/10, `CAMPAÑA_003_FINALIZADA` y STOP.
+
+**Intocables:** `main`, V28, árbitra, otras W, producción, `modules/`, `data/`, `config/`, catálogo canónico, PR118, workflow/validador de manifiesto, saves reales y 19 legacy. Arte/GPU/UI no verificados.
+
+---
+
 # ESTADO VIGENTE IA5/W05 — CAMPAÑA_003 · 03/10 PUBLICADOS (2026-11-03)
 
 **Identidad:** IA5/W05, libros/MT. **Única rama de escritura:** `codex/calvo-items-20261103-w05-camp003`. Autorización de la cola IA6 `CAMPAIGN_003_QUEUE_APPROVED.csv`/encargo `campaigns/CAMP_003_W05.md`, no modificar otras ramas ni producción.
