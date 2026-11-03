@@ -700,6 +700,296 @@ EXPECTED_03 = json.loads(r'''[
 IDS_03 = ["calcium","zinc","carbos","exp_candy_xs"]
 SOURCES_03 = ["modules/inventory/field_training_effects.gd","modules/inventory/field_friendship_effects.gd","modules/inventory/field_growth_effects.gd","modules/inventory/field_item_service.gd","tests/gameplay/item_field_growth_v9.gd","tests/gameplay/field_held_v17.gd"]
 
+EXPECTED_04 = json.loads(r'''[
+  {
+    "scenario": "exp_candy_s_level50_gain",
+    "id": "exp_candy_s",
+    "kind": "growth",
+    "applies": true,
+    "exp_amount": 800,
+    "level": 50
+  },
+  {
+    "scenario": "exp_candy_s_level90_gain",
+    "id": "exp_candy_s",
+    "kind": "growth",
+    "applies": true,
+    "exp_amount": 800,
+    "level": 90
+  },
+  {
+    "scenario": "exp_candy_s_level99_gain",
+    "id": "exp_candy_s",
+    "kind": "growth",
+    "applies": true,
+    "exp_amount": 800,
+    "level": 99
+  },
+  {
+    "scenario": "exp_candy_s_level99_cap_50xp",
+    "id": "exp_candy_s",
+    "kind": "growth",
+    "applies": true,
+    "exp_amount": 800,
+    "level": 99,
+    "exp_until_next": 50,
+    "expected_exp_gain": 50,
+    "expect_cap": true
+  },
+  {
+    "scenario": "exp_candy_s_level50_cross_80xp",
+    "id": "exp_candy_s",
+    "kind": "growth",
+    "applies": true,
+    "exp_amount": 800,
+    "level": 50,
+    "exp_until_next": 80,
+    "expect_level_up": true
+  },
+  {
+    "scenario": "exp_candy_s_level100_no_effect",
+    "id": "exp_candy_s",
+    "kind": "growth",
+    "applies": false,
+    "exp_amount": 800,
+    "level": 100
+  },
+  {
+    "scenario": "exp_candy_s_explicit_slot_rejected",
+    "id": "exp_candy_s",
+    "kind": "growth",
+    "applies": false,
+    "exp_amount": 800,
+    "level": 50,
+    "slot": 0
+  },
+  {
+    "scenario": "exp_candy_s_friendship_high_200",
+    "id": "exp_candy_s",
+    "kind": "growth",
+    "applies": true,
+    "exp_amount": 800,
+    "level": 50,
+    "start_friendship": 200
+  },
+  {
+    "scenario": "exp_candy_m_level50_gain",
+    "id": "exp_candy_m",
+    "kind": "growth",
+    "applies": true,
+    "exp_amount": 3000,
+    "level": 50
+  },
+  {
+    "scenario": "exp_candy_m_level90_gain",
+    "id": "exp_candy_m",
+    "kind": "growth",
+    "applies": true,
+    "exp_amount": 3000,
+    "level": 90
+  },
+  {
+    "scenario": "exp_candy_m_level99_gain",
+    "id": "exp_candy_m",
+    "kind": "growth",
+    "applies": true,
+    "exp_amount": 3000,
+    "level": 99
+  },
+  {
+    "scenario": "exp_candy_m_level99_cap_50xp",
+    "id": "exp_candy_m",
+    "kind": "growth",
+    "applies": true,
+    "exp_amount": 3000,
+    "level": 99,
+    "exp_until_next": 50,
+    "expected_exp_gain": 50,
+    "expect_cap": true
+  },
+  {
+    "scenario": "exp_candy_m_level50_cross_80xp",
+    "id": "exp_candy_m",
+    "kind": "growth",
+    "applies": true,
+    "exp_amount": 3000,
+    "level": 50,
+    "exp_until_next": 80,
+    "expect_level_up": true
+  },
+  {
+    "scenario": "exp_candy_m_level100_no_effect",
+    "id": "exp_candy_m",
+    "kind": "growth",
+    "applies": false,
+    "exp_amount": 3000,
+    "level": 100
+  },
+  {
+    "scenario": "exp_candy_m_explicit_slot_rejected",
+    "id": "exp_candy_m",
+    "kind": "growth",
+    "applies": false,
+    "exp_amount": 3000,
+    "level": 50,
+    "slot": 0
+  },
+  {
+    "scenario": "exp_candy_m_friendship_high_200",
+    "id": "exp_candy_m",
+    "kind": "growth",
+    "applies": true,
+    "exp_amount": 3000,
+    "level": 50,
+    "start_friendship": 200
+  },
+  {
+    "scenario": "exp_candy_l_level50_gain",
+    "id": "exp_candy_l",
+    "kind": "growth",
+    "applies": true,
+    "exp_amount": 10000,
+    "level": 50
+  },
+  {
+    "scenario": "exp_candy_l_level90_gain",
+    "id": "exp_candy_l",
+    "kind": "growth",
+    "applies": true,
+    "exp_amount": 10000,
+    "level": 90
+  },
+  {
+    "scenario": "exp_candy_l_level99_gain",
+    "id": "exp_candy_l",
+    "kind": "growth",
+    "applies": true,
+    "exp_amount": 10000,
+    "level": 99
+  },
+  {
+    "scenario": "exp_candy_l_level99_cap_50xp",
+    "id": "exp_candy_l",
+    "kind": "growth",
+    "applies": true,
+    "exp_amount": 10000,
+    "level": 99,
+    "exp_until_next": 50,
+    "expected_exp_gain": 50,
+    "expect_cap": true
+  },
+  {
+    "scenario": "exp_candy_l_level50_cross_80xp",
+    "id": "exp_candy_l",
+    "kind": "growth",
+    "applies": true,
+    "exp_amount": 10000,
+    "level": 50,
+    "exp_until_next": 80,
+    "expect_level_up": true
+  },
+  {
+    "scenario": "exp_candy_l_level100_no_effect",
+    "id": "exp_candy_l",
+    "kind": "growth",
+    "applies": false,
+    "exp_amount": 10000,
+    "level": 100
+  },
+  {
+    "scenario": "exp_candy_l_explicit_slot_rejected",
+    "id": "exp_candy_l",
+    "kind": "growth",
+    "applies": false,
+    "exp_amount": 10000,
+    "level": 50,
+    "slot": 0
+  },
+  {
+    "scenario": "exp_candy_l_friendship_high_200",
+    "id": "exp_candy_l",
+    "kind": "growth",
+    "applies": true,
+    "exp_amount": 10000,
+    "level": 50,
+    "start_friendship": 200
+  },
+  {
+    "scenario": "exp_candy_xl_level50_gain",
+    "id": "exp_candy_xl",
+    "kind": "growth",
+    "applies": true,
+    "exp_amount": 30000,
+    "level": 50
+  },
+  {
+    "scenario": "exp_candy_xl_level90_gain",
+    "id": "exp_candy_xl",
+    "kind": "growth",
+    "applies": true,
+    "exp_amount": 30000,
+    "level": 90
+  },
+  {
+    "scenario": "exp_candy_xl_level99_gain",
+    "id": "exp_candy_xl",
+    "kind": "growth",
+    "applies": true,
+    "exp_amount": 30000,
+    "level": 99,
+    "expect_cap": true
+  },
+  {
+    "scenario": "exp_candy_xl_level99_cap_50xp",
+    "id": "exp_candy_xl",
+    "kind": "growth",
+    "applies": true,
+    "exp_amount": 30000,
+    "level": 99,
+    "exp_until_next": 50,
+    "expected_exp_gain": 50,
+    "expect_cap": true
+  },
+  {
+    "scenario": "exp_candy_xl_level50_cross_80xp",
+    "id": "exp_candy_xl",
+    "kind": "growth",
+    "applies": true,
+    "exp_amount": 30000,
+    "level": 50,
+    "exp_until_next": 80,
+    "expect_level_up": true
+  },
+  {
+    "scenario": "exp_candy_xl_level100_no_effect",
+    "id": "exp_candy_xl",
+    "kind": "growth",
+    "applies": false,
+    "exp_amount": 30000,
+    "level": 100
+  },
+  {
+    "scenario": "exp_candy_xl_explicit_slot_rejected",
+    "id": "exp_candy_xl",
+    "kind": "growth",
+    "applies": false,
+    "exp_amount": 30000,
+    "level": 50,
+    "slot": 0
+  },
+  {
+    "scenario": "exp_candy_xl_friendship_high_200",
+    "id": "exp_candy_xl",
+    "kind": "growth",
+    "applies": true,
+    "exp_amount": 30000,
+    "level": 50,
+    "start_friendship": 200
+  }
+]''')
+IDS_04 = ["exp_candy_s","exp_candy_m","exp_candy_l","exp_candy_xl"]
+SOURCES_04 = ["modules/inventory/field_growth_effects.gd","modules/inventory/field_friendship_effects.gd","modules/inventory/field_item_service.gd","tests/gameplay/item_field_growth_v9.gd","tests/fixtures/progression_growth_curves/reference_contract.json"]
+
 
 class ContractError(ValueError):
     pass
