@@ -97,50 +97,67 @@ def main() -> int:
                      "Faltan rechazos prioritarios")
             elif block["bloque"] == "02":
                 test(ids == ["black_flute", "blue_flute", "escape_rope"],
-                     "Reserva 02 alterada")
+                     "Reserva oficial 02 alterada")
                 service = (ROOT / "modules/inventory/field_item_service.gd").read_text(encoding="utf-8")
                 field = (ROOT / "modules/inventory/field_item_effects.gd").read_text(encoding="utf-8")
                 modifiers = (ROOT / "modules/gameplay/encounter_item_modifiers.gd").read_text(encoding="utf-8")
+                recovery = json.loads((ROOT / "modules/inventory/imported_recovery_v19.json").read_text(encoding="utf-8"))
                 connections = json.loads((ROOT / "modules/inventory/item_connections_v1.json").read_text(encoding="utf-8"))
-                scope = rows(ROOT / "docs/current/RANDOMLOCK_ITEMS_BUILD_SCOPE_V2.csv")
-                chosen = {r["id"]: r for r in scope}
-                test(all(chosen[id]["familia"] == "FIELD_USE" and
-                         chosen[id]["estado_contenido"] == "SELECCIONADO" for id in ids),
-                     "Campo no seleccionado o cambió familia")
+                selected = {row["id"]: row for row in
+                            rows(ROOT / "docs/current/RANDOMLOCK_ITEMS_BUILD_SCOPE_V2.csv")}
+                test(all(selected[id]["familia"] == "FIELD_USE" and
+                         selected[id]["estado_contenido"] == "SELECCIONADO" for id in ids),
+                     "Los tres deben estar seleccionados como campo")
                 test(all(id in connections["holdable_ids"] for id in
                          ["black_flute", "blue_flute"]),
-                     "Metadatos equipables cambiaron; auditar posible colisión")
-                test(block["current_state"] == "DEPENDENCIA_COMPARTIDA" and
-                     block["supported_effects_certified"] is False,
-                     "La persistencia de bolsa no certifica efectos de campo")
-                test('return _deny("field_effect_not_connected", "DEPENDENCY_MISSING")' in service,
-                     "No existe rechazo de efecto de campo sin conexión")
+                     "Revisar metadatos de equipable de las flautas")
+                blue = recovery["items"]["blue_flute"]
+                test(blue["effect"]["cure"] == ["slp"] and blue["consume"] is False,
+                     "La Flauta Azul tiene curación existente y es reutilizable")
                 test('if FieldEffects.supports(item_id):' in service and
-                     'if EncounterModifiers.supports(item_id):' in service,
-                     "Ruta de decisión campo alterada")
-                test(all(id not in field and id not in modifiers for id in ids),
-                     "Objeto mencionado en ejecutor: inspeccionar antes de afirmar no soporte")
-                test('func _block_02(block: Dictionary)' in runner and
-                     '"02": _block_02(block)' in runner and
-                     'service.use_item(id, target.instance_id)' in runner,
-                     "No se ejecuta servicio de campo real")
+                     'if EncounterModifiers.supports(item_id):' in service and
+                     'return _apply_field_effect(item_id, creature_id' in service,
+                     "Ruta real de curación de campo no está conectada")
+                test('if cure:' in field and
+                     'creature.status_state.clear_persistent()' in field and
+                     'if FieldEffects.consumes_on_use(item_id)' in service,
+                     "Revisar curación real y consumo según perfil")
+                test(all(id not in field and id not in modifiers for id in
+                         ["black_flute", "escape_rope"]) and
+                     all(id not in recovery["items"] for id in
+                         ["black_flute", "escape_rope"]),
+                     "Otro objeto de campo cambió soporte; reauditar")
+                test('return _deny("field_effect_not_connected", "DEPENDENCY_MISSING")' in service,
+                     "Falta rechazo seguro para Flauta Negra y Cuerda")
+                test(block["per_id_status"]["blue_flute"] == "FUNCIONAL_PENDIENTE_CI"
+                     and block["per_id_status"]["black_flute"] == "DEPENDENCIA_COMPARTIDA"
+                     and block["per_id_status"]["escape_rope"] == "DEPENDENCIA_COMPARTIDA",
+                     "Se certifica indebidamente soporte de campo")
+                test('func _block_02(block: Dictionary)' in runner
+                     and '"02": _block_02(block)' in runner
+                     and 'service.use_item(id, target.instance_id)' in runner,
+                     "No se usan servicios reales de campo")
+                test('result.get("accepted", false) == true' in runner
+                     and 'after.status_state.persistent_id == &""' in runner
+                     and 'service.sleep_clocks.is_empty()' in runner
+                     and 'service.owner.inventory.quantity(id) == quantity' in runner,
+                     "Falta caso positivo de Flauta Azul curando sueño sin consumo")
+                test('expected = "item_not_owned" if quantity == 0 else "item_has_no_effect"' in runner
+                     and 'expected: String = "field_effect_not_connected"' in runner
+                     and 'snapshot(service) == before' in runner,
+                     "Faltan negativos sin posesión/sin sueño")
                 test('PlayerInventory.from_dict(saved)' in runner and
-                     'loaded.to_dict() == saved' in runner and
-                     'snapshot(service) == before' in runner,
-                     "Falta persistencia y no mutación real")
-                test('String(denied.get("reason", "")) == "field_locked"' in runner and
-                     'String(invalid.get("reason", "")) == "invalid_inventory"' in runner,
-                     "Faltan bloqueos de campo e inventario corrupto")
+                     'loaded.to_dict() == saved' in runner,
+                     "No se comprueba persistencia básica de mochila")
+                test('String(denied.get("reason", "")) == "field_locked"' in runner
+                     and 'String(invalid.get("reason", "")) == "invalid_inventory"' in runner,
+                     "Faltan guardas de campo/corrupción")
                 test(set(block["inventory_counts"]) == {0, 2} and
-                     {r["status"] for r in block["cases"]} == {"none", "sleep"},
-                     "Faltan caso sin inventario y Flauta Azul contra sueño")
+                     {entry["status"] for entry in block["cases"]} == {"none", "sleep"},
+                     "No se prueban ambos estados y posesión")
                 test(set(block["invalid_cases"]) ==
                      {"field_locked", "invalid_inventory", "unknown_target"},
-                     "Negativos del bloque 02 alterados")
-                test(block["requires_shared_features"] ==
-                     ["encounter_rate_world_context", "overworld_escape_destination",
-                      "world_position_and_session_transition"],
-                     "Faltan dependencias reales de mapa/encuentros")
+                     "Negativos de campo incompletos")
             else:
                 test(False, "Bloque sin implementación de test: " + block["bloque"])
         test(checks > 0, "Sin verificaciones")
