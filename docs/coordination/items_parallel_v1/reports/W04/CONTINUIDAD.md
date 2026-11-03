@@ -277,3 +277,12 @@ El **bloque 02/10 autorizado** contiene `protector;reaper_cloth;prism_scale;sach
 **Dependencia para IA6:** sigue `ITEM_TRADE_RESTORATION_V27.json` con `level_values_selected=null`; se necesita aprobar nivel para cada ruta, transportar `held_item` desde `ProgressionSystem`, validarlo en `EvolutionSystem`, decidir política de consumo/retención al evolucionar y preservar rutas alternativas/ramas. No programar umbrales, modificar el dataset ni afirmar evoluciones positivas sin esas decisiones. Los cinco objetos ya existían en CAMP003: no contarlos como nuevos.
 
 Al recibir nueva `p` y previa CI02 correcta, trabajar **únicamente bloque 03/10**: `oval_stone;dawn_stone;peat_block`. No repetir 01/02 ni iniciar 04.
+
+
+## CAMP005 W04 — CI02 y avance
+
+La CI principal de los dos bloques [#41718927428](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41718927428), SHA `1a6ceb323b77efecfcdc480665ad1a8707f79e14`, terminó **completed/success** con `CAMP005_W04_PY PASS blocks=2 checks=159`, `CAMP005_W04_GODOT PASS blocks=2 checks=194`, manifiesto `reserved=10 completed=2 ids=46`. El CSV quedó reconciliado en `585dda8cfaa65210220d2f1589e7cd6a2174ced3`, disparando otra CI [#41719349096](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41719349096), aún por comprobar.
+
+**Bloque 02 concluye cinco `BLOQUEADO_POR_CONTRATO` (no efecto evolutivo).** Datos: `protector` Rhydon→Rhyperior, `reaper_cloth` Dusclops→Dusknoir, `prism_scale` Feebas→Milotic, `sachet` Spritzee→Aromatisse, `up_grade` Porygon→Porygon2. Ningún mínimo evolutivo está aprobado. El test real de PokeAPI conserva **dos rutas de Feebas por belleza 170** (`DATA_ONLY`) distintas de Escama Bella y evita que `up_grade` salte a Porygon-Z; esa segunda etapa corresponde a `dubious_disc`. Se certifican equipamiento permitido y SaveV2, no conversión por nivel.
+
+**Estado visible:** 2/10 bloques del backlog W04 auditados en CAMP005 (9 IDs entre ambos, **no sumarlos como nuevos**). Siguiente `p`: después de verificar CI02 del CSV, **solo bloque 03** `oval_stone;dawn_stone;peat_block`. No inventar niveles, turno de día o condiciones sin fuente canónica. Regresiones CAMP004/CAMP003/CAMP001 preservadas para hitos 05/10 o parches.
