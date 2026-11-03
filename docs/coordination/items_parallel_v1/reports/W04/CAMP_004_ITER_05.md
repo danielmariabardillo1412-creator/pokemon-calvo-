@@ -40,3 +40,10 @@ En bloque 05 el workflow debe ejecutar **Python/Godot CAMP004**, **Python/Godot 
 - `gracidea`: `DEPENDENCIA records=0`, `forma_shaymin_necesita_contexto`.
 
 La prueba demuestra invariantes de rechazo y SaveV2, **no** una fusión, ganancia real de experiencia o cambio de forma. Progreso consolidado en commit `ba870381e0a5b2215a925be44487e5613157b777` con estado `DEPENDENCIA_DOCUMENTADA` y recibo CI. Se comprueba aparte la nueva ejecución automática que dicho CSV produce.
+
+
+## CI consolidada de la fila 05
+
+[GitHub Actions #41579352482](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41579352482) terminó **completed/success** sobre el SHA `ba870381e0a5b2215a925be44487e5613157b777` después de marcar el CSV como `DEPENDENCIA_DOCUMENTADA`. Recibos: `CAMP004_W04_MANIFEST_PASS reserved=10 completed=5 ids=36`; Python **147 PASS**; Godot **455 PASS**; CAMP003 Python **120 PASS**, Godot **270 PASS**; CAMP001 **559 comprobaciones y 12 casos PASS**. Los tres nuevos IDs continúan `status=DEPENDENCIA records=0`.
+
+**CAMPAÑA_004: 05/10 bloques verificados, 15 objetos auditados; no confundir 15 auditados con 15 efectos funcionales.** El cambio de este informe es puramente documental y no modifica los tests ni el árbol funcional validado.
