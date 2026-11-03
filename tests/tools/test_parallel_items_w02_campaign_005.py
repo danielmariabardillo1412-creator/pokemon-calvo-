@@ -1519,10 +1519,10 @@ def verify_sources(chk):
                      'creature.friendship = mini(255, before + gain)'):
         chk.demand(fragment in friendship, "Tramos de amistad modificados")
     for fragment in (
-        'elif String(spec.kind) == "vitamin":',
+        'elif String(spec.kind) in ["vitamin", "wing"]:',
         'var expected_evs: Dictionary = start_evs.duplicate(true)',
         'StatCalculator.compute(',
-        'var friendship_added: int = [5, 3, 2][tier]',
+        'var friendship_added: int = ([3, 2, 1] if String(spec.kind) == "wing" else [5, 3, 2])[tier]',
     ):
         chk.demand(fragment in runner, "Arnés vitamina incompleto: " + fragment)
     for fragment in ('&"hp_up"', '&"iron"', '&"pp_max"', '&"protein"'):
