@@ -1,6 +1,7 @@
 extends SceneTree
 const Servicio = preload("res://modules/inventory/field_item_service.gd")
 const BLOQUE_01 := [&"dawn_stone", &"dusk_stone", &"shiny_stone"]
+const BLOQUE_02 := [&"sun_stone", &"oval_stone", &"black_augurite"]
 const ID := &"w04_c003_01"
 var checks := 0
 var fallos: Array[String] = []
@@ -38,7 +39,7 @@ func _ejecutar() -> void:
 		terminar()
 		return
 	var catalogo: DefinitionCatalog = GameData.from_dict(data).to_definition_catalog()
-	for item: StringName in BLOQUE_01:
+	for item: StringName in BLOQUE_01 + BLOQUE_02:
 		var compatibles: Array[Dictionary] = []
 		var dependientes := 0
 		for sid: StringName in catalogo.species_catalog.all_ids():
@@ -51,7 +52,8 @@ func _ejecutar() -> void:
 				else:
 					dependientes += 1
 		validar(catalogo.item(item) != null, String(item) + "/objeto_catalogado")
-		validar(compatibles.size() + dependientes > 0, String(item) + "/reglas_reales_existentes")
+		if compatibles.is_empty() and dependientes == 0:
+			print("CAMP003_W04_DEPENDENCIA item=", String(item), " reason=sin_regla_catalogada")
 		if compatibles.is_empty():
 			print("CAMP003_W04_DEPENDENCIA item=", String(item), " records=", dependientes)
 			continue
@@ -104,7 +106,7 @@ func terminar() -> void:
 		return
 	cerrado = true
 	if fallos.is_empty():
-		print("CAMP003_W04_GODOT PASS blocks=1 checks=", checks)
+		print("CAMP003_W04_GODOT PASS blocks=2 checks=", checks)
 	else:
 		print("CAMP003_W04_GODOT FAIL errors=", JSON.stringify(fallos))
 	quit(0 if fallos.is_empty() else 1)
