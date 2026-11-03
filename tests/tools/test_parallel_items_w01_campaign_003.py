@@ -128,13 +128,28 @@ SCENARIOS_07 = {
     "light_no_screen": ("light_clay", "no_screen_control", "mew",
         "", "", 100, "mew", 100, "amnesia", "tackle", (19,)),
 }
+SCENARIOS_08 = {
+    "moss_water_boost": ("luminous_moss", "moss_water_special_defense", "mew",
+        "", "", 100, "mew", 100, "water_gun", "reflect", (19,23)),
+    "moss_normal_control": ("luminous_moss", "moss_no_water_hit", "mew",
+        "", "", 100, "mew", 100, "tackle", "reflect", (19,)),
+    "mental_taunt_cure": ("mental_herb", "mental_herb_taunt_cure", "mew",
+        "", "", 100, "mew", 100, "taunt", "reflect", (19,23)),
+    "mental_no_taunt": ("mental_herb", "mental_herb_retained", "mew",
+        "", "", 100, "mew", 100, "amnesia", "reflect", (19,)),
+    "metronome_repeat_reset": ("metronome", "metronome_repeat_reset", "mew",
+        "", "", 50, "mew", 100, "reflect", "water_gun", (19,23)),
+    "metronome_status_only": ("metronome", "metronome_no_repeat_control", "mew",
+        "", "", 100, "mew", 100, "amnesia", "reflect", (19,)),
+}
 OPERATIONS = ({r[1] for r in SCENARIOS_01.values()}
               | {r[1] for r in SCENARIOS_02.values()}
               | {r[1] for r in SCENARIOS_03.values()}
               | {r[1] for r in SCENARIOS_04.values()}
               | {r[1] for r in SCENARIOS_05.values()}
               | {r[1] for r in SCENARIOS_06.values()}
-              | {r[1] for r in SCENARIOS_07.values()})
+              | {r[1] for r in SCENARIOS_07.values()}
+              | {r[1] for r in SCENARIOS_08.values()})
 REQUIRED_CASE_FIELDS = {"block", "id", "item_id", "op", "actor_species", "foe_species",
                         "foe_move", "own_move", "seeds", "history"}
 TOTAL_CHECKS = 0
@@ -273,6 +288,20 @@ def validate() -> int:
         require("HELD_PILOT_VERIFIED" in next(x for x in inventory.splitlines()
                                              if x.startswith("light_clay,")),
                 "Refleluz: piloto de efecto no reconocido")
+    if len(progress) >= 8:
+        native_pilot = (ROOT / "tools/item_audit/held_pilot.cjs").read_text(encoding="utf-8")
+        require("['luminous_moss','water_gun','spd']" in old_v2
+                and "hit_type_stat_boost" in old_v2,
+                "Musgo Brillante: prueba nativa de golpe Agua ausente")
+        require("mental_herb:{foe:['taunt']" in native_pilot
+                and "volatiles.includes('taunt')" in native_pilot,
+                "Hierba Mental: piloto nativo de Mofa ausente")
+        require("add('metronome','repeat_and_reset'" in old_v3
+                and "moves:['water_gun','reflect']" in old_v3,
+                "Metrónomo: referencia de incremento y reinicio de cadena ausente")
+        require("HELD_PILOT_VERIFIED" in next(x for x in inventory.splitlines()
+                                             if x.startswith("mental_herb,")),
+                "Hierba Mental: validación histórica del piloto ausente")
     cases = document["cases"]
     require(type(cases) is list and len(cases) >= 7, "Sin casos suficientes")
     found, pairs = set(), set()
@@ -353,7 +382,16 @@ def validate() -> int:
                       case["foe_species"], case.get("foe_level", 100),
                       case["foe_move"], case["own_move"], tuple(case["seeds"]))
             require(actual == expected, "Desviacion de mecanismo o semilla W01/07: "+name)
-        elif stage not in {"01", "02", "03", "04", "05", "06", "07"}:
+        elif stage == "08":
+            require(name in SCENARIOS_08, "Caso ajeno a W01/08")
+            expected = SCENARIOS_08[name]
+            actual = (item, case["op"], case["actor_species"],
+                      case.get("actor_ability", ""), case.get("actor_hp", ""),
+                      case.get("actor_level", 100), case["foe_species"],
+                      case.get("foe_level", 100), case["foe_move"],
+                      case["own_move"], tuple(case["seeds"]))
+            require(actual == expected, "Desviación de causa o semilla W01/08: "+name)
+        elif stage not in {"01", "02", "03", "04", "05", "06", "07", "08"}:
             raise ValueError("Stage no implementado por validador W01")
     for stage, ids in stage_map.items():
         for item in ids:
@@ -386,6 +424,10 @@ def validate() -> int:
         require(len(cases) == 48 and len(pairs) == 99,
                 "Matriz W01/07 requiere 48 escenarios y 99 pares")
         require(set(SCENARIOS_07) <= found, "Faltan 6 escenarios del bloque 07")
+    if len(progress) == 8:
+        require(len(cases) == 54 and len(pairs) == 108,
+                "Matriz W01/08 requiere 54 escenarios y 108 pares")
+        require(set(SCENARIOS_08) <= found, "Faltan seis casos W01/08")
     return len(progress)
 
 def main():
