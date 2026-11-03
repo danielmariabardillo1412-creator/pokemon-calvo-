@@ -282,6 +282,80 @@
       "context_origin": "Both WildAdventureSession.capture_current and ShowdownAdventureSession.capture propagate active catcher.level, not target level or UI input.",
       "implementation_authorized": false,
       "ci_required": true
+    },
+    {
+      "bloque": "05",
+      "ids": [
+        "fast_ball",
+        "dream_ball"
+      ],
+      "objective": "base_speed_y_sueno",
+      "prior_evidence": {
+        "state": "YA_VERIFICADO_NO_DUPLICAR",
+        "sources": [
+          "modules/capture/capture_ball_effects.gd",
+          "modules/capture/capture_system.gd",
+          "modules/inventory/capture_inventory_service.gd",
+          "tests/gameplay/item_capture_v11.gd"
+        ],
+        "note": "V11 ya contempla Fast/Dream. Prueba incremental velocidad base, cap 255, sueño versus Bostezo."
+      },
+      "fast_cases": [
+        {
+          "species_id": "pikachu",
+          "base_speed": 90,
+          "capture_rate": 190,
+          "expected_factor": 1,
+          "seed": 5501
+        },
+        {
+          "species_id": "mew",
+          "base_speed": 100,
+          "capture_rate": 45,
+          "expected_factor": 4,
+          "seed": 5502
+        },
+        {
+          "species_id": "raichu",
+          "base_speed": 110,
+          "capture_rate": 75,
+          "expected_factor": 3.4,
+          "seed": 5503
+        }
+      ],
+      "dream_species": [
+        "mew",
+        "caterpie"
+      ],
+      "dream_states": [
+        {
+          "state": "none",
+          "expected_factor": 1,
+          "status_bonus": 1
+        },
+        {
+          "state": "yawn",
+          "expected_factor": 1,
+          "status_bonus": 1
+        },
+        {
+          "state": "sleep",
+          "expected_factor": 4,
+          "status_bonus": 2
+        }
+      ],
+      "hp_modes": [
+        "full",
+        "one_hp"
+      ],
+      "invalid_cases": [
+        "trainer_battle_not_capturable",
+        "item_not_owned",
+        "target_knocked_out"
+      ],
+      "expected_behavior": "Fast base_speed >=100 x4 with modified rate cap 255; Dream x4 only on persistent sleep (not volatile yawn), with independent sleep status bonus x2; valid throws one ball/one RNG, invalid none.",
+      "implementation_authorized": false,
+      "ci_required": true
     }
   ]
 }
