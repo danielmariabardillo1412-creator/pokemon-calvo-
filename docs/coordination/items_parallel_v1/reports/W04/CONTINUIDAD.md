@@ -165,3 +165,6 @@ Las **16 dependencias CAMP003** y **9 dependencias CAMP004 bloques 01–03** sig
 **Incidencia previa:** el intento de escritura anterior del runner fue bloqueado por un control de seguridad. Con el nuevo `p` se reintentó la **misma operación normal en la rama propia** y funcionó (commit `4940c32e47488bc24d606876f3f5c127344b6433`); no hubo modificación de permisos ni derivación. Regresiones CAMP003 y CAMP001 preservadas.
 
 **Al siguiente `p`:** comprobar la CI definitiva del bloque 06 y reparar errores propios si los hay. Si CI correcta, ejecutar solamente **bloque 07/10** `rage_candy_bar;red_orb;reins_of_unity`. Mantener backlog de 16 dependencias CAMP003 sin repetir su trabajo. No editar `main`, V28, rama árbitra o ramas ajenas.
+
+
+**CI posterior de CSV consolidado (bloque 06):** [#41584473320](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41584473320), SHA `ce99a4a70514b3d952a59ee863f07f770af71f6a`, `completed/success`: CAMP004 Python 181, Godot 565 y regresiones CAMP003 120/270. **Cierre del bloque 06 verificado 6/10**, 18 IDs auditados en CAMP004 y 16 dependencias heredadas de CAMP003 sin resolver. Siguiente `p` exclusivamente bloque 07: `rage_candy_bar;red_orb;reins_of_unity`.
