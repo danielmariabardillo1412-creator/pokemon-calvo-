@@ -40,6 +40,7 @@ func _run_campaign() -> void:
 			"03": _block_03(bloque)
 			"04": _block_04(bloque)
 			"05": _block_05(bloque)
+			"06": _block_06(bloque)
 			_: check("Bloque aún sin suite funcional " + str(numero), false)
 	_terminar_campania(numero)
 
@@ -629,6 +630,44 @@ func _block05_reject(id: StringName, reason: String) -> void:
 		result.result.status == CaptureResult.INVALID and result.result.reason == reason
 		and not result.result.consume_item and inv.to_dict() == before_inv
 		and target.to_dict() == before_target and rng.state == before_rng and party.is_empty())
+
+
+# 06: Amigo fija amistad a 200, Sana repone PS/PP/estado SOLO después de captura.
+# Regresión complementaria V11: amistad superior a 200, fallo y rechazo sin efectos.
+func _block_06(bloque: Dictionary) -> void:
+	var rules := CaptureRuleset.new()
+	check("Bloque06 IDs exactos y bolas conocidas",
+		bloque.get("ids", []) == ["friend_ball", "heal_ball"]
+		and rules.is_known_ball(&"friend_ball") and rules.is_known_ball(&"heal_ball"))
+	var bounds: Array = bloque.get("seed_search_range", [])
+	check("Semillas de prueba deterministas acotadas", bounds.size() == 2
+		and int(bounds[0]) == 1 and int(bounds[1]) == 4096)
+	for entry: Dictionary in bloque.get("friend_cases", []):
+		_block06_capture(&"friend_ball", &"mew", int(entry.get("friendship", -99)),
+			"sleep", 3, 64, String(entry.get("outcome", "")) == "success", false, bounds)
+	for entry: Dictionary in bloque.get("heal_cases", []):
+		_block06_capture(&"heal_ball", StringName(String(entry.get("species_id", ""))), 117,
+			String(entry.get("status", "none")), int(entry.get("pp_current", 3)),
+			int(entry.get("pp_max", 64)), String(entry.get("outcome", "")) == "success",
+			false, bounds)
+	for id: StringName in [&"friend_ball", &"heal_ball"]:
+		_block06_capture(id, &"mew", 240, "sleep", 1, 64, true, true, bounds)
+		for reason: String in bloque.get("invalid_cases", []):
+			_block06_reject(id, reason, 117, 3, 64)
+	for value: Variant in bloque.get("invalid_friendship", []):
+		_block06_reject(&"friend_ball", "invalid_ball_friendship_state", int(value), 3, 64)
+	for entry: Dictionary in bloque.get("invalid_pp", []):
+		_block06_reject(&"heal_ball", "invalid_ball_pp_state", 117,
+			int(entry.get("pp_current", -99)), int(entry.get("pp_max", -99)))
+
+
+func _block06_seed_for(probability: float, want_success: bool, bounds: Array) -> int:
+	for candidate in range(int(bounds[0]), int(bounds[1]) + 1):
+		var trial := RandomNumberGenerator.new()
+		trial.seed = candidate
+		if (trial.randf() < probability) == want_success:
+			return candidate
+	return -1
 
 
 func _terminar_campania(bloques: int) -> void:
