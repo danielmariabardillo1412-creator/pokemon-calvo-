@@ -14,6 +14,7 @@ ITEMS_04 = ("galarica_cuff", "galarica_wreath", "scroll_of_darkness", "scroll_of
 ITEMS_05 = ("berry_sweet", "clover_sweet", "flower_sweet", "love_sweet", "ribbon_sweet", "star_sweet", "strawberry_sweet")
 ITEMS_06 = ("whipped_dream", "leaders_crest")
 ITEMS_07 = ("adamant_crystal", "blue_orb", "griseous_core", "lustrous_globe", "red_orb")
+ITEMS_08 = ("dna_splicers", "reins_of_unity", "n_lunarizer_merge", "n_solarizer_merge")
 
 
 def check_rows(path):
@@ -57,10 +58,11 @@ def main():
     field = (ROOT / "modules/inventory/field_item_service.gd").read_text(encoding="utf-8")
 
     check(fixture["worker"] == "W04" and fixture["campaign"] == "CAMP_005", "fixture identidad")
-    check(len(fixture["blocks"]) == 7 and [x["block"] for x in fixture["blocks"]] == ["01", "02", "03", "04", "05", "06", "07"], "fixture acumulativo 01 a 07")
+    check(len(fixture["blocks"]) == 8 and [x["block"] for x in fixture["blocks"]] == ["01", "02", "03", "04", "05", "06", "07", "08"], "fixture acumulativo 01 a 08")
     check(len(queue) == 10 and queue[0]["ids"].split(";") == list(ITEMS_01), "cola oficial 01")
-    check(len(progress) == 7 and [x["bloque"] for x in progress] == ["01", "02", "03", "04", "05", "06", "07"], "progreso bloques 01 a 07")
-    check(progress[0]["ids"].split(";") == list(ITEMS_01) and progress[1]["ids"].split(";") == list(ITEMS_02) and progress[2]["ids"].split(";") == list(ITEMS_03) and progress[3]["ids"].split(";") == list(ITEMS_04) and progress[4]["ids"].split(";") == list(ITEMS_05) and progress[5]["ids"].split(";") == list(ITEMS_06) and progress[6]["ids"].split(";") == list(ITEMS_07), "progreso filas exactas")
+    check(len(progress) == 8 and [x["bloque"] for x in progress] == ["01", "02", "03", "04", "05", "06", "07", "08"], "progreso bloques 01 a 08")
+    check(progress[0]["ids"].split(";") == list(ITEMS_01) and progress[1]["ids"].split(";") == list(ITEMS_02) and progress[2]["ids"].split(";") == list(ITEMS_03) and progress[3]["ids"].split(";") == list(ITEMS_04) and progress[4]["ids"].split(";") == list(ITEMS_05) and progress[5]["ids"].split(";") == list(ITEMS_06) and progress[6]["ids"].split(";") == list(ITEMS_07) and progress[7]["ids"].split(";") == list(ITEMS_08), "progreso filas exactas")
+    check(queue[7]["ids"].split(";") == list(ITEMS_08) and queue[7]["familia"] == "FORM_FUSION", "cola 08 aprobada")
     check(queue[6]["ids"].split(";") == list(ITEMS_07) and queue[6]["familia"] == "FORM_DEPENDENCY", "cola 07 aprobada")
     check(queue[5]["ids"].split(";") == list(ITEMS_06) and queue[5]["familia"] == "SPECIAL_EVOLUTION", "cola 06 aprobada")
     check(queue[4]["ids"].split(";") == list(ITEMS_05) and queue[4]["familia"] == "SPECIAL_EVOLUTION", "cola 05 aprobada")
@@ -132,7 +134,7 @@ def main():
     for token in ("func _casos_de_version_y_etapas_02(", "prism_scale/belleza_legacy_no_degradada",
                   "up_grade/dos_objetos_dos_etapas", "up_grade/porygon2_sin_opcion",
                   "up_grade/porygon2_no_evoluciona", "up_grade/porygon2_con_objeto_no_salta_etapa",
-                  "up_grade/porygon2_retirada_sin_mutacion", "bloques_01_a_07_secuenciales",
+                  "up_grade/porygon2_retirada_sin_mutacion", "bloques_01_a_08_secuenciales",
                   "CAMP005_W04_ALT id=prism_scale", "CAMP005_W04_STAGE item=up_grade"):
         check(token in runner, "Falta contrato runtime del bloque 02: " + token)
 
@@ -178,7 +180,7 @@ def main():
     check("var gender:" not in creature and "var gender_id:" not in creature and '"gender":' not in creature, "género no persistido en dominio de criatura")
     check('"time_of_day":' not in evolution.split("static func level_up_context(",1)[1].split("static func _stat_relation_matches(",1)[0], "subida de nivel sin reloj")
     for token in ("func _auditar_condicion_03(", "func _tiene_destino_03(",
-                  "bloques_01_a_07_secuenciales", "sin_opciones_directas",
+                  "bloques_01_a_08_secuenciales", "sin_opciones_directas",
                   "condicion_no_degradable", "no_ignora_condiciones", "sexo_no_persistido",
                   "contexto_sin_requisitos", "uso_rechazado_sin_gasto", "evolucion_rechazada",
                   "estado_savev2_integro", "retirada_sin_perdida", "no_equipable_sin_gasto",
@@ -235,7 +237,7 @@ def main():
                   "04_no_uso_incondicional", "04_forma_no_inventada_savev2",
                   "04_retira_y_restaura", "04_no_equipable_sin_mutacion",
                   "04_forma_persistente_no_contratada", "CAMP005_W04_FORM_CONTRACT",
-                  "bloques_01_a_07_secuenciales", "CAMP005_W04_GODOT PASS blocks=7 checks="):
+                  "bloques_01_a_08_secuenciales", "CAMP005_W04_GODOT PASS blocks=8 checks="):
         check(token in runner, "falta escenario Godot de forma04: " + token)
 
     # Bloque 05: siete confites seleccionados, pero una sola evolucion original SPIN.
@@ -268,7 +270,7 @@ def main():
                   "05_ajeno_sin_gasto", "05_sin_consumo_tras_equipar", "05_sin_forma_por_evolve",
                   "05_guardar_savev2", "05_cargar_savev2", "05_identidad_confite_savev2",
                   "05_atributos_savev2", "05_retirada_restaurada", "05_siete_confites_exactos",
-                  "bloques_01_a_07_secuenciales", "CAMP005_W04_GODOT PASS blocks=7 checks="):
+                  "bloques_01_a_08_secuenciales", "CAMP005_W04_GODOT PASS blocks=8 checks="):
         check(token in runner, "Godot sin contrato observable confites: " + token)
 
     # Bloque06: dos rutas muy distintas. Whipped Dream mantiene trade+held_item
@@ -329,8 +331,8 @@ def main():
                   "06_ajeno_rechazado", "06_sin_intercambio_ni_tres_derrotas_falsas",
                   "06_guardar_savev2", "06_cargar_savev2", "06_identidad_y_stock_savev2",
                   "06_atributos_savev2", "06_retirar_sin_perder", "06_no_equipable_inmutable",
-                  "06_dos_objetos_exactos", "bloques_01_a_07_secuenciales",
-                  "CAMP005_W04_GODOT PASS blocks=7 checks="):
+                  "06_dos_objetos_exactos", "bloques_01_a_08_secuenciales",
+                  "CAMP005_W04_GODOT PASS blocks=8 checks="):
         check(token in runner, "faltan aserciones Godot bloque06: " + token)
 
     # Bloque 07: formas Origin y Primal son variedades de la MISMA especie,
@@ -394,9 +396,88 @@ def main():
                   "07_atributos_savev2", "07_retirar_y_restaurar",
                   "07_cruce_equipamiento_generico_no_seleccion_forma",
                   "07_prisma_no_cambia_especie_ajena", "07_cinco_objetos_exactos",
-                  "bloques_01_a_07_secuenciales", "CAMP005_W04_ORB_CROSS",
-                  "CAMP005_W04_GODOT PASS blocks=7 checks="):
+                  "bloques_01_a_08_secuenciales", "CAMP005_W04_ORB_CROSS",
+                  "CAMP005_W04_GODOT PASS blocks=8 checks="):
         check(token in runner, "bloque07 no comprueba escenario real: " + token)
+
+
+    # Bloque 08: la pareja fusionada debe conservar DOS identidades propietarias,
+    # no solo forma del origen; PokeAPI ofrece variedades, NO una cadena evolutiva.
+    fusion = fixture["blocks"][7]
+    pairs = fusion["cases"]
+    check(fusion["ids"] == list(ITEMS_08) and fusion["family"] == "FORM_FUSION", "bloque08 cuatro IDs propios")
+    check(fusion["classification"] == "DEPENDENCIA_FUSION_DOS_PROPIETARIOS" and len(pairs) == 6, "seis escenarios, dependencia concreta")
+    check({p["item_id"] for p in pairs} == set(ITEMS_08), "cuatro items sin otros ID")
+    expected_pairs = {
+        ("dna_splicers", "kyurem", "zekrom", "kyurem-black"),
+        ("dna_splicers", "kyurem", "reshiram", "kyurem-white"),
+        ("reins_of_unity", "calyrex", "glastrier", "calyrex-ice"),
+        ("reins_of_unity", "calyrex", "spectrier", "calyrex-shadow"),
+        ("n_lunarizer_merge", "necrozma", "lunala", "necrozma-dawn"),
+        ("n_solarizer_merge", "necrozma", "solgaleo", "necrozma-dusk"),
+    }
+    check({(p["item_id"], p["source"], p["partner"], p["target_variety"]) for p in pairs} == expected_pairs,
+          "partner y variedad correctos, sin confundir fusión ni reversibilidad")
+    check(len(set((p["item_id"], p["source"], p["partner"]) for p in pairs)) == 6, "seis parejas únicas")
+    check(set(p["item_id"] for p in pairs if p["partner_storage"]) == {
+        "dna_splicers", "reins_of_unity", "n_lunarizer_merge"
+    }, "segundo propietario en PC cubierto por casos reales")
+    check(all(selected[i]["estado_contenido"] == "SELECCIONADO" for i in ITEMS_08),
+          "cuatro elementos del backlog seleccionados")
+    check(selected["dna_splicers"]["familia"] == "STORY_KEY_OR_FORM_REVIEW" and
+          selected["reins_of_unity"]["familia"] == "STORY_KEY_OR_FORM_REVIEW" and
+          selected["n_lunarizer_merge"]["familia"] == "LEGACY_OR_CATEGORY_REVIEW" and
+          selected["n_solarizer_merge"]["familia"] == "LEGACY_OR_CATEGORY_REVIEW",
+          "diferencia canonical y legacy conservada")
+    check(all(i not in held_profile["holdable_ids"] for i in ITEMS_08),
+          "ninguna de cuatro herramientas es equipable")
+    fusion_field = {r["id"]: r for r in check_rows(ROOT / "docs/current/ITEM_FIELD_V8.csv.txt")}
+    fusion_inventory = {r["id"]: r for r in check_rows(ROOT / "docs/current/ITEM_INVENTORY.csv")}
+    check(all(fusion_field[i]["field_runtime_status"] == "NOT_CERTIFIED" for i in ITEMS_08),
+          "fusion sin puente de campo certificado")
+    check(all(fusion_inventory[i]["connection"] == "DATA_ONLY" for i in ITEMS_08),
+          "fuente de fusion en inventario data_only")
+    partner_numbers = {
+        "zekrom": 644, "reshiram": 643, "glastrier": 896,
+        "spectrier": 897, "lunala": 792, "solgaleo": 791,
+    }
+    for p in pairs:
+        name = p["item_id"] + "/" + p["partner"]
+        source_data = json.loads((ROOT / f"data/api/v2/pokemon-species/{p['species_number']}/index.json").read_text(encoding="utf-8"))
+        check(source_data["name"] == p["source"], name + ": especie titular canónica")
+        check(sum(v["pokemon"]["name"] == p["target_variety"] and not v["is_default"] for v in source_data["varieties"]) == 1,
+              name + ": forma alternativa presente realmente")
+        check(source_data["evolution_chain"]["url"] == f"/api/v2/evolution-chain/{p['evolution_chain']}/",
+              name + ": cadena origen referenciada")
+        chain = json.loads((ROOT / f"data/api/v2/evolution-chain/{p['evolution_chain']}/index.json").read_text(encoding="utf-8"))
+        check(chain["chain"]["species"]["name"] == p["source"] and chain["chain"]["evolves_to"] == [],
+              name + ": fusion no es evolucion")
+        partner_data = json.loads((ROOT / f"data/api/v2/pokemon-species/{partner_numbers[p['partner']]}/index.json").read_text(encoding="utf-8"))
+        check(partner_data["name"] == p["partner"], name + ": pareja real documentada como especie")
+    save_source = (ROOT / "modules/save/save_game_data.gd").read_text(encoding="utf-8")
+    collection_source = (ROOT / "modules/creatures/storage/player_collection.gd").read_text(encoding="utf-8")
+    check("var creatures: Variant = []" in save_source and '"creatures": creatures' in save_source,
+          "SaveV2 tiene registro de objetos CreatureInstance individuales")
+    check("duplicate_creature_id" in save_source and "double_ownership" in save_source,
+          "SaveV2 rechaza identidades duplicadas y doble propiedad")
+    check("func deposit(" in collection_source and "func owned_creature(" in collection_source and
+          "func location_of(" in collection_source, "agregado permite party y PC sin inventar api")
+    check('func fuse(' not in field and 'func unfuse(' not in field,
+          "FieldItemService carece de transaccion de fusion y reversión")
+    for token in ("func _auditar_fusion_08(", "08_forma_fusion_canonica",
+                  "08_fusion_no_es_evolucion", "08_criatura_socia", "08_socio_depositado_pc",
+                  "08_dos_identidades_sin_duplicacion", "08_no_api_fusion_dos_criaturas",
+                  "08_savev2_registro_doble_valido", "08_registro_dos_ids_exactos",
+                  "08_no_fusion_mochila_principal", "08_no_fusion_mochila_socio",
+                  "08_no_fusion_por_evolve", "08_no_fusion_por_equipar",
+                  "08_ajeno_sin_gasto", "08_dos_especies_intactas_y_sin_consumo",
+                  "08_guardar_doble_savev2", "08_recuperar_doble_savev2",
+                  "08_recuperar_dos_especies_identidades", "08_pc_o_party_sin_duplicacion",
+                  "08_principal_persistencia_completa", "08_socio_persistencia_completa",
+                  "08_estado_inalterado_cero_fusiones", "08_seis_parejas_cuatro_objetos",
+                  "bloques_01_a_08_secuenciales", "CAMP005_W04_FUSION",
+                  "CAMP005_W04_GODOT PASS blocks=8 checks="):
+        check(token in runner, "ausencia de test observable bloque08: " + token)
 
 
     # Prueba de interfaz pendiente: la API de nivel comunica nivel/estadísticas,
@@ -415,11 +496,11 @@ def main():
                   "productor_no_transporta_objeto", "equipamiento_positivo_sin_evolucion",
                   "guardar_savev2", "leer_savev2", "identidad_item_savev2",
                   "retirada_preserva_estado", "mochila_no_es_intercambio",
-                  "CAMP005_W04_GODOT PASS blocks=7 checks="):
+                  "CAMP005_W04_GODOT PASS blocks=8 checks="):
         check(token in runner, "runner sin prueba observable: " + token)
     check((ROOT / "tests/tools/test_parallel_items_w04_campaign_004.py").exists(), "regresión CAMP004 preservada")
     check((ROOT / "tests/tools/test_parallel_items_w04_campaign_003.py").exists(), "regresión CAMP003 preservada")
-    print(f"CAMP005_W04_PY PASS blocks=7 checks={checks}")
+    print(f"CAMP005_W04_PY PASS blocks=8 checks={checks}")
 
 
 if __name__ == "__main__":
