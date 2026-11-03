@@ -1,3 +1,24 @@
+# CAMPAÑA_005_FINALIZADA — IA5/W05 · 10/10 · 60 MT · CI FINAL PASS
+
+**CERTIFICACIÓN DEFINITIVA (2026-11-04):** entregadas y validadas mediante pruebas funcionales 60 MT únicas `tm142`–`tm201` en Scarlet/Violet; los 10 bloques y las 10 filas de progreso coinciden exactamente con cola IA6 y catálogo canónico. Se verificó el run [GitHub Actions #41742499805](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41742499805), SHA de pruebas `b886c10756ad843d5f92834f29a42d31e63cf262`, job `126287538668`, con **`completed/success`** y estos recibos reales:
+
+| Suite | Recibo de log |
+| --- | --- |
+| CAMP005 Python | `CAMP005_W05_PY PASS blocks=10 checks=580` |
+| CAMP005 gate Python | `CAMP005_GATE_PY_PASS worker=W05 blocks=10 checks=580` |
+| CAMP005 Godot | `CAMP005_W05_GODOT PASS blocks=10 checks=2166` |
+| CAMP005 gate Godot | `CAMP005_GATE_GODOT_PASS worker=W05 blocks=10 checks=2166` |
+| CAMP004 Python (60 MT anteriores) | `CAMP004_W05_PY PASS blocks=10 checks=580` |
+| CAMP004 Godot | `CAMP004_W05_GODOT PASS blocks=10 checks=2166` |
+| CAMP003 Python (60 MT anteriores) | `CAMP003_W05_PY PASS blocks=10 checks=580` |
+| CAMP003 Godot | `CAMP003_W05_GODOT PASS blocks=10 checks=2166` |
+
+**Conclusión técnica:** 60/60 MT de CAMP005 con pruebas de enseñanza, compatibilidad, PP, stock, propietario, consumo y SaveV2 PASS; 120 MT anteriores conservaron su cobertura funcional en el mismo run de cierre. Todo se probó en la rama W05, **no se ha integrado ni fusionado en `main`**. La CI Godot headless no acredita UI/GPU y no sustituye auditoría/merge de IA6. No se modificaron producción, catálogos, learnsets, políticas, 19 MT históricas inactivas ni ramas ajenas; no se relajaron aserciones. Los commits posteriores de informes no alteran el SHA de pruebas validado.
+
+**ESTADO OFICIAL: `CAMPAÑA_005_FINALIZADA` Y STOP.** No hay bloque 11 ni campaña posterior autorizados. IA6 debe auditar y coordinar integración desde su gate. Esta sección definitiva prevalece sobre el estado provisional `CI FUNCIONAL FINAL PENDIENTE` conservado más abajo como historial de publicación.
+
+---
+
 # IA5/W05 — CAMPAÑA_005 · INFORME CONSOLIDADO 10/10
 
 **ESTADO DE ENTREGA:** 10 bloques entregados, **60 MT nuevas `tm142`–`tm201`** en versión Scarlet/Violet. **CI FUNCIONAL FINAL PENDIENTE** en la fecha de creación: no afirmar `CAMPAÑA_005_FINALIZADA` sin leer recibos de las tres campañas.
