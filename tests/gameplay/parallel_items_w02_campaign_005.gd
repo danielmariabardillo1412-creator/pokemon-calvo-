@@ -30,6 +30,11 @@ func _training_creature(spec: Dictionary) -> CreatureInstance:
 	if spec.has("exp_until_next"):
 		var curve: String = String(catalogs.species(c.species_id).growth_rate)
 		c.experience = ProgressionRuleset.experience_for_level(curve, c.level + 1) - int(spec.exp_until_next)
+	if String(spec.kind) == "mochi_reset":
+		var reset_evs: Dictionary = spec.get("reset_evs", {})
+		for stat: Variant in c.evs:
+			c.evs[stat] = int(reset_evs.get(String(stat), 0))
+		c.recalculate_stats(catalogs.species(c.species_id), ProgressionRuleset.new())
 	c.friendship = int(spec.get("start_friendship", 99))
 	if String(spec.kind) in ["vitamin", "wing", "mochi"]:
 		var stat: String = String(spec.stat)
