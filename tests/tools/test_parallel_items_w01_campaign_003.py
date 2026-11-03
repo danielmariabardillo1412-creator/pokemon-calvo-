@@ -81,10 +81,29 @@ SCENARIOS_04 = {
     "focus_band_nonlethal": ("focus_band", "nonlethal_control", "mew", "", "",
         "mew", "tackle", "reflect", (19,)),
 }
+SCENARIOS_05 = {
+    "flame_burn_end_turn": ("flame_orb", "end_turn_burn", "mew", "", "", 100,
+        "mew", 100, "amnesia", "reflect", (19,23)),
+    "flame_fire_type_immune": ("flame_orb", "fire_type_immunity", "charizard", "", "", 100,
+        "mew", 100, "amnesia", "scratch", (19,)),
+    "sash_full_hp_lethal": ("focus_sash", "focus_sash_full_hp", "pikachu", "", "", 1,
+        "mew", 100, "seismic_toss", "growl", (1,19)),
+    "sash_partial_hp_lethal": ("focus_sash", "focus_sash_not_full", "pikachu", "",
+        "minus_one", 1, "mew", 100, "seismic_toss", "growl", (19,)),
+    "sash_nonlethal": ("focus_sash", "focus_sash_nonlethal", "mew", "", "", 100,
+        "mew", 1, "tackle", "growl", (23,)),
+    "grassy_seed_field": ("grassy_seed", "grassy_field_defense", "mew", "", "", 100,
+        "mew", 100, "grassy_terrain", "reflect", (19,23)),
+    "grassy_seed_wrong_field": ("grassy_seed", "grassy_wrong_terrain", "mew", "", "", 100,
+        "mew", 100, "electric_terrain", "reflect", (19,)),
+    "grassy_seed_no_field": ("grassy_seed", "grassy_no_terrain", "mew", "", "", 100,
+        "mew", 100, "amnesia", "reflect", (19,)),
+}
 OPERATIONS = ({r[1] for r in SCENARIOS_01.values()}
               | {r[1] for r in SCENARIOS_02.values()}
               | {r[1] for r in SCENARIOS_03.values()}
-              | {r[1] for r in SCENARIOS_04.values()})
+              | {r[1] for r in SCENARIOS_04.values()}
+              | {r[1] for r in SCENARIOS_05.values()})
 REQUIRED_CASE_FIELDS = {"block", "id", "item_id", "op", "actor_species", "foe_species",
                         "foe_move", "own_move", "seeds", "history"}
 TOTAL_CHECKS = 0
@@ -179,6 +198,19 @@ def validate() -> int:
         require("add('focus_band','survival_rng'" in old_v3
                 and "foeMoves:['seismic_toss']" in old_v3,
                 "Cinta Aguante: fuente RNG de supervivencia ausente")
+    if len(progress) >= 5:
+        require("add('flame_orb','end_turn_status'" in old_v2
+                and "own(a).status_id,'burn'" in old_v2,
+                "Llamasfera: referencia nativa de quemadura residual ausente")
+        require("['grassy_seed','grassy_terrain','def']" in old_v3
+                and "add(id,'wrong_terrain'" in old_v3,
+                "Semilla Hierba: referencia de terreno y control ausente")
+        require("HELD_PILOT_VERIFIED" in next(x for x in inventory.splitlines()
+                                             if x.startswith("focus_sash,")),
+                "Banda Aguante: piloto histórico sin evidencia")
+        require(""""lethal_full"""" in old_w01 and "lethal_partial" in old_w01
+                and "nonlethal_control" in old_w01,
+                "Banda Aguante: escenarios históricos de PS y KO ausentes")
     cases = document["cases"]
     require(type(cases) is list and len(cases) >= 7, "Sin casos suficientes")
     found, pairs = set(), set()
@@ -186,7 +218,7 @@ def validate() -> int:
     stage_map = {r["bloque"]: set(r["ids"].split(";")) for r in tasks[:len(progress)]}
     for case in cases:
         require(type(case) is dict and REQUIRED_CASE_FIELDS <= set(case)
-                and set(case) <= REQUIRED_CASE_FIELDS | {"actor_ability", "actor_hp"},
+                and set(case) <= REQUIRED_CASE_FIELDS | {"actor_ability", "actor_hp", "actor_level", "foe_level"},
                 "Caso con forma inválida")
         name, stage, item = case["id"], case["block"], case["item_id"]
         require(type(name) is str and name not in found and stage in stage_map
@@ -227,13 +259,23 @@ def validate() -> int:
                       tuple(case["seeds"]))
             require(actual == expected, "Desvío de causas/semillas W01/03: "+name)
         elif stage == "04":
+            require("actor_level" not in case and "foe_level" not in case, "Stage04 sin niveles adicionales")
             require(name in SCENARIOS_04, "Caso ajeno al bloque W01/04")
             expected = SCENARIOS_04[name]
             actual = (item, case["op"], case["actor_species"], case.get("actor_ability", ""),
                       case.get("actor_hp", ""), case["foe_species"], case["foe_move"],
                       case["own_move"], tuple(case["seeds"]))
             require(actual == expected, "Mecánica o semilla desviada W01/04: "+name)
-        elif stage not in {"01", "02", "03", "04"}:
+        elif stage == "05":
+            require(name in SCENARIOS_05, "Caso no autorizado W01/05")
+            expected = SCENARIOS_05[name]
+            actual = (item, case["op"], case["actor_species"],
+                      case.get("actor_ability", ""), case.get("actor_hp", ""),
+                      case.get("actor_level", 100), case["foe_species"],
+                      case.get("foe_level", 100), case["foe_move"], case["own_move"],
+                      tuple(case["seeds"]))
+            require(actual == expected, "Condición o semilla alterada W01/05: " + name)
+        elif stage not in {"01", "02", "03", "04", "05"}:
             raise ValueError("Stage no implementado por validador W01")
     for stage, ids in stage_map.items():
         for item in ids:
@@ -253,6 +295,10 @@ def validate() -> int:
                 "Matriz W01/04 debe tener 28 escenarios y 69 pares")
         require(set(SCENARIOS_04) <= found,
                 "Faltan 7 casos positivos/negativos del bloque W01/04")
+    if len(progress) == 5:
+        require(len(cases) == 36 and len(pairs) == 80,
+                "Matriz W01/05 debe preservar 36 escenarios y 80 pares")
+        require(set(SCENARIOS_05) <= found, "Faltan escenarios W01/05")
     return len(progress)
 
 def main():
