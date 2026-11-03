@@ -1,3 +1,5 @@
+> **CERTIFICACIÓN FUNCIONAL DEFINITIVA — BLOQUE 01/10 · CI PASS (2026-11-03):** [GitHub Actions #41715365400](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41715365400), SHA `c18760b7df5978a4bdcbb6395f2bcd85c113b7fb`, job `126193834698`, `completed/success`. Se leyeron recibos reales: `CAMP005_W05_MANIFEST_PASS reserved=10 completed=1 ids=60 kind=NEW_IDS`; `CAMP005_W05_PY PASS blocks=1 checks=58`; `CAMP005_GATE_PY_PASS worker=W05 blocks=1 checks=58`; `CAMP005_W05_GODOT PASS blocks=1 checks=231`; `CAMP005_GATE_GODOT_PASS worker=W05 blocks=1 checks=231`. **Las seis nuevas MT tienen cobertura funcional PASS en Godot headless y catálogo Python; no se atribuye certificación visual/GPU.** Regresiones CAMP004/003 no ejecutadas en bloque 01: están previstas explícitamente para hitos 05/10 y cambios de producción propios. Este párrafo prevalece sobre notas históricas inferiores de CI pendiente. No hubo parches en producción.
+
 # IA5/W05 — CAMPAÑA_005 · BLOQUE 01/10 · MT142–147
 
 **Estado inicial al publicar:** EN_CI_AUTOMATICA (no confundir bootstrap 0/10 con PASS funcional).
