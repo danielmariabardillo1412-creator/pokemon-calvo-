@@ -1,3 +1,11 @@
+# ESTADO FINAL VERIFICADO IA5/W05 — CAMPAÑA_003 10/10 · CI PASS (2026-11-03)
+
+**CAMPAÑA_003_FINALIZADA** tanto en entrega documental como en validación funcional de CI de su rama. Diez microbloques W05 entregados, **60 MT diferentes** validadas cumulativamente. Último run [#41565822563](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41565822563), SHA pruebas/progreso `984a80a128f5c6847664325ae487956adb838f49`, `completed/success`, Python `CAMP003_W05_PY PASS blocks=10 checks=580`, Godot 4.7 `CAMP003_W05_GODOT PASS blocks=10 checks=2166`, ambos gates del manifiesto PASS (logs comprobados, job `125687201922`). **No se introdujo parche en producción**: no apareció defecto que activar bajo V5. Fixture, CSV y cola IA6 cotejados: 60 IDs únicos y mapeos SV sin diferencias. La última fila CSV conserva estado histórico `EN_CI_AUTOMATICA` para evitar relanzar CI por cambios administrativos; prevalece el resultado del run real. Informes `CAMP_003_ITER_10.md` y `CAMP_003_FINAL.md` documentan el cierre.
+
+**SIGUIENTE ACCIÓN:** ninguna `p` nueva está autorizada para W05. **STOP en 10/10**; no se inventa bloque 11, no se inicia CAMPAÑA_004. IA6 se encargará de consolidación / revisión global e integración. No se hizo merge a árbitra, `main` o V28; ni se modificaron otras W, catálogo, saves, 19 legacy o reglas compartidas. Pruebas de GPU/visuales no cubiertas por headless. Las notas inferiores de CI pendiente son históricas y anteriores a este PASS.
+
+---
+
 # ESTADO VIGENTE IA5/W05 — CAMPAÑA_003 · 10/10 ENTREGADOS (2026-11-03)
 
 **Identidad:** IA5/W05 (familia MT/libros). **Rama exclusiva:** `codex/calvo-items-20261103-w05-camp003`. Autoridad de IDs: cola IA6 `CAMPAIGN_003_QUEUE_APPROVED.csv`; alcance y reparación: `campaigns/CAMP_003_W05.md` y `AUTONOMOUS_REPAIR_V5.md` de `codex/calvo-items-20261101-arbitro`. **Los diez microbloques están entregados. Ninguna nueva `p` puede crear un bloque 11 ni una nueva campaña.**
