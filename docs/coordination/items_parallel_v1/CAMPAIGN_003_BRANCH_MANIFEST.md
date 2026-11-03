@@ -1,3 +1,5 @@
+> **AMPLIACIÓN PREVALENTE — IA4 REINCORPORADA (2026-11-03):** la exclusión anterior de W04 en esta puerta queda **revocada por petición del usuario**, exclusivamente en los términos de [CAMPAIGN_003_W04_ADDENDUM_GATE.md](CAMPAIGN_003_W04_ADDENDUM_GATE.md). W04 tiene [cola propia de 10 bloques/30 evoluciones](CAMPAIGN_003_W04_ADDENDUM_QUEUE.csv), [rama nueva](CAMPAIGN_003_W04_BRANCH_MANIFEST.md) y CI autónoma [#41554077520](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41554077520) `completed/success` **SOLO bootstrap 0/10**, no funcional. Los otros cuatro mantienen íntegros sus 40 bloques/150 IDs y ramas: total de cinco W, **50 bloques/180 IDs**; el CSV original 40/150 y su validador no se reescriben para no romper su ejecución. IA4 recibe únicamente [este mensaje](CAMPAIGN_003_W04_ACTIVATION_MESSAGE.md), en su conversación ya recuperada, sin enviar a las otras cuatro una nueva activación. `main`, V28, producción y ramas ajenas protegidas.
+
 # IA6 — CAMPAÑA_003 / MANIFIESTO DE RAMAS VERIFICADAS
 
 **ACTIVADA:** sí, por autorización expresa del usuario el 2026-11-03.
