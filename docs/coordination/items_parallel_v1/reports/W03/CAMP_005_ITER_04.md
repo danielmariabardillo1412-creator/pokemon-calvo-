@@ -1,3 +1,9 @@
+## CI validada — bloque 04
+
+La ejecución [GitHub Actions #41720389165](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41720389165) en SHA `890824fb682faacf916c6430a9c34cff3962ad6b` terminó **completed/success**. Recibos: `CAMP005_W03_PY PASS blocks=4 checks=78`, `CAMP005_GATE_PY_PASS`, `CAMP005_W03_GODOT PASS blocks=4 checks=80`, `CAMP005_GATE_GODOT_PASS`. Esta aprobación verifica los contratos presentes y las dependencias concretas; **no** acredita efecto funcional de Beast Ball ni Heavy Ball.
+
+---
+
 # IA3/W03 — CAMPAÑA_005, bloque 04 — Beast Ball y Heavy Ball
 
 **Cola autorizada, backlog previo:** `beast_ball;heavy_ball` en la rama `codex/calvo-items-20261103-w03-camp005`. No sumar objetos nuevos.
