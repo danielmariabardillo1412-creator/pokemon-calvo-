@@ -1,3 +1,19 @@
+# IA2/W02 — CONTINUIDAD VIGENTE: CAMPAÑA_004 BLOQUE 09/10
+
+**Identidad:** IA2/W02, bayas/medicinas/entrenamiento; **rama exclusiva editable** `codex/calvo-items-20261103-w02-camp004`. Tecla `p` = ejecutar **una sola fila** siguiente de la cola oficial IA6. No tocar `main`, V28, PR #118, otras ramas, rama árbitra, workflow, producción ni reglas compartidas. Autorreparación V5 restringida a pruebas/componentes propios; intervención en API común exige coordinación de IA6.
+
+**Estado actual:** 9/10 filas **publicadas**; 36 IDs, 165 escenarios y 495 variantes planificadas. **NO son 36 objetos certificados.** CI CAMP004 comprobada **únicamente para bloque 01** en [GitHub Actions #41573481223](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41573481223): Python `PASS blocks=1 checks=83`, Godot `PASS blocks=1 checks=1022` y regresión CAMP003 `blocks=10` (Python 680 / Godot 7306). **Bloques 02–09 sin PASS/FAIL recuperado de CI**. Las consultas GitHub `fetch_commit_workflow_runs` sobre SHA de push devuelven `[]` porque solo listan los runs de PR; `get_commit_combined_status` devuelve `statuses:[]`. No afirmar que el workflow no se ejecuta ni que pasa.
+
+**Bloque 09 publicado:** `old_gateau;paralyze_heal;pewter_crunchies;potion`, 22 escenarios × 3 modalidades = 66 variantes. Old Gateau/Pewter Crunchies curan estado y confusión; Paralyze Heal cura sólo `paralysis`, conservando confusión; Potion cura 20 PS hasta tope, sin curar estado. Datos de `modules/inventory/imported_recovery_v19.json`. Cada caso usa `FieldItemService` desde PARTY con ítem, PARTY sin ítem y STORAGE con ítem; stock y rechazo atómico, SaveV2 y SHA256. El runner de Godot de CAMP004 ya cubre todas las operaciones, por lo que bloque 09 sólo añade fixture y validador Python, no modifica producción ni runner.
+
+**Commits bloque 09:** fixture `e628d8eaa0e74d84f747414f9b1a326429394c3a`, Python `360cda96c11b8e31cfb8525fb18ec9d5397b6977`, progreso `b31059cf736fa175358763ca0aab93b71fb1c213`, informe `5499c9d6a86c83406e6039d84d4c53d5d84e70b1` en `docs/coordination/items_parallel_v1/reports/W02/CAMP_004_ITER_09.md`; este cuaderno actualizado en commit posterior.
+
+**Dependencias funcionales sin resolver:** `razz_berry` de bloque 02 y `hopo_berry` de bloque 06 solo tienen negativas de no conexión, no funcionalidad positiva; IA6 debe decidir uso o exclusión. No inventar mecanismos de captura ni PP. Integración total, pruebas visuales/GPU requieren comprobaciones separadas.
+
+**Próxima `p`:** intentar localizar CI real sobre HEAD (recibos `CAMP004_W02_PY/GODOT PASS blocks=9` y `CAMP003_W02_PY/GODOT PASS blocks=10` con logs/SHA). Si hay fallos reparables dentro de W02, resolver sin reducir pruebas; si API compartida, escalar IA6. Después ejecutar **exclusivamente fila 10/10**: `shalour_sable;soda_pop;super_potion;sweet_heart`. Una vez publicada esa fila, **parar**, marcar CAMPAÑA_004 como entregada pendiente de CI si no hay logs completos. NO inventar CAMPAÑA_005 ni trabajos sin autoridad.
+
+---
+
 # IA2/W02 — CONTINUIDAD VIGENTE: CAMPAÑA_004 BLOQUE 08/10
 
 **Identidad IA2/W02:** bayas, medicinas y entrenamiento. **Única rama de escritura:** `codex/calvo-items-20261103-w02-camp004`. Una tecla `p` autoriza solo el microbloque siguiente de la cola IA6; no repetir filas ni ejecutar varias. Mantener `main`, V28, PR #118, rama árbitra IA6, W01/W03/W04/W05, producción, catálogos, políticas compartidas y workflows sin cambios. Autorreparación V5 limitada al alcance propio; cualquier API común requiere coordinación IA6.
