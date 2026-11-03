@@ -1674,6 +1674,25 @@ def negative_controls(fixture, queue, progress, chk):
             lambda v: v["blocks"][3]["cases"][28].update({"exp_until_next": 500}),
             lambda v: v["blocks"][3]["cases"][31].update({"start_friendship": 199}),
         ])
+    if len(fixture["blocks"]) >= 5:
+        mutations.extend([
+            lambda v: v["blocks"][4]["ids"].append("clever_wing"),
+            lambda v: v["blocks"][4]["source_evidence"].pop(),
+            lambda v: v["blocks"][4]["cases"].pop(),
+            lambda v: v["blocks"][4]["cases"][0].update({"expected_ev_gain": 10}),
+            lambda v: v["blocks"][4]["cases"][1].update({"start_ev": 250}),
+            lambda v: v["blocks"][4]["cases"][2].update({"applies": True}),
+            lambda v: v["blocks"][4]["cases"][3].update({"expected_ev_gain": 2}),
+            lambda v: v["blocks"][4]["cases"][4].update({"applies": True}),
+            lambda v: v["blocks"][4]["cases"][5].update({"slot": -1}),
+            lambda v: v["blocks"][4]["cases"][6].update({"start_friendship": 100}),
+            lambda v: v["blocks"][4]["cases"][7].update({"other_ev_total": 260}),
+            lambda v: v["blocks"][4]["cases"][8].update({"stat": "hp"}),
+            lambda v: v["blocks"][4]["cases"][16].update({"stat": "attack"}),
+            lambda v: v["blocks"][4]["cases"][24].update({"stat": "defense"}),
+            lambda v: v["blocks"][4]["cases"][27].update({"other_ev_total": 510}),
+            lambda v: v["blocks"][4]["cases"][31].update({"expected_ev_gain": 0}),
+        ])
     for index, mutation in enumerate(mutations):
         altered = copy.deepcopy(fixture)
         mutation(altered)
