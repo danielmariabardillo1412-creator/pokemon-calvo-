@@ -48,7 +48,7 @@ func _run_camp004() -> void:
 						observations[mode] = await _probe_berry(spec, mode)
 					"field_ev_training":
 						observations[mode] = _probe_field_ev(spec, mode)
-					"field_pp", "field_lum", "field_heal", "field_unsupported":
+					"field_pp", "field_lum", "field_heal", "field_unsupported", "field_medicine":
 						observations[mode] = _probe_field_use(spec, mode)
 					_:
 						check("tipo de ensayo desconocido", false)
@@ -69,7 +69,7 @@ func _run_camp004() -> void:
 						_compare_inert_held(spec, observations)
 					"field_ev_training":
 						_compare_field_ev(spec, observations)
-					"field_pp", "field_lum", "field_heal", "field_unsupported":
+					"field_pp", "field_lum", "field_heal", "field_unsupported", "field_medicine":
 						_compare_field_use(spec, observations)
 			results.append({"block": block.block, "id": spec.id, "scenario": spec.scenario,
 				"status": "PASS" if complete and errors.size() == errors_before else "FAIL",
@@ -164,17 +164,28 @@ func _probe_field_use(spec: Dictionary, mode: String) -> Dictionary:
 	var item: StringName = StringName(spec.id)
 	var creature: CreatureInstance = _mon(&"mew", int(automation.level), &"own", ["tackle", "reflect"])
 	creature.friendship = 100
-	if String(spec.kind) == "field_heal":
-		if String(spec.get("start_hp", "")) == "half":
-			creature.current_hp = maxi(1, int(creature.stats.max_hp / 2))
-		elif String(spec.get("start_hp", "")) != "full":
-			check("campo Sitrus: estado HP inicial reconocido", false)
+	if String(spec.kind) in ["field_heal", "field_medicine"]:
+		match String(spec.get("start_hp", "full")):
+			"half":
+				creature.current_hp = maxi(1, int(creature.stats.max_hp / 2))
+			"missing_7":
+				creature.current_hp = maxi(1, creature.stats.max_hp - 7)
+			"full":
+				pass
+			_:
+				check("campo medicina: HP inicial desconocido", false)
 	if String(spec.kind) == "field_pp":
 		creature.moveset[0].current_pp = creature.moveset[0].max_pp if spec.pp_start is String else int(spec.pp_start)
 	else:
 		if String(spec.get("status", "")) != "":
 			creature.status_state.persistent_id = StringName(spec.status)
 			creature.status_ids.assign([StringName(spec.status)])
+			if String(spec.status) == "sleep":
+				creature.status_state.turns_remaining = 2
+				creature.status_state.rest_sleep = true
+				creature.status_state.add_volatile(&"nightmare")
+			elif String(spec.status) == "badly_poisoned":
+				creature.status_state.toxic_counter = 3
 		if bool(spec.get("confused", false)):
 			creature.status_state.add_volatile(&"confusion", {"turns": 3})
 	var start: Dictionary = creature.to_dict()
@@ -190,8 +201,11 @@ func _probe_field_use(spec: Dictionary, mode: String) -> Dictionary:
 	if mode != "none":
 		check(mode + " campo: dos unidades físicas", collection.inventory.add(item, 2))
 	var service := Service.new()
+	var sleep_clocks: Dictionary = {}
+	if String(spec.get("status", "")) == "sleep":
+		sleep_clocks["own"] = {"version": "0.10.11", "start_time": 3, "time": 2}
 	check(mode + " campo: servicio de inventario real",
-		service.configure(collection, catalogs, func(): return true))
+		service.configure(collection, catalogs, func(): return true, sleep_clocks))
 	var original: CreatureInstance = collection.owned_creature(&"own")
 	var before: Dictionary = _owner_data(collection)
 	var slot: int = int(spec.slot) if String(spec.kind) == "field_pp" else -1
@@ -203,6 +217,9 @@ func _probe_field_use(spec: Dictionary, mode: String) -> Dictionary:
 		check(mode + " Razz sin conexion: rechazo, no prueba positiva",
 			not bool(reply.get("accepted", false))
 			and String(reply.get("status", "")) in ["DEPENDENCY_MISSING", "REJECTED"])
+	if String(spec.kind) == "field_medicine" and expected_acceptance:
+		check(mode + " medicina usa el servicio existente",
+			String(reply.get("action", "")) == "medicine")
 	var updated: CreatureInstance = collection.owned_creature(&"own")
 	if updated == null:
 		check(mode + " campo: Pokemon no desaparece", false)
@@ -214,13 +231,31 @@ func _probe_field_use(spec: Dictionary, mode: String) -> Dictionary:
 		start_pp + (int(spec.expected_delta) if expected_acceptance else 0)) if String(spec.kind) == "field_pp" else start_pp
 	check(mode + " campo: PP estrictos y slot no contaminado", now_pp == expected_pp
 		and updated.moveset[1].current_pp == creature.moveset[1].current_pp)
+	var cures_status: bool = expected_acceptance and (
+		String(spec.kind) == "field_lum" or
+		(String(spec.kind) == "field_medicine" and bool(spec.get("cures_status", false))))
+	var cures_confusion: bool = expected_acceptance and (
+		String(spec.kind) == "field_lum" or
+		(String(spec.kind) == "field_medicine" and bool(spec.get("cures_confusion", false))))
 	check(mode + " campo: estado y confusión según contrato",
-		now_status == ("" if expected_acceptance and String(spec.kind) == "field_lum" else start_status)
-		and now_confusion == (false if expected_acceptance and String(spec.kind) == "field_lum" else start_confusion))
+		now_status == ("" if cures_status else start_status)
+		and now_confusion == (false if cures_confusion else start_confusion))
+	if String(spec.kind) == "field_medicine":
+		check(mode + " medicina respeta contador/status y sueño",
+			(not cures_status or (updated.status_ids.is_empty()
+			and updated.status_state.turns_remaining == 0
+			and updated.status_state.toxic_counter == 0
+			and not updated.status_state.rest_sleep
+			and not updated.status_state.has_volatile(&"nightmare")))
+			and (not bool(spec.get("expect_sleep_clock_clear", false)) or
+			((sleep_clocks.is_empty() if expected_acceptance else sleep_clocks.has("own")))))
 	var expected_hp: int = start_hp
 	if String(spec.kind) == "field_heal" and expected_acceptance:
 		expected_hp = mini(updated.stats.max_hp,
 			start_hp + maxi(1, int(updated.stats.max_hp / int(spec.heal_denominator))))
+	elif String(spec.kind) == "field_medicine" and expected_acceptance:
+		expected_hp = mini(updated.stats.max_hp,
+			start_hp + int(spec.get("heal_amount", 0)))
 	check(mode + " campo: PS segun contrato, amistad/EV intactos",
 		updated.current_hp == expected_hp and updated.friendship == start_friend
 		and updated.evs == creature.evs)
@@ -252,7 +287,9 @@ func _probe_field_use(spec: Dictionary, mode: String) -> Dictionary:
 			restored_mon.moveset[0].current_pp == now_pp
 			and String(restored_mon.status_state.persistent_id) == now_status
 			and restored_mon.status_state.has_volatile(&"confusion") == now_confusion
-			and restored_mon.friendship == start_friend)
+			and restored_mon.friendship == start_friend
+			and restored_mon.current_hp == expected_hp
+			and restored_mon.evs == updated.evs)
 	var name: String = String(spec.scenario) + "_" + mode
 	var evidence: Dictionary = {"scenario": spec.scenario, "mode": mode, "item": String(item),
 		"kind": spec.kind, "before": before, "after": state, "accepted": bool(reply.get("accepted", false)),
@@ -295,6 +332,21 @@ func _compare_field_use(spec: Dictionary, observed: Dictionary) -> void:
 			not bool(a.accepted) and not bool(n.accepted)
 			and not bool(s.accepted)
 			and int(a.hp) == int(n.hp) and int(n.hp) == int(s.hp))
+	if String(spec.kind) == "field_medicine":
+		var should_cure_status: bool = expected and bool(spec.get("cures_status", false))
+		var should_cure_confusion: bool = expected and bool(spec.get("cures_confusion", false))
+		var expected_healed_hp: int = mini(int(a.max_hp),
+			int(n.hp) + (int(spec.heal_amount) if expected else 0))
+		check("medicina cura PS exactos o mantiene PS al curar estado",
+			int(a.hp) == expected_healed_hp and int(s.hp) == expected_healed_hp)
+		check("medicina solo cura estado especificado si se consume",
+			String(n.status) == String(spec.status)
+			and String(a.status) == ("" if should_cure_status else String(spec.status))
+			and String(s.status) == String(a.status))
+		check("medicina conserva confusion ajena cuando no aplica",
+			bool(a.confusion) == (false if should_cure_confusion else bool(spec.confused))
+			and bool(s.confusion) == bool(a.confusion)
+			and bool(n.confusion) == bool(spec.confused))
 	for mode: String in automation.modes:
 		var rec: Dictionary = observed[mode]
 		var path: String = destination + "/" + String(rec.evidence)
