@@ -34,3 +34,16 @@ El primer run funcional [#41579895025](https://github.com/danielmariabardillo141
 **Parche V5 local, sin rebajar el contrato:** commit `525991c4ad55dd8952ed2f62a4fc7f2a820540f3`, modifica exclusivamente `tests/gameplay/parallel_items_w01_campaign_004.gd`: acepta `int` o `float` solo si `float(value) == float(int(value))`, con límite `1..65535`; conserva rechazo de valores fraccionarios y normaliza el nombre del caso a entero. Fixture, ocho escenarios, 34 pares, 102 variantes, semillas declaradas, aserciones de especies, críticos y SaveV2 permanecen idénticos.
 
 **CI completa de verificación del parche:** [#41580332632](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41580332632), SHA `525991c4ad55dd8952ed2f62a4fc7f2a820540f3`, inicialmente en cola. No declarar `CI_PASS_VERIFICADO` hasta ver los recibos `CAMP004_W01_PY PASS blocks=1` y `CAMP004_W01_GODOT PASS blocks=1` y `completed/success`.
+
+## Cierre de verificación funcional — CI PASS 01/10
+
+**GitHub Actions #41580332632**: [ejecución final](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41580332632), **`completed/success`** en SHA de pruebas `525991c4ad55dd8952ed2f62a4fc7f2a820540f3`, posterior a la reparación V5 del arnés. Recibos literales:
+
+- `CAMP004_W01_PY PASS blocks=1 checks=111`
+- `CAMP004_GATE_PY_PASS worker=W01 blocks=1 checks=111`
+- `CAMP004_W01_GODOT PASS blocks=1 checks=2905`
+- `CAMP004_GATE_GODOT_PASS worker=W01 blocks=1 checks=2905`
+
+**Cero errores**. Los 34 errores de tipo de semilla del primer intento han desaparecido sin modificar las 34 semillas/casos ni los controles de motor y SaveV2. Quedan validados funcionalmente **tres IDs, ocho escenarios, 34 pares, 102 variantes**, en los límites de la prueba automatizada. No certifica UI/GPU ni integración a `main`.
+
+**Nota de eficiencia:** La fila 01 de `CAMP_004_PROGRESO.csv` sigue temporalmente `EN_CI_AUTOMATICA` porque escribir solo un nuevo estado desencadenaría otra CI de ~3 minutos, sin cambiar test funcional. **En la próxima `p` de bloque 02**, actualizar esa fila a `CI_PASS_VERIFICADO` con run `41580332632` y SHA `525991c4ad55dd8952ed2f62a4fc7f2a820540f3`, junto con la nueva fila 02, de forma que se ejecute CI una sola vez. La autoridad real de PASS es el run certificado aquí.
