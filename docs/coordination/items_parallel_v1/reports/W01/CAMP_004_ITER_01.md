@@ -26,3 +26,11 @@ Las mecánicas se ejecutan mediante `Native.begin_wild` y `Native.submit` del mo
 ## Criterios de continuación
 
 Si el motor muestra fallo real, diagnosticar logs SHA y repararlo dentro de la especialidad W01 bajo V5, conservando controles. En caso de dependencia de arquitectura o conflicto con otras IAs, escalar a IA6 sin modificar módulos compartidos por cuenta propia. **Siguiente `p` únicamente bloque 02** (`damp_rock;float_stone;icy_rock`) y **solo tras revisar CI01**. No iniciar bloque 03 ni completar campaña antes de 10/10. Sin validación GPU/UI, mapa ni integración global.
+
+## Reparación autónoma V5 tras primera CI
+
+El primer run funcional [#41579895025](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41579895025) concluyó `failure`: **Python `CAMP004_W01_PY PASS blocks=1 checks=111`**, mientras Godot emitió `CAMP004_W01_GODOT FAIL blocks=1 checks=2905 errors=34`. Los **34 errores eran todos `Semilla válida`**: Godot deserializa números del JSON como `float` (`19.0`) aunque representan enteros, y el arnés usaba la condición incorrecta `value is int`. Los otros **2.871 checks**, incluidos positivo/negativo por especie, control de críticos, consumo e integridad SaveV2, no fallaron.
+
+**Parche V5 local, sin rebajar el contrato:** commit `525991c4ad55dd8952ed2f62a4fc7f2a820540f3`, modifica exclusivamente `tests/gameplay/parallel_items_w01_campaign_004.gd`: acepta `int` o `float` solo si `float(value) == float(int(value))`, con límite `1..65535`; conserva rechazo de valores fraccionarios y normaliza el nombre del caso a entero. Fixture, ocho escenarios, 34 pares, 102 variantes, semillas declaradas, aserciones de especies, críticos y SaveV2 permanecen idénticos.
+
+**CI completa de verificación del parche:** [#41580332632](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41580332632), SHA `525991c4ad55dd8952ed2f62a4fc7f2a820540f3`, inicialmente en cola. No declarar `CI_PASS_VERIFICADO` hasta ver los recibos `CAMP004_W01_PY PASS blocks=1` y `CAMP004_W01_GODOT PASS blocks=1` y `completed/success`.
