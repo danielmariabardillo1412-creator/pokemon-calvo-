@@ -141,3 +141,14 @@ Todos los confites probados están asociados al requisito de giro `spin` de Milc
 **Hechos comprobados en perfiles:** `adamant_crystal` y `blue_orb` figuran como equipables, pero la transferencia del objeto no certifica forma de Dialga ni reversión primigenia de Kyogre; `catching_charm` no está entre los equipables. El runner prueba uso directo/evolución falsa rechazados sin gasto, propiedad, equipamiento y SaveV2 cuando corresponde. **No prueba ni modifica efectos de captura de W03**. Son revisiones de contexto, no implementaciones de formas o mejoras de captura.
 
 Las **16 dependencias CAMP003** y **9 dependencias CAMP004 bloques 01–03** siguen intactas. No se ha tocado producción, políticas, datasets, otras ramas, `main` ni V28. La cola sigue la puerta de IA6, siguiente `p` **bloque 05/10**: `dna_splicers;exp_charm;gracidea`, previa verificación de CI04 y reparación si procede.
+
+
+---
+
+## CAMPAÑA_004 — Bloque 05 (2026-11-03)
+
+**IA4/W04**, rama exclusiva `codex/calvo-items-20261103-w04-camp004`. Bloque 05 **publicado en pruebas**: `dna_splicers;exp_charm;gracidea`. Los 3 son `STORY_KEY_OR_FORM_REVIEW` y están seleccionados; en el inventario canónico aparecen `DATA_ONLY` y el perfil no los permite equipar. Pruebas Godot/Python acumulativas, fixture, CSV e informe `CAMP_004_ITER_05.md` publicados.
+
+**CI inicial:** [#41579180249](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41579180249), SHA `26da57ec3496f03b728cc60f4ffc9206ec71a485` (pendiente de verificar). El workflow del bloque 05 exige CAMP004, regresión CAMP003 **y** regresión CAMP001 SaveV2 seis piedras. No se atribuyen fusiones Kyurem, efectos EXP ni forma Shaymin por un PASS negativo.
+
+**Al reanudar:** antes de avanzar, comprobar CI 05 y repararla si falla; actualizar estado y recibos del CSV, `CAMP_004_ITER_05.md` y continuidad. Próximo `p`: **bloque 06**, `griseous_core;lustrous_globe;meteorite`. No actuar sobre otros bloques ni tocar producción compartida, main, V28 o ramas ajenas. 16 dependencias CAMP003 siguen pendientes.
