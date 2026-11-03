@@ -1,3 +1,15 @@
+# IA3/W03 — CONTINUIDAD CAMPAÑA_003: 09/10
+
+**Rama exclusiva:** `codex/calvo-items-20261103-w03-camp003`. Se ha ejecutado el bloque 09 `love_ball;moon_ball`; siguiente `p` **exclusivamente bloque 10 `beast_ball;heavy_ball`** tras consultar CI. STOP definitivo al completar 10/10.
+
+- **CI 08 confirmada:** [#41566107173](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41566107173), SHA `fc1791081e3d073e6c2732489b996f30bcc17590`, `CAMP003_W03_PY PASS blocks=8 checks=233` y `CAMP003_W03_GODOT PASS blocks=8 checks=898`. Gate de IA6 Python/Godot PASS. Certifica únicamente la regresión del motor actual, no contextos especiales.
+- **Bloque 09:** bolas Amor/Luna ausentes del registro operativo. Nueva prueba directa de rechazo `unknown_ball`, dos especies, dos condiciones de PS, dos estados del contexto, tres rechazos prioritarios por bola, sin consumo, RNG ni mutación.
+- **Dependencias:** Amor requiere especie y sexo del capturador/objetivo; Luna requiere elegibilidad real de Piedra Lunar, incluyendo formas. Solo IA6 debe fijar la frontera de API compartida. No fabricar flags ni multiplicadores.
+- Fixture, runner Godot, Python, progreso, informe 09 y este cuaderno son los únicos cambios. No producción, `main`, V28, workflows, catálogo ni ramas ajenas.
+- **CI 09:** pendiente de comprobar run del SHA de tests/progreso. Ante fallo propio, reparar preservando aserciones; si es contrato compartido, aislar la incidencia y escalar.
+
+---
+
 # IA3/W03 — CONTINUIDAD CAMPAÑA_003: 08/10
 
 **Rama:** `codex/calvo-items-20261103-w03-camp003`. Bloque 08: `luxury_ball;lure_ball`. **Siguiente `p`: 09 `love_ball;moon_ball` tras verificar CI 08.** Máximo diez bloques.
