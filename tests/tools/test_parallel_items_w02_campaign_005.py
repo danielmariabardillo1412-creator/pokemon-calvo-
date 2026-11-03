@@ -3058,6 +3058,34 @@ def verify_sources(chk):
                and '&"modest": ["special_attack", "attack"]' in rules_08
                and '&"jolly": ["speed", "special_attack"]' in rules_08,
                "Menta08 tabla de naturalezas base alterada")
+    for id, name, modifiers in (
+        ("timid_mint", "timid", ('speed', 'attack')),
+        ("bold_mint", "bold", ('defense', 'attack')),
+        ("calm_mint", "calm", ('special_defense', 'attack')),
+        ("careful_mint", "careful", ('special_defense', 'special_attack')),
+    ):
+        chk.demand(id not in selection_08["excluded_ids"]
+                   and "nature_mints" not in selection_08["excluded_categories"],
+                   "Menta09: política excluye " + id)
+        chk.demand(all(id not in source for source in
+                       (service, field_effects, mochi, growth)),
+                   "Menta09: el ejecutor ha cambiado y exige reauditoría " + id)
+        token = '&"' + name + '": ["' + modifiers[0] + '", "' + modifiers[1] + '"]'
+        chk.demand(token in rules_08, "Menta09: tabla de naturaleza base modificada " + name)
+    for fragment in (
+        '"nature_id": String(spec.get("nature", "hardy"))',
+        'if String(spec.kind) == "mint_dependency":',
+        'String(result.get("status", "")) == String(spec.expect_status)',
+        'String(result.get("reason", "")) == String(spec.expect_reason)',
+        'now.nature_id == c.nature_id and now.evs == c.evs',
+        'and _owner_data(owner) == before',
+        'SaveGameRepository.new().decode_snapshot(state)',
+    ):
+        chk.demand(fragment in runner, "Menta09: runner no verifica integridad " + fragment)
+    chk.demand("effective_nature_id" not in creature_08
+               and "mint" not in creature_08
+               and 'return _deny("field_effect_not_connected", "DEPENDENCY_MISSING")' in service,
+               "Menta09: dependencia de naturaleza efectiva cambió; requiere reauditoría")
     for old, token in (
         (old_ability, 'TRANSITIONS'),
         (old_growth, 'rare_candy'),
