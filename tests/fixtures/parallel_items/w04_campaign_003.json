@@ -53,6 +53,23 @@
         "one_consumption_if_supported",
         "identity_and_savev2_if_supported"
       ]
+    },
+    {
+      "block": "04",
+      "ids": [
+        "magmarizer",
+        "protector",
+        "reaper_cloth"
+      ],
+      "expected_trigger": "classify_real_records; trade_held_item_not_direct_bag_use",
+      "policy": "no_bypass_trades_or_held_item_conditions",
+      "cases": [
+        "catalog_classification",
+        "negative_rejection_no_inventory_spend_if_conditional",
+        "positive_only_if_runtime_supported",
+        "single_consumption_if_supported",
+        "same_identity_iv_ev_moves_exp_friendship_and_savev2_if_supported"
+      ]
     }
   ]
 }
