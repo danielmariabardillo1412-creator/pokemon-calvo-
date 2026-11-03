@@ -18,6 +18,9 @@ GROWTH = ROOT / "modules/inventory/field_growth_effects.gd"
 PPBOOST = ROOT / "modules/inventory/field_pp_boost_effects.gd"
 TRAINING = ROOT / "modules/inventory/field_training_effects.gd"
 FRIENDSHIP = ROOT / "modules/inventory/field_friendship_effects.gd"
+MOCHI = ROOT / "modules/inventory/field_mochi_effects.gd"
+FIELD_EFFECTS = ROOT / "modules/inventory/field_item_effects.gd"
+HIST_MOCHI = ROOT / "tests/gameplay/item_mochi_v13.gd"
 HIST_TRAINING = ROOT / "tests/gameplay/field_held_v17.gd"
 SERVICE = ROOT / "modules/inventory/field_item_service.gd"
 RUNNER = ROOT / "tests/gameplay/parallel_items_w02_campaign_005.gd"
@@ -1817,6 +1820,9 @@ def verify_sources(chk):
     training = TRAINING.read_text(encoding="utf-8")
     friendship = FRIENDSHIP.read_text(encoding="utf-8")
     historic_training = HIST_TRAINING.read_text(encoding="utf-8")
+    mochi = MOCHI.read_text(encoding="utf-8")
+    field_effects = FIELD_EFFECTS.read_text(encoding="utf-8")
+    historic_mochi = HIST_MOCHI.read_text(encoding="utf-8")
     for fragment in (
         'item_id in [&"ability_capsule", &"ability_patch"]',
         'destination = 2 if current == 1 else 1',
