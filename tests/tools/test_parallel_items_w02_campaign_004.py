@@ -1774,6 +1774,277 @@ EXPECTED_08 = json.loads(r'''[
 EXPECTED_IDS_08 = ["max_elixir","max_ether","max_potion","moomoo_milk"]
 SOURCES_08 = ["modules/inventory/imported_recovery_v19.json","modules/inventory/field_item_effects.gd","modules/inventory/field_item_service.gd","tests/gameplay/item_field_effects_v4.gd"]
 
+EXPECTED_09 = json.loads(r'''[
+  {
+    "scenario": "old_gateau_poison_c004",
+    "id": "old_gateau",
+    "kind": "field_medicine",
+    "start_hp": "full",
+    "status": "poison",
+    "confused": false,
+    "applies": true,
+    "heal_amount": 0,
+    "cures_status": true,
+    "cures_confusion": false
+  },
+  {
+    "scenario": "old_gateau_toxic_c004",
+    "id": "old_gateau",
+    "kind": "field_medicine",
+    "start_hp": "full",
+    "status": "badly_poisoned",
+    "confused": false,
+    "applies": true,
+    "heal_amount": 0,
+    "cures_status": true,
+    "cures_confusion": false
+  },
+  {
+    "scenario": "old_gateau_sleep_c004",
+    "id": "old_gateau",
+    "kind": "field_medicine",
+    "start_hp": "full",
+    "status": "sleep",
+    "confused": false,
+    "applies": true,
+    "heal_amount": 0,
+    "cures_status": true,
+    "cures_confusion": false,
+    "expect_sleep_clock_clear": true
+  },
+  {
+    "scenario": "old_gateau_freeze_c004",
+    "id": "old_gateau",
+    "kind": "field_medicine",
+    "start_hp": "full",
+    "status": "freeze",
+    "confused": false,
+    "applies": true,
+    "heal_amount": 0,
+    "cures_status": true,
+    "cures_confusion": false
+  },
+  {
+    "scenario": "old_gateau_confusion_c004",
+    "id": "old_gateau",
+    "kind": "field_medicine",
+    "start_hp": "full",
+    "status": "",
+    "confused": true,
+    "applies": true,
+    "heal_amount": 0,
+    "cures_status": false,
+    "cures_confusion": true
+  },
+  {
+    "scenario": "old_gateau_poison_confusion_c004",
+    "id": "old_gateau",
+    "kind": "field_medicine",
+    "start_hp": "full",
+    "status": "poison",
+    "confused": true,
+    "applies": true,
+    "heal_amount": 0,
+    "cures_status": true,
+    "cures_confusion": true
+  },
+  {
+    "scenario": "old_gateau_healthy_reject_c004",
+    "id": "old_gateau",
+    "kind": "field_medicine",
+    "start_hp": "full",
+    "status": "",
+    "confused": false,
+    "applies": false,
+    "heal_amount": 0,
+    "cures_status": false,
+    "cures_confusion": false
+  },
+  {
+    "scenario": "paralyze_heal_paralysis_c004",
+    "id": "paralyze_heal",
+    "kind": "field_medicine",
+    "start_hp": "full",
+    "status": "paralysis",
+    "confused": false,
+    "applies": true,
+    "heal_amount": 0,
+    "cures_status": true,
+    "cures_confusion": false
+  },
+  {
+    "scenario": "paralyze_heal_paralysis_confusion_stays_c004",
+    "id": "paralyze_heal",
+    "kind": "field_medicine",
+    "start_hp": "full",
+    "status": "paralysis",
+    "confused": true,
+    "applies": true,
+    "heal_amount": 0,
+    "cures_status": true,
+    "cures_confusion": false
+  },
+  {
+    "scenario": "paralyze_heal_poison_reject_c004",
+    "id": "paralyze_heal",
+    "kind": "field_medicine",
+    "start_hp": "full",
+    "status": "poison",
+    "confused": false,
+    "applies": false,
+    "heal_amount": 0,
+    "cures_status": false,
+    "cures_confusion": false
+  },
+  {
+    "scenario": "paralyze_heal_sleep_reject_c004",
+    "id": "paralyze_heal",
+    "kind": "field_medicine",
+    "start_hp": "full",
+    "status": "sleep",
+    "confused": false,
+    "applies": false,
+    "heal_amount": 0,
+    "cures_status": false,
+    "cures_confusion": false
+  },
+  {
+    "scenario": "paralyze_heal_healthy_reject_c004",
+    "id": "paralyze_heal",
+    "kind": "field_medicine",
+    "start_hp": "full",
+    "status": "",
+    "confused": false,
+    "applies": false,
+    "heal_amount": 0,
+    "cures_status": false,
+    "cures_confusion": false
+  },
+  {
+    "scenario": "pewter_crunchies_burn_c004",
+    "id": "pewter_crunchies",
+    "kind": "field_medicine",
+    "start_hp": "full",
+    "status": "burn",
+    "confused": false,
+    "applies": true,
+    "heal_amount": 0,
+    "cures_status": true,
+    "cures_confusion": false
+  },
+  {
+    "scenario": "pewter_crunchies_toxic_c004",
+    "id": "pewter_crunchies",
+    "kind": "field_medicine",
+    "start_hp": "full",
+    "status": "badly_poisoned",
+    "confused": false,
+    "applies": true,
+    "heal_amount": 0,
+    "cures_status": true,
+    "cures_confusion": false
+  },
+  {
+    "scenario": "pewter_crunchies_sleep_c004",
+    "id": "pewter_crunchies",
+    "kind": "field_medicine",
+    "start_hp": "full",
+    "status": "sleep",
+    "confused": false,
+    "applies": true,
+    "heal_amount": 0,
+    "cures_status": true,
+    "cures_confusion": false,
+    "expect_sleep_clock_clear": true
+  },
+  {
+    "scenario": "pewter_crunchies_confusion_c004",
+    "id": "pewter_crunchies",
+    "kind": "field_medicine",
+    "start_hp": "full",
+    "status": "",
+    "confused": true,
+    "applies": true,
+    "heal_amount": 0,
+    "cures_status": false,
+    "cures_confusion": true
+  },
+  {
+    "scenario": "pewter_crunchies_poison_confusion_c004",
+    "id": "pewter_crunchies",
+    "kind": "field_medicine",
+    "start_hp": "full",
+    "status": "poison",
+    "confused": true,
+    "applies": true,
+    "heal_amount": 0,
+    "cures_status": true,
+    "cures_confusion": true
+  },
+  {
+    "scenario": "pewter_crunchies_healthy_reject_c004",
+    "id": "pewter_crunchies",
+    "kind": "field_medicine",
+    "start_hp": "full",
+    "status": "",
+    "confused": false,
+    "applies": false,
+    "heal_amount": 0,
+    "cures_status": false,
+    "cures_confusion": false
+  },
+  {
+    "scenario": "potion_half_hp_c004",
+    "id": "potion",
+    "kind": "field_medicine",
+    "start_hp": "half",
+    "status": "",
+    "confused": false,
+    "applies": true,
+    "heal_amount": 20,
+    "cures_status": false,
+    "cures_confusion": false
+  },
+  {
+    "scenario": "potion_missing7_c004",
+    "id": "potion",
+    "kind": "field_medicine",
+    "start_hp": "missing_7",
+    "status": "",
+    "confused": false,
+    "applies": true,
+    "heal_amount": 20,
+    "cures_status": false,
+    "cures_confusion": false
+  },
+  {
+    "scenario": "potion_full_hp_reject_c004",
+    "id": "potion",
+    "kind": "field_medicine",
+    "start_hp": "full",
+    "status": "",
+    "confused": false,
+    "applies": false,
+    "heal_amount": 20,
+    "cures_status": false,
+    "cures_confusion": false
+  },
+  {
+    "scenario": "potion_half_poison_stays_c004",
+    "id": "potion",
+    "kind": "field_medicine",
+    "start_hp": "half",
+    "status": "poison",
+    "confused": false,
+    "applies": true,
+    "heal_amount": 20,
+    "cures_status": false,
+    "cures_confusion": false
+  }
+]''')
+EXPECTED_IDS_09 = ["old_gateau","paralyze_heal","pewter_crunchies","potion"]
+SOURCES_09 = ["modules/inventory/imported_recovery_v19.json","modules/inventory/field_item_effects.gd","modules/inventory/field_item_service.gd","tests/gameplay/item_field_effects_v4.gd"]
+
 
 class ContractError(ValueError):
     pass
@@ -1945,6 +2216,22 @@ def verify(fixture, queue, progress, chk):
                 seen.add(actual["scenario"])
             chk.demand(seen == {z["scenario"] for z in EXPECTED_08},
                        "Escenarios 08 no cubiertos por completo")
+        elif i == 8:
+            chk.demand(block["ids"] == EXPECTED_IDS_09 and block["family"] == "MEDICINE",
+                       "IDs/familia del bloque 09 distintos de la cola")
+            chk.demand(block["source_evidence"] == SOURCES_09,
+                       "Fuente de bloque09 modificada")
+            chk.demand(len(block["cases"]) == len(EXPECTED_09),
+                       "Bloque 09 carece de los 22 escenarios")
+            seen = set()
+            for actual, expected in zip(block["cases"], EXPECTED_09):
+                chk.demand(type(actual) is dict and actual == expected,
+                           "Escenario 09 alterado: "+str(expected["scenario"]))
+                chk.demand(actual["scenario"] not in seen,
+                           "Duplicado bloque09")
+                seen.add(actual["scenario"])
+            chk.demand(seen == {x["scenario"] for x in EXPECTED_09},
+                       "Matriz de bloque09 incompleta")
         else:
             raise ContractError("No hay contrato específico de bloque futuro")
     return len(progress)
@@ -2088,6 +2375,24 @@ def verify_sources(chk):
         chk.demand(fragment in effects, "Contrato Max PP/PS de motor alterado: " + fragment)
     chk.demand('"max_potion": 9999' in old,
                "Regresión histórica de Max Potion ausente")
+    expected_09_profiles = {
+        "old_gateau": {"confusion": True, "cure": "all"},
+        "paralyze_heal": {"cure": ["par"]},
+        "pewter_crunchies": {"confusion": True, "cure": "all"},
+        "potion": {"heal": 20},
+    }
+    for item, expected in expected_09_profiles.items():
+        chk.demand(profile["items"][item]["effect"] == expected
+                   and profile["items"][item]["consume"] is True,
+                   "Perfil 09 no coincide con los datos nativos: " + item)
+    chk.demand('"par": "paralysis"' in effects
+               and 'STATUS.get(code) == status' in effects
+               and 'creature.status_state.remove_volatile(&"confusion")' in effects
+               and "creature.recover_hp(amount)" in effects,
+               "Rutas de estado/confusión/PS 09 no conectadas")
+    chk.demand('"paralyze_heal": "paralysis"' in old
+               and '"potion": 20' in old,
+               "Regresión histórica Antiparalizador/Poción ausente")
 
 
 def negative_controls(fixture, queue, progress, chk):
@@ -2205,6 +2510,23 @@ def negative_controls(fixture, queue, progress, chk):
             lambda f: f["blocks"][7]["cases"][16].update({"heal_amount": 60}),
             lambda f: f["blocks"][7]["cases"][18].update({"applies": True}),
             lambda f: f["blocks"][7]["cases"][19].update({"cures_status": True}),
+        ])
+    if len(fixture["blocks"]) >= 9:
+        edits.extend([
+            lambda f: f["blocks"][8]["ids"].append("full_heal"),
+            lambda f: f["blocks"][8]["cases"].pop(),
+            lambda f: f["blocks"][8]["source_evidence"].pop(),
+            lambda f: f["blocks"][8]["cases"][0].update({"cures_status": False}),
+            lambda f: f["blocks"][8]["cases"][2].update({"expect_sleep_clock_clear": False}),
+            lambda f: f["blocks"][8]["cases"][5].update({"cures_confusion": False}),
+            lambda f: f["blocks"][8]["cases"][7].update({"applies": False}),
+            lambda f: f["blocks"][8]["cases"][8].update({"cures_confusion": True}),
+            lambda f: f["blocks"][8]["cases"][10].update({"applies": True}),
+            lambda f: f["blocks"][8]["cases"][12].update({"cures_status": False}),
+            lambda f: f["blocks"][8]["cases"][15].update({"cures_confusion": False}),
+            lambda f: f["blocks"][8]["cases"][19].update({"heal_amount": 15}),
+            lambda f: f["blocks"][8]["cases"][20].update({"applies": True}),
+            lambda f: f["blocks"][8]["cases"][21].update({"cures_status": True}),
         ])
     for i, edit in enumerate(edits):
         altered = copy.deepcopy(fixture)
