@@ -90,6 +90,35 @@
           "move_id": "iron_head"
         }
       ]
+    },
+    {
+      "block": "04",
+      "items": [
+        {
+          "item_id": "tm100",
+          "move_id": "dragon_dance"
+        },
+        {
+          "item_id": "tm101",
+          "move_id": "power_gem"
+        },
+        {
+          "item_id": "tm102",
+          "move_id": "gunk_shot"
+        },
+        {
+          "item_id": "tm103",
+          "move_id": "substitute"
+        },
+        {
+          "item_id": "tm104",
+          "move_id": "iron_defense"
+        },
+        {
+          "item_id": "tm105",
+          "move_id": "x_scissor"
+        }
+      ]
     }
   ]
 }
