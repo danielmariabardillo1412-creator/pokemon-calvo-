@@ -28,6 +28,10 @@
     {
       "path": "tools/item_audit/held_effect_sweep_v2.cjs",
       "git_blob_sha": "c9ba4d7bcddad6ae69f085f4b69983461ad05219"
+    },
+    {
+      "path": "tools/item_audit/held_pilot.cjs",
+      "git_blob_sha": "c8a59a18f546d772ff34e4f8640a4246a00a822b"
     }
   ],
   "cases": [
