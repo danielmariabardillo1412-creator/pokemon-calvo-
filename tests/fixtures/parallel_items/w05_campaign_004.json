@@ -32,6 +32,35 @@
           "move_id": "taunt"
         }
       ]
+    },
+    {
+      "block": "02",
+      "items": [
+        {
+          "item_id": "tm88",
+          "move_id": "swords_dance"
+        },
+        {
+          "item_id": "tm89",
+          "move_id": "body_press"
+        },
+        {
+          "item_id": "tm90",
+          "move_id": "spikes"
+        },
+        {
+          "item_id": "tm91",
+          "move_id": "toxic_spikes"
+        },
+        {
+          "item_id": "tm92",
+          "move_id": "imprison"
+        },
+        {
+          "item_id": "tm93",
+          "move_id": "flash_cannon"
+        }
+      ]
     }
   ]
 }
