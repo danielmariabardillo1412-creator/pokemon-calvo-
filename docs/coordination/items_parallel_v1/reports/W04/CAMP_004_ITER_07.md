@@ -22,3 +22,21 @@
 La CI debe exigir Python y Godot acumulativos de CAMP004 y regresiones Python/Godot de CAMP003; CAMP001 se conserva y ejecuta por workflow en puertas 05 y 10. **No** introducir efectos de captura, entrenamiento ajeno, fusiones o cambios de forma en producción. No se han alterado `main`, V28, rama árbitra, otras trabajadoras, scripts de producción, catálogo ni workflows.
 
 **Siguiente `p`:** ejecutar exclusivamente bloque 08 `reveal_glass;rotom_catalog;zygarde_cube`, previa verificación de CI07 y corrección de cualquier fallo local.
+
+
+## Evidencia CI07 ejecutada
+
+[GitHub Actions #41589367209](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41589367209), SHA `0c02e95ba2d13f726dfb4c02cb692946680bd990`, terminó `completed/success`. Recibos:
+- `CAMP004_W04_MANIFEST_PASS reserved=10 completed=7 ids=36`.
+- `CAMP004_W04_PY PASS blocks=7 checks=211`.
+- `CAMP004_W04_GODOT PASS blocks=7 checks=656`.
+- Regresiones CAMPAÑA_003: Python **120**, Godot **270** comprobaciones PASS.
+
+**Resultado individual:**
+- `rage_candy_bar`: `RECUPERACION_VERIFICADA records=0`; en Godot curó una quemadura existente, consumió una unidad, no evolucionó, preservó identidad y SaveV2; rechazó usos sin efecto ni segundo gasto. Esto **sí es funcionalidad de recuperación**, no evolución.
+- `red_orb`: `DEPENDENCIA records=0`; equipamiento/retirada sin cambio de forma ni gasto indebido, Primal Reversion de Groudon **no certificada**.
+- `reins_of_unity`: `DEPENDENCIA records=0`; no equipable, fusionar Calyrex **no conectado**.
+
+El CSV de bloque 07 registra estado agregado `DEPENDENCIA_DOCUMENTADA` por las dos dependencias, preservando en notas la recuperación positiva; commit `dc2b596533dac833ccb509753e93847b391c67a6`, run `41589367209`. Dicha actualización provoca una nueva CI sobre el estado consolidado que se verifica por separado.
+
+La regresión histórica CAMP001 se conserva y se ejecuta por workflow en puertas 05 y 10, no en esta 07.
