@@ -218,6 +218,192 @@ EXPECTED_02 = json.loads(r'''[
 EXPECTED_IDS_02 = ["qualot_berry","razz_berry","sitrus_berry","tamato_berry"]
 SOURCES_02 = ["modules/inventory/field_item_effects.gd","modules/inventory/imported_recovery_v19.json","modules/inventory/field_item_service.gd","modules/inventory/item_connections_v1.json"]
 
+EXPECTED_03 = json.loads(r'''[
+  {
+    "scenario": "antidote_poison_c004",
+    "id": "antidote",
+    "kind": "field_medicine",
+    "start_hp": "full",
+    "status": "poison",
+    "confused": false,
+    "applies": true,
+    "heal_amount": 0,
+    "cures_status": true,
+    "cures_confusion": false
+  },
+  {
+    "scenario": "antidote_badly_poisoned_c004",
+    "id": "antidote",
+    "kind": "field_medicine",
+    "start_hp": "full",
+    "status": "badly_poisoned",
+    "confused": false,
+    "applies": true,
+    "heal_amount": 0,
+    "cures_status": true,
+    "cures_confusion": false
+  },
+  {
+    "scenario": "antidote_burn_reject_c004",
+    "id": "antidote",
+    "kind": "field_medicine",
+    "start_hp": "full",
+    "status": "burn",
+    "confused": false,
+    "applies": false,
+    "heal_amount": 0,
+    "cures_status": false,
+    "cures_confusion": false
+  },
+  {
+    "scenario": "antidote_healthy_reject_c004",
+    "id": "antidote",
+    "kind": "field_medicine",
+    "start_hp": "full",
+    "status": "",
+    "confused": false,
+    "applies": false,
+    "heal_amount": 0,
+    "cures_status": false,
+    "cures_confusion": false
+  },
+  {
+    "scenario": "awakening_sleep_c004",
+    "id": "awakening",
+    "kind": "field_medicine",
+    "start_hp": "full",
+    "status": "sleep",
+    "confused": false,
+    "applies": true,
+    "heal_amount": 0,
+    "cures_status": true,
+    "cures_confusion": false,
+    "expect_sleep_clock_clear": true
+  },
+  {
+    "scenario": "awakening_poison_reject_c004",
+    "id": "awakening",
+    "kind": "field_medicine",
+    "start_hp": "full",
+    "status": "poison",
+    "confused": false,
+    "applies": false,
+    "heal_amount": 0,
+    "cures_status": false,
+    "cures_confusion": false
+  },
+  {
+    "scenario": "awakening_healthy_reject_c004",
+    "id": "awakening",
+    "kind": "field_medicine",
+    "start_hp": "full",
+    "status": "",
+    "confused": false,
+    "applies": false,
+    "heal_amount": 0,
+    "cures_status": false,
+    "cures_confusion": false
+  },
+  {
+    "scenario": "berry_juice_half_hp_c004",
+    "id": "berry_juice",
+    "kind": "field_medicine",
+    "start_hp": "half",
+    "status": "",
+    "confused": false,
+    "applies": true,
+    "heal_amount": 20,
+    "cures_status": false,
+    "cures_confusion": false
+  },
+  {
+    "scenario": "berry_juice_near_full_c004",
+    "id": "berry_juice",
+    "kind": "field_medicine",
+    "start_hp": "missing_7",
+    "status": "",
+    "confused": false,
+    "applies": true,
+    "heal_amount": 20,
+    "cures_status": false,
+    "cures_confusion": false
+  },
+  {
+    "scenario": "berry_juice_full_reject_c004",
+    "id": "berry_juice",
+    "kind": "field_medicine",
+    "start_hp": "full",
+    "status": "",
+    "confused": false,
+    "applies": false,
+    "heal_amount": 0,
+    "cures_status": false,
+    "cures_confusion": false
+  },
+  {
+    "scenario": "big_malasada_poison_c004",
+    "id": "big_malasada",
+    "kind": "field_medicine",
+    "start_hp": "full",
+    "status": "poison",
+    "confused": false,
+    "applies": true,
+    "heal_amount": 0,
+    "cures_status": true,
+    "cures_confusion": false
+  },
+  {
+    "scenario": "big_malasada_freeze_c004",
+    "id": "big_malasada",
+    "kind": "field_medicine",
+    "start_hp": "full",
+    "status": "freeze",
+    "confused": false,
+    "applies": true,
+    "heal_amount": 0,
+    "cures_status": true,
+    "cures_confusion": false
+  },
+  {
+    "scenario": "big_malasada_confusion_c004",
+    "id": "big_malasada",
+    "kind": "field_medicine",
+    "start_hp": "full",
+    "status": "",
+    "confused": true,
+    "applies": true,
+    "heal_amount": 0,
+    "cures_status": false,
+    "cures_confusion": true
+  },
+  {
+    "scenario": "big_malasada_poison_confusion_c004",
+    "id": "big_malasada",
+    "kind": "field_medicine",
+    "start_hp": "full",
+    "status": "poison",
+    "confused": true,
+    "applies": true,
+    "heal_amount": 0,
+    "cures_status": true,
+    "cures_confusion": true
+  },
+  {
+    "scenario": "big_malasada_healthy_reject_c004",
+    "id": "big_malasada",
+    "kind": "field_medicine",
+    "start_hp": "full",
+    "status": "",
+    "confused": false,
+    "applies": false,
+    "heal_amount": 0,
+    "cures_status": false,
+    "cures_confusion": false
+  }
+]''')
+EXPECTED_IDS_03 = ["antidote","awakening","berry_juice","big_malasada"]
+SOURCES_03 = ["modules/inventory/imported_recovery_v19.json","modules/inventory/field_item_effects.gd","modules/inventory/field_item_service.gd","tests/gameplay/item_field_effects_v4.gd"]
+
 
 class ContractError(ValueError):
     pass
@@ -298,6 +484,21 @@ def verify(fixture, queue, progress, chk):
                 names.add(actual["scenario"])
             chk.demand(names == {case["scenario"] for case in EXPECTED_02},
                        "Escenarios bloque 02 incompletos")
+        elif i == 2:
+            chk.demand(block["ids"] == EXPECTED_IDS_03 and block["family"] == "MEDICINE",
+                       "IDs o familia de medicinas 03 incorrectos")
+            chk.demand(block["source_evidence"] == SOURCES_03,
+                       "Fuentes del bloque de medicinas cambiadas")
+            chk.demand(len(block["cases"]) == len(EXPECTED_03),
+                       "No hay 15 escenarios de medicina")
+            names = set()
+            for actual, expected in zip(block["cases"], EXPECTED_03):
+                chk.demand(type(actual) is dict and actual == expected,
+                           "Medicina alterada: " + str(expected["scenario"]))
+                chk.demand(actual["scenario"] not in names, "Medicina duplicada")
+                names.add(actual["scenario"])
+            chk.demand(names == {x["scenario"] for x in EXPECTED_03},
+                       "Escenarios MEDICINE 03 incompletos")
         else:
             raise ContractError("No hay contrato específico de bloque futuro")
     return len(progress)
@@ -337,6 +538,24 @@ def verify_sources(chk):
     connections = json.loads((ROOT / "modules/inventory/item_connections_v1.json").read_text(encoding="utf-8"))
     chk.demand(all(x in connections["holdable_ids"] for x in EXPECTED_IDS_02),
                "Las 4 bayas deben conservar el contrato equipado permitido")
+    expected_medicines = {
+        "antidote": {"cure": ["psn", "tox"]},
+        "awakening": {"cure": ["slp"]},
+        "berry_juice": {"heal": 20},
+        "big_malasada": {"confusion": True, "cure": "all"},
+    }
+    for item, expected in expected_medicines.items():
+        chk.demand(profile["items"][item]["effect"] == expected
+                   and profile["items"][item]["consume"] is True,
+                   "Contrato nativo medicina no coincide: " + item)
+    chk.demand("static func apply(" in effects and
+               "static func _recovery_spec(" in effects and
+               "creature.status_state.clear_persistent()" in effects,
+               "Motor de medicina/cura no conectado")
+    chk.demand("confusion-only effect" in old and
+               '"antidote": "badly_poisoned"' in old and
+               '"awakening": "sleep"' in old,
+               "Regresiones históricas de estado no disponibles")
 
 
 def negative_controls(fixture, queue, progress, chk):
@@ -372,6 +591,16 @@ def negative_controls(fixture, queue, progress, chk):
             lambda f: f["blocks"][1]["cases"][5].update({"consumes": False}),
             lambda f: f["blocks"][1]["cases"][7].update({"heal_denominator": 3}),
             lambda f: f["blocks"][1]["cases"][9].update({"stat": "defense"}),
+        ])
+    if len(fixture["blocks"]) >= 3:
+        edits.extend([
+            lambda f: f["blocks"][2]["ids"].append("potion"),
+            lambda f: f["blocks"][2]["cases"].pop(),
+            lambda f: f["blocks"][2]["cases"][0].update({"applies": False}),
+            lambda f: f["blocks"][2]["cases"][4].update({"cures_status": False}),
+            lambda f: f["blocks"][2]["cases"][8].update({"heal_amount": 7}),
+            lambda f: f["blocks"][2]["cases"][12].update({"cures_confusion": False}),
+            lambda f: f["blocks"][2]["cases"][14].update({"applies": True}),
         ])
     for i, edit in enumerate(edits):
         altered = copy.deepcopy(fixture)
