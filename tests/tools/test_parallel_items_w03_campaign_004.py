@@ -269,6 +269,60 @@ def main() -> int:
                 test(set(block["invalid_cases"]) ==
                      {"field_locked", "invalid_inventory", "unknown_target"},
                      "Faltan negativos de campo")
+            elif block["bloque"] == "05":
+                test(ids == ["repel", "silver_razz_berry", "super_lure"],
+                     "Reserva bloque05 alterada")
+                service = (ROOT / "modules/inventory/field_item_service.gd").read_text(encoding="utf-8")
+                field = (ROOT / "modules/inventory/field_item_effects.gd").read_text(encoding="utf-8")
+                modifiers = (ROOT / "modules/gameplay/encounter_item_modifiers.gd").read_text(encoding="utf-8")
+                recovery = json.loads((ROOT / "modules/inventory/imported_recovery_v19.json").read_text(encoding="utf-8"))
+                selected = {r["id"]: r for r in
+                            rows(ROOT / "docs/current/RANDOMLOCK_ITEMS_BUILD_SCOPE_V2.csv")}
+                test(all(selected[id]["familia"] == "FIELD_USE"
+                         and selected[id]["estado_contenido"] == "SELECCIONADO"
+                         for id in ids), "Los tres IDs deben seguir seleccionados")
+                test(all(id not in recovery["items"] for id in ids),
+                     "Apareció contrato de recuperación: requiere nuevas pruebas")
+                test(all(id not in field and id not in modifiers for id in ids),
+                     "Apareció ejecutor: revisar funcionamiento antes de caracterizar rechazo")
+                test('return _deny("field_effect_not_connected", "DEPENDENCY_MISSING")' in service
+                     and 'if FieldEffects.supports(item_id):' in service
+                     and 'if EncounterModifiers.supports(item_id):' in service,
+                     "Cambió el enrutamiento del servicio de campo")
+                test(block["current_state"] == "DEPENDENCIA_COMPARTIDA"
+                     and block["functional_effect_certified"] is False
+                     and set(block["per_id_status"]) == set(ids)
+                     and all(s == "DEPENDENCIA_COMPARTIDA"
+                             for s in block["per_id_status"].values()),
+                     "No se puede certificar sin integración de campo")
+                test(block["missing_authoritative_integrations"] ==
+                     ["repel_overworld_encounter_steps_and_lead_level",
+                      "silver_razz_berry_catch_bait_transaction",
+                      "super_lure_overworld_encounter_rate_and_duration"],
+                     "Dependencias de Repel, Frambu Plateada o Supercolonia incompletas")
+                test('"05": _block_05(block)' in runner and
+                     'func _block_05(block: Dictionary)' in runner and
+                     'service.use_item(id, creature.instance_id)' in runner,
+                     "Falta integración de prueba Godot")
+                test('String(result.get("reason", "")) == "field_effect_not_connected"' in runner
+                     and 'String(result.get("status", "")) == "DEPENDENCY_MISSING"' in runner
+                     and 'snapshot(service) == before' in runner,
+                     "No se comprueba rechazo y ausencia de efectos secundarios")
+                test('PlayerInventory.from_dict(saved)' in runner
+                     and 'loaded.to_dict() == saved' in runner
+                     and 'loaded.quantity(id) == count' in runner,
+                     "Falta serialización real de mochila")
+                test('String(denied.get("reason", "")) == "field_locked"' in runner
+                     and 'String(invalid.get("reason", "")) == "invalid_inventory"' in runner
+                     and 'String(foreign.get("reason", "")) == "field_effect_not_connected"' in runner,
+                     "Faltan pruebas de guardas")
+                test({r["status"] for r in block["cases"]} ==
+                     {"none", "sleep", "confusion"}
+                     and set(block["inventory_counts"]) == {0, 2},
+                     "No se prueban variaciones de estado/inventario")
+                test(set(block["invalid_cases"]) ==
+                     {"field_locked", "invalid_inventory", "unknown_target"},
+                     "Negativos incompletos")
             else:
                 test(False, "Bloque sin implementación de test: " + block["bloque"])
         test(checks > 0, "Sin verificaciones")
