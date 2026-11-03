@@ -36,3 +36,10 @@ GitHub Actions [#41576674332](https://github.com/danielmariabardillo1412-creator
 El runner informó por separado `status=DEPENDENCIA records=0` para `strawberry_sweet`, `whipped_dream` y `leaders_crest`. Se probaron rechazos, persistencia e inventario, **no una evolución positiva**. Los tres permanecen `DEPENDENCIA_DOCUMENTADA`. El bloqueo de disparadores `spin` y `three_defeated_bisharp` no se ha relajado.
 
 Fila 03 reconciliada en `CAMP_004_PROGRESO.csv`, commit `e9035624278e65e06e0e656d17278c1a6daa209d`. El cambio al CSV inicia una nueva CI para comprobar el estado consolidado; no confundir el recibo original con esa ejecución posterior.
+
+
+## Verificación final del progreso consolidado
+
+GitHub Actions [#41576832454](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41576832454), SHA `e9035624278e65e06e0e656d17278c1a6daa209d`, terminó **completed/success** tras actualizar el CSV al estado `DEPENDENCIA_DOCUMENTADA`. Recibos repetidos: `CAMP004_W04_MANIFEST_PASS reserved=10 completed=3 ids=36`, Python `PASS blocks=3 checks=88`, Godot `PASS blocks=3 checks=292`, y regresiones de CAMP003 Python 120/Godot 270. Se mantienen los tres `status=DEPENDENCIA records=0`.
+
+**CAMPAÑA_004: 03/10 microbloques entregados y auditados**, sin confundir esta puerta de pruebas con efectos jugables. El informe y continuidad son los únicos cambios posteriores a esa CI; ningún módulo funcional cambió.
