@@ -1,3 +1,9 @@
+# Corrección de auditoría W03 / bloque 02
+
+**Flauta Azul sí es funcional** según `imported_recovery_v19.json`: cura el sueño y no se consume. Pruebas Godot/Python actualizadas con caso positivo, sin sueño, sin objeto, guardas, serialización de inventario y limpieza de reloj. **No confundir con Flauta Negra/Cuerda Huida**, que siguen sin conexión de campo. Última CI debe ejecutarse con SHA actualizado tras esta corrección. El siguiente `p` sigue siendo bloque 03; no ejecutarlo en esta orden.
+
+---
+
 # IA3/W03 — CONTINUIDAD CAMP004 02/10
 
 **Rama:** `codex/calvo-items-20261103-w03-camp004`. **Bloques publicados:** 01 Buceo/Ocaso/Acopio; 02 Flauta Negra/Azul/Cuerda Huida. **Próximo `p`: bloque 03 `fluffy_tail;golden_razz_berry;lure`, después de revisar CI.**
