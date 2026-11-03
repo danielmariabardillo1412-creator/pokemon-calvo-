@@ -1,3 +1,19 @@
+# ESTADO VIGENTE IA5/W05 — CAMPAÑA_003 · 07/10 PUBLICADOS (2026-11-03)
+
+**Identidad:** IA5/W05, MT/libros. **Rama exclusiva:** `codex/calvo-items-20261103-w05-camp003`. Única autoridad para los diez bloques: gate y `CAMPAIGN_003_QUEUE_APPROVED.csv` / `campaigns/CAMP_003_W05.md` de IA6. Esta sección prevalece sobre los historiales inferiores.
+
+**BLOQUE 07 ENTREGADO:** `tm57;tm58;tm59;tm60;tm61;tm62` → `false_swipe;brick_break;zen_headbutt;u_turn;shadow_claw;foul_play`, mapeos reales en perfil Scarlet/Violet. Fixture ampliado a 7 bloques/42 MT, commit `05bb0662f3a4089146d1968bf651e3280f9dac11`. Una única nueva fila de progreso `07`, commit `fc41a3e6cd53ee85cfccd08ca6da3a3fac2521e0`. Informe `CAMP_003_ITER_07.md`, commit `a3d615d99f322132789d30933384852322df7ff9`. Scripts Python/Godot propios no reescritos, acumulan las 42 muestras. **Consistencia documental** verificada: 42 IDs distintos, siete filas y correspondencia idéntica a la cola y los movimientos del perfil; no implica enseñanza ejecutada del bloque 07.
+
+**CI BLOQUES 01–06 VERIFICADA:** GitHub Actions [#41559866278](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41559866278) sobre `920a647db1bfa5f5ad9f34c13bab5d6b2fa48143`, `completed/success`; logs `CAMP003_W05_PY PASS blocks=6 checks=348` y `CAMP003_W05_GODOT PASS blocks=6 checks=1306` (Godot 4.7). 36 MT verificadas funcionalmente en ese commit.
+
+**CI BLOQUE 07 PENDIENTE HASTA RESULTADO DEL SHA DE PROGRESO:** `fc41a3e6cd53ee85cfccd08ca6da3a3fac2521e0`, workflow `.github/workflows/parallel-camp003-worker-autoci.yml`. Exigir `completed/success` y ambos recibos `PASS blocks=7`; no atribuir PASS de 42 MT antes. Run del commit de fixture puede ser `cancelled` por `concurrency.cancel-in-progress`.
+
+**Próxima `p`:** verificar run del SHA de progreso del bloque 07; con success ejecutar solamente el **bloque 08** `tm63;tm64;tm65;tm66;tm67;tm68` (una nueva fila CSV, seis entradas fixture, informe y continuidad propios). Si CI sigue en curso, solo bloque independiente de tests sin PASS; si falla test propio, corregir sin reducir aserciones; defectos reales en servicio, SaveV2, fuente canónica o dependencia compartida → STOP y elevar IA6. Al llegar a diez bloques declarar `CAMPAÑA_003_FINALIZADA` y STOP.
+
+**Protección:** `main`, V28, PR118, árbitra, ramas otras W, producción, `modules/`, `data/`, `config/`, CI/manifest compartidos, partidas reales, 19 legacy y UI/GPU intocados.
+
+---
+
 # ESTADO VIGENTE IA5/W05 — CAMPAÑA_003 · 06/10 PUBLICADOS (2026-11-03)
 
 **Identidad:** IA5/W05, MT/libros. **ÚNICA rama de escritura:** `codex/calvo-items-20261103-w05-camp003`. Gate/cola autorizados por IA6 en `codex/calvo-items-20261101-arbitro`, `CAMPAIGN_GATE_003.md`, `CAMPAIGN_003_QUEUE_APPROVED.csv`, `campaigns/CAMP_003_W05.md`. Historial más abajo es obsoleto para la siguiente autorización.
