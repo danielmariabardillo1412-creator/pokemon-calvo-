@@ -61,6 +61,35 @@
           "move_id": "flash_cannon"
         }
       ]
+    },
+    {
+      "block": "03",
+      "items": [
+        {
+          "item_id": "tm94",
+          "move_id": "dark_pulse"
+        },
+        {
+          "item_id": "tm95",
+          "move_id": "leech_life"
+        },
+        {
+          "item_id": "tm96",
+          "move_id": "eerie_impulse"
+        },
+        {
+          "item_id": "tm97",
+          "move_id": "fly"
+        },
+        {
+          "item_id": "tm98",
+          "move_id": "skill_swap"
+        },
+        {
+          "item_id": "tm99",
+          "move_id": "iron_head"
+        }
+      ]
     }
   ]
 }
