@@ -9,6 +9,7 @@ const BLOQUE_06 := [&"auspicious_armor", &"malicious_armor", &"metal_alloy"]
 const BLOQUE_07 := [&"galarica_cuff", &"galarica_wreath", &"peat_block"]
 const BLOQUE_08 := [&"chipped_pot", &"cracked_pot", &"masterpiece_teacup"]
 const BLOQUE_09 := [&"unremarkable_teacup", &"sweet_apple", &"tart_apple"]
+const BLOQUE_10 := [&"syrupy_apple", &"scroll_of_darkness", &"scroll_of_waters"]
 const ID := &"w04_c003_01"
 var checks := 0
 var fallos: Array[String] = []
@@ -46,7 +47,7 @@ func _ejecutar() -> void:
 		terminar()
 		return
 	var catalogo: DefinitionCatalog = GameData.from_dict(data).to_definition_catalog()
-	for item: StringName in BLOQUE_01 + BLOQUE_02 + BLOQUE_03 + BLOQUE_04 + BLOQUE_05 + BLOQUE_06 + BLOQUE_07 + BLOQUE_08 + BLOQUE_09:
+	for item: StringName in BLOQUE_01 + BLOQUE_02 + BLOQUE_03 + BLOQUE_04 + BLOQUE_05 + BLOQUE_06 + BLOQUE_07 + BLOQUE_08 + BLOQUE_09 + BLOQUE_10:
 		var compatibles: Array[Dictionary] = []
 		var dependientes := 0
 		var primer_dependiente: Dictionary = {}
@@ -55,7 +56,7 @@ func _ejecutar() -> void:
 			for rec: EvolutionRecord in sp.evolutions:
 				if rec.item_id != item:
 					continue
-				if item in BLOQUE_08 or item in BLOQUE_09:
+				if item in BLOQUE_08 or item in BLOQUE_09 or item in BLOQUE_10:
 					print("CAMP003_W04_FORMA item=", String(item), " source=", String(sid), " target=", String(rec.species_id), " conditions=", JSON.stringify(rec.conditions))
 					if rec.conditions.has("base_form") and StringName(str(rec.conditions["base_form"])) != sid:
 						validar(EvolutionSystem.classify_record(rec, catalogo, sid) != EvolutionSystem.RUNTIME_SUPPORTED, String(item) + "/forma_distinta_bloqueada")
@@ -66,7 +67,7 @@ func _ejecutar() -> void:
 					if primer_dependiente.is_empty():
 						primer_dependiente = {"source": sid, "target": rec.species_id, "trigger": String(rec.trigger), "classification": EvolutionSystem.classify_record(rec, catalogo, sid)}
 		validar(catalogo.item(item) != null, String(item) + "/objeto_catalogado")
-		if item in BLOQUE_07 or item in BLOQUE_08 or item in BLOQUE_09:
+		if item in BLOQUE_07 or item in BLOQUE_08 or item in BLOQUE_09 or item in BLOQUE_10:
 			var control_incompatible := _crear(catalogo, &"eevee")
 			validar(control_incompatible != null, String(item) + "/control_especie_incompatible")
 			if control_incompatible != null:
@@ -81,7 +82,7 @@ func _ejecutar() -> void:
 			print("CAMP003_W04_DEPENDENCIA item=", String(item), " reason=sin_regla_catalogada")
 		if compatibles.is_empty():
 			print("CAMP003_W04_DEPENDENCIA item=", String(item), " records=", dependientes, " example=", JSON.stringify(primer_dependiente))
-			if (item in BLOQUE_03 or item in BLOQUE_04 or item in BLOQUE_05 or item in BLOQUE_06 or item in BLOQUE_07 or item in BLOQUE_08 or item in BLOQUE_09) and not primer_dependiente.is_empty():
+			if (item in BLOQUE_03 or item in BLOQUE_04 or item in BLOQUE_05 or item in BLOQUE_06 or item in BLOQUE_07 or item in BLOQUE_08 or item in BLOQUE_09 or item in BLOQUE_10) and not primer_dependiente.is_empty():
 				var propietario_condicionado := _crear(catalogo, primer_dependiente.source as StringName)
 				validar(propietario_condicionado != null, String(item) + "/creacion_condicionada")
 				if propietario_condicionado != null:
@@ -112,6 +113,19 @@ func _ejecutar() -> void:
 				if otro_registro.item_id == manzana_alternativa and otro_registro.species_id != destino:
 					var rechazo_cruzado: Dictionary = servicio.evolve(item, ID, otro_registro.species_id)
 					validar(not rechazo_cruzado.get("accepted", false) and pc.inventory.quantity(item) == 2 and JSON.stringify(SaveGameData.build(pc.party, pc.storage, pc.inventory).to_dict()) == previo, String(item) + "/manzana_destino_cruzado_rechazado")
+		if item in BLOQUE_10:
+			var registro_origen: CreatureSpecies = catalogo.species(elegido.source as StringName)
+			var alternativas: Array[StringName] = []
+			if item == &"syrupy_apple":
+				alternativas = [&"sweet_apple", &"tart_apple"]
+			elif item == &"scroll_of_darkness":
+				alternativas = [&"scroll_of_waters"]
+			elif item == &"scroll_of_waters":
+				alternativas = [&"scroll_of_darkness"]
+			for registro_alternativo: EvolutionRecord in registro_origen.evolutions:
+				if registro_alternativo.item_id in alternativas and registro_alternativo.species_id != destino:
+					var intento_cruzado: Dictionary = servicio.evolve(item, ID, registro_alternativo.species_id)
+					validar(not intento_cruzado.get("accepted", false) and pc.inventory.quantity(item) == 2 and JSON.stringify(SaveGameData.build(pc.party, pc.storage, pc.inventory).to_dict()) == previo, String(item) + "/bloque10_destino_alternativo_rechazado")
 		var ajeno: Dictionary = servicio.evolve(item, &"id_ajeno", destino)
 		validar(not ajeno.get("accepted", false) and JSON.stringify(SaveGameData.build(pc.party, pc.storage, pc.inventory).to_dict()) == previo, String(item) + "/rechazo_ajeno")
 		var falso: Dictionary = servicio.evolve(item, ID, &"mewtwo")
@@ -149,7 +163,7 @@ func terminar() -> void:
 		return
 	cerrado = true
 	if fallos.is_empty():
-		print("CAMP003_W04_GODOT PASS blocks=9 checks=", checks)
+		print("CAMP003_W04_GODOT PASS blocks=10 checks=", checks)
 	else:
 		print("CAMP003_W04_GODOT FAIL errors=", JSON.stringify(fallos))
 	quit(0 if fallos.is_empty() else 1)
