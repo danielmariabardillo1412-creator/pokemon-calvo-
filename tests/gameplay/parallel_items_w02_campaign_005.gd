@@ -24,6 +24,9 @@ func _training_creature(spec: Dictionary) -> CreatureInstance:
 		catalogs, ProgressionRuleset.new(), rng,
 		{"instance_id": &"own", "ability_id": ability, "nature_id": "hardy",
 		"moves": ["growl", "protect"]})
+	if spec.has("exp_until_next"):
+		var curve: String = String(catalogs.species(c.species_id).growth_rate)
+		c.experience = ProgressionRuleset.experience_for_level(curve, c.level + 1) - int(spec.exp_until_next)
 	c.friendship = int(spec.get("start_friendship", 99))
 	if String(spec.kind) == "vitamin":
 		var stat: String = String(spec.stat)
@@ -100,13 +103,25 @@ func _probe_training(spec: Dictionary, mode: String) -> Dictionary:
 		check(mode + " acción habilidad y destino", String(result.get("action", "")) == "ability_change"
 			and String(result.get("ability_id", "")) == String(spec.expected_ability))
 	elif String(spec.kind) == "growth":
-		var next_level: int = int(spec.expected_level)
 		var curve: String = String(catalogs.species(c.species_id).growth_rate)
-		var expected_exp: int = ProgressionRuleset.experience_for_level(curve, next_level)
-		check(mode + " caramelo progresa exactamente un nivel", now.level == next_level
-			and now.experience == expected_exp and now.level == start_level + 1)
+		var expected_exp: int
+		var next_level: int
+		if String(spec.id) == "rare_candy":
+			next_level = int(spec.expected_level)
+			expected_exp = ProgressionRuleset.experience_for_level(curve, next_level)
+			check(mode + " Caramelo Raro sube exactamente un nivel",
+				now.level == start_level + 1)
+		else:
+			expected_exp = mini(
+				ProgressionRuleset.experience_for_level(curve, 100), c.experience + 100)
+			next_level = ProgressionRuleset.level_for_experience(curve, expected_exp)
+			check(mode + " Caramelo Exp XS gana XP real, máximo 100",
+				expected_exp - c.experience == int(spec.exp_gain)
+				and int(result.get("exp_gained", -1)) == int(spec.exp_gain))
+		check(mode + " crecimiento XP y nivel por curva real", now.level == next_level
+			and now.experience == expected_exp)
 		check(mode + " déficits PS y amistad", now.stats.max_hp - now.current_hp == start_hp_deficit
-			and now.friendship == mini(255, start_friend + 5))
+			and now.friendship == mini(255, start_friend + [5, 3, 2][mini(2, int(start_friend / 100))]))
 		check(mode + " sin alterar naturaleza, EV, IV ni habilidades", now.ivs == c.ivs
 			and now.evs == c.evs and now.nature_id == c.nature_id
 			and now.ability_id == c.ability_id and now.species_id == c.species_id)
