@@ -264,6 +264,35 @@
           "move_id": "ice_beam"
         }
       ]
+    },
+    {
+      "block": "10",
+      "items": [
+        {
+          "item_id": "tm136",
+          "move_id": "electric_terrain"
+        },
+        {
+          "item_id": "tm137",
+          "move_id": "grassy_terrain"
+        },
+        {
+          "item_id": "tm138",
+          "move_id": "psychic_terrain"
+        },
+        {
+          "item_id": "tm139",
+          "move_id": "misty_terrain"
+        },
+        {
+          "item_id": "tm140",
+          "move_id": "nasty_plot"
+        },
+        {
+          "item_id": "tm141",
+          "move_id": "fire_blast"
+        }
+      ]
     }
   ]
 }
