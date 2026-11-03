@@ -209,6 +209,76 @@ def main() -> int:
                             {"mew", "caterpie"}, "No se prueban ambas tasas de captura")
                 audit.check(not block["implementation_authorized"] and block["ci_required"],
                             "Prohibido inventar turnos o modificar producción")
+            elif block["bloque"] == "04":
+                audit.check(ids == ["level_ball", "nest_ball"], "Reserva 04 alterada")
+                contextual = (ROOT / "modules/capture/capture_context_ball_effects.gd").read_text(encoding="utf-8")
+                basic = (ROOT / "modules/capture/capture_ball_effects.gd").read_text(encoding="utf-8")
+                context = (ROOT / "modules/capture/capture_battle_context.gd").read_text(encoding="utf-8")
+                wild = (ROOT / "modules/gameplay/wild_adventure_session.gd").read_text(encoding="utf-8")
+                showdown = (ROOT / "modules/gameplay/showdown_adventure_session.gd").read_text(encoding="utf-8")
+                rules = (ROOT / "modules/capture/capture_ruleset.gd").read_text(encoding="utf-8")
+                level = block["level_ball"]
+                nest = block["nest_ball"]
+                audit.check("var catcher_level: int = -1" in context,
+                            "Nivel del capturador ausente no puede ser nivel 1")
+                audit.check('capture_active_level_context_missing' in contextual
+                            and "context.catcher_level < 1 or context.catcher_level > 100" in contextual,
+                            "Validación de Level no rechaza nivel desconocido")
+                audit.check('context.catcher_level >= target.level * 4' in contextual
+                            and 'context.catcher_level >= target.level * 2' in contextual
+                            and 'context.catcher_level > target.level' in contextual,
+                            "Faltan fronteras 8x/4x/2x de Level")
+                audit.check("return minf(factor, 255.0 / species.capture_rate)" in contextual,
+                            "Level requiere límite al ratio 255/capture_rate")
+                audit.check('maxf((41.0 - target.level) / 10.0, 1.0)' in basic
+                            and '&"nest_ball"' in basic,
+                            "Nest requiere nivel del salvaje y suelo de 1x")
+                audit.check('for id: StringName in ContextBallEffects.IDS:' in rules
+                            and 'for id: StringName in BallEffects.IDS:' in rules,
+                            "Las bolas no comparten catálogo de registro")
+                audit.check("context.catcher_level = catcher.level" in wild
+                            and "context.catcher_level = catcher.level" in showdown,
+                            "El nivel real del activo no llega a ambas sesiones")
+                audit.check('func _block_04(' in runner
+                            and '"04": _block_04(bloque)' in runner
+                            and 'func _check_block04_capture(' in runner
+                            and 'func _check_block04_reject(' in runner,
+                            "Faltan pruebas de captura y negativos de bloque04")
+                audit.check("CAMP003_W03_TURN_EFFECTS.multiplier(" in runner
+                            and "CAMP003_W03_BASIC_EFFECTS.multiplier(" in runner,
+                            "No se comprueba adaptador existente de Level y Nest")
+                audit.check('capture_active_level_context_missing' in runner
+                            and 'CaptureSystem.validate_attempt(' in runner,
+                            "Falta rechazo por nivel del capturador ausente")
+                audit.check('rng.state == control.state' in runner
+                            and 'rng.state == rng_before' in runner
+                            and 'inv.quantity(id) == 1' in runner,
+                            "Faltan controles de RNG y gasto en capturas/rechazos")
+                audit.check(level["target_level"] == 10
+                            and level["catcher_levels"] == [9, 10, 11, 19, 20, 39, 40, 100]
+                            and level["independent_multipliers"] == [1, 1, 2, 2, 4, 4, 8, 8],
+                            "No se cubren valores estrictos y no estrictos de Level")
+                audit.check(level["capped_at_modified_rate"] == 255,
+                            "Level debe saturar tasa de especie a 255")
+                audit.check(level["missing_catcher_levels"] == [-1, 0, 101]
+                            and level["expected_missing_reason"] ==
+                            "capture_active_level_context_missing",
+                            "Faltan inválidos por nivel del capturador")
+                audit.check(nest["target_levels"] == [1, 30, 31, 40, 100]
+                            and nest["independent_multipliers"] == [4, 1.1, 1, 1, 1],
+                            "Nest requiere fronteras en 30 y 31")
+                audit.check(nest["verify_without_catcher_level"] is True
+                            and 'ctx.catcher_level = catcher_level' in runner,
+                            "Nest no puede depender de nivel del capturador")
+                audit.check({x["species_id"] for x in block["species_cases"]} ==
+                            {"mew", "caterpie"} and
+                            block["hp_modes"] == ["full", "one_hp"],
+                            "Faltan tasa baja/alta y extremos de PS")
+                audit.check(set(block["invalid_cases"]) ==
+                            {"trainer_battle_not_capturable", "item_not_owned"},
+                            "Faltan negativos canónicos de Level/Nest")
+                audit.check(not block["implementation_authorized"] and block["ci_required"],
+                            "No existe autorización de producción")
             else:
                 audit.check(False, "Falta contrato incremental específico para " + block["bloque"])
         audit.check(audit.checks > 0, "Sin comprobaciones")
