@@ -63,10 +63,11 @@ func _run_w02() -> void:
 
 func _probe_berry(spec: Dictionary, mode: String) -> Dictionary:
 	var item := StringName(spec.id)
-	# Los casos de Liechi usan Amnesia para no confundir Swords Dance con la baya.
+	# Movimientos de control neutrales; Micle prueba el siguiente movimiento real.
 	var own_move: String = String(spec.get("own_move", "swords_dance"))
+	var own_moves: Array = spec.get("own_moves", [own_move])
 	var own: CreatureInstance = _mon(StringName(spec.get("actor_species", "mew")),
-		int(automation.level), &"own", [own_move])
+		int(automation.level), &"own", own_moves)
 	var reserve: CreatureInstance = _mon(&"mew", int(automation.level), &"reserve", ["swords_dance"])
 	var foe: CreatureInstance = _mon(StringName(spec.foe_species), int(automation.level),
 		&"foe", [String(spec.foe_move)])
@@ -147,6 +148,10 @@ func _probe_berry(spec: Dictionary, mode: String) -> Dictionary:
 			first_move_seen = true
 			first_move_is_own = line.begins_with("|move|p1a:")
 			native_events.append(String(value))
+	# Proyección de VOLATILES del checkpoint nativo real; no del nombre del objeto.
+	var micle_pending_before_restore: bool = false
+	if String(spec.kind) == "accuracy_next_move":
+		micle_pending_before_restore = _native_volatile(battle, &"own", String(spec.expected_volatile))
 	check(mode + " dueño inmutable antes de settlement",
 		JSON.stringify(_owner_data(owner)) == frozen and _units(owner, item) == 2)
 	var file_name: String = String(spec.scenario) + "_" + mode
@@ -163,6 +168,30 @@ func _probe_berry(spec: Dictionary, mode: String) -> Dictionary:
 	check(mode + " restauración HP/status/consumo",
 		replay.current_hp == hp and String(replay.status_state.persistent_id) == status
 		and replay.held_item_consumed == spent)
+	var micle_restored: bool = false
+	var micle_after_next: bool = false
+	var micle_used_next: bool = false
+	if String(spec.kind) == "accuracy_next_move":
+		micle_restored = _native_volatile(battle, &"own", String(spec.expected_volatile))
+		check(mode + " Micle volatile idéntico tras checkpoint restaurado",
+			micle_restored == micle_pending_before_restore)
+		var next_turn: Dictionary = await battle.submit("move %d" % int(spec.next_move_slot), battle.revision)
+		check(mode + " Micle segundo turno nativo ejecutado", next_turn.accepted)
+		if not next_turn.accepted:
+			await battle.close()
+			return {"valid": false}
+		micle_after_next = _native_volatile(battle, &"own", String(spec.expected_volatile))
+		var second_native: Dictionary = battle.snapshot().get("native", {}).get("native", {})
+		for entry: Variant in second_native.get("log", []):
+			var line: String = String(entry).to_lower()
+			if line.begins_with("|move|p1a:") and line.contains("|hydro pump|"):
+				micle_used_next = true
+		check(mode + " Micle Hydro Pump real fue lanzado", micle_used_next)
+		var still: CreatureInstance = battle.battle_state().creature(&"own")
+		check(mode + " Micle dos turnos mantienen PS/estado/consumo",
+			still != null and still.current_hp == hp
+			and String(still.status_state.persistent_id) == status
+			and still.held_item_consumed == spent)
 	var ending: Dictionary = await battle.use_item(&"poke_doll", &"own", battle.revision)
 	check(mode + " FLED real", ending.accepted and battle.completion_reason == "FLED")
 	if not ending.accepted:
@@ -202,6 +231,10 @@ func _probe_berry(spec: Dictionary, mode: String) -> Dictionary:
 		"native_boost_atk": boost_atk, "native_focus_energy": focus_energy,
 		"native_first_move_seen": first_move_seen, "native_first_own": first_move_is_own,
 		"native_foe_hp": foe_hp, "native_foe_max_hp": foe_max_hp,
+		"native_micle_pending": micle_pending_before_restore,
+		"native_micle_restored": micle_restored,
+		"native_micle_after_next": micle_after_next,
+		"native_micle_used_next": micle_used_next,
 		"physical_total": total}
 	var digest: String = _write_evidence(file_name, raw)
 	return {"valid": true, "hp": hp, "max_hp": replay.stats.max_hp,
@@ -210,8 +243,25 @@ func _probe_berry(spec: Dictionary, mode: String) -> Dictionary:
 		"boost_def": boost_def, "boost_atk": boost_atk, "focus_energy": focus_energy,
 		"first_move_seen": first_move_seen, "first_own": first_move_is_own,
 		"foe_hp": foe_hp, "foe_max_hp": foe_max_hp,
+		"micle_pending": micle_pending_before_restore, "micle_restored": micle_restored,
+		"micle_after_next": micle_after_next, "micle_used_next": micle_used_next,
 		"save_v2": true, "restored": true, "settled_once": true,
 		"evidence": file_name + ".json", "sha256": digest}
+
+
+# Sólo inspecciona la proyección verificada de las volátiles en el checkpoint nativo.
+func _native_volatile(session: RefCounted, cid: StringName, effect: String) -> bool:
+	var teams: Variant = session._checkpoint.get("roster", [])
+	if not teams is Array:
+		return false
+	for side: Variant in teams:
+		if not side is Dictionary:
+			continue
+		for monster: Variant in side.get("pokemon", []):
+			if monster is Dictionary and String(monster.get("instance_id", "")) == String(cid):
+				var effects: Variant = monster.get("volatiles", [])
+				return effects is Array and effects.has(effect)
+	return false
 
 
 func _compare_berry(spec: Dictionary, observed: Dictionary) -> void:
@@ -270,6 +320,20 @@ func _compare_berry(spec: Dictionary, observed: Dictionary) -> void:
 				active.hp == mini(active.max_hp, none.hp + heal)
 				and none.hp == reserve.hp)
 			check("enigma conserva estado", active.status == none.status and none.status == reserve.status)
+		"accuracy_next_move":
+			check("Micle activa volatile del titular al cruzar umbral",
+				active.micle_pending == consume
+				and not none.micle_pending and not reserve.micle_pending)
+			check("Micle mantiene volatile tras salvar y restaurar checkpoint",
+				active.micle_restored == consume
+				and not none.micle_restored and not reserve.micle_restored)
+			check("Micle se retira después del siguiente movimiento",
+				active.micle_used_next and none.micle_used_next and reserve.micle_used_next
+				and not active.micle_after_next and not none.micle_after_next
+				and not reserve.micle_after_next)
+			check("Micle no altera HP ni estado por sí sola",
+				active.hp == none.hp and none.hp == reserve.hp
+				and active.status == none.status and none.status == reserve.status)
 		"retaliate_physical":
 			var retaliation: int = int(floor(float(active.foe_max_hp) / float(spec.retaliation_denominator))) if consume else 0
 			check("Jaboca: testigos de rival nativo con HP maximo igual",
@@ -299,7 +363,9 @@ func _compare_berry(spec: Dictionary, observed: Dictionary) -> void:
 				and String(receipt.scenario) == String(spec.scenario)
 				and int(receipt.native_hp) == int(rec.hp) and receipt.native_consumed == rec.consumed
 				and int(receipt.native_foe_hp) == int(rec.foe_hp)
-				and int(receipt.native_foe_max_hp) == int(rec.foe_max_hp))
+				and int(receipt.native_foe_max_hp) == int(rec.foe_max_hp)
+				and bool(receipt.native_micle_pending) == bool(rec.micle_pending)
+				and bool(receipt.native_micle_after_next) == bool(rec.micle_after_next))
 
 
 func _finish_w02(results: Array) -> void:
