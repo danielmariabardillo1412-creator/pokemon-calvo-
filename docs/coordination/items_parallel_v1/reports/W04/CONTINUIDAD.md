@@ -240,3 +240,18 @@ La segunda ejecución [#41602238413](https://github.com/danielmariabardillo1412-
 **Puntos para IA6:** leer el informe completo `docs/coordination/items_parallel_v1/reports/W04/CAMP_004_FINAL.md` y `CAMP_004_ITER_10.md`; conservar los 31 pendientes funcionales de CAMP004 y las 16 dependencias de CAMP003 sin confundir con PASS de pruebas negativas. Coordinar decisiones de formas/fusiones, `rotom_catalog` con `missing_description`, cupones `unused`/`placeholder_description`, captura W03 y entrenamiento W02. Ninguna modificación de producción, `main`, V28, rama árbitra, PR118 ni ramas ajenas. No integrar en `main` automáticamente. Comprobación visual/GPU sigue pendiente.
 
 **STOP W04 — `CAMPAÑA_004_FINALIZADA`.** Un nuevo `p` NO autoriza un bloque 11 ni una CAMPAÑA_005; esperar nuevo encargo oficial de IA6.
+
+
+---
+
+## IA6 ACTIVÓ CAMPAÑA_005 — ESTADO ACTUAL W04
+
+**Esta sección prevalece sobre los STOP históricos de CAMPAÑA_003/004.** IA6 activó oficialmente CAMPAÑA_005 con rama exclusiva `codex/calvo-items-20261103-w04-camp005`, gate `CAMPAIGN_005_W04_GATE.md`, cola `CAMPAIGN_005_W04_QUEUE_APPROVED.csv` y protocolo V5. **10 bloques/46 IDs ya auditados anteriormente**, NO sumar a conteos de objetos nuevos.
+
+**Bloque 01** `dragon_scale;dubious_disc;electirizer;magmarizer` autorizado y publicado como **dependencia concreta de contrato**. Informe técnico `reports/W04/CAMP_005_ITER_01.md`, runner `tests/gameplay/parallel_items_w04_campaign_005.gd`, validador `tests/tools/test_parallel_items_w04_campaign_005.py` y fixture `tests/fixtures/parallel_items/w04_campaign_005.json`. CSV `reports/W04/CAMP_005_PROGRESO.csv` registra bloque 01 `EN_CI_AUTOMATICA`. CI de entrega [#41716388712](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41716388712), comprobar resultado antes de declarar PASS.
+
+**Contrato vigente V27:** eliminar solo intercambio; conservar objeto evolutivo equipado y exigir nivel futuro aprobado, con `level_values_selected=null` y `future_evolution_implementation=DEFERRED`. Pares probados desde PokeAPI: Seadra→Kingdra/Escama Dragón, Porygon2→Porygon-Z/Disco Extraño, Electabuzz→Electivire/Electrizador, Magmar→Magmortar/Magmatizador. Actualmente `EvolutionSystem` no admite el atributo `held_item` en condiciones `level_up` y `ProgressionSystem` no lo transporta en `level_up_context`. Además falta nivel y consumo post-evolución: **no inventar umbrales ni modificar producción**. Se comprueban nuevas evidencias de contrato de interfaz, equipamiento positivo y SaveV2; sin afirmar evolución positiva.
+
+**Regresiones:** pruebas CAMP004/CAMP003 y CAMP001 preservadas, ejecución obligatoria en hitos 05/10 o parches de producción según workflow. Nada tocado en main, V28, rama árbitra, datos ni APIs compartidas.
+
+**Siguiente `p`:** verificar CI01 y ejecutar solamente bloque 02 `protector;reaper_cloth;prism_scale;sachet;up_grade`. No repetir auditorías históricas ni empezar otro bloque por anticipado.
