@@ -43,6 +43,7 @@ func _run_campaign() -> void:
 			"06": _block_06(bloque)
 			"07": _block_07(bloque)
 			"08": _block_08(bloque)
+			"09": _block_09(bloque)
 			_: check("Bloque aún sin suite funcional " + str(numero), false)
 	_terminar_campania(numero)
 
@@ -968,6 +969,78 @@ func _block_08(bloque: Dictionary) -> void:
 						and result.captured == null and party.is_empty()
 						and inv.to_dict() == before_inv
 						and target.to_dict() == before_target and rng.state == before_rng)
+
+# 09: Amor/Luna sin definición operativa ni contexto de sexo/evolución lunar.
+# Verificar comportamiento real de rechazo y prioridad de validación.
+func _block_09(bloque: Dictionary) -> void:
+	check("Bloque09 reserva exacta Amor/Luna",
+		bloque.get("ids", []) == ["love_ball", "moon_ball"]
+		and not bool(bloque.get("functional_effect_certified", true)))
+	var rules := CaptureRuleset.new()
+	for id: StringName in [&"love_ball", &"moon_ball"]:
+		check("Amor/Luna todavía desconocidas para reglas de captura " + String(id),
+			not rules.is_known_ball(id) and rules.ball(id) == null
+			and not CaptureRuleset.ordered_ball_ids().has(id))
+	for case: Dictionary in bloque.get("cases", []):
+		var sid: StringName = StringName(String(case.get("species_id", "")))
+		check("Amor/Luna especie real " + String(sid), catalogs.species(sid) != null)
+		if catalogs.species(sid) == null:
+			continue
+		for mode: String in bloque.get("hp_modes", []):
+			for environment: Dictionary in bloque.get("contexts", []):
+				for id: StringName in [&"love_ball", &"moon_ball"]:
+					var target: CreatureInstance = _mon(sid, int(case.get("level", 12)),
+						StringName("c003_09_" + String(id) + String(sid)
+						+ mode + String(environment.get("name", ""))))
+					target.current_hp = target.stats.max_hp if mode == "full" else 1
+					var ctx := CaptureBattleContext.new()
+					ctx.completed_turns = int(environment.get("completed_turns", -1))
+					ctx.catcher_level = int(environment.get("catcher_level", -1))
+					var inv := PlayerInventory.new()
+					inv.add(id, 2)
+					var party := CreatureParty.new()
+					var rng := RandomNumberGenerator.new()
+					rng.seed = int(case.get("seed", 9901))
+					var before_rng: int = rng.state
+					var before_target: Dictionary = target.to_dict()
+					var before_inv: Dictionary = inv.to_dict()
+					var attempt := CaptureAttempt.new(target, id, ctx)
+					check("Amor/Luna sin regla deben devolver unknown_ball " + String(id),
+						CaptureSystem.validate_attempt(attempt, catalogs) == "unknown_ball")
+					var result: CaptureResolution = CaptureInventoryService.resolve(
+						attempt, rng, catalogs, party, inv)
+					check("Amor/Luna rechazo no gasta ni modifica estados " + String(id),
+						result.result.status == CaptureResult.INVALID
+						and result.result.reason == "unknown_ball"
+						and not result.result.consume_item and result.captured == null
+						and party.is_empty() and inv.to_dict() == before_inv
+						and target.to_dict() == before_target and rng.state == before_rng)
+	for id: StringName in [&"love_ball", &"moon_ball"]:
+		for reason: String in bloque.get("invalid_cases", []):
+			var target: CreatureInstance = _mon(&"mew", 35,
+				StringName("c003_09_reject_" + String(id) + reason))
+			var ctx := CaptureBattleContext.new()
+			var inv := PlayerInventory.new()
+			inv.add(id, 2)
+			match reason:
+				"trainer_battle_not_capturable": ctx.is_wild = false
+				"target_knocked_out": target.current_hp = 0
+				"battle_finished": ctx.battle_finished = true
+			var before_target: Dictionary = target.to_dict()
+			var before_inv: Dictionary = inv.to_dict()
+			var rng := RandomNumberGenerator.new()
+			rng.seed = 909
+			var before_rng: int = rng.state
+			var party := CreatureParty.new()
+			var result: CaptureResolution = CaptureInventoryService.resolve(
+				CaptureAttempt.new(target, id, ctx), rng, catalogs, party, inv)
+			check("Amor/Luna prioridad rechazo seguro " + String(id) + reason,
+				result.result.status == CaptureResult.INVALID
+				and result.result.reason == reason
+				and not result.result.consume_item and result.captured == null
+				and party.is_empty() and inv.to_dict() == before_inv
+				and target.to_dict() == before_target and rng.state == before_rng)
+
 
 func _terminar_campania(bloques: int) -> void:
 	done = true
