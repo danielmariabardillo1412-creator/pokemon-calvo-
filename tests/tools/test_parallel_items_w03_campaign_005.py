@@ -100,7 +100,8 @@ def main() -> int:
                       in runner and '"timer_ball", target, species, ctx), 1.0'
                       in runner and '"level_ball", target, species, ctx), 4.0'
                       in runner, "Godot no contrasta productores funcionales existentes")
-                check("unknown_ball" not in runner,
+                check('result.result.reason == "unknown_ball"' not in runner
+                      and 'expected_rejection == "unknown_ball"' not in runner,
                       "La campaña repite la prueba negativa de CAMP004")
             else:
                 check(False, "Bloque sin nueva prueba: " + block["bloque"])
