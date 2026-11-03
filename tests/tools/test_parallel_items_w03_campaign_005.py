@@ -284,6 +284,59 @@ def main() -> int:
                       and "rules.catch_probability(" in runner
                       and "not properties.has(\"weight_hectograms\")" in runner,
                       "Sin evidencias positivas de metadatos y cálculo")
+            elif block["bloque"] == "05":
+                check(ids == ["safari_ball", "sport_ball"], "Reserva Safari/Sport alterada")
+                check(block["current_state"] == "PARTIAL_EXISTING_EFFECT_UNGATED"
+                      and block["functional_effect_certified"] is False,
+                      "La bonificación genérica no certifica el contexto especial")
+                basic = (ROOT / "modules/capture/capture_ball_effects.gd").read_text(
+                    encoding="utf-8")
+                rules = (ROOT / "modules/capture/capture_ruleset.gd").read_text(
+                    encoding="utf-8")
+                context = (ROOT / "modules/capture/capture_battle_context.gd").read_text(
+                    encoding="utf-8")
+                session = (ROOT / "modules/gameplay/showdown_adventure_session.gd").read_text(
+                    encoding="utf-8")
+                capture = (ROOT / "modules/capture/capture_system.gd").read_text(
+                    encoding="utf-8")
+                check('&"safari_ball", &"sport_ball"' in basic
+                      and '&"safari_ball", &"sport_ball": return 1.5' in basic,
+                      "El multiplicador actual cambió: reauditar integración")
+                check("for id: StringName in BallEffects.IDS" in rules
+                      and "crs.BallEffects.multiplier(attempt.ball_id, target, species)" in capture,
+                      "La bonificación no está conectada al motor")
+                check(all(x not in context and x not in session
+                          for x in ["is_safari_zone", "is_bug_contest_zone",
+                                    "safari_capture_mode", "contest_capture_mode"]),
+                      "Hay fuente de zona nueva: cambiar a pruebas funcionales")
+                selected = {r["id"]: r for r in
+                            rows(ROOT / "docs/current/RANDOMLOCK_ITEMS_BUILD_SCOPE_V2.csv")}
+                check(all(selected[item]["estado_contenido"] == "SELECCIONADO"
+                          for item in ids), "Bolas fuera de selección")
+                expected = {
+                    "safari_ball": {"is_safari_zone", "safari_capture_mode",
+                                    "safari_profile_version"},
+                    "sport_ball": {"is_bug_contest_zone", "contest_capture_mode",
+                                   "sport_profile_version"},
+                }
+                check({p["id"] for p in block["required_producers"]} == set(ids),
+                      "Productores no asignados")
+                for producer in block["required_producers"]:
+                    check(set(producer["missing_fields"]) == expected[producer["id"]]
+                          and producer["producer"].strip()
+                          and producer["consumer"].strip()
+                          and producer["decision"].strip(),
+                          "Falta contrato concreto para " + producer["id"])
+                check('"05": _block_05(block)' in runner
+                      and 'func _block_05(block: Dictionary)' in runner,
+                      "Falta runner Godot propio")
+                check('CaptureSystem.validate_attempt(CaptureAttempt.new(target, id, ctx)' in runner
+                      and 'CaptureRuleset.BallEffects.multiplier(id, target, species)' in runner
+                      and 'is_equal_approx(bonus_p, base_p * 1.5)' in runner,
+                      "Faltan positivos del multiplicador real y probabilidad")
+                check('not ctx_fields.has("is_safari_zone")' in runner
+                      and 'not ctx_fields.has("is_bug_contest_zone")' in runner,
+                      "No se vigila el contrato de zona")
             else:
                 check(False, "Bloque sin nueva prueba: " + block["bloque"])
         check(checks > 0, "Sin verificaciones")
