@@ -109,8 +109,52 @@ def main() -> int:
                             "reglas.catch_probability(" in runner and
                             "p_grande >= p_normal" in runner,
                             "Falta comparación de probabilidades reales de ambas bolas")
+            elif block["bloque"] == "02":
+                audit.check(ids == ["ultra_ball", "master_ball"],
+                            "No coincide la reserva oficial 02")
+                rules = (ROOT / "modules/capture/capture_ruleset.gd").read_text(encoding="utf-8")
+                system = (ROOT / "modules/capture/capture_system.gd").read_text(encoding="utf-8")
+                inv = (ROOT / "modules/inventory/capture_inventory_service.gd").read_text(encoding="utf-8")
+                defined = {item["id"]: item for item in block["balls"]}
+                audit.check(set(defined) == set(ids), "Definiciones de fixture desviadas")
+                audit.check(defined["ultra_ball"]["multiplier"] == 2 and
+                            defined["ultra_ball"]["guaranteed"] is False,
+                            "Ultra Ball no es 2x ordinaria")
+                audit.check(defined["master_ball"]["multiplier"] == 1 and
+                            defined["master_ball"]["guaranteed"] is True,
+                            "Master Ball no es garantizada")
+                for item in block["balls"]:
+                    flag = "true" if item["guaranteed"] else "false"
+                    expected = (f'&"{item["id"]}": CaptureBallDefinition.new('
+                                f'&"{item["id"]}", {item["multiplier"]:.1f}, {flag})')
+                    audit.check(expected in rules, "Cambio en tabla canónica " + item["id"])
+                audit.check("if not guaranteed:" in system and
+                            "var success := guaranteed or" in system and
+                            "rng.randf() < p" in system,
+                            "RNG de Master debe hacer cortocircuito")
+                audit.check("inventory.remove(attempt.ball_id, 1)" in inv,
+                            "Límite de descuento compartido cambiado")
+                audit.check("func _block_02(" in runner and
+                            '"02": _block_02(bloque)' in runner,
+                            "Falta ejecución de suite02")
+                audit.check("is_zero_approx(result.result.probability)" in runner
+                            and "rng.state == before_rng" in runner
+                            and "rng.state == probe.state" in runner,
+                            "No se controla RNG de Ultra y Master")
+                audit.check("CaptureDisposition.STORAGE_REQUIRED" in runner
+                            and "CaptureOwnershipRouter.new().route(" in runner,
+                            "No se comprueba propietario y PC de Master")
+                audit.check("result.result.reason == razon" in runner
+                            and "not result.result.consume_item" in runner,
+                            "Faltan rechazos sin gasto")
+                audit.check(set(block["invalid_cases"]) ==
+                            {"trainer_battle_not_capturable", "item_not_owned",
+                             "target_knocked_out"}, "Negativos insuficientes")
+                audit.check({c["species_id"] for c in block["cases"]} ==
+                            {"mew", "pikachu", "caterpie"}, "No se prueban tres especies")
+                audit.check(block["health_modes"] == ["full", "one_hp"],
+                            "Falta variación de PS")
             else:
-                # Un nuevo bloque sin puerta de test concreta debe fallar, no presentar PASS vacío.
                 audit.check(False, "Falta contrato incremental específico para " + block["bloque"])
         audit.check(audit.checks > 0, "Sin comprobaciones")
     except (ValueError, OSError, KeyError, IndexError, AssertionError, TypeError) as exc:
