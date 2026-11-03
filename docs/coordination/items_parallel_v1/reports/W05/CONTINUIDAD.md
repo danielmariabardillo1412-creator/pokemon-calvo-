@@ -1,3 +1,17 @@
+# ESTADO VIGENTE IA5/W05 — CAMPAÑA_005 · 05/10 ENTREGADO · CI Y REGRESIONES PENDIENTES (2026-11-03)
+
+**Identidad:** IA5/W05 responsable de MT y libros. **Rama exclusiva** `codex/calvo-items-20261103-w05-camp005`. Gate IA6 `CAMPAIGN_005_W05_GATE.md`, cola `CAMPAIGN_005_W05_QUEUE_APPROVED.csv`, encargo `campaigns/CAMP_005_W05.md`, protocolo `AUTONOMOUS_REPAIR_V5.md`. Esta cabecera prevalece sobre las anteriores; CAMP004 y CAMP003 son las dos familias de regresión de 60 MT cada una, no se repiten como nuevos trabajos.
+
+**HITO BLOQUE 05 ENTREGADO:** `tm166;tm167;tm168;tm169;tm170;tm171` → `thunder;close_combat;solar_beam;draco_meteor;steel_beam;tera_blast` mapeo Scarlet/Violet. Fixture `tests/fixtures/parallel_items/w05_campaign_005.json` ahora **5 bloques/30 MT** commit `c58a37bfd5f06550d0097ab58405680188622a0a`. Progreso `reports/W05/CAMP_005_PROGRESO.csv` con una fila `05` `EN_CI_AUTOMATICA` commit `b47e6ecc45d96b0b6d3bb901a5aed66a9370c85a`. Informe `CAMP_005_ITER_05.md` commit `d66c13b655dff629273ae152cda17d741adcccf6`. Validación estática tras ambos commits: 5 bloques, 5 filas, 30 IDs únicos, parejas exactas a cola IA6 y perfil SV, cero discrepancias. Runners y producción sin cambios.
+
+**CI ANTERIOR 01–04 VERIFICADA:** [Actions #41720191745](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41720191745), SHA `fc87f105b9f5b979d7f5dc6f0f73f5b026dbca48`, `completed/success`, Python `CAMP005_W05_PY PASS blocks=4 checks=232`, Godot `CAMP005_W05_GODOT PASS blocks=4 checks=876`, gates PASS.
+
+**CI HITO 05 POR VERIFICAR:** [Actions #41721306449](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41721306449), SHA de progreso `b47e6ecc45d96b0b6d3bb901a5aed66a9370c85a`, `pending` inicialmente. La ejecución de fixture #41721275333 puede aparecer cancelada por concurrencia. Antes de acreditar 30 MT exigir run `completed/success`, recibos `CAMP005_W05_PY PASS blocks=5`, `CAMP005_W05_GODOT PASS blocks=5`, ambos gates. Además **hito obligatorio**: comprobar en ese run regresiones Python y Godot de CAMP004 60 MT y CAMP003 60 MT, recibos respectivos `CAMP004_W05_PY/GODOT PASS blocks=10` y `CAMP003_W05_PY/GODOT PASS blocks=10`. No confundir comprobación documental con CI.
+
+**SIGUIENTE `p`:** verificar esta CI de hito y regresiones; con PASS, ejecutar exclusivamente **bloque 06** `tm172;tm173;tm174;tm175;tm176;tm177`. Ante fallo, diagnosticar y reparar arnés o función W05 según V5 con pruebas reales, sin reducir negativos ni modificar catálogo/learnsets. No tocar `main`, V28, PR118, árbitra, otras ramas, catálogo/learnsets/políticas, 19 MT históricas, partidas reales, workflows o APIs ajenas. Sin merge. Al 10/10 declarar `CAMPAÑA_005_FINALIZADA` y STOP. CI headless no valida UI/GPU.
+
+---
+
 # ESTADO VIGENTE IA5/W05 — CAMPAÑA_005 · 04/10 CI PASS VERIFICADA (2026-11-03)
 
 **Identidad:** IA5/W05 responsable de MT/libros. **Rama exclusiva:** `codex/calvo-items-20261103-w05-camp005`. Autoridad IA6: `CAMPAIGN_005_W05_GATE.md`, `CAMPAIGN_005_W05_QUEUE_APPROVED.csv`, `campaigns/CAMP_005_W05.md`, `AUTONOMOUS_REPAIR_V5.md`. Este estado prevalece sobre cabeceras antiguas. CAMP004 (60 MT) y CAMP003 (60 MT) cerradas: mantener regresión, sin repetir trabajo.
