@@ -115,3 +115,18 @@ Esta sección reemplaza exclusivamente la indicación anterior de STOP tras CAMP
 **IA4/W04**, rama exclusiva `codex/calvo-items-20261103-w04-camp004`. Nuevo bloque **02/10** con `love_sweet;ribbon_sweet;star_sweet`, en runner y validador acumulativos de CAMP004 y fixture `tests/fixtures/parallel_items/w04_campaign_004.json`. Informes en `reports/W04/CAMP_004_ITER_02.md`. La CI de entrega [#41575954355](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41575954355) terminó PASS (Python 65, Godot 200, regresión CAMP003 Python 120/Godot 270). Los tres confites nuevos tienen 0 registros de evolución directa y quedan DEPENDENCIA_DOCUMENTADA. No se ha editado producción ni ramas ajenas.
 
 Todos los confites probados están asociados al requisito de giro `spin` de Milcery, clasificado `UNSUPPORTED`, sin inventar `use_item`. **CI PASS de pruebas negativas no implica evolución positiva ni selección de formas**. Continúan las tres dependencias del bloque 01 y las dieciséis de CAMP003. Próximo `p`: únicamente bloque **03** (`strawberry_sweet;whipped_dream;leaders_crest`), comprobando primero CI02. Mantener intactos CAMP003 y CAMP001.
+
+
+---
+
+## CAMPAÑA_004 — Bloque 03 (2026-11-03)
+
+**Identidad:** IA4/W04. **Única rama de escritura activa:** `codex/calvo-items-20261103-w04-camp004`.
+
+**Estado:** 03/10 microbloques publicados, 9 IDs auditados en CAMP004. La CI [#41576674332](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41576674332) finalizó `completed/success` con Python 88, Godot 292 y regresión CAMP003 Python 120 / Godot 270. Tres IDs añadidos: `strawberry_sweet`, `whipped_dream`, `leaders_crest`. Los tres presentan `status=DEPENDENCIA records=0`; no hay evolución directa ejecutable en datos, aunque se validan rechazos, inventario y SaveV2.
+
+**Dependencias CAMPAÑA_004:** siete confites de Milcery requieren `spin` y selección de forma; `whipped_dream` necesita la modalidad original de intercambio/objeto equipado; `leaders_crest` requiere contexto de Bisharp y 3 derrotas. Los 9 IDs son auditorías con tests negativos, **0 evoluciones nuevas certificadas**. Las 16 dependencias de CAMPAÑA_003 siguen sin resolver. Ninguna mecánica nueva ha sido inventada o implementada por W04.
+
+**Rutas:** `tests/gameplay/parallel_items_w04_campaign_004.gd`, `tests/tools/test_parallel_items_w04_campaign_004.py`, `tests/fixtures/parallel_items/w04_campaign_004.json`, `reports/W04/CAMP_004_PROGRESO.csv`, `reports/W04/CAMP_004_ITER_03.md`. Mantener intactas las pruebas CAMP003/CAMP001.
+
+**Siguiente `p`:** bloque 04/10 `adamant_crystal;blue_orb;catching_charm`, previa verificación de la CI posterior a la reconciliación CSV. No editar `main`, V28, rama árbitra, ramas de otras trabajadoras, catálogo ni arquitectura.
