@@ -1192,7 +1192,7 @@ def verify_sources(chk):
         'if spec.has("exp_until_next"):',
         'c.experience = ProgressionRuleset.experience_for_level(curve, c.level + 1)',
         'ProgressionRuleset.level_for_experience(curve, expected_exp)',
-        'int(result.get("exp_gained", -1)) == int(spec.exp_gain)',
+        'int(result.get("exp_gained", -1)) == gain_expected',
     ):
         chk.demand(fragment in runner, "Escenario XP real 03 no instrumentado: " + fragment)
     for old, token in (
