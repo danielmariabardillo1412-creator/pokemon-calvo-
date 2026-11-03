@@ -1,0 +1,8 @@
+{
+  "schema_version": 1,
+  "campaign": "CAMP_004_W02",
+  "worker": "W02",
+  "active_policy": "RANDOMLOCK_ITEMS_BUILD_SCOPE_V2",
+  "purpose": "Auditar y probar bayas/medicinas W02; no declarar PASS funcional con 0 bloques",
+  "blocks": []
+}
