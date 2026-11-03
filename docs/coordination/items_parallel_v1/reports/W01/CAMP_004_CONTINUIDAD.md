@@ -15,3 +15,11 @@
 - El run [#41579895025](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41579895025) ejecutó la matriz completa: Python 111 PASS, Godot 2905 checks con 34 fallos **todos y solo** en el tipo `value is int` para semillas deserializadas como `19.0`. Las 2871 aserciones restantes pasaron, incluso especies, críticos y SaveV2.
 - Parche mínimo del arnés `tests/gameplay/parallel_items_w01_campaign_004.gd`, commit `525991c4ad55dd8952ed2f62a4fc7f2a820540f3`: acepta float con valor entero exacto y rango 1..65535, rechaza fracciones. Sin cambiar fixture ni resultados nativos.
 - Nueva CI [#41580332632](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41580332632). **Estado pendiente.** Solo `success` y recibos reales Python/Godot autorizan declarar PASS. No comenzar bloque 02 hasta nueva `p`; si persiste fallo propio, reparar conforme a V5 sin nueva autorización.
+
+## 01/10 VERIFICADO — actualización definitiva CI
+
+La CI [#41580332632](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41580332632) terminó **`completed/success`**, SHA de pruebas `525991c4ad55dd8952ed2f62a4fc7f2a820540f3`. **Python 111 PASS** y **Godot 2.905 PASS**, puertas de manifiesto `CAMP004_GATE_PY_PASS worker=W01 blocks=1 checks=111` y `CAMP004_GATE_GODOT_PASS worker=W01 blocks=1 checks=2905`. Ocho escenarios, 34 pares y 102 variantes de Bola Luminosa, Puño Suerte y Hueso Grueso, incluyendo controles de especie y SaveV2. Cero fallos tras parche V5 de representación numérica de semillas.
+
+La fila 01 CSV conserva el estado anterior `EN_CI_AUTOMATICA` únicamente para **evitar un disparo innecesario de CI** por un cambio documental; en la siguiente `p` autorizada, actualizar la fila a `CI_PASS_VERIFICADO` con el run y SHA anteriores junto con el bloque 02.
+
+**Próxima `p` = microbloque 02/10: `damp_rock;float_stone;icy_rock`**. Mantener la rama `codex/calvo-items-20261103-w01-camp004`. No repetir bloque 01, no tocar CAMP003/producción fuera de los IDs propios, `main`, V28 ni otras ramas.
