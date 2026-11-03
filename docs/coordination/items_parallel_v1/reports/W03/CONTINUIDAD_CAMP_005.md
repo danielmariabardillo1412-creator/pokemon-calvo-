@@ -1,3 +1,13 @@
+# IA3/W03 — Continuidad CAMPAÑA_005 — bloque 09/10
+
+**Rama única:** `codex/calvo-items-20261103-w03-camp005`. Bloque 09 `escape_rope;fluffy_tail` auditado y pruebas nuevas publicadas, sin contabilizar objetos nuevos. **Cola Esponjosa:** existe ruta real de huida salvaje garantizada con consumo unitario posterior a commit y sin RNG, por `battle_escape_profile.json` y `ShowdownAdventureSession._use_escape_item`. **Cuerda Huida:** carece de destino de mundo/mapa y transacción de traslado. Ambos rechazan uso en `FieldItemService` sin gasto. Estados `DEPENDENCIA_MUNDO_RETORNO` y `BATTLE_ESCAPE_EXISTING_FIELD_REJECTED`, respectivamente.
+
+**CI del bloque 09:** comprobar `CAMP005_W03_PY PASS blocks=9`, `CAMP005_W03_GODOT PASS blocks=9` y gates IA6 sobre SHA con nueve filas de progreso. CI anterior bloque08 aprobada [#41733987301](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41733987301), Python139/Godot169. Si falla, corregir únicamente prueba propia, no producción.
+
+**Siguiente `p`: bloque 10** `friend_ball;heal_ball;quick_ball;timer_ball`, hito final con regresiones obligatorias. No iniciar hasta comprobar CI09. Prohibido tocar main, V28, producción o ramas ajenas.
+
+---
+
 ## CI verificada — bloque 08
 
 [GitHub Actions #41733987301](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41733987301), SHA `f5e80a92a38c16caf6c7e2cb543eb28ab235844f`, terminó **completed/success** con `CAMP005_W03_PY PASS blocks=8 checks=139`, `CAMP005_GATE_PY_PASS`, `CAMP005_W03_GODOT PASS blocks=8 checks=169`, `CAMP005_GATE_GODOT_PASS`. La primera ejecución [#41733755176](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41733755176) falló por leer el perfil `battle_support_profile.json` desde la raíz en lugar de `items`; corregido el auditor en el SHA validado. **Flauta Azul funcional en campo**: cura sueño, no se consume, limpia reloj y rechaza no-op. Roja y Amarilla mantienen dependencia de interfaz de estados volátiles de combate.
