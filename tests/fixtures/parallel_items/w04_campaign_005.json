@@ -250,6 +250,88 @@
         "do not confuse the level of prior species with eligibility threshold",
         "no shared API mutation without arbiter authorization"
       ]
+    },
+    {
+      "block": "04",
+      "ids": [
+        "galarica_cuff",
+        "galarica_wreath",
+        "scroll_of_darkness",
+        "scroll_of_waters"
+      ],
+      "family": "EVOLUTION_CONDITIONS",
+      "classification": "DEPENDENCIA_FORMA_REGIONAL",
+      "cases": [
+        {
+          "item_id": "galarica_cuff",
+          "source": "slowpoke",
+          "target": "slowbro",
+          "canonical_item": "galarica-cuff",
+          "chain": "33",
+          "trigger": "use-item",
+          "version": "the-isle-of-armor",
+          "base_form": "slowpoke-galar",
+          "evolved_form": "slowbro-galar",
+          "equippable": true
+        },
+        {
+          "item_id": "galarica_wreath",
+          "source": "slowpoke",
+          "target": "slowking",
+          "canonical_item": "galarica-wreath",
+          "chain": "33",
+          "trigger": "use-item",
+          "version": "the-isle-of-armor",
+          "base_form": "slowpoke-galar",
+          "evolved_form": "slowking-galar",
+          "equippable": true
+        },
+        {
+          "item_id": "scroll_of_darkness",
+          "source": "kubfu",
+          "target": "urshifu",
+          "canonical_item": "scroll-of-darkness",
+          "chain": "470",
+          "trigger": "use-item",
+          "version": "scarlet-violet",
+          "evolved_form": "urshifu-single-strike",
+          "equippable": false,
+          "alternative_trigger": "tower-of-darkness",
+          "alternative_version": "the-isle-of-armor"
+        },
+        {
+          "item_id": "scroll_of_waters",
+          "source": "kubfu",
+          "target": "urshifu",
+          "canonical_item": "scroll-of-waters",
+          "chain": "470",
+          "trigger": "use-item",
+          "version": "scarlet-violet",
+          "evolved_form": "urshifu-rapid-strike",
+          "equippable": false,
+          "alternative_trigger": "tower-of-waters",
+          "alternative_version": "the-isle-of-armor"
+        }
+      ],
+      "decision_source": "data/api/v2/evolution-chain/{33,470}/index.json",
+      "producer": "PokemonAPI evolution_record conditions base_form and evolved_form; ownership CreatureInstance/SaveV2",
+      "consumer": "EvolutionSystem.classify_record / FieldItemService.evolve / EvolutionSystem.apply_evolution",
+      "missing": [
+        "persistent regional form/variant identity for Slowpoke/Slowbro/Slowking and Kubfu/Urshifu",
+        "form-aware target resolver in evolution and application; distinguish two Urshifu styles sharing species id",
+        "cross-version selection for Tower (Isle of Armor) vs Scroll (Scarlet/Violet)",
+        "SaveV2/migration policy for form persistence; consume rules and eligibility"
+      ],
+      "runtime_contract": [
+        "PokeAPI route and per-item evolved_form checked for each item without target conflation",
+        "Galarian Slowpoke selector not interchangeable with ordinary Slowpoke",
+        "Urshifu same species target cannot identify styles; require explicit evolved_form",
+        "Tower-of-Waters and Tower-of-Darkness remain unsupported alternate triggers",
+        "reject invalid item/form choices without spending anything",
+        "holdable galarica pair and nonholdable scroll pair according to original profile",
+        "identity, equipped item, inventory and SaveV2 stable after rejected evolution",
+        "no API, save schema or canonical data mutation without IA6"
+      ]
     }
   ]
 }
