@@ -95,6 +95,52 @@ def main() -> int:
                      {"trainer_battle_not_capturable", "battle_finished",
                       "target_knocked_out", "item_not_owned"},
                      "Faltan rechazos prioritarios")
+            elif block["bloque"] == "02":
+                test(ids == ["black_flute", "blue_flute", "escape_rope"],
+                     "Reserva 02 alterada")
+                service = (ROOT / "modules/inventory/field_item_service.gd").read_text(encoding="utf-8")
+                field = (ROOT / "modules/inventory/field_item_effects.gd").read_text(encoding="utf-8")
+                modifiers = (ROOT / "modules/gameplay/encounter_item_modifiers.gd").read_text(encoding="utf-8")
+                connections = json.loads((ROOT / "modules/inventory/item_connections_v1.json").read_text(encoding="utf-8"))
+                scope = rows(ROOT / "docs/current/RANDOMLOCK_ITEMS_BUILD_SCOPE_V2.csv")
+                chosen = {r["id"]: r for r in scope}
+                test(all(chosen[id]["familia"] == "FIELD_USE" and
+                         chosen[id]["estado"] == "SELECCIONADO" for id in ids),
+                     "Campo no seleccionado o cambió familia")
+                test(all(id in connections["holdable_ids"] for id in
+                         ["black_flute", "blue_flute"]),
+                     "Metadatos equipables cambiaron; auditar posible colisión")
+                test(block["current_state"] == "DEPENDENCIA_COMPARTIDA" and
+                     block["supported_effects_certified"] is False,
+                     "La persistencia de bolsa no certifica efectos de campo")
+                test('return _deny("field_effect_not_connected", "DEPENDENCY_MISSING")' in service,
+                     "No existe rechazo de efecto de campo sin conexión")
+                test('if FieldEffects.supports(item_id):' in service and
+                     'if EncounterModifiers.supports(item_id):' in service,
+                     "Ruta de decisión campo alterada")
+                test(all(id not in field and id not in modifiers for id in ids),
+                     "Objeto mencionado en ejecutor: inspeccionar antes de afirmar no soporte")
+                test('func _block_02(block: Dictionary)' in runner and
+                     '"02": _block_02(block)' in runner and
+                     'service.use_item(id, target.instance_id)' in runner,
+                     "No se ejecuta servicio de campo real")
+                test('PlayerInventory.from_dict(saved)' in runner and
+                     'loaded.to_dict() == saved' in runner and
+                     'snapshot(service) == before' in runner,
+                     "Falta persistencia y no mutación real")
+                test('String(denied.get("reason", "")) == "field_locked"' in runner and
+                     'String(invalid.get("reason", "")) == "invalid_inventory"' in runner,
+                     "Faltan bloqueos de campo e inventario corrupto")
+                test(set(block["inventory_counts"]) == {0, 2} and
+                     {r["status"] for r in block["cases"]} == {"none", "sleep"},
+                     "Faltan caso sin inventario y Flauta Azul contra sueño")
+                test(set(block["invalid_cases"]) ==
+                     {"field_locked", "invalid_inventory", "unknown_target"},
+                     "Negativos del bloque 02 alterados")
+                test(block["requires_shared_features"] ==
+                     ["encounter_rate_world_context", "overworld_escape_destination",
+                      "world_position_and_session_transition"],
+                     "Faltan dependencias reales de mapa/encuentros")
             else:
                 test(False, "Bloque sin implementación de test: " + block["bloque"])
         test(checks > 0, "Sin verificaciones")
