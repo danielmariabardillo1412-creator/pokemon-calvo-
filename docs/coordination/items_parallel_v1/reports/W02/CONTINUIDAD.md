@@ -1,3 +1,27 @@
+# IA2/W02 — CAMPAÑA_003: CONTINUIDAD VIGENTE / BLOQUE 07 DE 10
+
+**ESTADO:** 07/10 ENTREGADO, `EN_CI_AUTOMATICA` en rama propia `codex/calvo-items-20261103-w02-camp003`. La `p` siguiente autoriza únicamente **08/10** y exige consultar primero el resultado de CI de los bloques 06–07. No iniciar 09 con la misma orden.
+
+**Autoridad:** `CAMPAIGN_003_QUEUE_APPROVED.csv` blob `ea06a0a000fc4f3b8bab48e45e21fb549d753559`, encargo `campaigns/CAMP_003_W02.md` blob `62498ebd44288a86e59986379dbc1b70e111ef1f`. W04 fue reincorporado con cola/CI independiente sin afectar la fila 07 W02.
+
+**Bloque 07 exacto:** `passho_berry` (Charizard/Surf Agua sí, Tackle no), `payapa_berry` (Gengar/Psychic Psíquico sí, Tackle no), `petaya_berry` (Mew al 20 % PS +1 SpA al portador, PS casi máximos no), `rindo_berry` (Blastoise/Energy Ball Planta sí, Tackle no). Origen `tools/item_audit/held_effect_sweep_v2.cjs`, prueba anterior de efectos equipados nativos; ninguna implementación nueva. Petaya usa movimiento propio `amnesia`, que no sube SpA; el runner escucha `|-boost|p1a:` y `|spa|` exclusivamente. Se añaden 11 mutaciones adversariales Python contra falsos PASS.
+
+**Suite acumulativa:** 7×4 = **28 bayas**, 9+8+8+9+8+9+8 = **59 escenarios**, **177 variantes** de `active/none/reserve`. Mantener todo lo anterior, incluido Micle de dos turnos. Se exigen consumo único, no gasto desde reserva, SaveV2, restauración de checkpoint, FLED y recibos de JSON SHA256. Campo/GPU/UI no testeados.
+
+**Último PASS real:** [GitHub Actions #41559377763](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41559377763) `completed/success`, bloques **01–05**, Python **327 comprobaciones**, Godot **3612 comprobaciones**.
+
+**Bloque 06 no certificado todavía:** [Actions #41560377509](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41560377509) se **canceló por un push posterior** sin recibo Godot final; Python **398 checks PASS** sí observado. `cancelled` no significa `functional failure` pero tampoco `PASS`. El último run completo debe verificar ambos bloques 06 y 07.
+
+**CI actual:** [Actions #41560981081](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41560981081), SHA tests/progreso `d7820e1b2aecc5cff13f13f1c289609a22c3a9ad`, inicialmente pendiente. Exigir `CAMP003_W02_PY PASS blocks=7 checks=M` y `CAMP003_W02_GODOT PASS blocks=7 checks=M` para confirmar 07/10. Si falla en test, corregir **solo W02** sin bajar exigencias. Si falla motor o SaveV2 compartido, STOP y solicitar IA6. No confundir runs cancelados/0 bootstrap con pruebas.
+
+**Commits del bloque 07:** fixture `18a84e704a43240b66fe0d0265fe563eaff85ba8`; runner `76fbf729fa843772e8bf5ba53f7d27d58fc20f9b`; Python `96f2a528b8a81e5e7dbb5a81e4f60e864726c711`; CSV `d7820e1b2aecc5cff13f13f1c289609a22c3a9ad`; informe `a4ce690a7b62e86586baeefe410b65bb18545219`. Solo los seis archivos W02 habituales (fixture, runner, validador, progreso, informe, cuaderno).
+
+**Siguiente `p`:** bloque 08 exacto `roseli_berry;rowap_berry;salac_berry;shuca_berry`. Antes revisar CI del último SHA. No tocar `main`, V28, producción, catálogo canónico, workflow, otras ramas ni IA4.
+
+---
+
+## ARCHIVO HISTÓRICO — ESTADO 06/10 Y ANTERIORES
+
 # IA2/W02 — CAMPAÑA_003: CONTINUIDAD VIGENTE / BLOQUE 06 DE 10
 
 **ESTADO:** 06/10 ENTREGADO en `codex/calvo-items-20261103-w02-camp003`, `EN_CI_AUTOMATICA`. El siguiente `p` puede ejecutar **solo el bloque 07** tras verificar semáforo del último workflow; no saltar ningún bloque.
