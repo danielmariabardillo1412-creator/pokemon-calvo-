@@ -1,3 +1,11 @@
+# IA5/W05 — CAMPAÑA_006 · BLOQUE 04/10 ENTREGADO · CI PENDIENTE (2026-11-04)
+
+Rama exclusiva `codex/calvo-items-20261104-w05-camp006`. Bloque 04 de cola oficial IA6: `tm217;tm218;tm219;tm220;tm221` → `future_sight;expanding_force;skitter_smack;meteor_beam;throat_chop` de `scarlet-violet`. Fixture propio 4 bloques/20 MT, conserva 01–03. Commit pruebas `26f5dff704ff4e15a1bb2b339ea863719e9ed038`. Runners acumulativos Python y Godot siguen verificando contrato estático y enseñanza real `FieldItemService.teach`, PP, compatibilidad, stock, consumo, identidad, propiedad, rechazos y SaveV2. Informe `CAMP_006_ITER_04.md` y CSV preparados para lanzar GitHub Actions. **NO declarar PASS del 04 sin run y logs del SHA funcional**. Bloque 03 sí está certificado en [#41778440182](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41778440182): Python 147, Godot 556.
+
+**Próxima `p`:** si PASS 04, ejecutar exactamente bloque 05 `tm222;tm223;tm224;tm225;tm226` con regresiones CAMP005/004/003 completas por hito 05. Si fallo, diagnóstico y reparación W05. No tocar `main`, V28, PR118, árbitra, W01–W04, catálogo/learnsets, política, 19 históricas, saves reales; no hacer merge. El PASS headless no certifica interfaz o GPU.
+
+---
+
 # IA5/W05 — CAMPAÑA_006 BLOQUE 03/10 · CI PASS VERIFICADA (2026-11-04)
 
 Rama exclusiva `codex/calvo-items-20261104-w05-camp006`. Bloque 03 reservado por IA6: `tm212;tm213;tm214;tm215;tm216`, movimientos `triple_axel;coaching;sludge_wave;scorching_sands;feather_dance` vía `scarlet-violet`. Fixture 3 bloques / 15 MT. **[Actions #41778440182](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41778440182)**: `completed/success` sobre SHA funcional `2c44ac98354d163f755fb408372b8c54b0a9cfec`, job 126404154789. Recibos reales: `CAMP006_W05_MANIFEST_PASS reserved=10 completed=3 ids=49 kind=NEW_IDS`; `CAMP006_W05_PY PASS blocks=3 checks=147`; `CAMP006_GATE_PY_PASS worker=W05 blocks=3 checks=147`; `CAMP006_W05_GODOT PASS blocks=3 checks=556`; `CAMP006_GATE_GODOT_PASS worker=W05 blocks=3 checks=556`. Preservados acumulativos 01–02 y sus negativos, sin modificaciones de módulos/producción ni políticas. Regresiones completas CAMP005/004/003 no correspondían a este hito 03 (step skipped), se ejecutan en 01/05/10 o cambio de módulo.
