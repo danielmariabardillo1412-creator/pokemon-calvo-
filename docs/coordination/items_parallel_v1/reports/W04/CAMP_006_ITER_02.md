@@ -39,3 +39,18 @@ Los **tres casos L3 de manzanas del bloque01** siguen ejecutándose en el mismo 
 - Sin modificaciones en `modules/`, `scenes/visual/`, `main`, V28, rama árbitra ni otras trabajadoras. Política trade→level V27 sin tocar.
 
 **Criterio para cerrar 02:** workflow CAMPAÑA_006 `completed/success`, recibos `CAMP006_W04_PY PASS blocks=2 checks=N` y `CAMP006_W04_GODOT PASS blocks=2 checks=N`, con cuatro líneas `CAMP006_W04_POT` diferenciadas. Clasificación final `DEPENDENCIA_DOCUMENTADA` salvo que IA6 entregue el productor de forma real y una CI lo demuestre.
+
+## CI02 real — prueba funcional de especie aprobada, forma NO certificada
+
+[Run GitHub Actions #41783726455](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41783726455) sobre SHA `45f1081011435db9ce07026d5e9dc3fc53c5eafa` terminó **completed/success**.
+
+Recibos verificados en los logs:
+- `CAMP006_W04_SCOPE PASS blocks=2`.
+- `CAMP006_W04_PY PASS blocks=2 checks=91`.
+- `CAMP006_W04_GODOT PASS blocks=2 checks=204`.
+- Tres `CAMP006_W04_APPLE ... status=L3_SCENE_BAG_AND_NATIVE_SAVEV2`: bloque01 preservado íntegro.
+- Cuatro `CAMP006_W04_POT ... status=L3_SPECIES_EVOLUTION__FORM_AUTHENTICITY_MISSING`: ejecución L3 positiva **por especie** y diagnóstico de falta de autenticidad, **no** forma correcta demostrada.
+
+El paso de regresión histórica CAMP005 aparece `skipped` en bloque02 según el workflow; **no** indicar que se ejecutó. No se ha tocado producción. La clasificación `DEPENDENCIA_DOCUMENTADA` en el CSV reconoce tanto el avance L3 como la frontera funcional pendiente de IA6. Se disparó una segunda CI por la actualización de progreso, que deberá verificarse por separado.
+
+**Próximo bloque autorizado cuando llegue `p`:** 03/10 `dragon_scale;electirizer`; política V27 `level_values_selected=null` sin umbrales ni consumo inventados. No iniciar ese bloque por el cierre de 02.
