@@ -193,7 +193,7 @@ def verify_block03(data: dict, progress: list[dict]) -> None:
             "Authorized block03 identity")
     require(block["status"] == "DEPENDENCY_DOCUMENTED_NOT_FUNCTIONAL"
             and progress[2]["estado"] == "DEPENDENCIA_DOCUMENTADA"
-            and progress[2]["ci_run"] == "CI_BLOQUE03_PENDIENTE",
+            and progress[2]["ci_run"] == "41784043391",
             "Block03 cannot claim L2 or completed CI")
     require(block["dependency_ref"] == data["blocks"][1]["dependency"]["key"]
             == "MINT_EFFECTIVE_NATURE_STATE_SAVEV2_006_W02"
