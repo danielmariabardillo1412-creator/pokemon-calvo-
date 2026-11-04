@@ -43,8 +43,8 @@ def main():
     check({c["item_id"]: (c["source"], c["target"]) for c in block["cases"]} == PAIRS,
           "three correct apples without branch cross-wire")
     check(len({c["save"] for c in block["cases"]}) == 3, "three isolated native save files")
-    check(all("CAMP006" not in c["save"] or c["save"] for c in block["cases"]),
-          "save paths are nonempty")
+    check(all(c["save"].startswith("user://w04_c006_01_") and c["save"].endswith(".json")
+              for c in block["cases"]), "save paths are isolated user:// fixtures")
     old = json.loads((ROOT / "tests/fixtures/parallel_items/w04_campaign_005.json").read_text(encoding="utf-8"))
     check(len(old["blocks"]) == 10 and old["blocks"][9]["block"] == "10",
           "prior CAMPAÑA_005 retained without editing or restarting")
