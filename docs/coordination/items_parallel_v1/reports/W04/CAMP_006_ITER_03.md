@@ -64,3 +64,18 @@ El nuevo positivo es **equipamiento desde escena y persistencia nativa**, NO evo
 **Aviso a IA6 antes de la fila04:** el bloque04 exige extender exactamente la misma conversión pendiente a otros siete objetos, **solo con política aprobada**. No permitir que la próxima `p` rellene ese bloque con pruebas negativas equivalentes o nuevos niveles arbitrarios. Si IA6 no aprueba V27, informar `BLOQUEADO_POLITICA_IA6` y no contabilizar integraciones de nivel como positivas.
 
 La actualización del CSV dispara otra CI; verificarla separadamente. Se conserva rama W04, sin cambios a producción, política, `main` ni V28.
+
+## CI sobre CSV03 consolidado — segundo recibo
+
+La CI de [#41785614844](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41785614844), SHA `ecc1a1c85af522826821e72dcb5924ebbb70e1d9`, terminó **completed/success** después de actualizar el progreso a `DEPENDENCIA_DOCUMENTADA`.
+
+Se comprobaron nuevamente:
+- `CAMP006_W04_SCOPE PASS blocks=3`
+- `CAMP006_W04_PY PASS blocks=3 checks=127`
+- `CAMP006_W04_GODOT PASS blocks=3 checks=281`
+- `CAMP006_W04_TRADE_HELD id=dragon_scale` y `id=electirizer`, ambos `L3_EQUIP_UNEQUIP_SAVEV2__TRADE_LEVEL_DEFERRED`.
+- El paso de regresión histórica CAMP005 se marcó `skipped`, como corresponde al hito03 sin modificaciones de producción.
+
+**Cierre W04 bloque03:** completada validación funcional real L3 de equipamiento, retirada y persistencia; **no** implementada la evolución por nivel por falta de niveles/consumo aprobados por IA6. Antes de ejecutar el bloque04 de la misma familia, es necesario resolver la política; no repetir el mismo informe negativo para otros siete ítems sin integrar funcionalidad nueva.
+
+**Detenido tras 03/10.** La siguiente `p` no concede modificar política V27 ni sistemas compartidos.
