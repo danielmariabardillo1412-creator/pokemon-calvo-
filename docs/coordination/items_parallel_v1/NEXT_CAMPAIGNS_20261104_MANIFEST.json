@@ -1,0 +1,545 @@
+{
+  "version": 1,
+  "generated_date": "2026-11-04",
+  "source_of_truth": "IA6_20261104_RECOVERY_AND_INTEGRATION",
+  "notes": "W01 CAMP005; W02..W05 CAMP006. W02 CI005 FAIL en Godot: exp_candy_xl_level99_gain y relaxed_mint_level100. No declarar cierre anterior PASS; fila 01 recupera CI, gate antes de fila 02. W03/W04 NO tienen nuevos IDs; integrar sistemas desbloqueadores, no repetir negativos. W05 exactamente 49 MT SV restantes, 19 legacy inactivas excluidas. Sin escribir main ni V28.",
+  "entries": [
+    {
+      "worker": "W01",
+      "campaign": "005",
+      "source_branch": "codex/calvo-items-20261103-w01-camp004",
+      "new_branch": "codex/calvo-items-20261104-w01-camp005",
+      "kind": "NEW_IDS",
+      "new_unique": 30,
+      "blocks": [
+        {
+          "ids": [
+            "black_glasses",
+            "dragon_fang",
+            "hard_stone"
+          ],
+          "system": "HELD_COMBAT",
+          "goal": "bonificacion_tipo_positiva_en_motor"
+        },
+        {
+          "ids": [
+            "miracle_seed",
+            "mystic_water",
+            "never_melt_ice"
+          ],
+          "system": "HELD_COMBAT",
+          "goal": "bonificacion_tipo_positiva_en_motor"
+        },
+        {
+          "ids": [
+            "poison_barb",
+            "sharp_beak",
+            "silk_scarf"
+          ],
+          "system": "HELD_COMBAT",
+          "goal": "bonificacion_tipo_positiva_en_motor"
+        },
+        {
+          "ids": [
+            "silver_powder",
+            "soft_sand",
+            "spell_tag"
+          ],
+          "system": "HELD_COMBAT",
+          "goal": "bonificacion_tipo_positiva_en_motor"
+        },
+        {
+          "ids": [
+            "twisted_spoon",
+            "metal_coat",
+            "kings_rock"
+          ],
+          "system": "HELD_COMBAT",
+          "goal": "efectos_equipados_especificos_con_tests_positivos"
+        },
+        {
+          "ids": [
+            "deep_sea_scale",
+            "deep_sea_tooth",
+            "metal_powder"
+          ],
+          "system": "HELD_COMBAT",
+          "goal": "efectos_equipados_especificos_con_tests_positivos"
+        },
+        {
+          "ids": [
+            "quick_powder",
+            "razor_claw",
+            "razor_fang"
+          ],
+          "system": "HELD_COMBAT",
+          "goal": "efectos_equipados_especificos_con_tests_positivos"
+        },
+        {
+          "ids": [
+            "odd_incense",
+            "rock_incense",
+            "rose_incense"
+          ],
+          "system": "HELD_COMBAT",
+          "goal": "incienso_efecto_positivo_o_contrato_compartido"
+        },
+        {
+          "ids": [
+            "sea_incense",
+            "full_incense",
+            "lax_incense"
+          ],
+          "system": "HELD_COMBAT",
+          "goal": "incienso_efecto_positivo_o_contrato_compartido"
+        },
+        {
+          "ids": [
+            "normal_gem",
+            "fire_gem",
+            "water_gem"
+          ],
+          "system": "HELD_COMBAT",
+          "goal": "gemas_consumo_real_y_savev2"
+        }
+      ],
+      "status": "READY",
+      "previous_ci": 41733777992
+    },
+    {
+      "worker": "W02",
+      "campaign": "006",
+      "source_branch": "codex/calvo-items-20261103-w02-camp005",
+      "new_branch": "codex/calvo-items-20261104-w02-camp006",
+      "kind": "RECOVERY_THEN_NEW",
+      "new_unique": 21,
+      "blocks": [
+        {
+          "ids": [
+            "exp_candy_xl",
+            "relaxed_mint"
+          ],
+          "system": "RECOVERY_CI005",
+          "goal": "reparar_fallos_Godot_CAMP005_XL_nivel100_y_relaxed_mint_sin_relajar_tests"
+        },
+        {
+          "ids": [
+            "gentle_mint",
+            "hasty_mint",
+            "lax_mint"
+          ],
+          "system": "MINT_ENGINE",
+          "goal": "mentas_positivas_naturaleza_efectiva_con_contrato_y_savev2"
+        },
+        {
+          "ids": [
+            "lonely_mint",
+            "mild_mint",
+            "naive_mint"
+          ],
+          "system": "MINT_ENGINE",
+          "goal": "extender_mentas_positivas"
+        },
+        {
+          "ids": [
+            "naughty_mint",
+            "rash_mint",
+            "sassy_mint",
+            "serious_mint"
+          ],
+          "system": "MINT_ENGINE",
+          "goal": "cerrar_mentas_restantes_y_regresion"
+        },
+        {
+          "ids": [
+            "everstone",
+            "exp_share",
+            "lucky_egg"
+          ],
+          "system": "TRAINING_HELD",
+          "goal": "bloqueo_evolucion_y_experiencia_positivos"
+        },
+        {
+          "ids": [
+            "power_anklet",
+            "power_band",
+            "power_belt"
+          ],
+          "system": "TRAINING_HELD",
+          "goal": "EV_held_tres_pilotos_y_limites"
+        },
+        {
+          "ids": [
+            "power_bracer",
+            "power_lens",
+            "power_weight"
+          ],
+          "system": "TRAINING_HELD",
+          "goal": "EV_held_tres_restantes"
+        },
+        {
+          "ids": [
+            "macho_brace",
+            "soothe_bell"
+          ],
+          "system": "TRAINING_HELD",
+          "goal": "amistad_y_EV_positivos"
+        },
+        {
+          "ids": [
+            "ability_capsule",
+            "ability_patch",
+            "gentle_mint"
+          ],
+          "system": "TRAINING_E2E",
+          "goal": "interfaz_real_habilidad_y_naturaleza"
+        },
+        {
+          "ids": [
+            "exp_share",
+            "lucky_egg",
+            "soothe_bell"
+          ],
+          "system": "TRAINING_E2E",
+          "goal": "e2e_entrenamiento_mochila_partida_savev2"
+        }
+      ],
+      "status": "HOLD_UNTIL_RECOVERY_GODOT",
+      "previous_ci": 41742682811
+    },
+    {
+      "worker": "W03",
+      "campaign": "006",
+      "source_branch": "codex/calvo-items-20261103-w03-camp005",
+      "new_branch": "codex/calvo-items-20261104-w03-camp006",
+      "kind": "INTEGRATION_BACKLOG",
+      "new_unique": 0,
+      "blocks": [
+        {
+          "ids": [
+            "escape_rope"
+          ],
+          "system": "WORLD_RETURN",
+          "goal": "return_anchor_posicion_demo_piloto"
+        },
+        {
+          "ids": [
+            "escape_rope",
+            "fluffy_tail"
+          ],
+          "system": "WORLD_RETURN",
+          "goal": "transaccion_retorno_mochila_y_savev2"
+        },
+        {
+          "ids": [
+            "repel",
+            "super_repel",
+            "max_repel"
+          ],
+          "system": "ENCOUNTER_STEPS",
+          "goal": "repelentes_con_pasos_y_nivel_lider"
+        },
+        {
+          "ids": [
+            "black_flute",
+            "white_flute",
+            "lure",
+            "super_lure",
+            "max_lure"
+          ],
+          "system": "ENCOUNTER_RATE",
+          "goal": "modificador_encuentros_duracion_real"
+        },
+        {
+          "ids": [
+            "dive_ball",
+            "lure_ball"
+          ],
+          "system": "CAPTURE_ENV",
+          "goal": "contexto_agua_pesca_source_to_capture"
+        },
+        {
+          "ids": [
+            "dusk_ball"
+          ],
+          "system": "CAPTURE_ENV",
+          "goal": "noche_o_cueva_real_en_CaptureBattleContext"
+        },
+        {
+          "ids": [
+            "repeat_ball"
+          ],
+          "system": "CAPTURE_DEX",
+          "goal": "registro_pokedex_persistente_y_repeat_ball"
+        },
+        {
+          "ids": [
+            "safari_ball",
+            "sport_ball"
+          ],
+          "system": "CAPTURE_ZONE",
+          "goal": "zonas_especiales_y_guardas_antes_de_consumir"
+        },
+        {
+          "ids": [
+            "love_ball",
+            "moon_ball",
+            "heavy_ball",
+            "beast_ball"
+          ],
+          "system": "CAPTURE_SPECIES",
+          "goal": "atributos_especie_contexto_sin_flags_ficticios"
+        },
+        {
+          "ids": [
+            "friend_ball",
+            "heal_ball",
+            "quick_ball",
+            "timer_ball"
+          ],
+          "system": "CAPTURE_E2E",
+          "goal": "demo_captura_mochila_coleccion_savev2"
+        }
+      ],
+      "status": "READY",
+      "previous_ci": 41742709006
+    },
+    {
+      "worker": "W04",
+      "campaign": "006",
+      "source_branch": "codex/calvo-items-20261103-w04-camp005",
+      "new_branch": "codex/calvo-items-20261104-w04-camp006",
+      "kind": "INTEGRATION_BACKLOG",
+      "new_unique": 0,
+      "blocks": [
+        {
+          "ids": [
+            "sweet_apple",
+            "tart_apple",
+            "syrupy_apple"
+          ],
+          "system": "EVOLUTION_E2E",
+          "goal": "evolucion_positiva_escena_y_guardado"
+        },
+        {
+          "ids": [
+            "chipped_pot",
+            "cracked_pot",
+            "masterpiece_teacup",
+            "unremarkable_teacup"
+          ],
+          "system": "FORM_SOURCE",
+          "goal": "autenticidad_forma_pieza_positiva_piloto"
+        },
+        {
+          "ids": [
+            "dragon_scale",
+            "electirizer"
+          ],
+          "system": "TRADE_LEVEL_GATE",
+          "goal": "held_item_contexto_piloto_sin_inventar_niveles"
+        },
+        {
+          "ids": [
+            "dubious_disc",
+            "magmarizer",
+            "protector",
+            "reaper_cloth",
+            "prism_scale",
+            "sachet",
+            "up_grade"
+          ],
+          "system": "TRADE_LEVEL_GATE",
+          "goal": "extender_trade_level_solo_con_politica_aprobada"
+        },
+        {
+          "ids": [
+            "oval_stone",
+            "dawn_stone",
+            "peat_block"
+          ],
+          "system": "GENDER_TIME_CONDITIONS",
+          "goal": "sexo_dia_luna_fuente_persistente"
+        },
+        {
+          "ids": [
+            "berry_sweet",
+            "clover_sweet",
+            "flower_sweet",
+            "love_sweet",
+            "ribbon_sweet",
+            "star_sweet",
+            "strawberry_sweet"
+          ],
+          "system": "MILCERY_CONDITIONS",
+          "goal": "giro_confite_forma_selccionada"
+        },
+        {
+          "ids": [
+            "galarica_cuff",
+            "galarica_wreath",
+            "scroll_of_darkness",
+            "scroll_of_waters"
+          ],
+          "system": "REGIONAL_FORMS",
+          "goal": "variantes_regionales_canonicas"
+        },
+        {
+          "ids": [
+            "gracidea",
+            "meteorite",
+            "reveal_glass",
+            "rotom_catalog",
+            "zygarde_cube"
+          ],
+          "system": "FORM_CHANGE",
+          "goal": "cambio_forma_positivo_reversible"
+        },
+        {
+          "ids": [
+            "blue_orb",
+            "red_orb",
+            "griseous_core",
+            "lustrous_globe",
+            "adamant_crystal"
+          ],
+          "system": "ORB_FORM",
+          "goal": "forma_por_objeto_equipado_positivo"
+        },
+        {
+          "ids": [
+            "dna_splicers",
+            "reins_of_unity",
+            "n_lunarizer_merge",
+            "n_solarizer_merge"
+          ],
+          "system": "FUSION",
+          "goal": "fusion_dos_criaturas_y_deshacer_atomico"
+        }
+      ],
+      "status": "READY",
+      "previous_ci": 41752332374
+    },
+    {
+      "worker": "W05",
+      "campaign": "006",
+      "source_branch": "codex/calvo-items-20261103-w05-camp005",
+      "new_branch": "codex/calvo-items-20261104-w05-camp006",
+      "kind": "NEW_IDS",
+      "new_unique": 49,
+      "blocks": [
+        {
+          "ids": [
+            "tm202",
+            "tm203",
+            "tm204",
+            "tm205",
+            "tm206"
+          ],
+          "system": "MACHINE_SV",
+          "goal": "libro_MT_ensenanza_positiva_con_learnset_compatible_PP_stock_consumo_y_savev2"
+        },
+        {
+          "ids": [
+            "tm207",
+            "tm208",
+            "tm209",
+            "tm210",
+            "tm211"
+          ],
+          "system": "MACHINE_SV",
+          "goal": "libro_MT_ensenanza_positiva_con_learnset_compatible_PP_stock_consumo_y_savev2"
+        },
+        {
+          "ids": [
+            "tm212",
+            "tm213",
+            "tm214",
+            "tm215",
+            "tm216"
+          ],
+          "system": "MACHINE_SV",
+          "goal": "libro_MT_ensenanza_positiva_con_learnset_compatible_PP_stock_consumo_y_savev2"
+        },
+        {
+          "ids": [
+            "tm217",
+            "tm218",
+            "tm219",
+            "tm220",
+            "tm221"
+          ],
+          "system": "MACHINE_SV",
+          "goal": "libro_MT_ensenanza_positiva_con_learnset_compatible_PP_stock_consumo_y_savev2"
+        },
+        {
+          "ids": [
+            "tm222",
+            "tm223",
+            "tm224",
+            "tm225",
+            "tm226"
+          ],
+          "system": "MACHINE_SV",
+          "goal": "libro_MT_ensenanza_positiva_con_learnset_compatible_PP_stock_consumo_y_savev2"
+        },
+        {
+          "ids": [
+            "tm227",
+            "tm228",
+            "tm229",
+            "tm01",
+            "tm02"
+          ],
+          "system": "MACHINE_SV",
+          "goal": "libro_MT_ensenanza_positiva_con_learnset_compatible_PP_stock_consumo_y_savev2"
+        },
+        {
+          "ids": [
+            "tm03",
+            "tm04",
+            "tm05",
+            "tm06",
+            "tm08"
+          ],
+          "system": "MACHINE_SV",
+          "goal": "libro_MT_ensenanza_positiva_con_learnset_compatible_PP_stock_consumo_y_savev2"
+        },
+        {
+          "ids": [
+            "tm09",
+            "tm10",
+            "tm11",
+            "tm12",
+            "tm13"
+          ],
+          "system": "MACHINE_SV",
+          "goal": "libro_MT_ensenanza_positiva_con_learnset_compatible_PP_stock_consumo_y_savev2"
+        },
+        {
+          "ids": [
+            "tm14",
+            "tm15",
+            "tm17",
+            "tm19",
+            "tm20"
+          ],
+          "system": "MACHINE_SV",
+          "goal": "libro_MT_ensenanza_positiva_con_learnset_compatible_PP_stock_consumo_y_savev2"
+        },
+        {
+          "ids": [
+            "tm31",
+            "tm36",
+            "tm44",
+            "tm77"
+          ],
+          "system": "MACHINE_SV",
+          "goal": "libro_MT_ensenanza_positiva_con_learnset_compatible_PP_stock_consumo_y_savev2"
+        }
+      ],
+      "status": "READY",
+      "previous_ci": 41742499805
+    }
+  ]
+}
