@@ -798,7 +798,7 @@ func _auditar_ruta_positiva_10(catalogo: DefinitionCatalog, caso: Dictionary) ->
 	comprobar(EvolutionSystem.classify_record(record, catalogo, source) == EvolutionSystem.RUNTIME_SUPPORTED, key + "/10_evolucion_de_especie_real")
 	var direct := EvolutionSystem.evolution_candidates(species, {"level": 40, "item_id": item}, catalogo)
 	comprobar(direct.has(record) and direct.size() == 1, key + "/10_direccion_y_objeto_unicos")
-	var variant := caso.get("source_variant")
+	var variant: Variant = caso.get("source_variant")
 	if variant != null:
 		var raw_species_number := 854 if source == &"sinistea" else 1012
 		var species_raw := _abrir("res://data/api/v2/pokemon-species/" + str(raw_species_number) + "/index.json")
