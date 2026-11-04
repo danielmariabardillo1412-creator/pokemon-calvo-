@@ -80,6 +80,31 @@
           "move_id": "feather_dance"
         }
       ]
+    },
+    {
+      "block": "04",
+      "items": [
+        {
+          "item_id": "tm217",
+          "move_id": "future_sight"
+        },
+        {
+          "item_id": "tm218",
+          "move_id": "expanding_force"
+        },
+        {
+          "item_id": "tm219",
+          "move_id": "skitter_smack"
+        },
+        {
+          "item_id": "tm220",
+          "move_id": "meteor_beam"
+        },
+        {
+          "item_id": "tm221",
+          "move_id": "throat_chop"
+        }
+      ]
     }
   ]
 }
