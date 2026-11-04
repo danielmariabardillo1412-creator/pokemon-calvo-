@@ -767,6 +767,109 @@ func _auditar_cambio_forma_09(catalogo: DefinitionCatalog, caso: Dictionary) -> 
 	print("CAMP005_W04_FORM id=", String(item), " source=", String(origen), " targets=", str(caso.get("target_varieties", [])), " status=DEPENDENCIA_FORMA_ACTIVA need=form_action+restore+savev2")
 
 
+func _auditar_ruta_positiva_10(catalogo: DefinitionCatalog, caso: Dictionary) -> void:
+	var item := StringName(caso.get("item_id", ""))
+	var source := StringName(caso.get("source", ""))
+	var target := StringName(caso.get("target", ""))
+	var key := String(item) + "/" + String(source) + "/" + String(target)
+	var species: CreatureSpecies = catalogo.species(source)
+	comprobar(catalogo.item(item) != null and species != null and catalogo.species(target) != null, key + "/10_catalogo")
+	if species == null or catalogo.species(target) == null:
+		return
+	var chain := _abrir("res://data/api/v2/evolution-chain/" + str(int(caso.get("chain", 0))) + "/index.json")
+	comprobar(String(chain.get("chain", {}).get("species", {}).get("name", "")) == String(source), key + "/10_cadena_original")
+	var raw_matches := 0
+	for child: Dictionary in chain.get("chain", {}).get("evolves_to", []):
+		if String(child.get("species", {}).get("name", "")) != String(target):
+			continue
+		for detail: Dictionary in child.get("evolution_details", []):
+			if String(detail.get("item", {}).get("name", "")) == String(caso.get("canonical_item", "")) and String(detail.get("trigger", {}).get("name", "")) == "use-item" and String(detail.get("version_group", {}).get("name", "")) == String(caso.get("version", "")) and detail.get("min_level") == null:
+				raw_matches += 1
+	comprobar(raw_matches == 1, key + "/10_una_ruta_pokeapi_exacta")
+	var selected: Array[EvolutionRecord] = []
+	for record: EvolutionRecord in species.evolutions:
+		if record.species_id == target and record.trigger == EvolutionSystem.TRIGGER_USE_ITEM and record.item_id == item:
+			selected.append(record)
+	comprobar(selected.size() == 1, key + "/10_registro_normalizado_unico")
+	if selected.size() != 1:
+		return
+	var record: EvolutionRecord = selected[0]
+	comprobar(String(record.version_group).replace("_", "-") == String(caso.get("version", "")), key + "/10_version_y_procedencia")
+	comprobar(EvolutionSystem.classify_record(record, catalogo, source) == EvolutionSystem.RUNTIME_SUPPORTED, key + "/10_evolucion_de_especie_real")
+	var direct := EvolutionSystem.evolution_candidates(species, {"level": 40, "item_id": item}, catalogo)
+	comprobar(direct.has(record) and direct.size() == 1, key + "/10_direccion_y_objeto_unicos")
+	var variant := caso.get("source_variant")
+	if variant != null:
+		var raw_species_number := 854 if source == &"sinistea" else 1012
+		var species_raw := _abrir("res://data/api/v2/pokemon-species/" + str(raw_species_number) + "/index.json")
+		comprobar(species_raw.get("varieties", []).size() == 1 and not record.conditions.has("base_form"), key + "/10_variantes_no_codificadas_en_cadena")
+		comprobar(EvolutionSystem.classify_record(record, catalogo, source) == EvolutionSystem.RUNTIME_SUPPORTED, key + "/10_ruta_positiva_sin_autenticidad")
+	var pc := _crear(catalogo, source)
+	comprobar(pc != null, key + "/10_propietario")
+	if pc == null:
+		return
+	var storage := bool(caso.get("storage", false))
+	if storage:
+		comprobar(pc.deposit(ID), key + "/10_pc_previo")
+	var location := &"STORAGE" if storage else &"PARTY"
+	comprobar(pc.location_of(ID) == location and pc.owned_creature(ID) != null, key + "/10_propiedad_unica")
+	var svc := Servicio.new()
+	comprobar(svc.configure(pc, catalogo, func(): return true), key + "/10_servicio")
+	comprobar(svc.holdable(item) == bool(caso.get("holdable", false)), key + "/10_equipable_no_es_disparador")
+	comprobar(pc.inventory.add(item, 2), key + "/10_stock_dos")
+	var before := _estado(pc)
+	var before_data := pc.owned_creature(ID).to_dict()
+	var options := svc.evolution_options(item, ID)
+	comprobar(options.size() == 1 and options.has(target), key + "/10_opcion_evolucion_positiva")
+	var wrong: Dictionary = svc.evolve(item, ID, &"pikachu")
+	comprobar(not wrong.get("accepted", false) and _estado(pc) == before, key + "/10_destino_invalido_sin_consumo")
+	var outsider: Dictionary = svc.use_item(item, &"w04_c005_otro")
+	comprobar(not outsider.get("accepted", false) and _estado(pc) == before, key + "/10_otro_propietario_rechazado")
+	var equip: Dictionary = svc.equip(item, ID)
+	comprobar(equip.get("accepted", false) and pc.owned_creature(ID).species_id == source and pc.owned_creature(ID).held_item_id == item and pc.inventory.quantity(item) == 1, key + "/10_equipar_no_evoluciona")
+	if bool(equip.get("accepted", false)):
+		var unequip: Dictionary = svc.unequip(ID)
+		comprobar(unequip.get("accepted", false) and _estado(pc) == before, key + "/10_retirar_devuelve_estado")
+	var applied: Dictionary = svc.use_item(item, ID) if storage else svc.evolve(item, ID, target)
+	comprobar(applied.get("accepted", false) and String(applied.get("species_id", "")) == String(target), key + "/10_evolucion_de_especie_aplicada")
+	var evolved := pc.owned_creature(ID)
+	comprobar(evolved != null and evolved.instance_id == ID and evolved.species_id == target and pc.location_of(ID) == location and pc.inventory.quantity(item) == 1, key + "/10_consumir_una_y_preservar_propiedad")
+	if evolved == null or evolved.species_id != target:
+		return
+	var after_data := evolved.to_dict()
+	comprobar(before_data.get("ivs") == after_data.get("ivs") and before_data.get("evs") == after_data.get("evs") and before_data.get("move_ids") == after_data.get("move_ids") and before_data.get("experience") == after_data.get("experience") and before_data.get("friendship") == after_data.get("friendship") and before_data.get("nature_id") == after_data.get("nature_id") and before_data.get("level") == after_data.get("level"), key + "/10_atributos_evolucion_conservados")
+	comprobar(after_data.get("held_item_id", "") == "" and not after_data.has("form_id") and not after_data.has("source_form_id"), key + "/10_sin_variantes_persistentes_ficticias")
+	var after := _estado(pc)
+	var once_again: Dictionary = svc.use_item(item, ID)
+	comprobar(not once_again.get("accepted", false) and _estado(pc) == after, key + "/10_sin_evolucion_doble_ni_gasto")
+	var snap := SaveGameData.build(pc.party, pc.storage, pc.inventory)
+	comprobar(snap.validate().get("ok", false) and snap.creatures.size() == 1, key + "/10_savev2_unica_criatura")
+	var uri := "user://w04_c005_10_" + String(item) + ".json"
+	var repository := SaveGameRepository.new()
+	var save: SaveResult = repository.save_collection(uri, pc)
+	comprobar(save.ok, key + "/10_guardar_savev2")
+	if save.ok:
+		var load: LoadResult = repository.load(uri)
+		comprobar(load.ok and load.schema_version == 2, key + "/10_cargar_savev2")
+		if load.ok:
+			var loaded := load.storage.get_creature(ID) if storage else load.party.get_creature(ID)
+			var empty_other := load.party.get_creature(ID) == null if storage else load.storage.get_creature(ID) == null
+			comprobar(loaded != null and loaded.species_id == target and loaded.instance_id == ID and empty_other and load.inventory.quantity(item) == 1, key + "/10_destino_lugar_stock_savev2")
+			if loaded != null:
+				var result_data := loaded.to_dict()
+				comprobar(after_data.get("ivs") == result_data.get("ivs") and after_data.get("evs") == result_data.get("evs") and after_data.get("move_ids") == result_data.get("move_ids") and after_data.get("experience") == result_data.get("experience") and after_data.get("friendship") == result_data.get("friendship") and after_data.get("nature_id") == result_data.get("nature_id"), key + "/10_atributos_savev2")
+	DirAccess.remove_absolute(ProjectSettings.globalize_path(uri))
+	var pc_wrong := _crear(catalogo, target)
+	comprobar(pc_wrong != null, key + "/10_etapa_destino_existente")
+	if pc_wrong != null:
+		var svc_wrong := Servicio.new()
+		comprobar(svc_wrong.configure(pc_wrong, catalogo, func(): return true) and pc_wrong.inventory.add(item, 1), key + "/10_etapa_equivocada_configurada")
+		var wrong_before := _estado(pc_wrong)
+		var wrong_stage: Dictionary = svc_wrong.use_item(item, ID)
+		comprobar(not wrong_stage.get("accepted", false) and _estado(pc_wrong) == wrong_before, key + "/10_no_saltar_etapa")
+	print("CAMP005_W04_POSITIVE id=", String(item), " source=", String(source), " target=", String(target), " status=", "POSITIVE_SPECIES_FORM_GUARD_MISSING" if variant != null else "POSITIVE_SPECIES_EVOLUTION", " need=", "persistent_source_variant" if variant != null else "none")
+
+
 func _ejecutar() -> void:
 	var fixture := _abrir(FIXTURE)
 	var policy := _abrir(TRADE_POLICY)
@@ -781,8 +884,8 @@ func _ejecutar() -> void:
 	comprobar(earlier.get("trade_level_conversion", {}).get("levels_selected") == null, "V25_sin_niveles")
 	comprobar(String(policy.get("correct_future_rule", "")).contains("original equipped evolution item"), "conservar_objeto_equipado")
 	var blocks: Array = fixture.get("blocks", [])
-	comprobar(blocks.size() == 9 and [blocks[0].get("block"), blocks[1].get("block"), blocks[2].get("block"), blocks[3].get("block"), blocks[4].get("block"), blocks[5].get("block"), blocks[6].get("block"), blocks[7].get("block"), blocks[8].get("block")] == ["01", "02", "03", "04", "05", "06", "07", "08", "09"], "bloques_01_a_09_secuenciales")
-	if blocks.size() != 9:
+	comprobar(blocks.size() == 10 and [blocks[0].get("block"), blocks[1].get("block"), blocks[2].get("block"), blocks[3].get("block"), blocks[4].get("block"), blocks[5].get("block"), blocks[6].get("block"), blocks[7].get("block"), blocks[8].get("block"), blocks[9].get("block")] == ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10"], "bloques_01_a_10_secuenciales")
+	if blocks.size() != 10:
 		_finalizar()
 		return
 	for index in range(2):
@@ -821,6 +924,10 @@ func _ejecutar() -> void:
 	comprobar(cambios.size() == 8, "09_ocho_especies_cinco_objetos")
 	for caso: Dictionary in cambios:
 		_auditar_cambio_forma_09(catalogo, caso)
+	var rutas_10: Array = blocks[9].get("cases", [])
+	comprobar(rutas_10.size() == 7, "10_siete_rutas_finales")
+	for caso: Dictionary in rutas_10:
+		_auditar_ruta_positiva_10(catalogo, caso)
 	_finalizar()
 
 func _finalizar() -> void:
@@ -828,7 +935,7 @@ func _finalizar() -> void:
 		return
 	cerrado = true
 	if errores.is_empty():
-		print("CAMP005_W04_GODOT PASS blocks=9 checks=", checks)
+		print("CAMP005_W04_GODOT PASS blocks=10 checks=", checks)
 	else:
 		print("CAMP005_W04_GODOT FAIL errors=", JSON.stringify(errores))
 	quit(0 if errores.is_empty() else 1)
