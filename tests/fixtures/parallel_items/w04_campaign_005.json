@@ -687,6 +687,163 @@
         "No item consumption or silent target replacement from bag/evolve/equip; no false positive fusion",
         "Never serialize fake fused species, destroy/duplicate the partner, modify SaveV2 schema or shared producers"
       ]
+    },
+    {
+      "block": "09",
+      "ids": [
+        "gracidea",
+        "meteorite",
+        "reveal_glass",
+        "rotom_catalog",
+        "zygarde_cube"
+      ],
+      "family": "FORM_DEPENDENCY",
+      "classification": "DEPENDENCIA_FORMAS_ACTIVAS_Y_RESTAURACION",
+      "cases": [
+        {
+          "item_id": "gracidea",
+          "source_species": "shaymin",
+          "species_number": 492,
+          "evolution_chain": 253,
+          "base_variety": "shaymin-land",
+          "target_varieties": [
+            "shaymin-sky"
+          ],
+          "forms_switchable": true,
+          "route_kind": "daytime+status+restore_land",
+          "storage": false
+        },
+        {
+          "item_id": "meteorite",
+          "source_species": "deoxys",
+          "species_number": 386,
+          "evolution_chain": 202,
+          "base_variety": "deoxys-normal",
+          "target_varieties": [
+            "deoxys-attack",
+            "deoxys-defense",
+            "deoxys-speed"
+          ],
+          "forms_switchable": true,
+          "route_kind": "user_selects_deoxys_form",
+          "storage": true
+        },
+        {
+          "item_id": "reveal_glass",
+          "source_species": "tornadus",
+          "species_number": 641,
+          "evolution_chain": 328,
+          "base_variety": "tornadus-incarnate",
+          "target_varieties": [
+            "tornadus-therian"
+          ],
+          "forms_switchable": true,
+          "route_kind": "incarnate_therian_toggle",
+          "storage": false
+        },
+        {
+          "item_id": "reveal_glass",
+          "source_species": "thundurus",
+          "species_number": 642,
+          "evolution_chain": 329,
+          "base_variety": "thundurus-incarnate",
+          "target_varieties": [
+            "thundurus-therian"
+          ],
+          "forms_switchable": true,
+          "route_kind": "incarnate_therian_toggle",
+          "storage": true
+        },
+        {
+          "item_id": "reveal_glass",
+          "source_species": "landorus",
+          "species_number": 645,
+          "evolution_chain": 332,
+          "base_variety": "landorus-incarnate",
+          "target_varieties": [
+            "landorus-therian"
+          ],
+          "forms_switchable": true,
+          "route_kind": "incarnate_therian_toggle",
+          "storage": false
+        },
+        {
+          "item_id": "reveal_glass",
+          "source_species": "enamorus",
+          "species_number": 905,
+          "evolution_chain": 477,
+          "base_variety": "enamorus-incarnate",
+          "target_varieties": [
+            "enamorus-therian"
+          ],
+          "forms_switchable": true,
+          "route_kind": "incarnate_therian_toggle",
+          "storage": true
+        },
+        {
+          "item_id": "rotom_catalog",
+          "source_species": "rotom",
+          "species_number": 479,
+          "evolution_chain": 240,
+          "base_variety": "rotom",
+          "target_varieties": [
+            "rotom-heat",
+            "rotom-wash",
+            "rotom-frost",
+            "rotom-fan",
+            "rotom-mow"
+          ],
+          "forms_switchable": true,
+          "route_kind": "appliance_selection_and_moves",
+          "storage": false
+        },
+        {
+          "item_id": "zygarde_cube",
+          "source_species": "zygarde",
+          "species_number": 718,
+          "evolution_chain": 370,
+          "base_variety": "zygarde-50",
+          "target_varieties": [
+            "zygarde-10",
+            "zygarde-10-power-construct",
+            "zygarde-50-power-construct",
+            "zygarde-complete"
+          ],
+          "forms_switchable": false,
+          "route_kind": "cell_assembly_and_power_construct_distinct",
+          "storage": true
+        }
+      ],
+      "canonical_sources": [
+        "data/api/v2/pokemon-species/{492,386,641,642,645,905,479,718}/index.json",
+        "data/api/v2/evolution-chain/{253,202,328,329,332,477,240,370}/index.json",
+        "docs/current/RANDOMLOCK_ITEMS_BUILD_SCOPE_V2.csv",
+        "docs/current/ITEM_INVENTORY.csv",
+        "modules/inventory/item_connections_v1.json"
+      ],
+      "caveats": [
+        "Canonical varieties do not encode which item causes each transition or its conditions; no item route was found in evolution chains",
+        "Zygarde Complete is an in-battle Power Construct consequence, not a direct Zygarde Cube item transformation; cube needs cell/core inventory and ability/form rules",
+        "forms_switchable=false for Zygarde in source snapshot despite multiple varieties; do not suppress variants nor infer item actions",
+        "Rotom form choice may require move-set adjustment; cannot use species_id changes to bypass ability, type and moves contracts",
+        "Meteorite/Deoxys and Gracidea/Shaymin need selection and temporal/reversion rules approved by IA6"
+      ],
+      "producer": "FieldItemService item action with species+target variant selection and preconditions (time/status/weather for Shaymin; appliance choice for Rotom; cells/cores/ability for Zygarde)",
+      "consumer": "Form resolver and rollback with CreatureInstance persistent form identity plus SaveV2 and battle lifecycle",
+      "missing": [
+        "Validated item-to-form rules for eight species, variant activation, removal, rollback and failed action atomicity",
+        "Persistent or derivable form identity, types/ability/moves/stat adjustments across SaveV2 (distinct from battle_transform_original)",
+        "Real clock, condition and reversion producer for Shaymin; correct Deoxys form selection by version; reveal-glass form toggles",
+        "Rotom catalog appliance and move selection, correctness under cancellation",
+        "Zygarde cell/core count and form assembly, distinction from Power Construct battle-only Complete"
+      ],
+      "runtime_contract": [
+        "Eight species/uses drawn from exactly five selected IDs, no new items and zero evolution-chain edges",
+        "None of the five items is holdable or has a certified field-use route; bag use/evolve/equip must not silently grant forms",
+        "Retain existing base species and party or storage location; reject outsider; preserve item counts and creature state on invalid actions",
+        "SaveV2 round trip of original species/identity/IVs/EVs/experience/friendship/moves and inventory; no invented form_id field",
+        "Do not count Zygarde Complete as a direct cube action; no false-positive form transformations"
+      ]
     }
   ]
 }
