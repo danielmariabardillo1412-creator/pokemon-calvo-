@@ -82,7 +82,7 @@ def validate() -> tuple[int, int, list[dict]]:
     for old_queue in (
             BASE / "CAMPAIGN_003_QUEUE_APPROVED.csv",
             BASE / "CAMPAIGN_004_W05_QUEUE_APPROVED.csv",
-            BASE / "CAMPAIGN_006_W05_QUEUE_APPROVED.csv"):
+            BASE / "CAMPAIGN_005_W05_QUEUE_APPROVED.csv"):
         for historical in load_csv(old_queue):
             if historical["trabajadora"] == "W05":
                 OLD.update(historical["ids"].split(";"))
