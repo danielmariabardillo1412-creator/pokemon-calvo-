@@ -46,3 +46,19 @@ con N positivo y **GitHub Actions completed/success real**. El PASS sería evide
 **Aislamiento estricto:** solo fixture, test Godot, test Python, progreso e informe de W04. Sin modificación de `main`, etiqueta V28, otras ramas, producción compartida, PR118, migraciones, catálogos ni workflows.
 
 **Próxima `p` tras cerrar bloque09:** bloque 10/10 `chipped_pot;cracked_pot;masterpiece_teacup;unremarkable_teacup;sweet_apple;tart_apple;syrupy_apple`, únicamente esa reserva.
+
+## CI09 real — comprobación acumulativa y límites
+
+[GitHub Actions #41745904539](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41745904539), SHA `e74672691e2cf7d00088148fb9c1b6f98bad3805`, cerró **completed/success**.
+
+Recibos extraídos directamente del log:
+- `CAMP005_W04_MANIFEST_PASS reserved=10 completed=9 ids=46 kind=FUNCTIONAL_BACKLOG`.
+- `CAMP005_W04_PY PASS blocks=9 checks=598`.
+- `CAMP005_W04_GODOT PASS blocks=9 checks=1189`.
+- Ocho recibos `CAMP005_W04_FORM` con `status=DEPENDENCIA_FORMA_ACTIVA` y `need=form_action+restore+savev2`, uno por especie/objeto especificado en la matriz.
+
+La ejecución valida los **nueve bloques acumulativos de CAMP005**, pero **no** certifica transformaciones positivas. Regresiones históricas CAMP004/003/001: `skipped` en este bloque sin cambios de producción; no afirmar que corrieron.
+
+La fila09 del CSV se consolidó como `DEPENDENCIA_DOCUMENTADA` con `ci_run=41745904539` en commit `67597a40db0df6ae7157ae5bcf061cba77cf683d`; este cambio dispara una segunda CI que debe comprobarse independientemente.
+
+**Bloque 09/10 cerrado como documentación y prueba verificable de dependencias**, sin cambios en módulos compartidos. Fila04 conservada sin conciliación por la incidencia previa. El siguiente `p` autoriza solo el bloque10/10, no adelantarlo.
