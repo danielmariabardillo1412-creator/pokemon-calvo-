@@ -1,3 +1,21 @@
+# IA2/W02 — CAMPAÑA_006 · CONTINUIDAD VIGENTE BLOQUE 02/10 — DEPENDENCIA DE MENTAS
+
+**Identidad:** IA2/W02. **Rama única de escritura:** `codex/calvo-items-20261104-w02-camp006`. **Cola oficial:** `CAMPAIGN_006_W02_QUEUE_APPROVED.csv`. Se ha ejecutado únicamente la fila **02** `gentle_mint;hasty_mint;lax_mint`; no se ha iniciado fila03. No escribir en `main`, V28, PR118, árbitra, ramas ajenas o producción compartida sin contrato IA6.
+
+**Gate de recuperación ya acreditado:** run [41763921080](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41763921080), `completed/success`, SHA `2abcc2ae9644b8821d9dae6f26214b1a8fa347fc`. CAMP005 10 bloques/288 escenarios, CI Godot+Python y regresiones CAMP004/CAMP003 correctas. Su recibo es de bloque01, no debe reutilizarse como CI nueva de bloque02.
+
+**Diagnóstico de fila02:** las tres naturalezas están en `ProgressionRuleset.NATURE_MODIFIERS`: gentle (+Defensa Especial, −Defensa), hasty (+Velocidad, −Defensa), lax (+Defensa, −Defensa Especial). **Ninguna menta tiene handler de campo o naturaleza efectiva persistente.** `CreatureInstance.recalculate_stats` y `StatCalculator.compute` operan con `nature_id` original, que SaveV2 persiste; no existe un dato independiente. Retocar `nature_id` directamente sería una mecánica falsa. Identificador compartido `MINT_EFFECTIVE_NATURE_STATE_SAVEV2_006_W02`, titular IA6, consumidores: criatura, stats, combate, serialización SaveV2 y FieldItemService. **Estado bloque02: `DEPENDENCIA_DOCUMENTADA`, NO L2 ni L3.**
+
+**Prueba mínima con contrato real:** fixture `tests/fixtures/parallel_items/w02_campaign_006.json` registra **tres IDs, un caso negativo representativo**, tabla de naturalezas y una dependencia compartida con productor, consumidores, propietario y prueba positiva pendiente. Godot `_probe_training` verifica `gentle_mint_missing_effect_route` en active/none/reserve: `DEPENDENCY_MISSING`, no consumo, instantánea sin cambios y SaveV2. Python comprueba las tres naturalezas, la falta de handlers y persistencia de naturaleza efectiva. Recibos separados `CAMP006_W02_PY/GODOT PASS blocks=1` de recuperación, `CAMP006_W02_DEPENDENCY BLOCKED block=02 ids=3` de dependencia. **Nunca reportar PASS blocks=2 como efecto positivo.**
+
+**Commits relevantes:** fixture `a77f951cb64d8f810aca5953a5a38edc744a9e79`; progreso `52438969592f85edc3901d41c43767b2e2ed2c78` (fila01 recuperada, fila02 dependencia); validador Python `a9cf6592826c8d1f590f07fe58ac282fd534a70a`; runner Godot `2cff2eb92c9e66233b3d709637c01c8fa96c7776`, corrección sintáctica `171cd5abde97a0634bd25b6f0bc99f1786db9366`; workflow CI reparado desde versión válida `2da2e54dc1657f140fd2c12724595404176197af`. Hubo runs con error de workflow por duplicación accidental al insertar grep: ya resuelto, no equivale a defecto de motor. Informe propio `docs/coordination/items_parallel_v1/reports/W02/CAMP_006_ITER_02.md`.
+
+**Nueva CI bloque02:** [run 41778869360](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41778869360), SHA `2da2e54dc1657f140fd2c12724595404176197af`. En última lectura: pasos puerta01, Python/Godot CAMP005, runner Godot CAMP006 completados `success`; regresiones CAMP004/CAMP003 `in_progress`. Solo declarar éxito global cuando `completed/success`, con logs de ese SHA. Si falla, reparar únicamente defecto propio. No usar CI verde como implementación positiva de mentas.
+
+**Próximo `p`:** fila03 `lonely_mint;mild_mint;naive_mint`, previa verificación de gate/CI en la rama. Si IA6 no ha definido el contrato compartido, **reutilizar la dependencia única** sin crear 24 rechazos redundantes ni implementar naturaleza ficticia. No avanzar a fila04 sin otro `p`; nunca cambiar producción común sin coordinación de IA6.
+
+---
+
 # IA2/W02 — CAMPAÑA_006 · CONTINUIDAD BLOQUE 01 / CI005 RECOVERY GATE
 
 **Identidad:** IA2/W02. **Rama exclusiva:** `codex/calvo-items-20261104-w02-camp006`. **Base:** `codex/calvo-items-20261103-w02-camp005`. Autoridad: `CAMPAIGN_006_W02_GATE.md`, `CAMPAIGN_006_W02_QUEUE_APPROVED.csv`, `campaigns/CAMP_006_W02.md`, `AUTONOMOUS_REPAIR_V5.md`. No tocar main, V28, PR118, árbitra, otras ramas ni APIs compartidas. No ejecutar fila02 antes de acreditación del gate de CAMP005 completa.
