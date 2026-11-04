@@ -15,6 +15,7 @@ ITEMS_05 = ("berry_sweet", "clover_sweet", "flower_sweet", "love_sweet", "ribbon
 ITEMS_06 = ("whipped_dream", "leaders_crest")
 ITEMS_07 = ("adamant_crystal", "blue_orb", "griseous_core", "lustrous_globe", "red_orb")
 ITEMS_08 = ("dna_splicers", "reins_of_unity", "n_lunarizer_merge", "n_solarizer_merge")
+ITEMS_09 = ("gracidea", "meteorite", "reveal_glass", "rotom_catalog", "zygarde_cube")
 
 
 def check_rows(path):
@@ -58,10 +59,11 @@ def main():
     field = (ROOT / "modules/inventory/field_item_service.gd").read_text(encoding="utf-8")
 
     check(fixture["worker"] == "W04" and fixture["campaign"] == "CAMP_005", "fixture identidad")
-    check(len(fixture["blocks"]) == 8 and [x["block"] for x in fixture["blocks"]] == ["01", "02", "03", "04", "05", "06", "07", "08"], "fixture acumulativo 01 a 08")
+    check(len(fixture["blocks"]) == 9 and [x["block"] for x in fixture["blocks"]] == ["01", "02", "03", "04", "05", "06", "07", "08", "09"], "fixture acumulativo 01 a 09")
     check(len(queue) == 10 and queue[0]["ids"].split(";") == list(ITEMS_01), "cola oficial 01")
-    check(len(progress) == 8 and [x["bloque"] for x in progress] == ["01", "02", "03", "04", "05", "06", "07", "08"], "progreso bloques 01 a 08")
-    check(progress[0]["ids"].split(";") == list(ITEMS_01) and progress[1]["ids"].split(";") == list(ITEMS_02) and progress[2]["ids"].split(";") == list(ITEMS_03) and progress[3]["ids"].split(";") == list(ITEMS_04) and progress[4]["ids"].split(";") == list(ITEMS_05) and progress[5]["ids"].split(";") == list(ITEMS_06) and progress[6]["ids"].split(";") == list(ITEMS_07) and progress[7]["ids"].split(";") == list(ITEMS_08), "progreso filas exactas")
+    check(len(progress) == 9 and [x["bloque"] for x in progress] == ["01", "02", "03", "04", "05", "06", "07", "08", "09"], "progreso bloques 01 a 09")
+    check(progress[0]["ids"].split(";") == list(ITEMS_01) and progress[1]["ids"].split(";") == list(ITEMS_02) and progress[2]["ids"].split(";") == list(ITEMS_03) and progress[3]["ids"].split(";") == list(ITEMS_04) and progress[4]["ids"].split(";") == list(ITEMS_05) and progress[5]["ids"].split(";") == list(ITEMS_06) and progress[6]["ids"].split(";") == list(ITEMS_07) and progress[7]["ids"].split(";") == list(ITEMS_08) and progress[8]["ids"].split(";") == list(ITEMS_09), "progreso filas exactas")
+    check(queue[8]["ids"].split(";") == list(ITEMS_09) and queue[8]["familia"] == "FORM_DEPENDENCY", "cola 09 aprobada")
     check(queue[7]["ids"].split(";") == list(ITEMS_08) and queue[7]["familia"] == "FORM_FUSION", "cola 08 aprobada")
     check(queue[6]["ids"].split(";") == list(ITEMS_07) and queue[6]["familia"] == "FORM_DEPENDENCY", "cola 07 aprobada")
     check(queue[5]["ids"].split(";") == list(ITEMS_06) and queue[5]["familia"] == "SPECIAL_EVOLUTION", "cola 06 aprobada")
@@ -134,7 +136,7 @@ def main():
     for token in ("func _casos_de_version_y_etapas_02(", "prism_scale/belleza_legacy_no_degradada",
                   "up_grade/dos_objetos_dos_etapas", "up_grade/porygon2_sin_opcion",
                   "up_grade/porygon2_no_evoluciona", "up_grade/porygon2_con_objeto_no_salta_etapa",
-                  "up_grade/porygon2_retirada_sin_mutacion", "bloques_01_a_08_secuenciales",
+                  "up_grade/porygon2_retirada_sin_mutacion", "bloques_01_a_09_secuenciales",
                   "CAMP005_W04_ALT id=prism_scale", "CAMP005_W04_STAGE item=up_grade"):
         check(token in runner, "Falta contrato runtime del bloque 02: " + token)
 
@@ -180,7 +182,7 @@ def main():
     check("var gender:" not in creature and "var gender_id:" not in creature and '"gender":' not in creature, "género no persistido en dominio de criatura")
     check('"time_of_day":' not in evolution.split("static func level_up_context(",1)[1].split("static func _stat_relation_matches(",1)[0], "subida de nivel sin reloj")
     for token in ("func _auditar_condicion_03(", "func _tiene_destino_03(",
-                  "bloques_01_a_08_secuenciales", "sin_opciones_directas",
+                  "bloques_01_a_09_secuenciales", "sin_opciones_directas",
                   "condicion_no_degradable", "no_ignora_condiciones", "sexo_no_persistido",
                   "contexto_sin_requisitos", "uso_rechazado_sin_gasto", "evolucion_rechazada",
                   "estado_savev2_integro", "retirada_sin_perdida", "no_equipable_sin_gasto",
@@ -237,7 +239,7 @@ def main():
                   "04_no_uso_incondicional", "04_forma_no_inventada_savev2",
                   "04_retira_y_restaura", "04_no_equipable_sin_mutacion",
                   "04_forma_persistente_no_contratada", "CAMP005_W04_FORM_CONTRACT",
-                  "bloques_01_a_08_secuenciales", "CAMP005_W04_GODOT PASS blocks=8 checks="):
+                  "bloques_01_a_09_secuenciales", "CAMP005_W04_GODOT PASS blocks=9 checks="):
         check(token in runner, "falta escenario Godot de forma04: " + token)
 
     # Bloque 05: siete confites seleccionados, pero una sola evolucion original SPIN.
@@ -270,7 +272,7 @@ def main():
                   "05_ajeno_sin_gasto", "05_sin_consumo_tras_equipar", "05_sin_forma_por_evolve",
                   "05_guardar_savev2", "05_cargar_savev2", "05_identidad_confite_savev2",
                   "05_atributos_savev2", "05_retirada_restaurada", "05_siete_confites_exactos",
-                  "bloques_01_a_08_secuenciales", "CAMP005_W04_GODOT PASS blocks=8 checks="):
+                  "bloques_01_a_09_secuenciales", "CAMP005_W04_GODOT PASS blocks=9 checks="):
         check(token in runner, "Godot sin contrato observable confites: " + token)
 
     # Bloque06: dos rutas muy distintas. Whipped Dream mantiene trade+held_item
@@ -331,8 +333,8 @@ def main():
                   "06_ajeno_rechazado", "06_sin_intercambio_ni_tres_derrotas_falsas",
                   "06_guardar_savev2", "06_cargar_savev2", "06_identidad_y_stock_savev2",
                   "06_atributos_savev2", "06_retirar_sin_perder", "06_no_equipable_inmutable",
-                  "06_dos_objetos_exactos", "bloques_01_a_08_secuenciales",
-                  "CAMP005_W04_GODOT PASS blocks=8 checks="):
+                  "06_dos_objetos_exactos", "bloques_01_a_09_secuenciales",
+                  "CAMP005_W04_GODOT PASS blocks=9 checks="):
         check(token in runner, "faltan aserciones Godot bloque06: " + token)
 
     # Bloque 07: formas Origin y Primal son variedades de la MISMA especie,
@@ -396,8 +398,8 @@ def main():
                   "07_atributos_savev2", "07_retirar_y_restaurar",
                   "07_cruce_equipamiento_generico_no_seleccion_forma",
                   "07_prisma_no_cambia_especie_ajena", "07_cinco_objetos_exactos",
-                  "bloques_01_a_08_secuenciales", "CAMP005_W04_ORB_CROSS",
-                  "CAMP005_W04_GODOT PASS blocks=8 checks="):
+                  "bloques_01_a_09_secuenciales", "CAMP005_W04_ORB_CROSS",
+                  "CAMP005_W04_GODOT PASS blocks=9 checks="):
         check(token in runner, "bloque07 no comprueba escenario real: " + token)
 
 
@@ -475,9 +477,99 @@ def main():
                   "08_recuperar_dos_especies_identidades", "08_pc_o_party_sin_duplicacion",
                   "08_principal_persistencia_completa", "08_socio_persistencia_completa",
                   "08_estado_inalterado_cero_fusiones", "08_seis_parejas_cuatro_objetos",
-                  "bloques_01_a_08_secuenciales", "CAMP005_W04_FUSION",
-                  "CAMP005_W04_GODOT PASS blocks=8 checks="):
+                  "bloques_01_a_09_secuenciales", "CAMP005_W04_FUSION",
+                  "CAMP005_W04_GODOT PASS blocks=9 checks="):
         check(token in runner, "ausencia de test observable bloque08: " + token)
+
+
+    # Bloque 09: cinco herramientas para ocho especies con múltiples alternativas,
+    # pero ninguna de las ocho cadenas contiene evolución causada por el objeto.
+    active_forms = fixture["blocks"][8]
+    cases09 = active_forms["cases"]
+    check(active_forms["ids"] == list(ITEMS_09) and active_forms["family"] == "FORM_DEPENDENCY",
+          "reserva exacta 09")
+    check(active_forms["classification"] == "DEPENDENCIA_FORMAS_ACTIVAS_Y_RESTAURACION"
+          and len(cases09) == 8, "cinco objetos / ocho especies")
+    check({row["item_id"] for row in cases09} == set(ITEMS_09), "cinco IDs exactos")
+    check({row["source_species"] for row in cases09} ==
+          {"shaymin", "deoxys", "tornadus", "thundurus", "landorus", "enamorus", "rotom", "zygarde"},
+          "ocho especies distintas sin mezclas")
+    forms09 = {
+        "gracidea": {"shaymin": ("shaymin-land", {"shaymin-sky"})},
+        "meteorite": {"deoxys": ("deoxys-normal", {"deoxys-attack", "deoxys-defense", "deoxys-speed"})},
+        "reveal_glass": {
+            "tornadus": ("tornadus-incarnate", {"tornadus-therian"}),
+            "thundurus": ("thundurus-incarnate", {"thundurus-therian"}),
+            "landorus": ("landorus-incarnate", {"landorus-therian"}),
+            "enamorus": ("enamorus-incarnate", {"enamorus-therian"}),
+        },
+        "rotom_catalog": {"rotom": ("rotom", {"rotom-heat", "rotom-wash", "rotom-frost", "rotom-fan", "rotom-mow"})},
+        "zygarde_cube": {"zygarde": ("zygarde-50",
+            {"zygarde-10", "zygarde-10-power-construct", "zygarde-50-power-construct", "zygarde-complete"})},
+    }
+    check(set(forms09) == set(ITEMS_09), "mapeo reglas completo")
+    check(all(selected[item]["estado_contenido"] == "SELECCIONADO" and
+              selected[item]["familia"] == "STORY_KEY_OR_FORM_REVIEW" for item in ITEMS_09),
+          "cinco elementos backlog seleccionados de forma")
+    check(all(item not in held_profile["holdable_ids"] for item in ITEMS_09),
+          "cinco herramientas NO equipables")
+    active_inventory = {r["id"]: r for r in check_rows(ROOT / "docs/current/ITEM_INVENTORY.csv")}
+    active_field = {r["id"]: r for r in check_rows(ROOT / "docs/current/ITEM_FIELD_V8.csv.txt")}
+    check(all(active_inventory[item]["connection"] == "DATA_ONLY" for item in ITEMS_09),
+          "no existen cinco implementaciones nativas completas")
+    check(all(active_field[item]["equipment_transfer"] == "NOT_CERTIFIED" and
+              active_field[item]["supported_evolution_routes_tested"] == "0" for item in ITEMS_09),
+          "no hay transferencia o evolución certificada")
+    for row in cases09:
+        name = row["item_id"] + "/" + row["source_species"]
+        base, targets = forms09[row["item_id"]][row["source_species"]]
+        check(row["base_variety"] == base and set(row["target_varieties"]) == targets and
+              len(row["target_varieties"]) == len(targets), name + ": destinos exactos")
+        source = json.loads((ROOT / f"data/api/v2/pokemon-species/{row['species_number']}/index.json").read_text(encoding="utf-8"))
+        check(source["name"] == row["source_species"] and source["forms_switchable"] is row["forms_switchable"],
+              name + ": snapshot especies y forms_switchable")
+        check(source["evolution_chain"]["url"] == f"/api/v2/evolution-chain/{row['evolution_chain']}/",
+              name + ": cadena correcta")
+        varieties = source["varieties"]
+        check(sum(v["pokemon"]["name"] == base and v["is_default"] for v in varieties) == 1,
+              name + ": variedad base única")
+        for target in targets:
+            check(sum(v["pokemon"]["name"] == target and not v["is_default"] for v in varieties) == 1,
+                  name + ": variedad opcional " + target)
+        chain = json.loads((ROOT / f"data/api/v2/evolution-chain/{row['evolution_chain']}/index.json").read_text(encoding="utf-8"))
+        check(chain["chain"]["species"]["name"] == row["source_species"] and
+              chain["chain"]["evolves_to"] == [], name + ": no es evolución")
+    zygarde = next(p for p in cases09 if p["item_id"] == "zygarde_cube")
+    check(zygarde["forms_switchable"] is False and "zygarde-complete" in zygarde["target_varieties"] and
+          zygarde["route_kind"] == "cell_assembly_and_power_construct_distinct",
+          "Zygarde Complete es batalla Power Construct, no boton directo del Arca")
+    check("zygarde-mega" not in zygarde["target_varieties"],
+          "no insertar una mega ruta sin encargo")
+    rotom = next(p for p in cases09 if p["item_id"] == "rotom_catalog")
+    check(len(rotom["target_varieties"]) == 5 and "appliance" in rotom["route_kind"],
+          "Rotom exige seleccionar electrodoméstico y contrato movimientos")
+    creature_form09 = (ROOT / "modules/creatures/domain/creature_instance.gd").read_text(encoding="utf-8")
+    check("battle_transform_original" in creature_form09 and
+          all(s not in creature_form09 for s in ('"form_id":', '"form_variant_id":', '"cells_count":')),
+          "SaveV2 no debe inventar identidad de forma o contadores Zygarde")
+    check("func evolution_options(" in field and "func use_item(" in field and "func equip(" in field,
+          "rutas del servicio prueban rechazo, no activación de forma")
+    for token in ("func _auditar_cambio_forma_09(",
+                  "09_fuente_especie", "09_forms_switchable_no_inventado",
+                  "09_base_y_destinos_declarados", "09_destino_variedad_",
+                  "09_cambio_forma_no_evolucion", "09_sin_evolucion_runtime",
+                  "09_complete_no_direct_cube", "09_propiedad_party_pc",
+                  "09_no_equipable", "09_no_evolucion_mochila",
+                  "09_uso_campo_rechazado", "09_equipar_rechazado",
+                  "09_evolve_no_es_forma", "09_ajeno_sin_consumo",
+                  "09_especie_y_batalla_intactas", "09_inventario_y_lugar_intactos",
+                  "09_savev2_unico_id_valido", "09_no_inventar_esquema_forma",
+                  "09_guardar_savev2", "09_cargar_savev2",
+                  "09_identidad_lugar_inventario_savev2", "09_atributos_savev2",
+                  "09_estado_final_identico", "09_ocho_especies_cinco_objetos",
+                  "bloques_01_a_09_secuenciales", "CAMP005_W04_FORM",
+                  "CAMP005_W04_GODOT PASS blocks=9 checks="):
+        check(token in runner, "falta escenario Godot 09: " + token)
 
 
     # Prueba de interfaz pendiente: la API de nivel comunica nivel/estadísticas,
@@ -496,11 +588,11 @@ def main():
                   "productor_no_transporta_objeto", "equipamiento_positivo_sin_evolucion",
                   "guardar_savev2", "leer_savev2", "identidad_item_savev2",
                   "retirada_preserva_estado", "mochila_no_es_intercambio",
-                  "CAMP005_W04_GODOT PASS blocks=8 checks="):
+                  "CAMP005_W04_GODOT PASS blocks=9 checks="):
         check(token in runner, "runner sin prueba observable: " + token)
     check((ROOT / "tests/tools/test_parallel_items_w04_campaign_004.py").exists(), "regresión CAMP004 preservada")
     check((ROOT / "tests/tools/test_parallel_items_w04_campaign_003.py").exists(), "regresión CAMP003 preservada")
-    print(f"CAMP005_W04_PY PASS blocks=8 checks={checks}")
+    print(f"CAMP005_W04_PY PASS blocks=9 checks={checks}")
 
 
 if __name__ == "__main__":
