@@ -37,7 +37,7 @@ func _run() -> void:
 func _block_01(block: Dictionary) -> void:
 	check("block01 exact", block.get("ids", []) == ["escape_rope"]
 		and block.get("contract") == "DEMO_RETURN_ANCHOR_V1")
-	var scene := load("res://scenes/visual/field_demo.tscn").instantiate()
+	var scene: Variant = load("res://scenes/visual/field_demo.tscn").instantiate()
 	root.add_child(scene)
 	await process_frame
 	await physics_frame
