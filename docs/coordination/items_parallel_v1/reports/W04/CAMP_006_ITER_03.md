@@ -47,3 +47,20 @@ El nuevo positivo es **equipamiento desde escena y persistencia nativa**, NO evo
 - **No se modificaron** `main`, V28, PR #118, políticas, productores ni las ramas ajenas.
 
 **Finalizar 03/10 con `DEPENDENCIA_DOCUMENTADA`** si pasan las nuevas pruebas L3, sin confundirlo con la conversión trade→level. No ejecutar bloque04 sin la siguiente `p`; la familia siguiente dependerá de la misma aprobación de umbrales de IA6 y no debe rellenarse con negativos repetidos.
+
+## CI03 ejecutada — evidencia L3 positiva y dependencia IA6
+
+[Run GitHub Actions #41785445720](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41785445720), SHA `4654ae0c70c600a26a8d0cd391739fed7ad09f5a`, **completed/success**. Logs:
+
+- `CAMP006_W04_SCOPE PASS blocks=3`.
+- `CAMP006_W04_PY PASS blocks=3 checks=127`.
+- `CAMP006_W04_GODOT PASS blocks=3 checks=281`.
+- Dos recibos `CAMP006_W04_TRADE_HELD id=dragon_scale/electirizer status=L3_EQUIP_UNEQUIP_SAVEV2__TRADE_LEVEL_DEFERRED requires=IA6_approved_level_and_consumption`.
+- Tres recibos `CAMP006_W04_APPLE` y cuatro `CAMP006_W04_POT`: los **siete casos anteriores continúan pasando**. El control de autenticidad del bloque02 sigue pendiente de productor compartido.
+- Regresión completa CAMPAÑA_005 histórica: `skipped` en bloque 03, conforme a los hitos 01/05/10 y ausencia de parche de producción.
+
+**Conclusión:** alcanzado **L3 de equipamiento, retirada y SaveV2 en la demo** para dos objetos. **NO** implementada ninguna evolución `trade → level`; las reglas V27 permanecen diferidas. El CSV03 queda `DEPENDENCIA_DOCUMENTADA` hasta que IA6 apruebe umbrales y política de objeto, y coordine productores y consumidores.
+
+**Aviso a IA6 antes de la fila04:** el bloque04 exige extender exactamente la misma conversión pendiente a otros siete objetos, **solo con política aprobada**. No permitir que la próxima `p` rellene ese bloque con pruebas negativas equivalentes o nuevos niveles arbitrarios. Si IA6 no aprueba V27, informar `BLOQUEADO_POLITICA_IA6` y no contabilizar integraciones de nivel como positivas.
+
+La actualización del CSV dispara otra CI; verificarla separadamente. Se conserva rama W04, sin cambios a producción, política, `main` ni V28.
