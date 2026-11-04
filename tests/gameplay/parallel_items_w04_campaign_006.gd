@@ -247,8 +247,8 @@ func _case_trade_03(caso: Dictionary) -> void:
     var records := 0
     var held_record: EvolutionRecord = null
     for record: EvolutionRecord in species.evolutions:
-        if record.species_id == target and record.trigger == EvolutionSystem.TRIGGER_TRADE and
-            StringName(str(record.conditions.get("held_item", ""))) == item:
+        if (record.species_id == target and record.trigger == EvolutionSystem.TRIGGER_TRADE and
+            StringName(str(record.conditions.get("held_item", ""))) == item):
             records += 1
             held_record = record
     check(records == 1 and held_record != null, label + "/03_canonical_trade_held_record")
