@@ -55,6 +55,31 @@
           "move_id": "electroweb"
         }
       ]
+    },
+    {
+      "block": "03",
+      "items": [
+        {
+          "item_id": "tm212",
+          "move_id": "triple_axel"
+        },
+        {
+          "item_id": "tm213",
+          "move_id": "coaching"
+        },
+        {
+          "item_id": "tm214",
+          "move_id": "sludge_wave"
+        },
+        {
+          "item_id": "tm215",
+          "move_id": "scorching_sands"
+        },
+        {
+          "item_id": "tm216",
+          "move_id": "feather_dance"
+        }
+      ]
     }
   ]
 }
