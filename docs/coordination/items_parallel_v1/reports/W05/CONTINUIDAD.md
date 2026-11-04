@@ -1,3 +1,11 @@
+# IA5/W05 — CAMPAÑA_006 · BLOQUE 03/10 ENTREGADO · CI PENDIENTE (2026-11-04)
+
+Rama: `codex/calvo-items-20261104-w05-camp006`. Tercera fila IA6 `tm212;tm213;tm214;tm215;tm216`, movimientos SV `triple_axel;coaching;sludge_wave;scorching_sands;feather_dance`, cotejados con perfil sin cambios canónicos. Fixture y progreso acumulativos **3/10 y 15 MT**. Commit de pruebas `a2716f2dffb16212be3c3ec5827d12c4a7126d80`. Informe `reports/W05/CAMP_006_ITER_03.md` y CSV publicados para activar CI en rama propia. **Pendiente PASS Python/Godot: no inventarlo**. Runner Python/Godot mantiene casos positivos `FieldItemService.teach`, PP, stock/consumo, propietario, identidad, rechazo sin mutación, learnset y SaveV2 de los tres bloques. CI anterior bloque 02 PASS [#41767616709](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41767616709), 98 Python / 376 Godot, no sirve para certificar bloque 03. Regresiones anteriores completas en hitos 01/05/10, con 01 ya aprobado.
+
+**Próxima `p`:** comprobar CI del bloque 03; si PASS, continuar exactamente bloque 04 `tm217;tm218;tm219;tm220;tm221`. Si falla, diagnosticar/reparar únicamente W05. No tocar `main`, V28, árbitra, PR118, ramas ajenas, catálogo/learnsets/políticas, 19 MT legacy ni saves reales. Godot headless no acredita UI/GPU. No hacer merge.
+
+---
+
 # IA5/W05 — CAMPAÑA_006 · BLOQUE 02/10 CI PASS VERIFICADA (2026-11-04)
 
 **Rama:** `codex/calvo-items-20261104-w05-camp006`. **Bloque 02:** `tm207;tm208;tm209;tm210;tm211` → `temper_flare;whirlpool;muddy_water;supercell_slam;electroweb` en `scarlet-violet`. Fixture acumulativo 2/10, diez MT, sin modificación de producción ni datos canónicos. **CI real [#41767616709](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41767616709), SHA funcional `1ea865c48184b723874868322f467a3dc263c6ab`, job 126369600349, `completed/success`**. Recibos comprobados de job: `CAMP006_W05_MANIFEST_PASS reserved=10 completed=2 ids=49 kind=NEW_IDS`, `CAMP006_W05_PY PASS blocks=2 checks=98`, `CAMP006_GATE_PY_PASS worker=W05 blocks=2 checks=98`, `CAMP006_W05_GODOT PASS blocks=2 checks=376`, `CAMP006_GATE_GODOT_PASS worker=W05 blocks=2 checks=376`. CAMPAÑA_003/004/005 no se corrieron en este run por hitos establecidos (01/05/10), sí pasaron en hito 01.
