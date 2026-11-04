@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "campaign": "CAMP_006",
+  "worker": "W03",
+  "kind": "INTEGRATION_BACKLOG",
+  "blocks": [
+    {
+      "bloque": "01",
+      "ids": [
+        "escape_rope"
+      ],
+      "family": "WORLD_RETURN",
+      "contract": "DEMO_RETURN_ANCHOR_V1",
+      "functional_level": "L2_L3_NAVIGATION_PILOT_ONLY",
+      "item_effect_fully_connected": false,
+      "world_return_pilot": true,
+      "inventory_commit": false,
+      "savev2_schema_changed": false,
+      "source_region": "cave",
+      "destination_region": "surface",
+      "anchor_node": "SurfaceCaveReturn",
+      "portal_node": "CaveExit",
+      "required_owner": "IA6",
+      "pending_interface": "field_item_bag.use(escape_rope) -> session guard -> EscapeRopeDemoPilot.preview -> staged inventory -1 -> traverse_portal -> save world + inventory atomically or rollback on failure",
+      "positive_cases": [
+        "real_field_demo_cave_portal_enter",
+        "escape_rope_demo_return_via_traversal",
+        "valid_surface_anchor",
+        "native_save_write_read_restores_returned_position"
+      ],
+      "negative_cases": [
+        "no_anchor_in_surface",
+        "locked_movement_no_spend",
+        "invalid_anchor_metadata_no_spend"
+      ],
+      "notes": "L3 navigation and existing native save tested; no actual bag consumption or UI binding until IA6 authorizes shared seam."
+    }
+  ]
+}
