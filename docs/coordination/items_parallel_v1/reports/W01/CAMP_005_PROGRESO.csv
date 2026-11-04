@@ -1,1 +1,2 @@
 bloque,ids,estado,sha_pruebas,ci_run,notas
+01,"black_glasses;dragon_fang;hard_stone",DEPENDENCIA_DOCUMENTADA,PENDIENTE_SHA_BLOQUE01,CI_NO_CONFIGURADA_CAMP005,9_casos;12_pares;36_variantes;combate_positivo;tipo_no_coincidente;estado;SaveV2;BLOQUEO_WORKFLOW_IA6
