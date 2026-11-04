@@ -124,6 +124,104 @@ func _case(caso: Dictionary) -> void:
     DirAccess.remove_absolute(ProjectSettings.globalize_path(String(caso.get("save", ""))))
     print("CAMP006_W04_APPLE id=", String(item), " target=", String(target), " status=L3_SCENE_BAG_AND_NATIVE_SAVEV2")
 
+func _form_snapshot_02(api_id: int) -> Dictionary:
+    var path := "res://data/api/v2/pokemon-form/" + str(api_id) + "/index.json"
+    var raw: Variant = JSON.parse_string(FileAccess.get_file_as_string(path))
+    check(raw is Dictionary, "02_form_snapshot_json_" + str(api_id))
+    return raw as Dictionary if raw is Dictionary else {}
+
+func _case_form_02(caso: Dictionary) -> void:
+    var item := StringName(caso.get("item_id", ""))
+    var source := StringName(caso.get("source", ""))
+    var target := StringName(caso.get("target", ""))
+    var name := String(item)
+    var creature_id := StringName("w04_c006_02_" + name)
+    var catalog: DefinitionCatalog = scene.field_definitions()
+    var collection: PlayerCollection = scene.field_collection()
+    check(collection != null and catalog != null and catalog.species(source) != null and catalog.species(target) != null,
+        name + "/02_real_demo_catalog")
+    if collection == null or catalog == null or catalog.species(source) == null:
+        return
+    var source_form := _form_snapshot_02(int(caso.get("source_form_api_id", 0)))
+    var target_form := _form_snapshot_02(int(caso.get("target_form_api_id", 0)))
+    check(String(source_form.get("form_name", "")) == String(caso.get("source_form", "")) and
+        String(source_form.get("pokemon", {}).get("name", "")) == String(source),
+        name + "/02_canonical_source_form")
+    check(String(target_form.get("pokemon", {}).get("name", "")) == String(target) and
+        not bool(source_form.get("is_battle_only", true)) and not bool(target_form.get("is_battle_only", true)),
+        name + "/02_source_target_are_permanent_forms")
+    var mon: CreatureInstance = make_mon(source, creature_id, catalog)
+    check(mon != null, name + "/02_real_creature")
+    if mon == null:
+        return
+    collection.party = CreatureParty.new()
+    check(collection.party.add_creature(mon), name + "/02_party_owns_creature")
+    check(collection.inventory.set_quantity(item, 2), name + "/02_two_items")
+    var before_data: Dictionary = mon.to_dict()
+    var before: String = snapshot(collection)
+    # This demonstrates the missing consumer/source without inventing a per-creature label.
+    check(not before_data.has("form_id") and not before_data.has("source_form_id"),
+        name + "/02_form_identity_not_serialized_yet")
+    var bag: Variant = scene._item_bag
+    check(scene.toggle_item_bag() and bag.visible, name + "/02_visual_bag_open")
+    check(scene.field_item_service_is_current(bag.service), name + "/02_real_service_binding")
+    check(choose_item(bag, item) and choose_creature(bag, creature_id), name + "/02_item_and_creature_selected")
+    check(bag.service.evolution_options(item, creature_id) == [target], name + "/02_species_evolution_available")
+    var counterpart := &"cracked_pot" if item == &"chipped_pot" else &"chipped_pot" if item == &"cracked_pot" else &"unremarkable_teacup" if item == &"masterpiece_teacup" else &"masterpiece_teacup"
+    # Both pot choices are offered for the SAME individual: this must be fixed by IA6's
+    # persistent form producer, not guessed at the moment the item is used.
+    check(bag.service.evolution_options(counterpart, creature_id) == [target],
+        name + "/02_form_gate_not_connected")
+    var applied: Dictionary = bag._apply("use")
+    check(applied.get("accepted", false) and StringName(applied.get("species_id", "")) == target,
+        name + "/02_species_evolution_positive_from_visual_bag")
+    check(bag._result.text.begins_with("¡Ha evolucionado a "), name + "/02_visual_confirmation")
+    var evolved: CreatureInstance = collection.owned_creature(creature_id)
+    check(evolved != null and evolved.instance_id == creature_id and evolved.species_id == target and
+        collection.location_of(creature_id) == &"PARTY" and collection.inventory.quantity(item) == 1,
+        name + "/02_identity_and_single_item_consumption")
+    if evolved == null:
+        bag.hide()
+        await process_frame
+        return
+    var after_data: Dictionary = evolved.to_dict()
+    check(before_data.get("ivs") == after_data.get("ivs") and before_data.get("evs") == after_data.get("evs") and
+        before_data.get("move_ids") == after_data.get("move_ids") and before_data.get("experience") == after_data.get("experience") and
+        before_data.get("friendship") == after_data.get("friendship") and before_data.get("nature_id") == after_data.get("nature_id") and
+        before_data.get("level") == after_data.get("level"), name + "/02_persistent_attributes_preserved")
+    check(not after_data.has("form_id") and not after_data.has("source_form_id"),
+        name + "/02_evolved_form_not_serialized_yet")
+    var committed: String = snapshot(collection)
+    var again: Dictionary = bag._apply("use")
+    check(not again.get("accepted", false) and snapshot(collection) == committed,
+        name + "/02_second_use_rejected_no_spend")
+    bag.hide()
+    await process_frame
+    var bridge: Variant = scene._native_battles
+    var uri := String(caso.get("save", ""))
+    bridge.save_path = uri
+    check(scene.field_player_movement_enabled() and not bridge.occupied(), name + "/02_demo_save_idle")
+    check(bridge.save_game(), name + "/02_native_scene_save")
+    check(collection.inventory.add(item, 1), name + "/02_modify_inventory_after_save")
+    check(collection.inventory.quantity(item) == 2, name + "/02_staged_mutation")
+    check(await bridge.load_game(), name + "/02_native_scene_reload")
+    var loaded: PlayerCollection = scene.field_collection()
+    check(loaded != null and not is_same(loaded, collection), name + "/02_new_aggregate_published")
+    if loaded != null:
+        var saved: CreatureInstance = loaded.owned_creature(creature_id)
+        check(saved != null and saved.instance_id == creature_id and saved.species_id == target and
+            loaded.location_of(creature_id) == &"PARTY" and loaded.inventory.quantity(item) == 1,
+            name + "/02_savev2_target_and_bag")
+        if saved != null:
+            var loaded_data: Dictionary = saved.to_dict()
+            check(after_data.get("ivs") == loaded_data.get("ivs") and after_data.get("evs") == loaded_data.get("evs") and
+                after_data.get("move_ids") == loaded_data.get("move_ids") and after_data.get("experience") == loaded_data.get("experience") and
+                after_data.get("friendship") == loaded_data.get("friendship") and after_data.get("nature_id") == loaded_data.get("nature_id"),
+                name + "/02_savev2_attributes")
+    DirAccess.remove_absolute(ProjectSettings.globalize_path(uri))
+    print("CAMP006_W04_POT id=", name, " source=", String(source), " target=", String(target),
+        " status=L3_SPECIES_EVOLUTION__FORM_AUTHENTICITY_MISSING producer=CreatureInstance_form+Capture+SaveV2")
+
 func _run() -> void:
     var fixture: Variant = JSON.parse_string(FileAccess.get_file_as_string(FIXTURE))
     check(fixture is Dictionary, "fixture_json")
@@ -131,9 +229,9 @@ func _run() -> void:
         finish()
         return
     var blocks: Array = fixture.get("blocks", [])
-    check(fixture.get("campaign") == "CAMP_006" and blocks.size() == 1 and blocks[0].get("block") == "01",
-        "block_01_exact")
-    if blocks.size() != 1:
+    check(fixture.get("campaign") == "CAMP_006" and blocks.size() == 2 and blocks[0].get("block") == "01" and blocks[1].get("block") == "02",
+        "blocks_01_02_exact")
+    if blocks.size() != 2:
         finish()
         return
     scene = load("res://scenes/visual/field_demo.tscn").instantiate()
@@ -144,6 +242,10 @@ func _run() -> void:
     for caso: Dictionary in blocks[0].get("cases", []):
         await _case(caso)
     check(blocks[0].get("cases", []).size() == 3, "three_apples_no_new_ids")
+    var pot_cases: Array = blocks[1].get("cases", [])
+    check(pot_cases.size() == 4, "02_four_authorized_pots_cups")
+    for caso: Dictionary in pot_cases:
+        await _case_form_02(caso)
     if scene != null and is_instance_valid(scene):
         scene.queue_free()
     await process_frame
@@ -154,7 +256,7 @@ func finish() -> void:
         return
     closed = true
     if errors.is_empty():
-        print("CAMP006_W04_GODOT PASS blocks=1 checks=", checks)
+        print("CAMP006_W04_GODOT PASS blocks=2 checks=", checks)
     else:
         print("CAMP006_W04_GODOT FAIL errors=", JSON.stringify(errors))
     quit(0 if errors.is_empty() else 1)
