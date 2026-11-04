@@ -18,6 +18,8 @@ static func preview(field: Node2D) -> Dictionary:
 		return _deny("missing_world")
 	if not field.has_method("field_can_use_items") or not field.field_can_use_items():
 		return _deny("field_locked")
+	if field.player == null or not field.player.movement_enabled:
+		return _deny("field_locked")
 	var region: StringName = field.technical_region_id()
 	if not ANCHORS.has(region):
 		return _deny("no_return_anchor")
