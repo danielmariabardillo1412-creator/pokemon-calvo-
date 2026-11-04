@@ -1,3 +1,29 @@
+# ESTADO VIGENTE IA5/W05 — CAMPAÑA_006 · BLOQUE 01/10 CI PASS VERIFICADA (2026-11-04)
+
+**Identidad y control:** IA5/W05, MT/libros. **Rama exclusiva activa:** `codex/calvo-items-20261104-w05-camp006`, creada por IA6 a partir del cierre CAMP005 en SHA `f74b8d33c6d4e7853dcc4fdadfe3a62bf2050d0b`. Autoridad IA6 en `codex/calvo-items-20261101-arbitro`: `CAMPAIGN_006_W05_GATE.md`, `CAMPAIGN_006_W05_QUEUE_APPROVED.csv`, `campaigns/CAMP_006_W05.md`, `AUTONOMOUS_REPAIR_V5.md`. **Esta cabecera prevalece sobre el histórico posterior de CAMP005 FINALIZADA**: nueva campaña explícitamente autorizada. Cola oficial copiada idéntica a propia rama, blob `0f3f1af220dab2e2197b0f181a6f113a544828a6`.
+
+**CAMP006 AUTORIZADA:** 49 MT activas en Scarlet/Violet, 10 microbloques (01..09 de 5 y 10 de 4); 28 `tm202`–`tm229` y 21 MT de numeración anterior aún pendientes. Las 19 históricas sin mapeo SV están excluidas. No inventar IDs ni cambiar fuentes. CAMP003, CAMP004, CAMP005 (60 MT cada una) conservadas como regresión.
+
+**BLOQUE 01 EJECUTADO Y CERTIFICADO:** `tm202;tm203;tm204;tm205;tm206` → `pain_split;psych_up;double_edge;endeavor;petal_blizzard` desde perfil SV. Fixture `tests/fixtures/parallel_items/w05_campaign_006.json` con **1 bloque/5 MT** publicado en commit `450b10b189585977a3f30f044c95d38d1ab9062b`; progreso `reports/W05/CAMP_006_PROGRESO.csv` con fila 01 `EN_CI_AUTOMATICA` (histórica), commit `6eee6ccf80d41bae36063d1653babf085293426e`. Ejecutores específicos `tests/tools/test_parallel_items_w05_campaign_006.py` y `tests/gameplay/parallel_items_w05_campaign_006.gd` hacen pruebas efectivas, no solo metadatos: learnset SV compatible/incompatible, propietario, ausencia stock, consumo de una unidad, PP, movimiento conocido/rechazado sin mutación e identidad/SaveV2. Manifest `tests/tools/test_parallel_items_w05_campaign_006_manifest.py`, workflow `.github/workflows/parallel-camp006-w05-autoci.yml`. Todo reside únicamente en rama W05.
+
+**CI FINAL DEL BLOQUE 01 PASS:** [Actions #41764725393](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41764725393), SHA de pruebas `cfb95bd64db841bdc8500129ffa781be34bdc99a`, job `126360311722`, `completed/success`. Recibos reales:
+- `CAMP006_W05_MANIFEST_PASS reserved=10 completed=1 ids=49 kind=NEW_IDS`
+- `CAMP006_W05_PY PASS blocks=1 checks=49`
+- `CAMP006_GATE_PY_PASS worker=W05 blocks=1 checks=49`
+- `CAMP006_W05_GODOT PASS blocks=1 checks=196`
+- `CAMP006_GATE_GODOT_PASS worker=W05 blocks=1 checks=196`
+- REGRESIÓN CAMP005 (60 MT): `CAMP005_W05_PY PASS blocks=10 checks=580`, `CAMP005_W05_GODOT PASS blocks=10 checks=2166`
+- REGRESIÓN CAMP004 (60 MT): `CAMP004_W05_PY PASS blocks=10 checks=580`, `CAMP004_W05_GODOT PASS blocks=10 checks=2166`
+- REGRESIÓN CAMP003 (60 MT): `CAMP003_W05_PY PASS blocks=10 checks=580`, `CAMP003_W05_GODOT PASS blocks=10 checks=2166`.
+
+**Incidencias y soluciones propias W05:** CI inicial YAML inválida corregida `76196545511d694052d2eea9a56bdc7d70f2d2f0` y bootstrap estructural PASS [#41763897134](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41763897134). Rutas de cola equivocadas de Python/Godot corregidas `d464cdafc0bbb97379f48887c6ef4cbd3170509d`/`22032718dc7984373df505c664ff5ddd79aa9043`. Exclusión histórica incorrectamente aplicada a cola 006 corregida `7343c5367947de810f8c1f62b0a83733b0771ab9`. Godot `all_blocks` fuera de alcance corregido `cfb95bd64db841bdc8500129ffa781be34bdc99a`. Informe de auditoría detallado `reports/W05/CAMP_006_ITER_01.md`, última certificación commit `fd94264ea03c3dd7fc6f762337c2b5f86bf56da9`. Ninguna incidencia exigió parchear producción ni relajar pruebas.
+
+**PRÓXIMA `p`:** ejecutar exactamente bloque **02** `tm207;tm208;tm209;tm210;tm211`, cotejar de nuevo cola IA6 y mapeo SV, añadir cinco casos a fixture y una fila CSV, validar Python/Godot y esperar los cuatro recibos reales CAMP006. Preservar positivos/negativos previos. Regresiones completas CAMP005/004/003 volverán a ejecutarse en hitos 05/10 o parche de producción, y ya se han ejecutado en 01. Si falla, diagnosticar/autorreparar en W05 bajo V5, sin tocar políticas/datos ni API compartida no asignada.
+
+**LÍMITES:** prohibido modificar `main`, V28, PR118, árbitra, W01–W04, ramas ajenas, catálogo y learnsets canónicos, 19 máquinas inactivas, saves reales o hacer merge. La CI Godot headless acredita pruebas funcionales y SaveV2, **no UI/GPU ni integración global**. Al cerrar 10/10 declarar `CAMPAÑA_006_FINALIZADA` y STOP, sin bloque 11.
+
+---
+
 # ESTADO DEFINITIVO IA5/W05 — CAMPAÑA_005_FINALIZADA · CI PASS (2026-11-04)
 
 **IDENTIDAD Y RAMA EXCLUSIVA:** IA5/W05, MT y libros, `codex/calvo-items-20261103-w05-camp005`. Autoridad IA6 `CAMPAIGN_005_W05_GATE.md`, `CAMPAIGN_005_W05_QUEUE_APPROVED.csv`, `campaigns/CAMP_005_W05.md` y `AUTONOMOUS_REPAIR_V5.md`. **Esta cabecera prevalece sobre todas las anteriores** y contiene el cierre definitivo.
