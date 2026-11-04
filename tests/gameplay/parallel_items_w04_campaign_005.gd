@@ -689,6 +689,84 @@ func _auditar_fusion_08(catalogo: DefinitionCatalog, caso: Dictionary) -> void:
 	print("CAMP005_W04_FUSION item=", String(item), " source=", String(origen), " partner=", String(socio), " target_form=", target_form, " status=DEPENDENCIA_DOS_CRIATURAS need=fusion_transaction+partner_identity+savev2")
 
 
+func _auditar_cambio_forma_09(catalogo: DefinitionCatalog, caso: Dictionary) -> void:
+	var item := StringName(caso.get("item_id", ""))
+	var origen := StringName(caso.get("source_species", ""))
+	var especie: CreatureSpecies = catalogo.species(origen)
+	var key := String(item) + "/" + String(origen)
+	comprobar(catalogo.item(item) != null and especie != null, key + "/09_fuente_y_especie_en_catalogo")
+	if especie == null:
+		return
+	var species_raw := _abrir("res://data/api/v2/pokemon-species/" + str(int(caso.get("species_number", 0))) + "/index.json")
+	comprobar(String(species_raw.get("name", "")) == String(origen), key + "/09_fuente_especie")
+	comprobar(bool(species_raw.get("forms_switchable", false)) == bool(caso.get("forms_switchable", false)), key + "/09_forms_switchable_no_inventado")
+	var count_base := 0
+	var target_counts: Dictionary = {}
+	for value in caso.get("target_varieties", []):
+		target_counts[String(value)] = 0
+	for row: Dictionary in species_raw.get("varieties", []):
+		var nombre := String(row.get("pokemon", {}).get("name", ""))
+		if nombre == String(caso.get("base_variety", "")) and bool(row.get("is_default", false)):
+			count_base += 1
+		if target_counts.has(nombre) and not bool(row.get("is_default", false)):
+			target_counts[nombre] = int(target_counts[nombre]) + 1
+	comprobar(count_base == 1 and target_counts.size() > 0, key + "/09_base_y_destinos_declarados")
+	for nombre: String in target_counts.keys():
+		comprobar(int(target_counts[nombre]) == 1, key + "/09_destino_variedad_" + nombre)
+	var chain := _abrir("res://data/api/v2/evolution-chain/" + str(int(caso.get("evolution_chain", 0))) + "/index.json")
+	comprobar(String(chain.get("chain", {}).get("species", {}).get("name", "")) == String(origen) and chain.get("chain", {}).get("evolves_to", []).is_empty(), key + "/09_cambio_forma_no_evolucion")
+	comprobar(especie.evolutions.is_empty(), key + "/09_sin_evolucion_runtime")
+	if item == &"zygarde_cube":
+		comprobar(not bool(caso.get("forms_switchable", true)) and target_counts.has("zygarde-complete") and String(caso.get("route_kind", "")).contains("power_construct"), key + "/09_complete_no_direct_cube")
+	var pc := _crear(catalogo, origen)
+	comprobar(pc != null, key + "/09_crear_criatura")
+	if pc == null:
+		return
+	var in_storage := bool(caso.get("storage", false))
+	if in_storage:
+		comprobar(pc.deposit(ID), key + "/09_trasladar_al_pc")
+	var lugar := &"STORAGE" if in_storage else &"PARTY"
+	comprobar(pc.location_of(ID) == lugar and pc.owned_creature(ID) != null, key + "/09_propiedad_party_pc")
+	var servicio := Servicio.new()
+	comprobar(servicio.configure(pc, catalogo, func(): return true), key + "/09_servicio")
+	comprobar(not servicio.holdable(item), key + "/09_no_equipable")
+	comprobar(pc.inventory.add(item, 2), key + "/09_posesion_dos_unidades")
+	var before := _estado(pc)
+	comprobar(servicio.evolution_options(item, ID).is_empty(), key + "/09_no_evolucion_mochila")
+	var usar: Dictionary = servicio.use_item(item, ID)
+	comprobar(not usar.get("accepted", false) and _estado(pc) == before, key + "/09_uso_campo_rechazado")
+	var equip: Dictionary = servicio.equip(item, ID)
+	comprobar(not equip.get("accepted", false) and _estado(pc) == before, key + "/09_equipar_rechazado")
+	var evolve: Dictionary = servicio.evolve(item, ID, origen)
+	comprobar(not evolve.get("accepted", false) and _estado(pc) == before, key + "/09_evolve_no_es_forma")
+	var ajeno: Dictionary = servicio.use_item(item, &"w04_c005_ajeno")
+	comprobar(not ajeno.get("accepted", false) and _estado(pc) == before, key + "/09_ajeno_sin_consumo")
+	var criatura := pc.owned_creature(ID)
+	comprobar(criatura != null and criatura.species_id == origen and criatura.held_item_id == &"" and criatura.battle_transform_original.is_empty(), key + "/09_especie_y_batalla_intactas")
+	comprobar(pc.inventory.quantity(item) == 2 and pc.location_of(ID) == lugar, key + "/09_inventario_y_lugar_intactos")
+	var snap := SaveGameData.build(pc.party, pc.storage, pc.inventory)
+	comprobar(snap.validate().get("ok", false) and snap.creatures.size() == 1, key + "/09_savev2_unico_id_valido")
+	comprobar(not criatura.to_dict().has("form_id") and not criatura.to_dict().has("form_variant_id") and not criatura.to_dict().has("cells_count"), key + "/09_no_inventar_esquema_forma")
+	var uri := "user://w04_c005_09_" + String(item) + "_" + String(origen) + ".json"
+	var repo := SaveGameRepository.new()
+	var save: SaveResult = repo.save_collection(uri, pc)
+	comprobar(save.ok, key + "/09_guardar_savev2")
+	if save.ok:
+		var load: LoadResult = repo.load(uri)
+		comprobar(load.ok and load.schema_version == 2, key + "/09_cargar_savev2")
+		if load.ok:
+			var creature_saved := load.storage.get_creature(ID) if in_storage else load.party.get_creature(ID)
+			var other_place_empty := load.party.get_creature(ID) == null if in_storage else load.storage.get_creature(ID) == null
+			comprobar(creature_saved != null and other_place_empty and creature_saved.instance_id == ID and creature_saved.species_id == origen and load.inventory.quantity(item) == 2, key + "/09_identidad_lugar_inventario_savev2")
+			if creature_saved != null:
+				var orig_data: Dictionary = criatura.to_dict()
+				var save_data: Dictionary = creature_saved.to_dict()
+				comprobar(orig_data.get("ivs") == save_data.get("ivs") and orig_data.get("evs") == save_data.get("evs") and orig_data.get("move_ids") == save_data.get("move_ids") and orig_data.get("experience") == save_data.get("experience") and orig_data.get("friendship") == save_data.get("friendship"), key + "/09_atributos_savev2")
+	DirAccess.remove_absolute(ProjectSettings.globalize_path(uri))
+	comprobar(_estado(pc) == before and pc.location_of(ID) == lugar, key + "/09_estado_final_identico")
+	print("CAMP005_W04_FORM id=", String(item), " source=", String(origen), " targets=", ",".join(caso.get("target_varieties", [])), " status=DEPENDENCIA_FORMA_ACTIVA need=form_action+restore+savev2")
+
+
 func _ejecutar() -> void:
 	var fixture := _abrir(FIXTURE)
 	var policy := _abrir(TRADE_POLICY)
@@ -703,8 +781,8 @@ func _ejecutar() -> void:
 	comprobar(earlier.get("trade_level_conversion", {}).get("levels_selected") == null, "V25_sin_niveles")
 	comprobar(String(policy.get("correct_future_rule", "")).contains("original equipped evolution item"), "conservar_objeto_equipado")
 	var blocks: Array = fixture.get("blocks", [])
-	comprobar(blocks.size() == 8 and [blocks[0].get("block"), blocks[1].get("block"), blocks[2].get("block"), blocks[3].get("block"), blocks[4].get("block"), blocks[5].get("block"), blocks[6].get("block"), blocks[7].get("block")] == ["01", "02", "03", "04", "05", "06", "07", "08"], "bloques_01_a_08_secuenciales")
-	if blocks.size() != 8:
+	comprobar(blocks.size() == 9 and [blocks[0].get("block"), blocks[1].get("block"), blocks[2].get("block"), blocks[3].get("block"), blocks[4].get("block"), blocks[5].get("block"), blocks[6].get("block"), blocks[7].get("block"), blocks[8].get("block")] == ["01", "02", "03", "04", "05", "06", "07", "08", "09"], "bloques_01_a_09_secuenciales")
+	if blocks.size() != 9:
 		_finalizar()
 		return
 	for index in range(2):
@@ -739,6 +817,10 @@ func _ejecutar() -> void:
 	comprobar(fusiones.size() == 6, "08_seis_parejas_cuatro_objetos")
 	for caso: Dictionary in fusiones:
 		_auditar_fusion_08(catalogo, caso)
+	var cambios: Array = blocks[8].get("cases", [])
+	comprobar(cambios.size() == 8, "09_ocho_especies_cinco_objetos")
+	for caso: Dictionary in cambios:
+		_auditar_cambio_forma_09(catalogo, caso)
 	_finalizar()
 
 func _finalizar() -> void:
@@ -746,7 +828,7 @@ func _finalizar() -> void:
 		return
 	cerrado = true
 	if errores.is_empty():
-		print("CAMP005_W04_GODOT PASS blocks=8 checks=", checks)
+		print("CAMP005_W04_GODOT PASS blocks=9 checks=", checks)
 	else:
 		print("CAMP005_W04_GODOT FAIL errors=", JSON.stringify(errores))
 	quit(0 if errores.is_empty() else 1)
