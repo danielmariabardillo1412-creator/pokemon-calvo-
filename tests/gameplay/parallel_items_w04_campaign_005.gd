@@ -764,7 +764,7 @@ func _auditar_cambio_forma_09(catalogo: DefinitionCatalog, caso: Dictionary) -> 
 				comprobar(orig_data.get("ivs") == save_data.get("ivs") and orig_data.get("evs") == save_data.get("evs") and orig_data.get("move_ids") == save_data.get("move_ids") and orig_data.get("experience") == save_data.get("experience") and orig_data.get("friendship") == save_data.get("friendship"), key + "/09_atributos_savev2")
 	DirAccess.remove_absolute(ProjectSettings.globalize_path(uri))
 	comprobar(_estado(pc) == before and pc.location_of(ID) == lugar, key + "/09_estado_final_identico")
-	print("CAMP005_W04_FORM id=", String(item), " source=", String(origen), " targets=", ",".join(caso.get("target_varieties", [])), " status=DEPENDENCIA_FORMA_ACTIVA need=form_action+restore+savev2")
+	print("CAMP005_W04_FORM id=", String(item), " source=", String(origen), " targets=", str(caso.get("target_varieties", [])), " status=DEPENDENCIA_FORMA_ACTIVA need=form_action+restore+savev2")
 
 
 func _ejecutar() -> void:
