@@ -30,6 +30,31 @@
           "move_id": "petal_blizzard"
         }
       ]
+    },
+    {
+      "block": "02",
+      "items": [
+        {
+          "item_id": "tm207",
+          "move_id": "temper_flare"
+        },
+        {
+          "item_id": "tm208",
+          "move_id": "whirlpool"
+        },
+        {
+          "item_id": "tm209",
+          "move_id": "muddy_water"
+        },
+        {
+          "item_id": "tm210",
+          "move_id": "supercell_slam"
+        },
+        {
+          "item_id": "tm211",
+          "move_id": "electroweb"
+        }
+      ]
     }
   ]
 }
