@@ -1,3 +1,9 @@
+## CAMP006 bloque02: PAUSA por contrato compartido IA6
+
+La revisión del gate mantiene FieldItemBag, FieldItemService, sesión e infraestructura SaveV2 bajo responsabilidad de IA6. El piloto 01/10 sigue aprobado. El bloque02 requiere conectar inventario, traslado y persistencia en una transacción; no está autorizado hacerlo unilateralmente. Ticket: `reports/W03/CAMP_006_BLOCK_02_IA6_INTERFACE_BLOCKER.md` (commit `723525ec`). No aumentar el progreso ni repetir pruebas negativas. WORLD_RETURN detenida hasta asignación explícita de la interfaz por IA6.
+
+---
+
 ## Última verificación tras actualizar el CSV
 
 [GitHub Actions #41764265082](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41764265082), HEAD `eead52006beb011f9a4c994cc4a7e9ced0a1c43a`, **completed/success**. La CI volvió a comprobar el mismo código funcional y el estado final del progreso: `CAMP006_W03_PY PASS blocks=1 checks=17`, `CAMP006_W03_GODOT PASS blocks=1 checks=20`, regresión `CAMP005_W03_PY PASS blocks=10 checks=169` y `CAMP005_W03_GODOT PASS blocks=10 checks=208`. El bloque 01 se considera **piloto de navegación L2/L3 validado**, no una Cuerda Huida conectada al botón de mochila. El contrato transaccional de IA6 sigue pendiente.
