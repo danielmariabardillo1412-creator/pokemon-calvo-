@@ -1,1 +1,2 @@
 bloque,ids,estado,sha_pruebas,ci_run,notas
+01,tm202;tm203;tm204;tm205;tm206,EN_CI_AUTOMATICA,450b10b189585977a3f30f044c95d38d1ab9062b,PENDIENTE_GITHUB_ACTIONS,Prueba_real_FIS_teach_learnset_PP_consumo_rollback_dueno_SaveV2_regresiones_005_004_003
