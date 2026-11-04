@@ -3,7 +3,64 @@
   "worker": "W02",
   "campaign": "CAMP_006",
   "kind": "RECOVERY_THEN_NEW",
-  "status": "CI005_FAILURE_RECOVERY_REQUIRED",
-  "blocks": [],
-  "warning": "BOOTSTRAP 0/10 no prueba funciones. Mantener test positivo y regresiones; no falsificar recibos."
+  "status": "CI005_RECOVERY_AWAITING_RUN",
+  "source_campaign": "CAMP_005",
+  "source_fixture": "tests/fixtures/parallel_items/w02_campaign_005.json",
+  "modes": [
+    "active",
+    "none",
+    "reserve"
+  ],
+  "blocks": [
+    {
+      "block": "01",
+      "family": "RECOVERY_CI005",
+      "ids": [
+        "exp_candy_xl",
+        "relaxed_mint"
+      ],
+      "purpose": "Reproducir fallo del run 41742682811, comparar curva XP independiente, asegurar rechazo mint sin efectos secundarios; CAMP005 10/10 completa es gate bloque02.",
+      "cases": [
+        {
+          "scenario": "exp_candy_xl_level99_gain",
+          "id": "exp_candy_xl",
+          "kind": "growth",
+          "level": 99,
+          "nominal_gain": 30000,
+          "medium_slow_level99": 1027103,
+          "medium_slow_level100": 1059860,
+          "expected_exp": 1057103,
+          "expected_level": 99,
+          "exp_remaining": 2757,
+          "expected_cap": false
+        },
+        {
+          "scenario": "exp_candy_xl_level99_cap_50xp",
+          "id": "exp_candy_xl",
+          "kind": "growth",
+          "level": 99,
+          "exp_until_next": 50,
+          "nominal_gain": 30000,
+          "expected_exp_gain": 50,
+          "expected_exp": 1059860,
+          "expected_level": 100,
+          "expected_cap": true
+        },
+        {
+          "scenario": "relaxed_mint_level100",
+          "id": "relaxed_mint",
+          "kind": "mint_dependency",
+          "level": 100,
+          "expected_status": "DEPENDENCY_MISSING",
+          "expected_reason": "field_effect_not_connected",
+          "expected_applies": false
+        }
+      ]
+    }
+  ],
+  "limitations": [
+    "El mensaje relaxed_mint_level100: bloque íntegro es etiqueta agregada del fallo del bloque Godot, no una tercera aserción de menta fallida.",
+    "No marca recuperación exitosa hasta el recibo Godot y Python de los diez bloques CAMP005 en esta rama y regresiones CAMP004/CAMP003. No ejecutar fila02 antes de PASS.",
+    "Sin cambios de producción; sustituir un falso expect_cap por nuevo expect_no_cap fuerte, preservando todos los escenarios CAMP005."
+  ]
 }
