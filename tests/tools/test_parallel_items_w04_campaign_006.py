@@ -10,6 +10,10 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 BASE = ROOT / "docs/coordination/items_parallel_v1"
 IDS = ("sweet_apple", "tart_apple", "syrupy_apple")
+TRADE_03 = {
+    "dragon_scale": ("seadra", "kingdra", 54, "dragon-scale", "gold-silver"),
+    "electirizer": ("electabuzz", "electivire", 60, "electirizer", "diamond-pearl"),
+}
 POTS_02 = {
     "chipped_pot": ("sinistea", "polteageist", "antique", 10344, 10345, "antique"),
     "cracked_pot": ("sinistea", "polteageist", "phony", 854, 855, "phony"),
@@ -41,7 +45,7 @@ def main():
     fx = json.loads((ROOT / "tests/fixtures/parallel_items/w04_campaign_006.json").read_text(encoding="utf-8"))
     check(fx["worker"] == "W04" and fx["campaign"] == "CAMP_006" and fx["kind"] == "INTEGRATION_BACKLOG",
           "identity and non-new campaign")
-    check(fx["new_item_ids"] == 0 and len(fx["blocks"]) == 2, "no new objects; exactly two authorized blocks")
+    check(fx["new_item_ids"] == 0 and len(fx["blocks"]) == 3, "no new objects; exactly three authorized blocks")
     block = fx["blocks"][0]
     check(block["block"] == "01" and block["ids"] == list(IDS) and block["family"] == "EVOLUTION_E2E",
           "block 01 queue scope")
@@ -68,14 +72,17 @@ def main():
     q = rows(BASE / "CAMPAIGN_006_W04_QUEUE_APPROVED.csv") if (BASE / "CAMPAIGN_006_W04_QUEUE_APPROVED.csv").exists() else None
     # Queue is published only in the arbiter branch until IA6 synchronizes it.
     if q is not None:
-        check(q[0]["bloque"] == "01" and q[0]["ids"].split(";") == list(IDS) and q[1]["bloque"] == "02" and q[1]["ids"].split(";") == list(POTS_02), "official queue copied unchanged")
+        check(q[0]["bloque"] == "01" and q[0]["ids"].split(";") == list(IDS) and q[1]["bloque"] == "02" and q[1]["ids"].split(";") == list(POTS_02) and q[2]["bloque"] == "03" and q[2]["ids"].split(";") == list(TRADE_03), "official queue copied unchanged")
     progress = rows(BASE / "reports/W04/CAMP_006_PROGRESO.csv")
-    check(len(progress) == 2 and progress[0]["bloque"] == "01" and progress[0]["ids"].split(";") == list(IDS),
+    check(len(progress) == 3 and progress[0]["bloque"] == "01" and progress[0]["ids"].split(";") == list(IDS),
           "first progress row retained")
     check(progress[1]["bloque"] == "02" and progress[1]["ids"].split(";") == list(POTS_02),
           "progress row02 exact scope")
     check(progress[1]["estado"] in ("EN_CI_AUTOMATICA", "DEPENDENCIA_DOCUMENTADA"),
           "L3 species positive but form gate must not be falsely certified")
+    check(progress[2]["bloque"] == "03" and progress[2]["ids"].split(";") == list(TRADE_03)
+          and progress[2]["estado"] in ("EN_CI_AUTOMATICA", "DEPENDENCIA_DOCUMENTADA"),
+          "03 exact official scope, positive held pilot without level approval")
     check(progress[0]["estado"] in ("ENTREGADO_PENDIENTE_CI", "CI_PASS_VERIFICADO"),
           "estado compatible con entrega pendiente o CI aprobada")
     if progress[0]["estado"] == "CI_PASS_VERIFICADO":
@@ -109,7 +116,7 @@ def main():
         'exactly_one_consumed', 'persistent_stats_and_moves', 'cannot_evolve_twice',
         'bridge.save_game()', 'bridge.load_game()', 'evolved_target_loaded',
         'spent_apple_and_party_loaded', 'attributes_loaded',
-        'CAMP006_W04_GODOT PASS blocks=2 checks='
+        'CAMP006_W04_GODOT PASS blocks=3 checks='
     ):
         check(token in runner, "Godot L3 runner missing real observable action: " + token)
     # 02: canonical forms exist (pokemon-form API) but CreatureInstance and SaveV2
@@ -159,9 +166,78 @@ def main():
                   "02_persistent_attributes_preserved", "02_native_scene_save",
                   "02_native_scene_reload", "02_savev2_target_and_bag",
                   "02_savev2_attributes", "02_four_authorized_pots_cups",
-                  "CAMP006_W04_POT id=", "CAMP006_W04_GODOT PASS blocks=2 checks="):
+                  "CAMP006_W04_POT id=", "CAMP006_W04_GODOT PASS blocks=3 checks="):
         check(token in runner, "Godot must exercise real scene path: " + token)
-    print(f"CAMP006_W04_PY PASS blocks=2 checks={n}")
+    # 03 adds a distinct L3 feature (the real demo equips/unequips and persists
+    # held trade items), not a repeated negative proof about unapproved levels.
+    third = fx["blocks"][2]
+    check(third["block"] == "03" and third["family"] == "TRADE_LEVEL_GATE"
+          and third["level"] == "L3_POSITIVE_EQUIP_UNEQUIP_AND_NATIVE_SAVEV2__LEVEL_EVOLUTION_DEFERRED",
+          "03 positive held context separated from unapproved trade level evolution")
+    check(third["ids"] == list(TRADE_03) and len(third["cases"]) == 2,
+          "03 two reserved IDs, no duplicates or new items")
+    actual = {row["item_id"]: (row["source"], row["target"], row["chain"],
+              row["canonical_item"], row["original_version"]) for row in third["cases"]}
+    check(actual == TRADE_03, "03 exact source/target/trade item and source version")
+    check(all(row["approved_level"] is None and row["post_evolution_held_item_rule"] is None
+              for row in third["cases"]), "03 no fabricated levels or consumption semantics")
+    check(len({row["save"] for row in third["cases"]}) == 2 and
+          all(row["save"].startswith("user://w04_c006_03_") and row["save"].endswith(".json")
+              for row in third["cases"]), "03 isolated native save files")
+    bound = third["trade_level_boundary"]
+    check(bound["owner"].startswith("IA6") and
+          "ProgressionSystem.gain_experience" in bound["producer"] and
+          "EvolutionSystem.classify_record" in bound["consumer"],
+          "03 shared producer, consumer and ownership precisely identified")
+    check(bound["gate"].startswith("level_values_selected=null") and
+          len(bound["missing_decisions"]) == 3 and bound["no_new_ids"] is True,
+          "03 unresolved IA6 decisions and zero catalog additions")
+    held = json.loads((ROOT / "modules/inventory/item_connections_v1.json").read_text(encoding="utf-8"))
+    check(all(item in held["holdable_ids"] and item in policy["restored_ids"]
+              for item in TRADE_03), "03 V27 restored both original held evolution items")
+    for item, (source, target, chain_id, canonical_held, version) in TRADE_03.items():
+        chain = json.loads((ROOT / f"data/api/v2/evolution-chain/{chain_id}/index.json").read_text(encoding="utf-8"))
+        def walk(node, parent=None):
+            for detail in node["evolution_details"]:
+                yield parent, node["species"]["name"], detail
+            for child in node["evolves_to"]:
+                yield from walk(child, node["species"]["name"])
+        selected = [detail for a, b, detail in walk(chain["chain"])
+                    if a == source and b == target and detail["trigger"]["name"] == "trade"
+                    and detail["held_item"]["name"] == canonical_held]
+        check(len(selected) == 1, item + ": unique PokeAPI trade with exact original held item")
+        check(selected[0]["min_level"] is None and selected[0]["item"] is None and
+              selected[0]["version_group"]["name"] == version, 
+              item + ": PokeAPI trade has no approved level or direct use-item route")
+    creature = (ROOT / "modules/creatures/domain/creature_instance.gd").read_text(encoding="utf-8")
+    evo = (ROOT / "modules/creatures/progression/evolution_system.gd").read_text(encoding="utf-8")
+    check('"held_item_id": String(held_item_id)' in creature and
+          '"held_item_consumed": held_item_consumed' in creature,
+          "03 held state persists in CreatureInstance SaveV2")
+    check('static func level_up_context(' in evo and
+          'context["held_item_id"]' not in evo and 'context["held_item"]' not in evo,
+          "03 current level-up producer lacks held context; no invented integration")
+    check('func equip(item_id: StringName, creature_id: StringName)' in service and
+          'func unequip(creature_id: StringName)' in service and
+          'if not staged.add(creature.held_item_id)' in service,
+          "03 real equip, reversible unequip and inventory staging")
+    for token in ("func _case_trade_03(", "03_real_demo_catalog_and_species",
+                  "03_canonical_trade_held_record", "03_positive_visual_equip",
+                  "03_held_context_preserved_without_evolution",
+                  "03_equip_changes_only_held_fields",
+                  "03_direct_use_rejected_without_spend",
+                  "03_duplicate_equip_no_extra_consumption",
+                  "03_no_premature_trade_or_level_evolution",
+                  "03_no_invented_level100_even_with_trade_flag",
+                  "03_positive_visual_unequip", "03_unequip_fully_reversible",
+                  "03_reequip_repeatable_without_conversion",
+                  "03_native_demo_save_held", "03_native_demo_load_held",
+                  "03_held_item_restored_through_savev2",
+                  "03_positive_unequip_after_savev2",
+                  "03_two_held_trade_routes_only",
+                  "CAMP006_W04_TRADE_HELD id=", "CAMP006_W04_GODOT PASS blocks=3 checks="):
+        check(token in runner, "03 Godot L3 missing observable contract " + token)
+    print(f"CAMP006_W04_PY PASS blocks=3 checks={n}")
 
 
 if __name__ == "__main__":
