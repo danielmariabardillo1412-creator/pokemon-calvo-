@@ -844,6 +844,142 @@
         "SaveV2 round trip of original species/identity/IVs/EVs/experience/friendship/moves and inventory; no invented form_id field",
         "Do not count Zygarde Complete as a direct cube action; no false-positive form transformations"
       ]
+    },
+    {
+      "block": "10",
+      "family": "FORM_CONDITIONS",
+      "classification": "RUTAS_POSITIVAS_Y_FORMA_NO_PERSISTIDA",
+      "ids": [
+        "chipped_pot",
+        "cracked_pot",
+        "masterpiece_teacup",
+        "unremarkable_teacup",
+        "sweet_apple",
+        "tart_apple",
+        "syrupy_apple"
+      ],
+      "cases": [
+        {
+          "item_id": "chipped_pot",
+          "source": "sinistea",
+          "target": "polteageist",
+          "chain": 449,
+          "version": "sword-shield",
+          "source_variant": "antique",
+          "source_variant_encoded": false,
+          "storage": true,
+          "canonical_item": "chipped-pot",
+          "trigger": "use-item",
+          "item_evolution_positive": true,
+          "holdable": true
+        },
+        {
+          "item_id": "cracked_pot",
+          "source": "sinistea",
+          "target": "polteageist",
+          "chain": 449,
+          "version": "sword-shield",
+          "source_variant": "phony",
+          "source_variant_encoded": false,
+          "storage": false,
+          "canonical_item": "cracked-pot",
+          "trigger": "use-item",
+          "item_evolution_positive": true,
+          "holdable": true
+        },
+        {
+          "item_id": "masterpiece_teacup",
+          "source": "poltchageist",
+          "target": "sinistcha",
+          "chain": 539,
+          "version": "the-teal-mask",
+          "source_variant": "artisan",
+          "source_variant_encoded": false,
+          "storage": true,
+          "canonical_item": "masterpiece-teacup",
+          "trigger": "use-item",
+          "item_evolution_positive": true,
+          "holdable": true
+        },
+        {
+          "item_id": "unremarkable_teacup",
+          "source": "poltchageist",
+          "target": "sinistcha",
+          "chain": 539,
+          "version": "the-teal-mask",
+          "source_variant": "counterfeit",
+          "source_variant_encoded": false,
+          "storage": false,
+          "canonical_item": "unremarkable-teacup",
+          "trigger": "use-item",
+          "item_evolution_positive": true,
+          "holdable": true
+        },
+        {
+          "item_id": "sweet_apple",
+          "source": "applin",
+          "target": "appletun",
+          "chain": 442,
+          "version": "sword-shield",
+          "source_variant": null,
+          "source_variant_encoded": false,
+          "storage": true,
+          "canonical_item": "sweet-apple",
+          "trigger": "use-item",
+          "item_evolution_positive": true,
+          "holdable": true
+        },
+        {
+          "item_id": "tart_apple",
+          "source": "applin",
+          "target": "flapple",
+          "chain": 442,
+          "version": "sword-shield",
+          "source_variant": null,
+          "source_variant_encoded": false,
+          "storage": false,
+          "canonical_item": "tart-apple",
+          "trigger": "use-item",
+          "item_evolution_positive": true,
+          "holdable": true
+        },
+        {
+          "item_id": "syrupy_apple",
+          "source": "applin",
+          "target": "dipplin",
+          "chain": 442,
+          "version": "the-teal-mask",
+          "source_variant": null,
+          "source_variant_encoded": false,
+          "storage": true,
+          "canonical_item": "syrupy-apple",
+          "trigger": "use-item",
+          "item_evolution_positive": true,
+          "holdable": true
+        }
+      ],
+      "canonical_sources": [
+        "data/api/v2/evolution-chain/{449,539,442}/index.json",
+        "data/api/v2/pokemon-species/{854,1012,840}/index.json",
+        "docs/current/ITEM_FIELD_V8.csv.txt",
+        "docs/current/ITEM_INVENTORY.csv",
+        "modules/creatures/progression/evolution_system.gd",
+        "modules/inventory/field_item_service.gd"
+      ],
+      "positive_scope": "Seven item→species evolution paths are already supported; verify live evolution, correct target, item spending exactly one, ownership Party/Storage, and SaveV2; never count as new implemented routes.",
+      "missing_contracts": [
+        "Sinistea phony vs antique phenotype and Poltchageist counterfeit vs artisan phenotype have no persistent distinct source variant in CreatureInstance or PokeAPI evolution-chain details; same species can currently accept both item routes.",
+        "Game-specific form resolution/capture producer and SaveV2 migration are required before validating correct pot/cup applicability (not just species-to-species transition).",
+        "The legacy inventory CSV says EVOLUTION_ELIGIBILITY_RULES_NO_BAG_BRIDGE but the field CSV certifies BAG_EVOLUTION_VERIFIED_WITH_SUPPORTED_TARGETS; this drift must be reconciled by coordination, not by falsifying test results.",
+        "Applin has three separate target species; do not let Syrupy Apple skip the distinct Dipplin→Hydrapple Dragon Cheer route."
+      ],
+      "runtime_contract": [
+        "Seven exact original use-item paths are reported as positive from source and behavior, without reimplementing them.",
+        "All seven selected and holdable; equipping is not evolution, and wrong-target/wrong-stage/outsider must not consume.",
+        "Positive bag use/evolve changes exactly one owned creature to its expected species, consumes exactly one item and preserves identity/IV/EV/XP/friendship/moves.",
+        "Party and Storage routes preserve unique ownership and SaveV2 roundtrip.",
+        "Four form-sensitive pot/cup routes remain UNVALIDATED for correct authenticity due to missing form variant, despite positive species transition."
+      ]
     }
   ]
 }
