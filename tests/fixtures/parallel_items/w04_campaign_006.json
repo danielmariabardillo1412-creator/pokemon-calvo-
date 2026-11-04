@@ -1,0 +1,58 @@
+{
+  "worker": "W04",
+  "campaign": "CAMP_006",
+  "kind": "INTEGRATION_BACKLOG",
+  "new_item_ids": 0,
+  "blocks": [
+    {
+      "block": "01",
+      "family": "EVOLUTION_E2E",
+      "ids": [
+        "sweet_apple",
+        "tart_apple",
+        "syrupy_apple"
+      ],
+      "objective": "evolucion_positiva_escena_y_guardado",
+      "cases": [
+        {
+          "item_id": "sweet_apple",
+          "source": "applin",
+          "target": "appletun",
+          "save": "user://w04_c006_01_sweet_apple.json"
+        },
+        {
+          "item_id": "tart_apple",
+          "source": "applin",
+          "target": "flapple",
+          "save": "user://w04_c006_01_tart_apple.json"
+        },
+        {
+          "item_id": "syrupy_apple",
+          "source": "applin",
+          "target": "dipplin",
+          "save": "user://w04_c006_01_syrupy_apple.json"
+        }
+      ],
+      "level": "L3_REAL_SCENE_AND_SAVEV2",
+      "status": "PENDING_RUNTIME_CI",
+      "contracts": {
+        "positive": [
+          "Use the actual scene res://scenes/visual/field_demo.tscn and visual bag _apply('use') with selected owned Applin and two units of the apple.",
+          "The real FieldItemService must return accepted true, evolve to exactly the selected species, consume one item and retain instance_id, IV/EV, moves, experience, level, nature, friendship.",
+          "Visible bag result message reports the evolved species; the party selector must refresh after use.",
+          "Close the bag, save through field_native_bridge.save_game(), then reload through field_native_bridge.load_game(); both target and spent inventory must roundtrip."
+        ],
+        "negative": [
+          "Using an apple on the wrong species is rejected without spending or mutating state.",
+          "Using a second apple on the already evolved target must not further evolve or spend; prevent skipping Applin->Dipplin->Hydrapple.",
+          "Attempting to open the bag while field is busy is rejected by the existing demo guard."
+        ],
+        "limits": [
+          "No new items counted, no changes to V27 trade-level thresholds, no new consumption semantics.",
+          "No visual screenshot/GPU certification; headless test covers scene/control/service/save code paths only.",
+          "Workflow for CAMP006 does not exist on branch; CI must be prepared by IA6 before certification."
+        ]
+      }
+    }
+  ]
+}
