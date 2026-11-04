@@ -1,3 +1,11 @@
+# IA5/W05 — CAMPAÑA_006 · BLOQUE 05/10 ENTREGADO · CI Y REGRESIONES PENDIENTES (2026-11-04)
+
+Rama exclusiva `codex/calvo-items-20261104-w05-camp006`, quinto bloque autorizado por IA6: `tm222;tm223;tm224;tm225;tm226` → `breaking_swipe;metal_sound;curse;hard_press;dragon_cheer` en `scarlet-violet`. Fixture acumulativo 5/10 y 25 MT con pruebas funcionales preexistentes `FieldItemService.teach` y SaveV2 para cada caso. Commit pruebas `7aa578bdd801d81c3e3465f9176182e1620940b7`. Informe `CAMP_006_ITER_05.md`, CSV y este cuaderno publicados. **No declarar PASS** hasta que GitHub Actions sobre el HEAD con CSV ejecute y supere Python/Godot CAMP006 *y* las regresiones CAMP005/004/003 en Python/Godot, obligatorias por hito 05. Bloque 04 ya certificado en [#41783434365](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41783434365), Python 196 y Godot 736.
+
+**Próxima `p`:** si hito 05 completo PASS, ejecutar únicamente bloque 06 `tm227;tm228;tm229;tm01;tm02`. Si falla, diagnosticar y reparar solo en W05 siguiendo V5 sin tocar reglas/archivos ajenos, `main`, V28, PR118, árbitra, W01–W04, catálogos/learnsets/políticas, saves reales, 19 históricas ni hacer merge. CI headless no certifica UI/GPU.
+
+---
+
 # IA5/W05 — CAMPAÑA_006 · BLOQUE 04/10 CI PASS VERIFICADA (2026-11-04)
 
 **Rama:** `codex/calvo-items-20261104-w05-camp006`. Bloque 04 `tm217;tm218;tm219;tm220;tm221` → `future_sight;expanding_force;skitter_smack;meteor_beam;throat_chop` con mapeo canónico `scarlet-violet`. Fixture acumulativo **4/10 bloques, 20 MT**; conservados 01–03 sin cambiar producción/datos. **CI real [#41783434365](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41783434365)** en SHA `b83d48916674a700edf9dd8aca51626da83e8ddf`, job 126420018002, `completed/success`. Recibos reales: `CAMP006_W05_MANIFEST_PASS reserved=10 completed=4 ids=49 kind=NEW_IDS`; `CAMP006_W05_PY PASS blocks=4 checks=196`; `CAMP006_GATE_PY_PASS worker=W05 blocks=4 checks=196`; `CAMP006_W05_GODOT PASS blocks=4 checks=736`; `CAMP006_GATE_GODOT_PASS worker=W05 blocks=4 checks=736`. El paso de regresiones CAMP005/004/003 fue skipped conforme a hitos 01/05/10; hito 01 había pasado. No confundir Godot headless con UI/GPU ni integración a main.
