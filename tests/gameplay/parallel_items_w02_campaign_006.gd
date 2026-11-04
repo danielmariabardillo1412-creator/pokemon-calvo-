@@ -28,9 +28,12 @@ func _run_recovery006() -> void:
 	check("overlay real y especies base", Variants.apply(catalogs))
 	check("worker y campaña propios", automation.campaign == "CAMP_006"
 		and automation.worker == "W02")
-	check("sólo bloque recuperación", automation.blocks.size() == 1
+	check("recuperación y bloque02 documentado sin bloque03", automation.blocks.size() == 2
 		and automation.blocks[0].block == "01"
-		and automation.blocks[0].ids == ["exp_candy_xl", "relaxed_mint"])
+		and automation.blocks[0].ids == ["exp_candy_xl", "relaxed_mint"]
+		and automation.blocks[1].block == "02"
+		and automation.blocks[1].ids == ["gentle_mint", "hasty_mint", "lax_mint"]
+		and automation.blocks[1].status == "DEPENDENCY_DOCUMENTED_NOT_FUNCTIONAL")
 	check("tres modos heredados PARTY/STORAGE", automation.modes == ["active", "none", "reserve"])
 	var old: Variant = JSON.parse_string(FileAccess.get_file_as_string(SOURCE_005))
 	check("fixture CAMP005 intacta", old is Dictionary)
@@ -89,6 +92,38 @@ func _run_recovery006() -> void:
 		if errors.size() == before_errors:
 			passed_cases += 1
 	check("los tres contratos completos sin errores", passed_cases == 3)
+	# Only one shared dependency: the native item service cannot apply any of
+	# these three mints until IA6 approves an independent effective-nature field.
+	var b2: Dictionary = automation.blocks[1]
+	check("bloque02 sin falso nivel L2", String(b2.dependency.level) == "L1_DEPENDENCY_NOT_L2"
+		and b2.cases.size() == 1)
+	for id_text: String in b2.ids:
+		check("catálogo incluye menta pendiente: " + id_text,
+			catalogs.item(StringName(id_text)) != null)
+	var nature_specs: Dictionary = b2.expected_nature_modifiers
+	for nature: String in nature_specs:
+		var target: Dictionary = nature_specs[nature]
+		var expected_pair: Array = [String(target.up), String(target.down)]
+		check("tabla nativa naturaleza y modificadores: " + nature,
+			ProgressionRuleset.NATURE_MODIFIERS.get(StringName(nature), []) == expected_pair)
+	var example: Dictionary = b2.cases[0]
+	check("único test negativo representativo", example.scenario == "gentle_mint_missing_effect_route"
+		and example.id == "gentle_mint" and not bool(example.applies))
+	current_case = String(example.scenario)
+	var sentinel_errors: int = errors.size()
+	var rejected_all: bool = true
+	for mode: String in automation.modes:
+		var mint_spec: Dictionary = example
+		var result_mint: Dictionary = _probe_training(mint_spec, mode)
+		rejected_all = rejected_all and bool(result_mint.get("valid", false))
+			and bool(result_mint.get("save_v2", false))
+			and not bool(result_mint.get("accepted", true))
+			and int(result_mint.get("count", -1)) == (0 if mode == "none" else 2)
+	check("menta representativa rechazada en tres propietarios con SaveV2",
+		rejected_all and errors.size() == sentinel_errors)
+	print("CAMP006_W02_DEPENDENCY ", "BLOCKED" if rejected_all
+		and errors.size() == sentinel_errors else "FAIL",
+		" block=02 ids=3 checks=", checks)
 	var success: bool = errors.is_empty() and passed_cases == 3
 	done = true
 	print("CAMP006_W02_GODOT ", "PASS" if success else "FAIL",
