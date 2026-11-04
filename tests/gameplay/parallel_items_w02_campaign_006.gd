@@ -115,10 +115,10 @@ func _run_recovery006() -> void:
 	for mode: String in automation.modes:
 		var mint_spec: Dictionary = example
 		var result_mint: Dictionary = _probe_training(mint_spec, mode)
-		rejected_all = rejected_all and bool(result_mint.get("valid", false))
+		rejected_all = (rejected_all and bool(result_mint.get("valid", false))
 			and bool(result_mint.get("save_v2", false))
 			and not bool(result_mint.get("accepted", true))
-			and int(result_mint.get("count", -1)) == (0 if mode == "none" else 2)
+			and int(result_mint.get("count", -1)) == (0 if mode == "none" else 2))
 	check("menta representativa rechazada en tres propietarios con SaveV2",
 		rejected_all and errors.size() == sentinel_errors)
 	print("CAMP006_W02_DEPENDENCY ", "BLOCKED" if rejected_all
