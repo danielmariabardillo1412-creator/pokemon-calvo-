@@ -1,0 +1,9 @@
+{
+  "schema_version": 1,
+  "worker": "W02",
+  "campaign": "CAMP_006",
+  "kind": "RECOVERY_THEN_NEW",
+  "status": "CI005_FAILURE_RECOVERY_REQUIRED",
+  "blocks": [],
+  "warning": "BOOTSTRAP 0/10 no prueba funciones. Mantener test positivo y regresiones; no falsificar recibos."
+}
