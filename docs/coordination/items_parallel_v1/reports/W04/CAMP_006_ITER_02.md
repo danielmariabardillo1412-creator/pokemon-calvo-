@@ -54,3 +54,17 @@ Recibos verificados en los logs:
 El paso de regresión histórica CAMP005 aparece `skipped` en bloque02 según el workflow; **no** indicar que se ejecutó. No se ha tocado producción. La clasificación `DEPENDENCIA_DOCUMENTADA` en el CSV reconoce tanto el avance L3 como la frontera funcional pendiente de IA6. Se disparó una segunda CI por la actualización de progreso, que deberá verificarse por separado.
 
 **Próximo bloque autorizado cuando llegue `p`:** 03/10 `dragon_scale;electirizer`; política V27 `level_values_selected=null` sin umbrales ni consumo inventados. No iniciar ese bloque por el cierre de 02.
+
+## Segunda CI02 consolidada — validación sobre CSV final
+
+[GitHub Actions #41783934197](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41783934197), SHA `01b4cfc8b14fed0b831fe847e97e01bceba715db`: **completed/success** sobre CSV clasificado `DEPENDENCIA_DOCUMENTADA`.
+
+Logs:
+- `CAMP006_W04_SCOPE PASS blocks=2`.
+- `CAMP006_W04_PY PASS blocks=2 checks=91`.
+- `CAMP006_W04_GODOT PASS blocks=2 checks=204`.
+- Los cuatro `CAMP006_W04_POT` repiten `L3_SPECIES_EVOLUTION__FORM_AUTHENTICITY_MISSING` y la dependencia `CreatureInstance_form+Capture+SaveV2`.
+
+Regresión CAMPAÑA_005 `skipped`, conforme al workflow que la exige en hitos 01,05,10 o cambios de producción. No se debe describir como ejecutada durante este bloque.
+
+**Bloque 02/10 cerrado en W04:** cuatro recorridos L3 de especie positivos y la condición de autenticidad **pendiente IA6**. Sin tocar sistema compartido ni convertir formas no persistidas en hechos. **Detenerse antes del bloque03** hasta nueva `p`.
