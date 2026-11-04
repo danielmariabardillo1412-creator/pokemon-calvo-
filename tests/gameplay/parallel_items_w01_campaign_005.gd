@@ -52,30 +52,35 @@ func _run_w01_c005() -> void:
 		and fixture.get("kind") == "NEW_IDS" and fixture.get("format") == "gen9calvounifiedv1")
 	check("Tres modalidades sin omisiones", fixture.get("variants") == ["active", "none", "reserve"])
 	var progress: Array = _progress_c005()
-	check("Bloques 01 y 02 de CAMPAÑA_005 autorizados", progress.size() == 2)
-	if progress.size() != 2:
+	check("Bloques 01, 02 y 03 de CAMPAÑA_005 autorizados", progress.size() == 3)
+	if progress.size() != 3:
 		quit(2)
 		return
 	check("Fila 01 autorizada por IA6", String(progress[0].block) == "01"
 		and String(progress[0].ids) == "black_glasses;dragon_fang;hard_stone")
 	check("Fila 02 autorizada por IA6", String(progress[1].block) == "02"
 		and String(progress[1].ids) == "miracle_seed;mystic_water;never_melt_ice")
+	check("Fila 03 autorizada por IA6", String(progress[2].block) == "03"
+		and String(progress[2].ids) == "poison_barb;sharp_beak;silk_scarf")
 	var stages: Array = fixture.get("blocks", [])
-	check("Fixture contiene dos bloques reales", stages.size() == 2)
-	if stages.size() != 2:
+	check("Fixture contiene tres bloques reales", stages.size() == 3)
+	if stages.size() != 3:
 		quit(2)
 		return
 	check("Los tres ID del bloque 01 son exactos",
 		stages[0].get("ids", []) == ["black_glasses", "dragon_fang", "hard_stone"])
 	check("Los tres ID del bloque 02 son exactos",
 		stages[1].get("ids", []) == ["miracle_seed", "mystic_water", "never_melt_ice"])
+	check("Los tres ID del bloque 03 son exactos",
+		stages[2].get("ids", []) == ["poison_barb", "sharp_beak", "silk_scarf"])
 	var cases: Array = fixture.get("cases", [])
-	check("Dieciocho escenarios funcionales autorizados", cases.size() == 18)
+	check("Veintisiete escenarios funcionales autorizados", cases.size() == 27)
 	var names: Array = []
 	for row: Dictionary in cases:
 		check("Escenario pertenece a su bloque oficial",
 			(String(row.block) == "01" and stages[0].get("ids", []).has(String(row.item_id)))
-			or (String(row.block) == "02" and stages[1].get("ids", []).has(String(row.item_id))))
+			or (String(row.block) == "02" and stages[1].get("ids", []).has(String(row.item_id)))
+			or (String(row.block) == "03" and stages[2].get("ids", []).has(String(row.item_id))))
 		check("ID único del escenario", not names.has(String(row.id)))
 		names.append(String(row.id))
 		for seed_value: Variant in row.seeds:
@@ -98,9 +103,10 @@ func _run_w01_c005() -> void:
 				"checks": checks - previous_checks,
 				"status": "PASS" if errors.size() == previous_errors else "FAIL",
 				"observed": observed})
-	check("Veinticuatro pares caso-semilla reales", c005_rows.size() == 24)
+	check("Treinta y seis pares caso-semilla reales", c005_rows.size() == 36)
 	for item_id: String in ["black_glasses", "dragon_fang", "hard_stone",
-		"miracle_seed", "mystic_water", "never_melt_ice"]:
+		"miracle_seed", "mystic_water", "never_melt_ice",
+		"poison_barb", "sharp_beak", "silk_scarf"]:
 		check("Tres contextos distintos para cada ID " + item_id, cases.filter(
 			func(c): return String(c.item_id) == item_id).size() == 3)
 	var report: Dictionary = {"schema_version": 1, "campaign": "CAMP_005",
@@ -155,16 +161,18 @@ func _compare_c005(row: Dictionary, observed: Dictionary) -> void:
 			var expected_moves: Dictionary = {"black_glasses": "dark_pulse",
 				"dragon_fang": "dragon_pulse", "hard_stone": "smack_down",
 				"miracle_seed": "energy_ball", "mystic_water": "surf",
-				"never_melt_ice": "ice_beam"}
+				"never_melt_ice": "ice_beam", "poison_barb": "sludge_bomb",
+				"sharp_beak": "aerial_ace", "silk_scarf": "tackle"}
 			check("Tipo del ataque positivo autorizado",
 				String(row.own_move) == String(expected_moves.get(String(row.item_id), "")))
 			check("Potenciador de tipo aumenta daño real solo al portador",
 				a.damage > n.damage and n.damage > 0 and n.damage == r.damage)
 			check("Sin equipo y con reserva, resultado idéntico", n.damage == r.damage)
 		"nonmatching_control":
-			check("Ataque de tipo Normal realmente causa daño",
-				String(row.own_move) == "tackle" and a.damage > 0)
-			check("Ataque de tipo Normal no recibe potencia",
+			check("Ataque de tipo distinto al objeto causa daño real",
+				String(row.own_move) == ("water_gun" if String(row.item_id) == "silk_scarf" else "tackle")
+				and a.damage > 0)
+			check("Ataque de tipo diferente no recibe potencia",
 				a.damage == n.damage and n.damage == r.damage)
 		"status_control":
 			check("Movimiento de estado no inflige daño",

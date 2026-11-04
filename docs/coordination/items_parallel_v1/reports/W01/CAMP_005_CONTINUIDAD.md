@@ -35,3 +35,12 @@ La ejecución [GitHub Actions #41778911208](https://github.com/danielmariabardil
 La fila 02 del CSV queda temporalmente `EN_CI_AUTOMATICA` para no disparar CI por el cierre documental. En la **siguiente `p`**, certificarla con `CI_PASS_VERIFICADO`, SHA `69438bfb81921456a87eb7da18b3442f50c79873` y run `41778911208` antes de insertar la fila 03. El siguiente microbloque, y solo ese, es `poison_barb;sharp_beak;silk_scarf`.
 
 La incidencia SaveV2 del turno de carga de Rayo Solar de CAMPAÑA_004 sigue pendiente para IA6; no hay prueba visual/GPU ni integración en main/V28. **STOP en 02/10 hasta nueva `p`**.
+
+## Bloque 03/10 — entrega y matriz acumulativa
+
+- **B02 certificado:** CI [#41778911208](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41778911208), SHA `69438bfb81921456a87eb7da18b3442f50c79873`, `CAMP005_W01_PY PASS blocks=2 checks=148`, `CAMP005_W01_GODOT PASS blocks=2 checks=2207`. Fila 02 en `CI_PASS_VERIFICADO`.
+- **B03 autorizado** `poison_barb;sharp_beak;silk_scarf`: golpe positivo `sludge_bomb`, `aerial_ace`, `tackle`, respectivamente; negativo `tackle`, `tackle`, `water_gun`; control no dañino `reflect`. Es esencial que Pañuelo de Seda potencie Placaje y que **Pistola Agua**, no Placaje, sea su control de tipo diferente.
+- Nueve casos nuevos, doce pares y 36 variantes. Acumulado 3 bloques, 9 objetos, 27 casos, 36 pares, 108 variantes; tres modalidades equipamiento activo/ausente/reserva con owner y SaveV2, sin recortar escenarios anteriores.
+- `CAMP005_W01_PY PASS blocks=3` y `CAMP005_W01_GODOT PASS blocks=3`, run `completed/success`, son la condición de cierre de B03. No atribuir aprobación por construcción de blobs ni basarse en el PASS de B02; revisar los logs y reparar con V5 si falla.
+- No se modifican motor, workflow, main, V28, rama árbitra, PR #118 ni ramas W02-W05. La regresión integral CAMP004 corresponde al hito 05/10, 10/10 o parches de producción; el run previo del hito 01 está aprobado.
+- Próxima `p` (solo si B03 PASS): bloque 04 `silver_powder;soft_sand;spell_tag`. Incidencia SaveV2 de Rayo Solar a media carga heredada de CAMP004 continúa para IA6, sin proclamar corrección ni integración global.
