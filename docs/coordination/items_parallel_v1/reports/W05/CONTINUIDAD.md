@@ -1,3 +1,11 @@
+# IA5/W05 — CAMPAÑA_006 · BLOQUE 02/10 PUBLICADO · CI PENDIENTE (2026-11-04)
+
+**Rama única:** `codex/calvo-items-20261104-w05-camp006`. La cola IA6 autoriza bloque 02 `tm207;tm208;tm209;tm210;tm211`; mapeos SV comprobados `tm207=temper_flare, tm208=whirlpool, tm209=muddy_water, tm210=supercell_slam, tm211=electroweb`. **Commit de pruebas:** `5862ac6efbb9560efdcdea1d5e3606c65c6c1d6b`. Fixture acumulativo 2/10, diez MT; progreso y `CAMP_006_ITER_02.md` preparados. El runner Python y Godot anteriores permanecen sin cambios y deben probar ambas filas, incluido `FieldItemService.teach`, PP, stock, propiedad, compatibilidad, consumo y SaveV2. **NO DECLARAR PASS** hasta que CI del HEAD que incluya el CSV termine satisfactoriamente. Workflow W05 se dispara al escribir CSV/fixture; comprobar recibos reales CAMP006 PY y GODOT con `blocks=2` y checks positivos, más sus gates. Hitos de regresión completa 01/05/10; bloque 01 PASS ya comprobado en [Actions #41764725393](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41764725393).
+
+**Próxima `p`:** si CI 02 PASS, ejecutar exactamente bloque 03 `tm212;tm213;tm214;tm215;tm216`; ante error, autorreparar solo en dominio W05. No tocar `main`, V28, PR #118, árbitra, otras ramas, datos/políticas, saves reales o máquinas históricas; no hacer merge. Godot headless no acredita UI/GPU.
+
+---
+
 # ESTADO VIGENTE IA5/W05 — CAMPAÑA_006 · BLOQUE 01/10 CI PASS VERIFICADA (2026-11-04)
 
 **Identidad y control:** IA5/W05, MT/libros. **Rama exclusiva activa:** `codex/calvo-items-20261104-w05-camp006`, creada por IA6 a partir del cierre CAMP005 en SHA `f74b8d33c6d4e7853dcc4fdadfe3a62bf2050d0b`. Autoridad IA6 en `codex/calvo-items-20261101-arbitro`: `CAMPAIGN_006_W05_GATE.md`, `CAMPAIGN_006_W05_QUEUE_APPROVED.csv`, `campaigns/CAMP_006_W05.md`, `AUTONOMOUS_REPAIR_V5.md`. **Esta cabecera prevalece sobre el histórico posterior de CAMP005 FINALIZADA**: nueva campaña explícitamente autorizada. Cola oficial copiada idéntica a propia rama, blob `0f3f1af220dab2e2197b0f181a6f113a544828a6`.
