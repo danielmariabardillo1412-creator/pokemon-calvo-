@@ -141,6 +141,11 @@ func _probe_training(spec: Dictionary, mode: String) -> Dictionary:
 			if bool(spec.get("expect_cap", false)):
 				check(mode + " Caramelo Exp llega exactamente al máximo nivel100",
 					expected_exp == cap_exp and next_level == 100)
+			if bool(spec.get("expect_no_cap", false)):
+				check(mode + " Caramelo Exp XL: 30000 XP íntegros sin nivel100",
+					expected_exp < cap_exp and gain_expected == nominal_exp
+					and next_level == start_level and now.level == start_level
+					and int(result.get("exp_gained", -1)) == nominal_exp)
 			if bool(spec.get("expect_level_up", false)):
 				check(mode + " Caramelo Exp atraviesa umbral de nivel",
 					next_level > start_level and now.level == next_level)
