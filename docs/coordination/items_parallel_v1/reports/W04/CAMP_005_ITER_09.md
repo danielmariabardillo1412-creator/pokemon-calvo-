@@ -62,3 +62,17 @@ La ejecución valida los **nueve bloques acumulativos de CAMP005**, pero **no** 
 La fila09 del CSV se consolidó como `DEPENDENCIA_DOCUMENTADA` con `ci_run=41745904539` en commit `67597a40db0df6ae7157ae5bcf061cba77cf683d`; este cambio dispara una segunda CI que debe comprobarse independientemente.
 
 **Bloque 09/10 cerrado como documentación y prueba verificable de dependencias**, sin cambios en módulos compartidos. Fila04 conservada sin conciliación por la incidencia previa. El siguiente `p` autoriza solo el bloque10/10, no adelantarlo.
+
+## Segunda CI09 — progreso consolidado aprobado
+
+[GitHub Actions #41746136561](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41746136561), SHA `67597a40db0df6ae7157ae5bcf061cba77cf683d`, terminó **completed/success** sobre el CSV ya clasificado `DEPENDENCIA_DOCUMENTADA`.
+
+Recibos leídos en los logs:
+- `CAMP005_W04_MANIFEST_PASS reserved=10 completed=9 ids=46 kind=FUNCTIONAL_BACKLOG`.
+- `CAMP005_W04_PY PASS blocks=9 checks=598`.
+- `CAMP005_W04_GODOT PASS blocks=9 checks=1189`.
+- Caso `zygarde_cube`: `status=DEPENDENCIA_FORMA_ACTIVA` y `need=form_action+restore+savev2`; presencia de la variedad Complete no implica que se active directamente mediante el Arca.
+
+Los pasos de regresiones históricas CAMP004/CAMP003/CAMP001 aparecen como **skipped** porque en el bloque09 no se modifica producción. Los nueve bloques del arnés acumulativo CAMP005 pasaron.
+
+**Bloque 09/10 cerrado:** cinco IDs previamente existentes, ocho especies y fronteras verificadas, **ningún cambio de forma positivo certificado**. Fila04 sin conciliación por el bloqueo anterior. Próxima tecla `p`: únicamente bloque 10/10.
