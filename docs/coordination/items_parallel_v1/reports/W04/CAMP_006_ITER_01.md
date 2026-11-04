@@ -35,3 +35,17 @@ Crear y activar en **esta rama** el workflow CAMPAÑA_006 que:
 Si IA6 dispone de una infraestructura compartida que pueda ejecutar estos mismos comandos **sin editar el workflow desde W04**, es igualmente válida solo con logs reales asociados al SHA.
 
 **No iniciada la fila 02.** Sin cambios en `main`, V28, PR118, ramas de IA6/otras trabajadoras, módulos comunes o política V27.
+
+## Resolución IA6: CI desbloqueada y verificada
+
+IA6 incorporó el workflow de CAMPAÑA_006 a esta rama. [Run #41767573680](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41767573680), SHA `73db15112ac09b641e25a050bb59f344030edf28`, terminó **completed/success**. Los recibos examinados en el log son:
+- `CAMP006_W04_PY PASS blocks=1 checks=52`
+- `CAMP006_W04_GODOT PASS blocks=1 checks=91`
+- `CAMP005_W04_PY PASS blocks=10 checks=673`
+- `CAMP005_W04_GODOT PASS blocks=10 checks=1423`
+
+Tres líneas `CAMP006_W04_APPLE` identifican `sweet_apple→appletun`, `tart_apple→flapple` y `syrupy_apple→dipplin`, todas `status=L3_SCENE_BAG_AND_NATIVE_SAVEV2`.
+
+La incidencia del workflow que constaba al preparar el bloque quedó **resuelta por IA6**. Se actualizó `CAMP_006_PROGRESO.csv` a `CI_PASS_VERIFICADO`, y el validador Python admite ese estado sin alterar el contrato del bloque.
+
+**Cierre funcional bloque 01/10: APROBADO.** No declarar todavía ejecución de bloque 02; requiere la siguiente tecla `p`. Si los commits puramente documentales generan una CI adicional, comprobarla independientemente.
