@@ -66,7 +66,10 @@ def main():
     progress = rows(BASE / "reports/W04/CAMP_006_PROGRESO.csv")
     check(len(progress) == 1 and progress[0]["bloque"] == "01" and progress[0]["ids"].split(";") == list(IDS),
           "exactly one progress row")
-    check(progress[0]["estado"] == "ENTREGADO_PENDIENTE_CI", "no claim of verified CI")
+    check(progress[0]["estado"] in ("ENTREGADO_PENDIENTE_CI", "CI_PASS_VERIFICADO"),
+          "estado compatible con entrega pendiente o CI aprobada")
+    if progress[0]["estado"] == "CI_PASS_VERIFICADO":
+        check(progress[0]["ci_run"] == "41767573680", "CI01 verificada en run 41767573680")
     for token in (
         'func toggle_item_bag() -> bool:', 'func field_collection() -> PlayerCollection:',
         'func field_bind_item_service(', 'func field_item_service_is_current(',
