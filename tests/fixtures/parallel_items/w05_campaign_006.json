@@ -105,6 +105,31 @@
           "move_id": "throat_chop"
         }
       ]
+    },
+    {
+      "block": "05",
+      "items": [
+        {
+          "item_id": "tm222",
+          "move_id": "breaking_swipe"
+        },
+        {
+          "item_id": "tm223",
+          "move_id": "metal_sound"
+        },
+        {
+          "item_id": "tm224",
+          "move_id": "curse"
+        },
+        {
+          "item_id": "tm225",
+          "move_id": "hard_press"
+        },
+        {
+          "item_id": "tm226",
+          "move_id": "dragon_cheer"
+        }
+      ]
     }
   ]
 }
