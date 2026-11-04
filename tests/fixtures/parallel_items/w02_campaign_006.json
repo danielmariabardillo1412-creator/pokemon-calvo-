@@ -3,7 +3,7 @@
   "worker": "W02",
   "campaign": "CAMP_006",
   "kind": "RECOVERY_THEN_NEW",
-  "status": "CI005_RECOVERY_AWAITING_RUN",
+  "status": "CI005_RECOVERED_BLOCK02_DEPENDENCY",
   "source_campaign": "CAMP_005",
   "source_fixture": "tests/fixtures/parallel_items/w02_campaign_005.json",
   "modes": [
@@ -56,11 +56,89 @@
           "expected_applies": false
         }
       ]
+    },
+    {
+      "block": "02",
+      "family": "MINT_ENGINE",
+      "ids": [
+        "gentle_mint",
+        "hasty_mint",
+        "lax_mint"
+      ],
+      "status": "DEPENDENCY_DOCUMENTED_NOT_FUNCTIONAL",
+      "expected_nature_modifiers": {
+        "gentle": {
+          "nature_id": "gentle",
+          "up": "special_defense",
+          "down": "defense"
+        },
+        "hasty": {
+          "nature_id": "hasty",
+          "up": "speed",
+          "down": "defense"
+        },
+        "lax": {
+          "nature_id": "lax",
+          "up": "defense",
+          "down": "special_defense"
+        }
+      },
+      "cases": [
+        {
+          "scenario": "gentle_mint_missing_effect_route",
+          "id": "gentle_mint",
+          "kind": "mint_dependency",
+          "applies": false,
+          "nature": "hardy",
+          "expect_status": "DEPENDENCY_MISSING",
+          "expect_reason": "field_effect_not_connected"
+        }
+      ],
+      "dependency": {
+        "key": "MINT_EFFECTIVE_NATURE_STATE_SAVEV2_006_W02",
+        "producer": "CreatureInstance independent original nature_id and effective nature for stat calculations; FieldItemService transaction to apply nature mint",
+        "source": [
+          "modules/creatures/domain/creature_instance.gd",
+          "modules/creatures/progression/stat_calculator.gd",
+          "modules/creatures/progression/progression_ruleset.gd",
+          "modules/inventory/field_item_service.gd"
+        ],
+        "consumers": [
+          "CreatureInstance.recalculate_stats",
+          "StatCalculator.compute",
+          "SaveGameData.build/validate",
+          "SaveGameRepository.decode_snapshot",
+          "FieldItemService.use_item",
+          "battle stat consumers"
+        ],
+        "missing": "No persisted effective nature, no mint item handler. ProgressionRuleset only defines nature multipliers for natural natures.",
+        "owner": "IA6: approve shared nature model, compatible SaveV2 representation and stat/battle consumers; assign implementation of shared API",
+        "positive_test_pending": "After approved model: 3 successful item uses with distinct stat changes (up/down), only one consumed, original nature unchanged, remaining stats/HP deficit unchanged, SaveV2 and battle consumers preserve effective modifier; redundant mint rejected atomically.",
+        "negative_test": "One representative native field rejection across active/none/reserve; Python source checks prove all three IDs lack route, rather than 24 duplicate negative scenarios.",
+        "level": "L1_DEPENDENCY_NOT_L2"
+      },
+      "source_evidence": [
+        "modules/inventory/field_item_service.gd",
+        "modules/inventory/field_item_effects.gd",
+        "modules/creatures/domain/creature_instance.gd",
+        "modules/creatures/progression/stat_calculator.gd",
+        "modules/creatures/progression/progression_ruleset.gd",
+        "modules/save/save_game_data.gd",
+        "config/item_selection_v1.json"
+      ],
+      "purpose": "Record exact shared contract dependency for three new mints; no speculative positive nature effect and no changes outside W02 test/docs."
     }
   ],
   "limitations": [
     "El mensaje relaxed_mint_level100: bloque íntegro es etiqueta agregada del fallo del bloque Godot, no una tercera aserción de menta fallida.",
     "No marca recuperación exitosa hasta el recibo Godot y Python de los diez bloques CAMP005 en esta rama y regresiones CAMP004/CAMP003. No ejecutar fila02 antes de PASS.",
-    "Sin cambios de producción; sustituir un falso expect_cap por nuevo expect_no_cap fuerte, preservando todos los escenarios CAMP005."
-  ]
+    "Sin cambios de producción; sustituir un falso expect_cap por nuevo expect_no_cap fuerte, preservando todos los escenarios CAMP005.",
+    "Block02 is NOT L2: one shared missing producer/SaveV2 contract, one representative native negative, and 3 source-mapped mints; no function or API was fabricated."
+  ],
+  "recovery_gate": {
+    "run_id": 41763921080,
+    "conclusion": "success",
+    "head_sha": "2abcc2ae9644b8821d9dae6f26214b1a8fa347fc",
+    "scope": "CAMP005_10/10 Python+Godot and CAMP004/CAMP003 regressions; evidence is historical and not a new run"
+  }
 }
