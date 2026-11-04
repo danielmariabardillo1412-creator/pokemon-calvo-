@@ -1,3 +1,13 @@
+# IA2/W02 — CONTINUIDAD CAMP006 BLOQUE 03/10
+
+**Rama:** `codex/calvo-items-20261104-w02-camp006`. Solo fila03 `lonely_mint;mild_mint;naive_mint`; próximo `p` fila04 `naughty_mint;rash_mint;sassy_mint;serious_mint`, aún no ejecutada.
+
+**Estado:** tres naturalezas válidas en ProgressionRuleset, sin handler menta ni naturaleza efectiva persistente, dependencia única `MINT_EFFECTIVE_NATURE_STATE_SAVEV2_006_W02` de IA6, misma de fila02. Fixture bloque03 tiene 0 negativos nuevos; Python/Godot validan fuentes reales y reutilizan rechazo nativo SaveV2 de fila02. **No L2 ni L3**; no tocar APIs compartidas sin IA6.
+
+**Recibos anteriores:** run 41763921080 recuperación SUCCESS, run 41778869360 bloque02 CI SUCCESS con marcadores BLOCKED (no efectos positivos). Bloque03 requiere run nuevo de su SHA. Conservar 288 casos CAMP005. Archivos actualizados en un commit atómico: fixture CAMP006, progreso, tests Python/Godot, workflow W02 e informe `CAMP_006_ITER_03.md`.
+
+---
+
 # IA2/W02 — CAMPAÑA_006 · CONTINUIDAD VIGENTE BLOQUE 02/10 — DEPENDENCIA DE MENTAS
 
 **Identidad:** IA2/W02. **Rama única de escritura:** `codex/calvo-items-20261104-w02-camp006`. **Cola oficial:** `CAMPAIGN_006_W02_QUEUE_APPROVED.csv`. Se ha ejecutado únicamente la fila **02** `gentle_mint;hasty_mint;lax_mint`; no se ha iniciado fila03. No escribir en `main`, V28, PR118, árbitra, ramas ajenas o producción compartida sin contrato IA6.

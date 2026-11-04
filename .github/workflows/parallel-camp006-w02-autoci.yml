@@ -41,6 +41,7 @@ jobs:
           python -B tests/tools/test_parallel_items_w02_campaign_006.py --ci | tee camp006-recovery-python.log
           grep -E '^CAMP006_W02_PY PASS blocks=1 checks=[1-9][0-9]*$' camp006-recovery-python.log
           grep -E '^CAMP006_W02_DEPENDENCY BLOCKED block=02 ids=3 checks=[1-9][0-9]*$' camp006-recovery-python.log
+          grep -E '^CAMP006_W02_DEPENDENCY BLOCKED block=03 ids=3 checks=[1-9][0-9]*$' camp006-recovery-python.log
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
@@ -85,6 +86,7 @@ jobs:
           timeout 900s godot --headless --path . --script res://tests/gameplay/parallel_items_w02_campaign_006.gd 2>&1 | tee camp006-recovery-godot.log
           grep -E '^CAMP006_W02_GODOT PASS blocks=1 checks=[1-9][0-9]*$' camp006-recovery-godot.log
           grep -E '^CAMP006_W02_DEPENDENCY BLOCKED block=02 ids=3 checks=[1-9][0-9]*$' camp006-recovery-godot.log
+          grep -E '^CAMP006_W02_DEPENDENCY BLOCKED block=03 ids=3 checks=[1-9][0-9]*$' camp006-recovery-godot.log
       - name: Regresión CAMP004 y CAMP003 - Python y Godot
         shell: bash
         run: |

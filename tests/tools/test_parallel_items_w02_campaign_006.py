@@ -34,11 +34,11 @@ def verify() -> None:
         progress = list(csv.DictReader(file))
     require(data["worker"] == "W02" and data["campaign"] == "CAMP_006", "Identity")
     require(data["kind"] == "RECOVERY_THEN_NEW", "Family")
-    require(data["status"] == "CI005_RECOVERED_BLOCK02_DEPENDENCY", "Block02 must not claim L2")
+    require(data["status"] == "CI005_RECOVERED_BLOCK03_DEPENDENCY", "Block02 must not claim L2")
     require(data["recovery_gate"]["run_id"] == 41763921080
             and data["recovery_gate"]["conclusion"] == "success"
             and data["recovery_gate"]["head_sha"] == "2abcc2ae9644b8821d9dae6f26214b1a8fa347fc", "Recovered CI run referenced exactly")
-    require(len(data["blocks"]) == len(progress) == 2, "Exactly blocks01 and02; no premature block03")
+    require(len(data["blocks"]) == len(progress) == 3, "Only blocks01-03, not block04")
     require(data["blocks"][0]["block"] == progress[0]["bloque"] == "01", "Progress continuity")
     require(data["blocks"][0]["ids"] == progress[0]["ids"].split(";") ==
             ["exp_candy_xl", "relaxed_mint"], "Exact reserved IDs")
@@ -121,7 +121,7 @@ def verify_mint_dependency(data: dict, progress: list[dict]) -> None:
             and progress[1]["ids"].split(";") == ids, "Three assigned new mints")
     require(block["status"] == "DEPENDENCY_DOCUMENTED_NOT_FUNCTIONAL"
             and progress[1]["estado"] == "DEPENDENCIA_DOCUMENTADA", "No false L2")
-    require(progress[1]["ci_run"] == "CI_BLOQUE02_PENDIENTE", "Do not certify new block")
+    require(progress[1]["ci_run"] == "41778869360", "Block02 CI success does not imply L2")
     expected_modifiers = {
         "gentle": {"nature_id": "gentle", "up": "special_defense", "down": "defense"},
         "hasty": {"nature_id": "hasty", "up": "speed", "down": "defense"},
@@ -178,6 +178,68 @@ def verify_mint_dependency(data: dict, progress: list[dict]) -> None:
                  "modules/save/save_game_repository.gd"]:
         require((ROOT / path).is_file(), "SaveV2 shared dependency exists: " + path)
 
+
+def verify_block03(data: dict, progress: list[dict]) -> None:
+    block = data["blocks"][2]
+    ids = ["lonely_mint", "mild_mint", "naive_mint"]
+    expected = {
+        "lonely": {"nature_id": "lonely", "up": "attack", "down": "defense"},
+        "mild": {"nature_id": "mild", "up": "special_attack", "down": "defense"},
+        "naive": {"nature_id": "naive", "up": "speed", "down": "special_defense"},
+    }
+    require(block["block"] == progress[2]["bloque"] == "03"
+            and block["family"] == "MINT_ENGINE"
+            and block["ids"] == progress[2]["ids"].split(";") == ids,
+            "Authorized block03 identity")
+    require(block["status"] == "DEPENDENCY_DOCUMENTED_NOT_FUNCTIONAL"
+            and progress[2]["estado"] == "DEPENDENCIA_DOCUMENTADA"
+            and progress[2]["ci_run"] == "CI_BLOQUE03_PENDIENTE",
+            "Block03 cannot claim L2 or completed CI")
+    require(block["dependency_ref"] == data["blocks"][1]["dependency"]["key"]
+            == "MINT_EFFECTIVE_NATURE_STATE_SAVEV2_006_W02"
+            and block["dependency_owner"] == "IA6", "Reused shared IA6 dependency")
+    require(block["cases"] == []
+            and "gentle_mint_missing_effect_route" in block["native_negative_reuse"],
+            "No redundant negatives; native three-mode sentinel reused")
+    require(block["expected_nature_modifiers"] == expected
+            and "SaveV2" in block["positive_test_pending"],
+            "Independent stat mapping and pending positive SaveV2 contract")
+    rules = RULES.read_text(encoding="utf-8")
+    service = (ROOT / "modules/inventory/field_item_service.gd").read_text(encoding="utf-8")
+    effects = (ROOT / "modules/inventory/field_item_effects.gd").read_text(encoding="utf-8")
+    creature = (ROOT / "modules/creatures/domain/creature_instance.gd").read_text(encoding="utf-8")
+    with (ROOT / "config/item_selection_v1.json").open(encoding="utf-8") as fh:
+        policy = json.load(fh)
+    for item, nature in zip(ids, expected):
+        fields = expected[nature]
+        token = ('&"' + nature + '": ["' + fields["up"] + '", "' +
+                 fields["down"] + '"]')
+        require(token in rules, "Native nature modifier " + nature)
+        require(item not in service and item not in effects,
+                "Handler added; reauditar efectos positivos " + item)
+        require(item not in policy["excluded_ids"] and
+                "nature_mints" not in policy["excluded_categories"],
+                "Policy unexpectedly excluded mint " + item)
+    require("effective_nature_id" not in creature
+            and 'StatCalculator.compute(base, ivs, evs, nature_id, level)' in creature,
+            "Pending nature producer still missing")
+    for path in block["source_evidence"]:
+        require((ROOT / path).is_file(), "Grounded source missing: " + path)
+    runner = RUNNER006.read_text(encoding="utf-8")
+    require("block=03 ids=3 checks=" in runner
+            and "gentle_mint_missing_effect_route" in runner,
+            "Godot native negative reused and block03 checked")
+    for mutation in (
+        lambda b: b["ids"].append("rash_mint"),
+        lambda b: b.update({"status": "FUNCTIONAL"}),
+        lambda b: b.update({"dependency_ref": "invalid"}),
+        lambda b: b["cases"].append({"fake": True}),
+        lambda b: b["expected_nature_modifiers"]["naive"].update({"up": "attack"}),
+    ):
+        changed = copy.deepcopy(block)
+        mutation(changed)
+        require(changed != block, "Mutation control detected")
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--ci", action="store_true")
@@ -190,6 +252,8 @@ def main() -> None:
         progress = list(csv.DictReader(file))
     verify_mint_dependency(data, progress)
     print(f"CAMP006_W02_DEPENDENCY BLOCKED block=02 ids=3 checks={checks}")
+    verify_block03(data, progress)
+    print(f"CAMP006_W02_DEPENDENCY BLOCKED block=03 ids=3 checks={checks}")
 
 if __name__ == "__main__":
     main()

@@ -3,7 +3,7 @@
   "worker": "W02",
   "campaign": "CAMP_006",
   "kind": "RECOVERY_THEN_NEW",
-  "status": "CI005_RECOVERED_BLOCK02_DEPENDENCY",
+  "status": "CI005_RECOVERED_BLOCK03_DEPENDENCY",
   "source_campaign": "CAMP_005",
   "source_fixture": "tests/fixtures/parallel_items/w02_campaign_005.json",
   "modes": [
@@ -127,13 +127,56 @@
         "config/item_selection_v1.json"
       ],
       "purpose": "Record exact shared contract dependency for three new mints; no speculative positive nature effect and no changes outside W02 test/docs."
+    },
+    {
+      "block": "03",
+      "family": "MINT_ENGINE",
+      "ids": [
+        "lonely_mint",
+        "mild_mint",
+        "naive_mint"
+      ],
+      "status": "DEPENDENCY_DOCUMENTED_NOT_FUNCTIONAL",
+      "expected_nature_modifiers": {
+        "lonely": {
+          "nature_id": "lonely",
+          "up": "attack",
+          "down": "defense"
+        },
+        "mild": {
+          "nature_id": "mild",
+          "up": "special_attack",
+          "down": "defense"
+        },
+        "naive": {
+          "nature_id": "naive",
+          "up": "speed",
+          "down": "special_defense"
+        }
+      },
+      "cases": [],
+      "dependency_ref": "MINT_EFFECTIVE_NATURE_STATE_SAVEV2_006_W02",
+      "dependency_owner": "IA6",
+      "source_evidence": [
+        "modules/creatures/progression/progression_ruleset.gd",
+        "modules/creatures/domain/creature_instance.gd",
+        "modules/creatures/progression/stat_calculator.gd",
+        "modules/inventory/field_item_service.gd",
+        "modules/inventory/field_item_effects.gd",
+        "modules/save/save_game_data.gd",
+        "config/item_selection_v1.json"
+      ],
+      "positive_test_pending": "Con productor IA6 aprobado: cambio real stats up/down, naturaleza original intacta, consumo de 1, rollback, persistencia SaveV2 y batalla.",
+      "native_negative_reuse": "gentle_mint_missing_effect_route de bloque02, modos active/none/reserve; cero negativos redundantes",
+      "reason": "Comparte ausencia de naturaleza efectiva/SaveV2 y ejecutor con bloque02, no se declara L2."
     }
   ],
   "limitations": [
     "El mensaje relaxed_mint_level100: bloque íntegro es etiqueta agregada del fallo del bloque Godot, no una tercera aserción de menta fallida.",
     "No marca recuperación exitosa hasta el recibo Godot y Python de los diez bloques CAMP005 en esta rama y regresiones CAMP004/CAMP003. No ejecutar fila02 antes de PASS.",
     "Sin cambios de producción; sustituir un falso expect_cap por nuevo expect_no_cap fuerte, preservando todos los escenarios CAMP005.",
-    "Block02 is NOT L2: one shared missing producer/SaveV2 contract, one representative native negative, and 3 source-mapped mints; no function or API was fabricated."
+    "Block02 is NOT L2: one shared missing producer/SaveV2 contract, one representative native negative, and 3 source-mapped mints; no function or API was fabricated.",
+    "Bloque03: reglas de lonely/mild/naive disponibles, sin handler ni persistencia de naturaleza efectiva. Se reutiliza dependencia IA6 y los 288 escenarios de CAMP005 siguen intactos."
   ],
   "recovery_gate": {
     "run_id": 41763921080,

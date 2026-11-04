@@ -28,12 +28,15 @@ func _run_recovery006() -> void:
 	check("overlay real y especies base", Variants.apply(catalogs))
 	check("worker y campaña propios", automation.campaign == "CAMP_006"
 		and automation.worker == "W02")
-	check("recuperación y bloque02 documentado sin bloque03", automation.blocks.size() == 2
+	check("recuperación y bloques02/03 documentados sin bloque04", automation.blocks.size() == 3
 		and automation.blocks[0].block == "01"
 		and automation.blocks[0].ids == ["exp_candy_xl", "relaxed_mint"]
 		and automation.blocks[1].block == "02"
 		and automation.blocks[1].ids == ["gentle_mint", "hasty_mint", "lax_mint"]
-		and automation.blocks[1].status == "DEPENDENCY_DOCUMENTED_NOT_FUNCTIONAL")
+		and automation.blocks[1].status == "DEPENDENCY_DOCUMENTED_NOT_FUNCTIONAL"
+		and automation.blocks[2].block == "03"
+		and automation.blocks[2].ids == ["lonely_mint", "mild_mint", "naive_mint"]
+		and automation.blocks[2].status == "DEPENDENCY_DOCUMENTED_NOT_FUNCTIONAL")
 	check("tres modos heredados PARTY/STORAGE", automation.modes == ["active", "none", "reserve"])
 	var old: Variant = JSON.parse_string(FileAccess.get_file_as_string(SOURCE_005))
 	check("fixture CAMP005 intacta", old is Dictionary)
@@ -124,6 +127,24 @@ func _run_recovery006() -> void:
 	print("CAMP006_W02_DEPENDENCY ", "BLOCKED" if rejected_all
 		and errors.size() == sentinel_errors else "FAIL",
 		" block=02 ids=3 checks=", checks)
+	var block03: Dictionary = automation.blocks[2]
+	check("03 hereda único productor pendiente IA6",
+		String(block03.dependency_ref) == String(b2.dependency.key)
+		and block03.cases.is_empty() and String(block03.dependency_owner) == "IA6")
+	var expected03: Dictionary = {"lonely": ["attack", "defense"],
+		"mild": ["special_attack", "defense"],
+		"naive": ["speed", "special_defense"]}
+	check("03 tiene tres naturalezas", block03.expected_nature_modifiers.size() == 3)
+	for nat03: String in expected03:
+		var m03: Dictionary = block03.expected_nature_modifiers.get(nat03, {})
+		check("03 modificadores nativos: " + nat03,
+			ProgressionRuleset.NATURE_MODIFIERS.get(StringName(nat03), []) == expected03[nat03]
+			and String(m03.get("up", "")) == String(expected03[nat03][0])
+			and String(m03.get("down", "")) == String(expected03[nat03][1]))
+	for id03: String in block03.ids:
+		check("03 objeto menta presente en catálogo: " + id03,
+			catalogs.item(StringName(id03)) != null)
+	print("CAMP006_W02_DEPENDENCY BLOCKED block=03 ids=3 checks=", checks)
 	var success: bool = errors.is_empty() and passed_cases == 3
 	done = true
 	print("CAMP006_W02_GODOT ", "PASS" if success else "FAIL",
