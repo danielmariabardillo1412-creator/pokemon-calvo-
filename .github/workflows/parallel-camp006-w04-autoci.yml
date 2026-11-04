@@ -1,0 +1,107 @@
+name: CAMP006 W04 - evolucion desde demo y SaveV2 con regresion
+on:
+  push:
+    branches:
+      - codex/calvo-items-20261104-w04-camp006
+    paths:
+      - '.github/workflows/parallel-camp006-w04-autoci.yml'
+      - 'tests/tools/test_parallel_items_w04_campaign_006.py'
+      - 'tests/gameplay/parallel_items_w04_campaign_006.gd'
+      - 'tests/fixtures/parallel_items/w04_campaign_006.json'
+      - 'docs/coordination/items_parallel_v1/reports/W04/CAMP_006_PROGRESO.csv'
+      - 'modules/**'
+      - 'scenes/visual/**'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: camp006-w04-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Puerta de identidad y progreso CAMP006
+        id: gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REF_NAME" = "codex/calvo-items-20261104-w04-camp006"
+          python -B - <<'PY'
+          import csv, os, json
+          from pathlib import Path
+          p = list(csv.DictReader(open("docs/coordination/items_parallel_v1/reports/W04/CAMP_006_PROGRESO.csv")))
+          f = json.loads(Path("tests/fixtures/parallel_items/w04_campaign_006.json").read_text())
+          assert f["worker"] == "W04" and f["campaign"] == "CAMP_006"
+          assert 1 <= len(p) <= 10 and len(f["blocks"]) == len(p)
+          assert [x["bloque"] for x in p] == [f"{i+1:02d}" for i in range(len(p))]
+          assert all(x["ids"].split(";") == f["blocks"][i]["ids"] for i,x in enumerate(p))
+          assert p[0]["ids"] == "sweet_apple;tart_apple;syrupy_apple"
+          with open(os.environ["GITHUB_OUTPUT"], "a") as out:
+              out.write(f"blocks={len(p)}\n")
+          print(f"CAMP006_W04_SCOPE PASS blocks={len(p)}")
+          PY
+      - uses: chickensoft-games/setup-godot@v2.4.1
+        with:
+          version: 4.7.0
+          use-dotnet: false
+          include-templates: false
+      - name: Preparar recursos e importar Godot
+        shell: bash
+        run: |
+          set -euo pipefail
+          godot --version | grep -E '^4[.]7([.-]|$)'
+          python -B tools/distribution/restore_resources.py
+          python -B tools/distribution/restore_resources.py --check
+          mkdir -p data/reports
+          cp ci/fixtures/pokeapi_reports/forms_policy_report.json data/reports/forms_policy_report.json
+          cp ci/fixtures/pokeapi_reports/unsupported_mechanics.json data/reports/unsupported_mechanics.json
+          cp ci/fixtures/pokeapi_reports/import_summary.json data/reports/import_summary.json
+          godot --headless --path . --import 2>&1 | tee camp006-w04-import.log
+          if grep -E 'SCRIPT ERROR|Parse Error' camp006-w04-import.log; then exit 1; fi
+      - name: CAMP006 contrato Python de integracion L3
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tests/tools/test_parallel_items_w04_campaign_006.py --ci 2>&1 | tee camp006-w04-python.log
+          grep -E "^CAMP006_W04_PY PASS blocks=${{ steps.gate.outputs.blocks }} checks=[1-9][0-9]*$" camp006-w04-python.log
+      - name: CAMP006 Godot escena real mochila evolucion y SaveV2
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 1100s godot --headless --path . --script res://tests/gameplay/parallel_items_w04_campaign_006.gd 2>&1 | tee camp006-w04-godot.log
+          grep -E "^CAMP006_W04_GODOT PASS blocks=${{ steps.gate.outputs.blocks }} checks=[1-9][0-9]*$" camp006-w04-godot.log
+      - name: Detectar cambios de produccion
+        id: changed
+        shell: bash
+        run: |
+          set -euo pipefail
+          if git diff --name-only HEAD^ HEAD | grep -Eq '^(modules/|scenes/visual/)'; then
+            echo "modules=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "modules=false" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Regresion completa CAMP005 al primer bloque y en hitos
+        if: steps.gate.outputs.blocks == '1' || steps.gate.outputs.blocks == '5' || steps.gate.outputs.blocks == '10' || steps.changed.outputs.modules == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tests/tools/test_parallel_items_w04_campaign_005.py --ci 2>&1 | tee camp006-w04-camp005-py.log
+          grep -E '^CAMP005_W04_PY PASS blocks=10 checks=[1-9][0-9]*$' camp006-w04-camp005-py.log
+          timeout 1100s godot --headless --path . --script res://tests/gameplay/parallel_items_w04_campaign_005.gd 2>&1 | tee camp006-w04-camp005-godot.log
+          grep -E '^CAMP005_W04_GODOT PASS blocks=10 checks=[1-9][0-9]*$' camp006-w04-camp005-godot.log
+      - name: Conservar logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: camp006-w04-${{ github.run_id }}
+          retention-days: 7
+          if-no-files-found: ignore
+          path: camp006-w04-*.log
