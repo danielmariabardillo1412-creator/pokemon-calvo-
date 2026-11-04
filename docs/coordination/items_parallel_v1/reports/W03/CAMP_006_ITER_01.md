@@ -1,3 +1,13 @@
+## Resultado CI real y correcciones del piloto
+
+La ejecución final del código [#41764044349](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41764044349), commit `425885a7182db2a7c9962f0a396fd22bf70b858e`, terminó **completed/success**. Recibos: `CAMP006_W03_PY PASS blocks=1 checks=17`, `CAMP006_W03_GODOT PASS blocks=1 checks=20`, y regresión `CAMP005_W03_PY PASS blocks=10 checks=169`, `CAMP005_W03_GODOT PASS blocks=10 checks=208`.
+
+Dos ejecuciones anteriores fallaron por causas propias corregidas sin relajar ninguna prueba: [#41763655888](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41763655888), inferencia estática de tipo GDScript en el runner, y [#41763891650](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41763891650), ausencia de guarda temprana del movimiento bloqueado en el adaptador. La tercera CI acreditó el retorno desde la cueva, guardado y recarga nativa, bloqueo seguro, conservación de cantidad y regresión.
+
+**Criterio alcanzado:** retorno del piloto de demo y serialización/restauración a través de SaveV2 existente, no transacción completa del objeto. **CI no acredita UI ni GPU**, y no debe anunciarse Cuerda Huida plenamente jugable. Solicitud puntual IA6: integrar `WorldItemCommand` con propiedad de mochila y commit transaccional (siguiente bloque del mismo grupo) antes de conectar el botón de bolsa.
+
+---
+
 # IA3/W03 · CAMPAÑA_006 · BLOQUE 01 · Cuerda Huida
 
 **Rama exclusiva:** `codex/calvo-items-20261104-w03-camp006`. **ID:** `escape_rope`, del backlog anterior, **no nuevo**. Baseline CAMP005 10/10 previo intacto. La rama inicialmente NO contenía fixture/progreso/runner CAMP006 ni workflow, y no había runs de CI CAMP006. Se crearon en W03, sin alterar ninguna rama ajena.
