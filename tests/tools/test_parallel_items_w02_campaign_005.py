@@ -943,7 +943,7 @@ EXPECTED_04 = json.loads(r'''[
     "applies": true,
     "exp_amount": 30000,
     "level": 99,
-    "expect_cap": true
+    "expect_no_cap": true
   },
   {
     "scenario": "exp_candy_xl_level99_cap_50xp",
@@ -3296,6 +3296,8 @@ def verify_sources(chk):
         'gain_expected > 0 and gain_expected <= nominal_exp',
         'int(result.get("exp_gained", -1)) == gain_expected',
         'bool(spec.get("expect_cap", false))',
+        'bool(spec.get("expect_no_cap", false))',
+        'expected_exp < cap_exp and gain_expected == nominal_exp',
         'bool(spec.get("expect_level_up", false))',
     ):
         chk.demand(fragment in runner, "Caramelos S/M/L/XL: prueba Godot incompleta: "+fragment)
@@ -3468,6 +3470,13 @@ def verify_sources(chk):
     chk.demand('return _deny("field_effect_not_connected", "DEPENDENCY_MISSING")' in service
                and "effective_nature_id" not in creature_08 and "mint" not in creature_08,
                "Menta10: falta o cambia dependencia de naturaleza efectiva")
+    # XL regression interval independent of the runtime's growth code.
+    # Mew (medium-slow) needs 32757 XP from level 99 to 100, not 30000.
+    ref_curves = json.loads((ROOT / "tests/fixtures/progression_growth_curves/reference_contract.json").read_text(encoding="utf-8"))
+    medium_slow = ref_curves["tables"]["medium-slow"]["levels_1_to_100"]
+    delta_99_100 = int(medium_slow[99]) - int(medium_slow[98])
+    chk.demand(delta_99_100 == 32757 and 30000 < delta_99_100,
+               "XL regression interval independent: 30000 XP cannot cap Mew at level99")
     for old, token in (
         (old_ability, 'TRANSITIONS'),
         (old_growth, 'rare_candy'),
@@ -3545,7 +3554,7 @@ def negative_controls(fixture, queue, progress, chk):
             lambda v: v["blocks"][3]["cases"][8].update({"exp_amount": 800}),
             lambda v: v["blocks"][3]["cases"][16].update({"exp_amount": 3000}),
             lambda v: v["blocks"][3]["cases"][24].update({"exp_amount": 10000}),
-            lambda v: v["blocks"][3]["cases"][26].update({"expect_cap": False}),
+            lambda v: v["blocks"][3]["cases"][26].update({"expect_no_cap": False}),
             lambda v: v["blocks"][3]["cases"][28].update({"exp_until_next": 500}),
             lambda v: v["blocks"][3]["cases"][31].update({"start_friendship": 199}),
         ])
