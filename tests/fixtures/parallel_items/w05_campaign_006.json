@@ -5,5 +5,31 @@
   "active_version": "scarlet-violet",
   "kind": "NEW_IDS",
   "purpose": "Bootstrap cero bloques; no certifica enseñanza",
-  "blocks": []
+  "blocks": [
+    {
+      "block": "01",
+      "items": [
+        {
+          "item_id": "tm202",
+          "move_id": "pain_split"
+        },
+        {
+          "item_id": "tm203",
+          "move_id": "psych_up"
+        },
+        {
+          "item_id": "tm204",
+          "move_id": "double_edge"
+        },
+        {
+          "item_id": "tm205",
+          "move_id": "endeavor"
+        },
+        {
+          "item_id": "tm206",
+          "move_id": "petal_blizzard"
+        }
+      ]
+    }
+  ]
 }
