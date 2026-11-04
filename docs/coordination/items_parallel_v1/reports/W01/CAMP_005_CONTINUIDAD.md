@@ -44,3 +44,16 @@ La incidencia SaveV2 del turno de carga de Rayo Solar de CAMPAÑA_004 sigue pend
 - `CAMP005_W01_PY PASS blocks=3` y `CAMP005_W01_GODOT PASS blocks=3`, run `completed/success`, son la condición de cierre de B03. No atribuir aprobación por construcción de blobs ni basarse en el PASS de B02; revisar los logs y reparar con V5 si falla.
 - No se modifican motor, workflow, main, V28, rama árbitra, PR #118 ni ramas W02-W05. La regresión integral CAMP004 corresponde al hito 05/10, 10/10 o parches de producción; el run previo del hito 01 está aprobado.
 - Próxima `p` (solo si B03 PASS): bloque 04 `silver_powder;soft_sand;spell_tag`. Incidencia SaveV2 de Rayo Solar a media carga heredada de CAMP004 continúa para IA6, sin proclamar corrección ni integración global.
+
+## Bloque 03 — certificación de CI real
+
+La CI [#41783664400](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41783664400) concluyó **`completed/success`** sobre el SHA de pruebas `67d0fe6041e690cc8059fd626eea7cdd4a840db2`. Se verificaron los recibos literales del job:
+- `CAMP005_W01_SCOPE PASS blocks=3`
+- `CAMP005_W01_PY PASS blocks=3 checks=208`
+- `CAMP005_W01_GODOT PASS blocks=3 checks=3305`
+
+Se mantiene el acumulado **3/10 bloques, 9 equipables, 27 escenarios, 36 pares caso-semilla y 108 variantes**, con comprobaciones funcionales de efecto positivo y SaveV2. No hubo modificaciones del motor ni de las pruebas heredadas. La regresión CAMP004 en el hito 03 se omitió legítimamente por la política del workflow (fue SUCCESS en el hito 01, run #41767517526; se repetirá al 05 y 10 o ante parche de producción).
+
+Para evitar una CI redundante por metadatos, la fila 03 del CSV seguirá provisionalmente `EN_CI_AUTOMATICA`; con la próxima `p` se cerrará como `CI_PASS_VERIFICADO`, SHA `67d0fe6041e690cc8059fd626eea7cdd4a840db2` y run `41783664400`, antes de añadir el bloque 04 `silver_powder;soft_sand;spell_tag`. **No iniciar bloque 04 sin `p` explícita**.
+
+Incidencia histórica SaveV2 de Rayo Solar a media carga pendiente de IA6; sin certificación visual/GPU ni fusión a main o V28.

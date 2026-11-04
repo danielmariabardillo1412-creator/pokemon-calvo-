@@ -30,3 +30,16 @@ Cada prueba usa sesiones nativas independientes con el objeto equipado, sin obje
 Riesgos residuales ajenos al bloque: SaveV2 de Rayo Solar a mitad de carga para IA6, pruebas visuales/GPU e integración `main`/V28 sin certificar. Si falla la CI, reparar propio runner/efecto según V5 sin retirar controles y sin tocar otras ramas.
 
 Próxima `p` tras PASS: exclusivamente bloque 04 `silver_powder;soft_sand;spell_tag`. No iniciar anticipadamente.
+
+## Bloque 03 — certificación de CI real
+
+La CI [#41783664400](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41783664400) concluyó **`completed/success`** sobre el SHA de pruebas `67d0fe6041e690cc8059fd626eea7cdd4a840db2`. Se verificaron los recibos literales del job:
+- `CAMP005_W01_SCOPE PASS blocks=3`
+- `CAMP005_W01_PY PASS blocks=3 checks=208`
+- `CAMP005_W01_GODOT PASS blocks=3 checks=3305`
+
+Se mantiene el acumulado **3/10 bloques, 9 equipables, 27 escenarios, 36 pares caso-semilla y 108 variantes**, con comprobaciones funcionales de efecto positivo y SaveV2. No hubo modificaciones del motor ni de las pruebas heredadas. La regresión CAMP004 en el hito 03 se omitió legítimamente por la política del workflow (fue SUCCESS en el hito 01, run #41767517526; se repetirá al 05 y 10 o ante parche de producción).
+
+Para evitar una CI redundante por metadatos, la fila 03 del CSV seguirá provisionalmente `EN_CI_AUTOMATICA`; con la próxima `p` se cerrará como `CI_PASS_VERIFICADO`, SHA `67d0fe6041e690cc8059fd626eea7cdd4a840db2` y run `41783664400`, antes de añadir el bloque 04 `silver_powder;soft_sand;spell_tag`. **No iniciar bloque 04 sin `p` explícita**.
+
+Incidencia histórica SaveV2 de Rayo Solar a media carga pendiente de IA6; sin certificación visual/GPU ni fusión a main o V28.
