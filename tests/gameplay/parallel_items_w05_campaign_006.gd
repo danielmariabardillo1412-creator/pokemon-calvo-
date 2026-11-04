@@ -260,8 +260,9 @@ func _execute() -> void:
 					if item_id == String(ids[j]) and not move_id.is_empty():
 						test_teach(block, record)
 	var expected_cases := 0
-	for group: Dictionary in all_blocks:
-		expected_cases += group.get("items", []).size()
+	for progress_row: PackedStringArray in read_csv(PROGRESS):
+		if progress_row.size() > 1:
+			expected_cases += String(progress_row[1]).split(";").size()
 	check("all_authorized_cases_exercised", results.size() == expected_cases)
 	for row: Dictionary in results:
 		check("teach_case_result_" + String(row.get("item_id", "")), row.get("status", "") == "PASS")
