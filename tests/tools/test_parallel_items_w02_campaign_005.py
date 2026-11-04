@@ -3406,9 +3406,9 @@ def verify_sources(chk):
                    "Menta08 excluida por política, no es dependencia de efecto")
     chk.demand('var nature_id: StringName' in creature_08
                and '"nature_id": String(nature_id)' in creature_08
-               and "mint" not in creature_08
+               and 'var effective_nature_id: StringName = &""' in creature_08
                and 'return _deny("field_effect_not_connected", "DEPENDENCY_MISSING")' in service,
-               "Mentas08 sin contrato de naturaleza efectiva ni ruta segura de aplicación")
+               "Mentas08 siguen sin ejecutor aunque exista naturaleza efectiva en el piloto")
     chk.demand('&"adamant": ["attack", "special_attack"]' in rules_08
                and '&"modest": ["special_attack", "attack"]' in rules_08
                and '&"jolly": ["speed", "special_attack"]' in rules_08,
@@ -3437,10 +3437,9 @@ def verify_sources(chk):
         'SaveGameRepository.new().decode_snapshot(state)',
     ):
         chk.demand(fragment in runner, "Menta09: runner no verifica integridad " + fragment)
-    chk.demand("effective_nature_id" not in creature_08
-               and "mint" not in creature_08
+    chk.demand('var effective_nature_id: StringName = &""' in creature_08
                and 'return _deny("field_effect_not_connected", "DEPENDENCY_MISSING")' in service,
-               "Menta09: dependencia de naturaleza efectiva cambió; requiere reauditoría")
+               "Menta09: debe seguir sin handler, aunque exista piloto aislado")
     for id, name, modifiers in (
         ("brave_mint", "brave", ('attack', 'speed')),
         ("quiet_mint", "quiet", ('special_attack', 'speed')),
@@ -3468,8 +3467,22 @@ def verify_sources(chk):
         chk.demand(fragment in runner,
                    "Menta10: falta prueba de rechazo atómico con SaveV2 " + fragment)
     chk.demand('return _deny("field_effect_not_connected", "DEPENDENCY_MISSING")' in service
-               and "effective_nature_id" not in creature_08 and "mint" not in creature_08,
-               "Menta10: falta o cambia dependencia de naturaleza efectiva")
+               and 'var effective_nature_id: StringName = &""' in creature_08,
+               "Menta10: sin conexión de estos IDs, aunque exista piloto aislado")
+    # CAMP006 pilot allows ONLY block04 mint IDs; all 11 original CAMP005
+    # mint rejections and non-consumption checks must still pass verbatim.
+    mint_source_04 = (ROOT / "modules/inventory/field_mint_effects.gd").read_text(encoding="utf-8")
+    for mint_id in (
+        "adamant_mint", "modest_mint", "jolly_mint",
+        "timid_mint", "bold_mint", "calm_mint", "careful_mint",
+        "brave_mint", "quiet_mint", "impish_mint", "relaxed_mint"
+    ):
+        chk.demand(('"' + mint_id + '"') not in mint_source_04,
+                   "CAMP005 historical mint rejection must remain: " + mint_id)
+    chk.demand('var stat_nature: StringName = nature_id if effective_nature_id == &"" else effective_nature_id' in creature_08,
+               "Effective nature actual recalculation required")
+    chk.demand('if effective_nature_id != &"": result["effective_nature_id"] = String(effective_nature_id)' in creature_08,
+               "New effective field omitted for old saves")
     # XL regression interval independent of the runtime's growth code.
     # Mew (medium-slow) needs 32757 XP from level 99 to 100, not 30000.
     ref_curves = json.loads((ROOT / "tests/fixtures/progression_growth_curves/reference_contract.json").read_text(encoding="utf-8"))

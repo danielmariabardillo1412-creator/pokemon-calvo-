@@ -1,3 +1,17 @@
+# IA2/W02 — CONTINUIDAD VIGENTE CAMPAÑA_006 BLOQUE 04/10 (PILOTO MENTAS)
+
+**Identidad/rama:** IA2/W02, `codex/calvo-items-20261104-w02-camp006`. **IA6 autorizó** el piloto mediante `docs/coordination/items_parallel_v1/CAMPAIGN_006_W02_EFFECTIVE_NATURE_ARCHITECTURE_GATE.md`. Bloque04 `naughty_mint;rash_mint;sassy_mint;serious_mint`. No avanzar al bloque05 sin otro `p` ni editar main, V28, ramas ajenas o APIs compartidas no autorizadas.
+
+**Cambio propuesto para el mismo commit atómico:** helper `modules/inventory/field_mint_effects.gd` de solo 4 IDs; `CreatureInstance.effective_nature_id` opcional y su uso por recálculo, dict y reconstrucción; despacho/transacción sin gasto previo en `FieldItemService`. `nature_id` original se conserva, `serious_mint` neutra se persiste con `serious`, vacío solo significa ninguna menta. Se prueban 4 escenarios positivos en PARTY/STORAGE y sin stock, rechazos atómicos, SaveV2 válido/retrocompatible/valor inválido. Los demás IDs de mentas en CAMP005 y bloques02/03 no se habilitan y deben seguir pasando rechazos históricos.
+
+**CI correcta y sin sobreafirmación:** estado `PILOTO_L2_EN_CI` hasta obtener recibo Godot `CAMP006_W02_MINT04 PASS block=04 ids=4`, Python `CAMP006_W02_MINT04_CONTRACT READY ids=4`, CAMP005 completos (288 escenarios), dependencias anteriores y CAMP004/CAMP003. Runs 41763921080, 41778869360 y 41784043391 SUCCESS correspondientes a código anterior: no sirven como certificado de este commit. Registrar nuevo SHA/run solo tras consultar GitHub.
+
+**Dependencias fuera del permiso IA6:** `FieldGrowthEffects.validation_error` y `FieldMochiEffects.validation_error` comparan estadísticas con `nature_id` y bloquearían caramelos EXP/mochis tras menta. `SaveGameData.validate` no valida campos efectivos antes de escribir (la carga puede rechazarlos en CreatureInstance). Revisar `BattleState`/evoluciones consumidores. No editar esos sistemas sin nueva autorización. Informe para IA6 `docs/coordination/items_parallel_v1/reports/W02/CAMP_006_ITER_04.md` con interfaz mínima y pruebas propuestas.
+
+**Próxima fila al escribir `p`:** bloque05 `everstone;exp_share;lucky_egg`. Revisar primero IA6 y CI piloto; no declarar efectos positivos si la regresión real falla.
+
+---
+
 # IA2/W02 — CONTINUIDAD CAMP006 BLOQUE 03/10
 
 **Rama:** `codex/calvo-items-20261104-w02-camp006`. Solo fila03 `lonely_mint;mild_mint;naive_mint`; próximo `p` fila04 `naughty_mint;rash_mint;sassy_mint;serious_mint`, aún no ejecutada.

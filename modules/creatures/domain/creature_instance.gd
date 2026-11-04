@@ -17,6 +17,8 @@ var experience: int = 0
 var ivs: Dictionary = {}            # stat_key -> int 0..31
 var evs: Dictionary = {}            # stat_key -> int 0..252
 var nature_id: StringName = &"hardy"
+# Optional independent stat modifier; empty means natural/original nature (legacy SaveV2).
+var effective_nature_id: StringName = &""
 var is_shiny := false
 var friendship: int = 0
 var current_hp: int
@@ -98,7 +100,11 @@ func recover_hp(amount: int) -> int:
 # within the new maximum.
 func recalculate_stats(species: CreatureSpecies, ruleset: ProgressionRuleset) -> void:
 	var base := species.base_stat_block()
-	stats = StatCalculator.compute(base, ivs, evs, nature_id, level)
+	var stat_nature: StringName = nature_id if effective_nature_id == &"" else effective_nature_id
+	if not ProgressionRuleset.is_valid_nature(stat_nature):
+		push_error("Invalid effective nature cannot recalculate stats")
+		return
+	stats = StatCalculator.compute(base, ivs, evs, stat_nature, level)
 	current_hp = mini(current_hp, stats.max_hp)
 
 
@@ -204,6 +210,7 @@ func to_dict() -> Dictionary:
 		"held_item_id": String(held_item_id),
 		"held_item_consumed": held_item_consumed,
 	}
+	if effective_nature_id != &"": result["effective_nature_id"] = String(effective_nature_id)
 	if not battle_transform_original.is_empty(): result["battle_transform"] = battle_transform_original.duplicate(true)
 	if is_shiny: result["is_shiny"] = true
 	return result
@@ -225,6 +232,18 @@ static func from_dict(data: Dictionary) -> CreatureInstance:
 	creature.ivs = data.get("ivs", {})
 	creature.evs = data.get("evs", {})
 	creature.nature_id = StringName(data.get("nature_id", "hardy"))
+	# Existing SaveGameRepository rejects empty identity after from_dict.
+	# Invalid effective nature uses that existing invalid-creature sentinel;
+	# never silently replace an invalid mint with its birth nature.
+	if data.has("effective_nature_id"):
+		var raw_effective: Variant = data["effective_nature_id"]
+		if not (raw_effective is String or raw_effective is StringName):
+			creature.instance_id = &""
+			return creature
+		creature.effective_nature_id = StringName(raw_effective)
+		if creature.effective_nature_id == &"" or not ProgressionRuleset.is_valid_nature(creature.effective_nature_id):
+			creature.instance_id = &""
+			return creature
 	creature.is_shiny = bool(data.get("is_shiny", false))
 	creature.friendship = int(data.get("friendship", 0))
 	if data.has("moveset"):

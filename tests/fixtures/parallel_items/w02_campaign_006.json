@@ -3,7 +3,7 @@
   "worker": "W02",
   "campaign": "CAMP_006",
   "kind": "RECOVERY_THEN_NEW",
-  "status": "CI005_RECOVERED_BLOCK03_DEPENDENCY",
+  "status": "CI005_RECOVERED_BLOCK04_MINT_PILOT_CI_PENDING",
   "source_campaign": "CAMP_005",
   "source_fixture": "tests/fixtures/parallel_items/w02_campaign_005.json",
   "modes": [
@@ -169,6 +169,69 @@
       "positive_test_pending": "Con productor IA6 aprobado: cambio real stats up/down, naturaleza original intacta, consumo de 1, rollback, persistencia SaveV2 y batalla.",
       "native_negative_reuse": "gentle_mint_missing_effect_route de bloque02, modos active/none/reserve; cero negativos redundantes",
       "reason": "Comparte ausencia de naturaleza efectiva/SaveV2 y ejecutor con bloque02, no se declara L2."
+    },
+    {
+      "block": "04",
+      "family": "MINT_ENGINE",
+      "ids": [
+        "naughty_mint",
+        "rash_mint",
+        "sassy_mint",
+        "serious_mint"
+      ],
+      "status": "POSITIVE_PILOT_AWAITING_CI",
+      "source_authority": "docs/coordination/items_parallel_v1/CAMPAIGN_006_W02_EFFECTIVE_NATURE_ARCHITECTURE_GATE.md",
+      "helper": "modules/inventory/field_mint_effects.gd",
+      "cases": [
+        {
+          "scenario": "naughty_mint_positive",
+          "id": "naughty_mint",
+          "target_nature": "naughty",
+          "original_nature": "hardy",
+          "changed_stats": [
+            "attack",
+            "special_defense"
+          ]
+        },
+        {
+          "scenario": "rash_mint_positive",
+          "id": "rash_mint",
+          "target_nature": "rash",
+          "original_nature": "hardy",
+          "changed_stats": [
+            "special_attack",
+            "special_defense"
+          ]
+        },
+        {
+          "scenario": "sassy_mint_positive",
+          "id": "sassy_mint",
+          "target_nature": "sassy",
+          "original_nature": "hardy",
+          "changed_stats": [
+            "special_defense",
+            "speed"
+          ]
+        },
+        {
+          "scenario": "serious_mint_neutral_positive",
+          "id": "serious_mint",
+          "target_nature": "serious",
+          "original_nature": "adamant",
+          "changed_stats": [
+            "attack",
+            "special_attack"
+          ]
+        }
+      ],
+      "positive_contract": "CreatureInstance original nature preserved; effective nature independently applied through real StatCalculator.compute; only 1 mint consumed; PARTY/STORAGE and SaveV2 round-trip; invalid effective nature rejected on load; rollback for no stock, wrong slot, same effective nature.",
+      "exclusions": "Other mints 01-03 and CAMP005 remain unavailable pending their own fully tested positive integration.",
+      "shared_seams": "Restricted CreatureInstance effective state/recalculate_stats/to_dict/from_dict; FieldItemService mint dispatch/transaction; no StatCalculator/SaveV2 central or battle edits.",
+      "followup_dependencies": [
+        "FieldGrowthEffects.validation_error computes expected stats from original nature_id, not effective; requires IA6 authorization before interoperable EXP items.",
+        "FieldMochiEffects.validation_error similarly computes with nature_id; requires IA6 authorization to validate mochi after mint.",
+        "SaveGameData.validate does not validate effective nature field before save; valid payloads load through CreatureInstance.from_dict, invalid payloads rejected by decoder, but direct save-time domain validation needs IA6."
+      ]
     }
   ],
   "limitations": [
@@ -176,7 +239,8 @@
     "No marca recuperación exitosa hasta el recibo Godot y Python de los diez bloques CAMP005 en esta rama y regresiones CAMP004/CAMP003. No ejecutar fila02 antes de PASS.",
     "Sin cambios de producción; sustituir un falso expect_cap por nuevo expect_no_cap fuerte, preservando todos los escenarios CAMP005.",
     "Block02 is NOT L2: one shared missing producer/SaveV2 contract, one representative native negative, and 3 source-mapped mints; no function or API was fabricated.",
-    "Bloque03: reglas de lonely/mild/naive disponibles, sin handler ni persistencia de naturaleza efectiva. Se reutiliza dependencia IA6 y los 288 escenarios de CAMP005 siguen intactos."
+    "Bloque03: reglas de lonely/mild/naive disponibles, sin handler ni persistencia de naturaleza efectiva. Se reutiliza dependencia IA6 y los 288 escenarios de CAMP005 siguen intactos.",
+    "Block04 authorised pilot for naughty/rash/sassy/serious only; previous 288 CAMP005 cases and mints not in pilot remain unchanged. Positive effects must be verified on real Godot CI."
   ],
   "recovery_gate": {
     "run_id": 41763921080,

@@ -28,7 +28,7 @@ func _run_recovery006() -> void:
 	check("overlay real y especies base", Variants.apply(catalogs))
 	check("worker y campaña propios", automation.campaign == "CAMP_006"
 		and automation.worker == "W02")
-	check("recuperación y bloques02/03 documentados sin bloque04", automation.blocks.size() == 3
+	check("recuperación + bloques02/03 + piloto04", automation.blocks.size() == 4
 		and automation.blocks[0].block == "01"
 		and automation.blocks[0].ids == ["exp_candy_xl", "relaxed_mint"]
 		and automation.blocks[1].block == "02"
@@ -36,7 +36,10 @@ func _run_recovery006() -> void:
 		and automation.blocks[1].status == "DEPENDENCY_DOCUMENTED_NOT_FUNCTIONAL"
 		and automation.blocks[2].block == "03"
 		and automation.blocks[2].ids == ["lonely_mint", "mild_mint", "naive_mint"]
-		and automation.blocks[2].status == "DEPENDENCY_DOCUMENTED_NOT_FUNCTIONAL")
+		and automation.blocks[2].status == "DEPENDENCY_DOCUMENTED_NOT_FUNCTIONAL"
+		and automation.blocks[3].block == "04"
+		and automation.blocks[3].ids == ["naughty_mint", "rash_mint", "sassy_mint", "serious_mint"]
+		and automation.blocks[3].status == "POSITIVE_PILOT_AWAITING_CI")
 	check("tres modos heredados PARTY/STORAGE", automation.modes == ["active", "none", "reserve"])
 	var old: Variant = JSON.parse_string(FileAccess.get_file_as_string(SOURCE_005))
 	check("fixture CAMP005 intacta", old is Dictionary)
@@ -145,8 +148,124 @@ func _run_recovery006() -> void:
 		check("03 objeto menta presente en catálogo: " + id03,
 			catalogs.item(StringName(id03)) != null)
 	print("CAMP006_W02_DEPENDENCY BLOCKED block=03 ids=3 checks=", checks)
-	var success: bool = errors.is_empty() and passed_cases == 3
+	var mint04_ok: bool = true
+	for pilot_spec: Dictionary in automation.blocks[3].cases:
+		current_case = String(pilot_spec.scenario)
+		for mode04: String in automation.modes:
+			var errors_before_04: int = errors.size()
+			_probe_mint04(pilot_spec, mode04)
+			if errors.size() != errors_before_04: mint04_ok = false
+	print("CAMP006_W02_MINT04 ", "PASS" if mint04_ok else "FAIL",
+		" block=04 ids=4 checks=", checks)
+	var success: bool = errors.is_empty() and passed_cases == 3 and mint04_ok
 	done = true
 	print("CAMP006_W02_GODOT ", "PASS" if success else "FAIL",
 		" blocks=", 1 if success else 0, " checks=", checks)
 	quit(0 if success else 1)
+
+
+# Block04 is a true native engine integration, not a fixture-only mint mapping.
+# The authorised W02 service owns detached staging and inventory publication.
+func _probe_mint04(spec: Dictionary, mode: String) -> void:
+	var item: StringName = StringName(spec.id)
+	var target: StringName = StringName(spec.target_nature)
+	var source_nature: StringName = StringName(spec.original_nature)
+	var build_spec: Dictionary = {"kind": "mint_pilot", "nature": String(source_nature), "level": 50}
+	var c: CreatureInstance = _training_creature(build_spec)
+	check(mode + " criatura mint04 real", c != null)
+	if c == null: return
+	var owner := PlayerCollection.new()
+	check(mode + " menta04 equipo real", owner.party.add_creature(c))
+	if mode == "reserve": check(mode + " menta04 STORAGE real", owner.deposit(&"own"))
+	if mode != "none": check(mode + " menta04 dos unidades reales", owner.inventory.add(item, 2))
+	var service := Service.new()
+	check(mode + " servicio menta04 nativo", service.configure(owner, catalogs, func(): return true))
+	var original: Dictionary = c.to_dict()
+	var before: Dictionary = _owner_data(owner)
+	var old_hp: int = c.current_hp
+	var expected_stats: StatBlock = StatCalculator.compute(
+		catalogs.species(c.species_id).base_stat_block(), c.ivs, c.evs, target, c.level)
+	var original_stats: Dictionary = c.stats.to_dict()
+	check(mode + " menta04 modificadores reales calculan diferencia",
+		expected_stats.to_dict() != original_stats
+		and ProgressionRuleset.is_valid_nature(target)
+		and c.nature_id == source_nature and c.effective_nature_id == &"")
+	var before_illegal: Dictionary = _owner_data(owner)
+	var illegal: Dictionary = service.use_item(item, &"own", 0)
+	check(mode + " menta04 slot no solicitado es rollback",
+		not bool(illegal.get("accepted", true))
+		and String(illegal.get("reason", "")) == "unexpected_mint_target"
+		and _owner_data(owner) == before_illegal)
+	var applied: Dictionary = service.use_item(item, &"own")
+	var should_apply: bool = mode != "none"
+	check(mode + " menta04 aceptación real",
+		bool(applied.get("accepted", false)) == should_apply)
+	var now: CreatureInstance = owner.owned_creature(&"own")
+	check(mode + " menta04 conserva identidad y propiedad", now != null
+		and owner.location_of(&"own") == (&"STORAGE" if mode == "reserve" else &"PARTY"))
+	if now == null: return
+	check(mode + " menta04 bag gasta exactamente una",
+		owner.inventory.quantity(item) == (1 if should_apply else 0))
+	check(mode + " menta04 original en memoria no mutado", original == c.to_dict())
+	if should_apply:
+		check(mode + " menta04 cambia naturaleza efectiva, no original",
+			now.effective_nature_id == target and now.nature_id == source_nature
+			and String(applied.get("action", "")) == "effective_nature"
+			and String(applied.get("effective_nature_id", "")) == String(target))
+		check(mode + " menta04 estadísticas nativas exactas", expected_stats.to_dict() == now.stats.to_dict())
+		check(mode + " menta04 conserva PS reales", now.stats.max_hp == c.stats.max_hp
+			and now.current_hp == old_hp)
+		for stat_key: String in spec.changed_stats:
+			check(mode + " menta04 cambia estadística " + stat_key,
+				int(now.stats.to_dict().get(stat_key, -1)) != int(original_stats.get(stat_key, -1)))
+		check(mode + " menta04 no altera IV EV PP naturaleza o progreso",
+			now.ivs == c.ivs and now.evs == c.evs and now.friendship == c.friendship
+			and now.moveset[0].to_dict() == c.moveset[0].to_dict()
+			and now.moveset[1].to_dict() == c.moveset[1].to_dict()
+			and now.experience == c.experience and now.level == c.level
+			and now.status_state.persistent_id == c.status_state.persistent_id)
+		var before_duplicate: Dictionary = _owner_data(owner)
+		var duplicate: Dictionary = service.use_item(item, &"own")
+		check(mode + " menta04 duplicado sin efecto no consume ni muta",
+			not bool(duplicate.get("accepted", true))
+			and String(duplicate.get("reason", "")) == "item_has_no_effect"
+			and _owner_data(owner) == before_duplicate)
+	else:
+		check(mode + " menta04 sin stock rechaza atómico",
+			String(applied.get("reason", "")) == "item_not_owned"
+			and _owner_data(owner) == before)
+	var snapshot: Dictionary = _owner_data(owner)
+	var loaded: LoadResult = SaveGameRepository.new().decode_snapshot(snapshot)
+	check(mode + " menta04 SaveV2 carga real", loaded.ok)
+	if loaded.ok:
+		var reloaded := PlayerCollection.new()
+		reloaded.party = loaded.party
+		reloaded.storage = loaded.storage
+		reloaded.inventory = loaded.inventory
+		var saved: CreatureInstance = reloaded.owned_creature(&"own")
+		check(mode + " menta04 SaveV2 conserva naturaleza efectiva y bolsa",
+			saved != null
+			and saved.nature_id == source_nature
+			and saved.effective_nature_id == (target if should_apply else &"")
+			and saved.stats.to_dict() == now.stats.to_dict()
+			and reloaded.inventory.quantity(item) == owner.inventory.quantity(item)
+			and reloaded.location_of(&"own") == owner.location_of(&"own"))
+	var legacy: LoadResult = SaveGameRepository.new().decode_snapshot(before)
+	check(mode + " menta04 snapshot SaveV2 anterior sin campo válido", legacy.ok)
+	if legacy.ok:
+		var legacy_collection := PlayerCollection.new()
+		legacy_collection.party = legacy.party
+		legacy_collection.storage = legacy.storage
+		check(mode + " menta04 retrocompatibilidad naturaleza original",
+			legacy_collection.owned_creature(&"own") != null
+			and legacy_collection.owned_creature(&"own").effective_nature_id == &""
+			and legacy_collection.owned_creature(&"own").nature_id == source_nature)
+	if should_apply:
+		var invalid: Dictionary = snapshot.duplicate(true)
+		var entries: Array = invalid.get("creatures", [])
+		for entry: Dictionary in entries:
+			if String(entry.get("instance_id", "")) == "own":
+				entry["effective_nature_id"] = "invented_invalid_nature"
+		var invalid_load: LoadResult = SaveGameRepository.new().decode_snapshot(invalid)
+		check(mode + " menta04 SaveV2 rechaza naturaleza efectiva inválida",
+			not invalid_load.ok and invalid_load.reason == "invalid_creature_id")

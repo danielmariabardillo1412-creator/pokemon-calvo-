@@ -5,6 +5,7 @@ const Content = preload("res://modules/gameplay/randomlock_content_policy.gd")
 const Medicine = preload("res://modules/inventory/battle_medicine_profile.gd")
 const FieldEffects = preload("res://modules/inventory/field_item_effects.gd")
 const Growth = preload("res://modules/inventory/field_growth_effects.gd")
+const Mint = preload("res://modules/inventory/field_mint_effects.gd")
 const EncounterModifiers = preload("res://modules/gameplay/encounter_item_modifiers.gd")
 const PROFILE := "res://modules/inventory/item_connections_v1.json"
 static var _shared_selection: RefCounted
@@ -176,6 +177,9 @@ func use_item(item_id: StringName, creature_id: StringName, replace_slot := -1, 
 	if Growth.supports(item_id):
 		if replace_slot != -1 or target_species != &"": return _deny("unexpected_growth_target")
 		return use_growth_item(item_id, creature_id)
+	if Mint.supports(item_id):
+		if replace_slot != -1 or target_species != &"" or expected_ability_stamp != "": return _deny("unexpected_mint_target")
+		return _apply_mint_item(item_id, creature_id)
 	if FieldEffects.supports(item_id):
 		return _apply_field_effect(item_id, creature_id, replace_slot, expected_ability_stamp)
 	if EncounterModifiers.supports(item_id):
@@ -189,6 +193,28 @@ func use_item(item_id: StringName, creature_id: StringName, replace_slot := -1, 
 		for record: EvolutionRecord in catalogs.species(creature.species_id).evolutions:
 			if record.item_id == item_id: return evolve(item_id, creature_id, target_species)
 	return _deny("field_effect_not_connected", "DEPENDENCY_MISSING")
+
+
+# Mint transaction lives on the W02-owned use_item seam; candidate is detached.
+# Bag is published only after the owner accepts the same-identity replacement.
+func _apply_mint_item(item_id: StringName, creature_id: StringName) -> Dictionary:
+	var original: CreatureInstance = owner.owned_creature(creature_id)
+	if original == null: return _deny("creature_not_owned")
+	if not owner.inventory.has(item_id): return _deny("item_not_owned")
+	var stamp: String = _item_state_stamp(item_id, original)
+	var candidate: CreatureInstance = CreatureInstance.from_dict(original.to_dict())
+	if candidate == null or candidate.instance_id != original.instance_id: return _deny("invalid_mint_state")
+	var outcome: Dictionary = Mint.apply(candidate, item_id, catalogs)
+	if not outcome.accepted: return outcome
+	if _boundary(item_id) != "" or not is_same(owner.owned_creature(creature_id), original) or _item_state_stamp(item_id, original) != stamp:
+		return _deny("mint_state_changed")
+	var staged: PlayerInventory = _bag_copy()
+	if not staged.remove(item_id): return _deny("item_not_owned")
+	if not owner.replace_owned_same_identity(candidate): return _deny("ownership_changed")
+	_publish_bag(staged)
+	outcome["item_id"] = String(item_id)
+	outcome["creature_id"] = String(creature_id)
+	return outcome
 
 
 func _item_state_stamp(item_id: StringName, creature: CreatureInstance) -> String:
