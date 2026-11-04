@@ -2,6 +2,10 @@
 
 **Fecha:** 2026-11-04. **Nueva rama exclusiva:** `codex/calvo-items-20261104-w02-camp006`. **Origen:** `codex/calvo-items-20261103-w02-camp005`. **Autoridad:** [manifiesto global](NEXT_CAMPAIGNS_20261104_MANIFEST.json) y [cola propia](CAMPAIGN_006_W02_QUEUE_APPROVED.csv). **Diez bloques autorizados; 21 IDs nuevos**, salvo explícitas reparaciones del backlog que no suman catálogo. **CI anterior:** [#41742682811](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41742682811) FAILED — NO se declara cierre funcional.
 
+## RESOLUCIÓN IA6 PARA MENTAS (2026-11-04)
+
+Run [#41784043391](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41784043391) **SUCCESS** de regresiones, pero las mentas bloque 03 siguen **DEPENDENCIA**, sin L2. En vez de repetir negativos en bloque 04, IA6 ha definido la naturaleza original y la efectiva por separado, con permisos temporales y restricciones precisas en [CAMPAIGN_006_W02_EFFECTIVE_NATURE_ARCHITECTURE_GATE.md](CAMPAIGN_006_W02_EFFECTIVE_NATURE_ARCHITECTURE_GATE.md). **W02 puede diseñar el piloto de bloque 04** en su rama: helper mint propio, y modificación mínima **solo de las funciones señaladas** de `CreatureInstance` y `FieldItemService`. Cualquier modificación de `StatCalculator`, `SaveGameSerializer`, `modules/save/**`, batalla o evolución requiere nuevo permiso IA6. No certificar L2 sin cálculo estadístico y SaveV2 reales.
+
 ## Propiedad / criterio de trabajo
 FILA 01 OBLIGATORIA: reproducir y reparar CI anterior #41742682811: exp_candy_xl_level99_gain y relaxed_mint_level100, sin relajar aserciones. Antes del bloque 02 se exige CI CAMP005 completa PASS con 10/10 en la nueva rama. Para mentas, no inventar naturaleza efectiva: contrato de estadística real/SaveV2 y fuente aprobada antes de implementación. Funciones propias de entrenamiento solamente; no tocar APIs comunes sin IA6.
 
