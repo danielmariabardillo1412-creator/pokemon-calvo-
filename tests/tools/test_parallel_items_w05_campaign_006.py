@@ -14,7 +14,7 @@ ROOT = Path(__file__).resolve().parents[2]
 BASE = ROOT / "docs/coordination/items_parallel_v1"
 FIXTURE = ROOT / "tests/fixtures/parallel_items/w05_campaign_006.json"
 PROGRESS = BASE / "reports/W05/CAMP_006_PROGRESO.csv"
-QUEUE = BASE / "CAMPAIGN_005_W05_QUEUE_APPROVED.csv"
+QUEUE = BASE / "CAMPAIGN_006_W05_QUEUE_APPROVED.csv"
 PROFILE = ROOT / "modules/inventory/item_connections_v1.json"
 NORMALIZED = ROOT / "data/normalized/pokemon_api.json"
 POLICY = ROOT / "config/randomlock_content_v1.json"
@@ -82,7 +82,7 @@ def validate() -> tuple[int, int, list[dict]]:
     for old_queue in (
             BASE / "CAMPAIGN_003_QUEUE_APPROVED.csv",
             BASE / "CAMPAIGN_004_W05_QUEUE_APPROVED.csv",
-            BASE / "CAMPAIGN_005_W05_QUEUE_APPROVED.csv"):
+            BASE / "CAMPAIGN_006_W05_QUEUE_APPROVED.csv"):
         for historical in load_csv(old_queue):
             if historical["trabajadora"] == "W05":
                 OLD.update(historical["ids"].split(";"))
