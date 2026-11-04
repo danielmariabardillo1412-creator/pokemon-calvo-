@@ -30,6 +30,9 @@ ITEMS = {
     "black_glasses": ("dark", "dark_pulse", "blackglasses"),
     "dragon_fang": ("dragon", "dragon_pulse", "dragonfang"),
     "hard_stone": ("rock", "smack_down", "hardstone"),
+    "miracle_seed": ("grass", "energy_ball", "miracleseed"),
+    "mystic_water": ("water", "surf", "mysticwater"),
+    "never_melt_ice": ("ice", "ice_beam", "nevermeltice"),
 }
 MODES = ["active", "none", "reserve"]
 STATES = {"EN_CI_AUTOMATICA", "ENTREGADO_PENDIENTE_CI",
@@ -66,13 +69,22 @@ def validate() -> int:
     check(len(all_ids) == len(set(all_ids)) == 30, "Cola CAMP005 duplica objetos")
     check(queue[0]["ids"] == "black_glasses;dragon_fang;hard_stone",
           "Primer bloque fuera de encargo de IA6")
+    check(queue[1]["ids"] == "miracle_seed;mystic_water;never_melt_ice",
+          "Segundo bloque fuera de encargo de IA6")
 
     progress = rows(PROGRESS)
-    check(len(progress) == 1, "Bloque 01 exige progreso exacto 1/10")
+    check(len(progress) == 2, "Bloque 02 exige progreso exacto 2/10")
     first = progress[0]
     check(first["bloque"] == "01" and first["ids"] == queue[0]["ids"],
           "La fila 01 no pertenece a W01")
-    check(first["estado"] in STATES, "Estado de bloque inválido")
+    check(first["estado"] == "CI_PASS_VERIFICADO"
+          and first["sha_pruebas"] == "bd33aeb3f993804c3c85217b81892356af39aac5"
+          and first["ci_run"] == "41767517526",
+          "Bloque 01 sin certificado GitHub Actions real")
+    second = progress[1]
+    check(second["bloque"] == "02" and second["ids"] == queue[1]["ids"]
+          and second["estado"] in STATES,
+          "Estado o propiedad de fila 02 incorrectos")
     check(bool(first["sha_pruebas"]) and bool(first["ci_run"]),
           "Progreso sin trazabilidad de estado pendiente")
 
@@ -100,7 +112,8 @@ def validate() -> int:
           and "foe(a).hp<foe(b).hp" in history,
           "Falta control histórico positivo/negativo de daño")
     for item, (kind, move, native) in ITEMS.items():
-        check(item in queue[0]["ids"].split(";"), "Objeto fuera de fila 01 " + item)
+        check(item in queue[0]["ids"].split(";") + queue[1]["ids"].split(";"),
+              "Objeto fuera de bloques 01/02 " + item)
         check(scope[item]["estado_contenido"] == "SELECCIONADO"
               and scope[item]["familia"] == "HELD_COMBAT_CANDIDATE",
               "Objeto no seleccionado: " + item)
@@ -117,17 +130,21 @@ def validate() -> int:
           and data["campaign"] == "CAMP_005" and data["kind"] == "NEW_IDS"
           and data["format"] == "gen9calvounifiedv1", "Fixture CAMPAÑA_005 inválido")
     check(data["variants"] == MODES, "Falta un modo activo, sin objeto o reserva")
-    check(len(data["blocks"]) == 1 and data["blocks"][0]["block"] == "01"
-          and data["blocks"][0]["ids"] == list(ITEMS),
-          "Fixture no sigue el bloque 01 exacto de IA6")
+    check(len(data["blocks"]) == 2 and data["blocks"][0]["block"] == "01"
+          and data["blocks"][1]["block"] == "02"
+          and data["blocks"][0]["ids"] == list(ITEMS)[:3]
+          and data["blocks"][1]["ids"] == list(ITEMS)[3:],
+          "Fixture no sigue los bloques 01/02 exactos de IA6")
     cases = data["cases"]
-    check(len(cases) == 9 and len({c["id"] for c in cases}) == 9,
-          "Se exigen nueve escenarios distintos")
-    check(set(data["blocks"][0]["cases"]) == {c["id"] for c in cases},
-          "Escenarios no están asignados a bloque 01")
+    check(len(cases) == 18 and len({c["id"] for c in cases}) == 18,
+          "Se exigen dieciocho escenarios distintos")
+    for i, block in enumerate(data["blocks"]):
+        check(set(block["cases"]) == {c["id"] for c in cases
+                                       if c["block"] == f"{i+1:02d}"},
+              "Escenarios fuera del bloque oficial " + block["block"])
     pairs = 0
     seen = set()
-    for item, (_, matching_move, _) in ITEMS.items():
+    for index, (item, (_, matching_move, _)) in enumerate(ITEMS.items()):
         for suffix, op, move, seeds in (
             ("matching", "matching_type_boost", matching_move, [19, 23]),
             ("nonmatching", "nonmatching_control", "tackle", [19]),
@@ -137,7 +154,8 @@ def validate() -> int:
             found = [c for c in cases if c["id"] == label]
             check(len(found) == 1, "Caso funcional ausente " + label)
             c = found[0]
-            check(c["block"] == "01" and c["item_id"] == item and c["op"] == op,
+            check(c["block"] == ("01" if index < 3 else "02")
+                  and c["item_id"] == item and c["op"] == op,
                   "Operación o propietario incorrecto: " + label)
             check(c["actor_species"] == "mew" and c["foe_species"] == "mew"
                   and c["own_move"] == move and c["foe_move"] == "amnesia",
@@ -148,8 +166,8 @@ def validate() -> int:
                   "Sin trazabilidad a prueba nativa: " + label)
             seen.add(label)
             pairs += len(seeds)
-    check(seen == {c["id"] for c in cases} and pairs == 12,
-          "No hay doce pares caso-semilla autorizados")
+    check(seen == {c["id"] for c in cases} and pairs == 24,
+          "No hay veinticuatro pares caso-semilla autorizados")
 
     runner = RUNNER.read_text(encoding="utf-8")
     for token in (

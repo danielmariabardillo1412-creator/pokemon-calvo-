@@ -1,2 +1,3 @@
 bloque,ids,estado,sha_pruebas,ci_run,notas
-01,"black_glasses;dragon_fang;hard_stone",DEPENDENCIA_DOCUMENTADA,PENDIENTE_SHA_BLOQUE01,CI_NO_CONFIGURADA_CAMP005,9_casos;12_pares;36_variantes;combate_positivo;tipo_no_coincidente;estado;SaveV2;BLOQUEO_WORKFLOW_IA6
+01,"black_glasses;dragon_fang;hard_stone",CI_PASS_VERIFICADO,bd33aeb3f993804c3c85217b81892356af39aac5,41767517526,9_casos;12_pares;36_variantes;Godot_1109_PASS;Python_88_PASS;CAMP004_Godot_16816_PASS;CAMP004_Python_1028_PASS;SaveV2
+02,"miracle_seed;mystic_water;never_melt_ice",EN_CI_AUTOMATICA,PENDIENTE_SHA_BLOQUE02,PENDIENTE_AUTOCI,9_casos;12_pares;36_variantes;positive_damage;nonmatching_type;non_damaging;active_absent_reserve;SaveV2

@@ -5,7 +5,7 @@
   "kind": "NEW_IDS",
   "scope": "HELD_COMBAT",
   "format": "gen9calvounifiedv1",
-  "status": "BLOCK_01_PENDING_CI",
+  "status": "BLOCK_02_PENDING_CI",
   "variants": [
     "active",
     "none",
@@ -29,6 +29,25 @@
         "hard_stone_matching",
         "hard_stone_nonmatching",
         "hard_stone_status"
+      ]
+    },
+    {
+      "block": "02",
+      "ids": [
+        "miracle_seed",
+        "mystic_water",
+        "never_melt_ice"
+      ],
+      "cases": [
+        "miracle_seed_matching",
+        "miracle_seed_nonmatching",
+        "miracle_seed_status",
+        "mystic_water_matching",
+        "mystic_water_nonmatching",
+        "mystic_water_status",
+        "never_melt_ice_matching",
+        "never_melt_ice_nonmatching",
+        "never_melt_ice_status"
       ]
     }
   ],
@@ -161,6 +180,135 @@
         19
       ],
       "history": "tools/item_audit/held_effect_sweep_v2.cjs:type_boost"
+    },
+    {
+      "block": "02",
+      "id": "miracle_seed_matching",
+      "item_id": "miracle_seed",
+      "op": "matching_type_boost",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "own_move": "energy_ball",
+      "foe_move": "amnesia",
+      "seeds": [
+        19,
+        23
+      ],
+      "history": "tools/item_audit/held_effect_sweep_v2.cjs:type_boost"
+    },
+    {
+      "block": "02",
+      "id": "miracle_seed_nonmatching",
+      "item_id": "miracle_seed",
+      "op": "nonmatching_control",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "own_move": "tackle",
+      "foe_move": "amnesia",
+      "seeds": [
+        19
+      ],
+      "history": "tools/item_audit/held_effect_sweep_v2.cjs:type_boost"
+    },
+    {
+      "block": "02",
+      "id": "miracle_seed_status",
+      "item_id": "miracle_seed",
+      "op": "status_control",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "own_move": "reflect",
+      "foe_move": "amnesia",
+      "seeds": [
+        19
+      ],
+      "history": "tools/item_audit/held_effect_sweep_v2.cjs:type_boost"
+    },
+    {
+      "block": "02",
+      "id": "mystic_water_matching",
+      "item_id": "mystic_water",
+      "op": "matching_type_boost",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "own_move": "surf",
+      "foe_move": "amnesia",
+      "seeds": [
+        19,
+        23
+      ],
+      "history": "tools/item_audit/held_effect_sweep_v2.cjs:type_boost"
+    },
+    {
+      "block": "02",
+      "id": "mystic_water_nonmatching",
+      "item_id": "mystic_water",
+      "op": "nonmatching_control",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "own_move": "tackle",
+      "foe_move": "amnesia",
+      "seeds": [
+        19
+      ],
+      "history": "tools/item_audit/held_effect_sweep_v2.cjs:type_boost"
+    },
+    {
+      "block": "02",
+      "id": "mystic_water_status",
+      "item_id": "mystic_water",
+      "op": "status_control",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "own_move": "reflect",
+      "foe_move": "amnesia",
+      "seeds": [
+        19
+      ],
+      "history": "tools/item_audit/held_effect_sweep_v2.cjs:type_boost"
+    },
+    {
+      "block": "02",
+      "id": "never_melt_ice_matching",
+      "item_id": "never_melt_ice",
+      "op": "matching_type_boost",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "own_move": "ice_beam",
+      "foe_move": "amnesia",
+      "seeds": [
+        19,
+        23
+      ],
+      "history": "tools/item_audit/held_effect_sweep_v2.cjs:type_boost"
+    },
+    {
+      "block": "02",
+      "id": "never_melt_ice_nonmatching",
+      "item_id": "never_melt_ice",
+      "op": "nonmatching_control",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "own_move": "tackle",
+      "foe_move": "amnesia",
+      "seeds": [
+        19
+      ],
+      "history": "tools/item_audit/held_effect_sweep_v2.cjs:type_boost"
+    },
+    {
+      "block": "02",
+      "id": "never_melt_ice_status",
+      "item_id": "never_melt_ice",
+      "op": "status_control",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "own_move": "reflect",
+      "foe_move": "amnesia",
+      "seeds": [
+        19
+      ],
+      "history": "tools/item_audit/held_effect_sweep_v2.cjs:type_boost"
     }
   ],
   "source_provenance": {
@@ -169,7 +317,7 @@
     "native_evidence": "tools/item_audit/held_effect_sweep_v2.cjs"
   },
   "limitations": [
-    "CI de CAMPAÑA_005 ausente en rama inicial",
-    "No certificar PASS sin Godot y Python del mismo SHA"
+    "No certificar bloque 02 sin CI Godot/Python del mismo SHA",
+    "Regresión íntegra CAMPAÑA_004 ya certificada en hito 01 #41767517526; volverá en 05/10 o parche funcional"
   ]
 }

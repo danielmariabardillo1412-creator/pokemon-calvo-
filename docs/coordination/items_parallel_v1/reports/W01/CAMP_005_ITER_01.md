@@ -33,3 +33,7 @@ Esto corresponde a la coordinación IA6 por la norma V5 de cambios de workflows.
 
 ## Estado y continuidad
 Bloque 01 **implementado en tests, pendiente de ejecución y validación**. Si se recibe `p` antes de restaurarse CI, comprobar primero la CI de bloque 01 y repararlo si falla; **no avanzar al 02 ni sumar objetos**. Tras CI real positiva, certificar el CSV con SHA/run y continuar con fila 02 `miracle_seed;mystic_water;never_melt_ice`.
+
+## Certificación posterior del bloque 01
+
+La incidencia descrita arriba fue resuelta por IA6 mediante `.github/workflows/parallel-camp005-w01-autoci.yml`. En el commit de pruebas y workflow `bd33aeb3f993804c3c85217b81892356af39aac5`, la CI oficial [#41767517526](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41767517526) terminó `completed/success`: `CAMP005_W01_PY PASS blocks=1 checks=88`; `CAMP005_W01_GODOT PASS blocks=1 checks=1109`. Regresión completa CAMPAÑA_004: Python 1028 PASS / Godot 16816 PASS. **La declaración histórica de CI no disponible queda resuelta.** Fila 01 certificada en CSV durante la entrada del bloque 02. No se modificó producción para resolverlo.
