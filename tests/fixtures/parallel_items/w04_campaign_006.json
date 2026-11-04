@@ -117,6 +117,54 @@
         "owner": "IA6 for shared producer and persistence; W04 limited evolution-condition adapter after producer contract",
         "safety": "Do not invent variant from held_item, id, seed, shiny, friendship or choose at use time. A pass of species evolution does not prove form authenticity."
       }
+    },
+    {
+      "block": "03",
+      "family": "TRADE_LEVEL_GATE",
+      "ids": [
+        "dragon_scale",
+        "electirizer"
+      ],
+      "objective": "held_item_contexto_piloto_sin_inventar_niveles",
+      "level": "L3_POSITIVE_EQUIP_UNEQUIP_AND_NATIVE_SAVEV2__LEVEL_EVOLUTION_DEFERRED",
+      "cases": [
+        {
+          "item_id": "dragon_scale",
+          "source": "seadra",
+          "target": "kingdra",
+          "chain": 54,
+          "canonical_item": "dragon-scale",
+          "original_version": "gold-silver",
+          "save": "user://w04_c006_03_dragon_scale.json",
+          "approved_level": null,
+          "post_evolution_held_item_rule": null
+        },
+        {
+          "item_id": "electirizer",
+          "source": "electabuzz",
+          "target": "electivire",
+          "chain": 60,
+          "canonical_item": "electirizer",
+          "original_version": "diamond-pearl",
+          "save": "user://w04_c006_03_electirizer.json",
+          "approved_level": null,
+          "post_evolution_held_item_rule": null
+        }
+      ],
+      "trade_level_boundary": {
+        "producer": "ProgressionSystem.gain_experience uses EvolutionSystem.level_up_context(creature); current context does not include held_item_id",
+        "policy": "docs/current/ITEM_TRADE_RESTORATION_V27.json correct_future_rule: Replace exchange requirement only; retain original equipped item plus future defined level, if item required",
+        "gate": "level_values_selected=null, future_evolution_implementation=DEFERRED",
+        "consumer": "EvolutionSystem.classify_record rejects held_item as level condition; need approved threshold, triggering contract and no unauthorized consumption",
+        "integration_proven": "Demo item bag _apply equip/unequip, attached CreatureInstance.held_item_id, PlayerCollection unique ownership, native SaveV2 save/load, retry and rejection without extra units",
+        "missing_decisions": [
+          "IA6 must approve threshold(s) for Seadra/Kingdra and Electabuzz/Electivire (never deduced from prior-stage levels)",
+          "IA6 must approve handling of held evolution item upon successful/cancelled evolution, including rollback",
+          "ProgressionSystem event producer and FieldItemService/SaveV2 shared consumers may need coordinated authorization"
+        ],
+        "owner": "IA6 for level thresholds, item-consumption semantics and shared progression integration; W04 may modify local EvolutionSystem after those contracts exist",
+        "no_new_ids": true
+      }
     }
   ]
 }
