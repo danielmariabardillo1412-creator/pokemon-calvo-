@@ -2,6 +2,10 @@
 
 **Fecha:** 2026-11-04. **Nueva rama exclusiva:** `codex/calvo-items-20261104-w03-camp006`. **Origen:** `codex/calvo-items-20261103-w03-camp005`. **Autoridad:** [manifiesto global](NEXT_CAMPAIGNS_20261104_MANIFEST.json) y [cola propia](CAMPAIGN_006_W03_QUEUE_APPROVED.csv). **Diez bloques autorizados; 0 IDs nuevos**, salvo explícitas reparaciones del backlog que no suman catálogo. **CI anterior:** [#41742709006](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41742709006) SUCCESS.
 
+## EXCEPCIÓN IA6 BLOQUE 02 (2026-11-04)
+
+**Autorizado reanudar el bloque 02 `escape_rope;fluffy_tail`**, exclusivamente con el permiso por función y las pruebas de atomicidad de [CAMPAIGN_006_W03_BLOCK02_SHARED_SEAM_AUTHORIZATION.md](CAMPAIGN_006_W03_BLOCK02_SHARED_SEAM_AUTHORIZATION.md). Se autoriza `FieldItemBag._refresh_choices/_apply` para interceptar solo Cuerda Huida, un helper nuevo de transacción local y ajustes del piloto W03, sin modificar `FieldItemService`, SaveV2, sesión, controlador de desplazamiento, `field_demo.gd` o `main`. La autorización es más específica que el veto general posterior de este archivo; no autoriza ningún otro cambio compartido. **Sin autosave: guardar/cargar manual es un paso separado; no prometer atomicidad de disco y estado vivo en una única operación.** Si rollback vivo no es viable con APIs existentes, detener y elevar test rojo a IA6. El bloque 02 sigue pendiente hasta prueba L3+regresión CI.
+
 ## Propiedad / criterio de trabajo
 Es campaña de INTEGRACIÓN, no otra auditoría negativa. IA6 concede propiedad por función exclusivamente a un adaptador nuevo propio del mundo/captura, y a lógica local de `modules/capture/`. Desplazamiento, estado de mundo, sesión, inventario general y SaveV2 pertenecen a IA6: no editarlos sin asignación puntual. El bloque 01 prueba un return_anchor sobre la demo; no requiere mundo completo. Cada bloque debe añadir efecto L2/L3 comprobable o generar un único ticket de productor común pendiente, NO repetir rechazo negativo como éxito de integración.
 
