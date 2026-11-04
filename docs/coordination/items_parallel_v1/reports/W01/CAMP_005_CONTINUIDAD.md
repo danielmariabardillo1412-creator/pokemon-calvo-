@@ -22,3 +22,16 @@ Consultar para detalles mecánicos y requisitos de CI `CAMP_005_ITER_01.md`. Sin
 - Esperar recibos `CAMP005_W01_PY PASS blocks=2 checks=N` y `CAMP005_W01_GODOT PASS blocks=2 checks=N` con N positivo y run `completed/success` sobre SHA del bloque 02. Si falla, diagnosticar y reparar rama propia según V5, no reducir aserciones.
 - Regresión completa CAMP004 aprobada hito 01; nueva ejecución obligatoria en hitos 05 y 10 o tras cambios de producción. No inventar integración global, UI o GPU. Incidencia anterior SaveV2 en carga intermedia de Rayo Solar continúa pendiente para IA6.
 - **Próxima `p` solo después de CI positiva:** bloquear cierre documental de 02 con SHA/run y ejecutar bloque 03 `poison_barb;sharp_beak;silk_scarf`. Nunca tocar `main`, V28, árbitra ni ramas ajenas.
+
+## Bloque 02 — certificación real CI
+
+La ejecución [GitHub Actions #41778911208](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41778911208) ha terminado `completed/success` sobre el **SHA de pruebas** `69438bfb81921456a87eb7da18b3442f50c79873`. Recibos extraídos del job:
+- `CAMP005_W01_SCOPE PASS blocks=2`
+- `CAMP005_W01_PY PASS blocks=2 checks=148`
+- `CAMP005_W01_GODOT PASS blocks=2 checks=2207`
+
+**Estado funcional: bloque 02 aprobado, 2/10 verificados**, 6 objetos, 18 escenarios, 24 pares caso-semilla y 72 variantes, con comparaciones nativas y SaveV2. Workflow y motores previos sin cambios en este commit. El workflow omitió legítimamente la regresión completa CAMPAÑA_004 en hito 02, ya verificada en el run del hito 01 #41767517526; volverá en hitos 05 y 10 o por parche de producción.
+
+La fila 02 del CSV queda temporalmente `EN_CI_AUTOMATICA` para no disparar CI por el cierre documental. En la **siguiente `p`**, certificarla con `CI_PASS_VERIFICADO`, SHA `69438bfb81921456a87eb7da18b3442f50c79873` y run `41778911208` antes de insertar la fila 03. El siguiente microbloque, y solo ese, es `poison_barb;sharp_beak;silk_scarf`.
+
+La incidencia SaveV2 del turno de carga de Rayo Solar de CAMPAÑA_004 sigue pendiente para IA6; no hay prueba visual/GPU ni integración en main/V28. **STOP en 02/10 hasta nueva `p`**.
