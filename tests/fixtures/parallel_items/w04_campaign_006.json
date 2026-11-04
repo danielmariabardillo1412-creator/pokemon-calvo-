@@ -53,6 +53,70 @@
           "Workflow for CAMP006 does not exist on branch; CI must be prepared by IA6 before certification."
         ]
       }
+    },
+    {
+      "block": "02",
+      "family": "FORM_SOURCE",
+      "ids": [
+        "chipped_pot",
+        "cracked_pot",
+        "masterpiece_teacup",
+        "unremarkable_teacup"
+      ],
+      "objective": "autenticidad_forma_pieza_positiva_piloto",
+      "level": "L3_SPECIES_POSITIVE__FORM_AUTHENTICITY_UNRESOLVED",
+      "cases": [
+        {
+          "item_id": "chipped_pot",
+          "source": "sinistea",
+          "target": "polteageist",
+          "source_form": "antique",
+          "source_form_api_id": 10344,
+          "target_form_api_id": 10345,
+          "save": "user://w04_c006_02_chipped_pot.json",
+          "runtime_form_id_present": false
+        },
+        {
+          "item_id": "cracked_pot",
+          "source": "sinistea",
+          "target": "polteageist",
+          "source_form": "phony",
+          "source_form_api_id": 854,
+          "target_form_api_id": 855,
+          "save": "user://w04_c006_02_cracked_pot.json",
+          "runtime_form_id_present": false
+        },
+        {
+          "item_id": "masterpiece_teacup",
+          "source": "poltchageist",
+          "target": "sinistcha",
+          "source_form": "artisan",
+          "source_form_api_id": 10447,
+          "target_form_api_id": 10448,
+          "save": "user://w04_c006_02_masterpiece_teacup.json",
+          "runtime_form_id_present": false
+        },
+        {
+          "item_id": "unremarkable_teacup",
+          "source": "poltchageist",
+          "target": "sinistcha",
+          "source_form": "counterfeit",
+          "source_form_api_id": 1012,
+          "target_form_api_id": 1013,
+          "save": "user://w04_c006_02_unremarkable_teacup.json",
+          "runtime_form_id_present": false
+        }
+      ],
+      "form_boundary": {
+        "canonical_producer": "data/api/v2/pokemon-form/{854,10344,855,10345,1012,10447,1013,10448}/index.json defines variants, not a runtime per-creature identity",
+        "missing_shared_producer": "Capture/CreatureFactory need to assign authoritative Sinistea phony/antique or Poltchageist counterfeit/artisan at acquisition, not randomly during item use",
+        "missing_persistent_contract": "CreatureInstance.to_dict/from_dict, SaveV2 validation/migration and evolved form target identity, owner IA6; do not set battle_transform_original, nature_id or instance_id as substitute",
+        "required_consumer": "FieldItemService.evolution_options/evolve must authorize exactly the matching pot/cup and carry source→target form atomically",
+        "positive_current": "Existing species-level item evolutions are tested end-to-end in the real demo, with one unit spent, instance_id preserved and native SaveV2 restored; L3 species only",
+        "negative_guard_future": "On an authenticated creature, mismatched pot/cup returns rejected without spending, and the evolved Polteageist/Sinistcha has the required persisted output form",
+        "owner": "IA6 for shared producer and persistence; W04 limited evolution-condition adapter after producer contract",
+        "safety": "Do not invent variant from held_item, id, seed, shiny, friendship or choose at use time. A pass of species evolution does not prove form authenticity."
+      }
     }
   ]
 }
