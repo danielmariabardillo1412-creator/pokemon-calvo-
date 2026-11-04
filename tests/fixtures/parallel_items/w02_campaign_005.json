@@ -979,7 +979,7 @@
           "applies": true,
           "exp_amount": 30000,
           "level": 99,
-          "expect_cap": true
+          "expect_no_cap": true
         },
         {
           "scenario": "exp_candy_xl_level99_cap_50xp",
@@ -3181,6 +3181,7 @@
     "Bloque08: fresh_start_mochi resetea los seis EV existentes sin aumentar amistad, rechazando EV cero o slot inesperado. Contratos reales de Mochi V13.",
     "Menthas adamant/modest/jolly: registradas en catálogo pero sin ejecutor de campo ni persistencia de naturaleza efectiva independiente de la naturaleza original. Se registra DEPENDENCY_MISSING, se exige no consumir el item. No simular éxito ni escribir API compartida.",
     "Fila09: timid/bold/calm/careful_mint sin handler nativo ni naturaleza estadística efectiva persistente; contrato negativo DEPENDENCY_MISSING/field_effect_not_connected sin consumo, en PARTY/STORAGE y sin stock. No atribuir funcionalidad positiva ni CI PASS.",
-    "Bloque10: brave/quiet/impish/relaxed_mint siguen sin ejecutor de campo ni effective_nature_id en SaveV2; 32 casos con DEPENDENCY_MISSING y rechazo atómico. No hay efecto positivo ni merge a main."
+    "Bloque10: brave/quiet/impish/relaxed_mint siguen sin ejecutor de campo ni effective_nature_id en SaveV2; 32 casos con DEPENDENCY_MISSING y rechazo atómico. No hay efecto positivo ni merge a main.",
+    "CAMP006 W02 reparación del oracle CAMP005: desde Mew 99, intervalo de curva medium-slow 32757 XP hasta 100; Caramelo Exp XL gana 30000 y NO debe llegar a nivel 100. Se exige expect_no_cap y se conserva caso independiente a 50 XP del nivel 100 con expect_cap."
   ]
 }
