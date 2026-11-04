@@ -29,7 +29,7 @@ func make_mon(species_id: StringName, id: StringName, catalogs: DefinitionCatalo
     return CreatureFactory.create(catalogs.species(species_id), 40, catalogs, ProgressionRuleset.new(), rng,
         {"instance_id": id, "nature_id": &"hardy", "moves": ["tackle", "protect"]})
 
-func choose_item(bag: Control, item: StringName) -> bool:
+func choose_item(bag: Variant, item: StringName) -> bool:
     for index in range(bag._items.item_count):
         if StringName(bag._items.get_item_metadata(index)) == item:
             bag._items.select(index)
@@ -37,7 +37,7 @@ func choose_item(bag: Control, item: StringName) -> bool:
             return true
     return false
 
-func choose_creature(bag: Control, id: StringName) -> bool:
+func choose_creature(bag: Variant, id: StringName) -> bool:
     for index in range(bag._targets.item_count):
         if StringName(bag._targets.get_item_metadata(index)) == id:
             bag._targets.select(index)
@@ -67,7 +67,7 @@ func _case(caso: Dictionary) -> void:
     var before_mon: Dictionary = mon.to_dict()
     var before: String = snapshot(collection)
     check(scene.field_can_open_item_bag(), label + "/field_demo_idle")
-    var bag: Control = scene._item_bag
+    var bag: Variant = scene._item_bag
     check(scene.toggle_item_bag() and bag.visible, label + "/visual_bag_open")
     check(scene.field_item_service_is_current(bag.service), label + "/service_bound_to_live_collection")
     check(choose_item(bag, item), label + "/apple_visible_in_bag")
@@ -98,7 +98,7 @@ func _case(caso: Dictionary) -> void:
     check(not repeated.get("accepted", false) and snapshot(collection) == after, label + "/cannot_evolve_twice")
     bag.hide()
     await process_frame
-    var bridge: Node = scene._native_battles
+    var bridge: Variant = scene._native_battles
     bridge.save_path = String(caso.get("save", ""))
     check(scene.field_player_movement_enabled() and not bridge.occupied(), label + "/save_idle_boundary")
     check(bridge.save_game(), label + "/visual_native_save")
