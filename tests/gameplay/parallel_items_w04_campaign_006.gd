@@ -222,6 +222,134 @@ func _case_form_02(caso: Dictionary) -> void:
     print("CAMP006_W04_POT id=", name, " source=", String(source), " target=", String(target),
         " status=L3_SPECIES_EVOLUTION__FORM_AUTHENTICITY_MISSING producer=CreatureInstance_form+Capture+SaveV2")
 
+func _case_trade_03(caso: Dictionary) -> void:
+    var item := StringName(caso.get("item_id", ""))
+    var source := StringName(caso.get("source", ""))
+    var target := StringName(caso.get("target", ""))
+    var label := String(item)
+    var creature_id := StringName("w04_c006_03_" + label)
+    var catalog: DefinitionCatalog = scene.field_definitions()
+    var pc: PlayerCollection = scene.field_collection()
+    check(catalog != null and pc != null and catalog.species(source) != null and catalog.species(target) != null,
+        label + "/03_real_demo_catalog_and_species")
+    if catalog == null or pc == null or catalog.species(source) == null:
+        return
+    var raw: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://docs/current/ITEM_TRADE_RESTORATION_V27.json"))
+    check(raw is Dictionary, label + "/03_v27_policy_file")
+    if not raw is Dictionary:
+        return
+    var policy: Dictionary = raw
+    check(policy.get("level_values_selected") == null and policy.get("future_evolution_implementation") == "DEFERRED"
+        and policy.get("restored_ids", []).has(label), label + "/03_no_approved_levels_or_trade_conversion")
+    check(caso.get("approved_level") == null and caso.get("post_evolution_held_item_rule") == null,
+        label + "/03_no_guessed_level_or_evolution_consumption")
+    var species: CreatureSpecies = catalog.species(source)
+    var records := 0
+    var held_record: EvolutionRecord = null
+    for record: EvolutionRecord in species.evolutions:
+        if record.species_id == target and record.trigger == EvolutionSystem.TRIGGER_TRADE and
+            StringName(str(record.conditions.get("held_item", ""))) == item:
+            records += 1
+            held_record = record
+    check(records == 1 and held_record != null, label + "/03_canonical_trade_held_record")
+    if held_record == null:
+        return
+    check(held_record.min_level == 0 and EvolutionSystem.classify_record(held_record, catalog, source) == EvolutionSystem.DATA_ONLY,
+        label + "/03_trade_is_not_implemented_as_level")
+    var mon: CreatureInstance = make_mon(source, creature_id, catalog)
+    check(mon != null, label + "/03_real_source_creature")
+    if mon == null:
+        return
+    pc.party = CreatureParty.new()
+    check(pc.party.add_creature(mon), label + "/03_party_owns_same_instance")
+    check(pc.inventory.set_quantity(item, 2), label + "/03_stock_two_original_items")
+    var baseline: String = snapshot(pc)
+    var before: Dictionary = mon.to_dict()
+    var bag: Variant = scene._item_bag
+    check(scene.toggle_item_bag() and bag.visible, label + "/03_open_visual_bag")
+    check(scene.field_item_service_is_current(bag.service), label + "/03_live_field_service_binding")
+    check(choose_item(bag, item) and choose_creature(bag, creature_id), label + "/03_select_item_and_source")
+    check(bag.service.holdable(item), label + "/03_equippable_item_from_profile")
+    var direct: Dictionary = bag._apply("use")
+    check(not direct.get("accepted", false) and snapshot(pc) == baseline,
+        label + "/03_direct_use_rejected_without_spend")
+    check(choose_item(bag, item) and choose_creature(bag, creature_id),
+        label + "/03_selection_still_valid")
+    var equipped: Dictionary = bag._apply("equip")
+    check(equipped.get("accepted", false) and equipped.get("action") == "equip"
+        and bag._result.text == "Objeto equipado.", label + "/03_positive_visual_equip")
+    check(mon.instance_id == creature_id and mon.species_id == source and
+        mon.held_item_id == item and not mon.held_item_consumed and
+        pc.inventory.quantity(item) == 1 and pc.location_of(creature_id) == &"PARTY",
+        label + "/03_held_context_preserved_without_evolution")
+    var expected: Dictionary = before.duplicate(true)
+    expected["held_item_id"] = label
+    expected["held_item_consumed"] = false
+    check(mon.to_dict() == expected, label + "/03_equip_changes_only_held_fields")
+    var equipped_snapshot: String = snapshot(pc)
+    var duplicate: Dictionary = bag._apply("equip")
+    check(not duplicate.get("accepted", false) and snapshot(pc) == equipped_snapshot,
+        label + "/03_duplicate_equip_no_extra_consumption")
+    check(bag.service.evolution_options(item, creature_id).is_empty(),
+        label + "/03_no_direct_use_item_route")
+    var premature: Dictionary = bag.service.evolve(item, creature_id, target)
+    check(not premature.get("accepted", false) and snapshot(pc) == equipped_snapshot,
+        label + "/03_no_premature_trade_or_level_evolution")
+    var ctx: Dictionary = EvolutionSystem.level_up_context(mon)
+    check(not ctx.has("held_item_id") and not ctx.has("held_item"),
+        label + "/03_shared_level_context_producer_missing")
+    var candidates: Array = EvolutionSystem.evolution_candidates(species,
+        {"level": 100, "item_id": item, "traded": true, "held_item_id": item}, catalog)
+    check(candidates.is_empty(), label + "/03_no_invented_level100_even_with_trade_flag")
+    var removed: Dictionary = bag._apply("unequip")
+    check(removed.get("accepted", false) and removed.get("action") == "unequip" and
+        bag._result.text == "Objeto retirado.", label + "/03_positive_visual_unequip")
+    check(mon.species_id == source and mon.held_item_id == &"" and
+        pc.inventory.quantity(item) == 2 and snapshot(pc) == baseline,
+        label + "/03_unequip_fully_reversible")
+    check(choose_item(bag, item) and choose_creature(bag, creature_id),
+        label + "/03_reselect_for_native_save")
+    var again: Dictionary = bag._apply("equip")
+    check(again.get("accepted", false) and snapshot(pc) == equipped_snapshot,
+        label + "/03_reequip_repeatable_without_conversion")
+    bag.hide()
+    await process_frame
+    var bridge: Variant = scene._native_battles
+    var uri := String(caso.get("save", ""))
+    bridge.save_path = uri
+    check(scene.field_player_movement_enabled() and not bridge.occupied(),
+        label + "/03_idle_save_gate")
+    check(bridge.save_game(), label + "/03_native_demo_save_held")
+    check(pc.inventory.add(item, 1), label + "/03_staged_inventory_mutation")
+    mon.held_item_id = &""
+    check(pc.inventory.quantity(item) == 2 and mon.held_item_id == &"",
+        label + "/03_save_then_mutate_held_context")
+    check(await bridge.load_game(), label + "/03_native_demo_load_held")
+    var loaded: PlayerCollection = scene.field_collection()
+    check(loaded != null and not is_same(loaded, pc), label + "/03_load_new_aggregate")
+    if loaded != null:
+        var restored: CreatureInstance = loaded.owned_creature(creature_id)
+        check(restored != null and restored.instance_id == creature_id and
+            restored.species_id == source and restored.held_item_id == item and
+            not restored.held_item_consumed and loaded.inventory.quantity(item) == 1 and
+            loaded.location_of(creature_id) == &"PARTY", label + "/03_held_item_restored_through_savev2")
+        if restored != null:
+            check(restored.to_dict() == expected, label + "/03_all_other_persistent_fields_saved")
+        check(scene.toggle_item_bag() and scene.field_item_service_is_current(bag.service),
+            label + "/03_rebind_visual_bag_after_native_load")
+        check(choose_creature(bag, creature_id), label + "/03_reselect_loaded_creature")
+        var restored_unequip: Dictionary = bag._apply("unequip")
+        check(restored_unequip.get("accepted", false) and
+            loaded.owned_creature(creature_id).held_item_id == &"" and
+            loaded.inventory.quantity(item) == 2 and loaded.owned_creature(creature_id).species_id == source,
+            label + "/03_positive_unequip_after_savev2")
+        bag.hide()
+        await process_frame
+    DirAccess.remove_absolute(ProjectSettings.globalize_path(uri))
+    print("CAMP006_W04_TRADE_HELD id=", label, " source=", String(source), " target=", String(target),
+        " status=L3_EQUIP_UNEQUIP_SAVEV2__TRADE_LEVEL_DEFERRED requires=IA6_approved_level_and_consumption")
+
+
 func _run() -> void:
     var fixture: Variant = JSON.parse_string(FileAccess.get_file_as_string(FIXTURE))
     check(fixture is Dictionary, "fixture_json")
@@ -229,9 +357,9 @@ func _run() -> void:
         finish()
         return
     var blocks: Array = fixture.get("blocks", [])
-    check(fixture.get("campaign") == "CAMP_006" and blocks.size() == 2 and blocks[0].get("block") == "01" and blocks[1].get("block") == "02",
-        "blocks_01_02_exact")
-    if blocks.size() != 2:
+    check(fixture.get("campaign") == "CAMP_006" and blocks.size() == 3 and blocks[0].get("block") == "01" and blocks[1].get("block") == "02" and blocks[2].get("block") == "03",
+        "blocks_01_02_03_exact")
+    if blocks.size() != 3:
         finish()
         return
     scene = load("res://scenes/visual/field_demo.tscn").instantiate()
@@ -246,6 +374,10 @@ func _run() -> void:
     check(pot_cases.size() == 4, "02_four_authorized_pots_cups")
     for caso: Dictionary in pot_cases:
         await _case_form_02(caso)
+    var held_cases: Array = blocks[2].get("cases", [])
+    check(held_cases.size() == 2, "03_two_held_trade_routes_only")
+    for caso: Dictionary in held_cases:
+        await _case_trade_03(caso)
     if scene != null and is_instance_valid(scene):
         scene.queue_free()
     await process_frame
@@ -256,7 +388,7 @@ func finish() -> void:
         return
     closed = true
     if errors.is_empty():
-        print("CAMP006_W04_GODOT PASS blocks=2 checks=", checks)
+        print("CAMP006_W04_GODOT PASS blocks=3 checks=", checks)
     else:
         print("CAMP006_W04_GODOT FAIL errors=", JSON.stringify(errors))
     quit(0 if errors.is_empty() else 1)
