@@ -52,8 +52,8 @@ func _run_w01_c005() -> void:
 		and fixture.get("kind") == "NEW_IDS" and fixture.get("format") == "gen9calvounifiedv1")
 	check("Tres modalidades sin omisiones", fixture.get("variants") == ["active", "none", "reserve"])
 	var progress: Array = _progress_c005()
-	check("Bloques 01, 02 y 03 de CAMPAÑA_005 autorizados", progress.size() == 3)
-	if progress.size() != 3:
+	check("Bloques 01, 02, 03 y 04 de CAMPAÑA_005 autorizados", progress.size() == 4)
+	if progress.size() != 4:
 		quit(2)
 		return
 	check("Fila 01 autorizada por IA6", String(progress[0].block) == "01"
@@ -62,9 +62,11 @@ func _run_w01_c005() -> void:
 		and String(progress[1].ids) == "miracle_seed;mystic_water;never_melt_ice")
 	check("Fila 03 autorizada por IA6", String(progress[2].block) == "03"
 		and String(progress[2].ids) == "poison_barb;sharp_beak;silk_scarf")
+	check("Fila 04 autorizada por IA6", String(progress[3].block) == "04"
+		and String(progress[3].ids) == "silver_powder;soft_sand;spell_tag")
 	var stages: Array = fixture.get("blocks", [])
-	check("Fixture contiene tres bloques reales", stages.size() == 3)
-	if stages.size() != 3:
+	check("Fixture contiene cuatro bloques reales", stages.size() == 4)
+	if stages.size() != 4:
 		quit(2)
 		return
 	check("Los tres ID del bloque 01 son exactos",
@@ -73,14 +75,17 @@ func _run_w01_c005() -> void:
 		stages[1].get("ids", []) == ["miracle_seed", "mystic_water", "never_melt_ice"])
 	check("Los tres ID del bloque 03 son exactos",
 		stages[2].get("ids", []) == ["poison_barb", "sharp_beak", "silk_scarf"])
+	check("Los tres ID del bloque 04 son exactos",
+		stages[3].get("ids", []) == ["silver_powder", "soft_sand", "spell_tag"])
 	var cases: Array = fixture.get("cases", [])
-	check("Veintisiete escenarios funcionales autorizados", cases.size() == 27)
+	check("Treinta y seis escenarios funcionales autorizados", cases.size() == 36)
 	var names: Array = []
 	for row: Dictionary in cases:
 		check("Escenario pertenece a su bloque oficial",
 			(String(row.block) == "01" and stages[0].get("ids", []).has(String(row.item_id)))
 			or (String(row.block) == "02" and stages[1].get("ids", []).has(String(row.item_id)))
-			or (String(row.block) == "03" and stages[2].get("ids", []).has(String(row.item_id))))
+			or (String(row.block) == "03" and stages[2].get("ids", []).has(String(row.item_id)))
+			or (String(row.block) == "04" and stages[3].get("ids", []).has(String(row.item_id))))
 		check("ID único del escenario", not names.has(String(row.id)))
 		names.append(String(row.id))
 		for seed_value: Variant in row.seeds:
@@ -103,10 +108,11 @@ func _run_w01_c005() -> void:
 				"checks": checks - previous_checks,
 				"status": "PASS" if errors.size() == previous_errors else "FAIL",
 				"observed": observed})
-	check("Treinta y seis pares caso-semilla reales", c005_rows.size() == 36)
+	check("Cuarenta y ocho pares caso-semilla reales", c005_rows.size() == 48)
 	for item_id: String in ["black_glasses", "dragon_fang", "hard_stone",
 		"miracle_seed", "mystic_water", "never_melt_ice",
-		"poison_barb", "sharp_beak", "silk_scarf"]:
+		"poison_barb", "sharp_beak", "silk_scarf",
+		"silver_powder", "soft_sand", "spell_tag"]:
 		check("Tres contextos distintos para cada ID " + item_id, cases.filter(
 			func(c): return String(c.item_id) == item_id).size() == 3)
 	var report: Dictionary = {"schema_version": 1, "campaign": "CAMP_005",
@@ -162,7 +168,9 @@ func _compare_c005(row: Dictionary, observed: Dictionary) -> void:
 				"dragon_fang": "dragon_pulse", "hard_stone": "smack_down",
 				"miracle_seed": "energy_ball", "mystic_water": "surf",
 				"never_melt_ice": "ice_beam", "poison_barb": "sludge_bomb",
-				"sharp_beak": "aerial_ace", "silk_scarf": "tackle"}
+				"sharp_beak": "aerial_ace", "silk_scarf": "tackle",
+				"silver_powder": "bug_buzz", "soft_sand": "earth_power",
+				"spell_tag": "shadow_ball"}
 			check("Tipo del ataque positivo autorizado",
 				String(row.own_move) == String(expected_moves.get(String(row.item_id), "")))
 			check("Potenciador de tipo aumenta daño real solo al portador",

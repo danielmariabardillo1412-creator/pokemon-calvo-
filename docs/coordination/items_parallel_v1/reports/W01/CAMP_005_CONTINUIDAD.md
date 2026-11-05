@@ -57,3 +57,12 @@ Se mantiene el acumulado **3/10 bloques, 9 equipables, 27 escenarios, 36 pares c
 Para evitar una CI redundante por metadatos, la fila 03 del CSV seguirá provisionalmente `EN_CI_AUTOMATICA`; con la próxima `p` se cerrará como `CI_PASS_VERIFICADO`, SHA `67d0fe6041e690cc8059fd626eea7cdd4a840db2` y run `41783664400`, antes de añadir el bloque 04 `silver_powder;soft_sand;spell_tag`. **No iniciar bloque 04 sin `p` explícita**.
 
 Incidencia histórica SaveV2 de Rayo Solar a media carga pendiente de IA6; sin certificación visual/GPU ni fusión a main o V28.
+
+## Bloque 04 — entrega técnica (pendiente de CI nueva)
+
+- Bloque 03 certificado en fila de CSV: [run #41783664400](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41783664400), SHA de pruebas `67d0fe6041e690cc8059fd626eea7cdd4a840db2`, Godot 3305 PASS y Python 208 PASS.
+- Se añaden exclusivamente los tres IDs autorizados del bloque 04: `silver_powder` → Bicho/`bug_buzz`, `soft_sand` → Tierra/`earth_power`, `spell_tag` → Fantasma/`shadow_ball`. Controles comunes `tackle` (tipo no coincidente) y `reflect` (estado). Tres modos activos, ausente, reserva, SaveV2 y no consumo.
+- Bloque 04: nueve casos y doce pares, 36 variantes. Acumulado 4 bloques, 12 objetos, 36 casos, 48 pares, 144 variantes. Los 27 casos previos no se eliminan; no se modifica producción ni CI.
+- Estado `EN_CI_AUTOMATICA`, **NO decir PASS hasta run nuevo completado y exitoso con recibos Godot/Python blocks=4 y SHA idéntico**.
+- Regresión completa CAMP004 prevista hitos 05/10 o por cambios de producción. Incidencia SaveV2 Rayo Solar intermedia para IA6. Sin integración `main`/V28 ni verificación GPU/UI.
+- Próxima orden `p`, una vez CI positiva: certificar 04 y ejecutar **solo** bloque 05 `twisted_spoon;metal_coat;kings_rock`.

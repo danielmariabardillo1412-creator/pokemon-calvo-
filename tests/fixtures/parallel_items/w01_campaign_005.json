@@ -5,7 +5,7 @@
   "kind": "NEW_IDS",
   "scope": "HELD_COMBAT",
   "format": "gen9calvounifiedv1",
-  "status": "BLOCK_03_PENDING_CI",
+  "status": "BLOCK_04_PENDING_CI",
   "variants": [
     "active",
     "none",
@@ -67,6 +67,25 @@
         "silk_scarf_matching",
         "silk_scarf_nonmatching",
         "silk_scarf_status"
+      ]
+    },
+    {
+      "block": "04",
+      "ids": [
+        "silver_powder",
+        "soft_sand",
+        "spell_tag"
+      ],
+      "cases": [
+        "silver_powder_matching",
+        "silver_powder_nonmatching",
+        "silver_powder_status",
+        "soft_sand_matching",
+        "soft_sand_nonmatching",
+        "soft_sand_status",
+        "spell_tag_matching",
+        "spell_tag_nonmatching",
+        "spell_tag_status"
       ]
     }
   ],
@@ -457,6 +476,135 @@
         19
       ],
       "history": "tools/item_audit/held_effect_sweep_v2.cjs:type_boost"
+    },
+    {
+      "block": "04",
+      "id": "silver_powder_matching",
+      "item_id": "silver_powder",
+      "op": "matching_type_boost",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "own_move": "bug_buzz",
+      "foe_move": "amnesia",
+      "seeds": [
+        19,
+        23
+      ],
+      "history": "tools/item_audit/held_effect_sweep_v2.cjs:type_boost"
+    },
+    {
+      "block": "04",
+      "id": "silver_powder_nonmatching",
+      "item_id": "silver_powder",
+      "op": "nonmatching_control",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "own_move": "tackle",
+      "foe_move": "amnesia",
+      "seeds": [
+        19
+      ],
+      "history": "tools/item_audit/held_effect_sweep_v2.cjs:type_boost"
+    },
+    {
+      "block": "04",
+      "id": "silver_powder_status",
+      "item_id": "silver_powder",
+      "op": "status_control",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "own_move": "reflect",
+      "foe_move": "amnesia",
+      "seeds": [
+        19
+      ],
+      "history": "tools/item_audit/held_effect_sweep_v2.cjs:type_boost"
+    },
+    {
+      "block": "04",
+      "id": "soft_sand_matching",
+      "item_id": "soft_sand",
+      "op": "matching_type_boost",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "own_move": "earth_power",
+      "foe_move": "amnesia",
+      "seeds": [
+        19,
+        23
+      ],
+      "history": "tools/item_audit/held_effect_sweep_v2.cjs:type_boost"
+    },
+    {
+      "block": "04",
+      "id": "soft_sand_nonmatching",
+      "item_id": "soft_sand",
+      "op": "nonmatching_control",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "own_move": "tackle",
+      "foe_move": "amnesia",
+      "seeds": [
+        19
+      ],
+      "history": "tools/item_audit/held_effect_sweep_v2.cjs:type_boost"
+    },
+    {
+      "block": "04",
+      "id": "soft_sand_status",
+      "item_id": "soft_sand",
+      "op": "status_control",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "own_move": "reflect",
+      "foe_move": "amnesia",
+      "seeds": [
+        19
+      ],
+      "history": "tools/item_audit/held_effect_sweep_v2.cjs:type_boost"
+    },
+    {
+      "block": "04",
+      "id": "spell_tag_matching",
+      "item_id": "spell_tag",
+      "op": "matching_type_boost",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "own_move": "shadow_ball",
+      "foe_move": "amnesia",
+      "seeds": [
+        19,
+        23
+      ],
+      "history": "tools/item_audit/held_effect_sweep_v2.cjs:type_boost"
+    },
+    {
+      "block": "04",
+      "id": "spell_tag_nonmatching",
+      "item_id": "spell_tag",
+      "op": "nonmatching_control",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "own_move": "tackle",
+      "foe_move": "amnesia",
+      "seeds": [
+        19
+      ],
+      "history": "tools/item_audit/held_effect_sweep_v2.cjs:type_boost"
+    },
+    {
+      "block": "04",
+      "id": "spell_tag_status",
+      "item_id": "spell_tag",
+      "op": "status_control",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "own_move": "reflect",
+      "foe_move": "amnesia",
+      "seeds": [
+        19
+      ],
+      "history": "tools/item_audit/held_effect_sweep_v2.cjs:type_boost"
     }
   ],
   "source_provenance": {
@@ -466,6 +614,6 @@
   },
   "limitations": [
     "Resultado funcional solo con CI del mismo SHA",
-    "Se preservan controles CAMP005 01/02 y SaveV2; regresión CAMP004 obligatoria en 05/10 o cambios de producción"
+    "Se preservan controles CAMP005 01/02/03 y SaveV2; regresión CAMP004 obligatoria en 05/10 o cambios de producción"
   ]
 }
