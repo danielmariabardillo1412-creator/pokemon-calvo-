@@ -1,3 +1,13 @@
+## Cierre CI bloque02 — mochila real y guardado manual
+
+Código funcional y runner ampliado verificados en [GitHub Actions #41955141690](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41955141690), SHA `275af61fd2028737cfafc227207c994591ba0ec3`: **completed/success**. Recibos: `CAMP006_W03_PY PASS blocks=2 checks=29`, `CAMP006_W03_GODOT PASS blocks=2 checks=43`, `CAMP005_W03_PY PASS blocks=10 checks=169`, `CAMP005_W03_GODOT PASS blocks=10 checks=208`. Primera CI de integración [#41954695248](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41954695248) PASS 29/39; tras ampliar rechazos, [#41954953546](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41954953546) falló únicamente por expectativa incorrecta de posición del test; corregido y demostrado en la CI final.
+
+**Efecto positivo:** pulsación real `FieldItemBag._use.pressed` dentro de la cueva → `EscapeRopeDemoPilot`/travesía → superficie segura → -1 Cuerda Huida. **SaveV2 solo manual**, sin autoguardado al usar el objeto; la recarga conserva posición y cantidad. Stale inventory, colisión en marcador, falta de ítem y doble activación rechazan sin consumo. `fluffy_tail` queda en batalla y la regresión anterior confirma su contrato. No se cambiaron APIs protegidas.
+
+**Reserva de auditoría:** `FieldWorldItemTransaction._restore_position` solo puede restaurar posición si el controlador terminó su transición. Ante fallo catastrófico permanente del controlador o mutación simultánea ajena, la atomicidad general necesita una primitiva coordinada de cancelación/rollback (IA6); la evidencia actual avala el camino normal y los rechazos probados, **no garantía absoluta ante todos los fallos posibles**. La modificación del archivo compartido `field_item_bag.gd` requiere revisión de IA6 antes de fusionar.
+
+---
+
 ## CAMP006 bloque02: PAUSA por contrato compartido IA6
 
 La revisión del gate mantiene FieldItemBag, FieldItemService, sesión e infraestructura SaveV2 bajo responsabilidad de IA6. El piloto 01/10 sigue aprobado. El bloque02 requiere conectar inventario, traslado y persistencia en una transacción; no está autorizado hacerlo unilateralmente. Ticket: `reports/W03/CAMP_006_BLOCK_02_IA6_INTERFACE_BLOCKER.md` (commit `723525ec`). No aumentar el progreso ni repetir pruebas negativas. WORLD_RETURN detenida hasta asignación explícita de la interfaz por IA6.
