@@ -407,7 +407,7 @@ def verify_block05_training_held(data: dict, progress: list[dict]) -> None:
     for frag in (
         "func _probe_held05(", "ProgressionSystem.reconcile_battle_result(",
         "ProgressionSystem.gain_experience(", "SaveGameRepository.new().decode_snapshot(",
-        "service.equip(", "service.unequip(", "CAMP006_W02_HELD05",
+        "svc.equip(", "service2.unequip(", "CAMP006_W02_HELD05",
         "exp_share", "everstone", "lucky_egg",
         "EvolutionSystem.level_up_context(", "item_not_owned",
     ):
