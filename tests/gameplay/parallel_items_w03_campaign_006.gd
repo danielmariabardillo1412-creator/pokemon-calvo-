@@ -32,6 +32,7 @@ func _run() -> void:
 		match String(block.get("bloque", "")):
 			"01": await _block_01(block)
 			"02": await _block_02(block)
+			"03": await _block_03(block)
 			_: check("block not implemented", false)
 	_finish(n)
 
@@ -221,6 +222,63 @@ func _block_02(block: Dictionary) -> void:
 	check("02 no-stock retains location", scene.player.global_position.is_equal_approx(blocked_position))
 	DirAccess.remove_absolute(ProjectSettings.globalize_path(save.save_path))
 	scene.queue_free()
+	await process_frame
+
+func _block_03(block: Dictionary) -> void:
+	check("03 exact reserved IDs", block.get("ids", []) == ["repel", "super_repel", "max_repel"])
+	check("03 no misleading world integration", block.get("functional_level") ==
+		"L2_STANDALONE_REAL_PLAYER_STEPS" and not block.get("item_effect_fully_connected", true))
+	var player := OverworldPlayer.new()
+	root.add_child(player)
+	await process_frame
+	await physics_frame
+	player.set_physics_process(false)
+	player.move_speed = 96.0
+	player.step_distance = 32.0
+	var effect := preload("res://modules/overworld/field_repel_step_effect.gd").new()
+	check("03 real step source attached", effect.attach(player))
+	var count := [0]
+	player.step_completed.connect(func(_pos: Vector2): count[0] += 1)
+	for item_id: StringName in [&"repel", &"super_repel", &"max_repel"]:
+		var duration: int = int(block.get("durations", {}).get(String(item_id), 0))
+		check("03 activate real item " + String(item_id),
+			effect.start(item_id).get("accepted", false) and effect.remaining_steps == duration)
+		check("03 level 9 suppressed under leader 10 " + String(item_id),
+			effect.blocks_level(9, 10))
+		check("03 equal/higher wild allowed " + String(item_id),
+			not effect.blocks_level(10, 10) and not effect.blocks_level(11, 10))
+		check("03 active duplicate rejected", not effect.start(item_id).get("accepted", false))
+		var start_count: int = count[0]
+		var first_delta: Vector2 = player.apply_motion(Vector2.RIGHT, 1.0/3.0)
+		check("03 actual physics movement gives step", first_delta.length() > 31.0
+			and count[0] == start_count + 1 and effect.remaining_steps == duration - 1)
+		var snap: Dictionary = effect.to_dict()
+		var other := preload("res://modules/overworld/field_repel_step_effect.gd").new()
+		check("03 restore state with duration " + String(item_id),
+			other.restore(snap) and other.to_dict() == snap)
+		check("03 reject corrupt effect snapshot without mutation",
+			not other.restore({"schema_version": 1, "active_id": String(item_id),
+				"remaining_steps": duration + 1}) and other.to_dict() == snap)
+		player.movement_enabled = false
+		var frozen_pos: Vector2 = player.global_position
+		var frozen_steps: int = count[0]
+		player.apply_motion(Vector2.RIGHT, 1.0/3.0)
+		check("03 blocked player movement not counted",
+			player.global_position.is_equal_approx(frozen_pos)
+			and count[0] == frozen_steps and effect.remaining_steps == duration - 1)
+		player.movement_enabled = true
+		for k in range(duration - 2):
+			player.apply_motion(Vector2.RIGHT, 1.0/3.0)
+		check("03 final step still has active effect " + String(item_id),
+			effect.remaining_steps == 1 and effect.blocks_level(1, 10))
+		player.apply_motion(Vector2.RIGHT, 1.0/3.0)
+		check("03 exactly expires after real steps " + String(item_id),
+			effect.remaining_steps == 0 and effect.active_id == &""
+			and not effect.blocks_level(1, 10)
+			and count[0] == start_count + duration)
+	check("03 no artificial encounter RNG", not effect.decision(1, 10).get("rng_consumed", true))
+	effect.detach()
+	player.queue_free()
 	await process_frame
 
 func _finish(n: int) -> void:
