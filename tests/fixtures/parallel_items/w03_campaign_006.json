@@ -67,6 +67,38 @@
         "collision_blocked_anchor"
       ],
       "required_owner": "IA6_SHARED_SEAM_AUTHORIZED_BLOCK02"
+    },
+    {
+      "bloque": "03",
+      "ids": [
+        "repel",
+        "super_repel",
+        "max_repel"
+      ],
+      "family": "ENCOUNTER_STEPS",
+      "contract": "REAL_STEPS_AND_LEADER_LEVEL_L2",
+      "functional_level": "L2_STANDALONE_REAL_PLAYER_STEPS",
+      "item_effect_fully_connected": false,
+      "durations": {
+        "repel": 100,
+        "super_repel": 200,
+        "max_repel": 250
+      },
+      "positive_cases": [
+        "real_move_and_collide_step_counts",
+        "duration_last_step_and_expiry",
+        "wild_below_leader_blocked",
+        "wild_equal_above_leader_allowed",
+        "snapshot_restore_effect"
+      ],
+      "negative_cases": [
+        "collision_without_movement_no_step",
+        "invalid_snapshot_unchanged",
+        "duplicate_active_rejected"
+      ],
+      "required_owner": "IA6_ENCOUNTER_STEP_PRODUCER_AND_SAVEV2",
+      "pending_interface": "hook repel decision into native field_prepare_native_encounter before begin/start and bind item activation, inventory consumption, SaveV2 state; shared field_demo and session are IA6-owned",
+      "no_new_items": true
     }
   ]
 }
