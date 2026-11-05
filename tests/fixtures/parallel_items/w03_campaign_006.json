@@ -34,6 +34,39 @@
         "invalid_anchor_metadata_no_spend"
       ],
       "notes": "L3 navigation and existing native save tested; no actual bag consumption or UI binding until IA6 authorizes shared seam."
+    },
+    {
+      "bloque": "02",
+      "ids": [
+        "escape_rope",
+        "fluffy_tail"
+      ],
+      "family": "WORLD_RETURN",
+      "contract": "BAG_ESCAPE_ROPE_TRANSACTION_V1",
+      "functional_level": "L3_REAL_BAG_AND_MANUAL_SAVE",
+      "item_effect_fully_connected": true,
+      "inventory_commit": true,
+      "savev2_schema_changed": false,
+      "autosave": false,
+      "fluffy_tail_world_use": false,
+      "source_region": "cave",
+      "destination_region": "surface",
+      "anchor_node": "SurfaceCaveReturn",
+      "positive_cases": [
+        "real_bag_button_escape_rope_spends_exactly_one",
+        "manual_save_load_position_and_inventory",
+        "no_auto_save",
+        "fluffy_tail_battle_regression"
+      ],
+      "negative_cases": [
+        "no_rope_no_spend",
+        "surface_no_anchor_no_spend",
+        "reentrancy_busy",
+        "stale_inventory_revision",
+        "movement_or_world_lock",
+        "collision_blocked_anchor"
+      ],
+      "required_owner": "IA6_SHARED_SEAM_AUTHORIZED_BLOCK02"
     }
   ]
 }
