@@ -1,3 +1,9 @@
+## CI final tras registrar el progreso
+
+[GitHub Actions #41965873289](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41965873289), commit de progreso `1730370c9d7c816faefc559617f2864e33673838`: **completed/success**, Python CAMP006 43, Godot CAMP006 77, Python CAMP005 169, Godot CAMP005 208. La CI vuelve a certificar L2 aislado, **no L3 de repelentes en demo**. El código funcional del helper ya había pasado la [CI #41965630903](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41965630903).
+
+---
+
 # IA3/W03 — CAMPAÑA_006, bloque 03: Repelentes — efecto L2 demostrado
 
 **Rama:** `codex/calvo-items-20261104-w03-camp006`. **IDs del backlog anterior:** `repel;super_repel;max_repel`, sin objetos nuevos. Propiedad funcional concedida por `CAMPAIGN_006_W03_GATE.md`: adaptador propio de mundo/captura, NO `field_demo.gd`, `OverworldEncounterDirector`, sesión, bolsa general, `PlayerCollection`, `PlayerInventory` ni SaveV2.
