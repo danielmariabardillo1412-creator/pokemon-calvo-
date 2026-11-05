@@ -30,3 +30,9 @@ Hay otra dependencia previa distinta: después de aplicar una menta de bloque04,
 **Estado de este informe previo al run:** dos rutas positivas ya conectadas y una dependencia; **CI nueva pendiente**. No declarar `CI_PASS_VERIFICADO` sin `completed/success` y logs del SHA correspondiente.
 
 **Siguiente `p`:** ejecutar únicamente fila06 `power_anklet;power_band;power_belt`, siempre comprobando la CI del quinto bloque. No abrir trabajo compartido sin permiso IA6.
+
+## Seguimiento real de CI (5 de noviembre de 2026)
+
+Se publicaron siete archivos en el commit atómico `e1eddc7228d9be7760040f70925387f510298766`. Los runs [41955260946](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41955260946) y [41955421355](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41955421355) fallaron **en la fase Python antes de Godot**, primero por errata `SavedV2` en un contrato documental y después por comparar `service.equip(` en vez de `svc.equip(` en el runner. Se corrigieron sin relajar pruebas en `8f0b1dd363b8aff3b10686de4f14ffc0324c18db` y `1cb6689f5fa52af6cf7d9b63b69d4ee76a83a7ec`.
+
+El run posterior [41955498590](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41955498590) en el SHA `1cb6689f5fa52af6cf7d9b63b69d4ee76a83a7ec` **ha terminado con success en puerta Python, CAMP005 Python/Godot y prueba Godot nativa CAMPAÑA_006**, incluidos los nuevos recibos de dos positivos y una dependencia. **La etapa de regresiones CAMP004/CAMP003 estaba aún `in_progress` en la última consulta; NO se declara CI global SUCCESS antes de esa conclusión.** Al próximo `p`, comprobar conclusión del mismo run, logs y artefactos antes de iniciar bloque06. Los compromisos posteriores a ese SHA son solo documentación, no código testado.
