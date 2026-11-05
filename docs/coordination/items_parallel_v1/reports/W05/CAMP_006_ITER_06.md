@@ -1,6 +1,6 @@
 # IA5/W05 — CAMPAÑA_006 · BLOQUE 06/10
 
-**Fecha:** 2026-11-05. **Rama exclusiva:** `codex/calvo-items-20261104-w05-camp006`. **Estado de publicación:** EN_CI_AUTOMATICA, CI PENDIENTE. **Commit del fixture:** `5e25c47f550cc01123bd8c9b192c8f7853129090`.
+**Fecha:** 2026-11-05. **Rama exclusiva:** `codex/calvo-items-20261104-w05-camp006`. **Estado de publicación:** EN_CI_AUTOMATICA (histórico). **Estado actual:** CI PASS VERIFICADA. **Commit del fixture:** `5e25c47f550cc01123bd8c9b192c8f7853129090`.
 
 ## Cola IA6 y asignaciones canónicas
 
@@ -24,8 +24,16 @@ La fila 06 de la cola oficial en la rama árbitra reserva exclusivamente `tm227;
 - Se mantienen los runners, aserciones y contratos previos sin relajación. No hay parches en producción ni cambios en catálogos, políticas, learnsets, reglas, partidas reales o ramas ajenas.
 - Regresiones CAMP005/004/003 completas aprobadas en hito 05 [#41785064826](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41785064826); se exigirán de nuevo en 10/10 o modificación de módulos.
 
-## Aceptación
+## Resultado CI del bloque 06 — PASS certificado
 
-Tras publicar CSV, GitHub Actions debe ejecutar la CI sobre el SHA de la rama con fixture y progreso: `completed/success`; `CAMP006_W05_PY PASS blocks=6 checks=N` y `CAMP006_W05_GODOT PASS blocks=6 checks=N`, más `CAMP006_GATE_PY_PASS` y `CAMP006_GATE_GODOT_PASS`, todos con N > 0. **No declarar PASS sin revisar el job y sus logs.**
+[GitHub Actions #41954495779](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41954495779): `completed/success` sobre SHA probado `54a05072b658329ef1b3a74d1fc67524225b78d5`, job `127006028074`. Recibos comprobados literalmente en logs del job:
+
+- `CAMP006_W05_MANIFEST_PASS reserved=10 completed=6 ids=49 kind=NEW_IDS`
+- `CAMP006_W05_PY PASS blocks=6 checks=294`
+- `CAMP006_GATE_PY_PASS worker=W05 blocks=6 checks=294`
+- `CAMP006_W05_GODOT PASS blocks=6 checks=1096`
+- `CAMP006_GATE_GODOT_PASS worker=W05 blocks=6 checks=1096`
+
+Regresiones completas CAMP005/004/003: `skipped`, conforme a hito 06 sin cambio en `modules/`. El hito 05 ya certificó las seis regresiones completas en [#41785064826](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41785064826). CSV preserva `EN_CI_AUTOMATICA` como estado histórico al disparar CI; el resultado PASS está certificado aquí. CI headless no demuestra UI/GPU ni integración global.
 
 **Próxima `p` tras certificación:** bloque 07 `tm03;tm04;tm05;tm06;tm08`. No merges.
