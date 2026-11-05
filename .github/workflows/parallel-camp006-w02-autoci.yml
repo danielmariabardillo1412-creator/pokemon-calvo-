@@ -43,6 +43,7 @@ jobs:
           grep -E '^CAMP006_W02_DEPENDENCY BLOCKED block=02 ids=3 checks=[1-9][0-9]*$' camp006-recovery-python.log
           grep -E '^CAMP006_W02_DEPENDENCY BLOCKED block=03 ids=3 checks=[1-9][0-9]*$' camp006-recovery-python.log
           grep -E '^CAMP006_W02_MINT04_CONTRACT READY ids=4 checks=[1-9][0-9]*$' camp006-recovery-python.log
+          grep -E '^CAMP006_W02_HELD05_CONTRACT READY positives=2 dependency=1 checks=[1-9][0-9]*$' camp006-recovery-python.log
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
@@ -89,6 +90,7 @@ jobs:
           grep -E '^CAMP006_W02_DEPENDENCY BLOCKED block=02 ids=3 checks=[1-9][0-9]*$' camp006-recovery-godot.log
           grep -E '^CAMP006_W02_DEPENDENCY BLOCKED block=03 ids=3 checks=[1-9][0-9]*$' camp006-recovery-godot.log
           grep -E '^CAMP006_W02_MINT04 PASS block=04 ids=4 checks=[1-9][0-9]*$' camp006-recovery-godot.log
+          grep -E '^CAMP006_W02_HELD05 PASS block=05 positive=2 dependency=1 checks=[1-9][0-9]*$' camp006-recovery-godot.log
       - name: Regresión CAMP004 y CAMP003 - Python y Godot
         shell: bash
         run: |

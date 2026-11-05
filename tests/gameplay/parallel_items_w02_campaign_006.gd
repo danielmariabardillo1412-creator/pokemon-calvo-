@@ -28,7 +28,7 @@ func _run_recovery006() -> void:
 	check("overlay real y especies base", Variants.apply(catalogs))
 	check("worker y campaña propios", automation.campaign == "CAMP_006"
 		and automation.worker == "W02")
-	check("recuperación + bloques02/03 + piloto04", automation.blocks.size() == 4
+	check("recuperación + bloques02/03 + piloto04 + held05", automation.blocks.size() == 5
 		and automation.blocks[0].block == "01"
 		and automation.blocks[0].ids == ["exp_candy_xl", "relaxed_mint"]
 		and automation.blocks[1].block == "02"
@@ -39,7 +39,10 @@ func _run_recovery006() -> void:
 		and automation.blocks[2].status == "DEPENDENCY_DOCUMENTED_NOT_FUNCTIONAL"
 		and automation.blocks[3].block == "04"
 		and automation.blocks[3].ids == ["naughty_mint", "rash_mint", "sassy_mint", "serious_mint"]
-		and automation.blocks[3].status == "POSITIVE_PILOT_AWAITING_CI")
+		and automation.blocks[3].status == "POSITIVE_PILOT_CI_VERIFIED"
+		and automation.blocks[4].block == "05"
+		and automation.blocks[4].ids == ["everstone", "exp_share", "lucky_egg"]
+		and automation.blocks[4].status == "TWO_POSITIVE_ONE_DEPENDENCY_AWAITING_CI")
 	check("tres modos heredados PARTY/STORAGE", automation.modes == ["active", "none", "reserve"])
 	var old: Variant = JSON.parse_string(FileAccess.get_file_as_string(SOURCE_005))
 	check("fixture CAMP005 intacta", old is Dictionary)
@@ -157,7 +160,17 @@ func _run_recovery006() -> void:
 			if errors.size() != errors_before_04: mint04_ok = false
 	print("CAMP006_W02_MINT04 ", "PASS" if mint04_ok else "FAIL",
 		" block=04 ids=4 checks=", checks)
-	var success: bool = errors.is_empty() and passed_cases == 3 and mint04_ok
+
+	var held05_ok: bool = true
+	for held_case: Dictionary in automation.blocks[4].cases:
+		current_case = String(held_case.scenario)
+		for held_mode: String in automation.modes:
+			var before05: int = errors.size()
+			_probe_held05(held_case, held_mode)
+			if errors.size() != before05: held05_ok = false
+	print("CAMP006_W02_HELD05 ", "PASS" if held05_ok else "FAIL",
+		" block=05 positive=2 dependency=1 checks=", checks)
+	var success: bool = errors.is_empty() and passed_cases == 3 and mint04_ok and held05_ok
 	done = true
 	print("CAMP006_W02_GODOT ", "PASS" if success else "FAIL",
 		" blocks=", 1 if success else 0, " checks=", checks)
@@ -269,3 +282,154 @@ func _probe_mint04(spec: Dictionary, mode: String) -> void:
 		var invalid_load: LoadResult = SaveGameRepository.new().decode_snapshot(invalid)
 		check(mode + " menta04 SaveV2 rechaza naturaleza efectiva inválida",
 			not invalid_load.ok and invalid_load.reason == "invalid_creature_id")
+
+
+
+# CAMP006 W02 block05. Existing progression code is executed directly.
+# Equippability is not considered proof of the missing Exp Share distribution.
+func _held05_outcome() -> BattleOutcome:
+	var o := BattleOutcome.new()
+	o.winner_side_id = &"side_a"
+	o.defeated = [{"base_experience": 71, "level": 7}]
+	return o
+
+
+func _held05_xp_events(events: Array, creature_id: StringName) -> int:
+	var amount: int = 0
+	for e: ProgressionEvent in events:
+		if e.kind == ProgressionEvent.EXPERIENCE_GAINED and e.creature_id == creature_id:
+			amount += int(e.data.get("amount", 0))
+	return amount
+
+
+func _held05_evolution_events(events: Array) -> int:
+	var count: int = 0
+	for e: ProgressionEvent in events:
+		if e.kind == ProgressionEvent.EVOLUTION_AVAILABLE: count += 1
+	return count
+
+
+func _probe_held05(spec: Dictionary, mode: String) -> void:
+	var id: StringName = StringName(spec.id)
+	var sid: StringName = StringName(spec.original_species)
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 1412
+	var c: CreatureInstance = CreatureFactory.create(
+		catalogs.species(sid), int(spec.level), catalogs, ProgressionRuleset.new(), rng,
+		{"instance_id": &"own", "nature_id": &"hardy", "moves": ["growl"]})
+	check(mode + " held05 creature domain", c != null and c.species_id == sid)
+	if c == null: return
+	var collection := PlayerCollection.new()
+	check(mode + " held05 real party ownership", collection.party.add_creature(c))
+	if mode == "reserve": check(mode + " held05 real storage", collection.deposit(&"own"))
+	if mode != "none": check(mode + " held05 inventory two", collection.inventory.add(id, 2))
+	var svc := Service.new()
+	check(mode + " held05 actual FieldItemService", svc.configure(collection, catalogs, func(): return true))
+	var before: Dictionary = _owner_data(collection)
+	var equip_result: Dictionary = svc.equip(id, &"own")
+	var equipped: bool = mode != "none"
+	check(mode + " held05 equip result reflects stock", bool(equip_result.get("accepted", false)) == equipped)
+	check(mode + " held05 equip spends exactly one unit",
+		collection.inventory.quantity(id) == (1 if equipped else 0))
+	if not equipped:
+		check(mode + " held05 rejected no stock is atomic",
+			String(equip_result.get("reason", "")) == "item_not_owned"
+			and _owner_data(collection) == before)
+		return
+	var equipped_creature: CreatureInstance = collection.owned_creature(&"own")
+	check(mode + " held05 active item and identity",
+		equipped_creature != null and equipped_creature.held_item_id == id
+		and not equipped_creature.held_item_consumed
+		and collection.location_of(&"own") == (&"STORAGE" if mode == "reserve" else &"PARTY"))
+	var repeated_before: Dictionary = _owner_data(collection)
+	var repeated: Dictionary = svc.equip(id, &"own")
+	check(mode + " held05 same equip rejects atomically",
+		not bool(repeated.get("accepted", true))
+		and String(repeated.get("reason", "")) == "already_equipped"
+		and _owner_data(collection) == repeated_before)
+	var loaded: LoadResult = SaveGameRepository.new().decode_snapshot(_owner_data(collection))
+	check(mode + " held05 actual SaveV2 equipped load", loaded.ok)
+	if not loaded.ok: return
+	var owner2 := PlayerCollection.new()
+	owner2.party = loaded.party
+	owner2.storage = loaded.storage
+	owner2.inventory = loaded.inventory
+	var saved: CreatureInstance = owner2.owned_creature(&"own")
+	check(mode + " held05 SaveV2 item/owner/stock",
+		saved != null and saved.held_item_id == id and not saved.held_item_consumed
+		and owner2.inventory.quantity(id) == 1
+		and owner2.location_of(&"own") == collection.location_of(&"own"))
+	if saved == null: return
+	var service2 := Service.new()
+	check(mode + " held05 rebind after SaveV2", service2.configure(owner2, catalogs, func(): return true))
+	if id == &"everstone":
+		var growth: String = String(catalogs.species(saved.species_id).growth_rate)
+		var needed: int = ProgressionRuleset.experience_for_level(growth, int(spec.target_level)) - saved.experience
+		check(mode + " Everstone real level threshold", needed > 0)
+		var initial_friend: int = saved.friendship
+		var before_events: Array = ProgressionSystem.gain_experience(
+			saved, needed, catalogs.species(saved.species_id), catalogs, ProgressionRuleset.new())
+		check(mode + " Everstone allows real level up but blocks evolution event",
+			saved.level == int(spec.target_level)
+			and _held05_xp_events(before_events, saved.instance_id) == needed
+			and _held05_evolution_events(before_events) == 0
+			and saved.friendship == initial_friend
+			and saved.held_item_id == id and not saved.held_item_consumed)
+		var unequip: Dictionary = service2.unequip(&"own")
+		check(mode + " Everstone removed from same owner to inventory",
+			bool(unequip.get("accepted", false))
+			and saved.held_item_id == &"" and owner2.inventory.quantity(id) == 2)
+		var restored_options: Array = EvolutionSystem.evolution_candidates(
+			catalogs.species(saved.species_id), EvolutionSystem.level_up_context(saved), catalogs)
+		check(mode + " Everstone removing unlocks real Ivysaur candidate",
+			restored_options.any(func(ev): return ev.species_id == StringName(spec.expected_blocked_species)))
+	elif id == &"lucky_egg":
+		var start_exp: int = saved.experience
+		var events: Array = ProgressionSystem.reconcile_battle_result(
+			[saved], _held05_outcome(), catalogs, ProgressionRuleset.new())
+		check(mode + " Lucky Egg actual battle progression 71 to 106",
+			saved.experience == start_exp + int(spec.expected_held_reward)
+			and _held05_xp_events(events, saved.instance_id) == int(spec.expected_held_reward)
+			and saved.held_item_id == &"lucky_egg")
+		check(mode + " Lucky Egg reward does not consume held item",
+			owner2.inventory.quantity(id) == 1 and not saved.held_item_consumed)
+		var unequip: Dictionary = service2.unequip(&"own")
+		check(mode + " Lucky Egg unequip returns item", bool(unequip.get("accepted", false))
+			and owner2.inventory.quantity(id) == 2)
+		var plain_start: int = saved.experience
+		var events_plain: Array = ProgressionSystem.reconcile_battle_result(
+			[saved], _held05_outcome(), catalogs, ProgressionRuleset.new())
+		check(mode + " Lucky Egg removed gives unboosted 71 XP",
+			saved.experience == plain_start + int(spec.expected_normal_reward)
+			and _held05_xp_events(events_plain, saved.instance_id) == int(spec.expected_normal_reward))
+	elif id == &"exp_share":
+		var idle_xp: int = saved.experience
+		var other: CreatureInstance = CreatureFactory.create(
+			catalogs.species(&"mew"), int(spec.level), catalogs, ProgressionRuleset.new(), rng,
+			{"instance_id": &"fighter", "nature_id": &"hardy", "moves": ["growl"]})
+		check(mode + " Exp Share participant real", other != null)
+		if other == null: return
+		var fighting_xp: int = other.experience
+		var fight_events: Array = ProgressionSystem.reconcile_battle_result(
+			[other], _held05_outcome(), catalogs, ProgressionRuleset.new())
+		check(mode + " Exp Share explicitly missing XP to nonparticipant",
+			saved.experience == idle_xp and _held05_xp_events(fight_events, saved.instance_id) == 0
+			and other.experience == fighting_xp + 71
+			and bool(spec.expected_no_distribution))
+		check(mode + " Exp Share is only equipable, not yet distributive",
+			saved.held_item_id == &"exp_share" and owner2.inventory.quantity(id) == 1)
+	var state_after: Dictionary = _owner_data(owner2)
+	var result_after: LoadResult = SaveGameRepository.new().decode_snapshot(state_after)
+	check(mode + " held05 SaveV2 survives progression and changes", result_after.ok)
+	if result_after.ok:
+		var owner3 := PlayerCollection.new()
+		owner3.party = result_after.party
+		owner3.storage = result_after.storage
+		owner3.inventory = result_after.inventory
+		var after_creature: CreatureInstance = owner3.owned_creature(&"own")
+		check(mode + " held05 post-action persistent owner/held/EXP",
+			after_creature != null
+			and after_creature.experience == saved.experience
+			and after_creature.held_item_id == saved.held_item_id
+			and owner3.inventory.quantity(id) == owner2.inventory.quantity(id)
+			and owner3.location_of(&"own") == owner2.location_of(&"own"))

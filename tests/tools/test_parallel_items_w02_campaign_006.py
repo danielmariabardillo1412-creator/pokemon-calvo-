@@ -34,11 +34,11 @@ def verify() -> None:
         progress = list(csv.DictReader(file))
     require(data["worker"] == "W02" and data["campaign"] == "CAMP_006", "Identity")
     require(data["kind"] == "RECOVERY_THEN_NEW", "Family")
-    require(data["status"] == "CI005_RECOVERED_BLOCK04_MINT_PILOT_CI_PENDING", "Block02 must not claim L2")
+    require(data["status"] == "CI005_RECOVERED_BLOCK05_TRAINING_HELD_AWAITING_CI", "Block02 must not claim L2")
     require(data["recovery_gate"]["run_id"] == 41763921080
             and data["recovery_gate"]["conclusion"] == "success"
             and data["recovery_gate"]["head_sha"] == "2abcc2ae9644b8821d9dae6f26214b1a8fa347fc", "Recovered CI run referenced exactly")
-    require(len(data["blocks"]) == len(progress) == 4, "Only blocks01-04, no future work")
+    require(len(data["blocks"]) == len(progress) == 5, "Only blocks01-05, no future work")
     require(data["blocks"][0]["block"] == progress[0]["bloque"] == "01", "Progress continuity")
     require(data["blocks"][0]["ids"] == progress[0]["ids"].split(";") ==
             ["exp_candy_xl", "relaxed_mint"], "Exact reserved IDs")
@@ -261,11 +261,13 @@ def verify_block04_pilot(data: dict, progress: list[dict]) -> None:
             and block["family"] == "MINT_ENGINE"
             and block["ids"] == progress[3]["ids"].split(";") == ids,
             "Only authorised four mint IDs")
-    require(block["status"] == "POSITIVE_PILOT_AWAITING_CI"
-            and progress[3]["estado"] == "PILOTO_L2_EN_CI",
+    require(block["status"] == "POSITIVE_PILOT_CI_VERIFIED"
+            and progress[3]["estado"] == "PILOTO_L2_CI_VERIFICADA",
             "Python source contract cannot certify real native effect")
-    require(progress[3]["ci_run"] == "CI_BLOQUE04_PENDIENTE",
-            "No unverified PASS label")
+    require(progress[3]["ci_run"] == "41788596358"
+            and block["verification"]["run_id"] == 41788596358
+            and block["verification"]["conclusion"] == "success",
+            "Block04 positive pilot must cite verified run")
     require(block["cases"] == expected, "Exact positive mint suite, including neutral Serious")
     require(block["helper"] == "modules/inventory/field_mint_effects.gd"
             and block["source_authority"].endswith("EFFECTIVE_NATURE_ARCHITECTURE_GATE.md"),
@@ -336,6 +338,95 @@ def verify_block04_pilot(data: dict, progress: list[dict]) -> None:
         require(altered["blocks"][3] != block, "Adversarial mint mutation rejected")
 
 
+
+def verify_block05_training_held(data: dict, progress: list[dict]) -> None:
+    """Two real held effects and one explicitly missing distribution path."""
+    b = data["blocks"][4]
+    ids = ["everstone", "exp_share", "lucky_egg"]
+    cases = [
+        {"scenario": "everstone_level_gate", "id": "everstone",
+         "kind": "held_positive", "original_species": "bulbasaur",
+         "level": 15, "target_level": 16,
+         "expected_blocked_species": "ivysaur",
+         "expected_outcome": "level_up_without_evolution"},
+        {"scenario": "exp_share_missing_distribution", "id": "exp_share",
+         "kind": "held_dependency", "original_species": "mew",
+         "level": 50, "expected_status": "DEPENDENCY_MISSING",
+         "expected_no_distribution": True},
+        {"scenario": "lucky_egg_battle_reward", "id": "lucky_egg",
+         "kind": "held_positive", "original_species": "mew",
+         "level": 50, "base_exp": 71,
+         "expected_normal_reward": 71, "expected_held_reward": 106},
+    ]
+    require(b["block"] == progress[4]["bloque"] == "05"
+            and b["family"] == "TRAINING_HELD"
+            and b["ids"] == progress[4]["ids"].split(";") == ids,
+            "Only authorized block05 held IDs")
+    require(b["status"] == "TWO_POSITIVE_ONE_DEPENDENCY_AWAITING_CI"
+            and progress[4]["estado"] == "DOS_FUNCIONALES_UNA_DEPENDENCIA_EN_CI"
+            and progress[4]["ci_run"] == "CI_BLOQUE05_PENDIENTE",
+            "No false overall CI or ExpShare functionality")
+    require(b["cases"] == cases, "Three exact and independently specified held cases")
+    require([x["kind"] for x in b["cases"]] ==
+            ["held_positive", "held_dependency", "held_positive"],
+            "Only two positive effects")
+    dep = b["dependency"]
+    require(dep["key"] == "EXP_SHARE_PROGRESSION_DISTRIBUTION_POLICY_006_W02"
+            and dep["owner"] == "IA6" and dep["scope"] == "L1_DEPENDENCY_NO_SHARE_EFFECT"
+            and "ProgressionSystem" in dep["missing"]
+            and "SaveV2" in dep["positive_contract_pending"],
+            "ExpShare must not be counted as a functional distribution")
+    for path in dep["source"]:
+        require((ROOT / path).is_file(), "Shared source contract exists: " + path)
+    held = (ROOT / "modules/creatures/progression/progression_held_items.gd").read_text(encoding="utf-8")
+    progression = (ROOT / "modules/creatures/progression/progression_system.gd").read_text(encoding="utf-8")
+    evolution = (ROOT / "modules/creatures/progression/evolution_system.gd").read_text(encoding="utf-8")
+    service = (ROOT / "modules/inventory/field_item_service.gd").read_text(encoding="utf-8")
+    conn = json.loads((ROOT / "modules/inventory/item_connections_v1.json").read_text(encoding="utf-8"))
+    selection = json.loads((ROOT / "config/item_selection_v1.json").read_text(encoding="utf-8"))
+    for item in ids:
+        require(item in conn["holdable_ids"] and item not in selection["excluded_ids"],
+                "Held item eligible and catalogued " + item)
+    require('return active_item(creature,&"everstone")' in held
+            and 'block_level_evolution' in evolution
+            and 'HeldItems.blocks_level_evolution(creature)' in evolution,
+            "Everstone evolution gate connected")
+    require('active_item(creature,&"lucky_egg")' in held
+            and 'amount=amount*3/2' in held
+            and 'HeldItems.battle_reward_amount(share, sp, starting_items, maximum)' in progression,
+            "Lucky Egg original real post-battle experience connection")
+    require('func equip(item_id: StringName, creature_id: StringName)' in service
+            and 'if not staged.remove(item_id): return _deny("item_not_owned")' in service,
+            "Field item equip is real stock transaction")
+    require("exp_share" not in held and "exp_share" not in progression,
+            "If ExpShare implementation appears, re-audit positively before marking it missing")
+    require('for p in participants:' in progression
+            and 'survivors.append(c)' in progression,
+            "Current reward recipients are battle participants only")
+    gd = RUNNER006.read_text(encoding="utf-8")
+    for frag in (
+        "func _probe_held05(", "ProgressionSystem.reconcile_battle_result(",
+        "ProgressionSystem.gain_experience(", "SaveGameRepository.new().decode_snapshot(",
+        "service.equip(", "service.unequip(", "CAMP006_W02_HELD05",
+        "exp_share", "everstone", "lucky_egg",
+        "EvolutionSystem.level_up_context(", "item_not_owned",
+    ):
+        require(frag in gd, "Native held integration contract missing: " + frag)
+    require(sum(len(bx["cases"]) for bx in json.loads(OLD.read_text(encoding="utf-8"))["blocks"]) == 288,
+            "Historical CAMP005 288 scenarios must remain")
+    for mutation in (
+        lambda f: f["blocks"][4]["ids"].append("soothe_bell"),
+        lambda f: f["blocks"][4]["cases"][0].update({"target_level": 17}),
+        lambda f: f["blocks"][4]["cases"][1].update({"kind": "held_positive"}),
+        lambda f: f["blocks"][4]["cases"][2].update({"expected_held_reward": 71}),
+        lambda f: f["blocks"][4]["dependency"].update({"scope": "L2_FUNCTIONAL"}),
+        lambda f: f["blocks"][4].update({"status": "FULL_FUNCTIONAL_CI_PASS"}),
+    ):
+        altered = copy.deepcopy(data)
+        mutation(altered)
+        require(altered["blocks"][4] != b, "Adversarial held-item mutation detected")
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--ci", action="store_true")
@@ -352,6 +443,8 @@ def main() -> None:
     print(f"CAMP006_W02_DEPENDENCY BLOCKED block=03 ids=3 checks={checks}")
     verify_block04_pilot(data, progress)
     print(f"CAMP006_W02_MINT04_CONTRACT READY ids=4 checks={checks}")
+    verify_block05_training_held(data, progress)
+    print(f"CAMP006_W02_HELD05_CONTRACT READY positives=2 dependency=1 checks={checks}")
 
 if __name__ == "__main__":
     main()

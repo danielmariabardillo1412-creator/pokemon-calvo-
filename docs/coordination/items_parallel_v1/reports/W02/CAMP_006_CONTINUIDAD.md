@@ -1,3 +1,19 @@
+# IA2/W02 — CONTINUIDAD VIGENTE CAMPAÑA_006 BLOQUE 05/10
+
+**Identidad:** IA2/W02. Rama exclusiva `codex/calvo-items-20261104-w02-camp006`. Fila05 oficial ejecutada: `everstone;exp_share;lucky_egg`. No iniciar fila06 sin otro `p`. Sin cambios a motor compartido, main, V28, PR118, árbitra u otras ramas.
+
+**Puerta anterior:** [41788596358](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41788596358) `completed/success`, SHA `ebb575ef078eab926a49e111bd99108f2dc86c1a`. Aprobó 288 casos históricos CAMP005, piloto positivo de 4 mentas del bloque04, dependencias 02/03 y regresiones CAMP004/CAMP003. Se actualizan fixture/CSV de bloque04 para registrar su aprobación REAL, sin declarar funcionales las mentas antiguas.
+
+**Bloque05: dos positivos ya conectados y una dependencia real.** `everstone` bloquea evolución al nivel 16 con objeto activo; al quitarlo reaparecen candidatos. `lucky_egg` concede +50 % XP de combate (71→106, nivel/cap intactos), al retirarlo vuelve XP normal. `exp_share` está permitido/equipable pero `ProgressionSystem` no reparte XP a no participantes, por tanto **NO es funcional**. Un ticket para IA6: `EXP_SHARE_PROGRESSION_DISTRIBUTION_POLICY_006_W02`, decidir distribución/gen/partícipes, política de objetos y modificación futura de ProgressionSystem fuera del permiso de W02. Sin tocar producción de progresión.
+
+**Cobertura W02:** 3 oráculos, 3 modos (PARTY con stock, STORAGE con stock, PARTY sin stock), equip/unequip real, inventario −1, sin stock rollback, SaveV2 y evolución/XP por `ProgressionSystem`. Python golden+fuentes y 6 mutaciones; Godot prueba positivos reales y un negativo de efecto no conectado. Recibos nuevos `CAMP006_W02_HELD05_CONTRACT READY positives=2 dependency=1` y `CAMP006_W02_HELD05 PASS block=05 positive=2 dependency=1`. **No es CI PASS hasta run de este SHA**. Fixture CAMP005 10 bloques/288 casos intacta, sin relajar tests anteriores.
+
+**Archivos de bloque05 en un commit atómico:** `tests/fixtures/parallel_items/w02_campaign_006.json`, `tests/tools/test_parallel_items_w02_campaign_006.py`, `tests/gameplay/parallel_items_w02_campaign_006.gd`, `.github/workflows/parallel-camp006-w02-autoci.yml`, `docs/coordination/items_parallel_v1/reports/W02/CAMP_006_PROGRESO.csv`, `docs/coordination/items_parallel_v1/reports/W02/CAMP_006_ITER_05.md` y este cuaderno. Run05 debe certificarse aparte. Bloque05 contiene dos efectos originales de V18 conectados; no crear nuevo handler ni compartir PR ajeno.
+
+**Pendiente IA6 adicional:** `FieldGrowthEffects` y `FieldMochiEffects` aún comparan stats con naturaleza original tras menta04; SaveV2 central pre-save valida poco. Sin autorización, no tocar. Decisión futura para Exp Share. **Siguiente fila al próximo `p`:** bloque06 `power_anklet;power_band;power_belt`, verificar primero run05 y fuente; no inventar efectos EV sin implementar.
+
+---
+
 # IA2/W02 — CONTINUIDAD VIGENTE CAMPAÑA_006 BLOQUE 04/10 (PILOTO MENTAS)
 
 **Identidad/rama:** IA2/W02, `codex/calvo-items-20261104-w02-camp006`. **IA6 autorizó** el piloto mediante `docs/coordination/items_parallel_v1/CAMPAIGN_006_W02_EFFECTIVE_NATURE_ARCHITECTURE_GATE.md`. Bloque04 `naughty_mint;rash_mint;sassy_mint;serious_mint`. No avanzar al bloque05 sin otro `p` ni editar main, V28, ramas ajenas o APIs compartidas no autorizadas.

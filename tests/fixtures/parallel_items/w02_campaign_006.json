@@ -3,7 +3,7 @@
   "worker": "W02",
   "campaign": "CAMP_006",
   "kind": "RECOVERY_THEN_NEW",
-  "status": "CI005_RECOVERED_BLOCK04_MINT_PILOT_CI_PENDING",
+  "status": "CI005_RECOVERED_BLOCK05_TRAINING_HELD_AWAITING_CI",
   "source_campaign": "CAMP_005",
   "source_fixture": "tests/fixtures/parallel_items/w02_campaign_005.json",
   "modes": [
@@ -179,7 +179,7 @@
         "sassy_mint",
         "serious_mint"
       ],
-      "status": "POSITIVE_PILOT_AWAITING_CI",
+      "status": "POSITIVE_PILOT_CI_VERIFIED",
       "source_authority": "docs/coordination/items_parallel_v1/CAMPAIGN_006_W02_EFFECTIVE_NATURE_ARCHITECTURE_GATE.md",
       "helper": "modules/inventory/field_mint_effects.gd",
       "cases": [
@@ -231,7 +231,74 @@
         "FieldGrowthEffects.validation_error computes expected stats from original nature_id, not effective; requires IA6 authorization before interoperable EXP items.",
         "FieldMochiEffects.validation_error similarly computes with nature_id; requires IA6 authorization to validate mochi after mint.",
         "SaveGameData.validate does not validate effective nature field before save; valid payloads load through CreatureInstance.from_dict, invalid payloads rejected by decoder, but direct save-time domain validation needs IA6."
-      ]
+      ],
+      "verification": {
+        "run_id": 41788596358,
+        "head_sha": "ebb575ef078eab926a49e111bd99108f2dc86c1a",
+        "conclusion": "success",
+        "qualification": "Only four block04 mints are functional; earlier mints still dependencies"
+      }
+    },
+    {
+      "block": "05",
+      "family": "TRAINING_HELD",
+      "ids": [
+        "everstone",
+        "exp_share",
+        "lucky_egg"
+      ],
+      "status": "TWO_POSITIVE_ONE_DEPENDENCY_AWAITING_CI",
+      "existing_source": {
+        "everstone": "modules/creatures/progression/evolution_system.gd",
+        "lucky_egg": "modules/creatures/progression/progression_held_items.gd",
+        "exp_share": "modules/creatures/progression/progression_system.gd"
+      },
+      "cases": [
+        {
+          "scenario": "everstone_level_gate",
+          "id": "everstone",
+          "kind": "held_positive",
+          "original_species": "bulbasaur",
+          "level": 15,
+          "target_level": 16,
+          "expected_blocked_species": "ivysaur",
+          "expected_outcome": "level_up_without_evolution"
+        },
+        {
+          "scenario": "exp_share_missing_distribution",
+          "id": "exp_share",
+          "kind": "held_dependency",
+          "original_species": "mew",
+          "level": 50,
+          "expected_status": "DEPENDENCY_MISSING",
+          "expected_no_distribution": true
+        },
+        {
+          "scenario": "lucky_egg_battle_reward",
+          "id": "lucky_egg",
+          "kind": "held_positive",
+          "original_species": "mew",
+          "level": 50,
+          "base_exp": 71,
+          "expected_normal_reward": 71,
+          "expected_held_reward": 106
+        }
+      ],
+      "dependency": {
+        "key": "EXP_SHARE_PROGRESSION_DISTRIBUTION_POLICY_006_W02",
+        "owner": "IA6",
+        "missing": "ProgressionSystem.reconcile_battle_result only rewards living participants; no redistribution to reserve party members; ProgressionHeldItems has no exp_share handler. Equipping does not implement distribution.",
+        "source": [
+          "modules/creatures/progression/progression_system.gd",
+          "modules/creatures/progression/progression_held_items.gd",
+          "modules/inventory/field_item_service.gd"
+        ],
+        "required_decisions": "Define held-vs-teamwide Exp Share mode/generation, recipient eligibility (participants, reserve, fainted), split/rounding/level cap, stacking Lucky Egg, ownership across PARTY/STORAGE; approve modification to shared progression modules.",
+        "positive_contract_pending": "After IA6 approval, real post-battle XP event to eligible nonparticipating recipient, measured original/recipient XP, level cap and SavedV2 without fake reward; no unrelated change to participant XP.",
+        "scope": "L1_DEPENDENCY_NO_SHARE_EFFECT"
+      },
+      "tests": "Godot executes equip/unequip via FieldItemService and actual ProgressionSystem.gain_experience/reconcile_battle_result, with PARTY/STORAGE, not-owned rollback and SaveV2. Exp Share remains an unimplemented progression path, equip-only is not L2.",
+      "constraints": "No changes to shared ProgressionSystem, EvolutionSystem, SaveV2, battle or FieldGrowth; positive checks only for already wired Everstone/Lucky Egg."
     }
   ],
   "limitations": [
@@ -240,7 +307,8 @@
     "Sin cambios de producción; sustituir un falso expect_cap por nuevo expect_no_cap fuerte, preservando todos los escenarios CAMP005.",
     "Block02 is NOT L2: one shared missing producer/SaveV2 contract, one representative native negative, and 3 source-mapped mints; no function or API was fabricated.",
     "Bloque03: reglas de lonely/mild/naive disponibles, sin handler ni persistencia de naturaleza efectiva. Se reutiliza dependencia IA6 y los 288 escenarios de CAMP005 siguen intactos.",
-    "Block04 authorised pilot for naughty/rash/sassy/serious only; previous 288 CAMP005 cases and mints not in pilot remain unchanged. Positive effects must be verified on real Godot CI."
+    "Block04 authorised pilot for naughty/rash/sassy/serious only; previous 288 CAMP005 cases and mints not in pilot remain unchanged. Positive effects must be verified on real Godot CI.",
+    "Block05: Everstone and Lucky Egg have real connected progression effects, Exp Share lacks distribution. EQUIPPABLE alone is not a functional reward mechanism. No shared progression source edited."
   ],
   "recovery_gate": {
     "run_id": 41763921080,
