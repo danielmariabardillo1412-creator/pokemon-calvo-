@@ -17,6 +17,8 @@ var _use: Button
 var _equip: Button
 var _growth := GrowthTransaction.new()
 var _growth_choices: VBoxContainer
+const WorldItemTx = preload("res://modules/overworld/field_world_item_transaction.gd")
+var _world_item_tx := WorldItemTx.new()
 var _ability_stamp := ""
 
 
@@ -162,6 +164,11 @@ func _refresh_choices() -> void:
 		_description.text = "Medicina para el Pokémon seleccionado. Se consume solo si tiene efecto." if service.FieldEffects.consumes_on_use(_selected_item()) else "Despierta al Pokémon seleccionado. Puede reutilizarse; no se consume."
 	elif service.FieldEffects.EV_BERRIES.has(String(_selected_item())):
 		_description.text = "Reduce hasta 10 EV de una estadística y aumenta la amistad."
+	if _selected_item() == &"escape_rope":
+		_description.text = "Regresa a la salida segura. Consume una cuerda al completar el traslado; no guarda automáticamente."
+		_use.disabled = _world_item_tx.busy or not service.owner.inventory.has(&"escape_rope")
+		_equip.disabled = true
+		return
 	_use.disabled = _selected_item() == &"" or creature == null
 	_equip.disabled = _use.disabled or not service.holdable(_selected_item())
 
@@ -173,6 +180,8 @@ func _apply(action: String) -> Dictionary:
 		if field != null: field.field_refresh_hud()
 		return {"accepted": false, "reason": "field_locked", "status": "REJECTED"}
 	_cancel_growth()
+	if action == "use" and _selected_item() == &"escape_rope":
+		return await _apply_escape_rope()
 	if action == "use" and service.Growth.supports(_selected_item()):
 		return _show_growth_result(_growth.begin(service, _selected_item(), _selected_creature()))
 	var definitions: DefinitionCatalog = field.field_definitions()
@@ -203,6 +212,24 @@ func _apply(action: String) -> Dictionary:
 		_result.text = {"field_locked": "Espera a terminar el combate o el desplazamiento.", "item_not_owned": "No queda ese objeto en la mochila.", "move_replacement_required": "Elige qué movimiento quieres sustituir.", "move_already_known": "Este Pokémon ya conoce ese movimiento.", "machine_incompatible": "Este Pokémon no puede aprender ese movimiento con esta MT.", "machine_not_in_active_version": "Esta máquina necesita una versión de reglas que todavía no está activa.", "species_machine_version_context_missing": "Faltan datos de compatibilidad para esta versión; no se ha usado el objeto.", "no_eligible_evolution": "Este objeto no provoca una evolución disponible para este Pokémon.", "nothing_equipped": "Este Pokémon no lleva objeto.", "already_equipped": "Este Pokémon ya lleva ese objeto.", "creature_knocked_out": "El Pokémon está debilitado.", "field_effect_not_connected": "La función de este objeto fuera del combate aún está pendiente."}.get(result.reason, "No se ha aplicado la acción. El inventario se conserva.")
 		if service.FieldEffects.Abilities.supports(_selected_item()): _result.text = _ability_rejection(result.reason)
 	refresh()
+	field.field_refresh_hud()
+	return result
+
+
+# W03 only: the world command does not need a Pokémon target.
+func _apply_escape_rope() -> Dictionary:
+	var prepared: Dictionary = _world_item_tx.prepare(field, service.owner)
+	if not bool(prepared.get("accepted", false)):
+		_result.text = "No se puede usar Cuerda Huida: " + String(prepared.get("reason", "rechazado"))
+		return prepared
+	# Closing the bag releases the movement lock through the existing popup_hide
+	# signal. No world preview or SaveV2 write is attempted with the bag open.
+	hide()
+	var result: Dictionary = await _world_item_tx.execute(field, prepared)
+	if bool(result.get("accepted", false)):
+		field.field_show_notice("Cuerda Huida utilizada. Has vuelto a la salida.")
+	else:
+		field.field_show_notice("Cuerda Huida conservada: " + String(result.get("reason", "sin efecto")))
 	field.field_refresh_hud()
 	return result
 
