@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""IA1/W01 CAMP005 — contrato acumulativo autorizado para 4 bloques funcionales.
+"""IA1/W01 CAMP005 — contrato acumulativo autorizado para 5 bloques funcionales.
 
 No atribuye PASS de Godot: el recibo de efecto positivo corresponde al runner
 real tests/gameplay/parallel_items_w01_campaign_005.gd y a CI del mismo SHA.
@@ -24,6 +24,7 @@ PARENT_RUNNER = ROOT / "tests/gameplay/parallel_items_w01_campaign_004.gd"
 PARENT_FIXTURE = ROOT / "tests/fixtures/parallel_items/w01_campaign_004.json"
 RUNNER = ROOT / "tests/gameplay/parallel_items_w01_campaign_005.gd"
 HISTORY = ROOT / "tools/item_audit/held_effect_sweep_v2.cjs"
+FLINCH_HISTORY = ROOT / "tools/item_audit/held_effect_sweep_v3.cjs"
 
 # ID, tipo, ataque positivo y clave nativa; misma referencia ya probada en CAMP004.
 ITEMS = {
@@ -39,6 +40,9 @@ ITEMS = {
     "silver_powder": ("bug", "bug_buzz", "silverpowder"),
     "soft_sand": ("ground", "earth_power", "softsand"),
     "spell_tag": ("ghost", "shadow_ball", "spelltag"),
+    "twisted_spoon": ("psychic", "psychic", "twistedspoon"),
+    "metal_coat": ("steel", "flash_cannon", "metalcoat"),
+    "kings_rock": ("flinch", "tackle", "kingsrock"),
 }
 MODES = ["active", "none", "reserve"]
 STATES = {"EN_CI_AUTOMATICA", "ENTREGADO_PENDIENTE_CI",
@@ -81,9 +85,11 @@ def validate() -> int:
           "Tercer bloque fuera de encargo de IA6")
     check(queue[3]["ids"] == "silver_powder;soft_sand;spell_tag",
           "Cuarto bloque fuera de encargo de IA6")
+    check(queue[4]["ids"] == "twisted_spoon;metal_coat;kings_rock",
+          "Quinto bloque fuera de encargo de IA6")
 
     progress = rows(PROGRESS)
-    check(len(progress) == 4, "Bloque 04 exige progreso exacto 4/10")
+    check(len(progress) == 5, "Bloque 05 exige progreso exacto 5/10")
     first = progress[0]
     check(first["bloque"] == "01" and first["ids"] == queue[0]["ids"],
           "La fila 01 no pertenece a W01")
@@ -105,8 +111,14 @@ def validate() -> int:
           "Bloque 03 sin certificado de CI oficial")
     fourth = progress[3]
     check(fourth["bloque"] == "04" and fourth["ids"] == queue[3]["ids"]
-          and fourth["estado"] in STATES,
-          "Estado o propiedad de fila 04 incorrectos")
+          and fourth["estado"] == "CI_PASS_VERIFICADO"
+          and fourth["sha_pruebas"] == "814943eb7445acee0161763eff85eb87285ed3ec"
+          and fourth["ci_run"] == "41954611857",
+          "Bloque 04 sin certificado de CI oficial")
+    fifth = progress[4]
+    check(fifth["bloque"] == "05" and fifth["ids"] == queue[4]["ids"]
+          and fifth["estado"] in STATES,
+          "Estado o propiedad de fila 05 incorrectos")
     check(bool(first["sha_pruebas"]) and bool(first["ci_run"]),
           "Progreso sin trazabilidad de estado pendiente")
 
@@ -128,40 +140,44 @@ def validate() -> int:
     scope = {r["id"]: r for r in rows(SCOPE)}
     inventory = {r["id"]: r for r in rows(INVENTORY)}
     history = HISTORY.read_text(encoding="utf-8")
+    flinch_history = FLINCH_HISTORY.read_text(encoding="utf-8")
+    check("kings_rock" in flinch_history and "flinch_rng" in flinch_history
+          and "l.includes('|flinch')" in flinch_history,
+          "Falta referencia histórica nativa de retroceso Roca del Rey")
     check("for(const [family,table] of [['type_boost',booster]" in history,
           "No hay escenario histórico nativo positivo de potenciadores de tipo")
     check("family+'_nonmatching'" in history
           and "foe(a).hp<foe(b).hp" in history,
           "Falta control histórico positivo/negativo de daño")
     for item, (kind, move, native) in ITEMS.items():
-        check(item in ";".join(r["ids"] for r in queue[:4]).split(";"),
-              "Objeto fuera de bloques 01/02/03/04 " + item)
+        check(item in ";".join(r["ids"] for r in queue[:5]).split(";"),
+              "Objeto fuera de bloques 01/02/03/04/05 " + item)
         check(scope[item]["estado_contenido"] == "SELECCIONADO"
               and scope[item]["familia"] == "HELD_COMBAT_CANDIDATE",
               "Objeto no seleccionado: " + item)
         check(inventory[item]["family"] == "HELD_COMBAT_CANDIDATE"
               and inventory[item]["native_entry"] == "True"
               and inventory[item]["native_id"] == native
-              and "onBasePower" in inventory[item]["native_hooks"],
+              and ("onModifyMove" if item == "kings_rock" else "onBasePower")
+                  in inventory[item]["native_hooks"],
               "Objeto sin soporte nativo funcional: " + item)
-        check(f"{kind}:'{item}'" in history and f"{kind}:'{move}'" in history,
-              "Referencias de tipo y ataque incoherentes: " + item)
+        if item != "kings_rock":
+            check(f"{kind}:'{item}'" in history and f"{kind}:'{move}'" in history,
+                  "Referencias de tipo y ataque incoherentes: " + item)
 
     data = json.loads(FIXTURE.read_text(encoding="utf-8"))
     check(data["schema_version"] == 1 and data["worker"] == "W01"
           and data["campaign"] == "CAMP_005" and data["kind"] == "NEW_IDS"
           and data["format"] == "gen9calvounifiedv1", "Fixture CAMPAÑA_005 inválido")
     check(data["variants"] == MODES, "Falta un modo activo, sin objeto o reserva")
-    check(len(data["blocks"]) == 4
-          and [b["block"] for b in data["blocks"]] == ["01", "02", "03", "04"]
-          and data["blocks"][0]["ids"] == list(ITEMS)[:3]
-          and data["blocks"][1]["ids"] == list(ITEMS)[3:6]
-          and data["blocks"][2]["ids"] == list(ITEMS)[6:9]
-          and data["blocks"][3]["ids"] == list(ITEMS)[9:12],
-          "Fixture no sigue los bloques 01/02/03/04 exactos de IA6")
+    check(len(data["blocks"]) == 5
+          and [b["block"] for b in data["blocks"]] == ["01", "02", "03", "04", "05"]
+          and all(data["blocks"][i]["ids"] == list(ITEMS)[i*3:(i+1)*3]
+                  for i in range(5)),
+          "Fixture no sigue los bloques 01/02/03/04/05 exactos de IA6")
     cases = data["cases"]
-    check(len(cases) == 36 and len({c["id"] for c in cases}) == 36,
-          "Se exigen 36 escenarios distintos")
+    check(len(cases) == 45 and len({c["id"] for c in cases}) == 45,
+          "Se exigen 45 escenarios distintos")
     for i, block in enumerate(data["blocks"]):
         check(set(block["cases"]) == {c["id"] for c in cases
                                        if c["block"] == f"{i+1:02d}"},
@@ -170,11 +186,16 @@ def validate() -> int:
     seen = set()
     for index, (item, (_, matching_move, _)) in enumerate(ITEMS.items()):
         wrong_move = "water_gun" if item == "silk_scarf" else "tackle"
-        for suffix, op, move, seeds in (
+        plans = ((
+            ("flinch", "kings_rock_flinch", "tackle", list(range(1, 65))),
+            ("immune", "kings_rock_immune", "tackle", [19]),
+            ("status", "kings_rock_status", "reflect", [19]),
+        ) if item == "kings_rock" else (
             ("matching", "matching_type_boost", matching_move, [19, 23]),
             ("nonmatching", "nonmatching_control", wrong_move, [19]),
             ("status", "status_control", "reflect", [19]),
-        ):
+        ))
+        for suffix, op, move, seeds in plans:
             label = f"{item}_{suffix}"
             found = [c for c in cases if c["id"] == label]
             check(len(found) == 1, "Caso funcional ausente " + label)
@@ -182,17 +203,22 @@ def validate() -> int:
             check(c["block"] == f"{index // 3 + 1:02d}"
                   and c["item_id"] == item and c["op"] == op,
                   "Operación o propietario incorrecto: " + label)
-            check(c["actor_species"] == "mew" and c["foe_species"] == "mew"
-                  and c["own_move"] == move and c["foe_move"] == "amnesia",
+            target = ("gengar" if suffix == "immune" else "snorlax") if item == "kings_rock" else "mew"
+            target_move = "tackle" if item == "kings_rock" else "amnesia"
+            check(c["actor_species"] == "mew" and c["foe_species"] == target
+                  and c["own_move"] == move and c["foe_move"] == target_move,
                   "Pokémon y movimiento real alterado: " + label)
             check(c["seeds"] == seeds and all(type(i) is int and i > 0 for i in seeds),
                   "Semillas de control alteradas: " + label)
-            check(c["history"] == "tools/item_audit/held_effect_sweep_v2.cjs:type_boost",
+            reference = ("tools/item_audit/held_effect_sweep_v3.cjs:flinch_rng"
+                         if item == "kings_rock" else
+                         "tools/item_audit/held_effect_sweep_v2.cjs:type_boost")
+            check(c["history"] == reference,
                   "Sin trazabilidad a prueba nativa: " + label)
             seen.add(label)
             pairs += len(seeds)
-    check(seen == {c["id"] for c in cases} and pairs == 48,
-          "No hay 48 pares caso-semilla autorizados")
+    check(seen == {c["id"] for c in cases} and pairs == 122,
+          "No hay 122 pares caso-semilla autorizados")
 
     runner = RUNNER.read_text(encoding="utf-8")
     for token in (
@@ -207,6 +233,10 @@ def validate() -> int:
         'CAMP005_W01_GODOT PASS blocks=',
     ):
         check(token in runner, "Runner carece de contrato funcional: " + token)
+    for token in ("kings_rock_flinch", "kings_rock_immune", "kings_rock_status",
+                  "c005_king_rock_activated", "c005_king_rock_not_activated",
+                  "flinched", "super._probe_w01_c004"):
+        check(token in runner, "Falta verificación positiva nativa Roca del Rey: " + token)
     check("await _restore_probe(" in PARENT_RUNNER.read_text(encoding="utf-8"),
           "Falta restauración real SaveV2 heredada")
 

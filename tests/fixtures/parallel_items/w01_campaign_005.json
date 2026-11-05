@@ -5,7 +5,7 @@
   "kind": "NEW_IDS",
   "scope": "HELD_COMBAT",
   "format": "gen9calvounifiedv1",
-  "status": "BLOCK_04_PENDING_CI",
+  "status": "BLOCK_05_PENDING_CI",
   "variants": [
     "active",
     "none",
@@ -86,6 +86,25 @@
         "spell_tag_matching",
         "spell_tag_nonmatching",
         "spell_tag_status"
+      ]
+    },
+    {
+      "block": "05",
+      "ids": [
+        "twisted_spoon",
+        "metal_coat",
+        "kings_rock"
+      ],
+      "cases": [
+        "twisted_spoon_matching",
+        "twisted_spoon_nonmatching",
+        "twisted_spoon_status",
+        "metal_coat_matching",
+        "metal_coat_nonmatching",
+        "metal_coat_status",
+        "kings_rock_flinch",
+        "kings_rock_immune",
+        "kings_rock_status"
       ]
     }
   ],
@@ -605,6 +624,197 @@
         19
       ],
       "history": "tools/item_audit/held_effect_sweep_v2.cjs:type_boost"
+    },
+    {
+      "block": "05",
+      "id": "twisted_spoon_matching",
+      "item_id": "twisted_spoon",
+      "op": "matching_type_boost",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "own_move": "psychic",
+      "foe_move": "amnesia",
+      "seeds": [
+        19,
+        23
+      ],
+      "history": "tools/item_audit/held_effect_sweep_v2.cjs:type_boost"
+    },
+    {
+      "block": "05",
+      "id": "twisted_spoon_nonmatching",
+      "item_id": "twisted_spoon",
+      "op": "nonmatching_control",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "own_move": "tackle",
+      "foe_move": "amnesia",
+      "seeds": [
+        19
+      ],
+      "history": "tools/item_audit/held_effect_sweep_v2.cjs:type_boost"
+    },
+    {
+      "block": "05",
+      "id": "twisted_spoon_status",
+      "item_id": "twisted_spoon",
+      "op": "status_control",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "own_move": "reflect",
+      "foe_move": "amnesia",
+      "seeds": [
+        19
+      ],
+      "history": "tools/item_audit/held_effect_sweep_v2.cjs:type_boost"
+    },
+    {
+      "block": "05",
+      "id": "metal_coat_matching",
+      "item_id": "metal_coat",
+      "op": "matching_type_boost",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "own_move": "flash_cannon",
+      "foe_move": "amnesia",
+      "seeds": [
+        19,
+        23
+      ],
+      "history": "tools/item_audit/held_effect_sweep_v2.cjs:type_boost"
+    },
+    {
+      "block": "05",
+      "id": "metal_coat_nonmatching",
+      "item_id": "metal_coat",
+      "op": "nonmatching_control",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "own_move": "tackle",
+      "foe_move": "amnesia",
+      "seeds": [
+        19
+      ],
+      "history": "tools/item_audit/held_effect_sweep_v2.cjs:type_boost"
+    },
+    {
+      "block": "05",
+      "id": "metal_coat_status",
+      "item_id": "metal_coat",
+      "op": "status_control",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "own_move": "reflect",
+      "foe_move": "amnesia",
+      "seeds": [
+        19
+      ],
+      "history": "tools/item_audit/held_effect_sweep_v2.cjs:type_boost"
+    },
+    {
+      "block": "05",
+      "id": "kings_rock_flinch",
+      "item_id": "kings_rock",
+      "op": "kings_rock_flinch",
+      "actor_species": "mew",
+      "foe_species": "snorlax",
+      "own_move": "tackle",
+      "foe_move": "tackle",
+      "seeds": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64
+      ],
+      "history": "tools/item_audit/held_effect_sweep_v3.cjs:flinch_rng"
+    },
+    {
+      "block": "05",
+      "id": "kings_rock_immune",
+      "item_id": "kings_rock",
+      "op": "kings_rock_immune",
+      "actor_species": "mew",
+      "foe_species": "gengar",
+      "own_move": "tackle",
+      "foe_move": "tackle",
+      "seeds": [
+        19
+      ],
+      "history": "tools/item_audit/held_effect_sweep_v3.cjs:flinch_rng"
+    },
+    {
+      "block": "05",
+      "id": "kings_rock_status",
+      "item_id": "kings_rock",
+      "op": "kings_rock_status",
+      "actor_species": "mew",
+      "foe_species": "snorlax",
+      "own_move": "reflect",
+      "foe_move": "tackle",
+      "seeds": [
+        19
+      ],
+      "history": "tools/item_audit/held_effect_sweep_v3.cjs:flinch_rng"
     }
   ],
   "source_provenance": {
@@ -614,6 +824,6 @@
   },
   "limitations": [
     "Resultado funcional solo con CI del mismo SHA",
-    "Se preservan controles CAMP005 01/02/03 y SaveV2; regresión CAMP004 obligatoria en 05/10 o cambios de producción"
+    "Se preservan controles CAMP005 01-04 y SaveV2; regresión CAMP004 obligatoria en bloque 05"
   ]
 }

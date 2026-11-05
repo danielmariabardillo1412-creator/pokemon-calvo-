@@ -75,3 +75,9 @@ Incidencia histórica SaveV2 de Rayo Solar a media carga pendiente de IA6; sin c
 - **Estado funcional: 4/10 bloques aprobados, 12 equipables, 36 escenarios, 48 pares, 144 variantes.** La regresión completa CAMPAÑA_004 se omitió conforme al workflow para bloque 04, y se ejecutará obligatoriamente en 05 y 10 o con cambios de producción.
 - La fila 04 del CSV continúa temporalmente `EN_CI_AUTOMATICA` para no ejecutar CI redundante por documentación. En la próxima `p`, cerrar como `CI_PASS_VERIFICADO`, con SHA funcional `814943eb7445acee0161763eff85eb87285ed3ec` y run `41954611857`, antes del bloque 05.
 - No se certifica aún integración a `main`, V28 ni pruebas visuales/GPU. Pendiente para IA6: SaveV2 de Rayo Solar a mitad de carga.
+
+## Bloque 05 — entrega pendiente de CI
+- Bloque 04 certificado: SHA `814943eb7445acee0161763eff85eb87285ed3ec`, CI #41954611857, Godot 4403/Python 268.
+- Asignados solo `twisted_spoon` (Psíquico), `metal_coat` (Acero), `kings_rock` (retroceso 10% nativo al golpear). Roca del Rey debe observar activación Y no activación durante 64 semillas; no se sustituye por metadatos.
+- Nuevos: 9 escenarios, 74 pares, 222 variantes; acumulado: 45 escenarios, 122 pares, 366 variantes. SAVEV2 en los tres modos. Regresión CAMP004 obligatoria en esta CI del hito 05.
+- Próxima `p`, solo tras CI SUCCESS: certificar bloque 05 y seguir bloque 06 `deep_sea_scale;deep_sea_tooth;metal_powder`. No tocar motor compartido, main, V28 u otras ramas.
