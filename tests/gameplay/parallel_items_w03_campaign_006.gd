@@ -31,6 +31,7 @@ func _run() -> void:
 		n += 1
 		match String(block.get("bloque", "")):
 			"01": await _block_01(block)
+			"02": await _block_02(block)
 			_: check("block not implemented", false)
 	_finish(n)
 
@@ -108,6 +109,82 @@ func _block_01(block: Dictionary) -> void:
 			&"escape_rope") == stocked)
 	check("no new global API changed", block.get("inventory_commit") == false
 		and block.get("savev2_schema_changed") == false)
+	DirAccess.remove_absolute(ProjectSettings.globalize_path(save.save_path))
+	scene.queue_free()
+	await process_frame
+
+func _block_02(block: Dictionary) -> void:
+	check("02 exact family and no autosave",
+		block.get("ids", []) == ["escape_rope", "fluffy_tail"]
+		and not bool(block.get("autosave", true)))
+	var scene: Variant = load("res://scenes/visual/field_demo.tscn").instantiate()
+	root.add_child(scene)
+	await process_frame
+	await physics_frame
+	check("02 real demo boots", scene.is_demo_ready())
+	if not scene.is_demo_ready():
+		scene.queue_free(); await process_frame; return
+	scene.player.set_physics_process(false)
+	var owner: PlayerCollection = scene.field_collection()
+	var bag: Control = scene._item_bag
+	var save: Node = scene._native_battles
+	save.save_path = "user://camp006_w03_block02_manual.json"
+	DirAccess.remove_absolute(ProjectSettings.globalize_path(save.save_path))
+	check("02 owns rope", owner.inventory.add(&"escape_rope", 2))
+	var amount: int = owner.inventory.quantity(&"escape_rope")
+	var enter: OverworldPortal = scene.get_node("CaveEntrance")
+	enter.fade_out_msec = 0; enter.fade_in_msec = 0; enter.hold_msec = 0
+	var exit: OverworldPortal = scene.get_node("CaveExit")
+	exit.fade_out_msec = 0; exit.fade_in_msec = 0; exit.hold_msec = 0
+	check("02 enter cave", await scene.traversal_controller.traverse_portal(enter))
+	var cave_position: Vector2 = scene.player.global_position
+	var dest: Vector2 = scene.get_node("SurfaceCaveReturn").global_position
+	check("02 bag visible before use", bag.open_bag() and bag.visible)
+	var rope_index := -1
+	for i in bag._items.item_count:
+		if String(bag._items.get_item_metadata(i)) == "escape_rope":
+			rope_index = i
+	check("02 rope selectable", rope_index >= 0)
+	if rope_index >= 0:
+		bag._items.select(rope_index)
+		bag._refresh_choices()
+		check("02 rope usable without Pokémon target", not bag._use.disabled
+			and bag._equip.disabled)
+		bag._use.pressed.emit()
+		for i in 5: await process_frame
+		check("02 button causes real return", not bag.visible
+			and scene.technical_region_id() == &"surface"
+			and scene.player.global_position.is_equal_approx(dest))
+		check("02 spends exactly one", owner.inventory.quantity(&"escape_rope") == amount - 1)
+		check("02 no automatic save", not FileAccess.file_exists(save.save_path))
+	check("02 collection/identity remains", is_same(scene.field_collection(), owner))
+	var native_saved: bool = save.save_game()
+	check("02 manual SaveV2 written", native_saved)
+	if native_saved:
+		var payload: Variant = JSON.parse_string(FileAccess.get_file_as_string(save.save_path))
+		check("02 manual save contains destination and spent item",
+			payload is Dictionary and payload.get("payload", {}).get("world", {}).get("position", []) == [dest.x, dest.y]
+			and payload.get("payload", {}).get("collection", {}).get("inventory", {}).get("quantities", {}).get("escape_rope", -1) == amount - 1)
+		scene.player.global_position = cave_position
+		var loaded: bool = await save.load_game()
+		check("02 load restores world and item", loaded
+			and scene.player.global_position.is_equal_approx(dest)
+			and scene.field_collection().inventory.quantity(&"escape_rope") == amount - 1)
+	# Verify preflight no-stock/region and reentry without consuming anything.
+	var tx := preload("res://modules/overworld/field_world_item_transaction.gd").new()
+	var snapshot: String = JSON.stringify(scene.field_collection().inventory.to_dict())
+	var rejected: Dictionary = tx.prepare(scene, scene.field_collection())
+	check("02 surface no anchor at execution",
+		rejected.get("accepted", false)
+		and not (await tx.execute(scene, rejected)).get("accepted", false)
+		and JSON.stringify(scene.field_collection().inventory.to_dict()) == snapshot)
+	tx.busy = true
+	check("02 double-use busy preflight", tx.prepare(scene, scene.field_collection()).get("reason") == "world_item_busy")
+	tx.busy = false
+	var owner2: PlayerCollection = scene.field_collection()
+	check("02 no-stock setup", owner2.inventory.set_quantity(&"escape_rope", 0))
+	check("02 no rope refusal", tx.prepare(scene, owner2).get("reason") == "item_not_owned")
+	check("02 no-stock retains location", scene.player.global_position.is_equal_approx(dest))
 	DirAccess.remove_absolute(ProjectSettings.globalize_path(save.save_path))
 	scene.queue_free()
 	await process_frame
