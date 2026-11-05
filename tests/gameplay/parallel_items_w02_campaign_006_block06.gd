@@ -127,5 +127,10 @@ func _probe_ev06(spec: Dictionary, mode: String) -> void:
 	var near: int = int(capped.evs[stat])
 	var near_result: Dictionary = BattleEvRewards.award(
 		capped, defeated, catalogs, ProgressionRuleset.new(), starting)
-	check(mode + " EV06 cap252 and cap510 clamp bonus to two", 
-		int(capped.evs[stat]) == near + 2 and int(near_result.get(stat, -1)) == 2)
+	var preceding_yield: int = 1 if stat == "special_defense" else 0
+	var available_for_power: int = 2 - preceding_yield
+	check(mode + " EV06 cap252 and cap510 respect ordered foe yield",
+		int(capped.evs[stat]) == near + available_for_power
+		and int(near_result.get(stat, -1)) == available_for_power
+		and (int(capped.evs.get("speed", 0)) == int(before_caps.get("speed", 0)) + 1 if stat == "special_defense" else true)
+		and ProgressionRuleset.STAT_KEYS.reduce(func(sum, key): return sum + int(capped.evs.get(key, 0)), 0) == 510)
