@@ -37,7 +37,7 @@ def main() -> int:
         save=(ROOT/"scenes/visual/field_native_bridge.gd").read_text(encoding="utf-8")
         tscn=(ROOT/"scenes/overworld/technical_overworld.tscn").read_text(encoding="utf-8")
         ck(f["campaign"]=="CAMP_006" and f["worker"]=="W03", "identity")
-        ck(len(q)==10 and len(p)==len(f["blocks"])==2,"progress not exactly 2/10")
+        ck(len(q)==10 and len(p)==len(f["blocks"])==3,"progress not exactly 2/10")
         ids=f["blocks"][0]["ids"]
         ck(ids==["escape_rope"] and p[0]["ids"]=="escape_rope" and q[0]["ids"]=="escape_rope","queue mismatch")
         ck(p[0]["bloque"]=="01" and f["blocks"][0]["bloque"]=="01", "block sequence")
@@ -125,6 +125,39 @@ def main() -> int:
         ck('fluffy_tail' not in transaction and
            'fluffy_tail' not in bag,
            "battle-only Fluffy Tail must not get world route")
+        row3=f["blocks"][2]
+        ck(row3["bloque"]=="03" and row3["ids"]==
+           ["repel","super_repel","max_repel"] and
+           p[2]["bloque"]=="03" and q[2]["ids"]==
+           "repel;super_repel;max_repel","block03 exact queue and progress")
+        ck(row3["functional_level"]=="L2_STANDALONE_REAL_PLAYER_STEPS"
+           and row3["item_effect_fully_connected"] is False
+           and row3["no_new_items"] is True,
+           "do not declare integration into actual world encounter producer")
+        ck(row3["durations"]=={"repel":100,"super_repel":200,"max_repel":250},
+           "repel durations are fixed canonical")
+        repel=(ROOT/"modules/overworld/field_repel_step_effect.gd").read_text(encoding="utf-8")
+        player=(ROOT/"modules/overworld/overworld_player.gd").read_text(encoding="utf-8")
+        encounter=(ROOT/"modules/encounters/wild_encounter_system.gd").read_text(encoding="utf-8")
+        for token in ['&"repel": 100','&"super_repel": 200','&"max_repel": 250',
+                      "step_completed.connect(_on_real_step)", "remaining_steps -= 1",
+                      "wild_level < leader_level", "func to_dict()", "func restore("]:
+            ck(token in repel,"missing positive repel contract: "+token)
+        ck("func apply_motion(" in player and
+           "_track_real_movement(segment_start, moved)" in player and
+           "step_completed.emit(cursor)" in player,
+           "real movement producer changed")
+        ck("begin_encounter(" not in repel and
+           "WildEncounterSystem.resolve(" not in repel and
+           "does not" not in encounter,
+           "L2 helper must not invent a full battle entrypoint")
+        ck('"03": await _block_03(block)' in gd and
+           'func _block_03(block: Dictionary)' in gd and
+           'player.apply_motion(Vector2.RIGHT, 1.0/3.0)' in gd and
+           'effect.blocks_level(9, 10)' in gd and
+           'effect.remaining_steps == 0' in gd and
+           'other.restore(snap)' in gd,
+           "Godot positive motion-level-expiry tests absent")
     except (OSError,KeyError,ValueError,TypeError,AssertionError) as exc:
         print("CAMP006_W03_PY FAIL",exc,file=sys.stderr)
         return 1
