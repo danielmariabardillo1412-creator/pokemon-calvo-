@@ -1,6 +1,6 @@
 # IA5/W05 — CAMPAÑA_006 · BLOQUE 07/10
 
-**Fecha:** 2026-11-05. **Rama exclusiva:** `codex/calvo-items-20261104-w05-camp006`. **Estado:** ENTREGADO_PENDIENTE_CI. **Commit fixture:** `7fc0f0a07371e820f18c400bbae710adc878ae64`.
+**Fecha:** 2026-11-05. **Rama exclusiva:** `codex/calvo-items-20261104-w05-camp006`. **Estado inicial:** ENTREGADO_PENDIENTE_CI. **Estado actual:** CI PASS VERIFICADA. **Commit fixture:** `7fc0f0a07371e820f18c400bbae710adc878ae64`.
 
 ## Autorización IA6 y mapeo Scarlet/Violet
 
@@ -24,8 +24,16 @@ Estas MT tienen otros movimientos en ediciones anteriores; únicamente se prueba
 - Se conservan runners y contratos de los 30 casos previos, sin cambios en motor, catálogo, learnsets, política, workflows, save reales ni otras ramas.
 - Las regresiones CAMP003/004/005 completas pasaron en hito 05 [#41785064826](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41785064826); su próximo hito obligatorio es 10 salvo parche `modules/`.
 
-## Criterio de certificación
+## CI del bloque 07 — PASS funcional certificado
 
-El workflow `.github/workflows/parallel-camp006-w05-autoci.yml` debe ejecutarse sobre el SHA del árbol con fixture y CSV. Exigir `completed/success`, `CAMP006_W05_PY PASS blocks=7 checks=N`, `CAMP006_W05_GODOT PASS blocks=7 checks=N` y gates de recibos PY/GODOT, con N positivo. **No atribuir PASS hasta comprobar el run y sus logs.** El CSV conserva `EN_CI_AUTOMATICA` como registro histórico del push.
+[GitHub Actions #41965283619](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41965283619): `completed/success` en SHA funcional `2c802f1d4dde50c6a6cee78c53dd6ef1934352e2`, job `127040761436`. Recibos exactos del log:
+
+- `CAMP006_W05_MANIFEST_PASS reserved=10 completed=7 ids=49 kind=NEW_IDS`
+- `CAMP006_W05_PY PASS blocks=7 checks=343`
+- `CAMP006_GATE_PY_PASS worker=W05 blocks=7 checks=343`
+- `CAMP006_W05_GODOT PASS blocks=7 checks=1276`
+- `CAMP006_GATE_GODOT_PASS worker=W05 blocks=7 checks=1276`
+
+Regresiones CAMP003/004/005 en este run: `skipped`, correctamente en bloque 07 sin cambios `modules/`. Hito 05 pasó las seis regresiones completas en [#41785064826](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41785064826). CSV conserva `EN_CI_AUTOMATICA` como registro histórico del push; PASS certificado aquí. No confundir Godot headless con UI/GPU ni con integración global.
 
 **Próxima `p` tras certificación:** bloque 08 `tm09;tm10;tm11;tm12;tm13`. Sin merge.
