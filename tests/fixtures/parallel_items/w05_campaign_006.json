@@ -130,6 +130,31 @@
           "move_id": "dragon_cheer"
         }
       ]
+    },
+    {
+      "block": "06",
+      "items": [
+        {
+          "item_id": "tm227",
+          "move_id": "alluring_voice"
+        },
+        {
+          "item_id": "tm228",
+          "move_id": "psychic_noise"
+        },
+        {
+          "item_id": "tm229",
+          "move_id": "upper_hand"
+        },
+        {
+          "item_id": "tm01",
+          "move_id": "take_down"
+        },
+        {
+          "item_id": "tm02",
+          "move_id": "charm"
+        }
+      ]
     }
   ]
 }
