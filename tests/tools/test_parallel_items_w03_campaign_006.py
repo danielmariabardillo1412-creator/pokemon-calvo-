@@ -37,7 +37,7 @@ def main() -> int:
         save=(ROOT/"scenes/visual/field_native_bridge.gd").read_text(encoding="utf-8")
         tscn=(ROOT/"scenes/overworld/technical_overworld.tscn").read_text(encoding="utf-8")
         ck(f["campaign"]=="CAMP_006" and f["worker"]=="W03", "identity")
-        ck(len(q)==10 and len(p)==len(f["blocks"])==1,"progress not exactly 1/10")
+        ck(len(q)==10 and len(p)==len(f["blocks"])==2,"progress not exactly 2/10")
         ids=f["blocks"][0]["ids"]
         ck(ids==["escape_rope"] and p[0]["ids"]=="escape_rope" and q[0]["ids"]=="escape_rope","queue mismatch")
         ck(p[0]["bloque"]=="01" and f["blocks"][0]["bloque"]=="01", "block sequence")
@@ -78,6 +78,53 @@ def main() -> int:
            "rejected use/no-consumption coverage missing")
         ck('"CAMP006_W03_GODOT PASS blocks=" + str(n)' in gd
            and "quit(1)" in gd, "Godot receipt/strict failures missing")
+        block=f["blocks"][1]
+        ck(block["bloque"]=="02" and block["ids"]==["escape_rope","fluffy_tail"]
+           and p[1]["bloque"]=="02" and p[1]["ids"]=="escape_rope;fluffy_tail"
+           and q[1]["ids"]=="escape_rope;fluffy_tail","block02 queue and progress")
+        ck(block["functional_level"]=="L3_REAL_BAG_AND_MANUAL_SAVE"
+           and block["inventory_commit"] is True
+           and block["autosave"] is False,"actual L3 and manual save")
+        transaction=(ROOT/"modules/overworld/field_world_item_transaction.gd").read_text(encoding="utf-8")
+        bag=(ROOT/"scenes/visual/field_item_bag.gd").read_text(encoding="utf-8")
+        ck('func prepare(' in transaction and 'func execute(' in transaction
+           and 'func _execute_locked(' in transaction,"real transaction")
+        ck('Pilot.preview(field)' in transaction and
+           'await Pilot.return_to_demo_anchor(field)' in transaction
+           and 'inv.remove(&"escape_rope", 1)' in transaction,
+           "positive move then exactly one item spend")
+        ck('var snapshot: Dictionary = inv.to_dict()' in transaction
+           and 'func _restore_position(' in transaction
+           and '"state_changed_during_traversal"' in transaction,
+           "race and failure guards")
+        ck('save_game()' not in transaction and 'saves.write(' not in transaction
+           and 'save_game()' not in bag,"no autosave on rope use")
+        ck('const WorldItemTx = preload(' in bag
+           and 'var _world_item_tx := WorldItemTx.new()' in bag
+           and 'if action == "use" and _selected_item() == &"escape_rope":' in bag
+           and 'return await _apply_escape_rope()' in bag,
+           "bag button routes through exclusive Escape Rope seam")
+        ck('func _apply_escape_rope()' in bag and
+           'hide()' in bag and
+           'await _world_item_tx.execute(field, prepared)' in bag,
+           "bag closes before traversal")
+        ck('if _selected_item() == &"escape_rope":' in bag and
+           '_use.disabled = _world_item_tx.busy' in bag,
+           "rope can be used without target")
+        ck('func _block_02(' in gd and
+           '"02": await _block_02(block)' in gd and
+           'bag._use.pressed.emit()' in gd and
+           'save.save_game()' in gd and
+           'await save.load_game()' in gd and
+           'not FileAccess.file_exists(save.save_path)' in gd,
+           "Godot tests real UI and manual save after rope")
+        ck('not (await tx.execute(scene, rejected)).get("accepted", false)' in gd
+           and 'tx.busy = true' in gd
+           and 'owner2.inventory.set_quantity(&"escape_rope", 0)' in gd,
+           "reject cases tested")
+        ck('fluffy_tail' not in transaction and
+           'fluffy_tail' not in bag,
+           "battle-only Fluffy Tail must not get world route")
     except (OSError,KeyError,ValueError,TypeError,AssertionError) as exc:
         print("CAMP006_W03_PY FAIL",exc,file=sys.stderr)
         return 1
