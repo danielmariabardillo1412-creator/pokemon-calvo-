@@ -66,3 +66,12 @@ Incidencia histórica SaveV2 de Rayo Solar a media carga pendiente de IA6; sin c
 - Estado `EN_CI_AUTOMATICA`, **NO decir PASS hasta run nuevo completado y exitoso con recibos Godot/Python blocks=4 y SHA idéntico**.
 - Regresión completa CAMP004 prevista hitos 05/10 o por cambios de producción. Incidencia SaveV2 Rayo Solar intermedia para IA6. Sin integración `main`/V28 ni verificación GPU/UI.
 - Próxima orden `p`, una vez CI positiva: certificar 04 y ejecutar **solo** bloque 05 `twisted_spoon;metal_coat;kings_rock`.
+
+## Certificación final del bloque 04 — GitHub Actions
+
+- [Run oficial #41954611857](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41954611857): `completed/success`.
+- Commit funcional verificado: `814943eb7445acee0161763eff85eb87285ed3ec`.
+- Recibos literales del job: `CAMP005_W01_SCOPE PASS blocks=4`, `CAMP005_W01_PY PASS blocks=4 checks=268`, `CAMP005_W01_GODOT PASS blocks=4 checks=4403`.
+- **Estado funcional: 4/10 bloques aprobados, 12 equipables, 36 escenarios, 48 pares, 144 variantes.** La regresión completa CAMPAÑA_004 se omitió conforme al workflow para bloque 04, y se ejecutará obligatoriamente en 05 y 10 o con cambios de producción.
+- La fila 04 del CSV continúa temporalmente `EN_CI_AUTOMATICA` para no ejecutar CI redundante por documentación. En la próxima `p`, cerrar como `CI_PASS_VERIFICADO`, con SHA funcional `814943eb7445acee0161763eff85eb87285ed3ec` y run `41954611857`, antes del bloque 05.
+- No se certifica aún integración a `main`, V28 ni pruebas visuales/GPU. Pendiente para IA6: SaveV2 de Rayo Solar a mitad de carga.

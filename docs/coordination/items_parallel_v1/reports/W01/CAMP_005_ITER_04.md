@@ -27,3 +27,12 @@ Cada positivo se contrasta con el mismo ataque en portador activo, sin objeto y 
 **Límites:** sin prueba visual/GPU; no se acredita integración a `main` o V28. Continúa para IA6 la incidencia de SaveV2 a mitad de carga de Rayo Solar, detectada en CAMP004. No se han modificado `modules/`, workflow, otras ramas ni motores comunes.
 
 **Próxima `p` solo tras PASS:** cerrar 04 documentalmente y ejecutar bloque 05 `twisted_spoon;metal_coat;kings_rock`, con regresión CAMP004 completa obligatoria.
+
+## Certificación final del bloque 04 — GitHub Actions
+
+- [Run oficial #41954611857](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41954611857): `completed/success`.
+- Commit funcional verificado: `814943eb7445acee0161763eff85eb87285ed3ec`.
+- Recibos literales del job: `CAMP005_W01_SCOPE PASS blocks=4`, `CAMP005_W01_PY PASS blocks=4 checks=268`, `CAMP005_W01_GODOT PASS blocks=4 checks=4403`.
+- **Estado funcional: 4/10 bloques aprobados, 12 equipables, 36 escenarios, 48 pares, 144 variantes.** La regresión completa CAMPAÑA_004 se omitió conforme al workflow para bloque 04, y se ejecutará obligatoriamente en 05 y 10 o con cambios de producción.
+- La fila 04 del CSV continúa temporalmente `EN_CI_AUTOMATICA` para no ejecutar CI redundante por documentación. En la próxima `p`, cerrar como `CI_PASS_VERIFICADO`, con SHA funcional `814943eb7445acee0161763eff85eb87285ed3ec` y run `41954611857`, antes del bloque 05.
+- No se certifica aún integración a `main`, V28 ni pruebas visuales/GPU. Pendiente para IA6: SaveV2 de Rayo Solar a mitad de carga.
