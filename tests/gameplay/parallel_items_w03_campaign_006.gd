@@ -182,6 +182,40 @@ func _block_02(block: Dictionary) -> void:
 	check("02 double-use busy preflight", tx.prepare(scene, scene.field_collection()).get("reason") == "world_item_busy")
 	tx.busy = false
 	var owner2: PlayerCollection = scene.field_collection()
+	# A prepared snapshot is invalidated before any traversal by an inventory change.
+	scene.player.global_position = cave_position
+	var prepared_stale: Dictionary = tx.prepare(scene, owner2)
+	check("02 stale setup in cave", prepared_stale.get("accepted", false))
+	var pre_stale_pos: Vector2 = scene.player.global_position
+	check("02 stale change", owner2.inventory.add(&"escape_rope", 1))
+	var current_qty: int = owner2.inventory.quantity(&"escape_rope")
+	var stale: Dictionary = await tx.execute(scene, prepared_stale)
+	check("02 stale revision rejects without move/spend",
+		not stale.get("accepted", false)
+		and stale.get("reason") == "inventory_changed"
+		and scene.player.global_position.is_equal_approx(pre_stale_pos)
+		and owner2.inventory.quantity(&"escape_rope") == current_qty)
+	# A real collision on the return marker must stop the command in preflight.
+	var obstruction := StaticBody2D.new()
+	obstruction.position = dest
+	var obstruction_shape := CollisionShape2D.new()
+	var rect := RectangleShape2D.new()
+	rect.size = Vector2(28, 28)
+	obstruction_shape.shape = rect
+	obstruction.add_child(obstruction_shape)
+	scene.add_child(obstruction)
+	await physics_frame
+	var prepared_blocked: Dictionary = tx.prepare(scene, owner2)
+	var blocked_position: Vector2 = scene.player.global_position
+	var blocked_qty: int = owner2.inventory.quantity(&"escape_rope")
+	var blocked: Dictionary = await tx.execute(scene, prepared_blocked)
+	check("02 occupied anchor rejects without move/spend",
+		not blocked.get("accepted", false)
+		and blocked.get("reason") == "return_anchor_occupied"
+		and scene.player.global_position.is_equal_approx(blocked_position)
+		and owner2.inventory.quantity(&"escape_rope") == blocked_qty)
+	obstruction.queue_free()
+	await process_frame
 	check("02 no-stock setup", owner2.inventory.set_quantity(&"escape_rope", 0))
 	check("02 no rope refusal", tx.prepare(scene, owner2).get("reason") == "item_not_owned")
 	check("02 no-stock retains location", scene.player.global_position.is_equal_approx(dest))
