@@ -1,0 +1,36 @@
+{
+  "worker": "W02",
+  "campaign": "CAMP_006",
+  "block": "06",
+  "status": "TESTS_PUBLISHED_AWAITING_CI",
+  "ids": [
+    "power_anklet",
+    "power_band",
+    "power_belt"
+  ],
+  "foe": "magikarp",
+  "cases": [
+    {
+      "id": "power_anklet",
+      "stat": "speed"
+    },
+    {
+      "id": "power_band",
+      "stat": "special_defense"
+    },
+    {
+      "id": "power_belt",
+      "stat": "defense"
+    }
+  ],
+  "rules": {
+    "bonus_per_defeat": 8,
+    "per_stat_cap": 252,
+    "total_cap": 510
+  },
+  "modes": [
+    "active",
+    "reserve",
+    "none"
+  ]
+}
