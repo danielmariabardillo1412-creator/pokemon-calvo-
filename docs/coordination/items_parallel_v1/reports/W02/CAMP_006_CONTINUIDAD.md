@@ -71,3 +71,5 @@
 **Informe fuente:** `docs/coordination/items_parallel_v1/reports/W02/CAMP_006_ITER_01.md`. Debe actualizarse con conclusión real y recibos de 006/005/004/003. Solo después de gate PASS documentado se puede considerar fila02 en el próximo turno `p`; no ejecutarla en este turno.
 
 **IMPORTANTE:** No solicitar autorización IA6 para reparar una expectativa propia, pero no implementar motor de naturaleza efectiva o mutar API compartida sin contrato y coordinación. Nunca retroceder pruebas ni atribuir éxito por cero casos.
+
+**CI parcial del bloque05 comprobada al cierre del turno:** run `41955498590`, SHA de código `1cb6689f5fa52af6cf7d9b63b69d4ee76a83a7ec`; puerta Python, CAMP005 Python/Godot y runner CAMPAÑA_006 Godot (2 positivos, 1 dependencia) `success`. Regresiones CAMP004/CAMP003 aún `in_progress` al último control: no declarar PASS global. Dos CI previas fallaron por errores de contrato Python (errata SavedV2 y nombre de instancia svc), corregidos en `8f0b1dd3` y `1cb6689f` sin debilitar oráculos. Al siguiente `p` confirmar run05 y actualizar progreso antes de fila06. Ningún cambio de producción.
