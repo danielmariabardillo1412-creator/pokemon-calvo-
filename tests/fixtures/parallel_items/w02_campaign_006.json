@@ -294,7 +294,7 @@
           "modules/inventory/field_item_service.gd"
         ],
         "required_decisions": "Define held-vs-teamwide Exp Share mode/generation, recipient eligibility (participants, reserve, fainted), split/rounding/level cap, stacking Lucky Egg, ownership across PARTY/STORAGE; approve modification to shared progression modules.",
-        "positive_contract_pending": "After IA6 approval, real post-battle XP event to eligible nonparticipating recipient, measured original/recipient XP, level cap and SavedV2 without fake reward; no unrelated change to participant XP.",
+        "positive_contract_pending": "After IA6 approval, real post-battle XP event to eligible nonparticipating recipient, measured original/recipient XP, level cap and SaveV2 without fake reward; no unrelated change to participant XP.",
         "scope": "L1_DEPENDENCY_NO_SHARE_EFFECT"
       },
       "tests": "Godot executes equip/unequip via FieldItemService and actual ProgressionSystem.gain_experience/reconcile_battle_result, with PARTY/STORAGE, not-owned rollback and SaveV2. Exp Share remains an unimplemented progression path, equip-only is not L2.",
