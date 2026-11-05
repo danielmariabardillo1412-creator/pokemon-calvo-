@@ -1,6 +1,7 @@
 extends "res://tests/gameplay/parallel_items_w02_campaign_006.gd"
 
 # W02 block06: tests live post-battle EV awards; never mocks BattleEvRewards.
+const BattleEvRewards = preload("res://modules/creatures/progression/battle_ev_rewards.gd")
 const EV06 := "res://tests/fixtures/parallel_items/w02_campaign_006_block06.json"
 
 func _initialize() -> void:
@@ -114,14 +115,14 @@ func _probe_ev06(spec: Dictionary, mode: String) -> void:
 	var filler: String = "hp" if stat != "hp" else "attack"
 	capped.evs[filler] = 252
 	var filler2: String = "attack" if stat != "attack" and filler != "attack" else "special_attack"
-	capped.evs[filler2] = 6
+	capped.evs[filler2] = 8
 	capped.recalculate_stats(catalogs.species(capped.species_id), ProgressionRuleset.new())
 	var before_caps: Dictionary = capped.evs.duplicate(true)
 	var cap_result: Dictionary = BattleEvRewards.award(
 		capped, defeated, catalogs, ProgressionRuleset.new(), starting)
 	check(mode + " EV06 cap510 rejects all grants", capped.evs == before_caps
 		and cap_result.is_empty())
-	capped.evs[filler2] = 4
+	capped.evs[filler2] = 6
 	var near: int = int(capped.evs[stat])
 	var near_result: Dictionary = BattleEvRewards.award(
 		capped, defeated, catalogs, ProgressionRuleset.new(), starting)
