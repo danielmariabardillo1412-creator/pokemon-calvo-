@@ -9,6 +9,7 @@ on:
       - 'tests/gameplay/parallel_items_w03_campaign_006.gd'
       - 'tests/fixtures/parallel_items/w03_campaign_006.json'
       - 'modules/overworld/escape_rope_demo_pilot.gd'
+      - 'modules/overworld/field_repel_step_effect.gd'
       - 'modules/overworld/field_world_item_transaction.gd'
       - 'scenes/visual/field_item_bag.gd'
       - 'docs/coordination/items_parallel_v1/reports/W03/CAMP_006_PROGRESO.csv'
@@ -50,13 +51,13 @@ jobs:
         run: |
           set -euo pipefail
           python -B tests/tools/test_parallel_items_w03_campaign_006.py --ci 2>&1 | tee camp006-w03-python.log
-          grep -E '^CAMP006_W03_PY PASS blocks=2 checks=[1-9][0-9]*$' camp006-w03-python.log
+          grep -E '^CAMP006_W03_PY PASS blocks=3 checks=[1-9][0-9]*$' camp006-w03-python.log
       - name: CAMP006 Godot demo and SaveV2 pilot
         shell: bash
         run: |
           set -euo pipefail
           timeout 900s godot --headless --path . --script res://tests/gameplay/parallel_items_w03_campaign_006.gd 2>&1 | tee camp006-w03-godot.log
-          grep -E '^CAMP006_W03_GODOT PASS blocks=2 checks=[1-9][0-9]*$' camp006-w03-godot.log
+          grep -E '^CAMP006_W03_GODOT PASS blocks=3 checks=[1-9][0-9]*$' camp006-w03-godot.log
       - name: Mandatory CAMP005 W03 regression
         shell: bash
         run: |
