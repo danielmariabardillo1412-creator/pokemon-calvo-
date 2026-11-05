@@ -218,7 +218,7 @@ func _block_02(block: Dictionary) -> void:
 	await process_frame
 	check("02 no-stock setup", owner2.inventory.set_quantity(&"escape_rope", 0))
 	check("02 no rope refusal", tx.prepare(scene, owner2).get("reason") == "item_not_owned")
-	check("02 no-stock retains location", scene.player.global_position.is_equal_approx(dest))
+	check("02 no-stock retains location", scene.player.global_position.is_equal_approx(blocked_position))
 	DirAccess.remove_absolute(ProjectSettings.globalize_path(save.save_path))
 	scene.queue_free()
 	await process_frame
