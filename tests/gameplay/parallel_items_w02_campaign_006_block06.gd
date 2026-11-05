@@ -11,6 +11,7 @@ func _initialize() -> void:
 		if not done:
 			push_error("CAMP006 W02 EV06 watchdog")
 			quit(2)
+	)
 
 func _run_ev06() -> void:
 	destination = "res://.godot/parallel_items/w02_campaign_006"
