@@ -15,10 +15,10 @@ assert data["rules"]=={"bonus_per_defeat":8,"per_stat_cap":252,"total_cap":510}
 assert data["modes"]==["active","reserve","none"]
 assert data["baseline_gate"]=={
     "run_id":41972015003,"conclusion":"success","head_sha":"58dc8103c8dd85275d477d4f563ca7ef279d9f86"}
-assert len(rows)==7 and rows[-1]["bloque"]=="07"
-assert rows[-1]["ids"]=="power_bracer;power_lens;power_weight"
-assert rows[-1]["estado"]=="PRUEBAS_NATIVAS_PUBLICADAS_CI_PENDIENTE"
-assert rows[-1]["ci_run"]=="CI_BLOQUE07_PENDIENTE"
+assert len(rows)==8 and rows[6]["bloque"]=="07" and rows[7]["bloque"]=="08"
+assert rows[6]["ids"]=="power_bracer;power_lens;power_weight"
+assert rows[6]["estado"]=="TRES_FUNCIONALES_CI_VERIFICADA"
+assert rows[6]["ci_run"]=="42232974438"
 assert rows[-2]["ci_run"]=="41972015003"
 source=(R/"modules/creatures/progression/battle_ev_rewards.gd").read_text()
 progression=(R/"modules/creatures/progression/progression_system.gd").read_text()
