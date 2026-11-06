@@ -1,3 +1,9 @@
+## Bloque04: pausa ENCOUNTER
+
+La revisión de `black_flute;white_flute;lure;super_lure;max_lure` reproduce la dependencia del productor compartido de encuentros detectada en bloque03. La política versionada de sus modificadores tampoco está aprobada. Ticket: `CAMP_006_BLOCK04_ENCOUNTER_PRODUCER_BLOCKER.md`, commit `afbbe5cf`. No sumar el bloque04 ni avanzar al 05 sin asignación IA6. Progreso válido 3/10; sin CI nueva.
+
+---
+
 ## NUEVO — CAMPAÑA_006 W03, bloque 03/10: L2 POSITIVO, L3 PENDIENTE IA6
 
 **Rama exclusiva:** `codex/calvo-items-20261104-w03-camp006`. El bloque 03 `repel;super_repel;max_repel` añade el helper `modules/overworld/field_repel_step_effect.gd`. Conecta al productor de pasos **reales** `OverworldPlayer.step_completed`; duraciones 100/200/250 pasos, filtra encuentros con nivel salvaje inferior al líder, caduca exactamente al paso final y permite serializar/restaurar su propio estado. El runner Godot mueve el personaje por `apply_motion` 550 pasos físicos, verifica no movimientos bloqueados, niveles 9/10/11, expiración y roundtrip propio. **No hay consumo de repelentes desde la mochila, ni filtro ligado a encuentros reales de la demo, ni SaveV2 integrado**: L2 probado ≠ L3 jugable. Ticket exacto en `reports/W03/CAMP_006_ITER_03.md`: IA6 debe decidir punto de integración antes de inicio de combate, preservar RNG/candidatos, activar ítem en bolsa y persistir `active_id/remaining_steps` en SaveV2; no cambiar mundo, sesión o SaveV2 unilateralmente.
