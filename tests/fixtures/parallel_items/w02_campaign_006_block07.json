@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "worker": "W02",
+  "campaign": "CAMP_006",
+  "block": "07",
+  "family": "TRAINING_HELD",
+  "status": "NATIVE_TESTS_PUBLISHED_AWAITING_CI",
+  "ids": [
+    "power_bracer",
+    "power_lens",
+    "power_weight"
+  ],
+  "foe": "magikarp",
+  "cases": [
+    {
+      "id": "power_bracer",
+      "stat": "attack",
+      "expected_power_bonus": 8
+    },
+    {
+      "id": "power_lens",
+      "stat": "special_attack",
+      "expected_power_bonus": 8
+    },
+    {
+      "id": "power_weight",
+      "stat": "hp",
+      "expected_power_bonus": 8
+    }
+  ],
+  "rules": {
+    "bonus_per_defeat": 8,
+    "per_stat_cap": 252,
+    "total_cap": 510
+  },
+  "modes": [
+    "active",
+    "reserve",
+    "none"
+  ],
+  "tested_routes": [
+    "FieldItemService.equip",
+    "ProgressionSystem.reconcile_battle_result",
+    "BattleEvRewards.award",
+    "SaveGameRepository.decode_snapshot"
+  ],
+  "baseline_gate": {
+    "run_id": 41972015003,
+    "conclusion": "success",
+    "head_sha": "58dc8103c8dd85275d477d4f563ca7ef279d9f86"
+  }
+}

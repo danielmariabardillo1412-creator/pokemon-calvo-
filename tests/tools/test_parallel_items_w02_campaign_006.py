@@ -38,8 +38,13 @@ def verify() -> None:
     require(data["recovery_gate"]["run_id"] == 41763921080
             and data["recovery_gate"]["conclusion"] == "success"
             and data["recovery_gate"]["head_sha"] == "2abcc2ae9644b8821d9dae6f26214b1a8fa347fc", "Recovered CI run referenced exactly")
-    require(len(data["blocks"]) == 5 and len(progress) == 6, "Five legacy blocks and one new EV06 progress row")
-    require(progress[5]["bloque"] == "06" and progress[5]["ids"] == "power_anklet;power_band;power_belt" and progress[5]["estado"] == "PRUEBAS_NATIVAS_PUBLICADAS_CI_PENDIENTE", "EV06 published but not certified")
+    require(len(data["blocks"]) == 5 and len(progress) == 7, "Five archival blocks and EV06/EV07 progress rows")
+    require(progress[5]["bloque"] == "06" and progress[5]["ids"] == "power_anklet;power_band;power_belt"
+            and progress[5]["estado"] == "TRES_FUNCIONALES_CI_VERIFICADA"
+            and progress[5]["ci_run"] == "41972015003", "EV06 native and historical suites verified")
+    require(progress[6]["bloque"] == "07" and progress[6]["ids"] == "power_bracer;power_lens;power_weight"
+            and progress[6]["estado"] == "PRUEBAS_NATIVAS_PUBLICADAS_CI_PENDIENTE"
+            and progress[6]["ci_run"] == "CI_BLOQUE07_PENDIENTE", "EV07 pending Godot CI")
     require(data["blocks"][0]["block"] == progress[0]["bloque"] == "01", "Progress continuity")
     require(data["blocks"][0]["ids"] == progress[0]["ids"].split(";") ==
             ["exp_candy_xl", "relaxed_mint"], "Exact reserved IDs")
@@ -364,8 +369,8 @@ def verify_block05_training_held(data: dict, progress: list[dict]) -> None:
             and b["ids"] == progress[4]["ids"].split(";") == ids,
             "Only authorized block05 held IDs")
     require(b["status"] == "TWO_POSITIVE_ONE_DEPENDENCY_AWAITING_CI"
-            and progress[4]["estado"] == "DOS_FUNCIONALES_UNA_DEPENDENCIA_EN_CI"
-            and progress[4]["ci_run"] == "CI_BLOQUE05_PENDIENTE",
+            and progress[4]["estado"] == "DOS_FUNCIONALES_UNA_DEPENDENCIA_CI_VERIFICADA"
+            and progress[4]["ci_run"] == "41955498590",
             "No false overall CI or ExpShare functionality")
     require(b["cases"] == cases, "Three exact and independently specified held cases")
     require([x["kind"] for x in b["cases"]] ==
