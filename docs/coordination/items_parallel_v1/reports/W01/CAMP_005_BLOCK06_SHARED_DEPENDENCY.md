@@ -23,3 +23,10 @@ Investigar dentro de la autoridad del backend compartido:
 **No hacer ahora:** mover código de backend a W01 sin autorización; declarar el bloque 06 aprobado; avanzar a bloque 07; fusionar a `main` o V28.
 
 **Datos de alcance:** 18 IDs asignados en 6 bloques de CAMP005, 54 escenarios, 134 pares y 402 variantes; *solo* 5/10 bloques certificados actualmente.
+## Diagnóstico incremental autorizado en W01 (2026-11-06)
+
+El usuario ha pulsado `p` y se ha comprobado el estado de la rama árbitra `codex/calvo-items-20261101-arbitro`: último commit `385ee26598cfe8b2bc7e3e27698d296b7dfcc3e7` del 4 de noviembre. **No existe nueva autorización de IA6 para cambiar el backend ni proceder al bloque 07.**
+
+Se ha inspeccionado el código actual del contrato compartido, sin modificarlo: `ShowdownBackend.submit` devuelve `{accepted:false,error:…}`; `_submit_choices` recibe el mensaje de `PipeClient.exchange` y preserva `prepared.error` en `_rejected(reason)`; `ShowdownAdventureSession.submit` también puede rechazar por `inactive_or_changed_campaign`. Los logs existentes no imprimían el campo `error` del rechazo, por lo que no se puede adjudicar la causa a `Transform`, a restricciones del combate, a un evento de proyección o a la llamada de test.
+
+Para cerrar esa laguna sin tocar producción, se instrumenta exclusivamente la prueba de W01 para emitir `W01_CAMP005_BLOCK06_SWITCH_DIAGNOSTIC` cuando el cambio posterior a Transformación no es aceptado. Incluye causa exacta devuelta, fase, revisión, elección, request y roster; no modifica ni elimina los escenarios acumulados. **No convierte el bloque 06 en PASS ni autoriza el 07.**

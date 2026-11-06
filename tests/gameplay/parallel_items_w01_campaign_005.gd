@@ -417,8 +417,28 @@ func _probe_c005_transformed_stable(row: Dictionary, seed: int, mode: String) ->
 	check(mode + " Snorlax inflige daño en turno transformado", damage_taken > 0)
 	# El daño real y el evento transform quedan inmóviles en el resultado antes
 	# de estabilizar: el cambio posterior nunca redefine la prueba positiva.
-	var switch_action: Dictionary = await session.submit(
-		_switch_choice(session, &"reserve"), session.revision)
+	var choice: String = _switch_choice(session, &"reserve")
+	var switch_action: Dictionary = await session.submit(choice, session.revision)
+	if not switch_action.get("accepted", false):
+		# Diagnóstico W01 de contrato, sin modificar el backend:
+		# la evidencia debe ofrecer el motivo devuelto por submit(), no una
+		# inferencia de que Transformación prohíbe el cambio.
+		var request_data: Dictionary = session._checkpoint.get("views", {}).get("p1", {}).get("request", {})
+		var state_roster: Array = session._checkpoint.get("roster", [])
+		var roster_p1: Dictionary = state_roster[0] if not state_roster.is_empty() else {}
+		var proof: Dictionary = {
+			"case": String(row.id), "seed": seed, "mode": mode, "choice": choice,
+			"error": String(switch_action.get("error", "")),
+			"backend_last_error": String(session.last_error),
+			"phase": String(session.phase()),
+			"revision": session.revision,
+			"request_wait": request_data.get("wait", null),
+			"request_force_switch": request_data.get("forceSwitch", null),
+			"request_side": request_data.get("side", {}),
+			"roster_active_id": roster_p1.get("active_id", ""),
+			"roster_pokemon": roster_p1.get("pokemon", [])
+		}
+		print("W01_CAMP005_BLOCK06_SWITCH_DIAGNOSTIC ", JSON.stringify(proof))
 	check(mode + " cambio real a reserva tras Transformación",
 		switch_action.get("accepted", false))
 	if not switch_action.get("accepted", false):
