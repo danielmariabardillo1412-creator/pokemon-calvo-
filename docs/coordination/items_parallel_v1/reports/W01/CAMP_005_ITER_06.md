@@ -34,3 +34,13 @@ Siguiente `p` solamente tras CI positiva: certificar bloque 06 en el CSV y ejecu
 **Dependencia IA6 no ocultada:** `ShowdownAdventureSession.restore_saved` / `ShowdownBackend.restore_saved` / snapshot nativo de `Transform`: un guardado DURANTE la transformación activa falla. Se mantiene test rojo/evidencia de la primera CI; no se ha alterado el backend ni relajado la obligación de restauración del estado estable. Para certificar restauración del checkpoint intermedio transformado se necesita un cambio de arquitectura compartida autorizado por IA6, con test aislado sobre mismo snapshot y SaveV2. **No afirmar que este fallo está reparado por W01.**
 
 Segunda CI pendiente del mismo bloque 06. No iniciar bloque 07 antes de verificar que Python y Godot del 06 pasan.
+
+## Dictamen de bloqueo tras segunda CI — NO CERTIFICADO
+
+**Segunda ejecución fallida:** [#42235777234](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/42235777234) sobre commit `17ba6ed11277e2651b1417692db2674c8b536bd0`. Python sí pasa: `CAMP005_W01_PY PASS blocks=6 checks=408`; Godot `CAMP005_W01_GODOT FAIL blocks=6 checks=12058 errors=4`. Tres errores son `metal_powder_transformed/19` en `active`, `none` y `reserve`: `cambio real a reserva tras Transformación` rechazado; el cuarto corresponde al fallo agregado de restauración/validez. La traza llega a `ShowdownAdventureSession.submit`, `ShowdownBackend._submit_choices` y `pipe_client.exchange`. El motivo exacto del rechazo todavía requiere investigación de la arquitectura compartida: **no está demostrado** que Transform por sí solo deshabilite el cambio.
+
+**Primera ejecución fallida:** [#42233251445](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/42233251445), commit `7f38de23fa297f5d12f95e5135a565b223e63835`: Python PASS; Godot FAIL, `checks=12064 errors=4`: el checkpoint SaveV2 de Ditto transformado no restauraba en ninguno de los tres modos, más fallo agregado.
+
+**Resultado verificable:** pruebas de Clamperl y de la protección de Ditto sin transformar sin errores reportados; pruebas de transformación L2 ejecutadas, pero **L3 de guardado/restauración no certificado**. No es posible cerrar el bloque 06 como `CI_PASS_VERIFICADO`. Estado correcto: **BLOQUEADO_DEPENDENCIA_COMPARTIDA**. Su CSV aún muestra `EN_CI_AUTOMATICA`, porque cambiar el CSV ejecutaría de nuevo una CI acumulativa actualmente roja. El dictamen correcto está en este informe y en el ticket propio de W01, y requiere coordinación de IA6.
+
+No se alteraron `main`, V28, otras ramas, backend compartido ni tests heredados. **No ejecutar bloque 07 con otra `p` hasta resolver la dependencia o recibir una decisión explícita de IA6**.
