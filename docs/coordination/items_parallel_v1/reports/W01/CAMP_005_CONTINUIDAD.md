@@ -88,3 +88,12 @@ Incidencia histórica SaveV2 de Rayo Solar a media carga pendiente de IA6; sin c
 - B06 añade 9 escenarios/12 pares/36 variantes; acumulado 6 bloques/18 objetos/54 escenarios/134 pares/402 variantes. No editar producción ni otras ramas.
 - CI bloque 06 pendiente: cerrar solo si `CAMP005_W01_PY PASS blocks=6` y `CAMP005_W01_GODOT PASS blocks=6` y run `completed/success` en SHA de pruebas. Hito de regresión CAMP004 siguiente en 10/10 o si producción cambia.
 - Próxima `p` tras CI positiva: certificar 06 y ejecutar solo 07 (`quick_powder;razor_claw;razor_fang`).
+## Reparación V5 tras primera CI de bloque 06
+
+**Diagnóstico exacto:** [CI #42233251445](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/42233251445) sobre SHA `7f38de23fa297f5d12f95e5135a565b223e63835`: Python PASS; Godot FAIL 4/12064. Las tres variantes de `metal_powder_transformed/19` fallaron únicamente al restaurar un checkpoint SaveV2 con Ditto todavía transformado; el cuarto fallo era la aserción global que depende de esas tres restauraciones. No se detectaron fallos del aumento de Def de Ditto sin transformar ni de los efectos de Clamperl.
+
+**Cambio limitado al runner de W01:** observar y exigir primero el evento real de Transformación y el daño de Snorlax, preservando esas mediciones; cambiar realmente a Pokémon en reserva, verificar estado activo estable y conservar las dos unidades; después comprobar persistencia del snapshot estable y restauración exacta SaveV2. Los 54 escenarios y 134 pares siguen presentes, sin modificar los resultados del primer turno ni eliminar negativos.
+
+**Dependencia IA6 no ocultada:** `ShowdownAdventureSession.restore_saved` / `ShowdownBackend.restore_saved` / snapshot nativo de `Transform`: un guardado DURANTE la transformación activa falla. Se mantiene test rojo/evidencia de la primera CI; no se ha alterado el backend ni relajado la obligación de restauración del estado estable. Para certificar restauración del checkpoint intermedio transformado se necesita un cambio de arquitectura compartida autorizado por IA6, con test aislado sobre mismo snapshot y SaveV2. **No afirmar que este fallo está reparado por W01.**
+
+Segunda CI pendiente del mismo bloque 06. No iniciar bloque 07 antes de verificar que Python y Godot del 06 pasan.

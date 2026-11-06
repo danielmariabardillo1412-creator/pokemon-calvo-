@@ -296,9 +296,11 @@ func _frame_c003(session: RefCounted, id: StringName) -> Dictionary:
 # En W01 la Roca del Rey se comprueba por retroceso observado en log nativo.
 # El harness original de CAMPAÑA_004 se mantiene intacto para las 4 filas previas.
 func _probe_w01_c004(row: Dictionary, seed: int, mode: String) -> Dictionary:
-	if String(row.item_id) != "kings_rock":
-		return await super._probe_w01_c004(row, seed, mode)
-	return await _probe_c005_king_rock(row, seed, mode)
+	if String(row.op) == "transformed_no_boost" and String(row.item_id) == "metal_powder":
+		return await _probe_c005_transformed_stable(row, seed, mode)
+	if String(row.item_id) == "kings_rock":
+		return await _probe_c005_king_rock(row, seed, mode)
+	return await super._probe_w01_c004(row, seed, mode)
 
 func _probe_c005_king_rock(row: Dictionary, seed: int, mode: String) -> Dictionary:
 	automation = {"actor_species": String(row.actor_species), "level": 100,
@@ -370,3 +372,89 @@ func _probe_c005_king_rock(row: Dictionary, seed: int, mode: String) -> Dictiona
 		"damage": int(before.foe_hp) - int(after.foe_hp), "flinched": flinched,
 		"physical_units": physical, "restored": restored == after,
 		"owner_unchanged": frozen, "save_equal": restored_physical == physical}
+
+# El estado TRANSFORMADO se observa y compara en el primer turno. El SaveV2
+# compartido NO restaura un checkpoint con Transform activo (CI #42233251445);
+# W01 NO modifica SaveV2: primero realiza el cambio real de Pokémon para
+# estabilizar la batalla y solo después ejecuta la restauración. La limitación
+# del snapshot intermedio queda documentada para IA6, no se declara corregida.
+func _probe_c005_transformed_stable(row: Dictionary, seed: int, mode: String) -> Dictionary:
+	automation = {"actor_species": "ditto", "level": 100,
+		"format": "gen9calvounifiedv1", "seed": [seed, 2, 3, 4],
+		"physical_move": "transform", "special_move": "water_gun",
+		"speed_target": "snorlax", "damage_target": "snorlax"}
+	var prepared: Dictionary = _fixture({"id": row.item_id}, "physical_damage", mode)
+	var owner: PlayerCollection = prepared.owner
+	var actor: CreatureInstance = owner.owned_creature(&"own")
+	actor.moveset.clear()
+	actor.move_ids.clear()
+	check(mode + " Ditto dispone de Transformación", actor.add_move(&"transform", catalogs))
+	check(mode + " Ditto conserva movimiento de control", actor.add_move(&"reflect", catalogs))
+	prepared.foe = _mon(&"snorlax", 100, &"foe", ["tackle"])
+	var id: StringName = StringName(row.item_id)
+	var frozen: String = JSON.stringify(_owner_data(owner))
+	check(mode + " Polvo Metálico mantiene dos unidades", _units(owner, id) == 2)
+	var session := Native.new(catalogs, owner, automation.format)
+	var opened: bool = await session.begin_wild(self, prepared.foe, automation.seed)
+	check(mode + " Ditto inicia combate real", opened)
+	if not opened:
+		await session.close()
+		return {"valid": false}
+	var before: Dictionary = _frame_c003(session, id)
+	check(mode + " Ditto no está transformado inicialmente",
+		before.valid and not bool(before.get("native_transform_event", false)))
+	var transform_action: Dictionary = await session.submit("move 1", session.revision)
+	check(mode + " Transformación real aceptada", transform_action.get("accepted", false))
+	if not transform_action.get("accepted", false):
+		await session.close()
+		return {"valid": false}
+	var transformed: Dictionary = _frame_c003(session, id)
+	check(mode + " transformación confirmada en log nativo",
+		transformed.valid and bool(transformed.get("native_transform_event", false)))
+	check(mode + " Polvo Metálico sin consumo tras transformar",
+		not bool(transformed.own_consumed))
+	var damage_taken: int = int(before.hp) - int(transformed.hp)
+	check(mode + " Snorlax inflige daño en turno transformado", damage_taken > 0)
+	# El daño real y el evento transform quedan inmóviles en el resultado antes
+	# de estabilizar: el cambio posterior nunca redefine la prueba positiva.
+	var switch_action: Dictionary = await session.submit(
+		_switch_choice(session, &"reserve"), session.revision)
+	check(mode + " cambio real a reserva tras Transformación",
+		switch_action.get("accepted", false))
+	if not switch_action.get("accepted", false):
+		await session.close()
+		return {"valid": false}
+	var stable: Dictionary = _frame_c003(session, id)
+	check(mode + " checkpoint estable con Ditto transformado fuera del campo",
+		stable.valid and String(stable.active_id) == "reserve")
+	var stable_snapshot: Dictionary = session.snapshot()
+	check(mode + " dueño intacto antes del asentamiento",
+		JSON.stringify(_owner_data(owner)) == frozen)
+	var physical: int = owner.inventory.quantity(id)
+	for creature: CreatureInstance in [session.battle_state().creature(&"own"), session.battle_state().creature(&"reserve")]:
+		if creature.held_item_id == id and not creature.held_item_consumed:
+			physical += 1
+	check(mode + " dos unidades físicas conservadas", physical == 2)
+	var key: String = String(row.id) + "_" + str(seed) + "_" + mode + "_stable"
+	var persisted: Dictionary = await _restore_probe(
+		session, owner, key + "_savev2", mode + " Ditto SaveV2 tras cambio estable")
+	if not persisted.get("valid", false):
+		return {"valid": false}
+	session = persisted.session
+	owner = persisted.owner
+	var stable_restored: Dictionary = _frame_c003(session, id)
+	check(mode + " Ditto estado estable idéntico al restaurar",
+		stable_restored == stable and session.snapshot() == stable_snapshot)
+	check(mode + " Ditto dueño igual después de guardar",
+		JSON.stringify(_owner_data(owner)) == frozen)
+	var physical_restored: int = owner.inventory.quantity(id)
+	for creature: CreatureInstance in [session.battle_state().creature(&"own"), session.battle_state().creature(&"reserve")]:
+		if creature.held_item_id == id and not creature.held_item_consumed:
+			physical_restored += 1
+	check(mode + " inventario y equipos iguales tras SaveV2", physical_restored == physical)
+	await session.close()
+	return {"valid": true, "start": before, "after": transformed,
+		"damage": int(before.foe_hp) - int(transformed.foe_hp),
+		"physical_units": physical, "restored": stable_restored == stable,
+		"owner_unchanged": JSON.stringify(_owner_data(owner)) == frozen,
+		"save_equal": physical_restored == physical, "save_scope": "post_switch_stable"}

@@ -972,6 +972,7 @@
   },
   "limitations": [
     "Resultado funcional solo con CI del mismo SHA",
-    "Se preservan controles CAMP005 01-05 y SaveV2; regresión CAMP004 aprobada en bloque 05, obligatoria de nuevo en 10/10 o ante cambios de producción"
+    "Se preservan controles CAMP005 01-05 y SaveV2; regresión CAMP004 aprobada en bloque 05, obligatoria de nuevo en 10/10 o ante cambios de producción",
+    "B06: un checkpoint SaveV2 de Ditto transformado NO restaura (run 42233251445); tras observar efecto y Transform se cambia a reserva para guardar un estado estable. Arquitectura compartida pendiente para IA6; no se declara arreglada."
   ]
 }

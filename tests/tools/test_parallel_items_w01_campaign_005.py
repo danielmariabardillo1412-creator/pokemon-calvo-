@@ -304,7 +304,9 @@ def validate() -> int:
     for token in ("holder_special_defense", "holder_special_attack",
                   "holder_physical_defense", "transformed_no_boost",
                   "wrong_species_defense", "wrong_species_attack",
-                  "a.start.hp", "a.after.hp", "a.damage > n.damage"):
+                  "a.start.hp", "a.after.hp", "a.damage > n.damage",
+                  "_probe_c005_transformed_stable", "_switch_choice(session, &\"reserve\")",
+                  "post_switch_stable", "stable_snapshot"):
         check(token in runner, "No hay control positivo o negativo por especie: " + token)
     check("await _restore_probe(" in PARENT_RUNNER.read_text(encoding="utf-8"),
           "Falta restauración real SaveV2 heredada")
