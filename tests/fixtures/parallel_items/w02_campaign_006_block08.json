@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "worker": "W02",
+  "campaign": "CAMP_006",
+  "block": "08",
+  "family": "TRAINING_HELD",
+  "status": "NATIVE_TESTS_PUBLISHED_AWAITING_CI",
+  "ids": [
+    "macho_brace",
+    "soothe_bell"
+  ],
+  "modes": [
+    "active",
+    "reserve",
+    "none"
+  ],
+  "origin": {
+    "run_id": 42232974438,
+    "sha": "2c727c47c057eeb4cebb02c51b33ebe873a8d55c",
+    "conclusion": "success"
+  },
+  "cases": [
+    {
+      "id": "macho_brace",
+      "effect": "battle_ev_multiplier",
+      "foe": "magikarp",
+      "stat": "speed",
+      "base_yield": 1,
+      "expected_yield": 2,
+      "cap_per_stat": 252,
+      "cap_total": 510
+    },
+    {
+      "id": "soothe_bell",
+      "effect": "friendship_from_vitamin",
+      "trigger": "protein",
+      "friendship_initial": 99,
+      "base_gain": 5,
+      "held_gain": 7,
+      "max_friendship": 255
+    }
+  ],
+  "scope": "Limited to already connected battle EV and field-item friendship; not worldwide walking/level-up friendship."
+}
