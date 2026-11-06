@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""IA1/W01 CAMP005 — contrato acumulativo autorizado para 5 bloques funcionales.
+"""IA1/W01 CAMP005 — contrato acumulativo autorizado para 6 bloques funcionales.
 
 No atribuye PASS de Godot: el recibo de efecto positivo corresponde al runner
 real tests/gameplay/parallel_items_w01_campaign_005.gd y a CI del mismo SHA.
@@ -25,6 +25,31 @@ PARENT_FIXTURE = ROOT / "tests/fixtures/parallel_items/w01_campaign_004.json"
 RUNNER = ROOT / "tests/gameplay/parallel_items_w01_campaign_005.gd"
 HISTORY = ROOT / "tools/item_audit/held_effect_sweep_v2.cjs"
 FLINCH_HISTORY = ROOT / "tools/item_audit/held_effect_sweep_v3.cjs"
+SPECIES_HISTORY = FLINCH_HISTORY
+SPECIES_HOOKS = {
+    "deep_sea_scale": "onModifySpD",
+    "deep_sea_tooth": "onModifySpA",
+    "metal_powder": "onModifyDef",
+}
+# suffix, operation, holder species, foe species, own move, foe move, seeds.
+SPECIES_CASES = {
+    "deep_sea_scale": [
+        ("special", "holder_special_defense", "clamperl", "mew", "reflect", "confusion", [19, 23]),
+        ("physical", "physical_damage_control", "clamperl", "snorlax", "reflect", "tackle", [19]),
+        ("wrong_species", "wrong_species_defense", "mew", "mew", "reflect", "confusion", [19]),
+    ],
+    "deep_sea_tooth": [
+        ("special", "holder_special_attack", "clamperl", "mew", "water_gun", "amnesia", [19, 23]),
+        ("physical", "physical_attack_control", "clamperl", "mew", "tackle", "amnesia", [19]),
+        ("wrong_species", "wrong_species_attack", "mew", "mew", "water_gun", "amnesia", [19]),
+    ],
+    "metal_powder": [
+        ("physical", "holder_physical_defense", "ditto", "snorlax", "reflect", "tackle", [19, 23]),
+        ("special", "special_damage_control", "ditto", "mew", "reflect", "confusion", [19]),
+        ("transformed", "transformed_no_boost", "ditto", "snorlax", "transform", "tackle", [19]),
+    ],
+}
+
 
 # ID, tipo, ataque positivo y clave nativa; misma referencia ya probada en CAMP004.
 ITEMS = {
@@ -43,6 +68,9 @@ ITEMS = {
     "twisted_spoon": ("psychic", "psychic", "twistedspoon"),
     "metal_coat": ("steel", "flash_cannon", "metalcoat"),
     "kings_rock": ("flinch", "tackle", "kingsrock"),
+    "deep_sea_scale": ("defense", "confusion", "deepseascale"),
+    "deep_sea_tooth": ("attack", "water_gun", "deepseatooth"),
+    "metal_powder": ("defense", "tackle", "metalpowder"),
 }
 MODES = ["active", "none", "reserve"]
 STATES = {"EN_CI_AUTOMATICA", "ENTREGADO_PENDIENTE_CI",
@@ -87,9 +115,11 @@ def validate() -> int:
           "Cuarto bloque fuera de encargo de IA6")
     check(queue[4]["ids"] == "twisted_spoon;metal_coat;kings_rock",
           "Quinto bloque fuera de encargo de IA6")
+    check(queue[5]["ids"] == "deep_sea_scale;deep_sea_tooth;metal_powder",
+          "Sexto bloque fuera de encargo de IA6")
 
     progress = rows(PROGRESS)
-    check(len(progress) == 5, "Bloque 05 exige progreso exacto 5/10")
+    check(len(progress) == 6, "Bloque 06 exige progreso exacto 6/10")
     first = progress[0]
     check(first["bloque"] == "01" and first["ids"] == queue[0]["ids"],
           "La fila 01 no pertenece a W01")
@@ -117,8 +147,14 @@ def validate() -> int:
           "Bloque 04 sin certificado de CI oficial")
     fifth = progress[4]
     check(fifth["bloque"] == "05" and fifth["ids"] == queue[4]["ids"]
-          and fifth["estado"] in STATES,
-          "Estado o propiedad de fila 05 incorrectos")
+          and fifth["estado"] == "CI_PASS_VERIFICADO"
+          and fifth["sha_pruebas"] == "fc4fe90c83a89b98aee1cb4b02963ffac5f015ed"
+          and fifth["ci_run"] == "41966189357",
+          "Bloque 05 no tiene certificado de CI real")
+    sixth = progress[5]
+    check(sixth["bloque"] == "06" and sixth["ids"] == queue[5]["ids"]
+          and sixth["estado"] in STATES,
+          "Estado o propiedad de fila 06 incorrectos")
     check(bool(first["sha_pruebas"]) and bool(first["ci_run"]),
           "Progreso sin trazabilidad de estado pendiente")
 
@@ -141,6 +177,11 @@ def validate() -> int:
     inventory = {r["id"]: r for r in rows(INVENTORY)}
     history = HISTORY.read_text(encoding="utf-8")
     flinch_history = FLINCH_HISTORY.read_text(encoding="utf-8")
+    species_history = SPECIES_HISTORY.read_text(encoding="utf-8")
+    for specific in SPECIES_HOOKS:
+        check(f"'{specific}'" in species_history and
+              ("species_defense" in species_history or "species_boost" in species_history),
+              "No hay antecedente nativo específico de " + specific)
     check("kings_rock" in flinch_history and "flinch_rng" in flinch_history
           and "l.includes('|flinch')" in flinch_history,
           "Falta referencia histórica nativa de retroceso Roca del Rey")
@@ -150,18 +191,19 @@ def validate() -> int:
           and "foe(a).hp<foe(b).hp" in history,
           "Falta control histórico positivo/negativo de daño")
     for item, (kind, move, native) in ITEMS.items():
-        check(item in ";".join(r["ids"] for r in queue[:5]).split(";"),
-              "Objeto fuera de bloques 01/02/03/04/05 " + item)
+        check(item in ";".join(r["ids"] for r in queue[:6]).split(";"),
+              "Objeto fuera de bloques 01/02/03/04/05/06 " + item)
         check(scope[item]["estado_contenido"] == "SELECCIONADO"
               and scope[item]["familia"] == "HELD_COMBAT_CANDIDATE",
               "Objeto no seleccionado: " + item)
         check(inventory[item]["family"] == "HELD_COMBAT_CANDIDATE"
               and inventory[item]["native_entry"] == "True"
               and inventory[item]["native_id"] == native
-              and ("onModifyMove" if item == "kings_rock" else "onBasePower")
+              and (SPECIES_HOOKS.get(item) or
+                   ("onModifyMove" if item == "kings_rock" else "onBasePower"))
                   in inventory[item]["native_hooks"],
               "Objeto sin soporte nativo funcional: " + item)
-        if item != "kings_rock":
+        if item != "kings_rock" and item not in SPECIES_HOOKS:
             check(f"{kind}:'{item}'" in history and f"{kind}:'{move}'" in history,
                   "Referencias de tipo y ataque incoherentes: " + item)
 
@@ -170,14 +212,15 @@ def validate() -> int:
           and data["campaign"] == "CAMP_005" and data["kind"] == "NEW_IDS"
           and data["format"] == "gen9calvounifiedv1", "Fixture CAMPAÑA_005 inválido")
     check(data["variants"] == MODES, "Falta un modo activo, sin objeto o reserva")
-    check(len(data["blocks"]) == 5
-          and [b["block"] for b in data["blocks"]] == ["01", "02", "03", "04", "05"]
+    check(len(data["blocks"]) == 6
+          and [b["block"] for b in data["blocks"]] ==
+              ["01", "02", "03", "04", "05", "06"]
           and all(data["blocks"][i]["ids"] == list(ITEMS)[i*3:(i+1)*3]
-                  for i in range(5)),
-          "Fixture no sigue los bloques 01/02/03/04/05 exactos de IA6")
+                  for i in range(6)),
+          "Fixture no sigue los bloques 01 a 06 exactos de IA6")
     cases = data["cases"]
-    check(len(cases) == 45 and len({c["id"] for c in cases}) == 45,
-          "Se exigen 45 escenarios distintos")
+    check(len(cases) == 54 and len({c["id"] for c in cases}) == 54,
+          "Se exigen 54 escenarios distintos")
     for i, block in enumerate(data["blocks"]):
         check(set(block["cases"]) == {c["id"] for c in cases
                                        if c["block"] == f"{i+1:02d}"},
@@ -185,6 +228,27 @@ def validate() -> int:
     pairs = 0
     seen = set()
     for index, (item, (_, matching_move, _)) in enumerate(ITEMS.items()):
+        if item in SPECIES_CASES:
+            for suffix, op, actor, foe, move, foe_move, seeds in SPECIES_CASES[item]:
+                label = f"{item}_{suffix}"
+                found = [c for c in cases if c["id"] == label]
+                check(len(found) == 1, "Caso por especie ausente: " + label)
+                c = found[0]
+                check(c["block"] == f"{index // 3 + 1:02d}" and
+                      c["item_id"] == item and c["op"] == op,
+                      "Escenario de especie fuera de autorización: " + label)
+                check(c["actor_species"] == actor and c["foe_species"] == foe and
+                      c["own_move"] == move and c["foe_move"] == foe_move,
+                      "Contratos de portador, rival o categoría alterados: " + label)
+                check(c["seeds"] == seeds and
+                      all(type(seed) is int and seed > 0 for seed in seeds),
+                      "Semillas específicas alteradas: " + label)
+                check(c["history"] ==
+                      "tools/item_audit/held_effect_sweep_v3.cjs:species_effect",
+                      "Sin referencia nativa del efecto por especie: " + label)
+                seen.add(label)
+                pairs += len(seeds)
+            continue
         wrong_move = "water_gun" if item == "silk_scarf" else "tackle"
         plans = ((
             ("flinch", "kings_rock_flinch", "tackle", list(range(1, 65))),
@@ -217,8 +281,8 @@ def validate() -> int:
                   "Sin trazabilidad a prueba nativa: " + label)
             seen.add(label)
             pairs += len(seeds)
-    check(seen == {c["id"] for c in cases} and pairs == 122,
-          "No hay 122 pares caso-semilla autorizados")
+    check(seen == {c["id"] for c in cases} and pairs == 134,
+          "No hay 134 pares caso-semilla autorizados")
 
     runner = RUNNER.read_text(encoding="utf-8")
     for token in (
@@ -237,6 +301,11 @@ def validate() -> int:
                   "c005_king_rock_activated", "c005_king_rock_not_activated",
                   "flinched", "super._probe_w01_c004"):
         check(token in runner, "Falta verificación positiva nativa Roca del Rey: " + token)
+    for token in ("holder_special_defense", "holder_special_attack",
+                  "holder_physical_defense", "transformed_no_boost",
+                  "wrong_species_defense", "wrong_species_attack",
+                  "a.start.hp", "a.after.hp", "a.damage > n.damage"):
+        check(token in runner, "No hay control positivo o negativo por especie: " + token)
     check("await _restore_probe(" in PARENT_RUNNER.read_text(encoding="utf-8"),
           "Falta restauración real SaveV2 heredada")
 

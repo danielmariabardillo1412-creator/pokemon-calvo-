@@ -81,3 +81,10 @@ Incidencia histórica SaveV2 de Rayo Solar a media carga pendiente de IA6; sin c
 - Asignados solo `twisted_spoon` (Psíquico), `metal_coat` (Acero), `kings_rock` (retroceso 10% nativo al golpear). Roca del Rey debe observar activación Y no activación durante 64 semillas; no se sustituye por metadatos.
 - Nuevos: 9 escenarios, 74 pares, 222 variantes; acumulado: 45 escenarios, 122 pares, 366 variantes. SAVEV2 en los tres modos. Regresión CAMP004 obligatoria en esta CI del hito 05.
 - Próxima `p`, solo tras CI SUCCESS: certificar bloque 05 y seguir bloque 06 `deep_sea_scale;deep_sea_tooth;metal_powder`. No tocar motor compartido, main, V28 u otras ramas.
+
+## Bloque 06/10 — nuevo trabajo publicado, condicionado a CI
+- B05 certificado: [CI #41966189357](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41966189357), SHA `fc4fe90c83a89b98aee1cb4b02963ffac5f015ed`; CAMP005 11012 Godot/335 Python; regresión CAMP004 16816 Godot/1028 Python, sin fallos.
+- Los tres IDs nuevos W01: `deep_sea_scale` (Clamperl, SpD), `deep_sea_tooth` (Clamperl, SpA), `metal_powder` (Ditto, Def sin transformar). Prueba positiva de daño, controles físicos/especiales, portador incompatible y transformación. Usar combate nativo y SaveV2 en tres modalidades; no fingir que son modificadores de tipo.
+- B06 añade 9 escenarios/12 pares/36 variantes; acumulado 6 bloques/18 objetos/54 escenarios/134 pares/402 variantes. No editar producción ni otras ramas.
+- CI bloque 06 pendiente: cerrar solo si `CAMP005_W01_PY PASS blocks=6` y `CAMP005_W01_GODOT PASS blocks=6` y run `completed/success` en SHA de pruebas. Hito de regresión CAMP004 siguiente en 10/10 o si producción cambia.
+- Próxima `p` tras CI positiva: certificar 06 y ejecutar solo 07 (`quick_powder;razor_claw;razor_fang`).

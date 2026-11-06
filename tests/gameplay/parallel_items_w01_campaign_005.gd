@@ -54,8 +54,8 @@ func _run_w01_c005() -> void:
 		and fixture.get("kind") == "NEW_IDS" and fixture.get("format") == "gen9calvounifiedv1")
 	check("Tres modalidades sin omisiones", fixture.get("variants") == ["active", "none", "reserve"])
 	var progress: Array = _progress_c005()
-	check("Bloques 01 a 05 de CAMPAÑA_005 autorizados", progress.size() == 5)
-	if progress.size() != 5:
+	check("Bloques 01 a 06 de CAMPAÑA_005 autorizados", progress.size() == 6)
+	if progress.size() != 6:
 		quit(2)
 		return
 	check("Fila 01 autorizada por IA6", String(progress[0].block) == "01"
@@ -68,9 +68,11 @@ func _run_w01_c005() -> void:
 		and String(progress[3].ids) == "silver_powder;soft_sand;spell_tag")
 	check("Fila 05 autorizada por IA6", String(progress[4].block) == "05"
 		and String(progress[4].ids) == "twisted_spoon;metal_coat;kings_rock")
+	check("Fila 06 autorizada por IA6", String(progress[5].block) == "06"
+		and String(progress[5].ids) == "deep_sea_scale;deep_sea_tooth;metal_powder")
 	var stages: Array = fixture.get("blocks", [])
-	check("Fixture contiene cinco bloques reales", stages.size() == 5)
-	if stages.size() != 5:
+	check("Fixture contiene seis bloques reales", stages.size() == 6)
+	if stages.size() != 6:
 		quit(2)
 		return
 	check("Los tres ID del bloque 01 son exactos",
@@ -83,8 +85,10 @@ func _run_w01_c005() -> void:
 		stages[3].get("ids", []) == ["silver_powder", "soft_sand", "spell_tag"])
 	check("Los tres ID del bloque 05 son exactos",
 		stages[4].get("ids", []) == ["twisted_spoon", "metal_coat", "kings_rock"])
+	check("Los tres ID del bloque 06 son exactos",
+		stages[5].get("ids", []) == ["deep_sea_scale", "deep_sea_tooth", "metal_powder"])
 	var cases: Array = fixture.get("cases", [])
-	check("Cuarenta y cinco escenarios funcionales autorizados", cases.size() == 45)
+	check("Cincuenta y cuatro escenarios funcionales autorizados", cases.size() == 54)
 	var names: Array = []
 	for row: Dictionary in cases:
 		check("Escenario pertenece a su bloque oficial",
@@ -92,7 +96,8 @@ func _run_w01_c005() -> void:
 			or (String(row.block) == "02" and stages[1].get("ids", []).has(String(row.item_id)))
 			or (String(row.block) == "03" and stages[2].get("ids", []).has(String(row.item_id)))
 			or (String(row.block) == "04" and stages[3].get("ids", []).has(String(row.item_id)))
-			or (String(row.block) == "05" and stages[4].get("ids", []).has(String(row.item_id))))
+			or (String(row.block) == "05" and stages[4].get("ids", []).has(String(row.item_id)))
+			or (String(row.block) == "06" and stages[5].get("ids", []).has(String(row.item_id))))
 		check("ID único del escenario", not names.has(String(row.id)))
 		names.append(String(row.id))
 		for seed_value: Variant in row.seeds:
@@ -115,14 +120,15 @@ func _run_w01_c005() -> void:
 				"checks": checks - previous_checks,
 				"status": "PASS" if errors.size() == previous_errors else "FAIL",
 				"observed": observed})
-	check("Ciento veintidós pares caso-semilla reales", c005_rows.size() == 122)
+	check("Ciento treinta y cuatro pares caso-semilla reales", c005_rows.size() == 134)
 	check("Roca del Rey: retroceso real observado con RNG", c005_king_rock_activated > 0)
 	check("Roca del Rey: rama RNG sin retroceso observada", c005_king_rock_not_activated > 0)
 	for item_id: String in ["black_glasses", "dragon_fang", "hard_stone",
 		"miracle_seed", "mystic_water", "never_melt_ice",
 		"poison_barb", "sharp_beak", "silk_scarf",
 		"silver_powder", "soft_sand", "spell_tag",
-		"twisted_spoon", "metal_coat", "kings_rock"]:
+		"twisted_spoon", "metal_coat", "kings_rock",
+		"deep_sea_scale", "deep_sea_tooth", "metal_powder"]:
 		check("Tres contextos distintos para cada ID " + item_id, cases.filter(
 			func(c): return String(c.item_id) == item_id).size() == 3)
 	var report: Dictionary = {"schema_version": 1, "campaign": "CAMP_005",
@@ -213,6 +219,59 @@ func _compare_c005(row: Dictionary, observed: Dictionary) -> void:
 				a.damage == 0 and n.damage == 0 and r.damage == 0
 				and not a.get("flinched", false) and not n.get("flinched", false)
 				and not r.get("flinched", false))
+		"holder_special_defense":
+			var active_loss: int = int(a.start.hp) - int(a.after.hp)
+			var no_loss: int = int(n.start.hp) - int(n.after.hp)
+			var reserve_loss: int = int(r.start.hp) - int(r.after.hp)
+			check("Escama Marina Clamperl: menos daño especial realmente recibido",
+				no_loss > 0 and active_loss >= 0 and active_loss < no_loss)
+			check("Escama Marina: sin objeto y reserva reciben el mismo daño",
+				no_loss == reserve_loss)
+		"physical_damage_control":
+			var active_loss: int = int(a.start.hp) - int(a.after.hp)
+			var no_loss: int = int(n.start.hp) - int(n.after.hp)
+			var reserve_loss: int = int(r.start.hp) - int(r.after.hp)
+			check("Escama Marina no reduce daño físico",
+				no_loss > 0 and active_loss == no_loss and no_loss == reserve_loss)
+		"wrong_species_defense":
+			var active_loss: int = int(a.start.hp) - int(a.after.hp)
+			var no_loss: int = int(n.start.hp) - int(n.after.hp)
+			var reserve_loss: int = int(r.start.hp) - int(r.after.hp)
+			check("Escama Marina solo protege a Clamperl, nunca a Mew",
+				no_loss > 0 and active_loss == no_loss and no_loss == reserve_loss)
+		"holder_special_attack":
+			check("Diente Marino Clamperl duplica potencia estadística especial real",
+				a.damage > n.damage and n.damage > 0 and n.damage == r.damage)
+		"physical_attack_control":
+			check("Diente Marino no aumenta daño físico",
+				a.damage > 0 and a.damage == n.damage and n.damage == r.damage)
+		"wrong_species_attack":
+			check("Diente Marino no aumenta daño especial de Mew",
+				a.damage > 0 and a.damage == n.damage and n.damage == r.damage)
+		"holder_physical_defense":
+			var active_loss: int = int(a.start.hp) - int(a.after.hp)
+			var no_loss: int = int(n.start.hp) - int(n.after.hp)
+			var reserve_loss: int = int(r.start.hp) - int(r.after.hp)
+			check("Polvo Metálico Ditto sin transformar reduce daño físico real",
+				no_loss > 0 and active_loss >= 0 and active_loss < no_loss)
+			check("Polvo Metálico en reserva no protege al portador",
+				no_loss == reserve_loss)
+		"special_damage_control":
+			var active_loss: int = int(a.start.hp) - int(a.after.hp)
+			var no_loss: int = int(n.start.hp) - int(n.after.hp)
+			var reserve_loss: int = int(r.start.hp) - int(r.after.hp)
+			check("Polvo Metálico no reduce daño especial",
+				no_loss > 0 and active_loss == no_loss and no_loss == reserve_loss)
+		"transformed_no_boost":
+			var active_loss: int = int(a.start.hp) - int(a.after.hp)
+			var no_loss: int = int(n.start.hp) - int(n.after.hp)
+			var reserve_loss: int = int(r.start.hp) - int(r.after.hp)
+			check("Ditto ejecutó Transformación realmente en tres carriles",
+				bool(a.after.get("native_transform_event", false))
+				and bool(n.after.get("native_transform_event", false))
+				and bool(r.after.get("native_transform_event", false)))
+			check("Polvo Metálico deja de proteger a Ditto transformado",
+				no_loss > 0 and active_loss == no_loss and no_loss == reserve_loss)
 		"status_control":
 			check("Movimiento de estado no inflige daño",
 				String(row.own_move) == "reflect"
@@ -221,6 +280,18 @@ func _compare_c005(row: Dictionary, observed: Dictionary) -> void:
 				not a.after.own_consumed and a.physical_units == 2)
 		_:
 			check("Operación no autorizada", false)
+
+# Solo en CAMP005 se añade evidencia de Transformación desde el log de motor.
+# El runner histórico CAMP004 no se modifica.
+func _frame_c003(session: RefCounted, id: StringName) -> Dictionary:
+	var frame: Dictionary = super._frame_c003(session, id)
+	var log: Array = session._checkpoint.get("snapshot", {}).get("native", {}).get("log", [])
+	var transform_seen: bool = false
+	for entry: String in log:
+		if entry.begins_with("|-transform|p1a:"):
+			transform_seen = true
+	frame["native_transform_event"] = transform_seen
+	return frame
 
 # En W01 la Roca del Rey se comprueba por retroceso observado en log nativo.
 # El harness original de CAMPAÑA_004 se mantiene intacto para las 4 filas previas.

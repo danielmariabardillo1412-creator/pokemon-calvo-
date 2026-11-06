@@ -5,7 +5,7 @@
   "kind": "NEW_IDS",
   "scope": "HELD_COMBAT",
   "format": "gen9calvounifiedv1",
-  "status": "BLOCK_05_PENDING_CI",
+  "status": "BLOCK_06_PENDING_CI",
   "variants": [
     "active",
     "none",
@@ -105,6 +105,25 @@
         "kings_rock_flinch",
         "kings_rock_immune",
         "kings_rock_status"
+      ]
+    },
+    {
+      "block": "06",
+      "ids": [
+        "deep_sea_scale",
+        "deep_sea_tooth",
+        "metal_powder"
+      ],
+      "cases": [
+        "deep_sea_scale_special",
+        "deep_sea_scale_physical",
+        "deep_sea_scale_wrong_species",
+        "deep_sea_tooth_special",
+        "deep_sea_tooth_physical",
+        "deep_sea_tooth_wrong_species",
+        "metal_powder_physical",
+        "metal_powder_special",
+        "metal_powder_transformed"
       ]
     }
   ],
@@ -815,6 +834,135 @@
         19
       ],
       "history": "tools/item_audit/held_effect_sweep_v3.cjs:flinch_rng"
+    },
+    {
+      "block": "06",
+      "id": "deep_sea_scale_special",
+      "item_id": "deep_sea_scale",
+      "op": "holder_special_defense",
+      "actor_species": "clamperl",
+      "foe_species": "mew",
+      "own_move": "reflect",
+      "foe_move": "confusion",
+      "seeds": [
+        19,
+        23
+      ],
+      "history": "tools/item_audit/held_effect_sweep_v3.cjs:species_effect"
+    },
+    {
+      "block": "06",
+      "id": "deep_sea_scale_physical",
+      "item_id": "deep_sea_scale",
+      "op": "physical_damage_control",
+      "actor_species": "clamperl",
+      "foe_species": "snorlax",
+      "own_move": "reflect",
+      "foe_move": "tackle",
+      "seeds": [
+        19
+      ],
+      "history": "tools/item_audit/held_effect_sweep_v3.cjs:species_effect"
+    },
+    {
+      "block": "06",
+      "id": "deep_sea_scale_wrong_species",
+      "item_id": "deep_sea_scale",
+      "op": "wrong_species_defense",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "own_move": "reflect",
+      "foe_move": "confusion",
+      "seeds": [
+        19
+      ],
+      "history": "tools/item_audit/held_effect_sweep_v3.cjs:species_effect"
+    },
+    {
+      "block": "06",
+      "id": "deep_sea_tooth_special",
+      "item_id": "deep_sea_tooth",
+      "op": "holder_special_attack",
+      "actor_species": "clamperl",
+      "foe_species": "mew",
+      "own_move": "water_gun",
+      "foe_move": "amnesia",
+      "seeds": [
+        19,
+        23
+      ],
+      "history": "tools/item_audit/held_effect_sweep_v3.cjs:species_effect"
+    },
+    {
+      "block": "06",
+      "id": "deep_sea_tooth_physical",
+      "item_id": "deep_sea_tooth",
+      "op": "physical_attack_control",
+      "actor_species": "clamperl",
+      "foe_species": "mew",
+      "own_move": "tackle",
+      "foe_move": "amnesia",
+      "seeds": [
+        19
+      ],
+      "history": "tools/item_audit/held_effect_sweep_v3.cjs:species_effect"
+    },
+    {
+      "block": "06",
+      "id": "deep_sea_tooth_wrong_species",
+      "item_id": "deep_sea_tooth",
+      "op": "wrong_species_attack",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "own_move": "water_gun",
+      "foe_move": "amnesia",
+      "seeds": [
+        19
+      ],
+      "history": "tools/item_audit/held_effect_sweep_v3.cjs:species_effect"
+    },
+    {
+      "block": "06",
+      "id": "metal_powder_physical",
+      "item_id": "metal_powder",
+      "op": "holder_physical_defense",
+      "actor_species": "ditto",
+      "foe_species": "snorlax",
+      "own_move": "reflect",
+      "foe_move": "tackle",
+      "seeds": [
+        19,
+        23
+      ],
+      "history": "tools/item_audit/held_effect_sweep_v3.cjs:species_effect"
+    },
+    {
+      "block": "06",
+      "id": "metal_powder_special",
+      "item_id": "metal_powder",
+      "op": "special_damage_control",
+      "actor_species": "ditto",
+      "foe_species": "mew",
+      "own_move": "reflect",
+      "foe_move": "confusion",
+      "seeds": [
+        19
+      ],
+      "history": "tools/item_audit/held_effect_sweep_v3.cjs:species_effect"
+    },
+    {
+      "block": "06",
+      "id": "metal_powder_transformed",
+      "item_id": "metal_powder",
+      "op": "transformed_no_boost",
+      "actor_species": "ditto",
+      "foe_species": "snorlax",
+      "own_move": "transform",
+      "foe_move": "tackle",
+      "seeds": [
+        19
+      ],
+      "history": "tools/item_audit/held_effect_sweep_v3.cjs:species_effect"
     }
   ],
   "source_provenance": {
@@ -824,6 +972,6 @@
   },
   "limitations": [
     "Resultado funcional solo con CI del mismo SHA",
-    "Se preservan controles CAMP005 01-04 y SaveV2; regresión CAMP004 obligatoria en bloque 05"
+    "Se preservan controles CAMP005 01-05 y SaveV2; regresión CAMP004 aprobada en bloque 05, obligatoria de nuevo en 10/10 o ante cambios de producción"
   ]
 }
