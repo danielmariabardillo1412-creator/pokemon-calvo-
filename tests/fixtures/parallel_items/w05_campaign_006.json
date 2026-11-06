@@ -180,6 +180,31 @@
           "move_id": "fire_fang"
         }
       ]
+    },
+    {
+      "block": "08",
+      "items": [
+        {
+          "item_id": "tm09",
+          "move_id": "thunder_fang"
+        },
+        {
+          "item_id": "tm10",
+          "move_id": "ice_fang"
+        },
+        {
+          "item_id": "tm11",
+          "move_id": "water_pulse"
+        },
+        {
+          "item_id": "tm12",
+          "move_id": "low_kick"
+        },
+        {
+          "item_id": "tm13",
+          "move_id": "acid_spray"
+        }
+      ]
     }
   ]
 }
