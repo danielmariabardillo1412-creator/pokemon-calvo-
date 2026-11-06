@@ -30,7 +30,7 @@ for token in (
     "svc.equip(", "ProgressionSystem.reconcile_battle_result(",
     "SaveGameRepository.new().decode_snapshot(",
     "BattleEvRewards.award(", "CAMP006_W02_EV07",
-    "positive=",", "mismatched_gain",
+    "positive=", "mismatched_gain",
     "cap510", "cap252", "available_for_power"
 ):
     assert token in runner, token
