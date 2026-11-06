@@ -205,6 +205,31 @@
           "move_id": "acid_spray"
         }
       ]
+    },
+    {
+      "block": "09",
+      "items": [
+        {
+          "item_id": "tm14",
+          "move_id": "acrobatics"
+        },
+        {
+          "item_id": "tm15",
+          "move_id": "struggle_bug"
+        },
+        {
+          "item_id": "tm17",
+          "move_id": "confuse_ray"
+        },
+        {
+          "item_id": "tm19",
+          "move_id": "disarming_voice"
+        },
+        {
+          "item_id": "tm20",
+          "move_id": "trailblaze"
+        }
+      ]
     }
   ]
 }
