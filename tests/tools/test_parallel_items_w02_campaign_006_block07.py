@@ -19,7 +19,7 @@ assert len(rows)==8 and rows[6]["bloque"]=="07" and rows[7]["bloque"]=="08"
 assert rows[6]["ids"]=="power_bracer;power_lens;power_weight"
 assert rows[6]["estado"]=="TRES_FUNCIONALES_CI_VERIFICADA"
 assert rows[6]["ci_run"]=="42232974438"
-assert rows[-2]["ci_run"]=="41972015003"
+assert rows[5]["ci_run"]=="41972015003"
 source=(R/"modules/creatures/progression/battle_ev_rewards.gd").read_text()
 progression=(R/"modules/creatures/progression/progression_system.gd").read_text()
 runner=(R/"tests/gameplay/parallel_items_w02_campaign_006_block07.gd").read_text()
