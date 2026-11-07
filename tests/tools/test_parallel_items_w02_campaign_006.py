@@ -322,11 +322,14 @@ def verify_block04_pilot(data: dict, progress: list[dict]) -> None:
         "adamant_mint", "modest_mint", "jolly_mint",
         "timid_mint", "bold_mint", "calm_mint", "careful_mint",
         "brave_mint", "quiet_mint", "impish_mint", "relaxed_mint",
-        "gentle_mint", "hasty_mint", "lax_mint",
+        "hasty_mint", "lax_mint",
         "lonely_mint", "mild_mint", "naive_mint"
     ):
         require(('"' + earlier + '"') not in mints,
                 "No unauthorized existing mint activation " + earlier)
+    # Block09 newly authorises gentle only; the other historic mints remain nonfunctional.
+    require('"gentle_mint": "gentle"' in mints,
+            "Block09 gentle mint must be implemented by W02-owned helper")
     runner = RUNNER006.read_text(encoding="utf-8")
     for fragment in (
         "func _probe_mint04(", "CAMP006_W02_MINT04",
