@@ -1,3 +1,15 @@
+# IA5/W05 — CAMPAÑA_006_FINALIZADA · 10/10 · 49/49 MT (2026-11-07)
+
+**Rama exclusiva:** `codex/calvo-items-20261104-w05-camp006`. **Estado terminal:** `CAMPAÑA_006_FINALIZADA`. Último bloque `tm31;tm36;tm44;tm77` → `metal_claw;rock_tomb;dragon_tail;waterfall` de `scarlet-violet`. Fixture acumulativo **10 bloques/49 MT**, sin alterar las 45 anteriores. **CI [#42417890877](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/42417890877)** sobre SHA funcional `e03bdf44f14c79f52907d91907d7cc2ee2e0eba3`, job `128539815534`, `completed/success`.
+
+**Recibos verificados directamente en job log:** `CAMP006_W05_MANIFEST_PASS reserved=10 completed=10 ids=49 kind=NEW_IDS`; `CAMP006_W05_PY PASS blocks=10 checks=481`; `CAMP006_GATE_PY_PASS worker=W05 blocks=10 checks=481`; `CAMP006_W05_GODOT PASS blocks=10 checks=1781`; `CAMP006_GATE_GODOT_PASS worker=W05 blocks=10 checks=1781`. **Regresiones hito 10 PASS en EL MISMO RUN**: CAMP005 PY 580/Godot 2166, CAMP004 PY 580/Godot 2166, CAMP003 PY 580/Godot 2166, todas `blocks=10`. Se conservan positivos/negativos de enseñanza real `FieldItemService.teach`, learnset, PP, stock y consumo, propiedad, rechazos sin mutación, SaveV2.
+
+**Entrega a IA6:** `CAMP_006_ITER_10.md` contiene recibos, resultado y límites. No se hizo merge a `main`; no se certifica UI/GPU ni integración global con otras ramas; libros/UI posteriores fuera de alcance. No se modificaron `main`, V28, PR118, árbitra, W01–W04, catálogo/learnsets/políticas, 19 MT excluidas, partidas reales o módulos de producción. CSV conserva `EN_CI_AUTOMATICA` histórico para no relanzar CI por estética.
+
+**STOP OBLIGATORIO:** no quedan más microbloques en CAMPAÑA_006/W05. Si llega otra `p`, no inventar CAMPAÑA_007; esperar encargo explícito de IA6 para integración/fase posterior.
+
+---
+
 # IA5/W05 — CAMPAÑA_006 · BLOQUE 10/10 PUBLICADO, CIERRE CI PENDIENTE (2026-11-07)
 
 **Rama exclusiva:** `codex/calvo-items-20261104-w05-camp006`. Reserva IA6 fila 10 `tm31;tm36;tm44;tm77` → `metal_claw;rock_tomb;dragon_tail;waterfall`, perfil `scarlet-violet`. Fixture **10/10 bloques, 49 MT únicas**, conservadas las 45 anteriores. Commit pruebas `c929538eaff755c511273b9e82f955f8301fa35a`. Informe de cierre `CAMP_006_ITER_10.md` y progreso CSV preparados. **NO declarar CAMPAÑA_006_FINALIZADA ni PASS hasta verificar CI funcional Python/Godot en el mismo SHA y las SEIS regresiones CAMP005, CAMP004 y CAMP003 Python+Godot.** Runners acumulativos usan `FieldItemService.teach`, species learnset, PP, consumo/stock, compatibilidad/propiedad y SaveV2. Sin cambios de producción/catálogo/learnsets/política. La CI del bloque09 está certificada en [#42252558475](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/42252558475).
