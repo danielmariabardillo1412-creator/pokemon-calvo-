@@ -122,7 +122,12 @@ func _run_recovery006() -> void:
 	var sentinel_errors: int = errors.size()
 	var rejected_all: bool = true
 	for mode: String in automation.modes:
-		var mint_spec: Dictionary = example
+		# Historical gentle-mint rejection remains in the archival fixture.
+		# After block09 only hasty/lax remain dependent: use the same single
+		# negative runtime contract for hasty without rewriting old evidence.
+		var mint_spec: Dictionary = example.duplicate(true)
+		mint_spec["id"] = "hasty_mint"
+		mint_spec["scenario"] = "hasty_mint_remaining_dependency"
 		var result_mint: Dictionary = _probe_training(mint_spec, mode)
 		rejected_all = (rejected_all and bool(result_mint.get("valid", false))
 			and bool(result_mint.get("save_v2", false))

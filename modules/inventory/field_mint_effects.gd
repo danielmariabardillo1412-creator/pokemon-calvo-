@@ -1,9 +1,10 @@
 extends RefCounted
 
-# W02 authorised mint pilot, precisely four IDs in CAMPAÑA_006 block04.
+# W02 authorised mint pilot, precisely the block04 pilot and block09 authorised gentle mint extension.
 # No inventory, save IO, mutation of live owner or global stat-rule changes.
 const MINTS := {
 	"naughty_mint": "naughty",
+	"gentle_mint": "gentle",
 	"rash_mint": "rash",
 	"sassy_mint": "sassy",
 	"serious_mint": "serious",

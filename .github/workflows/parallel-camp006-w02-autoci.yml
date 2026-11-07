@@ -21,6 +21,9 @@ on:
       - 'tests/fixtures/parallel_items/w02_campaign_006_block08.json'
       - 'tests/gameplay/parallel_items_w02_campaign_006_block08.gd'
       - 'tests/tools/test_parallel_items_w02_campaign_006_block08.py'
+      - 'tests/fixtures/parallel_items/w02_campaign_006_block09.json'
+      - 'tests/gameplay/parallel_items_w02_campaign_006_block09.gd'
+      - 'tests/tools/test_parallel_items_w02_campaign_006_block09.py'
       - 'docs/coordination/items_parallel_v1/reports/W02/CAMP_006_PROGRESO.csv'
       - 'modules/**'
   workflow_dispatch:
@@ -124,6 +127,14 @@ jobs:
           grep -E '^CAMP006_W02_HELD08_PY PASS block=08 checks=[1-9][0-9]*$' camp006-block08-python.log
           timeout 900s godot --headless --path . --script res://tests/gameplay/parallel_items_w02_campaign_006_block08.gd 2>&1 | tee camp006-block08-godot.log
           grep -E '^CAMP006_W02_HELD08 PASS block=08 positive=4 negative=2 checks=[1-9][0-9]*$' camp006-block08-godot.log
+      - name: Bloque09 contrato Python y habilidad/menta Godot real
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tests/tools/test_parallel_items_w02_campaign_006_block09.py | tee camp006-block09-python.log
+          grep -E '^CAMP006_W02_TRAIN09_PY PASS block=09 checks=[1-9][0-9]*$' camp006-block09-python.log
+          timeout 900s godot --headless --path . --script res://tests/gameplay/parallel_items_w02_campaign_006_block09.gd 2>&1 | tee camp006-block09-godot.log
+          grep -E '^CAMP006_W02_TRAIN09 PASS block=09 positive=6 negative=3 checks=[1-9][0-9]*$' camp006-block09-godot.log
       - name: Regresión CAMP004 y CAMP003 - Python y Godot
         shell: bash
         run: |

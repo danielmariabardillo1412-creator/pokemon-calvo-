@@ -12,8 +12,8 @@ assert d["origin"]=={"run_id":42232974438,"sha":"2c727c47c057eeb4cebb02c51b33ebe
 assert d["cases"]==[
     {"id":"macho_brace","effect":"battle_ev_multiplier","foe":"magikarp","stat":"speed","base_yield":1,"expected_yield":2,"cap_per_stat":252,"cap_total":510},
     {"id":"soothe_bell","effect":"friendship_from_vitamin","trigger":"protein","friendship_initial":99,"base_gain":5,"held_gain":7,"max_friendship":255}]
-assert len(p)==8 and p[6]["ci_run"]=="42232974438"
-assert p[7]["ids"]=="macho_brace;soothe_bell" and p[7]["estado"]=="PRUEBAS_NATIVAS_PUBLICADAS_CI_PENDIENTE"
+assert len(p)==9 and p[6]["ci_run"]=="42232974438"
+assert p[7]["ids"]=="macho_brace;soothe_bell" and p[7]["estado"]=="DOS_FUNCIONALES_CI_VERIFICADA" and p[7]["ci_run"]=="42254167309"
 ev=(root/"modules/creatures/progression/battle_ev_rewards.gd").read_text()
 friend=(root/"modules/inventory/field_friendship_effects.gd").read_text()
 train=(root/"modules/inventory/field_training_effects.gd").read_text()

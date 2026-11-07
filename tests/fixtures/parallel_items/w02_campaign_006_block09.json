@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "worker": "W02",
+  "campaign": "CAMP_006",
+  "block": "09",
+  "family": "TRAINING_E2E",
+  "status": "NATIVE_TESTS_PUBLISHED_AWAITING_CI",
+  "origin": {
+    "run_id": 42254167309,
+    "sha": "d1f9ea1f2ecbed44e21cf9e6d6398dfff4fdd19f",
+    "conclusion": "success"
+  },
+  "ids": [
+    "ability_capsule",
+    "ability_patch",
+    "gentle_mint"
+  ],
+  "modes": [
+    "active",
+    "reserve",
+    "none"
+  ],
+  "cases": [
+    {
+      "id": "ability_capsule",
+      "species": "growlithe",
+      "starting_ability": "intimidate",
+      "target_ability": "flash_fire",
+      "kind": "ability"
+    },
+    {
+      "id": "ability_patch",
+      "species": "growlithe",
+      "starting_ability": "intimidate",
+      "target_ability": "justified",
+      "kind": "ability"
+    },
+    {
+      "id": "gentle_mint",
+      "species": "mew",
+      "original_nature": "hardy",
+      "target_nature": "gentle",
+      "changed_stats": [
+        "defense",
+        "special_defense"
+      ],
+      "kind": "mint"
+    }
+  ],
+  "negative_policy": "Wrong move slot, stale ability stamp, repeat same mint, no stock; no modifications to StatCalculator or SaveV2 core."
+}
