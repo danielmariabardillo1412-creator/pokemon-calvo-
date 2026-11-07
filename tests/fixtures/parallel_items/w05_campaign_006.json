@@ -230,6 +230,27 @@
           "move_id": "trailblaze"
         }
       ]
+    },
+    {
+      "block": "10",
+      "items": [
+        {
+          "item_id": "tm31",
+          "move_id": "metal_claw"
+        },
+        {
+          "item_id": "tm36",
+          "move_id": "rock_tomb"
+        },
+        {
+          "item_id": "tm44",
+          "move_id": "dragon_tail"
+        },
+        {
+          "item_id": "tm77",
+          "move_id": "waterfall"
+        }
+      ]
     }
   ]
 }
