@@ -44,3 +44,24 @@ Segunda CI pendiente del mismo bloque 06. No iniciar bloque 07 antes de verifica
 **Resultado verificable:** pruebas de Clamperl y de la protección de Ditto sin transformar sin errores reportados; pruebas de transformación L2 ejecutadas, pero **L3 de guardado/restauración no certificado**. No es posible cerrar el bloque 06 como `CI_PASS_VERIFICADO`. Estado correcto: **BLOQUEADO_DEPENDENCIA_COMPARTIDA**. Su CSV aún muestra `EN_CI_AUTOMATICA`, porque cambiar el CSV ejecutaría de nuevo una CI acumulativa actualmente roja. El dictamen correcto está en este informe y en el ticket propio de W01, y requiere coordinación de IA6.
 
 No se alteraron `main`, V28, otras ramas, backend compartido ni tests heredados. **No ejecutar bloque 07 con otra `p` hasta resolver la dependencia o recibir una decisión explícita de IA6**.
+
+## Tercera CI: diagnóstico concreto para IA6 (7 de noviembre de 2026)
+
+- [Run #42252938911](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/42252938911), commit de pruebas `234b0bced95d497fe8804427c5c0b96c9963c674`, `completed/failure`.
+- Python `CAMP005_W01_PY PASS blocks=6 checks=408`. Godot `CAMP005_W01_GODOT FAIL blocks=6 checks=12058 errors=4`.
+- Tres mensajes `W01_CAMP005_BLOCK06_SWITCH_DIAGNOSTIC` sobre `metal_powder_transformed/19`, en modos `active`, `none`, `reserve`, muestran exactamente `error = "Cannot read properties of undefined (reading 'id')"` y `backend_last_error` idéntico.
+- Comando rechazado: `switch 2`. `phase=move`; `revision=1`; `roster_active_id=own`; el activo tiene `transformed=true` y la reserva tiene PS 237/237, `transformed=false`. El fallo se repite con objeto activo, ausente y en reserva.
+- El error es un TypeError de JavaScript enviado por RPC del backend, no un error reglamentario explícito de cambio de Pokémon. No está demostrado aún cuál es el campo `.id` ausente.
+
+### Posible punto compartido y prueba de aislamiento
+
+Archivo a revisar por IA6: `modules/battle/backends/showdown/native_engine.cjs`.
+- `serialize` (alrededor de línea 83): `battle.toJSON()`.
+- `restore` (alrededor de línea 96): `Battle.fromJSON(clone(snapshot))`, seguido de `b.restart(() => {})`.
+- `dispatch(op=prepare)` (alrededor de línea 282): llama `fork.execute(op=restore)` antes de `choose`.
+- `dispatch(op=choose)` (alrededor de línea 309): reconstruye candidato con `restore(serialize(session.battle))`.
+- `ShowdownBackend.restore_saved` también usa el RPC `restore`. Por tanto, la restauración SaveV2 y el siguiente turno tras Transformación comparten reconstrucción de snapshots. Es una hipótesis, no una causa demostrada.
+
+**Reproducción solicitada:** batalla nativa Ditto+reserva vs Snorlax, semilla `[19,2,3,4]`; `start → prepare/commit` de Transformación, `checkpoint` con `transformed=true`, y comparar (A) `restore(snapshot)` y (B) `prepare({p1:"switch 2",p2:"move 1"})`. Obtener stack JS COMPLETO, distinguiendo `fromJSON`, `restart` y `candidate.choose`, y localizar el valor undefined al leer `.id`. Probar luego SaveV2, neutralidad de Metal Powder tras transformación, PP, PS, identidad y propiedad. Si se modifica producción, ejecutar regresión CAMP004 íntegra.
+
+**Autoridad:** La rama arbitral `codex/calvo-items-20261101-arbitro` permanece en SHA `385ee26598cfe8b2bc7e3e27698d296b7dfcc3e7` (último commit 4 de noviembre); ninguna autorización nueva de IA6 al comprobarlo el 7 de noviembre. W01 mantiene bloque 06 **BLOQUEADO_DEPENDENCIA_COMPARTIDA**, sin comenzar bloque 07, sin parche propio al backend. Solo 5 de 10 bloques certificados.
