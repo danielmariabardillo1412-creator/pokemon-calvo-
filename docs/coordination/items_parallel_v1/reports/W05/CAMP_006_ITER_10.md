@@ -1,6 +1,6 @@
 # IA5/W05 — CAMPAÑA_006 · BLOQUE 10/10 · HITO FINAL
 
-**Fecha:** 2026-11-07. **Rama:** `codex/calvo-items-20261104-w05-camp006`. **Estado inicial:** PUBLICADO_PENDIENTE_CI; el cierre exige recibos reales. **Commit del fixture:** `c929538eaff755c511273b9e82f955f8301fa35a`.
+**Fecha:** 2026-11-07. **Rama:** `codex/calvo-items-20261104-w05-camp006`. **Estado original al publicar:** PUBLICADO_PENDIENTE_CI. **Estado final:** `CAMPAÑA_006_FINALIZADA` — CI funcional y seis regresiones certificadas. **Commit del fixture:** `c929538eaff755c511273b9e82f955f8301fa35a`.
 
 ## Reserva final IA6 (únicamente 4 MT)
 
@@ -22,8 +22,34 @@ No utilizar las asociaciones históricas de estas MT. Fixture `tests/fixtures/pa
 - **Obligatorio en este hito final:** ejecutar regresiones completas CAMP005, CAMP004 y CAMP003 **tanto Python como Godot**. Un PASS aislado de CAMP006 no permite cerrar 10/10.
 - No confundir PASS headless con validación visual/GPU, integración de ramas o puesta en producción.
 
-## Evidencia exigida
+## CI final y cierre — CAMPAÑA_006_FINALIZADA
 
-En el mismo run de Actions del commit de publicación, comprobar `completed/success`, `CAMP006_W05_MANIFEST_PASS reserved=10 completed=10 ids=49 kind=NEW_IDS`, `CAMP006_W05_PY PASS blocks=10 checks=N`, `CAMP006_GATE_PY_PASS worker=W05 blocks=10 checks=N`, `CAMP006_W05_GODOT PASS blocks=10 checks=N`, `CAMP006_GATE_GODOT_PASS worker=W05 blocks=10 checks=N`, todos N positivos. Además: `CAMP005_W05_PY/GODOT PASS blocks=10`, `CAMP004_W05_PY/GODOT PASS blocks=10` y `CAMP003_W05_PY/GODOT PASS blocks=10`, verificados literalmente en logs.
+La CI real [GitHub Actions #42417890877](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/42417890877) terminó en `completed/success` sobre el commit funcional `e03bdf44f14c79f52907d91907d7cc2ee2e0eba3` (job `128539815534`).
 
-Al superar todo lo anterior: anotar el run, SHA, job, métricas y estado `CAMPAÑA_006_FINALIZADA` en este informe y en continuidad; **STOP**, no iniciar campaña nueva ni modificar otras ramas. El CSV `EN_CI_AUTOMATICA` es constancia histórica del momento de publicación; no actualizar solo para cambiar la etiqueta.
+**Recibos exactos, verificados en logs de la misma ejecución:**
+
+- `CAMP006_W05_MANIFEST_PASS reserved=10 completed=10 ids=49 kind=NEW_IDS`
+- `CAMP006_W05_PY PASS blocks=10 checks=481`
+- `CAMP006_GATE_PY_PASS worker=W05 blocks=10 checks=481`
+- `CAMP006_W05_GODOT PASS blocks=10 checks=1781`
+- `CAMP006_GATE_GODOT_PASS worker=W05 blocks=10 checks=1781`
+
+**Regresiones obligatorias del hito 10, todas en este mismo run:**
+
+| Campaña | Recibo Python | Recibo Godot |
+| --- | --- | --- |
+| 005 | `CAMP005_W05_PY PASS blocks=10 checks=580` | `CAMP005_W05_GODOT PASS blocks=10 checks=2166` |
+| 004 | `CAMP004_W05_PY PASS blocks=10 checks=580` | `CAMP004_W05_GODOT PASS blocks=10 checks=2166` |
+| 003 | `CAMP003_W05_PY PASS blocks=10 checks=580` | `CAMP003_W05_GODOT PASS blocks=10 checks=2166` |
+
+### Resultado, límites y entrega a IA6
+
+**CAMPAÑA_006_FINALIZADA — W05 10/10, 49/49 MT Scarlet/Violet certificadas en su rama.** Cobertura acumulativa de `FieldItemService.teach`, PP, compatibilidad/learnsets, propiedad/identidad, stock/consumo, negativas sin mutación y persistencia SaveV2, mediante los runners de CI. Se conservaron las regresiones de las tres campañas anteriores.
+
+**Límites:** CI Godot `headless` no es prueba visual ni de GPU; este resultado no certifica un merge en `main`, integración global con W01–W04 ni revisión funcional del frontend de libros. Se mantienen pendientes de revisión de integración por IA6; fuera del alcance de la presente campaña, no constituyen fallos de estas pruebas.
+
+**Control de ramas:** no se modificaron `main`, V28, PR118, rama árbitra ni ramas de las otras trabajadoras; sin cambios en catálogos, learnsets, políticas, partidas reales, máquinas históricas excluidas o módulos de producción; sin merge.
+
+El CSV mantiene `EN_CI_AUTOMATICA` como estado histórico del push que lanzó la CI; el veredicto PASS definitivo consta en este informe, continuidad y Actions. No editar el CSV solo para actualizar su etiqueta y provocar otra ejecución innecesaria.
+
+**STOP.** No hay bloque 11 ni se inicia campaña adicional con `p`. La integración/aceptación global corresponde a IA6.
