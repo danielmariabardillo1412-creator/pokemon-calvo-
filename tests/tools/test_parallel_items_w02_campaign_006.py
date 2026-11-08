@@ -38,7 +38,7 @@ def verify() -> None:
     require(data["recovery_gate"]["run_id"] == 41763921080
             and data["recovery_gate"]["conclusion"] == "success"
             and data["recovery_gate"]["head_sha"] == "2abcc2ae9644b8821d9dae6f26214b1a8fa347fc", "Recovered CI run referenced exactly")
-    require(len(data["blocks"]) == 5 and len(progress) == 9, "Five historical blocks and EV06..EV09 progress rows")
+    require(len(data["blocks"]) == 5 and len(progress) == 10, "Five historical blocks and EV06..EV10 progress rows")
     require(progress[5]["bloque"] == "06" and progress[5]["ids"] == "power_anklet;power_band;power_belt"
             and progress[5]["estado"] == "TRES_FUNCIONALES_CI_VERIFICADA"
             and progress[5]["ci_run"] == "41972015003", "EV06 native and historical suites verified")
@@ -50,8 +50,12 @@ def verify() -> None:
             and progress[7]["ci_run"] == "42254167309", "Block08 native and historical CI certified")
     require(progress[8]["bloque"] == "09"
             and progress[8]["ids"] == "ability_capsule;ability_patch;gentle_mint"
-            and progress[8]["estado"] == "PRUEBAS_NATIVAS_PUBLICADAS_CI_PENDIENTE"
-            and progress[8]["ci_run"] == "CI_BLOQUE09_PENDIENTE", "Block09 must not claim CI before PASS")
+            and progress[8]["estado"] == "TRES_FUNCIONALES_CI_VERIFICADA"
+            and progress[8]["ci_run"] == "42418112808", "Block09 native Godot and regressions verified")
+    require(progress[9]["bloque"] == "10"
+            and progress[9]["ids"] == "exp_share;lucky_egg;soothe_bell"
+            and progress[9]["estado"] == "DOS_FUNCIONALES_UNA_DEPENDENCIA_CI_PENDIENTE"
+            and progress[9]["ci_run"] == "CI_BLOQUE10_PENDIENTE", "Block10 published; no falsely claimed CI")
     require(data["blocks"][0]["block"] == progress[0]["bloque"] == "01", "Progress continuity")
     require(data["blocks"][0]["ids"] == progress[0]["ids"].split(";") ==
             ["exp_candy_xl", "relaxed_mint"], "Exact reserved IDs")

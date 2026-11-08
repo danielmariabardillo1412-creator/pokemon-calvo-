@@ -12,9 +12,9 @@ assert d["modes"]==["active","reserve","none"]
 assert d["origin"]=={"run_id":42254167309,"sha":"d1f9ea1f2ecbed44e21cf9e6d6398dfff4fdd19f","conclusion":"success"}
 assert [(x["id"],x["kind"]) for x in d["cases"]]==[
     ("ability_capsule","ability"),("ability_patch","ability"),("gentle_mint","mint")]
-assert len(p)==9 and p[7]["ci_run"]=="42254167309"
-assert p[8]["bloque"]=="09" and p[8]["estado"]=="PRUEBAS_NATIVAS_PUBLICADAS_CI_PENDIENTE"
-assert p[8]["ci_run"]=="CI_BLOQUE09_PENDIENTE"
+assert len(p)==10 and p[7]["ci_run"]=="42254167309"
+assert p[8]["bloque"]=="09" and p[8]["estado"]=="TRES_FUNCIONALES_CI_VERIFICADA"
+assert p[8]["ci_run"]=="42418112808"
 ability=(root/"modules/inventory/field_ability_effects.gd").read_text()
 mint=(root/"modules/inventory/field_mint_effects.gd").read_text()
 service=(root/"modules/inventory/field_item_service.gd").read_text()
