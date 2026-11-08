@@ -34,9 +34,11 @@ assert 'creature.held_item_id == &"soothe_bell"' in friendship
 assert 'gain = gain * 3 / 2' in friendship
 for frag in ("service2.equip(", "owner.withdraw(", "owner.deposit(", "_held05_outcome()",
              "ProgressionSystem.reconcile_battle_result(", "active_service.use_item(&\"protein\"",
-             "SaveGameRepository.new().decode_snapshot(", "EXP Share dependency", "no phantom consumption",
+             "_reload08(", "EXP Share dependency", "no phantom consumption",
              "CAMP006_W02_FINAL10", "dependency=", "positive=", "negative="):
     assert frag in runner, frag
+inherited_save=(root/"tests/gameplay/parallel_items_w02_campaign_006_block08.gd").read_text()
+assert "SaveGameRepository.new().decode_snapshot(" in inherited_save
 historic=json.loads((root/"tests/fixtures/parallel_items/w02_campaign_005.json").read_text())
 assert sum(len(block["cases"]) for block in historic["blocks"])==288
 print("CAMP006_W02_FINAL10_PY PASS block=10 positives=2 dependency=1 checks=27")
