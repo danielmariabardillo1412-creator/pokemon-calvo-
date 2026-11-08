@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "worker": "W02",
+  "campaign": "CAMP_006",
+  "block": "10",
+  "family": "TRAINING_E2E",
+  "status": "TESTS_PUBLISHED_CI_PENDING",
+  "ids": [
+    "exp_share",
+    "lucky_egg",
+    "soothe_bell"
+  ],
+  "modes": [
+    "active",
+    "reserve",
+    "none"
+  ],
+  "origin": {
+    "run_id": 42418112808,
+    "conclusion": "success",
+    "head_sha": "7ac50f4fce12ee19fe9862538ca0ccd6a30939e0"
+  },
+  "cases": [
+    {
+      "id": "exp_share",
+      "kind": "dependency",
+      "reason": "No experience distribution to nonparticipants",
+      "expected_nonparticipant_xp": 0
+    },
+    {
+      "id": "lucky_egg",
+      "kind": "positive_battle_xp",
+      "expected_boosted_xp": 106,
+      "expected_plain_xp": 71
+    },
+    {
+      "id": "soothe_bell",
+      "kind": "positive_field_friendship",
+      "field_item": "protein",
+      "initial_friendship": 99,
+      "expected_held_gain": 7,
+      "expected_plain_gain": 5
+    }
+  ],
+  "dependency": {
+    "key": "EXP_SHARE_NONPARTICIPANT_XP_POLICY_006_W02",
+    "source": "ProgressionSystem.reconcile_battle_result only iterates passed participants and survivors",
+    "producer": "IA6: battle session and official Exp Share eligibility/all-party XP rules",
+    "consumer": "ProgressionSystem.reconcile_battle_result and player party/storage",
+    "missing": "A validated policy defining recipient eligibility and XP splitting; no current runtime producer passes nonparticipants",
+    "positive_test_pending": "After IA6 approves: an eligible nonparticipant receives the correct XP, excludes ineligible party/storage targets, preserves active participant XP, SaveV2, item identity, and no duplication",
+    "owner": "IA6",
+    "level": "L1_DEPENDENCY_NOT_L2",
+    "do_not_fake_distribution": true
+  }
+}
