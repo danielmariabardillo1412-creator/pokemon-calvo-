@@ -30,6 +30,7 @@ on:
       - 'docs/coordination/items_parallel_v1/reports/W02/CAMP_006_PROGRESO.csv'
       - 'tests/tools/test_parallel_items_w02_mint_pilot_20261109.py'
       - 'tests/gameplay/parallel_items_w02_mint_pilot_20261109.gd'
+      - 'tests/fixtures/parallel_items/w02_mint_pilot_20261109.json'
       - 'modules/**'
   workflow_dispatch:
 permissions:

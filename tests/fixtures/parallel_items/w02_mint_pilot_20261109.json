@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "worker": "W02",
+  "pilot": "MINT-L3",
+  "block": "01",
+  "status": "TESTS_PUBLISHED_CI_PENDING",
+  "base_gate": {
+    "run_id": 42690004814,
+    "sha": "662905404193b5247a55962fd08bf295871d7b53",
+    "conclusion": "success"
+  },
+  "source_authority": "docs/coordination/items_parallel_v1/W02_MINT_L3_PILOT_GATE_20261109.md",
+  "ids": [
+    "lonely_mint",
+    "mild_mint",
+    "naive_mint"
+  ],
+  "modes": [
+    "active",
+    "reserve",
+    "none"
+  ],
+  "cases": [
+    {
+      "id": "lonely_mint",
+      "original_nature": "hardy",
+      "target_nature": "lonely",
+      "up": "attack",
+      "down": "defense"
+    },
+    {
+      "id": "mild_mint",
+      "original_nature": "hardy",
+      "target_nature": "mild",
+      "up": "special_attack",
+      "down": "defense"
+    },
+    {
+      "id": "naive_mint",
+      "original_nature": "hardy",
+      "target_nature": "naive",
+      "up": "speed",
+      "down": "special_defense"
+    }
+  ],
+  "extra_regressions": [
+    "gentle_mint positive retained",
+    "gentle to lonely transition",
+    "legacy SaveV2 no effective nature",
+    "incorrect slot rejected atomically",
+    "repeated mint no-effect",
+    "temporarily transformed state rejected",
+    "malformed effective nature rejected"
+  ]
+}

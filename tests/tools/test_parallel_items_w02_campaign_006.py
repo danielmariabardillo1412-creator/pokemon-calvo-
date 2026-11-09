@@ -326,14 +326,21 @@ def verify_block04_pilot(data: dict, progress: list[dict]) -> None:
         "adamant_mint", "modest_mint", "jolly_mint",
         "timid_mint", "bold_mint", "calm_mint", "careful_mint",
         "brave_mint", "quiet_mint", "impish_mint", "relaxed_mint",
-        "hasty_mint", "lax_mint",
-        "lonely_mint", "mild_mint", "naive_mint"
+        # IA6 MINT-L3 pilot 01 now authorises lonely/mild/naive, but
+        # hasty/lax and the other prior mints remain excluded here.
+        "hasty_mint", "lax_mint"
     ):
         require(('"' + earlier + '"') not in mints,
                 "No unauthorized existing mint activation " + earlier)
-    # Block09 newly authorises gentle only; the other historic mints remain nonfunctional.
+    # CAMP006 remains historically certified; the separately authorised
+    # MINT-L3 01 adds exactly these positive mints without rewriting archive.
+    for mint_id, nature_id in {"lonely_mint": "lonely",
+                               "mild_mint": "mild",
+                               "naive_mint": "naive"}.items():
+        require(f'"{mint_id}": "{nature_id}"' in mints,
+                "New MINT-L3 01 authorised map " + mint_id)
     require('"gentle_mint": "gentle"' in mints,
-            "Block09 gentle mint must be implemented by W02-owned helper")
+            "Block09 gentle mint must remain implemented")
     runner = RUNNER006.read_text(encoding="utf-8")
     for fragment in (
         "func _probe_mint04(", "CAMP006_W02_MINT04",
