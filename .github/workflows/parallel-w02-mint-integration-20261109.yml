@@ -160,37 +160,21 @@ jobs:
           grep -E '^CAMP003_W02_PY PASS blocks=10 checks=[1-9][0-9]*$' camp006-regression-003-python.log
           timeout 900s godot --headless --path . --script res://tests/gameplay/parallel_items_w02_campaign_003.gd 2>&1 | tee camp006-regression-003-godot.log
           grep -E '^CAMP003_W02_GODOT PASS blocks=10 checks=[1-9][0-9]*$' camp006-regression-003-godot.log
-      - name: Nuevo piloto MINT-L3 con pruebas independientes
+      - name: Nuevo piloto de integración W02 con pruebas independientes
         shell: bash
         run: |
           set -euo pipefail
           PY="tests/tools/test_parallel_items_w02_mint_pilot_20261109.py"
           GD="tests/gameplay/parallel_items_w02_mint_pilot_20261109.gd"
           if [ ! -e "$PY" ] && [ ! -e "$GD" ]; then
-            echo "W02_MINT_PILOT_20261109 BOOTSTRAP_ONLY (piloto no implementado)"
+            echo "W02_MINT_PILOT_20261109 BOOTSTRAP_ONLY (piloto aun no implementado)"
           else
             test -f "$PY"
             test -f "$GD"
             python -B "$PY" 2>&1 | tee w02-pilot-python.log
-            grep -E '^W02_MINT_PILOT_20261109_PY PASS checks=[1-9][0-9]*
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: camp006-w02-${{ github.run_id }}
-          retention-days: 7
-          if-no-files-found: ignore
-          path: camp006-*.log
- w02-pilot-python.log
+            grep -E '^W02_MINT_PILOT_20261109_PY PASS checks=[1-9][0-9]*$' w02-pilot-python.log
             timeout 900s godot --headless --path . --script "res://$GD" 2>&1 | tee w02-pilot-godot.log
-            grep -E '^W02_MINT_PILOT_20261109_GODOT PASS checks=[1-9][0-9]*
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: camp006-w02-${{ github.run_id }}
-          retention-days: 7
-          if-no-files-found: ignore
-          path: camp006-*.log
- w02-pilot-godot.log
+            grep -E '^W02_MINT_PILOT_20261109_GODOT PASS checks=[1-9][0-9]*$' w02-pilot-godot.log
           fi
       - name: Guardar logs CAMP006 y regresiones
         if: always()
