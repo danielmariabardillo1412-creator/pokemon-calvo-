@@ -386,8 +386,8 @@ func _audit_conditions_05(fifth: Dictionary, fixture: Dictionary) -> void:
                 continue
             if trigger == EvolutionSystem.TRIGGER_USE_ITEM and rec.item_id != item:
                 continue
-            if trigger == EvolutionSystem.TRIGGER_LEVEL_UP and
-                StringName(str(rec.conditions.get("held_item", ""))) != item:
+            if (trigger == EvolutionSystem.TRIGGER_LEVEL_UP and
+                StringName(str(rec.conditions.get("held_item", ""))) != item):
                 continue
             count += 1
             selected = rec
@@ -396,8 +396,8 @@ func _audit_conditions_05(fifth: Dictionary, fixture: Dictionary) -> void:
             continue
         var factual := false
         if item == &"oval_stone":
-            factual = selected.conditions.get("held_item") == "oval_stone" and
-                String(selected.conditions.get("time_of_day", "")).replace("-", "_") == "day"
+            factual = (StringName(str(selected.conditions.get("held_item", ""))) == item and
+                String(selected.conditions.get("time_of_day", "")).replace("-", "_") == "day")
         elif item == &"dawn_stone":
             factual = int(selected.conditions.get("gender", 0)) == int(caso.get("gender", 0))
         elif item == &"peat_block":
