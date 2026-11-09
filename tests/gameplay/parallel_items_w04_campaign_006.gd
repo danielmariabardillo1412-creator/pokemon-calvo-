@@ -350,6 +350,80 @@ func _case_trade_03(caso: Dictionary) -> void:
         " status=L3_EQUIP_UNEQUIP_SAVEV2__TRADE_LEVEL_DEFERRED requires=IA6_approved_level_and_consumption")
 
 
+func _audit_conditions_05(fifth: Dictionary, fixture: Dictionary) -> void:
+    # Diagnosis only. Actual positive gameplay must wait for IA6's authoritative
+    # persistent individual gender and world day/moon producers.
+    var state: Dictionary = fixture.get("execution_state", {})
+    var deferred: Array = fixture.get("deferred_blocks", [])
+    check(String(state.get("last_executed_id", "")) == "05" and
+        int(state.get("completed", -1)) == 3 and state.get("deferred", []) == ["04"] and
+        deferred.size() == 1 and deferred[0].get("status", "") == "DEFERRED_POR_POLITICA",
+        "05_ia6_gate_completed3_block04_deferred")
+    check(fifth.get("block", "") == "05" and
+        fifth.get("status", "") == "BLOCKED_MISSING_SHARED_PRODUCERS" and
+        not bool(fifth.get("credited_completion", true)),
+        "05_diagnostic_not_functional_credit")
+    var catalog: DefinitionCatalog = scene.field_definitions()
+    var cases: Array = fifth.get("cases", [])
+    check(catalog != null and cases.size() == 4, "05_four_canonical_routes")
+    if catalog == null:
+        return
+    var seen: Dictionary = {}
+    for caso: Dictionary in cases:
+        var source := StringName(caso.get("source", ""))
+        var target := StringName(caso.get("target", ""))
+        var item := StringName(caso.get("item_id", ""))
+        var trigger := StringName(String(caso.get("trigger", "")).replace("-", "_"))
+        var source_species: CreatureSpecies = catalog.species(source)
+        check(source_species != null and catalog.species(target) != null and catalog.item(item) != null,
+            "05_canonical_entities_" + String(source))
+        if source_species == null:
+            continue
+        var count := 0
+        var selected: EvolutionRecord = null
+        for rec: EvolutionRecord in source_species.evolutions:
+            if rec.species_id != target or rec.trigger != trigger:
+                continue
+            if trigger == EvolutionSystem.TRIGGER_USE_ITEM and rec.item_id != item:
+                continue
+            if trigger == EvolutionSystem.TRIGGER_LEVEL_UP and
+                StringName(str(rec.conditions.get("held_item", ""))) != item:
+                continue
+            count += 1
+            selected = rec
+        check(count == 1 and selected != null, "05_unique_original_evolution_record_" + String(source))
+        if selected == null:
+            continue
+        var factual := false
+        if item == &"oval_stone":
+            factual = selected.conditions.get("held_item") == "oval_stone" and
+                String(selected.conditions.get("time_of_day", "")).replace("-", "_") == "day"
+        elif item == &"dawn_stone":
+            factual = int(selected.conditions.get("gender", 0)) == int(caso.get("gender", 0))
+        elif item == &"peat_block":
+            factual = String(selected.conditions.get("time_of_day", "")).replace("-", "_") == "full_moon"
+        check(factual and selected.min_level == 0, "05_imported_condition_not_degraded_" + String(source))
+        check(EvolutionSystem.classify_record(selected, catalog, source) == EvolutionSystem.DATA_ONLY,
+            "05_unsupported_conditions_remain_data_only_" + String(source))
+        seen[String(source)] = true
+    check(seen.size() == 4 and
+        seen.has("happiny") and seen.has("kirlia") and seen.has("snorunt") and seen.has("ursaring"),
+        "05_all_four_sources_audited_once")
+    var gender_creature: CreatureInstance = make_mon(&"kirlia", &"w04_c006_05_gender_source_check", catalog)
+    check(gender_creature != null, "05_real_creature_source")
+    if gender_creature != null:
+        var saved_state: Dictionary = gender_creature.to_dict()
+        var level_context: Dictionary = EvolutionSystem.level_up_context(gender_creature)
+        check(not saved_state.has("gender") and not saved_state.has("gender_id") and
+            not saved_state.has("sex") and not level_context.has("gender"),
+            "05_no_persistent_individual_gender_producer")
+        check(not level_context.has("time_of_day") and not level_context.has("moon_phase") and
+            not level_context.has("held_item_id"),
+            "05_no_authoritative_day_moon_or_held_level_producer")
+    print("CAMP006_W04_BLOCK05 status=BLOCKED_MISSING_SHARED_PRODUCERS completed=3 last_executed=05 deferred=04")
+    # NEVER print a positive L2/L3 evolution receipt for these conditional routes.
+
+
 func _run() -> void:
     var fixture: Variant = JSON.parse_string(FileAccess.get_file_as_string(FIXTURE))
     check(fixture is Dictionary, "fixture_json")
@@ -357,9 +431,11 @@ func _run() -> void:
         finish()
         return
     var blocks: Array = fixture.get("blocks", [])
-    check(fixture.get("campaign") == "CAMP_006" and blocks.size() == 3 and blocks[0].get("block") == "01" and blocks[1].get("block") == "02" and blocks[2].get("block") == "03",
-        "blocks_01_02_03_exact")
-    if blocks.size() != 3:
+    check(fixture.get("campaign") == "CAMP_006" and blocks.size() == 4 and
+        blocks[0].get("block") == "01" and blocks[1].get("block") == "02" and
+        blocks[2].get("block") == "03" and blocks[3].get("block") == "05",
+        "blocks_01_02_03_05_no_credit04")
+    if blocks.size() != 4:
         finish()
         return
     scene = load("res://scenes/visual/field_demo.tscn").instantiate()
@@ -378,6 +454,7 @@ func _run() -> void:
     check(held_cases.size() == 2, "03_two_held_trade_routes_only")
     for caso: Dictionary in held_cases:
         await _case_trade_03(caso)
+    _audit_conditions_05(blocks[3], fixture)
     if scene != null and is_instance_valid(scene):
         scene.queue_free()
     await process_frame
@@ -388,7 +465,7 @@ func finish() -> void:
         return
     closed = true
     if errors.is_empty():
-        print("CAMP006_W04_GODOT PASS blocks=3 checks=", checks)
+        print("CAMP006_W04_GODOT PASS completed=3 last_executed=05 deferred=04 checks=", checks)
     else:
         print("CAMP006_W04_GODOT FAIL errors=", JSON.stringify(errors))
     quit(0 if errors.is_empty() else 1)
