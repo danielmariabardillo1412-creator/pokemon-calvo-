@@ -126,6 +126,32 @@ func _run() -> void:
 			scene.player.apply_motion(Vector2.LEFT if i % 2 == 0 else Vector2.RIGHT, 1.0 / 3.0)
 		ck("expires at exact real step " + String(id),
 			effect.remaining_steps == 0 and effect.active_id == &"")
+		if id == &"repel":
+			var envelope: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(path))
+			var legacy: Dictionary = envelope.duplicate(true)
+			legacy.payload.world.erase("repel")
+			legacy["sha256"] = JSON.stringify(legacy.payload).sha256_text()
+			var output := FileAccess.open(path, FileAccess.WRITE)
+			ck("legacy save test file can be written", output != null)
+			if output != null:
+				output.store_string(JSON.stringify(legacy))
+				output.close()
+				ck("actual old save loads without repel effect",
+					await scene._native_battles.load_game()
+					and effect.active_id == &"" and effect.remaining_steps == 0)
+			var corrupt: Dictionary = envelope.duplicate(true)
+			corrupt.payload.world["repel"] = {"schema_version": 1, "active_id": "repel", "remaining_steps": "55"}
+			corrupt["sha256"] = JSON.stringify(corrupt.payload).sha256_text()
+			output = FileAccess.open(path, FileAccess.WRITE)
+			if output != null:
+				output.store_string(JSON.stringify(corrupt))
+				output.close()
+				var state_before_corrupt: Dictionary = effect.to_dict()
+				var position_before_corrupt: Vector2 = scene.player.global_position
+				ck("actual corrupt save rejected with live state intact",
+					not await scene._native_battles.load_game()
+					and effect.to_dict() == state_before_corrupt
+					and scene.player.global_position.is_equal_approx(position_before_corrupt))
 		DirAccess.remove_absolute(ProjectSettings.globalize_path(path))
 	ck("no suppressions created battles", scene._director._next_battle_seed == original_seed)
 	_finish(scene)
