@@ -102,6 +102,8 @@ func _probe(catalog: DefinitionCatalog) -> void:
         false, "held_item_already_consumed", "oval/consumed_held")
     assert_result(oval, level_up, {"held_item_id": "oval_stone"},
         false, "missing_world_daypart", "oval/day_missing")
+    assert_result(oval, level_up, {"held_item_id": "oval_stone", "daypart": "day"},
+        false, "missing_held_consumed_state", "oval/held_consumption_unverified")
     assert_result(oval, level_up, {"held_item_id": "oval_stone", "daypart": "night"},
         false, "wrong_world_daypart", "oval/night")
     assert_result(oval, level_up, {"held_item_id": "oval_stone", "daypart": "full_moon"},
