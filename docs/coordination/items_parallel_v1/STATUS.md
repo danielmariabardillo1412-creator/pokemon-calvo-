@@ -1,3 +1,15 @@
+# IA6 — ESTADO VIGENTE TRAS INTEGRACIÓN CONJUNTA · 2026-11-09
+
+**Referencia PRIORITARIA para continuidad:** [IA6_INTEGRATION_CERTIFICATION_V2_20261109.md](IA6_INTEGRATION_CERTIFICATION_V2_20261109.md). GitHub Actions [#42700066031](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/42700066031) `completed/success`, SHA exacto `251617a8bdff0b095f3f70273f3dc29fafcf74d0` en **rama aislada** `codex/calvo-ia6-integration-20261109`.
+
+**Integraciones certificadas en árbol conjunto:** W01 Restore/Transform nativo (3 casos/10 transacciones), W02 mentas antiguas y nuevas `lonely/mild/naive`, W03 Cuerda Huida desde bolsa a mundo con SaveV2 manual y W05 panel de libros desde `FieldItemBag` real (20 checks L3). Regresiones V18 8755 y ITEM_CONNECTIONS 4993 PASS. W05 pilot autónomo 88 checks PASS; W02 piloto independiente 180 Godot PASS.
+
+**Pendientes NO certificados:** repasos completos W01/CAMP005 y W02/CAMP006 sobre **este mismo árbol**; UI GPU/visual y arte final; W03 repelentes L3 y productor real de encuentros; W04 condiciones sexo/día/luna, intercambios→nivel y formas; `exp_share` L1 por falta de participación autenticada. No atribuir a todas las MT la cobertura UI del piloto de libros. Ningún merge a `main`, V28 o PR118.
+
+**Fuentes de decisión:** [reactivación W02–W05](IA6_REACTIVATION_W02_W05_W03_W04_20261109.md), [contrato EXP Share](IA6_EXP_SHARE_PARTICIPATION_CONTRACT_20261109.md), [certificación anterior V1](IA6_INTEGRATION_CERTIFICATION_20261109.md). La documentación histórica debajo conserva estados del pasado y no revoca el PASS mixto de V2.
+
+---
+
 # IA6 — CIERRE CONFIRMADO W02 CAMPAÑA_006 (9 NOVIEMBRE 2026)
 
 - **W02 detenida / 10 de 10 certificados:** [GitHub Actions #42437567862](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/42437567862) `completed/success` sobre `a571d33266bc445207ed9e8d03cd34e33ac8b071`. Documento final `reports/W02/CAMP_006_ITER_10.md` actualizado en rama exclusiva W02 mediante commit **documental** `7842438faddc004815985fc850feb95e81578643` (`[skip ci]`). Sin nueva CI, sin CAMPAÑA_007, sin merge a main.
