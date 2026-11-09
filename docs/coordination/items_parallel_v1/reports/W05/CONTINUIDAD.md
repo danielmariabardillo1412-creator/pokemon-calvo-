@@ -1,3 +1,9 @@
+# IA5/W05 — PILOTO LIBROS-UI-L3 01 CI PASS · REQUIERE INTEGRACIÓN IA6 (2026-11-09)
+
+Rama codex/calvo-items-20261109-w05-books-ui. SHA funcional 75883f53edbd977810b9234b3014f0c5ecf69096; CI #42697722250 job 129433913836 completed/success. Piloto Python 17 checks PASS; panel Godot headless 88 checks PASS. CAMP006 49/49 conservada: PY 481, Godot 1781. Regresiones completas CAMP005/004/003 en el mismo run: cada una PY 580, Godot 2166 PASS. Panel independiente scenes/visual/field_machine_book_panel.gd con FieldMachineBookProfile.presentacion, selección de libro Pokémon y sustitución; reutiliza FieldItemService.teach; casos tm202, tm31, incompatible, PP, no consumo negativo, un consumo positivo y SaveV2. L3 LOCAL del panel certificado sin GPU, NO montado en FieldItemBag; seam exacto en BOOKS_UI_PILOT_01_20261109.md para autorización IA6. Sin cambios FieldItemBag, producción central, catálogos, otras ramas, main/V28/PR118; sin merge. CAMPAÑA_006_FINALIZADA sigue STOP 10/10 49/49. Nuevo PILOTO_01 cerrado; no emprender 02 sin puerta IA6.
+
+---
+
 # IA5/W05 — PILOTO LIBROS-UI-L3 01 PUBLICADO, CI PENDIENTE (2026-11-09)
 
 Rama codex/calvo-items-20261109-w05-books-ui. Panel independiente de libros con servicio existente (sin tocar FieldItemBag), pruebas Godot y Python con tm202, tm31 y un incompatible, sustitución, PP, consumo y SaveV2. Informe BOOKS_UI_PILOT_01_20261109.md. La CI de arranque #42690009491 pasó, pero todavía no demuestra este piloto. CAMPAÑA_006_FINALIZADA 10/10 y 49/49 se conserva. Una vez certificado, STOP hasta nueva puerta IA6. No merges.
