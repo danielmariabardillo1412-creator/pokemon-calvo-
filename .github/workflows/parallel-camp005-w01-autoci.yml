@@ -6,6 +6,7 @@ on:
     paths:
       - '.github/workflows/parallel-camp005-w01-autoci.yml'
       - 'tests/tools/test_parallel_items_w01_campaign_005.py'
+      - 'tests/tools/repro_w01_camp005_b06_transform.cjs'
       - 'tests/gameplay/parallel_items_w01_campaign_005.gd'
       - 'tests/fixtures/parallel_items/w01_campaign_005.json'
       - 'docs/coordination/items_parallel_v1/reports/W01/CAMP_005_PROGRESO.csv'
@@ -67,6 +68,50 @@ jobs:
           if grep -E 'SCRIPT ERROR|Parse Error' camp005-w01-import.log; then exit 1; fi
           echo "POKEMON_CALVO_NODE=$(command -v node)" >> "$GITHUB_ENV"
           python -B tools/battle_reference/run.py --install --limit 1 2>&1 | tee camp005-w01-native.log
+      - name: W01 B06 aislado native Transform snapshot y switch
+        shell: bash
+        run: |
+          set -euo pipefail
+          node tests/tools/repro_w01_camp005_b06_transform.cjs 2>&1 | tee camp005-w01-native-transform.log
+          grep -E '^W01_B06_NATIVE_REPRO PASS cases=3 snapshots=3 switches=3        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tests/tools/test_parallel_items_w01_campaign_005.py --ci 2>&1 | tee camp005-w01-python.log
+          grep -E "^CAMP005_W01_PY PASS blocks=${{ steps.gate.outputs.blocks }} checks=[1-9][0-9]*$" camp005-w01-python.log
+      - name: CAMP005 Godot portador tipo dano y SaveV2
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 1100s godot --headless --path . --script res://tests/gameplay/parallel_items_w01_campaign_005.gd 2>&1 | tee camp005-w01-godot.log
+          grep -E "^CAMP005_W01_GODOT PASS blocks=${{ steps.gate.outputs.blocks }} checks=[1-9][0-9]*$" camp005-w01-godot.log
+      - name: Deteccion cambios de produccion
+        id: changed
+        shell: bash
+        run: |
+          set -euo pipefail
+          if git diff --name-only HEAD^ HEAD | grep -q '^modules/'; then
+            echo "modules=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "modules=false" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Regresion CAMP004 completa obligatoria al inicio y en hitos
+        if: steps.gate.outputs.blocks == '1' || steps.gate.outputs.blocks == '5' || steps.gate.outputs.blocks == '10' || steps.changed.outputs.modules == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tests/tools/test_parallel_items_w01_campaign_004.py --ci 2>&1 | tee camp005-w01-regression-camp004-py.log
+          grep -E '^CAMP004_W01_PY PASS blocks=10 checks=[1-9][0-9]*$' camp005-w01-regression-camp004-py.log
+          timeout 1100s godot --headless --path . --script res://tests/gameplay/parallel_items_w01_campaign_004.gd 2>&1 | tee camp005-w01-regression-camp004-godot.log
+          grep -E '^CAMP004_W01_GODOT PASS blocks=10 checks=[1-9][0-9]*$' camp005-w01-regression-camp004-godot.log
+      - name: Conservar logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: camp005-w01-${{ github.run_id }}
+          retention-days: 7
+          if-no-files-found: ignore
+          path: camp005-w01-*.log
+ camp005-w01-native-transform.log
       - name: CAMP005 Python equipables
         shell: bash
         run: |
