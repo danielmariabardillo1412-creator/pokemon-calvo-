@@ -88,6 +88,19 @@ func _run() -> void:
 			scene._director._encounter_rng.state == int(prepared.get("next_rng", -1))
 			and scene._director._next_battle_seed == seed_before
 			and not scene._native_battles.occupied())
+		var equal_table: Dictionary = TechnicalEncounterPoolBuilder.build(
+			scene._catalogs, zone, 100, leader.level, leader.level, &"pidgey")
+		ck("equal-level table valid " + String(id), bool(equal_table.get("ok", false)))
+		if bool(equal_table.get("ok", false)):
+			scene._director._tables[zone] = equal_table.table
+			var allowed: Dictionary = scene.field_prepare_native_encounter(zone)
+			var allowed_encounter := allowed.get("result") as WildEncounterResult
+			ck("equal-level wild is not repelled " + String(id),
+				not bool(allowed.get("blocked_by_repel", false))
+				and allowed_encounter != null
+				and allowed_encounter.status == WildEncounterResult.ENCOUNTER
+				and allowed_encounter.creature.level == leader.level)
+			scene._director._tables[zone] = built.table
 		var saved: Dictionary = scene.field_native_world_snapshot("gen9calvounifiedv1")
 		ck("repel state included in native world " + String(id),
 			saved.get("repel", {}) == effect.to_dict())
