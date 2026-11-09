@@ -165,6 +165,119 @@
         "owner": "IA6 for level thresholds, item-consumption semantics and shared progression integration; W04 may modify local EvolutionSystem after those contracts exist",
         "no_new_ids": true
       }
+    },
+    {
+      "block": "05",
+      "family": "GENDER_TIME_CONDITIONS",
+      "ids": [
+        "oval_stone",
+        "dawn_stone",
+        "peat_block"
+      ],
+      "objective": "sexo_dia_luna_fuente_persistente",
+      "level": "DATA_ONLY__BLOCKED_MISSING_SHARED_PRODUCERS",
+      "status": "BLOCKED_MISSING_SHARED_PRODUCERS",
+      "credited_completion": false,
+      "new_item_ids": 0,
+      "cases": [
+        {
+          "item_id": "oval_stone",
+          "source": "happiny",
+          "target": "chansey",
+          "chain": 51,
+          "trigger": "level-up",
+          "held_item": "oval-stone",
+          "time_of_day": "day",
+          "gender": null,
+          "missing_producer": "authoritative_persistent_world_daypart_and_level_up_held_item_context"
+        },
+        {
+          "item_id": "dawn_stone",
+          "source": "kirlia",
+          "target": "gallade",
+          "chain": 140,
+          "trigger": "use-item",
+          "held_item": null,
+          "canonical_item": "dawn-stone",
+          "gender": 2,
+          "time_of_day": "",
+          "missing_producer": "persisted_individual_gender"
+        },
+        {
+          "item_id": "dawn_stone",
+          "source": "snorunt",
+          "target": "froslass",
+          "chain": 186,
+          "trigger": "use-item",
+          "held_item": null,
+          "canonical_item": "dawn-stone",
+          "gender": 1,
+          "time_of_day": "",
+          "missing_producer": "persisted_individual_gender"
+        },
+        {
+          "item_id": "peat_block",
+          "source": "ursaring",
+          "target": "ursaluna",
+          "chain": 110,
+          "trigger": "use-item",
+          "held_item": null,
+          "canonical_item": "peat-block",
+          "gender": null,
+          "time_of_day": "full-moon",
+          "missing_producer": "authoritative_world_moon_phase"
+        }
+      ],
+      "contract": {
+        "producer_gender": "Capture/CreatureFactory to CreatureInstance per-individual gender with SaveV2 backward compatibility, independent of species gender rate metadata",
+        "producer_day": "Game world authoritative daypart persisted across save/load; level-up event includes daypart and held Oval Stone in EvolutionSystem.level_up_context",
+        "producer_moon": "World moon-phase/full-moon event with deterministic authoritative SaveV2 persistence (calendar/time rules must be approved)",
+        "consumer": "EvolutionSystem.classify_record/evolution_candidates strict condition gate and FieldItemService.evolution_options/evolve, no direct-use shortcut for Oval Stone",
+        "negative_boundary": "Without the corresponding source condition, item use and level-up evolution must remain blocked without spending any item",
+        "owner": "IA6: CreatureInstance, SaveV2, FieldItemService, time/calendar and capture producers; W04 only evolution evaluator after contract",
+        "positive_status": "NONE: PokeAPI evolution chains are real data but no valid L2/L3 evolution can be certified",
+        "no_fake": "Do not infer individual gender from species rate, choose daypart from OS time, or synthesize lunar phases; do not claim PASS for item evolution."
+      }
+    }
+  ],
+  "execution_state": {
+    "last_executed_id": "05",
+    "deferred": [
+      "04"
+    ],
+    "completed": 3,
+    "completed_ids": [
+      "01",
+      "02",
+      "03"
+    ],
+    "evaluated_ids": [
+      "01",
+      "02",
+      "03",
+      "05"
+    ],
+    "blocked_ids": [
+      "05"
+    ],
+    "gate_document": "docs/coordination/items_parallel_v1/CAMPAIGN_006_W04_BLOCK04_DEFER_CONDITIONS_GATE_20261109.md",
+    "fifth_status": "BLOCKED_MISSING_SHARED_PRODUCERS",
+    "definition": "completed counts validated 01-03 only; 04 deferred without tests; 05 evaluated but not credited without positive gameplay evolution"
+  },
+  "deferred_blocks": [
+    {
+      "block": "04",
+      "status": "DEFERRED_POR_POLITICA",
+      "ids": [
+        "dubious_disc",
+        "magmarizer",
+        "protector",
+        "reaper_cloth",
+        "prism_scale",
+        "sachet",
+        "up_grade"
+      ],
+      "reason": "V27 level_values_selected=null; consumption/cancellation undecided. No tests or implementation credited."
     }
   ]
 }
