@@ -46,6 +46,8 @@ func _run() -> void:
 	var original_seed: int = scene._director._next_battle_seed
 	for id: StringName in [&"repel", &"super_repel", &"max_repel"]:
 		owner = scene.field_collection()
+		# Manual load reconstitutes canonical encounter tables. Reapply this test fixture.
+		scene._director._tables[zone] = built.table
 		ck("inventory add " + String(id), owner.inventory.add(id, 2))
 		var quantity: int = owner.inventory.quantity(id)
 		ck("open bag " + String(id), bag.open_bag())
