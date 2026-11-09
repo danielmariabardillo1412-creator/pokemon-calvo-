@@ -178,3 +178,15 @@ Fila 06 del progreso: `CI_PASS_VERIFICADO`, anclada al SHA de código y al run c
 - CAMP004 íntegra **no se reejecutó** en B07 conforme a workflow (solo hitos 01/05/10 o cambios de `modules/`); permanece acreditada en run #42679854792 (Python 1028; Godot 16816).
 
 **Estado oficial: 7/10.** Fila 07 `CI_PASS_VERIFICADO`. La próxima `p` autoriza **solo** bloque 08: `odd_incense;rock_incense;rose_incense`. No empezar 08 ni publicar modificaciones fuera de W01 durante este turno. La CI que dispare el commit documental posterior se comprobará independientemente; su resultado no debe confundirse con el run funcional citado.
+
+## B08 — 9 de noviembre de 2026 — CI funcional certificada
+
+**Estado W01: 8/10.** Bloque 08 `odd_incense;rock_incense;rose_incense`, rama `codex/calvo-items-20261104-w01-camp005`. SHA de código funcional `271cb9af74fdd03928fc42c53cced746ebe6b801`, CI [#42705717830](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/42705717830) **completed/success** para ese SHA.
+
+- `CAMP005_W01_SCOPE PASS blocks=8`, `CAMP005_W01_PY PASS blocks=8 checks=544`, `CAMP005_W01_GODOT PASS blocks=8 checks=21147`.
+- `W01_B06_NATIVE_REPRO PASS cases=3 snapshots=3 switches=3`, `W01_B07_NATIVE_SPEED PASS cases=3`, `SHOWDOWN_TRANSACTIONS PASS 10`.
+- Tres inciensos potencian daño real de su tipo solo en el portador activo; negativos `tackle` y `reflect` no activan la bonificación. No consumen objeto; propiedad, identidad, SaveV2 y reserva no activadora demostradas.
+- B08 aporta 9 escenarios, 12 pares y 36 modalidades; acumulado de ocho bloques **72 escenarios, 234 pares y 702 modalidades**. No se han tocado escenarios 01–07 ni `native_engine.cjs`. Godot timeout de pruebas ampliado de 800 a 1040 s, dentro de la puerta de workflow 1100 s.
+- CAMP004 no se reejecutó por no ser hito 01/05/10 ni editar producción. Última regresión completa PASS #42679854792: Python 1028; Godot 16816. Sin dependencias nuevas; crianza no es alcance W01.
+
+**Próxima `p` autoriza solo bloque 09:** `sea_incense;full_incense;lax_incense`, una vez comprobada la CI del commit documental de cierre. No avanzar al 09 en este turno. `main`, V28, PR #118, rama árbitra y ramas ajenas intactas.

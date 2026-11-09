@@ -1,21 +1,28 @@
-# IA1/W01 — CAMPAÑA_005 — ITER_08 (CI pendiente)
+# IA1/W01 — CAMPAÑA_005 — ITER_08 — CI_PASS_VERIFICADO
 
-**Rama:** `codex/calvo-items-20261104-w01-camp005`  
-**Bloque:** 08 / 10  
-**Objetos:** `odd_incense` (Psíquico), `rock_incense` (Roca), `rose_incense` (Planta).  
-**Estado:** EN_CI_AUTOMATICA; el bloque **NO** se certifica hasta completar CI funcional sobre este SHA.
+**Bloque:** 08/10, con fecha 2026-11-09; **rama exclusiva** `codex/calvo-items-20261104-w01-camp005`.
 
-## Contrato L2/L3 ejecutable
-- Tres inciensos canónicos de combate `onBasePower`. Mew con cada incienso ataca al Mew rival usando `confusion`, `smack_down` o `energy_ball` respectivamente.
-- Casos positivos: daño real con incienso equipado superior a controles ausente y reserva; controles idénticos con semillas 19 y 23, nunca efecto desde la reserva.
-- Negativos: `tackle` (tipo distinto) inflige daño sin bonificación; `reflect` (estado) no inflige daño, no consume objeto.
-- Reutiliza motor nativo Showdown, tres carriles concurrentes aislados, SaveV2 y comprobaciones de titularidad, dos unidades físicas, no consumo, snapshots y propiedad.
-- Añade **9 escenarios, 12 pares, 36 modalidades**; total acumulado **72 escenarios, 234 pares, 702 modalidades**. Preservadas las pruebas probabilísticas B05/B07 y Transformación B06, sin modificar producción.
+**Commit funcional verificado:** `271cb9af74fdd03928fc42c53cced746ebe6b801`. **GitHub Actions [#42705717830](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/42705717830): `completed/success`, mismo SHA**.
 
-## Evidencia histórica
-`docs/current/ITEM_INVENTORY.csv` confirma entrada nativa y hook `onBasePower` de los tres inciensos. `tools/item_audit/held_effect_sweep_v3.cjs` prueba previamente potencia por tipo y control de tipo incorrecto; el nuevo bloque lleva esa evidencia al flujo Godot/SaveV2. No hay contrato de crianza dentro del alcance de equipables de combate.
+## IDs y comportamiento nativo
+- `odd_incense` (Incienso Raro): efecto positivo real `onBasePower` Psíquico sobre `confusion`; no potencia `tackle` de Normal ni `reflect` de estado.
+- `rock_incense` (Incienso Roca): potencia ataques Roca, probado con `smack_down`; negativos Normal y estado.
+- `rose_incense` (Incienso Floral): potencia ataques Planta, probado con `energy_ball`; negativos Normal y estado.
 
-## Certificación pendiente
-La CI documental previa del B07 [#42692174058](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/42692174058) es `completed/success`, cabeza previa `54db2518c08b12dce5ca4756dbfffb3367e9a818`. No reutilizar ese run como certificación B08.
+Para cada uno: mismos adversarios reales Mew/Mew y mismas semillas 19/23 en controles; comparación `a.damage > n.damage > 0` con `n.damage == r.damage`, sin asignación de daño simulada. Portador activo, ausencia y reserva independientes; cada modalidad conserva propietario, dos unidades sin consumo, equipamiento, snapshot real y restauración SaveV2. No se han creado nuevas reglas de producción.
 
-**Punto de parada:** no ejecutar B09 antes de CI B08 verde y registrar el run real. Sin cambios a `main`, V28, PR #118, rama árbitra, otras trabajadoras, SaveV2 o motor global. Se ha ampliado sólo el temporizador del runner de pruebas de 800 a 1040 s para sostener la matriz acumulativa dentro del timeout 1100 s del workflow.
+**Bloque 08:** 9 escenarios / 12 pares / 36 modalidades. **CAMPAÑA_005 acumulada:** 72 escenarios, 234 pares, 702 modalidades; preservados los 63 casos anteriores y el reproductor del arreglo Transformación.
+
+## Recibos de CI sobre commit funcional
+- `CAMP005_W01_SCOPE PASS blocks=8`
+- `CAMP005_W01_PY PASS blocks=8 checks=544`
+- `CAMP005_W01_GODOT PASS blocks=8 checks=21147`
+- `W01_B06_NATIVE_REPRO PASS cases=3 snapshots=3 switches=3`
+- `W01_B07_NATIVE_SPEED PASS cases=3`
+- `SHOWDOWN_TRANSACTIONS PASS 10`
+
+**CAMP004** no se reejecutó: el workflow solo exige regresión completa en hitos 01/05/10 o ante cambios en `modules/`. Su última CI funcional íntegra #42679854792 conserva Python 1028 y Godot 16816 PASS. No se ha reducido esa puerta ni se ha modificado código de producción.
+
+**Sin dependencias nuevas.** El test de inciensos como potenciadores de tipo no certifica funciones de crianza fuera de W01. Tampoco valida GUI/GPU ni integración en `main` o V28.
+
+**Estado:** fila 08 `CI_PASS_VERIFICADO` en CSV, anclada al SHA y run inmutables. El commit documental posterior puede disparar una segunda CI de verificación del HEAD. **Siguiente `p`**, tras confirmar esa CI: bloque 09, únicamente `sea_incense;full_incense;lax_incense`. No se inicia ahora.
