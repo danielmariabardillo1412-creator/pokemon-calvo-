@@ -144,12 +144,29 @@ def main() -> int:
            ["repel","super_repel","max_repel"] and
            p[2]["bloque"]=="03" and q[2]["ids"]==
            "repel;super_repel;max_repel","block03 exact queue and progress")
-        ck(row3["functional_level"]=="L2_STANDALONE_REAL_PLAYER_STEPS"
-           and row3["item_effect_fully_connected"] is False
+        ck(row3["functional_level"]=="L3_REAL_FIELD_BAG_ENCOUNTER_SAVE"
+           and row3["item_effect_fully_connected"] is True
+           and row3["l3_native_repel"] is True
+           and row3["savev2_schema_changed"] is False
            and row3["no_new_items"] is True,
            "do not declare integration into actual world encounter producer")
         ck(row3["durations"]=={"repel":100,"super_repel":200,"max_repel":250},
            "repel durations are fixed canonical")
+        l3test=(ROOT/"tests/gameplay/parallel_items_w03_repel_l3.gd").read_text(encoding="utf-8")
+        demo_repel=(ROOT/"scenes/visual/field_demo.gd").read_text(encoding="utf-8")
+        bridge=(ROOT/"scenes/visual/field_native_bridge.gd").read_text(encoding="utf-8")
+        for token in ['"blocked_by_repel": true', 'func field_commit_repelled_encounter_rng(', '"repel": _repel_effect.to_dict()', 'world.get("repel"', '_repel_effect.attach(player)']:
+            ck(token in demo_repel,"L3 native world hook missing: "+token)
+        ck('field.field_commit_repelled_encounter_rng(' in bridge
+           and 'if bool(prepared.get("blocked_by_repel", false)):' in bridge,
+           "L3 native bridge suppression missing")
+        ck('func _apply_repel()' in bag and 'effect.start(item_id)' in bag
+           and 'inv.remove(item_id, 1)' in bag and 'effect.restore(previous)' in bag,
+           "L3 bag consume/rollback missing")
+        ck('scene._native_battles.on_step(grass_position)' in l3test
+           and 'await scene._native_battles.load_game()' in l3test
+           and 'scene.field_prepare_native_encounter(zone)' in l3test,
+           "L3 real encounter and save tests missing")
         repel=(ROOT/"modules/overworld/field_repel_step_effect.gd").read_text(encoding="utf-8")
         player=(ROOT/"modules/overworld/overworld_player.gd").read_text(encoding="utf-8")
         encounter=(ROOT/"modules/encounters/wild_encounter_system.gd").read_text(encoding="utf-8")
