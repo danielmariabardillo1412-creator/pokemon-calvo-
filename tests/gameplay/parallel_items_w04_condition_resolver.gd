@@ -100,13 +100,13 @@ func _probe(catalog: DefinitionCatalog) -> void:
         false, "wrong_held_item", "oval/wrong_held")
     assert_result(oval, level_up, {"held_item_id": "oval_stone", "held_item_consumed": true, "daypart": "day"},
         false, "held_item_already_consumed", "oval/consumed_held")
-    assert_result(oval, level_up, {"held_item_id": "oval_stone"},
+    assert_result(oval, level_up, {"held_item_id": "oval_stone", "held_item_consumed": false},
         false, "missing_world_daypart", "oval/day_missing")
     assert_result(oval, level_up, {"held_item_id": "oval_stone", "daypart": "day"},
         false, "missing_held_consumed_state", "oval/held_consumption_unverified")
-    assert_result(oval, level_up, {"held_item_id": "oval_stone", "daypart": "night"},
+    assert_result(oval, level_up, {"held_item_id": "oval_stone", "held_item_consumed": false, "daypart": "night"},
         false, "wrong_world_daypart", "oval/night")
-    assert_result(oval, level_up, {"held_item_id": "oval_stone", "daypart": "full_moon"},
+    assert_result(oval, level_up, {"held_item_id": "oval_stone", "held_item_consumed": false, "daypart": "full_moon"},
         false, "wrong_world_daypart", "oval/moon_not_day")
     assert_result(oval, {"trigger": "use_item", "item_id": "oval_stone"}, facts_oval,
         false, "wrong_trigger", "oval/bag_is_not_level_up")
