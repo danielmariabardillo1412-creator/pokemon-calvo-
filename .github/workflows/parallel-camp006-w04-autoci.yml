@@ -7,6 +7,7 @@ on:
       - '.github/workflows/parallel-camp006-w04-autoci.yml'
       - 'tests/tools/test_parallel_items_w04_campaign_006.py'
       - 'tests/gameplay/parallel_items_w04_campaign_006.gd'
+      - 'tests/gameplay/parallel_items_w04_condition_resolver.gd'
       - 'tests/fixtures/parallel_items/w04_campaign_006.json'
       - 'docs/coordination/items_parallel_v1/reports/W04/CAMP_006_PROGRESO.csv'
       - 'modules/**'
@@ -87,6 +88,13 @@ jobs:
           set -euo pipefail
           timeout 1100s godot --headless --path . --script res://tests/gameplay/parallel_items_w04_campaign_006.gd 2>&1 | tee camp006-w04-godot.log
           grep -E "^CAMP006_W04_GODOT PASS completed=${{ steps.gate.outputs.completed }} last_executed=${{ steps.gate.outputs.last_executed }} deferred=${{ steps.gate.outputs.deferred }} checks=[1-9][0-9]*$" camp006-w04-godot.log
+      - name: CAMP006 resolver puro sexo dia luna L2 aislado SIN L3
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 1100s godot --headless --path . --script res://tests/gameplay/parallel_items_w04_condition_resolver.gd 2>&1 | tee camp006-w04-resolver-l2.log
+          grep -E "^CAMP006_W04_CONDITION_RESOLVER cases=4 positives=4 status=PURE_L2_NOT_GAMEPLAY_L3 completed=3 last_executed=05 deferred=04$" camp006-w04-resolver-l2.log
+          grep -E "^CAMP006_W04_RESOLVER_L2 PASS completed=3 last_executed=05 deferred=04 checks=[1-9][0-9]*$" camp006-w04-resolver-l2.log
       - name: Detectar cambios de produccion
         id: changed
         shell: bash
