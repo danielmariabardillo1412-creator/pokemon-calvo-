@@ -232,8 +232,9 @@ func _block_02(block: Dictionary) -> void:
 
 func _block_03(block: Dictionary) -> void:
 	check("03 exact reserved IDs", block.get("ids", []) == ["repel", "super_repel", "max_repel"])
-	check("03 no misleading world integration", block.get("functional_level") ==
-		"L2_STANDALONE_REAL_PLAYER_STEPS" and not block.get("item_effect_fully_connected", true))
+	check("03 L3 native integration with existing L2 fixtures", block.get("functional_level") ==
+		"L3_REAL_FIELD_BAG_ENCOUNTER_SAVE" and block.get("item_effect_fully_connected", false)
+		and block.get("l3_native_repel", false))
 	var player := OverworldPlayer.new()
 	root.add_child(player)
 	await process_frame
