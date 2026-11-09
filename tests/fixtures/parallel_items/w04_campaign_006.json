@@ -238,10 +238,126 @@
         "positive_status": "NONE: PokeAPI evolution chains are real data but no valid L2/L3 evolution can be certified",
         "no_fake": "Do not infer individual gender from species rate, choose daypart from OS time, or synthesize lunar phases; do not claim PASS for item evolution."
       }
+    },
+    {
+      "block": "06",
+      "family": "MILCERY_CONDITIONS",
+      "ids": [
+        "berry_sweet",
+        "clover_sweet",
+        "flower_sweet",
+        "love_sweet",
+        "ribbon_sweet",
+        "star_sweet",
+        "strawberry_sweet"
+      ],
+      "objective": "giro_confite_forma_seleccionada",
+      "status": "BLOCKED_MISSING_SHARED_PRODUCERS",
+      "level": "PURE_L2_PRECONDITION_ONLY__NO_L3",
+      "credited_completion": false,
+      "new_item_ids": 0,
+      "cases": [
+        {
+          "item_id": "berry_sweet",
+          "source": "milcery",
+          "target": "alcremie",
+          "chain": 452,
+          "trigger": "spin",
+          "held_required": true,
+          "canonical_form_count": 9,
+          "source_form_index": "data/api/v2/pokemon/869/index.json",
+          "gameplay_spin_produced": false,
+          "form_persisted": false
+        },
+        {
+          "item_id": "clover_sweet",
+          "source": "milcery",
+          "target": "alcremie",
+          "chain": 452,
+          "trigger": "spin",
+          "held_required": true,
+          "canonical_form_count": 9,
+          "source_form_index": "data/api/v2/pokemon/869/index.json",
+          "gameplay_spin_produced": false,
+          "form_persisted": false
+        },
+        {
+          "item_id": "flower_sweet",
+          "source": "milcery",
+          "target": "alcremie",
+          "chain": 452,
+          "trigger": "spin",
+          "held_required": true,
+          "canonical_form_count": 9,
+          "source_form_index": "data/api/v2/pokemon/869/index.json",
+          "gameplay_spin_produced": false,
+          "form_persisted": false
+        },
+        {
+          "item_id": "love_sweet",
+          "source": "milcery",
+          "target": "alcremie",
+          "chain": 452,
+          "trigger": "spin",
+          "held_required": true,
+          "canonical_form_count": 9,
+          "source_form_index": "data/api/v2/pokemon/869/index.json",
+          "gameplay_spin_produced": false,
+          "form_persisted": false
+        },
+        {
+          "item_id": "ribbon_sweet",
+          "source": "milcery",
+          "target": "alcremie",
+          "chain": 452,
+          "trigger": "spin",
+          "held_required": true,
+          "canonical_form_count": 9,
+          "source_form_index": "data/api/v2/pokemon/869/index.json",
+          "gameplay_spin_produced": false,
+          "form_persisted": false
+        },
+        {
+          "item_id": "star_sweet",
+          "source": "milcery",
+          "target": "alcremie",
+          "chain": 452,
+          "trigger": "spin",
+          "held_required": true,
+          "canonical_form_count": 9,
+          "source_form_index": "data/api/v2/pokemon/869/index.json",
+          "gameplay_spin_produced": false,
+          "form_persisted": false
+        },
+        {
+          "item_id": "strawberry_sweet",
+          "source": "milcery",
+          "target": "alcremie",
+          "chain": 452,
+          "trigger": "spin",
+          "held_required": true,
+          "canonical_form_count": 9,
+          "source_form_index": "data/api/v2/pokemon/869/index.json",
+          "gameplay_spin_produced": false,
+          "form_persisted": false
+        }
+      ],
+      "contract": {
+        "owner": "IA6",
+        "canonical_source": "data/api/v2/evolution-chain/452/index.json has ONE Milcery->Alcremie spin with item=null, held_item=null and no form-selection rule; data/api/v2/pokemon/869/index.json has 63 forms, 9 for each sweet",
+        "producer_spin": "Authoritative OverworldPlayer spin-completed event (real player motion), direction, duration and world time; must not accept a fabricated test event as gameplay",
+        "producer_held": "CreatureInstance.held_item_id and held_item_consumed at event time; seven sweets from existing holdable inventory profile",
+        "producer_form": "Approved version-specific cream-selection mapping from genuine spin direction/duration/world time (no arbitrary thresholds); complete canonical Alcremie form including sweet decoration",
+        "consumer": "EvolutionSystem trigger=spin and FieldItemService transaction after authenticated world event, rechecking ownership and allowing rollback",
+        "persistence": "CreatureInstance form identity, SaveV2/migration for original and evolved form and decoration, durable inventory and held-item consumption policy",
+        "negative_boundary": "Never evolve on bag use, equip-only, missing spin, guessed cream, missing form producer, wrong held sweet or any invalid world condition",
+        "test_boundary": "Isolated resolver unit tests accept synthetic facts but always return evolution_ready=false. NO gameplay L3 evolution, 06 NOT completed.",
+        "no_new_ids": true
+      }
     }
   ],
   "execution_state": {
-    "last_executed_id": "05",
+    "last_executed_id": "06",
     "deferred": [
       "04"
     ],
@@ -255,14 +371,17 @@
       "01",
       "02",
       "03",
-      "05"
+      "05",
+      "06"
     ],
     "blocked_ids": [
-      "05"
+      "05",
+      "06"
     ],
     "gate_document": "docs/coordination/items_parallel_v1/CAMPAIGN_006_W04_BLOCK04_DEFER_CONDITIONS_GATE_20261109.md",
     "fifth_status": "BLOCKED_MISSING_SHARED_PRODUCERS",
-    "definition": "completed counts validated 01-03 only; 04 deferred without tests; 05 evaluated but not credited without positive gameplay evolution"
+    "definition": "Completed remains 3; 04 deferred, 05 missing gender/day/moon world producers, 06 isolated Milcery spin precondition/form candidate only without gameplay evolution",
+    "sixth_status": "PURE_L2_RESOLVER_NOT_L3__BLOCKED_MISSING_SPIN_FORM_PRODUCERS"
   },
   "deferred_blocks": [
     {
