@@ -14,4 +14,19 @@ Prueba Godot: `tests/gameplay/parallel_items_w02_campaign_006_block10.gd`, 3 IDs
 
 **No modificar** IA6, `ProgressionSystem`, contratos del motor de batalla, `modules/save/**`, `StatCalculator`, `main`, V28 o ramas de otras trabajadoras. Las mentas 02/03 salvo `gentle_mint` no se declaran positivas retroactivamente.
 
-**CI pendiente**: el trabajo solo pasa a `CAMPAÑA_006_FINALIZADA` cuando GitHub confirma `completed/success` para el SHA final, incluidos CAMP005 10/10, CAMPAÑA_006 01–10, CAMP004/003. Un `SUCCESS` no implica que `exp_share` funcione. Tras éxito, reportar las dependencias concretas a IA6 para integración, sin fusionar nada automáticamente.
+**Estado al publicar el bloque:** CI todavía pendiente. El acta de cierre definitivo, confirmada posteriormente por IA6, figura a continuación. Ningún `SUCCESS` implica que `exp_share` reparta XP.
+
+## ACTA DEFINITIVA DE CIERRE — CAMPAÑA_006_FINALIZADA
+
+**Fecha del cierre registrado:** 2026-11-09. **Autoridad:** confirmación de IA6 y consulta directa de GitHub Actions.
+
+- **Estado oficial de IA2/W02:** `CAMPAÑA_006_FINALIZADA`; diez microbloques ejecutados y certificados conforme a los contratos individuales, **no** diez bloques compuestos exclusivamente de objetos funcionales.
+- **CI de validación final:** [42437567862](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/42437567862), estado `completed`, conclusión **`success`**. SHA validado: `a571d33266bc445207ed9e8d03cd34e33ac8b071`. La rama W02 coincidía exactamente con ese SHA antes de la presente actualización **solo documental**.
+- **Alcance:** bloques 01–10; recuperación y 288 casos de CAMPAÑA_005, pruebas nativas Godot/Python del bloque 10, y regresiones históricas CAMPAÑA_004/003 incluidas en la CI final. No se reclasifican por el mero hecho de pasar CI los efectos no implementados.
+- **`lucky_egg`:** bonificación real ×1,5 de experiencia comprobada en combate, inventario y SaveV2.
+- **`soothe_bell`:** bonificación real ×1,5 de amistad generada por proteína y otros productores de campo conectados; no se certifica un productor universal de amistad por caminar/subir nivel.
+- **`exp_share`:** **DEPENDENCIA ABIERTA, L1, propietario IA6.** Equipamiento y persistencia SaveV2 comprobados; **NO existe distribución funcional acreditada a Pokémon no participantes**. Contrato y prueba pendiente en `CAMP_006_EXP_SHARE_IA6_DEPENDENCY.md`.
+- **Resto de dependencias:** las mentas históricas de bloques 02/03 que no hayan recibido pruebas positivas posteriores mantienen su clasificación de dependencia; `gentle_mint` sí dispone de prueba funcional propia en el bloque 09.
+- **Control de cambios:** este cierre se limita a documentación; no modifica producción, tests, fixtures, workflows, reglas globales, `main`, V28 o ramas ajenas. Sin nueva CI, sin merge y **sin comenzar CAMPAÑA_007**. IA6 es responsable de la siguiente asignación.
+
+**Parada operativa:** W02 queda detenida hasta nueva autorización expresa de IA6.
