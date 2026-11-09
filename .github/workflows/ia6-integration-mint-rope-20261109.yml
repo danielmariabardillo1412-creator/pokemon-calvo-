@@ -15,6 +15,9 @@ on:
       - 'scenes/visual/field_item_bag.gd'
       - 'modules/battle/backends/showdown/native_engine.cjs'
       - 'tests/tools/repro_w01_camp005_b06_transform.cjs'
+      - 'scenes/visual/field_machine_book_panel.gd'
+      - 'tests/gameplay/parallel_items_w05_book_ui_pilot_20261109.gd'
+      - 'tests/gameplay/ia6_books_bag_20261109.gd'
   workflow_dispatch:
 permissions:
   contents: read
@@ -68,6 +71,14 @@ jobs:
           set -euo pipefail
           timeout 900s godot --headless --path . --script res://tests/gameplay/ia6_integration_mint_rope_20261109.gd 2>&1 | tee ia6-crossworker.log
           grep -E '^IA6_INTEGRATION PASS checks=[1-9][0-9]* features=mint_effective_nature,escape_rope_bag_savev2$' ia6-crossworker.log
+      - name: Regresion panel W05 aislado y mochila real IA6
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 900s godot --headless --path . --script res://tests/gameplay/parallel_items_w05_book_ui_pilot_20261109.gd 2>&1 | tee ia6-w05-panel.log
+          grep -E '^W05_BOOK_UI_PILOT_20261109_GODOT PASS checks=[1-9][0-9]*$' ia6-w05-panel.log
+          timeout 900s godot --headless --path . --script res://tests/gameplay/ia6_books_bag_20261109.gd 2>&1 | tee ia6-books-bag.log
+          grep -E '^IA6_BOOK_BAG PASS checks=[1-9][0-9]* features=real_bag,w05_panel,one_teach,savev2$' ia6-books-bag.log
       - name: Regresion de progresion y equipamiento V18
         shell: bash
         run: |
