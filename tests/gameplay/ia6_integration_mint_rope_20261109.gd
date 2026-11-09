@@ -22,6 +22,7 @@ func _ck(label: String, good: bool) -> void:
 
 func _run() -> void:
 	_test_mint()
+	_test_mint_extensions()
 	await _test_rope()
 	completed = true
 	if errors.is_empty():
@@ -77,6 +78,66 @@ func _test_mint() -> void:
 	_ck("mint_legacy_roundtrip", legacy.nature_id == &"hardy"
 		and legacy.effective_nature_id == &""
 		and legacy.stats.to_dict() == creature.stats.to_dict())
+
+# IA6: newly certified W02 MINT-L3 pilot, exercised against the combined W01/W03 tree.
+# W02 has the exhaustive 180-check suite; this checks the actual service + SaveV2 seam.
+func _test_mint_extensions() -> void:
+	var data: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://data/normalized/pokemon_api.json"))
+	_ck("mint3_catalog", data is Dictionary)
+	if not data is Dictionary: return
+	var catalog: DefinitionCatalog = GameData.from_dict(data).to_definition_catalog()
+	var species: CreatureSpecies = catalog.species(&"mew")
+	_ck("mint3_species", species != null)
+	if species == null: return
+	var cases: Array = [
+		{"item": &"lonely_mint", "nature": &"lonely", "up": "attack", "down": "defense"},
+		{"item": &"mild_mint", "nature": &"mild", "up": "special_attack", "down": "defense"},
+		{"item": &"naive_mint", "nature": &"naive", "up": "speed", "down": "special_defense"},
+	]
+	for spec: Dictionary in cases:
+		var item_id: StringName = spec.item
+		var nature: StringName = spec.nature
+		var rng := RandomNumberGenerator.new()
+		rng.seed = 1412
+		var pokemon: CreatureInstance = CreatureFactory.create(species, 50, catalog, ProgressionRuleset.new(), rng,
+			{"instance_id": &"mint3_own", "nature_id": &"hardy", "moves": ["tackle", "growl"]})
+		_ck("mint3_" + String(item_id) + "_creature", pokemon != null)
+		if pokemon == null: continue
+		var original: Dictionary = pokemon.to_dict()
+		var owner := PlayerCollection.new()
+		_ck("mint3_" + String(item_id) + "_party", owner.party.add_creature(pokemon))
+		_ck("mint3_" + String(item_id) + "_stock", owner.inventory.add(item_id, 2))
+		var service := preload("res://modules/inventory/field_item_service.gd").new()
+		_ck("mint3_" + String(item_id) + "_bind", service.configure(owner, catalog, func(): return true))
+		var rejected: Dictionary = service.use_item(item_id, &"mint3_own", 0)
+		_ck("mint3_" + String(item_id) + "_invalid_target_no_spend",
+			not bool(rejected.get("accepted", true)) and owner.inventory.quantity(item_id) == 2
+			and owner.owned_creature(&"mint3_own").to_dict() == original)
+		var expected: Dictionary = StatCalculator.compute(
+			species.base_stat_block(), pokemon.ivs, pokemon.evs, nature, pokemon.level).to_dict()
+		var actual_result: Dictionary = service.use_item(item_id, &"mint3_own")
+		var changed: CreatureInstance = owner.owned_creature(&"mint3_own")
+		_ck("mint3_" + String(item_id) + "_positive",
+			bool(actual_result.get("accepted", false)) and String(actual_result.get("effective_nature_id", "")) == String(nature))
+		_ck("mint3_" + String(item_id) + "_identity_and_stat",
+			changed != null and changed.instance_id == &"mint3_own" and changed.nature_id == &"hardy"
+			and changed.effective_nature_id == nature and changed.stats.to_dict() == expected
+			and int(expected[spec.up]) > int(original.stats[spec.up])
+			and int(expected[spec.down]) < int(original.stats[spec.down])
+			and changed.current_hp == pokemon.current_hp and changed.stats.max_hp == pokemon.stats.max_hp)
+		_ck("mint3_" + String(item_id) + "_single_spend", owner.inventory.quantity(item_id) == 1)
+		var second: Dictionary = service.use_item(item_id, &"mint3_own")
+		_ck("mint3_" + String(item_id) + "_repeat_atomic", not bool(second.get("accepted", true))
+			and String(second.get("reason", "")) == "item_has_no_effect"
+			and owner.inventory.quantity(item_id) == 1 and changed.to_dict() == owner.owned_creature(&"mint3_own").to_dict())
+		var snapshot := SaveGameData.build(owner.party, owner.storage, owner.inventory)
+		_ck("mint3_" + String(item_id) + "_savev2", bool(snapshot.validate().get("ok", false)))
+		var restored: CreatureInstance = CreatureInstance.from_dict(changed.to_dict())
+		_ck("mint3_" + String(item_id) + "_reload",
+			restored != null and restored.effective_nature_id == nature and restored.nature_id == &"hardy"
+			and restored.stats.to_dict() == expected and restored.instance_id == &"mint3_own")
+		_ck("mint3_" + String(item_id) + "_original_unchanged", pokemon.to_dict() == original)
+
 
 func _test_rope() -> void:
 	var scene: Node2D = load("res://scenes/visual/field_demo.tscn").instantiate()
