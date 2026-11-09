@@ -26,6 +26,12 @@ func _run() -> void:
 	var blocks: Array = parsed.get("blocks", [])
 	check("campaign identity", parsed.get("campaign") == "CAMP_006"
 		and parsed.get("worker") == "W03" and blocks.size() > 0)
+	var deferred_text := FileAccess.get_file_as_string(
+		"res://docs/coordination/items_parallel_v1/reports/W03/CAMP_006_APLAZADOS.csv")
+	check("04 deferred in separate register, never functional",
+		deferred_text.contains("04,black_flute;white_flute;lure;super_lure;max_lure,APLAZADO_IA6")
+		and blocks.size() == 3
+		and String(blocks[2].get("bloque", "")) == "03")
 	var n := 0
 	for block: Dictionary in blocks:
 		n += 1
