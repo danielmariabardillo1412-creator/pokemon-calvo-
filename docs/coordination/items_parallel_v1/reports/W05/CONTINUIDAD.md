@@ -1,3 +1,13 @@
+# IA5/W05 — LIBROS-UI-L3 02 CI PASS · STOP (2026-11-09)
+
+Rama exclusiva `codex/calvo-items-20261109-w05-books-ui`. SHA funcional probado `42397483f99a54d6234a3afae94e239b79b99f63`. CI [#42714738745](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/42714738745) `completed/success`, job `129493213945`, recibos propios Python **23** checks PASS y Godot headless **143** checks PASS. CAMP006 **10/10 / 49/49**, Python 481 / Godot 1781 PASS; regresiones CAMP005, CAMP004, CAMP003 cada una Python 580 y Godot 2166 PASS.
+
+Se reforzó solo `scenes/visual/field_machine_book_panel.gd` y pruebas propias: botón desactivado ante incompatibilidad, falta de stock, bloqueo de sesión, falta de selección/datos SV, movimiento ya aprendido y cuatro movimientos sin elegir sustitución; `teach_selected` revisa el estado antes de delegar la única llamada a `FieldItemService.teach`. Guardado/carga SaveV2, PP, sustitución y no-consumo probado. Primera CI #42714448965 falló por expectativa de test contradictoria con botón deshabilitado para cuatro movimientos; corregido únicamente el runner, sin relajar comportamiento. Ver `BOOKS_UI_PILOT_02_20261109.md` con recibos y diff.
+
+IA6 certificó antes la unión con `FieldItemBag` en **otra** rama CI #42701239557; este panel mejorado **todavía no está trasladado ni recertificado en integración**. No se tocó `FieldItemBag`, SaveV2 central, `FieldItemService`, catálogos, learnsets, localización ni ramas externas; no se hizo merge. No afirmar validación manual/GPU ni todas las MT en interfaz. **STOP** hasta nueva orden IA6; CAMPAÑA_006 sigue FINALIZADA y no existe CAMPAÑA_007.
+
+---
+
 # IA5/W05 — PILOTO LIBROS-UI-L3 01 CI PASS · REQUIERE INTEGRACIÓN IA6 (2026-11-09)
 
 Rama codex/calvo-items-20261109-w05-books-ui. SHA funcional 75883f53edbd977810b9234b3014f0c5ecf69096; CI #42697722250 job 129433913836 completed/success. Piloto Python 17 checks PASS; panel Godot headless 88 checks PASS. CAMP006 49/49 conservada: PY 481, Godot 1781. Regresiones completas CAMP005/004/003 en el mismo run: cada una PY 580, Godot 2166 PASS. Panel independiente scenes/visual/field_machine_book_panel.gd con FieldMachineBookProfile.presentacion, selección de libro Pokémon y sustitución; reutiliza FieldItemService.teach; casos tm202, tm31, incompatible, PP, no consumo negativo, un consumo positivo y SaveV2. L3 LOCAL del panel certificado sin GPU, NO montado en FieldItemBag; seam exacto en BOOKS_UI_PILOT_01_20261109.md para autorización IA6. Sin cambios FieldItemBag, producción central, catálogos, otras ramas, main/V28/PR118; sin merge. CAMPAÑA_006_FINALIZADA sigue STOP 10/10 49/49. Nuevo PILOTO_01 cerrado; no emprender 02 sin puerta IA6.
