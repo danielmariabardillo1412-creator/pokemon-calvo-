@@ -3469,16 +3469,21 @@ def verify_sources(chk):
     chk.demand('return _deny("field_effect_not_connected", "DEPENDENCY_MISSING")' in service
                and 'var effective_nature_id: StringName = &""' in creature_08,
                "Menta10: sin conexión de estos IDs, aunque exista piloto aislado")
-    # CAMP006 pilot allows ONLY block04 mint IDs; all 11 original CAMP005
-    # mint rejections and non-consumption checks must still pass verbatim.
+    # Keep CAMP005 historical fixtures and runtime negatives; only the three
+    # IA6-authorised MINT-L3 02 IDs are now mapped positively.
     mint_source_04 = (ROOT / "modules/inventory/field_mint_effects.gd").read_text(encoding="utf-8")
     for mint_id in (
-        "adamant_mint", "modest_mint", "jolly_mint",
-        "timid_mint", "bold_mint", "calm_mint", "careful_mint",
+        "jolly_mint",
+        "bold_mint", "calm_mint", "careful_mint",
         "brave_mint", "quiet_mint", "impish_mint", "relaxed_mint"
     ):
         chk.demand(('"' + mint_id + '"') not in mint_source_04,
                    "CAMP005 historical mint rejection must remain: " + mint_id)
+    for mint_id, nature in (("adamant_mint", "adamant"),
+                            ("modest_mint", "modest"),
+                            ("timid_mint", "timid")):
+        chk.demand(f'"{mint_id}": "{nature}"' in mint_source_04,
+                   "New IA6 MINT-L3 02 positive mapping: " + mint_id)
     chk.demand('var stat_nature: StringName = nature_id if effective_nature_id == &"" else effective_nature_id' in creature_08,
                "Effective nature actual recalculation required")
     chk.demand('if effective_nature_id != &"": result["effective_nature_id"] = String(effective_nature_id)' in creature_08,
