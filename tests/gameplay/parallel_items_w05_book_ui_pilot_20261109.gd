@@ -145,7 +145,8 @@ func test_book(item_id: StringName, move_id: StringName, spanish: String, type_e
 	check(String(item_id) + " Spanish type", panel.type_label.text.contains(type_es))
 	check(String(item_id) + " species learnset", compatible(catalogs.species(sid), move_id))
 	check(String(item_id) + " positive preview", panel.compatibility_label.text.contains("Compatible"))
-	check(String(item_id) + " teach enabled on valid preview", not panel.teach_button.disabled)
+	check(String(item_id) + " button requires a slot for four moves",
+		panel.teach_button.disabled if replacement else not panel.teach_button.disabled)
 	var before := snapshot(svc.owner)
 	var old_slot_id: StringName = &""
 	if replacement:
