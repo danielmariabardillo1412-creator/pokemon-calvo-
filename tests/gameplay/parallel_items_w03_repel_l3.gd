@@ -80,8 +80,11 @@ func _run() -> void:
 			bool(prepared.get("blocked_by_repel", false)) and prepared.has("next_rng")
 			and scene._director._encounter_rng.state == state_before)
 		var seed_before: int = scene._director._next_battle_seed
-		scene.field_commit_repelled_encounter_rng(int(prepared.get("next_rng", -1)))
-		ck("suppression commits RNG only " + String(id),
+		var grass_position: Vector2 = scene.get_node("EncounterZone").global_position
+		ck("real demo grass position belongs to registered encounter zone",
+			scene.zone_at_position(grass_position) == zone)
+		await scene._native_battles.on_step(grass_position)
+		ck("native bridge suppression commits RNG only " + String(id),
 			scene._director._encounter_rng.state == int(prepared.get("next_rng", -1))
 			and scene._director._next_battle_seed == seed_before
 			and not scene._native_battles.occupied())
