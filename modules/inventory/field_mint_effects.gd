@@ -1,10 +1,13 @@
 extends RefCounted
 
-# W02 authorised mint pilot, precisely the block04 pilot and block09 authorised gentle mint extension.
+# W02 authorised mint pilot, precisely blocks 04/09 and IA6 authorised MINT-L3 pilot 01 (lonely/mild/naive).
 # No inventory, save IO, mutation of live owner or global stat-rule changes.
 const MINTS := {
 	"naughty_mint": "naughty",
 	"gentle_mint": "gentle",
+	"lonely_mint": "lonely",
+	"mild_mint": "mild",
+	"naive_mint": "naive",
 	"rash_mint": "rash",
 	"sassy_mint": "sassy",
 	"serious_mint": "serious",
