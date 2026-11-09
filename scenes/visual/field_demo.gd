@@ -795,12 +795,17 @@ func field_validate_native_loaded_world(world: Dictionary) -> Dictionary:
 	if world.next_seed != int(world.next_seed) or world.next_seed < 1 or world.next_seed > 2147483646: return {"ok": false, "error": "world_seed"}
 	# Strict shape: never coerce corrupt strings or floats into valid integer steps.
 	var repel: Variant = world.get("repel", {"schema_version": 1, "active_id": "", "remaining_steps": 0})
-	if not repel is Dictionary or not repel.get("schema_version") is int or repel.get("schema_version") != 1:
+	if not repel is Dictionary:
 		return {"ok": false, "error": "world_repel_shape"}
-	if not repel.get("active_id") is String or not repel.get("remaining_steps") is int:
+	var ver: Variant = repel.get("schema_version")
+	var count: Variant = repel.get("remaining_steps")
+	# JSON round-trip may decode integer tokens as floats. Accept exact integral numbers only.
+	if not (ver is int or ver is float) or ver != 1 or not (count is int or count is float):
+		return {"ok": false, "error": "world_repel_shape"}
+	if not is_finite(float(count)) or count != int(count) or not repel.get("active_id") is String:
 		return {"ok": false, "error": "world_repel_shape"}
 	var sid := StringName(repel.active_id)
-	var steps: int = repel.remaining_steps
+	var steps: int = int(count)
 	if steps < 0 or (steps == 0 and sid != &"") or (steps > 0 and (not FieldRepel.DURATIONS.has(sid) or steps > int(FieldRepel.DURATIONS.get(sid, 0)))):
 		return {"ok": false, "error": "world_repel_range"}
 	var tables := field_build_native_encounter_tables(world.config)
