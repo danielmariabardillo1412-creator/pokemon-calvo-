@@ -147,3 +147,21 @@ Autorización verificable: `docs/coordination/items_parallel_v1/CAMPAIGN_005_W01
 **Reparación limitada y explícita a `native_engine.cjs`:** en `restore(snapshot)`, normalizar únicamente en una copia privada los snapshots con `transformed=true` en los que `baseMoveSlots` sea más largo que `moveSlots`: añadir entradas virtuales temporales suficientes para superar la deserialización de la biblioteca; retirarlas del Pokémon restaurado antes de `restart`, sin alterar el original ni su hash canónico. Rechazar estructuras transformadas inválidas; no silenciar excepciones. El reproductor verifica que el hash serializado después de restauración sea idéntico, la reserva siga válida y el cambio real se ejecute. Godot restablece SaveV2 **en pleno turno transformado** ANTES del cambio; guarda y restaura nuevamente después de cambiar. No se omiten los 54 escenarios, 134 pares o los tres modos.
 
 **Pruebas exigidas:** reproducir nativo A/B/C, control negativo de snapshot malformado, transacciones nativas preexistentes, Python CAMP005, Godot CAMP005 acumulativo, regresión completa Python/Godot CAMP004 tras modificación de `modules/`. **Todas las certificaciones del bloque 06 están pendientes de CI sobre el commit del parche.** No pasar a bloque 07 ni fusionar a `main` o V28.
+
+## B06 — certificación final verificable (9 de noviembre de 2026)
+
+**CI oficial:** [#42679854792](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/42679854792), `completed/success` para SHA funcional `2900431b3b50d3d47dbf7fabbb554915cd9c8319`. Evidencia literal de su único job:
+
+- `CAMP005_W01_SCOPE PASS blocks=6`
+- `W01_B06_NATIVE_REPRO PASS cases=3 snapshots=3 switches=3` (A/B/C + rechazo explícito de malformed en script)
+- `SHOWDOWN_TRANSACTIONS PASS 10`
+- `CAMP005_W01_PY PASS blocks=6 checks=408`
+- `CAMP005_W01_GODOT PASS blocks=6 checks=12124`
+- `CAMP004_W01_PY PASS blocks=10 checks=1028`
+- `CAMP004_W01_GODOT PASS blocks=10 checks=16816`
+
+**Dictamen:** desbloqueado el fallo real del simulador en `State.deserializePokemon` durante Transformación mediante normalización efímera de slots sobre copia privada en `native_engine.cjs`. Se ha probado restauración nativa y SaveV2 en el turno con Ditto transformado, el posterior cambio legal, preservación de hash, inventario, propietario y PP, así como efecto de Polvo Metálico condicionado y los dos objetos de Clamperl. No se omite ningún escenario de campañas previas; acumulado **6/10 bloques cerrados, 18 objetos, 54 escenarios, 134 pares caso-semilla, 402 modalidades ejecutadas**.
+
+Fila 06 del progreso: `CI_PASS_VERIFICADO`, anclada al SHA de código y al run completos. El cambio de documentación/CSV causa una nueva CI de verificación de metadatos; el SHA funcional citado no cambia. **Próxima `p`:** confirmar la CI final de metadatos y ejecutar exclusivamente el bloque 07 `quick_powder;razor_claw;razor_fang`; no adelantarse a ese bloque ahora.
+
+**Límite:** esta autorización no aprueba merge. IA6 debe revisar el parche antes de integración compartida. `main`, V28 y ramas ajenas intactos.
