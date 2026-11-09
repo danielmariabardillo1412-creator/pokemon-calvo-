@@ -17,7 +17,7 @@ var c005_razor_fang_not_activated: int = 0
 func _initialize() -> void:
 	capture = false
 	call_deferred("_run_w01_c005")
-	create_timer(800.0).timeout.connect(func():
+	create_timer(1040.0).timeout.connect(func():
 		if not done:
 			push_error("W01 CAMP005 timeout nativo")
 			quit(2))
@@ -58,8 +58,8 @@ func _run_w01_c005() -> void:
 		and fixture.get("kind") == "NEW_IDS" and fixture.get("format") == "gen9calvounifiedv1")
 	check("Tres modalidades sin omisiones", fixture.get("variants") == ["active", "none", "reserve"])
 	var progress: Array = _progress_c005()
-	check("Bloques 01 a 07 de CAMPAÑA_005 autorizados", progress.size() == 7)
-	if progress.size() != 7:
+	check("Bloques 01 a 08 de CAMPAÑA_005 autorizados", progress.size() == 8)
+	if progress.size() != 8:
 		quit(2)
 		return
 	check("Fila 01 autorizada por IA6", String(progress[0].block) == "01"
@@ -76,9 +76,11 @@ func _run_w01_c005() -> void:
 		and String(progress[5].ids) == "deep_sea_scale;deep_sea_tooth;metal_powder")
 	check("Fila 07 autorizada por IA6", String(progress[6].block) == "07"
 		and String(progress[6].ids) == "quick_powder;razor_claw;razor_fang")
+	check("Fila 08 autorizada por IA6", String(progress[7].block) == "08"
+		and String(progress[7].ids) == "odd_incense;rock_incense;rose_incense")
 	var stages: Array = fixture.get("blocks", [])
-	check("Fixture contiene siete bloques reales", stages.size() == 7)
-	if stages.size() != 7:
+	check("Fixture contiene ocho bloques reales", stages.size() == 8)
+	if stages.size() != 8:
 		quit(2)
 		return
 	check("Los tres ID del bloque 01 son exactos",
@@ -95,8 +97,10 @@ func _run_w01_c005() -> void:
 		stages[5].get("ids", []) == ["deep_sea_scale", "deep_sea_tooth", "metal_powder"])
 	check("Los tres ID del bloque 07 son exactos",
 		stages[6].get("ids", []) == ["quick_powder", "razor_claw", "razor_fang"])
+	check("Los tres ID del bloque 08 son exactos",
+		stages[7].get("ids", []) == ["odd_incense", "rock_incense", "rose_incense"])
 	var cases: Array = fixture.get("cases", [])
-	check("Sesenta y tres escenarios funcionales autorizados", cases.size() == 63)
+	check("Setenta y dos escenarios funcionales autorizados", cases.size() == 72)
 	var names: Array = []
 	for row: Dictionary in cases:
 		check("Escenario pertenece a su bloque oficial",
@@ -106,7 +110,8 @@ func _run_w01_c005() -> void:
 			or (String(row.block) == "04" and stages[3].get("ids", []).has(String(row.item_id)))
 			or (String(row.block) == "05" and stages[4].get("ids", []).has(String(row.item_id)))
 			or (String(row.block) == "06" and stages[5].get("ids", []).has(String(row.item_id)))
-			or (String(row.block) == "07" and stages[6].get("ids", []).has(String(row.item_id))))
+			or (String(row.block) == "07" and stages[6].get("ids", []).has(String(row.item_id)))
+			or (String(row.block) == "08" and stages[7].get("ids", []).has(String(row.item_id))))
 		check("ID único del escenario", not names.has(String(row.id)))
 		names.append(String(row.id))
 		for seed_value: Variant in row.seeds:
@@ -129,7 +134,7 @@ func _run_w01_c005() -> void:
 				"checks": checks - previous_checks,
 				"status": "PASS" if errors.size() == previous_errors else "FAIL",
 				"observed": observed})
-	check("Doscientos veintidós pares caso-semilla reales", c005_rows.size() == 222)
+	check("Doscientos treinta y cuatro pares caso-semilla reales", c005_rows.size() == 234)
 	check("Garra Afilada registra crítico real nativo", c005_razor_claw_critical > 0)
 	check("Garra Afilada aporta crítico exclusivo del portador", c005_razor_claw_exclusive > 0)
 	check("Colmillo Agudo registra retroceso real nativo", c005_razor_fang_activated > 0)
@@ -142,7 +147,8 @@ func _run_w01_c005() -> void:
 		"silver_powder", "soft_sand", "spell_tag",
 		"twisted_spoon", "metal_coat", "kings_rock",
 		"deep_sea_scale", "deep_sea_tooth", "metal_powder",
-		"quick_powder", "razor_claw", "razor_fang"]:
+		"quick_powder", "razor_claw", "razor_fang",
+		"odd_incense", "rock_incense", "rose_incense"]:
 		check("Tres contextos distintos para cada ID " + item_id, cases.filter(
 			func(c): return String(c.item_id) == item_id).size() == 3)
 	var report: Dictionary = {"schema_version": 1, "campaign": "CAMP_005",
@@ -201,7 +207,9 @@ func _compare_c005(row: Dictionary, observed: Dictionary) -> void:
 				"sharp_beak": "aerial_ace", "silk_scarf": "tackle",
 				"silver_powder": "bug_buzz", "soft_sand": "earth_power",
 				"spell_tag": "shadow_ball", "twisted_spoon": "psychic",
-				"metal_coat": "flash_cannon"}
+				"metal_coat": "flash_cannon",
+				"odd_incense": "confusion", "rock_incense": "smack_down",
+				"rose_incense": "energy_ball"}
 			check("Tipo del ataque positivo autorizado",
 				String(row.own_move) == String(expected_moves.get(String(row.item_id), "")))
 			check("Potenciador de tipo aumenta daño real solo al portador",

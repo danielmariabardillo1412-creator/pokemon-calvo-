@@ -5,7 +5,7 @@
   "kind": "NEW_IDS",
   "scope": "HELD_COMBAT",
   "format": "gen9calvounifiedv1",
-  "status": "BLOCK_07_PENDING_CI",
+  "status": "BLOCK_08_PENDING_CI",
   "variants": [
     "active",
     "none",
@@ -143,6 +143,25 @@
         "razor_fang_flinch",
         "razor_fang_immune",
         "razor_fang_status"
+      ]
+    },
+    {
+      "block": "08",
+      "ids": [
+        "odd_incense",
+        "rock_incense",
+        "rose_incense"
+      ],
+      "cases": [
+        "odd_incense_matching",
+        "odd_incense_nonmatching",
+        "odd_incense_status",
+        "rock_incense_matching",
+        "rock_incense_nonmatching",
+        "rock_incense_status",
+        "rose_incense_matching",
+        "rose_incense_nonmatching",
+        "rose_incense_status"
       ]
     }
   ],
@@ -1188,17 +1207,147 @@
         19
       ],
       "history": "tools/item_audit/held_effect_sweep_v3.cjs:flinch_rng"
+    },
+    {
+      "block": "08",
+      "id": "odd_incense_matching",
+      "item_id": "odd_incense",
+      "op": "matching_type_boost",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "own_move": "confusion",
+      "foe_move": "amnesia",
+      "seeds": [
+        19,
+        23
+      ],
+      "history": "tools/item_audit/held_effect_sweep_v3.cjs:type_boost"
+    },
+    {
+      "block": "08",
+      "id": "odd_incense_nonmatching",
+      "item_id": "odd_incense",
+      "op": "nonmatching_control",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "own_move": "tackle",
+      "foe_move": "amnesia",
+      "seeds": [
+        19
+      ],
+      "history": "tools/item_audit/held_effect_sweep_v3.cjs:wrong_type"
+    },
+    {
+      "block": "08",
+      "id": "odd_incense_status",
+      "item_id": "odd_incense",
+      "op": "status_control",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "own_move": "reflect",
+      "foe_move": "amnesia",
+      "seeds": [
+        19
+      ],
+      "history": "tools/item_audit/held_effect_sweep_v3.cjs:status_control"
+    },
+    {
+      "block": "08",
+      "id": "rock_incense_matching",
+      "item_id": "rock_incense",
+      "op": "matching_type_boost",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "own_move": "smack_down",
+      "foe_move": "amnesia",
+      "seeds": [
+        19,
+        23
+      ],
+      "history": "tools/item_audit/held_effect_sweep_v3.cjs:type_boost"
+    },
+    {
+      "block": "08",
+      "id": "rock_incense_nonmatching",
+      "item_id": "rock_incense",
+      "op": "nonmatching_control",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "own_move": "tackle",
+      "foe_move": "amnesia",
+      "seeds": [
+        19
+      ],
+      "history": "tools/item_audit/held_effect_sweep_v3.cjs:wrong_type"
+    },
+    {
+      "block": "08",
+      "id": "rock_incense_status",
+      "item_id": "rock_incense",
+      "op": "status_control",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "own_move": "reflect",
+      "foe_move": "amnesia",
+      "seeds": [
+        19
+      ],
+      "history": "tools/item_audit/held_effect_sweep_v3.cjs:status_control"
+    },
+    {
+      "block": "08",
+      "id": "rose_incense_matching",
+      "item_id": "rose_incense",
+      "op": "matching_type_boost",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "own_move": "energy_ball",
+      "foe_move": "amnesia",
+      "seeds": [
+        19,
+        23
+      ],
+      "history": "tools/item_audit/held_effect_sweep_v3.cjs:type_boost"
+    },
+    {
+      "block": "08",
+      "id": "rose_incense_nonmatching",
+      "item_id": "rose_incense",
+      "op": "nonmatching_control",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "own_move": "tackle",
+      "foe_move": "amnesia",
+      "seeds": [
+        19
+      ],
+      "history": "tools/item_audit/held_effect_sweep_v3.cjs:wrong_type"
+    },
+    {
+      "block": "08",
+      "id": "rose_incense_status",
+      "item_id": "rose_incense",
+      "op": "status_control",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "own_move": "reflect",
+      "foe_move": "amnesia",
+      "seeds": [
+        19
+      ],
+      "history": "tools/item_audit/held_effect_sweep_v3.cjs:status_control"
     }
   ],
   "source_provenance": {
     "queue": "docs/coordination/items_parallel_v1/CAMPAIGN_005_W01_QUEUE_APPROVED.csv",
     "prior_runner": "tests/gameplay/parallel_items_w01_campaign_004.gd",
-    "native_evidence": "tools/item_audit/held_effect_sweep_v2.cjs"
+    "native_evidence": "tools/item_audit/held_effect_sweep_v2.cjs",
+    "native_incense_evidence": "tools/item_audit/held_effect_sweep_v3.cjs"
   },
   "limitations": [
-    "Verificación funcional solo mediante CI sobre SHA con fixture, Python, Godot y prueba nativa B07.",
-    "Los 54 escenarios anteriores (134 pares) se conservan; B07 añade 9 escenarios (88 pares).",
-    "La restauración de Ditto transformado del bloque 06 sigue bajo autorización puntual de IA6; no se reabre ni altera su parche.",
-    "No equivale a integración en main/V28 ni prueba visual/GPU."
+    "B08 pendiente de CI sobre SHA de Python/Godot, 9 escenarios y 12 pares nuevos; no se asume aprobado.",
+    "Los 63 escenarios y 222 pares de B01-B07 deben conservarse íntegros; B08 acumula 72 escenarios y 234 pares.",
+    "Los inciensos se verifican únicamente como potenciadores de tipo en batalla; efectos de crianza/evolución quedan fuera de esta especialidad.",
+    "SaveV2 y parche puntual de Transformación B06 no se modifican; no hay validación visual/GPU ni integración main/V28."
   ]
 }

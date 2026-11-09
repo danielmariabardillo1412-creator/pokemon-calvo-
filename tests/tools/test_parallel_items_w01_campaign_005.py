@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""IA1/W01 CAMP005 — contrato acumulativo autorizado para 7 bloques funcionales.
+"""IA1/W01 CAMP005 — contrato acumulativo autorizado para 8 bloques funcionales.
 
 No atribuye PASS de Godot: el recibo de efecto positivo corresponde al runner
 real tests/gameplay/parallel_items_w01_campaign_005.gd y a CI del mismo SHA.
@@ -96,6 +96,9 @@ ITEMS = {
     "quick_powder": ("speed", "reflect", "quickpowder"),
     "razor_claw": ("critical", "focus_energy", "razorclaw"),
     "razor_fang": ("flinch", "tackle", "razorfang"),
+    "odd_incense": ("psychic", "confusion", "oddincense"),
+    "rock_incense": ("rock", "smack_down", "rockincense"),
+    "rose_incense": ("grass", "energy_ball", "roseincense"),
 }
 MODES = ["active", "none", "reserve"]
 STATES = {"EN_CI_AUTOMATICA", "ENTREGADO_PENDIENTE_CI",
@@ -144,9 +147,11 @@ def validate() -> int:
           "Sexto bloque fuera de encargo de IA6")
     check(queue[6]["ids"] == "quick_powder;razor_claw;razor_fang",
           "Séptimo bloque fuera de encargo de IA6")
+    check(queue[7]["ids"] == "odd_incense;rock_incense;rose_incense",
+          "Octavo bloque fuera de encargo de IA6")
 
     progress = rows(PROGRESS)
-    check(len(progress) == 7, "Bloque 07 exige progreso exacto 7/10")
+    check(len(progress) == 8, "Bloque 08 exige progreso exacto 8/10")
     first = progress[0]
     check(first["bloque"] == "01" and first["ids"] == queue[0]["ids"],
           "La fila 01 no pertenece a W01")
@@ -186,8 +191,13 @@ def validate() -> int:
           "No perder certificado funcional exacto del bloque 06")
     seventh = progress[6]
     check(seventh["bloque"] == "07" and seventh["ids"] == queue[6]["ids"]
-          and seventh["estado"] in STATES,
-          "Fila 07 fuera de cola o con estado ilegal")
+          and seventh["estado"] == "CI_PASS_VERIFICADO"
+          and seventh["sha_pruebas"] == "1e713a1925fe3fa582f21b5353e2c7f265ba928d"
+          and seventh["ci_run"] == "42689328705",
+          "No perder el certificado funcional exacto del bloque 07")
+    eighth = progress[7]
+    check(eighth["bloque"] == "08" and eighth["ids"] == queue[7]["ids"]
+          and eighth["estado"] in STATES, "Fila 08 sin estado autorizado")
     check(bool(first["sha_pruebas"]) and bool(first["ci_run"]),
           "Progreso sin trazabilidad de estado pendiente")
 
@@ -211,6 +221,13 @@ def validate() -> int:
     history = HISTORY.read_text(encoding="utf-8")
     flinch_history = FLINCH_HISTORY.read_text(encoding="utf-8")
     species_history = SPECIES_HISTORY.read_text(encoding="utf-8")
+    for id, history_move in (("odd_incense", "confusion"),
+                              ("rock_incense", "smack_down"),
+                              ("rose_incense", "absorb")):
+        check(f"'{id}','{history_move}'" in species_history
+              and "add(id,'type_boost'" in species_history
+              and "add(id,'wrong_type'" in species_history,
+              "Falta prueba nativa histórica de incienso " + id)
     for specific in SPECIES_HOOKS:
         check(f"'{specific}'" in species_history and
               ("species_defense" in species_history or "species_boost" in species_history),
@@ -224,8 +241,8 @@ def validate() -> int:
           and "foe(a).hp<foe(b).hp" in history,
           "Falta control histórico positivo/negativo de daño")
     for item, (kind, move, native) in ITEMS.items():
-        check(item in ";".join(r["ids"] for r in queue[:7]).split(";"),
-              "Objeto fuera de bloques 01/02/03/04/05/06 " + item)
+        check(item in ";".join(r["ids"] for r in queue[:8]).split(";"),
+              "Objeto fuera de los ocho bloques autorizados " + item)
         check(scope[item]["estado_contenido"] == "SELECCIONADO"
               and scope[item]["familia"] == "HELD_COMBAT_CANDIDATE",
               "Objeto no seleccionado: " + item)
@@ -236,7 +253,8 @@ def validate() -> int:
                    ("onModifyMove" if item == "kings_rock" else "onBasePower"))
                   in inventory[item]["native_hooks"],
               "Objeto sin soporte nativo funcional: " + item)
-        if item != "kings_rock" and item not in SPECIES_HOOKS and item not in BLOCK07_HOOKS:
+        if (item != "kings_rock" and item not in SPECIES_HOOKS
+                and item not in BLOCK07_HOOKS and not item.endswith("_incense")):
             check(f"{kind}:'{item}'" in history and f"{kind}:'{move}'" in history,
                   "Referencias de tipo y ataque incoherentes: " + item)
 
@@ -245,15 +263,15 @@ def validate() -> int:
           and data["campaign"] == "CAMP_005" and data["kind"] == "NEW_IDS"
           and data["format"] == "gen9calvounifiedv1", "Fixture CAMPAÑA_005 inválido")
     check(data["variants"] == MODES, "Falta un modo activo, sin objeto o reserva")
-    check(len(data["blocks"]) == 7
+    check(len(data["blocks"]) == 8
           and [b["block"] for b in data["blocks"]] ==
-              ["01", "02", "03", "04", "05", "06", "07"]
+              ["01", "02", "03", "04", "05", "06", "07", "08"]
           and all(data["blocks"][i]["ids"] == list(ITEMS)[i*3:(i+1)*3]
-                  for i in range(7)),
-          "Fixture no sigue los bloques 01 a 07 exactos de IA6")
+                  for i in range(8)),
+          "Fixture no sigue los bloques 01 a 08 exactos de IA6")
     cases = data["cases"]
-    check(len(cases) == 63 and len({c["id"] for c in cases}) == 63,
-          "Se exigen 63 escenarios distintos")
+    check(len(cases) == 72 and len({c["id"] for c in cases}) == 72,
+          "Se exigen 72 escenarios distintos")
     for i, block in enumerate(data["blocks"]):
         check(set(block["cases"]) == {c["id"] for c in cases
                                        if c["block"] == f"{i+1:02d}"},
@@ -328,13 +346,17 @@ def validate() -> int:
                   "Semillas de control alteradas: " + label)
             reference = ("tools/item_audit/held_effect_sweep_v3.cjs:flinch_rng"
                          if item == "kings_rock" else
+                         ("tools/item_audit/held_effect_sweep_v3.cjs:" +
+                          ("type_boost" if suffix == "matching" else
+                           "wrong_type" if suffix == "nonmatching" else "status_control"))
+                         if item.endswith("_incense") else
                          "tools/item_audit/held_effect_sweep_v2.cjs:type_boost")
             check(c["history"] == reference,
                   "Sin trazabilidad a prueba nativa: " + label)
             seen.add(label)
             pairs += len(seeds)
-    check(seen == {c["id"] for c in cases} and pairs == 222,
-          "No hay 222 pares caso-semilla autorizados")
+    check(seen == {c["id"] for c in cases} and pairs == 234,
+          "No hay 234 pares caso-semilla autorizados")
 
     runner = RUNNER.read_text(encoding="utf-8")
     for token in (
@@ -367,6 +389,10 @@ def validate() -> int:
                   "c005_razor_claw_exclusive", "c005_razor_fang_activated",
                   "c005_razor_fang_not_activated", "_probe_c005_transformed_stable"):
         check(token in runner, "No hay efecto o control B07 en Godot: " + token)
+    for label in ("odd_incense", "rock_incense", "rose_incense"):
+        check(f'"{label}"' in runner, "No se comprueba L2 nativo de incienso en Godot: " + label)
+    check("a.damage > n.damage and n.damage > 0 and n.damage == r.damage" in runner,
+          "Falta prueba real de daño aumentado solo al portador")
     check(NATIVE_B07.is_file(), "Falta prueba nativa específica B07")
     check("await _restore_probe(" in PARENT_RUNNER.read_text(encoding="utf-8"),
           "Falta restauración real SaveV2 heredada")
