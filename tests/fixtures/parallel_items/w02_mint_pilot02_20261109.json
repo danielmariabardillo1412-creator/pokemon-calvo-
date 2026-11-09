@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "worker": "W02",
+  "pilot": "MINT-L3",
+  "block": "02",
+  "status": "CI_PENDING",
+  "scope": "Only IA6-authorised pilot02",
+  "origin": {
+    "pilot01_run": 42696681590,
+    "pilot01_sha": "9e2797a4972f22dbf14d5bc5f2d24bb212d29456",
+    "branch_base": "1a550eb774736d89e6161d4a981559726e40e046"
+  },
+  "ids": [
+    "adamant_mint",
+    "modest_mint",
+    "timid_mint"
+  ],
+  "modes": [
+    "active",
+    "reserve",
+    "none"
+  ],
+  "cases": [
+    {
+      "id": "adamant_mint",
+      "original_nature": "hardy",
+      "target_nature": "adamant",
+      "up": "attack",
+      "down": "special_attack"
+    },
+    {
+      "id": "modest_mint",
+      "original_nature": "hardy",
+      "target_nature": "modest",
+      "up": "special_attack",
+      "down": "attack"
+    },
+    {
+      "id": "timid_mint",
+      "original_nature": "hardy",
+      "target_nature": "timid",
+      "up": "speed",
+      "down": "attack"
+    }
+  ],
+  "sequential": {
+    "first": "lonely_mint",
+    "second": "modest_mint",
+    "original_nature": "hardy",
+    "first_effective": "lonely",
+    "last_effective": "modest"
+  },
+  "level100": {
+    "ids": [
+      "adamant_mint",
+      "modest_mint",
+      "timid_mint"
+    ],
+    "original_nature": "hardy"
+  },
+  "excluded_non_authorized": [
+    "hasty_mint",
+    "lax_mint",
+    "relaxed_mint"
+  ],
+  "expected": {
+    "party_storage_positive": 6,
+    "no_stock_negative": 3,
+    "level100_positive": 3,
+    "sequential_positive": 1
+  }
+}

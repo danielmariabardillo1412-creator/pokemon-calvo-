@@ -323,8 +323,7 @@ def verify_block04_pilot(data: dict, progress: list[dict]) -> None:
     require('var mult := ProgressionRuleset.nature_multiplier(nature_id, key)' in stats,
             "Original calculator nature logic preserved")
     for earlier in (
-        "adamant_mint", "modest_mint", "jolly_mint",
-        "timid_mint", "bold_mint", "calm_mint", "careful_mint",
+        "jolly_mint", "bold_mint", "calm_mint", "careful_mint",
         "brave_mint", "quiet_mint", "impish_mint", "relaxed_mint",
         # IA6 MINT-L3 pilot 01 now authorises lonely/mild/naive, but
         # hasty/lax and the other prior mints remain excluded here.
@@ -339,6 +338,13 @@ def verify_block04_pilot(data: dict, progress: list[dict]) -> None:
                                "naive_mint": "naive"}.items():
         require(f'"{mint_id}": "{nature_id}"' in mints,
                 "New MINT-L3 01 authorised map " + mint_id)
+    # MINT-L3 02: add exactly the three newly authorized IDs, without
+    # revising historical fixture cases or retroactively counting positives.
+    for mint_id, nature_id in {"adamant_mint": "adamant",
+                               "modest_mint": "modest",
+                               "timid_mint": "timid"}.items():
+        require(f'"{mint_id}": "{nature_id}"' in mints,
+                "New MINT-L3 02 authorized map " + mint_id)
     require('"gentle_mint": "gentle"' in mints,
             "Block09 gentle mint must remain implemented")
     runner = RUNNER006.read_text(encoding="utf-8")

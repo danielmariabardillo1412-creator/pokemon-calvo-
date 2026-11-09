@@ -18,13 +18,15 @@ service=(ROOT/"modules/inventory/field_item_service.gd").read_text()
 creature=(ROOT/"modules/creatures/domain/creature_instance.gd").read_text()
 runner=(ROOT/"tests/gameplay/parallel_items_w02_mint_pilot_20261109.gd").read_text()
 legacy=(ROOT/"tests/tools/test_parallel_items_w02_campaign_006.py").read_text()
+for item,nature in [("adamant_mint","adamant"),("modest_mint","modest"),("timid_mint","timid")]:
+    assert f'"{item}": "{nature}"' in mint,item
 for item,nature,up,down in expected:
     assert f'"{item}": "{nature}"' in mint,item
     assert f'&"{nature}": ["{up}", "{down}"]' in rules,nature
 for item,nature in [("gentle_mint","gentle"),("naughty_mint","naughty"),
                     ("rash_mint","rash"),("sassy_mint","sassy"),("serious_mint","serious")]:
     assert f'"{item}": "{nature}"' in mint,item
-for item in ["hasty_mint","lax_mint","adamant_mint","modest_mint"]:
+for item in ["hasty_mint","lax_mint","relaxed_mint","jolly_mint"]:
     assert f'"{item}"' not in mint,item
 for token in ('func _apply_mint_item(', 'if Mint.supports(item_id):',
               'Mint.apply(candidate, item_id, catalogs)',
