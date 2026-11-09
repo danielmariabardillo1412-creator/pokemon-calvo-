@@ -63,6 +63,34 @@ jobs:
           set -euo pipefail
           timeout 900s godot --headless --path . --script res://tests/gameplay/progression_items_v18.gd 2>&1 | tee ia6-progression-v18.log
           if grep -E '^PROGRESSION_V18.*FAIL|SCRIPT ERROR|Parse Error' ia6-progression-v18.log; then exit 1; fi
+      - name: Preparar oraculos originales de conexiones sin alterar codigo ni catalogo
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p .godot/item_audit_v1 .godot/item_connections_v1
+          sha256sum modules/inventory/item_connections_v1.json > ia6-connection-profile-before.sha
+          node tools/item_audit/native_inventory.cjs 2>&1 | tee ia6-item-native-inventory.log
+          test -s .godot/item_audit_v1/native_inventory.json
+          python -B tools/item_audit/prepare_connections_v1.py 2>&1 | tee ia6-item-prepare.log
+          sha256sum -c ia6-connection-profile-before.sha
+          test -s .godot/item_connections_v1/source_machine_rows.json
+          test -s .godot/item_connections_v1/machine_fixtures.json
+          timeout 180s godot --headless --path . --script res://tests/gameplay/item_inventory_export.gd 2>&1 | tee ia6-item-eligibility.log
+          grep -E '^ITEM_GODOT_INVENTORY items=[1-9][0-9]*' ia6-item-eligibility.log
+          test -s .godot/item_audit_v1/godot_inventory.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          for p in (
+              '.godot/item_audit_v1/native_inventory.json',
+              '.godot/item_audit_v1/godot_inventory.json',
+              '.godot/item_connections_v1/source_machine_rows.json',
+              '.godot/item_connections_v1/machine_fixtures.json',
+          ):
+              obj=json.loads(Path(p).read_text(encoding='utf-8'))
+              assert obj, p
+              print('IA6_CONNECTION_FIXTURE_READY', p)
+          PY
       - name: Regresion conexiones de objetos/bolsa
         shell: bash
         run: |
