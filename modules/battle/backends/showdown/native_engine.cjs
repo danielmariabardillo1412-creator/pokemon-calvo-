@@ -94,9 +94,41 @@ function serialize(battle) {
   return snapshot;
 }
 function restore(snapshot) {
-  const b = Battle.fromJSON(clone(snapshot));
-  b.restart(() => {});
-  return b;
+  // @pkmn/sim 0.10.11 State.deserializePokemon aligns baseMoveSlots to
+  // moveSlots by index without checking the latter's length (state.js:210).
+  // Transform keeps the original base move slots while replacing the active
+  // move slots with the target's, which may contain fewer entries.
+  // Add TEMPORARY virtual slots to a private clone solely for deserialization;
+  // remove them before the battle is used. Canonical snapshots, PP, RNG and
+  // the real transformed moves remain unchanged.
+  const state = clone(snapshot), padding = [];
+  for (let si = 0; si < (state.sides?.length ?? 0); si++) {
+    const side = state.sides[si];
+    for (let pi = 0; pi < (side.pokemon?.length ?? 0); pi++) {
+      const p = side.pokemon[pi];
+      if (!p.transformed || !Array.isArray(p.baseMoveSlots) ||
+          !Array.isArray(p.moveSlots) || p.baseMoveSlots.length <= p.moveSlots.length) continue;
+      const count = p.moveSlots.length;
+      if (!count || p.baseMoveSlots.length > 4) throw Error('Invalid transformed move-slot snapshot');
+      while (p.moveSlots.length < p.baseMoveSlots.length) {
+        p.moveSlots.push({...clone(p.moveSlots[0]), virtual: true});
+      }
+      padding.push([si, pi, count]);
+    }
+  }
+  const b = Battle.fromJSON(state);
+  try {
+    for (const [si, pi, count] of padding) {
+      const p = b.sides[si].pokemon[pi];
+      if (!p || p.moveSlots.length < count) throw Error('Transformed move-slot recovery failed');
+      p.moveSlots.length = count;
+    }
+    b.restart(() => {});
+    return b;
+  } catch (error) {
+    b.destroy();
+    throw error;
+  }
 }
 
 function observeSubstitutes(b) {
