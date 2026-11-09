@@ -70,6 +70,10 @@ La regresión anterior de `evolution_condition_resolver_w04.gd` está conservada
 - `CAMP006_W04_MILCERY_L2 PASS completed=3 last_executed=06 deferred=04 blocked=05,06 checks=150`
 - `CAMP005_W04_PY PASS blocks=10 checks=673` y `CAMP005_W04_GODOT PASS blocks=10 checks=1423`.
 
-**Significado:** CI exitosa certifica **resolver puro, catálogo y regresiones**, NO giro jugable ni evolución Alcremie L3. Un segundo run tras consolidar el CSV debe quedar también verde; su resultado se añadirá sin modificar la semántica.
+**Significado:** CI exitosa certifica **resolver puro, catálogo y regresiones**, NO giro jugable ni evolución Alcremie L3.
+
+**Recibo definitivo de CSV consolidado:** [run #42715401401](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/42715401401), SHA probado `889f50b4a44e8e5c4a0ac474b8d869098dfee0ab`, **completed SUCCESS**. Se repitieron y aprobaron todos los pasos: alcance `completed=3 last_executed=06 deferred=04 rows=5`, Python CAMP006 211, Godot CAMP006 326, resolver previo 91, resolver Milcery 150, regresiones CAMP005 Python 673 y Godot 1423. La quinta fila está `BLOCKED_SPIN_FORM_PRODUCERS_VERIFIED`, no `PASS_L3`. El presente añadido documental no altera código ni workflow ni exige nueva CI.
+
+**Difusión a IA6:** punto de integración preciso pendiente: productor Overworld de giro completado, reglas canónicas de selección de crema + calendario y campo persistente de forma/SaveV2, y transacción equipamiento/evolución/consumo con rollback. La ventana W04 se detiene, sin pasar al 07.
 
 **Para IA6:** resolver, test y ticket listos. Es necesaria asignación explícita de productor A+B+C o nuevo gate de tarea independiente. No continuar bloque07 ni sumar 04/05/06 a `completed`.
