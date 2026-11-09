@@ -704,7 +704,8 @@ func field_prepare_native_encounter(zone_id: StringName) -> Dictionary:
 
 
 func field_commit_repelled_encounter_rng(next_rng: int) -> void:
-	if _director != null and next_rng >= 0:
+	# RNG.state is a signed 64-bit value; negative states are valid.
+	if _director != null:
 		_director._encounter_rng.state = next_rng
 
 
