@@ -1,3 +1,13 @@
+# IA6 — REFERENCIA OPERATIVA VIGENTE · 9 DE NOVIEMBRE DE 2026
+
+**INTEGRACIÓN CERTIFICADA MÁS RECIENTE:** [IA6_INTEGRATION_CERTIFICATION_V3_20261109.md](IA6_INTEGRATION_CERTIFICATION_V3_20261109.md). CI [#42701239557](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/42701239557) `completed/success` en SHA `f4a5687bff1aaf0fb443c36ca4c2873f5d0ac54e` de `codex/calvo-ia6-integration-20261109`. Test de menta desde bolsa a **FieldNativeSave real** 18 PASS, además de W01 Transform, W02 3 mentas, W03 Cuerda Huida y W05 Libros mochila L3, V18 y conexiones. Ningún merge a main/V28/PR118; no toda la campaña de objetos está integrada.
+
+**NUEVA ORDEN AUTORIZADA PARA W03:** [CAMPAIGN_006_W03_BLOCK03_REPEL_L3_WORLD_SEAM_AUTH_20261109.md](CAMPAIGN_006_W03_BLOCK03_REPEL_L3_WORLD_SEAM_AUTH_20261109.md) permite solo en rama W03 los seams de `field_demo.gd` y `field_native_bridge.gd` listados para terminar 03 L3, con RNG consumido una vez, SaveV2 `world.repel` compatible y sin modificar `modules/save/**`. No acreditar L3 antes de pruebas reales.
+
+**PENDIENTE IA6:** gate global de regresiones W01/W02 en árbol combinado, revisión visual GPU, integración segura productor de encuentros, sistema de sexo/día/luna y política de niveles de intercambio, EXP Share con participación real. Informes V2 y anteriores debajo son históricos y no sustituyen esta puerta.
+
+---
+
 # IA6 — ESTADO VIGENTE TRAS INTEGRACIÓN CONJUNTA · 2026-11-09
 
 **Referencia PRIORITARIA para continuidad:** [IA6_INTEGRATION_CERTIFICATION_V2_20261109.md](IA6_INTEGRATION_CERTIFICATION_V2_20261109.md). GitHub Actions [#42700066031](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/42700066031) `completed/success`, SHA exacto `251617a8bdff0b095f3f70273f3dc29fafcf74d0` en **rama aislada** `codex/calvo-ia6-integration-20261109`.
