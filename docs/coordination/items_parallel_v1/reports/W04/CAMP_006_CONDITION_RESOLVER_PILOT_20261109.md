@@ -47,6 +47,20 @@ El workflow `.github/workflows/parallel-camp006-w04-autoci.yml` incorpora un pas
 
 ## Evidencia CI
 
-**Pendiente de adjuntar:** ejecutar GitHub Actions sobre SHA que incluya módulo, test, workflow y guardas; exigir un recibo `CAMP006_W04_CONDITION_RESOLVER cases=4 positives=4 status=PURE_L2_NOT_GAMEPLAY_L3 completed=3 last_executed=05 deferred=04` y `CAMP006_W04_RESOLVER_L2 PASS completed=3 last_executed=05 deferred=04 checks=N`. Además, los cuatro pasos existentes (CAMP006 Python/Godot y CAMP005 Python/Godot) deben mantener éxito. Cualquier `FAIL` requiere reparación antes de certificar el piloto.
+**CI de ejecución final verificada:** [GitHub Actions #42697462612](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/42697462612) — **completed/success**, SHA probado `e9ee49618fa2388cb352afbf338e270b6cec26b9`. En una ejecución previa fallaron negativos del nuevo test (`#42697089539`); se repararon el tratamiento de enteros canónicos importados como JSON numérico y el contrato de `held_item_consumed`. No se reutilizó la CI fallida como evidencia positiva.
+
+Recibos observados en los logs del run final:
+
+- `CAMP006_W04_SCOPE PASS completed=3 last_executed=05 deferred=04 rows=4`
+- `CAMP006_W04_CONDITION_RESOLVER cases=4 positives=4 status=PURE_L2_NOT_GAMEPLAY_L3 completed=3 last_executed=05 deferred=04`
+- `CAMP006_W04_RESOLVER_L2 PASS completed=3 last_executed=05 deferred=04 checks=91` (incluye negativos y comprobaciones de pureza; NO 91 evoluciones)
+- `CAMP006_W04_PY PASS completed=3 last_executed=05 deferred=04 checks=176`
+- `CAMP006_W04_GODOT PASS completed=3 last_executed=05 deferred=04 checks=304`
+- `CAMP005_W04_PY PASS blocks=10 checks=673`
+- `CAMP005_W04_GODOT PASS blocks=10 checks=1423`
+
+Todos los pasos del workflow, incluida la regresión CAMP005, finalizaron **success**. La prueba del resolver obtiene cuatro positivos con **contextos inyectados de unidad**: es evidencia del predicado puro, NO de un productor real ni de un camino de evolución conectado a gameplay.
+
+**Cambio de clasificación: ninguno.** La fila 05 sigue `BLOCKED_PRODUCER_VERIFIED`, `credited_completion=false`, `completed=3`. Se entrega a IA6 módulo+pruebas+contrato para que decida propiedad y fuente de los hechos antes de cualquier integración L3.
 
 **Archivos compartidos no modificados:** `CreatureInstance`, `CreatureFactory`, `ProgressionSystem`, `EvolutionSystem`, `FieldItemService`, SaveV2, `field_demo.gd`, `main`, V28, PR #118, rama árbitra y demás ramas.
