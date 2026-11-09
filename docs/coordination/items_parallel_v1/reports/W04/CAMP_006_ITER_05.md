@@ -66,3 +66,21 @@ Recibos textuales observados:
 Los nueve recibos L3 anteriores (tres manzanas, cuatro vasijas por especie, dos equipables) aparecen en los logs. Ningún recibo L2/L3 de evolución para `oval_stone`, `dawn_stone` ni `peat_block` se ha emitido: **no corresponde**. El contador real `completed=3` permanece invariado. La CI consolidada deberá verificarse de nuevo después de publicar el CSV actualizado.
 
 **Resultado del bloque05:** diagnóstico y ticket único de productores completados; **implementación funcional no completada**. Se recomienda IA6 habilitar los productores compartidos o autorizar continuar con una familia independiente, sin conceder falsamente el bloque 05.
+
+## CI05 sobre CSV consolidado: segundo run satisfactorio
+
+[GitHub Actions #42679483422](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/42679483422), SHA `1cdeed28af5d222fc21dddb9000ecdc6e20bb309`, terminó **completed/success** con progreso de fila05 clasificado `BLOCKED_PRODUCER_VERIFIED`.
+
+Recibos:
+- `CAMP006_W04_SCOPE PASS completed=3 last_executed=05 deferred=04 rows=4`;
+- `CAMP006_W04_PY PASS completed=3 last_executed=05 deferred=04 checks=140`;
+- `CAMP006_W04_GODOT PASS completed=3 last_executed=05 deferred=04 checks=304`;
+- `CAMP005_W04_PY PASS blocks=10 checks=673`;
+- `CAMP005_W04_GODOT PASS blocks=10 checks=1423`;
+- `CAMP006_W04_BLOCK05 status=BLOCKED_MISSING_SHARED_PRODUCERS completed=3 last_executed=05 deferred=04` dos veces (Python y Godot).
+
+**CI exitosa certifica conservación de pruebas y diagnóstico coherente, NO que el bloque05 evolucione Pokémon.** En particular, no se ha modificado ninguna función de gameplay para simular sexo, día o luna, ni hay evidencia de evolución positiva L2/L3.
+
+Se ha cerrado el trabajo de investigación de la fila05 y trasladado el contrato preciso a IA6 mediante este informe. W04 conserva `completed=3`, `last_executed_id=05`, `deferred=[04]`; 05 sigue bloqueado por productor y 04 por política. Prohibido sumar 04/05 al total funcional.
+
+**Pausar W04** hasta nueva autorización de IA6 para integrar productores o cambiar de familia. CI se ejecutó con el CSV final; este añadido documental no activa otra ejecución.
