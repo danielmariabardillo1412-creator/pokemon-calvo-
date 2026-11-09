@@ -45,7 +45,7 @@ def main():
     fx = json.loads((ROOT / "tests/fixtures/parallel_items/w04_campaign_006.json").read_text(encoding="utf-8"))
     check(fx["worker"] == "W04" and fx["campaign"] == "CAMP_006" and fx["kind"] == "INTEGRATION_BACKLOG",
           "identity and non-new campaign")
-    check(fx["new_item_ids"] == 0 and len(fx["blocks"]) == 3, "no new objects; exactly three authorized blocks")
+    check(fx["new_item_ids"] == 0 and len(fx["blocks"]) == 4, "three preserved plus 05 blocked, no additions")
     block = fx["blocks"][0]
     check(block["block"] == "01" and block["ids"] == list(IDS) and block["family"] == "EVOLUTION_E2E",
           "block 01 queue scope")
@@ -74,7 +74,8 @@ def main():
     if q is not None:
         check(q[0]["bloque"] == "01" and q[0]["ids"].split(";") == list(IDS) and q[1]["bloque"] == "02" and q[1]["ids"].split(";") == list(POTS_02) and q[2]["bloque"] == "03" and q[2]["ids"].split(";") == list(TRADE_03), "official queue copied unchanged")
     progress = rows(BASE / "reports/W04/CAMP_006_PROGRESO.csv")
-    check(len(progress) == 3 and progress[0]["bloque"] == "01" and progress[0]["ids"].split(";") == list(IDS),
+    check(len(progress) == 4 and [r["bloque"] for r in progress] == ["01", "02", "03", "05"]
+          and progress[0]["ids"].split(";") == list(IDS),
           "first progress row retained")
     check(progress[1]["bloque"] == "02" and progress[1]["ids"].split(";") == list(POTS_02),
           "progress row02 exact scope")
@@ -83,6 +84,9 @@ def main():
     check(progress[2]["bloque"] == "03" and progress[2]["ids"].split(";") == list(TRADE_03)
           and progress[2]["estado"] in ("EN_CI_AUTOMATICA", "DEPENDENCIA_DOCUMENTADA"),
           "03 exact official scope, positive held pilot without level approval")
+    check(progress[3]["ids"] == "oval_stone;dawn_stone;peat_block"
+          and progress[3]["estado"] in ("BLOCKED_PRODUCER_CI_PENDING", "BLOCKED_PRODUCER_VERIFIED"),
+          "05 diagnostic only; no 04 row or fabricated PASS")
     check(progress[0]["estado"] in ("ENTREGADO_PENDIENTE_CI", "CI_PASS_VERIFICADO"),
           "estado compatible con entrega pendiente o CI aprobada")
     if progress[0]["estado"] == "CI_PASS_VERIFICADO":
@@ -116,7 +120,7 @@ def main():
         'exactly_one_consumed', 'persistent_stats_and_moves', 'cannot_evolve_twice',
         'bridge.save_game()', 'bridge.load_game()', 'evolved_target_loaded',
         'spent_apple_and_party_loaded', 'attributes_loaded',
-        'CAMP006_W04_GODOT PASS blocks=3 checks='
+        'CAMP006_W04_GODOT PASS completed=3 last_executed=05 deferred=04 checks='
     ):
         check(token in runner, "Godot L3 runner missing real observable action: " + token)
     # 02: canonical forms exist (pokemon-form API) but CreatureInstance and SaveV2
@@ -166,7 +170,7 @@ def main():
                   "02_persistent_attributes_preserved", "02_native_scene_save",
                   "02_native_scene_reload", "02_savev2_target_and_bag",
                   "02_savev2_attributes", "02_four_authorized_pots_cups",
-                  "CAMP006_W04_POT id=", "CAMP006_W04_GODOT PASS blocks=3 checks="):
+                  "CAMP006_W04_POT id=", "CAMP006_W04_GODOT PASS completed=3 last_executed=05 deferred=04 checks="):
         check(token in runner, "Godot must exercise real scene path: " + token)
     # 03 adds a distinct L3 feature (the real demo equips/unequips and persists
     # held trade items), not a repeated negative proof about unapproved levels.
@@ -235,9 +239,77 @@ def main():
                   "03_held_item_restored_through_savev2",
                   "03_positive_unequip_after_savev2",
                   "03_two_held_trade_routes_only",
-                  "CAMP006_W04_TRADE_HELD id=", "CAMP006_W04_GODOT PASS blocks=3 checks="):
+                  "CAMP006_W04_TRADE_HELD id=", "CAMP006_W04_GODOT PASS completed=3 last_executed=05 deferred=04 checks="):
         check(token in runner, "03 Godot L3 missing observable contract " + token)
-    print(f"CAMP006_W04_PY PASS blocks=3 checks={n}")
+
+    # Official IA6 exception: 04 deferred, 05 investigated with no positive
+    # evolution source. Previous 3 completed blocks remain the only credits.
+    state = fx["execution_state"]
+    check(state["last_executed_id"] == "05" and state["deferred"] == ["04"]
+          and state["completed"] == 3 and state["completed_ids"] == ["01", "02", "03"]
+          and state["evaluated_ids"] == ["01", "02", "03", "05"]
+          and state["blocked_ids"] == ["05"], "05 evaluated; completed remains 3")
+    deferred = fx["deferred_blocks"]
+    check(len(deferred) == 1 and deferred[0]["block"] == "04"
+          and deferred[0]["status"] == "DEFERRED_POR_POLITICA"
+          and deferred[0]["ids"] == ["dubious_disc", "magmarizer", "protector",
+                                     "reaper_cloth", "prism_scale", "sachet", "up_grade"],
+          "04 deferred outside functional list")
+    fifth = fx["blocks"][3]
+    check(fifth["block"] == "05" and fifth["family"] == "GENDER_TIME_CONDITIONS"
+          and fifth["ids"] == ["oval_stone", "dawn_stone", "peat_block"]
+          and fifth["status"] == "BLOCKED_MISSING_SHARED_PRODUCERS"
+          and fifth["level"] == "DATA_ONLY__BLOCKED_MISSING_SHARED_PRODUCERS"
+          and fifth["credited_completion"] is False and fifth["new_item_ids"] == 0,
+          "05 cannot be credited without a real evolution")
+    expected05 = {
+        ("oval_stone", "happiny", "chansey"): (51, "level-up", "oval-stone", None, "day"),
+        ("dawn_stone", "kirlia", "gallade"): (140, "use-item", None, 2, ""),
+        ("dawn_stone", "snorunt", "froslass"): (186, "use-item", None, 1, ""),
+        ("peat_block", "ursaring", "ursaluna"): (110, "use-item", None, None, "full-moon"),
+    }
+    cases05 = fifth["cases"]
+    check(len(cases05) == 4 and
+          {(r["item_id"], r["source"], r["target"]):
+           (r["chain"], r["trigger"], r["held_item"], r["gender"], r["time_of_day"])
+           for r in cases05} == expected05,
+          "05 real condition matrix: held+day, male, female, full moon")
+    for route in cases05:
+        chain = json.loads((ROOT / f'data/api/v2/evolution-chain/{route["chain"]}/index.json').read_text(encoding="utf-8"))
+        def traverse(node, parent=None):
+            for d in node["evolution_details"]:
+                yield parent, node["species"]["name"], d
+            for nxt in node["evolves_to"]:
+                yield from traverse(nxt, node["species"]["name"])
+        matching = [d for a, b, d in traverse(chain["chain"]) if
+                    a == route["source"] and b == route["target"]
+                    and d["trigger"]["name"] == route["trigger"]
+                    and (d["item"]["name"] if d["item"] else None) == route.get("canonical_item")
+                    and (d["held_item"]["name"] if d["held_item"] else None) == route["held_item"]
+                    and d["gender"] == route["gender"] and d["time_of_day"] == route["time_of_day"]]
+        check(len(matching) == 1 and matching[0]["min_level"] is None,
+              "05 authentic PokeAPI route, no invented levels " + route["source"])
+    contract = fifth["contract"]
+    check(contract["owner"].startswith("IA6") and
+          "CreatureInstance" in contract["producer_gender"] and
+          "SaveV2" in contract["producer_gender"] and
+          "daypart" in contract["producer_day"] and
+          "moon-phase" in contract["producer_moon"] and
+          contract["positive_status"].startswith("NONE"),
+          "05 one precise shared producer contract, not a fake L2/L3")
+    check('"gender":' not in creature and '"gender_id":' not in creature and
+          '"sex":' not in creature, "05 individual gender missing from persistence")
+    level_ctx = evo.split("static func level_up_context(", 1)[1].split("static func _stat_relation_matches(", 1)[0]
+    check('context["time_of_day"]' not in level_ctx and
+          'context["moon_phase"]' not in level_ctx and
+          'context["held_item_id"]' not in level_ctx,
+          "05 authoritative day/moon/held not produced by level progression")
+    check("func _audit_conditions_05(" in runner and
+          "CAMP006_W04_BLOCK05 status=BLOCKED_MISSING_SHARED_PRODUCERS" in runner and
+          "CAMP006_W04_GODOT PASS completed=3 last_executed=05 deferred=04 checks=" in runner,
+          "05 runner preserves previous gameplay while refusing fictional evolutions")
+    print("CAMP006_W04_BLOCK05 status=BLOCKED_MISSING_SHARED_PRODUCERS completed=3 last_executed=05 deferred=04")
+    print(f"CAMP006_W04_PY PASS completed=3 last_executed=05 deferred=04 checks={n}")
 
 
 if __name__ == "__main__":
