@@ -8,6 +8,7 @@ on:
       - 'tests/tools/test_parallel_items_w04_campaign_006.py'
       - 'tests/gameplay/parallel_items_w04_campaign_006.gd'
       - 'tests/gameplay/parallel_items_w04_condition_resolver.gd'
+      - 'tests/gameplay/parallel_items_w04_milcery_resolver.gd'
       - 'tests/fixtures/parallel_items/w04_campaign_006.json'
       - 'docs/coordination/items_parallel_v1/reports/W04/CAMP_006_PROGRESO.csv'
       - 'modules/**'
@@ -42,21 +43,24 @@ jobs:
           f = json.loads(Path("tests/fixtures/parallel_items/w04_campaign_006.json").read_text())
           assert f["worker"] == "W04" and f["campaign"] == "CAMP_006"
           ids = [r["bloque"] for r in p]
-          assert len(p) == len(f["blocks"]) == 4 and ids == ["01", "02", "03", "05"], ids
+          assert len(p) == len(f["blocks"]) == 5 and ids == ["01", "02", "03", "05", "06"], ids
           assert ids == [b["block"] for b in f["blocks"]]
           assert all(r["ids"].split(";") == f["blocks"][i]["ids"] for i, r in enumerate(p))
           assert p[0]["ids"] == "sweet_apple;tart_apple;syrupy_apple"
           assert p[3]["ids"] == "oval_stone;dawn_stone;peat_block"
+          assert p[4]["ids"] == "berry_sweet;clover_sweet;flower_sweet;love_sweet;ribbon_sweet;star_sweet;strawberry_sweet"
           assert p[3]["estado"] in ("BLOCKED_PRODUCER_CI_PENDING", "BLOCKED_PRODUCER_VERIFIED")
+          assert p[4]["estado"] in ("BLOCKED_SPIN_FORM_PRODUCERS_CI_PENDING", "BLOCKED_SPIN_FORM_PRODUCERS_VERIFIED")
           state = f["execution_state"]
-          assert state["last_executed_id"] == "05" and state["deferred"] == ["04"]
+          assert state["last_executed_id"] == "06" and state["deferred"] == ["04"]
           assert state["completed"] == 3 and state["completed_ids"] == ["01", "02", "03"]
-          assert state["evaluated_ids"] == ids and state["blocked_ids"] == ["05"]
+          assert state["evaluated_ids"] == ids and state["blocked_ids"] == ["05", "06"]
           assert len(f["deferred_blocks"]) == 1 and f["deferred_blocks"][0]["block"] == "04"
           assert f["blocks"][3]["credited_completion"] is False
+          assert f["blocks"][4]["credited_completion"] is False and f["blocks"][4]["block"] == "06"
           with open(os.environ["GITHUB_OUTPUT"], "a") as out:
-              out.write("completed=3\nlast_executed=05\ndeferred=04\n")
-          print("CAMP006_W04_SCOPE PASS completed=3 last_executed=05 deferred=04 rows=4")
+              out.write("completed=3\nlast_executed=06\ndeferred=04\n")
+          print("CAMP006_W04_SCOPE PASS completed=3 last_executed=06 deferred=04 rows=5")
           PY
       - uses: chickensoft-games/setup-godot@v2.4.1
         with:
@@ -93,8 +97,15 @@ jobs:
         run: |
           set -euo pipefail
           timeout 1100s godot --headless --path . --script res://tests/gameplay/parallel_items_w04_condition_resolver.gd 2>&1 | tee camp006-w04-resolver-l2.log
-          grep -E "^CAMP006_W04_CONDITION_RESOLVER cases=4 positives=4 status=PURE_L2_NOT_GAMEPLAY_L3 completed=3 last_executed=05 deferred=04$" camp006-w04-resolver-l2.log
-          grep -E "^CAMP006_W04_RESOLVER_L2 PASS completed=3 last_executed=05 deferred=04 checks=[1-9][0-9]*$" camp006-w04-resolver-l2.log
+          grep -E "^CAMP006_W04_CONDITION_RESOLVER cases=4 positives=4 status=PURE_L2_NOT_GAMEPLAY_L3 completed=3 last_executed=06 deferred=04$" camp006-w04-resolver-l2.log
+          grep -E "^CAMP006_W04_RESOLVER_L2 PASS completed=3 last_executed=06 deferred=04 checks=[1-9][0-9]*$" camp006-w04-resolver-l2.log
+      - name: CAMP006 Milcery giro y 63 formas resolver puro NO L3
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 1100s godot --headless --path . --script res://tests/gameplay/parallel_items_w04_milcery_resolver.gd 2>&1 | tee camp006-w04-milcery-l2.log
+          grep -E "^CAMP006_W04_MILCERY_RESOLVER sweets=7 canonical_forms=63 pure_precondition_positives=7 status=NOT_L3 completed=3 deferred=04 blocked=05,06$" camp006-w04-milcery-l2.log
+          grep -E "^CAMP006_W04_MILCERY_L2 PASS completed=3 last_executed=06 deferred=04 blocked=05,06 checks=[1-9][0-9]*$" camp006-w04-milcery-l2.log
       - name: Detectar cambios de produccion
         id: changed
         shell: bash
@@ -106,7 +117,7 @@ jobs:
             echo "modules=false" >> "$GITHUB_OUTPUT"
           fi
       - name: Regresion completa CAMP005 al primer bloque y en hitos
-        if: steps.gate.outputs.last_executed == '01' || steps.gate.outputs.last_executed == '05' || steps.gate.outputs.last_executed == '10' || steps.changed.outputs.modules == 'true'
+        if: steps.gate.outputs.last_executed == '01' || steps.gate.outputs.last_executed == '05' || steps.gate.outputs.last_executed == '06' || steps.gate.outputs.last_executed == '10' || steps.changed.outputs.modules == 'true'
         shell: bash
         run: |
           set -euo pipefail
