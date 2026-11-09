@@ -82,7 +82,12 @@ func _valid_creature(c: CreatureInstance, catalogs: DefinitionCatalog, policy: R
 	if not policy.form_allowed(base, String(c.species_id) if base != String(c.species_id) else ""): return false
 	if c.ability_id != &"" and not policy.ability_allowed(String(c.ability_id)): return false
 	if c.held_item_id != &"" and catalogs.item(c.held_item_id) == null: return false
-	if c.stats.to_dict() != StatCalculator.compute(species.base_stat_block(), c.ivs, c.evs, c.nature_id, c.level).to_dict(): return false
+	# Mints alter effective stat nature, never the original nature_id. The
+	# SaveV2 decoder validates both identities; the field-native envelope must
+	# validate the same effective stats without rewriting legacy snapshots.
+	var stat_nature: StringName = c.effective_nature_id if c.effective_nature_id != &"" else c.nature_id
+	if not ProgressionRuleset.is_valid_nature(c.nature_id) or not ProgressionRuleset.is_valid_nature(stat_nature): return false
+	if c.stats.to_dict() != StatCalculator.compute(species.base_stat_block(), c.ivs, c.evs, stat_nature, c.level).to_dict(): return false
 	if c.current_hp < 0 or c.current_hp > c.stats.max_hp or not c.battle_transform_original.is_empty(): return false
 	if c.status_state.persistent_id not in [&"", &"burn", &"poison", &"badly_poisoned", &"paralysis", &"sleep", &"freeze"]: return false
 	for slot: BattleMoveSlot in c.moveset:
