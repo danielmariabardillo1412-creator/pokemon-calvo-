@@ -165,3 +165,16 @@ Autorización verificable: `docs/coordination/items_parallel_v1/CAMPAIGN_005_W01
 Fila 06 del progreso: `CI_PASS_VERIFICADO`, anclada al SHA de código y al run completos. El cambio de documentación/CSV causa una nueva CI de verificación de metadatos; el SHA funcional citado no cambia. **Próxima `p`:** confirmar la CI final de metadatos y ejecutar exclusivamente el bloque 07 `quick_powder;razor_claw;razor_fang`; no adelantarse a ese bloque ahora.
 
 **Límite:** esta autorización no aprueba merge. IA6 debe revisar el parche antes de integración compartida. `main`, V28 y ramas ajenas intactos.
+
+## B07 — certificado definitivo (9 de noviembre de 2026)
+
+**Rama propia:** `codex/calvo-items-20261104-w01-camp005`. **SHA funcional:** `1e713a1925fe3fa582f21b5353e2c7f265ba928d`. **CI [#42689328705](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/42689328705) `completed/success`**, sobre ese mismo SHA.
+
+- `CAMP005_W01_SCOPE PASS blocks=7`, `CAMP005_W01_PY PASS blocks=7 checks=480`.
+- `CAMP005_W01_GODOT PASS blocks=7 checks=20049`; 63 escenarios, 222 pares caso-semilla, 666 modalidades acumuladas. B07 sumó 9 escenarios, 88 pares y 264 modalidades sin retirar ninguno de B01–B06.
+- `W01_B07_NATIVE_SPEED PASS cases=3`: Polvo Veloz dobla velocidad solo de Ditto sin transformar; Mew y Ditto transformado no reciben el bono, sin simular RNG.
+- Garra Afilada: crítico nativo por Foco Energía con testigo exclusivo frente a ausencia/reserva; negativos Reflejo y Gengar. Colmillo Agudo: ambos resultados de retroceso con 64 semillas reproducibles; negativos por ausencia, reserva, inmunidad y movimiento de estado. Sin consumo; restauración SaveV2 y propiedad comprobadas en los tres carriles.
+- `W01_B06_NATIVE_REPRO PASS cases=3 snapshots=3 switches=3` y `SHOWDOWN_TRANSACTIONS PASS 10` de nuevo. No cambios a `native_engine.cjs` ni otro módulo de producción.
+- CAMP004 íntegra **no se reejecutó** en B07 conforme a workflow (solo hitos 01/05/10 o cambios de `modules/`); permanece acreditada en run #42679854792 (Python 1028; Godot 16816).
+
+**Estado oficial: 7/10.** Fila 07 `CI_PASS_VERIFICADO`. La próxima `p` autoriza **solo** bloque 08: `odd_incense;rock_incense;rose_incense`. No empezar 08 ni publicar modificaciones fuera de W01 durante este turno. La CI que dispare el commit documental posterior se comprobará independientemente; su resultado no debe confundirse con el run funcional citado.
