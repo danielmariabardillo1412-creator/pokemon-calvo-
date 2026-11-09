@@ -38,8 +38,13 @@ function run(firstMove, actorItem, tag) {
     assert.equal(first.roster[0].active_id,'own');
     const nativeSnapshot=serialize(engine.sessions.get('battle').battle);
     const originalHash=hash(nativeSnapshot);
-    const transformedData=nativeSnapshot.p1?.pokemon?.find(p=>p.name==='calvo_p1_0') ??
-      nativeSnapshot.p1?.pokemon?.[0] ?? {};
+    const transformedData=nativeSnapshot.sides?.[0]?.pokemon?.[0] ?? {};
+    const activeBaseCount=transformedData.baseMoveSlots?.length;
+    const activeMoveCount=transformedData.moveSlots?.length;
+    if (firstMove === 'transform') {
+      assert.equal(transformedData.transformed,true);
+      assert(activeBaseCount>activeMoveCount,'Transformed base moves exceed active slots');
+    }
     console.log('W01_B06_TRANSFORM_SNAPSHOT_KEYS',tag,JSON.stringify({
       snapshotKeys:Object.keys(nativeSnapshot),pokemonKeys:Object.keys(transformedData),
       species:transformedData.species,
@@ -47,7 +52,8 @@ function run(firstMove, actorItem, tag) {
       set:transformedData.set,
       transformed:transformedData.transformed,
       moveSlots:transformedData.moveSlots,
-      baseMoveSlots:transformedData.baseMoveSlots
+      baseMoveSlots:transformedData.baseMoveSlots,
+      base_count:activeBaseCount, transformed_count:activeMoveCount
     }));
 
     console.log('W01_B06_REPRO_STATE',JSON.stringify({tag,transform:actor.transformed,
@@ -61,6 +67,14 @@ function run(firstMove, actorItem, tag) {
       direct=restore(nativeSnapshot);
       const rebuiltHash=hash(serialize(direct));
       assert.equal(rebuiltHash,originalHash,'Native serialize->fromJSON round-trip');
+      assert.equal(JSON.stringify(nativeSnapshot),JSON.stringify(serialize(engine.sessions.get('battle').battle)),
+        'Serializer must not mutate the original battle');
+      if (firstMove === 'transform') {
+        const malformed=structuredClone(nativeSnapshot);
+        malformed.sides[0].pokemon[0].moveSlots=[];
+        assert.throws(() => restore(malformed),/Invalid transformed move-slot snapshot/,
+          'Malformed active move slots must not be silently healed');
+      }
       console.log('W01_B06_REPRO_RESTORE_OK',tag,rebuiltHash);
     } catch(err) {
       console.error('W01_B06_REPRO_RESTORE_ERROR',tag,err.stack||String(err));

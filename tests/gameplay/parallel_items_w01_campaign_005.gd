@@ -415,8 +415,28 @@ func _probe_c005_transformed_stable(row: Dictionary, seed: int, mode: String) ->
 		not bool(transformed.own_consumed))
 	var damage_taken: int = int(before.hp) - int(transformed.hp)
 	check(mode + " Snorlax inflige daño en turno transformado", damage_taken > 0)
-	# El daño real y el evento transform quedan inmóviles en el resultado antes
-	# de estabilizar: el cambio posterior nunca redefine la prueba positiva.
+	# Gate IA6: restaurar el snapshot INTERMEDIO con Ditto transformado,
+	# antes de cambiar a reserva. No sustituir este control por guardado tardío.
+	var transformed_checkpoint: Dictionary = session.snapshot()
+	var mid_key: String = String(row.id) + "_" + str(seed) + "_" + mode + "_transformed"
+	var mid: Dictionary = await _restore_probe(
+		session, owner, mid_key + "_savev2", mode + " Ditto transformado SaveV2")
+	if not mid.get("valid", false):
+		return {"valid": false}
+	session = mid.session
+	owner = mid.owner
+	var transformed_restored: Dictionary = _frame_c003(session, id)
+	check(mode + " estado nativo Transformado idéntico tras SaveV2",
+		transformed_restored == transformed and session.snapshot() == transformed_checkpoint)
+	check(mode + " dueño y equipos conservados tras SaveV2 transformado",
+		JSON.stringify(_owner_data(owner)) == frozen)
+	var restored_roster: Array = session._checkpoint.get("roster", [])
+	check(mode + " Ditto sigue transformado tras restaurar, sin cambio de especie original",
+		not restored_roster.is_empty() and restored_roster[0].get("pokemon", []).size() == 2
+		and bool(restored_roster[0].pokemon[0].get("transformed", false))
+		and String(restored_roster[0].pokemon[0].get("species_id", "")) == "snorlax")
+	# El daño real del primer turno queda congelado; el cambio siguiente
+	# verifica de forma adicional que el backend acepta una orden legal.
 	var choice: String = _switch_choice(session, &"reserve")
 	var switch_action: Dictionary = await session.submit(choice, session.revision)
 	if not switch_action.get("accepted", false):
@@ -477,4 +497,4 @@ func _probe_c005_transformed_stable(row: Dictionary, seed: int, mode: String) ->
 		"damage": int(before.foe_hp) - int(transformed.foe_hp),
 		"physical_units": physical, "restored": stable_restored == stable,
 		"owner_unchanged": JSON.stringify(_owner_data(owner)) == frozen,
-		"save_equal": physical_restored == physical, "save_scope": "post_switch_stable"}
+		"save_equal": physical_restored == physical, "save_scope": "transform_and_post_switch_stable"}

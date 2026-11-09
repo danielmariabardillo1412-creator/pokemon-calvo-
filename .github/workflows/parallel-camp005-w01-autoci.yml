@@ -74,6 +74,13 @@ jobs:
           set -euo pipefail
           node tests/tools/repro_w01_camp005_b06_transform.cjs 2>&1 | tee camp005-w01-native-transform.log
           grep -E '^W01_B06_NATIVE_REPRO PASS cases=3 snapshots=3 switches=3$' camp005-w01-native-transform.log
+      - name: Native Showdown transacciones y turnos existentes
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p .godot/showdown_backend_checks
+          node tools/showdown_engine_probe/transaction_tests.cjs 2>&1 | tee camp005-w01-native-transaction-regression.log
+          grep -E '^SHOWDOWN_TRANSACTIONS PASS [1-9][0-9]*$' camp005-w01-native-transaction-regression.log
       - name: CAMP005 Python equipables
         shell: bash
         run: |
