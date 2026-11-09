@@ -40,13 +40,22 @@ jobs:
           p = list(csv.DictReader(open("docs/coordination/items_parallel_v1/reports/W04/CAMP_006_PROGRESO.csv")))
           f = json.loads(Path("tests/fixtures/parallel_items/w04_campaign_006.json").read_text())
           assert f["worker"] == "W04" and f["campaign"] == "CAMP_006"
-          assert 1 <= len(p) <= 10 and len(f["blocks"]) == len(p)
-          assert [x["bloque"] for x in p] == [f"{i+1:02d}" for i in range(len(p))]
-          assert all(x["ids"].split(";") == f["blocks"][i]["ids"] for i,x in enumerate(p))
+          ids = [r["bloque"] for r in p]
+          assert len(p) == len(f["blocks"]) == 4 and ids == ["01", "02", "03", "05"], ids
+          assert ids == [b["block"] for b in f["blocks"]]
+          assert all(r["ids"].split(";") == f["blocks"][i]["ids"] for i, r in enumerate(p))
           assert p[0]["ids"] == "sweet_apple;tart_apple;syrupy_apple"
+          assert p[3]["ids"] == "oval_stone;dawn_stone;peat_block"
+          assert p[3]["estado"] in ("BLOCKED_PRODUCER_CI_PENDING", "BLOCKED_PRODUCER_VERIFIED")
+          state = f["execution_state"]
+          assert state["last_executed_id"] == "05" and state["deferred"] == ["04"]
+          assert state["completed"] == 3 and state["completed_ids"] == ["01", "02", "03"]
+          assert state["evaluated_ids"] == ids and state["blocked_ids"] == ["05"]
+          assert len(f["deferred_blocks"]) == 1 and f["deferred_blocks"][0]["block"] == "04"
+          assert f["blocks"][3]["credited_completion"] is False
           with open(os.environ["GITHUB_OUTPUT"], "a") as out:
-              out.write(f"blocks={len(p)}\n")
-          print(f"CAMP006_W04_SCOPE PASS blocks={len(p)}")
+              out.write("completed=3\nlast_executed=05\ndeferred=04\n")
+          print("CAMP006_W04_SCOPE PASS completed=3 last_executed=05 deferred=04 rows=4")
           PY
       - uses: chickensoft-games/setup-godot@v2.4.1
         with:
@@ -66,18 +75,18 @@ jobs:
           cp ci/fixtures/pokeapi_reports/import_summary.json data/reports/import_summary.json
           godot --headless --path . --import 2>&1 | tee camp006-w04-import.log
           if grep -E 'SCRIPT ERROR|Parse Error' camp006-w04-import.log; then exit 1; fi
-      - name: CAMP006 contrato Python de integracion L3
+      - name: CAMP006 contrato Python L3 01-03 y condiciones05 no implementadas
         shell: bash
         run: |
           set -euo pipefail
           python -B tests/tools/test_parallel_items_w04_campaign_006.py --ci 2>&1 | tee camp006-w04-python.log
-          grep -E "^CAMP006_W04_PY PASS blocks=${{ steps.gate.outputs.blocks }} checks=[1-9][0-9]*$" camp006-w04-python.log
-      - name: CAMP006 Godot escena real mochila evolucion y SaveV2
+          grep -E "^CAMP006_W04_PY PASS completed=${{ steps.gate.outputs.completed }} last_executed=${{ steps.gate.outputs.last_executed }} deferred=${{ steps.gate.outputs.deferred }} checks=[1-9][0-9]*$" camp006-w04-python.log
+      - name: CAMP006 Godot escena real mochila y diagnóstico05 sin crédito de evolución
         shell: bash
         run: |
           set -euo pipefail
           timeout 1100s godot --headless --path . --script res://tests/gameplay/parallel_items_w04_campaign_006.gd 2>&1 | tee camp006-w04-godot.log
-          grep -E "^CAMP006_W04_GODOT PASS blocks=${{ steps.gate.outputs.blocks }} checks=[1-9][0-9]*$" camp006-w04-godot.log
+          grep -E "^CAMP006_W04_GODOT PASS completed=${{ steps.gate.outputs.completed }} last_executed=${{ steps.gate.outputs.last_executed }} deferred=${{ steps.gate.outputs.deferred }} checks=[1-9][0-9]*$" camp006-w04-godot.log
       - name: Detectar cambios de produccion
         id: changed
         shell: bash
@@ -89,7 +98,7 @@ jobs:
             echo "modules=false" >> "$GITHUB_OUTPUT"
           fi
       - name: Regresion completa CAMP005 al primer bloque y en hitos
-        if: steps.gate.outputs.blocks == '1' || steps.gate.outputs.blocks == '5' || steps.gate.outputs.blocks == '10' || steps.changed.outputs.modules == 'true'
+        if: steps.gate.outputs.last_executed == '01' || steps.gate.outputs.last_executed == '05' || steps.gate.outputs.last_executed == '10' || steps.changed.outputs.modules == 'true'
         shell: bash
         run: |
           set -euo pipefail
