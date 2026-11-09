@@ -45,6 +45,7 @@ func _run() -> void:
 	scene._director._tables[zone] = built.table
 	var original_seed: int = scene._director._next_battle_seed
 	for id: StringName in [&"repel", &"super_repel", &"max_repel"]:
+		owner = scene.field_collection()
 		ck("inventory add " + String(id), owner.inventory.add(id, 2))
 		var quantity: int = owner.inventory.quantity(id)
 		ck("open bag " + String(id), bag.open_bag())
@@ -59,6 +60,9 @@ func _run() -> void:
 		ck("enabled without target " + String(id), not bag._use.disabled)
 		bag._use.pressed.emit()
 		await process_frame
+		print("W03_REPEL_DEBUG id=", id, " bag_result=", bag._result.text,
+			" amount=", owner.inventory.quantity(id), " effect=", JSON.stringify(effect.to_dict()),
+			" field_use=", scene.field_can_use_items())
 		ck("one unit consumed " + String(id), owner.inventory.quantity(id) == quantity - 1)
 		var total: int = int(effect.DURATIONS[id])
 		ck("activated exact duration " + String(id), effect.active_id == id and effect.remaining_steps == total)
