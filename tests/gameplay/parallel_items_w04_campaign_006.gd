@@ -355,7 +355,7 @@ func _audit_conditions_05(fifth: Dictionary, fixture: Dictionary) -> void:
     # persistent individual gender and world day/moon producers.
     var state: Dictionary = fixture.get("execution_state", {})
     var deferred: Array = fixture.get("deferred_blocks", [])
-    check(String(state.get("last_executed_id", "")) == "05" and
+    check(String(state.get("last_executed_id", "")) == "06" and
         int(state.get("completed", -1)) == 3 and state.get("deferred", []) == ["04"] and
         deferred.size() == 1 and deferred[0].get("status", "") == "DEFERRED_POR_POLITICA",
         "05_ia6_gate_completed3_block04_deferred")
@@ -420,8 +420,57 @@ func _audit_conditions_05(fifth: Dictionary, fixture: Dictionary) -> void:
         check(not level_context.has("time_of_day") and not level_context.has("moon_phase") and
             not level_context.has("held_item_id"),
             "05_no_authoritative_day_moon_or_held_level_producer")
-    print("CAMP006_W04_BLOCK05 status=BLOCKED_MISSING_SHARED_PRODUCERS completed=3 last_executed=05 deferred=04")
+    print("CAMP006_W04_BLOCK05 status=BLOCKED_MISSING_SHARED_PRODUCERS completed=3 last_executed=06 deferred=04")
     # NEVER print a positive L2/L3 evolution receipt for these conditional routes.
+
+
+func _audit_milcery_06(block: Dictionary, fixture: Dictionary) -> void:
+    # Structural catalogue and integration boundary only. Pure predicates are
+    # tested separately; no spin event exists in the field demo.
+    var state: Dictionary = fixture.get("execution_state", {})
+    check(String(state.get("last_executed_id", "")) == "06" and
+        int(state.get("completed", -1)) == 3 and
+        state.get("deferred", []) == ["04"] and
+        state.get("blocked_ids", []) == ["05", "06"],
+        "06_IA6_scope_3_completed_04_deferred_05_06_pending")
+    var expected := ["berry_sweet", "clover_sweet", "flower_sweet",
+        "love_sweet", "ribbon_sweet", "star_sweet", "strawberry_sweet"]
+    check(block.get("block", "") == "06" and
+        block.get("ids", []) == expected and
+        block.get("status", "") == "BLOCKED_MISSING_SHARED_PRODUCERS" and
+        not bool(block.get("credited_completion", true)),
+        "06_seven_sweets_no_completed_credit")
+    var catalog: DefinitionCatalog = scene.field_definitions()
+    var milcery: CreatureSpecies = catalog.species(&"milcery") if catalog != null else null
+    var alcremie: CreatureSpecies = catalog.species(&"alcremie") if catalog != null else null
+    check(milcery != null and alcremie != null, "06_real_Milcery_and_Alcremie_in_catalog")
+    if milcery == null:
+        return
+    var spin_records: Array = []
+    for ev: EvolutionRecord in milcery.evolutions:
+        if ev.species_id == &"alcremie" and ev.trigger == &"spin":
+            spin_records.append(ev)
+    check(spin_records.size() == 1, "06_one_spin_route_not_seven_use_item_evolutions")
+    if spin_records.size() == 1:
+        check(EvolutionSystem.classify_record(spin_records[0], catalog, &"milcery") ==
+            EvolutionSystem.UNSUPPORTED, "06_spin_NOT_executable_in_gameplay")
+    var pokemon: Variant = JSON.parse_string(FileAccess.get_file_as_string(
+        "res://data/api/v2/pokemon/869/index.json"))
+    check(pokemon is Dictionary, "06_PokeAPI_form_catalog_available")
+    if pokemon is Dictionary:
+        var forms: Array = pokemon.get("forms", [])
+        check(forms.size() == 63, "06_63_canonical_forms")
+        for sweet: String in expected:
+            check(catalog.item(StringName(sweet)) != null, "06_existing_item_" + sweet)
+            var count := 0
+            for data: Dictionary in forms:
+                if String(data.get("name", "")).ends_with("-" + sweet.replace("_", "-")):
+                    count += 1
+            check(count == 9, "06_nine_canonical_form_candidates_" + sweet)
+    check(EvolutionSystem.evolution_candidates(milcery,
+        {"trigger": "spin", "item_id": &"berry_sweet"}, catalog).is_empty(),
+        "06_no_false_gameplay_evolution_for_equipped_sweet")
+    print("CAMP006_W04_BLOCK06 status=BLOCKED_MISSING_SHARED_PRODUCERS completed=3 last_executed=06 deferred=04 blocked=05,06")
 
 
 func _run() -> void:
@@ -431,11 +480,12 @@ func _run() -> void:
         finish()
         return
     var blocks: Array = fixture.get("blocks", [])
-    check(fixture.get("campaign") == "CAMP_006" and blocks.size() == 4 and
+    check(fixture.get("campaign") == "CAMP_006" and blocks.size() == 5 and
         blocks[0].get("block") == "01" and blocks[1].get("block") == "02" and
-        blocks[2].get("block") == "03" and blocks[3].get("block") == "05",
-        "blocks_01_02_03_05_no_credit04")
-    if blocks.size() != 4:
+        blocks[2].get("block") == "03" and blocks[3].get("block") == "05" and
+        blocks[4].get("block") == "06",
+        "blocks_01_02_03_05_06_no_credit04_05_06")
+    if blocks.size() != 5:
         finish()
         return
     scene = load("res://scenes/visual/field_demo.tscn").instantiate()
@@ -455,6 +505,7 @@ func _run() -> void:
     for caso: Dictionary in held_cases:
         await _case_trade_03(caso)
     _audit_conditions_05(blocks[3], fixture)
+    _audit_milcery_06(blocks[4], fixture)
     if scene != null and is_instance_valid(scene):
         scene.queue_free()
     await process_frame
@@ -465,7 +516,7 @@ func finish() -> void:
         return
     closed = true
     if errors.is_empty():
-        print("CAMP006_W04_GODOT PASS completed=3 last_executed=05 deferred=04 checks=", checks)
+        print("CAMP006_W04_GODOT PASS completed=3 last_executed=06 deferred=04 checks=", checks)
     else:
         print("CAMP006_W04_GODOT FAIL errors=", JSON.stringify(errors))
     quit(0 if errors.is_empty() else 1)
