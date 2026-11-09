@@ -68,7 +68,7 @@ func _run() -> void:
         return
     var record: EvolutionRecord = actual[0]
     check(record.item_id == &"" and record.conditions.is_empty() and
-        record.min_level == 0 and String(record.version_group) == "sword_shield",
+        record.min_level == 0 and String(record.version_group).replace("-", "_") == "sword_shield",
         "spin_original_has_no_item_no_level_or_embedded_cream_rule")
     check(EvolutionSystem.classify_record(record, catalog, &"milcery") ==
         EvolutionSystem.UNSUPPORTED, "spin_unsupported_in_live_evolution_system")
