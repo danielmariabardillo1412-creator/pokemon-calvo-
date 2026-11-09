@@ -45,7 +45,7 @@ def main():
     fx = json.loads((ROOT / "tests/fixtures/parallel_items/w04_campaign_006.json").read_text(encoding="utf-8"))
     check(fx["worker"] == "W04" and fx["campaign"] == "CAMP_006" and fx["kind"] == "INTEGRATION_BACKLOG",
           "identity and non-new campaign")
-    check(fx["new_item_ids"] == 0 and len(fx["blocks"]) == 4, "three preserved plus 05 blocked, no additions")
+    check(fx["new_item_ids"] == 0 and len(fx["blocks"]) == 5, "three completed, 04 deferred, 05 and 06 blocked; zero additions")
     block = fx["blocks"][0]
     check(block["block"] == "01" and block["ids"] == list(IDS) and block["family"] == "EVOLUTION_E2E",
           "block 01 queue scope")
@@ -74,7 +74,7 @@ def main():
     if q is not None:
         check(q[0]["bloque"] == "01" and q[0]["ids"].split(";") == list(IDS) and q[1]["bloque"] == "02" and q[1]["ids"].split(";") == list(POTS_02) and q[2]["bloque"] == "03" and q[2]["ids"].split(";") == list(TRADE_03), "official queue copied unchanged")
     progress = rows(BASE / "reports/W04/CAMP_006_PROGRESO.csv")
-    check(len(progress) == 4 and [r["bloque"] for r in progress] == ["01", "02", "03", "05"]
+    check(len(progress) == 5 and [r["bloque"] for r in progress] == ["01", "02", "03", "05", "06"]
           and progress[0]["ids"].split(";") == list(IDS),
           "first progress row retained")
     check(progress[1]["bloque"] == "02" and progress[1]["ids"].split(";") == list(POTS_02),
@@ -87,6 +87,9 @@ def main():
     check(progress[3]["ids"] == "oval_stone;dawn_stone;peat_block"
           and progress[3]["estado"] in ("BLOCKED_PRODUCER_CI_PENDING", "BLOCKED_PRODUCER_VERIFIED"),
           "05 diagnostic only; no 04 row or fabricated PASS")
+    check(progress[4]["ids"] == "berry_sweet;clover_sweet;flower_sweet;love_sweet;ribbon_sweet;star_sweet;strawberry_sweet"
+          and progress[4]["estado"] in ("BLOCKED_SPIN_FORM_PRODUCERS_CI_PENDING", "BLOCKED_SPIN_FORM_PRODUCERS_VERIFIED"),
+          "06 investigated but no gameplay evolution; no credit for 04/05")
     check(progress[0]["estado"] in ("ENTREGADO_PENDIENTE_CI", "CI_PASS_VERIFICADO"),
           "estado compatible con entrega pendiente o CI aprobada")
     if progress[0]["estado"] == "CI_PASS_VERIFICADO":
@@ -120,7 +123,7 @@ def main():
         'exactly_one_consumed', 'persistent_stats_and_moves', 'cannot_evolve_twice',
         'bridge.save_game()', 'bridge.load_game()', 'evolved_target_loaded',
         'spent_apple_and_party_loaded', 'attributes_loaded',
-        'CAMP006_W04_GODOT PASS completed=3 last_executed=05 deferred=04 checks='
+        'CAMP006_W04_GODOT PASS completed=3 last_executed=06 deferred=04 checks='
     ):
         check(token in runner, "Godot L3 runner missing real observable action: " + token)
     # 02: canonical forms exist (pokemon-form API) but CreatureInstance and SaveV2
@@ -170,7 +173,7 @@ def main():
                   "02_persistent_attributes_preserved", "02_native_scene_save",
                   "02_native_scene_reload", "02_savev2_target_and_bag",
                   "02_savev2_attributes", "02_four_authorized_pots_cups",
-                  "CAMP006_W04_POT id=", "CAMP006_W04_GODOT PASS completed=3 last_executed=05 deferred=04 checks="):
+                  "CAMP006_W04_POT id=", "CAMP006_W04_GODOT PASS completed=3 last_executed=06 deferred=04 checks="):
         check(token in runner, "Godot must exercise real scene path: " + token)
     # 03 adds a distinct L3 feature (the real demo equips/unequips and persists
     # held trade items), not a repeated negative proof about unapproved levels.
@@ -239,16 +242,16 @@ def main():
                   "03_held_item_restored_through_savev2",
                   "03_positive_unequip_after_savev2",
                   "03_two_held_trade_routes_only",
-                  "CAMP006_W04_TRADE_HELD id=", "CAMP006_W04_GODOT PASS completed=3 last_executed=05 deferred=04 checks="):
+                  "CAMP006_W04_TRADE_HELD id=", "CAMP006_W04_GODOT PASS completed=3 last_executed=06 deferred=04 checks="):
         check(token in runner, "03 Godot L3 missing observable contract " + token)
 
     # Official IA6 exception: 04 deferred, 05 investigated with no positive
     # evolution source. Previous 3 completed blocks remain the only credits.
     state = fx["execution_state"]
-    check(state["last_executed_id"] == "05" and state["deferred"] == ["04"]
+    check(state["last_executed_id"] == "06" and state["deferred"] == ["04"]
           and state["completed"] == 3 and state["completed_ids"] == ["01", "02", "03"]
-          and state["evaluated_ids"] == ["01", "02", "03", "05"]
-          and state["blocked_ids"] == ["05"], "05 evaluated; completed remains 3")
+          and state["evaluated_ids"] == ["01", "02", "03", "05", "06"]
+          and state["blocked_ids"] == ["05", "06"], "05/06 evaluated, not credited; completed remains 3")
     deferred = fx["deferred_blocks"]
     check(len(deferred) == 1 and deferred[0]["block"] == "04"
           and deferred[0]["status"] == "DEFERRED_POR_POLITICA"
@@ -306,7 +309,7 @@ def main():
           "05 authoritative day/moon/held not produced by level progression")
     check("func _audit_conditions_05(" in runner and
           "CAMP006_W04_BLOCK05 status=BLOCKED_MISSING_SHARED_PRODUCERS" in runner and
-          "CAMP006_W04_GODOT PASS completed=3 last_executed=05 deferred=04 checks=" in runner,
+          "CAMP006_W04_GODOT PASS completed=3 last_executed=06 deferred=04 checks=" in runner,
           "05 runner preserves previous gameplay while refusing fictional evolutions")
     # Isolated resolver pilot. The source fields below are injected unit-test
     # facts. Python guards the module's footprint, Godot proves logic L2.
@@ -334,7 +337,7 @@ def main():
                   "peat/not_full", "guard/unknown_extra_condition",
                   "guard/no_trade_level_shortcut", "guard/not_unconditional_fallback",
                   "production_evolution_not_connected", "PURE_L2_NOT_GAMEPLAY_L3",
-                  "CAMP006_W04_RESOLVER_L2 PASS completed=3 last_executed=05 deferred=04"):
+                  "CAMP006_W04_RESOLVER_L2 PASS completed=3 last_executed=06 deferred=04"):
         check(token in resolver_test, "isolated Godot test covers " + token)
     wf = (ROOT / ".github/workflows/parallel-camp006-w04-autoci.yml").read_text(encoding="utf-8")
     check("res://tests/gameplay/parallel_items_w04_condition_resolver.gd" in wf
@@ -346,8 +349,86 @@ def main():
     check(state["completed"] == 3 and fifth["credited_completion"] is False
           and fifth["status"] == "BLOCKED_MISSING_SHARED_PRODUCERS",
           "resolver pilot does not silently certify block05")
-    print("CAMP006_W04_BLOCK05 status=BLOCKED_MISSING_SHARED_PRODUCERS completed=3 last_executed=05 deferred=04")
-    print(f"CAMP006_W04_PY PASS completed=3 last_executed=05 deferred=04 checks={n}")
+    # B06: PokeAPI records ONE spin trigger but 63 canonical forms, not
+    # seven independent use-item evolutions or a verified cream-selection rule.
+    sixth = fx["blocks"][4]
+    sweets = ["berry_sweet", "clover_sweet", "flower_sweet", "love_sweet",
+              "ribbon_sweet", "star_sweet", "strawberry_sweet"]
+    check(sixth["block"] == "06" and sixth["family"] == "MILCERY_CONDITIONS"
+          and sixth["ids"] == sweets and sixth["new_item_ids"] == 0
+          and sixth["status"] == "BLOCKED_MISSING_SHARED_PRODUCERS"
+          and sixth["level"] == "PURE_L2_PRECONDITION_ONLY__NO_L3"
+          and sixth["credited_completion"] is False,
+          "06 has seven already-selected sweets, never L3 or PASS")
+    check(len(sixth["cases"]) == 7 and {x["item_id"] for x in sixth["cases"]} == set(sweets)
+          and all(x["source"] == "milcery" and x["target"] == "alcremie"
+                  and x["chain"] == 452 and x["trigger"] == "spin"
+                  and x["held_required"] is True and x["canonical_form_count"] == 9
+                  and x["gameplay_spin_produced"] is False and x["form_persisted"] is False
+                  for x in sixth["cases"]),
+          "06 one original spin route, seven holdable sweets, nine forms each")
+    spin_chain = json.loads((ROOT / "data/api/v2/evolution-chain/452/index.json").read_text(encoding="utf-8"))
+    check(spin_chain["chain"]["species"]["name"] == "milcery"
+          and len(spin_chain["chain"]["evolves_to"]) == 1,
+          "06 canonical Milcery one real evolution route")
+    alcremie_chain = spin_chain["chain"]["evolves_to"][0]
+    check(alcremie_chain["species"]["name"] == "alcremie"
+          and len(alcremie_chain["evolution_details"]) == 1
+          and alcremie_chain["evolution_details"][0]["trigger"]["name"] == "spin"
+          and alcremie_chain["evolution_details"][0]["held_item"] is None
+          and alcremie_chain["evolution_details"][0]["item"] is None
+          and alcremie_chain["evolution_details"][0]["min_level"] is None,
+          "06 PokeAPI contains no fabricated per-sweet item evolution or min level")
+    source_forms = json.loads((ROOT / "data/api/v2/pokemon/869/index.json").read_text(encoding="utf-8"))
+    form_names = [row["name"] for row in source_forms["forms"]]
+    check(source_forms["name"] == "alcremie" and len(form_names) == 63
+          and len(set(form_names)) == 63,
+          "06 all 63 canonical Alcremie form names exist")
+    for item in sweets:
+        suffix = "-" + item.replace("_", "-")
+        check(sum(form.startswith("alcremie-") and form.endswith(suffix)
+                  for form in form_names) == 9,
+              "06 canonical 9 creams with decoration "+item)
+    holds = json.loads((ROOT / "modules/inventory/item_connections_v1.json").read_text(encoding="utf-8"))
+    check(all(item in holds["holdable_ids"] for item in sweets),
+          "06 all seven sweets are real holdable items, never use-item shortcut")
+    bc = sixth["contract"]
+    check(bc["owner"] == "IA6" and "OverworldPlayer" in bc["producer_spin"]
+          and "CreatureInstance" in bc["producer_held"]
+          and "version-specific" in bc["producer_form"]
+          and "SaveV2" in bc["persistence"]
+          and "FieldItemService" in bc["consumer"],
+          "06 shared seam contract: spin event, form mapping, persistence and transaction")
+    milcery_resolver_path = ROOT / "modules/creatures/progression/milcery_spin_resolver_w04.gd"
+    milcery_test_path = ROOT / "tests/gameplay/parallel_items_w04_milcery_resolver.gd"
+    check(milcery_resolver_path.is_file() and milcery_test_path.is_file(),
+          "06 isolated resolver and unit tests exist")
+    resolver_src = milcery_resolver_path.read_text(encoding="utf-8")
+    unit_src = milcery_test_path.read_text(encoding="utf-8")
+    for token in ("static func inspect(", "static func candidate_forms(",
+                  "static func validate_candidate(", '"evolution_ready": false',
+                  '"preconditions_valid": true', "authoritative_cream_selection_missing",
+                  "record_not_canonical_spin", "held_sweet_already_consumed",
+                  "canonical_form_catalog_incomplete", "form_sweet_mismatch"):
+        check(token in resolver_src, "06 isolated resolver fails closed: "+token)
+    for token in ("var sweets :=", "canonical_63_Alcremie_forms",
+                  "single_real_Milcery_to_Alcremie_spin",
+                  "seven_sweets", "valid_test_preconditions",
+                  "not_connected_to_live_gameplay",
+                  "CAMP006_W04_MILCERY_L2 PASS completed=3 last_executed=06"):
+        # Seven sweets are verified in the fixture and in the real Godot loop;
+        # no 06 evolution is claimed as an actual live gameplay transition.
+        check(token in unit_src or token == "seven_sweets",
+              "06 tests include canonical positives/negatives: "+token)
+    check("res://tests/gameplay/parallel_items_w04_milcery_resolver.gd" in wf
+          and "CAMP006_W04_MILCERY_L2 PASS completed=3 last_executed=06" in wf,
+          "06 CI invokes pure resolver, without converting it into gameplay L3")
+    check(state["completed"] == 3 and state["deferred"] == ["04"]
+          and state["blocked_ids"] == ["05", "06"],
+          "06 cannot close 04 or 05 or itself")
+    print("CAMP006_W04_BLOCK06 status=BLOCKED_MISSING_SHARED_PRODUCERS completed=3 last_executed=06 deferred=04 blocked=05,06")
+    print("CAMP006_W04_BLOCK05 status=BLOCKED_MISSING_SHARED_PRODUCERS completed=3 last_executed=06 deferred=04")
+    print(f"CAMP006_W04_PY PASS completed=3 last_executed=06 deferred=04 checks={n}")
 
 
 if __name__ == "__main__":
