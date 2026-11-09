@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""IA1/W01 CAMP005 — contrato acumulativo autorizado para 9 bloques funcionales.
+"""IA1/W01 CAMP005 — contrato acumulativo autorizado para 10 bloques funcionales.
 
 No atribuye PASS de Godot: el recibo de efecto positivo corresponde al runner
 real tests/gameplay/parallel_items_w01_campaign_005.gd y a CI del mismo SHA.
@@ -31,6 +31,7 @@ BLOCK07_HOOKS = {"quick_powder": "onModifySpe", "razor_claw": "onModifyCritRatio
                  "razor_fang": "onModifyMove"}
 NATIVE_B07 = ROOT / "tests/tools/repro_w01_camp005_b07_native.cjs"
 NATIVE_B09 = ROOT / "tests/tools/repro_w01_camp005_b09_native.cjs"
+NATIVE_B10 = ROOT / "tests/tools/repro_w01_camp005_b10_native.cjs"
 SPECIES_HOOKS = {
     "deep_sea_scale": "onModifySpD",
     "deep_sea_tooth": "onModifySpA",
@@ -80,6 +81,17 @@ BLOCK09_CASES = {
     "lax_incense":[("accuracy","lax_incense_accuracy","mew","snorlax","reflect","tackle",list(range(1,17)),"accuracy_rng"),("never_miss","lax_incense_never_miss","mew","snorlax","reflect","aerial_ace",[19],"guaranteed_hit"),("status","lax_incense_status","mew","snorlax","reflect","amnesia",[19],"status_no_accuracy")]
 }
 B09_HOOKS = {"sea_incense":"onBasePower","full_incense":"","lax_incense":"onModifyAccuracy"}
+BLOCK10_CASES = {
+    "normal_gem": [("matching","gem_matching","tackle",[19,23]),
+                   ("nonmatching","gem_nonmatching","water_gun",[19]),
+                   ("status","gem_status","swords_dance",[19])],
+    "fire_gem": [("matching","gem_matching","fire_punch",[19,23]),
+                 ("nonmatching","gem_nonmatching","tackle",[19]),
+                 ("status","gem_status","sunny_day",[19])],
+    "water_gem": [("matching","gem_matching","surf",[19,23]),
+                  ("nonmatching","gem_nonmatching","tackle",[19]),
+                  ("status","gem_status","rain_dance",[19])],
+}
 # ID, tipo, ataque positivo y clave nativa; misma referencia ya probada en CAMP004.
 ITEMS = {
     "black_glasses": ("dark", "dark_pulse", "blackglasses"),
@@ -109,6 +121,9 @@ ITEMS = {
     "sea_incense": ("water", "water_gun", "seaincense"),
     "full_incense": ("order", "reflect", "fullincense"),
     "lax_incense": ("accuracy", "reflect", "laxincense"),
+    "normal_gem": ("normal", "tackle", "normalgem"),
+    "fire_gem": ("fire", "fire_punch", "firegem"),
+    "water_gem": ("water", "surf", "watergem"),
 }
 MODES = ["active", "none", "reserve"]
 STATES = {"EN_CI_AUTOMATICA", "ENTREGADO_PENDIENTE_CI",
@@ -161,9 +176,11 @@ def validate() -> int:
           "Octavo bloque fuera de encargo de IA6")
     check(queue[8]["ids"] == "sea_incense;full_incense;lax_incense",
           "Noveno bloque fuera de encargo de IA6")
+    check(queue[9]["ids"] == "normal_gem;fire_gem;water_gem",
+          "Décimo bloque fuera de encargo IA6")
 
     progress = rows(PROGRESS)
-    check(len(progress) == 9, "Bloque 09 exige progreso exacto 9/10")
+    check(len(progress) == 10, "Bloque 10 exige progreso exacto 10/10")
     first = progress[0]
     check(first["bloque"] == "01" and first["ids"] == queue[0]["ids"],
           "La fila 01 no pertenece a W01")
@@ -214,7 +231,13 @@ def validate() -> int:
           and eighth["ci_run"] == "42705717830", "Perdido certificado del bloque 08")
     ninth = progress[8]
     check(ninth["bloque"] == "09" and ninth["ids"] == queue[8]["ids"]
-          and ninth["estado"] in STATES, "Fila 09 incorrecta")
+          and ninth["estado"] == "CI_PASS_VERIFICADO"
+          and ninth["sha_pruebas"] == "db2339fca101db900ac7d266328701da62a0a90b"
+          and ninth["ci_run"] == "42713116537",
+          "Bloque 09 no conserva certificado oficial")
+    tenth = progress[9]
+    check(tenth["bloque"] == "10" and tenth["ids"] == queue[9]["ids"]
+          and tenth["estado"] in STATES, "Fila 10 no autorizada")
     check(bool(first["sha_pruebas"]) and bool(first["ci_run"]),
           "Progreso sin trazabilidad de estado pendiente")
 
@@ -263,8 +286,8 @@ def validate() -> int:
           and "foe(a).hp<foe(b).hp" in history,
           "Falta control histórico positivo/negativo de daño")
     for item, (kind, move, native) in ITEMS.items():
-        check(item in ";".join(r["ids"] for r in queue[:9]).split(";"),
-              "Objeto fuera de los nueve bloques autorizados " + item)
+        check(item in ";".join(r["ids"] for r in queue[:10]).split(";"),
+              "Objeto fuera de los diez bloques autorizados " + item)
         check(scope[item]["estado_contenido"] == "SELECCIONADO"
               and scope[item]["familia"] == "HELD_COMBAT_CANDIDATE",
               "Objeto no seleccionado: " + item)
@@ -273,12 +296,13 @@ def validate() -> int:
               and inventory[item]["native_id"] == native
               and ((item == "full_incense" and inventory[item]["native_hooks"] == "") or
                    (B09_HOOKS.get(item) or BLOCK07_HOOKS.get(item) or SPECIES_HOOKS.get(item) or
-                    ("onModifyMove" if item == "kings_rock" else "onBasePower"))
+                    ("onModifyMove" if item == "kings_rock" else
+                     "onSourceTryPrimaryHit" if item.endswith("_gem") else "onBasePower"))
                    in inventory[item]["native_hooks"]),
               "Objeto sin soporte nativo funcional: " + item)
         if (item != "kings_rock" and item not in SPECIES_HOOKS
                 and item not in BLOCK07_HOOKS and item not in B09_HOOKS
-                and not item.endswith("_incense")):
+                and not item.endswith("_incense") and not item.endswith("_gem")):
             check(f"{kind}:'{item}'" in history and f"{kind}:'{move}'" in history,
                   "Referencias de tipo y ataque incoherentes: " + item)
 
@@ -287,15 +311,15 @@ def validate() -> int:
           and data["campaign"] == "CAMP_005" and data["kind"] == "NEW_IDS"
           and data["format"] == "gen9calvounifiedv1", "Fixture CAMPAÑA_005 inválido")
     check(data["variants"] == MODES, "Falta un modo activo, sin objeto o reserva")
-    check(len(data["blocks"]) == 9
+    check(len(data["blocks"]) == 10
           and [b["block"] for b in data["blocks"]] ==
-              ["01", "02", "03", "04", "05", "06", "07", "08", "09"]
+              ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10"]
           and all(data["blocks"][i]["ids"] == list(ITEMS)[i*3:(i+1)*3]
-                  for i in range(9)),
-          "Fixture no sigue los bloques 01 a 09 exactos de IA6")
+                  for i in range(10)),
+          "Fixture no sigue los bloques 01 a 10 exactos de IA6")
     cases = data["cases"]
-    check(len(cases) == 81 and len({c["id"] for c in cases}) == 81,
-          "Se exigen 81 escenarios distintos")
+    check(len(cases) == 90 and len({c["id"] for c in cases}) == 90,
+          "Se exigen 90 escenarios distintos")
     for i, block in enumerate(data["blocks"]):
         check(set(block["cases"]) == {c["id"] for c in cases
                                        if c["block"] == f"{i+1:02d}"},
@@ -303,6 +327,22 @@ def validate() -> int:
     pairs = 0
     seen = set()
     for index, (item, (_, matching_move, _)) in enumerate(ITEMS.items()):
+        if item in BLOCK10_CASES:
+            for suffix,op,move,seeds in BLOCK10_CASES[item]:
+                label = f"{item}_{suffix}"
+                found = [c for c in cases if c["id"] == label]
+                check(len(found) == 1, "Falta escenario B10 " + label)
+                c = found[0]
+                check(c["block"] == "10" and c["item_id"] == item and c["op"] == op,
+                      "B10 fuera de propiedad " + label)
+                check((c["actor_species"],c["foe_species"],c["own_move"],c["foe_move"]) ==
+                      ("mew","mew",move,"amnesia") and c["seeds"] == seeds,
+                      "B10 altera datos o semillas " + label)
+                check(c["history"] == "showdown_native_items:onSourceTryPrimaryHit",
+                      "B10 no vincula el hook canónico " + label)
+                seen.add(label)
+                pairs += len(seeds)
+            continue
         if item in BLOCK09_CASES:
             for suffix,op,actor,foe,own,foe_move,seeds,tag in BLOCK09_CASES[item]:
                 key = f"{item}_{suffix}"
@@ -395,8 +435,8 @@ def validate() -> int:
                   "Sin trazabilidad a prueba nativa: " + label)
             seen.add(label)
             pairs += len(seeds)
-    check(seen == {c["id"] for c in cases} and pairs == 260,
-          "No hay 260 pares caso-semilla autorizados")
+    check(seen == {c["id"] for c in cases} and pairs == 272,
+          "No hay 272 pares caso-semilla autorizados")
 
     runner = RUNNER.read_text(encoding="utf-8")
     for token in (
@@ -438,6 +478,12 @@ def validate() -> int:
                   "c005_lax_missed", "c005_lax_hit", "foe_missed",
                   "sea_incense", "full_incense", "lax_incense"):
         check(token in runner, "Falta control B09 en Godot: " + token)
+    for token in ("gem_matching", "gem_nonmatching", "gem_status",
+                  "_probe_c005_gem_matching", "gem_first_consumed",
+                  "gem_second_consumed", "gem_mid_save", "gem_final_save",
+                  "normal_gem", "fire_gem", "water_gem"):
+        check(token in runner, "Falta prueba de gemas y SaveV2: " + token)
+    check(NATIVE_B10.is_file(), "Falta prueba nativa B10")
     check(NATIVE_B09.is_file(), "Falta prueba nativa B09")
     check(NATIVE_B07.is_file(), "Falta prueba nativa específica B07")
     check("await _restore_probe(" in PARENT_RUNNER.read_text(encoding="utf-8"),
@@ -460,6 +506,11 @@ def main() -> int:
         check("W01_B09_NATIVE PASS" in native09.stdout,
               "B09 no acreditó potencia, prioridad y RNG")
         print(native09.stdout.strip())
+        native10 = subprocess.run(["node", str(NATIVE_B10)], cwd=ROOT,
+                                  check=True, text=True, capture_output=True)
+        check("W01_B10_NATIVE PASS" in native10.stdout,
+              "B10 no acredita consumo único + casos negativos")
+        print(native10.stdout.strip())
     except (ValueError, KeyError, OSError, json.JSONDecodeError, TypeError,
             subprocess.CalledProcessError) as exc:
         if isinstance(exc, subprocess.CalledProcessError):

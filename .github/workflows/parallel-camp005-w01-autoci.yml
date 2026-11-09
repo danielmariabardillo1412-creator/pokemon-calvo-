@@ -20,7 +20,7 @@ concurrency:
 jobs:
   verify:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 55
     steps:
       - uses: actions/checkout@v4
         with:
@@ -91,7 +91,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          timeout 1100s godot --headless --path . --script res://tests/gameplay/parallel_items_w01_campaign_005.gd 2>&1 | tee camp005-w01-godot.log
+          timeout 1300s godot --headless --path . --script res://tests/gameplay/parallel_items_w01_campaign_005.gd 2>&1 | tee camp005-w01-godot.log
           grep -E "^CAMP005_W01_GODOT PASS blocks=${{ steps.gate.outputs.blocks }} checks=[1-9][0-9]*$" camp005-w01-godot.log
       - name: Deteccion cambios de produccion
         id: changed

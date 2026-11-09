@@ -5,7 +5,7 @@
   "kind": "NEW_IDS",
   "scope": "HELD_COMBAT",
   "format": "gen9calvounifiedv1",
-  "status": "BLOCK_09_PENDING_CI",
+  "status": "BLOCK_10_PENDING_CI",
   "variants": [
     "active",
     "none",
@@ -181,6 +181,25 @@
         "lax_incense_accuracy",
         "lax_incense_never_miss",
         "lax_incense_status"
+      ]
+    },
+    {
+      "block": "10",
+      "ids": [
+        "normal_gem",
+        "fire_gem",
+        "water_gem"
+      ],
+      "cases": [
+        "normal_gem_matching",
+        "normal_gem_nonmatching",
+        "normal_gem_status",
+        "fire_gem_matching",
+        "fire_gem_nonmatching",
+        "fire_gem_status",
+        "water_gem_matching",
+        "water_gem_nonmatching",
+        "water_gem_status"
       ]
     }
   ],
@@ -1498,6 +1517,135 @@
         19
       ],
       "history": "tools/item_audit/held_effect_sweep_v3.cjs:status_no_accuracy"
+    },
+    {
+      "block": "10",
+      "id": "normal_gem_matching",
+      "item_id": "normal_gem",
+      "op": "gem_matching",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "own_move": "tackle",
+      "foe_move": "amnesia",
+      "seeds": [
+        19,
+        23
+      ],
+      "history": "showdown_native_items:onSourceTryPrimaryHit"
+    },
+    {
+      "block": "10",
+      "id": "normal_gem_nonmatching",
+      "item_id": "normal_gem",
+      "op": "gem_nonmatching",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "own_move": "water_gun",
+      "foe_move": "amnesia",
+      "seeds": [
+        19
+      ],
+      "history": "showdown_native_items:onSourceTryPrimaryHit"
+    },
+    {
+      "block": "10",
+      "id": "normal_gem_status",
+      "item_id": "normal_gem",
+      "op": "gem_status",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "own_move": "swords_dance",
+      "foe_move": "amnesia",
+      "seeds": [
+        19
+      ],
+      "history": "showdown_native_items:onSourceTryPrimaryHit"
+    },
+    {
+      "block": "10",
+      "id": "fire_gem_matching",
+      "item_id": "fire_gem",
+      "op": "gem_matching",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "own_move": "fire_punch",
+      "foe_move": "amnesia",
+      "seeds": [
+        19,
+        23
+      ],
+      "history": "showdown_native_items:onSourceTryPrimaryHit"
+    },
+    {
+      "block": "10",
+      "id": "fire_gem_nonmatching",
+      "item_id": "fire_gem",
+      "op": "gem_nonmatching",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "own_move": "tackle",
+      "foe_move": "amnesia",
+      "seeds": [
+        19
+      ],
+      "history": "showdown_native_items:onSourceTryPrimaryHit"
+    },
+    {
+      "block": "10",
+      "id": "fire_gem_status",
+      "item_id": "fire_gem",
+      "op": "gem_status",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "own_move": "sunny_day",
+      "foe_move": "amnesia",
+      "seeds": [
+        19
+      ],
+      "history": "showdown_native_items:onSourceTryPrimaryHit"
+    },
+    {
+      "block": "10",
+      "id": "water_gem_matching",
+      "item_id": "water_gem",
+      "op": "gem_matching",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "own_move": "surf",
+      "foe_move": "amnesia",
+      "seeds": [
+        19,
+        23
+      ],
+      "history": "showdown_native_items:onSourceTryPrimaryHit"
+    },
+    {
+      "block": "10",
+      "id": "water_gem_nonmatching",
+      "item_id": "water_gem",
+      "op": "gem_nonmatching",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "own_move": "tackle",
+      "foe_move": "amnesia",
+      "seeds": [
+        19
+      ],
+      "history": "showdown_native_items:onSourceTryPrimaryHit"
+    },
+    {
+      "block": "10",
+      "id": "water_gem_status",
+      "item_id": "water_gem",
+      "op": "gem_status",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "own_move": "rain_dance",
+      "foe_move": "amnesia",
+      "seeds": [
+        19
+      ],
+      "history": "showdown_native_items:onSourceTryPrimaryHit"
     }
   ],
   "source_provenance": {
@@ -1505,12 +1653,13 @@
     "prior_runner": "tests/gameplay/parallel_items_w01_campaign_004.gd",
     "native_evidence": "tools/item_audit/held_effect_sweep_v2.cjs",
     "native_incense_evidence": "tools/item_audit/held_effect_sweep_v3.cjs",
-    "native_b09_evidence": "tests/tools/repro_w01_camp005_b09_native.cjs"
+    "native_b09_evidence": "tests/tools/repro_w01_camp005_b09_native.cjs",
+    "b10": "tests/tools/repro_w01_camp005_b10_native.cjs"
   },
   "limitations": [
-    "Bloque 09 pendiente de CI propia funcional sobre SHA; no confundir con CI de 08.",
-    "Conservados 72 casos anteriores y 234 pares; 9 casos nuevos y 26 pares: 81 casos y 260 pares.",
-    "Full Incense actúa último con igual prioridad y no invierte prioridad +1; Lax Incense sin RNG manipulado.",
-    "SaveV2, titularidad y no consumo en tres modalidades; no certifica main ni interfaz"
+    "B10 pendiente de CI funcional + regresión CAMP004 obligatoria.",
+    "Gemas se consumen una vez con ataque dañino del tipo; SaveV2 después del primer golpe y del segundo.",
+    "Todos los 81 escenarios anteriores y 260 pares preservados; acumulado 90 escenarios y 272 pares.",
+    "Sin cambios a reglas compartidas, SaveV2 o main/V28."
   ]
 }

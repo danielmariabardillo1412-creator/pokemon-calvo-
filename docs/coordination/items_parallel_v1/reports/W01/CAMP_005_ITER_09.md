@@ -1,16 +1,9 @@
-# IA1/W01 — CAMPAÑA_005 — BLOQUE 09 (pendiente de CI)
+# IA1/W01 — CAMPAÑA_005 — ITER_09 — CI_PASS_VERIFICADO
 
-**Rama:** `codex/calvo-items-20261104-w01-camp005`. **Estado:** `EN_CI_AUTOMATICA`, sin certificación funcional todavía.
+**SHA funcional:** `db2339fca101db900ac7d266328701da62a0a90b`. **CI [#42713116537](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/42713116537): `completed/success`** sobre ese SHA.
 
-**Objetos:** `sea_incense` (Incienso Marino), `full_incense` (Incienso Lento) y `lax_incense` (Incienso Suave).
+`CAMP005_W01_SCOPE PASS blocks=9`; `CAMP005_W01_PY PASS blocks=9 checks=607`; `CAMP005_W01_GODOT PASS blocks=9 checks=23505`; `W01_B09_NATIVE PASS water=1 order=1 misses=7 hits=57` sobre 64 semillas fijas sin intervenir RNG. B06 y B07 nativos y 10 transacciones Showdown siguen aprobados.
 
-- Marino: incremento real de ataques de Agua con `water_gun`, sin aumento de `tackle` ni de `reflect`.
-- Lento: Mew más veloz actúa al final si ambos comandos tienen prioridad normal; con `quick_attack` (+1) conserva la prioridad superior. Sin daño o consumo añadido.
-- Suave: medir `|-miss|p2a:` real del simulador frente a Placaje de precisión nominal 100; exigir fallos y aciertos naturales, sin alterar RNG. Golpe Aéreo infalible y Amnesia como controles negativos.
-- Todas las modalidades (activo/ausente/reserva), titularidad, identidad, dos unidades no consumidas, SaveV2 completo mediante el runner heredado.
+**Objetos:** `sea_incense`, `full_incense`, `lax_incense`. Acreditados daño extra Agua solo en portador, última acción a igual prioridad sin adelantar ataques +1, y los dos resultados de precisión probabilística; sin consumo, tres modalidades y SaveV2. Acumulado 81 casos/260 pares/780 modalidades.
 
-Nuevos: **9 escenarios, 26 pares semilla-caso, 78 carriles**. Acumulado: **81 escenarios, 260 pares, 780 carriles**. Reproductor B09 independiente ejecuta 64 semillas nativas para auditar ambas ramas RNG, velocidad de ejecución y daño de agua; no inventa estadísticas ni sustituye los casos Godot.
-
-Los 72 casos previos quedan íntegros; no se modifica producción, el parche `native_engine.cjs`, políticas de combate ni SaveV2. CAMP004 se conserva; la última regresión completa fue `42679854792`; siguiente hito obligatorio 10 salvo edición de producción.
-
-**Certificado pendiente:** run y SHA de GitHub Actions que ejecuten ambos runners con éxito. Si hay fallo, se repara el bloque 09 antes de avanzar a 10. Sin necesidad de autorización de IA6 salvo modificación de subsistema compartido.
+CAMPAÑA_004 no se reejecutó por no ser hito ni editar producción. Permanece la regresión completa de #42679854792: Python 1028 y Godot 16816. **B09 cerrado (9/10). Siguiente bloque: 10, con regresión completa CAMP004 obligatoria.**

@@ -190,3 +190,7 @@ Fila 06 del progreso: `CI_PASS_VERIFICADO`, anclada al SHA de código y al run c
 - CAMP004 no se reejecutó por no ser hito 01/05/10 ni editar producción. Última regresión completa PASS #42679854792: Python 1028; Godot 16816. Sin dependencias nuevas; crianza no es alcance W01.
 
 **Próxima `p` autoriza solo bloque 09:** `sea_incense;full_incense;lax_incense`, una vez comprobada la CI del commit documental de cierre. No avanzar al 09 en este turno. `main`, V28, PR #118, rama árbitra y ramas ajenas intactas.
+
+## B09 — certificación final (2026-11-09)
+
+**9/10 bloques certificados.** `sea_incense;full_incense;lax_incense` aprobados sobre SHA `db2339fca101db900ac7d266328701da62a0a90b`, run #42713116537 `completed/success`; Python 607, Godot 23505, B09 nativo 7 fallos y 57 aciertos con 64 semillas sin RNG artificial, B06 y B07 reproducidos. 81 escenarios, 260 pares. La nueva `p` autoriza solo B10 `normal_gem;fire_gem;water_gem` e incluye CAMP004 completa antes del cierre. Sin cambios de producción ni permisos adicionales.

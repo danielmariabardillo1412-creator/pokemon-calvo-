@@ -19,7 +19,7 @@ var c005_lax_hit: int = 0
 func _initialize() -> void:
 	capture = false
 	call_deferred("_run_w01_c005")
-	create_timer(1040.0).timeout.connect(func():
+	create_timer(1260.0).timeout.connect(func():
 		if not done:
 			push_error("W01 CAMP005 timeout nativo")
 			quit(2))
@@ -60,8 +60,8 @@ func _run_w01_c005() -> void:
 		and fixture.get("kind") == "NEW_IDS" and fixture.get("format") == "gen9calvounifiedv1")
 	check("Tres modalidades sin omisiones", fixture.get("variants") == ["active", "none", "reserve"])
 	var progress: Array = _progress_c005()
-	check("Bloques 01 a 09 de CAMPAÑA_005 autorizados", progress.size() == 9)
-	if progress.size() != 9:
+	check("Bloques 01 a 10 de CAMPAÑA_005 autorizados", progress.size() == 10)
+	if progress.size() != 10:
 		quit(2)
 		return
 	check("Fila 01 autorizada por IA6", String(progress[0].block) == "01"
@@ -82,9 +82,11 @@ func _run_w01_c005() -> void:
 		and String(progress[7].ids) == "odd_incense;rock_incense;rose_incense")
 	check("Fila 09 autorizada por IA6", String(progress[8].block) == "09"
 		and String(progress[8].ids) == "sea_incense;full_incense;lax_incense")
+	check("Fila 10 autorizada por IA6", String(progress[9].block) == "10"
+		and String(progress[9].ids) == "normal_gem;fire_gem;water_gem")
 	var stages: Array = fixture.get("blocks", [])
-	check("Fixture contiene nueve bloques reales", stages.size() == 9)
-	if stages.size() != 9:
+	check("Fixture contiene diez bloques reales", stages.size() == 10)
+	if stages.size() != 10:
 		quit(2)
 		return
 	check("Los tres ID del bloque 01 son exactos",
@@ -105,8 +107,10 @@ func _run_w01_c005() -> void:
 		stages[7].get("ids", []) == ["odd_incense", "rock_incense", "rose_incense"])
 	check("Los tres ID del bloque 09 son exactos",
 		stages[8].get("ids", []) == ["sea_incense", "full_incense", "lax_incense"])
+	check("Los tres ID del bloque 10 son exactos",
+		stages[9].get("ids", []) == ["normal_gem", "fire_gem", "water_gem"])
 	var cases: Array = fixture.get("cases", [])
-	check("Ochenta y un escenarios funcionales autorizados", cases.size() == 81)
+	check("Noventa escenarios funcionales autorizados", cases.size() == 90)
 	var names: Array = []
 	for row: Dictionary in cases:
 		check("Escenario pertenece a su bloque oficial",
@@ -118,7 +122,8 @@ func _run_w01_c005() -> void:
 			or (String(row.block) == "06" and stages[5].get("ids", []).has(String(row.item_id)))
 			or (String(row.block) == "07" and stages[6].get("ids", []).has(String(row.item_id)))
 			or (String(row.block) == "08" and stages[7].get("ids", []).has(String(row.item_id)))
-			or (String(row.block) == "09" and stages[8].get("ids", []).has(String(row.item_id))))
+			or (String(row.block) == "09" and stages[8].get("ids", []).has(String(row.item_id)))
+			or (String(row.block) == "10" and stages[9].get("ids", []).has(String(row.item_id))))
 		check("ID único del escenario", not names.has(String(row.id)))
 		names.append(String(row.id))
 		for seed_value: Variant in row.seeds:
@@ -141,7 +146,7 @@ func _run_w01_c005() -> void:
 				"checks": checks - previous_checks,
 				"status": "PASS" if errors.size() == previous_errors else "FAIL",
 				"observed": observed})
-	check("Doscientos sesenta pares caso-semilla reales", c005_rows.size() == 260)
+	check("Doscientos setenta y dos pares caso-semilla reales", c005_rows.size() == 272)
 	check("Incienso Suave: fallo real de ataque por RNG", c005_lax_missed > 0)
 	check("Incienso Suave: acierto natural de ataque por RNG", c005_lax_hit > 0)
 	check("Garra Afilada registra crítico real nativo", c005_razor_claw_critical > 0)
@@ -158,7 +163,8 @@ func _run_w01_c005() -> void:
 		"deep_sea_scale", "deep_sea_tooth", "metal_powder",
 		"quick_powder", "razor_claw", "razor_fang",
 		"odd_incense", "rock_incense", "rose_incense",
-		"sea_incense", "full_incense", "lax_incense"]:
+		"sea_incense", "full_incense", "lax_incense",
+		"normal_gem", "fire_gem", "water_gem"]:
 		check("Tres contextos distintos para cada ID " + item_id, cases.filter(
 			func(c): return String(c.item_id) == item_id).size() == 3)
 	var report: Dictionary = {"schema_version": 1, "campaign": "CAMP_005",
@@ -197,14 +203,17 @@ func _compare_c005(row: Dictionary, observed: Dictionary) -> void:
 			and bool(x.start.reserve_has_item) == (mode == "reserve"))
 		check("Reserva sin activación ni consumo " + mode,
 			not bool(x.after.reserve_consumed))
-		check("Conservación física de dos unidades " + mode,
-			int(x.physical_units) == 2)
+		var gem_trigger: bool = String(row.op) == "gem_matching" and mode == "active"
+		check("Cantidad física correcta y consumo único " + mode,
+			int(x.physical_units) == (1 if gem_trigger else 2))
 	var a: Dictionary = observed.active
 	var n: Dictionary = observed.none
 	var r: Dictionary = observed.reserve
 	var native_id: String = String(row.item_id).replace("_", "")
-	check("El objeto existe en el portador activo sin consumo",
-		String(a.after.native_item) == native_id and not a.after.own_consumed)
+	check("El objeto conserva su identidad nativa según activación",
+		(String(a.after.native_item).is_empty() and bool(a.after.own_consumed))
+		if String(row.op) == "gem_matching" else
+		(String(a.after.native_item) == native_id and not bool(a.after.own_consumed)))
 	check("El objeto en reserva no altera al portador",
 		not bool(n.after.own_consumed) and not bool(r.after.own_consumed)
 		and n.physical_units == 2 and r.physical_units == 2)
@@ -286,6 +295,46 @@ func _compare_c005(row: Dictionary, observed: Dictionary) -> void:
 			check("Ninguno recibe daño ni consume objeto ante Amnesia",
 				a.after.hp == a.start.hp and n.after.hp == n.start.hp
 				and r.after.hp == r.start.hp)
+		"gem_matching":
+			var move_by_gem: Dictionary = {"normal_gem": "tackle",
+				"fire_gem": "fire_punch", "water_gem": "surf"}
+			check("Gema: ataque del tipo correcto",
+				String(row.own_move) == String(move_by_gem.get(String(row.item_id), "")))
+			check("Gema: primer golpe potencia daño solo activa",
+				a.damage > n.damage and n.damage > 0 and n.damage == r.damage)
+			check("Gema: objeto gastado exactamente una vez por portador",
+				bool(a.after.own_consumed) and a.physical_units == 1
+				and not n.after.own_consumed and not r.after.reserve_consumed
+				and n.physical_units == 2 and r.physical_units == 2)
+			check("Gema: consumida primero y no reactivada en segundo golpe",
+				bool(a.get("gem_first_consumed", false))
+				and bool(a.get("gem_second_consumed", false))
+				and String(a.get("gem_first_native_item", "")).is_empty()
+				and String(a.get("gem_second_native_item", "")).is_empty()
+				and int(a.get("gem_first_units", 0)) == 1
+				and int(a.get("gem_second_units", 0)) == 1)
+			check("Gema: dos ataques legítimos y SaveV2 en ambos puntos",
+				int(a.get("second_damage", 0)) > 0
+				and bool(a.get("gem_mid_save", false))
+				and bool(a.get("gem_final_save", false))
+				and bool(n.get("gem_mid_save", false))
+				and bool(r.get("gem_final_save", false)))
+		"gem_nonmatching":
+			var wrong_by_gem: Dictionary = {"normal_gem": "water_gun",
+				"fire_gem": "tackle", "water_gem": "tackle"}
+			check("Gema: tipo equivocado no produce consumo",
+				String(row.own_move) == String(wrong_by_gem.get(String(row.item_id), ""))
+				and not a.after.own_consumed and a.physical_units == 2)
+			check("Gema: daño del tipo equivocado idéntico a controles",
+				a.damage > 0 and a.damage == n.damage and n.damage == r.damage)
+		"gem_status":
+			var status_by_gem: Dictionary = {"normal_gem": "swords_dance",
+				"fire_gem": "sunny_day", "water_gem": "rain_dance"}
+			check("Gema: prueba estado del mismo tipo",
+				String(row.own_move) == String(status_by_gem.get(String(row.item_id), "")))
+			check("Gema: estado de su tipo no consume ni daña",
+				a.damage == 0 and n.damage == 0 and r.damage == 0
+				and not a.after.own_consumed and a.physical_units == 2)
 		"kings_rock_flinch":
 			check("Roca del Rey no potencia daño: Placaje daña al objetivo",
 				a.damage > 0 and a.damage == n.damage and n.damage == r.damage)
@@ -445,6 +494,8 @@ func _frame_c003(session: RefCounted, id: StringName) -> Dictionary:
 # En W01 la Roca del Rey se comprueba por retroceso observado en log nativo.
 # El harness original de CAMPAÑA_004 se mantiene intacto para las 4 filas previas.
 func _probe_w01_c004(row: Dictionary, seed: int, mode: String) -> Dictionary:
+	if String(row.op) == "gem_matching":
+		return await _probe_c005_gem_matching(row, seed, mode)
 	if String(row.op) in ["transformed_no_boost", "quick_powder_transformed"] and String(row.item_id) in ["metal_powder", "quick_powder"]:
 		return await _probe_c005_transformed_stable(row, seed, mode)
 	if String(row.item_id) in ["kings_rock", "razor_fang"]:
@@ -647,3 +698,107 @@ func _probe_c005_transformed_stable(row: Dictionary, seed: int, mode: String) ->
 		"physical_units": physical, "restored": stable_restored == stable,
 		"owner_unchanged": JSON.stringify(_owner_data(owner)) == frozen,
 		"save_equal": physical_restored == physical, "save_scope": "transform_and_post_switch_stable"}
+
+# B10: la gema se verifica en un doble turno con SaveV2 ENTRE los golpes.
+# No modifica ni simula la autoridad nativa de consumo de objetos.
+func _probe_c005_gem_matching(row: Dictionary, seed: int, mode: String) -> Dictionary:
+	automation = {"actor_species": "mew", "level": 100,
+		"format": "gen9calvounifiedv1", "seed": [seed, 2, 3, 4],
+		"physical_move": String(row.own_move), "special_move": "water_gun",
+		"speed_target": "mew", "damage_target": "mew"}
+	var prepared: Dictionary = _fixture({"id": row.item_id}, "physical_damage", mode)
+	var owner: PlayerCollection = prepared.owner
+	var actor: CreatureInstance = owner.owned_creature(&"own")
+	actor.moveset.clear()
+	actor.move_ids.clear()
+	check(mode + " B10 ataque del tipo indicado existe",
+		actor.add_move(StringName(row.own_move), catalogs))
+	check(mode + " B10 movimiento auxiliar existe",
+		actor.add_move(&"reflect", catalogs))
+	prepared.foe = _mon(&"mew", 100, &"foe", ["amnesia"])
+	var id: StringName = StringName(row.item_id)
+	var frozen: String = JSON.stringify(_owner_data(owner))
+	check(mode + " B10 dos unidades iniciales", _units(owner, id) == 2)
+	var session := Native.new(catalogs, owner, automation.format)
+	var opened: bool = await session.begin_wild(self, prepared.foe, automation.seed)
+	check(mode + " B10 combate nativo iniciado", opened)
+	if not opened:
+		await session.close()
+		return {"valid": false}
+	var before: Dictionary = _frame_c003(session, id)
+	check(mode + " B10 inicio correcto", before.valid)
+	var first_action: Dictionary = await session.submit("move 1", session.revision)
+	check(mode + " B10 ataque real inicial aceptado",
+		first_action.get("accepted", false))
+	if not first_action.get("accepted", false):
+		await session.close()
+		return {"valid": false}
+	var first: Dictionary = _frame_c003(session, id)
+	check(mode + " B10 estado después del primer golpe", first.valid)
+	var first_damage: int = int(before.foe_hp) - int(first.foe_hp)
+	check(mode + " B10 primer golpe dañó al rival real", first_damage > 0)
+	var first_units: int = _c005_gem_units(owner, session, id)
+	check(mode + " B10 primer golpe no modifica propietario en vivo",
+		JSON.stringify(_owner_data(owner)) == frozen)
+	var mid_snapshot: Dictionary = session.snapshot()
+	var key: String = String(row.id) + "_" + str(seed) + "_" + mode
+	var mid: Dictionary = await _restore_probe(
+		session, owner, key + "_gem_first_savev2", mode + " B10 SaveV2 tras primer golpe")
+	if not mid.get("valid", false):
+		return {"valid": false}
+	session = mid.session
+	owner = mid.owner
+	var mid_frame: Dictionary = _frame_c003(session, id)
+	var gem_mid_save: bool = mid_frame == first and session.snapshot() == mid_snapshot
+	check(mode + " B10 SaveV2 conserva estado de primera activación",
+		gem_mid_save and JSON.stringify(_owner_data(owner)) == frozen)
+	var after_first_restore_units: int = _c005_gem_units(owner, session, id)
+	check(mode + " B10 SaveV2 no duplica la gema consumida",
+		first_units == after_first_restore_units)
+	var second_action: Dictionary = await session.submit("move 1", session.revision)
+	check(mode + " B10 segundo golpe real tras SaveV2 aceptado",
+		second_action.get("accepted", false))
+	if not second_action.get("accepted", false):
+		await session.close()
+		return {"valid": false}
+	var second: Dictionary = _frame_c003(session, id)
+	check(mode + " B10 segundo estado válido", second.valid)
+	var second_damage: int = int(first.foe_hp) - int(second.foe_hp)
+	check(mode + " B10 segundo golpe causa daño y no es un simulacro",
+		second_damage > 0)
+	var second_units: int = _c005_gem_units(owner, session, id)
+	check(mode + " B10 segunda acción no duplica ni recupera objetos",
+		second_units == first_units)
+	var final_snapshot: Dictionary = session.snapshot()
+	var finish: Dictionary = await _restore_probe(
+		session, owner, key + "_gem_second_savev2", mode + " B10 SaveV2 tras segundo golpe")
+	if not finish.get("valid", false):
+		return {"valid": false}
+	session = finish.session
+	owner = finish.owner
+	var end_frame: Dictionary = _frame_c003(session, id)
+	var gem_final_save: bool = end_frame == second and session.snapshot() == final_snapshot
+	var final_units: int = _c005_gem_units(owner, session, id)
+	check(mode + " B10 SaveV2 final conserva gasto e identidad",
+		gem_final_save and final_units == second_units
+		and JSON.stringify(_owner_data(owner)) == frozen)
+	await session.close()
+	return {"valid": true, "start": before, "after": second,
+		"damage": first_damage, "second_damage": second_damage,
+		"gem_first_consumed": bool(first.own_consumed),
+		"gem_second_consumed": bool(second.own_consumed),
+		"gem_first_native_item": String(first.native_item),
+		"gem_second_native_item": String(second.native_item),
+		"gem_first_units": first_units, "gem_second_units": second_units,
+		"gem_mid_save": gem_mid_save, "gem_final_save": gem_final_save,
+		"physical_units": final_units, "restored": gem_mid_save and gem_final_save,
+		"owner_unchanged": JSON.stringify(_owner_data(owner)) == frozen,
+		"save_equal": final_units == second_units}
+
+func _c005_gem_units(owner: PlayerCollection, session: RefCounted, id: StringName) -> int:
+	var physical: int = owner.inventory.quantity(id)
+	for creature: CreatureInstance in [session.battle_state().creature(&"own"),
+		session.battle_state().creature(&"reserve")]:
+		if creature.held_item_id == id and not creature.held_item_consumed:
+			physical += 1
+	return physical
