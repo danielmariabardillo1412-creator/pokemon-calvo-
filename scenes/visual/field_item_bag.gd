@@ -52,7 +52,7 @@ func _button(parent: Node, text: String, callback: Callable) -> Button:
 
 
 func open_bag() -> bool:
-	if field == null or not field.field_can_open_item_bag(): return false
+	if field == null or not field.field_can_use_items(): return false
 	if not field.field_bind_item_service(service): return false
 	_result.text = "Selecciona un objeto y un Pokémon. Las funciones pendientes no consumirán el objeto."
 	refresh()
