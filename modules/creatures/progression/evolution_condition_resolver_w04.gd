@@ -49,7 +49,9 @@ static func evaluate(record: EvolutionRecord, event: Dictionary, facts: Dictiona
             return _result(false, "invalid_held_rule")
         if not facts.has("held_item_id") or StringName(str(facts["held_item_id"])) != StringName(held):
             return _result(false, "wrong_held_item")
-        if facts.get("held_item_consumed", false) != false:
+        if not facts.has("held_item_consumed") or typeof(facts["held_item_consumed"]) != TYPE_BOOL:
+            return _result(false, "missing_held_consumed_state")
+        if facts["held_item_consumed"]:
             return _result(false, "held_item_already_consumed")
     if record.conditions.has("gender"):
         var required: Variant = record.conditions["gender"]
