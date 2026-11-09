@@ -55,7 +55,11 @@ static func evaluate(record: EvolutionRecord, event: Dictionary, facts: Dictiona
             return _result(false, "held_item_already_consumed")
     if record.conditions.has("gender"):
         var required: Variant = record.conditions["gender"]
-        if typeof(required) != TYPE_INT or int(required) not in [1, 2]:
+        # Godot JSON.parse_string may decode canonical integer-valued numbers
+        # as TYPE_FLOAT. Accept only exact 1/2; reject strings and fractions.
+        if not (typeof(required) == TYPE_INT or typeof(required) == TYPE_FLOAT):
+            return _result(false, "unsupported_gender_rule")
+        if float(required) != floor(float(required)) or int(required) not in [1, 2]:
             return _result(false, "unsupported_gender_rule")
         if not facts.has("gender") or typeof(facts["gender"]) != TYPE_INT:
             return _result(false, "missing_individual_gender")
