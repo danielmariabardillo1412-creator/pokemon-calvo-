@@ -145,15 +145,24 @@ func test_book(item_id: StringName, move_id: StringName, spanish: String, type_e
 	check(String(item_id) + " Spanish type", panel.type_label.text.contains(type_es))
 	check(String(item_id) + " species learnset", compatible(catalogs.species(sid), move_id))
 	check(String(item_id) + " positive preview", panel.compatibility_label.text.contains("Compatible"))
+	check(String(item_id) + " teach enabled on valid preview", not panel.teach_button.disabled)
 	var before := snapshot(svc.owner)
+	var old_slot_id: StringName = &""
+	if replacement:
+		old_slot_id = svc.owner.owned_creature(MON).moveset[1].move_id
 	if replacement:
 		check("four existing moves", svc.owner.owned_creature(MON).moveset.size() == 4)
+		check("replacement required disables button", panel.teach_button.disabled)
 		panel.teach_button.pressed.emit()
 		check("replacement mandatory no cost", not panel.last_result.get("accepted", false)
 			and panel.last_result.get("reason", "") == "move_replacement_required" and snapshot(svc.owner) == before)
 		check("select replacement index 1", panel.select_replacement_slot(1))
+		check("replacement selection enables button", not panel.teach_button.disabled)
 	else:
 		check("stock deliberately removed", svc.owner.inventory.remove(item_id, 2))
+		panel._refresh_compatibility()
+		check("no stock disables button and shows Spanish", panel.teach_button.disabled
+			and panel.compatibility_label.text.contains("Sin existencias"))
 		panel.teach_button.pressed.emit()
 		check("stale UI no stock rejection", not panel.last_result.get("accepted", false)
 			and panel.last_result.get("reason", "") == "item_not_owned" and svc.owner.inventory.quantity(item_id) == 0)
@@ -161,6 +170,7 @@ func test_book(item_id: StringName, move_id: StringName, spanish: String, type_e
 		panel.refresh()
 		check("reselect after refill", panel.select_book(item_id))
 		check("reselect target after refill", panel.select_creature(MON))
+		check("refilled re-enables button", not panel.teach_button.disabled)
 	panel.teach_button.pressed.emit()
 	var current: CreatureInstance = svc.owner.owned_creature(MON)
 	var slot: BattleMoveSlot = current.move_slot(move_id) if current != null else null
@@ -176,6 +186,9 @@ func test_book(item_id: StringName, move_id: StringName, spanish: String, type_e
 	check(String(item_id) + " result in Spanish", panel.result_label.text.contains(spanish))
 	if replacement:
 		check("slot 1 actually replaced", current != null and current.moveset[1].move_id == move_id)
+		check("old replaced move removed", current != null and not current.has_move(old_slot_id))
+	check(String(item_id) + " known move disables button", panel.teach_button.disabled
+		and panel.compatibility_label.text.contains("Ya conoce"))
 	var after := snapshot(svc.owner)
 	panel.teach_button.pressed.emit()
 	check(String(item_id) + " known move no cost", not panel.last_result.get("accepted", false)
@@ -197,11 +210,105 @@ func test_incompatible() -> void:
 	check("incompatible selected item", panel.select_book(&"tm202"))
 	check("incompatible selected pokemon", panel.select_creature(MON))
 	check("visible incompatible text", panel.compatibility_label.text.contains("Incompatible"))
+	check("incompatible button disabled", panel.teach_button.disabled)
 	var before := snapshot(svc.owner)
 	panel.teach_button.pressed.emit()
 	check("incompatible service rejects", not panel.last_result.get("accepted", false)
 		and panel.last_result.get("reason", "") == "machine_incompatible")
 	check("incompatible no state mutation", snapshot(svc.owner) == before)
+	panel.queue_free()
+
+
+func test_field_lock() -> void:
+	var sid := find_species(&"pain_split", true)
+	check("locked case real compatible", sid != &"")
+	if sid == &"":
+		return
+	var svc: Variant = make_service(sid)
+	check("locked case stock", svc.owner.inventory.add(&"tm202", 1))
+	var panel: Variant = mount(svc)
+	check("locked case choose", panel.select_book(&"tm202") and panel.select_creature(MON))
+	svc.guard = func(): return false
+	panel._refresh_compatibility()
+	check("locked disables button", panel.teach_button.disabled
+		and panel.compatibility_label.text.contains("No puedes enseñar"))
+	var before := snapshot(svc.owner)
+	panel.teach_button.pressed.emit()
+	check("locked cannot consume even forced signal", not panel.last_result.get("accepted", false)
+		and panel.last_result.get("reason", "") == "field_locked" and snapshot(svc.owner) == before)
+	svc.guard = func(): return true
+	panel._refresh_compatibility()
+	check("unlock restores button", not panel.teach_button.disabled)
+	panel.queue_free()
+
+
+func test_no_selection() -> void:
+	var sid := find_species(&"pain_split", true)
+	check("selection case compatible species", sid != &"")
+	if sid == &"":
+		return
+	var svc: Variant = make_service(sid)
+	check("selection case stock", svc.owner.inventory.add(&"tm202", 1))
+	var panel: Variant = mount(svc)
+	check("selection case selected", panel.select_book(&"tm202"))
+	panel.books.select(-1)
+	panel._refresh_preview()
+	check("no selection disables button", panel.teach_button.disabled)
+	var before := snapshot(svc.owner)
+	panel.teach_button.pressed.emit()
+	check("no selection no consumption", not panel.last_result.get("accepted", false)
+		and panel.last_result.get("reason", "") == "selection_missing" and snapshot(svc.owner) == before)
+	check("selection can recover", panel.select_book(&"tm202") and not panel.teach_button.disabled)
+	panel.queue_free()
+
+
+func test_last_copy() -> void:
+	var sid := find_species(&"pain_split", true)
+	check("last copy species", sid != &"")
+	if sid == &"":
+		return
+	var svc: Variant = make_service(sid)
+	check("last copy stock", svc.owner.inventory.add(&"tm202", 1))
+	var panel: Variant = mount(svc)
+	check("last copy book and creature", panel.select_book(&"tm202") and panel.select_creature(MON))
+	panel.teach_button.pressed.emit()
+	check("last copy accepted", panel.last_result.get("accepted", false))
+	check("last copy stock exactly zero", svc.owner.inventory.quantity(&"tm202") == 0)
+	check("last copy removed from list and disabled", panel.books.item_count == 0 and panel.teach_button.disabled)
+	var after := snapshot(svc.owner)
+	panel.teach_button.pressed.emit()
+	check("last copy cannot use again", not panel.last_result.get("accepted", false)
+		and snapshot(svc.owner) == after)
+	panel.queue_free()
+
+
+func test_missing_version_context() -> void:
+	# Negativo aislado: se retiran entradas SV temporalmente SOLO del catalogo
+	# en memoria durante esta prueba; se restauran antes de salir.
+	var sid := find_species(&"pain_split", true)
+	check("missing context real species", sid != &"")
+	if sid == &"":
+		return
+	var svc: Variant = make_service(sid)
+	check("missing context stock", svc.owner.inventory.add(&"tm202", 1))
+	var panel: Variant = mount(svc)
+	check("missing context book", panel.select_book(&"tm202"))
+	var sp: CreatureSpecies = catalogs.species(sid)
+	var entries_backup: Array = sp.learnset.duplicate()
+	sp.learnset.clear()
+	panel._refresh_compatibility()
+	check("unknown learnset does not claim compatibility", panel.teach_button.disabled
+		and panel.compatibility_label.text.contains("Faltan datos"))
+	var before := snapshot(svc.owner)
+	panel.teach_button.pressed.emit()
+	check("unknown learnset no consumption", not panel.last_result.get("accepted", false)
+		and panel.last_result.get("reason", "") == "species_machine_version_context_missing"
+		and snapshot(svc.owner) == before)
+	for entry: LearnSetEntry in entries_backup:
+		sp.learnset.append(entry)
+	panel._refresh_compatibility()
+	check("canonical learnset restored", not panel.teach_button.disabled
+		and compatible(sp, &"pain_split"))
 	panel.queue_free()
 
 
@@ -223,6 +330,10 @@ func _run() -> void:
 				test_book(&"tm202", &"pain_split", "Divide Dolor", "Normal")
 				test_book(&"tm31", &"metal_claw", "Garra Metal", "Acero", true)
 				test_incompatible()
+				test_field_lock()
+				test_no_selection()
+				test_last_copy()
+				test_missing_version_context()
 	if failures.is_empty():
 		print("W05_BOOK_UI_PILOT_20261109_GODOT PASS checks=", checks)
 		quit(0)

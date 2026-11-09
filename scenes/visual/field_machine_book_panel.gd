@@ -16,6 +16,7 @@ var compatibility_label: Label
 var result_label: Label
 var teach_button: Button
 var last_result: Dictionary = {}
+var _blocked_reason := "service_not_bound"
 
 
 func _ready() -> void:
@@ -159,26 +160,49 @@ func _slot() -> int:
 func _refresh_compatibility() -> void:
 	if book_label == null:
 		return
+	# La vista nunca autoriza el consumo. FieldItemService.teach sigue siendo
+	# el unico punto de mutacion: la vista solo previene intentos imposibles.
+	teach_button.disabled = true
+	_blocked_reason = "selection_missing"
 	book_label.text = "Selecciona un libro."
 	type_label.text = ""
 	compatibility_label.text = "Selecciona un Pokémon."
+	if service == null or service.owner == null or service.catalogs == null:
+		_blocked_reason = "service_not_bound"
+		compatibility_label.text = "La mochila no está vinculada."
+		return
 	var item_id := _selected(books)
 	var creature_id := _selected(targets)
-	teach_button.disabled = item_id == &"" or creature_id == &""
-	if teach_button.disabled or service == null:
+	if item_id == &"":
+		compatibility_label.text = "No quedan libros seleccionados en la mochila."
+		return
+	if creature_id == &"":
+		compatibility_label.text = "Selecciona un Pokémon del equipo."
 		return
 	var presented: Dictionary = Books.presentacion(item_id, service.profile, service.catalogs)
 	if not presented.get("disponible", false):
-		compatibility_label.text = "Libro no disponible."
-		teach_button.disabled = true
+		_blocked_reason = String(presented.get("motivo", "machine_not_in_active_version"))
+		compatibility_label.text = "Este libro no está disponible con las reglas actuales."
 		return
 	var move_id := StringName(presented.get("move_id", ""))
 	var name_es := String(PILOT_NAMES.get(String(move_id), presented.get("nombre_movimiento", "")))
 	book_label.text = "Libro de movimiento · " + name_es
 	type_label.text = "Tipo: " + String(presented.get("nombre_tipo", ""))
+	# Reutilizar la puerta EXISTENTE del servicio, incluida la sesion
+	# bloqueada; el panel no decide si un objeto se gasta.
+	var boundary := String(service._boundary(item_id))
+	if boundary != "":
+		_blocked_reason = boundary
+		compatibility_label.text = "No puedes enseñar ahora. El libro se conserva." if boundary == "field_locked" else "El uso de este libro está bloqueado."
+		return
+	if not service.owner.inventory.has(item_id):
+		_blocked_reason = "item_not_owned"
+		compatibility_label.text = "Sin existencias. El libro no se consumirá."
+		return
 	var creature: CreatureInstance = service.owner.owned_creature(creature_id)
 	var species: CreatureSpecies = service.catalogs.species(creature.species_id) if creature != null else null
 	if species == null:
+		_blocked_reason = "unknown_species"
 		compatibility_label.text = "Especie no disponible."
 		return
 	var any_version := false
@@ -190,27 +214,36 @@ func _refresh_compatibility() -> void:
 		if entry.move_id == move_id:
 			compatible = true
 	if not any_version:
+		_blocked_reason = "species_machine_version_context_missing"
 		compatibility_label.text = "Faltan datos de compatibilidad para esta versión."
 	elif not compatible:
+		_blocked_reason = "machine_incompatible"
 		compatibility_label.text = "Incompatible · no puede aprender el movimiento."
 	elif creature.has_move(move_id):
+		_blocked_reason = "move_already_known"
 		compatibility_label.text = "Ya conoce ese movimiento."
+	elif not service.content.move_learnable(String(move_id)):
+		_blocked_reason = "move_not_permitted"
+		compatibility_label.text = "Este movimiento no está permitido en la partida."
 	elif creature.moveset.size() >= ProgressionRuleset.MOVE_SLOTS_MAX and _slot() < 0:
+		_blocked_reason = "move_replacement_required"
 		compatibility_label.text = "Compatible · elige qué movimiento sustituir."
 	else:
+		_blocked_reason = ""
+		teach_button.disabled = false
 		compatibility_label.text = "Compatible · el servicio comprobará el uso antes del consumo."
 
 
 func teach_selected() -> Dictionary:
-	if service == null:
-		last_result = {"accepted": false, "reason": "service_not_bound"}
+	# Un evento atrasado o una invocacion directa NO elude un boton bloqueado.
+	# Revalidar el estado vivo justo antes del unico teach().
+	_refresh_compatibility()
+	if teach_button == null or teach_button.disabled:
+		last_result = {"accepted": false, "reason": _blocked_reason, "status": "REJECTED"}
 	else:
 		var id := _selected(books)
 		var target := _selected(targets)
-		if id == &"" or target == &"":
-			last_result = {"accepted": false, "reason": "selection_missing"}
-		else:
-			last_result = service.teach(id, target, _slot())
+		last_result = service.teach(id, target, _slot())
 	var answer := last_result.duplicate(true)
 	refresh()
 	if last_result.get("accepted", false):
@@ -226,8 +259,10 @@ func teach_selected() -> Dictionary:
 			"move_already_known": "Ya conoce el movimiento. Libro conservado.",
 			"creature_not_owned": "Pokémon ajeno. Libro conservado.",
 			"field_locked": "No puedes enseñar ahora. Libro conservado.",
-			"selection_missing": "Selecciona libro y Pokémon.",
-			"service_not_bound": "Falta vincular la mochila."
+			"service_not_bound": "Falta vincular la mochila.",
+			"species_machine_version_context_missing": "Faltan datos de compatibilidad. Libro conservado.",
+			"move_not_permitted": "Movimiento no permitido. Libro conservado.",
+			"selection_missing": "Selecciona libro y Pokémon."
 		}.get(reason, "No se ha enseñado. Libro conservado.")
 	teaching_finished.emit(answer)
 	return answer

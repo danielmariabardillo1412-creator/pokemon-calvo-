@@ -36,6 +36,12 @@ def main():
     check("no stock negative", "item_not_owned" in gd)
     check("incompatible negative", "machine_incompatible" in gd)
     check("real persistence", "SaveGameRepository.new()" in gd and "save_collection" in gd and "repo.load(SAVE)" in gd)
+    check("UI blocks incompatibility", '_blocked_reason = "machine_incompatible"' in p and "teach_button.disabled = true" in p)
+    check("UI blocks missing stock", 'service.owner.inventory.has(item_id)' in p and 'Sin existencias' in p)
+    check("UI blocks locked service", 'service._boundary(item_id)' in p and '"field_locked"' in p)
+    check("UI revalidates click", 'func teach_selected()' in p and "_refresh_compatibility()" in p)
+    check("no alternate engine", p.count("service.teach(id, target, _slot())") == 1)
+    check("new negative Godot coverage", all(s in gd for s in ["test_field_lock()", "test_last_copy()", "test_no_selection()", "test_missing_version_context()"]))
     check("no premature Godot pass", "W05_BOOK_UI_PILOT_20261109_GODOT PASS" in gd and "quit(1)" in gd)
     print(f"W05_BOOK_UI_PILOT_20261109_PY PASS checks={n}")
 
