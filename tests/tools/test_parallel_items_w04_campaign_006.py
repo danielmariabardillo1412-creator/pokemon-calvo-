@@ -308,6 +308,44 @@ def main():
           "CAMP006_W04_BLOCK05 status=BLOCKED_MISSING_SHARED_PRODUCERS" in runner and
           "CAMP006_W04_GODOT PASS completed=3 last_executed=05 deferred=04 checks=" in runner,
           "05 runner preserves previous gameplay while refusing fictional evolutions")
+    # Isolated resolver pilot. The source fields below are injected unit-test
+    # facts. Python guards the module's footprint, Godot proves logic L2.
+    resolver_path = ROOT / "modules/creatures/progression/evolution_condition_resolver_w04.gd"
+    resolver_test_path = ROOT / "tests/gameplay/parallel_items_w04_condition_resolver.gd"
+    check(resolver_path.is_file() and resolver_test_path.is_file(),
+          "isolated resolver and positive/negative Godot runner installed")
+    resolver = resolver_path.read_text(encoding="utf-8")
+    resolver_test = resolver_test_path.read_text(encoding="utf-8")
+    check("extends RefCounted" in resolver and "static func evaluate(record: EvolutionRecord" in resolver
+          and '"scope": "RESOLVER_ONLY"' in resolver and
+          '"mutates": false' in resolver, "resolver isolated contract")
+    for token in ("wrong_held_item", "held_item_already_consumed", "wrong_gender",
+                  "missing_individual_gender", "missing_world_daypart",
+                  "wrong_world_daypart", "missing_world_moon_phase",
+                  "not_full_moon", "missing_level_transition",
+                  "invalid_level_transition", "wrong_trigger", "wrong_item",
+                  "unsupported_condition", "unsupported_trigger",
+                  "below_required_level", "not_conditional_route"):
+        check(token in resolver, "resolver fail-closed reason " + token)
+    for token in ("func _probe(", "oval/held_day_on_actual_level_event",
+                  "dawn/kirlia_male", "dawn/snorunt_female",
+                  "peat/full_moon", "oval/no_held", "oval/night",
+                  "dawn/kirlia_female", "dawn/snorunt_male",
+                  "peat/not_full", "guard/unknown_extra_condition",
+                  "guard/no_trade_level_shortcut", "guard/not_unconditional_fallback",
+                  "production_evolution_not_connected", "PURE_L2_NOT_GAMEPLAY_L3",
+                  "CAMP006_W04_RESOLVER_L2 PASS completed=3 last_executed=05 deferred=04"):
+        check(token in resolver_test, "isolated Godot test covers " + token)
+    wf = (ROOT / ".github/workflows/parallel-camp006-w04-autoci.yml").read_text(encoding="utf-8")
+    check("res://tests/gameplay/parallel_items_w04_condition_resolver.gd" in wf
+          and "CAMP006_W04_RESOLVER_L2 PASS completed=3" in wf
+          and "CAMP005_W04_PY PASS blocks=10" in wf
+          and "CAMP005_W04_GODOT PASS blocks=10" in wf,
+          "CI verifies isolated L2, prior CAMP005 and scope remains 3")
+    # Tests MUST NOT claim real gameplay integration before IA6's producers exist.
+    check(state["completed"] == 3 and fifth["credited_completion"] is False
+          and fifth["status"] == "BLOCKED_MISSING_SHARED_PRODUCERS",
+          "resolver pilot does not silently certify block05")
     print("CAMP006_W04_BLOCK05 status=BLOCKED_MISSING_SHARED_PRODUCERS completed=3 last_executed=05 deferred=04")
     print(f"CAMP006_W04_PY PASS completed=3 last_executed=05 deferred=04 checks={n}")
 
