@@ -77,8 +77,8 @@
       ],
       "family": "ENCOUNTER_STEPS",
       "contract": "REAL_STEPS_AND_LEADER_LEVEL_L2",
-      "functional_level": "L2_STANDALONE_REAL_PLAYER_STEPS",
-      "item_effect_fully_connected": false,
+      "functional_level": "L3_REAL_FIELD_BAG_ENCOUNTER_SAVE",
+      "item_effect_fully_connected": true,
       "durations": {
         "repel": 100,
         "super_repel": 200,
@@ -89,16 +89,24 @@
         "duration_last_step_and_expiry",
         "wild_below_leader_blocked",
         "wild_equal_above_leader_allowed",
-        "snapshot_restore_effect"
+        "snapshot_restore_effect",
+        "real_FieldItemBag_button_spends_one",
+        "native_bridge_blocks_pre_battle",
+        "suppressed_encounter_commits_rng_only",
+        "leader_equal_level_not_blocked",
+        "manual_save_load_remaining_steps",
+        "old_save_without_repel_loads_inactive",
+        "malformed_save_no_live_mutation"
       ],
       "negative_cases": [
         "collision_without_movement_no_step",
         "invalid_snapshot_unchanged",
         "duplicate_active_rejected"
       ],
-      "required_owner": "IA6_ENCOUNTER_STEP_PRODUCER_AND_SAVEV2",
-      "pending_interface": "hook repel decision into native field_prepare_native_encounter before begin/start and bind item activation, inventory consumption, SaveV2 state; shared field_demo and session are IA6-owned",
-      "no_new_items": true
+      "required_owner": "IA6_BLOCK03_REPEL_L3_WORLD_SEAM_AUTH_20261109",
+      "no_new_items": true,
+      "l3_native_repel": true,
+      "savev2_schema_changed": false
     }
   ]
 }
