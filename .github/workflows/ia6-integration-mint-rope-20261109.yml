@@ -18,6 +18,8 @@ on:
       - 'scenes/visual/field_machine_book_panel.gd'
       - 'tests/gameplay/parallel_items_w05_book_ui_pilot_20261109.gd'
       - 'tests/gameplay/ia6_books_bag_20261109.gd'
+      - 'tests/gameplay/ia6_mint_field_native_save_20261109.gd'
+      - 'modules/save/field_native_save.gd'
   workflow_dispatch:
 permissions:
   contents: read
@@ -71,6 +73,12 @@ jobs:
           set -euo pipefail
           timeout 900s godot --headless --path . --script res://tests/gameplay/ia6_integration_mint_rope_20261109.gd 2>&1 | tee ia6-crossworker.log
           grep -E '^IA6_INTEGRATION PASS checks=[1-9][0-9]* features=mint_effective_nature,escape_rope_bag_savev2$' ia6-crossworker.log
+      - name: SaveV2 nativo real despues de menta desde mochila
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 900s godot --headless --path . --script res://tests/gameplay/ia6_mint_field_native_save_20261109.gd 2>&1 | tee ia6-mint-field-save.log
+          grep -E '^IA6_MINT_FIELD_SAVE PASS checks=[1-9][0-9]* features=real_bag,original_nature,effective_nature,savev2$' ia6-mint-field-save.log
       - name: Regresion panel W05 aislado y mochila real IA6
         shell: bash
         run: |
