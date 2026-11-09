@@ -50,3 +50,19 @@ Las condiciones importadas en `CreatureSpecies.evolutions` están presentes pero
 **Sin cambios** en producción, `CreatureInstance`, SaveV2, escena, servicios compartidos, datos canónicos, `main`, V28, PR #118 ni otras ramas. CI del bloque05 debe leerse en GitHub antes de añadir los recibos definitivos.
 
 **Siguiente acción:** IA6 debe publicar autorización de productor/semántica o reasignar trabajo independiente. No dar por concluido 05 ni disparar 06 en esta ventana por una `p` sin resolver antes este gate.
+
+## CI05 real — diagnóstico verificado, 05 sin completar
+
+El run [#42679146893](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/42679146893), SHA `706ef435ec31554308b285b6504f47ef81404e5b`, terminó **completed/success**.
+
+Recibos textuales observados:
+- `CAMP006_W04_SCOPE PASS completed=3 last_executed=05 deferred=04 rows=4`
+- `CAMP006_W04_BLOCK05 status=BLOCKED_MISSING_SHARED_PRODUCERS completed=3 last_executed=05 deferred=04` (Python y Godot)
+- `CAMP006_W04_PY PASS completed=3 last_executed=05 deferred=04 checks=140`
+- `CAMP006_W04_GODOT PASS completed=3 last_executed=05 deferred=04 checks=304`
+- `CAMP005_W04_PY PASS blocks=10 checks=673`
+- `CAMP005_W04_GODOT PASS blocks=10 checks=1423`
+
+Los nueve recibos L3 anteriores (tres manzanas, cuatro vasijas por especie, dos equipables) aparecen en los logs. Ningún recibo L2/L3 de evolución para `oval_stone`, `dawn_stone` ni `peat_block` se ha emitido: **no corresponde**. El contador real `completed=3` permanece invariado. La CI consolidada deberá verificarse de nuevo después de publicar el CSV actualizado.
+
+**Resultado del bloque05:** diagnóstico y ticket único de productores completados; **implementación funcional no completada**. Se recomienda IA6 habilitar los productores compartidos o autorizar continuar con una familia independiente, sin conceder falsamente el bloque 05.
