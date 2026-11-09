@@ -60,6 +60,11 @@ func _run() -> void:
 		ck("enabled without target " + String(id), not bag._use.disabled)
 		bag._use.pressed.emit()
 		await process_frame
+		print("W03_REPEL_SIGNAL id=", id, " selected=", bag._selected_item(),
+			" current=", scene.field_item_service_is_current(bag.service),
+			" connections=", bag._use.pressed.get_connections().size())
+		var direct: Dictionary = bag._apply_repel()
+		print("W03_REPEL_DIRECT result=", JSON.stringify(direct))
 		print("W03_REPEL_DEBUG id=", id, " bag_result=", bag._result.text,
 			" amount=", owner.inventory.quantity(id), " effect=", JSON.stringify(effect.to_dict()),
 			" field_use=", scene.field_can_use_items())
