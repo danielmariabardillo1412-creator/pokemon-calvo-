@@ -194,3 +194,17 @@ Fila 06 del progreso: `CI_PASS_VERIFICADO`, anclada al SHA de código y al run c
 ## B09 — certificación final (2026-11-09)
 
 **9/10 bloques certificados.** `sea_incense;full_incense;lax_incense` aprobados sobre SHA `db2339fca101db900ac7d266328701da62a0a90b`, run #42713116537 `completed/success`; Python 607, Godot 23505, B09 nativo 7 fallos y 57 aciertos con 64 semillas sin RNG artificial, B06 y B07 reproducidos. 81 escenarios, 260 pares. La nueva `p` autoriza solo B10 `normal_gem;fire_gem;water_gem` e incluye CAMP004 completa antes del cierre. Sin cambios de producción ni permisos adicionales.
+
+## B10 — CIERRE CAMPAÑA_005 — 10/10 CERTIFICADOS
+
+**Estado final W01: CAMPAÑA_005_FINALIZADA.** Los 30 equipables de CAMPAÑA_005 distribuidos en diez bloques están probados en la rama `codex/calvo-items-20261104-w01-camp005`.
+
+**SHA funcional:** `5303578448d909cf1b4e2c3c60c7d3e231203f98`. **CI #42717306543 `completed/success`**, sobre el mismo commit. B10 `normal_gem;fire_gem;water_gem`: activación/consumo real único, controles negativos, propietario activo y reserva, SaveV2 después del primer gasto, segundo golpe sin recreación y nuevo SaveV2. Nativo B10: 6 consumos positivos, 6 retenciones negativas, 6 segundos turnos y 33 snapshots.
+
+CAMP005 cerró con **90 escenarios, 272 pares caso-semilla, 816 modalidades**. CI: `CAMP005_W01_PY PASS blocks=10 checks=668`, `CAMP005_W01_GODOT PASS blocks=10 checks=24723`; B06/B07/B09 nativos, transacciones Showdown intactas.
+
+**Regresión completa CAMP004 hito 10, misma CI:** `CAMP004_W01_PY PASS blocks=10 checks=1028`, `CAMP004_W01_GODOT PASS blocks=10 checks=16816`.
+
+No se modificaron módulos de producción, SaveV2 central, main, V28, PR #118, rama árbitra ni ramas de otras trabajadoras. No se ha realizado merge; IA6 debe revisar e integrar antes de declarar el cambio disponible en la rama principal.
+
+**PARAR AUTONOMÍA:** no iniciar CAMPAÑA_006 sin nueva autorización y cola de IA6. La CI que dispare el commit de cierre documental debe comprobarse por separado de la funcional certificada.
