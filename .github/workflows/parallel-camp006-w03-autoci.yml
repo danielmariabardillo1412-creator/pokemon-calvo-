@@ -12,6 +12,9 @@ on:
       - 'modules/overworld/field_repel_step_effect.gd'
       - 'modules/overworld/field_world_item_transaction.gd'
       - 'scenes/visual/field_item_bag.gd'
+      - 'scenes/visual/field_demo.gd'
+      - 'scenes/visual/field_native_bridge.gd'
+      - 'tests/gameplay/parallel_items_w03_repel_l3.gd'
       - 'docs/coordination/items_parallel_v1/reports/W03/CAMP_006_PROGRESO.csv'
       - 'docs/coordination/items_parallel_v1/reports/W03/CAMP_006_APLAZADOS.csv'
       - 'tests/tools/test_parallel_items_w03_block05_source_red.py'
@@ -70,6 +73,28 @@ jobs:
           set -euo pipefail
           timeout 900s godot --headless --path . --script res://tests/gameplay/parallel_items_w03_campaign_006.gd 2>&1 | tee camp006-w03-godot.log
           grep -E '^CAMP006_W03_GODOT PASS blocks=3 checks=[1-9][0-9]*$' camp006-w03-godot.log
+      - name: CAMP006 W03 repel L3 native field integration
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 900s godot --headless --path . --script res://tests/gameplay/parallel_items_w03_repel_l3.gd 2>&1 | tee camp006-w03-repel-l3.log
+          grep -E '^CAMP006_W03_REPEL_L3 PASS checks=[1-9][0-9]*
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tests/tools/test_parallel_items_w03_campaign_005.py --ci 2>&1 | tee camp006-w03-camp005-py.log
+          grep -E '^CAMP005_W03_PY PASS blocks=10 checks=[1-9][0-9]*$' camp006-w03-camp005-py.log
+          timeout 900s godot --headless --path . --script res://tests/gameplay/parallel_items_w03_campaign_005.gd 2>&1 | tee camp006-w03-camp005-godot.log
+          grep -E '^CAMP005_W03_GODOT PASS blocks=10 checks=[1-9][0-9]*$' camp006-w03-camp005-godot.log
+      - name: Archive evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: camp006-w03-${{ github.run_id }}
+          retention-days: 7
+          if-no-files-found: ignore
+          path: camp006-w03-*.log
+ camp006-w03-repel-l3.log
       - name: Mandatory CAMP005 W03 regression
         shell: bash
         run: |
