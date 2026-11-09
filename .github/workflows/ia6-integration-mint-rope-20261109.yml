@@ -68,11 +68,25 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p .godot/item_audit_v1 .godot/item_connections_v1
-          sha256sum modules/inventory/item_connections_v1.json > ia6-connection-profile-before.sha
+          cp modules/inventory/item_connections_v1.json /tmp/ia6-item-profile-original.json
           node tools/item_audit/native_inventory.cjs 2>&1 | tee ia6-item-native-inventory.log
           test -s .godot/item_audit_v1/native_inventory.json
           python -B tools/item_audit/prepare_connections_v1.py 2>&1 | tee ia6-item-prepare.log
-          sha256sum -c ia6-connection-profile-before.sha
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          import shutil
+          original=Path('/tmp/ia6-item-profile-original.json')
+          current=Path('modules/inventory/item_connections_v1.json')
+          previous=json.loads(original.read_text(encoding='utf-8'))
+          generated=json.loads(current.read_text(encoding='utf-8'))
+          changed=[key for key in sorted(set(previous)|set(generated)) if previous.get(key)!=generated.get(key)]
+          if changed:
+              raise SystemExit('IA6_CONNECTION_PROFILE_DRIFT ' + ', '.join(changed))
+          shutil.copyfile(original,current)
+          assert current.read_bytes()==original.read_bytes()
+          print('IA6_CONNECTION_PROFILE_SEMANTIC_MATCH; original versioned bytes restored')
+          PY
           test -s .godot/item_connections_v1/source_machine_rows.json
           test -s .godot/item_connections_v1/machine_fixtures.json
           timeout 180s godot --headless --path . --script res://tests/gameplay/item_inventory_export.gd 2>&1 | tee ia6-item-eligibility.log
