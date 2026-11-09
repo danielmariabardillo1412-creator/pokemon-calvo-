@@ -1,3 +1,21 @@
+# IA6 — REANUDACIÓN 9 NOVIEMBRE 2026 / DECISIONES TRAS PAUSA
+
+**Comprobación de GitHub en fecha 2026-11-09**, sin reejecutar suites: ramas W01–W05 e historial reciente Actions. `main`, V28 y PR118 no alterados por esta reanudación.
+
+| IA | Campaña y estado real | Último run decisivo | Orden IA6 |
+| --- | --- | --- | --- |
+| W01 | CAMP005: 5/10 PASS; 06 reportado con 3 FAIL consecutivos, TypeError `undefined.id` al restaurar/escoger tras Transform | [#42252938911](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/42252938911) FAIL | [permiso de reproducción y reparación controlada](CAMPAIGN_005_W01_BLOCK06_NATIVE_TRANSFORM_REPAIR_AUTH_20261109.md), NO 07 antes de PASS |
+| W02 | CAMP006: 10/10 filas publicadas, `exp_share` L1, `lucky_egg` y `soothe_bell` positivos | [#42437567862](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/42437567862) SUCCESS sobre último HEAD `a571d332` | Registrar `CAMPAÑA_006_FINALIZADA` y STOP, SIN 11, conservar ticket `exp_share` |
+| W03 | CAMP006: 3/10 CI PASS, Cuerda Huida L3 y repelentes L2 sin L3; 04 bloqueado por reglas de flautas/señuelos y productor encuentros | [#41965873289](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41965873289) SUCCESS en último funcional | [aplazar 04, autorizar 05 captura](CAMPAIGN_006_W03_BLOCK04_DEFER_CAPTURE_GATE_20261109.md); 04 NO cuenta |
+| W04 | CAMP006: 3/10; 04 bloqueado por `level_values_selected:null` y `future_evolution_implementation:DEFERRED` V27 | [#41785614844](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/41785614844) SUCCESS tras fila 03 | [aplazar 04, autorizar 05 condicionada](CAMPAIGN_006_W04_BLOCK04_DEFER_CONDITIONS_GATE_20261109.md); no inventar niveles ni contar 04 |
+| W05 | CAMP006: 10/10, 49/49 MT activas certificadas en rama, seis regresiones aprobadas, sin integración main/visual | [#42417890877](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/42417890877) SUCCESS | STOP, sin `p`, próxima tarea corresponde a IA6 integración |
+
+**Nota de CI:** los CSV de progreso de W02 y W05 conservan `CI_PENDIENTE` por el push que los lanzó, pero Actions y reportes finales confirman SUCCESS; no disparar otra ejecución solo por cambiar el estado. La rama árbitra conserva la cola original de diez bloques para trazabilidad, y estas excepciones permiten ejecutar el **ID 05** de W03/W04 mientras el **ID 04** queda aplazado, *sin rellenar el hueco con falso PASS ni cambiar el denominador*. Cualquier validador que exija secuencia contigua debe evolucionar a lista real de bloques ejecutados + ledger de aplazados.
+
+**Prioridad técnica IA6 posterior:** (1) bug compartido Showdown/Transformación; (2) productor de encuentros que desbloquee repelentes, flautas y señuelos; (3) política concreta de niveles + objeto equipado para trade evolutions; (4) `exp_share` real para no participantes; (5) integración selectiva y pruebas visuales de MT/Libros. No mezclar sin revisión código de ramas paralelas, especialmente `CreatureInstance`, `FieldItemBag` y `native_engine.cjs`.
+
+---
+
 # IA6 — AUTORIZACIONES PARA DESBLOQUEO W03 Y MENTAS W02 (2026-11-04)
 
 **W03 / WORLD_RETURN, CAMPAÑA_006 bloque02:** ticket verificado en rama `codex/calvo-items-20261104-w03-camp006`, `reports/W03/CAMP_006_BLOCK_02_IA6_INTERFACE_BLOCKER.md`. Piloto de Cuerda Huida retorno/posición funciona; UI no ejecuta ni gasta cuerda. **IA6 autoriza explícitamente** `FieldItemBag._refresh_choices/_apply` limitado a `escape_rope` + NUEVO helper `modules/overworld/field_world_item_transaction.gd` y piloto W03 en **su rama exclusivamente**, bajo [contrato oficial](CAMPAIGN_006_W03_BLOCK02_SHARED_SEAM_AUTHORIZATION.md). Guardado *manual* después del uso; sin autosave ni promesa falsa de transacción disco+estado vivo. Si no se puede revertir fallo de travesía/consumo con APIs actuales, prueba roja y revisión IA6. Se preserva `fluffy_tail` positivo en batalla, sin uso en mundo. Requiere tests Godot L3 de mochila+retorno+consumo+SaveV2, negativos y regresiones, CI acumulativa bloque02. Modificado solo gate IA6; no producción. **W03 autorizada para trabajar en 02, no declarada PASS.**
