@@ -1,0 +1,202 @@
+name: PILOT W02 - recuperar CAMP005 y regresiones
+on:
+  push:
+    branches:
+      - codex/calvo-items-20261109-w02-mints-integration
+    paths:
+      - '.github/workflows/parallel-w02-mint-integration-20261109.yml'
+      - 'tests/tools/test_parallel_items_w02_campaign_005.py'
+      - 'tests/tools/test_parallel_items_w02_campaign_005_manifest.py'
+      - 'tests/gameplay/parallel_items_w02_campaign_005.gd'
+      - 'tests/fixtures/parallel_items/w02_campaign_005.json'
+      - 'tests/tools/test_parallel_items_w02_campaign_006.py'
+      - 'tests/gameplay/parallel_items_w02_campaign_006.gd'
+      - 'tests/fixtures/parallel_items/w02_campaign_006.json'
+      - 'tests/fixtures/parallel_items/w02_campaign_006_block06.json'
+      - 'tests/gameplay/parallel_items_w02_campaign_006_block06.gd'
+      - 'tests/tools/test_parallel_items_w02_campaign_006_block06.py'
+      - 'tests/fixtures/parallel_items/w02_campaign_006_block07.json'
+      - 'tests/gameplay/parallel_items_w02_campaign_006_block07.gd'
+      - 'tests/tools/test_parallel_items_w02_campaign_006_block07.py'
+      - 'tests/fixtures/parallel_items/w02_campaign_006_block08.json'
+      - 'tests/gameplay/parallel_items_w02_campaign_006_block08.gd'
+      - 'tests/tools/test_parallel_items_w02_campaign_006_block08.py'
+      - 'tests/fixtures/parallel_items/w02_campaign_006_block09.json'
+      - 'tests/gameplay/parallel_items_w02_campaign_006_block09.gd'
+      - 'tests/tools/test_parallel_items_w02_campaign_006_block09.py'
+      - 'tests/fixtures/parallel_items/w02_campaign_006_block10.json'
+      - 'tests/gameplay/parallel_items_w02_campaign_006_block10.gd'
+      - 'tests/tools/test_parallel_items_w02_campaign_006_block10.py'
+      - 'docs/coordination/items_parallel_v1/reports/W02/CAMP_006_PROGRESO.csv'
+      - 'tests/tools/test_parallel_items_w02_mint_pilot_20261109.py'
+      - 'tests/gameplay/parallel_items_w02_mint_pilot_20261109.gd'
+      - 'modules/**'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: pilot-w02-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  recover:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Puerta 01 en rama W02 y conservar CAMP005 10 bloques
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REF_NAME" = "codex/calvo-items-20261109-w02-mints-integration"
+          python -B tests/tools/test_parallel_items_w02_campaign_005_manifest.py
+          test "$(python -B tests/tools/test_parallel_items_w02_campaign_005_manifest.py --count-only)" = "10"
+          python -B tests/tools/test_parallel_items_w02_campaign_006.py --ci | tee camp006-recovery-python.log
+          grep -E '^CAMP006_W02_PY PASS blocks=1 checks=[1-9][0-9]*$' camp006-recovery-python.log
+          grep -E '^CAMP006_W02_DEPENDENCY BLOCKED block=02 ids=3 checks=[1-9][0-9]*$' camp006-recovery-python.log
+          grep -E '^CAMP006_W02_DEPENDENCY BLOCKED block=03 ids=3 checks=[1-9][0-9]*$' camp006-recovery-python.log
+          grep -E '^CAMP006_W02_MINT04_CONTRACT READY ids=4 checks=[1-9][0-9]*$' camp006-recovery-python.log
+          grep -E '^CAMP006_W02_HELD05_CONTRACT READY positives=2 dependency=1 checks=[1-9][0-9]*$' camp006-recovery-python.log
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: chickensoft-games/setup-godot@v2.4.1
+        with:
+          version: 4.7.0
+          use-dotnet: false
+          include-templates: false
+      - name: Preparar Godot 4.7 y restaurar recursos
+        shell: bash
+        run: |
+          set -euo pipefail
+          godot --version | grep -E '^4[.]7([.-]|$)'
+          python -B tools/distribution/restore_resources.py
+          python -B tools/distribution/restore_resources.py --check
+          mkdir -p data/reports
+          cp ci/fixtures/pokeapi_reports/forms_policy_report.json data/reports/forms_policy_report.json
+          cp ci/fixtures/pokeapi_reports/unsupported_mechanics.json data/reports/unsupported_mechanics.json
+          cp ci/fixtures/pokeapi_reports/import_summary.json data/reports/import_summary.json
+          godot --headless --path . --import 2>&1 | tee camp006-import.log
+          if grep -E 'SCRIPT ERROR|Parse Error' camp006-import.log; then exit 1; fi
+          echo "POKEMON_CALVO_NODE=$(command -v node)" >> "$GITHUB_ENV"
+          python -B tools/battle_reference/run.py --install --limit 1 2>&1 | tee camp006-native.log
+      - name: Recuperación integral Python CAMP005 10/10
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tests/tools/test_parallel_items_w02_campaign_005.py --ci 2>&1 | tee camp006-camp005-python.log
+          python -B tests/tools/test_parallel_items_w02_campaign_005_manifest.py --verify-output PY --log camp006-camp005-python.log
+          grep -E '^CAMP005_W02_PY PASS blocks=10 checks=[1-9][0-9]*$' camp006-camp005-python.log
+      - name: Recuperación integral Godot CAMP005 10/10
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 900s godot --headless --path . --script res://tests/gameplay/parallel_items_w02_campaign_005.gd 2>&1 | tee camp006-camp005-godot.log
+          python -B tests/tools/test_parallel_items_w02_campaign_005_manifest.py --verify-output GODOT --log camp006-camp005-godot.log
+          grep -E '^CAMP005_W02_GODOT PASS blocks=10 checks=[1-9][0-9]*$' camp006-camp005-godot.log
+      - name: Prueba nativa de recuperación Godot CAMP006 01/10
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 900s godot --headless --path . --script res://tests/gameplay/parallel_items_w02_campaign_006.gd 2>&1 | tee camp006-recovery-godot.log
+          grep -E '^CAMP006_W02_GODOT PASS blocks=1 checks=[1-9][0-9]*$' camp006-recovery-godot.log
+          grep -E '^CAMP006_W02_DEPENDENCY BLOCKED block=02 ids=3 checks=[1-9][0-9]*$' camp006-recovery-godot.log
+          grep -E '^CAMP006_W02_DEPENDENCY BLOCKED block=03 ids=3 checks=[1-9][0-9]*$' camp006-recovery-godot.log
+          grep -E '^CAMP006_W02_MINT04 PASS block=04 ids=4 checks=[1-9][0-9]*$' camp006-recovery-godot.log
+          grep -E '^CAMP006_W02_HELD05 PASS block=05 positive=2 dependency=1 checks=[1-9][0-9]*$' camp006-recovery-godot.log
+      - name: Bloque06 contrato Python y EV Power nativo Godot
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tests/tools/test_parallel_items_w02_campaign_006_block06.py | tee camp006-block06-python.log
+          grep -E '^CAMP006_W02_EV06_PY PASS block=06 checks=[1-9][0-9]*$' camp006-block06-python.log
+          timeout 900s godot --headless --path . --script res://tests/gameplay/parallel_items_w02_campaign_006_block06.gd 2>&1 | tee camp006-block06-godot.log
+          grep -E '^CAMP006_W02_EV06 PASS block=06 positive=9 checks=[1-9][0-9]*$' camp006-block06-godot.log
+      - name: Bloque07 contrato Python y EV Power nativo Godot
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tests/tools/test_parallel_items_w02_campaign_006_block07.py | tee camp006-block07-python.log
+          grep -E '^CAMP006_W02_EV07_PY PASS block=07 checks=[1-9][0-9]*$' camp006-block07-python.log
+          timeout 900s godot --headless --path . --script res://tests/gameplay/parallel_items_w02_campaign_006_block07.gd 2>&1 | tee camp006-block07-godot.log
+          grep -E '^CAMP006_W02_EV07 PASS block=07 positive=9 checks=[1-9][0-9]*$' camp006-block07-godot.log
+      - name: Bloque08 contrato Python y EV/amistad nativo Godot
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tests/tools/test_parallel_items_w02_campaign_006_block08.py | tee camp006-block08-python.log
+          grep -E '^CAMP006_W02_HELD08_PY PASS block=08 checks=[1-9][0-9]*$' camp006-block08-python.log
+          timeout 900s godot --headless --path . --script res://tests/gameplay/parallel_items_w02_campaign_006_block08.gd 2>&1 | tee camp006-block08-godot.log
+          grep -E '^CAMP006_W02_HELD08 PASS block=08 positive=4 negative=2 checks=[1-9][0-9]*$' camp006-block08-godot.log
+      - name: Bloque09 contrato Python y habilidad/menta Godot real
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tests/tools/test_parallel_items_w02_campaign_006_block09.py | tee camp006-block09-python.log
+          grep -E '^CAMP006_W02_TRAIN09_PY PASS block=09 checks=[1-9][0-9]*$' camp006-block09-python.log
+          timeout 900s godot --headless --path . --script res://tests/gameplay/parallel_items_w02_campaign_006_block09.gd 2>&1 | tee camp006-block09-godot.log
+          grep -E '^CAMP006_W02_TRAIN09 PASS block=09 positive=6 negative=3 checks=[1-9][0-9]*$' camp006-block09-godot.log
+      - name: Bloque10 E2E Python y Godot con Exp Share dependencia explicita
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tests/tools/test_parallel_items_w02_campaign_006_block10.py | tee camp006-block10-python.log
+          grep -E '^CAMP006_W02_FINAL10_PY PASS block=10 positives=2 dependency=1 checks=[1-9][0-9]*$' camp006-block10-python.log
+          timeout 900s godot --headless --path . --script res://tests/gameplay/parallel_items_w02_campaign_006_block10.gd 2>&1 | tee camp006-block10-godot.log
+          grep -E '^CAMP006_W02_FINAL10 PASS block=10 positive=4 dependency=2 negative=3 checks=[1-9][0-9]*$' camp006-block10-godot.log
+      - name: Regresión CAMP004 y CAMP003 - Python y Godot
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tests/tools/test_parallel_items_w02_campaign_004.py --ci 2>&1 | tee camp006-regression-004-python.log
+          grep -E '^CAMP004_W02_PY PASS blocks=10 checks=[1-9][0-9]*$' camp006-regression-004-python.log
+          timeout 900s godot --headless --path . --script res://tests/gameplay/parallel_items_w02_campaign_004.gd 2>&1 | tee camp006-regression-004-godot.log
+          grep -E '^CAMP004_W02_GODOT PASS blocks=10 checks=[1-9][0-9]*$' camp006-regression-004-godot.log
+          python -B tests/tools/test_parallel_items_w02_campaign_003.py --ci 2>&1 | tee camp006-regression-003-python.log
+          grep -E '^CAMP003_W02_PY PASS blocks=10 checks=[1-9][0-9]*$' camp006-regression-003-python.log
+          timeout 900s godot --headless --path . --script res://tests/gameplay/parallel_items_w02_campaign_003.gd 2>&1 | tee camp006-regression-003-godot.log
+          grep -E '^CAMP003_W02_GODOT PASS blocks=10 checks=[1-9][0-9]*$' camp006-regression-003-godot.log
+      - name: Nuevo piloto MINT-L3 con pruebas independientes
+        shell: bash
+        run: |
+          set -euo pipefail
+          PY="tests/tools/test_parallel_items_w02_mint_pilot_20261109.py"
+          GD="tests/gameplay/parallel_items_w02_mint_pilot_20261109.gd"
+          if [ ! -e "$PY" ] && [ ! -e "$GD" ]; then
+            echo "W02_MINT_PILOT_20261109 BOOTSTRAP_ONLY (piloto no implementado)"
+          else
+            test -f "$PY"
+            test -f "$GD"
+            python -B "$PY" 2>&1 | tee w02-pilot-python.log
+            grep -E '^W02_MINT_PILOT_20261109_PY PASS checks=[1-9][0-9]*
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: camp006-w02-${{ github.run_id }}
+          retention-days: 7
+          if-no-files-found: ignore
+          path: camp006-*.log
+ w02-pilot-python.log
+            timeout 900s godot --headless --path . --script "res://$GD" 2>&1 | tee w02-pilot-godot.log
+            grep -E '^W02_MINT_PILOT_20261109_GODOT PASS checks=[1-9][0-9]*
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: camp006-w02-${{ github.run_id }}
+          retention-days: 7
+          if-no-files-found: ignore
+          path: camp006-*.log
+ w02-pilot-godot.log
+          fi
+      - name: Guardar logs CAMP006 y regresiones
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: camp006-w02-${{ github.run_id }}
+          retention-days: 7
+          if-no-files-found: ignore
+          path: camp006-*.log
