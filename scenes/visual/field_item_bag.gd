@@ -164,6 +164,11 @@ func _refresh_choices() -> void:
 		_description.text = "Medicina para el Pokémon seleccionado. Se consume solo si tiene efecto." if service.FieldEffects.consumes_on_use(_selected_item()) else "Despierta al Pokémon seleccionado. Puede reutilizarse; no se consume."
 	elif service.FieldEffects.EV_BERRIES.has(String(_selected_item())):
 		_description.text = "Reduce hasta 10 EV de una estadística y aumenta la amistad."
+	if _selected_item() in [&"repel", &"super_repel", &"max_repel"]:
+		_description.text = "Ahuyenta Pokémon salvajes de nivel inferior al líder durante pasos reales."
+		_use.disabled = not service.owner.inventory.has(_selected_item()) or field._repel_effect.remaining_steps > 0
+		_equip.disabled = true
+		return
 	if _selected_item() == &"escape_rope":
 		_description.text = "Regresa a la salida segura. Consume una cuerda al completar el traslado; no guarda automáticamente."
 		_use.disabled = _world_item_tx.busy or not service.owner.inventory.has(&"escape_rope")
@@ -180,6 +185,8 @@ func _apply(action: String) -> Dictionary:
 		if field != null: field.field_refresh_hud()
 		return {"accepted": false, "reason": "field_locked", "status": "REJECTED"}
 	_cancel_growth()
+	if action == "use" and _selected_item() in [&"repel", &"super_repel", &"max_repel"]:
+		return _apply_repel()
 	if action == "use" and _selected_item() == &"escape_rope":
 		return await _apply_escape_rope()
 	if action == "use" and service.Growth.supports(_selected_item()):
@@ -214,6 +221,34 @@ func _apply(action: String) -> Dictionary:
 	refresh()
 	field.field_refresh_hud()
 	return result
+
+
+# W03 repel-only use, with preflight and rollback of the live effect if stock commit fails.
+func _apply_repel() -> Dictionary:
+	var item_id: StringName = _selected_item()
+	if item_id not in [&"repel", &"super_repel", &"max_repel"]:
+		return {"accepted": false, "reason": "unsupported_item"}
+	if not _ensure_binding() or service.owner == null or not field.field_can_open_item_bag():
+		return {"accepted": false, "reason": "field_locked"}
+	var inv = service.owner.inventory
+	if not inv.has(item_id):
+		return {"accepted": false, "reason": "item_not_owned"}
+	var effect = field._repel_effect
+	if effect == null:
+		return {"accepted": false, "reason": "repel_world_missing"}
+	var previous: Dictionary = effect.to_dict()
+	if effect.remaining_steps > 0:
+		return {"accepted": false, "reason": "repel_already_active"}
+	var started: Dictionary = effect.start(item_id)
+	if not bool(started.get("accepted", false)):
+		return started
+	if not inv.remove(item_id, 1):
+		effect.restore(previous)
+		return {"accepted": false, "reason": "inventory_commit_failed"}
+	_result.text = "Repelente activado; no se ha guardado automáticamente."
+	refresh()
+	field.field_refresh_hud()
+	return {"accepted": true, "item_id": String(item_id), "duration": effect.remaining_steps}
 
 
 # W03 only: the world command does not need a Pokémon target.
