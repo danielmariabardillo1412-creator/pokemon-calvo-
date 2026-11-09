@@ -1,3 +1,11 @@
+# IA6 — CIERRE CONFIRMADO W02 CAMPAÑA_006 (9 NOVIEMBRE 2026)
+
+- **W02 detenida / 10 de 10 certificados:** [GitHub Actions #42437567862](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/42437567862) `completed/success` sobre `a571d33266bc445207ed9e8d03cd34e33ac8b071`. Documento final `reports/W02/CAMP_006_ITER_10.md` actualizado en rama exclusiva W02 mediante commit **documental** `7842438faddc004815985fc850feb95e81578643` (`[skip ci]`). Sin nueva CI, sin CAMPAÑA_007, sin merge a main.
+- **No sobrecontar funcionalidad:** `lucky_egg` y `soothe_bell` con efectos positivos probados; `exp_share` únicamente equipamiento + SaveV2, reparto XP a no participantes **L1 DEPENDENCIA IA6**. Mentas sin positivo propio siguen dependientes, salvo las validadas específicamente (por ejemplo `gentle_mint`).
+- **Próxima intervención IA6:** diseñar contrato de `ProgressionSystem.reconcile_battle_result` para EXP Share (fuente de participantes, elegibles no participantes, política de reparto/identidad/XP), integrar de forma selectiva y probar regresiones, no asignar otra cola W02 sin cerrar decisiones compartidas. W02 STOP.
+
+---
+
 # IA6 — REANUDACIÓN 9 NOVIEMBRE 2026 / DECISIONES TRAS PAUSA
 
 **Comprobación de GitHub en fecha 2026-11-09**, sin reejecutar suites: ramas W01–W05 e historial reciente Actions. `main`, V28 y PR118 no alterados por esta reanudación.
