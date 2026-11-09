@@ -228,7 +228,7 @@ func _apply_repel() -> Dictionary:
 	var item_id: StringName = _selected_item()
 	if item_id not in [&"repel", &"super_repel", &"max_repel"]:
 		return {"accepted": false, "reason": "unsupported_item"}
-	if not _ensure_binding() or service.owner == null or not field.field_can_open_item_bag():
+	if not _ensure_binding() or service.owner == null or not field.field_can_use_items():
 		return {"accepted": false, "reason": "field_locked"}
 	var inv = service.owner.inventory
 	if not inv.has(item_id):
