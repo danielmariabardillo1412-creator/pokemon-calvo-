@@ -53,7 +53,7 @@ jobs:
         run: |
           set -euo pipefail
           python -B tests/tools/test_parallel_items_w03_campaign_006.py --ci 2>&1 | tee camp006-w03-python.log
-          grep -E '^CAMP006_W03_PY PASS blocks=3 checks=[1-9][0-9]* deferred=1 last_executed_id=03
+          grep -E '^CAMP006_W03_PY PASS blocks=3 checks=[1-9][0-9]* deferred=1 last_executed_id=03$' camp006-w03-python.log
       - name: Block05 authenticated origin contract (expected RED until IA6 seam)
         shell: bash
         run: |
