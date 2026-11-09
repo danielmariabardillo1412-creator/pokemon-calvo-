@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""IA1/W01 CAMP005 — contrato acumulativo autorizado para 6 bloques funcionales.
+"""IA1/W01 CAMP005 — contrato acumulativo autorizado para 7 bloques funcionales.
 
 No atribuye PASS de Godot: el recibo de efecto positivo corresponde al runner
 real tests/gameplay/parallel_items_w01_campaign_005.gd y a CI del mismo SHA.
@@ -10,6 +10,7 @@ import argparse
 import csv
 import hashlib
 import json
+import subprocess
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -26,6 +27,9 @@ RUNNER = ROOT / "tests/gameplay/parallel_items_w01_campaign_005.gd"
 HISTORY = ROOT / "tools/item_audit/held_effect_sweep_v2.cjs"
 FLINCH_HISTORY = ROOT / "tools/item_audit/held_effect_sweep_v3.cjs"
 SPECIES_HISTORY = FLINCH_HISTORY
+BLOCK07_HOOKS = {"quick_powder": "onModifySpe", "razor_claw": "onModifyCritRatio",
+                 "razor_fang": "onModifyMove"}
+NATIVE_B07 = ROOT / "tests/tools/repro_w01_camp005_b07_native.cjs"
 SPECIES_HOOKS = {
     "deep_sea_scale": "onModifySpD",
     "deep_sea_tooth": "onModifySpA",
@@ -51,6 +55,24 @@ SPECIES_CASES = {
 }
 
 
+# Contrato fijo 07: sufijo, operación, portador, rival, movimientos, semillas, segundo movimiento.
+BLOCK07_CASES = {
+    "quick_powder": [
+        ("speed", "quick_powder_untransformed", "ditto", "gyarados", "reflect", "tackle", [19, 23], None),
+        ("wrong_species", "quick_powder_wrong_species", "mew", "gyarados", "reflect", "tackle", [19], None),
+        ("transformed", "quick_powder_transformed", "ditto", "snorlax", "transform", "tackle", [19], None),
+    ],
+    "razor_claw": [
+        ("focus_critical", "razor_claw_focus_critical", "mew", "snorlax", "focus_energy", "amnesia", list(range(1, 17)), "tackle"),
+        ("immune", "razor_claw_immune", "mew", "gengar", "tackle", "amnesia", [19], None),
+        ("status", "razor_claw_status", "mew", "snorlax", "reflect", "amnesia", [19], None),
+    ],
+    "razor_fang": [
+        ("flinch", "razor_fang_flinch", "mew", "snorlax", "tackle", "tackle", list(range(1, 65)), None),
+        ("immune", "razor_fang_immune", "mew", "gengar", "tackle", "tackle", [19], None),
+        ("status", "razor_fang_status", "mew", "snorlax", "reflect", "tackle", [19], None),
+    ],
+}
 # ID, tipo, ataque positivo y clave nativa; misma referencia ya probada en CAMP004.
 ITEMS = {
     "black_glasses": ("dark", "dark_pulse", "blackglasses"),
@@ -71,6 +93,9 @@ ITEMS = {
     "deep_sea_scale": ("defense", "confusion", "deepseascale"),
     "deep_sea_tooth": ("attack", "water_gun", "deepseatooth"),
     "metal_powder": ("defense", "tackle", "metalpowder"),
+    "quick_powder": ("speed", "reflect", "quickpowder"),
+    "razor_claw": ("critical", "focus_energy", "razorclaw"),
+    "razor_fang": ("flinch", "tackle", "razorfang"),
 }
 MODES = ["active", "none", "reserve"]
 STATES = {"EN_CI_AUTOMATICA", "ENTREGADO_PENDIENTE_CI",
@@ -117,9 +142,11 @@ def validate() -> int:
           "Quinto bloque fuera de encargo de IA6")
     check(queue[5]["ids"] == "deep_sea_scale;deep_sea_tooth;metal_powder",
           "Sexto bloque fuera de encargo de IA6")
+    check(queue[6]["ids"] == "quick_powder;razor_claw;razor_fang",
+          "Séptimo bloque fuera de encargo de IA6")
 
     progress = rows(PROGRESS)
-    check(len(progress) == 6, "Bloque 06 exige progreso exacto 6/10")
+    check(len(progress) == 7, "Bloque 07 exige progreso exacto 7/10")
     first = progress[0]
     check(first["bloque"] == "01" and first["ids"] == queue[0]["ids"],
           "La fila 01 no pertenece a W01")
@@ -153,8 +180,14 @@ def validate() -> int:
           "Bloque 05 no tiene certificado de CI real")
     sixth = progress[5]
     check(sixth["bloque"] == "06" and sixth["ids"] == queue[5]["ids"]
-          and sixth["estado"] in STATES,
-          "Estado o propiedad de fila 06 incorrectos")
+          and sixth["estado"] == "CI_PASS_VERIFICADO"
+          and sixth["sha_pruebas"] == "2900431b3b50d3d47dbf7fabbb554915cd9c8319"
+          and sixth["ci_run"] == "42679854792",
+          "No perder certificado funcional exacto del bloque 06")
+    seventh = progress[6]
+    check(seventh["bloque"] == "07" and seventh["ids"] == queue[6]["ids"]
+          and seventh["estado"] in STATES,
+          "Fila 07 fuera de cola o con estado ilegal")
     check(bool(first["sha_pruebas"]) and bool(first["ci_run"]),
           "Progreso sin trazabilidad de estado pendiente")
 
@@ -191,7 +224,7 @@ def validate() -> int:
           and "foe(a).hp<foe(b).hp" in history,
           "Falta control histórico positivo/negativo de daño")
     for item, (kind, move, native) in ITEMS.items():
-        check(item in ";".join(r["ids"] for r in queue[:6]).split(";"),
+        check(item in ";".join(r["ids"] for r in queue[:7]).split(";"),
               "Objeto fuera de bloques 01/02/03/04/05/06 " + item)
         check(scope[item]["estado_contenido"] == "SELECCIONADO"
               and scope[item]["familia"] == "HELD_COMBAT_CANDIDATE",
@@ -199,11 +232,11 @@ def validate() -> int:
         check(inventory[item]["family"] == "HELD_COMBAT_CANDIDATE"
               and inventory[item]["native_entry"] == "True"
               and inventory[item]["native_id"] == native
-              and (SPECIES_HOOKS.get(item) or
+              and (BLOCK07_HOOKS.get(item) or SPECIES_HOOKS.get(item) or
                    ("onModifyMove" if item == "kings_rock" else "onBasePower"))
                   in inventory[item]["native_hooks"],
               "Objeto sin soporte nativo funcional: " + item)
-        if item != "kings_rock" and item not in SPECIES_HOOKS:
+        if item != "kings_rock" and item not in SPECIES_HOOKS and item not in BLOCK07_HOOKS:
             check(f"{kind}:'{item}'" in history and f"{kind}:'{move}'" in history,
                   "Referencias de tipo y ataque incoherentes: " + item)
 
@@ -212,15 +245,15 @@ def validate() -> int:
           and data["campaign"] == "CAMP_005" and data["kind"] == "NEW_IDS"
           and data["format"] == "gen9calvounifiedv1", "Fixture CAMPAÑA_005 inválido")
     check(data["variants"] == MODES, "Falta un modo activo, sin objeto o reserva")
-    check(len(data["blocks"]) == 6
+    check(len(data["blocks"]) == 7
           and [b["block"] for b in data["blocks"]] ==
-              ["01", "02", "03", "04", "05", "06"]
+              ["01", "02", "03", "04", "05", "06", "07"]
           and all(data["blocks"][i]["ids"] == list(ITEMS)[i*3:(i+1)*3]
-                  for i in range(6)),
-          "Fixture no sigue los bloques 01 a 06 exactos de IA6")
+                  for i in range(7)),
+          "Fixture no sigue los bloques 01 a 07 exactos de IA6")
     cases = data["cases"]
-    check(len(cases) == 54 and len({c["id"] for c in cases}) == 54,
-          "Se exigen 54 escenarios distintos")
+    check(len(cases) == 63 and len({c["id"] for c in cases}) == 63,
+          "Se exigen 63 escenarios distintos")
     for i, block in enumerate(data["blocks"]):
         check(set(block["cases"]) == {c["id"] for c in cases
                                        if c["block"] == f"{i+1:02d}"},
@@ -228,6 +261,25 @@ def validate() -> int:
     pairs = 0
     seen = set()
     for index, (item, (_, matching_move, _)) in enumerate(ITEMS.items()):
+        if item in BLOCK07_CASES:
+            for suffix, op, actor, foe, own_move, foe_move, seeds, follow in BLOCK07_CASES[item]:
+                label = f"{item}_{suffix}"
+                found = [c for c in cases if c["id"] == label]
+                check(len(found) == 1, "Caso funcional B07 ausente: " + label)
+                c = found[0]
+                check(c["block"] == "07" and c["item_id"] == item and c["op"] == op,
+                      "Caso B07 fuera de propiedad: " + label)
+                check((c["actor_species"], c["foe_species"], c["own_move"], c["foe_move"])
+                      == (actor, foe, own_move, foe_move), "Portador o combate alterado B07: " + label)
+                check(c.get("follow_move") == follow and c["seeds"] == seeds
+                      and all(type(i) is int and i > 0 for i in seeds),
+                      "Semillas o segundo movimiento B07 cambiados: " + label)
+                check(c["history"] == "tools/item_audit/held_effect_sweep_v3.cjs:" +
+                      {"quick_powder":"speed_species","razor_claw":"critical_stage","razor_fang":"flinch_rng"}[item],
+                      "Sin trazabilidad histórica B07: " + label)
+                seen.add(label)
+                pairs += len(seeds)
+            continue
         if item in SPECIES_CASES:
             for suffix, op, actor, foe, move, foe_move, seeds in SPECIES_CASES[item]:
                 label = f"{item}_{suffix}"
@@ -281,8 +333,8 @@ def validate() -> int:
                   "Sin trazabilidad a prueba nativa: " + label)
             seen.add(label)
             pairs += len(seeds)
-    check(seen == {c["id"] for c in cases} and pairs == 134,
-          "No hay 134 pares caso-semilla autorizados")
+    check(seen == {c["id"] for c in cases} and pairs == 222,
+          "No hay 222 pares caso-semilla autorizados")
 
     runner = RUNNER.read_text(encoding="utf-8")
     for token in (
@@ -308,6 +360,14 @@ def validate() -> int:
                   "_probe_c005_transformed_stable", "_switch_choice(session, &\"reserve\")",
                   "post_switch_stable", "stable_snapshot"):
         check(token in runner, "No hay control positivo o negativo por especie: " + token)
+    for token in ("quick_powder_untransformed", "quick_powder_wrong_species",
+                  "quick_powder_transformed", "razor_claw_focus_critical",
+                  "razor_claw_immune", "razor_claw_status", "razor_fang_flinch",
+                  "razor_fang_immune", "razor_fang_status",
+                  "c005_razor_claw_exclusive", "c005_razor_fang_activated",
+                  "c005_razor_fang_not_activated", "_probe_c005_transformed_stable"):
+        check(token in runner, "No hay efecto o control B07 en Godot: " + token)
+    check(NATIVE_B07.is_file(), "Falta prueba nativa específica B07")
     check("await _restore_probe(" in PARENT_RUNNER.read_text(encoding="utf-8"),
           "Falta restauración real SaveV2 heredada")
 
@@ -318,7 +378,16 @@ def main() -> int:
     argparse.ArgumentParser(description=__doc__).add_argument("--ci", action="store_true")
     try:
         n = validate()
-    except (ValueError, KeyError, OSError, json.JSONDecodeError, TypeError) as exc:
+        native = subprocess.run(["node", str(NATIVE_B07)], cwd=ROOT,
+                                check=True, text=True, capture_output=True)
+        check("W01_B07_NATIVE_SPEED PASS cases=3" in native.stdout,
+              "Prueba nativa B07 no certificó Velocidad y Transformación")
+        print(native.stdout.strip())
+    except (ValueError, KeyError, OSError, json.JSONDecodeError, TypeError,
+            subprocess.CalledProcessError) as exc:
+        if isinstance(exc, subprocess.CalledProcessError):
+            print("W01_B07_NATIVE_STDERR:", exc.stderr)
+            print("W01_B07_NATIVE_STDOUT:", exc.stdout)
         print("CAMP005_W01_PY FAIL:", exc)
         return 1
     print(f"CAMP005_W01_PY PASS blocks={n} checks={CHECKS}")

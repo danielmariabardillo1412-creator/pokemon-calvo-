@@ -9,6 +9,10 @@ const C005_OUTPUT := "res://.godot/parallel_items/w01_campaign_005"
 var c005_rows: Array = []
 var c005_king_rock_activated: int = 0
 var c005_king_rock_not_activated: int = 0
+var c005_razor_claw_exclusive: int = 0
+var c005_razor_claw_critical: int = 0
+var c005_razor_fang_activated: int = 0
+var c005_razor_fang_not_activated: int = 0
 
 func _initialize() -> void:
 	capture = false
@@ -54,8 +58,8 @@ func _run_w01_c005() -> void:
 		and fixture.get("kind") == "NEW_IDS" and fixture.get("format") == "gen9calvounifiedv1")
 	check("Tres modalidades sin omisiones", fixture.get("variants") == ["active", "none", "reserve"])
 	var progress: Array = _progress_c005()
-	check("Bloques 01 a 06 de CAMPAÑA_005 autorizados", progress.size() == 6)
-	if progress.size() != 6:
+	check("Bloques 01 a 07 de CAMPAÑA_005 autorizados", progress.size() == 7)
+	if progress.size() != 7:
 		quit(2)
 		return
 	check("Fila 01 autorizada por IA6", String(progress[0].block) == "01"
@@ -70,9 +74,11 @@ func _run_w01_c005() -> void:
 		and String(progress[4].ids) == "twisted_spoon;metal_coat;kings_rock")
 	check("Fila 06 autorizada por IA6", String(progress[5].block) == "06"
 		and String(progress[5].ids) == "deep_sea_scale;deep_sea_tooth;metal_powder")
+	check("Fila 07 autorizada por IA6", String(progress[6].block) == "07"
+		and String(progress[6].ids) == "quick_powder;razor_claw;razor_fang")
 	var stages: Array = fixture.get("blocks", [])
-	check("Fixture contiene seis bloques reales", stages.size() == 6)
-	if stages.size() != 6:
+	check("Fixture contiene siete bloques reales", stages.size() == 7)
+	if stages.size() != 7:
 		quit(2)
 		return
 	check("Los tres ID del bloque 01 son exactos",
@@ -87,8 +93,10 @@ func _run_w01_c005() -> void:
 		stages[4].get("ids", []) == ["twisted_spoon", "metal_coat", "kings_rock"])
 	check("Los tres ID del bloque 06 son exactos",
 		stages[5].get("ids", []) == ["deep_sea_scale", "deep_sea_tooth", "metal_powder"])
+	check("Los tres ID del bloque 07 son exactos",
+		stages[6].get("ids", []) == ["quick_powder", "razor_claw", "razor_fang"])
 	var cases: Array = fixture.get("cases", [])
-	check("Cincuenta y cuatro escenarios funcionales autorizados", cases.size() == 54)
+	check("Sesenta y tres escenarios funcionales autorizados", cases.size() == 63)
 	var names: Array = []
 	for row: Dictionary in cases:
 		check("Escenario pertenece a su bloque oficial",
@@ -97,7 +105,8 @@ func _run_w01_c005() -> void:
 			or (String(row.block) == "03" and stages[2].get("ids", []).has(String(row.item_id)))
 			or (String(row.block) == "04" and stages[3].get("ids", []).has(String(row.item_id)))
 			or (String(row.block) == "05" and stages[4].get("ids", []).has(String(row.item_id)))
-			or (String(row.block) == "06" and stages[5].get("ids", []).has(String(row.item_id))))
+			or (String(row.block) == "06" and stages[5].get("ids", []).has(String(row.item_id)))
+			or (String(row.block) == "07" and stages[6].get("ids", []).has(String(row.item_id))))
 		check("ID único del escenario", not names.has(String(row.id)))
 		names.append(String(row.id))
 		for seed_value: Variant in row.seeds:
@@ -120,7 +129,11 @@ func _run_w01_c005() -> void:
 				"checks": checks - previous_checks,
 				"status": "PASS" if errors.size() == previous_errors else "FAIL",
 				"observed": observed})
-	check("Ciento treinta y cuatro pares caso-semilla reales", c005_rows.size() == 134)
+	check("Doscientos veintidós pares caso-semilla reales", c005_rows.size() == 222)
+	check("Garra Afilada registra crítico real nativo", c005_razor_claw_critical > 0)
+	check("Garra Afilada aporta crítico exclusivo del portador", c005_razor_claw_exclusive > 0)
+	check("Colmillo Agudo registra retroceso real nativo", c005_razor_fang_activated > 0)
+	check("Colmillo Agudo registra rama RNG sin retroceso", c005_razor_fang_not_activated > 0)
 	check("Roca del Rey: retroceso real observado con RNG", c005_king_rock_activated > 0)
 	check("Roca del Rey: rama RNG sin retroceso observada", c005_king_rock_not_activated > 0)
 	for item_id: String in ["black_glasses", "dragon_fang", "hard_stone",
@@ -128,7 +141,8 @@ func _run_w01_c005() -> void:
 		"poison_barb", "sharp_beak", "silk_scarf",
 		"silver_powder", "soft_sand", "spell_tag",
 		"twisted_spoon", "metal_coat", "kings_rock",
-		"deep_sea_scale", "deep_sea_tooth", "metal_powder"]:
+		"deep_sea_scale", "deep_sea_tooth", "metal_powder",
+		"quick_powder", "razor_claw", "razor_fang"]:
 		check("Tres contextos distintos para cada ID " + item_id, cases.filter(
 			func(c): return String(c.item_id) == item_id).size() == 3)
 	var report: Dictionary = {"schema_version": 1, "campaign": "CAMP_005",
@@ -219,6 +233,64 @@ func _compare_c005(row: Dictionary, observed: Dictionary) -> void:
 				a.damage == 0 and n.damage == 0 and r.damage == 0
 				and not a.get("flinched", false) and not n.get("flinched", false)
 				and not r.get("flinched", false))
+		"quick_powder_untransformed":
+			check("Polvo Veloz: solo Ditto equipado adelanta a Gyarados en turno real",
+				String(a.after.first_move_actor) == "own"
+				and String(n.after.first_move_actor) == "foe"
+				and String(r.after.first_move_actor) == "foe")
+			check("Polvo Veloz no potencia Reflejo ni consume objeto",
+				a.damage == 0 and n.damage == 0 and r.damage == 0
+				and not a.after.own_consumed)
+		"quick_powder_wrong_species":
+			check("Polvo Veloz no altera orden en Mew ajeno a Ditto",
+				a.after.first_move_actor == n.after.first_move_actor
+				and n.after.first_move_actor == r.after.first_move_actor)
+			check("Polvo Veloz no altera daño ni consume en portador equivocado",
+				a.damage == 0 and n.damage == 0 and r.damage == 0)
+		"quick_powder_transformed":
+			check("Polvo Veloz: Transformación real restaurada en los tres modos",
+				bool(a.after.get("native_transform_event", false))
+				and bool(n.after.get("native_transform_event", false))
+				and bool(r.after.get("native_transform_event", false)))
+			check("Polvo Veloz no se consume al transformar; velocidad nativa la verifica B07",
+				not a.after.own_consumed and a.physical_units == 2
+				and n.physical_units == 2 and r.physical_units == 2)
+		"razor_claw_focus_critical":
+			check("Garra Afilada: Foco Energía y Placaje causan crítico nativo del portador",
+				a.critical and a.damage > 0 and a.damage >= n.damage)
+			check("Garra Afilada: controles sin objeto y reserva son idénticos",
+				n.critical == r.critical and n.damage == r.damage)
+			if a.critical:
+				c005_razor_claw_critical += 1
+			if a.critical and not n.critical and not r.critical:
+				c005_razor_claw_exclusive += 1
+		"razor_claw_immune":
+			check("Garra Afilada no permite crítico ni daño de Placaje a Gengar",
+				a.damage == 0 and n.damage == 0 and r.damage == 0
+				and not a.critical and not n.critical and not r.critical)
+		"razor_claw_status":
+			check("Garra Afilada no produce crítico en Reflejo",
+				a.damage == 0 and n.damage == 0 and r.damage == 0
+				and not a.critical and not n.critical and not r.critical)
+		"razor_fang_flinch":
+			check("Colmillo Agudo no aumenta daño real de Placaje",
+				a.damage > 0 and a.damage == n.damage and n.damage == r.damage)
+			check("Colmillo Agudo solo puede hacer retroceder en portador activo",
+				not n.get("flinched", false) and not r.get("flinched", false))
+			if bool(a.get("flinched", false)):
+				c005_razor_fang_activated += 1
+			else:
+				c005_razor_fang_not_activated += 1
+		"razor_fang_immune":
+			check("Colmillo Agudo no causa daño ni retroceso a Gengar inmune",
+				a.damage == 0 and n.damage == 0 and r.damage == 0
+				and not a.get("flinched", false) and not n.get("flinched", false)
+				and not r.get("flinched", false))
+		"razor_fang_status":
+			check("Colmillo Agudo no causa daño ni retroceso con Reflejo",
+				a.damage == 0 and n.damage == 0 and r.damage == 0
+				and not a.get("flinched", false) and not n.get("flinched", false)
+				and not r.get("flinched", false))
 		"holder_special_defense":
 			var active_loss: int = int(a.start.hp) - int(a.after.hp)
 			var no_loss: int = int(n.start.hp) - int(n.after.hp)
@@ -296,9 +368,9 @@ func _frame_c003(session: RefCounted, id: StringName) -> Dictionary:
 # En W01 la Roca del Rey se comprueba por retroceso observado en log nativo.
 # El harness original de CAMPAÑA_004 se mantiene intacto para las 4 filas previas.
 func _probe_w01_c004(row: Dictionary, seed: int, mode: String) -> Dictionary:
-	if String(row.op) == "transformed_no_boost" and String(row.item_id) == "metal_powder":
+	if String(row.op) in ["transformed_no_boost", "quick_powder_transformed"] and String(row.item_id) in ["metal_powder", "quick_powder"]:
 		return await _probe_c005_transformed_stable(row, seed, mode)
-	if String(row.item_id) == "kings_rock":
+	if String(row.item_id) in ["kings_rock", "razor_fang"]:
 		return await _probe_c005_king_rock(row, seed, mode)
 	return await super._probe_w01_c004(row, seed, mode)
 
@@ -340,9 +412,9 @@ func _probe_c005_king_rock(row: Dictionary, seed: int, mode: String) -> Dictiona
 		if entry.contains("|flinch") and entry.contains("p2a:"):
 			flinched = true
 	check(mode + " retroceso solo si Tackle golpeó antes",
-		not flinched or (String(row.op) == "kings_rock_flinch"
+		not flinched or (String(row.op) in ["kings_rock_flinch", "razor_fang_flinch"]
 			and int(after.foe_hp) < int(before.foe_hp)))
-	if String(row.op) == "kings_rock_flinch":
+	if String(row.op) in ["kings_rock_flinch", "razor_fang_flinch"]:
 		check(mode + " Mew mueve primero frente a Snorlax",
 			String(after.first_move_actor) == "own")
 	var before_restore: Dictionary = session.snapshot()

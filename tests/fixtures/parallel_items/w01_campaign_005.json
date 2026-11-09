@@ -5,7 +5,7 @@
   "kind": "NEW_IDS",
   "scope": "HELD_COMBAT",
   "format": "gen9calvounifiedv1",
-  "status": "BLOCK_06_PENDING_CI",
+  "status": "BLOCK_07_PENDING_CI",
   "variants": [
     "active",
     "none",
@@ -124,6 +124,25 @@
         "metal_powder_physical",
         "metal_powder_special",
         "metal_powder_transformed"
+      ]
+    },
+    {
+      "block": "07",
+      "ids": [
+        "quick_powder",
+        "razor_claw",
+        "razor_fang"
+      ],
+      "cases": [
+        "quick_powder_speed",
+        "quick_powder_wrong_species",
+        "quick_powder_transformed",
+        "razor_claw_focus_critical",
+        "razor_claw_immune",
+        "razor_claw_status",
+        "razor_fang_flinch",
+        "razor_fang_immune",
+        "razor_fang_status"
       ]
     }
   ],
@@ -963,6 +982,212 @@
         19
       ],
       "history": "tools/item_audit/held_effect_sweep_v3.cjs:species_effect"
+    },
+    {
+      "block": "07",
+      "id": "quick_powder_speed",
+      "item_id": "quick_powder",
+      "op": "quick_powder_untransformed",
+      "actor_species": "ditto",
+      "foe_species": "gyarados",
+      "own_move": "reflect",
+      "foe_move": "tackle",
+      "seeds": [
+        19,
+        23
+      ],
+      "history": "tools/item_audit/held_effect_sweep_v3.cjs:speed_species"
+    },
+    {
+      "block": "07",
+      "id": "quick_powder_wrong_species",
+      "item_id": "quick_powder",
+      "op": "quick_powder_wrong_species",
+      "actor_species": "mew",
+      "foe_species": "gyarados",
+      "own_move": "reflect",
+      "foe_move": "tackle",
+      "seeds": [
+        19
+      ],
+      "history": "tools/item_audit/held_effect_sweep_v3.cjs:speed_species"
+    },
+    {
+      "block": "07",
+      "id": "quick_powder_transformed",
+      "item_id": "quick_powder",
+      "op": "quick_powder_transformed",
+      "actor_species": "ditto",
+      "foe_species": "snorlax",
+      "own_move": "transform",
+      "foe_move": "tackle",
+      "seeds": [
+        19
+      ],
+      "history": "tools/item_audit/held_effect_sweep_v3.cjs:speed_species"
+    },
+    {
+      "block": "07",
+      "id": "razor_claw_focus_critical",
+      "item_id": "razor_claw",
+      "op": "razor_claw_focus_critical",
+      "actor_species": "mew",
+      "foe_species": "snorlax",
+      "own_move": "focus_energy",
+      "foe_move": "amnesia",
+      "seeds": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16
+      ],
+      "follow_move": "tackle",
+      "history": "tools/item_audit/held_effect_sweep_v3.cjs:critical_stage"
+    },
+    {
+      "block": "07",
+      "id": "razor_claw_immune",
+      "item_id": "razor_claw",
+      "op": "razor_claw_immune",
+      "actor_species": "mew",
+      "foe_species": "gengar",
+      "own_move": "tackle",
+      "foe_move": "amnesia",
+      "seeds": [
+        19
+      ],
+      "history": "tools/item_audit/held_effect_sweep_v3.cjs:critical_stage"
+    },
+    {
+      "block": "07",
+      "id": "razor_claw_status",
+      "item_id": "razor_claw",
+      "op": "razor_claw_status",
+      "actor_species": "mew",
+      "foe_species": "snorlax",
+      "own_move": "reflect",
+      "foe_move": "amnesia",
+      "seeds": [
+        19
+      ],
+      "history": "tools/item_audit/held_effect_sweep_v3.cjs:critical_stage"
+    },
+    {
+      "block": "07",
+      "id": "razor_fang_flinch",
+      "item_id": "razor_fang",
+      "op": "razor_fang_flinch",
+      "actor_species": "mew",
+      "foe_species": "snorlax",
+      "own_move": "tackle",
+      "foe_move": "tackle",
+      "seeds": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64
+      ],
+      "history": "tools/item_audit/held_effect_sweep_v3.cjs:flinch_rng"
+    },
+    {
+      "block": "07",
+      "id": "razor_fang_immune",
+      "item_id": "razor_fang",
+      "op": "razor_fang_immune",
+      "actor_species": "mew",
+      "foe_species": "gengar",
+      "own_move": "tackle",
+      "foe_move": "tackle",
+      "seeds": [
+        19
+      ],
+      "history": "tools/item_audit/held_effect_sweep_v3.cjs:flinch_rng"
+    },
+    {
+      "block": "07",
+      "id": "razor_fang_status",
+      "item_id": "razor_fang",
+      "op": "razor_fang_status",
+      "actor_species": "mew",
+      "foe_species": "snorlax",
+      "own_move": "reflect",
+      "foe_move": "tackle",
+      "seeds": [
+        19
+      ],
+      "history": "tools/item_audit/held_effect_sweep_v3.cjs:flinch_rng"
     }
   ],
   "source_provenance": {
@@ -971,8 +1196,9 @@
     "native_evidence": "tools/item_audit/held_effect_sweep_v2.cjs"
   },
   "limitations": [
-    "Resultado funcional solo con CI del mismo SHA",
-    "Se preservan controles CAMP005 01-05 y SaveV2; regresión CAMP004 aprobada en bloque 05, obligatoria de nuevo en 10/10 o ante cambios de producción",
-    "B06: un checkpoint SaveV2 de Ditto transformado NO restaura (run 42233251445); tras observar efecto y Transform se cambia a reserva para guardar un estado estable. Arquitectura compartida pendiente para IA6; no se declara arreglada."
+    "Verificación funcional solo mediante CI sobre SHA con fixture, Python, Godot y prueba nativa B07.",
+    "Los 54 escenarios anteriores (134 pares) se conservan; B07 añade 9 escenarios (88 pares).",
+    "La restauración de Ditto transformado del bloque 06 sigue bajo autorización puntual de IA6; no se reabre ni altera su parche.",
+    "No equivale a integración en main/V28 ni prueba visual/GPU."
   ]
 }
