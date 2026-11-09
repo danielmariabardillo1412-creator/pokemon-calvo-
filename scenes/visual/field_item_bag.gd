@@ -18,7 +18,10 @@ var _equip: Button
 var _growth := GrowthTransaction.new()
 var _growth_choices: VBoxContainer
 const WorldItemTx = preload("res://modules/overworld/field_world_item_transaction.gd")
+const BookPanel = preload("res://scenes/visual/field_machine_book_panel.gd")
 var _world_item_tx := WorldItemTx.new()
+var _books_panel: PanelContainer
+var _books_button: Button
 var _ability_stamp := ""
 
 
@@ -26,7 +29,9 @@ func _ready() -> void:
 	hide()
 	visibility_changed.connect(func():
 		if not visible:
-			_cancel_growth(); popup_hide.emit())
+			_cancel_growth()
+			if _books_panel != null: _books_panel.hide()
+			popup_hide.emit())
 	var box := VBoxContainer.new(); box.custom_minimum_size = Vector2(600, 360); box.add_theme_constant_override("separation", 10); add_child(box)
 	var title := Label.new(); title.text = "MOCHILA · FUERA DEL COMBATE"; box.add_child(title)
 	_items = ItemList.new(); _items.custom_minimum_size.y = 135; _items.fixed_icon_size = Vector2i(32, 32); box.add_child(_items)
@@ -38,9 +43,14 @@ func _ready() -> void:
 	var buttons := HBoxContainer.new(); box.add_child(buttons)
 	_use = _button(buttons, "Usar", func(): _apply("use"))
 	_equip = _button(buttons, "Equipar", func(): _apply("equip"))
+	_books_button = _button(buttons, "Abrir libro", _open_machine_books)
 	_button(buttons, "Quitar equipado", func(): _apply("unequip"))
 	_button(buttons, "Cerrar · B / Esc", hide)
 	_result = Label.new(); _result.custom_minimum_size.x = 540; _result.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART; box.add_child(_result)
+	_books_panel = BookPanel.new()
+	_books_panel.hide()
+	box.add_child(_books_panel)
+	_books_panel.teaching_finished.connect(_on_book_teaching_finished)
 	_growth_choices = GrowthChoices.new(); box.add_child(_growth_choices)
 	_growth_choices.chosen.connect(func(value): _show_growth_result(_growth.choose(value)))
 	_growth_choices.cancelled.connect(func():
@@ -55,6 +65,7 @@ func open_bag() -> bool:
 	if field == null or not field.field_can_open_item_bag(): return false
 	if not field.field_bind_item_service(service): return false
 	_result.text = "Selecciona un objeto y un Pokémon. Las funciones pendientes no consumirán el objeto."
+	if _books_panel != null: _books_panel.hide()
 	refresh()
 	reset_size()
 	position = (get_viewport_rect().size - size) / 2.0
@@ -91,6 +102,7 @@ func refresh() -> void:
 		_description.text = ""
 		_use.disabled = true
 		_equip.disabled = true
+		_books_button.disabled = true
 		return
 	var definitions: DefinitionCatalog = field.field_definitions()
 	var collection: PlayerCollection = service.owner
@@ -124,12 +136,14 @@ func _refresh_choices() -> void:
 		_description.text = ""
 		_use.disabled = true
 		_equip.disabled = true
+		_books_button.disabled = true
 		return
 	var definitions: DefinitionCatalog = field.field_definitions()
 	var creature := service.owner.owned_creature(_selected_creature())
 	if creature != null:
 		for slot: BattleMoveSlot in creature.moveset: _moves.add_item("Sustituir: " + SpanishGameText.move_name(slot.move_id, definitions))
 	_moves.visible = service.profile.get("machine_rows", {}).has(String(_selected_item()))
+	_books_button.disabled = not _moves.visible or not service.owner.inventory.has(_selected_item())
 	var pp_target: bool = service.FieldEffects.pp_target_required(_selected_item())
 	var pp_boost: bool = service.FieldEffects.pp_boost_supports(_selected_item())
 	if pp_target:
@@ -215,6 +229,27 @@ func _apply(action: String) -> Dictionary:
 	field.field_refresh_hud()
 	return result
 
+
+# IA6-owned UI seam. The W05 panel shares the existing service; opening it never
+# calls use_item/teach. Exactly one teach() call belongs to the panel button.
+func _open_machine_books() -> void:
+	if _books_panel == null or not _ensure_binding(): return
+	var item_id: StringName = _selected_item()
+	if not service.profile.get("machine_rows", {}).has(String(item_id)): return
+	if not service.owner.inventory.has(item_id): return
+	if not _books_panel.bind_existing_service(service): return
+	if not _books_panel.select_book(item_id): return
+	_books_panel.show()
+	_fit_bag.call_deferred()
+
+
+func _on_book_teaching_finished(outcome: Dictionary) -> void:
+	# The panel already called service.teach exactly once and refreshed itself.
+	# This callback only refreshes existing UI/HUD; it spends no additional item.
+	_result.text = "Libro enseñado. La mochila se ha actualizado." if bool(outcome.get("accepted", false)) else "No se ha enseñado el libro. Inventario conservado."
+	refresh()
+	if field != null: field.field_refresh_hud()
+	_fit_bag.call_deferred()
 
 # W03 only: the world command does not need a Pokémon target.
 func _apply_escape_rope() -> Dictionary:
