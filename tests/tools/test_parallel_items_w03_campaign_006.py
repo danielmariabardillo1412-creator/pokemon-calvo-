@@ -11,6 +11,7 @@ ROOT = Path(__file__).resolve().parents[2]
 BASE = ROOT / "docs/coordination/items_parallel_v1"
 FIXTURE = ROOT / "tests/fixtures/parallel_items/w03_campaign_006.json"
 PROGRESS = BASE / "reports/W03/CAMP_006_PROGRESO.csv"
+DEFERRED = BASE / "reports/W03/CAMP_006_APLAZADOS.csv"
 QUEUE = BASE / "CAMPAIGN_006_W03_QUEUE_APPROVED.csv"
 
 def read_csv(path: Path) -> list[dict[str,str]]:
@@ -30,6 +31,7 @@ def main() -> int:
         f=json.loads(FIXTURE.read_text(encoding="utf-8"))
         q=read_csv(QUEUE)
         p=read_csv(PROGRESS)
+        deferred=read_csv(DEFERRED)
         gd=(ROOT/"tests/gameplay/parallel_items_w03_campaign_006.gd").read_text(encoding="utf-8")
         adapter=(ROOT/"modules/overworld/escape_rope_demo_pilot.gd").read_text(encoding="utf-8")
         world=(ROOT/"modules/overworld/overworld_traversal_controller.gd").read_text(encoding="utf-8")
@@ -37,7 +39,19 @@ def main() -> int:
         save=(ROOT/"scenes/visual/field_native_bridge.gd").read_text(encoding="utf-8")
         tscn=(ROOT/"scenes/overworld/technical_overworld.tscn").read_text(encoding="utf-8")
         ck(f["campaign"]=="CAMP_006" and f["worker"]=="W03", "identity")
-        ck(len(q)==10 and len(p)==len(f["blocks"])==3,"progress not exactly 2/10")
+        ck(len(q)==10 and len(p)==len(f["blocks"])==3,"only 01/02/03 certified")
+        ck(len(deferred)==1 and deferred[0]["bloque"]=="04"
+           and deferred[0]["ids"]==q[3]["ids"]
+           and deferred[0]["estado"]=="APLAZADO_IA6"
+           and deferred[0]["cuenta_completado"]=="false",
+           "04 must be separately deferred, never counted completed")
+        ck([row["bloque"] for row in p]==["01","02","03"]
+           and [row["bloque"] for row in f["blocks"]]==["01","02","03"],
+           "no fabricated completed block04/05")
+        ck(q[4]["ids"]=="dive_ball;lure_ball"
+           and (BASE/"reports/W03/CAMP_006_BLOCK05_CAPTURE_SOURCE_BLOCKER.md").is_file()
+           and (ROOT/"tests/tools/test_parallel_items_w03_block05_source_red.py").is_file(),
+           "block05 source dependency evidence missing")
         ids=f["blocks"][0]["ids"]
         ck(ids==["escape_rope"] and p[0]["ids"]=="escape_rope" and q[0]["ids"]=="escape_rope","queue mismatch")
         ck(p[0]["bloque"]=="01" and f["blocks"][0]["bloque"]=="01", "block sequence")
@@ -161,7 +175,7 @@ def main() -> int:
     except (OSError,KeyError,ValueError,TypeError,AssertionError) as exc:
         print("CAMP006_W03_PY FAIL",exc,file=sys.stderr)
         return 1
-    print(f"CAMP006_W03_PY PASS blocks={len(p)} checks={n}")
+    print(f"CAMP006_W03_PY PASS blocks={len(p)} checks={n} deferred={len(deferred)} last_executed_id={p[-1]['bloque']}")
     return 0
 
 if __name__=="__main__":
