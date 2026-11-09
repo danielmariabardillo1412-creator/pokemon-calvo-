@@ -1,3 +1,9 @@
+# IA5/W05 — PILOTO LIBROS-UI-L3 01 PUBLICADO, CI PENDIENTE (2026-11-09)
+
+Rama codex/calvo-items-20261109-w05-books-ui. Panel independiente de libros con servicio existente (sin tocar FieldItemBag), pruebas Godot y Python con tm202, tm31 y un incompatible, sustitución, PP, consumo y SaveV2. Informe BOOKS_UI_PILOT_01_20261109.md. La CI de arranque #42690009491 pasó, pero todavía no demuestra este piloto. CAMPAÑA_006_FINALIZADA 10/10 y 49/49 se conserva. Una vez certificado, STOP hasta nueva puerta IA6. No merges.
+
+---
+
 # IA5/W05 — CAMPAÑA_006_FINALIZADA · 10/10 · 49/49 MT (2026-11-07)
 
 **Rama exclusiva:** `codex/calvo-items-20261104-w05-camp006`. **Estado terminal:** `CAMPAÑA_006_FINALIZADA`. Último bloque `tm31;tm36;tm44;tm77` → `metal_claw;rock_tomb;dragon_tail;waterfall` de `scarlet-violet`. Fixture acumulativo **10 bloques/49 MT**, sin alterar las 45 anteriores. **CI [#42417890877](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/42417890877)** sobre SHA funcional `e03bdf44f14c79f52907d91907d7cc2ee2e0eba3`, job `128539815534`, `completed/success`.
