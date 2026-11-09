@@ -155,7 +155,7 @@ func _probe(catalog: DefinitionCatalog) -> void:
     check(not invalid.get("eligible", true) and invalid.get("reason") == "invalid_record",
         "guard/null_record_fails_closed")
 
-    print("CAMP006_W04_CONDITION_RESOLVER cases=4 positives=4 status=PURE_L2_NOT_GAMEPLAY_L3 completed=3 last_executed=05 deferred=04")
+    print("CAMP006_W04_CONDITION_RESOLVER cases=4 positives=4 status=PURE_L2_NOT_GAMEPLAY_L3 completed=3 last_executed=06 deferred=04")
 
 func _run() -> void:
     var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(
@@ -173,7 +173,7 @@ func finish() -> void:
         return
     done = true
     if errors.is_empty():
-        print("CAMP006_W04_RESOLVER_L2 PASS completed=3 last_executed=05 deferred=04 checks=", checks)
+        print("CAMP006_W04_RESOLVER_L2 PASS completed=3 last_executed=06 deferred=04 checks=", checks)
     else:
         print("CAMP006_W04_RESOLVER_L2 FAIL errors=", JSON.stringify(errors))
     quit(0 if errors.is_empty() else 1)
