@@ -5,7 +5,7 @@
   "kind": "NEW_IDS",
   "scope": "HELD_COMBAT",
   "format": "gen9calvounifiedv1",
-  "status": "BLOCK_08_PENDING_CI",
+  "status": "BLOCK_09_PENDING_CI",
   "variants": [
     "active",
     "none",
@@ -162,6 +162,25 @@
         "rose_incense_matching",
         "rose_incense_nonmatching",
         "rose_incense_status"
+      ]
+    },
+    {
+      "block": "09",
+      "ids": [
+        "sea_incense",
+        "full_incense",
+        "lax_incense"
+      ],
+      "cases": [
+        "sea_incense_matching",
+        "sea_incense_nonmatching",
+        "sea_incense_status",
+        "full_incense_last",
+        "full_incense_priority",
+        "full_incense_status",
+        "lax_incense_accuracy",
+        "lax_incense_never_miss",
+        "lax_incense_status"
       ]
     }
   ],
@@ -1336,18 +1355,162 @@
         19
       ],
       "history": "tools/item_audit/held_effect_sweep_v3.cjs:status_control"
+    },
+    {
+      "block": "09",
+      "id": "sea_incense_matching",
+      "item_id": "sea_incense",
+      "op": "matching_type_boost",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "own_move": "water_gun",
+      "foe_move": "amnesia",
+      "seeds": [
+        19,
+        23
+      ],
+      "history": "tools/item_audit/held_effect_sweep_v3.cjs:type_boost"
+    },
+    {
+      "block": "09",
+      "id": "sea_incense_nonmatching",
+      "item_id": "sea_incense",
+      "op": "nonmatching_control",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "own_move": "tackle",
+      "foe_move": "amnesia",
+      "seeds": [
+        19
+      ],
+      "history": "tools/item_audit/held_effect_sweep_v3.cjs:wrong_type"
+    },
+    {
+      "block": "09",
+      "id": "sea_incense_status",
+      "item_id": "sea_incense",
+      "op": "status_control",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "own_move": "reflect",
+      "foe_move": "amnesia",
+      "seeds": [
+        19
+      ],
+      "history": "tools/item_audit/held_effect_sweep_v3.cjs:status_control"
+    },
+    {
+      "block": "09",
+      "id": "full_incense_last",
+      "item_id": "full_incense",
+      "op": "full_incense_last",
+      "actor_species": "mew",
+      "foe_species": "snorlax",
+      "own_move": "reflect",
+      "foe_move": "tackle",
+      "seeds": [
+        19,
+        23
+      ],
+      "history": "tools/item_audit/held_effect_sweep_v3.cjs:last_same_priority"
+    },
+    {
+      "block": "09",
+      "id": "full_incense_priority",
+      "item_id": "full_incense",
+      "op": "full_incense_priority",
+      "actor_species": "mew",
+      "foe_species": "snorlax",
+      "own_move": "quick_attack",
+      "foe_move": "tackle",
+      "seeds": [
+        19
+      ],
+      "history": "tools/item_audit/held_effect_sweep_v3.cjs:priority_preserved"
+    },
+    {
+      "block": "09",
+      "id": "full_incense_status",
+      "item_id": "full_incense",
+      "op": "full_incense_status",
+      "actor_species": "mew",
+      "foe_species": "snorlax",
+      "own_move": "reflect",
+      "foe_move": "amnesia",
+      "seeds": [
+        19
+      ],
+      "history": "tools/item_audit/held_effect_sweep_v3.cjs:last_same_priority"
+    },
+    {
+      "block": "09",
+      "id": "lax_incense_accuracy",
+      "item_id": "lax_incense",
+      "op": "lax_incense_accuracy",
+      "actor_species": "mew",
+      "foe_species": "snorlax",
+      "own_move": "reflect",
+      "foe_move": "tackle",
+      "seeds": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16
+      ],
+      "history": "tools/item_audit/held_effect_sweep_v3.cjs:accuracy_rng"
+    },
+    {
+      "block": "09",
+      "id": "lax_incense_never_miss",
+      "item_id": "lax_incense",
+      "op": "lax_incense_never_miss",
+      "actor_species": "mew",
+      "foe_species": "snorlax",
+      "own_move": "reflect",
+      "foe_move": "aerial_ace",
+      "seeds": [
+        19
+      ],
+      "history": "tools/item_audit/held_effect_sweep_v3.cjs:guaranteed_hit"
+    },
+    {
+      "block": "09",
+      "id": "lax_incense_status",
+      "item_id": "lax_incense",
+      "op": "lax_incense_status",
+      "actor_species": "mew",
+      "foe_species": "snorlax",
+      "own_move": "reflect",
+      "foe_move": "amnesia",
+      "seeds": [
+        19
+      ],
+      "history": "tools/item_audit/held_effect_sweep_v3.cjs:status_no_accuracy"
     }
   ],
   "source_provenance": {
     "queue": "docs/coordination/items_parallel_v1/CAMPAIGN_005_W01_QUEUE_APPROVED.csv",
     "prior_runner": "tests/gameplay/parallel_items_w01_campaign_004.gd",
     "native_evidence": "tools/item_audit/held_effect_sweep_v2.cjs",
-    "native_incense_evidence": "tools/item_audit/held_effect_sweep_v3.cjs"
+    "native_incense_evidence": "tools/item_audit/held_effect_sweep_v3.cjs",
+    "native_b09_evidence": "tests/tools/repro_w01_camp005_b09_native.cjs"
   },
   "limitations": [
-    "B08 pendiente de CI sobre SHA de Python/Godot, 9 escenarios y 12 pares nuevos; no se asume aprobado.",
-    "Los 63 escenarios y 222 pares de B01-B07 deben conservarse íntegros; B08 acumula 72 escenarios y 234 pares.",
-    "Los inciensos se verifican únicamente como potenciadores de tipo en batalla; efectos de crianza/evolución quedan fuera de esta especialidad.",
-    "SaveV2 y parche puntual de Transformación B06 no se modifican; no hay validación visual/GPU ni integración main/V28."
+    "Bloque 09 pendiente de CI propia funcional sobre SHA; no confundir con CI de 08.",
+    "Conservados 72 casos anteriores y 234 pares; 9 casos nuevos y 26 pares: 81 casos y 260 pares.",
+    "Full Incense actúa último con igual prioridad y no invierte prioridad +1; Lax Incense sin RNG manipulado.",
+    "SaveV2, titularidad y no consumo en tres modalidades; no certifica main ni interfaz"
   ]
 }

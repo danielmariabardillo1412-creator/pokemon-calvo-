@@ -13,6 +13,8 @@ var c005_razor_claw_exclusive: int = 0
 var c005_razor_claw_critical: int = 0
 var c005_razor_fang_activated: int = 0
 var c005_razor_fang_not_activated: int = 0
+var c005_lax_missed: int = 0
+var c005_lax_hit: int = 0
 
 func _initialize() -> void:
 	capture = false
@@ -58,8 +60,8 @@ func _run_w01_c005() -> void:
 		and fixture.get("kind") == "NEW_IDS" and fixture.get("format") == "gen9calvounifiedv1")
 	check("Tres modalidades sin omisiones", fixture.get("variants") == ["active", "none", "reserve"])
 	var progress: Array = _progress_c005()
-	check("Bloques 01 a 08 de CAMPAÑA_005 autorizados", progress.size() == 8)
-	if progress.size() != 8:
+	check("Bloques 01 a 09 de CAMPAÑA_005 autorizados", progress.size() == 9)
+	if progress.size() != 9:
 		quit(2)
 		return
 	check("Fila 01 autorizada por IA6", String(progress[0].block) == "01"
@@ -78,9 +80,11 @@ func _run_w01_c005() -> void:
 		and String(progress[6].ids) == "quick_powder;razor_claw;razor_fang")
 	check("Fila 08 autorizada por IA6", String(progress[7].block) == "08"
 		and String(progress[7].ids) == "odd_incense;rock_incense;rose_incense")
+	check("Fila 09 autorizada por IA6", String(progress[8].block) == "09"
+		and String(progress[8].ids) == "sea_incense;full_incense;lax_incense")
 	var stages: Array = fixture.get("blocks", [])
-	check("Fixture contiene ocho bloques reales", stages.size() == 8)
-	if stages.size() != 8:
+	check("Fixture contiene nueve bloques reales", stages.size() == 9)
+	if stages.size() != 9:
 		quit(2)
 		return
 	check("Los tres ID del bloque 01 son exactos",
@@ -99,8 +103,10 @@ func _run_w01_c005() -> void:
 		stages[6].get("ids", []) == ["quick_powder", "razor_claw", "razor_fang"])
 	check("Los tres ID del bloque 08 son exactos",
 		stages[7].get("ids", []) == ["odd_incense", "rock_incense", "rose_incense"])
+	check("Los tres ID del bloque 09 son exactos",
+		stages[8].get("ids", []) == ["sea_incense", "full_incense", "lax_incense"])
 	var cases: Array = fixture.get("cases", [])
-	check("Setenta y dos escenarios funcionales autorizados", cases.size() == 72)
+	check("Ochenta y un escenarios funcionales autorizados", cases.size() == 81)
 	var names: Array = []
 	for row: Dictionary in cases:
 		check("Escenario pertenece a su bloque oficial",
@@ -111,7 +117,8 @@ func _run_w01_c005() -> void:
 			or (String(row.block) == "05" and stages[4].get("ids", []).has(String(row.item_id)))
 			or (String(row.block) == "06" and stages[5].get("ids", []).has(String(row.item_id)))
 			or (String(row.block) == "07" and stages[6].get("ids", []).has(String(row.item_id)))
-			or (String(row.block) == "08" and stages[7].get("ids", []).has(String(row.item_id))))
+			or (String(row.block) == "08" and stages[7].get("ids", []).has(String(row.item_id)))
+			or (String(row.block) == "09" and stages[8].get("ids", []).has(String(row.item_id))))
 		check("ID único del escenario", not names.has(String(row.id)))
 		names.append(String(row.id))
 		for seed_value: Variant in row.seeds:
@@ -134,7 +141,9 @@ func _run_w01_c005() -> void:
 				"checks": checks - previous_checks,
 				"status": "PASS" if errors.size() == previous_errors else "FAIL",
 				"observed": observed})
-	check("Doscientos treinta y cuatro pares caso-semilla reales", c005_rows.size() == 234)
+	check("Doscientos sesenta pares caso-semilla reales", c005_rows.size() == 260)
+	check("Incienso Suave: fallo real de ataque por RNG", c005_lax_missed > 0)
+	check("Incienso Suave: acierto natural de ataque por RNG", c005_lax_hit > 0)
 	check("Garra Afilada registra crítico real nativo", c005_razor_claw_critical > 0)
 	check("Garra Afilada aporta crítico exclusivo del portador", c005_razor_claw_exclusive > 0)
 	check("Colmillo Agudo registra retroceso real nativo", c005_razor_fang_activated > 0)
@@ -148,7 +157,8 @@ func _run_w01_c005() -> void:
 		"twisted_spoon", "metal_coat", "kings_rock",
 		"deep_sea_scale", "deep_sea_tooth", "metal_powder",
 		"quick_powder", "razor_claw", "razor_fang",
-		"odd_incense", "rock_incense", "rose_incense"]:
+		"odd_incense", "rock_incense", "rose_incense",
+		"sea_incense", "full_incense", "lax_incense"]:
 		check("Tres contextos distintos para cada ID " + item_id, cases.filter(
 			func(c): return String(c.item_id) == item_id).size() == 3)
 	var report: Dictionary = {"schema_version": 1, "campaign": "CAMP_005",
@@ -209,7 +219,7 @@ func _compare_c005(row: Dictionary, observed: Dictionary) -> void:
 				"spell_tag": "shadow_ball", "twisted_spoon": "psychic",
 				"metal_coat": "flash_cannon",
 				"odd_incense": "confusion", "rock_incense": "smack_down",
-				"rose_incense": "energy_ball"}
+				"rose_incense": "energy_ball", "sea_incense": "water_gun"}
 			check("Tipo del ataque positivo autorizado",
 				String(row.own_move) == String(expected_moves.get(String(row.item_id), "")))
 			check("Potenciador de tipo aumenta daño real solo al portador",
@@ -221,6 +231,61 @@ func _compare_c005(row: Dictionary, observed: Dictionary) -> void:
 				and a.damage > 0)
 			check("Ataque de tipo diferente no recibe potencia",
 				a.damage == n.damage and n.damage == r.damage)
+		"full_incense_last":
+			check("Incienso Lento: Mew veloz actúa último a igual prioridad",
+				String(a.after.first_move_actor) == "foe"
+				and String(n.after.first_move_actor) == "own"
+				and String(r.after.first_move_actor) == "own")
+			check("Incienso Lento sin consumo ni movimiento ofensivo propio",
+				a.damage == 0 and n.damage == 0 and r.damage == 0)
+		"full_incense_priority":
+			check("Ataque Rápido +1 conserva prioridad aun con Incienso Lento",
+				String(a.after.first_move_actor) == "own"
+				and String(n.after.first_move_actor) == "own"
+				and String(r.after.first_move_actor) == "own")
+			check("Incienso Lento no altera daño de Ataque Rápido",
+				a.damage > 0 and a.damage == n.damage and n.damage == r.damage)
+		"full_incense_status":
+			check("Incienso Lento retrasa Reflejo también frente a Amnesia",
+				String(a.after.first_move_actor) == "foe"
+				and String(n.after.first_move_actor) == "own"
+				and String(r.after.first_move_actor) == "own")
+			check("Controles de estado sin daño o consumo de Incienso Lento",
+				a.damage == 0 and n.damage == 0 and r.damage == 0)
+		"lax_incense_accuracy":
+			check("Incienso Suave: Placaje no falla en ausencia ni en reserva",
+				not bool(n.after.get("foe_missed", false))
+				and not bool(r.after.get("foe_missed", false)))
+			var a_loss: int = int(a.start.hp) - int(a.after.hp)
+			var n_loss: int = int(n.start.hp) - int(n.after.hp)
+			var r_loss: int = int(r.start.hp) - int(r.after.hp)
+			check("Incienso Suave no incrementa daño; controles iguales",
+				n_loss > 0 and a_loss <= n_loss and n_loss == r_loss)
+			if bool(a.after.get("foe_missed", false)):
+				check("Incienso Suave: fallo nativo evita daño positivo",
+					a_loss == 0 and n_loss > 0)
+				c005_lax_missed += 1
+			else:
+				check("Incienso Suave: sin fallo no cambia el daño recibido",
+					a_loss > 0 and a_loss == n_loss)
+				c005_lax_hit += 1
+		"lax_incense_never_miss":
+			check("Incienso Suave no evita Golpe Aéreo infalible",
+				not a.after.get("foe_missed", false)
+				and not n.after.get("foe_missed", false)
+				and not r.after.get("foe_missed", false))
+			check("Golpe Aéreo causa daño real sin reducción artificial",
+				int(a.after.hp) < int(a.start.hp)
+				and int(a.after.hp) == int(n.after.hp)
+				and int(n.after.hp) == int(r.after.hp))
+		"lax_incense_status":
+			check("Incienso Suave no induce fallo a Amnesia",
+				not a.after.get("foe_missed", false)
+				and not n.after.get("foe_missed", false)
+				and not r.after.get("foe_missed", false))
+			check("Ninguno recibe daño ni consume objeto ante Amnesia",
+				a.after.hp == a.start.hp and n.after.hp == n.start.hp
+				and r.after.hp == r.start.hp)
 		"kings_rock_flinch":
 			check("Roca del Rey no potencia daño: Placaje daña al objetivo",
 				a.damage > 0 and a.damage == n.damage and n.damage == r.damage)
@@ -367,10 +432,14 @@ func _frame_c003(session: RefCounted, id: StringName) -> Dictionary:
 	var frame: Dictionary = super._frame_c003(session, id)
 	var log: Array = session._checkpoint.get("snapshot", {}).get("native", {}).get("log", [])
 	var transform_seen: bool = false
+	var foe_missed: bool = false
 	for entry: String in log:
 		if entry.begins_with("|-transform|p1a:"):
 			transform_seen = true
+		if entry.begins_with("|-miss|p2a:"):
+			foe_missed = true
 	frame["native_transform_event"] = transform_seen
+	frame["foe_missed"] = foe_missed
 	return frame
 
 # En W01 la Roca del Rey se comprueba por retroceso observado en log nativo.
