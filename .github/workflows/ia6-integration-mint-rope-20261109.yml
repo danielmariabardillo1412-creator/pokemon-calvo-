@@ -50,6 +50,7 @@ jobs:
           godot --headless --path . --import 2>&1 | tee ia6-import.log
           if grep -E 'SCRIPT ERROR|Parse Error' ia6-import.log; then exit 1; fi
           echo "POKEMON_CALVO_NODE=$(command -v node)" >> "$GITHUB_ENV"
+          python -B tools/battle_reference/run.py --install --limit 1 2>&1 | tee ia6-showdown-setup.log
       - name: Smoke IA6 conjunto menta / Cuerda Huida / SaveV2
         shell: bash
         run: |
