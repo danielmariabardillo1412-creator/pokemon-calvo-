@@ -19,6 +19,17 @@ on:
       - 'docs/coordination/items_parallel_v1/reports/W03/CAMP_006_APLAZADOS.csv'
       - 'tests/tools/test_parallel_items_w03_block05_source_red.py'
       - 'tests/tools/test_parallel_items_w03_autorun_v1.py'
+      - 'tests/gameplay/parallel_items_w03_repeat_history_v2.gd'
+      - 'modules/capture/caught_species_history_w03.gd'
+      - 'modules/capture/capture_context_ball_effects.gd'
+      - 'modules/capture/capture_battle_context.gd'
+      - 'modules/creatures/storage/player_collection.gd'
+      - 'modules/save/save_game_data.gd'
+      - 'modules/save/save_game_repository.gd'
+      - 'modules/save/load_result.gd'
+      - 'modules/save/field_native_save.gd'
+      - 'modules/gameplay/wild_adventure_session.gd'
+      - 'tests/tools/test_parallel_items_w03_campaign_005.py'
       - 'docs/coordination/items_parallel_v1/reports/W03/AUTORUN_V1_PROGRESS.csv'
       - 'docs/coordination/items_parallel_v1/reports/W03/AUTORUN_V1_PRODUCER_BLOCKERS.md'
   workflow_dispatch:
@@ -96,6 +107,20 @@ jobs:
           set -euo pipefail
           python -B tests/tools/test_parallel_items_w03_autorun_v1.py 2>&1 | tee camp006-w03-autorun-v1.log
           grep -E '^W03_AUTORUN_V1_PY PASS examined=10 existing_functional_rows=1 new_functional=0 checks=[1-9][0-9]*$' camp006-w03-autorun-v1.log
+      - name: W03 AUTORUN V2 Repeat Ball live ledger and SaveV2 test
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 900s godot --headless --path . --script res://tests/gameplay/parallel_items_w03_repeat_history_v2.gd 2>&1 | tee camp006-w03-repeat-v2.log
+          grep -E '^W03_REPEAT_V2_GODOT PASS checks=[1-9][0-9]* native_capture_l3=false
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: camp006-w03-${{ github.run_id }}
+          retention-days: 7
+          if-no-files-found: ignore
+          path: camp006-w03-*.log
+ camp006-w03-repeat-v2.log
       - name: Archive evidence
         if: always()
         uses: actions/upload-artifact@v4
