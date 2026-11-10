@@ -1,32 +1,42 @@
-# IA6 — RELEVO AUTORIZADO W01 · TANDA 03 (orden vigente)
+# IA6 — W01 · TANDA 04 ACTIVA · ORDEN PERMANENTE
 
-**La tanda anterior está revisada y cerrada; no la repitas.** IA6 ha actualizado esta misma ruta, que es tu memoria operativa permanente. Al recibir `p` o `sigue`: 1) lee este archivo en TU rama, 2) recupera el CSV/checkpoint de TANDA 03, 3) ejecuta la primera fila pendiente, 4) continúa las 10 filas sin pedir autorización por microbloque y guarda checkpoints cuando se interrumpa el turno. No contestes solo «entendido» ni afirmes trabajo entre turnos.
+**IA6 ha certificado tu TANDA 03**: 10/10 hitos, CI #42918737459 `completed/success` sobre SHA `dd0eab2509e50e44597de3d8d39366b7f3f823b3`. No repitas la tanda 03: tu nueva asignación es TANDA 04.
 
-**Única rama de trabajo:** `codex/calvo-items-20261110-w01-gems-autobatch01`. **Reglas generales:** `docs/coordination/items_parallel_v1/AUTONOMY_V1/README.md` en la rama árbitra `codex/calvo-items-20261101-arbitro`. **Cola maestra:** `docs/coordination/items_parallel_v1/AUTONOMY_V1/QUEUE_W01_TANDA_03.md` en rama árbitra. La cola íntegra queda reproducida abajo para no depender de contexto de conversación. No trabajar en `main`, V28 ni PR118. No modificar archivos fuera de permiso. No declarar CI SUCCESS de otra SHA. Al acabar TANDA 03, informe único y STOP hasta próxima orden IA6.
+**ACTIVADOR:** en cuanto recibas `p`, `sigue` o `continúa`, abre ESTE archivo en TU rama, comprueba HEAD y checkpoint de TANDA04, y comienza inmediatamente el primer hito pendiente. Trabaja los 10 sin pedir permisos por microbloque. Ante interrupción publica checkpoint y reanuda con la siguiente `p`; no existe trabajo en segundo plano garantizado. Si una fila está bloqueada por arquitectura protegida, ticket y siguiente objeto independiente; prohibido falsear PASS.
 
-**Métrica obligatoria separada en tu respuesta:** `hitos N/10 | objetos nuevos X | pruebas/QA Y | integración IA6: no` (salvo integración expresamente certificada sobre la rama de IA6). Una barra 10/10 NO significa diez objetos terminados.
+**Rama exclusiva:** `codex/calvo-items-20261110-w01-gems-autobatch01`. **Protocolo general:** `docs/coordination/items_parallel_v1/AUTONOMY_V1/README.md` en rama árbitra `codex/calvo-items-20261101-arbitro`. **Cola autorizada central:** `docs/coordination/items_parallel_v1/AUTONOMY_V1/QUEUE_W01_TANDA_04.md`. La copia integral de la cola está a continuación. No tocar main, V28, PR118 ni otras ramas. Al cerrar 10 filas, informe final, CI SHA correcta y STOP hasta nueva orden IA6.
 
 ---
 
-# IA6 — W01 TANDA 03 · CERRAR GAP DE GEMAS ENTRE MOCHILA Y COMBATE
-Rama: `codex/calvo-items-20261110-w01-gems-autobatch01`.
-**CI previa:** #42869207766 completed/success en `0871aa6751faecb7342376134ddbcaa5acf1ce5a`, 5 gemas T02 + matriz de 18 con las 3 CAMP005 y las 10 T01. El cierre documental T02 existe. No volver a contar ninguna de las 18 como NUEVA.
-**Regla de trabajo IA6:** 10 hitos, sin pedir permiso por cada uno. `p` inicia o reanuda desde checkpoint; no existe ejecución garantizada entre turnos. Probar efecto real y negativos, documentar SHA de código y CI completada SUCCESS, distinguir `HITOS`, `OBJETOS NUEVOS` y `INTEGRADOS EN IA6`. Un hito QA no cuenta como objeto nuevo. No tocar main, V28, PR118, otras ramas ni serializadores compartidos no autorizados. El cierre impide nueva fila 11 sin nota posterior.
+# IA6 — W01/IA1 · AUTORUN TANDA 04: equipables competitivos, 10 candidatos reales
+Fecha: 2026-11-11. Rama exclusiva: `codex/calvo-items-20261110-w01-gems-autobatch01`.
 
-**Problema:** la mecánica de daño nativa está comprobada con equipamiento dispuesto en el test, pero el informe T02 no acredita *todo el recorrido* desde `PlayerInventory` mediante `FieldItemService.equip` al combate, al consumo, al retorno y al guardado. Ya existen `FieldItemService.equip` y `unequip`; comprobar uso real y mantenerlos sin modificar.
+## Punto de partida CERTIFICADO
+La TANDA03 anterior está **CERRADA**: 10/10 hitos; 18 gemas históricas comprobadas por recorrido real `PlayerInventory → FieldItemService.equip → FieldNativeSession/Showdown → settle_finished_battle → SaveV2`. **0 objetos nuevos en esa tanda**. CI final [#42918737459](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/42918737459) completada SUCCESS sobre HEAD `dd0eab2509e50e44597de3d8d39366b7f3f823b3`, seis jobs SUCCESS. Informe `reports/W01/AUTORUN_V3_FINAL.md`. **No repetir las gemas** ni CAMPAÑAS 003/004/005.
 
-| Hito | Entrega |
-|---|---|
-| 01 | Trazar fuente exacta de 18 gemas, inventario+propiedad+equip, SaveV2 y entrada al motor; enumerar referencias |
-| 02 | Prueba roja si falla el ciclo `inventory → FieldItemService.equip → party.held` en 3 gemas CAMP005, sin falsear L3 |
-| 03 | Ciclo completo con gemas T01 IDs 01–05, efecto real en combate y consumo correcto |
-| 04 | Ciclo completo con gemas T01 IDs 06–10, efecto real en combate y consumo correcto |
-| 05 | Ciclo completo con gemas T02 5 IDs, efecto real en combate y consumo correcto |
-| 06 | Inventario con cero, Pokémon ajeno, equipar ya equipado, sustituir held y devolución segura sin duplicaciones |
-| 07 | Reserva/entrada/salida/derrota/captura/Transformación, estado consumido no reactivable por cambio de miembro |
-| 08 | Persistencia real de inventario y criatura antes/después del uso, SaveV2 normal y legacy, sin gemas fantasma |
-| 09 | Prueba de integración con adaptador **existente** de sesión de combate, no una ventana UI inventada; si no existe acoplamiento, ticket con interfaz exacta |
-| 10 | CI acumulativa con T01+T02+CAMP004/005, informe `AUTORUN_V3_FINAL.md` e inventario de casos L2 y L3 genuinos |
+## 10 objetos equipables a examinar, uno por fila
+Todos los IDs siguientes aparecen en `modules/inventory/item_connections_v1.json::holdable_ids` del HEAD auditado, **pero holdable NO es una certificación funcional ni equivale a seleccionado en política**. Antes de implementarlos comprobar política efectiva, código de batalla, pruebas preexistentes y si ya se certificaron en CAMP001/002 u otra tanda. La prioridad es completar efectos reales faltantes sin reescribir funcionalidades que ya existen.
 
-**Propiedad:** crear tests, fixtures, workflow W01 y helpers exclusivos, y modificar solo seam ESPECÍFICO de gemas en backend W01 si una prueba roja lo demuestra. `FieldItemService`, `FieldItemBag`, `PlayerCollection`, `CreatureInstance`, `SaveGameRepository`, `SaveV2`, escena nativa y motor de batalla global SOLO LECTURA; no copiar cambios de otras ramas. Si una unión es imposible sin tocar compartido, dejar prueba roja y ticket IA6 y pasar al resto. **Objetos nuevos de esta tanda = 0** (solo completar ruta de 18 gemas históricas), salvo que se identifique ID previamente no acreditado con autorización explícita nueva.
+| Fila | ID | Criterio positivo de la mecánica real |
+|---|---|---|
+| 01 | `leftovers` | recuperación al final de turno con PS perdidos; control PS completos |
+| 02 | `life_orb` | potencia de daño y retroceso propio; inmunidad/fallo sin daño según regla nativa |
+| 03 | `choice_band` | potencia física y bloqueo real de movimiento; cambio/reset válido |
+| 04 | `choice_specs` | potencia especial y bloqueo real de movimiento; reserva/cambio |
+| 05 | `choice_scarf` | velocidad/orden y bloqueo real; prioridad e independencia de velocidad |
+| 06 | `shell_bell` | curación proporcional a daño realmente causado; controles sin daño |
+| 07 | `eviolite` | Defensa/Def. Esp. solo en especies que pueden evolucionar conforme al catálogo |
+| 08 | `safety_goggles` | bloqueos canónicos de polvo/efectos de clima; no bloquear ataques ajenos |
+| 09 | `black_sludge` | recuperación Poison y penalización no Poison; dueño y tick correctos |
+| 10 | `sitrus_berry` | activación real por umbral HP, consumo una vez, sin doble disparo al restaurar |
 
+**Regla antirrepetición:** Para cada ID, si ya existe efecto completo y probado en escenarios L3 comparables, registrar `YA_CERTIFICADO` con SHA+CI+prueba y no contar como objeto nuevo; ejecutar únicamente el test faltante de integración si procede. Si está excluido, `NO_APLICA`. Si no hay soporte real, implementar y probar en seam local autorizado. Si varias filas resultan `YA_CERTIFICADO`, los **únicos suplentes preseleccionados** son `adrenaline_orb`, `absorb_bulb`, `rowap_berry` (también holdable): sustituir como máximo 3 filas ya certificadas, documentando la correspondencia; NUNCA contar dos veces. No ampliar más la tanda sin IA6.
+
+## Contrato técnico y autonomía
+1. `p`/`sigue` significa: leer `IA6_AUTORUN.md` de tu propia rama, comprobar checkpoint y ejecutar **la primera fila pendiente y las siguientes hasta 10** sin pedir autorización por objeto. Si acaba turno, guardar checkpoint y reanudar con otra `p`. Sin ejecución ficticia entre turnos.
+2. Por cada objeto: efecto positivo del motor **nativo que ya usa el juego**, control sin objeto/tipo/portador/condición, consumos y resets correctos, uso desde `FieldItemService.equip` con propietario real, batalla, `settle_finished_battle` y SaveV2/legacy cuando proceda, no RNG fabricado; compatibilidad con Transformación/reserva cuando aplique. Usar fuente de reglas ya fijada en el repo; **no inventar multiplicadores ni simplificar efectos**.
+3. Pruebas nuevas Python + Godot + nativo Showdown para cada efecto L2/L3, y CI acumulativa de CAMP003/004/005, T01/02/03, sin bajar denominadores ni `continue-on-error`.
+4. **Permiso de modificación:** solo adaptadores/funciones **específicas del ítem** dentro del seam de held W01 ya usado y propio; tests/fixtures/runner/workflow e informes W01. `modules/battle/backends/showdown/native_engine.cjs` se permite **exclusivamente si un test rojo reproduce un fallo localizado del ID y el arreglo no cambia reglas globales ni otros objetos**. `FieldItemService`, `FieldItemBag`, `PlayerCollection`, `CreatureInstance`, `SaveGameRepository`, `SaveV2`, captura W03, formas W04 y panel W05 son solo lectura. Si un objeto exige seam protegido más amplio, prueba roja + ticket y sigue con otro.
+5. Al finalizar: `reports/W01/AUTORUN_V4_PROGRESS.csv`, `reports/W01/AUTORUN_V4_FINAL.md`, SHA funcional, CI final real. Métricas separadas: **10 filas examinadas | N objetos nuevos implementados | M ya certificados | K bloqueados | efectos L3 realmente nuevos | integración en rama IA6: NO**. No se atribuye a W01 la integración conjunta de IA6. STOP tras las 10 filas.
+
+**Protegido:** `main`, V28 y PR #118 intactos, no merges ni escritura en otras ramas. La integración final de W01/W02/W03/W04/W05 será una puerta independiente de IA6.
