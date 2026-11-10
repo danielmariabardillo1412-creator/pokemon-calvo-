@@ -9,3 +9,4 @@ var migrated_from_version: int = 0
 var party: CreatureParty = null
 var storage: CreatureStorage = null
 var inventory: PlayerInventory = null
+var caught_base_species_ids: Array[StringName] = []
