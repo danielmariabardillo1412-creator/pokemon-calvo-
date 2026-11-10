@@ -9,6 +9,16 @@ extends RefCounted
 var party: CreatureParty = CreatureParty.new()
 var storage: CreatureStorage = CreatureStorage.new()
 var inventory: PlayerInventory = PlayerInventory.new()
+# W03: optional base-species ledger. Never reconstructed from party/storage.
+var caught_base_species_ids: Array[StringName] = []
+const CaughtHistory = preload("res://modules/capture/caught_species_history_w03.gd")
+
+func has_previously_caught(species_id: StringName, catalogs: DefinitionCatalog) -> bool:
+	return CaughtHistory.has_caught(caught_base_species_ids, species_id, catalogs)
+
+func record_successful_capture(species_id: StringName, catalogs: DefinitionCatalog) -> bool:
+	return CaughtHistory.record(caught_base_species_ids, species_id, catalogs)
+
 
 
 # PARTY -> STORAGE. Same CreatureInstance, removed from party and added to storage.
