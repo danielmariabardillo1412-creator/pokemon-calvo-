@@ -1,3 +1,11 @@
+# IA6 — CAMPAÑAS CONTINUAS V2 ACTUALMENTE VIGENTES · 2026-11-11
+
+**CAMBIO CONFIRMADO EN LAS CINCO RAMAS:** `docs/coordination/items_parallel_v1/IA6_AUTORUN.md` ahora incorpora `CONTINUOUS_V2/PLAN_W0X.md` y la regla **NO STOP CADA DIEZ**. Cada ventana avanza varias etapas preautorizadas por especialidad sin pedir otra tanda a IA6; escribe un checkpoint `docs/coordination/items_parallel_v1/CONTINUOUS_V2/STATE_W0X.md` en SU rama. Documentación maestra [CONTINUOUS_V2/README.md](CONTINUOUS_V2/README.md). Colas [W01](CONTINUOUS_V2/PLAN_W01.md) / [W02](CONTINUOUS_V2/PLAN_W02.md) / [W03](CONTINUOUS_V2/PLAN_W03.md) / [W04](CONTINUOUS_V2/PLAN_W04.md) / [W05](CONTINUOUS_V2/PLAN_W05.md).
+
+**Situación al emitir:** W01 T04 en curso (leftovers primer ID con CI pendiente); tras T04, 26 candidatos W01. W02 T04 cerrada → 42 bayas W02. W03 T05 cerrada → 25 balls y fuentes de captura. W04 T05 cerrada → contratos/evoluciones de 57 formas regionales; L3 protegido IA6. W05 T05 cerrada → preparación de integración y QA export/panel; al agotar backlog READY_FOR_IA6. Prohibido transformar un 10/10 de hitos en 10 objetos; prohibido rellenar plan con auditorías vacías. Cambio de ventana: releer nota+STATE; sin ejecución automática entre turnos. **Integración IA6 aún pendiente; no tocar main/V28/PR118.**
+
+---
+
 # IA6 — RELEVO REAL PUBLICADO EN LAS 5 RAMAS · 2026-11-10
 
 **CONFIRMACIÓN DE LECTURA REAL:** W01 sigue TANDA03 (no tiene cierre CI final de V3; no duplicar), W02 nueva TANDA04 `b1579efd264a324c3c3ef78e3a94d40881a3c3`, W03 nueva TANDA05 `393a764287a9a5060b7474dc7d62d11a6eeea5ee`, W04 nueva TANDA05 `a2a80caeb1589f4b5d14efd49060f9956a9282cc`, W05 nueva TANDA05 `be880dd58cd3ed5d8e24a61c7624d167a9813a88`. **Todas las 5 notas de `IA6_AUTORUN.md` han sido leídas de nuevo y contienen su cola correcta.** El usuario puede enviar `p` sin repetir prompts: cada ventana debe abrir su nota y comenzar el primer hito sin cerrar.
