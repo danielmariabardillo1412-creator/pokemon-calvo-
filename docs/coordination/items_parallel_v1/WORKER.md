@@ -1,3 +1,9 @@
+# ACTUALIZACIÓN VIGENTE IA6 — 2026-11-10: MODO AUTONOMÍA POR TANDAS
+
+**Esta actualización prevalece sobre las instrucciones históricas de encargo de 1–3 objetos y STOP tras cada `p` en el resto de este documento.** IA6 ha emitido nuevas órdenes permanentes en [AUTONOMY_V1/README.md](AUTONOMY_V1/README.md) y [AUTONOMY_V1/QUEUE_W01.md](AUTONOMY_V1/QUEUE_W01.md) ... `QUEUE_W05.md`. Cada operario debe abrir en SU RAMA `docs/coordination/items_parallel_v1/IA6_AUTORUN.md` antes de pedir nueva autorización. **La presencia de esa nota ya constituye asignación IA6 y entrega oficial: no hace falta que el usuario copie un prompt ni remita un lote cada tres objetos.** Un `p` reanuda la cola de diez microbloques permitidos. El informe se entrega al cierre de esa tanda, no por cada bloque. No elimina protecciones de código, permisos de propiedad, tests reales ni prohibiciones de `main`, V28 y PR118. Si el turno se corta, checkpoint y seguir en el siguiente `p`. No hay procesamiento autónomo entre turnos sin una ejecución explícita.
+
+---
+
 # PROTOCOLO OPERARIOS W01–W05 — trabajar de tres en tres sin pérdida de contexto
 
 **Tu rol es uno solo, W01/W02/W03/W04/W05.** No eres la coordinadora. Tienes **una rama exclusiva**. No inicies una misión al abrir el chat sin que exista un `assignments/LOTE_NNN_W0X.md` **publicado en la rama de la árbitra** y entregado por el usuario. Tu trabajo no afecta a otras conversaciones automáticamente.
