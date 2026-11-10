@@ -89,7 +89,7 @@ func hit_02_lifecycle() -> void:
 		callbacks["all"] += 1
 		if result.get("accepted", false):
 			callbacks["applied"] += 1)
-	var original_children := panel.get_child_count()
+	var original_children: int = int(panel.get_child_count())
 	panel.get_parent().remove_child(panel)
 	panel.request_ready()
 	root.add_child(panel)
@@ -422,6 +422,7 @@ func _run() -> void:
 				print("W05_BOOKS_AUTORUN_V3_HIT block=%02d name=%s status=%s checks=%d" %
 					[int(task.n), String(task.name), "CERTIFICABLE" if is_ok else "FAIL", checks - prior_checks])
 			var baseline := failures.size()
+			var gate_checks := checks
 			check("10 hit matrix 9 independent + final gate", completed == 9 and HITS == 10)
 			check("all nine positive before final CI gate", functional_hits == 9 and blocked_hits == 0)
 			completed += 1
@@ -430,7 +431,7 @@ func _run() -> void:
 			else:
 				blocked_hits += 1
 			print("W05_BOOKS_AUTORUN_V3_HIT block=10 name=ci_resiliencia status=%s checks=%d" %
-				["CERTIFICABLE" if failures.size() == baseline else "FAIL", checks - prior_checks])
+				["CERTIFICABLE" if failures.size() == baseline else "FAIL", checks - gate_checks])
 	if failures.is_empty() and completed == HITS and functional_hits == HITS:
 		print("W05_BOOKS_AUTORUN_V3_GODOT PASS blocks=10 functional=10 blocked=0 checks=%d" % checks)
 		quit(0)
