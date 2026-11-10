@@ -19,6 +19,9 @@ var creatures: Variant = []
 var party_layout: Variant = {}
 var storage_layout: Variant = {}
 var inventory_layout: Variant = {}
+# Optional V2 extension: absent field means legacy empty history.
+var caught_base_species_ids: Variant = {"schema_version": 1, "ids": []}
+const CaughtHistory = preload("res://modules/capture/caught_species_history_w03.gd")
 
 
 func to_dict() -> Dictionary:
@@ -29,6 +32,7 @@ func to_dict() -> Dictionary:
 		"party": party_layout,
 		"storage": storage_layout,
 		"inventory": inventory_layout,
+		"caught_base_species_ids": caught_base_species_ids,
 	}
 
 
@@ -42,13 +46,14 @@ static func from_dict(d: Dictionary) -> SaveGameData:
 	# Missing inventory is deliberately distinct from an empty inventory. V2 requires the field;
 	# only the explicit V1 migrator is allowed to synthesize an empty bag.
 	snap.inventory_layout = d.get("inventory", null)
+	snap.caught_base_species_ids = d.get("caught_base_species_ids", {"schema_version": 1, "ids": []})
 	return snap
 
 
 # Assemble a V2 snapshot from live state. Caller must check `validate()` before persisting.
 # The optional inventory keeps the lower-level save_state API source-compatible; callers that own a
 # PlayerCollection should use save_collection(), which always passes its real inventory.
-static func build(party: CreatureParty, storage: CreatureStorage, inventory: PlayerInventory = null) -> SaveGameData:
+static func build(party: CreatureParty, storage: CreatureStorage, inventory: PlayerInventory = null, captured_ids: Array[StringName] = []) -> SaveGameData:
 	var snap := SaveGameData.new()
 	for c in party.get_creatures():
 		snap.creatures.append((c as CreatureInstance).to_dict())
@@ -63,6 +68,7 @@ static func build(party: CreatureParty, storage: CreatureStorage, inventory: Pla
 	snap.storage_layout = storage.to_dict()
 	var actual_inventory := inventory if inventory != null else PlayerInventory.new()
 	snap.inventory_layout = actual_inventory.to_dict()
+	snap.caught_base_species_ids = CaughtHistory.encode(captured_ids)
 	return snap
 
 
@@ -87,6 +93,10 @@ func validate() -> Dictionary:
 		return {"ok": false, "reason": "invalid_storage_type"}
 	if not (inventory_layout is Dictionary):
 		return {"ok": false, "reason": "invalid_inventory_type"}
+
+	var ledger_validation := CaughtHistory.parse(caught_base_species_ids)
+	if not ledger_validation.ok:
+		return {"ok": false, "reason": ledger_validation.reason}
 
 	# --- inventory domain contract ---
 	var inv := PlayerInventory.from_dict(inventory_layout as Dictionary)
