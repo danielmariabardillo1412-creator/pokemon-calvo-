@@ -1,3 +1,9 @@
+# NUEVA RUTA ACTIVA — IA6 AUTORUN V1 · 2026-11-10
+
+**Para todas las ventanas W01–W05:** ya hay una orden completa de diez tareas publicada en la rama de cada trabajadora bajo `docs/coordination/items_parallel_v1/IA6_AUTORUN.md`. Consultarla **ANTES** del protocolo histórico y seguir con una `p` o `sigue` hasta terminar la tanda. IA6 solo se consulta al cierre o cuando una amenaza compartida impide todas las filas. Contrato maestro [AUTONOMY_V1/README.md](AUTONOMY_V1/README.md); las colas individuales [AUTONOMY_V1/](AUTONOMY_V1/). Las reglas antiguas de esperar permiso entre bloques de una campaña no se aplican a filas ya autorizadas en la nota. Ninguna rama de trabajadora escribe en otras ramas o en main/V28/PR118.
+
+---
+
 # CUADERNO DE RELEVO — Pokémon Calvo / sistema de objetos / cinco operarios y una árbitra
 
 **Edición:** 2026-11-01. **Modo:** seis conversaciones separadas de ChatGPT con GitHub compartido. **Empieza aquí**, no desde el historial de 2.222 objetos. Este documento es para conservar el contexto cuando se abra otra ventana.
