@@ -21,6 +21,7 @@ on:
       - 'tests/tools/test_parallel_items_w03_autorun_v1.py'
       - 'tests/gameplay/parallel_items_w03_repeat_history_v2.gd'
       - 'tests/gameplay/parallel_items_w03_repeat_native_v3.gd'
+      - 'tests/gameplay/parallel_items_w03_repeat_native_v4.gd'
       - 'modules/gameplay/showdown_adventure_session.gd'
       - 'docs/coordination/items_parallel_v1/reports/W03/AUTORUN_V3_PROGRESS.csv'
       - 'modules/capture/caught_species_history_w03.gd'
@@ -151,6 +152,20 @@ jobs:
           set -euo pipefail
           timeout 900s godot --headless --path . --script res://tests/gameplay/parallel_items_w03_repeat_native_v3.gd 2>&1 | tee camp006-w03-repeat-native-v3.log
           grep -E '^W03_REPEAT_NATIVE_V3 PASS checks=[1-9][0-9]*$' camp006-w03-repeat-native-v3.log
+      - name: W03 AUTORUN V4 native Repeat full-party and checkpoint QA
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 900s godot --headless --path . --script res://tests/gameplay/parallel_items_w03_repeat_native_v4.gd 2>&1 | tee camp006-w03-repeat-native-v4.log
+          grep -E '^W03_REPEAT_NATIVE_V4 PASS checks=[1-9][0-9]*
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: camp006-w03-${{ github.run_id }}
+          retention-days: 7
+          if-no-files-found: ignore
+          path: camp006-w03-*.log
+ camp006-w03-repeat-native-v4.log
       - name: Archive evidence
         if: always()
         uses: actions/upload-artifact@v4
