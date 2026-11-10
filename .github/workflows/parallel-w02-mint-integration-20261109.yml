@@ -32,6 +32,11 @@ on:
       - 'tests/gameplay/parallel_items_w02_mint_pilot_20261109.gd'
       - 'tests/fixtures/parallel_items/w02_mint_pilot_20261109.json'
       - 'tests/fixtures/parallel_items/w02_mint_pilot02_20261109.json'
+      - 'tests/gameplay/parallel_items_w02_campaign_005.gd'
+      - 'tests/fixtures/parallel_items/w02_autorun_v1.json'
+      - 'tests/tools/test_parallel_items_w02_autorun_v1.py'
+      - 'tests/gameplay/parallel_items_w02_autorun_v1.gd'
+      - 'docs/coordination/items_parallel_v1/reports/W02/AUTORUN_V1_PROGRESS.csv'
       - 'tests/tools/test_parallel_items_w02_mint_pilot02_20261109.py'
       - 'tests/gameplay/parallel_items_w02_mint_pilot02_20261109.gd'
       - 'modules/**'
@@ -96,6 +101,14 @@ jobs:
           grep -E '^W02_MINT_PILOT02_20261109_PY PASS checks=[1-9][0-9]*$' w02-pilot02-python.log
           timeout 900s godot --headless --path . --script res://tests/gameplay/parallel_items_w02_mint_pilot02_20261109.gd 2>&1 | tee w02-pilot02-godot.log
           grep -E '^W02_MINT_PILOT02_20261109_GODOT PASS checks=[1-9][0-9]*$' w02-pilot02-godot.log
+      - name: TANDA 01 AUTORUN W02 - diez mentas desde mochila Python y Godot
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tests/tools/test_parallel_items_w02_autorun_v1.py 2>&1 | tee w02-autorun-v1-py.log
+          grep -E '^W02_AUTORUN_V1_PY PASS rows=10 historical=288 promoted=82 checks=[1-9][0-9]*$' w02-autorun-v1-py.log
+          timeout 900s godot --headless --path . --script res://tests/gameplay/parallel_items_w02_autorun_v1.gd 2>&1 | tee w02-autorun-v1-godot.log
+          grep -E '^W02_AUTORUN_V1_GODOT PASS rows=10 positive=20 negative=10 level100=10 sequential=10 checks=[1-9][0-9]*$' w02-autorun-v1-godot.log
       - name: Recuperación integral Python CAMP005 10/10
         shell: bash
         run: |
@@ -103,6 +116,32 @@ jobs:
           python -B tests/tools/test_parallel_items_w02_campaign_005.py --ci 2>&1 | tee camp006-camp005-python.log
           python -B tests/tools/test_parallel_items_w02_campaign_005_manifest.py --verify-output PY --log camp006-camp005-python.log
           grep -E '^CAMP005_W02_PY PASS blocks=10 checks=[1-9][0-9]*$' camp006-camp005-python.log
+      - name: Puerta archivada - ejecutar CAMP005 inalterada en SHA verde congelado
+        shell: bash
+        run: |
+          set -euo pipefail
+          FROZEN_SHA=9e2797a4972f22dbf14d5bc5f2d24bb212d29456
+          FROZEN="$RUNNER_TEMP/w02-camp005-frozen"
+          git fetch --no-tags --depth=1 origin "$FROZEN_SHA"
+          git worktree add --detach "$FROZEN" "$FROZEN_SHA"
+          test "$(git -C "$FROZEN" rev-parse HEAD)" = "$FROZEN_SHA"
+          cmp tests/fixtures/parallel_items/w02_campaign_005.json "$FROZEN/tests/fixtures/parallel_items/w02_campaign_005.json"
+          (
+            cd "$FROZEN"
+            python -B tests/tools/test_parallel_items_w02_campaign_005.py --ci 2>&1 | tee "$RUNNER_TEMP/w02-frozen-python.log"
+            grep -E '^CAMP005_W02_PY PASS blocks=10 checks=[1-9][0-9]*$' "$RUNNER_TEMP/w02-frozen-python.log"
+            python -B tools/distribution/restore_resources.py
+            python -B tools/distribution/restore_resources.py --check
+            mkdir -p data/reports
+            cp ci/fixtures/pokeapi_reports/forms_policy_report.json data/reports/forms_policy_report.json
+            cp ci/fixtures/pokeapi_reports/unsupported_mechanics.json data/reports/unsupported_mechanics.json
+            cp ci/fixtures/pokeapi_reports/import_summary.json data/reports/import_summary.json
+            godot --headless --path . --import 2>&1 | tee "$RUNNER_TEMP/w02-frozen-import.log"
+            python -B tools/battle_reference/run.py --install --limit 1 2>&1 | tee "$RUNNER_TEMP/w02-frozen-native.log"
+            timeout 900s godot --headless --path . --script res://tests/gameplay/parallel_items_w02_campaign_005.gd 2>&1 | tee "$RUNNER_TEMP/w02-frozen-camp005-godot.log"
+            grep -E '^CAMP005_W02_GODOT PASS blocks=10 checks=[1-9][0-9]*$' "$RUNNER_TEMP/w02-frozen-camp005-godot.log"
+          )
+          echo "W02_CAMP005_FROZEN PASS sha=$FROZEN_SHA scenarios=288"
       - name: Recuperación integral Godot CAMP005 10/10
         shell: bash
         run: |
@@ -195,4 +234,7 @@ jobs:
           name: camp006-w02-${{ github.run_id }}
           retention-days: 7
           if-no-files-found: ignore
-          path: camp006-*.log
+          path: |
+            camp006-*.log
+            w02-autorun-v1-*.log
+            w02-pilot02-*.log
