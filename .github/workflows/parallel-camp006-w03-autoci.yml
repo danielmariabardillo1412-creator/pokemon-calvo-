@@ -47,6 +47,9 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
       - uses: chickensoft-games/setup-godot@v2.4.1
         with:
           version: 4.7.0
@@ -125,6 +128,14 @@ jobs:
           set -euo pipefail
           timeout 900s godot --headless --path . --script res://tests/gameplay/savegame_v2_adversarial_test_runner.gd 2>&1 | tee camp006-w03-savev2-adversarial.log
           grep -E '^=== SAVEGAME V2 ADVERSARIAL RESULT: [1-9][0-9]* PASS / 0 FAIL ===$' camp006-w03-savev2-adversarial.log
+      - name: Install pinned native simulation for real field battle tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --version
+          echo "POKEMON_CALVO_NODE=$(command -v node)" >> "$GITHUB_ENV"
+          python -B tools/battle_reference/run.py --install --limit 1 2>&1 | tee camp006-w03-native-bootstrap.log
+          grep -F 'BATTLE_REFERENCE PASS' camp006-w03-native-bootstrap.log
       - name: Native field SaveV2 and capture regression
         shell: bash
         run: |
