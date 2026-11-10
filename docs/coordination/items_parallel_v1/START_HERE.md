@@ -1,3 +1,9 @@
+# INICIO ACTIVO — IA6 CONTINUOUS_V2 · 2026-11-11
+
+El protocolo histórico de autorización por cada 10 tareas ESTÁ SUPERADO: cada trabajadora abre `docs/coordination/items_parallel_v1/IA6_AUTORUN.md` en SU rama y ejecuta la CAMPAÑA completa, varios bloques de hasta diez sin STOP entre ellos. Protocolo: [CONTINUOUS_V2/README.md](CONTINUOUS_V2/README.md); el plan de cada W está íntegro en su nota y en `CONTINUOUS_V2/PLAN_W0X.md` árbitra. Reanudación: `CONTINUOUS_V2/STATE_W0X.md` de su rama. Al agotarse ventana/contexto, guardar checkpoint, arrancar nueva conversación dando W0X y continuar con `p`. Las notas no lanzan trabajo en segundo plano. No modificar rutas protegidas, main, V28 ni PR118.
+
+---
+
 # NUEVA RUTA ACTIVA — IA6 AUTORUN V1 · 2026-11-10
 
 **Para todas las ventanas W01–W05:** ya hay una orden completa de diez tareas publicada en la rama de cada trabajadora bajo `docs/coordination/items_parallel_v1/IA6_AUTORUN.md`. Consultarla **ANTES** del protocolo histórico y seguir con una `p` o `sigue` hasta terminar la tanda. IA6 solo se consulta al cierre o cuando una amenaza compartida impide todas las filas. Contrato maestro [AUTONOMY_V1/README.md](AUTONOMY_V1/README.md); las colas individuales [AUTONOMY_V1/](AUTONOMY_V1/). Las reglas antiguas de esperar permiso entre bloques de una campaña no se aplican a filas ya autorizadas en la nota. Ninguna rama de trabajadora escribe en otras ramas o en main/V28/PR118.
