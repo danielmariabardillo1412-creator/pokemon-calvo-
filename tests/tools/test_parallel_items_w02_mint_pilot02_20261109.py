@@ -32,8 +32,8 @@ for item,nature in [("lonely_mint","lonely"),("mild_mint","mild"),("naive_mint",
                     ("naughty_mint","naughty"),("gentle_mint","gentle"),("rash_mint","rash"),
                     ("sassy_mint","sassy"),("serious_mint","serious")]:
     assert f'"{item}": "{nature}"' in helper,item
-for item in ["hasty_mint","lax_mint","relaxed_mint","jolly_mint"]:
-    assert f'"{item}"' not in helper,item
+for item,nature in (("hasty_mint","hasty"),("lax_mint","lax"),("relaxed_mint","relaxed"),("jolly_mint","jolly"),("bold_mint","bold"),("calm_mint","calm"),("careful_mint","careful"),("brave_mint","brave"),("quiet_mint","quiet"),("impish_mint","impish")):
+    assert f'"{item}": "{nature}"' in helper,item
 assert "Mint.apply(candidate, item_id, catalogs)" in service
 assert 'if Mint.supports(item_id):' in service
 assert 'if not staged.remove(item_id): return _deny("item_not_owned")' in service

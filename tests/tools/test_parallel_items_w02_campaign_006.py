@@ -322,15 +322,20 @@ def verify_block04_pilot(data: dict, progress: list[dict]) -> None:
     # StatCalculator and SaveV2 central are untouched by this change.
     require('var mult := ProgressionRuleset.nature_multiplier(nature_id, key)' in stats,
             "Original calculator nature logic preserved")
-    for earlier in (
-        "jolly_mint", "bold_mint", "calm_mint", "careful_mint",
-        "brave_mint", "quiet_mint", "impish_mint", "relaxed_mint",
-        # IA6 MINT-L3 pilot 01 now authorises lonely/mild/naive, but
-        # hasty/lax and the other prior mints remain excluded here.
-        "hasty_mint", "lax_mint"
-    ):
-        require(('"' + earlier + '"') not in mints,
-                "No unauthorized existing mint activation " + earlier)
+    # Later IA6 AUTONOMY_V1 promotes these ten IDs; require positive mapping
+    # without rewriting historical negative fixtures or regression receipts.
+    for mint_id, nature_id in (("hasty_mint", "hasty"),
+                              ("lax_mint", "lax"),
+                              ("relaxed_mint", "relaxed"),
+                              ("jolly_mint", "jolly"),
+                              ("bold_mint", "bold"),
+                              ("calm_mint", "calm"),
+                              ("careful_mint", "careful"),
+                              ("brave_mint", "brave"),
+                              ("quiet_mint", "quiet"),
+                              ("impish_mint", "impish")):
+        require(f'"{mint_id}": "{nature_id}"' in mints,
+                "W02 AUTORUN authorized positive map " + mint_id)
     # CAMP006 remains historically certified; the separately authorised
     # MINT-L3 01 adds exactly these positive mints without rewriting archive.
     for mint_id, nature_id in {"lonely_mint": "lonely",

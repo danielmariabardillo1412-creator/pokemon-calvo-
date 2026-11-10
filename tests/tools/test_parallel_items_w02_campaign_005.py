@@ -3472,13 +3472,20 @@ def verify_sources(chk):
     # Keep CAMP005 historical fixtures and runtime negatives; only the three
     # IA6-authorised MINT-L3 02 IDs are now mapped positively.
     mint_source_04 = (ROOT / "modules/inventory/field_mint_effects.gd").read_text(encoding="utf-8")
-    for mint_id in (
-        "jolly_mint",
-        "bold_mint", "calm_mint", "careful_mint",
-        "brave_mint", "quiet_mint", "impish_mint", "relaxed_mint"
-    ):
-        chk.demand(('"' + mint_id + '"') not in mint_source_04,
-                   "CAMP005 historical mint rejection must remain: " + mint_id)
+    # Historical CAMP005 fixture untouched. 10 authorized promotions use
+    # explicit positive tests and a frozen baseline, not stale negatives.
+    for mint_id, nature in (("hasty_mint", "hasty"),
+                             ("lax_mint", "lax"),
+                             ("relaxed_mint", "relaxed"),
+                             ("jolly_mint", "jolly"),
+                             ("bold_mint", "bold"),
+                             ("calm_mint", "calm"),
+                             ("careful_mint", "careful"),
+                             ("brave_mint", "brave"),
+                             ("quiet_mint", "quiet"),
+                             ("impish_mint", "impish")):
+        chk.demand(f'"{mint_id}": "{nature}"' in mint_source_04,
+                   "W02 AUTORUN new native positive map " + mint_id)
     for mint_id, nature in (("adamant_mint", "adamant"),
                             ("modest_mint", "modest"),
                             ("timid_mint", "timid")):
