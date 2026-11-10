@@ -1,6 +1,6 @@
 fila,id,estado,sha_pruebas,ci_run,objetos_nuevos,qa_funcional,notas
-01,leftovers,EN_CI_AUTOMATICA,PENDIENTE,PENDIENTE,0,no,l3_leftovers_native_godot_qa_en_ejecucion
-02,life_orb,PENDIENTE,PENDIENTE,PENDIENTE,0,no,pendiente_de_analisis_y_pruebas
+01,leftovers,CERTIFICADO,197b908d949825631856d246d36144c88154ea0c,42923382323,0,si,L2_preexistente_y_L3_cuatro_variantes_CI7jobs_success
+02,life_orb,EN_CI_AUTOMATICA,2a8578db6a53fcb0cfe1b66b1ccc22dee1d6eb64,42926044147,0,no,piloto_L2_L3_success_falta_CI_acumulativa_en_HEAD
 03,choice_band,PENDIENTE,PENDIENTE,PENDIENTE,0,no,pendiente_de_analisis_y_pruebas
 04,choice_specs,PENDIENTE,PENDIENTE,PENDIENTE,0,no,pendiente_de_analisis_y_pruebas
 05,choice_scarf,PENDIENTE,PENDIENTE,PENDIENTE,0,no,pendiente_de_analisis_y_pruebas

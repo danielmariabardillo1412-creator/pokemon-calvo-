@@ -1,11 +1,9 @@
-# IA1/W01 — TANDA 04 · checkpoint inicial (fila 01 en CI)
+# IA1/W01 — TANDA 04 · checkpoint fila 02 y CI acumulativa
 
-- **Orden vigente:** `IA6_AUTORUN.md` TANDA04, cola maestra `QUEUE_W01_TANDA_04.md`. Rama exclusiva `codex/calvo-items-20261110-w01-gems-autobatch01`.
-- **TANDA03 certificada por IA6:** CI #42918737459 SUCCESS sobre `dd0eab2509e50e44597de3d8d39366b7f3f823b3`. No se repiten gemas.
-- **Diez IDs:** `leftovers`, `life_orb`, `choice_band`, `choice_specs`, `choice_scarf`, `shell_bell`, `eviolite`, `safety_goggles`, `black_sludge`, `sitrus_berry`.
-- **Política auditada:** los 10 figuran `SELECCIONADO` en `RANDOMLOCK_ITEMS_BUILD_SCOPE_V2.csv`, `native_entry=True` en `ITEM_INVENTORY.csv` y están `holdable_ids`. Esta verificación L1 **no** significa funcionalidad L3.
-- **Histórico:** Restos, Vidasfera, Cinta Elegida y Baya Zidra constan con piloto nativo previo en `tools/item_audit/held_pilot.cjs`; Lodo Negro, Campana Concha, Mineral Evolutivo y Gafas Protectoras tienen matrices antiguas en `w01_campaign_001`. Falta cotejar si algún efecto ya tiene L3 equivalente. No sumar nuevos objetos por volver a probar.
-- **Fila 01 Restos:** fixture, validador Python, prueba nativa y GDScript L3 nuevo con cuatro variantes (portador, ninguno, reserva, PS completos). La prueba enlaza `FieldItemService.equip`, `FieldNativeSession`, turno natural y `settle_finished_battle`, `SaveGameRepository` en disco.
-- **Estado:** fila 01 `EN_CI_AUTOMATICA` hasta verificar run y su SHA. Ningún PASS afirmado. Filas 02–10 pendientes.
-- **Siguiente p:** consultar estado de la CI V4; corregir solo runner/tests/workflow propios si hay fallo. Certificar fila 01 únicamente con SUCCESS y evidencia; continuar filas siguientes sin permisos nuevos. Si hay bloqueo de productor protegido, ticket claro.
-- **Limitación:** sin ejecución de GitHub Actions no se asume que la nueva prueba funcione; no se ha tocado código de producción ni otras ramas.
+- **Orden:** `IA6_AUTORUN.md` TANDA04; única rama `codex/calvo-items-20261110-w01-gems-autobatch01`. No tocar main/V28/PR118.
+- **Hito 01 `leftovers`: CERTIFICADO** por [CI #42923382323](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/42923382323), 7/7 jobs SUCCESS, SHA funcional `197b908d949825631856d246d36144c88154ea0c`. Python 40, Node 4 variantes, Godot 76; camino L3 real. Era efecto nativo preexistente; **0 objetos implementados nuevos**.
+- **Hito 02 `life_orb`: piloto funcional SUCCESS**, [CI #42926044147](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/42926044147), SHA `2a8578db6a53fcb0cfe1b66b1ccc22dee1d6eb64`. Python 24, Node 5 variantes (daño, retroceso, inmune, estado, reserva), Godot 4 variantes/92 comprobaciones; `FieldItemService.equip`, FieldNativeSession, settle y SaveV2. **Pendiente CI acumulativa única con regresiones históricas para certificación oficial de fila 02**.
+- **Este commit** incorpora `v4_life_orb` al workflow W01 V4 junto con `v4_leftovers` y los seis jobs heredados `v3_l3_field_path`, `v3_field_boundaries`, `v2_new_gems`, `tanda01_regression`, `camp004_regression`, `camp005_regression` (8 jobs en total). Comprobar head_sha y `completed/success` reales.
+- **CSV** marca 01 certificado y 02 en `EN_CI_AUTOMATICA`; 03–10 PENDIENTE. Métricas oficiales al publicar: **1/10 certificados; 0 objetos nuevos; 1 recorrido L3 certificado y 1 piloto L3 verde pendiente de puerta acumulativa; integración IA6 NO**.
+- **Siguiente p:** consultar CI disparada por este commit, investigar logs y reparar solo archivos propios W01 si falla. Cuando complete todos los jobs, marcar `life_orb` certificado (efecto previo nativo, sin crédito de implementación) y empezar `choice_band`, con bloqueo/reset tras cambiar de Pokémon desde mochila real.
+- **Prohibiciones:** sin cambios a `native_engine.cjs`, SaveV2, motor global u otros propietarios; no falsear PASS ni adjudicar regresiones de otra SHA a la actual.
