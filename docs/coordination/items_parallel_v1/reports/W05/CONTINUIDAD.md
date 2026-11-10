@@ -1,3 +1,9 @@
+# IA5/W05 — TANDA03 FINALIZADA · Robustez panel 229 libros (2026-11-10)
+
+**10/10 hitos funcionales, 0 bloqueados.** SHA probado `93b13e63e175f5156146e3a6c8c5795e9efa8517`. CI [#42870136602](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/42870136602) `completed/success`, job `130019050606`. V3 Python 21 / Godot headless 1195 PASS; TANDA01 49/49, TANDA02 180/180 y CAMP003–006 + pilotos PASS. Cambios en panel: selección por ID persistente y sin sustitución silenciosa, sin conexiones duplicadas, validación de Party, orden/filtro seguros y aviso de fallback lingüístico. **Hallazgo: 218/229 nombres de movimiento carecen de acreditación española en las fuentes auditadas; no están traducidos ni falsamente certificados.** Ver `AUTORUN_V3_FINAL.md` y `AUTORUN_V3_PROGRESS.csv`. Pendiente IA6: integrar versión actual en FieldItemBag y revisión GPU/idioma; no editar recursos protegidos. STOP tras TANDA03; seguir solo tras siguiente cola oficial.
+
+---
+
 # IA5/W05 — TANDA 02 FINALIZADA · 10/10, 180/180, CI SUCCESS (2026-11-10)
 
 TANDA02 cerrada en rama `codex/calvo-items-20261109-w05-books-ui` con 10 grupos y 180 nuevos libros probados mediante panel Godot headless, 0 bloqueados. SHA funcional `98fe396988b841705df1d01ac64dcfd0882d80bb`, CI [#42733955354](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/42733955354), job `129558530826`, `completed/success`. Godot 10467 PASS; Python 225 PASS. TANDA01 49/49 y regresiones CAMP006/005/004/003 y pilotos L3 01/02 PASS en misma CI. Informe completo `AUTORUN_V2_FINAL.md`, progreso `AUTORUN_V2_PROGRESS.csv`; unión 229 = 49 + 180 sin duplicados. Sin tocar FieldItemBag ni ramas ajenas, sin merge ni validación GPU. **STOP hasta nota de TANDA03 por IA6**.
