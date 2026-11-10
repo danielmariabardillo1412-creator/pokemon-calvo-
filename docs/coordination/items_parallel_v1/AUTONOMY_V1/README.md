@@ -1,3 +1,9 @@
+# ACTUALIZACIÓN OBLIGATORIA 2026-11-11 — V2 PREVALECE
+
+La antigua regla de **STOP tras diez filas** de este documento ya NO es vigente cuando la nota de la trabajadora contiene `CONTINUOUS_V2`. Leer [../CONTINUOUS_V2/README.md](../CONTINUOUS_V2/README.md) y `IA6_AUTORUN.md` de la rama propia. Los STOP de una TANDA no detienen la CAMPAÑA; sí se mantienen los límites de edición, pruebas, rama exclusiva, SHA y bloqueo de sistemas compartidos. Las demás disposiciones históricas de integridad siguen vigentes.
+
+---
+
 # IA6 — PROTOCOLO PERMANENTE DE TANDAS AUTÓNOMAS V1
 Fecha de emisión: 2026-11-10. Autoridad: IA6, árbitra de Pokémon Calvo.
 
