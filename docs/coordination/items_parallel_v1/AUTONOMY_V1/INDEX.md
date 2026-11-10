@@ -1,3 +1,13 @@
+# IA6 — RELEVO ACTUAL 2026-11-10 · 19:22 EUROPE/MADRID
+
+**AUDITORÍA:** [AUTONOMY_V1/IA6_AUDIT_RELAY_20261110_1922.md](IA6_AUDIT_RELAY_20261110_1922.md). Certificadas TANDA02 W01 (5 gemas, 5 QA), W02 (9 hitos funcionales con mentas, 1 QA), TANDA03 W03 (Repeat Ball L3, QA07/08 parciales), W05 (229 MT ya existentes, 10 QA). **W04 NO se cierra:** TANDA03 con CI de último HEAD aún no certificada.
+
+**Colas ACTUALIZADAS YA EN RAMAS PROPIAS:** W01=T03 `QUEUE_W01_TANDA_03.md`; W02=T03 `QUEUE_W02_TANDA_03.md`; W03=T04 `QUEUE_W03_TANDA_04.md`; W05=T04 `QUEUE_W05_TANDA_04.md`. W04 sigue T03 sin modificar, bajo supervisión. Todas utilizan `docs/coordination/items_parallel_v1/IA6_AUTORUN.md` de su propia rama. Usuarios pueden dar `p` solo a W01/W02/W03/W05 para trabajo **nuevo**; W04 puede seguir en su cola actual. Hitos != objetos nuevos != integración conjunta IA6.
+
+**Riesgo prioritario IA6:** integración `codex/calvo-ia6-integration-20261109` sigue en SHA `f4a5687bff1aaf0fb443c36ca4c2873f5d0ac54e` (#42701239557 SUCCESS) y NO incorpora automáticamente las nuevas ramas posteriores. El relevo autónomo de trabajadoras NO es un merge. Cada incorporación debe reconstruirse por función y comprobarse con CI conjunta, sin tocar main/V28/PR118.
+
+---
+
 # ACTUALIZACIÓN IA6 — TANDA 02 ACTIVADA EN W03/W04/W05 · 2026-11-10
 
 **Tandas cerradas y verificadas:** W03 #42729137809 SUCCESS (10 revisadas/0 nuevas), W04 #42729967922 SUCCESS (10 revisadas/0 formas o fusiones nuevas), W05 #42730140482 SUCCESS (49/49 MT panel headless). Auditoría [IA6_AUDIT_BATCH01_AND_HANDOFF_BATCH02_20261110.md](IA6_AUDIT_BATCH01_AND_HANDOFF_BATCH02_20261110.md).
