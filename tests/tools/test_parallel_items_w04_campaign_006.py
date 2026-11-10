@@ -161,8 +161,15 @@ def main():
               output_form["form_name"] == expected_output_name and
               output_form["is_battle_only"] is False, item + ": canonical evolved form")
     creature = (ROOT / "modules/creatures/domain/creature_instance.gd").read_text(encoding="utf-8")
-    check('"form_id":' not in creature and '"source_form_id":' not in creature,
-          "persistent creature lacks form identity until IA6 owns schema")
+    # Historical B02 still has no Sinistea/Poltchageist form producer.
+    # One explicit W04 TANDA02 whitelist (slowpoke_galar) is now permitted.
+    form_pilot = (ROOT / "modules/creatures/progression/canonical_form_identity_w04.gd").read_text(encoding="utf-8")
+    check('PILOT_SPECIES := &"slowpoke_galar"' in form_pilot and
+          'PILOT_FORM := &"slowpoke-galar"' in form_pilot and
+          "sinistea" not in form_pilot.lower() and
+          "poltchageist" not in form_pilot.lower() and
+          '"source_form_id":' not in creature,
+          "whitelisted Galar form pilot does NOT certify B02 authenticity")
     check('"form_id"' not in service and '"source_form_id"' not in service,
           "shared evolution route currently cannot consume form identity")
     for token in ("func _form_snapshot_02(", "func _case_form_02(", "02_canonical_source_form",
