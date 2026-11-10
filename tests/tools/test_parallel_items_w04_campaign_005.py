@@ -231,9 +231,24 @@ def main():
           {"urshifu-single-strike","urshifu-rapid-strike"}, "torres no mezclan estilos")
     check(all(d["version_group"]["name"] == "the-isle-of-armor" for d in tower_rows), "torres son versión Isle of Armor")
     check(all(c["version"] == "scarlet-violet" for c in form_cases if c["source"] == "kubfu"), "manuscritos son Scarlet-Violet")
-    # No hay una identidad regional/forma por criatura en el modelo persistido.
-    check("var form_id:" not in creature and "var regional_form_id:" not in creature, "CreatureInstance aún sin forma persistida")
-    check('"form_id":' not in creature and '"regional_form_id":' not in creature, "SaveV2 sin contrato form_id")
+    # W04 TANDA02 migration whitelist: ONLY catalog-verified slowpoke_galar
+    # may now have a persistent form. Historic fixture and item use remain frozen.
+    # Positive real Factory/encounter/SaveV2 evidence is in
+    # tests/gameplay/w04_autorun_v2_form_identity.gd; all original negative
+    # gameplay form transitions below remain unchanged.
+    FORM_ID_PROMOTION_WHITELIST = {"slowpoke_galar": "slowpoke-galar"}
+    pilot = (ROOT / "modules/creatures/progression/canonical_form_identity_w04.gd").read_text(encoding="utf-8")
+    factory = (ROOT / "modules/creatures/progression/creature_factory.gd").read_text(encoding="utf-8")
+    check(FORM_ID_PROMOTION_WHITELIST == {"slowpoke_galar": "slowpoke-galar"}
+          and 'var form_id: StringName = &""' in creature
+          and 'PILOT_SPECIES := &"slowpoke_galar"' in pilot
+          and 'PILOT_FORM := &"slowpoke-galar"' in pilot
+          and 'species.id == &"slowpoke_galar"' in factory,
+          "FORM_ID_PROMOTION_WHITELIST: only validated Galar Slowpoke can have persistent form")
+    check('if form_id != &"": result["form_id"] = String(form_id)' in creature
+          and '"regional_form_id":' not in creature
+          and 'var decoration_id:' not in creature,
+          "SaveV2 optional form pilot, no regional/form/item blanket acceptance")
     for token in ("func _auditar_forma_04(", "func _fronteras_regionales_04(",
                   "04_base_regional", "04_forma_destino", "04_evolucion_normal_nivel_sigue_disponible", "04_urshifu_estilos_distintos_igual_especie",
                   "04_galar_regional_dos_destinos", "04_torre_sombras_no_simplificada",
@@ -267,8 +282,11 @@ def main():
     check(d["time_of_day"] in (None, ""), "PokeAPI no fija horario de forma")
     check('&"spin"' in evolution and "UNSUPPORTED_TRIGGERS" in evolution, "trigger spin explicitamente no implementado")
     check("var held_item_id:" in creature and "var held_item_consumed:" in creature, "el objeto equipado persiste")
-    check("var form_id:" not in creature and '"form_id":' not in creature and
-          "var decoration_id:" not in creature and '"decoration_id":' not in creature, "Alcremie carece de forma/decoracion persistente")
+    check('PILOT_SPECIES := &"slowpoke_galar"' in pilot
+          and 'alcremie' not in pilot.lower()
+          and 'var decoration_id:' not in creature
+          and '"decoration_id":' not in creature,
+          "Alcremie still has NO form producer; exact Slowpoke Galar pilot only")
     for token in ("func _auditar_confite_05(", "05_ruta_spin_real_unica",
                   "05_giro_no_disfrazado_de_use_item", "05_equipar", "05_uso_rechazado_sin_gasto",
                   "05_ajeno_sin_gasto", "05_sin_consumo_tras_equipar", "05_sin_forma_por_evolve",
@@ -384,8 +402,9 @@ def main():
         check(row["holdable"] is True, name + ": equipamiento contratado")
     creature_form = (ROOT / "modules/creatures/domain/creature_instance.gd").read_text(encoding="utf-8")
     check("var held_item_id:" in creature_form and '"held_item_id":' in creature_form, "SaveV2 conserva objeto equipado")
-    check(not any(s in creature_form for s in ('"form_id":', '"variant_id":', '"primal_form_id":')),
-          "no hay identificador persistente para forma base/origen/primal")
+    check('PILOT_FORM := &"slowpoke-galar"' in pilot
+          and not any(s in creature_form for s in ('"variant_id":', '"primal_form_id":')),
+          "no origin/primal item source despite one whitelisted regional form")
     check("func base_species_id(" in creature_form and "battle_transform_original" in creature_form,
           "existe restauracion temporal de combate, NO equivale a puente para los 5 objetos")
     check("func equip(" in field and "func unequip(" in field and "func evolution_options(" in field,
@@ -552,8 +571,9 @@ def main():
           "Rotom exige seleccionar electrodoméstico y contrato movimientos")
     creature_form09 = (ROOT / "modules/creatures/domain/creature_instance.gd").read_text(encoding="utf-8")
     check("battle_transform_original" in creature_form09 and
-          all(s not in creature_form09 for s in ('"form_id":', '"form_variant_id":', '"cells_count":')),
-          "SaveV2 no debe inventar identidad de forma o contadores Zygarde")
+          'PILOT_SPECIES := &"slowpoke_galar"' in pilot and
+          all(s not in creature_form09 for s in ('"form_variant_id":', '"cells_count":')),
+          "Galar pilot does not invent Zygarde form/cell state")
     check("func evolution_options(" in field and "func use_item(" in field and "func equip(" in field,
           "rutas del servicio prueban rechazo, no activación de forma")
     for token in ("func _auditar_cambio_forma_09(",
@@ -642,8 +662,10 @@ def main():
           {"antique", "phony", "artisan", "counterfeit"},
           "cuatro restricciones de forma requieren contrato separado")
     creature10 = (ROOT / "modules/creatures/domain/creature_instance.gd").read_text(encoding="utf-8")
-    check(all(s not in creature10 for s in ('"source_form_id":', '"form_id":')),
-          "SaveV2 no persiste forma de origen auténtica/falsa")
+    check('PILOT_SPECIES := &"slowpoke_galar"' in pilot
+          and '"source_form_id":' not in creature10 and
+          'sinistea' not in pilot and 'poltchageist' not in pilot,
+          "Sinistea/Poltchageist authenticity still has no source producer")
     check('if not _conditions_are_runtime_compatible(record, source_species_id)' in evolution,
           "clasificador conserva condiciones, pero no hay requisitos fuente en estas rutas")
     check('var options := evolution_options(item_id, creature_id)' in field and
