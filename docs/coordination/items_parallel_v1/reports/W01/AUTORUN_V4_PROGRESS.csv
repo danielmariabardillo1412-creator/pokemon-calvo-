@@ -1,0 +1,11 @@
+fila,id,estado,sha_pruebas,ci_run,objetos_nuevos,qa_funcional,notas
+01,leftovers,EN_CI_AUTOMATICA,PENDIENTE,PENDIENTE,0,no,l3_leftovers_native_godot_qa_en_ejecucion
+02,life_orb,PENDIENTE,PENDIENTE,PENDIENTE,0,no,pendiente_de_analisis_y_pruebas
+03,choice_band,PENDIENTE,PENDIENTE,PENDIENTE,0,no,pendiente_de_analisis_y_pruebas
+04,choice_specs,PENDIENTE,PENDIENTE,PENDIENTE,0,no,pendiente_de_analisis_y_pruebas
+05,choice_scarf,PENDIENTE,PENDIENTE,PENDIENTE,0,no,pendiente_de_analisis_y_pruebas
+06,shell_bell,PENDIENTE,PENDIENTE,PENDIENTE,0,no,pendiente_de_analisis_y_pruebas
+07,eviolite,PENDIENTE,PENDIENTE,PENDIENTE,0,no,pendiente_de_analisis_y_pruebas
+08,safety_goggles,PENDIENTE,PENDIENTE,PENDIENTE,0,no,pendiente_de_analisis_y_pruebas
+09,black_sludge,PENDIENTE,PENDIENTE,PENDIENTE,0,no,pendiente_de_analisis_y_pruebas
+10,sitrus_berry,PENDIENTE,PENDIENTE,PENDIENTE,0,no,pendiente_de_analisis_y_pruebas

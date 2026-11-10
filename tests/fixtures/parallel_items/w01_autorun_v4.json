@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "worker": "W01",
+  "tanda": "04",
+  "kind": "AUTORUN_V4_W01_COMPETITIVE_HELD",
+  "format": "gen9calvounifiedv1",
+  "items": [
+    {
+      "row": "01",
+      "id": "leftovers"
+    },
+    {
+      "row": "02",
+      "id": "life_orb"
+    },
+    {
+      "row": "03",
+      "id": "choice_band"
+    },
+    {
+      "row": "04",
+      "id": "choice_specs"
+    },
+    {
+      "row": "05",
+      "id": "choice_scarf"
+    },
+    {
+      "row": "06",
+      "id": "shell_bell"
+    },
+    {
+      "row": "07",
+      "id": "eviolite"
+    },
+    {
+      "row": "08",
+      "id": "safety_goggles"
+    },
+    {
+      "row": "09",
+      "id": "black_sludge"
+    },
+    {
+      "row": "10",
+      "id": "sitrus_berry"
+    }
+  ],
+  "stage01": {
+    "id": "leftovers",
+    "variants": [
+      "active",
+      "none",
+      "reserve",
+      "full"
+    ],
+    "mechanic": "end_turn_1_of_16_if_hp_missing",
+    "seed": 19,
+    "move": "reflect",
+    "finisher": "tackle"
+  },
+  "replacements": [
+    "adrenaline_orb",
+    "absorb_bulb",
+    "rowap_berry"
+  ],
+  "provenance": {
+    "tanda03_functional_sha": "20bfd7c3a08250c79a0a3d4f0dbf120f70850138",
+    "tanda03_ci": 42893188116
+  }
+}
