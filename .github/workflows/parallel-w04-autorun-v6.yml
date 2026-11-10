@@ -1,0 +1,96 @@
+name: W04 AUTORUN V6 - native Galar evolution identity
+on:
+  push:
+    branches: [codex/calvo-items-20261104-w04-camp006]
+    paths:
+      - '.github/workflows/parallel-w04-autorun-v6.yml'
+      - 'modules/creatures/progression/creature_factory.gd'
+      - 'modules/creatures/progression/regional_ability_selection_w04.gd'
+      - 'tests/gameplay/w04_autorun_v4_ability.gd'
+      - 'tests/gameplay/w04_autorun_v6_native_evolution.gd'
+      - 'modules/creatures/progression/evolution_system.gd'
+      - 'modules/creatures/progression/regional_evolution_contract_w04.gd'
+      - 'docs/coordination/items_parallel_v1/reports/W04/AUTORUN_V6_PROGRESS.csv'
+      - 'tests/gameplay/w04_autorun_v3_all_regional.gd'
+      - 'docs/coordination/items_parallel_v1/reports/W04/AUTORUN_V4_PROGRESS.csv'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: chickensoft-games/setup-godot@v2.4.1
+        with:
+          version: 4.7.0
+          use-dotnet: false
+          include-templates: false
+      - name: Restore source and import
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tools/distribution/restore_resources.py
+          python -B tools/distribution/restore_resources.py --check
+          mkdir -p data/reports
+          cp ci/fixtures/pokeapi_reports/forms_policy_report.json data/reports/forms_policy_report.json
+          cp ci/fixtures/pokeapi_reports/unsupported_mechanics.json data/reports/unsupported_mechanics.json
+          cp ci/fixtures/pokeapi_reports/import_summary.json data/reports/import_summary.json
+          godot --headless --path . --import 2>&1 | tee w04-v4-import.log
+          if grep -E 'SCRIPT ERROR|Parse Error' w04-v4-import.log; then exit 1; fi
+      - name: Galarica native evolution destination identities and SaveV2
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 900s godot --headless --path . --script res://tests/gameplay/w04_autorun_v6_native_evolution.gd 2>&1 | tee w04-v6-evolution.log
+          grep -E '^W04_AUTORUN_V6 PASS checks=[1-9][0-9]* routes=2 native_L2=2 L3=0$' w04-v6-evolution.log
+      - name: Four canonical normal ability promotions
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 900s godot --headless --path . --script res://tests/gameplay/w04_autorun_v4_ability.gd 2>&1 | tee w04-v4-ability.log
+          grep -E '^W04_AUTORUN_V4 PASS checks=[1-9][0-9]* promoted=4 blocked=1$' w04-v4-ability.log
+      - name: All 56 regional forms
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 1500s godot --headless --path . --script res://tests/gameplay/w04_autorun_v3_all_regional.gd 2>&1 | tee w04-v4-all.log
+          grep -E '^W04_AUTORUN_V3_ALL PASS checks=[1-9][0-9]* examined=56 native_functional=55 blocked=1$' w04-v4-all.log
+      - name: Preserved Slowpoke pilot
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 900s godot --headless --path . --script res://tests/gameplay/w04_autorun_v2_form_identity.gd 2>&1 | tee w04-v4-slowpoke.log
+          grep -E '^W04_AUTORUN_V2_FORM PASS checks=[1-9][0-9]*$' w04-v4-slowpoke.log
+      - name: Legacy Python gates
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tests/tools/test_parallel_items_w04_campaign_003.py --ci
+          python -B tests/tools/test_parallel_items_w04_campaign_004.py --ci
+          python -B tests/tools/test_parallel_items_w04_campaign_005.py --ci
+          python -B tests/tools/test_parallel_items_w04_campaign_006.py --ci
+          python -B tests/tools/test_parallel_items_w04_autorun_v1.py --ci
+          python -B tests/tools/test_w04_autorun_v2_form_identity.py
+      - name: Legacy Godot CAMP003-006 and resolvers
+        shell: bash
+        run: |
+          set -euo pipefail
+          for case in parallel_items_w04_campaign_003 parallel_items_w04_campaign_004 parallel_items_w04_campaign_005 parallel_items_w04_campaign_006 parallel_items_w04_condition_resolver parallel_items_w04_milcery_resolver; do
+            timeout 900s godot --headless --path . --script "res://tests/gameplay/${case}.gd" 2>&1 | tee "w04-v4-${case}.log"
+            if grep -E 'SCRIPT ERROR|Parse Error| FAIL ' "w04-v4-${case}.log"; then exit 1; fi
+          done
+      - name: Preserve logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: w04-v6-${{ github.run_id }}
+          retention-days: 7
+          if-no-files-found: ignore
+          path: |
+            w04-v4-*.log
+            w04-v6-*.log
