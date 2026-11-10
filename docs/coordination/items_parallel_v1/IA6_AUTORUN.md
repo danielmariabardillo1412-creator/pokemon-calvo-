@@ -1,40 +1,38 @@
-# IA6 — ORDEN FIJA PARA ESTA VENTANA (W05)
+# IA6 — ORDEN ACTIVA TANDA 02 PARA W05
 
-**Esta es tu instrucción de arranque y reanudación.** Al recibir `p`, `sigue` o `continúa`, no preguntes «¿qué trabajo sigue?» ni esperes otra autorización por cada objeto. Sigue la siguiente fila pendiente de la tabla de abajo, reanuda automáticamente las otras filas autorizadas, publica checkpoint si el turno se agota y cierra la tanda tras diez filas examinadas. La IA6 solo revisa el lote cerrado.
+**ESTA NOTA SUSTITUYE LA TANDA 01, YA CERRADA.** La orden ha sido publicada por IA6 en 2026-11-10. **Al recibir `p`, `sigue` o `continúa`, empieza inmediatamente la PRIMERA FILA SIN CERRAR de la TANDA 02.** No reabrir TANDA 01 ni pedir permiso por cada hito. Reanudar por el CSV/checkpoint de esta tanda si se interrumpe el turno; no se trabaja en background entre turnos.
 
-**Protocolo técnico vinculante y fuente de verdad:** rama árbitra `codex/calvo-items-20261101-arbitro`, archivo `docs/coordination/items_parallel_v1/AUTONOMY_V1/README.md`. Cola central `docs/coordination/items_parallel_v1/AUTONOMY_V1/QUEUE_W05.md`.
-
-**Permanencia:** IA6 actualizará ESTE MISMO archivo al aprobar una tanda nueva. Al iniciar `p`, comprueba el HEAD y la versión del archivo, no uses la conversación como única memoria. Los permisos de archivos protegidos y reglas de pruebas siguen vigentes. Ninguna orden aquí crea trabajos en segundo plano.
+**Política maestra:** `docs/coordination/items_parallel_v1/AUTONOMY_V1/README.md` de la rama árbitra `codex/calvo-items-20261101-arbitro`. **Cola central:** `docs/coordination/items_parallel_v1/AUTONOMY_V1/QUEUE_W05_TANDA_02.md` (rama árbitra). Las autorizaciones especiales y límites de edición de esta nota SON órdenes oficiales IA6. Las ramas son exclusivas. Todo PASS funcional requiere CI en SHA concreto. Al terminar las diez filas, entregar `TANDA 02 FINALIZADA` y STOP a espera de la siguiente nota.
 
 ---
 
-# IA6 — ORDEN PERMANENTE AUTORUN V1 — W05
-**Rama exclusiva:** `codex/calvo-items-20261109-w05-books-ui`
-**Estado desde el que se reanuda:** LIBROS UI L3 02 cerrado en CI #42714738745 SUCCESS; panel independiente mejorado, IA6 montó versión anterior en FieldItemBag y aún debe incorporar cambios recientes.
-**Activador:** `p`, `sigue` o `continúa` inicia o reanuda los **diez bloques de esta tanda**, sin pedir nuevo permiso por cada fila. Se trabaja hasta donde permita el turno/herramientas; si se interrumpe, checkpoint y siguiente `p` retoma la siguiente fila no cerrada.
-**Reglas vinculantes:** leer `docs/coordination/items_parallel_v1/AUTONOMY_V1/README.md` de la rama árbitra `codex/calvo-items-20261101-arbitro`. Se autoriza la reparación autónoma en archivos propios, la migración versionada de pruebas históricas y seguir con filas independientes pese a bloqueos. **Nunca saltar pruebas ni inventar L3.**
-**Resumen al usuario:** barra de filas revisadas `[████░░░░░░] 4/10` y **funcionales N/10** diferenciadas; solo al final enviar cierre a IA6.
-**Informe final único:** `docs/coordination/items_parallel_v1/reports/W05/AUTORUN_V1_FINAL.md`; estado por fila en `AUTORUN_V1_PROGRESS.csv`. No tocar main, V28, PR118 ni otras ramas.
+# IA6 — IA5/W05 · AUTORUN TANDA 02, RESTANTES 180 MT DE SCARLET/VIOLET
+**Fecha:** 2026-11-10. **Rama:** `codex/calvo-items-20261109-w05-books-ui`.
+**Previo certificado:** TANDA01 49/49 MT, panel real aislado, #42730140482 SUCCESS sobre `91c8b1803dd93e3ec5a6d68338c41f38fe3f8e4f` (HEAD final del informe, código tested `fd6a04317b21d8afa15af43a25cbe777ae64c4f6`). **No reimplementar esos 49 ni reclamar GPU.**
+**Esta orden autoriza 10 microbloques continuos**; `p/sigue` activa y reanuda la tanda sin consultarle permisos a IA6 fila a fila. Registrar estado por fila y cerrar con informe/CI.
 
-## Tanda 01 — cobertura real de la interfaz para los 49 libros de CAMP006
-Son los **49 IDs exactos de la cola canónica aprobada**, divididos en 10 grupos. **No** usar `tm230..tm250`, que no pertenecen a esa cola. No re-implementar enseñanza: reutilizar `FieldItemService.teach`.
+## Selección verificada por IA6
+Se tomaron los **229 IDs exactos** cuyo `modules/inventory/item_connections_v1.json::machine_rows[ID]["scarlet-violet"]` está definido. Se excluyeron los **49 IDs exactos** de `CAMPAIGN_006_W05_QUEUE_APPROVED.csv`. Restan **180 IDs únicos** repartidos en 10 grupos de 18, sin inventar nuevos ID, sin usar numeración indiscriminada ni alterar V27/V28. Fuente y diff deben verificarse en su HEAD antes de tocar cualquier producción.
 
-| Fila | IDs de la cola | Grupo |
-|---|---|---|
-| 01 | `tm202;tm203;tm204;tm205;tm206` | L01 CAMP006 |
-| 02 | `tm207;tm208;tm209;tm210;tm211` | L02 |
-| 03 | `tm212;tm213;tm214;tm215;tm216` | L03 |
-| 04 | `tm217;tm218;tm219;tm220;tm221` | L04 |
-| 05 | `tm222;tm223;tm224;tm225;tm226` | L05 |
-| 06 | `tm227;tm228;tm229;tm01;tm02` | L06 |
-| 07 | `tm03;tm04;tm05;tm06;tm08` | L07 |
-| 08 | `tm09;tm10;tm11;tm12;tm13` | L08 |
-| 09 | `tm14;tm15;tm17;tm19;tm20` | L09 |
-| 10 | `tm31;tm36;tm44;tm77` | L10 |
+| Fila | 18 IDs de la tanda 02 |
+|---|---|
+| 01 | `tm07;tm16;tm18;tm21;tm22;tm23;tm24;tm25;tm26;tm27;tm28;tm29;tm30;tm32;tm33;tm34;tm35;tm37` |
+| 02 | `tm38;tm39;tm40;tm41;tm42;tm43;tm45;tm46;tm47;tm48;tm49;tm50;tm51;tm52;tm53;tm54;tm55;tm56` |
+| 03 | `tm57;tm58;tm59;tm60;tm61;tm62;tm63;tm64;tm65;tm66;tm67;tm68;tm69;tm70;tm71;tm72;tm73;tm74` |
+| 04 | `tm75;tm76;tm78;tm79;tm80;tm81;tm82;tm83;tm84;tm85;tm86;tm87;tm88;tm89;tm90;tm91;tm92;tm93` |
+| 05 | `tm94;tm95;tm96;tm97;tm98;tm99;tm100;tm101;tm102;tm103;tm104;tm105;tm106;tm107;tm108;tm109;tm110;tm111` |
+| 06 | `tm112;tm113;tm114;tm115;tm116;tm117;tm118;tm119;tm120;tm121;tm122;tm123;tm124;tm125;tm126;tm127;tm128;tm129` |
+| 07 | `tm130;tm131;tm132;tm133;tm134;tm135;tm136;tm137;tm138;tm139;tm140;tm141;tm142;tm143;tm144;tm145;tm146;tm147` |
+| 08 | `tm148;tm149;tm150;tm151;tm152;tm153;tm154;tm155;tm156;tm157;tm158;tm159;tm160;tm161;tm162;tm163;tm164;tm165` |
+| 09 | `tm166;tm167;tm168;tm169;tm170;tm171;tm172;tm173;tm174;tm175;tm176;tm177;tm178;tm179;tm180;tm181;tm182;tm183` |
+| 10 | `tm184;tm185;tm186;tm187;tm188;tm189;tm190;tm191;tm192;tm193;tm194;tm195;tm196;tm197;tm198;tm199;tm200;tm201` |
 
-Para cada ID: portada/libro textual ES desde `FieldMachineBookProfile.presentacion`, tipo y etiqueta real, learnset SV y species permitidas, Pokémon compatible e incompatible, falta de stock, bloqueo de sesión, cuatro movimientos con reemplazo obligatorio, intento repetir un movimiento conocido, PP, consumo exactamente uno/rollback, SaveV2 y owner intacto. Al menos una prueba **real** de enseñanza por ID cuando haya especie compatible; si no se halla, registrar fuente y motivo, nunca inventar learnset. Tests parametrizados, **no** generar 49 escenas idénticas ni retocar 49 metadatos de movimientos.
+## Contrato repetido por cada ID
+Reutilizar el **panel existente** `scenes/visual/field_machine_book_panel.gd`, `FieldMachineBookProfile.presentacion`, el learnset `scarlet-violet` y **la única ruta** `FieldItemService.teach`. Comprobar en Godot headless que para cada libro existe Pokémon compatible real, aprendizaje positivo desde panel instanciado, PP correcto, identidad y propietario, -1 stock y SaveV2; negativos incompatible, sin stock, bloqueos, repetición, cuatro slots sin reemplazo y reemplazo explícito. No inventar compatibilidad ni modificar datos fuente. Para ID sin especie apta, documentar `BLOQUEADO` con evidencia, sin acreditar efecto.
 
-Edición autorizada del panel `scenes/visual/field_machine_book_panel.gd`, fixtures y runners W05, y CI de su rama; no modificar `scenes/visual/field_item_bag.gd`, `FieldItemService`, catálogos, `SaveV2`, políticas, ni fichas canónicas. IA6 unirá los cambios del panel mejorado con la mochila y los repelentes en rama integrada.
+**Prueba y eficiencia:** ampliar/parametrizar el runner usado en TANDA01 para grupos de 18 y no crear 180 escenas separadas. Ejecución acumulativa por grupos para limitar tiempo de CI y evitar suites innecesariamente duplicadas: cada grupo puede validarse aisladamente y el cierre revalida los 180 + regresión 49. En caso de timeout, segmentar jobs sin perder evidencias, nunca saltar aserciones. Contrato Python de integridad: 229 = 49 + 180 disjuntos, IDs/perfil exactos, 10×18 filas, ninguna duplicidad.
 
-CI de fin de tanda debe preservar pruebas originales L3 01/02 y CAMPAÑAS 006/005/004/003, y emitir recibos por grupo, total de IDs con positivos y bloqueados. No atribuir cobertura visual GPU humana; `headless` solo. El usuario recibe un cierre único tras diez filas, no diez solicitudes de autorización.
+**Ownership:** W05 edita solamente panel propio, runners, fixtures, workflow propio e informes. Prohibido tocar `FieldItemBag`, `FieldItemService`, SaveV2 central, catálogos, learnsets, `main`, V28, PR118 u otras W. **La actualización del panel en la mochila real es responsabilidad IA6**; un test del panel independiente no es un test visual humano ni todos los Pokémon.
+
+**CI cierre:** conservar piloto UI01/02 y TANDA01 49 IDs y CAMP006/005/004/003. Exigir `completed/success` sobre SHA con 10 grupos probados. Informe `reports/W05/AUTORUN_V2_FINAL.md` con funcionales/180 y bloqueados, HASH/CI, ningún crédito repetido. Al cerrar 10/10, STOP hasta nota nueva.
 
