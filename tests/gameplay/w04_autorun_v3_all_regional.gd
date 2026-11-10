@@ -118,7 +118,10 @@ func _run() -> void:
                     bad_moves.append(String(slot.move_id))
             print("W04_V3_NATIVE_DIAG species=", key, " canonical=", canonical_ok,
                 " native=", native_ok, " policy_species=", allowed,
-                " bad_moves=", JSON.stringify(bad_moves), " move_count=", mon.moveset.size())
+                " bad_moves=", JSON.stringify(bad_moves), " move_count=", mon.moveset.size(),
+                " ability=", mon.ability_id, " ability_allowed=", policy.ability_allowed(String(mon.ability_id)),
+                " stats_match=", mon.stats.to_dict() == StatCalculator.compute(species.base_stat_block(), mon.ivs, mon.evs, mon.nature_id, mon.level).to_dict(),
+                " status=", mon.status_state.persistent_id, " held=", mon.held_item_id)
         verify(canonical_ok and native_ok, key + "_native_guard")
         var owner := PlayerCollection.new()
         verify(owner.party.add_creature(mon), key + "_party")
