@@ -1,0 +1,11 @@
+fila,hito,estado,evidencia,qa_certificada,nota,sha_codigo,ci_run
+01,dos_batallas_nativas_ledger_seed_stock,QA_PASS_L3,26 V4,si,harness V4 dos encuentros nativos Master y Repeat SaveV2,b131fb008ac9e06ba06c63808e00d33ecd3e1178,42891930750
+02,party_llena_storage_llena,BLOQUEADO_CONTRATO,source,no,StorageRuleset sin MAX_BOXES y CreatureStorage autoexpande; ticket AUTORUN_V4_STORAGE_CONTRACT.md,b131fb008ac9e06ba06c63808e00d33ecd3e1178,42891930750
+03,captura_fallida_RNG_nativo,QA_PASS_L3,18 NEG,si,Mewtwo con Poke Ball seed 6413 fallo real inventario staged ledger intacto,b131fb008ac9e06ba06c63808e00d33ecd3e1178,42891930750
+04,sin_bola_inventario_rechazado,QA_PASS_L3,26 V4,si,no-stock sin cambio de snapshot PP RNG ni ledger; compatibilidad SaveV2 preservada,b131fb008ac9e06ba06c63808e00d33ecd3e1178,42891930750
+05,transform_nativo_y_repeat,QA_PASS_L3,20 TRANSFORM,si,Mew usa Transform nativa antes de Repeat; Mew persistente no cambia,b131fb008ac9e06ba06c63808e00d33ecd3e1178,42891930750
+06,checkpoint_activo_antes_repeat,QA_PASS_L3,26 V4,si,snapshot RNG ledger e inventario iguales despues de carga manual,b131fb008ac9e06ba06c63808e00d33ecd3e1178,42891930750
+07,party_llena_PC_disponible,QA_PASS_L3,26 V4,si,seis en party captura enviada a PC una vez; segunda Repeat igual,b131fb008ac9e06ba06c63808e00d33ecd3e1178,42891930750
+08,savev2_ledger_corrupto_legacy,QA_PASS_L3,18 NEG,si,checksum revalidado con IDs duplicados rechaza sin publicar; legacy vacio carga,b131fb008ac9e06ba06c63808e00d33ecd3e1178,42891930750
+09,repeat_misma_y_otra_especie,QA_PASS_L3,20 TRANSFORM,si,Pidgey previo Repeat x3.5; Caterpie distinta probabilidad nativa x1,b131fb008ac9e06ba06c63808e00d33ecd3e1178,42891930750
+10,regresiones_finales_informe,CI_PASS_CODIGO,all workflows,si,CI completa SUCCESS 64 nuevas comprobaciones Godot V4; reporte de cierre,b131fb008ac9e06ba06c63808e00d33ecd3e1178,42891930750
