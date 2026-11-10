@@ -1,11 +1,11 @@
 fila,hito,estado,funcional_l3,ci,sha,evidencia
-01,mint_rare_candy_red,ROJO_REPRODUCIDO,0,,,
-02,growth_nature_validation,TEST_IMPLEMENTADO_CI_PENDIENTE,0,,,
-03,exp_candies_after_mint,TEST_IMPLEMENTADO_CI_PENDIENTE,0,,,
-04,growth_move_evolution,TEST_IMPLEMENTADO_CI_PENDIENTE,0,,,
-05,mint_mochi_red,ROJO_REPRODUCIDO,0,,,
-06,mochi_nature_validation,TEST_IMPLEMENTADO_CI_PENDIENTE,0,,,
-07,fresh_start_mochi,TEST_IMPLEMENTADO_CI_PENDIENTE,0,,,
-08,protein_carbos,TEST_IMPLEMENTADO_CI_PENDIENTE,0,,,
-09,five_step_sequence,TEST_IMPLEMENTADO_CI_PENDIENTE,0,,,
-10,final_regressions,TEST_IMPLEMENTADO_CI_PENDIENTE,0,,,
+01,mint_rare_candy_red,CERTIFICADO,1,42869765262,ba2af91278a6e79df30532b66855f7ccdb4278d8,Rojo nativo y verde posterior; rechazo antes del arreglo sin gasto
+02,growth_nature_validation,CERTIFICADO,1,42869765262,ba2af91278a6e79df30532b66855f7ccdb4278d8,Growth.validation_error usa naturaleza efectiva cuando existe
+03,exp_candies_after_mint,CERTIFICADO,1,42869765262,ba2af91278a6e79df30532b66855f7ccdb4278d8,XP XS y XL; nivel100 PS PP SaveV2
+04,growth_move_evolution,CERTIFICADO,1,42869765262,ba2af91278a6e79df30532b66855f7ccdb4278d8,Razor Leaf reemplazo y Bulbasaur→Ivysaur tras menta; corrección Growth.plan
+05,mint_mochi_red,CERTIFICADO,1,42869765262,ba2af91278a6e79df30532b66855f7ccdb4278d8,Rojo Muscle Mochi; Swift Mochi positivo desde mochila tras corrección
+06,mochi_nature_validation,CERTIFICADO,1,42869765262,ba2af91278a6e79df30532b66855f7ccdb4278d8,Mochi.validation_error reconoce naturaleza efectiva
+07,fresh_start_mochi,CERTIFICADO,1,42869765262,ba2af91278a6e79df30532b66855f7ccdb4278d8,Fresh Start reinicia EV reales y persiste SaveV2
+08,protein_carbos,CERTIFICADO,1,42869765262,ba2af91278a6e79df30532b66855f7ccdb4278d8,Protein y Carbos recalculan EV estadística y amistad
+09,five_step_sequence,CERTIFICADO,1,42869765262,ba2af91278a6e79df30532b66855f7ccdb4278d8,Menta crecimiento mochi vitamina menta; PARTY/STORAGE; rollback y SaveV2
+10,final_regressions,CERTIFICADO,0,42869765262,ba2af91278a6e79df30532b66855f7ccdb4278d8,CI completa; pruebas archivadas y regresiones; informe único
