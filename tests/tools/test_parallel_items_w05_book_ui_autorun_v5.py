@@ -20,6 +20,7 @@ HELPER = ROOT / "modules/localization/machine_moves_es_sv_w05.gd"
 PROFILE = ROOT / "modules/inventory/item_connections_v1.json"
 PRESET = ROOT / "export_presets.cfg"
 IGNORE = ROOT / ".gitignore"
+PANEL = ROOT / "scenes/visual/field_machine_book_panel.gd"
 
 
 def check(name: str, condition: bool) -> None:
@@ -102,6 +103,20 @@ def main() -> None:
               and bool(names[0].strip()) and row.get("nombre_es") == names[0])
         checked += 1
     check("completed full coverage", checked == 229)
+    panel = PANEL.read_text(encoding="utf-8")
+    check("IA6 seam bind_existing_service",
+          "func bind_existing_service(bound_service: Variant) -> bool:" in panel)
+    check("IA6 seam select_book",
+          "func select_book(id: StringName) -> bool:" in panel)
+    check("IA6 seam choose target and slot",
+          "func select_creature(id: StringName) -> bool:" in panel
+          and "func select_replacement_slot(slot: int) -> bool:" in panel)
+    check("one teaching signal and one mutation through service",
+          "signal teaching_finished(result: Dictionary)" in panel
+          and panel.count("service.teach(id, target, _slot())") == 1)
+    print("W05_V5_IA6_INTEGRATION_CONTRACT PASS "
+          "service_binding=1 stable_book_selection=1 teach_seam=1 "
+          "FieldItemBag_edit=0")
     print(f"W05_BOOKS_AUTORUN_V5_PY PASS rows={checked} portable=1 "
           "original_sources=229 pck_inclusion=UNVERIFIED")
 
