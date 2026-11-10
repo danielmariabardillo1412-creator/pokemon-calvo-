@@ -1,0 +1,11 @@
+fila,tarea,ids,estado,nivel,funcional_real,sha_ci,run_ci,notas
+"01","CAMP006_B07","galarica_cuff;galarica_wreath;scroll_of_darkness;scroll_of_waters","BLOQUEADO","L1_CONTRATO_SIN_L3","0","","","PokeAPI evolution-chain 33/470: galarica exige forma Galar auténtica, pergaminos exigen estilo Urshifu single/rapid strike; CreatureInstance carece form_id persistente y FieldItemService no autentica forma. Sin L3. CAMP005 histórico bloque04 cubre rechazo/SaveV2. CI consolidada de esta tanda pendiente."
+"02","CAMP006_B08","gracidea;meteorite;reveal_glass;rotom_catalog;zygarde_cube","PENDIENTE","PENDIENTE","0","","",""
+"03","CAMP006_B09","blue_orb;red_orb;griseous_core;lustrous_globe;adamant_crystal","PENDIENTE","PENDIENTE","0","","",""
+"04","CAMP006_B10","dna_splicers;reins_of_unity;n_lunarizer_merge;n_solarizer_merge","PENDIENTE","PENDIENTE","0","","",""
+"05","QA_B01","sweet_apple;tart_apple;syrupy_apple","PENDIENTE","PENDIENTE","0","","",""
+"06","QA_B02","chipped_pot;cracked_pot;masterpiece_teacup;unremarkable_teacup","PENDIENTE","PENDIENTE","0","","",""
+"07","QA_B03","dragon_scale;electirizer","PENDIENTE","PENDIENTE","0","","",""
+"08","RESOLVER_B05","oval_stone;dawn_stone;peat_block","PENDIENTE","PENDIENTE","0","","",""
+"09","RESOLVER_B06","berry_sweet;clover_sweet;flower_sweet;love_sweet;ribbon_sweet;star_sweet;strawberry_sweet","PENDIENTE","PENDIENTE","0","","",""
+"10","AUDITORIA_B07_B10","galarica_cuff;gracidea;blue_orb;dna_splicers","PENDIENTE","PENDIENTE","0","","",""
