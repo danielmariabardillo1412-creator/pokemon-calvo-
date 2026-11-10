@@ -67,7 +67,7 @@ func _real_cycle(entry: Dictionary) -> Dictionary:
 	var prepared := _owner_with_gem(id, attack)
 	var owner: PlayerCollection = prepared.owner
 	var service: RefCounted = prepared.service
-	var first := service.equip(id, &"own")
+	var first: Dictionary = service.equip(id, &"own")
 	check("real item equip accepted " + String(id), first.get("accepted", false)
 		and first.get("status") == "APPLIED")
 	check("real bag spends one unit at equip " + String(id),
