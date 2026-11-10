@@ -168,7 +168,7 @@
         },
         {
           "op": "status_same_type",
-          "move": "toxic",
+          "move": "toxic_spikes",
           "seeds": [
             19
           ]
