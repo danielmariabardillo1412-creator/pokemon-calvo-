@@ -17,7 +17,7 @@
 | 07 | **QA parcial** | Se verifica no-stock nativo sin mutación/RNG, duplicado rechazado, y regresiones de Capture/SaveV2; **faltan test independiente nativo con party+storage totalmente llenos y fallo aleatorio de captura** |
 | 08 | **QA parcial** | Guardar/cargar sesión nativa activa antes de Repeat, ledger y checkpoint íntegros; el runner nativo histórico cubre mecánicas y recuperación en general, pero **no demuestra Repeat tras Transformación específica** |
 | 09 | QA completo de regresión | Repelentes 100/200/250, Cuerda Huida, captura nativa de campo, SaveV2 y CAMP005/CAMP006 conservados |
-| 10 | CI de código **SUCCESS** | [#42869290576](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/42869290576) sobre SHA `7ef7dbb22c748306724658d122074c32d3f343e2`; último checkpoint documental `6ee302703f335bd0de2e65792cddf420e4d252b7` tiene reejecución [#42869862584](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/42869862584) iniciada, cuyo resultado debe comprobarse separadamente |
+| 10 | CI de código **SUCCESS** | [#42869290576](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/42869290576) sobre SHA `7ef7dbb22c748306724658d122074c32d3f343e2`; último checkpoint documental `6ee302703f335bd0de2e65792cddf420e4d252b7` revalidado con [CI final #42869862584](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/42869862584) **completed/SUCCESS**, incluidos los tests nativos de Repeat Ball y las regresiones |
 
 ## Evidencia comprobada de código
 
