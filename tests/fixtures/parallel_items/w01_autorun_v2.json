@@ -1,0 +1,207 @@
+{
+  "schema_version": 1,
+  "worker": "W01",
+  "tanda": "02",
+  "kind": "AUTORUN_V2_W01_GEMS",
+  "format": "gen9calvounifiedv1",
+  "historical": {
+    "c005_sha": "5303578448d909cf1b4e2c3c60c7d3e231203f98",
+    "c005_ci": 42717306543,
+    "v1_sha": "9d1a9dae8b9d9abed09a12b082f7a719aa047981",
+    "v1_ci": 42730773059
+  },
+  "modes": [
+    "active",
+    "none",
+    "reserve"
+  ],
+  "items": [
+    {
+      "row": "01",
+      "id": "ghost_gem",
+      "type": "ghost",
+      "attack": "shadow_ball",
+      "wrong": "tackle",
+      "status": "spite",
+      "cases": [
+        {
+          "op": "matching",
+          "move": "shadow_ball",
+          "seeds": [
+            19,
+            23
+          ]
+        },
+        {
+          "op": "wrong_type",
+          "move": "tackle",
+          "seeds": [
+            19
+          ]
+        },
+        {
+          "op": "status_same_type",
+          "move": "spite",
+          "seeds": [
+            19
+          ]
+        }
+      ]
+    },
+    {
+      "row": "02",
+      "id": "dragon_gem",
+      "type": "dragon",
+      "attack": "dragon_pulse",
+      "wrong": "tackle",
+      "status": "dragon_dance",
+      "cases": [
+        {
+          "op": "matching",
+          "move": "dragon_pulse",
+          "seeds": [
+            19,
+            23
+          ]
+        },
+        {
+          "op": "wrong_type",
+          "move": "tackle",
+          "seeds": [
+            19
+          ]
+        },
+        {
+          "op": "status_same_type",
+          "move": "dragon_dance",
+          "seeds": [
+            19
+          ]
+        }
+      ]
+    },
+    {
+      "row": "03",
+      "id": "dark_gem",
+      "type": "dark",
+      "attack": "dark_pulse",
+      "wrong": "tackle",
+      "status": "nasty_plot",
+      "cases": [
+        {
+          "op": "matching",
+          "move": "dark_pulse",
+          "seeds": [
+            19,
+            23
+          ]
+        },
+        {
+          "op": "wrong_type",
+          "move": "tackle",
+          "seeds": [
+            19
+          ]
+        },
+        {
+          "op": "status_same_type",
+          "move": "nasty_plot",
+          "seeds": [
+            19
+          ]
+        }
+      ]
+    },
+    {
+      "row": "04",
+      "id": "steel_gem",
+      "type": "steel",
+      "attack": "flash_cannon",
+      "wrong": "tackle",
+      "status": "iron_defense",
+      "cases": [
+        {
+          "op": "matching",
+          "move": "flash_cannon",
+          "seeds": [
+            19,
+            23
+          ]
+        },
+        {
+          "op": "wrong_type",
+          "move": "tackle",
+          "seeds": [
+            19
+          ]
+        },
+        {
+          "op": "status_same_type",
+          "move": "iron_defense",
+          "seeds": [
+            19
+          ]
+        }
+      ]
+    },
+    {
+      "row": "05",
+      "id": "fairy_gem",
+      "type": "fairy",
+      "attack": "moonblast",
+      "wrong": "tackle",
+      "status": "misty_terrain",
+      "cases": [
+        {
+          "op": "matching",
+          "move": "moonblast",
+          "seeds": [
+            19,
+            23
+          ]
+        },
+        {
+          "op": "wrong_type",
+          "move": "tackle",
+          "seeds": [
+            19
+          ]
+        },
+        {
+          "op": "status_same_type",
+          "move": "misty_terrain",
+          "seeds": [
+            19
+          ]
+        }
+      ]
+    }
+  ],
+  "other_gems": [
+    "normal_gem",
+    "fire_gem",
+    "water_gem",
+    "electric_gem",
+    "grass_gem",
+    "ice_gem",
+    "fighting_gem",
+    "poison_gem",
+    "ground_gem",
+    "flying_gem",
+    "psychic_gem",
+    "bug_gem",
+    "rock_gem"
+  ],
+  "milestones": [
+    "01 ghost_gem functional real combat",
+    "02 dragon_gem functional real combat",
+    "03 dark_gem functional real combat",
+    "04 steel_gem functional real combat",
+    "05 fairy_gem canonical gate (do not invent)",
+    "06 matrix 18 types distinct without duplicate history",
+    "07 once-only consume, miss, immunity, wrong type",
+    "08 SaveV2, reserve, transform, PP",
+    "09 native backend active/reserve slot changes and effect order",
+    "10 joint CI CAMP004/CAMP005/TANDA01/TANDA02 and report"
+  ]
+}
