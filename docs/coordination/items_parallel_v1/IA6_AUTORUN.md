@@ -1,34 +1,39 @@
-# IA6 — ORDEN PERMANENTE ACTIVA W04 · TANDA 03
+# IA6 — RELEVO AUTORIZADO W04 · TANDA 04 (orden vigente)
 
-**IA6 HA REVISADO TU ENTREGA ANTERIOR Y PUBLICA AQUÍ LA NUEVA COLA COMPLETA.** Este archivo es tu punto fijo de entrada. Cuando recibas `p`, `sigue` o `continúa`: consulta la rama de GitHub, tu HEAD, esta nota y tu checkpoint; empieza en la primera fila pendiente de la **TANDA 03**, sin pedir permiso IA6 por cada fila. Tras completar 10, deja informe + CI real y STOP a esperar una TANDA nueva. No te limites a contestar «entendido».
+**TANDA03 10/10 cerrada, CI #42876057234 y #42876625902 SUCCESS.** IA6 ha examinado los 56 casos: 51 positivos, 5 bloqueados por política de habilidad; TANDA04 se centra en desbloquear cuatro con habilidad normal canónica, sin inventar habilitación de la habilidad oculta. No repitas TANDA03 ni atribuyas diez objetos a diez hitos.
 
-**Rama autorizada:** `codex/calvo-items-20261104-w04-camp006`. **Protocolo maestro:** `docs/coordination/items_parallel_v1/AUTONOMY_V1/README.md` de `codex/calvo-items-20261101-arbitro`. **Orden central:** `docs/coordination/items_parallel_v1/AUTONOMY_V1/QUEUE_W04_TANDA_03.md` de árbitra. Esta copia tiene el mismo contenido y vale aunque cambie el contexto de la conversación.
+**Al recibir `p` o `sigue`:** consulta ESTA nota `docs/coordination/items_parallel_v1/IA6_AUTORUN.md` de TU rama, recupera checkpoint y empieza el primer hito pendiente de la nueva TANDA04, continuando los diez sin solicitar permiso por microbloque. No existe ejecución background entre turnos; guardar checkpoint y reanudar con la próxima `p`.
 
-No ejecutar en segundo plano ficticio: si un turno se agota, publicar checkpoint en GitHub y la siguiente `p` continúa. Un bloqueo de un productor compartido no te obliga a detener los otros hitos independientes: ticket, `BLOQUEADO`, próximo. Nunca presentar CI de otro SHA como actual ni fusionar `main`, V28, PR118 u otras ramas. Protecciones de archivos/funciones indicadas abajo son estrictas.
+**Rama exclusiva:** `codex/calvo-items-20261104-w04-camp006`. Protocolo árbitro `docs/coordination/items_parallel_v1/AUTONOMY_V1/README.md` en `codex/calvo-items-20261101-arbitro`; cola central `docs/coordination/items_parallel_v1/AUTONOMY_V1/QUEUE_W04_TANDA_04.md`. Después de completar 10 filas, emitir informe + CI final y detenerse hasta nuevo relevo IA6. `10/10 examinados` != `10 objetos nuevos` != `código integrado en IA6`. No tocar main, V28, PR118, otras ramas, archivos compartidos sin permisos expresos.
 
 ---
 
-# IA6 W04 — AUTORUN TANDA 03: 56 identidades de forma regional canónicas
-Rama: codex/calvo-items-20261104-w04-camp006.
-Base CI TANDA02 42735277975 SUCCESS, SHA funcional 8c216c9c15dd028241cb664c99f06d79a81c5536. Piloto productor auténtico slowpoke_galar → form_id slowpoke-galar persistente en SaveV2, **no** cambio de forma por objeto ni evolución nueva. No volver a contar el piloto.
-PROTOCOLO: autoriza 10 grupos sin consultar IA6 entre objetos. p/sigue reanuda la primera fila pendiente; registrar checkpoint, CI por SHA, cerrar informe AUTORUN_V3_FINAL.md. No main/V28/PR118 ni otras ramas.
-## Fuente verificada
-Archivo config/pokemon_variants_v1.json contiene **57 regional_species** con source_metadata.base_species_id, regional_form y source_pokemon_id. Excluida slowpoke_galar ya probada, quedan **56** variantes en **6 grupos de 6 + 4 de 5**. Verificar cada ID de PokeAPI pokemon/[source_pokemon_id]/pokemon-form, DefinitionCatalog y RandomlockContentPolicy antes de considerar positivo. No derivar form_id solo concatenando sin verificar. Listado canónico exacto:
-| Fila | IDs autorizados |
+# IA6 — W04 TANDA 04 · SELECCIÓN DE HABILIDADES CANÓNICAS EN FORMAS REGIONALES
+**Rama:** `codex/calvo-items-20261104-w04-camp006`. **Cierre comprobado T03:** 10/10 grupos, **51 de 56 formas** nuevas con identidad/persistencia positivas; **5 bloqueadas por habilidad inicial excluida**, 0 nuevas evoluciones por objeto. CI funcional [#42876057234](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/42876057234) SUCCESS, código `20b47366a5b0798041fbf44297559d69421eaa58`; CI documental [#42876625902](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/42876625902) SUCCESS sobre HEAD `1c2f4cb648f6e0018d5f7e5b8f96de447fe508e9`. No repetir conteo T03 ni reclamar 56/56 nativas.
+
+## Hallazgo de IA6: se puede intentar desbloquear cuatro sin inventar habilidades
+En `config/pokemon_variants_v1.json`, los candidatos canónicos son:
+- `ponyta_galar` / `rapidash_galar`: primera `run_away` (excluida); alternativa normal `pastel_veil` (no excluida).
+- `voltorb_hisui` / `electrode_hisui`: primera `soundproof` (excluida); alternativa normal `static` (no excluida).
+- `exeggutor_alola`: primera `frisk` (excluida), alternativa `harvest` **OCULTA**. No dar habilidad oculta automáticamente sin un mecanismo legítimo de obtención y autorización explícita de modo Randomlock; mantener `BLOQUEADO` si no hay productor.
+
+**Decisión de IA6:** se autoriza seleccionar una habilidad **canónica NORMAL** que pase la política vigente cuando la primera está prohibida, únicamente en la generación de encuentros regionales, sin cambiar el set de habilidades canónico, sin cambiar probabilidades de otras especies ni sobrescribir un `overrides.ability_id` válido. Si no hay normal permitida, fallar explícitamente. No confundir `ability_allowed` con garantía de implementación nativa; probar motor real.
+
+## Diez hitos autorizados
+| Fila | Entrega comprobable |
 |---|---|
-| 01 | rattata_alola;raticate_alola;raichu_alola;sandshrew_alola;sandslash_alola;vulpix_alola |
-| 02 | ninetales_alola;diglett_alola;dugtrio_alola;meowth_alola;persian_alola;geodude_alola |
-| 03 | graveler_alola;golem_alola;grimer_alola;muk_alola;exeggutor_alola;marowak_alola |
-| 04 | meowth_galar;ponyta_galar;rapidash_galar;slowbro_galar;farfetchd_galar;weezing_galar |
-| 05 | mr_mime_galar;articuno_galar;zapdos_galar;moltres_galar;slowking_galar;corsola_galar |
-| 06 | zigzagoon_galar;linoone_galar;darumaka_galar;darmanitan_galar_standard;yamask_galar;stunfisk_galar |
-| 07 | growlithe_hisui;arcanine_hisui;voltorb_hisui;electrode_hisui;typhlosion_hisui |
-| 08 | qwilfish_hisui;sneasel_hisui;samurott_hisui;lilligant_hisui;zorua_hisui |
-| 09 | zoroark_hisui;braviary_hisui;sliggoo_hisui;goodra_hisui;avalugg_hisui |
-| 10 | decidueye_hisui;tauros_paldea_combat_breed;tauros_paldea_blaze_breed;tauros_paldea_aqua_breed;wooper_paldea |
-## Objetivo por cada especie
-Generalizar el helper canonical_form_identity_w04.gd desde el único piloto a variantes reales autorizadas SIN inventar fuentes. Factory debe derivar form_id del CreatureSpecies canónico realmente elegido por encuentro/Factory, no de llamada de UI ni overrides arbitrarios. Para cada ID: validar fuente pokemon-form, species/base, metadata, política de contenido, from_dict/to_dict opcional, Party/Storage y guardado SaveV2, load legacy, rechazar forma de otra especie y valor corrupto. Godot positivo real desde WildEncounterSystem.resolve con tabla que incluye la especie regional **sin afirmar que un mapa jugable la ofrezca todavía**. Tests negativos de forma base, política excluida, forma inexistente, datos fuente incompletos. Mantener identidad, IV/EV, movimiento, habilidad, naturaleza efectiva si existe. Form_id de origen es distinto de transformación temporal y solo se serializa cuando corresponde.
-## Ownership y bloqueos
-Únicamente modules/creatures/progression/canonical_form_identity_w04.gd, CreatureFactory **solo derivación**, CreatureInstance **solo form_id opcional ya aprobado**, SaveGameData.validate **solo validador de form_id**, FieldNativeSave._valid_creature **solo guardia forma aditiva**, nuevos fixtures/runner/workflow W04. **NO** copiar otras funciones compartidas, no tocar naturaleza efectiva, SaveGameSerializer/Repository, status de captura, FieldItemService, EvolutionSystem, forma por objeto, fusion, golpe, reloj, giro, main/V28. IA3 tiene ledger de capturas en SaveGameData/FieldNativeSave y IA6 tiene naturaleza efectiva: cualquier integración conjunta es trabajo IA6 por diff localizado, nunca merge automático.
-Si una de 56 especies no está permitida o falta fuente pokemon-form: BLOQUEADA con contrato y sigue; no falsear 56/56. No sumar estas 56 como objetos ni evoluciones; son identidades de forma nacidas desde una fuente regional auténtica. CI final con CAMP003/004/005/006 y TANDA02 y prueba positiva por cada forma permitida; reportar funcionales reales de 56 y pendientes.
+| 01 | Verificar las 5 especies bloqueadas, todas las `ability_slots`, política vigente y estado de `CreatureFactory.create` con prueba roja |
+| 02 | Diseñar helper puro W04 que seleccione primera habilidad normal canónica permitida, sin retocar lista `ability_ids`, sin RNG adicional para otras especies |
+| 03 | Conectar la selección **solo en ruta de variante regional** si hay acceso al `RandomlockContentPolicy` cargado sin volver a parsearlo en cada spawn; si hace falta API compartida nueva, ticket y QA en lugar de invasión |
+| 04 | `ponyta_galar` → `pastel_veil`: encuentro real, Factory, Party/Storage, SaveV2 y guardia nativa |
+| 05 | `rapidash_galar` → `pastel_veil`: mismos positivos/negativos |
+| 06 | `voltorb_hisui` → `static`: mismos positivos/negativos |
+| 07 | `electrode_hisui` → `static`: mismos positivos/negativos |
+| 08 | `exeggutor_alola`: no habilitar `harvest` oculta como default sin productor; decisión explícita `BLOQUEADO`/evidencia o test de una fuente canónica permitida |
+| 09 | Regresión de las 51 formas ya certificadas, base sin forma, forma no catalogada, naturaleza efectiva W02 en pruebas locales compatibles; no copiar estado de W02 |
+| 10 | CI final CAMP003–006/T02/T03 + report `reports/W04/AUTORUN_V4_FINAL.md`, matriz de 56 y conteo de positivas actuales vs nuevas |
+
+**Autoridad estricta:** `modules/creatures/progression/creature_factory.gd` solo la elección de habilidad de variantes **si se demuestra acceso a política inmutable sin cambios de contratos generales**; nuevo helper W04, nuevos tests/fixtures/workflow W04. `PokemonVariantCatalog.apply`, `DefinitionCatalog` y `WildEncounterSystem` solo lectura salvo que IA6 publique autorización adicional; si es imprescindible, NO mutarlos: prueba roja/ticket y pasar a las filas de QA. `RandomlockContentPolicy`, `config/randomlock_content_v1.json`, `CreatureInstance`, SaveV2 central, `FieldNativeSave`, `EvolutionSystem` (W02 ahora repara naturaleza efectiva), W03 captura y mochilas NO se editan.
+
+`p` / `sigue` ejecuta hasta 10 hitos sin permisos por microbloque. `10/10` significa filas examinadas, no 10 formas nuevas. No usar habilidades inventadas ni marcar la quinta forma L3 sin productor. No editar main/V28/PR118/ramas ajenas. La unión en rama de IA6 sigue pendiente de pruebas conjuntas.
 
