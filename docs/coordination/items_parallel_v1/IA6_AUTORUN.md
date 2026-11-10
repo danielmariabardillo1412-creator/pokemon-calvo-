@@ -1,40 +1,27 @@
-# IA6 — ORDEN FIJA PARA ESTA VENTANA (W02)
+# IA6 — ORDEN PERMANENTE ACTIVA W02 · TANDA 02
 
-**Esta es tu instrucción de arranque y reanudación.** Al recibir `p`, `sigue` o `continúa`, no preguntes «¿qué trabajo sigue?» ni esperes otra autorización por cada objeto. Sigue la siguiente fila pendiente de la tabla de abajo, reanuda automáticamente las otras filas autorizadas, publica checkpoint si el turno se agota y cierra la tanda tras diez filas examinadas. La IA6 solo revisa el lote cerrado.
+**IA6 HA REVISADO TU ENTREGA ANTERIOR Y PUBLICA AQUÍ LA NUEVA COLA COMPLETA.** Este archivo es tu punto fijo de entrada. Cuando recibas `p`, `sigue` o `continúa`: consulta la rama de GitHub, tu HEAD, esta nota y tu checkpoint; empieza en la primera fila pendiente de la **TANDA 02**, sin pedir permiso IA6 por cada fila. Tras completar 10, deja informe + CI real y STOP a esperar una TANDA nueva. No te limites a contestar «entendido».
 
-**Protocolo técnico vinculante y fuente de verdad:** rama árbitra `codex/calvo-items-20261101-arbitro`, archivo `docs/coordination/items_parallel_v1/AUTONOMY_V1/README.md`. Cola central `docs/coordination/items_parallel_v1/AUTONOMY_V1/QUEUE_W02.md`.
+**Rama autorizada:** `codex/calvo-items-20261109-w02-mints-integration`. **Protocolo maestro:** `docs/coordination/items_parallel_v1/AUTONOMY_V1/README.md` de `codex/calvo-items-20261101-arbitro`. **Orden central:** `docs/coordination/items_parallel_v1/AUTONOMY_V1/QUEUE_W02_TANDA_02.md` de árbitra. Esta copia tiene el mismo contenido y vale aunque cambie el contexto de la conversación.
 
-**Permanencia:** IA6 actualizará ESTE MISMO archivo al aprobar una tanda nueva. Al iniciar `p`, comprueba el HEAD y la versión del archivo, no uses la conversación como única memoria. Los permisos de archivos protegidos y reglas de pruebas siguen vigentes. Ninguna orden aquí crea trabajos en segundo plano.
+No ejecutar en segundo plano ficticio: si un turno se agota, publicar checkpoint en GitHub y la siguiente `p` continúa. Un bloqueo de un productor compartido no te obliga a detener los otros hitos independientes: ticket, `BLOQUEADO`, próximo. Nunca presentar CI de otro SHA como actual ni fusionar `main`, V28, PR118 u otras ramas. Protecciones de archivos/funciones indicadas abajo son estrictas.
 
 ---
 
-# IA6 — ORDEN PERMANENTE AUTORUN V1 — W02
-**Rama exclusiva:** `codex/calvo-items-20261109-w02-mints-integration`
-**Estado desde el que se reanuda:** MINT-L3 01 PASS #42696681590; MINT-L3 02 tiene efecto positivo Python39/Godot223 en #42715490604 pero CI global FAILED por expectativas históricas CAMP005.
-**Activador:** `p`, `sigue` o `continúa` inicia o reanuda los **diez bloques de esta tanda**, sin pedir nuevo permiso por cada fila. Se trabaja hasta donde permita el turno/herramientas; si se interrumpe, checkpoint y siguiente `p` retoma la siguiente fila no cerrada.
-**Reglas vinculantes:** leer `docs/coordination/items_parallel_v1/AUTONOMY_V1/README.md` de la rama árbitra `codex/calvo-items-20261101-arbitro`. Se autoriza la reparación autónoma en archivos propios, la migración versionada de pruebas históricas y seguir con filas independientes pese a bloqueos. **Nunca saltar pruebas ni inventar L3.**
-**Resumen al usuario:** barra de filas revisadas `[████░░░░░░] 4/10` y **funcionales N/10** diferenciadas; solo al final enviar cierre a IA6.
-**Informe final único:** `docs/coordination/items_parallel_v1/reports/W02/AUTORUN_V1_FINAL.md`; estado por fila en `AUTORUN_V1_PROGRESS.csv`. No tocar main, V28, PR118 ni otras ramas.
-
-## Preflight **preautorizado**: resolver conflicto de regresión MINT-L3 02 SIN detener tanda
-
-IA6 aprueba la **doble puerta histórica + vigente** detallada en el protocolo general: conservar el fixture CAMP005 de 288 casos y ejecutarlo con su SHA congelado (`9e2797a4972f22dbf14d5bc5f2d24bb212d29456` es un baseline válido donde CI completa pasó); en HEAD actual ejecutar los casos no afectados, y usar whitelist EXACTA `adamant_mint;modest_mint;timid_mint` para exigir el efecto nuevo en lugar de los antiguos rechazos. Registrar cada transición negativa→positiva; todos los otros negativos siguen. Se autorizan modificaciones mínimas a **runner/test gate**, no a los 288 fixtures versionados. No usar `continue-on-error`, ni `|| true`, ni doble CI de SHAs confundidas. Al cerrar este preflight, pilot02 pasa a `CERTIFICADO` **solo si** CI global SUCCESS; si falla por dependencia distinta, documentar y seguir a las nuevas filas.
-
-## Tanda 01 — diez mentas diferentes, 1 ID por microbloque
-| Fila | ID | Naturaleza de destino y modificadores |
-|---|---|---|
-| 01 | `hasty_mint` | hasty: +Velocidad, −Defensa |
-| 02 | `lax_mint` | lax: +Defensa, −Defensa Especial |
-| 03 | `relaxed_mint` | relaxed: +Defensa, −Velocidad |
-| 04 | `jolly_mint` | jolly: +Velocidad, −Ataque Especial |
-| 05 | `bold_mint` | bold: +Defensa, −Ataque |
-| 06 | `calm_mint` | calm: +Defensa Especial, −Ataque |
-| 07 | `careful_mint` | careful: +Defensa Especial, −Ataque Especial |
-| 08 | `brave_mint` | brave: +Ataque, −Velocidad |
-| 09 | `quiet_mint` | quiet: +Ataque Especial, −Velocidad |
-| 10 | `impish_mint` | impish: +Defensa, −Ataque Especial |
-
-Primero comprobar reglas de `ProgressionRuleset.NATURE_MODIFIERS`, IDs reales y política; si alguna no existe/está excluida, marcar bloqueada sin activar. Usar `FieldItemService.use_item`, `FieldMintEffects`, naturaleza original y naturaleza efectiva; medir efectos con `StatCalculator.compute` y test positivo PARTY/STORAGE con y sin stock, identidad, PS, nivel100, PP, SaveV2, repetir, sustituir y corrupción. Mantener todas las mentas previas. **No** tocar `CreatureInstance`, `FieldNativeSave`, StatCalculator, EXP Share, FieldGrowth/Mochi, engine, mochila ni SaveV2 central.
-
-**Regla especial de regresión:** cuando cada nueva menta invalide un `mint_dependency` histórico, usar whitelist de promoción y nueva prueba equivalente, nunca bloquearse esperando IA6. Conservar SHA de antiguo estado. Publicar CI final sobre HEAD con 10 filas y casos heredados vigentes. La integración IA6 de naturaleza efectiva en guardado de mundo ya está gestionada fuera de W02.
-
+# IA6 W02 — TANDA 02: crecimiento, mochi y vitaminas después de mentas
+Rama: codex/calvo-items-20261109-w02-mints-integration.
+TANDA01 10/10 mentas L3 y migración histórica 288 escenarios, CI 42730263746 SUCCESS, SHA f8168c2b5cdb2dc74bc2820d94cc59e7bc7be19c. No repetir mentas ni reiniciar CAMP006.
+PROTOCOLO COMÚN: Esta nota autoriza los 10 hitos sin pedir permiso por hito. Al recibir p/sigue, comenzar en primer hito pendiente, publicar checkpoint si termina el turno, retomar con siguiente p. Conservar pruebas, CI con SHA y contabilidad L1/L2/L3. Bloqueos reales se documentan y permiten pasar a hitos independientes. No main, V28, PR118 ni ramas ajenas. Al terminar emitir cierre de tanda y detenerse; no ejecutar en background.
+Hallazgo IA6: FieldGrowthEffects.validation_error y FieldMochiEffects.validation_error recalculan stats con nature_id original, aunque el Pokémon real tras una menta usa effective_nature_id. Esto provoca rechazos potenciales. FieldTrainingEffects.apply también recalcula: comprobar que conserva estadística con naturaleza efectiva.
+Diez hitos:
+01 Test rojo menta->rare_candy y rechazo sin gasto.
+02 Corrige SOLO Growth.validation_error: validar naturaleza original y efectiva, cálculo con efectiva si existe.
+03 Prueba exp_candy_xs y xl tras menta, nivel100, HP y experiencia.
+04 Crecimiento con aprender/sustituir movimiento o evolución, preservando PP/estado.
+05 Test rojo menta->muscle_mochi y swift_mochi.
+06 Corrige SOLO Mochi.validation_error con naturaleza efectiva.
+07 Fresh Start Mochi reset de EV tras menta y SaveV2.
+08 Protein y Carbos tras menta, prueba recálculo y amistad.
+09 Secuencia real menta->crecimiento->mochi->vitamina->menta en PARTY/STORAGE, rollback, SaveV2.
+10 CI con CAMP003–006, pilotos MINT-L3, TANDA01, informe AUTORUN_V2_FINAL.md.
+Permisos excepcionales W02 limitados a módulos field_growth_effects.gd (validation_error/plan), field_mochi_effects.gd (validation_error/apply) y field_training_effects.gd::apply SOLO con prueba de fallo; runner/CI propios. Prohibido CreatureInstance, StatCalculator, ProgressionSystem, SaveV2 central, FieldNativeSave, FieldItemService, exp_share, motor o mochila. Un fallo en otro módulo protegido se documenta; no declarar guardado nativo de mundo antes de integración IA6.
