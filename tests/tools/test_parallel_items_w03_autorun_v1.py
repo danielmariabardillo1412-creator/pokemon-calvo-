@@ -46,9 +46,14 @@ def main() -> None:
     rules = src("modules/capture/capture_ruleset.gd")
     basic = src("modules/capture/capture_ball_effects.gd")
     contextual = src("modules/capture/capture_context_ball_effects.gd")
-    for missing_ball in ("dusk_ball", "repeat_ball", "dive_ball", "lure_ball", "love_ball", "moon_ball", "heavy_ball", "beast_ball"):
+    for missing_ball in ("dusk_ball", "dive_ball", "lure_ball", "love_ball", "moon_ball", "heavy_ball", "beast_ball"):
         check(f'&"{missing_ball}"' not in basic and f'&"{missing_ball}"' not in contextual,
               f"{missing_ball}: review new rule before marking blocked")
+    # Repeat Ball is the sole approved later promotion; historical V1 findings remain frozen.
+    check('&"repeat_ball"' in contextual
+          and 'previously_caught_base_species' in contextual
+          and (ROOT / "tests/gameplay/parallel_items_w03_repeat_history_v2.gd").exists(),
+          "repeat promotion must include dedicated positive regression")
     check('&"safari_ball", &"sport_ball": return 1.5' in basic, "existing ungated modifier changed")
     check('&"friend_ball": target.friendship = 200' in basic
           and '&"heal_ball"' in basic and 'target.current_hp = target.stats.max_hp' in basic,
