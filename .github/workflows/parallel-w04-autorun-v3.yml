@@ -6,6 +6,7 @@ on:
     paths:
       - '.github/workflows/parallel-w04-autorun-v3.yml'
       - 'tests/gameplay/w04_autorun_v3_alola_group01.gd'
+      - 'tests/gameplay/w04_autorun_v3_all_regional.gd'
       - 'modules/creatures/progression/canonical_form_identity_w04.gd'
       - 'modules/creatures/progression/creature_factory.gd'
       - 'modules/save/save_game_data.gd'
@@ -44,6 +45,29 @@ jobs:
           set -euo pipefail
           timeout 900s godot --headless --path . --script res://tests/gameplay/w04_autorun_v3_alola_group01.gd 2>&1 | tee w04-v3-group01.log
           grep -E '^W04_AUTORUN_V3_ROW01 PASS checks=[1-9][0-9]* sources=6$' w04-v3-group01.log
+      - name: All 56 canonical regional forms ten groups with real encounters and persistence
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 1500s godot --headless --path . --script res://tests/gameplay/w04_autorun_v3_all_regional.gd 2>&1 | tee w04-v3-all.log
+          grep -E '^W04_AUTORUN_V3_ALL PASS checks=[1-9][0-9]* sources=56
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 900s godot --headless --path . --script res://tests/gameplay/w04_autorun_v2_form_identity.gd 2>&1 | tee w04-v3-pilot.log
+          grep -E '^W04_AUTORUN_V2_FORM PASS checks=[1-9][0-9]*$' w04-v3-pilot.log
+      - name: Log artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: w04-v3-group01-${{ github.run_id }}
+          retention-days: 7
+          if-no-files-found: ignore
+          path: w04-v3-*.log
+ w04-v3-all.log
+          for i in $(seq -w 1 10); do
+            grep -E "^W04_V3_ROW_${i} examined=[5-6] validated=[5-6]$" w04-v3-all.log
+          done
       - name: Preserve prior real Slowpoke pilot
         shell: bash
         run: |
