@@ -161,14 +161,29 @@ func hit_04_owner_moved() -> void:
 	check("ownership now absent", svc.owner.location_of(POKEMON) == &"")
 	before = state(svc.owner)
 	panel.teach_button.pressed.emit()
+	# If the prior rejected attempt refreshed an empty Party, the stale selector
+	# was already cleared; selection_missing is the correct *safer* response.
 	check("removed pokemon cannot consume", not panel.last_result.get("accepted", false)
-		and panel.last_result.get("reason", "") == "creature_not_owned"
+		and String(panel.last_result.get("reason", "")) in ["creature_not_owned", "selection_missing"]
 		and state(svc.owner) == before)
 	check("restore same creature identity", svc.owner.party.add_creature(creature))
 	panel.refresh()
 	check("party restoration allows original book", panel.select_creature(POKEMON)
 		and panel.select_book(&"tm202") and not panel.teach_button.disabled)
 	panel.queue_free()
+	# Independent scenario: remove identity directly while the original
+	# selected Party entry is still visible, verifying exact ownership denial.
+	var detached := setup()
+	if not detached.is_empty():
+		var missing_service: Variant = detached.service
+		var missing_panel: Variant = detached.panel
+		check("remove selected Pokemon directly", missing_service.owner.party.remove_creature(POKEMON))
+		before = state(missing_service.owner)
+		missing_panel.teach_button.pressed.emit()
+		check("directly removed identity is rejected", not missing_panel.last_result.get("accepted", false)
+			and missing_panel.last_result.get("reason", "") == "creature_not_owned"
+			and state(missing_service.owner) == before)
+		missing_panel.queue_free()
 
 
 func hit_05_all_slots_cancel() -> void:
