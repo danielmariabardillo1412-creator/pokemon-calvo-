@@ -20,6 +20,9 @@ var result_label: Label
 var teach_button: Button
 var last_result: Dictionary = {}
 var _blocked_reason := "service_not_bound"
+# A disappeared selection must NOT become the first other item after the next refresh.
+var _book_selection_stale := false
+var _target_selection_stale := false
 
 
 func _ready() -> void:
@@ -68,8 +71,12 @@ func _ready() -> void:
 	layout.add_child(result_label)
 	sort_mode.item_selected.connect(func(_i: int): refresh())
 	type_filter.item_selected.connect(func(_i: int): refresh())
-	books.item_selected.connect(func(_i: int): _refresh_preview())
-	targets.item_selected.connect(func(_i: int): _refresh_preview())
+	books.item_selected.connect(func(_i: int):
+		_book_selection_stale = false
+		_refresh_preview())
+	targets.item_selected.connect(func(_i: int):
+		_target_selection_stale = false
+		_refresh_preview())
 	slots.item_selected.connect(func(_i: int): _refresh_compatibility())
 	teach_button.pressed.connect(func(): teach_selected())
 	refresh()
@@ -107,6 +114,7 @@ func _choose(button: OptionButton, id: StringName) -> bool:
 func select_book(id: StringName) -> bool:
 	if not _choose(books, id):
 		return false
+	_book_selection_stale = false
 	_refresh_preview()
 	return true
 
@@ -114,6 +122,7 @@ func select_book(id: StringName) -> bool:
 func select_creature(id: StringName) -> bool:
 	if not _choose(targets, id):
 		return false
+	_target_selection_stale = false
 	_refresh_preview()
 	return true
 
@@ -196,15 +205,23 @@ func refresh() -> void:
 	# Preserve stable IDs. If a previously selected book or Pokémon disappears,
 	# leave the selection EMPTY: never silently teach a different one.
 	if not _choose(books, chosen_book):
-		if chosen_book == &"" and books.item_count > 0:
+		if chosen_book != &"":
+			_book_selection_stale = true
+		if chosen_book == &"" and not _book_selection_stale and books.item_count > 0:
 			books.select(0)
 		else:
 			books.select(-1)
+	else:
+		_book_selection_stale = false
 	if not _choose(targets, chosen_target):
-		if chosen_target == &"" and targets.item_count > 0:
+		if chosen_target != &"":
+			_target_selection_stale = true
+		if chosen_target == &"" and not _target_selection_stale and targets.item_count > 0:
 			targets.select(0)
 		else:
 			targets.select(-1)
+	else:
+		_target_selection_stale = false
 	_refresh_preview()
 
 func _refresh_preview() -> void:
