@@ -88,7 +88,7 @@ func _run() -> void:
 		return
 	scene.player.set_physics_process(false)
 	var config: Dictionary = scene._active_config.duplicate(true)
-	config.wild_species_id = "magikarp"
+	config.wild_species_id = "goldeen"
 	config.wild_min_level = 5
 	config.wild_max_level = 5
 	config.encounter_chance_percent = 100
@@ -108,7 +108,7 @@ func _run() -> void:
 	ck("first PC box is exactly full", owner.storage.box_count() == 1
 		and owner.storage.get_all_creatures().size() == 30)
 	var type_cases: Array[Dictionary] = [
-		{"species": &"magikarp", "expected": 3.5, "water": true, "bug": false},
+		{"species": &"goldeen", "expected": 3.5, "water": true, "bug": false},
 		{"species": &"pidgey", "expected": 1.0, "water": false, "bug": false},
 		{"species": &"caterpie", "expected": 3.5, "water": false, "bug": true},
 		{"species": &"surskit", "expected": 3.5, "water": true, "bug": true},
@@ -152,7 +152,7 @@ func _run() -> void:
 				and owner.storage.get_all_creatures().size() == starting_storage + 1
 				and owner.location_of(target_id) == &"STORAGE"
 				and owner.caught_base_species_ids.has(species_id))
-			if species_id == &"magikarp":
+			if species_id == &"goldeen":
 				ck("full PC box auto-expands on first real Net capture",
 					owner.storage.box_count() == 2 and owner.storage.get_all_creatures().size() == 31)
 				ck("first Net Ball settlement persists native owner via SaveV2",
@@ -165,11 +165,11 @@ func _run() -> void:
 				and owner.inventory.quantity(&"net_ball") == starting_qty)
 			await _cancel_still_active()
 		# Re-open another native encounter on the same owner, without reconfig.
-		if species_id == &"magikarp":
+		if species_id == &"goldeen":
 			ck("post-capture SaveV2 keeps PC boxes stock and Water ledger",
 				await bridge.load_game() and scene.field_collection().storage.box_count() == 2
 				and scene.field_collection().inventory.quantity(&"net_ball") == 7
-				and scene.field_collection().caught_base_species_ids.has(&"magikarp"))
+				and scene.field_collection().caught_base_species_ids.has(&"goldeen"))
 			owner = scene.field_collection()
 	ck("manual native settled save after all type cases", bridge.save_game())
 	var good_bytes: PackedByteArray = FileAccess.get_file_as_bytes(SAVE)
@@ -177,7 +177,7 @@ func _run() -> void:
 	ck("genuine native SaveV2 envelope", envelope is Dictionary)
 	if envelope is Dictionary:
 		var bad: Dictionary = envelope.duplicate(true)
-		bad.payload.collection["caught_base_species_ids"] = {"schema_version": 1, "ids": ["magikarp", "magikarp"]}
+		bad.payload.collection["caught_base_species_ids"] = {"schema_version": 1, "ids": ["goldeen", "goldeen"]}
 		bad.sha256 = JSON.stringify(bad.payload).sha256_text()
 		ck("adversarial valid-hash duplicated base ledger written", _write(bad))
 		var live_owner: PlayerCollection = scene.field_collection()
@@ -194,7 +194,7 @@ func _run() -> void:
 			f.store_buffer(good_bytes)
 			f.close()
 			ck("original SaveV2 recovers real Net owner", await bridge.load_game()
-				and scene.field_collection().caught_base_species_ids.has(&"magikarp")
+				and scene.field_collection().caught_base_species_ids.has(&"goldeen")
 				and scene.field_collection().storage.get_all_creatures().size() >= 31)
 	await _done()
 
