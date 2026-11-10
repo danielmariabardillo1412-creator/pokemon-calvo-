@@ -1,0 +1,11 @@
+fila,hito,estado,funcional_nuevo,sha_funcional,ci_funcional,observacion
+01,fuentes_y_politica,VERIFICADO,0,e70d4d43b1f931f05195b9706b7077b6721b367d,42890151094_SUCCESS,"Cinco habilidades iniciales excluidas, cuatro alternativas normales permitidas y harvest oculta"
+02,helper_puro,CERTIFICADO,0,e70d4d43b1f931f05195b9706b7077b6721b367d,42890151094_SUCCESS,"Lista blanca de cuatro y sin mutar ability_slots"
+03,factory_policy_cache,CERTIFICADO,0,e70d4d43b1f931f05195b9706b7077b6721b367d,42890151094_SUCCESS,"Solo forma regional auténtica; sin sobrescribir override"
+04,ponyta_galar,CERTIFICADO,1,e70d4d43b1f931f05195b9706b7077b6721b367d,42890151094_SUCCESS,"pastel_veil encuentro nativo SaveV2"
+05,rapidash_galar,CERTIFICADO,1,e70d4d43b1f931f05195b9706b7077b6721b367d,42890151094_SUCCESS,"pastel_veil encuentro nativo SaveV2"
+06,voltorb_hisui,CERTIFICADO,1,e70d4d43b1f931f05195b9706b7077b6721b367d,42890151094_SUCCESS,"static encuentro nativo SaveV2"
+07,electrode_hisui,CERTIFICADO,1,e70d4d43b1f931f05195b9706b7077b6721b367d,42890151094_SUCCESS,"static encuentro nativo SaveV2"
+08,exeggutor_alola,BLOQUEADO,0,e70d4d43b1f931f05195b9706b7077b6721b367d,42890151094_SUCCESS,"frisk denegada harvest oculta; sin productor habilitado"
+09,regresion_55_y_legacy,CERTIFICADO,0,e70d4d43b1f931f05195b9706b7077b6721b367d,42890151094_SUCCESS,"55/56 native positivo, base sin forma, pruebas T02 T03"
+10,ci_y_cierre,CERTIFICADO,0,e70d4d43b1f931f05195b9706b7077b6721b367d,42890151094_SUCCESS,"CAMP003-006 Python y Godot, CSV e informe final"
