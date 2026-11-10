@@ -30,7 +30,21 @@ def main():
     check("real bag", "service.owner.inventory.all_item_ids()" in p)
     check("real party", "service.owner.party.get_creatures()" in p)
     check("learnset from species", "species.learnset" in p and 'entry.version_group' in p)
-    check("Spanish localized pilot", '"Divide Dolor"' in p and '"Garra Metal"' in p)
+    # V4 promotion: verify the exact PokeAPI es source, rather than literal
+    # strings embedded in the panel. Original Godot panel tests remain intact.
+    source_es = json.loads((R / "data/localization/machine_moves_es_sv_v1.json").read_text(encoding="utf8"))
+    def verified_pilot(move_id, label):
+        entry = source_es["entries"][move_id]
+        doc = json.loads((R / entry["source_path"]).read_text(encoding="utf8"))
+        es = [name["name"] for name in doc["names"]
+              if name["language"]["name"] == "es"]
+        return (source_es["locale"] == "es" and
+                entry["nombre_es"] == label and doc["id"] == entry["source_api_id"]
+                and doc["name"] == move_id.replace("_","-") and es == [label])
+    check("Spanish localized pilot", verified_pilot("pain_split", "Divide Dolor")
+          and verified_pilot("metal_claw", "Garra Metal")
+          and 'presentation.get("nombre_movimiento"' in p
+          and 'presented.get("nombre_movimiento"' in p)
     check("real button", "teach_button.pressed.emit()" in gd)
     check("replace and no spend", "select_replacement_slot" in gd and "move_replacement_required" in gd)
     check("no stock negative", "item_not_owned" in gd)
