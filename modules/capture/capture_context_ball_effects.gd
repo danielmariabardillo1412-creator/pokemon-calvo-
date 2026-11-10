@@ -2,7 +2,7 @@ extends RefCounted
 
 # Context supplied by the owning session, never by a UI or saved extra counter.
 # Essentials reference uses completed turns (zero before the first action).
-const IDS: Array[StringName] = [&"quick_ball", &"timer_ball", &"level_ball"]
+const IDS: Array[StringName] = [&"quick_ball", &"timer_ball", &"level_ball", &"repeat_ball"]
 const Basic = preload("res://modules/capture/capture_ball_effects.gd")
 
 static func validation_error(id: StringName, target: CreatureInstance, context: CaptureBattleContext) -> String:
@@ -17,6 +17,7 @@ static func validation_error(id: StringName, target: CreatureInstance, context: 
 
 static func multiplier(id: StringName, target: CreatureInstance, species: CreatureSpecies, context: CaptureBattleContext) -> float:
 	match id:
+		&"repeat_ball": return 3.5 if context.previously_caught_base_species else 1.0
 		&"quick_ball": return 5.0 if context.completed_turns == 0 else 1.0
 		&"timer_ball": return minf(1.0 + 0.3 * context.completed_turns, 4.0)
 		&"level_ball":
