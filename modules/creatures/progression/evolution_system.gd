@@ -147,6 +147,21 @@ static func apply_evolution(
 	var target: CreatureSpecies = catalogs.species_catalog.get_by_id(target_species_id)
 	if target == null:
 		return null
+	# W04 TANDA06: only the two catalog-certified Galarica routes may carry
+	# a regional destination form. This function receives no item_id; the
+	# catalog record is checked here, but item consumption belongs to IA6.
+	var regional_target_form: StringName = &""
+	if target_species_id in [&"slowbro_galar", &"slowking_galar"]:
+		if not (catalogs is DefinitionCatalog):
+			return null
+		var required_item: StringName = &"galarica_cuff" if target_species_id == &"slowbro_galar" else &"galarica_wreath"
+		var contract: Dictionary = preload("res://modules/creatures/progression/regional_evolution_contract_w04.gd").inspect(
+			creature, required_item, catalogs, target_species_id)
+		if not bool(contract.get("ok", false)):
+			return null
+		regional_target_form = StringName(contract.get("target_form_id", ""))
+		if regional_target_form == &"":
+			return null
 	var new_creature := CreatureInstance.new(
 		creature.instance_id,
 		target_species_id,
@@ -154,6 +169,8 @@ static func apply_evolution(
 		creature.stats.duplicate() if creature.stats != null else StatBlock.new(),
 		[],
 	)
+	if regional_target_form != &"":
+		new_creature.form_id = regional_target_form
 	new_creature.experience = creature.experience
 	new_creature.ivs = creature.ivs.duplicate()
 	new_creature.evs = creature.evs.duplicate()
