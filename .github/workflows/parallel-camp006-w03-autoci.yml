@@ -113,6 +113,24 @@ jobs:
           set -euo pipefail
           timeout 900s godot --headless --path . --script res://tests/gameplay/parallel_items_w03_repeat_history_v2.gd 2>&1 | tee camp006-w03-repeat-v2.log
           grep -E '^W03_REPEAT_V2_GODOT PASS checks=[1-9][0-9]* native_capture_l3=false$' camp006-w03-repeat-v2.log
+      - name: SaveV2 collection compatibility
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 900s godot --headless --path . --script res://tests/gameplay/savegame_v2_test_runner.gd 2>&1 | tee camp006-w03-savev2.log
+          grep -E '^=== SAVEGAME V2 TEST RESULT: [1-9][0-9]* PASS / 0 FAIL ===$' camp006-w03-savev2.log
+      - name: SaveV2 hostile payload regression
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 900s godot --headless --path . --script res://tests/gameplay/savegame_v2_adversarial_test_runner.gd 2>&1 | tee camp006-w03-savev2-adversarial.log
+          grep -E '^=== SAVEGAME V2 ADVERSARIAL RESULT: [1-9][0-9]* PASS / 0 FAIL ===$' camp006-w03-savev2-adversarial.log
+      - name: Native field SaveV2 and capture regression
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 900s godot --headless --path . --script res://tests/gameplay/field_native_test_runner.gd 2>&1 | tee camp006-w03-native-field.log
+          grep -E '^FIELD_NATIVE .*PASS' camp006-w03-native-field.log
       - name: Archive evidence
         if: always()
         uses: actions/upload-artifact@v4
