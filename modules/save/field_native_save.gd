@@ -10,7 +10,7 @@ var last_error := ""
 
 func write(path: String, collection: PlayerCollection, world: Dictionary, trainer: TrainerCampaignRosterOwner,
 	clocks: Dictionary, battle: Dictionary, catalogs: DefinitionCatalog) -> bool:
-	var snapshot := SaveGameData.build(collection.party, collection.storage, collection.inventory)
+	var snapshot := SaveGameData.build(collection.party, collection.storage, collection.inventory, collection.caught_base_species_ids)
 	if not snapshot.validate().ok: last_error = "invalid_collection"; return false
 	var roster: Array = []
 	for c: CreatureInstance in trainer.roster_for_battle(): roster.append(c.to_dict())
@@ -43,6 +43,8 @@ func decode(envelope: Variant, catalogs: DefinitionCatalog) -> Dictionary:
 	if not decoded.ok: return _failed("collection:" + decoded.reason)
 	var collection := PlayerCollection.new()
 	collection.party = decoded.party; collection.storage = decoded.storage; collection.inventory = decoded.inventory
+	collection.caught_base_species_ids = decoded.caught_base_species_ids.duplicate()
+	if not preload("res://modules/capture/caught_species_history_w03.gd").validate_catalog(collection.caught_base_species_ids, catalogs): return _failed("caught_history_catalog")
 	var policy := Policy.new()
 	if not policy.load_local(): return _failed("content_policy")
 	var ids := {}
