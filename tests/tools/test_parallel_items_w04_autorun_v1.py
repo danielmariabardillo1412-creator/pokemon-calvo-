@@ -166,8 +166,14 @@ def main():
     creature = (ROOT / "modules/creatures/domain/creature_instance.gd").read_text(encoding="utf-8")
     evolution = (ROOT / "modules/creatures/progression/evolution_system.gd").read_text(encoding="utf-8")
     service = (ROOT / "modules/inventory/field_item_service.gd").read_text(encoding="utf-8")
-    test('"form_id":' not in creature and '"regional_form_id":' not in creature,
-         "persistent individual form is not a valid runtime producer")
+    # HEAD migration: preserve all frozen V1 fixture + negative item tests;
+    # allow ONLY the canonical Slowpoke Galar form producer from TANDA02.
+    form_helper = (ROOT / "modules/creatures/progression/canonical_form_identity_w04.gd").read_text(encoding="utf-8")
+    test('PILOT_SPECIES := &"slowpoke_galar"' in form_helper and
+         'PILOT_FORM := &"slowpoke-galar"' in form_helper and
+         '"regional_form_id":' not in creature and
+         "static func valid_persistent_form(" in form_helper,
+         "only whitelisted Galar Slowpoke gains canonical persistent form; no blanket producer")
     test('"spin"' in evolution and 'UNSUPPORTED_TRIGGERS' in evolution,
          "Milcery spin remains unsupported in live evolution")
     test("func evolve(" in service and "func equip(" in service and
