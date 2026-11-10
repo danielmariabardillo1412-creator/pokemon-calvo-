@@ -80,6 +80,9 @@ func _valid_creature(c: CreatureInstance, catalogs: DefinitionCatalog, policy: R
 	if species == null or c.level < 1 or c.level > 100 or c.moveset.is_empty() or c.moveset.size() > 4: return false
 	var base := String(species.source_metadata.get("base_species_id", String(c.species_id)))
 	if not policy.form_allowed(base, String(c.species_id) if base != String(c.species_id) else ""): return false
+	# Additive canonical-source check for W04 form_id; preserves existing stats,
+	# effective nature and all current native SaveV2 restrictions below.
+	if not preload("res://modules/creatures/progression/canonical_form_identity_w04.gd").valid_persistent_form(c, catalogs, policy): return false
 	if c.ability_id != &"" and not policy.ability_allowed(String(c.ability_id)): return false
 	if c.held_item_id != &"" and catalogs.item(c.held_item_id) == null: return false
 	if c.stats.to_dict() != StatCalculator.compute(species.base_stat_block(), c.ivs, c.evs, c.nature_id, c.level).to_dict(): return false
