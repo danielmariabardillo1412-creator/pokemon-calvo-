@@ -1,47 +1,34 @@
-# IA6 — ORDEN ACTIVA TANDA 02 PARA W04
+# IA6 — ORDEN PERMANENTE ACTIVA W04 · TANDA 03
 
-**ESTA NOTA SUSTITUYE LA TANDA 01, YA CERRADA.** La orden ha sido publicada por IA6 en 2026-11-10. **Al recibir `p`, `sigue` o `continúa`, empieza inmediatamente la PRIMERA FILA SIN CERRAR de la TANDA 02.** No reabrir TANDA 01 ni pedir permiso por cada hito. Reanudar por el CSV/checkpoint de esta tanda si se interrumpe el turno; no se trabaja en background entre turnos.
+**IA6 HA REVISADO TU ENTREGA ANTERIOR Y PUBLICA AQUÍ LA NUEVA COLA COMPLETA.** Este archivo es tu punto fijo de entrada. Cuando recibas `p`, `sigue` o `continúa`: consulta la rama de GitHub, tu HEAD, esta nota y tu checkpoint; empieza en la primera fila pendiente de la **TANDA 03**, sin pedir permiso IA6 por cada fila. Tras completar 10, deja informe + CI real y STOP a esperar una TANDA nueva. No te limites a contestar «entendido».
 
-**Política maestra:** `docs/coordination/items_parallel_v1/AUTONOMY_V1/README.md` de la rama árbitra `codex/calvo-items-20261101-arbitro`. **Cola central:** `docs/coordination/items_parallel_v1/AUTONOMY_V1/QUEUE_W04_TANDA_02.md` (rama árbitra). Las autorizaciones especiales y límites de edición de esta nota SON órdenes oficiales IA6. Las ramas son exclusivas. Todo PASS funcional requiere CI en SHA concreto. Al terminar las diez filas, entregar `TANDA 02 FINALIZADA` y STOP a espera de la siguiente nota.
+**Rama autorizada:** `codex/calvo-items-20261104-w04-camp006`. **Protocolo maestro:** `docs/coordination/items_parallel_v1/AUTONOMY_V1/README.md` de `codex/calvo-items-20261101-arbitro`. **Orden central:** `docs/coordination/items_parallel_v1/AUTONOMY_V1/QUEUE_W04_TANDA_03.md` de árbitra. Esta copia tiene el mismo contenido y vale aunque cambie el contexto de la conversación.
+
+No ejecutar en segundo plano ficticio: si un turno se agota, publicar checkpoint en GitHub y la siguiente `p` continúa. Un bloqueo de un productor compartido no te obliga a detener los otros hitos independientes: ticket, `BLOQUEADO`, próximo. Nunca presentar CI de otro SHA como actual ni fusionar `main`, V28, PR118 u otras ramas. Protecciones de archivos/funciones indicadas abajo son estrictas.
 
 ---
 
-# IA6 → W04/IA4 · AUTORUN TANDA 02: IDENTIDAD DE FORMA PERSISTENTE, PILOTO REAL
-**Rama:** `codex/calvo-items-20261104-w04-camp006` · **Fecha:** 2026-11-10.
-
-**Auditoría de TANDA01:** 10/10 filas revisadas, dos QA L3 de funciones **previas**, **0 transformaciones/formas/fusiones nuevas**. CI [#42729967922](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/42729967922) SUCCESS sobre `3385011da12ed6f3d0d68a82c33348c7c23e17fc`; HEAD final documental `19246f6158874edf71d37d7fafed3af12833e102`. 18 IDs/23 rutas bloqueados por falta de identidad de forma; ver `reports/W04/AUTORUN_V1_SHARED_PRODUCER_TICKET.md`. **No repetir las mismas auditorías.**
-
-**Protocolo vinculante:** `AUTONOMY_V1/README.md`. Una sola `p` autoriza iniciar y avanzar las diez filas de esta tanda dentro de los turnos que sean necesarios, con checkpoints; no pedir permiso nuevo por cada fila. CI y reporte de cierre por diez filas. No trabajo en segundo plano garantizado. Únicamente rama propia. Prohibido editar `main`, V28, PR118, otras ramas. Un bloqueo se documenta y se pasa a la siguiente prueba independiente; no acreditar L3 falso.
-
-## Decisión IA6 — crear primero un productor transversal
-Antes de implementar seis familias de formas y fusiones, desarrollar **UN piloto de identidad de forma canónica persistente** de `CreatureInstance`, sin inventar un `form_id` por especie base ni introducir forma ficticia. Elegir caso real y comprobable (p.ej. Galar Slowpoke o autenticidad Sinistea si la fuente de Factory/encuentro realmente está disponible). Es preferible una ruta positiva real con SaveV2 y retrocompatibilidad a 18 pruebas negativas nuevas. La identidad de forma es distinta de `species_id`, shiny, género, naturaleza, transformación temporal o `held_item_id`.
-
-## Diez hitos autorizados
-| Fila | Entrega concreta |
+# IA6 W04 — AUTORUN TANDA 03: 56 identidades de forma regional canónicas
+Rama: codex/calvo-items-20261104-w04-camp006.
+Base CI TANDA02 42735277975 SUCCESS, SHA funcional 8c216c9c15dd028241cb664c99f06d79a81c5536. Piloto productor auténtico slowpoke_galar → form_id slowpoke-galar persistente en SaveV2, **no** cambio de forma por objeto ni evolución nueva. No volver a contar el piloto.
+PROTOCOLO: autoriza 10 grupos sin consultar IA6 entre objetos. p/sigue reanuda la primera fila pendiente; registrar checkpoint, CI por SHA, cerrar informe AUTORUN_V3_FINAL.md. No main/V28/PR118 ni otras ramas.
+## Fuente verificada
+Archivo config/pokemon_variants_v1.json contiene **57 regional_species** con source_metadata.base_species_id, regional_form y source_pokemon_id. Excluida slowpoke_galar ya probada, quedan **56** variantes en **6 grupos de 6 + 4 de 5**. Verificar cada ID de PokeAPI pokemon/[source_pokemon_id]/pokemon-form, DefinitionCatalog y RandomlockContentPolicy antes de considerar positivo. No derivar form_id solo concatenando sin verificar. Listado canónico exacto:
+| Fila | IDs autorizados |
 |---|---|
-| 01 | Catálogo canónico: localizar IDs de forma, base species y fuente verdadera de creación/captura; escoger **un único piloto** donde el productor exista |
-| 02 | Contrato opcional `CreatureInstance.form_id` de valor exacto de catálogo: vacío para legado cuando no haya forma distinguida; no convertir automáticamente por la especie |
-| 03 | Serialización y deserialización opcional en `CreatureInstance.to_dict/from_dict`, sin alterar API ni `instance_id` |
-| 04 | Validación estricta de formas declaradas (tipo, correspondencia base species, origen en catálogo, Randomlock policy) antes de publicar saves, rechazar corrupción |
-| 05 | Pruebas SaveV2 legacy y campo nativo que demuestren que forma válida permanece y una inválida NO se acepta; sin nueva `schema_version` |
-| 06 | Conexión mínima con productor real de Factory/encuentro **si está presente**: obtener forma de un dato fuente del juego, no de test o elección arbitraria |
-| 07 | Propagación de forma al capturar/almacenar/mover sin duplicar objeto, alterar naturaleza, IV/EV/PP o estado de combate |
-| 08 | Aplicar un cambio de forma real solo si existe una regla canónica autentificada y transacción permitida (prioridad: una de B02 o B07); caso positivo y negativo |
-| 09 | Round-trip Party/Storage + SaveV2 nativo del caso piloto, rollback y migración legacy; preservar caso base sin forma y W04 CAMP005/006 |
-| 10 | CI de cierre con pruebas Python/Godot de toda la familia propia + regresiones CAMP003/004/005/006. Informe `reports/W04/AUTORUN_V2_FINAL.md`: L3 real vs estructura, SHA y pendientes productores |
-
-## Delegación IA6 **limitada** de módulos compartidos, SOLO en rama W04
-Autorizados exclusivamente:
-- `modules/creatures/domain/creature_instance.gd`: añadir `form_id` opcional y serializar/deserializar; conservar campos/habilidades/naturalezas originales y no tocar `recalculate_stats` ni `battle_transform_original`.
-- `modules/creatures/progression/creature_factory.gd`: aceptar/propagar un `form_id` **solo si hay fuente canónica auténtica** y con guardas; evitar romper firmas anteriores.
-- `modules/save/field_native_save.gd::_valid_creature`: validación aditiva de `form_id` si hay fuente verificable, SIN borrar el cálculo original de stats y SIN tocar su comportamiento de naturaleza efectiva que IA6 corrigió en su rama. Si la función no permite validar sin invasión, ticket y prueba, sin reescritura.
-- `modules/creatures/progression/evolution_system.gd`: solamente métodos y adaptadores de forma ya autorizados a W04; no tratar `spin`/fusión como evolución sin fuente real.
-- `modules/save/save_game_data.gd::validate`: **exclusivamente** validación estructural aditiva del campo `form_id` opcional por criatura (si existe), sin tocar ningún otro campo, layout o snapshot, conservando `schema_version=2`. IA3 edita otra parte del mismo archivo: IA6 integrará ambas diferencias por función, nunca merge completo.
-- Helpers de formas nuevos locales, fixture y tests W04, workflows propios. No alterar `SaveGameData.build/to_dict/from_dict` ni persistencia de la colección ajena.
-
-**No tocar:** `SaveGameSerializer`, `SaveGameRepository`, `SaveGameMigration`, mapa/reloj/giro, `FieldItemService`, `FieldItemBag`, sistema de captura, Showdown/estadísticas, o código de otras trabajadoras; **no cambiar `schema_version=2`**. Si para piloto L3 de Factory y captura hace falta un seam no listado, documentar API mínima y hacer pruebas positivas hasta el nivel que de verdad permitan los módulos autorizados, sin falsificar L3. Pueden quedar hitos bloqueados, pero no pedir autorización después de cada fila.
-
-**Integración IA6 posterior:** IA6 tiene cambios de W02 en `CreatureInstance` (naturaleza efectiva) y de W03 en guardado nativo; **no integrar copiando la clase completa desde W04**. IA6 revisará y trasplantará solo el campo de forma y validaciones con CI conjunta.
-
-**Resultado que se busca:** al menos 1 criatura real con identidad de forma fuente, persistida/recuperada y validada; NO afirmar que los 18 objetos B07–B10 ni Milcery/fusiones estén conectados hasta implementar sus propios disparadores. Al cerrar las diez filas, STOP y aviso IA6.
+| 01 | rattata_alola;raticate_alola;raichu_alola;sandshrew_alola;sandslash_alola;vulpix_alola |
+| 02 | ninetales_alola;diglett_alola;dugtrio_alola;meowth_alola;persian_alola;geodude_alola |
+| 03 | graveler_alola;golem_alola;grimer_alola;muk_alola;exeggutor_alola;marowak_alola |
+| 04 | meowth_galar;ponyta_galar;rapidash_galar;slowbro_galar;farfetchd_galar;weezing_galar |
+| 05 | mr_mime_galar;articuno_galar;zapdos_galar;moltres_galar;slowking_galar;corsola_galar |
+| 06 | zigzagoon_galar;linoone_galar;darumaka_galar;darmanitan_galar_standard;yamask_galar;stunfisk_galar |
+| 07 | growlithe_hisui;arcanine_hisui;voltorb_hisui;electrode_hisui;typhlosion_hisui |
+| 08 | qwilfish_hisui;sneasel_hisui;samurott_hisui;lilligant_hisui;zorua_hisui |
+| 09 | zoroark_hisui;braviary_hisui;sliggoo_hisui;goodra_hisui;avalugg_hisui |
+| 10 | decidueye_hisui;tauros_paldea_combat_breed;tauros_paldea_blaze_breed;tauros_paldea_aqua_breed;wooper_paldea |
+## Objetivo por cada especie
+Generalizar el helper canonical_form_identity_w04.gd desde el único piloto a variantes reales autorizadas SIN inventar fuentes. Factory debe derivar form_id del CreatureSpecies canónico realmente elegido por encuentro/Factory, no de llamada de UI ni overrides arbitrarios. Para cada ID: validar fuente pokemon-form, species/base, metadata, política de contenido, from_dict/to_dict opcional, Party/Storage y guardado SaveV2, load legacy, rechazar forma de otra especie y valor corrupto. Godot positivo real desde WildEncounterSystem.resolve con tabla que incluye la especie regional **sin afirmar que un mapa jugable la ofrezca todavía**. Tests negativos de forma base, política excluida, forma inexistente, datos fuente incompletos. Mantener identidad, IV/EV, movimiento, habilidad, naturaleza efectiva si existe. Form_id de origen es distinto de transformación temporal y solo se serializa cuando corresponde.
+## Ownership y bloqueos
+Únicamente modules/creatures/progression/canonical_form_identity_w04.gd, CreatureFactory **solo derivación**, CreatureInstance **solo form_id opcional ya aprobado**, SaveGameData.validate **solo validador de form_id**, FieldNativeSave._valid_creature **solo guardia forma aditiva**, nuevos fixtures/runner/workflow W04. **NO** copiar otras funciones compartidas, no tocar naturaleza efectiva, SaveGameSerializer/Repository, status de captura, FieldItemService, EvolutionSystem, forma por objeto, fusion, golpe, reloj, giro, main/V28. IA3 tiene ledger de capturas en SaveGameData/FieldNativeSave y IA6 tiene naturaleza efectiva: cualquier integración conjunta es trabajo IA6 por diff localizado, nunca merge automático.
+Si una de 56 especies no está permitida o falta fuente pokemon-form: BLOQUEADA con contrato y sigue; no falsear 56/56. No sumar estas 56 como objetos ni evoluciones; son identidades de forma nacidas desde una fuente regional auténtica. CI final con CAMP003/004/005/006 y TANDA02 y prueba positiva por cada forma permitida; reportar funcionales reales de 56 y pendientes.
 
