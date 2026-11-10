@@ -8,12 +8,12 @@ assert f["worker"]=="W02" and f["tanda"]=="02"
 assert len(f["rows"])==10 and [x["row"] for x in f["rows"]]==[f"{i:02d}" for i in range(1,11)]
 gd=(root/"tests/gameplay/parallel_items_w02_autorun_v2.gd").read_text(encoding="utf-8")
 for mark in ["GrowthV2.validation_error(now, catalogs)", "MochiV2.validation_error(now, -1, catalogs)",
-    "svc.use_growth_item(item, &\\"own\\")", "svc.use_item(item, &\\"own\\")",
+    "svc.use_growth_item(item, &\"own\")", "svc.use_item(item, &\"own\")",
     "SaveV2", "W02_AUTORUN_V2_GODOT", "_probe_exp_after_mint(mode)",
     "_probe_growth_choices(mode)", "_probe_fresh_start(mode)",
     "_probe_vitamins(mode)", "_probe_chain(mode)", "_assert_save(owner",
     "red_swift_mochi_", "v2 red successor no-stock rejection",
-    "svc.use_growth_item(&\\"rare_candy\\", &\\"own\\")",
+    "svc.use_growth_item(&\"rare_candy\", &\"own\")",
     "StatCalculator.compute(", "now.effective_nature_id",
     "evolution", "razor_leaf", "protein", "carbos", "fresh_start_mochi"]:
     assert mark in gd,mark
