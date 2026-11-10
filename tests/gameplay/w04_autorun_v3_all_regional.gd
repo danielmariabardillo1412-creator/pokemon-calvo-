@@ -107,8 +107,19 @@ func _run() -> void:
         var mon: CreatureInstance = result.creature
         verify(mon.species_id == sid and mon.form_id == expected and mon.instance_id != &"",
             key + "_factory_canonical")
-        verify(FormSource.valid_persistent_form(mon, catalog, policy)
-            and NativeSave.new()._valid_creature(mon, catalog, policy), key + "_native_guard")
+        var canonical_ok := FormSource.valid_persistent_form(mon, catalog, policy)
+        var native_ok := NativeSave.new()._valid_creature(mon, catalog, policy)
+        if not canonical_ok or not native_ok:
+            var base_key := String(species.source_metadata.get("base_species_id", String(species.id)))
+            var allowed := policy.form_allowed(base_key, String(species.id))
+            var bad_moves: Array[String] = []
+            for slot: BattleMoveSlot in mon.moveset:
+                if not policy.move_learnable(String(slot.move_id)):
+                    bad_moves.append(String(slot.move_id))
+            print("W04_V3_NATIVE_DIAG species=", key, " canonical=", canonical_ok,
+                " native=", native_ok, " policy_species=", allowed,
+                " bad_moves=", JSON.stringify(bad_moves), " move_count=", mon.moveset.size())
+        verify(canonical_ok and native_ok, key + "_native_guard")
         var owner := PlayerCollection.new()
         verify(owner.party.add_creature(mon), key + "_party")
         var before := mon.to_dict()
