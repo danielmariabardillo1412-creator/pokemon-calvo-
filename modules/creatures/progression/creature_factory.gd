@@ -49,9 +49,9 @@ static func create(
 	creature.evs = evs
 	creature.nature_id = nature_id
 	# Only a real catalog-selected regional source can provide a form. The
-	# verified W04 pilot never accepts arbitrary overrides or assigns a form
+	# verified W04 source resolver never accepts arbitrary overrides or assigns a form
 	# to the base species. All legacy factory signatures remain unchanged.
-	if catalogs is DefinitionCatalog and species.id == &"slowpoke_galar":
+	if catalogs is DefinitionCatalog and catalogs.species(species.id) == species:
 		creature.form_id = preload("res://modules/creatures/progression/canonical_form_identity_w04.gd").from_factory_source(species, catalogs)
 	if catalogs is DefinitionCatalog and catalogs.variants_enabled:
 		creature.is_shiny = preload("res://modules/creatures/progression/pokemon_variant_catalog.gd").choose_shiny(
