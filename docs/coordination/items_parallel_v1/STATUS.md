@@ -1,3 +1,13 @@
+# ESTADO VIGENTE IA6 — TANDAS AUTÓNOMAS · 2026-11-10
+
+**CAMBIO DE OPERACIÓN:** ya no pedir autorización a IA6 al finalizar cada microbloque. Se han publicado **cinco colas de diez filas**, una por trabajadora, y copiado la orden a `docs/coordination/items_parallel_v1/IA6_AUTORUN.md` de SU rama. Protocolo vinculante: [AUTONOMY_V1/README.md](AUTONOMY_V1/README.md). IA6 verifica una sola vez al cerrar diez filas, con CI de SHA. `p` o `sigue` reanuda cola; no es una orden nueva de una sola fila. Un bloqueo local se registra y se salta, sin falso PASS ni modificaciones fuera de permiso.
+
+**Estados de partida comprobados:** W01 CAMP005 10/10 (última CI funcional #42717306543 SUCCESS), nueva rama exclusiva `codex/calvo-items-20261110-w01-gems-autobatch01`; W02 MINT-L3 02 tiene tres mentas positivas (39 Python, 223 Godot) pero CI global #42715490604 FAILURE por 3 expectativas negativas históricas: la política de doble puerta queda AUTORIZADA en cola W02; W03 repelentes L3 CI #42716742131 SUCCESS, B04/B05 aún bloqueados; W04 resolver Milcery puro L2 CI #42715401401 SUCCESS sin productor L3, completed=3; W05 LIBROS UI02 CI #42714738745 SUCCESS, panel mejorado todavía pendiente de incorporar en rama IA6. No confundir la CI integrada anterior V3 (#42701239557 SUCCESS) con estas ramas más recientes.
+
+**Ramas y notas:** ver [AUTONOMY_V1/QUEUE_W01.md](AUTONOMY_V1/QUEUE_W01.md), [W02](AUTONOMY_V1/QUEUE_W02.md), [W03](AUTONOMY_V1/QUEUE_W03.md), [W04](AUTONOMY_V1/QUEUE_W04.md), [W05](AUTONOMY_V1/QUEUE_W05.md). No hay merge a main.
+
+---
+
 # IA6 — REFERENCIA OPERATIVA VIGENTE · 9 DE NOVIEMBRE DE 2026
 
 **INTEGRACIÓN CERTIFICADA MÁS RECIENTE:** [IA6_INTEGRATION_CERTIFICATION_V3_20261109.md](IA6_INTEGRATION_CERTIFICATION_V3_20261109.md). CI [#42701239557](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/42701239557) `completed/success` en SHA `f4a5687bff1aaf0fb443c36ca4c2873f5d0ac54e` de `codex/calvo-ia6-integration-20261109`. Test de menta desde bolsa a **FieldNativeSave real** 18 PASS, además de W01 Transform, W02 3 mentas, W03 Cuerda Huida y W05 Libros mochila L3, V18 y conexiones. Ningún merge a main/V28/PR118; no toda la campaña de objetos está integrada.
