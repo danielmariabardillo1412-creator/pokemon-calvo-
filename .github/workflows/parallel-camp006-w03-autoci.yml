@@ -25,6 +25,8 @@ on:
       - 'tests/gameplay/parallel_items_w03_repeat_native_v4_negatives.gd'
       - 'tests/gameplay/parallel_items_w03_repeat_native_v4_transform.gd'
       - 'tests/gameplay/parallel_items_w03_net_native_v5.gd'
+      - 'tests/gameplay/parallel_items_w03_net_native_v5_negatives.gd'
+      - 'tests/gameplay/parallel_items_w03_net_native_v5_transform.gd'
       - 'modules/gameplay/showdown_adventure_session.gd'
       - 'docs/coordination/items_parallel_v1/reports/W03/AUTORUN_V3_PROGRESS.csv'
       - 'modules/capture/caught_species_history_w03.gd'
@@ -179,6 +181,18 @@ jobs:
           set -euo pipefail
           timeout 900s godot --headless --path . --script res://tests/gameplay/parallel_items_w03_net_native_v5.gd 2>&1 | tee camp006-w03-net-native-v5.log
           grep -E '^W03_NET_NATIVE_V5 PASS checks=[1-9][0-9]*$' camp006-w03-net-native-v5.log
+      - name: W03 TANDA05 Net Ball true RNG failure hostile SaveV2
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 900s godot --headless --path . --script res://tests/gameplay/parallel_items_w03_net_native_v5_negatives.gd 2>&1 | tee camp006-w03-net-native-v5-neg.log
+          grep -E '^W03_NET_NATIVE_V5_NEG PASS checks=[1-9][0-9]*$' camp006-w03-net-native-v5-neg.log
+      - name: W03 TANDA05 Net Ball switch Transform canonical Water
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 900s godot --headless --path . --script res://tests/gameplay/parallel_items_w03_net_native_v5_transform.gd 2>&1 | tee camp006-w03-net-native-v5-transform.log
+          grep -E '^W03_NET_NATIVE_V5_TRANSFORM PASS checks=[1-9][0-9]*$' camp006-w03-net-native-v5-transform.log
       - name: Archive evidence
         if: always()
         uses: actions/upload-artifact@v4
