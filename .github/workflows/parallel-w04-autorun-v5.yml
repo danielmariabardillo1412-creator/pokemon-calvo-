@@ -46,51 +46,7 @@ jobs:
         run: |
           set -euo pipefail
           timeout 900s godot --headless --path . --script res://tests/gameplay/w04_autorun_v5_regional_evolution.gd 2>&1 | tee w04-v5-evolution.log
-          grep -E '^W04_AUTORUN_V5 PASS checks=[1-9][0-9]* routes=2 L3=0
-        shell: bash
-        run: |
-          set -euo pipefail
-          timeout 900s godot --headless --path . --script res://tests/gameplay/w04_autorun_v4_ability.gd 2>&1 | tee w04-v4-ability.log
-          grep -E '^W04_AUTORUN_V4 PASS checks=[1-9][0-9]* promoted=4 blocked=1$' w04-v4-ability.log
-      - name: All 56 regional forms
-        shell: bash
-        run: |
-          set -euo pipefail
-          timeout 1500s godot --headless --path . --script res://tests/gameplay/w04_autorun_v3_all_regional.gd 2>&1 | tee w04-v4-all.log
-          grep -E '^W04_AUTORUN_V3_ALL PASS checks=[1-9][0-9]* examined=56 native_functional=55 blocked=1$' w04-v4-all.log
-      - name: Preserved Slowpoke pilot
-        shell: bash
-        run: |
-          set -euo pipefail
-          timeout 900s godot --headless --path . --script res://tests/gameplay/w04_autorun_v2_form_identity.gd 2>&1 | tee w04-v4-slowpoke.log
-          grep -E '^W04_AUTORUN_V2_FORM PASS checks=[1-9][0-9]*$' w04-v4-slowpoke.log
-      - name: Legacy Python gates
-        shell: bash
-        run: |
-          set -euo pipefail
-          python -B tests/tools/test_parallel_items_w04_campaign_003.py --ci
-          python -B tests/tools/test_parallel_items_w04_campaign_004.py --ci
-          python -B tests/tools/test_parallel_items_w04_campaign_005.py --ci
-          python -B tests/tools/test_parallel_items_w04_campaign_006.py --ci
-          python -B tests/tools/test_parallel_items_w04_autorun_v1.py --ci
-          python -B tests/tools/test_w04_autorun_v2_form_identity.py
-      - name: Legacy Godot CAMP003-006 and resolvers
-        shell: bash
-        run: |
-          set -euo pipefail
-          for case in parallel_items_w04_campaign_003 parallel_items_w04_campaign_004 parallel_items_w04_campaign_005 parallel_items_w04_campaign_006 parallel_items_w04_condition_resolver parallel_items_w04_milcery_resolver; do
-            timeout 900s godot --headless --path . --script "res://tests/gameplay/${case}.gd" 2>&1 | tee "w04-v4-${case}.log"
-            if grep -E 'SCRIPT ERROR|Parse Error| FAIL ' "w04-v4-${case}.log"; then exit 1; fi
-          done
-      - name: Preserve logs
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: w04-v4-${{ github.run_id }}
-          retention-days: 7
-          if-no-files-found: ignore
-          path: w04-v4-*.log
- w04-v5-evolution.log
+          grep -E '^W04_AUTORUN_V5 PASS checks=[1-9][0-9]* routes=2 L3=0$' w04-v5-evolution.log
       - name: Four canonical normal ability promotions
         shell: bash
         run: |
