@@ -1,3 +1,9 @@
+# IA5/W05 — TANDA 02 FINALIZADA · 10/10, 180/180, CI SUCCESS (2026-11-10)
+
+TANDA02 cerrada en rama `codex/calvo-items-20261109-w05-books-ui` con 10 grupos y 180 nuevos libros probados mediante panel Godot headless, 0 bloqueados. SHA funcional `98fe396988b841705df1d01ac64dcfd0882d80bb`, CI [#42733955354](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/42733955354), job `129558530826`, `completed/success`. Godot 10467 PASS; Python 225 PASS. TANDA01 49/49 y regresiones CAMP006/005/004/003 y pilotos L3 01/02 PASS en misma CI. Informe completo `AUTORUN_V2_FINAL.md`, progreso `AUTORUN_V2_PROGRESS.csv`; unión 229 = 49 + 180 sin duplicados. Sin tocar FieldItemBag ni ramas ajenas, sin merge ni validación GPU. **STOP hasta nota de TANDA03 por IA6**.
+
+---
+
 # IA5/W05 — AUTORUN V1 TANDA 01 FINALIZADA · 10/10 / 49/49 (2026-11-10)
 
 **CI completa y logs verificados:** [#42729735437](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/42729735437), SHA funcional `fd6a04317b21d8afa15af43a25cbe777ae64c4f6`, job `129544427910`, `completed/success`. Diez grupos funcionales, 49 libros positivos, cero bloqueados. Runner UI Godot **2869** checks PASS; manifiesto Python **114** PASS; pilotos previos Godot 143/Python 23 PASS; CAMP006 Godot 1781/Python 481 PASS; regresiones CAMP005/004/003 cada una Godot 2166/Python 580 PASS. `reports/W05/AUTORUN_V1_PROGRESS.csv` incluye diez estados CERTIFICADO, `AUTORUN_V1_FINAL.md` tiene detalle, fuentes y tickets. Ninguna MT inventada, ni edición del panel compartido FieldItemBag, ni main/V28/PR118/otros trabajadores/ramas ni merge. Resultado L3 **panel headless**, revisión GPU y re-integración selectiva por IA6 pendientes. **STOP hasta siguiente cola IA6_AUTORUN.md.**
