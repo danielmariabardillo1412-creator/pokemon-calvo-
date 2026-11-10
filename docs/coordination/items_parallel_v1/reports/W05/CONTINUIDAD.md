@@ -1,3 +1,9 @@
+# IA5/W05 — TANDA04 FINALIZADA · 229 nombres MT ES PokeAPI, CI PASS (2026-11-10)
+
+Hitos **10/10** · **MT nuevas 0** · QA de traducción **229/229** · sin fuente **0** · bloqueadas **0**. SHA de código `0952232ed648e7997e1db470ce18c0b53ac4848a`, CI [#42893621203](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/42893621203) completed/success, job `130100845813`. Localización exclusiva de libros desde los 229 ficheros PokeAPI locales con `names.es` y su Git blob SHA verificado; una diferencia frente a CORE global `light_screen`: antes Pantalla Luz / libro ahora Pantalla de Luz. Python 1620, Godot headless 2316 PASS; regresiones T01–T03 (229 enseñanza positiva), pilotos y CAMP003–006 PASS. Informe `AUTORUN_V4_FINAL.md`, CSV `AUTORUN_V4_PROGRESS.csv`; L3 únicamente panel separado, sin GPU o merge. No se tocó SpanishGameText/FieldItemBag/FieldItemService ni ramas ajenas. **STOP hasta TANDA05 IA6**.
+
+---
+
 # IA5/W05 — TANDA03 FINALIZADA · Robustez panel 229 libros (2026-11-10)
 
 **10/10 hitos funcionales, 0 bloqueados.** SHA probado `93b13e63e175f5156146e3a6c8c5795e9efa8517`. CI [#42870136602](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/42870136602) `completed/success`, job `130019050606`. V3 Python 21 / Godot headless 1195 PASS; TANDA01 49/49, TANDA02 180/180 y CAMP003–006 + pilotos PASS. Cambios en panel: selección por ID persistente y sin sustitución silenciosa, sin conexiones duplicadas, validación de Party, orden/filtro seguros y aviso de fallback lingüístico. **Hallazgo: 218/229 nombres de movimiento carecen de acreditación española en las fuentes auditadas; no están traducidos ni falsamente certificados.** Ver `AUTORUN_V3_FINAL.md` y `AUTORUN_V3_PROGRESS.csv`. Pendiente IA6: integrar versión actual en FieldItemBag y revisión GPU/idioma; no editar recursos protegidos. STOP tras TANDA03; seguir solo tras siguiente cola oficial.
