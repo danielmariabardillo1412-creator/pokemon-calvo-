@@ -176,8 +176,8 @@ def main():
     # HEAD migration: preserve all frozen V1 fixture + negative item tests;
     # allow ONLY the canonical Slowpoke Galar form producer from TANDA02.
     form_helper = (ROOT / "modules/creatures/progression/canonical_form_identity_w04.gd").read_text(encoding="utf-8")
-    test('PILOT_SPECIES := &"slowpoke_galar"' in form_helper and
-         'PILOT_FORM := &"slowpoke-galar"' in form_helper and
+    test('"slowpoke_galar": {"base": "slowpoke", "region": "galar", "pokemon_id": 10164}' in form_helper and
+         'static func _api_form(' in form_helper and
          '"regional_form_id":' not in creature and
          "static func valid_persistent_form(" in form_helper,
          "only whitelisted Galar Slowpoke gains canonical persistent form; no blanket producer")
