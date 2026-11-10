@@ -75,7 +75,7 @@ static func _api_form(source: Dictionary) -> StringName:
         return &""
     if int(p.get("id", 0)) != pokemon_id or not (p.get("species") is Dictionary):
         return &""
-    if String(p["species"].get("name", "")) != String(source["base"]):
+    if String(p["species"].get("name", "")) != String(source["base"]).replace("_", "-"):
         return &""
     if not (p.get("forms") is Array):
         return &""
