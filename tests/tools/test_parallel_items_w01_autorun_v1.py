@@ -78,8 +78,11 @@ def validate() -> None:
     runner = GODOT.read_text(encoding="utf-8")
     for token in ["_run_autorun_v1","_w01_c004_probe_lane","gem_matching",
                   "gem_first_consumed","gem_second_consumed","gem_mid_save","gem_final_save",
-                  "physical_units","_frame_c003","SaveV2", "AUTORUN_W01_ROW_PASS"]:
+                  "physical_units","SaveV2", "AUTORUN_W01_ROW_PASS"]:
         check(token in runner, "No hay prueba efectiva en Godot: "+token)
+    parent_godot = (ROOT / "tests/gameplay/parallel_items_w01_campaign_005.gd").read_text(encoding="utf-8")
+    check("func _frame_c003(" in parent_godot and "func _probe_c005_gem_matching(" in parent_godot,
+          "Faltan probes heredados y cerrados de CAMP005")
     check(NATIVE.is_file(), "Falta simulador nativo real")
     source = NATIVE.read_text(encoding="utf-8")
     for token in ["NativeEngine","onSourceTryPrimaryHit","moveSlots","switch 2",
