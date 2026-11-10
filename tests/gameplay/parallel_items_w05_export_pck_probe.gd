@@ -45,5 +45,16 @@ func _initialize() -> void:
 			print("W05_V5_PCK_PROBE FAIL reason=mismatch move=" + key)
 			quit(1)
 			return
-	print("W05_V5_PCK_PROBE PASS records=229 runtime_samples=4 source=pck_only")
+	var helper: Variant = load("res://modules/localization/machine_moves_es_sv_w05.gd")
+	if helper == null:
+		print("W05_V5_PCK_PROBE FAIL reason=helper_missing_from_pack")
+		quit(1)
+		return
+	for key: String in EXPECTED.keys():
+		var resolved: Dictionary = helper.resolve(StringName(key), "Sin traducción")
+		if resolved.get("name", "") != EXPECTED[key] or not resolved.get("verified_es", false) or resolved.get("source_locale", "") != "es":
+			print("W05_V5_PCK_PROBE FAIL reason=helper_resolution move=" + key)
+			quit(1)
+			return
+	print("W05_V5_PCK_PROBE PASS records=229 runtime_samples=4 helper=1 source=pck_only")
 	quit(0)
