@@ -41,3 +41,16 @@
 3. Si cualquier job falla, analizar log y reparar SOLO en tests/fixtures/workflow W01; no modificar backend/SaveV2/proveedores compartidos sin autorización. No dar por terminada T03 hasta CI total.
 
 **Precisión:** Este documento solo acredita integración L3 por las APIs reales de campo, no un recorrido manual por interfaz, ni merge en la rama árbitra IA6. El commit documental que publica este recibo NO representa una nueva CI funcional aprobada.
+
+## Actualización verificada de continuidad — misma CI y mismo SHA funcional
+
+- **Run funcional inmutable:** `42893188116`, SHA `20bfd7c3a08250c79a0a3d4f0dbf120f70850138`.
+- **Aprobadas hasta la consulta:** `tanda01_regression`, `v2_new_gems`, `v3_field_boundaries`, `v3_l3_field_path`.
+- **Pendientes de completarse:** `camp004_regression`, `camp005_regression`.
+- `tanda01_regression`: `W01_AUTORUN_PY PASS rows=10 checks=85`, `W01_AUTORUN_GODOT PASS rows=10 checks=4002`.
+- `v2_new_gems`: `W01_V2_PY PASS rows=5 checks=82`, `W01_V2_GODOT PASS rows=5 checks=2012`.
+- `v3_l3_field_path`: 18/18 rutas de inventario con SaveV2, 5 negativos, legacy; `W01_V3_GODOT PASS ids=18 rejections=5 legacy=1 checks=574`.
+- `v3_field_boundaries`: `W01_V3_BOUNDARIES PASS cases=3 captures=2 defeats=1 transforms=1 checks=64`.
+- **9/10 hitos con puertas funcionales PASS; 10º hito aún pendiente, NO TANDA FINALIZADA.**
+- No actualizar `AUTORUN_V3_PROGRESS.csv` hasta cerrar la CI porque ese archivo está en filtros del workflow y `cancel-in-progress=true` podría cancelar la ejecución verificada.
+- El commit de este reporte es solamente documental; no debe confundirse con el SHA funcional de GitHub Actions.
