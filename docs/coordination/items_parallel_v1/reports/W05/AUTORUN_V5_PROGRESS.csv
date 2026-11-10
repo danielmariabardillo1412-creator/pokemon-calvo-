@@ -1,11 +1,11 @@
 hito,objetivo,estado,evidencia,limitacion
-01,Auditar preset rutas e ignores,EN_CI,Test Python V5 publicado; preset all_resources e include_filter sin ruta JSON expresa,Inclusion PCK no demostrada aun
-02,Verificar 229 fuentes ES integridad y ruta portable,EN_CI,Test Python V5 SHA originales y mapa tm01-tm229,Esperando recibo CI de SHA funcional
-03,Intentar export Windows sin sobrescribir artefactos,EN_CI,Job v5-export-audit con salida temporal PCK,No afirmar export hasta ver log
-04,Inspeccionar PCK real,PENDIENTE,Runner aislado en proyecto temporal,Requiere PCK valido
-05,Runtime ES tm01 tm75 tm202 tm229,PENDIENTE,Sonda PCK solo con 4 nombres y 229 registros,Requiere PCK valido
-06,Fallback JSON ausente o esquema invalido,PENDIENTE,Ninguna prueba nueva aun,No acreditar
-07,Reabrir Party Storage sin consumo indebido,PENDIENTE,Regresiones panel V3/V4 existentes,No acreditar caso nuevo
-08,Ensenanza PP stock SaveV2 229 regresiones,PENDIENTE,Suites historicas disponibles,No acreditar CI T05 aun
-09,Contrato integracion IA6 FieldItemBag,PENDIENTE,Panel aislado conserva interfaz,No editar FieldItemBag
-10,CI final y AUTORUN_V5_FINAL,PENDIENTE,Workflow V5 publicado,Sin cierre hasta CI final
+01,Auditar preset rutas e ignores,CERTIFICADO,"V5 Python PASS; export=all_resources; ruta JSON res:// y FileAccess validados","include_filter no nombra expresamente el JSON pero PCK real si lo incluye"
+02,Verificar 229 fuentes ES integridad y ruta portable,CERTIFICADO,"V5 Python rows=229 portable=1 original_sources=229; PokeAPI SHA y mapeo comprobados","El preflight aislado no pretende acreditar empaquetado"
+03,Intentar export Windows sin sobrescribir artefactos,CERTIFICADO,"CI 42923848244; export-pack temporal PASS y export-release EXE MZ PASS 635385472 bytes","EXE no lanzado en Windows"
+04,Inspeccionar PCK real,CERTIFICADO,"PCK montado por Godot desde proyecto temporal independiente; 229 filas disponibles","No sustituye inspeccion manual GPU"
+05,Runtime ES tm01 tm75 tm202 tm229,CERTIFICADO,"W05_V5_PCK_PROBE PASS records=229 runtime_samples=4 helper=1 source=pck_only","Verificacion del helper headless desde PCK; no pantalla de Windows real"
+06,Fallback JSON ausente o esquema invalido,CERTIFICADO,"Godot aislado missing PASS e invalid PASS; sin marcar verificado ES","Dos procesos sin cache compartida"
+07,Reabrir Party Storage sin consumo indebido,CERTIFICADO,"Regresion T03 panel Godot 1193 checks PASS; T01/T02 preservadas","Panel W05 independiente; no integrado en FieldItemBag"
+08,Ensenanza PP stock SaveV2 229 regresiones,CERTIFICADO,"CI 42923848244 verify SUCCESS; T01 49/49 T02 180/180 T03 T04 CAMP003-006 PASS","Pruebas Godot headless de rama W05"
+09,Contrato integracion IA6 FieldItemBag,CERTIFICADO,"W05_V5_IA6_INTEGRATION_CONTRACT PASS service_binding=1 stable_book_selection=1 teach_seam=1 FieldItemBag_edit=0","Contrato testeado pero montaje en mochila pendiente IA6"
+10,CI final y AUTORUN_V5_FINAL,CERTIFICADO,"CI funcional 42923848244 completed/success SHA 42466cfe9b012949472f12480a3d5e3b91573c92; informe de cierre emitido","Documentacion posterior no altera codigo probado; CI documentacion pendiente"
