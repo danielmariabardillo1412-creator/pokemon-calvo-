@@ -76,8 +76,11 @@ def main():
                    and "CAMP006 B07" in order)
     rolled_queue = ("TANDA 02" in order and "TANDA01" in order and "W04" in order
                     and (REPORT / "AUTORUN_V1_FINAL.md").is_file())
-    test(prior_queue or rolled_queue,
-         "IA6 stable queue is either original V1 or authorized V2 rollover")
+    v3_queue = ("TANDA 03" in order and "56 identidades" in order and "W04" in order
+                and (REPORT / "AUTORUN_V2_FINAL.md").is_file()
+                and (REPORT / "AUTORUN_V1_FINAL.md").is_file())
+    test(prior_queue or rolled_queue or v3_queue,
+         "IA6 stable queue recognizes authorized TANDA03 rollover, preserving frozen V1 QA")
     with PROGRESS.open(encoding="utf-8", newline="") as f:
         rows = list(csv.DictReader(f))
     test(len(rows) == 10 and [r["fila"] for r in rows] ==
