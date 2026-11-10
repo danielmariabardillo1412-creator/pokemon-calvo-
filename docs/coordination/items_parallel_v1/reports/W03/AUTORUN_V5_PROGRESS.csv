@@ -1,11 +1,11 @@
-fila,hito,estado,evidencia,nota
-01,preflight_net_agua_bicho_normal,L2_PREVIO_VERIFICADO,tests/gameplay/parallel_items_w03_net_campaign_001.gd;modules/capture/capture_ball_effects.gd,Net ya x3.5 Agua/Bicho y x1 otros; cero objetos nuevos
-02,nativa_agua_normal_semillas,PENDIENTE_CI,tests/gameplay/parallel_items_w03_net_native_v5.gd,prueba real en nueva CI
-03,bicho_doble_agua_bicho,PENDIENTE_CI,tests/gameplay/parallel_items_w03_net_native_v5.gd,Surskit doble tipo; esperar positivo
-04,captura_propiedad_consumo,PENDIENTE_CI,tests/gameplay/parallel_items_w03_net_native_v5.gd,owner real y un solo gasto
-05,fallo_RNG_real,PENDIENTE_CI,tests/gameplay/parallel_items_w03_net_native_v5_negatives.gd,Squirtle tipo Agua semilla calculada externamente al motor
-06,party_llena_PC_autoexpandible,PENDIENTE_CI,tests/gameplay/parallel_items_w03_net_native_v5.gd,30 slots + primera captura crea segunda caja
-07,cambio_miembro_transform,PENDIENTE_CI,tests/gameplay/parallel_items_w03_net_native_v5_transform.gd,Mew usa Transform tras switch en Showdown
-08,savev2_corrupto_normal,PENDIENTE_CI,tests/gameplay/parallel_items_w03_net_native_v5.gd;tests/gameplay/parallel_items_w03_net_native_v5_negatives.gd,checksum recalculado y sin publicar corrupto
-09,regresiones_bolas_repel_rope,PARCIAL_CI,tests/gameplay/parallel_items_w03_net_v5_context_regression.gd,15 invariantes PASS en #42922600049; falta CI completa actual
-10,ci_informe_final,PENDIENTE,docs/coordination/items_parallel_v1/reports/W03/AUTORUN_V5_FINAL.md,no declarar cerrado antes de CI completa success
+fila,hito,estado,evidencia,nota,sha_codigo,ci_run
+01,preflight_net_agua_bicho_normal,CI_PASS_L2_PREVIO,preexisting profile and Godot tests,L2 Net prior; catch rules and canonical types unchanged,56155f824dd684989192407622c7c46d28836110,42922912695
+02,nativa_agua_normal_semillas,CI_PASS_L3,net_native_v5 checks79,live WildEncounterSystem + Showdown + deterministic capture probability x3.5 versus x1,56155f824dd684989192407622c7c46d28836110,42922912695
+03,bicho_doble_agua_bicho,CI_PASS_L3,net_native_v5 checks79,Caterpie Bug and Surskit Water Bug exactly single x3.5,56155f824dd684989192407622c7c46d28836110,42922912695
+04,captura_propiedad_consumo,CI_PASS_L3,net_native_v5 checks79,positive real owner after native settlement; one Net spent,56155f824dd684989192407622c7c46d28836110,42922912695
+05,fallo_RNG_real,CI_PASS_L3,net_native_v5_negatives checks19,Squirtle Water true RNG failure; staged spend no owner/ledger published,56155f824dd684989192407622c7c46d28836110,42922912695
+06,party_llena_PC_autoexpandible,CI_PASS_L3,net_native_v5 checks79,6 party 30 box slots + new automatic PC box; unique identity,56155f824dd684989192407622c7c46d28836110,42922912695
+07,cambio_miembro_transform,CI_PASS_L3,net_native_v5_transform checks15,native switch to reserve then Transform and Water Net capture,56155f824dd684989192407622c7c46d28836110,42922912695
+08,savev2_corrupto_normal,CI_PASS_L3,net_native_v5 + negatives checks98,valid collection roundtrip; corrupt duplicated ledger rejected without publication,56155f824dd684989192407622c7c46d28836110,42922912695
+09,regresiones_bolas_repel_rope,CI_PASS_QA,context15 + prior CI gates,Quick Timer Level Repeat Net invariant and native Repeat + repel + escape rope + CAMP005/CAMP006,56155f824dd684989192407622c7c46d28836110,42922912695
+10,ci_informe_final,CI_PASS_CIERRE,GitHub Actions run 42922912695,full workflow completed success on exact code SHA,56155f824dd684989192407622c7c46d28836110,42922912695
