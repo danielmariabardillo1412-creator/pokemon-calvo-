@@ -61,6 +61,7 @@ const CASES := {
     "tauros_paldea_aqua_breed": "tauros-paldea-aqua-breed",
     "wooper_paldea": "wooper-paldea",
 }
+const BLOCKED_ABILITY_POLICY := ["exeggutor_alola","ponyta_galar","rapidash_galar","voltorb_hisui","electrode_hisui"]
 var checks := 0
 var failures: Array[String] = []
 
@@ -71,7 +72,7 @@ func verify(condition: bool, label: String) -> void:
     checks += 1
     if not condition:
         failures.append(label)
-        push_error("W04_V3_ROW01_FAIL " + label)
+        push_error("W04_V3_ALL_FAIL " + label)
 
 func _run() -> void:
     var original: Variant = JSON.parse_string(FileAccess.get_file_as_string(Overlay.CANONICAL))
@@ -86,6 +87,9 @@ func _run() -> void:
     var repo := SaveGameRepository.new()
     var count := 0
     var per_group := {}
+    var blocked_by_group := {}
+    var functional_count := 0
+    var blocked_count := 0
     for key in CASES.keys():
         var sid := StringName(key)
         var species: CreatureSpecies = catalog.species(sid)
@@ -122,7 +126,17 @@ func _run() -> void:
                 " ability=", mon.ability_id, " ability_allowed=", policy.ability_allowed(String(mon.ability_id)),
                 " stats_match=", mon.stats.to_dict() == StatCalculator.compute(species.base_stat_block(), mon.ivs, mon.evs, mon.nature_id, mon.level).to_dict(),
                 " status=", mon.status_state.persistent_id, " held=", mon.held_item_id)
-        verify(canonical_ok and native_ok, key + "_native_guard")
+        verify(canonical_ok, key + "_canonical_form_guard")
+        if key in BLOCKED_ABILITY_POLICY:
+            # Source identity works, but the actual generated first ability is
+            # disallowed by shared Randomlock policy: no native-save credit.
+            verify(not native_ok and not policy.ability_allowed(String(mon.ability_id)),
+                key + "_documented_ability_policy_block")
+            blocked_count += 1
+        else:
+            verify(native_ok, key + "_native_guard")
+            if native_ok:
+                functional_count += 1
         var owner := PlayerCollection.new()
         verify(owner.party.add_creature(mon), key + "_party")
         var before := mon.to_dict()
@@ -156,13 +170,16 @@ func _run() -> void:
         for group in ordered_groups:
             if key in group:
                 per_group[group_idx] = int(per_group.get(group_idx, 0)) + 1
+                if key in BLOCKED_ABILITY_POLICY:
+                    blocked_by_group[group_idx] = int(blocked_by_group.get(group_idx, 0)) + 1
                 break
             group_idx += 1
     verify(count == 56, "fifty_six_source_encounter_routes")
+    verify(functional_count == 51 and blocked_count == 5, "fifty_one_native_positive_five_policy_blocked")
     for row in range(10):
         var expected_count := 6 if row < 6 else 5
         verify(int(per_group.get(row, 0)) == expected_count, "row_%02d_all_sources" % (row + 1))
-        print("W04_V3_ROW_%02d examined=%d validated=%d" % [row + 1, expected_count, int(per_group.get(row, 0))])
+        print("W04_V3_ROW_%02d examined=%d native_functional=%d blocked=%d" % [row + 1, expected_count, expected_count - int(blocked_by_group.get(row, 0)), int(blocked_by_group.get(row, 0))])
     var plain: CreatureSpecies = catalog.species(&"rattata")
     verify(FormSource.from_factory_source(plain, catalog) == &"",
         "base_species_never_inherits_regional_identity")
@@ -173,7 +190,7 @@ func _run() -> void:
 
 func _end() -> void:
     if failures.is_empty():
-        print("W04_AUTORUN_V3_ALL PASS checks=", checks, " sources=56")
+        print("W04_AUTORUN_V3_ALL PASS checks=", checks, " examined=56 native_functional=51 blocked=5")
         quit(0)
     else:
         print("W04_AUTORUN_V3_ALL FAIL errors=", JSON.stringify(failures))
