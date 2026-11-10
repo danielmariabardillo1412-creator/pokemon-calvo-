@@ -1,0 +1,11 @@
+fila,hito,estado,evidencia,nota
+01,preflight_net_agua_bicho_normal,L2_PREVIO_VERIFICADO,tests/gameplay/parallel_items_w03_net_campaign_001.gd;modules/capture/capture_ball_effects.gd,Net ya x3.5 Agua/Bicho y x1 otros; cero objetos nuevos
+02,nativa_agua_normal_semillas,PENDIENTE_CI,tests/gameplay/parallel_items_w03_net_native_v5.gd,prueba real en nueva CI
+03,bicho_doble_agua_bicho,PENDIENTE_CI,tests/gameplay/parallel_items_w03_net_native_v5.gd,Surskit doble tipo; esperar positivo
+04,captura_propiedad_consumo,PENDIENTE_CI,tests/gameplay/parallel_items_w03_net_native_v5.gd,owner real y un solo gasto
+05,fallo_RNG_real,PENDIENTE_CI,tests/gameplay/parallel_items_w03_net_native_v5_negatives.gd,Squirtle tipo Agua semilla calculada externamente al motor
+06,party_llena_PC_autoexpandible,PENDIENTE_CI,tests/gameplay/parallel_items_w03_net_native_v5.gd,30 slots + primera captura crea segunda caja
+07,cambio_miembro_transform,PENDIENTE_CI,tests/gameplay/parallel_items_w03_net_native_v5_transform.gd,Mew usa Transform tras switch en Showdown
+08,savev2_corrupto_normal,PENDIENTE_CI,tests/gameplay/parallel_items_w03_net_native_v5.gd;tests/gameplay/parallel_items_w03_net_native_v5_negatives.gd,checksum recalculado y sin publicar corrupto
+09,regresiones_bolas_repel_rope,PARCIAL_CI,tests/gameplay/parallel_items_w03_net_v5_context_regression.gd,15 invariantes PASS en #42922600049; falta CI completa actual
+10,ci_informe_final,PENDIENTE,docs/coordination/items_parallel_v1/reports/W03/AUTORUN_V5_FINAL.md,no declarar cerrado antes de CI completa success
