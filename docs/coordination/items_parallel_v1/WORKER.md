@@ -1,3 +1,9 @@
+# PRIORIDAD VIGENTE IA6 — CAMPAÑA CONTINUA V2 · 2026-11-11
+
+**Se revoca la obligación histórica de pedir permiso y hacer STOP cada 10 hitos**. `p`/`sigue` abre `IA6_AUTORUN.md` en TU rama y avanza hasta el fin de la campaña vigente en `CONTINUOUS_V2/PLAN_W0X.md`; varios bloques autorizados pueden ejecutarse en el mismo turno. Cada checkpoint se guarda en `CONTINUOUS_V2/STATE_W0X.md` de tu propia rama. No inventar tareas tras agotar el backlog, no declarar integración IA6 y no modificar archivos fuera de permiso. Si toda la lista acaba y solo queda código compartido, emitir READY_FOR_IA6. Relevo por cambio de contexto: nuevo chat identificado W0X, GitHub HEAD y STATE, sin copiar largos mensajes. Detalles [CONTINUOUS_V2/README.md](CONTINUOUS_V2/README.md).
+
+---
+
 # ACTUALIZACIÓN VIGENTE IA6 — 2026-11-10: MODO AUTONOMÍA POR TANDAS
 
 **Esta actualización prevalece sobre las instrucciones históricas de encargo de 1–3 objetos y STOP tras cada `p` en el resto de este documento.** IA6 ha emitido nuevas órdenes permanentes en [AUTONOMY_V1/README.md](AUTONOMY_V1/README.md) y [AUTONOMY_V1/QUEUE_W01.md](AUTONOMY_V1/QUEUE_W01.md) ... `QUEUE_W05.md`. Cada operario debe abrir en SU RAMA `docs/coordination/items_parallel_v1/IA6_AUTORUN.md` antes de pedir nueva autorización. **La presencia de esa nota ya constituye asignación IA6 y entrega oficial: no hace falta que el usuario copie un prompt ni remita un lote cada tres objetos.** Un `p` reanuda la cola de diez microbloques permitidos. El informe se entrega al cierre de esa tanda, no por cada bloque. No elimina protecciones de código, permisos de propiedad, tests reales ni prohibiciones de `main`, V28 y PR118. Si el turno se corta, checkpoint y seguir en el siguiente `p`. No hay procesamiento autónomo entre turnos sin una ejecución explícita.
