@@ -12,6 +12,9 @@ extends RefCounted
 
 var instance_id: StringName
 var species_id: StringName
+# Optional canonical PokeAPI form identity. Empty means legacy/unspecified; NEVER
+# infer it from species_id, shiny, battle transform or held item during loading.
+var form_id: StringName = &""
 var level: int
 var experience: int = 0
 var ivs: Dictionary = {}            # stat_key -> int 0..31
@@ -204,6 +207,7 @@ func to_dict() -> Dictionary:
 		"held_item_id": String(held_item_id),
 		"held_item_consumed": held_item_consumed,
 	}
+	if form_id != &"": result["form_id"] = String(form_id)
 	if not battle_transform_original.is_empty(): result["battle_transform"] = battle_transform_original.duplicate(true)
 	if is_shiny: result["is_shiny"] = true
 	return result
@@ -241,6 +245,11 @@ static func from_dict(data: Dictionary) -> CreatureInstance:
 	creature.ability_id = StringName(data.get("ability_id", ""))
 	creature.held_item_id = StringName(data.get("held_item_id", ""))
 	creature.held_item_consumed = bool(data.get("held_item_consumed", false))
+	# SaveGameData validates the field structurally; the native decoder
+	# validates PokeAPI source + Randomlock policy before publishing a save.
+	var raw_form: Variant = data.get("form_id", "")
+	if typeof(raw_form) == TYPE_STRING and not String(raw_form).is_empty():
+		creature.form_id = StringName(raw_form)
 	var transform_context: Variant = data.get("battle_transform", {})
 	if transform_context is Dictionary: creature.battle_transform_original = transform_context.duplicate(true)
 	return creature
