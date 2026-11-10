@@ -51,7 +51,7 @@ function play({id,typ,move,seed=19,mode='active',double=false}){
   const foeBefore=initial.roster[1].pokemon.find(z=>z.instance_id==='foe');
   assert(own&&foe&&foeBefore,'Roster identity lost');
   const damage=foeBefore.hp-foe.hp;
-  const postPP=battle.p1.active[0].moveSlots.find(z=>z.id===moveId)?.pp;
+  const postPP=e.sessions.get('a').battle.p1.active[0].moveSlots.find(z=>z.id===moveId)?.pp;
   assert.equal(initialPP-postPP,1,'First legal move must use exactly one PP');
   ppChecks++;
   const save=(snapshot)=>{
@@ -78,7 +78,7 @@ function play({id,typ,move,seed=19,mode='active',double=false}){
    const after2=take('move 1');
    const own2=after2.roster[0].pokemon.find(z=>z.instance_id==='own');
    const foe2=after2.roster[1].pokemon.find(z=>z.instance_id==='foe');
-   finalPP=battle.p1.active[0].moveSlots.find(z=>z.id===moveId)?.pp;
+   finalPP=e.sessions.get('a').battle.p1.active[0].moveSlots.find(z=>z.id===moveId)?.pp;
    assert.equal(postPP-finalPP,1,'Second move must spend one more PP');
    ppChecks++;
    assert.equal(own2.item,'','Spent Gem cannot trigger twice');
