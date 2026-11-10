@@ -26,7 +26,7 @@ De los bloqueos, **Repeat Ball** tiene una ruta implementable: registrar **solo 
 - `modules/creatures/storage/player_collection.gd`: propiedad de historial y helper propio, **no** alterar deposit/withdraw/identidad.
 - `modules/save/save_game_data.gd`: campo opcional `caught_base_species_ids` y `build`/`to_dict`/`from_dict`/`validate` **solo para ledger**, sin alterar formato y sin suprimir validaciones.
 - `modules/save/save_game_repository.gd`: rutas `save_collection` y `decode_snapshot`/reconstrucción **solo ledger**; `modules/save/load_result.gd`: campo de resultado opcional si hace falta.
-- `modules/save/field_native_save.gd::decode`: copiar ledger del resultado al `PlayerCollection` real **exclusivamente**; no alterar `_valid_creature` (IA6 ya tiene parche de naturaleza efectiva ahí).
+- `modules/save/field_native_save.gd::write` y `::decode`: transmitir/restaurar únicamente el ledger opcional de captura al construir/leer `SaveGameData` de la colección real; no alterar `_valid_creature` (IA6 ya tiene parche de naturaleza efectiva ahí), checksum, payload de mundo ni semántica de guardado.
 - `modules/gameplay/wild_adventure_session.gd::capture_current`, `save_game`, `load_game` y reconstrucción de `player`: únicamente historial de capturas.
 - `modules/capture/capture_battle_context.gd` y `modules/capture/capture_context_ball_effects.gd`: bandera/validación y efecto de Repeat Ball; `capture_system.gd` solo un dispatch **muy localizado** si la API existente no puede invocar el nuevo efecto.
 - Nuevos helpers/tests/fixtures y workflows W03, sin rebajar ninguna regresión previa.
