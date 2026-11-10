@@ -41,6 +41,10 @@ func _encounter() -> bool:
 	if view.session != null and view.session.has_active_battle():
 		view._playback.set_process(false)
 		return true
+	print("W03_NET_NATIVE_V5_DIAG zone=", scene.field_note_native_step(scene.player.global_position),
+		" native_error=", bridge.last_error, " kind=", bridge.kind, " occupied=", bridge.occupied(),
+		" active_config=", scene._active_config.get("wild_species_id", ""),
+		" field_ready=", scene.is_demo_ready(), " player_party=", scene.field_collection().party.size())
 	return false
 
 func _finish_battle_if_caught() -> void:
