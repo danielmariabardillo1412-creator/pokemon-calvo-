@@ -149,7 +149,7 @@
       "type": "poison",
       "attack": "sludge_bomb",
       "wrong": "tackle",
-      "status": "toxic",
+      "status": "toxic_spikes",
       "cases": [
         {
           "op": "matching",

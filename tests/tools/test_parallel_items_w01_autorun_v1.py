@@ -20,7 +20,7 @@ EXPECTED = [
     ("grass_gem","grass","energy_ball","tackle","grassy_terrain"),
     ("ice_gem","ice","ice_beam","tackle","haze"),
     ("fighting_gem","fighting","brick_break","tackle","bulk_up"),
-    ("poison_gem","poison","sludge_bomb","tackle","toxic"),
+    ("poison_gem","poison","sludge_bomb","tackle","toxic_spikes"),
     ("ground_gem","ground","earth_power","tackle","spikes"),
     ("flying_gem","flying","aerial_ace","tackle","roost"),
     ("psychic_gem","psychic","psychic","tackle","calm_mind"),
