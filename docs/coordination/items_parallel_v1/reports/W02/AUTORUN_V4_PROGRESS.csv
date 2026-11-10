@@ -1,7 +1,7 @@
 hito,entrega,estado,objetos_nuevos,qa,ci,sha,evidencia
-01,diagnose_old_duplicate,DIAGNOSTICO_PRUEBA_ROJA_PENDIENTE,0,0,,,
-02,compare_semantic_equivalence,PENDIENTE,0,0,,,
-03,remove_growth_recalc,PENDIENTE,0,0,,,
+01,diagnose_old_duplicate,ROJO_REPRODUCIDO,0,1,42921793520,4991f19905bac236ee1f49114bbacbbfd3b21da2,Python asserts duplicate Growth.plan recompute in prepatch SHA
+02,compare_semantic_equivalence,TEST_IMPLEMENTADO_CI_PENDIENTE,0,1,,,Golden fallback candidate equals new shared evolution candidate in Godot
+03,remove_growth_recalc,PARCHE_IMPLEMENTADO_CI_PENDIENTE,0,0,,,Removed only redundant staged recalculation preserving choice and HP delta
 04,bulbasaur_ivysaur_minted,PENDIENTE,0,0,,,
 05,eevee_vaporeon_item,PENDIENTE,0,0,,,
 06,multi_level_context_rollback,PENDIENTE,0,0,,,

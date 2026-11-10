@@ -124,15 +124,11 @@ static func plan(source: CreatureInstance, item_id: StringName, catalogs: Defini
 			used[key] = true
 			if choice != "":
 				var old_hp := c.current_hp; var old_max := c.stats.max_hp
-				# EvolutionSystem currently copies original nature but not the
-				# effective mint nature. Preserve it on this local staged candidate
-				# without touching the shared evolution engine or live owner.
-				var effective_before_evolution: StringName = c.effective_nature_id
+				# EvolutionSystem.apply_evolution preserves original + effective
+				# nature and computes the evolved stats exactly once (W02 TANDA03).
+				# Do not reapply a minted nature or duplicate stat recalculation here.
 				c = EvolutionSystem.apply_evolution(c, StringName(choice), catalogs, ProgressionRuleset.new())
 				if c == null: return deny("evolution_failed")
-				if effective_before_evolution != &"":
-					c.effective_nature_id = effective_before_evolution
-					c.recalculate_stats(catalogs.species(c.species_id), ProgressionRuleset.new())
 				c.current_hp = clampi(old_hp + c.stats.max_hp - old_max, 1, c.stats.max_hp)
 				summary["species_id"] = String(c.species_id)
 				var evolved_species := catalogs.species(c.species_id)
