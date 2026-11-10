@@ -36,7 +36,9 @@ func _end_native_capture() -> void:
 func _run() -> void:
 	var raw: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://data/normalized/pokemon_api.json"))
 	ck("canonical game data", raw is Dictionary)
-	if not raw is Dictionary: return _finish()
+	if not raw is Dictionary:
+		_finish()
+		return
 	scene = load("res://scenes/visual/field_demo.tscn").instantiate()
 	root.add_child(scene)
 	await process_frame
@@ -45,12 +47,17 @@ func _run() -> void:
 	view = bridge.view
 	bridge.save_path = "user://w03_repeat_native_v3.json"
 	ck("native demo booted", scene.is_demo_ready() and bridge != null)
-	if not scene.is_demo_ready(): return _finish()
+	if not scene.is_demo_ready():
+		_finish()
+		return
 	scene.player.set_physics_process(false)
 	var player: PlayerCollection = scene.field_collection()
 	ck("new campaign has no caught history", player.caught_base_species_ids.is_empty())
+	ck("repeat inventory setup", player.inventory.add(&"repeat_ball", 2))
 	ck("first encounter native starts", await _enter_grass())
-	if view.session == null: return _finish()
+	if view.session == null:
+		_finish()
+		return
 	view._playback.set_process(false)
 	ck("native wild battle, not trainer", view.session.battle_kind == "wild")
 	var before_master := player.inventory.quantity(&"master_ball")
@@ -72,7 +79,9 @@ func _run() -> void:
 	player = scene.field_collection()
 	ck("no false caught species", not player.has_previously_caught(&"caterpie", scene._catalogs))
 	ck("next native encounter starts", await _enter_grass())
-	if view.session == null or not view.session.has_active_battle(): return _finish()
+	if view.session == null or not view.session.has_active_battle():
+		_finish()
+		return
 	view._playback.set_process(false)
 	ck("repeat ball stocked", player.inventory.has(&"repeat_ball"))
 	var before_repeat := player.inventory.quantity(&"repeat_ball")
