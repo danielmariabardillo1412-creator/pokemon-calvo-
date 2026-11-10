@@ -174,12 +174,20 @@ func capture(ball_id: StringName, expected_revision: int) -> Dictionary:
 	var catcher := battle_state().active_for_side(&"side_a")
 	if catcher != null: context.catcher_level = catcher.level
 	var target := _persistent_copy(battle_state().active_for_side(&"side_b"))
+	# W03: only the session owner's persistent successful-capture ledger is authoritative.
+	# Compute before resolving/spending a ball; never infer history from the current party.
+	if target != null:
+		context.previously_caught_base_species = player.has_previously_caught(target.base_species_id(), catalogs)
 	var resolution := CaptureInventoryService.resolve(CaptureAttempt.new(target, ball_id, context), rng, catalogs, party, bag)
 	if resolution.result.status == CaptureResult.INVALID:
 		_command_busy = false; return _rejected(resolution.result.reason)
 	if resolution.result.status == CaptureResult.SUCCESS:
 		var result := _finish("CAPTURED", bag, resolution)
 		if result.accepted:
+			# Routing and the native campaign commit already succeeded. Failed,
+			# rejected, duplicate and storage-rejected attempts never reach here.
+			if resolution.captured != null:
+				player.record_successful_capture(resolution.captured.base_species_id(), catalogs)
 			_capture_rng.state = rng.state
 			_record_spent(ball_id)
 			result["capture_outcome"] = {"capture": resolution.to_dict()}
