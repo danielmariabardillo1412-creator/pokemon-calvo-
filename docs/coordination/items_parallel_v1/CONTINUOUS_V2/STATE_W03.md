@@ -1,3 +1,15 @@
+# IA6 — ACTIVACIÓN CONFIRMADA V2 DE W03 (prevalece sobre checkpoint provisional)
+**Plan ya publicado y vigente en `IA6_AUTORUN.md` de esta misma rama.** La espera `AWAITING_IA6_W03_PLAN` descrita abajo quedó SUPERADA; se escribió mientras IA6 publicaba los archivos en paralelo.
+- mission_version: `CONTINUOUS_V2/PLAN_W03.md` de rama árbitra (copia íntegra también en `IA6_AUTORUN.md` de W03).
+- phase: B01 — 25 bolas autorizadas, varios bloques de hasta diez; NO parar al acabar uno.
+- next_id: `poke_ball` (confirmar contra el checkpoint/HEAD más reciente antes de ejecutar).
+- last_green_code_sha: `56155f824dd684989192407622c7c46d28836110`
+- last_green_run_id: `42922912695`
+- next_safe_action: leer la nota nueva `IA6_AUTORUN.md` y ejecutar el primer hito de la campaña continua; registrar cada resultado, pasar al siguiente bloque sin pedir IA6.
+- riesgo: solo seam específica de bolas W03, no otros módulos protegidos.
+
+---
+
 # IA3/W03 — CHECKPOINT DE CONTINUIDAD V2 (PENDIENTE DE PLAN)
 Fecha de verificación: 2026-11-11. Rama propietaria: `codex/calvo-items-20261104-w03-camp006`.
 
