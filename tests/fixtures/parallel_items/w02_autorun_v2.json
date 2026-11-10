@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "worker": "W02",
+  "tanda": "02",
+  "permission": "IA6 TANDA_02",
+  "source": "docs/coordination/items_parallel_v1/IA6_AUTORUN.md",
+  "rows": [
+    {
+      "row": "01",
+      "id": "mint_rare_candy_red",
+      "status": "PENDIENTE"
+    },
+    {
+      "row": "02",
+      "id": "growth_nature_validation",
+      "status": "PENDIENTE"
+    },
+    {
+      "row": "03",
+      "id": "exp_candies_after_mint",
+      "status": "PENDIENTE"
+    },
+    {
+      "row": "04",
+      "id": "growth_move_evolution",
+      "status": "PENDIENTE"
+    },
+    {
+      "row": "05",
+      "id": "mint_mochi_red",
+      "status": "PENDIENTE"
+    },
+    {
+      "row": "06",
+      "id": "mochi_nature_validation",
+      "status": "PENDIENTE"
+    },
+    {
+      "row": "07",
+      "id": "fresh_start_mochi",
+      "status": "PENDIENTE"
+    },
+    {
+      "row": "08",
+      "id": "protein_carbos",
+      "status": "PENDIENTE"
+    },
+    {
+      "row": "09",
+      "id": "five_step_sequence",
+      "status": "PENDIENTE"
+    },
+    {
+      "row": "10",
+      "id": "final_regressions",
+      "status": "PENDIENTE"
+    }
+  ],
+  "mode": [
+    "active",
+    "reserve"
+  ],
+  "baseline": {
+    "run": 42730263746,
+    "sha": "f8168c2b5cdb2dc74bc2820d94cc59e7bc7be19c"
+  }
+}
