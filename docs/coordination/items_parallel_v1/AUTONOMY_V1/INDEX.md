@@ -1,3 +1,9 @@
+# IA6 — RELEVO MÁS RECIENTE 2026-11-10 · CINCO TANDAS NUEVAS
+
+**TANDAS VIGENTES EN NOTAS PROPIAS:** IA1/W01=03 (gemas desde inventario), IA2/W02=03 (naturaleza efectiva en `EvolutionSystem.apply_evolution`), IA3/W03=04 (cerrar QA nativa Repeat Ball), IA4/W04=04 (habilidades normales permitidas para cuatro formas regionales; Exeggutor Alola sigue condicionado), IA5/W05=04 (nombres oficiales ES de 229 MT). IA4 TANDA03 certificada 51/56 con #42876057234 y #42876625902 SUCCESS, 5 bloqueos de política. [Auditoría y addenda](IA6_AUDIT_RELAY_20261110_1922.md). No confundir hitos con objetos nuevos ni con integración IA6. `p` reanuda desde nota GitHub en cada rama.
+
+---
+
 # IA6 — RELEVO ACTUAL 2026-11-10 · 19:22 EUROPE/MADRID
 
 **AUDITORÍA:** [AUTONOMY_V1/IA6_AUDIT_RELAY_20261110_1922.md](IA6_AUDIT_RELAY_20261110_1922.md). Certificadas TANDA02 W01 (5 gemas, 5 QA), W02 (9 hitos funcionales con mentas, 1 QA), TANDA03 W03 (Repeat Ball L3, QA07/08 parciales), W05 (229 MT ya existentes, 10 QA). **W04 NO se cierra:** TANDA03 con CI de último HEAD aún no certificada.
