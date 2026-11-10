@@ -258,7 +258,11 @@ jobs:
           printf '[application]\nconfig/name="W05 PCK Isolation Probe"\n' > "$PROBE/project.godot"
           cp tests/gameplay/parallel_items_w05_export_pck_probe.gd "$PROBE/probe.gd"
           godot --headless --path "$PROBE" --script "$PROBE/probe.gd" -- "$PCK" 2>&1 | tee w05-v5-runtime.log
-          grep -E '^W05_V5_PCK_PROBE PASS records=229 runtime_samples=4 source=pck_only$' w05-v5-runtime.log
+          grep -E '^W05_V5_PCK_PROBE PASS records=229 runtime_samples=4 helper=1 source=pck_only$' w05-v5-runtime.log
+          EXE="$RUNNER_TEMP/W05-PokemonCalvo-Windows-Export-Probe.exe"
+          godot --headless --path . --export-release "Pokemon Calvo Technical Test Windows" "$EXE" 2>&1 | tee w05-v5-exe-export.log
+          python -c 'from pathlib import Path; import sys; p=Path(sys.argv[1]); head=p.open("rb").read(2); size=p.stat().st_size; assert head==b"MZ" and size>1000000; print(f"W05_V5_WINDOWS_EXE PASS header=MZ size={size}")' "$EXE" | tee w05-v5-exe-check.log
+          grep -E '^W05_V5_WINDOWS_EXE PASS header=MZ size=[1-9][0-9]+$' w05-v5-exe-check.log
       - name: Save TANDA05 diagnostic logs, not distributables
         if: always()
         uses: actions/upload-artifact@v4
