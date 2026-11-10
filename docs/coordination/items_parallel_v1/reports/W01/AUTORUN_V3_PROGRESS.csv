@@ -1,0 +1,11 @@
+fila,hito,estado,sha_pruebas,ci_run,objetos_nuevos,qa_funcional,notas
+01,trace,PENDIENTE,PENDIENTE,PENDIENTE,0,no,pendiente_de_validacion_y_CI
+02,C005_three,PENDIENTE,PENDIENTE,PENDIENTE,0,no,pendiente_de_validacion_y_CI
+03,V1_first_five,PENDIENTE,PENDIENTE,PENDIENTE,0,no,pendiente_de_validacion_y_CI
+04,V1_last_five,PENDIENTE,PENDIENTE,PENDIENTE,0,no,pendiente_de_validacion_y_CI
+05,V2_five,PENDIENTE,PENDIENTE,PENDIENTE,0,no,pendiente_de_validacion_y_CI
+06,negative_equip,PENDIENTE,PENDIENTE,PENDIENTE,0,no,pendiente_de_validacion_y_CI
+07,battle_boundary,PENDIENTE,PENDIENTE,PENDIENTE,0,no,pendiente_de_validacion_y_CI
+08,SaveV2_legacy,PENDIENTE,PENDIENTE,PENDIENTE,0,no,pendiente_de_validacion_y_CI
+09,native_adapter,PENDIENTE,PENDIENTE,PENDIENTE,0,no,pendiente_de_validacion_y_CI
+10,CI_joint,PENDIENTE,PENDIENTE,PENDIENTE,0,no,pendiente_de_validacion_y_CI

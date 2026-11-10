@@ -1,0 +1,152 @@
+{
+  "schema_version": 1,
+  "worker": "W01",
+  "tanda": "03",
+  "kind": "AUTORUN_V3_W01_L3_GEMS",
+  "format": "gen9calvounifiedv1",
+  "source_history": {
+    "camp005": {
+      "sha": "5303578448d909cf1b4e2c3c60c7d3e231203f98",
+      "ci": 42717306543
+    },
+    "tanda01": {
+      "sha": "9d1a9dae8b9d9abed09a12b082f7a719aa047981",
+      "ci": 42730773059
+    },
+    "tanda02": {
+      "sha": "0871aa6751faecb7342376134ddbcaa5acf1ce5a",
+      "ci": 42869207766
+    }
+  },
+  "items": [
+    {
+      "id": "normal_gem",
+      "type": "normal",
+      "attack": "tackle",
+      "batch": "C005"
+    },
+    {
+      "id": "fire_gem",
+      "type": "fire",
+      "attack": "fire_punch",
+      "batch": "C005"
+    },
+    {
+      "id": "water_gem",
+      "type": "water",
+      "attack": "surf",
+      "batch": "C005"
+    },
+    {
+      "id": "electric_gem",
+      "type": "electric",
+      "attack": "thunderbolt",
+      "batch": "V1"
+    },
+    {
+      "id": "grass_gem",
+      "type": "grass",
+      "attack": "energy_ball",
+      "batch": "V1"
+    },
+    {
+      "id": "ice_gem",
+      "type": "ice",
+      "attack": "ice_beam",
+      "batch": "V1"
+    },
+    {
+      "id": "fighting_gem",
+      "type": "fighting",
+      "attack": "brick_break",
+      "batch": "V1"
+    },
+    {
+      "id": "poison_gem",
+      "type": "poison",
+      "attack": "sludge_bomb",
+      "batch": "V1"
+    },
+    {
+      "id": "ground_gem",
+      "type": "ground",
+      "attack": "earth_power",
+      "batch": "V1"
+    },
+    {
+      "id": "flying_gem",
+      "type": "flying",
+      "attack": "aerial_ace",
+      "batch": "V1"
+    },
+    {
+      "id": "psychic_gem",
+      "type": "psychic",
+      "attack": "psychic",
+      "batch": "V1"
+    },
+    {
+      "id": "bug_gem",
+      "type": "bug",
+      "attack": "bug_buzz",
+      "batch": "V1"
+    },
+    {
+      "id": "rock_gem",
+      "type": "rock",
+      "attack": "smack_down",
+      "batch": "V1"
+    },
+    {
+      "id": "ghost_gem",
+      "type": "ghost",
+      "attack": "shadow_ball",
+      "batch": "V2"
+    },
+    {
+      "id": "dragon_gem",
+      "type": "dragon",
+      "attack": "dragon_pulse",
+      "batch": "V2"
+    },
+    {
+      "id": "dark_gem",
+      "type": "dark",
+      "attack": "dark_pulse",
+      "batch": "V2"
+    },
+    {
+      "id": "steel_gem",
+      "type": "steel",
+      "attack": "flash_cannon",
+      "batch": "V2"
+    },
+    {
+      "id": "fairy_gem",
+      "type": "fairy",
+      "attack": "moonblast",
+      "batch": "V2"
+    }
+  ],
+  "scope": {
+    "new_items": 0,
+    "group_counts": {
+      "C005": 3,
+      "V1": 10,
+      "V2": 5
+    },
+    "testing": "PlayerInventory -> FieldItemService.equip -> native battle -> settle_finished_battle -> SaveGameRepository V2 and legacy"
+  },
+  "milestones": [
+    "trace",
+    "C005_three",
+    "V1_first_five",
+    "V1_last_five",
+    "V2_five",
+    "negative_equip",
+    "battle_boundary",
+    "SaveV2_legacy",
+    "native_adapter",
+    "CI_joint"
+  ]
+}
