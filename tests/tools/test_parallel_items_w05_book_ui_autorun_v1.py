@@ -8,7 +8,7 @@ import re
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 FIXTURE = ROOT / "tests/fixtures/parallel_items/w05_campaign_006.json"
 QUEUE = ROOT / "docs/coordination/items_parallel_v1/CAMPAIGN_006_W05_QUEUE_APPROVED.csv"
-ORDER = ROOT / "docs/coordination/items_parallel_v1/IA6_AUTORUN.md"
+ORDER = ROOT / "docs/coordination/items_parallel_v1/reports/W05/AUTORUN_V1_FINAL.md"
 PROFILE = ROOT / "modules/inventory/item_connections_v1.json"
 PANEL = ROOT / "scenes/visual/field_machine_book_panel.gd"
 RUNNER = ROOT / "tests/gameplay/parallel_items_w05_book_ui_autorun_v1.gd"
@@ -42,7 +42,7 @@ def main():
         require("queue exact block " + block, row[0] == block and group["block"] == block)
         require("queue same order " + block, ids == actual)
         require("queue size " + block, len(ids) == (4 if index == 10 else 5))
-        require("autorun contains group " + block, bool(re.search(
+        require("frozen TANDA01 report contains group " + block, bool(re.search(
             r"^\|\s*" + block + r"\s*\|.*" + re.escape(ids[0]), order, re.M)))
         require("progress checkpoint row " + block,
                 len(progress) > index and progress[index].startswith(block + ","))
