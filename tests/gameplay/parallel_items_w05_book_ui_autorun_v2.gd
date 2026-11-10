@@ -318,12 +318,12 @@ func _run() -> void:
 				print("W05_BOOKS_AUTORUN_V2_GROUP block=%s status=%s ids=%d functional=%d blocked=%d checks=%d" %
 					[block, "CERTIFICABLE" if blocks_pending == 0 else "BLOQUEADO",
 					items.size(), positives, blocks_pending, checks - start_checks])
-		check("exactly 49 distinct IDs", seen.size() == 49)
+		check("exactly 180 distinct IDs", seen.size() == 180)
 	if failures.is_empty():
-		print("W05_BOOKS_AUTORUN_V2_GODOT PASS blocks=10 ids=49 functional=%d blocked=%d checks=%d" %
+		print("W05_BOOKS_AUTORUN_V2_GODOT PASS blocks=10 ids=180 functional=%d blocked=%d checks=%d" %
 			[functional, blocked, checks])
 		quit(0)
 	else:
-		print("W05_BOOKS_AUTORUN_V2_GODOT FAIL blocks=10 ids=49 functional=%d blocked=%d checks=%d errors=%s" %
+		print("W05_BOOKS_AUTORUN_V2_GODOT FAIL blocks=10 ids=180 functional=%d blocked=%d checks=%d errors=%s" %
 			[functional, blocked, checks, str(failures)])
 		quit(1)
