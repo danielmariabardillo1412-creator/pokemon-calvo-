@@ -51,6 +51,12 @@ func _run() -> void:
 		_finish()
 		return
 	scene.player.set_physics_process(false)
+	var config: Dictionary = scene._active_config.duplicate(true)
+	config.wild_species_id = "pidgey"
+	config.wild_min_level = 5
+	config.wild_max_level = 5
+	config.encounter_chance_percent = 100
+	scene._on_configuration_applied(config)
 	var player: PlayerCollection = scene.field_collection()
 	ck("new campaign has no caught history", player.caught_base_species_ids.is_empty())
 	ck("repeat inventory setup", player.inventory.add(&"repeat_ball", 2))
