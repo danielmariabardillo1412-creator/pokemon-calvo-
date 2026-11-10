@@ -28,7 +28,8 @@ Autorizados exclusivamente:
 - `modules/creatures/progression/creature_factory.gd`: aceptar/propagar un `form_id` **solo si hay fuente canónica auténtica** y con guardas; evitar romper firmas anteriores.
 - `modules/save/field_native_save.gd::_valid_creature`: validación aditiva de `form_id` si hay fuente verificable, SIN borrar el cálculo original de stats y SIN tocar su comportamiento de naturaleza efectiva que IA6 corrigió en su rama. Si la función no permite validar sin invasión, ticket y prueba, sin reescritura.
 - `modules/creatures/progression/evolution_system.gd`: solamente métodos y adaptadores de forma ya autorizados a W04; no tratar `spin`/fusión como evolución sin fuente real.
-- Helpers de formas nuevos locales, fixture y tests W04, workflows propios; `modules/save/save_game_data.gd` solo **lectura** porque IA3 trabaja en un campo nuevo de ese archivo en paralelo.
+- `modules/save/save_game_data.gd::validate`: **exclusivamente** validación estructural aditiva del campo `form_id` opcional por criatura (si existe), sin tocar ningún otro campo, layout o snapshot, conservando `schema_version=2`. IA3 edita otra parte del mismo archivo: IA6 integrará ambas diferencias por función, nunca merge completo.
+- Helpers de formas nuevos locales, fixture y tests W04, workflows propios. No alterar `SaveGameData.build/to_dict/from_dict` ni persistencia de la colección ajena.
 
 **No tocar:** `SaveGameSerializer`, `SaveGameRepository`, `SaveGameMigration`, mapa/reloj/giro, `FieldItemService`, `FieldItemBag`, sistema de captura, Showdown/estadísticas, o código de otras trabajadoras; **no cambiar `schema_version=2`**. Si para piloto L3 de Factory y captura hace falta un seam no listado, documentar API mínima y hacer pruebas positivas hasta el nivel que de verdad permitan los módulos autorizados, sin falsificar L3. Pueden quedar hitos bloqueados, pero no pedir autorización después de cada fila.
 
