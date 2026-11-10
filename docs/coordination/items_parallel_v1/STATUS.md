@@ -1,3 +1,11 @@
+# IA6 — RELEVO REAL PUBLICADO EN LAS 5 RAMAS · 2026-11-10
+
+**CONFIRMACIÓN DE LECTURA REAL:** W01 sigue TANDA03 (no tiene cierre CI final de V3; no duplicar), W02 nueva TANDA04 `b1579efd264a324c3c3ef78e3a94d40881a3c3`, W03 nueva TANDA05 `393a764287a9a5060b7474dc7d62d11a6eeea5ee`, W04 nueva TANDA05 `a2a80caeb1589f4b5d14efd49060f9956a9282cc`, W05 nueva TANDA05 `be880dd58cd3ed5d8e24a61c7624d167a9813a88`. **Todas las 5 notas de `IA6_AUTORUN.md` han sido leídas de nuevo y contienen su cola correcta.** El usuario puede enviar `p` sin repetir prompts: cada ventana debe abrir su nota y comenzar el primer hito sin cerrar.
+
+**BASELINE CERTIFICADO:** W02 T03 #42890511612 SUCCESS, W03 T04 #42891930750 SUCCESS, W04 T04 #42890685931 SUCCESS, W05 T04 #42894306446 SUCCESS. No asignar errores ya resueltos ni diez objetos ficticios. Novedades de las colas: W02 quitar recálculo duplicado de Growth tras evolución y menta; W03 Net Ball nativa real; W04 condiciones de evolución regional sin saltarse políticas; W05 export Windows/PCK real de nombres ES; W01 cerrar gemas desde mochila. Independencia técnica en ramas propias: IA6 sigue pendiente de integración selectiva de W02/W03/W04/W05 en `codex/calvo-ia6-integration-20261109` con CI conjunta, NO está certificada ni se ha realizado merge. Prohibido tocar `main`, V28, PR118.
+
+---
+
 # DECISIÓN PRIORITARIA IA6 · 2026-11-10 · NO ENCADENAR MÁS TANDAS CIEGAS
 
 **W04 y W05 TANDA04 verificadas contra código y logs reales**: W04 cuatro variantes regionales desbloqueadas por habilidad normal, 55/56 nativas positivas y 1 bloqueada; CI #42890151094 y #42890685931 SUCCESS. W05 229 etiquetas españolas de PokeAPI local, 0 MT nuevas, CI #42893621203 y #42894306446 SUCCESS, visual headless panel aislado, no GPU. Ver [auditoría completa](AUTONOMY_V1/IA6_AUDIT_W04_W05_TANDA04_REALITY_GATE_20261110.md).
