@@ -14,6 +14,10 @@ on:
       - 'tests/gameplay/parallel_items_w05_book_ui_pilot_20261109.gd'
       - 'tests/tools/test_parallel_items_w05_book_ui_autorun_v1.py'
       - 'tests/gameplay/parallel_items_w05_book_ui_autorun_v1.gd'
+      - 'tests/tools/test_parallel_items_w05_book_ui_autorun_v2.py'
+      - 'tests/gameplay/parallel_items_w05_book_ui_autorun_v2.gd'
+      - 'tests/fixtures/parallel_items/w05_book_ui_autorun_v2.json'
+      - 'docs/coordination/items_parallel_v1/reports/W05/AUTORUN_V2_PROGRESS.csv'
       - 'docs/coordination/items_parallel_v1/reports/W05/AUTORUN_V1_PROGRESS.csv'
       - 'modules/**'
       - 'docs/coordination/items_parallel_v1/reports/W05/CAMP_006_PROGRESO.csv'
@@ -138,6 +142,16 @@ jobs:
           timeout 900s godot --headless --path . --script res://tests/gameplay/parallel_items_w05_book_ui_autorun_v1.gd 2>&1 | tee w05-autorun-godot.log
           grep -E '^W05_BOOKS_AUTORUN_GODOT PASS blocks=10 ids=49 functional=[0-9]+ blocked=[0-9]+ checks=[1-9][0-9]*$' w05-autorun-godot.log
           test "$(grep -Ec '^W05_BOOKS_AUTORUN_GROUP block=[0-9]{2} status=(CERTIFICABLE|BLOQUEADO) ids=[45] functional=[0-9]+ blocked=[0-9]+ checks=[1-9][0-9]*$' w05-autorun-godot.log)" -eq 10
+      - name: AUTORUN V2 W05 - diez grupos 180 libros desde panel real
+        if: steps.scope.outputs.blocks == '10'
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tests/tools/test_parallel_items_w05_book_ui_autorun_v2.py 2>&1 | tee w05-autorun-v2-python.log
+          grep -E '^W05_BOOKS_AUTORUN_V2_PY PASS blocks=10 ids=180 total_active=229 previous=49 checks=[1-9][0-9]*$' w05-autorun-v2-python.log
+          timeout 1000s godot --headless --path . --script res://tests/gameplay/parallel_items_w05_book_ui_autorun_v2.gd 2>&1 | tee w05-autorun-v2-godot.log
+          grep -E '^W05_BOOKS_AUTORUN_V2_GODOT PASS blocks=10 ids=180 functional=[0-9]+ blocked=[0-9]+ checks=[1-9][0-9]*$' w05-autorun-v2-godot.log
+          test "$(grep -Ec '^W05_BOOKS_AUTORUN_V2_GROUP block=[0-9]{2} status=(CERTIFICABLE|BLOQUEADO) ids=18 functional=[0-9]+ blocked=[0-9]+ checks=[1-9][0-9]*$' w05-autorun-v2-godot.log)" -eq 10
       - name: Conservar evidencia 7 dias
         if: always()
         uses: actions/upload-artifact@v4

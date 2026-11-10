@@ -1,0 +1,781 @@
+{
+  "schema_version": 1,
+  "campaign": "AUTORUN_V2",
+  "worker": "W05",
+  "active_version": "scarlet-violet",
+  "kind": "UI_REMAINING_IDS",
+  "source": "AUTONOMY_V1/QUEUE_W05_TANDA_02.md",
+  "previous_campaign": "CAMP_006",
+  "blocks": [
+    {
+      "block": "01",
+      "items": [
+        {
+          "item_id": "tm07",
+          "move_id": "protect"
+        },
+        {
+          "item_id": "tm16",
+          "move_id": "psybeam"
+        },
+        {
+          "item_id": "tm18",
+          "move_id": "thief"
+        },
+        {
+          "item_id": "tm21",
+          "move_id": "pounce"
+        },
+        {
+          "item_id": "tm22",
+          "move_id": "chilling_water"
+        },
+        {
+          "item_id": "tm23",
+          "move_id": "charge_beam"
+        },
+        {
+          "item_id": "tm24",
+          "move_id": "fire_spin"
+        },
+        {
+          "item_id": "tm25",
+          "move_id": "facade"
+        },
+        {
+          "item_id": "tm26",
+          "move_id": "poison_tail"
+        },
+        {
+          "item_id": "tm27",
+          "move_id": "aerial_ace"
+        },
+        {
+          "item_id": "tm28",
+          "move_id": "bulldoze"
+        },
+        {
+          "item_id": "tm29",
+          "move_id": "hex"
+        },
+        {
+          "item_id": "tm30",
+          "move_id": "snarl"
+        },
+        {
+          "item_id": "tm32",
+          "move_id": "swift"
+        },
+        {
+          "item_id": "tm33",
+          "move_id": "magical_leaf"
+        },
+        {
+          "item_id": "tm34",
+          "move_id": "icy_wind"
+        },
+        {
+          "item_id": "tm35",
+          "move_id": "mud_shot"
+        },
+        {
+          "item_id": "tm37",
+          "move_id": "draining_kiss"
+        }
+      ]
+    },
+    {
+      "block": "02",
+      "items": [
+        {
+          "item_id": "tm38",
+          "move_id": "flame_charge"
+        },
+        {
+          "item_id": "tm39",
+          "move_id": "low_sweep"
+        },
+        {
+          "item_id": "tm40",
+          "move_id": "air_cutter"
+        },
+        {
+          "item_id": "tm41",
+          "move_id": "stored_power"
+        },
+        {
+          "item_id": "tm42",
+          "move_id": "night_shade"
+        },
+        {
+          "item_id": "tm43",
+          "move_id": "fling"
+        },
+        {
+          "item_id": "tm45",
+          "move_id": "venoshock"
+        },
+        {
+          "item_id": "tm46",
+          "move_id": "avalanche"
+        },
+        {
+          "item_id": "tm47",
+          "move_id": "endure"
+        },
+        {
+          "item_id": "tm48",
+          "move_id": "volt_switch"
+        },
+        {
+          "item_id": "tm49",
+          "move_id": "sunny_day"
+        },
+        {
+          "item_id": "tm50",
+          "move_id": "rain_dance"
+        },
+        {
+          "item_id": "tm51",
+          "move_id": "sandstorm"
+        },
+        {
+          "item_id": "tm52",
+          "move_id": "snowscape"
+        },
+        {
+          "item_id": "tm53",
+          "move_id": "smart_strike"
+        },
+        {
+          "item_id": "tm54",
+          "move_id": "psyshock"
+        },
+        {
+          "item_id": "tm55",
+          "move_id": "dig"
+        },
+        {
+          "item_id": "tm56",
+          "move_id": "bullet_seed"
+        }
+      ]
+    },
+    {
+      "block": "03",
+      "items": [
+        {
+          "item_id": "tm57",
+          "move_id": "false_swipe"
+        },
+        {
+          "item_id": "tm58",
+          "move_id": "brick_break"
+        },
+        {
+          "item_id": "tm59",
+          "move_id": "zen_headbutt"
+        },
+        {
+          "item_id": "tm60",
+          "move_id": "u_turn"
+        },
+        {
+          "item_id": "tm61",
+          "move_id": "shadow_claw"
+        },
+        {
+          "item_id": "tm62",
+          "move_id": "foul_play"
+        },
+        {
+          "item_id": "tm63",
+          "move_id": "psychic_fangs"
+        },
+        {
+          "item_id": "tm64",
+          "move_id": "bulk_up"
+        },
+        {
+          "item_id": "tm65",
+          "move_id": "air_slash"
+        },
+        {
+          "item_id": "tm66",
+          "move_id": "body_slam"
+        },
+        {
+          "item_id": "tm67",
+          "move_id": "fire_punch"
+        },
+        {
+          "item_id": "tm68",
+          "move_id": "thunder_punch"
+        },
+        {
+          "item_id": "tm69",
+          "move_id": "ice_punch"
+        },
+        {
+          "item_id": "tm70",
+          "move_id": "sleep_talk"
+        },
+        {
+          "item_id": "tm71",
+          "move_id": "seed_bomb"
+        },
+        {
+          "item_id": "tm72",
+          "move_id": "electro_ball"
+        },
+        {
+          "item_id": "tm73",
+          "move_id": "drain_punch"
+        },
+        {
+          "item_id": "tm74",
+          "move_id": "reflect"
+        }
+      ]
+    },
+    {
+      "block": "04",
+      "items": [
+        {
+          "item_id": "tm75",
+          "move_id": "light_screen"
+        },
+        {
+          "item_id": "tm76",
+          "move_id": "rock_blast"
+        },
+        {
+          "item_id": "tm78",
+          "move_id": "dragon_claw"
+        },
+        {
+          "item_id": "tm79",
+          "move_id": "dazzling_gleam"
+        },
+        {
+          "item_id": "tm80",
+          "move_id": "metronome"
+        },
+        {
+          "item_id": "tm81",
+          "move_id": "grass_knot"
+        },
+        {
+          "item_id": "tm82",
+          "move_id": "thunder_wave"
+        },
+        {
+          "item_id": "tm83",
+          "move_id": "poison_jab"
+        },
+        {
+          "item_id": "tm84",
+          "move_id": "stomping_tantrum"
+        },
+        {
+          "item_id": "tm85",
+          "move_id": "rest"
+        },
+        {
+          "item_id": "tm86",
+          "move_id": "rock_slide"
+        },
+        {
+          "item_id": "tm87",
+          "move_id": "taunt"
+        },
+        {
+          "item_id": "tm88",
+          "move_id": "swords_dance"
+        },
+        {
+          "item_id": "tm89",
+          "move_id": "body_press"
+        },
+        {
+          "item_id": "tm90",
+          "move_id": "spikes"
+        },
+        {
+          "item_id": "tm91",
+          "move_id": "toxic_spikes"
+        },
+        {
+          "item_id": "tm92",
+          "move_id": "imprison"
+        },
+        {
+          "item_id": "tm93",
+          "move_id": "flash_cannon"
+        }
+      ]
+    },
+    {
+      "block": "05",
+      "items": [
+        {
+          "item_id": "tm94",
+          "move_id": "dark_pulse"
+        },
+        {
+          "item_id": "tm95",
+          "move_id": "leech_life"
+        },
+        {
+          "item_id": "tm96",
+          "move_id": "eerie_impulse"
+        },
+        {
+          "item_id": "tm97",
+          "move_id": "fly"
+        },
+        {
+          "item_id": "tm98",
+          "move_id": "skill_swap"
+        },
+        {
+          "item_id": "tm99",
+          "move_id": "iron_head"
+        },
+        {
+          "item_id": "tm100",
+          "move_id": "dragon_dance"
+        },
+        {
+          "item_id": "tm101",
+          "move_id": "power_gem"
+        },
+        {
+          "item_id": "tm102",
+          "move_id": "gunk_shot"
+        },
+        {
+          "item_id": "tm103",
+          "move_id": "substitute"
+        },
+        {
+          "item_id": "tm104",
+          "move_id": "iron_defense"
+        },
+        {
+          "item_id": "tm105",
+          "move_id": "x_scissor"
+        },
+        {
+          "item_id": "tm106",
+          "move_id": "drill_run"
+        },
+        {
+          "item_id": "tm107",
+          "move_id": "will_o_wisp"
+        },
+        {
+          "item_id": "tm108",
+          "move_id": "crunch"
+        },
+        {
+          "item_id": "tm109",
+          "move_id": "trick"
+        },
+        {
+          "item_id": "tm110",
+          "move_id": "liquidation"
+        },
+        {
+          "item_id": "tm111",
+          "move_id": "giga_drain"
+        }
+      ]
+    },
+    {
+      "block": "06",
+      "items": [
+        {
+          "item_id": "tm112",
+          "move_id": "aura_sphere"
+        },
+        {
+          "item_id": "tm113",
+          "move_id": "tailwind"
+        },
+        {
+          "item_id": "tm114",
+          "move_id": "shadow_ball"
+        },
+        {
+          "item_id": "tm115",
+          "move_id": "dragon_pulse"
+        },
+        {
+          "item_id": "tm116",
+          "move_id": "stealth_rock"
+        },
+        {
+          "item_id": "tm117",
+          "move_id": "hyper_voice"
+        },
+        {
+          "item_id": "tm118",
+          "move_id": "heat_wave"
+        },
+        {
+          "item_id": "tm119",
+          "move_id": "energy_ball"
+        },
+        {
+          "item_id": "tm120",
+          "move_id": "psychic"
+        },
+        {
+          "item_id": "tm121",
+          "move_id": "heavy_slam"
+        },
+        {
+          "item_id": "tm122",
+          "move_id": "encore"
+        },
+        {
+          "item_id": "tm123",
+          "move_id": "surf"
+        },
+        {
+          "item_id": "tm124",
+          "move_id": "ice_spinner"
+        },
+        {
+          "item_id": "tm125",
+          "move_id": "flamethrower"
+        },
+        {
+          "item_id": "tm126",
+          "move_id": "thunderbolt"
+        },
+        {
+          "item_id": "tm127",
+          "move_id": "play_rough"
+        },
+        {
+          "item_id": "tm128",
+          "move_id": "amnesia"
+        },
+        {
+          "item_id": "tm129",
+          "move_id": "calm_mind"
+        }
+      ]
+    },
+    {
+      "block": "07",
+      "items": [
+        {
+          "item_id": "tm130",
+          "move_id": "helping_hand"
+        },
+        {
+          "item_id": "tm131",
+          "move_id": "pollen_puff"
+        },
+        {
+          "item_id": "tm132",
+          "move_id": "baton_pass"
+        },
+        {
+          "item_id": "tm133",
+          "move_id": "earth_power"
+        },
+        {
+          "item_id": "tm134",
+          "move_id": "reversal"
+        },
+        {
+          "item_id": "tm135",
+          "move_id": "ice_beam"
+        },
+        {
+          "item_id": "tm136",
+          "move_id": "electric_terrain"
+        },
+        {
+          "item_id": "tm137",
+          "move_id": "grassy_terrain"
+        },
+        {
+          "item_id": "tm138",
+          "move_id": "psychic_terrain"
+        },
+        {
+          "item_id": "tm139",
+          "move_id": "misty_terrain"
+        },
+        {
+          "item_id": "tm140",
+          "move_id": "nasty_plot"
+        },
+        {
+          "item_id": "tm141",
+          "move_id": "fire_blast"
+        },
+        {
+          "item_id": "tm142",
+          "move_id": "hydro_pump"
+        },
+        {
+          "item_id": "tm143",
+          "move_id": "blizzard"
+        },
+        {
+          "item_id": "tm144",
+          "move_id": "fire_pledge"
+        },
+        {
+          "item_id": "tm145",
+          "move_id": "water_pledge"
+        },
+        {
+          "item_id": "tm146",
+          "move_id": "grass_pledge"
+        },
+        {
+          "item_id": "tm147",
+          "move_id": "wild_charge"
+        }
+      ]
+    },
+    {
+      "block": "08",
+      "items": [
+        {
+          "item_id": "tm148",
+          "move_id": "sludge_bomb"
+        },
+        {
+          "item_id": "tm149",
+          "move_id": "earthquake"
+        },
+        {
+          "item_id": "tm150",
+          "move_id": "stone_edge"
+        },
+        {
+          "item_id": "tm151",
+          "move_id": "phantom_force"
+        },
+        {
+          "item_id": "tm152",
+          "move_id": "giga_impact"
+        },
+        {
+          "item_id": "tm153",
+          "move_id": "blast_burn"
+        },
+        {
+          "item_id": "tm154",
+          "move_id": "hydro_cannon"
+        },
+        {
+          "item_id": "tm155",
+          "move_id": "frenzy_plant"
+        },
+        {
+          "item_id": "tm156",
+          "move_id": "outrage"
+        },
+        {
+          "item_id": "tm157",
+          "move_id": "overheat"
+        },
+        {
+          "item_id": "tm158",
+          "move_id": "focus_blast"
+        },
+        {
+          "item_id": "tm159",
+          "move_id": "leaf_storm"
+        },
+        {
+          "item_id": "tm160",
+          "move_id": "hurricane"
+        },
+        {
+          "item_id": "tm161",
+          "move_id": "trick_room"
+        },
+        {
+          "item_id": "tm162",
+          "move_id": "bug_buzz"
+        },
+        {
+          "item_id": "tm163",
+          "move_id": "hyper_beam"
+        },
+        {
+          "item_id": "tm164",
+          "move_id": "brave_bird"
+        },
+        {
+          "item_id": "tm165",
+          "move_id": "flare_blitz"
+        }
+      ]
+    },
+    {
+      "block": "09",
+      "items": [
+        {
+          "item_id": "tm166",
+          "move_id": "thunder"
+        },
+        {
+          "item_id": "tm167",
+          "move_id": "close_combat"
+        },
+        {
+          "item_id": "tm168",
+          "move_id": "solar_beam"
+        },
+        {
+          "item_id": "tm169",
+          "move_id": "draco_meteor"
+        },
+        {
+          "item_id": "tm170",
+          "move_id": "steel_beam"
+        },
+        {
+          "item_id": "tm171",
+          "move_id": "tera_blast"
+        },
+        {
+          "item_id": "tm172",
+          "move_id": "roar"
+        },
+        {
+          "item_id": "tm173",
+          "move_id": "charge"
+        },
+        {
+          "item_id": "tm174",
+          "move_id": "haze"
+        },
+        {
+          "item_id": "tm175",
+          "move_id": "toxic"
+        },
+        {
+          "item_id": "tm176",
+          "move_id": "sand_tomb"
+        },
+        {
+          "item_id": "tm177",
+          "move_id": "spite"
+        },
+        {
+          "item_id": "tm178",
+          "move_id": "gravity"
+        },
+        {
+          "item_id": "tm179",
+          "move_id": "smack_down"
+        },
+        {
+          "item_id": "tm180",
+          "move_id": "gyro_ball"
+        },
+        {
+          "item_id": "tm181",
+          "move_id": "knock_off"
+        },
+        {
+          "item_id": "tm182",
+          "move_id": "bug_bite"
+        },
+        {
+          "item_id": "tm183",
+          "move_id": "super_fang"
+        }
+      ]
+    },
+    {
+      "block": "10",
+      "items": [
+        {
+          "item_id": "tm184",
+          "move_id": "vacuum_wave"
+        },
+        {
+          "item_id": "tm185",
+          "move_id": "lunge"
+        },
+        {
+          "item_id": "tm186",
+          "move_id": "high_horsepower"
+        },
+        {
+          "item_id": "tm187",
+          "move_id": "icicle_spear"
+        },
+        {
+          "item_id": "tm188",
+          "move_id": "scald"
+        },
+        {
+          "item_id": "tm189",
+          "move_id": "heat_crash"
+        },
+        {
+          "item_id": "tm190",
+          "move_id": "solar_blade"
+        },
+        {
+          "item_id": "tm191",
+          "move_id": "uproar"
+        },
+        {
+          "item_id": "tm192",
+          "move_id": "focus_punch"
+        },
+        {
+          "item_id": "tm193",
+          "move_id": "weather_ball"
+        },
+        {
+          "item_id": "tm194",
+          "move_id": "grassy_glide"
+        },
+        {
+          "item_id": "tm195",
+          "move_id": "burning_jealousy"
+        },
+        {
+          "item_id": "tm196",
+          "move_id": "flip_turn"
+        },
+        {
+          "item_id": "tm197",
+          "move_id": "dual_wingbeat"
+        },
+        {
+          "item_id": "tm198",
+          "move_id": "poltergeist"
+        },
+        {
+          "item_id": "tm199",
+          "move_id": "lash_out"
+        },
+        {
+          "item_id": "tm200",
+          "move_id": "scale_shot"
+        },
+        {
+          "item_id": "tm201",
+          "move_id": "misty_explosion"
+        }
+      ]
+    }
+  ]
+}
