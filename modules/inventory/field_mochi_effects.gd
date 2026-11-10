@@ -14,11 +14,13 @@ static func validation_error(c: CreatureInstance, slot: int, catalogs: Definitio
 	if error != "": return error
 	if not c.battle_transform_original.is_empty(): return "temporary_battle_state"
 	if c.level < 1 or c.level > 100 or c.stats == null or c.status_state == null or c.stat_stages == null or c.current_hp > c.stats.max_hp or not ProgressionRuleset.is_valid_nature(c.nature_id): return "invalid_mochi_state"
+	if c.effective_nature_id != &"" and not ProgressionRuleset.is_valid_nature(c.effective_nature_id): return "invalid_mochi_state"
 	for key: Variant in c.ivs:
 		var value: Variant = c.ivs[key]
 		if not ProgressionRuleset.STAT_KEYS.has(key) or not (value is int or value is float): return "invalid_mochi_state"
 		if not is_finite(value) or value != int(value) or value < 0 or value > 31: return "invalid_mochi_state"
-	var expected := StatCalculator.compute(catalogs.species(c.species_id).base_stat_block(), c.ivs, c.evs, c.nature_id, c.level)
+	var stat_nature: StringName = c.nature_id if c.effective_nature_id == &"" else c.effective_nature_id
+	var expected := StatCalculator.compute(catalogs.species(c.species_id).base_stat_block(), c.ivs, c.evs, stat_nature, c.level)
 	if c.stats.to_dict() != expected.to_dict(): return "invalid_mochi_state"
 	if c.move_ids.size() != c.moveset.size() or c.moveset.size() > 4: return "invalid_pp_state"
 	for i in c.moveset.size():
