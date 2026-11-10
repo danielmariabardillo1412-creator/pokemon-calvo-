@@ -1,0 +1,11 @@
+fila,tarea,estado,nivel,funcional_real,sha_ci,run_ci,notas
+"01","Catalogo canonico Galar Slowpoke","FUENTE_VERIFICADA_CI_PENDIENTE","PILOTO_CI_PENDIENTE","0","","","PokeAPI 10164/10323 y regional source_metadata de la fuente real"
+"02","CreatureInstance.form_id opcional","IMPLEMENTADO_CI_PENDIENTE","PILOTO_CI_PENDIENTE","0","","","Campo StringName vacio por defecto, sin inferencias para base"
+"03","Serializacion CreatureInstance","IMPLEMENTADO_CI_PENDIENTE","PILOTO_CI_PENDIENTE","0","","","to_dict/from_dict aditivos, ausencia legacy preservada"
+"04","Validacion canonica y Randomlock","IMPLEMENTADO_CI_PENDIENTE","PILOTO_CI_PENDIENTE","0","","","Helper autentica especies/forma/PokeAPI y policy, SaveV2 estructural"
+"05","Legacy SaveV2 campo nativo","TEST_CI_PENDIENTE","PILOTO_CI_PENDIENTE","0","","","Pruebas de schema 2, rechazo de corrupcion y NativeSave"
+"06","Productor real Factory/encuentro","TEST_CI_PENDIENTE","PILOTO_CI_PENDIENTE","0","","","Factory infiere solo desde CreatureSpecies regional legitima, WildEncounterSystem la llama"
+"07","Party Storage propagacion","TEST_CI_PENDIENTE","PILOTO_CI_PENDIENTE","0","","","Pruebas transferencia mismo objeto, no perdida identidad/PP/naturaleza"
+"08","Cambio de forma gameplay","BLOQUEADO","L1_SIN_L3","0","","","Sin transaccion de FieldItemService ni source form transition autorizado, no inventar efecto"
+"09","Roundtrip nativo rollback","TEST_CI_PENDIENTE","PILOTO_CI_PENDIENTE","0","","","SaveV2 real con rechazo atomico del guardado corrupto"
+"10","CI completa y reporte","PENDIENTE","PILOTO_CI_PENDIENTE","0","","","Revalidar CAMP003/004/005/006, resolver05/06 y piloto de forma"
