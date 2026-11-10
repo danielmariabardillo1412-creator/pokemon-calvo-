@@ -64,7 +64,7 @@ func _run() -> void:
         var snapshot := SaveGameData.build(owner.party, owner.storage, owner.inventory)
         verify(snapshot.validate().ok and snapshot.creatures[0].get("form_id") == String(expected),
             key + "_save_structure")
-        var save_path := "user://w04_v3_group01_" + key + ".json"
+        var save_path: String = "user://w04_v3_group01_" + String(key) + ".json"
         verify(repo.save_collection(save_path, owner).ok, key + "_save")
         var loaded := repo.load(save_path)
         verify(loaded.ok and loaded.party.get_creature(mon.instance_id) != null
