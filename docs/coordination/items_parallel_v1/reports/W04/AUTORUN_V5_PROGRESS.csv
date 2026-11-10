@@ -1,0 +1,11 @@
+fila,hito,estado,contratos_L2_nuevos,evoluciones_L3_nuevas,ci_funcional,sha_funcional,observacion
+01,fuente_galar_slowpoke,VERIFICADO,0,0,42921791683_SUCCESS,8a93b82503d7ba5b96b40211f1417ca27ea093c7,"Datos 10164 slowbro 10165 slowking 10172"
+02,items_y_records,VERIFICADO,0,0,42921791683_SUCCESS,8a93b82503d7ba5b96b40211f1417ca27ea093c7,"Dos EvolutionRecord de uso de objeto version the_isle_of_armor"
+03,helper_puro,CERTIFICADO_L2,0,0,42921791683_SUCCESS,8a93b82503d7ba5b96b40211f1417ca27ea093c7,"Contract.inspect origen forma item destino"
+04,dos_positivos,CERTIFICADO_L2,2,0,42921791683_SUCCESS,8a93b82503d7ba5b96b40211f1417ca27ea093c7,"Galarica cuff y wreath; no hay L3"
+05,negativos,CERTIFICADO_QA,0,0,42921791683_SUCCESS,8a93b82503d7ba5b96b40211f1417ca27ea093c7,"Base forma incorrecta item y target"
+06,forma_destino,BLOQUEO_INTEGRACION,0,0,42921791683_SUCCESS,8a93b82503d7ba5b96b40211f1417ca27ea093c7,"EvolutionSystem.apply_evolution pierde form_id del target"
+07,naturaleza_W02,PARCIAL_DEPENDENCIA,0,0,42921791683_SUCCESS,8a93b82503d7ba5b96b40211f1417ca27ea093c7,"nature_id original; naturaleza efectiva W02 pendiente de reunion IA6"
+08,savev2_party_storage,CERTIFICADO_QA,0,0,42921791683_SUCCESS,8a93b82503d7ba5b96b40211f1417ca27ea093c7,"Origen y destinos Factory separados, NO evolucion real"
+09,regresiones,CERTIFICADO,0,0,42921791683_SUCCESS,8a93b82503d7ba5b96b40211f1417ca27ea093c7,"55 identidades nativas y Exeggutor bloqueado CAMP003-006"
+10,ci_informe,CERTIFICADO,0,0,42921791683_SUCCESS,8a93b82503d7ba5b96b40211f1417ca27ea093c7,"CI funcional 42921791683 success"
