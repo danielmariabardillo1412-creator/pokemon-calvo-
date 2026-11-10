@@ -9,6 +9,9 @@ const PILOT_NAMES := {"pain_split": "Divide Dolor", "metal_claw": "Garra Metal"}
 var service: Variant = null
 var books: OptionButton
 var targets: OptionButton
+var sort_mode: OptionButton
+var type_filter: OptionButton
+var translation_label: Label
 var slots: OptionButton
 var book_label: Label
 var type_label: Label
@@ -20,6 +23,10 @@ var _blocked_reason := "service_not_bound"
 
 
 func _ready() -> void:
+	# A re-entered panel must never duplicate controls or event connections.
+	if books != null:
+		refresh()
+		return
 	var layout := VBoxContainer.new()
 	layout.custom_minimum_size = Vector2(440, 270)
 	layout.add_theme_constant_override("separation", 8)
@@ -27,12 +34,25 @@ func _ready() -> void:
 	var title := Label.new()
 	title.text = "LIBROS DE MOVIMIENTOS · MT"
 	layout.add_child(title)
+	sort_mode = OptionButton.new()
+	for mode in ["ID original", "Nombre", "Tipo", "Cantidad"]:
+		sort_mode.add_item("Orden: " + mode)
+	sort_mode.select(0)
+	layout.add_child(sort_mode)
+	type_filter = OptionButton.new()
+	type_filter.add_item("Todos los tipos")
+	type_filter.set_item_metadata(0, "")
+	type_filter.select(0)
+	layout.add_child(type_filter)
 	books = OptionButton.new()
 	layout.add_child(books)
 	book_label = Label.new()
 	layout.add_child(book_label)
 	type_label = Label.new()
 	layout.add_child(type_label)
+	translation_label = Label.new()
+	translation_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	layout.add_child(translation_label)
 	targets = OptionButton.new()
 	layout.add_child(targets)
 	compatibility_label = Label.new()
@@ -46,6 +66,8 @@ func _ready() -> void:
 	result_label = Label.new()
 	result_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	layout.add_child(result_label)
+	sort_mode.item_selected.connect(func(_i: int): refresh())
+	type_filter.item_selected.connect(func(_i: int): refresh())
 	books.item_selected.connect(func(_i: int): _refresh_preview())
 	targets.item_selected.connect(func(_i: int): _refresh_preview())
 	slots.item_selected.connect(func(_i: int): _refresh_compatibility())
@@ -110,8 +132,11 @@ func refresh() -> void:
 		return
 	var chosen_book := _selected(books)
 	var chosen_target := _selected(targets)
+	var chosen_type := _selected(type_filter)
 	books.clear()
 	targets.clear()
+	var entries: Array[Dictionary] = []
+	var types: Dictionary = {}
 	if service != null and service.owner != null and service.catalogs != null:
 		var mapping: Dictionary = service.profile.get("machine_rows", {})
 		for id: StringName in service.owner.inventory.all_item_ids():
@@ -120,20 +145,67 @@ func refresh() -> void:
 			var presentation: Dictionary = Books.presentacion(id, service.profile, service.catalogs)
 			if not presentation.get("disponible", false):
 				continue
-			var spanish := String(PILOT_NAMES.get(String(presentation.get("move_id", "")),
-				presentation.get("nombre_movimiento", "")))
-			books.add_item("Libro MT · " + spanish + " · x%d" % service.owner.inventory.quantity(id))
-			books.set_item_metadata(books.item_count - 1, String(id))
+			var move_id := String(presentation.get("move_id", ""))
+			var name := String(PILOT_NAMES.get(move_id, presentation.get("nombre_movimiento", "")))
+			var type_id := String(presentation.get("type_id", ""))
+			var type_es := String(presentation.get("nombre_tipo", ""))
+			entries.append({"id": String(id), "name": name, "type_id": type_id,
+				"type_es": type_es, "quantity": service.owner.inventory.quantity(id)})
+			types[type_id] = type_es
 		for creature: CreatureInstance in service.owner.party.get_creatures():
 			targets.add_item("%s · Nv. %d" % [
 				SpanishGameText.species_name(creature.species_id, service.catalogs), creature.level])
 			targets.set_item_metadata(targets.item_count - 1, String(creature.instance_id))
-	if not _choose(books, chosen_book) and books.item_count > 0:
-		books.select(0)
-	if not _choose(targets, chosen_target) and targets.item_count > 0:
-		targets.select(0)
+	# The filter contains only type IDs obtained from canonical presentations.
+	type_filter.clear()
+	type_filter.add_item("Todos los tipos")
+	type_filter.set_item_metadata(0, "")
+	var type_ids: Array = types.keys()
+	type_ids.sort_custom(func(a, b): return String(a) < String(b))
+	for type_id in type_ids:
+		type_filter.add_item(String(types[type_id]))
+		type_filter.set_item_metadata(type_filter.item_count - 1, String(type_id))
+	if not _choose(type_filter, chosen_type):
+		type_filter.select(0)
+	var active_type := _selected(type_filter)
+	var mode := sort_mode.selected if sort_mode != null else 0
+	entries.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
+		var a_key := ""
+		var b_key := ""
+		match mode:
+			1:
+				a_key = String(a.name).to_lower()
+				b_key = String(b.name).to_lower()
+			2:
+				a_key = String(a.type_es).to_lower()
+				b_key = String(b.type_es).to_lower()
+			3:
+				# Stable descending stock, with ID for deterministic ties.
+				if int(a.quantity) != int(b.quantity):
+					return int(a.quantity) > int(b.quantity)
+			_:
+				pass
+		if a_key != b_key:
+			return a_key < b_key
+		return String(a.id) < String(b.id))
+	for entry: Dictionary in entries:
+		if active_type != &"" and String(entry.type_id) != String(active_type):
+			continue
+		books.add_item("Libro MT · " + String(entry.name) + " · x%d" % int(entry.quantity))
+		books.set_item_metadata(books.item_count - 1, String(entry.id))
+	# Preserve stable IDs. If a previously selected book or Pokémon disappears,
+	# leave the selection EMPTY: never silently teach a different one.
+	if not _choose(books, chosen_book):
+		if chosen_book == &"" and books.item_count > 0:
+			books.select(0)
+		else:
+			books.select(-1)
+	if not _choose(targets, chosen_target):
+		if chosen_target == &"" and targets.item_count > 0:
+			targets.select(0)
+		else:
+			targets.select(-1)
 	_refresh_preview()
-
 
 func _refresh_preview() -> void:
 	if slots == null:
@@ -142,7 +214,7 @@ func _refresh_preview() -> void:
 	slots.add_item("Aprender sin sustituir")
 	slots.set_item_metadata(0, -1)
 	if service != null and service.owner != null:
-		var creature: CreatureInstance = service.owner.owned_creature(_selected(targets))
+		var creature: CreatureInstance = service.owner.party.get_creature(_selected(targets))
 		if creature != null:
 			for i in range(creature.moveset.size()):
 				var slot: BattleMoveSlot = creature.moveset[i]
@@ -166,6 +238,7 @@ func _refresh_compatibility() -> void:
 	_blocked_reason = "selection_missing"
 	book_label.text = "Selecciona un libro."
 	type_label.text = ""
+	translation_label.text = ""
 	compatibility_label.text = "Selecciona un Pokémon."
 	if service == null or service.owner == null or service.catalogs == null:
 		_blocked_reason = "service_not_bound"
@@ -188,6 +261,10 @@ func _refresh_compatibility() -> void:
 	var name_es := String(PILOT_NAMES.get(String(move_id), presented.get("nombre_movimiento", "")))
 	book_label.text = "Libro de movimiento · " + name_es
 	type_label.text = "Tipo: " + String(presented.get("nombre_tipo", ""))
+	# Only explicitly localized names can be presented as verified Spanish.
+	# The catalog display_name can be English; we must not fabricate translations.
+	if not PILOT_NAMES.has(String(move_id)) and not SpanishGameText.CORE_MOVE_NAMES.has(String(move_id)):
+		translation_label.text = "Nombre disponible; traducción española no verificada."
 	# Reutilizar la puerta EXISTENTE del servicio, incluida la sesion
 	# bloqueada; el panel no decide si un objeto se gasta.
 	var boundary := String(service._boundary(item_id))
@@ -198,6 +275,11 @@ func _refresh_compatibility() -> void:
 	if not service.owner.inventory.has(item_id):
 		_blocked_reason = "item_not_owned"
 		compatibility_label.text = "Sin existencias. El libro no se consumirá."
+		return
+	var location: StringName = service.owner.location_of(creature_id)
+	if location != &"PARTY":
+		_blocked_reason = "creature_not_owned" if location == &"" else "creature_not_in_party"
+		compatibility_label.text = "Pokémon no disponible en el equipo. Libro conservado."
 		return
 	var creature: CreatureInstance = service.owner.owned_creature(creature_id)
 	var species: CreatureSpecies = service.catalogs.species(creature.species_id) if creature != null else null
@@ -258,6 +340,7 @@ func teach_selected() -> Dictionary:
 			"move_replacement_required": "Elige el movimiento que quieres sustituir. Libro conservado.",
 			"move_already_known": "Ya conoce el movimiento. Libro conservado.",
 			"creature_not_owned": "Pokémon ajeno. Libro conservado.",
+			"creature_not_in_party": "El Pokémon ya no está en el equipo. Libro conservado.",
 			"field_locked": "No puedes enseñar ahora. Libro conservado.",
 			"service_not_bound": "Falta vincular la mochila.",
 			"species_machine_version_context_missing": "Faltan datos de compatibilidad. Libro conservado.",
