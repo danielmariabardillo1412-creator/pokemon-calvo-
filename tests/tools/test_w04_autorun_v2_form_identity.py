@@ -46,7 +46,8 @@ for path in [
 ]:
     test((ROOT / path).is_file(), "runtime + test file exists " + path)
 helper = text_file("modules/creatures/progression/canonical_form_identity_w04.gd")
-test("PILOT_POKEMON_ID := 10164" in helper and "PILOT_FORM_ID := 10323" in helper
+test('"slowpoke_galar": {"base": "slowpoke", "region": "galar", "pokemon_id": 10164}' in helper
+     and "static func _api_form(" in helper
      and "static func from_factory_source(" in helper
      and "static func valid_persistent_form(" in helper
      and "policy.form_allowed(" in helper, "exact catalog + Randomlock validator")
@@ -56,7 +57,7 @@ test("var form_id: StringName = &\"\"" in creature
      and 'var raw_form: Variant = data.get("form_id", "")' in creature,
      "optional form no default inference and round trip")
 factory = text_file("modules/creatures/progression/creature_factory.gd")
-test('species.id == &"slowpoke_galar"' in factory
+test('catalogs.species(species.id) == species' in factory
      and "from_factory_source(species, catalogs)" in factory
      and 'overrides.get("form_id"' not in factory, "factory accepts actual source only")
 save = text_file("modules/save/save_game_data.gd")
