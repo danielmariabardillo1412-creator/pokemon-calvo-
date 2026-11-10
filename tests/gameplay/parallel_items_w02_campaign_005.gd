@@ -147,8 +147,8 @@ func _probe_training(spec: Dictionary, mode: String) -> Dictionary:
 				and now.effective_nature_id == target
 				and now.stats.max_hp == c.stats.max_hp)
 		else:
-			var rejection: String = "item_not_owned" if mode == "none" else (
-				"unexpected_mint_target" if slot != -1 else "item_has_no_effect")
+			var rejection: String = "unexpected_mint_target" if slot != -1 else (
+				"item_not_owned" if mode == "none" else "item_has_no_effect")
 			check(mode + " promoted negative specific reason and no mutation",
 				String(result.get("reason", "")) == rejection
 				and _owner_data(owner) == before)

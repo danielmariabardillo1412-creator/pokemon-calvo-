@@ -1,0 +1,102 @@
+{
+  "worker": "W02",
+  "tanda": "01",
+  "protocol": "IA6_AUTONOMY_V1",
+  "frozen_sha": "9e2797a4972f22dbf14d5bc5f2d24bb212d29456",
+  "frozen_ci": 42696681590,
+  "historical_cases": 288,
+  "promoted_historical": 82,
+  "modes": [
+    "active",
+    "reserve",
+    "none"
+  ],
+  "rows": [
+    {
+      "block": "01",
+      "id": "hasty_mint",
+      "original_nature": "hardy",
+      "target_nature": "hasty",
+      "up": "speed",
+      "down": "defense"
+    },
+    {
+      "block": "02",
+      "id": "lax_mint",
+      "original_nature": "hardy",
+      "target_nature": "lax",
+      "up": "defense",
+      "down": "special_defense"
+    },
+    {
+      "block": "03",
+      "id": "relaxed_mint",
+      "original_nature": "hardy",
+      "target_nature": "relaxed",
+      "up": "defense",
+      "down": "speed"
+    },
+    {
+      "block": "04",
+      "id": "jolly_mint",
+      "original_nature": "hardy",
+      "target_nature": "jolly",
+      "up": "speed",
+      "down": "special_attack"
+    },
+    {
+      "block": "05",
+      "id": "bold_mint",
+      "original_nature": "hardy",
+      "target_nature": "bold",
+      "up": "defense",
+      "down": "attack"
+    },
+    {
+      "block": "06",
+      "id": "calm_mint",
+      "original_nature": "hardy",
+      "target_nature": "calm",
+      "up": "special_defense",
+      "down": "attack"
+    },
+    {
+      "block": "07",
+      "id": "careful_mint",
+      "original_nature": "hardy",
+      "target_nature": "careful",
+      "up": "special_defense",
+      "down": "special_attack"
+    },
+    {
+      "block": "08",
+      "id": "brave_mint",
+      "original_nature": "hardy",
+      "target_nature": "brave",
+      "up": "attack",
+      "down": "speed"
+    },
+    {
+      "block": "09",
+      "id": "quiet_mint",
+      "original_nature": "hardy",
+      "target_nature": "quiet",
+      "up": "special_attack",
+      "down": "speed"
+    },
+    {
+      "block": "10",
+      "id": "impish_mint",
+      "original_nature": "hardy",
+      "target_nature": "impish",
+      "up": "defense",
+      "down": "special_attack"
+    }
+  ],
+  "expected": {
+    "positive": 20,
+    "negative": 10,
+    "level100": 10,
+    "sequential": 10
+  }
+}
