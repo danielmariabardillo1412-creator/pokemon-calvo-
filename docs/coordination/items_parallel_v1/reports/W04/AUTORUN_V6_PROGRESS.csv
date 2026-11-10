@@ -1,0 +1,11 @@
+fila,hito,estado,evidencia,pendiente
+01,baseline_y_seam,EXAMINADO,"V5 final; EvolutionSystem.apply_evolution no asignaba form_id","CI V6 no verificada"
+02,prueba_cuff,PREPARADO,"Test V6 exige destino Slowbro Galar y form_id exacto","Ejecutar Godot"
+03,prueba_wreath,PREPARADO,"Test V6 exige destino Slowking Galar y form_id exacto","Ejecutar Godot"
+04,reparacion_minima,IMPLEMENTADO_SIN_CI,"EvolutionSystem.apply_evolution valida contrato canónico W04 y asigna form_id destino","Compilación y CI"
+05,dos_positivos_nativos,PREPARADO,"Test V6 llama apply_evolution y compara forma de destino","Resultado CI"
+06,negativos,PREPARADO,"Kanto y forma errónea rechazados en test V6; contrato valida item y target canónicos","Resultado CI; item real no es parámetro de apply_evolution"
+07,persistencia_identidad,PREPARADO,"Test V6 verifica instance_id nature_id experience shiny","Resultado CI; naturaleza efectiva W02 no presente"
+08,party_storage_savev2,PREPARADO,"Test V6 hace roundtrip del engine_result real","Resultado CI"
+09,regresiones,PREPARADO,"Workflow V6 incluye T04/T03/T02 y CAMP003-006","Resultado CI; V5 fixture inmutable queda archivado y aserción previa es incompatible tras promoción"
+10,ci_informe,PENDIENTE,"Workflow parallel-w04-autorun-v6.yml publicado","Confirmar ejecución SUCCESS sobre HEAD"
