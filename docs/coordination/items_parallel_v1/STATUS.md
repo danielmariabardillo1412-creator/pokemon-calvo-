@@ -1,3 +1,11 @@
+# DECISIÓN PRIORITARIA IA6 · 2026-11-10 · NO ENCADENAR MÁS TANDAS CIEGAS
+
+**W04 y W05 TANDA04 verificadas contra código y logs reales**: W04 cuatro variantes regionales desbloqueadas por habilidad normal, 55/56 nativas positivas y 1 bloqueada; CI #42890151094 y #42890685931 SUCCESS. W05 229 etiquetas españolas de PokeAPI local, 0 MT nuevas, CI #42893621203 y #42894306446 SUCCESS, visual headless panel aislado, no GPU. Ver [auditoría completa](AUTONOMY_V1/IA6_AUDIT_W04_W05_TANDA04_REALITY_GATE_20261110.md).
+
+**Siguiente prioridad IA6:** integrar selectivamente trabajo certificado aislado de W02/W03/W04/W05 en rama `codex/calvo-ia6-integration-20261109` y ejecutar CI conjunta de campo, batalla, SaveV2, naturaleza efectiva, formas, Repeat Ball y libros MT ES. **No publicar aún TANDA05 W04/W05**, porque cerraron y su limitación real es la integración, no falta de otras diez verificaciones. No tocar main, V28, PR118. Aclaración de progreso: 10/10 son hitos, NO 10 objetos, NO 10 tandas.
+
+---
+
 # IA6 — ÚLTIMO RELEVO COMPLETO 2026-11-10
 
 **LAS CINCO RAMAS TIENEN ORDEN ACTIVA NUEVA:** W01=TANDA03, W02=TANDA03, W03=TANDA04, W04=TANDA04, W05=TANDA04. W04 finalizó TANDA03 **51/56 formas regionales canónicas, 5 bloqueos por política** y tiene CI #42876057234 y #42876625902 SUCCESS; su nota fue renovada en commit `b4e9837bad9609565200e0e3c50167e8a8a3937b`. Las demás notas nuevas fueron comprobadas en sus ramas. [Auditoría completa actualizada](AUTONOMY_V1/IA6_AUDIT_RELAY_20261110_1922.md).
