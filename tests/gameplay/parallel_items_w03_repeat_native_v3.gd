@@ -59,13 +59,19 @@ func _run() -> void:
 	scene._on_configuration_applied(config)
 	var player: PlayerCollection = scene.field_collection()
 	ck("new campaign has no caught history", player.caught_base_species_ids.is_empty())
-	ck("repeat inventory setup", player.inventory.add(&"repeat_ball", 2))
 	ck("first encounter native starts", await _enter_grass())
 	if view.session == null:
 		_finish()
 		return
 	view._playback.set_process(false)
 	ck("native wild battle, not trainer", view.session.battle_kind == "wild")
+	var no_ball_rng: int = view.session._capture_rng.state
+	var absent: Dictionary = view.session.capture(&"repeat_ball", view.session.revision)
+	ck("native no-stock attempt conserves live state and capture RNG",
+		not absent.get("accepted", false) and not player.inventory.has(&"repeat_ball")
+		and player.caught_base_species_ids.is_empty()
+		and view.session._capture_rng.state == no_ball_rng
+		and view.session.has_active_battle())
 	var before_master := player.inventory.quantity(&"master_ball")
 	var first: Dictionary = view.session.capture(&"master_ball", view.session.revision)
 	ck("first native master capture commits", first.get("accepted", false)
@@ -76,6 +82,7 @@ func _run() -> void:
 	ck("native capture owner owns caught pidgey",
 		player.party.get_creatures().any(func(c): return c.base_species_id() == &"pidgey"))
 	await _end_native_capture()
+	ck("repeat inventory setup after first settlement", player.inventory.add(&"repeat_ball", 2))
 	ck("manual native save with real ledger", bridge.save_game())
 	var saved: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(bridge.save_path))
 	ck("embedded SaveV2 records real capture",
@@ -90,6 +97,14 @@ func _run() -> void:
 		return
 	view._playback.set_process(false)
 	ck("repeat ball stocked", player.inventory.has(&"repeat_ball"))
+	ck("save active native battle before Repeat Ball", bridge.save_game())
+	var active_checkpoint: Dictionary = view.session.snapshot()
+	ck("native active checkpoint reload", await bridge.load_game()
+		and view.session != null and view.session.has_active_battle()
+		and view.session.snapshot() == active_checkpoint)
+	view._playback.set_process(false)
+	player = scene.field_collection()
+	ck("caught ledger survives native active checkpoint", player.caught_base_species_ids == [&"pidgey"])
 	var before_repeat := player.inventory.quantity(&"repeat_ball")
 	var second: Dictionary = view.session.capture(&"repeat_ball", view.session.revision)
 	var outcome: Dictionary = second.get("capture_outcome", {}).get("capture", {})
