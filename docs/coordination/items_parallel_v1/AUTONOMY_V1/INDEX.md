@@ -1,3 +1,13 @@
+# ACTUALIZACIÓN IA6 — TANDA 02 ACTIVADA EN W03/W04/W05 · 2026-11-10
+
+**Tandas cerradas y verificadas:** W03 #42729137809 SUCCESS (10 revisadas/0 nuevas), W04 #42729967922 SUCCESS (10 revisadas/0 formas o fusiones nuevas), W05 #42730140482 SUCCESS (49/49 MT panel headless). Auditoría [IA6_AUDIT_BATCH01_AND_HANDOFF_BATCH02_20261110.md](IA6_AUDIT_BATCH01_AND_HANDOFF_BATCH02_20261110.md).
+
+**Notas permanentes TANDA02 escritas en cada rama:** W03 = [QUEUE_W03_TANDA_02.md](QUEUE_W03_TANDA_02.md), captura persistente/Repeat Ball; W04 = [QUEUE_W04_TANDA_02.md](QUEUE_W04_TANDA_02.md), identidad de forma persistente; W05 = [QUEUE_W05_TANDA_02.md](QUEUE_W05_TANDA_02.md), otras 180 MT restantes de un total de 229. Usuario solo pulsa `p`; cada trabajadora lee su propio `IA6_AUTORUN.md`. No duplicar auditoría anterior ni atribuir L3 a nuevos productores antes de CI.
+
+**Conflicto controlado:** W03 y W04 pueden tocar funciones distintas de `SaveGameData` / `field_native_save.gd` en ramas propias; **IA6 integrará selectivamente** conservando naturaleza efectiva y todos los tests, nunca merge automático. No se ha llevado todavía el código de estas nuevas ramas a `codex/calvo-ia6-integration-20261109`, `main` ni V28.
+
+---
+
 # IA6 — CENTRO DE COLAS AUTÓNOMAS · 2026-11-10
 
 **Protocolo obligatorio:** [README.md](README.md). **Una copia íntegra de cada orden** también está en `docs/coordination/items_parallel_v1/IA6_AUTORUN.md` de la propia rama de cada W; es el archivo estable que deben abrir al recibir `p`/ `sigue`. No hace falta mensajería IA6 por microbloque.
