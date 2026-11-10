@@ -18,3 +18,5 @@ var target_side_id: StringName = &""
 # from the live battle after load/recovery; these are not persistent save fields.
 var completed_turns: int = -1
 var catcher_level: int = -1
+# Set only by the live owning session from PlayerCollection's caught ledger.
+var previously_caught_base_species: bool = false
