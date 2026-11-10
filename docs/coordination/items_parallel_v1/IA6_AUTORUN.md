@@ -1,26 +1,26 @@
-# IA6 — ORDEN PERMANENTE ACTUALIZADA W04 · TANDA 06
+# IA6 · W04 — MODO CAMPAÑA CONTINUA V2 ACTIVADO
 
-**IA6 ha revisado el cierre TANDA 05 y publica una nueva asignación.**
-Al recibir `p`, `sigue` o `continúa`: releer HEAD de tu rama, este archivo, `reports/W04/AUTORUN_V5_FINAL.md` y tu checkpoint V5. No repetir tandas cerradas; comenzar TANDA 06 inmediatamente y ejecutar los diez hitos independientes consecutivos sin nueva autorización por bloque, con checkpoint si el turno se interrumpe. La fuente maestra se encuentra en la rama árbitra `codex/calvo-items-20261101-arbitro`, archivo `docs/coordination/items_parallel_v1/AUTONOMY_V1/QUEUE_W04_TANDA_06.md`. Aplicar también `AUTONOMY_V1/README.md` en rama árbitra.
+**ORDEN PERMANENTE: YA NO SE PARA POR 10/10.** Esta orden sustituye la obligación `STOP al cerrar TANDA X` de la versión anterior, sin derogar permisos técnicos ni pruebas. Identifícate como W04, utiliza SOLO la rama `codex/calvo-items-20261104-w04-camp006`. El plan de trabajo completo se copia abajo y tiene varios bloques; **cuando uno termina con CI, pasa directamente al siguiente bloque del MISMO plan SIN PEDIR IA6**.
 
-**Rama propia:** `codex/calvo-items-20261104-w04-camp006`.
-**Estado previo:** TANDA 05 cerrada 10/10, 2 contratos L2, 0 evoluciones regionales completas L3, 55/56 identidades regionales validadas. Exeggutor Alola permanece bloqueado por Harvest oculta: no conceder habilidades ocultas automáticamente.
+Con cada `p` o `sigue`: (1) consulta tu HEAD y esta nota; (2) lee o crea `docs/coordination/items_parallel_v1/CONTINUOUS_V2/STATE_W04.md` de TU RAMA; (3) continúa la primera tarea pendiente de toda la CAMPAÑA, no solo de la última tanda; (4) trabaja secuencialmente mientras el turno lo permita, registrando checkpoints cada 10. Si el contexto se agota, publica estado y una próxima `p` reanuda desde GitHub. **No te quedes diciendo «esperando tanda siguiente» si quedan fases preautorizadas en este plan.**
 
-## MISIÓN TANDA 06
-Reparar la pérdida de identidad regional de destino en `EvolutionSystem.apply_evolution` para las rutas verificadas `slowpoke_galar + galarica_cuff → slowbro_galar (slowbro-galar)` y `slowpoke_galar + galarica_wreath → slowking_galar (slowking-galar)`. El destino debe recibir su **propia forma** canónica, no conservar `slowpoke-galar` ni quedar vacío.
+**Protocolo IA6 V2 (prioritario):** rama árbitra `codex/calvo-items-20261101-arbitro`, `docs/coordination/items_parallel_v1/CONTINUOUS_V2/README.md`. **Plan central y único:** `docs/coordination/items_parallel_v1/CONTINUOUS_V2/PLAN_W04.md` en árbitra (copia íntegra abajo). Si en el futuro IA6 actualiza este mismo archivo con una misión más reciente, leer siempre HEAD y respetar la última versión.
 
-**PERMISO IA6 ESTRICTO:** solo modificación mínima de la función `EvolutionSystem.apply_evolution` que garantice forma de destino usando validación canónica y contratos W04; helper propio W04, tests, fixtures, workflow e informes. No modificar otras funciones ni archivos compartidos, `FieldItemBag`, `FieldItemService`, `CreatureInstance`, `CreatureFactory`, SaveV2 central, política, datos canónicos o ramas ajenas. La operación transaccional mochila/consumo/rollback sigue siendo responsabilidad IA6; **no contar L3** hasta probarla. Si surge dependencia fuera del permiso, ticket rojo y continuar hitos seguros.
+**Control de seguridad:** no autoautorizar módulos protegidos, no fusionar ramas, no editar main/V28/PR118, no mover trabajo de otra W. No atribuir a IA6 integración no realizada. Si toda la misión termina o el resto exige exclusivamente una seam compartida, publicar `READY_FOR_IA6` y detenerse; no crear bucles de QA vacíos. Si hay más tareas independientes, continuar sin esperar. **Una `p` no mantiene ejecución asíncrona ni abre otra conversación automáticamente.**
 
-## Diez hitos autorizados, ejecutar en cadena
-01. Recuperar HEAD/checkpoint T05 y examinar la implementación nativa.
-02. Prueba roja previa de `galarica_cuff` y forma regional de destino.
-03. Prueba roja previa de `galarica_wreath` y forma de destino.
-04. Reparación mínima en seam autorizada, sin heredar form_id del origen.
-05. Pruebas positivas reales en `apply_evolution` para ambos destinos.
-06. Negativos de origen Kanto/forma errónea, ítem equivocado, target incompatible o forma corrupta.
-07. Preservar instancia, naturaleza original, estado persistente y naturaleza efectiva si existe en rama, sin editar otros módulos.
-08. Party/Storage y SaveV2 del resultado de evolución nativa; legacy/corruptos.
-09. Todas las regresiones T05–T02 y CAMP003–006; sin cambiar Randomlock ni Exeggutor.
-10. CI final del HEAD, informe `reports/W04/AUTORUN_V6_FINAL.md` y checkpoint `reports/W04/AUTORUN_V6_PROGRESS.csv`.
+**Contabilidad en cada respuesta:** `CAMPAÑA fase | bloque n/total | objetos nuevos | ya certificados | L3 verdaderos | bloqueados | CI SHA | integración IA6 pendiente`. Un 10/10 de bloque no es 100% de campaña.
 
-**Cierre obligatorio:** `W04 TANDA 06 — X/10 examinados — N rutas de evolución nativa positivas — M L3 mochila — K bloqueos — SHA — CI — informe`. No afirmar SUCCESS sin ejecución completada sobre SHA correcto. No tocar `main`, V28 ni PR #118. Al concluir, STOP para revisión de IA6. No existe ejecución automática entre turnos.
+---
+
+# W04 — CAMPAÑA CONTINUA V2 · EVOLUCIONES Y FORMAS CON ORIGEN AUTÉNTICO
+**Rama:** `codex/calvo-items-20261104-w04-camp006`.
+**Baseline:** TANDA05 10/10 examinada, 2 contratos L2 reales para `slowpoke_galar` con `galarica_cuff`/`galarica_wreath`, 0 evoluciones L3. El consumidor `EvolutionSystem.apply_evolution` no asigna la forma de DESTINO y el equipo de IA6 debe integrar naturaleza efectiva W02 + form_id W04. T04 tenía 55/56 formas de encuentro nativo positivas; Exeggutor Alola está bloqueado por habilidad oculta.
+
+## Tres bloques encadenados, sin pedir IA6 entre ellos
+**B01 — Matriz completa:** recorrer **todos** los `EvolutionRecord` de las 57 `regional_species` de `config/pokemon_variants_v1.json`. Clasificar por fuente canónica, `trigger`, conditions, `form_id` y `RUNTIME_SUPPORTED`/DATA_ONLY; extraer candidatos por `use_item`, `level_up`, held+trade y requisitos adicionales. No inventar registros ni sumar un Pokémon como una nueva evolución. Generar un manifiesto versionado exacto en reports W04, con IDs y fuentes.
+**B02 — Contratos positivos:** para TODOS los candidatos independientes de `use_item` con ítem permitido y fuente de forma real (empezando por las dos Galarica), escribir helper puro y Godot/Python positivos de compatibilidad, destino/form_id y negativos de ítem/especie/forma erróneos. Si no hay consumidor nativo, seguir con los siguientes candidatos; clasificar L2, no L3.
+**B03 — Persistencia y regresiones:** pruebas de Factory/encuentro/Party/Storage/SaveV2 para las formas existentes; validación de que no se traslada `form_id` incompatible al destino y naturaleza efectiva W02 si el esquema compartido está disponible en esta rama; matriz de 55/56 y regresiones anteriores. CI final; no pasar a otra familia de formas ficticias.
+
+**AUTORIDAD:** helpers puros/localizados W04, tests/fixtures/workflow/report; `canonical_form_identity_w04.gd` solo para corrección de validación con prueba roja. NO modificar `EvolutionSystem`, `FieldItemService`, `FieldItemBag`, `CreatureInstance`, `SaveV2`, `FieldNativeSave`, `Factory`, `config/**`, ni módulos W02/W03. Si todo el L3 sigue bloqueado por seam compartida, **parar SOLO al agotar la matriz y contratos L2 útiles**, publicar un ticket preciso `READY_FOR_IA6`. No continuar infinitas tandas de negativos. Las futuras decisiones de trade-level, habilidad oculta Exeggutor y productores de reloj/sexo/giro NO se autoconceden.
+
+
