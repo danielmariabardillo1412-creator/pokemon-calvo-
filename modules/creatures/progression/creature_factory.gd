@@ -5,6 +5,8 @@ extends RefCounted
 # Deterministic: same (species, level, overrides, seed) -> same creature. No autoload.
 
 static var _counter := 0
+# Load once when an IA6-authorized regional fallback is first needed.
+static var _w04_regional_policy: RefCounted = null
 
 
 static func _next_id() -> StringName:
@@ -61,6 +63,19 @@ static func create(
 	var ability: StringName = overrides.get("ability_id", &"")
 	if ability == &"" and not species.ability_ids.is_empty():
 		ability = species.ability_ids[0]
+		# IA6 authorizes fallback only for these four genuinely regional species.
+		# No RNG draw, no change to explicit ability overrides or other species.
+		if species.id in [&"ponyta_galar", &"rapidash_galar", &"voltorb_hisui", &"electrode_hisui"] and (
+			catalogs is DefinitionCatalog and catalogs.species(species.id) == species
+		):
+			if _w04_regional_policy == null:
+				var new_policy := preload("res://modules/gameplay/randomlock_content_policy.gd").new()
+				if new_policy.load_local():
+					_w04_regional_policy = new_policy
+			if _w04_regional_policy != null:
+				var fallback: StringName = preload("res://modules/creatures/progression/regional_ability_selection_w04.gd").select_normal(species, _w04_regional_policy)
+				if fallback != &"":
+					ability = fallback
 	creature.ability_id = ability
 
 	creature.recalculate_stats(species, ruleset)
