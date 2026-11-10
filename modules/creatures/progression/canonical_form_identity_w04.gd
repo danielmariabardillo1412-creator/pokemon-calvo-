@@ -1,16 +1,66 @@
 extends RefCounted
 # W04 TANDA03: strictly catalog-sourced canonical regional forms.
-# Only first six authorized Alola identities and the prior Galar pilot are
-# enabled here; no object-triggered transformation or synthetic form override.
+# All 57 individually authorized catalog sources (56 new plus prior Slowpoke pilot).
+# Exact form ID is resolved from local pokemon/pokemon-form, never synthesized.
 const Policy = preload("res://modules/gameplay/randomlock_content_policy.gd")
 const SOURCES := {
-    "slowpoke_galar": {"base": "slowpoke", "region": "galar", "pokemon_id": 10164},
     "rattata_alola": {"base": "rattata", "region": "alola", "pokemon_id": 10091},
     "raticate_alola": {"base": "raticate", "region": "alola", "pokemon_id": 10092},
     "raichu_alola": {"base": "raichu", "region": "alola", "pokemon_id": 10100},
     "sandshrew_alola": {"base": "sandshrew", "region": "alola", "pokemon_id": 10101},
     "sandslash_alola": {"base": "sandslash", "region": "alola", "pokemon_id": 10102},
     "vulpix_alola": {"base": "vulpix", "region": "alola", "pokemon_id": 10103},
+    "ninetales_alola": {"base": "ninetales", "region": "alola", "pokemon_id": 10104},
+    "diglett_alola": {"base": "diglett", "region": "alola", "pokemon_id": 10105},
+    "dugtrio_alola": {"base": "dugtrio", "region": "alola", "pokemon_id": 10106},
+    "meowth_alola": {"base": "meowth", "region": "alola", "pokemon_id": 10107},
+    "persian_alola": {"base": "persian", "region": "alola", "pokemon_id": 10108},
+    "geodude_alola": {"base": "geodude", "region": "alola", "pokemon_id": 10109},
+    "graveler_alola": {"base": "graveler", "region": "alola", "pokemon_id": 10110},
+    "golem_alola": {"base": "golem", "region": "alola", "pokemon_id": 10111},
+    "grimer_alola": {"base": "grimer", "region": "alola", "pokemon_id": 10112},
+    "muk_alola": {"base": "muk", "region": "alola", "pokemon_id": 10113},
+    "exeggutor_alola": {"base": "exeggutor", "region": "alola", "pokemon_id": 10114},
+    "marowak_alola": {"base": "marowak", "region": "alola", "pokemon_id": 10115},
+    "meowth_galar": {"base": "meowth", "region": "galar", "pokemon_id": 10161},
+    "ponyta_galar": {"base": "ponyta", "region": "galar", "pokemon_id": 10162},
+    "rapidash_galar": {"base": "rapidash", "region": "galar", "pokemon_id": 10163},
+    "slowpoke_galar": {"base": "slowpoke", "region": "galar", "pokemon_id": 10164},
+    "slowbro_galar": {"base": "slowbro", "region": "galar", "pokemon_id": 10165},
+    "farfetchd_galar": {"base": "farfetchd", "region": "galar", "pokemon_id": 10166},
+    "weezing_galar": {"base": "weezing", "region": "galar", "pokemon_id": 10167},
+    "mr_mime_galar": {"base": "mr_mime", "region": "galar", "pokemon_id": 10168},
+    "articuno_galar": {"base": "articuno", "region": "galar", "pokemon_id": 10169},
+    "zapdos_galar": {"base": "zapdos", "region": "galar", "pokemon_id": 10170},
+    "moltres_galar": {"base": "moltres", "region": "galar", "pokemon_id": 10171},
+    "slowking_galar": {"base": "slowking", "region": "galar", "pokemon_id": 10172},
+    "corsola_galar": {"base": "corsola", "region": "galar", "pokemon_id": 10173},
+    "zigzagoon_galar": {"base": "zigzagoon", "region": "galar", "pokemon_id": 10174},
+    "linoone_galar": {"base": "linoone", "region": "galar", "pokemon_id": 10175},
+    "darumaka_galar": {"base": "darumaka", "region": "galar", "pokemon_id": 10176},
+    "darmanitan_galar_standard": {"base": "darmanitan", "region": "galar", "pokemon_id": 10177},
+    "yamask_galar": {"base": "yamask", "region": "galar", "pokemon_id": 10179},
+    "stunfisk_galar": {"base": "stunfisk", "region": "galar", "pokemon_id": 10180},
+    "growlithe_hisui": {"base": "growlithe", "region": "hisui", "pokemon_id": 10229},
+    "arcanine_hisui": {"base": "arcanine", "region": "hisui", "pokemon_id": 10230},
+    "voltorb_hisui": {"base": "voltorb", "region": "hisui", "pokemon_id": 10231},
+    "electrode_hisui": {"base": "electrode", "region": "hisui", "pokemon_id": 10232},
+    "typhlosion_hisui": {"base": "typhlosion", "region": "hisui", "pokemon_id": 10233},
+    "qwilfish_hisui": {"base": "qwilfish", "region": "hisui", "pokemon_id": 10234},
+    "sneasel_hisui": {"base": "sneasel", "region": "hisui", "pokemon_id": 10235},
+    "samurott_hisui": {"base": "samurott", "region": "hisui", "pokemon_id": 10236},
+    "lilligant_hisui": {"base": "lilligant", "region": "hisui", "pokemon_id": 10237},
+    "zorua_hisui": {"base": "zorua", "region": "hisui", "pokemon_id": 10238},
+    "zoroark_hisui": {"base": "zoroark", "region": "hisui", "pokemon_id": 10239},
+    "braviary_hisui": {"base": "braviary", "region": "hisui", "pokemon_id": 10240},
+    "sliggoo_hisui": {"base": "sliggoo", "region": "hisui", "pokemon_id": 10241},
+    "goodra_hisui": {"base": "goodra", "region": "hisui", "pokemon_id": 10242},
+    "avalugg_hisui": {"base": "avalugg", "region": "hisui", "pokemon_id": 10243},
+    "decidueye_hisui": {"base": "decidueye", "region": "hisui", "pokemon_id": 10244},
+    "tauros_paldea_combat_breed": {"base": "tauros", "region": "paldea", "pokemon_id": 10250},
+    "tauros_paldea_blaze_breed": {"base": "tauros", "region": "paldea", "pokemon_id": 10251},
+    "tauros_paldea_aqua_breed": {"base": "tauros", "region": "paldea", "pokemon_id": 10252},
+    "wooper_paldea": {"base": "wooper", "region": "paldea", "pokemon_id": 10253},
 }
 
 # Obtain the exact form from the pokemon-form object referenced by pokemon,
@@ -53,9 +103,13 @@ static func _api_form(source: Dictionary) -> StringName:
             continue
         if String(f.get("name", "")) != candidate or String(p.get("name", "")) != candidate:
             continue
-        if String(f["pokemon"].get("name", "")) != candidate:
+        if String(f["pokemon"].get("name", "")) != candidate or (
+            String(f["pokemon"].get("url", "")) != "/api/v2/pokemon/%d/" % pokemon_id
+        ):
             continue
-        if String(f.get("form_name", "")) != String(source["region"]):
+        var form_name := String(f.get("form_name", ""))
+        var region := String(source["region"])
+        if form_name != region and not form_name.begins_with(region + "-"):
             continue
         if found != &"":
             return &""
