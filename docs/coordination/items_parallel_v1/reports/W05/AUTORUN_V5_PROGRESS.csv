@@ -1,0 +1,11 @@
+hito,objetivo,estado,evidencia,limitacion
+01,Auditar preset rutas e ignores,EN_CI,Test Python V5 publicado; preset all_resources e include_filter sin ruta JSON expresa,Inclusion PCK no demostrada aun
+02,Verificar 229 fuentes ES integridad y ruta portable,EN_CI,Test Python V5 SHA originales y mapa tm01-tm229,Esperando recibo CI de SHA funcional
+03,Intentar export Windows sin sobrescribir artefactos,EN_CI,Job v5-export-audit con salida temporal PCK,No afirmar export hasta ver log
+04,Inspeccionar PCK real,PENDIENTE,Runner aislado en proyecto temporal,Requiere PCK valido
+05,Runtime ES tm01 tm75 tm202 tm229,PENDIENTE,Sonda PCK solo con 4 nombres y 229 registros,Requiere PCK valido
+06,Fallback JSON ausente o esquema invalido,PENDIENTE,Ninguna prueba nueva aun,No acreditar
+07,Reabrir Party Storage sin consumo indebido,PENDIENTE,Regresiones panel V3/V4 existentes,No acreditar caso nuevo
+08,Ensenanza PP stock SaveV2 229 regresiones,PENDIENTE,Suites historicas disponibles,No acreditar CI T05 aun
+09,Contrato integracion IA6 FieldItemBag,PENDIENTE,Panel aislado conserva interfaz,No editar FieldItemBag
+10,CI final y AUTORUN_V5_FINAL,PENDIENTE,Workflow V5 publicado,Sin cierre hasta CI final
