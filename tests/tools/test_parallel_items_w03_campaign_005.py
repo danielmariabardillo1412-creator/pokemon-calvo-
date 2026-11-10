@@ -95,7 +95,7 @@ def main() -> int:
                           "Productor, consumidor o decisión sin especificar")
                 # Versioned migration whitelist W03: Repeat Ball alone promoted; protect all
                 # original contextual entries and require a dedicated positive live-ledger test.
-                ids_line = re.search(r'const IDS: Array\\[StringName\\] = \\[(.*?)\\]', effects)
+                ids_line = re.search(r'const IDS: Array\[StringName\] = \[(.*?)\]', effects)
                 check(ids_line is not None and ids_line.group(1).replace(" ", "") ==
                       '&"quick_ball",&"timer_ball",&"level_ball",&"repeat_ball"' and
                       "ContextBallEffects.IDS" in rules and
