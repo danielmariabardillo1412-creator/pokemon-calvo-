@@ -1,0 +1,11 @@
+hito,entrega,estado,objetos_nuevos,qa,ci,sha,evidencia
+01,direct_red,TEST_ROJO_PUBLICADO,0,1,,,
+02,minimal_patch,PENDIENTE,0,0,,,
+03,level_evolution,PENDIENTE,0,0,,,
+04,field_item_evolution,PENDIENTE,0,0,,,
+05,unminted_baseline,PENDIENTE,0,0,,,
+06,same_original_and_replacement,PENDIENTE,0,0,,,
+07,party_storage,PENDIENTE,0,0,,,
+08,save_v2_legacy_invalid,PENDIENTE,0,0,,,
+09,growth_plan_interop,PENDIENTE,0,0,,,
+10,ci_final,PENDIENTE,0,0,,,

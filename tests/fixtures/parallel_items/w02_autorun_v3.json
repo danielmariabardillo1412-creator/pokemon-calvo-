@@ -1,0 +1,58 @@
+{
+  "worker": "W02",
+  "tanda": "03",
+  "purpose": "effective nature preserved by general apply_evolution",
+  "baseline_sha": "1988eaee4ae5c5bdd3988f45b18b968a6ae9f24d",
+  "frozen_red": "",
+  "cases": [
+    {
+      "id": "direct",
+      "species": "eevee",
+      "target": "vaporeon",
+      "nature_original": "hardy",
+      "nature_effective": "adamant"
+    },
+    {
+      "id": "item",
+      "species": "eevee",
+      "target": "flareon",
+      "item": "fire_stone"
+    },
+    {
+      "id": "level",
+      "species": "bulbasaur",
+      "target": "ivysaur",
+      "item": "rare_candy",
+      "start_level": 15
+    },
+    {
+      "id": "unminted",
+      "species": "eevee",
+      "target": "flareon",
+      "item": "fire_stone"
+    },
+    {
+      "id": "replace",
+      "first": "adamant_mint",
+      "next": "timid_mint",
+      "species": "eevee",
+      "target": "vaporeon"
+    }
+  ],
+  "modes": [
+    "active",
+    "reserve"
+  ],
+  "rows": [
+    "direct_red",
+    "minimal_patch",
+    "level_evolution",
+    "field_item_evolution",
+    "unminted_baseline",
+    "same_original_and_replacement",
+    "party_storage",
+    "save_v2_legacy_invalid",
+    "growth_plan_interop",
+    "ci_final"
+  ]
+}
