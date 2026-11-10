@@ -1,3 +1,9 @@
+# IA5/W05 — AUTORUN V1 TANDA 01 FINALIZADA · 10/10 / 49/49 (2026-11-10)
+
+**CI completa y logs verificados:** [#42729735437](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/42729735437), SHA funcional `fd6a04317b21d8afa15af43a25cbe777ae64c4f6`, job `129544427910`, `completed/success`. Diez grupos funcionales, 49 libros positivos, cero bloqueados. Runner UI Godot **2869** checks PASS; manifiesto Python **114** PASS; pilotos previos Godot 143/Python 23 PASS; CAMP006 Godot 1781/Python 481 PASS; regresiones CAMP005/004/003 cada una Godot 2166/Python 580 PASS. `reports/W05/AUTORUN_V1_PROGRESS.csv` incluye diez estados CERTIFICADO, `AUTORUN_V1_FINAL.md` tiene detalle, fuentes y tickets. Ninguna MT inventada, ni edición del panel compartido FieldItemBag, ni main/V28/PR118/otros trabajadores/ramas ni merge. Resultado L3 **panel headless**, revisión GPU y re-integración selectiva por IA6 pendientes. **STOP hasta siguiente cola IA6_AUTORUN.md.**
+
+---
+
 # IA5/W05 — LIBROS-UI-L3 02 CI PASS · STOP (2026-11-09)
 
 Rama exclusiva `codex/calvo-items-20261109-w05-books-ui`. SHA funcional probado `42397483f99a54d6234a3afae94e239b79b99f63`. CI [#42714738745](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/42714738745) `completed/success`, job `129493213945`, recibos propios Python **23** checks PASS y Godot headless **143** checks PASS. CAMP006 **10/10 / 49/49**, Python 481 / Godot 1781 PASS; regresiones CAMP005, CAMP004, CAMP003 cada una Python 580 y Godot 2166 PASS.
