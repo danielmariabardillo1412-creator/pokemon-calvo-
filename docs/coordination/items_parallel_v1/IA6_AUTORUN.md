@@ -1,26 +1,26 @@
-# IA6 — ORDEN PERMANENTE ACTUALIZADA W04 · TANDA 05
+# IA6 — ORDEN PERMANENTE ACTUALIZADA W04 · TANDA 06
 
-**IA6 YA HA REVISADO TU TANDA 04 Y PUBLICADO UNA ORDEN NUEVA.** Este archivo de TU rama es la fuente de verdad. Al recibir p/sigue/continúa: relee el HEAD de tu rama, abre este archivo y el último checkpoint, identifica primera fila pendiente de TANDA 05 y **trabaja inmediatamente**. No respondas solo que estás esperando a IA6. Ejecuta todos los hitos independientes autorizados sin pedir otra puerta. Si el turno se acaba, guarda progreso y reanuda con la próxima p; no existe procesamiento automático entre turnos.
+**IA6 ha revisado el cierre TANDA 05 y publica una nueva asignación.**
+Al recibir `p`, `sigue` o `continúa`: releer HEAD de tu rama, este archivo, `reports/W04/AUTORUN_V5_FINAL.md` y tu checkpoint V5. No repetir tandas cerradas; comenzar TANDA 06 inmediatamente y ejecutar los diez hitos independientes consecutivos sin nueva autorización por bloque, con checkpoint si el turno se interrumpe. La fuente maestra se encuentra en la rama árbitra `codex/calvo-items-20261101-arbitro`, archivo `docs/coordination/items_parallel_v1/AUTONOMY_V1/QUEUE_W04_TANDA_06.md`. Aplicar también `AUTONOMY_V1/README.md` en rama árbitra.
 
-Protocolo árbitra: docs/coordination/items_parallel_v1/AUTONOMY_V1/README.md en codex/calvo-items-20261101-arbitro; cola maestra: docs/coordination/items_parallel_v1/AUTONOMY_V1/QUEUE_W04_TANDA_05.md. **Reglas:** no repetir tandas cerradas, no tocar main, V28, PR118, ramas ajenas ni módulos fuera de permiso. Una CI SUCCESS solo cuenta si corresponde al SHA del código probado. Reporta por separado hitos, objetos nuevos, QA, funciones L3 y pendientes de integración IA6. Solo detenerse al terminar la tanda o si todas las tareas restantes están realmente bloqueadas.
+**Rama propia:** `codex/calvo-items-20261104-w04-camp006`.
+**Estado previo:** TANDA 05 cerrada 10/10, 2 contratos L2, 0 evoluciones regionales completas L3, 55/56 identidades regionales validadas. Exeggutor Alola permanece bloqueado por Harvest oculta: no conceder habilidades ocultas automáticamente.
 
----
+## MISIÓN TANDA 06
+Reparar la pérdida de identidad regional de destino en `EvolutionSystem.apply_evolution` para las rutas verificadas `slowpoke_galar + galarica_cuff → slowbro_galar (slowbro-galar)` y `slowpoke_galar + galarica_wreath → slowking_galar (slowking-galar)`. El destino debe recibir su **propia forma** canónica, no conservar `slowpoke-galar` ni quedar vacío.
 
-# IA6 W04 TANDA 05 — contrato real de evolución de formas regionales
-Rama: codex/calvo-items-20261104-w04-camp006.
-Baseline: T04 CI #42890685931 SUCCESS, 55/56 identidades regionales positivas. Exeggutor Alola bloqueado; NO darle Harvest oculta automáticamente.
-PROTOCOLO IA6: 10 hitos autorizados sin nueva puerta por hito; p/sigue consulta IA6_AUTORUN.md en su propia rama, usa checkpoint y ejecuta el siguiente paso. Terminar solo al cubrir 10 hitos o agotar todos los seguros; informe + SHA funcional + CI completed/success. Hitos != objetos nuevos != integración IA6. No hay ejecución entre turnos. No tocar main, V28, PR118, ramas ajenas ni ficheros no autorizados.
+**PERMISO IA6 ESTRICTO:** solo modificación mínima de la función `EvolutionSystem.apply_evolution` que garantice forma de destino usando validación canónica y contratos W04; helper propio W04, tests, fixtures, workflow e informes. No modificar otras funciones ni archivos compartidos, `FieldItemBag`, `FieldItemService`, `CreatureInstance`, `CreatureFactory`, SaveV2 central, política, datos canónicos o ramas ajenas. La operación transaccional mochila/consumo/rollback sigue siendo responsabilidad IA6; **no contar L3** hasta probarla. Si surge dependencia fuera del permiso, ticket rojo y continuar hitos seguros.
 
-OBJETIVO: obtener regla real de forma+especie+ítem para Slowpoke de Galar (galarica_cuff / galarica_wreath) y cualquier ruta adicional realmente documentada en EvolutionRecord. NO inventar evoluciones ni saltar condiciones DATA_ONLY. Priorizar helper puro + test reproducible; integración con mochila depende de IA6.
-10 HITOS:
-01. Datos de Galar Slowpoke/Slowbro/Slowking y metadata exacta.
-02. Verificar ítems existentes, triggers y condiciones EvolutionRecord.
-03. Helper puro local W04 que valide fuente species+form+item.
-04. Positivo solo si el contrato canónico realmente existe; en otro caso ticket con prueba roja.
-05. Negativos Slowpoke base, form equivocado, sin item y target incorrecto.
-06. No traspasar form_id de especie anterior al destino incompatible.
-07. Comprobar naturaleza original/efectiva sin editar trabajo de W02.
-08. PARTY/STORAGE, SaveV2 positivo/legacy/corrupto.
-09. Regresión 55 formas, Exeggutor bloqueado y CAMP003–006.
-10. CI e informe reports/W04/AUTORUN_V5_FINAL.md separando productores, L2, L3 y bloqueos.
-Permisos: helper nuevo W04, tests/fixtures/CI, ajuste a canonical_form_identity_w04.gd solo ante defecto probado. EvolutionSystem, CreatureInstance, FieldItemService, FieldItemBag, SaveV2 central, Factory y config son SOLO LECTURA. No adjudicar L3 sin ruta nativa real.
+## Diez hitos autorizados, ejecutar en cadena
+01. Recuperar HEAD/checkpoint T05 y examinar la implementación nativa.
+02. Prueba roja previa de `galarica_cuff` y forma regional de destino.
+03. Prueba roja previa de `galarica_wreath` y forma de destino.
+04. Reparación mínima en seam autorizada, sin heredar form_id del origen.
+05. Pruebas positivas reales en `apply_evolution` para ambos destinos.
+06. Negativos de origen Kanto/forma errónea, ítem equivocado, target incompatible o forma corrupta.
+07. Preservar instancia, naturaleza original, estado persistente y naturaleza efectiva si existe en rama, sin editar otros módulos.
+08. Party/Storage y SaveV2 del resultado de evolución nativa; legacy/corruptos.
+09. Todas las regresiones T05–T02 y CAMP003–006; sin cambiar Randomlock ni Exeggutor.
+10. CI final del HEAD, informe `reports/W04/AUTORUN_V6_FINAL.md` y checkpoint `reports/W04/AUTORUN_V6_PROGRESS.csv`.
+
+**Cierre obligatorio:** `W04 TANDA 06 — X/10 examinados — N rutas de evolución nativa positivas — M L3 mochila — K bloqueos — SHA — CI — informe`. No afirmar SUCCESS sin ejecución completada sobre SHA correcto. No tocar `main`, V28 ni PR #118. Al concluir, STOP para revisión de IA6. No existe ejecución automática entre turnos.
