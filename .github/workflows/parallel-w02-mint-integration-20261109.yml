@@ -106,7 +106,7 @@ jobs:
         run: |
           set -euo pipefail
           python -B tests/tools/test_parallel_items_w02_autorun_v3.py 2>&1 | tee w02-autorun-v3-py.log
-          grep -E '^W02_AUTORUN_V3_PY PASS checks=[1-9][0-9]*$' w02-autorun-v3-py.log
+          grep -E '^W02_AUTORUN_V3_PY PASS checks=26$' w02-autorun-v3-py.log
           timeout 900s godot --headless --path . --script res://tests/gameplay/parallel_items_w02_autorun_v3.gd 2>&1 | tee w02-autorun-v3-godot.log
           grep -E '^W02_AUTORUN_V3_GODOT PASS checks=[1-9][0-9]*$' w02-autorun-v3-godot.log
       - name: TANDA 02 W02 Growth Mochi Vitamins Python y Godot
