@@ -112,15 +112,7 @@ jobs:
         run: |
           set -euo pipefail
           timeout 900s godot --headless --path . --script res://tests/gameplay/parallel_items_w03_repeat_history_v2.gd 2>&1 | tee camp006-w03-repeat-v2.log
-          grep -E '^W03_REPEAT_V2_GODOT PASS checks=[1-9][0-9]* native_capture_l3=false
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: camp006-w03-${{ github.run_id }}
-          retention-days: 7
-          if-no-files-found: ignore
-          path: camp006-w03-*.log
- camp006-w03-repeat-v2.log
+          grep -E '^W03_REPEAT_V2_GODOT PASS checks=[1-9][0-9]* native_capture_l3=false$' camp006-w03-repeat-v2.log
       - name: Archive evidence
         if: always()
         uses: actions/upload-artifact@v4
