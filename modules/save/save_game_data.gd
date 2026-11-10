@@ -99,13 +99,13 @@ func validate() -> Dictionary:
 	for cd in creatures:
 		if not (cd is Dictionary):
 			return {"ok": false, "reason": "invalid_creature_entry"}
-		# W04 pilot: optional canonical regional form, without changing SaveV2 schema.
+		# W04 regional: optional canonical regional form, without changing SaveV2 schema.
 		# Unknown/invented forms are never reinterpreted as a base species.
 		if cd.has("form_id"):
 			var form: Variant = cd["form_id"]
 			if typeof(form) != TYPE_STRING:
 				return {"ok": false, "reason": "invalid_creature_form_type"}
-			if String(form) != "" and (form != "slowpoke-galar" or cd.get("species_id") != "slowpoke_galar"):
+			if String(form) != "" and not preload("res://modules/creatures/progression/canonical_form_identity_w04.gd").structural_form_matches(String(cd.get("species_id", "")), String(form)):
 				return {"ok": false, "reason": "invalid_creature_form_id"}
 		var id := StringName(cd.get("instance_id", ""))
 		if id == &"":
