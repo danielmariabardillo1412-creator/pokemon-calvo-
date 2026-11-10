@@ -24,6 +24,8 @@ func _run_v2() -> void:
 		_red_after_mint(mode, &"rare_candy")
 		current_case = "red_muscle_mochi_" + mode
 		_red_after_mint(mode, &"muscle_mochi")
+		current_case = "red_swift_mochi_" + mode
+		_red_after_mint(mode, &"swift_mochi")
 	for mode: String in ["active", "reserve"]:
 		current_case = "xp_after_mint_" + mode
 		_probe_exp_after_mint(mode)
@@ -71,6 +73,12 @@ func _red_after_mint(mode: String, item: StringName) -> void:
 	if not bool(response.get("accepted", false)):
 		check("red rejected transaction kept 1 stock and full SaveV2 state",
 			owner.inventory.quantity(item) == 1 and _owner_data(owner) == before)
+	else:
+		var after_applied: Dictionary = _owner_data(owner)
+		var exhausted: Dictionary = svc.use_growth_item(item, &"own") if item == &"rare_candy" else svc.use_item(item, &"own")
+		check("v2 red successor no-stock rejection without mutation",
+			not bool(exhausted.get("accepted", true)) and String(exhausted.get("reason", "")) == "item_not_owned"
+			and _owner_data(owner) == after_applied)
 
 # Full scoped TANDA02 native regression suite. No fake item service or save.
 func _new_minted(mode: String, items: Array, species: StringName = &"mew",
@@ -129,7 +137,7 @@ func _assert_save(owner: PlayerCollection, label: String) -> void:
 		and loaded.location_of(&"own") == owner.location_of(&"own")
 		and loaded.inventory.to_dict() == owner.inventory.to_dict())
 
-func _resolve_growth(svc: RefCounted, item: StringName, evolution_target := "") -> Dictionary:
+func _resolve_growth(svc: Variant, item: StringName, evolution_target := "") -> Dictionary:
 	var decisions: Dictionary = {}
 	var stamp := ""
 	var outcome: Dictionary = svc.use_growth_item(item, &"own")
@@ -148,7 +156,7 @@ func _probe_exp_after_mint(mode: String) -> void:
 		var ctx: Dictionary = _new_minted(mode, [id])
 		if ctx.is_empty(): continue
 		var owner: PlayerCollection = ctx.owner
-		var svc: RefCounted = ctx.service
+		var svc = ctx.service
 		var source: CreatureInstance = owner.owned_creature(&"own")
 		var before_level: int = source.level
 		var before_xp: int = source.experience
@@ -197,7 +205,7 @@ func _probe_growth_choices(mode: String) -> void:
 	var ctx: Dictionary = _new_minted(mode, ["rare_candy"], &"bulbasaur", 11, moves)
 	if ctx.is_empty(): return
 	var owner: PlayerCollection = ctx.owner
-	var svc: RefCounted = ctx.service
+	var svc = ctx.service
 	var before: Dictionary = _owner_data(owner)
 	var prompt: Dictionary = svc.use_growth_item(&"rare_candy", &"own")
 	check("v2 level12 real learn/replace prompt and no transaction",
@@ -297,7 +305,7 @@ func _probe_vitamins(mode: String) -> void:
 	var ctx: Dictionary = _new_minted(mode, ["protein", "carbos"])
 	if ctx.is_empty(): return
 	var owner: PlayerCollection = ctx.owner
-	var svc: RefCounted = ctx.service
+	var svc = ctx.service
 	var now: CreatureInstance = owner.owned_creature(&"own")
 	var initial_friend: int = now.friendship
 	var first: Dictionary = svc.use_item(&"protein", &"own")
@@ -322,7 +330,7 @@ func _probe_chain(mode: String) -> void:
 		["rare_candy", "muscle_mochi", "carbos", "timid_mint", "timid_mint"])
 	if ctx.is_empty(): return
 	var owner: PlayerCollection = ctx.owner
-	var svc: RefCounted = ctx.service
+	var svc = ctx.service
 	var baseline: CreatureInstance = owner.owned_creature(&"own")
 	var before_iv: Dictionary = baseline.ivs.duplicate(true)
 	var before_pp: Dictionary = baseline.moveset[0].to_dict()

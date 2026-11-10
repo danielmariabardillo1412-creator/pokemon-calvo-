@@ -102,7 +102,7 @@ jobs:
         run: |
           set -euo pipefail
           python -B tests/tools/test_parallel_items_w02_autorun_v2.py 2>&1 | tee w02-autorun-v2-py.log
-          grep -E '^W02_AUTORUN_V2_PY PASS rows=10 checks=[1-9][0-9]*$' w02-autorun-v2-py.log
+          grep -E '^W02_AUTORUN_V2_PY PASS rows=10 checks=23$' w02-autorun-v2-py.log
           timeout 900s godot --headless --path . --script res://tests/gameplay/parallel_items_w02_autorun_v2.gd 2>&1 | tee w02-autorun-v2-godot.log
           grep -E '^W02_AUTORUN_V2_GODOT PASS checks=[1-9][0-9]*$' w02-autorun-v2-godot.log
       - name: MINT-L3 PILOTO 02 Python y Godot nuevos con regresion 01
