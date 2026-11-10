@@ -1,39 +1,26 @@
-# IA6 — ORDEN FIJA PARA ESTA VENTANA (W01)
+# IA6 — ORDEN PERMANENTE ACTIVA W01 · TANDA 02
 
-**Esta es tu instrucción de arranque y reanudación.** Al recibir `p`, `sigue` o `continúa`, no preguntes «¿qué trabajo sigue?» ni esperes otra autorización por cada objeto. Sigue la siguiente fila pendiente de la tabla de abajo, reanuda automáticamente las otras filas autorizadas, publica checkpoint si el turno se agota y cierra la tanda tras diez filas examinadas. La IA6 solo revisa el lote cerrado.
+**IA6 HA REVISADO TU ENTREGA ANTERIOR Y PUBLICA AQUÍ LA NUEVA COLA COMPLETA.** Este archivo es tu punto fijo de entrada. Cuando recibas `p`, `sigue` o `continúa`: consulta la rama de GitHub, tu HEAD, esta nota y tu checkpoint; empieza en la primera fila pendiente de la **TANDA 02**, sin pedir permiso IA6 por cada fila. Tras completar 10, deja informe + CI real y STOP a esperar una TANDA nueva. No te limites a contestar «entendido».
 
-**Protocolo técnico vinculante y fuente de verdad:** rama árbitra `codex/calvo-items-20261101-arbitro`, archivo `docs/coordination/items_parallel_v1/AUTONOMY_V1/README.md`. Cola central `docs/coordination/items_parallel_v1/AUTONOMY_V1/QUEUE_W01.md`.
+**Rama autorizada:** `codex/calvo-items-20261110-w01-gems-autobatch01`. **Protocolo maestro:** `docs/coordination/items_parallel_v1/AUTONOMY_V1/README.md` de `codex/calvo-items-20261101-arbitro`. **Orden central:** `docs/coordination/items_parallel_v1/AUTONOMY_V1/QUEUE_W01_TANDA_02.md` de árbitra. Esta copia tiene el mismo contenido y vale aunque cambie el contexto de la conversación.
 
-**Permanencia:** IA6 actualizará ESTE MISMO archivo al aprobar una tanda nueva. Al iniciar `p`, comprueba el HEAD y la versión del archivo, no uses la conversación como única memoria. Los permisos de archivos protegidos y reglas de pruebas siguen vigentes. Ninguna orden aquí crea trabajos en segundo plano.
+No ejecutar en segundo plano ficticio: si un turno se agota, publicar checkpoint en GitHub y la siguiente `p` continúa. Un bloqueo de un productor compartido no te obliga a detener los otros hitos independientes: ticket, `BLOQUEADO`, próximo. Nunca presentar CI de otro SHA como actual ni fusionar `main`, V28, PR118 u otras ramas. Protecciones de archivos/funciones indicadas abajo son estrictas.
 
 ---
 
-# IA6 — ORDEN PERMANENTE AUTORUN V1 — W01
-**Rama exclusiva:** `codex/calvo-items-20261110-w01-gems-autobatch01`
-**Estado desde el que se reanuda:** CAMP005 cerrada 10/10; CI funcional #42717306543 SUCCESS; nueva rama creada por IA6 desde HEAD documental f7f28b1ea0bc.
-**Activador:** `p`, `sigue` o `continúa` inicia o reanuda los **diez bloques de esta tanda**, sin pedir nuevo permiso por cada fila. Se trabaja hasta donde permita el turno/herramientas; si se interrumpe, checkpoint y siguiente `p` retoma la siguiente fila no cerrada.
-**Reglas vinculantes:** leer `docs/coordination/items_parallel_v1/AUTONOMY_V1/README.md` de la rama árbitra `codex/calvo-items-20261101-arbitro`. Se autoriza la reparación autónoma en archivos propios, la migración versionada de pruebas históricas y seguir con filas independientes pese a bloqueos. **Nunca saltar pruebas ni inventar L3.**
-**Resumen al usuario:** barra de filas revisadas `[████░░░░░░] 4/10` y **funcionales N/10** diferenciadas; solo al final enviar cierre a IA6.
-**Informe final único:** `docs/coordination/items_parallel_v1/reports/W01/AUTORUN_V1_FINAL.md`; estado por fila en `AUTORUN_V1_PROGRESS.csv`. No tocar main, V28, PR118 ni otras ramas.
-
-## Tanda 01 — diez gemas de combate, una por fila
-La lista proviene de los IDs habituales del catálogo local; **confirmar cada ID activo con `DefinitionCatalog`, política y perfiles reales** antes de tocar producción. Excluir si el ID no está seleccionado o si ya está validado en campaña anterior; registrar `NO_APLICA` sin inventar sustituto fuera del catálogo.
-| Fila | ID | Prueba de efecto requerida |
-|---|---|---|
-| 01 | `electric_gem` | Tipo Eléctrico |
-| 02 | `grass_gem` | Planta |
-| 03 | `ice_gem` | Hielo |
-| 04 | `fighting_gem` | Lucha |
-| 05 | `poison_gem` | Veneno |
-| 06 | `ground_gem` | Tierra |
-| 07 | `flying_gem` | Volador |
-| 08 | `psychic_gem` | Psíquico |
-| 09 | `bug_gem` | Bicho |
-| 10 | `rock_gem` | Roca |
-
-**Preflight:** conservar íntegra CAMPAÑA_005 con sus 30 equipables y regresión 004. Crear workflow propio de nueva rama desde el último workflow W01 certificado y cambiar triggers/paths. Un archivo `CAMP005` cerrado no debe reescribirse como si la gema perteneciera a esa campaña. Usar fixtures/runners nuevos `w01_autorun_v1`, con CI propia y motor nativo, sin mover `main` ni V28.
-
-**Efecto positivo obligatorio por gema:** portador real + movimiento de tipo exacto, contra otro tipo, sin gema, una sola activación/cambio de PP, consumo y estado de equipamiento, reentrada a combate, snapshot/restauración de turno, SaveV2, sin consumir ante fallo/negativo. Determinar multiplicador por fuente canónica y motor existente, **no inventar porcentaje**. La mecánica de gemas fue certificada con `normal_gem/fire_gem/water_gem` en CAMP005 B10; reutilizar patrón y conservar casos de Transformación/Quick Powder.
-
-**Edición autorizada:** pruebas y nueva rama W01, adapter local de held, solo funciones específicas de consumibles de tipo en su propio motor/backend; cualquier generalización que cambie otras reglas o cualquier serializador compartido se deja en ticket y se continúa. Rehacer CI completa al cerrar tanda. Si alguna gema no puede obtener positivo por falta de perfil o contrato, marcar bloqueada con prueba y avanzar. **No esperar IA6 hasta completar diez filas.**
-
+# IA6 W01 — TANDA 02: gemas restantes
+Rama: codex/calvo-items-20261110-w01-gems-autobatch01.
+Evidencia TANDA01: CI 42730773059 SUCCESS, SHA 9d1a9dae8b9d9abed09a12b082f7a719aa047981, native 10 filas y 20 activaciones, Godot 4002 checks; CAMP005/004 regresiones PASS. El CSV AUTORUN_V1_PROGRESS.csv todavía dice EN_CI_AUTOMATICA; antes de nuevos cambios cerrar la documentación con recibos y AUTORUN_V1_FINAL.md SIN volver a adjudicar tests antiguos a una SHA nueva.
+PROTOCOLO COMÚN: Esta nota autoriza los 10 hitos sin pedir permiso por hito. Al recibir p/sigue, comenzar en primer hito pendiente, publicar checkpoint si termina el turno, retomar con siguiente p. Conservar pruebas, CI con SHA y contabilidad L1/L2/L3. Bloqueos reales se documentan y permiten pasar a hitos independientes. No main, V28, PR118 ni ramas ajenas. Al terminar emitir cierre de tanda y detenerse; no ejecutar en background.
+Diez hitos:
+01 ghost_gem: efecto real Fantasma.
+02 dragon_gem: efecto real Dragón.
+03 dark_gem: efecto real Siniestro.
+04 steel_gem: efecto real Acero.
+05 fairy_gem: solo con perfil canónico validado (no inventar Fairy Gem).
+06 matriz de gemas de 18 tipos: no duplicar NORMAL/FIRE/WATER ni diez gemas TANDA01.
+07 consumo único, fallo, inmunidad, tipo incompatible.
+08 Guardado SaveV2, restauración, reserva, Transformación y PP.
+09 regresión de backend nativo, active/reserve, cambios de slot, orden de efectos.
+10 CI conjunta CAMP004/CAMP005/TANDA01/TANDA02 e informe AUTORUN_V2_FINAL.md.
+Reglas: estos cinco IDs aparecen en item_connections_v1.json como holdable, pero NO se presume que tengan efecto de motor ni estén seleccionados. Verificar DefinitionCatalog, política y referencia real. Exigir daño del tipo correcto/incorrecto, consumo, SaveV2 y negativos. Solo ediciones de consumo held específico, tests y workflow W01; si exige backend global protegido, ticket y no mutación. Diez filas revisadas no equivalen a cinco gemas funcionales.
