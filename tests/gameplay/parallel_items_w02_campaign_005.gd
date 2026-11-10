@@ -9,6 +9,16 @@ const PROMOTED_MINTS_005 := {
 	"adamant_mint": "adamant",
 	"modest_mint": "modest",
 	"timid_mint": "timid",
+	"impish_mint": "impish",
+	"quiet_mint": "quiet",
+	"brave_mint": "brave",
+	"careful_mint": "careful",
+	"calm_mint": "calm",
+	"bold_mint": "bold",
+	"jolly_mint": "jolly",
+	"relaxed_mint": "relaxed",
+	"lax_mint": "lax",
+	"hasty_mint": "hasty",
 }
 
 const MOCHI_STATS_005 := {"health_mochi": "hp", "muscle_mochi": "attack",
@@ -396,7 +406,7 @@ func _run_camp005() -> void:
 		if ok: passed_blocks += 1
 	var historical_count: int = 0
 	for n: Variant in migration_counts.values(): historical_count += int(n)
-	check("migration exact cases count", historical_count == 20)
+	check("migration exact cases count", historical_count == 82)
 	var success: bool = errors.is_empty() and passed_blocks == automation.blocks.size()
 	var report: Dictionary = {"worker": "W02", "campaign": "CAMP_005",
 		"status": "PASS" if success else "FAIL", "blocks": passed_blocks,

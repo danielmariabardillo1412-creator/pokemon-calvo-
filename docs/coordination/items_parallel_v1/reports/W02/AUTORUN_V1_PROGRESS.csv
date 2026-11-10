@@ -1,0 +1,11 @@
+fila,id,naturaleza,estado,ci,sha_funcional,evidencia
+01,hasty_mint,hasty,IMPLEMENTADO_CI_PENDIENTE,,,native_tests_new_pending
+02,lax_mint,lax,IMPLEMENTADO_CI_PENDIENTE,,,native_tests_new_pending
+03,relaxed_mint,relaxed,IMPLEMENTADO_CI_PENDIENTE,,,native_tests_new_pending
+04,jolly_mint,jolly,IMPLEMENTADO_CI_PENDIENTE,,,native_tests_new_pending
+05,bold_mint,bold,IMPLEMENTADO_CI_PENDIENTE,,,native_tests_new_pending
+06,calm_mint,calm,IMPLEMENTADO_CI_PENDIENTE,,,native_tests_new_pending
+07,careful_mint,careful,IMPLEMENTADO_CI_PENDIENTE,,,native_tests_new_pending
+08,brave_mint,brave,IMPLEMENTADO_CI_PENDIENTE,,,native_tests_new_pending
+09,quiet_mint,quiet,IMPLEMENTADO_CI_PENDIENTE,,,native_tests_new_pending
+10,impish_mint,impish,IMPLEMENTADO_CI_PENDIENTE,,,native_tests_new_pending
