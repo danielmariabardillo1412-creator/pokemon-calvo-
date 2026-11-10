@@ -20,6 +20,10 @@ on:
       - 'tests/tools/test_parallel_items_w05_book_ui_autorun_v3.py'
       - 'tests/gameplay/parallel_items_w05_book_ui_autorun_v3.gd'
       - 'tests/tools/test_parallel_items_w05_book_ui_autorun_v4.py'
+      - 'tests/tools/test_parallel_items_w05_book_ui_autorun_v5.py'
+      - 'tests/gameplay/parallel_items_w05_export_pck_probe.gd'
+      - 'export_presets.cfg'
+      - 'docs/coordination/items_parallel_v1/reports/W05/AUTORUN_V5_PROGRESS.csv'
       - 'tests/gameplay/parallel_items_w05_book_ui_autorun_v4.gd'
       - 'data/localization/machine_moves_es_sv_v1.json'
       - 'docs/coordination/items_parallel_v1/reports/W05/AUTORUN_V4_PROGRESS.csv'
@@ -188,3 +192,64 @@ jobs:
           retention-days: 7
           if-no-files-found: ignore
           path: camp006-*.log
+
+  v5-export-audit:
+    name: W05 TANDA05 - Windows PCK/runtime isolation
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: TANDA05 Python - 229 Spanish labels and portable export contract
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tests/tools/test_parallel_items_w05_book_ui_autorun_v5.py | tee w05-v5-preflight.log
+          grep -E '^W05_BOOKS_AUTORUN_V5_PY PASS rows=229 portable=1 original_sources=229 pck_inclusion=UNVERIFIED$' w05-v5-preflight.log
+      - uses: chickensoft-games/setup-godot@v2.4.1
+        with:
+          version: 4.7.0
+          use-dotnet: false
+          include-templates: true
+      - name: Windows PCK export without touching existing build artifacts
+        shell: bash
+        run: |
+          set -euo pipefail
+          godot --version | grep -E '^4[.]7([.-]|$)'
+          python -B tools/distribution/restore_resources.py
+          python -B tools/distribution/restore_resources.py --check
+          mkdir -p data/reports
+          cp ci/fixtures/pokeapi_reports/forms_policy_report.json data/reports/forms_policy_report.json
+          cp ci/fixtures/pokeapi_reports/unsupported_mechanics.json data/reports/unsupported_mechanics.json
+          cp ci/fixtures/pokeapi_reports/import_summary.json data/reports/import_summary.json
+          godot --headless --path . --import 2>&1 | tee w05-v5-import.log
+          if grep -E 'SCRIPT ERROR|Parse Error' w05-v5-import.log; then exit 1; fi
+          PCK="$RUNNER_TEMP/w05-tanda05-windows-probe.pck"
+          if godot --headless --path . --export-pack "Pokemon Calvo Technical Test Windows" "$PCK" 2>&1 | tee w05-v5-export.log; then
+            test -s "$PCK"
+            echo "W05_V5_WINDOWS_EXPORT PASS output=temp_pck"
+          else
+            if grep -Ei 'export template(s)? (are )?(missing|not found|unavailable)|no export template|export templates? not installed' w05-v5-export.log; then
+              echo "W05_V5_WINDOWS_EXPORT BLOCKED reason=windows_export_templates"
+              exit 0
+            fi
+            echo "W05_V5_WINDOWS_EXPORT FAIL reason=unexpected_export_error"
+            exit 1
+          fi
+          PROBE="$RUNNER_TEMP/w05-pck-only-project"
+          mkdir -p "$PROBE"
+          printf '[application]\\nconfig/name="W05 PCK Isolation Probe"\\n' > "$PROBE/project.godot"
+          cp tests/gameplay/parallel_items_w05_export_pck_probe.gd "$PROBE/probe.gd"
+          godot --headless --path "$PROBE" --script "$PROBE/probe.gd" -- "$PCK" 2>&1 | tee w05-v5-runtime.log
+          grep -E '^W05_V5_PCK_PROBE PASS records=229 runtime_samples=4 source=pck_only$' w05-v5-runtime.log
+      - name: Save TANDA05 diagnostic logs, not distributables
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: w05-v5-audit-${{ github.run_id }}
+          retention-days: 7
+          if-no-files-found: ignore
+          path: |
+            w05-v5-*.log
