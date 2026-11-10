@@ -1,3 +1,11 @@
+# IA6 — ACTUALIZACIÓN VERIFICADA · 2026-11-10 · CINCO TANDAS PUBLICADAS
+
+**Prioridad de continuidad:** [AUTONOMY_V1/IA6_AUDIT_FIVE_WORKERS_AND_HANDOFF_20261110.md](AUTONOMY_V1/IA6_AUDIT_FIVE_WORKERS_AND_HANDOFF_20261110.md). Confirmados: W01 TANDA01 CI #42730773059 SUCCESS **pero CSV sin cerrar**; W02 TANDA01 10 mentas L3 #42730263746 SUCCESS; W03 TANDA02 Repeat Ball L2, native L3 bloqueado, #42736177949 SUCCESS; W04 TANDA02 forma real Slowpoke Galar y SaveV2, no evolución por objeto, #42735277975 SUCCESS; W05 TANDA02 180 MT + 49 previas = 229/229 positivas en panel aislado, #42734399078 SUCCESS. Las cinco CI se verificaron por jobs/logs, no solo informes.
+
+**YA PUBLICADAS EN CADA RAMA:** `docs/coordination/items_parallel_v1/IA6_AUTORUN.md` con tandas W01=02, W02=02, W03=03, W04=03 y W05=03. Una `p` basta para reanudar; sin orden adicional por microbloque. W01 documento cierre previo; W02 interoperabilidad Growth/Mochi; W03 Repeat Ball nativo; W04 56 formas regionales fuente; W05 robustez UI de 229. No hay merge a main/V28/PR118 ni integración conjunta de estos cambios posteriores; no confundir CI de ramas aisladas con CI de producto integrado.
+
+---
+
 # ACTUALIZACIÓN IA6 — TANDA 02 ACTIVADA EN W03/W04/W05 · 2026-11-10
 
 **Tandas cerradas y verificadas:** W03 #42729137809 SUCCESS (10 revisadas/0 nuevas), W04 #42729967922 SUCCESS (10 revisadas/0 formas o fusiones nuevas), W05 #42730140482 SUCCESS (49/49 MT panel headless). Auditoría [IA6_AUDIT_BATCH01_AND_HANDOFF_BATCH02_20261110.md](AUTONOMY_V1/IA6_AUDIT_BATCH01_AND_HANDOFF_BATCH02_20261110.md).
