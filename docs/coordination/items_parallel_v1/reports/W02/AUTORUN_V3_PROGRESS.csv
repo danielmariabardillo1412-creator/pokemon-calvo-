@@ -1,11 +1,11 @@
 hito,entrega,estado,objetos_nuevos,qa,ci,sha,evidencia
-01,direct_red,TEST_ROJO_PUBLICADO,0,1,,,
-02,minimal_patch,PENDIENTE,0,0,,,
-03,level_evolution,PENDIENTE,0,0,,,
-04,field_item_evolution,PENDIENTE,0,0,,,
-05,unminted_baseline,PENDIENTE,0,0,,,
-06,same_original_and_replacement,PENDIENTE,0,0,,,
-07,party_storage,PENDIENTE,0,0,,,
-08,save_v2_legacy_invalid,PENDIENTE,0,0,,,
-09,growth_plan_interop,PENDIENTE,0,0,,,
-10,ci_final,PENDIENTE,0,0,,,
+01,direct_red,CERTIFICADO,0,1,42890511612,17df457b1320eec379ef78059cd14c4f6e5576e1,Red 42889749900: Eevee mintado Vaporeon pierde efectiva en PARTY y STORAGE
+02,minimal_patch,CERTIFICADO,0,0,42890511612,17df457b1320eec379ef78059cd14c4f6e5576e1,Unico arreglo compartido en EvolutionSystem.apply_evolution 51f6892f
+03,level_evolution,CERTIFICADO,0,1,42890511612,17df457b1320eec379ef78059cd14c4f6e5576e1,Bulbasaur Ivysaur nivel 16 Growth.plan; naturaleza; PP; PS; SaveV2
+04,field_item_evolution,CERTIFICADO,0,1,42890511612,17df457b1320eec379ef78059cd14c4f6e5576e1,Fire Stone Eevee Flareon; destino falso rechaza; stock y rollback
+05,unminted_baseline,CERTIFICADO,0,1,42890511612,17df457b1320eec379ef78059cd14c4f6e5576e1,Eevee sin menta evolucionado conserva naturaleza original; IV; EV; PP; habilidad y SaveV2
+06,same_original_and_replacement,CERTIFICADO,0,1,42890511612,17df457b1320eec379ef78059cd14c4f6e5576e1,Timid luego Adamant coincide con original; nueva menta; evolución
+07,party_storage,CERTIFICADO,0,1,42890511612,17df457b1320eec379ef78059cd14c4f6e5576e1,Identidad propia y ubicacion PARTY STORAGE sin duplicar ni perder
+08,save_v2_legacy_invalid,CERTIFICADO,0,1,42890511612,17df457b1320eec379ef78059cd14c4f6e5576e1,SaveV2 evolucionado; legacy sin naturaleza efectiva; corrupción rechazada sin publicar
+09,growth_plan_interop,BLOQUEADO,0,1,42890511612,17df457b1320eec379ef78059cd14c4f6e5576e1,Interoperabilidad funcional PASS; recálculo doble en Growth.plan protegido; ticket IA6
+10,ci_final,CERTIFICADO,0,1,42890511612,17df457b1320eec379ef78059cd14c4f6e5576e1,CI 42890511612 SUCCESS sobre SHA 17df457b; campañas y pilotos preservados
