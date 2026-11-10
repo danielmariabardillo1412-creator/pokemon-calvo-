@@ -51,9 +51,9 @@ jobs:
         run: |
           set -euo pipefail
           timeout 1500s godot --headless --path . --script res://tests/gameplay/w04_autorun_v3_all_regional.gd 2>&1 | tee w04-v3-all.log
-          grep -E '^W04_AUTORUN_V3_ALL PASS checks=[1-9][0-9]* sources=56$' w04-v3-all.log
+          grep -E '^W04_AUTORUN_V3_ALL PASS checks=[1-9][0-9]* examined=56 native_functional=51 blocked=5$' w04-v3-all.log
           for i in $(seq -w 1 10); do
-            grep -E "^W04_V3_ROW_${i} examined=[5-6] validated=[5-6]$" w04-v3-all.log
+            grep -E "^W04_V3_ROW_${i} examined=[5-6] native_functional=[3-6] blocked=[0-2]$" w04-v3-all.log
           done
       - name: Preserved Slowpoke Galar pilot
         shell: bash
@@ -61,6 +61,24 @@ jobs:
           set -euo pipefail
           timeout 900s godot --headless --path . --script res://tests/gameplay/w04_autorun_v2_form_identity.gd 2>&1 | tee w04-v3-pilot.log
           grep -E '^W04_AUTORUN_V2_FORM PASS checks=[1-9][0-9]*$' w04-v3-pilot.log
+      - name: Frozen history CAMP003-006 and TANDA01-02 static gates
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tests/tools/test_parallel_items_w04_campaign_003.py --ci
+          python -B tests/tools/test_parallel_items_w04_campaign_004.py --ci
+          python -B tests/tools/test_parallel_items_w04_campaign_005.py --ci
+          python -B tests/tools/test_parallel_items_w04_campaign_006.py --ci
+          python -B tests/tools/test_parallel_items_w04_autorun_v1.py --ci
+          python -B tests/tools/test_w04_autorun_v2_form_identity.py
+      - name: Frozen history Godot CAMP003-006
+        shell: bash
+        run: |
+          set -euo pipefail
+          for test in parallel_items_w04_campaign_003 parallel_items_w04_campaign_004 parallel_items_w04_campaign_005 parallel_items_w04_campaign_006 parallel_items_w04_condition_resolver parallel_items_w04_milcery_resolver; do
+            timeout 900s godot --headless --path . --script "res://tests/gameplay/${test}.gd" 2>&1 | tee "w04-v3-${test}.log"
+            if grep -E 'SCRIPT ERROR|Parse Error| FAIL ' "w04-v3-${test}.log"; then exit 1; fi
+          done
       - name: Preserve logs
         if: always()
         uses: actions/upload-artifact@v4
