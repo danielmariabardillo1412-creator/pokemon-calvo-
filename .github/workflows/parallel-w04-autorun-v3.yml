@@ -51,7 +51,7 @@ jobs:
         run: |
           set -euo pipefail
           timeout 1500s godot --headless --path . --script res://tests/gameplay/w04_autorun_v3_all_regional.gd 2>&1 | tee w04-v3-all.log
-          grep -E '^W04_AUTORUN_V3_ALL PASS checks=[1-9][0-9]* examined=56 native_functional=51 blocked=5$' w04-v3-all.log
+          grep -E '^W04_AUTORUN_V3_ALL PASS checks=[1-9][0-9]* examined=56 native_functional=55 blocked=1$' w04-v3-all.log
           for i in $(seq -w 1 10); do
             grep -E "^W04_V3_ROW_${i} examined=[5-6] native_functional=[3-6] blocked=[0-2]$" w04-v3-all.log
           done
