@@ -40,8 +40,8 @@ def main() -> None:
     check("Windows preset parses", bool(cfg.read(PRESET, encoding="utf-8")))
     section = cfg["preset.0"]
     check("correct existing Windows desktop preset",
-          section.get("name") == "Pokemon Calvo Technical Test Windows"
-          and section.get("platform") == "Windows Desktop")
+          section.get("name", "").strip('"') == "Pokemon Calvo Technical Test Windows"
+          and section.get("platform", "").strip('"') == "Windows Desktop")
     check("export resources mode", section.get("export_filter") == '"all_resources"')
     check("no resource exclusion", section.get("exclude_filter") == '""')
     check("existing executable unchanged",
