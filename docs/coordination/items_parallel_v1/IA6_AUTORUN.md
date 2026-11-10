@@ -1,36 +1,45 @@
-# IA6 — ORDEN FIJA PARA ESTA VENTANA (W03)
+# IA6 — ORDEN ACTIVA TANDA 02 PARA W03
 
-**Esta es tu instrucción de arranque y reanudación.** Al recibir `p`, `sigue` o `continúa`, no preguntes «¿qué trabajo sigue?» ni esperes otra autorización por cada objeto. Sigue la siguiente fila pendiente de la tabla de abajo, reanuda automáticamente las otras filas autorizadas, publica checkpoint si el turno se agota y cierra la tanda tras diez filas examinadas. La IA6 solo revisa el lote cerrado.
+**ESTA NOTA SUSTITUYE LA TANDA 01, YA CERRADA.** La orden ha sido publicada por IA6 en 2026-11-10. **Al recibir `p`, `sigue` o `continúa`, empieza inmediatamente la PRIMERA FILA SIN CERRAR de la TANDA 02.** No reabrir TANDA 01 ni pedir permiso por cada hito. Reanudar por el CSV/checkpoint de esta tanda si se interrumpe el turno; no se trabaja en background entre turnos.
 
-**Protocolo técnico vinculante y fuente de verdad:** rama árbitra `codex/calvo-items-20261101-arbitro`, archivo `docs/coordination/items_parallel_v1/AUTONOMY_V1/README.md`. Cola central `docs/coordination/items_parallel_v1/AUTONOMY_V1/QUEUE_W03.md`.
-
-**Permanencia:** IA6 actualizará ESTE MISMO archivo al aprobar una tanda nueva. Al iniciar `p`, comprueba el HEAD y la versión del archivo, no uses la conversación como única memoria. Los permisos de archivos protegidos y reglas de pruebas siguen vigentes. Ninguna orden aquí crea trabajos en segundo plano.
+**Política maestra:** `docs/coordination/items_parallel_v1/AUTONOMY_V1/README.md` de la rama árbitra `codex/calvo-items-20261101-arbitro`. **Cola central:** `docs/coordination/items_parallel_v1/AUTONOMY_V1/QUEUE_W03_TANDA_02.md` (rama árbitra). Las autorizaciones especiales y límites de edición de esta nota SON órdenes oficiales IA6. Las ramas son exclusivas. Todo PASS funcional requiere CI en SHA concreto. Al terminar las diez filas, entregar `TANDA 02 FINALIZADA` y STOP a espera de la siguiente nota.
 
 ---
 
-# IA6 — ORDEN PERMANENTE AUTORUN V1 — W03
-**Rama exclusiva:** `codex/calvo-items-20261104-w03-camp006`
-**Estado desde el que se reanuda:** CAMP006 bloque03 repelentes L3 certificado #42716742131 SUCCESS; 01–03 cerrados, 04 aplazado, 05 bloqueado por productor.
-**Activador:** `p`, `sigue` o `continúa` inicia o reanuda los **diez bloques de esta tanda**, sin pedir nuevo permiso por cada fila. Se trabaja hasta donde permita el turno/herramientas; si se interrumpe, checkpoint y siguiente `p` retoma la siguiente fila no cerrada.
-**Reglas vinculantes:** leer `docs/coordination/items_parallel_v1/AUTONOMY_V1/README.md` de la rama árbitra `codex/calvo-items-20261101-arbitro`. Se autoriza la reparación autónoma en archivos propios, la migración versionada de pruebas históricas y seguir con filas independientes pese a bloqueos. **Nunca saltar pruebas ni inventar L3.**
-**Resumen al usuario:** barra de filas revisadas `[████░░░░░░] 4/10` y **funcionales N/10** diferenciadas; solo al final enviar cierre a IA6.
-**Informe final único:** `docs/coordination/items_parallel_v1/reports/W03/AUTORUN_V1_FINAL.md`; estado por fila en `AUTORUN_V1_PROGRESS.csv`. No tocar main, V28, PR118 ni otras ramas.
+# IA6 → W03/IA3 · AUTORUN TANDA 02: HISTORIAL AUTÉNTICO DE CAPTURAS / REPEAT BALL
+**Rama:** `codex/calvo-items-20261104-w03-camp006` · **Fecha:** 2026-11-10.
 
-## Tanda 01 — diez filas: completar cola de captura, sin repetir repelentes
-| Fila | Origen | Objetos o tarea |
-|---|---|---|
-| 01 | CAMP006 B04 | `black_flute;white_flute;lure;super_lure;max_lure` |
-| 02 | CAMP006 B05 | `dive_ball;lure_ball` |
-| 03 | CAMP006 B06 | `dusk_ball` |
-| 04 | CAMP006 B07 | `repeat_ball` |
-| 05 | CAMP006 B08 | `safari_ball;sport_ball` |
-| 06 | CAMP006 B09 | `love_ball;moon_ball;heavy_ball;beast_ball` |
-| 07 | CAMP006 B10 | `friend_ball;heal_ball;quick_ball;timer_ball` |
-| 08 | QA dedicado | Revalidar repelentes L3 (100/200/250 pasos, RNG consumido sin semilla de combate, legacy SaveV2) en nueva CI de la tanda, **sin recertificar como nuevo bloque** |
-| 09 | QA dedicado | Revalidar `escape_rope` y `fluffy_tail` junto al flujo de captura nativo, sin doble consumo/guardado automático |
-| 10 | QA de cobertura | Informe reproducible del contrato de `CaptureBattleContext` y tabla de procedencia REAL de noche/cueva, agua/pesca, Pokédex y zona; tests de fuente y no flags ficticios |
+**Auditoría de TANDA01:** 10/10 filas inspeccionadas; **0 nuevos objetos funcionales**, CI [#42729137809](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/42729137809) SUCCESS en SHA funcional `0114c3331d3d641569a0e967c111bb9836a6a572`; HEAD posterior `d009f948e8f4390f2e00a69fa5d3cb48a21dec45` solo documental. Los bloqueos reales están en `reports/W03/AUTORUN_V1_PRODUCER_BLOCKERS.md`. **No repetir la auditoría B04–B10.**
 
-**Autoridad heredada:** `CAMPAIGN_006_W03_BLOCK03_REPEL_L3_WORLD_SEAM_AUTH_20261109.md` sigue válida SOLO para repelentes; IA6 integrará sus cambios en versión compartida de mochila/escena. No se reabre B03. Para B04–B10 se autorizan pruebas, adaptadores propios de captura y consumo solo dentro de APIs ya existentes y propiedad W03; si requieren nuevo `FieldItemBag`, `field_demo.gd`, `field_native_bridge.gd`, SaveV2 central o alterar RNG general, documentar contrato y marcar esa fila **BLOQUEADA**, pero seguir inmediatamente las otras filas independientes. No inventar pescas, día/noche, Pokédex o zonas si el productor aún no existe. Tampoco retrogradar resultados L3 previos.
+**Protocolo vinculante:** `AUTONOMY_V1/README.md`. Una sola `p` autoriza iniciar y avanzar las diez filas de esta tanda dentro de los turnos que sean necesarios, con checkpoints; no pedir permiso nuevo por cada fila. CI y reporte de cierre por diez filas. No trabajo en segundo plano garantizado. Únicamente rama propia. Prohibido editar `main`, V28, PR118, otras ramas. Un bloqueo se documenta y se pasa a la siguiente prueba independiente; no acreditar L3 falso.
 
-**Criterios positivos:** wild encounter real, contexto real de origen, CaptureBattleContext, bonus/tasa de captura según reglas existentes, RNG/seed/no-conjunto, consumo y SaveV2/propiedad; conservar CI CAMP006 01–03 y CAMP005. Si B04/B05 siguen bloqueados, no repetir 10 negativas; una sola prueba/ticket por productor. Informar cierre por las diez filas examinadas, con funcionales reales separados del total.
+## Decisión IA6 — productor prioritario
+De los bloqueos, **Repeat Ball** tiene una ruta implementable: registrar **solo capturas realmente exitosas**, conservar una lista versionada de **especies base** ya capturadas y utilizarla en el siguiente intento. No inferir historial exclusivamente de la Party actual (la especie podría haberse liberado), no contar avistamientos/fallos/regalos como capturas, no inventar flags de pesca o reloj. El historial debe pertenecer al jugador y persistir en SaveV2, sin cambiar `schema_version=2`, checksums ni RNG general. El bonus exacto de Repeat Ball debe proceder de las reglas canónicas/referencia fijadas en el repo, no de una suposición.
+
+## 10 filas de desarrollo preautorizadas (un solo productor, no diez objetos)
+| Fila | Entrega exigida |
+|---|---|
+| 01 | Verificar fuentes `WildAdventureSession.capture_current`, `CaptureOwnershipRouter.route`, `PlayerCollection`, `SaveGameData.build`, `SaveGameRepository.save_collection/decode_snapshot` y ruta field-native; definir contrato `caught_base_species_ids` sin identificaciones artificiales |
+| 02 | Añadir helper local `modules/capture/caught_species_history_w03.gd` con canonicalización exacta de `source_metadata.base_species_id`, deduplicación, validación estricta y lista estable |
+| 03 | Añadir propiedad opcional al agregado `PlayerCollection` para historial, sin reconstruirlo de Party/storage; legacy inactivo/vacío |
+| 04 | Registrar ID únicamente **después** de captura SUCCESS y enrutamiento aceptado, con rollback en fallo; asegurar que batalla perdida, captura fallida, storage full/rollback no modifica historial |
+| 05 | Persistir/restaurar historial en colección SaveV2 con campo opcional compatible (no cambiar versión, hashes ni serializador) y rechazar payload corrupto antes de publicar estado |
+| 06 | Preservar historial a través de carga nativa de campo y carga normal de aventura, sin reconstruir otra `PlayerCollection` que lo pierda; sin autosave |
+| 07 | Producir bandera `previously_caught_base_species` **desde el ledger real y antes de usar la Ball**, dentro de `CaptureBattleContext` de sesión propia; nunca parámetro del usuario/UI |
+| 08 | Implementar regla `repeat_ball` en adaptador de captura y `CaptureContextBallEffects` bajo perfil canónico, sin alterar otras 16 Balls, distribución de RNG ni consumo en rechazo |
+| 09 | Prueba L3: primera captura real → ledger nuevo → SaveV2 → recarga → segunda captura misma especie con bonificación; negativos de especie distinta, corrupción/legacy, captura fallida, no doble captura ni gasto |
+| 10 | CI acumulativa HEAD, pruebas nuevas Python/Godot + todas CAMP006 01–03 repelentes/Cuerda, CAMP005, native save. Informe `reports/W03/AUTORUN_V2_FINAL.md` con estados L1/L2/L3 y SHA/run |
+
+## Autorización excepcional de IA6 en archivos protegidos — **solo estas funciones, solo en rama W03**
+- `modules/creatures/storage/player_collection.gd`: propiedad de historial y helper propio, **no** alterar deposit/withdraw/identidad.
+- `modules/save/save_game_data.gd`: campo opcional `caught_base_species_ids` y `build`/`to_dict`/`from_dict`/`validate` **solo para ledger**, sin alterar formato y sin suprimir validaciones.
+- `modules/save/save_game_repository.gd`: rutas `save_collection` y `decode_snapshot`/reconstrucción **solo ledger**; `modules/save/load_result.gd`: campo de resultado opcional si hace falta.
+- `modules/save/field_native_save.gd::decode`: copiar ledger del resultado al `PlayerCollection` real **exclusivamente**; no alterar `_valid_creature` (IA6 ya tiene parche de naturaleza efectiva ahí).
+- `modules/gameplay/wild_adventure_session.gd::capture_current`, `save_game`, `load_game` y reconstrucción de `player`: únicamente historial de capturas.
+- `modules/capture/capture_battle_context.gd` y `modules/capture/capture_context_ball_effects.gd`: bandera/validación y efecto de Repeat Ball; `capture_system.gd` solo un dispatch **muy localizado** si la API existente no puede invocar el nuevo efecto.
+- Nuevos helpers/tests/fixtures y workflows W03, sin rebajar ninguna regresión previa.
+
+**No autorizados:** nuevos formatos globales, cambios a `SaveGameSerializer`, `SaveGameMigration` (si fuera imprescindible, ticket de IA6 y continuar otros tests), motores Showdown, `FieldItemBag`, mapas, `CreatureInstance`, reglas generales de captura/combate ni código W04/W05. **Hay trabajo IA6 paralelo en `field_native_save.gd`; no copiarlo desde otras ramas ni pisarlo.** IA6 hará integración selectiva por función, nunca merge ciego. Cuando un seam resulte imposible sin tocar algo no listado: prueba roja, ticket y `BLOQUEADO`, no pedir permiso para repetir las mismas filas.
+
+**Semántica positiva:** Repeat Ball se marca funcional L3 únicamente con ruta de captura real + historial persistente antes del intento + bonificación verificable + guardado/carga y CI íntegra. No acreditar otros objetos bloqueados de TANDA01. Un `p` basta para iniciar esta tanda de diez hitos; al terminar, STOP y aviso IA6.
 
