@@ -1,3 +1,11 @@
+# IA6 — ÚLTIMO RELEVO COMPLETO 2026-11-10
+
+**LAS CINCO RAMAS TIENEN ORDEN ACTIVA NUEVA:** W01=TANDA03, W02=TANDA03, W03=TANDA04, W04=TANDA04, W05=TANDA04. W04 finalizó TANDA03 **51/56 formas regionales canónicas, 5 bloqueos por política** y tiene CI #42876057234 y #42876625902 SUCCESS; su nota fue renovada en commit `b4e9837bad9609565200e0e3c50167e8a8a3937b`. Las demás notas nuevas fueron comprobadas en sus ramas. [Auditoría completa actualizada](AUTONOMY_V1/IA6_AUDIT_RELAY_20261110_1922.md).
+
+**Para reanudar:** el usuario solo envía `p` a cada trabajadora. Ellas consultan su propio `docs/coordination/items_parallel_v1/IA6_AUTORUN.md`. No existe renovación automática sin una nueva escritura IA6. Distinguir 10 hitos / cantidad de objetos reales / integración conjunta. No se ha hecho merge a main/V28/PR118.
+
+---
+
 # IA6 — RELEVO ACTUAL 2026-11-10 · 19:22 EUROPE/MADRID
 
 **AUDITORÍA:** [AUTONOMY_V1/IA6_AUDIT_RELAY_20261110_1922.md](AUTONOMY_V1/IA6_AUDIT_RELAY_20261110_1922.md). Certificadas TANDA02 W01 (5 gemas, 5 QA), W02 (9 hitos funcionales con mentas, 1 QA), TANDA03 W03 (Repeat Ball L3, QA07/08 parciales), W05 (229 MT ya existentes, 10 QA). **W04 NO se cierra:** TANDA03 con CI de último HEAD aún no certificada.
