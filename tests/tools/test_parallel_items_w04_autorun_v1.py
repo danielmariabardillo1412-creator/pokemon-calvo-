@@ -154,7 +154,7 @@ def main():
             if cs.get("base_variety"):
                 test(cs["base_variety"] in names,
                      "original PokeAPI base form " + cs["base_variety"])
-            chain = read_json(ROOT / f'data/api/v2/evolution-chain/{cs["evolution_chain"] if block_id == "08" else cs["chain_id"]}/index.json')
+            chain = read_json(ROOT / f'data/api/v2/evolution-chain/{cs["chain_id"] if block_id == "07" else cs["evolution_chain"]}/index.json')
             test(not evolution_edges(chain["chain"]),
                  "form/fusion is NOT an evolution-chain edge " + cs["item_id"])
     # Source field for active fusion pair must remain two distinct owned creatures.
