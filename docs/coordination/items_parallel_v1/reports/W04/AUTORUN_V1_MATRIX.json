@@ -1,0 +1,560 @@
+{
+  "schema": "W04_AUTORUN_V1_CROSS_BOUNDARY_MATRIX",
+  "version": 1,
+  "auth": "IA6_AUTORUN.md in own W04 branch",
+  "source_historical": "tests/fixtures/parallel_items/w04_campaign_005.json; preserved original",
+  "scope": [
+    "CAMP006_B07",
+    "CAMP006_B08",
+    "CAMP006_B09",
+    "CAMP006_B10"
+  ],
+  "complete_10": 3,
+  "deferred": [
+    "CAMP006_B04"
+  ],
+  "blocked": [
+    "CAMP006_B05",
+    "CAMP006_B06"
+  ],
+  "new_L3_form_or_fusion": false,
+  "unique_ids": 18,
+  "route_count": 23,
+  "items": [
+    {
+      "autorun": "01",
+      "camp005": "04",
+      "item_id": "galarica_cuff",
+      "kind": "REGIONAL_EVOLUTION",
+      "producer": "Capture/Factory per-individual base form + verified item intent",
+      "consumer": "EvolutionSystem canonical base_form/evolved_form route; FieldItemService.evolve owner transaction",
+      "persistence": "CreatureInstance.form_id + SaveV2/migration preserving evolved regional form",
+      "rollback": "No item consumption or species/form change on invalid form, wrong item, denied owner or failed atomic transaction",
+      "real_evidence": "L1 PokeAPI item evolution records; no L3 valid regional form mapping",
+      "routes": [
+        {
+          "source": "slowpoke",
+          "target": "slowbro",
+          "partner": null,
+          "target_varieties": [],
+          "base_variety": "slowpoke-galar",
+          "evolved_form": "slowbro-galar",
+          "chain_id": 33,
+          "species_number": null,
+          "trigger": "use-item",
+          "route_kind": null
+        }
+      ]
+    },
+    {
+      "autorun": "01",
+      "camp005": "04",
+      "item_id": "galarica_wreath",
+      "kind": "REGIONAL_EVOLUTION",
+      "producer": "Capture/Factory per-individual base form + verified item intent",
+      "consumer": "EvolutionSystem canonical base_form/evolved_form route; FieldItemService.evolve owner transaction",
+      "persistence": "CreatureInstance.form_id + SaveV2/migration preserving evolved regional form",
+      "rollback": "No item consumption or species/form change on invalid form, wrong item, denied owner or failed atomic transaction",
+      "real_evidence": "L1 PokeAPI item evolution records; no L3 valid regional form mapping",
+      "routes": [
+        {
+          "source": "slowpoke",
+          "target": "slowking",
+          "partner": null,
+          "target_varieties": [],
+          "base_variety": "slowpoke-galar",
+          "evolved_form": "slowking-galar",
+          "chain_id": 33,
+          "species_number": null,
+          "trigger": "use-item",
+          "route_kind": null
+        }
+      ]
+    },
+    {
+      "autorun": "01",
+      "camp005": "04",
+      "item_id": "scroll_of_darkness",
+      "kind": "REGIONAL_EVOLUTION",
+      "producer": "Capture/Factory per-individual base form + verified item intent",
+      "consumer": "EvolutionSystem canonical base_form/evolved_form route; FieldItemService.evolve owner transaction",
+      "persistence": "CreatureInstance.form_id + SaveV2/migration preserving evolved regional form",
+      "rollback": "No item consumption or species/form change on invalid form, wrong item, denied owner or failed atomic transaction",
+      "real_evidence": "L1 PokeAPI item evolution records; no L3 valid regional form mapping",
+      "routes": [
+        {
+          "source": "kubfu",
+          "target": "urshifu",
+          "partner": null,
+          "target_varieties": [],
+          "base_variety": null,
+          "evolved_form": "urshifu-single-strike",
+          "chain_id": 470,
+          "species_number": null,
+          "trigger": "use-item",
+          "route_kind": null
+        }
+      ]
+    },
+    {
+      "autorun": "01",
+      "camp005": "04",
+      "item_id": "scroll_of_waters",
+      "kind": "REGIONAL_EVOLUTION",
+      "producer": "Capture/Factory per-individual base form + verified item intent",
+      "consumer": "EvolutionSystem canonical base_form/evolved_form route; FieldItemService.evolve owner transaction",
+      "persistence": "CreatureInstance.form_id + SaveV2/migration preserving evolved regional form",
+      "rollback": "No item consumption or species/form change on invalid form, wrong item, denied owner or failed atomic transaction",
+      "real_evidence": "L1 PokeAPI item evolution records; no L3 valid regional form mapping",
+      "routes": [
+        {
+          "source": "kubfu",
+          "target": "urshifu",
+          "partner": null,
+          "target_varieties": [],
+          "base_variety": null,
+          "evolved_form": "urshifu-rapid-strike",
+          "chain_id": 470,
+          "species_number": null,
+          "trigger": "use-item",
+          "route_kind": null
+        }
+      ]
+    },
+    {
+      "autorun": "02",
+      "camp005": "09",
+      "item_id": "gracidea",
+      "kind": "FORM_CHANGE",
+      "producer": "World context/choice plus species-specific form source (clock Shaymin; Deoxys selection; Therian mode; Rotom appliance; Zygarde cells+ability)",
+      "consumer": "Form application service with species/variant/moves/types and reversion",
+      "persistence": "Persistent form ID + context in CreatureInstance/SaveV2; battle-only Complete Zygarde not direct Cube form",
+      "rollback": "No item loss/identity mutation on invalid choice, missing producer, outsider or SaveV2 rejection",
+      "real_evidence": "L1 varieties and protected negative behavior, no form-change L3",
+      "routes": [
+        {
+          "source": "shaymin",
+          "target": "",
+          "partner": null,
+          "target_varieties": [
+            "shaymin-sky"
+          ],
+          "base_variety": "shaymin-land",
+          "evolved_form": null,
+          "chain_id": 253,
+          "species_number": 492,
+          "trigger": null,
+          "route_kind": "daytime+status+restore_land"
+        }
+      ]
+    },
+    {
+      "autorun": "02",
+      "camp005": "09",
+      "item_id": "meteorite",
+      "kind": "FORM_CHANGE",
+      "producer": "World context/choice plus species-specific form source (clock Shaymin; Deoxys selection; Therian mode; Rotom appliance; Zygarde cells+ability)",
+      "consumer": "Form application service with species/variant/moves/types and reversion",
+      "persistence": "Persistent form ID + context in CreatureInstance/SaveV2; battle-only Complete Zygarde not direct Cube form",
+      "rollback": "No item loss/identity mutation on invalid choice, missing producer, outsider or SaveV2 rejection",
+      "real_evidence": "L1 varieties and protected negative behavior, no form-change L3",
+      "routes": [
+        {
+          "source": "deoxys",
+          "target": "",
+          "partner": null,
+          "target_varieties": [
+            "deoxys-attack",
+            "deoxys-defense",
+            "deoxys-speed"
+          ],
+          "base_variety": "deoxys-normal",
+          "evolved_form": null,
+          "chain_id": 202,
+          "species_number": 386,
+          "trigger": null,
+          "route_kind": "user_selects_deoxys_form"
+        }
+      ]
+    },
+    {
+      "autorun": "02",
+      "camp005": "09",
+      "item_id": "reveal_glass",
+      "kind": "FORM_CHANGE",
+      "producer": "World context/choice plus species-specific form source (clock Shaymin; Deoxys selection; Therian mode; Rotom appliance; Zygarde cells+ability)",
+      "consumer": "Form application service with species/variant/moves/types and reversion",
+      "persistence": "Persistent form ID + context in CreatureInstance/SaveV2; battle-only Complete Zygarde not direct Cube form",
+      "rollback": "No item loss/identity mutation on invalid choice, missing producer, outsider or SaveV2 rejection",
+      "real_evidence": "L1 varieties and protected negative behavior, no form-change L3",
+      "routes": [
+        {
+          "source": "tornadus",
+          "target": "",
+          "partner": null,
+          "target_varieties": [
+            "tornadus-therian"
+          ],
+          "base_variety": "tornadus-incarnate",
+          "evolved_form": null,
+          "chain_id": 328,
+          "species_number": 641,
+          "trigger": null,
+          "route_kind": "incarnate_therian_toggle"
+        },
+        {
+          "source": "thundurus",
+          "target": "",
+          "partner": null,
+          "target_varieties": [
+            "thundurus-therian"
+          ],
+          "base_variety": "thundurus-incarnate",
+          "evolved_form": null,
+          "chain_id": 329,
+          "species_number": 642,
+          "trigger": null,
+          "route_kind": "incarnate_therian_toggle"
+        },
+        {
+          "source": "landorus",
+          "target": "",
+          "partner": null,
+          "target_varieties": [
+            "landorus-therian"
+          ],
+          "base_variety": "landorus-incarnate",
+          "evolved_form": null,
+          "chain_id": 332,
+          "species_number": 645,
+          "trigger": null,
+          "route_kind": "incarnate_therian_toggle"
+        },
+        {
+          "source": "enamorus",
+          "target": "",
+          "partner": null,
+          "target_varieties": [
+            "enamorus-therian"
+          ],
+          "base_variety": "enamorus-incarnate",
+          "evolved_form": null,
+          "chain_id": 477,
+          "species_number": 905,
+          "trigger": null,
+          "route_kind": "incarnate_therian_toggle"
+        }
+      ]
+    },
+    {
+      "autorun": "02",
+      "camp005": "09",
+      "item_id": "rotom_catalog",
+      "kind": "FORM_CHANGE",
+      "producer": "World context/choice plus species-specific form source (clock Shaymin; Deoxys selection; Therian mode; Rotom appliance; Zygarde cells+ability)",
+      "consumer": "Form application service with species/variant/moves/types and reversion",
+      "persistence": "Persistent form ID + context in CreatureInstance/SaveV2; battle-only Complete Zygarde not direct Cube form",
+      "rollback": "No item loss/identity mutation on invalid choice, missing producer, outsider or SaveV2 rejection",
+      "real_evidence": "L1 varieties and protected negative behavior, no form-change L3",
+      "routes": [
+        {
+          "source": "rotom",
+          "target": "",
+          "partner": null,
+          "target_varieties": [
+            "rotom-heat",
+            "rotom-wash",
+            "rotom-frost",
+            "rotom-fan",
+            "rotom-mow"
+          ],
+          "base_variety": "rotom",
+          "evolved_form": null,
+          "chain_id": 240,
+          "species_number": 479,
+          "trigger": null,
+          "route_kind": "appliance_selection_and_moves"
+        }
+      ]
+    },
+    {
+      "autorun": "02",
+      "camp005": "09",
+      "item_id": "zygarde_cube",
+      "kind": "FORM_CHANGE",
+      "producer": "World context/choice plus species-specific form source (clock Shaymin; Deoxys selection; Therian mode; Rotom appliance; Zygarde cells+ability)",
+      "consumer": "Form application service with species/variant/moves/types and reversion",
+      "persistence": "Persistent form ID + context in CreatureInstance/SaveV2; battle-only Complete Zygarde not direct Cube form",
+      "rollback": "No item loss/identity mutation on invalid choice, missing producer, outsider or SaveV2 rejection",
+      "real_evidence": "L1 varieties and protected negative behavior, no form-change L3",
+      "routes": [
+        {
+          "source": "zygarde",
+          "target": "",
+          "partner": null,
+          "target_varieties": [
+            "zygarde-10",
+            "zygarde-10-power-construct",
+            "zygarde-50-power-construct",
+            "zygarde-complete"
+          ],
+          "base_variety": "zygarde-50",
+          "evolved_form": null,
+          "chain_id": 370,
+          "species_number": 718,
+          "trigger": null,
+          "route_kind": "cell_assembly_and_power_construct_distinct"
+        }
+      ]
+    },
+    {
+      "autorun": "03",
+      "camp005": "07",
+      "item_id": "adamant_crystal",
+      "kind": "HELD_ORIGIN_PRIMAL",
+      "producer": "Equip/unequip source held_item_id; battle switch-in/exit trigger for Primal, held Origin activation and reversal",
+      "consumer": "Battle form resolver separate from species EvolutionSystem",
+      "persistence": "Stable/derivable form_id or battle transient with SaveV2 policies, held preserved",
+      "rollback": "Reversible equipment, no false origin/primal during invalid item or species and no double consumption",
+      "real_evidence": "L3 equipment/SaveV2 existing; form activation missing",
+      "routes": [
+        {
+          "source": "dialga",
+          "target": "dialga-origin",
+          "partner": null,
+          "target_varieties": [],
+          "base_variety": "dialga",
+          "evolved_form": null,
+          "chain_id": 244,
+          "species_number": 483,
+          "trigger": null,
+          "route_kind": "origin_held"
+        }
+      ]
+    },
+    {
+      "autorun": "03",
+      "camp005": "07",
+      "item_id": "blue_orb",
+      "kind": "HELD_ORIGIN_PRIMAL",
+      "producer": "Equip/unequip source held_item_id; battle switch-in/exit trigger for Primal, held Origin activation and reversal",
+      "consumer": "Battle form resolver separate from species EvolutionSystem",
+      "persistence": "Stable/derivable form_id or battle transient with SaveV2 policies, held preserved",
+      "rollback": "Reversible equipment, no false origin/primal during invalid item or species and no double consumption",
+      "real_evidence": "L3 equipment/SaveV2 existing; form activation missing",
+      "routes": [
+        {
+          "source": "kyogre",
+          "target": "kyogre-primal",
+          "partner": null,
+          "target_varieties": [],
+          "base_variety": "kyogre",
+          "evolved_form": null,
+          "chain_id": 198,
+          "species_number": 382,
+          "trigger": null,
+          "route_kind": "primal_on_switch"
+        }
+      ]
+    },
+    {
+      "autorun": "03",
+      "camp005": "07",
+      "item_id": "griseous_core",
+      "kind": "HELD_ORIGIN_PRIMAL",
+      "producer": "Equip/unequip source held_item_id; battle switch-in/exit trigger for Primal, held Origin activation and reversal",
+      "consumer": "Battle form resolver separate from species EvolutionSystem",
+      "persistence": "Stable/derivable form_id or battle transient with SaveV2 policies, held preserved",
+      "rollback": "Reversible equipment, no false origin/primal during invalid item or species and no double consumption",
+      "real_evidence": "L3 equipment/SaveV2 existing; form activation missing",
+      "routes": [
+        {
+          "source": "giratina",
+          "target": "giratina-origin",
+          "partner": null,
+          "target_varieties": [],
+          "base_variety": "giratina-altered",
+          "evolved_form": null,
+          "chain_id": 248,
+          "species_number": 487,
+          "trigger": null,
+          "route_kind": "origin_held"
+        }
+      ]
+    },
+    {
+      "autorun": "03",
+      "camp005": "07",
+      "item_id": "lustrous_globe",
+      "kind": "HELD_ORIGIN_PRIMAL",
+      "producer": "Equip/unequip source held_item_id; battle switch-in/exit trigger for Primal, held Origin activation and reversal",
+      "consumer": "Battle form resolver separate from species EvolutionSystem",
+      "persistence": "Stable/derivable form_id or battle transient with SaveV2 policies, held preserved",
+      "rollback": "Reversible equipment, no false origin/primal during invalid item or species and no double consumption",
+      "real_evidence": "L3 equipment/SaveV2 existing; form activation missing",
+      "routes": [
+        {
+          "source": "palkia",
+          "target": "palkia-origin",
+          "partner": null,
+          "target_varieties": [],
+          "base_variety": "palkia",
+          "evolved_form": null,
+          "chain_id": 245,
+          "species_number": 484,
+          "trigger": null,
+          "route_kind": "origin_held"
+        }
+      ]
+    },
+    {
+      "autorun": "03",
+      "camp005": "07",
+      "item_id": "red_orb",
+      "kind": "HELD_ORIGIN_PRIMAL",
+      "producer": "Equip/unequip source held_item_id; battle switch-in/exit trigger for Primal, held Origin activation and reversal",
+      "consumer": "Battle form resolver separate from species EvolutionSystem",
+      "persistence": "Stable/derivable form_id or battle transient with SaveV2 policies, held preserved",
+      "rollback": "Reversible equipment, no false origin/primal during invalid item or species and no double consumption",
+      "real_evidence": "L3 equipment/SaveV2 existing; form activation missing",
+      "routes": [
+        {
+          "source": "groudon",
+          "target": "groudon-primal",
+          "partner": null,
+          "target_varieties": [],
+          "base_variety": "groudon",
+          "evolved_form": null,
+          "chain_id": 199,
+          "species_number": 383,
+          "trigger": null,
+          "route_kind": "primal_on_switch"
+        }
+      ]
+    },
+    {
+      "autorun": "04",
+      "camp005": "08",
+      "item_id": "dna_splicers",
+      "kind": "FUSION",
+      "producer": "Two distinct owned creature instance IDs party/storage + partner selection and fuse/unfuse intent",
+      "consumer": "Fusion transaction/service and chosen variant resolver, active/parked partner ownership",
+      "persistence": "SaveV2 pair IDs, reversible form and complete snapshot of each creature, migration",
+      "rollback": "Atomic consume/restore or zero mutation on failure; never clone/discard partner and never orphan inventory",
+      "real_evidence": "L1 canonical varieties and negative save/ownership; no positive L3 fusion",
+      "routes": [
+        {
+          "source": "kyurem",
+          "target": "kyurem-black",
+          "partner": "zekrom",
+          "target_varieties": [],
+          "base_variety": null,
+          "evolved_form": null,
+          "chain_id": 333,
+          "species_number": 646,
+          "trigger": null,
+          "route_kind": null
+        },
+        {
+          "source": "kyurem",
+          "target": "kyurem-white",
+          "partner": "reshiram",
+          "target_varieties": [],
+          "base_variety": null,
+          "evolved_form": null,
+          "chain_id": 333,
+          "species_number": 646,
+          "trigger": null,
+          "route_kind": null
+        }
+      ]
+    },
+    {
+      "autorun": "04",
+      "camp005": "08",
+      "item_id": "reins_of_unity",
+      "kind": "FUSION",
+      "producer": "Two distinct owned creature instance IDs party/storage + partner selection and fuse/unfuse intent",
+      "consumer": "Fusion transaction/service and chosen variant resolver, active/parked partner ownership",
+      "persistence": "SaveV2 pair IDs, reversible form and complete snapshot of each creature, migration",
+      "rollback": "Atomic consume/restore or zero mutation on failure; never clone/discard partner and never orphan inventory",
+      "real_evidence": "L1 canonical varieties and negative save/ownership; no positive L3 fusion",
+      "routes": [
+        {
+          "source": "calyrex",
+          "target": "calyrex-ice",
+          "partner": "glastrier",
+          "target_varieties": [],
+          "base_variety": null,
+          "evolved_form": null,
+          "chain_id": 476,
+          "species_number": 898,
+          "trigger": null,
+          "route_kind": null
+        },
+        {
+          "source": "calyrex",
+          "target": "calyrex-shadow",
+          "partner": "spectrier",
+          "target_varieties": [],
+          "base_variety": null,
+          "evolved_form": null,
+          "chain_id": 476,
+          "species_number": 898,
+          "trigger": null,
+          "route_kind": null
+        }
+      ]
+    },
+    {
+      "autorun": "04",
+      "camp005": "08",
+      "item_id": "n_lunarizer_merge",
+      "kind": "FUSION",
+      "producer": "Two distinct owned creature instance IDs party/storage + partner selection and fuse/unfuse intent",
+      "consumer": "Fusion transaction/service and chosen variant resolver, active/parked partner ownership",
+      "persistence": "SaveV2 pair IDs, reversible form and complete snapshot of each creature, migration",
+      "rollback": "Atomic consume/restore or zero mutation on failure; never clone/discard partner and never orphan inventory",
+      "real_evidence": "L1 canonical varieties and negative save/ownership; no positive L3 fusion",
+      "routes": [
+        {
+          "source": "necrozma",
+          "target": "necrozma-dawn",
+          "partner": "lunala",
+          "target_varieties": [],
+          "base_variety": null,
+          "evolved_form": null,
+          "chain_id": 421,
+          "species_number": 800,
+          "trigger": null,
+          "route_kind": null
+        }
+      ]
+    },
+    {
+      "autorun": "04",
+      "camp005": "08",
+      "item_id": "n_solarizer_merge",
+      "kind": "FUSION",
+      "producer": "Two distinct owned creature instance IDs party/storage + partner selection and fuse/unfuse intent",
+      "consumer": "Fusion transaction/service and chosen variant resolver, active/parked partner ownership",
+      "persistence": "SaveV2 pair IDs, reversible form and complete snapshot of each creature, migration",
+      "rollback": "Atomic consume/restore or zero mutation on failure; never clone/discard partner and never orphan inventory",
+      "real_evidence": "L1 canonical varieties and negative save/ownership; no positive L3 fusion",
+      "routes": [
+        {
+          "source": "necrozma",
+          "target": "necrozma-dusk",
+          "partner": "solgaleo",
+          "target_varieties": [],
+          "base_variety": null,
+          "evolved_form": null,
+          "chain_id": 421,
+          "species_number": 800,
+          "trigger": null,
+          "route_kind": null
+        }
+      ]
+    }
+  ]
+}
