@@ -9,9 +9,9 @@ var bridge: Node
 var view: Control
 const SAVE := "user://w03_repeat_native_v4_negatives.json"
 
-func ck(label: String, pass: bool) -> void:
+func ck(label: String, ok: bool) -> void:
 	checks += 1
-	if not pass:
+	if not ok:
 		errors.append(label)
 		push_error("W03_REPEAT_NATIVE_V4_NEG: " + label)
 
