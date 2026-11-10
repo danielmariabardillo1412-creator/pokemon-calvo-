@@ -1,0 +1,11 @@
+bloque,hito,estado,funcional,dependencia,sha,ci,nota
+01,rendimiento_229,EN_CI,0,0,PENDIENTE,PENDIENTE,validar_en_Godot_headless
+02,apertura_cierre,EN_CI,0,0,PENDIENTE,PENDIENTE,validar_en_Godot_headless
+03,stock_obsoleto,EN_CI,0,0,PENDIENTE,PENDIENTE,validar_en_Godot_headless
+04,propietario_retirado,EN_CI,0,0,PENDIENTE,PENDIENTE,validar_en_Godot_headless
+05,cuatro_slots_cancelar,EN_CI,0,0,PENDIENTE,PENDIENTE,validar_en_Godot_headless
+06,orden_tipo_stock,EN_CI,0,0,PENDIENTE,PENDIENTE,validar_en_Godot_headless
+07,rechazos,EN_CI,0,0,PENDIENTE,PENDIENTE,validar_en_Godot_headless
+08,textos_es_fallback,EN_CI,0,0,PENDIENTE,PENDIENTE,validar_en_Godot_headless
+09,SaveV2_abierto,EN_CI,0,0,PENDIENTE,PENDIENTE,validar_en_Godot_headless
+10,ci_resiliencia,EN_CI,0,0,PENDIENTE,PENDIENTE,validar_en_Godot_headless

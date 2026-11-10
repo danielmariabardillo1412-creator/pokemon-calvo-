@@ -16,6 +16,10 @@ on:
       - 'tests/gameplay/parallel_items_w05_book_ui_autorun_v1.gd'
       - 'tests/tools/test_parallel_items_w05_book_ui_autorun_v2.py'
       - 'tests/gameplay/parallel_items_w05_book_ui_autorun_v2.gd'
+      - 'scenes/visual/field_machine_book_panel.gd'
+      - 'tests/tools/test_parallel_items_w05_book_ui_autorun_v3.py'
+      - 'tests/gameplay/parallel_items_w05_book_ui_autorun_v3.gd'
+      - 'docs/coordination/items_parallel_v1/reports/W05/AUTORUN_V3_PROGRESS.csv'
       - 'tests/fixtures/parallel_items/w05_book_ui_autorun_v2.json'
       - 'docs/coordination/items_parallel_v1/reports/W05/AUTORUN_V2_PROGRESS.csv'
       - 'docs/coordination/items_parallel_v1/reports/W05/AUTORUN_V1_PROGRESS.csv'
@@ -152,6 +156,16 @@ jobs:
           timeout 1000s godot --headless --path . --script res://tests/gameplay/parallel_items_w05_book_ui_autorun_v2.gd 2>&1 | tee w05-autorun-v2-godot.log
           grep -E '^W05_BOOKS_AUTORUN_V2_GODOT PASS blocks=10 ids=180 functional=[0-9]+ blocked=[0-9]+ checks=[1-9][0-9]*$' w05-autorun-v2-godot.log
           test "$(grep -Ec '^W05_BOOKS_AUTORUN_V2_GROUP block=[0-9]{2} status=(CERTIFICABLE|BLOQUEADO) ids=18 functional=[0-9]+ blocked=[0-9]+ checks=[1-9][0-9]*$' w05-autorun-v2-godot.log)" -eq 10
+      - name: AUTORUN V3 W05 - 10 gates de robustez de panel 229 libros
+        if: steps.scope.outputs.blocks == '10'
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tests/tools/test_parallel_items_w05_book_ui_autorun_v3.py 2>&1 | tee w05-autorun-v3-python.log
+          grep -E '^W05_BOOKS_AUTORUN_V3_PY PASS blocks=10 books=229 checks=[1-9][0-9]*$' w05-autorun-v3-python.log
+          timeout 900s godot --headless --path . --script res://tests/gameplay/parallel_items_w05_book_ui_autorun_v3.gd 2>&1 | tee w05-autorun-v3-godot.log
+          grep -E '^W05_BOOKS_AUTORUN_V3_GODOT PASS blocks=10 functional=10 blocked=0 checks=[1-9][0-9]*$' w05-autorun-v3-godot.log
+          test "$(grep -Ec '^W05_BOOKS_AUTORUN_V3_HIT block=[0-9]{2} name=[A-Za-z0-9_]+ status=CERTIFICABLE checks=[1-9][0-9]*$' w05-autorun-v3-godot.log)" -eq 10
       - name: Conservar evidencia 7 dias
         if: always()
         uses: actions/upload-artifact@v4
