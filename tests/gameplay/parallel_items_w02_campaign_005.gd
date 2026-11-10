@@ -3,6 +3,14 @@ extends "res://tests/gameplay/parallel_items_w02_campaign_004.gd"
 # W02 CAMPAÑA_005: reutiliza utilidades reales de propietario, SaveV2 y recibos.
 # No ejecuta _run_camp004 ni modifica los contratos de campañas previas.
 const SOURCE_005 := "res://tests/fixtures/parallel_items/w02_campaign_005.json"
+# Whitelist ONLY IA6-promoted mint IDs; frozen 288-case fixture untouched.
+# This initially covers MINT-L3 02; AUTORUN 01..10 extend it one row at a time.
+const PROMOTED_MINTS_005 := {
+	"adamant_mint": "adamant",
+	"modest_mint": "modest",
+	"timid_mint": "timid",
+}
+
 const MOCHI_STATS_005 := {"health_mochi": "hp", "muscle_mochi": "attack",
 	"resist_mochi": "defense", "genius_mochi": "special_attack",
 	"clever_mochi": "special_defense", "swift_mochi": "speed"}
@@ -90,7 +98,12 @@ func _probe_training(spec: Dictionary, mode: String) -> Dictionary:
 		stamp = String(preview.get("stamp", ""))
 		check(mode + " sello de transición no vacío", not stamp.is_empty())
 	var result: Dictionary = service.use_item(item, &"own", slot, &"", stamp)
+	var promoted_mint: bool = String(spec.kind) == "mint_dependency" and PROMOTED_MINTS_005.has(String(item))
 	var expected: bool = bool(spec.applies) and mode != "none"
+	if promoted_mint:
+		check(mode + " migration explicitly mapped to exact nature",
+			String(PROMOTED_MINTS_005[String(item)]) == String(spec.wanted_nature))
+		expected = mode != "none" and slot == -1 and String(spec.get("nature", "hardy")) != String(spec.wanted_nature)
 	check(mode + " aceptación contra contrato", bool(result.get("accepted", false)) == expected)
 	var now: CreatureInstance = owner.owned_creature(&"own")
 	if now == null:
@@ -101,7 +114,35 @@ func _probe_training(spec: Dictionary, mode: String) -> Dictionary:
 	check(mode + " identidad y localización", now.instance_id == &"own"
 		and owner.location_of(&"own") == (&"STORAGE" if mode == "reserve" else &"PARTY"))
 	check(mode + " origen no modificado", c.to_dict() == original)
-	if String(spec.kind) == "mint_dependency":
+	if String(spec.kind) == "mint_dependency" and promoted_mint:
+		# Every historical scenario is executed, never skipped. Replaced negative
+		# assertions use a positive native stat/stock/SaveV2 contract.
+		var target: StringName = StringName(spec.wanted_nature)
+		var wanted: Dictionary = StatCalculator.compute(
+			catalogs.species(c.species_id).base_stat_block(), c.ivs, c.evs, target, c.level).to_dict()
+		var original_stats: Dictionary = c.stats.to_dict()
+		check(mode + " promoted nature originally immutable", now.nature_id == c.nature_id
+			and now.instance_id == c.instance_id and now.ivs == c.ivs and now.evs == c.evs
+			and now.moveset[0].to_dict() == start_first
+			and now.moveset[1].to_dict() == start_second
+			and now.friendship == c.friendship and now.level == c.level
+			and now.current_hp == c.current_hp)
+		if expected:
+			var exact: Dictionary = original.duplicate(true)
+			exact["effective_nature_id"] = String(target)
+			exact["stats"] = wanted
+			check(mode + " promoted mint positive change and exact creature payload",
+				wanted != original_stats and now.to_dict() == exact
+				and String(result.get("action", "")) == "effective_nature"
+				and now.effective_nature_id == target
+				and now.stats.max_hp == c.stats.max_hp)
+		else:
+			var rejection: String = "item_not_owned" if mode == "none" else (
+				"unexpected_mint_target" if slot != -1 else "item_has_no_effect")
+			check(mode + " promoted negative specific reason and no mutation",
+				String(result.get("reason", "")) == rejection
+				and _owner_data(owner) == before)
+	elif String(spec.kind) == "mint_dependency":
 		check(mode + " menta: dependencia explícita sin falsa aplicación",
 			String(result.get("status", "")) == String(spec.expect_status)
 			and String(result.get("reason", "")) == String(spec.expect_reason))
@@ -299,11 +340,14 @@ func _run_camp005() -> void:
 	check("tres modos", automation.modes == ["active", "none", "reserve"])
 	check("bloques acumulados", automation.blocks.size() == automation.completed_blocks.size())
 	var results: Array = []
+	var migration_counts: Dictionary = {}
 	for index: int in automation.blocks.size():
 		var block: Dictionary = automation.blocks[index]
 		check("bloque exacto", block.block == "%02d" % (index + 1)
 			and int(automation.completed_blocks[index]) == index + 1)
 		for spec: Dictionary in block.cases:
+			if String(spec.kind) == "mint_dependency" and PROMOTED_MINTS_005.has(String(spec.id)):
+				migration_counts[String(spec.id)] = int(migration_counts.get(String(spec.id), 0)) + 1
 			current_case = String(spec.scenario)
 			var errors_before: int = errors.size()
 			var checks_before: int = checks
@@ -321,6 +365,8 @@ func _run_camp005() -> void:
 				var n: Dictionary = observations.none
 				var s: Dictionary = observations.reserve
 				var should: bool = bool(spec.applies)
+				if String(spec.kind) == "mint_dependency" and PROMOTED_MINTS_005.has(String(spec.id)):
+					should = int(spec.get("slot", -1)) == -1 and String(spec.get("nature", "hardy")) != String(spec.wanted_nature)
 				check("efecto solo con stock en PARTY o STORAGE",
 					bool(a.accepted) == should and not bool(n.accepted)
 					and bool(s.accepted) == should)
@@ -348,11 +394,16 @@ func _run_camp005() -> void:
 			ok = ok and names.has(String(spec.scenario))
 		check("bloque íntegro", ok)
 		if ok: passed_blocks += 1
+	var historical_count: int = 0
+	for n: Variant in migration_counts.values(): historical_count += int(n)
+	check("migration exact cases count", historical_count == 20)
 	var success: bool = errors.is_empty() and passed_blocks == automation.blocks.size()
 	var report: Dictionary = {"worker": "W02", "campaign": "CAMP_005",
 		"status": "PASS" if success else "FAIL", "blocks": passed_blocks,
 		"checks": checks, "results": results, "errors": automation_errors,
 		"fixture_sha256": FileAccess.get_sha256(SOURCE_005),
+		"promoted_mint_cases": migration_counts, "promoted_natures": PROMOTED_MINTS_005,
+		"frozen_ci_run": 42696681590, "frozen_sha": "9e2797a4972f22dbf14d5bc5f2d24bb212d29456",
 		"gpu_tested": false, "ui_tested": false}
 	var file := FileAccess.open(destination + "/godot.json", FileAccess.WRITE)
 	if file == null:
