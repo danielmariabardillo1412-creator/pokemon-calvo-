@@ -40,7 +40,7 @@ func _run() -> void:
 		return
 	scene.player.set_physics_process(false)
 	var config: Dictionary = scene._active_config.duplicate(true)
-	config.wild_species_id = "magikarp"
+	config.wild_species_id = "goldeen"
 	config.wild_min_level = 5
 	config.wild_max_level = 5
 	config.encounter_chance_percent = 100
@@ -57,7 +57,7 @@ func _run() -> void:
 		await _finish()
 		return
 	view._playback.set_process(false)
-	var catalog: CreatureSpecies = scene._catalogs.species(&"magikarp")
+	var catalog: CreatureSpecies = scene._catalogs.species(&"goldeen")
 	ck("target canonical catalog is Water only", catalog.has_type(&"water") and not catalog.has_type(&"bug"))
 	var initial_owner_species := owner.party.get_creature(&"w03net_transform").species_id
 	var switch_response: Dictionary = await view.session.submit("switch 2", view.session.revision)
@@ -73,7 +73,7 @@ func _run() -> void:
 		and initial_owner_species == &"mew")
 	var target: CreatureInstance = view.session.battle_state().active_for_side(&"side_b")
 	ck("native target remains original Water species after player Transform",
-		target.base_species_id() == &"magikarp")
+		target.base_species_id() == &"goldeen")
 	var before_qty := owner.inventory.quantity(&"net_ball")
 	var before_ledger := owner.caught_base_species_ids.duplicate()
 	var attempted: Dictionary = await view.session.capture(&"net_ball", view.session.revision)
@@ -87,7 +87,7 @@ func _run() -> void:
 		and is_equal_approx(float(result.get("probability", -1.0)), expected))
 	ck("exactly one Net consumed and only actual Water base recorded",
 		owner.inventory.quantity(&"net_ball") == before_qty - 1
-		and owner.caught_base_species_ids == [&"magikarp"]
+		and owner.caught_base_species_ids == [&"goldeen"]
 		and before_ledger.is_empty())
 	ck("both player Mew identities retained after native settlement",
 		owner.party.get_creature(&"w03net_lead").species_id == &"mew"
@@ -105,7 +105,7 @@ func _run() -> void:
 		await bridge.load_game()
 		and scene.field_collection().party.get_creature(&"w03net_transform").species_id == &"mew"
 		and scene.field_collection().inventory.quantity(&"net_ball") == before_qty - 1
-		and scene.field_collection().caught_base_species_ids == [&"magikarp"])
+		and scene.field_collection().caught_base_species_ids == [&"goldeen"])
 	await _finish()
 
 func _finish() -> void:
