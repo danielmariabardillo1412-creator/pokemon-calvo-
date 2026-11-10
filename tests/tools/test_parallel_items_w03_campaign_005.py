@@ -93,9 +93,14 @@ def main() -> int:
                     check("ShowdownAdventureSession.capture" in producer["consumer"]
                           and producer["decision"].strip() and producer["producer"].strip(),
                           "Productor, consumidor o decisión sin especificar")
-                check('const IDS: Array[StringName] = [&"quick_ball", &"timer_ball", &"level_ball"]'
-                      in effects and "ContextBallEffects.IDS" in rules,
-                      "Referencia positiva de contexto previo cambió")
+                # Versioned migration whitelist W03: Repeat Ball alone promoted; protect all
+                # original contextual entries and require a dedicated positive live-ledger test.
+                ids_line = re.search(r'const IDS: Array\\[StringName\\] = \\[(.*?)\\]', effects)
+                check(ids_line is not None and ids_line.group(1).replace(" ", "") ==
+                      '&"quick_ball",&"timer_ball",&"level_ball",&"repeat_ball"' and
+                      "ContextBallEffects.IDS" in rules and
+                      (ROOT / "tests/gameplay/parallel_items_w03_repeat_history_v2.gd").exists(),
+                      "W03 repeat-only migration must preserve prior contextual balls")
                 check('CaptureSystem.validate_attempt(CaptureAttempt.new(target, &"quick_ball", ctx)'
                       in runner and '"timer_ball", target, species, ctx), 1.0'
                       in runner and '"level_ball", target, species, ctx), 4.0'
