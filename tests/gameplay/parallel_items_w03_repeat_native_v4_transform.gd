@@ -26,6 +26,16 @@ func _set_encounter(species_id: String) -> void:
 	config.encounter_chance_percent = 100
 	scene._on_configuration_applied(config)
 
+func _set_native_encounter_without_reset(species_id: StringName) -> bool:
+	# Do not call _on_configuration_applied here: it bootstraps a NEW
+	# PlayerCollection and silently destroys the caught-ledger fixture.
+	var zone: StringName = scene.TECHNICAL_ZONE_ID
+	var built: Dictionary = TechnicalEncounterPoolBuilder.build(scene._catalogs, zone, 100, 5, 5, species_id)
+	if not bool(built.get("ok", false)):
+		return false
+	scene._director._tables[zone] = built.table
+	return true
+
 func _encounter() -> bool:
 	scene.player.global_position = Vector2(420, 150)
 	await scene._on_player_step_completed(scene.player.global_position)
@@ -108,7 +118,8 @@ func _run() -> void:
 		await bridge.load_game() and scene.field_collection().caught_base_species_ids == [&"pidgey"]
 		and scene.field_collection().party.get_creature(&"w03v4_transform_lead").species_id == &"mew")
 	owner = scene.field_collection()
-	_set_encounter("caterpie")
+	ck("distinct-species encounter set without losing native owner",
+		_set_native_encounter_without_reset(&"caterpie") and is_same(scene.field_collection(), owner))
 	ck("distinct-species wild battle opened", await _encounter())
 	if view.session == null or not view.session.has_active_battle():
 		await _finish()
