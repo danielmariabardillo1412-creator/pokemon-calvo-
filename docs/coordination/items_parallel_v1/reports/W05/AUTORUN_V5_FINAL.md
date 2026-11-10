@@ -5,7 +5,7 @@ Rama exclusiva: `codex/calvo-items-20261109-w05-books-ui`.
 **Estado:** TANDA05, 10/10 hitos QA examinados/certificados en su alcance; MT nuevas **0**; 229/229 nombres españoles de movimientos en datos originales y en PCK; bloqueados de la tanda **0**.
 **SHA funcional validado:** `42466cfe9b012949472f12480a3d5e3b91573c92`.
 **CI:** [#42923848244](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/42923848244) `completed/success`, jobs `verify` y `W05 TANDA05 - Windows PCK/runtime isolation` ambos SUCCESS.
-La actualización documental posterior del CSV no cambia el código ni la exportación; la CI del checkpoint documental se verifica por separado.
+**CI del checkpoint documental:** [#42924399433](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/42924399433), también `completed/success`, sobre SHA `0256e7ec32df3959914eb97e771a12c19545f503`, ambos jobs SUCCESS. Los commits posteriores de informe/continuidad son exclusivamente documentales y no alteran código ni exportación.
 
 ## Resultado de los 10 hitos
 
