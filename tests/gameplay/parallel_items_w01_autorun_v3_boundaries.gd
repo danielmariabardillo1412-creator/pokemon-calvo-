@@ -52,6 +52,7 @@ func _run_v3_boundaries() -> void:
 	quit(0 if errors.is_empty() else 1)
 
 func _reserve_capture() -> void:
+	var before_errors: int = errors.size()
 	var id := &"ghost_gem"
 	var f: Dictionary = _owner_with_gem(id, "shadow_ball")
 	var owner: PlayerCollection = f.owner
@@ -85,11 +86,11 @@ func _reserve_capture() -> void:
 		hit.get("accepted", false)
 		and session.battle_state().creature(&"reserve").held_item_consumed
 		and session.battle_state().creature(&"own").held_item_id == &"")
-	var back: Dictionary = await session.submit("switch 1", session.revision)
+	var back: Dictionary = await session.submit(_switch_choice(session, &"own"), session.revision)
 	check("reserve: return to own without item resurrection",
 		back.get("accepted", false)
 		and session.battle_state().active_for_side(&"side_a").instance_id == &"own")
-	var return_bench: Dictionary = await session.submit("switch 2", session.revision)
+	var return_bench: Dictionary = await session.submit(_switch_choice(session, &"reserve"), session.revision)
 	check("reserve: second entry keeps consumed flag",
 		return_bench.get("accepted", false)
 		and session.battle_state().active_for_side(&"side_a").instance_id == &"reserve"
@@ -111,11 +112,15 @@ func _reserve_capture() -> void:
 		final.valid and final.owner.owned_creature(&"reserve").held_item_consumed
 		and final.owner.inventory.quantity(id) == 1)
 	await session.close()
-	boundaries_ok += 1
-	captures_ok += 1
-	print("W01_V3_BOUNDARY_ROW PASS kind=reserve_capture gem=ghost_gem")
+	if errors.size() == before_errors:
+		boundaries_ok += 1
+		captures_ok += 1
+		print("W01_V3_BOUNDARY_ROW PASS kind=reserve_capture gem=ghost_gem")
+	else:
+		print("W01_V3_BOUNDARY_ROW FAIL kind=reserve_capture gem=ghost_gem")
 
 func _defeat_retention() -> void:
+	var before_errors: int = errors.size()
 	var owner := PlayerCollection.new()
 	var own := _mon(&"mew", 1, &"own", ["reflect", "shadow_ball"])
 	check("defeat: own creature in actual collection", owner.party.add_creature(own))
@@ -149,11 +154,15 @@ func _defeat_retention() -> void:
 		and not saved.owner.owned_creature(&"own").held_item_consumed
 		and saved.owner.inventory.quantity(&"ghost_gem") == 0)
 	await session.close()
-	boundaries_ok += 1
-	defeats_ok += 1
-	print("W01_V3_BOUNDARY_ROW PASS kind=defeat gem=ghost_gem")
+	if errors.size() == before_errors:
+		boundaries_ok += 1
+		defeats_ok += 1
+		print("W01_V3_BOUNDARY_ROW PASS kind=defeat gem=ghost_gem")
+	else:
+		print("W01_V3_BOUNDARY_ROW FAIL kind=defeat gem=ghost_gem")
 
 func _transform_capture() -> void:
+	var before_errors: int = errors.size()
 	var owner := PlayerCollection.new()
 	var ditto := _mon(&"ditto", 100, &"own", ["transform", "reflect"])
 	var second := _mon(&"mew", 100, &"reserve", ["reflect"])
@@ -213,7 +222,10 @@ func _transform_capture() -> void:
 		and final.owner.owned_creature(&"own").held_item_consumed
 		and final.owner.inventory.quantity(&"ghost_gem") == 1)
 	await session.close()
-	boundaries_ok += 1
-	captures_ok += 1
-	transforms_ok += 1
-	print("W01_V3_BOUNDARY_ROW PASS kind=transform_capture gem=ghost_gem")
+	if errors.size() == before_errors:
+		boundaries_ok += 1
+		captures_ok += 1
+		transforms_ok += 1
+		print("W01_V3_BOUNDARY_ROW PASS kind=transform_capture gem=ghost_gem")
+	else:
+		print("W01_V3_BOUNDARY_ROW FAIL kind=transform_capture gem=ghost_gem")
