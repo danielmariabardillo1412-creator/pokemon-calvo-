@@ -1,11 +1,11 @@
 hito,entrega,estado,objetos_nuevos,qa,ci,sha,evidencia
-01,diagnose_old_duplicate,ROJO_REPRODUCIDO,0,1,42921793520,4991f19905bac236ee1f49114bbacbbfd3b21da2,Python asserts duplicate Growth.plan recompute in prepatch SHA
-02,compare_semantic_equivalence,TEST_IMPLEMENTADO_CI_PENDIENTE,0,1,,,Golden fallback candidate equals new shared evolution candidate in Godot
-03,remove_growth_recalc,PARCHE_IMPLEMENTADO_CI_PENDIENTE,0,0,,,Removed only redundant staged recalculation preserving choice and HP delta
-04,bulbasaur_ivysaur_minted,PENDIENTE,0,0,,,
-05,eevee_vaporeon_item,PENDIENTE,0,0,,,
-06,multi_level_context_rollback,PENDIENTE,0,0,,,
-07,owner_party_storage_invariants,PENDIENTE,0,0,,,
-08,save_v2_normal_legacy_corrupt,PENDIENTE,0,0,,,
-09,w04_form_guard_not_integration,PENDIENTE,0,0,,,
-10,regression_certification,PENDIENTE,0,0,,,
+01,diagnose_old_duplicate,CERTIFICADO,0,1,42922087890,7765c4bb6982662ae00695c8329c970e10931b4c,Diagnóstico estructural y CI roja de duplicación explícita 42921793520
+02,compare_semantic_equivalence,CERTIFICADO,0,1,42922087890,7765c4bb6982662ae00695c8329c970e10931b4c,Godot compara payload completo de candidato con y sin fallback legacy en PARTY/STORAGE
+03,remove_growth_recalc,CERTIFICADO,0,1,42922087890,7765c4bb6982662ae00695c8329c970e10931b4c,Growth.plan elimina solo fallback effective y recalculate_stats redundante; conserva HP delta
+04,bulbasaur_ivysaur_minted,CERTIFICADO,0,1,42922087890,7765c4bb6982662ae00695c8329c970e10931b4c,Evolución real Bulbasaur a Ivysaur tras menta por nivel y SaveV2
+05,eevee_vaporeon_item,CERTIFICADO,0,1,42922087890,7765c4bb6982662ae00695c8329c970e10931b4c,Eevee a Vaporeon mediante Piedra Agua; rechazos sin consumo y persistencia
+06,multi_level_context_rollback,CERTIFICADO,0,1,42922087890,7765c4bb6982662ae00695c8329c970e10931b4c,Caramelo Exp XL: varios niveles; decisiones de evolución; rechazo y rollback atómico
+07,owner_party_storage_invariants,CERTIFICADO,0,1,42922087890,7765c4bb6982662ae00695c8329c970e10931b4c,PARTY/STORAGE: identidad propietario IV EV HP PP y sin duplicación
+08,save_v2_normal_legacy_corrupt,CERTIFICADO,0,1,42922087890,7765c4bb6982662ae00695c8329c970e10931b4c,Snapshot SaveV2 actual legacy y alterado; carga corrupta denegada
+09,w04_form_guard_not_integration,CERTIFICADO,0,1,42922087890,7765c4bb6982662ae00695c8329c970e10931b4c,Contrato estructural W04 sin form_id agregado ni escrito; integración futura no demostrada
+10,regression_certification,CERTIFICADO,0,0,42922087890,7765c4bb6982662ae00695c8329c970e10931b4c,CI global verde 42922087890; T01-T03 y CAMP003-CAMP006 completas
