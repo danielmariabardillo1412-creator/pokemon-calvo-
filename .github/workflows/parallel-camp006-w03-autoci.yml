@@ -178,15 +178,7 @@ jobs:
         run: |
           set -euo pipefail
           timeout 900s godot --headless --path . --script res://tests/gameplay/parallel_items_w03_net_native_v5.gd 2>&1 | tee camp006-w03-net-native-v5.log
-          grep -E '^W03_NET_NATIVE_V5 PASS checks=[1-9][0-9]*
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: camp006-w03-${{ github.run_id }}
-          retention-days: 7
-          if-no-files-found: ignore
-          path: camp006-w03-*.log
- camp006-w03-net-native-v5.log
+          grep -E '^W03_NET_NATIVE_V5 PASS checks=[1-9][0-9]*$' camp006-w03-net-native-v5.log
       - name: Archive evidence
         if: always()
         uses: actions/upload-artifact@v4
