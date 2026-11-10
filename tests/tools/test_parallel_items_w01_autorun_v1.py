@@ -76,7 +76,7 @@ def validate() -> None:
               scope[id]["estado_contenido"]=="SELECCIONADO", "Fuera del catálogo elegido "+id)
         check(id not in ";".join(r["ids"] for r in prev), "No repetir objeto CAMP005 "+id)
     runner = GODOT.read_text(encoding="utf-8")
-    for token in ["_run_autorun_v1","_probe_w01_c004","gem_matching",
+    for token in ["_run_autorun_v1","_w01_c004_probe_lane","gem_matching",
                   "gem_first_consumed","gem_second_consumed","gem_mid_save","gem_final_save",
                   "physical_units","_frame_c003","SaveV2", "AUTORUN_W01_ROW_PASS"]:
         check(token in runner, "No hay prueba efectiva en Godot: "+token)
