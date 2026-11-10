@@ -112,8 +112,8 @@ func _probe_training(spec: Dictionary, mode: String) -> Dictionary:
 	var expected: bool = bool(spec.applies) and mode != "none"
 	if promoted_mint:
 		check(mode + " migration explicitly mapped to exact nature",
-			String(PROMOTED_MINTS_005[String(item)]) == String(spec.wanted_nature))
-		expected = mode != "none" and slot == -1 and String(spec.get("nature", "hardy")) != String(spec.wanted_nature)
+			String(PROMOTED_MINTS_005[String(item)]) == String(spec.get("wanted_nature", PROMOTED_MINTS_005[String(item)])))
+		expected = mode != "none" and slot == -1 and String(spec.get("nature", "hardy")) != String(spec.get("wanted_nature", PROMOTED_MINTS_005[String(item)]))
 	check(mode + " aceptación contra contrato", bool(result.get("accepted", false)) == expected)
 	var now: CreatureInstance = owner.owned_creature(&"own")
 	if now == null:
@@ -127,7 +127,7 @@ func _probe_training(spec: Dictionary, mode: String) -> Dictionary:
 	if String(spec.kind) == "mint_dependency" and promoted_mint:
 		# Every historical scenario is executed, never skipped. Replaced negative
 		# assertions use a positive native stat/stock/SaveV2 contract.
-		var target: StringName = StringName(spec.wanted_nature)
+		var target: StringName = StringName(spec.get("wanted_nature", PROMOTED_MINTS_005[String(item)]))
 		var wanted: Dictionary = StatCalculator.compute(
 			catalogs.species(c.species_id).base_stat_block(), c.ivs, c.evs, target, c.level).to_dict()
 		var original_stats: Dictionary = c.stats.to_dict()

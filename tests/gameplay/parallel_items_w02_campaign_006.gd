@@ -94,10 +94,12 @@ func _run_recovery006() -> void:
 					and bool(observed[mode].get("accepted", false)) == (mode != "none")
 					and int(criterion.expected_exp_gain) == 50)
 			elif label == "relaxed_mint_level100":
-				check(mode + " mint sin ejecutor no altera ni consume",
+				# The archived negative is preserved on frozen SHA. In current HEAD
+				# relaxed_mint is explicitly promoted in IA6 AUTONOMY_V1.
+				check(mode + " mint relaxed promote exact positive level100",
 					int(observed[mode].get("level", -1)) == 100
-					and not bool(observed[mode].get("accepted", true))
-					and int(observed[mode].get("count", -1)) == (0 if mode == "none" else 2))
+					and bool(observed[mode].get("accepted", false)) == (mode != "none")
+					and int(observed[mode].get("count", -1)) == (0 if mode == "none" else 1))
 		if errors.size() == before_errors:
 			passed_cases += 1
 	check("los tres contratos completos sin errores", passed_cases == 3)
@@ -122,18 +124,22 @@ func _run_recovery006() -> void:
 	var sentinel_errors: int = errors.size()
 	var rejected_all: bool = true
 	for mode: String in automation.modes:
-		# Historical gentle-mint rejection remains in the archival fixture.
-		# After block09 only hasty/lax remain dependent: use the same single
-		# negative runtime contract for hasty without rewriting old evidence.
+		# The historical gentle-mint rejection remains in the immutable fixture.
+		# On current HEAD all ten autonomy mints are promoted; require a
+		# real invalid-target rollback, never a fabricated missing handler.
 		var mint_spec: Dictionary = example.duplicate(true)
 		mint_spec["id"] = "hasty_mint"
-		mint_spec["scenario"] = "hasty_mint_remaining_dependency"
+		mint_spec["scenario"] = "hasty_mint_promoted_invalid_slot"
+		mint_spec["slot"] = 0
+		mint_spec["wanted_nature"] = "hasty"
+		# Original source fixture says DEPENDENCY_MISSING, but current tree
+		# requires a strong negative (invalid slot) for a now-working item.
 		var result_mint: Dictionary = _probe_training(mint_spec, mode)
 		rejected_all = (rejected_all and bool(result_mint.get("valid", false))
 			and bool(result_mint.get("save_v2", false))
 			and not bool(result_mint.get("accepted", true))
 			and int(result_mint.get("count", -1)) == (0 if mode == "none" else 2))
-	check("menta representativa rechazada en tres propietarios con SaveV2",
+	check("menta promovida rechaza destino inválido en tres propietarios con SaveV2",
 		rejected_all and errors.size() == sentinel_errors)
 	print("CAMP006_W02_DEPENDENCY ", "BLOCKED" if rejected_all
 		and errors.size() == sentinel_errors else "FAIL",
