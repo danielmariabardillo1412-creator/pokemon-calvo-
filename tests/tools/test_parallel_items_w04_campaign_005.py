@@ -241,9 +241,9 @@ def main():
     factory = (ROOT / "modules/creatures/progression/creature_factory.gd").read_text(encoding="utf-8")
     check(FORM_ID_PROMOTION_WHITELIST == {"slowpoke_galar": "slowpoke-galar"}
           and 'var form_id: StringName = &""' in creature
-          and 'PILOT_SPECIES := &"slowpoke_galar"' in pilot
-          and 'PILOT_FORM := &"slowpoke-galar"' in pilot
-          and 'species.id == &"slowpoke_galar"' in factory,
+          and '"slowpoke_galar": {"base": "slowpoke", "region": "galar", "pokemon_id": 10164}' in pilot
+          and 'static func _api_form(' in pilot
+          and 'catalogs.species(species.id) == species' in factory,
           "FORM_ID_PROMOTION_WHITELIST: only validated Galar Slowpoke can have persistent form")
     check('if form_id != &"": result["form_id"] = String(form_id)' in creature
           and '"regional_form_id":' not in creature
@@ -282,7 +282,7 @@ def main():
     check(d["time_of_day"] in (None, ""), "PokeAPI no fija horario de forma")
     check('&"spin"' in evolution and "UNSUPPORTED_TRIGGERS" in evolution, "trigger spin explicitamente no implementado")
     check("var held_item_id:" in creature and "var held_item_consumed:" in creature, "el objeto equipado persiste")
-    check('PILOT_SPECIES := &"slowpoke_galar"' in pilot
+    check('"slowpoke_galar": {"base": "slowpoke", "region": "galar", "pokemon_id": 10164}' in pilot
           and 'alcremie' not in pilot.lower()
           and 'var decoration_id:' not in creature
           and '"decoration_id":' not in creature,
@@ -402,7 +402,7 @@ def main():
         check(row["holdable"] is True, name + ": equipamiento contratado")
     creature_form = (ROOT / "modules/creatures/domain/creature_instance.gd").read_text(encoding="utf-8")
     check("var held_item_id:" in creature_form and '"held_item_id":' in creature_form, "SaveV2 conserva objeto equipado")
-    check('PILOT_FORM := &"slowpoke-galar"' in pilot
+    check('static func _api_form(' in pilot
           and not any(s in creature_form for s in ('"variant_id":', '"primal_form_id":')),
           "no origin/primal item source despite one whitelisted regional form")
     check("func base_species_id(" in creature_form and "battle_transform_original" in creature_form,
@@ -571,7 +571,7 @@ def main():
           "Rotom exige seleccionar electrodoméstico y contrato movimientos")
     creature_form09 = (ROOT / "modules/creatures/domain/creature_instance.gd").read_text(encoding="utf-8")
     check("battle_transform_original" in creature_form09 and
-          'PILOT_SPECIES := &"slowpoke_galar"' in pilot and
+          '"slowpoke_galar": {"base": "slowpoke", "region": "galar", "pokemon_id": 10164}' in pilot and
           all(s not in creature_form09 for s in ('"form_variant_id":', '"cells_count":')),
           "Galar pilot does not invent Zygarde form/cell state")
     check("func evolution_options(" in field and "func use_item(" in field and "func equip(" in field,
@@ -662,7 +662,7 @@ def main():
           {"antique", "phony", "artisan", "counterfeit"},
           "cuatro restricciones de forma requieren contrato separado")
     creature10 = (ROOT / "modules/creatures/domain/creature_instance.gd").read_text(encoding="utf-8")
-    check('PILOT_SPECIES := &"slowpoke_galar"' in pilot
+    check('"slowpoke_galar": {"base": "slowpoke", "region": "galar", "pokemon_id": 10164}' in pilot
           and '"source_form_id":' not in creature10 and
           'sinistea' not in pilot and 'poltchageist' not in pilot,
           "Sinistea/Poltchageist authenticity still has no source producer")
