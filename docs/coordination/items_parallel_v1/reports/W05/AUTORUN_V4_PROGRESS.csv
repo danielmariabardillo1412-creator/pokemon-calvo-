@@ -1,0 +1,11 @@
+bloque,tm_inicio,tm_fin,estado,es_con_fuente,es_sin_fuente,objetos_nuevos,sha_codigo,ci,nota
+01,tm01,tm23,EN_CI,0,0,0,PENDIENTE,PENDIENTE,validar_estructura_PokeAPI_es_panel_Godot_y_regresiones
+02,tm24,tm46,EN_CI,0,0,0,PENDIENTE,PENDIENTE,validar_estructura_PokeAPI_es_panel_Godot_y_regresiones
+03,tm47,tm69,EN_CI,0,0,0,PENDIENTE,PENDIENTE,validar_estructura_PokeAPI_es_panel_Godot_y_regresiones
+04,tm70,tm92,EN_CI,0,0,0,PENDIENTE,PENDIENTE,validar_estructura_PokeAPI_es_panel_Godot_y_regresiones
+05,tm93,tm115,EN_CI,0,0,0,PENDIENTE,PENDIENTE,validar_estructura_PokeAPI_es_panel_Godot_y_regresiones
+06,tm116,tm138,EN_CI,0,0,0,PENDIENTE,PENDIENTE,validar_estructura_PokeAPI_es_panel_Godot_y_regresiones
+07,tm139,tm161,EN_CI,0,0,0,PENDIENTE,PENDIENTE,validar_estructura_PokeAPI_es_panel_Godot_y_regresiones
+08,tm162,tm184,EN_CI,0,0,0,PENDIENTE,PENDIENTE,validar_estructura_PokeAPI_es_panel_Godot_y_regresiones
+09,tm185,tm207,EN_CI,0,0,0,PENDIENTE,PENDIENTE,validar_estructura_PokeAPI_es_panel_Godot_y_regresiones
+10,tm208,tm229,EN_CI,0,0,0,PENDIENTE,PENDIENTE,validar_estructura_PokeAPI_es_panel_Godot_y_regresiones

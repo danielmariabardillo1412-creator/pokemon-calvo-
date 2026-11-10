@@ -321,6 +321,9 @@ func hit_07_negative_states() -> void:
 
 
 func hit_08_spanish_audit() -> void:
+	# Migration V3 -> V4: the old baseline is frozen at commit 93b13e63.
+	# All 218 previous fallback entries are now explicitly source-whitelisted
+	# by the 229 move_id keys in machine_moves_es_sv_v1.json, verified in V4.
 	var d := load_all_books()
 	if d.is_empty():
 		return
@@ -328,36 +331,35 @@ func hit_08_spanish_audit() -> void:
 	var panel: Variant = d.panel
 	var profile: Dictionary = svc.profile.get("machine_rows", {})
 	var total := 0
-	var verified := 0
-	var fallback := 0
-	var fallback_id := &""
+	var previously_verified := 0
+	var promoted := 0
 	for raw: Variant in profile.keys():
 		var id := StringName(raw)
 		var versions: Dictionary = profile[raw]
 		if not versions.has("scarlet-violet"):
 			continue
 		var item: Dictionary = Presentation.presentacion(id, svc.profile, catalogs)
-		check("book label and type present " + String(id), item.get("disponible", false)
-			and String(item.get("nombre_movimiento", "")).length() > 0
-			and String(item.get("nombre_tipo", "")).length() > 0)
-		total += 1
 		var move_id := String(item.get("move_id", ""))
+		var localized: Dictionary = MachineMovesEsSvW05.resolve(StringName(move_id), "")
+		check("V4 promoted source and label " + String(id), item.get("disponible", false)
+			and item.get("traduccion_es_verificada", false)
+			and String(item.get("nombre_movimiento", "")) == String(localized.get("name", ""))
+			and localized.get("verified_es", false))
+		total += 1
 		if move_id in ["pain_split", "metal_claw"] or SpanishGameText.CORE_MOVE_NAMES.has(move_id):
-			verified += 1
+			previously_verified += 1
 		else:
-			fallback += 1
-			if fallback_id == &"":
-				fallback_id = id
-	check("229 canonical text presentations audited", total == 229 and verified + fallback == 229)
-	check("unverified names explicitly tracked", fallback > 0 and fallback_id != &"")
-	if fallback_id != &"":
-		check("select text fallback book", panel.select_book(fallback_id))
-		check("unverified translation visibly labeled", panel.translation_label.text.contains("no verificada"))
-	check("select verified pilot Spanish", panel.select_book(&"tm202"))
-	check("verified Spanish has no warning", panel.translation_label.text == ""
+			promoted += 1
+	check("V3 frozen baseline promoted with full source whitelist",
+		total == 229 and previously_verified == 11 and promoted == 218)
+	check("unknown move remains unverified fallback",
+		not MachineMovesEsSvW05.resolve(&"w05_nonexistent_move", "sin traducción").get("verified_es", true)
+		and MachineMovesEsSvW05.resolve(&"w05_nonexistent_move", "sin traducción").get("name", "") == "sin traducción")
+	check("select verified TM source ES", panel.select_book(&"tm202"))
+	check("verified Spanish is shown without warning", panel.translation_label.text == ""
 		and panel.book_label.text.contains("Divide Dolor"))
-	print("W05_BOOKS_V3_TRANSLATIONS audited=%d verified_spanish=%d unverified_fallback=%d invented=0" %
-		[total, verified, fallback])
+	print("W05_BOOKS_V3_TRANSLATIONS audited=%d previous_verified=%d promoted=%d verified_es=%d invented=0" %
+		[total, previously_verified, promoted, total])
 	panel.queue_free()
 
 

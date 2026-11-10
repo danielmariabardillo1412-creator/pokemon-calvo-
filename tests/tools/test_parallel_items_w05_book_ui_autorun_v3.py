@@ -44,8 +44,8 @@ def main():
     verify("no double controls on reattach", 'if books != null:' in panel)
     verify("sort and filter from canonical presentation", 'presentation.get("type_id"' in panel
            and "entries.sort_custom" in panel and "type_filter" in panel)
-    verify("Spanish fallback disclosed", 'traducción española no verificada' in panel
-           and "SpanishGameText.CORE_MOVE_NAMES" in panel)
+    verify("Spanish fallback disclosed and sourced", 'traducción española no verificada' in panel
+           and 'traduccion_es_verificada' in panel and "MachineMovesEsSvW05.resolve" in panel)
     verify("snapshot validated before execution", "func teach_selected()" in panel
            and "_refresh_compatibility()" in panel)
     verify("all ten named scenarios", all(f"func hit_{n:02d}_" in runner for n in range(1, 10))

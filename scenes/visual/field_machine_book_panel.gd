@@ -4,7 +4,6 @@ extends PanelContainer
 # Usa el FieldItemService de la mochila, no otro motor de MT.
 signal teaching_finished(result: Dictionary)
 const Books = preload("res://modules/inventory/field_machine_book_profile.gd")
-const PILOT_NAMES := {"pain_split": "Divide Dolor", "metal_claw": "Garra Metal"}
 
 var service: Variant = null
 var books: OptionButton
@@ -155,7 +154,7 @@ func refresh() -> void:
 			if not presentation.get("disponible", false):
 				continue
 			var move_id := String(presentation.get("move_id", ""))
-			var name := String(PILOT_NAMES.get(move_id, presentation.get("nombre_movimiento", "")))
+			var name := String(presentation.get("nombre_movimiento", ""))
 			var type_id := String(presentation.get("type_id", ""))
 			var type_es := String(presentation.get("nombre_tipo", ""))
 			entries.append({"id": String(id), "name": name, "type_id": type_id,
@@ -235,7 +234,9 @@ func _refresh_preview() -> void:
 		if creature != null:
 			for i in range(creature.moveset.size()):
 				var slot: BattleMoveSlot = creature.moveset[i]
-				slots.add_item("Sustituir: " + SpanishGameText.move_name(slot.move_id, service.catalogs))
+				var old_text: Dictionary = MachineMovesEsSvW05.resolve(slot.move_id,
+					SpanishGameText.move_name(slot.move_id, service.catalogs))
+				slots.add_item("Sustituir: " + String(old_text.get("name", "")))
 				slots.set_item_metadata(slots.item_count - 1, i)
 	_refresh_compatibility()
 
@@ -275,12 +276,12 @@ func _refresh_compatibility() -> void:
 		compatibility_label.text = "Este libro no está disponible con las reglas actuales."
 		return
 	var move_id := StringName(presented.get("move_id", ""))
-	var name_es := String(PILOT_NAMES.get(String(move_id), presented.get("nombre_movimiento", "")))
+	var name_es := String(presented.get("nombre_movimiento", ""))
 	book_label.text = "Libro de movimiento · " + name_es
 	type_label.text = "Tipo: " + String(presented.get("nombre_tipo", ""))
 	# Only explicitly localized names can be presented as verified Spanish.
 	# The catalog display_name can be English; we must not fabricate translations.
-	if not PILOT_NAMES.has(String(move_id)) and not SpanishGameText.CORE_MOVE_NAMES.has(String(move_id)):
+	if not bool(presented.get("traduccion_es_verificada", false)):
 		translation_label.text = "Nombre disponible; traducción española no verificada."
 	# Reutilizar la puerta EXISTENTE del servicio, incluida la sesion
 	# bloqueada; el panel no decide si un objeto se gasta.
@@ -347,7 +348,9 @@ func teach_selected() -> Dictionary:
 	refresh()
 	if last_result.get("accepted", false):
 		var move_id := StringName(last_result.get("move_id", ""))
-		var spanish := String(PILOT_NAMES.get(String(move_id), SpanishGameText.move_name(move_id, service.catalogs)))
+		var localized := MachineMovesEsSvW05.resolve(move_id,
+			SpanishGameText.move_name(move_id, service.catalogs))
+		var spanish := String(localized.get("name", ""))
 		result_label.text = "¡Ha aprendido %s! Se consumió un libro." % spanish
 	else:
 		var reason := String(last_result.get("reason", ""))
