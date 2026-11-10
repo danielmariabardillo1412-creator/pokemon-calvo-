@@ -22,6 +22,8 @@ on:
       - 'tests/gameplay/parallel_items_w03_repeat_history_v2.gd'
       - 'tests/gameplay/parallel_items_w03_repeat_native_v3.gd'
       - 'tests/gameplay/parallel_items_w03_repeat_native_v4.gd'
+      - 'tests/gameplay/parallel_items_w03_repeat_native_v4_negatives.gd'
+      - 'tests/gameplay/parallel_items_w03_repeat_native_v4_transform.gd'
       - 'modules/gameplay/showdown_adventure_session.gd'
       - 'docs/coordination/items_parallel_v1/reports/W03/AUTORUN_V3_PROGRESS.csv'
       - 'modules/capture/caught_species_history_w03.gd'
@@ -158,6 +160,18 @@ jobs:
           set -euo pipefail
           timeout 900s godot --headless --path . --script res://tests/gameplay/parallel_items_w03_repeat_native_v4.gd 2>&1 | tee camp006-w03-repeat-native-v4.log
           grep -E '^W03_REPEAT_NATIVE_V4 PASS checks=[1-9][0-9]*$' camp006-w03-repeat-native-v4.log
+      - name: W03 TANDA04 native failed RNG and ledger SaveV2 QA
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 900s godot --headless --path . --script res://tests/gameplay/parallel_items_w03_repeat_native_v4_negatives.gd 2>&1 | tee camp006-w03-repeat-native-v4-neg.log
+          grep -E '^W03_REPEAT_NATIVE_V4_NEG PASS checks=[1-9][0-9]*$' camp006-w03-repeat-native-v4-neg.log
+      - name: W03 TANDA04 native Transform and distinct Repeat QA
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 900s godot --headless --path . --script res://tests/gameplay/parallel_items_w03_repeat_native_v4_transform.gd 2>&1 | tee camp006-w03-repeat-native-v4-transform.log
+          grep -E '^W03_REPEAT_NATIVE_V4_TRANSFORM PASS checks=[1-9][0-9]*$' camp006-w03-repeat-native-v4-transform.log
       - name: Archive evidence
         if: always()
         uses: actions/upload-artifact@v4
