@@ -1,0 +1,11 @@
+fila,grupo,estado,formas_nuevas_certificadas,ci,observacion
+01,alola_01,IMPLEMENTADO_PENDIENTE_CI,0,NO_CONFIRMADA,"6 fuentes PokeAPI verificadas; Factory helper SaveV2 + runner Godot + workflow V3 publicados; aún no hay evidencia CI PASS"
+02,alola_02,PENDIENTE,0,NO_EJECUTADA,""
+03,alola_03,PENDIENTE,0,NO_EJECUTADA,""
+04,galar_01,PENDIENTE,0,NO_EJECUTADA,""
+05,galar_02,PENDIENTE,0,NO_EJECUTADA,""
+06,galar_03,PENDIENTE,0,NO_EJECUTADA,""
+07,hisui_01,PENDIENTE,0,NO_EJECUTADA,""
+08,hisui_02,PENDIENTE,0,NO_EJECUTADA,""
+09,hisui_03,PENDIENTE,0,NO_EJECUTADA,""
+10,hisui_paldea,PENDIENTE,0,NO_EJECUTADA,""
