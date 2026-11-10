@@ -1,0 +1,5 @@
+fila,origen,ids,estado,nivel,funcional_nuevo,ci_run,nota
+01,CAMP006_B04,black_flute;white_flute;lure;super_lure;max_lure,BLOQUEADO,L2_SIN_PRODUCTOR,false,,productor_de_frecuencia_y_politica_persistente_ausente
+02,CAMP006_B05,dive_ball;lure_ball,BLOQUEADO,L1_SIN_ORIGEN_REAL,false,,pesca_surf_buceo_sin_fuente_autenticada
+03,CAMP006_B06,dusk_ball,BLOQUEADO,L1_SIN_RELOJ_MAPA_CERTIFICADO,false,,hora_y_oscuridad_cueva_sin_contexto_captura
+04,CAMP006_B07,repeat_ball,BLOQUEADO,L1_SIN_POKEDEX_PERSISTENTE,false,,historial_captura_antes_del_intento_ausente
