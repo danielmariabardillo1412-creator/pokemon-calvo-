@@ -164,8 +164,8 @@ def main():
     # Historical B02 still has no Sinistea/Poltchageist form producer.
     # One explicit W04 TANDA02 whitelist (slowpoke_galar) is now permitted.
     form_pilot = (ROOT / "modules/creatures/progression/canonical_form_identity_w04.gd").read_text(encoding="utf-8")
-    check('PILOT_SPECIES := &"slowpoke_galar"' in form_pilot and
-          'PILOT_FORM := &"slowpoke-galar"' in form_pilot and
+    check('"slowpoke_galar": {"base": "slowpoke", "region": "galar", "pokemon_id": 10164}' in form_pilot and
+          'static func _api_form(' in form_pilot and
           "sinistea" not in form_pilot.lower() and
           "poltchageist" not in form_pilot.lower() and
           '"source_form_id":' not in creature,
