@@ -1,0 +1,28 @@
+{
+  "worker": "W02",
+  "tanda": "04",
+  "authorisation": "IA6 AUTONOMY_V1/QUEUE_W02_TANDA_04.md",
+  "purpose": "remove only duplicate growth plan effective-nature recalculation",
+  "baseline": {
+    "functional_sha": "17df457b1320eec379ef78059cd14c4f6e5576e1",
+    "run_id": 42890511612,
+    "godot_v3_checks": 193
+  },
+  "new_items": 0,
+  "modes": [
+    "active",
+    "reserve"
+  ],
+  "checks": [
+    "diagnose_old_duplicate",
+    "compare_semantic_equivalence",
+    "remove_growth_recalc",
+    "bulbasaur_ivysaur_minted",
+    "eevee_vaporeon_item",
+    "multi_level_context_rollback",
+    "owner_party_storage_invariants",
+    "save_v2_normal_legacy_corrupt",
+    "w04_form_guard_not_integration",
+    "regression_certification"
+  ]
+}

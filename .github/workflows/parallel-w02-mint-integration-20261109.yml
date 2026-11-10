@@ -39,6 +39,10 @@ on:
       - 'tests/fixtures/parallel_items/w02_autorun_v2.json'
       - 'tests/gameplay/parallel_items_w02_autorun_v2.gd'
       - 'tests/gameplay/parallel_items_w02_autorun_v3.gd'
+      - 'tests/gameplay/parallel_items_w02_autorun_v4.gd'
+      - 'tests/fixtures/parallel_items/w02_autorun_v4.json'
+      - 'tests/tools/test_parallel_items_w02_autorun_v4.py'
+      - 'docs/coordination/items_parallel_v1/reports/W02/AUTORUN_V4_PROGRESS.csv'
       - 'tests/fixtures/parallel_items/w02_autorun_v3.json'
       - 'tests/tools/test_parallel_items_w02_autorun_v3.py'
       - 'docs/coordination/items_parallel_v1/reports/W02/AUTORUN_V3_PROGRESS.csv'
@@ -101,6 +105,14 @@ jobs:
           if grep -E 'SCRIPT ERROR|Parse Error' camp006-import.log; then exit 1; fi
           echo "POKEMON_CALVO_NODE=$(command -v node)" >> "$GITHUB_ENV"
           python -B tools/battle_reference/run.py --install --limit 1 2>&1 | tee camp006-native.log
+      - name: TANDA 04 W02 no-double-growth and semantic equivalence Python Godot
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tests/tools/test_parallel_items_w02_autorun_v4.py 2>&1 | tee w02-autorun-v4-python.log
+          grep -E '^W02_AUTORUN_V4_PY PASS checks=23$' w02-autorun-v4-python.log
+          timeout 900s godot --headless --path . --script res://tests/gameplay/parallel_items_w02_autorun_v4.gd 2>&1 | tee w02-autorun-v4-godot.log
+          grep -E '^W02_AUTORUN_V4_GODOT PASS checks=[1-9][0-9]*$' w02-autorun-v4-godot.log
       - name: TANDA 03 W02 natura efectiva en evolucion Python y Godot
         shell: bash
         run: |
@@ -263,4 +275,5 @@ jobs:
             w02-autorun-v1-*.log
             w02-autorun-v2-*.log
             w02-autorun-v3-*.log
+            w02-autorun-v4-*.log
             w02-pilot02-*.log

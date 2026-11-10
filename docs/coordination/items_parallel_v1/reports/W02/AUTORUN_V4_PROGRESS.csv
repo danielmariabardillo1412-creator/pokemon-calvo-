@@ -1,0 +1,11 @@
+hito,entrega,estado,objetos_nuevos,qa,ci,sha,evidencia
+01,diagnose_old_duplicate,DIAGNOSTICO_PRUEBA_ROJA_PENDIENTE,0,0,,,
+02,compare_semantic_equivalence,PENDIENTE,0,0,,,
+03,remove_growth_recalc,PENDIENTE,0,0,,,
+04,bulbasaur_ivysaur_minted,PENDIENTE,0,0,,,
+05,eevee_vaporeon_item,PENDIENTE,0,0,,,
+06,multi_level_context_rollback,PENDIENTE,0,0,,,
+07,owner_party_storage_invariants,PENDIENTE,0,0,,,
+08,save_v2_normal_legacy_corrupt,PENDIENTE,0,0,,,
+09,w04_form_guard_not_integration,PENDIENTE,0,0,,,
+10,regression_certification,PENDIENTE,0,0,,,
