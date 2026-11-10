@@ -80,6 +80,82 @@ func _run_history() -> void:
 		and bad_load.party == null and bad_load.inventory == null)
 	bad["caught_base_species_ids"] = {"schema_version": 1, "ids": [false]}
 	check("invalid shape rejected", not SaveGameRepository.new().decode_snapshot(bad).ok)
+	# Negative: a real unsuccessful battle capture consumes its ball but never appends ledger.
+	var failed_owner := PlayerCollection.new()
+	failed_owner.party.add_creature(_mon(&"bulbasaur", 50, &"w03_failure_leader"))
+	check("stock low-chance ball", failed_owner.inventory.add(&"poke_ball", 2))
+	var mewtwo_table := WildEncounterTable.new(&"history_failure", 10000)
+	check("low-rate real encounter table", mewtwo_table.add_slot(
+		WildEncounterSlot.new(&"mewtwo_single", &"mewtwo", 1, 8, 8)))
+	var failed_session := WildAdventureSession.new(failed_owner, catalogs, ProgressionRuleset.new())
+	var failure_enc_rng := RandomNumberGenerator.new()
+	failure_enc_rng.seed = 2191
+	check("failed-path encounter started", failed_session.begin_encounter(
+		mewtwo_table, failure_enc_rng, 5555).status == WildEncounterResult.ENCOUNTER)
+	var fail_rng := RandomNumberGenerator.new()
+	fail_rng.seed = 6413
+	var fail_probe := RandomNumberGenerator.new()
+	fail_probe.seed = 6413
+	check("failure seed is above maximum low-rate threshold", fail_probe.randf() > 0.05)
+	var failed_capture := failed_session.capture_current(&"poke_ball", fail_rng)
+	check("actual failed capture has no ledger entry", failed_capture.resolution != null
+		and failed_capture.resolution.result.status == CaptureResult.FAILED
+		and failed_owner.caught_base_species_ids.is_empty()
+		and failed_owner.inventory.quantity(&"poke_ball") == 1)
+	var bag_before := session.player.inventory.quantity(&"repeat_ball")
+	var extra_capture := session.capture_current(&"repeat_ball", attempt_rng)
+	check("cannot double capture a closed encounter", extra_capture.resolution == null
+		and session.player.inventory.quantity(&"repeat_ball") == bag_before
+		and session.player.caught_base_species_ids == [&"caterpie"])
+
+	# The native save owns a different battle transport, but must still preserve the player ledger.
+	var scene = load("res://scenes/visual/field_demo.tscn").instantiate()
+	root.add_child(scene)
+	await process_frame
+	await physics_frame
+	check("native field demo ready", scene.is_demo_ready())
+	if scene.is_demo_ready():
+		var native_owner: PlayerCollection = scene.field_collection()
+		check("native owner records base after real capture ledger import",
+			native_owner.record_successful_capture(&"caterpie", catalogs))
+		var native_path := "user://w03_repeat_ledger_native.json"
+		scene._native_battles.save_path = native_path
+		check("native world manual save includes ledger", scene._native_battles.save_game())
+		var envelope: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(native_path))
+		check("embedded native collection has the original ledger",
+			envelope.payload.collection.get("caught_base_species_ids", {}).get("ids", []) == ["caterpie"])
+		check("native manual reload retains caught ledger", await scene._native_battles.load_game()
+			and scene.field_collection().caught_base_species_ids == [&"caterpie"])
+		var legacy_envelope := envelope.duplicate(true)
+		legacy_envelope.payload.collection.erase("caught_base_species_ids")
+		legacy_envelope["sha256"] = JSON.stringify(legacy_envelope.payload).sha256_text()
+		var out := FileAccess.open(native_path, FileAccess.WRITE)
+		check("write native legacy fixture", out != null)
+		if out != null:
+			out.store_string(JSON.stringify(legacy_envelope))
+			out.close()
+			check("native legacy load restores empty caught ledger",
+				await scene._native_battles.load_game()
+				and scene.field_collection().caught_base_species_ids.is_empty())
+		var corrupt := envelope.duplicate(true)
+		corrupt.payload.collection["caught_base_species_ids"] = {
+			"schema_version": 1, "ids": ["not_a_real_pokemon"]}
+		corrupt["sha256"] = JSON.stringify(corrupt.payload).sha256_text()
+		out = FileAccess.open(native_path, FileAccess.WRITE)
+		check("write corrupt native ledger fixture", out != null)
+		if out != null:
+			out.store_string(JSON.stringify(corrupt))
+			out.close()
+			var preserved_owner: PlayerCollection = scene.field_collection()
+			var preserved_world: Vector2 = scene.player.global_position
+			check("native corrupted ledger rejects before state publication",
+				not await scene._native_battles.load_game()
+				and is_same(scene.field_collection(), preserved_owner)
+				and scene.player.global_position.is_equal_approx(preserved_world))
+		DirAccess.remove_absolute(ProjectSettings.globalize_path(native_path))
+	scene.queue_free()
+	await process_frame
+
 	DirAccess.remove_absolute(ProjectSettings.globalize_path(filename))
 	# Pinned baseline result, not a promise about native Showdown capture which remains protected.
 	done = true
