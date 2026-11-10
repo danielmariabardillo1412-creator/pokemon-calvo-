@@ -69,8 +69,15 @@ def main():
     blocks = {b["block"]: b for b in historical["blocks"]}
     test(len(blocks) == 10, "ten historical blocks intact")
     order = QUEUE.read_text(encoding="utf-8")
-    test("AUTORUN V1" in order and "Tanda 01" in order
-         and "CAMP006 B07" in order, "stable IA6 queue without guessed extension")
+    # Queue rollover is authorized: TANDA01 is already closed and IA6 replaced
+    # the stable worker note with TANDA02. The frozen V1 fixture/progress/QA
+    # remain checked below; do not pretend the old queue is still active.
+    prior_queue = ("AUTORUN V1" in order and "Tanda 01" in order
+                   and "CAMP006 B07" in order)
+    rolled_queue = ("TANDA 02" in order and "TANDA01" in order and "W04" in order
+                    and (REPORT / "AUTORUN_V1_FINAL.md").is_file())
+    test(prior_queue or rolled_queue,
+         "IA6 stable queue is either original V1 or authorized V2 rollover")
     with PROGRESS.open(encoding="utf-8", newline="") as f:
         rows = list(csv.DictReader(f))
     test(len(rows) == 10 and [r["fila"] for r in rows] ==
