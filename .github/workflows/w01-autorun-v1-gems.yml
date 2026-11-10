@@ -1,0 +1,132 @@
+name: W01 AUTORUN V1 - ten canonical Gems with full historical regressions
+on:
+  push:
+    branches:
+      - codex/calvo-items-20261110-w01-gems-autobatch01
+    paths:
+      - '.github/workflows/w01-autorun-v1-gems.yml'
+      - 'tests/tools/test_parallel_items_w01_autorun_v1.py'
+      - 'tests/tools/repro_w01_autorun_v1_native.cjs'
+      - 'tests/gameplay/parallel_items_w01_autorun_v1.gd'
+      - 'tests/fixtures/parallel_items/w01_autorun_v1.json'
+      - 'docs/coordination/items_parallel_v1/reports/W01/AUTORUN_V1_PROGRESS.csv'
+      - 'docs/coordination/items_parallel_v1/reports/W01/AUTORUN_V1_FINAL.md'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: w01-autorun-v1-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  autorun_gems:
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: chickensoft-games/setup-godot@v2.4.1
+        with:
+          version: 4.7.0
+          use-dotnet: false
+          include-templates: false
+      - name: Restore canonical catalog and native Showdown
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REF_NAME" = 'codex/calvo-items-20261110-w01-gems-autobatch01'
+          godot --version | grep -E '^4[.]7([.-]|$)'
+          python -B tools/distribution/restore_resources.py
+          python -B tools/distribution/restore_resources.py --check
+          mkdir -p data/reports
+          cp ci/fixtures/pokeapi_reports/forms_policy_report.json data/reports/forms_policy_report.json
+          cp ci/fixtures/pokeapi_reports/unsupported_mechanics.json data/reports/unsupported_mechanics.json
+          cp ci/fixtures/pokeapi_reports/import_summary.json data/reports/import_summary.json
+          godot --headless --path . --import 2>&1 | tee w01-autorun-import.log
+          if grep -E 'SCRIPT ERROR|Parse Error' w01-autorun-import.log; then exit 1; fi
+          echo "POKEMON_CALVO_NODE=$(command -v node)" >> "$GITHUB_ENV"
+          python -B tools/battle_reference/run.py --install --limit 1 2>&1 | tee w01-autorun-native-install.log
+      - name: Ten-Gem preflight, native positive/negative, PP, re-entry and snapshot
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tests/tools/test_parallel_items_w01_autorun_v1.py 2>&1 | tee w01-autorun-python.log
+          grep -E '^W01_AUTORUN_PY PASS rows=10 checks=[1-9][0-9]*$' w01-autorun-python.log
+          grep -E '^W01_AUTORUN_NATIVE PASS rows=10 activations=20 negatives=20 reentries=20 pp_checks=120 snapshots=120$' w01-autorun-python.log
+          test "$(grep -c '^W01_AUTORUN_NATIVE_ROW PASS row=' w01-autorun-python.log)" -eq 10
+      - name: Ten-Gem Godot real battle, holder, one-shot and SaveV2
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 1650s godot --headless --path . --script res://tests/gameplay/parallel_items_w01_autorun_v1.gd 2>&1 | tee w01-autorun-godot.log
+          grep -E '^W01_AUTORUN_GODOT PASS rows=10 checks=[1-9][0-9]*$' w01-autorun-godot.log
+          test "$(grep -c '^AUTORUN_W01_ROW_PASS row=' w01-autorun-godot.log)" -eq 10
+      - name: Preserve Gem logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: w01-autorun-gems-${{ github.run_id }}
+          retention-days: 7
+          if-no-files-found: ignore
+          path: w01-autorun-*.log
+
+  historical_regression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 70
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: chickensoft-games/setup-godot@v2.4.1
+        with:
+          version: 4.7.0
+          use-dotnet: false
+          include-templates: false
+      - name: Restore historical resources and battle engine
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tools/distribution/restore_resources.py
+          python -B tools/distribution/restore_resources.py --check
+          mkdir -p data/reports
+          cp ci/fixtures/pokeapi_reports/forms_policy_report.json data/reports/forms_policy_report.json
+          cp ci/fixtures/pokeapi_reports/unsupported_mechanics.json data/reports/unsupported_mechanics.json
+          cp ci/fixtures/pokeapi_reports/import_summary.json data/reports/import_summary.json
+          godot --headless --path . --import 2>&1 | tee w01-history-import.log
+          if grep -E 'SCRIPT ERROR|Parse Error' w01-history-import.log; then exit 1; fi
+          echo "POKEMON_CALVO_NODE=$(command -v node)" >> "$GITHUB_ENV"
+          python -B tools/battle_reference/run.py --install --limit 1 2>&1 | tee w01-history-native-install.log
+      - name: Frozen CAMP005 contract including B06/B07/B09/B10
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tests/tools/test_parallel_items_w01_campaign_005.py --ci 2>&1 | tee w01-history-c005-py.log
+          grep -E '^CAMP005_W01_PY PASS blocks=10 checks=668$' w01-history-c005-py.log
+          timeout 1300s godot --headless --path . --script res://tests/gameplay/parallel_items_w01_campaign_005.gd 2>&1 | tee w01-history-c005-godot.log
+          grep -E '^CAMP005_W01_GODOT PASS blocks=10 checks=24723$' w01-history-c005-godot.log
+      - name: Frozen CAMP004 full regression
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tests/tools/test_parallel_items_w01_campaign_004.py --ci 2>&1 | tee w01-history-c004-py.log
+          grep -E '^CAMP004_W01_PY PASS blocks=10 checks=1028$' w01-history-c004-py.log
+          timeout 1100s godot --headless --path . --script res://tests/gameplay/parallel_items_w01_campaign_004.gd 2>&1 | tee w01-history-c004-godot.log
+          grep -E '^CAMP004_W01_GODOT PASS blocks=10 checks=16816$' w01-history-c004-godot.log
+      - name: Preserve historical logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: w01-autorun-history-${{ github.run_id }}
+          retention-days: 7
+          if-no-files-found: ignore
+          path: w01-history-*.log

@@ -1,0 +1,339 @@
+{
+  "schema_version": 1,
+  "kind": "AUTORUN_V1_W01_GEMS",
+  "worker": "W01",
+  "tanda": "01",
+  "format": "gen9calvounifiedv1",
+  "reference_baseline": {
+    "campaign": "CAMP_005",
+    "sha": "5303578448d909cf1b4e2c3c60c7d3e231203f98",
+    "run": 42717306543
+  },
+  "modes": [
+    "active",
+    "none",
+    "reserve"
+  ],
+  "items": [
+    {
+      "row": "01",
+      "id": "electric_gem",
+      "type": "electric",
+      "attack": "thunderbolt",
+      "wrong": "tackle",
+      "status": "thunder_wave",
+      "cases": [
+        {
+          "op": "matching",
+          "move": "thunderbolt",
+          "seeds": [
+            19,
+            23
+          ]
+        },
+        {
+          "op": "wrong_type",
+          "move": "tackle",
+          "seeds": [
+            19
+          ]
+        },
+        {
+          "op": "status_same_type",
+          "move": "thunder_wave",
+          "seeds": [
+            19
+          ]
+        }
+      ]
+    },
+    {
+      "row": "02",
+      "id": "grass_gem",
+      "type": "grass",
+      "attack": "energy_ball",
+      "wrong": "tackle",
+      "status": "grassy_terrain",
+      "cases": [
+        {
+          "op": "matching",
+          "move": "energy_ball",
+          "seeds": [
+            19,
+            23
+          ]
+        },
+        {
+          "op": "wrong_type",
+          "move": "tackle",
+          "seeds": [
+            19
+          ]
+        },
+        {
+          "op": "status_same_type",
+          "move": "grassy_terrain",
+          "seeds": [
+            19
+          ]
+        }
+      ]
+    },
+    {
+      "row": "03",
+      "id": "ice_gem",
+      "type": "ice",
+      "attack": "ice_beam",
+      "wrong": "tackle",
+      "status": "haze",
+      "cases": [
+        {
+          "op": "matching",
+          "move": "ice_beam",
+          "seeds": [
+            19,
+            23
+          ]
+        },
+        {
+          "op": "wrong_type",
+          "move": "tackle",
+          "seeds": [
+            19
+          ]
+        },
+        {
+          "op": "status_same_type",
+          "move": "haze",
+          "seeds": [
+            19
+          ]
+        }
+      ]
+    },
+    {
+      "row": "04",
+      "id": "fighting_gem",
+      "type": "fighting",
+      "attack": "brick_break",
+      "wrong": "tackle",
+      "status": "bulk_up",
+      "cases": [
+        {
+          "op": "matching",
+          "move": "brick_break",
+          "seeds": [
+            19,
+            23
+          ]
+        },
+        {
+          "op": "wrong_type",
+          "move": "tackle",
+          "seeds": [
+            19
+          ]
+        },
+        {
+          "op": "status_same_type",
+          "move": "bulk_up",
+          "seeds": [
+            19
+          ]
+        }
+      ]
+    },
+    {
+      "row": "05",
+      "id": "poison_gem",
+      "type": "poison",
+      "attack": "sludge_bomb",
+      "wrong": "tackle",
+      "status": "toxic",
+      "cases": [
+        {
+          "op": "matching",
+          "move": "sludge_bomb",
+          "seeds": [
+            19,
+            23
+          ]
+        },
+        {
+          "op": "wrong_type",
+          "move": "tackle",
+          "seeds": [
+            19
+          ]
+        },
+        {
+          "op": "status_same_type",
+          "move": "toxic",
+          "seeds": [
+            19
+          ]
+        }
+      ]
+    },
+    {
+      "row": "06",
+      "id": "ground_gem",
+      "type": "ground",
+      "attack": "earth_power",
+      "wrong": "tackle",
+      "status": "spikes",
+      "cases": [
+        {
+          "op": "matching",
+          "move": "earth_power",
+          "seeds": [
+            19,
+            23
+          ]
+        },
+        {
+          "op": "wrong_type",
+          "move": "tackle",
+          "seeds": [
+            19
+          ]
+        },
+        {
+          "op": "status_same_type",
+          "move": "spikes",
+          "seeds": [
+            19
+          ]
+        }
+      ]
+    },
+    {
+      "row": "07",
+      "id": "flying_gem",
+      "type": "flying",
+      "attack": "aerial_ace",
+      "wrong": "tackle",
+      "status": "roost",
+      "cases": [
+        {
+          "op": "matching",
+          "move": "aerial_ace",
+          "seeds": [
+            19,
+            23
+          ]
+        },
+        {
+          "op": "wrong_type",
+          "move": "tackle",
+          "seeds": [
+            19
+          ]
+        },
+        {
+          "op": "status_same_type",
+          "move": "roost",
+          "seeds": [
+            19
+          ]
+        }
+      ]
+    },
+    {
+      "row": "08",
+      "id": "psychic_gem",
+      "type": "psychic",
+      "attack": "psychic",
+      "wrong": "tackle",
+      "status": "calm_mind",
+      "cases": [
+        {
+          "op": "matching",
+          "move": "psychic",
+          "seeds": [
+            19,
+            23
+          ]
+        },
+        {
+          "op": "wrong_type",
+          "move": "tackle",
+          "seeds": [
+            19
+          ]
+        },
+        {
+          "op": "status_same_type",
+          "move": "calm_mind",
+          "seeds": [
+            19
+          ]
+        }
+      ]
+    },
+    {
+      "row": "09",
+      "id": "bug_gem",
+      "type": "bug",
+      "attack": "bug_buzz",
+      "wrong": "tackle",
+      "status": "sticky_web",
+      "cases": [
+        {
+          "op": "matching",
+          "move": "bug_buzz",
+          "seeds": [
+            19,
+            23
+          ]
+        },
+        {
+          "op": "wrong_type",
+          "move": "tackle",
+          "seeds": [
+            19
+          ]
+        },
+        {
+          "op": "status_same_type",
+          "move": "sticky_web",
+          "seeds": [
+            19
+          ]
+        }
+      ]
+    },
+    {
+      "row": "10",
+      "id": "rock_gem",
+      "type": "rock",
+      "attack": "smack_down",
+      "wrong": "tackle",
+      "status": "stealth_rock",
+      "cases": [
+        {
+          "op": "matching",
+          "move": "smack_down",
+          "seeds": [
+            19,
+            23
+          ]
+        },
+        {
+          "op": "wrong_type",
+          "move": "tackle",
+          "seeds": [
+            19
+          ]
+        },
+        {
+          "op": "status_same_type",
+          "move": "stealth_rock",
+          "seeds": [
+            19
+          ]
+        }
+      ]
+    }
+  ]
+}
