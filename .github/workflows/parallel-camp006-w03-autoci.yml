@@ -95,15 +95,7 @@ jobs:
         run: |
           set -euo pipefail
           python -B tests/tools/test_parallel_items_w03_autorun_v1.py 2>&1 | tee camp006-w03-autorun-v1.log
-          grep -E '^W03_AUTORUN_V1_PY PASS examined=10 existing_functional_rows=1 new_functional=0 checks=[1-9][0-9]*
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: camp006-w03-${{ github.run_id }}
-          retention-days: 7
-          if-no-files-found: ignore
-          path: camp006-w03-*.log
- camp006-w03-autorun-v1.log
+          grep -E '^W03_AUTORUN_V1_PY PASS examined=10 existing_functional_rows=1 new_functional=0 checks=[1-9][0-9]*$' camp006-w03-autorun-v1.log
       - name: Archive evidence
         if: always()
         uses: actions/upload-artifact@v4
