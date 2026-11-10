@@ -59,7 +59,7 @@ def main():
     require("owner inventory and party", "service.owner.inventory.all_item_ids()" in panel
             and "service.owner.party.get_creatures()" in panel)
     require("SV learnset", "species.learnset" in panel and "entry.version_group" in panel)
-    require("real UI headless", "BookPanel.new()" in runner and "panel.teach_button.pressed.emit()" in runner)
+    require("real UI headless", "PanelClass.new()" in runner and "panel.teach_button.pressed.emit()" in runner)
     require("positive and negative per ID", "func test_book" in runner and "test_incompatible" in runner)
     require("save real", "SaveGameRepository.new()" in runner and "save_collection" in runner and ".load(SAVE)" in runner)
     require("historical pilot preserved", PILOT.exists())
