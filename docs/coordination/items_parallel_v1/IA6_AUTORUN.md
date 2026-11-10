@@ -1,26 +1,32 @@
-# IA6 — ORDEN PERMANENTE ACTIVA W01 · TANDA 02
+# IA6 — RELEVO AUTORIZADO W01 · TANDA 03 (orden vigente)
 
-**IA6 HA REVISADO TU ENTREGA ANTERIOR Y PUBLICA AQUÍ LA NUEVA COLA COMPLETA.** Este archivo es tu punto fijo de entrada. Cuando recibas `p`, `sigue` o `continúa`: consulta la rama de GitHub, tu HEAD, esta nota y tu checkpoint; empieza en la primera fila pendiente de la **TANDA 02**, sin pedir permiso IA6 por cada fila. Tras completar 10, deja informe + CI real y STOP a esperar una TANDA nueva. No te limites a contestar «entendido».
+**La tanda anterior está revisada y cerrada; no la repitas.** IA6 ha actualizado esta misma ruta, que es tu memoria operativa permanente. Al recibir `p` o `sigue`: 1) lee este archivo en TU rama, 2) recupera el CSV/checkpoint de TANDA 03, 3) ejecuta la primera fila pendiente, 4) continúa las 10 filas sin pedir autorización por microbloque y guarda checkpoints cuando se interrumpa el turno. No contestes solo «entendido» ni afirmes trabajo entre turnos.
 
-**Rama autorizada:** `codex/calvo-items-20261110-w01-gems-autobatch01`. **Protocolo maestro:** `docs/coordination/items_parallel_v1/AUTONOMY_V1/README.md` de `codex/calvo-items-20261101-arbitro`. **Orden central:** `docs/coordination/items_parallel_v1/AUTONOMY_V1/QUEUE_W01_TANDA_02.md` de árbitra. Esta copia tiene el mismo contenido y vale aunque cambie el contexto de la conversación.
+**Única rama de trabajo:** `codex/calvo-items-20261110-w01-gems-autobatch01`. **Reglas generales:** `docs/coordination/items_parallel_v1/AUTONOMY_V1/README.md` en la rama árbitra `codex/calvo-items-20261101-arbitro`. **Cola maestra:** `docs/coordination/items_parallel_v1/AUTONOMY_V1/QUEUE_W01_TANDA_03.md` en rama árbitra. La cola íntegra queda reproducida abajo para no depender de contexto de conversación. No trabajar en `main`, V28 ni PR118. No modificar archivos fuera de permiso. No declarar CI SUCCESS de otra SHA. Al acabar TANDA 03, informe único y STOP hasta próxima orden IA6.
 
-No ejecutar en segundo plano ficticio: si un turno se agota, publicar checkpoint en GitHub y la siguiente `p` continúa. Un bloqueo de un productor compartido no te obliga a detener los otros hitos independientes: ticket, `BLOQUEADO`, próximo. Nunca presentar CI de otro SHA como actual ni fusionar `main`, V28, PR118 u otras ramas. Protecciones de archivos/funciones indicadas abajo son estrictas.
+**Métrica obligatoria separada en tu respuesta:** `hitos N/10 | objetos nuevos X | pruebas/QA Y | integración IA6: no` (salvo integración expresamente certificada sobre la rama de IA6). Una barra 10/10 NO significa diez objetos terminados.
 
 ---
 
-# IA6 W01 — TANDA 02: gemas restantes
-Rama: codex/calvo-items-20261110-w01-gems-autobatch01.
-Evidencia TANDA01: CI 42730773059 SUCCESS, SHA 9d1a9dae8b9d9abed09a12b082f7a719aa047981, native 10 filas y 20 activaciones, Godot 4002 checks; CAMP005/004 regresiones PASS. El CSV AUTORUN_V1_PROGRESS.csv todavía dice EN_CI_AUTOMATICA; antes de nuevos cambios cerrar la documentación con recibos y AUTORUN_V1_FINAL.md SIN volver a adjudicar tests antiguos a una SHA nueva.
-PROTOCOLO COMÚN: Esta nota autoriza los 10 hitos sin pedir permiso por hito. Al recibir p/sigue, comenzar en primer hito pendiente, publicar checkpoint si termina el turno, retomar con siguiente p. Conservar pruebas, CI con SHA y contabilidad L1/L2/L3. Bloqueos reales se documentan y permiten pasar a hitos independientes. No main, V28, PR118 ni ramas ajenas. Al terminar emitir cierre de tanda y detenerse; no ejecutar en background.
-Diez hitos:
-01 ghost_gem: efecto real Fantasma.
-02 dragon_gem: efecto real Dragón.
-03 dark_gem: efecto real Siniestro.
-04 steel_gem: efecto real Acero.
-05 fairy_gem: solo con perfil canónico validado (no inventar Fairy Gem).
-06 matriz de gemas de 18 tipos: no duplicar NORMAL/FIRE/WATER ni diez gemas TANDA01.
-07 consumo único, fallo, inmunidad, tipo incompatible.
-08 Guardado SaveV2, restauración, reserva, Transformación y PP.
-09 regresión de backend nativo, active/reserve, cambios de slot, orden de efectos.
-10 CI conjunta CAMP004/CAMP005/TANDA01/TANDA02 e informe AUTORUN_V2_FINAL.md.
-Reglas: estos cinco IDs aparecen en item_connections_v1.json como holdable, pero NO se presume que tengan efecto de motor ni estén seleccionados. Verificar DefinitionCatalog, política y referencia real. Exigir daño del tipo correcto/incorrecto, consumo, SaveV2 y negativos. Solo ediciones de consumo held específico, tests y workflow W01; si exige backend global protegido, ticket y no mutación. Diez filas revisadas no equivalen a cinco gemas funcionales.
+# IA6 — W01 TANDA 03 · CERRAR GAP DE GEMAS ENTRE MOCHILA Y COMBATE
+Rama: `codex/calvo-items-20261110-w01-gems-autobatch01`.
+**CI previa:** #42869207766 completed/success en `0871aa6751faecb7342376134ddbcaa5acf1ce5a`, 5 gemas T02 + matriz de 18 con las 3 CAMP005 y las 10 T01. El cierre documental T02 existe. No volver a contar ninguna de las 18 como NUEVA.
+**Regla de trabajo IA6:** 10 hitos, sin pedir permiso por cada uno. `p` inicia o reanuda desde checkpoint; no existe ejecución garantizada entre turnos. Probar efecto real y negativos, documentar SHA de código y CI completada SUCCESS, distinguir `HITOS`, `OBJETOS NUEVOS` y `INTEGRADOS EN IA6`. Un hito QA no cuenta como objeto nuevo. No tocar main, V28, PR118, otras ramas ni serializadores compartidos no autorizados. El cierre impide nueva fila 11 sin nota posterior.
+
+**Problema:** la mecánica de daño nativa está comprobada con equipamiento dispuesto en el test, pero el informe T02 no acredita *todo el recorrido* desde `PlayerInventory` mediante `FieldItemService.equip` al combate, al consumo, al retorno y al guardado. Ya existen `FieldItemService.equip` y `unequip`; comprobar uso real y mantenerlos sin modificar.
+
+| Hito | Entrega |
+|---|---|
+| 01 | Trazar fuente exacta de 18 gemas, inventario+propiedad+equip, SaveV2 y entrada al motor; enumerar referencias |
+| 02 | Prueba roja si falla el ciclo `inventory → FieldItemService.equip → party.held` en 3 gemas CAMP005, sin falsear L3 |
+| 03 | Ciclo completo con gemas T01 IDs 01–05, efecto real en combate y consumo correcto |
+| 04 | Ciclo completo con gemas T01 IDs 06–10, efecto real en combate y consumo correcto |
+| 05 | Ciclo completo con gemas T02 5 IDs, efecto real en combate y consumo correcto |
+| 06 | Inventario con cero, Pokémon ajeno, equipar ya equipado, sustituir held y devolución segura sin duplicaciones |
+| 07 | Reserva/entrada/salida/derrota/captura/Transformación, estado consumido no reactivable por cambio de miembro |
+| 08 | Persistencia real de inventario y criatura antes/después del uso, SaveV2 normal y legacy, sin gemas fantasma |
+| 09 | Prueba de integración con adaptador **existente** de sesión de combate, no una ventana UI inventada; si no existe acoplamiento, ticket con interfaz exacta |
+| 10 | CI acumulativa con T01+T02+CAMP004/005, informe `AUTORUN_V3_FINAL.md` e inventario de casos L2 y L3 genuinos |
+
+**Propiedad:** crear tests, fixtures, workflow W01 y helpers exclusivos, y modificar solo seam ESPECÍFICO de gemas en backend W01 si una prueba roja lo demuestra. `FieldItemService`, `FieldItemBag`, `PlayerCollection`, `CreatureInstance`, `SaveGameRepository`, `SaveV2`, escena nativa y motor de batalla global SOLO LECTURA; no copiar cambios de otras ramas. Si una unión es imposible sin tocar compartido, dejar prueba roja y ticket IA6 y pasar al resto. **Objetos nuevos de esta tanda = 0** (solo completar ruta de 18 gemas históricas), salvo que se identifique ID previamente no acreditado con autorización explícita nueva.
+
