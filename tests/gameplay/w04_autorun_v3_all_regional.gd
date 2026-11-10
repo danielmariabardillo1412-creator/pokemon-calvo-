@@ -61,7 +61,7 @@ const CASES := {
     "tauros_paldea_aqua_breed": "tauros-paldea-aqua-breed",
     "wooper_paldea": "wooper-paldea",
 }
-const BLOCKED_ABILITY_POLICY := ["exeggutor_alola","ponyta_galar","rapidash_galar","voltorb_hisui","electrode_hisui"]
+const BLOCKED_ABILITY_POLICY := ["exeggutor_alola"]
 var checks := 0
 var failures: Array[String] = []
 
@@ -175,7 +175,7 @@ func _run() -> void:
                 break
             group_idx += 1
     verify(count == 56, "fifty_six_source_encounter_routes")
-    verify(functional_count == 51 and blocked_count == 5, "fifty_one_native_positive_five_policy_blocked")
+    verify(functional_count == 55 and blocked_count == 1, "fifty_five_native_positive_one_hidden_ability_blocked")
     for row in range(10):
         var expected_count := 6 if row < 6 else 5
         verify(int(per_group.get(row, 0)) == expected_count, "row_%02d_all_sources" % (row + 1))
@@ -190,7 +190,7 @@ func _run() -> void:
 
 func _end() -> void:
     if failures.is_empty():
-        print("W04_AUTORUN_V3_ALL PASS checks=", checks, " examined=56 native_functional=51 blocked=5")
+        print("W04_AUTORUN_V3_ALL PASS checks=", checks, " examined=56 native_functional=55 blocked=1")
         quit(0)
     else:
         print("W04_AUTORUN_V3_ALL FAIL errors=", JSON.stringify(failures))
