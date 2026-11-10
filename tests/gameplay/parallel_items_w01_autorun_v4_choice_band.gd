@@ -7,7 +7,9 @@ func _initialize() -> void:
 	capture = false
 	call_deferred("_run_choice")
 	create_timer(650.0).timeout.connect(func():
-		if not done: quit(2)
+		if not done:
+			push_error("W01 Choice Band pilot timed out")
+			quit(2))
 
 func _one_choice(mode: String) -> Dictionary:
 	var before_errors: int = errors.size()
