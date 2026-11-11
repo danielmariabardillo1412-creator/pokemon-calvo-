@@ -13,3 +13,6 @@
 - Piloto #42927457230 completed/success en SHA `afb05a97a5dcfa0e654e819ea836598e2924df5d` para `choice_band`. Se incorpora como noveno job al workflow V4, aún no certificado globalmente.
 - Fase A: 2/10; 0 objetos nuevos; 2 recorridos L3 nuevos en cobertura pero con efecto previo del motor; integración IA6 NO.
 - Campaña CONTINUOUS_V2 activa: tras fila 10 seguir otros 26 IDs, no parar para pedir nueva tanda.
+
+## Actualización 11-11-2026 · bloque 03
+CI #42929306389 terminó **SUCCESS 9/9** en SHA `0d11b41549b713c68433fa6b1d11d18b7d7e670c`. Fila 03 `choice_band` **CERTIFICADO**. Los 4 pilotos filas 04–07 ya verdes pasan a workflow acumulativo de 13 jobs; certificación pendiente. Estado 3/10, 0 nuevos de producción, integración IA6 NO. Próximo piloto: fila08 `safety_goggles`.

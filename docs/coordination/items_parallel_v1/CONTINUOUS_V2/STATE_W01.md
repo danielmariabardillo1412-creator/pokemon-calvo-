@@ -3,10 +3,10 @@
 - **worker:** W01/IA1. **Rama exclusiva:** `codex/calvo-items-20261110-w01-gems-autobatch01`.
 - **mission_version:** `CONTINUOUS_V2/PLAN_W01.md` copiado a `IA6_AUTORUN.md` (consultar HEAD antes de cada `p`).
 - **phase:** A de 3 — TANDA04 con 10 objetos. Tras certificar los 10, ir automáticamente a Fase B de 26 IDs (10+10+6) y luego Fase C de auditoría final. NO STOP por bloque.
-- **block:** TANDA04 / **2 de 10 CERTIFICADOS**. El CSV `reports/W01/AUTORUN_V4_PROGRESS.csv` es la contabilidad oficial; no adelantar filas sin CI global.
-- **last_green_code_sha:** `46e4204a77743656de68d2026f6533f712c618cd`
-- **last_green_run_id:** `42926374158` — completed/success **8/8 jobs**, acredita `leftovers` fila 01 y `life_orb` fila 02 con L3 auténtico + regresiones. Ambas eran mecánicas nativas previas.
-- **objetos_nuevos_implementados:** 0. **efectos L3 nuevos certificados en cobertura:** 2. **bloqueos de arquitectura:** 0. **integración rama IA6:** NO.
+- **block:** TANDA04 / **3 de 10 CERTIFICADOS**. El CSV `reports/W01/AUTORUN_V4_PROGRESS.csv` es la contabilidad oficial; no adelantar filas sin CI global.
+- **last_green_code_sha:** `0d11b41549b713c68433fa6b1d11d18b7d7e670c`
+- **last_green_run_id:** `42929306389` — completed/success **9/9 jobs**, acredita `leftovers`, `life_orb` y `choice_band` con L3 y regresiones. Efectos nativos preexistentes.
+- **objetos_nuevos_implementados:** 0. **efectos L3 nuevos certificados en cobertura:** 3. **bloqueos de arquitectura:** 0. **integración rama IA6:** NO.
 - **03 `choice_band`:** piloto L2/L3 [CI 42927457230](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/42927457230) completed/success (Python 9/Node 3 modos/Godot 66); 9-job full regression [CI 42929306389](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/42929306389), SHA `0d11b41549b713c68433fa6b1d11d18b7d7e670c`, en progreso al último chequeo: job `v4_choice_band` SUCCESS, CAMP004 y CAMP005 aún en ejecución. **NO CERTIFICAR 03 sin 9/9 SUCCESS.**
 - **04 `choice_specs`:** piloto [CI 42929604201](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/42929604201) completed/success, SHA `a6f31e35358898dd5de841d964ce4958aff329e1`: Python 9, Node 3 modos (potencia especial y bloqueo/reset), Godot L3 61 comprobaciones. Pendiente incorporar a siguiente CI acumulativa, no marcar objeto nuevo hasta diferenciar historial.
 - **05 `choice_scarf`:** pilotos #42930154081 y #42930598346 detectaron que `battle.log` en el adaptador está vacío; #42930848420 encontró referencia obsoleta al Battle anterior tras commit. Se corrigieron **únicamente los tests**. [CI #42931082074](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/42931082074), SHA `c5a96406875108a809ea1838505619d6441d80c0`, `completed/success`: Python 10, Showdown cuatro modos con orden Mew/Jolteon y prioridad de Ataque Rápido, 4 snapshots, Godot 3 L3 y 61 comprobaciones SaveV2. **Piloto verde, todavía no CI acumulativa**, sin sumar nuevo objeto implementado.
@@ -25,3 +25,9 @@
 - Exclusivamente pruebas/fixtures/workflows/checkpoints de W01; ninguna modificación de `main`, V28, PR118, subsistemas compartidos, ni integración IA6.
 
 **Relevo seguro:** No se ha tocado `.github/workflows/w01-autorun-v4-held.yml` mientras la acumulativa #42929306389 está `in_progress`, para no cancelarla por política de concurrencia. Próxima `p` debe comprobar su conclusión exacta antes de actualizar CSV V4 y añadir jobs 04–07 a CI completa. Los 8/9 SUCCESS no autorizan aún 03 CERTIFICADO.
+
+## Checkpoint posterior al cierre de TANDA04/03
+- **Cinta Elegida certificada:** CI 42929306389 completed/success 9/9 sobre SHA `0d11b41549b713c68433fa6b1d11d18b7d7e670c`.
+- **Nueva CI de 13 jobs:** conserva los 9 anteriores e incorpora `v4_choice_specs`, `v4_choice_scarf`, `v4_shell_bell`, `v4_eviolite`. Pilotos propios 42929604201, 42931082074, 42930492497 y 42931485332 ya SUCCESS, pero filas 04–07 **no** son CERTIFICADO hasta gate completa SUCCESS sobre SHA de esta modificación.
+- **Fase A:** 3/10 certificados; 0 objetos implementados nuevos; 3 L3 certificados; 0 bloqueos; IA6 integración pendiente. Próximo ID independiente: `safety_goggles` (08), luego `black_sludge` y `sitrus_berry`.
+- **No contabilizar accidentalmente piloto L2 como L3 ni mencionar commit de integración inexistente.**
