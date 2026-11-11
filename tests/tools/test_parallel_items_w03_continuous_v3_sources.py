@@ -55,6 +55,26 @@ def source_summary():
                 moon.append((sid,ev.get("species_id"),ev.get("trigger"),ev.get("version_group"),ev.get("conditions")))
     print("W03_V3_SOURCE moon_evolutions=%s" % repr(moon[:60]))
     print("W03_V3_SOURCE moon_count=%d" %len(moon))
+
+    # Selection policy is independent from capture odds: never generate an
+    # excluded source species merely to obtain a boosted Ball test.
+    randomlock = read(ROOT / "config/randomlock_content_v1.json")
+    assert randomlock.get("profile_id") == "randomlock_v1", "wrong Randomlock profile"
+    forbidden = set(randomlock.get("excluded_species_ids", []))
+    invalid_moon = sorted({sid for sid,*_ in moon} & forbidden)
+    print("W03_V3_SOURCE randomlock_moon_denied=%s" % repr(invalid_moon))
+    assert not invalid_moon, "Moon source includes a Randomlock-excluded species"
+    # The upstream PokeAPI pokemon endpoint keeps hectogram weight, but the
+    # battle DefinitionCatalog species do NOT contain it; do not invent a
+    # multiplier or read massive source files at capture time.
+    original = read(ROOT / "data/api/v2/pokemon/35/index.json")
+    assert original.get("id") == 35 and original.get("name") == "clefairy"
+    assert original.get("weight") == 75, "upstream weight must be in hectograms"
+    print("W03_V3_SOURCE raw_pokeapi_weight_clefairy_hg=%d runtime=ABSENT" %
+          original["weight"])
+    assert not weights, "re-evaluate Heavy Ball if trusted runtime weight appears"
+    assert not tags, "re-evaluate Beast Ball if canonical Ultra Beast flag appears"
+
     if RAW.exists():
         raw = read(RAW)
         print("W03_V3_SOURCE raw_root=%s raw_keys=%s" %
