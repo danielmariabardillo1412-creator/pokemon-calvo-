@@ -16,3 +16,8 @@
 
 ## Actualización 11-11-2026 · bloque 03
 CI #42929306389 terminó **SUCCESS 9/9** en SHA `0d11b41549b713c68433fa6b1d11d18b7d7e670c`. Fila 03 `choice_band` **CERTIFICADO**. Los 4 pilotos filas 04–07 ya verdes pasan a workflow acumulativo de 13 jobs; certificación pendiente. Estado 3/10, 0 nuevos de producción, integración IA6 NO. Próximo piloto: fila08 `safety_goggles`.
+
+## Certificación acumulativa 13/13 + cierre A en CI
+- [CI #42936836840](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/42936836840) **13/13 completed/success** para filas 01–07, SHA `8ddbef7d1fcd235b921173a4cb005b175be10b08`.
+- Filas 08–10 pilotos aislados **SUCCESS**: goggles #42937741017 (Godot 157), sludge #42937805501 (127), Sitrus #42939382830 (148); **ninguno aún globalmente certificado**.
+- Nuevo workflow acumulativo **16 jobs** = 13 anteriores íntegros + 3 pilotos. Espera revisión CI y SHA; tras aprobar 16/16 certificar 10/10 y seguir Fase B sin pedir tanda adicional. W01 sin cambios producción; IA6 integración NO.
