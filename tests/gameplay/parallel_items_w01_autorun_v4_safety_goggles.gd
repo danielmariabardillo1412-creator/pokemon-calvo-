@@ -36,10 +36,12 @@ func _goggles_probe(effect: String, mode: String) -> Dictionary:
 	player = pre.owner
 	var foe_species: StringName = &"breloom" if effect == "powder" else &"mew"
 	var foe_move: String = "spore" if effect == "powder" else "sandstorm" if effect == "weather" else "amnesia"
-	var foe := _mon(foe_species, 20, &"foe", [foe_move])
+	var foe := _mon(foe_species, 100 if effect == "powder" else 20, &"foe", [foe_move])
 	foe.current_hp = 65
 	var session := FieldSession.new(catalogs, player, {}, "gen9calvounifiedv1")
 	var opened: bool = await session.begin_wild(self, foe, [19, 2, 3, 4])
+	if not opened:
+		print("W01_GOGGLES_OPEN_DIAG effect=", effect, " mode=", mode, " error=", session.last_error)
 	check("Safety Goggles genuine field session opens", opened)
 	if not opened:
 		await session.close()
