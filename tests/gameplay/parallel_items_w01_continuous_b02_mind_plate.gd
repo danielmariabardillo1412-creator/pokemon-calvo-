@@ -19,7 +19,7 @@ func _mind_trial(mode:String)->Dictionary:
 	var reserve:bool=mode.begins_with("reserve")
 	var psychic:bool=mode.ends_with("psychic")
 	var owner:=PlayerCollection.new()
-	var own:=_mon(&"mew",100,&"own",["psychic","psychic"] if psychic else ["tackle","psychic"])
+	var own:=_mon(&"mew",100,&"own",["psychic","shadow_ball"] if psychic else ["tackle","shadow_ball"])
 	var bench:=_mon(&"mew",100,&"reserve",["reflect"])
 	check("Mind Plate owned party",owner.party.add_creature(own) and owner.party.add_creature(bench))
 	check("Mind Plate actual bag one unit",owner.inventory.add(&"mind_plate",1))
