@@ -155,7 +155,11 @@ func _refresh_choices() -> void:
 	if creature != null:
 		for slot: BattleMoveSlot in creature.moveset: _moves.add_item("Sustituir: " + SpanishGameText.move_name(slot.move_id, definitions))
 	_moves.visible = service.profile.get("machine_rows", {}).has(String(_selected_item()))
-	_books_button.disabled = not _moves.visible or not service.owner.inventory.has(_selected_item()) or _requested_book_id != _selected_item()
+	# A bag refresh may select the next row after a removed item; reject that
+	# stale fallback. Programmatic legitimate selection + _refresh_choices()
+	# must still work when the previous selection remains owned (IA6 baseline).
+	var stale_book: bool = _requested_book_id != &"" and not service.owner.inventory.has(_requested_book_id)
+	_books_button.disabled = not _moves.visible or not service.owner.inventory.has(_selected_item()) or stale_book
 	var pp_target: bool = service.FieldEffects.pp_target_required(_selected_item())
 	var pp_boost: bool = service.FieldEffects.pp_boost_supports(_selected_item())
 	if pp_target:
@@ -258,7 +262,9 @@ func _open_machine_books() -> void:
 	if _books_panel == null or _books_panel.visible or _books_button.disabled: return
 	if not _ensure_binding() or not field.field_item_service_is_current(service): return
 	var item_id: StringName = _selected_item()
-	if item_id == &"" or item_id != _requested_book_id: return
+	if item_id == &"": return
+	# Do not open a different book after an external stock loss.
+	if _requested_book_id != &"" and not service.owner.inventory.has(_requested_book_id): return
 	if not service.profile.get("machine_rows", {}).has(String(item_id)): return
 	if not service.owner.inventory.has(item_id): return
 	if not _books_panel.bind_existing_service(service): return
