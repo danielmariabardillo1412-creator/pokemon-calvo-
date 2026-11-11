@@ -1,4 +1,4 @@
-name: W04 CONTINUOUS V2 - regional evolution matrix and L2 item contracts
+name: W04 CONTINUOUS V2 - regional evolution L2 and regressions
 on:
   push:
     branches: [codex/calvo-items-20261104-w04-camp006]
@@ -44,7 +44,7 @@ jobs:
           cp ci/fixtures/pokeapi_reports/import_summary.json data/reports/import_summary.json
           godot --headless --path . --import 2>&1 | tee w04-v4-import.log
           if grep -E 'SCRIPT ERROR|Parse Error' w04-v4-import.log; then exit 1; fi
-      - name: Seven regional item evolution contracts (L2 only)
+      - name: Verify seven regional item evolution L2 contracts
         shell: bash
         run: |
           set -euo pipefail
@@ -101,6 +101,7 @@ jobs:
           path: |
             w04-v4-*.log
             w04-v2-items.log
+            w04-v5-evolution.log
  w04-v2-items.log
       - name: Galar Slowpoke two L2 contracts negatives and SaveV2
         shell: bash
