@@ -46,10 +46,19 @@ def main() -> None:
     rules = src("modules/capture/capture_ruleset.gd")
     basic = src("modules/capture/capture_ball_effects.gd")
     contextual = src("modules/capture/capture_context_ball_effects.gd")
-    for missing_ball in ("dusk_ball", "dive_ball", "lure_ball", "love_ball", "moon_ball", "heavy_ball", "beast_ball"):
+    for missing_ball in ("dusk_ball", "dive_ball", "lure_ball", "love_ball", "heavy_ball", "beast_ball"):
         check(f'&"{missing_ball}"' not in basic and f'&"{missing_ball}"' not in contextual,
               f"{missing_ball}: review new rule before marking blocked")
-    # Repeat Ball is the sole approved later promotion; historical V1 findings remain frozen.
+    # The frozen AUTORUN V1 report remains unchanged, while the later IA6 V3
+    # explicitly promoted Moon via canonical EvolutionRecord and live native QA.
+    moon_source = src("modules/capture/capture_source_w03_v3.gd")
+    check('&"moon_ball"' in contextual and
+          "moon_stone_context_known" in ctx and
+          "moon_context(target.base_species_id(), catalogs)" in showdown and
+          "moon_stone" in moon_source and
+          (ROOT / "tests/gameplay/parallel_items_w03_continuous_v3.gd").exists(),
+          "V3 Moon must have a trusted live producer, not a synthetic flag")
+    # Repeat Ball remains the V1 migration; subsequent Moon authorization is distinct.
     check('&"repeat_ball"' in contextual
           and 'previously_caught_base_species' in contextual
           and (ROOT / "tests/gameplay/parallel_items_w03_repeat_history_v2.gd").exists(),
