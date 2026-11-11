@@ -1,3 +1,18 @@
+# IA3/W03 — CIERRE DEFINITIVO OFICIAL IA6 (orden más reciente del árbitro 714391a)
+- authority: arbiter docs/coordination/items_parallel_v1/IA6_W03_CAPTURE_CERTIFIED_W04_NEXT_20261111.md
+- official_IA6_head: ddc8a1af56c5fe7e950bee5bf3986d8e62261f8f
+- official_IA6_run_repel_books_rope: 43106031150 completed/success
+- official_IA6_run_capture_repeat_net_moon: 43106031155 completed/success
+- IA6_decision: W03 capture and repels incorporated and certified by official cross-gates; do NOT integrate divergent W03 staging again
+- standalone_W03_one_line_fixture_runs: 43095883086 and 43095882953 still QUEUED with 0 jobs at final read, neither attributed as success
+- distinction: official IA6 tests green on different SHA and fixture blob; W03 post-fix strict SHA test remains unexecuted
+- W03_worker_new_queue: NONE; close W03 assignment, do not start V6 or make further W03 code commits absent new IA6 authorization
+- IA6_next_team_priority: W04 selective evolution staging from official SHA, not a task to be performed by W03
+- safeguards: main, V28, PR118 and all other worker/official integration branches untouched
+- checkpoint_date: 2026-11-11
+
+## Historical checkpoint (superseded only where official integration status changed)
+
 # IA3/W03 — CONTINUOUS_V5 · VERIFICACIÓN FIXTURE EN COLA; INTEGRACIÓN IA6 YA CERTIFICADA
 date: 2026-11-11
 branch: codex/calvo-items-20261111-w03-repel-staging-v5
