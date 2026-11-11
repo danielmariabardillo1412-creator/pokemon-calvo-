@@ -1,3 +1,11 @@
+# IA6 — RELEVO W03 V5 ACTIVO · 11-11-2026 · LEER PRIMERO
+
+**NO REPETIR CAMPAÑAS V3/V4 YA CERTIFICADAS.** La captura native/legacy V4 W03 está cerrada y certificada con CI #43068968046 (SHA funcional `5a82da2a9dd1a868c3f8af9d73551fe16571adea`). Los repelentes siguen pendientes. IA6 ha creado **rama NUEVA de trabajo autorizada** `codex/calvo-items-20261111-w03-repel-staging-v5`, sin alterar esta rama histórica.
+
+**SIGUIENTE `p`:** primero comprobar que cualquier cambio local pendiente está publicado en su rama original y que el working tree está limpio. Después cambiar a la rama NUEVA `codex/calvo-items-20261111-w03-repel-staging-v5`, abrir allí `docs/coordination/items_parallel_v1/IA6_AUTORUN.md` y `CONTINUOUS_V5/STATE_W03.md`, empezar directamente la fase A de integración Repel/Súper/Máximo con mochila W05+Cuerda Huida, y seguir A→B→C sin parar cada diez. No editar esta rama antigua, `main`, V28, PR118, staging W05 ni IA6 oficial. Una `p` no ejecuta trabajo en segundo plano.
+
+---
+
 # ACTUALIZACIÓN IA6 — 2026-11-11: DESBLOQUEO W03 LEGACY (leer primero)
 
 IA6 ha AUTORIZADO **tres y solo tres seams** de `modules/gameplay/wild_adventure_session.gd` exclusivamente en tu rama `codex/calvo-ia6-staging-20261111-w03-capture`. La orden de IA6 está publicada en la rama árbitra `codex/calvo-items-20261101-arbitro`:
