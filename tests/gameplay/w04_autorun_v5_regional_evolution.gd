@@ -102,11 +102,13 @@ func _run() -> void:
         check(target.form_id != &"" and target.form_id != source.form_id and target.species_id == target_id,
             String(item) + "_target_factory_identity_not_inherited")
         roundtrip(target, catalog, String(target_id))
-        # Existing EvolutionSystem creates a new species without form_id; do not
-        # claim this is a playable successful regional evolution or mutate it.
+        # V3 promotes the native destination identity; this historical L2
+        # fixture must now insist on the exact canonical form, not the old bug.
+        # This check alone does not claim bag consumption or a playable L3.
         var engine_result := EvolutionSystem.apply_evolution(source, target_id, catalog, ProgressionRuleset.new())
         check(engine_result != null and engine_result.species_id == target_id
-            and engine_result.form_id == &"", String(item) + "_native_engine_missing_target_form_proven")
+            and engine_result.form_id == StringName(option.get("target_form_id", "")),
+            String(item) + "_native_engine_exact_target_form")
         check(source.to_dict() == original, String(item) + "_source_immutable")
         index += 1
     check(index == 2, "two_routes_examined")
