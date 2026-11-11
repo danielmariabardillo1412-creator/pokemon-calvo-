@@ -1,0 +1,9 @@
+# IA1/W01 · CONTINUOUS_V2 B02/B03 — 14 placas equipables (pilotos)
+
+**Pilotos publicados, NO certificados hasta pasar cada CI y posteriormente la acumulativa.** El motor nativo previo de `draco_plate` sirve como plantilla L2/L3: cinco casos por tipo (`active_type`, `none_type`, `reserve_type`, `active_wrong`, `none_wrong`), con comparación causal, restore/checkpoint, recorrido FieldItemService → FieldSession → victoria → SaveV2 y conservación de especie y portador.
+
+Tipos/movimientos: `13: fist_plate` (fighting) → `aura_sphere`; `14: flame_plate` (fire) → `flamethrower`; `15: icicle_plate` (ice) → `ice_beam`; `16: insect_plate` (bug) → `bug_buzz`; `17: iron_plate` (steel) → `flash_cannon`; `18: meadow_plate` (grass) → `energy_ball`; `19: mind_plate` (psychic) → `psychic`; `20: pixie_plate` (fairy) → `moonblast`; `21: sky_plate` (flying) → `aerial_ace`; `22: splash_plate` (water) → `surf`; `23: spooky_plate` (ghost) → `shadow_ball`; `24: stone_plate` (rock) → `power_gem`; `25: toxic_plate` (poison) → `sludge_bomb`; `26: zap_plate` (electric) → `thunderbolt`.
+
+Todos los rivales de la batería son Mew con 250 PS iniciales (para evitar inmunidad de Garchomp frente a Electric). **70 escenarios Node y 70 escenarios Godot planteados, NO PASS presumidos.** Hay pruebas individuales para que un fallo concreto no invalide el diagnóstico de las demás. Las CI de los primeros dos pilotos B02 ya dieron SUCCESS: Dread #42955088591, Earth #42955023454. Aún falta su gate acumulativa.
+
+**Estado de campaña:** Fase A 10/10; Fase B/B01 6 certificados + 4 dependencias fuera de alcance, CI #42954745915 22/22; B02/B03 16 placas todavía sin certificación global. 0 implementaciones nuevas en producción. No tocar Arceus/formas W04, SaveV2, motor global, main/V28/PR118 ni otras ramas.
