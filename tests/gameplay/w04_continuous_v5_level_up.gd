@@ -3,6 +3,7 @@ extends SceneTree
 # ProgressionSystem.apply_evolution, Party/Storage replacement, SaveV2.
 const Overlay = preload("res://modules/creatures/progression/pokemon_variant_catalog.gd")
 const Canonical = preload("res://modules/creatures/progression/canonical_form_identity_w04.gd")
+const LevelContract = preload("res://modules/creatures/progression/regional_level_evolution_contract_w04_v5.gd")
 const ROUTES := [
     [&"diglett_alola", &"dugtrio_alola", 26],
     [&"geodude_alola", &"graveler_alola", 25],
@@ -79,6 +80,20 @@ func run_one(catalog: DefinitionCatalog, source: StringName, target: StringName,
     check(ev != null, tag + "_available_event")
     if ev == null: return
     events_found += 1
+    # The event can be declined; no owner replacement happens until accepted.
+    check(owner.owned_creature(mon.instance_id) == mon, tag + "_decline_event_keeps_owner")
+    var evidence := LevelContract.inspect(mon, target, catalog)
+    check(evidence.get("ok", false), tag + "_strict_route_contract")
+    check(not LevelContract.inspect(mon, &"pikachu", catalog).get("ok", false),
+        tag + "_wrong_target_contract_denied")
+    var invalid_form := CreatureInstance.from_dict(mon.to_dict())
+    invalid_form.form_id = &"invented-region-form"
+    check(not LevelContract.inspect(invalid_form, target, catalog).get("ok", false),
+        tag + "_forged_form_denied")
+    var underleveled := CreatureInstance.from_dict(mon.to_dict())
+    underleveled.level = minimum - 1
+    check(not LevelContract.inspect(underleveled, target, catalog).get("ok", false),
+        tag + "_below_threshold_contract_denied")
     var before := mon.to_dict()
     var evolved := ProgressionSystem.apply_evolution(mon, ev, catalog, rules)
     check(evolved != null and evolved.instance_id == mon.instance_id and evolved.species_id == target,
@@ -121,6 +136,22 @@ func run_everstone(catalog: DefinitionCatalog, source: StringName, target: Strin
     check(mon.level == threshold and evo_event(events, target) == null,
         String(source) + "_everstone_prevents_event")
 
+func run_nonlevel_triggers(catalog: DefinitionCatalog) -> void:
+    var conditional_species := [&"graveler_alola", &"farfetchd_galar", &"yamask_galar"]
+    for id in conditional_species:
+        var species := catalog.species(id)
+        check(species != null, String(id) + "_nonlevel_source")
+        if species == null: continue
+        for rec: EvolutionRecord in species.evolutions:
+            if rec.trigger == &"level_up": continue
+            var mon := make_mon(catalog, id, StringName("w04_v5_special_" + String(id)),
+                99, ProgressionRuleset.new())
+            var candidates := EvolutionSystem.evolution_candidates(species,
+                EvolutionSystem.level_up_context(mon), catalog)
+            check(not candidates.has(rec),
+                String(id) + "_trade_or_special_not_level_simplified")
+
+
 func run_negative_records(catalog: DefinitionCatalog) -> void:
     var excluded := [&"rattata_alola", &"meowth_alola", &"linoone_galar", &"qwilfish_hisui",
         &"sneasel_hisui", &"sliggoo_hisui"]
@@ -147,6 +178,7 @@ func _run() -> void:
         run_one(catalog, row[0], row[1], row[2], true)
         run_everstone(catalog, row[0], row[1], row[2])
     run_negative_records(catalog)
+    run_nonlevel_triggers(catalog)
     print("W04_V5_RESULT routes=10 events=", events_found, " saved=", persisted, " checks=", checks)
     finish()
 
