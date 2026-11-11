@@ -3,6 +3,7 @@ extends SceneTree
 const Overlay = preload("res://modules/creatures/progression/pokemon_variant_catalog.gd")
 const Contract = preload("res://modules/creatures/progression/regional_item_evolution_contract_w04_v2.gd")
 const Service = preload("res://modules/inventory/field_item_service.gd")
+const FailService = preload("res://tests/gameplay/w04_continuous_v3_fail_publish_service.gd")
 const ROUTES := [
     [&"darumaka_galar", &"ice_stone", &"darmanitan_galar_standard"],
     [&"growlithe_hisui", &"fire_stone", &"arcanine_hisui"],
@@ -15,6 +16,7 @@ const ROUTES := [
 var errors: Array[String] = []
 var checks := 0
 var positives := 0
+var rollback_verified := 0
 
 func _initialize() -> void: call_deferred("_run")
 
@@ -91,6 +93,28 @@ func _case(catalog: DefinitionCatalog, source_id: StringName, item: StringName,
     DirAccess.remove_absolute(ProjectSettings.globalize_path(save_path))
     positives += 1
 
+func _rollback_case(catalog: DefinitionCatalog, source_id: StringName, item_id: StringName,
+        target_id: StringName, in_storage: bool) -> void:
+    var tag := String(source_id) + ("_rollback_storage" if in_storage else "_rollback_party")
+    var owner := PlayerCollection.new()
+    var mon := make_mon(catalog, source_id, StringName("w04_v3_fault_" + tag))
+    check(owner.party.add_creature(mon), tag + "_party")
+    if in_storage:
+        check(owner.deposit(mon.instance_id), tag + "_storage")
+    check(owner.inventory.set_quantity(item_id, 2), tag + "_stock")
+    var service := FailService.new()
+    check(service.configure(owner, catalog, func() -> bool: return true), tag + "_configured")
+    var before := snapshot(owner)
+    var location := owner.location_of(mon.instance_id)
+    var result: Dictionary = service.evolve(item_id, mon.instance_id, target_id)
+    var unchanged: bool = not result.get("accepted", false) and result.get("reason", "") == "evolution_commit_failed"
+    unchanged = unchanged and snapshot(owner) == before and owner.inventory.quantity(item_id) == 2
+    unchanged = unchanged and owner.location_of(mon.instance_id) == location
+    unchanged = unchanged and is_same(owner.owned_creature(mon.instance_id), mon)
+    check(unchanged, tag + "_failed_after_owner_replace_atomic_rollback")
+    if unchanged:
+        rollback_verified += 1
+
 func _run() -> void:
     var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(Overlay.CANONICAL))
     check(parsed is Dictionary, "canonical")
@@ -102,13 +126,16 @@ func _run() -> void:
     for row in ROUTES:
         _case(catalog, row[0], row[1], row[2], false)
         _case(catalog, row[0], row[1], row[2], true)
+    _rollback_case(catalog, &"slowpoke_galar", &"galarica_cuff", &"slowbro_galar", false)
+    _rollback_case(catalog, &"vulpix_alola", &"ice_stone", &"ninetales_alola", true)
+    print("W04_V3_ROLLBACK_RESULT cases=", rollback_verified, " expected=2")
     print("W04_V3_L3_RESULT routes=", ROUTES.size(), " ownership_cases=", positives,
         " checks=", checks, " L3=", positives / 2)
     finish()
 
 func finish() -> void:
-    if errors.is_empty() and positives == ROUTES.size() * 2:
-        print("W04_V3_L3 PASS checks=", checks, " routes=7 ownership=14")
+    if errors.is_empty() and positives == ROUTES.size() * 2 and rollback_verified == 2:
+        print("W04_V3_L3 PASS checks=", checks, " routes=7 ownership=14 rollback=2")
         quit(0)
     else:
         print("W04_V3_L3 FAIL errors=", JSON.stringify(errors))
