@@ -25,9 +25,10 @@ function trial(mode){
    return e.execute({op:'commit',id,draft_token:draft.draft_token});
   };
   const first=take('move 1',mode==='priority'?'move 2':'move 1');
-  const turns=battle.log.filter(x=>x.startsWith('|move|'));
-  if(turns.length<2) console.error('W01_SCARF_DIAG '+JSON.stringify({mode,liveLog:battle.log.slice(-35),snapshotLog:first.snapshot?.log?.slice?.(-35),snapNativeLog:first.snapshot?.native?.log?.slice?.(-35),turnCount:turns.length}));
-  assert(turns.length>=2,'must observe two executed native move events');
+  // NativeEngine checkpoints own the official log; battle.log is empty by adapter design.
+  // Parse the actual committed snapshot log, never a fake move-order assumption.
+  const turns=first.snapshot.native.log.filter(x=>x.startsWith('|move|'));
+  assert(turns.length>=2,'must observe two actual committed native move events');
   const order=turns.slice(-2).map(row=>{
     const m=/^\|move\|p([12])a:/.exec(row);return m?Number(m[1]):null;
   });
