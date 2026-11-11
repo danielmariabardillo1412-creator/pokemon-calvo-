@@ -1,0 +1,68 @@
+name: W01 CONTINUOUS_V4 held staging baseline functional audit
+on:
+  push:
+    branches:
+      - codex/calvo-ia6-staging-20261111-w01-held
+    paths:
+      - '.github/workflows/w01-continuous-v4-held-stage-baseline.yml'
+      - 'tests/tools/test_w01_v4_held_staging_preflight.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  held_stage_baseline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: chickensoft-games/setup-godot@v2.4.1
+        with:
+          version: 4.7.0
+          use-dotnet: false
+          include-templates: false
+      - name: Restore canonical project resources and pinned native Showdown
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "POKEMON_CALVO_NODE=$(command -v node)" >> "$GITHUB_ENV"
+          python -B tools/distribution/restore_resources.py
+          python -B tools/distribution/restore_resources.py --check
+          mkdir -p data/reports .godot/item_audit_v1
+          cp ci/fixtures/pokeapi_reports/forms_policy_report.json data/reports/forms_policy_report.json
+          cp ci/fixtures/pokeapi_reports/unsupported_mechanics.json data/reports/unsupported_mechanics.json
+          cp ci/fixtures/pokeapi_reports/import_summary.json data/reports/import_summary.json
+          godot --headless --path . --import 2>&1 | tee w01-v4-import.log
+          if grep -E 'SCRIPT ERROR|Parse Error' w01-v4-import.log; then exit 1; fi
+          python -B tools/battle_reference/run.py --install --limit 1 2>&1 | tee w01-v4-native-install.log
+      - name: No-diff SHA audit, CAMPAÑA001 actual native+SaveV2 and Transformación
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tests/tools/test_w01_v4_held_staging_preflight.py 2>&1 | tee w01-v4-preflight.log
+          grep -F 'W01_V4_STAGE_PREFLIGHT PASS held_engine_same=1 policy_same=1 held_catalog_same=1 selected_held=8' w01-v4-preflight.log
+          python -B tests/tools/test_parallel_items_w01_campaign_001.py --contracts 2>&1 | tee w01-v4-camp001-contract.log
+          python -B tests/tools/test_parallel_items_w01_campaign_001.py --self-test 2>&1 | tee w01-v4-camp001-selftest.log
+          timeout 1100s godot --headless --path . --script res://tests/gameplay/parallel_items_w01_campaign_001.gd 2>&1 | tee w01-v4-camp001-godot.log
+          grep -E '^W01_CAMP_001 PASS checks=[1-9][0-9]* rows=[1-9][0-9]* errors=0$' w01-v4-camp001-godot.log
+          python -B tests/tools/test_parallel_items_w01_campaign_001.py 2>&1 | tee w01-v4-camp001-verify.log
+          node tests/tools/repro_w01_camp005_b06_transform.cjs 2>&1 | tee w01-v4-transform.log
+          grep -F 'W01_B06_NATIVE_REPRO PASS cases=3 snapshots=3 switches=3' w01-v4-transform.log
+      - name: IA6 policy Dynamax Candy veto unchanged in staging
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 180s godot --headless --path . --script res://tests/gameplay/item_selection_policy_test_runner.gd 2>&1 | tee w01-v4-policy.log
+          grep -E '^ITEM_SELECTION_POLICY PASS checks=[1-9][0-9]* excluded=45$' w01-v4-policy.log
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: w01-v4-stage-baseline-${{ github.run_id }}
+          path: w01-v4-*.log
+          if-no-files-found: ignore
+          retention-days: 7
