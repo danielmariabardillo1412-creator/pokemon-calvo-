@@ -147,6 +147,27 @@ static func apply_evolution(
 	var target: CreatureSpecies = catalogs.species_catalog.get_by_id(target_species_id)
 	if target == null:
 		return null
+	# W04 V3: only certified regional item destinations gain a permanent
+	# canonical form. Normal non-regional evolutions retain their old behavior.
+	var regional_form: StringName = &""
+	if catalogs is DefinitionCatalog:
+		var route_map: Dictionary = preload("res://modules/creatures/progression/regional_item_evolution_contract_w04_v2.gd").ROUTES
+		if route_map.has(creature.species_id):
+			var selected: StringName = &""
+			var matches := 0
+			for approved_item: StringName in route_map[creature.species_id]:
+				if route_map[creature.species_id][approved_item] != target_species_id:
+					continue
+				var evidence: Dictionary = preload("res://modules/creatures/progression/regional_item_evolution_contract_w04_v2.gd").inspect(
+					creature, approved_item, catalogs, target_species_id)
+				if not evidence.get("ok", false):
+					return null
+				selected = StringName(evidence.get("target_form_id", ""))
+				matches += 1
+			if matches > 1 or (matches == 1 and selected == &""):
+				return null
+			if matches == 1:
+				regional_form = selected
 	var new_creature := CreatureInstance.new(
 		creature.instance_id,
 		target_species_id,
@@ -154,10 +175,13 @@ static func apply_evolution(
 		creature.stats.duplicate() if creature.stats != null else StatBlock.new(),
 		[],
 	)
+	if regional_form != &"":
+		new_creature.form_id = regional_form
 	new_creature.experience = creature.experience
 	new_creature.ivs = creature.ivs.duplicate()
 	new_creature.evs = creature.evs.duplicate()
 	new_creature.nature_id = creature.nature_id
+	new_creature.effective_nature_id = creature.effective_nature_id
 	new_creature.is_shiny = creature.is_shiny
 	new_creature.friendship = creature.friendship
 	new_creature.status_ids = creature.status_ids.duplicate()
@@ -180,7 +204,7 @@ static func apply_evolution(
 		new_creature.ability_id = target.ability_ids[0]
 	# Recompute stats from the new species base.
 	var base := target.base_stat_block()
-	new_creature.stats = StatCalculator.compute(base, new_creature.ivs, new_creature.evs, new_creature.nature_id, new_creature.level)
+	new_creature.stats = StatCalculator.compute(base, new_creature.ivs, new_creature.evs, (new_creature.effective_nature_id if new_creature.effective_nature_id != &"" else new_creature.nature_id), new_creature.level)
 	# Preserve current HP conservatively, clamped to the new maximum.
 	new_creature.current_hp = mini(creature.current_hp, new_creature.stats.max_hp)
 	new_creature.stat_stages = StatStages.from_dict(creature.stat_stages.to_dict()) if creature.stat_stages != null else StatStages.new()
