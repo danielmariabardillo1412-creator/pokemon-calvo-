@@ -44,6 +44,9 @@ func _case(catalog: DefinitionCatalog, source_id: StringName, item: StringName,
     # IA6 staging merges W02 independent effective nature with W04 form identity.
     mon.effective_nature_id = &"adamant"
     mon.recalculate_stats(catalog.species(source_id), ProgressionRuleset.new())
+    # Persist changed PP, not only move IDs, through the actual evolution.
+    if not mon.moveset.is_empty():
+        mon.moveset[0].current_pp = maxi(0, mon.moveset[0].max_pp - 2)
     check(owner.party.add_creature(mon) and owner.party.add_creature(wrong), tag + "_owned")
     if in_storage:
         check(owner.deposit(mon.instance_id), tag + "_deposited")
@@ -54,6 +57,10 @@ func _case(catalog: DefinitionCatalog, source_id: StringName, item: StringName,
     check(evidence.get("ok", false), tag + "_canonical")
     check(service.evolution_options(item, mon.instance_id) == [target_id], tag + "_options")
     var initial := snapshot(owner)
+    service.guard = func() -> bool: return false
+    check(not service.evolve(item, mon.instance_id, target_id).get("accepted", false)
+        and snapshot(owner) == initial, tag + "_inactive_session_no_spend")
+    service.guard = func() -> bool: return true
     check(service.evolution_options(&"potion", mon.instance_id).is_empty(), tag + "_wrong_item_options")
     check(not service.evolve(item, wrong.instance_id, target_id).get("accepted", false)
         and snapshot(owner) == initial, tag + "_wrong_species_no_spend")
@@ -82,6 +89,8 @@ func _case(catalog: DefinitionCatalog, source_id: StringName, item: StringName,
     check(evolved.stats.to_dict() == StatCalculator.compute(catalog.species(target_id).base_stat_block(),
         evolved.ivs, evolved.evs, evolved.effective_nature_id, evolved.level).to_dict(),
         tag + "_w02_effective_stats_on_evolved_target")
+    check(evolved.to_dict().get("moveset", []) == before.get("moveset", []),
+        tag + "_pp_and_move_slots_preserved")
     check(evolved.nature_id == mon.nature_id and evolved.ivs == mon.ivs and evolved.evs == mon.evs
         and evolved.experience == mon.experience and evolved.move_ids == mon.move_ids,
         tag + "_persistent_values")
