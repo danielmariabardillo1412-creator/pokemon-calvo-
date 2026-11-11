@@ -7,7 +7,7 @@ const BagClass = preload("res://scenes/visual/field_item_bag.gd")
 
 class FieldFacade:
 	extends Node2D
-	var owner: PlayerCollection
+	var collection: PlayerCollection
 	var definitions: DefinitionCatalog
 	var unlocked := true
 	var opens := 0
@@ -17,10 +17,10 @@ class FieldFacade:
 		return true
 
 	func field_bind_item_service(bound: RefCounted) -> bool:
-		return bound.configure(owner, definitions, func(): return unlocked)
+		return bound.configure(collection, definitions, func(): return unlocked)
 
 	func field_item_service_is_current(bound: RefCounted) -> bool:
-		return bound != null and is_same(bound.get("owner"), owner) \
+		return bound != null and is_same(bound.get("owner"), collection) \
 			and is_same(bound.get("catalogs"), definitions)
 
 	func field_definitions() -> DefinitionCatalog:
@@ -35,7 +35,7 @@ class FieldFacade:
 
 func mount_real_bag(svc: Variant) -> Dictionary:
 	var facade := FieldFacade.new()
-	facade.owner = svc.owner
+	facade.collection = svc.owner
 	facade.definitions = catalogs
 	root.add_child(facade)
 	var bag: Variant = BagClass.new()
