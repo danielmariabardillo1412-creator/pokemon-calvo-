@@ -124,18 +124,21 @@ jobs:
           set -euo pipefail
           timeout 900s godot --headless --path . --script res://tests/gameplay/parallel_items_w02_continuous_v2_block01.gd 2>&1 | tee w02-continuous-v2-b01-godot.log
           grep -E '^W02_CONTINUOUS_V2_B01_GODOT PASS positive=6 negative=6 checks=[1-9][0-9]*$' w02-continuous-v2-b01-godot.log
+          if grep -E 'SCRIPT ERROR|Parse Error' w02-continuous-v2-b01-godot.log; then exit 1; fi
       - name: W02 CONTINUOUS V2 PERSIM native held confusion L3
         shell: bash
         run: |
           set -euo pipefail
           timeout 900s godot --headless --path . --script res://tests/gameplay/parallel_items_w02_continuous_v2_persim.gd 2>&1 | tee w02-continuous-v2-persim-godot.log
           grep -E '^W02_CONTINUOUS_V2_PERSIM_GODOT PASS cases=2 checks=[1-9][0-9]*$' w02-continuous-v2-persim-godot.log
+          if grep -E 'SCRIPT ERROR|Parse Error' w02-continuous-v2-persim-godot.log; then exit 1; fi
       - name: W02 CONTINUOUS V2 HELD05 native status healing berries
         shell: bash
         run: |
           set -euo pipefail
           timeout 900s godot --headless --path . --script res://tests/gameplay/parallel_items_w02_continuous_v2_held05.gd 2>&1 | tee w02-continuous-v2-held05-godot.log
           grep -E '^W02_CONTINUOUS_V2_HELD05_GODOT PASS positive=5 negative=5 checks=[1-9][0-9]*$' w02-continuous-v2-held05-godot.log
+          if grep -E 'SCRIPT ERROR|Parse Error' w02-continuous-v2-held05-godot.log; then exit 1; fi
       - name: TANDA 04 W02 no-double-growth and semantic equivalence Python Godot
         shell: bash
         run: |
