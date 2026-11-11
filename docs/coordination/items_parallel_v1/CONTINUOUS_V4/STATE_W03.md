@@ -1,3 +1,25 @@
+# IA3/W03 — CONTINUOUS_V4 STAGING · ENTREGA NATIVA CERTIFICADA / BLOQUEOS PROTEGIDOS
+
+- **worker / staging**: W03 / `codex/calvo-ia6-staging-20261111-w03-capture`; base IA6 `e63b2e6c7e175fba318cc2f562bebd1769589092`.
+- **mission_version**: `CONTINUOUS_V4/PLAN_W03.md` de rama árbitra. No se tocaron main, V28, PR118, rama integradora IA6 ni ramas de otras W.
+- **phase**: A COMPLETADA (diff por función); B CERTIFICADA para **Showdown nativo**; C REPORTE/TICKETS FINALIZADOS, **regresión total BLOQUEADA** por seam legacy fuera de autorización.
+- **new_object_ids**: 0. **newly_ported_native_effects**: Repeat x3.5 desde ledger exitoso autenticado y Moon x4 desde evolución Stone del catálogo. Net x3.5 **ya existía** en base IA6, no duplicada.
+- **last_green_stage_code_sha**: `0cb612cd548ee47ff66fabf85472e64e10951a28`.
+- **last_green_stage_ci**: [42965463520](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/42965463520) `completed/success` en el SHA exacto de código. Su job tiene 18 pasos SUCCESS y 0 fallidos; **NO equivale a suite completa de regresión**, porque detecta y registra fallo conocido `WildAdventureSession`.
+- **qa_native_stage**: Repeat 26 PASS + negativos 18 PASS; Net 79 PASS + negativos 19 PASS; Moon 41 PASS (2 capturas); SaveV2 40 PASS + adversarial 8 PASS; mint native 18 PASS; IA6 mint+rope 65 PASS; bag libros 20 PASS; fuente Python 34 checks, datos 1082 especies.
+- **red_legacy_explicit**: `W03_REPEAT_V2_GODOT FAIL checks=37`, **6 aserciones rojas reales** en ruta `WildAdventureSession` **no editada por falta de permiso**. La CI publica `W03_V4_LEGACY_WILD BLOCKED_AUTHORIZATION_WILD_ADVENTURE_SESSION NOT_PASS`; sin falsear histórico. Ticket `CONTINUOUS_V4/W03_WILD_LEGACY_GAP.md`.
+- **repel_shared_gap**: `FieldItemBag` IA6 tiene libros W05 y cuerda; faltan hunk Repel y origen/guardado de mundo. W03 dejó mochila, mapa y puente intactos. Ticket `CONTINUOUS_V4/W03_REPEL_BAG_GAP.md`.
+- **protected_sources**: `FieldItemBag`, `CreatureInstance`, `FieldItemService`, `native_engine.cjs`, `config/item_selection_v1.json` (dynamax_candy excluido) protegidos por SHA de blob; `FieldNativeSave._valid_creature` preserva naturaleza efectiva.
+- **blocked_balls**: Heavy/Beast/Dive/Dusk/Lure/Love sin productor, Safari/Sport parciales; Magikarp L5 move_policy ticket previo.
+- **final_report**: `docs/coordination/items_parallel_v1/reports/W03/CONTINUOUS_V4_STAGING_FINAL.md`.
+- **integration_IA6_official**: NO. **ready_state**: `READY_FOR_IA6_REVIEW_NATIVE_ONLY / BLOCKED_SHARED_SEAMS`, **NO READY_FOR_FULL_MERGE**.
+- **ci_pending**: NO sobre el último SHA de código. Los commits posteriores son docs `[skip ci]`, no atribuirles CI.
+- **next_safe_action**: IA6 revisa hunks, decide autorización puntual para `WildAdventureSession.capture_current/load_game`, integra repeles con W05 de forma selectiva y ejecuta CI integrada; W03 no puede continuar esas seams sin nueva orden. No repetir QA en bucle.
+
+---
+
+## Checkpoint histórico previo preservado
+
 # IA3/W03 — V4 STAGING, FASE A COMPLETADA · FASE B EN CERTIFICACIÓN
 
 - **branch**: `codex/calvo-ia6-staging-20261111-w03-capture`, derivada de IA6 `e63b2e6c7e175fba318cc2f562bebd1769589092`.
