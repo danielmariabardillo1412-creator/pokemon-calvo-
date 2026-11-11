@@ -1,3 +1,11 @@
+# IA5/W05 — CAMPAÑA CONTINUA V3 CERRADA · READY_FOR_IA6 (2026-11-11)
+
+IA6 autorizó excepcionalmente **montar FieldMachineBookPanel dentro de FieldItemBag SOLO en rama W05**. Las fases **A+B+C 3/3** se completaron con CI [#42957930359](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/42957930359) **completed/success**, código `803561dd6a0253458c576762d74b3c62435299fa`. **173 checks nativos** nuevos Godot W05 PASS (mochila real + servicio auténtico, usando fachada mínima del campo), 4 slots, cancelación, consumo exacto, rechazo de doble gasto, Party/Storage, bloqueo, SaveV2 sin autosave. Los 229 libros ya certificados y traducciones ES PCK se preservaron: **0 objetos nuevos**. EXE Windows técnico 635.399.144 B, PCK 526.379.480 B; no probado visualmente en Windows/GPU.
+
+**Riesgo de integración real:** la rama IA6 ya tenía un panel propio (`_books_panel`) y Cuerda Huida; W03 tiene lógica adicional de repelentes. NO copiar FieldItemBag de W05 entero, ni declarar integrada la versión W05 en IA6. El informe `reports/W05/CONTINUOUS_V3_FINAL.md` y `CONTINUOUS_V3/W05_COLLISION_AUDIT.md` detallan el trasplante selectivo y las puertas de aceptación. Estado actual `CONTINUOUS_V3/STATE_W05.md` = **READY_FOR_IA6**, campaña V3 agotada; STOP hasta orden nueva en `IA6_AUTORUN.md`. No tocar `main`, V28, PR118, SaveV2 ni ramas ajenas.
+
+---
+
 # IA5/W05 — CONTINUOUS_V2 CAMPAÑA 3/3 COMPLETA · READY_FOR_IA6 (2026-11-11)
 
 **Nueva orden prevalente:** docs/coordination/items_parallel_v1/IA6_AUTORUN.md (CONTINUOUS_V2). La nota antigua STOP de TANDA05 se conserva **sólo como historial**: IA6 abrió y W05 completó B01/B02/B03 sin repetir 229 objetos. Estado actual y siguiente acción: docs/coordination/items_parallel_v1/CONTINUOUS_V2/STATE_W05.md. Entrega completa: docs/coordination/items_parallel_v1/CONTINUOUS_V2/W05_READY_FOR_IA6.md y W05_IA6_ACCEPTANCE.md.
