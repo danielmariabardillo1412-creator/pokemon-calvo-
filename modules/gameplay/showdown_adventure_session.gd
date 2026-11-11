@@ -174,12 +174,23 @@ func capture(ball_id: StringName, expected_revision: int) -> Dictionary:
 	var catcher := battle_state().active_for_side(&"side_a")
 	if catcher != null: context.catcher_level = catcher.level
 	var target := _persistent_copy(battle_state().active_for_side(&"side_b"))
+	# W03 staging: owner-ledger source for Repeat; no party/storage inference.
+	# Moon uses only the target's canonical base species and source evolution record.
+	if target != null:
+		context.previously_caught_base_species = player.has_previously_caught(target.base_species_id(), catalogs)
+		if ball_id == &"moon_ball":
+			var moon_data: Dictionary = preload("res://modules/capture/capture_source_w03_v3.gd").moon_context(target.base_species_id(), catalogs)
+			context.moon_stone_context_known = bool(moon_data.get("ok", false))
+			context.target_evolves_with_moon_stone = bool(moon_data.get("eligible", false))
 	var resolution := CaptureInventoryService.resolve(CaptureAttempt.new(target, ball_id, context), rng, catalogs, party, bag)
 	if resolution.result.status == CaptureResult.INVALID:
 		_command_busy = false; return _rejected(resolution.result.reason)
 	if resolution.result.status == CaptureResult.SUCCESS:
 		var result := _finish("CAPTURED", bag, resolution)
 		if result.accepted:
+			# Only the genuine, committed captured owner can amend persistent history.
+			if resolution.captured != null:
+				player.record_successful_capture(resolution.captured.base_species_id(), catalogs)
 			_capture_rng.state = rng.state
 			_record_spent(ball_id)
 			result["capture_outcome"] = {"capture": resolution.to_dict()}
