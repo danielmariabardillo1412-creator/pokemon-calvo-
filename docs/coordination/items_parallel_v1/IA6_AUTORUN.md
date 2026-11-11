@@ -1,3 +1,13 @@
+# IA6 — RELEVO NUEVA CAMPAÑA 12-11-2026 · W04 · LEE PRIMERO
+
+**ESTA RAMA ANTIGUA YA HA TERMINADO. NO REPETIR CAMPAÑA ANTERIOR.** IA6 ha publicado trabajo NUEVO y AUTORIZADO: decisión y publicación en juego de evolución tras XP de combate.
+
+**SIGUIENTE `p`:** antes de cambiar, comprobar que no haya cambios locales sin publicar. Cambiar a la rama ÚNICA NUEVA `codex/calvo-items-20261112-w04-evolution-consumer-v6` y abrir **allí** `docs/coordination/items_parallel_v1/IA6_AUTORUN.md` + `docs/coordination/items_parallel_v1/CONTINUOUS_V6/STATE_W04.md`. Iniciar Fase A inmediatamente y continuar A→B→C sin parada burocrática; las instrucciones completas están incorporadas a IA6_AUTORUN.md de la nueva rama.
+
+No modificar ESTA rama histórica, ni IA6 oficial, main, V28, PR118 ni ramas de otras trabajadoras. La CI anterior NO certifica código de nueva misión. Las conversaciones no trabajan en background.
+
+---
+
 # ORDEN IA6 — W04 · V5 ACTIVA · EVOLUCIONES REGIONALES POR NIVEL · 2026-11-11
 
 **NUEVA MISIÓN AUTORIZADA EN ESTA RAMA:** `codex/calvo-items-20261111-w04-regional-level-v5`. La V4 de `codex/calvo-ia6-staging-20261111-w04-evolution` ha terminado y permanece congelada como entrega a IA6 con CI #42965322073 SUCCESS y SHA funcional `cdd53fb1d61a3aeb8790818aa571e13f9afbaed8`. NO repetirla ni modificarla. El nuevo trabajo es V5, no una extensión de certificación V4.
