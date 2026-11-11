@@ -1,18 +1,19 @@
-# W03 — CONTINUOUS_V2: campaña 25/25 examinados, último gate CI pendiente
+# IA3/W03 — CONTINUOUS_V2 CAMPAÑA FINALIZADA / READY_FOR_IA6
 
 - **branch**: `codex/calvo-items-20261104-w03-camp006`
-- **mission_version**: `CONTINUOUS_V2/PLAN_W03.md`, publicado en IA6 y activado en `IA6_AUTORUN.md`.
-- **phase**: `B03_CONTEXT_BLOCKS_REVIEWED` — 25/25 IDs examinados, final técnico condicionado a la CI acumulativa.
-- **block**: B01 10/10 certificados; B02 10/10 examinados (8 lanzamientos nativos, Safari/Sport solo parciales, Dive/Dusk bloqueadas); B03 5/5 bloqueadas por productores auténticos ausentes.
-- **next_id**: ninguno dentro del plan de 25. No inventar otra familia.
-- **checked/functional/new/blocked**: 25 IDs; 16 rutas L3 completas de existentes; 2 rutas de zona parciales; 7 `BLOCKED_CONTEXT`; objetos nuevos=0; integración IA6=NO.
-- **QA nueva por suite**: B01 `156 PASS` y B02 `125 PASS`, productores `58 PASS`, más sonda Magikarp y 3 ramas de Fast/Quick/Level a certificar con CI final.
-- **last_green_code_sha**: `eb42cfee9236a17fbae58b697144c8fc22bb530d`.
-- **last_green_run_id**: [42930597727](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/42930597727), `completed/success`, contiene B01+B02+auditoría de 7 ausencias y 2 parciales.
-- **ci_pending**: [42931723587](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/42931723587), SHA código/workflow `2c4b0a63f04572be1dd86d565e7b71e78d897c65` (sonda Magikarp y ramas Fast/Quick/Level). Nunca declarar PASS antes de `completed/success`.
-- **owned_files_changed**: runners `parallel_items_w03_continuous_v2_b01.gd`, `_b02.gd`, `_magikarp_probe.gd`, `_context_edges.gd`; auditoría `test_parallel_items_w03_continuous_v2_sources.py`; workflow W03; manifiesto, ticket y STATE.
-- **protected_tickets**: `W03_CONTEXT_PRODUCERS_TICKET.md` documenta siete productores regionales ausentes y dos zonas parciales. Magikarp L5 `move_policy` reproducido como fallo previo a captura; sin corregir política o generador protegidos.
-- **next_safe_action**: revisar el resultado final de #42931723587. Ante PASS publicar `W03_CAMPAIGN_FINAL.md` y estado `READY_FOR_IA6`. Ante FAIL reparar únicamente runner/fixture o seam específica autorizada, mantener CI previa verde y reintentar.
+- **mission_version**: `CONTINUOUS_V2/PLAN_W03.md` autorizado por IA6, activado en la nota permanente W03.
+- **phase**: `READY_FOR_IA6` — agotados los 25 IDs, sin otra fila independiente autorizada.
+- **block**: B01 10/10 completos; B02 10/10 examinados; B03 5/5 examinados.
+- **next_id**: ninguno; no inventar nuevas tandas o familias.
+- **checked/functional/new/blocked**: 25 revisados / 16 completos L3 de objetos preexistentes / 0 objetos nuevos / 7 `BLOCKED_CONTEXT` / 2 `PARCIAL_ZONE`; integración IA6=NO.
+- **QA**: `156+125+58+44+35=418 PASS` nuevas (B01/B02/producción auténtica/Magikarp/Fast-Quick-Level); todas las regresiones históricas también PASS.
+- **last_green_code_sha**: `2c4b0a63f04572be1dd86d565e7b71e78d897c65`.
+- **last_green_run_id**: [42931723587](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/42931723587), `completed/success` sobre esa SHA.
+- **ci_pending**: NO. Los commits posteriores son estrictamente documentación `[skip ci]`, sin atribuirles una CI no ejecutada.
+- **owned_files_changed**: solo runners V2 B01/B02/Magikarp/edges, validador Python de fuentes, workflow W03, manifest, ticket y reportes documentales.
+- **protected_tickets**: siete bolas regionales requieren contexto de mundo, Safari/Sport requieren política o productor de zona, Magikarp L5 devuelve `move_policy` antes de captura; ver `W03_CONTEXT_PRODUCERS_TICKET.md` y `W03_CAMPAIGN_FINAL.md`.
+- **final_report**: `docs/coordination/items_parallel_v1/CONTINUOUS_V2/W03_CAMPAIGN_FINAL.md`.
+- **next_safe_action**: IA6 revisa el informe y decide incorporación selectiva y nuevos productores. La trabajadora NO altera política, SaveV2, generadores ni ramas ajenas y no repite esta cola.
 
 ---
 ## Historia anterior preservada
