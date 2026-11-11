@@ -6,6 +6,7 @@ const Service = preload("res://modules/inventory/field_item_service.gd")
 const Art = preload("res://scenes/visual/item_art_catalog.gd")
 const GrowthTransaction = preload("res://modules/inventory/field_growth_transaction.gd")
 const GrowthChoices = preload("res://scenes/visual/field_growth_choices.gd")
+const MachinePanel = preload("res://scenes/visual/field_machine_book_panel.gd")
 var field: Node2D
 var service := Service.new()
 var _items: ItemList
@@ -18,6 +19,8 @@ var _equip: Button
 var _growth := GrowthTransaction.new()
 var _growth_choices: VBoxContainer
 var _ability_stamp := ""
+var _machine_panel: PanelContainer
+var _machine_requested_book: StringName = &""
 
 
 func _ready() -> void:
@@ -31,14 +34,23 @@ func _ready() -> void:
 	_description = Label.new(); _description.custom_minimum_size.x = 540; _description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART; box.add_child(_description)
 	_targets = OptionButton.new(); box.add_child(_targets)
 	_moves = OptionButton.new(); box.add_child(_moves)
-	_items.item_selected.connect(func(_i): _refresh_choices())
+	_items.item_selected.connect(func(_i):
+		_machine_requested_book = _selected_item()
+		_refresh_choices())
 	_targets.item_selected.connect(func(_i): _refresh_choices())
+	_moves.item_selected.connect(func(_i):
+		if _machine_panel != null and _machine_panel.visible:
+			_machine_panel.select_replacement_slot(_moves.selected - 1))
 	var buttons := HBoxContainer.new(); box.add_child(buttons)
 	_use = _button(buttons, "Usar", func(): _apply("use"))
 	_equip = _button(buttons, "Equipar", func(): _apply("equip"))
 	_button(buttons, "Quitar equipado", func(): _apply("unequip"))
 	_button(buttons, "Cerrar · B / Esc", hide)
 	_result = Label.new(); _result.custom_minimum_size.x = 540; _result.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART; box.add_child(_result)
+	_machine_panel = MachinePanel.new()
+	box.add_child(_machine_panel)
+	_machine_panel.hide()
+	_machine_panel.teaching_finished.connect(_on_machine_teaching_finished)
 	_growth_choices = GrowthChoices.new(); box.add_child(_growth_choices)
 	_growth_choices.chosen.connect(func(value): _show_growth_result(_growth.choose(value)))
 	_growth_choices.cancelled.connect(func():
@@ -52,8 +64,11 @@ func _button(parent: Node, text: String, callback: Callable) -> Button:
 func open_bag() -> bool:
 	if field == null or not field.field_can_open_item_bag(): return false
 	if not field.field_bind_item_service(service): return false
+	_machine_requested_book = &""
 	_result.text = "Selecciona un objeto y un Pokémon. Las funciones pendientes no consumirán el objeto."
 	refresh()
+	_machine_requested_book = _selected_item()
+	_refresh_choices()
 	reset_size()
 	position = (get_viewport_rect().size - size) / 2.0
 	show()
@@ -118,6 +133,7 @@ func _refresh_choices() -> void:
 	_ability_stamp = ""
 	_moves.clear(); _moves.add_item("Aprender sin sustituir un movimiento")
 	if field == null or not field.field_item_service_is_current(service) or service.owner == null:
+		if _machine_panel != null: _machine_panel.hide()
 		_moves.visible = false
 		_description.text = ""
 		_use.disabled = true
@@ -162,7 +178,20 @@ func _refresh_choices() -> void:
 		_description.text = "Medicina para el Pokémon seleccionado. Se consume solo si tiene efecto." if service.FieldEffects.consumes_on_use(_selected_item()) else "Despierta al Pokémon seleccionado. Puede reutilizarse; no se consume."
 	elif service.FieldEffects.EV_BERRIES.has(String(_selected_item())):
 		_description.text = "Reduce hasta 10 EV de una estadística y aumenta la amistad."
-	_use.disabled = _selected_item() == &"" or creature == null
+	# MTs are handled only by the nested panel; the global Use button MUST
+	# never trigger a second FieldItemService.use_item transaction for the same click.
+	var is_book := service.profile.get("machine_rows", {}).has(String(_selected_item()))
+	if _machine_panel != null:
+		_machine_panel.hide()
+		if is_book and _machine_requested_book == _selected_item():
+			if _machine_panel.bind_existing_service(service):
+				if _machine_panel.select_book(_selected_item()):
+					var owner_id := _selected_creature()
+					if owner_id != &"" and service.owner.location_of(owner_id) == &"PARTY":
+						_machine_panel.select_creature(owner_id)
+					_machine_panel.select_replacement_slot(_moves.selected - 1)
+					_machine_panel.show()
+	_use.disabled = _selected_item() == &"" or creature == null or is_book
 	_equip.disabled = _use.disabled or not service.holdable(_selected_item())
 
 
@@ -173,6 +202,9 @@ func _apply(action: String) -> Dictionary:
 		if field != null: field.field_refresh_hud()
 		return {"accepted": false, "reason": "field_locked", "status": "REJECTED"}
 	_cancel_growth()
+	if action == "use" and service.profile.get("machine_rows", {}).has(String(_selected_item())):
+		_result.text = "Los libros se enseñan desde su panel de movimientos; no se ha consumido nada."
+		return {"accepted": false, "reason": "machine_panel_required", "status": "REJECTED"}
 	if action == "use" and service.Growth.supports(_selected_item()):
 		return _show_growth_result(_growth.begin(service, _selected_item(), _selected_creature()))
 	var definitions: DefinitionCatalog = field.field_definitions()
@@ -205,6 +237,21 @@ func _apply(action: String) -> Dictionary:
 	refresh()
 	field.field_refresh_hud()
 	return result
+
+
+func _on_machine_teaching_finished(result: Dictionary) -> void:
+	# The panel already called FieldItemService.teach exactly once.
+	# Never perform a second mutation in this callback.
+	if field == null or not field.field_item_service_is_current(service):
+		return
+	refresh()
+	if result.get("accepted", false):
+		var move_id := StringName(result.get("move_id", ""))
+		_result.text = "¡Ha aprendido %s! Se consumió un libro." % MachineMovesEsSvW05.resolve(
+			move_id, SpanishGameText.move_name(move_id, field.field_definitions())).get("name", "")
+	else:
+		_result.text = "No se ha enseñado el movimiento. El libro se conserva."
+	field.field_refresh_hud()
 
 
 func _ability_name(id: StringName, definitions: DefinitionCatalog) -> String:
