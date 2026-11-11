@@ -18,3 +18,9 @@ var target_side_id: StringName = &""
 # from the live battle after load/recovery; these are not persistent save fields.
 var completed_turns: int = -1
 var catcher_level: int = -1
+# Canonical live successful capture history, never party/storage membership.
+var previously_caught_base_species: bool = false
+# W03 V3 Moon Stone producer; untrusted defaults reject Moon Ball attempts.
+var moon_stone_context_known: bool = false
+var target_evolves_with_moon_stone: bool = false
+
