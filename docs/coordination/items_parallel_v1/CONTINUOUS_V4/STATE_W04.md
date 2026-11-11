@@ -1,24 +1,28 @@
-# W04 — CONTINUOUS_V4 / STAGING CHECKPOINT 2026-11-11
+# W04 — CONTINUOUS_V4 · READY_FOR_IA6_MERGE_CANDIDATE (2026-11-11)
 
 - worker: W04
 - branch: `codex/calvo-ia6-staging-20261111-w04-evolution`
-- staging_base_sha: `e63b2e6c7e175fba318cc2f562bebd1769589092`
+- base_IA6_sha: `e63b2e6c7e175fba318cc2f562bebd1769589092`
 - mission_version: `CONTINUOUS_V4/PLAN_W04.md`
-- phase: **A/B transplantados; C CI ampliada en ejecución**
-- source_certified_sha: `db24e6f38943e5782b0d028b2d6553267adecd6f`, source CI #42959076143
-- staging_last_green_sha: `535169ff1d44da0162b05f24702e9fb95be04f1c`
-- staging_last_green_ci: **#42965058174 SUCCESS** (historical regional and 7 L3 on W02 staging, before explicit PP/session assertions)
-- staging_latest_test_sha: `cdd53fb1d61a3aeb8790818aa571e13f9afbaed8`
-- staging_latest_test_ci: **#42965322073**, pending final verdict at time of checkpoint
-- objects_new: 0 (all seven items already existed)
-- regional_L3_routes_transplanted: 7; Party/Storage cases 14; prior CI success
-- W02_effective_nature: preserved in CreatureInstance and carried through EvolutionSystem/SaveV2 in staging (previous CI SUCCESS)
-- rollback: 2 injected after owner replacement PASS on prior staging CI
-- blocked: no known newly blocked regional routes on previous green SHA; Exeggutor Alola hidden Harvest blocked as before
-- historical_coverage: V2 source/target save; 55/56 regional native; four approved normal abilities; Galarica and Slowpoke pilot (staging #42965058174 SUCCESS)
-- excluded_item: `dynamax_candy` excluded in staging config, CI checks exclusion, not included in seven routes
-- CAMP003_006: historical source CI #42959076143 SUCCESS, **not rerun on staging** because W04 historical Python/Godot suites and fixtures are absent from this IA6 staging base; do not misattribute
-- visual_FieldItemBag: NOT CERTIFIED on staging; only native FieldItemService Party/Storage, SaveV2
-- integrated_official_IA6: **NO**; no main/V28/PR118 updates
-- files_changed: additive form_id in CreatureInstance, Factory canonical form and exact four normal abilities, EvolutionSystem.apply_evolution (preserves effective nature), FieldItemService.evolution_options/evolve, SaveGameData.validate form guard, FieldNativeSave._valid_creature form guard, W04 canonical helper/contract and tests/workflow
-- next_safe_action: inspect #42965322073; if green, publish V4 report with precise SHA and list of remaining integration-only checks; if red, repair without lowering checks, rerun.
+- phase: **A/B completed, C staging-specific QA completed; historic CAMP003–006 cross-suite remains central**
+- current_status: **READY_FOR_IA6_MERGE_CANDIDATE** (NOT merged, NOT global integration certified)
+- last_green_code_sha: `cdd53fb1d61a3aeb8790818aa571e13f9afbaed8`
+- last_green_run_id: **42965322073**
+- last_green_result: **completed / SUCCESS**
+- source_V3_green: `db24e6f38943e5782b0d028b2d6553267adecd6f` / #42959076143
+- objects_new: **0**
+- actual_L3_regional_routes_staging: **7/7**
+- ownership_cases: **14/14**, Party/Storage
+- QA: **396 checks** (W02 effective nature+stats, IV/EV/PP, SaveV2, inactive session, wrong item/source/target, one-item consumption, id, 2/2 forced atomic rollback)
+- regional_encounters: **55/56** certified, Exeggutor Alola still blocked
+- historical_staging: V2 pilot PASS, V3 regional forms PASS, V4 normal abilities PASS, V5 Galarica PASS, V2 L2/B03 PASS
+- excluded: **dynamax_candy** verified excluded via staged CI
+- historical_CAMP003_006_on_staging: **NOT RUN** because dependency files absent from base; source CI green is not stage CI
+- visual_bag_on_staging: **NOT RUN**
+- integrated_official_IA6: **NO**
+- files: `CreatureInstance.form_id` optional, W02 effective_nature untouched, `CreatureFactory.create` canonical form+normal ability, `EvolutionSystem.apply_evolution` canonical target+effective nature stats, `FieldItemService.evolution_options/evolve`, structural/native SaveV2 form guard, W04 helpers/tests/workflow
+- final_report: `docs/coordination/items_parallel_v1/reports/W04/CONTINUOUS_V4_STAGING_FINAL.md`
+- next_safe_action: IA6 review source-to-staging hunks, run CAMP003–006 and full W02/W03/W05 integration/visual FieldItemBag CI in its OWN official integration branch; do not merge blindly.
+- stop_reason: all independent V4 work possible on isolated staging completed; remaining gates are integration-owner scope, not permission to invent another W04 mission
+
+**Evidence rule:** the completed CI #42965322073 validates exactly `cdd53fb1d61a3aeb8790818aa571e13f9afbaed8`; later documentation SHA `c43a37b258708fb1510397a32b4b38b695a10722` and this checkpoint SHA are not separately certified by that code run.
