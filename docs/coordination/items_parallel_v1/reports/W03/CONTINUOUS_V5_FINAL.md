@@ -1,3 +1,17 @@
+# ACTUALIZACIÓN POSTERIOR IA3/W03 — 2026-11-11 · PREVALECE SOBRE EL REGISTRO HISTÓRICO
+
+**Hecho nuevo verificado en GitHub:** IA6 ha integrado funcionalidad Repel y la ha certificado en su rama oficial `codex/calvo-ia6-integration-20261109`, SHA `ddc8a1af56c5fe7e950bee5bf3986d8e62261f8f`.
+- [CI oficial Repel + libros + Rope #43106031150](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/43106031150): **SUCCESS**, log `CAMP006_W03_REPEL_L3 PASS checks=66`; `IA6_BOOK_BAG PASS checks=20`, `IA6_INTEGRATION PASS checks=65`, 229 nombres españoles y exclusión Dinamax.
+- [CI oficial W03 capture + cross-worker #43106031155](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/43106031155): **SUCCESS**, Repeat original 37, Repeat native 26 + 18, Net 79 + 19, Moon 41, SaveV2 40 + 8, menta 18, libros 20, repel histórico 66.
+- **Diferencia importante:** el test histórico oficial tiene blob `f542f6aef303caa12812714415846bcf16bb2bcf` y selecciona zona real desde `zone_at_position`. El test W03 exclusivo ha recibido autorización IA6 para **otra corrección mínima equivalente de una línea** desde `registered_zone_ids()[0]` hacia `scene.TECHNICAL_ZONE_ID`, blob `91ec4cca45b0a398597dd352f10d4bcfec4b3353`. No son archivos idénticos y la CI oficial no certifica automáticamente esa nueva versión W03.
+- Corrección W03 commit funcional `e7b4235788b200a946030a248b33cc4a20535359`; guard protege reconstrucción exacta del blob original y los 7 hashes de producción.
+- CI W03 histórica estricta [#43095883086](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/43095883086) y CI W03 scoped [#43095882953](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/43095882953): a esta revisión ambas **QUEUED, sin jobs iniciados**. No afirmar PASS, FAIL ni fallo de código. Última CI W03 scoped verde antes del cambio #43084807955 sobre `1fc5d7fdba3a9b84a4c04fc88a24ea3c8d1bb579`.
+- **No queda trabajo de integración pendiente de W03 sobre la rama oficial** sin orden nueva; tampoco abrir V6. El único remate de W03 V5 es auditar sus dos CI exactas cuando GitHub las ejecute. Integración de rutas W04 y CAMP003–006 completas no certificada por estas pruebas.
+
+---
+
+## Registro anterior (válido para el momento previo a la integración oficial y a la corrección del fixture)
+
 # IA3/W03 — CONTINUOUS_V5 FINAL · READY_FOR_IA6_MERGE_REPEL_CANDIDATE
 **Fecha:** 2026-11-11. **Ejecutor:** W03. **Integración oficial IA6:** NO.
 
