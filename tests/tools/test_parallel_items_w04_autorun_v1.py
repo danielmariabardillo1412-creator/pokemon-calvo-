@@ -94,8 +94,17 @@ def main():
         and (ROOT / "docs/coordination/items_parallel_v1/CONTINUOUS_V2/STATE_W04.md").is_file()
         and (REPORT / "CONTINUOUS_V2_REGIONAL_EVOLUTION_MATRIX.csv").is_file()
     )
-    test(prior_queue or rolled_queue or v3_queue or v4_queue or v5_queue or v2_continuous_queue,
-         "IA6 stable queue recognizes authorized TANDA05 or CONTINUOUS_V2 rollover, preserving frozen V1 QA")
+    # IA6 explicitly advanced W04 again from the certified V2 campaign to
+    # CONTINUOUS_V3. Recognize the versioned handoff, not an arbitrary queue.
+    v3_continuous_queue = (
+        "CONTINUOUS_V3/PLAN_W04.md" in order
+        and "W04" in order
+        and "FASE A" in order and "FASE B" in order and "FASE C" in order
+        and (REPORT / "CONTINUOUS_V2_READY_FOR_IA6.md").is_file()
+        and (ROOT / "docs/coordination/items_parallel_v1/CONTINUOUS_V3/STATE_W04.md").is_file()
+    )
+    test(prior_queue or rolled_queue or v3_queue or v4_queue or v5_queue or v2_continuous_queue or v3_continuous_queue,
+         "IA6 stable queue recognizes authorized V1-V3 continuous rollover, preserving frozen V1 QA")
     with PROGRESS.open(encoding="utf-8", newline="") as f:
         rows = list(csv.DictReader(f))
     test(len(rows) == 10 and [r["fila"] for r in rows] ==
