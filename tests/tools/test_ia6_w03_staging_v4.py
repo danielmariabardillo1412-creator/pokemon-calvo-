@@ -28,7 +28,7 @@ def blob(path):
 def run():
     # Preserve all preexisting IA6 code not owned by W03.
     protected = {
-        "scenes/visual/field_item_bag.gd": "0d0497d661bc28785a76aed73b7e177854fe1a23",
+        "scenes/visual/field_item_bag.gd": "da0648a71f3efd4e5ba15daeb467fd012a7e9305",
         "modules/creatures/domain/creature_instance.gd": "bd70d1ce2ff6b78129525ba3bda34667f62c12d4",
         "modules/battle/backends/showdown/native_engine.cjs": "073e5c8523f47a477735b98a766437392c201e33",
         "config/item_selection_v1.json": "bf76a361b30e158f613f31ef275006862562cea8",
