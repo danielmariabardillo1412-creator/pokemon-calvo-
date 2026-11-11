@@ -54,13 +54,17 @@ func _one_sitrus(entry: Dictionary) -> Dictionary:
 	if not opened:
 		await session.close()
 		return {"valid": false}
+	var expected_hp: int = start_hp + (maxi(1, int(max_hp / 4)) if should_consume else 0)
+	var entry: CreatureInstance = session.battle_state().creature(&"own")
+	var entry_hp: int = entry.current_hp
+	check("Sitrus authentic quarter-HP trigger at battle entry " + name,
+		entry_hp == expected_hp and entry.held_item_consumed == should_consume)
 	var initial: Dictionary = await session.submit("move 1", session.revision)
 	check("Sitrus genuine first turn processed " + name, initial.get("accepted", false))
 	var live: CreatureInstance = session.battle_state().creature(&"own")
 	var after_hp: int = live.current_hp
-	var expected_hp: int = start_hp + (maxi(1, int(max_hp / 4)) if should_consume else 0)
-	check("Sitrus authentic quarter-HP recovery and no early activation " + name,
-		after_hp == expected_hp)
+	check("Sitrus cannot apply same berry twice on first turn " + name,
+		after_hp == entry_hp)
 	check("Sitrus consumed precisely once and original holder stays stable " + name,
 		live.held_item_id == (&"sitrus_berry" if mode == "active" else &"")
 		and live.held_item_consumed == should_consume

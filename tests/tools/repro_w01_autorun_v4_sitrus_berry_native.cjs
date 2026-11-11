@@ -36,12 +36,19 @@ function run(t){
    assert.equal(cp().state_hash,before.state_hash,'Sitrus cannot trigger in prepare');
    return e.execute({op:'commit',id,draft_token:d.draft_token});
   };
-  const first=step(),own1=get(first,'own'),bench1=get(first,'reserve');
+  // Showdown may eat a held Sitrus immediately at battle entry when HP
+  // already satisfies the trigger. Test the true native start checkpoint,
+  // then ensure neither subsequent turn re-applies the effect.
   const quarter=Math.floor(mon.max_hp/4);
   const heal=t.consume?quarter:0;
-  assert.equal(own1.hp,mon.hp+heal,'actual Gen9 quarter HP restoration once');
-  assert.equal(own1.item,(t.holder==='active'&&!t.consume)?'sitrusberry':'',
-   'Berry consumed iff low-HP active holder');
+  const rawHP=t.hp===null?mon.max_hp:t.hp;
+  assert.equal(mon.hp,rawHP+heal,
+   'native battle entry must heal exactly one quarter at or below half HP');
+  assert.equal(mon.item,(t.holder==='active'&&!t.consume)?'sitrusberry':'',
+   'battle entry consumes only eligible active holder');
+  const first=step(),own1=get(first,'own'),bench1=get(first,'reserve');
+  assert.equal(own1.hp,mon.hp,'no second consumption or duplicate heal on first turn');
+  assert.equal(own1.item,mon.item,'spent state must survive first turn');
   assert.equal(bench1.item,t.holder==='reserve'?'sitrusberry':'',
    'Reserve berry must never trigger');
   const again=step(),own2=get(again,'own');
