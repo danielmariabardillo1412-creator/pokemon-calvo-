@@ -71,10 +71,11 @@ func _run_held05() -> void:
 				and bool(a.settled_once) and bool(n.settled_once)
 				and bool(s.settled_once))
 			if String(spec.kind) == "status_cure":
+				var control_status: String = String(spec.get("expected_control_status", spec.status))
 				check("HELD05: precise status cure only on active bearer",
-					String(a.status) == ("" if consumes else String(spec.status))
-					and String(n.status) == String(spec.status)
-					and String(s.status) == String(spec.status))
+					String(a.status) == ("" if consumes else control_status)
+					and String(n.status) == control_status
+					and String(s.status) == control_status)
 			elif String(spec.kind) == "heal_fixed10":
 				var expected_hp: int = mini(int(a.max_hp), int(n.hp) + (10 if consumes else 0))
 				check("HELD05: Oran restores exactly ten HP if activated",
