@@ -1,3 +1,25 @@
+# IA3/W03 — CONTINUOUS_V3 FINALIZADA / READY_FOR_IA6
+
+- **mission_version**: `CONTINUOUS_V3/PLAN_W03.md` autorizado por IA6 en rama árbitra y activado en `IA6_AUTORUN.md` W03.
+- **branch**: `codex/calvo-items-20261104-w03-camp006`.
+- **phase**: `READY_FOR_IA6` — fases A (fuente auténtica), B (Moon nativa) y C (ticket mundo/Magikarp/regresiones) **3/3 agotadas**; no más tarea independiente autorizada.
+- **next_id**: ninguno. No repetir 25 bolas V2 ni inventar nuevas tandas.
+- **checked/functional/new/blocked**: tres prioridades auditadas: Moon **1 ruta L3 implementada ahora**, Heavy y Beast **2 BLOCKED_CONTEXT** (Heavy peso raw L2 sin runtime). **0 IDs de inventario nuevos**. Foto global 25 bolas=**17 L3, 2 PARCIAL_ZONE, 6 BLOCKED_CONTEXT**.
+- **test_moon**: `W03_V3_MOON PASS native=2 checks=41`, Clefairy ×4, Goldeen ×1, RNG fallido, owner, SaveV2; `moon_ball_gen7_plus_v1`, seis registros auténticos `EvolutionRecord`; política Randomlock comprobada.
+- **last_green_code_sha**: `ef63e824069aa27ce957e99997df8e7a50c78524`.
+- **last_green_run_id**: [42958535816](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/42958535816), `completed/success` sobre ese SHA, **regresiones históricas completas** y Moon.
+- **v3_source_and_native_ci**: [42958341652](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/42958341652) SUCCESS, SHA `b79f322d89619144f0111205d770e1b4db057b0f`. Auditoría de 1.082 especies y Moon 41 PASS, Magikarp negativo 44 checks.
+- **ci_pending**: NO. Commits posteriores exclusivamente de informe/checkpoint `[skip ci]`, **no certificados como código**.
+- **report**: `docs/coordination/items_parallel_v1/reports/W03/CONTINUOUS_V3_FINAL.md`.
+- **blocked_ticket**: `docs/coordination/items_parallel_v1/CONTINUOUS_V3/W03_PRODUCER_DEPENDENCIES.md` — Heavy, Beast y cuatro fuentes mundo + dos contextos de zona parciales; `move_policy` Magikarp L5 independiente.
+- **protected_files**: sin alteración de SaveV2, PlayerCollection, CreatureInstance, FieldItemBag, native_engine, RNG, mundo/reloj/pesca/sexo ni main/V28/PR118/ramas ajenas.
+- **integration_IA6**: NO. Integración selectiva y CI central pendiente; evitar cherry-pick íntegro de módulos compartidos.
+- **next_safe_action**: IA6 recibe informe, revisa seam de Moon, decide productores Heavy/Beast y coordina integración; W03 queda STOP válido de campaña V3, hasta nueva orden explícita en nota propia.
+
+---
+
+## Checkpoint(s) anteriores preservados (históricos; campos pending ya superados)
+
 # IA3/W03 — CAMPAÑA V3 · FASES A/B CERTIFICADAS, REGRESIÓN FINAL EN CURSO
 
 - **mission**: `CONTINUOUS_V3/PLAN_W03.md` en árbitra; activa en `IA6_AUTORUN.md` de la rama propia W03.
