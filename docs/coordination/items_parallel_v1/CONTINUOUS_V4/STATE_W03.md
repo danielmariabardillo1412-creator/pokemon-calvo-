@@ -1,3 +1,24 @@
+# IA3/W03 — V4 CAPTURA NATIVA + LEGACY CERTIFICADAS; REPELENTES PENDIENTES (ACTUAL)
+
+- **authority**: IA6 `CONTINUOUS_V4/IA6_W03_LEGACY_WILD_SEAM_AUTH_20261111.md`; 3 hunks exclusivos `WildAdventureSession` autorizados y cerrados.
+- **branch**: `codex/calvo-ia6-staging-20261111-w03-capture`; integración oficial IA6 **NO**. Base staging `e63b2e6c7e175fba318cc2f562bebd1769589092`.
+- **phase**: V4 A DIFF completada; B QA **nativa + legacy** certificada; C reporte y cierre completados para captura. **NO afirmar regresión total CAMP003–006/V1–V3**: se probaron las suites V4 especificadas y legacy Repeat original.
+- **last_green_code_sha**: `5a82da2a9dd1a868c3f8af9d73551fe16571adea` (código Wild + workflow estricto).
+- **last_green_ci**: [43068968046](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/43068968046) `completed/success`, 18 pasos SUCCESS/0 fail, **sin excepción por regresión legacy**.
+- **legacy_red_to_green**: test original **inalterado** `W03_REPEAT_V2_GODOT PASS checks=37` (6 aserciones antes FAIL restauradas), gate `W03_V4_LEGACY_WILD PASS strict_unmodified_test=true checks=37`. Ticket legacy **RESUELTO en staging**, no en IA6 oficial.
+- **legacy_hunks**: commit `0bf1bb2c1f33499338c5e946128a2dc58c06b504`, único archivo `modules/gameplay/wild_adventure_session.gd`, **3 hunks**, blob antiguo `42b03a0435fd07915955fe9ecf7b8b7468c8c714`, blob nuevo `f8aacfdeb24a317d865717c98add76712a3b8196`: antes del intento ledger real, tras éxito/routing registro real, tras LoadResult SaveV2 copia de ledger. No otros módulos.
+- **other_verified**: Repeat nativa 26 + negativos 18 PASS; Net 79 + negativos 19 PASS; Moon 41 PASS; SaveV2 40 + adversarial 8 PASS; menta nativa 18 PASS; menta+rope 65 PASS; libros 20 PASS; Python 34 checks; 1.082 especies canónicas; 0 IDs nuevos.
+- **veto**: `dynamax_candy` excluido, fuente de política y cinco blobs protegidos idénticos.
+- **current_report**: `docs/coordination/items_parallel_v1/reports/W03/CONTINUOUS_V4_LEGACY_REDGREEN_20261111.md`.
+- **remaining_shared_gap**: `CONTINUOUS_V4/W03_REPEL_BAG_GAP.md`; Repel/Super/Max desde bag + efectos de campo/bridge + SaveV2 **NO integrados**, módulos protegidos W05/IA6. Heavy/Beast/etc sin productores; Magikarp L5 independiente.
+- **integration_IA6_official**: **NO**. `ready_state`: `READY_FOR_IA6_MERGE_CAPTURE / REPEL_SHARED_SEAM_PENDING`, **NO READY_FOR_FULL_MERGE**.
+- **ci_pending**: no. Comits docs posteriores `[skip ci]` no cambian código ni trasladan cobertura.
+- **next_safe_action**: IA6 revisa hunk exacto y CI, hace integración selectiva W03 + W05 con su CI conjunta y resuelve repelentes; W03 **STOP V4 autorizado** hasta orden específica nueva. No reabrir legacy roja ya certificada.
+
+---
+
+## Estados anteriores archivados — NO usar como autoridad actual
+
 # IA3/W03 — CONTINUOUS_V4 STAGING · ENTREGA NATIVA CERTIFICADA / BLOQUEOS PROTEGIDOS
 
 - **worker / staging**: W03 / `codex/calvo-ia6-staging-20261111-w03-capture`; base IA6 `e63b2e6c7e175fba318cc2f562bebd1769589092`.
