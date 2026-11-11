@@ -9,6 +9,7 @@ on:
       - 'tests/gameplay/w04_continuous_v3_red_destinations.gd'
       - 'tests/gameplay/w04_continuous_v3_real_evolution.gd'
       - 'tests/gameplay/w04_autorun_v5_regional_evolution.gd'
+      - 'tests/tools/test_parallel_items_w04_autorun_v1.py'
       - 'modules/creatures/progression/regional_item_evolution_contract_w04_v2.gd'
   workflow_dispatch:
 permissions:
