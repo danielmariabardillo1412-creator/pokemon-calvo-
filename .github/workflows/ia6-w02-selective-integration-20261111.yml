@@ -29,7 +29,7 @@ on:
 permissions:
   contents: read
 concurrency:
-  group: ia6-mint-rope-${{ github.ref }}
+  group: ia6-w02-selective-native-${{ github.ref }}
   cancel-in-progress: true
 jobs:
   verify:
