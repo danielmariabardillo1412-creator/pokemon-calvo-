@@ -1,0 +1,163 @@
+{
+  "schema_version": 2,
+  "campaign": "W02_CONTINUOUS_V2",
+  "block": "01",
+  "proof_scope": "held_native_battle_only",
+  "format": "gen9calvounifiedv1",
+  "level": 100,
+  "seed": [
+    23,
+    19,
+    29,
+    43
+  ],
+  "modes": [
+    "active",
+    "none",
+    "reserve"
+  ],
+  "item_ids": [
+    "aguav_berry",
+    "iapapa_berry",
+    "mago_berry"
+  ],
+  "cases": [
+    {
+      "id": "aguav_berry",
+      "scenario": "aguav_berry_disliked_battle",
+      "kind": "heal_flavor",
+      "nature": "naughty",
+      "start": "full",
+      "status": "",
+      "actor_species": "mew",
+      "foe_species": "snorlax",
+      "foe_move": "endeavor",
+      "consumes": true,
+      "confuses": true,
+      "own_move": "reflect",
+      "foe_initial_hp": 1
+    },
+    {
+      "id": "aguav_berry",
+      "scenario": "aguav_berry_neutral_battle",
+      "kind": "heal_flavor",
+      "nature": "hardy",
+      "start": "full",
+      "status": "",
+      "actor_species": "mew",
+      "foe_species": "snorlax",
+      "foe_move": "endeavor",
+      "consumes": true,
+      "confuses": false,
+      "own_move": "reflect",
+      "foe_initial_hp": 1
+    },
+    {
+      "id": "aguav_berry",
+      "scenario": "aguav_berry_high_battle",
+      "kind": "heal_flavor",
+      "nature": "naughty",
+      "start": "near_full",
+      "status": "",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "foe_move": "amnesia",
+      "consumes": false,
+      "confuses": false,
+      "own_move": "reflect"
+    },
+    {
+      "id": "iapapa_berry",
+      "scenario": "iapapa_berry_disliked_battle",
+      "kind": "heal_flavor",
+      "nature": "lonely",
+      "start": "full",
+      "status": "",
+      "actor_species": "mew",
+      "foe_species": "snorlax",
+      "foe_move": "endeavor",
+      "consumes": true,
+      "confuses": true,
+      "own_move": "reflect",
+      "foe_initial_hp": 1
+    },
+    {
+      "id": "iapapa_berry",
+      "scenario": "iapapa_berry_neutral_battle",
+      "kind": "heal_flavor",
+      "nature": "hardy",
+      "start": "full",
+      "status": "",
+      "actor_species": "mew",
+      "foe_species": "snorlax",
+      "foe_move": "endeavor",
+      "consumes": true,
+      "confuses": false,
+      "own_move": "reflect",
+      "foe_initial_hp": 1
+    },
+    {
+      "id": "iapapa_berry",
+      "scenario": "iapapa_berry_high_battle",
+      "kind": "heal_flavor",
+      "nature": "lonely",
+      "start": "near_full",
+      "status": "",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "foe_move": "amnesia",
+      "consumes": false,
+      "confuses": false,
+      "own_move": "reflect"
+    },
+    {
+      "id": "mago_berry",
+      "scenario": "mago_berry_disliked_battle",
+      "kind": "heal_flavor",
+      "nature": "brave",
+      "start": "full",
+      "status": "",
+      "actor_species": "mew",
+      "foe_species": "snorlax",
+      "foe_move": "endeavor",
+      "consumes": true,
+      "confuses": true,
+      "own_move": "reflect",
+      "foe_initial_hp": 1
+    },
+    {
+      "id": "mago_berry",
+      "scenario": "mago_berry_neutral_battle",
+      "kind": "heal_flavor",
+      "nature": "hardy",
+      "start": "full",
+      "status": "",
+      "actor_species": "mew",
+      "foe_species": "snorlax",
+      "foe_move": "endeavor",
+      "consumes": true,
+      "confuses": false,
+      "own_move": "reflect",
+      "foe_initial_hp": 1
+    },
+    {
+      "id": "mago_berry",
+      "scenario": "mago_berry_high_battle",
+      "kind": "heal_flavor",
+      "nature": "brave",
+      "start": "near_full",
+      "status": "",
+      "actor_species": "mew",
+      "foe_species": "mew",
+      "foe_move": "amnesia",
+      "consumes": false,
+      "confuses": false,
+      "own_move": "reflect"
+    }
+  ],
+  "limitations": [
+    "Persim se verifica en un ensayo independiente",
+    "No se modifica el motor Showdown",
+    "No acredita uso directo de bayas de sabor desde mochila"
+  ]
+}
