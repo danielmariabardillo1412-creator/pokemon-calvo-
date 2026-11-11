@@ -119,23 +119,9 @@ jobs:
         run: |
           set -euo pipefail
           timeout 900s godot --headless --path . --script res://tests/gameplay/parallel_items_w03_repel_l3.gd 2>&1 | tee w03-v4-repel.log
-          grep -E '^CAMP006_W03_REPEL_L3 PASS checks=[1-9][0-9]*        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: ia6-w03-v4-${{ github.run_id }}
-          if-no-files-found: ignore
-          retention-days: 7
-          path: w03-v4-*.log
- w03-v4-repel.log
+          grep -E '^CAMP006_W03_REPEL_L3 PASS checks=[1-9][0-9]*$' w03-v4-repel.log
           timeout 900s godot --headless --path . --script res://tests/gameplay/w05_staging_v4_books_bag.gd 2>&1 | tee w03-v4-w05-books-real.log
-          grep -E '^W05_V4_REAL_FIELD_BAG PASS .*rope_preserved=IA6_SMOKE checks=[1-9][0-9]*        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: ia6-w03-v4-${{ github.run_id }}
-          if-no-files-found: ignore
-          retention-days: 7
-          path: w03-v4-*.log
- w03-v4-w05-books-real.log
+          grep -E '^W05_V4_REAL_FIELD_BAG PASS .*rope_preserved=IA6_SMOKE checks=[1-9][0-9]*$' w03-v4-w05-books-real.log
           if grep -E 'SCRIPT ERROR|Parse Error|^CAMP006_W03_REPEL_L3 FAIL|^W05_V4_REAL_FIELD_BAG FAIL' w03-v4-repel.log w03-v4-w05-books-real.log; then exit 1; fi
       - name: Save staging logs
         if: always()
