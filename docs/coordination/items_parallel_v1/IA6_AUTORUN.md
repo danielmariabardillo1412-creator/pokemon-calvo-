@@ -1,3 +1,13 @@
+# IA6 — RELEVO NUEVA CAMPAÑA 12-11-2026 · W05 · LEE PRIMERO
+
+**ESTA RAMA ANTIGUA YA HA TERMINADO. NO REPETIR CAMPAÑA ANTERIOR.** IA6 ha publicado trabajo NUEVO y AUTORIZADO: 14 TM/TR históricas opcionales + diagnóstico 5 HM, sin romper los 229 SV.
+
+**SIGUIENTE `p`:** antes de cambiar, comprobar que no haya cambios locales sin publicar. Cambiar a la rama ÚNICA NUEVA `codex/calvo-items-20261112-w05-legacy-books-v5` y abrir **allí** `docs/coordination/items_parallel_v1/IA6_AUTORUN.md` + `docs/coordination/items_parallel_v1/CONTINUOUS_V5/STATE_W05.md`. Iniciar Fase A inmediatamente y continuar A→B→C sin parada burocrática; las instrucciones completas están incorporadas a IA6_AUTORUN.md de la nueva rama.
+
+No modificar ESTA rama histórica, ni IA6 oficial, main, V28, PR118 ni ramas de otras trabajadoras. La CI anterior NO certifica código de nueva misión. Las conversaciones no trabajan en background.
+
+---
+
 # IA6 — W05 · NUEVA MISIÓN CONTINUA V4 EN RAMA STAGING
 **Estado:** ACTIVA. **Rama ÚNICA de esta misión:** codex/calvo-ia6-staging-20261111-w05-books.
 **Origen de confianza:** plan IA6 en rama árbitra codex/calvo-items-20261101-arbitro: docs/coordination/items_parallel_v1/CONTINUOUS_V4/PLAN_W05.md; reglas generales docs/coordination/items_parallel_v1/CONTINUOUS_V4/README.md. **Base fija** e63b2e6c7e175fba318cc2f562bebd1769589092 (IA6 integradora, conserva exclusión dynamax_candy).
