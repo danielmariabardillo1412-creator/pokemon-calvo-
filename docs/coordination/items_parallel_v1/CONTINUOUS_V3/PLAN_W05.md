@@ -1,0 +1,11 @@
+# IA6 W05 · CAMPAÑA CONTINUA V3 — MONTAJE REAL DE LIBROS EN MOCHILA
+Rama: codex/calvo-items-20261109-w05-books-ui.
+Baseline: V2 final CI #42929830881 SUCCESS. 229 MT enseñables, 229 nombres españoles en PCK Windows y consumidor aislado; 0 MT nuevas. Falta panel montado dentro de FieldItemBag.
+
+PERMISO EXCEPCIONAL IA6 EN RAMA W05: editar SOLO scenes/visual/field_item_bag.gd en funciones _ready, open_bag, _refresh_choices, _apply y callback LOCAL NUEVO de enseñanza, exclusivamente para libros. Nunca copiar el archivo entero a la integración: IA6 trasplantará únicamente los cambios precisos. Los cambios W03 de repelentes/Cuerda Huida pueden no estar presentes en la rama W05.
+
+FASE A: prueba roja con FieldItemBag real, leer W05_IA6_ACCEPTANCE.md y las APIs FieldMachineBookPanel.bind_existing_service, select_book, select_creature, select_replacement_slot, teaching_finished. Crear una sola instancia de panel y compartir el mismo FieldItemService; usar IDs de libro y de Pokémon reales, nunca índices inestables. El callback SOLO refresca; no hace un segundo teach/use_item. Bloquear clic doble.
+FASE B: pruebas nativas Godot de mochila, cuatro movimientos y slot 0–3, Party/Storage y retiro del elegido, stock agotado, bloqueo, cambios durante selección, cancelación, PP, dueño, SaveV2 manual sin autosave, reabrir y no duplicar señales ni gastos. Mantener 229 enseñanzas anteriores, traducciones ES, export PCK y CAMP003–006.
+FASE C: CI de W05, informe reports/W05/CONTINUOUS_V3_FINAL.md y diff mínimo para IA6; verificar estructuralmente colisiones con Cuerda Huida y repelentes según rama integración, SIN decir que están realmente integrados en W05. Windows GPU y Android no certificados hasta prueba real. No añadir MT inventadas.
+
+PROTEGIDOS: FieldItemService, FieldNativeSave, PlayerCollection, GameData, SaveV2, Showdown, otras ramas, main/V28/PR118. El objetivo es L3 en mochila de rama W05, NO en producto integrado hasta CI posterior de IA6. Fases continuas, p/sigue reanuda STATE_W05.md, STOP solo al agotar misión READY_FOR_IA6 o bloqueo técnico sin filas independientes.
