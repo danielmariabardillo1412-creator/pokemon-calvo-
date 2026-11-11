@@ -143,7 +143,7 @@ func _run() -> void:
 			seed = _seed_for(p, true)
 		ck(name + " reproducible real success seed", definition.guaranteed or seed > 0)
 		view.session._capture_rng.seed = seed if seed > 0 else 62001
-		var capture_rng_before := view.session._capture_rng.state
+		var capture_rng_before: int = view.session._capture_rng.state
 		var response: Dictionary = await view.session.capture(id, view.session.revision)
 		var outcome: Dictionary = response.get("capture_outcome", {}).get("capture", {}).get("result", {})
 		ck(name + " native capture succeeded with real RNG/guaranteed profile",
