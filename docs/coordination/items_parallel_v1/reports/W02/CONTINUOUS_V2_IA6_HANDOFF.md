@@ -6,7 +6,7 @@
 
 - Campaña V2: revisión de 42 IDs de bayas, con 36 con pruebas históricas CAMP003, cinco IDs sin cobertura CAMP003 de uso/cura en campo y Persim mediante prueba de combate. Aspear combina historial equipado y ensayo adicional de campo; ninguna cifra representa 42 objetos nuevos.
 - Evidencia global ya verde: CI `42931293868` sobre SHA `0e59679abc91c353a5d58b33e0a4bf4ea2c51fc6` (auditor 42, seis usos campo, Persim, regresiones completas).
-- Puerta más estricta de cierre: CI `42937706214` sobre `bd2a525858a5b08ff85fc2121a23ddf6a10d7c5d` (añade cinco ensayos equipados, tres runners blindados contra `SCRIPT ERROR` y regresiones). **Consultar estado completed/success antes de dar cierre definitivo.**
+- Puerta más estricta de cierre: CI `42937706214` sobre `bd2a525858a5b08ff85fc2121a23ddf6a10d7c5d` (añade cinco ensayos equipados, tres runners blindados contra `SCRIPT ERROR` y regresiones). **Verificada completed/SUCCESS en GitHub #42937706214**; V2 campo 795 checks, Persim 165 checks, HELD05 833 checks y regresiones completas.
 - QA roja previa `42937080819`: Chesto fallaba por fixture de sleep preinyectado inválido; además se detectó `SCRIPT ERROR` silencioso por `confused` no inicializado en fixture de campo. Los errores se corrigieron exclusivamente en pruebas/fixtures y workflow; no se degradaron aserciones ni se modificó producción.
 - `main`, V28, PR #118 y rama IA6 no han sido modificadas por W02.
 
@@ -36,4 +36,4 @@ Commits funcionales W02 de referencia:
 4. Si un conflicto requiere interfaces compartidas, registrar ticket; no tocar `main`, V28 o PR #118.
 5. Mantener la campaña V2 de bayas como contrato de QA; su certificado W02 no implica instalación en el juego integrado ni verificación visual/GPU.
 
-**Autoría:** informe W02. **Estado final:** depende del resultado de CI `42937706214`; ninguna integración realizada aquí.
+**Autoría:** informe W02. **Estado final:** `READY_FOR_IA6`; campaña V2 de 42 bayas certificada en rama W02 con CI `42937706214` SUCCESS y SHA `bd2a525858a5b08ff85fc2121a23ddf6a10d7c5d`. **Integración IA6 NO realizada aquí.**
