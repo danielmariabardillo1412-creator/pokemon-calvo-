@@ -9,16 +9,16 @@ bloque,orden,id,estado,funcional_nuevo,l3_nativo,evidencia,nota
 01,08,heal_ball,CERTIFICADO_L3_EXISTENTE,false,true,CI_42930029593_SHA_20238618268bfdb82cbd4c6d533a5ae78c7a35b3,real native capture stock no-stock owner SaveV2
 01,09,premier_ball,CERTIFICADO_L3_EXISTENTE,false,true,CI_42930029593_SHA_20238618268bfdb82cbd4c6d533a5ae78c7a35b3,real native capture stock no-stock owner SaveV2
 01,10,friend_ball,CERTIFICADO_L3_EXISTENTE,false,true,CI_42930029593_SHA_20238618268bfdb82cbd4c6d533a5ae78c7a35b3,real native capture stock no-stock owner SaveV2
-02,01,safari_ball,PARCIAL_ZONE_CI_PENDIENTE,false,false,CI_42930597727,existing x1.5; no authentic zone/contest producer
-02,02,sport_ball,PARCIAL_ZONE_CI_PENDIENTE,false,false,CI_42930597727,existing x1.5; no authentic zone/contest producer
-02,03,cherish_ball,PENDIENTE_CI,false,false,CI_42930597727,Await native source and CI gate
-02,04,quick_ball,PENDIENTE_CI,false,false,CI_42930597727,Await native source and CI gate
-02,05,timer_ball,PENDIENTE_CI,false,false,CI_42930597727,Await native source and CI gate
-02,06,level_ball,PENDIENTE_CI,false,false,CI_42930597727,Await native source and CI gate
-02,07,net_ball,L3_EXISTENTE_REVALIDACION_PENDIENTE,false,true,CI_42922912695,Net TANDA05 already L3
-02,08,repeat_ball,L3_EXISTENTE_REVALIDACION_PENDIENTE,false,true,CI_42891930750,Repeat TANDA03-04 already L3
-02,09,dive_ball,BLOCKED_CONTEXT,false,false,W03_CONTEXT_PRODUCERS_TICKET.md,requires trusted world/canonical context; no native registration
-02,10,dusk_ball,BLOCKED_CONTEXT,false,false,W03_CONTEXT_PRODUCERS_TICKET.md,requires trusted world/canonical context; no native registration
+02,01,safari_ball,PARCIAL_ZONE_NATIVE_PASS,false,false,CI_42930597727,native x1.5 and ownership confirmed; no zone or contest producer
+02,02,sport_ball,PARCIAL_ZONE_NATIVE_PASS,false,false,CI_42930597727,native x1.5 and ownership confirmed; no zone or contest producer
+02,03,cherish_ball,CERTIFICADO_L3_EXISTENTE,false,true,CI_42930597727_SHA_eb42cfee9236a17fbae58b697144c8fc22bb530d,native RNG multiplier stock owner and SaveV2
+02,04,quick_ball,CERTIFICADO_L3_EXISTENTE,false,true,CI_42930597727_SHA_eb42cfee9236a17fbae58b697144c8fc22bb530d,native RNG multiplier stock owner and SaveV2
+02,05,timer_ball,CERTIFICADO_L3_EXISTENTE,false,true,CI_42930597727_SHA_eb42cfee9236a17fbae58b697144c8fc22bb530d,native RNG multiplier stock owner and SaveV2
+02,06,level_ball,CERTIFICADO_L3_EXISTENTE,false,true,CI_42930597727_SHA_eb42cfee9236a17fbae58b697144c8fc22bb530d,native RNG multiplier stock owner and SaveV2
+02,07,net_ball,L3_EXISTENTE_REVALIDADO,false,true,CI_42930597727_PLUS_BASELINE,native rerun pass; Net and Repeat previous independent L3 receipts
+02,08,repeat_ball,L3_EXISTENTE_REVALIDADO,false,true,CI_42930597727_PLUS_BASELINE,native rerun pass; Net and Repeat previous independent L3 receipts
+02,09,dive_ball,BLOCKED_CONTEXT,false,false,CI_42930597727_SOURCE_QA,blocked authentic world producer and native registration
+02,10,dusk_ball,BLOCKED_CONTEXT,false,false,CI_42930597727_SOURCE_QA,blocked authentic world producer and native registration
 03,01,lure_ball,BLOCKED_CONTEXT,false,false,W03_CONTEXT_PRODUCERS_TICKET.md,requires trusted world/canonical context; no native registration
 03,02,love_ball,BLOCKED_CONTEXT,false,false,W03_CONTEXT_PRODUCERS_TICKET.md,requires trusted world/canonical context; no native registration
 03,03,moon_ball,BLOCKED_CONTEXT,false,false,W03_CONTEXT_PRODUCERS_TICKET.md,requires trusted world/canonical context; no native registration
