@@ -174,6 +174,13 @@ jobs:
       # The historical V28 verifier is intrinsically scoped to files changed
       # against 47f42a..., so verify it without weakening its guard in a
       # detached, pinned historical worktree. Both gates are required.
+      - name: Actual integrated V28 native families - 8 items / 40 scenarios
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tools/item_audit/ia6_v28_integrated_mechanics.py --godot "$(command -v godot)" --node "$(command -v node)" 2>&1 | tee item-ia6-v28-integrated.log
+          if grep -E 'SCRIPT ERROR|Parse Error|IA6_V28_INTEGRATED FAILED' item-ia6-v28-integrated.log; then exit 1; fi
+          grep -E '^IA6_V28_INTEGRATED PASS checks=[1-9][0-9]* items=8 scenarios=40 sha=[0-9a-f]{40}$' item-ia6-v28-integrated.log
       - name: Prepare isolated historical V28 contract on Linux (exact pinned SHA)
         shell: bash
         run: |
@@ -248,6 +255,7 @@ jobs:
             .godot/item_closure_v3/*.json
             .godot/competitive_protection_v28/*.json
             .godot/competitive_damage_v28/*.json
+            item-ia6-v28-integrated.log
             .godot/item_automation_v28/
             .godot/publication_v27/runs/
           if-no-files-found: ignore
