@@ -9,6 +9,7 @@ on:
       - 'tests/gameplay/w04_continuous_v2_regional_persistence.gd'
       - 'docs/coordination/items_parallel_v1/reports/W04/CONTINUOUS_V2_REGIONAL_EVOLUTION_MATRIX.csv'
       - 'modules/creatures/progression/canonical_form_identity_w04.gd'
+      - 'tests/tools/test_parallel_items_w04_autorun_v1.py'
   workflow_dispatch:
 permissions:
   contents: read
