@@ -48,6 +48,9 @@ static func create(
 	creature.ivs = ivs
 	creature.evs = evs
 	creature.nature_id = nature_id
+	# W04 canonical form from the actual selected regional catalog source.
+	if catalogs is DefinitionCatalog and catalogs.species(species.id) == species:
+		creature.form_id = preload("res://modules/creatures/progression/canonical_form_identity_w04.gd").from_factory_source(species, catalogs)
 	if catalogs is DefinitionCatalog and catalogs.variants_enabled:
 		creature.is_shiny = preload("res://modules/creatures/progression/pokemon_variant_catalog.gd").choose_shiny(
 			species.id, catalogs, rng, instance_id, overrides.get("is_shiny"))
@@ -56,6 +59,16 @@ static func create(
 	var ability: StringName = overrides.get("ability_id", &"")
 	if ability == &"" and not species.ability_ids.is_empty():
 		ability = species.ability_ids[0]
+		# W04 V4: preserve the previously certified normal-only fallback for
+		# the four canonical regional sources, never select a hidden ability.
+		if species.id in [&"ponyta_galar", &"rapidash_galar", &"voltorb_hisui", &"electrode_hisui"] and (
+			catalogs is DefinitionCatalog and catalogs.species(species.id) == species
+		):
+			var region_policy := preload("res://modules/gameplay/randomlock_content_policy.gd").new()
+			if region_policy.load_local():
+				var fallback: StringName = preload("res://modules/creatures/progression/regional_ability_selection_w04.gd").select_normal(species, region_policy)
+				if fallback != &"":
+					ability = fallback
 	creature.ability_id = ability
 
 	creature.recalculate_stats(species, ruleset)
