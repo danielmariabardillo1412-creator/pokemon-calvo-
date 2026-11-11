@@ -1,3 +1,22 @@
+# W03 — CONTINUOUS_V2: checkpoint operativo B01 certificado / B02 en curso
+
+- **branch**: `codex/calvo-items-20261104-w03-camp006`
+- **mission_version**: `CONTINUOUS_V2/PLAN_W03.md`, vigente y activado por IA6 en `IA6_AUTORUN.md`.
+- **phase**: B02 / 25 bolas autorizadas; B01 **cerrado por CI**.
+- **block**: B01=10/10 L3 nativas certificadas; B02=0/10 certificado de este bloque, 8 pruebas nativas pendientes de CI y 2 contextos condicionados; B03=0/5 en revisión.
+- **next_id**: `safari_ball` (B02 01; conserva `PARCIAL_ZONE` aunque la captura incondicional pase).
+- **checked/functional/new/blocked**: 10/25 certificados; 10 rutas L3 nativas del bloque 01, 0 objetos creados; 7 IDs candidatos a `BLOCKED_CONTEXT`, ticket compartido publicado.
+- **QA**: `W03_CONT_V2_B01 PASS ids=10 captured=10 checks=156`; cada uno conserva captura real/stock/propietario/SaveV2 y no-stock de siguiente ID.
+- **last_green_code_sha**: `20238618268bfdb82cbd4c6d533a5ae78c7a35b3`.
+- **last_green_run_id**: [42930029593](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/42930029593), `completed/success`.
+- **ci_pending**: [42930597727](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/42930597727) (`eb42cfee`, V2 B01+B02+source y regresiones; NO certificado hasta `completed/success`).
+- **owned_files_changed**: `tests/gameplay/parallel_items_w03_continuous_v2_b01.gd`, `_b02.gd`, `tests/tools/test_parallel_items_w03_continuous_v2_sources.py`, workflow W03, ticket `W03_CONTEXT_PRODUCERS_TICKET.md`, este estado.
+- **protected_tickets**: productores regionales de siete bolas y Safari/Sport parcial; Magikarp L5 `move_policy` aislado como riesgo previo sin edición global.
+- **next_safe_action**: recuperar CI B02; si falla, reparar SOLO tests W03 o seam autorizada. Una vez verde continuar automáticamente B03 (5 regionales condicionadas), registrar resultados sin inventar soporte.
+
+---
+
+## Historia anterior preservada
 # IA6 — ACTIVACIÓN CONFIRMADA V2 DE W03 (prevalece sobre checkpoint provisional)
 **Plan ya publicado y vigente en `IA6_AUTORUN.md` de esta misma rama.** La espera `AWAITING_IA6_W03_PLAN` descrita abajo quedó SUPERADA; se escribió mientras IA6 publicaba los archivos en paralelo.
 - mission_version: `CONTINUOUS_V2/PLAN_W03.md` de rama árbitra (copia íntegra también en `IA6_AUTORUN.md` de W03).
