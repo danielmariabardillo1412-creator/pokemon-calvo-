@@ -97,3 +97,11 @@
 - Cambio posterior de política `dynamax_candy` validado por [CI #42960157622](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/42960157622) SUCCESS Python/Godot; no invalida la matriz W01.
 - Informe `CONTINUOUS_V2_FUNCTIONAL_CLOSURE.md` deja pendiente únicamente auditoría Fase C final sobre los CSV definitivos. **Aún no READY_FOR_IA6**.
 - La rama nueva W01 staging V4 está PREASIGNADA por IA6; activarla únicamente DESPUÉS de `READY_FOR_IA6` verificado y sin alterar integración árbitra.
+
+## CIERRE FINAL V2 — READY_FOR_IA6
+- **Fases A, B, C: COMPLETADAS.** A 10/10 y B 22/26 CERTIFICADO + 4 `DEPENDENCIA_FUERA_W01`; 32 efectos L3, 0 objetos nuevos de producción. Integración IA6: NO.
+- [CI global #42958587809](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/42958587809) **completed/success 38/38**, SHA `dead5a21679c0aa8f635f3ce12fce0279ada0fc0`.
+- [CI política #42960157622](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/42960157622) SUCCESS SHA `53b292321b7eba52b3b5469505c4cefb29e86886`.
+- [CI ledger definitivo #42964085232](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/42964085232) **completed/success**, SHA `8464374f56bb52075ced46fcf2af5b867dcfaa14`, recibo `W01_PHASE_C_LEDGER_READY total_certified=32 external=4`.
+- **Estado vinculante:** `READY_FOR_IA6`. Informe `reports/W01/CONTINUOUS_V2_FINAL.md` y sello `CONTINUOUS_V2/READY_FOR_IA6.md` publicados. No reabrir V2 por rutina ni declarar merge.
+- **Siguiente misión preasignada:** `codex/calvo-ia6-staging-20261111-w01-held` V4. Activar únicamente con HEAD/instrucciones/STATE propios, prueba roja contra base integradora IA6 y sin tocar main/V28/PR118.
