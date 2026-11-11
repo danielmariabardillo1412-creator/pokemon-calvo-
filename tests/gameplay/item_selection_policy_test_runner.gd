@@ -15,9 +15,10 @@ func _initialize() -> void:
 	var excluded: Array[String] = []
 	for id: String in data.items:
 		if not policy.content_allowed(StringName(id)): excluded.append(id)
-	check("exact confirmed scope is 44 IDs", excluded.size() == 44)
-	for id: String in ["revive", "max_revive", "revival_herb", "sacred_ash", "max_honey", "bright_powder", "wide_lens", "dream_mail", "linking_cord"]:
+	check("exact confirmed scope is 45 IDs after Dynamax Candy veto", excluded.size() == 45)
+	for id: String in ["revive", "max_revive", "revival_herb", "sacred_ash", "max_honey", "bright_powder", "wide_lens", "dream_mail", "linking_cord", "dynamax_candy"]:
 		check("confirmed ban cannot enter even a supported pool " + id, not policy.can_generate(StringName(id), {id: true}) and not policy.exclusion_reason(StringName(id)).is_empty())
+	check("Dynamax Candy cannot enter any generation pool", not policy.content_allowed(&"dynamax_candy") and not policy.can_generate(&"dynamax_candy", {"dynamax_candy": true}))
 	check("no additional evasion ban inferred", policy.content_allowed(&"lax_incense"))
 	check("functional Poke Doll is not classified as decoration", policy.content_allowed(&"poke_doll"))
 	check("undefined IDs fail closed", not policy.content_allowed(&"not_an_item") and not policy.can_generate(&"not_an_item", {"not_an_item": true}))
