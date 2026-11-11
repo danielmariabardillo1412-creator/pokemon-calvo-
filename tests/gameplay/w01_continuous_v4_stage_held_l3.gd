@@ -4,7 +4,7 @@ extends "res://tests/gameplay/item_automation_v28.gd"
 # Real Inventory -> FieldItemService -> NativeSession -> settlement -> SaveV2.
 const ItemService = preload("res://modules/inventory/field_item_service.gd")
 const FieldSession = preload("res://modules/gameplay/field_native_session.gd")
-const OUT := "res://.godot/parallel_items/w01_v4_stage_l3"
+const STAGE_HELD_OUT := "res://.godot/parallel_items/w01_v4_stage_l3"
 var cases: Array = []
 var passed: int = 0
 
@@ -124,7 +124,7 @@ func _case(kind: String, mode: String) -> Dictionary:
 		"mode": mode, "dealt": dealt, "delta": delta, "entry_hp": entry_hp}
 
 func _run_held_stage() -> void:
-	destination = OUT
+	destination = STAGE_HELD_OUT
 	DirAccess.make_dir_recursive_absolute(destination)
 	catalogs = GameData.from_dict(JSON.parse_string(FileAccess.get_file_as_string(
 		"res://data/normalized/pokemon_api.json"))).to_definition_catalog()
