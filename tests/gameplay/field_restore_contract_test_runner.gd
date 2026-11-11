@@ -147,7 +147,8 @@ func check_getters_and_snapshot() -> void:
 	expect_unchanged("getters", before)
 
 	var world: Dictionary = scene.field_native_world_snapshot("gen9customgame")
-	check("snapshot key order", world.keys() == ["position", "region", "config", "rng", "next_seed", "format"])
+	check("snapshot key order", world.keys() == ["position", "region", "config", "rng", "next_seed", "format", "repel"])
+	check("snapshot repel state", world.repel == scene._repel_effect.to_dict())
 	check("snapshot position shape", world.position is Array and world.position.size() == 2)
 	check("snapshot position x", world.position[0] == scene.player.global_position.x)
 	check("snapshot position y", world.position[1] == scene.player.global_position.y)
@@ -268,7 +269,9 @@ func accepts_world(label: String, world: Dictionary, config: Dictionary) -> Dict
 	var text := JSON.stringify(world)
 	var result: Dictionary = scene.field_validate_native_loaded_world(world)
 	check(label + " accepted", bool(result.get("ok", false)))
-	check(label + " result keys", result.keys() == ["ok", "position", "tables"])
+	check(label + " result keys", result.keys() == ["ok", "position", "tables", "repel"])
+	check(label + " repel state", result.get("repel") == world.get("repel", {
+		"schema_version": 1, "active_id": "", "remaining_steps": 0}))
 	check(label + " position type", result.get("position") is Vector2)
 	check(label + " tables type", result.get("tables") is Dictionary)
 	check(label + " position value", result.get("position") == Vector2(world.position[0], world.position[1]))
@@ -294,6 +297,12 @@ func check_validator_valid() -> void:
 	var result := accepts_world("valid default", world, world.config)
 	check("valid position type", result.position == scene.player.global_position)
 	check("valid tables are fresh", not is_same(result.tables, scene._director._tables))
+	var old_world := valid_world()
+	old_world.erase("repel")
+	accepts_world("old world defaults to no repel", old_world, old_world.config)
+	var active_repel := valid_world()
+	active_repel.repel = {"schema_version": 1, "active_id": "repel", "remaining_steps": 17}
+	accepts_world("active repel survives validation", active_repel, active_repel.config)
 
 	for format_id: String in ["gen8customgame", "gen9customgame", "gen9calvounifiedv1"]:
 		accepts_world("valid format " + format_id, valid_world(format_id), scene._active_config)
@@ -321,6 +330,11 @@ func check_validator_valid() -> void:
 
 
 func check_validator_rejections() -> void:
+	var invalid_repel := valid_world()
+	invalid_repel.repel = {"schema_version": 1, "active_id": "repel", "remaining_steps": "17"}
+	rejects_world("repel count is numeric", invalid_repel, "world_repel_shape")
+	invalid_repel.repel.remaining_steps = 101
+	rejects_world("repel cannot exceed its duration", invalid_repel, "world_repel_range")
 	for raw_region: Variant in [null, false, true, 1, 1.5, [], {}]:
 		var malformed := valid_world(); malformed.region = raw_region
 		rejects_world("shape region " + str(raw_region), malformed, "world_shape")
