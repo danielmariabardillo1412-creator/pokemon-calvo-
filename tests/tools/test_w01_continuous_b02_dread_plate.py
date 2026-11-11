@@ -11,8 +11,8 @@ def main():
  inv=rows("docs/current/ITEM_INVENTORY.csv")["dread_plate"]
  assert inv["native_entry"]=="True" and "onBasePower" in inv["native_hooks"]
  assert "dread_plate" in json.loads((R/"modules/inventory/item_connections_v1.json").read_text(encoding="utf-8"))["holdable_ids"]
- node=(R/"tests/tools/repro_w01_continuous_b01_dread_plate_native.cjs").read_text(encoding="utf-8")
- gd=(R/"tests/gameplay/parallel_items_w01_continuous_b01_dread_plate.gd").read_text(encoding="utf-8")
+ node=(R/"tests/tools/repro_w01_continuous_b02_dread_plate_native.cjs").read_text(encoding="utf-8")
+ gd=(R/"tests/gameplay/parallel_items_w01_continuous_b02_dread_plate.gd").read_text(encoding="utf-8")
  for x in ("NativeEngine","dark_pulse","tackle","garchomp","restore","W01_B02_NATIVE PASS id=dread_plate"):assert x in node,x
  for x in ("service.equip(","FieldSession.new(","settle_finished_battle(","_roundtrip(","species_id==&\"mew\"","W01_B02_L3_ROW PASS row=11 id=dread_plate"):assert x in gd,x
  print("W01_B02_DREAD_PY PASS row=11 checks=9")
