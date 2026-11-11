@@ -33,3 +33,7 @@ Rama `codex/calvo-ia6-w02-integration-20261111`; workflow editado `.github/workf
 2. Verificar todos los workflows del último HEAD PR #119 en GitHub. Si un control falla, mantener DRAFT y reproducir.
 3. Si ambas puertas V28 y demás CI SUCCESS, revisar el resultado de `compare` contra la rama de integración IA6 y solo entonces evaluar **merge exclusivo a `codex/calvo-ia6-integration-20261109`**; el merge no autoriza tocar main.
 4. Después del merge, verificar el SHA efectivo y ejecutar workflow en SHA real IA6. No confundir CI de staging o de un worktree histórico con evidencia del commit mergeado.
+
+## Seguridad de destino del PR
+
+La referencia `refs/pull/119/merge` se observó con padres `e63b2e6c7e175fba318cc2f562bebd1769589092` y HEAD del PR, **distintos** del SHA de base declarado por `pulls/119` (`f4a5687bff1aaf0fb443c36ca4c2873f5d0ac54e`). La CI ya ignora ese merge temporal y usa el SHA HEAD directamente, pero **el contrato de destino de una eventual fusión REST exige auditoría separada**. Si sigue esta discordancia, no invocar a ciegas `merge_pull_request`: preferir integración selectiva con escrituras GitHub condicionadas al SHA y con `branch=codex/calvo-ia6-integration-20261109` explícito, verificar `main` antes y después, y ejecutar CI nueva sobre el commit real de IA6. No cerrar PR #119 hasta tener identidad inequívoca del destino y resultado verificado.
