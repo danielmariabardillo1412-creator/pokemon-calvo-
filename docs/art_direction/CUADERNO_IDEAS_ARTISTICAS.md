@@ -27,6 +27,7 @@ Este cuaderno recoge efectos, técnicas, referencias y posibles mejoras para la 
 | `ART-REF-006` | Referencia Pokémon Luminescent Platinum (mod BDSP) | REFERENCIA VISUAL, NO PRUEBA DE MAPA 2D | Media |
 | `ART-FX-TRAIL-007` | Rastros y huellas 2D reutilizables para nieve, barro, arena y otras superficies | APARCADA / INVESTIGACIÓN | Alta en zonas de terreno especial |
 | `ART-TEX-NOISE-008` | Ruido Perlin procedural reutilizable: agua, humo, niebla, suciedad, terreno y lava | APARCADA / TÉCNICA DOCUMENTADA | Alta, tecnología transversal |
+| `ART-FX-RAIN-009` | Lluvia, suelo mojado y ondas de agua: versión 2D económica frente a shader 3D avanzado | APARCADA / TRANSCRIPCIÓN ANALIZADA | Media-alta para clima y biomas |
 
 ---
 
@@ -328,7 +329,78 @@ No limitar la idea a nieve: crear **un sistema reutilizable basado en el tipo de
 
 ---
 
+## ART-FX-RAIN-009 — Lluvia y suelo mojado con coste artístico controlado
+
+**Estado:** APARCADA para fase artística; investigación y diseño de prototipo, **SIN implementación ni autorización para IA1–IA5**.  
+**Fuente:** Guinxu, «¿Cómo SIMULAN lluvia y suelo mojado los juegos?» (18-06-2023, 7 min 43 s): https://www.youtube.com/watch?v=gOnw6uYs5ag  
+**Evidencia:** transcripción completa recuperada el 2026-11-11; el sitio entrega una transcripción automática traducida al inglés de un vídeo originalmente en español. La descripción del vídeo enumera `Normal Map`, `smoothness/roughness` y `Flipbook`.
+
+### Qué hace realmente el vídeo
+
+1. **Material seco → mojado:** el suelo de adoquines aumenta su suavidad (menos rugosidad) para reflejar luz; visualmente también se modifica el aspecto al mojarse.
+2. **Relieve falso mediante normal map:** compara un suelo plano de 2 triángulos con una versión de gran geometría (~500.000 triángulos en su ejemplo). En lugar de modelar el relieve, un mapa de normales altera cómo reacciona la iluminación sobre un plano. **La geometría no cambia de forma real ni aparecen colisiones nuevas.**
+3. **Ondas por gotas:** utiliza una serie de aproximadamente **seis mapas de normales animados** en un atlas (*flipbook*) para crear círculos expansivos sobre la superficie.
+4. **Suavización:** mezcla dos muestras consecutivas del flipbook (*crossfade*) para que la onda no parezca avanzar a saltos.
+5. **Lluvia visible:** añade partículas alargadas que descienden aleatoriamente.
+6. **Movimiento adicional del material:** desplaza suavemente otro normal map sobre el suelo para variar reflejos.
+7. **Cambio del tiempo/clima:** hace una transición progresiva entre estado soleado y lluvioso; la ropa del personaje también puede oscurecerse y cambiar su acabado.
+
+**No copiar recursos de Mario Kart u otros juegos comerciales aunque aparezcan en el vídeo.** Los mapas normales, sprites y atlas destinados a Calvo deberán ser originales, procedurales o reutilizados con licencia apropiada.
+
+### Dificultad REAL para Pokémon Calvo
+
+El vídeo trabaja con **Unity y materiales/iluminación de escenario 3D**. Calvo está investigando **personajes 3D sobre mapas 2D o 2.5D** (`ART-WORLD-004`). Los mapas de normales 2D pueden servir si se incorpora iluminación `Light2D`/shader en Godot, pero **no basta añadir un normal map a cualquier sprite 2D para obtener automáticamente reflejos realistas**. Un flipbook de normales también tiene coste y pipeline de assets.
+
+La mayor dificultad del usuario no es comprender código, sino **producir recursos visuales** sin depender de un artista. Por tanto, priorizar soluciones que pueden montarse mediante formas sencillas (círculos, trazos), partículas y ajustes de paleta; no exigir dibujar a mano seis cuadros por cada material.
+
+### Plan de opciones por complejidad (orden recomendado de evaluación)
+
+| Nivel | Método para mapa 2D | Recursos de dibujo necesarios | Qué consigue / limitación |
+|---|---|---|---|
+| **A — inicial, recomendada** | Oscurecer ligeramente tiles mojados y combinar con líneas de lluvia mediante partículas 2D; charcos como pequeñas capas translúcidas | Reutilizar tiles y crear un trazo/óvalo sencillo, incluso mediante generación procedimental | Sensación de lluvia y suelo húmedo; no genera reflejos físicos |
+| **B — mejora puntual** | Ondas circulares en charcos: un sprite de anillo que crece y se desvanece, o 4–6 cuadros **generados automáticamente** a partir de círculos | No hace falta ilustrar seis imágenes distintas a mano | Gotas convincentes con pocos recursos; controlar número y duración |
+| **C — avanzado opcional** | Normal maps originales + `Light2D`/shaders 2D, flipbook o interpolación de normales, rugosidad falsa/reflejo estilizado | Crear/generar normales y ajustar iluminación por superficie | Relieve e iluminación más ricos; mayor coste y ajuste visual |
+| **D — solo si mapa 3D** | Materiales 3D con normal maps, roughness real, flipbooks y reflejos sobre superficies | Más configuración y arte; exige geometría/material 3D donde corresponda | Aproxima el vídeo original; **no está justificado implementarlo en todos los mapas** |
+
+### Aplicaciones en Calvo
+
+- **Rutas romanas adoquinadas:** charcos en zonas concretas y reflejos estilizados, sin cambiar geometría de las calles.
+- **Bosques y caminos vikingos:** tierra oscurecida, barro y pequeños círculos en las charcas; conectar visualmente con `ART-FX-TRAIL-007` (huellas).
+- **Niebla + lluvia:** `ART-FX-FOG-001` para niebla localizada; NO mezclar sistemas hasta medir rendimiento.
+- **Personajes 3D:** si se desea ropa mojada, oscurecer/material mate→satinado según contexto. No aplicar el efecto a todos ni perder estética estilo Pokémon DS/GBA.
+- **Clima:** la transición puede gestionarse como factor `wetness` 0..1 para interpolar colores y densidad de partículas sin cambiar mapas completos.
+
+### Recomendación técnica y riesgo de rendimiento
+
+- Comenzar por **una sala** con suelo seco, cambio a mojado, lluvia de pocos trazos y unas ondas sobre charcos. Probar sin arte de alta resolución.
+- Evitar al principio reflejos en tiempo real, luces extra por cada charco, simulación física de líquidos y miles de partículas por segundo.
+- Un efecto 2D sencillo **no garantiza** coste despreciable: evaluar *overdraw*, transparencia y render de partículas; medir FPS y memoria.
+- Para charcos, un par de variantes de anillos simples con escalado, transparencia y rotación limitada puede dar suficiente naturalidad en píxel art; no es necesario dibujar cada fotograma.
+- **No implementar en todas las rutas:** seleccionar biomas/climas donde aporte ambiente y legibilidad.
+- El vídeo es una explicación y reconstrucción en Unity, **no una prueba de que ese sea el shader interno exacto** de Zelda/Mario Kart.
+
+### Prototipo futuro, no ejecutar ahora
+
+1. Fijar resolución de tiles, estilo de pixel art y tamaño de personaje objetivo.
+2. Montar dos pantallas de comparación seco/mojado con **los mismos tiles**, cambiando color/contraste y añadiendo pequeñas charcas.
+3. Partículas de lluvia hechas de líneas sencillas; ondas automáticas de círculos que crecen/desaparecen al tocar charcos.
+4. Probar transición lluvia→seco y posible estado de ropa mojada solo sobre un personaje de prueba.
+5. Comparar opciones A/B frente a C sin dar por hecho que C merece la pena; registrar imágenes de resultado y presupuesto GPU/CPU en hardware de referencia.
+6. Comprobar compatibilidad de vistas híbridas personaje 3D + mapa 2D y su coherencia de luces.
+7. Mantener el proceso como un *vertical slice* visual aislado; no tocar los sistemas actuales hasta autorización.
+
+**Decisión a fecha 2026-11-11:** conservar técnica completa en el archivo como referencia; **recomendar A + B** en prototipo inicial por menor producción artística y posibilidad de crear recursos procedimentales. C/D son opciones avanzadas, no requisitos.
+
+**Documentación técnica relacionada:**  
+- Iluminación y sombras 2D en Godot: https://docs.godotengine.org/en/stable/tutorials/2d/2d_lights_and_shadows.html  
+- Shaders canvas_item: https://docs.godotengine.org/en/stable/tutorials/shaders/shader_reference/canvas_item_shader.html  
+- GPUParticles2D: https://docs.godotengine.org/en/stable/classes/class_gpuparticles2d.html
+
+---
+
 ## Registro de cambios
+
+- **2026-11-11 — ART-FX-RAIN-009:** transcripción completa de Guinxu sobre suelo mojado, normal maps, flipbooks, partículas, crossfade y cambio de clima; adaptación por niveles a mapas 2D con recursos generables sin ilustraciones manuales. Sin implementar. Se comprobó que ART-LIGHT-002 (iluminación anime) permanece registrada.
 
 - **2026-11-11 — ACTUALIZACIÓN ART-LIGHT-002:** transcripción completa de Guinxu analizada. Se documenta cel shading, ajuste de normales, luces individuales, Fresnel y outlines, separándolos de la conjetura anterior ACES. Se propone prototipo 3D/2D híbrido sin implementar nada.
 
