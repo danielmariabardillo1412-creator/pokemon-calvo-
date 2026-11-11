@@ -19,7 +19,7 @@ var _equip: Button
 var _growth := GrowthTransaction.new()
 var _growth_choices: VBoxContainer
 var _ability_stamp := ""
-var _machine_panel: PanelContainer
+var _machine_panel: Variant = null
 var _machine_requested_book: StringName = &""
 
 
