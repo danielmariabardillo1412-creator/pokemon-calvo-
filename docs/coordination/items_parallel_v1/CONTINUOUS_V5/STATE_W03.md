@@ -1,0 +1,20 @@
+# IA3/W03 — CONTINUOUS_V5 · CHECKPOINT INICIAL (11-11-2026)
+- worker: W03
+- branch: codex/calvo-items-20261111-w03-repel-staging-v5
+- phase: A / prueba roja real + diff por función, PENDIENTE
+- mission: CONTINUOUS_V5/PLAN_W03.md (árbitra IA6)
+- preceding_stage: codex/calvo-ia6-staging-20261111-w03-capture
+- v4_capture_code_sha: 5a82da2a9dd1a868c3f8af9d73551fe16571adea
+- v4_capture_ci: #43068968046 completed/success (no equivale a CI V5)
+- v4_state: READY_FOR_IA6_MERGE_CAPTURE / REPEL_SHARED_SEAM_PENDING
+- source_repel: codex/calvo-items-20261104-w03-camp006 (CAMP006)
+- gap: CONTINUOUS_V4/W03_REPEL_BAG_GAP.md
+- planned: repel(100), super_repel(200), max_repel(250) — existentes; 0 nuevos IDs
+- L3_repel_on_V5: 0/3 hasta CI real
+- V5_green_code_sha: ninguno
+- V5_ci: ninguna
+- shared_W05: libro y Cuerda Huida presentes en base V4 W03; **staging W05 más reciente NO integrada**
+- integration_official_IA6: NO
+- next_safe_action: recuperar test inalterado parallel_items_w03_repel_l3.gd de origen y mostrar RED contra baseline de esta rama; después diff y trasplante de mínimos
+- protection: main, V28, PR118, W05, IA6, policy, save core, battle JS, captura previamente certificada intactos
+- STOP: al acabar fases A/B/C con CI o dependencia genuina y ticket; nunca por 10/10 artificial.
