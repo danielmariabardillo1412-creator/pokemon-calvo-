@@ -1,3 +1,13 @@
+# IA6 — RELEVO NUEVA CAMPAÑA 12-11-2026 · W03 · LEE PRIMERO
+
+**ESTA RAMA ANTIGUA YA HA TERMINADO. NO REPETIR CAMPAÑA ANTERIOR.** IA6 ha publicado trabajo NUEVO y AUTORIZADO: Bola Ocaso en cueva real (capturas y repelentes anteriores integrados por IA6).
+
+**SIGUIENTE `p`:** antes de cambiar, comprobar que no haya cambios locales sin publicar. Cambiar a la rama ÚNICA NUEVA `codex/calvo-items-20261112-w03-dusk-cave-v6` y abrir **allí** `docs/coordination/items_parallel_v1/IA6_AUTORUN.md` + `docs/coordination/items_parallel_v1/CONTINUOUS_V6/STATE_W03.md`. Iniciar Fase A inmediatamente y continuar A→B→C sin parada burocrática; las instrucciones completas están incorporadas a IA6_AUTORUN.md de la nueva rama.
+
+No modificar ESTA rama histórica, ni IA6 oficial, main, V28, PR118 ni ramas de otras trabajadoras. La CI anterior NO certifica código de nueva misión. Las conversaciones no trabajan en background.
+
+---
+
 # IA6 — W03 V5 · DESBLOQUEO FIXTURE HISTÓRICO REPEL · 11-11-2026 · LEE PRIMERO
 
 **AUTORIZACIÓN NUEVA, MÁS RECIENTE Y VINCULANTE:** `docs/coordination/items_parallel_v1/CONTINUOUS_V5/IA6_W03_REPEL_FIXTURE_ONE_LINE_AUTH_20261111.md` en la rama árbitra `codex/calvo-items-20261101-arbitro`. Tras auditar #43073388744 (FAIL) y `W03_REPEL_HISTORICAL_TEST_ZONE_TICKET.md`, IA6 autoriza cambiar EXCLUSIVAMENTE la selección de zona del test `tests/gameplay/parallel_items_w03_repel_l3.gd` desde `registered_zone_ids()[0]` (cueva por orden alfabético) a `scene.TECHNICAL_ZONE_ID` (hierba real). No tocar ninguna otra línea del fixture ni relajar aserciones; documentar diff exacto de una línea respecto al blob histórico `318ee45f60d9ee046bcb048019337524acfb4844`.
