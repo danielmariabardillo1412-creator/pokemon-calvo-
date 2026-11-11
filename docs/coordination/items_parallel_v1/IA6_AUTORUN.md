@@ -1,36 +1,23 @@
-# IA6 · W02 — MODO CAMPAÑA CONTINUA V2 ACTIVADO
+# IA6 — W02 · CAMPAÑA CONTINUA V3 AUTORIZADA
 
-**ORDEN PERMANENTE: YA NO SE PARA POR 10/10.** Esta orden sustituye la obligación `STOP al cerrar TANDA X` de la versión anterior, sin derogar permisos técnicos ni pruebas. Identifícate como W02, utiliza SOLO la rama `codex/calvo-items-20261109-w02-mints-integration`. El plan de trabajo completo se copia abajo y tiene varios bloques; **cuando uno termina con CI, pasa directamente al siguiente bloque del MISMO plan SIN PEDIR IA6**.
+**IA6 REVISÓ TU CAMPAÑA V2 Y TE ASIGNA ESTA NUEVA MISIÓN, NO ESTÁS EN ESPERA.** El archivo que estás leyendo en TU propia rama `codex/calvo-items-20261109-w02-mints-integration` es la orden vigente. El plan V2 anterior está agotado y se conserva en GitHub para trazabilidad; **NO repetir IDs o pruebas certificadas de V2**. La misión V3 tiene tres fases y no termina artificialmente al completar 10/10. Cada `p`/`sigue` recupera `docs/coordination/items_parallel_v1/CONTINUOUS_V3/STATE_W02.md` y reanuda la primera fase/tarea pendiente; al finalizar una fase con CI correcta empieza inmediatamente la siguiente sin esperar a IA6, en el mismo turno si es posible.
 
-Con cada `p` o `sigue`: (1) consulta tu HEAD y esta nota; (2) lee o crea `docs/coordination/items_parallel_v1/CONTINUOUS_V2/STATE_W02.md` de TU RAMA; (3) continúa la primera tarea pendiente de toda la CAMPAÑA, no solo de la última tanda; (4) trabaja secuencialmente mientras el turno lo permita, registrando checkpoints cada 10. Si el contexto se agota, publica estado y una próxima `p` reanuda desde GitHub. **No te quedes diciendo «esperando tanda siguiente» si quedan fases preautorizadas en este plan.**
+**Autoridad y política:** protocolo árbitra `docs/coordination/items_parallel_v1/CONTINUOUS_V3/README.md`, plan central `docs/coordination/items_parallel_v1/CONTINUOUS_V3/PLAN_W02.md`, rama árbitra `codex/calvo-items-20261101-arbitro`. La copia íntegra del plan está debajo. Esta autorización es expresa para los módulos/funciones enumerados, pero NO permite cambios globales ajenos, ni tocar `main`, V28, PR118, ni ramas de otras W. No atribuir CI a SHA distinta ni integración final a IA6 sin ver su CI. Si todas las fases posibles se agotan o dependen de seam protegida, publicar READY_FOR_IA6 con ticket real y STOP. Si el turno se agota antes, checkpoint GitHub y siguiente `p`, sin otra autorización ni promesa de background.
 
-**Protocolo IA6 V2 (prioritario):** rama árbitra `codex/calvo-items-20261101-arbitro`, `docs/coordination/items_parallel_v1/CONTINUOUS_V2/README.md`. **Plan central y único:** `docs/coordination/items_parallel_v1/CONTINUOUS_V2/PLAN_W02.md` en árbitra (copia íntegra abajo). Si en el futuro IA6 actualiza este mismo archivo con una misión más reciente, leer siempre HEAD y respetar la última versión.
-
-**Control de seguridad:** no autoautorizar módulos protegidos, no fusionar ramas, no editar main/V28/PR118, no mover trabajo de otra W. No atribuir a IA6 integración no realizada. Si toda la misión termina o el resto exige exclusivamente una seam compartida, publicar `READY_FOR_IA6` y detenerse; no crear bucles de QA vacíos. Si hay más tareas independientes, continuar sin esperar. **Una `p` no mantiene ejecución asíncrona ni abre otra conversación automáticamente.**
-
-**Contabilidad en cada respuesta:** `CAMPAÑA fase | bloque n/total | objetos nuevos | ya certificados | L3 verdaderos | bloqueados | CI SHA | integración IA6 pendiente`. Un 10/10 de bloque no es 100% de campaña.
+**Barra correcta:** campaña fase A/B/C + tareas | objetos nuevos | L3 comprobados | bloqueados | integración IA6 pendiente. **No usar 10/10 como sinónimo de 10 objetos.**
 
 ---
 
-# W02 — CAMPAÑA CONTINUA V2 · BAYAS, MEDICINAS Y ENTRENAMIENTO
-**Rama:** `codex/calvo-items-20261109-w02-mints-integration`.
-**Baselines:** TANDA04 cerrada con CI #42922087890 SUCCESS; se eliminó recálculo duplicado de `Growth.plan`; no repetir las 21 mentas, el proceso de naturaleza efectiva ni QA ya certificados.
+# IA6 W02 · CAMPAÑA CONTINUA V3 — EXP SHARE, PARTICIPACIÓN AUTORITATIVA
+Rama: codex/calvo-items-20261109-w02-mints-integration.
+Baseline: campaña V2 de 42 bayas cerrada, 0 efectos nuevos de producción, CI #42937706214 SUCCESS. EXP SHARE todavía L1; no afirmar efecto real por simple equipamiento.
 
-## Cola completa — 42 bayas canónicas presentes en holdable_ids
-Los IDs de abajo están en el catálogo de equipables al emitir V2. Son **candidatos**, no 42 efectos inexistentes. Muchos pueden tener pruebas anteriores W02/CAMP004 o handlers de batalla. Verificar fuente, versión, política y recorrido real antes de reclamar implementación.
+AUTORIZACIÓN NUEVA IA6, LIMITADA: el contrato IA6_EXP_SHARE_PARTICIPATION_CONTRACT_20261109.md continúa protegiendo la experiencia global. Se autoriza W02 a crear y probar un productor de participación solo lectura, y a proponer perfil EXP Share OPT-IN sin activarlo en el juego, sin cambiar reparto XP legado.
 
-| Bloque automático | IDs | Cantidad |
-|---|---|---|
-| 01 | `cheri_berry`, `chesto_berry`, `pecha_berry`, `rawst_berry`, `aspear_berry`, `persim_berry`, `oran_berry`, `aguav_berry`, `iapapa_berry`, `mago_berry` | 10 |
-| 02 | `wiki_berry`, `enigma_berry`, `liechi_berry`, `ganlon_berry`, `salac_berry`, `petaya_berry`, `apicot_berry`, `lansat_berry`, `starf_berry`, `kee_berry` | 10 |
-| 03 | `maranga_berry`, `micle_berry`, `custap_berry`, `jaboca_berry`, `occa_berry`, `passho_berry`, `wacan_berry`, `rindo_berry`, `yache_berry`, `chople_berry` | 10 |
-| 04 | `kebia_berry`, `shuca_berry`, `coba_berry`, `payapa_berry`, `tanga_berry`, `charti_berry`, `kasib_berry`, `haban_berry`, `colbur_berry`, `babiri_berry` | 10 |
-| 05 | `chilan_berry`, `roseli_berry` | 2 |
+FASE A — RECIBO: crear helper nuevo modules/creatures/progression/battle_participation_receipt_w02.gd de registro validado y detached con battle_id, side_id, roster_ids, deployed_ids, eligible_alive_ids, starting_held_items y outcome hash. Derivar desplegados de eventos reales de batalla, no de UI ni de todo el equipo. Pruebas de al menos 10 escenarios: titular, cambio, dos rivales, debilitamiento, reserva sin salir, nivel 100, Transformación, restauración, derrota, equipo mixto. Rechazar adversario, duplicados, Storage, IDs desconocidos, batalla distinta y reordenación.
+FASE B — XP Y POLÍTICA: demostrar que ProgressionSystem.reconcile_battle_result actualmente reparte experiencia entre supervivientes de todo el array y Lucky Egg tiene contrato previo. Construir simulador PURO para comparar política legada vs alternativa claramente versionada, con party A desplegado, B reserva EXP Share y C reserva sin objeto. Sin fórmula canónica decidida, POLÍTICA PENDIENTE: NO activar ni adjudicar efecto al EXP Share, NO sumar experiencia dos veces.
+FASE C — TESTS DE INTEGRACIÓN: si los eventos existentes permiten participación real, proyección de eventos SOLO LECTURA en función auxiliar de ShowdownAdventureSession, sin tocar _finish, capture, RNG, inventario ni batalla. Contrato para sesiones nativa/salvaje/entrenador, restauración de combate y SaveV2. Si no hay eventos suficientes, ticket bloqueante con APIs mínimas y casos rojos. CI completa W02 T01–04+CAMP003–006+V2, informe reports/W02/CONTINUOUS_V3_FINAL.md.
 
-**Orden de trabajo continuo:** recorrer todos los bloques, hasta agotar lista. Para cada baya: si ya está funcional con prueba real, `YA_CERTIFICADA` con CI SHA y no duplicar. Si no existe ruta real, implementar únicamente handler berry específico en la superficie W02 ya autorizada, con condición exacta (PS/status/PP/EV/consumo según perfil canónico y sin inventar efecto). Demostrar Party/Storage, stock, SaveV2, owner/rollback, y combate si es efecto activado al final del turno o al recibir daño.
+ARCHIVOS: helper nuevo, tests, fixtures, workflow/report W02. Puede añadirse método AUXILIAR de lectura de eventos a showdown_adventure_session.gd SIN modificar _finish/capture y solo con prueba que derive de acciones reales; si hace falta otro archivo compartido, ticket IA6. PROHIBIDO editar ProgressionSystem, motores Showdown, CreatureInstance, FieldItemService, SaveGameData, SaveV2, FieldItemBag, EXP Share de producción, Lucky Egg, ramas ajenas, main/V28/PR118.
 
-**Límites importantes:** `sitrus_berry` ya figura en TANDA04 de W01 y se certificó en CAMP004 W02; excluida de esta nueva cola para prevenir doble escritura. No editar equipables no berry W01, bolas W03, formas W04 ni panel W05. Los efectos sostenidos en motor Showdown o modificación de sistema compartido fuera de seam W02 requieren ticket y pasan a `BLOCKED_SHARED`, sin editar motor nativo. W02 puede usar tests/harness/fixtures/workflow nuevos propios, datos canónicos SOLO LECTURA, cambios de handlers **berry o medicina W02 previamente propios** si autorización y prueba roja lo justifican. No modificar `CreatureInstance`, `StatCalculator`, motor global, `SaveV2` central, `FieldItemBag`, `FieldNativeSave`, `EvolutionSystem`, configuración de contenido ni ramas ajenas.
-
-**Cierre real:** un único informe de campaña al terminar lista, con filas `already/functional_new/blocked/no_aplica`, SHA de CI y pendientes de IA6. Si todas las restantes tienen bloqueador común, ticket único y `READY_FOR_IA6` sin inventar pruebas. No STOP por alcanzar cada 10.
-
-
+No STOP por bloque de diez. Checkpoint CONTINUOUS_V3/STATE_W02.md; p/sigue retoma fase pendiente. READY_FOR_IA6 al agotar fases; L3 EXP Share seguirá bloqueado hasta política e integración de IA6. No atribuir QA como objetos nuevos.
