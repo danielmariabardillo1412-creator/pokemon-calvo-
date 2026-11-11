@@ -1,0 +1,18 @@
+# IA5/W05 — V5 · CHECKPOINT INICIAL / 12-11-2026
+- worker: W05
+- branch: codex/calvo-items-20261112-w05-legacy-books-v5
+- base_official_IA6: ddc8a1af56c5fe7e950bee5bf3986d8e62261f8f
+- prior_W05_V4: closed, 229/229 active SV certified #42965926888, W03/W05 integrated official cross-gates #43106031150/#43106031155
+- mission: CONTINUOUS_V5/PLAN_W05.md (arbiter, full copy in IA6_AUTORUN.md)
+- phase: A PENDING, 19/19 source audit and real RED legacy teaching
+- scope_selected_machine: 248, currently SV 229/229, historical_only 19
+- targets: hm01 hm04 hm05 hm06 hm08 tm00 tr13 tr19 tr28 tr31 tr39 tr41 tr44 tr50 tr72 tr83 tr85 tr91 tr93
+- candidates_new_functionality: 14 TM00/TR historical mapping, opt-in only; 5 HM separate field behavior blocked pending contract
+- source_species_version_compatibility: NOT YET VERIFIED
+- active_SV_book_regression: 229 MUST remain green
+- V5_confirmed_new_historical_L3: 0/14 until real CI
+- new_item_catalog_ids: 0
+- V5_functional_SHA/CI: NONE
+- official_IA6_integration: NO for new V5
+- next_p: show 19 exact version→move→species learnset rows, RED attempt, add safe opt-in version-specific teaching where positive supported, CI with SV/repels/rope/save regression
+- protected: main, V28, PR118, IA6 official, other W, global default SV, Dynamax Candy exclusion
