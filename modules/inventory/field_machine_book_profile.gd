@@ -55,11 +55,16 @@ static func presentacion(item_id: StringName, perfil: Dictionary, catalogos: Def
 		return resultado
 	var movimiento := StringName(resultado["move_id"])
 	var tipo := StringName(resultado["type_id"])
-	var nombre_movimiento := SpanishGameText.move_name(movimiento, catalogos)
+	var fallback := SpanishGameText.move_name(movimiento, catalogos)
+	var localizacion: Dictionary = MachineMovesEsSvW05.resolve(movimiento, fallback)
+	var nombre_movimiento := String(localizacion.get("name", fallback))
 	var nombre_tipo := SpanishGameText.type_name(tipo)
 	resultado["categoria_presentacion"] = "LIBRO_MOVIMIENTO"
 	resultado["etiqueta"] = "Libro de movimiento · " + nombre_movimiento
 	resultado["nombre_movimiento"] = nombre_movimiento
+	resultado["traduccion_es_verificada"] = bool(localizacion.get("verified_es", false))
+	resultado["nombre_source_api_id"] = int(localizacion.get("source_api_id", 0))
+	resultado["nombre_source_locale"] = String(localizacion.get("source_locale", "fallback"))
 	resultado["clasificacion_tipo"] = String(tipo)
 	resultado["nombre_tipo"] = nombre_tipo
 	# Paleta y seis modelos visuales requieren aprobación artística aparte.

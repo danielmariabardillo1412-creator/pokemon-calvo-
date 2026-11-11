@@ -1,0 +1,256 @@
+{
+  "schema_version": 1,
+  "campaign": "CAMP_006",
+  "worker": "W05",
+  "active_version": "scarlet-violet",
+  "kind": "NEW_IDS",
+  "purpose": "Bootstrap cero bloques; no certifica enseñanza",
+  "blocks": [
+    {
+      "block": "01",
+      "items": [
+        {
+          "item_id": "tm202",
+          "move_id": "pain_split"
+        },
+        {
+          "item_id": "tm203",
+          "move_id": "psych_up"
+        },
+        {
+          "item_id": "tm204",
+          "move_id": "double_edge"
+        },
+        {
+          "item_id": "tm205",
+          "move_id": "endeavor"
+        },
+        {
+          "item_id": "tm206",
+          "move_id": "petal_blizzard"
+        }
+      ]
+    },
+    {
+      "block": "02",
+      "items": [
+        {
+          "item_id": "tm207",
+          "move_id": "temper_flare"
+        },
+        {
+          "item_id": "tm208",
+          "move_id": "whirlpool"
+        },
+        {
+          "item_id": "tm209",
+          "move_id": "muddy_water"
+        },
+        {
+          "item_id": "tm210",
+          "move_id": "supercell_slam"
+        },
+        {
+          "item_id": "tm211",
+          "move_id": "electroweb"
+        }
+      ]
+    },
+    {
+      "block": "03",
+      "items": [
+        {
+          "item_id": "tm212",
+          "move_id": "triple_axel"
+        },
+        {
+          "item_id": "tm213",
+          "move_id": "coaching"
+        },
+        {
+          "item_id": "tm214",
+          "move_id": "sludge_wave"
+        },
+        {
+          "item_id": "tm215",
+          "move_id": "scorching_sands"
+        },
+        {
+          "item_id": "tm216",
+          "move_id": "feather_dance"
+        }
+      ]
+    },
+    {
+      "block": "04",
+      "items": [
+        {
+          "item_id": "tm217",
+          "move_id": "future_sight"
+        },
+        {
+          "item_id": "tm218",
+          "move_id": "expanding_force"
+        },
+        {
+          "item_id": "tm219",
+          "move_id": "skitter_smack"
+        },
+        {
+          "item_id": "tm220",
+          "move_id": "meteor_beam"
+        },
+        {
+          "item_id": "tm221",
+          "move_id": "throat_chop"
+        }
+      ]
+    },
+    {
+      "block": "05",
+      "items": [
+        {
+          "item_id": "tm222",
+          "move_id": "breaking_swipe"
+        },
+        {
+          "item_id": "tm223",
+          "move_id": "metal_sound"
+        },
+        {
+          "item_id": "tm224",
+          "move_id": "curse"
+        },
+        {
+          "item_id": "tm225",
+          "move_id": "hard_press"
+        },
+        {
+          "item_id": "tm226",
+          "move_id": "dragon_cheer"
+        }
+      ]
+    },
+    {
+      "block": "06",
+      "items": [
+        {
+          "item_id": "tm227",
+          "move_id": "alluring_voice"
+        },
+        {
+          "item_id": "tm228",
+          "move_id": "psychic_noise"
+        },
+        {
+          "item_id": "tm229",
+          "move_id": "upper_hand"
+        },
+        {
+          "item_id": "tm01",
+          "move_id": "take_down"
+        },
+        {
+          "item_id": "tm02",
+          "move_id": "charm"
+        }
+      ]
+    },
+    {
+      "block": "07",
+      "items": [
+        {
+          "item_id": "tm03",
+          "move_id": "fake_tears"
+        },
+        {
+          "item_id": "tm04",
+          "move_id": "agility"
+        },
+        {
+          "item_id": "tm05",
+          "move_id": "mud_slap"
+        },
+        {
+          "item_id": "tm06",
+          "move_id": "scary_face"
+        },
+        {
+          "item_id": "tm08",
+          "move_id": "fire_fang"
+        }
+      ]
+    },
+    {
+      "block": "08",
+      "items": [
+        {
+          "item_id": "tm09",
+          "move_id": "thunder_fang"
+        },
+        {
+          "item_id": "tm10",
+          "move_id": "ice_fang"
+        },
+        {
+          "item_id": "tm11",
+          "move_id": "water_pulse"
+        },
+        {
+          "item_id": "tm12",
+          "move_id": "low_kick"
+        },
+        {
+          "item_id": "tm13",
+          "move_id": "acid_spray"
+        }
+      ]
+    },
+    {
+      "block": "09",
+      "items": [
+        {
+          "item_id": "tm14",
+          "move_id": "acrobatics"
+        },
+        {
+          "item_id": "tm15",
+          "move_id": "struggle_bug"
+        },
+        {
+          "item_id": "tm17",
+          "move_id": "confuse_ray"
+        },
+        {
+          "item_id": "tm19",
+          "move_id": "disarming_voice"
+        },
+        {
+          "item_id": "tm20",
+          "move_id": "trailblaze"
+        }
+      ]
+    },
+    {
+      "block": "10",
+      "items": [
+        {
+          "item_id": "tm31",
+          "move_id": "metal_claw"
+        },
+        {
+          "item_id": "tm36",
+          "move_id": "rock_tomb"
+        },
+        {
+          "item_id": "tm44",
+          "move_id": "dragon_tail"
+        },
+        {
+          "item_id": "tm77",
+          "move_id": "waterfall"
+        }
+      ]
+    }
+  ]
+}

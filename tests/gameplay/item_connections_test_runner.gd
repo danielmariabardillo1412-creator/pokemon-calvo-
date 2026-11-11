@@ -229,11 +229,23 @@ func _test_field_and_save() -> void:
 	bag._targets.select(0); bag._refresh_choices()
 	check("real bag evolves selected owned creature", bag._apply("use").accepted and scene._session.player.owned_creature(first.instance_id).species_id == &"flareon")
 	for index in bag._items.item_count:
-		if bag._items.get_item_metadata(index) == "tm01": bag._items.select(index); break
+		if bag._items.get_item_metadata(index) == "tm01":
+			bag._items.select(index)
+			bag._items.item_selected.emit(index) # Match real UI, clear stale fire-stone selection.
+			break
 	bag._refresh_choices()
 	check("machine preview uses current mapping rather than legacy description", bag._description.text.contains(SpanishGameText.move_name(&"take_down", catalogs)))
 	bag._moves.select(1)
-	check("real bag teaches explicit slot before save", bag._apply("use").accepted and scene._session.player.owned_creature(first.instance_id).moveset[0].move_id == &"take_down")
+	# W05 routes teaching exclusively through the bound book panel. Retain
+	# the historic explicit-slot/save invariant and prove global Use cannot
+	# silently consume the same TM via a second mutation path.
+	var tm_before: int = scene._session.player.inventory.quantity(&"tm01")
+	var legacy_use: Dictionary = bag._apply("use")
+	check("real bag global use cannot double-consume machine", not legacy_use.accepted and String(legacy_use.get("reason", "")) == "machine_panel_required" and scene._session.player.inventory.quantity(&"tm01") == tm_before)
+	bag._open_machine_books()
+	check("real bag book panel opens for selected owned machine", bag._books_panel.visible)
+	var book_result: Dictionary = bag._books_panel.teach_selected()
+	check("real bag teaches explicit slot before save", book_result.accepted and scene._session.player.owned_creature(first.instance_id).moveset[0].move_id == &"take_down" and scene._session.player.inventory.quantity(&"tm01") == tm_before - 1)
 	for index in bag._items.item_count:
 		if bag._items.get_item_metadata(index) == "leftovers": bag._items.select(index); break
 	check("real bag equips owned Leftovers", bag._apply("equip").accepted and scene._session.player.owned_creature(first.instance_id).held_item_id == &"leftovers")

@@ -1,0 +1,157 @@
+name: IA6 W05 V4 selective integration - books Rope W02 native
+on:
+  push:
+    branches:
+      - codex/calvo-ia6-w05-integration-20261111
+    paths:
+      - '.github/workflows/ia6-w05-v4-selective-integration-20261111.yml'
+      - 'scenes/visual/field_item_bag.gd'
+      - 'scenes/visual/field_machine_book_panel.gd'
+      - 'modules/inventory/field_machine_book_profile.gd'
+      - 'modules/localization/machine_moves_es_sv_w05.gd'
+      - 'data/localization/machine_moves_es_sv_v1.json'
+      - 'tests/gameplay/w05_staging_v4_books_bag.gd'
+      - 'tests/gameplay/parallel_items_w05_book_ui_autorun_v*.gd'
+      - 'tests/gameplay/parallel_items_w05_campaign_00*.gd'
+      - 'tests/tools/test_parallel_items_w05_campaign_00*.py'
+      - 'tests/fixtures/parallel_items/w05_campaign_00*.json'
+      - 'docs/coordination/items_parallel_v1/reports/W05/CAMP_00*_PROGRESO.csv'
+      - 'tests/gameplay/parallel_items_w05_export_*.gd'
+      - 'tests/tools/test_parallel_items_w05_staging_v4.py'
+      - 'config/item_selection_v1.json'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: ia6-w05-selective-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: chickensoft-games/setup-godot@v2.4.1
+        with:
+          version: 4.7.0
+          use-dotnet: false
+          include-templates: true
+      - name: Restore original PokeAPI resources and import project
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REF_NAME" = "codex/calvo-ia6-w05-integration-20261111"
+          godot --version | grep -E '^4[.]7([.-]|$)'
+          python -B tools/distribution/restore_resources.py
+          python -B tools/distribution/restore_resources.py --check
+          mkdir -p data/reports
+          cp ci/fixtures/pokeapi_reports/forms_policy_report.json data/reports/forms_policy_report.json
+          cp ci/fixtures/pokeapi_reports/unsupported_mechanics.json data/reports/unsupported_mechanics.json
+          cp ci/fixtures/pokeapi_reports/import_summary.json data/reports/import_summary.json
+          godot --headless --path . --import 2>&1 | tee w05-v4-import.log
+          if grep -E 'SCRIPT ERROR|Parse Error' w05-v4-import.log; then exit 1; fi
+          echo "POKEMON_CALVO_NODE=$(command -v node)" >> "$GITHUB_ENV"
+          python -B tools/battle_reference/run.py --install --limit 1 2>&1 | tee w05-v4-showdown-setup.log
+      - name: Policy gate and source backed Spanish 229 names
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tests/tools/test_parallel_items_w05_staging_v4.py --baseline-red | tee w05-v4-baseline.log
+          grep -E '^W05_V4_BASELINE_RED EXPECTED missing_machine_use_guard=1$' w05-v4-baseline.log
+          python -B tests/tools/test_parallel_items_w05_staging_v4.py | tee w05-v4-source.log
+          grep -E '^W05_V4_SOURCE_ES PASS ids=229 exact_pokeapi=229 excluded_dynamax_candy=1 rope_unmodified=1$' w05-v4-source.log
+          grep -E '^W05_V4_BAG_CONTRACT PASS panel=1 signals=1 double_spend_guard=1 stable_ids=1 callback_ui_only=1$' w05-v4-source.log
+      - name: IA6 policy45 and W02 effective nature native regression
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tools/item_audit/item_closure_v3.py | tee w05-v4-ia6-policy45.log
+          python -B tests/tools/test_item_closure_v3.py | tee w05-v4-ia6-policy45-audit.log
+          grep -E 'ITEM_CLOSURE_V3_AUDIT PASS checks=[1-9][0-9]* ids=2222' w05-v4-ia6-policy45-audit.log
+          timeout 600s godot --headless --path . --script res://tests/gameplay/ia6_w02_effective_nature_integration_20261111.gd 2>&1 | tee w05-v4-ia6-w02-native.log
+          if grep -E 'SCRIPT ERROR|Parse Error|IA6_W02_SEAMS FAIL' w05-v4-ia6-w02-native.log; then exit 1; fi
+          grep -E 'IA6_W02_SEAMS PASS checks=[1-9][0-9]* features=mint,mochi,evolution,growth,savev2' w05-v4-ia6-w02-native.log
+      - name: W05 original 229 learning regressions T01-T04
+        shell: bash
+        run: |
+          set -euo pipefail
+          for v in 1 2 3 4; do
+            timeout 900s godot --headless --path . --script "res://tests/gameplay/parallel_items_w05_book_ui_autorun_v${v}.gd" 2>&1 | tee "w05-v4-original-t${v}.log"
+            if grep -E 'SCRIPT ERROR|Parse Error|^W05_BOOKS_.*FAIL' "w05-v4-original-t${v}.log"; then exit 1; fi
+          done
+          grep -E '^W05_BOOKS_AUTORUN_V2_GODOT PASS blocks=10 ids=180 functional=180 blocked=0 checks=[1-9][0-9]*$' w05-v4-original-t2.log
+          grep -E '^W05_BOOKS_AUTORUN_V3_GODOT PASS blocks=10 functional=10 blocked=0 checks=[1-9][0-9]*$' w05-v4-original-t3.log
+          grep -E '^W05_BOOKS_AUTORUN_V4_GODOT PASS groups=10 translated=229 missing=0 checks=[1-9][0-9]*$' w05-v4-original-t4.log
+      - name: CAMP003-CAMP006 historic W05 Python and Godot regressions
+        shell: bash
+        run: |
+          set -euo pipefail
+          for stage in 003 004 005 006; do
+            python -B "tests/tools/test_parallel_items_w05_campaign_${stage}.py" --ci 2>&1 | tee "w05-v4-camp${stage}-py.log"
+            grep -E "^CAMP${stage}_W05_PY PASS blocks=10 checks=[1-9][0-9]*$" "w05-v4-camp${stage}-py.log"
+            timeout 900s godot --headless --path . --script "res://tests/gameplay/parallel_items_w05_campaign_${stage}.gd" 2>&1 | tee "w05-v4-camp${stage}-godot.log"
+            grep -E "^CAMP${stage}_W05_GODOT PASS blocks=10 checks=[1-9][0-9]*$" "w05-v4-camp${stage}-godot.log"
+          done
+      - name: Original integrated IA6 W05 and W03 Rope smoke
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 900s godot --headless --path . --script res://tests/gameplay/parallel_items_w05_book_ui_pilot_20261109.gd 2>&1 | tee w05-v4-legacy-panel.log
+          grep -E '^W05_BOOK_UI_PILOT_20261109_GODOT PASS checks=[1-9][0-9]*$' w05-v4-legacy-panel.log
+          timeout 900s godot --headless --path . --script res://tests/gameplay/ia6_books_bag_20261109.gd 2>&1 | tee w05-v4-legacy-real-bag.log
+          grep -E '^IA6_BOOK_BAG PASS checks=[1-9][0-9]* features=real_bag,w05_panel,one_teach,savev2$' w05-v4-legacy-real-bag.log
+          timeout 900s godot --headless --path . --script res://tests/gameplay/ia6_integration_mint_rope_20261109.gd 2>&1 | tee w05-v4-rope-smoke.log
+          grep -E '^IA6_INTEGRATION PASS checks=[1-9][0-9]* features=mint_effective_nature,escape_rope_bag_savev2$' w05-v4-rope-smoke.log
+      - name: V4 real staging field bag all slots and stale safety
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 900s godot --headless --path . --script res://tests/gameplay/w05_staging_v4_books_bag.gd 2>&1 | tee w05-v4-real-bag.log
+          grep -E '^W05_V4_REAL_FIELD_BAG PASS slots=4 es=229 one_panel=1 no_double_spend=1 stale=1 party_storage=1 savev2=1 no_autosave=1 rope_preserved=IA6_SMOKE checks=[1-9][0-9]*$' w05-v4-real-bag.log
+      - name: Isolated Godot JSON missing/invalid language fallback
+        shell: bash
+        run: |
+          set -euo pipefail
+          PROBE="$RUNNER_TEMP/w05-v4-fallback"
+          mkdir -p "$PROBE/modules/localization" "$PROBE/data/localization"
+          printf '[application]\nconfig/name="W05 V4 Fallback Probe"\n' > "$PROBE/project.godot"
+          cp modules/localization/machine_moves_es_sv_w05.gd "$PROBE/modules/localization/"
+          cp tests/gameplay/parallel_items_w05_export_fallback_probe.gd "$PROBE/probe.gd"
+          godot --headless --path "$PROBE" --script "$PROBE/probe.gd" -- missing 2>&1 | tee w05-v4-fallback-missing.log
+          grep -E '^W05_V5_FALLBACK PASS mode=missing verified=false source=fallback$' w05-v4-fallback-missing.log
+          printf '{"schema_version":2,"locale":"es","entries":{}}\n' > "$PROBE/data/localization/machine_moves_es_sv_v1.json"
+          godot --headless --path "$PROBE" --script "$PROBE/probe.gd" -- invalid 2>&1 | tee w05-v4-fallback-invalid.log
+          grep -E '^W05_V5_FALLBACK PASS mode=invalid verified=false source=fallback$' w05-v4-fallback-invalid.log
+      - name: Windows export PCK and independent runtime names
+        shell: bash
+        run: |
+          set -euo pipefail
+          PCK="$RUNNER_TEMP/w05-v4-staging.pck"
+          godot --headless --path . --export-pack "Pokemon Calvo Technical Test Windows" "$PCK" 2>&1 | tee w05-v4-export.log
+          test -s "$PCK"
+          PROJECT="$RUNNER_TEMP/w05-v4-pck-probe"
+          mkdir -p "$PROJECT"
+          printf '[application]\nconfig/name="W05 V4 PCK Probe"\n' > "$PROJECT/project.godot"
+          cp tests/gameplay/parallel_items_w05_export_pck_probe.gd "$PROJECT/probe.gd"
+          godot --headless --path "$PROJECT" --script "$PROJECT/probe.gd" -- "$PCK" 2>&1 | tee w05-v4-pck-runtime.log
+          grep -E '^W05_V5_PCK_PROBE PASS records=229 runtime_samples=4 helper=1 source=pck_only$' w05-v4-pck-runtime.log
+          EXE="$RUNNER_TEMP/w05-v4-staging.exe"
+          godot --headless --path . --export-release "Pokemon Calvo Technical Test Windows" "$EXE" 2>&1 | tee w05-v4-exe-export.log
+          python -c 'from pathlib import Path; import sys; p=Path(sys.argv[1]); assert p.open("rb").read(2)==b"MZ"; print("W05_V4_WINDOWS_EXPORT PASS exe_bytes="+str(p.stat().st_size)+" pck_bytes="+str(Path(sys.argv[2]).stat().st_size)+" visual=UNVERIFIED android=UNVERIFIED")' "$EXE" "$PCK" | tee w05-v4-exe-size.log
+          grep -E '^W05_V4_WINDOWS_EXPORT PASS exe_bytes=[1-9][0-9]+ pck_bytes=[1-9][0-9]+ visual=UNVERIFIED android=UNVERIFIED$' w05-v4-exe-size.log
+      - name: Save evidence only, not packaged EXE or PCK
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: w05-v4-${{ github.run_id }}
+          retention-days: 7
+          if-no-files-found: ignore
+          path: w05-v4-*.log
