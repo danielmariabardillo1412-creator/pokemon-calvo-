@@ -111,7 +111,7 @@ func _run() -> void:
 		context.catcher_level = catcher.level
 		context.previously_caught_base_species = owner.has_previously_caught(target.base_species_id(), scene._catalogs)
 		var expected_multiplier := float(case_data.mult)
-		var actual_multiplier := CaptureRuleset.new().ball(ball).base_multiplier
+		var actual_multiplier: float = CaptureRuleset.new().ball(ball).base_multiplier
 		actual_multiplier *= CaptureRuleset.BallEffects.multiplier(ball, target, species)
 		actual_multiplier *= CaptureRuleset.ContextBallEffects.multiplier(ball, target, species, context)
 		ck(label + " 4x/1x/8x native context not neutralized by rate cap",
