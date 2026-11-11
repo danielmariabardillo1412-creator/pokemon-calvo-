@@ -1,0 +1,17 @@
+# IA4/W04 — V6 · CHECKPOINT INICIAL / 12-11-2026
+- worker: W04
+- branch: codex/calvo-items-20261112-w04-evolution-consumer-v6
+- baseline: completed W04 V5 (10 unconditional level regional evolution form preservation)
+- prior_V5_code_sha: 2aad1bfa2a5d74adf845699c2f161345177ea622
+- prior_V5_ci: #43073026880 completed/success (not a CI V6)
+- mission: CONTINUOUS_V6/PLAN_W04.md, copied in IA6_AUTORUN.md
+- phase: A PENDING; true battle-XP event-to-UI/owner publication red
+- pilots: diglett_alola level26; meowth_galar level28
+- actual_postbattle_consumer_L3: 0/2 pending
+- 7_item_routes_V4: previous success only, not V6 integrated
+- new_item_ids: 0
+- V6_functional_sha/ci: NONE
+- official_IA6_integration: NO; current official IA6 includes W03/W05 on newer tree, protect it
+- next_p: show actual EVOLUTION_AVAILABLE event at end of battle, missing approval/publish, then targeted UI transactional consumer, pass SaveV2 and negative tests
+- block_without_fake_PASS: if requires unrelated shared architecture, ticket to IA6 with exact API/hunk, do not edit W02 XP, Showdown JS, CreatureInstance or SaveV2 core
+- protected: main, V28, PR118, all worker branches and central integration
