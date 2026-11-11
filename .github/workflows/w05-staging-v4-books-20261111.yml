@@ -12,6 +12,10 @@ on:
       - 'data/localization/machine_moves_es_sv_v1.json'
       - 'tests/gameplay/w05_staging_v4_books_bag.gd'
       - 'tests/gameplay/parallel_items_w05_book_ui_autorun_v*.gd'
+      - 'tests/gameplay/parallel_items_w05_campaign_00*.gd'
+      - 'tests/tools/test_parallel_items_w05_campaign_00*.py'
+      - 'tests/fixtures/parallel_items/w05_campaign_00*.json'
+      - 'docs/coordination/items_parallel_v1/reports/W05/CAMP_00*_PROGRESO.csv'
       - 'tests/gameplay/parallel_items_w05_export_*.gd'
       - 'tests/tools/test_parallel_items_w05_staging_v4.py'
       - 'config/item_selection_v1.json'
@@ -76,6 +80,16 @@ jobs:
           grep -E '^W05_BOOKS_AUTORUN_V2_GODOT PASS blocks=10 ids=180 functional=180 blocked=0 checks=[1-9][0-9]*$' w05-v4-original-t2.log
           grep -E '^W05_BOOKS_AUTORUN_V3_GODOT PASS blocks=10 functional=10 blocked=0 checks=[1-9][0-9]*$' w05-v4-original-t3.log
           grep -E '^W05_BOOKS_AUTORUN_V4_GODOT PASS groups=10 translated=229 missing=0 checks=[1-9][0-9]*$' w05-v4-original-t4.log
+      - name: CAMP003-CAMP006 historic W05 Python and Godot regressions
+        shell: bash
+        run: |
+          set -euo pipefail
+          for stage in 003 004 005 006; do
+            python -B "tests/tools/test_parallel_items_w05_campaign_${stage}.py" --ci 2>&1 | tee "w05-v4-camp${stage}-py.log"
+            grep -E "^CAMP${stage}_W05_PY PASS blocks=10 checks=[1-9][0-9]*$" "w05-v4-camp${stage}-py.log"
+            timeout 900s godot --headless --path . --script "res://tests/gameplay/parallel_items_w05_campaign_${stage}.gd" 2>&1 | tee "w05-v4-camp${stage}-godot.log"
+            grep -E "^CAMP${stage}_W05_GODOT PASS blocks=10 checks=[1-9][0-9]*$" "w05-v4-camp${stage}-godot.log"
+          done
       - name: Original integrated IA6 W05 and W03 Rope smoke
         shell: bash
         run: |
