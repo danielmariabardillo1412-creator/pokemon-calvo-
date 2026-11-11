@@ -1,3 +1,11 @@
+# IA5/W05 — CONTINUOUS_V2 CAMPAÑA 3/3 COMPLETA · READY_FOR_IA6 (2026-11-11)
+
+**Nueva orden prevalente:** docs/coordination/items_parallel_v1/IA6_AUTORUN.md (CONTINUOUS_V2). La nota antigua STOP de TANDA05 se conserva **sólo como historial**: IA6 abrió y W05 completó B01/B02/B03 sin repetir 229 objetos. Estado actual y siguiente acción: docs/coordination/items_parallel_v1/CONTINUOUS_V2/STATE_W05.md. Entrega completa: docs/coordination/items_parallel_v1/CONTINUOUS_V2/W05_READY_FOR_IA6.md y W05_IA6_ACCEPTANCE.md.
+
+CI V2 [#42929830881](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/42929830881) **completed/success** (verify y Windows export), SHA funcional **426021c41b75d42cd2ee112ed4446f11e166ec54**; **58 checks nuevos** de panel real/servicio/SaveV2, contratos Python, EXE Windows **635.389.864 B**, PCK **526.370.204 B**, 229 nombres incluidos y helper probado desde PCK. **229 libros ya certificados, 0 MT nuevas, integración FieldItemBag NO realizada**, W03 convivencia integrada NO certificada. Sólo IA6 puede montar panel en su mochila y probar Windows visual/GPU/Android. STOP por **campaña agotada/READY_FOR_IA6**, no por 10/10. Cualquier misión futura exige orden explícita actualizada en el archivo estable.
+
+---
+
 # IA5/W05 — TANDA05 FINALIZADA · Paquete Windows de nombres ES (2026-11-11)
 
 **STOP / relevo IA6.** TANDA05 **10/10 hitos QA**, **229/229 nombres españoles** válidos y presentes en PCK Windows exportado, **0 MT nuevas**, **0 bloqueos internos**, sin merges. Rama `codex/calvo-items-20261109-w05-books-ui`. Evidencia de código y export: **SHA `42466cfe9b012949472f12480a3d5e3b91573c92`**, CI [#42923848244](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/42923848244) `completed/success`. CI adicional del CSV [#42924399433](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/42924399433) `completed/success`, SHA `0256e7ec32df3959914eb97e771a12c19545f503`. **Informe:** `AUTORUN_V5_FINAL.md`; CSV `AUTORUN_V5_PROGRESS.csv`.
