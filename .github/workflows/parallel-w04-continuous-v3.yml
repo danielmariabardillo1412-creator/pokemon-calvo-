@@ -52,7 +52,7 @@ jobs:
         run: |
           set -euo pipefail
           timeout 1500s godot --headless --path . --script res://tests/gameplay/w04_continuous_v3_real_evolution.gd 2>&1 | tee w04-v3-b.log
-          grep -E '^W04_V3_L3 PASS checks=[1-9][0-9]* routes=7 ownership=14 rollback=2
+          grep -E '^W04_V3_L3 PASS checks=[1-9][0-9]* routes=7 ownership=14 rollback=2$' w04-v3-b.log
       - name: V2 seven regional L2 contracts
         shell: bash
         run: |
