@@ -1,15 +1,24 @@
-# W04 — CONTINUOUS_V4 / ESTADO INICIAL IA6
-- worker: W04
-- branch: codex/calvo-ia6-staging-20261111-w04-evolution
-- staging_base_sha: e63b2e6c7e175fba318cc2f562bebd1769589092
-- mission_version: CONTINUOUS_V4/PLAN_W04.md
-- phase: A / DIFF
-- code_changes_v4: 0 (rama recién creada, aún no tiene código nuevo)
-- green_ci_v4: ninguno (CI histórica de origen no es CI de staging)
-- integrated_into_official_IA6: NO
-- last_source_ci: consultar PLAN_W04.md y SHA exacto certificado
-- next_safe_action: Prueba roja form_id/naturaleza al evolucionar con Galarica desde FieldItemService
-- protected_files: no tocar main, V28, PR118, rama integradora oficial ni ramas de otras W
-- next_checkpoint: actualizar fase, SHA, CI, hunks y tests; detener al fin con READY_FOR_IA6_MERGE
+# W04 — CONTINUOUS_V4 / STAGING CHECKPOINT 2026-11-11
 
-La nota IA6_AUTORUN.md de ESTA rama contiene el plan íntegro. Para W01/W02 está PROHIBIDO activar hasta que V2/V3 de rama original cierre realmente. Una p reanuda acciones autorizadas y no ejecuta nada en background.
+- worker: W04
+- branch: `codex/calvo-ia6-staging-20261111-w04-evolution`
+- staging_base_sha: `e63b2e6c7e175fba318cc2f562bebd1769589092`
+- mission_version: `CONTINUOUS_V4/PLAN_W04.md`
+- phase: **A/B transplantados; C CI ampliada en ejecución**
+- source_certified_sha: `db24e6f38943e5782b0d028b2d6553267adecd6f`, source CI #42959076143
+- staging_last_green_sha: `535169ff1d44da0162b05f24702e9fb95be04f1c`
+- staging_last_green_ci: **#42965058174 SUCCESS** (historical regional and 7 L3 on W02 staging, before explicit PP/session assertions)
+- staging_latest_test_sha: `cdd53fb1d61a3aeb8790818aa571e13f9afbaed8`
+- staging_latest_test_ci: **#42965322073**, pending final verdict at time of checkpoint
+- objects_new: 0 (all seven items already existed)
+- regional_L3_routes_transplanted: 7; Party/Storage cases 14; prior CI success
+- W02_effective_nature: preserved in CreatureInstance and carried through EvolutionSystem/SaveV2 in staging (previous CI SUCCESS)
+- rollback: 2 injected after owner replacement PASS on prior staging CI
+- blocked: no known newly blocked regional routes on previous green SHA; Exeggutor Alola hidden Harvest blocked as before
+- historical_coverage: V2 source/target save; 55/56 regional native; four approved normal abilities; Galarica and Slowpoke pilot (staging #42965058174 SUCCESS)
+- excluded_item: `dynamax_candy` excluded in staging config, CI checks exclusion, not included in seven routes
+- CAMP003_006: historical source CI #42959076143 SUCCESS, **not rerun on staging** because W04 historical Python/Godot suites and fixtures are absent from this IA6 staging base; do not misattribute
+- visual_FieldItemBag: NOT CERTIFIED on staging; only native FieldItemService Party/Storage, SaveV2
+- integrated_official_IA6: **NO**; no main/V28/PR118 updates
+- files_changed: additive form_id in CreatureInstance, Factory canonical form and exact four normal abilities, EvolutionSystem.apply_evolution (preserves effective nature), FieldItemService.evolution_options/evolve, SaveGameData.validate form guard, FieldNativeSave._valid_creature form guard, W04 canonical helper/contract and tests/workflow
+- next_safe_action: inspect #42965322073; if green, publish V4 report with precise SHA and list of remaining integration-only checks; if red, repair without lowering checks, rerun.
