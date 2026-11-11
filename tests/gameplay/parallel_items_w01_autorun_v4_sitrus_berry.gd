@@ -55,10 +55,10 @@ func _one_sitrus(entry: Dictionary) -> Dictionary:
 		await session.close()
 		return {"valid": false}
 	var expected_hp: int = start_hp + (maxi(1, int(max_hp / 4)) if should_consume else 0)
-	var entry: CreatureInstance = session.battle_state().creature(&"own")
-	var entry_hp: int = entry.current_hp
+	var battle_entry_mon: CreatureInstance = session.battle_state().creature(&"own")
+	var entry_hp: int = battle_entry_mon.current_hp
 	check("Sitrus authentic quarter-HP trigger at battle entry " + name,
-		entry_hp == expected_hp and entry.held_item_consumed == should_consume)
+		entry_hp == expected_hp and battle_entry_mon.held_item_consumed == should_consume)
 	var initial: Dictionary = await session.submit("move 1", session.revision)
 	check("Sitrus genuine first turn processed " + name, initial.get("accepted", false))
 	var live: CreatureInstance = session.battle_state().creature(&"own")
