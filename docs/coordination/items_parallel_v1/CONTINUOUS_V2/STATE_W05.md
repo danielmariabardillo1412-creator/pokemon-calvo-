@@ -1,18 +1,28 @@
-# W05 — CONTINUOUS_V2 / CHECKPOINT DE ARRANQUE IA6
-**Estado inicial emitido por IA6, no sustituye la lectura del HEAD más reciente.**
+# W05 — CONTINUOUS_V2 · Checkpoint tras B01 y ensayo B03
+Actualizado: 2026-11-11 (Europe/Madrid).
 - worker: W05
-- branch: `codex/calvo-items-20261109-w05-books-ui`
+- branch: codex/calvo-items-20261109-w05-books-ui
 - mission_version: CONTINUOUS_V2/PLAN_W05.md
-- phase: B
-- block: interfaz, paquete, contrato de integración
-- next_id: RECONSTRUIR DESDE ÚLTIMO CSV/CI REAL (este archivo inicial no adelanta el trabajo de la ventana)
-- last_green_code_sha_known_at_assignment: `42466cfe9b012949472f12480a3d5e3b91573c92`
-- last_green_run_id_known_at_assignment: `42924399433`
-- newly_functional: 0 EN NUEVA CAMPAÑA (las funcionalidades anteriores ya están en informes históricos)
-- blocked: ninguno declarado por esta nueva campaña
-- ci_pending: consultar GitHub antes de iniciar nueva modificación
-- protected_tickets: no editar shared seams sin autorización escrita
-- next_safe_action: Partir de 229 MT y Windows PCK ya probados; probar solo huecos, no recontar efectos.
+- phase: B02 (CI paquete pendiente)
+- block: B01 COMPLETADO / B02 EN CURSO / B03 CONTRATO PUBLICADO, PENDIENTE CI COMPLETA
+- next_id: B02_PCK_EXE_SIZE_GUARD_CI
+- checked: 229 libros históricos ya certificados; 58 comprobaciones NUEVAS en consumidor Godot, más contrato Python
+- functional: 229 MT ya funcionales en panel aislado, **0 MT nuevas CONTINUOUS_V2**
+- newly_functional: 0
+- blocked: 0 internos; montaje mochila real/convivencia W03 reservados a IA6
+- L3: panel Godot headless + servicio real, sin FieldItemBag integrado
+- last_green_code_sha: 42466cfe9b012949472f12480a3d5e3b91573c92 (TANDA05, CI #42923848244)
+- current_code_sha_under_CI: 426021c41b75d42cd2ee112ed4446f11e166ec54
+- current_run_id: 42929830881
+- ci_pending: RUN 42929830881; job verify SUCCESS, export pack job in_progress al emitir este checkpoint. **NO declarar CI total PASS hasta comprobación final**
+- owned_files_changed: tests/tools/test_parallel_items_w05_continuous_v2.py; tests/gameplay/parallel_items_w05_continuous_v2.gd; .github/workflows/parallel-w05-books-ui-20261109.yml; docs/coordination/items_parallel_v1/CONTINUOUS_V2/W05_IA6_ACCEPTANCE.md; STATE_W05.md
+- protected_tickets: FieldItemBag IA6 para montaje; coexistencia W03 Cuerda Huida/repelentes; prueba manual EXE Windows/GPU; Android no certificado; light_screen CORE global sin alterar
+- next_safe_action: recuperar resultado de #42929830881, corregir sólo pruebas o workflow W05 si falla, guardar tamaño EXE/PCK y top grupos del workspace, luego informar READY_FOR_IA6 cuando B01/B02/B03 estén completos.
 
-## Instrucciones para los siguientes checkpoints
-Sustituir estos campos con hechos comprobables después de cada bloque o al terminar un turno: HEAD funcional, run completada y estado, nuevos IDs, objetos ya certificados, negativos, L3 y bloqueos. No borrar ni reescribir informes de tandas antiguas. Si el contexto se agota, crear nueva ventana, leer `IA6_AUTORUN.md` y ESTE STATE, continuar la primera fila no cerrada. NO requiere una nueva tanda IA6 si quedan IDs independientes del plan. Cierre global solo cuando el plan esté agotado o bloquee una dependencia compartida irreversible.
+## Evidencia B01 y B03 consumidor
+El job verify del run #42929830881 superó las regresiones de W05 y:
+W05_V2_CONTRACT PASS books=229 source_es=229 teach_entrypoints=1 historical_regressions=preserved real_mount=pending_ia6
+W05_V2_CONSUMER_GODOT PASS live_service=1 real_panel=1 accepted=1 duplicate_spend=0 storage_rejection=1 locked_rollback=1 savev2=1 actual_bag=NOT_MOUNTED w03_coexistence=IA6_PENDING checks=58
+
+## Riesgo operativo
+La primera iteración #42929714960 falló porque un editor del YAML duplicó secciones al insertar una cadena que contenía el operador $' de reemplazo. Se reconstruyó el workflow desde el último archivo verde de IA6 y la CI posterior arrancó ambos jobs correctamente. No se ha tocado producción ni alterado ninguna regresión. Evitar repetir ese mecanismo de sustitución.
