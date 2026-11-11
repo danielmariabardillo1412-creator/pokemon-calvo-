@@ -38,3 +38,21 @@ Rama `codex/calvo-ia6-w02-integration-20261111`; workflow editado `.github/workf
 ## Seguridad de destino del PR
 
 La referencia de fusión temporal `refs/pull/119/merge` utilizó como padre `e63b2e6...`, que **sí era** el HEAD actualizado de IA6 a las 04:29 UTC. La discrepancia con `pulls/119.base.sha=f4a5687...` procedía de metadatos PR obsoletos, no de un destino ajeno. **Aun así**, no ejecutar la fusión a ciegas: comprobar que el HEAD actual de `codex/calvo-ia6-integration-20261109` coincide con el baseline validado, comparar la política real (45), y preferir escrituras condicionadas por SHA y rama explícita si persiste incertidumbre. Verificar que `main` permanece ajena a estas operaciones. Mantener PR #119 DRAFT hasta certificar la nueva CI de política45 y el resultado en la rama IA6.
+
+
+---
+
+## ✅ Cierre de bloqueo y fusión oficial IA6 (2026-11-11)
+
+**Esta sección sustituye cualquier instrucción anterior de NO MERGE, DRAFT o `BLOCKED_CI_SCOPE_V28` en este documento. No confundir histórico con estado vigente.**
+
+- PR [#119](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/pull/119): **MERGED**, base exclusiva `codex/calvo-ia6-integration-20261109`, HEAD staging `16da5a0373ef92b33c308e96c95f60679dc85675`.
+- La CI de política actual y V28 [#42963526507](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/42963526507) concluyó `completed/success` sobre ese HEAD: 20/20 workflows en el mismo SHA, incluyendo V28 histórico intacto en Linux y Windows, 8 IDs/40 escenarios nativos integrados y audit item scope 2222/45.
+- **Merge SHA oficial `0028361ae69c2a63ca2aaf23710a4543157445ac`**, confirmado en GitHub; padres `e63b2e6c7e175fba318cc2f562bebd1769589092` (IA6 con veto `dynamax_candy`) + `16da5a0373ef92b33c308e96c95f60679dc85675` (staging certificado).
+- No ha habido merge a `main`: se verificó `main=233b1a4f15ee4df7301e2c5acf8aed84a8f40626` antes y después. V28 y PR #118 no se han tocado.
+- Se conserva `dynamax_candy` como excluido, 45 actuales; el documento V27 antiguo continúa con 44 históricos.
+- Al primer push del merge GitHub canceló el workflow viejo `IA6 Integration - mint + rope` por colisión de grupo `concurrency: ia6-mint-rope-${{ github.ref }}` con el nuevo workflow. **No es un FAIL de pruebas**. La puerta nueva engloba las regresiones viejas y añade W02.
+- Se reparó exclusivamente ese grupo de concurrencia en el workflow nuevo: commit IA6 **`33ecf65d9ca33aa80d7968c172726465099f812f`**, cambiando a `ia6-w02-selective-native-${{ github.ref }}`. Permite ejecutar la CI antigua y nueva sin cancelación cruzada en próximos commits pertinentes.
+- Certificación **del SHA de IA6 posterior al merge:** [#42969055524](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/42969055524) en `0028361...`; [#42969175343](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/42969175343) en `33ecf65...`. **Ambas IN_PROGRESS en el momento de este checkpoint; no atribuir SUCCESS hasta leer GitHub**.
+
+**Estado: `MERGED_IN_IA6_PENDING_POSTMERGE_CI`.** El bloqueo V28 quedó resuelto y aprobado por la CI del staging; la validación post-merge sobre el SHA oficial sigue separada. No reabrir PR #119, no realizar otro merge automático ni promocionar a `main`. La siguiente `p` consulta primero las dos CI post-merge, diagnostica cualquier FAIL, documenta el SHA final y después retoma el plan global IA6 de staging V4 sin pisar ramas ni inventar nuevos objetos.
