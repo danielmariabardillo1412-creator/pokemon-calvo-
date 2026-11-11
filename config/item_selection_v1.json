@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "profile_id": "calvo_item_selection_v1",
-  "updated": "2026-10-31",
+  "updated": "2026-11-11",
   "excluded_ids": {
     "revive": "revives_fainted_pokemon",
     "max_revive": "revives_fainted_pokemon",
@@ -10,7 +10,8 @@
     "max_honey": "revives_fainted_pokemon",
     "linking_cord": "user_excludes_trade_evolution_replacement_item",
     "wide_lens": "friend_named_ban_confirmed_by_user_delegation",
-    "bright_powder": "friend_named_ban_confirmed_by_user_delegation"
+    "bright_powder": "friend_named_ban_confirmed_by_user_delegation",
+    "dynamax_candy": "user_explicitly_excludes_dynamax_candy_without_dynamax_level_mechanic"
   },
   "excluded_categories": {
     "all_mail": "user_excludes_mail_from_this_game"
@@ -23,6 +24,7 @@
     "Max Honey also revives, confirmed by PokeAPI item 1630 flavor text.",
     "Story/futuristic items, machine version mapping and unsupported mechanics require separate review.",
     "Linking Cord is excluded by the user. Trade evolutions will be adapted later; no replacement levels are active or selected.",
-    "V27 corrects the V26 misunderstanding: retain all original held evolution items. Future trade replacement requires the appropriate equipped item plus its defined level, where an item was originally required; no trade and no automatic item-free evolution. Levels/evolution adaptation remain deferred. Linking Cord alone stays excluded."
+    "V27 corrects the V26 misunderstanding: retain all original held evolution items. Future trade replacement requires the appropriate equipped item plus its defined level, where an item was originally required; no trade and no automatic item-free evolution. Levels/evolution adaptation remain deferred. Linking Cord alone stays excluded.",
+    "2026-11-11 IA6: dynamax_candy explicitly excluded by user. Exclusion covers item selection, loot, shops and implementation queues; preserve canonical PokeAPI data and historic art audits. Does not imply banning EXP Candies, Rare Candy or battle move ids."
   ]
 }
