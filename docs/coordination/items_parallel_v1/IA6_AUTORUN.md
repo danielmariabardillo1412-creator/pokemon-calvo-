@@ -1,3 +1,13 @@
+# ACTUALIZACIÓN IA6 — 2026-11-11: DESBLOQUEO W03 LEGACY (leer primero)
+
+IA6 ha AUTORIZADO **tres y solo tres seams** de `modules/gameplay/wild_adventure_session.gd` exclusivamente en tu rama `codex/calvo-ia6-staging-20261111-w03-capture`. La orden de IA6 está publicada en la rama árbitra `codex/calvo-items-20261101-arbitro`:
+
+`docs/coordination/items_parallel_v1/CONTINUOUS_V4/IA6_W03_LEGACY_WILD_SEAM_AUTH_20261111.md`
+
+Tu siguiente `p` debe recuperar esa orden, comparar el blob fuente con staging y ejecutar los tres hunks con el test histórico `parallel_items_w03_repeat_history_v2.gd` **obligatoriamente verde**, sin aceptar las seis aserciones rojas antiguas como excepción. No tocar mochila/repelentes ni módulos fuera de permiso. La autorización no es merge oficial IA6.
+
+---
+
 # IA6 — W03 · NUEVA MISIÓN CONTINUA V4 EN RAMA STAGING
 **Estado:** ACTIVA. **Rama ÚNICA de esta misión:** codex/calvo-ia6-staging-20261111-w03-capture.
 **Origen de confianza:** plan IA6 en rama árbitra codex/calvo-items-20261101-arbitro: docs/coordination/items_parallel_v1/CONTINUOUS_V4/PLAN_W03.md; reglas generales docs/coordination/items_parallel_v1/CONTINUOUS_V4/README.md. **Base fija** e63b2e6c7e175fba318cc2f562bebd1769589092 (IA6 integradora, conserva exclusión dynamax_candy).
