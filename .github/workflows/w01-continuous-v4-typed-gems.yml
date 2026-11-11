@@ -1,0 +1,55 @@
+name: W01 V4 staging five typed Gems native settlement SaveV2
+on:
+  push:
+    branches:
+      - codex/calvo-ia6-staging-20261111-w01-held
+    paths:
+      - '.github/workflows/w01-continuous-v4-typed-gems.yml'
+      - 'tests/gameplay/w01_continuous_v4_typed_gems.gd'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  typed_gems_l3:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: chickensoft-games/setup-godot@v2.4.1
+        with:
+          version: 4.7.0
+          use-dotnet: false
+          include-templates: false
+      - name: Canonical resources and pinned native engine
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "POKEMON_CALVO_NODE=$(command -v node)" >> "$GITHUB_ENV"
+          python -B tools/distribution/restore_resources.py
+          python -B tools/distribution/restore_resources.py --check
+          mkdir -p data/reports
+          cp ci/fixtures/pokeapi_reports/forms_policy_report.json data/reports/forms_policy_report.json
+          cp ci/fixtures/pokeapi_reports/unsupported_mechanics.json data/reports/unsupported_mechanics.json
+          cp ci/fixtures/pokeapi_reports/import_summary.json data/reports/import_summary.json
+          godot --headless --path . --import 2>&1 | tee w01-v4-typed-import.log
+          if grep -E 'SCRIPT ERROR|Parse Error' w01-v4-typed-import.log; then exit 1; fi
+          python -B tools/battle_reference/run.py --install --limit 1
+      - name: Five native typed gems across active none reserve and SaveV2
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 1200s godot --headless --path . --script res://tests/gameplay/w01_continuous_v4_typed_gems.gd 2>&1 | tee w01-v4-typed-gems.log
+          grep -E '^W01_V4_TYPED_GEMS PASS items=5 modes=15 checks=[1-9][0-9]*$' w01-v4-typed-gems.log
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: w01-v4-typed-gems-${{ github.run_id }}
+          retention-days: 7
+          if-no-files-found: ignore
+          path: w01-v4-typed-*.log
