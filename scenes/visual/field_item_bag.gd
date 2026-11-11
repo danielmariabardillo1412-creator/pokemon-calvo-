@@ -180,7 +180,7 @@ func _refresh_choices() -> void:
 		_description.text = "Reduce hasta 10 EV de una estadística y aumenta la amistad."
 	# MTs are handled only by the nested panel; the global Use button MUST
 	# never trigger a second FieldItemService.use_item transaction for the same click.
-	var is_book := service.profile.get("machine_rows", {}).has(String(_selected_item()))
+	var is_book: bool = bool(service.profile.get("machine_rows", {}).has(String(_selected_item())))
 	if _machine_panel != null:
 		_machine_panel.hide()
 		if is_book and _machine_requested_book == _selected_item():
