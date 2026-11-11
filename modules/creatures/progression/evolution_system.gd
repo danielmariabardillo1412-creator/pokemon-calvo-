@@ -147,6 +147,27 @@ static func apply_evolution(
 	var target: CreatureSpecies = catalogs.species_catalog.get_by_id(target_species_id)
 	if target == null:
 		return null
+	# W04 V3: only certified regional item destinations gain a permanent
+	# canonical form. Normal non-regional evolutions retain their old behavior.
+	var regional_form: StringName = &""
+	if catalogs is DefinitionCatalog:
+		var route_map: Dictionary = preload("res://modules/creatures/progression/regional_item_evolution_contract_w04_v2.gd").ROUTES
+		if route_map.has(creature.species_id):
+			var selected: StringName = &""
+			var matches := 0
+			for approved_item: StringName in route_map[creature.species_id]:
+				if route_map[creature.species_id][approved_item] != target_species_id:
+					continue
+				var evidence: Dictionary = preload("res://modules/creatures/progression/regional_item_evolution_contract_w04_v2.gd").inspect(
+					creature, approved_item, catalogs, target_species_id)
+				if not evidence.get("ok", false):
+					return null
+				selected = StringName(evidence.get("target_form_id", ""))
+				matches += 1
+			if matches > 1 or (matches == 1 and selected == &""):
+				return null
+			if matches == 1:
+				regional_form = selected
 	var new_creature := CreatureInstance.new(
 		creature.instance_id,
 		target_species_id,
@@ -154,6 +175,8 @@ static func apply_evolution(
 		creature.stats.duplicate() if creature.stats != null else StatBlock.new(),
 		[],
 	)
+	if regional_form != &"":
+		new_creature.form_id = regional_form
 	new_creature.experience = creature.experience
 	new_creature.ivs = creature.ivs.duplicate()
 	new_creature.evs = creature.evs.duplicate()
