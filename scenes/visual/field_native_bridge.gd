@@ -93,7 +93,7 @@ func _unlock_world() -> void:
 
 
 func leave_battle() -> void:
-	if busy or view.session == null or view.session.has_active_battle() or view._playback.is_playing(): return
+	if busy or view.session == null or view.session.has_active_battle() or view.session.has_level_evolution_choice() or view._playback.is_playing(): return
 	busy = true
 	view._working = true
 	var reason := String(view.session.completion_reason)
@@ -110,7 +110,10 @@ func notify(message: String) -> void:
 
 
 func _idle_boundary() -> bool:
-	return not busy and not field.traversal_is_busy() and not _world_overlay_open() and not (view != null and (view._working or view._playback.is_playing() or view.session != null and view.session.busy))
+	if busy or field.traversal_is_busy() or _world_overlay_open(): return false
+	if view == null: return true
+	if view._working or view._playback.is_playing(): return false
+	return view.session == null or not (view.session.busy or view.session.has_level_evolution_choice())
 
 
 func save_game() -> bool:

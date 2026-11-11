@@ -99,6 +99,10 @@ func _test_equipment() -> void:
 		if not service.selection.content_allowed(item_id):
 			check("excluded equip conserves state " + raw_id, not result.accepted and snapshot(service.owner) == before)
 			continue
+		if item_id in [&"amulet_coin", &"exp_share", &"luck_incense"]:
+			check("unimplemented held effect blocked without mutation " + raw_id,
+				not service.holdable(item_id) and not result.accepted and result.reason == "held_effect_pending" and snapshot(service.owner) == before)
+			continue
 		check("equip transfers one " + raw_id, result.accepted and service.owner.inventory.quantity(item_id) == 1 and creature.held_item_id == item_id and not creature.held_item_consumed)
 		check("unequip returns same item " + raw_id, service.unequip(creature.instance_id).accepted and service.owner.inventory.quantity(item_id) == 2 and creature.held_item_id == &"")
 		equip_cases.append({"id": raw_id, "status": "TRANSFER_VERIFIED_EFFECT_NOT_CERTIFIED"})

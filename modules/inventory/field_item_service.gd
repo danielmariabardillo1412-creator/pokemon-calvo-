@@ -8,6 +8,9 @@ const Growth = preload("res://modules/inventory/field_growth_effects.gd")
 const Mint = preload("res://modules/inventory/field_mint_effects.gd")
 const EncounterModifiers = preload("res://modules/gameplay/encounter_item_modifiers.gd")
 const PROFILE := "res://modules/inventory/item_connections_v1.json"
+# These three catalogue entries have no native definition or connected effect.
+# Keep existing saves recoverable via unequip, while preventing new bad loadouts.
+const PENDING_HELD_EFFECTS := [&"amulet_coin", &"exp_share", &"luck_incense"]
 static var _shared_selection: RefCounted
 static var _shared_content: RefCounted
 static var _shared_profile: Dictionary = {}
@@ -61,7 +64,7 @@ func _publish_bag(staged: PlayerInventory) -> void:
 
 
 func holdable(item_id: StringName) -> bool:
-	return _holdable.has(String(item_id)) and selection.content_allowed(item_id)
+	return _holdable.has(String(item_id)) and selection.content_allowed(item_id) and item_id not in PENDING_HELD_EFFECTS
 
 
 func equip(item_id: StringName, creature_id: StringName) -> Dictionary:
@@ -69,6 +72,7 @@ func equip(item_id: StringName, creature_id: StringName) -> Dictionary:
 	if error != "": return _deny(error)
 	var creature := owner.owned_creature(creature_id)
 	if creature == null: return _deny("creature_not_owned")
+	if item_id in PENDING_HELD_EFFECTS: return _deny("held_effect_pending", "DEPENDENCY_MISSING")
 	if not holdable(item_id): return _deny("holdability_not_supported", "NEEDS_CONTEXT")
 	if creature.held_item_id == item_id and not creature.held_item_consumed: return _deny("already_equipped")
 	var staged := _bag_copy()

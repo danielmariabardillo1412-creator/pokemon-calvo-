@@ -168,7 +168,7 @@ function nativeSet(spec, side, index) {
   const out = {name:`calvo_${side}_${index}`,species:species.name,level:spec.level ?? 50,
     ability:spec.ability_id ? lookup('abilities',spec.ability_id).name : 'No Ability',
     item:spec.held_item_consumed ? '' : spec.held_item_id ? lookup('items',spec.held_item_id).name : '',
-    moves:moves.map(x => lookup('moves',x).name), nature:spec.nature_id ?? 'Hardy',
+    moves:moves.map(x => lookup('moves',x).name), nature:spec.effective_nature_id ?? spec.nature_id ?? 'Hardy',
     happiness:spec.friendship ?? 0, shiny:!!spec.is_shiny, ivs:{},evs:{}};
   if (spec.ability_id && !lookup('abilities',spec.ability_id).exists) throw Error('Unknown ability');
   if (spec.held_item_id && !lookup('items',spec.held_item_id).exists) throw Error('Unknown held item');

@@ -125,7 +125,7 @@ func _refresh_view() -> void:
 func _settle() -> void:
 	if _working or session.completion_reason != "": return
 	var result: Dictionary = session.settle_finished_battle()
-	if result.accepted: _event_log.append_text("\nResultado aplicado al equipo y al inventario de esta prueba.")
+	if result.accepted: _event_log.append_text("\nResultado aplicado al equipo y al inventario.")
 	else:
 		_settlement_error = true
 		_event_log.append_text("\nNo se pudo aplicar el resultado: " + session.last_error)

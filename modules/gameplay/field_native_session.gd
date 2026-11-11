@@ -4,6 +4,7 @@ extends "res://modules/gameplay/showdown_adventure_session.gd"
 ## sleep clocks in the same synchronous settlement as the player's collection.
 var trainer_owner: TrainerCampaignRosterOwner
 var _trainer_stamp := ""
+var _level_evolutions: Array[Dictionary] = []
 
 
 func _init(catalog: DefinitionCatalog, collection: PlayerCollection, clocks: Dictionary,
@@ -59,4 +60,36 @@ func _finish(reason: String, bag: PlayerInventory, resolution: CaptureResolution
 			if owned.status_state.persistent_id == &"sleep" and row.sleep_clock is Dictionary: native_sleep_clocks[id] = row.sleep_clock.duplicate(true)
 			else: native_sleep_clocks.erase(id)
 	_trainer_stamp = _trainer_fingerprint()
+	for event: ProgressionEvent in result.progression_events:
+		if event.kind != ProgressionEvent.EVOLUTION_AVAILABLE: continue
+		var source := player.owned_creature(event.creature_id)
+		var target := StringName(event.data.get("species_id", ""))
+		if not EvolutionSystem.RegionalLevels.inspect(source, target, catalogs).get("ok", false): continue
+		_level_evolutions.append({"target": target, "source": source, "state": source.to_dict()})
 	return result
+
+
+func has_level_evolution_choice() -> bool:
+	return not _level_evolutions.is_empty()
+
+
+func level_evolution_prompt() -> Dictionary:
+	if not has_level_evolution_choice(): return {}
+	var choice := _level_evolutions[0]
+	return {"kind": "evolution", "level": choice.state.level, "species_id": choice.state.species_id,
+		"targets": [String(choice.target)]}
+
+
+func resolve_level_evolution(target: StringName) -> bool:
+	if not has_level_evolution_choice() or busy or has_active_battle(): return false
+	var choice := _level_evolutions[0]
+	if target != &"":
+		var current := player.owned_creature(choice.source.instance_id)
+		if target != choice.target or not is_same(current, choice.source): return false
+		if current.to_dict() != choice.state or EvolutionSystem.level_up_context(current).block_level_evolution: return false
+		var event := ProgressionEvent.new(ProgressionEvent.EVOLUTION_AVAILABLE, current.instance_id, {"species_id": target})
+		var evolved := ProgressionSystem.apply_evolution(current, event, catalogs, progression_ruleset)
+		if evolved == null or (evolved.ability_id != &"" and not _policy.ability_allowed(String(evolved.ability_id))): return false
+		if not player.replace_owned_same_identity(evolved): return false
+	_level_evolutions.pop_front()
+	return true

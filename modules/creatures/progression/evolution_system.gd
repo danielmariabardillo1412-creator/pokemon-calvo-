@@ -14,6 +14,7 @@ const TRIGGER_LEVEL_UP := &"level_up"
 const TRIGGER_USE_ITEM := &"use_item"
 const TRIGGER_TRADE := &"trade"
 const HeldItems = preload("res://modules/creatures/progression/progression_held_items.gd")
+const RegionalLevels = preload("res://modules/creatures/progression/regional_level_evolution_contract_w04_v5.gd")
 
 # Canonical V3 trigger IDs use underscores. These mechanics have no runtime path in
 # the current progression model and must never fall through as apparently unknown
@@ -168,6 +169,11 @@ static func apply_evolution(
 				return null
 			if matches == 1:
 				regional_form = selected
+		if RegionalLevels.ROUTES.get(creature.species_id, {}).get(&"target") == target_species_id:
+			var evidence := RegionalLevels.inspect(creature, target_species_id, catalogs)
+			if not evidence.get("ok", false):
+				return null
+			regional_form = StringName(evidence.target_form_id)
 	var new_creature := CreatureInstance.new(
 		creature.instance_id,
 		target_species_id,

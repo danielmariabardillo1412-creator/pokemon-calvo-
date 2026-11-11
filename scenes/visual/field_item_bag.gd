@@ -168,6 +168,11 @@ func _refresh_choices() -> void:
 			for slot: BattleMoveSlot in creature.moveset: _moves.add_item("%s · PP %d/%d" % [SpanishGameText.move_name(slot.move_id, definitions), slot.current_pp, slot.max_pp])
 		_moves.visible = true
 	_description.text = ""
+	if _selected_item() in service.PENDING_HELD_EFFECTS:
+		_description.text = "Su efecto sigue pendiente. Puedes conservarlo en la mochila."
+		_use.disabled = true
+		_equip.disabled = true
+		return
 	if service.FieldEffects.Abilities.supports(_selected_item()):
 		var preview: Dictionary = service.ability_preview(_selected_item(), _selected_creature())
 		if preview.accepted:
