@@ -52,6 +52,9 @@ var _chance_index := 2
 var native_battles_enabled := true
 var _native_battles: Node
 var _item_bag: Control
+# W03 V5: real step-driven repel state, independent of inventory/UI.
+const FieldRepel = preload("res://modules/overworld/field_repel_step_effect.gd")
+var _repel_effect := FieldRepel.new()
 
 
 func _ready() -> void:
@@ -62,6 +65,7 @@ func _ready() -> void:
 	test_panel._encounter_chance.value = INITIAL_CHANCE
 	test_panel._wild_species_input.text = "pidgey"
 	super._ready()
+	_repel_effect.attach(player)
 	var canvas := $CanvasLayer as CanvasLayer
 	for child in get_children():
 		if child is Polygon2D or child is Label:
@@ -682,6 +686,15 @@ func field_prepare_native_encounter(zone_id: StringName) -> Dictionary:
 	var staged := RandomNumberGenerator.new()
 	staged.state = _director._encounter_rng.state
 	var encounter := WildEncounterSystem.resolve(table, staged, _catalogs, _session.progression_ruleset)
+	# Real result, real leader; suppress *after* the ordinary RNG draw but before battle.
+	if encounter.status == WildEncounterResult.ENCOUNTER and encounter.creature != null:
+		var leader: CreatureInstance = null
+		for creature: CreatureInstance in _session.player.party.get_creatures():
+			if creature != null and not creature.is_knocked_out():
+				leader = creature
+				break
+		if leader != null and _repel_effect.blocks_level(encounter.creature.level, leader.level):
+			return {"blocked_by_repel": true, "next_rng": staged.state}
 	_metrics.note_encounter_roll(encounter.status == WildEncounterResult.ENCOUNTER, encounter.status, encounter.reason)
 	if encounter.status == WildEncounterResult.NONE:
 		_director._encounter_rng.state = staged.state
@@ -689,6 +702,12 @@ func field_prepare_native_encounter(zone_id: StringName) -> Dictionary:
 		if _session.force_shiny_encounters and _catalogs.shiny_species_ids.has(String(encounter.creature.species_id)):
 			encounter.creature.is_shiny = true
 	return {"result": encounter, "next_rng": staged.state}
+
+
+func field_commit_repelled_encounter_rng(next_rng: int) -> void:
+	# RNG.state is a signed 64-bit value; negative states are valid.
+	if _director != null:
+		_director._encounter_rng.state = next_rng
 
 
 func field_native_seed() -> int:
@@ -746,7 +765,8 @@ func field_player_movement_enabled() -> bool:
 func field_native_world_snapshot(format_id: String) -> Dictionary:
 	var position := field_player_position()
 	return {"position": [position.x, position.y], "region": String(technical_region_id()),
-		"config": _active_config.duplicate(true), "rng": str(_director._encounter_rng.state), "next_seed": _director._next_battle_seed, "format": format_id}
+		"config": _active_config.duplicate(true), "rng": str(_director._encounter_rng.state), "next_seed": _director._next_battle_seed, "format": format_id,
+		"repel": _repel_effect.to_dict()}
 
 
 func field_build_native_encounter_tables(config: Dictionary) -> Dictionary:
@@ -775,9 +795,24 @@ func field_validate_native_loaded_world(world: Dictionary) -> Dictionary:
 	var position := Vector2(world.position[0], world.position[1])
 	if position.x < 16 or position.x > 1280 or position.y < 16 or position.y > 850 or String(_region_at_position(position)) != world.get("region") or not traversal_controller._destination_is_clear(position): return {"ok": false, "error": "world_position"}
 	if world.next_seed != int(world.next_seed) or world.next_seed < 1 or world.next_seed > 2147483646: return {"ok": false, "error": "world_seed"}
+	# Strict shape: never coerce corrupt strings or floats into valid integer steps.
+	var repel: Variant = world.get("repel", {"schema_version": 1, "active_id": "", "remaining_steps": 0})
+	if not repel is Dictionary:
+		return {"ok": false, "error": "world_repel_shape"}
+	var ver: Variant = repel.get("schema_version")
+	var count: Variant = repel.get("remaining_steps")
+	# JSON round-trip may decode integer tokens as floats. Accept exact integral numbers only.
+	if not (ver is int or ver is float) or ver != 1 or not (count is int or count is float):
+		return {"ok": false, "error": "world_repel_shape"}
+	if not is_finite(float(count)) or count != int(count) or not repel.get("active_id") is String:
+		return {"ok": false, "error": "world_repel_shape"}
+	var sid := StringName(repel.active_id)
+	var steps: int = int(count)
+	if steps < 0 or (steps == 0 and sid != &"") or (steps > 0 and (not FieldRepel.DURATIONS.has(sid) or steps > int(FieldRepel.DURATIONS.get(sid, 0)))):
+		return {"ok": false, "error": "world_repel_range"}
 	var tables := field_build_native_encounter_tables(world.config)
 	if tables.is_empty(): return {"ok": false, "error": "world_encounters"}
-	return {"ok": true, "position": position, "tables": tables}
+	return {"ok": true, "position": position, "tables": tables, "repel": repel}
 
 
 func field_publish_native_loaded_world(collection: PlayerCollection, trainer: TrainerCampaignRosterOwner, world: Dictionary, position: Vector2, tables: Dictionary) -> void:
@@ -792,6 +827,9 @@ func field_publish_native_loaded_world(collection: PlayerCollection, trainer: Tr
 	_director.session = _session; _director._tables = tables
 	_director._encounter_rng.state = int(world.rng); _director._next_battle_seed = int(world.next_seed)
 	player.global_position = position; player.reset_step_meter()
+	# Validation happened before publication; missing legacy field means inactive effect.
+	_repel_effect.restore(world.get("repel", {"schema_version": 1, "active_id": "", "remaining_steps": 0}))
+	_repel_effect.attach(player)
 
 
 func field_refresh_legacy_presentations() -> void:
