@@ -43,3 +43,12 @@ La próxima `p` lee `IA6_AUTORUN.md` y este archivo, inspecciona HEAD/CI antes d
 - Código de producción modificado en V2: ninguno. Pruebas nuevas no equivalen a 42 objetos nuevos.
 - Próxima acción segura: verificar conclusión de ambas CI y de Persim; si FALLA inspeccionar job/log y reparar prueba o ticket protegido; si todas SUCCESS publicar informe final con 36 históricas + 5 nuevos contratos L3 de campo + 1 Persim L3 y 0 objetos nuevos.
 - No fusionar a IA6 ni certificar global hasta completed/success en SHA de los tests actuales.
+
+## Checkpoint de la prueba de bayas equipadas
+- Se han incorporado cinco contratos nativos equipados: `cheri_berry`, `chesto_berry`, `pecha_berry`, `rawst_berry`, `oran_berry`, con dos escenarios por ID, propiedad PARTY/ausente/reserva, snapshot/restauración, consumo y SaveV2.
+- Fixture: `tests/fixtures/parallel_items/w02_continuous_v2_held05.json`.
+- Runner: `tests/gameplay/parallel_items_w02_continuous_v2_held05.gd`.
+- El auditor Python de 42 bayas incluye la presencia y distinción de cinco ID de la nueva suite nativa, sin duplicar históricos.
+- CI de cierre candidata: #42937080819 en SHA `6852afba56332d78fe65cdfc2ffe02c51db2290a`; al crear este checkpoint figura `IN_PROGRESS` y el auditor Python ha pasado, pero los test Godot y regresiones siguen pendientes.
+- Comparación desde el cierre T04 `5d8c77b34d` hasta el código de esta CI: 22 commits de avance; solo cambian pruebas, fixtures, documentación y workflow, NO `modules/` ni código de producción.
+- **No declarar cierre V2 antes de la CI #42937080819 `completed/success`.** Si falla el nuevo runner, investigar logs y reparar solo archivos autorizados, nunca el backend global sin ticket IA6.
