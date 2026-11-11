@@ -1,3 +1,11 @@
+# IA6 — ÚLTIMA SITUACIÓN 2026-11-11 · CINCO STAGING CONTINUOUS_V4
+
+**Relevo activado en las notas originales W01–W05 y verificado en staging:** W03 V4 ACTIVA (integración captura); W04 V4 ACTIVA (forma+evoluciones L3); W05 V4 ACTIVA (panel 229 libros+Rope sin duplicar); W01 V4 EN COLA hasta READY_FOR_IA6 V2 (CI38 #42958587809 y policy #42960157622 ya SUCCESS; falta ledger de cierre); W02 V4 EN COLA hasta cierre V3 (checkpoint fase A aún no iniciado). Cada nueva rama staging parte de `codex/calvo-ia6-integration-20261109` SHA `e63b2e6c7e175fba318cc2f562bebd1769589092`, y tiene orden `IA6_AUTORUN.md` y `CONTINUOUS_V4/STATE_W0X.md`; **sin implementación ni CI staging todavía**.
+
+**Revisión y fuentes:** [CONTINUOUS_V4/IA6_HANDOFF_20261111.md](CONTINUOUS_V4/IA6_HANDOFF_20261111.md), [CONTINUOUS_V4/README.md](CONTINUOUS_V4/README.md), planes PLAN_W01–W05. No se ha actualizado la rama de integración oficial, main, V28 ni PR118. Tras recibir los parches de staging, IA6 integrará por función y ejecutará CI cruzada (naturaleza efectiva+forma, capturas ledger+SaveV2, libros+Cuerda+repeles y held). `p` reanuda trabajo, no mantiene workers en background. Evitar ciclos de QA sin funcionalidad nueva.
+
+---
+
 # IA6 — CORRECCIÓN DE SELECCIÓN CANÓNICA, 2026-11-11
 
 **CARAMELO DINAMAX `dynamax_candy` EXCLUIDO POR DECISIÓN EXPRESA DEL USUARIO.** Se actualizó `config/item_selection_v1.json::excluded_ids` y `tests/gameplay/item_selection_policy_test_runner.gd` en ramas árbitra, integración IA6 y cinco ramas W01–W05; la política activa debe rechazar `content_allowed` y `can_generate` incluso cuando el pool explícito contenga el ID. Los registros `docs/current` de 2026-10-28 eran candidato de auditoría/arte, NO selección vigente; se conservan para procedencia y la decisión actual prevalece. **No implementar, dibujar ni programar Caramelo Dinamax**; Rare Candy y EXP Candy no quedan excluidos por esta orden. Auditoría [IA6_EXCLUSION_DYNAMAX_CANDY_20261111.md](IA6_EXCLUSION_DYNAMAX_CANDY_20261111.md). Contador de veto 45 (9 por ID + 36 correo); no alterar el universo PokeAPI. No modificar main, V28 ni PR118. Nuevos tests subidos; la CI posterior aún requiere observación.
