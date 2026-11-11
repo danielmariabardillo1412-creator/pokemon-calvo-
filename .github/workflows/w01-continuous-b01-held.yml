@@ -15,6 +15,18 @@ on:
       - 'tests/tools/repro_w01_continuous_b01_ability_shield_native.cjs'
       - 'tests/gameplay/parallel_items_w01_continuous_b01_ability_shield.gd'
       - 'tests/tools/test_w01_continuous_b01_absorb_bulb.py'
+      - 'tests/tools/repro_w01_continuous_b01_adrenaline_orb_native.cjs'
+      - 'tests/gameplay/parallel_items_w01_continuous_b01_adrenaline_orb.gd'
+      - 'tests/tools/test_w01_continuous_b01_adrenaline_orb.py'
+      - 'tests/tools/repro_w01_continuous_b01_big_root_native.cjs'
+      - 'tests/gameplay/parallel_items_w01_continuous_b01_big_root.gd'
+      - 'tests/tools/test_w01_continuous_b01_big_root.py'
+      - 'tests/tools/repro_w01_continuous_b01_expert_belt_native.cjs'
+      - 'tests/gameplay/parallel_items_w01_continuous_b01_expert_belt.gd'
+      - 'tests/tools/test_w01_continuous_b01_expert_belt.py'
+      - 'tests/tools/repro_w01_continuous_b01_draco_plate_native.cjs'
+      - 'tests/gameplay/parallel_items_w01_continuous_b01_draco_plate.gd'
+      - 'tests/tools/test_w01_continuous_b01_draco_plate.py'
       - 'tests/tools/repro_w01_continuous_b01_absorb_bulb_native.cjs'
       - 'tests/gameplay/parallel_items_w01_continuous_b01_absorb_bulb.gd'
       - 'tests/tools/repro_w01_autorun_v4_choice_specs_native.cjs'
@@ -957,3 +969,195 @@ jobs:
           retention-days: 7
           if-no-files-found: ignore
           path: w01-b01-bulb-*.log
+  b01_adrenaline_orb:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: chickensoft-games/setup-godot@v2.4.1
+        with:
+          version: 4.7.0
+          use-dotnet: false
+          include-templates: false
+      - name: Restore canonical resources and native Showdown
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tools/distribution/restore_resources.py
+          python -B tools/distribution/restore_resources.py --check
+          mkdir -p data/reports
+          cp ci/fixtures/pokeapi_reports/forms_policy_report.json data/reports/forms_policy_report.json
+          cp ci/fixtures/pokeapi_reports/unsupported_mechanics.json data/reports/unsupported_mechanics.json
+          cp ci/fixtures/pokeapi_reports/import_summary.json data/reports/import_summary.json
+          godot --headless --path . --import 2>&1 | tee w01-b01-orb-import.log
+          if grep -E 'SCRIPT ERROR|Parse Error' w01-b01-orb-import.log; then exit 1; fi
+          echo "POKEMON_CALVO_NODE=$(command -v node)" >> "$GITHUB_ENV"
+          python -B tools/battle_reference/run.py --install --limit 1 2>&1 | tee w01-b01-orb-reference.log
+      - name: Real Water hit SpA boost consumption and disk SaveV2
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tests/tools/test_w01_continuous_b01_adrenaline_orb.py 2>&1 | tee w01-b01-orb-python.log
+          grep -E '^W01_B01_ORB_PY PASS row=03 checks=[1-9][0-9]*$' w01-b01-orb-python.log
+          node tests/tools/repro_w01_continuous_b01_adrenaline_orb_native.cjs 2>&1 | tee w01-b01-orb-native.log
+          grep -F 'W01_B01_NATIVE PASS id=adrenaline_orb modes=4 intimidate=1 controls=3 restore=4' w01-b01-orb-native.log
+          timeout 450s godot --headless --path . --script res://tests/gameplay/parallel_items_w01_continuous_b01_adrenaline_orb.gd 2>&1 | tee w01-b01-orb-godot.log
+          grep -E '^W01_B01_L3_ROW PASS row=03 id=adrenaline_orb modes=4 checks=[1-9][0-9]*$' w01-b01-orb-godot.log
+      - name: Upload diagnostic receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: w01-b01-orb-${{ github.run_id }}
+          retention-days: 7
+          if-no-files-found: ignore
+          path: w01-b01-orb-*.log
+  b01_big_root:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: chickensoft-games/setup-godot@v2.4.1
+        with:
+          version: 4.7.0
+          use-dotnet: false
+          include-templates: false
+      - name: Restore canonical resources and native Showdown
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tools/distribution/restore_resources.py
+          python -B tools/distribution/restore_resources.py --check
+          mkdir -p data/reports
+          cp ci/fixtures/pokeapi_reports/forms_policy_report.json data/reports/forms_policy_report.json
+          cp ci/fixtures/pokeapi_reports/unsupported_mechanics.json data/reports/unsupported_mechanics.json
+          cp ci/fixtures/pokeapi_reports/import_summary.json data/reports/import_summary.json
+          godot --headless --path . --import 2>&1 | tee w01-b01-root-import.log
+          if grep -E 'SCRIPT ERROR|Parse Error' w01-b01-root-import.log; then exit 1; fi
+          echo "POKEMON_CALVO_NODE=$(command -v node)" >> "$GITHUB_ENV"
+          python -B tools/battle_reference/run.py --install --limit 1 2>&1 | tee w01-b01-root-reference.log
+      - name: Real Water hit SpA boost consumption and disk SaveV2
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tests/tools/test_w01_continuous_b01_big_root.py 2>&1 | tee w01-b01-root-python.log
+          grep -E '^W01_B01_ROOT_PY PASS row=04 checks=[1-9][0-9]*$' w01-b01-root-python.log
+          node tests/tools/repro_w01_continuous_b01_big_root_native.cjs 2>&1 | tee w01-b01-root-native.log
+          grep -F 'W01_B01_NATIVE PASS id=big_root modes=4 drain_boost=1 wrong_move=1 snapshots=4' w01-b01-root-native.log
+          timeout 450s godot --headless --path . --script res://tests/gameplay/parallel_items_w01_continuous_b01_big_root.gd 2>&1 | tee w01-b01-root-godot.log
+          grep -E '^W01_B01_L3_ROW PASS row=04 id=big_root modes=4 checks=[1-9][0-9]*$' w01-b01-root-godot.log
+      - name: Upload diagnostic receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: w01-b01-root-${{ github.run_id }}
+          retention-days: 7
+          if-no-files-found: ignore
+          path: w01-b01-root-*.log
+  b01_expert_belt:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: chickensoft-games/setup-godot@v2.4.1
+        with:
+          version: 4.7.0
+          use-dotnet: false
+          include-templates: false
+      - name: Restore canonical resources and native Showdown
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tools/distribution/restore_resources.py
+          python -B tools/distribution/restore_resources.py --check
+          mkdir -p data/reports
+          cp ci/fixtures/pokeapi_reports/forms_policy_report.json data/reports/forms_policy_report.json
+          cp ci/fixtures/pokeapi_reports/unsupported_mechanics.json data/reports/unsupported_mechanics.json
+          cp ci/fixtures/pokeapi_reports/import_summary.json data/reports/import_summary.json
+          godot --headless --path . --import 2>&1 | tee w01-b01-belt-import.log
+          if grep -E 'SCRIPT ERROR|Parse Error' w01-b01-belt-import.log; then exit 1; fi
+          echo "POKEMON_CALVO_NODE=$(command -v node)" >> "$GITHUB_ENV"
+          python -B tools/battle_reference/run.py --install --limit 1 2>&1 | tee w01-b01-belt-reference.log
+      - name: Real Water hit SpA boost consumption and disk SaveV2
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tests/tools/test_w01_continuous_b01_expert_belt.py 2>&1 | tee w01-b01-belt-python.log
+          grep -E '^W01_B01_BELT_PY PASS row=05 checks=[1-9][0-9]*$' w01-b01-belt-python.log
+          node tests/tools/repro_w01_continuous_b01_expert_belt_native.cjs 2>&1 | tee w01-b01-belt-native.log
+          grep -F 'W01_B01_NATIVE PASS id=expert_belt modes=5 super_effective=1 neutral=2 snapshots=5' w01-b01-belt-native.log
+          timeout 450s godot --headless --path . --script res://tests/gameplay/parallel_items_w01_continuous_b01_expert_belt.gd 2>&1 | tee w01-b01-belt-godot.log
+          grep -E '^W01_B01_L3_ROW PASS row=05 id=expert_belt modes=5 checks=[1-9][0-9]*$' w01-b01-belt-godot.log
+      - name: Upload diagnostic receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: w01-b01-belt-${{ github.run_id }}
+          retention-days: 7
+          if-no-files-found: ignore
+          path: w01-b01-belt-*.log
+  b01_draco_plate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: chickensoft-games/setup-godot@v2.4.1
+        with:
+          version: 4.7.0
+          use-dotnet: false
+          include-templates: false
+      - name: Restore canonical resources and native Showdown
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tools/distribution/restore_resources.py
+          python -B tools/distribution/restore_resources.py --check
+          mkdir -p data/reports
+          cp ci/fixtures/pokeapi_reports/forms_policy_report.json data/reports/forms_policy_report.json
+          cp ci/fixtures/pokeapi_reports/unsupported_mechanics.json data/reports/unsupported_mechanics.json
+          cp ci/fixtures/pokeapi_reports/import_summary.json data/reports/import_summary.json
+          godot --headless --path . --import 2>&1 | tee w01-b01-draco-import.log
+          if grep -E 'SCRIPT ERROR|Parse Error' w01-b01-draco-import.log; then exit 1; fi
+          echo "POKEMON_CALVO_NODE=$(command -v node)" >> "$GITHUB_ENV"
+          python -B tools/battle_reference/run.py --install --limit 1 2>&1 | tee w01-b01-draco-reference.log
+      - name: Real Water hit SpA boost consumption and disk SaveV2
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tests/tools/test_w01_continuous_b01_draco_plate.py 2>&1 | tee w01-b01-draco-python.log
+          grep -E '^W01_B01_DRACO_PY PASS row=10 checks=[1-9][0-9]*$' w01-b01-draco-python.log
+          node tests/tools/repro_w01_continuous_b01_draco_plate_native.cjs 2>&1 | tee w01-b01-draco-native.log
+          grep -F 'W01_B01_NATIVE PASS id=draco_plate modes=5 type_boost=1 wrong_type=2 snapshots=5' w01-b01-draco-native.log
+          timeout 450s godot --headless --path . --script res://tests/gameplay/parallel_items_w01_continuous_b01_draco_plate.gd 2>&1 | tee w01-b01-draco-godot.log
+          grep -E '^W01_B01_L3_ROW PASS row=10 id=draco_plate modes=5 checks=[1-9][0-9]*$' w01-b01-draco-godot.log
+      - name: Upload diagnostic receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: w01-b01-draco-${{ github.run_id }}
+          retention-days: 7
+          if-no-files-found: ignore
+          path: w01-b01-draco-*.log
