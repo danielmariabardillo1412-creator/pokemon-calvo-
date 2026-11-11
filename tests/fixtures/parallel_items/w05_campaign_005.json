@@ -1,0 +1,300 @@
+{
+  "schema_version": 1,
+  "campaign": "CAMP_005",
+  "worker": "W05",
+  "active_version": "scarlet-violet",
+  "kind": "NEW_IDS",
+  "purpose": "0 bloques bootstrap, sin efecto funcional certificado",
+  "blocks": [
+    {
+      "block": "01",
+      "items": [
+        {
+          "item_id": "tm142",
+          "move_id": "hydro_pump"
+        },
+        {
+          "item_id": "tm143",
+          "move_id": "blizzard"
+        },
+        {
+          "item_id": "tm144",
+          "move_id": "fire_pledge"
+        },
+        {
+          "item_id": "tm145",
+          "move_id": "water_pledge"
+        },
+        {
+          "item_id": "tm146",
+          "move_id": "grass_pledge"
+        },
+        {
+          "item_id": "tm147",
+          "move_id": "wild_charge"
+        }
+      ]
+    },
+    {
+      "block": "02",
+      "items": [
+        {
+          "item_id": "tm148",
+          "move_id": "sludge_bomb"
+        },
+        {
+          "item_id": "tm149",
+          "move_id": "earthquake"
+        },
+        {
+          "item_id": "tm150",
+          "move_id": "stone_edge"
+        },
+        {
+          "item_id": "tm151",
+          "move_id": "phantom_force"
+        },
+        {
+          "item_id": "tm152",
+          "move_id": "giga_impact"
+        },
+        {
+          "item_id": "tm153",
+          "move_id": "blast_burn"
+        }
+      ]
+    },
+    {
+      "block": "03",
+      "items": [
+        {
+          "item_id": "tm154",
+          "move_id": "hydro_cannon"
+        },
+        {
+          "item_id": "tm155",
+          "move_id": "frenzy_plant"
+        },
+        {
+          "item_id": "tm156",
+          "move_id": "outrage"
+        },
+        {
+          "item_id": "tm157",
+          "move_id": "overheat"
+        },
+        {
+          "item_id": "tm158",
+          "move_id": "focus_blast"
+        },
+        {
+          "item_id": "tm159",
+          "move_id": "leaf_storm"
+        }
+      ]
+    },
+    {
+      "block": "04",
+      "items": [
+        {
+          "item_id": "tm160",
+          "move_id": "hurricane"
+        },
+        {
+          "item_id": "tm161",
+          "move_id": "trick_room"
+        },
+        {
+          "item_id": "tm162",
+          "move_id": "bug_buzz"
+        },
+        {
+          "item_id": "tm163",
+          "move_id": "hyper_beam"
+        },
+        {
+          "item_id": "tm164",
+          "move_id": "brave_bird"
+        },
+        {
+          "item_id": "tm165",
+          "move_id": "flare_blitz"
+        }
+      ]
+    },
+    {
+      "block": "05",
+      "items": [
+        {
+          "item_id": "tm166",
+          "move_id": "thunder"
+        },
+        {
+          "item_id": "tm167",
+          "move_id": "close_combat"
+        },
+        {
+          "item_id": "tm168",
+          "move_id": "solar_beam"
+        },
+        {
+          "item_id": "tm169",
+          "move_id": "draco_meteor"
+        },
+        {
+          "item_id": "tm170",
+          "move_id": "steel_beam"
+        },
+        {
+          "item_id": "tm171",
+          "move_id": "tera_blast"
+        }
+      ]
+    },
+    {
+      "block": "06",
+      "items": [
+        {
+          "item_id": "tm172",
+          "move_id": "roar"
+        },
+        {
+          "item_id": "tm173",
+          "move_id": "charge"
+        },
+        {
+          "item_id": "tm174",
+          "move_id": "haze"
+        },
+        {
+          "item_id": "tm175",
+          "move_id": "toxic"
+        },
+        {
+          "item_id": "tm176",
+          "move_id": "sand_tomb"
+        },
+        {
+          "item_id": "tm177",
+          "move_id": "spite"
+        }
+      ]
+    },
+    {
+      "block": "07",
+      "items": [
+        {
+          "item_id": "tm178",
+          "move_id": "gravity"
+        },
+        {
+          "item_id": "tm179",
+          "move_id": "smack_down"
+        },
+        {
+          "item_id": "tm180",
+          "move_id": "gyro_ball"
+        },
+        {
+          "item_id": "tm181",
+          "move_id": "knock_off"
+        },
+        {
+          "item_id": "tm182",
+          "move_id": "bug_bite"
+        },
+        {
+          "item_id": "tm183",
+          "move_id": "super_fang"
+        }
+      ]
+    },
+    {
+      "block": "08",
+      "items": [
+        {
+          "item_id": "tm184",
+          "move_id": "vacuum_wave"
+        },
+        {
+          "item_id": "tm185",
+          "move_id": "lunge"
+        },
+        {
+          "item_id": "tm186",
+          "move_id": "high_horsepower"
+        },
+        {
+          "item_id": "tm187",
+          "move_id": "icicle_spear"
+        },
+        {
+          "item_id": "tm188",
+          "move_id": "scald"
+        },
+        {
+          "item_id": "tm189",
+          "move_id": "heat_crash"
+        }
+      ]
+    },
+    {
+      "block": "09",
+      "items": [
+        {
+          "item_id": "tm190",
+          "move_id": "solar_blade"
+        },
+        {
+          "item_id": "tm191",
+          "move_id": "uproar"
+        },
+        {
+          "item_id": "tm192",
+          "move_id": "focus_punch"
+        },
+        {
+          "item_id": "tm193",
+          "move_id": "weather_ball"
+        },
+        {
+          "item_id": "tm194",
+          "move_id": "grassy_glide"
+        },
+        {
+          "item_id": "tm195",
+          "move_id": "burning_jealousy"
+        }
+      ]
+    },
+    {
+      "block": "10",
+      "items": [
+        {
+          "item_id": "tm196",
+          "move_id": "flip_turn"
+        },
+        {
+          "item_id": "tm197",
+          "move_id": "dual_wingbeat"
+        },
+        {
+          "item_id": "tm198",
+          "move_id": "poltergeist"
+        },
+        {
+          "item_id": "tm199",
+          "move_id": "lash_out"
+        },
+        {
+          "item_id": "tm200",
+          "move_id": "scale_shot"
+        },
+        {
+          "item_id": "tm201",
+          "move_id": "misty_explosion"
+        }
+      ]
+    }
+  ]
+}
