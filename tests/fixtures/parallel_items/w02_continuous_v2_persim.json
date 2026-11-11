@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "campaign": "W02_CONTINUOUS_V2",
+  "block": "01",
+  "proof_scope": "held_native_confusion_only",
+  "format": "gen9calvounifiedv1",
+  "level": 100,
+  "seed": [
+    23,
+    19,
+    29,
+    43
+  ],
+  "modes": [
+    "active",
+    "none",
+    "reserve"
+  ],
+  "item_id": "persim_berry",
+  "cases": [
+    {
+      "scenario": "persim_confuse_ray_real",
+      "foe_species": "gengar",
+      "foe_move": "confuse_ray",
+      "triggers": true
+    },
+    {
+      "scenario": "persim_no_confusion_control",
+      "foe_species": "mew",
+      "foe_move": "amnesia",
+      "triggers": false
+    }
+  ],
+  "requirements": [
+    "Native turn applies Confuse Ray before capture",
+    "Only equipped active berry cures confusion and consumes one",
+    "Absent or reserve control remains confused without consumption",
+    "Check SaveV2, owner publication, duplicate settlement, restore",
+    "No field use or native engine changes"
+  ]
+}
