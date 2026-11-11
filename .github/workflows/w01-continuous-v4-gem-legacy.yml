@@ -1,0 +1,50 @@
+name: W01 V4 stage V1 legacy consumed gem migration
+on:
+  push:
+    branches:
+      - codex/calvo-ia6-staging-20261111-w01-held
+    paths:
+      - '.github/workflows/w01-continuous-v4-gem-legacy.yml'
+      - 'tests/gameplay/w01_continuous_v4_gem_legacy.gd'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  gem_legacy_v1:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: chickensoft-games/setup-godot@v2.4.1
+        with:
+          version: 4.7.0
+          use-dotnet: false
+          include-templates: false
+      - name: Restore canonical resources
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tools/distribution/restore_resources.py
+          python -B tools/distribution/restore_resources.py --check
+          mkdir -p data/reports
+          cp ci/fixtures/pokeapi_reports/forms_policy_report.json data/reports/forms_policy_report.json
+          cp ci/fixtures/pokeapi_reports/unsupported_mechanics.json data/reports/unsupported_mechanics.json
+          cp ci/fixtures/pokeapi_reports/import_summary.json data/reports/import_summary.json
+          godot --headless --path . --import 2>&1 | tee w01-v4-gem-legacy-import.log
+          if grep -E 'SCRIPT ERROR|Parse Error' w01-v4-gem-legacy-import.log; then exit 1; fi
+      - name: Legacy V1 spent gem, transactional inventory and disk SaveV2
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 180s godot --headless --path . --script res://tests/gameplay/w01_continuous_v4_gem_legacy.gd 2>&1 | tee w01-v4-gem-legacy-run.log
+          grep -E '^W01_V4_GEM_LEGACY PASS checks=[1-9][0-9]* errors=0$' w01-v4-gem-legacy-run.log
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: w01-v4-gem-legacy-${{ github.run_id }}
+          retention-days: 7
+          if-no-files-found: ignore
+          path: w01-v4-gem-legacy-*.log
