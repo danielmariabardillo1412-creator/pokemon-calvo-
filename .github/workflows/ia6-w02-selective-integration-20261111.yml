@@ -1,0 +1,165 @@
+name: IA6 W02 selective integration - growth mochi evolution native gates
+on:
+  push:
+    branches:
+      - codex/calvo-ia6-w02-integration-20261111
+    paths:
+      - '.github/workflows/ia6-w02-selective-integration-20261111.yml'
+      - 'tests/gameplay/ia6_w02_effective_nature_integration_20261111.gd'
+      - 'modules/inventory/field_growth_effects.gd'
+      - 'modules/inventory/field_mochi_effects.gd'
+      - 'modules/creatures/progression/evolution_system.gd'
+      - 'tests/gameplay/ia6_integration_mint_rope_20261109.gd'
+      - 'modules/creatures/domain/creature_instance.gd'
+      - 'modules/inventory/field_item_service.gd'
+      - 'modules/inventory/field_mint_effects.gd'
+      - 'modules/overworld/escape_rope_demo_pilot.gd'
+      - 'modules/overworld/field_world_item_transaction.gd'
+      - 'modules/overworld/field_repel_step_effect.gd'
+      - 'scenes/visual/field_item_bag.gd'
+      - 'modules/battle/backends/showdown/native_engine.cjs'
+      - 'tests/tools/repro_w01_camp005_b06_transform.cjs'
+      - 'scenes/visual/field_machine_book_panel.gd'
+      - 'tests/gameplay/parallel_items_w05_book_ui_pilot_20261109.gd'
+      - 'tests/gameplay/ia6_books_bag_20261109.gd'
+      - 'tests/gameplay/ia6_mint_field_native_save_20261109.gd'
+      - 'modules/save/field_native_save.gd'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: ia6-mint-rope-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: chickensoft-games/setup-godot@v2.4.1
+        with:
+          version: 4.7.0
+          use-dotnet: false
+          include-templates: false
+      - name: Preparar recursos canonicos y compilar scripts Godot
+        shell: bash
+        run: |
+          set -euo pipefail
+          godot --version | grep -E '^4[.]7([.-]|$)'
+          python -B tools/distribution/restore_resources.py
+          python -B tools/distribution/restore_resources.py --check
+          mkdir -p data/reports
+          cp ci/fixtures/pokeapi_reports/forms_policy_report.json data/reports/forms_policy_report.json
+          cp ci/fixtures/pokeapi_reports/unsupported_mechanics.json data/reports/unsupported_mechanics.json
+          cp ci/fixtures/pokeapi_reports/import_summary.json data/reports/import_summary.json
+          godot --headless --path . --import 2>&1 | tee ia6-import.log
+          if grep -E 'SCRIPT ERROR|Parse Error' ia6-import.log; then exit 1; fi
+          echo "POKEMON_CALVO_NODE=$(command -v node)" >> "$GITHUB_ENV"
+          python -B tools/battle_reference/run.py --install --limit 1 2>&1 | tee ia6-showdown-setup.log
+      - name: Guardas nativas W01 Transform y transacciones existentes
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p .godot/showdown_backend_checks
+          node tools/showdown_engine_probe/transaction_tests.cjs 2>&1 | tee ia6-showdown-transactions.log
+          grep -E '^SHOWDOWN_TRANSACTIONS PASS 10$' ia6-showdown-transactions.log
+          node tests/tools/repro_w01_camp005_b06_transform.cjs 2>&1 | tee ia6-transform-native.log
+          grep -E '^W01_B06_NATIVE_REPRO PASS cases=3 snapshots=3 switches=3$' ia6-transform-native.log
+      - name: Puerta W02 integrada nativa mint mochi evolution growth SaveV2
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 900s godot --headless --path . --script res://tests/gameplay/ia6_w02_effective_nature_integration_20261111.gd 2>&1 | tee ia6-w02-selective-native.log
+          if grep -E 'SCRIPT ERROR|Parse Error|IA6_W02_SEAMS FAIL' ia6-w02-selective-native.log; then exit 1; fi
+          grep -E '^IA6_W02_SEAMS PASS checks=[1-9][0-9]* features=mint,mochi,evolution,growth,savev2$' ia6-w02-selective-native.log
+      - name: Smoke IA6 conjunto menta / Cuerda Huida / SaveV2
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 900s godot --headless --path . --script res://tests/gameplay/ia6_integration_mint_rope_20261109.gd 2>&1 | tee ia6-crossworker.log
+          grep -E '^IA6_INTEGRATION PASS checks=[1-9][0-9]* features=mint_effective_nature,escape_rope_bag_savev2$' ia6-crossworker.log
+      - name: SaveV2 nativo real despues de menta desde mochila
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 900s godot --headless --path . --script res://tests/gameplay/ia6_mint_field_native_save_20261109.gd 2>&1 | tee ia6-mint-field-save.log
+          grep -E '^IA6_MINT_FIELD_SAVE PASS checks=[1-9][0-9]* features=real_bag,original_nature,effective_nature,savev2$' ia6-mint-field-save.log
+      - name: Regresion panel W05 aislado y mochila real IA6
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 900s godot --headless --path . --script res://tests/gameplay/parallel_items_w05_book_ui_pilot_20261109.gd 2>&1 | tee ia6-w05-panel.log
+          grep -E '^W05_BOOK_UI_PILOT_20261109_GODOT PASS checks=[1-9][0-9]*$' ia6-w05-panel.log
+          timeout 900s godot --headless --path . --script res://tests/gameplay/ia6_books_bag_20261109.gd 2>&1 | tee ia6-books-bag.log
+          grep -E '^IA6_BOOK_BAG PASS checks=[1-9][0-9]* features=real_bag,w05_panel,one_teach,savev2$' ia6-books-bag.log
+      - name: Regresion de progresion y equipamiento V18
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 900s godot --headless --path . --script res://tests/gameplay/progression_items_v18.gd 2>&1 | tee ia6-progression-v18.log
+          if grep -E '^PROGRESSION_V18.*FAIL|SCRIPT ERROR|Parse Error' ia6-progression-v18.log; then exit 1; fi
+      - name: Preparar oraculos originales de conexiones sin alterar codigo ni catalogo
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p .godot/item_audit_v1 .godot/item_connections_v1
+          cp modules/inventory/item_connections_v1.json /tmp/ia6-item-profile-original.json
+          node tools/item_audit/native_inventory.cjs 2>&1 | tee ia6-item-native-inventory.log
+          test -s .godot/item_audit_v1/native_inventory.json
+          python -B tools/item_audit/prepare_connections_v1.py 2>&1 | tee ia6-item-prepare.log
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          import shutil
+          original=Path('/tmp/ia6-item-profile-original.json')
+          current=Path('modules/inventory/item_connections_v1.json')
+          previous=json.loads(original.read_text(encoding='utf-8'))
+          generated=json.loads(current.read_text(encoding='utf-8'))
+          changed=[key for key in sorted(set(previous)|set(generated)) if previous.get(key)!=generated.get(key)]
+          functional=[key for key in changed if key != 'holdable_source']
+          if functional:
+              raise SystemExit('IA6_CONNECTION_PROFILE_FUNCTIONAL_DRIFT ' + ', '.join(functional))
+          if 'holdable_source' in changed:
+              print('IA6_CONNECTION_PROVENANCE_DRIFT holdable_source (metadata only; versioned file retained)')
+          shutil.copyfile(original,current)
+          assert current.read_bytes()==original.read_bytes()
+          print('IA6_CONNECTION_PROFILE_GAMEPLAY_MATCH; original versioned bytes restored')
+          PY
+          test -s .godot/item_connections_v1/source_machine_rows.json
+          test -s .godot/item_connections_v1/machine_fixtures.json
+          timeout 180s godot --headless --path . --script res://tests/gameplay/item_inventory_export.gd 2>&1 | tee ia6-item-eligibility.log
+          grep -E '^ITEM_GODOT_INVENTORY items=[1-9][0-9]*' ia6-item-eligibility.log
+          test -s .godot/item_audit_v1/godot_inventory.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          for p in (
+              '.godot/item_audit_v1/native_inventory.json',
+              '.godot/item_audit_v1/godot_inventory.json',
+              '.godot/item_connections_v1/source_machine_rows.json',
+              '.godot/item_connections_v1/machine_fixtures.json',
+          ):
+              obj=json.loads(Path(p).read_text(encoding='utf-8'))
+              assert obj, p
+              print('IA6_CONNECTION_FIXTURE_READY', p)
+          PY
+      - name: Regresion conexiones de objetos/bolsa
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 900s godot --headless --path . --script res://tests/gameplay/item_connections_test_runner.gd 2>&1 | tee ia6-item-connections.log
+          if grep -E '^ITEM_CONNECTIONS.*FAIL|SCRIPT ERROR|Parse Error' ia6-item-connections.log; then exit 1; fi
+      - name: Conservar recibos reales
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ia6-integracion-${{ github.run_id }}
+          retention-days: 7
+          if-no-files-found: ignore
+          path: ia6-*.log
