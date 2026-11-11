@@ -26,6 +26,7 @@ Este cuaderno recoge efectos, técnicas, referencias y posibles mejoras para la 
 | `ART-REF-005` | Referencia ISO-CORE / JohnBrx: terreno con relieve y representación 2D | REFERENCIA TÉCNICA / VERIFICADA PARCIALMENTE | Alta |
 | `ART-REF-006` | Referencia Pokémon Luminescent Platinum (mod BDSP) | REFERENCIA VISUAL, NO PRUEBA DE MAPA 2D | Media |
 | `ART-FX-TRAIL-007` | Rastros y huellas 2D reutilizables para nieve, barro, arena y otras superficies | APARCADA / INVESTIGACIÓN | Alta en zonas de terreno especial |
+| `ART-TEX-NOISE-008` | Ruido Perlin procedural reutilizable: agua, humo, niebla, suciedad, terreno y lava | APARCADA / TÉCNICA DOCUMENTADA | Alta, tecnología transversal |
 
 ---
 
@@ -247,7 +248,63 @@ No limitar la idea a nieve: crear **un sistema reutilizable basado en el tipo de
 
 ---
 
+## ART-TEX-NOISE-008 — Ruido Perlin como recurso transversal de arte
+
+- **Estado:** APARCADA / REFERENCIA TÉCNICA DOCUMENTADA. No encargar implementación ahora.
+- **Fuente exacta:** Pere Gamedev, «¡TODOS LOS VIDEOJUEGOS UTILIZAN ESTA TEXTURA Y NO TE HAS ENTERADO!» (10-02-2026, duración aproximada 48 s): https://www.youtube.com/watch?v=wIR2ryONbcU
+- **Evidencia:** vídeo localizado en la pestaña del navegador y **transcripción completa recuperada** el 11-11-2026; descripción confirma que se trata de `Perlin Noise`.
+- **Corrección de subtítulo automático:** donde aparece «Ken Perry» debe leerse **Ken Perlin**, autor de la técnica original; donde dice «solas» se entiende «olas».
+- **Precisión:** «todos los videojuegos» es una exageración del título: **no** demostrar universalidad, ni que un solo patrón sirva para todos los materiales sin adaptación.
+
+### Cómo funciona, conforme a la explicación
+
+1. No es una foto o textura pintada: es un **campo de valores calculado matemáticamente**. Una cuadrícula contiene direcciones/gradientes pseudorrandom en sus puntos.
+2. Para cada posición se combinan las contribuciones de gradientes vecinos mediante interpolación suave, dando transiciones orgánicas sin el aspecto «sal y pimienta» de ruido blanco.
+3. Cambiar la **escala/frecuencia** altera el tamaño de las manchas; cambiar intensidad afecta al contraste o a cuánto modifica un material.
+4. **Superponer varias octavas** con distintas frecuencias y amplitudes permite detalle grande y pequeño (ruido fractal).
+5. **Animar** coordenadas/tiempo —desplazar la muestra, distorsionar UV, variar otra dimensión del ruido o combinar capas— produce variaciones que pueden sugerir corriente, viento o combustión. El ruido por sí solo **no simula agua, humo ni física de fluidos**.
+
+### Reutilizaciones propuestas para Pokémon Calvo
+
+| Material/efecto | Función del ruido | Otras piezas necesarias |
+|---|---|---|
+| **Agua**: ríos, lagos, charcos | Distorsionar coordenadas y animar patrones de brillo/ondas suaves | Paleta de agua, borde de costa, espuma, transparencias y reflejos estilizados |
+| **Lava** (idea del usuario; no se afirma mencionada literalmente en la transcripción) | Umbral/máscara entre roca oscura y zonas calientes; deformación animada | Paleta cálida, resplandor moderado, iluminación local si procede |
+| **Humo y polvo** | Máscara de opacidad irregular y animación ascendente | Partículas, disolución, orientación y transparencia |
+| **Niebla** | Densidad irregular y movimiento suave; posible fuente para textura 2D | Interacción jugador requiere otro sistema; **ART-FX-FOG-001** continúa siendo técnica distinta |
+| **Suciedad, desgaste y manchas de barro** | Máscaras para intercalar colores/materiales sin repetición regular | Sprites/texturas propias; **ART-FX-TRAIL-007** dibuja huellas mediante base/profundidad/borde y partículas, **no** se sustituye con Perlin |
+| **Rocas, tierra, césped y terreno** | Distribución de variaciones, manchas y detalles ambientales | Tiles artísticos, coherencia de biomas y colisiones separadas |
+| **Nubes / fondos** | Siluetas y variaciones de densidad, movimiento | Colores, capas y profundidad visual |
+
+**Relación con ART-WORLD-004 (mapas 2.5D):** trabajar sobre shaders, máscaras y tiles del mapa 2D; compatible en principio con personajes 3D renderizados sobre él, siempre que la iluminación y la perspectiva queden coherentes. No exige modelar el mundo entero en 3D.
+
+### Cómo implementarlo en Godot 4.x, más adelante
+
+- **Ruta base recomendada para probar:** recurso `FastNoiseLite` configurado como ruido Perlin + `NoiseTexture2D` para entregar al material/shader. `FastNoiseLite` también incorpora otros algoritmos; **seleccionar `TYPE_PERLIN` si se quiere probar exactamente Perlin**, no dar por hecho que es el valor predeterminado.
+- Opcionalmente, shader `canvas_item` para agua/lava/humo 2D que muestrea textura de ruido y altera colores, alpha o UV. El movimiento y el mosaico seamless deben probarse.
+- **Dos opciones de coste distintas:** (A) generar la textura una vez/precalcular para materiales que no cambian; (B) evaluar ruido o coordendas animadas por frame en GPU para superficies en movimiento. «Procedural» no significa necesariamente calcularlo de cero cada fotograma.
+- Limitar cantidad de capas/octavas y resolución; reutilizar recursos entre mapas. Medir uso real de GPU/VRAM y *overdraw*.
+
+**Documentación de referencia fiable:**
+- `FastNoiseLite` Godot 4.x: https://docs.godotengine.org/es/4.x/classes/class_fastnoiselite.html
+- `NoiseTexture2D` Godot 4.x: https://docs.godotengine.org/es/4.x/classes/class_noisetexture2d.html
+- Ejemplo Godot de ruido como mapa de alturas en shader 3D: https://docs.godotengine.org/en/stable/tutorials/shaders/your_first_shader/your_first_3d_shader.html
+
+### Prototipo de la futura fase artística (NO ejecutar ahora)
+
+1. Sala 2D independiente con 3 superficies: pequeño lago, lava estilizada y zona de niebla/humo. Mostrar control sin ruido, variante con ruido fijo y variante animada.
+2. Mantener estilo artístico de Pokémon Calvo (no perseguir realismo a costa de legibilidad); comparar frecuencias, 2/4 octavas como ejemplos, escala de mapa y paletas.
+3. Probar humo/niebla con alpha irregular, y agua/lava con desplazamiento UV controlado; registrar si aparecen patrones que se repiten, parpadeos o mosaicos.
+4. Medir FPS, GPU/CPU, VRAM y memoria de texturas en el hardware objetivo; usar mapa pequeño y varias áreas antes de extender el efecto.
+5. Si la calidad no compensa, usar imágenes prerenderizadas o animación de sprites; no imponer ruido procedural para todo.
+
+**Dependencias:** arquitectura definitiva de mapas y dirección artística. **Prohibiciones actuales:** no tocar `main`, V28, PR118, SaveV2, combate ni ramas IA1–IA5; no alterar niebla o huellas ya documentadas.
+
+---
+
 ## Registro de cambios
+
+- **2026-11-11:** ART-TEX-NOISE-008 creada tras recuperar la transcripción del vídeo sobre Perlin Noise; usos transversales de agua, lava, humo, niebla, suciedad y terreno. Sin desarrollo actual.
 
 - **2026-11-11 — CORRECCIÓN ART-FX-TRAIL-007:** recuperada transcripción completa del Short; el método descrito es trail de sprites dividido en base/profundidad/borde, emitidos por capas mediante partículas con variantes artísticas. Se sustituye propuesta inicial de máscara como primera opción; máscara queda solo como alternativa no atribuible al vídeo.
 
