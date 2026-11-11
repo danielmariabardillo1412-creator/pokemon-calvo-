@@ -23,6 +23,9 @@ on:
       - 'tests/tools/test_parallel_items_w05_book_ui_autorun_v5.py'
       - 'tests/tools/test_parallel_items_w05_continuous_v2.py'
       - 'tests/gameplay/parallel_items_w05_continuous_v2.gd'
+      - 'tests/tools/test_parallel_items_w05_continuous_v3.py'
+      - 'tests/gameplay/parallel_items_w05_continuous_v3.gd'
+      - 'scenes/visual/field_item_bag.gd'
       - 'tests/gameplay/parallel_items_w05_export_pck_probe.gd'
       - 'tests/gameplay/parallel_items_w05_export_fallback_probe.gd'
       - 'export_presets.cfg'
@@ -196,6 +199,15 @@ jobs:
           grep -E '^W05_V2_CONTRACT PASS books=229 source_es=229 teach_entrypoints=1 historical_regressions=preserved real_mount=(pending_ia6|present_unverified)$' w05-continuous-v2-contract.log
           timeout 900s godot --headless --path . --script res://tests/gameplay/parallel_items_w05_continuous_v2.gd 2>&1 | tee w05-continuous-v2-godot.log
           grep -E '^W05_V2_CONSUMER_GODOT PASS live_service=1 real_panel=1 accepted=1 duplicate_spend=0 storage_rejection=1 locked_rollback=1 savev2=1 actual_bag=NOT_MOUNTED w03_coexistence=IA6_PENDING checks=[1-9][0-9]*$' w05-continuous-v2-godot.log
+      - name: CONTINUOUS V3 - Actual FieldItemBag mounted MT panel regression
+        if: steps.scope.outputs.blocks == '10'
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tests/tools/test_parallel_items_w05_continuous_v3.py 2>&1 | tee w05-continuous-v3-structure.log
+          grep -E '^W05_V3_BAG_STRUCTURAL PASS mount=1 service_shared=1 callback=1 item_use_nonmachine_preserved=1$' w05-continuous-v3-structure.log
+          timeout 900s godot --headless --path . --script res://tests/gameplay/parallel_items_w05_continuous_v3.gd 2>&1 | tee w05-continuous-v3-native.log
+          grep -E '^W05_V3_NATIVE_BAG_GODOT PASS slots=4 real_bag=1 owner=1 spent_once=1 double_spend=0 storage=1 stale=1 lock=1 savev2=1 signals=1 checks=[1-9][0-9]*$' w05-continuous-v3-native.log
       - name: Conservar evidencia 7 dias
         if: always()
         uses: actions/upload-artifact@v4
@@ -206,6 +218,7 @@ jobs:
           path: |
             camp006-*.log
             w05-continuous-v2-*.log
+            w05-continuous-v3-*.log
 
   v5-export-audit:
     name: W05 TANDA05 - Windows PCK/runtime isolation
