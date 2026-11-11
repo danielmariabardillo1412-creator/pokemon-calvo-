@@ -1,3 +1,11 @@
+# IA6 — RELEVO DIRECTO 12-11-2026 · W04 · PRÓXIMA p
+
+**Esta rama histórica ya está cerrada y los relevos V3/V4/V5 previos que se leen más abajo son HISTÓRICOS Y ESTÁN SUPERADOS.** IA6 ha entregado una nueva misión funcional en rama exclusiva `codex/calvo-items-20261112-w04-evolution-consumer-v6`.
+
+**PRÓXIMA `p`:** guardar/publicar cambios locales pendientes de esta rama si los hubiera; después cambiar directamente a `codex/calvo-items-20261112-w04-evolution-consumer-v6`, abrir allí `docs/coordination/items_parallel_v1/IA6_AUTORUN.md` y `docs/coordination/items_parallel_v1/CONTINUOUS_V6/STATE_W04.md`, iniciar fase A y seguir A→B→C. No repetir bloques anteriores ni pedir otra autorización por cada diez. La rama antigua NO se modifica en código, IA6 oficial/main/V28/PR118 son solo lectura. Las CI anteriores no acreditan la misión nueva.
+
+---
+
 # IA6 — W04 · SALTO DIRECTO A NUEVA MISIÓN V5 (2026-11-11)
 
 La V3 de esta rama histórica y la V4 de staging `codex/calvo-ia6-staging-20261111-w04-evolution` ya terminaron. **No repetir ni V3 ni V4.** La entrega V4 está pendiente de integración central por IA6.
