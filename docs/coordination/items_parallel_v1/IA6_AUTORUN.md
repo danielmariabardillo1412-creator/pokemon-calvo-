@@ -1,3 +1,11 @@
+# IA6 — RELEVO DIRECTO 12-11-2026 · W03 · PRÓXIMA p
+
+**Esta rama histórica ya está cerrada y los relevos V3/V4/V5 previos que se leen más abajo son HISTÓRICOS Y ESTÁN SUPERADOS.** IA6 ha entregado una nueva misión funcional en rama exclusiva `codex/calvo-items-20261112-w03-dusk-cave-v6`.
+
+**PRÓXIMA `p`:** guardar/publicar cambios locales pendientes de esta rama si los hubiera; después cambiar directamente a `codex/calvo-items-20261112-w03-dusk-cave-v6`, abrir allí `docs/coordination/items_parallel_v1/IA6_AUTORUN.md` y `docs/coordination/items_parallel_v1/CONTINUOUS_V6/STATE_W03.md`, iniciar fase A y seguir A→B→C. No repetir bloques anteriores ni pedir otra autorización por cada diez. La rama antigua NO se modifica en código, IA6 oficial/main/V28/PR118 son solo lectura. Las CI anteriores no acreditan la misión nueva.
+
+---
+
 # IA6 — RELEVO W03 V5 ACTIVO · 11-11-2026 · LEER PRIMERO
 
 **NO REPETIR CAMPAÑAS V3/V4 YA CERTIFICADAS.** La captura native/legacy V4 W03 está cerrada y certificada con CI #43068968046 (SHA funcional `5a82da2a9dd1a868c3f8af9d73551fe16571adea`). Los repelentes siguen pendientes. IA6 ha creado **rama NUEVA de trabajo autorizada** `codex/calvo-items-20261111-w03-repel-staging-v5`, sin alterar esta rama histórica.
