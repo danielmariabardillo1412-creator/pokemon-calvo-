@@ -8,6 +8,7 @@ on:
       - 'modules/inventory/field_item_service.gd'
       - 'tests/gameplay/w04_continuous_v3_red_destinations.gd'
       - 'tests/gameplay/w04_continuous_v3_real_evolution.gd'
+      - 'tests/gameplay/w04_autorun_v5_regional_evolution.gd'
       - 'modules/creatures/progression/regional_item_evolution_contract_w04_v2.gd'
   workflow_dispatch:
 permissions:
