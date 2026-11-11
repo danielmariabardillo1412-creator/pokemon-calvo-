@@ -1,0 +1,51 @@
+name: W01 post-gate IA6 policy exclusion integrity
+on:
+  push:
+    branches:
+      - codex/calvo-items-20261110-w01-gems-autobatch01
+    paths:
+      - '.github/workflows/w01-continuous-v2-policy-postgate.yml'
+      - 'tests/tools/test_w01_continuous_v2_policy_postgate.py'
+      - 'config/item_selection_v1.json'
+      - 'tests/gameplay/item_selection_policy_test_runner.gd'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  ia6_policy_guard:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: chickensoft-games/setup-godot@v2.4.1
+        with:
+          version: 4.7.0
+          use-dotnet: false
+          include-templates: false
+      - name: Verify W01 scope unchanged by IA6 policy
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tests/tools/test_w01_continuous_v2_policy_postgate.py | tee w01-policy-python.log
+          grep -F 'W01_POLICY_POSTGATE_PY PASS excluded=dynamax_candy no_scope_expansion=1 rows=36' w01-policy-python.log
+      - name: Restore resources and run actual Godot selection policy
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tools/distribution/restore_resources.py
+          python -B tools/distribution/restore_resources.py --check
+          mkdir -p .godot/item_audit_v1
+          godot --headless --path . --import 2>&1 | tee w01-policy-import.log
+          if grep -E 'SCRIPT ERROR|Parse Error' w01-policy-import.log; then exit 1; fi
+          timeout 180s godot --headless --path . --script res://tests/gameplay/item_selection_policy_test_runner.gd 2>&1 | tee w01-policy-godot.log
+          grep -E '^ITEM_SELECTION_POLICY PASS checks=[1-9][0-9]* excluded=45$' w01-policy-godot.log
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: w01-policy-postgate-${{ github.run_id }}
+          path: w01-policy-*.log
+          if-no-files-found: ignore
+          retention-days: 7
