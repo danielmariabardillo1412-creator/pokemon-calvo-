@@ -45,8 +45,18 @@ def main():
     for item in B02[:8]:
         ck(item in registered, f"B02 {item} pre-registered")
     for item in CONTEXTUAL:
-        ck(item not in registered,
-           f"{item}: new registration requires authentic regional producer")
+        if item == "moon_ball":
+            ck(item in registered, "V3 promotes Moon Ball from real EvolutionRecord")
+            ck((CAP / "capture_source_w03_v3.gd").is_file(),
+               "V3 producer is a real source module")
+            ck("moon_stone_context_known" in context
+               and "target_evolves_with_moon_stone" in context,
+               "Moon native context is explicitly validated")
+            ck("moon_context(target.base_species_id(), catalogs)" in native_capture,
+               "Moon producer uses real native target species and catalogs")
+        else:
+            ck(item not in registered,
+               f"{item}: new registration still requires authentic producer")
     ck("var previously_caught_base_species: bool" in context,
        "existing live Repeat source")
     ck("context.previously_caught_base_species = player.has_previously_caught" in native_capture,
@@ -67,10 +77,10 @@ def main():
            "native may not synthesize regional context: " + field)
     ck("var is_wild: bool" in context, "native wild context exists")
     ck("var target_side_id: StringName" in context, "native target side exists")
-    print(f"W03_CONT_V2_SOURCE PASS checked=25 blocked_context=7 partial_zone=2 checks={checks}")
+    print(f"W03_CONT_V2_SOURCE PASS checked=25 blocked_context=6 promoted_v3=1 partial_zone=2 checks={checks}")
     print("W03_CONT_V2_SOURCE_TICKET missing authentic world producers: "
           "dive/fishing-surf; dusk/night-cave; lure/fishing; love/individual-sex; "
-          "moon/evolution-line; heavy/weight-form; beast/ultra-beast; "
+          "heavy/weight-form; beast/ultra-beast; "
           "Safari/Sport zone/contest")
 
 
