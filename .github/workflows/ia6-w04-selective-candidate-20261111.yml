@@ -2,6 +2,8 @@ name: IA6 W04 selective candidate - regional evolution plus W03 W05 coexistence
 on:
   push:
     branches: [codex/calvo-ia6-w04-selective-20261111]
+  pull_request:
+    branches: [codex/calvo-ia6-integration-20261109]
     paths:
       - '.github/workflows/w04-continuous-v4-staging.yml'
       - 'modules/creatures/domain/creature_instance.gd'
