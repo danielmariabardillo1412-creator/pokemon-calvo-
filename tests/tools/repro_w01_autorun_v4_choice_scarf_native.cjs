@@ -44,7 +44,10 @@ function trial(mode){
    assert.equal(cp().state_hash,first.state_hash,'rejected choice must be pure');
   }
   const switchTo=cid=>{
-   const ix=battle.p1.pokemon.findIndex(p=>e.sessions.get(id).identities[p.name]===cid);
+   // Prepare/commit may swap the live native Battle object. Never use the
+   // initial battle reference to resolve an owner's subsequent party slot.
+   const current=e.sessions.get(id);
+   const ix=current.battle.p1.pokemon.findIndex(p=>current.identities[p.name]===cid);
    assert(ix>=0,'canonical bench identity required');return 'switch '+(ix+1);
   };
   const bench=take(switchTo('reserve'));
