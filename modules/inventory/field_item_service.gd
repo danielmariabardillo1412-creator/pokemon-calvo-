@@ -101,13 +101,21 @@ func evolution_options(item_id: StringName, creature_id: StringName) -> Array[St
 	if species == null: return result
 	var regional_routes: Dictionary = preload("res://modules/creatures/progression/regional_item_evolution_contract_w04_v2.gd").ROUTES
 	for record: EvolutionRecord in EvolutionSystem.evolution_candidates(species, {"level": creature.level, "item_id": item_id}, catalogs):
-		if record.trigger != EvolutionSystem.TRIGGER_USE_ITEM or record.item_id != item_id or not content.species_allowed(String(record.species_id)):
+		if record.trigger != EvolutionSystem.TRIGGER_USE_ITEM or record.item_id != item_id:
 			continue
 		if regional_routes.has(creature.species_id):
 			var evidence: Dictionary = preload("res://modules/creatures/progression/regional_item_evolution_contract_w04_v2.gd").inspect(
 				creature, item_id, catalogs, record.species_id)
 			if not evidence.get("ok", false):
 				continue
+			var destination := catalogs.species(record.species_id)
+			if destination == null or not catalogs.variant_allowed_species.has(String(record.species_id)):
+				continue
+			var base_id := String(destination.source_metadata.get("base_species_id", ""))
+			if not content.form_allowed(base_id, String(evidence.get("target_form_id", ""))):
+				continue
+		elif not content.species_allowed(String(record.species_id)):
+			continue
 		result.append(record.species_id)
 	return result
 
