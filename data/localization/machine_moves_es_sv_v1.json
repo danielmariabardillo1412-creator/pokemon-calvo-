@@ -1,0 +1,1617 @@
+{
+  "schema_version": 1,
+  "locale": "es",
+  "version": "scarlet-violet",
+  "profile_id": "calvo_item_connections_v1",
+  "source": "repo-local PokeAPI move names language.name=es",
+  "source_index_path": "data/api/v2/move/index.json",
+  "source_index_sha": "5624183ddfa67b4887cd29df1b3627135a962c27",
+  "active_books": 229,
+  "verified_es": 229,
+  "missing_es": 0,
+  "entries": {
+    "take_down": {
+      "nombre_es": "Derribo",
+      "source_api_id": 36,
+      "source_path": "data/api/v2/move/36/index.json",
+      "source_blob_sha": "d536966d059f3ab8e49dd73aebb3fb024d275499",
+      "item_id": "tm01"
+    },
+    "charm": {
+      "nombre_es": "Encanto",
+      "source_api_id": 204,
+      "source_path": "data/api/v2/move/204/index.json",
+      "source_blob_sha": "28faa865338e907622d86f0f69395893b20d91c4",
+      "item_id": "tm02"
+    },
+    "fake_tears": {
+      "nombre_es": "Llanto Falso",
+      "source_api_id": 313,
+      "source_path": "data/api/v2/move/313/index.json",
+      "source_blob_sha": "12f09d801c45882102515c37fe7d73862c0f0ab0",
+      "item_id": "tm03"
+    },
+    "agility": {
+      "nombre_es": "Agilidad",
+      "source_api_id": 97,
+      "source_path": "data/api/v2/move/97/index.json",
+      "source_blob_sha": "bad94dc83d54fa0788999e8bc556bb3158fd74e6",
+      "item_id": "tm04"
+    },
+    "mud_slap": {
+      "nombre_es": "Bofetón Lodo",
+      "source_api_id": 189,
+      "source_path": "data/api/v2/move/189/index.json",
+      "source_blob_sha": "741c3d32fafca0223fdb1b8d83ce8ef5372f96ef",
+      "item_id": "tm05"
+    },
+    "scary_face": {
+      "nombre_es": "Cara Susto",
+      "source_api_id": 184,
+      "source_path": "data/api/v2/move/184/index.json",
+      "source_blob_sha": "2606a60ab4ad706349cc57213f4239ed6b6ed35c",
+      "item_id": "tm06"
+    },
+    "protect": {
+      "nombre_es": "Protección",
+      "source_api_id": 182,
+      "source_path": "data/api/v2/move/182/index.json",
+      "source_blob_sha": "650bbe52495829b42799a9f6457933824a67eedd",
+      "item_id": "tm07"
+    },
+    "fire_fang": {
+      "nombre_es": "Colmillo Ígneo",
+      "source_api_id": 424,
+      "source_path": "data/api/v2/move/424/index.json",
+      "source_blob_sha": "6898bf59e2a03aded863828545e4b3bd7dc43685",
+      "item_id": "tm08"
+    },
+    "thunder_fang": {
+      "nombre_es": "Colmillo Rayo",
+      "source_api_id": 422,
+      "source_path": "data/api/v2/move/422/index.json",
+      "source_blob_sha": "9d9b9a681c415e5217eb87da6cd8854802deaf67",
+      "item_id": "tm09"
+    },
+    "ice_fang": {
+      "nombre_es": "Colmillo Hielo",
+      "source_api_id": 423,
+      "source_path": "data/api/v2/move/423/index.json",
+      "source_blob_sha": "54a51077044441a21622752717a32e018c665b3b",
+      "item_id": "tm10"
+    },
+    "water_pulse": {
+      "nombre_es": "Hidropulso",
+      "source_api_id": 352,
+      "source_path": "data/api/v2/move/352/index.json",
+      "source_blob_sha": "3828144db851dc8198cb1ee83d6f2fabdac8ead9",
+      "item_id": "tm11"
+    },
+    "low_kick": {
+      "nombre_es": "Patada Baja",
+      "source_api_id": 67,
+      "source_path": "data/api/v2/move/67/index.json",
+      "source_blob_sha": "feafe8d5de8d58320d7daa1a0dc16c627662b121",
+      "item_id": "tm12"
+    },
+    "acid_spray": {
+      "nombre_es": "Bomba Ácida",
+      "source_api_id": 491,
+      "source_path": "data/api/v2/move/491/index.json",
+      "source_blob_sha": "e7329eb34c40e07508988ebf9b145b596adb077a",
+      "item_id": "tm13"
+    },
+    "acrobatics": {
+      "nombre_es": "Acróbata",
+      "source_api_id": 512,
+      "source_path": "data/api/v2/move/512/index.json",
+      "source_blob_sha": "d6ad2c84321918000517109236ac2a849a3f9627",
+      "item_id": "tm14"
+    },
+    "struggle_bug": {
+      "nombre_es": "Estoicismo",
+      "source_api_id": 522,
+      "source_path": "data/api/v2/move/522/index.json",
+      "source_blob_sha": "164652c72a6b55fd955210c0243607a9ead179a7",
+      "item_id": "tm15"
+    },
+    "psybeam": {
+      "nombre_es": "Psicorrayo",
+      "source_api_id": 60,
+      "source_path": "data/api/v2/move/60/index.json",
+      "source_blob_sha": "e0038f4c93bcd13c6867a1ec4127c4fa91406dfe",
+      "item_id": "tm16"
+    },
+    "confuse_ray": {
+      "nombre_es": "Rayo Confuso",
+      "source_api_id": 109,
+      "source_path": "data/api/v2/move/109/index.json",
+      "source_blob_sha": "d4ffb792988cd3fcfc2dbdb2babeec952fefced1",
+      "item_id": "tm17"
+    },
+    "thief": {
+      "nombre_es": "Ladrón",
+      "source_api_id": 168,
+      "source_path": "data/api/v2/move/168/index.json",
+      "source_blob_sha": "a6b6bfc6e80437bfe4792b4598f8703d26ec1d16",
+      "item_id": "tm18"
+    },
+    "disarming_voice": {
+      "nombre_es": "Voz Cautivadora",
+      "source_api_id": 574,
+      "source_path": "data/api/v2/move/574/index.json",
+      "source_blob_sha": "c74a923e63332b29849cc3a95feb0fe14512bd8f",
+      "item_id": "tm19"
+    },
+    "trailblaze": {
+      "nombre_es": "Abrecaminos",
+      "source_api_id": 885,
+      "source_path": "data/api/v2/move/885/index.json",
+      "source_blob_sha": "7f2e72f592514b9376a9161c9512b6bb814f0593",
+      "item_id": "tm20"
+    },
+    "pounce": {
+      "nombre_es": "Brinco",
+      "source_api_id": 884,
+      "source_path": "data/api/v2/move/884/index.json",
+      "source_blob_sha": "68244372d1085a457dea05f806a5a2be3b1f811b",
+      "item_id": "tm21"
+    },
+    "chilling_water": {
+      "nombre_es": "Agua Fría",
+      "source_api_id": 886,
+      "source_path": "data/api/v2/move/886/index.json",
+      "source_blob_sha": "3bac8ed43e28cd61f8340d0f5aefb4f0ae9eff42",
+      "item_id": "tm22"
+    },
+    "charge_beam": {
+      "nombre_es": "Rayo Carga",
+      "source_api_id": 451,
+      "source_path": "data/api/v2/move/451/index.json",
+      "source_blob_sha": "a189ee6e6eb6a38727cad882065b5d9db2cd4983",
+      "item_id": "tm23"
+    },
+    "fire_spin": {
+      "nombre_es": "Giro Fuego",
+      "source_api_id": 83,
+      "source_path": "data/api/v2/move/83/index.json",
+      "source_blob_sha": "797fe2dc8e8b0fc61401867d8741b654a0de85f3",
+      "item_id": "tm24"
+    },
+    "facade": {
+      "nombre_es": "Fachada",
+      "source_api_id": 263,
+      "source_path": "data/api/v2/move/263/index.json",
+      "source_blob_sha": "106c4d48eaf2d6b2b094677d49e693c01d12e6c8",
+      "item_id": "tm25"
+    },
+    "poison_tail": {
+      "nombre_es": "Cola Veneno",
+      "source_api_id": 342,
+      "source_path": "data/api/v2/move/342/index.json",
+      "source_blob_sha": "e77b8f023573fc917611396deb92604b9caf7740",
+      "item_id": "tm26"
+    },
+    "aerial_ace": {
+      "nombre_es": "Golpe Aéreo",
+      "source_api_id": 332,
+      "source_path": "data/api/v2/move/332/index.json",
+      "source_blob_sha": "4e6ea1749a56b0762a5bf94f5b7c113ca4365664",
+      "item_id": "tm27"
+    },
+    "bulldoze": {
+      "nombre_es": "Terratemblor",
+      "source_api_id": 523,
+      "source_path": "data/api/v2/move/523/index.json",
+      "source_blob_sha": "91289ae3bca1525df3761a755d5f0e9cb6502a67",
+      "item_id": "tm28"
+    },
+    "hex": {
+      "nombre_es": "Infortunio",
+      "source_api_id": 506,
+      "source_path": "data/api/v2/move/506/index.json",
+      "source_blob_sha": "7dea93dfa3f5fcf40b86037e609fd00800872c3f",
+      "item_id": "tm29"
+    },
+    "snarl": {
+      "nombre_es": "Alarido",
+      "source_api_id": 555,
+      "source_path": "data/api/v2/move/555/index.json",
+      "source_blob_sha": "728399d4aaf9ce70b0c4198d48d7698af7a5c91b",
+      "item_id": "tm30"
+    },
+    "metal_claw": {
+      "nombre_es": "Garra Metal",
+      "source_api_id": 232,
+      "source_path": "data/api/v2/move/232/index.json",
+      "source_blob_sha": "19081cab60e73be5f3c625a05739ddd3d988b853",
+      "item_id": "tm31"
+    },
+    "swift": {
+      "nombre_es": "Meteoros",
+      "source_api_id": 129,
+      "source_path": "data/api/v2/move/129/index.json",
+      "source_blob_sha": "ae5459189c6390da38473cb91b4768a553ee1acc",
+      "item_id": "tm32"
+    },
+    "magical_leaf": {
+      "nombre_es": "Hoja Mágica",
+      "source_api_id": 345,
+      "source_path": "data/api/v2/move/345/index.json",
+      "source_blob_sha": "5a1fce360c88beee8836bb11a335f2aaf2c0ff2c",
+      "item_id": "tm33"
+    },
+    "icy_wind": {
+      "nombre_es": "Viento Hielo",
+      "source_api_id": 196,
+      "source_path": "data/api/v2/move/196/index.json",
+      "source_blob_sha": "17f60186817075d93dad2d259645947977982c72",
+      "item_id": "tm34"
+    },
+    "mud_shot": {
+      "nombre_es": "Disparo Lodo",
+      "source_api_id": 341,
+      "source_path": "data/api/v2/move/341/index.json",
+      "source_blob_sha": "8f65993659e3d260dbf3905076fac3d65391a256",
+      "item_id": "tm35"
+    },
+    "rock_tomb": {
+      "nombre_es": "Tumba Rocas",
+      "source_api_id": 317,
+      "source_path": "data/api/v2/move/317/index.json",
+      "source_blob_sha": "e1b6942abb89bbc02b9691abbf3a346952813a96",
+      "item_id": "tm36"
+    },
+    "draining_kiss": {
+      "nombre_es": "Beso Drenaje",
+      "source_api_id": 577,
+      "source_path": "data/api/v2/move/577/index.json",
+      "source_blob_sha": "ad3e1dbe2a1182003571c4104ea68028506504f6",
+      "item_id": "tm37"
+    },
+    "flame_charge": {
+      "nombre_es": "Nitrocarga",
+      "source_api_id": 488,
+      "source_path": "data/api/v2/move/488/index.json",
+      "source_blob_sha": "3be4bf5e84b5668ab20b1e410b283318b56e0ca0",
+      "item_id": "tm38"
+    },
+    "low_sweep": {
+      "nombre_es": "Puntapié",
+      "source_api_id": 490,
+      "source_path": "data/api/v2/move/490/index.json",
+      "source_blob_sha": "d6a2d790258a781de806ae2d80569f7796e8ed5a",
+      "item_id": "tm39"
+    },
+    "air_cutter": {
+      "nombre_es": "Aire Afilado",
+      "source_api_id": 314,
+      "source_path": "data/api/v2/move/314/index.json",
+      "source_blob_sha": "6e480299288e94bfb7d91ec20458a2239cdf717f",
+      "item_id": "tm40"
+    },
+    "stored_power": {
+      "nombre_es": "Poder Reserva",
+      "source_api_id": 500,
+      "source_path": "data/api/v2/move/500/index.json",
+      "source_blob_sha": "61e719dbd689979a555955b7ffa4979790a857cd",
+      "item_id": "tm41"
+    },
+    "night_shade": {
+      "nombre_es": "Tinieblas",
+      "source_api_id": 101,
+      "source_path": "data/api/v2/move/101/index.json",
+      "source_blob_sha": "7c87f82b7b6dff45119f93150b4d82ced31776f5",
+      "item_id": "tm42"
+    },
+    "fling": {
+      "nombre_es": "Lanzamiento",
+      "source_api_id": 374,
+      "source_path": "data/api/v2/move/374/index.json",
+      "source_blob_sha": "b5f72976f6b19cf9b23be795a4a1ef5025708abf",
+      "item_id": "tm43"
+    },
+    "dragon_tail": {
+      "nombre_es": "Cola Dragón",
+      "source_api_id": 525,
+      "source_path": "data/api/v2/move/525/index.json",
+      "source_blob_sha": "b419462cc6f4f4faf87f9ba6f6f87448059577f7",
+      "item_id": "tm44"
+    },
+    "venoshock": {
+      "nombre_es": "Carga Tóxica",
+      "source_api_id": 474,
+      "source_path": "data/api/v2/move/474/index.json",
+      "source_blob_sha": "c1e79626b8fef7d1160829225b06a77edeeab9f5",
+      "item_id": "tm45"
+    },
+    "avalanche": {
+      "nombre_es": "Alud",
+      "source_api_id": 419,
+      "source_path": "data/api/v2/move/419/index.json",
+      "source_blob_sha": "ed820cf6c5db7e83db08234d0e52263a5effd29a",
+      "item_id": "tm46"
+    },
+    "endure": {
+      "nombre_es": "Aguante",
+      "source_api_id": 203,
+      "source_path": "data/api/v2/move/203/index.json",
+      "source_blob_sha": "3f713e191a0dbfe0110acae6b38bbae09e6813f9",
+      "item_id": "tm47"
+    },
+    "volt_switch": {
+      "nombre_es": "Voltiocambio",
+      "source_api_id": 521,
+      "source_path": "data/api/v2/move/521/index.json",
+      "source_blob_sha": "8aeabeac4c7a3c6475a901867973d4745b0e0611",
+      "item_id": "tm48"
+    },
+    "sunny_day": {
+      "nombre_es": "Día Soleado",
+      "source_api_id": 241,
+      "source_path": "data/api/v2/move/241/index.json",
+      "source_blob_sha": "078498be60eb86e4624c17752e08c1cc7af5cca2",
+      "item_id": "tm49"
+    },
+    "rain_dance": {
+      "nombre_es": "Danza Lluvia",
+      "source_api_id": 240,
+      "source_path": "data/api/v2/move/240/index.json",
+      "source_blob_sha": "e713bb802f7569c6ca95017d9c7589fa8d8a0134",
+      "item_id": "tm50"
+    },
+    "sandstorm": {
+      "nombre_es": "Tormenta de Arena",
+      "source_api_id": 201,
+      "source_path": "data/api/v2/move/201/index.json",
+      "source_blob_sha": "547a3b751b99cb3a9615ad8a1e95d2f16e49de1a",
+      "item_id": "tm51"
+    },
+    "snowscape": {
+      "nombre_es": "Paisaje Nevado",
+      "source_api_id": 883,
+      "source_path": "data/api/v2/move/883/index.json",
+      "source_blob_sha": "94e4ed7c227cd99b3534837bec83f19e0dc0416b",
+      "item_id": "tm52"
+    },
+    "smart_strike": {
+      "nombre_es": "Cuerno Certero",
+      "source_api_id": 684,
+      "source_path": "data/api/v2/move/684/index.json",
+      "source_blob_sha": "84f96f7328256c59ade5e673119258c717e0efd4",
+      "item_id": "tm53"
+    },
+    "psyshock": {
+      "nombre_es": "Psicocarga",
+      "source_api_id": 473,
+      "source_path": "data/api/v2/move/473/index.json",
+      "source_blob_sha": "0e7985aa7e316438bb32dd9e309e4c2a1e711d49",
+      "item_id": "tm54"
+    },
+    "dig": {
+      "nombre_es": "Excavar",
+      "source_api_id": 91,
+      "source_path": "data/api/v2/move/91/index.json",
+      "source_blob_sha": "1b59f9418b128e9eb570d4921f21f36bf4c0cef7",
+      "item_id": "tm55"
+    },
+    "bullet_seed": {
+      "nombre_es": "Semilladora",
+      "source_api_id": 331,
+      "source_path": "data/api/v2/move/331/index.json",
+      "source_blob_sha": "eb19a914af0a02c4b9edf04fd019d3f4fed06497",
+      "item_id": "tm56"
+    },
+    "false_swipe": {
+      "nombre_es": "Falso Tortazo",
+      "source_api_id": 206,
+      "source_path": "data/api/v2/move/206/index.json",
+      "source_blob_sha": "5e0190afb86dd21552d7a19866620dcb4e1fb138",
+      "item_id": "tm57"
+    },
+    "brick_break": {
+      "nombre_es": "Demolición",
+      "source_api_id": 280,
+      "source_path": "data/api/v2/move/280/index.json",
+      "source_blob_sha": "0578c54bde2fd7e813ae1f89c0be925bf750545f",
+      "item_id": "tm58"
+    },
+    "zen_headbutt": {
+      "nombre_es": "Cabezazo Zen",
+      "source_api_id": 428,
+      "source_path": "data/api/v2/move/428/index.json",
+      "source_blob_sha": "3f4e31a69e2b1a313db5b36a2946c1ed48096ca2",
+      "item_id": "tm59"
+    },
+    "u_turn": {
+      "nombre_es": "Ida y Vuelta",
+      "source_api_id": 369,
+      "source_path": "data/api/v2/move/369/index.json",
+      "source_blob_sha": "02312abecd05e59a61aef0b00e8412cb36870761",
+      "item_id": "tm60"
+    },
+    "shadow_claw": {
+      "nombre_es": "Garra Umbría",
+      "source_api_id": 421,
+      "source_path": "data/api/v2/move/421/index.json",
+      "source_blob_sha": "306314f3b6375420b505776545b36ebcc44d8472",
+      "item_id": "tm61"
+    },
+    "foul_play": {
+      "nombre_es": "Juego Sucio",
+      "source_api_id": 492,
+      "source_path": "data/api/v2/move/492/index.json",
+      "source_blob_sha": "318a2780d57bb147795e3a6a93cb62fd31da3acb",
+      "item_id": "tm62"
+    },
+    "psychic_fangs": {
+      "nombre_es": "Psicocolmillo",
+      "source_api_id": 706,
+      "source_path": "data/api/v2/move/706/index.json",
+      "source_blob_sha": "4f0c33a155019750edac29b09368c6e86994524f",
+      "item_id": "tm63"
+    },
+    "bulk_up": {
+      "nombre_es": "Corpulencia",
+      "source_api_id": 339,
+      "source_path": "data/api/v2/move/339/index.json",
+      "source_blob_sha": "8ff30c4c07fe8a09548d15b8a27627fb1bb5e442",
+      "item_id": "tm64"
+    },
+    "air_slash": {
+      "nombre_es": "Tajo Aéreo",
+      "source_api_id": 403,
+      "source_path": "data/api/v2/move/403/index.json",
+      "source_blob_sha": "87c663c4c9dbc779c7fe6df563969556aee53f75",
+      "item_id": "tm65"
+    },
+    "body_slam": {
+      "nombre_es": "Golpe Cuerpo",
+      "source_api_id": 34,
+      "source_path": "data/api/v2/move/34/index.json",
+      "source_blob_sha": "4c3e8df1c3cba28d64d016a08d926b1ec6c3f3e4",
+      "item_id": "tm66"
+    },
+    "fire_punch": {
+      "nombre_es": "Puño Fuego",
+      "source_api_id": 7,
+      "source_path": "data/api/v2/move/7/index.json",
+      "source_blob_sha": "c05c14e330de86cef41e8d4c84a501c65426f01d",
+      "item_id": "tm67"
+    },
+    "thunder_punch": {
+      "nombre_es": "Puño Trueno",
+      "source_api_id": 9,
+      "source_path": "data/api/v2/move/9/index.json",
+      "source_blob_sha": "b5df137d73f363c3f3d19332f2fd235c46728743",
+      "item_id": "tm68"
+    },
+    "ice_punch": {
+      "nombre_es": "Puño Hielo",
+      "source_api_id": 8,
+      "source_path": "data/api/v2/move/8/index.json",
+      "source_blob_sha": "3ad9eaa454db449118d40c794aab5ad75a3b4373",
+      "item_id": "tm69"
+    },
+    "sleep_talk": {
+      "nombre_es": "Sonámbulo",
+      "source_api_id": 214,
+      "source_path": "data/api/v2/move/214/index.json",
+      "source_blob_sha": "3647ff8516d6688f6de3e193c84eab5a2b081b9b",
+      "item_id": "tm70"
+    },
+    "seed_bomb": {
+      "nombre_es": "Bomba Germen",
+      "source_api_id": 402,
+      "source_path": "data/api/v2/move/402/index.json",
+      "source_blob_sha": "8cc8b1957affb132968dcdb9a63eea0eb8def7d2",
+      "item_id": "tm71"
+    },
+    "electro_ball": {
+      "nombre_es": "Bola Voltio",
+      "source_api_id": 486,
+      "source_path": "data/api/v2/move/486/index.json",
+      "source_blob_sha": "54bd8346137961086dd87c6e5d15d853d46a3a51",
+      "item_id": "tm72"
+    },
+    "drain_punch": {
+      "nombre_es": "Puño Drenaje",
+      "source_api_id": 409,
+      "source_path": "data/api/v2/move/409/index.json",
+      "source_blob_sha": "3897b0b3f528427e9f7bb3b2df06c0b3979a5057",
+      "item_id": "tm73"
+    },
+    "reflect": {
+      "nombre_es": "Reflejo",
+      "source_api_id": 115,
+      "source_path": "data/api/v2/move/115/index.json",
+      "source_blob_sha": "9e108557f496b1ca0e05745f3c0bf9c7bcfe2c15",
+      "item_id": "tm74"
+    },
+    "light_screen": {
+      "nombre_es": "Pantalla de Luz",
+      "source_api_id": 113,
+      "source_path": "data/api/v2/move/113/index.json",
+      "source_blob_sha": "7c8617c03c04752c9e556e5bc23d158ca2d623a6",
+      "item_id": "tm75"
+    },
+    "rock_blast": {
+      "nombre_es": "Pedrada",
+      "source_api_id": 350,
+      "source_path": "data/api/v2/move/350/index.json",
+      "source_blob_sha": "8ab9308ef6033c69deb528840956180d2fd34d1f",
+      "item_id": "tm76"
+    },
+    "waterfall": {
+      "nombre_es": "Cascada",
+      "source_api_id": 127,
+      "source_path": "data/api/v2/move/127/index.json",
+      "source_blob_sha": "499d766ed3a26a857969c31e3ca44e9c75a2d82a",
+      "item_id": "tm77"
+    },
+    "dragon_claw": {
+      "nombre_es": "Garra Dragón",
+      "source_api_id": 337,
+      "source_path": "data/api/v2/move/337/index.json",
+      "source_blob_sha": "1e68e11b25187e47cc7230357bc59605b7f27af8",
+      "item_id": "tm78"
+    },
+    "dazzling_gleam": {
+      "nombre_es": "Brillo Mágico",
+      "source_api_id": 605,
+      "source_path": "data/api/v2/move/605/index.json",
+      "source_blob_sha": "a9a57a635955085afddce7e3fa519a5d099f3e8f",
+      "item_id": "tm79"
+    },
+    "metronome": {
+      "nombre_es": "Metrónomo",
+      "source_api_id": 118,
+      "source_path": "data/api/v2/move/118/index.json",
+      "source_blob_sha": "5b6936b929d21a06d2436838b677b234dc3f6afc",
+      "item_id": "tm80"
+    },
+    "grass_knot": {
+      "nombre_es": "Hierba Lazo",
+      "source_api_id": 447,
+      "source_path": "data/api/v2/move/447/index.json",
+      "source_blob_sha": "b8d450e8b49822f7500450850ad1300049e12176",
+      "item_id": "tm81"
+    },
+    "thunder_wave": {
+      "nombre_es": "Onda Trueno",
+      "source_api_id": 86,
+      "source_path": "data/api/v2/move/86/index.json",
+      "source_blob_sha": "6b1c4d2666d82b3e290f446d72936fa4c9ae9f41",
+      "item_id": "tm82"
+    },
+    "poison_jab": {
+      "nombre_es": "Puya Nociva",
+      "source_api_id": 398,
+      "source_path": "data/api/v2/move/398/index.json",
+      "source_blob_sha": "59fa452e2214a8fe0bde8e315718dee26b87c55f",
+      "item_id": "tm83"
+    },
+    "stomping_tantrum": {
+      "nombre_es": "Pataleta",
+      "source_api_id": 707,
+      "source_path": "data/api/v2/move/707/index.json",
+      "source_blob_sha": "0f7ebd99c91014d97aeddb7ed8ec96e351c39979",
+      "item_id": "tm84"
+    },
+    "rest": {
+      "nombre_es": "Descanso",
+      "source_api_id": 156,
+      "source_path": "data/api/v2/move/156/index.json",
+      "source_blob_sha": "07faf78b3b5307f3c6b4acd0162b49d5483e73cf",
+      "item_id": "tm85"
+    },
+    "rock_slide": {
+      "nombre_es": "Avalancha",
+      "source_api_id": 157,
+      "source_path": "data/api/v2/move/157/index.json",
+      "source_blob_sha": "1af149814d4c3a9dc883c0f890bb48979d93ff1f",
+      "item_id": "tm86"
+    },
+    "taunt": {
+      "nombre_es": "Mofa",
+      "source_api_id": 269,
+      "source_path": "data/api/v2/move/269/index.json",
+      "source_blob_sha": "65f15517df98a53152c2cf58f0e32cb9cb4abda0",
+      "item_id": "tm87"
+    },
+    "swords_dance": {
+      "nombre_es": "Danza Espada",
+      "source_api_id": 14,
+      "source_path": "data/api/v2/move/14/index.json",
+      "source_blob_sha": "9dbdc0278a6c5369861aa8c2c8c08f40760675c4",
+      "item_id": "tm88"
+    },
+    "body_press": {
+      "nombre_es": "Plancha Corporal",
+      "source_api_id": 776,
+      "source_path": "data/api/v2/move/776/index.json",
+      "source_blob_sha": "c0a0476ad94041e09e3aed46eb06d00dfc6409a7",
+      "item_id": "tm89"
+    },
+    "spikes": {
+      "nombre_es": "Púas",
+      "source_api_id": 191,
+      "source_path": "data/api/v2/move/191/index.json",
+      "source_blob_sha": "e9b0e46819dca79374dff60958ba8ae7d1c6f931",
+      "item_id": "tm90"
+    },
+    "toxic_spikes": {
+      "nombre_es": "Púas Tóxicas",
+      "source_api_id": 390,
+      "source_path": "data/api/v2/move/390/index.json",
+      "source_blob_sha": "4b570f5caf7dfa3f76696b6d493726fa4e511234",
+      "item_id": "tm91"
+    },
+    "imprison": {
+      "nombre_es": "Sellar",
+      "source_api_id": 286,
+      "source_path": "data/api/v2/move/286/index.json",
+      "source_blob_sha": "28a2c5bc361b9042216a1517fd091fdf1b6b9c88",
+      "item_id": "tm92"
+    },
+    "flash_cannon": {
+      "nombre_es": "Cañón Resplandor",
+      "source_api_id": 430,
+      "source_path": "data/api/v2/move/430/index.json",
+      "source_blob_sha": "0378f5ee07e0207e59782c766385ae695810e154",
+      "item_id": "tm93"
+    },
+    "dark_pulse": {
+      "nombre_es": "Pulso Umbrío",
+      "source_api_id": 399,
+      "source_path": "data/api/v2/move/399/index.json",
+      "source_blob_sha": "090249ed12e7a4b52e2b3c06f785e9c33f6a29b6",
+      "item_id": "tm94"
+    },
+    "leech_life": {
+      "nombre_es": "Chupavidas",
+      "source_api_id": 141,
+      "source_path": "data/api/v2/move/141/index.json",
+      "source_blob_sha": "651062c69a65473464ea4ed3fa70952369c5112e",
+      "item_id": "tm95"
+    },
+    "eerie_impulse": {
+      "nombre_es": "Onda Anómala",
+      "source_api_id": 598,
+      "source_path": "data/api/v2/move/598/index.json",
+      "source_blob_sha": "f138c0bb2a5fca3502935803780b62b5be0ea588",
+      "item_id": "tm96"
+    },
+    "fly": {
+      "nombre_es": "Vuelo",
+      "source_api_id": 19,
+      "source_path": "data/api/v2/move/19/index.json",
+      "source_blob_sha": "a51fdcfbe63b940254ada79f14d7f507e6b9536d",
+      "item_id": "tm97"
+    },
+    "skill_swap": {
+      "nombre_es": "Intercambio",
+      "source_api_id": 285,
+      "source_path": "data/api/v2/move/285/index.json",
+      "source_blob_sha": "095bd20014d3fa0747719b8c7f4a338a5eee4c04",
+      "item_id": "tm98"
+    },
+    "iron_head": {
+      "nombre_es": "Cabeza de Hierro",
+      "source_api_id": 442,
+      "source_path": "data/api/v2/move/442/index.json",
+      "source_blob_sha": "50756ad0e254bd984927d231b595e2149dd3fa0f",
+      "item_id": "tm99"
+    },
+    "dragon_dance": {
+      "nombre_es": "Danza Dragón",
+      "source_api_id": 349,
+      "source_path": "data/api/v2/move/349/index.json",
+      "source_blob_sha": "10334042d94fc594fd413d9f604c16357213112d",
+      "item_id": "tm100"
+    },
+    "power_gem": {
+      "nombre_es": "Joya de Luz",
+      "source_api_id": 408,
+      "source_path": "data/api/v2/move/408/index.json",
+      "source_blob_sha": "f6a249991e97dfc64ba2774dd8b6223ff2cbcae3",
+      "item_id": "tm101"
+    },
+    "gunk_shot": {
+      "nombre_es": "Lanzamugre",
+      "source_api_id": 441,
+      "source_path": "data/api/v2/move/441/index.json",
+      "source_blob_sha": "5c0164272bdd461cc22782efeaa960f263514706",
+      "item_id": "tm102"
+    },
+    "substitute": {
+      "nombre_es": "Sustituto",
+      "source_api_id": 164,
+      "source_path": "data/api/v2/move/164/index.json",
+      "source_blob_sha": "6f437ae8402c425de515250722c7bc4eb9e885b6",
+      "item_id": "tm103"
+    },
+    "iron_defense": {
+      "nombre_es": "Defensa Férrea",
+      "source_api_id": 334,
+      "source_path": "data/api/v2/move/334/index.json",
+      "source_blob_sha": "6045c1d1c9fbca1e00acb6b43681dd3b45787556",
+      "item_id": "tm104"
+    },
+    "x_scissor": {
+      "nombre_es": "Tijera X",
+      "source_api_id": 404,
+      "source_path": "data/api/v2/move/404/index.json",
+      "source_blob_sha": "93b4b2cd00f5ca3afca9c1b3be3870af2a645b56",
+      "item_id": "tm105"
+    },
+    "drill_run": {
+      "nombre_es": "Taladradora",
+      "source_api_id": 529,
+      "source_path": "data/api/v2/move/529/index.json",
+      "source_blob_sha": "3556fa892ec34ca646a47d0270c4ad4038f4b17a",
+      "item_id": "tm106"
+    },
+    "will_o_wisp": {
+      "nombre_es": "Fuego Fatuo",
+      "source_api_id": 261,
+      "source_path": "data/api/v2/move/261/index.json",
+      "source_blob_sha": "f53e1ced54a60707b0dfda1a4d9fed874baa6baf",
+      "item_id": "tm107"
+    },
+    "crunch": {
+      "nombre_es": "Triturar",
+      "source_api_id": 242,
+      "source_path": "data/api/v2/move/242/index.json",
+      "source_blob_sha": "6dace8e1520f52405f4ebb40fbde057db039dbdd",
+      "item_id": "tm108"
+    },
+    "trick": {
+      "nombre_es": "Truco",
+      "source_api_id": 271,
+      "source_path": "data/api/v2/move/271/index.json",
+      "source_blob_sha": "bb35395480ed85eff02607f58504a9232cc76648",
+      "item_id": "tm109"
+    },
+    "liquidation": {
+      "nombre_es": "Hidroariete",
+      "source_api_id": 710,
+      "source_path": "data/api/v2/move/710/index.json",
+      "source_blob_sha": "764a8586e17b0319ae55b1a3bb222203faf5cf89",
+      "item_id": "tm110"
+    },
+    "giga_drain": {
+      "nombre_es": "Gigadrenado",
+      "source_api_id": 202,
+      "source_path": "data/api/v2/move/202/index.json",
+      "source_blob_sha": "f2a1f08cd559e3cf440ceb66ce8def1f6d1c683d",
+      "item_id": "tm111"
+    },
+    "aura_sphere": {
+      "nombre_es": "Esfera Aural",
+      "source_api_id": 396,
+      "source_path": "data/api/v2/move/396/index.json",
+      "source_blob_sha": "45a87f2d26285e7b3c23ccfc3563cb7bfa315a20",
+      "item_id": "tm112"
+    },
+    "tailwind": {
+      "nombre_es": "Viento Afín",
+      "source_api_id": 366,
+      "source_path": "data/api/v2/move/366/index.json",
+      "source_blob_sha": "b3cee7478354310b5848f2cf01f542972bb4365a",
+      "item_id": "tm113"
+    },
+    "shadow_ball": {
+      "nombre_es": "Bola Sombra",
+      "source_api_id": 247,
+      "source_path": "data/api/v2/move/247/index.json",
+      "source_blob_sha": "61e7eb41ab81e1acd34de00c2fc3b607ff332465",
+      "item_id": "tm114"
+    },
+    "dragon_pulse": {
+      "nombre_es": "Pulso Dragón",
+      "source_api_id": 406,
+      "source_path": "data/api/v2/move/406/index.json",
+      "source_blob_sha": "a756bc5b48e6c8dd2e6f7c158ed5018520d6865f",
+      "item_id": "tm115"
+    },
+    "stealth_rock": {
+      "nombre_es": "Trampa Rocas",
+      "source_api_id": 446,
+      "source_path": "data/api/v2/move/446/index.json",
+      "source_blob_sha": "49e3488a4d9aaab7b7167ff611dff23be3528766",
+      "item_id": "tm116"
+    },
+    "hyper_voice": {
+      "nombre_es": "Vozarrón",
+      "source_api_id": 304,
+      "source_path": "data/api/v2/move/304/index.json",
+      "source_blob_sha": "30190375a7763be37ecac3e13bab1d8308e58652",
+      "item_id": "tm117"
+    },
+    "heat_wave": {
+      "nombre_es": "Onda Ígnea",
+      "source_api_id": 257,
+      "source_path": "data/api/v2/move/257/index.json",
+      "source_blob_sha": "a5ba74ee8ca0b09118c32f78576f1b3de965b712",
+      "item_id": "tm118"
+    },
+    "energy_ball": {
+      "nombre_es": "Energibola",
+      "source_api_id": 412,
+      "source_path": "data/api/v2/move/412/index.json",
+      "source_blob_sha": "a55e7c3bc2161253835dfcad63069c697df738b0",
+      "item_id": "tm119"
+    },
+    "psychic": {
+      "nombre_es": "Psíquico",
+      "source_api_id": 94,
+      "source_path": "data/api/v2/move/94/index.json",
+      "source_blob_sha": "9901f1daa2bef93a3ee361d653ae91dbec5e025a",
+      "item_id": "tm120"
+    },
+    "heavy_slam": {
+      "nombre_es": "Cuerpo Pesado",
+      "source_api_id": 484,
+      "source_path": "data/api/v2/move/484/index.json",
+      "source_blob_sha": "113640f59405dbb8e16dd87f5e1d9e42ee8b3d4c",
+      "item_id": "tm121"
+    },
+    "encore": {
+      "nombre_es": "Otra Vez",
+      "source_api_id": 227,
+      "source_path": "data/api/v2/move/227/index.json",
+      "source_blob_sha": "7dcae2ebe222eafea98005ce9b15f295ae6c8cc0",
+      "item_id": "tm122"
+    },
+    "surf": {
+      "nombre_es": "Surf",
+      "source_api_id": 57,
+      "source_path": "data/api/v2/move/57/index.json",
+      "source_blob_sha": "5021cd4e2484a65c7605a9adbeb63a9857ff706d",
+      "item_id": "tm123"
+    },
+    "ice_spinner": {
+      "nombre_es": "Pirueta Helada",
+      "source_api_id": 861,
+      "source_path": "data/api/v2/move/861/index.json",
+      "source_blob_sha": "dae025afaa740658c960e84581828fea5ec316c0",
+      "item_id": "tm124"
+    },
+    "flamethrower": {
+      "nombre_es": "Lanzallamas",
+      "source_api_id": 53,
+      "source_path": "data/api/v2/move/53/index.json",
+      "source_blob_sha": "5b78f189623a33a16cf13b5edddce83db7daec94",
+      "item_id": "tm125"
+    },
+    "thunderbolt": {
+      "nombre_es": "Rayo",
+      "source_api_id": 85,
+      "source_path": "data/api/v2/move/85/index.json",
+      "source_blob_sha": "fe85b0eca8dc1d405e33db8973476f051063d603",
+      "item_id": "tm126"
+    },
+    "play_rough": {
+      "nombre_es": "Carantoña",
+      "source_api_id": 583,
+      "source_path": "data/api/v2/move/583/index.json",
+      "source_blob_sha": "36bc799d265cf7c501f425e52dfd2c541e40a8ee",
+      "item_id": "tm127"
+    },
+    "amnesia": {
+      "nombre_es": "Amnesia",
+      "source_api_id": 133,
+      "source_path": "data/api/v2/move/133/index.json",
+      "source_blob_sha": "26898a23b04df766e5a0cd741e22cea5d894ca3d",
+      "item_id": "tm128"
+    },
+    "calm_mind": {
+      "nombre_es": "Paz Mental",
+      "source_api_id": 347,
+      "source_path": "data/api/v2/move/347/index.json",
+      "source_blob_sha": "41cdbd965da3a5f7e41806afecbc2ed4ca25103b",
+      "item_id": "tm129"
+    },
+    "helping_hand": {
+      "nombre_es": "Refuerzo",
+      "source_api_id": 270,
+      "source_path": "data/api/v2/move/270/index.json",
+      "source_blob_sha": "90a47878f250b4bd21b27ddad0c017cd2c4ec5d6",
+      "item_id": "tm130"
+    },
+    "pollen_puff": {
+      "nombre_es": "Bola de Polen",
+      "source_api_id": 676,
+      "source_path": "data/api/v2/move/676/index.json",
+      "source_blob_sha": "6affefa94a1bfc4b09256edb8b8c4d669ac8e200",
+      "item_id": "tm131"
+    },
+    "baton_pass": {
+      "nombre_es": "Relevo",
+      "source_api_id": 226,
+      "source_path": "data/api/v2/move/226/index.json",
+      "source_blob_sha": "841f73fa794836ddab753686e7ae8dee48e6e270",
+      "item_id": "tm132"
+    },
+    "earth_power": {
+      "nombre_es": "Tierra Viva",
+      "source_api_id": 414,
+      "source_path": "data/api/v2/move/414/index.json",
+      "source_blob_sha": "65e9666c74800b9b1ce709fe6c9a95037df451a8",
+      "item_id": "tm133"
+    },
+    "reversal": {
+      "nombre_es": "Inversión",
+      "source_api_id": 179,
+      "source_path": "data/api/v2/move/179/index.json",
+      "source_blob_sha": "ed076d726bd11d5cb359f1dfcae04c4174d70ed1",
+      "item_id": "tm134"
+    },
+    "ice_beam": {
+      "nombre_es": "Rayo Hielo",
+      "source_api_id": 58,
+      "source_path": "data/api/v2/move/58/index.json",
+      "source_blob_sha": "0b7791cbd40330808c807d7a8305973f7e52e554",
+      "item_id": "tm135"
+    },
+    "electric_terrain": {
+      "nombre_es": "Campo Eléctrico",
+      "source_api_id": 604,
+      "source_path": "data/api/v2/move/604/index.json",
+      "source_blob_sha": "47f3991b75a446fd156096dd4c676d636359248e",
+      "item_id": "tm136"
+    },
+    "grassy_terrain": {
+      "nombre_es": "Campo de Hierba",
+      "source_api_id": 580,
+      "source_path": "data/api/v2/move/580/index.json",
+      "source_blob_sha": "3f00ebc2b7ca2aa742f7fb2f452b1f86a4d0dc70",
+      "item_id": "tm137"
+    },
+    "psychic_terrain": {
+      "nombre_es": "Campo Psíquico",
+      "source_api_id": 678,
+      "source_path": "data/api/v2/move/678/index.json",
+      "source_blob_sha": "1403452dd260077f585b754a2f90755f84caa6bc",
+      "item_id": "tm138"
+    },
+    "misty_terrain": {
+      "nombre_es": "Campo de Niebla",
+      "source_api_id": 581,
+      "source_path": "data/api/v2/move/581/index.json",
+      "source_blob_sha": "b97f19f618d5db49d9e6df821dc4782742837412",
+      "item_id": "tm139"
+    },
+    "nasty_plot": {
+      "nombre_es": "Maquinación",
+      "source_api_id": 417,
+      "source_path": "data/api/v2/move/417/index.json",
+      "source_blob_sha": "ecc86c23c70163fb413df1ee5d627c9fed0c7cc1",
+      "item_id": "tm140"
+    },
+    "fire_blast": {
+      "nombre_es": "Llamarada",
+      "source_api_id": 126,
+      "source_path": "data/api/v2/move/126/index.json",
+      "source_blob_sha": "f1d670d3c0d668e83c96a60fda29d1f2e8a3961a",
+      "item_id": "tm141"
+    },
+    "hydro_pump": {
+      "nombre_es": "Hidrobomba",
+      "source_api_id": 56,
+      "source_path": "data/api/v2/move/56/index.json",
+      "source_blob_sha": "963bb8521c312a1c0e65768777ddbbeb0679ccfd",
+      "item_id": "tm142"
+    },
+    "blizzard": {
+      "nombre_es": "Ventisca",
+      "source_api_id": 59,
+      "source_path": "data/api/v2/move/59/index.json",
+      "source_blob_sha": "23408e04f4ff99c29e26de810d63b8c313f3f36d",
+      "item_id": "tm143"
+    },
+    "fire_pledge": {
+      "nombre_es": "Voto Fuego",
+      "source_api_id": 519,
+      "source_path": "data/api/v2/move/519/index.json",
+      "source_blob_sha": "6b200a4f716e8aa2ab21116a93959eed896aea00",
+      "item_id": "tm144"
+    },
+    "water_pledge": {
+      "nombre_es": "Voto Agua",
+      "source_api_id": 518,
+      "source_path": "data/api/v2/move/518/index.json",
+      "source_blob_sha": "0fb4e2ec4da5823ba9186d0f0f62c909044369f4",
+      "item_id": "tm145"
+    },
+    "grass_pledge": {
+      "nombre_es": "Voto Planta",
+      "source_api_id": 520,
+      "source_path": "data/api/v2/move/520/index.json",
+      "source_blob_sha": "6fd6ec5c5c40758906f7f5aa667c19c6d1e148bd",
+      "item_id": "tm146"
+    },
+    "wild_charge": {
+      "nombre_es": "Voltio Cruel",
+      "source_api_id": 528,
+      "source_path": "data/api/v2/move/528/index.json",
+      "source_blob_sha": "a235c39dcecba449cd45ae7d9df1c75789771872",
+      "item_id": "tm147"
+    },
+    "sludge_bomb": {
+      "nombre_es": "Bomba Lodo",
+      "source_api_id": 188,
+      "source_path": "data/api/v2/move/188/index.json",
+      "source_blob_sha": "1cba6cb85d83ab7e4418196514cabd2c783136ea",
+      "item_id": "tm148"
+    },
+    "earthquake": {
+      "nombre_es": "Terremoto",
+      "source_api_id": 89,
+      "source_path": "data/api/v2/move/89/index.json",
+      "source_blob_sha": "4bcd234c06834614a301d429d7e4b81ee8a4eff0",
+      "item_id": "tm149"
+    },
+    "stone_edge": {
+      "nombre_es": "Roca Afilada",
+      "source_api_id": 444,
+      "source_path": "data/api/v2/move/444/index.json",
+      "source_blob_sha": "013f1121a4c5cc01ce20d3669995da5123734862",
+      "item_id": "tm150"
+    },
+    "phantom_force": {
+      "nombre_es": "Golpe Fantasma",
+      "source_api_id": 566,
+      "source_path": "data/api/v2/move/566/index.json",
+      "source_blob_sha": "214dd3541a3bcb2581e83a8957867dd75f089913",
+      "item_id": "tm151"
+    },
+    "giga_impact": {
+      "nombre_es": "Gigaimpacto",
+      "source_api_id": 416,
+      "source_path": "data/api/v2/move/416/index.json",
+      "source_blob_sha": "77f8dd47dbd493a00b1ba9138218f7b85f0794ab",
+      "item_id": "tm152"
+    },
+    "blast_burn": {
+      "nombre_es": "Anillo Ígneo",
+      "source_api_id": 307,
+      "source_path": "data/api/v2/move/307/index.json",
+      "source_blob_sha": "cf549c635798064c6f2e8b52b3bc171385846063",
+      "item_id": "tm153"
+    },
+    "hydro_cannon": {
+      "nombre_es": "Hidrocañón",
+      "source_api_id": 308,
+      "source_path": "data/api/v2/move/308/index.json",
+      "source_blob_sha": "a90f4503dff99f5014011c40c45971364e7a62eb",
+      "item_id": "tm154"
+    },
+    "frenzy_plant": {
+      "nombre_es": "Planta Feroz",
+      "source_api_id": 338,
+      "source_path": "data/api/v2/move/338/index.json",
+      "source_blob_sha": "b3360d3d81be9edb683c089e09646c246eac698c",
+      "item_id": "tm155"
+    },
+    "outrage": {
+      "nombre_es": "Enfado",
+      "source_api_id": 200,
+      "source_path": "data/api/v2/move/200/index.json",
+      "source_blob_sha": "27814a2d54304b296763c7e79ca4aebfab3f653c",
+      "item_id": "tm156"
+    },
+    "overheat": {
+      "nombre_es": "Sofoco",
+      "source_api_id": 315,
+      "source_path": "data/api/v2/move/315/index.json",
+      "source_blob_sha": "7a18e57abe9f6d78e543256270d995da16fe4c3d",
+      "item_id": "tm157"
+    },
+    "focus_blast": {
+      "nombre_es": "Onda Certera",
+      "source_api_id": 411,
+      "source_path": "data/api/v2/move/411/index.json",
+      "source_blob_sha": "1264b4fff932e027af4ae51e12d092be53751efc",
+      "item_id": "tm158"
+    },
+    "leaf_storm": {
+      "nombre_es": "Lluevehojas",
+      "source_api_id": 437,
+      "source_path": "data/api/v2/move/437/index.json",
+      "source_blob_sha": "96c4cbe1b6ae26238526d004437ec2ebcafd21ea",
+      "item_id": "tm159"
+    },
+    "hurricane": {
+      "nombre_es": "Vendaval",
+      "source_api_id": 542,
+      "source_path": "data/api/v2/move/542/index.json",
+      "source_blob_sha": "cae0b2da3ed25a4423c88fff3d66acea76165a10",
+      "item_id": "tm160"
+    },
+    "trick_room": {
+      "nombre_es": "Espacio Raro",
+      "source_api_id": 433,
+      "source_path": "data/api/v2/move/433/index.json",
+      "source_blob_sha": "beee1fc9e7c8e624283e23d3c027cd59c7d63e61",
+      "item_id": "tm161"
+    },
+    "bug_buzz": {
+      "nombre_es": "Zumbido",
+      "source_api_id": 405,
+      "source_path": "data/api/v2/move/405/index.json",
+      "source_blob_sha": "058686e3b1e1e264daef75f67dd6403605039583",
+      "item_id": "tm162"
+    },
+    "hyper_beam": {
+      "nombre_es": "Hiperrayo",
+      "source_api_id": 63,
+      "source_path": "data/api/v2/move/63/index.json",
+      "source_blob_sha": "efe20315f75dc65cdfb582c7b7d667e45debfc32",
+      "item_id": "tm163"
+    },
+    "brave_bird": {
+      "nombre_es": "Pájaro Osado",
+      "source_api_id": 413,
+      "source_path": "data/api/v2/move/413/index.json",
+      "source_blob_sha": "e1107b40a9268223483b54666b4d4e72cf374294",
+      "item_id": "tm164"
+    },
+    "flare_blitz": {
+      "nombre_es": "Envite Ígneo",
+      "source_api_id": 394,
+      "source_path": "data/api/v2/move/394/index.json",
+      "source_blob_sha": "9f6d98f02a1b8b64d59db8d109dff1677893567c",
+      "item_id": "tm165"
+    },
+    "thunder": {
+      "nombre_es": "Trueno",
+      "source_api_id": 87,
+      "source_path": "data/api/v2/move/87/index.json",
+      "source_blob_sha": "ad3f4f01aa81e2b842292d121a5be18df9f8fe90",
+      "item_id": "tm166"
+    },
+    "close_combat": {
+      "nombre_es": "A Bocajarro",
+      "source_api_id": 370,
+      "source_path": "data/api/v2/move/370/index.json",
+      "source_blob_sha": "0fa2a10cd37eaf81068fc2b4121cc48b9b40d052",
+      "item_id": "tm167"
+    },
+    "solar_beam": {
+      "nombre_es": "Rayo Solar",
+      "source_api_id": 76,
+      "source_path": "data/api/v2/move/76/index.json",
+      "source_blob_sha": "75dc4d398a2fd770a1f476002dc3dd385d2e0c96",
+      "item_id": "tm168"
+    },
+    "draco_meteor": {
+      "nombre_es": "Cometa Draco",
+      "source_api_id": 434,
+      "source_path": "data/api/v2/move/434/index.json",
+      "source_blob_sha": "9774ced6b31fe8d08f987e756588945afcaf37a1",
+      "item_id": "tm169"
+    },
+    "steel_beam": {
+      "nombre_es": "Metaláser",
+      "source_api_id": 796,
+      "source_path": "data/api/v2/move/796/index.json",
+      "source_blob_sha": "e9f1f27365e0313bcc87a701fbae529bbe601aea",
+      "item_id": "tm170"
+    },
+    "tera_blast": {
+      "nombre_es": "Teraexplosión",
+      "source_api_id": 851,
+      "source_path": "data/api/v2/move/851/index.json",
+      "source_blob_sha": "121f719bc1b51595e5229f5f9a422786cce69073",
+      "item_id": "tm171"
+    },
+    "roar": {
+      "nombre_es": "Rugido",
+      "source_api_id": 46,
+      "source_path": "data/api/v2/move/46/index.json",
+      "source_blob_sha": "60d849be39edbf447bc133a1d8b53a1fc5f6e0a2",
+      "item_id": "tm172"
+    },
+    "charge": {
+      "nombre_es": "Carga",
+      "source_api_id": 268,
+      "source_path": "data/api/v2/move/268/index.json",
+      "source_blob_sha": "6e73494e8974cc1fdc67cd96cd0b97d88056353a",
+      "item_id": "tm173"
+    },
+    "haze": {
+      "nombre_es": "Niebla",
+      "source_api_id": 114,
+      "source_path": "data/api/v2/move/114/index.json",
+      "source_blob_sha": "f873463145cc9ba18b5e288acd2f6ea0bbb319cd",
+      "item_id": "tm174"
+    },
+    "toxic": {
+      "nombre_es": "Tóxico",
+      "source_api_id": 92,
+      "source_path": "data/api/v2/move/92/index.json",
+      "source_blob_sha": "59a8fa4a6c67451ca207c2037ef1404f332957e3",
+      "item_id": "tm175"
+    },
+    "sand_tomb": {
+      "nombre_es": "Bucle Arena",
+      "source_api_id": 328,
+      "source_path": "data/api/v2/move/328/index.json",
+      "source_blob_sha": "4f14a0d2fdd5ba6320a61985d08b43b66bd4d9dd",
+      "item_id": "tm176"
+    },
+    "spite": {
+      "nombre_es": "Rencor",
+      "source_api_id": 180,
+      "source_path": "data/api/v2/move/180/index.json",
+      "source_blob_sha": "3c7463607a6f043e5242df55dbe5f8cea78cebd2",
+      "item_id": "tm177"
+    },
+    "gravity": {
+      "nombre_es": "Gravedad",
+      "source_api_id": 356,
+      "source_path": "data/api/v2/move/356/index.json",
+      "source_blob_sha": "e0c4c826b8d5064e494f9ecfebe2ab29308a417a",
+      "item_id": "tm178"
+    },
+    "smack_down": {
+      "nombre_es": "Antiaéreo",
+      "source_api_id": 479,
+      "source_path": "data/api/v2/move/479/index.json",
+      "source_blob_sha": "26f68f3548bf2d9435265cace8deef4ab612b9d5",
+      "item_id": "tm179"
+    },
+    "gyro_ball": {
+      "nombre_es": "Giro Bola",
+      "source_api_id": 360,
+      "source_path": "data/api/v2/move/360/index.json",
+      "source_blob_sha": "d416c80c180b3d6ceef57828ff5efcfcdb4e30f1",
+      "item_id": "tm180"
+    },
+    "knock_off": {
+      "nombre_es": "Desarme",
+      "source_api_id": 282,
+      "source_path": "data/api/v2/move/282/index.json",
+      "source_blob_sha": "9bc9d7a46e07f67299cbb62839eda708eece28f9",
+      "item_id": "tm181"
+    },
+    "bug_bite": {
+      "nombre_es": "Picadura",
+      "source_api_id": 450,
+      "source_path": "data/api/v2/move/450/index.json",
+      "source_blob_sha": "d3304ae45c771fe13bbcda6d0b4902cfd326528d",
+      "item_id": "tm182"
+    },
+    "super_fang": {
+      "nombre_es": "Superdiente",
+      "source_api_id": 162,
+      "source_path": "data/api/v2/move/162/index.json",
+      "source_blob_sha": "293d2ffd725b15286509e563461e4f8fad4304e2",
+      "item_id": "tm183"
+    },
+    "vacuum_wave": {
+      "nombre_es": "Onda Vacío",
+      "source_api_id": 410,
+      "source_path": "data/api/v2/move/410/index.json",
+      "source_blob_sha": "f91cadc7d36093f786c2262f4562c4938cb168f6",
+      "item_id": "tm184"
+    },
+    "lunge": {
+      "nombre_es": "Plancha",
+      "source_api_id": 679,
+      "source_path": "data/api/v2/move/679/index.json",
+      "source_blob_sha": "6f6a5f5528ef87c2be60e1cdec45ca7af1529010",
+      "item_id": "tm185"
+    },
+    "high_horsepower": {
+      "nombre_es": "Fuerza Equina",
+      "source_api_id": 667,
+      "source_path": "data/api/v2/move/667/index.json",
+      "source_blob_sha": "6eae4070754441d51daeaa7354c0eb74791a74f5",
+      "item_id": "tm186"
+    },
+    "icicle_spear": {
+      "nombre_es": "Carámbano",
+      "source_api_id": 333,
+      "source_path": "data/api/v2/move/333/index.json",
+      "source_blob_sha": "8dae40add1063bf9c1b0b44371d4af5629b23165",
+      "item_id": "tm187"
+    },
+    "scald": {
+      "nombre_es": "Escaldar",
+      "source_api_id": 503,
+      "source_path": "data/api/v2/move/503/index.json",
+      "source_blob_sha": "435c3e27c34f58afa366623ce89c209ffc9e356e",
+      "item_id": "tm188"
+    },
+    "heat_crash": {
+      "nombre_es": "Golpe Calor",
+      "source_api_id": 535,
+      "source_path": "data/api/v2/move/535/index.json",
+      "source_blob_sha": "441b5d42fa0a92f294296453ae2724deb9f3cfcb",
+      "item_id": "tm189"
+    },
+    "solar_blade": {
+      "nombre_es": "Cuchilla Solar",
+      "source_api_id": 669,
+      "source_path": "data/api/v2/move/669/index.json",
+      "source_blob_sha": "454dc1281705c6c07da4955d14a367651299647a",
+      "item_id": "tm190"
+    },
+    "uproar": {
+      "nombre_es": "Alboroto",
+      "source_api_id": 253,
+      "source_path": "data/api/v2/move/253/index.json",
+      "source_blob_sha": "5a0a1d50c92f3abe2b6210cd6f837e97c1114cad",
+      "item_id": "tm191"
+    },
+    "focus_punch": {
+      "nombre_es": "Puño Certero",
+      "source_api_id": 264,
+      "source_path": "data/api/v2/move/264/index.json",
+      "source_blob_sha": "624bcdefad064ef6917888176a868d916877bda8",
+      "item_id": "tm192"
+    },
+    "weather_ball": {
+      "nombre_es": "Meteorobola",
+      "source_api_id": 311,
+      "source_path": "data/api/v2/move/311/index.json",
+      "source_blob_sha": "d14041cded5ba57ba558e40d6dee40f8196a1a05",
+      "item_id": "tm193"
+    },
+    "grassy_glide": {
+      "nombre_es": "Fitoimpulso",
+      "source_api_id": 803,
+      "source_path": "data/api/v2/move/803/index.json",
+      "source_blob_sha": "b761a16cb82d011cc652d28329abe007011b18ed",
+      "item_id": "tm194"
+    },
+    "burning_jealousy": {
+      "nombre_es": "Envidia Ardiente",
+      "source_api_id": 807,
+      "source_path": "data/api/v2/move/807/index.json",
+      "source_blob_sha": "469bd83ee0f07e8d2a6e41b669a82c95c9826130",
+      "item_id": "tm195"
+    },
+    "flip_turn": {
+      "nombre_es": "Viraje",
+      "source_api_id": 812,
+      "source_path": "data/api/v2/move/812/index.json",
+      "source_blob_sha": "c59d7cb991b8b7b9c51b45a6b38381203b7f5bf5",
+      "item_id": "tm196"
+    },
+    "dual_wingbeat": {
+      "nombre_es": "Ala Bis",
+      "source_api_id": 814,
+      "source_path": "data/api/v2/move/814/index.json",
+      "source_blob_sha": "0a8c65504d758a988f4c0f123eae2378d30bd8ef",
+      "item_id": "tm197"
+    },
+    "poltergeist": {
+      "nombre_es": "Poltergeist",
+      "source_api_id": 809,
+      "source_path": "data/api/v2/move/809/index.json",
+      "source_blob_sha": "d06840e91a90fb20f937b11ac0a364e80207f70a",
+      "item_id": "tm198"
+    },
+    "lash_out": {
+      "nombre_es": "Desahogo",
+      "source_api_id": 808,
+      "source_path": "data/api/v2/move/808/index.json",
+      "source_blob_sha": "8ae4f689e74f9d84161d65f0f33e49802e9b75a1",
+      "item_id": "tm199"
+    },
+    "scale_shot": {
+      "nombre_es": "Ráfaga Escamas",
+      "source_api_id": 799,
+      "source_path": "data/api/v2/move/799/index.json",
+      "source_blob_sha": "d44c91ce65eb24c15e47356da20e93e42b290818",
+      "item_id": "tm200"
+    },
+    "misty_explosion": {
+      "nombre_es": "Bruma Explosiva",
+      "source_api_id": 802,
+      "source_path": "data/api/v2/move/802/index.json",
+      "source_blob_sha": "8c156db6153689fd8c6b6785d9d9c46dabfdfe8e",
+      "item_id": "tm201"
+    },
+    "pain_split": {
+      "nombre_es": "Divide Dolor",
+      "source_api_id": 220,
+      "source_path": "data/api/v2/move/220/index.json",
+      "source_blob_sha": "c15291992e14375390421e7c8f8526a16dcb0b13",
+      "item_id": "tm202"
+    },
+    "psych_up": {
+      "nombre_es": "Autosugestión",
+      "source_api_id": 244,
+      "source_path": "data/api/v2/move/244/index.json",
+      "source_blob_sha": "a8863ee2b4bd1e5a5a931735d0a9f1b278df2389",
+      "item_id": "tm203"
+    },
+    "double_edge": {
+      "nombre_es": "Doble Filo",
+      "source_api_id": 38,
+      "source_path": "data/api/v2/move/38/index.json",
+      "source_blob_sha": "e11d83d10d1750c012cdc3f7749cd03d0684af89",
+      "item_id": "tm204"
+    },
+    "endeavor": {
+      "nombre_es": "Esfuerzo",
+      "source_api_id": 283,
+      "source_path": "data/api/v2/move/283/index.json",
+      "source_blob_sha": "c128b18397a6e6eebfe0fd0ff2229fa707627bdc",
+      "item_id": "tm205"
+    },
+    "petal_blizzard": {
+      "nombre_es": "Tormenta Floral",
+      "source_api_id": 572,
+      "source_path": "data/api/v2/move/572/index.json",
+      "source_blob_sha": "983024d8514ea4b6d759c9b40a75b1ced2391fe6",
+      "item_id": "tm206"
+    },
+    "temper_flare": {
+      "nombre_es": "Cólera Ardiente",
+      "source_api_id": 915,
+      "source_path": "data/api/v2/move/915/index.json",
+      "source_blob_sha": "d988266e512bc40e98878a7562b3b1e5e5bd06f8",
+      "item_id": "tm207"
+    },
+    "whirlpool": {
+      "nombre_es": "Torbellino",
+      "source_api_id": 250,
+      "source_path": "data/api/v2/move/250/index.json",
+      "source_blob_sha": "cbc137536bd2e6b3c46e83bf22bf72342b703241",
+      "item_id": "tm208"
+    },
+    "muddy_water": {
+      "nombre_es": "Agua Lodosa",
+      "source_api_id": 330,
+      "source_path": "data/api/v2/move/330/index.json",
+      "source_blob_sha": "6600adc6aecbd02194d7c20ecc32c0f8ed23af2a",
+      "item_id": "tm209"
+    },
+    "supercell_slam": {
+      "nombre_es": "Plancha Voltaica",
+      "source_api_id": 916,
+      "source_path": "data/api/v2/move/916/index.json",
+      "source_blob_sha": "9753d3f42215d78c747ed6dcf147cd8aa390f3a2",
+      "item_id": "tm210"
+    },
+    "electroweb": {
+      "nombre_es": "Electrotela",
+      "source_api_id": 527,
+      "source_path": "data/api/v2/move/527/index.json",
+      "source_blob_sha": "1405fc846e47fa187a16d699a7effb1da3a606c3",
+      "item_id": "tm211"
+    },
+    "triple_axel": {
+      "nombre_es": "Triple Axel",
+      "source_api_id": 813,
+      "source_path": "data/api/v2/move/813/index.json",
+      "source_blob_sha": "104f1c6fce7f5e6ec4e73aa291acbc2df6e5332f",
+      "item_id": "tm212"
+    },
+    "coaching": {
+      "nombre_es": "Motivación",
+      "source_api_id": 811,
+      "source_path": "data/api/v2/move/811/index.json",
+      "source_blob_sha": "e022a075001958809a0da1fa3faf3965f2e242e6",
+      "item_id": "tm213"
+    },
+    "sludge_wave": {
+      "nombre_es": "Onda Tóxica",
+      "source_api_id": 482,
+      "source_path": "data/api/v2/move/482/index.json",
+      "source_blob_sha": "f321979eef90c665b553ddc6346a57f7f20113e4",
+      "item_id": "tm214"
+    },
+    "scorching_sands": {
+      "nombre_es": "Arenas Ardientes",
+      "source_api_id": 815,
+      "source_path": "data/api/v2/move/815/index.json",
+      "source_blob_sha": "647713dd177b2fb89943810420badbbe6014136d",
+      "item_id": "tm215"
+    },
+    "feather_dance": {
+      "nombre_es": "Danza Pluma",
+      "source_api_id": 297,
+      "source_path": "data/api/v2/move/297/index.json",
+      "source_blob_sha": "4abfdbc92f463d7b742b32734b6d62b900e5278d",
+      "item_id": "tm216"
+    },
+    "future_sight": {
+      "nombre_es": "Premonición",
+      "source_api_id": 248,
+      "source_path": "data/api/v2/move/248/index.json",
+      "source_blob_sha": "84b25e9d7161065f720778b9f034354b124cae1c",
+      "item_id": "tm217"
+    },
+    "expanding_force": {
+      "nombre_es": "Vasta Fuerza",
+      "source_api_id": 797,
+      "source_path": "data/api/v2/move/797/index.json",
+      "source_blob_sha": "c051baea7d080c55106924da8b6a7398bca31366",
+      "item_id": "tm218"
+    },
+    "skitter_smack": {
+      "nombre_es": "Golpe Rastrero",
+      "source_api_id": 806,
+      "source_path": "data/api/v2/move/806/index.json",
+      "source_blob_sha": "16354d737ad4589a5b51dd3d9e87563c5d127142",
+      "item_id": "tm219"
+    },
+    "meteor_beam": {
+      "nombre_es": "Rayo Meteórico",
+      "source_api_id": 800,
+      "source_path": "data/api/v2/move/800/index.json",
+      "source_blob_sha": "7d4d6c3e777ee8415c4b17f1eaad5cb88dd3763b",
+      "item_id": "tm220"
+    },
+    "throat_chop": {
+      "nombre_es": "Golpe Mordaza",
+      "source_api_id": 675,
+      "source_path": "data/api/v2/move/675/index.json",
+      "source_blob_sha": "784a89e706e7b319deac9f1a0bbbed835f6d12b2",
+      "item_id": "tm221"
+    },
+    "breaking_swipe": {
+      "nombre_es": "Vasto Impacto",
+      "source_api_id": 784,
+      "source_path": "data/api/v2/move/784/index.json",
+      "source_blob_sha": "6fd824cd3525e826e43e7b5f8845daad8b4a6693",
+      "item_id": "tm222"
+    },
+    "metal_sound": {
+      "nombre_es": "Eco Metálico",
+      "source_api_id": 319,
+      "source_path": "data/api/v2/move/319/index.json",
+      "source_blob_sha": "7490f27b3ef57a5375a0355dc031f486afb856ea",
+      "item_id": "tm223"
+    },
+    "curse": {
+      "nombre_es": "Maldición",
+      "source_api_id": 174,
+      "source_path": "data/api/v2/move/174/index.json",
+      "source_blob_sha": "a2ee6c6362c8a19ec41f550b99c243354e23fcff",
+      "item_id": "tm224"
+    },
+    "hard_press": {
+      "nombre_es": "Prensa Metálica",
+      "source_api_id": 912,
+      "source_path": "data/api/v2/move/912/index.json",
+      "source_blob_sha": "7c055d2fbb43505034b9f399bbf8f4717b5ac6b9",
+      "item_id": "tm225"
+    },
+    "dragon_cheer": {
+      "nombre_es": "Bramido Dragón",
+      "source_api_id": 913,
+      "source_path": "data/api/v2/move/913/index.json",
+      "source_blob_sha": "84de6592cf45a320933ff71be654bd909d8f997e",
+      "item_id": "tm226"
+    },
+    "alluring_voice": {
+      "nombre_es": "Canto Encantador",
+      "source_api_id": 914,
+      "source_path": "data/api/v2/move/914/index.json",
+      "source_blob_sha": "07534eb1cc85ab369dd6fce71b3edc66b93e5f49",
+      "item_id": "tm227"
+    },
+    "psychic_noise": {
+      "nombre_es": "Psicorruido",
+      "source_api_id": 917,
+      "source_path": "data/api/v2/move/917/index.json",
+      "source_blob_sha": "5075d2177d0f268005ca871cf9f99b201301973f",
+      "item_id": "tm228"
+    },
+    "upper_hand": {
+      "nombre_es": "Palma Rauda",
+      "source_api_id": 918,
+      "source_path": "data/api/v2/move/918/index.json",
+      "source_blob_sha": "33bd987d08112adfb71c03bed4c1788b434efb55",
+      "item_id": "tm229"
+    }
+  }
+}
