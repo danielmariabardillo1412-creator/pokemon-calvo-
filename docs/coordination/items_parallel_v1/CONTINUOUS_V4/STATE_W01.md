@@ -36,3 +36,10 @@
 - **No-diff funcional preliminar corroborado en staging:** código del motor nativo, conex. held y selección ya presente; código de producción W01 portado: 0 hunks. Hay que conservar revisiones compartidas de IA6.
 - **[CI de W01 V1 y CAMP002 #42965532842](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/42965532842)** sobre SHA `39570126842821a885e5e5da9803a6bb75ca66b4`, `in_progress` en última consulta. No atribuir PASS hasta run `completed/success`.
 - **Siguiente `p`:** comprobar #42965532842, aislar fallos W01 si surgen; si verde, preparar Fase C CI staging más amplia con T01–04, V2, CAMP003–005 y mantener política Dinamax. Los tests T01–04/CAMP003–005 **no se encuentran en la staging** y no hay autorización para copiar clases enteras/merge: diseñar adaptador QA selectivo o proponer a IA6 pruebas faltantes. No declarar `READY_FOR_IA6_MERGE` antes de gate suficiente. Integración oficial IA6: NO.
+
+## Reanudación por p — recepción V1/CAMP002 y control documental (2026-11-11)
+- CI #42965532842: el job `held_stage_v1_camp002` figura `completed/success` en consulta directa de Actions. SHA registrado al lanzamiento: `39570126842821a885e5e5da9803a6bb75ca66b4`.
+- Reporte nuevo verificado/publicado: `reports/W01/CONTINUOUS_V4_REGRESSION_V1_C002.md`. Commit documental `9cd8f39177f074fe6c7da05be5fd178bd19029ec`; **no atribuirle la CI anterior**.
+- Discrepancia documental: `reports/W01/CONTINUOUS_V4_DIFF_AUDIT.md` (citado por checkpoint) devuelve 404 en esta rama. Auditar o regenerar a partir de evidencia antes de cierre final.
+- Regresiones pendientes de puerta staging: T01–T04, V2 y CAMP003–005; aún no `READY_FOR_IA6_MERGE`. No se han portado cambios de producción ni fusionado ramas.
+- Siguiente `p`: comprobar presencia/ubicación de tests originales y producir adaptador selectivo permitido (o ticket técnico de pruebas inaccesibles), manteniendo suites previas y exclusión `dynamax_candy`; CI final solo contra SHA actual comprobado.
