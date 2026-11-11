@@ -66,14 +66,7 @@ jobs:
           set -euo pipefail
           timeout 900s godot --headless --path . --script res://tests/gameplay/parallel_items_w03_repel_l3.gd 2>&1 | tee ia6-w05-w03-repel.log
           if grep -E 'SCRIPT ERROR|Parse Error|^CAMP006_W03_REPEL_L3 FAIL' ia6-w05-w03-repel.log; then exit 1; fi
-          grep -E '^CAMP006_W03_REPEL_L3 PASS checks=[1-9][0-9]*        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: ia6-w05-candidate-${{ github.run_id }}
-          retention-days: 7
-          if-no-files-found: ignore
-          path: ia6-w05-*.log
- ia6-w05-w03-repel.log
+          grep -E '^CAMP006_W03_REPEL_L3 PASS checks=[1-9][0-9]*$' ia6-w05-w03-repel.log
       - name: Preserve logs
         if: always()
         uses: actions/upload-artifact@v4
