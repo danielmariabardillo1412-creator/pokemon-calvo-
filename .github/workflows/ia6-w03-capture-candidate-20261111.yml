@@ -4,7 +4,7 @@ on:
     branches:
       - codex/calvo-ia6-candidate-w03-capture-20261111
     paths:
-      - '.github/workflows/ia6-w03-v4-capture-staging.yml'
+      - '.github/workflows/ia6-w03-capture-candidate-20261111.yml'
       - 'tests/tools/test_ia6_w03_staging_v4.py'
       - 'tests/tools/test_parallel_items_w03_continuous_v3_sources.py'
       - 'tests/gameplay/parallel_items_w03_*.gd'
