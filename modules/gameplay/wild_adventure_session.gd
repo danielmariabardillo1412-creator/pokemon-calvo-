@@ -351,6 +351,8 @@ func capture_current(ball_id: StringName, capture_rng: RandomNumberGenerator) ->
 	context.completed_turns = _battle_server.state.turn
 	var catcher := player_active()
 	if catcher != null: context.catcher_level = catcher.level
+	# V4 IA6-authorized: only actual successful-capture history may trigger Repeat.
+	context.previously_caught_base_species = player.has_previously_caught(target.base_species_id(), catalogs)
 	var attempt := CaptureAttempt.new(target, ball_id, context)
 	var resolution := CaptureInventoryService.resolve(
 		attempt, capture_rng, catalogs, player.party, player.inventory
@@ -367,6 +369,10 @@ func capture_current(ball_id: StringName, capture_rng: RandomNumberGenerator) ->
 	out.routing = routing
 	if routing == null or not routing.routed:
 		out.reason = "capture_routing_failed"
+		return out
+	# Capture history is amended only after a routed, successful capture.
+	if resolution.captured == null or not player.record_successful_capture(resolution.captured.base_species_id(), catalogs):
+		out.reason = "capture_history_canonicalization_failed"
 		return out
 
 	# Battle-only modifiers must never leak into the newly-owned creature or the player's roster.
@@ -488,6 +494,8 @@ func load_game(path: String) -> LoadResult:
 	restored.party = loaded.party
 	restored.storage = loaded.storage
 	restored.inventory = loaded.inventory
+	# Legacy SaveV2 with no history field is validated as an empty ledger.
+	restored.caught_base_species_ids = loaded.caught_base_species_ids.duplicate()
 	player = restored
 	status = READY
 	completion_reason = &""
