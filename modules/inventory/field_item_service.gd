@@ -95,13 +95,29 @@ func unequip(creature_id: StringName) -> Dictionary:
 
 func evolution_options(item_id: StringName, creature_id: StringName) -> Array[StringName]:
 	var result: Array[StringName] = []
+	if owner == null or catalogs == null or content == null: return result
 	var creature := owner.owned_creature(creature_id)
 	if creature == null: return result
 	var species := catalogs.species(creature.species_id)
 	if species == null: return result
+	var regional_routes: Dictionary = preload("res://modules/creatures/progression/regional_item_evolution_contract_w04_v2.gd").ROUTES
 	for record: EvolutionRecord in EvolutionSystem.evolution_candidates(species, {"level": creature.level, "item_id": item_id}, catalogs):
-		if record.trigger == EvolutionSystem.TRIGGER_USE_ITEM and record.item_id == item_id and content.species_allowed(String(record.species_id)):
-			result.append(record.species_id)
+		if record.trigger != EvolutionSystem.TRIGGER_USE_ITEM or record.item_id != item_id:
+			continue
+		if regional_routes.has(creature.species_id):
+			var evidence: Dictionary = preload("res://modules/creatures/progression/regional_item_evolution_contract_w04_v2.gd").inspect(
+				creature, item_id, catalogs, record.species_id)
+			if not evidence.get("ok", false):
+				continue
+			var destination := catalogs.species(record.species_id)
+			if destination == null or not catalogs.variant_allowed_species.has(String(record.species_id)):
+				continue
+			var base_id := String(destination.source_metadata.get("base_species_id", ""))
+			if not content.form_allowed(base_id, String(evidence.get("target_form_id", ""))):
+				continue
+		elif not content.species_allowed(String(record.species_id)):
+			continue
+		result.append(record.species_id)
 	return result
 
 
@@ -122,13 +138,35 @@ func evolve(item_id: StringName, creature_id: StringName, requested_target: Stri
 		if options.size() != 1: return _deny("evolution_target_required", "NEEDS_CONTEXT")
 		requested_target = options[0]
 	if not options.has(requested_target): return _deny("invalid_evolution_target")
+	var regional_routes: Dictionary = preload("res://modules/creatures/progression/regional_item_evolution_contract_w04_v2.gd").ROUTES
+	var required_form: StringName = &""
+	if regional_routes.has(creature.species_id):
+		var evidence: Dictionary = preload("res://modules/creatures/progression/regional_item_evolution_contract_w04_v2.gd").inspect(
+			creature, item_id, catalogs, requested_target)
+		if not evidence.get("ok", false): return _deny("invalid_regional_evolution")
+		required_form = StringName(evidence.get("target_form_id", ""))
+		if required_form == &"": return _deny("missing_regional_target_form")
+	var stamp := _item_state_stamp(item_id, creature)
 	var evolved := EvolutionSystem.apply_evolution(creature, requested_target, catalogs, ProgressionRuleset.new())
 	if evolved == null or evolved.instance_id != creature.instance_id: return _deny("evolution_failed")
-	if evolved.ability_id != &"" and not content.ability_allowed(String(evolved.ability_id)): return _deny("evolution_ability_route_pending", "DEPENDENCY_MISSING")
+	if required_form != &"" and evolved.form_id != required_form: return _deny("wrong_regional_target_form")
+	if evolved.ability_id != &"" and not content.ability_allowed(String(evolved.ability_id)):
+		return _deny("evolution_ability_route_pending", "DEPENDENCY_MISSING")
+	# Stage consumption before changing the aggregate and validate the live
+	# source, owner, inventory, and guard again before publishing.
 	var staged := _bag_copy()
 	if not staged.remove(item_id): return _deny("item_not_owned")
+	if _boundary(item_id) != "" or not is_same(owner.owned_creature(creature_id), creature) or _item_state_stamp(item_id, creature) != stamp:
+		return _deny("evolution_state_changed")
+	var previous_bag := _bag_copy()
 	if not owner.replace_owned_same_identity(evolved): return _deny("ownership_changed")
+	# Inventory operations are synchronous; if publishing cannot establish
+	# the intended quantities, restore the original creature and original bag.
 	_publish_bag(staged)
+	if owner.inventory.to_dict() != staged.to_dict() or not is_same(owner.owned_creature(creature_id), evolved):
+		owner.replace_owned_same_identity(creature)
+		_publish_bag(previous_bag)
+		return _deny("evolution_commit_failed")
 	return {"accepted": true, "status": "APPLIED", "action": "evolve", "species_id": String(requested_target), "creature_id": String(creature_id)}
 
 

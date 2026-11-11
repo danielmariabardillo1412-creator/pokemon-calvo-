@@ -12,6 +12,8 @@ extends RefCounted
 
 var instance_id: StringName
 var species_id: StringName
+# W04 staging: optional canonical source form; keep W02 effective nature independent.
+var form_id: StringName = &""
 var level: int
 var experience: int = 0
 var ivs: Dictionary = {}            # stat_key -> int 0..31
@@ -210,6 +212,7 @@ func to_dict() -> Dictionary:
 		"held_item_id": String(held_item_id),
 		"held_item_consumed": held_item_consumed,
 	}
+	if form_id != &"": result["form_id"] = String(form_id)
 	if effective_nature_id != &"": result["effective_nature_id"] = String(effective_nature_id)
 	if not battle_transform_original.is_empty(): result["battle_transform"] = battle_transform_original.duplicate(true)
 	if is_shiny: result["is_shiny"] = true
@@ -232,6 +235,13 @@ static func from_dict(data: Dictionary) -> CreatureInstance:
 	creature.ivs = data.get("ivs", {})
 	creature.evs = data.get("evs", {})
 	creature.nature_id = StringName(data.get("nature_id", "hardy"))
+	# Strict optional form type; do not infer or repair corrupt/foreign forms.
+	if data.has("form_id"):
+		var raw_form: Variant = data["form_id"]
+		if not (raw_form is String or raw_form is StringName):
+			creature.instance_id = &""
+			return creature
+		creature.form_id = StringName(raw_form)
 	# Existing SaveGameRepository rejects empty identity after from_dict.
 	# Invalid effective nature uses that existing invalid-creature sentinel;
 	# never silently replace an invalid mint with its birth nature.
