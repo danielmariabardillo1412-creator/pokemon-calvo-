@@ -31,3 +31,22 @@ Para reanudar con `p`:
 4. Si falla integración o hay conflicto, mantener PR abierto y reportar causa concreta. No reescribir sistemas protegidos ni rebajar tests.
 
 La actividad **no** constituye autorización para integrar globalmente en main; es una consolidación selectiva en la rama de IA6. No hay trabajo asíncrono de este chat.
+
+## Corrección de estado — comprobación completa del PR #119
+
+El checkpoint anterior de 19 SUCCESS y 2 IN_PROGRESS queda **superado y sustituido** por estos resultados definitivos, verificados en GitHub para el mismo HEAD `f3eb3248a43bfbb453bac539318cc641777b6fe3`:
+
+- **20/21 workflows SUCCESS**. `Trainer Team Composition #42955302921` y build Windows concluyeron SUCCESS.
+- **1/21 workflow FAILURE:** [Item Closure V3 #42955302952](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/42955302952), en dos jobs `Declarative item families` (Windows y Linux).
+- Mensaje reproducido en ambos: `ITEM_AUTOMATION_V28 FAILED checks=0`, `Outside exact allowlist`.
+- El guardia de `tools/item_audit/automation_v28.py` define `BASE=47f42aef1a518eefb744ad310f89b6e2d3ce7108` y rechaza cualquier archivo no incluido en `ALLOWED` al comparar **todo el checkout** contra BASE, sin llegar a las verificaciones funcionales.
+- **Preexistencia demostrada por comparación de commits**: la rama base de IA6, SHA `f4a5687bff1aaf0fb443c36ca4c2873f5d0ac54e`, difiere de ese BASE en **295 archivos**, entre ellos `native_engine.cjs`, `creature_instance.gd`, `field_item_service.gd`, `field_native_save.gd`, todos fuera del allowlist. La rama PR #119 suma 300 rutas diferentes contra BASE. El fallo se reproduciría en el punto de partida IA6: no está causado únicamente por las cuatro reparaciones W02.
+- **Pruebas relevantes verdes en HEAD exacto del PR**: [IA6 W02 crossworker #42955272137](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/42955272137) SUCCESS y el resto de las 19 CI globales; **no equivalen a cerrar la puerta V28**.
+- PR [#119](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/pull/119) convertido a **DRAFT**, abierto, no fusionado, con comentario técnico [#6786707200](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/pull/119#issuecomment-6786707200).
+- La rama `codex/calvo-ia6-integration-20261109` permanece en SHA `f4a5687...` antes del merge; `main`, V28 y PR #118 intactos.
+
+### Decisión y siguiente trabajo autorizado
+
+**ESTADO: `BLOCKED_CI_SCOPE_V28` — NO MERGE.** No repetir campañas W02 ni cambiar leyes de combate/SaveV2. No ampliar el allowlist de V28, falsificar PASS, hacer `continue-on-error` o saltar esa gate.
+
+Para proseguir, preparar una propuesta de **separación del alcance de CI**, preservando el contrato histórico V28 en un checkout con modificaciones exclusivamente permitidas, y ejecutando en la rama de integración las regresiones funcionales nativas/crossworker sobre el verdadero SHA integrado. Esa adaptación de infraestructura deberá mantener pruebas verificables en su propio SHA y quedar aprobada como cambio explícito, no como excepción encubierta. Hasta entonces, dejar el PR en DRAFT.
