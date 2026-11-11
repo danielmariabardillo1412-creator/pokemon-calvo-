@@ -27,7 +27,19 @@ func save_state(path: String, party: CreatureParty, storage: CreatureStorage, in
 
 
 func save_collection(path: String, pc: PlayerCollection) -> SaveResult:
-	return save_state(path, pc.party, pc.storage, pc.inventory)
+	# Collection-owned ledger is kept out of the generic save_state API.
+	var inv_validation := pc.inventory.validate()
+	if not inv_validation.ok:
+		var rejected := SaveResult.new()
+		rejected.reason = "inventory_" + String(inv_validation.reason)
+		return rejected
+	var snap := SaveGameData.build(pc.party, pc.storage, pc.inventory, pc.caught_base_species_ids)
+	var v := snap.validate()
+	if not v.ok:
+		var rejected := SaveResult.new()
+		rejected.reason = v.reason
+		return rejected
+	return _serializer.write_atomic(path, snap)
 
 
 # Transactional load. Returns ok=false (with reason) on any migration/validation/rebuild failure.
@@ -116,4 +128,7 @@ func decode_snapshot(d: Dictionary) -> LoadResult:
 	out.party = party
 	out.storage = storage
 	out.inventory = inventory
+	# SaveGameData.validate already rejected malformed optional ledger.
+	var caught: Dictionary = preload("res://modules/capture/caught_species_history_w03.gd").parse(snap.caught_base_species_ids)
+	out.caught_base_species_ids = caught.ids
 	return out
