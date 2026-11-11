@@ -123,25 +123,10 @@ jobs:
           set -euo pipefail
           for spec in savegame_v2_test_runner savegame_v2_adversarial_test_runner ia6_mint_field_native_save_20261109 ia6_integration_mint_rope_20261109 ia6_books_bag_20261109 parallel_items_w03_repeat_history_v2 parallel_items_w03_repel_l3 w05_staging_v4_books_bag; do
             timeout 900s godot --headless --path . --script "res://tests/gameplay/${spec}.gd" 2>&1 | tee "w04-ia6-${spec}.log"
-            if grep -E 'SCRIPT ERROR|Parse Error|^W03_.*FAIL|^IA6_.*FAIL|^W05_.*FAIL|^CAMP006_W03_REPEL_L3 FAIL|^=== .* [1-9][0-9]* FAIL ===
+            if grep -E 'SCRIPT ERROR|Parse Error|^W03_.*FAIL|^IA6_.*FAIL|^W05_.*FAIL|^CAMP006_W03_REPEL_L3 FAIL|^=== .* [1-9][0-9]* FAIL ===$' "w04-ia6-${spec}.log"; then exit 1; fi
           done
-          grep -E '^W03_REPEAT_V2_GODOT PASS checks=37' w04-ia6-parallel_items_w03_repeat_history_v2.log
-          grep -E '^CAMP006_W03_REPEL_L3 PASS checks=[1-9][0-9]*' w04-ia6-parallel_items_w03_repel_l3.log
-          grep -E '^W05_V4_REAL_FIELD_BAG PASS' w04-ia6-w05_staging_v4_books_bag.log
-          grep -E '^IA6_BOOK_BAG PASS' w04-ia6-ia6_books_bag_20261109.log
-          grep -E '^IA6_INTEGRATION PASS' w04-ia6-ia6_integration_mint_rope_20261109.log
-      - name: Preserve logs
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: w04-v4-staging-${{ github.run_id }}
-          retention-days: 7
-          if-no-files-found: ignore
-          path: |
-            w04-v4-*.log
-            w04-ia6-*.log
- "w04-ia6-${spec}.log"; then exit 1; fi
-          done
+          grep -E '^=== SAVEGAME V2 TEST RESULT: [1-9][0-9]* PASS / 0 FAIL ===$' w04-ia6-savegame_v2_test_runner.log
+          grep -E '^=== SAVEGAME V2 ADVERSARIAL RESULT: [1-9][0-9]* PASS / 0 FAIL ===$' w04-ia6-savegame_v2_adversarial_test_runner.log
           grep -E '^W03_REPEAT_V2_GODOT PASS checks=37' w04-ia6-parallel_items_w03_repeat_history_v2.log
           grep -E '^CAMP006_W03_REPEL_L3 PASS checks=[1-9][0-9]*' w04-ia6-parallel_items_w03_repel_l3.log
           grep -E '^W05_V4_REAL_FIELD_BAG PASS' w04-ia6-w05_staging_v4_books_bag.log
