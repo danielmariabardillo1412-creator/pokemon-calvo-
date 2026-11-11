@@ -89,3 +89,11 @@
 - [CI #42960157622](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/42960157622) **completed/success** (1/1) sobre SHA `53b292321b7eba52b3b5469505c4cefb29e86886`.
 - Log Python: `W01_POLICY_POSTGATE_PY PASS excluded=dynamax_candy no_scope_expansion=1 rows=36`; Godot 4.7: `ITEM_SELECTION_POLICY PASS checks=22 excluded=45`. Excluye `dynamax_candy` y conserva Rare Candy y caramelos Exp, sin alterar la lista de 36 filas W01.
 - **CI de held 38 jobs #42958587809 sigue pendiente de CAMP005 (37/38)** al último chequeo. El guard de política **NO permite certificar las 16 placas** sin esa regresión histórica. Integración IA6 NO.
+
+## CIERRE FUNCIONAL CERTIFICADO POR CI38 · 2026-11-11
+- [CI integral #42958587809](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/42958587809) finalmente **completed/success, 38/38 jobs** SHA `dead5a21679c0aa8f635f3ce12fce0279ada0fc0` (validado mediante `jobs?per_page=100`).
+- Las 16 placas B02/B03 se marcan **CERTIFICADO** con ese SHA y CI en `reports/W01/CONTINUOUS_V2_PHASE_B_PROGRESS.csv`. Matriz de pilotos también actualizada para conservar procedencia.
+- Resultado: **A 10/10, B 22/26 certificados + 4 DEPENDENCIA_FUERA_W01**, 36 examinados, 32 efectos existentes con L3 certificado, **0 objetos nuevos implementados**, IA6 integración NO.
+- Cambio posterior de política `dynamax_candy` validado por [CI #42960157622](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/42960157622) SUCCESS Python/Godot; no invalida la matriz W01.
+- Informe `CONTINUOUS_V2_FUNCTIONAL_CLOSURE.md` deja pendiente únicamente auditoría Fase C final sobre los CSV definitivos. **Aún no READY_FOR_IA6**.
+- La rama nueva W01 staging V4 está PREASIGNADA por IA6; activarla únicamente DESPUÉS de `READY_FOR_IA6` verificado y sin alterar integración árbitra.
