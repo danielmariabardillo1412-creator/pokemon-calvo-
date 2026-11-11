@@ -59,10 +59,7 @@ def main() -> None:
             "Dynamax Candy explicit exclusion dropped")
 
     if "--baseline-red" in sys.argv:
-        require("machine_panel_required" not in original and
-                "select_replacement_slot" not in original and
-                "PILOT_NAMES" in text(PANEL) or
-                "machine_panel_required" not in original,
+        require("machine_panel_required" not in original,
                 "Baseline expected to lack W05 transaction gate")
         print("W05_V4_BASELINE_RED EXPECTED missing_machine_use_guard=1")
         return
@@ -92,7 +89,8 @@ def main() -> None:
     require(panel.count("service.teach(id, target, _slot())") == 1 and
             "PILOT_NAMES" not in panel, "Old pilot-only language or double mutation")
     require("MachineMovesEsSvW05.resolve" in text(PROFILE) and
-            "MachineMovesEsSvW05.resolve" in text(HELPER),
+            "class_name MachineMovesEsSvW05" in text(HELPER) and
+            "func resolve(" in text(HELPER),
             "229 ES helper not connected to presentation")
     records = json.loads(text(LOCAL))
     profile = json.loads(text(MAPPING))
