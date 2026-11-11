@@ -1,0 +1,163 @@
+name: W01 V4 staging phase C partial genuine regression gate
+on:
+  push:
+    branches:
+      - codex/calvo-ia6-staging-20261111-w01-held
+    paths:
+      - '.github/workflows/w01-continuous-v4-phase-c-partial.yml'
+      - 'tests/gameplay/w01_continuous_v4_stage_held_l3.gd'
+      - 'tests/gameplay/parallel_items_w01_held_v1.gd'
+      - 'tests/gameplay/parallel_items_w01_campaign_002.gd'
+      - 'tests/gameplay/parallel_items_w01_campaign_001.gd'
+      - 'tests/gameplay/item_selection_policy_test_runner.gd'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  stage_baseline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: chickensoft-games/setup-godot@v2.4.1
+        with:
+          version: 4.7.0
+          use-dotnet: false
+          include-templates: false
+      - name: Restore pinned resources
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "POKEMON_CALVO_NODE=$(command -v node)" >> "$GITHUB_ENV"
+          python -B tools/distribution/restore_resources.py
+          python -B tools/distribution/restore_resources.py --check
+          mkdir -p data/reports .godot/item_audit_v1
+          cp ci/fixtures/pokeapi_reports/forms_policy_report.json data/reports/forms_policy_report.json
+          cp ci/fixtures/pokeapi_reports/unsupported_mechanics.json data/reports/unsupported_mechanics.json
+          cp ci/fixtures/pokeapi_reports/import_summary.json data/reports/import_summary.json
+          godot --headless --path . --import 2>&1 | tee w01-partial-import.log
+          if grep -E 'SCRIPT ERROR|Parse Error' w01-partial-import.log; then exit 1; fi
+          python -B tools/battle_reference/run.py --install --limit 1 2>&1 | tee w01-partial-native.log
+      - name: Stage SHA and CAMP001, Transform, policy real regression
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tests/tools/test_w01_v4_held_staging_preflight.py 2>&1 | tee w01-partial-preflight.log
+          grep -F 'W01_V4_STAGE_PREFLIGHT PASS held_engine_same=1 policy_same=1 held_catalog_same=1 selected_held=8' w01-partial-preflight.log
+          python -B tests/tools/test_parallel_items_w01_campaign_001.py --contracts
+          python -B tests/tools/test_parallel_items_w01_campaign_001.py --self-test
+          timeout 1100s godot --headless --path . --script res://tests/gameplay/parallel_items_w01_campaign_001.gd 2>&1 | tee w01-partial-camp001.log
+          grep -E '^W01_CAMP_001 PASS checks=[1-9][0-9]* rows=[1-9][0-9]* errors=0$' w01-partial-camp001.log
+          python -B tests/tools/test_parallel_items_w01_campaign_001.py
+          node tests/tools/repro_w01_camp005_b06_transform.cjs 2>&1 | tee w01-partial-transform.log
+          grep -F 'W01_B06_NATIVE_REPRO PASS cases=3 snapshots=3 switches=3' w01-partial-transform.log
+          timeout 180s godot --headless --path . --script res://tests/gameplay/item_selection_policy_test_runner.gd 2>&1 | tee w01-partial-policy.log
+          grep -E '^ITEM_SELECTION_POLICY PASS checks=[1-9][0-9]* excluded=45$' w01-partial-policy.log
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: w01-v4-partial-baseline-${{ github.run_id }}
+          retention-days: 7
+          if-no-files-found: ignore
+          path: w01-partial-*.log
+  stage_v1_camp002:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: chickensoft-games/setup-godot@v2.4.1
+        with:
+          version: 4.7.0
+          use-dotnet: false
+          include-templates: false
+      - name: Restore pinned resources
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "POKEMON_CALVO_NODE=$(command -v node)" >> "$GITHUB_ENV"
+          python -B tools/distribution/restore_resources.py
+          python -B tools/distribution/restore_resources.py --check
+          mkdir -p data/reports
+          cp ci/fixtures/pokeapi_reports/forms_policy_report.json data/reports/forms_policy_report.json
+          cp ci/fixtures/pokeapi_reports/unsupported_mechanics.json data/reports/unsupported_mechanics.json
+          cp ci/fixtures/pokeapi_reports/import_summary.json data/reports/import_summary.json
+          godot --headless --path . --import 2>&1 | tee w01-partial-v1-import.log
+          if grep -E 'SCRIPT ERROR|Parse Error' w01-partial-v1-import.log; then exit 1; fi
+          python -B tools/battle_reference/run.py --install --limit 1
+      - name: Original V1 and CAMP002 full tests with save and native evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tests/tools/test_parallel_items_w01_held_v1.py --contracts
+          timeout 900s godot --headless --path . --script res://tests/gameplay/parallel_items_w01_held_v1.gd 2>&1 | tee w01-partial-v1.log
+          grep -E '^PARALLEL_ITEMS_W01 PASS checks=[1-9][0-9]* rows=[1-9][0-9]* errors=0$' w01-partial-v1.log
+          python -B tests/tools/test_parallel_items_w01_held_v1.py 2>&1 | tee w01-partial-v1-evidence.log
+          grep -E '^W01_NATIVE_EVIDENCE_PASS runs=[1-9][0-9]* variants=[1-9][0-9]*$' w01-partial-v1-evidence.log
+          python -B tests/tools/test_parallel_items_w01_campaign_002.py --contracts --self-test 2>&1 | tee w01-partial-c002-contract.log
+          grep -E '^W01_CAMP002_ITER01_NEGATIVE_PASS rejected=[1-9][0-9]*$' w01-partial-c002-contract.log
+          timeout 1200s godot --headless --path . --script res://tests/gameplay/parallel_items_w01_campaign_002.gd 2>&1 | tee w01-partial-c002.log
+          grep -E '^W01_CAMP002_GODOT PASS checks=[1-9][0-9]* runs=[1-9][0-9]* errors=0$' w01-partial-c002.log
+          python -B tests/tools/test_parallel_items_w01_campaign_002.py --native 2>&1 | tee w01-partial-c002-evidence.log
+          grep -E '^W01_CAMP002_NATIVE_EVIDENCE_PASS runs=[1-9][0-9]* variants=[1-9][0-9]*$' w01-partial-c002-evidence.log
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: w01-v4-partial-v1-c002-${{ github.run_id }}
+          retention-days: 7
+          if-no-files-found: ignore
+          path: w01-partial-*.log
+  stage_held_l3:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: chickensoft-games/setup-godot@v2.4.1
+        with:
+          version: 4.7.0
+          use-dotnet: false
+          include-templates: false
+      - name: Restore pinned resources
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "POKEMON_CALVO_NODE=$(command -v node)" >> "$GITHUB_ENV"
+          python -B tools/distribution/restore_resources.py
+          python -B tools/distribution/restore_resources.py --check
+          mkdir -p data/reports
+          cp ci/fixtures/pokeapi_reports/forms_policy_report.json data/reports/forms_policy_report.json
+          cp ci/fixtures/pokeapi_reports/unsupported_mechanics.json data/reports/unsupported_mechanics.json
+          cp ci/fixtures/pokeapi_reports/import_summary.json data/reports/import_summary.json
+          godot --headless --path . --import 2>&1 | tee w01-partial-l3-import.log
+          if grep -E 'SCRIPT ERROR|Parse Error' w01-partial-l3-import.log; then exit 1; fi
+          python -B tools/battle_reference/run.py --install --limit 1
+      - name: Genuine staging held inventory, battle, settlement and SaveV2
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 1500s godot --headless --path . --script res://tests/gameplay/w01_continuous_v4_stage_held_l3.gd 2>&1 | tee w01-partial-l3.log
+          grep -E '^W01_V4_STAGE_L3 PASS modes=10 checks=[1-9][0-9]*$' w01-partial-l3.log
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: w01-v4-partial-l3-${{ github.run_id }}
+          retention-days: 7
+          if-no-files-found: ignore
+          path: w01-partial-*.log
