@@ -48,6 +48,9 @@ static func create(
 	creature.ivs = ivs
 	creature.evs = evs
 	creature.nature_id = nature_id
+	# W04 canonical form from the actual selected regional catalog source.
+	if catalogs is DefinitionCatalog and catalogs.species(species.id) == species:
+		creature.form_id = preload("res://modules/creatures/progression/canonical_form_identity_w04.gd").from_factory_source(species, catalogs)
 	if catalogs is DefinitionCatalog and catalogs.variants_enabled:
 		creature.is_shiny = preload("res://modules/creatures/progression/pokemon_variant_catalog.gd").choose_shiny(
 			species.id, catalogs, rng, instance_id, overrides.get("is_shiny"))
