@@ -176,45 +176,7 @@ jobs:
         run: |
           set -euo pipefail
           timeout 900s godot --headless --path . --script res://tests/gameplay/parallel_items_w03_continuous_v2_b01.gd 2>&1 | tee camp006-w03-continuous-v2-b01.log
-          grep -E '^W03_CONT_V2_B01 PASS ids=10 captured=10 checks=[1-9][0-9]*
-        shell: bash
-        run: |
-          set -euo pipefail
-          timeout 900s godot --headless --path . --script res://tests/gameplay/field_native_test_runner.gd 2>&1 | tee camp006-w03-native-field.log
-          grep -E '^FIELD_NATIVE .*PASS' camp006-w03-native-field.log
-      - name: W03 AUTORUN V3 real native Repeat capture history
-        shell: bash
-        run: |
-          set -euo pipefail
-          timeout 900s godot --headless --path . --script res://tests/gameplay/parallel_items_w03_repeat_native_v3.gd 2>&1 | tee camp006-w03-repeat-native-v3.log
-          grep -E '^W03_REPEAT_NATIVE_V3 PASS checks=[1-9][0-9]*$' camp006-w03-repeat-native-v3.log
-      - name: W03 AUTORUN V4 native Repeat full-party and checkpoint QA
-        shell: bash
-        run: |
-          set -euo pipefail
-          timeout 900s godot --headless --path . --script res://tests/gameplay/parallel_items_w03_repeat_native_v4.gd 2>&1 | tee camp006-w03-repeat-native-v4.log
-          grep -E '^W03_REPEAT_NATIVE_V4 PASS checks=[1-9][0-9]*$' camp006-w03-repeat-native-v4.log
-      - name: W03 TANDA04 native failed RNG and ledger SaveV2 QA
-        shell: bash
-        run: |
-          set -euo pipefail
-          timeout 900s godot --headless --path . --script res://tests/gameplay/parallel_items_w03_repeat_native_v4_negatives.gd 2>&1 | tee camp006-w03-repeat-native-v4-neg.log
-          grep -E '^W03_REPEAT_NATIVE_V4_NEG PASS checks=[1-9][0-9]*$' camp006-w03-repeat-native-v4-neg.log
-      - name: W03 TANDA04 native Transform and distinct Repeat QA
-        shell: bash
-        run: |
-          set -euo pipefail
-          timeout 900s godot --headless --path . --script res://tests/gameplay/parallel_items_w03_repeat_native_v4_transform.gd 2>&1 | tee camp006-w03-repeat-native-v4-transform.log
-          grep -E '^W03_REPEAT_NATIVE_V4_TRANSFORM PASS checks=[1-9][0-9]*$' camp006-w03-repeat-native-v4-transform.log
-      - name: Archive evidence
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: camp006-w03-${{ github.run_id }}
-          retention-days: 7
-          if-no-files-found: ignore
-          path: camp006-w03-*.log
- camp006-w03-continuous-v2-b01.log
+          grep -E '^W03_CONT_V2_B01 PASS ids=10 captured=10 checks=[1-9][0-9]*$' camp006-w03-continuous-v2-b01.log
       - name: Native field SaveV2 and capture regression
         shell: bash
         run: |
