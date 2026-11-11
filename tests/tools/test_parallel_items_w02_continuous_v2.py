@@ -25,7 +25,7 @@ def fail_if(condition: bool, message: str) -> None:
 def main() -> None:
     note = ORDER.read_text(encoding="utf-8")
     section = note.split("## Cola completa", 1)[1].split("**Orden de trabajo continuo:**", 1)[0]
-    rows = re.findall(r"^\\|\\s*(0[1-5])\\s*\\|([^\\n]+)\\|", section, flags=re.MULTILINE)
+    rows = re.findall(r"^\|\s*(0[1-5])\s*\|([^\n]+)\|", section, flags=re.MULTILINE)
     fail_if(len(rows) != 5, "V2 must contain exactly five blocks")
     blocks = []
     for number, text in rows:
