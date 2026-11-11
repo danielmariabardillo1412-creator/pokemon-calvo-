@@ -1,3 +1,11 @@
+# IA6 — RELEVO DIRECTO 12-11-2026 · W05 · PRÓXIMA p
+
+**Esta rama histórica ya está cerrada y los relevos V3/V4/V5 previos que se leen más abajo son HISTÓRICOS Y ESTÁN SUPERADOS.** IA6 ha entregado una nueva misión funcional en rama exclusiva `codex/calvo-items-20261112-w05-legacy-books-v5`.
+
+**PRÓXIMA `p`:** guardar/publicar cambios locales pendientes de esta rama si los hubiera; después cambiar directamente a `codex/calvo-items-20261112-w05-legacy-books-v5`, abrir allí `docs/coordination/items_parallel_v1/IA6_AUTORUN.md` y `docs/coordination/items_parallel_v1/CONTINUOUS_V5/STATE_W05.md`, iniciar fase A y seguir A→B→C. No repetir bloques anteriores ni pedir otra autorización por cada diez. La rama antigua NO se modifica en código, IA6 oficial/main/V28/PR118 son solo lectura. Las CI anteriores no acreditan la misión nueva.
+
+---
+
 # IA6 — V4 STAGING ACTIVA · W05 · 2026-11-11
 **Tu misión histórica V3 ha cerrado READY_FOR_IA6 y fue verificada por IA6.** No repetir QA ni empezar otra tanda en ESTA rama histórica. **IA6 ya creó una RAMA NUEVA EXCLUSIVA**: codex/calvo-ia6-staging-20261111-w05-books; el plan completo está en docs/coordination/items_parallel_v1/IA6_AUTORUN.md de ESA rama y el estado en docs/coordination/items_parallel_v1/CONTINUOUS_V4/STATE_W05.md. En la siguiente p: conservar el working tree original y comprobar que no hay modificaciones sin subir; cambiar a la staging asignada, leer allí IA6_AUTORUN.md y empezar fase A, B, C sin STOP cada diez. No modificar la rama oficial codex/calvo-ia6-integration-20261109, main, V28 ni PR118. La CI de V3 no certifica la staging.
 
