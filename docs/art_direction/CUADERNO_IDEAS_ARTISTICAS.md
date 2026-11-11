@@ -187,7 +187,8 @@ Estado: IDEA | INVESTIGAR | APARCADA | PROTOTIPO_AUTORIZADO | DESCARTADA
 - **Referencia observada por el usuario:** Pere Gamedev, «DESARROLLADOR INDIE IMPLEMENTA UN TRAIL EN 2D SOBRE LA NIEVE» (vídeo de 29 s; captura del usuario): https://www.youtube.com/watch?v=xjjtBN2IPzA
 - **Juego identificado en la propia descripción del vídeo:** **No Name Village**, de **PieMastah**; juego 2D de aventura/RPG desarrollado con **GameMaker**, publicado comercialmente el 13 de septiembre de 2025. Referencia: https://store.steampowered.com/app/2201500/No_Name_Village/ y demo https://piemastah.itch.io/no-name-village.
 - **Qué se ha visto en la captura:** un personaje pixel art caminando por nieve con un camino o rastro visible sobre la superficie blanca; se trata de un efecto gráfico para terreno **2D**.
-- **Límite de evidencia:** la página del vídeo identifica juego y efecto, pero no se ha extraído una transcripción o código fuente que confirme el **algoritmo interno exacto** de PieMastah. Los mecanismos descritos debajo son propuestas técnicas para Pokémon Calvo, NO una atribución comprobada a su motor.
+- **Transcripción recuperada y consultada (2026-11-11):** en el vídeo de Pere Gamedev (30 s) se explica un método concreto: dividir el *trail* en **tres partes (base, profundidad y borde)**, dibujar los sprites **en capas separadas mediante un sistema de partículas** y añadir **variaciones de cada sprite** para un acabado orgánico. Esta es la explicación expresada en el vídeo, no una suposición sobre un render target.
+- **Límite de evidencia:** el narrador atribuye esa solución al desarrollador del juego, pero **no se ha inspeccionado el código de PieMastah** para verificar los nodos, algoritmos o parámetros exactos. Diferenciar «lo explica Pere Gamedev» de «está confirmado por código fuente del desarrollador».
 
 ### Propósito para Pokémon Calvo
 
@@ -206,16 +207,16 @@ No limitar la idea a nieve: crear **un sistema reutilizable basado en el tipo de
 
 ### Arquitectura propuesta en Godot 4.x (específica para mapas 2D / 2.5D)
 
-**Primera versión experimental preferida: estampación de huellas/surcos en una máscara 2D.**
+**Primera versión experimental preferida: sistema de partículas/sprites en TRES capas, como enseña el vídeo.**
 
-1. El controlador del personaje identifica el material del suelo bajo sus pies (`TileMapLayer` con datos personalizados de superficie, o zonas/áreas equivalentes según la arquitectura final).
-2. Al avanzar una distancia suficiente o dispararse un evento de contacto de pie, emite un **sello** (*stamp*) en coordenadas del mapa: posición, orientación, forma de huella, intensidad y material.
-3. Un `SubViewport` 2D o render target por zona acumula estas marcas en una textura/máscara. Un shader del suelo combina máscara con nieve, barro, arena, etc. Para persistencia temporal se requiere una forma controlada de disipar o regenerar marcas, sin lectura/escritura simultánea insegura de la misma textura.
-4. La máscara altera **color, normales aparentes, sombras y textura**, generando sensación de hundimiento o arrastre sin cálculos de deformación volumétrica ni miles de objetos individuales. Para relieve auténtico sería otra opción más costosa.
-5. Delimitar el historial por sala o fragmentos (*chunks*); no guardar indefinidamente todas las pisadas del mundo. Sincronizar desplazamiento de cámara/mapa y limpieza al descargar zonas.
-6. Optimizar por evento/distancia de movimiento, no por creación de nodos/sprites ilimitados cada frame; usar resolución moderada, atlas compartido y criterios de culling. Medir memoria, coste de actualización y *overdraw*.
+1. El controlador identifica el tipo de suelo bajo el personaje (datos personalizados de `TileMapLayer` o áreas). Emite una marca al contacto de pie o tras recorrer distancia suficiente, no una por fotograma.
+2. Cada marca visible se compone de **(a) base**: textura principal del surco; **(b) profundidad**: zona de sombra o hundimiento aparente; **(c) borde**: nieve/barro desplazado a ambos lados. No hay deformación física 3D obligatoria.
+3. Las tres piezas se dibujan **en capas/z-index distintos** usando partículas 2D y sprites (en Godot, estudiar `GPUParticles2D`, `CPUParticles2D` o estampas reciclables, con orden de dibujo estable). Puede hacerse mediante una emisión coordinada que alinee base/profundidad/borde en el mismo punto y orientación; no exigir un solo nodo específico sin prueba.
+4. Crear **varias versiones de cada pieza** y alternarlas (rotación, longitud, anchura, variación artística) para evitar patrones idénticos. Variar dentro de los límites de legibilidad de pixel art.
+5. Mantener las marcas pegadas a coordenadas del mundo; definir vida útil y límites de partículas/estampas activas por área. **Ojo:** un sistema de partículas normal puede arrastrarlas o borrarlas al reiniciar el emisor; hay que probar persistencia e independencia del movimiento de cámara.
+6. Definir el suelo como datos + perfiles visuales: para **nieve**, base clara y borde suave; para **barro**, base oscura, borde húmedo y alguna salpicadura; para **arena**, borde granulado y vida más corta. Reutilizar el mecanismo, cambiar los sprites y parámetros. Medir FPS, memoria y sobrepintado.
 
-**Alternativa simple para el primer test:** huellas como sprites/decal 2D reciclables con vida limitada, evitando un sistema de máscara complejo si bastan pocas pisadas. Comparar contra la máscara acumulativa; elegir según el resultado y los tamaños reales de mapa.
+**Alternativas técnicas (no son la técnica que describe el vídeo):** sellos de sprites 2D reciclables sin partículas, si resultan más estables para huellas duraderas; y una máscara 2D acumulativa (`SubViewport` / textura dinámica + shader) si más adelante se necesitan miles de interacciones o deformaciones extensas. **No atribuir estos dos métodos al vídeo de Pere Gamedev.**
 
 **Relación con ART-WORLD-004 (mapas 2.5D):** calcular huellas sobre coordenadas 2D del suelo independientemente de que la apariencia del personaje provenga de un modelo 3D. Hay que sincronizar la ubicación de **los pies** renderizados, no solamente el centro del personaje. Resolver qué dibuja por delante/detrás y la escala de las huellas según perspectiva fija.
 
@@ -224,7 +225,7 @@ No limitar la idea a nieve: crear **un sistema reutilizable basado en el tipo de
 1. Una habitación pequeña de mapa de prueba con superficies de nieve y barro, personaje móvil y una cámara normal.
 2. Validar caminar, correr, girar, detenerse y volver a pisar un rastro: las huellas no deben multiplicarse sin control ni saltar de posición.
 3. Cambiar el material sin reescribir el sistema, solo sus ajustes visuales. Ensayar después arena.
-4. Comparar **sprites reciclados vs. máscara de huellas**; revisar que los surcos no atraviesen piedras, paredes o nieve que esté sobre otros planos.
+4. Probar primero **tres capas con partículas y variaciones de sprites** (método del vídeo). Comparar después sprites reciclados si aportan mayor estabilidad; evaluar máscara 2D solo si hace falta. Revisar que los surcos no atraviesen piedras, paredes u otros planos.
 5. Probar varias huellas, limpieza, cambio de mapa y cámara. No exigir guardar rastros entre sesiones en SaveV2 salvo autorización expresa.
 6. Medir CPU/GPU, FPS, VRAM y coherencia de estética DS/GBA; elegir presupuesto y opciones de calidad cuando se fije plataforma objetivo.
 
@@ -242,11 +243,13 @@ No limitar la idea a nieve: crear **un sistema reutilizable basado en el tipo de
 - Hugo Leblanc, **Deformable Snow Trails in Unity URP with Render Textures** (2026): textura de marcas y mapa de alturas; ejemplo 3D adaptable conceptualmente a 2D: https://hugoleblanc.fr/devlog/unity-snow-trails/
 - Demo original de No Name Village por PieMastah en GameMaker, útil para observar el resultado gráfico y estilo, **no como fuente de código interno**: https://piemastah.itch.io/no-name-village
 
-**Próxima condición de estudio:** cuando alcance la fase artística, revisar la transcripción/explicación completa de Pere Gamedev si está disponible y separar su método real de nuestro prototipo recomendado.
+**Transcripción del vídeo ya obtenida.** Queda para fase artística ver el detalle del *trail* en movimiento, diseñar las tres piezas artísticas y reproducir el método mediante una prueba real en Godot; la implementación interna exacta del juego solo se podrá afirmar si el autor aporta código o documentación.
 
 ---
 
 ## Registro de cambios
+
+- **2026-11-11 — CORRECCIÓN ART-FX-TRAIL-007:** recuperada transcripción completa del Short; el método descrito es trail de sprites dividido en base/profundidad/borde, emitidos por capas mediante partículas con variantes artísticas. Se sustituye propuesta inicial de máscara como primera opción; máscara queda solo como alternativa no atribuible al vídeo.
 
 - **2026-11-11:** ART-FX-TRAIL-007; referencia No Name Village/PieMastah y trail de nieve 2D, posible sistema compartido de huellas para nieve/barro/arena; sin implementación ni órdenes para trabajadoras.
 
