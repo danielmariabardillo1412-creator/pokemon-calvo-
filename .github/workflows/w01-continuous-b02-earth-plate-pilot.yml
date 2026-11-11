@@ -1,0 +1,65 @@
+name: W01 Continuous B02 Earth Plate native and L3 pilot
+on:
+  push:
+    branches:
+      - codex/calvo-items-20261110-w01-gems-autobatch01
+    paths:
+      - '.github/workflows/w01-continuous-b02-earth-plate-pilot.yml'
+      - 'tests/tools/repro_w01_continuous_b02_earth_plate_native.cjs'
+      - 'tests/gameplay/parallel_items_w01_continuous_b02_earth_plate.gd'
+      - 'tests/tools/test_w01_continuous_b02_earth_plate.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: w01-b02-earth-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  b02_earth_plate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: chickensoft-games/setup-godot@v2.4.1
+        with:
+          version: 4.7.0
+          use-dotnet: false
+          include-templates: false
+      - name: Restore canonical resources and native Showdown
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tools/distribution/restore_resources.py
+          python -B tools/distribution/restore_resources.py --check
+          mkdir -p data/reports
+          cp ci/fixtures/pokeapi_reports/forms_policy_report.json data/reports/forms_policy_report.json
+          cp ci/fixtures/pokeapi_reports/unsupported_mechanics.json data/reports/unsupported_mechanics.json
+          cp ci/fixtures/pokeapi_reports/import_summary.json data/reports/import_summary.json
+          godot --headless --path . --import 2>&1 | tee w01-b02-earth-import.log
+          if grep -E 'SCRIPT ERROR|Parse Error' w01-b02-earth-import.log; then exit 1; fi
+          echo "POKEMON_CALVO_NODE=$(command -v node)" >> "$GITHUB_ENV"
+          python -B tools/battle_reference/run.py --install --limit 1 2>&1 | tee w01-b02-earth-reference.log
+      - name: Real Earth Plate Ground-type damage boost and SaveV2
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tests/tools/test_w01_continuous_b02_earth_plate.py 2>&1 | tee w01-b02-earth-python.log
+          grep -E '^W01_B02_EARTH_PY PASS row=12 checks=[1-9][0-9]*$' w01-b02-earth-python.log
+          node tests/tools/repro_w01_continuous_b02_earth_plate_native.cjs 2>&1 | tee w01-b02-earth-native.log
+          grep -F 'W01_B02_NATIVE PASS id=earth_plate modes=5 type_boost=1 wrong_type=2 snapshots=5' w01-b02-earth-native.log
+          timeout 450s godot --headless --path . --script res://tests/gameplay/parallel_items_w01_continuous_b02_earth_plate.gd 2>&1 | tee w01-b02-earth-godot.log
+          grep -E '^W01_B02_L3_ROW PASS row=12 id=earth_plate modes=5 checks=[1-9][0-9]*$' w01-b02-earth-godot.log
+      - name: Upload diagnostic receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: w01-b02-earth-${{ github.run_id }}
+          retention-days: 7
+          if-no-files-found: ignore
+          path: w01-b02-earth-*.log
