@@ -60,6 +60,20 @@ jobs:
           grep -E '^IA6_BOOK_BAG PASS checks=[1-9][0-9]* features=real_bag,w05_panel,one_teach,savev2$' ia6-w05-ia6_books_bag_20261109.log
           grep -E '^IA6_INTEGRATION PASS checks=[1-9][0-9]* features=mint_effective_nature,escape_rope_bag_savev2$' ia6-w05-ia6_integration_mint_rope_20261109.log
           grep -E '^W05_V4_REAL_FIELD_BAG PASS slots=4 es=229 one_panel=1 no_double_spend=1 stale=1 party_storage=1 savev2=1 no_autosave=1 rope_preserved=IA6_SMOKE checks=[1-9][0-9]*$' ia6-w05-w05_staging_v4_books_bag.log
+      - name: W03 native Repel with books and Rope on same real demo
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 900s godot --headless --path . --script res://tests/gameplay/parallel_items_w03_repel_l3.gd 2>&1 | tee ia6-w05-w03-repel.log
+          if grep -E 'SCRIPT ERROR|Parse Error|^CAMP006_W03_REPEL_L3 FAIL' ia6-w05-w03-repel.log; then exit 1; fi
+          grep -E '^CAMP006_W03_REPEL_L3 PASS checks=[1-9][0-9]*        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ia6-w05-candidate-${{ github.run_id }}
+          retention-days: 7
+          if-no-files-found: ignore
+          path: ia6-w05-*.log
+ ia6-w05-w03-repel.log
       - name: Preserve logs
         if: always()
         uses: actions/upload-artifact@v4
