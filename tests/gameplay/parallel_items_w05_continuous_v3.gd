@@ -1,4 +1,4 @@
-extends "res://tests/gameplay/parallel_items_w05_book_ui_autorun_v2.gd"
+extends "res://tests/gameplay/parallel_items_w05_book_ui_autorun_v3.gd"
 
 # V3 actual FieldItemBag node plus authentic FieldItemService and panel.
 # FakeField supplies only FieldDemo's binding/session facade. Never mocks
