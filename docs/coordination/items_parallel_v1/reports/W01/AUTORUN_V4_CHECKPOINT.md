@@ -7,3 +7,9 @@
 - **CSV** marca 01 certificado y 02 en `EN_CI_AUTOMATICA`; 03–10 PENDIENTE. Métricas oficiales al publicar: **1/10 certificados; 0 objetos nuevos; 1 recorrido L3 certificado y 1 piloto L3 verde pendiente de puerta acumulativa; integración IA6 NO**.
 - **Siguiente p:** consultar CI disparada por este commit, investigar logs y reparar solo archivos propios W01 si falla. Cuando complete todos los jobs, marcar `life_orb` certificado (efecto previo nativo, sin crédito de implementación) y empezar `choice_band`, con bloqueo/reset tras cambiar de Pokémon desde mochila real.
 - **Prohibiciones:** sin cambios a `native_engine.cjs`, SaveV2, motor global u otros propietarios; no falsear PASS ni adjudicar regresiones de otra SHA a la actual.
+
+## Relevo verificado 2026-11-11 01:09 (Madrid)
+- CI #42926374158 completed/success 8/8 en SHA `46e4204a77743656de68d2026f6533f712c618cd`, por lo que fila 02 `life_orb` está CERTIFICADA.
+- Piloto #42927457230 completed/success en SHA `afb05a97a5dcfa0e654e819ea836598e2924df5d` para `choice_band`. Se incorpora como noveno job al workflow V4, aún no certificado globalmente.
+- Fase A: 2/10; 0 objetos nuevos; 2 recorridos L3 nuevos en cobertura pero con efecto previo del motor; integración IA6 NO.
+- Campaña CONTINUOUS_V2 activa: tras fila 10 seguir otros 26 IDs, no parar para pedir nueva tanda.

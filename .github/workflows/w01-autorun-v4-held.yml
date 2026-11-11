@@ -9,6 +9,9 @@ on:
       - 'tests/tools/repro_w01_autorun_v4_leftovers_native.cjs'
       - 'tests/tools/test_parallel_items_w01_autorun_v4.py'
       - 'tests/tools/test_parallel_items_w01_autorun_v4_life_orb.py'
+      - 'tests/tools/repro_w01_autorun_v4_choice_band_native.cjs'
+      - 'tests/tools/test_parallel_items_w01_autorun_v4_choice_band.py'
+      - 'tests/gameplay/parallel_items_w01_autorun_v4_choice_band.gd'
       - 'tests/tools/repro_w01_autorun_v4_life_orb_native.cjs'
       - 'tests/gameplay/parallel_items_w01_autorun_v4_life_orb.gd'
       - 'tests/fixtures/parallel_items/w01_autorun_v4.json'
@@ -446,3 +449,51 @@ jobs:
           retention-days: 7
           if-no-files-found: ignore
           path: w01-v4-life-*.log
+  v4_choice_band:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: chickensoft-games/setup-godot@v2.4.1
+        with:
+          version: 4.7.0
+          use-dotnet: false
+          include-templates: false
+      - name: Restore canonical assets and native Showdown
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tools/distribution/restore_resources.py
+          python -B tools/distribution/restore_resources.py --check
+          mkdir -p data/reports
+          cp ci/fixtures/pokeapi_reports/forms_policy_report.json data/reports/forms_policy_report.json
+          cp ci/fixtures/pokeapi_reports/unsupported_mechanics.json data/reports/unsupported_mechanics.json
+          cp ci/fixtures/pokeapi_reports/import_summary.json data/reports/import_summary.json
+          godot --headless --path . --import 2>&1 | tee w01-v4-band-import.log
+          if grep -E 'SCRIPT ERROR|Parse Error' w01-v4-band-import.log; then exit 1; fi
+          echo "POKEMON_CALVO_NODE=$(command -v node)" >> "$GITHUB_ENV"
+          python -B tools/battle_reference/run.py --install --limit 1 2>&1 | tee w01-v4-band-reference.log
+      - name: Real Choice Band damage lock switch reset SaveV2
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tests/tools/test_parallel_items_w01_autorun_v4_choice_band.py | tee w01-v4-band-python.log
+          grep -E '^W01_V4_CHOICE_PY PASS row=03 checks=[1-9][0-9]*$' w01-v4-band-python.log
+          node tests/tools/repro_w01_autorun_v4_choice_band_native.cjs 2>&1 | tee w01-v4-band-native.log
+          grep -F 'W01_V4_NATIVE PASS id=choice_band modes=3 boost=1 lock=1 reset=1 snapshots=3' w01-v4-band-native.log
+          timeout 460s godot --headless --path . --script res://tests/gameplay/parallel_items_w01_autorun_v4_choice_band.gd 2>&1 | tee w01-v4-band-godot.log
+          grep -E '^W01_V4_L3_ROW PASS row=03 id=choice_band modes=3 checks=[1-9][0-9]*$' w01-v4-band-godot.log
+      - name: Upload pilot diagnostic logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: w01-v4-choice-band-${{ github.run_id }}
+          retention-days: 7
+          if-no-files-found: ignore
+          path: w01-v4-band-*.log
