@@ -1,3 +1,8 @@
+# IA6 — V4 STAGING ACTIVA · W03 · 2026-11-11
+**Tu misión histórica V3 ha cerrado READY_FOR_IA6 y fue verificada por IA6.** No repetir QA ni empezar otra tanda en ESTA rama histórica. **IA6 ya creó una RAMA NUEVA EXCLUSIVA**: codex/calvo-ia6-staging-20261111-w03-capture; el plan completo está en docs/coordination/items_parallel_v1/IA6_AUTORUN.md de ESA rama y el estado en docs/coordination/items_parallel_v1/CONTINUOUS_V4/STATE_W03.md. En la siguiente p: conservar el working tree original y comprobar que no hay modificaciones sin subir; cambiar a la staging asignada, leer allí IA6_AUTORUN.md y empezar fase A, B, C sin STOP cada diez. No modificar la rama oficial codex/calvo-ia6-integration-20261109, main, V28 ni PR118. La CI de V3 no certifica la staging.
+
+---
+
 # IA6 — VETO CARAMELO DINAMAX / dinamax_candy — 2026-11-11
 
 **ORDEN VINCULANTE A W03:** el usuario descartó `dynamax_candy`. Ya está en `config/item_selection_v1.json::excluded_ids` de TU rama y el test de política exige rechazo de generación. No seleccionarlo, no incluirlo en nuevas colas de objetos ni invertir trabajo en su arte/función; los CSV antiguos `CANDIDATE`/`RETAIN_FOR_FUNCTIONAL_REVIEW` son auditorías HISTÓRICAS, no autorización. Excluye solo este ítem, no Rare Candy/Exp Candy/otras mecánicas no discutidas. Dictamen completo en rama árbitra: `docs/coordination/items_parallel_v1/IA6_EXCLUSION_DYNAMAX_CANDY_20261111.md`. El resto de TU plan continuo sigue vigente.
