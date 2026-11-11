@@ -1,4 +1,4 @@
-# W01 CONTINUOUS_V2 · Estado activo — FASE B / Bloque 01
+# W01 CONTINUOUS_V2 · Estado activo — FASE B / Bloque 02
 
 **Rama W01:** `codex/calvo-items-20261110-w01-gems-autobatch01`. **Protocolo:** `IA6_AUTORUN.md` y `CONTINUOUS_V2/PLAN_W01.md`. **NUNCA STOP por 10/10**.
 
@@ -10,7 +10,7 @@
 
 ## Fase B — bloque 01/03 activo
 - **26 candidatos autorizados**, 10+10+6. **22 seleccionados con entrada nativa**, **4 DEPENDENCIA_FUERA_W01** debido a `DATA_ONLY` y ausencia en selección: `amulet_coin`, `pure_incense`, `luck_incense`, `cleanse_tag`. No se implementan monedas, encuentros ni crianza.
-- **CSV activo:** `reports/W01/CONTINUOUS_V2_PHASE_B_PROGRESS.csv`, 26 filas, **2/26 certificados B**, **6 pilotos L3 aprobados** (puerta global pendiente), **4/26 dependencias**, **16/26 pilotos por ejecutar**, **0 nuevos implementados B**.
+- **CSV activo:** `reports/W01/CONTINUOUS_V2_PHASE_B_PROGRESS.csv`, 26 filas, **6/26 certificados B**, **6 pilotos L3 aprobados** (puerta global pendiente), **4/26 dependencias**, **16/26 pilotos por ejecutar**, **0 nuevos implementados B**.
 - **next_id:** bloque B01 con 6 pilotos verdes (IDs 01,02,03,04,05,10) y 4 dependencias fuera W01 (06–09). La CI acumulativa intermedia #42946981841 terminó SUCCESS 18/18; nueva CI 22 jobs pendiente para cuatro pilotos adicionales. Al terminar, publicar gate final B01 con 22 jobs (los 18 + 4 pilotos verdes), sin cancelar la CI vigente. Después empezar B02 placas por tipo.
 - **siguientes:** Fase B bloque 02 (10 placas) y bloque 03 (6 placas); no implementar formas de Arceus. Si mejora eficiencia, usar suite paramétrica de tipos con controles por placa y reporte individual por ID.
 - **preflight:** `reports/W01/CONTINUOUS_V2_PHASE_B_PREFLIGHT.md`. `holdable_ids` no basta para declarar efecto disponible. `expert_belt` ya tenía piloto L2; `big_root` CAMP001: reusar evidencia y añadir únicamente cobertura faltante.
@@ -45,7 +45,7 @@
 ## Checkpoint de ejecución autónoma · Fase B (11-11-2026)
 - **CI B01 definitiva 22 jobs:** [#42954745915](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/42954745915), SHA `1bfd86991cfbd01509b29a245f2e8ee7ada45e93`, **in_progress** al último chequeo. Incluye pilotos `ability_shield`, `absorb_bulb`, `adrenaline_orb`, `big_root`, `expert_belt`, `draco_plate`, más 16 regresiones completas. Los 6 jobs B01 de ítems ya están SUCCESS, pero **NO** certificar los últimos cuatro hasta 22/22 SUCCESS.
 - **B02 fila 11 `dread_plate`:** piloto aislado [#42954858566](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/42954858566), SHA funcional `41cf4d24f70f97a31e9b1c45159ab6e770261523`, **in_progress** en último chequeo. Cinco casos nativos Dark Pulse vs Tackle/no equipar/reserva, camino FieldItemService → campo → SaveV2. Prohibición de cambios Arceus/W04. No declarar PASS todavía.
-- **Contabilidad verificable actual:** Fase A 10/10; Fase B **2/26** certificados (01–02), cuatro pilotos B01 verdes todavía sin gate completa, cuatro dependencias fuera W01; B02 fila 11 test publicado, no certificado. **0 objetos implementados nuevos**; **IA6 integración pendiente**.
+- **Contabilidad verificable actual:** Fase A 10/10; Fase B **6/26** certificados (01–02), cuatro pilotos B01 verdes todavía sin gate completa, cuatro dependencias fuera W01; B02 fila 11 test publicado, no certificado. **0 objetos implementados nuevos**; **IA6 integración pendiente**.
 - **Siguiente `p`:** comprobar #42954745915 y #42954858566. Si B01 22/22 SUCCESS, certificar filas 03/04/05/10 con SHA de CI y cerrar B01 6 certificados + 4 dependencias. Si Dread PASS, incorporar su test a CI acumulativa de B02, preferentemente en suite parametrizada de 16 placas, sin cancelar jobs pendientes. Si Dread falla, revisar Node/Godot y corregir solo test W01. Continuar al ID `earth_plate` sin orden adicional.
 
 ## Continuidad adicional — B02/11 y B02/12 (este turno)
@@ -53,3 +53,9 @@
 - **Fila 12 `earth_plate`:** piloto nativo `earth_power` y control `tackle`, reserva/no equipar y Godot L3/SaveV2 publicado SHA `6e01402af5811a74ad2f200d80ab7c1eb761ecbf`. [CI #42955023454](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/42955023454) **completed/success**, Python 9, Showdown 5 modos y Godot 5 rutas L3 / 100 comprobaciones; **todavía NO CERTIFICADO globalmente** hasta CI acumulativa B02.
 - **Gate B01 22 jobs** [#42954745915](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/42954745915) SHA `1bfd86991cfbd01509b29a245f2e8ee7ada45e93` en ejecución en último chequeo. No atribuir PASS global a las filas B01/03–05,10 hasta 22/22 success. Fase A 10/10; Fase B 2/26 certificados, 4 dependencias; nuevas implementaciones producción 0; IA6 integración NO.
 - **Próximo `p`:** consultar CI22, Dread reintento y Earth piloto. Si CI22 SUCCESS, certificar en CSV B01 filas 03–05 y 10, cerrar B01 6/10 + 4 DEPENDENCIA_FUERA_W01. Si Dread/Earth PASS, integrar sus jobs a CI B02 acumulativa; si falla, reparar exclusivamente test W01 tras leer logs. Continuar B02 `fist_plate` etc. No tocar formas de Arceus ni W04.
+
+## Cierre CERTIFICADO del bloque B01
+- [CI 42954745915](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/42954745915) `completed/success` **22/22 jobs** sobre SHA `1bfd86991cfbd01509b29a245f2e8ee7ada45e93`. B01/03 `adrenaline_orb`, /04 `big_root`, /05 `expert_belt`, /10 `draco_plate` ahora `CERTIFICADO` en CSV. B01/01–02 ya lo estaban por CI18.
+- **B01 resuelto: 6 certificados + 4 DEPENDENCIA_FUERA_W01**. Fase B: **6/26 certificados, 4 dependencias, 16 placas por certificar**. Implementaciones nuevas de producción: 0. Integración IA6: NO.
+- **B02/11 y B02/12** ya tienen pilotos aislados SUCCESS (#42955088591 y #42955023454), sin gate B02. Continuar B02 placas por tipo, conservar regresiones. **Siguiente ID B02/13 `fist_plate`.**
+- Informe B01 final: `reports/W01/CONTINUOUS_V2_B01_FINAL.md`.
