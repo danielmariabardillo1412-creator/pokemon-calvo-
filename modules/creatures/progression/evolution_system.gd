@@ -168,6 +168,15 @@ static func apply_evolution(
 				return null
 			if matches == 1:
 				regional_form = selected
+	# W04 V5: only ten canonical unconditional level routes; keep the V4 item
+	# resolver above untouched. Source identity must be verified before target form.
+	if catalogs is DefinitionCatalog and preload("res://modules/creatures/progression/regional_level_evolution_contract_w04_v5.gd").ROUTES.has(creature.species_id):
+		var level_route: Dictionary = preload("res://modules/creatures/progression/regional_level_evolution_contract_w04_v5.gd").ROUTES[creature.species_id]
+		if level_route[&"target"] == target_species_id:
+			var level_evidence: Dictionary = preload("res://modules/creatures/progression/regional_level_evolution_contract_w04_v5.gd").inspect(creature, target_species_id, catalogs)
+			if not level_evidence.get("ok", false):
+				return null
+			regional_form = StringName(level_evidence.get("target_form_id", ""))
 	var new_creature := CreatureInstance.new(
 		creature.instance_id,
 		target_species_id,
