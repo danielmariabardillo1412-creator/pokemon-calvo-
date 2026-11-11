@@ -1,30 +1,47 @@
-# ACTUALIZACIÓN IA6 — 2026-11-11: DESBLOQUEO W03 LEGACY (leer primero)
+# IA6 — W03 · NUEVA CAMPAÑA CONTINUA V5 ACTIVADA · REPELENTES + MOCHILA + CAMPO
 
-IA6 ha AUTORIZADO **tres y solo tres seams** de `modules/gameplay/wild_adventure_session.gd` exclusivamente en tu rama `codex/calvo-ia6-staging-20261111-w03-capture`. La orden de IA6 está publicada en la rama árbitra `codex/calvo-items-20261101-arbitro`:
+**Rama ÚNICA de trabajo**: `codex/calvo-items-20261111-w03-repel-staging-v5`. Esta rama se creó desde la V4 W03 completada, pero es una misión distinta; NO volver a certificar V4 ni editar la rama entregada. V4 está READY_FOR_IA6_MERGE_CAPTURE con CI #43068968046 SUCCESS; Repel sigue ausente de la staging y de IA6 oficial.
 
-`docs/coordination/items_parallel_v1/CONTINUOUS_V4/IA6_W03_LEGACY_WILD_SEAM_AUTH_20261111.md`
+**PRÓXIMA `p` O `sigue`**: comprobar working tree, HEAD, leer `docs/coordination/items_parallel_v1/CONTINUOUS_V5/STATE_W03.md` y el plan íntegro de abajo. Ejecutar **FASE A paso 1**: incorporar la prueba real de repelentes desde W03 histórica como test, demostrar RED en la staging, comparar los cuatro archivos por función. Proseguir fases B→C sin detenerse cada diez tareas, con checkpoint y CI de SHA exacto. No esperar a otra tanda si el plan tiene pendientes. No atribuir trabajo en segundo plano.
 
-Tu siguiente `p` debe recuperar esa orden, comparar el blob fuente con staging y ejecutar los tres hunks con el test histórico `parallel_items_w03_repeat_history_v2.gd` **obligatoriamente verde**, sin aceptar las seis aserciones rojas antiguas como excepción. No tocar mochila/repelentes ni módulos fuera de permiso. La autorización no es merge oficial IA6.
+**Nueva autorización IA6 acotada** en rama V5: `FieldItemBag` SOLO _refresh_choices/_apply/_apply_repel para los tres repeles; `field_demo.gd` SOLO pasos/encuentro/estado SaveV2; `field_native_bridge.gd::on_step` SOLO bloqueos repel. Proteger libros W05, Cuerda Huida, legado Repeat, menta efectiva, política de exclusión de dynamax_candy y todas las ramas ajenas. No copiar archivos globales ni hacer merges.
 
----
-
-# IA6 — W03 · NUEVA MISIÓN CONTINUA V4 EN RAMA STAGING
-**Estado:** ACTIVA. **Rama ÚNICA de esta misión:** codex/calvo-ia6-staging-20261111-w03-capture.
-**Origen de confianza:** plan IA6 en rama árbitra codex/calvo-items-20261101-arbitro: docs/coordination/items_parallel_v1/CONTINUOUS_V4/PLAN_W03.md; reglas generales docs/coordination/items_parallel_v1/CONTINUOUS_V4/README.md. **Base fija** e63b2e6c7e175fba318cc2f562bebd1769589092 (IA6 integradora, conserva exclusión dynamax_candy).
-
-**PUERTA SUPERADA:** fuente histórica V3 completada y CI verificada. Al recibir p/sigue, trabajar inmediatamente en la rama staging siguiendo fases A → B → C; no detener cada diez hitos.
-
-**Seguridad:** Si el workspace local contiene cambios no subidos, primero guardar checkpoint en su rama original; no cambiar rama con working tree sucio. Esta staging es un ensayo y no modifica ni fusiona la rama integradora oficial IA6, main, V28, PR118 u otras ramas. Evitar copiar archivos enteros de origen, usar diff por funciones, tests rojos y CI del SHA exacto. Registrar STATE_W03.md en esta misma staging. Sin trabajo asíncrono; p reanuda desde checkpoint.
-
-**Métrica:** fases A/B/C | funcionalidades ya existentes vs integradas en ensayo | L3 y regresiones CI | conflictos bloqueados | integración oficial IA6: NO. Al terminar READY_FOR_IA6_MERGE (sin generar más rondas de QA vacías).
+**Autoridad central**: `docs/coordination/items_parallel_v1/CONTINUOUS_V5/PLAN_W03.md` en `codex/calvo-items-20261101-arbitro`. El siguiente plan está copiado completo para evitar depender de lecturas cruzadas.
 
 ---
 
-# W03 V4 — CAPTURA STAGING (ACTIVA)
-Destino: codex/calvo-ia6-staging-20261111-w03-capture. Base IA6 e63b2e6c7e175fba318cc2f562bebd1769589092. Fuente W03 código ef63e824069aa27ce957e99997df8e7a50c78524, CI #42958535816 SUCCESS.
+# ORDEN IA6 / W03 — CONTINUOUS V5 · REPELENTES EN MOCHILA + CAMPO + SAVEV2
 
-FASE A: diff selectivo de la captura W03 contra IA6. Portar únicamente lo que falte de Repeat Ball+ledger real, Net Ball, Moon Ball x4 con origen EvolutionRecord, persistencia opcional SaveV2 y pruebas. IA6 ya tiene Cuerda Huida: NO duplicarla. Identificar gap de repeles, pero NO modificar FieldItemBag (es W05).
-FASE B: test captura real ShowdownAdventureSession.capture: primera captura, guardar/cargar, Repeat misma especie x3.5, Net por tipo Agua/Bicho, Moon según Piedra Lunar; stock, RNG, Party/Storage, especie base, corrupción/legacy y rollback. Conservar naturaleza efectiva de IA6. Mantener Heavy/Beast/Dive/Dusk/Lure/Love bloqueadas si productor real falta, sin flags fingidos.
-FASE C: CI staging CAMP003–006 y W03 V1–V3, reporte reports/W03/CONTINUOUS_V4_STAGING_FINAL.md + STATE_W03. Entregar hunks exactos, ticket separado para repeles de mochila, READY_FOR_IA6_MERGE.
+Fecha 2026-11-11. **Rama NUEVA exclusiva**: `codex/calvo-items-20261111-w03-repel-staging-v5`, derivada de `codex/calvo-ia6-staging-20261111-w03-capture`. V4 queda entregada/fijada: captura nativa + Wild legacy, CI **#43068968046 completed/success** SHA `5a82da2a9dd1a868c3f8af9d73551fe16571adea`. NO repetir V4 ni atribuir su CI a V5. Entrega V4 `READY_FOR_IA6_MERGE_CAPTURE / REPEL_SHARED_SEAM_PENDING`; la integración oficial sigue NO realizada.
 
-PERMISOS: cambios localizados al ledger en PlayerCollection, SaveGameData/Repository y FieldNativeSave (NO _valid_creature); CaptureBattleContext, CaptureRuleset, CaptureContextBallEffects y ShowdownAdventureSession.capture; helpers y tests propios. FieldItemBag, CreatureInstance, motor Showdown global, RNG, W04 y W05 solo lectura. No copiar archivos enteros; no main/V28/PR118. La staging no es IA6 integrada.
+## Objetivo legítimo y fuente exacta
+Resolver el ticket `CONTINUOUS_V4/W03_REPEL_BAG_GAP.md` en una staging **exclusiva W03** sin tocar la integradora oficial ni las ramas de W05. El origen W03 `codex/calvo-items-20261104-w03-camp006` ya tiene código y prueba `tests/gameplay/parallel_items_w03_repel_l3.gd` para:
+- `repel` 100 pasos; `super_repel` 200; `max_repel` 250.
+- consumo exactamente 1 desde mochila; no consumir si ya hay efecto activo, inventario desactualizado o guard falso;
+- supresión de salvajes de nivel inferior al líder (igual o superior se permite), movimiento real `OverworldPlayer.step_completed`, RNG comprometido una vez para encuentro suprimido, sin crear batalla;
+- estado persistido manualmente con SaveV2, carga antigua sin campo, rechazo de corrupción sin mutar estado vivo.
+
+La staging W03 V4 actual ya incluye **libros W05 + Cuerda Huida** en la mochila de la base IA6, además de Repeat, Net, Moon y naturaleza efectiva. **IMPORTANTE**: W05 también ha entregado después una staging V4 propia #42965926888, con mejoras en `FieldItemBag`. Esa entrega NO está integrada en esta nueva rama W03. La prueba aquí puede acreditar solo convivencia con el baseline disponible; IA6 integrará después los hunks W05 más recientes y repetirá CI cruzada. No afirmar convivencia total ni merge oficial.
+
+## Fase A — Prueba roja y diferencias REALES
+1. Verificar HEAD/working tree, `IA6_AUTORUN.md`, `CONTINUOUS_V5/STATE_W03.md`, el ticket y las CI/SHAs V4; diferenciar source antiguo y staging. No perder cambios sin publicar de la ventana V4.
+2. Reproducir `tests/gameplay/parallel_items_w03_repel_l3.gd` **inalterado** en V5 (traerlo como test desde origen W03), señalar los fallos reales y explicar qué función falta. Probar también los escenarios negativos, no tratar PASS anterior de origen como V5.
+3. Comparar por función las siguientes fuentes antiguas vs staging: `modules/overworld/field_repel_step_effect.gd` (nuevo helper), `scenes/visual/field_item_bag.gd` (`_refresh_choices`, `_apply`, `_apply_repel`), `scenes/visual/field_demo.gd` (estado, encuentros, guardado/carga), `scenes/visual/field_native_bridge.gd::on_step`. Registrar diff exacto y dependencias sin copiar ficheros completos.
+
+## Fase B — Trasplante autorizado, acotado
+**AUTORIZACIÓN NUEVA ESPECÍFICA DE IA6 EXCLUSIVAMENTE EN ESTA RAMA** para:
+- Añadir helper `modules/overworld/field_repel_step_effect.gd` y sus pruebas W03.
+- Editar **solo** `_refresh_choices`, `_apply` y nuevo `_apply_repel` en `scenes/visual/field_item_bag.gd` para los 3 IDs. La selección no debe requerir Pokémon para activar repel. PRESERVAR exactamente `_open_machine_books`, `_on_book_teaching_finished`, panel, señales, `_apply_escape_rope` y su callback, y el orden de actualización. Ningún duplicado de panel ni de consumo.
+- Editar solo los puntos mínimos de `scenes/visual/field_demo.gd` necesarios para inicializar/adjuntar el efecto a movimiento real, aplicar bloqueo de encuentros, incluir estado en snapshot, validar/restaurar la porción opcional de repel en SaveV2. No cambiar reglas generales de encuentros, especies, combate, generadores o UI.
+- Editar **solo** `on_step` de `scenes/visual/field_native_bridge.gd` para aceptar `blocked_by_repel` y aplicar el avance de RNG según el contrato existente, sin abrir batalla ni consumir `next_battle_seed`.
+- Añadir tests y workflow W03 V5, CSV/checkpoints/report. NO modificar `FieldItemService`, `FieldNativeSave`, `SaveGameData`, `PlayerCollection`, `WildAdventureSession`, `ShowdownAdventureSession`, `CreatureInstance`, motor JS, RNG global, catálogos/política, W05 staging, IA6 oficial, main, V28 o PR118.
+
+**Puertas B**: para los tres ítems, ejecutar mochila real → efecto → desplazamiento real → encuentro bajo líder bloqueado/igual nivel permitido → decremento hasta expiración → consumo/rollback → guardado/carga manual → legacy sin campo y corrupción. Probar idempotencia, señal única, abrir/cerrar libro y Cuerda Huida sin regresión, menta y SaveV2. Jamás inventar productor `heavy_ball`, `beast_ball` ni de pesca/zona/sexo.
+
+## Fase C — Certificación y entrega
+1. Mantener green original Repeat Legacy `W03_REPEAT_V2_GODOT PASS checks=37` **sin waiver** y Repeat/Net/Moon nativa, historia capturas, persistencia, 7/7 rutas W04 solo si están disponibles en esta rama (si no, reportar dependencia). Guardas `dynamax_candy` excluido y W05 libros+Cuerda Huida del baseline. No declarar PASS de suites no ejecutadas.
+2. Ejecutar Godot/Python de W03 V4 + nuevo Repel L3, CI de V5 sobre SHA exacto, negativa de corrupción/stock/doble pulsación; si falla reparar únicamente dentro de funciones autorizadas. CAMP003–006 u otras suites ausentes: documentar qué falta y reservar la CI central de IA6; no alterar tests históricos para ocultar FAIL.
+3. Publicar `docs/coordination/items_parallel_v1/reports/W03/CONTINUOUS_V5_FINAL.md`, diff por función con blob/SHA, checklist de compatibilidad de W05 V4 más reciente, `CONTINUOUS_V5/STATE_W03.md` como `READY_FOR_IA6_MERGE_REPEL_CANDIDATE`. **No** declarar integración oficial ni activar V6 por iniciativa propia. No rondas de QA vacías.
+
+## Autonomía y reglas de barra
+Una `p` reanuda la primera fase/tarea V5 pendiente y enlaza A→B→C en el mismo turno cuando sea posible; checkpoint en GitHub si el turno se agota. Solo detener si todas las tareas independientes certificadas o hay bloqueo real en archivo protegido, con ticket. Métrica `V5 A/B/C | 3 repelentes examinados | L3 por ítem | fallos/rollback | QA books/rope | CI/SHA | integración IA6 NO`. No confundir tres ítems ya existentes con tres objetos creados. No ejecución en background.
