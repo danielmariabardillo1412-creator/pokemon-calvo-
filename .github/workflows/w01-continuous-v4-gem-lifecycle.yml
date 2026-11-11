@@ -1,0 +1,55 @@
+name: W01 V4 stage real gem native lifecycle
+on:
+  push:
+    branches:
+      - codex/calvo-ia6-staging-20261111-w01-held
+    paths:
+      - '.github/workflows/w01-continuous-v4-gem-lifecycle.yml'
+      - 'tests/gameplay/w01_continuous_v4_gem_lifecycle.gd'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  gem_lifecycle:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: chickensoft-games/setup-godot@v2.4.1
+        with:
+          version: 4.7.0
+          use-dotnet: false
+          include-templates: false
+      - name: Restore canonical battle resources
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "POKEMON_CALVO_NODE=$(command -v node)" >> "$GITHUB_ENV"
+          python -B tools/distribution/restore_resources.py
+          python -B tools/distribution/restore_resources.py --check
+          mkdir -p data/reports
+          cp ci/fixtures/pokeapi_reports/forms_policy_report.json data/reports/forms_policy_report.json
+          cp ci/fixtures/pokeapi_reports/unsupported_mechanics.json data/reports/unsupported_mechanics.json
+          cp ci/fixtures/pokeapi_reports/import_summary.json data/reports/import_summary.json
+          godot --headless --path . --import 2>&1 | tee w01-v4-gem-life-import.log
+          if grep -E 'SCRIPT ERROR|Parse Error' w01-v4-gem-life-import.log; then exit 1; fi
+          python -B tools/battle_reference/run.py --install --limit 1
+      - name: Native gem damage, consumption, settle and SaveV2 with controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 300s godot --headless --path . --script res://tests/gameplay/w01_continuous_v4_gem_lifecycle.gd 2>&1 | tee w01-v4-gem-life-run.log
+          grep -E '^W01_V4_GEM_LIFECYCLE PASS modes=3 checks=[1-9][0-9]*$' w01-v4-gem-life-run.log
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: w01-v4-gem-lifecycle-${{ github.run_id }}
+          retention-days: 7
+          if-no-files-found: ignore
+          path: w01-v4-gem-life-*.log
