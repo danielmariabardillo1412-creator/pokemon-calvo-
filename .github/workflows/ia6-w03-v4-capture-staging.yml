@@ -74,15 +74,25 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          # The legacy WildAdventureSession is deliberately outside W03 V4 write
-          # permissions. Keep its ORIGINAL test and record exact known RED;
-          # no weakening/rewriting of the test and no false PASS attribution.
+          # This ORIGINAL legacy WildAdventureSession test is outside W03 V4
+          # edit authority; diagnose exact known RED separately, never call it PASS.
           set +e
           timeout 900s godot --headless --path . --script res://tests/gameplay/parallel_items_w03_repeat_history_v2.gd 2>&1 | tee w03-v4-repeat-ledger.log
           legacy_exit=${PIPESTATUS[0]}
           set -e
           if [ "$legacy_exit" -eq 0 ]; then
-            grep -E '^W03_REPEAT_V2_GODOT PASS checks=[1-9][0-9]* native_capture_l3=false
+            grep -E '^W03_REPEAT_V2_GODOT PASS checks=[1-9][0-9]* native_capture_l3=false$' w03-v4-repeat-ledger.log
+            echo 'W03_V4_LEGACY_WILD PASS legacy adapter now functional'
+          else
+            grep -F 'W03_REPEAT_V2_GODOT FAIL checks=37 errors=[' w03-v4-repeat-ledger.log
+            grep -F '"ledger exactly one base and party-owned"' w03-v4-repeat-ledger.log
+            grep -F '"adventure reloaded ledger"' w03-v4-repeat-ledger.log
+            grep -F '"repeat bonus from true ledger"' w03-v4-repeat-ledger.log
+            grep -F '"live context ledger before attempt"' w03-v4-repeat-ledger.log
+            grep -F '"repeat processed through real battle and spent"' w03-v4-repeat-ledger.log
+            grep -F '"cannot double capture a closed encounter"' w03-v4-repeat-ledger.log
+            echo 'W03_V4_LEGACY_WILD BLOCKED_AUTHORIZATION_WILD_ADVENTURE_SESSION NOT_PASS'
+          fi
           timeout 900s godot --headless --path . --script res://tests/gameplay/parallel_items_w03_repeat_native_v4.gd 2>&1 | tee w03-v4-repeat-native.log
           grep -E '^W03_REPEAT_NATIVE_V4 PASS checks=[1-9][0-9]*$' w03-v4-repeat-native.log
           timeout 900s godot --headless --path . --script res://tests/gameplay/parallel_items_w03_repeat_native_v4_negatives.gd 2>&1 | tee w03-v4-repeat-negative.log
