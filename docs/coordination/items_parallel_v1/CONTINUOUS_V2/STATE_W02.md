@@ -33,3 +33,13 @@ La fase V2 tiene 42 IDs, de los cuales **36 ya disponían de pruebas positivas y
 ## Reanudación
 
 La próxima `p` lee `IA6_AUTORUN.md` y este archivo, inspecciona HEAD/CI antes de editar y continúa por el primer trabajo pendiente. Está prohibido repetir mecánicas ya cubiertas o realizar STOP automático cada diez; sólo concluir tras acreditación de Persim o ticket explícito de bloqueo compartido y cierre de la lista.
+
+## Checkpoint incremental tras pruebas y CI acumulativa V2
+- Audit CSV por ID: `docs/coordination/items_parallel_v1/reports/W02/CONTINUOUS_V2_BERRIES_AUDIT.csv` (42 filas).
+- `persim_berry`: fixture `tests/fixtures/parallel_items/w02_continuous_v2_persim.json` y runner `tests/gameplay/parallel_items_w02_continuous_v2_persim.gd` PUBLICADOS, aún sin PASS propio.
+- Gate estructural Python V2: `tests/tools/test_parallel_items_w02_continuous_v2.py`, PENDIENTE CI.
+- CI acumulativa nueva: `42931293868` sobre SHA `0e59679abc91c353a5d58b33e0a4bf4ea2c51fc6`, estado PENDING observado (concurrency `cancel-in-progress: false`).
+- CI anterior en curso: `42929837808` SHA `69cbf0e56669142b25f5b785fde73630b80ec2b9` IN_PROGRESS, etapa V2 campo SUCCESS y regresiones T04/T03/T02 SUCCESS; CAMP004/003 seguía activa.
+- Código de producción modificado en V2: ninguno. Pruebas nuevas no equivalen a 42 objetos nuevos.
+- Próxima acción segura: verificar conclusión de ambas CI y de Persim; si FALLA inspeccionar job/log y reparar prueba o ticket protegido; si todas SUCCESS publicar informe final con 36 históricas + 5 nuevos contratos L3 de campo + 1 Persim L3 y 0 objetos nuevos.
+- No fusionar a IA6 ni certificar global hasta completed/success en SHA de los tests actuales.
