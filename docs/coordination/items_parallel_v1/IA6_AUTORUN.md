@@ -1,3 +1,11 @@
+# IA6 — W03 V5 · DESBLOQUEO FIXTURE HISTÓRICO REPEL · 11-11-2026 · LEE PRIMERO
+
+**AUTORIZACIÓN NUEVA, MÁS RECIENTE Y VINCULANTE:** `docs/coordination/items_parallel_v1/CONTINUOUS_V5/IA6_W03_REPEL_FIXTURE_ONE_LINE_AUTH_20261111.md` en la rama árbitra `codex/calvo-items-20261101-arbitro`. Tras auditar #43073388744 (FAIL) y `W03_REPEL_HISTORICAL_TEST_ZONE_TICKET.md`, IA6 autoriza cambiar EXCLUSIVAMENTE la selección de zona del test `tests/gameplay/parallel_items_w03_repel_l3.gd` desde `registered_zone_ids()[0]` (cueva por orden alfabético) a `scene.TECHNICAL_ZONE_ID` (hierba real). No tocar ninguna otra línea del fixture ni relajar aserciones; documentar diff exacto de una línea respecto al blob histórico `318ee45f60d9ee046bcb048019337524acfb4844`.
+
+**SIGUIENTE `p`:** continuar V5, adaptar SOLO `test_ia6_w03_v5_source_guard.py` a esta nueva autorización sin soltar hashes de producción y ejecutar **AMBAS** CI estrictas: `ia6-w03-v5-repel-staging.yml` (test histórico corregido PASS obligatorio) y `ia6-w03-v5-repel-grass-qa.yml` (test de hierba independiente y regresiones IA6). No permitir `continue-on-error`, no marcar PASS por un ticket o por suite ausente, ni inventar integración oficial. Si ambas y regresiones tienen SUCCESS sobre SHA exacto, actualizar STATE + informe final V5 y entregar READY_FOR_IA6_MERGE_REPEL_CANDIDATE; de lo contrario registrar fallo real. No esperar nueva tanda para estas tareas autorizadas.
+
+---
+
 # IA6 — W03 · NUEVA CAMPAÑA CONTINUA V5 ACTIVADA · REPELENTES + MOCHILA + CAMPO
 
 **Rama ÚNICA de trabajo**: `codex/calvo-items-20261111-w03-repel-staging-v5`. Esta rama se creó desde la V4 W03 completada, pero es una misión distinta; NO volver a certificar V4 ni editar la rama entregada. V4 está READY_FOR_IA6_MERGE_CAPTURE con CI #43068968046 SUCCESS; Repel sigue ausente de la staging y de IA6 oficial.
