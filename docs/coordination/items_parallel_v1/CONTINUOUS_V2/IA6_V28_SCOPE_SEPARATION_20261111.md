@@ -56,3 +56,16 @@ La referencia de fusión temporal `refs/pull/119/merge` utilizó como padre `e63
 - Certificación **del SHA de IA6 posterior al merge:** [#42969055524](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/42969055524) en `0028361...`; [#42969175343](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/42969175343) en `33ecf65...`. **Ambas IN_PROGRESS en el momento de este checkpoint; no atribuir SUCCESS hasta leer GitHub**.
 
 **Estado: `MERGED_IN_IA6_PENDING_POSTMERGE_CI`.** El bloqueo V28 quedó resuelto y aprobado por la CI del staging; la validación post-merge sobre el SHA oficial sigue separada. No reabrir PR #119, no realizar otro merge automático ni promocionar a `main`. La siguiente `p` consulta primero las dos CI post-merge, diagnostica cualquier FAIL, documenta el SHA final y después retoma el plan global IA6 de staging V4 sin pisar ramas ni inventar nuevos objetos.
+
+
+### Certificación final de IA6 — resultado definitivo del commit de concurrencia
+
+**ESTADO: `IA6_W02_MERGED_AND_POSTMERGE_CERTIFIED` — no quedan bloqueos CI de PR #119.**
+
+- [CI #42969055524](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/42969055524): `completed/success` sobre merge real `0028361ae69c2a63ca2aaf23710a4543157445ac`.
+- [CI #42969175343](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/42969175343): `completed/success` sobre HEAD IA6 `33ecf65d9ca33aa80d7968c172726465099f812f` tras eliminar colisión de `concurrency`.
+- Ambas CI cubren integración efectiva W02, Cuerda Huida W03, panel/libros W05, SaveV2 y regresiones de objetos. La certificación V28 histórico Windows/Linux e inventario 45 está en [#42963526507](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/42963526507) `completed/success` sobre SHA staging `16da5a...`. No inventar CI completa Item Closure para el SHA posterior si no se ejecutó.
+- GitHub confirmó PR #119 `merged=true`, base `codex/calvo-ia6-integration-20261109`, merge `0028361...`; `main=233b1a4f15ee4df7301e2c5acf8aed84a8f40626` intacta.
+- El bloqueo `BLOCKED_CI_SCOPE_V28` está cerrado: sustituido por puertas funcionales integradas + contrato histórico separado. No eliminar `guard()`, no volver a mezclar ámbitos.
+- No es autorización para mezclar otras ramas ni llevar IA6 a `main`. Siguiente trabajo IA6: auditar entregas V4 W01–W05 y las condiciones de promoción, especialmente W02 CONTINUOUS_V3 EXP SHARE antes de activar su V4, sin repetir la campaña de 42 bayas.
+
