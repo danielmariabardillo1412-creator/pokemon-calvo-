@@ -72,7 +72,17 @@ def main() -> None:
     fail_if(field_ids - certified != {
         "cheri_berry", "chesto_berry", "pecha_berry", "rawst_berry", "oran_berry"
     }, "field gate cannot claim new IDs or repeat old ones")
-    print("W02_CONTINUOUS_V2_AUDIT_PY PASS ids=42 historical=36 field=6 persim=1 checks=42")
+    held = read_json("w02_continuous_v2_held05.json")
+    expected_held = {"cheri_berry", "chesto_berry", "pecha_berry", "rawst_berry", "oran_berry"}
+    fail_if(set(held["item_ids"]) != expected_held or len(held["cases"]) != 10,
+            "held-native gate must cover exactly five IDs and ten cases")
+    fail_if(held.get("proof_scope") != "held_native_battle_only",
+            "held validation must stay separate from field validation")
+    for berry_id in expected_held:
+        tests = [x for x in held["cases"] if x["id"] == berry_id]
+        fail_if(len(tests) != 2 or {bool(x["consumes"]) for x in tests} != {True, False},
+                f"held trigger/no-trigger scenarios incomplete: {berry_id}")
+    print("W02_CONTINUOUS_V2_AUDIT_PY PASS ids=42 historical=36 field=6 persim=1 held=5 checks=42")
 
 
 if __name__ == "__main__":
