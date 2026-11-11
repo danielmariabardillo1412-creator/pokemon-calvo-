@@ -52,3 +52,10 @@ La próxima `p` lee `IA6_AUTORUN.md` y este archivo, inspecciona HEAD/CI antes d
 - CI de cierre candidata: #42937080819 en SHA `6852afba56332d78fe65cdfc2ffe02c51db2290a`; al crear este checkpoint figura `IN_PROGRESS` y el auditor Python ha pasado, pero los test Godot y regresiones siguen pendientes.
 - Comparación desde el cierre T04 `5d8c77b34d` hasta el código de esta CI: 22 commits de avance; solo cambian pruebas, fixtures, documentación y workflow, NO `modules/` ni código de producción.
 - **No declarar cierre V2 antes de la CI #42937080819 `completed/success`.** Si falla el nuevo runner, investigar logs y reparar solo archivos autorizados, nunca el backend global sin ticket IA6.
+
+## QA roja y recuperación de fixture, 2026-11-11
+- CI roja reproducida: `42937080819` sobre `6852afba56332d78fe65cdfc2ffe02c51db2290a`. Auditoría, campo y Persim pasaron; `HELD05` falló por Chesto con estado inicial `sleep` incompleto, que impedía abrir la sesión nativa (reproductor inválido, no demuestra fallo de mecánica).
+- La CI roja reveló además `SCRIPT ERROR` en el test de campo anterior: fixture `field_medicine` sin `confused` invocaba `_compare_field_use` de CAMP004 con propiedad inexistente. Pese al `PASS` impreso la ejecución tenía errores GDScript. Se corrigió añadiendo estado de confusión explícito y guards CI que bloquean cualquier `SCRIPT ERROR|Parse Error` en los tres runners V2.
+- La reparación de Chesto sustituye `sleep` preinyectado por `Spore` real de Amoonguss, y compara el control sin baya contra `sleep` resultante. Si ese productor no funciona, ticket y no falsificar la prueba.
+- Nuevo SHA funcional+workflow bajo CI: `bd2a525858a5b08ff85fc2121a23ddf6a10d7c5d`; ejecución `42937706214` IN_PROGRESS al registrar este checkpoint.
+- No se tocó `modules/` ni motor compartido. La campaña sigue pendiente de CI global final.
