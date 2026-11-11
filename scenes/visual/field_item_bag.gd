@@ -20,8 +20,9 @@ var _growth_choices: VBoxContainer
 const WorldItemTx = preload("res://modules/overworld/field_world_item_transaction.gd")
 const BookPanel = preload("res://scenes/visual/field_machine_book_panel.gd")
 var _world_item_tx := WorldItemTx.new()
-var _books_panel: PanelContainer
+var _books_panel: Variant = null
 var _books_button: Button
+var _requested_book_id: StringName = &""
 var _ability_stamp := ""
 
 
@@ -38,8 +39,16 @@ func _ready() -> void:
 	_description = Label.new(); _description.custom_minimum_size.x = 540; _description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART; box.add_child(_description)
 	_targets = OptionButton.new(); box.add_child(_targets)
 	_moves = OptionButton.new(); box.add_child(_moves)
-	_items.item_selected.connect(func(_i): _refresh_choices())
-	_targets.item_selected.connect(func(_i): _refresh_choices())
+	_items.item_selected.connect(func(_i):
+		_requested_book_id = _selected_item()
+		_refresh_choices())
+	_targets.item_selected.connect(func(_i):
+		_refresh_choices()
+		if _books_panel != null and _books_panel.visible:
+			_books_panel.select_creature(_selected_creature()))
+	_moves.item_selected.connect(func(_i):
+		if _books_panel != null and _books_panel.visible:
+			_books_panel.select_replacement_slot(_moves.selected - 1))
 	var buttons := HBoxContainer.new(); box.add_child(buttons)
 	_use = _button(buttons, "Usar", func(): _apply("use"))
 	_equip = _button(buttons, "Equipar", func(): _apply("equip"))
@@ -64,9 +73,12 @@ func _button(parent: Node, text: String, callback: Callable) -> Button:
 func open_bag() -> bool:
 	if field == null or not field.field_can_open_item_bag(): return false
 	if not field.field_bind_item_service(service): return false
+	_requested_book_id = &""
 	_result.text = "Selecciona un objeto y un Pokémon. Las funciones pendientes no consumirán el objeto."
 	if _books_panel != null: _books_panel.hide()
 	refresh()
+	_requested_book_id = _selected_item()
+	_refresh_choices()
 	reset_size()
 	position = (get_viewport_rect().size - size) / 2.0
 	show()
@@ -143,7 +155,11 @@ func _refresh_choices() -> void:
 	if creature != null:
 		for slot: BattleMoveSlot in creature.moveset: _moves.add_item("Sustituir: " + SpanishGameText.move_name(slot.move_id, definitions))
 	_moves.visible = service.profile.get("machine_rows", {}).has(String(_selected_item()))
-	_books_button.disabled = not _moves.visible or not service.owner.inventory.has(_selected_item())
+	# A bag refresh may select the next row after a removed item; reject that
+	# stale fallback. Programmatic legitimate selection + _refresh_choices()
+	# must still work when the previous selection remains owned (IA6 baseline).
+	var stale_book: bool = _requested_book_id != &"" and not service.owner.inventory.has(_requested_book_id)
+	_books_button.disabled = not _moves.visible or not service.owner.inventory.has(_selected_item()) or stale_book
 	var pp_target: bool = service.FieldEffects.pp_target_required(_selected_item())
 	var pp_boost: bool = service.FieldEffects.pp_boost_supports(_selected_item())
 	if pp_target:
@@ -166,7 +182,8 @@ func _refresh_choices() -> void:
 		_description.text = "Aumenta los PP máximos del movimiento seleccionado. Se consume solo si puede mejorarlo." if pp_boost else "Recupera PP del movimiento seleccionado."
 	elif _moves.visible:
 		var taught := service.machine_move(_selected_item())
-		_description.text = "Enseña: " + SpanishGameText.move_name(taught, definitions) if taught != &"" else "Esta máquina necesita una versión de reglas aún pendiente."
+		_description.text = "Enseña: " + String(MachineMovesEsSvW05.resolve(
+			taught, SpanishGameText.move_name(taught, definitions)).get("name", "")) if taught != &"" else "Esta máquina necesita una versión de reglas aún pendiente."
 	elif service.FieldEffects.Mochi.supports(_selected_item()):
 		_description.text = "Reinicia a cero todos los puntos de esfuerzo. La amistad no cambia." if _selected_item() == &"fresh_start_mochi" else "Aumenta hasta 10 puntos de esfuerzo de su estadística, respetando los límites. La amistad no cambia."
 		_description.text += " Se consume solo si tiene efecto."
@@ -183,6 +200,12 @@ func _refresh_choices() -> void:
 		_use.disabled = _world_item_tx.busy or not service.owner.inventory.has(&"escape_rope")
 		_equip.disabled = true
 		return
+	# A book has exactly one mutation path: the nested panel.
+	# Global Use must never spend another copy of the same MT.
+	if _moves.visible and service.profile.get("machine_rows", {}).has(String(_selected_item())):
+		_use.disabled = true
+		_equip.disabled = true
+		return
 	_use.disabled = _selected_item() == &"" or creature == null
 	_equip.disabled = _use.disabled or not service.holdable(_selected_item())
 
@@ -196,6 +219,9 @@ func _apply(action: String) -> Dictionary:
 	_cancel_growth()
 	if action == "use" and _selected_item() == &"escape_rope":
 		return await _apply_escape_rope()
+	if action == "use" and service.profile.get("machine_rows", {}).has(String(_selected_item())):
+		_result.text = "Usa el panel de libros para enseñar. No se ha consumido nada."
+		return {"accepted": false, "reason": "machine_panel_required", "status": "REJECTED"}
 	if action == "use" and service.Growth.supports(_selected_item()):
 		return _show_growth_result(_growth.begin(service, _selected_item(), _selected_creature()))
 	var definitions: DefinitionCatalog = field.field_definitions()
@@ -233,12 +259,20 @@ func _apply(action: String) -> Dictionary:
 # IA6-owned UI seam. The W05 panel shares the existing service; opening it never
 # calls use_item/teach. Exactly one teach() call belongs to the panel button.
 func _open_machine_books() -> void:
-	if _books_panel == null or not _ensure_binding(): return
+	if _books_panel == null or _books_panel.visible or _books_button.disabled: return
+	if not _ensure_binding() or not field.field_item_service_is_current(service): return
 	var item_id: StringName = _selected_item()
+	if item_id == &"": return
+	# Do not open a different book after an external stock loss.
+	if _requested_book_id != &"" and not service.owner.inventory.has(_requested_book_id): return
 	if not service.profile.get("machine_rows", {}).has(String(item_id)): return
 	if not service.owner.inventory.has(item_id): return
 	if not _books_panel.bind_existing_service(service): return
 	if not _books_panel.select_book(item_id): return
+	var creature_id: StringName = _selected_creature()
+	if creature_id != &"" and service.owner.location_of(creature_id) == &"PARTY":
+		if not _books_panel.select_creature(creature_id): return
+	_books_panel.select_replacement_slot(_moves.selected - 1)
 	_books_panel.show()
 	_fit_bag.call_deferred()
 
@@ -246,7 +280,13 @@ func _open_machine_books() -> void:
 func _on_book_teaching_finished(outcome: Dictionary) -> void:
 	# The panel already called service.teach exactly once and refreshed itself.
 	# This callback only refreshes existing UI/HUD; it spends no additional item.
-	_result.text = "Libro enseñado. La mochila se ha actualizado." if bool(outcome.get("accepted", false)) else "No se ha enseñado el libro. Inventario conservado."
+	if bool(outcome.get("accepted", false)):
+		var move_id := StringName(outcome.get("move_id", ""))
+		var es_name := MachineMovesEsSvW05.resolve(move_id,
+			SpanishGameText.move_name(move_id, field.field_definitions()))
+		_result.text = "¡Ha aprendido %s! Se consumió un libro." % String(es_name.get("name", ""))
+	else:
+		_result.text = "No se ha enseñado el libro. Inventario conservado."
 	refresh()
 	if field != null: field.field_refresh_hud()
 	_fit_bag.call_deferred()
