@@ -178,6 +178,12 @@ func capture(ball_id: StringName, expected_revision: int) -> Dictionary:
 	# Compute before resolving/spending a ball; never infer history from the current party.
 	if target != null:
 		context.previously_caught_base_species = player.has_previously_caught(target.base_species_id(), catalogs)
+		# W03 V3: only Moon Ball reads an additional immutable species-
+		# evolution producer. No RNG, inventory, ledger or other ball changes.
+		if ball_id == &"moon_ball":
+			var moon_data: Dictionary = preload("res://modules/capture/capture_source_w03_v3.gd").moon_context(target.base_species_id(), catalogs)
+			context.moon_stone_context_known = bool(moon_data.get("ok", false))
+			context.target_evolves_with_moon_stone = bool(moon_data.get("eligible", false))
 	var resolution := CaptureInventoryService.resolve(CaptureAttempt.new(target, ball_id, context), rng, catalogs, party, bag)
 	if resolution.result.status == CaptureResult.INVALID:
 		_command_busy = false; return _rejected(resolution.result.reason)
