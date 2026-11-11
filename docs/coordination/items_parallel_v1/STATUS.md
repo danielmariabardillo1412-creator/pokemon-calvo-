@@ -1,3 +1,9 @@
+# IA6 — CORRECCIÓN DE SELECCIÓN CANÓNICA, 2026-11-11
+
+**CARAMELO DINAMAX `dynamax_candy` EXCLUIDO POR DECISIÓN EXPRESA DEL USUARIO.** Se actualizó `config/item_selection_v1.json::excluded_ids` y `tests/gameplay/item_selection_policy_test_runner.gd` en ramas árbitra, integración IA6 y cinco ramas W01–W05; la política activa debe rechazar `content_allowed` y `can_generate` incluso cuando el pool explícito contenga el ID. Los registros `docs/current` de 2026-10-28 eran candidato de auditoría/arte, NO selección vigente; se conservan para procedencia y la decisión actual prevalece. **No implementar, dibujar ni programar Caramelo Dinamax**; Rare Candy y EXP Candy no quedan excluidos por esta orden. Auditoría [IA6_EXCLUSION_DYNAMAX_CANDY_20261111.md](IA6_EXCLUSION_DYNAMAX_CANDY_20261111.md). Contador de veto 45 (9 por ID + 36 correo); no alterar el universo PokeAPI. No modificar main, V28 ni PR118. Nuevos tests subidos; la CI posterior aún requiere observación.
+
+---
+
 # IA6 — ESTADO OPERATIVO ACTUAL · 2026-11-11
 
 **SE HAN PUBLICADO NUEVAS MISIONES EN LAS CUATRO RAMAS FINALIZADAS:** W02 V3 (participación real / EXP Share sin activar XP global), W03 V3 (Heavy/Moon/Beast con productor auténtico), W04 V3 (7 evoluciones regionales L3 con permiso mínimo compartido), W05 V3 (panel MT dentro de FieldItemBag solo en su rama). W01 sigue V2 Fase B (26 equipables autorizados, 2 placas con CI piloto SUCCESS y acumulativas en seguimiento); NO reiniciarla. **Las cinco notas IA6_AUTORUN.md fueron leídas y verificadas; hay checkpoint V3 para las cuatro renovadas.** Informe [CONTINUOUS_V3/IA6_HANDOFF_20261111.md](CONTINUOUS_V3/IA6_HANDOFF_20261111.md).
