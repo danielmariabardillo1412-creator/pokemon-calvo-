@@ -83,8 +83,19 @@ def main():
                 and (REPORT / "AUTORUN_V3_FINAL.md").is_file())
     v5_queue = ("TANDA 05" in order and "Slowpoke" in order and "W04" in order
                 and (REPORT / "AUTORUN_V4_FINAL.md").is_file())
-    test(prior_queue or rolled_queue or v3_queue or v4_queue or v5_queue,
-         "IA6 stable queue recognizes authorized TANDA05 rollover, preserving frozen V1 QA")
+    # IA6's CONTINUOUS_V2 is an explicit authorized successor to TANDA05.
+    # This migration only recognizes the new queue document; all frozen V1
+    # fixtures, exact IDs, provenance and runtime assertions below stay intact.
+    v2_continuous_queue = (
+        "CONTINUOUS_V2/PLAN_W04.md" in order
+        and "W04" in order
+        and "B01" in order and "B02" in order and "B03" in order
+        and (REPORT / "AUTORUN_V5_FINAL.md").is_file()
+        and (ROOT / "docs/coordination/items_parallel_v1/CONTINUOUS_V2/STATE_W04.md").is_file()
+        and (REPORT / "CONTINUOUS_V2_REGIONAL_EVOLUTION_MATRIX.csv").is_file()
+    )
+    test(prior_queue or rolled_queue or v3_queue or v4_queue or v5_queue or v2_continuous_queue,
+         "IA6 stable queue recognizes authorized TANDA05 or CONTINUOUS_V2 rollover, preserving frozen V1 QA")
     with PROGRESS.open(encoding="utf-8", newline="") as f:
         rows = list(csv.DictReader(f))
     test(len(rows) == 10 and [r["fila"] for r in rows] ==
