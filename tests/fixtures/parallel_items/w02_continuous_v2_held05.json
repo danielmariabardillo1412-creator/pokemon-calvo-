@@ -1,0 +1,153 @@
+{
+  "schema_version": 1,
+  "campaign": "W02_CONTINUOUS_V2",
+  "block": "01",
+  "proof_scope": "held_native_battle_only",
+  "format": "gen9calvounifiedv1",
+  "level": 100,
+  "seed": [
+    23,
+    19,
+    29,
+    43
+  ],
+  "modes": [
+    "active",
+    "none",
+    "reserve"
+  ],
+  "item_ids": [
+    "cheri_berry",
+    "chesto_berry",
+    "pecha_berry",
+    "rawst_berry",
+    "oran_berry"
+  ],
+  "cases": [
+    {
+      "id": "cheri_berry",
+      "scenario": "cheri_berry_status_held",
+      "kind": "status_cure",
+      "nature": "hardy",
+      "start": "full",
+      "status": "paralysis",
+      "foe_species": "mew",
+      "foe_move": "amnesia",
+      "consumes": true,
+      "confuses": false
+    },
+    {
+      "id": "cheri_berry",
+      "scenario": "cheri_berry_healthy_held",
+      "kind": "status_cure",
+      "nature": "hardy",
+      "start": "full",
+      "status": "",
+      "foe_species": "mew",
+      "foe_move": "amnesia",
+      "consumes": false,
+      "confuses": false
+    },
+    {
+      "id": "chesto_berry",
+      "scenario": "chesto_berry_status_held",
+      "kind": "status_cure",
+      "nature": "hardy",
+      "start": "full",
+      "status": "sleep",
+      "foe_species": "mew",
+      "foe_move": "amnesia",
+      "consumes": true,
+      "confuses": false
+    },
+    {
+      "id": "chesto_berry",
+      "scenario": "chesto_berry_healthy_held",
+      "kind": "status_cure",
+      "nature": "hardy",
+      "start": "full",
+      "status": "",
+      "foe_species": "mew",
+      "foe_move": "amnesia",
+      "consumes": false,
+      "confuses": false
+    },
+    {
+      "id": "pecha_berry",
+      "scenario": "pecha_berry_status_held",
+      "kind": "status_cure",
+      "nature": "hardy",
+      "start": "full",
+      "status": "poison",
+      "foe_species": "mew",
+      "foe_move": "amnesia",
+      "consumes": true,
+      "confuses": false
+    },
+    {
+      "id": "pecha_berry",
+      "scenario": "pecha_berry_healthy_held",
+      "kind": "status_cure",
+      "nature": "hardy",
+      "start": "full",
+      "status": "",
+      "foe_species": "mew",
+      "foe_move": "amnesia",
+      "consumes": false,
+      "confuses": false
+    },
+    {
+      "id": "rawst_berry",
+      "scenario": "rawst_berry_status_held",
+      "kind": "status_cure",
+      "nature": "hardy",
+      "start": "full",
+      "status": "burn",
+      "foe_species": "mew",
+      "foe_move": "amnesia",
+      "consumes": true,
+      "confuses": false
+    },
+    {
+      "id": "rawst_berry",
+      "scenario": "rawst_berry_healthy_held",
+      "kind": "status_cure",
+      "nature": "hardy",
+      "start": "full",
+      "status": "",
+      "foe_species": "mew",
+      "foe_move": "amnesia",
+      "consumes": false,
+      "confuses": false
+    },
+    {
+      "id": "oran_berry",
+      "scenario": "oran_berry_low_hp_held",
+      "kind": "heal_fixed10",
+      "nature": "hardy",
+      "start": "fifth",
+      "status": "",
+      "foe_species": "mew",
+      "foe_move": "amnesia",
+      "consumes": true,
+      "confuses": false
+    },
+    {
+      "id": "oran_berry",
+      "scenario": "oran_berry_high_hp_held",
+      "kind": "heal_fixed10",
+      "nature": "hardy",
+      "start": "near_full",
+      "status": "",
+      "foe_species": "mew",
+      "foe_move": "amnesia",
+      "consumes": false,
+      "confuses": false
+    }
+  ],
+  "limitations": [
+    "Does not replace field use proof",
+    "No code changes to @pkmn/sim",
+    "Native trigger comparisons must pass before certified"
+  ]
+}
