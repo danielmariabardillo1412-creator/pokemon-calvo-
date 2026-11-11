@@ -1,21 +1,20 @@
-# W03 — CONTINUOUS_V2: checkpoint operativo B01 certificado / B02 en curso
+# W03 — CONTINUOUS_V2: campaña 25/25 examinados, último gate CI pendiente
 
 - **branch**: `codex/calvo-items-20261104-w03-camp006`
-- **mission_version**: `CONTINUOUS_V2/PLAN_W03.md`, vigente y activado por IA6 en `IA6_AUTORUN.md`.
-- **phase**: B02 / 25 bolas autorizadas; B01 **cerrado por CI**.
-- **block**: B01=10/10 L3 nativas certificadas; B02=0/10 certificado de este bloque, 8 pruebas nativas pendientes de CI y 2 contextos condicionados; B03=0/5 en revisión.
-- **next_id**: `safari_ball` (B02 01; conserva `PARCIAL_ZONE` aunque la captura incondicional pase).
-- **checked/functional/new/blocked**: 10/25 certificados; 10 rutas L3 nativas del bloque 01, 0 objetos creados; 7 IDs candidatos a `BLOCKED_CONTEXT`, ticket compartido publicado.
-- **QA**: `W03_CONT_V2_B01 PASS ids=10 captured=10 checks=156`; cada uno conserva captura real/stock/propietario/SaveV2 y no-stock de siguiente ID.
-- **last_green_code_sha**: `20238618268bfdb82cbd4c6d533a5ae78c7a35b3`.
-- **last_green_run_id**: [42930029593](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/42930029593), `completed/success`.
-- **ci_pending**: [42930597727](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/42930597727) (`eb42cfee`, V2 B01+B02+source y regresiones; NO certificado hasta `completed/success`).
-- **owned_files_changed**: `tests/gameplay/parallel_items_w03_continuous_v2_b01.gd`, `_b02.gd`, `tests/tools/test_parallel_items_w03_continuous_v2_sources.py`, workflow W03, ticket `W03_CONTEXT_PRODUCERS_TICKET.md`, este estado.
-- **protected_tickets**: productores regionales de siete bolas y Safari/Sport parcial; Magikarp L5 `move_policy` aislado como riesgo previo sin edición global.
-- **next_safe_action**: recuperar CI B02; si falla, reparar SOLO tests W03 o seam autorizada. Una vez verde continuar automáticamente B03 (5 regionales condicionadas), registrar resultados sin inventar soporte.
+- **mission_version**: `CONTINUOUS_V2/PLAN_W03.md`, publicado en IA6 y activado en `IA6_AUTORUN.md`.
+- **phase**: `B03_CONTEXT_BLOCKS_REVIEWED` — 25/25 IDs examinados, final técnico condicionado a la CI acumulativa.
+- **block**: B01 10/10 certificados; B02 10/10 examinados (8 lanzamientos nativos, Safari/Sport solo parciales, Dive/Dusk bloqueadas); B03 5/5 bloqueadas por productores auténticos ausentes.
+- **next_id**: ninguno dentro del plan de 25. No inventar otra familia.
+- **checked/functional/new/blocked**: 25 IDs; 16 rutas L3 completas de existentes; 2 rutas de zona parciales; 7 `BLOCKED_CONTEXT`; objetos nuevos=0; integración IA6=NO.
+- **QA nueva por suite**: B01 `156 PASS` y B02 `125 PASS`, productores `58 PASS`, más sonda Magikarp y 3 ramas de Fast/Quick/Level a certificar con CI final.
+- **last_green_code_sha**: `eb42cfee9236a17fbae58b697144c8fc22bb530d`.
+- **last_green_run_id**: [42930597727](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/42930597727), `completed/success`, contiene B01+B02+auditoría de 7 ausencias y 2 parciales.
+- **ci_pending**: [42931723587](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/42931723587), SHA código/workflow `2c4b0a63f04572be1dd86d565e7b71e78d897c65` (sonda Magikarp y ramas Fast/Quick/Level). Nunca declarar PASS antes de `completed/success`.
+- **owned_files_changed**: runners `parallel_items_w03_continuous_v2_b01.gd`, `_b02.gd`, `_magikarp_probe.gd`, `_context_edges.gd`; auditoría `test_parallel_items_w03_continuous_v2_sources.py`; workflow W03; manifiesto, ticket y STATE.
+- **protected_tickets**: `W03_CONTEXT_PRODUCERS_TICKET.md` documenta siete productores regionales ausentes y dos zonas parciales. Magikarp L5 `move_policy` reproducido como fallo previo a captura; sin corregir política o generador protegidos.
+- **next_safe_action**: revisar el resultado final de #42931723587. Ante PASS publicar `W03_CAMPAIGN_FINAL.md` y estado `READY_FOR_IA6`. Ante FAIL reparar únicamente runner/fixture o seam específica autorizada, mantener CI previa verde y reintentar.
 
 ---
-
 ## Historia anterior preservada
 # IA6 — ACTIVACIÓN CONFIRMADA V2 DE W03 (prevalece sobre checkpoint provisional)
 **Plan ya publicado y vigente en `IA6_AUTORUN.md` de esta misma rama.** La espera `AWAITING_IA6_W03_PLAN` descrita abajo quedó SUPERADA; se escribió mientras IA6 publicaba los archivos en paralelo.
