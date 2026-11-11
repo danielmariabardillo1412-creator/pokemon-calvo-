@@ -1,0 +1,133 @@
+name: IA6 Official W03 capture Repeat Net Moon ledger cross-worker gate
+on:
+  push:
+    branches:
+      - codex/calvo-ia6-integration-20261109
+    paths:
+      - '.github/workflows/ia6-official-w03-capture-20261111.yml'
+      - 'tests/tools/test_ia6_w03_staging_v4.py'
+      - 'tests/tools/test_parallel_items_w03_continuous_v3_sources.py'
+      - 'tests/gameplay/parallel_items_w03_*.gd'
+      - 'modules/capture/*.gd'
+      - 'modules/creatures/storage/player_collection.gd'
+      - 'modules/save/save_game_data.gd'
+      - 'modules/save/save_game_repository.gd'
+      - 'modules/save/load_result.gd'
+      - 'modules/save/field_native_save.gd'
+      - 'modules/gameplay/showdown_adventure_session.gd'
+      - 'modules/gameplay/wild_adventure_session.gd'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: ia6-w03-capture-official-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  w03_capture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: chickensoft-games/setup-godot@v2.4.1
+        with:
+          version: 4.7.0
+          use-dotnet: false
+          include-templates: false
+      - name: Source guard - IA6 protected blobs and W03 additive capture
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tests/tools/test_ia6_w03_staging_v4.py 2>&1 | tee w03-v4-python.log
+          grep -E '^IA6_W03_V4_PY PASS checks=[1-9][0-9]* protected=5 contextual=5 veto_dynamax=true$' w03-v4-python.log
+          python -B tests/tools/test_parallel_items_w03_continuous_v3_sources.py 2>&1 | tee w03-v4-source.log
+          grep -E '^W03_V3_SOURCE PASS checked=[1-9][0-9]* moon=6 runtime_weight=0 ultra_fields=0$' w03-v4-source.log
+      - name: Restore and compile canonical Godot 4.7 resources
+        shell: bash
+        run: |
+          set -euo pipefail
+          godot --version | grep -E '^4[.]7([.-]|$)'
+          python -B tools/distribution/restore_resources.py
+          python -B tools/distribution/restore_resources.py --check
+          mkdir -p data/reports
+          cp ci/fixtures/pokeapi_reports/forms_policy_report.json data/reports/forms_policy_report.json
+          cp ci/fixtures/pokeapi_reports/unsupported_mechanics.json data/reports/unsupported_mechanics.json
+          cp ci/fixtures/pokeapi_reports/import_summary.json data/reports/import_summary.json
+          godot --headless --path . --import 2>&1 | tee w03-v4-import.log
+          if grep -E 'SCRIPT ERROR|Parse Error' w03-v4-import.log; then exit 1; fi
+          echo "POKEMON_CALVO_NODE=$(command -v node)" >> "$GITHUB_ENV"
+          python -B tools/battle_reference/run.py --install --limit 1 2>&1 | tee w03-v4-native-ref.log
+          grep -F 'BATTLE_REFERENCE PASS' w03-v4-native-ref.log
+      - name: Pure SaveV2 and legacy/hostile persistence
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 900s godot --headless --path . --script res://tests/gameplay/savegame_v2_test_runner.gd 2>&1 | tee w03-v4-savev2.log
+          grep -E '^=== SAVEGAME V2 TEST RESULT: [1-9][0-9]* PASS / 0 FAIL ===$' w03-v4-savev2.log
+          timeout 900s godot --headless --path . --script res://tests/gameplay/savegame_v2_adversarial_test_runner.gd 2>&1 | tee w03-v4-savev2-hostile.log
+          grep -E '^=== SAVEGAME V2 ADVERSARIAL RESULT: [1-9][0-9]* PASS / 0 FAIL ===$' w03-v4-savev2-hostile.log
+      - name: Mandatory unmodified legacy WildAdventureSession red-to-green gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 900s godot --headless --path . --script res://tests/gameplay/parallel_items_w03_repeat_history_v2.gd 2>&1 | tee w03-v4-repeat-ledger.log
+          grep -E '^W03_REPEAT_V2_GODOT PASS checks=37 native_capture_l3=false$' w03-v4-repeat-ledger.log
+          if grep -E '^W03_REPEAT_V2_GODOT FAIL|^W03_V4_LEGACY_WILD BLOCKED|SCRIPT ERROR|Parse Error' w03-v4-repeat-ledger.log; then
+            echo 'W03_V4_LEGACY_WILD NOT_CERTIFIED'
+            exit 1
+          fi
+          echo 'W03_V4_LEGACY_WILD PASS strict_unmodified_test=true checks=37'
+          timeout 900s godot --headless --path . --script res://tests/gameplay/parallel_items_w03_repeat_native_v4.gd 2>&1 | tee w03-v4-repeat-native.log
+          grep -E '^W03_REPEAT_NATIVE_V4 PASS checks=[1-9][0-9]*$' w03-v4-repeat-native.log
+          timeout 900s godot --headless --path . --script res://tests/gameplay/parallel_items_w03_repeat_native_v4_negatives.gd 2>&1 | tee w03-v4-repeat-negative.log
+          grep -E '^W03_REPEAT_NATIVE_V4_NEG PASS checks=[1-9][0-9]*$' w03-v4-repeat-negative.log
+      - name: Net owner Party Storage Water Bug and failed RNG
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 900s godot --headless --path . --script res://tests/gameplay/parallel_items_w03_net_native_v5.gd 2>&1 | tee w03-v4-net-native.log
+          grep -E '^W03_NET_NATIVE_V5 PASS checks=[1-9][0-9]*$' w03-v4-net-native.log
+          timeout 900s godot --headless --path . --script res://tests/gameplay/parallel_items_w03_net_native_v5_negatives.gd 2>&1 | tee w03-v4-net-negative.log
+          grep -E '^W03_NET_NATIVE_V5_NEG PASS checks=[1-9][0-9]*$' w03-v4-net-negative.log
+      - name: Moon from canonical Stone evolution and real native SaveV2
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 900s godot --headless --path . --script res://tests/gameplay/parallel_items_w03_continuous_v3.gd 2>&1 | tee w03-v4-moon.log
+          grep -E '^W03_V3_MOON PASS native=2 checks=[1-9][0-9]*$' w03-v4-moon.log
+      - name: Preserve IA6 mint effective nature and field-native SaveV2
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 900s godot --headless --path . --script res://tests/gameplay/ia6_mint_field_native_save_20261109.gd 2>&1 | tee w03-v4-mint-native.log
+          grep -E '^IA6_MINT_FIELD_SAVE PASS checks=[1-9][0-9]* features=real_bag,original_nature,effective_nature,savev2$' w03-v4-mint-native.log
+          timeout 900s godot --headless --path . --script res://tests/gameplay/ia6_integration_mint_rope_20261109.gd 2>&1 | tee w03-v4-crossworker.log
+          grep -E '^IA6_INTEGRATION PASS checks=[1-9][0-9]* features=mint_effective_nature,escape_rope_bag_savev2$' w03-v4-crossworker.log
+      - name: Preserve IA6 machine book bag integration
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 900s godot --headless --path . --script res://tests/gameplay/ia6_books_bag_20261109.gd 2>&1 | tee w03-v4-books.log
+          grep -E '^IA6_BOOK_BAG PASS checks=[1-9][0-9]* features=real_bag,w05_panel,one_teach,savev2$' w03-v4-books.log
+      - name: W03 repel and W05 real book panel retained on integrated field
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 900s godot --headless --path . --script res://tests/gameplay/parallel_items_w03_repel_l3.gd 2>&1 | tee w03-v4-repel.log
+          grep -E '^CAMP006_W03_REPEL_L3 PASS checks=[1-9][0-9]*$' w03-v4-repel.log
+          timeout 900s godot --headless --path . --script res://tests/gameplay/w05_staging_v4_books_bag.gd 2>&1 | tee w03-v4-w05-books-real.log
+          grep -E '^W05_V4_REAL_FIELD_BAG PASS .*rope_preserved=IA6_SMOKE checks=[1-9][0-9]*$' w03-v4-w05-books-real.log
+          if grep -E 'SCRIPT ERROR|Parse Error|^CAMP006_W03_REPEL_L3 FAIL|^W05_V4_REAL_FIELD_BAG FAIL' w03-v4-repel.log w03-v4-w05-books-real.log; then exit 1; fi
+      - name: Save staging logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ia6-w03-v4-${{ github.run_id }}
+          if-no-files-found: ignore
+          retention-days: 7
+          path: w03-v4-*.log
