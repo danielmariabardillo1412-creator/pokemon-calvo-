@@ -54,11 +54,12 @@
       "kind": "status_cure",
       "nature": "hardy",
       "start": "full",
-      "status": "sleep",
-      "foe_species": "mew",
-      "foe_move": "amnesia",
+      "status": "",
+      "foe_species": "amoonguss",
+      "foe_move": "spore",
       "consumes": true,
-      "confuses": false
+      "confuses": false,
+      "expected_control_status": "sleep"
     },
     {
       "id": "chesto_berry",
