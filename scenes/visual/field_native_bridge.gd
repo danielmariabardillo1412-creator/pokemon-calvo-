@@ -39,6 +39,10 @@ func on_step(position: Vector2) -> void:
 	if field.trainer_trigger_contains(position) and start_trainer(): return
 	var prepared: Dictionary = field.field_prepare_native_encounter(zone)
 	if prepared.is_empty(): return
+	if bool(prepared.get("blocked_by_repel", false)):
+		# Commit only the encounter RNG draw; no battle allocation or new battle seed.
+		field.field_commit_repelled_encounter_rng(int(prepared.get("next_rng", -1)))
+		return
 	var encounter := prepared.get("result") as WildEncounterResult
 	if encounter == null or encounter.status == WildEncounterResult.NONE: return
 	if encounter.status != WildEncounterResult.ENCOUNTER: notify("Encuentro rechazado: " + encounter.reason); return
