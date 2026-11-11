@@ -17,6 +17,12 @@ on:
       - 'tests/gameplay/w04_continuous_v3_fail_publish_service.gd'
       - 'tests/gameplay/w04_continuous_v2_regional_items.gd'
       - 'tests/gameplay/w04_continuous_v2_regional_persistence.gd'
+      - 'modules/creatures/progression/regional_ability_selection_w04.gd'
+      - 'modules/creatures/progression/regional_evolution_contract_w04.gd'
+      - 'tests/gameplay/w04_autorun_v2_form_identity.gd'
+      - 'tests/gameplay/w04_autorun_v3_all_regional.gd'
+      - 'tests/gameplay/w04_autorun_v4_ability.gd'
+      - 'tests/gameplay/w04_autorun_v5_regional_evolution.gd'
       - 'config/item_selection_v1.json'
   workflow_dispatch:
 permissions:
@@ -80,6 +86,62 @@ jobs:
           set -euo pipefail
           timeout 900s godot --headless --path . --script res://tests/gameplay/w04_continuous_v2_regional_persistence.gd 2>&1 | tee w04-v4-persistence.log
           grep -E '^W04_V2_B03 PASS checks=[1-9][0-9]* L3=0$' w04-v4-persistence.log
+      - name: Historical native regional 55 of 56 and Exeggutor blocked
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 1500s godot --headless --path . --script res://tests/gameplay/w04_autorun_v3_all_regional.gd 2>&1 | tee w04-v4-forms.log
+          grep -E '^W04_AUTORUN_V3_ALL PASS checks=[1-9][0-9]* examined=56 native_functional=55 blocked=1
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: w04-v4-staging-${{ github.run_id }}
+          retention-days: 7
+          if-no-files-found: ignore
+          path: w04-v4-*.log
+ w04-v4-forms.log
+      - name: Historical four allowed normal abilities
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 900s godot --headless --path . --script res://tests/gameplay/w04_autorun_v4_ability.gd 2>&1 | tee w04-v4-abilities.log
+          grep -E '^W04_AUTORUN_V4 PASS checks=[1-9][0-9]* promoted=4 blocked=1
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: w04-v4-staging-${{ github.run_id }}
+          retention-days: 7
+          if-no-files-found: ignore
+          path: w04-v4-*.log
+ w04-v4-abilities.log
+      - name: Historical Galarica canonical contracts
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 900s godot --headless --path . --script res://tests/gameplay/w04_autorun_v5_regional_evolution.gd 2>&1 | tee w04-v4-galarica.log
+          grep -E '^W04_AUTORUN_V5 PASS checks=[1-9][0-9]* routes=2 L3=0
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: w04-v4-staging-${{ github.run_id }}
+          retention-days: 7
+          if-no-files-found: ignore
+          path: w04-v4-*.log
+ w04-v4-galarica.log
+      - name: Historical native Slowpoke Galar
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 900s godot --headless --path . --script res://tests/gameplay/w04_autorun_v2_form_identity.gd 2>&1 | tee w04-v4-pilot.log
+          grep -E '^W04_AUTORUN_V2_FORM PASS checks=[1-9][0-9]*
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: w04-v4-staging-${{ github.run_id }}
+          retention-days: 7
+          if-no-files-found: ignore
+          path: w04-v4-*.log
+ w04-v4-pilot.log
       - name: Preserve logs
         if: always()
         uses: actions/upload-artifact@v4
