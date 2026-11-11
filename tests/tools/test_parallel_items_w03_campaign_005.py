@@ -93,14 +93,19 @@ def main() -> int:
                     check("ShowdownAdventureSession.capture" in producer["consumer"]
                           and producer["decision"].strip() and producer["producer"].strip(),
                           "Productor, consumidor o decisión sin especificar")
-                # Versioned migration whitelist W03: Repeat Ball alone promoted; protect all
-                # original contextual entries and require a dedicated positive live-ledger test.
+                # Keep the original four ordered IDs and permit ONLY the
+                # later IA6-authorized V3 Moon producer, never arbitrary append.
                 ids_line = re.search(r'const IDS: Array\[StringName\] = \[(.*?)\]', effects)
-                check(ids_line is not None and ids_line.group(1).replace(" ", "") ==
-                      '&"quick_ball",&"timer_ball",&"level_ball",&"repeat_ball"' and
-                      "ContextBallEffects.IDS" in rules and
-                      (ROOT / "tests/gameplay/parallel_items_w03_repeat_history_v2.gd").exists(),
-                      "W03 repeat-only migration must preserve prior contextual balls")
+                actual = ids_line.group(1).replace(" ", "").replace("\n", "") if ids_line else ""
+                original = '&"quick_ball",&"timer_ball",&"level_ball",&"repeat_ball"'
+                moon = ',&"moon_ball"'
+                check(actual in (original, original + moon)
+                      and "ContextBallEffects.IDS" in rules
+                      and (ROOT / "tests/gameplay/parallel_items_w03_repeat_history_v2.gd").exists()
+                      and (actual == original or
+                           (ROOT / "modules/capture/capture_source_w03_v3.gd").exists()
+                           and (ROOT / "tests/gameplay/parallel_items_w03_continuous_v3.gd").exists()),
+                      "W03 contextual list must preserve original four with only authorized Moon addition")
                 check('CaptureSystem.validate_attempt(CaptureAttempt.new(target, &"quick_ball", ctx)'
                       in runner and '"timer_ball", target, species, ctx), 1.0'
                       in runner and '"level_ball", target, species, ctx), 4.0'
