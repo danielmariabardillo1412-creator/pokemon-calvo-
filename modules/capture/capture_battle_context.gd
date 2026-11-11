@@ -20,3 +20,7 @@ var completed_turns: int = -1
 var catcher_level: int = -1
 # Set only by the live owning session from PlayerCollection's caught ledger.
 var previously_caught_base_species: bool = false
+# W03 V3 additive Moon Ball projection from canonical EvolutionRecord.
+# A missing or unverified producer MUST reject, never silently grant x1.
+var moon_stone_context_known: bool = false
+var target_evolves_with_moon_stone: bool = false
