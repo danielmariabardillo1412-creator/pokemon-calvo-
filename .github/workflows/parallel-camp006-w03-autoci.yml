@@ -31,6 +31,7 @@ on:
       - 'tests/gameplay/parallel_items_w03_continuous_v2_b01.gd'
       - 'tests/gameplay/parallel_items_w03_continuous_v2_b02.gd'
       - 'tests/gameplay/parallel_items_w03_continuous_v2_magikarp_probe.gd'
+      - 'tests/gameplay/parallel_items_w03_continuous_v2_context_edges.gd'
       - 'tests/tools/test_parallel_items_w03_continuous_v2_sources.py'
       - 'modules/gameplay/showdown_adventure_session.gd'
       - 'docs/coordination/items_parallel_v1/reports/W03/AUTORUN_V3_PROGRESS.csv'
@@ -198,6 +199,12 @@ jobs:
           set -euo pipefail
           timeout 900s godot --headless --path . --script res://tests/gameplay/parallel_items_w03_continuous_v2_magikarp_probe.gd 2>&1 | tee camp006-w03-continuous-v2-magikarp.log
           grep -E '^W03_V2_MAGIKARP_PROBE PASS checks=[1-9][0-9]* status=KNOWN_MOVE_POLICY_NO_BALL_LOSS$' camp006-w03-continuous-v2-magikarp.log
+      - name: W03 V2 Fast high speed Quick late turn and Level uncapped native QA
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 900s godot --headless --path . --script res://tests/gameplay/parallel_items_w03_continuous_v2_context_edges.gd 2>&1 | tee camp006-w03-continuous-v2-context-edges.log
+          grep -E '^W03_V2_CONTEXT_EDGES PASS branches=3 checks=[1-9][0-9]*$' camp006-w03-continuous-v2-context-edges.log
       - name: Native field SaveV2 and capture regression
         shell: bash
         run: |
