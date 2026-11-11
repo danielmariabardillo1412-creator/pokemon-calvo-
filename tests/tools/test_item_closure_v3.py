@@ -14,7 +14,11 @@ report = mod.generate()
 rows = report["rows"]
 by_id = {x["id"]: x for x in rows}
 assert len(rows) == 2222 and len(by_id) == 2222
-assert sum(x["excluded"] for x in rows) == 44
+# Current policy includes the user-requested Dynamax Candy exclusion.
+# V27 snapshot provenance is not rewritten.
+assert sum(x["excluded"] for x in rows) == 45
+assert by_id["dynamax_candy"]["excluded"]
+assert by_id["dynamax_candy"]["exclusion_reason"] == "user_explicitly_excludes_dynamax_candy_without_dynamax_level_mechanic"
 assert sum(x["equip_permitted"] for x in rows) == 624
 assert sum(x["native_descriptor_v27_documented"] for x in rows) == 621
 assert report["explicit_missing_native"] == ["amulet_coin", "exp_share", "luck_incense"]

@@ -67,7 +67,12 @@ def generate(with_evidence: bool = False) -> dict:
     }
     held = set(connections["holdable_ids"]) - excluded
     native_missing = set(status["native_missing_permitted_equipped_ids"])
-    assert len(canonical) == 2222 and len(excluded) == 44
+    # The 44 excluded IDs in the V27 history are a frozen snapshot.
+    # The current IA6 content policy explicitly adds Dynamax Candy (45).
+    assert len(canonical) == 2222 and len(excluded) == 45
+    assert policy["excluded_ids"].get("dynamax_candy") == (
+        "user_explicitly_excludes_dynamax_candy_without_dynamax_level_mechanic")
+    assert "dynamax_candy" in excluded
     assert len(held) == status["trade_item_restoration_v27"]["permitted_holdable_ids"] == 624
     assert len(held - native_missing) == status["native_known_permitted_equipped_ids"] == 621
     assert native_missing == set(MISSING)

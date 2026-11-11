@@ -158,6 +158,7 @@ static func apply_evolution(
 	new_creature.ivs = creature.ivs.duplicate()
 	new_creature.evs = creature.evs.duplicate()
 	new_creature.nature_id = creature.nature_id
+	new_creature.effective_nature_id = creature.effective_nature_id
 	new_creature.is_shiny = creature.is_shiny
 	new_creature.friendship = creature.friendship
 	new_creature.status_ids = creature.status_ids.duplicate()
@@ -180,7 +181,8 @@ static func apply_evolution(
 		new_creature.ability_id = target.ability_ids[0]
 	# Recompute stats from the new species base.
 	var base := target.base_stat_block()
-	new_creature.stats = StatCalculator.compute(base, new_creature.ivs, new_creature.evs, new_creature.nature_id, new_creature.level)
+	var stat_nature: StringName = new_creature.nature_id if new_creature.effective_nature_id == &"" else new_creature.effective_nature_id
+	new_creature.stats = StatCalculator.compute(base, new_creature.ivs, new_creature.evs, stat_nature, new_creature.level)
 	# Preserve current HP conservatively, clamped to the new maximum.
 	new_creature.current_hp = mini(creature.current_hp, new_creature.stats.max_hp)
 	new_creature.stat_stages = StatStages.from_dict(creature.stat_stages.to_dict()) if creature.stat_stages != null else StatStages.new()

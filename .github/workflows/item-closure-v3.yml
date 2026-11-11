@@ -24,6 +24,16 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          # Never use the synthetic PR merge ref: it can contain unrelated
+          # catalog policy changes from a different base. Test exact PR HEAD.
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - name: Assert exact PR HEAD checkout on Linux
+        shell: bash
+        run: |
+          set -euo pipefail
+          actual="$(git rev-parse HEAD)"
+          test "$actual" = "${{ github.event.pull_request.head.sha || github.sha }}"
+          echo "IA6_INTEGRATION_PR_HEAD Linux=$actual"
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
@@ -71,6 +81,28 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          # Read-only diagnostics to distinguish fixture drift from logic drift.
+          python - <<'PY'
+          import hashlib, json
+          from collections import Counter
+          from pathlib import Path
+          root=Path('.')
+          inputs=['data/normalized/pokemon_api.json','config/item_selection_v1.json',
+                  'modules/inventory/item_connections_v1.json',
+                  'docs/current/ITEM_SYSTEM_CURRENT_STATUS.json',
+                  'docs/opencode/ITEM_CLOSURE_V2/COVERAGE.json']
+          for name in inputs:
+              raw=(root/name).read_bytes()
+              print('IA6_ITEM_PREFLIGHT_HASH',name,len(raw),hashlib.sha256(raw).hexdigest())
+          canonical=json.loads((root/inputs[0]).read_text())['items']
+          policy=json.loads((root/inputs[1]).read_text())
+          excluded={i for i,row in canonical.items()
+                    if i in policy['excluded_ids'] or row.get('category') in policy['excluded_categories']}
+          print('IA6_ITEM_PREFLIGHT_COUNTS',
+                json.dumps({'canonical':len(canonical),'excluded':len(excluded),
+                            'excluded_categories':dict(Counter(canonical[x].get('category') for x in excluded)),
+                            'excluded_ids_sample':sorted(excluded)[:12]},sort_keys=True))
+          PY
           python -B tools/item_audit/item_closure_v3.py | tee item-inventory-v3.log
           python -B tests/tools/test_item_closure_v3.py | tee item-audit-v3.log
           grep -E 'ITEM_CLOSURE_V3_AUDIT PASS checks=[1-9][0-9]* ids=2222' item-audit-v3.log
@@ -138,22 +170,53 @@ jobs:
           timeout 300s godot --headless --path . --script res://tests/gameplay/competitive_damage_items_v28.gd 2>&1 | tee item-damage-v28.log
           if grep -E 'SCRIPT ERROR|Parse Error|timeout' item-damage-v28.log; then exit 1; fi
           grep -E 'COMPETITIVE_DAMAGE_V28 PASS checks=[1-9][0-9]* ids=9 errors=0' item-damage-v28.log
-      - name: Declarative item families (Choice, recovery, recoil and contact)
+      # Integrated native item families above run on the actual PR SHA.
+      # The historical V28 verifier is intrinsically scoped to files changed
+      # against 47f42a..., so verify it without weakening its guard in a
+      # detached, pinned historical worktree. Both gates are required.
+      - name: Actual integrated V28 native families - 8 items / 40 scenarios
         shell: bash
         run: |
           set -euo pipefail
-          python -B tests/tools/test_item_automation_v28.py 2>&1 | tee item-automation-contract-v28.log
-          python -B tests/tools/test_item_automation_passive_v28.py 2>&1 | tee item-automation-passive-contract-v28.log
-          python -B tests/tools/test_item_automation_entry_v28.py 2>&1 | tee item-automation-entry-contract-v28.log
-          timeout 900s python -B tools/item_audit/automation_v28.py 2>&1 | tee item-automation-v28.log
-          grep -E 'ITEM_AUTOMATION_V28 SCOPED_VERIFIED checks=[1-9][0-9]*' item-automation-v28.log
-      - name: Existing scenario replay feasibility (not item certification)
+          python -B tools/item_audit/ia6_v28_integrated_mechanics.py --godot "$(command -v godot)" --node "$(command -v node)" 2>&1 | tee item-ia6-v28-integrated.log
+          if grep -E 'SCRIPT ERROR|Parse Error|IA6_V28_INTEGRATED FAILED' item-ia6-v28-integrated.log; then exit 1; fi
+          grep -E '^IA6_V28_INTEGRATED PASS checks=[1-9][0-9]* items=8 scenarios=40 sha=[0-9a-f]{40}$' item-ia6-v28-integrated.log
+      - name: Prepare isolated historical V28 contract on Linux (exact pinned SHA)
         shell: bash
         run: |
           set -euo pipefail
+          git worktree add --detach "$RUNNER_TEMP/ia6-v28-historical" "ba2909297bd5d0049b97517b59e6cc9ee2ca6bd7"
+          cd "$RUNNER_TEMP/ia6-v28-historical"
+          test "$(git rev-parse HEAD)" = "ba2909297bd5d0049b97517b59e6cc9ee2ca6bd7"
+          python -B tools/distribution/restore_resources.py
+          python -B tools/distribution/restore_resources.py --check
+          mkdir -p data/reports
+          cp ci/fixtures/pokeapi_reports/{forms_policy_report,unsupported_mechanics,import_summary}.json data/reports/
+          godot --headless --path . --import 2>&1 | tee "$GITHUB_WORKSPACE/item-v28-isolated-import-linux.log"
+          if grep -E 'SCRIPT ERROR|Parse Error' "$GITHUB_WORKSPACE/item-v28-isolated-import-linux.log"; then exit 1; fi
+          python -B tools/battle_reference/run.py --install --limit 1 2>&1 | tee "$GITHUB_WORKSPACE/item-v28-isolated-install-linux.log"
+          grep -E 'BATTLE_REFERENCE PASS' "$GITHUB_WORKSPACE/item-v28-isolated-install-linux.log"
+          echo "IA6_V28_ISOLATION_READY Linux ref=$(git rev-parse HEAD) integrated=$GITHUB_SHA"
+      - name: Historical V28 full declarative contract in isolated Linux worktree
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd "$RUNNER_TEMP/ia6-v28-historical"
+          test "$(git rev-parse HEAD)" = "ba2909297bd5d0049b97517b59e6cc9ee2ca6bd7"
+          python -B tests/tools/test_item_automation_v28.py 2>&1 | tee "$GITHUB_WORKSPACE/item-automation-contract-v28.log"
+          python -B tests/tools/test_item_automation_passive_v28.py 2>&1 | tee "$GITHUB_WORKSPACE/item-automation-passive-contract-v28.log"
+          python -B tests/tools/test_item_automation_entry_v28.py 2>&1 | tee "$GITHUB_WORKSPACE/item-automation-entry-contract-v28.log"
+          timeout 900s python -B tools/item_audit/automation_v28.py 2>&1 | tee "$GITHUB_WORKSPACE/item-automation-v28.log"
+          grep -E 'ITEM_AUTOMATION_V28 SCOPED_VERIFIED checks=[1-9][0-9]*' "$GITHUB_WORKSPACE/item-automation-v28.log"
+      - name: Historical V28 replay feasibility in isolated Linux worktree
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd "$RUNNER_TEMP/ia6-v28-historical"
+          test "$(git rev-parse HEAD)" = "ba2909297bd5d0049b97517b59e6cc9ee2ca6bd7"
           python -B tests/tools/test_item_case_replay_v28.py
-          timeout 420s python -B tools/item_audit/replay_v28.py --godot godot --node "$(command -v node)" 2>&1 | tee item-replay-feasibility-v28.log
-          grep -E 'ITEM_CASE_REPLAY_V28 VIABLE cases=[1-9][0-9]* checks=[1-9][0-9]*' item-replay-feasibility-v28.log
+          timeout 420s python -B tools/item_audit/replay_v28.py --godot godot --node "$(command -v node)" 2>&1 | tee "$GITHUB_WORKSPACE/item-replay-feasibility-v28.log"
+          grep -E 'ITEM_CASE_REPLAY_V28 VIABLE cases=[1-9][0-9]* checks=[1-9][0-9]*' "$GITHUB_WORKSPACE/item-replay-feasibility-v28.log"
       - name: Evidence-bound matrix by ID and context
         shell: bash
         run: |
@@ -192,6 +255,7 @@ jobs:
             .godot/item_closure_v3/*.json
             .godot/competitive_protection_v28/*.json
             .godot/competitive_damage_v28/*.json
+            item-ia6-v28-integrated.log
             .godot/item_automation_v28/
             .godot/publication_v27/runs/
           if-no-files-found: ignore
@@ -211,6 +275,15 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          # Never use the synthetic PR merge ref: it can contain unrelated
+          # catalog policy changes from a different base. Test exact PR HEAD.
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - name: Assert exact PR HEAD checkout on Windows
+        shell: pwsh
+        run: |
+          $actual = (& git rev-parse HEAD).Trim()
+          if ($actual -ne '${{ github.event.pull_request.head.sha || github.sha }}') { throw 'PR HEAD checkout mismatched requested commit' }
+          Write-Output ("IA6_INTEGRATION_PR_HEAD Windows=" + $actual)
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
@@ -282,10 +355,38 @@ jobs:
             Write-Error 'Portable gate did not emit PASS despite exit code zero'
             exit 1
           }
-      - name: Declarative item families on Windows after unchanged portable gate
+      - name: Prepare isolated historical V28 contract on Windows (exact pinned SHA)
         shell: pwsh
         run: |
           $ErrorActionPreference = 'Stop'
+          $ref = 'ba2909297bd5d0049b97517b59e6cc9ee2ca6bd7'
+          $isolated = Join-Path $env:RUNNER_TEMP 'ia6-v28-historical'
+          & git worktree add --detach $isolated $ref
+          if ($LASTEXITCODE -ne 0) { exit 1 }
+          Set-Location $isolated
+          if ((& git rev-parse HEAD).Trim() -ne $ref) { throw 'Historical V28 SHA mismatch' }
+          $godot = Join-Path $env:USERPROFILE 'godot/Godot_v4.7-stable_win64_console.exe'
+          $node = (Get-Command node).Source
+          $npm = (Get-Command npm.cmd).Source
+          & python -B tools/distribution/restore_resources.py
+          if ($LASTEXITCODE -ne 0) { exit 1 }
+          & python -B tools/distribution/restore_resources.py --check
+          if ($LASTEXITCODE -ne 0) { exit 1 }
+          New-Item -ItemType Directory -Force 'data/reports' | Out-Null
+          foreach ($name in @('forms_policy_report.json','unsupported_mechanics.json','import_summary.json')) {
+            Copy-Item ("ci/fixtures/pokeapi_reports/" + $name) ("data/reports/" + $name)
+          }
+          & $godot --headless --path . --import 2>&1 | Tee-Object -FilePath (Join-Path $env:GITHUB_WORKSPACE 'item-v28-isolated-import-windows.log')
+          if ($LASTEXITCODE -ne 0) { exit 1 }
+          & python -B tools/battle_reference/run.py --install --limit 1 --godot $godot --node $node --npm $npm 2>&1 | Tee-Object -FilePath (Join-Path $env:GITHUB_WORKSPACE 'item-v28-isolated-install-windows.log')
+          if ($LASTEXITCODE -ne 0) { exit 1 }
+          Write-Output ("IA6_V28_ISOLATION_READY Windows ref=" + (& git rev-parse HEAD).Trim() + " integrated=" + $env:GITHUB_SHA)
+      - name: Historical V28 full declarative contract on Windows after unchanged portable gate
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          Set-Location (Join-Path $env:RUNNER_TEMP 'ia6-v28-historical')
+          if ((& git rev-parse HEAD).Trim() -ne 'ba2909297bd5d0049b97517b59e6cc9ee2ca6bd7') { throw 'Historical V28 SHA mismatch' }
           $godot = Join-Path $env:USERPROFILE 'godot/Godot_v4.7-stable_win64_console.exe'
           $node = (Get-Command node).Source
           & python -B tests/tools/test_item_automation_v28.py
@@ -293,13 +394,13 @@ jobs:
           & python -B tests/tools/test_item_automation_passive_v28.py
           if ($LASTEXITCODE -ne 0) { exit 1 }
           & python -B tests/tools/test_item_automation_entry_v28.py
-          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-          & python -B tools/item_audit/automation_v28.py --godot $godot --node $node 2>&1 | Tee-Object -FilePath item-automation-windows-v28.log
           if ($LASTEXITCODE -ne 0) { exit 1 }
-          if (-not (Select-String -Path item-automation-windows-v28.log -Pattern 'ITEM_AUTOMATION_V28 SCOPED_VERIFIED checks=[1-9][0-9]*' -Quiet)) { exit 1 }
+          & python -B tools/item_audit/automation_v28.py --godot $godot --node $node 2>&1 | Tee-Object -FilePath (Join-Path $env:GITHUB_WORKSPACE 'item-automation-windows-v28.log')
+          if ($LASTEXITCODE -ne 0) { exit 1 }
+          if (-not (Select-String -Path (Join-Path $env:GITHUB_WORKSPACE 'item-automation-windows-v28.log') -Pattern 'ITEM_AUTOMATION_V28 SCOPED_VERIFIED checks=[1-9][0-9]*' -Quiet)) { exit 1 }
           & python -B tests/tools/test_item_case_replay_v28.py
           if ($LASTEXITCODE -ne 0) { exit 1 }
-          & python -B tools/item_audit/replay_v28.py --godot $godot --node $node 2>&1 | Tee-Object -FilePath item-replay-feasibility-windows-v28.log
+          & python -B tools/item_audit/replay_v28.py --godot $godot --node $node 2>&1 | Tee-Object -FilePath (Join-Path $env:GITHUB_WORKSPACE 'item-replay-feasibility-windows-v28.log')
           if ($LASTEXITCODE -ne 0) { exit 1 }
       - name: Preserve portable gate evidence
         if: always()
