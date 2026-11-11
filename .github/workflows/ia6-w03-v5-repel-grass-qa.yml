@@ -7,6 +7,7 @@ on:
       - '.github/workflows/ia6-w03-v5-repel-grass-qa.yml'
       - 'tests/tools/test_ia6_w03_v5_source_guard.py'
       - 'tests/gameplay/parallel_items_w03_v5_repel_grass.gd'
+      - 'tests/gameplay/parallel_items_w03_v5_repel_negative.gd'
       - 'modules/overworld/field_repel_step_effect.gd'
       - 'scenes/visual/field_item_bag.gd'
       - 'scenes/visual/field_demo.gd'
@@ -65,6 +66,59 @@ jobs:
           timeout 900s godot --headless --path . --script res://tests/gameplay/parallel_items_w03_v5_repel_grass.gd 2>&1 | tee w03-v5-grass-l3.log
           grep -E '^W03_V5_REPEL_GRASS PASS checks=[1-9][0-9]*$' w03-v5-grass-l3.log
           if grep -E '^W03_V5_REPEL_GRASS FAIL|SCRIPT ERROR|Parse Error' w03-v5-grass-l3.log; then exit 1; fi
+      - name: Negative real bag commit failures, stale stock and idempotent steps
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 900s godot --headless --path . --script res://tests/gameplay/parallel_items_w03_v5_repel_negative.gd 2>&1 | tee w03-v5-repel-neg.log
+          grep -E '^W03_V5_REPEL_NEG PASS checks=[1-9][0-9]*
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 900s godot --headless --path . --script res://tests/gameplay/parallel_items_w03_repeat_history_v2.gd 2>&1 | tee w03-v5-repeat-legacy.log
+          grep -E '^W03_REPEAT_V2_GODOT PASS checks=37 native_capture_l3=false$' w03-v5-repeat-legacy.log
+      - name: Repeat Net Moon real Showdown native capture regression
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 900s godot --headless --path . --script res://tests/gameplay/parallel_items_w03_repeat_native_v4.gd 2>&1 | tee w03-v5-repeat-native.log
+          grep -E '^W03_REPEAT_NATIVE_V4 PASS checks=[1-9][0-9]*$' w03-v5-repeat-native.log
+          timeout 900s godot --headless --path . --script res://tests/gameplay/parallel_items_w03_repeat_native_v4_negatives.gd 2>&1 | tee w03-v5-repeat-neg.log
+          grep -E '^W03_REPEAT_NATIVE_V4_NEG PASS checks=[1-9][0-9]*$' w03-v5-repeat-neg.log
+          timeout 900s godot --headless --path . --script res://tests/gameplay/parallel_items_w03_net_native_v5.gd 2>&1 | tee w03-v5-net-native.log
+          grep -E '^W03_NET_NATIVE_V5 PASS checks=[1-9][0-9]*$' w03-v5-net-native.log
+          timeout 900s godot --headless --path . --script res://tests/gameplay/parallel_items_w03_net_native_v5_negatives.gd 2>&1 | tee w03-v5-net-neg.log
+          grep -E '^W03_NET_NATIVE_V5_NEG PASS checks=[1-9][0-9]*$' w03-v5-net-neg.log
+          timeout 900s godot --headless --path . --script res://tests/gameplay/parallel_items_w03_continuous_v3.gd 2>&1 | tee w03-v5-moon-native.log
+          grep -E '^W03_V3_MOON PASS native=2 checks=[1-9][0-9]*$' w03-v5-moon-native.log
+      - name: SaveV2 clean and adversarial
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 900s godot --headless --path . --script res://tests/gameplay/savegame_v2_test_runner.gd 2>&1 | tee w03-v5-savev2.log
+          grep -E '^=== SAVEGAME V2 TEST RESULT: [1-9][0-9]* PASS / 0 FAIL ===$' w03-v5-savev2.log
+          timeout 900s godot --headless --path . --script res://tests/gameplay/savegame_v2_adversarial_test_runner.gd 2>&1 | tee w03-v5-save-hostile.log
+          grep -E '^=== SAVEGAME V2 ADVERSARIAL RESULT: [1-9][0-9]* PASS / 0 FAIL ===$' w03-v5-save-hostile.log
+      - name: IA6 effective nature, Rope and W05 book bag coexistence
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 900s godot --headless --path . --script res://tests/gameplay/ia6_mint_field_native_save_20261109.gd 2>&1 | tee w03-v5-mint-save.log
+          grep -E '^IA6_MINT_FIELD_SAVE PASS checks=[1-9][0-9]* features=real_bag,original_nature,effective_nature,savev2$' w03-v5-mint-save.log
+          timeout 900s godot --headless --path . --script res://tests/gameplay/ia6_integration_mint_rope_20261109.gd 2>&1 | tee w03-v5-mint-rope.log
+          grep -E '^IA6_INTEGRATION PASS checks=[1-9][0-9]* features=mint_effective_nature,escape_rope_bag_savev2$' w03-v5-mint-rope.log
+          timeout 900s godot --headless --path . --script res://tests/gameplay/ia6_books_bag_20261109.gd 2>&1 | tee w03-v5-books-bag.log
+          grep -E '^IA6_BOOK_BAG PASS checks=[1-9][0-9]* features=real_bag,w05_panel,one_teach,savev2$' w03-v5-books-bag.log
+      - name: Preserve scoped receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ia6-w03-v5-scoped-${{ github.run_id }}
+          retention-days: 7
+          if-no-files-found: ignore
+          path: w03-v5-*.log
+ w03-v5-repel-neg.log
+          if grep -E '^W03_V5_REPEL_NEG FAIL|SCRIPT ERROR|Parse Error' w03-v5-repel-neg.log; then exit 1; fi
       - name: Strict original historical Repeat legacy, true owner ledger
         shell: bash
         run: |
