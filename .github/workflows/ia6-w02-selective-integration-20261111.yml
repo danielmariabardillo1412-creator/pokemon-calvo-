@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - codex/calvo-ia6-w02-integration-20261111
+      - codex/calvo-ia6-integration-20261109
     paths:
       - '.github/workflows/ia6-w02-selective-integration-20261111.yml'
       - 'tests/gameplay/ia6_w02_effective_nature_integration_20261111.gd'
