@@ -1,0 +1,43 @@
+name: W03 V3 - canonical capture producers
+on:
+  push:
+    branches:
+      - codex/calvo-items-20261104-w03-camp006
+    paths:
+      - '.github/workflows/parallel-w03-continuous-v3.yml'
+      - 'tests/tools/test_parallel_items_w03_continuous_v3_sources.py'
+      - 'tests/gameplay/parallel_items_w03_continuous_v3.gd'
+      - 'modules/capture/capture_battle_context.gd'
+      - 'modules/capture/capture_ruleset.gd'
+      - 'modules/capture/capture_context_ball_effects.gd'
+      - 'modules/gameplay/showdown_adventure_session.gd'
+      - 'modules/capture/capture_source_w03_v3.gd'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: w03-continuous-v3-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  source_audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Phase A canonical producers and negative inventory
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tests/tools/test_parallel_items_w03_continuous_v3_sources.py 2>&1 | tee w03-v3-source.log
+          grep -E '^W03_V3_SOURCE PASS checked=[1-9][0-9]* moon=[0-9]+ runtime_weight=[0-9]+ ultra_fields=[0-9]+$' w03-v3-source.log
+      - name: Archive source audit
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: w03-v3-source-${{ github.run_id }}
+          if-no-files-found: ignore
+          retention-days: 7
+          path: w03-v3-source.log
