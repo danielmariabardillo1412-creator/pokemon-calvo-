@@ -45,3 +45,10 @@ Fecha: 2026-11-11. Estado de este documento: `W05_SELECTIVE_INTEGRATION_STAGING_
 - Se dispararon además los workflows generales del PR, incluido `Item Closure V3` (requiere V28 scope dual) y compilación Windows. Todos deben alcanzar `completed/success` antes de cualquier integración.
 - [CI directa W05 #43067373789](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/43067373789) ha pasado la preparación, la política 45, el runner W02 nativo, T01–04, CAMP003–006, el smoke IA6 panel/rope, la prueba W05 real de 366 checks y fallback ES; **estaba ejecutando la exportación técnica PCK/EXE al último chequeo**. No declarar SUCCESS global mientras siga en curso.
 - Próxima `p`: verificar CI directa y todos los jobs generales del PR #120 sobre el HEAD exacto; si hay un fallo, obtener log y repararlo solo en rama W05 de ensayo. Si todo verde, confirmar que IA6 oficial no avanzó, revisar el diff limitado, fusionar únicamente en IA6 y exigir CI postmerge. W03 repeles/legacy y W04 evolución deben pasar por otro gate; ninguna promoción a main.
+
+
+### Puerta W05 propia certificada (actualización posterior)
+
+- [#43067373789](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/43067373789) **completed/success**, HEAD `58ef7a496ec13a1a8db1552ac0d3f031865bfecd`. Superó workflow completo con T01–T04, CAMP003–006, bolsa W05 real, W02, Rope IA6, policy45, fallback y export Windows técnico.
+- [PR #120](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/pull/120) abierto `draft=true` a IA6; las CI generales del PR sobre SHA exacto mostraban **17/21 completed/success, 4 in_progress, 0 failures** en la última consulta: `Trainer Team Composition`, `Godot 4.7`, `Windows Build`, `Item Closure V3`.
+- **Puerta restante: todas las CI del PR y posterior CI del merge IA6**. No inferir estado final de esos cuatro runs a partir de la CI W05 verde. Mientras tanto, mantener DRAFT / NO MERGE. W03 repeles y wild legacy siguen bloqueados fuera de W05.
