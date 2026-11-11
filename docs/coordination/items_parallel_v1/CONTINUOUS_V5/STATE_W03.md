@@ -1,3 +1,20 @@
+# IA3/W03 — CONTINUOUS_V5 · AUTORIZACIÓN FIXTURE HISTÓRICO EN VERIFICACIÓN
+- checkpoint_date: 2026-11-11
+- phase: A/B/C implemented; historical fixture one-line fix submitted; both new CI pending
+- new_arbiter_authorization: CONTINUOUS_V5/IA6_W03_REPEL_FIXTURE_ONE_LINE_AUTH_20261111.md
+- authorized_change: tests/gameplay/parallel_items_w03_repel_l3.gd, zone registered_zone_ids()[0] → scene.TECHNICAL_ZONE_ID, exactly 1 line
+- original_historical_blob: 318ee45f60d9ee046bcb048019337524acfb4844
+- repaired_historical_blob: 91ec4cca45b0a398597dd352f10d4bcfec4b3353
+- guard: reconstruct original blob from repaired fixture; verify all remaining bytes; keep seven production hashes/dynamax veto
+- new_code_sha: e7b4235788b200a946030a248b33cc4a20535359
+- strict_historical_run: 43095883086 (PENDING, do not claim PASS)
+- actual_grass_regression_run: 43095882953 (PENDING, do not claim PASS)
+- last_verified_green_BEFORE_fixture_fix: 43084807955 @ 1fc5d7fdba3a9b84a4c04fc88a24ea3c8d1bb579
+- integration_official_IA6: NO
+- next_safe_action: inspect both CI results on e7b4235, audit failing job logs if needed, then update final report and state only if both SUCCESS
+- STOP: no new V6, no production repair absent real failure; do not count pending CI as PASS
+
+## Previous verified V5 work (historical checkpoint superseded for fixture status)
 # IA3/W03 — CONTINUOUS_V5 FINALIZADA · READY_FOR_IA6_MERGE_REPEL_CANDIDATE
 - date: 2026-11-11
 - worker: W03
