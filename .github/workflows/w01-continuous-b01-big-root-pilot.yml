@@ -1,0 +1,65 @@
+name: W01 Continuous B01 Big Root native and L3 pilot
+on:
+  push:
+    branches:
+      - codex/calvo-items-20261110-w01-gems-autobatch01
+    paths:
+      - '.github/workflows/w01-continuous-b01-big-root-pilot.yml'
+      - 'tests/tools/repro_w01_continuous_b01_big_root_native.cjs'
+      - 'tests/gameplay/parallel_items_w01_continuous_b01_big_root.gd'
+      - 'tests/tools/test_w01_continuous_b01_big_root.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: w01-b01-root-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  b01_big_root:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: chickensoft-games/setup-godot@v2.4.1
+        with:
+          version: 4.7.0
+          use-dotnet: false
+          include-templates: false
+      - name: Restore canonical resources and native Showdown
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tools/distribution/restore_resources.py
+          python -B tools/distribution/restore_resources.py --check
+          mkdir -p data/reports
+          cp ci/fixtures/pokeapi_reports/forms_policy_report.json data/reports/forms_policy_report.json
+          cp ci/fixtures/pokeapi_reports/unsupported_mechanics.json data/reports/unsupported_mechanics.json
+          cp ci/fixtures/pokeapi_reports/import_summary.json data/reports/import_summary.json
+          godot --headless --path . --import 2>&1 | tee w01-b01-root-import.log
+          if grep -E 'SCRIPT ERROR|Parse Error' w01-b01-root-import.log; then exit 1; fi
+          echo "POKEMON_CALVO_NODE=$(command -v node)" >> "$GITHUB_ENV"
+          python -B tools/battle_reference/run.py --install --limit 1 2>&1 | tee w01-b01-root-reference.log
+      - name: Real Water hit SpA boost consumption and disk SaveV2
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tests/tools/test_w01_continuous_b01_big_root.py 2>&1 | tee w01-b01-root-python.log
+          grep -E '^W01_B01_ROOT_PY PASS row=04 checks=[1-9][0-9]*$' w01-b01-root-python.log
+          node tests/tools/repro_w01_continuous_b01_big_root_native.cjs 2>&1 | tee w01-b01-root-native.log
+          grep -F 'W01_B01_NATIVE PASS id=big_root modes=4 drain_boost=1 wrong_move=1 snapshots=4' w01-b01-root-native.log
+          timeout 450s godot --headless --path . --script res://tests/gameplay/parallel_items_w01_continuous_b01_big_root.gd 2>&1 | tee w01-b01-root-godot.log
+          grep -E '^W01_B01_L3_ROW PASS row=04 id=big_root modes=4 checks=[1-9][0-9]*$' w01-b01-root-godot.log
+      - name: Upload diagnostic receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: w01-b01-root-${{ github.run_id }}
+          retention-days: 7
+          if-no-files-found: ignore
+          path: w01-b01-root-*.log
