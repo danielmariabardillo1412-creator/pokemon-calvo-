@@ -10,7 +10,7 @@ def main():
  assert f["items"][9]=={"row":"10","id":"sitrus_berry"}
  assert read("docs/current/RANDOMLOCK_ITEMS_BUILD_SCOPE_V2.csv")["sitrus_berry"]["estado_contenido"]=="SELECCIONADO"
  inv=read("docs/current/ITEM_INVENTORY.csv")["sitrus_berry"]
- assert inv["native_entry"]=="True" and inv["effect_status"]=="HELD_PILOT_VERIFIED"
+ assert inv["native_entry"]=="True" and inv["connection"]=="HELD_PILOT_VERIFIED"
  assert "onEat" in inv["native_hooks"] and "onUpdate" in inv["native_hooks"]
  assert "sitrus_berry" in json.loads((R/"modules/inventory/item_connections_v1.json").read_text(encoding="utf-8"))["holdable_ids"]
  pilot=(R/"tools/item_audit/held_pilot.cjs").read_text(encoding="utf-8")
