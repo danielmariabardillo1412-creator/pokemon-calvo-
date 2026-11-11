@@ -71,6 +71,28 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          # Read-only diagnostics to distinguish fixture drift from logic drift.
+          python - <<'PY'
+          import hashlib, json
+          from collections import Counter
+          from pathlib import Path
+          root=Path('.')
+          inputs=['data/normalized/pokemon_api.json','config/item_selection_v1.json',
+                  'modules/inventory/item_connections_v1.json',
+                  'docs/current/ITEM_SYSTEM_CURRENT_STATUS.json',
+                  'docs/opencode/ITEM_CLOSURE_V2/COVERAGE.json']
+          for name in inputs:
+              raw=(root/name).read_bytes()
+              print('IA6_ITEM_PREFLIGHT_HASH',name,len(raw),hashlib.sha256(raw).hexdigest())
+          canonical=json.loads((root/inputs[0]).read_text())['items']
+          policy=json.loads((root/inputs[1]).read_text())
+          excluded={i for i,row in canonical.items()
+                    if i in policy['excluded_ids'] or row.get('category') in policy['excluded_categories']}
+          print('IA6_ITEM_PREFLIGHT_COUNTS',
+                json.dumps({'canonical':len(canonical),'excluded':len(excluded),
+                            'excluded_categories':dict(Counter(canonical[x].get('category') for x in excluded)),
+                            'excluded_ids_sample':sorted(excluded)[:12]},sort_keys=True))
+          PY
           python -B tools/item_audit/item_closure_v3.py | tee item-inventory-v3.log
           python -B tests/tools/test_item_closure_v3.py | tee item-audit-v3.log
           grep -E 'ITEM_CLOSURE_V3_AUDIT PASS checks=[1-9][0-9]* ids=2222' item-audit-v3.log
