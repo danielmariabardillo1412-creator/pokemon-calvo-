@@ -1,0 +1,959 @@
+name: W01 CONTINUOUS_V2 B01 held items with frozen TANDA04 regressions
+on:
+  push:
+    branches:
+      - codex/calvo-items-20261110-w01-gems-autobatch01
+    paths:
+      - '.github/workflows/w01-continuous-b01-held.yml'
+      - 'tests/gameplay/parallel_items_w01_autorun_v4_leftovers.gd'
+      - 'tests/tools/repro_w01_autorun_v4_leftovers_native.cjs'
+      - 'tests/tools/test_parallel_items_w01_autorun_v4.py'
+      - 'tests/tools/test_parallel_items_w01_autorun_v4_life_orb.py'
+      - 'tests/tools/repro_w01_autorun_v4_choice_band_native.cjs'
+      - 'tests/tools/test_parallel_items_w01_autorun_v4_choice_band.py'
+      - 'tests/tools/test_w01_continuous_b01_ability_shield.py'
+      - 'tests/tools/repro_w01_continuous_b01_ability_shield_native.cjs'
+      - 'tests/gameplay/parallel_items_w01_continuous_b01_ability_shield.gd'
+      - 'tests/tools/test_w01_continuous_b01_absorb_bulb.py'
+      - 'tests/tools/repro_w01_continuous_b01_absorb_bulb_native.cjs'
+      - 'tests/gameplay/parallel_items_w01_continuous_b01_absorb_bulb.gd'
+      - 'tests/tools/repro_w01_autorun_v4_choice_specs_native.cjs'
+      - 'tests/tools/test_parallel_items_w01_autorun_v4_choice_specs.py'
+      - 'tests/gameplay/parallel_items_w01_autorun_v4_choice_specs.gd'
+      - 'tests/tools/repro_w01_autorun_v4_choice_scarf_native.cjs'
+      - 'tests/tools/test_parallel_items_w01_autorun_v4_choice_scarf.py'
+      - 'tests/gameplay/parallel_items_w01_autorun_v4_choice_scarf.gd'
+      - 'tests/tools/repro_w01_autorun_v4_shell_bell_native.cjs'
+      - 'tests/tools/test_parallel_items_w01_autorun_v4_shell_bell.py'
+      - 'tests/gameplay/parallel_items_w01_autorun_v4_shell_bell.gd'
+      - 'tests/tools/repro_w01_autorun_v4_eviolite_native.cjs'
+      - 'tests/tools/test_parallel_items_w01_autorun_v4_eviolite.py'
+      - 'tests/tools/repro_w01_autorun_v4_safety_goggles_native.cjs'
+      - 'tests/tools/test_parallel_items_w01_autorun_v4_safety_goggles.py'
+      - 'tests/gameplay/parallel_items_w01_autorun_v4_safety_goggles.gd'
+      - 'tests/tools/repro_w01_autorun_v4_black_sludge_native.cjs'
+      - 'tests/tools/test_parallel_items_w01_autorun_v4_black_sludge.py'
+      - 'tests/gameplay/parallel_items_w01_autorun_v4_black_sludge.gd'
+      - 'tests/tools/repro_w01_autorun_v4_sitrus_berry_native.cjs'
+      - 'tests/tools/test_parallel_items_w01_autorun_v4_sitrus_berry.py'
+      - 'tests/gameplay/parallel_items_w01_autorun_v4_sitrus_berry.gd'
+      - 'tests/gameplay/parallel_items_w01_autorun_v4_eviolite.gd'
+      - 'tests/gameplay/parallel_items_w01_autorun_v4_choice_band.gd'
+      - 'tests/tools/repro_w01_autorun_v4_life_orb_native.cjs'
+      - 'tests/gameplay/parallel_items_w01_autorun_v4_life_orb.gd'
+      - 'tests/fixtures/parallel_items/w01_autorun_v4.json'
+      - 'docs/coordination/items_parallel_v1/reports/W01/AUTORUN_V4_PROGRESS.csv'
+      - 'docs/coordination/items_parallel_v1/reports/W01/AUTORUN_V4_CHECKPOINT.md'
+      - 'docs/coordination/items_parallel_v1/reports/W01/AUTORUN_V4_FINAL.md'
+      - 'tests/gameplay/parallel_items_w01_autorun_v3.gd'
+      - 'tests/gameplay/parallel_items_w01_autorun_v3_boundaries.gd'
+      - 'tests/tools/test_parallel_items_w01_autorun_v3.py'
+      - 'tests/fixtures/parallel_items/w01_autorun_v3.json'
+      - 'docs/coordination/items_parallel_v1/reports/W01/AUTORUN_V3_PROGRESS.csv'
+      - 'docs/coordination/items_parallel_v1/reports/W01/AUTORUN_V3_FINAL.md'
+      - 'docs/coordination/items_parallel_v1/reports/W01/AUTORUN_V3_CHECKPOINT.md'
+      - '.github/workflows/w01-autorun-v2-gems.yml'
+      - 'tests/tools/test_parallel_items_w01_autorun_v2.py'
+      - 'tests/tools/repro_w01_autorun_v2_native.cjs'
+      - 'tests/gameplay/parallel_items_w01_autorun_v2.gd'
+      - 'tests/fixtures/parallel_items/w01_autorun_v2.json'
+      - 'docs/coordination/items_parallel_v1/reports/W01/AUTORUN_V2_PROGRESS.csv'
+      - 'docs/coordination/items_parallel_v1/reports/W01/AUTORUN_V2_FINAL.md'
+      - 'docs/coordination/items_parallel_v1/reports/W01/AUTORUN_V1_PROGRESS.csv'
+      - 'docs/coordination/items_parallel_v1/reports/W01/AUTORUN_V1_FINAL.md'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: w01-autorun-v4-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  v2_new_gems:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: chickensoft-games/setup-godot@v2.4.1
+        with:
+          version: 4.7.0
+          use-dotnet: false
+          include-templates: false
+      - name: Rebuild canonical Godot catalog and native Showdown without production changes
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REF_NAME" = 'codex/calvo-items-20261110-w01-gems-autobatch01'
+          godot --version | grep -E '^4[.]7([.-]|$)'
+          python -B tools/distribution/restore_resources.py
+          python -B tools/distribution/restore_resources.py --check
+          mkdir -p data/reports
+          cp ci/fixtures/pokeapi_reports/forms_policy_report.json data/reports/forms_policy_report.json
+          cp ci/fixtures/pokeapi_reports/unsupported_mechanics.json data/reports/unsupported_mechanics.json
+          cp ci/fixtures/pokeapi_reports/import_summary.json data/reports/import_summary.json
+          godot --headless --path . --import 2>&1 | tee w01-v2-import.log
+          if grep -E 'SCRIPT ERROR|Parse Error' w01-v2-import.log; then exit 1; fi
+          echo "POKEMON_CALVO_NODE=$(command -v node)" >> "$GITHUB_ENV"
+          python -B tools/battle_reference/run.py --install --limit 1 2>&1 | tee w01-v2-reference.log
+      - name: TANDA02 real GEM, matrix 18, miss immunity Transform slots and SaveV2
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tests/tools/test_parallel_items_w01_autorun_v2.py 2>&1 | tee w01-v2-v2-python.log
+          grep -E '^W01_V2_PY PASS rows=5 checks=[1-9][0-9]*$' w01-v2-v2-python.log
+          grep -E '^W01_V2_NATIVE PASS rows=5 activations=10 negatives=10 snapshots=[1-9][0-9]*$' w01-v2-v2-python.log
+          grep -E '^W01_V2_MATRIX PASS types=18 unique=18 old_c005=3 old_v1=10 new_v2=5$' w01-v2-v2-python.log
+          grep -E '^W01_V2_IMMUNITY PASS cases=2$' w01-v2-v2-python.log
+          grep -E '^W01_V2_MISS PASS hits=[1-9][0-9]* misses=[1-9][0-9]*$' w01-v2-v2-python.log
+          grep -E '^W01_V2_SLOTS PASS status_first=1 second_slot_trigger=1 switch_reentry=1$' w01-v2-v2-python.log
+          grep -E '^W01_V2_TRANSFORM PASS status_retains=1 transformed_hit_consumes=1 snapshots=2$' w01-v2-v2-python.log
+          test "$(grep -c '^W01_V2_NATIVE_ROW PASS row=' w01-v2-v2-python.log)" -eq 5
+          timeout 1050s godot --headless --path . --script res://tests/gameplay/parallel_items_w01_autorun_v2.gd 2>&1 | tee w01-v2-v2-godot.log
+          grep -E '^W01_V2_GODOT PASS rows=5 checks=[1-9][0-9]*$' w01-v2-v2-godot.log
+          test "$(grep -c '^W01_V2_GODOT_ROW PASS row=' w01-v2-v2-godot.log)" -eq 5
+      - name: Upload traceable logs even after failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: w01-v2-v2_new_gems-${{ github.run_id }}
+          retention-days: 7
+          if-no-files-found: ignore
+          path: w01-v2-*.log
+  tanda01_regression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: chickensoft-games/setup-godot@v2.4.1
+        with:
+          version: 4.7.0
+          use-dotnet: false
+          include-templates: false
+      - name: Rebuild canonical Godot catalog and native Showdown without production changes
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REF_NAME" = 'codex/calvo-items-20261110-w01-gems-autobatch01'
+          godot --version | grep -E '^4[.]7([.-]|$)'
+          python -B tools/distribution/restore_resources.py
+          python -B tools/distribution/restore_resources.py --check
+          mkdir -p data/reports
+          cp ci/fixtures/pokeapi_reports/forms_policy_report.json data/reports/forms_policy_report.json
+          cp ci/fixtures/pokeapi_reports/unsupported_mechanics.json data/reports/unsupported_mechanics.json
+          cp ci/fixtures/pokeapi_reports/import_summary.json data/reports/import_summary.json
+          godot --headless --path . --import 2>&1 | tee w01-v2-import.log
+          if grep -E 'SCRIPT ERROR|Parse Error' w01-v2-import.log; then exit 1; fi
+          echo "POKEMON_CALVO_NODE=$(command -v node)" >> "$GITHUB_ENV"
+          python -B tools/battle_reference/run.py --install --limit 1 2>&1 | tee w01-v2-reference.log
+      - name: TANDA01 frozen Gem positives and SaveV2
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tests/tools/test_parallel_items_w01_autorun_v1.py 2>&1 | tee w01-v2-v1-python.log
+          grep -E '^W01_AUTORUN_PY PASS rows=10 checks=85$' w01-v2-v1-python.log
+          timeout 1650s godot --headless --path . --script res://tests/gameplay/parallel_items_w01_autorun_v1.gd 2>&1 | tee w01-v2-v1-godot.log
+          grep -E '^W01_AUTORUN_GODOT PASS rows=10 checks=4002$' w01-v2-v1-godot.log
+          test "$(grep -c '^AUTORUN_W01_ROW_PASS row=' w01-v2-v1-godot.log)" -eq 10
+      - name: Upload traceable logs even after failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: w01-v2-tanda01_regression-${{ github.run_id }}
+          retention-days: 7
+          if-no-files-found: ignore
+          path: w01-v2-*.log
+  camp005_regression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: chickensoft-games/setup-godot@v2.4.1
+        with:
+          version: 4.7.0
+          use-dotnet: false
+          include-templates: false
+      - name: Rebuild canonical Godot catalog and native Showdown without production changes
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REF_NAME" = 'codex/calvo-items-20261110-w01-gems-autobatch01'
+          godot --version | grep -E '^4[.]7([.-]|$)'
+          python -B tools/distribution/restore_resources.py
+          python -B tools/distribution/restore_resources.py --check
+          mkdir -p data/reports
+          cp ci/fixtures/pokeapi_reports/forms_policy_report.json data/reports/forms_policy_report.json
+          cp ci/fixtures/pokeapi_reports/unsupported_mechanics.json data/reports/unsupported_mechanics.json
+          cp ci/fixtures/pokeapi_reports/import_summary.json data/reports/import_summary.json
+          godot --headless --path . --import 2>&1 | tee w01-v2-import.log
+          if grep -E 'SCRIPT ERROR|Parse Error' w01-v2-import.log; then exit 1; fi
+          echo "POKEMON_CALVO_NODE=$(command -v node)" >> "$GITHUB_ENV"
+          python -B tools/battle_reference/run.py --install --limit 1 2>&1 | tee w01-v2-reference.log
+      - name: CAMP005 frozen all thirty combat items and SaveV2
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tests/tools/test_parallel_items_w01_campaign_005.py --ci 2>&1 | tee w01-v2-c005-python.log
+          grep -E '^CAMP005_W01_PY PASS blocks=10 checks=668$' w01-v2-c005-python.log
+          timeout 1400s godot --headless --path . --script res://tests/gameplay/parallel_items_w01_campaign_005.gd 2>&1 | tee w01-v2-c005-godot.log
+          grep -E '^CAMP005_W01_GODOT PASS blocks=10 checks=24723$' w01-v2-c005-godot.log
+      - name: Upload traceable logs even after failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: w01-v2-camp005_regression-${{ github.run_id }}
+          retention-days: 7
+          if-no-files-found: ignore
+          path: w01-v2-*.log
+  camp004_regression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: chickensoft-games/setup-godot@v2.4.1
+        with:
+          version: 4.7.0
+          use-dotnet: false
+          include-templates: false
+      - name: Rebuild canonical Godot catalog and native Showdown without production changes
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REF_NAME" = 'codex/calvo-items-20261110-w01-gems-autobatch01'
+          godot --version | grep -E '^4[.]7([.-]|$)'
+          python -B tools/distribution/restore_resources.py
+          python -B tools/distribution/restore_resources.py --check
+          mkdir -p data/reports
+          cp ci/fixtures/pokeapi_reports/forms_policy_report.json data/reports/forms_policy_report.json
+          cp ci/fixtures/pokeapi_reports/unsupported_mechanics.json data/reports/unsupported_mechanics.json
+          cp ci/fixtures/pokeapi_reports/import_summary.json data/reports/import_summary.json
+          godot --headless --path . --import 2>&1 | tee w01-v2-import.log
+          if grep -E 'SCRIPT ERROR|Parse Error' w01-v2-import.log; then exit 1; fi
+          echo "POKEMON_CALVO_NODE=$(command -v node)" >> "$GITHUB_ENV"
+          python -B tools/battle_reference/run.py --install --limit 1 2>&1 | tee w01-v2-reference.log
+      - name: CAMP004 complete historical regression
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tests/tools/test_parallel_items_w01_campaign_004.py --ci 2>&1 | tee w01-v2-c004-python.log
+          grep -E '^CAMP004_W01_PY PASS blocks=10 checks=1028$' w01-v2-c004-python.log
+          timeout 1150s godot --headless --path . --script res://tests/gameplay/parallel_items_w01_campaign_004.gd 2>&1 | tee w01-v2-c004-godot.log
+          grep -E '^CAMP004_W01_GODOT PASS blocks=10 checks=16816$' w01-v2-c004-godot.log
+      - name: Upload traceable logs even after failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: w01-v2-camp004_regression-${{ github.run_id }}
+          retention-days: 7
+          if-no-files-found: ignore
+          path: w01-v2-*.log
+  v3_l3_field_path:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: chickensoft-games/setup-godot@v2.4.1
+        with:
+          version: 4.7.0
+          use-dotnet: false
+          include-templates: false
+      - name: Import native FieldItemService and real SaveV2 resources
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tools/distribution/restore_resources.py
+          python -B tools/distribution/restore_resources.py --check
+          mkdir -p data/reports
+          cp ci/fixtures/pokeapi_reports/forms_policy_report.json data/reports/forms_policy_report.json
+          cp ci/fixtures/pokeapi_reports/unsupported_mechanics.json data/reports/unsupported_mechanics.json
+          cp ci/fixtures/pokeapi_reports/import_summary.json data/reports/import_summary.json
+          godot --headless --path . --import 2>&1 | tee w01-v3-import.log
+          if grep -E 'SCRIPT ERROR|Parse Error' w01-v3-import.log; then exit 1; fi
+          echo "POKEMON_CALVO_NODE=$(command -v node)" >> "$GITHUB_ENV"
+          python -B tools/battle_reference/run.py --install --limit 1 2>&1 | tee w01-v3-native-install.log
+      - name: Verify immutable inventory to session provenance
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tests/tools/test_parallel_items_w01_autorun_v3.py 2>&1 | tee w01-v3-static.log
+          grep -E '^W01_V3_PY PASS items=18 milestones=10 checks=[1-9][0-9]*$' w01-v3-static.log
+      - name: Real FieldItemService equip and FieldNativeSession settlement into SaveV2
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 1300s godot --headless --path . --script res://tests/gameplay/parallel_items_w01_autorun_v3.gd 2>&1 | tee w01-v3-native-l3.log
+          grep -E '^W01_V3_GODOT PASS ids=18 rejections=5 legacy=1 checks=[1-9][0-9]*$' w01-v3-native-l3.log
+          test "$(grep -c '^W01_V3_L3_ROW PASS id=' w01-v3-native-l3.log)" -eq 18
+      - name: Upload V3 reproducible logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: w01-v3-l3-${{ github.run_id }}
+          retention-days: 7
+          if-no-files-found: ignore
+          path: w01-v3-*.log
+  v3_field_boundaries:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: chickensoft-games/setup-godot@v2.4.1
+        with:
+          version: 4.7.0
+          use-dotnet: false
+          include-templates: false
+      - name: Recreate exact native field session runtime
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tools/distribution/restore_resources.py
+          python -B tools/distribution/restore_resources.py --check
+          mkdir -p data/reports
+          cp ci/fixtures/pokeapi_reports/forms_policy_report.json data/reports/forms_policy_report.json
+          cp ci/fixtures/pokeapi_reports/unsupported_mechanics.json data/reports/unsupported_mechanics.json
+          cp ci/fixtures/pokeapi_reports/import_summary.json data/reports/import_summary.json
+          godot --headless --path . --import 2>&1 | tee w01-v3-boundary-import.log
+          if grep -E 'SCRIPT ERROR|Parse Error' w01-v3-boundary-import.log; then exit 1; fi
+          echo "POKEMON_CALVO_NODE=$(command -v node)" >> "$GITHUB_ENV"
+          python -B tools/battle_reference/run.py --install --limit 1 2>&1 | tee w01-v3-boundary-install.log
+      - name: Actual reserve capture defeat Transform with FieldItemService and full SaveV2
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 900s godot --headless --path . --script res://tests/gameplay/parallel_items_w01_autorun_v3_boundaries.gd 2>&1 | tee w01-v3-boundary-godot.log
+          grep -E '^W01_V3_BOUNDARIES PASS cases=3 captures=2 defeats=1 transforms=1 checks=[1-9][0-9]*$' w01-v3-boundary-godot.log
+          test "$(grep -c '^W01_V3_BOUNDARY_ROW PASS kind=' w01-v3-boundary-godot.log)" -eq 3
+      - name: Keep native boundary traces
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: w01-v3-boundaries-${{ github.run_id }}
+          retention-days: 7
+          if-no-files-found: ignore
+          path: w01-v3-boundary-*.log
+
+  v4_leftovers:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: chickensoft-games/setup-godot@v2.4.1
+        with:
+          version: 4.7.0
+          use-dotnet: false
+          include-templates: false
+      - name: Restore canonical resources and native Showdown
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REF_NAME" = 'codex/calvo-items-20261110-w01-gems-autobatch01'
+          python -B tools/distribution/restore_resources.py
+          python -B tools/distribution/restore_resources.py --check
+          mkdir -p data/reports
+          cp ci/fixtures/pokeapi_reports/forms_policy_report.json data/reports/forms_policy_report.json
+          cp ci/fixtures/pokeapi_reports/unsupported_mechanics.json data/reports/unsupported_mechanics.json
+          cp ci/fixtures/pokeapi_reports/import_summary.json data/reports/import_summary.json
+          godot --headless --path . --import 2>&1 | tee w01-v4-import.log
+          if grep -E 'SCRIPT ERROR|Parse Error' w01-v4-import.log; then exit 1; fi
+          echo "POKEMON_CALVO_NODE=$(command -v node)" >> "$GITHUB_ENV"
+          python -B tools/battle_reference/run.py --install --limit 1 2>&1 | tee w01-v4-reference.log
+      - name: Test exact Leftovers positive controls L2 and full L3
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tests/tools/test_parallel_items_w01_autorun_v4.py 2>&1 | tee w01-v4-python.log
+          grep -E '^W01_V4_PY PASS rows=10 stage=leftovers checks=[1-9][0-9]*$' w01-v4-python.log
+          node tests/tools/repro_w01_autorun_v4_leftovers_native.cjs 2>&1 | tee w01-v4-native.log
+          grep -F 'W01_V4_NATIVE PASS id=leftovers variants=4 exact_residual=1 snapshots=4' w01-v4-native.log
+          timeout 420s godot --headless --path . --script res://tests/gameplay/parallel_items_w01_autorun_v4_leftovers.gd 2>&1 | tee w01-v4-godot.log
+          grep -E '^W01_V4_L3_ROW PASS row=01 id=leftovers variants=4 checks=[1-9][0-9]*$' w01-v4-godot.log
+      - name: Preserve W01 V4 evidence logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: w01-v4-leftovers-${{ github.run_id }}
+          retention-days: 7
+          if-no-files-found: ignore
+          path: w01-v4-*.log
+  v4_life_orb:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: chickensoft-games/setup-godot@v2.4.1
+        with:
+          version: 4.7.0
+          use-dotnet: false
+          include-templates: false
+      - name: Restore canonical Godot resources and pinned Showdown
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REF_NAME" = 'codex/calvo-items-20261110-w01-gems-autobatch01'
+          python -B tools/distribution/restore_resources.py
+          python -B tools/distribution/restore_resources.py --check
+          mkdir -p data/reports
+          cp ci/fixtures/pokeapi_reports/forms_policy_report.json data/reports/forms_policy_report.json
+          cp ci/fixtures/pokeapi_reports/unsupported_mechanics.json data/reports/unsupported_mechanics.json
+          cp ci/fixtures/pokeapi_reports/import_summary.json data/reports/import_summary.json
+          godot --headless --path . --import 2>&1 | tee w01-v4-life-import.log
+          if grep -E 'SCRIPT ERROR|Parse Error' w01-v4-life-import.log; then exit 1; fi
+          echo "POKEMON_CALVO_NODE=$(command -v node)" >> "$GITHUB_ENV"
+          python -B tools/battle_reference/run.py --install --limit 1 2>&1 | tee w01-v4-life-reference.log
+      - name: Real Life Orb damage recoil negative modes and disk SaveV2
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tests/tools/test_parallel_items_w01_autorun_v4_life_orb.py 2>&1 | tee w01-v4-life-python.log
+          grep -E '^W01_V4_LIFE_PY PASS row=02 checks=[1-9][0-9]*$' w01-v4-life-python.log
+          node tests/tools/repro_w01_autorun_v4_life_orb_native.cjs 2>&1 | tee w01-v4-life-native.log
+          grep -F 'W01_V4_NATIVE PASS id=life_orb variants=5 boost=1 recoil=1 immune=1 status=1 snapshots=5' w01-v4-life-native.log
+          timeout 450s godot --headless --path . --script res://tests/gameplay/parallel_items_w01_autorun_v4_life_orb.gd 2>&1 | tee w01-v4-life-godot.log
+          grep -E '^W01_V4_L3_ROW PASS row=02 id=life_orb variants=4 checks=[1-9][0-9]*$' w01-v4-life-godot.log
+      - name: Upload pilot logs, even on failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: w01-v4-life-orb-${{ github.run_id }}
+          retention-days: 7
+          if-no-files-found: ignore
+          path: w01-v4-life-*.log
+  v4_choice_band:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: chickensoft-games/setup-godot@v2.4.1
+        with:
+          version: 4.7.0
+          use-dotnet: false
+          include-templates: false
+      - name: Restore canonical assets and native Showdown
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tools/distribution/restore_resources.py
+          python -B tools/distribution/restore_resources.py --check
+          mkdir -p data/reports
+          cp ci/fixtures/pokeapi_reports/forms_policy_report.json data/reports/forms_policy_report.json
+          cp ci/fixtures/pokeapi_reports/unsupported_mechanics.json data/reports/unsupported_mechanics.json
+          cp ci/fixtures/pokeapi_reports/import_summary.json data/reports/import_summary.json
+          godot --headless --path . --import 2>&1 | tee w01-v4-band-import.log
+          if grep -E 'SCRIPT ERROR|Parse Error' w01-v4-band-import.log; then exit 1; fi
+          echo "POKEMON_CALVO_NODE=$(command -v node)" >> "$GITHUB_ENV"
+          python -B tools/battle_reference/run.py --install --limit 1 2>&1 | tee w01-v4-band-reference.log
+      - name: Real Choice Band damage lock switch reset SaveV2
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tests/tools/test_parallel_items_w01_autorun_v4_choice_band.py | tee w01-v4-band-python.log
+          grep -E '^W01_V4_CHOICE_PY PASS row=03 checks=[1-9][0-9]*$' w01-v4-band-python.log
+          node tests/tools/repro_w01_autorun_v4_choice_band_native.cjs 2>&1 | tee w01-v4-band-native.log
+          grep -F 'W01_V4_NATIVE PASS id=choice_band modes=3 boost=1 lock=1 reset=1 snapshots=3' w01-v4-band-native.log
+          timeout 460s godot --headless --path . --script res://tests/gameplay/parallel_items_w01_autorun_v4_choice_band.gd 2>&1 | tee w01-v4-band-godot.log
+          grep -E '^W01_V4_L3_ROW PASS row=03 id=choice_band modes=3 checks=[1-9][0-9]*$' w01-v4-band-godot.log
+      - name: Upload pilot diagnostic logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: w01-v4-choice-band-${{ github.run_id }}
+          retention-days: 7
+          if-no-files-found: ignore
+          path: w01-v4-band-*.log
+  v4_choice_specs:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: chickensoft-games/setup-godot@v2.4.1
+        with:
+          version: 4.7.0
+          use-dotnet: false
+          include-templates: false
+      - name: Restore canonical assets and native Showdown
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tools/distribution/restore_resources.py
+          python -B tools/distribution/restore_resources.py --check
+          mkdir -p data/reports
+          cp ci/fixtures/pokeapi_reports/forms_policy_report.json data/reports/forms_policy_report.json
+          cp ci/fixtures/pokeapi_reports/unsupported_mechanics.json data/reports/unsupported_mechanics.json
+          cp ci/fixtures/pokeapi_reports/import_summary.json data/reports/import_summary.json
+          godot --headless --path . --import 2>&1 | tee w01-v4-specs-import.log
+          if grep -E 'SCRIPT ERROR|Parse Error' w01-v4-specs-import.log; then exit 1; fi
+          echo "POKEMON_CALVO_NODE=$(command -v node)" >> "$GITHUB_ENV"
+          python -B tools/battle_reference/run.py --install --limit 1 2>&1 | tee w01-v4-specs-reference.log
+      - name: Real Choice Specs damage lock switch reset SaveV2
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tests/tools/test_parallel_items_w01_autorun_v4_choice_specs.py | tee w01-v4-specs-python.log
+          grep -E '^W01_V4_SPECS_PY PASS row=04 checks=[1-9][0-9]*$' w01-v4-specs-python.log
+          node tests/tools/repro_w01_autorun_v4_choice_specs_native.cjs 2>&1 | tee w01-v4-specs-native.log
+          grep -F 'W01_V4_NATIVE PASS id=choice_specs modes=3 boost=1 lock=1 reset=1 snapshots=3' w01-v4-specs-native.log
+          timeout 460s godot --headless --path . --script res://tests/gameplay/parallel_items_w01_autorun_v4_choice_specs.gd 2>&1 | tee w01-v4-specs-godot.log
+          grep -E '^W01_V4_L3_ROW PASS row=04 id=choice_specs modes=3 checks=[1-9][0-9]*$' w01-v4-specs-godot.log
+      - name: Upload pilot diagnostic logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: w01-v4-choice-specs-${{ github.run_id }}
+          retention-days: 7
+          if-no-files-found: ignore
+          path: w01-v4-specs-*.log
+  v4_choice_scarf:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: chickensoft-games/setup-godot@v2.4.1
+        with:
+          version: 4.7.0
+          use-dotnet: false
+          include-templates: false
+      - name: Restore canonical assets and native Showdown
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tools/distribution/restore_resources.py
+          python -B tools/distribution/restore_resources.py --check
+          mkdir -p data/reports
+          cp ci/fixtures/pokeapi_reports/forms_policy_report.json data/reports/forms_policy_report.json
+          cp ci/fixtures/pokeapi_reports/unsupported_mechanics.json data/reports/unsupported_mechanics.json
+          cp ci/fixtures/pokeapi_reports/import_summary.json data/reports/import_summary.json
+          godot --headless --path . --import 2>&1 | tee w01-v4-scarf-import.log
+          if grep -E 'SCRIPT ERROR|Parse Error' w01-v4-scarf-import.log; then exit 1; fi
+          echo "POKEMON_CALVO_NODE=$(command -v node)" >> "$GITHUB_ENV"
+          python -B tools/battle_reference/run.py --install --limit 1 2>&1 | tee w01-v4-scarf-reference.log
+      - name: Real Choice Scarf damage lock switch reset SaveV2
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tests/tools/test_parallel_items_w01_autorun_v4_choice_scarf.py | tee w01-v4-scarf-python.log
+          grep -E '^W01_V4_SCARF_PY PASS row=05 checks=[1-9][0-9]*$' w01-v4-scarf-python.log
+          node tests/tools/repro_w01_autorun_v4_choice_scarf_native.cjs 2>&1 | tee w01-v4-scarf-native.log
+          grep -F 'W01_V4_NATIVE PASS id=choice_scarf modes=4 speed_order=1 priority_override=1 lock_reset=1 snapshots=4' w01-v4-scarf-native.log
+          timeout 460s godot --headless --path . --script res://tests/gameplay/parallel_items_w01_autorun_v4_choice_scarf.gd 2>&1 | tee w01-v4-scarf-godot.log
+          grep -E '^W01_V4_L3_ROW PASS row=05 id=choice_scarf modes=3 checks=[1-9][0-9]*$' w01-v4-scarf-godot.log
+      - name: Upload pilot diagnostic logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: w01-v4-choice-scarf-${{ github.run_id }}
+          retention-days: 7
+          if-no-files-found: ignore
+          path: w01-v4-scarf-*.log
+  v4_shell_bell:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: chickensoft-games/setup-godot@v2.4.1
+        with:
+          version: 4.7.0
+          use-dotnet: false
+          include-templates: false
+      - name: Restore canonical assets and native Showdown
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tools/distribution/restore_resources.py
+          python -B tools/distribution/restore_resources.py --check
+          mkdir -p data/reports
+          cp ci/fixtures/pokeapi_reports/forms_policy_report.json data/reports/forms_policy_report.json
+          cp ci/fixtures/pokeapi_reports/unsupported_mechanics.json data/reports/unsupported_mechanics.json
+          cp ci/fixtures/pokeapi_reports/import_summary.json data/reports/import_summary.json
+          godot --headless --path . --import 2>&1 | tee w01-v4-bell-import.log
+          if grep -E 'SCRIPT ERROR|Parse Error' w01-v4-bell-import.log; then exit 1; fi
+          echo "POKEMON_CALVO_NODE=$(command -v node)" >> "$GITHUB_ENV"
+          python -B tools/battle_reference/run.py --install --limit 1 2>&1 | tee w01-v4-bell-reference.log
+      - name: Real Shell Bell damage lock switch reset SaveV2
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tests/tools/test_parallel_items_w01_autorun_v4_shell_bell.py | tee w01-v4-bell-python.log
+          grep -E '^W01_V4_BELL_PY PASS row=06 checks=[1-9][0-9]*$' w01-v4-bell-python.log
+          node tests/tools/repro_w01_autorun_v4_shell_bell_native.cjs 2>&1 | tee w01-v4-bell-native.log
+          grep -F 'W01_V4_NATIVE PASS id=shell_bell modes=5 proportional=1 no_damage=2 snapshots=5' w01-v4-bell-native.log
+          timeout 460s godot --headless --path . --script res://tests/gameplay/parallel_items_w01_autorun_v4_shell_bell.gd 2>&1 | tee w01-v4-bell-godot.log
+          grep -E '^W01_V4_L3_ROW PASS row=06 id=shell_bell modes=4 checks=[1-9][0-9]*$' w01-v4-bell-godot.log
+      - name: Upload pilot diagnostic logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: w01-v4-shell-bell-${{ github.run_id }}
+          retention-days: 7
+          if-no-files-found: ignore
+          path: w01-v4-bell-*.log
+  v4_eviolite:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: chickensoft-games/setup-godot@v2.4.1
+        with:
+          version: 4.7.0
+          use-dotnet: false
+          include-templates: false
+      - name: Restore canonical assets and native Showdown
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tools/distribution/restore_resources.py
+          python -B tools/distribution/restore_resources.py --check
+          mkdir -p data/reports
+          cp ci/fixtures/pokeapi_reports/forms_policy_report.json data/reports/forms_policy_report.json
+          cp ci/fixtures/pokeapi_reports/unsupported_mechanics.json data/reports/unsupported_mechanics.json
+          cp ci/fixtures/pokeapi_reports/import_summary.json data/reports/import_summary.json
+          godot --headless --path . --import 2>&1 | tee w01-v4-evi-import.log
+          if grep -E 'SCRIPT ERROR|Parse Error' w01-v4-evi-import.log; then exit 1; fi
+          echo "POKEMON_CALVO_NODE=$(command -v node)" >> "$GITHUB_ENV"
+          python -B tools/battle_reference/run.py --install --limit 1 2>&1 | tee w01-v4-evi-reference.log
+      - name: Real Eviolite damage lock switch reset SaveV2
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tests/tools/test_parallel_items_w01_autorun_v4_eviolite.py | tee w01-v4-evi-python.log
+          grep -E '^W01_V4_EVI_PY PASS row=07 checks=[1-9][0-9]*$' w01-v4-evi-python.log
+          node tests/tools/repro_w01_autorun_v4_eviolite_native.cjs 2>&1 | tee w01-v4-evi-native.log
+          grep -F 'W01_V4_NATIVE PASS id=eviolite types=2 seeds=2 pre_positive=4 final_negative=4 snapshots=20' w01-v4-evi-native.log
+          timeout 460s godot --headless --path . --script res://tests/gameplay/parallel_items_w01_autorun_v4_eviolite.gd 2>&1 | tee w01-v4-evi-godot.log
+          grep -E '^W01_V4_L3_ROW PASS row=07 id=eviolite modes=10 checks=[1-9][0-9]*$' w01-v4-evi-godot.log
+      - name: Upload pilot diagnostic logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: w01-v4-eviolite-${{ github.run_id }}
+          retention-days: 7
+          if-no-files-found: ignore
+          path: w01-v4-evi-*.log
+  v4_safety_goggles:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: chickensoft-games/setup-godot@v2.4.1
+        with:
+          version: 4.7.0
+          use-dotnet: false
+          include-templates: false
+      - name: Restore canonical assets and native Showdown
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tools/distribution/restore_resources.py
+          python -B tools/distribution/restore_resources.py --check
+          mkdir -p data/reports
+          cp ci/fixtures/pokeapi_reports/forms_policy_report.json data/reports/forms_policy_report.json
+          cp ci/fixtures/pokeapi_reports/unsupported_mechanics.json data/reports/unsupported_mechanics.json
+          cp ci/fixtures/pokeapi_reports/import_summary.json data/reports/import_summary.json
+          godot --headless --path . --import 2>&1 | tee w01-v4-gog-import.log
+          if grep -E 'SCRIPT ERROR|Parse Error' w01-v4-gog-import.log; then exit 1; fi
+          echo "POKEMON_CALVO_NODE=$(command -v node)" >> "$GITHUB_ENV"
+          python -B tools/battle_reference/run.py --install --limit 1 2>&1 | tee w01-v4-gog-reference.log
+      - name: Real Safety Goggles damage lock switch reset SaveV2
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tests/tools/test_parallel_items_w01_autorun_v4_safety_goggles.py | tee w01-v4-gog-python.log
+          grep -E '^W01_V4_GOG_PY PASS row=08 checks=[1-9][0-9]*$' w01-v4-gog-python.log
+          node tests/tools/repro_w01_autorun_v4_safety_goggles_native.cjs 2>&1 | tee w01-v4-gog-native.log
+          grep -F 'W01_V4_NATIVE PASS id=safety_goggles modes=8 powder=3 weather=3 neutral=2 snapshots=8' w01-v4-gog-native.log
+          timeout 460s godot --headless --path . --script res://tests/gameplay/parallel_items_w01_autorun_v4_safety_goggles.gd 2>&1 | tee w01-v4-gog-godot.log
+          grep -E '^W01_V4_L3_ROW PASS row=08 id=safety_goggles modes=8 checks=[1-9][0-9]*$' w01-v4-gog-godot.log
+      - name: Upload pilot diagnostic logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: w01-v4-safety_goggles-${{ github.run_id }}
+          retention-days: 7
+          if-no-files-found: ignore
+          path: w01-v4-gog-*.log
+  v4_black_sludge:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: chickensoft-games/setup-godot@v2.4.1
+        with:
+          version: 4.7.0
+          use-dotnet: false
+          include-templates: false
+      - name: Restore canonical assets and native Showdown
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tools/distribution/restore_resources.py
+          python -B tools/distribution/restore_resources.py --check
+          mkdir -p data/reports
+          cp ci/fixtures/pokeapi_reports/forms_policy_report.json data/reports/forms_policy_report.json
+          cp ci/fixtures/pokeapi_reports/unsupported_mechanics.json data/reports/unsupported_mechanics.json
+          cp ci/fixtures/pokeapi_reports/import_summary.json data/reports/import_summary.json
+          godot --headless --path . --import 2>&1 | tee w01-v4-sludge-import.log
+          if grep -E 'SCRIPT ERROR|Parse Error' w01-v4-sludge-import.log; then exit 1; fi
+          echo "POKEMON_CALVO_NODE=$(command -v node)" >> "$GITHUB_ENV"
+          python -B tools/battle_reference/run.py --install --limit 1 2>&1 | tee w01-v4-sludge-reference.log
+      - name: Real Black Sludge damage lock switch reset SaveV2
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tests/tools/test_parallel_items_w01_autorun_v4_black_sludge.py | tee w01-v4-sludge-python.log
+          grep -E '^W01_V4_SLUDGE_PY PASS row=09 checks=[1-9][0-9]*$' w01-v4-sludge-python.log
+          node tests/tools/repro_w01_autorun_v4_black_sludge_native.cjs 2>&1 | tee w01-v4-sludge-native.log
+          grep -F 'W01_V4_NATIVE PASS id=black_sludge modes=7 poison_heal=1 nonpoison_damage=1 full_hp=1 snapshots=7' w01-v4-sludge-native.log
+          timeout 460s godot --headless --path . --script res://tests/gameplay/parallel_items_w01_autorun_v4_black_sludge.gd 2>&1 | tee w01-v4-sludge-godot.log
+          grep -E '^W01_V4_L3_ROW PASS row=09 id=black_sludge modes=7 checks=[1-9][0-9]*$' w01-v4-sludge-godot.log
+      - name: Upload pilot diagnostic logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: w01-v4-black_sludge-${{ github.run_id }}
+          retention-days: 7
+          if-no-files-found: ignore
+          path: w01-v4-sludge-*.log
+  v4_sitrus_berry:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: chickensoft-games/setup-godot@v2.4.1
+        with:
+          version: 4.7.0
+          use-dotnet: false
+          include-templates: false
+      - name: Restore canonical assets and native Showdown
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tools/distribution/restore_resources.py
+          python -B tools/distribution/restore_resources.py --check
+          mkdir -p data/reports
+          cp ci/fixtures/pokeapi_reports/forms_policy_report.json data/reports/forms_policy_report.json
+          cp ci/fixtures/pokeapi_reports/unsupported_mechanics.json data/reports/unsupported_mechanics.json
+          cp ci/fixtures/pokeapi_reports/import_summary.json data/reports/import_summary.json
+          godot --headless --path . --import 2>&1 | tee w01-v4-sitrus-import.log
+          if grep -E 'SCRIPT ERROR|Parse Error' w01-v4-sitrus-import.log; then exit 1; fi
+          echo "POKEMON_CALVO_NODE=$(command -v node)" >> "$GITHUB_ENV"
+          python -B tools/battle_reference/run.py --install --limit 1 2>&1 | tee w01-v4-sitrus-reference.log
+      - name: Real Sitrus Berry damage lock switch reset SaveV2
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tests/tools/test_parallel_items_w01_autorun_v4_sitrus_berry.py | tee w01-v4-sitrus-python.log
+          grep -E '^W01_V4_SITRUS_PY PASS row=10 checks=[1-9][0-9]*$' w01-v4-sitrus-python.log
+          node tests/tools/repro_w01_autorun_v4_sitrus_berry_native.cjs 2>&1 | tee w01-v4-sitrus-native.log
+          grep -F 'W01_V4_NATIVE PASS id=sitrus_berry modes=6 threshold=2 one_use=1 snapshots=6' w01-v4-sitrus-native.log
+          timeout 460s godot --headless --path . --script res://tests/gameplay/parallel_items_w01_autorun_v4_sitrus_berry.gd 2>&1 | tee w01-v4-sitrus-godot.log
+          grep -E '^W01_V4_L3_ROW PASS row=10 id=sitrus_berry modes=6 checks=[1-9][0-9]*$' w01-v4-sitrus-godot.log
+      - name: Upload pilot diagnostic logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: w01-v4-sitrus_berry-${{ github.run_id }}
+          retention-days: 7
+          if-no-files-found: ignore
+          path: w01-v4-sitrus-*.log
+  b01_ability_shield:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: chickensoft-games/setup-godot@v2.4.1
+        with:
+          version: 4.7.0
+          use-dotnet: false
+          include-templates: false
+      - name: Restore resources and pinned real Showdown
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tools/distribution/restore_resources.py
+          python -B tools/distribution/restore_resources.py --check
+          mkdir -p data/reports
+          cp ci/fixtures/pokeapi_reports/forms_policy_report.json data/reports/forms_policy_report.json
+          cp ci/fixtures/pokeapi_reports/unsupported_mechanics.json data/reports/unsupported_mechanics.json
+          cp ci/fixtures/pokeapi_reports/import_summary.json data/reports/import_summary.json
+          godot --headless --path . --import 2>&1 | tee w01-b01-shield-import.log
+          if grep -E 'SCRIPT ERROR|Parse Error' w01-b01-shield-import.log; then exit 1; fi
+          echo "POKEMON_CALVO_NODE=$(command -v node)" >> "$GITHUB_ENV"
+          python -B tools/battle_reference/run.py --install --limit 1 2>&1 | tee w01-b01-shield-reference.log
+      - name: Native ability suppression, translated item block and SaveV2
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tests/tools/test_w01_continuous_b01_ability_shield.py 2>&1 | tee w01-b01-shield-python.log
+          grep -E '^W01_B01_SHIELD_PY PASS row=01 checks=[1-9][0-9]*$' w01-b01-shield-python.log
+          node tests/tools/repro_w01_continuous_b01_ability_shield_native.cjs 2>&1 | tee w01-b01-shield-native.log
+          grep -F 'W01_B01_NATIVE PASS id=ability_shield modes=4 block=1 controls=3 restore=4' w01-b01-shield-native.log
+          timeout 460s godot --headless --path . --script res://tests/gameplay/parallel_items_w01_continuous_b01_ability_shield.gd 2>&1 | tee w01-b01-shield-godot.log
+          grep -E '^W01_B01_L3_ROW PASS row=01 id=ability_shield modes=4 checks=[1-9][0-9]*$' w01-b01-shield-godot.log
+      - name: Upload diagnostic receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: w01-b01-shield-${{ github.run_id }}
+          retention-days: 7
+          if-no-files-found: ignore
+          path: w01-b01-shield-*.log
+
+  b01_absorb_bulb:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: chickensoft-games/setup-godot@v2.4.1
+        with:
+          version: 4.7.0
+          use-dotnet: false
+          include-templates: false
+      - name: Restore canonical resources and native Showdown
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tools/distribution/restore_resources.py
+          python -B tools/distribution/restore_resources.py --check
+          mkdir -p data/reports
+          cp ci/fixtures/pokeapi_reports/forms_policy_report.json data/reports/forms_policy_report.json
+          cp ci/fixtures/pokeapi_reports/unsupported_mechanics.json data/reports/unsupported_mechanics.json
+          cp ci/fixtures/pokeapi_reports/import_summary.json data/reports/import_summary.json
+          godot --headless --path . --import 2>&1 | tee w01-b01-bulb-import.log
+          if grep -E 'SCRIPT ERROR|Parse Error' w01-b01-bulb-import.log; then exit 1; fi
+          echo "POKEMON_CALVO_NODE=$(command -v node)" >> "$GITHUB_ENV"
+          python -B tools/battle_reference/run.py --install --limit 1 2>&1 | tee w01-b01-bulb-reference.log
+      - name: Real Water hit SpA boost consumption and disk SaveV2
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tests/tools/test_w01_continuous_b01_absorb_bulb.py 2>&1 | tee w01-b01-bulb-python.log
+          grep -E '^W01_B01_BULB_PY PASS row=02 checks=[1-9][0-9]*$' w01-b01-bulb-python.log
+          node tests/tools/repro_w01_continuous_b01_absorb_bulb_native.cjs 2>&1 | tee w01-b01-bulb-native.log
+          grep -F 'W01_B01_NATIVE PASS id=absorb_bulb modes=4 water_boost=1 negatives=3 snapshots=4' w01-b01-bulb-native.log
+          timeout 450s godot --headless --path . --script res://tests/gameplay/parallel_items_w01_continuous_b01_absorb_bulb.gd 2>&1 | tee w01-b01-bulb-godot.log
+          grep -E '^W01_B01_L3_ROW PASS row=02 id=absorb_bulb modes=4 checks=[1-9][0-9]*$' w01-b01-bulb-godot.log
+      - name: Upload diagnostic receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: w01-b01-bulb-${{ github.run_id }}
+          retention-days: 7
+          if-no-files-found: ignore
+          path: w01-b01-bulb-*.log

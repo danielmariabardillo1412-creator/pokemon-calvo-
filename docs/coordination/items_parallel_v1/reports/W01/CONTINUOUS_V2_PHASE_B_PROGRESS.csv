@@ -1,6 +1,6 @@
 bloque,orden,id,estado,sha_pruebas,ci_run,objetos_nuevos,qa_funcional,notas
-01,01,ability_shield,PENDIENTE,,,0,no,requiere_efecto_nativo_comparativo_y_L3_en_caso_de_aplicar
-01,02,absorb_bulb,PENDIENTE,,,0,no,requiere_efecto_nativo_comparativo_y_L3_en_caso_de_aplicar
+01,01,ability_shield,EN_CI_AUTOMATICA,0d53565751c2550c37c595de99d5c02d044c6cfd,42946138962,0,no,piloto_L2_L3_success_pendiente_CI_acumulativa_18jobs
+01,02,absorb_bulb,EN_CI_AUTOMATICA,a496b6418656029b2a97754326887874807c0842,42946617984,0,no,piloto_L2_L3_success_pendiente_CI_acumulativa_18jobs
 01,03,adrenaline_orb,PENDIENTE,,,0,no,requiere_efecto_nativo_comparativo_y_L3_en_caso_de_aplicar
 01,04,big_root,PENDIENTE,,,0,no,requiere_efecto_nativo_comparativo_y_L3_en_caso_de_aplicar
 01,05,expert_belt,PENDIENTE,,,0,no,requiere_efecto_nativo_comparativo_y_L3_en_caso_de_aplicar
