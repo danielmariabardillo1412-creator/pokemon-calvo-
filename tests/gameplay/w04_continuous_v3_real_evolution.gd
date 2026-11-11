@@ -41,6 +41,9 @@ func _case(catalog: DefinitionCatalog, source_id: StringName, item: StringName,
     var owner := PlayerCollection.new()
     var mon := make_mon(catalog, source_id, StringName("w04_v3_" + tag))
     var wrong := make_mon(catalog, &"pikachu", StringName("w04_v3_other_" + tag))
+    # IA6 staging merges W02 independent effective nature with W04 form identity.
+    mon.effective_nature_id = &"adamant"
+    mon.recalculate_stats(catalog.species(source_id), ProgressionRuleset.new())
     check(owner.party.add_creature(mon) and owner.party.add_creature(wrong), tag + "_owned")
     if in_storage:
         check(owner.deposit(mon.instance_id), tag + "_deposited")
@@ -74,6 +77,11 @@ func _case(catalog: DefinitionCatalog, source_id: StringName, item: StringName,
     check(owner.inventory.quantity(item) == 1, tag + "_exactly_one_consumed")
     check(owner.location_of(mon.instance_id) == (&"STORAGE" if in_storage else &"PARTY"),
         tag + "_original_location")
+    check(evolved.effective_nature_id == mon.effective_nature_id
+        and evolved.effective_nature_id == &"adamant", tag + "_w02_effective_nature_preserved")
+    check(evolved.stats.to_dict() == StatCalculator.compute(catalog.species(target_id).base_stat_block(),
+        evolved.ivs, evolved.evs, evolved.effective_nature_id, evolved.level).to_dict(),
+        tag + "_w02_effective_stats_on_evolved_target")
     check(evolved.nature_id == mon.nature_id and evolved.ivs == mon.ivs and evolved.evs == mon.evs
         and evolved.experience == mon.experience and evolved.move_ids == mon.move_ids,
         tag + "_persistent_values")
@@ -89,6 +97,9 @@ func _case(catalog: DefinitionCatalog, source_id: StringName, item: StringName,
     if loaded.ok:
         var persisted: CreatureInstance = loaded.storage.get_creature(mon.instance_id) if in_storage else loaded.party.get_creature(mon.instance_id)
         check(persisted != null and persisted.to_dict() == evolved.to_dict(), tag + "_savev2_identity")
+        if persisted != null:
+            check(persisted.effective_nature_id == &"adamant" and persisted.form_id == evolved.form_id,
+                tag + "_savev2_w02_effective_and_w04_form")
         check(loaded.inventory.quantity(item) == 1, tag + "_savev2_consumption")
     DirAccess.remove_absolute(ProjectSettings.globalize_path(save_path))
     positives += 1
