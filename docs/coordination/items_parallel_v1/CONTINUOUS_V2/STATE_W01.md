@@ -59,3 +59,10 @@
 - **B01 resuelto: 6 certificados + 4 DEPENDENCIA_FUERA_W01**. Fase B: **6/26 certificados, 4 dependencias, 16 placas por certificar**. Implementaciones nuevas de producción: 0. Integración IA6: NO.
 - **B02/11 y B02/12** ya tienen pilotos aislados SUCCESS (#42955088591 y #42955023454), sin gate B02. Continuar B02 placas por tipo, conservar regresiones. **Siguiente ID B02/13 `fist_plate`.**
 - Informe B01 final: `reports/W01/CONTINUOUS_V2_B01_FINAL.md`.
+
+## B02/B03 piloto por tipo · matriz 16 placas
+- **Batch QA:** commit `01a10594b98de4ed596828421c5fab797f87efb3` publica 14 pilotos adicionales de placas (filas 13–26) con Node nativo 5 modos y Godot 5 rutas L3 cada uno. Las 14 CI individuales se han disparado y se verificó su presencia; **resultado todavía pendiente al registrar este checkpoint**, no declarar PASS.
+- **Dread y Earth** (filas 11/12) tienen pilotos verdes CI #42955088591 y #42955023454, sin gate global.
+- **CSV B actualizado:** filas 11–26 `EN_CI_AUTOMATICA` y con IDs de CI exactos en `reports/W01/CONTINUOUS_V2_PLATES_RUN_MATRIX.csv`. No hay certificación B02/B03 hasta gate de regresiones históricas + evidencias L3, ni nuevos objetos de producción.
+- **Siguiente `p`:** consultar los 14 runs de matriz; corregir únicamente tests de placa fallidos tras inspeccionar log, sin bajar aserciones de daño ni ruta SaveV2. Cuando las 16 placas tengan piloto PASS, crear gate global sobre 22 jobs heredados + dos pilotos B02/11–12 + 14 pilotos B02/13–26 (38 jobs, o agrupar suites si conserva recibos por placa), y esperar SUCCESS completo. Evaluar fiabilidad si limitación de recursos de CI antes de lanzar 38 jobs simultáneos.
+- **Métrica actual:** A 10/10; B01 6 CERTIFICADO + 4 DEPENDENCIA_FUERA_W01; B02/B03 0 placas certificadas; **B 6/26 CERTIFICADO**, 0 nuevos implementados; integración IA6 NO. No parar por bloque.
