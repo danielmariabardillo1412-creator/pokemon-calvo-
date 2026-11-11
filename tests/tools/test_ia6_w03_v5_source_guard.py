@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """V5 W03: pin protected IA6/V4 blobs and verify in-scope Repel wiring.
 
-The source W03 CAMP006 test is intentionally preserved byte-for-byte. Its
-historic zone fixture is red because registered_zone_ids() sorts cave before
-grass; the independent V5 test exercises the actual grass zone.
+The historical W03 CAMP006 test has the only IA6-authorized one-line
+zone fixture correction. Reconstruct the original Git blob to verify that
+every other byte and assertion stays unchanged. The independent V5 test
+still exercises the actual grass zone separately.
 """
 import json
 import subprocess
@@ -50,9 +51,20 @@ def main():
     }
     for path, sha in protected.items():
         ck(git_blob(path) == sha, "protected IA6/V4 blob drift: " + path)
-    ck(git_blob("tests/gameplay/parallel_items_w03_repel_l3.gd")
-       == "318ee45f60d9ee046bcb048019337524acfb4844",
-       "the original historical test must remain byte-for-byte unchanged")
+    # IA6 one-line authorization: restore the exact old line and hash the
+    # reconstructed original Git blob. This rejects any other test mutation,
+    # including added/removed assertions, whitespace changes or weak waivers.
+    original_line = "var zone: StringName = scene._director.registered_zone_ids()[0]"
+    approved_line = "var zone: StringName = scene.TECHNICAL_ZONE_ID"
+    historical = body("tests/gameplay/parallel_items_w03_repel_l3.gd")
+    ck(historical.count(approved_line) == 1 and original_line not in historical,
+       "the one-line corrected real-grass historical fixture is required")
+    restored_original = historical.replace(approved_line, original_line, 1)
+    original_blob = subprocess.check_output(
+        ["git", "hash-object", "--stdin"], input=restored_original,
+        cwd=ROOT, text=True).strip()
+    ck(original_blob == "318ee45f60d9ee046bcb048019337524acfb4844",
+       "historical fixture differs beyond the sole authorized zone replacement")
     ck(git_blob("modules/overworld/field_repel_step_effect.gd")
        == "7dbd62dd8238191e2101f25687d3e12d5d61a693",
        "canonical existing real-steps helper was changed")
@@ -121,7 +133,7 @@ def main():
        and 'zone_id = &"technical_cave_floor"' in body("scenes/overworld/technical_overworld.tscn"),
        "original world zone identities unavailable")
     print(f"W03_V5_SOURCE PASS checks={checks} protected={len(protected)} "
-          f"old_test_unchanged=true actual_grass_fixture=true dynamax_veto=true")
+          f"historical_fixture_one_line=true actual_grass_fixture=true dynamax_veto=true")
 
 
 if __name__ == "__main__":

@@ -36,7 +36,7 @@ func _run() -> void:
 	if leader == null or leader.level <= 1:
 		_finish(scene)
 		return
-	var zone: StringName = scene._director.registered_zone_ids()[0]
+	var zone: StringName = scene.TECHNICAL_ZONE_ID
 	var built: Dictionary = TechnicalEncounterPoolBuilder.build(scene._catalogs, zone, 100, 1, 1, &"pidgey")
 	ck("real authored encounter table created", bool(built.get("ok", false)))
 	if not bool(built.get("ok", false)):

@@ -40,7 +40,7 @@ jobs:
         run: |
           set -euo pipefail
           python -B tests/tools/test_ia6_w03_v5_source_guard.py 2>&1 | tee w03-v5-guard.log
-          grep -E '^W03_V5_SOURCE PASS checks=[1-9][0-9]* protected=7 old_test_unchanged=true actual_grass_fixture=true dynamax_veto=true$' w03-v5-guard.log
+          grep -E '^W03_V5_SOURCE PASS checks=[1-9][0-9]* protected=7 historical_fixture_one_line=true actual_grass_fixture=true dynamax_veto=true$' w03-v5-guard.log
           python -B tests/tools/test_parallel_items_w03_continuous_v3_sources.py 2>&1 | tee w03-v5-moon-source.log
           grep -E '^W03_V3_SOURCE PASS checked=1082 moon=6 runtime_weight=0 ultra_fields=0$' w03-v5-moon-source.log
       - name: Prepare canonical resources and actual native Godot 4.7
