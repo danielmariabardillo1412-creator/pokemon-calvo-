@@ -59,6 +59,8 @@ def main() -> None:
             "new field gate must be 6 IDs / 12 scenarios")
     fail_if(field.get("proof_scope") != "field_use_only_no_held_combat_claim",
             "field scope cannot be misreported as held native battle")
+    fail_if(any("confused" not in case for case in field["cases"]),
+            "field medicine cases require explicit starting confusion state")
     for berry_id in field_ids:
         checks = [c for c in field["cases"] if c["id"] == berry_id]
         fail_if(len(checks) != 2 or {bool(c["applies"]) for c in checks} != {True, False},
@@ -78,6 +80,10 @@ def main() -> None:
             "held-native gate must cover exactly five IDs and ten cases")
     fail_if(held.get("proof_scope") != "held_native_battle_only",
             "held validation must stay separate from field validation")
+    chesto = [x for x in held["cases"] if x["scenario"] == "chesto_berry_status_held"]
+    fail_if(len(chesto) != 1 or chesto[0]["foe_move"] != "spore" or
+            chesto[0].get("expected_control_status") != "sleep" or chesto[0]["status"] != "",
+            "Chesto requires a valid battle-start state and a real sleep-producing move")
     for berry_id in expected_held:
         tests = [x for x in held["cases"] if x["id"] == berry_id]
         fail_if(len(tests) != 2 or {bool(x["consumes"]) for x in tests} != {True, False},
