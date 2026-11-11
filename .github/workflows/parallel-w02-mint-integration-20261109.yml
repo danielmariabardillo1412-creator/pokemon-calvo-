@@ -41,6 +41,9 @@ on:
       - 'tests/gameplay/parallel_items_w02_autorun_v3.gd'
       - 'tests/gameplay/parallel_items_w02_autorun_v4.gd'
       - 'tests/gameplay/parallel_items_w02_continuous_v2_block01.gd'
+      - 'tests/tools/test_parallel_items_w02_continuous_v2.py'
+      - 'tests/gameplay/parallel_items_w02_continuous_v2_persim.gd'
+      - 'tests/fixtures/parallel_items/w02_continuous_v2_persim.json'
       - 'tests/fixtures/parallel_items/w02_continuous_v2_block01.json'
       - 'tests/fixtures/parallel_items/w02_autorun_v4.json'
       - 'tests/tools/test_parallel_items_w02_autorun_v4.py'
@@ -59,7 +62,7 @@ permissions:
   contents: read
 concurrency:
   group: pilot-w02-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: false
 jobs:
   recover:
     runs-on: ubuntu-latest
@@ -71,6 +74,12 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+      - name: W02 CONTINUOUS V2 audit 42 berry IDs and inherited cases
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tests/tools/test_parallel_items_w02_continuous_v2.py 2>&1 | tee w02-continuous-v2-audit-python.log
+          grep -E '^W02_CONTINUOUS_V2_AUDIT_PY PASS ids=42 historical=36 field=6 persim=1 checks=42$' w02-continuous-v2-audit-python.log
       - name: Puerta 01 en rama W02 y conservar CAMP005 10 bloques
         shell: bash
         run: |
@@ -113,6 +122,12 @@ jobs:
           set -euo pipefail
           timeout 900s godot --headless --path . --script res://tests/gameplay/parallel_items_w02_continuous_v2_block01.gd 2>&1 | tee w02-continuous-v2-b01-godot.log
           grep -E '^W02_CONTINUOUS_V2_B01_GODOT PASS positive=6 negative=6 checks=[1-9][0-9]*$' w02-continuous-v2-b01-godot.log
+      - name: W02 CONTINUOUS V2 PERSIM native held confusion L3
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 900s godot --headless --path . --script res://tests/gameplay/parallel_items_w02_continuous_v2_persim.gd 2>&1 | tee w02-continuous-v2-persim-godot.log
+          grep -E '^W02_CONTINUOUS_V2_PERSIM_GODOT PASS cases=2 checks=[1-9][0-9]*$' w02-continuous-v2-persim-godot.log
       - name: TANDA 04 W02 no-double-growth and semantic equivalence Python Godot
         shell: bash
         run: |
