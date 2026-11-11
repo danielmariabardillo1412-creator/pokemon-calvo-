@@ -2,7 +2,7 @@ extends RefCounted
 
 # Context supplied by the owning session, never by a UI or saved extra counter.
 # Essentials reference uses completed turns (zero before the first action).
-const IDS: Array[StringName] = [&"quick_ball", &"timer_ball", &"level_ball"]
+const IDS: Array[StringName] = [&"quick_ball", &"timer_ball", &"level_ball", &"repeat_ball", &"moon_ball"]
 const Basic = preload("res://modules/capture/capture_ball_effects.gd")
 
 static func validation_error(id: StringName, target: CreatureInstance, context: CaptureBattleContext) -> String:
@@ -13,12 +13,15 @@ static func validation_error(id: StringName, target: CreatureInstance, context: 
 	if error != "": return error
 	if id in [&"quick_ball", &"timer_ball"] and context.completed_turns < 0: return "capture_turn_context_missing"
 	if id == &"level_ball" and (context.catcher_level < 1 or context.catcher_level > 100): return "capture_active_level_context_missing"
+	if id == &"moon_ball" and not context.moon_stone_context_known: return "capture_moon_stone_context_missing"
 	return ""
 
 static func multiplier(id: StringName, target: CreatureInstance, species: CreatureSpecies, context: CaptureBattleContext) -> float:
 	match id:
 		&"quick_ball": return 5.0 if context.completed_turns == 0 else 1.0
 		&"timer_ball": return minf(1.0 + 0.3 * context.completed_turns, 4.0)
+		&"repeat_ball": return 3.5 if context.previously_caught_base_species else 1.0
+		&"moon_ball": return 4.0 if context.moon_stone_context_known and context.target_evolves_with_moon_stone else 1.0
 		&"level_ball":
 			var factor := 1.0
 			if context.catcher_level >= target.level * 4: factor = 8.0
