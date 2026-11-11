@@ -1,0 +1,67 @@
+name: W01 CONTINUOUS_V4 staging held W01 V1 and CAMP002 regression
+on:
+  push:
+    branches:
+      - codex/calvo-ia6-staging-20261111-w01-held
+    paths:
+      - '.github/workflows/w01-continuous-v4-held-regression-v1-v2.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  held_stage_v1_camp002:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: chickensoft-games/setup-godot@v2.4.1
+        with:
+          version: 4.7.0
+          use-dotnet: false
+          include-templates: false
+      - name: Canonical resources, pinned Godot and native runtime
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "POKEMON_CALVO_NODE=$(command -v node)" >> "$GITHUB_ENV"
+          python -B tools/distribution/restore_resources.py
+          python -B tools/distribution/restore_resources.py --check
+          mkdir -p data/reports
+          cp ci/fixtures/pokeapi_reports/forms_policy_report.json data/reports/forms_policy_report.json
+          cp ci/fixtures/pokeapi_reports/unsupported_mechanics.json data/reports/unsupported_mechanics.json
+          cp ci/fixtures/pokeapi_reports/import_summary.json data/reports/import_summary.json
+          godot --headless --path . --import 2>&1 | tee w01-v4-reg-import.log
+          if grep -E 'SCRIPT ERROR|Parse Error' w01-v4-reg-import.log; then exit 1; fi
+          python -B tools/battle_reference/run.py --install --limit 1 2>&1 | tee w01-v4-reg-native.log
+      - name: Held V1 full original positive and negative Native+SaveV2 suite
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tests/tools/test_parallel_items_w01_held_v1.py --contracts 2>&1 | tee w01-v4-reg-v1-contract.log
+          timeout 900s godot --headless --path . --script res://tests/gameplay/parallel_items_w01_held_v1.gd 2>&1 | tee w01-v4-reg-v1-godot.log
+          grep -E '^PARALLEL_ITEMS_W01 PASS checks=[1-9][0-9]* rows=[1-9][0-9]* errors=0$' w01-v4-reg-v1-godot.log
+          python -B tests/tools/test_parallel_items_w01_held_v1.py 2>&1 | tee w01-v4-reg-v1-verify.log
+          grep -E '^W01_NATIVE_EVIDENCE_PASS runs=[1-9][0-9]* variants=[1-9][0-9]*$' w01-v4-reg-v1-verify.log
+      - name: CAMP002 complete original ability and consumable gates
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tests/tools/test_parallel_items_w01_campaign_002.py --contracts --self-test 2>&1 | tee w01-v4-reg-c002-contract.log
+          grep -E '^W01_CAMP002_ITER01_NEGATIVE_PASS rejected=[1-9][0-9]*$' w01-v4-reg-c002-contract.log
+          timeout 1200s godot --headless --path . --script res://tests/gameplay/parallel_items_w01_campaign_002.gd 2>&1 | tee w01-v4-reg-c002-godot.log
+          grep -E '^W01_CAMP002_GODOT PASS checks=[1-9][0-9]* runs=[1-9][0-9]* errors=0$' w01-v4-reg-c002-godot.log
+          python -B tests/tools/test_parallel_items_w01_campaign_002.py --native 2>&1 | tee w01-v4-reg-c002-verify.log
+          grep -E '^W01_CAMP002_NATIVE_EVIDENCE_PASS runs=[1-9][0-9]* variants=[1-9][0-9]*$' w01-v4-reg-c002-verify.log
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: w01-v4-held-regression-${{ github.run_id }}
+          retention-days: 7
+          if-no-files-found: ignore
+          path: w01-v4-reg-*.log
