@@ -75,3 +75,10 @@
 - [CI #43072818614](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/43072818614) verificada realmente lanzada; al último chequeo `gem_negative_l3` estaba `in_progress`, step 6 `Restore canonical Godot and native runtime`, sin resultado final. **No contar PASS hasta éxito real**.
 - La suite no cubre todavía consumo por batalla, legado ni 18 gemas completas; solo controles negativos deterministas. Su PASS parcial no da `READY_FOR_IA6_MERGE`.
 - Siguiente `p`: comprobar CI 43072818614; si falla leer logs del job y corregir solo test/runner W01; si PASS, anotar SHA exacto y continuar con consumo nativo/legacy de gemas y negativos históricos restantes. Integración IA6 NO; producción 0 cambios.
+
+## Continuación p — GEM negativa certificada; ciclo nativo publicado (2026-11-11)
+- [CI gemas negativas #43072818614](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/43072818614) `gem_negative_l3 completed/success`. Contrasta rechazo de duplicados, falta de stock, portador ajeno, reemplazo y persistencia SaveV2. Esta prueba no demuestra consumo en combate ni legado.
+- Nuevo test autónomo `tests/gameplay/w01_continuous_v4_gem_lifecycle.gd` commit `1b77af329c8b0be23217162d0ddc8552861330ac`; hereda solo infraestructura stage L3 existente, no runners CAMP003–005. Usa Normal Gem en modos active/none/reserve, daño nativo, consumo real, settlement SaveV2, no reembolso de gema consumida y devolución de reserva sin uso.
+- Workflow `.github/workflows/w01-continuous-v4-gem-lifecycle.yml`, commit `e5f4653113aae0090903aec961e3f60f97ca9eca`. [CI #43073243601](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/43073243601) lanzada y `gem_lifecycle in_progress` al último chequeo, SIN certificación.
+- Próxima `p`: comprobar CI 43073243601. Si falla, recoger pasos/log y reparar solo el nuevo test W01, sin disminuir aserciones; si PASS, ampliar una prueba de legacy V1 sin bolsa fantasma y cobertura histórica CAMP003–005.
+- No se ha declarado READY_FOR_IA6_MERGE ni integrado en árbitra. Producción protegida, main, V28 y otras ramas intactas.
