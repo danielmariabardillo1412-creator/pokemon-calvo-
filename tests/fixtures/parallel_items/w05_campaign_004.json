@@ -1,0 +1,298 @@
+{
+  "schema_version": 1,
+  "campaign": "CAMP_004_W05",
+  "active_version": "scarlet-violet",
+  "purpose": "Cobertura de enseñanza W05 en CAMPAÑA_004; cero bloques en bootstrap, nunca es PASS funcional",
+  "blocks": [
+    {
+      "block": "01",
+      "items": [
+        {
+          "item_id": "tm82",
+          "move_id": "thunder_wave"
+        },
+        {
+          "item_id": "tm83",
+          "move_id": "poison_jab"
+        },
+        {
+          "item_id": "tm84",
+          "move_id": "stomping_tantrum"
+        },
+        {
+          "item_id": "tm85",
+          "move_id": "rest"
+        },
+        {
+          "item_id": "tm86",
+          "move_id": "rock_slide"
+        },
+        {
+          "item_id": "tm87",
+          "move_id": "taunt"
+        }
+      ]
+    },
+    {
+      "block": "02",
+      "items": [
+        {
+          "item_id": "tm88",
+          "move_id": "swords_dance"
+        },
+        {
+          "item_id": "tm89",
+          "move_id": "body_press"
+        },
+        {
+          "item_id": "tm90",
+          "move_id": "spikes"
+        },
+        {
+          "item_id": "tm91",
+          "move_id": "toxic_spikes"
+        },
+        {
+          "item_id": "tm92",
+          "move_id": "imprison"
+        },
+        {
+          "item_id": "tm93",
+          "move_id": "flash_cannon"
+        }
+      ]
+    },
+    {
+      "block": "03",
+      "items": [
+        {
+          "item_id": "tm94",
+          "move_id": "dark_pulse"
+        },
+        {
+          "item_id": "tm95",
+          "move_id": "leech_life"
+        },
+        {
+          "item_id": "tm96",
+          "move_id": "eerie_impulse"
+        },
+        {
+          "item_id": "tm97",
+          "move_id": "fly"
+        },
+        {
+          "item_id": "tm98",
+          "move_id": "skill_swap"
+        },
+        {
+          "item_id": "tm99",
+          "move_id": "iron_head"
+        }
+      ]
+    },
+    {
+      "block": "04",
+      "items": [
+        {
+          "item_id": "tm100",
+          "move_id": "dragon_dance"
+        },
+        {
+          "item_id": "tm101",
+          "move_id": "power_gem"
+        },
+        {
+          "item_id": "tm102",
+          "move_id": "gunk_shot"
+        },
+        {
+          "item_id": "tm103",
+          "move_id": "substitute"
+        },
+        {
+          "item_id": "tm104",
+          "move_id": "iron_defense"
+        },
+        {
+          "item_id": "tm105",
+          "move_id": "x_scissor"
+        }
+      ]
+    },
+    {
+      "block": "05",
+      "items": [
+        {
+          "item_id": "tm106",
+          "move_id": "drill_run"
+        },
+        {
+          "item_id": "tm107",
+          "move_id": "will_o_wisp"
+        },
+        {
+          "item_id": "tm108",
+          "move_id": "crunch"
+        },
+        {
+          "item_id": "tm109",
+          "move_id": "trick"
+        },
+        {
+          "item_id": "tm110",
+          "move_id": "liquidation"
+        },
+        {
+          "item_id": "tm111",
+          "move_id": "giga_drain"
+        }
+      ]
+    },
+    {
+      "block": "06",
+      "items": [
+        {
+          "item_id": "tm112",
+          "move_id": "aura_sphere"
+        },
+        {
+          "item_id": "tm113",
+          "move_id": "tailwind"
+        },
+        {
+          "item_id": "tm114",
+          "move_id": "shadow_ball"
+        },
+        {
+          "item_id": "tm115",
+          "move_id": "dragon_pulse"
+        },
+        {
+          "item_id": "tm116",
+          "move_id": "stealth_rock"
+        },
+        {
+          "item_id": "tm117",
+          "move_id": "hyper_voice"
+        }
+      ]
+    },
+    {
+      "block": "07",
+      "items": [
+        {
+          "item_id": "tm118",
+          "move_id": "heat_wave"
+        },
+        {
+          "item_id": "tm119",
+          "move_id": "energy_ball"
+        },
+        {
+          "item_id": "tm120",
+          "move_id": "psychic"
+        },
+        {
+          "item_id": "tm121",
+          "move_id": "heavy_slam"
+        },
+        {
+          "item_id": "tm122",
+          "move_id": "encore"
+        },
+        {
+          "item_id": "tm123",
+          "move_id": "surf"
+        }
+      ]
+    },
+    {
+      "block": "08",
+      "items": [
+        {
+          "item_id": "tm124",
+          "move_id": "ice_spinner"
+        },
+        {
+          "item_id": "tm125",
+          "move_id": "flamethrower"
+        },
+        {
+          "item_id": "tm126",
+          "move_id": "thunderbolt"
+        },
+        {
+          "item_id": "tm127",
+          "move_id": "play_rough"
+        },
+        {
+          "item_id": "tm128",
+          "move_id": "amnesia"
+        },
+        {
+          "item_id": "tm129",
+          "move_id": "calm_mind"
+        }
+      ]
+    },
+    {
+      "block": "09",
+      "items": [
+        {
+          "item_id": "tm130",
+          "move_id": "helping_hand"
+        },
+        {
+          "item_id": "tm131",
+          "move_id": "pollen_puff"
+        },
+        {
+          "item_id": "tm132",
+          "move_id": "baton_pass"
+        },
+        {
+          "item_id": "tm133",
+          "move_id": "earth_power"
+        },
+        {
+          "item_id": "tm134",
+          "move_id": "reversal"
+        },
+        {
+          "item_id": "tm135",
+          "move_id": "ice_beam"
+        }
+      ]
+    },
+    {
+      "block": "10",
+      "items": [
+        {
+          "item_id": "tm136",
+          "move_id": "electric_terrain"
+        },
+        {
+          "item_id": "tm137",
+          "move_id": "grassy_terrain"
+        },
+        {
+          "item_id": "tm138",
+          "move_id": "psychic_terrain"
+        },
+        {
+          "item_id": "tm139",
+          "move_id": "misty_terrain"
+        },
+        {
+          "item_id": "tm140",
+          "move_id": "nasty_plot"
+        },
+        {
+          "item_id": "tm141",
+          "move_id": "fire_blast"
+        }
+      ]
+    }
+  ]
+}

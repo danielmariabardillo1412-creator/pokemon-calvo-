@@ -1,0 +1,298 @@
+{
+  "schema_version": 1,
+  "campaign": "CAMP_003_W05",
+  "active_version": "scarlet-violet",
+  "purpose": "Pruebas acumulativas de enseñanza; sin habilitar legacy ni alterar datos",
+  "blocks": [
+    {
+      "block": "01",
+      "items": [
+        {
+          "item_id": "tm07",
+          "move_id": "protect"
+        },
+        {
+          "item_id": "tm16",
+          "move_id": "psybeam"
+        },
+        {
+          "item_id": "tm18",
+          "move_id": "thief"
+        },
+        {
+          "item_id": "tm21",
+          "move_id": "pounce"
+        },
+        {
+          "item_id": "tm22",
+          "move_id": "chilling_water"
+        },
+        {
+          "item_id": "tm23",
+          "move_id": "charge_beam"
+        }
+      ]
+    },
+    {
+      "block": "02",
+      "items": [
+        {
+          "item_id": "tm24",
+          "move_id": "fire_spin"
+        },
+        {
+          "item_id": "tm25",
+          "move_id": "facade"
+        },
+        {
+          "item_id": "tm26",
+          "move_id": "poison_tail"
+        },
+        {
+          "item_id": "tm27",
+          "move_id": "aerial_ace"
+        },
+        {
+          "item_id": "tm28",
+          "move_id": "bulldoze"
+        },
+        {
+          "item_id": "tm29",
+          "move_id": "hex"
+        }
+      ]
+    },
+    {
+      "block": "03",
+      "items": [
+        {
+          "item_id": "tm30",
+          "move_id": "snarl"
+        },
+        {
+          "item_id": "tm32",
+          "move_id": "swift"
+        },
+        {
+          "item_id": "tm33",
+          "move_id": "magical_leaf"
+        },
+        {
+          "item_id": "tm34",
+          "move_id": "icy_wind"
+        },
+        {
+          "item_id": "tm35",
+          "move_id": "mud_shot"
+        },
+        {
+          "item_id": "tm37",
+          "move_id": "draining_kiss"
+        }
+      ]
+    },
+    {
+      "block": "04",
+      "items": [
+        {
+          "item_id": "tm38",
+          "move_id": "flame_charge"
+        },
+        {
+          "item_id": "tm39",
+          "move_id": "low_sweep"
+        },
+        {
+          "item_id": "tm40",
+          "move_id": "air_cutter"
+        },
+        {
+          "item_id": "tm41",
+          "move_id": "stored_power"
+        },
+        {
+          "item_id": "tm42",
+          "move_id": "night_shade"
+        },
+        {
+          "item_id": "tm43",
+          "move_id": "fling"
+        }
+      ]
+    },
+    {
+      "block": "05",
+      "items": [
+        {
+          "item_id": "tm45",
+          "move_id": "venoshock"
+        },
+        {
+          "item_id": "tm46",
+          "move_id": "avalanche"
+        },
+        {
+          "item_id": "tm47",
+          "move_id": "endure"
+        },
+        {
+          "item_id": "tm48",
+          "move_id": "volt_switch"
+        },
+        {
+          "item_id": "tm49",
+          "move_id": "sunny_day"
+        },
+        {
+          "item_id": "tm50",
+          "move_id": "rain_dance"
+        }
+      ]
+    },
+    {
+      "block": "06",
+      "items": [
+        {
+          "item_id": "tm51",
+          "move_id": "sandstorm"
+        },
+        {
+          "item_id": "tm52",
+          "move_id": "snowscape"
+        },
+        {
+          "item_id": "tm53",
+          "move_id": "smart_strike"
+        },
+        {
+          "item_id": "tm54",
+          "move_id": "psyshock"
+        },
+        {
+          "item_id": "tm55",
+          "move_id": "dig"
+        },
+        {
+          "item_id": "tm56",
+          "move_id": "bullet_seed"
+        }
+      ]
+    },
+    {
+      "block": "07",
+      "items": [
+        {
+          "item_id": "tm57",
+          "move_id": "false_swipe"
+        },
+        {
+          "item_id": "tm58",
+          "move_id": "brick_break"
+        },
+        {
+          "item_id": "tm59",
+          "move_id": "zen_headbutt"
+        },
+        {
+          "item_id": "tm60",
+          "move_id": "u_turn"
+        },
+        {
+          "item_id": "tm61",
+          "move_id": "shadow_claw"
+        },
+        {
+          "item_id": "tm62",
+          "move_id": "foul_play"
+        }
+      ]
+    },
+    {
+      "block": "08",
+      "items": [
+        {
+          "item_id": "tm63",
+          "move_id": "psychic_fangs"
+        },
+        {
+          "item_id": "tm64",
+          "move_id": "bulk_up"
+        },
+        {
+          "item_id": "tm65",
+          "move_id": "air_slash"
+        },
+        {
+          "item_id": "tm66",
+          "move_id": "body_slam"
+        },
+        {
+          "item_id": "tm67",
+          "move_id": "fire_punch"
+        },
+        {
+          "item_id": "tm68",
+          "move_id": "thunder_punch"
+        }
+      ]
+    },
+    {
+      "block": "09",
+      "items": [
+        {
+          "item_id": "tm69",
+          "move_id": "ice_punch"
+        },
+        {
+          "item_id": "tm70",
+          "move_id": "sleep_talk"
+        },
+        {
+          "item_id": "tm71",
+          "move_id": "seed_bomb"
+        },
+        {
+          "item_id": "tm72",
+          "move_id": "electro_ball"
+        },
+        {
+          "item_id": "tm73",
+          "move_id": "drain_punch"
+        },
+        {
+          "item_id": "tm74",
+          "move_id": "reflect"
+        }
+      ]
+    },
+    {
+      "block": "10",
+      "items": [
+        {
+          "item_id": "tm75",
+          "move_id": "light_screen"
+        },
+        {
+          "item_id": "tm76",
+          "move_id": "rock_blast"
+        },
+        {
+          "item_id": "tm78",
+          "move_id": "dragon_claw"
+        },
+        {
+          "item_id": "tm79",
+          "move_id": "dazzling_gleam"
+        },
+        {
+          "item_id": "tm80",
+          "move_id": "metronome"
+        },
+        {
+          "item_id": "tm81",
+          "move_id": "grass_knot"
+        }
+      ]
+    }
+  ]
+}
