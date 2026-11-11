@@ -1,3 +1,11 @@
+# IA6 — W04 · SALTO DIRECTO A NUEVA MISIÓN V5 (2026-11-11)
+
+La V3 de esta rama histórica y la V4 de staging `codex/calvo-ia6-staging-20261111-w04-evolution` ya terminaron. **No repetir ni V3 ni V4.** La entrega V4 está pendiente de integración central por IA6.
+
+**PRÓXIMA `p`:** comprobar y publicar cualquier cambio local no subido; con working tree limpio, cambiar a la rama NUEVA exclusiva `codex/calvo-items-20261111-w04-regional-level-v5`; leer allí `docs/coordination/items_parallel_v1/IA6_AUTORUN.md` y `CONTINUOUS_V5/STATE_W04.md`; ejecutar inmediatamente fase A de evoluciones regionales por nivel y continuar A→B→C sin solicitar otra tanda. No modificar `main`, V28, PR118, ramas ajenas ni integración oficial.
+
+---
+
 # IA6 — V4 STAGING ACTIVA · W04 · 2026-11-11
 **Tu misión histórica V3 ha cerrado READY_FOR_IA6 y fue verificada por IA6.** No repetir QA ni empezar otra tanda en ESTA rama histórica. **IA6 ya creó una RAMA NUEVA EXCLUSIVA**: codex/calvo-ia6-staging-20261111-w04-evolution; el plan completo está en docs/coordination/items_parallel_v1/IA6_AUTORUN.md de ESA rama y el estado en docs/coordination/items_parallel_v1/CONTINUOUS_V4/STATE_W04.md. En la siguiente p: conservar el working tree original y comprobar que no hay modificaciones sin subir; cambiar a la staging asignada, leer allí IA6_AUTORUN.md y empezar fase A, B, C sin STOP cada diez. No modificar la rama oficial codex/calvo-ia6-integration-20261109, main, V28 ni PR118. La CI de V3 no certifica la staging.
 
