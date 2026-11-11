@@ -54,82 +54,41 @@ jobs:
         run: |
           set -euo pipefail
           timeout 1500s godot --headless --path . --script res://tests/gameplay/w04_continuous_v6_consumer.gd 2>&1 | tee w04-v6-consumer.log
-          grep -E '^W04_V6_CONSUMER PASS checks=[1-9][0-9]* pilots=2 accepted=4 declined=4
+          grep -E '^W04_V6_CONSUMER PASS checks=[1-9][0-9]* pilots=2 accepted=4 declined=4$' w04-v6-consumer.log
+      - name: Ten regional level-up routes V5
         shell: bash
         run: |
           set -euo pipefail
           timeout 1500s godot --headless --path . --script res://tests/gameplay/w04_continuous_v5_level_up.gd 2>&1 | tee w04-v6-level.log
           grep -E '^W04_V5 PASS checks=[1-9][0-9]* routes=10 owners=20$' w04-v6-level.log
-      - name: Regression V4 seven item routes plus W02 nature
+      - name: Seven item evolutions V4 and W02 nature
         shell: bash
         run: |
           set -euo pipefail
-          timeout 1500s godot --headless --path . --script res://tests/gameplay/w04_continuous_v3_real_evolution.gd 2>&1 | tee w04-v6-item-regression.log
-          grep -E '^W04_V3_L3 PASS checks=[1-9][0-9]* routes=7 ownership=14 rollback=2$' w04-v6-item-regression.log
-      - name: Regression 55 of 56 regional encounters
+          timeout 1500s godot --headless --path . --script res://tests/gameplay/w04_continuous_v3_real_evolution.gd 2>&1 | tee w04-v6-items.log
+          grep -E '^W04_V3_L3 PASS checks=[1-9][0-9]* routes=7 ownership=14 rollback=2$' w04-v6-items.log
+      - name: Regional encounters 55 of 56
         shell: bash
         run: |
           set -euo pipefail
           timeout 1500s godot --headless --path . --script res://tests/gameplay/w04_autorun_v3_all_regional.gd 2>&1 | tee w04-v6-forms.log
           grep -E '^W04_AUTORUN_V3_ALL PASS checks=[1-9][0-9]* examined=56 native_functional=55 blocked=1$' w04-v6-forms.log
-      - name: Regression V4 four normal regional abilities
+      - name: Regional normal abilities V4
         shell: bash
         run: |
           set -euo pipefail
-          timeout 900s godot --headless --path . --script res://tests/gameplay/w04_autorun_v4_ability.gd 2>&1 | tee w04-v6-abilities.log
-          grep -E '^W04_AUTORUN_V4 PASS checks=[1-9][0-9]* promoted=4 blocked=1$' w04-v6-abilities.log
-      - name: Veto dynamax_candy intact
+          timeout 900s godot --headless --path . --script res://tests/gameplay/w04_autorun_v4_ability.gd 2>&1 | tee w04-v6-ability.log
+          grep -E '^W04_AUTORUN_V4 PASS checks=[1-9][0-9]* promoted=4 blocked=1$' w04-v6-ability.log
+      - name: Exclusion dynamax candy
         shell: bash
         run: |
           python - <<'PY'
           import json
           data = json.load(open('config/item_selection_v1.json', encoding='utf-8'))
           assert 'dynamax_candy' in data['excluded_ids']
-          print('W04_V5_DYNAMAX_EXCLUSION PASS')
+          print('W04_V6_DYNAMAX_EXCLUSION PASS')
           PY
-      - name: Preserve V5 logs
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: w04-v6-${{ github.run_id }}
-          retention-days: 7
-          if-no-files-found: ignore
-          path: w04-v6-*.log
- w04-v6-consumer.log
-      - name: Ten regional level-up routes native XP event and SaveV2
-        shell: bash
-        run: |
-          set -euo pipefail
-          timeout 1500s godot --headless --path . --script res://tests/gameplay/w04_continuous_v5_level_up.gd 2>&1 | tee w04-v6-level.log
-          grep -E '^W04_V5 PASS checks=[1-9][0-9]* routes=10 owners=20$' w04-v6-level.log
-      - name: Regression V4 seven item routes plus W02 nature
-        shell: bash
-        run: |
-          set -euo pipefail
-          timeout 1500s godot --headless --path . --script res://tests/gameplay/w04_continuous_v3_real_evolution.gd 2>&1 | tee w04-v6-item-regression.log
-          grep -E '^W04_V3_L3 PASS checks=[1-9][0-9]* routes=7 ownership=14 rollback=2$' w04-v6-item-regression.log
-      - name: Regression 55 of 56 regional encounters
-        shell: bash
-        run: |
-          set -euo pipefail
-          timeout 1500s godot --headless --path . --script res://tests/gameplay/w04_autorun_v3_all_regional.gd 2>&1 | tee w04-v6-forms.log
-          grep -E '^W04_AUTORUN_V3_ALL PASS checks=[1-9][0-9]* examined=56 native_functional=55 blocked=1$' w04-v6-forms.log
-      - name: Regression V4 four normal regional abilities
-        shell: bash
-        run: |
-          set -euo pipefail
-          timeout 900s godot --headless --path . --script res://tests/gameplay/w04_autorun_v4_ability.gd 2>&1 | tee w04-v6-abilities.log
-          grep -E '^W04_AUTORUN_V4 PASS checks=[1-9][0-9]* promoted=4 blocked=1$' w04-v6-abilities.log
-      - name: Veto dynamax_candy intact
-        shell: bash
-        run: |
-          python - <<'PY'
-          import json
-          data = json.load(open('config/item_selection_v1.json', encoding='utf-8'))
-          assert 'dynamax_candy' in data['excluded_ids']
-          print('W04_V5_DYNAMAX_EXCLUSION PASS')
-          PY
-      - name: Preserve V5 logs
+      - name: Preserve V6 logs
         if: always()
         uses: actions/upload-artifact@v4
         with:
