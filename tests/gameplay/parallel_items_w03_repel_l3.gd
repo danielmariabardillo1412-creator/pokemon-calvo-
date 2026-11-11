@@ -36,7 +36,9 @@ func _run() -> void:
 	if leader == null or leader.level <= 1:
 		_finish(scene)
 		return
-	var zone: StringName = scene._director.registered_zone_ids()[0]
+	var grass_position: Vector2 = scene.get_node("EncounterZone").global_position
+	var zone: StringName = scene.zone_at_position(grass_position)
+	ck("grass test position resolves to registered zone", zone != &"" and scene._director.has_zone(zone))
 	var built: Dictionary = TechnicalEncounterPoolBuilder.build(scene._catalogs, zone, 100, 1, 1, &"pidgey")
 	ck("real authored encounter table created", bool(built.get("ok", false)))
 	if not bool(built.get("ok", false)):
@@ -80,7 +82,6 @@ func _run() -> void:
 			bool(prepared.get("blocked_by_repel", false)) and prepared.has("next_rng")
 			and scene._director._encounter_rng.state == state_before)
 		var seed_before: int = scene._director._next_battle_seed
-		var grass_position: Vector2 = scene.get_node("EncounterZone").global_position
 		ck("real demo grass position belongs to registered encounter zone",
 			scene.zone_at_position(grass_position) == zone)
 		await scene._native_battles.on_step(grass_position)
