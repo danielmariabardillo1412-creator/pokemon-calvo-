@@ -24,12 +24,14 @@ static func validation_error(c: CreatureInstance, catalogs: DefinitionCatalog) -
 	if c.experience > ProgressionRuleset.experience_for_level(species.growth_rate, 100): return "invalid_growth_state"
 	if ProgressionRuleset.level_for_experience(species.growth_rate, c.experience) != c.level: return "inconsistent_level_experience"
 	if not ProgressionRuleset.is_valid_nature(c.nature_id): return "invalid_growth_state"
+	if c.effective_nature_id != &"" and not ProgressionRuleset.is_valid_nature(c.effective_nature_id): return "invalid_growth_state"
 	for key: Variant in c.ivs:
 		var value: Variant = c.ivs[key]
 		if not ProgressionRuleset.STAT_KEYS.has(key): return "invalid_growth_state"
 		if not (value is int or value is float) or not is_finite(value) or value < 0 or value > 31 or value != int(value): return "invalid_growth_state"
 	if c.stats == null or c.current_hp > c.stats.max_hp: return "invalid_growth_state"
-	var expected := StatCalculator.compute(species.base_stat_block(), c.ivs, c.evs, c.nature_id, c.level)
+	var stat_nature: StringName = c.nature_id if c.effective_nature_id == &"" else c.effective_nature_id
+	var expected := StatCalculator.compute(species.base_stat_block(), c.ivs, c.evs, stat_nature, c.level)
 	if expected.to_dict() != c.stats.to_dict(): return "invalid_growth_state"
 	if c.moveset.size() != c.move_ids.size() or c.moveset.size() > 4: return "invalid_pp_state"
 	for index in c.moveset.size():
@@ -122,7 +124,11 @@ static func plan(source: CreatureInstance, item_id: StringName, catalogs: Defini
 			used[key] = true
 			if choice != "":
 				var old_hp := c.current_hp; var old_max := c.stats.max_hp
+				# EvolutionSystem.apply_evolution preserves original + effective
+				# nature and computes the evolved stats exactly once (W02 TANDA03).
+				# Do not reapply a minted nature or duplicate stat recalculation here.
 				c = EvolutionSystem.apply_evolution(c, StringName(choice), catalogs, ProgressionRuleset.new())
+				if c == null: return deny("evolution_failed")
 				c.current_hp = clampi(old_hp + c.stats.max_hp - old_max, 1, c.stats.max_hp)
 				summary["species_id"] = String(c.species_id)
 				var evolved_species := catalogs.species(c.species_id)
