@@ -43,3 +43,12 @@
 - Discrepancia documental: `reports/W01/CONTINUOUS_V4_DIFF_AUDIT.md` (citado por checkpoint) devuelve 404 en esta rama. Auditar o regenerar a partir de evidencia antes de cierre final.
 - Regresiones pendientes de puerta staging: T01–T04, V2 y CAMP003–005; aún no `READY_FOR_IA6_MERGE`. No se han portado cambios de producción ni fusionado ramas.
 - Siguiente `p`: comprobar presencia/ubicación de tests originales y producir adaptador selectivo permitido (o ticket técnico de pruebas inaccesibles), manteniendo suites previas y exclusión `dynamax_candy`; CI final solo contra SHA actual comprobado.
+
+## Continuación `p` — diagnóstico de pruebas históricas ausentes (2026-11-11)
+- Publicado informe de auditoría de diferencias `reports/W01/CONTINUOUS_V4_DIFF_AUDIT.md` (commit `4581640ad9b51894917c2ce315daad4aa45cd056`): corrige la referencia 404 anterior.
+- Comprobada comparación real source↔staging: ramas divergen; no hacer merge ni copiar el árbol de tests completo.
+- Confirmados en origen y ausentes en staging: `parallel_items_w01_campaign_003.gd`, `_004.gd`, `_005.gd`, `parallel_items_w01_autorun_v4_leftovers.gd`, y fixture `w01_campaign_005.json`.
+- Herencia QA CAMP005→CAMP004→CAMP003→`item_automation_v28.gd`; TANDA04 leftovers→`parallel_items_w01_autorun_v3.gd`. Pendiente mapear coberturas equivalentes stage para evitar copia de clases.
+- CI #42965532842 `held_stage_v1_camp002` completada SUCCESS, recibo en `reports/W01/CONTINUOUS_V4_REGRESSION_V1_C002.md`.
+- **Estado:** fase C `QA_MISSING_DEPENDENCIES`. Ningún cambio de producción ni nuevo run CI en esta `p`; integración oficial IA6 = NO; `READY_FOR_IA6_MERGE` todavía NO.
+- **Siguiente `p`:** inventario de los runners/fuentes y sus negativos; crear adaptador selectivo de pruebas ausentes sobre staging, sin portar clases enteras, y gate reproducible contra SHA real. Si no se puede, ticket IA6 con dependencia exacta.
