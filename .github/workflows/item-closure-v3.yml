@@ -24,6 +24,16 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          # Never use the synthetic PR merge ref: it can contain unrelated
+          # catalog policy changes from a different base. Test exact PR HEAD.
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - name: Assert exact PR HEAD checkout on Linux
+        shell: bash
+        run: |
+          set -euo pipefail
+          actual="$(git rev-parse HEAD)"
+          test "$actual" = "${{ github.event.pull_request.head.sha || github.sha }}"
+          echo "IA6_INTEGRATION_PR_HEAD Linux=$actual"
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
@@ -257,6 +267,15 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          # Never use the synthetic PR merge ref: it can contain unrelated
+          # catalog policy changes from a different base. Test exact PR HEAD.
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - name: Assert exact PR HEAD checkout on Windows
+        shell: pwsh
+        run: |
+          $actual = (& git rev-parse HEAD).Trim()
+          if ($actual -ne '${{ github.event.pull_request.head.sha || github.sha }}') { throw 'PR HEAD checkout mismatched requested commit' }
+          Write-Output ("IA6_INTEGRATION_PR_HEAD Windows=" + $actual)
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
