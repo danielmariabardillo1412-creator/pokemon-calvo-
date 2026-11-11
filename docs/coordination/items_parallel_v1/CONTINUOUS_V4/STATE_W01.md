@@ -52,3 +52,11 @@
 - CI #42965532842 `held_stage_v1_camp002` completada SUCCESS, recibo en `reports/W01/CONTINUOUS_V4_REGRESSION_V1_C002.md`.
 - **Estado:** fase C `QA_MISSING_DEPENDENCIES`. Ningún cambio de producción ni nuevo run CI en esta `p`; integración oficial IA6 = NO; `READY_FOR_IA6_MERGE` todavía NO.
 - **Siguiente `p`:** inventario de los runners/fuentes y sus negativos; crear adaptador selectivo de pruebas ausentes sobre staging, sin portar clases enteras, y gate reproducible contra SHA real. Si no se puede, ticket IA6 con dependencia exacta.
+
+## Continuación p — fase C: puerta parcial de CI staging (2026-11-11)
+- Publicado workflow `.github/workflows/w01-continuous-v4-phase-c-partial.yml` en commit `54cce127b95221ce48c332f55ec5d06ab7367d72`. Tres jobs reales: `stage_baseline`, `stage_v1_camp002`, `stage_held_l3` con Godot/Node/Showdown, preflight, negativos, políticas y SaveV2.
+- Publicado `reports/W01/CONTINUOUS_V4_PHASE_C_PARTIAL_GATE.md` con matriz de cobertura/ausencias, commit `1051a7f29b6f8707fee704cfb68e19b280a517b2`.
+- El workflow se leyó de GitHub tras crear. **No hay CI nueva confirmada**: consulta de runs por commit limitada a eventos PR devolvió vacío y no permite concluir si la CI push se lanzó. No declarar PASS ni SHA de ejecución.
+- Cobertura nueva que busca revalidación: CAMP001/Transform/policy, V1/CAMP002, 10 rutas L3. No afirmar cobertura completa de T01–04, V2 y CAMP003–005.
+- Históricos faltantes: runner CAMP003→CAMP004→CAMP005 y TANDA04 dependiente de TANDA03. No copiar clases completas ni hacer merge de ramas divergentes.
+- **Siguiente p:** comprobar CI real de esta puerta y, si GREEN, inspeccionar escenarios/negativos de origen para construir adaptador puntual de los faltantes y puerta incremental; si RED, corregir solo seam de tests W01. `READY_FOR_IA6_MERGE` pendiente, integración IA6 NO, producción modificada 0.
