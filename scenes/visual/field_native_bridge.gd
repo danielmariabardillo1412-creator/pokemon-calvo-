@@ -90,6 +90,7 @@ func _unlock_world() -> void:
 
 
 func leave_battle() -> void:
+	if view != null and view.has_pending_evolution_w04(): return
 	if busy or view.session == null or view.session.has_active_battle() or view._playback.is_playing(): return
 	busy = true
 	view._working = true
@@ -111,6 +112,7 @@ func _idle_boundary() -> bool:
 
 
 func save_game() -> bool:
+	if view != null and view.has_pending_evolution_w04(): return false
 	if not _idle_boundary(): return false
 	if not view.visible and not field.field_player_movement_enabled(): return false
 	var battle := {}
@@ -128,6 +130,7 @@ func save_game() -> bool:
 
 
 func load_game() -> bool:
+	if view != null and view.has_pending_evolution_w04(): return false
 	if not _idle_boundary(): return false
 	busy = true; view._working = true; _lock_world(); view._refresh_view()
 	var loaded := saves.read(save_path, field.field_definitions())
