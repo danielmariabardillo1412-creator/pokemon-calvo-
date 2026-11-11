@@ -33,6 +33,40 @@ jobs:
           set -euo pipefail
           python -B tests/tools/test_parallel_items_w03_continuous_v3_sources.py 2>&1 | tee w03-v3-source.log
           grep -E '^W03_V3_SOURCE PASS checked=[1-9][0-9]* moon=[0-9]+ runtime_weight=[0-9]+ ultra_fields=[0-9]+$' w03-v3-source.log
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: chickensoft-games/setup-godot@v2.4.1
+        with:
+          version: 4.7.0
+          use-dotnet: false
+          include-templates: false
+      - name: Restore canonical resources and Godot import
+        shell: bash
+        run: |
+          set -euo pipefail
+          godot --version | grep -E '^4[.]7([.-]|$)'
+          python -B tools/distribution/restore_resources.py
+          python -B tools/distribution/restore_resources.py --check
+          mkdir -p data/reports
+          cp ci/fixtures/pokeapi_reports/forms_policy_report.json data/reports/forms_policy_report.json
+          cp ci/fixtures/pokeapi_reports/unsupported_mechanics.json data/reports/unsupported_mechanics.json
+          cp ci/fixtures/pokeapi_reports/import_summary.json data/reports/import_summary.json
+          godot --headless --path . --import 2>&1 | tee w03-v3-import.log
+          if grep -E 'SCRIPT ERROR|Parse Error' w03-v3-import.log; then exit 1; fi
+      - name: Install native reference simulation
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "POKEMON_CALVO_NODE=$(command -v node)" >> "$GITHUB_ENV"
+          python -B tools/battle_reference/run.py --install --limit 1 2>&1 | tee w03-v3-native-bootstrap.log
+          grep -F 'BATTLE_REFERENCE PASS' w03-v3-native-bootstrap.log
+      - name: Moon Ball Gen7 canonical native capture positive and negative
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 900s godot --headless --path . --script res://tests/gameplay/parallel_items_w03_continuous_v3.gd 2>&1 | tee w03-v3-moon-native.log
+          grep -E '^W03_V3_MOON PASS native=2 checks=[1-9][0-9]*$' w03-v3-moon-native.log
       - name: Archive source audit
         if: always()
         uses: actions/upload-artifact@v4
@@ -40,4 +74,5 @@ jobs:
           name: w03-v3-source-${{ github.run_id }}
           if-no-files-found: ignore
           retention-days: 7
-          path: w03-v3-source.log
+          path: |
+            w03-v3-*.log
