@@ -154,8 +154,16 @@ func _block_03(block: Dictionary) -> void:
 		var id := StringName(raw_id)
 		check("Catálogo y selección Love/Moon " + raw_id,
 			catalogs.item(id) != null and service_for().selection.content_allowed(id))
-		check("Motor de captura no registra Love/Moon " + raw_id,
-			not CaptureRuleset.new().is_known_ball(id))
+		# CAMP005 historical inventory is unchanged; only the later IA6 V3
+		# Moon source is now genuinely wired. Love still requires a producer.
+		if id == &"moon_ball":
+			check("V3 Moon promoted with canonical source " + raw_id,
+				CaptureRuleset.new().is_known_ball(id)
+				and bool(preload("res://modules/capture/capture_source_w03_v3.gd").moon_context(
+					&"nidorino", catalogs).get("eligible", false)))
+		else:
+			check("Love still blocked without individual sex " + raw_id,
+				not CaptureRuleset.new().is_known_ball(id))
 	var target: CreatureInstance = _mon(&"nidorino", 25, &"c005_03_genderless_contract")
 	var saved: Dictionary = target.to_dict()
 	var restored: CreatureInstance = CreatureInstance.from_dict(saved)
