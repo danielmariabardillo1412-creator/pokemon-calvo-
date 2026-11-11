@@ -1,55 +1,30 @@
-# ORDEN IA6 — W04 · V5 ACTIVA · EVOLUCIONES REGIONALES POR NIVEL · 2026-11-11
+# IA6 — W04 · NUEVA MISIÓN ACTIVA CONTINUOUS_V6/PLAN_W04.md · 12-11-2026
 
-**NUEVA MISIÓN AUTORIZADA EN ESTA RAMA:** `codex/calvo-items-20261111-w04-regional-level-v5`. La V4 de `codex/calvo-ia6-staging-20261111-w04-evolution` ha terminado y permanece congelada como entrega a IA6 con CI #42965322073 SUCCESS y SHA funcional `cdd53fb1d61a3aeb8790818aa571e13f9afbaed8`. NO repetirla ni modificarla. El nuevo trabajo es V5, no una extensión de certificación V4.
-
-**AL RECIBIR `p` O `sigue`**: verifica el HEAD y working tree, lee `docs/coordination/items_parallel_v1/CONTINUOUS_V5/STATE_W04.md`; ejecuta la primera tarea pendiente de las FASES A → B → C del plan de abajo. Continua por bloques mientras el turno lo permita, sin pedir otra tanda al terminar diez hitos. Checkpoint de SHA/CI por bloque y recuperación en otra ventana si hace falta. Si hay trabajo local no subido en la rama V4 anterior, publícalo antes de cambiar, nunca pierdas cambios con checkout.
-
-**PROTECCIÓN:** cambiar solo esta rama. Sin merge de la V4 ni de IA6; main, V28, PR118, otras W, XP global, UI/bolsa, SaveV2 y motor de batalla protegidos. No alterar política de habilidad oculta ni exclusión de `dynamax_candy`.
-
-**Plan autoridad IA6:** `docs/coordination/items_parallel_v1/CONTINUOUS_V5/PLAN_W04.md` en `codex/calvo-items-20261101-arbitro`. Copia íntegra a continuación para recuperación sin depender de lectura cruzada.
+**Rama ÚNICA NUEVA:** `codex/calvo-items-20261112-w04-evolution-consumer-v6`.
+**ANTERIOR:** W04 V5 ENTREGADA Y CERRADA. No repetir sus hitos ni declarar su CI aplicable a nuevos commits.
+**`p` SIGUIENTE:** FASE A: localizar EVOLUTION_AVAILABLE nativo poscombate y demostrar que falta publicación UI/propiedad; luego implementar y CI.
+**TRABAJO FUNCIONAL:** consumidor y decisión real de evolución por XP de combate, con aceptación/rechazo y estado Party/Storage.
+**PERMISOS:** solo hunks y pruebas que autoriza el PLAN íntegro siguiente. La rama IA6 oficial y main/V28/PR118 son solo lectura; cada compañera conserva su propia rama. Conservar veto `dynamax_candy`. No se ejecuta en background.
+**CHECKPOINT:** `docs/coordination/items_parallel_v1/CONTINUOUS_V6/STATE_W04.md`. El plan es autoridad IA6 en `codex/calvo-items-20261101-arbitro` (también copiado aquí completo).
+**AUTONOMÍA:** A→B→C en el máximo trabajo real por turno con commits/CI; sin STOP por diez hitos; detener solo con entrega certificada o bloqueo fuera de permisos verificado.
 
 ---
 
-# IA6 / W04 — CAMPAÑA CONTINUA V5 · EVOLUCIONES REGIONALES POR NIVEL (11-11-2026)
+# IA6 / W04 — CONTINUOUS_V6 · DECISIÓN Y PUBLICACIÓN REAL DE EVOLUCIONES POR XP DESPUÉS DEL COMBATE
 
-## Autoridad y origen
-Rama exclusiva NUEVA: `codex/calvo-items-20261111-w04-regional-level-v5`. Nace de `codex/calvo-ia6-staging-20261111-w04-evolution` después de su entrega V4, **sin alterar ni prolongar la certificación V4**. V4 tiene 7/7 evoluciones de ítem L3 en staging, CI #42965322073 SUCCESS, código SHA `cdd53fb1d61a3aeb8790818aa571e13f9afbaed8`, y está READY_FOR_IA6_MERGE_CANDIDATE. IA6 conserva en exclusiva el merge oficial y las pruebas multiworker.
+**Autorizado 2026-11-12. Rama nueva EXCLUSIVA** `codex/calvo-items-20261112-w04-evolution-consumer-v6` basada en `codex/calvo-items-20261111-w04-regional-level-v5`, que conserva las diez correcciones de forma V5. No confundir con el HEAD oficial IA6: W04 V5 **NO** está aún integrada. Su CI certificada #43073026880, SHA de código `2aad1bfa2a5d74adf845699c2f161345177ea622`; en esta misión V6 todavía 0 PASS.
 
-**Nueva misión real:** completar cobertura funcional de las evoluciones regionales `level_up` que utilizan requisitos ya implementados. No duplicar las siete evoluciones con objetos, ni repetir indiscriminadamente las 55/56 pruebas de encuentros. `p` reanuda el primer trabajo pendiente de V5, pasando de fase a fase sin otra orden.
+## Defecto que queda por corregir (no repetir diez tests de servicio)
+V5 prueba 10/10 rutas regionales por `ProgressionSystem.gain_experience` → `EVOLUTION_AVAILABLE` → `apply_evolution` → `replace_owned_same_identity` en harness Party/Storage. Sin embargo el **consumidor real de eventos tras combate no garantiza al jugador aceptar/rechazar y publicar la evolución**, y no hay L3 visual de esa secuencia. Las 7 evoluciones por objeto V4 eran otro recorrido y no son el objetivo nuevo.
 
-## Inventario contrastado con config/pokemon_variants_v1.json
-57 `regional_species`, 28 registros de evolución: 16 `level_up`, 7 `use_item`, 1 `trade`, 4 disparadores especiales. Hay **10 registros level_up con conditions={}** que forman el alcance positivo; su implementación L3 todavía NO está certificada:
-| Origen | Destino | Nivel mínimo |
-|---|---|---|
-| diglett_alola | dugtrio_alola | 26 |
-| geodude_alola | graveler_alola | 25 |
-| grimer_alola | muk_alola | 38 |
-| meowth_galar | perrserker | 28 |
-| ponyta_galar | rapidash_galar | 40 |
-| mr_mime_galar | mr_rime | 42 |
-| corsola_galar | cursola | 38 |
-| zigzagoon_galar | linoone_galar | 20 |
-| zorua_hisui | zoroark_hisui | 30 |
-| wooper_paldea | clodsire | 20 |
+**Fase A — localizar consumidor, reproducir fallo real.** Inspeccionar `ShowdownAdventureSession` / `FieldNativeSession`, `ProgressionSystem.reconcile_battle_result`, `FieldNativeBridge`, campo/presentación y `PlayerCollection`. Registrar el evento real emitido al obtener XP en combate nativo, quién lo recibe, el punto de asentamiento de recompensas, la identidad tras battle settle, y si existe una UI de evolución reutilizable. Crear RED end-to-end real (no llamar `apply_evolution` directamente como sustituto de una decisión). Al menos ruta regional `diglett_alola` 26 y ruta independiente `meowth_galar` 28; rechazos a nivel anterior o Everstone.
 
-Los otros 6 `level_up` poseen condiciones que NO se deben descartar: Rattata Alola (noche), Meowth Alola (amistad), Linoone Galar (noche), Qwilfish Hisui (movimiento conocido), Sneasel Hisui (objeto + día), Sliggoo Hisui (lluvia). La evolución de Graveler Alola por intercambio y los 4 triggers especiales permanecen en ticket aparte. No asignar nivel arbitrario a intercambios ni inventar clima, reloj, eventos de combate o habilidades ocultas.
+**Fase B — solución mínima aplicable.** Permiso exclusivo de staging W04 para **nuevo helper acotado** de resolución de evento/prompt, integrable luego por IA6, y cambios limitados a métodos concretos de salida de combate en `modules/gameplay/showdown_adventure_session.gd`, `scenes/visual/field_native_bridge.gd` y/o presentación de elección, SOLO si la fase A demuestra necesidad. Reutilizar `FieldGrowthChoices` (ya sabe mostrar destinos y no evolucionar) si encaja sin romper el flujo Rare Candy; no duplicar gestor de XP o UI. La ruta debe ofrecer **aceptar / declinar** desde interfaz real, validar que la decisión corresponde al evento y criatura propietaria actual, aplicar `ProgressionSystem.apply_evolution`, publicar sustitución same_identity en Party/Storage y mostrar resultado. En cancelación, bloqueo o fallo de validación NO duplicar ni corromper criatura; guardar manual y cargar SaveV2 con identidad y `form_id` de destino; conservar `effective_nature_id`, IV/EV, EXP, PP, shiny, held item, amistad y PS. Evitar doble emisión/consumo de XP, prompts duplicados tras reapertura, guardado intermedio no confirmado y mutación tras combate aún ocupado.
 
-## Fase A — Diagnóstico causal y contratos
-1. Leer el HEAD de ESTA rama, `IA6_AUTORUN.md`, `CONTINUOUS_V5/STATE_W04.md` y la matriz canónica. Confirmar que los 10 registros y destinos existen y diferenciar evolución regional de especie no regional (p. ej., Perrserker y Clodsire).
-2. Reproducir el camino auténtico `ProgressionSystem.gain_experience -> EVOLUTION_AVAILABLE -> ProgressionSystem.apply_evolution -> EvolutionSystem.apply_evolution` con eventos reales, no llamadas directas a Factory. Registrar prueba roja si el destino pierde la identidad canónica o no se publica en Party/Storage. Exigir que nivel 1 antes del umbral NO habilite evolución y que Everstone la bloquee si la regla existe.
-3. Separar para cada ruta productor real disponible, L2/emitida, L3 de servicio, y bloqueo. No suponer que la generación del evento equivale a reemplazar criatura en el juego.
+**Guardas y conflictos:** la función `EvolutionSystem.apply_evolution` V5 se conserva intacta salvo error demostrado; no editar `CreatureInstance`, `PlayerCollection`, `SaveGameData`, `FieldItemService`, `FieldGrowthEffects`, `ProgressionSystem`, battle JS ni cambios compartidos de W02, W03 y W05. En módulos compartidos usar hunks localizados y documentarlos para que IA6 los trasplante, no copiar archivos enteros. El XP de EXP Share está bajo W02 y NO se debe reprogramar aquí. Los 6 level_up con condiciones incompletas, `trade`, evoluciones `spin`/formas, Exeggutor Alola Harvest deben seguir bloqueados, jamás degradados a niveles simples. `dynamax_candy` excluido.
 
-## Fase B — Corrección mínima y pilotos L3
-4. Autorizar exclusivamente helpers W04 nuevos y corrección estrecha de la resolución de `form_id` **del destino** en `EvolutionSystem.apply_evolution` para esas diez rutas, solo si prueba roja confirma pérdida real. Preservar sin cambios la ruta de siete objetos y `effective_nature_id` W02. Un destino sin forma regional válida no debe recibir una `form_id` inventada.
-5. Crear tests Python/Godot por ruta que partan de XP/nivel auténticos y evento de evolución, incluyan aceptación/declinación cuando aplique, validación de umbral, propietario Party/Storage, identidad estable, estadísticas con naturaleza natal y efectiva, IV/EV/PP, experiencia, SaveV2 manual, fuente/forma incorrecta, bloqueo Everstone y duplicación/rollback de sustitución.
-6. El reemplazo real del dueño se podrá probar mediante el API existente `PlayerCollection.replace_owned_same_identity` desde tests/harness propio, nunca falsificando la implementación. Si hay un seam ausente en el consumidor/XP/GUI, **documentar DEPENDENCY_MISSING** y seguir con la siguiente ruta; NO editar `ProgressionSystem.gain_experience`, `reconcile_battle_result`, FieldItemBag, Showdown, BattleOutcome, SaveV2, PlayerCollection ni UI ajena.
-7. No calificar como L3 de juego una evolución que solo se ejecute mediante helper aislado. Distinguir `L2`, `L3_SERVICIO` y `INTEGRACION_JUEGO_PENDIENTE`.
+**Fase C — aceptación y entrega.** CI headless real Godot 4.7 + pruebas negativas de recepción/elección/rollback + SaveV2 y regresiones V5 (10 rutas), V4 (7 objetos), compatibilidad menta W02; prueba del flujo visual automatizable si existe, y marcar GPU/visual manual NO CERTIFICADO cuando no se ejecute. Ejecutar regresiones que estén disponibles de CAMP003–006 sin inventar que están en esta base; si para END-TO-END real hay API de otro equipo necesariamente protegida, documentar ticket concreto para IA6 y código aislado listo para trasplante, sin declarar L3 end-to-end.
+Publicar `CONTINUOUS_V6/STATE_W04.md`, informe `reports/W04/CONTINUOUS_V6_FINAL.md`, SHA funcional y URL CI. **Métrica: consumidor real de XP y decisión con interfaz (0/2 rutas piloto hasta CI), no objetos nuevos ni nuevos IDs; cobertura extensible a diez rutas tras piloto.** Al terminar entregar READY_FOR_IA6_MERGE_CONSUMER_CANDIDATE (no merge oficial) o BLOCKED_SEAM demostrado.
 
-## Fase C — Regresión y entrega
-8. Conservar 7/7 rutas de ítem V4, 55/56 encuentros y la exclusión `dynamax_candy`. Añadir negativas para los seis `level_up` condicionados, comercio y disparadores especiales, demostrando que no se activan por simplificación.
-9. Ejecutar CI sobre SHA funcional, Godot/Python pertinentes y regresiones V4 existentes. Las suites CAMP003–006 que faltan en base staging se reservan a IA6: ausencia de fichero **no equivale** a PASS ni justifica reescribir historia.
-10. Publicar `docs/coordination/items_parallel_v1/reports/W04/CONTINUOUS_V5_FINAL.md`, matriz por ruta, CI exacta, diff por función, tests y `CONTINUOUS_V5/STATE_W04.md` con READY_FOR_IA6. Si se agota toda tarea independiente, detenerse sin rondas de QA ficticias.
-
-## Propiedad, límites y continuidad
-V5 solo puede escribir en SU rama `codex/calvo-items-20261111-w04-regional-level-v5`: helper/test/fixture/report/workflow W04 y, condicionado a prueba roja, resolución de forma para las 10 rutas en `EvolutionSystem.apply_evolution`. No editar ramas V4 entregadas, IA6 integración, `main`, V28 ni PR118. No tocar `CreatureInstance`, `FieldItemService`, `ProgressionSystem`, `FieldItemBag`, SaveV2, catálogo, política, experiencia, RNG o archivos W01/W02/W03/W05. Para un cambio compartido fuera de esta autoridad, ticket con evidencia y continuar lo independiente. `p` no ejecuta tareas asíncronas: checkpoint cada fase/bloque para reanudar. Reportar: `V5 fase | 10 rutas examinadas | L2 | L3 servicio | integración juego | bloqueadas | objetos nuevos (esperado 0) | CI/SHA | IA6 central pendiente`.
+**Autonomía:** una `p` empieza A y continúa B→C sin nuevos permisos por cada microbloque, pero solo en hunks autorizados; ningún trabajo en segundo plano. No tocar main, V28, PR118, rama IA6 oficial ni ramas ajenas. No prometer que emisión de evento = evolución jugable.
 
