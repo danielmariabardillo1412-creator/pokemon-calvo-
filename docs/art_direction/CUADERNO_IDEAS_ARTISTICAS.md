@@ -20,7 +20,7 @@ Este cuaderno recoge efectos, técnicas, referencias y posibles mejoras para la 
 | ID | Idea | Estado | Prioridad cuando llegue fase artística |
 |---|---|---|---|
 | `ART-FX-FOG-001` | Niebla reactiva simulada en 2D, visualizada con sensación de volumen | APARCADA / INVESTIGAR | Media-alta para una zona concreta |
-| `ART-LIGHT-002` | Iluminación/materiales para evitar personajes con aspecto de plástico; «lighting axis» por identificar | APARCADA / TÉRMINO SIN CONFIRMAR | Alta para dirección de iluminación |
+| `ART-LIGHT-002` | Cel shading y técnicas de iluminación anime para modelos 3D integrados en mapas 2D/2.5D | APARCADA / TÉCNICAS VERIFICADAS EN VÍDEO | Alta para dirección de personajes |
 | `ART-REF-003` | Revisar periódicamente explicaciones técnicas de @PereGamedev y otros autores fiables | REFERENCIA / SIN TAREAS ACTIVAS | Según propuestas concretas |
 | `ART-WORLD-004` | Arquitectura de mapas 2.5D: personajes 3D y escenarios 2D con sensación de volumen | APARCADA / DISEÑO COMPARATIVO | Alta al empezar mapas |
 | `ART-REF-005` | Referencia ISO-CORE / JohnBrx: terreno con relieve y representación 2D | REFERENCIA TÉCNICA / VERIFICADA PARCIALMENTE | Alta |
@@ -71,26 +71,52 @@ Este cuaderno recoge efectos, técnicas, referencias y posibles mejoras para la 
 
 ---
 
-## ART-LIGHT-002 — Iluminación y materiales naturales; «lighting axis» por identificar
+## ART-LIGHT-002 — Cel shading y control de iluminación de personajes 3D
 
-- **Solicitud literal del usuario:** «lighting axis», técnica que ayudaría a evitar que personajes parezcan «de plástico».
-- **Estado:** TÉRMINO NO VERIFICADO. **No asumir que ese es el nombre correcto de una función, plugin o shader.**
-- **Posible interpretación:** `ACES` (*Academy Color Encoding System*) o *ACES tonemapping*, que trata cómo se representan altas luces, contraste y color. Es una **posibilidad fonética, no una identificación confirmada del vídeo**. Existe en el entorno de Godot, pero **no arregla por sí mismo** materiales plásticos.
-- **Alternativas técnicas a contrastar cuando esté el vídeo:** iluminación ambiental y de relleno, luces de rebote, sombras de contacto/oclusiones, `roughness` y `metallic` de materiales PBR en 3D, mapas normales, *subsurface scattering* para piel 3D (si procede), y tratamiento de color. **No activar todo por defecto**; dependerá del estilo DS/GBA y de si el personaje se dibuja en sprite 2D o se renderiza como modelo 3D.
+- **Estado:** APARCADA para la fase artística. Sin implementación ni asignaciones para IA1–IA5.
+- **Fuente primaria analizada:** Guinxu, **«El secreto de la LUZ en juegos estilo ANIME»**, 23-07-2024, duración 9 min 33 s: https://www.youtube.com/watch?v=yp7HpTkSzBA
+- **Evidencia:** transcripción completa recuperada y estudiada el 2026-11-11. El autor muestra técnicas presentes o descritas en juegos como Guilty Gear, Dragon Ball FighterZ y Genshin Impact. Las simplificaciones para Pokémon Calvo son propuestas, **no copias probadas de sus implementaciones internas**.
+- **Corrección sobre hipótesis previa:** se había apuntado «lighting axis» de oído y se planteó si sería `ACES`. **Este vídeo explica principalmente cel shading, normales, iluminación por personaje, Fresnel/rim light y outlines, NO ACES.** No afirmar que la frase original «lighting axis» se haya identificado con certeza; puede proceder de otra fuente. ACES/AgX es tratamiento tonal/colorimétrico diferente y solo se valoraría por separado.
 
-### Prueba futura
+### Técnicas concretas explicadas en el vídeo
 
-1. Identificar y guardar **el vídeo concreto** y el nombre técnico exacto de la técnica.
-2. Diseñar una sala de iluminación de referencia: mismo personaje y cámara, material y luz controlados.
-3. Comparar configuración actual frente a iluminación/materiales corregidos y ACES/AgX si corresponde.
-4. Medir legibilidad de silueta y caras, consistencia con mapas/sprites, reflejos excesivos y FPS/VRAM.
-5. Adoptar solo lo que mejore el aspecto sin volverlo fotorealista o introducir luces caras innecesarias.
+1. **Cel shading / toon shading:** pasar de sombras graduales realistas a dos o más bandas definidas de luz y sombra. Guinxu simplifica usando un umbral sobre el producto escalar entre normal de la superficie y dirección de luz. Un valor mostrado (70%) es **solo un ejemplo**, no un ajuste universal.
+2. **Normales de vértices ajustadas:** modificar la dirección que la iluminación «cree» que mira una zona del modelo sin deformar su geometría. Permite diseñar sombras faciales propias del estilo anime; requiere trabajo técnico/artístico y puede cambiar con rigging, cámara y expresiones.
+3. **Umbrales por zona del modelo:** distintos puntos pueden entrar en sombra con mayor o menor facilidad (por ejemplo, bajo una prenda o alrededor de la cara). Guinxu menciona el control fino usado por Guilty Gear. **No necesario para un primer ensayo.**
+4. **Luz independiente por personaje:** en algunos juegos, ciertas luces se controlan para favorecer la silueta/rostro aunque la luz ambiental general sea distinta. En un juego con personajes 3D renderizados en `SubViewport`, podría configurarse una luz aislada propia del viewport, pero **debe conservar coherencia con la hora, mapas y escenas**.
+5. **Fresnel / rim light:** iluminación o brillo fino a lo largo de la silueta para separarla del fondo. No es lo mismo que una luz física ni que el contorno negro.
+6. **Outline oscuro:** contorno exterior estilizado, en el vídeo explicado mediante una copia ligeramente aumentada/invertida del modelo. El grosor se adapta con distancia; no asumir que duplicar todos los modelos sea gratis. Existen opciones de shader/borde y postprocesado que se deben comparar en Godot.
+7. **Detalles de línea internos:** dibujos/texturas y organización de UV para conservar trazos anime sin pérdida de nitidez; el vídeo muestra trucos de textura de Guilty Gear/Dragon Ball FighterZ. Solo justificable si el personaje final se verá a escala suficiente.
 
-**Referencias verificadas:**  
-- Godot: entorno, ambiente, luz reflejada y tonemapping (ACES y AgX): https://docs.godotengine.org/es/4.x/tutorials/3d/environment_and_post_processing.html  
-- Materiales PBR/roughness y ambient occlusion: https://docs.godotengine.org/en/stable/tutorials/3d/standard_material_3d.html
+### Aplicación específica a Pokémon Calvo
 
-**Pendiente de aclarar:** enlace o transcripción del vídeo donde el creador menciona «lighting axis». No marcar ACES como término confirmado hasta verlo.
+**Meta:** aprovechar personajes 3D generados/retocados con Meshy y Blender, mientras los mapas pueden ser 2D/2.5D (véase `ART-WORLD-004`), sin aspecto de plástico ni apariencia de «personaje pegado encima».
+
+- Probar **primero cel shading sencillo de dos bandas + paleta coherente** con los mapas estilo Pokémon DS/GBA. No imitar necesariamente los anime de alta definición del vídeo.
+- Comparar **sin outline / outline fino / rim light suave** a la escala real del juego, no solo en un zoom cercano. Los contornos exagerados o Fresnel intensos pueden desentonar.
+- En el escenario híbrido `SubViewport` 3D sobre fondo 2D, decidir si las sombras del personaje obedecerán al sol del mundo, a una luz artística propia o a un compromiso. Considerar oclusión y contacto con suelo.
+- **No presuponer coste bajo:** un shader sencillo puede ser razonable, pero luces adicionales, outlines por geometría, transparencias, renderizados en múltiples viewports y mayor número de personajes incrementan coste. Medir CPU/GPU, VRAM, FPS y nitidez real.
+- No modificar ahora la arquitectura del juego, los modelos de personajes, el `FieldItemBag`, el sistema de batalla, mapas en desarrollo ni política de objetos.
+
+### Microprototipo futuro (NO comenzar ahora)
+
+1. Elegir **un único modelo existente** y una sala con fondo provisional 2D. Cámara y tamaño de personaje iguales a los que se usarán jugando.
+2. Ensayo A: sombreado convencional con materiales sin reflejos especulares exagerados; B: cel shading de dos bandas; C: B + outline; D: B + rim light suave. Registrar imágenes y coste de cada opción.
+3. Caminar, girar, reproducir una animación y cambiar de zona clara a zona oscura; comprobar que ojos, cara, manos y ropa siguen legibles y que los contornos no vibran.
+4. Solo si se detectan sombras faciales inadecuadas, investigar normales personalizadas y umbrales por zona; no exigir pintura manual de sombras para cada personaje desde el principio.
+5. Confirmar compatibilidad con el renderizador real de Godot 4.7 y la arquitectura elegida (2D + 3D `SubViewport` o escenario 3D con sprites). Benchmark hardware objetivo.
+6. No decidir estilo definitivo sin comparar sprites del mapa y modelos en movimiento, ni marcar técnica «certificada» antes de una prueba en el proyecto.
+
+### Fuente y referencias
+
+- [Guinxu — El secreto de la luz en juegos estilo anime](https://www.youtube.com/watch?v=yp7HpTkSzBA) — vídeo del que se ha recuperado la transcripción.
+- [Godot 4: shaders espaciales](https://docs.godotengine.org/en/stable/tutorials/shaders/shader_reference/spatial_shader.html) — materiales/shading de modelos 3D.
+- [Godot 4: viewports](https://docs.godotengine.org/en/stable/tutorials/rendering/viewports.html) — render de una escena 3D en textura para composiciones 2D.
+- [Godot: materiales PBR](https://docs.godotengine.org/en/stable/tutorials/3d/standard_material_3d.html) — brillo/rugosidad para comparar aspecto plástico.
+- [Godot: entorno y postprocesado](https://docs.godotengine.org/en/stable/tutorials/3d/environment_and_post_processing.html) — tonemapping ACES/AgX como cuestión **separada**.
+
+**Decisión actual:** investigación documentada; la primera prueba recomendable será un personaje con toon shading simple. El detalle tipo Guilty Gear se mantiene como opción avanzada, no como requisito.
+
 
 ---
 
@@ -303,6 +329,8 @@ No limitar la idea a nieve: crear **un sistema reutilizable basado en el tipo de
 ---
 
 ## Registro de cambios
+
+- **2026-11-11 — ACTUALIZACIÓN ART-LIGHT-002:** transcripción completa de Guinxu analizada. Se documenta cel shading, ajuste de normales, luces individuales, Fresnel y outlines, separándolos de la conjetura anterior ACES. Se propone prototipo 3D/2D híbrido sin implementar nada.
 
 - **2026-11-11:** ART-TEX-NOISE-008 creada tras recuperar la transcripción del vídeo sobre Perlin Noise; usos transversales de agua, lava, humo, niebla, suciedad y terreno. Sin desarrollo actual.
 
