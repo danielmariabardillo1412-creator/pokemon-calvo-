@@ -67,6 +67,12 @@ jobs:
           set -euo pipefail
           timeout 900s godot --headless --path . --script res://tests/gameplay/parallel_items_w03_continuous_v3.gd 2>&1 | tee w03-v3-moon-native.log
           grep -E '^W03_V3_MOON PASS native=2 checks=[1-9][0-9]*$' w03-v3-moon-native.log
+      - name: Magikarp L5 move-policy independent native negative
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 900s godot --headless --path . --script res://tests/gameplay/parallel_items_w03_continuous_v2_magikarp_probe.gd 2>&1 | tee w03-v3-magikarp-probe.log
+          grep -E '^W03_V2_MAGIKARP_PROBE PASS checks=[1-9][0-9]* status=KNOWN_MOVE_POLICY_NO_BALL_LOSS$' w03-v3-magikarp-probe.log
       - name: Archive source audit
         if: always()
         uses: actions/upload-artifact@v4
