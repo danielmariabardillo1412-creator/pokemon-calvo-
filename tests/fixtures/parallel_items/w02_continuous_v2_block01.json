@@ -28,7 +28,8 @@
       "cures_confusion": false,
       "start_hp": "full",
       "heal_amount": 0,
-      "applies": true
+      "applies": true,
+      "confused": false
     },
     {
       "id": "cheri_berry",
@@ -39,7 +40,8 @@
       "cures_confusion": false,
       "start_hp": "full",
       "heal_amount": 0,
-      "applies": false
+      "applies": false,
+      "confused": false
     },
     {
       "id": "chesto_berry",
@@ -51,7 +53,8 @@
       "start_hp": "full",
       "heal_amount": 0,
       "applies": true,
-      "expect_sleep_clock_clear": true
+      "expect_sleep_clock_clear": true,
+      "confused": false
     },
     {
       "id": "chesto_berry",
@@ -62,7 +65,8 @@
       "cures_confusion": false,
       "start_hp": "full",
       "heal_amount": 0,
-      "applies": false
+      "applies": false,
+      "confused": false
     },
     {
       "id": "pecha_berry",
@@ -73,7 +77,8 @@
       "cures_confusion": false,
       "start_hp": "full",
       "heal_amount": 0,
-      "applies": true
+      "applies": true,
+      "confused": false
     },
     {
       "id": "pecha_berry",
@@ -84,7 +89,8 @@
       "cures_confusion": false,
       "start_hp": "full",
       "heal_amount": 0,
-      "applies": false
+      "applies": false,
+      "confused": false
     },
     {
       "id": "rawst_berry",
@@ -95,7 +101,8 @@
       "cures_confusion": false,
       "start_hp": "full",
       "heal_amount": 0,
-      "applies": true
+      "applies": true,
+      "confused": false
     },
     {
       "id": "rawst_berry",
@@ -106,7 +113,8 @@
       "cures_confusion": false,
       "start_hp": "full",
       "heal_amount": 0,
-      "applies": false
+      "applies": false,
+      "confused": false
     },
     {
       "id": "aspear_berry",
@@ -117,7 +125,8 @@
       "cures_confusion": false,
       "start_hp": "full",
       "heal_amount": 0,
-      "applies": true
+      "applies": true,
+      "confused": false
     },
     {
       "id": "aspear_berry",
@@ -128,7 +137,8 @@
       "cures_confusion": false,
       "start_hp": "full",
       "heal_amount": 0,
-      "applies": false
+      "applies": false,
+      "confused": false
     },
     {
       "id": "oran_berry",
@@ -139,7 +149,8 @@
       "cures_confusion": false,
       "start_hp": "missing_7",
       "heal_amount": 10,
-      "applies": true
+      "applies": true,
+      "confused": false
     },
     {
       "id": "oran_berry",
@@ -150,7 +161,8 @@
       "cures_confusion": false,
       "start_hp": "full",
       "heal_amount": 10,
-      "applies": false
+      "applies": false,
+      "confused": false
     }
   ],
   "limitations": [
