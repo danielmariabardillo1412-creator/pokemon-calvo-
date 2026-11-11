@@ -68,3 +68,10 @@
 - **Estado:** `PHASE_C_PARTIAL_GATE_PASS`. No promover a `READY_FOR_IA6_MERGE` por regresiones CAMP003–005, TANDA01–04 completas y V2 aún sin cobertura equivalenciada en staging.
 - **Siguiente p autorizada:** crear test autónomo pequeño en staging para negativos deterministas de gemas (duplicación, reserva, reemplazo y legacy) usando infraestructura existente; lanzar CI SHA propia. Posteriormente casos RNG de CAMP003–005 y matriz de placas. No importar runners heredados ni tocar producción protegida.
 - Integración oficial IA6 NO; cambios de producción en V4 0.
+
+## Continuación p — piloto negativo determinista de gemas en CI (2026-11-11)
+- Nuevo test autónomo staging: `tests/gameplay/w01_continuous_v4_gem_negative.gd` (commit `9ec3adbdd1b3532ee402c71e2fb20673e9aae32b`). Usa FieldItemService real, bolsa/propietario, controles de duplicación, reserva, titular ajeno, sustitución Normal Gem↔Fire Gem y dos SaveV2 de disco.
+- Workflow `.github/workflows/w01-continuous-v4-gem-negative.yml`, commit `0366d632c51a12152c9418b3a1e0c6ddbbb96cb8`, runner Godot 4.7, recursos canónicos, salida W01_V4_GEM_NEGATIVE solo tras al menos 24 aserciones y sin errores.
+- [CI #43072818614](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/43072818614) verificada realmente lanzada; al último chequeo `gem_negative_l3` estaba `in_progress`, step 6 `Restore canonical Godot and native runtime`, sin resultado final. **No contar PASS hasta éxito real**.
+- La suite no cubre todavía consumo por batalla, legado ni 18 gemas completas; solo controles negativos deterministas. Su PASS parcial no da `READY_FOR_IA6_MERGE`.
+- Siguiente `p`: comprobar CI 43072818614; si falla leer logs del job y corregir solo test/runner W01; si PASS, anotar SHA exacto y continuar con consumo nativo/legacy de gemas y negativos históricos restantes. Integración IA6 NO; producción 0 cambios.
