@@ -28,6 +28,7 @@ Este cuaderno recoge efectos, técnicas, referencias y posibles mejoras para la 
 | `ART-FX-TRAIL-007` | Rastros y huellas 2D reutilizables para nieve, barro, arena y otras superficies | APARCADA / INVESTIGACIÓN | Alta en zonas de terreno especial |
 | `ART-TEX-NOISE-008` | Ruido Perlin procedural reutilizable: agua, humo, niebla, suciedad, terreno y lava | APARCADA / TÉCNICA DOCUMENTADA | Alta, tecnología transversal |
 | `ART-FX-RAIN-009` | Lluvia, suelo mojado y ondas de agua: versión 2D económica frente a shader 3D avanzado | APARCADA / TRANSCRIPCIÓN ANALIZADA | Media-alta para clima y biomas |
+| `ART-WORLD-STREAM-010` | Exterior continuo sin transiciones: chunks agrupados y precarga alrededor de cámara | APARCADA / ARQUITECTURA A VALIDAR | Alta cuando se diseñen mapas |
 
 ---
 
@@ -398,7 +399,77 @@ La mayor dificultad del usuario no es comprender código, sino **producir recurs
 
 ---
 
+## ART-WORLD-STREAM-010 — Mundo exterior continuo con carga progresiva de fragmentos (chunk streaming)
+
+**Fecha:** 2026-11-11. **Estado:** DISEÑO FUTURO / NO IMPLEMENTADO. No asignar tareas a IA1–IA5 ni modificar mapa, SaveV2, escenas, ramas, `main` o V28 hasta autorización expresa y la fase adecuada.
+
+### Fuente examinada
+
+- Vídeo: Guinxu, **«¿Rinde mejor un juego con el mapa en 1 sola pieza?»** (15-11-2025, 11 min 14 s): https://www.youtube.com/watch?v=a8Mz2YHd5cU
+- Transcripción completa recuperada y analizada el 2026-11-11.
+- **Conclusión expresada por Guinxu:** hay un compromiso entre agrupar mallas cercanas para reducir *draw calls* y fragmentar el entorno para que el motor descarte, sustituya o descargue contenido que no necesita. En el ejemplo de Pokémon Leyendas Z-A, distingue la ciudad fragmentada utilizada en gameplay de un modelo alternativo más unido/simplificado para ciertas vistas de cinemática. **No afirmar que el juego se ejecuta sobre una única malla 3D**.
+- Conceptos explicados: culling por campo visual, oclusión, niveles de detalle (LOD), *streaming* de recursos, *draw calls*, agrupación de objetos cercanos y las excepciones de habitaciones pequeñas y vistas panorámicas.
+- **Matiz:** el vídeo trata principalmente **geometría y render 3D**; en Calvo, con mapas 2D/2.5D, el mecanismo equivalente de tiles/atlas/escenas debe diseñarse y medirse en Godot. No copiar nombres de técnicas 3D como si fueran automáticamente necesarias en una `TileMapLayer`.
+
+### Objetivo expresado por el usuario
+
+- **Exteriores visualmente continuos:** rutas, ciudades, bosques y caminos romanos/vikingos podrían conectar sin pantalla negra o cambio de escena perceptible.
+- **Interior/exterior separado:** por ahora casas, cuevas, mazmorras y edificios complejos pueden ser escenas distintas con transición deliberada para aislar iluminación, lógica, encuentros y carga. No imponer esa separación a todos los lugares si luego se demuestra innecesaria.
+- **Eficiencia:** solo mantener activos los sectores próximos al campo de visión y preparar los siguientes **antes de que el jugador los vea**. El personaje puede pasear por un mundo global lógico continuo, aunque la representación se organice en fragmentos.
+
+### Arquitectura propuesta para comparar (NO asumida como ya existente)
+
+**Propuesta inicial: mundo persistente lógico + escenas de chunks visuales.**
+
+1. Conservar **coordenadas globales**, biome/route IDs y reglas de desplazamiento consistentes; un único controlador de jugador y cámara para el exterior. Las piezas físicas no deben tener un borde visible ni obligar a teletransportar.
+2. Dividir el mapa por **chunks contiguos** de tiles/atlas reutilizables (por ejemplo, **16×16 o 32×32 tiles como hipótesis de prototipo, NO tamaños fijados**). Escenas de terreno y decoración ligera dentro de cada sector; los atlas se comparten.
+3. En cada actualización relevante de movimiento, calcular el rectángulo visible de cámara y una **corona de precarga** que cubra varios sectores más allá de la pantalla. El radio debe adaptarse al zoom, resolución y velocidad máxima del jugador, incluyendo correr/bicicleta si existen. No reaccionar únicamente cuando algo entra en la pantalla.
+4. Iniciar precarga de sectores entrantes mediante `ResourceLoader.load_threaded_request`, consultar `load_threaded_get_status` y recuperar solo cuando esté en `THREAD_LOAD_LOADED`. La API oficial advierte que llamar a `load_threaded_get` antes de completar la carga **puede bloquear el hilo principal**.
+5. Añadir escenas listas al árbol de Godot **en el hilo principal** (seguridad de hilos; no modificar el árbol de escenas activo desde un worker). Distribuir altas y bajas entre fotogramas dentro de presupuesto.
+6. Activar las colisiones, eventos, NPCs y navegación necesarios para zonas cercanas. Conservar alrededor del jugador **más margen de colisión que el de dibujo si hace falta** para evitar colarse en zonas sin carga. No dejar colisiones invisibles de sectores lejanos consumiendo recursos sin propósito.
+7. Al alejarse, desactivar o descargar zonas después de cruzar un **umbral exterior diferente** (histéresis) o un breve tiempo de retención. Evitar el bucle cargar/descargar cuando se camina sobre la frontera.
+8. **Persistencia desacoplada de las escenas:** recoger objetos, NPC movidos, puzles, eventos, derrotas, trainer flags y contenido ya visitado deben conservarse por IDs estables cuando se descargue el chunk; restaurarlos desde el estado de mundo/SaveV2 con integración específica y pruebas de regresión. **Jamás perder cambios por eliminar nodos**.
+9. Mantener un estado de carga claro: `unloaded`, `requested`, `ready`, `active`, `retained`, `unloading`; gestionar solicitudes duplicadas, teletransportes, giros rápidos de cámara, cambios de zona e invalidaciones tras recargar partida.
+10. **Probar también si hace falta streaming real**. Para exteriores pequeños, `TileMapLayer` con render agrupado y descarte de lo no visible puede bastar y ser más simple. El `rendering_quadrant_size` de `TileMapLayer` agrupa tiles para dibujo, **pero NO implementa descarga dinámica de todas las escenas, NPCs, lógica y recursos por sí solo**.
+
+### Aclaración: por qué no debe prometerse ausencia total de tirones
+
+- Precargar en un hilo ayuda a **lectura/deserialización de recursos**; la construcción, inserción, actualización de colisiones y primera subida de texturas/shaders a GPU también cuestan tiempo y podrían provocar un pico.
+- Si el usuario se mueve más rápido que la precarga (correr, bici, teletransporte) pueden aparecer sectores tarde; requerirá margen, presupuesto, prioridades y degradación visual temporal explícita (nunca atravesar colisión inexistente).
+- **Chunk demasiado pequeño:** exceso de gestión, cambios y nodos. **Demasiado grande:** memoria y picos de carga. Los tamaños deben medirse.
+- Malla única puede reducir draw calls 3D, pero sacrifica algunas formas de culling/descarga granular; en **2D** importan batching del TileSet, atlas, CanvasItems y cantidad de nodos. El algoritmo ideal no se deduce solamente del vídeo.
+- No simular a máxima frecuencia los NPCs de todo el mundo si están lejos. Separar representación e historial/estado de IA y reconstruir correctamente cuando el sector reaparece.
+- Cuidar transiciones entre biomas, orden Y-sort de árboles, luces, lluvia, niebla, sonido y música sin cambios bruscos en fronteras de chunks.
+- Guardado/restauración de posición global y evento de mundo no pueden romper las rutas actuales de SaveV2.
+
+### Plan de ensayo futuro, sin introducir nuevas tareas ahora
+
+1. **Prototipo aislado** (cuando toque diseño de mapas): un camino continuo con ciudad → pradera → bosque dividido en **3×3 a 5×5 chunks** como muestra, sin teletransporte entre ellos; una puerta lleva a un interior con transición.
+2. Implementación de referencia **A:** mapa continuo no descargado, solo tiles visibles con el render nativo. **B:** mismos recursos con streaming y precarga de vecinos. Comparación de memoria, tiempos de frame, carga y complejidad.
+3. Prueba rápida: caminar lentamente, correr, cambiar de dirección junto a fronteras, diagonal, zoom, abrir menú/mapa y volver a un chunk anterior.
+4. Prueba de estado: coger un objeto y activar NPC/evento, salir más allá del radio de descarga y volver; comprobar que **no reaparecen indebidamente**. Guardar y cargar SaveV2 en un sector fronterizo, si se autoriza integración con la demo real.
+5. Prueba de transición: entrar/salir de casa, cueva y ciudad interior; cámara y personaje aparecen en coordenada/entrada correcta sin doble spawn.
+6. QA automático futuro `QA-BOT-001` puede recorrer fronteras y comprobar que nunca se ve terreno vacío, aparecen colisiones rotas ni se pierden eventos.
+7. Repetir sobre el hardware objetivo, medir 1% low/frame time, picos CPU/GPU, VRAM, RAM y tiempos máximos de aparición. No asumir streaming mejor que A antes del experimento.
+
+### Decisión técnica por ahora
+
+**Recomendación provisional:** diseñar el mundo exterior como **una experiencia continua construida con regiones/chunks**, y mantener interiores en escenas aisladas con transición. Aplazar el sistema completo de streaming hasta que la escala, las mediciones y las pruebas con mapas justifiquen su coste de implementación. Evitar construir una sola textura gigantesca o un único nodo/malla indivisible para todo el continente.
+
+**Relaciones:** `ART-WORLD-004` mapas 2.5D; `ART-TEX-NOISE-008` y `ART-FX-RAIN-009` efectos por regiones; `ART-FX-FOG-001` niebla por zona; `QA-BOT-001` (cuaderno separado de QA) pruebas de tránsito entre chunks.
+
+**Documentación oficial de Godot 4.x:**
+- Carga en segundo plano: https://docs.godotengine.org/en/stable/tutorials/io/background_loading.html
+- API `ResourceLoader`: https://docs.godotengine.org/en/stable/classes/class_resourceloader.html
+- Seguridad del árbol de escenas y threads: https://docs.godotengine.org/en/stable/tutorials/performance/thread_safe_apis.html
+- `TileMapLayer`, cuadrantes de render/colisión: https://docs.godotengine.org/en/stable/classes/class_tilemaplayer.html
+- Optimización CPU / cantidad de nodos: https://docs.godotengine.org/en/stable/tutorials/performance/cpu_optimization.html
+
+---
+
 ## Registro de cambios
+
+- **2026-11-11 — ART-WORLD-STREAM-010:** transcripción completa de Guinxu sobre piezas frente a mapa único, propuesta del usuario de exterior continuo con carga alrededor de la cámara, margen de precarga e interiores con transición. Se definen riesgos, condiciones de streaming, persistencia y ensayo A/B para Godot; sin implementación.
 
 - **2026-11-11 — ART-FX-RAIN-009:** transcripción completa de Guinxu sobre suelo mojado, normal maps, flipbooks, partículas, crossfade y cambio de clima; adaptación por niveles a mapas 2D con recursos generables sin ilustraciones manuales. Sin implementar. Se comprobó que ART-LIGHT-002 (iluminación anime) permanece registrada.
 
