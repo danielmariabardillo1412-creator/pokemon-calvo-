@@ -1,3 +1,17 @@
+# Actualización vinculante — LEGACY RED → GREEN certificado, 2026-11-11
+
+El informe inferior es el estado **histórico anterior a la autorización IA6**. IA6 autorizó después exactamente tres hunks de `WildAdventureSession` y W03 los ejecutó. **El antiguo bloqueo de seis aserciones ya está RESUELTO en la staging W03.**
+
+- CI [#43068968046](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/43068968046) `completed/success`, código SHA `5a82da2a9dd1a868c3f8af9d73551fe16571adea`. Test **original inalterado** `W03_REPEAT_V2_GODOT PASS checks=37`, sin waiver. Repeat nativa 26/18, Net nativa 79/19, Moon 41, SaveV2 40/8, menta/rope/libros 18/65/20 PASS.
+- Commit exacto `0bf1bb2c`, blob Wild `f8aacfdeb24a317d865717c98add76712a3b8196`, 3 hunks/1 archivo. No se alteró motor JS, mundo, mochila, RNG ni fuentes ajenas.
+- Informe nuevo con pruebas, permisos, límites y SHA: `reports/W03/CONTINUOUS_V4_LEGACY_REDGREEN_20261111.md`. Checkpoint actual: `CONTINUOUS_V4/STATE_W03.md`.
+- **Sigue BLOQUEADO** el merge conjunto de **repelentes** con W05/IA6; no se integró en la rama IA6 oficial. Estado `READY_FOR_IA6_MERGE_CAPTURE / REPEL_SHARED_SEAM_PENDING`, **NO READY_FOR_FULL_MERGE**.
+- Ninguna CI aquí acredita la suite íntegra de CAMP003–006/V1–V3; únicamente las puertas concretas ejecutadas.
+
+---
+
+## Archivo histórico previo a esta reparación (para trazabilidad)
+
 # IA3/W03 — CONTINUOUS V4 STAGING · ENTREGA SELECTIVA NATIVA / BLOQUEOS PROTEGIDOS
 
 **Fecha:** 2026-11-11. **Rama staging exclusiva:** `codex/calvo-ia6-staging-20261111-w03-capture`.
