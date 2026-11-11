@@ -1,0 +1,161 @@
+{
+  "schema_version": 2,
+  "campaign": "W02_CONTINUOUS_V2",
+  "block": "01",
+  "proof_scope": "field_use_only_no_held_combat_claim",
+  "format": "gen9calvounifiedv1",
+  "level": 100,
+  "modes": [
+    "active",
+    "none",
+    "reserve"
+  ],
+  "item_ids": [
+    "cheri_berry",
+    "chesto_berry",
+    "pecha_berry",
+    "rawst_berry",
+    "aspear_berry",
+    "oran_berry"
+  ],
+  "cases": [
+    {
+      "id": "cheri_berry",
+      "scenario": "cheri_berry_cures_paralysis",
+      "kind": "field_medicine",
+      "status": "paralysis",
+      "cures_status": true,
+      "cures_confusion": false,
+      "start_hp": "full",
+      "heal_amount": 0,
+      "applies": true
+    },
+    {
+      "id": "cheri_berry",
+      "scenario": "cheri_berry_does_not_cure_poison",
+      "kind": "field_medicine",
+      "status": "poison",
+      "cures_status": false,
+      "cures_confusion": false,
+      "start_hp": "full",
+      "heal_amount": 0,
+      "applies": false
+    },
+    {
+      "id": "chesto_berry",
+      "scenario": "chesto_berry_cures_sleep",
+      "kind": "field_medicine",
+      "status": "sleep",
+      "cures_status": true,
+      "cures_confusion": false,
+      "start_hp": "full",
+      "heal_amount": 0,
+      "applies": true,
+      "expect_sleep_clock_clear": true
+    },
+    {
+      "id": "chesto_berry",
+      "scenario": "chesto_berry_does_not_cure_paralysis",
+      "kind": "field_medicine",
+      "status": "paralysis",
+      "cures_status": false,
+      "cures_confusion": false,
+      "start_hp": "full",
+      "heal_amount": 0,
+      "applies": false
+    },
+    {
+      "id": "pecha_berry",
+      "scenario": "pecha_berry_cures_badly_poisoned",
+      "kind": "field_medicine",
+      "status": "badly_poisoned",
+      "cures_status": true,
+      "cures_confusion": false,
+      "start_hp": "full",
+      "heal_amount": 0,
+      "applies": true
+    },
+    {
+      "id": "pecha_berry",
+      "scenario": "pecha_berry_does_not_cure_burn",
+      "kind": "field_medicine",
+      "status": "burn",
+      "cures_status": false,
+      "cures_confusion": false,
+      "start_hp": "full",
+      "heal_amount": 0,
+      "applies": false
+    },
+    {
+      "id": "rawst_berry",
+      "scenario": "rawst_berry_cures_burn",
+      "kind": "field_medicine",
+      "status": "burn",
+      "cures_status": true,
+      "cures_confusion": false,
+      "start_hp": "full",
+      "heal_amount": 0,
+      "applies": true
+    },
+    {
+      "id": "rawst_berry",
+      "scenario": "rawst_berry_does_not_cure_poison",
+      "kind": "field_medicine",
+      "status": "poison",
+      "cures_status": false,
+      "cures_confusion": false,
+      "start_hp": "full",
+      "heal_amount": 0,
+      "applies": false
+    },
+    {
+      "id": "aspear_berry",
+      "scenario": "aspear_berry_cures_freeze",
+      "kind": "field_medicine",
+      "status": "freeze",
+      "cures_status": true,
+      "cures_confusion": false,
+      "start_hp": "full",
+      "heal_amount": 0,
+      "applies": true
+    },
+    {
+      "id": "aspear_berry",
+      "scenario": "aspear_berry_does_not_cure_paralysis",
+      "kind": "field_medicine",
+      "status": "paralysis",
+      "cures_status": false,
+      "cures_confusion": false,
+      "start_hp": "full",
+      "heal_amount": 0,
+      "applies": false
+    },
+    {
+      "id": "oran_berry",
+      "scenario": "oran_missing_7_hp",
+      "kind": "field_medicine",
+      "status": "",
+      "cures_status": false,
+      "cures_confusion": false,
+      "start_hp": "missing_7",
+      "heal_amount": 10,
+      "applies": true
+    },
+    {
+      "id": "oran_berry",
+      "scenario": "oran_full_hp_does_not_spend",
+      "kind": "field_medicine",
+      "status": "",
+      "cures_status": false,
+      "cures_confusion": false,
+      "start_hp": "full",
+      "heal_amount": 10,
+      "applies": false
+    }
+  ],
+  "limitations": [
+    "No certifica autouso en combate de bayas equipadas",
+    "No acredita Persim, Aguav, Iapapa o Mago",
+    "CI SUCCESS solo sobre SHA de codigo correspondiente"
+  ]
+}
