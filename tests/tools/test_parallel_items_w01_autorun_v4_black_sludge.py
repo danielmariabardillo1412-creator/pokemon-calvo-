@@ -17,7 +17,7 @@ def main():
  assert '"sludge_poison_heal"' in old and '"sludge_nonpoison_damage"' in old
  native=(R/"tests/tools/repro_w01_autorun_v4_black_sludge_native.cjs").read_text(encoding="utf-8")
  gd=(R/"tests/gameplay/parallel_items_w01_autorun_v4_black_sludge.gd").read_text(encoding="utf-8")
- for word in ("NativeEngine","gengar","caterpie","1/16","1/8","restore","W01_V4_NATIVE PASS id=black_sludge"):assert word in native,word
+ for word in ("NativeEngine","gengar","caterpie","max_hp/16","max_hp/8","restore","W01_V4_NATIVE PASS id=black_sludge"):assert word in native,word
  for word in ("service.equip(","FieldSession.new(","settle_finished_battle(","_roundtrip(","W01_V4_L3_ROW PASS row=09 id=black_sludge"):assert word in gd,word
  print("W01_V4_SLUDGE_PY PASS row=09 checks=9")
 if __name__=="__main__":main()
