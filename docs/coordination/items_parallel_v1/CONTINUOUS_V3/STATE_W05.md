@@ -1,3 +1,39 @@
+# W05 — CONTINUOUS_V3 · READY_FOR_IA6 · CAMPAÑA V3 COMPLETA
+Fecha: 2026-11-11 (Europe/Madrid).
+- worker: W05
+- branch: codex/calvo-items-20261109-w05-books-ui
+- mission_version: CONTINUOUS_V3/PLAN_W05.md
+- phase: A+B+C COMPLETADAS (3/3), no STOP artificial 10/10
+- next_id: READY_FOR_IA6; sin trabajo independiente pendiente en plan V3
+- current_code_sha_certified: 803561dd6a0253458c576762d74b3c62435299fa
+- last_green_run_id: 42957930359
+- ci_pending: NO; completed/success; verify y Windows PCK/runtime isolation SUCCESS
+- objects_new_v3: 0
+- existing_machine_books: 229/229 certificados previamente; no contarlos como nuevos
+- l3_true: FieldItemBag REAL W05 + panel Godot + FieldItemService auténtico + SaveV2 manual; fachada mínima FieldDemo simulada, no mundo integrado real
+- new_native_godot_checks: 173 PASS; slots 0/1/2/3, cancelación, un consumo, no double spend, Party/Storage, stock agotado, lock, propietario, selección stale, PP, SaveV2, sin autosave ni doble señal
+- python_contract: W05_V3_BAG_STRUCTURAL PASS
+- windows_exe_bytes: 635399144
+- windows_pck_bytes: 526379480
+- pck_spanish_translations: 229/229 + helper runtime cargado desde PCK
+- blocked_internal: 0; integración IA6 distinta y convivencia W03 siguen sin certificar en W05
+- owned_files_changed: scenes/visual/field_item_bag.gd; tests/gameplay/parallel_items_w05_continuous_v3.gd; tests/tools/test_parallel_items_w05_continuous_v3.py; .github/workflows/parallel-w05-books-ui-20261109.yml; reports/W05/CONTINUOUS_V3_FINAL.md; CONTINUOUS_V3/W05_COLLISION_AUDIT.md; STATE_W05.md
+- protected_tickets: la rama IA6 ya tiene BookPanel y Cuerda Huida, W03 además tiene repelentes. No cherry-pick completo de FieldItemBag; integrar por funciones y certificar CI IA6. Windows visual/GPU, Android y presupuesto de distribución pendientes.
+- next_safe_action: IA6 debe consultar reports/W05/CONTINUOUS_V3_FINAL.md y CONTINUOUS_V3/W05_COLLISION_AUDIT.md y fusionar solo cambios imprescindibles en su rama. W05 no puede tocar otros módulos. STOP por campaña agotada hasta nueva misión explícita.
+
+## Recibos verificables
+CI: https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/42957930359
+SHA exacto: 803561dd6a0253458c576762d74b3c62435299fa
+- W05_V3_BAG_STRUCTURAL PASS mount=1 service_shared=1 callback=1 item_use_nonmachine_preserved=1
+- W05_V3_NATIVE_BAG_GODOT PASS slots=4 real_bag=1 owner=1 spent_once=1 double_spend=0 storage=1 stale=1 lock=1 savev2=1 signals=1 checks=173
+- W05_V5_PCK_PROBE PASS records=229 runtime_samples=4 helper=1 source=pck_only
+- W05_V2_PACKAGE PASS exe_bytes=635399144 pck_bytes=526379480 growth_guard_bytes=698924019 tracked_workspace_files=19893 windows_runtime_manual=UNVERIFIED android=UNVERIFIED
+- Dos intentos anteriores fallaron/cancelaron en instrumentación, nunca se cuentan como CI final: #42957381981 Godot tipado; #42957563964 verify verde pero export interrumpido por siguiente revisión.
+- Los commits documentales posteriores a SHA probado no alteran código; no se tocó main, V28, PR118, IA6, W03 ni módulos protegidos.
+
+---
+## Checkpoint previo (histórico)
+
 # W05 — CAMPAÑA CONTINUA V3 · checkpoint de ejecución (no cierre)
 Fecha: 2026-11-11 (Europe/Madrid)
 - worker: W05
