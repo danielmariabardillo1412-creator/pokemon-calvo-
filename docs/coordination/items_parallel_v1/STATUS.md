@@ -1,3 +1,11 @@
+# IA6 — ESTADO OPERATIVO ACTUAL · 2026-11-11
+
+**SE HAN PUBLICADO NUEVAS MISIONES EN LAS CUATRO RAMAS FINALIZADAS:** W02 V3 (participación real / EXP Share sin activar XP global), W03 V3 (Heavy/Moon/Beast con productor auténtico), W04 V3 (7 evoluciones regionales L3 con permiso mínimo compartido), W05 V3 (panel MT dentro de FieldItemBag solo en su rama). W01 sigue V2 Fase B (26 equipables autorizados, 2 placas con CI piloto SUCCESS y acumulativas en seguimiento); NO reiniciarla. **Las cinco notas IA6_AUTORUN.md fueron leídas y verificadas; hay checkpoint V3 para las cuatro renovadas.** Informe [CONTINUOUS_V3/IA6_HANDOFF_20261111.md](CONTINUOUS_V3/IA6_HANDOFF_20261111.md).
+
+El usuario puede pulsar `p` para que W02–W05 arranquen nuevas fases, y W01 continúe la ya vigente. Sin STOP cada diez; STOP solo al agotar misión o topar arquitectura protegida. **Rama integrada IA6 aún no recertificada**: trabajo propio pendiente de integración selectiva W01–W05 y CI conjunta. main/V28/PR118 protegidas.
+
+---
+
 # IA6 — CAMPAÑAS CONTINUAS V2 ACTUALMENTE VIGENTES · 2026-11-11
 
 **CAMBIO CONFIRMADO EN LAS CINCO RAMAS:** `docs/coordination/items_parallel_v1/IA6_AUTORUN.md` ahora incorpora `CONTINUOUS_V2/PLAN_W0X.md` y la regla **NO STOP CADA DIEZ**. Cada ventana avanza varias etapas preautorizadas por especialidad sin pedir otra tanda a IA6; escribe un checkpoint `docs/coordination/items_parallel_v1/CONTINUOUS_V2/STATE_W0X.md` en SU rama. Documentación maestra [CONTINUOUS_V2/README.md](CONTINUOUS_V2/README.md). Colas [W01](CONTINUOUS_V2/PLAN_W01.md) / [W02](CONTINUOUS_V2/PLAN_W02.md) / [W03](CONTINUOUS_V2/PLAN_W03.md) / [W04](CONTINUOUS_V2/PLAN_W04.md) / [W05](CONTINUOUS_V2/PLAN_W05.md).
