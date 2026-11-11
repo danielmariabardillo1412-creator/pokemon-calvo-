@@ -1,3 +1,11 @@
+# IA6 — W04 · RELEVO A V5 YA PUBLICADO · 2026-11-11
+
+**V4 CERRADA / NO REPETIR.** La entrega de W04 V4 alcanzó READY_FOR_IA6_MERGE_CANDIDATE: CI #42965322073 SUCCESS, SHA funcional cdd53fb1d61a3aeb8790818aa571e13f9afbaed8; 7/7 evoluciones con objetos verificadas en staging. Esta rama V4 queda como evidencia para IA6; no se reabre ni se mezcla.
+
+**NUEVO TRABAJO ACTIVADO POR IA6:** rama exclusiva `codex/calvo-items-20261111-w04-regional-level-v5`. En la próxima `p`, si el árbol de trabajo local está limpio y los cambios V4 pendientes están publicados, cambia a ESA rama, lee `docs/coordination/items_parallel_v1/IA6_AUTORUN.md` allí y `CONTINUOUS_V5/STATE_W04.md`; comienza la FASE A de 10 evoluciones regionales por nivel. Las fases A→B→C están preautorizadas y no exigen otra tanda de IA6. No copiar cambios locales sucios; no reiniciar V4, no tocar `main`, V28, PR118, ramas ajenas ni integradora oficial.
+
+---
+
 # IA6 — W04 · NUEVA MISIÓN CONTINUA V4 EN RAMA STAGING
 **Estado:** ACTIVA. **Rama ÚNICA de esta misión:** codex/calvo-ia6-staging-20261111-w04-evolution.
 **Origen de confianza:** plan IA6 en rama árbitra codex/calvo-items-20261101-arbitro: docs/coordination/items_parallel_v1/CONTINUOUS_V4/PLAN_W04.md; reglas generales docs/coordination/items_parallel_v1/CONTINUOUS_V4/README.md. **Base fija** e63b2e6c7e175fba318cc2f562bebd1769589092 (IA6 integradora, conserva exclusión dynamax_candy).
