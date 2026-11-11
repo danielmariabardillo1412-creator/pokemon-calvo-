@@ -25,6 +25,7 @@ Este cuaderno recoge efectos, técnicas, referencias y posibles mejoras para la 
 | `ART-WORLD-004` | Arquitectura de mapas 2.5D: personajes 3D y escenarios 2D con sensación de volumen | APARCADA / DISEÑO COMPARATIVO | Alta al empezar mapas |
 | `ART-REF-005` | Referencia ISO-CORE / JohnBrx: terreno con relieve y representación 2D | REFERENCIA TÉCNICA / VERIFICADA PARCIALMENTE | Alta |
 | `ART-REF-006` | Referencia Pokémon Luminescent Platinum (mod BDSP) | REFERENCIA VISUAL, NO PRUEBA DE MAPA 2D | Media |
+| `ART-FX-TRAIL-007` | Rastros y huellas 2D reutilizables para nieve, barro, arena y otras superficies | APARCADA / INVESTIGACIÓN | Alta en zonas de terreno especial |
 
 ---
 
@@ -179,7 +180,75 @@ Estado: IDEA | INVESTIGAR | APARCADA | PROTOTIPO_AUTORIZADO | DESCARTADA
 
 ---
 
+## ART-FX-TRAIL-007 — Huellas y rastros dinámicos sobre superficies 2D
+
+- **Fecha:** 2026-11-11.
+- **Estado:** APARCADA para la fase artística. **No implementar ni asignar ahora a IA1–IA5.**
+- **Referencia observada por el usuario:** Pere Gamedev, «DESARROLLADOR INDIE IMPLEMENTA UN TRAIL EN 2D SOBRE LA NIEVE» (vídeo de 29 s; captura del usuario): https://www.youtube.com/watch?v=xjjtBN2IPzA
+- **Juego identificado en la propia descripción del vídeo:** **No Name Village**, de **PieMastah**; juego 2D de aventura/RPG desarrollado con **GameMaker**, publicado comercialmente el 13 de septiembre de 2025. Referencia: https://store.steampowered.com/app/2201500/No_Name_Village/ y demo https://piemastah.itch.io/no-name-village.
+- **Qué se ha visto en la captura:** un personaje pixel art caminando por nieve con un camino o rastro visible sobre la superficie blanca; se trata de un efecto gráfico para terreno **2D**.
+- **Límite de evidencia:** la página del vídeo identifica juego y efecto, pero no se ha extraído una transcripción o código fuente que confirme el **algoritmo interno exacto** de PieMastah. Los mecanismos descritos debajo son propuestas técnicas para Pokémon Calvo, NO una atribución comprobada a su motor.
+
+### Propósito para Pokémon Calvo
+
+No limitar la idea a nieve: crear **un sistema reutilizable basado en el tipo de superficie**. El movimiento de jugador, NPC o criatura puede dejar huellas que expresen interacción física sin tener que deformar una malla de terreno 3D.
+
+| Suelo | Apariencia del rastro | Persistencia y respuesta sugeridas |
+|---|---|---|
+| Nieve | Pisadas comprimidas, surco más oscuro/azulado y posible borde claro; partículas mínimas opcionales | Se mantienen durante un rato; nieve reciente puede cubrirlas |
+| Barro | Huella oscura y húmeda, arrastre irregular, bordes salpicados | Persistencia mayor; posible secado progresivo |
+| Arena | Marca con relieve aparente y borde granulado | Difuminado por viento o al salir de la zona |
+| Tierra/ceniza | Pisada, polvo acumulado o suelo removido | Desvanecimiento según material |
+| Hierba | Aplastamiento local del patrón de vegetación | Recuperación gradual; no implica alterar colisión |
+| Agua superficial | Ondas o salpicaduras (variante visual distinta, **no** una huella permanente) | Duración muy breve |
+
+**No confundir gráficos con gameplay:** las huellas no modifican por defecto velocidad, encuentros, combate ni persistencia de SaveV2. Cualquier efecto jugable es una decisión independiente futura.
+
+### Arquitectura propuesta en Godot 4.x (específica para mapas 2D / 2.5D)
+
+**Primera versión experimental preferida: estampación de huellas/surcos en una máscara 2D.**
+
+1. El controlador del personaje identifica el material del suelo bajo sus pies (`TileMapLayer` con datos personalizados de superficie, o zonas/áreas equivalentes según la arquitectura final).
+2. Al avanzar una distancia suficiente o dispararse un evento de contacto de pie, emite un **sello** (*stamp*) en coordenadas del mapa: posición, orientación, forma de huella, intensidad y material.
+3. Un `SubViewport` 2D o render target por zona acumula estas marcas en una textura/máscara. Un shader del suelo combina máscara con nieve, barro, arena, etc. Para persistencia temporal se requiere una forma controlada de disipar o regenerar marcas, sin lectura/escritura simultánea insegura de la misma textura.
+4. La máscara altera **color, normales aparentes, sombras y textura**, generando sensación de hundimiento o arrastre sin cálculos de deformación volumétrica ni miles de objetos individuales. Para relieve auténtico sería otra opción más costosa.
+5. Delimitar el historial por sala o fragmentos (*chunks*); no guardar indefinidamente todas las pisadas del mundo. Sincronizar desplazamiento de cámara/mapa y limpieza al descargar zonas.
+6. Optimizar por evento/distancia de movimiento, no por creación de nodos/sprites ilimitados cada frame; usar resolución moderada, atlas compartido y criterios de culling. Medir memoria, coste de actualización y *overdraw*.
+
+**Alternativa simple para el primer test:** huellas como sprites/decal 2D reciclables con vida limitada, evitando un sistema de máscara complejo si bastan pocas pisadas. Comparar contra la máscara acumulativa; elegir según el resultado y los tamaños reales de mapa.
+
+**Relación con ART-WORLD-004 (mapas 2.5D):** calcular huellas sobre coordenadas 2D del suelo independientemente de que la apariencia del personaje provenga de un modelo 3D. Hay que sincronizar la ubicación de **los pies** renderizados, no solamente el centro del personaje. Resolver qué dibuja por delante/detrás y la escala de las huellas según perspectiva fija.
+
+### Prototipo futuro obligatorio, no ejecutar ahora
+
+1. Una habitación pequeña de mapa de prueba con superficies de nieve y barro, personaje móvil y una cámara normal.
+2. Validar caminar, correr, girar, detenerse y volver a pisar un rastro: las huellas no deben multiplicarse sin control ni saltar de posición.
+3. Cambiar el material sin reescribir el sistema, solo sus ajustes visuales. Ensayar después arena.
+4. Comparar **sprites reciclados vs. máscara de huellas**; revisar que los surcos no atraviesen piedras, paredes o nieve que esté sobre otros planos.
+5. Probar varias huellas, limpieza, cambio de mapa y cámara. No exigir guardar rastros entre sesiones en SaveV2 salvo autorización expresa.
+6. Medir CPU/GPU, FPS, VRAM y coherencia de estética DS/GBA; elegir presupuesto y opciones de calidad cuando se fije plataforma objetivo.
+
+### Riesgos
+
+- «Es 2D, así que no cuesta casi nada» es una hipótesis excesiva: memoria de textura, transparencia, efectos de borde y sellos frecuentes pueden consumir recursos.
+- El sistema de huellas superficiales es diferente a simular barro con física real; evitar prometer deformación física del terreno o colisiones.
+- Si la cámara y el mapa son isométricos, hay que preservar la proyección y ordenar correctamente el render.
+- En personajes 3D sobre fondo 2D (ART-WORLD-004), el punto de contacto real de ambos pies necesita una interfaz coherente.
+- Las huellas pueden ensuciar la lectura visual, especialmente en mapas pixel art pequeños; debe haber intensidad configurable y opción de desactivación.
+
+### Referencias técnicas comparables (no constituyen prueba del método original del juego)
+
+- Ibrahim Afara, **Dynamic Snow Footprints**: demostración y desglose de render target acumulativo, control de superficie y reutilización para barro, arena y ruedas: https://iafara.me/work/snow-footprints/
+- Hugo Leblanc, **Deformable Snow Trails in Unity URP with Render Textures** (2026): textura de marcas y mapa de alturas; ejemplo 3D adaptable conceptualmente a 2D: https://hugoleblanc.fr/devlog/unity-snow-trails/
+- Demo original de No Name Village por PieMastah en GameMaker, útil para observar el resultado gráfico y estilo, **no como fuente de código interno**: https://piemastah.itch.io/no-name-village
+
+**Próxima condición de estudio:** cuando alcance la fase artística, revisar la transcripción/explicación completa de Pere Gamedev si está disponible y separar su método real de nuestro prototipo recomendado.
+
+---
+
 ## Registro de cambios
+
+- **2026-11-11:** ART-FX-TRAIL-007; referencia No Name Village/PieMastah y trail de nieve 2D, posible sistema compartido de huellas para nieve/barro/arena; sin implementación ni órdenes para trabajadoras.
 
 - **2026-11-11:** añadido diseño comparativo 2.5D para modelos 3D con mapas 2D, ISO-CORE/JohnBrx y Pokémon Luminescent Platinum. Se distingue referencia 2D isométrica de mod basado en mapas 3D; sin autorización de implementación.
 - **2026-11-11:** creado el cuaderno con niebla reactiva 2D/volumen aparente, iluminación («lighting axis» no identificado) y referencia de divulgador @PereGamedev. Exclusión expresa de tareas de desarrollo actual.
