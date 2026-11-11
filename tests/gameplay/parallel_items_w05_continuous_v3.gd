@@ -98,6 +98,16 @@ func check_slots() -> void:
 			and direct_use.get("reason", "") == "machine_panel_required"
 			and state(svc.owner) == untouched)
 		var old_move: StringName = svc.owner.owned_creature(POKEMON).moveset[slot].move_id
+		# Explicit no-replacement cancellation must not mutate the real bag.
+		var before_cancel: String = state(svc.owner)
+		bag._moves.select(0)
+		bag._moves.item_selected.emit(0)
+		bag._machine_panel.teach_button.pressed.emit()
+		check("real bag cancellation keeps book and creature",
+			not bag._machine_panel.last_result.get("accepted", false)
+			and bag._machine_panel.last_result.get("reason", "") == "move_replacement_required"
+			and state(svc.owner) == before_cancel)
+		if slot == 1: clear_save()
 		bag._moves.select(slot + 1)
 		bag._moves.item_selected.emit(slot + 1)
 		check("bag replacement slot transmitted to panel", bag._machine_panel._slot() == slot
@@ -122,6 +132,7 @@ func check_slots() -> void:
 		check("PP canonical after bag click", moved != null and def != null
 			and moved.current_pp == def.pp and moved.max_pp == def.pp)
 		if slot == 1:
+			check("no surprise autosave on teaching", not FileAccess.file_exists(SAVE))
 			check_save(svc.owner, &"tm31", &"metal_claw", old_move)
 		var after_once: String = state(svc.owner)
 		bag._machine_panel.teach_button.pressed.emit()
