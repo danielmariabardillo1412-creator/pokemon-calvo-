@@ -29,6 +29,8 @@ on:
       - 'tests/gameplay/parallel_items_w03_net_native_v5_transform.gd'
       - 'tests/gameplay/parallel_items_w03_net_v5_context_regression.gd'
       - 'tests/gameplay/parallel_items_w03_continuous_v2_b01.gd'
+      - 'tests/gameplay/parallel_items_w03_continuous_v2_b02.gd'
+      - 'tests/tools/test_parallel_items_w03_continuous_v2_sources.py'
       - 'modules/gameplay/showdown_adventure_session.gd'
       - 'docs/coordination/items_parallel_v1/reports/W03/AUTORUN_V3_PROGRESS.csv'
       - 'modules/capture/caught_species_history_w03.gd'
@@ -177,6 +179,18 @@ jobs:
           set -euo pipefail
           timeout 900s godot --headless --path . --script res://tests/gameplay/parallel_items_w03_continuous_v2_b01.gd 2>&1 | tee camp006-w03-continuous-v2-b01.log
           grep -E '^W03_CONT_V2_B01 PASS ids=10 captured=10 checks=[1-9][0-9]*$' camp006-w03-continuous-v2-b01.log
+      - name: W03 V2 continuous B02 native capture family
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 900s godot --headless --path . --script res://tests/gameplay/parallel_items_w03_continuous_v2_b02.gd 2>&1 | tee camp006-w03-continuous-v2-b02.log
+          grep -E '^W03_CONT_V2_B02 PASS ids=8 captured=8 checks=[1-9][0-9]*$' camp006-w03-continuous-v2-b02.log
+      - name: W03 V2 regional source provenance and blocked context audit
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tests/tools/test_parallel_items_w03_continuous_v2_sources.py 2>&1 | tee camp006-w03-continuous-v2-source.log
+          grep -E '^W03_CONT_V2_SOURCE PASS checked=25 blocked_context=7 partial_zone=2 checks=[1-9][0-9]*$' camp006-w03-continuous-v2-source.log
       - name: Native field SaveV2 and capture regression
         shell: bash
         run: |
