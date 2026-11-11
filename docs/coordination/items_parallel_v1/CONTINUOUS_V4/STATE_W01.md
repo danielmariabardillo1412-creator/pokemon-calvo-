@@ -60,3 +60,11 @@
 - Cobertura nueva que busca revalidación: CAMP001/Transform/policy, V1/CAMP002, 10 rutas L3. No afirmar cobertura completa de T01–04, V2 y CAMP003–005.
 - Históricos faltantes: runner CAMP003→CAMP004→CAMP005 y TANDA04 dependiente de TANDA03. No copiar clases completas ni hacer merge de ramas divergentes.
 - **Siguiente p:** comprobar CI real de esta puerta y, si GREEN, inspeccionar escenarios/negativos de origen para construir adaptador puntual de los faltantes y puerta incremental; si RED, corregir solo seam de tests W01. `READY_FOR_IA6_MERGE` pendiente, integración IA6 NO, producción modificada 0.
+
+## Continuación p — CI parcial verificada y brechas auditadas (2026-11-11)
+- Puerta parcial V4 [CI #43069765360](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/43069765360): `stage_baseline`, `stage_v1_camp002`, `stage_held_l3` los tres `completed/success`, commit de workflow probado `54cce127b95221ce48c332f55ec5d06ab7367d72`.
+- Informe de gaps `reports/W01/CONTINUOUS_V4_PHASE_C_GAP_MATRIX.md` publicado, commit `1e189e96dd7773f18f7b8a43fae6e01fd0d64177`.
+- Analizados runners históricos fuente: CAMP004 exige 79 escenarios/185 pares; CAMP005 90 escenarios/272 pares, con RNG positivo/negativo. CAMP003 cubre Quick Claw, Focus Band y Air Balloon. TANDA03 gemas 18 incluye consumos/legacy/reemplazo. Suite L3 staging actualmente solo 10 rutas de Restos, Baya Zidra y Tabla Draco.
+- **Estado:** `PHASE_C_PARTIAL_GATE_PASS`. No promover a `READY_FOR_IA6_MERGE` por regresiones CAMP003–005, TANDA01–04 completas y V2 aún sin cobertura equivalenciada en staging.
+- **Siguiente p autorizada:** crear test autónomo pequeño en staging para negativos deterministas de gemas (duplicación, reserva, reemplazo y legacy) usando infraestructura existente; lanzar CI SHA propia. Posteriormente casos RNG de CAMP003–005 y matriz de placas. No importar runners heredados ni tocar producción protegida.
+- Integración oficial IA6 NO; cambios de producción en V4 0.
