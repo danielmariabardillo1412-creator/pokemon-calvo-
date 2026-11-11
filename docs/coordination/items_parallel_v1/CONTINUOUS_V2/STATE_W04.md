@@ -1,21 +1,25 @@
-# W04 — CONTINUOUS V2 / CHECKPOINT B01–B03 (2026-11-11)
+# W04 — CONTINUOUS_V2 · READY_FOR_IA6 (2026-11-11)
 
 - worker: W04
 - branch: `codex/calvo-items-20261104-w04-camp006`
-- mission: `CONTINUOUS_V2/PLAN_W04.md` in IA6 arbitration branch.
-- current_block: **B03 implementation/QA prepared; CI pending**.
-- next_id: verify `parallel-w04-continuous-v2.yml` CI status on HEAD and inspect logs. Repair only W04-owned helpers, tests or workflow if failed. Publish READY_FOR_IA6 after genuine CI success; if CI cannot be observed keep PENDING.
-- B01: **57 regional species; 28 EvolutionRecord** extracted, committed in `reports/W04/CONTINUOUS_V2_REGIONAL_EVOLUTION_MATRIX.csv`; 11 statically runtime compatible, 7 item routes conditional on catalog, 10 data-only/unsupported.
-- B02: pure resolver for seven actual regional use_item routes, with positive/negative Godot test written. **CI not yet certified.** Already historically certified: 2 Galarica L2, do not count as new. Max possible new L2 contracts here = 5, subject to test.
-- B03: `tests/gameplay/w04_continuous_v2_regional_persistence.gd` added: Factory source and targets, canonical source/destination form, Party/Storage, native guard, SaveV2, legacy/corrupt checks. **These are Factory-created creatures, NOT evolved outputs.** CI not yet certified.
-- latest workflow: `.github/workflows/parallel-w04-continuous-v2.yml` rewritten cleanly, single suite with B02+B03, V5/V4/V3/V2, Python and Godot CAMP003–006 and resolvers, plus uploaded logs.
-- objects_new_certified: 0.
-- L2_new_certified: 0 pending CI; L2_historical: 2.
-- L3_real: 0; no bag consumption/owner replacement/rollback.
-- blocked: Exeggutor Alola hidden Harvest policy, regional native `form_id` target and atomic item integration require IA6 shared seam.
-- last_green_sha: `18bc8cbf0a2135b34516cf857e6e36824c920244` for T05 only; **not V2**.
-- last_green_run: `42922194326` for T05 only; **not V2**.
-- new_V2_CI_success: **NOT VERIFIED**. GitHub connector available here does not expose push workflow run listing/dispatch; no current run ID has been confirmed.
-- workflow_commit: `980b9e74c92b0fdd3bfd8a8305fc20a17b91dd72`.
-- protected: the prior out-of-scope `EvolutionSystem` change was reverted to content blob SHA `2f684ae11f36c6c2183a7100b9015c3f6c906f49`. Do not reintroduce without IA6.
-- next_safe_action: verify CI, address any actual errors, then mark READY_FOR_IA6 with exact results and ticket for shared evolution consumer. No further candidate IDs outside B01 matrix.
+- mission_version: `CONTINUOUS_V2/PLAN_W04.md` en rama árbitra
+- phase: **B01/B02/B03 finalizadas en el alcance autorizado**
+- block: **READY_FOR_IA6**
+- next_id: ninguna tarea independiente pendiente en el plan V2; no inventar B04
+- examined: 57 especies regionales, 28 EvolutionRecord; 7 rutas use_item
+- new_objects: 0
+- L2_certified: **7 rutas totales, 5 nuevas y 2 ya certificadas en T05**
+- L3_native_item_evolution: **0**
+- historical_forms: 55/56 positivas, 1 bloqueada por habilidad oculta
+- last_green_code_sha: `c7ab98d1b0a2cac0ebbcfe74f1e27fee36d00f17`
+- last_green_run_id: **42945615987**
+- last_green_run_status: **completed / success**
+- ci_pending: **NO para SHA funcional**; commit documental posterior requiere no atribuirle CI del SHA funcional
+- B02: `W04_V2_B02 PASS checks=59 routes=7 L2=7 blocked=0 L3=0`
+- B03: `W04_V2_B03 PASS checks=179 L3=0`, creación Factory/Party/Storage/SaveV2; NO evolución real
+- regresiones: V5/V4/V3/V2 y CAMP003–006 Python/Godot PASS; V1 queue migration CI PASS (202 checks)
+- owned_files_changed: matriz de EvolutionRecord, resolver W04 V2, pruebas B02/B03, workflow V2, test Python de reconocimiento explícito de CONTINUOUS_V2 y documentos
+- protected: EvolutionSystem, FieldItemService, FieldItemBag, CreatureInstance, SaveV2 y Factory sin modificaciones autorizadas de W04. Cambio experimental previo de EvolutionSystem revertido a blob `2f684ae11f36c6c2183a7100b9015c3f6c906f49`.
+- protected_tickets: corrección de forma regional DEL DESTINO al evolucionar, integración mochila/consumo/sustitución/rollback, naturaleza efectiva W02, Exeggutor Alola habilidad oculta no autorizada
+- handoff: `docs/coordination/items_parallel_v1/reports/W04/CONTINUOUS_V2_READY_FOR_IA6.md`
+- next_safe_action: IA6 revisa informe y ejecuta integración selectiva en rama IA6. W04 se detiene solo porque el plan está agotado, no porque un bloque tenga 10/10.
