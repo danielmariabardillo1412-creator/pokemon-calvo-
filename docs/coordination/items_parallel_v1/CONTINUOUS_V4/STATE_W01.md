@@ -164,3 +164,10 @@
 - Workflow `.github/workflows/w01-continuous-v4-camp003-flame-orb.yml`, commit `5949857bd761a2bf2d09656a13a11e179f6a45bd`; [CI #43134930971](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/43134930971) realmente `in_progress` al ver GitHub, aún no PASS.
 - CAMP003 completa, CAMP004–005, TANDAS completas NO certificadas en staging; READY_FOR_IA6_MERGE=NO e integración oficial IA6 NO. Cambios de producción 0.
 - Siguiente `p`: comprobar CI #43134930971; si FAIL inspeccionar el job/log y corregir exclusivamente runner W01 sin relajar nueve casos; si PASS avanzar otro equipable CAMP003 pendiente.
+
+## Continuación p — Llamasfera PASS; Casco Dentado en CI (2026-11-12)
+- [CI Llamasfera #43134930971](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/43134930971): job `camp003_flame_orb completed/success` comprobado directamente. 9 rutas sobre quemadura fin de turno, inmunidad tipo Fuego, SaveV2.
+- Del fixture histórico CAMP003 se extrajeron `rocky_helmet_incoming_contact` con semillas 19/23, y `rocky_helmet_noncontact` seed 19. Test autónomo `tests/gameplay/w01_continuous_v4_camp003_rocky_helmet.gd` commit `61df6a77f1ef351b1d8e073079e66e9c006c09ca`. Tres variantes de equipamiento para cada uno de tres casos: 9 sesiones nativas, recoil a atacante únicamente si ataque rival de contacto conecta con portador activo, ausencia con Water Gun y portadores en reserva, persistencia exacta de checkpoint+owner SaveV2, no consumo.
+- Workflow `.github/workflows/w01-continuous-v4-camp003-rocky-helmet.yml` commit `257841f7f244b06ef982fadbe0dfde5af823cee8`; [CI #43136788662](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/43136788662) iniciada, `in_progress` según página de workflow. **Aún NO PASS**.
+- Aún faltan regresiones completas CAMP003–005/TANDAS previas. `READY_FOR_IA6_MERGE=NO`, integración IA6 NO, producción 0 cambios.
+- Próxima `p`: comprobar CI #43136788662, revisar logs si falla y reparar solo test W01. Si PASS, seguir con otras regresiones CAMP003 sin importar runners heredados.
