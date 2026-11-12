@@ -105,7 +105,7 @@ func one(catalog: DefinitionCatalog, source: StringName, target: StringName,
     # a successfully settled battle in this runner. stop_now is the pre-existing
     # cleanup API; do not modify protected PipeClient or hide the open IA6 issue.
     await session.close()
-    print("W04_V7_CLOSE_STAGE ", label, " graceful_close_returned")
+    print("W04_V7_CLOSE_STAGE ", label, " forced_close_returned")
 
 func _run() -> void:
     var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(Overlay.CANONICAL))
