@@ -1,0 +1,14 @@
+# W03 — CONTINUOUS V7 · CHECKPOINT INICIAL / 2026-11-12
+- worker: W03
+- branch: codex/calvo-items-20261112-w03-black-white-flutes-v7
+- previous_V6_dusk: READY_FOR_IA6_MERGE_DUSK_CAVE_CANDIDATE, CI #43125138000 SUCCESS, code a5733eb3683222d302ec6ed084bb1ac69575b9ce
+- V7 plan: docs/coordination/items_parallel_v1/CONTINUOUS_V7/PLAN_W03.md arbiter and full copy in IA6_AUTORUN.md
+- phase: A PENDING, authentic on_step chance source, flute semantics by generation, red tests
+- IDs: black_flute, white_flute (2 already selected FIELD_USE; 0 new IDs)
+- V7 L3: 0/2
+- optional_classic_profile: calvo_flutes_classic_encounter_rate_v1 (Gen III/IV rules; not a claim that Gen IX works the same)
+- need_prove: Bag real no spend; native step chance modification; no stack; inverse cancels; Repel interop; valid SaveV2 and old save; actual map boundary if producer exists
+- V7 code SHA/CI: NONE
+- official IA6 integration: NO for V6 and V7 until central selective merge with strict CI
+- next_p: read W03 plan, locate actual field step and map identity, RED, then minimal live effect + CI, or dependency ticket if map transition cannot be proved
+- safeguards: W05 books, W03 rope/repel/capture/Dusk, W02 mint, ownership, replay RNG, main/V28/PR118, official integration, dynamax_candy exclusion.
