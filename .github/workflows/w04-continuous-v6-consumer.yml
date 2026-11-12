@@ -73,7 +73,7 @@ jobs:
           POKEMON_CALVO_NODE: node
         run: |
           set -euo pipefail
-          timeout 1500s godot --headless --path . --script res://tests/gameplay/w04_continuous_v6_native_battle_ui.gd 2>&1 | tee w04-v6-native.log
+          timeout 180s godot --headless --path . --script res://tests/gameplay/w04_continuous_v6_native_battle_ui.gd 2>&1 | tee w04-v6-native.log
           grep -E '^W04_V6_NATIVE PASS checks=[1-9][0-9]* pilots=2 accepted=2 declined=2$' w04-v6-native.log
       - name: Ten regional level-up routes V5
         shell: bash
