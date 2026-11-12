@@ -63,11 +63,17 @@ func _transport_failure(reason: String) -> Dictionary:
 
 
 func close(tree: SceneTree) -> bool:
+	print("W04_V7_PIPE_STAGE entry pid=", pid)
 	if _stdio != null and _stdio.is_open():
+		print("W04_V7_PIPE_STAGE before_exchange")
 		await exchange(tree, {"op": "shutdown"}, 1000)
+		print("W04_V7_PIPE_STAGE after_exchange")
 		_stdio.close()
+		print("W04_V7_PIPE_STAGE after_stdio_close")
 	if _stderr != null and _stderr.is_open(): _stderr.close()
+	print("W04_V7_PIPE_STAGE before_timer")
 	await tree.create_timer(0.03).timeout
+	print("W04_V7_PIPE_STAGE after_timer")
 	if pid >= 0 and OS.is_process_running(pid): OS.kill(pid)
 	var stopped := pid < 0 or not OS.is_process_running(pid)
 	pid = -1
