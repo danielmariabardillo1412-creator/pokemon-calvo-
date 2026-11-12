@@ -43,7 +43,7 @@ func one(catalog: DefinitionCatalog, source: StringName, target: StringName,
     foe.current_hp = 1
     var session := Session.new(catalog, owner, {}, "gen9calvounifiedv1")
     var opened: bool = await session.begin_wild(self, foe, [23, 19, 29, 43])
-    check(opened, label + "_native_battle_opens")
+    check(opened, label + "_native_battle_opens_" + session.last_error)
     if not opened: await session.close(); return
     var view: Control = View.new()
     view.catalogs = catalog
