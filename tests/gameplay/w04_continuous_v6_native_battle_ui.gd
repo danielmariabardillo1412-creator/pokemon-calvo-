@@ -45,28 +45,34 @@ func one(catalog: DefinitionCatalog, source: StringName, target: StringName,
     check(owner.party.add_creature(mon), label + "_added")
     var foe := create(catalog, &"caterpie", 50, StringName("w04_v6_foe_" + label))
     foe.current_hp = 1
+    print("W04_V6_NATIVE_STAGE ", label, " session_new")
     var session := Session.new(catalog, owner, {}, "gen9calvounifiedv1")
     var opened: bool = await session.begin_wild(self, foe, [23, 19, 29, 43])
     check(opened, label + "_native_battle_opens_" + session.last_error)
     if not opened: await session.close(); return
+    print("W04_V6_NATIVE_STAGE ", label, " opened")
     var view: Control = View.new()
     view.catalogs = catalog
     get_root().add_child(view)
     await process_frame
     view.session = session
     view.player = owner
+    print("W04_V6_NATIVE_STAGE ", label, " submitting")
     check((await session.submit("move 1", session.revision)).get("accepted", false)
         and session.phase() == "finished", label + "_native_kill")
     if session.phase() != "finished":
         view.queue_free(); await session.close(); return
     check(mon.level == min_level - 1, label + "_xp_staged_before_settle")
+    print("W04_V6_NATIVE_STAGE ", label, " settling")
     view._settle()
+    print("W04_V6_NATIVE_STAGE ", label, " settled")
     check(session.completion_reason == "VICTORY" and mon.level == min_level,
         label + "_actual_post_battle_xp")
     check(view.has_pending_evolution_w04(), label + "_real_pending_choice")
     check(view._evolution_choices_w04.visible and view._continue_button.disabled,
         label + "_visible_ui_and_return_locked")
     check(owner.owned_creature(mon.instance_id) == mon, label + "_no_automatic_evolution")
+    print("W04_V6_NATIVE_STAGE ", label, " deciding")
     if accept:
         view._evolution_choices_w04.chosen.emit(String(target))
         accepted += 1
@@ -93,8 +99,10 @@ func one(catalog: DefinitionCatalog, source: StringName, target: StringName,
         check(loaded.party.get_creature(mon.instance_id).to_dict() == resulting.to_dict(),
             label + "_savev2_identity")
     DirAccess.remove_absolute(ProjectSettings.globalize_path(path))
+    print("W04_V6_NATIVE_STAGE ", label, " closing")
     view.queue_free()
     await session.close()
+    print("W04_V6_NATIVE_STAGE ", label, " closed")
 
 func _run() -> void:
     var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(Overlay.CANONICAL))
