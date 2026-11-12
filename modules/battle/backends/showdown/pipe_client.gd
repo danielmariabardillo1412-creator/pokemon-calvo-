@@ -91,7 +91,11 @@ func close(tree: SceneTree) -> bool:
 	if forced:
 		var error := OS.kill(worker_pid)
 		if error != OK: push_warning("W04_V7_PIPE_CLOSE kill_error=" + str(error))
+	print("W04_V7_PIPE_STEP before_stdio_close pid=", worker_pid,
+		" running=", worker_pid >= 0 and OS.is_process_running(worker_pid),
+		" sent=", shutdown_sent, " forced=", forced)
 	if _stdio != null and _stdio.is_open(): _stdio.close()
+	print("W04_V7_PIPE_STEP after_stdio_close_close_method")
 	print("W04_V7_PIPE_STEP before_stderr_close")
 	if _stderr != null and _stderr.is_open(): _stderr.close()
 	print("W04_V7_PIPE_STEP after_stderr_close")
