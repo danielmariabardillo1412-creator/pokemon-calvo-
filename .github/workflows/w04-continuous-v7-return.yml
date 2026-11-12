@@ -20,6 +20,10 @@ on:
       - 'tests/gameplay/w04_continuous_v5_level_up.gd'
       - 'tests/tools/test_w04_continuous_v5_level.py'
       - 'docs/coordination/items_parallel_v1/CONTINUOUS_V5/STATE_W04.md'
+      - 'tests/gameplay/w04_continuous_v7_native_mint_boundary.gd'
+      - 'tests/gameplay/w04_continuous_v6_consumer.gd'
+      - 'tests/gameplay/w04_continuous_v6_native_battle_ui.gd'
+      - 'docs/coordination/items_parallel_v1/CONTINUOUS_V7/STATE_W04.md'
   workflow_dispatch:
 permissions:
   contents: read
@@ -76,6 +80,67 @@ jobs:
           set -euo pipefail
           timeout 180s godot --headless --path . --script res://tests/gameplay/w04_continuous_v7_return_map.gd 2>&1 | tee w04-v7-map.log
           grep -E '^W04_V7_MAP PASS checks=[1-9][0-9]* cycles=2 closed=2$' w04-v7-map.log
+      - name: Python strict route inventory and excluded mechanics
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tests/tools/test_w04_continuous_v5_level.py | tee w04-v7-python.log
+          grep -E '^W04_V5_PY PASS routes=10 conditional=6 trade=1 special=4 regional=57$' w04-v7-python.log
+      - name: Postbattle consumer acceptance decline real owner SaveV2 and native prompt
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 1500s godot --headless --path . --script res://tests/gameplay/w04_continuous_v6_consumer.gd 2>&1 | tee w04-v7-consumer.log
+          grep -E '^W04_V6_CONSUMER PASS checks=[1-9][0-9]* pilots=2 accepted=4 declined=4$' w04-v7-consumer.log
+      - name: Native postbattle evolution prompt real Showdown two routes
+        shell: bash
+        env:
+          POKEMON_CALVO_NODE: node
+        run: |
+          set -euo pipefail
+          timeout 180s godot --headless --path . --script res://tests/gameplay/w04_continuous_v6_native_battle_ui.gd 2>&1 | tee w04-v7-native.log
+          grep -E '^W04_V6_NATIVE PASS checks=[1-9][0-9]* pilots=2 accepted=2 declined=2$' w04-v7-native.log
+      - name: Ten regional level-up routes V5
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 1500s godot --headless --path . --script res://tests/gameplay/w04_continuous_v5_level_up.gd 2>&1 | tee w04-v7-level.log
+          grep -E '^W04_V5 PASS checks=[1-9][0-9]* routes=10 owners=20$' w04-v7-level.log
+      - name: Seven item evolutions V4 and W02 nature
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 1500s godot --headless --path . --script res://tests/gameplay/w04_continuous_v3_real_evolution.gd 2>&1 | tee w04-v7-items.log
+          grep -E '^W04_V3_L3 PASS checks=[1-9][0-9]* routes=7 ownership=14 rollback=2$' w04-v7-items.log
+      - name: Regional encounters 55 of 56
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 1500s godot --headless --path . --script res://tests/gameplay/w04_autorun_v3_all_regional.gd 2>&1 | tee w04-v7-forms.log
+          grep -E '^W04_AUTORUN_V3_ALL PASS checks=[1-9][0-9]* examined=56 native_functional=55 blocked=1$' w04-v7-forms.log
+      - name: Regional normal abilities V4
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 900s godot --headless --path . --script res://tests/gameplay/w04_autorun_v4_ability.gd 2>&1 | tee w04-v7-ability.log
+          grep -E '^W04_AUTORUN_V4 PASS checks=[1-9][0-9]* promoted=4 blocked=1$' w04-v7-ability.log
+      - name: Exclusion dynamax candy
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          data = json.load(open('config/item_selection_v1.json', encoding='utf-8'))
+          assert 'dynamax_candy' in data['excluded_ids']
+          print('W04_V6_DYNAMAX_EXCLUSION PASS')
+          PY
+      - name: W02 minted nature native import incompatibility documented
+        shell: bash
+        env:
+          POKEMON_CALVO_NODE: node
+        run: |
+          set -euo pipefail
+          timeout 120s godot --headless --path . --script res://tests/gameplay/w04_continuous_v7_native_mint_boundary.gd 2>&1 | tee w04-v7-mint.log
+          grep -E '^W04_V7_MINT_DEP PASS checks=[1-9][0-9]* reproduced=2 unresolved=2$' w04-v7-mint.log
       - name: Preserve V7 logs
         if: always()
         uses: actions/upload-artifact@v4
