@@ -1,3 +1,13 @@
+# IA6 — RELEVO DIRECTO V7 2026-11-12 · W03 · ANULAR ORDENES HISTÓRICAS INFERIORES
+
+**TRABAJO EN ESTA RAMA HISTÓRICA TERMINADO.** Los relevos V3/V4/V5/V6 descritos más abajo SON HISTORIA y no deben activarse ni volver a repetirse. IA6 ha publicado una nueva misión concreta V7 con su CI independiente.
+
+**AL SIGUIENTE `p`:** comprobar/publicar cambios locales de esta rama si existieran; cambiar a la RAMA V7 `codex/calvo-items-20261112-w03-black-white-flutes-v7` y leer ALLÍ `docs/coordination/items_parallel_v1/IA6_AUTORUN.md` + `docs/coordination/items_parallel_v1/CONTINUOUS_V7/STATE_W03.md`. Ejecutar fase A desde el primer pendiente, continuar B/C sin esperar nueva tanda. Esta instrucción prevalece sobre las antiguas bajo este encabezado.
+
+No modificar esta rama antigua ni rama oficial IA6/main/V28/PR118; `dynamax_candy` sigue excluido. No atribuir los CI antiguos a nuevas modificaciones. Sin trabajo asíncrono.
+
+---
+
 # IA6 — RELEVO NUEVA CAMPAÑA 12-11-2026 · W03 · LEE PRIMERO
 
 **ESTA RAMA ANTIGUA YA HA TERMINADO. NO REPETIR CAMPAÑA ANTERIOR.** IA6 ha publicado trabajo NUEVO y AUTORIZADO: Bola Ocaso en cueva real (capturas y repelentes anteriores integrados por IA6).
