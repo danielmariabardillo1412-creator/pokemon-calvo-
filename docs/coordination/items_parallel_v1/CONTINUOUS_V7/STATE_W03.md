@@ -29,3 +29,19 @@ Protected: main, V28, PR118, arbiter integration, other W branches, dynamax_cand
 - Commit-status query for this SHA returned **0 checks**, and the GitHub workflow-runs lookup returned **0 runs** (the latter only covers PR-triggered runs). Consequently no completed CI, no run URL, and no Godot PASS are claimed.
 - Branch state stays **V7 0/2 L3**. No integration into IA6.
 - Next executable action: establish an actual Actions execution for the V7 workflow; check logs, repair any genuine test failures; then produce real native RED and minimal bag/world wiring. Do not call the published YAML an executed test.
+
+
+## 2026-11-12 · siguiente p — cableado funcional staging publicado, sin certificación
+- `8545bc27`: `field_demo.gd` instala efecto clásico **solo en staging V7** sobre copia de `WildEncounterTable` tras el modificador existente y antes de `WildEncounterSystem.resolve`. El mismo mundo valida la propiedad del objeto, guarda el estado de flauta y rechaza estado corrupto antes de publicar carga; save legacy sin clave queda inactivo. Configuración reiniciada limpia la flauta. Nunca invoca segundo RNG ni consume inventario.
+- `8b390828`: `field_item_bag.gd` incluye despachador de flautas fuera de batalla sin Pokémon destino; consulta inventario real y reutiliza guardas de campo, no llama `use_item` consumible.
+- `0d395caa`: prueba **escrita, todavía NO ejecutada** de mochila real, zonas físicas registradas, copia de tablas, stock, serialización nativa, legacy y corrupción.
+- `9649da8f`: workflow V7 se amplía con prueba del campo y regresiones Repel + Dusk. Se mantienen unitarias estrictas; esto NO sustituye regresiones de todo el repositorio.
+- GitHub combined statuses para `9649da8f`: lista vacía; consulta de runs del conector lista vacía (esta consulta solo cubre PR). **No se ha observado CI real ni logs Godot. Ningún PASS certificado.**
+- La semántica de vida hasta cambio de mapa sigue **bloqueada**: `technical_overworld` expone `region`, pero no se ha probado `map_id` estable ni un evento real de carga de otro mapa. **Clasificación provisional del código: L2_CONTEXT_ONLY/map-transition-pending; L3 V7=0/2.**
+- El test de integración es cobertura diseñada, no evidencia de éxito. Faltan pasos físicos y semillas ejecutadas, guardia adversarial completo, CI oficial y merge selectivo de IA6. No contar dos IDs nuevos.
+- Main, V28, PR118, ramas W ajenas e IA6 oficial no modificadas por W03.
+
+### Próximo p
+1. Obtener ejecución de workflow V7 y logs exactos; corregir fallos reales de parse o test, sin relajar aserciones.
+2. Añadir pruebas negativas, repeles simultáneos, tasa exacta en pasos físicos reales y guardado/carga posterior a transición.
+3. Exigir fuente auténtica de **map ID** o ticket de infraestructura; no ascender a L3 ni declarar campaña cerrada mientras falte esa garantía.
