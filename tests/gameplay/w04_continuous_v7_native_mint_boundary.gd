@@ -21,7 +21,7 @@ func make(catalog: DefinitionCatalog, sid: StringName, lvl: int,
         {"instance_id": id, "nature_id": &"hardy", "moves": [&"quick_attack"]})
 
 func _run() -> void:
-    var parsed := JSON.parse_string(FileAccess.get_file_as_string(Overlay.CANONICAL))
+    var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(Overlay.CANONICAL))
     check(parsed is Dictionary, "canonical")
     if not parsed is Dictionary: quit(1); return
     var catalogs := GameData.from_dict(parsed).to_definition_catalog()
