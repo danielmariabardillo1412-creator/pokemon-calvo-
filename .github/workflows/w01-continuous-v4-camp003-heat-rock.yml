@@ -1,4 +1,4 @@
-name: W01 V4 staging CAMP003 Heat Rock Reflect duration and SaveV2
+name: W01 V4 staging CAMP003 Heat Rock Sunny Day duration and SaveV2
 on:
   push:
     branches:
