@@ -1,0 +1,184 @@
+name: IA6 Official W01 held item native QA - gems plates CAMP003
+on:
+  push:
+    branches:
+      - codex/calvo-ia6-integration-20261109
+    paths:
+      - '.github/workflows/ia6-official-w01-held-qa-20261112.yml'
+      - 'tests/gameplay/w01_continuous_v4_*.gd'
+      - 'tests/tools/test_w01_v4_held_staging_preflight.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  gems:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: chickensoft-games/setup-godot@v2.4.1
+        with:
+          version: 4.7.0
+          use-dotnet: false
+          include-templates: false
+      - name: Restore resources and native engine
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tests/tools/test_w01_v4_held_staging_preflight.py
+          python -B tools/distribution/restore_resources.py
+          python -B tools/distribution/restore_resources.py --check
+          mkdir -p data/reports
+          cp ci/fixtures/pokeapi_reports/forms_policy_report.json data/reports/forms_policy_report.json
+          cp ci/fixtures/pokeapi_reports/unsupported_mechanics.json data/reports/unsupported_mechanics.json
+          cp ci/fixtures/pokeapi_reports/import_summary.json data/reports/import_summary.json
+          godot --headless --path . --import 2>&1 | tee import.log
+          if grep -E 'SCRIPT ERROR|Parse Error' import.log; then exit 1; fi
+          echo "POKEMON_CALVO_NODE=$(command -v node)" >> "$GITHUB_ENV"
+          python -B tools/battle_reference/run.py --install --limit 1 2>&1 | tee reference.log
+          grep -F 'BATTLE_REFERENCE PASS' reference.log
+      - name: Exact native gems regressions on merged IA6 W02-W05
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 1100s godot --headless --path . --script res://tests/gameplay/w01_continuous_v4_stage_held_l3.gd 2>&1 | tee w01-stage_held_l3.log
+          grep -E '^W01_V4_STAGE_L3 PASS ' w01-stage_held_l3.log
+          if grep -E 'SCRIPT ERROR|Parse Error|^W01_V4_STAGE_L3 FAIL ' w01-stage_held_l3.log; then exit 1; fi
+          timeout 1100s godot --headless --path . --script res://tests/gameplay/w01_continuous_v4_gem_lifecycle.gd 2>&1 | tee w01-gem_lifecycle.log
+          grep -E '^W01_V4_GEM_LIFECYCLE PASS ' w01-gem_lifecycle.log
+          if grep -E 'SCRIPT ERROR|Parse Error|^W01_V4_GEM_LIFECYCLE FAIL ' w01-gem_lifecycle.log; then exit 1; fi
+          timeout 1100s godot --headless --path . --script res://tests/gameplay/w01_continuous_v4_gem_negative.gd 2>&1 | tee w01-gem_negative.log
+          grep -E '^W01_V4_GEM_NEGATIVE PASS ' w01-gem_negative.log
+          if grep -E 'SCRIPT ERROR|Parse Error|^W01_V4_GEM_NEGATIVE FAIL ' w01-gem_negative.log; then exit 1; fi
+          timeout 1100s godot --headless --path . --script res://tests/gameplay/w01_continuous_v4_gem_legacy.gd 2>&1 | tee w01-gem_legacy.log
+          grep -E '^W01_V4_GEM_LEGACY PASS ' w01-gem_legacy.log
+          if grep -E 'SCRIPT ERROR|Parse Error|^W01_V4_GEM_LEGACY FAIL ' w01-gem_legacy.log; then exit 1; fi
+          timeout 1100s godot --headless --path . --script res://tests/gameplay/w01_continuous_v4_typed_gems.gd 2>&1 | tee w01-typed_gems.log
+          grep -E '^W01_V4_TYPED_GEMS PASS ' w01-typed_gems.log
+          if grep -E 'SCRIPT ERROR|Parse Error|^W01_V4_TYPED_GEMS FAIL ' w01-typed_gems.log; then exit 1; fi
+          timeout 1100s godot --headless --path . --script res://tests/gameplay/w01_continuous_v4_remaining_gems.gd 2>&1 | tee w01-remaining_gems.log
+          grep -E '^W01_V4_REMAINING_GEMS PASS ' w01-remaining_gems.log
+          if grep -E 'SCRIPT ERROR|Parse Error|^W01_V4_REMAINING_GEMS FAIL ' w01-remaining_gems.log; then exit 1; fi
+      - name: Preserve QA evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ia6-w01-gems-${{ github.run_id }}
+          if-no-files-found: ignore
+          retention-days: 7
+          path: '*.log'
+  plates:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: chickensoft-games/setup-godot@v2.4.1
+        with:
+          version: 4.7.0
+          use-dotnet: false
+          include-templates: false
+      - name: Restore resources and native engine
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tests/tools/test_w01_v4_held_staging_preflight.py
+          python -B tools/distribution/restore_resources.py
+          python -B tools/distribution/restore_resources.py --check
+          mkdir -p data/reports
+          cp ci/fixtures/pokeapi_reports/forms_policy_report.json data/reports/forms_policy_report.json
+          cp ci/fixtures/pokeapi_reports/unsupported_mechanics.json data/reports/unsupported_mechanics.json
+          cp ci/fixtures/pokeapi_reports/import_summary.json data/reports/import_summary.json
+          godot --headless --path . --import 2>&1 | tee import.log
+          if grep -E 'SCRIPT ERROR|Parse Error' import.log; then exit 1; fi
+          echo "POKEMON_CALVO_NODE=$(command -v node)" >> "$GITHUB_ENV"
+          python -B tools/battle_reference/run.py --install --limit 1 2>&1 | tee reference.log
+          grep -F 'BATTLE_REFERENCE PASS' reference.log
+      - name: Exact native plates regressions on merged IA6 W02-W05
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 1100s godot --headless --path . --script res://tests/gameplay/w01_continuous_v4_plate_pilot.gd 2>&1 | tee w01-plate_pilot.log
+          grep -E '^W01_V4_PLATE_PILOT PASS ' w01-plate_pilot.log
+          if grep -E 'SCRIPT ERROR|Parse Error|^W01_V4_PLATE_PILOT FAIL ' w01-plate_pilot.log; then exit 1; fi
+          timeout 1100s godot --headless --path . --script res://tests/gameplay/w01_continuous_v4_remaining_plates.gd 2>&1 | tee w01-remaining_plates.log
+          grep -E '^W01_V4_PLATES_REMAINING PASS ' w01-remaining_plates.log
+          if grep -E 'SCRIPT ERROR|Parse Error|^W01_V4_PLATES_REMAINING FAIL ' w01-remaining_plates.log; then exit 1; fi
+      - name: Preserve QA evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ia6-w01-plates-${{ github.run_id }}
+          if-no-files-found: ignore
+          retention-days: 7
+          path: '*.log'
+  camp003:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: chickensoft-games/setup-godot@v2.4.1
+        with:
+          version: 4.7.0
+          use-dotnet: false
+          include-templates: false
+      - name: Restore resources and native engine
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tests/tools/test_w01_v4_held_staging_preflight.py
+          python -B tools/distribution/restore_resources.py
+          python -B tools/distribution/restore_resources.py --check
+          mkdir -p data/reports
+          cp ci/fixtures/pokeapi_reports/forms_policy_report.json data/reports/forms_policy_report.json
+          cp ci/fixtures/pokeapi_reports/unsupported_mechanics.json data/reports/unsupported_mechanics.json
+          cp ci/fixtures/pokeapi_reports/import_summary.json data/reports/import_summary.json
+          godot --headless --path . --import 2>&1 | tee import.log
+          if grep -E 'SCRIPT ERROR|Parse Error' import.log; then exit 1; fi
+          echo "POKEMON_CALVO_NODE=$(command -v node)" >> "$GITHUB_ENV"
+          python -B tools/battle_reference/run.py --install --limit 1 2>&1 | tee reference.log
+          grep -F 'BATTLE_REFERENCE PASS' reference.log
+      - name: Exact native camp003 regressions on merged IA6 W02-W05
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 1100s godot --headless --path . --script res://tests/gameplay/w01_continuous_v4_camp003_balloon.gd 2>&1 | tee w01-camp003_balloon.log
+          grep -E '^W01_V4_BALLOON PASS ' w01-camp003_balloon.log
+          if grep -E 'SCRIPT ERROR|Parse Error|^W01_V4_BALLOON FAIL ' w01-camp003_balloon.log; then exit 1; fi
+          timeout 1100s godot --headless --path . --script res://tests/gameplay/w01_continuous_v4_camp003_vest.gd 2>&1 | tee w01-camp003_vest.log
+          grep -E '^W01_V4_C003_VEST PASS ' w01-camp003_vest.log
+          if grep -E 'SCRIPT ERROR|Parse Error|^W01_V4_C003_VEST FAIL ' w01-camp003_vest.log; then exit 1; fi
+          timeout 1100s godot --headless --path . --script res://tests/gameplay/w01_continuous_v4_camp003_quick_claw.gd 2>&1 | tee w01-camp003_quick_claw.log
+          grep -E '^W01_V4_C003_CLAW PASS ' w01-camp003_quick_claw.log
+          if grep -E 'SCRIPT ERROR|Parse Error|^W01_V4_C003_CLAW FAIL ' w01-camp003_quick_claw.log; then exit 1; fi
+          timeout 1100s godot --headless --path . --script res://tests/gameplay/w01_continuous_v4_camp003_focus_band.gd 2>&1 | tee w01-camp003_focus_band.log
+          grep -E '^W01_V4_C003_FOCUS_BAND PASS ' w01-camp003_focus_band.log
+          if grep -E 'SCRIPT ERROR|Parse Error|^W01_V4_C003_FOCUS_BAND FAIL ' w01-camp003_focus_band.log; then exit 1; fi
+          timeout 1100s godot --headless --path . --script res://tests/gameplay/w01_continuous_v4_camp003_flame_orb.gd 2>&1 | tee w01-camp003_flame_orb.log
+          grep -E '^W01_V4_C003_FLAME_ORB PASS ' w01-camp003_flame_orb.log
+          if grep -E 'SCRIPT ERROR|Parse Error|^W01_V4_C003_FLAME_ORB FAIL ' w01-camp003_flame_orb.log; then exit 1; fi
+      - name: Preserve QA evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ia6-w01-camp003-${{ github.run_id }}
+          if-no-files-found: ignore
+          retention-days: 7
+          path: '*.log'
