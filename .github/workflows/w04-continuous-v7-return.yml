@@ -75,15 +75,7 @@ jobs:
         run: |
           set -euo pipefail
           timeout 180s godot --headless --path . --script res://tests/gameplay/w04_continuous_v7_return_map.gd 2>&1 | tee w04-v7-map.log
-          grep -E '^W04_V7_MAP PASS checks=[1-9][0-9]* cycles=2 closed=2
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: w04-v7-${{ github.run_id }}
-          retention-days: 7
-          if-no-files-found: ignore
-          path: w04-v7-*.log
- w04-v7-map.log
+          grep -E '^W04_V7_MAP PASS checks=[1-9][0-9]* cycles=2 closed=2$' w04-v7-map.log
       - name: Preserve V7 logs
         if: always()
         uses: actions/upload-artifact@v4
