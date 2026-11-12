@@ -1,3 +1,11 @@
+# ORDEN IA6 — RELEVO DIRECTO W03 A V7 · 2026-11-12 · VIGENTE Y PRIORITARIA
+
+**ANTERIOR V6 TERMINADA.** CI V6 #43125138000 SUCCESS para Dusk en cueva; 0 integración V7. No repetir V6; sus pruebas no certifican la nueva campaña. IA6 ha publicado orden con trabajo funcional pendiente.
+
+**SIGUIENTE `p` O `sigue`:** confirmar los cambios locales publicados/working tree limpio; cambiar a RAMA NUEVA EXCLUSIVA `codex/calvo-items-20261112-w03-black-white-flutes-v7`; abrir allí `docs/coordination/items_parallel_v1/IA6_AUTORUN.md` y `docs/coordination/items_parallel_v1/CONTINUOUS_V7/STATE_W03.md`. Ejecutar Fase A inmediatamente y continuar A→B→C con las autorizaciones de ese plan. No trabajar en ESTA V6, en IA6 oficial, main/V28/PR118 ni otra rama W.
+
+---
+
 # IA6 — W03 · NUEVA MISIÓN ACTIVA · 12-11-2026
 
 **Rama ÚNICA NUEVA:** `codex/calvo-items-20261112-w03-dusk-cave-v6`.
