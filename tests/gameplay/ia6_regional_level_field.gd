@@ -3,7 +3,7 @@ extends SceneTree
 const Routes = preload("res://modules/creatures/progression/regional_level_evolution_contract_w04_v5.gd")
 const Forms = preload("res://modules/creatures/progression/canonical_form_identity_w04.gd")
 const OUT := "res://.godot/items_integration_20261111/level_field/"
-const PENDING_BALLS := [&"heavy_ball", &"beast_ball", &"love_ball", &"dusk_ball", &"dive_ball", &"lure_ball"]
+const PENDING_BALLS := [&"heavy_ball", &"beast_ball", &"love_ball", &"dive_ball", &"lure_ball"]
 const PENDING_HELD := [&"amulet_coin", &"exp_share", &"luck_incense"]
 var scene: Node2D
 var bridge: Node
@@ -159,7 +159,7 @@ func check_pending_items() -> void:
 		var result: Dictionary = await view.session.capture(item_id, view.session.revision)
 		check("pending ball unavailable without spending or advancing battle " + String(item_id), not listed
 			and not result.get("accepted", false) and view.session.snapshot() == snapshot)
-	check("ordinary move still works after all six rejections", await win())
+	check("ordinary move still works after all pending ball rejections", await win())
 	await bridge.leave_battle()
 
 

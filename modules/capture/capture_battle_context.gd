@@ -23,4 +23,7 @@ var previously_caught_base_species: bool = false
 # W03 V3 Moon Stone producer; untrusted defaults reject Moon Ball attempts.
 var moon_stone_context_known: bool = false
 var target_evolves_with_moon_stone: bool = false
+# Authored OverworldEncounterZone supplied by the field bridge's live source.
+# Unknown/stale/invalid source stays empty and MUST NOT grant Dusk bonus.
+var native_field_zone_id: StringName = &""
 

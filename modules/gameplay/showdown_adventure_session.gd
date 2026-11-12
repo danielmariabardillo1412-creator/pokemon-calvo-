@@ -17,6 +17,9 @@ var _command_busy := false
 var _settled := false
 var _capture_rng := RandomNumberGenerator.new()
 var _escape_rng := RandomNumberGenerator.new()
+# W03 V6 ephemeral, field-bound provenance. Never persisted as a cave flag.
+var _native_zone_source: Callable = Callable()
+var _native_zone_target_id: StringName = &""
 const Medicine = preload("res://modules/inventory/battle_medicine_profile.gd")
 const Escape = preload("res://modules/inventory/battle_escape_profile.gd")
 const BattleSupport = preload("res://modules/inventory/battle_support_profile.gd")
@@ -161,6 +164,22 @@ func _record_spent(id: StringName) -> void:
 	_spent_items[String(id)] = int(_spent_items.get(String(id), 0)) + 1
 
 
+# Exclusively the field bridge supplies a live source from a registered
+# physical EncounterZone. Direct sessions/unknown producer receive no bonus.
+func bind_native_field_source(source: Callable, original_target_id: StringName) -> bool:
+	if battle_kind != "wild" or not has_active_battle() or not source.is_valid() or original_target_id == &"":
+		return false
+	var wild: CreatureInstance = battle_state().active_for_side(&"side_b")
+	if wild == null or wild.instance_id != original_target_id:
+		return false
+	var zone := StringName(String(source.call()))
+	if zone not in [&"technical_cave_floor", &"technical_grass"]:
+		return false
+	_native_zone_source = source
+	_native_zone_target_id = original_target_id
+	return true
+
+
 func capture(ball_id: StringName, expected_revision: int) -> Dictionary:
 	if not _external_ready(expected_revision): return _command_rejected("invalid_capture_boundary")
 	_command_busy = true
@@ -174,6 +193,12 @@ func capture(ball_id: StringName, expected_revision: int) -> Dictionary:
 	var catcher := battle_state().active_for_side(&"side_a")
 	if catcher != null: context.catcher_level = catcher.level
 	var target := _persistent_copy(battle_state().active_for_side(&"side_b"))
+	# Re-evaluate field provenance at attempt time. A changed target, closed
+	# source node or moved player cannot inherit a previous cave multiplier.
+	if target != null and target.instance_id == _native_zone_target_id and _native_zone_source.is_valid():
+		var actual_zone := StringName(String(_native_zone_source.call()))
+		if actual_zone in [&"technical_cave_floor", &"technical_grass"]:
+			context.native_field_zone_id = actual_zone
 	# W03 staging: owner-ledger source for Repeat; no party/storage inference.
 	# Moon uses only the target's canonical base species and source evolution record.
 	if target != null:

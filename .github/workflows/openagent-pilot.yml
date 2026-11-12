@@ -1,0 +1,74 @@
+name: OpenAgent pilot verification
+
+on:
+  push:
+    branches: [codex/openagent-pilot-20261112]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: openagent-pilot-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  dusk:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: chickensoft-games/setup-godot@v2.4.1
+        with:
+          version: 4.7.0
+          use-dotnet: false
+          include-templates: false
+      - name: Verify source and install pinned runtime resources
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tests/tools/test_openagent_dusk_source_guard.py
+          python -B tests/tools/test_parallel_items_w03_continuous_v3_sources.py
+          godot --version | grep -E '^4[.]7([.-]|$)'
+          python -B tools/distribution/restore_resources.py
+          python -B tools/distribution/restore_resources.py --check
+          mkdir -p data/reports pilot-logs
+          cp ci/fixtures/pokeapi_reports/{forms_policy_report,unsupported_mechanics,import_summary}.json data/reports/
+          godot --headless --path . --import 2>&1 | tee pilot-logs/import.log
+          if grep -E 'SCRIPT ERROR|Parse Error' pilot-logs/import.log; then exit 1; fi
+          python -B tools/battle_reference/run.py --install --limit 1 2>&1 | tee pilot-logs/runtime.log
+          grep -F 'BATTLE_REFERENCE PASS' pilot-logs/runtime.log
+          echo "POKEMON_CALVO_NODE=$(command -v node)" >> "$GITHUB_ENV"
+      - name: Verify effect, ownership, capture and save regressions
+        shell: bash
+        run: |
+          set -euo pipefail
+          run() {
+            local name="$1" pattern="$2" log="pilot-logs/$1.log"
+            godot --headless --path . --script "res://tests/gameplay/$name.gd" 2>&1 | tee "$log"
+            grep -E "$pattern" "$log"
+            if grep -E 'SCRIPT ERROR|Parse Error' "$log"; then exit 1; fi
+          }
+          run parallel_items_w03_dusk_native_v6 '^W03_DUSK_V6 PASS checks=23 native=2 producer=real_cave_and_grass savev2=true$'
+          run parallel_items_w03_dusk_native_v6_negatives '^W03_DUSK_V6_NEG PASS checks=20 cave_source=live fail_rng=real$'
+          run parallel_items_w03_repeat_native_v4 '^W03_REPEAT_NATIVE_V4 PASS checks=26$'
+          run parallel_items_w03_net_native_v5 '^W03_NET_NATIVE_V5 PASS checks=79$'
+          run parallel_items_w03_continuous_v3 '^W03_V3_MOON PASS native=2 checks=41$'
+          run parallel_items_w03_repel_l3 '^CAMP006_W03_REPEL_L3 PASS checks=66$'
+          run ia6_regional_level_field '^IA6_REGIONAL_LEVEL_FIELD PASS checks=[1-9][0-9]* routes=10 GPU=false errors=\[\]$'
+          run savegame_v2_test_runner '^=== SAVEGAME V2 TEST RESULT: 40 PASS / 0 FAIL ===$'
+          run savegame_v2_adversarial_test_runner '^=== SAVEGAME V2 ADVERSARIAL RESULT: 8 PASS / 0 FAIL ===$'
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: openagent-pilot-${{ github.sha }}
+          path: pilot-logs/*.log
+          retention-days: 7
