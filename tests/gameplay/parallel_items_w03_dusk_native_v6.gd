@@ -91,6 +91,9 @@ func _run() -> void:
 	ck("active native cave SaveV2 restored", await bridge.load_game()
 		and view.session != null and view.session.has_active_battle())
 	view._playback.set_process(false)
+	# load_game atomically publishes a fresh PlayerCollection, not the old
+	# owner object held before SaveV2 restore.
+	owner = scene.field_collection()
 	ck("restored native session derives cave from restored real world",
 		view.session._native_zone_source.is_valid()
 		and view.session._native_zone_source.call() == scene.TECHNICAL_CAVE_ZONE_ID)
