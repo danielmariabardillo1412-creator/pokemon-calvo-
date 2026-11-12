@@ -1,15 +1,29 @@
-# IA4/W04 — V7 · CHECKPOINT INICIAL / 12-11-2026
-- worker: W04
-- branch: codex/calvo-items-20261112-w04-battle-return-v7
-- preceding V6: READY_FOR_IA6_MERGE_CONSUMER_CANDIDATE, COMPLETED CI #43126697924, code SHA 1dd5bb05e987b75cedadeefa09c64925ff4cb35b
-- V6 finished: 2/2 pilotos nativos, 135+66 checks, V5 526, V4 396
-- V6 unresolved: W04-V6-DEP-02 normal session.close() stuck (>180s) after XP/accept/save, fixture used stop_now ONLY for cleanup; actual return-to-map NOT certified
-- related separate seam: W04-V6-DEP-01 minted nature hardy -> adamant Stat import mismatch in native Showdown; diagnostic only, no shared engine changes here
-- V7 plan: docs/coordination/items_parallel_v1/CONTINUOUS_V7/PLAN_W04.md arbiter; full copy in IA6_AUTORUN.md
-- phase: A / actual red reproduction with FieldNativeBridge.leave_battle, no V7 code yet
-- new positive V7 close+map test: 0/1
-- new item IDs: 0
-- V7 functional SHA: none; V7 CI: none
-- official IA6 integration V7: NO
-- next p: inspect W04 V6 native test and backend/pipe close, reproduce hung RPC vs SceneTree, fix only proven seam as authorized, certify returning to map and second battle
-- protected: official IA6, main, V28, PR118, worker branches, native_engine.cjs, W02 progression, XP, SaveV2 core, policy dynamax_candy excluded
+# IA4/W04 — CONTINUOUS V7 · READY_FOR_IA6_MERGE_RETURN_CANDIDATE / STOP
+
+- date: 2026-11-12
+- branch: `codex/calvo-items-20261112-w04-battle-return-v7`
+- phases: **A reproduced RED, B fallback patch, C native map and full available regressions PASS**
+- status: **READY_FOR_IA6_MERGE_RETURN_CANDIDATE**
+- certified_code_sha: **`6d483b839ec57c674afc36acc508102f0df10fd5`**
+- certified_ci: **#43139645110 COMPLETED/SUCCESS**
+- ci: https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/43139645110
+- game_L3_return_to_map: **PASS in Godot headless, two field-demo native cycles**
+- map_checks: **37 PASS, cycles=2, battle_closed=2**; Diglett Alola evolves accepted, Meowth Galar declines, movement re-enabled, HUD/view released, SaveV2 save/load after return.
+- native_close_checks: **66 PASS** in four real battles; **forced worker exit via existing stop_now**, PID stopped, not graceful RPC shutdown.
+- root_boundary: CI RED #43137078426 blocked at `PipeClient.close() -> await exchange({op: shutdown})`; bypassing `exchange` alone failed later in pipe teardown (#43137609917); chose explicit stop_now fallback, no changes to exchange or engine JS.
+- production_change: exclusively `modules/battle/backends/showdown/pipe_client.gd::close()`; no changes to core XP, SaveV2, battle engine JS or other workers.
+- V6_consumer: **135 PASS**, V6_native: **66 PASS**.
+- V5_regional_level_up: **526 PASS, 10 routes**.
+- V4_item_evolution: **396 PASS, 7 routes, 2 rollback**.
+- V3_regional_forms: **968 PASS, 55/56**, blocked Harvest remains; regional normal abilities: **64 PASS**.
+- Python canonical regional registry: **PASS**; dynamax_candy remains excluded.
+- W04-V6-DEP-01: **NOT SOLVED**; 2/2 minted-nature Showdown import mismatches reproduced in **8-check diagnostic PASS**, game attack 36 vs native 33 (Diglett), 41 vs 38 (Meowth); native_engine.cjs reads nature_id but not effective_nature_id; owner IA6/W02.
+- W04-V7-DEP-02: **MITIGATED ONLY** by explicit forced stop_now; graceful RPC shutdown not fixed, Windows-specific testing outstanding; owner IA6/native.
+- GPU_click_manual: **NOT RUN**
+- CAMP003_006_on_central_IA6: **NOT RUN**
+- integration_official_IA6: **NOT MERGED**
+- catalog_objects_new: **0**
+- protected_main_V28_PR118_workers: untouched
+- final_report: `docs/coordination/items_parallel_v1/reports/W04/CONTINUOUS_V7_FINAL.md`
+- next: **IA6** selective merge, cross-worker regressions, Windows native shutdown and W02 mint adapter fix. W04 STOP until newly authorized mission.
+- certification_provenance: code SHA `6d483b...` was tested; report SHA `9d732b5f7968b9decee7a700221b92422a96fd37` and this state SHA are documentation-only, not separately validated as code.
