@@ -1,0 +1,65 @@
+name: IA6 W01 Rocky Helmet rebased V27 cross-worker gate
+on:
+  push:
+    branches:
+      - codex/calvo-ia6-candidate-w01-helmet-current-20261112
+    paths:
+      - '.github/workflows/ia6-w01-helmet-current-candidate-20261112.yml'
+      - 'tests/gameplay/w01_continuous_v4_camp003_rocky_helmet.gd'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  camp003_rocky_helmet:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: chickensoft-games/setup-godot@v2.4.1
+        with:
+          version: 4.7.0
+          use-dotnet: false
+          include-templates: false
+      - name: Canonical resources and pinned native engine
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "POKEMON_CALVO_NODE=$(command -v node)" >> "$GITHUB_ENV"
+          python -B tools/distribution/restore_resources.py
+          python -B tools/distribution/restore_resources.py --check
+          mkdir -p data/reports
+          cp ci/fixtures/pokeapi_reports/forms_policy_report.json data/reports/forms_policy_report.json
+          cp ci/fixtures/pokeapi_reports/unsupported_mechanics.json data/reports/unsupported_mechanics.json
+          cp ci/fixtures/pokeapi_reports/import_summary.json data/reports/import_summary.json
+          godot --headless --path . --import 2>&1 | tee w01-v4-helmet-import.log
+          if grep -E 'SCRIPT ERROR|Parse Error' w01-v4-helmet-import.log; then exit 1; fi
+          python -B tools/battle_reference/run.py --install --limit 1
+      - name: Rocky Helmet native contact recoil and noncontact controls across SaveV2
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 1200s godot --headless --path . --script res://tests/gameplay/w01_continuous_v4_camp003_rocky_helmet.gd 2>&1 | tee w01-v4-helmet-gems.log
+          grep -E '^W01_V4_C003_HELMET PASS modes=9 checks=[1-9][0-9]*$' w01-v4-helmet-gems.log
+      - name: Verify W03 capture W04 regional evolution and W05 books still operate
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 900s godot --headless --path . --script res://tests/gameplay/parallel_items_w03_repeat_native_v4.gd 2>&1 | tee w01-v4-cross-capture.log
+          grep -E '^W03_REPEAT_NATIVE_V4 PASS checks=[1-9][0-9]*$' w01-v4-cross-capture.log
+          timeout 900s godot --headless --path . --script res://tests/gameplay/w04_continuous_v3_real_evolution.gd 2>&1 | tee w01-v4-cross-regional.log
+          grep -E '^W04_V3_L3 PASS checks=[1-9][0-9]* routes=7 ownership=14 rollback=2$' w01-v4-cross-regional.log
+          timeout 900s godot --headless --path . --script res://tests/gameplay/ia6_books_bag_20261109.gd 2>&1 | tee w01-v4-cross-books.log
+          grep -E '^IA6_BOOK_BAG PASS checks=[1-9][0-9]*' w01-v4-cross-books.log
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: w01-v4-helmet-gems-${{ github.run_id }}
+          retention-days: 7
+          if-no-files-found: ignore
+          path: w01-v4-helmet-*.log
