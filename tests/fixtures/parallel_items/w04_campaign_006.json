@@ -1,0 +1,402 @@
+{
+  "worker": "W04",
+  "campaign": "CAMP_006",
+  "kind": "INTEGRATION_BACKLOG",
+  "new_item_ids": 0,
+  "blocks": [
+    {
+      "block": "01",
+      "family": "EVOLUTION_E2E",
+      "ids": [
+        "sweet_apple",
+        "tart_apple",
+        "syrupy_apple"
+      ],
+      "objective": "evolucion_positiva_escena_y_guardado",
+      "cases": [
+        {
+          "item_id": "sweet_apple",
+          "source": "applin",
+          "target": "appletun",
+          "save": "user://w04_c006_01_sweet_apple.json"
+        },
+        {
+          "item_id": "tart_apple",
+          "source": "applin",
+          "target": "flapple",
+          "save": "user://w04_c006_01_tart_apple.json"
+        },
+        {
+          "item_id": "syrupy_apple",
+          "source": "applin",
+          "target": "dipplin",
+          "save": "user://w04_c006_01_syrupy_apple.json"
+        }
+      ],
+      "level": "L3_REAL_SCENE_AND_SAVEV2",
+      "status": "PENDING_RUNTIME_CI",
+      "contracts": {
+        "positive": [
+          "Use the actual scene res://scenes/visual/field_demo.tscn and visual bag _apply('use') with selected owned Applin and two units of the apple.",
+          "The real FieldItemService must return accepted true, evolve to exactly the selected species, consume one item and retain instance_id, IV/EV, moves, experience, level, nature, friendship.",
+          "Visible bag result message reports the evolved species; the party selector must refresh after use.",
+          "Close the bag, save through field_native_bridge.save_game(), then reload through field_native_bridge.load_game(); both target and spent inventory must roundtrip."
+        ],
+        "negative": [
+          "Using an apple on the wrong species is rejected without spending or mutating state.",
+          "Using a second apple on the already evolved target must not further evolve or spend; prevent skipping Applin->Dipplin->Hydrapple.",
+          "Attempting to open the bag while field is busy is rejected by the existing demo guard."
+        ],
+        "limits": [
+          "No new items counted, no changes to V27 trade-level thresholds, no new consumption semantics.",
+          "No visual screenshot/GPU certification; headless test covers scene/control/service/save code paths only.",
+          "Workflow for CAMP006 does not exist on branch; CI must be prepared by IA6 before certification."
+        ]
+      }
+    },
+    {
+      "block": "02",
+      "family": "FORM_SOURCE",
+      "ids": [
+        "chipped_pot",
+        "cracked_pot",
+        "masterpiece_teacup",
+        "unremarkable_teacup"
+      ],
+      "objective": "autenticidad_forma_pieza_positiva_piloto",
+      "level": "L3_SPECIES_POSITIVE__FORM_AUTHENTICITY_UNRESOLVED",
+      "cases": [
+        {
+          "item_id": "chipped_pot",
+          "source": "sinistea",
+          "target": "polteageist",
+          "source_form": "antique",
+          "source_form_api_id": 10344,
+          "target_form_api_id": 10345,
+          "save": "user://w04_c006_02_chipped_pot.json",
+          "runtime_form_id_present": false
+        },
+        {
+          "item_id": "cracked_pot",
+          "source": "sinistea",
+          "target": "polteageist",
+          "source_form": "phony",
+          "source_form_api_id": 854,
+          "target_form_api_id": 855,
+          "save": "user://w04_c006_02_cracked_pot.json",
+          "runtime_form_id_present": false
+        },
+        {
+          "item_id": "masterpiece_teacup",
+          "source": "poltchageist",
+          "target": "sinistcha",
+          "source_form": "artisan",
+          "source_form_api_id": 10447,
+          "target_form_api_id": 10448,
+          "save": "user://w04_c006_02_masterpiece_teacup.json",
+          "runtime_form_id_present": false
+        },
+        {
+          "item_id": "unremarkable_teacup",
+          "source": "poltchageist",
+          "target": "sinistcha",
+          "source_form": "counterfeit",
+          "source_form_api_id": 1012,
+          "target_form_api_id": 1013,
+          "save": "user://w04_c006_02_unremarkable_teacup.json",
+          "runtime_form_id_present": false
+        }
+      ],
+      "form_boundary": {
+        "canonical_producer": "data/api/v2/pokemon-form/{854,10344,855,10345,1012,10447,1013,10448}/index.json defines variants, not a runtime per-creature identity",
+        "missing_shared_producer": "Capture/CreatureFactory need to assign authoritative Sinistea phony/antique or Poltchageist counterfeit/artisan at acquisition, not randomly during item use",
+        "missing_persistent_contract": "CreatureInstance.to_dict/from_dict, SaveV2 validation/migration and evolved form target identity, owner IA6; do not set battle_transform_original, nature_id or instance_id as substitute",
+        "required_consumer": "FieldItemService.evolution_options/evolve must authorize exactly the matching pot/cup and carry source→target form atomically",
+        "positive_current": "Existing species-level item evolutions are tested end-to-end in the real demo, with one unit spent, instance_id preserved and native SaveV2 restored; L3 species only",
+        "negative_guard_future": "On an authenticated creature, mismatched pot/cup returns rejected without spending, and the evolved Polteageist/Sinistcha has the required persisted output form",
+        "owner": "IA6 for shared producer and persistence; W04 limited evolution-condition adapter after producer contract",
+        "safety": "Do not invent variant from held_item, id, seed, shiny, friendship or choose at use time. A pass of species evolution does not prove form authenticity."
+      }
+    },
+    {
+      "block": "03",
+      "family": "TRADE_LEVEL_GATE",
+      "ids": [
+        "dragon_scale",
+        "electirizer"
+      ],
+      "objective": "held_item_contexto_piloto_sin_inventar_niveles",
+      "level": "L3_POSITIVE_EQUIP_UNEQUIP_AND_NATIVE_SAVEV2__LEVEL_EVOLUTION_DEFERRED",
+      "cases": [
+        {
+          "item_id": "dragon_scale",
+          "source": "seadra",
+          "target": "kingdra",
+          "chain": 54,
+          "canonical_item": "dragon-scale",
+          "original_version": "gold-silver",
+          "save": "user://w04_c006_03_dragon_scale.json",
+          "approved_level": null,
+          "post_evolution_held_item_rule": null
+        },
+        {
+          "item_id": "electirizer",
+          "source": "electabuzz",
+          "target": "electivire",
+          "chain": 60,
+          "canonical_item": "electirizer",
+          "original_version": "diamond-pearl",
+          "save": "user://w04_c006_03_electirizer.json",
+          "approved_level": null,
+          "post_evolution_held_item_rule": null
+        }
+      ],
+      "trade_level_boundary": {
+        "producer": "ProgressionSystem.gain_experience uses EvolutionSystem.level_up_context(creature); current context does not include held_item_id",
+        "policy": "docs/current/ITEM_TRADE_RESTORATION_V27.json correct_future_rule: Replace exchange requirement only; retain original equipped item plus future defined level, if item required",
+        "gate": "level_values_selected=null, future_evolution_implementation=DEFERRED",
+        "consumer": "EvolutionSystem.classify_record rejects held_item as level condition; need approved threshold, triggering contract and no unauthorized consumption",
+        "integration_proven": "Demo item bag _apply equip/unequip, attached CreatureInstance.held_item_id, PlayerCollection unique ownership, native SaveV2 save/load, retry and rejection without extra units",
+        "missing_decisions": [
+          "IA6 must approve threshold(s) for Seadra/Kingdra and Electabuzz/Electivire (never deduced from prior-stage levels)",
+          "IA6 must approve handling of held evolution item upon successful/cancelled evolution, including rollback",
+          "ProgressionSystem event producer and FieldItemService/SaveV2 shared consumers may need coordinated authorization"
+        ],
+        "owner": "IA6 for level thresholds, item-consumption semantics and shared progression integration; W04 may modify local EvolutionSystem after those contracts exist",
+        "no_new_ids": true
+      }
+    },
+    {
+      "block": "05",
+      "family": "GENDER_TIME_CONDITIONS",
+      "ids": [
+        "oval_stone",
+        "dawn_stone",
+        "peat_block"
+      ],
+      "objective": "sexo_dia_luna_fuente_persistente",
+      "level": "DATA_ONLY__BLOCKED_MISSING_SHARED_PRODUCERS",
+      "status": "BLOCKED_MISSING_SHARED_PRODUCERS",
+      "credited_completion": false,
+      "new_item_ids": 0,
+      "cases": [
+        {
+          "item_id": "oval_stone",
+          "source": "happiny",
+          "target": "chansey",
+          "chain": 51,
+          "trigger": "level-up",
+          "held_item": "oval-stone",
+          "time_of_day": "day",
+          "gender": null,
+          "missing_producer": "authoritative_persistent_world_daypart_and_level_up_held_item_context"
+        },
+        {
+          "item_id": "dawn_stone",
+          "source": "kirlia",
+          "target": "gallade",
+          "chain": 140,
+          "trigger": "use-item",
+          "held_item": null,
+          "canonical_item": "dawn-stone",
+          "gender": 2,
+          "time_of_day": "",
+          "missing_producer": "persisted_individual_gender"
+        },
+        {
+          "item_id": "dawn_stone",
+          "source": "snorunt",
+          "target": "froslass",
+          "chain": 186,
+          "trigger": "use-item",
+          "held_item": null,
+          "canonical_item": "dawn-stone",
+          "gender": 1,
+          "time_of_day": "",
+          "missing_producer": "persisted_individual_gender"
+        },
+        {
+          "item_id": "peat_block",
+          "source": "ursaring",
+          "target": "ursaluna",
+          "chain": 110,
+          "trigger": "use-item",
+          "held_item": null,
+          "canonical_item": "peat-block",
+          "gender": null,
+          "time_of_day": "full-moon",
+          "missing_producer": "authoritative_world_moon_phase"
+        }
+      ],
+      "contract": {
+        "producer_gender": "Capture/CreatureFactory to CreatureInstance per-individual gender with SaveV2 backward compatibility, independent of species gender rate metadata",
+        "producer_day": "Game world authoritative daypart persisted across save/load; level-up event includes daypart and held Oval Stone in EvolutionSystem.level_up_context",
+        "producer_moon": "World moon-phase/full-moon event with deterministic authoritative SaveV2 persistence (calendar/time rules must be approved)",
+        "consumer": "EvolutionSystem.classify_record/evolution_candidates strict condition gate and FieldItemService.evolution_options/evolve, no direct-use shortcut for Oval Stone",
+        "negative_boundary": "Without the corresponding source condition, item use and level-up evolution must remain blocked without spending any item",
+        "owner": "IA6: CreatureInstance, SaveV2, FieldItemService, time/calendar and capture producers; W04 only evolution evaluator after contract",
+        "positive_status": "NONE: PokeAPI evolution chains are real data but no valid L2/L3 evolution can be certified",
+        "no_fake": "Do not infer individual gender from species rate, choose daypart from OS time, or synthesize lunar phases; do not claim PASS for item evolution."
+      }
+    },
+    {
+      "block": "06",
+      "family": "MILCERY_CONDITIONS",
+      "ids": [
+        "berry_sweet",
+        "clover_sweet",
+        "flower_sweet",
+        "love_sweet",
+        "ribbon_sweet",
+        "star_sweet",
+        "strawberry_sweet"
+      ],
+      "objective": "giro_confite_forma_seleccionada",
+      "status": "BLOCKED_MISSING_SHARED_PRODUCERS",
+      "level": "PURE_L2_PRECONDITION_ONLY__NO_L3",
+      "credited_completion": false,
+      "new_item_ids": 0,
+      "cases": [
+        {
+          "item_id": "berry_sweet",
+          "source": "milcery",
+          "target": "alcremie",
+          "chain": 452,
+          "trigger": "spin",
+          "held_required": true,
+          "canonical_form_count": 9,
+          "source_form_index": "data/api/v2/pokemon/869/index.json",
+          "gameplay_spin_produced": false,
+          "form_persisted": false
+        },
+        {
+          "item_id": "clover_sweet",
+          "source": "milcery",
+          "target": "alcremie",
+          "chain": 452,
+          "trigger": "spin",
+          "held_required": true,
+          "canonical_form_count": 9,
+          "source_form_index": "data/api/v2/pokemon/869/index.json",
+          "gameplay_spin_produced": false,
+          "form_persisted": false
+        },
+        {
+          "item_id": "flower_sweet",
+          "source": "milcery",
+          "target": "alcremie",
+          "chain": 452,
+          "trigger": "spin",
+          "held_required": true,
+          "canonical_form_count": 9,
+          "source_form_index": "data/api/v2/pokemon/869/index.json",
+          "gameplay_spin_produced": false,
+          "form_persisted": false
+        },
+        {
+          "item_id": "love_sweet",
+          "source": "milcery",
+          "target": "alcremie",
+          "chain": 452,
+          "trigger": "spin",
+          "held_required": true,
+          "canonical_form_count": 9,
+          "source_form_index": "data/api/v2/pokemon/869/index.json",
+          "gameplay_spin_produced": false,
+          "form_persisted": false
+        },
+        {
+          "item_id": "ribbon_sweet",
+          "source": "milcery",
+          "target": "alcremie",
+          "chain": 452,
+          "trigger": "spin",
+          "held_required": true,
+          "canonical_form_count": 9,
+          "source_form_index": "data/api/v2/pokemon/869/index.json",
+          "gameplay_spin_produced": false,
+          "form_persisted": false
+        },
+        {
+          "item_id": "star_sweet",
+          "source": "milcery",
+          "target": "alcremie",
+          "chain": 452,
+          "trigger": "spin",
+          "held_required": true,
+          "canonical_form_count": 9,
+          "source_form_index": "data/api/v2/pokemon/869/index.json",
+          "gameplay_spin_produced": false,
+          "form_persisted": false
+        },
+        {
+          "item_id": "strawberry_sweet",
+          "source": "milcery",
+          "target": "alcremie",
+          "chain": 452,
+          "trigger": "spin",
+          "held_required": true,
+          "canonical_form_count": 9,
+          "source_form_index": "data/api/v2/pokemon/869/index.json",
+          "gameplay_spin_produced": false,
+          "form_persisted": false
+        }
+      ],
+      "contract": {
+        "owner": "IA6",
+        "canonical_source": "data/api/v2/evolution-chain/452/index.json has ONE Milcery->Alcremie spin with item=null, held_item=null and no form-selection rule; data/api/v2/pokemon/869/index.json has 63 forms, 9 for each sweet",
+        "producer_spin": "Authoritative OverworldPlayer spin-completed event (real player motion), direction, duration and world time; must not accept a fabricated test event as gameplay",
+        "producer_held": "CreatureInstance.held_item_id and held_item_consumed at event time; seven sweets from existing holdable inventory profile",
+        "producer_form": "Approved version-specific cream-selection mapping from genuine spin direction/duration/world time (no arbitrary thresholds); complete canonical Alcremie form including sweet decoration",
+        "consumer": "EvolutionSystem trigger=spin and FieldItemService transaction after authenticated world event, rechecking ownership and allowing rollback",
+        "persistence": "CreatureInstance form identity, SaveV2/migration for original and evolved form and decoration, durable inventory and held-item consumption policy",
+        "negative_boundary": "Never evolve on bag use, equip-only, missing spin, guessed cream, missing form producer, wrong held sweet or any invalid world condition",
+        "test_boundary": "Isolated resolver unit tests accept synthetic facts but always return evolution_ready=false. NO gameplay L3 evolution, 06 NOT completed.",
+        "no_new_ids": true
+      }
+    }
+  ],
+  "execution_state": {
+    "last_executed_id": "06",
+    "deferred": [
+      "04"
+    ],
+    "completed": 3,
+    "completed_ids": [
+      "01",
+      "02",
+      "03"
+    ],
+    "evaluated_ids": [
+      "01",
+      "02",
+      "03",
+      "05",
+      "06"
+    ],
+    "blocked_ids": [
+      "05",
+      "06"
+    ],
+    "gate_document": "docs/coordination/items_parallel_v1/CAMPAIGN_006_W04_BLOCK04_DEFER_CONDITIONS_GATE_20261109.md",
+    "fifth_status": "BLOCKED_MISSING_SHARED_PRODUCERS",
+    "definition": "Completed remains 3; 04 deferred, 05 missing gender/day/moon world producers, 06 isolated Milcery spin precondition/form candidate only without gameplay evolution",
+    "sixth_status": "PURE_L2_RESOLVER_NOT_L3__BLOCKED_MISSING_SPIN_FORM_PRODUCERS"
+  },
+  "deferred_blocks": [
+    {
+      "block": "04",
+      "status": "DEFERRED_POR_POLITICA",
+      "ids": [
+        "dubious_disc",
+        "magmarizer",
+        "protector",
+        "reaper_cloth",
+        "prism_scale",
+        "sachet",
+        "up_grade"
+      ],
+      "reason": "V27 level_values_selected=null; consumption/cancellation undecided. No tests or implementation credited."
+    }
+  ]
+}
