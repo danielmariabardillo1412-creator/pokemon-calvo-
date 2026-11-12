@@ -21,3 +21,11 @@
 5. Strict CI and evidence on exact SHA; selective IA6 integration later.
 
 Protected: main, V28, PR118, arbiter integration, other W branches, dynamax_candy exclusion.
+
+
+## 2026-11-12 · siguiente p — runner de CI publicado
+- New CI workflow `.github/workflows/ia6-w03-v7-flutes-unit.yml`, commit `10f7193d15a08b51fa70861d9cae056d583d000e`.
+- The workflow installs Godot 4.7, restores resources, imports and calls the isolated 20-check GDScript with strict error parsing. This is **unit-only**; it deliberately does not certify Bag, footsteps, SaveV2 or map lifetime.
+- Commit-status query for this SHA returned **0 checks**, and the GitHub workflow-runs lookup returned **0 runs** (the latter only covers PR-triggered runs). Consequently no completed CI, no run URL, and no Godot PASS are claimed.
+- Branch state stays **V7 0/2 L3**. No integration into IA6.
+- Next executable action: establish an actual Actions execution for the V7 workflow; check logs, repair any genuine test failures; then produce real native RED and minimal bag/world wiring. Do not call the published YAML an executed test.
