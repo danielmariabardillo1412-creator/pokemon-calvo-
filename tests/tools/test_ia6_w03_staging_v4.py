@@ -2,7 +2,7 @@
 """IA6 W03 V4: deterministic integration boundary and protected-source assertions.
 
 All checks run against the actual staging checkout. The reference protection
-hashes are from IA6 staging e63b2e6, NOT from W03's historical branch.
+hashes match the current certified IA6 W04 integrated source, not the historical W03 staging.
 """
 import json
 import re
@@ -29,13 +29,23 @@ def run():
     # Preserve all preexisting IA6 code not owned by W03.
     protected = {
         "scenes/visual/field_item_bag.gd": "da0648a71f3efd4e5ba15daeb467fd012a7e9305",
-        "modules/creatures/domain/creature_instance.gd": "bd70d1ce2ff6b78129525ba3bda34667f62c12d4",
+        "modules/creatures/domain/creature_instance.gd": "a0acfcfef11bb7afa316ff2beca782ed257e71ee",
         "modules/battle/backends/showdown/native_engine.cjs": "073e5c8523f47a477735b98a766437392c201e33",
         "config/item_selection_v1.json": "bf76a361b30e158f613f31ef275006862562cea8",
-        "modules/inventory/field_item_service.gd": "f94066212e4572b5854eba8ff5847367247e723b",
+        "modules/inventory/field_item_service.gd": "47d67335db8a8925d0ceb0ac73e2f1cc2eafb648",
     }
     for path, sha in protected.items():
         ck(blob(path) == sha, "IA6 protected baseline changed: " + path)
+    # W04 is now an intentional shared-code owner: pin its exact new blobs,
+    # and demand that the W02 mint and W04 regional identity mechanisms coexist.
+    creature = read("modules/creatures/domain/creature_instance.gd")
+    service = read("modules/inventory/field_item_service.gd")
+    ck("effective_nature_id" in creature and "form_id" in creature,
+       "W02 effective nature or W04 persistent form missing")
+    ck("regional_item_evolution_contract_w04_v2.gd" in service
+       and "evolution_options" in service,
+       "W04 item evolution routing missing after W03 integration")
+
     items = json.loads(read("config/item_selection_v1.json"))
     ck("dynamax_candy" in items["excluded_ids"], "Dynamax Candy veto must survive V4")
     for candy in ("rare_candy", "exp_candy_xl"):
