@@ -1,0 +1,64 @@
+name: IA6 W04 historic CAMP003-006 and real demo bag
+on:
+  push:
+    branches:
+      - codex/calvo-ia6-w04-selective-20261111
+    paths:
+      - '.github/workflows/ia6-w04-historic-camp003-006-20261112.yml'
+      - 'tests/gameplay/parallel_items_w04_campaign_*.gd'
+      - 'tests/fixtures/parallel_items/w04_campaign_*.json'
+  pull_request:
+    branches:
+      - codex/calvo-ia6-integration-20261109
+permissions:
+  contents: read
+jobs:
+  historic:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: chickensoft-games/setup-godot@v2.4.1
+        with:
+          version: 4.7.0
+          use-dotnet: false
+          include-templates: false
+      - name: Restore resources and native engine
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tools/distribution/restore_resources.py
+          python -B tools/distribution/restore_resources.py --check
+          mkdir -p data/reports
+          cp ci/fixtures/pokeapi_reports/forms_policy_report.json data/reports/forms_policy_report.json
+          cp ci/fixtures/pokeapi_reports/unsupported_mechanics.json data/reports/unsupported_mechanics.json
+          cp ci/fixtures/pokeapi_reports/import_summary.json data/reports/import_summary.json
+          godot --headless --path . --import 2>&1 | tee w04-hist-import.log
+          if grep -E 'SCRIPT ERROR|Parse Error' w04-hist-import.log; then exit 1; fi
+          echo "POKEMON_CALVO_NODE=$(command -v node)" >> "$GITHUB_ENV"
+          python -B tools/battle_reference/run.py --install --limit 1
+      - name: Exact historic CAMP003 through CAMP006 on current IA6 candidate
+        shell: bash
+        run: |
+          set -euo pipefail
+          for num in 003 004 005 006; do
+            timeout 1200s godot --headless --path . --script "res://tests/gameplay/parallel_items_w04_campaign_${num}.gd" 2>&1 | tee "w04-hist-${num}.log"
+            if grep -E 'SCRIPT ERROR|Parse Error|^CAMP00[3-6]_W04_GODOT FAIL' "w04-hist-${num}.log"; then exit 1; fi
+            grep -E "^CAMP${num}_W04_GODOT PASS" "w04-hist-${num}.log"
+          done
+          grep -E '^CAMP006_W04_APPLE .*status=L3_SCENE_BAG_AND_NATIVE_SAVEV2' w04-hist-006.log
+          grep -E '^CAMP006_W04_GODOT PASS completed=3 last_executed=06 deferred=04 checks=[1-9][0-9]*$' w04-hist-006.log
+      - name: Preserve logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ia6-w04-historic-${{ github.run_id }}
+          retention-days: 7
+          if-no-files-found: ignore
+          path: w04-hist-*.log
