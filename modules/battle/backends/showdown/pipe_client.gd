@@ -57,7 +57,9 @@ func exchange(tree: SceneTree, message: Dictionary, timeout_ms: int = 8000) -> D
 
 
 func _transport_failure(reason: String) -> Dictionary:
+	print("W04_V7_PIPE_STEP before_stdio_close")
 	if _stdio != null and _stdio.is_open(): _stdio.close()
+	print("W04_V7_PIPE_STEP after_stdio_close")
 	if pid >= 0 and OS.is_process_running(pid): OS.kill(pid)
 	return {"ok": false, "error": reason, "stderr": stderr_text}
 
@@ -68,13 +70,17 @@ func _transport_failure(reason: String) -> Dictionary:
 # bounded grace period to exit normally, then kill and report escalation.
 # Active battle RPCs and exchange() semantics remain unchanged.
 func close(tree: SceneTree) -> bool:
+	print("W04_V7_PIPE_STEP entry")
 	var worker_pid := pid
 	var shutdown_sent := false
 	if _stdio != null and _stdio.is_open() and worker_pid >= 0 and OS.is_process_running(worker_pid):
 		_sequence += 1
 		var payload := (JSON.stringify({"op": "shutdown", "rpc_id": _sequence}) + "\n").to_utf8_buffer()
+		print("W04_V7_PIPE_STEP before_write")
 		_stdio.store_buffer(payload)
+		print("W04_V7_PIPE_STEP after_write")
 		shutdown_sent = _stdio.get_error() == OK
+	print("W04_V7_PIPE_STEP before_poll")
 	var graceful := false
 	var deadline := Time.get_ticks_msec() + 1200
 	while worker_pid >= 0 and OS.is_process_running(worker_pid) and Time.get_ticks_msec() < deadline:
@@ -86,7 +92,9 @@ func close(tree: SceneTree) -> bool:
 		var error := OS.kill(worker_pid)
 		if error != OK: push_warning("W04_V7_PIPE_CLOSE kill_error=" + str(error))
 	if _stdio != null and _stdio.is_open(): _stdio.close()
+	print("W04_V7_PIPE_STEP before_stderr_close")
 	if _stderr != null and _stderr.is_open(): _stderr.close()
+	print("W04_V7_PIPE_STEP after_stderr_close")
 	if worker_pid >= 0:
 		await tree.create_timer(0.03).timeout
 	var stopped := worker_pid < 0 or not OS.is_process_running(worker_pid)
