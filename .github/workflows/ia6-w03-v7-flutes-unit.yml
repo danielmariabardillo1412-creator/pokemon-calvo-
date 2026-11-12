@@ -7,6 +7,7 @@ on:
       - '.github/workflows/ia6-w03-v7-flutes-unit.yml'
       - 'modules/overworld/field_flute_encounter_rate_v7.gd'
       - 'tests/gameplay/parallel_items_w03_flute_rate_v7.gd'
+      - 'tests/gameplay/parallel_items_w03_flutes_field_v7.gd'
       - 'scenes/visual/field_demo.gd'
       - 'scenes/visual/field_item_bag.gd'
   workflow_dispatch:
@@ -46,6 +47,52 @@ jobs:
           timeout 300s godot --headless --path . --script res://tests/gameplay/parallel_items_w03_flute_rate_v7.gd 2>&1 | tee v7-unit.log
           grep -F 'W03_FLUTE_V7_UNIT checks=20 failures=0' v7-unit.log
           if grep -E 'W03_FLUTE_V7 FAIL|SCRIPT ERROR|Parse Error' v7-unit.log; then exit 1; fi
+      - name: Genuine field bag flute activation and native SaveV2
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 900s godot --headless --path . --script res://tests/gameplay/parallel_items_w03_flutes_field_v7.gd 2>&1 | tee v7-field.log
+          grep -E '^W03_FLUTE_FIELD_V7 PASS checks=[1-9][0-9]* bag=true savev2=true map_lifetime=false        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: w03-v7-flute-unit-${{ github.run_id }}
+          if-no-files-found: ignore
+          retention-days: 7
+          path: |
+            v7-import.log
+            v7-unit.log
+            v7-field.log
+            v7-repel.log
+            v7-dusk.log
+ v7-field.log
+          if grep -E 'W03_FLUTE_FIELD_V7 FAIL|SCRIPT ERROR|Parse Error' v7-field.log; then exit 1; fi
+      - name: Preserve W03 historic repel and Dusk regressions
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 900s godot --headless --path . --script res://tests/gameplay/parallel_items_w03_repel_l3.gd 2>&1 | tee v7-repel.log
+          grep -E '^CAMP006_W03_REPEL_L3 PASS checks=[1-9][0-9]*        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: w03-v7-flute-unit-${{ github.run_id }}
+          if-no-files-found: ignore
+          retention-days: 7
+          path: |
+            v7-import.log
+            v7-unit.log
+ v7-repel.log
+          timeout 900s godot --headless --path . --script res://tests/gameplay/parallel_items_w03_dusk_native_v6.gd 2>&1 | tee v7-dusk.log
+          grep -E '^W03_DUSK_V6 PASS checks=[1-9][0-9]* native=2 producer=real_cave_and_grass savev2=true        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: w03-v7-flute-unit-${{ github.run_id }}
+          if-no-files-found: ignore
+          retention-days: 7
+          path: |
+            v7-import.log
+            v7-unit.log
+ v7-dusk.log
+          if grep -E 'SCRIPT ERROR|Parse Error|W03_REPEL_L3:|W03_DUSK_V6 FAIL' v7-repel.log v7-dusk.log; then exit 1; fi
       - name: Preserve evidence
         if: always()
         uses: actions/upload-artifact@v4
