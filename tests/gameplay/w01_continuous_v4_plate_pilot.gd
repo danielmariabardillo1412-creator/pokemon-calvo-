@@ -25,7 +25,7 @@ func _plate_lane(item_name: String, move_name: String, mode: String) -> Dictiona
 	var id := StringName(item_name)
 	var owner := PlayerCollection.new()
 	check("plate party " + current_case,
-		owner.party.add_creature(_mon(&"mew", 100, &"own", [move_name, "shadow_ball"]))
+		owner.party.add_creature(_mon(&"mew", 100, &"own", [move_name, "tackle" if move_name == "shadow_ball" else "shadow_ball"]))
 		and owner.party.add_creature(_mon(&"mew", 100, &"reserve", ["reflect"])))
 	check("single genuine Plate in bag " + current_case, owner.inventory.add(id, 1))
 	var service := ItemService.new()
