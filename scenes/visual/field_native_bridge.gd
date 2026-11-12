@@ -46,7 +46,7 @@ func on_step(position: Vector2) -> void:
 	if encounter == null or encounter.status == WildEncounterResult.NONE: return
 	if encounter.status != WildEncounterResult.ENCOUNTER: notify("Encuentro rechazado: " + encounter.reason); return
 	busy = true; kind = "wild"; _lock_world()
-	await _open(encounter.creature, int(prepared.get("next_rng", -1)))
+	await _open(encounter.creature, int(prepared.get("next_rng", -1)), zone, position)
 
 
 func start_trainer() -> bool:
@@ -60,7 +60,8 @@ func start_trainer() -> bool:
 	return true
 
 
-func _open(wild: CreatureInstance, next_rng: int) -> void:
+func _open(wild: CreatureInstance, next_rng: int,
+	encounter_zone: StringName = &"", encounter_position: Vector2 = Vector2.ZERO) -> void:
 	var collection: PlayerCollection = field.field_collection()
 	var owner: TrainerCampaignRosterOwner = field.field_trainer_owner() if kind == "trainer" else null
 	var session := Session.new(field.field_definitions(), collection, clocks, format_id, owner)
@@ -76,6 +77,11 @@ func _open(wild: CreatureInstance, next_rng: int) -> void:
 	if not ok:
 		last_error = session.last_error; await session.close(); view.hide(); kind = ""
 		_unlock_world(); notify("No se pudo iniciar el combate: " + last_error); return
+	# Bind a live verifier, not a caller-provided cave flag. It reads the actual
+	# authored OverworldEncounterZone again when CaptureSystem resolves a ball.
+	if kind == "wild" and wild != null:
+		session.bind_native_field_source(Callable(field, "field_native_capture_zone").bind(
+			encounter_position, encounter_zone), wild.instance_id)
 	field.field_commit_native_battle_start(next_rng, StringName(kind), format_id)
 	view.diagnostic_event.emit({"event": "battle_opened"}); view._refresh_view()
 
@@ -149,6 +155,15 @@ func load_game() -> bool:
 	if view.session != null: await view.session.close()
 	# Candidate state is fully validated, including its worker. Publish synchronously.
 	field.field_publish_native_loaded_world(loaded.collection, loaded.trainer, world, position, tables)
+	# Restore provenance from the validated REAL world position and the native
+	# wild origin (never from a user-editable Dusk/cave field in SaveV2).
+	if candidate != null and candidate.battle_kind == "wild":
+		var opponents: Variant = loaded.battle.get("origin", {}).get("p2", [])
+		if opponents is Array and opponents.size() == 1 and opponents[0] is Dictionary:
+			var original_target_id := StringName(String(opponents[0].get("instance_id", "")))
+			var true_zone: StringName = field.zone_at_position(position)
+			candidate.bind_native_field_source(Callable(field, "field_native_capture_zone").bind(
+				position, true_zone), original_target_id)
 	clocks = loaded.clocks; format_id = world.format
 	view._playback.cancel(); view._medicine_popup.hide(); view.session = candidate; view.player = loaded.collection
 	view._settlement_error = false; view._working = false

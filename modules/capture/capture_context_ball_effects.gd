@@ -2,7 +2,7 @@ extends RefCounted
 
 # Context supplied by the owning session, never by a UI or saved extra counter.
 # Essentials reference uses completed turns (zero before the first action).
-const IDS: Array[StringName] = [&"quick_ball", &"timer_ball", &"level_ball", &"repeat_ball", &"moon_ball"]
+const IDS: Array[StringName] = [&"quick_ball", &"timer_ball", &"level_ball", &"repeat_ball", &"moon_ball", &"dusk_ball"]
 const Basic = preload("res://modules/capture/capture_ball_effects.gd")
 
 static func validation_error(id: StringName, target: CreatureInstance, context: CaptureBattleContext) -> String:
@@ -22,6 +22,9 @@ static func multiplier(id: StringName, target: CreatureInstance, species: Creatu
 		&"timer_ball": return minf(1.0 + 0.3 * context.completed_turns, 4.0)
 		&"repeat_ball": return 3.5 if context.previously_caught_base_species else 1.0
 		&"moon_ball": return 4.0 if context.moon_stone_context_known and context.target_evolves_with_moon_stone else 1.0
+		# Gen VII+ profile: x3 only for the authored, live cave encounter.
+		# The field bridge verifies this source each time; no fake night clock.
+		&"dusk_ball": return 3.0 if context.native_field_zone_id == &"technical_cave_floor" else 1.0
 		&"level_ball":
 			var factor := 1.0
 			if context.catcher_level >= target.level * 4: factor = 8.0

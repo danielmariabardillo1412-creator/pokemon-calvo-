@@ -671,6 +671,27 @@ func field_note_native_step(position: Vector2) -> StringName:
 	return zone
 
 
+# Only the authored physical Area2D produces a native Dusk Ball source.
+# Re-check at capture time: movement/zone corruption or invalidation removes bonus.
+# No external is_cave toggle, clock or SaveV2 zone field is accepted.
+func field_native_capture_zone(position: Vector2, expected_zone: StringName) -> StringName:
+	if not is_inside_tree() or _director == null or player == null:
+		return &""
+	if expected_zone not in [TECHNICAL_CAVE_ZONE_ID, TECHNICAL_ZONE_ID]:
+		return &""
+	if not _director.has_zone(expected_zone):
+		return &""
+	if not player.global_position.is_equal_approx(position):
+		return &""
+	if zone_at_position(position) != expected_zone:
+		return &""
+	if expected_zone == TECHNICAL_CAVE_ZONE_ID and technical_region_id() != &"cave":
+		return &""
+	if expected_zone == TECHNICAL_ZONE_ID and technical_region_id() != &"surface":
+		return &""
+	return expected_zone
+
+
 func field_prepare_native_encounter(zone_id: StringName) -> Dictionary:
 	if _director == null or _session == null or _catalogs == null:
 		return {}
