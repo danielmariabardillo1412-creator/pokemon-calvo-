@@ -1,16 +1,27 @@
-# IA3/W03 — V6 · CHECKPOINT INICIAL / 12-11-2026
-- worker: W03
+# IA3/W03 · CONTINUOUS_V6 FINALIZADA — READY_FOR_IA6_MERGE_DUSK_CAVE_CANDIDATE
+- date: 2026-11-12
 - branch: codex/calvo-items-20261112-w03-dusk-cave-v6
+- arbiter_plan: docs/coordination/items_parallel_v1/CONTINUOUS_V6/PLAN_W03.md @ codex/calvo-items-20261101-arbitro
+- phase: A/B/C COMPLETED (3/3)
+- target: dusk_ball (existing catalog ID, 0 new IDs)
+- target_L3: 1/1, real authored technical_cave_floor ONLY; grass and unknown source ×1
+- reference: Gen VII+ Dusk Ball ×3 cave; no night clock implemented
 - base_official_IA6: ddc8a1af56c5fe7e950bee5bf3986d8e62261f8f
-- preceding_W03_V5: CLOSED; official capture and repel already certified by IA6 CI #43106031155 and #43106031150
-- mission: CONTINUOUS_V6/PLAN_W03.md (arbiter, copied in this branch IA6_AUTORUN.md)
-- phase: A PENDING, real native cave-zone source trace and RED
-- target_existing_selected_item: dusk_ball
-- target_positive_L3: 0/1 until strict CI
-- other_items_reimplemented: 0
-- production_changes_new_mission: 0
-- CI_V6: none
-- official_integration_of_V6: NO
-- next_p: trace native real cave context and show red/grass difference; implement smallest producer and multiplier; full regressions and green CI
-- maintain: Repeat Net Moon, 3 Repel, books, Rope, nature, SaveV2, Dynamax Candy ban
-- forbid: main, V28, PR118, official IA6 writes, other W branches, fake clock/cave field flags
+- latest_official_IA6_seen: 5ece417fe0e15c9507c870601bf87ce97e184996 (NOT MODIFIED BY W03)
+- last_green_code_sha: a5733eb3683222d302ec6ed084bb1ac69575b9ce
+- final_ci_url: https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/43125138000
+- final_ci_status: COMPLETED SUCCESS, 21 successful steps, 0 failed
+- guard: 25 PASS, protected 8 identical, source baseline RED x2, dynamax_candy excluded
+- dusk_positive_real_native: 23 PASS (2 encounters grass/cave, savev2, stock, owner)
+- dusk_negative_real_native: 20 PASS (invalid source/target binding, failed RNG, trainer domain veto, restored session)
+- existing_regressions: SaveV2 40+8, Repeat 37+26+18, Net 79+19, Moon 41, Repel 66, mint/rope 18+65, Books 20+366, source 1082
+- previous_failed_CI: 43124880797 FAIL caused by stale test owner after SaveV2; fixed only test, no production repair
+- runtime_RED_on_unpatched_base: NOT EXECUTED (base absence proven by Git source guard, not actual Godot)
+- unproven: trainer via full native trainer fight (only domain rejection); live opponent replaced in native battle (binder rejection checked); nighttime and other-map cave producers; full CAMP003-006 and W04 seven routes
+- scope: five authorized production files with narrow hunks; new two Godot tests, one Python guard, one workflow
+- other_ball_producers: Dive/Lure/Love/Heavy/Beast BLOCKED_CONTEXT; no guessed contexts
+- V6_official_IA6_integration: NO
+- next_action: IA6 selective diff onto latest official SHA and post-integration CI, no full branch merge
+- STOP_W03: YES pending new IA6 order, no V7 on initiative
+- protections: main, V28, PR118, IA6 official and other W branches unchanged
+- documents: reports/W03/CONTINUOUS_V6_FINAL.md and CONTINUOUS_V6/W03_V6_SOURCE_DIAGNOSTIC.md
