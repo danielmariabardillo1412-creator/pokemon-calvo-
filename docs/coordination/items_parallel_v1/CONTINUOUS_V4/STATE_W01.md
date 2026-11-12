@@ -171,3 +171,11 @@
 - Workflow `.github/workflows/w01-continuous-v4-camp003-rocky-helmet.yml` commit `257841f7f244b06ef982fadbe0dfde5af823cee8`; [CI #43136788662](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/43136788662) iniciada, `in_progress` según página de workflow. **Aún NO PASS**.
 - Aún faltan regresiones completas CAMP003–005/TANDAS previas. `READY_FOR_IA6_MERGE=NO`, integración IA6 NO, producción 0 cambios.
 - Próxima `p`: comprobar CI #43136788662, revisar logs si falla y reparar solo test W01. Si PASS, seguir con otras regresiones CAMP003 sin importar runners heredados.
+
+## Continuación p — Casco Dentado PASS; Banda Aguante bajo CI (2026-11-12)
+- [CI Rocky Helmet #43136788662](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/43136788662): job `camp003_rocky_helmet completed/success` comprobado en GitHub; 9 rutas contacto/no contacto y SaveV2.
+- Siguiente caso histórico CAMP003 seleccionado: `focus_sash` (Banda Aguante) **distinto** de `focus_band` (Cinta Aguante), con las semillas originales del fixture: Pikachu nivel 1 a máximos PS vs Mew nivel 100 `seismic_toss` seeds 1/19; Pikachu a un PS menos que máximo seed 19; Mew nivel 100 vs Mew nivel 1 `tackle` seed 23.
+- Test `tests/gameplay/w01_continuous_v4_camp003_focus_sash.gd`, commit `9985fa8c869cd7c50354b2ff40b3942608e89689`. Cuatro casos × active/none/reserve = 12 rutas nativas, objeto solo se consume cuando evita KO desde PS máximos, controles rival KO, no efecto a PS incompletos y con daño no letal, SaveV2 propietario/checkpoint/flags exactos. No modifica motor.
+- Workflow `.github/workflows/w01-continuous-v4-camp003-focus-sash.yml`, commit `339c5b8254e86150a55b67628bc7814926106374`. [CI #43139082393](https://github.com/danielmariabardillo1412-creator/pokemon-calvo-/actions/runs/43139082393) detectada `in_progress` en GitHub; todavía NO PASS.
+- Pendiente: otras regresiones CAMP003, CAMP004/005 y equivalencias completas TANDAS. `READY_FOR_IA6_MERGE=NO`, integración oficial IA6 NO, producción 0 cambios.
+- Próxima `p`: comprobar #43139082393; si fallo, log real y reparación limitada al test W01 sin rebajar 12 escenarios; si éxito, avanzar siguiente regresión.
