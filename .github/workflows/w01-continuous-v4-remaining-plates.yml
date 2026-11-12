@@ -6,6 +6,7 @@ on:
     paths:
       - '.github/workflows/w01-continuous-v4-remaining-plates.yml'
       - 'tests/gameplay/w01_continuous_v4_remaining_plates.gd'
+      - 'tests/gameplay/w01_continuous_v4_plate_pilot.gd'
   workflow_dispatch:
 permissions:
   contents: read
