@@ -8,6 +8,7 @@ on:
       - 'scenes/visual/field_native_presentation.gd'
       - 'scenes/visual/field_native_bridge.gd'
       - 'tests/gameplay/w04_continuous_v6_consumer.gd'
+      - 'tests/gameplay/w04_continuous_v6_native_battle_ui.gd'
       - 'docs/coordination/items_parallel_v1/CONTINUOUS_V6/STATE_W04.md'
       - 'modules/creatures/progression/evolution_system.gd'
       - 'modules/creatures/progression/regional_level_evolution_contract_w04_v5.gd'
@@ -55,6 +56,12 @@ jobs:
           set -euo pipefail
           timeout 1500s godot --headless --path . --script res://tests/gameplay/w04_continuous_v6_consumer.gd 2>&1 | tee w04-v6-consumer.log
           grep -E '^W04_V6_CONSUMER PASS checks=[1-9][0-9]* pilots=2 accepted=4 declined=4$' w04-v6-consumer.log
+      - name: Native postbattle evolution prompt real Showdown two routes
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 1500s godot --headless --path . --script res://tests/gameplay/w04_continuous_v6_native_battle_ui.gd 2>&1 | tee w04-v6-native.log
+          grep -E '^W04_V6_NATIVE PASS checks=[1-9][0-9]* pilots=2 accepted=2 declined=2$' w04-v6-native.log
       - name: Ten regional level-up routes V5
         shell: bash
         run: |
