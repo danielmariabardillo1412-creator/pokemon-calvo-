@@ -1,0 +1,985 @@
+{
+  "schema_version": 1,
+  "campaign": "CAMP_005",
+  "worker": "W04",
+  "kind": "FUNCTIONAL_BACKLOG",
+  "purpose": "No recontar IDs antiguos como nuevos. 0/10 no certifica funcionalidad",
+  "blocks": [
+    {
+      "block": "01",
+      "ids": [
+        "dragon_scale",
+        "dubious_disc",
+        "electirizer",
+        "magmarizer"
+      ],
+      "family": "TRADE_OBJECT_REPAIR",
+      "classification": "BLOQUEADO_POR_CONTRATO",
+      "pairs": [
+        {
+          "item_id": "dragon_scale",
+          "source": "seadra",
+          "target": "kingdra",
+          "canonical_item": "dragon-scale",
+          "evolution_chain": "54",
+          "approved_level": null,
+          "original_trigger": "trade",
+          "held_item_required": true
+        },
+        {
+          "item_id": "dubious_disc",
+          "source": "porygon2",
+          "target": "porygon_z",
+          "canonical_item": "dubious-disc",
+          "evolution_chain": "68",
+          "approved_level": null,
+          "original_trigger": "trade",
+          "held_item_required": true
+        },
+        {
+          "item_id": "electirizer",
+          "source": "electabuzz",
+          "target": "electivire",
+          "canonical_item": "electirizer",
+          "evolution_chain": "60",
+          "approved_level": null,
+          "original_trigger": "trade",
+          "held_item_required": true
+        },
+        {
+          "item_id": "magmarizer",
+          "source": "magmar",
+          "target": "magmortar",
+          "canonical_item": "magmarizer",
+          "evolution_chain": "61",
+          "approved_level": null,
+          "original_trigger": "trade",
+          "held_item_required": true
+        }
+      ],
+      "decision_source": "docs/current/ITEM_TRADE_RESTORATION_V27.json",
+      "consumer": "modules/creatures/progression/evolution_system.gd::evolution_candidates",
+      "producer": "modules/creatures/progression/progression_system.gd::gain_experience",
+      "missing": [
+        "min_level aprobados por cada especie",
+        "condicion de objeto equipado en disparador level_up",
+        "politica de consumo del objeto equipado al evolucionar"
+      ],
+      "runtime_contract": [
+        "verificar rutas trade+held_item en catalogo normalizado",
+        "ningun nivel sin aprobacion activa evolucion",
+        "held_item no soportado como condicion level_up",
+        "equipamiento legitimo y SaveV2 sin cambio de especie",
+        "no convertir en uso de bolsa ni retirar objeto"
+      ]
+    },
+    {
+      "block": "02",
+      "ids": [
+        "protector",
+        "reaper_cloth",
+        "prism_scale",
+        "sachet",
+        "up_grade"
+      ],
+      "family": "TRADE_OBJECT_REPAIR",
+      "classification": "BLOQUEADO_POR_CONTRATO",
+      "pairs": [
+        {
+          "item_id": "protector",
+          "source": "rhydon",
+          "target": "rhyperior",
+          "canonical_item": "protector",
+          "evolution_chain": "50",
+          "approved_level": null,
+          "original_trigger": "trade",
+          "held_item_required": true
+        },
+        {
+          "item_id": "reaper_cloth",
+          "source": "dusclops",
+          "target": "dusknoir",
+          "canonical_item": "reaper-cloth",
+          "evolution_chain": "182",
+          "approved_level": null,
+          "original_trigger": "trade",
+          "held_item_required": true
+        },
+        {
+          "item_id": "prism_scale",
+          "source": "feebas",
+          "target": "milotic",
+          "canonical_item": "prism-scale",
+          "evolution_chain": "178",
+          "approved_level": null,
+          "original_trigger": "trade",
+          "held_item_required": true
+        },
+        {
+          "item_id": "sachet",
+          "source": "spritzee",
+          "target": "aromatisse",
+          "canonical_item": "sachet",
+          "evolution_chain": "350",
+          "approved_level": null,
+          "original_trigger": "trade",
+          "held_item_required": true
+        },
+        {
+          "item_id": "up_grade",
+          "source": "porygon",
+          "target": "porygon2",
+          "canonical_item": "up-grade",
+          "evolution_chain": "68",
+          "approved_level": null,
+          "original_trigger": "trade",
+          "held_item_required": true
+        }
+      ],
+      "decision_source": "docs/current/ITEM_TRADE_RESTORATION_V27.json",
+      "consumer": "modules/creatures/progression/evolution_system.gd::evolution_candidates",
+      "producer": "modules/creatures/progression/progression_system.gd::gain_experience",
+      "missing": [
+        "nivel aprobado para cada pareja",
+        "condición level_up con objeto equipado sin intercambio",
+        "política de consumo/persistencia del objeto en evolución o cancelación"
+      ],
+      "special_cases": [
+        {
+          "item_id": "prism_scale",
+          "source": "feebas",
+          "target": "milotic",
+          "legacy_alternative_trigger": "level-up",
+          "legacy_alternative_min_beauty": 170,
+          "legacy_alternative_source": "data/api/v2/evolution-chain/178/index.json",
+          "requirement": "Mantener distinta la ruta belleza legacy de la ruta intercambio con objeto; no degradar condición de belleza."
+        },
+        {
+          "item_id": "up_grade",
+          "source": "porygon",
+          "target": "porygon2",
+          "next_stage": "porygon2",
+          "next_stage_item": "dubious_disc",
+          "next_target": "porygon_z",
+          "requirement": "No permitir up_grade en Porygon2; distinguir dos etapas y requisitos."
+        }
+      ],
+      "runtime_contract": [
+        "comprobar pareja trade y held_item real",
+        "no introducir nivel universal, ni extrapolar nivel 37 de Dusclops ni 42 de Rhydon",
+        "prism_scale ruta alternativa belleza 170 no habilita level_up sin condición",
+        "up_grade distinto de dubious_disc en etapas Porygon",
+        "equipar permitido y SaveV2 preserva objeto/identidad sin evolución directa",
+        "sin cambio de arquitectura ni consumo especulativo"
+      ]
+    },
+    {
+      "block": "03",
+      "ids": [
+        "oval_stone",
+        "dawn_stone",
+        "peat_block"
+      ],
+      "family": "EVOLUTION_CONDITIONS",
+      "classification": "DEPENDENCIA_DE_CONDICIONES",
+      "cases": [
+        {
+          "item_id": "oval_stone",
+          "source": "happiny",
+          "target": "chansey",
+          "chain": "51",
+          "canonical_item": "oval-stone",
+          "trigger": "level-up",
+          "key": "held_item",
+          "required": "oval-stone",
+          "additional_key": "time_of_day",
+          "additional_value": "day",
+          "equippable": true,
+          "approved_level": null,
+          "missing": "level_up context lacks daytime and held-item condition; cannot infer level"
+        },
+        {
+          "item_id": "dawn_stone",
+          "source": "kirlia",
+          "target": "gallade",
+          "chain": "140",
+          "canonical_item": "dawn-stone",
+          "trigger": "use-item",
+          "key": "gender",
+          "required": 2,
+          "equippable": true,
+          "missing": "creature gender absent from persistent CreatureInstance; must require male and target-safe use"
+        },
+        {
+          "item_id": "dawn_stone",
+          "source": "snorunt",
+          "target": "froslass",
+          "chain": "186",
+          "canonical_item": "dawn-stone",
+          "trigger": "use-item",
+          "key": "gender",
+          "required": 1,
+          "equippable": true,
+          "missing": "creature gender absent from persistent CreatureInstance; must require female and target-safe use"
+        },
+        {
+          "item_id": "peat_block",
+          "source": "ursaring",
+          "target": "ursaluna",
+          "chain": "110",
+          "canonical_item": "peat-block",
+          "trigger": "use-item",
+          "key": "time_of_day",
+          "required": "full-moon",
+          "equippable": false,
+          "missing": "moon-phase context unavailable from FieldItemService/Adventure time; no direct use"
+        }
+      ],
+      "expected_sources": [
+        "data/api/v2/evolution-chain/51/index.json",
+        "data/api/v2/evolution-chain/140/index.json",
+        "data/api/v2/evolution-chain/186/index.json",
+        "data/api/v2/evolution-chain/110/index.json"
+      ],
+      "runtime_contract": [
+        "no false unconditional evolution for high-level Happiny without daylight and oval stone",
+        "no direct dawn stone evolution without saved creature gender and target compatibility",
+        "peat block no evolution without full moon",
+        "equip/unequip only for items allowed by profile",
+        "rejection preserves inventory, identity and SaveV2",
+        "do not confuse the level of prior species with eligibility threshold",
+        "no shared API mutation without arbiter authorization"
+      ]
+    },
+    {
+      "block": "04",
+      "ids": [
+        "galarica_cuff",
+        "galarica_wreath",
+        "scroll_of_darkness",
+        "scroll_of_waters"
+      ],
+      "family": "EVOLUTION_CONDITIONS",
+      "classification": "DEPENDENCIA_FORMA_REGIONAL",
+      "cases": [
+        {
+          "item_id": "galarica_cuff",
+          "source": "slowpoke",
+          "target": "slowbro",
+          "canonical_item": "galarica-cuff",
+          "chain": "33",
+          "trigger": "use-item",
+          "version": "the-isle-of-armor",
+          "base_form": "slowpoke-galar",
+          "evolved_form": "slowbro-galar",
+          "equippable": true
+        },
+        {
+          "item_id": "galarica_wreath",
+          "source": "slowpoke",
+          "target": "slowking",
+          "canonical_item": "galarica-wreath",
+          "chain": "33",
+          "trigger": "use-item",
+          "version": "the-isle-of-armor",
+          "base_form": "slowpoke-galar",
+          "evolved_form": "slowking-galar",
+          "equippable": true
+        },
+        {
+          "item_id": "scroll_of_darkness",
+          "source": "kubfu",
+          "target": "urshifu",
+          "canonical_item": "scroll-of-darkness",
+          "chain": "470",
+          "trigger": "use-item",
+          "version": "scarlet-violet",
+          "evolved_form": "urshifu-single-strike",
+          "equippable": false,
+          "alternative_trigger": "tower-of-darkness",
+          "alternative_version": "the-isle-of-armor"
+        },
+        {
+          "item_id": "scroll_of_waters",
+          "source": "kubfu",
+          "target": "urshifu",
+          "canonical_item": "scroll-of-waters",
+          "chain": "470",
+          "trigger": "use-item",
+          "version": "scarlet-violet",
+          "evolved_form": "urshifu-rapid-strike",
+          "equippable": false,
+          "alternative_trigger": "tower-of-waters",
+          "alternative_version": "the-isle-of-armor"
+        }
+      ],
+      "decision_source": "data/api/v2/evolution-chain/{33,470}/index.json",
+      "producer": "PokemonAPI evolution_record conditions base_form and evolved_form; ownership CreatureInstance/SaveV2",
+      "consumer": "EvolutionSystem.classify_record / FieldItemService.evolve / EvolutionSystem.apply_evolution",
+      "missing": [
+        "persistent regional form/variant identity for Slowpoke/Slowbro/Slowking and Kubfu/Urshifu",
+        "form-aware target resolver in evolution and application; distinguish two Urshifu styles sharing species id",
+        "cross-version selection for Tower (Isle of Armor) vs Scroll (Scarlet/Violet)",
+        "SaveV2/migration policy for form persistence; consume rules and eligibility"
+      ],
+      "runtime_contract": [
+        "PokeAPI route and per-item evolved_form checked for each item without target conflation",
+        "Galarian Slowpoke selector not interchangeable with ordinary Slowpoke",
+        "Urshifu same species target cannot identify styles; require explicit evolved_form",
+        "Tower-of-Waters and Tower-of-Darkness remain unsupported alternate triggers",
+        "reject invalid item/form choices without spending anything",
+        "holdable galarica pair and nonholdable scroll pair according to original profile",
+        "identity, equipped item, inventory and SaveV2 stable after rejected evolution",
+        "no API, save schema or canonical data mutation without IA6"
+      ]
+    },
+    {
+      "block": "05",
+      "ids": [
+        "berry_sweet",
+        "clover_sweet",
+        "flower_sweet",
+        "love_sweet",
+        "ribbon_sweet",
+        "star_sweet",
+        "strawberry_sweet"
+      ],
+      "family": "SPECIAL_EVOLUTION",
+      "classification": "DEPENDENCIA_GIRO_FORMA",
+      "source": "milcery",
+      "target": "alcremie",
+      "evolution_chain": "452",
+      "version": "sword-shield",
+      "original_trigger": "spin",
+      "cases": [
+        {
+          "item_id": "berry_sweet",
+          "source": "milcery",
+          "target": "alcremie",
+          "canonical_item": "berry-sweet",
+          "equippable": true,
+          "trigger": "spin",
+          "requires_held_sweet": true
+        },
+        {
+          "item_id": "clover_sweet",
+          "source": "milcery",
+          "target": "alcremie",
+          "canonical_item": "clover-sweet",
+          "equippable": true,
+          "trigger": "spin",
+          "requires_held_sweet": true
+        },
+        {
+          "item_id": "flower_sweet",
+          "source": "milcery",
+          "target": "alcremie",
+          "canonical_item": "flower-sweet",
+          "equippable": true,
+          "trigger": "spin",
+          "requires_held_sweet": true
+        },
+        {
+          "item_id": "love_sweet",
+          "source": "milcery",
+          "target": "alcremie",
+          "canonical_item": "love-sweet",
+          "equippable": true,
+          "trigger": "spin",
+          "requires_held_sweet": true
+        },
+        {
+          "item_id": "ribbon_sweet",
+          "source": "milcery",
+          "target": "alcremie",
+          "canonical_item": "ribbon-sweet",
+          "equippable": true,
+          "trigger": "spin",
+          "requires_held_sweet": true
+        },
+        {
+          "item_id": "star_sweet",
+          "source": "milcery",
+          "target": "alcremie",
+          "canonical_item": "star-sweet",
+          "equippable": true,
+          "trigger": "spin",
+          "requires_held_sweet": true
+        },
+        {
+          "item_id": "strawberry_sweet",
+          "source": "milcery",
+          "target": "alcremie",
+          "canonical_item": "strawberry-sweet",
+          "equippable": true,
+          "trigger": "spin",
+          "requires_held_sweet": true
+        }
+      ],
+      "decision_source": "data/api/v2/evolution-chain/452/index.json + CAMPAIGN_005_W04_QUEUE_APPROVED.csv + modules/inventory/item_connections_v1.json",
+      "producer": "Milcery held_item_id + acto de giro real (dirección/duración/hora) + decoración/forma elegida",
+      "consumer": "EvolutionSystem.classify_record/evolution_candidates + FieldItemService.evolve + CreatureInstance/SaveV2",
+      "missing": [
+        "El snapshot PokeAPI solo recoge trigger=spin; no vincula los siete confites en evolution_details. Los siete son equipables en el perfil, no un trigger use_item.",
+        "No hay evento de giro jugable ni contrato aprobado para dirección, duración, hora y forma de crema.",
+        "No hay identidad persistente de decoración/forma Alcremie ni esquema SaveV2/migración correspondiente.",
+        "Falta política aprobada de consumo del confite al aceptar/cancelar la evolución por giro."
+      ],
+      "runtime_contract": [
+        "Los siete IDs corresponden a cola previa, catálogo seleccionado, son equipables y tienen origen Milcery sin inventar siete rutas PokeAPI",
+        "Existe una única evolución Milcery->Alcremie trigger=spin, clasificada UNSUPPORTED",
+        "Ningún confite dispara use_item/evolve ni especie/forma instantánea al equiparse",
+        "Rechazos sin gasto, propietario desconocido, equipado/retirado y persistencia SaveV2 sin pérdida",
+        "Nunca declarar Alcremie jugable hasta contar con el productor de giro, elección de forma y contrato de guardado"
+      ]
+    },
+    {
+      "block": "06",
+      "ids": [
+        "whipped_dream",
+        "leaders_crest"
+      ],
+      "family": "SPECIAL_EVOLUTION",
+      "classification": "DEPENDENCIA_INTERCAMBIO_Y_COMBATE",
+      "cases": [
+        {
+          "item_id": "whipped_dream",
+          "source": "swirlix",
+          "target": "slurpuff",
+          "canonical_item": "whipped-dream",
+          "evolution_chain": "351",
+          "original_trigger": "trade",
+          "held_item_required": true,
+          "holdable": true,
+          "approved_level": null,
+          "version": "x-y",
+          "classification": "BLOQUEADO_POR_CONTRATO"
+        },
+        {
+          "item_id": "leaders_crest",
+          "source": "bisharp",
+          "target": "kingambit",
+          "canonical_item": "leaders-crest",
+          "evolution_chain": "317",
+          "original_trigger": "three-defeated-bisharp",
+          "held_item_required": false,
+          "holdable": false,
+          "approved_level": null,
+          "version": "scarlet-violet",
+          "classification": "DEPENDENCIA_COMBATE"
+        }
+      ],
+      "decision_sources": [
+        "data/api/v2/evolution-chain/351/index.json",
+        "data/api/v2/evolution-chain/317/index.json",
+        "docs/current/ITEM_TRADE_RESTORATION_V27.json",
+        "docs/current/RANDOMLOCK_ITEMS_BUILD_SCOPE_V2.csv",
+        "modules/inventory/item_connections_v1.json"
+      ],
+      "boundary": {
+        "whipped_dream": {
+          "producer": "ProgressionSystem.gain_experience + approved level + current equipped item",
+          "consumer": "EvolutionSystem.level_up_context/classify_record + PlayerCollection replacement",
+          "missing": [
+            "approved level for Swirlix-to-Slurpuff remains null",
+            "level_up context does not carry held-item validation",
+            "approved consume/retain policy for equipped trade-evolution object"
+          ]
+        },
+        "leaders_crest": {
+          "producer": "battle event log with canonical defeated Bisharp qualifying conditions and ownership",
+          "consumer": "EvolutionSystem three_defeated_bisharp + player collection",
+          "missing": [
+            "no event accumulator for three eligible defeated Bisharp tied to the evolving Bisharp",
+            "no confirmed item possession/consumption policy for leaders_crest",
+            "Pokemon API route records trigger, not direct use-item or held-item condition"
+          ]
+        }
+      },
+      "catalogue_discrepancy": "leaders_crest selected as FOOD_OR_PICNIC_ACTIVITY while queue assigns W04 SPECIAL_EVOLUTION; do not reclassify shared catalogue here",
+      "runtime_contract": [
+        "Check the exact PokeAPI original route without taking Pawniard-to-Bisharp level 52 as a new requirement",
+        "Whipped Dream may be equipped, but no direct bag use, trade shortcut or numeric level is invented",
+        "Leader's Crest not holdable by current profile, trigger three_defeated_bisharp remains unsupported, and no item is spent on invalid requests",
+        "Preserve creature identity, IV/EV, experience, friendship, moves and inventory through failed attempts and SaveV2",
+        "Conclude integration dependency, not a positive Kingambit/Slurpuff evolution"
+      ]
+    },
+    {
+      "block": "07",
+      "ids": [
+        "adamant_crystal",
+        "blue_orb",
+        "griseous_core",
+        "lustrous_globe",
+        "red_orb"
+      ],
+      "family": "FORM_DEPENDENCY",
+      "classification": "DEPENDENCIA_FORMA_EQUIPABLE",
+      "cases": [
+        {
+          "item_id": "adamant_crystal",
+          "source_species": "dialga",
+          "base_variety": "dialga",
+          "target_variety": "dialga-origin",
+          "species_number": 483,
+          "chain_id": 244,
+          "forms_switchable": false,
+          "route_kind": "origin_held",
+          "holdable": true
+        },
+        {
+          "item_id": "blue_orb",
+          "source_species": "kyogre",
+          "base_variety": "kyogre",
+          "target_variety": "kyogre-primal",
+          "species_number": 382,
+          "chain_id": 198,
+          "forms_switchable": true,
+          "route_kind": "primal_on_switch",
+          "holdable": true
+        },
+        {
+          "item_id": "griseous_core",
+          "source_species": "giratina",
+          "base_variety": "giratina-altered",
+          "target_variety": "giratina-origin",
+          "species_number": 487,
+          "chain_id": 248,
+          "forms_switchable": true,
+          "route_kind": "origin_held",
+          "holdable": true
+        },
+        {
+          "item_id": "lustrous_globe",
+          "source_species": "palkia",
+          "base_variety": "palkia",
+          "target_variety": "palkia-origin",
+          "species_number": 484,
+          "chain_id": 245,
+          "forms_switchable": false,
+          "route_kind": "origin_held",
+          "holdable": true
+        },
+        {
+          "item_id": "red_orb",
+          "source_species": "groudon",
+          "base_variety": "groudon",
+          "target_variety": "groudon-primal",
+          "species_number": 383,
+          "chain_id": 199,
+          "forms_switchable": true,
+          "route_kind": "primal_on_switch",
+          "holdable": true
+        }
+      ],
+      "decision_sources": [
+        "data/api/v2/pokemon-species/{382,383,483,484,487}/index.json",
+        "data/api/v2/evolution-chain/{198,199,244,245,248}/index.json",
+        "modules/inventory/item_connections_v1.json",
+        "docs/current/RANDOMLOCK_ITEMS_BUILD_SCOPE_V2.csv"
+      ],
+      "contract_boundary": {
+        "producer": "FieldItemService.equip/unequip produces held_item_id only; battle switch-in for primal forms and item-dependent origin form activation need explicit hooks",
+        "consumer": "Battle form/state resolver and persistent or derivable CreatureInstance form identifier, not EvolutionSystem species evolution",
+        "missing": [
+          "Runtime item-to-form activation and reversal for Origin Dialga/Palkia/Giratina",
+          "Runtime primal switch-in/exit/restore for Kyogre Blue Orb and Groudon Red Orb without cross-wiring",
+          "Stable form identity and SaveV2 contract for retained/equipped vs temporary battle form",
+          "Form item effects vs type power modifiers must not be conflated"
+        ]
+      },
+      "runtime_contract": [
+        "Each item maps to canonical species default and alternate variety; five chains have zero evolution edges",
+        "All five equip as held items but this alone does not certify transformations",
+        "Wrong-species orb cannot create evolution or alter species identity",
+        "Bag item use/evolve is rejected without spending; held item survives SaveV2, unequip recovers original inventory",
+        "Preserve identity, IV/EV, friendship, experience, moves and species, no invented persistent form fields"
+      ]
+    },
+    {
+      "block": "08",
+      "ids": [
+        "dna_splicers",
+        "reins_of_unity",
+        "n_lunarizer_merge",
+        "n_solarizer_merge"
+      ],
+      "family": "FORM_FUSION",
+      "classification": "DEPENDENCIA_FUSION_DOS_PROPIETARIOS",
+      "cases": [
+        {
+          "item_id": "dna_splicers",
+          "source": "kyurem",
+          "partner": "zekrom",
+          "target_variety": "kyurem-black",
+          "species_number": 646,
+          "evolution_chain": 333,
+          "partner_storage": false
+        },
+        {
+          "item_id": "dna_splicers",
+          "source": "kyurem",
+          "partner": "reshiram",
+          "target_variety": "kyurem-white",
+          "species_number": 646,
+          "evolution_chain": 333,
+          "partner_storage": true
+        },
+        {
+          "item_id": "reins_of_unity",
+          "source": "calyrex",
+          "partner": "glastrier",
+          "target_variety": "calyrex-ice",
+          "species_number": 898,
+          "evolution_chain": 476,
+          "partner_storage": true
+        },
+        {
+          "item_id": "reins_of_unity",
+          "source": "calyrex",
+          "partner": "spectrier",
+          "target_variety": "calyrex-shadow",
+          "species_number": 898,
+          "evolution_chain": 476,
+          "partner_storage": false
+        },
+        {
+          "item_id": "n_lunarizer_merge",
+          "source": "necrozma",
+          "partner": "lunala",
+          "target_variety": "necrozma-dawn",
+          "species_number": 800,
+          "evolution_chain": 421,
+          "partner_storage": true
+        },
+        {
+          "item_id": "n_solarizer_merge",
+          "source": "necrozma",
+          "partner": "solgaleo",
+          "target_variety": "necrozma-dusk",
+          "species_number": 800,
+          "evolution_chain": 421,
+          "partner_storage": false
+        }
+      ],
+      "canonical_sources": [
+        "data/api/v2/pokemon-species/{646,898,800}/index.json",
+        "data/api/v2/evolution-chain/{333,476,421}/index.json",
+        "docs/current/RANDOMLOCK_ITEMS_BUILD_SCOPE_V2.csv",
+        "docs/current/ITEM_INVENTORY.csv",
+        "modules/inventory/item_connections_v1.json"
+      ],
+      "source_caveat": "PokeAPI species varieties substantiate target forms; routes and partners require separately approved project rules, not present as evolution_chain edges. n_lunarizer_merge/n_solarizer_merge are selected legacy item IDs rather than PokéAPI use-item evolutions.",
+      "producer": "PlayerCollection ownership (Party or Storage) for two distinct instance IDs; fusion intent with main/partner/item and reversible state",
+      "consumer": "Fusion ownership transaction / form resolver / SaveGameRepository SaveV2 migration",
+      "missing": [
+        "A public API for selecting two owned creatures, fusion/undo and distinct ownership semantics",
+        "Rules for parking or hiding partner creature while fused, and restoring exactly the same partner with its IV/EV/moves/level/held item",
+        "Persistent fusion pair identities and form target in SaveV2, plus battle prohibition and unmerge on invalid/deleted partner",
+        "Item consumption/refund and target-form policy for legacy merge IDs; cannot be guessed from the standard evolution chain"
+      ],
+      "runtime_contract": [
+        "Six ordered source+partner+target-form pairs from four IDs; do not conflate the two routes per shared item",
+        "All four are currently selected but not in holdable_ids, and have no positive certified field route",
+        "Two independently owned CreatureInstance objects remain distinct before and after rejected item use; cover Party and Storage",
+        "SaveV2 must preserve both unique instance IDs/ownership and all persistent creature data when no fusion occurs",
+        "No item consumption or silent target replacement from bag/evolve/equip; no false positive fusion",
+        "Never serialize fake fused species, destroy/duplicate the partner, modify SaveV2 schema or shared producers"
+      ]
+    },
+    {
+      "block": "09",
+      "ids": [
+        "gracidea",
+        "meteorite",
+        "reveal_glass",
+        "rotom_catalog",
+        "zygarde_cube"
+      ],
+      "family": "FORM_DEPENDENCY",
+      "classification": "DEPENDENCIA_FORMAS_ACTIVAS_Y_RESTAURACION",
+      "cases": [
+        {
+          "item_id": "gracidea",
+          "source_species": "shaymin",
+          "species_number": 492,
+          "evolution_chain": 253,
+          "base_variety": "shaymin-land",
+          "target_varieties": [
+            "shaymin-sky"
+          ],
+          "forms_switchable": true,
+          "route_kind": "daytime+status+restore_land",
+          "storage": false
+        },
+        {
+          "item_id": "meteorite",
+          "source_species": "deoxys",
+          "species_number": 386,
+          "evolution_chain": 202,
+          "base_variety": "deoxys-normal",
+          "target_varieties": [
+            "deoxys-attack",
+            "deoxys-defense",
+            "deoxys-speed"
+          ],
+          "forms_switchable": true,
+          "route_kind": "user_selects_deoxys_form",
+          "storage": true
+        },
+        {
+          "item_id": "reveal_glass",
+          "source_species": "tornadus",
+          "species_number": 641,
+          "evolution_chain": 328,
+          "base_variety": "tornadus-incarnate",
+          "target_varieties": [
+            "tornadus-therian"
+          ],
+          "forms_switchable": true,
+          "route_kind": "incarnate_therian_toggle",
+          "storage": false
+        },
+        {
+          "item_id": "reveal_glass",
+          "source_species": "thundurus",
+          "species_number": 642,
+          "evolution_chain": 329,
+          "base_variety": "thundurus-incarnate",
+          "target_varieties": [
+            "thundurus-therian"
+          ],
+          "forms_switchable": true,
+          "route_kind": "incarnate_therian_toggle",
+          "storage": true
+        },
+        {
+          "item_id": "reveal_glass",
+          "source_species": "landorus",
+          "species_number": 645,
+          "evolution_chain": 332,
+          "base_variety": "landorus-incarnate",
+          "target_varieties": [
+            "landorus-therian"
+          ],
+          "forms_switchable": true,
+          "route_kind": "incarnate_therian_toggle",
+          "storage": false
+        },
+        {
+          "item_id": "reveal_glass",
+          "source_species": "enamorus",
+          "species_number": 905,
+          "evolution_chain": 477,
+          "base_variety": "enamorus-incarnate",
+          "target_varieties": [
+            "enamorus-therian"
+          ],
+          "forms_switchable": true,
+          "route_kind": "incarnate_therian_toggle",
+          "storage": true
+        },
+        {
+          "item_id": "rotom_catalog",
+          "source_species": "rotom",
+          "species_number": 479,
+          "evolution_chain": 240,
+          "base_variety": "rotom",
+          "target_varieties": [
+            "rotom-heat",
+            "rotom-wash",
+            "rotom-frost",
+            "rotom-fan",
+            "rotom-mow"
+          ],
+          "forms_switchable": true,
+          "route_kind": "appliance_selection_and_moves",
+          "storage": false
+        },
+        {
+          "item_id": "zygarde_cube",
+          "source_species": "zygarde",
+          "species_number": 718,
+          "evolution_chain": 370,
+          "base_variety": "zygarde-50",
+          "target_varieties": [
+            "zygarde-10",
+            "zygarde-10-power-construct",
+            "zygarde-50-power-construct",
+            "zygarde-complete"
+          ],
+          "forms_switchable": false,
+          "route_kind": "cell_assembly_and_power_construct_distinct",
+          "storage": true
+        }
+      ],
+      "canonical_sources": [
+        "data/api/v2/pokemon-species/{492,386,641,642,645,905,479,718}/index.json",
+        "data/api/v2/evolution-chain/{253,202,328,329,332,477,240,370}/index.json",
+        "docs/current/RANDOMLOCK_ITEMS_BUILD_SCOPE_V2.csv",
+        "docs/current/ITEM_INVENTORY.csv",
+        "modules/inventory/item_connections_v1.json"
+      ],
+      "caveats": [
+        "Canonical varieties do not encode which item causes each transition or its conditions; no item route was found in evolution chains",
+        "Zygarde Complete is an in-battle Power Construct consequence, not a direct Zygarde Cube item transformation; cube needs cell/core inventory and ability/form rules",
+        "forms_switchable=false for Zygarde in source snapshot despite multiple varieties; do not suppress variants nor infer item actions",
+        "Rotom form choice may require move-set adjustment; cannot use species_id changes to bypass ability, type and moves contracts",
+        "Meteorite/Deoxys and Gracidea/Shaymin need selection and temporal/reversion rules approved by IA6"
+      ],
+      "producer": "FieldItemService item action with species+target variant selection and preconditions (time/status/weather for Shaymin; appliance choice for Rotom; cells/cores/ability for Zygarde)",
+      "consumer": "Form resolver and rollback with CreatureInstance persistent form identity plus SaveV2 and battle lifecycle",
+      "missing": [
+        "Validated item-to-form rules for eight species, variant activation, removal, rollback and failed action atomicity",
+        "Persistent or derivable form identity, types/ability/moves/stat adjustments across SaveV2 (distinct from battle_transform_original)",
+        "Real clock, condition and reversion producer for Shaymin; correct Deoxys form selection by version; reveal-glass form toggles",
+        "Rotom catalog appliance and move selection, correctness under cancellation",
+        "Zygarde cell/core count and form assembly, distinction from Power Construct battle-only Complete"
+      ],
+      "runtime_contract": [
+        "Eight species/uses drawn from exactly five selected IDs, no new items and zero evolution-chain edges",
+        "None of the five items is holdable or has a certified field-use route; bag use/evolve/equip must not silently grant forms",
+        "Retain existing base species and party or storage location; reject outsider; preserve item counts and creature state on invalid actions",
+        "SaveV2 round trip of original species/identity/IVs/EVs/experience/friendship/moves and inventory; no invented form_id field",
+        "Do not count Zygarde Complete as a direct cube action; no false-positive form transformations"
+      ]
+    },
+    {
+      "block": "10",
+      "family": "FORM_CONDITIONS",
+      "classification": "RUTAS_POSITIVAS_Y_FORMA_NO_PERSISTIDA",
+      "ids": [
+        "chipped_pot",
+        "cracked_pot",
+        "masterpiece_teacup",
+        "unremarkable_teacup",
+        "sweet_apple",
+        "tart_apple",
+        "syrupy_apple"
+      ],
+      "cases": [
+        {
+          "item_id": "chipped_pot",
+          "source": "sinistea",
+          "target": "polteageist",
+          "chain": 449,
+          "version": "sword-shield",
+          "source_variant": "antique",
+          "source_variant_encoded": false,
+          "storage": true,
+          "canonical_item": "chipped-pot",
+          "trigger": "use-item",
+          "item_evolution_positive": true,
+          "holdable": true
+        },
+        {
+          "item_id": "cracked_pot",
+          "source": "sinistea",
+          "target": "polteageist",
+          "chain": 449,
+          "version": "sword-shield",
+          "source_variant": "phony",
+          "source_variant_encoded": false,
+          "storage": false,
+          "canonical_item": "cracked-pot",
+          "trigger": "use-item",
+          "item_evolution_positive": true,
+          "holdable": true
+        },
+        {
+          "item_id": "masterpiece_teacup",
+          "source": "poltchageist",
+          "target": "sinistcha",
+          "chain": 539,
+          "version": "the-teal-mask",
+          "source_variant": "artisan",
+          "source_variant_encoded": false,
+          "storage": true,
+          "canonical_item": "masterpiece-teacup",
+          "trigger": "use-item",
+          "item_evolution_positive": true,
+          "holdable": true
+        },
+        {
+          "item_id": "unremarkable_teacup",
+          "source": "poltchageist",
+          "target": "sinistcha",
+          "chain": 539,
+          "version": "the-teal-mask",
+          "source_variant": "counterfeit",
+          "source_variant_encoded": false,
+          "storage": false,
+          "canonical_item": "unremarkable-teacup",
+          "trigger": "use-item",
+          "item_evolution_positive": true,
+          "holdable": true
+        },
+        {
+          "item_id": "sweet_apple",
+          "source": "applin",
+          "target": "appletun",
+          "chain": 442,
+          "version": "sword-shield",
+          "source_variant": null,
+          "source_variant_encoded": false,
+          "storage": true,
+          "canonical_item": "sweet-apple",
+          "trigger": "use-item",
+          "item_evolution_positive": true,
+          "holdable": true
+        },
+        {
+          "item_id": "tart_apple",
+          "source": "applin",
+          "target": "flapple",
+          "chain": 442,
+          "version": "sword-shield",
+          "source_variant": null,
+          "source_variant_encoded": false,
+          "storage": false,
+          "canonical_item": "tart-apple",
+          "trigger": "use-item",
+          "item_evolution_positive": true,
+          "holdable": true
+        },
+        {
+          "item_id": "syrupy_apple",
+          "source": "applin",
+          "target": "dipplin",
+          "chain": 442,
+          "version": "the-teal-mask",
+          "source_variant": null,
+          "source_variant_encoded": false,
+          "storage": true,
+          "canonical_item": "syrupy-apple",
+          "trigger": "use-item",
+          "item_evolution_positive": true,
+          "holdable": true
+        }
+      ],
+      "canonical_sources": [
+        "data/api/v2/evolution-chain/{449,539,442}/index.json",
+        "data/api/v2/pokemon-species/{854,1012,840}/index.json",
+        "docs/current/ITEM_FIELD_V8.csv.txt",
+        "docs/current/ITEM_INVENTORY.csv",
+        "modules/creatures/progression/evolution_system.gd",
+        "modules/inventory/field_item_service.gd"
+      ],
+      "positive_scope": "Seven item→species evolution paths are already supported; verify live evolution, correct target, item spending exactly one, ownership Party/Storage, and SaveV2; never count as new implemented routes.",
+      "missing_contracts": [
+        "Sinistea phony vs antique phenotype and Poltchageist counterfeit vs artisan phenotype have no persistent distinct source variant in CreatureInstance or PokeAPI evolution-chain details; same species can currently accept both item routes.",
+        "Game-specific form resolution/capture producer and SaveV2 migration are required before validating correct pot/cup applicability (not just species-to-species transition).",
+        "The legacy inventory CSV says EVOLUTION_ELIGIBILITY_RULES_NO_BAG_BRIDGE but the field CSV certifies BAG_EVOLUTION_VERIFIED_WITH_SUPPORTED_TARGETS; this drift must be reconciled by coordination, not by falsifying test results.",
+        "Applin has three separate target species; do not let Syrupy Apple skip the distinct Dipplin→Hydrapple Dragon Cheer route."
+      ],
+      "runtime_contract": [
+        "Seven exact original use-item paths are reported as positive from source and behavior, without reimplementing them.",
+        "All seven selected and holdable; equipping is not evolution, and wrong-target/wrong-stage/outsider must not consume.",
+        "Positive bag use/evolve changes exactly one owned creature to its expected species, consumes exactly one item and preserves identity/IV/EV/XP/friendship/moves.",
+        "Party and Storage routes preserve unique ownership and SaveV2 roundtrip.",
+        "Four form-sensitive pot/cup routes remain UNVALIDATED for correct authenticity due to missing form variant, despite positive species transition."
+      ]
+    }
+  ]
+}
