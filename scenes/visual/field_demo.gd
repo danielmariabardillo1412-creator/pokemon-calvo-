@@ -57,6 +57,11 @@ var _item_bag: Control
 const FieldRepel = preload("res://modules/overworld/field_repel_step_effect.gd")
 var _repel_effect := FieldRepel.new()
 
+# V7 staging-only explicit classic profile; not enabled in global encounter rules.
+const FieldFlutes = preload("res://modules/overworld/field_flute_encounter_rate_v7.gd")
+const FLUTE_PROFILE: StringName = FieldFlutes.PROFILE
+var _flute_effect := FieldFlutes.new()
+
 
 func _ready() -> void:
 	native_battles_enabled = native_battles_enabled and "--legacy-field" not in OS.get_cmdline_user_args()
@@ -412,6 +417,7 @@ func restart_field_run() -> void:
 func _on_configuration_applied(config: Dictionary) -> void:
 	if not _can_configure():
 		return
+	_flute_effect.clear()
 	_grass_walking_seconds = 0.0
 	if _notice_label != null:
 		_notice_label.text = ""
@@ -692,6 +698,20 @@ func field_native_capture_zone(position: Vector2, expected_zone: StringName) -> 
 	return expected_zone
 
 
+# V7: native-world use only; the inventory remains the source of truth.
+# Never consumes a flute, changes a battle RNG, or silently saves the game.
+func field_use_classic_flute(item_id: StringName, inventory: Variant) -> Dictionary:
+	if not FieldFlutes.supports(item_id):
+		return {"accepted": false, "reason": "unsupported_item"}
+	if not field_can_use_items() or _director == null or _session == null:
+		return {"accepted": false, "reason": "field_locked"}
+	if inventory == null or not inventory.has(item_id):
+		return {"accepted": false, "reason": "item_not_owned"}
+	if not _flute_effect.activate(item_id, FLUTE_PROFILE):
+		return {"accepted": false, "reason": "flute_profile_not_active"}
+	return {"accepted": true, "item_id": String(item_id), "active_id": String(_flute_effect.active_id), "consumed": false}
+
+
 func field_prepare_native_encounter(zone_id: StringName) -> Dictionary:
 	if _director == null or _session == null or _catalogs == null:
 		return {}
@@ -705,6 +725,8 @@ func field_prepare_native_encounter(zone_id: StringName) -> Dictionary:
 	# Incense, in which case it returns a validated COPY with the 2/3 rate. The
 	# authored table, resolver, metrics, seeds and RNG stream stay untouched.
 	table = preload("res://modules/gameplay/encounter_item_modifiers.gd").prepare_table(table, _session.player.party.get_creatures())
+	# Classic flutes act on a validated COPY at the same step-rate boundary.
+	table = _flute_effect.prepare_table(table, FLUTE_PROFILE)
 	var staged := RandomNumberGenerator.new()
 	staged.state = _director._encounter_rng.state
 	var encounter := WildEncounterSystem.resolve(table, staged, _catalogs, _session.progression_ruleset)
@@ -788,7 +810,7 @@ func field_native_world_snapshot(format_id: String) -> Dictionary:
 	var position := field_player_position()
 	return {"position": [position.x, position.y], "region": String(technical_region_id()),
 		"config": _active_config.duplicate(true), "rng": str(_director._encounter_rng.state), "next_seed": _director._next_battle_seed, "format": format_id,
-		"repel": _repel_effect.to_dict()}
+		"repel": _repel_effect.to_dict(), "flute": _flute_effect.to_dict()}
 
 
 func field_build_native_encounter_tables(config: Dictionary) -> Dictionary:
@@ -832,6 +854,8 @@ func field_validate_native_loaded_world(world: Dictionary) -> Dictionary:
 	var steps: int = int(count)
 	if steps < 0 or (steps == 0 and sid != &"") or (steps > 0 and (not FieldRepel.DURATIONS.has(sid) or steps > int(FieldRepel.DURATIONS.get(sid, 0)))):
 		return {"ok": false, "error": "world_repel_range"}
+	if world.has("flute") and not _flute_effect.validate_snapshot(world.flute):
+		return {"ok": false, "error": "world_flute_corrupt"}
 	var tables := field_build_native_encounter_tables(world.config)
 	if tables.is_empty(): return {"ok": false, "error": "world_encounters"}
 	return {"ok": true, "position": position, "tables": tables, "repel": repel}
@@ -852,6 +876,8 @@ func field_publish_native_loaded_world(collection: PlayerCollection, trainer: Tr
 	# Validation has already run before publication. Existing saved games omit this key.
 	_repel_effect.restore(world.get("repel", {"schema_version": 1, "active_id": "", "remaining_steps": 0}))
 	_repel_effect.attach(player)
+	# Legacy saves have no flute. Corrupt snapshots are rejected before publication.
+	_flute_effect.restore(world.get("flute", {"schema_version": 1, "active_id": ""}))
 
 
 func field_refresh_legacy_presentations() -> void:
