@@ -62,21 +62,39 @@ func _transport_failure(reason: String) -> Dictionary:
 	return {"ok": false, "error": reason, "stderr": stderr_text}
 
 
+# W04 V7: bounded native worker close. exchange() reads a duplex pipe and
+# may block on get_buffer while the shutdown RPC is in progress. Never await
+# that read in teardown. Send the ordinary shutdown RPC, give the worker a
+# bounded grace period to exit normally, then kill and report escalation.
+# Active battle RPCs and exchange() semantics remain unchanged.
 func close(tree: SceneTree) -> bool:
-	print("W04_V7_PIPE_STAGE entry pid=", pid)
-	if _stdio != null and _stdio.is_open():
-		print("W04_V7_PIPE_STAGE before_exchange")
-		await exchange(tree, {"op": "shutdown"}, 1000)
-		print("W04_V7_PIPE_STAGE after_exchange")
-		_stdio.close()
-		print("W04_V7_PIPE_STAGE after_stdio_close")
+	var worker_pid := pid
+	var shutdown_sent := false
+	if _stdio != null and _stdio.is_open() and worker_pid >= 0 and OS.is_process_running(worker_pid):
+		_sequence += 1
+		var payload := (JSON.stringify({"op": "shutdown", "rpc_id": _sequence}) + "\n").to_utf8_buffer()
+		_stdio.store_buffer(payload)
+		shutdown_sent = _stdio.get_error() == OK
+	var graceful := false
+	var deadline := Time.get_ticks_msec() + 1200
+	while worker_pid >= 0 and OS.is_process_running(worker_pid) and Time.get_ticks_msec() < deadline:
+		await tree.process_frame
+	if worker_pid < 0 or not OS.is_process_running(worker_pid):
+		graceful = shutdown_sent
+	var forced := worker_pid >= 0 and OS.is_process_running(worker_pid)
+	if forced:
+		var error := OS.kill(worker_pid)
+		if error != OK: push_warning("W04_V7_PIPE_CLOSE kill_error=" + str(error))
+	if _stdio != null and _stdio.is_open(): _stdio.close()
 	if _stderr != null and _stderr.is_open(): _stderr.close()
-	print("W04_V7_PIPE_STAGE before_timer")
-	await tree.create_timer(0.03).timeout
-	print("W04_V7_PIPE_STAGE after_timer")
-	if pid >= 0 and OS.is_process_running(pid): OS.kill(pid)
-	var stopped := pid < 0 or not OS.is_process_running(pid)
+	if worker_pid >= 0:
+		await tree.create_timer(0.03).timeout
+	var stopped := worker_pid < 0 or not OS.is_process_running(worker_pid)
+	print("W04_V7_PIPE_CLOSE shutdown_sent=", shutdown_sent,
+		" graceful=", graceful, " forced=", forced, " stopped=", stopped)
 	pid = -1
+	_stdio = null
+	_stderr = null
 	return stopped
 
 
