@@ -1,0 +1,140 @@
+name: IA6 Official W04 regional evolution and W02 W03 W05 cross-worker
+on:
+  push:
+    branches: [codex/calvo-ia6-integration-20261109]
+    paths:
+      - '.github/workflows/ia6-official-w04-regional-20261112.yml'
+      - 'modules/creatures/domain/creature_instance.gd'
+      - 'modules/creatures/progression/creature_factory.gd'
+      - 'modules/creatures/progression/evolution_system.gd'
+      - 'modules/creatures/progression/canonical_form_identity_w04.gd'
+      - 'modules/creatures/progression/regional_item_evolution_contract_w04_v2.gd'
+      - 'modules/inventory/field_item_service.gd'
+      - 'modules/save/save_game_data.gd'
+      - 'modules/save/field_native_save.gd'
+      - 'tests/gameplay/w04_continuous_v3_red_destinations.gd'
+      - 'tests/gameplay/w04_continuous_v3_real_evolution.gd'
+      - 'tests/gameplay/w04_continuous_v3_fail_publish_service.gd'
+      - 'tests/gameplay/w04_continuous_v2_regional_items.gd'
+      - 'tests/gameplay/w04_continuous_v2_regional_persistence.gd'
+      - 'modules/creatures/progression/regional_ability_selection_w04.gd'
+      - 'modules/creatures/progression/regional_evolution_contract_w04.gd'
+      - 'tests/gameplay/w04_autorun_v2_form_identity.gd'
+      - 'tests/gameplay/w04_autorun_v3_all_regional.gd'
+      - 'tests/gameplay/w04_autorun_v4_ability.gd'
+      - 'tests/gameplay/w04_autorun_v5_regional_evolution.gd'
+      - 'config/item_selection_v1.json'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  qa:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: chickensoft-games/setup-godot@v2.4.1
+        with:
+          version: 4.7.0
+          use-dotnet: false
+          include-templates: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Restore and import Godot
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -B tools/distribution/restore_resources.py
+          python -B tools/distribution/restore_resources.py --check
+          mkdir -p data/reports
+          cp ci/fixtures/pokeapi_reports/forms_policy_report.json data/reports/forms_policy_report.json
+          cp ci/fixtures/pokeapi_reports/unsupported_mechanics.json data/reports/unsupported_mechanics.json
+          cp ci/fixtures/pokeapi_reports/import_summary.json data/reports/import_summary.json
+          godot --headless --path . --import 2>&1 | tee w04-v4-import.log
+          echo "POKEMON_CALVO_NODE=$(command -v node)" >> "$GITHUB_ENV"
+          python -B tools/battle_reference/run.py --install --limit 1 2>&1 | tee w04-v4-native-ref.log
+          grep -F 'BATTLE_REFERENCE PASS' w04-v4-native-ref.log
+          if grep -E 'SCRIPT ERROR|Parse Error' w04-v4-import.log; then exit 1; fi
+      - name: Ensure Dynamax Candy exclusion
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          c=json.load(open('config/item_selection_v1.json',encoding='utf-8'))
+          assert 'dynamax_candy' in c['excluded_ids'], 'forbidden dynamax_candy accidentally selected'
+          print('W04_V4_DYNAMAX_EXCLUSION PASS')
+          PY
+      - name: Canonical destination via actual EvolutionSystem
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 900s godot --headless --path . --script res://tests/gameplay/w04_continuous_v3_red_destinations.gd 2>&1 | tee w04-v4-a.log
+          grep -E '^W04_V3_A PASS seven_real_destinations$' w04-v4-a.log
+      - name: Seven native evolutions with W02 effective nature and rollback
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 1500s godot --headless --path . --script res://tests/gameplay/w04_continuous_v3_real_evolution.gd 2>&1 | tee w04-v4-b.log
+          grep -E '^W04_V3_L3 PASS checks=[1-9][0-9]* routes=7 ownership=14 rollback=2$' w04-v4-b.log
+      - name: Seven canonical L2 contracts
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 900s godot --headless --path . --script res://tests/gameplay/w04_continuous_v2_regional_items.gd 2>&1 | tee w04-v4-l2.log
+          grep -E '^W04_V2_B02 PASS checks=[1-9][0-9]* L3=0$' w04-v4-l2.log
+      - name: Factory source destination Party Storage SaveV2
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 900s godot --headless --path . --script res://tests/gameplay/w04_continuous_v2_regional_persistence.gd 2>&1 | tee w04-v4-persistence.log
+          grep -E '^W04_V2_B03 PASS checks=[1-9][0-9]* L3=0$' w04-v4-persistence.log
+      - name: Historical native regional 55 of 56 and Exeggutor blocked
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 1500s godot --headless --path . --script res://tests/gameplay/w04_autorun_v3_all_regional.gd 2>&1 | tee w04-v4-forms.log
+          grep -E '^W04_AUTORUN_V3_ALL PASS checks=[1-9][0-9]* examined=56 native_functional=55 blocked=1$' w04-v4-forms.log
+      - name: Historical four allowed normal abilities
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 900s godot --headless --path . --script res://tests/gameplay/w04_autorun_v4_ability.gd 2>&1 | tee w04-v4-abilities.log
+          grep -E '^W04_AUTORUN_V4 PASS checks=[1-9][0-9]* promoted=4 blocked=1$' w04-v4-abilities.log
+      - name: Historical Galarica canonical contracts
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 900s godot --headless --path . --script res://tests/gameplay/w04_autorun_v5_regional_evolution.gd 2>&1 | tee w04-v4-galarica.log
+          grep -E '^W04_AUTORUN_V5 PASS checks=[1-9][0-9]* routes=2 L3=0$' w04-v4-galarica.log
+      - name: Historical native Slowpoke Galar
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout 900s godot --headless --path . --script res://tests/gameplay/w04_autorun_v2_form_identity.gd 2>&1 | tee w04-v4-pilot.log
+          grep -E '^W04_AUTORUN_V2_FORM PASS checks=[1-9][0-9]*$' w04-v4-pilot.log
+      - name: Cross-worker native SaveV2 mint books rope repel and capture ledger
+        shell: bash
+        run: |
+          set -euo pipefail
+          for entry in savegame_v2_test_runner savegame_v2_adversarial_test_runner ia6_integration_mint_rope_20261109 ia6_books_bag_20261109 parallel_items_w03_repel_l3 parallel_items_w03_repeat_native_v4; do
+            timeout 900s godot --headless --path . --script "res://tests/gameplay/${entry}.gd" 2>&1 | tee "w04-v4-cross-${entry}.log"
+            if grep -E 'SCRIPT ERROR|Parse Error|^CAMP006_W03_REPEL_L3 FAIL|^W03_REPEAT_NATIVE_V4 FAIL|^IA6_.*FAIL' "w04-v4-cross-${entry}.log"; then exit 1; fi
+          done
+          grep -E '^=== SAVEGAME V2 TEST RESULT: [1-9][0-9]* PASS / 0 FAIL ===$' w04-v4-cross-savegame_v2_test_runner.log
+          grep -E '^=== SAVEGAME V2 ADVERSARIAL RESULT: [1-9][0-9]* PASS / 0 FAIL ===$' w04-v4-cross-savegame_v2_adversarial_test_runner.log
+          grep -E '^IA6_INTEGRATION PASS checks=[1-9][0-9]*' w04-v4-cross-ia6_integration_mint_rope_20261109.log
+          grep -E '^IA6_BOOK_BAG PASS checks=[1-9][0-9]*' w04-v4-cross-ia6_books_bag_20261109.log
+          grep -E '^CAMP006_W03_REPEL_L3 PASS checks=[1-9][0-9]*$' w04-v4-cross-parallel_items_w03_repel_l3.log
+          grep -E '^W03_REPEAT_NATIVE_V4 PASS checks=[1-9][0-9]*$' w04-v4-cross-parallel_items_w03_repeat_native_v4.log
+      - name: Preserve logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: w04-v4-staging-${{ github.run_id }}
+          retention-days: 7
+          if-no-files-found: ignore
+          path: w04-v4-*.log
