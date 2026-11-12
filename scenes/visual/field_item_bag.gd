@@ -195,6 +195,11 @@ func _refresh_choices() -> void:
 		_description.text = "Medicina para el Pokémon seleccionado. Se consume solo si tiene efecto." if service.FieldEffects.consumes_on_use(_selected_item()) else "Despierta al Pokémon seleccionado. Puede reutilizarse; no se consume."
 	elif service.FieldEffects.EV_BERRIES.has(String(_selected_item())):
 		_description.text = "Reduce hasta 10 EV de una estadística y aumenta la amistad."
+	if _selected_item() in [&"black_flute", &"white_flute"]:
+		_description.text = "Cambia la frecuencia de encuentros en el perfil clásico de este mapa; sustituye la otra flauta. No se consume."
+		_use.disabled = not service.owner.inventory.has(_selected_item()) or not field.field_can_use_items()
+		_equip.disabled = true
+		return
 	if _selected_item() in [&"repel", &"super_repel", &"max_repel"]:
 		_description.text = "Ahuyenta Pokémon salvajes de nivel inferior al líder durante pasos reales."
 		_use.disabled = not service.owner.inventory.has(_selected_item()) or field._repel_effect.remaining_steps > 0
@@ -222,6 +227,8 @@ func _apply(action: String) -> Dictionary:
 		if field != null: field.field_refresh_hud()
 		return {"accepted": false, "reason": "field_locked", "status": "REJECTED"}
 	_cancel_growth()
+	if action == "use" and _selected_item() in [&"black_flute", &"white_flute"]:
+		return _apply_flute()
 	if action == "use" and _selected_item() in [&"repel", &"super_repel", &"max_repel"]:
 		return _apply_repel()
 	if action == "use" and _selected_item() == &"escape_rope":
@@ -297,6 +304,22 @@ func _on_book_teaching_finished(outcome: Dictionary) -> void:
 	refresh()
 	if field != null: field.field_refresh_hud()
 	_fit_bag.call_deferred()
+
+# W03 V7: world effect without a creature target or inventory spend.
+func _apply_flute() -> Dictionary:
+	var item_id: StringName = _selected_item()
+	if item_id not in [&"black_flute", &"white_flute"]:
+		return {"accepted": false, "reason": "unsupported_item"}
+	if not _ensure_binding() or service.owner == null or not field.field_can_use_items():
+		return {"accepted": false, "reason": "field_locked"}
+	if not service.owner.inventory.has(item_id):
+		return {"accepted": false, "reason": "item_not_owned"}
+	var result: Dictionary = field.field_use_classic_flute(item_id, service.owner.inventory)
+	_result.text = "Flauta activada; la anterior queda sustituida. No se ha gastado ni guardado." if bool(result.get("accepted", false)) else "No se pudo activar la flauta: " + String(result.get("reason", "rechazado"))
+	refresh()
+	field.field_refresh_hud()
+	return result
+
 
 # W03 only: the world command does not need a Pokémon target.
 func _apply_repel() -> Dictionary:
