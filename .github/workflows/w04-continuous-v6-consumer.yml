@@ -24,6 +24,9 @@ jobs:
     timeout-minutes: 55
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
@@ -32,6 +35,14 @@ jobs:
           version: 4.7.0
           use-dotnet: false
           include-templates: false
+      - name: Prepare pinned native Showdown runtime
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p .godot/battle_reference/runtime
+          cp tools/battle_reference/package.json tools/battle_reference/package-lock.json .godot/battle_reference/runtime/
+          npm ci --prefix .godot/battle_reference/runtime --ignore-scripts --no-audit --no-fund
+          node -e "const p = require('./.godot/battle_reference/runtime/node_modules/@pkmn/sim/package.json'); if (p.version !== '0.10.11') process.exit(1);"
       - name: Restore and import Godot
         shell: bash
         run: |
@@ -58,6 +69,8 @@ jobs:
           grep -E '^W04_V6_CONSUMER PASS checks=[1-9][0-9]* pilots=2 accepted=4 declined=4$' w04-v6-consumer.log
       - name: Native postbattle evolution prompt real Showdown two routes
         shell: bash
+        env:
+          POKEMON_CALVO_NODE: node
         run: |
           set -euo pipefail
           timeout 1500s godot --headless --path . --script res://tests/gameplay/w04_continuous_v6_native_battle_ui.gd 2>&1 | tee w04-v6-native.log
