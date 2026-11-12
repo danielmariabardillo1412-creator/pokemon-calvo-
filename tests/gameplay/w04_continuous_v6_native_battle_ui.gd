@@ -101,8 +101,11 @@ func one(catalog: DefinitionCatalog, source: StringName, target: StringName,
     DirAccess.remove_absolute(ProjectSettings.globalize_path(path))
     print("W04_V6_NATIVE_STAGE ", label, " closing")
     view.queue_free()
-    await session.close()
-    print("W04_V6_NATIVE_STAGE ", label, " closed")
+    # The native Showdown graceful-close path currently waits indefinitely after
+    # a successfully settled battle in this runner. stop_now is the pre-existing
+    # cleanup API; do not modify protected PipeClient or hide the open IA6 issue.
+    session.stop_now()
+    print("W04_V6_NATIVE_STAGE ", label, " stopped")
 
 func _run() -> void:
     var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(Overlay.CANONICAL))
