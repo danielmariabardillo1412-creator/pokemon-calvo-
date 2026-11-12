@@ -1,3 +1,11 @@
+# ORDEN IA6 — RELEVO DIRECTO W04 A V7 · 2026-11-12 · VIGENTE Y PRIORITARIA
+
+**ANTERIOR V6 TERMINADA.** CI V6 #43126697924 SUCCESS, pero retorno de mapa sin certificar. No repetir V6; sus pruebas no certifican la nueva campaña. IA6 ha publicado orden con trabajo funcional pendiente.
+
+**SIGUIENTE `p` O `sigue`:** confirmar los cambios locales publicados/working tree limpio; cambiar a RAMA NUEVA EXCLUSIVA `codex/calvo-items-20261112-w04-battle-return-v7`; abrir allí `docs/coordination/items_parallel_v1/IA6_AUTORUN.md` y `docs/coordination/items_parallel_v1/CONTINUOUS_V7/STATE_W04.md`. Ejecutar Fase A inmediatamente y continuar A→B→C con las autorizaciones de ese plan. No trabajar en ESTA V6, en IA6 oficial, main/V28/PR118 ni otra rama W.
+
+---
+
 # IA6 — W04 · NUEVA MISIÓN ACTIVA CONTINUOUS_V6/PLAN_W04.md · 12-11-2026
 
 **Rama ÚNICA NUEVA:** `codex/calvo-items-20261112-w04-evolution-consumer-v6`.
