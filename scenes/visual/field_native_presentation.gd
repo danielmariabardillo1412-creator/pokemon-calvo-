@@ -36,6 +36,13 @@ func _build_ui() -> void:
 	# Real post-battle evolution choice, reused from the field growth UI.
 	_evolution_choices_w04 = GrowthChoicesW04.new()
 	right.add_child(_evolution_choices_w04)
+	# FieldGrowthChoices is shared with Rare Candy; change only this instance's
+	# cancel caption, not the global bag-use text.
+	for group: Node in _evolution_choices_w04.get_children():
+		if group is HBoxContainer:
+			for child: Node in group.get_children():
+				if child is Button and child.text.begins_with("Cancelar uso"):
+					child.text = "No evolucionar"
 	_evolution_choices_w04.chosen.connect(func(value: Variant):
 		_resolve_postbattle_evolution_w04(StringName(str(value)) == StringName(_active_evolution_contract_w04.get("target_id", ""))))
 	_evolution_choices_w04.cancelled.connect(func():
@@ -63,7 +70,7 @@ func _refresh_view() -> void:
 	_save.show(); _load.show()
 	_save.disabled = locked or owner_bridge == null or has_pending_evolution_w04()
 	_continue_button.disabled = _continue_button.disabled or has_pending_evolution_w04()
-	_load.disabled = locked or owner_bridge == null or not FileAccess.file_exists(owner_bridge.save_path)
+	_load.disabled = locked or owner_bridge == null or has_pending_evolution_w04() or not FileAccess.file_exists(owner_bridge.save_path)
 
 
 func save_battle(_path: String = "") -> bool:
