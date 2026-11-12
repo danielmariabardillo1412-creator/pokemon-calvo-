@@ -57,56 +57,24 @@ func exchange(tree: SceneTree, message: Dictionary, timeout_ms: int = 8000) -> D
 
 
 func _transport_failure(reason: String) -> Dictionary:
-	print("W04_V7_PIPE_STEP before_stdio_close")
 	if _stdio != null and _stdio.is_open(): _stdio.close()
-	print("W04_V7_PIPE_STEP after_stdio_close")
 	if pid >= 0 and OS.is_process_running(pid): OS.kill(pid)
 	return {"ok": false, "error": reason, "stderr": stderr_text}
 
 
-# W04 V7: bounded native worker close. exchange() reads a duplex pipe and
-# may block on get_buffer while the shutdown RPC is in progress. Never await
-# that read in teardown. Send the ordinary shutdown RPC, give the worker a
-# bounded grace period to exit normally, then kill and report escalation.
-# Active battle RPCs and exchange() semantics remain unchanged.
-func close(tree: SceneTree) -> bool:
-	print("W04_V7_PIPE_STEP entry")
-	var worker_pid := pid
-	var shutdown_sent := false
-	if _stdio != null and _stdio.is_open() and worker_pid >= 0 and OS.is_process_running(worker_pid):
-		_sequence += 1
-		var payload := (JSON.stringify({"op": "shutdown", "rpc_id": _sequence}) + "\n").to_utf8_buffer()
-		print("W04_V7_PIPE_STEP before_write")
-		_stdio.store_buffer(payload)
-		print("W04_V7_PIPE_STEP after_write")
-		shutdown_sent = _stdio.get_error() == OK
-	print("W04_V7_PIPE_STEP before_poll")
-	var graceful := false
-	var deadline := Time.get_ticks_msec() + 1200
-	while worker_pid >= 0 and OS.is_process_running(worker_pid) and Time.get_ticks_msec() < deadline:
-		await tree.process_frame
-	if worker_pid < 0 or not OS.is_process_running(worker_pid):
-		graceful = shutdown_sent
-	var forced := worker_pid >= 0 and OS.is_process_running(worker_pid)
-	if forced:
-		var error := OS.kill(worker_pid)
-		if error != OK: push_warning("W04_V7_PIPE_CLOSE kill_error=" + str(error))
-	print("W04_V7_PIPE_STEP before_stdio_close pid=", worker_pid,
-		" running=", worker_pid >= 0 and OS.is_process_running(worker_pid),
-		" sent=", shutdown_sent, " forced=", forced)
-	if _stdio != null and _stdio.is_open(): _stdio.close()
-	print("W04_V7_PIPE_STEP after_stdio_close_close_method")
-	print("W04_V7_PIPE_STEP before_stderr_close")
-	if _stderr != null and _stderr.is_open(): _stderr.close()
-	print("W04_V7_PIPE_STEP after_stderr_close")
-	if worker_pid >= 0:
-		await tree.create_timer(0.03).timeout
-	var stopped := worker_pid < 0 or not OS.is_process_running(worker_pid)
-	print("W04_V7_PIPE_CLOSE shutdown_sent=", shutdown_sent,
-		" graceful=", graceful, " forced=", forced, " stopped=", stopped)
-	pid = -1
-	_stdio = null
-	_stderr = null
+# W04 V7 — bounded shutdown escalation. CI #43137078426 located the
+# deadlock inside close()->exchange(shutdown). Even sending the RPC without
+# awaiting exchange still blocked teardown in #43137609917. V6 had already
+# certified stop_now for post-battle process disposal. Use that exact safe path
+# explicitly as FORCED close until the protected transport can be redesigned.
+func close(_tree: SceneTree) -> bool:
+	var original_pid := pid
+	# Never advertise the forced fallback as a successful graceful shutdown.
+	if original_pid >= 0:
+		push_warning("W04_V7_PIPE_CLOSE forced_shutdown: blocking_graceful_pipe_boundary")
+	stop_now()
+	var stopped := original_pid < 0 or not OS.is_process_running(original_pid)
+	print("W04_V7_PIPE_CLOSE forced=true stopped=", stopped)
 	return stopped
 
 
