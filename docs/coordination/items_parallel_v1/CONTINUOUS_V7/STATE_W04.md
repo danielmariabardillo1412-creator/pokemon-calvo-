@@ -1,0 +1,15 @@
+# IA4/W04 — V7 · CHECKPOINT INICIAL / 12-11-2026
+- worker: W04
+- branch: codex/calvo-items-20261112-w04-battle-return-v7
+- preceding V6: READY_FOR_IA6_MERGE_CONSUMER_CANDIDATE, COMPLETED CI #43126697924, code SHA 1dd5bb05e987b75cedadeefa09c64925ff4cb35b
+- V6 finished: 2/2 pilotos nativos, 135+66 checks, V5 526, V4 396
+- V6 unresolved: W04-V6-DEP-02 normal session.close() stuck (>180s) after XP/accept/save, fixture used stop_now ONLY for cleanup; actual return-to-map NOT certified
+- related separate seam: W04-V6-DEP-01 minted nature hardy -> adamant Stat import mismatch in native Showdown; diagnostic only, no shared engine changes here
+- V7 plan: docs/coordination/items_parallel_v1/CONTINUOUS_V7/PLAN_W04.md arbiter; full copy in IA6_AUTORUN.md
+- phase: A / actual red reproduction with FieldNativeBridge.leave_battle, no V7 code yet
+- new positive V7 close+map test: 0/1
+- new item IDs: 0
+- V7 functional SHA: none; V7 CI: none
+- official IA6 integration V7: NO
+- next p: inspect W04 V6 native test and backend/pipe close, reproduce hung RPC vs SceneTree, fix only proven seam as authorized, certify returning to map and second battle
+- protected: official IA6, main, V28, PR118, worker branches, native_engine.cjs, W02 progression, XP, SaveV2 core, policy dynamax_candy excluded
